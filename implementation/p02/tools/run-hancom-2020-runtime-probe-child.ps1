@@ -86,13 +86,22 @@ function Get-ComProperty {
         [Parameter(Mandatory)][string]$Name
     )
 
-    return $ComObject.GetType().InvokeMember(
-        $Name,
-        [System.Reflection.BindingFlags]::GetProperty,
-        $null,
-        $ComObject,
-        $null
-    )
+    try {
+        # PowerShell's COM adapter can resolve IDispatch members that are not
+        # surfaced by __ComObject.GetType().
+        return $ComObject.$Name
+    }
+    catch {
+        $property = $ComObject.PSObject.Properties[$Name]
+        if ($null -ne $property) { return $property.Value }
+        return $ComObject.GetType().InvokeMember(
+            $Name,
+            [System.Reflection.BindingFlags]::GetProperty,
+            $null,
+            $ComObject,
+            $null
+        )
+    }
 }
 
 function Clear-ComObject {
@@ -275,12 +284,17 @@ try {
         throw 'DEFAULT_READ_ALLOWLIST_CARDINALITY_MISMATCH'
     }
     $defaultResult = $resultByCapability['edit.go_to']
+    $defaultReadSubphase = 'parameter_container'
     try {
         $parameterContainer = $hwp.HParameterSet
+        $defaultReadSubphase = 'parameter_set_resolve'
         $parameterSet = Get-ComProperty -ComObject $parameterContainer -Name ([string]$defaultProbe[0].parameter_set_id)
+        $defaultReadSubphase = 'hset_resolve'
         $parameterHSet = Get-ComProperty -ComObject $parameterSet -Name 'HSet'
+        $defaultReadSubphase = 'get_default'
         $getDefaultResult = $hwp.HAction.GetDefault([string]$defaultProbe[0].action_id, $parameterHSet)
         if ($getDefaultResult -eq $false) { throw 'GET_DEFAULT_RETURNED_FALSE' }
+        $defaultReadSubphase = 'shape_snapshot'
         $memberDescriptors = @(
             $parameterSet.PSObject.Properties |
                 ForEach-Object { "property:$($_.Name):$($_.TypeNameOfValue)" } |
@@ -299,7 +313,7 @@ try {
     catch {
         $defaultResult.default_read_state = 'failed'
         $defaultResult.disposition = 'failed'
-        $defaultResult.reason_code = 'default_read_failed'
+        $defaultResult.reason_code = "default_read_${defaultReadSubphase}_failed"
         throw
     }
     finally {
