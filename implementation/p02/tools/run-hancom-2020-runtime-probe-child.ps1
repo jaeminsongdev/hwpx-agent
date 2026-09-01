@@ -15,7 +15,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 function Get-Sha256Bytes {
-    param([Parameter(Mandatory)][byte[]]$Value)
+    param([Parameter(Mandatory)][AllowEmptyCollection()][byte[]]$Value)
 
     $algorithm = [System.Security.Cryptography.SHA256]::Create()
     try {

@@ -48,6 +48,7 @@ $required = [ordered]@{
     semantic_reopen = 'reopen_exact_match'
     null_document_is_empty = 'return \[string\]::Empty'
     empty_undo_direct_assignment = 'IsNullOrEmpty\(\$undoRaw\)'
+    empty_byte_hash_allowed = 'AllowEmptyCollection\(\)'
 }
 foreach ($entry in $required.GetEnumerator()) {
     Add-Result -Case $entry.Key -Passed ([regex]::IsMatch($combined, $entry.Value)) -Detail $entry.Value
