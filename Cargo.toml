@@ -1,0 +1,38 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/domain-ir",
+    "crates/foundation",
+    "protocol/generated/rust",
+    "tools/xtask",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+rust-version = "1.96"
+
+[workspace.dependencies]
+hex = "=0.4.3"
+prost = "=0.14.4"
+prost-build = "=0.14.4"
+prost-types = "=0.14.4"
+protoc-bin-vendored = "=3.2.0"
+regex = "=1.13.1"
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.151"
+sha2 = "=0.11.0"
+tempfile = "=3.27.0"
+thiserror = "=2.0.20"
+uuid = { version = "=1.26.0", features = ["serde", "v4"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_debug_implementations = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+unwrap_used = "deny"
+expect_used = "deny"

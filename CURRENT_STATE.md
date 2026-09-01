@@ -1,0 +1,57 @@
+# CURRENT STATE
+
+> 기준일: 2026-09-01  
+> 프로젝트 코드명: `hwpx-agent`  
+> 문서 세트 버전: `2.0-design`  
+> 규범 키워드: **MUST/SHALL=필수**, **SHOULD=권장**, **MAY=선택**
+
+## 현재 상태
+
+- 상태: `P01_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
+- 현재 phase: `P01_REPOSITORY_CI_SECURITY_FOUNDATION`
+- 구현 코드: 제품 코드는 없음. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence가 존재
+- 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
+- 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
+- root workflow skill: 9개
+- 설계 정적 검증: P00-08 `PASS`; pinned dependency 기반 full validator 16 schema/609 feature/609 contract/190 WBS 오류 0
+- generated 산출물 재현성: 23개 파일 연속 2회 재생성 후 SHA-256 비결정 파일 0
+
+## P00 현재 상태
+
+- target family: 한글 desktop 2020 이상 모든 release/build. 미등록 버전은 discovery만 허용하고 exact build/host evidence bundle별 qualification 전에는 `discovered_unqualified`.
+- current primary target: 한글 2020 `11.0.0.9136` x86. 기존 evidence correlation 때문에 profile ID `hancom-hangul-2020-secondary`는 유지하지만 역할은 `primary_development`다.
+- current use scope: 사용자가 확인한 정품 유효 한글 2020 seat의 개인 비상업·로컬 개발. Production, 사내, 서버/VM, 고객 배포는 disabled다.
+- deferred compatibility targets: 한글 2022 `12.0.0.4605`, 한글 2024 `13.0.0.4049`. 프로필·공식 자료·pending request는 보존하지만 다른 PC가 가능할 때까지 `hold_unqualified`이며 현재 P00 blocker가 아니다.
+- 2020 automation: exact x86/STA identity probe PASS. Reference run `98798b1801314a5e9bebf0f2505bc763`은 synthetic 문서 생성→HWPX 저장→종료→재열기→exact normalized readback→PDF export→`Quit()`→잔류 0 PASS다.
+- remote diagnostics: request/session/inventory/events/manifest/verifier 6개 schema와 PowerShell 4개 구현. Windows PowerShell 5.1 상위 collector에서 probe `valid/pass`, discovery `valid/discovered_unqualified`; traversal/manifest tamper 포함 3/3 PASS.
+- environment baseline: 현재 PC의 private machine binding, OS build/UBR, exact 한글 binary/Registry32, HCR Batang, Hancom PDF, oracle/source evidence를 deterministic digest로 고정하고 live verifier와 tamper/traversal negative test를 통과했다. Clean image는 주장하지 않으며 다른 PC/portable worker/production 범위로 연기했다.
+- font/printer: HCR Batang이 HWPX 모든 언어 슬롯과 embedded PDF에 일치해 substitution 0. Hancom PDF `1.3.0.550` profile/driver를 잠갔고 redirected default printer는 제외·미변경. P00-03은 현재 범위 PASS.
+- official source: 공식 원격 24개를 잠갔다. KS X 6101 reform 03 machine response 521 title/content records, HWP 공개 문서, 한글 2020 rights, HCR FAQ와 attribution 결정을 포함한다. P00-04는 현재 범위 PASS.
+- source lock: `source-lock-P00-20260901-v9-final-current-scope`, PowerShell 7과 Windows PowerShell 5.1 모두 local 40/40, remote 24/24, 실패 0. P00-05는 현재 범위 PASS.
+- automation/provider license: 정품 유효 2020 seat와 개인 비상업 로컬 목적 확인, production/provider disabled. P00-06/07 PASS.
+- P00 Gate: v10은 사용자가 지정한 현재-PC 로컬 개발 범위에서 `PASS_SCOPED`; P01 scaffold를 이 PC에 한해 시작할 수 있다. v9의 clean-image `BLOCKED`는 이전 범위의 정확한 역사 기록으로 보존한다.
+
+## v2 핵심 변경
+
+- capability-driven multi-backend
+- Rust direct HWPX core + C#/.NET STA Windows automation worker
+- exact 문서 크기·구역·다단, 고급 표, native 수식을 VS-1 필수 gate로 지정
+- 대상 build별 signed capability binding과 실제 한/글 oracle
+- 확장 DocumentGraph/OperationPlan/transaction
+- async job·artifact·immutable revision·Web↔Codex continuity
+- 상업 라이선스·보안·외부 기능의 명시적 release gate
+- ChatGPT Web universal package와 Codex remote/local companion blueprint
+
+## 다음 작업
+
+현재 PC에서 P01 repository/CI/security foundation의 P01-01~09를 구현·검증 중이다. 구현 추론수준은 `xhigh`, Gate 최종 감사는 `max`다. 한글 UI 자동 조작, 사용자 문서, 다른 PC/버전, production/provider 경로는 열지 않는다.
+
+## 현재 blocker
+
+- 현재 PC 로컬 P01 착수 blocker 없음.
+
+2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.
+
+## 검증 한계
+
+제품 본체 코드는 아직 없지만 exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export, 현재-host baseline 증거가 있다. 이 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00 실제 상태는 `implementation/p00/P00_GATE_REPORT.md`를 따른다.

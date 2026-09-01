@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/target-profile.schema.json",
+  "title": "TargetProfile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "profile_id",
+    "product",
+    "major_release",
+    "exact_build",
+    "os_image",
+    "locale",
+    "fonts_manifest",
+    "license_state",
+    "capability_catalog_version"
+  ],
+  "properties": {
+    "profile_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]+$"
+    },
+    "product": {
+      "type": "string"
+    },
+    "major_release": {
+      "type": [
+        "string",
+        "integer"
+      ]
+    },
+    "exact_build": {
+      "type": "string",
+      "minLength": 1
+    },
+    "os_image": {
+      "type": "string"
+    },
+    "locale": {
+      "type": "string"
+    },
+    "fonts_manifest": {
+      "type": "string"
+    },
+    "printer_profile": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "automation_catalog_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "owpml_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "capability_catalog_version": {
+      "type": "string"
+    },
+    "license_state": {
+      "enum": [
+        "approved",
+        "restricted",
+        "pending",
+        "denied",
+        "not_applicable"
+      ]
+    },
+    "enabled_backends": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "direct_hwpx",
+          "desktop_automation",
+          "webhwp",
+          "oracle",
+          "external_connector"
+        ]
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "image_digest": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_lock_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

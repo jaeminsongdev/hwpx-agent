@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/current-host-baseline-verification.schema.json",
+  "title": "Current PC Hangul 2020 baseline verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "checked_at",
+    "state",
+    "baseline_relative_path",
+    "baseline_file_sha256",
+    "baseline_digest_sha256",
+    "checks"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.current-host-baseline-verification/v1" },
+    "checked_at": { "type": "string", "format": "date-time" },
+    "state": { "const": "pass" },
+    "baseline_relative_path": {
+      "const": "implementation/p00/evidence/current-host-baseline.20260901.json"
+    },
+    "baseline_file_sha256": { "$ref": "#/$defs/sha256" },
+    "baseline_digest_sha256": { "$ref": "#/$defs/sha256" },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["digest_match", "evidence_files_match", "machine_binding_match", "windows_baseline_match", "exact_hancom_2020_match", "hcr_batang_match", "hancom_pdf_binding_match", "hancom_pdf_driver_files_match", "current_hwp_processes", "clean_image_claimed", "scope_overclaim_detected"],
+      "properties": {
+        "digest_match": { "const": true },
+        "evidence_files_match": { "const": true },
+        "machine_binding_match": { "const": true },
+        "windows_baseline_match": { "const": true },
+        "exact_hancom_2020_match": { "const": true },
+        "hcr_batang_match": { "const": true },
+        "hancom_pdf_binding_match": { "const": true },
+        "hancom_pdf_driver_files_match": { "const": true },
+        "current_hwp_processes": { "const": 0 },
+        "clean_image_claimed": { "const": false },
+        "scope_overclaim_detected": { "const": false }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

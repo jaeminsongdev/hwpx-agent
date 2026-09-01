@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/document-smoke-receipt.schema.json",
+  "title": "Hancom Hangul document smoke receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "target_profile_id",
+    "run_id",
+    "started_at",
+    "completed_at",
+    "state",
+    "host_classification",
+    "clean_image_gate_satisfied",
+    "use_scope",
+    "product_seat_confirmation",
+    "prog_id",
+    "client_apartment_state",
+    "observed_file_version",
+    "observed_executable_sha256",
+    "automation_version_matches_expected",
+    "phases",
+    "text_exact_match_after_document_separator_normalization",
+    "hwpx",
+    "pdf",
+    "preexisting_hwp_processes",
+    "remaining_hwp_processes",
+    "quit_invoked",
+    "register_module_invoked",
+    "user_document_opened",
+    "generated_document_only",
+    "external_network_invoked",
+    "registry_or_system_setting_changed",
+    "computer_use_click_or_type_invoked"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hwpx-agent.hancom-document-smoke-receipt/v1"
+    },
+    "target_profile_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "state": {
+      "enum": ["pass", "failed", "unverified"]
+    },
+    "error_code": {
+      "type": ["string", "null"]
+    },
+    "host_classification": {
+      "const": "non_clean_development_reference"
+    },
+    "clean_image_gate_satisfied": {
+      "const": false
+    },
+    "use_scope": {
+      "const": "personal_noncommercial_local_validation"
+    },
+    "product_seat_confirmation": {
+      "const": "confirmed_genuine_valid_by_user_2026-09-01"
+    },
+    "prog_id": {
+      "const": "HWPFrame.HwpObject.2"
+    },
+    "client_apartment_state": {
+      "const": "STA"
+    },
+    "observed_file_version": {
+      "type": "string"
+    },
+    "observed_executable_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "automation_version_matches_expected": {
+      "type": "boolean"
+    },
+    "phases": {
+      "type": ["object", "null"]
+    },
+    "text_exact_match_after_document_separator_normalization": {
+      "type": "boolean"
+    },
+    "hwpx": {
+      "$ref": "#/$defs/artifact"
+    },
+    "pdf": {
+      "$ref": "#/$defs/artifact"
+    },
+    "preexisting_hwp_processes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "remaining_hwp_processes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "quit_invoked": {
+      "type": "boolean"
+    },
+    "register_module_invoked": {
+      "const": false
+    },
+    "user_document_opened": {
+      "const": false
+    },
+    "generated_document_only": {
+      "const": true
+    },
+    "external_network_invoked": {
+      "const": false
+    },
+    "registry_or_system_setting_changed": {
+      "const": false
+    },
+    "computer_use_click_or_type_invoked": {
+      "const": false
+    }
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "required": ["relative_path", "sha256"],
+      "properties": {
+        "relative_path": {
+          "type": "string",
+          "pattern": "^implementation/p00/evidence/document-smoke-runs/[0-9a-f]{32}/"
+        },
+        "sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}
+

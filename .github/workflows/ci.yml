@@ -1,0 +1,103 @@
+name: P01 CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p01-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux-core:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: 3.13.13
+      - name: Install pinned Rust components
+        run: rustup toolchain install 1.96.0 --profile minimal --component rustfmt,clippy
+      - name: Rust core, tests, and generated drift
+        run: python3 tools/p01/run_ci.py --lane linux-core
+
+  windows-worker:
+    runs-on: windows-2025
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: 3.13.13
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 10.0.300
+      - name: C# semantic worker boundary
+        run: python tools/p01/run_ci.py --lane windows-worker
+
+  widget:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: 3.13.13
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.16.0
+      - name: Install pinned pnpm
+        run: npm install --global pnpm@11.19.0
+      - name: TypeScript typecheck, build, and tests
+        run: python3 tools/p01/run_ci.py --lane widget
+
+  docs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: 3.13.13
+          cache: pip
+      - name: Install pinned validators
+        run: python -m pip install --requirement tools/design-validation/requirements.txt
+      - name: Design, schema, fixture, and link validation
+        run: python tools/p01/run_ci.py --lane docs
+
+  security:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.16.0
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 10.0.300
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: 3.13.13
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: 1.26.3
+      - name: Install pinned security tools
+        run: |
+          npm install --global pnpm@11.19.0
+          cargo install cargo-deny --version 0.20.2 --locked
+          cargo install cargo-audit --version 0.22.2 --locked
+          go install github.com/anchore/syft/cmd/syft@v1.45.0
+          python -m pip install --requirement tools/design-validation/requirements.txt
+      - name: Restore locked dependency graphs
+        run: |
+          cargo fetch --locked
+          pnpm install --frozen-lockfile
+          dotnet restore --locked-mode workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.Smoke/HwpxAgent.WindowsWorker.Smoke.csproj
+      - name: SBOM, license, vulnerability, and secret gates
+        run: python tools/p01/run_ci.py --lane security

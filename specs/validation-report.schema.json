@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/validation-report.schema.json",
+  "title": "ValidationReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "validation_report_id",
+    "artifact_id",
+    "target_profile",
+    "overall_state",
+    "checks",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hwpx-agent.validation-report/v2"
+    },
+    "validation_report_id": {
+      "type": "string"
+    },
+    "artifact_id": {
+      "type": "string"
+    },
+    "target_profile": {
+      "type": "string"
+    },
+    "overall_state": {
+      "enum": [
+        "verified",
+        "partial",
+        "failed",
+        "unverified"
+      ]
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "check_id",
+          "level",
+          "state"
+        ],
+        "properties": {
+          "check_id": {
+            "type": "string"
+          },
+          "level": {
+            "enum": [
+              "input",
+              "package",
+              "schema",
+              "relationships",
+              "semantic",
+              "reopen",
+              "hancom_open",
+              "hancom_save_reopen",
+              "render",
+              "visual_diff",
+              "print_export",
+              "accessibility",
+              "security"
+            ]
+          },
+          "state": {
+            "enum": [
+              "pass",
+              "fail",
+              "unverified",
+              "skipped_by_policy"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "metrics": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "evidence_artifact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "backend": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "build": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_job_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

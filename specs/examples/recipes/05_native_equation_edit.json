@@ -1,0 +1,54 @@
+{
+  "schema_version": "hwpx-agent.operation-plan/v2",
+  "plan_id": "plan_equation_edit",
+  "mode": "surgical_preserve",
+  "target_profile": "hancom-2024-primary-ko-KR",
+  "source_revision_id": "rev-with-equation",
+  "template_contract_id": null,
+  "operations": [
+    {
+      "op_id": "edit-eq",
+      "depends_on": [],
+      "capability_id": "eq.edit_native",
+      "selector": {
+        "node_id": "eq-q17-2"
+      },
+      "args": {
+        "source": {
+          "latex": "\\lim_{x\\to 0}\\frac{\\sin x}{x}=1"
+        },
+        "display": "inline",
+        "unsupported_policy": "fail_closed"
+      },
+      "preconditions": [
+        "eq-q17-2 is a native equation"
+      ],
+      "postconditions": [
+        "normalized AST matches requested formula"
+      ],
+      "on_failure": "abort",
+      "client_label": "수식 교체"
+    }
+  ],
+  "preconditions": [
+    "source equation readback succeeds"
+  ],
+  "postconditions": [
+    "equation remains editable"
+  ],
+  "preservation": {
+    "untouched_parts": "token_preserve",
+    "unknown_xml": "preserve",
+    "styles": "no_gc"
+  },
+  "requested_validation": [
+    "equation_roundtrip",
+    "hancom_open",
+    "hancom_save_reopen",
+    "equation_editor_smoke",
+    "render"
+  ],
+  "metadata": {
+    "recipe": "native_equation_edit"
+  }
+}

@@ -1,0 +1,36 @@
+# Historical P00-01 candidate retained for audit. It was first superseded by
+# the multi-anchor decision and remains superseded by the exact 2020 primary.
+profile_id: hancom-hangul-2020-local-candidate
+product: Hancom Hangul (installed through Hancom Office 2020)
+major_release: "2020"
+exact_build: "11.0.0.9136"
+os_image: local-windows-11-pro-build-26200-unpinned
+locale: ko-KR
+fonts_manifest: PENDING_P00_03
+printer_profile: null
+automation_catalog_version: null
+owpml_version: null
+capability_catalog_version: 2.0-design
+license_state: pending
+enabled_backends:
+  - direct_hwpx
+constraints:
+  profile_state: superseded_by_exact_2020_primary_profile
+  observed_at: "2026-09-01"
+  observation_method: uninstall_registry_and_file_metadata_only
+  executable_name: Hwp.exe
+  executable_architecture: x86
+  executable_sha256: 7F00961398802C41620F5EF32FA2D2A26F7FF71F172723BE36C660EA86A72BCE
+  com_progids_registered:
+    - HWPFrame.HwpObject
+    - HWPFrame.HwpObject.1
+  runtime_probe: failed_automation_initialization_timeout
+  hancom_launch: automation_server_started_without_api_initialization
+  automation_license: pending
+  official_source_lock: pending
+  windows_image_pinned: false
+  external_network: false
+  scripts: preserve_only
+  ole: preserve_only
+image_digest: null
+source_lock_id: null

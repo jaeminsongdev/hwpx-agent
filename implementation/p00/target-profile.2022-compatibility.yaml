@@ -1,0 +1,37 @@
+# Deferred compatibility target. Official update data establishes the desired
+# build; qualification remains on hold until the separate PC is available.
+profile_id: hancom-hangul-2022-compatibility
+product: Hancom Hangul 2022
+major_release: "2022"
+exact_build: "12.0.0.4605"
+os_image: windows-11-hancom-2022-compatibility-pending
+locale: ko-KR
+fonts_manifest: font-printer-manifest.yaml
+printer_profile: microsoft-print-to-pdf-2022-candidate
+automation_catalog_version: "2504"
+owpml_version: KS-X-6101-2024-pending-official-copy
+capability_catalog_version: 2.0-design
+license_state: pending
+enabled_backends:
+  - direct_hwpx
+constraints:
+  role: deferred_compatibility
+  target_family: hancom-hangul-desktop-2020-plus
+  target_decision: deferred_by_user_until_remote_pc_available_2026-09-01
+  desired_build_source: official_update_app_js_2026-09-01
+  installation_state: not_installed_on_current_host
+  executable_architecture: unverified
+  executable_sha256: null
+  runtime_probe: not_run
+  remote_diagnostic_state: hold_remote_pc_unavailable
+  remote_diagnostic_collector_sha256: 9e3829ef45d46d7638563ba7dc3b6816b55304daa05a3c050fd7527dd429cd3d
+  pending_discovery_request: evidence/remote-diagnostics/requests/discover.hancom-hangul-2022.remote-pending.20260901.v3.json
+  current_p00_gate_required: false
+  support_claim_state: unqualified_no_support_claim
+  desktop_automation_release_state: disabled_pending_license_and_probe
+  oracle_release_state: disabled_pending_runtime_evidence
+  external_network: false
+  scripts: preserve_only
+  ole: preserve_only
+image_digest: null
+source_lock_id: source-lock-P00-20260901-draft

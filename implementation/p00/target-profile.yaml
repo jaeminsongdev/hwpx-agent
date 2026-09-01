@@ -1,0 +1,67 @@
+# Current P00 primary development target. The profile_id is intentionally kept
+# stable because existing probe and diagnostic evidence is bound to that ID.
+profile_id: hancom-hangul-2020-secondary
+product: Hancom Hangul 2020
+major_release: "2020"
+exact_build: "11.0.0.9136"
+os_image: current-physical-pc-development-baseline
+locale: ko-KR
+fonts_manifest: font-printer-manifest.yaml
+printer_profile: hancom-pdf-export-2020-reference
+automation_catalog_version: "2504"
+owpml_version: KS-X-6101-reform-03-operation-2024-10-30
+capability_catalog_version: 2.0-design
+license_state: approved
+enabled_backends:
+  - direct_hwpx
+constraints:
+  role: primary_development
+  target_family: hancom-hangul-desktop-2020-plus
+  target_decision: current_pc_exact_2020_only_by_user_2026-09-01
+  immutable_profile_id_note: retained_for_existing_evidence_correlation
+  current_p00_gate_required: true
+  current_use_scope: personal_noncommercial_local_development
+  user_scope_confirmation: confirmed_2026-09-01
+  product_seat_confirmation: confirmed_genuine_valid_by_user_2026-09-01
+  product_seat_confirmation_evidence: evidence/user-license-scope-confirmation.20260901.json
+  installation_state: installed_on_current_host
+  executable_architecture: x86
+  executable_sha256: 7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce
+  official_update_build_match: true
+  runtime_probe: passed
+  runtime_probe_scope: exact_identity_on_current_development_pc
+  runtime_image_qualification: deferred_outside_current_pc_development_scope
+  runtime_probe_evidence: evidence/runtime-probe.2020.20260901.v3.json
+  runtime_diagnosis: evidence/runtime-diagnosis.2020.20260901.md
+  runtime_probe_client: windows_powershell_x86_sta
+  runtime_probe_target_identity_match: true
+  runtime_probe_process_cleanup_verified: true
+  remote_diagnostic_state: probe_and_discovery_validated
+  remote_diagnostic_probe_bundle: evidence/remote-diagnostics/runs/121f2323-0350-4cc3-8953-ae9489923796.zip
+  remote_diagnostic_discovery_bundle: evidence/remote-diagnostics/runs/6e2a8185-a2d6-452e-8cc7-1552bd5c9096.zip
+  remote_diagnostic_host_shell: windows_powershell_5.1.26100.8875
+  remote_diagnostic_collector_sha256: 9e3829ef45d46d7638563ba7dc3b6816b55304daa05a3c050fd7527dd429cd3d
+  user_privacy_choice_required: completed_by_user_2026-09-01
+  desktop_automation_release_state: allowed_for_bounded_personal_noncommercial_local_validation_only
+  oracle_release_state: current_pc_local_document_oracle_pass
+  production_release_state: disabled
+  document_smoke_state: passed_current_development_pc
+  document_smoke_run_id: 98798b1801314a5e9bebf0f2505bc763
+  document_smoke_evidence: evidence/document-smoke-runs/98798b1801314a5e9bebf0f2505bc763/receipt.json
+  document_smoke_exact_readback: true
+  document_smoke_pdf_export: true
+  document_smoke_remaining_hwp_processes: 0
+  font_substitution_fixture_state: passed
+  font_printer_evidence: evidence/font-printer-reference-smoke.20260901.json
+  source_rights_evidence: evidence/official-source-rights.20260901.json
+  current_host_baseline_state: passed
+  current_host_baseline_evidence: evidence/current-host-baseline.20260901.json
+  current_host_baseline_verification: evidence/current-host-baseline-verification.20260901.json
+  current_pc_local_p01_authorization: allowed
+  support_claim_state: verified_current_pc_roundtrip_for_exact_2020_build_only
+  support_window_note: official_support_list_shows_through_2026
+  external_network: false
+  scripts: preserve_only
+  ole: preserve_only
+image_digest: null
+source_lock_id: source-lock-P00-20260901-v9-final-current-scope

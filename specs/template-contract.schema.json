@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/template-contract.schema.json",
+  "title": "TemplateContract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_id",
+    "source_artifact_id",
+    "source_sha256",
+    "slots",
+    "immutable_regions",
+    "preservation_policy"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hwpx-agent.template-contract/v2"
+    },
+    "contract_id": {
+      "type": "string"
+    },
+    "source_artifact_id": {
+      "type": "string"
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "slot_id",
+          "selector",
+          "content_type"
+        ],
+        "properties": {
+          "slot_id": {
+            "type": "string"
+          },
+          "selector": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "content_type": {
+            "enum": [
+              "text",
+              "rich_text",
+              "date",
+              "number",
+              "equation",
+              "image",
+              "table_rows",
+              "document_fragment"
+            ]
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "constraints": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "immutable_regions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "repeating_blocks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "style_contract": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "section_contract": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "preservation_policy": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "risk_inventory": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

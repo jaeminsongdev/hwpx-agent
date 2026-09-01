@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/error-envelope.schema.json",
+  "title": "ErrorEnvelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "error_code",
+    "category",
+    "safe_message",
+    "retryable",
+    "stage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hwpx-agent.error/v2"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "error_code": {
+      "type": "string",
+      "pattern": "^[A-Z0-9_]+$"
+    },
+    "category": {
+      "enum": [
+        "input",
+        "capability",
+        "conflict",
+        "document",
+        "security",
+        "backend",
+        "validation",
+        "storage",
+        "external",
+        "internal"
+      ]
+    },
+    "safe_message": {
+      "type": "string"
+    },
+    "retryable": {
+      "type": "boolean"
+    },
+    "stage": {
+      "type": "string"
+    },
+    "details": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "recovery": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "internal_trace_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

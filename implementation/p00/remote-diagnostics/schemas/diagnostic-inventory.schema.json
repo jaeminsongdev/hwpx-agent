@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/p00/diagnostic-inventory.schema.json",
+  "title": "HancomDiagnosticInventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "run_id",
+    "host_fingerprint",
+    "os",
+    "interactive_session",
+    "installed_product_candidates",
+    "com_candidates",
+    "target_files",
+    "fonts",
+    "printers",
+    "installed_hotfix_ids",
+    "crash_dump_metadata",
+    "crash_dump_content_collected"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.hancom-diagnostic-inventory/v1" },
+    "request_id": { "type": "string", "format": "uuid" },
+    "run_id": { "type": "string", "format": "uuid" },
+    "host_fingerprint": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "os": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["caption", "version", "build_number", "architecture", "locale", "ui_culture"],
+      "properties": {
+        "caption": { "type": "string" },
+        "version": { "type": "string" },
+        "build_number": { "type": "string" },
+        "architecture": { "type": "string" },
+        "locale": { "type": "string" },
+        "ui_culture": { "type": "string" }
+      }
+    },
+    "interactive_session": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["process_session_id", "session_class"],
+      "properties": {
+        "process_session_id": { "type": "integer", "minimum": 0 },
+        "session_class": { "enum": ["console", "rdp", "other_or_unknown"] }
+      }
+    },
+    "installed_product_candidates": { "type": "array", "items": { "type": "object" } },
+    "com_candidates": { "type": "array", "items": { "type": "object" } },
+    "target_files": { "type": "array", "items": { "type": "object" } },
+    "fonts": { "type": "array", "items": { "type": "object" } },
+    "printers": { "type": "array", "items": { "type": "object" } },
+    "installed_hotfix_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "crash_dump_metadata": { "type": "array", "items": { "type": "object" } },
+    "crash_dump_content_collected": { "const": false }
+  }
+}

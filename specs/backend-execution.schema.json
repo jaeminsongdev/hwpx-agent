@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/backend-execution.schema.json",
+  "title": "BackendExecution Contract",
+  "type": "object",
+  "required": [
+    "request",
+    "receipt"
+  ],
+  "properties": {
+    "request": {
+      "type": "object",
+      "required": [
+        "execution_id",
+        "target_profile",
+        "source_artifact",
+        "mode",
+        "resolved_operations",
+        "validation_contract",
+        "resource_limits",
+        "security_policy"
+      ],
+      "properties": {
+        "execution_id": {
+          "type": "string"
+        },
+        "target_profile": {
+          "type": "string"
+        },
+        "source_artifact": {
+          "$ref": "artifact-ref.schema.json"
+        },
+        "mode": {
+          "enum": [
+            "normalized_authoring",
+            "surgical_preserve",
+            "native_automation"
+          ]
+        },
+        "resolved_operations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "validation_contract": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resource_limits": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "security_policy": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "trace_level": {
+          "enum": [
+            "none",
+            "safe",
+            "debug_redacted"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "receipt": {
+      "type": "object",
+      "required": [
+        "execution_id",
+        "backend",
+        "state",
+        "input_sha256",
+        "operation_results"
+      ],
+      "properties": {
+        "execution_id": {
+          "type": "string"
+        },
+        "backend": {
+          "type": "string"
+        },
+        "backend_version": {
+          "type": "string"
+        },
+        "target_build": {
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "succeeded",
+            "failed",
+            "cancelled",
+            "quarantined"
+          ]
+        },
+        "input_sha256": {
+          "type": "string"
+        },
+        "output_artifact": {
+          "oneOf": [
+            {
+              "$ref": "artifact-ref.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "operation_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "changed_parts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "id_remap": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "evidence_artifact_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timings_ms": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

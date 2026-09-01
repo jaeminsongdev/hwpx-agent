@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/artifact-ref.schema.json",
+  "title": "ArtifactRef",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "sha256",
+    "size_bytes",
+    "media_type",
+    "filename",
+    "created_at"
+  ],
+  "properties": {
+    "artifact_id": {
+      "type": "string",
+      "pattern": "^art_[A-Za-z0-9_-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "size_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "media_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "filename": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_revision_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_job_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "validation_state": {
+      "enum": [
+        "unverified",
+        "partial",
+        "verified",
+        "failed",
+        "quarantined"
+      ]
+    },
+    "quarantine_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "retention_class": {
+      "type": "string"
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "relation",
+          "artifact_id"
+        ],
+        "properties": {
+          "relation": {
+            "type": "string"
+          },
+          "artifact_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/foundation/workspace-policy-v1.schema.json",
+  "title": "WorkspacePolicyV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "max_artifact_bytes",
+    "allow_symlinks",
+    "allow_overwrite",
+    "areas"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.workspace-policy/v1" },
+    "max_artifact_bytes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1073741824
+    },
+    "allow_symlinks": { "const": false },
+    "allow_overwrite": { "const": false },
+    "areas": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": { "enum": ["staging", "quarantine", "output"] }
+    }
+  }
+}

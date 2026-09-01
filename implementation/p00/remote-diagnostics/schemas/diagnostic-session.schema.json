@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/p00/diagnostic-session.schema.json",
+  "title": "HancomDiagnosticSession",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "challenge_nonce",
+    "run_id",
+    "started_at",
+    "completed_at",
+    "mode",
+    "state",
+    "error_code",
+    "target_profile_id",
+    "collector_sha256",
+    "request_sha256",
+    "privacy",
+    "target_observation",
+    "runtime_probe",
+    "event_summary"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.hancom-diagnostic-session/v1" },
+    "request_id": { "type": "string", "format": "uuid" },
+    "challenge_nonce": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "run_id": { "type": "string", "format": "uuid" },
+    "started_at": { "type": "string", "format": "date-time" },
+    "completed_at": { "type": "string", "format": "date-time" },
+    "mode": { "enum": ["discover", "probe"] },
+    "state": { "enum": ["pass", "discovered_unqualified", "failed", "blocked"] },
+    "error_code": { "type": ["string", "null"] },
+    "collector_phase": { "type": "string", "minLength": 1 },
+    "exception": {
+      "type": ["object", "null"],
+      "required": ["exception_type", "message_sha256"],
+      "properties": {
+        "phase": { "type": "string", "minLength": 1 },
+        "exception_type": { "type": "string", "minLength": 1 },
+        "message_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      },
+      "additionalProperties": false
+    },
+    "target_profile_id": { "type": "string" },
+    "collector_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "request_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "privacy": {
+      "type": "object",
+      "required": ["document_content_collected", "user_document_opened", "raw_event_messages_collected", "dump_content_collected", "ui_automation_performed", "network_transmission_performed"],
+      "properties": {
+        "document_content_collected": { "const": false },
+        "user_document_opened": { "const": false },
+        "raw_event_messages_collected": { "const": false },
+        "dump_content_collected": { "const": false },
+        "ui_automation_performed": { "const": false },
+        "network_transmission_performed": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "target_observation": { "type": ["object", "null"] },
+    "runtime_probe": { "type": "object" },
+    "event_summary": { "type": "object" }
+  }
+}

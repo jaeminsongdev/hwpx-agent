@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/style-v2.schema.json",
+  "title": "StyleCatalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "character_styles",
+    "paragraph_styles",
+    "named_styles",
+    "numbering_styles"
+  ],
+  "properties": {
+    "font_faces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "font_id",
+          "family"
+        ],
+        "properties": {
+          "font_id": {
+            "type": "string"
+          },
+          "family": {
+            "type": "string"
+          },
+          "fallbacks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "language_slots": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "character_styles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/character"
+      }
+    },
+    "paragraph_styles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paragraph"
+      }
+    },
+    "named_styles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "style_id",
+          "name"
+        ],
+        "properties": {
+          "style_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "character_style_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "paragraph_style_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "next_style_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "numbering_styles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "table_styles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "object_styles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    }
+  },
+  "$defs": {
+    "length": {
+      "type": "object",
+      "required": [
+        "value",
+        "unit"
+      ],
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "unit": {
+          "enum": [
+            "mm",
+            "pt",
+            "percent",
+            "deg",
+            "px"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "character": {
+      "type": "object",
+      "required": [
+        "style_id"
+      ],
+      "properties": {
+        "style_id": {
+          "type": "string"
+        },
+        "font_slots": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "size_pt": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "bold": {
+          "type": "boolean"
+        },
+        "italic": {
+          "type": "boolean"
+        },
+        "underline": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "strike": {
+          "type": "string"
+        },
+        "outline": {
+          "type": "boolean"
+        },
+        "shadow": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "emboss": {
+          "type": "boolean"
+        },
+        "engrave": {
+          "type": "boolean"
+        },
+        "superscript": {
+          "type": "boolean"
+        },
+        "subscript": {
+          "type": "boolean"
+        },
+        "color": {
+          "type": "string"
+        },
+        "scale_percent": {
+          "type": "number"
+        },
+        "spacing_percent": {
+          "type": "number"
+        },
+        "baseline_offset": {
+          "type": "number"
+        },
+        "border_background": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "paragraph": {
+      "type": "object",
+      "required": [
+        "style_id"
+      ],
+      "properties": {
+        "style_id": {
+          "type": "string"
+        },
+        "alignment": {
+          "enum": [
+            "left",
+            "right",
+            "center",
+            "justify",
+            "distribute"
+          ]
+        },
+        "left_margin": {
+          "$ref": "#/$defs/length"
+        },
+        "right_margin": {
+          "$ref": "#/$defs/length"
+        },
+        "first_line_indent": {
+          "$ref": "#/$defs/length"
+        },
+        "line_spacing": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "before_spacing": {
+          "$ref": "#/$defs/length"
+        },
+        "after_spacing": {
+          "$ref": "#/$defs/length"
+        },
+        "tab_stops": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "keep_with_next": {
+          "type": "boolean"
+        },
+        "keep_lines": {
+          "type": "boolean"
+        },
+        "page_break_before": {
+          "type": "boolean"
+        },
+        "widow_orphan": {
+          "type": "boolean"
+        },
+        "border_background": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "numbering_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

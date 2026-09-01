@@ -1,0 +1,130 @@
+{
+  "schema_version": "hwpx-agent.operation-plan/v2",
+  "plan_id": "plan_two_column_exam",
+  "mode": "normalized_authoring",
+  "target_profile": "hancom-2024-primary-ko-KR",
+  "source_revision_id": null,
+  "template_contract_id": null,
+  "operations": [
+    {
+      "op_id": "paper",
+      "depends_on": [],
+      "capability_id": "page.paper_preset",
+      "selector": {
+        "section_ids": [
+          "sec-1"
+        ]
+      },
+      "args": {
+        "preset": "A3",
+        "orientation": "portrait"
+      },
+      "preconditions": [],
+      "postconditions": [
+        "A3 portrait exact dimensions recorded"
+      ],
+      "on_failure": "abort",
+      "client_label": "A3 시험지"
+    },
+    {
+      "op_id": "columns",
+      "depends_on": [
+        "paper"
+      ],
+      "capability_id": "page.column_config_equal",
+      "selector": {
+        "section_ids": [
+          "sec-1"
+        ]
+      },
+      "args": {
+        "count": 2,
+        "equal_width": true,
+        "gaps_mm": [
+          8
+        ],
+        "separator": {
+          "enabled": false
+        },
+        "direction": "left_to_right"
+      },
+      "preconditions": [],
+      "postconditions": [
+        "section has two equal columns"
+      ],
+      "on_failure": "abort",
+      "client_label": "2단"
+    },
+    {
+      "op_id": "qtable",
+      "depends_on": [
+        "columns"
+      ],
+      "capability_id": "table.create",
+      "selector": {
+        "after_node_id": "exam-header"
+      },
+      "args": {
+        "rows": 6,
+        "columns": 2,
+        "width_mm": 120,
+        "style_id": "exam.data-table"
+      },
+      "preconditions": [
+        "exam-header exists"
+      ],
+      "postconditions": [
+        "table remains inside one column or has explicit span policy"
+      ],
+      "on_failure": "abort",
+      "client_label": "문항 표"
+    },
+    {
+      "op_id": "qeq",
+      "depends_on": [
+        "qtable"
+      ],
+      "capability_id": "eq.insert_native",
+      "selector": {
+        "after_node_id": "q-001-stem"
+      },
+      "args": {
+        "source": {
+          "latex": "f(x)=x^3-3x+1"
+        },
+        "display": "inline",
+        "unsupported_policy": "fail_closed"
+      },
+      "preconditions": [
+        "q-001-stem exists"
+      ],
+      "postconditions": [
+        "native inline equation exists"
+      ],
+      "on_failure": "abort",
+      "client_label": "1번 수식"
+    }
+  ],
+  "preconditions": [
+    "exam content nodes are compiled before layout operations"
+  ],
+  "postconditions": [
+    "question split report has no forbidden split"
+  ],
+  "preservation": {
+    "untouched_parts": "not_required",
+    "unknown_xml": "reject",
+    "styles": "safe_gc"
+  },
+  "requested_validation": [
+    "semantic",
+    "question_split",
+    "table_page_split",
+    "equation_roundtrip",
+    "hancom_save_reopen",
+    "render"
+  ],
+  "metadata": {
+    "recipe": "two_column_exam"
+  }
+}

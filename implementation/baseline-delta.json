@@ -1,0 +1,67 @@
+{
+  "schema": "hwpx-agent.baseline-delta/v2",
+  "recorded_at": "2026-09-01",
+  "source_package": {
+    "path": "HWPX_Agent_Product_Design_v2_2026-08-31.zip",
+    "sha256": "dfcb1ff9de18ff11d7cb158f499031ac702937a33d19e8ff02125bb5f1909446",
+    "preservation_state": "unchanged_outside_project_root"
+  },
+  "baseline_manifest": {
+    "path": "MANIFEST.sha256",
+    "managed_entry_count": 277,
+    "state": "unchanged",
+    "expected_mismatches_after_p00_start": 40
+  },
+  "intentional_mutation_groups": [
+    {
+      "name": "p00_state_and_attribution",
+      "paths": ["CURRENT_STATE.md", "ROADMAP_STATUS.yaml", "README.md"],
+      "expected_count": 3,
+      "reason": "Record the user-authorized P00 execution state and required Hancom public-format attribution."
+    },
+    {
+      "name": "p00_08_canonical_contract_sources",
+      "paths": [
+        "docs/01_product/03_requirements_traceability.md",
+        "docs/02_architecture/02_capability_routing.md",
+        "docs/05_backends/06_fallback_degradation.md",
+        "docs/06_mcp_api/01_tool_surface.md",
+        "docs/06_mcp_api/02_tool_contracts.md",
+        "docs/06_mcp_api/03_operation_examples.md",
+        "docs/08_testing/02_golden_corpus.md",
+        "specs/capability-registry.schema.json",
+        "specs/examples/operation-plan.example.json",
+        "specs/source-lock.schema.json",
+        "specs/validation-report.schema.json",
+        "tools/design-generation/generate_wbs.py",
+        "tools/design-validation/validate_design.py"
+      ],
+      "expected_count": 13,
+      "reason": "Apply the reviewed canonical capability, enum, source revalidation, WBS, and fail-closed validation decisions."
+    },
+    {
+      "name": "p00_08_regenerated_wbs",
+      "path_globs": [
+        "WORK_BREAKDOWN_STRUCTURE.csv",
+        "specs/work-breakdown-structure.json",
+        "docs/09_roadmap/*.md"
+      ],
+      "expected_count": 24,
+      "reason": "Regenerate the fan-out/fan-in WBS and synchronized roadmap documents from the corrected generator."
+    }
+  ],
+  "added_working_artifacts": [
+    "PLANS.md",
+    "implementation/baseline-delta.json",
+    "implementation/IMPLEMENTATION_READINESS_2026-09-01.md",
+    "implementation/p00/",
+    "specs/capability-id-migrations.v1.json",
+    "tools/design-validation/requirements.txt"
+  ],
+  "verification_contract": {
+    "all_other_manifest_entries_must_match": true,
+    "unlisted_files_are_allowed_only_under_added_working_artifacts": true,
+    "source_zip_is_the_recovery_baseline": true,
+    "current_manifest_mismatch_count_must_equal": 40
+  }
+}

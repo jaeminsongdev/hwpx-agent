@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/feature-row.schema.json",
+  "title": "FeatureCoverageRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "feature_id",
+    "domain",
+    "scope_class",
+    "feature_ko",
+    "capability_id",
+    "semantic_operation",
+    "document_ir",
+    "preferred_backend",
+    "support_level",
+    "phase",
+    "validation",
+    "permission",
+    "source_group"
+  ],
+  "properties": {
+    "feature_id": {
+      "type": "string",
+      "pattern": "^[A-Z]+-[0-9]{3}$"
+    },
+    "domain": {
+      "type": "string"
+    },
+    "scope_class": {
+      "enum": [
+        "artifact_semantics",
+        "editor_workflow",
+        "workstation_ui",
+        "external_service",
+        "security_control"
+      ]
+    },
+    "feature_ko": {
+      "type": "string"
+    },
+    "capability_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]+$"
+    },
+    "semantic_operation": {
+      "type": "string"
+    },
+    "document_ir": {
+      "type": "string"
+    },
+    "preferred_backend": {
+      "type": "string"
+    },
+    "fallback_backend": {
+      "type": "string"
+    },
+    "support_level": {
+      "enum": [
+        "DIRECT_FULL",
+        "AUTOMATION_FULL",
+        "HYBRID",
+        "READ_ONLY",
+        "PRESERVE_ONLY",
+        "OPTIONAL_EXTERNAL",
+        "DISABLED_BY_POLICY",
+        "UNSUPPORTED"
+      ]
+    },
+    "phase": {
+      "type": "string"
+    },
+    "validation": {
+      "type": "string"
+    },
+    "permission": {
+      "type": "string"
+    },
+    "source_group": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

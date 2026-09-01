@@ -1,0 +1,79 @@
+{
+  "schema_version": "hwpx-agent.capability-id-migrations/v1",
+  "canonical_source": "FEATURE_COVERAGE_MATRIX.csv",
+  "runtime_aliases_allowed": false,
+  "migrations": [
+    {
+      "legacy_id": "page.columns",
+      "kind": "args_split",
+      "canonical_ids": ["page.column_config_equal", "page.column_config_custom"],
+      "rule": "equal_width=true selects page.column_config_equal; explicit per-column widths select page.column_config_custom"
+    },
+    {
+      "legacy_id": "page.margins",
+      "kind": "rename",
+      "canonical_ids": ["page.margin_all"]
+    },
+    {
+      "legacy_id": "page.paper.set",
+      "kind": "args_split",
+      "canonical_ids": ["page.paper_preset", "page.paper_custom"],
+      "rule": "named paper selects page.paper_preset; explicit dimensions select page.paper_custom"
+    },
+    {
+      "legacy_id": "page.set_paper",
+      "kind": "args_split",
+      "canonical_ids": ["page.paper_preset", "page.paper_custom"],
+      "rule": "named paper selects page.paper_preset; explicit dimensions select page.paper_custom"
+    },
+    {
+      "legacy_id": "section.layout.set",
+      "kind": "operation_split",
+      "canonical_ids": ["page.section_config", "page.margin_all", "page.column_config_equal", "page.column_config_custom"],
+      "rule": "emit page.section_config and only the explicit layout sub-operations requested by the caller"
+    },
+    {
+      "legacy_id": "section.columns.configure",
+      "kind": "args_split",
+      "canonical_ids": ["page.column_config_equal", "page.column_config_custom"],
+      "rule": "equal widths and custom widths are distinct typed operations"
+    },
+    {
+      "legacy_id": "table.cell.merge",
+      "kind": "rename",
+      "canonical_ids": ["table.merge_cells"]
+    },
+    {
+      "legacy_id": "table.cell_border_background",
+      "kind": "operation_split",
+      "canonical_ids": ["table.cell_border", "table.cell_fill", "table.cell_padding"],
+      "rule": "emit a separate operation for each supplied border, fill, and padding argument"
+    },
+    {
+      "legacy_id": "equation.insert.native",
+      "kind": "rename",
+      "canonical_ids": ["eq.insert_native"]
+    },
+    {
+      "legacy_id": "equation.insert_native",
+      "kind": "rename",
+      "canonical_ids": ["eq.insert_native"]
+    },
+    {
+      "legacy_id": "reference.crossref.insert",
+      "kind": "rename",
+      "canonical_ids": ["ref.crossref_insert"]
+    },
+    {
+      "legacy_id": "review.track_changes.accept",
+      "kind": "args_split",
+      "canonical_ids": ["review.track_accept_one", "review.track_accept_all"],
+      "rule": "an explicit single-change selector selects track_accept_one; an explicit all scope selects track_accept_all"
+    },
+    {
+      "legacy_id": "object.wordart.insert",
+      "kind": "rename",
+      "canonical_ids": ["obj.wordart_insert"]
+    }
+  ]
+}

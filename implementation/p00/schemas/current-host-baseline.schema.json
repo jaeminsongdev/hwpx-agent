@@ -1,0 +1,248 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/current-host-baseline.schema.json",
+  "title": "Current PC Hangul 2020 development baseline",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "state",
+    "baseline_digest_sha256",
+    "digest_canonicalization",
+    "pinned_environment_canonical_json",
+    "pinned_environment",
+    "live_checks",
+    "claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hwpx-agent.current-host-baseline/v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "state": {
+      "const": "pass_current_pc_local_development_baseline"
+    },
+    "baseline_digest_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "digest_canonicalization": {
+      "const": "stored-utf8-json-compact-payload-v1"
+    },
+    "pinned_environment_canonical_json": {
+      "type": "string",
+      "minLength": 2
+    },
+    "pinned_environment": {
+      "$ref": "#/$defs/pinnedEnvironment"
+    },
+    "live_checks": {
+      "$ref": "#/$defs/liveChecks"
+    },
+    "claims": {
+      "$ref": "#/$defs/claims"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidenceRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relative_path", "bytes", "sha256"],
+      "properties": {
+        "relative_path": {
+          "type": "string",
+          "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|/|\\\\)\\.\\.(?:/|\\\\|$)).+$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "driverFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "bytes", "version", "sha256"],
+      "properties": {
+        "file": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "version": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "pinnedEnvironment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "host", "target", "font", "pdf_export", "oracle", "source_lock", "evidence"],
+      "properties": {
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["authority", "use", "host_policy", "target_policy", "other_versions_state", "production_release_state"],
+          "properties": {
+            "authority": { "const": "user_directive_2026-09-01_current_pc_only" },
+            "use": { "const": "personal_noncommercial_local_development" },
+            "host_policy": { "const": "this_current_pc_only" },
+            "target_policy": { "const": "exact_hancom_hangul_2020_only" },
+            "other_versions_state": { "const": "deferred_until_their_installed_pc_is_available" },
+            "production_release_state": { "const": "disabled" }
+          }
+        },
+        "host": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["classification", "clean_image_claimed", "machine_binding_sha256", "machine_binding_raw_value_stored", "os_caption", "os_version", "os_build", "os_ubr", "os_architecture", "os_install_date_utc", "locale", "ui_culture"],
+          "properties": {
+            "classification": { "const": "mutable_current_development_pc" },
+            "clean_image_claimed": { "const": false },
+            "machine_binding_sha256": { "$ref": "#/$defs/sha256" },
+            "machine_binding_raw_value_stored": { "const": false },
+            "os_caption": { "$ref": "#/$defs/nonEmptyString" },
+            "os_version": { "$ref": "#/$defs/nonEmptyString" },
+            "os_build": { "$ref": "#/$defs/nonEmptyString" },
+            "os_ubr": { "type": "integer", "minimum": 0 },
+            "os_architecture": { "$ref": "#/$defs/nonEmptyString" },
+            "os_install_date_utc": { "type": "string", "minLength": 1 },
+            "locale": { "$ref": "#/$defs/nonEmptyString" },
+            "ui_culture": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["profile_id", "product", "exact_build", "executable_architecture", "executable_path", "executable_bytes", "executable_file_version", "executable_sha256", "prog_id", "clsid", "com_registry_view", "registered_executable_path"],
+          "properties": {
+            "profile_id": { "const": "hancom-hangul-2020-secondary" },
+            "product": { "const": "Hancom Hangul 2020" },
+            "exact_build": { "const": "11.0.0.9136" },
+            "executable_architecture": { "const": "x86" },
+            "executable_path": { "$ref": "#/$defs/nonEmptyString" },
+            "executable_bytes": { "type": "integer", "minimum": 1 },
+            "executable_file_version": { "const": "11.0.0.9136" },
+            "executable_sha256": { "const": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce" },
+            "prog_id": { "const": "HWPFrame.HwpObject.2" },
+            "clsid": { "type": "string", "pattern": "^\\{[0-9A-Fa-f-]{36}\\}$" },
+            "com_registry_view": { "const": "Registry32" },
+            "registered_executable_path": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        },
+        "font": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["family", "korean_family", "file_path", "bytes", "sha256", "fixture_substitution_zero", "pdf_embedded"],
+          "properties": {
+            "family": { "const": "HCR Batang" },
+            "korean_family": { "const": "함초롬바탕" },
+            "file_path": { "$ref": "#/$defs/nonEmptyString" },
+            "bytes": { "type": "integer", "minimum": 1 },
+            "sha256": { "$ref": "#/$defs/sha256" },
+            "fixture_substitution_zero": { "const": true },
+            "pdf_embedded": { "const": true }
+          }
+        },
+        "pdf_export": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["printer_name", "driver_name", "port_name", "producer", "driver_files"],
+          "properties": {
+            "printer_name": { "const": "Hancom PDF" },
+            "driver_name": { "const": "Hancom PDF" },
+            "port_name": { "const": "Hancom PDF Port" },
+            "producer": { "const": "Hancom PDF 1.3.0.550" },
+            "driver_files": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/driverFile" }
+            }
+          }
+        },
+        "oracle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["run_id", "exact_normalized_text_readback", "hwpx_sha256", "pdf_sha256", "quit_invoked", "remaining_hwp_processes"],
+          "properties": {
+            "run_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+            "exact_normalized_text_readback": { "const": true },
+            "hwpx_sha256": { "$ref": "#/$defs/sha256" },
+            "pdf_sha256": { "$ref": "#/$defs/sha256" },
+            "quit_invoked": { "const": true },
+            "remaining_hwp_processes": { "const": 0 }
+          }
+        },
+        "source_lock": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source_lock_id", "entries", "local_matches", "remote_matches", "powershell_7_state", "windows_powershell_5_1_state"],
+          "properties": {
+            "source_lock_id": { "$ref": "#/$defs/nonEmptyString" },
+            "entries": { "type": "integer", "minimum": 1 },
+            "local_matches": { "type": "integer", "minimum": 1 },
+            "remote_matches": { "type": "integer", "minimum": 1 },
+            "powershell_7_state": { "const": "pass" },
+            "windows_powershell_5_1_state": { "const": "pass" }
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 13,
+          "maxItems": 13,
+          "items": { "$ref": "#/$defs/evidenceRecord" }
+        }
+      }
+    },
+    "liveChecks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exact_target_hash_match", "registry32_target_match", "accepted_oracle_invariants_match", "font_hash_match", "hancom_pdf_binding_match", "hancom_pdf_driver_files_match", "source_lock_dual_shell_pass", "current_hwp_processes", "user_document_opened", "com_object_created", "external_network_invoked", "registry_or_system_setting_changed", "computer_use_invoked"],
+      "properties": {
+        "exact_target_hash_match": { "const": true },
+        "registry32_target_match": { "const": true },
+        "accepted_oracle_invariants_match": { "const": true },
+        "font_hash_match": { "const": true },
+        "hancom_pdf_binding_match": { "const": true },
+        "hancom_pdf_driver_files_match": { "const": true },
+        "source_lock_dual_shell_pass": { "const": true },
+        "current_hwp_processes": { "const": 0 },
+        "user_document_opened": { "const": false },
+        "com_object_created": { "const": false },
+        "external_network_invoked": { "const": false },
+        "registry_or_system_setting_changed": { "const": false },
+        "computer_use_invoked": { "const": false }
+      }
+    },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current_pc_local_p01_development_ready", "clean_immutable_image_qualified", "other_pc_or_version_supported", "production_or_distribution_ready"],
+      "properties": {
+        "current_pc_local_p01_development_ready": { "const": true },
+        "clean_immutable_image_qualified": { "const": false },
+        "other_pc_or_version_supported": { "const": false },
+        "production_or_distribution_ready": { "const": false }
+      }
+    }
+  }
+}

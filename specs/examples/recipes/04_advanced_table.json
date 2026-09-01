@@ -1,0 +1,124 @@
+{
+  "schema_version": "hwpx-agent.operation-plan/v2",
+  "plan_id": "plan_advanced_table",
+  "mode": "normalized_authoring",
+  "target_profile": "hancom-2024-primary-ko-KR",
+  "source_revision_id": null,
+  "template_contract_id": null,
+  "operations": [
+    {
+      "op_id": "create",
+      "depends_on": [],
+      "capability_id": "table.create",
+      "selector": {
+        "after_node_id": "p-1"
+      },
+      "args": {
+        "rows": 12,
+        "columns": 6,
+        "width_mm": 170,
+        "style_id": "table.analysis"
+      },
+      "preconditions": [
+        "p-1 exists"
+      ],
+      "postconditions": [
+        "12x6 grid"
+      ],
+      "on_failure": "abort",
+      "client_label": "분석 표"
+    },
+    {
+      "op_id": "merge",
+      "depends_on": [
+        "create"
+      ],
+      "capability_id": "table.merge_cells",
+      "selector": {
+        "table_id": "table-1",
+        "cell_range": {
+          "start": "A1",
+          "end": "F1"
+        }
+      },
+      "args": {
+        "preserve_content": "concatenate"
+      },
+      "preconditions": [
+        "merge range is rectangular"
+      ],
+      "postconditions": [
+        "A1 is 1x6 master cell"
+      ],
+      "on_failure": "abort",
+      "client_label": "제목 행 병합"
+    },
+    {
+      "op_id": "header",
+      "depends_on": [
+        "merge"
+      ],
+      "capability_id": "table.repeat_header",
+      "selector": {
+        "table_id": "table-1",
+        "row_indices": [
+          0,
+          1
+        ]
+      },
+      "args": {
+        "enabled": true
+      },
+      "preconditions": [],
+      "postconditions": [
+        "header repeats after page split"
+      ],
+      "on_failure": "abort",
+      "client_label": "머리행 반복"
+    },
+    {
+      "op_id": "formula",
+      "depends_on": [
+        "header"
+      ],
+      "capability_id": "table.formula_relative_ref",
+      "selector": {
+        "table_id": "table-1",
+        "cell_range": {
+          "start": "F3",
+          "end": "F12"
+        }
+      },
+      "args": {
+        "formula": "SUM(B3:E3)",
+        "recalculate": true,
+        "cache_policy": "update"
+      },
+      "preconditions": [],
+      "postconditions": [
+        "formula AST and cache read back"
+      ],
+      "on_failure": "abort",
+      "client_label": "합계 수식"
+    }
+  ],
+  "preconditions": [],
+  "postconditions": [
+    "grid/span/formula invariants hold"
+  ],
+  "preservation": {
+    "untouched_parts": "not_required",
+    "unknown_xml": "reject",
+    "styles": "safe_gc"
+  },
+  "requested_validation": [
+    "semantic",
+    "formula_readback",
+    "page_split",
+    "hancom_save_reopen",
+    "render"
+  ],
+  "metadata": {
+    "recipe": "advanced_table"
+  }
+}

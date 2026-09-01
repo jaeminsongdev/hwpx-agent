@@ -1,0 +1,191 @@
+﻿task_id,phase,phase_title,task,implementation,dependencies,outputs,verification,owner_role,parallelizable
+P00-01,P00,Source·License·Target Freeze,대상 제품 기준선,"primary/secondary 한/글 제품, edition, exact build, locale, bitness를 결정한다.",없음,target-profile.yaml 초안,제품 정보와 runtime probe가 일치,Product/Legal/Architecture,no
+P00-02,P00,Source·License·Target Freeze,Windows 이미지 기준선,"OS build, interactive session 방식, patch policy, image digest를 고정한다.",P00-01,windows-image decision,깨끗한 이미지에서 설치/실행 smoke,Product/Legal/Architecture,yes
+P00-03,P00,Source·License·Target Freeze,글꼴·프린터 기준선,"필수 font set, embedding 권리, 기본/시험용 printer profile을 확정한다.",P00-01,font-printer manifest,font substitution 0인 기준 fixture,Product/Legal/Architecture,yes
+P00-04,P00,Source·License·Target Freeze,공식 자료 수집,"HWPX/OWPML, Help, ActionTable, ParameterSetTable, Automation, Event, WebHWP 자료를 수집한다.",P00-01,source archive inventory,모든 파일 URL/date/hash 기록,Product/Legal/Architecture,yes
+P00-05,P00,Source·License·Target Freeze,Source lock,"원본 checksum, parser rights, 보관 위치, version을 source-lock에 기록한다.",P00-01,source-lock.json,재다운로드/내부 원본 hash 일치,Product/Legal/Architecture,yes
+P00-06,P00,Source·License·Target Freeze,Automation 라이선스,"개인 연구, 사내, 상업 서비스, 서버/VM 범위별 승인 조건을 확인한다.",P00-01,license-decision.md,법무/사업/기술 승인 서명,Product/Legal/Architecture,yes
+P00-07,P00,Source·License·Target Freeze,WebHWP·외부 provider 라이선스,"WebHWP, 변환, OCR, 번역, 서명, 폰트 조건을 분리한다.",P00-01,provider-license matrix,미승인 provider disabled,Product/Legal/Architecture,yes
+P00-08,P00,Source·License·Target Freeze,기능 baseline 승인,609개 baseline과 completeness 방법을 review한다.,P00-01,feature-baseline report,누락/중복/비기능 분류 review 완료,Product/Legal/Architecture,yes
+P00-09,P00,Source·License·Target Freeze,P00 gate,모든 blocker와 미결정을 ROADMAP_STATUS에 반영한다.,"P00-01,P00-02,P00-03,P00-04,P00-05,P00-06,P00-07,P00-08",P00 evidence bundle,다음 phase 시작 승인,Product/Legal/Architecture,no
+P01-01,P01,Repository·CI·Security Foundation,Monorepo 생성,Rust/C#/TypeScript workspace와 경계를 생성한다.,P00,buildable repository,clean checkout build,Engineering,no
+P01-02,P01,Repository·CI·Security Foundation,도구체인 lock,Rust/.NET/Node/protobuf/schema 도구를 lock한다.,P01-01,toolchain manifests,CI와 local version 일치,Engineering,yes
+P01-03,P01,Repository·CI·Security Foundation,Schema·protobuf generation,JSON Schema와 proto codegen을 단일 명령으로 만든다.,P01-01,generated model packages,breaking/schema compile test,Engineering,yes
+P01-04,P01,Repository·CI·Security Foundation,CI matrix,"Linux core, Windows worker, widget, docs, security job을 구성한다.",P01-01,CI workflows,각 job 최소 smoke pass,Engineering,yes
+P01-05,P01,Repository·CI·Security Foundation,Secure workdir,temp/staging/quarantine/atomic output 규칙을 구현한다.,P01-01,workspace utility,path traversal·interruption tests,Engineering,yes
+P01-06,P01,Repository·CI·Security Foundation,Dependency security,"SBOM, license allowlist, vulnerability/secret scan을 추가한다.",P01-01,SBOM/security reports,금지 라이선스·secret 0,Engineering,yes
+P01-07,P01,Repository·CI·Security Foundation,Logging baseline,"request/job/trace ID, redaction, structured logging을 정의한다.",P01-01,logging crate/package,PII/secret redaction tests,Engineering,yes
+P01-08,P01,Repository·CI·Security Foundation,Fixture policy,synthetic/licensed-private/malicious fixture manifest 규칙을 만든다.,P01-01,fixture manifest schema,라이선스/PII 필드 누락 시 CI fail,Engineering,yes
+P01-09,P01,Repository·CI·Security Foundation,Bootstrap docs,개발 환경과 한 명의 새 개발자 smoke 절차를 작성한다.,"P01-01,P01-02,P01-03,P01-04,P01-05,P01-06,P01-07,P01-08",bootstrap script/runbook,새 환경 재현 성공,Engineering,no
+P02-01,P02,Official Catalog Importer·Capability Registry,SourceRecord schema,도움말/PDF/XSD/runtime 항목의 공통 record를 정의한다.,P01,source-record schema,sample records validate,Engineering,no
+P02-02,P02,Official Catalog Importer·Capability Registry,Help extractor,메뉴·상세 도움말을 구조화한다.,P02-01,help records,원문 locator 보존,Engineering,yes
+P02-03,P02,Official Catalog Importer·Capability Registry,Automation extractor,Action/Parameter/Object/Event 자료를 구조화한다.,P02-01,automation records,필드 타입·설명·source hash 보존,Engineering,yes
+P02-04,P02,Official Catalog Importer·Capability Registry,OWPML extractor,XSD/패키지 part/element/attribute를 색인한다.,P02-01,schema records,namespace/version coverage,Engineering,yes
+P02-05,P02,Official Catalog Importer·Capability Registry,정규화·중복 후보,label/input/output/scope 기반 candidate를 생성한다.,P02-01,candidate graph,자동 병합 오탐 review,Engineering,yes
+P02-06,P02,Official Catalog Importer·Capability Registry,Semantic capability review,후보를 stable capability와 scope/support에 매핑한다.,P02-01,reviewed catalog,official item 100% disposition,Engineering,yes
+P02-07,P02,Official Catalog Importer·Capability Registry,Binding model,target build action/method/parameter binding schema를 구현한다.,P02-01,binding registry types,schema/codegen pass,Engineering,yes
+P02-08,P02,Official Catalog Importer·Capability Registry,Runtime probe tool,default ParameterSet·실행 effect·modal을 탐사한다.,P02-01,probe CLI,disposable fixture에서 trace 생성,Engineering,yes
+P02-09,P02,Official Catalog Importer·Capability Registry,Registry signing·drift,signed registry와 build-to-build diff를 만든다.,"P02-01,P02-02,P02-03,P02-04,P02-05,P02-06,P02-07,P02-08",signed registry/drift report,tamper and drift tests,Engineering,no
+P03-01,P03,HWPX Package·Preserving XML Core,Bounded ZIP reader,크기/entry/압축률/path 제한을 적용한다.,P02,hwpx-package reader,malicious ZIP corpus pass,Engineering,no
+P03-02,P03,HWPX Package·Preserving XML Core,Package graph,mimetype/container/manifest/relationships/part graph를 구축한다.,P03-01,PackageGraph,dangling/duplicate relationship tests,Engineering,yes
+P03-03,P03,HWPX Package·Preserving XML Core,XML safety parser,"DTD/entity/network off, depth/node/text limit을 구현한다.",P03-01,safe XML reader,XML bomb/invalid namespace tests,Engineering,yes
+P03-04,P03,HWPX Package·Preserving XML Core,Preserving tokenizer,byte span·namespace-aware token/tree를 만든다.,P03-01,hwpx-xml token model,parse-serialize untouched equality,Engineering,yes
+P03-05,P03,HWPX Package·Preserving XML Core,Part preservation map,byte/token/semantic/opaque/rejected 등급을 계산한다.,P03-01,PreservationReport,known fixture expected map,Engineering,yes
+P03-06,P03,HWPX Package·Preserving XML Core,ID/reference index,part별 ID namespace와 cross-reference를 색인한다.,P03-01,IdIndex,duplicate/dangling/wrong-type detection,Engineering,yes
+P03-07,P03,HWPX Package·Preserving XML Core,Patch engine,제한된 PatchIntent와 overlap/conflict 검사를 구현한다.,P03-01,preserving patcher,property/random patch tests,Engineering,yes
+P03-08,P03,HWPX Package·Preserving XML Core,Atomic ZIP writer,deterministic normalized writer와 preserve writer를 분리한다.,P03-01,package writer,crash/no partial output tests,Engineering,yes
+P03-09,P03,HWPX Package·Preserving XML Core,Round-trip·repair,"100+ fixture reopen, repair diagnostics, fuzz baseline을 만든다.","P03-01,P03-02,P03-03,P03-04,P03-05,P03-06,P03-07,P03-08",roundtrip CLI/evidence,untouched policy 위반 0,Engineering,no
+P04-01,P04,DocumentGraph·OperationPlan·Transactions,DocumentGraph v2 types,metadata/sections/blocks/controls/resources/review/security graph를 구현한다.,P03,domain-ir crate,serialization/golden tests,Engineering,no
+P04-02,P04,DocumentGraph·OperationPlan·Transactions,Unit·ID model,"mm/pt/HWPUNIT, logical/source IDs, coordinate systems을 구현한다.",P04-01,unit/id module,overflow/rounding/property tests,Engineering,yes
+P04-03,P04,DocumentGraph·OperationPlan·Transactions,Selector engine,ID/slot/field/path/text-context selector를 구현한다.,P04-01,selector module,zero/multiple/stale candidate tests,Engineering,yes
+P04-04,P04,DocumentGraph·OperationPlan·Transactions,OperationPlan compiler,schema/default/unit/ambiguity/dependency를 compile한다.,P04-01,planner,invalid/cycle/needs-resolution tests,Engineering,yes
+P04-05,P04,DocumentGraph·OperationPlan·Transactions,Capability router,support/policy/preservation/backend health로 route한다.,P04-01,router,routing matrix tests,Engineering,yes
+P04-06,P04,DocumentGraph·OperationPlan·Transactions,Workspace transaction,isolated working copy와 rollback을 구현한다.,P04-01,transaction engine,fault injection/no source mutation,Engineering,yes
+P04-07,P04,DocumentGraph·OperationPlan·Transactions,Semantic diff,node/style/table/equation/object/reference diff를 구현한다.,P04-01,diff crate,golden diff tests,Engineering,yes
+P04-08,P04,DocumentGraph·OperationPlan·Transactions,Idempotency·CAS,key/hash/retry/revision conflict를 구현한다.,P04-01,idempotency service,duplicate and stale revision E2E,Engineering,yes
+P04-09,P04,DocumentGraph·OperationPlan·Transactions,VS-0 core CLI,A4 한 문단 HWPX를 plan→execute→reopen한다.,"P04-01,P04-02,P04-03,P04-04,P04-05,P04-06,P04-07,P04-08",vertical CLI,actual Hancom open evidence,Engineering,no
+P05-01,P05,Text·Character·Paragraph·Page·Section,Text flow reader/writer,"run, tab, line break, field boundary를 parse/lower한다.",P04,text module,Unicode/run-boundary corpus,Engineering,no
+P05-02,P05,Text·Character·Paragraph·Page·Section,Character styles,"언어별 font slots, 크기, 장평, 자간, 효과, 색을 구현한다.",P05-01,char style lowerer,style dedup/readback,Engineering,yes
+P05-03,P05,Text·Character·Paragraph·Page·Section,Paragraph styles,"정렬, 간격, 들여쓰기, border/fill, keep를 구현한다.",P05-01,para style lowerer,layout/semantic tests,Engineering,yes
+P05-04,P05,Text·Character·Paragraph·Page·Section,Tabs,"default/custom tab, leader, decimal tab을 구현한다.",P05-01,tab model,target readback fixtures,Engineering,yes
+P05-05,P05,Text·Character·Paragraph·Page·Section,Lists·numbering,글머리표/문단번호/개요/재시작/연속성을 구현한다.,P05-01,list engine,sequence and nesting tests,Engineering,yes
+P05-06,P05,Text·Character·Paragraph·Page·Section,Page setup,"preset/custom mm, orientation, margins, gutter를 구현한다.",P05-01,PageSetup lowerer,impossible layout negative tests,Engineering,yes
+P05-07,P05,Text·Character·Paragraph·Page·Section,Sections·columns,"section break, equal/custom columns, gaps/separator/balance를 구현한다.",P05-01,section/column engine,multi-section render tests,Engineering,yes
+P05-08,P05,Text·Character·Paragraph·Page·Section,Header/footer/page number,"variants, restart, fields, master page 연결을 구현한다.",P05-01,header/footer module,odd/even/first-page fixtures,Engineering,yes
+P05-09,P05,Text·Character·Paragraph·Page·Section,VS-1 layout,custom paper+2단+styles 문서를 E2E 생성한다.,"P05-01,P05-02,P05-03,P05-04,P05-05,P05-06,P05-07,P05-08",layout vertical slice,Hancom save/reopen/render pass,Engineering,no
+P06-01,P06,Table Engine,Grid/span invariant,"slot→master cell, rectangular span model을 구현한다.",P05,TableGrid,property tests,Engineering,no
+P06-02,P06,Table Engine,Create/insert/delete,표·행·열 생성과 삽입/삭제를 구현한다.,P06-01,table operations,boundary/index tests,Engineering,yes
+P06-03,P06,Table Engine,Merge/split,content preservation policy와 span 변환을 구현한다.,P06-01,merge/split engine,nonrectangular/conflict tests,Engineering,yes
+P06-04,P06,Table Engine,Cell formatting,"margin, border/fill, alignment, direction, protection을 구현한다.",P06-01,cell style lowerer,readback/render tests,Engineering,yes
+P06-05,P06,Table Engine,Sizing·autofit,fixed/min/preferred width와 body constraints solver를 구현한다.,P06-01,layout solver,overflow and font metric tests,Engineering,yes
+P06-06,P06,Table Engine,FormulaAst,"수식, 상대/절대 참조, 캐시, number format을 구현한다.",P06-01,formula engine,row/column move reference tests,Engineering,yes
+P06-07,P06,Table Engine,Pagination,"repeat header, row/page split, caption, keep를 구현한다.",P06-01,table pagination validator,boundary page suite,Engineering,yes
+P06-08,P06,Table Engine,Inspect/select,stable table/cell selector와 snapshot을 구현한다.,P06-01,table inspector,merged/nested selector tests,Engineering,yes
+P06-09,P06,Table Engine,Direct/automation differential,61 capability를 target binding과 비교한다.,"P06-01,P06-02,P06-03,P06-04,P06-05,P06-06,P06-07,P06-08",table conformance report,required matrix green,Engineering,no
+P07-01,P07,Native Equation Engine,MathAst,"semantic nodes, source spans, normalization/hash를 구현한다.",P05,math AST crate,canonicalization property tests,Engineering,no
+P07-02,P07,Native Equation Engine,LaTeX adapter,지원 문법·macro limits·ambiguity를 구현한다.,P07-01,LaTeX parser,Tier A/negative corpus,Engineering,yes
+P07-03,P07,Native Equation Engine,MathML adapter,namespace/content/presentation subset을 구현한다.,P07-01,MathML parser,round-trip corpus,Engineering,yes
+P07-04,P07,Native Equation Engine,EqEdit parser/compiler,target dialect precedence/symbol/escape를 구현한다.,P07-01,EqEdit module,AST↔script property tests,Engineering,yes
+P07-05,P07,Native Equation Engine,Direct native lowerer,equation control/script/style/layout를 HWPX에 생성한다.,P07-01,direct equation writer,native object inspection,Engineering,yes
+P07-06,P07,Native Equation Engine,Automation binding,native equation insertion/edit/readback을 연결한다.,P07-01,equation bindings,target action probes,Engineering,yes
+P07-07,P07,Native Equation Engine,Layout estimator,inline baseline/object extent와 render-required state를 구현한다.,P07-01,equation layout module,baseline/ink-box visual tests,Engineering,yes
+P07-08,P07,Native Equation Engine,Tier corpus,A/B/C와 legacy preserve fixture를 구축한다.,P07-01,equation corpus,"A 100%, B target",Engineering,yes
+P07-09,P07,Native Equation Engine,Editor smoke,double-click edit→token 변경→save/reopen을 자동/수동 증거화한다.,"P07-01,P07-02,P07-03,P07-04,P07-05,P07-06,P07-07,P07-08",oracle evidence,silent fallback 0,Engineering,no
+P08-01,P08,Images·Shapes·Drawing·Charts,Asset pipeline,MIME sniff/hash/dedup/relationship/size limit을 구현한다.,P05,asset store adapter,malformed media tests,Engineering,no
+P08-02,P08,Images·Shapes·Drawing·Charts,Image insert,"embed/link, crop, resolution, alt text를 구현한다.",P08-01,image lowerer,reopen/render,Engineering,yes
+P08-03,P08,Images·Shapes·Drawing·Charts,Geometry·anchor·wrap,좌표/size/rotation/anchor/text wrap을 구현한다.,P08-01,object geometry module,page/paragraph anchor fixtures,Engineering,yes
+P08-04,P08,Images·Shapes·Drawing·Charts,Basic shapes,line/rectangle/ellipse/text box/freeform을 구현한다.,P08-01,shape lowerer,property/readback tests,Engineering,yes
+P08-05,P08,Images·Shapes·Drawing·Charts,Appearance,line/fill/gradient/pattern/shadow/transparency/effects를 구현한다.,P08-01,effect model,visual diff,Engineering,yes
+P08-06,P08,Images·Shapes·Drawing·Charts,Composition,group/ungroup/z-order/align/distribute/connector를 구현한다.,P08-01,object graph operations,graph invariant tests,Engineering,yes
+P08-07,P08,Images·Shapes·Drawing·Charts,Charts,type/data/series/axis/legend/title/style automation bindings을 구현한다.,P08-01,chart adapter,target readback/export,Engineering,yes
+P08-08,P08,Images·Shapes·Drawing·Charts,OLE/media policy,"opaque preserve, blocked activation, inventory를 구현한다.",P08-01,active-content policy,security corpus,Engineering,yes
+P08-09,P08,Images·Shapes·Drawing·Charts,Object conformance,58 capability와 asset/render thresholds를 닫는다.,"P08-01,P08-02,P08-03,P08-04,P08-05,P08-06,P08-07,P08-08",object report,required matrix green,Engineering,no
+P09-01,P09,Fields·Forms·Notes·References,Field core,"named field, date/file/page/section/object result와 lock/update를 구현한다.",P05,field engine,field readback,Engineering,no
+P09-02,P09,Fields·Forms·Notes·References,Form controls,text/check/radio/combo/list/date properties와 tab order를 구현한다.,P09-01,form model,input/protection fixtures,Engineering,yes
+P09-03,P09,Fields·Forms·Notes·References,Notes,footnote/endnote insert/style/convert/export를 구현한다.,P09-01,note engine,section-specific tests,Engineering,yes
+P09-04,P09,Fields·Forms·Notes·References,Comments,insert/style/show/resolve/delete를 구현한다.,P09-01,comment model,author/time/readback,Engineering,yes
+P09-05,P09,Fields·Forms·Notes·References,Bookmark/hyperlink,"target names, external link policy, edit/delete를 구현한다.",P09-01,link/reference module,dangling/external tests,Engineering,yes
+P09-06,P09,Fields·Forms·Notes·References,Cross reference,target graph와 update를 구현한다.,P09-01,crossref engine,rename/update tests,Engineering,yes
+P09-07,P09,Fields·Forms·Notes·References,TOC/index,mark/create/update/hide와 numbering linkage를 구현한다.,P09-01,TOC/index engine,multi-level corpus,Engineering,yes
+P09-08,P09,Fields·Forms·Notes·References,Citation/bibliography,citation source and generated list를 구현/automation 연결한다.,P09-01,citation adapter,provider/format evidence,Engineering,yes
+P09-09,P09,Fields·Forms·Notes·References,Mail merge/labels,"data schema, preview, batch output, label layout를 구현한다.","P09-01,P09-02,P09-03,P09-04,P09-05,P09-06,P09-07,P09-08",merge engine,record count/privacy tests,Engineering,no
+P10-01,P10,Windows Hancom Automation Bridge,Protocol,Rust↔Agent gRPC와 Agent↔STA named-pipe protobuf를 정의한다.,P03,proto v1/generated SDK,compatibility test,Engineering,no
+P10-02,P10,Windows Hancom Automation Bridge,Windows Agent,"job lease, artifact staging, sandbox, upload를 구현한다.",P10-01,agent service,lease/fencing E2E,Engineering,yes
+P10-03,P10,Windows Hancom Automation Bridge,STA worker,C#/.NET message pump와 command loop를 구현한다.,P10-01,STA worker,COM apartment tests,Engineering,yes
+P10-04,P10,Windows Hancom Automation Bridge,HwpObject lifecycle,create/open/close/quit/process ownership을 구현한다.,P10-01,HancomSession,leak/crash tests,Engineering,yes
+P10-05,P10,Windows Hancom Automation Bridge,Security module,file path approval와 safe open policy를 연결한다.,P10-01,security adapter,allowed/denied path tests,Engineering,yes
+P10-06,P10,Windows Hancom Automation Bridge,Binding executor,signed allowlist와 typed ParameterSet을 실행한다.,P10-01,executor,unknown/raw action rejection,Engineering,yes
+P10-07,P10,Windows Hancom Automation Bridge,Event/modal watchdog,"events, expected/unknown dialog, screenshot metadata를 구현한다.",P10-01,watchdog,unknown modal fail-closed,Engineering,yes
+P10-08,P10,Windows Hancom Automation Bridge,Isolation,"interactive desktop/user/VM, network/clipboard/temp 정책을 구현한다.",P10-01,worker image/runbook,residue/isolation audit,Engineering,yes
+P10-09,P10,Windows Hancom Automation Bridge,Timeout/recycle,"cancel, unknown outcome reconciliation, process recycle을 구현한다.",P10-01,supervisor,hang/retry/no duplicate effect,Engineering,yes
+P10-10,P10,Windows Hancom Automation Bridge,Runtime probe,target build health/capability report를 registry에 공급한다.,"P10-01,P10-02,P10-03,P10-04,P10-05,P10-06,P10-07,P10-08,P10-09",probe agent,profile mismatch no lease,Engineering,no
+P11-01,P11,Advanced Desktop Features,HWP import/export,binary HWP와 office formats를 automation 변환한다.,"P06,P07,P08,P09,P10",format adapter,loss/reopen report,Engineering,no
+P11-02,P11,Advanced Desktop Features,Track changes,enable/display/filter/accept/reject/protect를 연결한다.,P11-01,review bindings,change list readback,Engineering,yes
+P11-03,P11,Advanced Desktop Features,Compare/history,문서 비교·병합·한/글 이력 기능을 구현한다.,P11-01,compare adapter,known-diff fixtures,Engineering,yes
+P11-04,P11,Advanced Desktop Features,Chart advanced,chart editing/export behavior를 완성한다.,P11-01,chart binding bundle,visual/readback,Engineering,yes
+P11-05,P11,Advanced Desktop Features,Print/PDF,"print profiles, PDF options, tagged PDF를 구현한다.",P11-01,print/export adapter,spool/export reopen,Engineering,yes
+P11-06,P11,Advanced Desktop Features,External tools,spell/dictionary/translation/assets/provider flow를 구현한다.,P11-01,provider adapters,consent/license/offline tests,Engineering,yes
+P11-07,P11,Advanced Desktop Features,Workstation UI,보기/창/도구상자 session capabilities를 구현한다.,P11-01,UI bindings,session state probe,Engineering,yes
+P11-08,P11,Advanced Desktop Features,Advanced security,password/distribution/protection/signature inspection을 연결한다.,P11-01,security bindings,clean-worker audit,Engineering,yes
+P11-09,P11,Advanced Desktop Features,Accessibility,"alt text, headings, table headers, reading order/checker를 구현한다.","P11-01,P11-02,P11-03,P11-04,P11-05,P11-06,P11-07,P11-08",accessibility suite,checker and tagged export,Engineering,no
+P12-01,P12,Template Surgical Edit·Cross-backend Normalization,Template analyzer,slots/styles/sections/controls/unknown/protection을 inventory한다.,"P06,P07,P08,P09,P11",TemplateSnapshot,real/synthetic template corpus,Engineering,no
+P12-02,P12,Template Surgical Edit·Cross-backend Normalization,TemplateContract,fillable/immutable/repeating regions와 allowed operation을 생성한다.,P12-01,contract generator,schema and human review,Engineering,yes
+P12-03,P12,Template Surgical Edit·Cross-backend Normalization,Surgical edits,field/slot/stable ID 기반 patch와 untouched policy를 구현한다.,P12-01,template editor,byte/token preservation,Engineering,yes
+P12-04,P12,Template Surgical Edit·Cross-backend Normalization,Style mapping,semantic styles를 existing style IDs에 map하고 conflict를 처리한다.,P12-01,style mapper,no unintended style duplication,Engineering,yes
+P12-05,P12,Template Surgical Edit·Cross-backend Normalization,Unknown/OLE handling,opaque extension/active content 영향 분석과 quarantine을 구현한다.,P12-01,preservation/security report,malicious template tests,Engineering,yes
+P12-06,P12,Template Surgical Edit·Cross-backend Normalization,Cross-backend normalization,direct/automation output을 semantic snapshot으로 조정한다.,P12-01,normalizer,differential fixtures,Engineering,yes
+P12-07,P12,Template Surgical Edit·Cross-backend Normalization,Document merge/split,section/style/resource/reference collision을 처리한다.,P12-01,transform engine,multi-document tests,Engineering,yes
+P12-08,P12,Template Surgical Edit·Cross-backend Normalization,Exam engine,question/score/choice/answer/keep/split rule를 구현한다.,P12-01,ExamPlan compiler,30-question fixture,Engineering,yes
+P12-09,P12,Template Surgical Edit·Cross-backend Normalization,VS-2/VS-3,학교 양식과 수학 시험지를 end-to-end 완성한다.,"P12-01,P12-02,P12-03,P12-04,P12-05,P12-06,P12-07,P12-08",vertical evidence,Hancom save/reopen/visual pass,Engineering,no
+P13-01,P13,Validation·Hancom Oracle·Render,Validation model,pass/fail/unverified/skipped evidence와 invalidation을 구현한다.,"P02,P10",validation-core,state transition tests,Engineering,no
+P13-02,P13,Validation·Hancom Oracle·Render,Package/schema validators,ZIP/XML/XSD/relationship/reference 검사를 구현한다.,P13-01,L1/L2 validators,malformed corpus,Engineering,yes
+P13-03,P13,Validation·Hancom Oracle·Render,Semantic snapshot,문서 의미 canonical snapshot과 feature comparator를 구현한다.,P13-01,snapshot engine,determinism tests,Engineering,yes
+P13-04,P13,Validation·Hancom Oracle·Render,Hancom open oracle,fresh target process open/repair/error evidence를 구현한다.,P13-01,L5 oracle,known corrupt fixtures,Engineering,yes
+P13-05,P13,Validation·Hancom Oracle·Render,Save/reopen oracle,"save, close, fresh reopen, snapshot compare를 구현한다.",P13-01,L6 oracle,format-specific suite,Engineering,yes
+P13-06,P13,Validation·Hancom Oracle·Render,Render service,"page PDF/image, font substitution, bounds metadata를 생성한다.",P13-01,render oracle,page count/bounds tests,Engineering,yes
+P13-07,P13,Validation·Hancom Oracle·Render,Visual diff,"affected region, text/table/equation/object thresholds를 구현한다.",P13-01,visual diff tool,golden image suite,Engineering,yes
+P13-08,P13,Validation·Hancom Oracle·Render,Export validator,PDF/DOCX/HWP/image/text reopen/loss를 검증한다.,P13-01,export validators,conversion matrix,Engineering,yes
+P13-09,P13,Validation·Hancom Oracle·Render,Evidence store/report,"환경 digest, artifact refs, freshness와 dashboard를 구현한다.","P13-01,P13-02,P13-03,P13-04,P13-05,P13-06,P13-07,P13-08",evidence service,tamper/invalidation tests,Engineering,no
+P14-01,P14,Projects·Revisions·Jobs·Artifacts,Metadata schema,tenant/project/revision/checkpoint/job/artifact/idempotency DB를 설계한다.,P04,DB migrations,migration/rollback tests,Engineering,no
+P14-02,P14,Projects·Revisions·Jobs·Artifacts,Artifact store,"content hash, encryption, ACL, quarantine, signed URL을 구현한다.",P14-01,artifact service,cross-tenant denial,Engineering,yes
+P14-03,P14,Projects·Revisions·Jobs·Artifacts,Revision CAS,immutable DAG와 expected head commit을 구현한다.,P14-01,revision service,race/conflict tests,Engineering,yes
+P14-04,P14,Projects·Revisions·Jobs·Artifacts,History/checkpoints,"semantic diff cursor, labels, branches를 구현한다.",P14-01,history API,DAG/query tests,Engineering,yes
+P14-05,P14,Projects·Revisions·Jobs·Artifacts,Job state machine,enqueue/lease/stage/execute/validate/commit 상태를 구현한다.,P14-01,job service,invalid transition tests,Engineering,yes
+P14-06,P14,Projects·Revisions·Jobs·Artifacts,Worker lease/fencing,"capability/profile matching, lease expiry, fencing token을 구현한다.",P14-01,scheduler,late worker commit rejection,Engineering,yes
+P14-07,P14,Projects·Revisions·Jobs·Artifacts,Idempotency/reconciliation,"request hash, timeout outcome, retry policy를 구현한다.",P14-01,idempotency module,duplicate side-effect tests,Engineering,yes
+P14-08,P14,Projects·Revisions·Jobs·Artifacts,Cancel/cleanup,"safe cancellation, orphan artifact, temp cleanup을 구현한다.",P14-01,cleanup worker,fault injection,Engineering,yes
+P14-09,P14,Projects·Revisions·Jobs·Artifacts,Retention/local mirror,purge/legal hold와 Codex project-state mirror를 구현한다.,"P14-01,P14-02,P14-03,P14-04,P14-05,P14-06,P14-07,P14-08",retention/sync service,delete and conflict tests,Engineering,no
+P15-01,P15,Remote MCP Control Plane,Auth/tenant,"OAuth/OIDC identity, tenant mapping, service tokens를 구현한다.",P14,auth middleware,negative/expiry tests,Engineering,no
+P15-02,P15,Remote MCP Control Plane,Public tool schemas,18 tool input/output와 annotations를 확정한다.,P15-01,MCP descriptors,schema snapshots,Engineering,yes
+P15-03,P15,Remote MCP Control Plane,Handlers,auth→schema→policy→job/service 호출→structured result를 구현한다.,P15-01,MCP handlers,contract tests,Engineering,yes
+P15-04,P15,Remote MCP Control Plane,Async job UX,"job IDs, progress, cancel, terminal receipt를 구현한다.",P15-01,job MCP tools,long-running E2E,Engineering,yes
+P15-05,P15,Remote MCP Control Plane,Artifact delivery,"attachment/signed URL, range, expiry를 구현한다.",P15-01,artifact_get,ACL/expiry tests,Engineering,yes
+P15-06,P15,Remote MCP Control Plane,Error mapping,internal errors를 stable public envelope로 map한다.,P15-01,error catalog,no secret leakage,Engineering,yes
+P15-07,P15,Remote MCP Control Plane,Rate limit/quotas,tenant/user/capability/job class 제한을 구현한다.,P15-01,quota service,burst/fairness tests,Engineering,yes
+P15-08,P15,Remote MCP Control Plane,Telemetry,tool/job/backend/capability SLI와 trace correlation을 구현한다.,P15-01,dashboards,sample trace complete,Engineering,yes
+P15-09,P15,Remote MCP Control Plane,Inspector/staging,MCP Inspector와 staging HTTPS E2E를 자동화한다.,"P15-01,P15-02,P15-03,P15-04,P15-05,P15-06,P15-07,P15-08",staging evidence,all tools green,Engineering,no
+P16-01,P16,ChatGPT Web Plugin·Widget,Official docs lock,release 시점 plugin/Apps SDK 문서와 examples를 다시 고정한다.,P15,OpenAI source lock,manifest/UI requirements reviewed,Engineering,no
+P16-02,P16,ChatGPT Web Plugin·Widget,Universal package,"plugin manifest, registered app mapping, assets를 구성한다.",P16-01,plugin bundle,package validation,Engineering,yes
+P16-03,P16,ChatGPT Web Plugin·Widget,Skills,9개 workflow skill을 실제 tool names와 동기화한다.,P16-01,skills package,trigger/negative eval,Engineering,yes
+P16-04,P16,ChatGPT Web Plugin·Widget,Widget shell,"MCP Apps bridge, resource URI, theme/locale를 구현한다.",P16-01,React widget,bridge lifecycle tests,Engineering,yes
+P16-05,P16,ChatGPT Web Plugin·Widget,Project/revision UI,"project open, history, checkpoint, conflict 화면을 구현한다.",P16-01,continuity UI,Web↔Codex E2E,Engineering,yes
+P16-06,P16,ChatGPT Web Plugin·Widget,Plan/diff UI,"capability route, risk, semantic diff, warnings를 구현한다.",P16-01,dry-run UI,high-risk confirmation tests,Engineering,yes
+P16-07,P16,ChatGPT Web Plugin·Widget,Preview/job UI,"page thumbnails, validation badges, progress/cancel을 구현한다.",P16-01,preview UI,large job tests,Engineering,yes
+P16-08,P16,ChatGPT Web Plugin·Widget,Upload/download,input file/asset와 artifact output flow를 구현한다.,P16-01,file flow,size/type/ACL tests,Engineering,yes
+P16-09,P16,ChatGPT Web Plugin·Widget,CSP/a11y/E2E,"exact domains, keyboard, screen reader, developer-mode flow를 검증한다.","P16-01,P16-02,P16-03,P16-04,P16-05,P16-06,P16-07,P16-08",web release evidence,create/edit/validate/resume/download green,Engineering,no
+P17-01,P17,Codex Remote·Local Companion,Codex package,"manifest, remote app, skills/agents/commands를 구성한다.",P15,Codex bundle,package validation,Engineering,no
+P17-02,P17,Codex Remote·Local Companion,Remote workflow,동일 MCP project/create/edit/validate를 검증한다.,P17-01,remote E2E,Web project resume,Engineering,yes
+P17-03,P17,Codex Remote·Local Companion,Local daemon,workspace-confined local service와 health/config를 구현한다.,P17-01,local daemon,sandbox tests,Engineering,yes
+P17-04,P17,Codex Remote·Local Companion,Local MCP config,optional `.mcp.json`과 startup/auth를 구현한다.,P17-01,local companion config,fresh install smoke,Engineering,yes
+P17-05,P17,Codex Remote·Local Companion,Local file/Git,fixture/materialize/output/diff/commit helper를 구현한다.,P17-01,local workflow,path traversal/large file tests,Engineering,yes
+P17-06,P17,Codex Remote·Local Companion,Project sync,"local mirror, pull/push/checkpoint를 구현한다.",P17-01,sync CLI,offline/online transition,Engineering,yes
+P17-07,P17,Codex Remote·Local Companion,Conflict handling,rebase/branch/manual merge와 stale head UI를 구현한다.,P17-01,conflict resolver,concurrent Web/Codex tests,Engineering,yes
+P17-08,P17,Codex Remote·Local Companion,Approvals,shell/automation/external side effect approval policy를 구현한다.,P17-01,approval policy,denied-by-default tests,Engineering,yes
+P17-09,P17,Codex Remote·Local Companion,Handoff/evals,AGENTS/handoff와 task eval corpus를 완성한다.,"P17-01,P17-02,P17-03,P17-04,P17-05,P17-06,P17-07,P17-08",Codex evidence,remote/local parity,Engineering,no
+P18-01,P18,Quality·Security·Performance·DR,Capability closure,609 rows의 상태·fixture·evidence·제약을 audit한다.,"P12,P13,P16,P17",coverage dashboard,missing required field 0,Engineering,no
+P18-02,P18,Quality·Security·Performance·DR,Fuzz/security,ZIP/XML/IR/protocol/widget/API/worker fuzz와 pentest를 수행한다.,P18-01,security report,critical/high 0,Engineering,yes
+P18-03,P18,Quality·Security·Performance·DR,Large document performance,page/object/table/equation scale별 benchmark와 limit을 확정한다.,P18-01,benchmark report,SLO threshold,Engineering,yes
+P18-04,P18,Quality·Security·Performance·DR,Windows capacity,"worker density, recycle, cold start, queue capacity를 측정한다.",P18-01,capacity model,peak load simulation,Engineering,yes
+P18-05,P18,Quality·Security·Performance·DR,Chaos/retry,network/storage/worker crash/modal/DB failover를 주입한다.,P18-01,chaos evidence,no partial/duplicate commit,Engineering,yes
+P18-06,P18,Quality·Security·Performance·DR,Backup/restore,DB/object/binding/evidence backup과 restore drill을 수행한다.,P18-01,DR report,RPO/RTO met,Engineering,yes
+P18-07,P18,Quality·Security·Performance·DR,Privacy/retention,"PII scan, data residency, purge/legal hold를 검증한다.",P18-01,privacy assessment,deletion verification,Engineering,yes
+P18-08,P18,Quality·Security·Performance·DR,Supply chain,"SBOM, provenance, signing, image scanning을 완성한다.",P18-01,release attestations,policy pass,Engineering,yes
+P18-09,P18,Quality·Security·Performance·DR,RC gate,G0-G6와 blocker review를 수행한다.,"P18-01,P18-02,P18-03,P18-04,P18-05,P18-06,P18-07,P18-08",release candidate,all mandatory gates pass,Engineering,no
+P19-01,P19,Production Deployment·License·Submission,Production infra,control plane/storage/queue/Windows pool를 배포한다.,P18,production environment,smoke/health pass,Engineering,no
+P19-02,P19,Production Deployment·License·Submission,License evidence,Automation/WebHWP/font/provider 계약을 production config에 연결한다.,P19-01,signed license bundle,scope matches deployment,Engineering,yes
+P19-03,P19,Production Deployment·License·Submission,Identity/secrets/domain,"OAuth, secrets, domains, TLS, rotation을 설정한다.",P19-01,security config,rotation/failover test,Engineering,yes
+P19-04,P19,Production Deployment·License·Submission,Privacy/terms/support,"정책 문서, support channel, data handling disclosure를 확정한다.",P19-01,public metadata,legal review,Engineering,yes
+P19-05,P19,Production Deployment·License·Submission,Canary,internal/workspace tenant로 제한 출시한다.,P19-01,canary report,SLO/error/feedback threshold,Engineering,yes
+P19-06,P19,Production Deployment·License·Submission,Rollback,service/image/registry/binding/widget를 함께 rollback한다.,P19-01,rollback runbook/evidence,full rollback drill,Engineering,yes
+P19-07,P19,Production Deployment·License·Submission,Plugin submission,"manifest, screenshots, test account, review notes를 제출한다.",P19-01,submission package,review checklist pass,Engineering,yes
+P19-08,P19,Production Deployment·License·Submission,Quota/billing,필요 시 job class/worker cost/billing guardrail을 구현한다.,P19-01,quota/billing config,abuse/cost tests,Engineering,yes
+P19-09,P19,Production Deployment·License·Submission,GA gate,"production smoke, incident contacts, G7를 승인한다.","P19-01,P19-02,P19-03,P19-04,P19-05,P19-06,P19-07,P19-08",1.0 release,signed release notes,Engineering,no
+P20-01,P20,Post-GA Parity·Rust-native Expansion,Source/build watcher,Hancom/OpenAI 문서·build 변화를 감시한다.,P19,change feed,scheduled diff runs,Engineering,no
+P20-02,P20,Post-GA Parity·Rust-native Expansion,Catalog delta,새 source를 import하고 coverage drift를 review한다.,P20-01,delta registry,official item disposition,Engineering,yes
+P20-03,P20,Post-GA Parity·Rust-native Expansion,Binding re-probe,새 build의 automation binding을 재검증한다.,P20-01,binding bundle,target canary green,Engineering,yes
+P20-04,P20,Post-GA Parity·Rust-native Expansion,Direct backend expansion,사용량/안정성 높은 automation capability를 Rust direct로 이전한다.,P20-01,new direct capabilities,differential parity,Engineering,yes
+P20-05,P20,Post-GA Parity·Rust-native Expansion,WebHWP expansion,라이선스가 있는 환경에서 browser/server route를 추가한다.,P20-01,WebHWP bindings,cross-backend tests,Engineering,yes
+P20-06,P20,Post-GA Parity·Rust-native Expansion,Schema migration,IR/OperationPlan/project/binding migration을 제공한다.,P20-01,migrators,N-1 compatibility,Engineering,yes
+P20-07,P20,Post-GA Parity·Rust-native Expansion,Deprecation,removed/renamed capability와 target build sunset을 운영한다.,P20-01,deprecation notices,no silent break,Engineering,yes
+P20-08,P20,Post-GA Parity·Rust-native Expansion,Performance/cost,"queue, storage, render, worker 효율을 지속 개선한다.",P20-01,optimization report,no correctness regression,Engineering,yes
+P20-09,P20,Post-GA Parity·Rust-native Expansion,Parity release cadence,분기/빌드별 matrix와 evidence report를 발행한다.,"P20-01,P20-02,P20-03,P20-04,P20-05,P20-06,P20-07,P20-08",parity release,signed report,Engineering,no

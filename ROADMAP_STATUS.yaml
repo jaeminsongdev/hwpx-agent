@@ -1,0 +1,111 @@
+schema: hwpx-agent.roadmap-status/v2
+updated_at: 2026-09-01
+current_phase: P01
+status: p01_in_progress_current_pc_local_only
+design_baseline:
+  feature_domains: 16
+  features: 609
+  capability_contracts: 609
+  roadmap_phases: 21
+  wbs_tasks: 190
+  root_skills: 9
+  static_validation: passed
+  validation_errors: 0
+  generated_outputs_idempotent: true
+runtime_validation:
+  product_code_built: false
+  hwpx_artifact_generated: true
+  hancom_automation_executed: true
+  hancom_automation_probe_attempted: true
+  hancom_automation_probe_state: passed_2020_2022_and_2024_deferred_unqualified
+  hancom_oracle_executed: true
+  hancom_oracle_scope: current_pc_exact_2020_local_development_only
+  chatgpt_codex_e2e_executed: false
+p00_execution:
+  started_at: 2026-09-01
+  gate_state: pass_scoped_current_pc
+  historical_final_gate_attempt: v6_completed_blocked_pre_rebaseline
+  current_gate_audit: v10_current_pc_scope_owner_rebaseline_pass
+  target_family:
+    family_id: hancom-hangul-desktop-2020-plus
+    minimum_major_release: 2020
+    admission: discovery_then_exact_build_host_evidence_qualification
+    current_gate_required_releases:
+      - 2020
+    deferred_releases:
+      - 2022
+      - 2024
+  primary_target:
+    profile_id: hancom-hangul-2020-secondary
+    stable_id_note: retained_for_evidence_correlation
+    role: primary_development
+    exact_build: 11.0.0.9136
+    runtime_state: passed_exact_identity_probe
+    document_oracle_state: passed_current_development_pc
+    document_smoke_run_id: 98798b1801314a5e9bebf0f2505bc763
+    current_host_baseline_state: passed
+    current_host_baseline_digest_sha256: 7fbf6559fc3372b9da6c0b0ca53d9f4eb78b76a79df248c37ff009c13376adc0
+    clean_image_state: deferred_outside_current_pc_development_scope
+  deferred_compatibility_targets:
+    - profile_id: hancom-hangul-2022-compatibility
+      exact_build: 12.0.0.4605
+      runtime_state: hold_unqualified
+    - profile_id: hancom-hangul-2024-primary
+      exact_build: 13.0.0.4049
+      runtime_state: hold_unqualified
+  use_scope:
+    current: personal_noncommercial_local_development
+    user_purpose_confirmation: confirmed_2026-09-01
+    installed_2020_product_seat_confirmation: confirmed_genuine_valid_by_user_2026-09-01
+    production_release_state: disabled
+  source_lock_id: source-lock-P00-20260901-v9-final-current-scope
+  archived_remote_source_artifacts: 24
+  source_lock_entries: 40
+  source_lock_local_matches: 40
+  source_lock_remote_matches: 24
+  remote_diagnostics:
+    state: validated_for_p00_tooling
+    collector_sha256: 9e3829ef45d46d7638563ba7dc3b6816b55304daa05a3c050fd7527dd429cd3d
+    probe_e2e: passed_2020
+    discovery_e2e: passed_unqualified
+    windows_powershell_5_1_e2e: passed
+    privacy_invariants: passed
+    negative_security_tests: 3_of_3_passed
+  tasks:
+    P00-01: passed_exact_2020_scope_only
+    P00-02: accepted_scoped_current_host_baseline_clean_image_not_claimed
+    P00-03: passed_current_scope_substitution_zero_hcr_batang_hancom_pdf
+    P00-04: passed_current_scope_ks_reform03_rights_and_attribution_locked
+    P00-05: passed_final_current_scope_40_local_24_remote
+    P00-06: passed_current_personal_noncommercial_valid_seat_scope
+    P00-07: passed_disabled
+    P00-08: passed
+    P00-09: v10_pass_scoped_current_pc_p01_local_authorized
+phases:
+  P00: completed_current_pc_local_scope
+  P01: in_progress_current_pc_local_scope
+  P02: blocked_by_P01
+  P03: blocked_by_P02
+  P04: blocked_by_P03
+  P05: blocked_by_P04
+  P06: blocked_by_P05
+  P07: blocked_by_P05
+  P08: blocked_by_P05
+  P09: blocked_by_P05
+  P10: blocked_by_P03
+  P11: blocked_by_P06_P07_P08_P09_P10
+  P12: blocked_by_P06_P07_P08_P09_P11
+  P13: blocked_by_P02_P10
+  P14: blocked_by_P04
+  P15: blocked_by_P14
+  P16: blocked_by_P15
+  P17: blocked_by_P15
+  P18: blocked_by_P12_P13_P16_P17
+  P19: blocked_by_P18
+  P20: post_ga
+blocking_decisions: []
+deferred_release_blockers:
+  - clean_immutable_or_equivalent_portable_worker_qualification_if_that_scope_opens
+  - hancom_2022_and_2024_independent_qualification
+  - commercial_internal_hosted_server_vm_and_distribution_approval
+  - production_font_embedding_and_redistribution_rights

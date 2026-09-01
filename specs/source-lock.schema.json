@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/source-lock.schema.json",
+  "title": "SourceLock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_lock_id",
+    "generated_at",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hwpx-agent.source-lock/v2"
+    },
+    "source_lock_id": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "kind",
+          "origin",
+          "fetched_at",
+          "sha256",
+          "license_state"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "web_help",
+              "pdf_manual",
+              "xsd",
+              "zip",
+              "runtime_probe",
+              "fixture",
+              "openai_docs",
+              "machine_readable_standard",
+              "policy_evidence"
+            ]
+          },
+          "origin": {
+            "type": "string"
+          },
+          "version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fetched_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "parser_version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "license_state": {
+            "enum": [
+              "approved",
+              "restricted",
+              "pending",
+              "denied",
+              "public_reference"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          },
+          "revalidation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "mode"
+            ],
+            "properties": {
+              "mode": {
+                "enum": [
+                  "byte_exact",
+                  "semantic"
+                ]
+              },
+              "required_markers": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "method": {
+                "enum": [
+                  "GET",
+                  "POST"
+                ]
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1
+              },
+              "content_type": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "mode": {
+                      "const": "semantic"
+                    }
+                  },
+                  "required": [
+                    "mode"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "required_markers"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "method": {
+                      "const": "POST"
+                    }
+                  },
+                  "required": [
+                    "method"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "body",
+                    "content_type"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+# Copy this file for a newly discovered Hangul 2020+ exact build. Do not replace
+# placeholders or promote states until an accepted discovery bundle is reviewed.
+profile_id: replace-with-hancom-hangul-release-build
+product: replace-with-official-product-name
+major_release: replace-with-official-release-year
+exact_build: replace-with-four-part-file-version
+os_image: replace-with-independent-image-id
+locale: ko-KR
+fonts_manifest: font-printer-manifest.yaml
+printer_profile: replace-with-pinned-printer-profile
+automation_catalog_version: null
+owpml_version: KS-X-6101-2024-pending-official-copy
+capability_catalog_version: 2.0-design
+license_state: pending
+enabled_backends:
+  - direct_hwpx
+constraints:
+  role: compatibility
+  target_family: hancom-hangul-desktop-2020-plus
+  official_product_identity: pending
+  installation_state: discovered_unqualified
+  executable_architecture: unverified
+  executable_sha256: null
+  runtime_probe: not_run
+  remote_diagnostic_state: discovery_review_required
+  remote_diagnostic_collector_sha256: 9e3829ef45d46d7638563ba7dc3b6816b55304daa05a3c050fd7527dd429cd3d
+  desktop_automation_release_state: disabled_pending_license_and_probe
+  oracle_release_state: disabled_pending_runtime_evidence
+  external_network: false
+  scripts: preserve_only
+  ole: preserve_only
+image_digest: null
+source_lock_id: source-lock-P00-20260901-draft

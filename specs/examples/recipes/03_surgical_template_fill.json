@@ -1,0 +1,77 @@
+{
+  "schema_version": "hwpx-agent.operation-plan/v2",
+  "plan_id": "plan_template_fill",
+  "mode": "surgical_preserve",
+  "target_profile": "hancom-2024-primary-ko-KR",
+  "source_revision_id": "rev-template-source",
+  "template_contract_id": "tpl-school-form-v1",
+  "operations": [
+    {
+      "op_id": "title",
+      "depends_on": [],
+      "capability_id": "search.replace_literal",
+      "selector": {
+        "field_name": "document_title"
+      },
+      "args": {
+        "query": "{{TITLE}}",
+        "replacement": "2026학년도 2학기 미적분 평가",
+        "regex": false,
+        "max_replacements": 1,
+        "preview_only": false
+      },
+      "preconditions": [
+        "template slot document_title is fillable"
+      ],
+      "postconditions": [
+        "exactly one title slot replaced"
+      ],
+      "on_failure": "abort",
+      "client_label": "제목 채우기"
+    },
+    {
+      "op_id": "student-table",
+      "depends_on": [
+        "title"
+      ],
+      "capability_id": "table.insert_rows",
+      "selector": {
+        "table_id": "student-roster"
+      },
+      "args": {
+        "index": 1,
+        "count": 29,
+        "inherit_format_from": "before"
+      },
+      "preconditions": [
+        "table student-roster exists"
+      ],
+      "postconditions": [
+        "roster has 30 data rows"
+      ],
+      "on_failure": "abort",
+      "client_label": "명단 행 추가"
+    }
+  ],
+  "preconditions": [
+    "template preservation contract is valid"
+  ],
+  "postconditions": [
+    "immutable regions unchanged"
+  ],
+  "preservation": {
+    "untouched_parts": "byte_preserve",
+    "unknown_xml": "preserve",
+    "styles": "no_gc"
+  },
+  "requested_validation": [
+    "package",
+    "semantic",
+    "preservation",
+    "hancom_save_reopen",
+    "visual_diff"
+  ],
+  "metadata": {
+    "recipe": "surgical_template_fill"
+  }
+}

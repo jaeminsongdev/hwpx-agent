@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/foundation/log-event-v1.schema.json",
+  "title": "SafeLogEventV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event", "request_id", "trace_id", "fields"],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.safe-log-event/v1" },
+    "event": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]{2,127}$" },
+    "request_id": { "type": "string", "format": "uuid" },
+    "job_id": { "type": ["string", "null"], "format": "uuid" },
+    "trace_id": { "type": "string", "format": "uuid" },
+    "fields": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9_.-]{1,63}$" },
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "integer", "minimum": 0 },
+          { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          { "enum": ["passed", "failed", "unverified"] },
+          { "type": "string", "pattern": "^(/|#/)" }
+        ]
+      }
+    }
+  }
+}

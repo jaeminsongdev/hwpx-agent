@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package hwpx_agent.foundation.v1;
+
+option csharp_namespace = "HwpxAgent.Protocol.Foundation.V1";
+
+// RPC body에는 문서 binary를 넣지 않고 staged artifact 참조만 전달한다.
+message ArtifactRef {
+  string artifact_id = 1;
+  string sha256 = 2;
+  uint64 size_bytes = 3;
+}
+
+message WorkerRequestContext {
+  string request_id = 1;
+  string job_id = 2;
+  string trace_id = 3;
+  string capability_id = 4;
+  ArtifactRef input = 5;
+}
+
+enum ValidationState {
+  VALIDATION_STATE_UNSPECIFIED = 0;
+  VALIDATION_STATE_PASSED = 1;
+  VALIDATION_STATE_FAILED = 2;
+  VALIDATION_STATE_UNVERIFIED = 3;
+}
+
+message WorkerReceipt {
+  string request_id = 1;
+  string job_id = 2;
+  string capability_id = 3;
+  ArtifactRef output = 4;
+  ValidationState validation_state = 5;
+}

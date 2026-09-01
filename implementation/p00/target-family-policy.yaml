@@ -1,0 +1,98 @@
+schema_version: hwpx-agent.hancom-target-family/v1
+family_id: hancom-hangul-desktop-2020-plus
+minimum_major_release: "2020"
+release_lines_open_ended: true
+qualification_unit: exact_build_and_host_evidence_bundle
+profile_template: remote-diagnostics/templates/target-profile.yaml
+locale_policy: explicit_per_profile
+current_implementation_baseline:
+  scope: personal_noncommercial_local_development
+  primary_profile_id: hancom-hangul-2020-secondary
+  primary_major_release: "2020"
+  primary_exact_build: 11.0.0.9136
+  gate_requires_only_primary_profile: true
+  support_claim: exact_2020_build_only
+  deferred_profile_ids:
+    - hancom-hangul-2022-compatibility
+    - hancom-hangul-2024-primary
+  deferred_profiles_are_current_gate_blockers: false
+  deferred_profiles_require_full_independent_qualification_before_support_claim: true
+  current_2020_evidence_boundary:
+    exact_identity_probe: passed
+    current_host_baseline: passed
+    current_host_baseline_digest_sha256: 7fbf6559fc3372b9da6c0b0ca53d9f4eb78b76a79df248c37ff009c13376adc0
+    clean_worker_image_qualification: deferred_not_claimed
+    document_oracle: passed_current_pc
+    do_not_promote_current_pc_evidence_to_another_host_or_version: true
+qualification_policy:
+  discovery:
+    allowed: true
+    resulting_state: discovered_unqualified
+    requires_com_activation: false
+  runtime_probe:
+    requires_exact_build: true
+    requires_executable_sha256: true
+    requires_bitness: true
+    requires_independent_host_evidence_bundle: true
+    requires_independent_worker_image: false
+    requires_version_readback: true
+    requires_clean_quit: true
+    resulting_state: runtime_qualified
+  document_oracle:
+    requires_generated_non_user_fixture: true
+    requires_open_save_reopen: true
+    requires_render_export: true
+    requires_font_substitution_zero: true
+    resulting_state: oracle_qualified
+known_release_lines:
+  - major_release: "2020"
+    file_version_major: 11
+    current_reference_build: 11.0.0.9136
+    profile_id: hancom-hangul-2020-secondary
+    gate_role: primary_development
+    local_state: current_pc_runtime_oracle_and_host_baseline_qualified
+  - major_release: "2022"
+    file_version_major: 12
+    current_reference_build: 12.0.0.4605
+    profile_id: hancom-hangul-2022-compatibility
+    gate_role: deferred_compatibility
+    local_state: hold_remote_pc_unavailable
+  - major_release: "2024"
+    file_version_major: 13
+    current_reference_build: 13.0.0.4049
+    profile_id: hancom-hangul-2024-primary
+    gate_role: deferred_compatibility
+    local_state: hold_remote_pc_unavailable
+unknown_release_policy:
+  minimum_release_enforced: true
+  infer_release_from_file_version_formula: false
+  discovery_state: discovered_unqualified
+  lease_allowed: false
+  required_for_admission:
+    - official product or update identity
+    - exact Hwp.exe build, bitness, and SHA-256
+    - isolated runtime receipt
+    - source and license review
+worker_isolation:
+  one_target_profile_per_evidence_bundle: true
+  immutable_image_required_for_current_pc_development: false
+  clean_image_claimed_for_current_pc: false
+  coinstalled_prog_id_evidence_allowed: false
+  in_place_patch_allowed: false
+  interactive_session_required: true
+diagnostics:
+  transport: offline_bundle
+  network_upload_by_collector: false
+  ui_automation: forbidden
+  computer_use: screenshot_only
+  user_documents: forbidden
+  event_log_policy: metadata_allowlist
+  crash_dump_policy: metadata_only_until_explicit_consent
+  bundle_integrity: sha256_manifest
+  request_schema: remote-diagnostics/schemas/diagnostic-request.schema.json
+  session_schema: remote-diagnostics/schemas/diagnostic-session.schema.json
+  inventory_schema: remote-diagnostics/schemas/diagnostic-inventory.schema.json
+  events_schema: remote-diagnostics/schemas/diagnostic-events.schema.json
+  manifest_schema: remote-diagnostics/schemas/diagnostic-bundle-manifest.schema.json
+  verifier_schema: remote-diagnostics/schemas/diagnostic-verification.schema.json
+  collector_sha256: 9e3829ef45d46d7638563ba7dc3b6816b55304daa05a3c050fd7527dd429cd3d

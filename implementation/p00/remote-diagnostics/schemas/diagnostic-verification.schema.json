@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/p00/diagnostic-verification.schema.json",
+  "title": "HancomDiagnosticBundleVerification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "verifier_schema_version",
+    "bundle_state",
+    "qualification_state",
+    "qualification_error_code",
+    "verification_error_code",
+    "request_id",
+    "run_id",
+    "bundle_sha256",
+    "require_qualified"
+  ],
+  "properties": {
+    "verifier_schema_version": { "const": "hwpx-agent.hancom-diagnostic-bundle-verification/v1" },
+    "bundle_state": { "enum": ["valid", "invalid"] },
+    "qualification_state": { "enum": ["pass", "failed", "discovered_unqualified", "not_evaluated"] },
+    "qualification_error_code": { "type": ["string", "null"] },
+    "verification_error_code": { "type": ["string", "null"] },
+    "request_id": { "type": ["string", "null"], "format": "uuid" },
+    "run_id": { "type": ["string", "null"], "format": "uuid" },
+    "bundle_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+    "require_qualified": { "type": "boolean" }
+  }
+}

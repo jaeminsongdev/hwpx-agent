@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/capability-contract-v1.schema.json",
+  "title": "CapabilityContract v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "contract_version",
+    "feature_id",
+    "capability_id",
+    "support_level",
+    "selector",
+    "args_schema",
+    "mutability",
+    "risk",
+    "preconditions",
+    "execution_algorithm",
+    "fallback_policy",
+    "validation_steps",
+    "error_codes",
+    "release_gate"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "hwpx-agent.capability-contract/v1"
+    },
+    "feature_id": {
+      "type": "string",
+      "pattern": "^[A-Z]+-[0-9]{3}$"
+    },
+    "capability_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]+$"
+    },
+    "support_level": {
+      "type": "string"
+    },
+    "selector": {
+      "type": "object",
+      "required": [
+        "name",
+        "schema"
+      ]
+    },
+    "args_schema": {
+      "type": "object"
+    },
+    "mutability": {
+      "enum": [
+        "read_only",
+        "session_mutation",
+        "external_side_effect",
+        "artifact_mutation"
+      ]
+    },
+    "risk": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "preconditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "execution_algorithm": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "validation_steps": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "error_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "release_gate": {
+      "type": "object"
+    }
+  }
+}

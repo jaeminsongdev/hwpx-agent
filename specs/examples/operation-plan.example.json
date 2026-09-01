@@ -1,0 +1,86 @@
+{
+  "schema_version": "hwpx-agent.operation-plan/v2",
+  "plan_id": "plan_example_a3_exam",
+  "mode": "normalized_authoring",
+  "target_profile": "hancom-2024-primary",
+  "source_revision_id": null,
+  "template_contract_id": null,
+  "operations": [
+    {
+      "op_id": "op-1",
+      "capability_id": "page.paper_preset",
+      "selector": {
+        "section_ids": [
+          "sec-1"
+        ]
+      },
+      "args": {
+        "preset": "A3",
+        "orientation": "landscape"
+      },
+      "on_failure": "abort"
+    },
+    {
+      "op_id": "op-2",
+      "depends_on": [
+        "op-1"
+      ],
+      "capability_id": "page.column_config_equal",
+      "selector": {
+        "section_ids": [
+          "sec-1"
+        ]
+      },
+      "args": {
+        "count": 2,
+        "equal_width": true,
+        "gap": {
+          "value": 8,
+          "unit": "mm"
+        }
+      },
+      "on_failure": "abort"
+    },
+    {
+      "op_id": "op-3",
+      "depends_on": [
+        "op-2"
+      ],
+      "capability_id": "eq.insert_native",
+      "selector": {
+        "paragraph_id": "p-question-1",
+        "offset": 0
+      },
+      "args": {
+        "display": "inline",
+        "source": {
+          "kind": "latex",
+          "value": "\\frac{x^2-1}{x-1}"
+        }
+      },
+      "on_failure": "abort"
+    }
+  ],
+  "preconditions": [
+    "target_profile.available"
+  ],
+  "postconditions": [
+    "package.valid",
+    "equation.native_object",
+    "hancom.open"
+  ],
+  "preservation": {
+    "untouched_parts": "not_required",
+    "unknown_xml": "preserve",
+    "styles": "normalize"
+  },
+  "requested_validation": [
+    "package",
+    "semantic",
+    "hancom_open",
+    "render"
+  ],
+  "metadata": {
+    "example": true
+  }
+}

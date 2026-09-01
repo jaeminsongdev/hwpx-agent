@@ -1,0 +1,132 @@
+{
+  "schema_version": "hwpx-agent.operation-plan/v2",
+  "plan_id": "plan_custom_page_table_eq",
+  "mode": "normalized_authoring",
+  "target_profile": "hancom-2024-primary-ko-KR",
+  "source_revision_id": null,
+  "template_contract_id": null,
+  "operations": [
+    {
+      "op_id": "op-page",
+      "depends_on": [],
+      "capability_id": "page.paper_custom",
+      "selector": {
+        "section_ids": [
+          "sec-1"
+        ]
+      },
+      "args": {
+        "width_mm": 260,
+        "height_mm": 380,
+        "orientation": "portrait",
+        "name": "custom-260x380"
+      },
+      "preconditions": [],
+      "postconditions": [
+        "section sec-1 page size is exactly 260mm x 380mm"
+      ],
+      "on_failure": "abort",
+      "client_label": "사용자 정의 용지"
+    },
+    {
+      "op_id": "op-margin",
+      "depends_on": [
+        "op-page"
+      ],
+      "capability_id": "page.margin_all",
+      "selector": {
+        "section_ids": [
+          "sec-1"
+        ]
+      },
+      "args": {
+        "top_mm": 15,
+        "bottom_mm": 15,
+        "left_mm": 16,
+        "right_mm": 16
+      },
+      "preconditions": [],
+      "postconditions": [
+        "body width and height are positive"
+      ],
+      "on_failure": "abort",
+      "client_label": "여백"
+    },
+    {
+      "op_id": "op-table",
+      "depends_on": [
+        "op-margin"
+      ],
+      "capability_id": "table.create",
+      "selector": {
+        "after_node_id": "p-title"
+      },
+      "args": {
+        "rows": 4,
+        "columns": 5,
+        "width_mm": 220,
+        "column_widths_mm": [
+          20,
+          50,
+          50,
+          50,
+          50
+        ],
+        "style_id": "table.school-grid"
+      },
+      "preconditions": [
+        "p-title exists"
+      ],
+      "postconditions": [
+        "table has 4x5 logical grid"
+      ],
+      "on_failure": "abort",
+      "client_label": "성적표"
+    },
+    {
+      "op_id": "op-eq",
+      "depends_on": [
+        "op-table"
+      ],
+      "capability_id": "eq.insert_native",
+      "selector": {
+        "after_node_id": "table-1"
+      },
+      "args": {
+        "source": {
+          "latex": "\\int_0^1 x^2\\,dx=\\frac{1}{3}"
+        },
+        "display": "block",
+        "unsupported_policy": "fail_closed"
+      },
+      "preconditions": [],
+      "postconditions": [
+        "native equation semantic AST matches input"
+      ],
+      "on_failure": "abort",
+      "client_label": "편집 가능한 수식"
+    }
+  ],
+  "preconditions": [
+    "target supports custom paper, tables, and native equations"
+  ],
+  "postconditions": [
+    "output reopens as HWPX"
+  ],
+  "preservation": {
+    "untouched_parts": "not_required",
+    "unknown_xml": "reject",
+    "styles": "safe_gc"
+  },
+  "requested_validation": [
+    "package",
+    "semantic",
+    "hancom_open",
+    "hancom_save_reopen",
+    "render",
+    "visual_diff"
+  ],
+  "metadata": {
+    "recipe": "custom_page_table_equation"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "binding_id",
+    "backend",
+    "target_profile",
+    "status",
+    "implementation"
+  ],
+  "properties": {
+    "binding_id": {
+      "type": "string"
+    },
+    "backend": {
+      "enum": [
+        "direct_hwpx",
+        "desktop_automation",
+        "webhwp",
+        "external_connector"
+      ]
+    },
+    "target_profile": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "candidate",
+        "verified_binding",
+        "deprecated",
+        "disabled"
+      ]
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "preconditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "postconditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "known_issues": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_checksum": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "verified_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/capability-binding.schema.json",
+  "title": "CapabilityBinding"
+}

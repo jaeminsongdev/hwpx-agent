@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import time
+
+ROOT = Path(__file__).resolve().parents[2]
+LANES = ("linux-core", "windows-worker", "widget", "docs", "security")
+
+
+def run(command: list[str], *, env: dict[str, str] | None = None) -> None:
+    if os.name == "nt" and command[0] == "pnpm":
+        command[0] = shutil.which("pnpm.cmd") or "pnpm.cmd"
+    print(f"+ {' '.join(command)}", flush=True)
+    subprocess.run(command, cwd=ROOT, env=env, check=True)
+
+
+def linux_core() -> None:
+    run(["cargo", "fmt", "--all", "--", "--check"])
+    run(["cargo", "clippy", "--locked", "--workspace", "--all-targets", "--", "-D", "warnings"])
+    run(["cargo", "test", "--locked", "--workspace"])
+    run(["cargo", "run", "--locked", "-p", "xtask", "--", "generate", "--check"])
+
+
+def windows_worker() -> None:
+    if os.name != "nt":
+        raise RuntimeError("windows-worker lane requires Windows")
+    project = "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.Smoke/HwpxAgent.WindowsWorker.Smoke.csproj"
+    run(["dotnet", "restore", "--locked-mode", project])
+    run(["dotnet", "format", project, "--verify-no-changes", "--no-restore"])
+    run(["dotnet", "build", "--no-restore", "--configuration", "Release", project])
+    run(["dotnet", "run", "--no-build", "--configuration", "Release", "--project", project])
+
+
+def widget() -> None:
+    run(["pnpm", "install", "--frozen-lockfile"])
+    run(["pnpm", "run", "format:check"])
+    run(["pnpm", "-r", "typecheck"])
+    run(["pnpm", "-r", "build"])
+    run(["pnpm", "-r", "test"])
+
+
+def docs() -> None:
+    run([sys.executable, "-m", "compileall", "-q", "tools/p01"])
+    run([sys.executable, "tools/design-validation/validate_design.py"])
+    run([sys.executable, "tools/p01/validate_foundation.py"])
+    run([sys.executable, "tools/p01/check_docs.py"])
+
+
+def security() -> None:
+    run([sys.executable, "tools/p01/security_checks.py"])
+
+
+FUNCTIONS = {
+    "linux-core": linux_core,
+    "windows-worker": windows_worker,
+    "widget": widget,
+    "docs": docs,
+    "security": security,
+}
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--lane", choices=(*LANES, "all"), default="all")
+    arguments = parser.parse_args()
+    selected = LANES if arguments.lane == "all" else (arguments.lane,)
+    results: list[dict[str, object]] = []
+    for lane in selected:
+        started = time.monotonic()
+        try:
+            FUNCTIONS[lane]()
+        except (subprocess.CalledProcessError, RuntimeError) as error:
+            results.append({"lane": lane, "status": "failed", "seconds": round(time.monotonic() - started, 3), "error": str(error)})
+            print(json.dumps({"lanes": results}, ensure_ascii=False, indent=2))
+            return 1
+        results.append({"lane": lane, "status": "passed", "seconds": round(time.monotonic() - started, 3)})
+    print(json.dumps({"lanes": results}, ensure_ascii=False, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

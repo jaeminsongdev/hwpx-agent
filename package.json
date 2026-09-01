@@ -1,0 +1,21 @@
+{
+  "name": "hwpx-agent-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=24.16.0 <25",
+    "pnpm": "11.19.0"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "format:check": "prettier --check \".github/**/*.yml\" \"web/**/*.ts\" \"web/**/*.json\" \"protocol/generated/typescript/src/schema-models.test.ts\" \"protocol/generated/typescript/*.json\" \"protocol/json-schema/*.json\" \"protocol/baseline/*.json\" \"security/*.json\" \"toolchains.lock.json\" \"package.json\" \"pnpm-workspace.yaml\" \"tsconfig.base.json\" \"docs/10_operations/09_p01_bootstrap_runbook.md\"",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.3",
+    "prettier": "3.9.6",
+    "typescript": "7.0.2"
+  }
+}

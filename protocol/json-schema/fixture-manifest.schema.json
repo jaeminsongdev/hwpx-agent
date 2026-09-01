@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/foundation/fixture-manifest-v1.schema.json",
+  "title": "FixtureManifestV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "fixture_id",
+    "kind",
+    "provenance",
+    "license",
+    "privacy",
+    "content"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.fixture-manifest/v1" },
+    "fixture_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"
+    },
+    "kind": { "enum": ["synthetic", "licensed_private", "malicious"] },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["origin", "created_by", "source_reference"],
+      "properties": {
+        "origin": {
+          "enum": ["generated", "licensed_source", "security_research"]
+        },
+        "created_by": { "type": "string", "minLength": 1 },
+        "source_reference": { "type": "string", "minLength": 1 }
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spdx_id", "redistribution_allowed", "evidence"],
+      "properties": {
+        "spdx_id": { "type": "string", "minLength": 1 },
+        "redistribution_allowed": { "type": "boolean" },
+        "evidence": { "type": "string", "minLength": 1 }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "contains_user_content", "retention"],
+      "properties": {
+        "classification": {
+          "enum": ["none", "internal", "personal", "sensitive"]
+        },
+        "contains_user_content": { "type": "boolean" },
+        "retention": { "enum": ["repository", "restricted_local", "ephemeral"] }
+      }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size_bytes"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+        },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "size_bytes": { "type": "integer", "minimum": 0, "maximum": 10485760 }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "kind": { "const": "licensed_private" } },
+        "required": ["kind"]
+      },
+      "then": {
+        "properties": {
+          "license": {
+            "properties": { "redistribution_allowed": { "const": false } }
+          },
+          "privacy": {
+            "properties": { "retention": { "const": "restricted_local" } }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "privacy": {
+            "properties": {
+              "contains_user_content": { "const": true }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "privacy": {
+            "properties": {
+              "retention": { "enum": ["restricted_local", "ephemeral"] }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

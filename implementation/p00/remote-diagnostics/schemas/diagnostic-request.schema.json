@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/p00/diagnostic-request.schema.json",
+  "title": "HancomDiagnosticRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "created_at",
+    "challenge_nonce",
+    "mode",
+    "collector_sha256",
+    "target",
+    "policy"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hwpx-agent.hancom-diagnostic-request/v1"
+    },
+    "request_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "challenge_nonce": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "mode": {
+      "enum": ["discover", "probe"]
+    },
+    "collector_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "minimum_major_release",
+        "expected_major_release",
+        "expected_file_version",
+        "expected_executable_sha256",
+        "prog_id"
+      ],
+      "properties": {
+        "profile_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]+$"
+        },
+        "minimum_major_release": {
+          "type": "integer",
+          "minimum": 2020
+        },
+        "expected_major_release": {
+          "type": ["string", "null"],
+          "pattern": "^20[2-9][0-9]$"
+        },
+        "expected_file_version": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "expected_executable_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "prog_id": {
+          "const": "HWPFrame.HwpObject.2"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "network_allowed",
+        "ui_automation_allowed",
+        "computer_use_mode",
+        "user_documents_allowed",
+        "event_log_mode",
+        "crash_dump_mode"
+      ],
+      "properties": {
+        "network_allowed": { "const": false },
+        "ui_automation_allowed": { "const": false },
+        "computer_use_mode": { "const": "screenshot_only" },
+        "user_documents_allowed": { "const": false },
+        "event_log_mode": { "const": "metadata_allowlist" },
+        "crash_dump_mode": { "const": "metadata_only" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "mode": { "const": "probe" } },
+        "required": ["mode"]
+      },
+      "then": {
+        "properties": {
+          "target": {
+            "properties": {
+              "expected_major_release": { "type": "string" },
+              "expected_file_version": { "type": "string" },
+              "expected_executable_sha256": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+
