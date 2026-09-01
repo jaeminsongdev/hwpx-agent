@@ -94,6 +94,15 @@ function Get-ComProperty {
     catch {
         $property = $ComObject.PSObject.Properties[$Name]
         if ($null -ne $property) { return $property.Value }
+        try {
+            return [Microsoft.VisualBasic.Interaction]::CallByName(
+                $ComObject,
+                $Name,
+                [Microsoft.VisualBasic.CallType]::Get,
+                @()
+            )
+        }
+        catch { }
         return $ComObject.GetType().InvokeMember(
             $Name,
             [System.Reflection.BindingFlags]::GetProperty,
