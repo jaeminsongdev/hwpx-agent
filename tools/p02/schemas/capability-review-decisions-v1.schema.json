@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/internal/capability-review-decisions-v1.schema.json",
+  "title": "CapabilityReviewDecisionsV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_graph_sha256",
+    "canonical_matrix_sha256",
+    "reviewer",
+    "items"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hwpx-agent.capability-review-decisions/v1"
+    },
+    "candidate_graph_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "canonical_matrix_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewer_id", "review_revision", "method"],
+      "properties": {
+        "reviewer_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,95}$"
+        },
+        "review_revision": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,95}$"
+        },
+        "method": {
+          "const": "manual_strict_multi_signal_v1"
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100000,
+      "items": {
+        "oneOf": [
+          { "$ref": "#/$defs/mappedDecision" },
+          { "$ref": "#/$defs/ignoredDecision" }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "decisionBase": {
+      "type": "object",
+      "required": ["node_id", "status", "reason_code"],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "pattern": "^node:[0-9a-f]{24}$"
+        },
+        "status": {
+          "enum": ["mapped", "ignored_with_reason"]
+        },
+        "reason_code": {
+          "enum": [
+            "strict_multi_signal_semantic_match",
+            "ambiguous_canonical_semantics"
+          ]
+        }
+      }
+    },
+    "mappedDecision": {
+      "allOf": [
+        { "$ref": "#/$defs/decisionBase" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["node_id", "status", "reason_code", "capability_id"],
+          "properties": {
+            "node_id": {
+              "type": "string",
+              "pattern": "^node:[0-9a-f]{24}$"
+            },
+            "status": { "const": "mapped" },
+            "reason_code": {
+              "const": "strict_multi_signal_semantic_match"
+            },
+            "capability_id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_.-]+$"
+            }
+          }
+        }
+      ]
+    },
+    "ignoredDecision": {
+      "allOf": [
+        { "$ref": "#/$defs/decisionBase" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["node_id", "status", "reason_code"],
+          "properties": {
+            "node_id": {
+              "type": "string",
+              "pattern": "^node:[0-9a-f]{24}$"
+            },
+            "status": { "const": "ignored_with_reason" },
+            "reason_code": { "const": "ambiguous_canonical_semantics" }
+          }
+        }
+      ]
+    }
+  }
+}

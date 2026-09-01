@@ -1,0 +1,360 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/internal/reviewed-catalog-v1.schema.json",
+  "title": "ReviewedCapabilityCatalogV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_lock_id",
+    "generator",
+    "restricted_derivative",
+    "candidate_graph",
+    "canonical_matrix",
+    "review_decisions",
+    "runtime_qualification",
+    "node_dispositions",
+    "edge_dispositions",
+    "coverage"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.reviewed-catalog/v1" },
+    "source_lock_id": { "type": "string", "minLength": 3, "maxLength": 192 },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generator_id",
+        "generator_version",
+        "review_policy",
+        "auto_merge",
+        "runtime_qualification_performed"
+      ],
+      "properties": {
+        "generator_id": { "const": "semantic-capability-review-generator" },
+        "generator_version": { "const": "0.1.0" },
+        "review_policy": { "const": "strict_multi_signal_v1" },
+        "auto_merge": { "const": false },
+        "runtime_qualification_performed": { "const": false }
+      }
+    },
+    "restricted_derivative": { "type": "boolean" },
+    "candidate_graph": { "$ref": "#/$defs/lockedArtifact" },
+    "canonical_matrix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "row_count"],
+      "properties": {
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "row_count": { "type": "integer", "minimum": 1, "maximum": 100000 }
+      }
+    },
+    "review_decisions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sha256",
+        "reviewer_id",
+        "review_revision",
+        "method",
+        "item_count"
+      ],
+      "properties": {
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "reviewer_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,95}$"
+        },
+        "review_revision": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,95}$"
+        },
+        "method": { "const": "manual_strict_multi_signal_v1" },
+        "item_count": { "type": "integer", "minimum": 1, "maximum": 100000 }
+      }
+    },
+    "runtime_qualification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "target_profile_id", "evidence_refs"],
+      "properties": {
+        "state": { "const": "unverified" },
+        "target_profile_id": { "type": "null" },
+        "evidence_refs": { "type": "array", "maxItems": 0 }
+      }
+    },
+    "node_dispositions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100000,
+      "items": { "$ref": "#/$defs/nodeDisposition" }
+    },
+    "edge_dispositions": {
+      "type": "array",
+      "maxItems": 1000000,
+      "items": { "$ref": "#/$defs/edgeDisposition" }
+    },
+    "coverage": { "$ref": "#/$defs/coverage" }
+  },
+  "$defs": {
+    "lockedArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "node_count", "edge_count", "input_sha256"],
+      "properties": {
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "node_count": { "type": "integer", "minimum": 1, "maximum": 100000 },
+        "edge_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "input_sha256": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "feature_id",
+        "capability_id",
+        "domain",
+        "scope_class",
+        "support_level",
+        "preferred_backend",
+        "fallback_backend",
+        "phase"
+      ],
+      "properties": {
+        "feature_id": { "type": "string", "pattern": "^[A-Z]+-[0-9]{3}$" },
+        "capability_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]+$"
+        },
+        "domain": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "scope_class": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "support_level": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "preferred_backend": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "fallback_backend": { "type": "string", "maxLength": 128 },
+        "phase": { "type": "string", "pattern": "^(?:P[0-9]{2}|N/A)$" }
+      }
+    },
+    "semanticEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "action_label_score_ppm",
+        "korean_description_score_ppm",
+        "combined_score_ppm",
+        "runner_up_margin_ppm",
+        "assertions"
+      ],
+      "properties": {
+        "policy": { "const": "strict_multi_signal_v1" },
+        "action_label_score_ppm": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "korean_description_score_ppm": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "combined_score_ppm": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "runner_up_margin_ppm": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "assertions": {
+          "type": "array",
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "action_identifier",
+              "korean_description",
+              "backend_compatibility",
+              "human_approval"
+            ]
+          }
+        }
+      }
+    },
+    "nodeDisposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "record_id",
+        "source_id",
+        "source_kind",
+        "candidate_refs",
+        "status",
+        "reason_code",
+        "capability",
+        "semantic_evidence",
+        "runtime_support_state"
+      ],
+      "properties": {
+        "node_id": { "type": "string", "pattern": "^node:[0-9a-f]{24}$" },
+        "record_id": { "type": "string", "minLength": 3, "maxLength": 192 },
+        "source_id": { "type": "string", "minLength": 3, "maxLength": 192 },
+        "source_kind": {
+          "enum": [
+            "help",
+            "webhwp",
+            "xsd",
+            "action_table",
+            "parameter_table",
+            "automation_object",
+            "automation_event"
+          ]
+        },
+        "candidate_refs": {
+          "type": "array",
+          "maxItems": 10000,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^candidate:[0-9a-f]{24}$" }
+        },
+        "status": { "enum": ["mapped", "ignored_with_reason"] },
+        "reason_code": {
+          "enum": [
+            "strict_multi_signal_semantic_match",
+            "ambiguous_canonical_semantics",
+            "no_strict_canonical_semantic_match",
+            "documentation_navigation_not_executable_item",
+            "structural_schema_component_not_standalone_operation",
+            "binding_parameter_metadata_not_standalone_operation",
+            "automation_object_metadata_not_standalone_operation",
+            "automation_event_signal_not_standalone_operation"
+          ]
+        },
+        "capability": {
+          "oneOf": [{ "$ref": "#/$defs/capability" }, { "type": "null" }]
+        },
+        "semantic_evidence": { "$ref": "#/$defs/semanticEvidence" },
+        "runtime_support_state": { "const": "unverified" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "mapped" } } },
+          "then": {
+            "properties": {
+              "reason_code": { "const": "strict_multi_signal_semantic_match" },
+              "capability": { "$ref": "#/$defs/capability" }
+            }
+          },
+          "else": { "properties": { "capability": { "type": "null" } } }
+        }
+      ]
+    },
+    "edgeDisposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "left_node_id",
+        "right_node_id",
+        "candidate_state",
+        "status",
+        "reason_code",
+        "left_capability_id",
+        "right_capability_id",
+        "auto_merge"
+      ],
+      "properties": {
+        "candidate_id": {
+          "type": "string",
+          "pattern": "^candidate:[0-9a-f]{24}$"
+        },
+        "left_node_id": { "type": "string", "pattern": "^node:[0-9a-f]{24}$" },
+        "right_node_id": { "type": "string", "pattern": "^node:[0-9a-f]{24}$" },
+        "candidate_state": { "enum": ["review_candidate", "collision_review"] },
+        "status": {
+          "enum": [
+            "same_capability_evidence_link",
+            "distinct_capabilities",
+            "not_semantically_mapped",
+            "collision_preserved"
+          ]
+        },
+        "reason_code": {
+          "enum": [
+            "both_nodes_mapped_same_capability_without_merge",
+            "nodes_mapped_to_distinct_capabilities",
+            "one_or_both_nodes_not_semantically_mapped",
+            "candidate_conflict_preserved_without_merge"
+          ]
+        },
+        "left_capability_id": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z][a-z0-9_.-]+$"
+        },
+        "right_capability_id": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z][a-z0-9_.-]+$"
+        },
+        "auto_merge": { "const": false }
+      }
+    },
+    "countByCode": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "count"],
+        "properties": {
+          "code": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "count": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_count",
+        "mapped_node_count",
+        "ignored_node_count",
+        "unresolved_node_count",
+        "node_reason_counts",
+        "edge_count",
+        "disposed_edge_count",
+        "undisposed_edge_count",
+        "edge_status_counts",
+        "strict_proposal_count",
+        "review_decision_count",
+        "runtime_qualified_count",
+        "auto_merge_count"
+      ],
+      "properties": {
+        "node_count": { "type": "integer", "minimum": 1 },
+        "mapped_node_count": { "type": "integer", "minimum": 0 },
+        "ignored_node_count": { "type": "integer", "minimum": 0 },
+        "unresolved_node_count": { "const": 0 },
+        "node_reason_counts": { "$ref": "#/$defs/countByCode" },
+        "edge_count": { "type": "integer", "minimum": 0 },
+        "disposed_edge_count": { "type": "integer", "minimum": 0 },
+        "undisposed_edge_count": { "const": 0 },
+        "edge_status_counts": { "$ref": "#/$defs/countByCode" },
+        "strict_proposal_count": { "type": "integer", "minimum": 0 },
+        "review_decision_count": { "type": "integer", "minimum": 1 },
+        "runtime_qualified_count": { "const": 0 },
+        "auto_merge_count": { "const": 0 }
+      }
+    }
+  }
+}
