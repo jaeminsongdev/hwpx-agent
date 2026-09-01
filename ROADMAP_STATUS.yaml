@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_foundation_and_p02_source_importers
+  product_code_scope: p01_foundation_and_p02_source_importers_candidate_semantic_review
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -102,15 +102,15 @@ p01_execution:
     P01-08: passed
     P01-09: passed
 p02_execution:
-  current_task: P02-06
+  current_task: P02-07
   tasks:
     P02-01: passed_current_pc_local
     P02-02: passed_current_pc_local
     P02-03: passed_current_pc_local
     P02-04: passed_current_pc_local
     P02-05: passed_current_pc_local
-    P02-06: in_progress_current_pc_local
-    P02-07: blocked_by_P02-06
+    P02-06: passed_current_pc_local
+    P02-07: in_progress_current_pc_local
     P02-08: blocked_by_P02-07
     P02-09: blocked_by_P02-08
   source_record_contract:
@@ -180,6 +180,26 @@ p02_execution:
     collision_review_count: 3065
     auto_merge_count: 0
     actual_output_sha256: 65f470fee6b4e79e94f71bc55b068ed7a686f12eb52cedfffe238cdcf71cb29a
+    actual_verification_errors: 0
+    restricted_output_git_tracked: false
+  reviewed_catalog:
+    audited_source_commit: d29a4bac634ba8a662b06662b54655496f8296ad
+    combined_p02_tests_windows: 36_of_36_passed
+    combined_p02_tests_linux: 36_of_36_passed
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    canonical_matrix_count: 609
+    candidate_graph_sha256: 65f470fee6b4e79e94f71bc55b068ed7a686f12eb52cedfffe238cdcf71cb29a
+    review_decisions_sha256: f9403897a2682a1cc2283715d1dc96000beacc4aff762a89be1c7917df63d8d0
+    strict_proposal_count: 35
+    mapped_node_count: 34
+    ignored_node_count: 3646
+    unresolved_node_count: 0
+    edge_count: 3811
+    disposed_edge_count: 3811
+    auto_merge_count: 0
+    runtime_qualified_count: 0
+    actual_output_sha256: 88b4c5238c1911ae4cd3f40874a0328401a12dda9b57f51d2e1c5663834d5609
     actual_verification_errors: 0
     restricted_output_git_tracked: false
 phases:

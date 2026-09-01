@@ -9,7 +9,8 @@ P02는 immutable source lock을 format별 extractor로 읽어 `SourceRecordV1`�
 - `P02-03_REPORT.md`: source-locked Automation PDF extractor, private actual extraction and independent verification.
 - `P02-04_REPORT.md`: source-locked KS X 6101/OWPML schema and package-part extraction with independent coverage verification.
 - `P02-05_REPORT.md`: deterministic review-only candidate graph over all P02 source records.
+- `P02-06_REPORT.md`: complete semantic disposition of every candidate node/edge against the canonical capability matrix.
 
 ## 현재 task
 
-`P02-06 Semantic capability review`를 현재 PC 로컬 범위에서 수행한다. 모든 candidate node/edge를 canonical capability matrix와 대조해 100% disposition하고, label-only mapping이나 runtime support 승격을 금지한다. 사용자 문서나 한글 UI 조작은 필요하지 않다.
+`P02-07 Binding model`을 현재 PC 로컬 범위에서 수행한다. reviewed catalog와 exact 2020 target profile을 고정하고 action/method/parameter binding schema와 codegen을 구현하되, P02-08 probe 전에는 실행 가능성을 `unverified`로 유지한다. 사용자 문서나 한글 UI 조작은 필요하지 않다.
