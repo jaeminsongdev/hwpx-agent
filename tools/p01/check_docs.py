@@ -13,6 +13,7 @@ LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 def main() -> int:
     errors: list[str] = []
     checked = 0
+    declared_local_evidence = 0
     for markdown in sorted(ROOT.rglob("*.md")):
         if any(part in {"target", "node_modules", ".git", "evidence", "source-archive"} for part in markdown.parts):
             continue
@@ -27,13 +28,32 @@ def main() -> int:
             checked += 1
             resolved = (markdown.parent / path_text).resolve()
             try:
-                resolved.relative_to(ROOT.resolve())
+                relative_target = resolved.relative_to(ROOT.resolve())
             except ValueError:
                 errors.append(f"link escapes repository: {markdown.relative_to(ROOT)} -> {destination}")
                 continue
-            if not resolved.exists():
+            parts = relative_target.parts
+            if (
+                not resolved.exists()
+                and len(parts) >= 3
+                and parts[0] == "implementation"
+                and parts[1] in {"p00", "p01"}
+                and parts[2] == "evidence"
+            ):
+                declared_local_evidence += 1
+            elif not resolved.exists():
                 errors.append(f"broken link: {markdown.relative_to(ROOT)} -> {destination}")
-    print(json.dumps({"checked_local_links": checked, "errors": errors}, ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {
+                "checked_local_links": checked,
+                "declared_local_evidence_links": declared_local_evidence,
+                "errors": errors,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
     return 1 if errors else 0
 
 

@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 errors: list[str] = []
 p00_source_locks_checked = 0
 p00_target_profiles_checked = 0
+declared_local_evidence_links = 0
 EXCLUDED_TREE_PARTS = {
     '.git',
     '__pycache__',
@@ -46,6 +47,14 @@ if yaml is None:
     errors.append('required dependency missing: PyYAML')
 if Draft202012Validator is None:
     errors.append('required dependency missing: jsonschema')
+
+gitignore = (ROOT / '.gitignore').read_text(encoding='utf-8')
+for required_private_rule in (
+    '/implementation/p00/evidence/',
+    '/implementation/p01/evidence/',
+):
+    if required_private_rule not in gitignore:
+        errors.append(f'private evidence ignore rule missing: {required_private_rule}')
 
 # 1. Syntax parsing.
 for path in source_paths('*.json'):
@@ -279,7 +288,23 @@ for path in source_paths('*.md'):
         if not target or target.startswith(('http://', 'https://', 'mailto:', 'sandbox:', '#')):
             continue
         target = target.strip('<>')
-        if not (path.parent / target).resolve().exists():
+        resolved = (path.parent / target).resolve()
+        try:
+            relative_target = resolved.relative_to(ROOT.resolve())
+        except ValueError:
+            errors.append(f'markdown link escapes repository: {path.relative_to(ROOT)} -> {target}')
+            continue
+        if resolved.exists():
+            continue
+        parts = relative_target.parts
+        if (
+            len(parts) >= 3
+            and parts[0] == 'implementation'
+            and parts[1] in {'p00', 'p01'}
+            and parts[2] == 'evidence'
+        ):
+            declared_local_evidence_links += 1
+        else:
             errors.append(f'broken markdown link: {path.relative_to(ROOT)} -> {target}')
 
 result = {
@@ -295,6 +320,7 @@ result = {
     'roadmap_phases': len(expected_phases),
     'wbs_tasks': len(wbs),
     'root_skills': len(root_skills),
+    'declared_local_evidence_links': declared_local_evidence_links,
     'errors': errors,
 }
 print(json.dumps(result, ensure_ascii=False, indent=2))
