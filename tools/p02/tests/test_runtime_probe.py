@@ -295,6 +295,7 @@ def passing_receipt(request: dict, request_sha: str, trace_sha: str, registry_sh
             "timeout_seconds": 120,
             "timed_out": False,
             "child_exit_code": 0,
+            "visible_window_observed": False,
             "unexpected_window_observed": False,
             "observed_process_count": 2,
             "cleaned_process_count": 0,

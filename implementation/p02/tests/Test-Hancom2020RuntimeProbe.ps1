@@ -35,6 +35,7 @@ $required = [ordered]@{
     sta_child = "'-STA'"
     preexisting_process_refusal = 'RUNTIME_PROBE_PREEXISTING_HWP_PROCESS'
     private_output_boundary = 'evidence\\runtime-probes'
+    visible_window_diagnostic = 'visibleWindowObserved'
     unexpected_window_policy = 'unexpectedWindowObserved'
     exact_cleanup_identity = 'safeToClean'
     undo_allowlist = "'edit\.undo'"

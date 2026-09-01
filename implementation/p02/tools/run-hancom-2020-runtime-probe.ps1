@@ -238,6 +238,7 @@ $stdoutTask = $child.StandardOutput.ReadToEndAsync()
 $stderrTask = $child.StandardError.ReadToEndAsync()
 
 $observed = @{}
+$visibleWindowObserved = $false
 $unexpectedWindowObserved = $false
 function Add-ObservedProcess {
     param([Microsoft.Management.Infrastructure.CimInstance]$CimProcess)
@@ -256,7 +257,11 @@ function Add-ObservedProcess {
     }
     $mainWindowVisible = $mainWindowHandle -ne 0 -and
         [HwpxAgentWindowProbe]::IsWindowVisible([System.IntPtr]$mainWindowHandle)
-    if ($mainWindowVisible) { $script:unexpectedWindowObserved = $true }
+    # A visible main window is diagnostic evidence, not proof of an action
+    # modal. On this exact host, Hancom may show a user-only file-access
+    # consent window while saving the disposable artifact. Unexpected modal
+    # classification remains separate and fail-closed when positively known.
+    if ($mainWindowVisible) { $script:visibleWindowObserved = $true }
     $script:observed[$key] = [ordered]@{
         path_matches = $pathMatches
         same_session = [int]$CimProcess.SessionId -eq $currentSessionId
@@ -403,6 +408,7 @@ $receipt = [ordered]@{
         timeout_seconds = $TimeoutSeconds
         timed_out = $timedOut
         child_exit_code = $childExitCode
+        visible_window_observed = $visibleWindowObserved
         unexpected_window_observed = $unexpectedWindowObserved
         observed_process_count = $observed.Count
         cleaned_process_count = $cleanedCount
