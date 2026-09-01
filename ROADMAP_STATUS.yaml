@@ -1,7 +1,7 @@
 schema: hwpx-agent.roadmap-status/v2
 updated_at: 2026-09-01
-current_phase: P01
-status: p01_in_progress_current_pc_local_only
+current_phase: P02
+status: p02_in_progress_current_pc_local_only
 design_baseline:
   feature_domains: 16
   features: 609
@@ -13,7 +13,8 @@ design_baseline:
   validation_errors: 0
   generated_outputs_idempotent: true
 runtime_validation:
-  product_code_built: false
+  product_code_built: true
+  product_code_scope: p01_foundation_only
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -81,10 +82,29 @@ p00_execution:
     P00-07: passed_disabled
     P00-08: passed
     P00-09: v10_pass_scoped_current_pc_p01_local_authorized
+p01_execution:
+  gate_state: pass_scoped_current_pc_local
+  audited_source_commit: 7915bc844dd75c8ff63b7c207f5ad5a81586ba51
+  local_ci_lanes: 5_of_5_passed
+  clean_clone_bootstrap: passed_git_status_clean
+  linux_read_only_source_lane: passed
+  github_hosted_workflow_run: unverified
+  secrets_vulnerabilities_forbidden_licenses: 0
+  sbom_components: 146
+  tasks:
+    P01-01: passed
+    P01-02: passed
+    P01-03: passed
+    P01-04: passed_scoped_hosted_scheduler_unverified
+    P01-05: passed
+    P01-06: passed
+    P01-07: passed
+    P01-08: passed
+    P01-09: passed
 phases:
   P00: completed_current_pc_local_scope
-  P01: in_progress_current_pc_local_scope
-  P02: blocked_by_P01
+  P01: completed_current_pc_local_scope
+  P02: in_progress_current_pc_local_scope
   P03: blocked_by_P02
   P04: blocked_by_P03
   P05: blocked_by_P04

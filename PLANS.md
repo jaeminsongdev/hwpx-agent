@@ -18,8 +18,9 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | Phase | 상태 | 근거 |
 |---|---|---|
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
-| P01 | `in_progress_current_pc_local` | P01-01~09 repository/CI/security foundation |
-| P02~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
+| P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
+| P02 | `in_progress_current_pc_local` | P02-01 SourceRecord schema부터 시작 |
+| P03~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
 
@@ -27,19 +28,15 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0011 | P01 repository·CI·security foundation | `in_progress` | clean checkout bootstrap, 5 CI lane smoke, schema/proto drift, secure-path/interruption, redaction, fixture negative, SBOM/license/vulnerability/secret 0 |
+| P-0012 | P02-01 immutable SourceRecord schema·sample·negative test·codegen | `in_progress` | Draft 2020-12 compile, valid samples, locator/hash/availability negative cases, Rust/TypeScript generated drift |
 
-### P01 Acceptance
+### P02-01 Acceptance
 
-- Rust/C#/TypeScript workspace와 경계를 buildable하게 생성한다.
-- Rust 1.96.0, .NET SDK 10.0.300, Node 24.16.0, pnpm 11.19.0 및 schema/protobuf 도구를 lock한다.
-- JSON Schema와 protobuf codegen을 한 명령으로 재현하고 generated drift/breaking test를 둔다.
-- Linux core, Windows worker, widget, docs, security 5개 lane을 로컬 smoke와 CI workflow에 동일하게 매핑한다.
-- secure workdir의 traversal/symlink/atomic publication/interruption negative test를 통과한다.
-- request/job/trace ID 구조화 로그와 secret/PII/document-content redaction test를 통과한다.
-- fixture manifest가 license/privacy/provenance/checksum 누락과 private redistribution을 거부한다.
-- SBOM, license allowlist, vulnerability audit, secret scan 보고서를 생성한다.
-- bootstrap runbook과 단일 명령을 clean checkout에서 재현한다.
+- official source 원본을 수정하지 않고 source lock identity와 SHA-256를 참조한다.
+- help/PDF/XSD/automation/runtime 공통 record와 kind별 locator를 strict schema로 정의한다.
+- 원문 이름·설명·parameter·제품/build/locale availability를 보존하되 raw action 실행 surface는 만들지 않는다.
+- valid sample과 필수 field 누락, 잘못된 hash/locator/build range, 추가 속성 negative case를 둔다.
+- 기존 단일 codegen/check 명령으로 Rust/TypeScript model을 deterministic하게 생성한다.
 
 ## Risks
 
@@ -57,7 +54,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 - P-0000~P-0006: 원본/설계 감사, 2020 probe, canonical contract 교정, offline diagnostics는 P00 report와 source lock에 보존.
 - P-0007~P-0010: 과거 blocked Gate, current-PC 재기준화, exact 2020 reference smoke, host baseline, P00 v10 scoped PASS.
+- P-0011: P01 repository·CI·security foundation은 `implementation/p01/P01_GATE_REPORT.md`에서 current-PC local scoped PASS.
 
 ## Next
 
-P01 구현 중 추론수준은 `xhigh`; P01 Gate 최종 감사는 `max`. P01 PASS 뒤 정확한 다음 작업은 P02-01 공식 카탈로그 source adapter이며 시작 권장 추론수준은 `xhigh`다.
+P02-01 구현은 `xhigh`; P02 phase 최종 감사는 `max`. P02-01 완료 뒤 정확한 다음 작업은 P02-02 Help extractor이며 권장 추론수준은 `xhigh`다.

@@ -1,0 +1,70 @@
+{
+  "schema_version": "hwpx-agent.p01-gate-audit/v1",
+  "audited_at": "2026-09-01T23:22:38.8208452+09:00",
+  "phase": "P01",
+  "audit_kind": "current_pc_local_final_gate",
+  "audit_complete": true,
+  "aggregate_state": "pass_scoped_current_pc_local",
+  "audited_source_commit": "7915bc844dd75c8ff63b7c207f5ad5a81586ba51",
+  "p02_authorization": "authorized_current_pc_local_only",
+  "criteria": [
+    { "task_id": "P01-01", "state": "pass", "reason": "Rust, C# and TypeScript workspaces built and a clean clone completed bootstrap with zero Git status changes." },
+    { "task_id": "P01-02", "state": "pass", "reason": "Pinned local toolchain versions matched the preflight and lock manifests." },
+    { "task_id": "P01-03", "state": "pass", "reason": "Deterministic protobuf and JSON Schema generation, compile validation, generated drift and immutable v1 baseline checks passed." },
+    { "task_id": "P01-04", "state": "pass_scoped", "reason": "All five workflow-equivalent local lanes and the read-only Linux container lane passed; the GitHub-hosted scheduler itself remains unverified." },
+    { "task_id": "P01-05", "state": "pass", "reason": "Secure workdir traversal, link, no-overwrite atomic publication/quarantine and interruption tests passed on Windows and Linux." },
+    { "task_id": "P01-06", "state": "pass", "reason": "Secret, vulnerability and forbidden-license counts are zero and the CycloneDX SBOM contains 146 components." },
+    { "task_id": "P01-07", "state": "pass", "reason": "Allowlisted structured logging and secret, PII, bearer and signed-URL redaction tests passed." },
+    { "task_id": "P01-08", "state": "pass", "reason": "Checksum-bound synthetic fixture validation and license, privacy, provenance and redistribution negative cases passed." },
+    { "task_id": "P01-09", "state": "pass", "reason": "The documented one-command bootstrap succeeded in a new clean clone and left it clean." }
+  ],
+  "validation": {
+    "local_lanes_passed": 5,
+    "local_lanes_total": 5,
+    "rust_tests_passed": 10,
+    "rust_tests_failed": 0,
+    "typescript_tests_passed": 3,
+    "csharp_build_warnings": 0,
+    "csharp_build_errors": 0,
+    "design_validation_errors": 0,
+    "tracked_secret_findings": 0,
+    "vulnerability_findings": 0,
+    "forbidden_license_findings": 0,
+    "sbom_components": 146,
+    "clean_clone_status_changes": 0,
+    "clean_clone_declared_local_evidence_links": 17,
+    "linux_read_only_source_check": "passed",
+    "linux_image_digest": "sha256:5e2214abe154fe26e39f64488952e5c991eeed1d6d6da7cc8381ae83927f0cfc",
+    "github_hosted_workflow_run": "unverified"
+  },
+  "evidence": {
+    "security_report_path": "evidence/security-report.20260901.json",
+    "security_report_sha256": "e3858b70a457214052a4a7f98300e6823c0b7b88a73d05a0ff2a89133b7c17c0",
+    "sbom_path": "evidence/sbom.cdx.json",
+    "sbom_sha256": "cc88da22004511b45bf4b3ff2837ae4da101eefee496a367d60e181ff59751aa",
+    "local_evidence_git_ignored": true
+  },
+  "scope": {
+    "host_policy": "this_current_pc_only",
+    "hangul_invoked_by_p01": false,
+    "user_document_accessed_by_p01": false,
+    "computer_use_mode": "screenshot_only",
+    "hangul_2022_and_2024_state": "deferred_unqualified",
+    "production_release_state": "disabled"
+  },
+  "strict_review": {
+    "mode": "STRICT",
+    "reasoning_effort": "max",
+    "change_risk": "high",
+    "verdict": "approve_scoped_current_pc_local",
+    "blocker_findings": 0,
+    "major_findings": 0,
+    "minor_findings": 0
+  },
+  "next_exact_task": {
+    "task_id": "P02-01",
+    "task": "Define and validate the immutable official SourceRecord schema, samples, negative cases and deterministic generated types.",
+    "reasoning_effort": "xhigh",
+    "user_local_operation_required_now": false
+  }
+}

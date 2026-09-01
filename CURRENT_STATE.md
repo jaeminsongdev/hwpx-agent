@@ -7,9 +7,9 @@
 
 ## 현재 상태
 
-- 상태: `P01_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
-- 현재 phase: `P01_REPOSITORY_CI_SECURITY_FOUNDATION`
-- 구현 코드: 제품 코드는 없음. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence가 존재
+- 상태: `P02_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
+- 현재 phase: `P02_OFFICIAL_CATALOG_IMPORTER_CAPABILITY_REGISTRY`
+- 구현 코드: P01 Rust/C#/TypeScript foundation, secure workdir, safe logging, semantic worker boundary, schema/protobuf codegen, CI/security/bootstrap가 build·test 가능하다. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence도 보존한다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -42,16 +42,23 @@
 - 상업 라이선스·보안·외부 기능의 명시적 release gate
 - ChatGPT Web universal package와 Codex remote/local companion blueprint
 
+## P01 완료 상태
+
+- Gate: `PASS_SCOPED_CURRENT_PC_LOCAL`; authoritative report는 `implementation/p01/P01_GATE_REPORT.md`다.
+- 검증: 현재 Windows PC 5/5 lane, 공식 Rust 1.96.0 Linux 컨테이너 read-only source lane, clean clone bootstrap와 post-run Git status 0.
+- 보안: secrets/vulnerabilities/forbidden licenses 0, CycloneDX 146 components, private evidence와 사용자 문서 Git 추적 0.
+- 범위: P01은 한글/COM/UI/사용자 문서를 실행하지 않았다. GitHub-hosted scheduler, 다른 PC/버전 및 production은 검증했다고 주장하지 않는다.
+
 ## 다음 작업
 
-현재 PC에서 P01 repository/CI/security foundation의 P01-01~09를 구현·검증 중이다. 구현 추론수준은 `xhigh`, Gate 최종 감사는 `max`다. 한글 UI 자동 조작, 사용자 문서, 다른 PC/버전, production/provider 경로는 열지 않는다.
+현재 PC에서 P02-01 immutable SourceRecord schema·sample·negative test·Rust/TypeScript codegen을 구현한다. 구현 추론수준은 `xhigh`, P02 Gate 최종 감사는 `max`다. 한글 UI 자동 조작, 사용자 문서, 다른 PC/버전, production/provider 경로는 열지 않는다.
 
 ## 현재 blocker
 
-- 현재 PC 로컬 P01 착수 blocker 없음.
+- 현재 PC 로컬 P02-01 착수 blocker 없음.
 
 2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.
 
 ## 검증 한계
 
-제품 본체 코드는 아직 없지만 exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export, 현재-host baseline 증거가 있다. 이 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00 실제 상태는 `implementation/p00/P00_GATE_REPORT.md`를 따른다.
+제품 foundation 코드는 재현 가능하지만 문서 패키지 core와 전체 제품 기능은 아직 구현되지 않았다. Exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00/P01 실제 상태는 각 Gate report를 따른다.
