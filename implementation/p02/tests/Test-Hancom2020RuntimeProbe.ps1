@@ -47,6 +47,7 @@ $required = [ordered]@{
     no_overwrite = 'RUNTIME_PROBE_OUTPUT_ALREADY_EXISTS'
     semantic_reopen = 'reopen_exact_match'
     null_document_is_empty = 'return \[string\]::Empty'
+    empty_undo_direct_assignment = 'IsNullOrEmpty\(\$undoRaw\)'
 }
 foreach ($entry in $required.GetEnumerator()) {
     Add-Result -Case $entry.Key -Passed ([regex]::IsMatch($combined, $entry.Value)) -Detail $entry.Value

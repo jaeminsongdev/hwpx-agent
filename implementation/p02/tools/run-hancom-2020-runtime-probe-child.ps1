@@ -411,7 +411,15 @@ try {
     try {
         $undoResult.pre_snapshot_sha256 = $fixtureSha256
         $undoReturn = $hwp.HAction.Run([string]$undoProbe[0].action_id)
-        $undoCanonical = ConvertTo-CanonicalProbeText -Value ([string]$hwp.GetTextFile('UNICODE', ''))
+        $undoRaw = [string]$hwp.GetTextFile('UNICODE', '')
+        if ([string]::IsNullOrEmpty($undoRaw)) {
+            # An empty string emitted from a PowerShell function is treated as
+            # no pipeline output. Assign it directly to preserve the state.
+            $undoCanonical = [string]::Empty
+        }
+        else {
+            $undoCanonical = ConvertTo-CanonicalProbeText -Value $undoRaw
+        }
         $undoSha256 = Get-Sha256String -Value $undoCanonical
         $undoObserved = $undoReturn -ne $false -and $undoCanonical -cne $fixtureCanonical -and -not $undoCanonical.Contains($fixtureId)
         $undoResult.return_value_kind = Get-ReturnValueKind -Value $undoReturn
