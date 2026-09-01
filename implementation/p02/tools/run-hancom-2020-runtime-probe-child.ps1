@@ -63,7 +63,7 @@ function ConvertTo-NormalizedHancomVersion {
 function ConvertTo-CanonicalProbeText {
     param([AllowEmptyString()][string]$Value)
 
-    if ($null -eq $Value) { return $null }
+    if ($null -eq $Value) { return [string]::Empty }
     $normalized = $Value.Replace("`0", '')
     $normalized = $normalized.Replace("`r`n", "`n").Replace("`r", "`n")
     return $normalized.Normalize([System.Text.NormalizationForm]::FormC)
@@ -408,24 +408,30 @@ try {
         throw 'UNDO_CANARY_REQUEST_INVALID'
     }
     $undoResult = $resultByCapability['edit.undo']
-    $undoResult.pre_snapshot_sha256 = $fixtureSha256
-    $undoReturn = $hwp.HAction.Run([string]$undoProbe[0].action_id)
-    $undoCanonical = ConvertTo-CanonicalProbeText -Value ([string]$hwp.GetTextFile('UNICODE', ''))
-    $undoSha256 = Get-Sha256String -Value $undoCanonical
-    $undoObserved = $undoReturn -ne $false -and $undoCanonical -cne $fixtureCanonical -and -not $undoCanonical.Contains($fixtureId)
-    $undoResult.return_value_kind = Get-ReturnValueKind -Value $undoReturn
-    $undoResult.post_snapshot_sha256 = $undoSha256
-    $undoResult.expected_effect_observed = $undoObserved
-    $trace.fixture.undo_snapshot_sha256 = $undoSha256
-    if (-not $undoObserved) {
+    try {
+        $undoResult.pre_snapshot_sha256 = $fixtureSha256
+        $undoReturn = $hwp.HAction.Run([string]$undoProbe[0].action_id)
+        $undoCanonical = ConvertTo-CanonicalProbeText -Value ([string]$hwp.GetTextFile('UNICODE', ''))
+        $undoSha256 = Get-Sha256String -Value $undoCanonical
+        $undoObserved = $undoReturn -ne $false -and $undoCanonical -cne $fixtureCanonical -and -not $undoCanonical.Contains($fixtureId)
+        $undoResult.return_value_kind = Get-ReturnValueKind -Value $undoReturn
+        $undoResult.post_snapshot_sha256 = $undoSha256
+        $undoResult.expected_effect_observed = $undoObserved
+        $trace.fixture.undo_snapshot_sha256 = $undoSha256
+        if (-not $undoObserved) { throw 'UNDO_CANARY_EFFECT_MISMATCH' }
+        $undoResult.execute_state = 'pass'
+        $undoResult.disposition = 'verified'
+        $undoResult.reason_code = 'fixture_removed_exact_2020'
+    }
+    catch {
         $undoResult.execute_state = 'failed'
         $undoResult.disposition = 'failed'
-        $undoResult.reason_code = 'undo_effect_mismatch'
-        throw 'UNDO_CANARY_EFFECT_MISMATCH'
+        $undoResult.reason_code = 'undo_canary_failed'
+        $undoResult.error_type = $_.Exception.GetType().FullName
+        $undoResult.error_hresult = $_.Exception.HResult
+        $undoResult.error_message_sha256 = Get-Sha256String -Value ([string]$_.Exception.Message)
+        throw
     }
-    $undoResult.execute_state = 'pass'
-    $undoResult.disposition = 'verified'
-    $undoResult.reason_code = 'fixture_removed_exact_2020'
     $trace.phases.undo_canary = 'pass'
 
     $activePhase = 'redo_canary'
@@ -435,24 +441,30 @@ try {
         throw 'REDO_CANARY_REQUEST_INVALID'
     }
     $redoResult = $resultByCapability['edit.redo']
-    $redoResult.pre_snapshot_sha256 = $undoSha256
-    $redoReturn = $hwp.HAction.Run([string]$redoProbe[0].action_id)
-    $redoCanonical = ConvertTo-CanonicalProbeText -Value ([string]$hwp.GetTextFile('UNICODE', ''))
-    $redoSha256 = Get-Sha256String -Value $redoCanonical
-    $redoObserved = $redoReturn -ne $false -and $redoCanonical -ceq $fixtureCanonical
-    $redoResult.return_value_kind = Get-ReturnValueKind -Value $redoReturn
-    $redoResult.post_snapshot_sha256 = $redoSha256
-    $redoResult.expected_effect_observed = $redoObserved
-    $trace.fixture.redo_snapshot_sha256 = $redoSha256
-    if (-not $redoObserved) {
+    try {
+        $redoResult.pre_snapshot_sha256 = $undoSha256
+        $redoReturn = $hwp.HAction.Run([string]$redoProbe[0].action_id)
+        $redoCanonical = ConvertTo-CanonicalProbeText -Value ([string]$hwp.GetTextFile('UNICODE', ''))
+        $redoSha256 = Get-Sha256String -Value $redoCanonical
+        $redoObserved = $redoReturn -ne $false -and $redoCanonical -ceq $fixtureCanonical
+        $redoResult.return_value_kind = Get-ReturnValueKind -Value $redoReturn
+        $redoResult.post_snapshot_sha256 = $redoSha256
+        $redoResult.expected_effect_observed = $redoObserved
+        $trace.fixture.redo_snapshot_sha256 = $redoSha256
+        if (-not $redoObserved) { throw 'REDO_CANARY_EFFECT_MISMATCH' }
+        $redoResult.execute_state = 'pass'
+        $redoResult.disposition = 'verified'
+        $redoResult.reason_code = 'fixture_restored_exact_2020'
+    }
+    catch {
         $redoResult.execute_state = 'failed'
         $redoResult.disposition = 'failed'
-        $redoResult.reason_code = 'redo_effect_mismatch'
-        throw 'REDO_CANARY_EFFECT_MISMATCH'
+        $redoResult.reason_code = 'redo_canary_failed'
+        $redoResult.error_type = $_.Exception.GetType().FullName
+        $redoResult.error_hresult = $_.Exception.HResult
+        $redoResult.error_message_sha256 = Get-Sha256String -Value ([string]$_.Exception.Message)
+        throw
     }
-    $redoResult.execute_state = 'pass'
-    $redoResult.disposition = 'verified'
-    $redoResult.reason_code = 'fixture_restored_exact_2020'
     $trace.phases.redo_canary = 'pass'
 
     $activePhase = 'hwpx_save'
