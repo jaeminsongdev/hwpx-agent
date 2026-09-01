@@ -19,7 +19,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 |---|---|---|
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
-| P02 | `in_progress_current_pc_local` | P02-01 SourceRecord schema부터 시작 |
+| P02 | `in_progress_current_pc_local` | P02-01~03 PASS; P02-04 OWPML extractor 진행 |
 | P03~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -28,15 +28,15 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0014 | P02-03 PDF Automation/Parameter/Object/Event extractor | `in_progress` | locked PDF hash, page/section/field preservation, deterministic records, ambiguity/tamper/restricted-output rejection |
+| P-0015 | P02-04 OWPML extractor | `in_progress` | locked source readiness, namespace/version/package part/element/attribute coverage, deterministic records, missing-authority/tamper/restricted-output rejection |
 
-### P02-03 Acceptance
+### P02-04 Acceptance
 
-- ActionTable, ParameterSetTable, HwpAutomation, EventHandler의 exact source-lock ID/SHA와 PDF bytes를 결합한다.
-- 이름, declared type, direction/required unknown, 설명, page/section locator를 추출하고 불명확한 열/행은 거부한다.
-- raw action/parameter 문자열은 internal metadata로만 저장하고 실행 surface에 연결하지 않는다.
-- restricted output은 private evidence만 허용하고 source PDF를 수정·재배포하지 않는다.
-- 합성 PDF/text fixture negative와 실제 locked PDF별 parser coverage/count/hash report를 만든다.
+- KS X 6101/OWPML download page, machine-readable standard and any exact archive/XSD bytes의 source-lock ID/SHA/권위를 먼저 감사한다.
+- authoritative XSD/package source가 없으면 PDF/HTML 설명을 XSD 증거로 승격하지 않고 명시적 source-readiness failure로 정지한다.
+- 준비된 source에서 namespace/version, package part, element, attribute와 원문 locator를 결정적으로 색인한다.
+- raw XML/XSD 문자열은 internal metadata로만 저장하고 public/LLM 실행 surface에 연결하지 않는다.
+- restricted output은 private evidence만 허용하며 tamper/traversal/entity expansion/archive bomb/ambiguous namespace negative를 통과한다.
 
 ## Risks
 
@@ -57,7 +57,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0011: P01 repository·CI·security foundation은 `implementation/p01/P01_GATE_REPORT.md`에서 current-PC local scoped PASS.
 - P-0012: P02-01 SourceRecord contract는 `implementation/p02/P02-01_REPORT.md`에서 PASS.
 - P-0013: P02-02 Help extractor는 `implementation/p02/P02-02_REPORT.md`에서 PASS.
+- P-0014: P02-03 Automation PDF extractor는 `implementation/p02/P02-03_REPORT.md`에서 PASS.
 
 ## Next
 
-P02-03 구현은 `xhigh`; P02 phase 최종 감사는 `max`. P02-03 완료 뒤 정확한 다음 작업은 P02-04 OWPML extractor이며 권장 추론수준은 `xhigh`다.
+P02-04 구현은 `xhigh`; P02 phase 최종 감사는 `max`. P02-04 완료 뒤 정확한 다음 작업은 P02-05 정규화·중복 후보이며 권장 추론수준은 `xhigh`다.

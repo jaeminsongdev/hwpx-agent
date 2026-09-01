@@ -1,6 +1,6 @@
 # CURRENT STATE
 
-> 기준일: 2026-09-01  
+> 기준일: 2026-09-02
 > 프로젝트 코드명: `hwpx-agent`  
 > 문서 세트 버전: `2.0-design`  
 > 규범 키워드: **MUST/SHALL=필수**, **SHOULD=권장**, **MAY=선택**
@@ -54,15 +54,16 @@
 - P02-01 `PASS`: immutable `SourceRecordV1`, 5개 valid sample, 10개 negative case, Rust/TypeScript generated models와 additive catalog v2 lock.
 - 검증: 현재 저장소와 clean clone의 전체 5/5 lane, 공식 Linux read-only source lane, schema/codegen drift와 이전 P01 catalog byte identity 통과.
 - P02-02 `PASS`: source-locked read-only Help adapter, Windows/Linux 8개 test, 실제 restricted snapshot 4 records/private evidence/verifier errors 0.
-- P02-03 `in_progress`: SHA-locked automation PDF 4종에서 page/section/field metadata를 ambiguity 없이 추출한다.
+- P02-03 `PASS`: SHA-locked PDF 4종에서 2,532 records(Action 937/Parameter 1,205/Object 363/Event 27), Windows/Linux combined 16 tests, actual verifier errors 0, deterministic output과 clean clone 5/5 lane을 통과했다.
+- P02-04 `in_progress`: locked KS X 6101/OWPML source readiness를 감사하고 namespace/version/package part/element/attribute를 색인한다.
 
 ## 다음 작업
 
-현재 PC에서 P02-03 Automation/Parameter/Object/Event PDF extractor를 구현한다. 구현 추론수준은 `xhigh`, P02 Gate 최종 감사는 `max`다. 한글 UI 자동 조작, 사용자 문서, 다른 PC/버전, production/provider 경로는 열지 않는다.
+현재 PC에서 P02-04 OWPML extractor를 구현한다. 구현 추론수준은 `xhigh`, P02 Gate 최종 감사는 `max`다. 한글 UI 자동 조작, 사용자 문서, 다른 PC/버전, production/provider 경로는 열지 않는다.
 
 ## 현재 blocker
 
-- 현재 PC 로컬 P02-03 blocker 없음. 실제 locked PDF는 restricted/private evidence로만 처리한다.
+- P02-04 source readiness 감사 전 blocker 판정은 열어 두며, authoritative XSD/package bytes 부재 시 설명 문서를 대체 증거로 사용하지 않는다.
 
 2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.
 

@@ -37,9 +37,9 @@ Official Catalog Importer·Capability Registry를 문서상 계획이 아니라 
 
 ## Phase hard gate
 
-- [ ] `P02-01` 산출물 `source-record schema` 존재, 검증: sample records validate.
-- [ ] `P02-02` 산출물 `help records` 존재, 검증: 원문 locator 보존.
-- [ ] `P02-03` 산출물 `automation records` 존재, 검증: 필드 타입·설명·source hash 보존.
+- [x] `P02-01` 산출물 `source-record schema` 존재, 검증: sample records validate.
+- [x] `P02-02` 산출물 `help records` 존재, 검증: 원문 locator 보존.
+- [x] `P02-03` 산출물 `automation records` 존재, 검증: 필드 타입·설명·source hash 보존.
 - [ ] `P02-04` 산출물 `schema records` 존재, 검증: namespace/version coverage.
 - [ ] `P02-05` 산출물 `candidate graph` 존재, 검증: 자동 병합 오탐 review.
 - [ ] `P02-06` 산출물 `reviewed catalog` 존재, 검증: official item 100% disposition.

@@ -1,5 +1,5 @@
 schema: hwpx-agent.roadmap-status/v2
-updated_at: 2026-09-01
+updated_at: 2026-09-02
 current_phase: P02
 status: p02_in_progress_current_pc_local_only
 design_baseline:
@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_foundation_only
+  product_code_scope: p01_foundation_and_p02_source_importers
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -102,12 +102,12 @@ p01_execution:
     P01-08: passed
     P01-09: passed
 p02_execution:
-  current_task: P02-03
+  current_task: P02-04
   tasks:
     P02-01: passed_current_pc_local
     P02-02: passed_current_pc_local
-    P02-03: in_progress_current_pc_local
-    P02-04: blocked_by_P02-03
+    P02-03: passed_current_pc_local
+    P02-04: in_progress_current_pc_local
     P02-05: blocked_by_P02-04
     P02-06: blocked_by_P02-05
     P02-07: blocked_by_P02-06
@@ -128,6 +128,23 @@ p02_execution:
     actual_record_count: 4
     actual_output_sha256: 5ef0e749c04efaf856ee07131ed7ae9cbd7449cbc37756d4cccdbce9d07fd7b8
     actual_verification_errors: 0
+    restricted_output_git_tracked: false
+  automation_pdf_extractor:
+    audited_source_commit: aed6308d4713c41600426b94e95802b00b9a24bd
+    synthetic_tests_windows: 8_of_8_passed
+    combined_p02_tests_linux: 16_of_16_passed
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    actual_record_count: 2532
+    actual_record_counts:
+      action_table: 937
+      parameter_table: 1205
+      automation_object: 363
+      automation_event: 27
+    actual_output_sha256: 03db035d408d03ce3f78d4eca8ca76d7f9e8076ef8fadd49d8f3ed4b885317b5
+    actual_verification_errors: 0
+    source_type_missing_rows_preserved: 11
+    source_declaration_name_mismatches_preserved: 10
     restricted_output_git_tracked: false
 phases:
   P00: completed_current_pc_local_scope
