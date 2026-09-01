@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/private/runtime-probe-trace-v1.schema.json",
+  "title": "RuntimeProbeTraceV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "request_sha256",
+    "registry_sha256",
+    "target_profile_id",
+    "exact_build",
+    "apartment_state",
+    "fixture",
+    "phases",
+    "probe_results",
+    "state",
+    "error_code",
+    "failed_phase",
+    "quit_invoked",
+    "user_document_opened",
+    "external_network_invoked",
+    "registry_or_system_setting_changed"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.runtime-probe-trace/v1" },
+    "request_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+    "request_sha256": { "$ref": "#/$defs/sha256" },
+    "registry_sha256": { "$ref": "#/$defs/sha256" },
+    "target_profile_id": { "const": "hancom-hangul-2020-secondary" },
+    "exact_build": { "const": "11.0.0.9136" },
+    "apartment_state": { "const": "STA" },
+    "automation_version_normalized": {
+      "type": ["string", "null"],
+      "maxLength": 64
+    },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fixture_id",
+        "input_sha256",
+        "undo_snapshot_sha256",
+        "redo_snapshot_sha256",
+        "reopen_snapshot_sha256",
+        "output_hwpx_sha256",
+        "reopen_exact_match"
+      ],
+      "properties": {
+        "fixture_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+        "input_sha256": { "$ref": "#/$defs/sha256OrNull" },
+        "undo_snapshot_sha256": { "$ref": "#/$defs/sha256OrNull" },
+        "redo_snapshot_sha256": { "$ref": "#/$defs/sha256OrNull" },
+        "reopen_snapshot_sha256": { "$ref": "#/$defs/sha256OrNull" },
+        "output_hwpx_sha256": { "$ref": "#/$defs/sha256OrNull" },
+        "reopen_exact_match": { "type": "boolean" }
+      }
+    },
+    "phases": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "enum": ["not_run", "running", "pass", "failed"]
+      }
+    },
+    "probe_results": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000,
+      "items": { "$ref": "#/$defs/result" }
+    },
+    "state": { "enum": ["pass", "failed"] },
+    "error_code": { "type": ["string", "null"], "pattern": "^[A-Z0-9_]+$" },
+    "failed_phase": { "type": ["string", "null"], "maxLength": 128 },
+    "exception_type": { "type": ["string", "null"], "maxLength": 256 },
+    "exception_hresult": { "type": ["integer", "null"] },
+    "exception_message_sha256": { "$ref": "#/$defs/sha256OrNull" },
+    "quit_invoked": { "type": "boolean" },
+    "user_document_opened": { "const": false },
+    "external_network_invoked": { "const": false },
+    "registry_or_system_setting_changed": { "const": false }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "sha256OrNull": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding_key",
+        "feature_id",
+        "capability_id",
+        "planned_execution",
+        "disposition",
+        "reason_code",
+        "default_read_state",
+        "default_member_count",
+        "default_shape_sha256",
+        "execute_state",
+        "return_value_kind",
+        "pre_snapshot_sha256",
+        "post_snapshot_sha256",
+        "expected_effect_observed"
+      ],
+      "properties": {
+        "binding_key": { "type": "string", "minLength": 3, "maxLength": 512 },
+        "feature_id": { "type": "string", "pattern": "^[A-Z]+-[0-9]{3}$" },
+        "capability_id": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]+$" },
+        "planned_execution": {
+          "enum": ["safe_canary", "not_run", "blocked_by_risk"]
+        },
+        "disposition": {
+          "enum": ["verified", "failed", "blocked_by_risk", "not_run"]
+        },
+        "reason_code": { "type": "string", "pattern": "^[a-z][a-z0-9_]+$" },
+        "default_read_state": {
+          "enum": ["pass", "failed", "not_run", "not_applicable"]
+        },
+        "default_member_count": { "type": "integer", "minimum": 0 },
+        "default_shape_sha256": { "$ref": "#/$defs/sha256OrNull" },
+        "execute_state": { "enum": ["pass", "failed", "not_run"] },
+        "return_value_kind": {
+          "enum": ["true", "false", "null", "other", "not_run"]
+        },
+        "pre_snapshot_sha256": { "$ref": "#/$defs/sha256OrNull" },
+        "post_snapshot_sha256": { "$ref": "#/$defs/sha256OrNull" },
+        "expected_effect_observed": { "type": "boolean" }
+      }
+    }
+  }
+}

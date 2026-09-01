@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/private/runtime-probe-receipt-v1.schema.json",
+  "title": "RuntimeProbeReceiptV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "request_sha256",
+    "trace_sha256",
+    "registry_sha256",
+    "profile_sha256",
+    "state",
+    "error_code",
+    "target",
+    "runtime",
+    "coverage",
+    "privacy"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.runtime-probe-receipt/v1" },
+    "request_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+    "request_sha256": { "$ref": "#/$defs/sha256" },
+    "trace_sha256": { "$ref": "#/$defs/sha256OrNull" },
+    "registry_sha256": { "$ref": "#/$defs/sha256" },
+    "profile_sha256": { "$ref": "#/$defs/sha256" },
+    "state": { "enum": ["pass", "failed", "unverified"] },
+    "error_code": { "type": ["string", "null"], "pattern": "^[A-Z0-9_]+$" },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "observed_file_version",
+        "observed_executable_sha256",
+        "automation_version_normalized",
+        "identity_match",
+        "registry_view",
+        "client_apartment_state"
+      ],
+      "properties": {
+        "profile_id": { "const": "hancom-hangul-2020-secondary" },
+        "observed_file_version": { "const": "11.0.0.9136" },
+        "observed_executable_sha256": {
+          "const": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+        },
+        "automation_version_normalized": {
+          "type": ["string", "null"],
+          "maxLength": 64
+        },
+        "identity_match": { "type": "boolean" },
+        "registry_view": { "const": "Registry32" },
+        "client_apartment_state": { "const": "STA" }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timeout_seconds",
+        "timed_out",
+        "child_exit_code",
+        "unexpected_window_observed",
+        "observed_process_count",
+        "cleaned_process_count",
+        "cleanup_refused_count",
+        "cleanup_error_count",
+        "remaining_hwp_process_count"
+      ],
+      "properties": {
+        "timeout_seconds": { "type": "integer", "minimum": 30, "maximum": 300 },
+        "timed_out": { "type": "boolean" },
+        "child_exit_code": { "type": "integer" },
+        "unexpected_window_observed": { "type": "boolean" },
+        "observed_process_count": { "type": "integer", "minimum": 0 },
+        "cleaned_process_count": { "type": "integer", "minimum": 0 },
+        "cleanup_refused_count": { "type": "integer", "minimum": 0 },
+        "cleanup_error_count": { "type": "integer", "minimum": 0 },
+        "remaining_hwp_process_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_count",
+        "verified",
+        "failed",
+        "blocked_by_risk",
+        "not_run"
+      ],
+      "properties": {
+        "candidate_count": { "type": "integer", "minimum": 1 },
+        "verified": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "blocked_by_risk": { "type": "integer", "minimum": 0 },
+        "not_run": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "restricted_output",
+        "raw_identifiers_present",
+        "default_values_present",
+        "absolute_private_paths_present",
+        "user_document_opened",
+        "external_network_invoked",
+        "registry_or_system_setting_changed",
+        "computer_use_click_or_type_invoked"
+      ],
+      "properties": {
+        "restricted_output": { "const": true },
+        "raw_identifiers_present": { "const": false },
+        "default_values_present": { "const": false },
+        "absolute_private_paths_present": { "const": false },
+        "user_document_opened": { "const": false },
+        "external_network_invoked": { "const": false },
+        "registry_or_system_setting_changed": { "const": false },
+        "computer_use_click_or_type_invoked": { "const": false }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "sha256OrNull": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" }
+  }
+}
