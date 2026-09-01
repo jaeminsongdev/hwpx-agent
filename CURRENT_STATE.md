@@ -56,15 +56,16 @@
 - P02-02 `PASS`: source-locked read-only Help adapter, Windows/Linux 8개 test, 실제 restricted snapshot 4 records/private evidence/verifier errors 0.
 - P02-03 `PASS`: SHA-locked PDF 4종에서 2,532 records(Action 937/Parameter 1,205/Object 363/Event 27), Windows/Linux combined 16 tests, actual verifier errors 0, deterministic output과 clean clone 5/5 lane을 통과했다.
 - P02-04 `PASS`: locked KS X 6101 reform 03 machine response의 embedded authoritative XSD 7종과 OCF package table을 읽어 1,144 records(package part 22/schema 7/import 5/element 359/attribute 648/named complexType 82/named simpleType 14/attributeGroup 7)를 생성했다. 2024 namespace 7/7, actual verifier errors 0, Windows/Linux 23 tests, current/clean-clone 5/5 lane을 통과했다.
-- P02-05 `in_progress`: P02-02~04 SourceRecord를 provenance 보존 candidate graph로 정규화하되 자동 병합하지 않는다.
+- P02-05 `PASS`: 3개 locked SourceRecord 출력 3,680개를 3,680 nodes/2,736 normalized labels/3,811 review edges로 전환했다. 호환 후보 746, collision review 3,065, auto-merge 0이며 independent verifier errors 0, Windows/Linux 29 tests, current/clean-clone 5/5 lane을 통과했다.
+- P02-06 `in_progress`: 3,680개 official node와 3,811개 edge를 609 canonical capability 기준으로 semantic disposition한다.
 
 ## 다음 작업
 
-현재 PC에서 P02-05 정규화·중복 후보를 구현한다. 구현 추론수준은 `xhigh`, 다음 P02-06 semantic review와 P02 Gate 최종 감사는 `max`다. 한글 UI 자동 조작, 사용자 문서, 다른 PC/버전, production/provider 경로는 열지 않는다.
+현재 PC에서 P02-06 semantic capability review를 수행한다. 구현·감사 추론수준은 `max`, 다음 P02-07 binding model은 `xhigh`다. 한글 UI 자동 조작, 사용자 문서, 다른 PC/버전, production/provider 경로는 열지 않는다.
 
 ## 현재 blocker
 
-- 현재 blocker 없음. P02-05 후보는 병합 결과가 아니라 review 입력이며, restricted 원문을 public 산출물로 승격하지 않는다.
+- 현재 blocker 없음. P02-06에서 semantic 근거가 부족한 node를 label-only로 매핑하지 않고 명시적 ignored-with-reason 또는 Gate blocker로 남긴다.
 
 2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.
 

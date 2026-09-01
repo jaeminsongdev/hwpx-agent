@@ -19,7 +19,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 |---|---|---|
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
-| P02 | `in_progress_current_pc_local` | P02-01~04 PASS; P02-05 정규화·중복 후보 진행 |
+| P02 | `in_progress_current_pc_local` | P02-01~05 PASS; P02-06 semantic capability review 진행 |
 | P03~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -28,15 +28,16 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0016 | P02-05 정규화·중복 후보 | `in_progress` | source-bound normalization, deterministic candidate graph, no auto-merge, adversarial-label/tamper/restricted-output rejection |
+| P-0017 | P02-06 Semantic capability review | `in_progress` | 3,680 nodes 100% disposition, stable capability/scope/support mapping, collision resolution, provenance and restricted-output preservation |
 
-### P02-05 Acceptance
+### P02-06 Acceptance
 
-- P02-02~04의 schema-valid `SourceRecordV1`만 입력으로 받고 source-lock/source ID/SHA와 record ordinal 연속성을 다시 검증한다.
-- label/input/output/scope의 Unicode·공백·구두점 정규화 규칙과 deterministic candidate score/reason을 고정한다.
-- 후보는 provenance를 보존하고 자동 병합하지 않는다. 동명이인·과적재·Action/Parameter/XSD 이름 충돌은 별도 review 대기 상태로 남긴다.
-- restricted record가 하나라도 포함되면 candidate graph도 private evidence에만 no-overwrite로 발행한다.
-- adversarial Unicode, empty normalized label, duplicate record ID, tamper, traversal, overwrite와 비결정 순서 negative를 통과한다.
+- exact candidate graph SHA와 3개 SourceRecord 입력 SHA, source-lock identity, 609개 canonical capability matrix를 다시 검증한다.
+- 3,680개 node 각각을 `mapped` 또는 구체적인 `ignored_with_reason`으로 정확히 한 번 disposition하고 미결 상태를 PASS로 숨기지 않는다.
+- `mapped`는 canonical capability ID, feature scope/support/backend, source/candidate refs와 semantic reason을 가져야 하며 label 문자열 하나만으로 승인하지 않는다.
+- 3,811개 edge의 `review_candidate`/`collision_review`를 개별 disposition하고 동명이인·과적재·XSD 일반 속성을 자동 병합하지 않는다.
+- 문서 증거는 runtime qualification로 승격하지 않는다. 현재 2020 support claim은 P02-08 probe 전까지 candidate/unverified다.
+- restricted review catalog는 private evidence no-overwrite로만 발행하고 public 상태에는 집계와 해시만 기록한다.
 
 ## Risks
 
@@ -59,7 +60,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0013: P02-02 Help extractor는 `implementation/p02/P02-02_REPORT.md`에서 PASS.
 - P-0014: P02-03 Automation PDF extractor는 `implementation/p02/P02-03_REPORT.md`에서 PASS.
 - P-0015: P02-04 OWPML extractor는 `implementation/p02/P02-04_REPORT.md`에서 PASS.
+- P-0016: P02-05 정규화·중복 후보는 `implementation/p02/P02-05_REPORT.md`에서 PASS.
 
 ## Next
 
-P02-05 구현은 `xhigh`; 다음 P02-06 semantic capability review와 P02 phase 최종 감사는 `max`다.
+P02-06 semantic review와 P02 phase 최종 감사는 `max`. 다음 P02-07 binding model은 `xhigh`다.

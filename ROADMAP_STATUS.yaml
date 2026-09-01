@@ -102,14 +102,14 @@ p01_execution:
     P01-08: passed
     P01-09: passed
 p02_execution:
-  current_task: P02-05
+  current_task: P02-06
   tasks:
     P02-01: passed_current_pc_local
     P02-02: passed_current_pc_local
     P02-03: passed_current_pc_local
     P02-04: passed_current_pc_local
-    P02-05: in_progress_current_pc_local
-    P02-06: blocked_by_P02-05
+    P02-05: passed_current_pc_local
+    P02-06: in_progress_current_pc_local
     P02-07: blocked_by_P02-06
     P02-08: blocked_by_P02-07
     P02-09: blocked_by_P02-08
@@ -164,6 +164,23 @@ p02_execution:
     attribute_count: 648
     glossary_replacements_verified: 37
     raw_xml_published: false
+    restricted_output_git_tracked: false
+  candidate_graph:
+    audited_source_commit: 3df40e33b0564aea17af3b1835c8c46a8647cd55
+    combined_p02_tests_windows: 29_of_29_passed
+    combined_p02_tests_linux: 29_of_29_passed
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    input_record_count: 3680
+    node_count: 3680
+    normalized_label_count: 2736
+    singleton_node_count: 2296
+    edge_count: 3811
+    review_candidate_count: 746
+    collision_review_count: 3065
+    auto_merge_count: 0
+    actual_output_sha256: 65f470fee6b4e79e94f71bc55b068ed7a686f12eb52cedfffe238cdcf71cb29a
+    actual_verification_errors: 0
     restricted_output_git_tracked: false
 phases:
   P00: completed_current_pc_local_scope
