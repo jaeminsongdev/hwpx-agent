@@ -55,7 +55,7 @@ def main() -> int:
         except (subprocess.CalledProcessError, FileNotFoundError) as error:
             errors.append(f"{label} discovery failed: {error}")
     observations["python"] = ".".join(str(part) for part in sys.version_info[:3])
-    for package in ("PyYAML", "jsonschema"):
+    for package in ("PyYAML", "jsonschema", "pdfminer.six"):
         try:
             observations[package] = importlib.metadata.version(package)
         except importlib.metadata.PackageNotFoundError as error:
@@ -68,6 +68,12 @@ def main() -> int:
     exact_version("pnpm", observations.get("pnpm", "missing"), LOCK["node"]["pnpm"], errors)
     exact_version("PyYAML", observations.get("PyYAML", "missing"), LOCK["python"]["pyyaml"], errors)
     exact_version("jsonschema", observations.get("jsonschema", "missing"), LOCK["python"]["jsonschema"], errors)
+    exact_version(
+        "pdfminer.six",
+        observations.get("pdfminer.six", "missing"),
+        LOCK["python"]["pdfminer_six"],
+        errors,
+    )
     exact_version("cargo-deny", observations.get("cargo_deny", "missing"), LOCK["security"]["cargo_deny"], errors)
     exact_version("cargo-audit", observations.get("cargo_audit", "missing"), LOCK["security"]["cargo_audit"], errors)
     exact_version("syft", observations.get("syft", "missing"), LOCK["security"]["syft"], errors)
