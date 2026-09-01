@@ -102,13 +102,13 @@ p01_execution:
     P01-08: passed
     P01-09: passed
 p02_execution:
-  current_task: P02-04
+  current_task: P02-05
   tasks:
     P02-01: passed_current_pc_local
     P02-02: passed_current_pc_local
     P02-03: passed_current_pc_local
-    P02-04: in_progress_current_pc_local
-    P02-05: blocked_by_P02-04
+    P02-04: passed_current_pc_local
+    P02-05: in_progress_current_pc_local
     P02-06: blocked_by_P02-05
     P02-07: blocked_by_P02-06
     P02-08: blocked_by_P02-07
@@ -145,6 +145,25 @@ p02_execution:
     actual_verification_errors: 0
     source_type_missing_rows_preserved: 11
     source_declaration_name_mismatches_preserved: 10
+    restricted_output_git_tracked: false
+  owpml_extractor:
+    audited_source_commit: dbad3a71ad2b3b756cbea34a2911610cea51fac1
+    combined_p02_tests_windows: 23_of_23_passed
+    combined_p02_tests_linux: 23_of_23_passed
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    actual_source_id: ks-x-6101-machine-content-20260901
+    actual_source_sha256: c4a8bdb082cf8610fa2b3f6e709ca9058ab256a2371e9a779b9b323ca82638e4
+    actual_record_count: 1144
+    actual_output_sha256: c32f323a8fd22f228cc0a116c81881f9ae6c846525c19209142cfe7adcef6ea1
+    actual_verification_errors: 0
+    namespace_version: '2024'
+    namespace_coverage: 7_of_7
+    package_part_count: 22
+    element_count: 359
+    attribute_count: 648
+    glossary_replacements_verified: 37
+    raw_xml_published: false
     restricted_output_git_tracked: false
 phases:
   P00: completed_current_pc_local_scope

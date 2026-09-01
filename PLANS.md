@@ -19,7 +19,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 |---|---|---|
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
-| P02 | `in_progress_current_pc_local` | P02-01~03 PASS; P02-04 OWPML extractor 진행 |
+| P02 | `in_progress_current_pc_local` | P02-01~04 PASS; P02-05 정규화·중복 후보 진행 |
 | P03~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -28,15 +28,15 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0015 | P02-04 OWPML extractor | `in_progress` | locked source readiness, namespace/version/package part/element/attribute coverage, deterministic records, missing-authority/tamper/restricted-output rejection |
+| P-0016 | P02-05 정규화·중복 후보 | `in_progress` | source-bound normalization, deterministic candidate graph, no auto-merge, adversarial-label/tamper/restricted-output rejection |
 
-### P02-04 Acceptance
+### P02-05 Acceptance
 
-- KS X 6101/OWPML download page, machine-readable standard and any exact archive/XSD bytes의 source-lock ID/SHA/권위를 먼저 감사한다.
-- authoritative XSD/package source가 없으면 PDF/HTML 설명을 XSD 증거로 승격하지 않고 명시적 source-readiness failure로 정지한다.
-- 준비된 source에서 namespace/version, package part, element, attribute와 원문 locator를 결정적으로 색인한다.
-- raw XML/XSD 문자열은 internal metadata로만 저장하고 public/LLM 실행 surface에 연결하지 않는다.
-- restricted output은 private evidence만 허용하며 tamper/traversal/entity expansion/archive bomb/ambiguous namespace negative를 통과한다.
+- P02-02~04의 schema-valid `SourceRecordV1`만 입력으로 받고 source-lock/source ID/SHA와 record ordinal 연속성을 다시 검증한다.
+- label/input/output/scope의 Unicode·공백·구두점 정규화 규칙과 deterministic candidate score/reason을 고정한다.
+- 후보는 provenance를 보존하고 자동 병합하지 않는다. 동명이인·과적재·Action/Parameter/XSD 이름 충돌은 별도 review 대기 상태로 남긴다.
+- restricted record가 하나라도 포함되면 candidate graph도 private evidence에만 no-overwrite로 발행한다.
+- adversarial Unicode, empty normalized label, duplicate record ID, tamper, traversal, overwrite와 비결정 순서 negative를 통과한다.
 
 ## Risks
 
@@ -58,7 +58,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0012: P02-01 SourceRecord contract는 `implementation/p02/P02-01_REPORT.md`에서 PASS.
 - P-0013: P02-02 Help extractor는 `implementation/p02/P02-02_REPORT.md`에서 PASS.
 - P-0014: P02-03 Automation PDF extractor는 `implementation/p02/P02-03_REPORT.md`에서 PASS.
+- P-0015: P02-04 OWPML extractor는 `implementation/p02/P02-04_REPORT.md`에서 PASS.
 
 ## Next
 
-P02-04 구현은 `xhigh`; P02 phase 최종 감사는 `max`. P02-04 완료 뒤 정확한 다음 작업은 P02-05 정규화·중복 후보이며 권장 추론수준은 `xhigh`다.
+P02-05 구현은 `xhigh`; 다음 P02-06 semantic capability review와 P02 phase 최종 감사는 `max`다.
