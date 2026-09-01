@@ -52,6 +52,7 @@ gitignore = (ROOT / '.gitignore').read_text(encoding='utf-8')
 for required_private_rule in (
     '/implementation/p00/evidence/',
     '/implementation/p01/evidence/',
+    '/implementation/p02/evidence/',
 ):
     if required_private_rule not in gitignore:
         errors.append(f'private evidence ignore rule missing: {required_private_rule}')
@@ -300,7 +301,7 @@ for path in source_paths('*.md'):
         if (
             len(parts) >= 3
             and parts[0] == 'implementation'
-            and parts[1] in {'p00', 'p01'}
+            and parts[1] in {'p00', 'p01', 'p02'}
             and parts[2] == 'evidence'
         ):
             declared_local_evidence_links += 1

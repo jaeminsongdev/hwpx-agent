@@ -51,6 +51,18 @@ def docs() -> None:
     run([sys.executable, "tools/design-validation/validate_design.py"])
     run([sys.executable, "tools/p01/validate_foundation.py"])
     run([sys.executable, "tools/p02/validate_source_records.py"])
+    run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tools/p02/tests",
+            "-p",
+            "test_*.py",
+        ]
+    )
     run([sys.executable, "tools/p01/check_docs.py"])
 
 

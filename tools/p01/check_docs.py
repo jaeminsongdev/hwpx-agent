@@ -37,7 +37,7 @@ def main() -> int:
                 not resolved.exists()
                 and len(parts) >= 3
                 and parts[0] == "implementation"
-                and parts[1] in {"p00", "p01"}
+                and parts[1] in {"p00", "p01", "p02"}
                 and parts[2] == "evidence"
             ):
                 declared_local_evidence += 1
