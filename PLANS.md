@@ -28,15 +28,15 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0012 | P02-01 immutable SourceRecord schema·sample·negative test·codegen | `in_progress` | Draft 2020-12 compile, valid samples, locator/hash/availability negative cases, Rust/TypeScript generated drift |
+| P-0013 | P02-02 read-only Help extractor | `in_progress` | source-lock/hash match, deterministic SourceRecord output, locator preservation, unsupported/tampered source rejection |
 
-### P02-01 Acceptance
+### P02-02 Acceptance
 
-- official source 원본을 수정하지 않고 source lock identity와 SHA-256를 참조한다.
-- help/PDF/XSD/automation/runtime 공통 record와 kind별 locator를 strict schema로 정의한다.
-- 원문 이름·설명·parameter·제품/build/locale availability를 보존하되 raw action 실행 surface는 만들지 않는다.
-- valid sample과 필수 field 누락, 잘못된 hash/locator/build range, 추가 속성 negative case를 둔다.
-- 기존 단일 codegen/check 명령으로 Rust/TypeScript model을 deterministic하게 생성한다.
+- 승인된 source-lock entry와 실제 입력 SHA-256가 일치할 때만 읽는다.
+- 원본은 read-only로 취급하고 이름·설명·section/anchor/page locator를 보존한다.
+- 동일 입력에서 byte-identical한 정렬·record ID·SourceRecord JSON을 생성한다.
+- unsupported format/encoding, source-lock mismatch, malformed structure, output overwrite를 fail-closed한다.
+- 합성 fixture로 parser negative를 먼저 통과하고, 권리 범위가 확인된 실제 source가 있으면 별도 private evidence로 검증한다.
 
 ## Risks
 
@@ -55,7 +55,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0000~P-0006: 원본/설계 감사, 2020 probe, canonical contract 교정, offline diagnostics는 P00 report와 source lock에 보존.
 - P-0007~P-0010: 과거 blocked Gate, current-PC 재기준화, exact 2020 reference smoke, host baseline, P00 v10 scoped PASS.
 - P-0011: P01 repository·CI·security foundation은 `implementation/p01/P01_GATE_REPORT.md`에서 current-PC local scoped PASS.
+- P-0012: P02-01 SourceRecord contract는 `implementation/p02/P02-01_REPORT.md`에서 PASS.
 
 ## Next
 
-P02-01 구현은 `xhigh`; P02 phase 최종 감사는 `max`. P02-01 완료 뒤 정확한 다음 작업은 P02-02 Help extractor이며 권장 추론수준은 `xhigh`다.
+P02-02 구현은 `xhigh`; P02 phase 최종 감사는 `max`. P02-02 완료 뒤 정확한 다음 작업은 P02-03 Automation extractor이며 권장 추론수준은 `xhigh`다.

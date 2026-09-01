@@ -101,6 +101,25 @@ p01_execution:
     P01-07: passed
     P01-08: passed
     P01-09: passed
+p02_execution:
+  current_task: P02-02
+  tasks:
+    P02-01: passed_current_pc_local
+    P02-02: in_progress_current_pc_local
+    P02-03: blocked_by_P02-02
+    P02-04: blocked_by_P02-03
+    P02-05: blocked_by_P02-04
+    P02-06: blocked_by_P02-05
+    P02-07: blocked_by_P02-06
+    P02-08: blocked_by_P02-07
+    P02-09: blocked_by_P02-08
+  source_record_contract:
+    schema: protocol/json-schema/source-record-v1.schema.json
+    valid_samples: 5
+    negative_cases: 10
+    audited_source_commit: 52228e0fd1e47e91c45b34f16a11c5089a53cc20
+    clean_clone_bootstrap: passed_git_status_clean
+    linux_read_only_source_lane: passed
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope

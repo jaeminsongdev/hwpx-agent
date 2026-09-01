@@ -49,13 +49,19 @@
 - 보안: secrets/vulnerabilities/forbidden licenses 0, CycloneDX 146 components, private evidence와 사용자 문서 Git 추적 0.
 - 범위: P01은 한글/COM/UI/사용자 문서를 실행하지 않았다. GitHub-hosted scheduler, 다른 PC/버전 및 production은 검증했다고 주장하지 않는다.
 
+## P02 현재 상태
+
+- P02-01 `PASS`: immutable `SourceRecordV1`, 5개 valid sample, 10개 negative case, Rust/TypeScript generated models와 additive catalog v2 lock.
+- 검증: 현재 저장소와 clean clone의 전체 5/5 lane, 공식 Linux read-only source lane, schema/codegen drift와 이전 P01 catalog byte identity 통과.
+- P02-02 `in_progress`: 승인된 source-lock과 SHA가 일치하는 Help source만 read-only로 추출하는 adapter를 구현한다.
+
 ## 다음 작업
 
-현재 PC에서 P02-01 immutable SourceRecord schema·sample·negative test·Rust/TypeScript codegen을 구현한다. 구현 추론수준은 `xhigh`, P02 Gate 최종 감사는 `max`다. 한글 UI 자동 조작, 사용자 문서, 다른 PC/버전, production/provider 경로는 열지 않는다.
+현재 PC에서 P02-02 read-only Help extractor를 구현한다. 구현 추론수준은 `xhigh`, P02 Gate 최종 감사는 `max`다. 한글 UI 자동 조작, 사용자 문서, 다른 PC/버전, production/provider 경로는 열지 않는다.
 
 ## 현재 blocker
 
-- 현재 PC 로컬 P02-01 착수 blocker 없음.
+- 현재 PC 로컬 P02-02 합성 adapter 구현 blocker 없음. 실제 official source 검증은 source-lock·로컬 보관·권리 상태를 먼저 확인한다.
 
 2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.
 
