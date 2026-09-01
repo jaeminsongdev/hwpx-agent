@@ -189,6 +189,9 @@ def passing_trace(request: dict, request_sha: str, registry_sha: str) -> dict:
             "pre_snapshot_sha256": None,
             "post_snapshot_sha256": None,
             "expected_effect_observed": False,
+            "error_type": None,
+            "error_hresult": None,
+            "error_message_sha256": None,
         }
         if capability_id == "edit.go_to":
             row["default_read_state"] = "pass"
@@ -246,6 +249,8 @@ def passing_trace(request: dict, request_sha: str, registry_sha: str) -> dict:
         "fixture": {
             "fixture_id": request["fixture"]["fixture_id"],
             "input_sha256": input_sha,
+            "bootstrap_default_member_count": 3,
+            "bootstrap_default_shape_sha256": "f" * 64,
             "undo_snapshot_sha256": "b" * 64,
             "redo_snapshot_sha256": input_sha,
             "reopen_snapshot_sha256": input_sha,
@@ -413,6 +418,58 @@ class RuntimeProbeTests(unittest.TestCase):
             )
             self.assertEqual(result["state"], "failed")
             self.assertTrue(any("semantic chain" in error for error in result["errors"]))
+
+    def test_verifier_accepts_isolated_default_binding_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            registry = synthetic_registry()
+            registry_bytes = serialize(registry)
+            registry_sha = hashlib.sha256(registry_bytes).hexdigest()
+            request = build_request(plan_config(registry_sha), registry, contracts())
+            request_bytes = serialize(request)
+            request_sha = hashlib.sha256(request_bytes).hexdigest()
+            trace = passing_trace(request, request_sha, registry_sha)
+            default_result = next(
+                row for row in trace["probe_results"] if row["capability_id"] == "edit.go_to"
+            )
+            default_result.update(
+                disposition="failed",
+                reason_code="default_read_parameter_set_resolve_failed",
+                default_read_state="failed",
+                default_member_count=0,
+                default_shape_sha256=None,
+                error_type="Synthetic.ComException",
+                error_hresult=-1,
+                error_message_sha256="9" * 64,
+            )
+            trace_bytes = serialize(trace)
+            trace_sha = hashlib.sha256(trace_bytes).hexdigest()
+            receipt = passing_receipt(request, request_sha, trace_sha, registry_sha)
+            receipt["coverage"].update(failed=1, not_run=0)
+            paths = {
+                "registry": root / "registry.json",
+                "request": root / "request.json",
+                "trace": root / "trace.json",
+                "receipt": root / "receipt.json",
+            }
+            paths["registry"].write_bytes(registry_bytes)
+            paths["request"].write_bytes(request_bytes)
+            paths["trace"].write_bytes(trace_bytes)
+            paths["receipt"].write_bytes(serialize(receipt))
+            result = verify(
+                ProbeVerificationConfig(
+                    registry=paths["registry"],
+                    registry_sha256=registry_sha,
+                    target_profile=PROFILE_PATH,
+                    profile_sha256=PROFILE_SHA,
+                    contracts=CONTRACTS_PATH,
+                    contracts_sha256=CONTRACTS_SHA,
+                    request=paths["request"],
+                    trace=paths["trace"],
+                    receipt=paths["receipt"],
+                )
+            )
+            self.assertEqual(result["state"], "pass", result["errors"])
 
 
 if __name__ == "__main__":

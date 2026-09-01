@@ -173,6 +173,9 @@ function New-ProbeResult {
         pre_snapshot_sha256 = $null
         post_snapshot_sha256 = $null
         expected_effect_observed = $false
+        error_type = $null
+        error_hresult = $null
+        error_message_sha256 = $null
     }
 }
 
@@ -239,6 +242,8 @@ $trace = [ordered]@{
     fixture = [ordered]@{
         fixture_id = $fixtureId
         input_sha256 = $fixtureSha256
+        bootstrap_default_member_count = 0
+        bootstrap_default_shape_sha256 = $null
         undo_snapshot_sha256 = $null
         redo_snapshot_sha256 = $null
         reopen_snapshot_sha256 = $null
@@ -281,6 +286,8 @@ $parameterContainer = $null
 $parameterSet = $null
 $parameterHSet = $null
 $parameterResolution = $null
+$bootstrapParameterSet = $null
+$bootstrapHSet = $null
 $activePhase = 'initialization'
 
 try {
@@ -310,10 +317,29 @@ try {
 
     $activePhase = 'fixture_insert'
     $trace.phases.fixture_insert = 'running'
-    $null = $hwp.HAction.GetDefault('InsertText', $hwp.HParameterSet.HInsertText.HSet)
-    $hwp.HParameterSet.HInsertText.Text = $fixtureText
-    $insertResult = $hwp.HAction.Execute('InsertText', $hwp.HParameterSet.HInsertText.HSet)
+    $bootstrapParameterSet = $hwp.HParameterSet.HInsertText
+    $bootstrapHSet = $bootstrapParameterSet.HSet
+    $bootstrapDefaultResult = $hwp.HAction.GetDefault('InsertText', $bootstrapHSet)
+    if ($bootstrapDefaultResult -eq $false) { throw 'BOOTSTRAP_GET_DEFAULT_RETURNED_FALSE' }
+    $bootstrapMembers = @(
+        $bootstrapParameterSet.PSObject.Properties |
+            ForEach-Object { "property:$($_.Name):$($_.TypeNameOfValue)" } |
+            Sort-Object -Unique
+    )
+    $bootstrapShapeSeed = @(
+        "identifier_sha256=$(Get-Sha256String -Value 'InsertText')"
+        "get_default_return=$(Get-ReturnValueKind -Value $bootstrapDefaultResult)"
+        $bootstrapMembers
+    ) -join "`n"
+    $trace.fixture.bootstrap_default_member_count = $bootstrapMembers.Count
+    $trace.fixture.bootstrap_default_shape_sha256 = Get-Sha256String -Value $bootstrapShapeSeed
+    $bootstrapParameterSet.Text = $fixtureText
+    $insertResult = $hwp.HAction.Execute('InsertText', $bootstrapHSet)
     if ($insertResult -eq $false) { throw 'FIXTURE_INSERT_RETURNED_FALSE' }
+    Clear-ComObject -Value $bootstrapHSet
+    Clear-ComObject -Value $bootstrapParameterSet
+    $bootstrapHSet = $null
+    $bootstrapParameterSet = $null
     $insertedCanonical = ConvertTo-CanonicalProbeText -Value ([string]$hwp.GetTextFile('UNICODE', ''))
     if ($insertedCanonical -cne $fixtureCanonical) { throw 'FIXTURE_INSERT_READBACK_MISMATCH' }
     $trace.phases.fixture_insert = 'pass'
@@ -360,7 +386,9 @@ try {
         $defaultResult.default_read_state = 'failed'
         $defaultResult.disposition = 'failed'
         $defaultResult.reason_code = "default_read_${defaultReadSubphase}_failed"
-        throw
+        $defaultResult.error_type = $_.Exception.GetType().FullName
+        $defaultResult.error_hresult = $_.Exception.HResult
+        $defaultResult.error_message_sha256 = Get-Sha256String -Value ([string]$_.Exception.Message)
     }
     finally {
         Clear-ComObject -Value $parameterHSet
@@ -487,6 +515,8 @@ catch {
     if ($trace.phases.Contains($activePhase)) { $trace.phases[$activePhase] = 'failed' }
 }
 finally {
+    Clear-ComObject -Value $bootstrapHSet
+    Clear-ComObject -Value $bootstrapParameterSet
     foreach ($candidate in @($reopenedDocument, $document)) {
         if ($null -ne $candidate) {
             try { $null = $candidate.Close($false) } catch { }

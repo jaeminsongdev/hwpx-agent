@@ -41,6 +41,8 @@
       "required": [
         "fixture_id",
         "input_sha256",
+        "bootstrap_default_member_count",
+        "bootstrap_default_shape_sha256",
         "undo_snapshot_sha256",
         "redo_snapshot_sha256",
         "reopen_snapshot_sha256",
@@ -50,6 +52,8 @@
       "properties": {
         "fixture_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
         "input_sha256": { "$ref": "#/$defs/sha256OrNull" },
+        "bootstrap_default_member_count": { "type": "integer", "minimum": 0 },
+        "bootstrap_default_shape_sha256": { "$ref": "#/$defs/sha256OrNull" },
         "undo_snapshot_sha256": { "$ref": "#/$defs/sha256OrNull" },
         "redo_snapshot_sha256": { "$ref": "#/$defs/sha256OrNull" },
         "reopen_snapshot_sha256": { "$ref": "#/$defs/sha256OrNull" },
@@ -101,7 +105,10 @@
         "return_value_kind",
         "pre_snapshot_sha256",
         "post_snapshot_sha256",
-        "expected_effect_observed"
+        "expected_effect_observed",
+        "error_type",
+        "error_hresult",
+        "error_message_sha256"
       ],
       "properties": {
         "binding_key": { "type": "string", "minLength": 3, "maxLength": 512 },
@@ -125,7 +132,10 @@
         },
         "pre_snapshot_sha256": { "$ref": "#/$defs/sha256OrNull" },
         "post_snapshot_sha256": { "$ref": "#/$defs/sha256OrNull" },
-        "expected_effect_observed": { "type": "boolean" }
+        "expected_effect_observed": { "type": "boolean" },
+        "error_type": { "type": ["string", "null"], "maxLength": 256 },
+        "error_hresult": { "type": ["integer", "null"] },
+        "error_message_sha256": { "$ref": "#/$defs/sha256OrNull" }
       }
     }
   }

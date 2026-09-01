@@ -245,13 +245,29 @@ def verify(config: ProbeVerificationConfig) -> dict:
                 and result.get("pre_snapshot_sha256")
                 and result.get("post_snapshot_sha256")
                 and result.get("default_read_state") == "not_applicable"
+                and result.get("error_type") is None
+                and result.get("error_hresult") is None
+                and result.get("error_message_sha256") is None
             ):
                 errors.append(f"safe canary evidence incomplete: {capability_id}")
         elif capability_id == DEFAULT_READ_CAPABILITY:
-            if not (
+            default_read_passed = (
                 result.get("disposition") == "not_run"
                 and result.get("default_read_state") == "pass"
-                and result.get("default_shape_sha256")
+                and bool(result.get("default_shape_sha256"))
+                and result.get("error_type") is None
+                and result.get("error_hresult") is None
+                and result.get("error_message_sha256") is None
+            )
+            default_read_failed = (
+                result.get("disposition") == "failed"
+                and result.get("default_read_state") == "failed"
+                and bool(result.get("error_type"))
+                and isinstance(result.get("error_hresult"), int)
+                and bool(result.get("error_message_sha256"))
+            )
+            if not (
+                (default_read_passed or default_read_failed)
                 and result.get("execute_state") == "not_run"
                 and result.get("expected_effect_observed") is False
             ):
@@ -262,6 +278,9 @@ def verify(config: ProbeVerificationConfig) -> dict:
                 and result.get("execute_state") == "not_run"
                 and result.get("default_read_state") in {"not_run", "not_applicable"}
                 and result.get("expected_effect_observed") is False
+                and result.get("error_type") is None
+                and result.get("error_hresult") is None
+                and result.get("error_message_sha256") is None
             ):
                 errors.append(f"risk block was not preserved: {capability_id}")
         else:
@@ -270,6 +289,9 @@ def verify(config: ProbeVerificationConfig) -> dict:
                 and result.get("execute_state") == "not_run"
                 and result.get("default_read_state") in {"not_run", "not_applicable"}
                 and result.get("expected_effect_observed") is False
+                and result.get("error_type") is None
+                and result.get("error_hresult") is None
+                and result.get("error_message_sha256") is None
             ):
                 errors.append(f"bounded not-run was not preserved: {capability_id}")
 
@@ -291,6 +313,8 @@ def verify(config: ProbeVerificationConfig) -> dict:
     fixture = trace.get("fixture", {})
     if not (
         fixture.get("input_sha256")
+        and fixture.get("bootstrap_default_shape_sha256")
+        and isinstance(fixture.get("bootstrap_default_member_count"), int)
         and fixture.get("input_sha256") == fixture.get("redo_snapshot_sha256")
         and fixture.get("input_sha256") == fixture.get("reopen_snapshot_sha256")
         and fixture.get("undo_snapshot_sha256") != fixture.get("input_sha256")
