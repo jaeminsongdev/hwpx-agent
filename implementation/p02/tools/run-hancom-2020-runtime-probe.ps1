@@ -28,6 +28,15 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+public static class HwpxAgentWindowProbe {
+    [DllImport("user32.dll")]
+    public static extern bool IsWindowVisible(IntPtr hWnd);
+}
+'@
+
 function Get-Sha256File {
     param([Parameter(Mandatory)][string]$Path)
 
@@ -245,12 +254,15 @@ function Add-ObservedProcess {
         $pathMatches = $processPath.Equals($identity.path, [System.StringComparison]::OrdinalIgnoreCase)
         $mainWindowHandle = [int64]$runtimeProcess.MainWindowHandle
     }
-    if ($mainWindowHandle -ne 0) { $script:unexpectedWindowObserved = $true }
+    $mainWindowVisible = $mainWindowHandle -ne 0 -and
+        [HwpxAgentWindowProbe]::IsWindowVisible([System.IntPtr]$mainWindowHandle)
+    if ($mainWindowVisible) { $script:unexpectedWindowObserved = $true }
     $script:observed[$key] = [ordered]@{
         path_matches = $pathMatches
         same_session = [int]$CimProcess.SessionId -eq $currentSessionId
         automation_command_line = [bool]($CimProcess.CommandLine -match '(?i)-Automation\s+-Embedding\s*$')
         main_window_present = $mainWindowHandle -ne 0
+        main_window_visible = $mainWindowVisible
     }
 }
 

@@ -104,6 +104,37 @@ function Get-ComProperty {
     }
 }
 
+function Resolve-ParameterSetObject {
+    param(
+        [Parameter(Mandatory)]$ParameterContainer,
+        [Parameter(Mandatory)][string]$DocumentedId
+    )
+
+    if ($DocumentedId -notmatch '^[A-Za-z_][A-Za-z0-9_]*$') {
+        throw 'PARAMETER_SET_ID_SHAPE_INVALID'
+    }
+    $candidates = @(
+        [pscustomobject]@{ name = $DocumentedId; strategy = 'documented_exact' }
+    )
+    if (-not $DocumentedId.EndsWith('E', [System.StringComparison]::Ordinal)) {
+        $candidates += [pscustomobject]@{ name = $DocumentedId + 'E'; strategy = 'documented_plus_e' }
+    }
+    foreach ($candidate in $candidates) {
+        try {
+            $value = Get-ComProperty -ComObject $ParameterContainer -Name ([string]$candidate.name)
+            if ($null -ne $value) {
+                return [pscustomobject]@{
+                    value = $value
+                    strategy = [string]$candidate.strategy
+                    resolved_name_sha256 = Get-Sha256String -Value ([string]$candidate.name)
+                }
+            }
+        }
+        catch { }
+    }
+    throw 'PARAMETER_SET_RUNTIME_ALIAS_NOT_RESOLVED'
+}
+
 function Clear-ComObject {
     param([AllowNull()]$Value)
 
@@ -240,6 +271,7 @@ $reopenedDocument = $null
 $parameterContainer = $null
 $parameterSet = $null
 $parameterHSet = $null
+$parameterResolution = $null
 $activePhase = 'initialization'
 
 try {
@@ -288,7 +320,10 @@ try {
     try {
         $parameterContainer = $hwp.HParameterSet
         $defaultReadSubphase = 'parameter_set_resolve'
-        $parameterSet = Get-ComProperty -ComObject $parameterContainer -Name ([string]$defaultProbe[0].parameter_set_id)
+        $parameterResolution = Resolve-ParameterSetObject `
+            -ParameterContainer $parameterContainer `
+            -DocumentedId ([string]$defaultProbe[0].parameter_set_id)
+        $parameterSet = $parameterResolution.value
         $defaultReadSubphase = 'hset_resolve'
         $parameterHSet = Get-ComProperty -ComObject $parameterSet -Name 'HSet'
         $defaultReadSubphase = 'get_default'
@@ -302,13 +337,15 @@ try {
         )
         $shapeSeed = @(
             "parameter_set_id_sha256=$(Get-Sha256String -Value ([string]$defaultProbe[0].parameter_set_id))"
+            "runtime_name_sha256=$($parameterResolution.resolved_name_sha256)"
+            "resolution_strategy=$($parameterResolution.strategy)"
             "get_default_return=$(Get-ReturnValueKind -Value $getDefaultResult)"
             $memberDescriptors
         ) -join "`n"
         $defaultResult.default_read_state = 'pass'
         $defaultResult.default_member_count = $memberDescriptors.Count
         $defaultResult.default_shape_sha256 = Get-Sha256String -Value $shapeSeed
-        $defaultResult.reason_code = 'safe_default_read_pass_execution_not_run'
+        $defaultResult.reason_code = "safe_default_read_$($parameterResolution.strategy)_pass_execution_not_run"
     }
     catch {
         $defaultResult.default_read_state = 'failed'
@@ -323,6 +360,7 @@ try {
         $parameterHSet = $null
         $parameterSet = $null
         $parameterContainer = $null
+        $parameterResolution = $null
     }
     $trace.phases.default_parameter_read = 'pass'
 

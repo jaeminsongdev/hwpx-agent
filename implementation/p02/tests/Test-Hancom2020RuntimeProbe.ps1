@@ -41,6 +41,8 @@ $required = [ordered]@{
     redo_allowlist = "'edit\.redo'"
     default_read_allowlist = "'edit\.go_to'"
     powershell_com_adapter_first = 'return \$ComObject\.\$Name'
+    bounded_parameter_alias = 'documented_plus_e'
+    visible_window_check = 'IsWindowVisible'
     no_overwrite = 'RUNTIME_PROBE_OUTPUT_ALREADY_EXISTS'
     semantic_reopen = 'reopen_exact_match'
 }
