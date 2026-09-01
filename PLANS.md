@@ -28,15 +28,15 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0013 | P02-02 read-only Help extractor | `in_progress` | source-lock/hash match, deterministic SourceRecord output, locator preservation, unsupported/tampered source rejection |
+| P-0014 | P02-03 PDF Automation/Parameter/Object/Event extractor | `in_progress` | locked PDF hash, page/section/field preservation, deterministic records, ambiguity/tamper/restricted-output rejection |
 
-### P02-02 Acceptance
+### P02-03 Acceptance
 
-- 승인된 source-lock entry와 실제 입력 SHA-256가 일치할 때만 읽는다.
-- 원본은 read-only로 취급하고 이름·설명·section/anchor/page locator를 보존한다.
-- 동일 입력에서 byte-identical한 정렬·record ID·SourceRecord JSON을 생성한다.
-- unsupported format/encoding, source-lock mismatch, malformed structure, output overwrite를 fail-closed한다.
-- 합성 fixture로 parser negative를 먼저 통과하고, 권리 범위가 확인된 실제 source가 있으면 별도 private evidence로 검증한다.
+- ActionTable, ParameterSetTable, HwpAutomation, EventHandler의 exact source-lock ID/SHA와 PDF bytes를 결합한다.
+- 이름, declared type, direction/required unknown, 설명, page/section locator를 추출하고 불명확한 열/행은 거부한다.
+- raw action/parameter 문자열은 internal metadata로만 저장하고 실행 surface에 연결하지 않는다.
+- restricted output은 private evidence만 허용하고 source PDF를 수정·재배포하지 않는다.
+- 합성 PDF/text fixture negative와 실제 locked PDF별 parser coverage/count/hash report를 만든다.
 
 ## Risks
 
@@ -56,7 +56,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0007~P-0010: 과거 blocked Gate, current-PC 재기준화, exact 2020 reference smoke, host baseline, P00 v10 scoped PASS.
 - P-0011: P01 repository·CI·security foundation은 `implementation/p01/P01_GATE_REPORT.md`에서 current-PC local scoped PASS.
 - P-0012: P02-01 SourceRecord contract는 `implementation/p02/P02-01_REPORT.md`에서 PASS.
+- P-0013: P02-02 Help extractor는 `implementation/p02/P02-02_REPORT.md`에서 PASS.
 
 ## Next
 
-P02-02 구현은 `xhigh`; P02 phase 최종 감사는 `max`. P02-02 완료 뒤 정확한 다음 작업은 P02-03 Automation extractor이며 권장 추론수준은 `xhigh`다.
+P02-03 구현은 `xhigh`; P02 phase 최종 감사는 `max`. P02-03 완료 뒤 정확한 다음 작업은 P02-04 OWPML extractor이며 권장 추론수준은 `xhigh`다.

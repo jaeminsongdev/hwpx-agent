@@ -53,15 +53,16 @@
 
 - P02-01 `PASS`: immutable `SourceRecordV1`, 5개 valid sample, 10개 negative case, Rust/TypeScript generated models와 additive catalog v2 lock.
 - 검증: 현재 저장소와 clean clone의 전체 5/5 lane, 공식 Linux read-only source lane, schema/codegen drift와 이전 P01 catalog byte identity 통과.
-- P02-02 `in_progress`: 승인된 source-lock과 SHA가 일치하는 Help source만 read-only로 추출하는 adapter를 구현한다.
+- P02-02 `PASS`: source-locked read-only Help adapter, Windows/Linux 8개 test, 실제 restricted snapshot 4 records/private evidence/verifier errors 0.
+- P02-03 `in_progress`: SHA-locked automation PDF 4종에서 page/section/field metadata를 ambiguity 없이 추출한다.
 
 ## 다음 작업
 
-현재 PC에서 P02-02 read-only Help extractor를 구현한다. 구현 추론수준은 `xhigh`, P02 Gate 최종 감사는 `max`다. 한글 UI 자동 조작, 사용자 문서, 다른 PC/버전, production/provider 경로는 열지 않는다.
+현재 PC에서 P02-03 Automation/Parameter/Object/Event PDF extractor를 구현한다. 구현 추론수준은 `xhigh`, P02 Gate 최종 감사는 `max`다. 한글 UI 자동 조작, 사용자 문서, 다른 PC/버전, production/provider 경로는 열지 않는다.
 
 ## 현재 blocker
 
-- 현재 PC 로컬 P02-02 합성 adapter 구현 blocker 없음. 실제 official source 검증은 source-lock·로컬 보관·권리 상태를 먼저 확인한다.
+- 현재 PC 로컬 P02-03 blocker 없음. 실제 locked PDF는 restricted/private evidence로만 처리한다.
 
 2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.
 
