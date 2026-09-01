@@ -1,0 +1,352 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/catalog/automation-binding-registry-v1.schema.json",
+  "title": "AutomationBindingRegistryV1",
+  "description": "Target-build desktop automation binding candidates. Registry instances containing raw identifiers are restricted and remain unroutable until runtime probe qualification.",
+  "x-rust-model": true,
+  "x-catalog-version": 3,
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_lock_id",
+    "generator",
+    "restricted_derivative",
+    "target",
+    "inputs",
+    "runtime_qualification",
+    "bindings",
+    "coverage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hwpx-agent.automation-binding-registry/v1"
+    },
+    "source_lock_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,191}$"
+    },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generator_id",
+        "generator_version",
+        "raw_identifier_policy",
+        "runtime_execution_performed"
+      ],
+      "properties": {
+        "generator_id": {
+          "const": "target-automation-binding-generator"
+        },
+        "generator_version": { "const": "0.1.0" },
+        "raw_identifier_policy": { "const": "restricted_private_only" },
+        "runtime_execution_performed": { "const": false }
+      }
+    },
+    "restricted_derivative": { "type": "boolean" },
+    "target": { "$ref": "#/$defs/target" },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewed_catalog_sha256",
+        "canonical_matrix_sha256",
+        "automation_records_sha256"
+      ],
+      "properties": {
+        "reviewed_catalog_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "canonical_matrix_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "automation_records_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "runtime_qualification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "probe_required", "qualified_binding_count"],
+      "properties": {
+        "state": { "const": "not_run" },
+        "probe_required": { "const": true },
+        "qualified_binding_count": { "const": 0 }
+      }
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100000,
+      "items": { "$ref": "#/$defs/binding" }
+    },
+    "coverage": { "$ref": "#/$defs/coverage" }
+  },
+  "$defs": {
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "product",
+        "major_release",
+        "exact_build",
+        "locale",
+        "architecture",
+        "profile_sha256",
+        "license_state",
+        "automation_release_state",
+        "image_digest",
+        "routing_enabled"
+      ],
+      "properties": {
+        "profile_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"
+        },
+        "product": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "major_release": {
+          "type": "string",
+          "pattern": "^[0-9]{4}$"
+        },
+        "exact_build": {
+          "type": "string",
+          "pattern": "^[0-9]+(?:\\.[0-9]+){1,3}$"
+        },
+        "locale": {
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(?:-[A-Z]{2})?$"
+        },
+        "architecture": { "enum": ["x86", "x64", "arm64"] },
+        "profile_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "license_state": { "const": "approved" },
+        "automation_release_state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 192
+        },
+        "image_digest": { "type": ["string", "null"], "maxLength": 256 },
+        "routing_enabled": { "const": false }
+      }
+    },
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "artifact_sha256",
+        "node_id",
+        "record_id",
+        "source_id",
+        "source_sha256"
+      ],
+      "properties": {
+        "kind": {
+          "enum": ["reviewed_catalog_node", "automation_source_record"]
+        },
+        "artifact_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "node_id": {
+          "type": ["string", "null"],
+          "pattern": "^node:[0-9a-f]{24}$"
+        },
+        "record_id": {
+          "type": ["string", "null"],
+          "maxLength": 192
+        },
+        "source_id": {
+          "type": ["string", "null"],
+          "maxLength": 192
+        },
+        "source_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "invocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "action_id",
+        "parameter_set_id",
+        "parameter_set_state",
+        "parameter_map",
+        "parameter_map_state"
+      ],
+      "properties": {
+        "kind": { "const": "action" },
+        "action_id": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "parameter_set_id": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "parameter_set_state": {
+          "enum": ["documented_candidate", "source_declares_none"]
+        },
+        "parameter_map": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "parameter_map_state": { "const": "pending_runtime_probe" }
+      }
+    },
+    "probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "fixture_id",
+        "pre_snapshot",
+        "post_snapshot",
+        "expected_effect",
+        "modal_risk",
+        "external_side_effect_risk"
+      ],
+      "properties": {
+        "state": { "const": "not_run" },
+        "fixture_id": { "type": "null" },
+        "pre_snapshot": { "type": "null" },
+        "post_snapshot": { "type": "null" },
+        "expected_effect": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]+$"
+        },
+        "modal_risk": { "const": "unknown" },
+        "external_side_effect_risk": { "const": "unknown" }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding_key",
+        "feature_id",
+        "capability_id",
+        "scope_class",
+        "support_level",
+        "preferred_backend",
+        "fallback_backend",
+        "target_profile_id",
+        "status",
+        "unavailable_reason",
+        "invocation",
+        "source_refs",
+        "raw_identifiers_present",
+        "runtime_support_state",
+        "routing_enabled",
+        "probe"
+      ],
+      "properties": {
+        "binding_key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]+@[a-z0-9][a-z0-9._-]+/[0-9]+(?:\\.[0-9]+){1,3}/[a-z]{2,3}(?:-[A-Z]{2})?$"
+        },
+        "feature_id": { "type": "string", "pattern": "^[A-Z]+-[0-9]{3}$" },
+        "capability_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]+$"
+        },
+        "scope_class": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "support_level": { "enum": ["AUTOMATION_FULL", "HYBRID"] },
+        "preferred_backend": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "fallback_backend": { "type": "string", "maxLength": 128 },
+        "target_profile_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"
+        },
+        "status": {
+          "enum": ["candidate_unverified", "unavailable_with_reason"]
+        },
+        "unavailable_reason": {
+          "type": ["string", "null"],
+          "enum": [null, "no_reviewed_action_mapping"]
+        },
+        "invocation": {
+          "oneOf": [{ "$ref": "#/$defs/invocation" }, { "type": "null" }]
+        },
+        "source_refs": {
+          "type": "array",
+          "maxItems": 2,
+          "items": { "$ref": "#/$defs/sourceRef" }
+        },
+        "raw_identifiers_present": { "type": "boolean" },
+        "runtime_support_state": { "const": "unverified" },
+        "routing_enabled": { "const": false },
+        "probe": { "$ref": "#/$defs/probe" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "candidate_unverified" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "unavailable_reason": { "type": "null" },
+              "invocation": { "$ref": "#/$defs/invocation" },
+              "source_refs": { "minItems": 2, "maxItems": 2 },
+              "raw_identifiers_present": { "const": true }
+            }
+          },
+          "else": {
+            "properties": {
+              "unavailable_reason": {
+                "const": "no_reviewed_action_mapping"
+              },
+              "invocation": { "type": "null" },
+              "source_refs": { "maxItems": 0 },
+              "raw_identifiers_present": { "const": false }
+            }
+          }
+        }
+      ]
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_capability_count",
+        "automation_full_count",
+        "hybrid_count",
+        "binding_count",
+        "candidate_unverified_count",
+        "unavailable_count",
+        "unresolved_count",
+        "duplicate_capability_count",
+        "raw_identifier_binding_count",
+        "runtime_qualified_count",
+        "routing_enabled_count"
+      ],
+      "properties": {
+        "required_capability_count": { "type": "integer", "minimum": 1 },
+        "automation_full_count": { "type": "integer", "minimum": 0 },
+        "hybrid_count": { "type": "integer", "minimum": 0 },
+        "binding_count": { "type": "integer", "minimum": 1 },
+        "candidate_unverified_count": { "type": "integer", "minimum": 0 },
+        "unavailable_count": { "type": "integer", "minimum": 0 },
+        "unresolved_count": { "const": 0 },
+        "duplicate_capability_count": { "const": 0 },
+        "raw_identifier_binding_count": { "type": "integer", "minimum": 0 },
+        "runtime_qualified_count": { "const": 0 },
+        "routing_enabled_count": { "const": 0 }
+      }
+    }
+  }
+}

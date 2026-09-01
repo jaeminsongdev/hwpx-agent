@@ -2,6 +2,20 @@
 
 #[derive(Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
+pub struct AutomationBindingRegistryV1 {
+    pub bindings: Vec<serde_json::Value>,
+    pub coverage: serde_json::Value,
+    pub generator: serde_json::Value,
+    pub inputs: serde_json::Value,
+    pub restricted_derivative: bool,
+    pub runtime_qualification: serde_json::Value,
+    pub schema_version: String,
+    pub source_lock_id: String,
+    pub target: serde_json::Value,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct SourceRecordV1 {
     pub availability: serde_json::Value,
     pub description_ko: Option<String>,

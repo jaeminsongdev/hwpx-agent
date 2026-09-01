@@ -1,11 +1,31 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { schemaIds, type SourceRecordV1 } from "./schema-models.js";
+import {
+    schemaIds,
+    type AutomationBindingRegistryV1,
+    type SourceRecordV1,
+} from "./schema-models.js";
 
 test("generated schema catalog is sorted and complete", () => {
-    assert.equal(schemaIds.length, 4);
+    assert.equal(schemaIds.length, 5);
     assert.deepEqual(schemaIds, [...schemaIds].sort());
+});
+
+test("generated automation binding registry keeps target and coverage", () => {
+    const registry = {
+        schema_version: "hwpx-agent.automation-binding-registry/v1",
+        source_lock_id: "source-lock-synthetic-p02",
+        generator: {},
+        restricted_derivative: true,
+        target: { profile_id: "hancom-hangul-2020-secondary" },
+        inputs: {},
+        runtime_qualification: { state: "not_run" },
+        bindings: [],
+        coverage: { runtime_qualified_count: 0 },
+    } satisfies AutomationBindingRegistryV1;
+    assert.equal(registry.target.profile_id, "hancom-hangul-2020-secondary");
+    assert.equal(registry.coverage.runtime_qualified_count, 0);
 });
 
 test("generated SourceRecord model keeps identity and locator fields", () => {
