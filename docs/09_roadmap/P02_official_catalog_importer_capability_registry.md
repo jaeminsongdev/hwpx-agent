@@ -43,7 +43,7 @@ Official Catalog Importer·Capability Registry를 문서상 계획이 아니라 
 - [x] `P02-04` 산출물 `schema records` 존재, 검증: namespace/version coverage.
 - [x] `P02-05` 산출물 `candidate graph` 존재, 검증: 자동 병합 오탐 review.
 - [x] `P02-06` 산출물 `reviewed catalog` 존재, 검증: official item 100% disposition.
-- [ ] `P02-07` 산출물 `binding registry types` 존재, 검증: schema/codegen pass.
+- [x] `P02-07` 산출물 `binding registry types` 존재, 검증: schema/codegen pass.
 - [ ] `P02-08` 산출물 `probe CLI` 존재, 검증: disposable fixture에서 trace 생성.
 - [ ] `P02-09` 산출물 `signed registry/drift report` 존재, 검증: tamper and drift tests.
 - [ ] 새 capability/contract/schema에 migration과 negative test가 있다.

@@ -19,7 +19,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 |---|---|---|
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
-| P02 | `in_progress_current_pc_local` | P02-01~06 PASS; P02-07 target-build binding model 진행 |
+| P02 | `in_progress_current_pc_local` | P02-01~07 PASS; P02-08 exact 2020 runtime probe tool 진행 |
 | P03~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -28,16 +28,16 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0018 | P02-07 Binding model | `in_progress` | reviewed catalog와 exact 2020 profile 고정, binding schema/codegen, AUTOMATION_FULL/HYBRID candidate 또는 unavailable 전수 표현, runtime 미승격 |
+| P-0019 | P02-08 Runtime probe tool | `in_progress` | exact 2020 x86/STA identity, disposable fixture, default ParameterSet, bounded execute/readback/modal/process trace, runtime claim fail-closed |
 
-### P02-07 Acceptance
+### P02-08 Acceptance
 
-- reviewed catalog SHA, 609-row canonical matrix SHA, source-lock ID와 exact 2020 target profile identity를 다시 검증한다.
-- target-build binding, invocation kind, raw identifier reference, ParameterSet/parameter map, source refs, risk/modal/side-effect, probe contract와 status를 Draft 2020-12 schema로 고정하고 codegen drift를 검사한다.
-- 모든 `AUTOMATION_FULL`/`HYBRID` capability를 정확히 한 번 `candidate` 또는 구체적 `unavailable_with_reason`으로 표현한다. semantic mapping이 없는 capability에 action/method 문자열을 추정하지 않는다.
-- P02-06 mapped ActionTable 항목만 provenance가 잠긴 candidate binding으로 연결하며, raw action/method/parameter 값은 restricted private registry 밖으로 노출하지 않는다.
-- 현재 2020 binding은 P02-08 probe 전까지 `unverified`; 문서 근거를 executable/runtime-qualified로 승격하지 않는다.
-- generator/verifier는 입력 tamper, duplicate/missing coverage, target mismatch, traversal, overwrite, raw identifier public escape와 runtime claim을 fail closed한다.
+- private binding registry SHA와 exact 2020 profile/build/locale/x86/STA/executable identity를 probe 직전에 다시 검증한다.
+- request/trace/receipt schema와 PowerShell x86 child runner를 구현하고, 입력 allowlist·request correlation·timeout·process cleanup·private no-overwrite evidence를 fail closed한다.
+- 원본/사용자 문서를 열지 않고 disposable synthetic HWPX/working copy만 사용하며 pre/default/post/save-reopen semantic snapshot을 남긴다.
+- 먼저 non-mutating/default-read와 안전한 canary를 수행한다. modal, clipboard, print, password/security, macro, external side effect 후보는 별도 위험 상태로 격리하고 임의 실행하지 않는다.
+- candidate 32건 각각을 `verified`, `failed`, `blocked_by_risk`, `not_run` 중 하나로 명시하되, 실제 trace 없는 항목을 verified로 승격하지 않는다.
+- raw Action/ParameterSet/default values와 private host paths는 evidence 밖으로 출력하지 않고 공개 상태에는 해시·집계만 남긴다.
 
 ## Risks
 
@@ -62,7 +62,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0015: P02-04 OWPML extractor는 `implementation/p02/P02-04_REPORT.md`에서 PASS.
 - P-0016: P02-05 정규화·중복 후보는 `implementation/p02/P02-05_REPORT.md`에서 PASS.
 - P-0017: P02-06 semantic capability review는 `implementation/p02/P02-06_REPORT.md`에서 3,680 node/3,811 edge 100% disposition PASS.
+- P-0018: P02-07 binding model은 `implementation/p02/P02-07_REPORT.md`에서 exact 2020 기준 536/536 binding coverage PASS.
 
 ## Next
 
-P02-07 binding model은 `xhigh`. 다음 P02-08 한글 2020 runtime probe와 P02 phase 최종 감사는 `max`다.
+P02-08 한글 2020 runtime probe, 다음 P02-09 signing/drift와 P02 phase 최종 감사는 모두 `max`다.

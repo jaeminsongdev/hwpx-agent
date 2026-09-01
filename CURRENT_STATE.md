@@ -58,15 +58,16 @@
 - P02-04 `PASS`: locked KS X 6101 reform 03 machine response의 embedded authoritative XSD 7종과 OCF package table을 읽어 1,144 records(package part 22/schema 7/import 5/element 359/attribute 648/named complexType 82/named simpleType 14/attributeGroup 7)를 생성했다. 2024 namespace 7/7, actual verifier errors 0, Windows/Linux 23 tests, current/clean-clone 5/5 lane을 통과했다.
 - P02-05 `PASS`: 3개 locked SourceRecord 출력 3,680개를 3,680 nodes/2,736 normalized labels/3,811 review edges로 전환했다. 호환 후보 746, collision review 3,065, auto-merge 0이며 independent verifier errors 0, Windows/Linux 29 tests, current/clean-clone 5/5 lane을 통과했다.
 - P02-06 `PASS`: 609-row canonical matrix에 대해 3,680/3,680 node와 3,811/3,811 edge를 disposition했다. strict proposal 35건 중 34건을 semantic mapping하고 1건은 ambiguity로 거절했다. unresolved/auto-merge/runtime-qualified 0, independent verifier errors 0, Windows/Linux 36 tests, current/clean-clone 5/5 lane을 통과했다.
-- P02-07 `in_progress`: reviewed catalog와 exact 2020 target profile을 고정해 target-build binding schema/codegen을 구현한다.
+- P02-07 `PASS`: exact 2020 profile에 `AUTOMATION_FULL` 191 + `HYBRID` 345 = 536 capability를 전수 표현했다. candidate 32, unavailable-with-reason 504, missing/duplicate/runtime-qualified/routing-enabled 0이며 protocol catalog v2 byte identity, additive v3 codegen, independent verifier errors 0, Windows/Linux 43 tests, current/clean-clone 5/5 lane을 통과했다.
+- P02-08 `in_progress`: exact 2020 x86/STA runtime probe schema/CLI와 disposable trace를 구현한다.
 
 ## 다음 작업
 
-현재 PC에서 P02-07 binding model을 수행한다. 구현 추론수준은 `xhigh`, 다음 P02-08 runtime probe와 P02 최종 감사는 `max`다. P02-07은 한글 UI 자동 조작이나 사용자 문서를 열지 않는다.
+현재 PC에서 P02-08 runtime probe tool을 수행한다. P02-08과 다음 P02-09/P02 최종 감사 추론수준은 `max`다. 실제 probe harness 준비 전에는 한글 UI나 사용자 문서를 열지 않는다.
 
 ## 현재 blocker
 
-- 현재 blocker 없음. P02-07에서 semantic mapping이 없는 capability에 raw action/method/parameter identifier를 추정하지 않고 명시적 unavailable 상태로 남긴다.
+- 현재 blocker 없음. 실제 probe 실행 시 한글 보안 접근 허용 창이 나타나면 사용자가 로컬에서 승인해야 하며, 그 전까지 tooling·fixture·negative test를 완료한다.
 
 2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.
 

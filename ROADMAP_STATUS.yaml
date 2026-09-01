@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_foundation_and_p02_source_importers_candidate_semantic_review
+  product_code_scope: p01_foundation_and_p02_import_review_binding_model
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -102,7 +102,7 @@ p01_execution:
     P01-08: passed
     P01-09: passed
 p02_execution:
-  current_task: P02-07
+  current_task: P02-08
   tasks:
     P02-01: passed_current_pc_local
     P02-02: passed_current_pc_local
@@ -110,8 +110,8 @@ p02_execution:
     P02-04: passed_current_pc_local
     P02-05: passed_current_pc_local
     P02-06: passed_current_pc_local
-    P02-07: in_progress_current_pc_local
-    P02-08: blocked_by_P02-07
+    P02-07: passed_current_pc_local
+    P02-08: in_progress_current_pc_local
     P02-09: blocked_by_P02-08
   source_record_contract:
     schema: protocol/json-schema/source-record-v1.schema.json
@@ -201,6 +201,31 @@ p02_execution:
     runtime_qualified_count: 0
     actual_output_sha256: 88b4c5238c1911ae4cd3f40874a0328401a12dda9b57f51d2e1c5663834d5609
     actual_verification_errors: 0
+    restricted_output_git_tracked: false
+  automation_binding_registry:
+    audited_source_commit: 01deaf67f6f8f2ca8999ca3530defda02f8f709b
+    target_profile_id: hancom-hangul-2020-secondary
+    target_exact_build: 11.0.0.9136
+    target_locale: ko-KR
+    target_architecture: x86
+    target_profile_sha256: 538b7b2eb953ea81d95b30f46479e81983d309277f6d16ca6e6f8d0a24d48af2
+    required_capability_count: 536
+    automation_full_count: 191
+    hybrid_count: 345
+    candidate_unverified_count: 32
+    unavailable_count: 504
+    unresolved_count: 0
+    duplicate_capability_count: 0
+    runtime_qualified_count: 0
+    routing_enabled_count: 0
+    protocol_catalog_v2_unchanged: true
+    protocol_catalog_v3_sha256: 066c8cca91eb0bcbdf599748015267518945e54fbacaf2381912812be92551a8
+    actual_output_sha256: 986953421c74d033bcb17dbd763eb6daa0b06c1a5a8b9e3720951fc674d6fd48
+    actual_verification_errors: 0
+    combined_p02_tests_windows: 43_of_43_passed
+    combined_p02_tests_linux: 43_of_43_passed
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
     restricted_output_git_tracked: false
 phases:
   P00: completed_current_pc_local_scope
