@@ -207,6 +207,10 @@ fn repeated_text_and_candidate_limits_fail_closed() -> TestResult {
 
 #[test]
 fn normalization_limits_and_reserved_metadata_are_validated() -> TestResult {
+    assert_eq!(
+        Selector::by_text_context("target", None, None).map_err(SelectorError::code),
+        Err("selector_invalid")
+    );
     let graph = graph_from_draft(fixture_draft("go Cafe\u{301} now", "other", false)?)?;
     let snapshot = build_snapshot(&graph, "rev-1", SelectorLimits::default())?;
     let selector = Selector::by_text_context(
@@ -253,6 +257,19 @@ fn normalization_limits_and_reserved_metadata_are_validated() -> TestResult {
     let bad_graph = graph_from_draft(bad_metadata)?;
     assert_eq!(
         snapshot_with_result(&bad_graph, "rev-1", SelectorLimits::default())
+            .err()
+            .map(SelectorError::code),
+        Some("selector_invalid_graph_metadata")
+    );
+
+    let mut conflicting_field = fixture_draft("alpha target omega", "other", false)?;
+    conflicting_field.references[1].properties.insert(
+        "field_name",
+        PropertyValue::Text("different_field_name".into()),
+    );
+    let conflicting_graph = graph_from_draft(conflicting_field)?;
+    assert_eq!(
+        snapshot_with_result(&conflicting_graph, "rev-1", SelectorLimits::default())
             .err()
             .map(SelectorError::code),
         Some("selector_invalid_graph_metadata")
