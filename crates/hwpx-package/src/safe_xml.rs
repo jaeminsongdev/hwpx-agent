@@ -105,11 +105,37 @@ impl SafeXmlLimits {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct SafeXmlAttributeName {
+    pub qualified_name: String,
+    pub local_name: String,
+    pub namespace: Option<String>,
+    pub namespace_declaration: bool,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct SafeXmlSpan {
+    pub start: usize,
+    pub end: usize,
+}
+
+impl SafeXmlSpan {
+    fn from_reader_positions(start: u64, end: u64, input_len: usize) -> Result<Self, SafeXmlError> {
+        let start = usize::try_from(start).map_err(|_| SafeXmlError::Malformed)?;
+        let end = usize::try_from(end).map_err(|_| SafeXmlError::Malformed)?;
+        if start > end || end > input_len {
+            return Err(SafeXmlError::Malformed);
+        }
+        Ok(Self { start, end })
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) struct SafeXmlElement {
     pub qualified_name: String,
     pub local_name: String,
     pub namespace: Option<String>,
     pub attributes: BTreeMap<String, String>,
+    pub ordered_attribute_names: Vec<SafeXmlAttributeName>,
     pub depth: usize,
 }
 
@@ -127,6 +153,7 @@ pub(crate) enum SafeXmlEvent {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) struct SafeXmlDocument {
     pub events: Vec<SafeXmlEvent>,
+    pub spans: Vec<SafeXmlSpan>,
 }
 
 impl SafeXmlDocument {
@@ -134,100 +161,163 @@ impl SafeXmlDocument {
         if bytes.len() > limits.config().input_bytes {
             return Err(SafeXmlError::InputLimit);
         }
+        std::str::from_utf8(bytes).map_err(|_| SafeXmlError::EncodingForbidden)?;
+        let source_offset = u64::from(bytes.starts_with(&[0xEF, 0xBB, 0xBF])) * 3;
         let mut reader = NsReader::from_reader(bytes);
         reader.config_mut().enable_all_checks(true);
         reader
             .resolver_mut()
             .set_max_namespace_bindings(limits.config().namespace_bindings);
-
         let initial_capacity = limits
             .config()
             .events
             .min(bytes.len().saturating_div(2).saturating_add(1));
-        let mut output = Vec::new();
-        output
-            .try_reserve_exact(initial_capacity)
-            .map_err(|_| SafeXmlError::AllocationFailed)?;
+        let mut output = SafeXmlOutput::new(initial_capacity)?;
         let mut state = ParseState::default();
-
         loop {
+            let event_start = reader.buffer_position();
             let event = reader
                 .read_event()
                 .map_err(|error| map_quick_xml_error(&error))?;
+            let span = SafeXmlSpan::from_reader_positions(
+                event_start
+                    .checked_add(source_offset)
+                    .ok_or(SafeXmlError::Malformed)?,
+                reader
+                    .buffer_position()
+                    .checked_add(source_offset)
+                    .ok_or(SafeXmlError::Malformed)?,
+                bytes.len(),
+            )?;
             let (namespace, event) = reader.resolver().resolve_event(event);
-            state.count_event(limits)?;
-            match event {
-                Event::Start(element) => {
-                    let next_depth = state.next_depth(limits)?;
-                    state.begin_root_if_needed()?;
-                    state.count_node(limits)?;
-                    let element =
-                        safe_element(&element, &namespace, reader.resolver(), next_depth, limits)?;
-                    push_event(&mut output, SafeXmlEvent::Start(element))?;
-                    state.depth = next_depth;
-                }
-                Event::Empty(element) => {
-                    let element_depth = state.next_depth(limits)?;
-                    state.begin_root_if_needed()?;
-                    state.count_node(limits)?;
-                    let element = safe_element(
-                        &element,
-                        &namespace,
-                        reader.resolver(),
-                        element_depth,
-                        limits,
-                    )?;
-                    push_event(&mut output, SafeXmlEvent::Empty(element))?;
-                }
-                Event::End(_) => {
-                    resolved_namespace(&namespace)?;
-                    state.depth = state.depth.checked_sub(1).ok_or(SafeXmlError::Malformed)?;
-                    push_event(&mut output, SafeXmlEvent::End)?;
-                }
-                Event::Text(text) => {
-                    let length = text.as_ref().len();
-                    if state.depth == 0 && !text.as_ref().chars().all(char::is_whitespace) {
-                        return Err(SafeXmlError::Malformed);
-                    }
-                    state.count_text(length, limits)?;
-                    state.count_node(limits)?;
-                    push_event(&mut output, SafeXmlEvent::Text { bytes: length })?;
-                }
-                Event::GeneralRef(reference) => {
-                    if state.depth == 0 || !is_safe_xml_reference(reference.as_ref()) {
-                        return Err(SafeXmlError::CustomEntityForbidden);
-                    }
-                    state.count_text(1, limits)?;
-                    state.count_node(limits)?;
-                    push_event(&mut output, SafeXmlEvent::Reference)?;
-                }
-                Event::Comment(_) => {
-                    state.count_node(limits)?;
-                    push_event(&mut output, SafeXmlEvent::Comment)?;
-                }
-                Event::Decl(declaration) => {
-                    if state.events != 1
-                        || state.declaration_seen
-                        || state.root_count != 0
-                        || state.depth != 0
-                    {
-                        return Err(SafeXmlError::Malformed);
-                    }
-                    validate_declaration(&declaration)?;
-                    state.declaration_seen = true;
-                    push_event(&mut output, SafeXmlEvent::Declaration)?;
-                }
-                Event::DocType(_) => return Err(SafeXmlError::DtdForbidden),
-                Event::PI(_) => return Err(SafeXmlError::ProcessingInstructionForbidden),
-                Event::CData(_) => return Err(SafeXmlError::CdataForbidden),
-                Event::Eof => break,
+            if process_safe_event(
+                event,
+                &namespace,
+                reader.resolver(),
+                span,
+                &mut state,
+                &mut output,
+                limits,
+            )? {
+                break;
             }
         }
         if state.depth != 0 || state.root_count != 1 {
             return Err(SafeXmlError::Malformed);
         }
-        Ok(Self { events: output })
+        Ok(output.finish())
     }
+}
+
+struct SafeXmlOutput {
+    events: Vec<SafeXmlEvent>,
+    spans: Vec<SafeXmlSpan>,
+}
+
+impl SafeXmlOutput {
+    fn new(capacity: usize) -> Result<Self, SafeXmlError> {
+        let mut events = Vec::new();
+        events
+            .try_reserve_exact(capacity)
+            .map_err(|_| SafeXmlError::AllocationFailed)?;
+        let mut spans = Vec::new();
+        spans
+            .try_reserve_exact(capacity)
+            .map_err(|_| SafeXmlError::AllocationFailed)?;
+        Ok(Self { events, spans })
+    }
+
+    fn push(&mut self, event: SafeXmlEvent, span: SafeXmlSpan) -> Result<(), SafeXmlError> {
+        self.events
+            .try_reserve(1)
+            .map_err(|_| SafeXmlError::AllocationFailed)?;
+        self.spans
+            .try_reserve(1)
+            .map_err(|_| SafeXmlError::AllocationFailed)?;
+        self.events.push(event);
+        self.spans.push(span);
+        Ok(())
+    }
+
+    fn finish(self) -> SafeXmlDocument {
+        SafeXmlDocument {
+            events: self.events,
+            spans: self.spans,
+        }
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn process_safe_event(
+    event: Event<'_>,
+    namespace: &ResolveResult<'_>,
+    resolver: &NamespaceResolver,
+    span: SafeXmlSpan,
+    state: &mut ParseState,
+    output: &mut SafeXmlOutput,
+    limits: SafeXmlLimits,
+) -> Result<bool, SafeXmlError> {
+    state.count_event(limits)?;
+    match event {
+        Event::Start(element) => {
+            let next_depth = state.next_depth(limits)?;
+            state.begin_root_if_needed()?;
+            state.count_node(limits)?;
+            let element = safe_element(&element, namespace, resolver, next_depth, limits)?;
+            output.push(SafeXmlEvent::Start(element), span)?;
+            state.depth = next_depth;
+        }
+        Event::Empty(element) => {
+            let element_depth = state.next_depth(limits)?;
+            state.begin_root_if_needed()?;
+            state.count_node(limits)?;
+            let element = safe_element(&element, namespace, resolver, element_depth, limits)?;
+            output.push(SafeXmlEvent::Empty(element), span)?;
+        }
+        Event::End(_) => {
+            resolved_namespace(namespace)?;
+            state.depth = state.depth.checked_sub(1).ok_or(SafeXmlError::Malformed)?;
+            output.push(SafeXmlEvent::End, span)?;
+        }
+        Event::Text(text) => {
+            let length = text.as_ref().len();
+            if state.depth == 0 && !is_xml_whitespace(text.as_ref().as_bytes()) {
+                return Err(SafeXmlError::Malformed);
+            }
+            state.count_text(length, limits)?;
+            state.count_node(limits)?;
+            output.push(SafeXmlEvent::Text { bytes: length }, span)?;
+        }
+        Event::GeneralRef(reference) => {
+            if state.depth == 0 || !is_safe_xml_reference(reference.as_ref()) {
+                return Err(SafeXmlError::CustomEntityForbidden);
+            }
+            state.count_text(1, limits)?;
+            state.count_node(limits)?;
+            output.push(SafeXmlEvent::Reference, span)?;
+        }
+        Event::Comment(_) => {
+            state.count_node(limits)?;
+            output.push(SafeXmlEvent::Comment, span)?;
+        }
+        Event::Decl(declaration) => {
+            if state.events != 1
+                || state.declaration_seen
+                || state.root_count != 0
+                || state.depth != 0
+            {
+                return Err(SafeXmlError::Malformed);
+            }
+            validate_declaration(&declaration)?;
+            state.declaration_seen = true;
+            output.push(SafeXmlEvent::Declaration, span)?;
+        }
+        Event::DocType(_) => return Err(SafeXmlError::DtdForbidden),
+        Event::PI(_) => return Err(SafeXmlError::ProcessingInstructionForbidden),
+        Event::CData(_) => return Err(SafeXmlError::CdataForbidden),
+        Event::Eof => return Ok(true),
+    }
+    Ok(false)
 }
 
 #[derive(Debug, Default)]
@@ -304,6 +394,7 @@ fn safe_element(
     let local_name = element.local_name().as_ref().to_owned();
     let namespace = resolved_namespace(namespace)?.map(str::to_owned);
     let mut attributes = BTreeMap::new();
+    let mut ordered_attribute_names = Vec::new();
     let mut expanded_attributes = BTreeSet::new();
     let mut total_attribute_bytes = 0_usize;
     for (index, attribute) in element.attributes().with_checks(true).enumerate() {
@@ -312,16 +403,32 @@ fn safe_element(
         }
         let attribute = attribute.map_err(|_| SafeXmlError::Malformed)?;
         let key = attribute.key.as_ref().to_owned();
-        if key != "xmlns" && !key.starts_with("xmlns:") {
+        let namespace_declaration = key == "xmlns" || key.starts_with("xmlns:");
+        let (attribute_namespace, attribute_local_name) = if namespace_declaration {
+            (
+                None,
+                key.strip_prefix("xmlns:").unwrap_or("xmlns").to_owned(),
+            )
+        } else {
             let (attribute_namespace, local_name) = resolver.resolve_attribute(attribute.key);
-            let expanded_name = (
-                resolved_namespace(&attribute_namespace)?.map(str::to_owned),
-                local_name.as_ref().to_owned(),
-            );
+            let attribute_namespace = resolved_namespace(&attribute_namespace)?.map(str::to_owned);
+            (attribute_namespace, local_name.as_ref().to_owned())
+        };
+        if !namespace_declaration {
+            let expanded_name = (attribute_namespace.clone(), attribute_local_name.clone());
             if !expanded_attributes.insert(expanded_name) {
                 return Err(SafeXmlError::DuplicateAttribute);
             }
         }
+        ordered_attribute_names
+            .try_reserve(1)
+            .map_err(|_| SafeXmlError::AllocationFailed)?;
+        ordered_attribute_names.push(SafeXmlAttributeName {
+            qualified_name: key.clone(),
+            local_name: attribute_local_name,
+            namespace: attribute_namespace,
+            namespace_declaration,
+        });
         let value = attribute
             .normalized_value(XmlVersion::Implicit1_0)
             .map_err(|error| map_quick_xml_error(&error))?
@@ -342,6 +449,7 @@ fn safe_element(
         local_name,
         namespace,
         attributes,
+        ordered_attribute_names,
         depth,
     })
 }
@@ -420,12 +528,10 @@ fn is_xml_character(value: u32) -> bool {
     matches!(value, 0x09 | 0x0A | 0x0D | 0x20..=0xD7FF | 0xE000..=0xFFFD | 0x1_0000..=0x10_FFFF)
 }
 
-fn push_event(output: &mut Vec<SafeXmlEvent>, event: SafeXmlEvent) -> Result<(), SafeXmlError> {
-    output
-        .try_reserve(1)
-        .map_err(|_| SafeXmlError::AllocationFailed)?;
-    output.push(event);
-    Ok(())
+fn is_xml_whitespace(bytes: &[u8]) -> bool {
+    bytes
+        .iter()
+        .all(|byte| matches!(byte, b' ' | b'\t' | b'\r' | b'\n'))
 }
 
 fn map_quick_xml_error(error: &QuickXmlError) -> SafeXmlError {
@@ -574,6 +680,7 @@ mod tests {
             br"<one/><two/>",
             br"text<root/>",
             br"<root/>text",
+            "<root/>\u{00A0}".as_bytes(),
         ];
         for xml in cases {
             let Err(error) = SafeXmlDocument::parse(xml, SafeXmlLimits::default()) else {
