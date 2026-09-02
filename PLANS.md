@@ -21,7 +21,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
 | P03 | `pass_scoped_current_pc_local` | P03-01~09, package/preservation/round-trip, exact-2020 output oracle, Windows/Linux/clean-clone Gate PASS |
-| P04 | `in_progress_current_pc_local` | P04-01 PASS; P04-02 Unit·ID model 시작 |
+| P04 | `in_progress_current_pc_local` | P04-01~02 PASS; P04-03 Selector engine 시작 |
 | P05~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P10은 P03 선행조건 충족 후 순차 보류, P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -31,7 +31,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
 | P-0030 | P04-01 DocumentGraph v2 types | `pass` | Windows/Linux 9/9, golden SHA, current/clean-clone FULL 5/5 |
-| P-0031 | P04-02 Unit·ID model | `in_progress` | checked conversion, rounding receipts, coordinate/typed-ID property tests |
+| P-0031 | P04-02 Unit·ID model | `pass` | Windows/Linux 18/18, fixed-seed 10,000 round trips, current/clean-clone FULL 5/5 |
+| P-0032 | P04-03 Selector engine | `in_progress` | zero/multiple/stale fail-closed, ID/name/path/text-context resolution |
 
 ### P04-01 Acceptance (completed)
 
@@ -44,7 +45,7 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - `specs/document-graph-v2.schema.json`은 설계 입력으로 대조하되 구현 안전 계약을 약화하지 않는다. additive versioned policy/migration과 negative/golden tests를 함께 추가한다.
 - Windows/Linux `domain-ir` tests/Clippy, current/clean-clone FULL, security regression을 통과하고 P04-01 report와 상태 원장을 갱신한다. 이 task는 한글 runtime Gate가 아니다.
 
-### P04-02 Acceptance
+### P04-02 Acceptance (completed)
 
 - `domain-ir` 내부에 backend-independent `units`와 `identity` module을 추가하고 `unsafe`, filesystem, network, process, 한글 runtime 의존성은 0을 유지한다.
 - public length/typography/ratio는 `LengthMicrometers(i64)`, `PointMilli(i64)`, `RatioMillionths(i64)` fixed-point newtype으로 표현한다. float를 canonical 저장 형식이나 equality/hash 기준으로 사용하지 않는다.
@@ -54,6 +55,16 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - `ProjectId`, `RevisionId`, `ArtifactId`, logical node/style/resource/bookmark/field/change ID, backend opaque source ID를 서로 다른 newtype으로 구현한다. 빈 값·제어문자·과대 길이·종류 혼용은 compile-time 또는 checked parse에서 실패하고 Debug는 값을 노출하지 않는다.
 - P04-01 `DocumentId`/`LogicalId` wire bytes와 golden digest를 의도치 않게 변경하지 않는다. 구조 변경이 필요하면 별도 version/migration과 golden 갱신 사유를 먼저 기록한다.
 - Windows/Linux unit/ID tests와 Clippy, fixed-seed boundary/property tests, current/clean-clone FULL, security regression을 통과하고 P04-02 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
+
+### P04-03 Acceptance
+
+- `domain-ir`에 pure immutable selector snapshot/index를 추가하고 filesystem, network, process, COM, raw XML/HAction 의존성은 0을 유지한다.
+- selector는 stable logical ID, named slot/field/bookmark, finite structural path + expected fingerprint, exact normalized text query + before/after context hash를 typed variant로 제공한다. 저장된 text offset 단독 selector와 cursor/session fallback은 core에서 허용하지 않는다.
+- snapshot은 expected revision ID와 canonical graph digest를 고정한다. 둘 중 하나가 달라지면 후보 검색 전에 `stale`로 실패하고 새 graph에 과거 selector를 임의 적용하지 않는다.
+- selector priority와 candidate ordering은 deterministic이어야 하지만 단일 대상 요청은 정확히 한 후보만 성공한다. 0개는 `not_found`, 2개 이상은 `ambiguous`, 후보 상한 초과는 `limit_exceeded`로 실패하며 첫 후보 자동 선택은 금지한다.
+- structural path는 node-kind 단계와 index를 함께 검증하고 expected node fingerprint가 다르면 `stale`로 실패한다. named selector collision, path drift, text offset drift와 context mismatch negative test를 포함한다.
+- query/path/context/candidate에 finite bound를 적용한다. 공개 Debug/error에는 query text, node ID, slot/field/bookmark 이름, context hash 원문을 노출하지 않는다.
+- Windows/Linux selector tests와 Clippy, deterministic serialization/index/property regression, current/clean-clone FULL, security regression을 통과하고 P04-03 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
 
 ## Risks
 
@@ -91,7 +102,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0028: P03-08 atomic ZIP writer는 `implementation/p03/P03-08_REPORT.md`에서 preserving/normalized private writer, bounded construction, staged/full reopen, atomic no-overwrite, absent-or-complete fault model, actual 2020 writer `2/2`, Windows/Linux `45/45`, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0029: P03-09와 phase Gate는 `implementation/p03/P03-09_REPORT.md` 및 `implementation/p03/P03_GATE_REPORT.md`에서 128 valid/256 negative replay, 두 ASan fuzz target, exact 한글 2020 output `4/4`, Windows/Linux `48/48`, current/clean-clone FULL 5/5로 current-PC local scoped PASS.
 - P-0030: P04-01 DocumentGraph v2는 `implementation/p04/P04-01_REPORT.md`에서 pure typed graph, finite identity/closure/shape validation, Windows/Linux golden `2ab9ffef...f3c6`, current/clean-clone FULL 5/5로 PASS.
+- P-0031: P04-02 Unit·ID model은 `implementation/p04/P04-02_REPORT.md`에서 official `1/7200 inch` HWPUNIT, exact rational conversion, checked half-away rounding, coordinate/typed-ID validation, Windows/Linux `18/18`, current/clean-clone FULL 5/5로 PASS.
 
 ## Next
 
-P04-02 Unit·ID model을 `high`로 구현한다. source-verified rational conversion, half-away-from-zero receipt, coordinate space/anchor와 typed IDs를 먼저 고정한다. P04-09 actual 한글 2020 vertical Gate와 P04 phase Gate는 `max`다.
+P04-03 Selector engine을 `high`로 구현한다. immutable revision/digest snapshot에서 ID/name/path/text-context selector를 deterministic하게 평가하고 zero/multiple/stale를 fail-closed로 고정한다. P04-09 actual 한글 2020 vertical Gate와 P04 phase Gate는 `max`다.

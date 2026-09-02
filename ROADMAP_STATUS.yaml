@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_foundation_p02_signed_registry_p03_package_roundtrip_core_p04_document_graph_v2_and_units_in_progress
+  product_code_scope: p01_foundation_p02_signed_registry_p03_package_roundtrip_core_p04_document_graph_v2_units_and_selector_in_progress
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -401,13 +401,13 @@ p03_execution:
     user_documents_opened: false
     hancom_runtime_executed_by_task: true
 p04_execution:
-  current_task: P04-02
+  current_task: P04-03
   gate_state: in_progress_current_pc_local
   tasks:
     P04-01: passed_current_pc_local_pure_model
-    P04-02: in_progress_unit_id_model
-    P04-03: blocked_by_P04-02
-    P04-04: blocked_by_P04-02_P04-03
+    P04-02: passed_current_pc_local_pure_model
+    P04-03: in_progress_selector_engine
+    P04-04: blocked_by_P04-03
     P04-05: blocked_by_P04-04
     P04-06: blocked_by_P04-04_P04-05
     P04-07: blocked_by_P04-01_P04-02
@@ -422,6 +422,27 @@ p04_execution:
     linux_tests_read_only: 9_of_9_passed
     clippy_deny_warnings_windows_linux: passed
     canonical_golden_sha256: 2ab9ffef0263e14609afa148e412ba2915820e54e365c9a420c734f908a6f3c6
+    linux_clippy_derived_image_digest: sha256:bfda7f1ddbf0a192699d4b02dc3dbfefabe5eb7c0dd5527ba31acdaf0e4ab37f
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    secrets_vulnerabilities_forbidden_licenses: 0
+    sbom_components: 271
+    clean_clone_sbom_components: 229
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
+  unit_id_model:
+    audited_source_commit: 6790fa9b558785c35d569947ec58101786061a81
+    contract: hwpx-agent.unit-id/v1
+    crate: domain-ir
+    official_source_id: hancom-hwp-5-rev1.3
+    official_source_sha256: 1d1da9e6fe22563ae2c5285bbbfc6762974fb7f002278084cbc11e5266bdc782
+    hwpunit_definition: 1_over_7200_inch
+    unit_identity_specific_tests: 9_of_9_passed
+    combined_domain_ir_windows_tests: 18_of_18_passed
+    combined_domain_ir_linux_tests_read_only: 18_of_18_passed
+    fixed_seed_hwpunit_round_trips: 10000_of_10000_passed
+    document_graph_golden_unchanged: true
+    clippy_deny_warnings_windows_linux: passed
     linux_clippy_derived_image_digest: sha256:bfda7f1ddbf0a192699d4b02dc3dbfefabe5eb7c0dd5527ba31acdaf0e4ab37f
     local_ci_lanes: 5_of_5_passed
     clean_clone_bootstrap: passed_git_status_clean
