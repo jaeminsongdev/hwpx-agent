@@ -20,7 +20,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
-| P03 | `in_progress_current_pc_local` | P03-01~04 PASS, P03-05 part preservation map 시작 |
+| P03 | `in_progress_current_pc_local` | P03-01~05 PASS, P03-06 ID/reference index 시작 |
 | P04~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -29,18 +29,18 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0025 | P03-05 Part preservation map | `in_progress` | evidence-ranked per-part class, complete known-fixture expected map |
+| P-0026 | P03-06 ID/reference index | `in_progress` | part-scoped typed ID/reference index, duplicate/dangling/wrong-type detection |
 
-### P03-05 Acceptance
+### P03-06 Acceptance
 
-- closed `PackageGraph`의 모든 non-directory part를 정확히 한 번 포함하는 deterministic `PreservationReport`와 stable per-part reason code를 만든다.
-- report 생성 시 bounded reader로 part를 다시 읽어 size/SHA-256이 graph identity와 일치하는지 검증하고 mismatch나 누락을 fail closed로 처리한다.
-- `ByteExact`, `TokenStable`, `Semantic`, `Regenerated`, `Opaque`, `Rejected`의 증거 수준과 승격 조건을 versioned policy로 고정한다. 아직 없는 writer/semantic producer 능력을 근거 없이 부여하지 않는다.
-- exact `mimetype` 같은 byte-contract part, safe XML token part, opaque binary/unknown part와 unsafe XML part를 구분하며 XML media/path mismatch와 DTD/entity/encoding 실패를 silently opaque로 downgrade하지 않는다.
-- `Rejected`가 하나라도 있으면 report의 direct-preserve readiness를 false로 유지하고 stable non-sensitive diagnostic만 기록한다.
-- raw bytes/XML/value/path를 public 또는 LLM report에 노출하지 않고 canonical package path, media type, role, size, digest, class, reason/evidence만 제공한다.
-- known synthetic HWPX fixture의 expected class map과 missing/extra/order/hash/media/unsafe negative corpus를 Windows/Linux에서 검증한다.
-- P03-04 preserving XML 7/7, P03-03 safe XML 5/5, P03-02 PackageGraph 8/8, P03-01 ZIP 8/8 regression을 유지하고 versioned migration/policy를 남긴다.
+- `TokenStable` XML part만 대상으로 part-scoped ID namespace와 cross-part reference를 deterministic `IdIndex`로 만든다. `Opaque`, `Rejected` 또는 근거 없는 XML은 해석하지 않는다.
+- 지원하는 namespace/QName별 declaration/reference 규칙과 기대 target type을 versioned profile로 고정하고 unknown attribute를 ID/reference로 추측하지 않는다.
+- declaration과 reference에 canonical part path, element/token index, checked source span, ID kind/expected target kind를 기록하되 raw XML/value는 public 또는 진단에 노출하지 않는다.
+- duplicate declaration, dangling reference, wrong-type target과 malformed/oversized ID를 stable non-sensitive code로 검출하고 partial-valid index나 자동 재번호화로 downgrade하지 않는다.
+- cross-part target 문법은 portable package path로 정규화하고 traversal, external scheme, missing/non-token-stable target을 fail closed로 처리한다.
+- ID·reference 개수와 value length에 finite checked limits를 적용하고 reserve/allocation failure를 명시적으로 처리한다.
+- namespace prefix 변형, part order 변형, same-ID-in-different-part, duplicate, dangling, wrong-type, traversal/external, unknown attribute negative fixture를 Windows/Linux에서 검증한다.
+- P03-05 preservation map `5/5`, P03-04 preserving XML `7/7`, P03-03 safe XML `5/5`, P03-02 PackageGraph `8/8`, P03-01 ZIP `8/8` regression을 유지하고 versioned migration/policy를 남긴다.
 
 ## Risks
 
@@ -72,7 +72,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0022: P03-02 PackageGraph는 `implementation/p03/P03-02_REPORT.md`에서 namespace-resolved closed graph Windows/Linux 8/8, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0023: P03-03 safe XML reader는 `implementation/p03/P03-03_REPORT.md`에서 XML 1.0/UTF-8 namespace-resolved finite parser, Windows/Linux 5/5, PackageGraph/ZIP regression, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0024: P03-04 preserving XML token model은 `implementation/p03/P03-04_REPORT.md`에서 checked source spans, namespace tree, untouched byte/SHA equality, Windows/Linux core corpus, current/clean-clone FULL 5/5와 보안 0건 PASS.
+- P-0025: P03-05 part preservation map은 `implementation/p03/P03-05_REPORT.md`에서 authoritative graph/readback, evidence-ranked complete class map, Windows/Linux core corpus, current/clean-clone FULL 5/5와 보안 0건 PASS.
 
 ## Next
 
-P03-05 part preservation map은 `max`다. P03-06 ID/reference index도 시작 시 `max`로 유지한다.
+P03-06 ID/reference index는 `max`다. P03-07 preserving patch engine도 시작 시 `max`로 유지한다.
