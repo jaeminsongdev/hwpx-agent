@@ -59,15 +59,16 @@
 - P02-05 `PASS`: 3개 locked SourceRecord 출력 3,680개를 3,680 nodes/2,736 normalized labels/3,811 review edges로 전환했다. 호환 후보 746, collision review 3,065, auto-merge 0이며 independent verifier errors 0, Windows/Linux 29 tests, current/clean-clone 5/5 lane을 통과했다.
 - P02-06 `PASS`: 609-row canonical matrix에 대해 3,680/3,680 node와 3,811/3,811 edge를 disposition했다. strict proposal 35건 중 34건을 semantic mapping하고 1건은 ambiguity로 거절했다. unresolved/auto-merge/runtime-qualified 0, independent verifier errors 0, Windows/Linux 36 tests, current/clean-clone 5/5 lane을 통과했다.
 - P02-07 `PASS`: exact 2020 profile에 `AUTOMATION_FULL` 191 + `HYBRID` 345 = 536 capability를 전수 표현했다. candidate 32, unavailable-with-reason 504, missing/duplicate/runtime-qualified/routing-enabled 0이며 protocol catalog v2 byte identity, additive v3 codegen, independent verifier errors 0, Windows/Linux 43 tests, current/clean-clone 5/5 lane을 통과했다.
-- P02-08 `in_progress`: exact 2020 x86/STA runtime probe schema/CLI와 disposable trace를 구현한다.
+- P02-08 `PASS`: exact 2020 x86/STA disposable runtime probe에서 request/trace/receipt correlation, 32/32 disposition, 안전 canary 2건, save/reopen exact semantic match, `Quit()`, 잔류 process 0을 확인했다. `edit.go_to` default-read 실패 1건은 typed/hash negative evidence로 보존했고 independent verifier errors 0, Python 47/47, PowerShell 31/31을 통과했다.
+- P02-09 `in_progress`: verified runtime evidence만 target-scoped로 승격하는 signed registry manifest와 deterministic drift/tamper 검증을 구현한다.
 
 ## 다음 작업
 
-현재 PC에서 P02-08 runtime probe tool을 수행한다. P02-08과 다음 P02-09/P02 최종 감사 추론수준은 `max`다. 실제 probe harness 준비 전에는 한글 UI나 사용자 문서를 열지 않는다.
+현재 PC에서 P02-09 registry signing/drift를 구현한다. P02-09와 P02 최종 감사 추론수준은 `max`다. 추가 한글 UI 조작은 현재 task에 필요하지 않다.
 
 ## 현재 blocker
 
-- 현재 blocker 없음. 실제 probe 실행 시 한글 보안 접근 허용 창이 나타나면 사용자가 로컬에서 승인해야 하며, 그 전까지 tooling·fixture·negative test를 완료한다.
+- 현재 blocker 없음.
 
 2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.
 

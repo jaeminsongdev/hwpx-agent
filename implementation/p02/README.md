@@ -11,7 +11,8 @@ P02는 immutable source lock을 format별 extractor로 읽어 `SourceRecordV1`�
 - `P02-05_REPORT.md`: deterministic review-only candidate graph over all P02 source records.
 - `P02-06_REPORT.md`: complete semantic disposition of every candidate node/edge against the canonical capability matrix.
 - `P02-07_REPORT.md`: exact-target binding schema/codegen and complete current-2020 candidate/unavailable registry.
+- `P02-08_REPORT.md`: exact current-PC 2020 x86/STA disposable runtime probe and independently verified trace.
 
 ## 현재 task
 
-`P02-08 Runtime probe tool`을 exact current-PC 2020 x86/STA 범위에서 구현한다. private binding registry를 입력으로 disposable fixture와 bounded trace를 만들되, 실제 한글 실행 전까지 모든 binding을 `unverified`로 유지한다. harness가 준비될 때까지 사용자 조작은 필요하지 않다.
+`P02-09 Registry signing·drift`를 exact current-PC 2020 범위에서 구현한다. private binding registry와 independently verified P02-08 trace를 입력으로 target-scoped signed manifest와 deterministic drift report를 만들되, runtime evidence가 없는 binding을 승격하거나 routing을 활성화하지 않는다.
