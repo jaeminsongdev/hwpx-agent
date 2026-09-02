@@ -20,7 +20,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
-| P03 | `in_progress_current_pc_local` | P03-01 PASS, P03-02 PackageGraph 시작 |
+| P03 | `in_progress_current_pc_local` | P03-01~02 PASS, P03-03 safe XML reader 시작 |
 | P04~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -29,17 +29,17 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0022 | P03-02 PackageGraph | `in_progress` | mimetype/container/OPF manifest/spine/relationship graph, duplicate/dangling/external target negatives |
+| P-0023 | P03-03 XML safety parser | `in_progress` | reusable bounded namespace-aware XML reader, bomb/entity/network/namespace negative corpus |
 
-### P03-02 Acceptance
+### P03-03 Acceptance
 
-- `PackageGraph`, `PartRecord`, `Relationship`, `MediaType`의 typed contract와 stable error code를 먼저 고정한다.
-- root `mimetype`가 정확한 HWPX media type·Stored·first entry인지 검증하고 duplicate/missing/malformed 값을 거부한다.
-- `META-INF/container.xml`의 rootfile과 OPF `manifest`/`spine`을 bounded entry bytes에서 읽어 모든 package part를 graph node로 색인한다.
-- manifest ID/path/media-type 중복, missing target, orphan/unlisted part, spine dangling/nonlinear duplicate와 path normalization collision을 deterministic error로 거부한다.
-- internal relationship target은 source-relative portable path로 resolve하되 package root 탈출을 거부하고, external relationship은 기본 `block` policy로 분리한다.
-- graph construction은 read-only이며 raw XML을 public/LLM 경로에 노출하지 않는다. P03-03 전용 generic XML parser를 우회해 임의 entity/network 처리를 허용하지 않는다.
-- valid synthetic HWPX graph와 missing/duplicate/dangling/external/ordering negative corpus를 Windows/Linux에서 검증한다.
+- P03-02 container/OPF parser의 안전 규칙을 reusable internal `safe_xml` layer로 추출하고 PackageGraph가 같은 layer를 사용하게 한다.
+- UTF-8/XML 1.0, namespace-resolved element identity와 stable typed error code를 고정하며 raw XML 또는 resolver capability를 public/LLM 경로에 노출하지 않는다.
+- metadata bytes, event/node, depth, text, attributes, attribute bytes와 active namespace binding에 finite default/hard ceiling을 적용한다.
+- DTD, custom entity, external entity/network/filesystem resolution, processing instruction과 CDATA policy를 fail closed로 유지한다. XML predefined/numeric reference allowlist는 별도 검증한다.
+- malformed/end-name/duplicate-attribute/namespace rebinding/unknown prefix를 deterministic error로 거부하고 reader 실패에 untrusted XML text를 포함하지 않는다.
+- XML bomb, entity expansion, oversized text/attribute, deep tree, invalid/rebound namespace positive/negative corpus를 Windows/Linux에서 검증한다.
+- P03-02 PackageGraph 8/8과 P03-01 malicious ZIP 8/8 regression을 유지하고 versioned migration/policy를 남긴다.
 
 ## Risks
 
@@ -68,7 +68,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0019: P02-08 runtime probe는 `implementation/p02/P02-08_REPORT.md`에서 exact 2020 x86/STA disposable trace, independent verifier errors 0, 47/47 + 31/31 PASS.
 - P-0020: P02-09와 phase Gate는 `implementation/p02/P02-09_REPORT.md` 및 `implementation/p02/P02_GATE_REPORT.md`에서 current-PC local scoped PASS. Actual other-build drift는 `baseline_unavailable`.
 - P-0021: P03-01 bounded ZIP reader는 `implementation/p03/P03-01_REPORT.md`에서 Windows/Linux malicious corpus 8/8, current/clean-clone FULL 5/5와 보안 0건 PASS.
+- P-0022: P03-02 PackageGraph는 `implementation/p03/P03-02_REPORT.md`에서 namespace-resolved closed graph Windows/Linux 8/8, current/clean-clone FULL 5/5와 보안 0건 PASS.
 
 ## Next
 
-P03-02 PackageGraph는 `max`다. P03-03 XML safety parser도 시작 시 `max`로 유지한다.
+P03-03 XML safety parser는 `max`다. P03-04 preserving tokenizer도 시작 시 `max`로 유지한다.
