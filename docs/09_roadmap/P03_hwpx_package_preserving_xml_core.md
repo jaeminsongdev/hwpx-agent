@@ -45,11 +45,11 @@ HWPX Package·Preserving XML Core를 문서상 계획이 아니라 **재현 가�
 - [x] `P03-06` 산출물 `IdIndex` 존재, 검증: duplicate/dangling/wrong-type detection.
 - [x] `P03-07` 산출물 `preserving patcher` 존재, 검증: property/random patch tests.
 - [x] `P03-08` 산출물 `package writer` 존재, 검증: crash/no partial output tests.
-- [ ] `P03-09` 산출물 `roundtrip CLI/evidence` 존재, 검증: untouched policy 위반 0.
-- [ ] 새 capability/contract/schema에 migration과 negative test가 있다.
-- [ ] 실제 수행하지 않은 검증은 `unverified`로 남았다.
-- [ ] source artifact를 in-place로 수정한 경로가 없다.
-- [ ] phase handoff에 실패 fixture와 다음 exact task가 기록됐다.
+- [x] `P03-09` 산출물 `roundtrip CLI/evidence` 존재, 검증: untouched policy 위반 0.
+- [x] 새 capability/contract/schema에 migration과 negative test가 있다.
+- [x] 실제 수행하지 않은 검증은 `unverified`로 남았다.
+- [x] source artifact를 in-place로 수정한 경로가 없다.
+- [x] phase handoff에 실패 fixture와 다음 exact task가 기록됐다.
 
 ## 금지
 

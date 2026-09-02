@@ -20,8 +20,9 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
-| P03 | `in_progress_current_pc_local` | P03-01~08 PASS, P03-09 round-trip·repair Gate 시작 |
-| P04~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
+| P03 | `pass_scoped_current_pc_local` | P03-01~09, package/preservation/round-trip, exact-2020 output oracle, Windows/Linux/clean-clone Gate PASS |
+| P04 | `in_progress_current_pc_local` | P04-01 DocumentGraph v2 types 시작 |
+| P05~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P10은 P03 선행조건 충족 후 순차 보류, P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
 
@@ -29,18 +30,18 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0029 | P03-09 round-trip·repair Gate | `in_progress` | 100+ reopen corpus, untouched policy 0, repair diagnostics, fuzz baseline, exact 2020 oracle |
+| P-0030 | P04-01 DocumentGraph v2 types | `in_progress` | pure typed graph, finite validation, deterministic serialization/golden tests |
 
-### P03-09 Acceptance
+### P04-01 Acceptance
 
-- `roundtrip` CLI/library는 explicit input과 explicit private `SecureWorkspace`만 사용한다. source를 in-place 수정하지 않고 no-op preserving, allowlisted mutation preserving, normalized 세 경로를 분리해 source/output identity와 full reopen evidence를 non-sensitive receipt로 남긴다.
-- deterministic synthetic corpus를 최소 100개 구축한다. package order/compression, XML token shape, supported current-2020 namespace/ID/reference 조합과 valid boundary를 seed로 고정하고 Windows/Linux에서 corpus ID·expected disposition·output SHA가 재현되어야 한다. current-2020 actual evidence 2개를 synthetic 수에 포함하지 않는다.
-- no-op preserving은 모든 part expanded bytes가 exact하고 untouched-policy violation이 0이어야 한다. mutation preserving은 allowlisted changed/added part 외 전 part exact, normalized는 graph/preservation/ID와 semantic count가 동일해야 하며 raw compressed/timestamp equality를 거짓 주장하지 않는다.
-- repair는 P04의 범용 자동복구를 선행 구현하지 않는다. P03-01~08 admission 오류를 stable `RepairDiagnostic`으로 분류하고 손상 위치 범주, safe-to-retry/repairability, recommended next action만 노출한다. raw XML/value/path/문서 bytes는 출력하지 않고 source를 변경하거나 임의 repair를 실행하지 않는다.
-- malformed/truncated/header mismatch/CRC/path collision/mimetype/container/manifest/relationship/XML safety/ID duplicate·dangling·wrong-type/limit/output publication 실패 corpus에서 partial output 0, diagnostic code deterministic, unsupported/ambiguous는 `not_repairable`이어야 한다.
-- fuzz baseline은 bounded byte mutation과 structured package mutation target을 갖고 고정 seed corpus 100+를 replay한다. 현재 pinned toolchain에서 재현 가능한 smoke budget을 실행하며 panic, hang, OOM, source mutation, partial publication 0을 증명한다. 수행하지 못한 coverage-guided/nightly sanitizer는 별도 `unverified`로 남긴다.
-- 실제 한글 2020 Gate는 승인된 disposable fixture에서 생성한 no-op preserving과 normalized 산출물을 fresh x86/STA process로 각각 open하고, repair/format-conversion/modal prompt 0, safe normalized semantic readback 일치, `Quit()` 후 잔류 0을 확인한다. Computer Use는 screenshot-only이며 필요한 접근 허용 클릭만 사용자에게 요청한다.
-- P03-01~08의 `hwpx-package 45/45`, current-2020 writer validation `2/2`, Windows/Linux/clean-clone FULL과 security regression을 유지하고 roundtrip/diagnostic versioned policy·migration, phase Gate report, `ROADMAP_STATUS`/`CURRENT_STATE`/handoff를 갱신한다.
+- `domain-ir`는 ZIP/XML/COM/HAction/backend 구현을 알지 않는 pure typed model이어야 하며 `#![forbid(unsafe_code)]`를 유지한다. HWPX numeric ID, namespace, raw action/parameter 문자열은 public IR에 포함하지 않는다.
+- `DocumentGraph` v2는 schema version, document/source identity, metadata/settings/security/accessibility, resource/style catalogs, sections/flow nodes, notes/references/review와 opaque preservation handle을 빠짐없이 typed field로 표현한다.
+- node kind는 paragraph/table/equation/drawing/chart/field/form/break/embedded를 최소 지원하고, 공통 logical ID·style refs·layout/semantics/provenance/preservation 정보를 갖는다. backend source binding은 private 또는 opaque handle로 격리한다.
+- 생성은 finite `DocumentGraphLimits`와 checked count/size/depth를 요구한다. section 1개 이상, 전역 logical ID uniqueness, resource/style/reference closure, table shape와 node-kind payload 일치가 실패하면 부분 graph 없이 stable typed error로 종료한다.
+- deterministic serialization은 canonical collection/order와 explicit version tag를 사용한다. 동일 graph는 Windows/Linux에서 byte-identical JSON과 SHA-256을 내며 deserialize→validate→serialize golden equality를 통과해야 한다.
+- 공개 `Debug`/오류에 문서 본문, source path, opaque bytes가 노출되지 않는다. 원본 HWPX와 P03 artifact를 읽거나 수정하지 않는 pure synthetic test로 완료한다.
+- `specs/document-graph-v2.schema.json`은 설계 입력으로 대조하되 구현 안전 계약을 약화하지 않는다. additive versioned policy/migration과 negative/golden tests를 함께 추가한다.
+- Windows/Linux `domain-ir` tests/Clippy, current/clean-clone FULL, security regression을 통과하고 P04-01 report와 상태 원장을 갱신한다. 이 task는 한글 runtime Gate가 아니다.
 
 ## Risks
 
@@ -76,7 +77,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0026: P03-06 ID/reference index는 `implementation/p03/P03-06_REPORT.md`에서 typed part-scoped index, duplicate/dangling/wrong-type fail-closed, current-2020 disposable `2/2`, Windows/Linux `38/38`, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0027: P03-07 preserving patch engine은 `implementation/p03/P03-07_REPORT.md`에서 8종 typed intent, checked conflict/rollback/allocation/closure, fixed-seed property corpus, actual 2020 memory mutation `2/2`, Windows/Linux `43/43`, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0028: P03-08 atomic ZIP writer는 `implementation/p03/P03-08_REPORT.md`에서 preserving/normalized private writer, bounded construction, staged/full reopen, atomic no-overwrite, absent-or-complete fault model, actual 2020 writer `2/2`, Windows/Linux `45/45`, current/clean-clone FULL 5/5와 보안 0건 PASS.
+- P-0029: P03-09와 phase Gate는 `implementation/p03/P03-09_REPORT.md` 및 `implementation/p03/P03_GATE_REPORT.md`에서 128 valid/256 negative replay, 두 ASan fuzz target, exact 한글 2020 output `4/4`, Windows/Linux `48/48`, current/clean-clone FULL 5/5로 current-PC local scoped PASS.
 
 ## Next
 
-P03-09 round-trip/repair Gate는 `max`다. P04 시작 전 P03 phase Gate 감사도 `max`로 유지한다.
+P04-01 DocumentGraph v2 types를 `max`로 구현한다. P04-02~08은 task 위험에 따라 `high` 또는 `max`, P04-09 actual 한글 2020 vertical Gate와 P04 phase Gate는 `max`다.

@@ -7,9 +7,9 @@
 
 ## 현재 상태
 
-- 상태: `P03_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
-- 현재 phase: `P03_HWPX_PACKAGE_PRESERVING_XML_CORE`
-- 구현 코드: P01 Rust/C#/TypeScript foundation, P02 source importer/candidate/semantic review/binding/runtime probe/Ed25519 signed registry pipeline과 P03 bounded ZIP→graph→safe/preserving XML→preservation map→typed ID→patch→atomic writer core가 build·test 가능하다. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence도 보존한다.
+- 상태: `P04_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
+- 현재 phase: `P04_DOCUMENTGRAPH_OPERATIONPLAN_TRANSACTIONS`
+- 구현 코드: P01 Rust/C#/TypeScript foundation, P02 source importer/candidate/semantic review/binding/runtime probe/Ed25519 signed registry pipeline과 P03 bounded ZIP→graph→safe/preserving XML→preservation map→typed ID→patch→atomic writer→round-trip/repair core가 build·test 가능하다. P04-01 pure DocumentGraph v2 type 구현을 시작했다. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence도 보존한다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -70,11 +70,17 @@
 - P03-06 `PASS`: exact 한글 2020 core profile의 typed part-scoped ID/reference index를 구현했다. actual disposable fixture `2/2`에서 각 declaration 73/reference 184/issue 0이며 package `38/38`을 통과했다.
 - P03-07 `PASS`: 8종 checked `PatchIntent`, overlap/conflict, deterministic typed allocation, relationship/part closure와 atomic private transaction을 구현했다. actual fixture `2/2`에서 mutation `1 changed / 10 untouched`, package `43/43`을 통과했다.
 - P03-08 `PASS`: `PreservingWriter`/`NormalizedWriter`, bounded/fallible ZIP buffer와 `AtomicPackagePublisher`를 구현했다. source order/compression/expanded bytes와 unavailable raw metadata를 구분하고, staged/full reopen, same-volume no-overwrite, absent-or-complete fault model을 Windows/Linux `45/45`, actual writer `2/2`, current/clean-clone FULL `5/5`로 검증했다.
-- P03-09 `in_progress`: 100+ deterministic reopen corpus, non-mutating repair diagnostics, bounded fuzz baseline과 exact 한글 2020 fresh-process output open/readback Gate를 준비한다.
+- P03-09 `PASS`: `RoundTripVerifier`와 non-mutating `RepairDiagnostic`, 128 valid/128 mutation/128 truncation corpus, raw/structured ASan fuzz target을 구현했다. cross-platform semantic/writer digest가 일치하고 exact 한글 2020 output `4/4`, pair `2/2`, 잔류 process 0을 통과했다.
+- P03 Gate `PASS_SCOPED_CURRENT_PC_LOCAL`: Windows/Linux `48/48`, current/clean-clone FULL `5/5`, security 0건, STRICT `max` 감사를 통과했다. Authoritative report는 `implementation/p03/P03_GATE_REPORT.md`다.
+
+## P04 현재 상태
+
+- P04-01 `in_progress`: backend-neutral `DocumentGraph` v2 types, finite validation과 deterministic serialization/golden contract를 `domain-ir`에 구현한다.
+- P03가 요구되던 P04/P10 선행조건은 현재 PC 로컬 범위에서 충족됐다. 전체 제품 구현은 P04부터 순차 진행하며 P10은 현재 실행 task가 아니다.
 
 ## 다음 작업
 
-P03-09 Round-trip·repair Gate를 구현한다. 추론수준은 `max`다. core/corpus/diagnostic/fuzz를 먼저 완료한 뒤 승인된 disposable output의 한글 2020 접근 허용이 필요할 때 사용자에게 한 번에 요청한다.
+P04-01 DocumentGraph v2 types를 구현한다. 추론수준은 `max`다. pure model, finite validation, canonical serialization과 golden/negative test를 먼저 완료하며 이 task에는 한글 runtime 조작이 없다.
 
 ## 현재 blocker
 
@@ -84,4 +90,4 @@ P03-09 Round-trip·repair Gate를 구현한다. 추론수준은 `max`다. core/c
 
 ## 검증 한계
 
-제품 foundation, P02 signed registry와 P03-01~08 package/preserving writer core는 재현 가능하지만 P03-09 100+ corpus/repair/fuzz/actual output oracle과 이후 제품 기능은 아직 완료되지 않았다. P03-08 actual evidence는 이미 승인된 두 한글 2020 fixture를 read-only로 소비한 in-memory writer 검증이며 새 writer output을 한글에서 열었다는 뜻이 아니다. Signed registry는 exact 2020에서 두 안전 canary만 verified이며 public routing은 0이다. Exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00/P01/P02 실제 상태는 각 Gate report를 따른다.
+제품 foundation, P02 signed registry와 P03 package/preserving/round-trip core는 재현 가능하지만 P04 이후 제품 기능은 아직 완료되지 않았다. P03 actual output evidence는 승인된 두 synthetic fixture에서 생성한 네 output의 read-only open/readback이며 save/render/PDF 동등성이나 사용자 문서 호환성을 뜻하지 않는다. Signed registry는 exact 2020에서 두 안전 canary만 verified이며 public routing은 0이다. Exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00/P01/P02/P03 실제 상태는 각 Gate report를 따른다.

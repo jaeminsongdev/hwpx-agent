@@ -1,7 +1,7 @@
 schema: hwpx-agent.roadmap-status/v2
 updated_at: 2026-09-02
-current_phase: P03
-status: p03_in_progress_current_pc_local_only
+current_phase: P04
+status: p04_in_progress_current_pc_local_only
 design_baseline:
   feature_domains: 16
   features: 609
@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_foundation_p02_signed_registry_and_p03_package_preserving_writer_core
+  product_code_scope: p01_foundation_p02_signed_registry_p03_package_roundtrip_core_and_p04_document_graph_in_progress
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -283,7 +283,9 @@ p02_execution:
     private_key_git_tracked: false
     signed_registry_git_tracked: false
 p03_execution:
-  current_task: P03-09
+  current_task: completed
+  gate_state: pass_scoped_current_pc_local
+  audited_source_commit: d5ff13547976d55204f63a030f07f7a628afb605
   tasks:
     P03-01: passed_current_pc_local_core
     P03-02: passed_current_pc_local_core
@@ -293,7 +295,7 @@ p03_execution:
     P03-06: passed_current_pc_local_core_and_disposable_2020
     P03-07: passed_current_pc_local_core_and_disposable_2020_mutation
     P03-08: passed_current_pc_local_core_and_disposable_2020_writer_validation
-    P03-09: in_progress_current_pc_local_gate
+    P03-09: passed_current_pc_local_core_and_exact_2020_oracle
   bounded_zip_reader:
     audited_source_commit: bb80bb8a557177ea7d51443729a422719c11b7c8
     crate: hwpx-package
@@ -369,18 +371,60 @@ p03_execution:
     actual_writer_output_opened_in_hancom: false
     user_documents_opened: false
     hancom_runtime_executed_by_task: false
+  roundtrip_repair_gate:
+    audited_source_commit: d5ff13547976d55204f63a030f07f7a628afb605
+    exact_oracle_product_bytes_commit: ac17426d98995ca21814fab059222f757a715394
+    contract: hwpx-agent.roundtrip-repair/v1
+    valid_synthetic_fixtures: 128
+    byte_mutation_replays: 128
+    truncation_replays: 128
+    untouched_policy_violations: 0
+    semantic_corpus_sha256: b0f187093072a78bc50e12de31f6d30c88d679fb35c8a7ab309203937ba06823
+    cross_platform_writer_aggregate_sha256: d5492303a282c3fe4b00b7fa9b0cfd8a8528f7f2b060ffc24b086341e06d0224
+    windows_hwpx_package_tests: 48_of_48_passed
+    linux_hwpx_package_tests_read_only: 48_of_48_passed
+    linux_clippy_derived_image_digest: sha256:bfda7f1ddbf0a192699d4b02dc3dbfefabe5eb7c0dd5527ba31acdaf0e4ab37f
+    raw_fuzz_target: 1000_runs_cov_7599_ft_12470_artifacts_0
+    structured_fuzz_target: 1000_runs_cov_7286_ft_9694_artifacts_0
+    fuzz_sanitizer: address
+    fuzz_toolchain: nightly-2026-08-01
+    fuzz_license_policy: separate_exact_libfuzzer_sys_0_4_13_ncsa_exception
+    exact_2020_oracle_cases: 4_of_4_passed
+    exact_2020_semantic_pairs: 2_of_2_passed
+    exact_2020_corpus_manifest_sha256: 9a5d92baee5602ebb05e6f3cdc45611f604f483bf9d0a87a4070377c4cee9747
+    oracle_static_tests: 36_of_36_passed
+    oracle_input_mutation_save_residual_process: 0
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    secrets_vulnerabilities_forbidden_licenses: 0
+    sbom_components: 271
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: true
+p04_execution:
+  current_task: P04-01
+  gate_state: in_progress_current_pc_local
+  tasks:
+    P04-01: in_progress_document_graph_v2_types
+    P04-02: blocked_by_P04-01
+    P04-03: blocked_by_P04-01
+    P04-04: blocked_by_P04-01
+    P04-05: blocked_by_P04-01
+    P04-06: blocked_by_P04-01
+    P04-07: blocked_by_P04-01
+    P04-08: blocked_by_P04-01
+    P04-09: blocked_by_P04-01_to_P04-08
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope
   P02: completed_current_pc_local_scope
-  P03: in_progress_current_pc_local_scope
-  P04: blocked_by_P03
+  P03: completed_current_pc_local_scope
+  P04: in_progress_current_pc_local_scope
   P05: blocked_by_P04
   P06: blocked_by_P05
   P07: blocked_by_P05
   P08: blocked_by_P05
   P09: blocked_by_P05
-  P10: blocked_by_P03
+  P10: ready_by_P03_current_pc_local_scope_deferred_to_sequential_roadmap
   P11: blocked_by_P06_P07_P08_P09_P10
   P12: blocked_by_P06_P07_P08_P09_P11
   P13: blocked_by_P10
