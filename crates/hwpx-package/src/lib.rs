@@ -10,6 +10,7 @@ mod graph;
 mod limits;
 mod path;
 mod reader;
+mod safe_xml;
 
 pub use graph::{
     GraphError, MediaType, PackageGraph, PackageGraphLimitConfig, PackageGraphLimits, PartRecord,
@@ -18,3 +19,4 @@ pub use graph::{
 pub use limits::{PackageLimitConfig, PackageLimits};
 pub use path::PackagePath;
 pub use reader::{BoundedZipReader, Compression, EntryMetadata, PackageError};
+pub use safe_xml::SafeXmlError;

@@ -269,6 +269,9 @@ fn metadata_rejects_entities_processing_instructions_and_non_utf8_declarations()
         "xml_forbidden_construct",
     )?;
 
+    let xml11 = CONTAINER.replace("version=\"1.0\" encoding", "version=\"1.1\" encoding");
+    expect_code(valid_archive(&xml11, OPF, &[]), "xml_forbidden_construct")?;
+
     let unknown_reference = OPF.replace(
         "<opf:metadata>",
         "<opf:metadata><meta xmlns=\"urn:test\">&unknown;</meta>",

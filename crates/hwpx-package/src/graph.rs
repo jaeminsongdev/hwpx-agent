@@ -1,20 +1,18 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::io::{Read, Seek};
 
-use quick_xml::XmlVersion;
-use quick_xml::events::{BytesStart, Event};
-use quick_xml::name::ResolveResult;
-use quick_xml::reader::NsReader;
 use sha2::{Digest as _, Sha256};
 use thiserror::Error;
 
+use crate::safe_xml::{
+    SafeXmlDocument, SafeXmlElement, SafeXmlError, SafeXmlEvent, SafeXmlLimitConfig, SafeXmlLimits,
+};
 use crate::{BoundedZipReader, Compression, PackageError, PackageLimits, PackagePath};
 
 pub const HWPX_MEDIA_TYPE: &str = "application/hwp+zip";
 const CONTAINER_PATH: &str = "META-INF/container.xml";
 const CONTAINER_NS: &str = "urn:oasis:names:tc:opendocument:xmlns:container";
 const OPF_NS: &str = "http://www.idpf.org/2007/opf";
-const HARD_MAX_NAMESPACE_BINDINGS: usize = 4_096;
 
 /// Finite limits for the narrow container/OPF metadata parser used by P03-02.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -233,7 +231,6 @@ impl PackageGraph {
             return Err(GraphError::RequiredPartMissing { part: "version" });
         }
         let container_bytes = reader.read_entry(container_index)?;
-        validate_metadata_size(&container_bytes, "container", graph_limits)?;
         let root = parse_container(&container_bytes, package_limits, graph_limits)?;
         let root_index = by_key
             .get(root.path.collision_key())
@@ -243,7 +240,7 @@ impl PackageGraph {
             return Err(GraphError::PackageDocumentMissing);
         }
         let package_document = entries[root_index].path.clone();
-        let hashed = read_and_hash_parts(reader, &entries, root_index, graph_limits)?;
+        let hashed = read_and_hash_parts(reader, &entries, root_index)?;
         let parsed = parse_opf(
             &hashed.package_bytes,
             &package_document,
@@ -452,7 +449,6 @@ fn read_and_hash_parts<R: Read + Seek>(
     reader: &mut BoundedZipReader<R>,
     entries: &[crate::EntryMetadata],
     root_index: usize,
-    graph_limits: PackageGraphLimits,
 ) -> Result<HashedParts, GraphError> {
     let mut raw_hashes = BTreeMap::new();
     let mut package_bytes = None;
@@ -460,7 +456,6 @@ fn read_and_hash_parts<R: Read + Seek>(
         let bytes = reader.read_entry(entry.index)?;
         raw_hashes.insert(entry.index, Sha256::digest(&bytes).into());
         if entry.index == root_index {
-            validate_metadata_size(&bytes, "package_document", graph_limits)?;
             package_bytes = Some(bytes);
         }
     }
@@ -633,46 +628,55 @@ fn exact_index(entries: &[crate::EntryMetadata], path: &str) -> Option<usize> {
         .map(|entry| entry.index)
 }
 
-fn validate_metadata_size(
-    bytes: &[u8],
-    kind: &'static str,
-    limits: PackageGraphLimits,
-) -> Result<(), GraphError> {
-    if bytes.len() > limits.config().max_metadata_bytes {
-        return Err(GraphError::MetadataTooLarge { kind });
-    }
-    validate_xml_declaration(bytes)
+fn parse_safe_xml(bytes: &[u8], limits: PackageGraphLimits) -> Result<SafeXmlDocument, GraphError> {
+    let config = limits.config();
+    let namespace_bindings = config
+        .max_attributes_per_element
+        .saturating_mul(config.max_xml_depth)
+        .clamp(1, SafeXmlLimits::HARD_MAX_NAMESPACE_BINDINGS);
+    let safe_limits = SafeXmlLimits::new(SafeXmlLimitConfig {
+        input_bytes: config.max_metadata_bytes,
+        events: config.max_xml_events,
+        nodes: config.max_xml_events,
+        depth: config.max_xml_depth,
+        text_bytes: config.max_metadata_bytes.min(1024 * 1024),
+        total_text_bytes: config.max_metadata_bytes,
+        attributes_per_element: config.max_attributes_per_element,
+        attribute_bytes: config.max_attribute_bytes,
+        namespace_bindings,
+    })
+    .map_err(|error| map_safe_xml_error(&error))?;
+    SafeXmlDocument::parse(bytes, safe_limits).map_err(|error| map_safe_xml_error(&error))
 }
 
-fn validate_xml_declaration(bytes: &[u8]) -> Result<(), GraphError> {
-    let start = bytes.strip_prefix(&[0xEF, 0xBB, 0xBF]).unwrap_or(bytes);
-    if start.starts_with(b"<?xml") {
-        let end = start
-            .windows(2)
-            .position(|window| window == b"?>")
-            .ok_or(GraphError::XmlMalformed)?;
-        let declaration =
-            std::str::from_utf8(&start[..end + 2]).map_err(|_| GraphError::XmlMalformed)?;
-        let lower = declaration.to_ascii_lowercase();
-        if let Some(position) = lower.find("encoding") {
-            let remainder = lower[position + "encoding".len()..].trim_start();
-            let value = remainder
-                .strip_prefix('=')
-                .map(str::trim_start)
-                .and_then(|value| {
-                    let quote = value.chars().next()?;
-                    if !matches!(quote, '\'' | '"') {
-                        return None;
-                    }
-                    value[1..].split_once(quote).map(|(encoding, _)| encoding)
-                })
-                .ok_or(GraphError::XmlMalformed)?;
-            if value != "utf-8" {
-                return Err(GraphError::XmlForbiddenConstruct);
-            }
-        }
+fn map_safe_xml_error(error: &SafeXmlError) -> GraphError {
+    match error {
+        SafeXmlError::InputLimit => GraphError::MetadataTooLarge { kind: "xml" },
+        SafeXmlError::EventLimit => GraphError::XmlLimitExceeded { limit: "events" },
+        SafeXmlError::NodeLimit => GraphError::XmlLimitExceeded { limit: "nodes" },
+        SafeXmlError::DepthLimit => GraphError::XmlLimitExceeded { limit: "depth" },
+        SafeXmlError::TextLimit => GraphError::XmlLimitExceeded { limit: "text" },
+        SafeXmlError::AttributeLimit => GraphError::XmlLimitExceeded {
+            limit: "attributes",
+        },
+        SafeXmlError::AttributeBytesLimit => GraphError::XmlLimitExceeded {
+            limit: "attribute_bytes",
+        },
+        SafeXmlError::NamespaceLimit => GraphError::XmlLimitExceeded {
+            limit: "namespace_bindings",
+        },
+        SafeXmlError::NamespaceInvalid => GraphError::XmlNamespaceInvalid,
+        SafeXmlError::DtdForbidden
+        | SafeXmlError::CustomEntityForbidden
+        | SafeXmlError::ProcessingInstructionForbidden
+        | SafeXmlError::CdataForbidden
+        | SafeXmlError::EncodingForbidden => GraphError::XmlForbiddenConstruct,
+        SafeXmlError::AllocationFailed => GraphError::AllocationFailed,
+        SafeXmlError::InvalidLimit { .. }
+        | SafeXmlError::InvalidLimitRelation
+        | SafeXmlError::DuplicateAttribute
+        | SafeXmlError::Malformed => GraphError::XmlMalformed,
     }
-    Ok(())
 }
 
 fn parse_container(
@@ -680,10 +684,7 @@ fn parse_container(
     package_limits: PackageLimits,
     limits: PackageGraphLimits,
 ) -> Result<RootfileRecord, GraphError> {
-    let mut reader = NsReader::from_reader(bytes);
-    configure_xml_reader(&mut reader, limits);
-    let mut depth = 0_usize;
-    let mut events = 0_usize;
+    let document = parse_safe_xml(bytes, limits)?;
     let mut stack = Vec::<String>::new();
     stack
         .try_reserve_exact(limits.config().max_xml_depth)
@@ -692,56 +693,37 @@ fn parse_container(
         root_seen: false,
         rootfile: None,
     };
-    loop {
-        let (namespace, event) = reader
-            .read_resolved_event()
-            .map_err(|_| GraphError::XmlMalformed)?;
-        count_event(&mut events, limits)?;
+    for event in document.events {
         match event {
-            Event::Start(element) => {
-                depth = depth
-                    .checked_add(1)
-                    .ok_or(GraphError::XmlLimitExceeded { limit: "depth" })?;
-                check_depth(depth, limits)?;
+            SafeXmlEvent::Start(element) => {
                 handle_container_element(
                     &element,
-                    depth,
                     stack.last().map(String::as_str),
-                    &namespace,
                     &mut state,
                     package_limits,
                     limits,
                 )?;
-                stack.push(element.name().as_ref().to_owned());
+                stack.push(element.qualified_name);
             }
-            Event::Empty(element) => {
-                let element_depth = depth
-                    .checked_add(1)
-                    .ok_or(GraphError::XmlLimitExceeded { limit: "depth" })?;
-                check_depth(element_depth, limits)?;
+            SafeXmlEvent::Empty(element) => {
                 handle_container_element(
                     &element,
-                    element_depth,
                     stack.last().map(String::as_str),
-                    &namespace,
                     &mut state,
                     package_limits,
                     limits,
                 )?;
             }
-            Event::End(_) => {
+            SafeXmlEvent::End => {
                 stack.pop().ok_or(GraphError::XmlMalformed)?;
-                depth = depth.checked_sub(1).ok_or(GraphError::XmlMalformed)?;
             }
-            Event::Eof => break,
-            Event::GeneralRef(reference) if is_safe_xml_reference(reference.as_ref()) => {}
-            Event::DocType(_) | Event::GeneralRef(_) | Event::PI(_) | Event::CData(_) => {
-                return Err(GraphError::XmlForbiddenConstruct);
-            }
-            Event::Decl(_) | Event::Comment(_) | Event::Text(_) => {}
+            SafeXmlEvent::Declaration
+            | SafeXmlEvent::Text { .. }
+            | SafeXmlEvent::Reference
+            | SafeXmlEvent::Comment => {}
         }
     }
-    if depth != 0 || !state.root_seen {
+    if !stack.is_empty() || !state.root_seen {
         return Err(GraphError::XmlMalformed);
     }
     state.rootfile.ok_or(GraphError::ContainerRootfileMissing)
@@ -754,26 +736,24 @@ struct ContainerState {
 }
 
 fn handle_container_element(
-    element: &BytesStart<'_>,
-    depth: usize,
+    element: &SafeXmlElement,
     parent: Option<&str>,
-    namespace: &ResolveResult<'_>,
     state: &mut ContainerState,
     package_limits: PackageLimits,
     limits: PackageGraphLimits,
 ) -> Result<(), GraphError> {
-    let name = element.name();
-    let (_, local) = split_qname(name.as_ref());
-    let attributes = attributes(element, limits)?;
+    let local = element.local_name.as_str();
+    let attributes = &element.attributes;
+    let depth = element.depth;
     if depth == 1 {
         if local != "container" || state.root_seen {
             return Err(GraphError::XmlMalformed);
         }
-        require_namespace(namespace, CONTAINER_NS)?;
+        require_namespace(element.namespace.as_deref(), CONTAINER_NS)?;
         state.root_seen = true;
         return Ok(());
     }
-    require_namespace(namespace, CONTAINER_NS)?;
+    require_namespace(element.namespace.as_deref(), CONTAINER_NS)?;
     match (depth, local) {
         (2, "rootfiles") if parent.is_some_and(|value| qname_local(value) == "container") => Ok(()),
         (3, "rootfile") if parent.is_some_and(|value| qname_local(value) == "rootfiles") => {
@@ -802,10 +782,7 @@ fn parse_opf(
     package_limits: PackageLimits,
     limits: PackageGraphLimits,
 ) -> Result<ParsedOpf, GraphError> {
-    let mut reader = NsReader::from_reader(bytes);
-    configure_xml_reader(&mut reader, limits);
-    let mut depth = 0_usize;
-    let mut events = 0_usize;
+    let document = parse_safe_xml(bytes, limits)?;
     let mut stack = Vec::<String>::new();
     stack
         .try_reserve_exact(limits.config().max_xml_depth)
@@ -822,22 +799,12 @@ fn parse_opf(
     spine
         .try_reserve_exact(limits.config().max_relationships)
         .map_err(|_| GraphError::AllocationFailed)?;
-    loop {
-        let (namespace, event) = reader
-            .read_resolved_event()
-            .map_err(|_| GraphError::XmlMalformed)?;
-        count_event(&mut events, limits)?;
+    for event in document.events {
         match event {
-            Event::Start(element) => {
-                depth = depth
-                    .checked_add(1)
-                    .ok_or(GraphError::XmlLimitExceeded { limit: "depth" })?;
-                check_depth(depth, limits)?;
+            SafeXmlEvent::Start(element) => {
                 handle_opf_element(
                     &element,
-                    depth,
                     stack.last().map(String::as_str),
-                    &namespace,
                     &mut root_seen,
                     &mut manifest_seen,
                     &mut spine_seen,
@@ -848,18 +815,12 @@ fn parse_opf(
                     package_limits,
                     limits,
                 )?;
-                stack.push(element.name().as_ref().to_owned());
+                stack.push(element.qualified_name);
             }
-            Event::Empty(element) => {
-                let element_depth = depth
-                    .checked_add(1)
-                    .ok_or(GraphError::XmlLimitExceeded { limit: "depth" })?;
-                check_depth(element_depth, limits)?;
+            SafeXmlEvent::Empty(element) => {
                 handle_opf_element(
                     &element,
-                    element_depth,
                     stack.last().map(String::as_str),
-                    &namespace,
                     &mut root_seen,
                     &mut manifest_seen,
                     &mut spine_seen,
@@ -871,19 +832,16 @@ fn parse_opf(
                     limits,
                 )?;
             }
-            Event::End(_) => {
+            SafeXmlEvent::End => {
                 stack.pop().ok_or(GraphError::XmlMalformed)?;
-                depth = depth.checked_sub(1).ok_or(GraphError::XmlMalformed)?;
             }
-            Event::Eof => break,
-            Event::GeneralRef(reference) if is_safe_xml_reference(reference.as_ref()) => {}
-            Event::DocType(_) | Event::GeneralRef(_) | Event::PI(_) | Event::CData(_) => {
-                return Err(GraphError::XmlForbiddenConstruct);
-            }
-            Event::Decl(_) | Event::Comment(_) | Event::Text(_) => {}
+            SafeXmlEvent::Declaration
+            | SafeXmlEvent::Text { .. }
+            | SafeXmlEvent::Reference
+            | SafeXmlEvent::Comment => {}
         }
     }
-    if depth != 0 || !root_seen {
+    if !stack.is_empty() || !root_seen {
         return Err(GraphError::XmlMalformed);
     }
     if !manifest_seen {
@@ -897,10 +855,8 @@ fn parse_opf(
 
 #[allow(clippy::too_many_arguments)]
 fn handle_opf_element(
-    element: &BytesStart<'_>,
-    depth: usize,
+    element: &SafeXmlElement,
     parent: Option<&str>,
-    namespace: &ResolveResult<'_>,
     root_seen: &mut bool,
     manifest_seen: &mut bool,
     spine_seen: &mut bool,
@@ -911,18 +867,18 @@ fn handle_opf_element(
     package_limits: PackageLimits,
     limits: PackageGraphLimits,
 ) -> Result<(), GraphError> {
-    let name = element.name();
-    let (_, local) = split_qname(name.as_ref());
-    let attributes = attributes(element, limits)?;
+    let local = element.local_name.as_str();
+    let attributes = &element.attributes;
+    let depth = element.depth;
     if depth == 1 {
         if local != "package" || *root_seen {
             return Err(GraphError::XmlMalformed);
         }
-        require_namespace(namespace, OPF_NS)?;
+        require_namespace(element.namespace.as_deref(), OPF_NS)?;
         *root_seen = true;
         return Ok(());
     }
-    let structural = namespace_matches(namespace, OPF_NS)?;
+    let structural = namespace_matches(element.namespace.as_deref(), OPF_NS);
     let expected_structural_position = (depth == 2 && matches!(local, "manifest" | "spine"))
         || (depth == 3
             && matches!(local, "item" | "itemref")
@@ -1005,99 +961,13 @@ fn handle_opf_element(
     Ok(())
 }
 
-fn attributes(
-    element: &BytesStart<'_>,
-    limits: PackageGraphLimits,
-) -> Result<BTreeMap<String, String>, GraphError> {
-    let mut result = BTreeMap::new();
-    let mut total = 0_usize;
-    for (index, attribute) in element.attributes().with_checks(true).enumerate() {
-        if index >= limits.config().max_attributes_per_element {
-            return Err(GraphError::XmlLimitExceeded {
-                limit: "attributes",
-            });
-        }
-        let attribute = attribute.map_err(|_| GraphError::XmlMalformed)?;
-        let key = attribute.key.as_ref().to_owned();
-        let value = attribute
-            .normalized_value(XmlVersion::Implicit1_0)
-            .map_err(|_| GraphError::XmlMalformed)?
-            .into_owned();
-        total = total
-            .checked_add(key.len())
-            .and_then(|value_len| value_len.checked_add(value.len()))
-            .ok_or(GraphError::XmlLimitExceeded {
-                limit: "attribute_bytes",
-            })?;
-        if total > limits.config().max_attribute_bytes || result.insert(key, value).is_some() {
-            return Err(GraphError::XmlLimitExceeded {
-                limit: "attribute_bytes",
-            });
-        }
-    }
-    Ok(result)
+fn namespace_matches(namespace: Option<&str>, expected: &str) -> bool {
+    namespace == Some(expected)
 }
 
-fn configure_xml_reader(reader: &mut NsReader<&[u8]>, limits: PackageGraphLimits) {
-    reader.config_mut().enable_all_checks(true);
-    let namespace_limit = limits
-        .config()
-        .max_attributes_per_element
-        .saturating_mul(limits.config().max_xml_depth)
-        .min(HARD_MAX_NAMESPACE_BINDINGS);
-    reader
-        .resolver_mut()
-        .set_max_namespace_bindings(namespace_limit);
-}
-
-fn namespace_matches(namespace: &ResolveResult<'_>, expected: &str) -> Result<bool, GraphError> {
-    match namespace {
-        ResolveResult::Bound(namespace) => Ok(namespace.as_ref() == expected),
-        ResolveResult::Unbound => Ok(false),
-        ResolveResult::Unknown(_) => Err(GraphError::XmlNamespaceInvalid),
-    }
-}
-
-fn require_namespace(namespace: &ResolveResult<'_>, expected: &str) -> Result<(), GraphError> {
-    if !namespace_matches(namespace, expected)? {
+fn require_namespace(namespace: Option<&str>, expected: &str) -> Result<(), GraphError> {
+    if !namespace_matches(namespace, expected) {
         return Err(GraphError::XmlNamespaceInvalid);
-    }
-    Ok(())
-}
-
-fn is_safe_xml_reference(reference: &str) -> bool {
-    if matches!(reference, "amp" | "lt" | "gt" | "apos" | "quot") {
-        return true;
-    }
-    let value = reference
-        .strip_prefix("#x")
-        .or_else(|| reference.strip_prefix("#X"))
-        .and_then(|digits| u32::from_str_radix(digits, 16).ok())
-        .or_else(|| {
-            reference
-                .strip_prefix('#')
-                .and_then(|digits| digits.parse::<u32>().ok())
-        });
-    value.is_some_and(is_xml_character)
-}
-
-fn is_xml_character(value: u32) -> bool {
-    matches!(value, 0x09 | 0x0A | 0x0D | 0x20..=0xD7FF | 0xE000..=0xFFFD | 0x1_0000..=0x10_FFFF)
-}
-
-fn count_event(events: &mut usize, limits: PackageGraphLimits) -> Result<(), GraphError> {
-    *events = events
-        .checked_add(1)
-        .ok_or(GraphError::XmlLimitExceeded { limit: "events" })?;
-    if *events > limits.config().max_xml_events {
-        return Err(GraphError::XmlLimitExceeded { limit: "events" });
-    }
-    Ok(())
-}
-
-fn check_depth(depth: usize, limits: PackageGraphLimits) -> Result<(), GraphError> {
-    if depth > limits.config().max_xml_depth {
-        return Err(GraphError::XmlLimitExceeded { limit: "depth" });
     }
     Ok(())
 }
