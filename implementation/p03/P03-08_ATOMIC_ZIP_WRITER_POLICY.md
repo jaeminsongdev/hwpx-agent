@@ -10,7 +10,7 @@
 
 `PreservingWriter` and `NormalizedWriter` are separate public capabilities. Both accept only a fully validated private `PatchResult`, recheck its path/size/hash identity, construct a private `PackageArtifact`, and reopen it through `BoundedZipReader`, `PackageGraph`, `PreservationReport` and `IdIndex` before returning.
 
-`PreservingWriter` retains every available source part order, compression method and exact expanded bytes. `NormalizedWriter` is opt-in and uses canonical path order, a fixed ZIP timestamp, stored `mimetype`, deflate level 6 for all other parts, and deterministic archive construction. Preserving mode never silently changes to normalized mode.
+`PreservingWriter` retains every available source part order, compression method and exact expanded bytes. `NormalizedWriter` is opt-in and uses canonical path order, a fixed ZIP timestamp, stored `mimetype`, deflate level 6 for all other parts, and deterministic archive construction. Both writers pin the ZIP creator system to Unix and regular-file permissions to `0644`, rather than inheriting the build host's DOS/Unix default. Preserving mode never silently changes to normalized mode.
 
 ## 2. Truthful preservation report
 

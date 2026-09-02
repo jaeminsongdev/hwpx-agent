@@ -35,7 +35,7 @@ Diagnostics contain no source value, archive path, XML text, document text or ex
 
 ## 3. Deterministic corpus and fuzz baseline
 
-The committed deterministic corpus contains 128 valid synthetic packages with varied entry order, compression, comments and semantic attributes. Every package must produce zero untouched violations and repeatable preserving/normalized hashes. A pinned aggregate digest detects silent corpus or writer drift.
+The committed deterministic corpus contains 128 valid synthetic packages with varied entry order, compression, comments and semantic attributes. Every package must produce zero untouched violations and repeatable preserving/normalized hashes. A platform-independent semantic corpus digest and a separate aggregate of all preserving/normalized writer hashes detect silent corpus or writer drift. The writer aggregate must be identical on Windows and Linux; ZIP creator system and regular-file permissions are pinned rather than inherited from the host.
 
 A second bounded corpus replays 128 one-byte mutations and 128 truncations twice. Identical bytes must produce identical success evidence or identical error code and diagnostic. No mutation or truncation may return partial evidence or panic.
 

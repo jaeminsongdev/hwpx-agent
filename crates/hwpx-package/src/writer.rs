@@ -7,7 +7,7 @@ use hwpx_agent_foundation::workdir::{SecureWorkspace, StagedArtifact, WorkspaceE
 use sha2::{Digest as _, Sha256};
 use thiserror::Error;
 use zip::write::SimpleFileOptions;
-use zip::{CompressionMethod, DateTime, ZipWriter};
+use zip::{CompressionMethod, DateTime, System, ZipWriter};
 
 use crate::patch::VirtualPart;
 use crate::{
@@ -707,7 +707,9 @@ fn zip_options(compression: Compression) -> SimpleFileOptions {
     };
     let options = SimpleFileOptions::default()
         .compression_method(method)
-        .last_modified_time(DateTime::default());
+        .last_modified_time(DateTime::default())
+        .system(System::Unix)
+        .unix_permissions(0o644);
     if compression == Compression::Deflated {
         options.compression_level(Some(NORMALIZED_DEFLATE_LEVEL))
     } else {

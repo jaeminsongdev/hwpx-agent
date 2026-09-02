@@ -19,7 +19,8 @@ const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 
 #[test]
 fn deterministic_128_fixture_roundtrip_has_zero_untouched_violations() -> TestResult {
-    let mut aggregate = Sha256::new();
+    let mut corpus_aggregate = Sha256::new();
+    let mut writer_aggregate = Sha256::new();
     for seed in 0..CORPUS_SIZE {
         let fixture = valid_archive(seed)?;
         let evidence =
@@ -29,15 +30,23 @@ fn deterministic_128_fixture_roundtrip_has_zero_untouched_violations() -> TestRe
         assert_eq!(evidence.untouched_policy_violations(), 0);
         assert!(evidence.preserving_deterministic());
         assert!(evidence.normalized_deterministic());
-        aggregate.update(u64::try_from(seed)?.to_le_bytes());
-        aggregate.update(Sha256::digest(&fixture.semantic_descriptor));
-        aggregate.update(u64::try_from(evidence.source_parts())?.to_le_bytes());
-        aggregate.update(u64::try_from(evidence.writer_entries())?.to_le_bytes());
-        aggregate.update(u64::try_from(evidence.untouched_policy_violations())?.to_le_bytes());
+        corpus_aggregate.update(u64::try_from(seed)?.to_le_bytes());
+        corpus_aggregate.update(Sha256::digest(&fixture.semantic_descriptor));
+        corpus_aggregate.update(u64::try_from(evidence.source_parts())?.to_le_bytes());
+        corpus_aggregate.update(u64::try_from(evidence.writer_entries())?.to_le_bytes());
+        corpus_aggregate
+            .update(u64::try_from(evidence.untouched_policy_violations())?.to_le_bytes());
+        writer_aggregate.update(u64::try_from(seed)?.to_le_bytes());
+        writer_aggregate.update(evidence.preserving_sha256());
+        writer_aggregate.update(evidence.normalized_sha256());
     }
     assert_eq!(
-        hex::encode(aggregate.finalize()),
+        hex::encode(corpus_aggregate.finalize()),
         "b0f187093072a78bc50e12de31f6d30c88d679fb35c8a7ab309203937ba06823"
+    );
+    assert_eq!(
+        hex::encode(writer_aggregate.finalize()),
+        "d5492303a282c3fe4b00b7fa9b0cfd8a8528f7f2b060ffc24b086341e06d0224"
     );
     Ok(())
 }
