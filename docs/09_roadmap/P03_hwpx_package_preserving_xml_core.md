@@ -43,7 +43,7 @@ HWPX Package·Preserving XML Core를 문서상 계획이 아니라 **재현 가�
 - [x] `P03-04` 산출물 `hwpx-xml token model` 존재, 검증: parse-serialize untouched equality.
 - [x] `P03-05` 산출물 `PreservationReport` 존재, 검증: known fixture expected map.
 - [x] `P03-06` 산출물 `IdIndex` 존재, 검증: duplicate/dangling/wrong-type detection.
-- [ ] `P03-07` 산출물 `preserving patcher` 존재, 검증: property/random patch tests.
+- [x] `P03-07` 산출물 `preserving patcher` 존재, 검증: property/random patch tests.
 - [ ] `P03-08` 산출물 `package writer` 존재, 검증: crash/no partial output tests.
 - [ ] `P03-09` 산출물 `roundtrip CLI/evidence` 존재, 검증: untouched policy 위반 0.
 - [ ] 새 capability/contract/schema에 migration과 negative test가 있다.

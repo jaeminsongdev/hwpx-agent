@@ -283,7 +283,7 @@ p02_execution:
     private_key_git_tracked: false
     signed_registry_git_tracked: false
 p03_execution:
-  current_task: P03-07
+  current_task: P03-08
   tasks:
     P03-01: passed_current_pc_local_core
     P03-02: passed_current_pc_local_core
@@ -291,8 +291,8 @@ p03_execution:
     P03-04: passed_current_pc_local_core
     P03-05: passed_current_pc_local_core
     P03-06: passed_current_pc_local_core_and_disposable_2020
-    P03-07: in_progress_current_pc_local_core
-    P03-08: blocked_by_P03-07
+    P03-07: passed_current_pc_local_core_and_disposable_2020_mutation
+    P03-08: in_progress_current_pc_local_core
     P03-09: blocked_by_P03-01_to_P03-08
   bounded_zip_reader:
     audited_source_commit: bb80bb8a557177ea7d51443729a422719c11b7c8
@@ -322,6 +322,26 @@ p03_execution:
     clean_clone_bootstrap: passed_git_status_clean
     secrets_vulnerabilities_forbidden_licenses: 0
     sbom_components: 159
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
+  preserving_patch_engine:
+    audited_source_commit: 28f45a4857ac38c67f3d0110becb820257ffe46d
+    contract: hwpx-agent.preserving-patch/v1
+    intent_variants: 8
+    windows_hwpx_package_tests: 43_of_43_passed
+    linux_hwpx_package_tests_read_only: 43_of_43_passed
+    fixed_seed_random_sequences: 64
+    disposable_current_2020_fixtures: 2_of_2_passed
+    no_op_untouched_parts_per_fixture: 11_of_11
+    memory_mutation_changed_parts_per_fixture: 1
+    memory_mutation_untouched_parts_per_fixture: 10
+    declarations_per_fixture: 73
+    references_per_fixture: 184
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    secrets_vulnerabilities_forbidden_licenses: 0
+    sbom_components: 159
+    filesystem_publication: not_implemented_until_P03-08
     user_documents_opened: false
     hancom_runtime_executed_by_task: false
 phases:

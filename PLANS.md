@@ -20,7 +20,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
-| P03 | `in_progress_current_pc_local` | P03-01~06 PASS, P03-07 preserving patch engine 시작 |
+| P03 | `in_progress_current_pc_local` | P03-01~07 PASS, P03-08 atomic ZIP writer 시작 |
 | P04~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -29,19 +29,19 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0027 | P03-07 preserving patch engine | `in_progress` | bounded `PatchIntent`, checked spans, overlap/conflict, rollback, random/property corpus |
+| P-0028 | P03-08 atomic ZIP writer | `in_progress` | preserving/normalized separation, reopen-before-publish, fsync/checksum, atomic no-overwrite, crash corpus |
 
-### P03-07 Acceptance
+### P03-08 Acceptance
 
-- v1 public intent는 설계 allowlist인 `ReplaceAttribute`, `ReplaceText`, `InsertSibling`, `DeleteSubtree`, `ReplaceSubtree`, `AllocateId`, `AddRelationship`, `AddPart`만 표현하며 raw XML/ZIP capability나 unchecked byte offset을 public 입력으로 받지 않는다.
-- XML mutation은 P03-05 `TokenStable` part와 P03-04 checked token/tree selector에만 결합한다. stale selector, source SHA drift, UTF-8 경계 위반, root/attribute 구조 위반은 실행 전에 fail closed한다.
-- 모든 intent를 immutable source 위의 transaction plan으로 먼저 정규화하고, byte range overlap·ancestor/descendant 삭제/교체·동일 insertion anchor·ID reservation dependency가 모호하면 자동 순서를 추측하지 않고 stable conflict로 실패한다.
-- 안전한 text/attribute lexical encoding과 bounded validated fragment만 허용한다. DTD/entity/PI/CDATA/legacy encoding, namespace rebinding ambiguity와 malformed/multi-root fragment는 거부한다.
-- 기존 ID는 재번호화하지 않는다. `AllocateId`는 typed part namespace 안에서 deterministic reservation block을 사용하고 commit 전 재색인에서 duplicate/dangling/wrong-type 0을 요구하며 rollback 시 reservation을 폐기한다.
-- relationship/add-part는 canonical internal path, media/role allowlist와 graph closure를 만족해야 하며 external/traversal/collision/orphan/overwrite를 거부한다. P03-08 전에는 ZIP이나 filesystem에 publish하지 않는다.
-- 적용 결과를 safe XML/preserving tokenizer/PackageGraph/PreservationReport/IdIndex로 다시 검증하며 실패 시 source와 public result가 변하지 않는다. untouched span/part bytes는 exact equality를 유지한다.
-- finite patch/count/fragment/output-growth limits와 checked allocation을 적용하고 deterministic property/random sequence, overlap/nesting/stale selector/rollback/malicious fragment corpus를 Windows/Linux에서 검증한다.
-- P03-06 ID index `5/5`와 actual disposable `2/2`, P03-05 `5/5`, PackageGraph `8/8`, malicious ZIP `8/8` regression을 유지하고 versioned policy/migration을 남긴다.
+- `PreservingWriter`는 P03-07 private artifact만 소비하고 source order·compression method·untouched expanded bytes를 보존한다. `NormalizedWriter`는 명시적 fully-owned input만 받아 canonical order, fixed timestamp와 pinned compression으로 결정적 출력을 만들며 두 mode를 암묵적으로 혼합하지 않는다.
+- writer input/result bytes와 document content를 public/`Debug`/진단에 노출하지 않는다. output은 explicit secure workspace와 normal relative path에만 게시하며 absolute/traversal/reserved/casefold collision, existing link/reparse point, source/destination alias와 overwrite를 거부한다.
+- complete ZIP은 same-volume create-new private staging에만 쓰고 file sync와 SHA-256을 완료한 후, publication 전에 `BoundedZipReader`→`PackageGraph`→`PreservationReport`→`IdIndex`로 재개봉한다. validation failure는 destination을 만들지 않는다.
+- publication은 atomic no-overwrite primitive를 사용하고 parent durability를 platform capability대로 동기화한다. 게시 후 path identity·size·SHA-256을 다시 읽어 receipt와 일치시킨 뒤에만 success를 반환한다.
+- failure injection을 archive build 전/중/후, sync 전/후, validation 전/후, atomic publication 전/후, cleanup 단계에 두고 source hash 불변, destination `absent-or-complete`, staging bounded cleanup/quarantine, 재시도 no-overwrite/idempotent 결과를 Windows/Linux에서 검증한다.
+- preserve mode의 touched/untouched/added part, expanded-byte hash, source/output order와 compression disposition을 report한다. 현재 reader가 증명하지 못하는 raw compressed stream, timestamp/extra-field exact preservation은 거짓 claim하지 않고 명시적으로 `unverified/not_preserved`로 기록한다.
+- normalized mode는 동일 logical input의 반복 및 Windows/Linux output SHA-256 equality를 검증하고, preserve mode는 동일 source+patch 반복 output equality와 untouched part expanded-byte equality를 검증한다.
+- output/archive/entry/growth limits와 checked arithmetic을 publication 전 재적용하고 ZIP64, descriptor, encryption, unsupported method, symlink/special/nested archive와 unsafe path를 계속 거부한다.
+- P03-07 patch `5/5` 및 actual disposable memory mutation `2/2`, P03-06 ID `5/5`, preservation `5/5`, graph `8/8`, malicious ZIP `8/8` regression을 유지하고 versioned writer policy/migration을 남긴다. 실제 한글 reopen은 P03-09 Gate로 남긴다.
 
 ## Risks
 
@@ -75,7 +75,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0024: P03-04 preserving XML token model은 `implementation/p03/P03-04_REPORT.md`에서 checked source spans, namespace tree, untouched byte/SHA equality, Windows/Linux core corpus, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0025: P03-05 part preservation map은 `implementation/p03/P03-05_REPORT.md`에서 authoritative graph/readback, evidence-ranked complete class map, Windows/Linux core corpus, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0026: P03-06 ID/reference index는 `implementation/p03/P03-06_REPORT.md`에서 typed part-scoped index, duplicate/dangling/wrong-type fail-closed, current-2020 disposable `2/2`, Windows/Linux `38/38`, current/clean-clone FULL 5/5와 보안 0건 PASS.
+- P-0027: P03-07 preserving patch engine은 `implementation/p03/P03-07_REPORT.md`에서 8종 typed intent, checked conflict/rollback/allocation/closure, fixed-seed property corpus, actual 2020 memory mutation `2/2`, Windows/Linux `43/43`, current/clean-clone FULL 5/5와 보안 0건 PASS.
 
 ## Next
 
-P03-07 preserving patch engine은 `max`다. P03-08 atomic ZIP writer도 시작 시 `max`로 유지한다.
+P03-08 atomic ZIP writer는 `max`다. P03-09 round-trip/repair Gate도 시작 시 `max`로 유지한다.
