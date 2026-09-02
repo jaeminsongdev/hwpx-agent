@@ -283,15 +283,15 @@ p02_execution:
     private_key_git_tracked: false
     signed_registry_git_tracked: false
 p03_execution:
-  current_task: P03-02
+  current_task: P03-07
   tasks:
     P03-01: passed_current_pc_local_core
-    P03-02: in_progress_current_pc_local_core
-    P03-03: blocked_by_P03-02
-    P03-04: blocked_by_P03-03
-    P03-05: blocked_by_P03-04
-    P03-06: blocked_by_P03-05
-    P03-07: blocked_by_P03-06
+    P03-02: passed_current_pc_local_core
+    P03-03: passed_current_pc_local_core
+    P03-04: passed_current_pc_local_core
+    P03-05: passed_current_pc_local_core
+    P03-06: passed_current_pc_local_core_and_disposable_2020
+    P03-07: in_progress_current_pc_local_core
     P03-08: blocked_by_P03-07
     P03-09: blocked_by_P03-01_to_P03-08
   bounded_zip_reader:
@@ -309,6 +309,21 @@ p03_execution:
     sbom_components: 158
     user_documents_opened: false
     hancom_runtime_executed: false
+  id_reference_index:
+    audited_source_commit: c70479c62f4ac87e8527b6b12b0c18b7975808d6
+    rule_profile: hancom-2020-hwpml-2011-core/v1
+    windows_hwpx_package_tests: 38_of_38_passed
+    linux_hwpx_package_tests_read_only: 38_of_38_passed
+    disposable_current_2020_fixtures: 2_of_2_passed
+    declarations_per_fixture: 73
+    references_per_fixture: 184
+    issues: 0
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    secrets_vulnerabilities_forbidden_licenses: 0
+    sbom_components: 159
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope

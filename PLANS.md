@@ -20,7 +20,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
-| P03 | `in_progress_current_pc_local` | P03-01~05 PASS, P03-06 ID/reference index 시작 |
+| P03 | `in_progress_current_pc_local` | P03-01~06 PASS, P03-07 preserving patch engine 시작 |
 | P04~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -29,18 +29,19 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0026 | P03-06 ID/reference index | `in_progress` | part-scoped typed ID/reference index, duplicate/dangling/wrong-type detection |
+| P-0027 | P03-07 preserving patch engine | `in_progress` | bounded `PatchIntent`, checked spans, overlap/conflict, rollback, random/property corpus |
 
-### P03-06 Acceptance
+### P03-07 Acceptance
 
-- `TokenStable` XML part만 대상으로 part-scoped ID namespace와 cross-part reference를 deterministic `IdIndex`로 만든다. `Opaque`, `Rejected` 또는 근거 없는 XML은 해석하지 않는다.
-- 지원하는 namespace/QName별 declaration/reference 규칙과 기대 target type을 versioned profile로 고정하고 unknown attribute를 ID/reference로 추측하지 않는다.
-- declaration과 reference에 canonical part path, element/token index, checked source span, ID kind/expected target kind를 기록하되 raw XML/value는 public 또는 진단에 노출하지 않는다.
-- duplicate declaration, dangling reference, wrong-type target과 malformed/oversized ID를 stable non-sensitive code로 검출하고 partial-valid index나 자동 재번호화로 downgrade하지 않는다.
-- cross-part target 문법은 portable package path로 정규화하고 traversal, external scheme, missing/non-token-stable target을 fail closed로 처리한다.
-- ID·reference 개수와 value length에 finite checked limits를 적용하고 reserve/allocation failure를 명시적으로 처리한다.
-- namespace prefix 변형, part order 변형, same-ID-in-different-part, duplicate, dangling, wrong-type, traversal/external, unknown attribute negative fixture를 Windows/Linux에서 검증한다.
-- P03-05 preservation map `5/5`, P03-04 preserving XML `7/7`, P03-03 safe XML `5/5`, P03-02 PackageGraph `8/8`, P03-01 ZIP `8/8` regression을 유지하고 versioned migration/policy를 남긴다.
+- v1 public intent는 설계 allowlist인 `ReplaceAttribute`, `ReplaceText`, `InsertSibling`, `DeleteSubtree`, `ReplaceSubtree`, `AllocateId`, `AddRelationship`, `AddPart`만 표현하며 raw XML/ZIP capability나 unchecked byte offset을 public 입력으로 받지 않는다.
+- XML mutation은 P03-05 `TokenStable` part와 P03-04 checked token/tree selector에만 결합한다. stale selector, source SHA drift, UTF-8 경계 위반, root/attribute 구조 위반은 실행 전에 fail closed한다.
+- 모든 intent를 immutable source 위의 transaction plan으로 먼저 정규화하고, byte range overlap·ancestor/descendant 삭제/교체·동일 insertion anchor·ID reservation dependency가 모호하면 자동 순서를 추측하지 않고 stable conflict로 실패한다.
+- 안전한 text/attribute lexical encoding과 bounded validated fragment만 허용한다. DTD/entity/PI/CDATA/legacy encoding, namespace rebinding ambiguity와 malformed/multi-root fragment는 거부한다.
+- 기존 ID는 재번호화하지 않는다. `AllocateId`는 typed part namespace 안에서 deterministic reservation block을 사용하고 commit 전 재색인에서 duplicate/dangling/wrong-type 0을 요구하며 rollback 시 reservation을 폐기한다.
+- relationship/add-part는 canonical internal path, media/role allowlist와 graph closure를 만족해야 하며 external/traversal/collision/orphan/overwrite를 거부한다. P03-08 전에는 ZIP이나 filesystem에 publish하지 않는다.
+- 적용 결과를 safe XML/preserving tokenizer/PackageGraph/PreservationReport/IdIndex로 다시 검증하며 실패 시 source와 public result가 변하지 않는다. untouched span/part bytes는 exact equality를 유지한다.
+- finite patch/count/fragment/output-growth limits와 checked allocation을 적용하고 deterministic property/random sequence, overlap/nesting/stale selector/rollback/malicious fragment corpus를 Windows/Linux에서 검증한다.
+- P03-06 ID index `5/5`와 actual disposable `2/2`, P03-05 `5/5`, PackageGraph `8/8`, malicious ZIP `8/8` regression을 유지하고 versioned policy/migration을 남긴다.
 
 ## Risks
 
@@ -73,7 +74,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0023: P03-03 safe XML reader는 `implementation/p03/P03-03_REPORT.md`에서 XML 1.0/UTF-8 namespace-resolved finite parser, Windows/Linux 5/5, PackageGraph/ZIP regression, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0024: P03-04 preserving XML token model은 `implementation/p03/P03-04_REPORT.md`에서 checked source spans, namespace tree, untouched byte/SHA equality, Windows/Linux core corpus, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0025: P03-05 part preservation map은 `implementation/p03/P03-05_REPORT.md`에서 authoritative graph/readback, evidence-ranked complete class map, Windows/Linux core corpus, current/clean-clone FULL 5/5와 보안 0건 PASS.
+- P-0026: P03-06 ID/reference index는 `implementation/p03/P03-06_REPORT.md`에서 typed part-scoped index, duplicate/dangling/wrong-type fail-closed, current-2020 disposable `2/2`, Windows/Linux `38/38`, current/clean-clone FULL 5/5와 보안 0건 PASS.
 
 ## Next
 
-P03-06 ID/reference index는 `max`다. P03-07 preserving patch engine도 시작 시 `max`로 유지한다.
+P03-07 preserving patch engine은 `max`다. P03-08 atomic ZIP writer도 시작 시 `max`로 유지한다.
