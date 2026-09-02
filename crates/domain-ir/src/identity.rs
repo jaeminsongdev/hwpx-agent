@@ -89,3 +89,4 @@ typed_id!(CapabilityId);
 typed_id!(BackendId);
 typed_id!(TargetProfileId);
 typed_id!(TransactionId);
+typed_id!(IdempotencyKey);

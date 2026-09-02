@@ -26,8 +26,8 @@ pub use document_graph::{
 };
 pub use identity::{
     ArtifactId, BackendId, BackendOpaqueId, BookmarkId, CapabilityId, ChangeId, FieldId,
-    IdentityError, LogicalNodeId, MAX_TYPED_ID_BYTES, OperationId, PlanId, ProjectId, ResourceId,
-    RevisionId, StyleId, TargetProfileId, TransactionId,
+    IdempotencyKey, IdentityError, LogicalNodeId, MAX_TYPED_ID_BYTES, OperationId, PlanId,
+    ProjectId, ResourceId, RevisionId, StyleId, TargetProfileId, TransactionId,
 };
 pub use operation_plan::{
     ArgumentDraft, ArgumentKind, ArgumentSource, ArgumentSpec,
