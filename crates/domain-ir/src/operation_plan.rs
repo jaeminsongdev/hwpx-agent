@@ -428,6 +428,11 @@ impl CompiledOperation {
     }
 
     #[must_use]
+    pub const fn capability_id(&self) -> &CapabilityId {
+        &self.capability_id
+    }
+
+    #[must_use]
     pub const fn target(&self) -> &ResolvedTarget {
         &self.target
     }

@@ -1,11 +1,19 @@
 #![forbid(unsafe_code)]
 
+mod capability_router;
 mod document_graph;
 mod identity;
 mod operation_plan;
 mod selector;
 mod units;
 
+pub use capability_router::{
+    Architecture, BackendHealth, BackendHealthState, BackendKind,
+    CAPABILITY_ROUTE_DECISION_SCHEMA_VERSION, CapabilityRouteCatalog, CapabilityRouter,
+    CapabilityRouterError, CapabilityRouterLimits, ExactTargetProfile, PolicyScope,
+    PreservationImpact, PreservationRequirement, ProtectionState, RegistryTrustState, RouteBinding,
+    RouteContext, RouteDecision, RouteRestriction, SignatureImpact, SupportState,
+};
 pub use document_graph::{
     AccessibilityState, ArtifactRef, BreakKind, BreakNode, ChartNode,
     DOCUMENT_GRAPH_SCHEMA_VERSION, DocumentGraph, DocumentGraphDraft, DocumentGraphError,
@@ -16,9 +24,9 @@ pub use document_graph::{
     SecurityState, SourceAnchorHandle, Style, TableCell, TableNode,
 };
 pub use identity::{
-    ArtifactId, BackendOpaqueId, BookmarkId, CapabilityId, ChangeId, FieldId, IdentityError,
-    LogicalNodeId, MAX_TYPED_ID_BYTES, OperationId, PlanId, ProjectId, ResourceId, RevisionId,
-    StyleId,
+    ArtifactId, BackendId, BackendOpaqueId, BookmarkId, CapabilityId, ChangeId, FieldId,
+    IdentityError, LogicalNodeId, MAX_TYPED_ID_BYTES, OperationId, PlanId, ProjectId, ResourceId,
+    RevisionId, StyleId, TargetProfileId,
 };
 pub use operation_plan::{
     ArgumentDraft, ArgumentKind, ArgumentSource, ArgumentSpec,

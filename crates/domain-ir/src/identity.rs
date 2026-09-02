@@ -86,3 +86,5 @@ typed_id!(BackendOpaqueId);
 typed_id!(PlanId);
 typed_id!(OperationId);
 typed_id!(CapabilityId);
+typed_id!(BackendId);
+typed_id!(TargetProfileId);
