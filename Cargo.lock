@@ -236,6 +236,8 @@ dependencies = [
 name = "hwpx-package"
 version = "0.1.0"
 dependencies = [
+ "quick-xml",
+ "sha2",
  "thiserror",
  "unicode-casefold",
  "unicode-normalization",
@@ -473,6 +475,15 @@ name = "protoc-bin-vendored-win32"
 version = "3.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95067976aca6421a523e491fce939a3e65249bac4b977adee0ee9771568e8aa3"
+
+[[package]]
+name = "quick-xml"
+version = "0.42.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "41b1177fdf999d2321d3fb46ff47159d9c1fb9ad66a4879f8c50a0b504615e9b"
+dependencies = [
+ "memchr",
+]
 
 [[package]]
 name = "quote"

@@ -294,6 +294,10 @@ impl<R: Read + Seek> BoundedZipReader<R> {
         &self.entries
     }
 
+    pub(crate) const fn package_limits(&self) -> PackageLimits {
+        self.limits
+    }
+
     /// Reads one non-directory entry and publishes bytes only after streamed
     /// size, decompression, CRC, and nested-archive validation succeed.
     ///

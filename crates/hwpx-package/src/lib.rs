@@ -6,10 +6,15 @@
 //! fully verified in-memory value only after metadata, streaming size, CRC and
 //! nested-package checks have succeeded.
 
+mod graph;
 mod limits;
 mod path;
 mod reader;
 
+pub use graph::{
+    GraphError, MediaType, PackageGraph, PackageGraphLimitConfig, PackageGraphLimits, PartRecord,
+    PartRole, Relationship, RelationshipKind,
+};
 pub use limits::{PackageLimitConfig, PackageLimits};
 pub use path::PackagePath;
 pub use reader::{BoundedZipReader, Compression, EntryMetadata, PackageError};
