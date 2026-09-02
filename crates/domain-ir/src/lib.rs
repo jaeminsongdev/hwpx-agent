@@ -2,6 +2,7 @@
 
 mod document_graph;
 mod identity;
+mod operation_plan;
 mod selector;
 mod units;
 
@@ -15,8 +16,17 @@ pub use document_graph::{
     SecurityState, SourceAnchorHandle, Style, TableCell, TableNode,
 };
 pub use identity::{
-    ArtifactId, BackendOpaqueId, BookmarkId, ChangeId, FieldId, IdentityError, LogicalNodeId,
-    MAX_TYPED_ID_BYTES, ProjectId, ResourceId, RevisionId, StyleId,
+    ArtifactId, BackendOpaqueId, BookmarkId, CapabilityId, ChangeId, FieldId, IdentityError,
+    LogicalNodeId, MAX_TYPED_ID_BYTES, OperationId, PlanId, ProjectId, ResourceId, RevisionId,
+    StyleId,
+};
+pub use operation_plan::{
+    ArgumentDraft, ArgumentKind, ArgumentSource, ArgumentSpec,
+    CAPABILITY_DEFINITION_SCHEMA_VERSION, CanonicalArgumentValue, CapabilityCatalog,
+    CapabilityDefinitionDraft, CompiledArgument, CompiledOperation, CompiledOperationPlan,
+    DefaultPolicy, FailurePolicy, NumericArgumentDraft, NumericUnit, OPERATION_PLAN_SCHEMA_VERSION,
+    OperationDraft, OperationPlanCompiler, OperationPlanDraft, OperationPlanError,
+    OperationPlanLimits, SelectorDraft, UnsupportedSelectorKind,
 };
 pub use selector::{
     NamedSelectorKind, NodeKind, ResolvedTarget, Selector, SelectorError, SelectorExpectation,

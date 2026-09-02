@@ -314,6 +314,16 @@ impl SelectorExpectation {
             graph_sha256,
         }
     }
+
+    #[must_use]
+    pub const fn revision_id(&self) -> &RevisionId {
+        &self.revision_id
+    }
+
+    #[must_use]
+    pub const fn graph_sha256(&self) -> [u8; 32] {
+        self.graph_sha256
+    }
 }
 
 impl fmt::Debug for SelectorExpectation {

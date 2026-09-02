@@ -83,3 +83,6 @@ typed_id!(BookmarkId);
 typed_id!(FieldId);
 typed_id!(ChangeId);
 typed_id!(BackendOpaqueId);
+typed_id!(PlanId);
+typed_id!(OperationId);
+typed_id!(CapabilityId);
