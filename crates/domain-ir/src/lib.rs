@@ -5,6 +5,7 @@ mod document_graph;
 mod identity;
 mod operation_plan;
 mod selector;
+mod semantic_diff;
 mod units;
 
 pub use capability_router::{
@@ -40,6 +41,11 @@ pub use selector::{
     NamedSelectorKind, NodeKind, ResolvedTarget, Selector, SelectorError, SelectorExpectation,
     SelectorLimits, SelectorSnapshot, StructuralPath, StructuralRoot, StructuralStep,
     TextContextAnchor, TextRange,
+};
+pub use semantic_diff::{
+    ChangeCategory, ChangeKind, EntityKind, PathScope, SEMANTIC_DIFF_SCHEMA_VERSION,
+    SemanticChange, SemanticDiff, SemanticDiffError, SemanticDiffLimits, SemanticDiffSnapshot,
+    SemanticPath,
 };
 pub use units::{
     AngleMicrodegrees, Conversion, ConversionReceipt, CoordinateAnchor, CoordinateSpace, HwpUnit,
