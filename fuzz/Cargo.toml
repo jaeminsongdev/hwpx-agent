@@ -10,10 +10,18 @@ cargo-fuzz = true
 [dependencies]
 hwpx-package = { version = "0.1.0", path = "../crates/hwpx-package" }
 libfuzzer-sys = "0.4"
+zip = { version = "8.6.0", default-features = false, features = ["deflate"] }
 
 [[bin]]
 name = "roundtrip_admission"
 path = "fuzz_targets/roundtrip_admission.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "structured_roundtrip"
+path = "fuzz_targets/structured_roundtrip.rs"
 test = false
 doc = false
 bench = false
