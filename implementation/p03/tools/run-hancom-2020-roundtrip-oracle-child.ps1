@@ -29,7 +29,15 @@ $ErrorActionPreference = 'Stop'
 function Get-Sha256File {
     param([Parameter(Mandatory)][string]$Path)
 
-    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+    $stream = [System.IO.File]::OpenRead($Path)
+    $algorithm = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        return (($algorithm.ComputeHash($stream) | ForEach-Object { $_.ToString('x2') }) -join '')
+    }
+    finally {
+        $algorithm.Dispose()
+        $stream.Dispose()
+    }
 }
 
 function Get-Sha256String {
@@ -113,6 +121,7 @@ $trace = [ordered]@{
     mode = $Mode
     input_sha256 = $null
     input_size = 0
+    input_identity_subphase = 'not_run'
     apartment_state = [string][Threading.Thread]::CurrentThread.GetApartmentState()
     automation_version_normalized = $null
     text_sha256 = $null
@@ -150,12 +159,17 @@ try {
     }
 
     $trace.phases.input_identity = 'running'
+    $trace.input_identity_subphase = 'get_item'
     $inputItem = Get-Item -LiteralPath $resolvedInputPath
+    $trace.input_identity_subphase = 'read_size'
     $trace.input_size = [int64]$inputItem.Length
+    $trace.input_identity_subphase = 'hash_file'
     $trace.input_sha256 = Get-Sha256File -Path $resolvedInputPath
+    $trace.input_identity_subphase = 'compare_hash'
     if ($trace.input_sha256 -cne $ExpectedInputSha256) {
         throw 'ROUNDTRIP_ORACLE_INPUT_SHA256_MISMATCH'
     }
+    $trace.input_identity_subphase = 'pass'
     $trace.phases.input_identity = 'pass'
 
     $activePhase = 'com_create'

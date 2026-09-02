@@ -52,6 +52,7 @@ $required = [ordered]@{
     corpus_manifest_pin = 'ExpectedCorpusManifestSha256'
     reparse_refusal = 'ROUNDTRIP_ORACLE_REPARSE_POINT_REFUSED'
     input_hash_pin = 'ROUNDTRIP_ORACLE_INPUT_SHA256_MISMATCH'
+    managed_stream_hash = 'SHA256\]::Create\(\)'
     create_new_receipt = 'FileMode\]::CreateNew'
     open_read_only_intent = "\.Open\(\`$resolvedInputPath, 'HWPX', 'lock:false;setcurdir:false'\)"
     unicode_text_read = "GetTextFile\('UNICODE', ''\)"
@@ -77,6 +78,7 @@ $forbidden = [ordered]@{
     no_ui_input = '(?i)(SendKeys|mouse_event|SetCursorPos|PostMessage|SendMessage)'
     no_visible_toggle = '(?i)\.Visible\s*='
     no_recursive_enumeration = '(?i)Get-ChildItem[^\r\n]*-Recurse'
+    no_module_autoload_hash = '(?i)Get-FileHash'
 }
 foreach ($entry in $forbidden.GetEnumerator()) {
     Add-Result `
