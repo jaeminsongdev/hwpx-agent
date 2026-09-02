@@ -40,7 +40,7 @@ DocumentGraph·OperationPlan·Transactions를 문서상 계획이 아니라 **�
 - [x] `P04-01` 산출물 `domain-ir crate` 존재, 검증: serialization/golden tests.
 - [x] `P04-02` 산출물 `unit/id module` 존재, 검증: overflow/rounding/property tests.
 - [x] `P04-03` 산출물 `selector module` 존재, 검증: zero/multiple/stale candidate tests.
-- [ ] `P04-04` 산출물 `planner` 존재, 검증: invalid/cycle/needs-resolution tests.
+- [x] `P04-04` 산출물 `planner` 존재, 검증: invalid/cycle/needs-resolution tests.
 - [ ] `P04-05` 산출물 `router` 존재, 검증: routing matrix tests.
 - [ ] `P04-06` 산출물 `transaction engine` 존재, 검증: fault injection/no source mutation.
 - [ ] `P04-07` 산출물 `diff crate` 존재, 검증: golden diff tests.
