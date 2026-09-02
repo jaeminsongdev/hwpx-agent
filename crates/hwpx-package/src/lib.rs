@@ -9,6 +9,7 @@
 mod graph;
 mod limits;
 mod path;
+mod preservation;
 mod preserving_xml;
 mod reader;
 mod safe_xml;
@@ -19,6 +20,10 @@ pub use graph::{
 };
 pub use limits::{PackageLimitConfig, PackageLimits};
 pub use path::PackagePath;
+pub use preservation::{
+    PartPreservationRecord, PreservationClass, PreservationCounts, PreservationError,
+    PreservationReason, PreservationReport, TokenPreservationEvidence,
+};
 pub use preserving_xml::{
     PreservingXmlDocument, PreservingXmlError, XmlAttributeToken, XmlByteSpan, XmlElementToken,
     XmlName, XmlQuoteStyle, XmlToken, XmlTokenKind,
