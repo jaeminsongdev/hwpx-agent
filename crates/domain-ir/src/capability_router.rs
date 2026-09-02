@@ -478,6 +478,16 @@ pub struct RouteDecision {
 
 impl RouteDecision {
     #[must_use]
+    pub const fn operation_id(&self) -> &OperationId {
+        &self.operation_id
+    }
+
+    #[must_use]
+    pub const fn capability_id(&self) -> &CapabilityId {
+        &self.capability_id
+    }
+
+    #[must_use]
     pub const fn backend_id(&self) -> &BackendId {
         &self.backend_id
     }
@@ -490,6 +500,21 @@ impl RouteDecision {
     #[must_use]
     pub const fn health_generation(&self) -> u64 {
         self.health_generation
+    }
+
+    #[must_use]
+    pub const fn target_profile_id(&self) -> &TargetProfileId {
+        &self.target_profile_id
+    }
+
+    #[must_use]
+    pub const fn registry_payload_sha256(&self) -> [u8; 32] {
+        self.registry_payload_sha256
+    }
+
+    #[must_use]
+    pub const fn registry_sequence(&self) -> u64 {
+        self.registry_sequence
     }
 
     /// Emits deterministic compact JSON for downstream transaction binding.

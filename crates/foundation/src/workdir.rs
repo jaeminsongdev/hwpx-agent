@@ -198,6 +198,48 @@ impl SecureWorkspace {
         Ok(destination)
     }
 
+    /// Moves one already-published output into quarantine without an overwrite window.
+    ///
+    /// The output and quarantine directories belong to the same workspace volume. A hard link is
+    /// made and synced before the public output name is removed, so a failure leaves either the
+    /// complete output, the complete quarantine copy, or both complete and explicitly incomplete.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error for containment/link violations, an existing quarantine destination or an
+    /// I/O/durability failure. It never replaces either name.
+    pub fn quarantine_published(
+        &self,
+        output_relative: &Path,
+        quarantine_relative: &Path,
+    ) -> Result<(), WorkspaceError> {
+        let source = self.resolve_existing(&self.output, output_relative)?;
+        if !source.is_file() {
+            return Err(WorkspaceError::InvalidRelativePath);
+        }
+        let destination = self.resolve_for_create(&self.quarantine, quarantine_relative)?;
+        create_parent_chain(
+            &self.root,
+            destination
+                .parent()
+                .ok_or(WorkspaceError::InvalidRelativePath)?,
+        )?;
+        match fs::hard_link(&source, &destination) {
+            Ok(()) => {}
+            Err(error) if error.kind() == io::ErrorKind::AlreadyExists => {
+                return Err(WorkspaceError::ArtifactExists);
+            }
+            Err(error) => return Err(WorkspaceError::Io(error)),
+        }
+        if sync_parent(&destination).is_err() {
+            return Err(WorkspaceError::ArtifactPublishedIncomplete);
+        }
+        if fs::remove_file(&source).is_err() || sync_parent(&source).is_err() {
+            return Err(WorkspaceError::ArtifactPublishedIncomplete);
+        }
+        Ok(())
+    }
+
     /// 중단된 한 staging 하위 디렉터리만 제거한다.
     ///
     /// # Errors
@@ -485,5 +527,49 @@ mod tests {
         let bytes =
             std::fs::read(quarantined).unwrap_or_else(|error| panic!("read quarantine: {error}"));
         assert_eq!(bytes, b"first");
+    }
+
+    #[test]
+    fn published_output_moves_to_quarantine_without_overwrite() {
+        let temporary = tempfile::tempdir().unwrap_or_else(|error| panic!("tempdir: {error}"));
+        let workspace = SecureWorkspace::create(temporary.path())
+            .unwrap_or_else(|error| panic!("workspace: {error}"));
+        let staged = workspace
+            .stage_bytes(Path::new("job/output.bin"), b"complete")
+            .unwrap_or_else(|error| panic!("stage: {error}"));
+        let published = workspace
+            .publish(&staged, Path::new("artifact/output.bin"))
+            .unwrap_or_else(|error| panic!("publish: {error}"));
+        workspace
+            .quarantine_published(
+                Path::new("artifact/output.bin"),
+                Path::new("orphan/output.bin"),
+            )
+            .unwrap_or_else(|error| panic!("quarantine published: {error}"));
+        assert!(!published.exists());
+        assert_eq!(
+            std::fs::read(temporary.path().join("quarantine/orphan/output.bin"))
+                .unwrap_or_else(|error| panic!("read quarantine: {error}")),
+            b"complete"
+        );
+
+        let replacement = workspace
+            .stage_bytes(Path::new("job-2/output.bin"), b"replacement")
+            .unwrap_or_else(|error| panic!("stage replacement: {error}"));
+        let replacement_path = workspace
+            .publish(&replacement, Path::new("artifact/output.bin"))
+            .unwrap_or_else(|error| panic!("publish replacement: {error}"));
+        assert!(matches!(
+            workspace.quarantine_published(
+                Path::new("artifact/output.bin"),
+                Path::new("orphan/output.bin")
+            ),
+            Err(WorkspaceError::ArtifactExists)
+        ));
+        assert_eq!(
+            std::fs::read(replacement_path)
+                .unwrap_or_else(|error| panic!("read replacement: {error}")),
+            b"replacement"
+        );
     }
 }

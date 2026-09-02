@@ -471,6 +471,16 @@ pub struct CompiledOperationPlan {
 
 impl CompiledOperationPlan {
     #[must_use]
+    pub const fn plan_id(&self) -> &PlanId {
+        &self.plan_id
+    }
+
+    #[must_use]
+    pub const fn base_revision(&self) -> &RevisionId {
+        &self.base_revision
+    }
+
+    #[must_use]
     pub fn operations(&self) -> &[CompiledOperation] {
         &self.operations
     }
