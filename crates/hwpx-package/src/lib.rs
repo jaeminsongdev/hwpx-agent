@@ -9,6 +9,7 @@
 mod graph;
 mod id_index;
 mod limits;
+mod patch;
 mod path;
 mod preservation;
 mod preserving_xml;
@@ -24,6 +25,12 @@ pub use id_index::{
     IdLocation, IdReference, IdRuleProfile, IdValidationIssue, IdValidationReport,
 };
 pub use limits::{PackageLimitConfig, PackageLimits};
+pub use patch::{
+    AddedPart, AllocationHandle, PatchAttributeValue, PatchError, PatchIntent, PatchLimitConfig,
+    PatchLimits, PatchPartDisposition, PatchPartRecord, PatchResult, PatchText,
+    PreservingPatchEngine, RelationshipAddition, RelationshipSpine, SiblingPosition,
+    ValidatedXmlFragment, XmlAttributeSelector, XmlElementSelector, XmlTextSelector,
+};
 pub use path::PackagePath;
 pub use preservation::{
     PartPreservationRecord, PreservationClass, PreservationCounts, PreservationError,

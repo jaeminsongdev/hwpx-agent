@@ -122,7 +122,7 @@ impl PackageGraphLimits {
 pub struct MediaType(String);
 
 impl MediaType {
-    fn parse(raw: &str, limits: PackageGraphLimits) -> Result<Self, GraphError> {
+    pub(crate) fn parse(raw: &str, limits: PackageGraphLimits) -> Result<Self, GraphError> {
         if raw.is_empty()
             || raw.len() > limits.config().max_media_type_bytes
             || !raw.is_ascii()

@@ -330,6 +330,55 @@ impl IdIndex {
     pub fn declaration_for(&self, reference: &IdReference) -> Option<&IdDeclaration> {
         self.declarations.get(reference.declaration_index)
     }
+
+    pub(crate) fn next_decimal_value(
+        &self,
+        part: &PackagePath,
+        kind: IdKind,
+    ) -> Result<u64, IdIndexError> {
+        self.declarations
+            .iter()
+            .filter(|declaration| declaration.location.part == *part && declaration.kind == kind)
+            .filter_map(|declaration| match declaration.value {
+                IdValue::Decimal(value) => Some(value),
+                IdValue::Text(_) => None,
+            })
+            .max()
+            .unwrap_or(0)
+            .checked_add(1)
+            .ok_or(IdIndexError::LimitExceeded {
+                limit: "id_allocation_range",
+            })
+    }
+}
+
+pub(crate) fn allocation_declaration_kind(
+    graph: &PackageGraph,
+    part: &PartPreservationRecord,
+    document: &PreservingXmlDocument,
+    element_index: usize,
+    attribute_index: usize,
+    _profile: IdRuleProfile,
+) -> Result<Option<(IdKind, bool)>, IdIndexError> {
+    let Some(element) = document.elements().get(element_index) else {
+        return Ok(None);
+    };
+    let Some(attribute) = element.attributes().get(attribute_index) else {
+        return Ok(None);
+    };
+    let Some(rule) = matching_declaration_rule(
+        graph,
+        part,
+        element.name().namespace(),
+        element.name().local_name(),
+        attribute.name().namespace(),
+        attribute.name().local_name(),
+    )?
+    else {
+        return Ok(None);
+    };
+    Ok(declaration_kind(document, element_index, rule)
+        .map(|kind| (kind, matches!(rule.syntax, ValueSyntax::Decimal))))
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
