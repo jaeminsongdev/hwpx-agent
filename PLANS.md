@@ -21,7 +21,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
 | P03 | `pass_scoped_current_pc_local` | P03-01~09, package/preservation/round-trip, exact-2020 output oracle, Windows/Linux/clean-clone Gate PASS |
-| P04 | `in_progress_current_pc_local` | P04-01~07 PASS; P04-08 Idempotency·CAS 시작 |
+| P04 | `in_progress_current_pc_local` | P04-01~08 PASS; P04-09 VS-0 core CLI 시작 |
 | P05~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P10은 P03 선행조건 충족 후 순차 보류, P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -37,7 +37,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 | P-0034 | P04-05 Capability router | `pass` | Windows/Linux 45/45, exact evidence/policy/health matrix, current/clean FULL 5/5 |
 | P-0035 | P04-06 Workspace transaction | `pass` | Windows/Linux 9/9, fault 22/22, current/clean FULL 5/5 |
 | P-0036 | P04-07 Semantic diff | `pass` | Windows/Linux 55/55, golden SHA, current/clean FULL 5/5 |
-| P-0037 | P04-08 Idempotency·CAS | `in_progress` | exact request hash, duplicate replay, fencing, stale revision no-effect E2E |
+| P-0037 | P04-08 Idempotency·CAS | `pass` | Windows/Linux 20/20, 32/16/32 concurrency, current/clean FULL 5/5 |
+| P-0038 | P04-09 VS-0 core CLI | `in_progress` | A4 one-paragraph plan→execute→reopen, actual Hangul 2020 open evidence |
 
 ### P04-01 Acceptance (completed)
 
@@ -116,7 +117,7 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - golden corpus는 node/style/table/equation/object/reference 각각의 add/remove/modify/move, multi-category change, unknown/opaque change, invalid identity/version/digest, limit overflow와 privacy negative case를 포함한다.
 - Windows/Linux semantic-diff tests와 Clippy, byte-identical golden digest, current/clean-clone FULL, security regression을 통과하고 P04-07 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
 
-### P04-08 Acceptance
+### P04-08 Acceptance (completed)
 
 - `operation-engine`에 in-memory reference idempotency/CAS service와 storage trait boundary를 추가한다. P14 durable DB 구현을 당겨오지 않으며 filesystem/network/process/COM/HAction/backend 실행은 수행하지 않는다.
 - bounded typed idempotency key는 exact request SHA-256, execution manifest SHA-256, expected head revision과 transaction identity에 한 번만 결합된다. 같은 key의 다른 request/manifest/revision/transaction 재사용은 stable `key_reuse_conflict`이며 기존 record를 변경하지 않는다.
@@ -127,6 +128,17 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - claim→effect→CAS→terminal 경계에 deterministic concurrency/fault harness를 둔다. 2개 이상 thread barrier duplicate, owner crash/outcome unknown, stale revision, retry storm, conflicting key와 reconciliation에서 artifact/revision effect counter가 최대 1임을 증명한다.
 - 모든 key/record/thread/receipt/byte 수는 finite limit을 갖고 checked arithmetic, deterministic canonical v1 receipt와 redacted Debug/error를 유지한다. raw request, document ID, path, body와 owner token을 출력하지 않는다.
 - Windows/Linux idempotency/CAS tests와 Clippy, duplicate/stale revision E2E, current/clean-clone FULL, security regression을 통과하고 P04-08 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
+
+### P04-09 Acceptance
+
+- 새 `vertical CLI`는 versioned bounded request만 받아 synthetic 빈 A4, 한 style, 한 paragraph DocumentGraph와 exact base revision을 만든다. 사용자 문서, 임의 경로, raw XML/HAction/COM action 문자열을 입력으로 받지 않는다.
+- P04-03 selector와 P04-04 compiler로 정확한 create plan을 만들고 P04-05 policy/preservation 조건을 약화하지 않는 direct-HWPX route만 사용한다. verified evidence가 부족하면 임의 route를 만들지 않고 task 전용 signed/verified binding evidence를 먼저 생성한다.
+- P03 package graph/preserving writer와 P04-06 transaction을 통해 create-new staging, complete reopen validation, checksum artifact identity, no-overwrite publication을 수행한다. 출력은 A4 1 page/1 section/1 paragraph/1 style closure를 가져야 한다.
+- P04-08 store를 통해 exact request/manifest/head를 claim하고 artifact publication과 revision-head CAS를 한 번만 수행한다. 동일 CLI retry는 byte-identical terminal receipt와 기존 artifact/revision을 replay하며 두 번째 파일을 만들지 않는다.
+- CLI 자체 reopen은 bounded ZIP/package/XML/ID/reference closure와 semantic readback을 검사한다. 생성 bytes, artifact/revision/receipt digest와 trace correlation은 deterministic private evidence bundle에 기록하되 문서 본문과 로컬 절대 경로는 공개 로그/커밋에서 제외한다.
+- 실제 정품 한글 2020 `11.0.0.9136` x86에서 disposable output을 열고 오류 없는 open, A4/한 문단 normalized readback, 종료와 잔류 process 0을 확인한다. 2022/2024와 다른 PC 증거는 섞지 않는다.
+- 실제 한글 접근 허용 UI가 표시되면 사용자가 누르고, Computer Use는 screenshot-only로 상태만 확인한다. 자동 click/type이나 사용자 문서 접근은 수행하지 않는다.
+- Windows CLI unit/E2E, Linux direct-core tests, current/clean-clone FULL, security와 exact-2020 actual evidence를 통과한 뒤 P04 phase Gate를 `max`로 별도 감사한다.
 
 ## Risks
 
@@ -170,7 +182,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0034: P04-05 Capability router는 `implementation/p04/P04-05_REPORT.md`에서 exact target/registry/support/policy/preservation/health routing, equal-top ambiguity, Windows/Linux `45/45`, current/clean-clone FULL 5/5로 PASS.
 - P-0035: P04-06 Workspace transaction은 `implementation/p04/P04-06_REPORT.md`에서 immutable manifest, finite state machine, staged validation/publication/CAS, fault 22/22, Windows/Linux `9/9`, current/clean-clone FULL 5/5로 PASS.
 - P-0036: P04-07 Semantic diff는 `implementation/p04/P04-07_REPORT.md`에서 9개 typed category, relative-order move, opaque/privacy/finite contract, Windows/Linux `55/55`, golden `b12f8a54...9f7e`, current/clean-clone FULL 5/5로 PASS.
+- P-0037: P04-08 Idempotency·CAS는 `implementation/p04/P04-08_REPORT.md`에서 exact binding/fencing/replay/reconciliation, object-safe storage boundary, Windows/Linux `20/20`, 32/16/32 concurrency, current/clean-clone FULL 5/5로 PASS.
 
 ## Next
 
-P04-08 Idempotency·CAS를 `xhigh`로 구현한다. exact key/request/manifest/expected-head 결합, fencing owner, terminal replay, outcome-unknown reconciliation과 stale revision no-effect를 동시성 E2E로 증명한다. P04-09 actual 한글 2020 vertical Gate와 P04 phase Gate는 `max`다.
+P04-09 VS-0 core CLI를 `max`로 구현한다. synthetic A4/한 style/한 paragraph를 exact plan→verified direct route→transaction→idempotency/CAS→bounded reopen으로 연결하고 정품 한글 2020 open/readback/clean-shutdown actual evidence를 수집한다. 그 뒤 P04 phase Gate도 `max`로 별도 감사한다.

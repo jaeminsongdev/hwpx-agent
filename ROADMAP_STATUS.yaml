@@ -401,7 +401,7 @@ p03_execution:
     user_documents_opened: false
     hancom_runtime_executed_by_task: true
 p04_execution:
-  current_task: P04-08
+  current_task: P04-09
   gate_state: in_progress_current_pc_local
   tasks:
     P04-01: passed_current_pc_local_pure_model
@@ -411,8 +411,8 @@ p04_execution:
     P04-05: passed_current_pc_local_pure_model
     P04-06: passed_current_pc_local_transaction_core
     P04-07: passed_current_pc_local_pure_model
-    P04-08: in_progress_idempotency_cas
-    P04-09: blocked_by_P04-01_to_P04-08
+    P04-08: passed_current_pc_local_reference_service
+    P04-09: in_progress_vs0_core_cli
   document_graph_v2:
     audited_source_commit: 0408d8f19592641e8737544ea35377265f444a1b
     contract: hwpx-agent.document-graph/v2
@@ -552,6 +552,30 @@ p04_execution:
     clean_clone_bootstrap: passed_git_status_clean
     secrets_vulnerabilities_forbidden_licenses: 0
     scanned_files_current_and_clean_clone: 551
+    sbom_components: 272
+    clean_clone_sbom_components: 230
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
+  idempotency_cas:
+    audited_source_commit: 8a1d35ceb938639dbbad175875af229020e44932
+    receipt_contract: hwpx-agent.idempotency-receipt/v1
+    storage_boundary: IdempotencyStore
+    durable_storage_implemented: false
+    crate: operation-engine
+    idempotency_specific_tests_windows: 11_of_11_passed
+    idempotency_specific_tests_linux_read_only: 11_of_11_passed
+    combined_operation_engine_tests_windows: 20_of_20_passed
+    combined_operation_engine_tests_linux_read_only: 20_of_20_passed
+    simultaneous_claim_threads: 32_owner_1_duplicate_31_effect_1
+    simultaneous_commit_threads: 16_committed_1_rejected_15
+    terminal_retry_threads: 32_of_32_exact_replay
+    stale_revision_side_effects: 0
+    clippy_deny_warnings_windows_linux: passed
+    linux_clippy_derived_image_digest: sha256:bfda7f1ddbf0a192699d4b02dc3dbfefabe5eb7c0dd5527ba31acdaf0e4ab37f
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    secrets_vulnerabilities_forbidden_licenses: 0
+    scanned_files_current_and_clean_clone: 556
     sbom_components: 272
     clean_clone_sbom_components: 230
     user_documents_opened: false
