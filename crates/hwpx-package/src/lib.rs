@@ -14,6 +14,7 @@ mod path;
 mod preservation;
 mod preserving_xml;
 mod reader;
+mod roundtrip;
 mod safe_xml;
 mod writer;
 
@@ -42,6 +43,10 @@ pub use preserving_xml::{
     XmlName, XmlQuoteStyle, XmlToken, XmlTokenKind,
 };
 pub use reader::{BoundedZipReader, Compression, EntryMetadata, PackageError};
+pub use roundtrip::{
+    DiagnosticLayer, RecommendedAction, RepairDiagnostic, Repairability, RoundTripError,
+    RoundTripEvidence, RoundTripLimits, RoundTripVerifier,
+};
 pub use safe_xml::SafeXmlError;
 pub use writer::{
     AtomicPackagePublisher, MetadataDisposition, NormalizedWriter, PackageArtifact,

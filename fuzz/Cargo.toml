@@ -1,0 +1,22 @@
+[package]
+name = "hwpx-package-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+hwpx-package = { version = "0.1.0", path = "../crates/hwpx-package" }
+libfuzzer-sys = "0.4"
+
+[[bin]]
+name = "roundtrip_admission"
+path = "fuzz_targets/roundtrip_admission.rs"
+test = false
+doc = false
+bench = false
+
+[workspace]
+members = ["."]
