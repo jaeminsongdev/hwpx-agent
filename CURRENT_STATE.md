@@ -9,7 +9,7 @@
 
 - 상태: `P03_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P03_HWPX_PACKAGE_PRESERVING_XML_CORE`
-- 구현 코드: P01 Rust/C#/TypeScript foundation과 P02 source importer/candidate/semantic review/binding/runtime probe/Ed25519 signed registry pipeline이 build·test 가능하다. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence도 보존한다.
+- 구현 코드: P01 Rust/C#/TypeScript foundation, P02 source importer/candidate/semantic review/binding/runtime probe/Ed25519 signed registry pipeline과 P03 bounded ZIP reader가 build·test 가능하다. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence도 보존한다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -65,11 +65,12 @@
 
 ## P03 현재 상태
 
-- P03-01 `in_progress`: Rust bounded ZIP reader의 limit/path/streaming/error contract와 synthetic malicious ZIP corpus를 구현한다.
+- P03-01 `PASS`: `hwpx-package`의 finite limits, strict portable path와 Unicode collision, classic ZIP central/local header consistency, bounded streamed size/CRC, nesting과 no-partial-publication policy를 구현했다. Windows/Linux malicious corpus 8/8, current/clean-clone FULL bootstrap 5/5, secret/vulnerability/forbidden license 0이다. 사용자 문서와 한글 runtime은 실행하지 않았다.
+- P03-02 `in_progress`: `mimetype`, container/OPF manifest/spine/relationships를 bounded `PackageGraph`로 구축하고 dangling/duplicate/external target을 fail closed한다.
 
 ## 다음 작업
 
-P03-01 Bounded ZIP reader를 구현한다. 추론수준은 `max`이며 한글 UI나 사용자 문서는 필요하지 않다.
+P03-02 PackageGraph를 구현한다. 추론수준은 `max`이며 한글 UI나 사용자 문서는 필요하지 않다.
 
 ## 현재 blocker
 
@@ -79,4 +80,4 @@ P03-01 Bounded ZIP reader를 구현한다. 추론수준은 `max`이며 한글 UI
 
 ## 검증 한계
 
-제품 foundation과 P02 signed registry는 재현 가능하지만 P03 문서 패키지 core와 이후 제품 기능은 아직 구현되지 않았다. Signed registry는 exact 2020에서 두 안전 canary만 verified이며 public routing은 0이다. Exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00/P01/P02 실제 상태는 각 Gate report를 따른다.
+제품 foundation, P02 signed registry와 P03-01 bounded ZIP reader는 재현 가능하지만 PackageGraph/XML 보존·patch/writer와 이후 제품 기능은 아직 구현되지 않았다. P03-01은 synthetic corpus 증거이며 실제 사용자/Hancom HWPX 호환성을 주장하지 않는다. Signed registry는 exact 2020에서 두 안전 canary만 verified이며 public routing은 0이다. Exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00/P01/P02 실제 상태는 각 Gate report를 따른다.

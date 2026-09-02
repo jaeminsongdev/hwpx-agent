@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_foundation_and_p02_import_review_binding_probe_signed_registry
+  product_code_scope: p01_foundation_p02_signed_registry_and_p03_bounded_zip_reader
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -283,17 +283,32 @@ p02_execution:
     private_key_git_tracked: false
     signed_registry_git_tracked: false
 p03_execution:
-  current_task: P03-01
+  current_task: P03-02
   tasks:
-    P03-01: in_progress_current_pc_local
-    P03-02: blocked_by_P03-01
-    P03-03: blocked_by_P03-01
-    P03-04: blocked_by_P03-01
-    P03-05: blocked_by_P03-01
-    P03-06: blocked_by_P03-01
-    P03-07: blocked_by_P03-01
-    P03-08: blocked_by_P03-01
+    P03-01: passed_current_pc_local_core
+    P03-02: in_progress_current_pc_local_core
+    P03-03: blocked_by_P03-02
+    P03-04: blocked_by_P03-03
+    P03-05: blocked_by_P03-04
+    P03-06: blocked_by_P03-05
+    P03-07: blocked_by_P03-06
+    P03-08: blocked_by_P03-07
     P03-09: blocked_by_P03-01_to_P03-08
+  bounded_zip_reader:
+    audited_source_commit: bb80bb8a557177ea7d51443729a422719c11b7c8
+    crate: hwpx-package
+    zip_version: 8.6.0
+    supported_compression: stored_and_deflate_only
+    zip64_data_descriptor_encryption: rejected
+    malicious_corpus_windows: 8_of_8_passed
+    malicious_corpus_linux_read_only: 8_of_8_passed
+    linux_image_digest: sha256:31ee7fc65186be7e0e0ccb3f2ca305f14e4739e7642a1ae65753aa5d7b874523
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    secrets_vulnerabilities_forbidden_licenses: 0
+    sbom_components: 158
+    user_documents_opened: false
+    hancom_runtime_executed: false
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope
