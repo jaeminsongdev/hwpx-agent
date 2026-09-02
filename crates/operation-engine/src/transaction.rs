@@ -124,6 +124,21 @@ impl RevisionCommitRequest {
     pub const fn result_sha256(&self) -> [u8; 32] {
         self.result_sha256
     }
+
+    #[must_use]
+    pub const fn result_size(&self) -> u64 {
+        self.result_size
+    }
+
+    /// Hashes the deterministic precommit receipt that is presented to revision CAS.
+    ///
+    /// # Errors
+    ///
+    /// Returns a stable serialization error.
+    pub fn canonical_sha256(&self) -> Result<[u8; 32], TransactionError> {
+        let bytes = serde_json::to_vec(self).map_err(|_| TransactionError::ReceiptSerialization)?;
+        Ok(Sha256::digest(bytes).into())
+    }
 }
 
 impl fmt::Debug for RevisionCommitRequest {

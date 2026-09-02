@@ -1,0 +1,39 @@
+{
+  "schema_version": "hwpx-agent.direct-route-attestation/v1",
+  "attestation_id": "p04-vs0-direct-hwpx-current-2020",
+  "sequence": 1,
+  "target": {
+    "profile_id": "hancom-hangul-2020-secondary",
+    "exact_build": "11.0.0.9136",
+    "architecture": "x86",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+  },
+  "route": {
+    "capability_id": "document.create_vs0",
+    "backend_id": "direct-hwpx-vs0",
+    "backend_kind": "direct_hwpx",
+    "support": "verified_current_pc_local",
+    "preservation": "normalized",
+    "priority": 100,
+    "cost": 1
+  },
+  "basis": {
+    "p03_gate_audited_source_commit": "d5ff13547976d55204f63a030f07f7a628afb605",
+    "p03_gate_state": "pass_scoped_current_pc_local",
+    "p03_exact_2020_roundtrip_cases": 4,
+    "p04_vs0_builder_scope": "deterministic_closed_graph_a4_one_style_one_paragraph"
+  },
+  "scope": {
+    "use": "personal_noncommercial_local_development",
+    "host": "current_pc_exact_identity_only",
+    "production_allowed": false,
+    "provider_allowed": false,
+    "network_allowed": false,
+    "desktop_automation_route_allowed": false,
+    "direct_hwpx_route_allowed": true
+  },
+  "trust_anchor": {
+    "key_id": "ed25519-sha256-63523944501a02b0bd75c1a5d3568dbc5c1f9b009b7679da7a2b78adc47274be",
+    "algorithm": "Ed25519"
+  }
+}

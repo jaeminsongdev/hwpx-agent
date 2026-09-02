@@ -47,10 +47,11 @@ def widget() -> None:
 
 
 def docs() -> None:
-    run([sys.executable, "-m", "compileall", "-q", "tools/p01", "tools/p02"])
+    run([sys.executable, "-m", "compileall", "-q", "tools/p01", "tools/p02", "tools/p04"])
     run([sys.executable, "tools/design-validation/validate_design.py"])
     run([sys.executable, "tools/p01/validate_foundation.py"])
     run([sys.executable, "tools/p02/validate_source_records.py"])
+    run([sys.executable, "tools/p04/verify_route_attestation.py"])
     run(
         [
             sys.executable,

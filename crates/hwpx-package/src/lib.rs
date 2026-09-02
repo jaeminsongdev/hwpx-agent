@@ -16,6 +16,7 @@ mod preserving_xml;
 mod reader;
 mod roundtrip;
 mod safe_xml;
+mod vs0;
 mod writer;
 
 pub use graph::{
@@ -48,6 +49,9 @@ pub use roundtrip::{
     RoundTripEvidence, RoundTripLimits, RoundTripVerifier,
 };
 pub use safe_xml::SafeXmlError;
+pub use vs0::{
+    HANCOM_2020_VS0_MAX_TEXT_BYTES, Hancom2020Vs0Artifact, Hancom2020Vs0Builder, Hancom2020Vs0Error,
+};
 pub use writer::{
     AtomicPackagePublisher, MetadataDisposition, NormalizedWriter, PackageArtifact,
     PreservingWriter, PublicationReceipt, WriterEntryRecord, WriterError, WriterLimitConfig,

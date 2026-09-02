@@ -315,6 +315,16 @@ impl CommittedResult {
     pub const fn revision_id(&self) -> &RevisionId {
         &self.revision_id
     }
+
+    #[must_use]
+    pub const fn artifact_sha256(&self) -> [u8; 32] {
+        self.artifact_sha256
+    }
+
+    #[must_use]
+    pub const fn artifact_size(&self) -> u64 {
+        self.artifact_size
+    }
 }
 
 impl fmt::Debug for CommittedResult {
