@@ -20,7 +20,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
-| P03 | `in_progress_current_pc_local` | P03-01~02 PASS, P03-03 safe XML reader 시작 |
+| P03 | `in_progress_current_pc_local` | P03-01~03 PASS, P03-04 preserving tokenizer 시작 |
 | P04~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -29,17 +29,17 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0023 | P03-03 XML safety parser | `in_progress` | reusable bounded namespace-aware XML reader, bomb/entity/network/namespace negative corpus |
+| P-0024 | P03-04 Preserving tokenizer | `in_progress` | checked byte span·namespace-aware token/tree, untouched byte equality |
 
-### P03-03 Acceptance
+### P03-04 Acceptance
 
-- P03-02 container/OPF parser의 안전 규칙을 reusable internal `safe_xml` layer로 추출하고 PackageGraph가 같은 layer를 사용하게 한다.
-- UTF-8/XML 1.0, namespace-resolved element identity와 stable typed error code를 고정하며 raw XML 또는 resolver capability를 public/LLM 경로에 노출하지 않는다.
-- metadata bytes, event/node, depth, text, attributes, attribute bytes와 active namespace binding에 finite default/hard ceiling을 적용한다.
-- DTD, custom entity, external entity/network/filesystem resolution, processing instruction과 CDATA policy를 fail closed로 유지한다. XML predefined/numeric reference allowlist는 별도 검증한다.
-- malformed/end-name/duplicate-attribute/namespace rebinding/unknown prefix를 deterministic error로 거부하고 reader 실패에 untrusted XML text를 포함하지 않는다.
-- XML bomb, entity expansion, oversized text/attribute, deep tree, invalid/rebound namespace positive/negative corpus를 Windows/Linux에서 검증한다.
-- P03-02 PackageGraph 8/8과 P03-01 malicious ZIP 8/8 regression을 유지하고 versioned migration/policy를 남긴다.
+- P03-03 safe reader가 승인한 immutable UTF-8/XML 1.0 bytes 위에 checked half-open byte span token과 lightweight tree/index를 만든다.
+- declaration, start/end/empty element, attribute, text/reference, comment와 whitespace의 원본 slice 경계를 보존하고 span이 UTF-8 및 input 경계를 벗어나지 못하게 한다.
+- element와 non-namespace attribute에 original QName/prefix 및 namespace URI identity를 함께 보존하고 descendant prefix rebinding을 올바르게 색인한다.
+- parent/child/sibling과 matching start/end 관계를 deterministic하게 구축하되 raw XML 또는 arbitrary rewrite capability를 public/LLM 경로에 노출하지 않는다.
+- untouched serialize는 normalization/re-encoding 없이 원본 bytes를 그대로 반환하며 SHA-256과 byte-for-byte equality를 검증한다.
+- quote style, attribute order, namespace prefix, entity spelling, comment, mixed whitespace가 다른 positive fixture와 malformed/overflow/span/limit negative fixture를 Windows/Linux에서 검증한다.
+- P03-03 safe XML 5/5, P03-02 PackageGraph 8/8, P03-01 malicious ZIP 8/8 regression을 유지하고 versioned migration/policy를 남긴다.
 
 ## Risks
 
@@ -69,7 +69,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0020: P02-09와 phase Gate는 `implementation/p02/P02-09_REPORT.md` 및 `implementation/p02/P02_GATE_REPORT.md`에서 current-PC local scoped PASS. Actual other-build drift는 `baseline_unavailable`.
 - P-0021: P03-01 bounded ZIP reader는 `implementation/p03/P03-01_REPORT.md`에서 Windows/Linux malicious corpus 8/8, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0022: P03-02 PackageGraph는 `implementation/p03/P03-02_REPORT.md`에서 namespace-resolved closed graph Windows/Linux 8/8, current/clean-clone FULL 5/5와 보안 0건 PASS.
+- P-0023: P03-03 safe XML reader는 `implementation/p03/P03-03_REPORT.md`에서 XML 1.0/UTF-8 namespace-resolved finite parser, Windows/Linux 5/5, PackageGraph/ZIP regression, current/clean-clone FULL 5/5와 보안 0건 PASS.
 
 ## Next
 
-P03-03 XML safety parser는 `max`다. P03-04 preserving tokenizer도 시작 시 `max`로 유지한다.
+P03-04 preserving tokenizer는 `max`다. P03-05 part preservation map도 시작 시 `max`로 유지한다.
