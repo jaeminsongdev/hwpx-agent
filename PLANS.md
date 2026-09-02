@@ -21,7 +21,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
 | P03 | `pass_scoped_current_pc_local` | P03-01~09, package/preservation/round-trip, exact-2020 output oracle, Windows/Linux/clean-clone Gate PASS |
-| P04 | `in_progress_current_pc_local` | P04-01~02 PASS; P04-03 Selector engine 시작 |
+| P04 | `in_progress_current_pc_local` | P04-01~03 PASS; P04-04 OperationPlan compiler 시작 |
 | P05~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P10은 P03 선행조건 충족 후 순차 보류, P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -32,7 +32,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 |---|---|---|---|
 | P-0030 | P04-01 DocumentGraph v2 types | `pass` | Windows/Linux 9/9, golden SHA, current/clean-clone FULL 5/5 |
 | P-0031 | P04-02 Unit·ID model | `pass` | Windows/Linux 18/18, fixed-seed 10,000 round trips, current/clean-clone FULL 5/5 |
-| P-0032 | P04-03 Selector engine | `in_progress` | zero/multiple/stale fail-closed, ID/name/path/text-context resolution |
+| P-0032 | P04-03 Selector engine | `pass` | Windows/Linux 27/27, zero/multiple/stale, current/clean-clone FULL 5/5 |
+| P-0033 | P04-04 OperationPlan compiler | `in_progress` | schema/default/unit/ambiguity compile, deterministic dependency DAG |
 
 ### P04-01 Acceptance (completed)
 
@@ -56,7 +57,7 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P04-01 `DocumentId`/`LogicalId` wire bytes와 golden digest를 의도치 않게 변경하지 않는다. 구조 변경이 필요하면 별도 version/migration과 golden 갱신 사유를 먼저 기록한다.
 - Windows/Linux unit/ID tests와 Clippy, fixed-seed boundary/property tests, current/clean-clone FULL, security regression을 통과하고 P04-02 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
 
-### P04-03 Acceptance
+### P04-03 Acceptance (completed)
 
 - `domain-ir`에 pure immutable selector snapshot/index를 추가하고 filesystem, network, process, COM, raw XML/HAction 의존성은 0을 유지한다.
 - selector는 stable logical ID, named slot/field/bookmark, finite structural path + expected fingerprint, exact normalized text query + before/after context hash를 typed variant로 제공한다. 저장된 text offset 단독 selector와 cursor/session fallback은 core에서 허용하지 않는다.
@@ -65,6 +66,17 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - structural path는 node-kind 단계와 index를 함께 검증하고 expected node fingerprint가 다르면 `stale`로 실패한다. named selector collision, path drift, text offset drift와 context mismatch negative test를 포함한다.
 - query/path/context/candidate에 finite bound를 적용한다. 공개 Debug/error에는 query text, node ID, slot/field/bookmark 이름, context hash 원문을 노출하지 않는다.
 - Windows/Linux selector tests와 Clippy, deterministic serialization/index/property regression, current/clean-clone FULL, security regression을 통과하고 P04-03 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
+
+### P04-04 Acceptance
+
+- pure `operation_plan` compiler를 추가하고 filesystem, network, process, COM, raw XML/HAction과 runtime capability 실행 의존성은 0을 유지한다. 입력 draft와 성공한 immutable compiled plan을 별도 타입으로 둔다.
+- exact schema/version, typed plan/operation/capability/revision identity, operation 수·dependency 수·argument depth/size의 finite limit을 먼저 검증한다. unknown version, duplicate operation ID와 과대 입력은 부분 compile 없이 stable error로 종료한다.
+- wire selector draft는 정확히 한 variant만 허용하고 P04-03 typed selector로 compile한다. 혼합 selector, bare text offset, cursor/session/page-position과 stale expectation은 `needs_resolution` 또는 typed rejection이며 약한 selector로 fallback하지 않는다.
+- length/typography/ratio/angle argument는 unit을 명시해야 하며 P04-02 checked conversion과 receipt를 통해 canonical fixed-point로 normalize한다. 단위 없는 수치, invalid DPI, overflow, 충돌하는 caller/default 값은 `needs_resolution` 또는 stable unit error로 실패한다.
+- defaults는 versioned capability definition에서만 가져오고 적용 여부와 normalized value digest를 compile receipt에 남긴다. 자유 문자열 backend action/default, 환경 의존 default와 암묵 locale 단위는 금지한다.
+- dependency graph는 missing/self/duplicate edge를 거절하고 deterministic topological order를 만든다. cycle은 `operation_plan_cycle`, 동일 입력은 byte-identical canonical compiled JSON/SHA-256이어야 한다.
+- selector resolve는 immutable snapshot/expectation에서 compile 전에 수행하고 exact-one target만 compiled operation에 넣는다. 한 operation 실패 시 compiled plan을 전혀 반환하지 않는다.
+- Windows/Linux compiler tests와 Clippy, invalid/cycle/needs-resolution/fixed-seed DAG tests, current/clean-clone FULL, security regression을 통과하고 P04-04 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
 
 ## Risks
 
@@ -103,7 +115,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0029: P03-09와 phase Gate는 `implementation/p03/P03-09_REPORT.md` 및 `implementation/p03/P03_GATE_REPORT.md`에서 128 valid/256 negative replay, 두 ASan fuzz target, exact 한글 2020 output `4/4`, Windows/Linux `48/48`, current/clean-clone FULL 5/5로 current-PC local scoped PASS.
 - P-0030: P04-01 DocumentGraph v2는 `implementation/p04/P04-01_REPORT.md`에서 pure typed graph, finite identity/closure/shape validation, Windows/Linux golden `2ab9ffef...f3c6`, current/clean-clone FULL 5/5로 PASS.
 - P-0031: P04-02 Unit·ID model은 `implementation/p04/P04-02_REPORT.md`에서 official `1/7200 inch` HWPUNIT, exact rational conversion, checked half-away rounding, coordinate/typed-ID validation, Windows/Linux `18/18`, current/clean-clone FULL 5/5로 PASS.
+- P-0032: P04-03 Selector engine은 `implementation/p04/P04-03_REPORT.md`에서 revision/digest snapshot, exact-one ID/name/path/text-context resolution, zero/multiple/stale fail-closed, Windows/Linux `27/27`, current/clean-clone FULL 5/5로 PASS.
 
 ## Next
 
-P04-03 Selector engine을 `high`로 구현한다. immutable revision/digest snapshot에서 ID/name/path/text-context selector를 deterministic하게 평가하고 zero/multiple/stale를 fail-closed로 고정한다. P04-09 actual 한글 2020 vertical Gate와 P04 phase Gate는 `max`다.
+P04-04 OperationPlan compiler를 `xhigh`로 구현한다. versioned bounded draft를 typed selector, canonical units/defaults와 deterministic dependency DAG로 compile하고 invalid/cycle/needs-resolution을 fail-closed로 고정한다. P04-09 actual 한글 2020 vertical Gate와 P04 phase Gate는 `max`다.
