@@ -20,7 +20,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
-| P03 | `in_progress_current_pc_local` | P03-01~03 PASS, P03-04 preserving tokenizer 시작 |
+| P03 | `in_progress_current_pc_local` | P03-01~04 PASS, P03-05 part preservation map 시작 |
 | P04~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -29,17 +29,18 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0024 | P03-04 Preserving tokenizer | `in_progress` | checked byte span·namespace-aware token/tree, untouched byte equality |
+| P-0025 | P03-05 Part preservation map | `in_progress` | evidence-ranked per-part class, complete known-fixture expected map |
 
-### P03-04 Acceptance
+### P03-05 Acceptance
 
-- P03-03 safe reader가 승인한 immutable UTF-8/XML 1.0 bytes 위에 checked half-open byte span token과 lightweight tree/index를 만든다.
-- declaration, start/end/empty element, attribute, text/reference, comment와 whitespace의 원본 slice 경계를 보존하고 span이 UTF-8 및 input 경계를 벗어나지 못하게 한다.
-- element와 non-namespace attribute에 original QName/prefix 및 namespace URI identity를 함께 보존하고 descendant prefix rebinding을 올바르게 색인한다.
-- parent/child/sibling과 matching start/end 관계를 deterministic하게 구축하되 raw XML 또는 arbitrary rewrite capability를 public/LLM 경로에 노출하지 않는다.
-- untouched serialize는 normalization/re-encoding 없이 원본 bytes를 그대로 반환하며 SHA-256과 byte-for-byte equality를 검증한다.
-- quote style, attribute order, namespace prefix, entity spelling, comment, mixed whitespace가 다른 positive fixture와 malformed/overflow/span/limit negative fixture를 Windows/Linux에서 검증한다.
-- P03-03 safe XML 5/5, P03-02 PackageGraph 8/8, P03-01 malicious ZIP 8/8 regression을 유지하고 versioned migration/policy를 남긴다.
+- closed `PackageGraph`의 모든 non-directory part를 정확히 한 번 포함하는 deterministic `PreservationReport`와 stable per-part reason code를 만든다.
+- report 생성 시 bounded reader로 part를 다시 읽어 size/SHA-256이 graph identity와 일치하는지 검증하고 mismatch나 누락을 fail closed로 처리한다.
+- `ByteExact`, `TokenStable`, `Semantic`, `Regenerated`, `Opaque`, `Rejected`의 증거 수준과 승격 조건을 versioned policy로 고정한다. 아직 없는 writer/semantic producer 능력을 근거 없이 부여하지 않는다.
+- exact `mimetype` 같은 byte-contract part, safe XML token part, opaque binary/unknown part와 unsafe XML part를 구분하며 XML media/path mismatch와 DTD/entity/encoding 실패를 silently opaque로 downgrade하지 않는다.
+- `Rejected`가 하나라도 있으면 report의 direct-preserve readiness를 false로 유지하고 stable non-sensitive diagnostic만 기록한다.
+- raw bytes/XML/value/path를 public 또는 LLM report에 노출하지 않고 canonical package path, media type, role, size, digest, class, reason/evidence만 제공한다.
+- known synthetic HWPX fixture의 expected class map과 missing/extra/order/hash/media/unsafe negative corpus를 Windows/Linux에서 검증한다.
+- P03-04 preserving XML 7/7, P03-03 safe XML 5/5, P03-02 PackageGraph 8/8, P03-01 ZIP 8/8 regression을 유지하고 versioned migration/policy를 남긴다.
 
 ## Risks
 
@@ -70,7 +71,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0021: P03-01 bounded ZIP reader는 `implementation/p03/P03-01_REPORT.md`에서 Windows/Linux malicious corpus 8/8, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0022: P03-02 PackageGraph는 `implementation/p03/P03-02_REPORT.md`에서 namespace-resolved closed graph Windows/Linux 8/8, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0023: P03-03 safe XML reader는 `implementation/p03/P03-03_REPORT.md`에서 XML 1.0/UTF-8 namespace-resolved finite parser, Windows/Linux 5/5, PackageGraph/ZIP regression, current/clean-clone FULL 5/5와 보안 0건 PASS.
+- P-0024: P03-04 preserving XML token model은 `implementation/p03/P03-04_REPORT.md`에서 checked source spans, namespace tree, untouched byte/SHA equality, Windows/Linux core corpus, current/clean-clone FULL 5/5와 보안 0건 PASS.
 
 ## Next
 
-P03-04 preserving tokenizer는 `max`다. P03-05 part preservation map도 시작 시 `max`로 유지한다.
+P03-05 part preservation map은 `max`다. P03-06 ID/reference index도 시작 시 `max`로 유지한다.
