@@ -24,6 +24,8 @@ v1 automatically assigns only:
 
 `Semantic` and `Regenerated` are reserved and always have zero automatic count. They require later explicit producer/comparator evidence.
 
+The XML path allowlist includes `.rdf` because current 한글 2020 declares `META-INF/container.rdf` as an ancillary `application/rdf+xml` rootfile. Other one-sided media/path hints remain rejected.
+
 ## Readiness and failure
 
 One `Rejected` record makes `direct_preserve_ready=false` but does not hide other records. Reader/graph set drift, graph semantic mutation, raw size/hash drift, internal token failure or allocation failure aborts without a partial report.

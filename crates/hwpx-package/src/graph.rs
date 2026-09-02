@@ -13,6 +13,9 @@ pub const HWPX_MEDIA_TYPE: &str = "application/hwp+zip";
 const CONTAINER_PATH: &str = "META-INF/container.xml";
 const CONTAINER_NS: &str = "urn:oasis:names:tc:opendocument:xmlns:container";
 const OPF_NS: &str = "http://www.idpf.org/2007/opf";
+const OPF_NS_HANCOM_2020: &str = "http://www.idpf.org/2007/opf/";
+const HWPML_PACKAGE_MEDIA_TYPE: &str = "application/hwpml-package+xml";
+const OEBPS_PACKAGE_MEDIA_TYPE: &str = "application/oebps-package+xml";
 
 /// Finite limits for the narrow container/OPF metadata parser used by P03-02.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -231,7 +234,9 @@ impl PackageGraph {
             return Err(GraphError::RequiredPartMissing { part: "version" });
         }
         let container_bytes = reader.read_entry(container_index)?;
-        let root = parse_container(&container_bytes, package_limits, graph_limits)?;
+        let roots = parse_container(&container_bytes, package_limits, graph_limits)?;
+        validate_rootfile_targets(&roots, &entries, &by_key)?;
+        let root = &roots.package;
         let root_index = by_key
             .get(root.path.collision_key())
             .copied()
@@ -244,18 +249,30 @@ impl PackageGraph {
         let parsed = parse_opf(
             &hashed.package_bytes,
             &package_document,
+            &by_key,
             package_limits,
             graph_limits,
         )?;
         let links = build_links(parsed, &entries, &by_key, &package_document, graph_limits)?;
-        let infrastructure = infrastructure_keys(&package_document, package_limits)?;
+        let infrastructure = infrastructure_keys(&package_document, &roots.all, package_limits)?;
         validate_closure(&entries, &infrastructure, &links.manifest_targets)?;
+        let root_media_by_target = roots
+            .all
+            .iter()
+            .map(|root| {
+                (
+                    root.path.collision_key().to_owned(),
+                    root.media_type.clone(),
+                )
+            })
+            .collect::<BTreeMap<_, _>>();
         let parts = build_parts(
             &entries,
             &hashed.raw_hashes,
             &links,
             &package_document,
             &root.media_type,
+            &root_media_by_target,
             graph_limits,
         )?;
         Ok(Self {
@@ -303,6 +320,8 @@ pub enum GraphError {
     ContainerRootfileDuplicate,
     #[error("container rootfile is invalid")]
     ContainerRootfileInvalid,
+    #[error("container rootfile target is missing")]
+    ContainerRootfileTargetMissing,
     #[error("package document target is missing")]
     PackageDocumentMissing,
     #[error("OPF manifest is missing")]
@@ -321,6 +340,8 @@ pub enum GraphError {
     ManifestPathDuplicate,
     #[error("OPF manifest target is missing from the package")]
     ManifestTargetMissing,
+    #[error("OPF manifest target is ambiguous between root and source-relative paths")]
+    ManifestTargetAmbiguous,
     #[error("package contains an unlisted non-infrastructure part")]
     OrphanPart,
     #[error("OPF spine contains a dangling reference")]
@@ -358,6 +379,7 @@ impl GraphError {
             Self::ContainerRootfileMissing => "container_rootfile_missing",
             Self::ContainerRootfileDuplicate => "container_rootfile_duplicate",
             Self::ContainerRootfileInvalid => "container_rootfile_invalid",
+            Self::ContainerRootfileTargetMissing => "container_rootfile_target_missing",
             Self::PackageDocumentMissing => "package_document_missing",
             Self::ManifestMissing => "manifest_missing",
             Self::ManifestDuplicate => "manifest_duplicate",
@@ -367,6 +389,7 @@ impl GraphError {
             Self::ManifestIdDuplicate => "manifest_id_duplicate",
             Self::ManifestPathDuplicate => "manifest_path_duplicate",
             Self::ManifestTargetMissing => "manifest_target_missing",
+            Self::ManifestTargetAmbiguous => "manifest_target_ambiguous",
             Self::OrphanPart => "orphan_part",
             Self::SpineDangling => "spine_dangling",
             Self::SpineDuplicate => "spine_duplicate",
@@ -398,10 +421,16 @@ struct ParsedOpf {
     spine: Vec<SpineItem>,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 struct RootfileRecord {
     path: PackagePath,
     media_type: MediaType,
+}
+
+#[derive(Debug)]
+struct ContainerRoots {
+    package: RootfileRecord,
+    all: Vec<RootfileRecord>,
 }
 
 #[derive(Debug)]
@@ -581,6 +610,7 @@ fn build_parts(
     links: &GraphLinks,
     package_document: &PackagePath,
     package_document_media_type: &MediaType,
+    root_media_by_target: &BTreeMap<String, MediaType>,
     limits: PackageGraphLimits,
 ) -> Result<Vec<PartRecord>, GraphError> {
     let mut parts = Vec::new();
@@ -596,6 +626,8 @@ fn build_parts(
                 PartRole::ManifestListed
             };
             (media_type.clone(), role)
+        } else if let Some(media_type) = root_media_by_target.get(key) {
+            (media_type.clone(), PartRole::Infrastructure)
         } else {
             (
                 infrastructure_media_type(
@@ -683,7 +715,7 @@ fn parse_container(
     bytes: &[u8],
     package_limits: PackageLimits,
     limits: PackageGraphLimits,
-) -> Result<RootfileRecord, GraphError> {
+) -> Result<ContainerRoots, GraphError> {
     let document = parse_safe_xml(bytes, limits)?;
     let mut stack = Vec::<String>::new();
     stack
@@ -691,8 +723,14 @@ fn parse_container(
         .map_err(|_| GraphError::AllocationFailed)?;
     let mut state = ContainerState {
         root_seen: false,
-        rootfile: None,
+        package_root: None,
+        rootfiles: Vec::new(),
+        rootfile_keys: BTreeSet::new(),
     };
+    state
+        .rootfiles
+        .try_reserve(limits.config().max_relationships.min(16))
+        .map_err(|_| GraphError::AllocationFailed)?;
     for event in document.events {
         match event {
             SafeXmlEvent::Start(element) => {
@@ -726,13 +764,24 @@ fn parse_container(
     if !stack.is_empty() || !state.root_seen {
         return Err(GraphError::XmlMalformed);
     }
-    state.rootfile.ok_or(GraphError::ContainerRootfileMissing)
+    if state.rootfiles.is_empty() {
+        return Err(GraphError::ContainerRootfileMissing);
+    }
+    let package = state
+        .package_root
+        .ok_or(GraphError::ContainerRootfileMissing)?;
+    Ok(ContainerRoots {
+        package,
+        all: state.rootfiles,
+    })
 }
 
 #[derive(Debug)]
 struct ContainerState {
     root_seen: bool,
-    rootfile: Option<RootfileRecord>,
+    package_root: Option<RootfileRecord>,
+    rootfiles: Vec<RootfileRecord>,
+    rootfile_keys: BTreeSet<String>,
 }
 
 fn handle_container_element(
@@ -757,19 +806,37 @@ fn handle_container_element(
     match (depth, local) {
         (2, "rootfiles") if parent.is_some_and(|value| qname_local(value) == "container") => Ok(()),
         (3, "rootfile") if parent.is_some_and(|value| qname_local(value) == "rootfiles") => {
-            if state.rootfile.is_some() {
-                return Err(GraphError::ContainerRootfileDuplicate);
-            }
             let raw = attributes
                 .get("full-path")
                 .ok_or(GraphError::ContainerRootfileInvalid)?;
             let media_type = attributes
                 .get("media-type")
                 .ok_or(GraphError::ContainerRootfileInvalid)?;
-            state.rootfile = Some(RootfileRecord {
+            if state.rootfiles.len() >= limits.config().max_relationships {
+                return Err(GraphError::XmlLimitExceeded {
+                    limit: "relationships",
+                });
+            }
+            let rootfile = RootfileRecord {
                 path: resolve_reference(None, raw, package_limits)?,
                 media_type: MediaType::parse(media_type, limits)?,
-            });
+            };
+            if !state
+                .rootfile_keys
+                .insert(rootfile.path.collision_key().to_owned())
+            {
+                return Err(GraphError::ContainerRootfileDuplicate);
+            }
+            if is_package_root_media(rootfile.media_type.as_str())
+                && state.package_root.replace(rootfile.clone()).is_some()
+            {
+                return Err(GraphError::ContainerRootfileDuplicate);
+            }
+            state
+                .rootfiles
+                .try_reserve(1)
+                .map_err(|_| GraphError::AllocationFailed)?;
+            state.rootfiles.push(rootfile);
             Ok(())
         }
         _ => Err(GraphError::XmlMalformed),
@@ -779,6 +846,7 @@ fn handle_container_element(
 fn parse_opf(
     bytes: &[u8],
     package_document: &PackagePath,
+    by_key: &BTreeMap<String, usize>,
     package_limits: PackageLimits,
     limits: PackageGraphLimits,
 ) -> Result<ParsedOpf, GraphError> {
@@ -812,6 +880,7 @@ fn parse_opf(
                     &mut items,
                     &mut spine,
                     package_document,
+                    by_key,
                     package_limits,
                     limits,
                 )?;
@@ -828,6 +897,7 @@ fn parse_opf(
                     &mut items,
                     &mut spine,
                     package_document,
+                    by_key,
                     package_limits,
                     limits,
                 )?;
@@ -864,6 +934,7 @@ fn handle_opf_element(
     items: &mut Vec<ManifestItem>,
     spine: &mut Vec<SpineItem>,
     package_document: &PackagePath,
+    by_key: &BTreeMap<String, usize>,
     package_limits: PackageLimits,
     limits: PackageGraphLimits,
 ) -> Result<(), GraphError> {
@@ -927,7 +998,7 @@ fn handle_opf_element(
         }
         items.push(ManifestItem {
             id,
-            target: resolve_reference(Some(package_document), href, package_limits)?,
+            target: resolve_manifest_reference(package_document, href, by_key, package_limits)?,
             media_type: MediaType::parse(media_type, limits)?,
         });
         return Ok(());
@@ -962,7 +1033,7 @@ fn handle_opf_element(
 }
 
 fn namespace_matches(namespace: Option<&str>, expected: &str) -> bool {
-    namespace == Some(expected)
+    namespace == Some(expected) || (expected == OPF_NS && namespace == Some(OPF_NS_HANCOM_2020))
 }
 
 fn require_namespace(namespace: Option<&str>, expected: &str) -> Result<(), GraphError> {
@@ -1036,6 +1107,37 @@ fn resolve_reference(
         .map_err(|_| GraphError::InvalidRelationshipPath)
 }
 
+fn resolve_manifest_reference(
+    package_document: &PackagePath,
+    raw: &str,
+    by_key: &BTreeMap<String, usize>,
+    limits: PackageLimits,
+) -> Result<PackagePath, GraphError> {
+    let relative = resolve_reference(Some(package_document), raw, limits);
+    let root = resolve_reference(None, raw, limits);
+    let mut existing = Vec::new();
+    existing
+        .try_reserve_exact(2)
+        .map_err(|_| GraphError::AllocationFailed)?;
+    for candidate in [relative.as_ref().ok(), root.as_ref().ok()]
+        .into_iter()
+        .flatten()
+    {
+        if by_key.contains_key(candidate.collision_key())
+            && !existing
+                .iter()
+                .any(|path: &PackagePath| path.collision_key() == candidate.collision_key())
+        {
+            existing.push(candidate.clone());
+        }
+    }
+    match existing.len() {
+        1 => Ok(existing.remove(0)),
+        2 => Err(GraphError::ManifestTargetAmbiguous),
+        _ => relative.or(root),
+    }
+}
+
 fn percent_decode(raw: &str) -> Result<Vec<u8>, GraphError> {
     let bytes = raw.as_bytes();
     let mut output = Vec::new();
@@ -1071,6 +1173,7 @@ fn hex_value(byte: u8) -> Option<u8> {
 
 fn infrastructure_keys(
     package_document: &PackagePath,
+    rootfiles: &[RootfileRecord],
     limits: PackageLimits,
 ) -> Result<BTreeSet<String>, GraphError> {
     let mut result = BTreeSet::new();
@@ -1083,13 +1186,50 @@ fn infrastructure_keys(
         "META-INF/signatures.xml",
         "META-INF/encryption.xml",
         "META-INF/rights.xml",
+        "Preview/PrvImage.png",
         package_document.as_str(),
     ] {
         let parsed = PackagePath::parse(path.as_bytes(), usize::MAX, limits)
             .map_err(|_| GraphError::InvalidRelationshipPath)?;
         result.insert(parsed.collision_key().to_owned());
     }
+    for rootfile in rootfiles {
+        result.insert(rootfile.path.collision_key().to_owned());
+    }
     Ok(result)
+}
+
+fn validate_rootfile_targets(
+    roots: &ContainerRoots,
+    entries: &[crate::EntryMetadata],
+    by_key: &BTreeMap<String, usize>,
+) -> Result<(), GraphError> {
+    for rootfile in &roots.all {
+        let missing_error = if rootfile.path == roots.package.path {
+            GraphError::PackageDocumentMissing
+        } else {
+            GraphError::ContainerRootfileTargetMissing
+        };
+        let index = by_key
+            .get(rootfile.path.collision_key())
+            .copied()
+            .ok_or(missing_error)?;
+        if entries[index].path.is_directory() {
+            return Err(if rootfile.path == roots.package.path {
+                GraphError::PackageDocumentMissing
+            } else {
+                GraphError::ContainerRootfileTargetMissing
+            });
+        }
+    }
+    Ok(())
+}
+
+fn is_package_root_media(media_type: &str) -> bool {
+    matches!(
+        media_type,
+        HWPML_PACKAGE_MEDIA_TYPE | OEBPS_PACKAGE_MEDIA_TYPE
+    )
 }
 
 fn infrastructure_media_type(
@@ -1100,6 +1240,8 @@ fn infrastructure_media_type(
 ) -> Result<MediaType, GraphError> {
     if path == "mimetype" {
         MediaType::parse(HWPX_MEDIA_TYPE, limits)
+    } else if path == "Preview/PrvImage.png" {
+        MediaType::parse("image/png", limits)
     } else if path == package_document.as_str() {
         Ok(package_document_media_type.clone())
     } else {

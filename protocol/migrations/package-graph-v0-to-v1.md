@@ -13,6 +13,8 @@
 - exact first/stored HWPX `mimetype` validation;
 - required container/version/rootfile checks;
 - bounded OCF container and OPF manifest/spine parsing;
+- exact OPF namespace allowlist for the standard URI and current 한글 2020 trailing-slash emission only;
+- current 한글 2020 multi-root container validation, declared ancillary media, fixed preview-image infrastructure and unambiguous root/source-relative manifest target selection;
 - source-relative internal target resolution;
 - manifest ID/target and spine reference uniqueness;
 - existing-target and all-part closure checks;

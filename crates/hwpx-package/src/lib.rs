@@ -7,6 +7,7 @@
 //! nested-package checks have succeeded.
 
 mod graph;
+mod id_index;
 mod limits;
 mod path;
 mod preservation;
@@ -17,6 +18,10 @@ mod safe_xml;
 pub use graph::{
     GraphError, MediaType, PackageGraph, PackageGraphLimitConfig, PackageGraphLimits, PartRecord,
     PartRole, Relationship, RelationshipKind,
+};
+pub use id_index::{
+    IdDeclaration, IdIndex, IdIndexError, IdIndexLimitConfig, IdIndexLimits, IdIssueKind, IdKind,
+    IdLocation, IdReference, IdRuleProfile, IdValidationIssue, IdValidationReport,
 };
 pub use limits::{PackageLimitConfig, PackageLimits};
 pub use path::PackagePath;

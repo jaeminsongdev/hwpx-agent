@@ -19,15 +19,15 @@ The following checks occur before graph publication:
 2. it uses ZIP `Stored` compression and its bytes are exactly `application/hwp+zip` with no BOM or whitespace;
 3. `version.xml` and `META-INF/container.xml` exist as files;
 4. container XML declares the OCF namespace `urn:oasis:names:tc:opendocument:xmlns:container` and exactly one `rootfile` with `full-path` and a valid `media-type`;
-5. the rootfile exists and declares an OPF `package` in `http://www.idpf.org/2007/opf`;
+5. the rootfile exists and declares an OPF `package` in either the exact standard URI `http://www.idpf.org/2007/opf` or the exact trailing-slash URI `http://www.idpf.org/2007/opf/` emitted by the current 한글 2020 fixture; arbitrary trimming or other near-match URI is rejected;
 6. exactly one OPF `manifest` and one OPF `spine` are accepted.
 
-Duplicate archive names and NFC/casefold path collisions are already rejected by P03-01. A directory entry is never a part node.
+Duplicate archive names and NFC/casefold path collisions are already rejected by P03-01. A directory entry is never a part node. Current 한글 2020 may declare multiple container rootfiles: exactly one package root media type is selected, all ancillary rootfile targets must exist, and declared media types are preserved. The fixed preview image `Preview/PrvImage.png` is an allowlisted HWPX infrastructure part with `image/png`; arbitrary unlisted files remain orphan failures.
 
 ## 3. Relationship and closure policy
 
 - Manifest items require non-empty unique `id`, `href` and a syntactically valid media type.
-- `href` is strict UTF-8 after percent decoding and resolves relative to the OPF source directory.
+- `href` is strict UTF-8 after percent decoding. Both package-root and OPF-source-relative candidates are checked against existing entries; exactly one existing candidate is selected, the same normalized candidate is deduplicated, and two distinct existing candidates fail as ambiguous.
 - `.` is normalized, `..` is permitted only while it remains inside package root, and absolute, empty-component, backslash, query, fragment, drive/stream and invalid portable names are rejected.
 - A URI scheme or network-path reference is an external relationship and is blocked by default.
 - Different relationship spellings that normalize to the same portable collision key are duplicates.

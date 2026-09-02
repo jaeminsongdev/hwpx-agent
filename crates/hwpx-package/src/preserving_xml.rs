@@ -11,7 +11,7 @@ use crate::safe_xml::{
 const XMLNS_NAMESPACE: &str = "http://www.w3.org/2000/xmlns/";
 
 /// A checked half-open byte range into the exact UTF-8 XML input.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct XmlByteSpan {
     start: usize,
     end: usize,
@@ -100,7 +100,7 @@ pub enum XmlQuoteStyle {
 }
 
 /// Structural metadata for one attribute without its untrusted raw value.
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Eq, PartialEq)]
 pub struct XmlAttributeToken {
     name: XmlName,
     span: XmlByteSpan,
@@ -108,6 +108,22 @@ pub struct XmlAttributeToken {
     value_span: XmlByteSpan,
     quote: XmlQuoteStyle,
     namespace_declaration: bool,
+    semantic_value: String,
+}
+
+impl Debug for XmlAttributeToken {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("XmlAttributeToken")
+            .field("name", &self.name)
+            .field("span", &self.span)
+            .field("name_span", &self.name_span)
+            .field("value_span", &self.value_span)
+            .field("quote", &self.quote)
+            .field("namespace_declaration", &self.namespace_declaration)
+            .field("semantic_value_bytes", &self.semantic_value.len())
+            .finish()
+    }
 }
 
 impl XmlAttributeToken {
@@ -139,6 +155,10 @@ impl XmlAttributeToken {
     #[must_use]
     pub const fn name(&self) -> &XmlName {
         &self.name
+    }
+
+    pub(crate) fn semantic_value(&self) -> &str {
+        &self.semantic_value
     }
 }
 
@@ -789,6 +809,10 @@ fn parse_start_tag(
             attribute_name_span,
             value_span,
             quote,
+            element
+                .attributes
+                .get(&expected.qualified_name)
+                .ok_or(PreservingXmlError::TokenMismatch)?,
         ));
     }
     skip_xml_whitespace(bytes, &mut cursor, close);
@@ -809,6 +833,7 @@ fn attribute_token(
     name_span: XmlByteSpan,
     value_span: XmlByteSpan,
     quote: XmlQuoteStyle,
+    semantic_value: &str,
 ) -> XmlAttributeToken {
     let namespace = if attribute.namespace_declaration {
         Some(XMLNS_NAMESPACE.to_owned())
@@ -826,6 +851,7 @@ fn attribute_token(
         value_span,
         quote,
         namespace_declaration: attribute.namespace_declaration,
+        semantic_value: semantic_value.to_owned(),
     }
 }
 
@@ -923,7 +949,7 @@ mod tests {
     fn preserves_every_accepted_token_byte_and_digest() {
         let xml = concat!(
             "<?xml version=\"1.0\" encoding='UTF-8'?>\r\n",
-            "<!--before--><p:root xmlns:p='urn:one' a = '1' p:b=\"&quot;\">\n",
+            "<!--before--><p:root xmlns:p='urn:one' a = '1' p:b=\"&quot;\" secret='TOPSECRET'>\n",
             "  <p:item p:id='7'/>text &amp; 한글<!--inside-->\r\n",
             "</p:root>\n"
         )
@@ -984,6 +1010,8 @@ mod tests {
         assert!(!debug.contains("before"));
         assert!(!debug.contains("한글"));
         assert!(!debug.contains("&quot;"));
+        let element_debug = format!("{:?}", document.elements());
+        assert!(!element_debug.contains("TOPSECRET"));
     }
 
     #[test]

@@ -48,6 +48,72 @@ fn valid_hwpx_builds_a_closed_typed_graph() -> TestResult {
         .replace("xmlns:opf", "xmlns:pkg");
     let alternate = graph_from(valid_archive(CONTAINER, &alternate_prefix, &[]))?;
     assert_eq!(alternate.parts.len(), graph.parts.len());
+
+    let hancom_2020_namespace = OPF.replace(
+        "http://www.idpf.org/2007/opf\"",
+        "http://www.idpf.org/2007/opf/\"",
+    );
+    let current_2020 = graph_from(valid_archive(CONTAINER, &hancom_2020_namespace, &[]))?;
+    assert_eq!(current_2020.parts.len(), graph.parts.len());
+    let current_2020_root_hrefs = hancom_2020_namespace
+        .replace("href=\"header.xml\"", "href=\"Contents/header.xml\"")
+        .replace("href=\"section0.xml\"", "href=\"Contents/section0.xml\"")
+        .replace(
+            "href=\"../BinData/image.png\"",
+            "href=\"BinData/image.png\"",
+        );
+
+    let multi_root = CONTAINER.replace(
+        "<rootfiles><rootfile full-path=\"Contents/content.hpf\" media-type=\"application/oebps-package+xml\"/></rootfiles>",
+        concat!(
+            "<rootfiles>",
+            "<rootfile full-path=\"Contents/content.hpf\" media-type=\"application/hwpml-package+xml\"/>",
+            "<rootfile full-path=\"Preview/PrvText.txt\" media-type=\"text/plain\"/>",
+            "<rootfile full-path=\"META-INF/container.rdf\" media-type=\"application/rdf+xml\"/>",
+            "</rootfiles>"
+        ),
+    );
+    let current_roots = graph_from(valid_archive(
+        &multi_root,
+        &current_2020_root_hrefs,
+        &[
+            (
+                "Preview/PrvText.txt",
+                b"preview",
+                CompressionMethod::Deflated,
+            ),
+            (
+                "META-INF/container.rdf",
+                b"<rdf/>",
+                CompressionMethod::Deflated,
+            ),
+            (
+                "Preview/PrvImage.png",
+                b"preview-image",
+                CompressionMethod::Stored,
+            ),
+        ],
+    ))?;
+    assert_eq!(current_roots.parts.len(), graph.parts.len() + 3);
+    assert!(current_roots.parts.iter().any(|part| {
+        part.path.as_str() == "Preview/PrvText.txt" && part.media_type.as_str() == "text/plain"
+    }));
+    assert!(current_roots.parts.iter().any(|part| {
+        part.path.as_str() == "META-INF/container.rdf"
+            && part.media_type.as_str() == "application/rdf+xml"
+    }));
+    assert!(current_roots.parts.iter().any(|part| {
+        part.path.as_str() == "Preview/PrvImage.png" && part.media_type.as_str() == "image/png"
+    }));
+
+    let near_match = OPF.replace(
+        "http://www.idpf.org/2007/opf\"",
+        "http://www.idpf.org/2007/opf//\"",
+    );
+    expect_code(
+        valid_archive(CONTAINER, &near_match, &[]),
+        "xml_namespace_invalid",
+    )?;
     Ok(())
 }
 
@@ -106,6 +172,15 @@ fn container_requires_one_namespaced_existing_rootfile() -> TestResult {
         entry("version.xml", b"<version/>", CompressionMethod::Stored),
     ])?;
     expect_code(no_container, "required_part_missing")?;
+
+    let missing_ancillary = CONTAINER.replace(
+        "</rootfiles>",
+        "<rootfile full-path=\"Preview/missing.txt\" media-type=\"text/plain\"/></rootfiles>",
+    );
+    expect_code(
+        valid_archive(&missing_ancillary, OPF, &[]),
+        "container_rootfile_target_missing",
+    )?;
 
     let missing = CONTAINER.replace(
         "<rootfiles><rootfile full-path=\"Contents/content.hpf\" media-type=\"application/oebps-package+xml\"/></rootfiles>",
@@ -229,6 +304,15 @@ fn relationship_targets_are_bounded_internal_and_source_relative() -> TestResult
     expect_code(
         valid_archive(CONTAINER, &external, &[]),
         "external_relationship_blocked",
+    )?;
+
+    expect_code(
+        valid_archive(
+            CONTAINER,
+            OPF,
+            &[("header.xml", b"ambiguous", CompressionMethod::Stored)],
+        ),
+        "manifest_target_ambiguous",
     )?;
 
     let escape = OPF.replace("header.xml", "../../escape.xml");

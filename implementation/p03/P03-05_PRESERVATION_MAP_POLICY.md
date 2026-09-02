@@ -28,7 +28,7 @@ Report records are sorted by canonical `PackagePath`, independent of caller vect
 
 ## 3. XML and media policy
 
-XML media is `*/xml` or a subtype ending `+xml`. XML path hints are `.xml`, `.hpf`, `.opf`, `.rels`, `.xsd` and `.svg`, compared case-insensitively. A one-sided media/path hint is rejected rather than guessed.
+XML media is `*/xml` or a subtype ending `+xml`. XML path hints are `.xml`, `.hpf`, `.opf`, `.rels`, `.xsd`, `.svg` and the current-2020 container metadata suffix `.rdf`, compared case-insensitively. A one-sided media/path hint is rejected rather than guessed.
 
 An XML candidate is parsed only by `PreservingXmlDocument`. P03-03 safety rejection becomes a complete `Rejected` record with the existing stable `safe_xml_*` code. Token/span/tree/allocation or untouched-equality failures after safe admission are internal hard errors, not content downgrades.
 

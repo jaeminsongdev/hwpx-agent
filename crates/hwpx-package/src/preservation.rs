@@ -471,7 +471,7 @@ fn classify_xml(bytes: &[u8]) -> Result<Classification, PreservationError> {
 
 fn path_is_xml(path: &str) -> bool {
     let lower = path.to_ascii_lowercase();
-    [".xml", ".hpf", ".opf", ".rels", ".xsd", ".svg"]
+    [".xml", ".hpf", ".opf", ".rels", ".xsd", ".svg", ".rdf"]
         .iter()
         .any(|extension| lower.ends_with(extension))
 }
