@@ -9,7 +9,7 @@
 
 - 상태: `P04_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P04_DOCUMENTGRAPH_OPERATIONPLAN_TRANSACTIONS`
-- 구현 코드: P01 Rust/C#/TypeScript foundation, P02 source importer/candidate/semantic review/binding/runtime probe/Ed25519 signed registry pipeline과 P03 bounded ZIP→graph→safe/preserving XML→preservation map→typed ID→patch→atomic writer→round-trip/repair core가 build·test 가능하다. P04-01 pure DocumentGraph v2 type 구현을 시작했다. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence도 보존한다.
+- 구현 코드: P01 Rust/C#/TypeScript foundation, P02 source importer/candidate/semantic review/binding/runtime probe/Ed25519 signed registry pipeline과 P03 bounded ZIP→graph→safe/preserving XML→preservation map→typed ID→patch→atomic writer→round-trip/repair core가 build·test 가능하다. P04-01 pure DocumentGraph v2 type·finite validator·canonical JSON을 완료했고 P04-02 Unit·ID model을 시작한다. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence도 보존한다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -75,12 +75,13 @@
 
 ## P04 현재 상태
 
-- P04-01 `in_progress`: backend-neutral `DocumentGraph` v2 types, finite validation과 deterministic serialization/golden contract를 `domain-ir`에 구현한다.
+- P04-01 `PASS`: backend-neutral `DocumentGraph` v2 types, finite identity/reference/table validator와 deterministic canonical JSON을 `domain-ir`에 구현했다. Windows/Linux `9/9`, golden `2ab9ffef...f3c6`, current/clean-clone FULL `5/5`, security 0건을 통과했다.
+- P04-02 `in_progress`: checked mm/pt/HWPUNIT conversion, half-away-from-zero receipt, coordinate space/anchor와 typed ID newtype을 구현한다.
 - P03가 요구되던 P04/P10 선행조건은 현재 PC 로컬 범위에서 충족됐다. 전체 제품 구현은 P04부터 순차 진행하며 P10은 현재 실행 task가 아니다.
 
 ## 다음 작업
 
-P04-01 DocumentGraph v2 types를 구현한다. 추론수준은 `max`다. pure model, finite validation, canonical serialization과 golden/negative test를 먼저 완료하며 이 task에는 한글 runtime 조작이 없다.
+P04-02 Unit·ID model을 구현한다. 추론수준은 `high`다. source-verified rational factor, fixed-point normalization, rounding/overflow property tests와 coordinate/typed-ID 경계를 먼저 완료하며 이 task에는 한글 runtime 조작이 없다.
 
 ## 현재 blocker
 
@@ -90,4 +91,4 @@ P04-01 DocumentGraph v2 types를 구현한다. 추론수준은 `max`다. pure mo
 
 ## 검증 한계
 
-제품 foundation, P02 signed registry와 P03 package/preserving/round-trip core는 재현 가능하지만 P04 이후 제품 기능은 아직 완료되지 않았다. P03 actual output evidence는 승인된 두 synthetic fixture에서 생성한 네 output의 read-only open/readback이며 save/render/PDF 동등성이나 사용자 문서 호환성을 뜻하지 않는다. Signed registry는 exact 2020에서 두 안전 canary만 verified이며 public routing은 0이다. Exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00/P01/P02/P03 실제 상태는 각 Gate report를 따른다.
+제품 foundation, P02 signed registry, P03 package/preserving/round-trip core와 P04-01 pure DocumentGraph는 재현 가능하지만 P04-02 이후 operation/transaction 기능은 아직 완료되지 않았다. P04-01은 synthetic IR 계약이며 실제 HWPX lifting/lowering, real-save ID 안정성, public wire schema나 visual fidelity를 증명하지 않는다. P03 actual output evidence는 승인된 두 synthetic fixture에서 생성한 네 output의 read-only open/readback이며 save/render/PDF 동등성이나 사용자 문서 호환성을 뜻하지 않는다. Signed registry는 exact 2020에서 두 안전 canary만 verified이며 public routing은 0이다. Exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00/P01/P02/P03/P04-01 실제 상태는 각 report를 따른다.

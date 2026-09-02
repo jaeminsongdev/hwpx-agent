@@ -37,7 +37,7 @@ DocumentGraph·OperationPlan·Transactions를 문서상 계획이 아니라 **�
 
 ## Phase hard gate
 
-- [ ] `P04-01` 산출물 `domain-ir crate` 존재, 검증: serialization/golden tests.
+- [x] `P04-01` 산출물 `domain-ir crate` 존재, 검증: serialization/golden tests.
 - [ ] `P04-02` 산출물 `unit/id module` 존재, 검증: overflow/rounding/property tests.
 - [ ] `P04-03` 산출물 `selector module` 존재, 검증: zero/multiple/stale candidate tests.
 - [ ] `P04-04` 산출물 `planner` 존재, 검증: invalid/cycle/needs-resolution tests.
