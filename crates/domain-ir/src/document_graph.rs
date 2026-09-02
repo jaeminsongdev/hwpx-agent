@@ -647,6 +647,11 @@ impl DocumentGraph {
     }
 
     #[must_use]
+    pub(crate) const fn draft(&self) -> &DocumentGraphDraft {
+        &self.0
+    }
+
+    #[must_use]
     pub fn into_draft(self) -> DocumentGraphDraft {
         self.0
     }
