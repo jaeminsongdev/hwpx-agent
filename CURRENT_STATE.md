@@ -7,9 +7,9 @@
 
 ## 현재 상태
 
-- 상태: `P02_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
-- 현재 phase: `P02_OFFICIAL_CATALOG_IMPORTER_CAPABILITY_REGISTRY`
-- 구현 코드: P01 Rust/C#/TypeScript foundation, secure workdir, safe logging, semantic worker boundary, schema/protobuf codegen, CI/security/bootstrap와 P02 source importer/candidate/semantic review pipeline이 build·test 가능하다. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence도 보존한다.
+- 상태: `P03_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
+- 현재 phase: `P03_HWPX_PACKAGE_PRESERVING_XML_CORE`
+- 구현 코드: P01 Rust/C#/TypeScript foundation과 P02 source importer/candidate/semantic review/binding/runtime probe/Ed25519 signed registry pipeline이 build·test 가능하다. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence도 보존한다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -60,11 +60,16 @@
 - P02-06 `PASS`: 609-row canonical matrix에 대해 3,680/3,680 node와 3,811/3,811 edge를 disposition했다. strict proposal 35건 중 34건을 semantic mapping하고 1건은 ambiguity로 거절했다. unresolved/auto-merge/runtime-qualified 0, independent verifier errors 0, Windows/Linux 36 tests, current/clean-clone 5/5 lane을 통과했다.
 - P02-07 `PASS`: exact 2020 profile에 `AUTOMATION_FULL` 191 + `HYBRID` 345 = 536 capability를 전수 표현했다. candidate 32, unavailable-with-reason 504, missing/duplicate/runtime-qualified/routing-enabled 0이며 protocol catalog v2 byte identity, additive v3 codegen, independent verifier errors 0, Windows/Linux 43 tests, current/clean-clone 5/5 lane을 통과했다.
 - P02-08 `PASS`: exact 2020 x86/STA disposable runtime probe에서 request/trace/receipt correlation, 32/32 disposition, 안전 canary 2건, save/reopen exact semantic match, `Quit()`, 잔류 process 0을 확인했다. `edit.go_to` default-read 실패 1건은 typed/hash negative evidence로 보존했고 independent verifier errors 0, Python 47/47, PowerShell 31/31을 통과했다.
-- P02-09 `in_progress`: verified runtime evidence만 target-scoped로 승격하는 signed registry manifest와 deterministic drift/tamper 검증을 구현한다.
+- P02-09 `PASS`: Ed25519 private signed registry 963,624 bytes를 생성하고 독립 verifier signature/runtime errors 0, deterministic 2회 byte identity, no-overwrite, tamper/rollback/wrong-parent/drift tests를 통과했다. 536개 중 verified 2/failed 1/risk-blocked 17/not-run 12/unavailable 504, routing 0이다. Actual 다른-build drift는 `baseline_unavailable`다.
+- P02 Gate `PASS_SCOPED_CURRENT_PC_LOCAL`: Windows/Linux P02 61/61, current/clean-clone FULL bootstrap 5/5, secret/vulnerability/forbidden license 0. Authoritative report는 `implementation/p02/P02_GATE_REPORT.md`다.
+
+## P03 현재 상태
+
+- P03-01 `in_progress`: Rust bounded ZIP reader의 limit/path/streaming/error contract와 synthetic malicious ZIP corpus를 구현한다.
 
 ## 다음 작업
 
-현재 PC에서 P02-09 registry signing/drift를 구현한다. P02-09와 P02 최종 감사 추론수준은 `max`다. 추가 한글 UI 조작은 현재 task에 필요하지 않다.
+P03-01 Bounded ZIP reader를 구현한다. 추론수준은 `max`이며 한글 UI나 사용자 문서는 필요하지 않다.
 
 ## 현재 blocker
 
@@ -74,4 +79,4 @@
 
 ## 검증 한계
 
-제품 foundation 코드는 재현 가능하지만 문서 패키지 core와 전체 제품 기능은 아직 구현되지 않았다. Exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00/P01 실제 상태는 각 Gate report를 따른다.
+제품 foundation과 P02 signed registry는 재현 가능하지만 P03 문서 패키지 core와 이후 제품 기능은 아직 구현되지 않았다. Signed registry는 exact 2020에서 두 안전 canary만 verified이며 public routing은 0이다. Exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00/P01/P02 실제 상태는 각 Gate report를 따른다.

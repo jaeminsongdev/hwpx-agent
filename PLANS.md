@@ -19,8 +19,9 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 |---|---|---|
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
-| P02 | `in_progress_current_pc_local` | P02-01~08 PASS; P02-09 registry signing/drift 진행 |
-| P03~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
+| P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
+| P03 | `in_progress_current_pc_local` | P03-01 Bounded ZIP reader 시작 |
+| P04~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
 
@@ -28,16 +29,16 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0020 | P02-09 Registry signing·drift | `in_progress` | verified P02-08 evidence만 target-scoped promotion, deterministic signed manifest/drift, tamper rejection, routing disabled |
+| P-0021 | P03-01 Bounded ZIP reader | `in_progress` | archive/entry/expanded-size/ratio/path/nesting hard limits, streaming reader, malicious ZIP corpus |
 
-### P02-09 Acceptance
+### P03-01 Acceptance
 
-- private source registry와 P02-08 request/trace/receipt/profile/contracts SHA 및 exact 2020 identity를 서명 직전에 다시 검증한다.
-- independently verified `verified` 결과만 target-scoped runtime evidence로 승격하고 `failed`/`blocked_by_risk`/`not_run`은 승격하지 않는다.
-- signing key 원문을 저장소·출력·로그에 노출하지 않고 공개키/manifest/signature와 재현 가능한 verification receipt만 공개한다.
-- registry payload, evidence correlation, signature, target identity, generated artifact drift를 fail closed하고 tamper/rollback/cross-build negative test를 포함한다.
-- 다른 build baseline이 없으면 actual cross-build PASS를 만들지 않고 `baseline_unavailable`로 명시한다.
-- production/provider와 routing은 계속 disabled이며 P02 signing 결과만으로 활성화하지 않는다.
+- Rust `hwpx-package` reader의 public limits/config/error 계약을 먼저 고정하고 기본값을 profile 없이 우회할 수 없게 한다.
+- archive bytes, entry count, name bytes, path depth, per-entry/total expanded bytes와 compression ratio를 central/local metadata와 streaming read 모두에서 검증한다.
+- absolute, traversal, empty/dot, backslash, NUL/control, Windows reserved name, duplicate와 case-fold collision을 canonical path 전에 fail closed한다.
+- encrypted/unsupported ZIP methods, inconsistent sizes/CRC, overlapping ranges, nested archive signature·extension과 unexpected trailing structures를 정책으로 명시한다.
+- 원본을 추출하거나 수정하지 않고 positional bounded read만 사용하며 allocation 전에 checked arithmetic으로 upper bound를 검증한다.
+- synthetic valid corpus와 malicious ZIP negatives를 생성해 실패 code가 deterministic하고 panic/OOM/partial output이 없음을 검증한다.
 
 ## Risks
 
@@ -64,7 +65,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0017: P02-06 semantic capability review는 `implementation/p02/P02-06_REPORT.md`에서 3,680 node/3,811 edge 100% disposition PASS.
 - P-0018: P02-07 binding model은 `implementation/p02/P02-07_REPORT.md`에서 exact 2020 기준 536/536 binding coverage PASS.
 - P-0019: P02-08 runtime probe는 `implementation/p02/P02-08_REPORT.md`에서 exact 2020 x86/STA disposable trace, independent verifier errors 0, 47/47 + 31/31 PASS.
+- P-0020: P02-09와 phase Gate는 `implementation/p02/P02-09_REPORT.md` 및 `implementation/p02/P02_GATE_REPORT.md`에서 current-PC local scoped PASS. Actual other-build drift는 `baseline_unavailable`.
 
 ## Next
 
-P02-09 signing/drift와 P02 phase 최종 감사는 모두 `max`다.
+P03-01 Bounded ZIP reader는 `max`다. P03-02 PackageGraph와 P03-03 XML safety parser도 시작 시 `max`로 유지한다.

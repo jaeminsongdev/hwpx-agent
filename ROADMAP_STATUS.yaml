@@ -1,7 +1,7 @@
 schema: hwpx-agent.roadmap-status/v2
 updated_at: 2026-09-02
-current_phase: P02
-status: p02_in_progress_current_pc_local_only
+current_phase: P03
+status: p03_in_progress_current_pc_local_only
 design_baseline:
   feature_domains: 16
   features: 609
@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_foundation_and_p02_import_review_binding_model
+  product_code_scope: p01_foundation_and_p02_import_review_binding_probe_signed_registry
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -102,7 +102,8 @@ p01_execution:
     P01-08: passed
     P01-09: passed
 p02_execution:
-  current_task: P02-08
+  current_task: completed
+  gate_state: pass_scoped_current_pc_local
   tasks:
     P02-01: passed_current_pc_local
     P02-02: passed_current_pc_local
@@ -111,8 +112,8 @@ p02_execution:
     P02-05: passed_current_pc_local
     P02-06: passed_current_pc_local
     P02-07: passed_current_pc_local
-    P02-08: in_progress_current_pc_local
-    P02-09: blocked_by_P02-08
+    P02-08: passed_current_pc_local
+    P02-09: passed_current_pc_local
   source_record_contract:
     schema: protocol/json-schema/source-record-v1.schema.json
     valid_samples: 5
@@ -249,11 +250,55 @@ p02_execution:
     powershell_static_tests_windows: 31_of_31_passed
     raw_identifier_value_leak_count: 0
     restricted_output_git_tracked: false
+  registry_signing:
+    audited_source_commit: 7b63d0ede07ea116e64d084fa00015a0fefb4ec3
+    algorithm: Ed25519
+    key_id: ed25519-sha256-2df5b9452e4e49827de3d4716bc9add34a11dbad69dfbc9fd9882e66053daa64
+    public_key_sha256: 838f7ce354cb2e284ca8b1e108c4234481b66fdfc0c9d415de43dc7cd3da57f5
+    source_registry_sha256: 986953421c74d033bcb17dbd763eb6daa0b06c1a5a8b9e3720951fc674d6fd48
+    signed_payload_sha256: 3958ccc564be09d0f40889287fa4f2db36584596001a7a2b9e8df0ca57a9450f
+    signed_envelope_sha256: 97c86645a4bf0696474cb6815699a2e4b012f650ae09ef81c582b672580b85e4
+    verification_receipt_sha256: c11c2e2555877ea4d4f3973ae6b3e739ddecbbf80150b99ce66be966b54d48f7
+    verification_errors: 0
+    registry_sequence: 1
+    qualification_state: partially_qualified_scoped_current_target
+    binding_count: 536
+    verified_count: 2
+    failed_count: 1
+    blocked_by_risk_count: 17
+    not_run_count: 12
+    unavailable_count: 504
+    routing_enabled_count: 0
+    deterministic_regeneration: 2_of_2_byte_identical
+    no_overwrite: passed_existing_hash_unchanged
+    drift_baseline_state: baseline_unavailable
+    drift_report_sha256: 28c8efba8f64d101cb5e7345b3d8589e011a1466da9c5bed69b906855926df4b
+    actual_cross_build_comparison: unverified_no_second_build
+    combined_p02_tests_windows: 61_of_61_passed
+    combined_p02_tests_linux_read_only: 61_of_61_passed
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    secrets_vulnerabilities_forbidden_licenses: 0
+    sbom_components: 148
+    private_key_git_tracked: false
+    signed_registry_git_tracked: false
+p03_execution:
+  current_task: P03-01
+  tasks:
+    P03-01: in_progress_current_pc_local
+    P03-02: blocked_by_P03-01
+    P03-03: blocked_by_P03-01
+    P03-04: blocked_by_P03-01
+    P03-05: blocked_by_P03-01
+    P03-06: blocked_by_P03-01
+    P03-07: blocked_by_P03-01
+    P03-08: blocked_by_P03-01
+    P03-09: blocked_by_P03-01_to_P03-08
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope
-  P02: in_progress_current_pc_local_scope
-  P03: blocked_by_P02
+  P02: completed_current_pc_local_scope
+  P03: in_progress_current_pc_local_scope
   P04: blocked_by_P03
   P05: blocked_by_P04
   P06: blocked_by_P05
@@ -263,7 +308,7 @@ phases:
   P10: blocked_by_P03
   P11: blocked_by_P06_P07_P08_P09_P10
   P12: blocked_by_P06_P07_P08_P09_P11
-  P13: blocked_by_P02_P10
+  P13: blocked_by_P10
   P14: blocked_by_P04
   P15: blocked_by_P14
   P16: blocked_by_P15
