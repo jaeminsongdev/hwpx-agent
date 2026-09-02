@@ -21,7 +21,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
 | P03 | `pass_scoped_current_pc_local` | P03-01~09, package/preservation/round-trip, exact-2020 output oracle, Windows/Linux/clean-clone Gate PASS |
-| P04 | `in_progress_current_pc_local` | P04-01~04 PASS; P04-05 Capability router 시작 |
+| P04 | `in_progress_current_pc_local` | P04-01~05 PASS; P04-06 Workspace transaction 시작 |
 | P05~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P10은 P03 선행조건 충족 후 순차 보류, P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -34,7 +34,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 | P-0031 | P04-02 Unit·ID model | `pass` | Windows/Linux 18/18, fixed-seed 10,000 round trips, current/clean-clone FULL 5/5 |
 | P-0032 | P04-03 Selector engine | `pass` | Windows/Linux 27/27, zero/multiple/stale, current/clean-clone FULL 5/5 |
 | P-0033 | P04-04 OperationPlan compiler | `pass` | Windows/Linux 36/36, 1,000-op DAG, current/clean-clone FULL 5/5 |
-| P-0034 | P04-05 Capability router | `in_progress` | support/policy/preservation/backend-health deterministic route matrix |
+| P-0034 | P04-05 Capability router | `pass` | Windows/Linux 45/45, exact evidence/policy/health matrix, current/clean FULL 5/5 |
+| P-0035 | P04-06 Workspace transaction | `in_progress` | isolated working copy, state machine, fault injection/no source mutation |
 
 ### P04-01 Acceptance (completed)
 
@@ -79,7 +80,7 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - selector resolve는 immutable snapshot/expectation에서 compile 전에 수행하고 exact-one target만 compiled operation에 넣는다. 한 operation 실패 시 compiled plan을 전혀 반환하지 않는다.
 - Windows/Linux compiler tests와 Clippy, invalid/cycle/needs-resolution/fixed-seed DAG tests, current/clean-clone FULL, security regression을 통과하고 P04-04 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
 
-### P04-05 Acceptance
+### P04-05 Acceptance (completed)
 
 - pure `capability_router`를 추가하고 compiled operation과 immutable route context를 입력으로 받는다. router는 graph mutation, backend 실행, filesystem/network/process/COM/HAction을 수행하지 않는다.
 - route context는 exact target profile ID/build/architecture, signed capability registry payload digest/sequence, policy scope, preservation requirement, backend health generation과 관측 시각을 typed field로 고정한다. 현재 PC 범위 밖 production/provider와 deferred release를 암묵 허용하지 않는다.
@@ -89,6 +90,18 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - backend health는 healthy/degraded/unhealthy/unknown과 generation/TTL을 확인한다. degraded route는 capability definition이 명시 허용한 경우에만 후보가 되며 unhealthy/unknown/stale health는 제외한다.
 - direct HWPX, hybrid, desktop automation 후보의 priority/cost가 같아도 stable backend ID로 deterministic order를 만들되 최고 후보가 둘 이상 동률이면 임의 선택하지 않고 `ambiguous_route`로 실패한다. fallback은 원래 정책/보존/지원 조건을 약화하지 않는다.
 - Windows/Linux routing matrix tests와 Clippy, exact profile/digest/sequence drift, policy/preservation/health/ambiguity negative tests, current/clean-clone FULL, security regression을 통과하고 P04-05 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
+
+### P04-06 Acceptance
+
+- filesystem-backed `operation-engine` workspace transaction을 별도 crate로 추가한다. P04-04 compiled plan 전체와 P04-05 route receipt 전체를 immutable execution manifest에 고정하고, raw public JSON/LLM action/COM/HAction/backend 세부 문자열은 입력으로 받지 않는다.
+- transaction은 `received → planned → preconditions_verified → workspace_prepared → executing → readback → validating → artifact_committed → revision_cas_committed → completed` finite state machine을 사용한다. illegal skip/repeat/backward transition, terminal 이후 mutation과 서로 다른 job/manifest receipt 혼용은 stable typed error로 실패한다.
+- source artifact는 read-only open 후 SHA-256/size와 expected artifact ID/base revision/compiled-plan hash/route hash를 재검증한다. isolated per-job directory에만 bounded copy를 만들고 source path/bytes는 어떤 성공·실패 경로에서도 수정·이동·삭제하지 않는다.
+- output은 create-new staging에 쓰고 bounded readback digest/size와 caller-supplied validator를 통과한 뒤에만 no-overwrite artifact path로 commit한다. partial output, validation 실패와 retry는 public artifact/revision을 만들지 않는다.
+- artifact commit과 revision CAS를 별도 명시 단계로 둔다. artifact commit 후 CAS 실패/interrupt이면 artifact를 orphan quarantine으로 원자 이동하거나 typed `published_incomplete`로 표시하며 정상 output과 completed receipt로 승격하지 않는다.
+- rollback은 unpublished staging/working copy만 제거하며 source와 이미 완료된 다른 transaction output을 건드리지 않는다. cleanup failure는 숨기지 않고 incomplete/quarantine 상태와 안정된 receipt로 보고한다.
+- 모든 경계는 finite file/job/receipt/byte limits, canonical containment, symlink/reparse deny, create-new/no-overwrite, deterministic job-relative names과 redacted Debug를 유지한다. same-volume atomicity 조건이 성립하지 않으면 시작 전에 실패한다.
+- 각 state transition 전후, source copy/readback/validation/artifact commit/CAS/quarantine/cleanup에 deterministic fault injector를 둔다. 전체 fault matrix에서 source digest 불변, public output absent-or-complete, terminal state 정확성과 retry determinism을 검증한다.
+- Windows/Linux transaction tests와 Clippy, fault injection/no-source-mutation, cross-job/revision/route mismatch, symlink/traversal, current/clean-clone FULL, security regression을 통과하고 P04-06 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
 
 ## Risks
 
@@ -129,7 +142,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0031: P04-02 Unit·ID model은 `implementation/p04/P04-02_REPORT.md`에서 official `1/7200 inch` HWPUNIT, exact rational conversion, checked half-away rounding, coordinate/typed-ID validation, Windows/Linux `18/18`, current/clean-clone FULL 5/5로 PASS.
 - P-0032: P04-03 Selector engine은 `implementation/p04/P04-03_REPORT.md`에서 revision/digest snapshot, exact-one ID/name/path/text-context resolution, zero/multiple/stale fail-closed, Windows/Linux `27/27`, current/clean-clone FULL 5/5로 PASS.
 - P-0033: P04-04 OperationPlan compiler는 `implementation/p04/P04-04_REPORT.md`에서 typed selector/unit/default compile, atomic deterministic DAG, 1,000-op fixed-seed equality, Windows/Linux `36/36`, current/clean-clone FULL 5/5로 PASS.
+- P-0034: P04-05 Capability router는 `implementation/p04/P04-05_REPORT.md`에서 exact target/registry/support/policy/preservation/health routing, equal-top ambiguity, Windows/Linux `45/45`, current/clean-clone FULL 5/5로 PASS.
 
 ## Next
 
-P04-05 Capability router를 `xhigh`로 구현한다. exact support evidence, current-PC policy, preservation impact와 backend health를 모두 만족하는 단일 deterministic route만 허용하고 stale/ambiguous/fallback escalation을 fail-closed로 고정한다. P04-09 actual 한글 2020 vertical Gate와 P04 phase Gate는 `max`다.
+P04-06 Workspace transaction을 `xhigh`로 구현한다. compiled plan/route/base revision에 고정된 isolated working copy, finite state machine, staged validation/no-overwrite commit과 transition별 fault injection으로 모든 실패에서 source 불변을 증명한다. P04-09 actual 한글 2020 vertical Gate와 P04 phase Gate는 `max`다.
