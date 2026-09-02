@@ -10,9 +10,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 if str(REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(REPOSITORY_ROOT))
 
-from tools.p02.extract_help import ExtractionError
+from tools.p02.extract_help import ExtractionError, publish_no_overwrite, resolve_output
 from tools.p02.registry_signing import (
+    PRIVATE_OUTPUT_ROOT,
     SignedRegistryVerificationConfig,
+    serialize_json,
     verify_signed_registry,
 )
 
@@ -35,6 +37,8 @@ def main() -> int:
     parser.add_argument("--trace-sha256", required=True)
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--receipt-sha256", required=True)
+    parser.add_argument("--output-root", type=Path, required=True)
+    parser.add_argument("--output-relative", required=True)
     arguments = parser.parse_args()
     try:
         result = verify_signed_registry(
@@ -57,6 +61,12 @@ def main() -> int:
                 receipt_sha256=arguments.receipt_sha256,
             )
         )
+        if arguments.output_root.resolve() != PRIVATE_OUTPUT_ROOT.resolve():
+            raise ExtractionError(
+                "signed registry verification may publish only under private P02 evidence"
+            )
+        output = resolve_output(arguments.output_root, arguments.output_relative)
+        publish_no_overwrite(output, serialize_json(result))
     except (ExtractionError, OSError, ValueError) as error:
         result = {
             "schema_version": "hwpx-agent.signed-registry-verification/v1",
