@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/p02/registry-trust-policy-v1.schema.json",
+  "title": "RegistryTrustPolicyV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "trust_anchor_id",
+    "algorithm",
+    "key_id",
+    "public_key",
+    "target",
+    "scope",
+    "lineage"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.registry-trust-policy/v1" },
+    "trust_anchor_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"
+    },
+    "algorithm": { "const": "Ed25519" },
+    "key_id": {
+      "type": "string",
+      "pattern": "^ed25519-sha256-[0-9a-f]{64}$"
+    },
+    "public_key": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relative_path", "sha256"],
+      "properties": {
+        "relative_path": {
+          "type": "string",
+          "pattern": "^implementation/p02/trust/[a-z0-9._-]+\\.pem$"
+        },
+        "sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "exact_build",
+        "architecture",
+        "executable_sha256"
+      ],
+      "properties": {
+        "profile_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"
+        },
+        "exact_build": {
+          "type": "string",
+          "pattern": "^[0-9]+(?:\\.[0-9]+){1,3}$"
+        },
+        "architecture": { "enum": ["x86", "x64", "arm64"] },
+        "executable_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "use",
+        "host",
+        "private_key_custody",
+        "production_allowed",
+        "provider_allowed",
+        "hosted_or_vm_allowed",
+        "routing_allowed"
+      ],
+      "properties": {
+        "use": { "const": "personal_noncommercial_local_development" },
+        "host": { "const": "current_pc_exact_identity_only" },
+        "private_key_custody": { "const": "git_ignored_local_evidence" },
+        "production_allowed": { "const": false },
+        "provider_allowed": { "const": false },
+        "hosted_or_vm_allowed": { "const": false },
+        "routing_allowed": { "const": false }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_registry_sequence", "rollback_allowed"],
+      "properties": {
+        "minimum_registry_sequence": { "type": "integer", "minimum": 1 },
+        "rollback_allowed": { "const": false }
+      }
+    }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

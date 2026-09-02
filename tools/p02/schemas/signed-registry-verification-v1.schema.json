@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/p02/signed-registry-verification-v1.schema.json",
+  "title": "SignedRegistryVerificationV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "state",
+    "target_profile_id",
+    "exact_build",
+    "key_id",
+    "envelope_sha256",
+    "payload_sha256",
+    "source_registry_sha256",
+    "signature_valid",
+    "runtime_evidence_valid",
+    "coverage",
+    "routing_enabled",
+    "raw_identifier_value_leak_count",
+    "errors"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hwpx-agent.signed-registry-verification/v1"
+    },
+    "state": { "enum": ["pass", "failed"] },
+    "target_profile_id": { "type": ["string", "null"] },
+    "exact_build": { "type": ["string", "null"] },
+    "key_id": { "type": ["string", "null"] },
+    "envelope_sha256": { "type": ["string", "null"] },
+    "payload_sha256": { "type": ["string", "null"] },
+    "source_registry_sha256": { "type": ["string", "null"] },
+    "signature_valid": { "type": "boolean" },
+    "runtime_evidence_valid": { "type": "boolean" },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding_count",
+        "candidate_count",
+        "unavailable_count",
+        "verified_count",
+        "failed_count",
+        "blocked_by_risk_count",
+        "not_run_count",
+        "routing_enabled_count"
+      ],
+      "properties": {
+        "binding_count": { "type": "integer", "minimum": 0 },
+        "candidate_count": { "type": "integer", "minimum": 0 },
+        "unavailable_count": { "type": "integer", "minimum": 0 },
+        "verified_count": { "type": "integer", "minimum": 0 },
+        "failed_count": { "type": "integer", "minimum": 0 },
+        "blocked_by_risk_count": { "type": "integer", "minimum": 0 },
+        "not_run_count": { "type": "integer", "minimum": 0 },
+        "routing_enabled_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "routing_enabled": { "const": false },
+    "raw_identifier_value_leak_count": { "type": "integer", "minimum": 0 },
+    "errors": { "type": "array", "items": { "type": "string" } }
+  }
+}

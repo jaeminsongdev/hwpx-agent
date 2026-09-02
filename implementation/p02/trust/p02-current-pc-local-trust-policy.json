@@ -1,0 +1,29 @@
+{
+  "schema_version": "hwpx-agent.registry-trust-policy/v1",
+  "trust_anchor_id": "p02-current-pc-local-ed25519",
+  "algorithm": "Ed25519",
+  "key_id": "ed25519-sha256-2df5b9452e4e49827de3d4716bc9add34a11dbad69dfbc9fd9882e66053daa64",
+  "public_key": {
+    "relative_path": "implementation/p02/trust/p02-current-pc-local-ed25519-public.pem",
+    "sha256": "838f7ce354cb2e284ca8b1e108c4234481b66fdfc0c9d415de43dc7cd3da57f5"
+  },
+  "target": {
+    "profile_id": "hancom-hangul-2020-secondary",
+    "exact_build": "11.0.0.9136",
+    "architecture": "x86",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+  },
+  "scope": {
+    "use": "personal_noncommercial_local_development",
+    "host": "current_pc_exact_identity_only",
+    "private_key_custody": "git_ignored_local_evidence",
+    "production_allowed": false,
+    "provider_allowed": false,
+    "hosted_or_vm_allowed": false,
+    "routing_allowed": false
+  },
+  "lineage": {
+    "minimum_registry_sequence": 1,
+    "rollback_allowed": false
+  }
+}

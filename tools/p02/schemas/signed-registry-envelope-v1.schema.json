@@ -1,0 +1,306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/p02/signed-registry-envelope-v1.schema.json",
+  "title": "SignedAutomationRegistryEnvelopeV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "algorithm",
+    "key_id",
+    "public_key_sha256",
+    "payload_sha256",
+    "payload",
+    "signature_base64"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hwpx-agent.signed-automation-registry-envelope/v1"
+    },
+    "algorithm": { "const": "Ed25519" },
+    "key_id": {
+      "type": "string",
+      "pattern": "^ed25519-sha256-[0-9a-f]{64}$"
+    },
+    "public_key_sha256": { "$ref": "#/$defs/hash" },
+    "payload_sha256": { "$ref": "#/$defs/hash" },
+    "payload": { "$ref": "#/$defs/payload" },
+    "signature_base64": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9+/]{86}==$"
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "product",
+        "major_release",
+        "exact_build",
+        "locale",
+        "architecture",
+        "profile_sha256",
+        "executable_sha256"
+      ],
+      "properties": {
+        "profile_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"
+        },
+        "product": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "major_release": { "type": "string", "pattern": "^[0-9]{4}$" },
+        "exact_build": {
+          "type": "string",
+          "pattern": "^[0-9]+(?:\\.[0-9]+){1,3}$"
+        },
+        "locale": {
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(?:-[A-Z]{2})?$"
+        },
+        "architecture": { "enum": ["x86", "x64", "arm64"] },
+        "profile_sha256": { "$ref": "#/$defs/hash" },
+        "executable_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "probeEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_sha256",
+        "trace_sha256",
+        "receipt_sha256",
+        "execute_state",
+        "default_read_state",
+        "expected_effect_observed",
+        "pre_snapshot_sha256",
+        "post_snapshot_sha256",
+        "default_shape_sha256",
+        "error_type",
+        "error_hresult",
+        "error_message_sha256"
+      ],
+      "properties": {
+        "request_sha256": { "$ref": "#/$defs/hash" },
+        "trace_sha256": { "$ref": "#/$defs/hash" },
+        "receipt_sha256": { "$ref": "#/$defs/hash" },
+        "execute_state": { "enum": ["pass", "failed", "not_run"] },
+        "default_read_state": {
+          "enum": ["pass", "failed", "not_run", "not_applicable"]
+        },
+        "expected_effect_observed": { "type": "boolean" },
+        "pre_snapshot_sha256": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "post_snapshot_sha256": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "default_shape_sha256": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "error_type": { "type": ["string", "null"], "maxLength": 256 },
+        "error_hresult": { "type": ["integer", "null"] },
+        "error_message_sha256": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        }
+      }
+    },
+    "qualificationBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding_key",
+        "feature_id",
+        "capability_id",
+        "source_status",
+        "runtime_support_state",
+        "probe_disposition",
+        "routing_enabled",
+        "evidence"
+      ],
+      "properties": {
+        "binding_key": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "feature_id": { "type": "string", "pattern": "^[A-Z]+-[0-9]{3}$" },
+        "capability_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]+$"
+        },
+        "source_status": {
+          "enum": ["candidate_unverified", "unavailable_with_reason"]
+        },
+        "runtime_support_state": {
+          "enum": [
+            "verified_current_target",
+            "failed_current_target",
+            "blocked_by_policy",
+            "unverified_not_run",
+            "unavailable"
+          ]
+        },
+        "probe_disposition": {
+          "type": ["string", "null"],
+          "enum": ["verified", "failed", "blocked_by_risk", "not_run", null]
+        },
+        "routing_enabled": { "const": false },
+        "evidence": {
+          "oneOf": [{ "$ref": "#/$defs/probeEvidence" }, { "type": "null" }]
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding_count",
+        "candidate_count",
+        "unavailable_count",
+        "verified_count",
+        "failed_count",
+        "blocked_by_risk_count",
+        "not_run_count",
+        "routing_enabled_count"
+      ],
+      "properties": {
+        "binding_count": { "type": "integer", "minimum": 1 },
+        "candidate_count": { "type": "integer", "minimum": 0 },
+        "unavailable_count": { "type": "integer", "minimum": 0 },
+        "verified_count": { "type": "integer", "minimum": 0 },
+        "failed_count": { "type": "integer", "minimum": 0 },
+        "blocked_by_risk_count": { "type": "integer", "minimum": 0 },
+        "not_run_count": { "type": "integer", "minimum": 0 },
+        "routing_enabled_count": { "const": 0 }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "restricted_derivative",
+        "source_registry",
+        "target",
+        "runtime_evidence",
+        "qualification",
+        "release_policy",
+        "drift_baseline",
+        "lineage",
+        "provenance"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "hwpx-agent.signed-automation-registry-payload/v1"
+        },
+        "restricted_derivative": { "const": true },
+        "source_registry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["encoding", "sha256", "bytes_base64"],
+          "properties": {
+            "encoding": { "const": "base64" },
+            "sha256": { "$ref": "#/$defs/hash" },
+            "bytes_base64": {
+              "type": "string",
+              "minLength": 4,
+              "maxLength": 50000000
+            }
+          }
+        },
+        "target": { "$ref": "#/$defs/target" },
+        "runtime_evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "request_id",
+            "request_sha256",
+            "trace_sha256",
+            "receipt_sha256",
+            "independent_verification_state"
+          ],
+          "properties": {
+            "request_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+            "request_sha256": { "$ref": "#/$defs/hash" },
+            "trace_sha256": { "$ref": "#/$defs/hash" },
+            "receipt_sha256": { "$ref": "#/$defs/hash" },
+            "independent_verification_state": { "const": "pass" }
+          }
+        },
+        "qualification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "bindings", "coverage", "routing_enabled"],
+          "properties": {
+            "state": { "const": "partially_qualified_scoped_current_target" },
+            "bindings": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 100000,
+              "items": { "$ref": "#/$defs/qualificationBinding" }
+            },
+            "coverage": { "$ref": "#/$defs/coverage" },
+            "routing_enabled": { "const": false }
+          }
+        },
+        "release_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "use_scope",
+            "target_scope",
+            "production_release_state",
+            "provider_release_state",
+            "routing_enabled"
+          ],
+          "properties": {
+            "use_scope": {
+              "const": "personal_noncommercial_local_development"
+            },
+            "target_scope": { "const": "current_pc_exact_identity_only" },
+            "production_release_state": { "const": "disabled" },
+            "provider_release_state": { "const": "disabled" },
+            "routing_enabled": { "const": false }
+          }
+        },
+        "drift_baseline": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "baseline_registry_sha256",
+            "baseline_exact_build"
+          ],
+          "properties": {
+            "state": { "const": "baseline_unavailable" },
+            "baseline_registry_sha256": { "type": "null" },
+            "baseline_exact_build": { "type": "null" }
+          }
+        },
+        "lineage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["registry_sequence", "parent_payload_sha256"],
+          "properties": {
+            "registry_sequence": { "type": "integer", "minimum": 1 },
+            "parent_payload_sha256": {
+              "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+            }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["generator_id", "generator_version", "source_commit"],
+          "properties": {
+            "generator_id": { "const": "p02-registry-signer" },
+            "generator_version": { "const": "0.1.0" },
+            "source_commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+          }
+        }
+      }
+    }
+  }
+}
