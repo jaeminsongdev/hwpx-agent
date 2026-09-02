@@ -20,7 +20,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
-| P03 | `in_progress_current_pc_local` | P03-01~07 PASS, P03-08 atomic ZIP writer 시작 |
+| P03 | `in_progress_current_pc_local` | P03-01~08 PASS, P03-09 round-trip·repair Gate 시작 |
 | P04~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -29,19 +29,18 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 
 | ID | 단계 | 상태 | 검증 |
 |---|---|---|---|
-| P-0028 | P03-08 atomic ZIP writer | `in_progress` | preserving/normalized separation, reopen-before-publish, fsync/checksum, atomic no-overwrite, crash corpus |
+| P-0029 | P03-09 round-trip·repair Gate | `in_progress` | 100+ reopen corpus, untouched policy 0, repair diagnostics, fuzz baseline, exact 2020 oracle |
 
-### P03-08 Acceptance
+### P03-09 Acceptance
 
-- `PreservingWriter`는 P03-07 private artifact만 소비하고 source order·compression method·untouched expanded bytes를 보존한다. `NormalizedWriter`는 명시적 fully-owned input만 받아 canonical order, fixed timestamp와 pinned compression으로 결정적 출력을 만들며 두 mode를 암묵적으로 혼합하지 않는다.
-- writer input/result bytes와 document content를 public/`Debug`/진단에 노출하지 않는다. output은 explicit secure workspace와 normal relative path에만 게시하며 absolute/traversal/reserved/casefold collision, existing link/reparse point, source/destination alias와 overwrite를 거부한다.
-- complete ZIP은 same-volume create-new private staging에만 쓰고 file sync와 SHA-256을 완료한 후, publication 전에 `BoundedZipReader`→`PackageGraph`→`PreservationReport`→`IdIndex`로 재개봉한다. validation failure는 destination을 만들지 않는다.
-- publication은 atomic no-overwrite primitive를 사용하고 parent durability를 platform capability대로 동기화한다. 게시 후 path identity·size·SHA-256을 다시 읽어 receipt와 일치시킨 뒤에만 success를 반환한다.
-- failure injection을 archive build 전/중/후, sync 전/후, validation 전/후, atomic publication 전/후, cleanup 단계에 두고 source hash 불변, destination `absent-or-complete`, staging bounded cleanup/quarantine, 재시도 no-overwrite/idempotent 결과를 Windows/Linux에서 검증한다.
-- preserve mode의 touched/untouched/added part, expanded-byte hash, source/output order와 compression disposition을 report한다. 현재 reader가 증명하지 못하는 raw compressed stream, timestamp/extra-field exact preservation은 거짓 claim하지 않고 명시적으로 `unverified/not_preserved`로 기록한다.
-- normalized mode는 동일 logical input의 반복 및 Windows/Linux output SHA-256 equality를 검증하고, preserve mode는 동일 source+patch 반복 output equality와 untouched part expanded-byte equality를 검증한다.
-- output/archive/entry/growth limits와 checked arithmetic을 publication 전 재적용하고 ZIP64, descriptor, encryption, unsupported method, symlink/special/nested archive와 unsafe path를 계속 거부한다.
-- P03-07 patch `5/5` 및 actual disposable memory mutation `2/2`, P03-06 ID `5/5`, preservation `5/5`, graph `8/8`, malicious ZIP `8/8` regression을 유지하고 versioned writer policy/migration을 남긴다. 실제 한글 reopen은 P03-09 Gate로 남긴다.
+- `roundtrip` CLI/library는 explicit input과 explicit private `SecureWorkspace`만 사용한다. source를 in-place 수정하지 않고 no-op preserving, allowlisted mutation preserving, normalized 세 경로를 분리해 source/output identity와 full reopen evidence를 non-sensitive receipt로 남긴다.
+- deterministic synthetic corpus를 최소 100개 구축한다. package order/compression, XML token shape, supported current-2020 namespace/ID/reference 조합과 valid boundary를 seed로 고정하고 Windows/Linux에서 corpus ID·expected disposition·output SHA가 재현되어야 한다. current-2020 actual evidence 2개를 synthetic 수에 포함하지 않는다.
+- no-op preserving은 모든 part expanded bytes가 exact하고 untouched-policy violation이 0이어야 한다. mutation preserving은 allowlisted changed/added part 외 전 part exact, normalized는 graph/preservation/ID와 semantic count가 동일해야 하며 raw compressed/timestamp equality를 거짓 주장하지 않는다.
+- repair는 P04의 범용 자동복구를 선행 구현하지 않는다. P03-01~08 admission 오류를 stable `RepairDiagnostic`으로 분류하고 손상 위치 범주, safe-to-retry/repairability, recommended next action만 노출한다. raw XML/value/path/문서 bytes는 출력하지 않고 source를 변경하거나 임의 repair를 실행하지 않는다.
+- malformed/truncated/header mismatch/CRC/path collision/mimetype/container/manifest/relationship/XML safety/ID duplicate·dangling·wrong-type/limit/output publication 실패 corpus에서 partial output 0, diagnostic code deterministic, unsupported/ambiguous는 `not_repairable`이어야 한다.
+- fuzz baseline은 bounded byte mutation과 structured package mutation target을 갖고 고정 seed corpus 100+를 replay한다. 현재 pinned toolchain에서 재현 가능한 smoke budget을 실행하며 panic, hang, OOM, source mutation, partial publication 0을 증명한다. 수행하지 못한 coverage-guided/nightly sanitizer는 별도 `unverified`로 남긴다.
+- 실제 한글 2020 Gate는 승인된 disposable fixture에서 생성한 no-op preserving과 normalized 산출물을 fresh x86/STA process로 각각 open하고, repair/format-conversion/modal prompt 0, safe normalized semantic readback 일치, `Quit()` 후 잔류 0을 확인한다. Computer Use는 screenshot-only이며 필요한 접근 허용 클릭만 사용자에게 요청한다.
+- P03-01~08의 `hwpx-package 45/45`, current-2020 writer validation `2/2`, Windows/Linux/clean-clone FULL과 security regression을 유지하고 roundtrip/diagnostic versioned policy·migration, phase Gate report, `ROADMAP_STATUS`/`CURRENT_STATE`/handoff를 갱신한다.
 
 ## Risks
 
@@ -76,7 +75,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0025: P03-05 part preservation map은 `implementation/p03/P03-05_REPORT.md`에서 authoritative graph/readback, evidence-ranked complete class map, Windows/Linux core corpus, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0026: P03-06 ID/reference index는 `implementation/p03/P03-06_REPORT.md`에서 typed part-scoped index, duplicate/dangling/wrong-type fail-closed, current-2020 disposable `2/2`, Windows/Linux `38/38`, current/clean-clone FULL 5/5와 보안 0건 PASS.
 - P-0027: P03-07 preserving patch engine은 `implementation/p03/P03-07_REPORT.md`에서 8종 typed intent, checked conflict/rollback/allocation/closure, fixed-seed property corpus, actual 2020 memory mutation `2/2`, Windows/Linux `43/43`, current/clean-clone FULL 5/5와 보안 0건 PASS.
+- P-0028: P03-08 atomic ZIP writer는 `implementation/p03/P03-08_REPORT.md`에서 preserving/normalized private writer, bounded construction, staged/full reopen, atomic no-overwrite, absent-or-complete fault model, actual 2020 writer `2/2`, Windows/Linux `45/45`, current/clean-clone FULL 5/5와 보안 0건 PASS.
 
 ## Next
 
-P03-08 atomic ZIP writer는 `max`다. P03-09 round-trip/repair Gate도 시작 시 `max`로 유지한다.
+P03-09 round-trip/repair Gate는 `max`다. P04 시작 전 P03 phase Gate 감사도 `max`로 유지한다.
