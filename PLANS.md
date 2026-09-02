@@ -21,7 +21,7 @@ P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디�
 | P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
 | P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
 | P03 | `pass_scoped_current_pc_local` | P03-01~09, package/preservation/round-trip, exact-2020 output oracle, Windows/Linux/clean-clone Gate PASS |
-| P04 | `in_progress_current_pc_local` | P04-01~06 PASS; P04-07 Semantic diff 시작 |
+| P04 | `in_progress_current_pc_local` | P04-01~07 PASS; P04-08 Idempotency·CAS 시작 |
 | P05~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P10은 P03 선행조건 충족 후 순차 보류, P20은 post-GA |
 
 P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
@@ -36,7 +36,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 | P-0033 | P04-04 OperationPlan compiler | `pass` | Windows/Linux 36/36, 1,000-op DAG, current/clean-clone FULL 5/5 |
 | P-0034 | P04-05 Capability router | `pass` | Windows/Linux 45/45, exact evidence/policy/health matrix, current/clean FULL 5/5 |
 | P-0035 | P04-06 Workspace transaction | `pass` | Windows/Linux 9/9, fault 22/22, current/clean FULL 5/5 |
-| P-0036 | P04-07 Semantic diff | `in_progress` | typed deterministic node/style/table/equation/object/reference golden diff |
+| P-0036 | P04-07 Semantic diff | `pass` | Windows/Linux 55/55, golden SHA, current/clean FULL 5/5 |
+| P-0037 | P04-08 Idempotency·CAS | `in_progress` | exact request hash, duplicate replay, fencing, stale revision no-effect E2E |
 
 ### P04-01 Acceptance (completed)
 
@@ -104,7 +105,7 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - 각 state transition 전후, source copy/readback/validation/artifact commit/CAS/quarantine/cleanup에 deterministic fault injector를 둔다. 전체 fault matrix에서 source digest 불변, public output absent-or-complete, terminal state 정확성과 retry determinism을 검증한다.
 - Windows/Linux transaction tests와 Clippy, fault injection/no-source-mutation, cross-job/revision/route mismatch, symlink/traversal, current/clean-clone FULL, security regression을 통과하고 P04-06 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
 
-### P04-07 Acceptance
+### P04-07 Acceptance (completed)
 
 - `domain-ir`에 두 validated `DocumentGraph` snapshot을 입력으로 받는 pure semantic diff를 추가한다. filesystem/network/process/COM/HAction/backend 실행과 graph mutation은 수행하지 않는다.
 - 비교 전 exact graph schema, document identity, before/after revision identity와 canonical digest를 검증한다. 동일 revision에 다른 digest, 다른 document, invalid graph와 stale declared digest는 부분 diff 없이 stable typed error로 거절한다.
@@ -114,6 +115,18 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - output은 versioned canonical schema, deterministic category/path/ID ordering과 finite graph/change/path/payload limits를 사용한다. 입력 collection 순서 차이는 동일 bytes를 내고, 같은 before/after는 empty diff, A→B와 B→A는 category/count가 정확히 반전되어야 한다.
 - golden corpus는 node/style/table/equation/object/reference 각각의 add/remove/modify/move, multi-category change, unknown/opaque change, invalid identity/version/digest, limit overflow와 privacy negative case를 포함한다.
 - Windows/Linux semantic-diff tests와 Clippy, byte-identical golden digest, current/clean-clone FULL, security regression을 통과하고 P04-07 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
+
+### P04-08 Acceptance
+
+- `operation-engine`에 in-memory reference idempotency/CAS service와 storage trait boundary를 추가한다. P14 durable DB 구현을 당겨오지 않으며 filesystem/network/process/COM/HAction/backend 실행은 수행하지 않는다.
+- bounded typed idempotency key는 exact request SHA-256, execution manifest SHA-256, expected head revision과 transaction identity에 한 번만 결합된다. 같은 key의 다른 request/manifest/revision/transaction 재사용은 stable `key_reuse_conflict`이며 기존 record를 변경하지 않는다.
+- 최초 claim은 monotonically increasing nonzero fencing generation과 owner token을 반환한다. 동일 hash의 concurrent duplicate는 owner가 되지 않고 `in_progress`/terminal replay를 받는다. stale owner/generation의 heartbeat, complete, fail, unknown 전이는 모두 거절한다.
+- 상태는 `claimed`, `in_progress`, `outcome_unknown`, `succeeded`, `failed_terminal`을 구분한다. outcome unknown은 새 side effect 실행을 허용하지 않고 exact artifact/revision observation으로 reconcile한 뒤에만 terminal replay가 된다.
+- 성공 terminal record는 result artifact ID/digest/size, committed revision ID, transaction receipt digest를 immutable하게 보존한다. 동일 요청 retry는 byte-identical replay receipt를 반환하고 artifact publication이나 revision mutation callback을 다시 호출하지 않는다.
+- revision head store는 project/document stream별 immutable head와 monotonically increasing generation을 유지한다. commit은 exact expected revision+generation CAS와 result identity를 모두 요구하며 stale/missing/conflicting head는 side effect 없이 실패한다. 동일 idempotency terminal commit만 exact replay될 수 있다.
+- claim→effect→CAS→terminal 경계에 deterministic concurrency/fault harness를 둔다. 2개 이상 thread barrier duplicate, owner crash/outcome unknown, stale revision, retry storm, conflicting key와 reconciliation에서 artifact/revision effect counter가 최대 1임을 증명한다.
+- 모든 key/record/thread/receipt/byte 수는 finite limit을 갖고 checked arithmetic, deterministic canonical v1 receipt와 redacted Debug/error를 유지한다. raw request, document ID, path, body와 owner token을 출력하지 않는다.
+- Windows/Linux idempotency/CAS tests와 Clippy, duplicate/stale revision E2E, current/clean-clone FULL, security regression을 통과하고 P04-08 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
 
 ## Risks
 
@@ -156,7 +169,8 @@ P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `impl
 - P-0033: P04-04 OperationPlan compiler는 `implementation/p04/P04-04_REPORT.md`에서 typed selector/unit/default compile, atomic deterministic DAG, 1,000-op fixed-seed equality, Windows/Linux `36/36`, current/clean-clone FULL 5/5로 PASS.
 - P-0034: P04-05 Capability router는 `implementation/p04/P04-05_REPORT.md`에서 exact target/registry/support/policy/preservation/health routing, equal-top ambiguity, Windows/Linux `45/45`, current/clean-clone FULL 5/5로 PASS.
 - P-0035: P04-06 Workspace transaction은 `implementation/p04/P04-06_REPORT.md`에서 immutable manifest, finite state machine, staged validation/publication/CAS, fault 22/22, Windows/Linux `9/9`, current/clean-clone FULL 5/5로 PASS.
+- P-0036: P04-07 Semantic diff는 `implementation/p04/P04-07_REPORT.md`에서 9개 typed category, relative-order move, opaque/privacy/finite contract, Windows/Linux `55/55`, golden `b12f8a54...9f7e`, current/clean-clone FULL 5/5로 PASS.
 
 ## Next
 
-P04-07 Semantic diff를 `xhigh`로 구현한다. validated graph 두 개에서 node/style/table/equation/object/reference와 unknown/opaque 변화를 deterministic typed delta로 만들고 Windows/Linux golden bytes를 고정한다. P04-09 actual 한글 2020 vertical Gate와 P04 phase Gate는 `max`다.
+P04-08 Idempotency·CAS를 `xhigh`로 구현한다. exact key/request/manifest/expected-head 결합, fencing owner, terminal replay, outcome-unknown reconciliation과 stale revision no-effect를 동시성 E2E로 증명한다. P04-09 actual 한글 2020 vertical Gate와 P04 phase Gate는 `max`다.

@@ -43,7 +43,7 @@ DocumentGraph·OperationPlan·Transactions를 문서상 계획이 아니라 **�
 - [x] `P04-04` 산출물 `planner` 존재, 검증: invalid/cycle/needs-resolution tests.
 - [x] `P04-05` 산출물 `router` 존재, 검증: routing matrix tests.
 - [x] `P04-06` 산출물 `transaction engine` 존재, 검증: fault injection/no source mutation.
-- [ ] `P04-07` 산출물 `diff crate` 존재, 검증: golden diff tests.
+- [x] `P04-07` 산출물 `diff crate` 존재, 검증: golden diff tests.
 - [ ] `P04-08` 산출물 `idempotency service` 존재, 검증: duplicate and stale revision E2E.
 - [ ] `P04-09` 산출물 `vertical CLI` 존재, 검증: actual Hancom open evidence.
 - [ ] 새 capability/contract/schema에 migration과 negative test가 있다.

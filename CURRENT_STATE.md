@@ -9,7 +9,7 @@
 
 - 상태: `P04_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P04_DOCUMENTGRAPH_OPERATIONPLAN_TRANSACTIONS`
-- 구현 코드: P01 Rust/C#/TypeScript foundation, P02 source importer/candidate/semantic review/binding/runtime probe/Ed25519 signed registry pipeline과 P03 bounded ZIP→graph→safe/preserving XML→preservation map→typed ID→patch→atomic writer→round-trip/repair core가 build·test 가능하다. P04-01~05 typed graph/selector/plan/router와 P04-06 isolated Workspace transaction을 완료했고 P04-07 Semantic diff를 시작한다. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence도 보존한다.
+- 구현 코드: P01 Rust/C#/TypeScript foundation, P02 source importer/candidate/semantic review/binding/runtime probe/Ed25519 signed registry pipeline과 P03 bounded ZIP→graph→safe/preserving XML→preservation map→typed ID→patch→atomic writer→round-trip/repair core가 build·test 가능하다. P04-01~06 typed graph/selector/plan/router/transaction과 P04-07 Semantic diff를 완료했고 P04-08 Idempotency·CAS를 시작한다. P00 source 수집, 2020+ 원격 diagnostics, exact 2020 synthetic document smoke harness와 evidence도 보존한다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -81,12 +81,13 @@
 - P04-04 `PASS`: versioned bounded plan draft를 typed selector, checked unit/default normalization과 deterministic atomic dependency DAG로 compile한다. 1,000-op fixed-seed equality, Windows/Linux `36/36`, current/clean-clone FULL `5/5`, security 0건을 통과했다.
 - P04-05 `PASS`: exact profile, signature-verified registry, support/policy/preservation/backend-health가 모두 맞는 단일 deterministic route만 허용한다. Windows/Linux `45/45`, current/clean-clone FULL `5/5`, security 0건을 통과했다.
 - P04-06 `PASS`: immutable plan/route/source manifest, isolated working copy, bounded state machine, staged validation/no-overwrite publication/revision CAS와 rollback/quarantine을 구현했다. Windows/Linux `9/9`, fault `22/22`, current/clean-clone FULL `5/5`, security 0건을 통과했다.
-- P04-07 `in_progress`: validated graph 두 개의 deterministic typed semantic diff와 golden corpus를 구현한다.
+- P04-07 `PASS`: validated graph 두 개에서 9개 category의 typed semantic delta, relative-order move, opaque visibility와 raw-value privacy를 구현했다. Windows/Linux `55/55`, golden `b12f8a54...9f7e`, current/clean-clone FULL `5/5`, security 0건을 통과했다.
+- P04-08 `in_progress`: exact idempotency key/request/hash와 fencing, terminal replay, outcome-unknown reconciliation, revision-head CAS를 구현한다.
 - P03가 요구되던 P04/P10 선행조건은 현재 PC 로컬 범위에서 충족됐다. 전체 제품 구현은 P04부터 순차 진행하며 P10은 현재 실행 task가 아니다.
 
 ## 다음 작업
 
-P04-07 Semantic diff를 구현한다. 추론수준은 `xhigh`다. validated before/after graph에서 node/style/table/equation/object/reference와 unknown/opaque 변화를 deterministic typed delta로 만들고 Windows/Linux golden bytes를 고정한다. 이 task에는 한글 runtime 조작이 없다.
+P04-08 Idempotency·CAS를 구현한다. 추론수준은 `xhigh`다. exact key/request/manifest/expected-head 결합, fencing owner, terminal replay, outcome-unknown reconciliation과 stale revision no-effect를 동시성 E2E로 고정한다. 이 task에는 한글 runtime 조작이 없다.
 
 ## 현재 blocker
 
@@ -96,4 +97,4 @@ P04-07 Semantic diff를 구현한다. 추론수준은 `xhigh`다. validated befo
 
 ## 검증 한계
 
-제품 foundation, P02 signed registry, P03 package/preserving/round-trip core와 P04-01~06 model/transaction core는 재현 가능하지만 P04-07 이후 diff/revision/vertical 기능은 아직 완료되지 않았다. P04-01~06은 synthetic IR/compile/route/byte transaction 계약이며 실제 HWPX lifting/lowering, real-save ID 안정성, public wire schema, route 실행이나 visual fidelity를 증명하지 않는다. P03 actual output evidence는 승인된 두 synthetic fixture에서 생성한 네 output의 read-only open/readback이며 save/render/PDF 동등성이나 사용자 문서 호환성을 뜻하지 않는다. Signed registry는 exact 2020에서 두 안전 canary만 verified이며 public routing은 0이다. Exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00/P01/P02/P03/P04-01~06 실제 상태는 각 report를 따른다.
+제품 foundation, P02 signed registry, P03 package/preserving/round-trip core와 P04-01~07 model/transaction/diff core는 재현 가능하지만 P04-08 이후 idempotency/revision/vertical 기능은 아직 완료되지 않았다. P04-01~07은 synthetic IR/compile/route/byte transaction/graph diff 계약이며 실제 HWPX lifting/lowering, real-save ID 안정성, public wire schema, route 실행이나 visual fidelity를 증명하지 않는다. P03 actual output evidence는 승인된 두 synthetic fixture에서 생성한 네 output의 read-only open/readback이며 save/render/PDF 동등성이나 사용자 문서 호환성을 뜻하지 않는다. Signed registry는 exact 2020에서 두 안전 canary만 verified이며 public routing은 0이다. Exact 2020 synthetic HWPX/PDF와 실제 한글 save/reopen/readback/export 증거는 이 Windows 설치의 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00/P01/P02/P03/P04-01~07 실제 상태는 각 report를 따른다.
