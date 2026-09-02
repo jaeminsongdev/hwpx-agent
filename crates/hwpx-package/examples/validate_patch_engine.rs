@@ -4,14 +4,21 @@ use std::io::Cursor;
 use std::process::ExitCode;
 
 use hwpx_package::{
-    BoundedZipReader, PackageGraph, PackageGraphLimits, PackageLimits, PatchAttributeValue,
-    PatchIntent, PatchResult, PatchText, PreservingPatchEngine, PreservingXmlDocument,
-    XmlAttributeSelector,
+    BoundedZipReader, IdIndexLimits, NormalizedWriter, PackageGraph, PackageGraphLimits,
+    PackageLimits, PatchAttributeValue, PatchIntent, PatchResult, PatchText, PreservingPatchEngine,
+    PreservingWriter, PreservingXmlDocument, WriterLimits, XmlAttributeSelector,
 };
 
 struct ProbeFailure {
     stage: &'static str,
     code: &'static str,
+}
+
+struct WriterProbe {
+    entries: usize,
+    preserving_deterministic: bool,
+    normalized_deterministic: bool,
+    modes_distinct: bool,
 }
 
 fn main() -> ExitCode {
@@ -25,7 +32,7 @@ fn main() -> ExitCode {
             eprintln!("fixture {ordinal}: input_read_failed");
             return ExitCode::from(1);
         };
-        let (result, mutation) = match validate(bytes) {
+        let (result, mutation, writer) = match validate(bytes) {
             Ok(results) => results,
             Err(failure) => {
                 eprintln!(
@@ -36,7 +43,7 @@ fn main() -> ExitCode {
             }
         };
         println!(
-            "fixture {ordinal}: profile={}, parts={}, untouched={}, changed={}, added={}, declarations={}, references={}, mutation_changed={}, mutation_untouched={}",
+            "fixture {ordinal}: profile={}, parts={}, untouched={}, changed={}, added={}, declarations={}, references={}, mutation_changed={}, mutation_untouched={}, writer_entries={}, preserving_deterministic={}, normalized_deterministic={}, modes_distinct={}",
             result.profile_version(),
             result.parts().len(),
             result.untouched_parts(),
@@ -46,12 +53,16 @@ fn main() -> ExitCode {
             result.reference_count(),
             mutation.changed_parts(),
             mutation.untouched_parts(),
+            writer.entries,
+            writer.preserving_deterministic,
+            writer.normalized_deterministic,
+            writer.modes_distinct,
         );
     }
     ExitCode::SUCCESS
 }
 
-fn validate(bytes: Vec<u8>) -> Result<(PatchResult, PatchResult), ProbeFailure> {
+fn validate(bytes: Vec<u8>) -> Result<(PatchResult, PatchResult, WriterProbe), ProbeFailure> {
     let mut reader =
         BoundedZipReader::open(Cursor::new(bytes), PackageLimits::default()).map_err(|error| {
             ProbeFailure {
@@ -110,7 +121,87 @@ fn validate(bytes: Vec<u8>) -> Result<(PatchResult, PatchResult), ProbeFailure> 
             stage: "mutation_artifact",
             code: error.code(),
         })?;
-    Ok((result, mutation))
+    let writer = probe_writers(&mutation)?;
+    Ok((result, mutation, writer))
+}
+
+fn probe_writers(mutation: &PatchResult) -> Result<WriterProbe, ProbeFailure> {
+    let package_limits = PackageLimits::default();
+    let graph_limits = PackageGraphLimits::default();
+    let id_limits = IdIndexLimits::default();
+    let writer_limits = WriterLimits::default();
+    let preserving = PreservingWriter::build(
+        mutation,
+        package_limits,
+        graph_limits,
+        id_limits,
+        writer_limits,
+    )
+    .map_err(|error| ProbeFailure {
+        stage: "preserving_writer",
+        code: error.code(),
+    })?;
+    let preserving_again = PreservingWriter::build(
+        mutation,
+        package_limits,
+        graph_limits,
+        id_limits,
+        writer_limits,
+    )
+    .map_err(|error| ProbeFailure {
+        stage: "preserving_writer_repeat",
+        code: error.code(),
+    })?;
+    let normalized = NormalizedWriter::build(
+        mutation,
+        package_limits,
+        graph_limits,
+        id_limits,
+        writer_limits,
+    )
+    .map_err(|error| ProbeFailure {
+        stage: "normalized_writer",
+        code: error.code(),
+    })?;
+    let normalized_again = NormalizedWriter::build(
+        mutation,
+        package_limits,
+        graph_limits,
+        id_limits,
+        writer_limits,
+    )
+    .map_err(|error| ProbeFailure {
+        stage: "normalized_writer_repeat",
+        code: error.code(),
+    })?;
+    preserving.verify().map_err(|error| ProbeFailure {
+        stage: "preserving_writer_verify",
+        code: error.code(),
+    })?;
+    normalized.verify().map_err(|error| ProbeFailure {
+        stage: "normalized_writer_verify",
+        code: error.code(),
+    })?;
+    let preserving_deterministic = preserving.sha256() == preserving_again.sha256();
+    if !preserving_deterministic {
+        return Err(ProbeFailure {
+            stage: "preserving_writer_repeat",
+            code: "writer_nondeterministic",
+        });
+    }
+    let normalized_deterministic = normalized.sha256() == normalized_again.sha256();
+    if !normalized_deterministic {
+        return Err(ProbeFailure {
+            stage: "normalized_writer_repeat",
+            code: "writer_nondeterministic",
+        });
+    }
+    Ok(WriterProbe {
+        entries: preserving.report().entries().len(),
+        preserving_deterministic,
+        normalized_deterministic,
+        modes_distinct: preserving.sha256() != normalized.sha256(),
+    })
 }
 
 fn linear_mutation(

@@ -1,13 +1,18 @@
 use std::error::Error;
 use std::io::{Cursor, Write};
 
+use hwpx_agent_foundation::workdir::SecureWorkspace;
 use hwpx_package::{
-    AddedPart, AllocationHandle, BoundedZipReader, IdKind, PackageGraph, PackageGraphLimits,
-    PackageLimits, PatchAttributeValue, PatchError, PatchIntent, PatchLimitConfig, PatchLimits,
-    PatchPartDisposition, PatchText, PreservingPatchEngine, PreservingXmlDocument,
-    RelationshipAddition, RelationshipSpine, SiblingPosition, ValidatedXmlFragment,
-    XmlAttributeSelector, XmlElementSelector, XmlTextSelector, XmlTokenKind,
+    AddedPart, AllocationHandle, AtomicPackagePublisher, BoundedZipReader, IdIndexLimits, IdKind,
+    MetadataDisposition, NormalizedWriter, PackageGraph, PackageGraphLimits, PackageLimits,
+    PatchAttributeValue, PatchError, PatchIntent, PatchLimitConfig, PatchLimits,
+    PatchPartDisposition, PatchText, PreservingPatchEngine, PreservingWriter,
+    PreservingXmlDocument, RelationshipAddition, RelationshipSpine, SiblingPosition,
+    ValidatedXmlFragment, WriterLimitConfig, WriterLimits, WriterMode, XmlAttributeSelector,
+    XmlElementSelector, XmlTextSelector, XmlTokenKind,
 };
+use sha2::{Digest as _, Sha256};
+use tempfile::tempdir;
 use zip::write::SimpleFileOptions;
 use zip::{CompressionMethod, ZipWriter};
 
@@ -395,6 +400,143 @@ fn fixed_seed_random_sequences_are_deterministic_and_limits_fail_closed() -> Tes
     );
     assert_code(error, "patch_limit_exceeded");
     assert_addition_part_limit(bytes)?;
+    Ok(())
+}
+
+#[test]
+fn separated_writers_are_deterministic_atomic_and_no_overwrite() -> TestResult {
+    let bytes = valid_archive(SECTION)?;
+    let (mut reader, graph) = open_graph(bytes)?;
+    let patch = PreservingPatchEngine::apply(&mut reader, &graph, &[])?;
+    let preserving = PreservingWriter::build(
+        &patch,
+        PackageLimits::default(),
+        PackageGraphLimits::default(),
+        IdIndexLimits::default(),
+        WriterLimits::default(),
+    )?;
+    let preserving_repeat = PreservingWriter::build(
+        &patch,
+        PackageLimits::default(),
+        PackageGraphLimits::default(),
+        IdIndexLimits::default(),
+        WriterLimits::default(),
+    )?;
+    let normalized = NormalizedWriter::build(
+        &patch,
+        PackageLimits::default(),
+        PackageGraphLimits::default(),
+        IdIndexLimits::default(),
+        WriterLimits::default(),
+    )?;
+    let normalized_repeat = NormalizedWriter::build(
+        &patch,
+        PackageLimits::default(),
+        PackageGraphLimits::default(),
+        IdIndexLimits::default(),
+        WriterLimits::default(),
+    )?;
+    preserving.verify()?;
+    normalized.verify()?;
+    assert_eq!(preserving.sha256(), preserving_repeat.sha256());
+    assert_eq!(normalized.sha256(), normalized_repeat.sha256());
+    assert_ne!(preserving.sha256(), normalized.sha256());
+    assert_eq!(preserving.mode(), WriterMode::Preserving);
+    assert_eq!(normalized.mode(), WriterMode::Normalized);
+    assert_eq!(
+        preserving.report().timestamp(),
+        MetadataDisposition::NotPreservedUnavailable
+    );
+    assert_eq!(
+        normalized.report().timestamp(),
+        MetadataDisposition::Normalized
+    );
+    assert_eq!(
+        preserving.report().raw_compressed_stream(),
+        MetadataDisposition::NotPreservedUnavailable
+    );
+    assert!(preserving.report().entries().iter().all(|entry| {
+        entry.disposition() == PatchPartDisposition::Untouched
+            && entry.source_compression() == Some(entry.output_compression())
+    }));
+    assert_atomic_publication(&preserving, &normalized)?;
+    let tiny = WriterLimits::new(WriterLimitConfig {
+        max_output_bytes: 1,
+    })?;
+    let tiny_result = PreservingWriter::build(
+        &patch,
+        PackageLimits::default(),
+        PackageGraphLimits::default(),
+        IdIndexLimits::default(),
+        tiny,
+    );
+    let Err(tiny_error) = tiny_result else {
+        panic!("one-byte output limit unexpectedly returned an artifact");
+    };
+    assert_eq!(tiny_error.code(), "writer_output_limit_exceeded");
+    Ok(())
+}
+
+fn assert_atomic_publication(
+    preserving: &hwpx_package::PackageArtifact,
+    normalized: &hwpx_package::PackageArtifact,
+) -> TestResult {
+    let temporary = tempdir()?;
+    let workspace = SecureWorkspace::create(temporary.path().join("writer-work"))?;
+    let receipt = AtomicPackagePublisher::publish(
+        preserving,
+        &workspace,
+        std::path::Path::new("job-1/document.hwpx"),
+        std::path::Path::new("documents/document.hwpx"),
+    )?;
+    assert!(receipt.staged_reopen_verified());
+    assert!(receipt.published_reopen_verified());
+    assert_eq!(receipt.sha256(), preserving.sha256());
+    let published = temporary
+        .path()
+        .join("writer-work/output/documents/document.hwpx");
+    let published_bytes = std::fs::read(&published)?;
+    assert_eq!(
+        <[u8; 32]>::from(Sha256::digest(&published_bytes)),
+        preserving.sha256()
+    );
+
+    let duplicate = AtomicPackagePublisher::publish(
+        normalized,
+        &workspace,
+        std::path::Path::new("job-2/document.hwpx"),
+        std::path::Path::new("documents/document.hwpx"),
+    );
+    let Err(error) = duplicate else {
+        panic!("no-overwrite publication unexpectedly succeeded");
+    };
+    assert_eq!(error.code(), "writer_output_exists");
+    assert!(
+        !temporary
+            .path()
+            .join("writer-work/staging/job-2/document.hwpx")
+            .exists()
+    );
+    assert_eq!(
+        <[u8; 32]>::from(Sha256::digest(std::fs::read(&published)?)),
+        preserving.sha256()
+    );
+
+    let traversal = AtomicPackagePublisher::publish(
+        normalized,
+        &workspace,
+        std::path::Path::new("job-3/document.hwpx"),
+        std::path::Path::new("../escape.hwpx"),
+    );
+    assert!(traversal.is_err());
+    assert!(
+        !temporary
+            .path()
+            .join("writer-work/staging/job-3/document.hwpx")
+            .exists()
+    );
+    assert!(!temporary.path().join("escape.hwpx").exists());
+
     Ok(())
 }
 

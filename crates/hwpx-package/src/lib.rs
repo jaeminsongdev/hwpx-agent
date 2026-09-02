@@ -15,6 +15,7 @@ mod preservation;
 mod preserving_xml;
 mod reader;
 mod safe_xml;
+mod writer;
 
 pub use graph::{
     GraphError, MediaType, PackageGraph, PackageGraphLimitConfig, PackageGraphLimits, PartRecord,
@@ -42,3 +43,8 @@ pub use preserving_xml::{
 };
 pub use reader::{BoundedZipReader, Compression, EntryMetadata, PackageError};
 pub use safe_xml::SafeXmlError;
+pub use writer::{
+    AtomicPackagePublisher, MetadataDisposition, NormalizedWriter, PackageArtifact,
+    PreservingWriter, PublicationReceipt, WriterEntryRecord, WriterError, WriterLimitConfig,
+    WriterLimits, WriterMode, WriterReport,
+};

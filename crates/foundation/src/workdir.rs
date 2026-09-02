@@ -1,7 +1,5 @@
-#[cfg(not(windows))]
-use std::fs::File;
-use std::fs::{self, OpenOptions};
-use std::io::{self, Write};
+use std::fs::{self, File, OpenOptions};
+use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::{Component, Path, PathBuf};
 
 use sha2::{Digest, Sha256};
@@ -17,6 +15,8 @@ pub enum WorkspaceError {
     LinkNotAllowed,
     #[error("artifact already exists")]
     ArtifactExists,
+    #[error("artifact became atomically visible but durability or staging cleanup failed")]
+    ArtifactPublishedIncomplete,
     #[error("I/O error: {0}")]
     Io(#[from] io::Error),
 }
@@ -26,6 +26,22 @@ pub struct StagedArtifact {
     path: PathBuf,
     pub sha256: String,
     pub size_bytes: u64,
+}
+
+/// Read/seek access to one containment-checked staging file without exposing its path.
+#[derive(Debug)]
+pub struct StagedReader(File);
+
+impl Read for StagedReader {
+    fn read(&mut self, buffer: &mut [u8]) -> io::Result<usize> {
+        self.0.read(buffer)
+    }
+}
+
+impl Seek for StagedReader {
+    fn seek(&mut self, position: SeekFrom) -> io::Result<u64> {
+        self.0.seek(position)
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -90,6 +106,31 @@ impl SecureWorkspace {
         })
     }
 
+    /// Opens a staged artifact read-only after rechecking containment and link policy.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the artifact moved, escaped staging, became a link, or cannot open.
+    pub fn open_staged(&self, staged: &StagedArtifact) -> Result<StagedReader, WorkspaceError> {
+        self.ensure_existing_contained(&staged.path, &self.staging)?;
+        let file = File::open(&staged.path)?;
+        if !file.metadata()?.is_file() {
+            return Err(WorkspaceError::InvalidRelativePath);
+        }
+        Ok(StagedReader(file))
+    }
+
+    /// Removes one unpublished staged artifact after rechecking containment.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the artifact escaped staging, became a link, or cannot be removed.
+    pub fn discard_staged(&self, staged: &StagedArtifact) -> Result<(), WorkspaceError> {
+        self.ensure_existing_contained(&staged.path, &self.staging)?;
+        fs::remove_file(&staged.path)?;
+        sync_parent(&staged.path)
+    }
+
     /// 동일 volume hard-link publication으로 no-overwrite와 atomic visibility를 동시에 보장한다.
     ///
     /// # Errors
@@ -115,8 +156,15 @@ impl SecureWorkspace {
             }
             Err(error) => return Err(WorkspaceError::Io(error)),
         }
-        sync_parent(&destination)?;
-        fs::remove_file(&staged.path)?;
+        if sync_parent(&destination).is_err() {
+            return Err(WorkspaceError::ArtifactPublishedIncomplete);
+        }
+        if fs::remove_file(&staged.path).is_err() {
+            return Err(WorkspaceError::ArtifactPublishedIncomplete);
+        }
+        if sync_parent(&staged.path).is_err() {
+            return Err(WorkspaceError::ArtifactPublishedIncomplete);
+        }
         Ok(destination)
     }
 
@@ -275,6 +323,7 @@ fn sync_parent(_path: &Path) -> Result<(), WorkspaceError> {
 
 #[cfg(test)]
 mod tests {
+    use std::io::Read as _;
     use std::path::Path;
 
     use tempfile::tempdir;
@@ -321,6 +370,32 @@ mod tests {
             .unwrap_or_else(|error| panic!("first workspace: {error}"));
         let _second = SecureWorkspace::create(&root)
             .unwrap_or_else(|error| panic!("second workspace: {error}"));
+    }
+
+    #[test]
+    fn staged_reader_and_discard_keep_paths_private_and_bounded() {
+        let temporary = tempdir().unwrap_or_else(|error| panic!("tempdir: {error}"));
+        let workspace = SecureWorkspace::create(temporary.path().join("work"))
+            .unwrap_or_else(|error| panic!("workspace: {error}"));
+        let staged = workspace
+            .stage_bytes(Path::new("job/read.bin"), b"verified")
+            .unwrap_or_else(|error| panic!("stage: {error}"));
+        let mut reader = workspace
+            .open_staged(&staged)
+            .unwrap_or_else(|error| panic!("open staged: {error}"));
+        let mut bytes = Vec::new();
+        reader
+            .read_to_end(&mut bytes)
+            .unwrap_or_else(|error| panic!("read staged: {error}"));
+        assert_eq!(bytes, b"verified");
+        drop(reader);
+        workspace
+            .discard_staged(&staged)
+            .unwrap_or_else(|error| panic!("discard staged: {error}"));
+        assert!(matches!(
+            workspace.open_staged(&staged),
+            Err(WorkspaceError::Io(_))
+        ));
     }
 
     #[test]
