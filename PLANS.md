@@ -68,7 +68,7 @@ save, render, cross-version or production proof.
 | P-0053 | P10-05 Security module | `core_ready_actual_module_pending` | commit `b830f74`; Agent 12/12, Worker 10/10, static 29/29, current/clean FULL 5/5, x86 pass; registered module count 0 |
 | P-0054 | P10-06 Signed binding executor | `builder_pass_actual_execution_pending` | commits `3281693` + `2f92654`; executor 14/14 x64+x86, actual signed bundle built/verified, actual COM execution pending P10-05 |
 | P-0055 | P10-06 trusted offline bundle builder | `pass_current_pc_local_builder` | commit `2f92654`; builder 11/11, static 41/41, actual bundle + independent redacted receipt, current/clean FULL 5/5 |
-| P-0056 | P10-07 Event/modal watchdog | `pass_scoped_current_pc_local` | commit `b0f3b6f`; actual event signals 6, actual unknown modal fail-closed, smoke 13/13, static 23/23 |
+| P-0056 | P10-07 Event/modal watchdog | `pass_scoped_current_pc_local` | commits `b0f3b6f` + `b4c7a54`; actual events 6, unknown modal fail-closed, smoke 13/13, static 23/23, clean FULL 5/5 |
 
 ## Active evidence summary
 

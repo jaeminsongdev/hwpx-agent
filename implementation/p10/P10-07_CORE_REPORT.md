@@ -50,6 +50,8 @@ created from it.
   remained `6/6`, `10/10`, `10/10`, `14/14` and `13/13` respectively.
 - Existing P10 static suites remained `24/24`, `29/29` and `41/41`; binding schemas accepted two valid
   fixtures and rejected all six negative fixtures.
+- Exact commit `b4c7a54` clean clone passed all five CI lanes and remained Git-clean after validation.
+  The clone contained none of the Git-ignored actual target evidence.
 - P05 section/column tests passed `14/14`; the corrected target builder passed four example tests and
   independently inspected the v2 fixture as two sections, one break, spans `[1, 1]`, body width 80,220
   and the exact expected text digest.
