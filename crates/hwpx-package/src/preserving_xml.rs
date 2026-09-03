@@ -387,6 +387,14 @@ impl PreservingXmlDocument {
         self.original_sha256
     }
 
+    pub(crate) fn source_text(&self, span: XmlByteSpan) -> Result<&str, PreservingXmlError> {
+        let bytes = self
+            .original
+            .get(span.start()..span.end())
+            .ok_or(PreservingXmlError::InvalidSpan)?;
+        std::str::from_utf8(bytes).map_err(|_| PreservingXmlError::InvalidSpan)
+    }
+
     /// Reassembles every untouched token internally and verifies exact source
     /// bytes and digest without exposing raw XML through the public API.
     ///
