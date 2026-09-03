@@ -20,6 +20,7 @@ mod preserving_xml;
 mod reader;
 mod roundtrip;
 mod safe_xml;
+mod section_columns;
 mod tab_definition;
 mod text_flow;
 mod vs0;
@@ -87,6 +88,13 @@ pub use roundtrip::{
     RoundTripEvidence, RoundTripLimits, RoundTripVerifier,
 };
 pub use safe_xml::SafeXmlError;
+pub use section_columns::{
+    COLUMN_PROFILE_ID, ColumnDefinition, ColumnLayout, ColumnLineType, ColumnLineWidth,
+    ColumnMetrics, ColumnSeparator, ColumnSize, ColumnSizing, ColumnType, SectionBoundary,
+    SectionColumnError, SectionColumnLimitConfig, SectionColumnLimits, SectionColumnLowerer,
+    SectionColumnLoweringReceipt, SectionColumnPatchReceipt, SectionColumnReader,
+    SectionColumnSequence, SectionColumns,
+};
 pub use tab_definition::{
     DeduplicatedTabDefinitions, TAB_DEFINITION_PROFILE_ID, TabDefinition, TabDefinitionCatalog,
     TabDefinitionCatalogReader, TabDefinitionCatalogWriter, TabDefinitionError,
