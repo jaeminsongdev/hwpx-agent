@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-03
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-05~08 exact Hangul 2020 acceptance queue`
+- Active phase/task: `P05 / P05-06~08 exact Hangul 2020 acceptance queue`
 - Active reasoning effort: `max`
 - Blocker: none
 
@@ -28,7 +28,7 @@ save, render, cross-version or production proof.
 | P02 | `pass_scoped_current_pc_local` | `implementation/p02/P02_GATE_REPORT.md` |
 | P03 | `pass_scoped_current_pc_local` | `implementation/p03/P03_GATE_REPORT.md` |
 | P04 | `pass_scoped_current_pc_local` | `implementation/p04/P04_GATE_REPORT.md` |
-| P05 | `in_progress_current_pc_local` | P05-01~04 pass; P05-05~08 core ready, actual 2020 queue active |
+| P05 | `in_progress_current_pc_local` | P05-01~05 pass; P05-06~08 core ready, actual 2020 queue active |
 | P06 | `blocked_by_P05` | table engine |
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
@@ -56,7 +56,7 @@ save, render, cross-version or production proof.
 | P-0041 | P05-02 Character styles | `pass` | commit `a810aa7`, style 11/11, package 74/74, current/clean FULL 5/5, Linux offline |
 | P-0042 | P05-03 Paragraph styles | `pass` | commit `ec76232`, paragraph 12/12, package 86/86, current/clean FULL 5/5, Linux offline |
 | P-0043 | P05-04 Tabs | `pass` | commits `1a8723c` + `5cb4fe7`; tab 13/13, package 101/101, exact 2020 save/reopen semantic pass |
-| P-0044 | P05-05 Lists and numbering | `actual_in_progress` | commit `4afd8c0`; bounded diagnostic runner `49ba92a`; core/fixture/current-clean-Linux pass; exact 2020 open/save/reopen active |
+| P-0044 | P05-05 Lists and numbering | `pass` | commits `4afd8c0` + `9597db2`; exact 2020 canonical save/reopen semantic pass; current/clean 5/5, offline Linux |
 | P-0045 | P05-06 Page setup | `actual_pending` | commits `35b6d2c` + `453e1d4`; core/fixture/current-clean-Linux pass |
 | P-0046 | P05-07 Sections and columns | `actual_render_pending` | commits `cf01d27` + `dfd60e3`; core/fixture/current-clean-Linux pass |
 | P-0047 | P05-08 Header/footer/page number | `actual_render_pending` | commits `a6bcd35` + `6a46fbc`; 16 core + 2 fixture tests, current/clean FULL 5/5, offline Linux pass |
@@ -82,11 +82,14 @@ promoted.
 
 The latest core commit `6a46fbc` additionally passed offline network-disabled Linux
 `hwpx-package --all-targets` tests/Clippy with source and Cargo registry read-only. The authoritative
-task state remains open until the serialized exact Hangul 2020 open/save/reopen runs finish and
-P05-07/P05-08 render evidence is captured. Two P05-05 attempts ended fail-closed at
-`open_input:running` after 300 and 900 seconds without manual approval: both preserved the source,
-created no output, cleaned exactly one owned Hangul process and left zero Hwp processes. No
-synthetic, static or timed-out result is promoted to actual behavior.
+P05-05 task is now closed at correction commit `9597db2`. Its canonical disposable fixture passed
+exact Hangul 2020 open/save/reopen, product semantic readback and source/process closure. The runtime
+calibration history remains recorded: approval timeouts produced no output, and later probes exposed
+the exact text oracle, early-trace/success-exit issues and Hangul's bullet-level/checkable
+canonicalization before the final clean pass. Current and exact-commit clean bootstraps passed 5/5,
+both copies of all six PowerShell suites passed 153/153, and offline read-only Linux package tests and
+Clippy passed. No synthetic, static, timed-out or pre-correction result was promoted to actual proof.
+P05-06 actual save/reopen and P05-07/P05-08 actual save/render evidence remain open.
 
 ## P05-04 closure evidence
 
@@ -107,7 +110,7 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next action
 
-Finish the active disposable P05-05 exact Hangul 2020 open/save/reopen run, verify source immutability,
-trace closure and product semantic readback, then write its task report. Run P05-06, P05-07 and P05-08
-actual fixtures serially; add required render evidence for P05-07/P05-08 before task closure. Continue
+Run the existing disposable P05-06 custom landscape page-setup fixture through exact Hangul 2020,
+verify source immutability, trace closure and product semantic readback, then write its task report.
+Run P05-07 and P05-08 serially with their required PDF/render evidence before task closure. Continue
 at reasoning effort `max`.
