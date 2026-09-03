@@ -7,12 +7,12 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/HwpxAgent.WindowsWorker/HwpxAgent.WindowsWorker.csproj" />
-    <ProjectReference Include="../../src/HwpxAgent.WindowsWorker.Host/HwpxAgent.WindowsWorker.Host.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="../HwpxAgent.WindowsWorker.TestHost/HwpxAgent.WindowsWorker.TestHost.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
-  <Target Name="CopyStaHost" AfterTargets="Build">
+  <Target Name="CopyStaTestHost" AfterTargets="Build">
     <ItemGroup>
-      <StaHostArtifacts Include="$(MSBuildProjectDirectory)/../../src/HwpxAgent.WindowsWorker.Host/bin/$(Configuration)/net10.0-windows/*" />
+      <StaTestHostArtifacts Include="$(MSBuildProjectDirectory)/../HwpxAgent.WindowsWorker.TestHost/bin/$(Configuration)/net10.0-windows/*" />
     </ItemGroup>
-    <Copy SourceFiles="@(StaHostArtifacts)" DestinationFolder="$(OutDir)/sta-host" />
+    <Copy SourceFiles="@(StaTestHostArtifacts)" DestinationFolder="$(OutDir)/sta-test-host" />
   </Target>
 </Project>

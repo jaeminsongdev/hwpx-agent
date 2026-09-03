@@ -104,291 +104,311 @@ public sealed class StaWorkerServer(TimeProvider? timeProvider = null)
         }
 
         await using var staLoop = new StaMessageLoop();
-        using var connectionCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        using var writeGate = new SemaphoreSlim(1, 1);
-        var queue = Channel.CreateBounded<QueuedCommand>(new BoundedChannelOptions(options.MaximumQueuedCommands)
-        {
-            FullMode = BoundedChannelFullMode.Wait,
-            SingleReader = true,
-            SingleWriter = true,
-            AllowSynchronousContinuations = false,
-        });
-        var queuedCommands = new ConcurrentDictionary<string, QueuedCommand>(StringComparer.Ordinal);
-        var seenCommandIds = new HashSet<string>(StringComparer.Ordinal);
-        var receivedStart = false;
-        var receivedClose = false;
-        var receivedCommandCount = 0;
-        var closed = false;
-        var cleanupOnly = false;
-        var processor = ProcessCommandsAsync();
-        Exception? readerError = null;
-
         try
         {
-            while (!connectionCancellation.IsCancellationRequested)
+            using var connectionCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            using var writeGate = new SemaphoreSlim(1, 1);
+            var queue = Channel.CreateBounded<QueuedCommand>(new BoundedChannelOptions(options.MaximumQueuedCommands)
             {
-                var payload = await StaPipeFraming
-                    .ReadFrameAsync(duplexStream, connectionCancellation.Token)
-                    .ConfigureAwait(false);
-                if (payload is null)
-                {
-                    break;
-                }
+                FullMode = BoundedChannelFullMode.Wait,
+                SingleReader = true,
+                SingleWriter = true,
+                AllowSynchronousContinuations = false,
+            });
+            var queuedCommands = new ConcurrentDictionary<string, QueuedCommand>(StringComparer.Ordinal);
+            var seenCommandIds = new HashSet<string>(StringComparer.Ordinal);
+            var receivedStart = false;
+            var receivedClose = false;
+            var receivedCommandCount = 0;
+            var closed = false;
+            var cleanupOnly = false;
+            var processor = ProcessCommandsAsync();
+            Exception? readerError = null;
 
-                StaCommandEnvelope command;
-                try
+            try
+            {
+                while (!connectionCancellation.IsCancellationRequested)
                 {
-                    command = WorkerBoundary.DecodeAndValidate(payload);
-                }
-                catch (ArgumentException error)
-                {
-                    throw new StaTransportException(StaTransportError.InvalidEnvelope, error);
-                }
+                    var payload = await StaPipeFraming
+                        .ReadFrameAsync(duplexStream, connectionCancellation.Token)
+                        .ConfigureAwait(false);
+                    if (payload is null)
+                    {
+                        break;
+                    }
 
-                ValidateBinding(command, options);
-                receivedCommandCount = checked(receivedCommandCount + 1);
-                if (receivedCommandCount > options.MaximumCommandCount)
-                {
-                    throw new StaTransportException(StaTransportError.FrameLimit);
-                }
+                    StaCommandEnvelope command;
+                    try
+                    {
+                        command = WorkerBoundary.DecodeAndValidate(payload);
+                    }
+                    catch (ArgumentException error)
+                    {
+                        throw new StaTransportException(StaTransportError.InvalidEnvelope, error);
+                    }
 
-                if (!seenCommandIds.Add(command.CommandId))
-                {
-                    throw new StaTransportException(StaTransportError.DuplicateCommand);
-                }
+                    ValidateBinding(command, options);
+                    receivedCommandCount = checked(receivedCommandCount + 1);
+                    if (receivedCommandCount > options.MaximumCommandCount)
+                    {
+                        throw new StaTransportException(StaTransportError.FrameLimit);
+                    }
 
-                if (!receivedStart)
-                {
-                    if (command.CommandCase != StaCommandEnvelope.CommandOneofCase.StartSession
-                        || !string.Equals(
-                            command.StartSession.TargetProfile.ProfileId,
-                            options.TargetProfileId,
-                            StringComparison.Ordinal))
+                    if (!seenCommandIds.Add(command.CommandId))
+                    {
+                        throw new StaTransportException(StaTransportError.DuplicateCommand);
+                    }
+
+                    if (!receivedStart)
+                    {
+                        if (command.CommandCase != StaCommandEnvelope.CommandOneofCase.StartSession
+                            || !string.Equals(
+                                command.StartSession.TargetProfile.ProfileId,
+                                options.TargetProfileId,
+                                StringComparison.Ordinal))
+                        {
+                            throw new StaTransportException(StaTransportError.InvalidSequence);
+                        }
+
+                        receivedStart = true;
+                    }
+                    else if (command.CommandCase == StaCommandEnvelope.CommandOneofCase.StartSession || receivedClose)
                     {
                         throw new StaTransportException(StaTransportError.InvalidSequence);
                     }
 
-                    receivedStart = true;
-                }
-                else if (command.CommandCase == StaCommandEnvelope.CommandOneofCase.StartSession || receivedClose)
-                {
-                    throw new StaTransportException(StaTransportError.InvalidSequence);
-                }
-
-                if (command.CommandCase == StaCommandEnvelope.CommandOneofCase.Cancel)
-                {
-                    var accepted = queuedCommands.TryGetValue(command.Cancel.TargetCommandId, out var target);
-                    if (accepted)
+                    if (command.CommandCase == StaCommandEnvelope.CommandOneofCase.Cancel)
                     {
-                        target!.RequestCancel();
-                    }
-
-                    var cancelReceipt = accepted
-                        ? CreateSuccessReceipt(command)
-                        : CreateFailureReceipt(
-                            command,
-                            ExecutionState.Failed,
-                            BridgeErrorCode.Cancelled,
-                            "cancel-target-not-active",
-                            effectUnknown: false,
-                            cleanupRequired: false);
-                    await WriteReceiptAsync(command, cancelReceipt).ConfigureAwait(false);
-                    continue;
-                }
-
-                var queued = new QueuedCommand(command);
-                if (!queuedCommands.TryAdd(command.CommandId, queued))
-                {
-                    queued.Dispose();
-                    throw new StaTransportException(StaTransportError.DuplicateCommand);
-                }
-
-                await queue.Writer.WriteAsync(queued, connectionCancellation.Token).ConfigureAwait(false);
-                if (command.CommandCase == StaCommandEnvelope.CommandOneofCase.CloseSession)
-                {
-                    receivedClose = true;
-                }
-            }
-        }
-        catch (OperationCanceledException) when (connectionCancellation.IsCancellationRequested)
-        {
-            // A successful close or the caller ended this one connection.
-        }
-        catch (Exception error)
-        {
-            readerError = error;
-            connectionCancellation.Cancel();
-        }
-        finally
-        {
-            queue.Writer.TryComplete();
-        }
-
-        try
-        {
-            await processor.ConfigureAwait(false);
-        }
-        catch (OperationCanceledException) when (connectionCancellation.IsCancellationRequested)
-        {
-            // The reader failed, the caller cancelled, or close completed.
-        }
-        finally
-        {
-            foreach (var queued in queuedCommands.Values)
-            {
-                queued.Dispose();
-            }
-
-            queuedCommands.Clear();
-        }
-
-        if (readerError is not null)
-        {
-            System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(readerError).Throw();
-        }
-
-        if (!closed && !cancellationToken.IsCancellationRequested)
-        {
-            throw new StaTransportException(StaTransportError.ConnectionClosed);
-        }
-
-        async Task ProcessCommandsAsync()
-        {
-            try
-            {
-                await foreach (var queued in queue.Reader.ReadAllAsync(connectionCancellation.Token).ConfigureAwait(false))
-                {
-                    var command = queued.Command;
-                    StaCommandReceipt receipt;
-                    var handlerInvoked = 0;
-                    try
-                    {
-                        if (cleanupOnly
-                            && command.CommandCase != StaCommandEnvelope.CommandOneofCase.CloseSession)
+                        var accepted = queuedCommands.TryGetValue(command.Cancel.TargetCommandId, out var target);
+                        if (accepted)
                         {
-                            receipt = CreateFailureReceipt(
+                            target!.RequestCancel();
+                        }
+
+                        var cancelReceipt = accepted
+                            ? CreateSuccessReceipt(command)
+                            : CreateFailureReceipt(
                                 command,
                                 ExecutionState.Failed,
-                                BridgeErrorCode.PolicyDenied,
-                                "session-cleanup-only",
+                                BridgeErrorCode.Cancelled,
+                                "cancel-target-not-active",
                                 effectUnknown: false,
-                                cleanupRequired: true);
-                        }
-                        else
+                                cleanupRequired: false);
+                        await WriteReceiptAsync(command, cancelReceipt).ConfigureAwait(false);
+                        continue;
+                    }
+
+                    var queued = new QueuedCommand(command);
+                    if (!queuedCommands.TryAdd(command.CommandId, queued))
+                    {
+                        queued.Dispose();
+                        throw new StaTransportException(StaTransportError.DuplicateCommand);
+                    }
+
+                    await queue.Writer.WriteAsync(queued, connectionCancellation.Token).ConfigureAwait(false);
+                    if (command.CommandCase == StaCommandEnvelope.CommandOneofCase.CloseSession)
+                    {
+                        receivedClose = true;
+                    }
+                }
+            }
+            catch (OperationCanceledException) when (connectionCancellation.IsCancellationRequested)
+            {
+                // A successful close or the caller ended this one connection.
+            }
+            catch (Exception error)
+            {
+                readerError = error;
+                connectionCancellation.Cancel();
+            }
+            finally
+            {
+                queue.Writer.TryComplete();
+            }
+
+            try
+            {
+                await processor.ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (connectionCancellation.IsCancellationRequested)
+            {
+                // The reader failed, the caller cancelled, or close completed.
+            }
+            finally
+            {
+                foreach (var queued in queuedCommands.Values)
+                {
+                    queued.Dispose();
+                }
+
+                queuedCommands.Clear();
+            }
+
+            if (readerError is not null)
+            {
+                System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(readerError).Throw();
+            }
+
+            if (!closed && !cancellationToken.IsCancellationRequested)
+            {
+                throw new StaTransportException(StaTransportError.ConnectionClosed);
+            }
+
+            async Task ProcessCommandsAsync()
+            {
+                try
+                {
+                    await foreach (var queued in queue.Reader.ReadAllAsync(connectionCancellation.Token).ConfigureAwait(false))
+                    {
+                        var command = queued.Command;
+                        StaCommandReceipt receipt;
+                        var handlerInvoked = 0;
+                        try
                         {
-                            var remainingMilliseconds = checked(
-                                (long)command.DeadlineUnixMs - UtcNowMilliseconds());
-                            if (remainingMilliseconds <= 0)
+                            if (cleanupOnly
+                                && command.CommandCase != StaCommandEnvelope.CommandOneofCase.CloseSession)
                             {
                                 receipt = CreateFailureReceipt(
                                     command,
                                     ExecutionState.Failed,
-                                    BridgeErrorCode.Timeout,
-                                    "command-deadline-expired",
+                                    BridgeErrorCode.PolicyDenied,
+                                    "session-cleanup-only",
                                     effectUnknown: false,
-                                    cleanupRequired: false);
-                            }
-                            else if (remainingMilliseconds > options.MaximumCommandSeconds * 1_000L)
-                            {
-                                receipt = CreateFailureReceipt(
-                                    command,
-                                    ExecutionState.Failed,
-                                    BridgeErrorCode.InvalidEnvelope,
-                                    "command-deadline-unbounded",
-                                    effectUnknown: false,
-                                    cleanupRequired: false);
-                            }
-                            else if (queued.CancelRequested)
-                            {
-                                receipt = CreateFailureReceipt(
-                                    command,
-                                    ExecutionState.Cancelled,
-                                    BridgeErrorCode.Cancelled,
-                                    "command-cancelled-before-dispatch",
-                                    effectUnknown: false,
-                                    cleanupRequired: false);
+                                    cleanupRequired: true);
                             }
                             else
                             {
-                                using var deadline = CancellationTokenSource.CreateLinkedTokenSource(
-                                    connectionCancellation.Token,
-                                    queued.CancellationToken);
-                                deadline.CancelAfter(TimeSpan.FromMilliseconds(remainingMilliseconds));
-                                try
-                                {
-                                    receipt = await staLoop.InvokeAsync(
-                                        context =>
-                                        {
-                                            Interlocked.Exchange(ref handlerInvoked, 1);
-                                            return handler.Execute(command.Clone(), context);
-                                        },
-                                        deadline.Token).ConfigureAwait(false);
-                                    WorkerBoundary.ValidateReceipt(receipt, command, options.MaximumEventCount);
-                                }
-                                catch (OperationCanceledException)
+                                var remainingMilliseconds = checked(
+                                    (long)command.DeadlineUnixMs - UtcNowMilliseconds());
+                                if (remainingMilliseconds <= 0)
                                 {
                                     receipt = CreateFailureReceipt(
                                         command,
-                                        handlerInvoked == 0 ? ExecutionState.Cancelled : ExecutionState.UnknownOutcome,
-                                        queued.CancelRequested ? BridgeErrorCode.Cancelled : BridgeErrorCode.Timeout,
-                                        queued.CancelRequested ? "command-cancelled" : "command-timeout",
-                                        effectUnknown: handlerInvoked != 0,
-                                        cleanupRequired: handlerInvoked != 0);
+                                        ExecutionState.Failed,
+                                        BridgeErrorCode.Timeout,
+                                        "command-deadline-expired",
+                                        effectUnknown: false,
+                                        cleanupRequired: false);
                                 }
-                                catch (Exception)
+                                else if (remainingMilliseconds > options.MaximumCommandSeconds * 1_000L)
                                 {
                                     receipt = CreateFailureReceipt(
                                         command,
-                                        handlerInvoked == 0 ? ExecutionState.Failed : ExecutionState.UnknownOutcome,
-                                        BridgeErrorCode.UnknownOutcome,
-                                        "handler-failure",
-                                        effectUnknown: handlerInvoked != 0,
-                                        cleanupRequired: handlerInvoked != 0);
+                                        ExecutionState.Failed,
+                                        BridgeErrorCode.InvalidEnvelope,
+                                        "command-deadline-unbounded",
+                                        effectUnknown: false,
+                                        cleanupRequired: false);
+                                }
+                                else if (queued.CancelRequested)
+                                {
+                                    receipt = CreateFailureReceipt(
+                                        command,
+                                        ExecutionState.Cancelled,
+                                        BridgeErrorCode.Cancelled,
+                                        "command-cancelled-before-dispatch",
+                                        effectUnknown: false,
+                                        cleanupRequired: false);
+                                }
+                                else
+                                {
+                                    using var deadline = CancellationTokenSource.CreateLinkedTokenSource(
+                                        connectionCancellation.Token,
+                                        queued.CancellationToken);
+                                    deadline.CancelAfter(TimeSpan.FromMilliseconds(remainingMilliseconds));
+                                    try
+                                    {
+                                        receipt = await staLoop.InvokeAsync(
+                                            context =>
+                                            {
+                                                Interlocked.Exchange(ref handlerInvoked, 1);
+                                                return handler.Execute(command.Clone(), context);
+                                            },
+                                            deadline.Token).ConfigureAwait(false);
+                                        WorkerBoundary.ValidateReceipt(receipt, command, options.MaximumEventCount);
+                                    }
+                                    catch (OperationCanceledException)
+                                    {
+                                        receipt = CreateFailureReceipt(
+                                            command,
+                                            handlerInvoked == 0 ? ExecutionState.Cancelled : ExecutionState.UnknownOutcome,
+                                            queued.CancelRequested ? BridgeErrorCode.Cancelled : BridgeErrorCode.Timeout,
+                                            queued.CancelRequested ? "command-cancelled" : "command-timeout",
+                                            effectUnknown: handlerInvoked != 0,
+                                            cleanupRequired: handlerInvoked != 0);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        receipt = CreateFailureReceipt(
+                                            command,
+                                            handlerInvoked == 0 ? ExecutionState.Failed : ExecutionState.UnknownOutcome,
+                                            BridgeErrorCode.UnknownOutcome,
+                                            "handler-failure",
+                                            effectUnknown: handlerInvoked != 0,
+                                            cleanupRequired: handlerInvoked != 0);
+                                    }
                                 }
                             }
-                        }
 
-                        await WriteReceiptAsync(command, receipt).ConfigureAwait(false);
-                        if (command.CommandCase == StaCommandEnvelope.CommandOneofCase.StartSession
-                            && receipt.State != ExecutionState.Succeeded)
-                        {
-                            break;
-                        }
+                            await WriteReceiptAsync(command, receipt).ConfigureAwait(false);
+                            if (command.CommandCase == StaCommandEnvelope.CommandOneofCase.StartSession
+                                && receipt.State != ExecutionState.Succeeded)
+                            {
+                                break;
+                            }
 
-                        cleanupOnly |= receipt.State == ExecutionState.UnknownOutcome;
-                        if (command.CommandCase == StaCommandEnvelope.CommandOneofCase.CloseSession)
-                        {
-                            closed = receipt.State == ExecutionState.Succeeded;
-                            connectionCancellation.Cancel();
-                            break;
+                            cleanupOnly |= receipt.State == ExecutionState.UnknownOutcome;
+                            if (command.CommandCase == StaCommandEnvelope.CommandOneofCase.CloseSession)
+                            {
+                                closed = receipt.State == ExecutionState.Succeeded;
+                                connectionCancellation.Cancel();
+                                break;
+                            }
                         }
-                    }
-                    finally
-                    {
-                        queuedCommands.TryRemove(command.CommandId, out _);
-                        queued.Dispose();
+                        finally
+                        {
+                            queuedCommands.TryRemove(command.CommandId, out _);
+                            queued.Dispose();
+                        }
                     }
                 }
+                finally
+                {
+                    connectionCancellation.Cancel();
+                }
             }
-            finally
+
+            async Task WriteReceiptAsync(StaCommandEnvelope command, StaCommandReceipt receipt)
             {
-                connectionCancellation.Cancel();
+                WorkerBoundary.ValidateReceipt(receipt, command, options.MaximumEventCount);
+                await writeGate.WaitAsync(connectionCancellation.Token).ConfigureAwait(false);
+                try
+                {
+                    await StaPipeFraming
+                        .WriteMessageAsync(duplexStream, receipt, connectionCancellation.Token)
+                        .ConfigureAwait(false);
+                }
+                finally
+                {
+                    writeGate.Release();
+                }
             }
         }
-
-        async Task WriteReceiptAsync(StaCommandEnvelope command, StaCommandReceipt receipt)
+        finally
         {
-            WorkerBoundary.ValidateReceipt(receipt, command, options.MaximumEventCount);
-            await writeGate.WaitAsync(connectionCancellation.Token).ConfigureAwait(false);
-            try
+            if (handler is IStaCommandHandlerCleanup cleanup)
             {
-                await StaPipeFraming
-                    .WriteMessageAsync(duplexStream, receipt, connectionCancellation.Token)
+                using var cleanupTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+                await staLoop
+                    .InvokeAsync(
+                        context =>
+                        {
+                            cleanup.Cleanup(context);
+                            return true;
+                        },
+                        cleanupTimeout.Token)
+                    .WaitAsync(TimeSpan.FromSeconds(10))
                     .ConfigureAwait(false);
-            }
-            finally
-            {
-                writeGate.Release();
             }
         }
     }

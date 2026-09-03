@@ -39,7 +39,7 @@ internal static class Program
         {
             var server = new StaWorkerServer();
             await server
-                .RunAsync(options, new ApartmentBoundaryCommandHandler(), shutdown.Token)
+                .RunAsync(options, new HancomLifecycleCommandHandler(), shutdown.Token)
                 .ConfigureAwait(false);
             return 0;
         }

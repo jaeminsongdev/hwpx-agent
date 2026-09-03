@@ -167,8 +167,8 @@ internal static class Program
         var options = Options();
         var hostPath = Path.Combine(
             AppContext.BaseDirectory,
-            "sta-host",
-            "HwpxAgent.WindowsWorker.Host.exe");
+            "sta-test-host",
+            "HwpxAgent.WindowsWorker.TestHost.exe");
         Require(File.Exists(hostPath), "built STA worker host is missing");
         var startInfo = new ProcessStartInfo
         {

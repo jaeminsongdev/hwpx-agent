@@ -34,6 +34,7 @@ def windows_worker() -> None:
     projects = (
         "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.Smoke/HwpxAgent.WindowsWorker.Smoke.csproj",
         "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.StaSmoke/HwpxAgent.WindowsWorker.StaSmoke.csproj",
+        "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.LifecycleSmoke/HwpxAgent.WindowsWorker.LifecycleSmoke.csproj",
         "workers/windows-hancom-agent/tests/HwpxAgent.WindowsAgent.Smoke/HwpxAgent.WindowsAgent.Smoke.csproj",
     )
     for project in projects:
@@ -41,6 +42,7 @@ def windows_worker() -> None:
         run(["dotnet", "format", project, "--verify-no-changes", "--no-restore"])
         run(["dotnet", "build", "--no-restore", "--configuration", "Release", project])
         run(["dotnet", "run", "--no-build", "--configuration", "Release", "--project", project])
+    run(["pwsh", "-NoProfile", "-File", "implementation/p10/tests/Test-Hancom2020Lifecycle.ps1"])
 
 
 def widget() -> None:
