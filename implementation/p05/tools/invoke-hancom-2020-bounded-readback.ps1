@@ -130,7 +130,17 @@ function Read-ProgressJournal {
     foreach ($line in @(Get-Content -LiteralPath $Path -Encoding UTF8)) {
         if ($expectedSequence -gt 32) { return $summary }
         if ([string]::IsNullOrWhiteSpace($line)) { return $summary }
-        try { $event = $line | ConvertFrom-Json -DateKind String } catch { return $summary }
+        try {
+            $event = if ($PSVersionTable.PSVersion.Major -ge 7) {
+                $line | ConvertFrom-Json -DateKind String
+            }
+            else {
+                # Windows PowerShell 5.1 has no -DateKind parameter and leaves
+                # JSON timestamp strings unchanged.
+                $line | ConvertFrom-Json
+            }
+        }
+        catch { return $summary }
         $properties = @($event.PSObject.Properties.Name)
         if ($properties.Count -ne $allowedProperties.Count) { return $summary }
         foreach ($property in $properties) {
