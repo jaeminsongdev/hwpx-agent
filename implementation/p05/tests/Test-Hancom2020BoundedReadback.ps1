@@ -45,6 +45,8 @@ $checks = [ordered]@{
     progress_pid_correlation = $bounded -match 'workerProcessId -ne \[long\]\$event\.worker_process_id' -and $bounded -match 'hwpProcessId -ne \[long\]\$event\.hwp_process_id'
     progress_terminal_required = $bounded -match "progress\.last_phase -cne 'terminal'" -and $bounded -match "progress\.last_state -cne 'pass'"
     inner_trace_correlated = $bounded -match "trace\.schema_version -ceq 'hwpx-agent\.p05-04-hancom-2020-tab-readback/v1'" -and $bounded -match 'trace\.input_sha256 -ceq \$ExpectedInputSha256'
+    wrapper_rechecks_input_after_child = $bounded -match 'trace\.input_unchanged = \(Get-Sha256File -Path \$input\)'
+    inner_failure_phase_preserved = $bounded -match 'childReportedFailure = \$childExitCode -ne 0' -and $bounded -match 'if \(-not \$childReportedFailure\)'
     create_new_terminal_trace = $bounded -match 'FileMode\]::CreateNew'
     progress_privacy_constant = $engine -match 'raw_document_text_present = \$false'
     no_register_module = ($bounded + $engine) -notmatch '(?i)\.RegisterModule\s*\('

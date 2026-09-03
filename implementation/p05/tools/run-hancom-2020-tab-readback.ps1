@@ -433,6 +433,10 @@ finally {
     Clear-ComObject -Value $hwp
     [GC]::Collect()
     [GC]::WaitForPendingFinalizers()
+    try {
+        $result.input_unchanged = (Get-Sha256File -Path $input) -ceq $ExpectedInputSha256
+    }
+    catch { $result.input_unchanged = $false }
 }
 
 Write-ProgressEvent -Phase 'terminal' -State $(if ($result.state -eq 'pass') { 'pass' } else { 'failed' }) -HwpProcessId $hwpProcessId

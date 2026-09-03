@@ -405,13 +405,17 @@ else {
     $innerSchema = [string]$trace.schema_version
     $trace.schema_version = $TraceSchema
     $trace | Add-Member -NotePropertyName delegated_engine_schema -NotePropertyValue $innerSchema -Force
+    $trace.input_unchanged = (Get-Sha256File -Path $input) -ceq $ExpectedInputSha256
+    $childReportedFailure = $childExitCode -ne 0 -or [string]$trace.state -cne 'pass'
     if ($null -ne $trace.error_code) {
         $trace.error_code = ([string]$trace.error_code).Replace('TAB_READBACK_', $ErrorPrefix + '_')
     }
     if ($null -ne $wrapperError) {
         $trace.state = if ($wrapperError.EndsWith('_PROCESS_CLEANUP_UNVERIFIED')) { 'unverified' } else { 'failed' }
         $trace.error_code = $wrapperError
-        $trace.failed_phase = 'watchdog'
+        if (-not $childReportedFailure) {
+            $trace.failed_phase = 'watchdog'
+        }
     }
 }
 $trace | Add-Member -NotePropertyName watchdog -NotePropertyValue ([ordered]@{
