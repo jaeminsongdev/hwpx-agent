@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-03
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-06 actual acceptance` + `P10 / P10-03 STA worker`
+- Active phase/task: `P05 / P05-06 actual acceptance` + `P10 / P10-04 HwpObject lifecycle`
 - Active reasoning effort: `max`
 - Immediate UI dependency: none live; launch the next P05 retry only when the user can immediately click every visible `접근 허용`
 
@@ -33,7 +33,7 @@ save, render, cross-version or production proof.
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
 | P09 | `blocked_by_P05` | fields/forms/notes/references |
-| P10 | `in_progress_current_pc_local` | P10-01~02 pass; P10-03 STA worker next |
+| P10 | `in_progress_current_pc_local` | P10-01~03 pass; P10-04 HwpObject lifecycle next |
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
@@ -63,6 +63,7 @@ save, render, cross-version or production proof.
 | P-0048 | P05-09 VS-1 layout | `actual_render_pending` | commits `bd7428c` + `32d9810`; typed layout slice, exact target fixture and bounded Hangul/PDF harness ready |
 | P-0049 | P10-01 Windows bridge protocol | `pass` | commit `9e44190`; Rust/C# generated SDK, compatibility 7/7, current/clean FULL 5/5, offline Linux pass |
 | P-0050 | P10-02 Windows Agent | `pass` | commit `731f32a`; Agent E2E 11/11, current/clean FULL 5/5, STRICT findings 0/0/0 |
+| P-0051 | P10-03 STA worker | `pass` | commit `2628174`; STA/pipe smoke 6/6, x64+x86, current/clean FULL 5/5, STRICT findings 0/0/0 |
 
 ## Active evidence summary
 
@@ -76,11 +77,12 @@ must reuse the fixed source SHA-256
 `c76816ca35352168955f47cb656ad2cb1ff049192fc10ce46db1465f7f43f0bc`; only a terminal pass plus
 independent semantic readback may close P05-06.
 
-P10-01 and P10-02 are closed by their reports under `implementation/p10/`. At exact commit `731f32a`,
-the outbound authenticated Agent, fenced append-only journal, bounded artifact staging/sandbox/upload
-and durable commit/replay path passed 11/11 E2E scenarios plus current and exact-clean FULL 5/5.
-Live remote TLS/cloud storage, named-pipe I/O, STA/COM and production behavior were not claimed;
-P10-03 is next.
+P10-01 through P10-03 are closed by their reports under `implementation/p10/`. At exact commit
+`2628174`, the private one-job named pipe, bounded protocol command loop, separate worker host and real
+Windows STA message pump passed 6/6 smoke suites under both x64 and this PC's x86 .NET runtime, plus
+current and exact-clean FULL 5/5. `CurrentUserOnly` is not claimed as hostile same-user isolation.
+`HwpObject`, actual Hangul execution, file-path approval, modal handling and process recycling remain
+unverified; P10-04 is next.
 
 ## Validation policy
 
@@ -94,5 +96,6 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 When the user is immediately available, launch one P05-06 retry and verify source immutability,
 terminal trace closure and independent product semantic readback before writing its task report. Then
 run P05-07, P05-08 and P05-09 serially with required PDF/render evidence before the strict P05 Gate.
-In parallel, start P10-03 from `implementation/p10/P10-02_REPORT.md`: implement the private local
-named-pipe STA command loop and prove its apartment/serialization boundary at reasoning effort `max`.
+In parallel, start P10-04 from `implementation/p10/P10-03_REPORT.md`: implement the exact current
+Hangul 2020 x86 `HancomSession` lifecycle inside the STA worker and prove owned-process cleanup across
+normal and failure paths at reasoning effort `max`.
