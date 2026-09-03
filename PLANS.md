@@ -4,7 +4,7 @@
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
 - Active phase/task: `P05 / P05-06~09 exact Hangul 2020 acceptance queue`
 - Active reasoning effort: `max`
-- Blocker: P05-06 actual retry needs the user's visible `접근 허용` click; retry-03 timed out fail-closed
+- Blocker: P05-06 actual retry needs the user's visible `접근 허용` click; retry-04 timed out fail-closed
 
 ## Objective and non-negotiable boundaries
 
@@ -106,6 +106,13 @@ Linux image with network disabled plus source/Cargo registry read-only passed. H
 expectation. The expanded six PowerShell suites pass 163/163 and the PDF verifier passes 16/16. These
 are core/static/synthetic results only; P05-09 remains pending exact Hangul save/reopen/render.
 
+P05-06 retry-04 reached exact Hangul 2020 COM creation and a live, enabled, on-screen `접근 허용`
+dialog in `open_input`, but no user approval was received during the bounded 900-second window. The
+watchdog recorded three valid correlated progress events, preserved the fixed input SHA-256
+`c76816ca35352168955f47cb656ad2cb1ff049192fc10ce46db1465f7f43f0bc`, created no output, cleaned its
+one owned Hangul process and left zero residual Hangul processes. The terminal state remains
+`PAGE_SETUP_READBACK_TIMEOUT`; it is failure evidence, not actual readback proof.
+
 ## P05-04 closure evidence
 
 P05-04 added `hwpx-agent.tab-definition/1` with bounded automatic/custom tab definitions, direct and
@@ -125,7 +132,8 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next action
 
-When the user confirms they are at the PC, immediately start P05-06 retry-04 and have them click every
-visible `접근 허용` prompt before the bounded timeout. Verify source immutability, trace closure and
-product semantic readback, then write its task report. Run P05-07, P05-08 and P05-09 serially with
-their required PDF/render evidence before the strict P05 Gate. Continue at reasoning effort `max`.
+When the user has the Hangul window visible and confirms immediate readiness, start P05-06 retry-05.
+Have them click the first `접근 허용` prompt immediately and every subsequent prompt before the
+bounded timeout. Verify source immutability, trace closure and product semantic readback, then write
+its task report. Run P05-07, P05-08 and P05-09 serially with their required PDF/render evidence before
+the strict P05 Gate. Continue at reasoning effort `max`.
