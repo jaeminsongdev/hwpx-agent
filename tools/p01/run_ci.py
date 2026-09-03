@@ -33,6 +33,7 @@ def windows_worker() -> None:
         raise RuntimeError("windows-worker lane requires Windows")
     projects = (
         "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.Smoke/HwpxAgent.WindowsWorker.Smoke.csproj",
+        "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.StaSmoke/HwpxAgent.WindowsWorker.StaSmoke.csproj",
         "workers/windows-hancom-agent/tests/HwpxAgent.WindowsAgent.Smoke/HwpxAgent.WindowsAgent.Smoke.csproj",
     )
     for project in projects:

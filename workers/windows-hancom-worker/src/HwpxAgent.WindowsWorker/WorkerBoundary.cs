@@ -83,7 +83,9 @@ public static partial class WorkerBoundary
         RequireGuid(envelope.SessionId, nameof(envelope.SessionId));
         RequireGuid(envelope.CommandId, nameof(envelope.CommandId));
         RequireGuid(envelope.TraceId, nameof(envelope.TraceId));
-        if (envelope.FencingToken == 0 || envelope.DeadlineUnixMs == 0)
+        if (envelope.FencingToken == 0
+            || envelope.DeadlineUnixMs == 0
+            || envelope.DeadlineUnixMs > long.MaxValue)
         {
             throw new ArgumentException("Fencing token and deadline are required.", nameof(envelope));
         }
@@ -128,6 +130,88 @@ public static partial class WorkerBoundary
         }
     }
 
+    /// <summary>
+    /// Validates a terminal local-worker receipt and its exact command correlation.
+    /// </summary>
+    public static void ValidateReceipt(
+        StaCommandReceipt receipt,
+        StaCommandEnvelope command,
+        uint maximumEventCount = 10_000)
+    {
+        ArgumentNullException.ThrowIfNull(receipt);
+        ArgumentNullException.ThrowIfNull(command);
+        Validate(command);
+        if (maximumEventCount is 0 or > 10_000
+            || receipt.ProtocolMajor != WindowsBridgeProtocolMajor
+            || receipt.ProtocolMinor != WindowsBridgeProtocolMinor
+            || !string.Equals(receipt.SessionId, command.SessionId, StringComparison.Ordinal)
+            || !string.Equals(receipt.CommandId, command.CommandId, StringComparison.Ordinal)
+            || receipt.FencingToken != command.FencingToken
+            || receipt.State is not (
+                ExecutionState.Succeeded
+                or ExecutionState.Failed
+                or ExecutionState.Cancelled
+                or ExecutionState.UnknownOutcome)
+            || receipt.ValidationState == ValidationState.Unspecified
+            || !receipt.InputUnchanged
+            || receipt.RawDocumentContentLogged
+            || receipt.ExternalNetworkInvoked
+            || receipt.RegistryOrSystemSettingChanged
+            || receipt.Outputs.Count > 64
+            || receipt.Events.Count > maximumEventCount)
+        {
+            throw new ArgumentException("The STA receipt violates its command or safety boundary.", nameof(receipt));
+        }
+
+        var outputHandles = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var output in receipt.Outputs)
+        {
+            ValidateStagedArtifact(output, requireReadOnly: true);
+            if (!outputHandles.Add(output.SandboxHandle))
+            {
+                throw new ArgumentException("STA receipt output handles must be unique.", nameof(receipt));
+            }
+        }
+
+        uint expectedSequence = 1;
+        foreach (var eventRecord in receipt.Events)
+        {
+            if (eventRecord.Sequence != expectedSequence
+                || eventRecord.EventType == StaEventType.Unspecified
+                || eventRecord.RecordedAtUnixMs == 0)
+            {
+                throw new ArgumentException("STA receipt events must be finite and ordered.", nameof(receipt));
+            }
+
+            ValidateDigest(eventRecord.SafeMetadataSha256);
+            expectedSequence = checked(expectedSequence + 1);
+        }
+
+        if (receipt.State == ExecutionState.Succeeded)
+        {
+            if (receipt.Diagnostic is not null || receipt.CleanupRequired)
+            {
+                throw new ArgumentException("Successful STA receipts cannot carry failure state.", nameof(receipt));
+            }
+        }
+        else
+        {
+            if (receipt.Diagnostic is null
+                || receipt.Diagnostic.ErrorCode == BridgeErrorCode.Unspecified)
+            {
+                throw new ArgumentException("Failed STA receipts require a typed diagnostic.", nameof(receipt));
+            }
+
+            ValidateDigest(receipt.Diagnostic.SafeDetailSha256);
+        }
+
+        if (receipt.State == ExecutionState.UnknownOutcome
+            && (!receipt.CleanupRequired || receipt.Diagnostic?.EffectUnknown != true))
+        {
+            throw new ArgumentException("Unknown STA outcomes require cleanup and effect uncertainty.", nameof(receipt));
+        }
+    }
+
     private static void ValidateStagedArtifact(StagedArtifactRef staged, bool requireReadOnly)
     {
         if (staged is null
@@ -164,7 +248,11 @@ public static partial class WorkerBoundary
 
     private static void ValidatePolicy(SecurityPolicy policy)
     {
-        if (policy is null)
+        if (policy is null
+            || policy.AllowExternalNetwork
+            || policy.AllowClipboard
+            || policy.AllowMacros
+            || policy.AllowOleActivation)
         {
             throw new ArgumentException("A security policy is required.", nameof(policy));
         }

@@ -110,6 +110,37 @@ catch (ArgumentException)
     // Expected fail-closed behavior.
 }
 
+var unsafePolicyCommand = openCommand.Clone();
+unsafePolicyCommand.StartSession = new StaStartSessionCommand
+{
+    TargetProfile = new TargetProfileIdentity
+    {
+        ProfileId = "hancom-hangul-2020-secondary",
+        ProductBuild = "11.0.0.9136",
+        Locale = "ko-KR",
+        ProcessArchitecture = "x86",
+        ExecutableSha256 = new string('a', 64),
+        EnvironmentDigest = new string('b', 64),
+    },
+    CapabilityRegistrySha256 = new string('c', 64),
+    SecurityPolicy = new SecurityPolicy
+    {
+        AllowMacros = true,
+        FileAccessPolicyId = "file.local_read",
+        ModalPolicyId = "modal.fail_closed",
+    },
+};
+try
+{
+    WorkerBoundary.Validate(unsafePolicyCommand);
+    Console.Error.WriteLine("unsafe STA security policy was accepted");
+    return 1;
+}
+catch (ArgumentException)
+{
+    // Expected fail-closed behavior.
+}
+
 var bridgeService = WindowsBridgeReflection.Descriptor.Services[0];
 var bridgeMethods = bridgeService.Methods.Select(method => method.Name).ToArray();
 if (bridgeService.Name != "WindowsAgentControl"
