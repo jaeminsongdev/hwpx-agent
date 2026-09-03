@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-03
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-06 actual acceptance` + `P10 / P10-04 HwpObject lifecycle`
+- Active phase/task: `P05 / P05-06 actual acceptance` + `P10 / P10-04 actual acceptance and P10-05 security adapter`
 - Active reasoning effort: `max`
 - Immediate UI dependency: none live; launch the next P05 retry only when the user can immediately click every visible `접근 허용`
 
@@ -33,7 +33,7 @@ save, render, cross-version or production proof.
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
 | P09 | `blocked_by_P05` | fields/forms/notes/references |
-| P10 | `in_progress_current_pc_local` | P10-01~03 pass; P10-04 HwpObject lifecycle next |
+| P10 | `in_progress_current_pc_local` | P10-01~03 pass; P10-04 core ready/actual pending; P10-05 next |
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
@@ -64,12 +64,13 @@ save, render, cross-version or production proof.
 | P-0049 | P10-01 Windows bridge protocol | `pass` | commit `9e44190`; Rust/C# generated SDK, compatibility 7/7, current/clean FULL 5/5, offline Linux pass |
 | P-0050 | P10-02 Windows Agent | `pass` | commit `731f32a`; Agent E2E 11/11, current/clean FULL 5/5, STRICT findings 0/0/0 |
 | P-0051 | P10-03 STA worker | `pass` | commit `2628174`; STA/pipe smoke 6/6, x64+x86, current/clean FULL 5/5, STRICT findings 0/0/0 |
+| P-0052 | P10-04 HwpObject lifecycle | `actual_pending` | commit `c10f97c`; lifecycle 8/8 x64+x86, static 24/24, current/clean FULL 5/5, actual attempt 01 timed out safely |
 
 ## Active evidence summary
 
 P05-01~05 are closed by their task reports. P05-06~09 core/static harnesses, deterministic disposable
 fixtures, current/exact-clean FULL checks and offline Linux checks passed, but P05-06 actual
-save/reopen and P05-07~09 actual save/render evidence remain open. `retry-04` through `retry-06`
+save/reopen and P05-07~09 actual save/render evidence remain open. `retry-04` through `retry-07`
 timed out fail-closed while awaiting the first access approval: no output, source unchanged and zero
 residual Hangul processes. Commit `d3ccd05` fixed the Windows PowerShell 5.1 progress parser;
 `retry-06` then recorded a valid three-event journal ending at `open_input/running`. The next retry
@@ -81,8 +82,13 @@ P10-01 through P10-03 are closed by their reports under `implementation/p10/`. A
 `2628174`, the private one-job named pipe, bounded protocol command loop, separate worker host and real
 Windows STA message pump passed 6/6 smoke suites under both x64 and this PC's x86 .NET runtime, plus
 current and exact-clean FULL 5/5. `CurrentUserOnly` is not claimed as hostile same-user isolation.
-`HwpObject`, actual Hangul execution, file-path approval, modal handling and process recycling remain
-unverified; P10-04 is next.
+P10-04 core commit `c10f97c` now provides an x86 `HancomSession`, exact target/process admission,
+typed create/open/close/quit and fail-closed owned-process cleanup. Lifecycle smoke passed 8/8 under
+x64 and x86, the static harness passed 24/24, and current/exact-clean FULL passed 5/5. Actual attempt
+01 timed out before access approval and safely preserved the input/staging, removed temporary staging,
+cleaned one owned process and left zero `Hwp.exe`; therefore actual lifecycle remains unverified and
+P10-04 is not closed. File-path leases start at P10-05; modal handling and process supervision remain
+later tasks.
 
 ## Validation policy
 
@@ -93,9 +99,9 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next action
 
-When the user is immediately available, launch one P05-06 retry and verify source immutability,
-terminal trace closure and independent product semantic readback before writing its task report. Then
+When the user is immediately available, run one P10-04 actual lifecycle attempt and one P05-06 retry;
+require source immutability, terminal trace closure and zero residual Hangul processes. After P05-06,
 run P05-07, P05-08 and P05-09 serially with required PDF/render evidence before the strict P05 Gate.
-In parallel, start P10-04 from `implementation/p10/P10-03_REPORT.md`: implement the exact current
-Hangul 2020 x86 `HancomSession` lifecycle inside the STA worker and prove owned-process cleanup across
-normal and failure paths at reasoning effort `max`.
+While UI acceptance is unavailable, implement P10-05 as a single-use approved-document security
+adapter tied to P10-02 staging identity and P10-04 `HancomSession`, with allowed/denied path, reparse,
+size, digest, lease expiry/replay and TOCTOU tests. Continue at reasoning effort `max`.
