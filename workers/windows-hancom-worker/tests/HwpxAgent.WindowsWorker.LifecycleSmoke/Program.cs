@@ -18,20 +18,39 @@ internal static class Program
     {
         try
         {
+            if (args.Length == 1
+                && string.Equals(args[0], "--owned-process-exit-child", StringComparison.Ordinal))
+            {
+                await Task.Delay(750);
+                return 0;
+            }
+
             if (args.Length != 0)
             {
                 return await RunActualAsync(args);
             }
 
+            Volatile.Write(ref actualStage, "normal-lifecycle");
             await NormalLifecycleIsOrderedAsync();
+            Volatile.Write(ref actualStage, "open-failure");
             await OpenFailurePreservesCleanupAsync();
+            Volatile.Write(ref actualStage, "input-mutation");
             await InputMutationFailsBeforeOpenReceiptAsync();
+            Volatile.Write(ref actualStage, "cleanup-failure");
             await CleanupFailureStillRunsEveryStepAsync();
+            Volatile.Write(ref actualStage, "version-mismatch");
             await VersionMismatchCleansActivationAsync();
+            Volatile.Write(ref actualStage, "repeated-sessions");
             await RepeatedSessionsLeaveNoFakeOwnerAsync();
+            Volatile.Write(ref actualStage, "typed-handler");
             await LifecycleHandlerUsesTypedCommandsAsync();
+            Volatile.Write(ref actualStage, "server-cancellation");
+            await ServerCancellationRunsStaCleanupHookAsync();
+            Volatile.Write(ref actualStage, "disconnect-cleanup");
             await DisconnectRunsStaCleanupHookAsync();
-            Console.WriteLine("Windows HancomSession P10-04 lifecycle and cleanup smoke passed (8/8)");
+            Volatile.Write(ref actualStage, "owned-process-exit");
+            await AbruptOwnedProcessExitIsAcceptedAsync();
+            Console.WriteLine("Windows HancomSession P10-04 lifecycle and cleanup smoke passed (10/10)");
             return 0;
         }
         catch (Exception error)
@@ -234,6 +253,69 @@ internal static class Program
 
         await RequireTransportAsync(server, StaTransportError.ConnectionClosed);
         Require(factory.Events.Contains("process-stop") && factory.Events.Contains("quit"), "disconnect skipped STA cleanup hook");
+    }
+
+    private static async Task ServerCancellationRunsStaCleanupHookAsync()
+    {
+        var factory = new FakeFactory();
+        var handler = new HancomLifecycleCommandHandler(
+            () => new HancomSession(factory),
+            documentResolver: null,
+            TimeProvider.System);
+        var options = Options();
+        using var serverCancellation = new CancellationTokenSource();
+        using var operationTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        var server = new StaWorkerServer().RunAsync(options, handler, serverCancellation.Token);
+        await using var client = new NamedPipeClientStream(
+            ".",
+            options.PipeName,
+            PipeDirection.InOut,
+            PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly);
+        await client.ConnectAsync(5_000, operationTimeout.Token);
+        await StaPipeFraming.WriteMessageAsync(
+            client,
+            StartCommand("93000000-0000-4000-8000-000000000001"),
+            operationTimeout.Token);
+        _ = await StaPipeFraming.ReadFrameAsync(client, operationTimeout.Token);
+
+        serverCancellation.Cancel();
+        await server.WaitAsync(TimeSpan.FromSeconds(10));
+        Require(
+            factory.Events.Contains("process-stop") && factory.Events.Contains("quit"),
+            "server cancellation skipped STA cleanup hook");
+    }
+
+    private static async Task AbruptOwnedProcessExitIsAcceptedAsync()
+    {
+        var executable = Environment.ProcessPath
+            ?? throw new InvalidOperationException("Lifecycle smoke executable path is unavailable.");
+        var startInfo = new System.Diagnostics.ProcessStartInfo(executable)
+        {
+            UseShellExecute = false,
+            CreateNoWindow = true,
+        };
+        if (string.Equals(
+            Path.GetFileNameWithoutExtension(executable),
+            "dotnet",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            startInfo.ArgumentList.Add(typeof(Program).Assembly.Location);
+        }
+        startInfo.ArgumentList.Add("--owned-process-exit-child");
+        using var child = System.Diagnostics.Process.Start(startInfo)
+            ?? throw new InvalidOperationException("Lifecycle smoke child process did not start.");
+        using var owned = OwnedHancomProcess.Bind(child, executable);
+        Require(child.WaitForExit(5_000), "owned-process crash child did not exit");
+        Require(child.ExitCode == 0, "owned-process crash child failed");
+
+        await using var loop = new StaMessageLoop("p10-04-owned-process-exit");
+        await loop.InvokeAsync(
+            context =>
+            {
+                owned.EnsureStopped(context);
+                return true;
+            },
+            CancellationToken.None);
     }
 
     private static async Task<int> RunActualAsync(string[] args)

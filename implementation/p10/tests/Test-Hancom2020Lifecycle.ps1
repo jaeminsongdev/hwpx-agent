@@ -71,6 +71,8 @@ $checks = [ordered]@{
         $hostProgram -match 'new HancomLifecycleCommandHandler\(securityAdapter\)'
     fake_failure_and_repeat_tests = $smoke -match 'InputMutationFailsBeforeOpenReceiptAsync' -and
         $smoke -match 'CleanupFailureStillRunsEveryStepAsync' -and
+        $smoke -match 'ServerCancellationRunsStaCleanupHookAsync' -and
+        $smoke -match 'AbruptOwnedProcessExitIsAcceptedAsync' -and
         $smoke -match 'index < 32'
     actual_safe_output = $smoke -match 'HANCOM_LIFECYCLE_PASS cycles=3 input_unchanged=true remaining=0' -and
         $smoke -match 'HANCOM_LIFECYCLE_SMOKE_FAILED'
