@@ -99,6 +99,7 @@ jobs:
           cargo fetch --locked
           pnpm install --frozen-lockfile
           dotnet restore --locked-mode workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.LifecycleSmoke/HwpxAgent.WindowsWorker.LifecycleSmoke.csproj
+          dotnet restore --locked-mode workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.SecuritySmoke/HwpxAgent.WindowsWorker.SecuritySmoke.csproj
           dotnet restore --locked-mode workers/windows-hancom-agent/tests/HwpxAgent.WindowsAgent.Smoke/HwpxAgent.WindowsAgent.Smoke.csproj
       - name: SBOM, license, vulnerability, and secret gates
         run: python tools/p01/run_ci.py --lane security

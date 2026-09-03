@@ -54,7 +54,8 @@ $checks = [ordered]@{
     typed_lifecycle_only = $session -match 'XHwpDocuments' -and
         $session -match '\.Open\(input\.Path, "HWPX"' -and
         $session -match '\.Close\(false\)' -and $session -match 'automation\.Quit\(\)'
-    no_raw_action = ($session + $handler) -notmatch '(?i)HAction|HParameterSet|RegisterModule'
+    no_raw_action = ($session + $handler) -notmatch '(?i)HAction|HParameterSet' -and
+        $session -notmatch 'RegisterModule\((?!"FilePathCheckDLL", registrationName\))'
     source_rehashed = $session -match 'InputChanged' -and
         $session -match 'ValidateIntegrity\(HancomLifecycleError\.InputChanged\)'
     handler_typed_commands = $handler -match 'StartSession' -and
@@ -63,7 +64,7 @@ $checks = [ordered]@{
     server_finally_cleanup = $server -match 'IStaCommandHandlerCleanup cleanup' -and
         $server -match 'WaitAsync\(TimeSpan\.FromSeconds\(10\)\)'
     production_host_x86 = $hostProject -match '<PlatformTarget>x86</PlatformTarget>' -and
-        $hostProgram -match 'new HancomLifecycleCommandHandler\(\)'
+        $hostProgram -match 'new HancomLifecycleCommandHandler\(securityAdapter\)'
     fake_failure_and_repeat_tests = $smoke -match 'InputMutationFailsBeforeOpenReceiptAsync' -and
         $smoke -match 'CleanupFailureStillRunsEveryStepAsync' -and
         $smoke -match 'index < 32'

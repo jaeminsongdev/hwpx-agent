@@ -22,6 +22,22 @@ internal static partial class AgentValidation
         {
             throw new ArgumentException("Agent capacity and RPC timeout must be bounded.", nameof(configuration));
         }
+
+        if (configuration.HancomSecurityModule is not null)
+        {
+            ValidateHancomSecurityModulePin(configuration.HancomSecurityModule);
+        }
+    }
+
+    internal static void ValidateHancomSecurityModulePin(HancomSecurityModulePin module)
+    {
+        ArgumentNullException.ThrowIfNull(module);
+        if (!ModuleRegistrationNamePattern().IsMatch(module.RegistrationName ?? string.Empty))
+        {
+            throw new ArgumentException("A bounded Hancom security module registration name is required.", nameof(module));
+        }
+
+        RequireDigest(module.Sha256);
     }
 
     internal static void ValidateAssignment(
@@ -367,6 +383,9 @@ internal static partial class AgentValidation
 
     [GeneratedRegex("^[A-Za-z0-9][A-Za-z0-9._-]{1,126}$", RegexOptions.CultureInvariant)]
     private static partial Regex TokenPattern();
+
+    [GeneratedRegex("^[A-Za-z][A-Za-z0-9._-]{2,63}$", RegexOptions.CultureInvariant)]
+    private static partial Regex ModuleRegistrationNamePattern();
 }
 
 public enum AgentProtocolError

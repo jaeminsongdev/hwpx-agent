@@ -28,6 +28,11 @@ internal static class Program
             arguments["--trace"],
             arguments["--profile"]);
         options.Validate();
+        var securityAdapter = HancomSecurityAdapter.Load(
+            arguments["--security-lease"],
+            options.SessionId,
+            options.FencingToken,
+            options.TargetProfileId);
         using var shutdown = new CancellationTokenSource();
         ConsoleCancelEventHandler onCancel = (_, eventArgs) =>
         {
@@ -39,7 +44,7 @@ internal static class Program
         {
             var server = new StaWorkerServer();
             await server
-                .RunAsync(options, new HancomLifecycleCommandHandler(), shutdown.Token)
+                .RunAsync(options, new HancomLifecycleCommandHandler(securityAdapter), shutdown.Token)
                 .ConfigureAwait(false);
             return 0;
         }
@@ -58,6 +63,7 @@ internal static class Program
             "--fence",
             "--trace",
             "--profile",
+            "--security-lease",
         };
         if (args.Length != allowed.Count * 2)
         {

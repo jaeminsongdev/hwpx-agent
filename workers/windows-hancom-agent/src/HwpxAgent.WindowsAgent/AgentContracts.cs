@@ -31,7 +31,16 @@ public sealed record WindowsAgentConfiguration(
     TargetProfileIdentity TargetProfile,
     string CapabilityRegistrySha256,
     uint AvailableJobSlots,
-    TimeSpan RpcTimeout);
+    TimeSpan RpcTimeout,
+    HancomSecurityModulePin? HancomSecurityModule = null);
+
+public sealed record HancomSecurityModulePin(string RegistrationName, string Sha256);
+
+public sealed record HancomWorkerSecurityLease(
+    string SessionId,
+    ulong FencingToken,
+    string TargetProfileId,
+    string SecurityLeasePath);
 
 public sealed record ProducedArtifact(string SandboxHandle, string ArtifactId, bool Evidence = false);
 

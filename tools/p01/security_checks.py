@@ -59,7 +59,7 @@ def main() -> int:
     checks["pnpm_audit"] = capture(["pnpm", "audit", "--audit-level", "high", "--json"])
     checks["pnpm_licenses"] = capture(["pnpm", "licenses", "list", "--json"])
     dotnet_projects = {
-        "dotnet_vulnerable_windows_worker": "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.LifecycleSmoke/HwpxAgent.WindowsWorker.LifecycleSmoke.csproj",
+        "dotnet_vulnerable_windows_worker": "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.SecuritySmoke/HwpxAgent.WindowsWorker.SecuritySmoke.csproj",
         "dotnet_vulnerable_windows_agent": "workers/windows-hancom-agent/tests/HwpxAgent.WindowsAgent.Smoke/HwpxAgent.WindowsAgent.Smoke.csproj",
     }
     for check_name, project in dotnet_projects.items():

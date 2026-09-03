@@ -1,5 +1,7 @@
 using System.Buffers;
 using System.Security.Cryptography;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using HwpxAgent.Protocol.Foundation.V1;
 using HwpxAgent.Protocol.WindowsBridge.V1;
 
@@ -75,11 +77,21 @@ public sealed class AgentWorkspace
 public sealed class AgentJobContext
 {
     private readonly AgentJobSandbox sandbox;
+    private readonly LeaseAssignment hancomSecurityAssignment;
+    private readonly HancomSecurityModulePin? hancomSecurityModule;
+    private readonly TimeProvider timeProvider;
 
-    internal AgentJobContext(LeaseAssignment assignment, AgentJobSandbox sandbox)
+    internal AgentJobContext(
+        LeaseAssignment assignment,
+        AgentJobSandbox sandbox,
+        HancomSecurityModulePin? hancomSecurityModule,
+        TimeProvider timeProvider)
     {
         Assignment = assignment.Clone();
+        hancomSecurityAssignment = assignment.Clone();
         this.sandbox = sandbox;
+        this.hancomSecurityModule = hancomSecurityModule;
+        this.timeProvider = timeProvider;
     }
 
     public LeaseAssignment Assignment { get; }
@@ -87,11 +99,34 @@ public sealed class AgentJobContext
     public Stream OpenStagedInput(string sandboxHandle) => sandbox.OpenStagedInput(sandboxHandle);
 
     public Stream CreateOutput(string sandboxHandle) => sandbox.CreateOutput(sandboxHandle);
+
+    public Task<HancomWorkerSecurityLease> PrepareHancomWorkerSecurityLeaseAsync(
+        CancellationToken cancellationToken = default)
+    {
+        if (hancomSecurityModule is null)
+        {
+            throw new AgentProtocolException(AgentProtocolError.PolicyDenied);
+        }
+
+        return sandbox.PrepareHancomWorkerSecurityLeaseAsync(
+            hancomSecurityAssignment,
+            hancomSecurityModule,
+            timeProvider,
+            cancellationToken);
+    }
 }
 
 internal sealed class AgentJobSandbox : IAsyncDisposable
 {
     private const string SandboxMarkerName = ".hwpx-agent-sandbox";
+    private const string HancomSecurityLeaseSchema = "hwpx-agent.p10-05-security-lease/v1";
+    private const string HancomSecurityLeaseFileName = ".hancom-security-lease.json";
+    private const string HancomApprovedInputFileName = "hancom_approved_input.hwpx";
+    private const string HancomFileAccessPolicyId = "file.local_read";
+    private const string HancomOpenPolicyId = "open.read_only";
+    private const int MaximumHancomInputBytes = 8 * 1024 * 1024;
+    private const int MaximumHancomLeaseBytes = 8 * 1024;
+    private static readonly TimeSpan MaximumHancomLeaseLifetime = TimeSpan.FromMinutes(30);
     private readonly string path;
     private readonly string sandboxRoot;
     private readonly ulong maximumOutputBytes;
@@ -99,6 +134,7 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
     private readonly HashSet<string> stagedHandles = new(StringComparer.Ordinal);
     private readonly HashSet<string> outputHandles = new(StringComparer.Ordinal);
     private bool disposed;
+    private int hancomSecurityPrepared;
     private ulong createdOutputBytes;
     private ulong uploadedOutputBytes;
 
@@ -182,6 +218,132 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
         catch
         {
             outputHandles.Remove(sandboxHandle);
+            throw;
+        }
+    }
+
+    internal async Task<HancomWorkerSecurityLease> PrepareHancomWorkerSecurityLeaseAsync(
+        LeaseAssignment assignment,
+        HancomSecurityModulePin module,
+        TimeProvider timeProvider,
+        CancellationToken cancellationToken)
+    {
+        ThrowIfDisposed();
+        ArgumentNullException.ThrowIfNull(assignment);
+        ArgumentNullException.ThrowIfNull(timeProvider);
+        AgentValidation.ValidateHancomSecurityModulePin(module);
+        if (Interlocked.CompareExchange(ref hancomSecurityPrepared, 1, 0) != 0)
+        {
+            throw new AgentProtocolException(AgentProtocolError.DuplicateHandle);
+        }
+
+        var approvedInput = Path.Combine(path, HancomApprovedInputFileName);
+        var partialInput = Path.Combine(path, ".hancom-approved-input.partial");
+        var leasePath = Path.Combine(path, HancomSecurityLeaseFileName);
+        try
+        {
+            var input = assignment.Input;
+            if (input is null
+                || input.Artifact is null
+                || !input.ReadOnly
+                || !stagedHandles.Contains(input.SandboxHandle)
+                || input.Artifact.SizeBytes is 0 or > MaximumHancomInputBytes
+                || assignment.SecurityPolicy is null
+                || assignment.SecurityPolicy.AllowExternalNetwork
+                || assignment.SecurityPolicy.AllowClipboard
+                || assignment.SecurityPolicy.AllowMacros
+                || assignment.SecurityPolicy.AllowOleActivation
+                || !string.Equals(
+                    assignment.SecurityPolicy.FileAccessPolicyId,
+                    HancomFileAccessPolicyId,
+                    StringComparison.Ordinal))
+            {
+                throw new AgentProtocolException(AgentProtocolError.PolicyDenied);
+            }
+
+            var nowUnixMilliseconds = timeProvider.GetUtcNow().ToUnixTimeMilliseconds();
+            if (nowUnixMilliseconds < 0
+                || assignment.ExpiresAtUnixMs <= (ulong)nowUnixMilliseconds)
+            {
+                throw new AgentProtocolException(AgentProtocolError.ExpiredLease);
+            }
+
+            var sourcePath = ResolveHandle(input.SandboxHandle);
+            RejectReparse(sourcePath);
+            if ((File.GetAttributes(sourcePath) & FileAttributes.ReadOnly) == 0)
+            {
+                throw new AgentProtocolException(AgentProtocolError.MutableInput);
+            }
+
+            await using (var source = new FileStream(
+                sourcePath,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read,
+                bufferSize: 65_536,
+                FileOptions.Asynchronous | FileOptions.SequentialScan))
+            {
+                await CopyAndVerifyAsync(source, partialInput, input.Artifact, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+
+            File.Move(partialInput, approvedInput, overwrite: false);
+            File.SetAttributes(approvedInput, FileAttributes.ReadOnly);
+
+            var maximumExpiry = timeProvider
+                .GetUtcNow()
+                .Add(MaximumHancomLeaseLifetime)
+                .ToUnixTimeMilliseconds();
+            var expiresAt = Math.Min(
+                assignment.ExpiresAtUnixMs,
+                checked((ulong)maximumExpiry));
+            var document = new HancomSecurityLeaseDocument
+            {
+                SchemaVersion = HancomSecurityLeaseSchema,
+                ExecutionId = assignment.ExecutionId,
+                SessionId = assignment.ExecutionId,
+                FencingToken = assignment.FencingToken,
+                TargetProfileId = assignment.TargetProfileId,
+                ExpiresAtUnixMs = checked((long)expiresAt),
+                FileAccessPolicyId = HancomFileAccessPolicyId,
+                OpenPolicyId = HancomOpenPolicyId,
+                SandboxHandle = input.SandboxHandle,
+                ArtifactId = input.Artifact.ArtifactId,
+                InputSha256 = input.Artifact.Sha256,
+                InputSizeBytes = input.Artifact.SizeBytes,
+                SecurityModuleRegistrationName = module.RegistrationName,
+                SecurityModuleSha256 = module.Sha256,
+            };
+            var leaseBytes = JsonSerializer.SerializeToUtf8Bytes(document);
+            if (leaseBytes.Length is <= 0 or > MaximumHancomLeaseBytes)
+            {
+                throw new AgentProtocolException(AgentProtocolError.InvalidLimits);
+            }
+
+            using (var lease = new FileStream(
+                leasePath,
+                FileMode.CreateNew,
+                FileAccess.Write,
+                FileShare.None,
+                bufferSize: MaximumHancomLeaseBytes,
+                FileOptions.WriteThrough))
+            {
+                lease.Write(leaseBytes);
+                lease.Flush(flushToDisk: true);
+            }
+
+            File.SetAttributes(leasePath, FileAttributes.ReadOnly);
+            return new HancomWorkerSecurityLease(
+                assignment.ExecutionId,
+                assignment.FencingToken,
+                assignment.TargetProfileId,
+                leasePath);
+        }
+        catch
+        {
+            DeletePrivateFile(leasePath);
+            DeletePrivateFile(approvedInput);
+            DeletePrivateFile(partialInput);
             throw;
         }
     }
@@ -378,6 +540,22 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
         }
     }
 
+    private static void DeletePrivateFile(string file)
+    {
+        if (!File.Exists(file))
+        {
+            return;
+        }
+
+        var attributes = File.GetAttributes(file);
+        if ((attributes & FileAttributes.ReadOnly) != 0)
+        {
+            File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
+        }
+
+        File.Delete(file);
+    }
+
     private static void DeleteTreeWithoutFollowingReparsePoints(string directory)
     {
         foreach (var entry in Directory.EnumerateFileSystemEntries(directory))
@@ -537,5 +715,51 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
             await inner.DisposeAsync().ConfigureAwait(false);
             GC.SuppressFinalize(this);
         }
+    }
+
+    [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+    private sealed class HancomSecurityLeaseDocument
+    {
+        [JsonPropertyName("schema_version")]
+        public required string SchemaVersion { get; init; }
+
+        [JsonPropertyName("execution_id")]
+        public required string ExecutionId { get; init; }
+
+        [JsonPropertyName("session_id")]
+        public required string SessionId { get; init; }
+
+        [JsonPropertyName("fencing_token")]
+        public ulong FencingToken { get; init; }
+
+        [JsonPropertyName("target_profile_id")]
+        public required string TargetProfileId { get; init; }
+
+        [JsonPropertyName("expires_at_unix_ms")]
+        public long ExpiresAtUnixMs { get; init; }
+
+        [JsonPropertyName("file_access_policy_id")]
+        public required string FileAccessPolicyId { get; init; }
+
+        [JsonPropertyName("open_policy_id")]
+        public required string OpenPolicyId { get; init; }
+
+        [JsonPropertyName("sandbox_handle")]
+        public required string SandboxHandle { get; init; }
+
+        [JsonPropertyName("artifact_id")]
+        public required string ArtifactId { get; init; }
+
+        [JsonPropertyName("input_sha256")]
+        public required string InputSha256 { get; init; }
+
+        [JsonPropertyName("input_size_bytes")]
+        public ulong InputSizeBytes { get; init; }
+
+        [JsonPropertyName("security_module_registration_name")]
+        public required string SecurityModuleRegistrationName { get; init; }
+
+        [JsonPropertyName("security_module_sha256")]
+        public required string SecurityModuleSha256 { get; init; }
     }
 }

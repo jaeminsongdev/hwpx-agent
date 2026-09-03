@@ -10,28 +10,53 @@ public interface IStaCommandHandlerCleanup
 
 internal interface IHancomApprovedDocumentResolver
 {
-    HancomApprovedDocument Resolve(StagedArtifactRef input);
+    HancomApprovedDocument Resolve(StaOpenDocumentCommand command, StaExecutionContext context);
 }
 
 public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaCommandHandlerCleanup
 {
     private readonly Func<HancomSession> sessionFactory;
     private readonly IHancomApprovedDocumentResolver? documentResolver;
+    private readonly IHancomSessionSecurity? sessionSecurity;
     private readonly TimeProvider timeProvider;
     private HancomSession? session;
 
     public HancomLifecycleCommandHandler()
-        : this(() => new HancomSession(), documentResolver: null, TimeProvider.System)
+        : this(
+            () => new HancomSession(),
+            documentResolver: null,
+            sessionSecurity: null,
+            TimeProvider.System)
     {
+    }
+
+    public HancomLifecycleCommandHandler(HancomSecurityAdapter securityAdapter)
+        : this(
+            () => new HancomSession(),
+            securityAdapter,
+            securityAdapter,
+            TimeProvider.System)
+    {
+        ArgumentNullException.ThrowIfNull(securityAdapter);
     }
 
     internal HancomLifecycleCommandHandler(
         Func<HancomSession> sessionFactory,
         IHancomApprovedDocumentResolver? documentResolver,
         TimeProvider timeProvider)
+        : this(sessionFactory, documentResolver, sessionSecurity: null, timeProvider)
+    {
+    }
+
+    internal HancomLifecycleCommandHandler(
+        Func<HancomSession> sessionFactory,
+        IHancomApprovedDocumentResolver? documentResolver,
+        IHancomSessionSecurity? sessionSecurity,
+        TimeProvider timeProvider)
     {
         this.sessionFactory = sessionFactory ?? throw new ArgumentNullException(nameof(sessionFactory));
         this.documentResolver = documentResolver;
+        this.sessionSecurity = sessionSecurity;
         this.timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
     }
 
@@ -87,14 +112,30 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
         {
             var profile = HancomTargetProfile.From(command.StartSession.TargetProfile);
             created.Start(profile, context);
+            sessionSecurity?.Apply(command.StartSession, created, context);
             return Success(command, StaEventType.SessionStarted, "hancom-session-started");
         }
         catch (HancomLifecycleException error)
         {
+            var cleanupRequired = created.State == HancomSessionState.Faulted;
+            try
+            {
+                if (created.State != HancomSessionState.Closed)
+                {
+                    created.Shutdown(context);
+                }
+
+                session = null;
+            }
+            catch
+            {
+                cleanupRequired = true;
+            }
+
             return Failure(
                 command,
                 error.Error,
-                cleanupRequired: created.State == HancomSessionState.Faulted);
+                cleanupRequired);
         }
     }
 
@@ -116,10 +157,12 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
                 cleanupRequired: false);
         }
 
+        HancomApprovedDocument? approved = null;
         try
         {
-            var approved = documentResolver.Resolve(command.OpenDocument.Input);
+            approved = documentResolver.Resolve(command.OpenDocument, context);
             session.Open(approved, context);
+            approved = null;
             return Success(command, StaEventType.DocumentOpened, "hancom-document-opened");
         }
         catch (HancomLifecycleException error)
@@ -128,6 +171,10 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
                 command,
                 error.Error,
                 cleanupRequired: session.State == HancomSessionState.Faulted);
+        }
+        finally
+        {
+            approved?.Dispose();
         }
     }
 
@@ -188,6 +235,12 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
                 or HancomLifecycleError.AutomationVersionMismatch => BridgeErrorCode.ProfileMismatch,
             HancomLifecycleError.InputRejected or HancomLifecycleError.InputChanged =>
                 BridgeErrorCode.ArtifactMismatch,
+            HancomLifecycleError.SecurityLeaseInvalid
+                or HancomLifecycleError.SecurityLeaseExpired
+                or HancomLifecycleError.SecurityPolicyMismatch
+                or HancomLifecycleError.SecurityLeaseConsumed => BridgeErrorCode.PolicyDenied,
+            HancomLifecycleError.SecurityModuleInvalid => BridgeErrorCode.ProfileMismatch,
+            HancomLifecycleError.SecurityModuleRegistrationFailed => BridgeErrorCode.PolicyDenied,
             HancomLifecycleError.CleanupFailed or HancomLifecycleError.CleanupOwnershipMismatch =>
                 BridgeErrorCode.CleanupFailed,
             HancomLifecycleError.InvalidState => BridgeErrorCode.InvalidEnvelope,

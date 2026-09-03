@@ -435,9 +435,17 @@ internal static class Program
 
     private sealed class FixedResolver(HancomApprovedDocument document) : IHancomApprovedDocumentResolver
     {
-        public HancomApprovedDocument Resolve(StagedArtifactRef input)
+        public HancomApprovedDocument Resolve(
+            StaOpenDocumentCommand command,
+            StaExecutionContext context)
         {
-            Require(string.Equals(input.Artifact.Sha256, document.Sha256, StringComparison.Ordinal), "resolver digest drifted");
+            Require(context.ApartmentState == ApartmentState.STA, "resolver left STA");
+            Require(
+                string.Equals(
+                    command.Input.Artifact.Sha256,
+                    document.Sha256,
+                    StringComparison.Ordinal),
+                "resolver digest drifted");
             return document;
         }
     }
@@ -469,6 +477,12 @@ internal static class Program
         private sealed class FakeRuntime(FakeFactory owner) : IHancomAutomationRuntime
         {
             public string Version => owner.Version;
+
+            public bool RegisterFilePathSecurityModule(string registrationName)
+            {
+                owner.Events.Add("register-security");
+                return true;
+            }
 
             public IHancomAutomationDocument Open(HancomApprovedDocument input)
             {

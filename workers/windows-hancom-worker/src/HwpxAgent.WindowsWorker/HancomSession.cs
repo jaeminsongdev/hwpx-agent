@@ -31,6 +31,12 @@ public enum HancomLifecycleError
     AutomationVersionMismatch,
     InputRejected,
     InputChanged,
+    SecurityLeaseInvalid,
+    SecurityLeaseExpired,
+    SecurityPolicyMismatch,
+    SecurityModuleInvalid,
+    SecurityModuleRegistrationFailed,
+    SecurityLeaseConsumed,
     OpenFailed,
     CloseFailed,
     QuitFailed,
@@ -100,11 +106,21 @@ public sealed partial record HancomTargetProfile(
     private static partial Regex Sha256Pattern();
 }
 
-public sealed class HancomApprovedDocument
+public sealed class HancomApprovedDocument : IDisposable
 {
     private const long MaximumInputBytes = 8 * 1024 * 1024;
+    private FileStream? integrityGuard;
 
     internal HancomApprovedDocument(string path, string sha256, long sizeBytes)
+        : this(path, sha256, sizeBytes, integrityGuard: null)
+    {
+    }
+
+    private HancomApprovedDocument(
+        string path,
+        string sha256,
+        long sizeBytes,
+        FileStream? integrityGuard)
     {
         try
         {
@@ -116,6 +132,7 @@ public sealed class HancomApprovedDocument
         }
         Sha256 = sha256;
         SizeBytes = sizeBytes;
+        this.integrityGuard = integrityGuard;
         ValidateIntegrity();
     }
 
@@ -151,6 +168,67 @@ public sealed class HancomApprovedDocument
         }
     }
 
+    internal static HancomApprovedDocument OpenGuarded(string path, string sha256, long sizeBytes)
+    {
+        FileStream? guard = null;
+        try
+        {
+            var fullPath = System.IO.Path.GetFullPath(path);
+            var item = new FileInfo(fullPath);
+            if (!item.Exists
+                || (item.Attributes & FileAttributes.ReparsePoint) != 0
+                || (item.Attributes & FileAttributes.ReadOnly) == 0
+                || !string.Equals(item.Extension, ".hwpx", StringComparison.Ordinal)
+                || item.Length != sizeBytes)
+            {
+                throw new HancomLifecycleException(HancomLifecycleError.InputRejected);
+            }
+
+            guard = new FileStream(
+                fullPath,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read,
+                bufferSize: 64 * 1024,
+                FileOptions.SequentialScan);
+            if (guard.Length != sizeBytes
+                || !string.Equals(
+                    Convert.ToHexStringLower(SHA256.HashData(guard)),
+                    sha256,
+                    StringComparison.Ordinal))
+            {
+                throw new HancomLifecycleException(HancomLifecycleError.InputRejected);
+            }
+
+            guard.Position = 0;
+            var approved = new HancomApprovedDocument(fullPath, sha256, sizeBytes, guard);
+            guard = null;
+            return approved;
+        }
+        catch (HancomLifecycleException)
+        {
+            throw;
+        }
+        catch (Exception error) when (error is IOException
+            or UnauthorizedAccessException
+            or ArgumentException
+            or NotSupportedException
+            or PathTooLongException)
+        {
+            throw new HancomLifecycleException(HancomLifecycleError.InputRejected, error);
+        }
+        finally
+        {
+            guard?.Dispose();
+        }
+    }
+
+    public void Dispose()
+    {
+        Interlocked.Exchange(ref integrityGuard, null)?.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
     internal static string HashFile(string path)
     {
         using var stream = new FileStream(
@@ -172,6 +250,8 @@ internal interface IHancomAutomationDocument : IDisposable
 internal interface IHancomAutomationRuntime : IDisposable
 {
     string Version { get; }
+
+    bool RegisterFilePathSecurityModule(string registrationName);
 
     IHancomAutomationDocument Open(HancomApprovedDocument input);
 
@@ -215,6 +295,8 @@ public sealed class HancomSession
 
     public int? OwnedProcessId => lease?.Process.ProcessId;
 
+    public bool FilePathSecurityEnabled { get; private set; }
+
     public void Start(HancomTargetProfile profile, StaExecutionContext context)
     {
         ArgumentNullException.ThrowIfNull(profile);
@@ -250,12 +332,12 @@ public sealed class HancomSession
         ArgumentNullException.ThrowIfNull(context);
         RequireState(HancomSessionState.Started);
         VerifyContext(context);
-        input.ValidateIntegrity();
+        openedInput = input;
         try
         {
+            input.ValidateIntegrity();
             var opened = RequireLease().Automation.Open(input);
             document = opened;
-            openedInput = input;
             State = HancomSessionState.DocumentOpen;
             context.PumpPendingMessages();
             input.ValidateIntegrity(HancomLifecycleError.InputChanged);
@@ -292,6 +374,40 @@ public sealed class HancomSession
         }
     }
 
+    internal void EnableFilePathSecurity(string registrationName, StaExecutionContext context)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(registrationName);
+        ArgumentNullException.ThrowIfNull(context);
+        RequireState(HancomSessionState.Started);
+        VerifyContext(context);
+        if (FilePathSecurityEnabled)
+        {
+            throw new HancomLifecycleException(HancomLifecycleError.InvalidState);
+        }
+
+        try
+        {
+            if (!RequireLease().Automation.RegisterFilePathSecurityModule(registrationName))
+            {
+                throw new HancomLifecycleException(
+                    HancomLifecycleError.SecurityModuleRegistrationFailed);
+            }
+
+            context.PumpPendingMessages();
+            FilePathSecurityEnabled = true;
+        }
+        catch (HancomLifecycleException)
+        {
+            throw;
+        }
+        catch (Exception error)
+        {
+            throw new HancomLifecycleException(
+                HancomLifecycleError.SecurityModuleRegistrationFailed,
+                error);
+        }
+    }
+
     public void CloseDocument(StaExecutionContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
@@ -319,23 +435,44 @@ public sealed class HancomSession
             closeError ??= error;
         }
 
-        if (closeError is not null)
-        {
-            State = HancomSessionState.Faulted;
-            throw new HancomLifecycleException(HancomLifecycleError.CloseFailed, closeError);
-        }
-
+        HancomLifecycleException? integrityError = null;
         try
         {
             input.ValidateIntegrity(HancomLifecycleError.InputChanged);
-            context.PumpPendingMessages();
-            State = HancomSessionState.Started;
         }
-        catch (HancomLifecycleException)
+        catch (HancomLifecycleException error)
+        {
+            integrityError = error;
+        }
+
+        Exception? disposeError = null;
+        try
+        {
+            input.Dispose();
+        }
+        catch (Exception error)
+        {
+            disposeError = error;
+        }
+
+        if (closeError is not null || integrityError is not null || disposeError is not null)
         {
             State = HancomSessionState.Faulted;
-            throw;
+            if (closeError is not null)
+            {
+                throw new HancomLifecycleException(HancomLifecycleError.CloseFailed, closeError);
+            }
+
+            if (integrityError is not null)
+            {
+                throw integrityError;
+            }
+
+            throw new HancomLifecycleException(HancomLifecycleError.CleanupFailed, disposeError!);
         }
+
+        State = HancomSessionState.Started;
+        context.PumpPendingMessages();
     }
 
     public void Shutdown(StaExecutionContext context)
@@ -348,7 +485,7 @@ public sealed class HancomSession
         }
 
         var cleanupFailed = false;
-        if (document is not null)
+        if (document is not null || openedInput is not null)
         {
             var current = document;
             var input = openedInput;
@@ -356,7 +493,7 @@ public sealed class HancomSession
             openedInput = null;
             try
             {
-                current.CloseWithoutSaving();
+                current?.CloseWithoutSaving();
             }
             catch
             {
@@ -364,7 +501,7 @@ public sealed class HancomSession
             }
             try
             {
-                current.Dispose();
+                current?.Dispose();
             }
             catch
             {
@@ -373,6 +510,14 @@ public sealed class HancomSession
             try
             {
                 input?.ValidateIntegrity(HancomLifecycleError.InputChanged);
+            }
+            catch
+            {
+                cleanupFailed = true;
+            }
+            try
+            {
+                input?.Dispose();
             }
             catch
             {
@@ -476,7 +621,7 @@ public sealed class HancomSession
 
     private void ClosePartialDocument()
     {
-        if (document is null)
+        if (document is null && openedInput is null)
         {
             return;
         }
@@ -487,7 +632,7 @@ public sealed class HancomSession
         openedInput = null;
         try
         {
-            current.CloseWithoutSaving();
+            current?.CloseWithoutSaving();
         }
         catch
         {
@@ -495,7 +640,7 @@ public sealed class HancomSession
         }
         try
         {
-            current.Dispose();
+            current?.Dispose();
         }
         catch
         {
@@ -504,6 +649,14 @@ public sealed class HancomSession
         try
         {
             input?.ValidateIntegrity(HancomLifecycleError.InputChanged);
+        }
+        catch
+        {
+            State = HancomSessionState.Faulted;
+        }
+        try
+        {
+            input?.Dispose();
         }
         catch
         {
@@ -821,6 +974,13 @@ internal sealed class ComHancomAutomationRuntime(object instance) : IHancomAutom
             ReleasePartialDocument(documents, document);
             throw new HancomLifecycleException(HancomLifecycleError.OpenFailed, error);
         }
+    }
+
+    public bool RegisterFilePathSecurityModule(string registrationName)
+    {
+        dynamic automation = RequireInstance();
+        object? result = automation.RegisterModule("FilePathCheckDLL", registrationName);
+        return result is bool accepted && accepted;
     }
 
     public void Quit()

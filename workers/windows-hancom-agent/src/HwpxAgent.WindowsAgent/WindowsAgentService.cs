@@ -268,7 +268,13 @@ public sealed class WindowsAgentService
 
         markExecutorInvoked();
         var result = await executor
-            .ExecuteAsync(new AgentJobContext(assignment, sandbox), cancellationToken)
+            .ExecuteAsync(
+                new AgentJobContext(
+                    assignment,
+                    sandbox,
+                    configuration.HancomSecurityModule,
+                    timeProvider),
+                cancellationToken)
             .ConfigureAwait(false);
         AgentValidation.ValidateJobResult(result);
         await VerifySourceArtifactAsync(assignment.Input.Artifact, cancellationToken).ConfigureAwait(false);

@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 using Google.Protobuf;
 using Grpc.Core;
 using HwpxAgent.Protocol.Foundation.V1;
@@ -17,6 +18,7 @@ internal static class Program
     public static async Task<int> Main()
     {
         await SuccessfulLeaseReplaysWithoutDuplicateEffectAsync();
+        await HancomSecurityLeaseBridgesOpaqueHandleAsync();
         await ConcurrentDuplicateLeaseIsBusyAsync();
         await StaleLeaseNeverInvokesExecutorAsync();
         await UnfinishedJournalBecomesUnknownWithoutReplayAsync();
@@ -27,7 +29,7 @@ internal static class Program
         await ArtifactUploadIsIdempotentButValidatesEveryStreamAsync();
         await NoWorkAndProfileMismatchFailClosedAsync();
         RejectsUnsafeTransportAndArtifactBoundaries();
-        Console.WriteLine("Windows Agent P10-02 lease, fencing, staging, upload and auth smoke passed (11/11)");
+        Console.WriteLine("Windows Agent P10-02/P10-05 staging, security lease, fencing, upload and auth smoke passed (12/12)");
         return 0;
     }
 
@@ -94,6 +96,72 @@ internal static class Program
             ["AcquireLease", "Heartbeat", "Heartbeat", "CommitExecution", "AcquireLease", "CommitExecution", "ReportProbe"]),
             "outbound RPC method sequence drifted");
         Require(environment.SandboxDirectories().Count == 0, "successful run left a sandbox directory");
+    }
+
+    private static async Task HancomSecurityLeaseBridgesOpaqueHandleAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("hancom-security");
+        var assignment = environment.CreateAssignment(
+            leaseId: "10000000-0000-4000-8000-000000000012",
+            executionId: "20000000-0000-4000-8000-000000000012",
+            fencingToken: 19);
+        string? sandboxPath = null;
+        var invoker = new ScriptedCallInvoker((method, request, headers) =>
+        {
+            RequireAuthorization(headers);
+            return method switch
+            {
+                "AcquireLease" => Assigned(assignment),
+                "Heartbeat" => CurrentHeartbeat(),
+                "CommitExecution" => Commit((AgentCommitRequest)request, []),
+                _ => throw new InvalidOperationException("unexpected RPC"),
+            };
+        });
+        await using var client = AuthenticatedClient(invoker);
+        var executor = new DelegatingExecutor(async (context, cancellationToken) =>
+        {
+            context.Assignment.Input = context.Assignment.OperationPlan.Clone();
+            var lease = await context.PrepareHancomWorkerSecurityLeaseAsync(cancellationToken);
+            var leaseSandbox = Path.GetDirectoryName(lease.SecurityLeasePath)
+                ?? throw new InvalidOperationException("security lease escaped its sandbox");
+            sandboxPath = leaseSandbox;
+            Require(
+                string.Equals(Path.GetFileName(lease.SecurityLeasePath), ".hancom-security-lease.json", StringComparison.Ordinal),
+                "security lease filename drifted");
+            Require(
+                (File.GetAttributes(lease.SecurityLeasePath) & FileAttributes.ReadOnly) != 0,
+                "security lease is mutable");
+
+            using (var document = JsonDocument.Parse(await File.ReadAllBytesAsync(lease.SecurityLeasePath, cancellationToken)))
+            {
+                var root = document.RootElement;
+                Require(root.EnumerateObject().Count() == 14, "security lease field set drifted");
+                Require(root.GetProperty("schema_version").GetString() == "hwpx-agent.p10-05-security-lease/v1", "security schema drifted");
+                Require(root.GetProperty("session_id").GetString() == assignment.ExecutionId, "security session was not execution-bound");
+                Require(root.GetProperty("fencing_token").GetUInt64() == assignment.FencingToken, "security fence drifted");
+                Require(root.GetProperty("sandbox_handle").GetString() == "input_0001", "opaque input handle drifted");
+                Require(root.GetProperty("sandbox_handle").GetString()!.IndexOfAny(['\\', '/', ':', '.']) < 0, "public handle became a path");
+                Require(root.GetProperty("input_sha256").GetString() == environment.Input.Sha256, "security digest drifted");
+                Require(root.GetProperty("security_module_registration_name").GetString() == "FilePathCheckerModuleExample", "module pin drifted");
+            }
+
+            var approvedInput = Path.Combine(leaseSandbox, "hancom_approved_input.hwpx");
+            Require(
+                (File.GetAttributes(approvedInput) & FileAttributes.ReadOnly) != 0,
+                "approved input is mutable");
+            Require(
+                (await File.ReadAllBytesAsync(approvedInput, cancellationToken)).AsSpan().SequenceEqual(InputBytes),
+                "approved input copy drifted");
+            await RequireThrowsAsync<AgentProtocolException>(
+                () => context.PrepareHancomWorkerSecurityLeaseAsync(cancellationToken));
+
+            await using var output = context.CreateOutput("output_0001");
+            await output.WriteAsync(OutputBytes, cancellationToken);
+            return SuccessfulJob();
+        });
+        var result = await environment.CreateService(client, executor).RunOnceAsync(CancellationToken.None);
+        Require(result.Disposition == AgentRunDisposition.Succeeded, "security lease integration did not succeed");
+        Require(sandboxPath is not null && !Directory.Exists(sandboxPath), "security lease sandbox was not removed");
     }
 
     private static async Task ConcurrentDuplicateLeaseIsBusyAsync()
@@ -679,7 +747,10 @@ internal static class Program
                 },
                 Digest('c'),
                 AvailableJobSlots: 1,
-                RpcTimeout: TimeSpan.FromSeconds(10));
+                RpcTimeout: TimeSpan.FromSeconds(10),
+                HancomSecurityModule: new HancomSecurityModulePin(
+                    "FilePathCheckerModuleExample",
+                    Digest('d')));
             return new TestEnvironment(root, store, workspace, configuration, input, plan, validation);
         }
 
