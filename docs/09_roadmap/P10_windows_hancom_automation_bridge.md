@@ -44,7 +44,7 @@ Windows Hancom Automation Bridge를 문서상 계획이 아니라 **재현 가�
 - [x] `P10-04` 산출물 `HancomSession` 존재, 검증: leak/crash tests.
 - [ ] `P10-05` 산출물 `security adapter` 존재, 검증: allowed/denied path tests.
 - [ ] `P10-06` 산출물 `executor` 존재, 검증: unknown/raw action rejection.
-- [ ] `P10-07` 산출물 `watchdog` 존재, 검증: unknown modal fail-closed.
+- [x] `P10-07` 산출물 `watchdog` 존재, 검증: unknown modal fail-closed.
 - [ ] `P10-08` 산출물 `worker image/runbook` 존재, 검증: residue/isolation audit.
 - [ ] `P10-09` 산출물 `supervisor` 존재, 검증: hang/retry/no duplicate effect.
 - [ ] `P10-10` 산출물 `probe agent` 존재, 검증: profile mismatch no lease.

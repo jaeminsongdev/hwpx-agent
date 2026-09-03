@@ -2,9 +2,9 @@
 
 - Updated: 2026-09-04
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P10 / P10-07 event/modal watchdog core`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P10 / P10-08 isolation`
 - Active reasoning effort: `max`
-- Immediate UI dependency: none live; P05-07 retry 01 timed out safely, relaunch only when the user can immediately click every visible `접근 허용`
+- Immediate UI dependency: none live; P05-07 v2 attempts timed out safely, relaunch only when the user can immediately click the visible `접근 허용`
 
 ## Objective and non-negotiable boundaries
 
@@ -33,7 +33,7 @@ save, render, cross-version or production proof.
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
 | P09 | `blocked_by_P05` | fields/forms/notes/references |
-| P10 | `in_progress_current_pc_local` | P10-01~04 pass; P10-05 actual module pending; P10-06 builder pass/actual execution pending; P10-07 next |
+| P10 | `in_progress_current_pc_local` | P10-01~04,07 pass; P10-05 actual module pending; P10-06 actual execution pending; P10-08 next |
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
@@ -68,39 +68,30 @@ save, render, cross-version or production proof.
 | P-0053 | P10-05 Security module | `core_ready_actual_module_pending` | commit `b830f74`; Agent 12/12, Worker 10/10, static 29/29, current/clean FULL 5/5, x86 pass; registered module count 0 |
 | P-0054 | P10-06 Signed binding executor | `builder_pass_actual_execution_pending` | commits `3281693` + `2f92654`; executor 14/14 x64+x86, actual signed bundle built/verified, actual COM execution pending P10-05 |
 | P-0055 | P10-06 trusted offline bundle builder | `pass_current_pc_local_builder` | commit `2f92654`; builder 11/11, static 41/41, actual bundle + independent redacted receipt, current/clean FULL 5/5 |
+| P-0056 | P10-07 Event/modal watchdog | `pass_scoped_current_pc_local` | commit `b0f3b6f`; actual event signals 6, actual unknown modal fail-closed, smoke 13/13, static 23/23 |
 
 ## Active evidence summary
 
-P05-01~06 are closed by their task reports. P05-06 retry 09 passed actual licensed Hangul 2020
-open/read/save/reopen/read/quit with unchanged source, equal input/output text digest, 19-event
-terminal trace, zero cleanup errors and zero residual processes. Independent product inspection
-confirmed the custom landscape dimensions, margins-derived body area and text digest. Failed retry
-08 remains diagnostic-only. P05-07 retry 01 timed out at `open_input` without user approval; input
-was unchanged, output/PDF absent, one owned process cleaned and zero `Hwp.exe` remained. P05-07~09
-core/static harnesses are ready, but their required actual save/render evidence remains open.
+P05-01~06 are closed by their reports. P05-06 retry 09 proved actual licensed Hangul 2020
+open/read/save/reopen/read/quit, unchanged source, equal text digest, a 19-event terminal trace and
+zero residual processes. P05-07 retry 10 exposed that both fixture spine rows were `linear=no` and
+Hangul read only section one. Commit `9096502` changes both to `linear=yes`, adds self-inspection and
+four builder tests. The v2 fixture independently inspects as two sections and one break, but its
+user-approved save/reopen/PDF acceptance has not run; bounded attempts left input unchanged, no
+output/PDF and zero residual processes. P05-08~09 actual render evidence is also open.
 
-P10-01 through P10-04 are closed by their reports under `implementation/p10/`. P10-04 actual attempt
-09 passed the exact licensed Hangul 2020 x86 three-cycle normal lifecycle with unchanged
-source/staging, terminal exact-safe output and zero residual processes. Commit `c06d12c` added the
-missing server-cancellation and abrupt owned-process-exit regressions; lifecycle smoke now passes
-10/10 under x64 and x86. Earlier timed-out attempts remain diagnostics. The private named pipe and
-`CurrentUserOnly` are not claimed as hostile same-user isolation; modal handling and process
-supervision remain later tasks.
+P10-01~04 are closed by their reports. P10-05 core commit `b830f74` has Agent/Worker lease, path and
+allowed/denied coverage, but Registry32 still reports zero registered security modules; no module was
+downloaded, installed or registered. P10-06 commits `3281693` and `2f92654` provide the signed typed
+executor and independently verified real two-binding bundle, while production COM execution remains
+pending P10-05.
 
-P10-05 core commit `b830f74` connects the Agent sandbox to the production Worker through an
-immutable, single-use execution/fencing/profile/policy/artifact/module-bound security lease. The
-public handle remains path-free; a fixed private read-only HWPX copy is digest-checked and guarded.
-Agent smoke passed 12/12, Worker allowed/denied smoke passed 10/10 under x64 and x86, static checks
-passed 29/29, and current plus exact-clean FULL passed 5/5. The current-PC Registry32 probe found the
-key but zero registered security modules; therefore actual module registration is not verified,
-P10-05 remains core-only and no module was downloaded, installed or registered.
-
-P10-06 commits `3281693` and `2f92654` add an Ed25519-signed exact-target bundle, semantic-only public plan,
-finite typed ParameterSet conversion, preflight-before-COM rejection and single-use Agent bundle/key
-leases plus a policy-pinned P02-to-P10 offline builder. Builder tests passed 11/11, static checks
-passed 41/41, and a real two-binding bundle was independently reconstructed and verified. Current
-and exact-clean FULL passed 5/5. Actual production Agent/Worker COM execution remains pending the
-P10-05 registered-module dependency, so P10-06 stays open.
+P10-07 commit `b0f3b6f` adds the exact installed 16-DispId event connection, bounded redacted journal,
+exact-process modal probe, metadata-only `BitBlt` capture, fail-closed policy and cleanup-only dispatch.
+A disposable blank document delivered six actual events; the actual 683x196 access modal was detected
+as unknown with no auto-response/raw text/pixel persistence, followed by zero residual processes.
+Smoke passed 13/13, static checks 23/23 and the complete Windows lane passed. Evidence and strict
+scope are recorded in `implementation/p10/P10-07_CORE_REPORT.md`; P10-08 isolation is next.
 
 ## Validation policy
 
@@ -112,7 +103,6 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 ## Exact next action
 
 When the user is immediately available, rerun P05-07, then P05-08 and P05-09 serially with required
-save/reopen/PDF/render evidence before the strict P05 Gate. Require source immutability, terminal
-trace closure and zero residual Hangul processes for every actual run. In the non-UI lane, implement
-P10-07 event/modal watchdog core. Keep P10-05 actual module registration and the dependent P10-06
+save/reopen/PDF/render evidence before the strict P05 Gate. In the non-UI lane, implement P10-08
+isolation and its residue audit. Keep P10-05 actual module registration and dependent P10-06
 production execution unverified until an approved module exists. Continue at reasoning effort `max`.
