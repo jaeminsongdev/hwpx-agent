@@ -18,6 +18,7 @@ mod preserving_xml;
 mod reader;
 mod roundtrip;
 mod safe_xml;
+mod tab_definition;
 mod text_flow;
 mod vs0;
 mod writer;
@@ -71,6 +72,12 @@ pub use roundtrip::{
     RoundTripEvidence, RoundTripLimits, RoundTripVerifier,
 };
 pub use safe_xml::SafeXmlError;
+pub use tab_definition::{
+    DeduplicatedTabDefinitions, TAB_DEFINITION_PROFILE_ID, TabDefinition, TabDefinitionCatalog,
+    TabDefinitionCatalogReader, TabDefinitionCatalogWriter, TabDefinitionError,
+    TabDefinitionLimitConfig, TabDefinitionLimits, TabDefinitionLoweringReceipt, TabItem,
+    TabPositionUnit, TabStop, TabStopAlignment,
+};
 pub use text_flow::{
     FieldBegin, FieldEnd, FieldType, HANCOM_2020_PARAGRAPH_NAMESPACE, OpaqueTextElement,
     ParagraphChild, TabAlignment, TextAtom, TextFlow, TextFlowError, TextFlowLimitConfig,
