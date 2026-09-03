@@ -31,6 +31,8 @@ $checks = [ordered]@{
     input_unchanged = $source -match 'TAB_READBACK_INPUT_CHANGED'
     privacy_marker = $source -match 'raw_document_text_present = \$false'
     visible_for_user_access = $source -match '\$window\.Visible = \$true'
+    progress_journal = $source -match 'hwpx-agent\.p05-hancom-readback-progress/v1'
+    progress_has_no_text_value = $source -match 'raw_document_text_present = \$false'
     no_register_module = $source -notmatch '(?i)\.RegisterModule\s*\('
     no_ui_input = $source -notmatch '(?i)(SendKeys|mouse_event|SetCursorPos|PostMessage|SendMessage)'
     no_network = $source -notmatch '(?i)(Invoke-WebRequest|Invoke-RestMethod|Start-BitsTransfer)'

@@ -5,6 +5,7 @@ param(
     [Parameter(Mandatory)][string]$OutputPath,
     [Parameter(Mandatory)][string]$TracePath,
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{64}$')][string]$ExpectedTextSha256,
+    [string]$ProgressPath = '',
     [string]$ProgId = 'HWPFrame.HwpObject.2',
     [string]$ExpectedBuild = '11.0.0.9136',
     [string]$ExpectedExecutableSha256 = '7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce'
@@ -56,6 +57,34 @@ function Write-NewUtf8File {
         $stream.Flush($true)
     }
     finally { $stream.Dispose() }
+}
+
+function Write-ProgressEvent {
+    param(
+        [Parameter(Mandatory)][string]$Phase,
+        [Parameter(Mandatory)][ValidateSet('running', 'pass', 'failed')][string]$State,
+        [AllowNull()][Nullable[int]]$HwpProcessId = $null
+    )
+
+    $script:progressSequence += 1
+    $event = [ordered]@{
+        schema_version = 'hwpx-agent.p05-hancom-readback-progress/v1'
+        sequence = $script:progressSequence
+        recorded_at_utc = [datetime]::UtcNow.ToString('o')
+        worker_process_id = $PID
+        hwp_process_id = $HwpProcessId
+        phase = $Phase
+        state = $State
+        raw_document_text_present = $false
+    }
+    $line = $event | ConvertTo-Json -Compress
+    if ($script:progressSequence -eq 1) {
+        Write-NewUtf8File -Path $script:progressFile -Content $line
+    }
+    else {
+        $encoding = [System.Text.UTF8Encoding]::new($false)
+        [System.IO.File]::AppendAllText($script:progressFile, "`n$line", $encoding)
+    }
 }
 
 function ConvertTo-CanonicalText {
@@ -130,11 +159,26 @@ function Get-ComServerIdentity {
     }
 }
 
-$input = (Resolve-Path -LiteralPath $InputPath).Path
+$inputItem = Get-Item -LiteralPath $InputPath -Force
+if ($inputItem.PSIsContainer -or
+    ($inputItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0 -or
+    $inputItem.Length -le 0 -or $inputItem.Length -gt 8388608) {
+    throw 'TAB_READBACK_INPUT_NOT_BOUNDED_REGULAR_FILE'
+}
+$input = $inputItem.FullName
 $boundary = (Resolve-Path -LiteralPath (Split-Path -Parent $input)).Path.TrimEnd('\')
+$boundaryItem = Get-Item -LiteralPath $boundary -Force
+if (($boundaryItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) {
+    throw 'TAB_READBACK_FIXTURE_BOUNDARY_REPARSE_POINT'
+}
 $output = [System.IO.Path]::GetFullPath($OutputPath)
 $traceFile = [System.IO.Path]::GetFullPath($TracePath)
-foreach ($candidate in @($output, $traceFile)) {
+$script:progressFile = if ([string]::IsNullOrWhiteSpace($ProgressPath)) {
+    $traceFile + '.progress.jsonl'
+}
+else { [System.IO.Path]::GetFullPath($ProgressPath) }
+$script:progressSequence = 0
+foreach ($candidate in @($output, $traceFile, $script:progressFile)) {
     if (-not $candidate.StartsWith($boundary + '\', [System.StringComparison]::OrdinalIgnoreCase)) {
         throw 'TAB_READBACK_PATH_OUTSIDE_FIXTURE_BOUNDARY'
     }
@@ -143,7 +187,9 @@ if ([System.IO.Path]::GetExtension($input) -cne '.hwpx' -or
     [System.IO.Path]::GetExtension($output) -cne '.hwpx') {
     throw 'TAB_READBACK_HWPX_EXTENSION_REQUIRED'
 }
-if ((Test-Path -LiteralPath $output) -or (Test-Path -LiteralPath $traceFile)) {
+if ((Test-Path -LiteralPath $output) -or
+    (Test-Path -LiteralPath $traceFile) -or
+    (Test-Path -LiteralPath $script:progressFile)) {
     throw 'TAB_READBACK_OUTPUT_ALREADY_EXISTS'
 }
 if ((Get-Sha256File -Path $input) -cne $ExpectedInputSha256) {
@@ -202,6 +248,8 @@ $documents = $null
 $document = $null
 $window = $null
 $phase = 'com_create'
+$hwpProcessId = $null
+Write-ProgressEvent -Phase 'preflight' -State 'pass'
 try {
     if ([Threading.Thread]::CurrentThread.GetApartmentState() -ne [Threading.ApartmentState]::STA) {
         throw 'TAB_READBACK_CLIENT_NOT_STA'
@@ -213,6 +261,10 @@ try {
     }
     $result.phases.com_create = 'pass'
 
+    $hwpProcesses = @(Get-CimInstance Win32_Process -Filter "Name='Hwp.exe'" -ErrorAction SilentlyContinue)
+    if ($hwpProcesses.Count -eq 1) { $hwpProcessId = [int]$hwpProcesses[0].ProcessId }
+    Write-ProgressEvent -Phase 'com_create' -State 'pass' -HwpProcessId $hwpProcessId
+
     $documents = $hwp.XHwpDocuments
     $document = $documents.Add($false)
     if ($null -eq $document) { throw 'TAB_READBACK_DOCUMENT_ADD_FAILED' }
@@ -222,23 +274,28 @@ try {
 
     $phase = 'open_input'
     $result.phases.open_input = 'running'
+    Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
     if ($document.Open($input, 'HWPX', 'lock:false;setcurdir:false') -eq $false) {
         throw 'TAB_READBACK_INPUT_OPEN_RETURNED_FALSE'
     }
     [void]$document.SetActive_XHwpDocument()
     $result.phases.open_input = 'pass'
+    Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
     $phase = 'read_input'
     $result.phases.read_input = 'running'
+    Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
     $inputText = ConvertTo-CanonicalText -Value ([string]$hwp.GetTextFile('UNICODE', ''))
     $result.input_text_sha256 = Get-Sha256String -Value $inputText
     if ($result.input_text_sha256 -cne $ExpectedTextSha256) {
         throw 'TAB_READBACK_INPUT_TEXT_MISMATCH'
     }
     $result.phases.read_input = 'pass'
+    Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
     $phase = 'save_as_hwpx'
     $result.phases.save_as_hwpx = 'running'
+    Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
     [void]$document.SaveAs($output, 'HWPX', '')
     if (-not (Test-Path -LiteralPath $output -PathType Leaf)) {
         throw 'TAB_READBACK_SAVE_OUTPUT_MISSING'
@@ -246,16 +303,20 @@ try {
     $result.output_saved = $true
     $result.output_sha256 = Get-Sha256File -Path $output
     $result.phases.save_as_hwpx = 'pass'
+    Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
     $phase = 'close_input'
     $result.phases.close_input = 'running'
+    Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
     [void]$document.Close($false)
     Clear-ComObject -Value $document
     $document = $null
     $result.phases.close_input = 'pass'
+    Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
     $phase = 'reopen_output'
     $result.phases.reopen_output = 'running'
+    Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
     $document = $documents.Add($false)
     if ($null -eq $document) { throw 'TAB_READBACK_REOPEN_DOCUMENT_ADD_FAILED' }
     if ($document.Open($output, 'HWPX', 'lock:false;setcurdir:false') -eq $false) {
@@ -263,27 +324,34 @@ try {
     }
     [void]$document.SetActive_XHwpDocument()
     $result.phases.reopen_output = 'pass'
+    Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
     $phase = 'read_output'
     $result.phases.read_output = 'running'
+    Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
     $outputText = ConvertTo-CanonicalText -Value ([string]$hwp.GetTextFile('UNICODE', ''))
     $result.output_text_sha256 = Get-Sha256String -Value $outputText
     if ($result.output_text_sha256 -cne $ExpectedTextSha256) {
         throw 'TAB_READBACK_OUTPUT_TEXT_MISMATCH'
     }
     $result.phases.read_output = 'pass'
+    Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
     $phase = 'close_output'
     $result.phases.close_output = 'running'
+    Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
     [void]$document.Close($false)
     Clear-ComObject -Value $document
     $document = $null
     $result.phases.close_output = 'pass'
+    Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
     $phase = 'quit'
     $result.phases.quit = 'running'
+    Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
     $hwp.Quit()
     $result.phases.quit = 'pass'
+    Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
     $result.input_unchanged = (Get-Sha256File -Path $input) -ceq $ExpectedInputSha256
     if (-not $result.input_unchanged) { throw 'TAB_READBACK_INPUT_CHANGED' }
     $result.state = 'pass'
@@ -297,6 +365,7 @@ catch {
     $result.exception_type = $_.Exception.GetType().FullName
     $result.exception_hresult = $_.Exception.HResult
     if ($result.phases.Contains($phase)) { $result.phases[$phase] = 'failed' }
+    Write-ProgressEvent -Phase $phase -State 'failed' -HwpProcessId $hwpProcessId
 }
 finally {
     if ($null -ne $document) {
@@ -317,6 +386,7 @@ finally {
     [GC]::WaitForPendingFinalizers()
 }
 
+Write-ProgressEvent -Phase 'terminal' -State $(if ($result.state -eq 'pass') { 'pass' } else { 'failed' }) -HwpProcessId $hwpProcessId
 Write-NewUtf8File -Path $traceFile -Content ($result | ConvertTo-Json -Depth 8)
 $result | ConvertTo-Json -Depth 8
 if ($result.state -ne 'pass') { exit 2 }
