@@ -442,3 +442,4 @@ if (Test-Path -LiteralPath $innerTrace -PathType Leaf) {
 $child.Dispose()
 $json
 if ($null -ne $wrapperError -or [string]$trace.state -cne 'pass') { exit 2 }
+exit 0

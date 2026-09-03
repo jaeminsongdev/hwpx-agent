@@ -48,6 +48,7 @@ $checks = [ordered]@{
     wrapper_rechecks_input_after_child = $bounded -match 'trace\.input_unchanged = \(Get-Sha256File -Path \$input\)'
     inner_failure_phase_preserved = $bounded -match 'childReportedFailure = \$childExitCode -ne 0' -and $bounded -match 'if \(-not \$childReportedFailure\)'
     create_new_terminal_trace = $bounded -match 'FileMode\]::CreateNew'
+    explicit_success_exit = $bounded -match "trace\.state -cne 'pass'\) \{ exit 2 \}\s+exit 0"
     progress_privacy_constant = $engine -match 'raw_document_text_present = \$false'
     no_register_module = ($bounded + $engine) -notmatch '(?i)\.RegisterModule\s*\('
     no_ui_input = ($bounded + $engine) -notmatch '(?i)(SendKeys|mouse_event|SetCursorPos|PostMessage|SendMessage)'
