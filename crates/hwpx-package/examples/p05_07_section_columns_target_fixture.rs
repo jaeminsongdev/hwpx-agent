@@ -103,6 +103,8 @@ fn inspect_bytes(bytes: &[u8]) -> Result<Inspection, Box<dyn Error>> {
     let graph = PackageGraph::build(&mut reader, PackageGraphLimits::default())?;
     let section0 = read_part(&mut reader, "Contents/section0.xml")?;
     let section1 = read_part(&mut reader, "Contents/section1.xml")?;
+    let package_document = read_part(&mut reader, "Contents/content.hpf")?;
+    verify_linear_spine(&package_document)?;
     let setup = expected_page_setup()?;
     let metrics = setup.metrics(PageSetupLimits::default())?;
     for section in [&section0, &section1] {
@@ -153,6 +155,21 @@ fn inspect_bytes(bytes: &[u8]) -> Result<Inspection, Box<dyn Error>> {
         body_width: metrics.body_width,
         text_sha256: hex::encode(Sha256::digest(canonical_text.as_bytes())),
     })
+}
+
+fn verify_linear_spine(package_document: &[u8]) -> Result<(), Box<dyn Error>> {
+    let source = std::str::from_utf8(package_document)?;
+    let section0 = r#"<opf:itemref idref="section0" linear="yes"/>"#;
+    let section1 = r#"<opf:itemref idref="section1" linear="yes"/>"#;
+    if source.matches(section0).count() != 1
+        || source.matches(section1).count() != 1
+        || source.contains(r#"<opf:itemref idref="section0" linear="no"/>"#)
+        || source.contains(r#"<opf:itemref idref="section1" linear="no"/>"#)
+    {
+        return Err("target multi-section spine is not linear".into());
+    }
+
+    Ok(())
 }
 
 fn visible_text(section: &[u8]) -> Result<String, Box<dyn Error>> {
@@ -265,8 +282,8 @@ fn add_section_to_package_document(bytes: &[u8]) -> Result<Vec<u8>, Box<dyn Erro
         &source,
         r#"<opf:itemref idref="section0" linear="no"/>"#,
         concat!(
-            r#"<opf:itemref idref="section0" linear="no"/>"#,
-            r#"<opf:itemref idref="section1" linear="no"/>"#,
+            r#"<opf:itemref idref="section0" linear="yes"/>"#,
+            r#"<opf:itemref idref="section1" linear="yes"/>"#,
         ),
     )?
     .into_bytes())
@@ -416,6 +433,33 @@ fn extract_exact_element<'a>(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn exact_two_section_linear_spine_is_accepted() {
+        let package_document = concat!(
+            r#"<opf:spine>"#,
+            r#"<opf:itemref idref="section0" linear="yes"/>"#,
+            r#"<opf:itemref idref="section1" linear="yes"/>"#,
+            r#"</opf:spine>"#,
+        );
+        verify_linear_spine(package_document.as_bytes()).expect("linear spine must pass");
+    }
+
+    #[test]
+    fn non_linear_or_duplicate_section_spine_is_rejected() {
+        let non_linear = concat!(
+            r#"<opf:itemref idref="section0" linear="yes"/>"#,
+            r#"<opf:itemref idref="section1" linear="no"/>"#,
+        );
+        assert!(verify_linear_spine(non_linear.as_bytes()).is_err());
+
+        let duplicate = concat!(
+            r#"<opf:itemref idref="section0" linear="yes"/>"#,
+            r#"<opf:itemref idref="section0" linear="yes"/>"#,
+            r#"<opf:itemref idref="section1" linear="yes"/>"#,
+        );
+        assert!(verify_linear_spine(duplicate.as_bytes()).is_err());
+    }
 
     #[test]
     fn bounded_fixture_reader_rejects_empty_and_oversized_files() -> Result<(), Box<dyn Error>> {
