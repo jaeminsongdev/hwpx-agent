@@ -66,13 +66,20 @@ save, render, cross-version or production proof.
 P05-05~08 have bounded typed contracts, deterministic lower/readback, negative corpora and disposable
 target fixtures. Commit `49ba92a` adds a 30--900 second watchdog, privacy-safe append-only progress
 journal, exact-process cleanup checks and version-specific wrappers for the current Hangul 2020
-actual runs. Its five PowerShell suites passed 119/119 in the current checkout and again in an exact
-clean checkout; the exact clean checkout also passed FULL bootstrap 5/5 with zero tracked changes.
+actual runs. Commit `2d2c884` extends the P05-07/P05-08 wrappers with optional bounded
+`IXHwpDocument.SaveAs/PDF` evidence: no-overwrite, same-fixture boundary, regular-file/reparse,
+32-MiB, `%PDF-`, length, SHA-256 and exact method checks run in both worker and watchdog. The six
+PowerShell suites passed 146/146 in the current and exact clean checkouts; both also passed FULL
+bootstrap 5/5, and the clean checkout had zero tracked changes. PDF page count, geometry, text and
+visual review remain required before any render Gate is promoted.
+
 The latest core commit `6a46fbc` additionally passed offline network-disabled Linux
 `hwpx-package --all-targets` tests/Clippy with source and Cargo registry read-only. The authoritative
 task state remains open until the serialized exact Hangul 2020 open/save/reopen runs finish and
-P05-07/P05-08 render evidence is captured. No synthetic or static result is promoted to actual
-behavior.
+P05-07/P05-08 render evidence is captured. Two P05-05 attempts ended fail-closed at
+`open_input:running` after 300 and 900 seconds without manual approval: both preserved the source,
+created no output, cleaned exactly one owned Hangul process and left zero Hwp processes. No
+synthetic, static or timed-out result is promoted to actual behavior.
 
 ## P05-04 closure evidence
 
