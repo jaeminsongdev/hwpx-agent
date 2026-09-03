@@ -10,6 +10,7 @@ mod character_style;
 mod graph;
 mod id_index;
 mod limits;
+mod paragraph_style;
 mod patch;
 mod path;
 mod preservation;
@@ -39,6 +40,16 @@ pub use id_index::{
     IdLocation, IdReference, IdRuleProfile, IdValidationIssue, IdValidationReport,
 };
 pub use limits::{PackageLimitConfig, PackageLimits};
+pub use paragraph_style::{
+    AutoSpacing, BorderFill, BorderLine, BorderWidth, BreakSettings, CenterLine, CompatibleHeading,
+    CompatibleParagraphLayout, DeduplicatedParagraphStyles, FillBrush, HatchStyle, Heading,
+    HeadingType, HorizontalAlignment, HwpValue, LineSpacing, LineSpacingType, LineWrap, Margin,
+    MeasurementUnit, PARAGRAPH_STYLE_PROFILE_ID, ParagraphBorder, ParagraphLayout,
+    ParagraphReferenceDomains, ParagraphStyle, ParagraphStyleCatalog, ParagraphStyleCatalogReader,
+    ParagraphStyleCatalogWriter, ParagraphStyleError, ParagraphStyleLimitConfig,
+    ParagraphStyleLimits, ParagraphStyleLoweringReceipt, Slash, SlashType, TextDirection,
+    VerticalAlignment, WindowBrush, WordBreak,
+};
 pub use patch::{
     AddedPart, AllocationHandle, PatchAttributeValue, PatchError, PatchIntent, PatchLimitConfig,
     PatchLimits, PatchPartDisposition, PatchPartRecord, PatchResult, PatchText,
