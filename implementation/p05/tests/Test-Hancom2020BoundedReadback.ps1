@@ -38,6 +38,7 @@ $checks = [ordered]@{
     bounded_input = $bounded -match 'Length -gt 8388608' -and $engine -match 'Length -gt 8388608'
     reparse_refused = $bounded -match 'FIXTURE_BOUNDARY_REPARSE_POINT' -and $engine -match 'FIXTURE_BOUNDARY_REPARSE_POINT'
     bounded_progress = $bounded -match 'Length -gt 65536' -and $bounded -match 'expectedSequence -gt 32'
+    progress_preserves_iso_time = $bounded -match 'ConvertFrom-Json -DateKind String'
     bounded_terminal_trace = $bounded -match 'innerItem\.Length -gt 0 -and \$innerItem\.Length -le 131072'
     progress_exact_properties = $bounded -match 'allowedProperties -cnotcontains \$property'
     progress_exact_types = $bounded -match 'sequenceIsInteger' -and $bounded -match 'privacyIsBoolean'
