@@ -56,7 +56,7 @@ save, render, cross-version or production proof.
 | P-0041 | P05-02 Character styles | `pass` | commit `a810aa7`, style 11/11, package 74/74, current/clean FULL 5/5, Linux offline |
 | P-0042 | P05-03 Paragraph styles | `pass` | commit `ec76232`, paragraph 12/12, package 86/86, current/clean FULL 5/5, Linux offline |
 | P-0043 | P05-04 Tabs | `pass` | commits `1a8723c` + `5cb4fe7`; tab 13/13, package 101/101, exact 2020 save/reopen semantic pass |
-| P-0044 | P05-05 Lists and numbering | `actual_in_progress` | commit `4afd8c0`; core/fixture/current-clean-Linux pass; exact 2020 open/save/reopen active |
+| P-0044 | P05-05 Lists and numbering | `actual_in_progress` | commit `4afd8c0`; bounded diagnostic runner `49ba92a`; core/fixture/current-clean-Linux pass; exact 2020 open/save/reopen active |
 | P-0045 | P05-06 Page setup | `actual_pending` | commits `35b6d2c` + `453e1d4`; core/fixture/current-clean-Linux pass |
 | P-0046 | P05-07 Sections and columns | `actual_render_pending` | commits `cf01d27` + `dfd60e3`; core/fixture/current-clean-Linux pass |
 | P-0047 | P05-08 Header/footer/page number | `actual_render_pending` | commits `a6bcd35` + `6a46fbc`; 16 core + 2 fixture tests, current/clean FULL 5/5, offline Linux pass |
@@ -64,11 +64,15 @@ save, render, cross-version or production proof.
 ## P05 active acceptance queue
 
 P05-05~08 have bounded typed contracts, deterministic lower/readback, negative corpora and disposable
-target fixtures. The latest exact commit `6a46fbc` passed current and clean-clone FULL 5/5 plus offline
-network-disabled Linux `hwpx-package --all-targets` tests/Clippy with source and Cargo registry
-read-only. The authoritative task state remains open until the serialized exact Hangul 2020
-open/save/reopen runs finish and P05-07/P05-08 render evidence is captured. No synthetic or static
-result is promoted to actual behavior.
+target fixtures. Commit `49ba92a` adds a 30--900 second watchdog, privacy-safe append-only progress
+journal, exact-process cleanup checks and version-specific wrappers for the current Hangul 2020
+actual runs. Its five PowerShell suites passed 119/119 in the current checkout and again in an exact
+clean checkout; the exact clean checkout also passed FULL bootstrap 5/5 with zero tracked changes.
+The latest core commit `6a46fbc` additionally passed offline network-disabled Linux
+`hwpx-package --all-targets` tests/Clippy with source and Cargo registry read-only. The authoritative
+task state remains open until the serialized exact Hangul 2020 open/save/reopen runs finish and
+P05-07/P05-08 render evidence is captured. No synthetic or static result is promoted to actual
+behavior.
 
 ## P05-04 closure evidence
 
