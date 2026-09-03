@@ -32,9 +32,16 @@ format, a character-style reference or the exact UINT32_MAX no-style sentinel, c
 escaped template string. Templates are data only; they never become XML or backend commands.
 
 A character bullet preserves char, optional checkedChar, useImage=false and one ParaHead style without
-a numbering start. Empty or multi-scalar bullet marks, checked state without checkedChar, image-bullet
+a numbering start. For the current Hangul 2020 profile that bullet ParaHead uses the executable's
+canonical XML level 0; the locked Hancom OWPML model initializes ParaHead level to 0, and actual
+save/reopen also rewrites a level-1 probe to level 0. Empty or multi-scalar bullet marks, checked state without checkedChar, image-bullet
 children and unresolved character-style references reject. Image bullets are intentionally deferred to
 P08, where binary-item ownership and package relationship closure can be validated together.
+
+The disposable interop fixture also sets the custom ROMAN_SMALL numbering head's checkable flag to
+true before publication. The exact current Hangul 2020 save/reopen probe canonicalized the earlier
+false value to true; the fixture therefore starts from the executable's retained form instead of
+claiming byte-level preservation for a value the target rewrites.
 
 Definitions are bounded and unknown typed children/attributes reject. Container counts, exact child
 order/cardinality, dense IDs, levels, lexical numbers/booleans/enums, character references, templates

@@ -361,6 +361,7 @@ fn expected_catalog() -> Result<ListDefinitionCatalog, Box<dyn Error>> {
     custom.levels[0].head.number_format = NumberFormat::Digit;
     "(^1)".clone_into(&mut custom.levels[0].head.template);
     custom.levels[1].head.number_format = NumberFormat::RomanSmall;
+    custom.levels[1].head.checkable = true;
     "^1.^2".clone_into(&mut custom.levels[1].head.template);
     catalog.numberings.push(custom);
     let mut bullet_head = catalog.numberings[0].levels[0].head.clone();

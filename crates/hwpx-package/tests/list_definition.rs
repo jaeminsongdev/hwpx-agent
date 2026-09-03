@@ -175,6 +175,17 @@ fn lower_is_deterministic_escaped_and_exactly_readable() -> TestResult {
     let xml = std::str::from_utf8(&first)?;
     assert!(xml.contains("^1 &amp; 항목"));
     assert!(xml.contains("char=\"•\" checkedChar=\"✓\" useImage=\"0\""));
+    assert!(xml.contains("<hh:paraHead level=\"0\""));
+    let noncanonical_bullet_level =
+        xml.replacen("<hh:paraHead level=\"0\"", "<hh:paraHead level=\"1\"", 1);
+    assert_eq!(
+        ListDefinitionCatalogReader::read_with_character_style_domain(
+            noncanonical_bullet_level.as_bytes(),
+            &[0],
+            ListDefinitionLimits::default()
+        ),
+        Err(ListDefinitionError::OutOfRange)
+    );
     Ok(())
 }
 
@@ -728,7 +739,7 @@ fn fixed_128_case_catalog_and_sequence_corpus_is_deterministic() -> TestResult {
     assert_eq!(first, second);
     assert_eq!(
         hex::encode(first),
-        "7798294a9b581ff434befcc80f201f28b93430cbd1c74581b9a9f20f3e97dbd1"
+        "b3d05ff6709d083cd938d36f163674e3711c47240eb4c10890aa6f5952b9e23a"
     );
     Ok(())
 }

@@ -14,6 +14,7 @@ pub const LIST_DEFINITION_PROFILE_ID: &str = "hwpx-agent.list-definition/1";
 const HEAD_NS: &str = "http://www.hancom.co.kr/hwpml/2011/head";
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const LEVEL_COUNT: usize = 10;
+const BULLET_XML_LEVEL: u8 = 0;
 const NO_CHARACTER_STYLE: u32 = u32::MAX;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -1112,7 +1113,7 @@ fn read_bullet(
             "checkable",
         ],
     )?;
-    if required_u8(head_element, "level")? != 1 {
+    if required_u8(head_element, "level")? != BULLET_XML_LEVEL {
         return Err(ListDefinitionError::OutOfRange);
     }
     let definition = BulletDefinition {
@@ -1630,7 +1631,7 @@ fn write_bullet(
         output.push_escaped(&mark.to_string())?;
     }
     output.push("\" useImage=\"0\">")?;
-    write_head(output, None, 1, &definition.head)?;
+    write_head(output, None, BULLET_XML_LEVEL, &definition.head)?;
     output.push("</hh:bullet>")
 }
 
