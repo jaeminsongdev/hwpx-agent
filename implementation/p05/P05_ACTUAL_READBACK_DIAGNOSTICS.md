@@ -33,6 +33,28 @@ already-qualified `IXHwpDocument.SaveAs/PDF` path. The worker rejects an existin
 non-PDF-signature or larger-than-32-MiB result; the watchdog independently correlates its SHA-256,
 length, boolean state and export method. A timeout or partial file never becomes render PASS.
 
+`verify_p05_hancom_pdf.py` performs the next independent layer. It binds the PDF and exact
+`pdftoppm` executable by SHA-256, rejects encryption and out-of-bound inputs, checks page count,
+rotation, MediaBox dimensions and fixture-only required/forbidden text, then renders every page at
+144 DPI. Each complete PNG is decoded with Pillow, checked against the physical page dimensions and
+recorded by size and SHA-256. The expectation, trace and new render directory must be direct children
+of the named disposable PDF directory. The terminal JSON contains hashes and measurements but no
+document text or path. The input PDF and renderer are rehashed after rendering to close mid-run
+mutation, and the PNG directory must contain exactly the expected pages. Automated PASS still
+requires a human/agent visual review of every generated PNG before a layout Gate can close.
+
+On the current PC this verifier uses the Codex bundled Python runtime reported by
+`load_workspace_dependencies`, with `pypdf 6.10.0`, `Pillow 12.3.0` and that bundle's exact
+`pdftoppm.exe`. The CLI requires the expected renderer SHA-256, and its trace also records the
+Python executable, verifier source, expectation and renderer SHA-256 values plus both Python package
+versions. These packages are diagnostic-only dependencies, not HWPX Agent product-runtime
+dependencies. Validate changes explicitly with the bundled Python executable:
+
+```powershell
+& $BundledPython -m unittest implementation.p05.tests.test_verify_p05_hancom_pdf
+& $BundledPython -m py_compile implementation\p05\tools\verify_p05_hancom_pdf.py
+```
+
 ## Bounded execution and cleanup
 
 `invoke-hancom-2020-bounded-readback.ps1` runs the x86 STA engine in a separate hidden PowerShell
