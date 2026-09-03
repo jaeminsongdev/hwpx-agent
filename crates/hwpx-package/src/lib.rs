@@ -10,6 +10,7 @@ mod character_style;
 mod graph;
 mod id_index;
 mod limits;
+mod list_definition;
 mod paragraph_style;
 mod patch;
 mod path;
@@ -41,6 +42,14 @@ pub use id_index::{
     IdLocation, IdReference, IdRuleProfile, IdValidationIssue, IdValidationReport,
 };
 pub use limits::{PackageLimitConfig, PackageLimits};
+pub use list_definition::{
+    BulletDefinition, DeduplicatedListDefinitions, LIST_DEFINITION_PROFILE_ID, ListAlignment,
+    ListBinding, ListDefinitionCatalog, ListDefinitionCatalogReader, ListDefinitionCatalogWriter,
+    ListDefinitionError, ListDefinitionLimitConfig, ListDefinitionLimits,
+    ListDefinitionLoweringReceipt, ListSequenceEngine, ListSequenceItem, ListSequenceKind,
+    ListSequenceResult, NumberFormat, NumberingDefinition, NumberingLevel,
+    OutlineDefinitionBinding, OutlineDefinitionBindingReader, ParagraphHeadStyle, TextOffsetUnit,
+};
 pub use paragraph_style::{
     AutoSpacing, BorderFill, BorderLine, BorderWidth, BreakSettings, CenterLine, CompatibleHeading,
     CompatibleParagraphLayout, DeduplicatedParagraphStyles, FillBrush, HatchStyle, Heading,
