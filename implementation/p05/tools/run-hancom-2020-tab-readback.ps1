@@ -5,6 +5,7 @@ param(
     [Parameter(Mandatory)][string]$OutputPath,
     [Parameter(Mandatory)][string]$TracePath,
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{64}$')][string]$ExpectedTextSha256,
+    [string]$RenderPdfPath = '',
     [string]$ProgressPath = '',
     [string]$ProgId = 'HWPFrame.HwpObject.2',
     [string]$ExpectedBuild = '11.0.0.9136',
@@ -173,12 +174,17 @@ if (($boundaryItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -n
 }
 $output = [System.IO.Path]::GetFullPath($OutputPath)
 $traceFile = [System.IO.Path]::GetFullPath($TracePath)
+$renderPdf = if ([string]::IsNullOrWhiteSpace($RenderPdfPath)) {
+    $null
+}
+else { [System.IO.Path]::GetFullPath($RenderPdfPath) }
 $script:progressFile = if ([string]::IsNullOrWhiteSpace($ProgressPath)) {
     $traceFile + '.progress.jsonl'
 }
 else { [System.IO.Path]::GetFullPath($ProgressPath) }
 $script:progressSequence = 0
-foreach ($candidate in @($output, $traceFile, $script:progressFile)) {
+foreach ($candidate in @($output, $traceFile, $script:progressFile, $renderPdf)) {
+    if ($null -eq $candidate) { continue }
     if (-not $candidate.StartsWith($boundary + '\', [System.StringComparison]::OrdinalIgnoreCase)) {
         throw 'TAB_READBACK_PATH_OUTSIDE_FIXTURE_BOUNDARY'
     }
@@ -187,9 +193,13 @@ if ([System.IO.Path]::GetExtension($input) -cne '.hwpx' -or
     [System.IO.Path]::GetExtension($output) -cne '.hwpx') {
     throw 'TAB_READBACK_HWPX_EXTENSION_REQUIRED'
 }
+if ($null -ne $renderPdf -and [System.IO.Path]::GetExtension($renderPdf) -cne '.pdf') {
+    throw 'TAB_READBACK_PDF_EXTENSION_REQUIRED'
+}
 if ((Test-Path -LiteralPath $output) -or
     (Test-Path -LiteralPath $traceFile) -or
-    (Test-Path -LiteralPath $script:progressFile)) {
+    (Test-Path -LiteralPath $script:progressFile) -or
+    ($null -ne $renderPdf -and (Test-Path -LiteralPath $renderPdf))) {
     throw 'TAB_READBACK_OUTPUT_ALREADY_EXISTS'
 }
 if ((Get-Sha256File -Path $input) -cne $ExpectedInputSha256) {
@@ -220,6 +230,12 @@ $result = [ordered]@{
     output_sha256 = $null
     output_text_sha256 = $null
     output_saved = $false
+    render_pdf_requested = $null -ne $renderPdf
+    render_pdf_saved = $false
+    render_pdf_sha256 = $null
+    render_pdf_bytes = $null
+    render_pdf_signature_valid = $false
+    render_pdf_export_method = $null
     phases = [ordered]@{
         com_create = 'not_run'
         open_input = 'not_run'
@@ -228,6 +244,7 @@ $result = [ordered]@{
         close_input = 'not_run'
         reopen_output = 'not_run'
         read_output = 'not_run'
+        export_pdf = 'not_run'
         close_output = 'not_run'
         quit = 'not_run'
     }
@@ -336,6 +353,38 @@ try {
     }
     $result.phases.read_output = 'pass'
     Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
+
+    if ($null -ne $renderPdf) {
+        $phase = 'export_pdf'
+        $result.phases.export_pdf = 'running'
+        Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
+        $result.render_pdf_export_method = 'IXHwpDocument.SaveAs/PDF'
+        [void]$document.SaveAs($renderPdf, 'PDF', '')
+        if (-not (Test-Path -LiteralPath $renderPdf -PathType Leaf)) {
+            throw 'TAB_READBACK_PDF_EXPORT_OUTPUT_MISSING'
+        }
+        $pdfItem = Get-Item -LiteralPath $renderPdf -Force
+        if ($pdfItem.PSIsContainer -or
+            ($pdfItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0 -or
+            $pdfItem.Length -lt 5 -or $pdfItem.Length -gt 33554432) {
+            throw 'TAB_READBACK_PDF_NOT_BOUNDED_REGULAR_FILE'
+        }
+        $pdfStream = [System.IO.File]::OpenRead($renderPdf)
+        try {
+            $signature = [byte[]]::new(5)
+            if ($pdfStream.Read($signature, 0, $signature.Length) -ne $signature.Length -or
+                [System.Text.Encoding]::ASCII.GetString($signature) -cne '%PDF-') {
+                throw 'TAB_READBACK_PDF_SIGNATURE_MISMATCH'
+            }
+        }
+        finally { $pdfStream.Dispose() }
+        $result.render_pdf_saved = $true
+        $result.render_pdf_sha256 = Get-Sha256File -Path $renderPdf
+        $result.render_pdf_bytes = [long]$pdfItem.Length
+        $result.render_pdf_signature_valid = $true
+        $result.phases.export_pdf = 'pass'
+        Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
+    }
 
     $phase = 'close_output'
     $result.phases.close_output = 'running'

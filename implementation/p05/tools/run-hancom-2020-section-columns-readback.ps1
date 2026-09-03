@@ -5,6 +5,7 @@ param(
     [Parameter(Mandatory)][string]$OutputPath,
     [Parameter(Mandatory)][string]$TracePath,
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{64}$')][string]$ExpectedTextSha256,
+    [string]$RenderPdfPath = '',
     [string]$ProgId = 'HWPFrame.HwpObject.2',
     [string]$ExpectedBuild = '11.0.0.9136',
     [string]$ExpectedExecutableSha256 = '7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce',
@@ -25,6 +26,7 @@ $runner = (Resolve-Path -LiteralPath (
     -ExpectedTextSha256 $ExpectedTextSha256 `
     -TraceSchema 'hwpx-agent.p05-07-hancom-2020-section-columns-readback/v1' `
     -ErrorPrefix 'SECTION_COLUMNS_READBACK' `
+    -RenderPdfPath $RenderPdfPath `
     -ProgId $ProgId `
     -ExpectedBuild $ExpectedBuild `
     -ExpectedExecutableSha256 $ExpectedExecutableSha256 `

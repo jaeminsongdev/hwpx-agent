@@ -7,6 +7,7 @@ param(
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{64}$')][string]$ExpectedTextSha256,
     [Parameter(Mandatory)][ValidatePattern('^hwpx-agent\.[a-z0-9-]+/v1$')][string]$TraceSchema,
     [Parameter(Mandatory)][ValidatePattern('^[A-Z0-9_]+$')][string]$ErrorPrefix,
+    [string]$RenderPdfPath = '',
     [string]$ProgId = 'HWPFrame.HwpObject.2',
     [string]$ExpectedBuild = '11.0.0.9136',
     [string]$ExpectedExecutableSha256 = '7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce',
@@ -57,6 +58,48 @@ function Write-NewUtf8File {
     finally { $stream.Dispose() }
 }
 
+function Test-BoundedPdfEvidence {
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory)][object]$Trace
+    )
+
+    foreach ($property in @(
+        'render_pdf_requested', 'render_pdf_saved', 'render_pdf_sha256',
+        'render_pdf_bytes', 'render_pdf_signature_valid', 'render_pdf_export_method'
+    )) {
+        if (@($Trace.PSObject.Properties.Name) -cnotcontains $property) { return $false }
+    }
+    if (-not ($Trace.render_pdf_requested -is [bool]) -or
+        -not [bool]$Trace.render_pdf_requested -or
+        -not ($Trace.render_pdf_saved -is [bool]) -or
+        -not [bool]$Trace.render_pdf_saved -or
+        [string]$Trace.render_pdf_sha256 -notmatch '^[0-9a-f]{64}$' -or
+        -not ($Trace.render_pdf_bytes -is [int] -or $Trace.render_pdf_bytes -is [long]) -or
+        [long]$Trace.render_pdf_bytes -lt 5 -or [long]$Trace.render_pdf_bytes -gt 33554432 -or
+        -not ($Trace.render_pdf_signature_valid -is [bool]) -or
+        -not [bool]$Trace.render_pdf_signature_valid -or
+        [string]$Trace.render_pdf_export_method -cne 'IXHwpDocument.SaveAs/PDF') {
+        return $false
+    }
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
+    $item = Get-Item -LiteralPath $Path -Force
+    if (($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0 -or
+        $item.Length -ne [long]$Trace.render_pdf_bytes) {
+        return $false
+    }
+    $stream = [System.IO.File]::OpenRead($Path)
+    try {
+        $signature = [byte[]]::new(5)
+        if ($stream.Read($signature, 0, $signature.Length) -ne $signature.Length -or
+            [System.Text.Encoding]::ASCII.GetString($signature) -cne '%PDF-') {
+            return $false
+        }
+    }
+    finally { $stream.Dispose() }
+    return (Get-Sha256File -Path $Path) -ceq [string]$Trace.render_pdf_sha256
+}
+
 function Read-ProgressJournal {
     param([Parameter(Mandatory)][string]$Path)
 
@@ -79,7 +122,7 @@ function Read-ProgressJournal {
     )
     $allowedPhases = @(
         'preflight', 'com_create', 'open_input', 'read_input', 'save_as_hwpx',
-        'close_input', 'reopen_output', 'read_output', 'close_output', 'quit', 'terminal'
+        'close_input', 'reopen_output', 'read_output', 'export_pdf', 'close_output', 'quit', 'terminal'
     )
     $expectedSequence = 1
     $workerProcessId = $null
@@ -188,6 +231,10 @@ $input = $inputItem.FullName
 $boundary = (Resolve-Path -LiteralPath (Split-Path -Parent $input)).Path.TrimEnd('\')
 $output = [System.IO.Path]::GetFullPath($OutputPath)
 $traceFile = [System.IO.Path]::GetFullPath($TracePath)
+$renderPdf = if ([string]::IsNullOrWhiteSpace($RenderPdfPath)) {
+    $null
+}
+else { [System.IO.Path]::GetFullPath($RenderPdfPath) }
 $boundaryItem = Get-Item -LiteralPath $boundary -Force
 if (($boundaryItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) {
     throw ($ErrorPrefix + '_FIXTURE_BOUNDARY_REPARSE_POINT')
@@ -198,11 +245,15 @@ if ([System.IO.Path]::GetExtension($input) -cne '.hwpx' -or
 }
 $innerTrace = $traceFile + '.inner.' + [string]$PID + '.json'
 $progressFile = $traceFile + '.progress.jsonl'
-foreach ($candidate in @($output, $traceFile, $innerTrace, $progressFile)) {
+foreach ($candidate in @($output, $traceFile, $innerTrace, $progressFile, $renderPdf)) {
+    if ($null -eq $candidate) { continue }
     if (-not $candidate.StartsWith($boundary + '\', [System.StringComparison]::OrdinalIgnoreCase)) {
         throw ($ErrorPrefix + '_PATH_OUTSIDE_FIXTURE_BOUNDARY')
     }
     if (Test-Path -LiteralPath $candidate) { throw ($ErrorPrefix + '_OUTPUT_ALREADY_EXISTS') }
+}
+if ($null -ne $renderPdf -and [System.IO.Path]::GetExtension($renderPdf) -cne '.pdf') {
+    throw ($ErrorPrefix + '_PDF_EXTENSION_REQUIRED')
 }
 if (@(Get-CimInstance Win32_Process -Filter "Name='Hwp.exe'" -ErrorAction SilentlyContinue).Count -ne 0) {
     throw ($ErrorPrefix + '_PREEXISTING_HWP_PROCESS')
@@ -222,6 +273,9 @@ $arguments = @(
     '-ExpectedBuild', $ExpectedBuild,
     '-ExpectedExecutableSha256', $ExpectedExecutableSha256
 )
+if ($null -ne $renderPdf) {
+    $arguments += @('-RenderPdfPath', $renderPdf)
+}
 $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
 $startInfo.FileName = $powerShell
 $startInfo.Arguments = (($arguments | ForEach-Object {
@@ -297,6 +351,9 @@ elseif (-not [bool]$progress.valid -or
     [string]$progress.last_state -cne 'pass') {
     $ErrorPrefix + '_PROGRESS_INVALID'
 }
+elseif ($null -ne $renderPdf -and -not (Test-BoundedPdfEvidence -Path $renderPdf -Trace $trace)) {
+    $ErrorPrefix + '_RENDER_EVIDENCE_INVALID'
+}
 elseif ([int]$cleanup.refused -ne 0 -or [int]$cleanup.errors -ne 0 -or $remaining.Count -ne 0) {
     $ErrorPrefix + '_PROCESS_CLEANUP_UNVERIFIED'
 }
@@ -313,6 +370,12 @@ if ($null -eq $trace) {
         output_sha256 = $null
         output_text_sha256 = $null
         output_saved = (Test-Path -LiteralPath $output -PathType Leaf)
+        render_pdf_requested = $null -ne $renderPdf
+        render_pdf_saved = $null -ne $renderPdf -and (Test-Path -LiteralPath $renderPdf -PathType Leaf)
+        render_pdf_sha256 = $null
+        render_pdf_bytes = $null
+        render_pdf_signature_valid = $false
+        render_pdf_export_method = $null
         phases = $null
         error_code = $wrapperError
         failed_phase = 'watchdog'

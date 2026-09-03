@@ -27,6 +27,12 @@ secret or user identity. The important boundary events are `open_input:running/p
 `save_as_hwpx:running/pass`, `reopen_output:running/pass` and `terminal`. A missing terminal trace can
 therefore still be diagnosed from the last durable progress event without guessing where COM hung.
 
+The section/column and header/footer wrappers additionally accept an optional new `.pdf` path in the
+same disposable fixture directory. When requested, the reopened output is exported with the
+already-qualified `IXHwpDocument.SaveAs/PDF` path. The worker rejects an existing, linked, empty,
+non-PDF-signature or larger-than-32-MiB result; the watchdog independently correlates its SHA-256,
+length, boolean state and export method. A timeout or partial file never becomes render PASS.
+
 ## Bounded execution and cleanup
 
 `invoke-hancom-2020-bounded-readback.ps1` runs the x86 STA engine in a separate hidden PowerShell
