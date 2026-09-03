@@ -255,6 +255,8 @@ internal interface IHancomAutomationRuntime : IDisposable
 
     IHancomAutomationDocument Open(HancomApprovedDocument input);
 
+    bool ExecuteAction(HancomBoundAction invocation);
+
     void Quit();
 }
 
@@ -405,6 +407,40 @@ public sealed class HancomSession
             throw new HancomLifecycleException(
                 HancomLifecycleError.SecurityModuleRegistrationFailed,
                 error);
+        }
+    }
+
+    internal void ExecuteAction(HancomBoundAction invocation, StaExecutionContext context)
+    {
+        ArgumentNullException.ThrowIfNull(invocation);
+        ArgumentNullException.ThrowIfNull(context);
+        RequireState(HancomSessionState.DocumentOpen);
+        VerifyContext(context);
+        context.ThrowIfCancellationRequested();
+        try
+        {
+            if (!RequireLease().Automation.ExecuteAction(invocation))
+            {
+                State = HancomSessionState.Faulted;
+                throw new HancomBindingException(
+                    HancomBindingError.ActionFailed,
+                    effectUnknown: true);
+            }
+
+            context.PumpPendingMessages();
+        }
+        catch (HancomBindingException)
+        {
+            State = HancomSessionState.Faulted;
+            throw;
+        }
+        catch (Exception error)
+        {
+            State = HancomSessionState.Faulted;
+            throw new HancomBindingException(
+                HancomBindingError.ActionFailed,
+                error,
+                effectUnknown: true);
         }
     }
 
@@ -956,7 +992,7 @@ internal sealed class ComHancomAutomationRuntime(object instance) : IHancomAutom
 
             dynamic openedDocument = document;
             object? result = openedDocument.Open(input.Path, "HWPX", "lock:false;setcurdir:false");
-            if (result is bool accepted && !accepted)
+            if (result is not bool accepted || !accepted)
             {
                 throw new HancomLifecycleException(HancomLifecycleError.OpenFailed);
             }
@@ -981,6 +1017,78 @@ internal sealed class ComHancomAutomationRuntime(object instance) : IHancomAutom
         dynamic automation = RequireInstance();
         object? result = automation.RegisterModule("FilePathCheckDLL", registrationName);
         return result is bool accepted && accepted;
+    }
+
+    public bool ExecuteAction(HancomBoundAction invocation)
+    {
+        ArgumentNullException.ThrowIfNull(invocation);
+        object? actionCollection = null;
+        object? action = null;
+        object? parameterSet = null;
+        try
+        {
+            dynamic automation = RequireInstance();
+            actionCollection = automation.HAction;
+            dynamic actions = actionCollection;
+            if (invocation.Parameters.Count == 0)
+            {
+                object? runResult = actions.Run(invocation.ActionId);
+                return runResult is bool accepted && accepted;
+            }
+
+            action = actions.CreateAction(invocation.ActionId);
+            if (action is null)
+            {
+                return false;
+            }
+
+            dynamic boundAction = action;
+            if (boundAction.ActID is not string actualActionId
+                || !string.Equals(actualActionId, invocation.ActionId, StringComparison.Ordinal)
+                || boundAction.SetID is not string actualSetId
+                || !string.Equals(actualSetId, invocation.ParameterSetId, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            parameterSet = boundAction.CreateSet();
+            if (parameterSet is null)
+            {
+                return false;
+            }
+
+            object? defaultResult = boundAction.GetDefault(parameterSet);
+            dynamic typedSet = parameterSet;
+            if (defaultResult is not bool defaultAccepted
+                || !defaultAccepted
+                || typedSet.IsSet is not bool isSet
+                || !isSet
+                || typedSet.SetID is not string parameterSetId
+                || !string.Equals(parameterSetId, invocation.ParameterSetId, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            foreach (var parameter in invocation.Parameters)
+            {
+                object? itemExists = typedSet.ItemExist(parameter.ItemName);
+                if (itemExists is not bool exists || !exists)
+                {
+                    return false;
+                }
+
+                typedSet.SetItem(parameter.ItemName, parameter.Value);
+            }
+
+            object? executeResult = boundAction.Execute(parameterSet);
+            return executeResult is bool executeAccepted && executeAccepted;
+        }
+        finally
+        {
+            ReleaseComObject(parameterSet);
+            ReleaseComObject(action);
+            ReleaseComObject(actionCollection);
+        }
     }
 
     public void Quit()
@@ -1078,30 +1186,64 @@ internal sealed class OwnedHancomProcess : IHancomOwnedProcess
     public void EnsureStopped(StaExecutionContext context)
     {
         var deadline = DateTimeOffset.UtcNow.AddSeconds(5);
+        var ownedProcessExited = false;
         while (DateTimeOffset.UtcNow < deadline)
         {
             context.PumpPendingMessages();
             using var process = TryOpen();
             if (process is null || process.HasExited)
             {
-                return;
+                ownedProcessExited = true;
+                break;
             }
 
             Thread.Sleep(25);
         }
 
-        using var owned = TryOpen();
-        if (owned is null || owned.HasExited)
+        if (!ownedProcessExited)
         {
-            return;
+            using var owned = TryOpen();
+            if (owned is not null && !owned.HasExited)
+            {
+                VerifyIdentity(owned);
+                owned.Kill(entireProcessTree: false);
+                if (!owned.WaitForExit(10_000))
+                {
+                    throw new HancomLifecycleException(HancomLifecycleError.CleanupFailed);
+                }
+            }
         }
 
-        VerifyIdentity(owned);
-        owned.Kill(entireProcessTree: false);
-        if (!owned.WaitForExit(10_000))
+        WaitForHancomProcessQuiescence(context);
+    }
+
+    private static void WaitForHancomProcessQuiescence(StaExecutionContext context)
+    {
+        var deadline = DateTimeOffset.UtcNow.AddSeconds(5);
+        while (DateTimeOffset.UtcNow < deadline)
         {
-            throw new HancomLifecycleException(HancomLifecycleError.CleanupFailed);
+            context.PumpPendingMessages();
+            var remaining = Process.GetProcessesByName("Hwp");
+            try
+            {
+                if (remaining.Length == 0)
+                {
+                    return;
+                }
+            }
+            finally
+            {
+                foreach (var process in remaining)
+                {
+                    process.Dispose();
+                }
+            }
+
+            Thread.Sleep(25);
         }
+
+        // Never terminate an unowned process. The next session remains fail-closed.
+        throw new HancomLifecycleException(HancomLifecycleError.CleanupOwnershipMismatch);
     }
 
     public void Dispose()

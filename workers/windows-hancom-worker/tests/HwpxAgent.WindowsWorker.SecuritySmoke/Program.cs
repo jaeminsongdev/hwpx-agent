@@ -504,6 +504,8 @@ internal static class Program
                 return new FakeDocument(owner);
             }
 
+            public bool ExecuteAction(HancomBoundAction invocation) => true;
+
             public void Quit() => owner.Events.Add("quit");
 
             public void Dispose()

@@ -79,18 +79,24 @@ public sealed class AgentJobContext
     private readonly AgentJobSandbox sandbox;
     private readonly LeaseAssignment hancomSecurityAssignment;
     private readonly HancomSecurityModulePin? hancomSecurityModule;
+    private readonly HancomBindingBundlePin? hancomBindingBundle;
+    private readonly string capabilityRegistrySha256;
     private readonly TimeProvider timeProvider;
 
     internal AgentJobContext(
         LeaseAssignment assignment,
         AgentJobSandbox sandbox,
         HancomSecurityModulePin? hancomSecurityModule,
+        HancomBindingBundlePin? hancomBindingBundle,
+        string capabilityRegistrySha256,
         TimeProvider timeProvider)
     {
         Assignment = assignment.Clone();
         hancomSecurityAssignment = assignment.Clone();
         this.sandbox = sandbox;
         this.hancomSecurityModule = hancomSecurityModule;
+        this.hancomBindingBundle = hancomBindingBundle;
+        this.capabilityRegistrySha256 = capabilityRegistrySha256;
         this.timeProvider = timeProvider;
     }
 
@@ -111,6 +117,8 @@ public sealed class AgentJobContext
         return sandbox.PrepareHancomWorkerSecurityLeaseAsync(
             hancomSecurityAssignment,
             hancomSecurityModule,
+            hancomBindingBundle,
+            capabilityRegistrySha256,
             timeProvider,
             cancellationToken);
     }
@@ -120,12 +128,19 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
 {
     private const string SandboxMarkerName = ".hwpx-agent-sandbox";
     private const string HancomSecurityLeaseSchema = "hwpx-agent.p10-05-security-lease/v1";
+    private const string HancomBindingSecurityLeaseSchema = "hwpx-agent.p10-06-security-lease/v2";
     private const string HancomSecurityLeaseFileName = ".hancom-security-lease.json";
     private const string HancomApprovedInputFileName = "hancom_approved_input.hwpx";
+    private const string HancomOperationPlanFileName = "hancom_operation_plan.json";
+    private const string HancomBindingBundleFileName = "hancom_binding_bundle.json";
+    private const string HancomBindingPublicKeyFileName = "hancom_binding_public_key.pem";
     private const string HancomFileAccessPolicyId = "file.local_read";
     private const string HancomOpenPolicyId = "open.read_only";
     private const int MaximumHancomInputBytes = 8 * 1024 * 1024;
     private const int MaximumHancomLeaseBytes = 8 * 1024;
+    private const int MaximumHancomOperationPlanBytes = 4 * 1024 * 1024;
+    private const int MaximumHancomBindingBundleBytes = 1024 * 1024;
+    private const int MaximumHancomBindingPublicKeyBytes = 8 * 1024;
     private static readonly TimeSpan MaximumHancomLeaseLifetime = TimeSpan.FromMinutes(30);
     private readonly string path;
     private readonly string sandboxRoot;
@@ -225,6 +240,8 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
     internal async Task<HancomWorkerSecurityLease> PrepareHancomWorkerSecurityLeaseAsync(
         LeaseAssignment assignment,
         HancomSecurityModulePin module,
+        HancomBindingBundlePin? bindingBundle,
+        string capabilityRegistrySha256,
         TimeProvider timeProvider,
         CancellationToken cancellationToken)
     {
@@ -232,6 +249,11 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
         ArgumentNullException.ThrowIfNull(assignment);
         ArgumentNullException.ThrowIfNull(timeProvider);
         AgentValidation.ValidateHancomSecurityModulePin(module);
+        AgentValidation.RequireDigest(capabilityRegistrySha256);
+        if (bindingBundle is not null)
+        {
+            AgentValidation.ValidateHancomBindingBundlePin(bindingBundle);
+        }
         if (Interlocked.CompareExchange(ref hancomSecurityPrepared, 1, 0) != 0)
         {
             throw new AgentProtocolException(AgentProtocolError.DuplicateHandle);
@@ -240,6 +262,12 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
         var approvedInput = Path.Combine(path, HancomApprovedInputFileName);
         var partialInput = Path.Combine(path, ".hancom-approved-input.partial");
         var leasePath = Path.Combine(path, HancomSecurityLeaseFileName);
+        var operationPlanPath = Path.Combine(path, HancomOperationPlanFileName);
+        var partialOperationPlan = Path.Combine(path, ".hancom-operation-plan.partial");
+        var bindingBundlePath = Path.Combine(path, HancomBindingBundleFileName);
+        var partialBindingBundle = Path.Combine(path, ".hancom-binding-bundle.partial");
+        var bindingPublicKeyPath = Path.Combine(path, HancomBindingPublicKeyFileName);
+        var partialBindingPublicKey = Path.Combine(path, ".hancom-binding-public-key.partial");
         try
         {
             var input = assignment.Input;
@@ -290,6 +318,60 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
             File.Move(partialInput, approvedInput, overwrite: false);
             File.SetAttributes(approvedInput, FileAttributes.ReadOnly);
 
+            if (bindingBundle is not null)
+            {
+                var operationPlan = assignment.OperationPlan;
+                if (operationPlan is null
+                    || operationPlan.Artifact is null
+                    || !operationPlan.ReadOnly
+                    || !stagedHandles.Contains(operationPlan.SandboxHandle)
+                    || operationPlan.Artifact.SizeBytes is 0 or > MaximumHancomOperationPlanBytes)
+                {
+                    throw new AgentProtocolException(AgentProtocolError.PolicyDenied);
+                }
+
+                var stagedPlanPath = ResolveHandle(operationPlan.SandboxHandle);
+                RejectReparse(stagedPlanPath);
+                if ((File.GetAttributes(stagedPlanPath) & FileAttributes.ReadOnly) == 0)
+                {
+                    throw new AgentProtocolException(AgentProtocolError.MutableInput);
+                }
+
+                await using (var source = new FileStream(
+                    stagedPlanPath,
+                    FileMode.Open,
+                    FileAccess.Read,
+                    FileShare.Read,
+                    bufferSize: 65_536,
+                    FileOptions.Asynchronous | FileOptions.SequentialScan))
+                {
+                    await CopyAndVerifyAsync(
+                        source,
+                        partialOperationPlan,
+                        operationPlan.Artifact,
+                        cancellationToken).ConfigureAwait(false);
+                }
+
+                File.Move(partialOperationPlan, operationPlanPath, overwrite: false);
+                File.SetAttributes(operationPlanPath, FileAttributes.ReadOnly);
+                await CopyPinnedFileAsync(
+                    bindingBundle.BundlePath,
+                    partialBindingBundle,
+                    bindingBundle.Sha256,
+                    MaximumHancomBindingBundleBytes,
+                    cancellationToken).ConfigureAwait(false);
+                File.Move(partialBindingBundle, bindingBundlePath, overwrite: false);
+                File.SetAttributes(bindingBundlePath, FileAttributes.ReadOnly);
+                await CopyPinnedFileAsync(
+                    bindingBundle.TrustedPublicKeyPath,
+                    partialBindingPublicKey,
+                    bindingBundle.TrustedPublicKeySha256,
+                    MaximumHancomBindingPublicKeyBytes,
+                    cancellationToken).ConfigureAwait(false);
+                File.Move(partialBindingPublicKey, bindingPublicKeyPath, overwrite: false);
+                File.SetAttributes(bindingPublicKeyPath, FileAttributes.ReadOnly);
+            }
+
             var maximumExpiry = timeProvider
                 .GetUtcNow()
                 .Add(MaximumHancomLeaseLifetime)
@@ -299,7 +381,9 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
                 checked((ulong)maximumExpiry));
             var document = new HancomSecurityLeaseDocument
             {
-                SchemaVersion = HancomSecurityLeaseSchema,
+                SchemaVersion = bindingBundle is null
+                    ? HancomSecurityLeaseSchema
+                    : HancomBindingSecurityLeaseSchema,
                 ExecutionId = assignment.ExecutionId,
                 SessionId = assignment.ExecutionId,
                 FencingToken = assignment.FencingToken,
@@ -313,6 +397,24 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
                 InputSizeBytes = input.Artifact.SizeBytes,
                 SecurityModuleRegistrationName = module.RegistrationName,
                 SecurityModuleSha256 = module.Sha256,
+                OperationPlanSandboxHandle = bindingBundle is null
+                    ? null
+                    : assignment.OperationPlan.SandboxHandle,
+                OperationPlanArtifactId = bindingBundle is null
+                    ? null
+                    : assignment.OperationPlan.Artifact.ArtifactId,
+                OperationPlanSha256 = bindingBundle is null
+                    ? null
+                    : assignment.OperationPlan.Artifact.Sha256,
+                OperationPlanSizeBytes = bindingBundle is null
+                    ? 0
+                    : assignment.OperationPlan.Artifact.SizeBytes,
+                BindingBundleId = bindingBundle?.BundleId,
+                BindingBundleSha256 = bindingBundle?.Sha256,
+                BindingPublicKeySha256 = bindingBundle?.TrustedPublicKeySha256,
+                CapabilityRegistrySha256 = bindingBundle is null
+                    ? null
+                    : capabilityRegistrySha256,
             };
             var leaseBytes = JsonSerializer.SerializeToUtf8Bytes(document);
             if (leaseBytes.Length is <= 0 or > MaximumHancomLeaseBytes)
@@ -344,6 +446,12 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
             DeletePrivateFile(leasePath);
             DeletePrivateFile(approvedInput);
             DeletePrivateFile(partialInput);
+            DeletePrivateFile(operationPlanPath);
+            DeletePrivateFile(partialOperationPlan);
+            DeletePrivateFile(bindingBundlePath);
+            DeletePrivateFile(partialBindingBundle);
+            DeletePrivateFile(bindingPublicKeyPath);
+            DeletePrivateFile(partialBindingPublicKey);
             throw;
         }
     }
@@ -460,6 +568,44 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
         return ValueTask.CompletedTask;
     }
 
+    private static async Task CopyPinnedFileAsync(
+        string sourcePath,
+        string destination,
+        string expectedSha256,
+        int maximumBytes,
+        CancellationToken cancellationToken)
+    {
+        AgentValidation.RequireDigest(expectedSha256);
+        if (!Path.IsPathFullyQualified(sourcePath))
+        {
+            throw new AgentProtocolException(AgentProtocolError.UnsafeHandle);
+        }
+
+        var fullPath = Path.GetFullPath(sourcePath);
+        RejectReparseChain(fullPath);
+        var file = new FileInfo(fullPath);
+        if (!file.Exists || file.Length is <= 0 || file.Length > maximumBytes)
+        {
+            throw new AgentProtocolException(AgentProtocolError.ArtifactMismatch);
+        }
+
+        await using var source = new FileStream(
+            fullPath,
+            FileMode.Open,
+            FileAccess.Read,
+            FileShare.Read,
+            bufferSize: 65_536,
+            FileOptions.Asynchronous | FileOptions.SequentialScan);
+        var expected = new ArtifactRef
+        {
+            ArtifactId = "p10-06-pinned-local",
+            Sha256 = expectedSha256,
+            SizeBytes = checked((ulong)source.Length),
+        };
+        await CopyAndVerifyAsync(source, destination, expected, cancellationToken)
+            .ConfigureAwait(false);
+    }
+
     private static async Task CopyAndVerifyAsync(
         Stream source,
         string destination,
@@ -537,6 +683,21 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
             || (File.GetAttributes(candidate) & FileAttributes.ReparsePoint) != 0)
         {
             throw new AgentProtocolException(AgentProtocolError.UnsafeHandle);
+        }
+    }
+
+    private static void RejectReparseChain(string candidate)
+    {
+        RejectReparse(candidate);
+        var parent = Directory.GetParent(candidate);
+        while (parent is not null)
+        {
+            if ((parent.Attributes & FileAttributes.ReparsePoint) != 0)
+            {
+                throw new AgentProtocolException(AgentProtocolError.UnsafeHandle);
+            }
+
+            parent = parent.Parent;
         }
     }
 
@@ -761,5 +922,37 @@ internal sealed class AgentJobSandbox : IAsyncDisposable
 
         [JsonPropertyName("security_module_sha256")]
         public required string SecurityModuleSha256 { get; init; }
+
+        [JsonPropertyName("operation_plan_sandbox_handle")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? OperationPlanSandboxHandle { get; init; }
+
+        [JsonPropertyName("operation_plan_artifact_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? OperationPlanArtifactId { get; init; }
+
+        [JsonPropertyName("operation_plan_sha256")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? OperationPlanSha256 { get; init; }
+
+        [JsonPropertyName("operation_plan_size_bytes")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public ulong OperationPlanSizeBytes { get; init; }
+
+        [JsonPropertyName("binding_bundle_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? BindingBundleId { get; init; }
+
+        [JsonPropertyName("binding_bundle_sha256")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? BindingBundleSha256 { get; init; }
+
+        [JsonPropertyName("binding_public_key_sha256")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? BindingPublicKeySha256 { get; init; }
+
+        [JsonPropertyName("capability_registry_sha256")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? CapabilityRegistrySha256 { get; init; }
     }
 }

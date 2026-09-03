@@ -45,14 +45,21 @@ internal sealed class HancomSecurityModuleRegistration : IDisposable
 }
 
 public sealed partial class HancomSecurityAdapter
-    : IHancomSessionSecurity, IHancomApprovedDocumentResolver
+    : IHancomSessionSecurity, IHancomApprovedDocumentResolver, IHancomPlanExecutionResolver
 {
     public const string SchemaVersion = "hwpx-agent.p10-05-security-lease/v1";
+    public const string BindingSchemaVersion = "hwpx-agent.p10-06-security-lease/v2";
     public const string FileAccessPolicyId = "file.local_read";
     public const string OpenPolicyId = "open.read_only";
     public const string LeaseFileName = ".hancom-security-lease.json";
     public const string ApprovedInputFileName = "hancom_approved_input.hwpx";
+    public const string OperationPlanFileName = "hancom_operation_plan.json";
+    public const string BindingBundleFileName = "hancom_binding_bundle.json";
+    public const string BindingPublicKeyFileName = "hancom_binding_public_key.pem";
     private const int MaximumLeaseBytes = 8 * 1024;
+    private const int MaximumOperationPlanBytes = 4 * 1024 * 1024;
+    private const int MaximumBindingBundleBytes = 1024 * 1024;
+    private const int MaximumBindingPublicKeyBytes = 8 * 1024;
     private static readonly TimeSpan MaximumLeaseLifetime = TimeSpan.FromMinutes(30);
 
     private readonly HancomSecurityLease lease;
@@ -61,6 +68,7 @@ public sealed partial class HancomSecurityAdapter
     private readonly TimeProvider timeProvider;
     private int securityApplied;
     private int consumed;
+    private int planConsumed;
 
     private HancomSecurityAdapter(
         HancomSecurityLease lease,
@@ -182,7 +190,12 @@ public sealed partial class HancomSecurityAdapter
             || !string.Equals(
                 command.TargetProfile.ProfileId,
                 lease.TargetProfileId,
-                StringComparison.Ordinal))
+                StringComparison.Ordinal)
+            || (string.Equals(lease.SchemaVersionValue, BindingSchemaVersion, StringComparison.Ordinal)
+                && !string.Equals(
+                    command.CapabilityRegistrySha256,
+                    lease.CapabilityRegistrySha256,
+                    StringComparison.Ordinal)))
         {
             throw Fail(HancomLifecycleError.SecurityPolicyMismatch);
         }
@@ -236,6 +249,165 @@ public sealed partial class HancomSecurityAdapter
             candidate,
             lease.InputSha256!,
             checked((long)lease.InputSizeBytes));
+    }
+
+    HancomApprovedPlanExecution IHancomPlanExecutionResolver.Resolve(
+        StaExecutePlanCommand command,
+        StaExecutionContext context)
+    {
+        ArgumentNullException.ThrowIfNull(command);
+        ArgumentNullException.ThrowIfNull(context);
+        context.ThrowIfCancellationRequested();
+        EnsureFresh();
+        if (Volatile.Read(ref securityApplied) != 1)
+        {
+            throw new HancomBindingException(HancomBindingError.BundleInvalid);
+        }
+
+        if (Interlocked.CompareExchange(ref planConsumed, 1, 0) != 0)
+        {
+            throw new HancomBindingException(HancomBindingError.LeaseConsumed);
+        }
+
+        var staged = command.OperationPlan;
+        if (!string.Equals(lease.SchemaVersionValue, BindingSchemaVersion, StringComparison.Ordinal)
+            || staged is null
+            || staged.Artifact is null
+            || !staged.ReadOnly
+            || !string.Equals(
+                staged.SandboxHandle,
+                lease.OperationPlanSandboxHandle,
+                StringComparison.Ordinal)
+            || !string.Equals(
+                staged.Artifact.ArtifactId,
+                lease.OperationPlanArtifactId,
+                StringComparison.Ordinal)
+            || !string.Equals(
+                staged.Artifact.Sha256,
+                lease.OperationPlanSha256,
+                StringComparison.Ordinal)
+            || staged.Artifact.SizeBytes != lease.OperationPlanSizeBytes
+            || !string.Equals(command.BindingBundleId, lease.BindingBundleId, StringComparison.Ordinal)
+            || !string.Equals(
+                command.BindingBundleSha256,
+                lease.BindingBundleSha256,
+                StringComparison.Ordinal))
+        {
+            throw new HancomBindingException(HancomBindingError.BundleInvalid);
+        }
+
+        EnsurePlainSandbox(sandboxRoot, lease.ExecutionId);
+        var guards = new List<FileStream>(3);
+        try
+        {
+            var operationPlan = OpenGuardedBytes(
+                OperationPlanFileName,
+                lease.OperationPlanSha256!,
+                checked((long)lease.OperationPlanSizeBytes),
+                MaximumOperationPlanBytes,
+                guards);
+            var bindingBundle = OpenGuardedBytes(
+                BindingBundleFileName,
+                lease.BindingBundleSha256!,
+                expectedSize: null,
+                MaximumBindingBundleBytes,
+                guards);
+            var publicKey = OpenGuardedBytes(
+                BindingPublicKeyFileName,
+                lease.BindingPublicKeySha256!,
+                expectedSize: null,
+                MaximumBindingPublicKeyBytes,
+                guards);
+            var approved = new HancomApprovedPlanExecution(
+                operationPlan,
+                bindingBundle,
+                publicKey,
+                guards);
+            guards = [];
+            return approved;
+        }
+        catch (HancomBindingException)
+        {
+            throw;
+        }
+        catch (Exception error) when (error is IOException
+            or UnauthorizedAccessException
+            or ArgumentException
+            or NotSupportedException
+            or PathTooLongException
+            or OverflowException)
+        {
+            throw new HancomBindingException(HancomBindingError.BundleInvalid, error);
+        }
+        finally
+        {
+            foreach (var guard in guards)
+            {
+                guard.Dispose();
+            }
+        }
+    }
+
+    private byte[] OpenGuardedBytes(
+        string fileName,
+        string expectedSha256,
+        long? expectedSize,
+        int maximumSize,
+        ICollection<FileStream> guards)
+    {
+        var candidate = Path.GetFullPath(Path.Combine(sandboxRoot, fileName));
+        var prefix = sandboxRoot.TrimEnd(Path.DirectorySeparatorChar)
+            + Path.DirectorySeparatorChar;
+        if (!candidate.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new HancomBindingException(HancomBindingError.BundleInvalid);
+        }
+
+        var file = new FileInfo(candidate);
+        if (!file.Exists
+            || !string.Equals(file.Name, fileName, StringComparison.Ordinal)
+            || (file.Attributes & FileAttributes.ReparsePoint) != 0
+            || (file.Attributes & FileAttributes.ReadOnly) == 0
+            || file.Length is <= 0
+            || file.Length > maximumSize
+            || expectedSize is not null && file.Length != expectedSize)
+        {
+            throw new HancomBindingException(HancomBindingError.BundleInvalid);
+        }
+
+        var guard = new FileStream(
+            candidate,
+            FileMode.Open,
+            FileAccess.Read,
+            FileShare.Read,
+            bufferSize: 64 * 1024,
+            FileOptions.SequentialScan);
+        try
+        {
+            if (guard.Length != file.Length)
+            {
+                throw new HancomBindingException(HancomBindingError.BundleInvalid);
+            }
+
+            var bytes = new byte[checked((int)guard.Length)];
+            guard.ReadExactly(bytes);
+            if (!string.Equals(
+                Convert.ToHexStringLower(SHA256.HashData(bytes)),
+                expectedSha256,
+                StringComparison.Ordinal))
+            {
+                throw new HancomBindingException(HancomBindingError.BundleInvalid);
+            }
+
+            guard.Position = 0;
+            guards.Add(guard);
+            return bytes;
+        }
+        catch
+        {
+            guard.Dispose();
+            throw;
+        }
     }
 
     private void EnsureFresh()
@@ -333,6 +505,30 @@ public sealed partial class HancomSecurityAdapter
         [JsonPropertyName("security_module_sha256")]
         public string? SecurityModuleSha256 { get; init; }
 
+        [JsonPropertyName("operation_plan_sandbox_handle")]
+        public string? OperationPlanSandboxHandle { get; init; }
+
+        [JsonPropertyName("operation_plan_artifact_id")]
+        public string? OperationPlanArtifactId { get; init; }
+
+        [JsonPropertyName("operation_plan_sha256")]
+        public string? OperationPlanSha256 { get; init; }
+
+        [JsonPropertyName("operation_plan_size_bytes")]
+        public ulong OperationPlanSizeBytes { get; init; }
+
+        [JsonPropertyName("binding_bundle_id")]
+        public string? BindingBundleId { get; init; }
+
+        [JsonPropertyName("binding_bundle_sha256")]
+        public string? BindingBundleSha256 { get; init; }
+
+        [JsonPropertyName("binding_public_key_sha256")]
+        public string? BindingPublicKeySha256 { get; init; }
+
+        [JsonPropertyName("capability_registry_sha256")]
+        public string? CapabilityRegistrySha256 { get; init; }
+
         internal void Validate(
             string root,
             string expectedSessionId,
@@ -348,7 +544,12 @@ public sealed partial class HancomSecurityAdapter
                 throw Fail(HancomLifecycleError.SecurityLeaseExpired);
             }
 
-            if (!string.Equals(SchemaVersionValue, SchemaVersion, StringComparison.Ordinal)
+            var baseLease = string.Equals(SchemaVersionValue, SchemaVersion, StringComparison.Ordinal);
+            var bindingLease = string.Equals(
+                SchemaVersionValue,
+                BindingSchemaVersion,
+                StringComparison.Ordinal);
+            if ((!baseLease && !bindingLease)
                 || !Guid.TryParseExact(ExecutionId, "D", out var executionId)
                 || !string.Equals(executionId.ToString("D"), ExecutionId, StringComparison.Ordinal)
                 || !string.Equals(marker, ExecutionId, StringComparison.Ordinal)
@@ -367,6 +568,35 @@ public sealed partial class HancomSecurityAdapter
                 || InputSizeBytes is 0 or > 8 * 1024 * 1024
                 || !ModuleNamePattern().IsMatch(SecurityModuleRegistrationName ?? string.Empty)
                 || !Sha256Pattern().IsMatch(SecurityModuleSha256 ?? string.Empty))
+            {
+                throw Fail(HancomLifecycleError.SecurityLeaseInvalid);
+            }
+
+            if (baseLease)
+            {
+                if (OperationPlanSandboxHandle is not null
+                    || OperationPlanArtifactId is not null
+                    || OperationPlanSha256 is not null
+                    || OperationPlanSizeBytes != 0
+                    || BindingBundleId is not null
+                    || BindingBundleSha256 is not null
+                    || BindingPublicKeySha256 is not null
+                    || CapabilityRegistrySha256 is not null)
+                {
+                    throw Fail(HancomLifecycleError.SecurityLeaseInvalid);
+                }
+
+                return;
+            }
+
+            if (!InputHandlePattern().IsMatch(OperationPlanSandboxHandle ?? string.Empty)
+                || !ArtifactIdPattern().IsMatch(OperationPlanArtifactId ?? string.Empty)
+                || !Sha256Pattern().IsMatch(OperationPlanSha256 ?? string.Empty)
+                || OperationPlanSizeBytes is 0 or > MaximumOperationPlanBytes
+                || !ArtifactIdPattern().IsMatch(BindingBundleId ?? string.Empty)
+                || !Sha256Pattern().IsMatch(BindingBundleSha256 ?? string.Empty)
+                || !Sha256Pattern().IsMatch(BindingPublicKeySha256 ?? string.Empty)
+                || !Sha256Pattern().IsMatch(CapabilityRegistrySha256 ?? string.Empty))
             {
                 throw Fail(HancomLifecycleError.SecurityLeaseInvalid);
             }

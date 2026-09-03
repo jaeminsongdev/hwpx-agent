@@ -27,6 +27,18 @@ internal static partial class AgentValidation
         {
             ValidateHancomSecurityModulePin(configuration.HancomSecurityModule);
         }
+
+        if (configuration.HancomBindingBundle is not null)
+        {
+            if (configuration.HancomSecurityModule is null)
+            {
+                throw new ArgumentException(
+                    "A Hancom binding bundle requires the file-path security module boundary.",
+                    nameof(configuration));
+            }
+
+            ValidateHancomBindingBundlePin(configuration.HancomBindingBundle);
+        }
     }
 
     internal static void ValidateHancomSecurityModulePin(HancomSecurityModulePin module)
@@ -38,6 +50,34 @@ internal static partial class AgentValidation
         }
 
         RequireDigest(module.Sha256);
+    }
+
+    internal static void ValidateHancomBindingBundlePin(HancomBindingBundlePin bundle)
+    {
+        ArgumentNullException.ThrowIfNull(bundle);
+        RequireSemanticId(bundle.BundleId);
+        RequireDigest(bundle.Sha256);
+        RequireDigest(bundle.TrustedPublicKeySha256);
+        var normalizedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var path in new[] { bundle.BundlePath, bundle.TrustedPublicKeyPath })
+        {
+            if (string.IsNullOrWhiteSpace(path)
+                || !Path.IsPathFullyQualified(path)
+                || !LocalDrivePathPattern().IsMatch(path)
+                || path.Length > 1_024)
+            {
+                throw new ArgumentException(
+                    "Hancom binding trust files require bounded absolute local paths.",
+                    nameof(bundle));
+            }
+
+            if (!normalizedPaths.Add(Path.GetFullPath(path)))
+            {
+                throw new ArgumentException(
+                    "The binding envelope and trust key must be distinct files.",
+                    nameof(bundle));
+            }
+        }
     }
 
     internal static void ValidateAssignment(
@@ -386,6 +426,9 @@ internal static partial class AgentValidation
 
     [GeneratedRegex("^[A-Za-z][A-Za-z0-9._-]{2,63}$", RegexOptions.CultureInvariant)]
     private static partial Regex ModuleRegistrationNamePattern();
+
+    [GeneratedRegex("^[A-Za-z]:[\\\\/]", RegexOptions.CultureInvariant)]
+    private static partial Regex LocalDrivePathPattern();
 }
 
 public enum AgentProtocolError

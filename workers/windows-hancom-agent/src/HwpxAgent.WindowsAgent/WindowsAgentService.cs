@@ -273,10 +273,24 @@ public sealed class WindowsAgentService
                     assignment,
                     sandbox,
                     configuration.HancomSecurityModule,
+                    configuration.HancomBindingBundle,
+                    configuration.CapabilityRegistrySha256,
                     timeProvider),
                 cancellationToken)
             .ConfigureAwait(false);
         AgentValidation.ValidateJobResult(result);
+        if (configuration.HancomBindingBundle is not null
+            && (!string.Equals(
+                    result.BindingBundleId,
+                    configuration.HancomBindingBundle.BundleId,
+                    StringComparison.Ordinal)
+                || !string.Equals(
+                    result.BindingBundleSha256,
+                    configuration.HancomBindingBundle.Sha256,
+                    StringComparison.Ordinal)))
+        {
+            throw new AgentProtocolException(AgentProtocolError.PolicyDenied);
+        }
         await VerifySourceArtifactAsync(assignment.Input.Artifact, cancellationToken).ConfigureAwait(false);
         sandbox.ValidateOutputs(result.Artifacts);
 

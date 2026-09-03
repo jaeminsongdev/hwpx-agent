@@ -19,6 +19,7 @@ internal static class Program
     {
         await SuccessfulLeaseReplaysWithoutDuplicateEffectAsync();
         await HancomSecurityLeaseBridgesOpaqueHandleAsync();
+        await HancomBindingLeaseCopiesPinnedPlanBundleAndKeyAsync();
         await ConcurrentDuplicateLeaseIsBusyAsync();
         await StaleLeaseNeverInvokesExecutorAsync();
         await UnfinishedJournalBecomesUnknownWithoutReplayAsync();
@@ -29,7 +30,7 @@ internal static class Program
         await ArtifactUploadIsIdempotentButValidatesEveryStreamAsync();
         await NoWorkAndProfileMismatchFailClosedAsync();
         RejectsUnsafeTransportAndArtifactBoundaries();
-        Console.WriteLine("Windows Agent P10-02/P10-05 staging, security lease, fencing, upload and auth smoke passed (12/12)");
+        Console.WriteLine("Windows Agent P10-02/P10-05/P10-06 staging, security lease, fencing, upload and auth smoke passed (13/13)");
         return 0;
     }
 
@@ -162,6 +163,110 @@ internal static class Program
         var result = await environment.CreateService(client, executor).RunOnceAsync(CancellationToken.None);
         Require(result.Disposition == AgentRunDisposition.Succeeded, "security lease integration did not succeed");
         Require(sandboxPath is not null && !Directory.Exists(sandboxPath), "security lease sandbox was not removed");
+    }
+
+    private static async Task HancomBindingLeaseCopiesPinnedPlanBundleAndKeyAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("hancom-binding");
+        var bundleBytes = Encoding.UTF8.GetBytes("{\"synthetic_bundle\":true}");
+        var publicKeyBytes = Encoding.ASCII.GetBytes(
+            "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\n-----END PUBLIC KEY-----\n");
+        var bundlePath = Path.Combine(environment.Root, "synthetic-binding.json");
+        var publicKeyPath = Path.Combine(environment.Root, "synthetic-binding.pem");
+        await File.WriteAllBytesAsync(bundlePath, bundleBytes);
+        await File.WriteAllBytesAsync(publicKeyPath, publicKeyBytes);
+        var bundleId = "binding.current2020.v1";
+        var bundleSha256 = Sha256(bundleBytes);
+        var configuration = environment.Configuration with
+        {
+            HancomBindingBundle = new HancomBindingBundlePin(
+                bundleId,
+                bundlePath,
+                bundleSha256,
+                publicKeyPath,
+                Sha256(publicKeyBytes)),
+        };
+        var assignment = environment.CreateAssignment(
+            leaseId: "10000000-0000-4000-8000-000000000013",
+            executionId: "20000000-0000-4000-8000-000000000013",
+            fencingToken: 23);
+        string? sandboxPath = null;
+        var invoker = new ScriptedCallInvoker((method, request, headers) =>
+        {
+            RequireAuthorization(headers);
+            return method switch
+            {
+                "AcquireLease" => Assigned(assignment),
+                "Heartbeat" => CurrentHeartbeat(),
+                "CommitExecution" => Commit((AgentCommitRequest)request, []),
+                _ => throw new InvalidOperationException("unexpected RPC"),
+            };
+        });
+        await using var client = AuthenticatedClient(invoker);
+        var executor = new DelegatingExecutor(async (context, cancellationToken) =>
+        {
+            var lease = await context.PrepareHancomWorkerSecurityLeaseAsync(cancellationToken);
+            sandboxPath = Path.GetDirectoryName(lease.SecurityLeasePath)
+                ?? throw new InvalidOperationException("binding lease escaped its sandbox");
+            using var document = JsonDocument.Parse(
+                await File.ReadAllBytesAsync(lease.SecurityLeasePath, cancellationToken));
+            var root = document.RootElement;
+            Require(root.EnumerateObject().Count() == 22, "binding lease field set drifted");
+            Require(
+                root.GetProperty("schema_version").GetString()
+                    == "hwpx-agent.p10-06-security-lease/v2",
+                "binding lease schema drifted");
+            Require(
+                root.GetProperty("operation_plan_sandbox_handle").GetString() == "plan_0001",
+                "operation-plan handle drifted");
+            Require(
+                root.GetProperty("operation_plan_sha256").GetString() == environment.Plan.Sha256,
+                "operation-plan digest drifted");
+            Require(
+                root.GetProperty("binding_bundle_id").GetString() == bundleId
+                    && root.GetProperty("binding_bundle_sha256").GetString() == bundleSha256,
+                "binding identity drifted");
+            Require(
+                root.GetProperty("capability_registry_sha256").GetString()
+                    == configuration.CapabilityRegistrySha256,
+                "capability registry binding drifted");
+
+            foreach (var (name, expected) in new[]
+            {
+                ("hancom_operation_plan.json", PlanBytes),
+                ("hancom_binding_bundle.json", bundleBytes),
+                ("hancom_binding_public_key.pem", publicKeyBytes),
+            })
+            {
+                var copied = Path.Combine(sandboxPath, name);
+                Require(
+                    (File.GetAttributes(copied) & FileAttributes.ReadOnly) != 0,
+                    $"private binding input became mutable: {name}");
+                Require(
+                    (await File.ReadAllBytesAsync(copied, cancellationToken)).AsSpan()
+                        .SequenceEqual(expected),
+                    $"private binding input drifted: {name}");
+            }
+
+            await using var output = context.CreateOutput("output_0001");
+            await output.WriteAsync(OutputBytes, cancellationToken);
+            return new AgentJobResult(
+                ExecutionState.Succeeded,
+                "windows.agent",
+                bundleId,
+                bundleSha256,
+                ValidationState.Passed,
+                [new ProducedArtifact("output_0001", "fixture-output-binding")]);
+        });
+        var service = new WindowsAgentService(
+            configuration,
+            client,
+            environment.Store,
+            executor,
+            environment.Workspace);
+        var result = await service.RunOnceAsync(CancellationToken.None);
+        Require(result.Disposition == AgentRunDisposition.Succeeded, "binding lease integration failed");
+        Require(sandboxPath is not null && !Directory.Exists(sandboxPath), "binding lease sandbox remained");
     }
 
     private static async Task ConcurrentDuplicateLeaseIsBusyAsync()
@@ -554,6 +659,40 @@ internal static class Program
                 TimeSpan.FromSeconds(10)));
         RequireThrows<ArgumentException>(() =>
             _ = new ContentAddressedArtifactStore(Path.GetPathRoot(Path.GetTempPath())!));
+
+        var configuration = new WindowsAgentConfiguration(
+            "30000000-0000-4000-8000-000000000009",
+            new TargetProfileIdentity
+            {
+                ProfileId = "hancom-hangul-2020-secondary",
+                ProductBuild = "11.0.0.9136",
+                Locale = "ko-KR",
+                ProcessArchitecture = "x86",
+                ExecutableSha256 = Digest('a'),
+                EnvironmentDigest = Digest('b'),
+            },
+            Digest('c'),
+            AvailableJobSlots: 1,
+            RpcTimeout: TimeSpan.FromSeconds(10),
+            HancomSecurityModule: new HancomSecurityModulePin("SyntheticModule", Digest('d')));
+        RequireThrows<ArgumentException>(() => AgentValidation.ValidateConfiguration(configuration with
+        {
+            HancomBindingBundle = new HancomBindingBundlePin(
+                "binding.current2020.v1",
+                @"\\server\share\bundle.json",
+                Digest('e'),
+                @"C:\trust\key.pem",
+                Digest('f')),
+        }));
+        RequireThrows<ArgumentException>(() => AgentValidation.ValidateConfiguration(configuration with
+        {
+            HancomBindingBundle = new HancomBindingBundlePin(
+                "binding.current2020.v1",
+                @"C:\trust\same.bin",
+                Digest('e'),
+                @"C:\trust\same.bin",
+                Digest('f')),
+        }));
     }
 
     private static async Task AssertStagedInputAsync(AgentJobContext context, CancellationToken cancellationToken)

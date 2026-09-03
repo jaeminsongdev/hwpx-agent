@@ -20,6 +20,9 @@ $hostProgram = Get-Content -LiteralPath (
 $hostProject = Get-Content -LiteralPath (
     Join-Path $root 'workers\windows-hancom-worker\src\HwpxAgent.WindowsWorker.Host\HwpxAgent.WindowsWorker.Host.csproj'
 ) -Raw
+$protocol = Get-Content -LiteralPath (
+    Join-Path $root 'protocol\proto\hwpx_agent\windows_bridge\v1\windows_bridge.proto'
+) -Raw
 $smoke = Get-Content -LiteralPath (
     Join-Path $root 'workers\windows-hancom-worker\tests\HwpxAgent.WindowsWorker.LifecycleSmoke\Program.cs'
 ) -Raw
@@ -54,12 +57,13 @@ $checks = [ordered]@{
     typed_lifecycle_only = $session -match 'XHwpDocuments' -and
         $session -match '\.Open\(input\.Path, "HWPX"' -and
         $session -match '\.Close\(false\)' -and $session -match 'automation\.Quit\(\)'
-    no_raw_action = ($session + $handler) -notmatch '(?i)HAction|HParameterSet' -and
+    no_public_raw_action_surface = $protocol -notmatch '(?m)^\s*string\s+(action_id|parameter_set_id|item_name)\s*=' -and
         $session -notmatch 'RegisterModule\((?!"FilePathCheckDLL", registrationName\))'
     source_rehashed = $session -match 'InputChanged' -and
         $session -match 'ValidateIntegrity\(HancomLifecycleError\.InputChanged\)'
     handler_typed_commands = $handler -match 'StartSession' -and
-        $handler -match 'OpenDocument' -and $handler -match 'CloseSession'
+        $handler -match 'OpenDocument' -and $handler -match 'ExecutePlan' -and
+        $handler -match 'CloseSession'
     open_requires_resolver = $handler -match 'p10-05-path-approval-required'
     server_finally_cleanup = $server -match 'IStaCommandHandlerCleanup cleanup' -and
         $server -match 'WaitAsync\(TimeSpan\.FromSeconds\(10\)\)'

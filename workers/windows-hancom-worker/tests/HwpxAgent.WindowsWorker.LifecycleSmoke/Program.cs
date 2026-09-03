@@ -11,6 +11,7 @@ internal static class Program
     private const string TraceId = "90000000-0000-4000-8000-000000000002";
     private const ulong Fence = 41;
     private const string ExecutableSha256 = "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce";
+    private static string actualStage = "component";
 
     [STAThread]
     public static async Task<int> Main(string[] args)
@@ -33,9 +34,13 @@ internal static class Program
             Console.WriteLine("Windows HancomSession P10-04 lifecycle and cleanup smoke passed (8/8)");
             return 0;
         }
-        catch (Exception)
+        catch (Exception error)
         {
-            Console.Error.WriteLine("HANCOM_LIFECYCLE_SMOKE_FAILED");
+            var errorCode = error is HancomLifecycleException lifecycle
+                ? lifecycle.Error.ToString()
+                : "none";
+            Console.Error.WriteLine(
+                $"HANCOM_LIFECYCLE_SMOKE_FAILED stage={Volatile.Read(ref actualStage)} type={error.GetType().Name} code={errorCode}");
             return 2;
         }
     }
@@ -233,7 +238,9 @@ internal static class Program
 
     private static async Task<int> RunActualAsync(string[] args)
     {
+        Volatile.Write(ref actualStage, "parse-arguments");
         var parsed = ParseActualArguments(args);
+        Volatile.Write(ref actualStage, "validate-input");
         var input = new HancomApprovedDocument(
             parsed["--input"],
             parsed["--sha256"],
@@ -244,26 +251,38 @@ internal static class Program
             return 2;
         }
 
+        Volatile.Write(ref actualStage, "create-sta-loop");
         await using var loop = new StaMessageLoop("p10-04-actual");
+        Volatile.Write(ref actualStage, "invoke-sta-loop");
         await loop.InvokeAsync(
             context =>
             {
+                Volatile.Write(ref actualStage, "create-session-1");
                 var session = new HancomSession();
+                Volatile.Write(ref actualStage, "start-session-1");
                 session.Start(Profile(), context);
+                Volatile.Write(ref actualStage, "open-input");
                 session.Open(input, context);
+                Volatile.Write(ref actualStage, "close-input");
                 session.CloseDocument(context);
+                Volatile.Write(ref actualStage, "shutdown-session-1");
                 session.Shutdown(context);
                 for (var index = 0; index < 2; index++)
                 {
+                    Volatile.Write(ref actualStage, $"create-session-{index + 2}");
                     var repeated = new HancomSession();
+                    Volatile.Write(ref actualStage, $"start-session-{index + 2}");
                     repeated.Start(Profile(), context);
+                    Volatile.Write(ref actualStage, $"shutdown-session-{index + 2}");
                     repeated.Shutdown(context);
                 }
 
                 return true;
             },
             CancellationToken.None);
+        Volatile.Write(ref actualStage, "post-run-delay");
         await Task.Delay(500);
+        Volatile.Write(ref actualStage, "post-run-input-integrity");
         input.ValidateIntegrity();
         if (ProcessCount() != 0)
         {
@@ -500,6 +519,8 @@ internal static class Program
 
                 return new FakeDocument(owner);
             }
+
+            public bool ExecuteAction(HancomBoundAction invocation) => true;
 
             public void Quit()
             {

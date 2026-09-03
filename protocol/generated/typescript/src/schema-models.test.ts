@@ -8,8 +8,18 @@ import {
 } from "./schema-models.js";
 
 test("generated schema catalog is sorted and complete", () => {
-    assert.equal(schemaIds.length, 5);
+    assert.equal(schemaIds.length, 7);
     assert.deepEqual(schemaIds, [...schemaIds].sort());
+    assert.ok(
+        schemaIds.includes(
+            "https://hwpx-agent.local/schemas/windows/hancom-binding-bundle-v1.schema.json",
+        ),
+    );
+    assert.ok(
+        schemaIds.includes(
+            "https://hwpx-agent.local/schemas/windows/hancom-signed-binding-envelope-v1.schema.json",
+        ),
+    );
 });
 
 test("generated automation binding registry keeps target and coverage", () => {

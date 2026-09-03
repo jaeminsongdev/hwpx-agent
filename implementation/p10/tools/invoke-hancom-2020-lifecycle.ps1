@@ -200,6 +200,19 @@ try {
 catch { $outputDrained = $false }
 $stdout = if ($outputDrained) { $stdoutTask.GetAwaiter().GetResult().Trim() } else { '' }
 $stderr = if ($outputDrained) { $stderrTask.GetAwaiter().GetResult().Trim() } else { '' }
+$safeFailureStage = $null
+$safeExceptionType = $null
+$safeErrorCode = $null
+$failureMatch = [regex]::Match(
+    $stderr,
+    '^HANCOM_LIFECYCLE_SMOKE_FAILED stage=(?<stage>[a-z0-9-]+) type=(?<type>[A-Za-z][A-Za-z0-9.]*) code=(?<code>[A-Za-z][A-Za-z0-9]*)$',
+    [System.Text.RegularExpressions.RegexOptions]::CultureInvariant
+)
+if ($failureMatch.Success) {
+    $safeFailureStage = $failureMatch.Groups['stage'].Value
+    $safeExceptionType = $failureMatch.Groups['type'].Value
+    $safeErrorCode = $failureMatch.Groups['code'].Value
+}
 
 Start-Sleep -Milliseconds 500
 $cleanup = Stop-OwnedHancomProcesses `
@@ -239,6 +252,9 @@ $result = [ordered]@{
     output_drained = $outputDrained
     exact_safe_stdout = $stdout -ceq 'HANCOM_LIFECYCLE_PASS cycles=3 input_unchanged=true remaining=0'
     stderr_empty = [string]::IsNullOrEmpty($stderr)
+    safe_failure_stage = $safeFailureStage
+    safe_exception_type = $safeExceptionType
+    safe_error_code = $safeErrorCode
     cleaned_process_count = [int]$cleanup.cleaned
     cleanup_refused_count = [int]$cleanup.refused
     cleanup_error_count = [int]$cleanup.errors

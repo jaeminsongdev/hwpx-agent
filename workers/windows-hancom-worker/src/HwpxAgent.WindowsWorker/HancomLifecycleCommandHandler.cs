@@ -18,14 +18,20 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
     private readonly Func<HancomSession> sessionFactory;
     private readonly IHancomApprovedDocumentResolver? documentResolver;
     private readonly IHancomSessionSecurity? sessionSecurity;
+    private readonly IHancomPlanExecutionResolver? planExecutionResolver;
+    private readonly HancomBindingExecutor bindingExecutor;
     private readonly TimeProvider timeProvider;
     private HancomSession? session;
+    private HancomTargetProfile? targetProfile;
+    private string? capabilityRegistrySha256;
 
     public HancomLifecycleCommandHandler()
         : this(
             () => new HancomSession(),
             documentResolver: null,
             sessionSecurity: null,
+            planExecutionResolver: null,
+            new HancomBindingExecutor(),
             TimeProvider.System)
     {
     }
@@ -35,6 +41,8 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
             () => new HancomSession(),
             securityAdapter,
             securityAdapter,
+            securityAdapter,
+            new HancomBindingExecutor(),
             TimeProvider.System)
     {
         ArgumentNullException.ThrowIfNull(securityAdapter);
@@ -44,7 +52,13 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
         Func<HancomSession> sessionFactory,
         IHancomApprovedDocumentResolver? documentResolver,
         TimeProvider timeProvider)
-        : this(sessionFactory, documentResolver, sessionSecurity: null, timeProvider)
+        : this(
+            sessionFactory,
+            documentResolver,
+            sessionSecurity: null,
+            planExecutionResolver: null,
+            new HancomBindingExecutor(),
+            timeProvider)
     {
     }
 
@@ -53,10 +67,29 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
         IHancomApprovedDocumentResolver? documentResolver,
         IHancomSessionSecurity? sessionSecurity,
         TimeProvider timeProvider)
+        : this(
+            sessionFactory,
+            documentResolver,
+            sessionSecurity,
+            planExecutionResolver: null,
+            new HancomBindingExecutor(),
+            timeProvider)
+    {
+    }
+
+    internal HancomLifecycleCommandHandler(
+        Func<HancomSession> sessionFactory,
+        IHancomApprovedDocumentResolver? documentResolver,
+        IHancomSessionSecurity? sessionSecurity,
+        IHancomPlanExecutionResolver? planExecutionResolver,
+        HancomBindingExecutor bindingExecutor,
+        TimeProvider timeProvider)
     {
         this.sessionFactory = sessionFactory ?? throw new ArgumentNullException(nameof(sessionFactory));
         this.documentResolver = documentResolver;
         this.sessionSecurity = sessionSecurity;
+        this.planExecutionResolver = planExecutionResolver;
+        this.bindingExecutor = bindingExecutor ?? throw new ArgumentNullException(nameof(bindingExecutor));
         this.timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
     }
 
@@ -68,6 +101,7 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
         {
             StaCommandEnvelope.CommandOneofCase.StartSession => Start(command, context),
             StaCommandEnvelope.CommandOneofCase.OpenDocument => Open(command, context),
+            StaCommandEnvelope.CommandOneofCase.ExecutePlan => ExecutePlan(command, context),
             StaCommandEnvelope.CommandOneofCase.CloseSession => Close(command, context),
             _ => StaWorkerServer.CreateFailureReceipt(
                 command,
@@ -91,6 +125,8 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
         {
             current.Shutdown(context);
             session = null;
+            targetProfile = null;
+            capabilityRegistrySha256 = null;
         }
         catch
         {
@@ -113,6 +149,8 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
             var profile = HancomTargetProfile.From(command.StartSession.TargetProfile);
             created.Start(profile, context);
             sessionSecurity?.Apply(command.StartSession, created, context);
+            targetProfile = profile;
+            capabilityRegistrySha256 = command.StartSession.CapabilityRegistrySha256;
             return Success(command, StaEventType.SessionStarted, "hancom-session-started");
         }
         catch (HancomLifecycleException error)
@@ -126,6 +164,8 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
                 }
 
                 session = null;
+                targetProfile = null;
+                capabilityRegistrySha256 = null;
             }
             catch
             {
@@ -136,6 +176,60 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
                 command,
                 error.Error,
                 cleanupRequired);
+        }
+    }
+
+    private StaCommandReceipt ExecutePlan(StaCommandEnvelope command, StaExecutionContext context)
+    {
+        if (session is null || targetProfile is null || capabilityRegistrySha256 is null)
+        {
+            return Failure(command, HancomLifecycleError.InvalidState, cleanupRequired: false);
+        }
+
+        if (planExecutionResolver is null)
+        {
+            return StaWorkerServer.CreateFailureReceipt(
+                command,
+                ExecutionState.Failed,
+                BridgeErrorCode.PolicyDenied,
+                "p10-06-binding-approval-required",
+                effectUnknown: false,
+                cleanupRequired: false);
+        }
+
+        try
+        {
+            using var approved = planExecutionResolver.Resolve(command.ExecutePlan, context);
+            var result = bindingExecutor.Execute(
+                command.ExecutePlan,
+                approved,
+                session,
+                targetProfile,
+                capabilityRegistrySha256,
+                context);
+            return StaWorkerServer.CreateSuccessReceipt(
+                command,
+                [
+                    new StaEventRecord
+                    {
+                        Sequence = 1,
+                        EventType = StaEventType.PlanExecuted,
+                        RecordedAtUnixMs = (ulong)timeProvider.GetUtcNow().ToUnixTimeMilliseconds(),
+                        SafeMetadataSha256 = StaWorkerServer.Sha256(
+                            $"hancom-plan-executed:{result.OperationCount}:{result.PlanSha256}:{result.BundleSha256}"),
+                    },
+                ]);
+        }
+        catch (HancomBindingException error)
+        {
+            return BindingFailure(
+                command,
+                error,
+                cleanupRequired: error.EffectUnknown || session.State == HancomSessionState.Faulted);
+        }
+        catch (HancomLifecycleException error)
+        {
+            return Failure(command, error.Error, cleanupRequired: false);
         }
     }
 
@@ -189,12 +283,40 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
         {
             session.Shutdown(context);
             session = null;
+            targetProfile = null;
+            capabilityRegistrySha256 = null;
             return Success(command, StaEventType.CleanupCompleted, "hancom-session-closed");
         }
         catch (HancomLifecycleException error)
         {
             return Failure(command, error.Error, cleanupRequired: true);
         }
+    }
+
+    private static StaCommandReceipt BindingFailure(
+        StaCommandEnvelope command,
+        HancomBindingException error,
+        bool cleanupRequired)
+    {
+        var uncertain = error.EffectUnknown || cleanupRequired;
+        var code = error.Error switch
+        {
+            HancomBindingError.TargetMismatch => BridgeErrorCode.ProfileMismatch,
+            HancomBindingError.PlanInvalid => BridgeErrorCode.ArtifactMismatch,
+            HancomBindingError.BundleInvalid or HancomBindingError.SignatureInvalid or
+                HancomBindingError.LeaseConsumed => BridgeErrorCode.PolicyDenied,
+            HancomBindingError.UnknownBinding or HancomBindingError.ArgumentInvalid =>
+                BridgeErrorCode.UnknownBinding,
+            HancomBindingError.ActionFailed => BridgeErrorCode.ComFailure,
+            _ => BridgeErrorCode.UnknownOutcome,
+        };
+        return StaWorkerServer.CreateFailureReceipt(
+            command,
+            uncertain ? ExecutionState.UnknownOutcome : ExecutionState.Failed,
+            code,
+            $"hancom-binding-{error.Error.ToString().ToLowerInvariant()}",
+            effectUnknown: uncertain,
+            cleanupRequired: uncertain);
     }
 
     private StaCommandReceipt Success(

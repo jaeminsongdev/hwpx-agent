@@ -32,9 +32,17 @@ public sealed record WindowsAgentConfiguration(
     string CapabilityRegistrySha256,
     uint AvailableJobSlots,
     TimeSpan RpcTimeout,
-    HancomSecurityModulePin? HancomSecurityModule = null);
+    HancomSecurityModulePin? HancomSecurityModule = null,
+    HancomBindingBundlePin? HancomBindingBundle = null);
 
 public sealed record HancomSecurityModulePin(string RegistrationName, string Sha256);
+
+public sealed record HancomBindingBundlePin(
+    string BundleId,
+    string BundlePath,
+    string Sha256,
+    string TrustedPublicKeyPath,
+    string TrustedPublicKeySha256);
 
 public sealed record HancomWorkerSecurityLease(
     string SessionId,

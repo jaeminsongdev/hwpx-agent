@@ -24,6 +24,7 @@ const GENERATED_FILES: &[&str] = &[
     "typescript/schema-catalog.json",
     "typescript/schema-catalog-v2.json",
     "typescript/schema-catalog-v3.json",
+    "typescript/schema-catalog-v4.json",
 ];
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -309,6 +310,12 @@ fn generate_schema_models(root: &Path, output: &Path) -> Result<(), Box<dyn std:
     )?;
     let additive_catalog_v3 = schemas
         .iter()
+        .filter(|(_, _, schema, _)| {
+            schema
+                .get("x-catalog-version")
+                .and_then(Value::as_u64)
+                .is_none_or(|version| version <= 3)
+        })
         .map(|(id, title, _, sha256)| {
             serde_json::json!({ "id": id, "title": title, "sha256": sha256 })
         })
@@ -316,6 +323,16 @@ fn generate_schema_models(root: &Path, output: &Path) -> Result<(), Box<dyn std:
     write_schema_catalog(
         &output.join("typescript/schema-catalog-v3.json"),
         &additive_catalog_v3,
+    )?;
+    let additive_catalog_v4 = schemas
+        .iter()
+        .map(|(id, title, _, sha256)| {
+            serde_json::json!({ "id": id, "title": title, "sha256": sha256 })
+        })
+        .collect::<Vec<_>>();
+    write_schema_catalog(
+        &output.join("typescript/schema-catalog-v4.json"),
+        &additive_catalog_v4,
     )?;
     Ok(())
 }

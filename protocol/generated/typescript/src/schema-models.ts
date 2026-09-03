@@ -6,6 +6,8 @@ export const schemaIds = [
   "https://hwpx-agent.local/schemas/foundation/fixture-manifest-v1.schema.json",
   "https://hwpx-agent.local/schemas/foundation/log-event-v1.schema.json",
   "https://hwpx-agent.local/schemas/foundation/workspace-policy-v1.schema.json",
+  "https://hwpx-agent.local/schemas/windows/hancom-binding-bundle-v1.schema.json",
+  "https://hwpx-agent.local/schemas/windows/hancom-signed-binding-envelope-v1.schema.json",
 ] as const;
 
 export interface AutomationBindingRegistryV1 {
@@ -60,4 +62,25 @@ export interface WorkspacePolicyV1 {
   areas: Array<"staging" | "quarantine" | "output">;
   max_artifact_bytes: number;
   schema_version: "hwpx-agent.workspace-policy/v1";
+}
+
+export interface HancomBindingBundleV1 {
+  authorization: unknown;
+  bindings: Array<unknown>;
+  bundle_id: unknown;
+  capability_registry_sha256: unknown;
+  schema_version: "hwpx-agent.p10-06-binding-bundle/v1";
+  sequence: number;
+  source_registry_sha256: unknown;
+  target: unknown;
+}
+
+export interface HancomSignedBindingEnvelopeV1 {
+  algorithm: "Ed25519";
+  key_id: string;
+  payload_base64: string;
+  payload_sha256: unknown;
+  public_key_sha256: unknown;
+  schema_version: "hwpx-agent.p10-06-signed-binding-envelope/v1";
+  signature_base64: string;
 }
