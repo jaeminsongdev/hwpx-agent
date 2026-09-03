@@ -1,0 +1,53 @@
+{
+  "schema_version": "hwpx-agent.p10-08-worker-isolation-policy/v1",
+  "policy_id": "isolation.current_pc_local_v1",
+  "scope": "current_pc_interactive_development",
+  "target": {
+    "profile_id": "hancom-hangul-2020-secondary",
+    "product_build": "11.0.0.9136",
+    "locale": "ko-KR",
+    "process_architecture": "x86",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    "host_baseline_sha256": "7fbf6559fc3372b9da6c0b0ca53d9f4eb78b76a79df248c37ff009c13376adc0",
+    "host_isolation_identity_sha256": "ce988cc6f36855ba8e6353b2ab7582732f4678e78178f10fd938a82459cc5d9a",
+    "capability_registry_sha256": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306"
+  },
+  "worker_image": {
+    "classification": "mutable_current_development_pc",
+    "immutable_image_claimed": false,
+    "clean_image_claimed": false,
+    "production_isolation_qualified": false,
+    "release_routable": false
+  },
+  "required_current_scope_controls": {
+    "exact_host_baseline": true,
+    "interactive_nonzero_session": true,
+    "single_active_job": true,
+    "empty_marked_job_workspace_before_after": true,
+    "zero_hancom_processes_before_after": true,
+    "source_read_only_staging": true,
+    "separate_no_overwrite_output": true,
+    "external_network_request_denied": true,
+    "clipboard_request_denied": true,
+    "macro_execution_denied": true,
+    "ole_activation_denied": true,
+    "raw_identity_persisted": false,
+    "user_document_scan_allowed": false
+  },
+  "unqualified_dedicated_controls": {
+    "dedicated_job_identity_and_profile": false,
+    "private_window_station": false,
+    "os_network_default_deny": false,
+    "clipboard_isolated": false,
+    "profile_recent_files_residue_audited": false,
+    "recovery_residue_audited": false,
+    "printer_spool_residue_audited": false
+  },
+  "dedicated_worker_admission": {
+    "independent_manifest_required": true,
+    "all_unqualified_controls_must_be_true": true,
+    "current_policy_must_not_be_promoted": true,
+    "another_host_requires_independent_evidence": true,
+    "another_hancom_version_requires_independent_evidence": true
+  }
+}

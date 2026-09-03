@@ -23,6 +23,14 @@ internal static partial class AgentValidation
             throw new ArgumentException("Agent capacity and RPC timeout must be bounded.", nameof(configuration));
         }
 
+        ValidateWorkerIsolationPolicy(configuration.WorkerIsolation, configuration.TargetProfile);
+        if (configuration.AvailableJobSlots != 1)
+        {
+            throw new ArgumentException(
+                "The current isolation boundary permits exactly one active Hancom job per Agent.",
+                nameof(configuration));
+        }
+
         if (configuration.HancomSecurityModule is not null)
         {
             ValidateHancomSecurityModulePin(configuration.HancomSecurityModule);
@@ -77,6 +85,37 @@ internal static partial class AgentValidation
                     "The binding envelope and trust key must be distinct files.",
                     nameof(bundle));
             }
+        }
+    }
+
+    internal static void ValidateWorkerIsolationPolicy(
+        WorkerIsolationPolicyPin policy,
+        TargetProfileIdentity target)
+    {
+        ArgumentNullException.ThrowIfNull(policy);
+        RequireSemanticId(policy.PolicyId);
+        RequireDigest(policy.HostBaselineSha256);
+        RequireDigest(policy.HostIsolationIdentitySha256);
+        RequireDigest(policy.WorkerImageManifestSha256);
+        if (policy.Scope is not (
+                WorkerIsolationScope.CurrentPcInteractiveDevelopment
+                or WorkerIsolationScope.DedicatedWorkerImage)
+            || !string.Equals(policy.TargetProfileId, target.ProfileId, StringComparison.Ordinal)
+            || !string.Equals(policy.HostBaselineSha256, target.EnvironmentDigest, StringComparison.Ordinal))
+        {
+            throw new ArgumentException(
+                "The worker isolation policy must bind the exact target and host baseline.",
+                nameof(policy));
+        }
+
+        if ((policy.Scope == WorkerIsolationScope.CurrentPcInteractiveDevelopment
+                && policy.ProductionIsolationQualified)
+            || (policy.Scope == WorkerIsolationScope.DedicatedWorkerImage
+                && !policy.ProductionIsolationQualified))
+        {
+            throw new ArgumentException(
+                "The worker isolation scope cannot overclaim or underclaim production isolation.",
+                nameof(policy));
         }
     }
 
@@ -449,6 +488,8 @@ public enum AgentProtocolError
     JournalConflict,
     ArtifactMismatch,
     OutputLimit,
+    IsolationNotReady,
+    CleanupResidue,
 }
 
 public sealed class AgentProtocolException : Exception

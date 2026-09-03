@@ -53,6 +53,10 @@ Windows Hancom Automation Bridge를 문서상 계획이 아니라 **재현 가�
 - [ ] source artifact를 in-place로 수정한 경로가 없다.
 - [ ] phase handoff에 실패 fixture와 다음 exact task가 기록됐다.
 
+현재-PC 개발용 P10-08 core와 실제 감사는 완료됐지만, 실제 감사에서 OS outbound deny,
+전용 identity/profile/window station, clipboard 격리와 profile/recovery/printer residue 감사가
+미충족으로 확인됐다. 따라서 위 P10-08 hard-gate checkbox는 전용 환경 증거 전까지 열어 둔다.
+
 ## 금지
 
 - hard gate를 “나중에 테스트”로 넘기지 않는다.

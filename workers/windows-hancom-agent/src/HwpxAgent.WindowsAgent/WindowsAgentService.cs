@@ -15,7 +15,9 @@ public sealed class WindowsAgentService
     private readonly IArtifactStore artifactStore;
     private readonly IAgentJobExecutor executor;
     private readonly AgentWorkspace workspace;
+    private readonly WorkerIsolationGuard isolationGuard;
     private readonly TimeProvider timeProvider;
+    private int activeRun;
 
     public WindowsAgentService(
         WindowsAgentConfiguration configuration,
@@ -23,6 +25,7 @@ public sealed class WindowsAgentService
         IArtifactStore artifactStore,
         IAgentJobExecutor executor,
         AgentWorkspace workspace,
+        IWorkerIsolationAttestor isolationAttestor,
         TimeProvider? timeProvider = null)
     {
         AgentValidation.ValidateConfiguration(configuration);
@@ -31,11 +34,34 @@ public sealed class WindowsAgentService
         this.artifactStore = artifactStore ?? throw new ArgumentNullException(nameof(artifactStore));
         this.executor = executor ?? throw new ArgumentNullException(nameof(executor));
         this.workspace = workspace ?? throw new ArgumentNullException(nameof(workspace));
+        isolationGuard = new WorkerIsolationGuard(configuration, workspace, isolationAttestor);
         this.timeProvider = timeProvider ?? TimeProvider.System;
     }
 
     public async Task<AgentRunResult> RunOnceAsync(CancellationToken cancellationToken)
     {
+        if (Interlocked.CompareExchange(ref activeRun, 1, 0) != 0)
+        {
+            return new AgentRunResult(
+                AgentRunDisposition.Busy,
+                ExecutionState.Accepted,
+                ExecutorInvoked: false,
+                CommitAttempted: false);
+        }
+
+        try
+        {
+            return await RunOnceCoreAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            Volatile.Write(ref activeRun, 0);
+        }
+    }
+
+    private async Task<AgentRunResult> RunOnceCoreAsync(CancellationToken cancellationToken)
+    {
+        var isolationBefore = isolationGuard.VerifyBeforeLease();
         var leaseResponse = await controlClient
             .AcquireLeaseAsync(CreateLeaseRequest(), cancellationToken)
             .ConfigureAwait(false);
@@ -47,6 +73,8 @@ public sealed class WindowsAgentService
             {
                 throw new AgentProtocolException(AgentProtocolError.InvalidState);
             }
+
+            isolationGuard.VerifyAfterJob(isolationBefore);
 
             return new AgentRunResult(
                 AgentRunDisposition.NoWork,
@@ -148,6 +176,21 @@ public sealed class WindowsAgentService
                 executorInvoked ? ExecutionState.UnknownOutcome : ExecutionState.Failed,
                 BridgeErrorCode.UnknownOutcome,
                 "agent-unclassified-failure",
+                effectUnknown: executorInvoked);
+        }
+
+        try
+        {
+            isolationGuard.VerifyAfterJob(isolationBefore);
+        }
+        catch (AgentProtocolException error) when (error.Error is (
+            AgentProtocolError.IsolationNotReady or AgentProtocolError.CleanupResidue))
+        {
+            terminalReceipt = CreateFailureReceipt(
+                assignment,
+                executorInvoked ? ExecutionState.UnknownOutcome : ExecutionState.Failed,
+                BridgeErrorCode.CleanupFailed,
+                "worker-isolation-post-job-residue",
                 effectUnknown: executorInvoked);
         }
 
@@ -521,6 +564,8 @@ public sealed class WindowsAgentService
         AgentProtocolError.PolicyDenied => BridgeErrorCode.PolicyDenied,
         AgentProtocolError.OutputLimit => BridgeErrorCode.OutputRejected,
         AgentProtocolError.JournalConflict => BridgeErrorCode.UnknownOutcome,
+        AgentProtocolError.IsolationNotReady => BridgeErrorCode.PolicyDenied,
+        AgentProtocolError.CleanupResidue => BridgeErrorCode.CleanupFailed,
         _ => BridgeErrorCode.InvalidEnvelope,
     };
 

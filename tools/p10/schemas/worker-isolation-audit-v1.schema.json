@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/worker-isolation-audit-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at_utc",
+    "state",
+    "policy_relative_path",
+    "policy_sha256",
+    "host_baseline_verification",
+    "live_observation",
+    "firewall_observation",
+    "scope",
+    "privacy"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.p10-08-worker-isolation-audit/v1" },
+    "generated_at_utc": { "type": "string", "format": "date-time" },
+    "state": { "const": "pass_current_pc_development_only" },
+    "policy_relative_path": {
+      "const": "implementation/p10/isolation/p10-current-pc-local-worker-policy.json"
+    },
+    "policy_sha256": { "$ref": "#/$defs/sha256" },
+    "host_baseline_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "baseline_digest_sha256", "verification_sha256"],
+      "properties": {
+        "state": { "const": "pass" },
+        "baseline_digest_sha256": { "$ref": "#/$defs/sha256" },
+        "verification_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "live_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "state",
+        "policy_id",
+        "policy_manifest_sha256",
+        "target_profile_id",
+        "host_baseline_sha256",
+        "probe_complete",
+        "windows_host",
+        "interactive_session",
+        "session_id",
+        "identity_sha256",
+        "window_station_sha256",
+        "desktop_sha256",
+        "profile_root_sha256",
+        "temp_root_sha256",
+        "host_isolation_identity_sha256",
+        "private_job_workspace",
+        "target_process_count",
+        "raw_identity_stored",
+        "dedicated_identity_and_profile",
+        "private_window_station",
+        "os_network_default_deny",
+        "clipboard_isolated",
+        "profile_residue_clean",
+        "recovery_residue_clean",
+        "printer_residue_clean",
+        "production_isolation_qualified",
+        "raw_document_text_present",
+        "user_document_scanned"
+      ],
+      "properties": {
+        "schema_version": { "const": "hwpx-agent.p10-08-current-host-live-observation/v1" },
+        "state": { "const": "pass_current_pc_development_only" },
+        "policy_id": { "const": "isolation.current_pc_local_v1" },
+        "policy_manifest_sha256": { "$ref": "#/$defs/sha256" },
+        "target_profile_id": { "const": "hancom-hangul-2020-secondary" },
+        "host_baseline_sha256": { "$ref": "#/$defs/sha256" },
+        "probe_complete": { "const": true },
+        "windows_host": { "const": true },
+        "interactive_session": { "const": true },
+        "session_id": { "type": "integer", "minimum": 1 },
+        "identity_sha256": { "$ref": "#/$defs/sha256" },
+        "window_station_sha256": { "$ref": "#/$defs/sha256" },
+        "desktop_sha256": { "$ref": "#/$defs/sha256" },
+        "profile_root_sha256": { "$ref": "#/$defs/sha256" },
+        "temp_root_sha256": { "$ref": "#/$defs/sha256" },
+        "host_isolation_identity_sha256": { "$ref": "#/$defs/sha256" },
+        "private_job_workspace": { "const": true },
+        "target_process_count": { "const": 0 },
+        "raw_identity_stored": { "const": false },
+        "dedicated_identity_and_profile": { "const": false },
+        "private_window_station": { "const": false },
+        "os_network_default_deny": { "const": false },
+        "clipboard_isolated": { "const": false },
+        "profile_residue_clean": { "const": false },
+        "recovery_residue_clean": { "const": false },
+        "printer_residue_clean": { "const": false },
+        "production_isolation_qualified": { "const": false },
+        "raw_document_text_present": { "const": false },
+        "user_document_scanned": { "const": false }
+      }
+    },
+    "firewall_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["probe_complete", "profile_count", "all_default_outbound_block", "state_sha256"],
+      "properties": {
+        "probe_complete": { "const": true },
+        "profile_count": { "type": "integer", "minimum": 1, "maximum": 16 },
+        "all_default_outbound_block": { "type": "boolean" },
+        "state_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "current_pc_local_development_qualified",
+        "production_or_provider_qualified",
+        "dedicated_worker_image_qualified",
+        "profile_wide_residue_scan_performed",
+        "clipboard_content_read",
+        "system_setting_changed"
+      ],
+      "properties": {
+        "current_pc_local_development_qualified": { "const": true },
+        "production_or_provider_qualified": { "const": false },
+        "dedicated_worker_image_qualified": { "const": false },
+        "profile_wide_residue_scan_performed": { "const": false },
+        "clipboard_content_read": { "const": false },
+        "system_setting_changed": { "const": false }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw_user_identity_present",
+        "raw_path_present",
+        "raw_document_text_present",
+        "user_document_scanned"
+      ],
+      "properties": {
+        "raw_user_identity_present": { "const": false },
+        "raw_path_present": { "const": false },
+        "raw_document_text_present": { "const": false },
+        "user_document_scanned": { "const": false }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

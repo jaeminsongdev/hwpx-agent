@@ -32,8 +32,55 @@ public sealed record WindowsAgentConfiguration(
     string CapabilityRegistrySha256,
     uint AvailableJobSlots,
     TimeSpan RpcTimeout,
+    WorkerIsolationPolicyPin WorkerIsolation,
     HancomSecurityModulePin? HancomSecurityModule = null,
     HancomBindingBundlePin? HancomBindingBundle = null);
+
+public enum WorkerIsolationScope
+{
+    CurrentPcInteractiveDevelopment = 1,
+    DedicatedWorkerImage = 2,
+}
+
+public sealed record WorkerIsolationPolicyPin(
+    string PolicyId,
+    WorkerIsolationScope Scope,
+    string TargetProfileId,
+    string HostBaselineSha256,
+    string HostIsolationIdentitySha256,
+    string WorkerImageManifestSha256,
+    bool ProductionIsolationQualified);
+
+public sealed record WorkerIsolationObservation(
+    string PolicyId,
+    string TargetProfileId,
+    string HostBaselineSha256,
+    string WorkerImageManifestSha256,
+    bool ProbeComplete,
+    bool WindowsHost,
+    bool InteractiveSession,
+    uint SessionId,
+    string IdentitySha256,
+    string WindowStationSha256,
+    string DesktopSha256,
+    string ProfileRootSha256,
+    string TempRootSha256,
+    string HostIsolationIdentitySha256,
+    bool PrivateJobWorkspace,
+    bool DedicatedIdentityAndProfile,
+    bool PrivateWindowStation,
+    bool OsNetworkDefaultDeny,
+    bool ClipboardIsolated,
+    bool ProfileResidueClean,
+    bool RecoveryResidueClean,
+    bool PrinterResidueClean,
+    uint TargetProcessCount,
+    bool RawIdentityStored);
+
+public interface IWorkerIsolationAttestor
+{
+    WorkerIsolationObservation Observe(string workspaceRoot);
+}
 
 public sealed record HancomSecurityModulePin(string RegistrationName, string Sha256);
 

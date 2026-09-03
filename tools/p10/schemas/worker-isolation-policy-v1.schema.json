@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/worker-isolation-policy-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_id",
+    "scope",
+    "target",
+    "worker_image",
+    "required_current_scope_controls",
+    "unqualified_dedicated_controls",
+    "dedicated_worker_admission"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.p10-08-worker-isolation-policy/v1" },
+    "policy_id": { "const": "isolation.current_pc_local_v1" },
+    "scope": { "const": "current_pc_interactive_development" },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "product_build",
+        "locale",
+        "process_architecture",
+        "executable_sha256",
+        "host_baseline_sha256",
+        "host_isolation_identity_sha256",
+        "capability_registry_sha256"
+      ],
+      "properties": {
+        "profile_id": { "const": "hancom-hangul-2020-secondary" },
+        "product_build": { "const": "11.0.0.9136" },
+        "locale": { "const": "ko-KR" },
+        "process_architecture": { "const": "x86" },
+        "executable_sha256": {
+          "const": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+        },
+        "host_baseline_sha256": {
+          "const": "7fbf6559fc3372b9da6c0b0ca53d9f4eb78b76a79df248c37ff009c13376adc0"
+        },
+        "host_isolation_identity_sha256": {
+          "const": "ce988cc6f36855ba8e6353b2ab7582732f4678e78178f10fd938a82459cc5d9a"
+        },
+        "capability_registry_sha256": {
+          "const": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306"
+        }
+      }
+    },
+    "worker_image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "immutable_image_claimed",
+        "clean_image_claimed",
+        "production_isolation_qualified",
+        "release_routable"
+      ],
+      "properties": {
+        "classification": { "const": "mutable_current_development_pc" },
+        "immutable_image_claimed": { "const": false },
+        "clean_image_claimed": { "const": false },
+        "production_isolation_qualified": { "const": false },
+        "release_routable": { "const": false }
+      }
+    },
+    "required_current_scope_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exact_host_baseline",
+        "interactive_nonzero_session",
+        "single_active_job",
+        "empty_marked_job_workspace_before_after",
+        "zero_hancom_processes_before_after",
+        "source_read_only_staging",
+        "separate_no_overwrite_output",
+        "external_network_request_denied",
+        "clipboard_request_denied",
+        "macro_execution_denied",
+        "ole_activation_denied",
+        "raw_identity_persisted",
+        "user_document_scan_allowed"
+      ],
+      "properties": {
+        "exact_host_baseline": { "const": true },
+        "interactive_nonzero_session": { "const": true },
+        "single_active_job": { "const": true },
+        "empty_marked_job_workspace_before_after": { "const": true },
+        "zero_hancom_processes_before_after": { "const": true },
+        "source_read_only_staging": { "const": true },
+        "separate_no_overwrite_output": { "const": true },
+        "external_network_request_denied": { "const": true },
+        "clipboard_request_denied": { "const": true },
+        "macro_execution_denied": { "const": true },
+        "ole_activation_denied": { "const": true },
+        "raw_identity_persisted": { "const": false },
+        "user_document_scan_allowed": { "const": false }
+      }
+    },
+    "unqualified_dedicated_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dedicated_job_identity_and_profile",
+        "private_window_station",
+        "os_network_default_deny",
+        "clipboard_isolated",
+        "profile_recent_files_residue_audited",
+        "recovery_residue_audited",
+        "printer_spool_residue_audited"
+      ],
+      "properties": {
+        "dedicated_job_identity_and_profile": { "const": false },
+        "private_window_station": { "const": false },
+        "os_network_default_deny": { "const": false },
+        "clipboard_isolated": { "const": false },
+        "profile_recent_files_residue_audited": { "const": false },
+        "recovery_residue_audited": { "const": false },
+        "printer_spool_residue_audited": { "const": false }
+      }
+    },
+    "dedicated_worker_admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "independent_manifest_required",
+        "all_unqualified_controls_must_be_true",
+        "current_policy_must_not_be_promoted",
+        "another_host_requires_independent_evidence",
+        "another_hancom_version_requires_independent_evidence"
+      ],
+      "properties": {
+        "independent_manifest_required": { "const": true },
+        "all_unqualified_controls_must_be_true": { "const": true },
+        "current_policy_must_not_be_promoted": { "const": true },
+        "another_host_requires_independent_evidence": { "const": true },
+        "another_hancom_version_requires_independent_evidence": { "const": true }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

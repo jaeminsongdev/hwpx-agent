@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-04
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P10 / P10-08 isolation`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P10 / P10-09 timeout/recycle`
 - Active reasoning effort: `max`
 - Immediate UI dependency: none live; P05-07 v2 attempts timed out safely, relaunch only when the user can immediately click the visible `접근 허용`
 
@@ -33,7 +33,7 @@ save, render, cross-version or production proof.
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
 | P09 | `blocked_by_P05` | fields/forms/notes/references |
-| P10 | `in_progress_current_pc_local` | P10-01~04,07 pass; P10-05 actual module pending; P10-06 actual execution pending; P10-08 next |
+| P10 | `in_progress_current_pc_local` | P10-01~04,07 pass; P10-05/06 actual dependencies pending; P10-08 current-PC core/audit done but dedicated controls unqualified; P10-09 next |
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
@@ -69,6 +69,7 @@ save, render, cross-version or production proof.
 | P-0054 | P10-06 Signed binding executor | `builder_pass_actual_execution_pending` | commits `3281693` + `2f92654`; executor 14/14 x64+x86, actual signed bundle built/verified, actual COM execution pending P10-05 |
 | P-0055 | P10-06 trusted offline bundle builder | `pass_current_pc_local_builder` | commit `2f92654`; builder 11/11, static 41/41, actual bundle + independent redacted receipt, current/clean FULL 5/5 |
 | P-0056 | P10-07 Event/modal watchdog | `pass_scoped_current_pc_local` | commits `b0f3b6f` + `b4c7a54`; actual events 6, unknown modal fail-closed, smoke 13/13, static 23/23, clean FULL 5/5 |
+| P-0057 | P10-08 worker isolation | `core_ready_current_pc_audit_pass_dedicated_unqualified` | mandatory machine-bound pre-lease/post-job guard; Agent 18/18, static 24/24, policy negatives 8/8; actual Session 1/workspace/process audit pass, OS outbound deny and dedicated controls false |
 
 ## Active evidence summary
 
@@ -91,7 +92,15 @@ exact-process modal probe, metadata-only `BitBlt` capture, fail-closed policy an
 A disposable blank document delivered six actual events; the actual 683x196 access modal was detected
 as unknown with no auto-response/raw text/pixel persistence, followed by zero residual processes.
 Smoke passed 13/13, static checks 23/23 and the complete Windows lane passed. Evidence and strict
-scope are recorded in `implementation/p10/P10-07_CORE_REPORT.md`; P10-08 isolation is next.
+scope are recorded in `implementation/p10/P10-07_CORE_REPORT.md`.
+
+P10-08 now requires an exact policy pin and live attestation before any lease RPC, serializes the
+Agent to one active job, and audits the same identity/session/desktop/profile/temp plus an empty
+marked workspace and zero `Hwp.exe` after execution. Agent smoke passes 18/18, policy negative tests
+8/8 and static checks 24/24. The actual current-PC audit passed only for local development; it also
+recorded that OS default outbound deny, dedicated identity/profile/window station, clipboard
+isolation and profile/recovery/printer residue audits are not qualified. The roadmap P10-08 hard
+gate therefore remains open while P10-09 implementation proceeds.
 
 ## Validation policy
 
@@ -103,6 +112,6 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 ## Exact next action
 
 When the user is immediately available, rerun P05-07, then P05-08 and P05-09 serially with required
-save/reopen/PDF/render evidence before the strict P05 Gate. In the non-UI lane, implement P10-08
-isolation and its residue audit. Keep P10-05 actual module registration and dependent P10-06
+save/reopen/PDF/render evidence before the strict P05 Gate. In the non-UI lane, implement P10-09
+timeout/recycle and unknown-outcome reconciliation. Keep P10-05 actual module registration and dependent P10-06
 production execution unverified until an approved module exists. Continue at reasoning effort `max`.

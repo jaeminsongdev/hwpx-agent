@@ -13,6 +13,13 @@
 - interactive desktop/session이 필요한 automation 제약을 image 검증에 포함.
 - job별 새 프로세스 또는 bounded reuse 후 recycle.
 
+현재 PC의 개인·비상업 개발 범위는 전용 VM/pool을 주장하지 않는다. 이 예외 범위는
+`implementation/p10/isolation/p10-current-pc-local-worker-policy.json`과 P00 host baseline에
+동시에 고정되며 release routing이 금지된다. Agent는 lease 전에 대화형 nonzero session,
+단일 active job, 빈 marked workspace와 `Hwp.exe=0`을 확인하고, 작업 뒤 같은 identity/session/
+desktop/profile/temp 해시와 무잔류 상태를 다시 확인한다. 실제 OS outbound deny, clipboard,
+전용 profile/desktop, Recent/recovery/printer 정리는 전용 worker image에서 별도 증명해야 한다.
+
 ## lifecycle
 
 1. clean VM/session lease.
@@ -25,6 +32,9 @@
 8. readback/render/evidence.
 9. process close, recovery files cleanup.
 10. session health check/recycle.
+
+구체적인 현재-PC 실행, 실패 격리 및 미래 전용 image 승격 절차는
+`implementation/p10/P10-08_WORKER_ISOLATION_RUNBOOK.md`를 따른다.
 
 ## watchdog
 

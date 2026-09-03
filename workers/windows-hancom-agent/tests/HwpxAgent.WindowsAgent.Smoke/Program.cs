@@ -15,8 +15,16 @@ internal static class Program
     private static readonly byte[] ValidationBytes = Encoding.UTF8.GetBytes("validation contract");
     private static readonly byte[] OutputBytes = Encoding.UTF8.GetBytes("deterministic output fixture");
 
-    public static async Task<int> Main()
+    public static async Task<int> Main(string[] args)
     {
+        if (args.Length != 0)
+        {
+            return args.Length == 2
+                && string.Equals(args[0], "--actual-current-host-isolation", StringComparison.Ordinal)
+                    ? RunActualCurrentHostIsolation(args[1])
+                    : 64;
+        }
+
         await SuccessfulLeaseReplaysWithoutDuplicateEffectAsync();
         await HancomSecurityLeaseBridgesOpaqueHandleAsync();
         await HancomBindingLeaseCopiesPinnedPlanBundleAndKeyAsync();
@@ -29,9 +37,203 @@ internal static class Program
         await AggregateOutputLimitFailsBeforeUploadAsync();
         await ArtifactUploadIsIdempotentButValidatesEveryStreamAsync();
         await NoWorkAndProfileMismatchFailClosedAsync();
+        await IsolationDriftIsRejectedBeforeRpcAsync();
+        await DedicatedIsolationRequiresEveryControlAsync();
+        await DedicatedIsolationAcceptsCompleteAttestationAsync();
+        await PostJobResidueBecomesUnknownOutcomeAsync();
+        await StaleWorkspaceResidueIsRejectedAtStartupAsync();
         RejectsUnsafeTransportAndArtifactBoundaries();
-        Console.WriteLine("Windows Agent P10-02/P10-05/P10-06 staging, security lease, fencing, upload and auth smoke passed (13/13)");
+        Console.WriteLine("Windows Agent P10-02/P10-05/P10-06/P10-08 staging, isolation, security lease, fencing, upload and auth smoke passed (18/18)");
         return 0;
+    }
+
+    private static int RunActualCurrentHostIsolation(string policyPath)
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"hwpx-agent-p10-08-actual-{Guid.NewGuid():N}");
+        try
+        {
+            var fullPolicyPath = Path.GetFullPath(policyPath);
+            var policyFile = new FileInfo(fullPolicyPath);
+            if (!policyFile.Exists
+                || policyFile.Length is <= 0 or > 65_536
+                || (policyFile.Attributes & FileAttributes.ReparsePoint) != 0)
+            {
+                return 65;
+            }
+
+            var policyBytes = File.ReadAllBytes(fullPolicyPath);
+            var policySha256 = Sha256(policyBytes);
+            using var document = JsonDocument.Parse(policyBytes, new JsonDocumentOptions
+            {
+                AllowTrailingCommas = false,
+                CommentHandling = JsonCommentHandling.Disallow,
+                MaxDepth = 16,
+            });
+            var top = document.RootElement;
+            var target = top.GetProperty("target");
+            if (!string.Equals(
+                    top.GetProperty("schema_version").GetString(),
+                    "hwpx-agent.p10-08-worker-isolation-policy/v1",
+                    StringComparison.Ordinal)
+                || !string.Equals(
+                    top.GetProperty("scope").GetString(),
+                    "current_pc_interactive_development",
+                    StringComparison.Ordinal))
+            {
+                return 65;
+            }
+
+            var targetProfile = new TargetProfileIdentity
+            {
+                ProfileId = RequiredString(target, "profile_id"),
+                ProductBuild = RequiredString(target, "product_build"),
+                Locale = RequiredString(target, "locale"),
+                ProcessArchitecture = RequiredString(target, "process_architecture"),
+                ExecutableSha256 = RequiredString(target, "executable_sha256"),
+                EnvironmentDigest = RequiredString(target, "host_baseline_sha256"),
+            };
+            var isolationPolicy = new WorkerIsolationPolicyPin(
+                RequiredString(top, "policy_id"),
+                WorkerIsolationScope.CurrentPcInteractiveDevelopment,
+                targetProfile.ProfileId,
+                targetProfile.EnvironmentDigest,
+                RequiredString(target, "host_isolation_identity_sha256"),
+                policySha256,
+                ProductionIsolationQualified: false);
+            var configuration = new WindowsAgentConfiguration(
+                "30000000-0000-4000-8000-000000000080",
+                targetProfile,
+                RequiredString(target, "capability_registry_sha256"),
+                AvailableJobSlots: 1,
+                RpcTimeout: TimeSpan.FromSeconds(10),
+                WorkerIsolation: isolationPolicy);
+
+            Directory.CreateDirectory(root);
+            var workspace = new AgentWorkspace(Path.Combine(root, "workspace"));
+            var attestor = new CurrentPcWorkerIsolationAttestor(isolationPolicy);
+            var preview = attestor.Observe(workspace.RootPath);
+            if (!string.Equals(
+                    preview.HostIsolationIdentitySha256,
+                    isolationPolicy.HostIsolationIdentitySha256,
+                    StringComparison.Ordinal))
+            {
+                Console.Error.WriteLine(
+                    $"HANCOM_ISOLATION_IDENTITY_MISMATCH actual_sha256={preview.HostIsolationIdentitySha256}");
+                return 2;
+            }
+
+            var guard = new WorkerIsolationGuard(configuration, workspace, attestor);
+            var before = guard.VerifyBeforeLease();
+            guard.VerifyAfterJob(before);
+
+            Console.WriteLine(JsonSerializer.Serialize(new
+            {
+                schema_version = "hwpx-agent.p10-08-current-host-live-observation/v1",
+                state = "pass_current_pc_development_only",
+                policy_id = isolationPolicy.PolicyId,
+                policy_manifest_sha256 = policySha256,
+                target_profile_id = targetProfile.ProfileId,
+                host_baseline_sha256 = targetProfile.EnvironmentDigest,
+                probe_complete = before.ProbeComplete,
+                windows_host = before.WindowsHost,
+                interactive_session = before.InteractiveSession,
+                session_id = before.SessionId,
+                identity_sha256 = before.IdentitySha256,
+                window_station_sha256 = before.WindowStationSha256,
+                desktop_sha256 = before.DesktopSha256,
+                profile_root_sha256 = before.ProfileRootSha256,
+                temp_root_sha256 = before.TempRootSha256,
+                host_isolation_identity_sha256 = before.HostIsolationIdentitySha256,
+                private_job_workspace = before.PrivateJobWorkspace,
+                target_process_count = before.TargetProcessCount,
+                raw_identity_stored = before.RawIdentityStored,
+                dedicated_identity_and_profile = before.DedicatedIdentityAndProfile,
+                private_window_station = before.PrivateWindowStation,
+                os_network_default_deny = before.OsNetworkDefaultDeny,
+                clipboard_isolated = before.ClipboardIsolated,
+                profile_residue_clean = before.ProfileResidueClean,
+                recovery_residue_clean = before.RecoveryResidueClean,
+                printer_residue_clean = before.PrinterResidueClean,
+                production_isolation_qualified = isolationPolicy.ProductionIsolationQualified,
+                raw_document_text_present = false,
+                user_document_scanned = false,
+            }));
+            return 0;
+        }
+        catch
+        {
+            Console.Error.WriteLine("HANCOM_ISOLATION_AUDIT_FAILED");
+            return 2;
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                DeleteActualProbeRoot(root);
+            }
+        }
+    }
+
+    private static string RequiredString(JsonElement element, string propertyName)
+    {
+        var value = element.GetProperty(propertyName).GetString();
+        return string.IsNullOrWhiteSpace(value)
+            ? throw new InvalidDataException("Required policy value is missing.")
+            : value;
+    }
+
+    private static void DeleteActualProbeRoot(string path)
+    {
+        var fullPath = Path.GetFullPath(path);
+        var tempPrefix = Path.GetFullPath(Path.GetTempPath()).TrimEnd(
+            Path.DirectorySeparatorChar,
+            Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+        if (!fullPath.StartsWith(tempPrefix, StringComparison.OrdinalIgnoreCase)
+            || !Path.GetFileName(fullPath).StartsWith(
+                "hwpx-agent-p10-08-actual-",
+                StringComparison.Ordinal))
+        {
+            throw new InvalidOperationException("Actual isolation probe cleanup escaped its private root.");
+        }
+
+        DeleteTreeWithoutFollowingReparsePoints(fullPath);
+    }
+
+    private static void DeleteTreeWithoutFollowingReparsePoints(string directory)
+    {
+        foreach (var entry in Directory.EnumerateFileSystemEntries(directory))
+        {
+            var attributes = File.GetAttributes(entry);
+            if ((attributes & FileAttributes.ReparsePoint) != 0)
+            {
+                if ((attributes & FileAttributes.Directory) != 0)
+                {
+                    Directory.Delete(entry, recursive: false);
+                }
+                else
+                {
+                    File.Delete(entry);
+                }
+
+                continue;
+            }
+
+            if ((attributes & FileAttributes.Directory) != 0)
+            {
+                DeleteTreeWithoutFollowingReparsePoints(entry);
+            }
+            else
+            {
+                if ((attributes & FileAttributes.ReadOnly) != 0)
+                {
+                    File.SetAttributes(entry, attributes & ~FileAttributes.ReadOnly);
+                }
+
+                File.Delete(entry);
+            }
+        }
+
+        Directory.Delete(directory, recursive: false);
     }
 
     private static async Task SuccessfulLeaseReplaysWithoutDuplicateEffectAsync()
@@ -263,7 +465,8 @@ internal static class Program
             client,
             environment.Store,
             executor,
-            environment.Workspace);
+            environment.Workspace,
+            environment.IsolationAttestor);
         var result = await service.RunOnceAsync(CancellationToken.None);
         Require(result.Disposition == AgentRunDisposition.Succeeded, "binding lease integration failed");
         Require(sandboxPath is not null && !Directory.Exists(sandboxPath), "binding lease sandbox remained");
@@ -674,6 +877,9 @@ internal static class Program
             Digest('c'),
             AvailableJobSlots: 1,
             RpcTimeout: TimeSpan.FromSeconds(10),
+            WorkerIsolation: CurrentIsolationPolicy(
+                "hancom-hangul-2020-secondary",
+                Digest('b')),
             HancomSecurityModule: new HancomSecurityModulePin("SyntheticModule", Digest('d')));
         RequireThrows<ArgumentException>(() => AgentValidation.ValidateConfiguration(configuration with
         {
@@ -693,6 +899,165 @@ internal static class Program
                 @"C:\trust\same.bin",
                 Digest('f')),
         }));
+    }
+
+    private static async Task IsolationDriftIsRejectedBeforeRpcAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("isolation-drift");
+        var invoker = new ScriptedCallInvoker((_, _, _) =>
+            throw new InvalidOperationException("isolation drift reached the control plane"));
+        await using var client = AuthenticatedClient(invoker);
+        var drifted = PassingIsolationObservation(environment.Configuration.WorkerIsolation) with
+        {
+            HostBaselineSha256 = Digest('f'),
+        };
+
+        var error = CaptureProtocolError(() => _ = new WindowsAgentService(
+            environment.Configuration,
+            client,
+            environment.Store,
+            new DelegatingExecutor((_, _) => throw new InvalidOperationException("executor invoked")),
+            environment.Workspace,
+            new FixedIsolationAttestor(drifted)));
+        Require(error == AgentProtocolError.IsolationNotReady, "host baseline drift was not isolation failure");
+        Require(invoker.Methods.Count == 0, "host baseline drift made an outbound RPC");
+    }
+
+    private static async Task DedicatedIsolationRequiresEveryControlAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("dedicated-denied");
+        var policy = environment.Configuration.WorkerIsolation with
+        {
+            PolicyId = "isolation.dedicated_v1",
+            Scope = WorkerIsolationScope.DedicatedWorkerImage,
+            ProductionIsolationQualified = true,
+        };
+        var configuration = environment.Configuration with { WorkerIsolation = policy };
+        var invoker = new ScriptedCallInvoker((_, _, _) =>
+            throw new InvalidOperationException("incomplete dedicated isolation reached the control plane"));
+        await using var client = AuthenticatedClient(invoker);
+        var incomplete = PassingIsolationObservation(policy, dedicated: true) with
+        {
+            ClipboardIsolated = false,
+        };
+
+        var error = CaptureProtocolError(() => _ = new WindowsAgentService(
+            configuration,
+            client,
+            environment.Store,
+            new DelegatingExecutor((_, _) => throw new InvalidOperationException("executor invoked")),
+            environment.Workspace,
+            new FixedIsolationAttestor(incomplete)));
+        Require(error == AgentProtocolError.IsolationNotReady, "missing clipboard isolation was accepted");
+        Require(invoker.Methods.Count == 0, "incomplete dedicated isolation made an outbound RPC");
+
+        RequireThrows<ArgumentException>(() => AgentValidation.ValidateConfiguration(
+            environment.Configuration with
+            {
+                WorkerIsolation = environment.Configuration.WorkerIsolation with
+                {
+                    ProductionIsolationQualified = true,
+                },
+            }));
+    }
+
+    private static async Task DedicatedIsolationAcceptsCompleteAttestationAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("dedicated-pass");
+        var policy = environment.Configuration.WorkerIsolation with
+        {
+            PolicyId = "isolation.dedicated_v1",
+            Scope = WorkerIsolationScope.DedicatedWorkerImage,
+            ProductionIsolationQualified = true,
+        };
+        var configuration = environment.Configuration with { WorkerIsolation = policy };
+        var invoker = new ScriptedCallInvoker((method, _, headers) =>
+        {
+            RequireAuthorization(headers);
+            return method == "AcquireLease"
+                ? new AgentLeaseResponse { Disposition = LeaseDisposition.NoWork }
+                : throw new InvalidOperationException("unexpected RPC");
+        });
+        await using var client = AuthenticatedClient(invoker);
+        var service = new WindowsAgentService(
+            configuration,
+            client,
+            environment.Store,
+            new DelegatingExecutor((_, _) => throw new InvalidOperationException("executor invoked")),
+            environment.Workspace,
+            new FixedIsolationAttestor(PassingIsolationObservation(policy, dedicated: true)));
+
+        var result = await service.RunOnceAsync(CancellationToken.None);
+        Require(result.Disposition == AgentRunDisposition.NoWork, "complete dedicated attestation was rejected");
+        Require(invoker.Methods.SequenceEqual(["AcquireLease"]), "dedicated no-work request drifted");
+    }
+
+    private static async Task PostJobResidueBecomesUnknownOutcomeAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("post-residue");
+        var assignment = environment.CreateAssignment(
+            "10000000-0000-4000-8000-000000000018",
+            "20000000-0000-4000-8000-000000000018",
+            28);
+        AgentExecutionReceipt? committed = null;
+        var invoker = new ScriptedCallInvoker((method, request, headers) =>
+        {
+            RequireAuthorization(headers);
+            return method switch
+            {
+                "AcquireLease" => Assigned(assignment),
+                "Heartbeat" => CurrentHeartbeat(),
+                "CommitExecution" => CaptureCommit(
+                    (AgentCommitRequest)request,
+                    receipt => committed = receipt),
+                _ => throw new InvalidOperationException("unexpected RPC"),
+            };
+        });
+        await using var client = AuthenticatedClient(invoker);
+        var passing = PassingIsolationObservation(environment.Configuration.WorkerIsolation);
+        var attestor = new SequenceIsolationAttestor(
+            passing,
+            passing,
+            passing with { TargetProcessCount = 1 });
+        var service = new WindowsAgentService(
+            environment.Configuration,
+            client,
+            environment.Store,
+            new DelegatingExecutor(async (context, cancellationToken) =>
+            {
+                await using var output = context.CreateOutput("output_0018");
+                await output.WriteAsync(OutputBytes, cancellationToken);
+                return SuccessfulJob("output_0018", "fixture-output-residue");
+            }),
+            environment.Workspace,
+            attestor);
+
+        var result = await service.RunOnceAsync(CancellationToken.None);
+        Require(result.Disposition == AgentRunDisposition.UnknownOutcome
+            && result.ExecutorInvoked, "post-job residue did not become unknown outcome");
+        Require(committed?.Diagnostic?.ErrorCode == BridgeErrorCode.CleanupFailed
+            && committed.Diagnostic.EffectUnknown, "cleanup failure receipt was not fail-closed");
+        Require(environment.SandboxDirectories().Count == 0, "post-residue fixture left a sandbox");
+    }
+
+    private static async Task StaleWorkspaceResidueIsRejectedAtStartupAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("stale-residue");
+        var residue = Path.Combine(environment.Workspace.RootPath, "sandboxes", "job-stale-residue");
+        Directory.CreateDirectory(residue);
+        var invoker = new ScriptedCallInvoker((_, _, _) =>
+            throw new InvalidOperationException("stale residue reached the control plane"));
+        await using var client = AuthenticatedClient(invoker);
+
+        var error = CaptureProtocolError(() => _ = new WindowsAgentService(
+            environment.Configuration,
+            client,
+            environment.Store,
+            new DelegatingExecutor((_, _) => throw new InvalidOperationException("executor invoked")),
+            environment.Workspace,
+            environment.IsolationAttestor));
+        Require(error == AgentProtocolError.CleanupResidue, "stale sandbox residue was accepted");
+        Require(invoker.Methods.Count == 0, "stale sandbox residue made an outbound RPC");
     }
 
     private static async Task AssertStagedInputAsync(AgentJobContext context, CancellationToken cancellationToken)
@@ -787,6 +1152,48 @@ internal static class Program
             && authorization.Length == 47, "authenticated outbound metadata missing");
     }
 
+    private static WorkerIsolationPolicyPin CurrentIsolationPolicy(
+        string targetProfileId,
+        string hostBaselineSha256) =>
+        new(
+            "isolation.current_pc_v1",
+            WorkerIsolationScope.CurrentPcInteractiveDevelopment,
+            targetProfileId,
+            hostBaselineSha256,
+            Digest('6'),
+            Digest('e'),
+            ProductionIsolationQualified: false);
+
+    private static WorkerIsolationObservation PassingIsolationObservation(
+        WorkerIsolationPolicyPin policy,
+        bool dedicated = false,
+        uint targetProcessCount = 0) =>
+        new(
+            policy.PolicyId,
+            policy.TargetProfileId,
+            policy.HostBaselineSha256,
+            policy.WorkerImageManifestSha256,
+            ProbeComplete: true,
+            WindowsHost: true,
+            InteractiveSession: true,
+            SessionId: 1,
+            IdentitySha256: Digest('1'),
+            WindowStationSha256: Digest('2'),
+            DesktopSha256: Digest('3'),
+            ProfileRootSha256: Digest('4'),
+            TempRootSha256: Digest('5'),
+            HostIsolationIdentitySha256: policy.HostIsolationIdentitySha256,
+            PrivateJobWorkspace: true,
+            DedicatedIdentityAndProfile: dedicated,
+            PrivateWindowStation: dedicated,
+            OsNetworkDefaultDeny: dedicated,
+            ClipboardIsolated: dedicated,
+            ProfileResidueClean: dedicated,
+            RecoveryResidueClean: dedicated,
+            PrinterResidueClean: dedicated,
+            TargetProcessCount: targetProcessCount,
+            RawIdentityStored: false);
+
     private static string Digest(char value) => new(value, 64);
 
     private static string Sha256(ReadOnlySpan<byte> bytes) =>
@@ -815,6 +1222,20 @@ internal static class Program
         throw new InvalidOperationException($"Expected {typeof(TException).Name}.");
     }
 
+    private static AgentProtocolError CaptureProtocolError(Action action)
+    {
+        try
+        {
+            action();
+        }
+        catch (AgentProtocolException error)
+        {
+            return error.Error;
+        }
+
+        throw new InvalidOperationException("Expected AgentProtocolException.");
+    }
+
     private static async Task RequireThrowsAsync<TException>(Func<Task> action)
         where TException : Exception
     {
@@ -837,6 +1258,7 @@ internal static class Program
             ContentAddressedArtifactStore store,
             AgentWorkspace workspace,
             WindowsAgentConfiguration configuration,
+            IWorkerIsolationAttestor isolationAttestor,
             ArtifactRef input,
             ArtifactRef plan,
             ArtifactRef validation)
@@ -845,6 +1267,7 @@ internal static class Program
             Store = store;
             Workspace = workspace;
             Configuration = configuration;
+            IsolationAttestor = isolationAttestor;
             Input = input;
             Plan = plan;
             Validation = validation;
@@ -857,6 +1280,8 @@ internal static class Program
         internal AgentWorkspace Workspace { get; }
 
         internal WindowsAgentConfiguration Configuration { get; }
+
+        internal IWorkerIsolationAttestor IsolationAttestor { get; }
 
         internal ArtifactRef Input { get; }
 
@@ -887,10 +1312,23 @@ internal static class Program
                 Digest('c'),
                 AvailableJobSlots: 1,
                 RpcTimeout: TimeSpan.FromSeconds(10),
+                WorkerIsolation: CurrentIsolationPolicy(
+                    "hancom-hangul-2020-secondary",
+                    Digest('b')),
                 HancomSecurityModule: new HancomSecurityModulePin(
                     "FilePathCheckerModuleExample",
                     Digest('d')));
-            return new TestEnvironment(root, store, workspace, configuration, input, plan, validation);
+            var isolationAttestor = new FixedIsolationAttestor(
+                PassingIsolationObservation(configuration.WorkerIsolation));
+            return new TestEnvironment(
+                root,
+                store,
+                workspace,
+                configuration,
+                isolationAttestor,
+                input,
+                plan,
+                validation);
         }
 
         internal LeaseAssignment CreateAssignment(string leaseId, string executionId, ulong fencingToken) =>
@@ -925,7 +1363,7 @@ internal static class Program
         internal WindowsAgentService CreateService(
             IWindowsAgentControlClient client,
             IAgentJobExecutor executor) =>
-            new(Configuration, client, Store, executor, Workspace);
+            new(Configuration, client, Store, executor, Workspace, IsolationAttestor);
 
         internal List<string> SandboxDirectories()
         {
@@ -974,6 +1412,33 @@ internal static class Program
         public Task<AgentJobResult> ExecuteAsync(
             AgentJobContext context,
             CancellationToken cancellationToken) => execute(context, cancellationToken);
+    }
+
+    private sealed class FixedIsolationAttestor(WorkerIsolationObservation observation)
+        : IWorkerIsolationAttestor
+    {
+        public WorkerIsolationObservation Observe(string workspaceRoot)
+        {
+            Require(Directory.Exists(workspaceRoot), "isolation attestor received a missing workspace");
+            return observation;
+        }
+    }
+
+    private sealed class SequenceIsolationAttestor(params WorkerIsolationObservation[] observations)
+        : IWorkerIsolationAttestor
+    {
+        private int index;
+
+        public WorkerIsolationObservation Observe(string workspaceRoot)
+        {
+            Require(Directory.Exists(workspaceRoot), "isolation attestor received a missing workspace");
+            if (index >= observations.Length)
+            {
+                throw new InvalidOperationException("isolation observation sequence exhausted");
+            }
+
+            return observations[index++];
+        }
     }
 
     private sealed class ScriptedCallInvoker(

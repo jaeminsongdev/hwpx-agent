@@ -30,6 +30,23 @@ public sealed class AgentWorkspace
 
     public FileExecutionJournal Journal { get; }
 
+    internal void VerifyNoJobSandboxResidue()
+    {
+        AgentValidation.EnsurePlainDirectory(RootPath, nameof(RootPath));
+        AgentValidation.EnsurePlainDirectory(sandboxRoot, nameof(sandboxRoot));
+        var marker = Path.Combine(RootPath, ".hwpx-agent-workspace");
+        if (!File.Exists(marker)
+            || (File.GetAttributes(marker) & FileAttributes.ReparsePoint) != 0
+            || !string.Equals(
+                File.ReadAllText(marker, System.Text.Encoding.UTF8),
+                WorkspaceMarker,
+                StringComparison.Ordinal)
+            || Directory.EnumerateFileSystemEntries(sandboxRoot).Any())
+        {
+            throw new AgentProtocolException(AgentProtocolError.CleanupResidue);
+        }
+    }
+
     internal AgentJobSandbox CreateSandbox(LeaseAssignment assignment)
     {
         AgentValidation.RequireGuid(assignment.ExecutionId, nameof(assignment));
