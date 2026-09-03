@@ -2,9 +2,9 @@
 
 - Updated: 2026-09-04
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P10 / P10-06 trusted bundle builder`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P10 / P10-07 event/modal watchdog core`
 - Active reasoning effort: `max`
-- Immediate UI dependency: none live; launch P05-07 only when the user can immediately click every visible `접근 허용`
+- Immediate UI dependency: none live; P05-07 retry 01 timed out safely, relaunch only when the user can immediately click every visible `접근 허용`
 
 ## Objective and non-negotiable boundaries
 
@@ -33,7 +33,7 @@ save, render, cross-version or production proof.
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
 | P09 | `blocked_by_P05` | fields/forms/notes/references |
-| P10 | `in_progress_current_pc_local` | P10-01~04 pass; P10-05 actual module pending; P10-06 core ready/trusted builder pending |
+| P10 | `in_progress_current_pc_local` | P10-01~04 pass; P10-05 actual module pending; P10-06 builder pass/actual execution pending; P10-07 next |
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
@@ -66,8 +66,8 @@ save, render, cross-version or production proof.
 | P-0051 | P10-03 STA worker | `pass` | commit `2628174`; STA/pipe smoke 6/6, x64+x86, current/clean FULL 5/5, STRICT findings 0/0/0 |
 | P-0052 | P10-04 HwpObject lifecycle | `pass` | commits `c10f97c` + `3281693` + `c06d12c`; actual attempt 09 plus x64+x86 cancellation/abrupt-exit lifecycle 10/10 |
 | P-0053 | P10-05 Security module | `core_ready_actual_module_pending` | commit `b830f74`; Agent 12/12, Worker 10/10, static 29/29, current/clean FULL 5/5, x86 pass; registered module count 0 |
-| P-0054 | P10-06 Signed binding executor | `core_ready_actual_bundle_builder_pending` | commit `3281693`; binding 14/14 x64+x86, static 35/35, schema 2 valid + 6 negative, current/clean FULL 5/5 |
-| P-0055 | P10-06 trusted offline bundle builder | `in_progress` | verify exact signed P02 registry, project only per-binding runtime-qualified entries, sign with separate P10 key, emit redacted receipt |
+| P-0054 | P10-06 Signed binding executor | `builder_pass_actual_execution_pending` | commits `3281693` + `2f92654`; executor 14/14 x64+x86, actual signed bundle built/verified, actual COM execution pending P10-05 |
+| P-0055 | P10-06 trusted offline bundle builder | `pass_current_pc_local_builder` | commit `2f92654`; builder 11/11, static 41/41, actual bundle + independent redacted receipt, current/clean FULL 5/5 |
 
 ## Active evidence summary
 
@@ -75,8 +75,9 @@ P05-01~06 are closed by their task reports. P05-06 retry 09 passed actual licens
 open/read/save/reopen/read/quit with unchanged source, equal input/output text digest, 19-event
 terminal trace, zero cleanup errors and zero residual processes. Independent product inspection
 confirmed the custom landscape dimensions, margins-derived body area and text digest. Failed retry
-08 remains diagnostic-only. P05-07~09 core/static harnesses and deterministic disposable fixtures
-are ready, but their required actual save/render evidence remains open.
+08 remains diagnostic-only. P05-07 retry 01 timed out at `open_input` without user approval; input
+was unchanged, output/PDF absent, one owned process cleaned and zero `Hwp.exe` remained. P05-07~09
+core/static harnesses are ready, but their required actual save/render evidence remains open.
 
 P10-01 through P10-04 are closed by their reports under `implementation/p10/`. P10-04 actual attempt
 09 passed the exact licensed Hangul 2020 x86 three-cycle normal lifecycle with unchanged
@@ -94,12 +95,12 @@ passed 29/29, and current plus exact-clean FULL passed 5/5. The current-PC Regis
 key but zero registered security modules; therefore actual module registration is not verified,
 P10-05 remains core-only and no module was downloaded, installed or registered.
 
-P10-06 core commit `3281693` adds an Ed25519-signed exact-target bundle, semantic-only public plan,
+P10-06 commits `3281693` and `2f92654` add an Ed25519-signed exact-target bundle, semantic-only public plan,
 finite typed ParameterSet conversion, preflight-before-COM rejection and single-use Agent bundle/key
-leases. Binding smoke passed 14/14 under x64 and x86, static checks passed 35/35, schema valid/negative
-cases passed and current/exact-clean FULL passed 5/5. The trusted P02-to-P10 offline builder and an
-actual signed target execution bundle do not yet exist, so P10-06 remains open and component evidence
-is not promoted to actual COM action execution.
+leases plus a policy-pinned P02-to-P10 offline builder. Builder tests passed 11/11, static checks
+passed 41/41, and a real two-binding bundle was independently reconstructed and verified. Current
+and exact-clean FULL passed 5/5. Actual production Agent/Worker COM execution remains pending the
+P10-05 registered-module dependency, so P10-06 stays open.
 
 ## Validation policy
 
@@ -110,8 +111,8 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next action
 
-When the user is immediately available, run P05-07, P05-08 and P05-09 serially with required
+When the user is immediately available, rerun P05-07, then P05-08 and P05-09 serially with required
 save/reopen/PDF/render evidence before the strict P05 Gate. Require source immutability, terminal
 trace closure and zero residual Hangul processes for every actual run. In the non-UI lane, implement
-the trusted offline P02-to-P10 bundle builder, validate/sign its exact-target output and then execute
-one admitted bundle through the production P10-06 path. Continue at reasoning effort `max`.
+P10-07 event/modal watchdog core. Keep P10-05 actual module registration and the dependent P10-06
+production execution unverified until an approved module exists. Continue at reasoning effort `max`.
