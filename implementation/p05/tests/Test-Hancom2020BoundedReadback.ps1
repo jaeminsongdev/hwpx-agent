@@ -25,6 +25,9 @@ $engine = [System.IO.File]::ReadAllText($enginePath)
 $checks = [ordered]@{
     bounded_parses = $boundedErrors.Count -eq 0
     engine_parses = $engineErrors.Count -eq 0
+    x86_child_runtime = $bounded -match 'SpecialFolder\]::SystemX86' -and $bounded -match 'WindowsPowerShell\\v1\.0\\powershell\.exe'
+    x86_child_runtime_bounded = $bounded -match 'powerShellItem\.Length -gt 16777216' -and $bounded -match 'powerShellItem\.Attributes.*ReparsePoint'
+    no_pshome_runtime_guess = $bounded -notmatch 'Join-Path \$PSHOME'
     timeout_range = $bounded -match 'ValidateRange\(30, 900\).*TimeoutSeconds = 300'
     child_timeout = $bounded -match 'WaitForExit\(\$TimeoutSeconds \* 1000\)'
     timed_out_child_killed = $bounded -match 'if \(-not \$exitedWithinTimeout\)' -and $bounded -match '\$child\.Kill\(\)'

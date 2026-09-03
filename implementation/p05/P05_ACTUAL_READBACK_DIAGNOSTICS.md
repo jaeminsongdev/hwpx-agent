@@ -57,9 +57,11 @@ dependencies. Validate changes explicitly with the bundled Python executable:
 
 ## Bounded execution and cleanup
 
-`invoke-hancom-2020-bounded-readback.ps1` runs the x86 STA engine in a separate hidden PowerShell
-process. The default timeout is 300 seconds and the accepted range is 30–900 seconds so a manual
-access prompt has time to be handled but cannot wait forever.
+`invoke-hancom-2020-bounded-readback.ps1` runs the x86 STA engine in a separate hidden Windows
+PowerShell resolved from the operating system's `SystemX86` special folder; it never guesses that
+Windows PowerShell is adjacent to the calling `pwsh` runtime. The default timeout is 300 seconds and
+the accepted range is 30–900 seconds so a manual access prompt has time to be handled but cannot wait
+forever.
 
 After exit or timeout, cleanup is allowed only for an `Hwp.exe` that:
 

@@ -259,7 +259,21 @@ if (@(Get-CimInstance Win32_Process -Filter "Name='Hwp.exe'" -ErrorAction Silent
     throw ($ErrorPrefix + '_PREEXISTING_HWP_PROCESS')
 }
 
-$powerShell = Join-Path $PSHOME 'powershell.exe'
+$systemX86 = [System.Environment]::GetFolderPath(
+    [System.Environment+SpecialFolder]::SystemX86
+)
+if ([string]::IsNullOrWhiteSpace($systemX86)) {
+    throw ($ErrorPrefix + '_X86_POWERSHELL_UNAVAILABLE')
+}
+$powerShellItem = Get-Item -LiteralPath (
+    Join-Path $systemX86 'WindowsPowerShell\v1.0\powershell.exe'
+) -Force
+if ($powerShellItem.PSIsContainer -or
+    ($powerShellItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0 -or
+    $powerShellItem.Length -le 0 -or $powerShellItem.Length -gt 16777216) {
+    throw ($ErrorPrefix + '_X86_POWERSHELL_UNAVAILABLE')
+}
+$powerShell = $powerShellItem.FullName
 $arguments = @(
     '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-STA',
     '-File', $engine,
