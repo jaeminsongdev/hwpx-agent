@@ -8,6 +8,7 @@
 
 mod character_style;
 mod graph;
+mod header_footer;
 mod id_index;
 mod limits;
 mod list_definition;
@@ -38,6 +39,15 @@ pub use character_style::{
 pub use graph::{
     GraphError, MediaType, PackageGraph, PackageGraphLimitConfig, PackageGraphLimits, PartRecord,
     PartRole, Relationship, RelationshipKind,
+};
+pub use header_footer::{
+    FirstPageDisplay, FirstPageVisibility, HEADER_FOOTER_PROFILE_ID, HeaderFooterBody,
+    HeaderFooterDefinition, HeaderFooterError, HeaderFooterInline, HeaderFooterKind,
+    HeaderFooterLimitConfig, HeaderFooterLimits, HeaderFooterLowerer, HeaderFooterLoweringReceipt,
+    HeaderFooterParagraph, HeaderFooterReader, HeaderFooterRun, LineWrap as HeaderFooterLineWrap,
+    MasterPageDefinition, MasterPageVariant, PageField, PageFieldKind, PageNumberPlacement,
+    PageNumberPosition, PageNumberRestart, PageVariant, SectionPagePolicy,
+    TextDirection as HeaderFooterTextDirection, VerticalAlignment as HeaderFooterVerticalAlignment,
 };
 pub use id_index::{
     IdDeclaration, IdIndex, IdIndexError, IdIndexLimitConfig, IdIndexLimits, IdIssueKind, IdKind,

@@ -163,7 +163,7 @@ pub enum NumberFormat {
 }
 
 impl NumberFormat {
-    fn parse(value: &str) -> Result<Self, ListDefinitionError> {
+    pub(crate) fn parse(value: &str) -> Result<Self, ListDefinitionError> {
         match value {
             "DIGIT" => Ok(Self::Digit),
             "CIRCLED_DIGIT" => Ok(Self::CircledDigit),
@@ -191,7 +191,7 @@ impl NumberFormat {
         }
     }
 
-    const fn as_str(self) -> &'static str {
+    pub(crate) const fn as_str(self) -> &'static str {
         match self {
             Self::Digit => "DIGIT",
             Self::CircledDigit => "CIRCLED_DIGIT",
