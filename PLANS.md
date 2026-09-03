@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-03
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-04 Tabs`
+- Active phase/task: `P05 / P05-05 Lists and numbering`
 - Active reasoning effort: `max`
 - Blocker: none
 
@@ -28,7 +28,7 @@ save, render, cross-version or production proof.
 | P02 | `pass_scoped_current_pc_local` | `implementation/p02/P02_GATE_REPORT.md` |
 | P03 | `pass_scoped_current_pc_local` | `implementation/p03/P03_GATE_REPORT.md` |
 | P04 | `pass_scoped_current_pc_local` | `implementation/p04/P04_GATE_REPORT.md` |
-| P05 | `in_progress_current_pc_local` | P05-01/02/03 pass; P05-04 active |
+| P05 | `in_progress_current_pc_local` | P05-01/02/03/04 pass; P05-05 active |
 | P06 | `blocked_by_P05` | table engine |
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
@@ -55,40 +55,37 @@ save, render, cross-version or production proof.
 | P-0040 | P05-01 Text flow reader/writer | `pass` | commit `08de88a`, text-flow 12/12, package 63/63, current/clean FULL 5/5, Linux offline |
 | P-0041 | P05-02 Character styles | `pass` | commit `a810aa7`, style 11/11, package 74/74, current/clean FULL 5/5, Linux offline |
 | P-0042 | P05-03 Paragraph styles | `pass` | commit `ec76232`, paragraph 12/12, package 86/86, current/clean FULL 5/5, Linux offline |
-| P-0043 | P05-04 Tabs | `in_progress` | exact 2020 tabProperties and official tab-stop contract discovery |
+| P-0043 | P05-04 Tabs | `pass` | commits `1a8723c` + `5cb4fe7`; tab 13/13, package 101/101, exact 2020 save/reopen semantic pass |
+| P-0044 | P05-05 Lists and numbering | `in_progress` | exact 2020 numbering/bullet/paraHead and paragraph heading discovery |
 
-## P05-04 acceptance
+## P05-05 acceptance
 
-- Lock a versioned bounded current-2020 `header.xml` tab profile from exact `tabProperties`,
-  cross-checked against the locked official Appendix C/F structures. A shared namespace does not
-  qualify another Hangul release.
-- Model automatic left/right tabs and ordered custom left/right/center/decimal stops with exact
-  position unit, leader enum and defaults. Reject duplicate, unsorted, out-of-range or otherwise
-  ambiguous stops rather than normalizing them silently.
-- Lift only supported exact namespace shapes through P03 preserving XML. Validate container count,
-  child cardinality/order, dense unique IDs, numeric/enum/bool syntax, stop ordering and finite limits.
-  Unknown content inside a typed record rejects; none is dropped.
-- Define semantic tab-profile identity separately from allocated ID. Deduplicate in deterministic
-  first-occurrence order and atomically rewrite only typed P05-03 paragraph `tabPrIDRef` references
-  after complete map and source validation. Opaque content and unrelated IDs remain untouched.
-- Lower deterministic escaped typed fragments, reparse for exact equality/reference closure and emit
-  stable digest/count receipts. No raw XML, arbitrary path, COM/HAction name or best-effort platform
-  fallback enters the public contract.
-- Test the exact generated 2020 header's three tab records; custom alignment/leader/position variants;
-  decimal and automatic tabs; dedup/idempotence; malformed/count/ID/order/range/enum/namespace/limit
-  failures; and paragraph-reference readback. Add a fixed synthetic variation corpus.
+- Lock a bounded current-2020 `header.xml` list profile from exact `numberings`, optional `bullets`
+  and `paraHead` records, cross-checked against locked Appendix C/F and the official OWPML model.
+- Model one-based dense numbering/bullet IDs, ordered levels, start values, format expressions,
+  alignment, indentation/offset rules, character-style references and checked/image bullet states.
+- Bind NUMBER, BULLET and OUTLINE paragraph headings to typed definitions and levels. Validate all
+  references and level transitions before mutation; unknown content, unsupported image bullets and
+  ambiguous compatibility forms fail closed.
+- Define deterministic sequence/nesting semantics for continuity, level-up/down and restart. Restart
+  must be an explicit typed operation with reproducible definition/reference effects, not hidden state.
+- Deduplicate definitions in first-occurrence order, atomically rewrite only typed paragraph heading
+  references after complete map validation, lower bounded escaped fragments and re-lift for equality.
+- Test exact current numbering records, synthetic bullets, nested sequence/continuity/restart, format
+  expansion boundaries, dedup/idempotence, malformed/count/ID/reference/level/enum/namespace/limit
+  failures and fixed-seed deterministic cases.
 - Run Windows and offline read-only Linux unit/Clippy validation, current/clean-clone FULL 5/5 and
-  security. The first package/IR slice uses no Hangul UI or user document; request user UI input only
-  when a disposable exact-2020 target readback fixture is ready.
+  security. Request user UI input only for a disposable exact-2020 target fixture after the pure slice.
 
-## P05-03 closure evidence
+## P05-04 closure evidence
 
-P05-03 added `hwpx-agent.paragraph-style/1` with bounded paragraph layout and referenced border/fill
-values, both exact compatibility branches, semantic dedup, complete-map typed-reference rewrite and
-deterministic lower/readback receipts. Its 12 tests, fixed 128-case corpus
-`ae926c99...20ed339`, package 86/86, Windows/Linux, current/clean FULL 5/5 and security all passed at
-exact commit `ec76232`; no Hangul runtime or user document was used. Visual pagination, full tab/list
-definitions and save/render compatibility remain unverified.
+P05-04 added `hwpx-agent.tab-definition/1` with bounded automatic/custom tab definitions, direct and
+HwpUnitChar compatibility preservation, semantic dedup, complete-map typed-reference rewrite and
+deterministic lower/readback receipts. Its 13 tests, fixed 128-case corpus
+`f1f8d682...dd0a92`, package 101/101, Windows/Linux, current/clean FULL 5/5 and security all passed at
+exact correction commit `5cb4fe7`. A disposable exact Hangul 2020 save/reopen preserved text and tab
+semantics, left the source unchanged and exited cleanly. Visual placement, arbitrary documents and
+other releases remain unverified.
 
 ## Validation policy
 
@@ -99,7 +96,7 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next action
 
-Inspect the exact current-2020 generated `header.xml` tabProperties, the locked official Appendix C/F
-records and P03/P05-03 ID/reference contracts. Freeze `P05-04` tab semantic identity, units, ordering,
-enums, defaults, limits and failure codes in a migration/policy, then implement the smallest exact-
-profile lift/lower/readback slice. Continue at reasoning effort `max`.
+Inspect the exact current-2020 generated `header.xml` numberings/bullets/paraHead records, the locked
+official Appendix C/F records and P05-03 heading/reference contracts. Freeze `P05-05` definition,
+level, sequence, nesting, continuity/restart, limits and failure codes in a migration/policy, then
+implement the smallest exact-profile lift/lower/readback slice. Continue at reasoning effort `max`.

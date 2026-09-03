@@ -40,7 +40,7 @@ Text·Character·Paragraph·Page·Section를 문서상 계획이 아니라 **재
 - [x] `P05-01` 산출물 `text module` 존재, 검증: Unicode/run-boundary corpus.
 - [x] `P05-02` 산출물 `char style lowerer` 존재, 검증: style dedup/readback.
 - [x] `P05-03` 산출물 `para style lowerer` 존재, 검증: layout/semantic tests.
-- [ ] `P05-04` 산출물 `tab model` 존재, 검증: target readback fixtures.
+- [x] `P05-04` 산출물 `tab model` 존재, 검증: target readback fixtures.
 - [ ] `P05-05` 산출물 `list engine` 존재, 검증: sequence and nesting tests.
 - [ ] `P05-06` 산출물 `PageSetup lowerer` 존재, 검증: impossible layout negative tests.
 - [ ] `P05-07` 산출물 `section/column engine` 존재, 검증: multi-section render tests.

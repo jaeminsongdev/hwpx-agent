@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_to_p04_complete_p05_text_character_paragraph_and_tabs_in_progress
+  product_code_scope: p01_to_p04_complete_p05_text_character_paragraph_tabs_complete_lists_in_progress
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -604,14 +604,14 @@ p04_execution:
     user_documents_opened: false
     hancom_runtime_executed_by_task: true
 p05_execution:
-  current_task: P05-04
+  current_task: P05-05
   gate_state: in_progress_current_pc_local
   tasks:
     P05-01: completed_current_pc_local_text_flow
     P05-02: completed_current_pc_local_character_styles
     P05-03: completed_current_pc_local_paragraph_styles
-    P05-04: in_progress_tabs
-    P05-05: blocked_by_P05-04
+    P05-04: completed_current_pc_local_tabs
+    P05-05: in_progress_lists_numbering
     P05-06: blocked_by_P05-05
     P05-07: blocked_by_P05-06
     P05-08: blocked_by_P05-07
@@ -692,6 +692,37 @@ p05_execution:
     clean_clone_sbom_components: 231
     user_documents_opened: false
     hancom_runtime_executed_by_task: false
+  tab_definition:
+    contract: hwpx-agent.tab-definition/1
+    implementation_base_commit: 1a8723c4430a93f597fc9e4a3c53ace9dec84ea5
+    audited_source_commit: 5cb4fe74c1ffe8795ceb535324667660897c3d63
+    target_profile: hancom-hangul-2020-secondary
+    exact_build_scope: 11.0.0.9136
+    executable_namespace: http://www.hancom.co.kr/hwpml/2011/head
+    official_structural_source: ks-x-6101-machine-content-20260901_appendix_C_and_F
+    official_source_sha256: c4a8bdb082cf8610fa2b3f6e709ca9058ab256a2371e9a779b9b323ca82638e4
+    exact_header_tab_definitions: 3_dense_automatic_profiles
+    tab_definition_tests_windows_linux: 13_of_13_passed
+    hwpx_package_tests_windows_linux: 101_of_101_passed
+    tab_variation_cases: 128
+    tab_variation_sha256: f1f8d6822de68ca5824cef00cca89e753c61aac5b5956d9b7d5a4ccbdbdd0a92
+    typed_reference_rewrite: atomic_complete_map_validation
+    compatibility_branches: direct_and_hwpunit_char_exact_preservation
+    deterministic_receipt: passed
+    exact_hancom_2020_save_reopen: passed_semantic_readback
+    exact_output_sha256: 835c703c8b745a81424b39b0f6bc3db65011ed37f786b5f4a0569a732c83cb94
+    input_unchanged: true
+    text_digest_preserved: true
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    linux_clippy_and_workspace_tests_read_only: passed
+    linux_clippy_derived_image_digest: sha256:bfda7f1ddbf0a192699d4b02dc3dbfefabe5eb7c0dd5527ba31acdaf0e4ab37f
+    secrets_vulnerabilities_forbidden_licenses: 0
+    scanned_files_current_and_clean_clone: 600_and_597
+    sbom_components: 273
+    clean_clone_sbom_components: 231
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: true
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope
