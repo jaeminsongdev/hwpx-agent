@@ -25,7 +25,7 @@ open and no actual behavior is promoted from component tests.
 | Process ownership | pass_component | refuses pre-existing Hangul processes, binds one newly created same-session exact-path process and records PID/start ticks/session/path |
 | Fail-closed cleanup | pass_component | close, quit, COM release and owned-process cleanup continue independently; uncertain cleanup becomes `UNKNOWN_OUTCOME` |
 | Production open boundary | pass_component | default host denies document open until P10-05 supplies an approved-document resolver |
-| Actual current-PC lifecycle | actual_pending | attempt 01 timed out before access approval; input/staging unchanged, temporary staging removed, one owned process cleaned, zero remained |
+| Actual current-PC lifecycle | actual_pending | attempts 01 and 02 timed out before access approval; input/staging unchanged, temporary staging removed, one owned process cleaned per attempt, zero remained |
 
 ## Validation evidence
 
@@ -37,7 +37,7 @@ open and no actual behavior is promoted from component tests.
 - A fresh clean checkout at the same exact commit passed all five lanes, passed the x86 `8/8`
   lifecycle smoke and remained Git-clean. Its security report found no failed checks and produced an
   SBOM with 348 components.
-- The actual-attempt evidence reports `timed_out=true`, `input_unchanged=true`,
+- Both actual-attempt evidence files report `timed_out=true`, `input_unchanged=true`,
   `staged_input_unchanged=true`, `staged_input_removed=true`, `cleaned_process_count=1`,
   `cleanup_refused_count=0`, `cleanup_error_count=0` and `remaining_hwp_process_count=0`.
 - No user document was scanned, no document text was emitted, no network was invoked, no registry or

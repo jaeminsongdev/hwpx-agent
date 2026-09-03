@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-03
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-06 actual acceptance` + `P10 / P10-04 actual acceptance and P10-05 security adapter`
+- Active phase/task: `P05 / P05-06 actual acceptance` + `P10 / P10-04 actual acceptance and P10-06 binding executor`
 - Active reasoning effort: `max`
 - Immediate UI dependency: none live; launch the next P05 retry only when the user can immediately click every visible `접근 허용`
 
@@ -33,7 +33,7 @@ save, render, cross-version or production proof.
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
 | P09 | `blocked_by_P05` | fields/forms/notes/references |
-| P10 | `in_progress_current_pc_local` | P10-01~03 pass; P10-04 core ready/actual pending; P10-05 next |
+| P10 | `in_progress_current_pc_local` | P10-01~03 pass; P10-04 core ready/actual pending; P10-05 core ready/actual module pending; P10-06 next |
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
@@ -64,7 +64,8 @@ save, render, cross-version or production proof.
 | P-0049 | P10-01 Windows bridge protocol | `pass` | commit `9e44190`; Rust/C# generated SDK, compatibility 7/7, current/clean FULL 5/5, offline Linux pass |
 | P-0050 | P10-02 Windows Agent | `pass` | commit `731f32a`; Agent E2E 11/11, current/clean FULL 5/5, STRICT findings 0/0/0 |
 | P-0051 | P10-03 STA worker | `pass` | commit `2628174`; STA/pipe smoke 6/6, x64+x86, current/clean FULL 5/5, STRICT findings 0/0/0 |
-| P-0052 | P10-04 HwpObject lifecycle | `actual_pending` | commit `c10f97c`; lifecycle 8/8 x64+x86, static 24/24, current/clean FULL 5/5, actual attempt 01 timed out safely |
+| P-0052 | P10-04 HwpObject lifecycle | `actual_pending` | commit `c10f97c`; lifecycle 8/8 x64+x86, static 24/24, current/clean FULL 5/5, actual attempts 01~02 timed out safely |
+| P-0053 | P10-05 Security module | `core_ready_actual_module_pending` | commit `b830f74`; Agent 12/12, Worker 10/10, static 29/29, current/clean FULL 5/5, x86 pass; registered module count 0 |
 
 ## Active evidence summary
 
@@ -84,11 +85,19 @@ Windows STA message pump passed 6/6 smoke suites under both x64 and this PC's x8
 current and exact-clean FULL 5/5. `CurrentUserOnly` is not claimed as hostile same-user isolation.
 P10-04 core commit `c10f97c` now provides an x86 `HancomSession`, exact target/process admission,
 typed create/open/close/quit and fail-closed owned-process cleanup. Lifecycle smoke passed 8/8 under
-x64 and x86, the static harness passed 24/24, and current/exact-clean FULL passed 5/5. Actual attempt
-01 timed out before access approval and safely preserved the input/staging, removed temporary staging,
-cleaned one owned process and left zero `Hwp.exe`; therefore actual lifecycle remains unverified and
+x64 and x86, the static harness passed 24/24, and current/exact-clean FULL passed 5/5. Actual attempts
+01 and 02 timed out before access approval and safely preserved the input/staging, removed temporary
+staging, cleaned one owned process per attempt and left zero `Hwp.exe`; therefore actual lifecycle remains unverified and
 P10-04 is not closed. File-path leases start at P10-05; modal handling and process supervision remain
 later tasks.
+
+P10-05 core commit `b830f74` connects the Agent sandbox to the production Worker through an
+immutable, single-use execution/fencing/profile/policy/artifact/module-bound security lease. The
+public handle remains path-free; a fixed private read-only HWPX copy is digest-checked and guarded.
+Agent smoke passed 12/12, Worker allowed/denied smoke passed 10/10 under x64 and x86, static checks
+passed 29/29, and current plus exact-clean FULL passed 5/5. The current-PC Registry32 probe found the
+key but zero registered security modules; therefore actual module registration is not verified,
+P10-05 remains core-only and no module was downloaded, installed or registered.
 
 ## Validation policy
 
@@ -102,6 +111,7 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 When the user is immediately available, run one P10-04 actual lifecycle attempt and one P05-06 retry;
 require source immutability, terminal trace closure and zero residual Hangul processes. After P05-06,
 run P05-07, P05-08 and P05-09 serially with required PDF/render evidence before the strict P05 Gate.
-While UI acceptance is unavailable, implement P10-05 as a single-use approved-document security
-adapter tied to P10-02 staging identity and P10-04 `HancomSession`, with allowed/denied path, reparse,
-size, digest, lease expiry/replay and TOCTOU tests. Continue at reasoning effort `max`.
+While UI acceptance is unavailable, implement P10-06 as a signed, version-scoped, finite typed
+binding executor. Reject unknown/raw actions and parameters before COM dispatch and prove bundle,
+target, capability, execution/fencing, plan-artifact, replay and cleanup boundaries. Continue at
+reasoning effort `max`.
