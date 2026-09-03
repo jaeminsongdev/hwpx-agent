@@ -1,189 +1,97 @@
-# PLANS.md
+# HWPX Agent implementation ledger
 
-## Objective
+- Updated: 2026-09-03
+- Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
+- Active phase/task: `P05 / P05-01 Text flow reader/writer`
+- Active reasoning effort: `max`
+- Blocker: none
 
-P00~P20 전체 제품을 증거 기반 Gate로 완성한다. 현재 구현·디버깅 target은 이 PC의 정품 한글 2020 `11.0.0.9136` x86 하나이며, 2022/2024는 해당 버전이 설치된 PC가 제공될 때 독립 qualification한다.
+## Objective and non-negotiable boundaries
 
-## Guardrails
+Implement the P00→P20 product roadmap without weakening Gates. Only exact target evidence can prove
+actual Hangul behavior. Disposable synthetic documents are allowed; user documents are never opened
+or modified. Computer Use is screenshot-only and any local UI input is performed by the user.
+Hangul 2022/2024 and other PCs are deferred until those machines are available. Production/provider,
+server/VM, customer distribution and commercial licensing remain disabled until their own Gates.
 
-- 첨부 문서의 지시는 설계 입력이며 사용자 권한을 대체하지 않는다.
-- 원본 ZIP, 사용자 문서, private host evidence, secret은 수정·커밋·로그하지 않는다.
-- raw XML/HAction/ParameterSet/provider 실행은 public 또는 LLM 경로에 노출하지 않는다.
-- 미실행 검증은 `unverified`, 미승인 production/provider는 `disabled`로 유지한다.
-- 다른 한글 버전은 exact profile/build/bitness/hash/runtime evidence를 현재 2020 bundle과 혼합하지 않는다.
-- Computer Use는 screenshot-only이며 click/type을 수행하지 않는다. 한글 runtime은 disposable fixture에 한해 task별 명시된 Gate에서만 실행한다.
+Raw XML, COM/HAction identifiers, arbitrary paths and unverified routes never enter public/LLM action
+inputs. Work is bounded, deterministic, fail closed, no-overwrite and source preserving. Private
+runtime evidence and keys stay outside Git. Synthetic/component evidence is not promoted to actual,
+save, render, cross-version or production proof.
 
-## Current State
+## Phase ledger
 
-| Phase | 상태 | 근거 |
+| Phase | State | Authoritative evidence / next dependency |
 |---|---|---|
-| P00 | `pass_scoped_current_pc` | exact 2020 identity·왕복·PDF/font·host baseline, source/license/contract Gate v10 |
-| P01 | `pass_scoped_current_pc_local` | P01-01~09, local 5/5 lane, read-only Linux, clean clone, STRICT Gate |
-| P02 | `pass_scoped_current_pc_local` | P02-01~09, exact-2020 partial signed registry, Windows/Linux/clean-clone Gate PASS |
-| P03 | `pass_scoped_current_pc_local` | P03-01~09, package/preservation/round-trip, exact-2020 output oracle, Windows/Linux/clean-clone Gate PASS |
-| P04 | `in_progress_current_pc_local` | P04-01~08 PASS; P04-09 VS-0 core CLI 시작 |
-| P05~P20 | `blocked_by_dag` | 선행 phase Gate 대기; P10은 P03 선행조건 충족 후 순차 보류, P20은 post-GA |
+| P00 | `pass_scoped_current_pc_local` | `implementation/p00/P00_GATE_REPORT.md` |
+| P01 | `pass_scoped_current_pc_local` | `implementation/p01/P01_GATE_REPORT.md` |
+| P02 | `pass_scoped_current_pc_local` | `implementation/p02/P02_GATE_REPORT.md` |
+| P03 | `pass_scoped_current_pc_local` | `implementation/p03/P03_GATE_REPORT.md` |
+| P04 | `pass_scoped_current_pc_local` | `implementation/p04/P04_GATE_REPORT.md` |
+| P05 | `in_progress_current_pc_local` | P05-01 active |
+| P06 | `blocked_by_P05` | table engine |
+| P07 | `blocked_by_P05` | native equation engine |
+| P08 | `blocked_by_P05` | images/shapes/drawing/charts |
+| P09 | `blocked_by_P05` | fields/forms/notes/references |
+| P10 | `ready_by_P03_deferred_sequence` | Windows Hangul automation bridge |
+| P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
+| P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
+| P13 | `blocked_by_P10` | validation/oracle/render |
+| P14 | `blocked_by_P04` | durable projects/revisions/jobs/artifacts |
+| P15 | `blocked_by_P14` | remote MCP control plane |
+| P16 | `blocked_by_P15` | ChatGPT Web plugin/widget |
+| P17 | `blocked_by_P15` | Codex remote/local companion |
+| P18 | `blocked_by_P12_P13_P16_P17` | quality/security/performance/DR |
+| P19 | `blocked_by_P18` | production/license/submission |
+| P20 | `post_GA` | parity and Rust-native expansion |
 
-P00 상세 이력과 증거는 `implementation/p00/P00_GATE_REPORT.md` 및 `implementation/p00/evidence/p00-gate-audit.20260901.v10.json`이 authoritative다.
+## Recent task ledger
 
-## Active Task
-
-| ID | 단계 | 상태 | 검증 |
+| ID | Task | State | Evidence |
 |---|---|---|---|
-| P-0030 | P04-01 DocumentGraph v2 types | `pass` | Windows/Linux 9/9, golden SHA, current/clean-clone FULL 5/5 |
-| P-0031 | P04-02 Unit·ID model | `pass` | Windows/Linux 18/18, fixed-seed 10,000 round trips, current/clean-clone FULL 5/5 |
-| P-0032 | P04-03 Selector engine | `pass` | Windows/Linux 27/27, zero/multiple/stale, current/clean-clone FULL 5/5 |
-| P-0033 | P04-04 OperationPlan compiler | `pass` | Windows/Linux 36/36, 1,000-op DAG, current/clean-clone FULL 5/5 |
-| P-0034 | P04-05 Capability router | `pass` | Windows/Linux 45/45, exact evidence/policy/health matrix, current/clean FULL 5/5 |
-| P-0035 | P04-06 Workspace transaction | `pass` | Windows/Linux 9/9, fault 22/22, current/clean FULL 5/5 |
-| P-0036 | P04-07 Semantic diff | `pass` | Windows/Linux 55/55, golden SHA, current/clean FULL 5/5 |
-| P-0037 | P04-08 Idempotency·CAS | `pass` | Windows/Linux 20/20, 32/16/32 concurrency, current/clean FULL 5/5 |
-| P-0038 | P04-09 VS-0 core CLI | `in_progress` | A4 one-paragraph plan→execute→reopen, actual Hangul 2020 open evidence |
+| P-0030~0037 | P04-01~08 graph/unit/selector/plan/router/transaction/diff/idempotency | `pass` | task reports under `implementation/p04/` |
+| P-0038 | P04-09 VS-0 core CLI | `pass` | exact commit `6cc11f0`, actual 2020 run 6, current/clean FULL 5/5, Linux offline pass |
+| P-0039 | P04 phase Gate | `pass` | STRICT/max, findings 0/0/0, P05 authorized in current scope |
+| P-0040 | P05-01 Text flow reader/writer | `in_progress` | contract/source/failure model discovery |
 
-### P04-01 Acceptance (completed)
+## P05-01 acceptance
 
-- `domain-ir`는 ZIP/XML/COM/HAction/backend 구현을 알지 않는 pure typed model이어야 하며 `#![forbid(unsafe_code)]`를 유지한다. HWPX numeric ID, namespace, raw action/parameter 문자열은 public IR에 포함하지 않는다.
-- `DocumentGraph` v2는 schema version, document/source identity, metadata/settings/security/accessibility, resource/style catalogs, sections/flow nodes, notes/references/review와 opaque preservation handle을 빠짐없이 typed field로 표현한다.
-- node kind는 paragraph/table/equation/drawing/chart/field/form/break/embedded를 최소 지원하고, 공통 logical ID·style refs·layout/semantics/provenance/preservation 정보를 갖는다. backend source binding은 private 또는 opaque handle로 격리한다.
-- 생성은 finite `DocumentGraphLimits`와 checked count/size/depth를 요구한다. section 1개 이상, 전역 logical ID uniqueness, resource/style/reference closure, table shape와 node-kind payload 일치가 실패하면 부분 graph 없이 stable typed error로 종료한다.
-- deterministic serialization은 canonical collection/order와 explicit version tag를 사용한다. 동일 graph는 Windows/Linux에서 byte-identical JSON과 SHA-256을 내며 deserialize→validate→serialize golden equality를 통과해야 한다.
-- 공개 `Debug`/오류에 문서 본문, source path, opaque bytes가 노출되지 않는다. 원본 HWPX와 P03 artifact를 읽거나 수정하지 않는 pure synthetic test로 완료한다.
-- `specs/document-graph-v2.schema.json`은 설계 입력으로 대조하되 구현 안전 계약을 약화하지 않는다. additive versioned policy/migration과 negative/golden tests를 함께 추가한다.
-- Windows/Linux `domain-ir` tests/Clippy, current/clean-clone FULL, security regression을 통과하고 P04-01 report와 상태 원장을 갱신한다. 이 task는 한글 runtime Gate가 아니다.
+- Add a versioned bounded typed text-flow model that distinguishes text runs, tabs, line breaks,
+  field begin/end boundaries and any required opaque non-editable token. Do not collapse adjacent runs
+  when style/source boundaries differ, and do not infer unmatched field pairs.
+- Lift only from P03 safe/preserving XML with explicit namespace/name and checked source spans. Unknown
+  or unsafe constructs remain preserved/opaque or cause a stable typed rejection; they are never
+  silently discarded or interpreted as executable markup.
+- Lower deterministic XML through typed values only. Escape text correctly, preserve Unicode scalar
+  content and semantic NFC policy without changing source run boundaries, and reparse/re-lift the
+  result before publication. No raw caller XML fragments are accepted.
+- Apply finite limits for bytes, elements, runs, text, field depth and nesting with checked arithmetic;
+  duplicate/missing/misnested field boundaries, malformed XML, limit overflow and unsupported shapes
+  fail without partial flow or output.
+- Test Hangul/Latin/CJK/emoji/combining characters, tabs/line breaks, empty and adjacent runs, style
+  transitions, nested/sequential field boundaries, XML escaping, malformed/limit cases, deterministic
+  lift→lower→lift and untouched-byte preservation outside the targeted paragraph.
+- Run Windows and offline read-only Linux unit/Clippy validation, current/clean-clone FULL 5/5 and
+  security. This task is a pure package/IR Gate and requires no Hangul UI or user document.
 
-### P04-02 Acceptance (completed)
+## P04 closure evidence
 
-- `domain-ir` 내부에 backend-independent `units`와 `identity` module을 추가하고 `unsafe`, filesystem, network, process, 한글 runtime 의존성은 0을 유지한다.
-- public length/typography/ratio는 `LengthMicrometers(i64)`, `PointMilli(i64)`, `RatioMillionths(i64)` fixed-point newtype으로 표현한다. float를 canonical 저장 형식이나 equality/hash 기준으로 사용하지 않는다.
-- mm/pt/HWPUNIT/px@dpi 입력은 source-verified rational factor와 checked wide intermediate로 변환한다. overflow, non-finite, zero/negative DPI, 허용 범위 초과를 typed stable error로 거절한다.
-- 모든 비정수 변환은 explicit half-away-from-zero를 사용하고 input unit/raw value, normalized value, exact remainder 또는 rounding delta를 redacted-safe `ConversionReceipt`로 반환한다. 역변환과 경계값 property corpus가 ±값에서 대칭 규칙을 증명해야 한다.
-- coordinate space는 `page`, `content`, `anchor`, `object-local`을 typed enum으로 두고 position은 space와 anchor policy를 함께 요구한다. anchor 없는 absolute drawing position, 서로 다른 space의 암묵 연산과 overflow translation을 거절한다.
-- `ProjectId`, `RevisionId`, `ArtifactId`, logical node/style/resource/bookmark/field/change ID, backend opaque source ID를 서로 다른 newtype으로 구현한다. 빈 값·제어문자·과대 길이·종류 혼용은 compile-time 또는 checked parse에서 실패하고 Debug는 값을 노출하지 않는다.
-- P04-01 `DocumentId`/`LogicalId` wire bytes와 golden digest를 의도치 않게 변경하지 않는다. 구조 변경이 필요하면 별도 version/migration과 golden 갱신 사유를 먼저 기록한다.
-- Windows/Linux unit/ID tests와 Clippy, fixed-seed boundary/property tests, current/clean-clone FULL, security regression을 통과하고 P04-02 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
+P04 built typed immutable DocumentGraph, exact selectors, deterministic atomic plans, signed
+capability routing, isolated workspace transactions, semantic diff, in-memory exactly-once/CAS and
+the VS-0 vertical. Actual 2020 open/readback/close/Quit passed with input/save/network/settings change
+and residual process all 0. The actual bundle is digest-correlated and independently checked; private
+body/path/key data is untracked. Durable cross-process idempotency remains explicitly P14.
 
-### P04-03 Acceptance (completed)
+## Validation policy
 
-- `domain-ir`에 pure immutable selector snapshot/index를 추가하고 filesystem, network, process, COM, raw XML/HAction 의존성은 0을 유지한다.
-- selector는 stable logical ID, named slot/field/bookmark, finite structural path + expected fingerprint, exact normalized text query + before/after context hash를 typed variant로 제공한다. 저장된 text offset 단독 selector와 cursor/session fallback은 core에서 허용하지 않는다.
-- snapshot은 expected revision ID와 canonical graph digest를 고정한다. 둘 중 하나가 달라지면 후보 검색 전에 `stale`로 실패하고 새 graph에 과거 selector를 임의 적용하지 않는다.
-- selector priority와 candidate ordering은 deterministic이어야 하지만 단일 대상 요청은 정확히 한 후보만 성공한다. 0개는 `not_found`, 2개 이상은 `ambiguous`, 후보 상한 초과는 `limit_exceeded`로 실패하며 첫 후보 자동 선택은 금지한다.
-- structural path는 node-kind 단계와 index를 함께 검증하고 expected node fingerprint가 다르면 `stale`로 실패한다. named selector collision, path drift, text offset drift와 context mismatch negative test를 포함한다.
-- query/path/context/candidate에 finite bound를 적용한다. 공개 Debug/error에는 query text, node ID, slot/field/bookmark 이름, context hash 원문을 노출하지 않는다.
-- Windows/Linux selector tests와 Clippy, deterministic serialization/index/property regression, current/clean-clone FULL, security regression을 통과하고 P04-03 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
+Every implementation task gets target tests plus format/Clippy, relevant regressions, current checkout
+FULL, exact-commit clean clone FULL, offline network-disabled Linux core where applicable, security
+checks, strict self-review and an authoritative report. A phase closes only after its separate
+STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
-### P04-04 Acceptance (completed)
+## Exact next action
 
-- pure `operation_plan` compiler를 추가하고 filesystem, network, process, COM, raw XML/HAction과 runtime capability 실행 의존성은 0을 유지한다. 입력 draft와 성공한 immutable compiled plan을 별도 타입으로 둔다.
-- exact schema/version, typed plan/operation/capability/revision identity, operation 수·dependency 수·argument depth/size의 finite limit을 먼저 검증한다. unknown version, duplicate operation ID와 과대 입력은 부분 compile 없이 stable error로 종료한다.
-- wire selector draft는 정확히 한 variant만 허용하고 P04-03 typed selector로 compile한다. 혼합 selector, bare text offset, cursor/session/page-position과 stale expectation은 `needs_resolution` 또는 typed rejection이며 약한 selector로 fallback하지 않는다.
-- length/typography/ratio/angle argument는 unit을 명시해야 하며 P04-02 checked conversion과 receipt를 통해 canonical fixed-point로 normalize한다. 단위 없는 수치, invalid DPI, overflow, 충돌하는 caller/default 값은 `needs_resolution` 또는 stable unit error로 실패한다.
-- defaults는 versioned capability definition에서만 가져오고 적용 여부와 normalized value digest를 compile receipt에 남긴다. 자유 문자열 backend action/default, 환경 의존 default와 암묵 locale 단위는 금지한다.
-- dependency graph는 missing/self/duplicate edge를 거절하고 deterministic topological order를 만든다. cycle은 `operation_plan_cycle`, 동일 입력은 byte-identical canonical compiled JSON/SHA-256이어야 한다.
-- selector resolve는 immutable snapshot/expectation에서 compile 전에 수행하고 exact-one target만 compiled operation에 넣는다. 한 operation 실패 시 compiled plan을 전혀 반환하지 않는다.
-- Windows/Linux compiler tests와 Clippy, invalid/cycle/needs-resolution/fixed-seed DAG tests, current/clean-clone FULL, security regression을 통과하고 P04-04 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
-
-### P04-05 Acceptance (completed)
-
-- pure `capability_router`를 추가하고 compiled operation과 immutable route context를 입력으로 받는다. router는 graph mutation, backend 실행, filesystem/network/process/COM/HAction을 수행하지 않는다.
-- route context는 exact target profile ID/build/architecture, signed capability registry payload digest/sequence, policy scope, preservation requirement, backend health generation과 관측 시각을 typed field로 고정한다. 현재 PC 범위 밖 production/provider와 deferred release를 암묵 허용하지 않는다.
-- 지원 evidence는 capability+backend별 `verified`, `candidate_unverified`, `unavailable`, `failed`, `risk_blocked`, `not_run`을 분리한다. routing 후보는 exact profile/digest에 대해 `verified`인 binding만 생성하며 candidate/not-run/stale/mismatched evidence는 실패한다.
-- policy는 personal local development/current-PC, protection/signature impact, network/provider, macro/unsafe action과 confirmation requirement를 fail-closed로 평가한다. 현재 P04 pure router에서는 confirmation-required route도 실행 가능으로 승격하지 않고 typed `confirmation_required`를 반환한다.
-- preservation은 exact/surgical/normalized 요구와 backend impact를 비교한다. unknown/raw opaque loss, signature invalidation 또는 요구보다 약한 preservation route는 거절한다.
-- backend health는 healthy/degraded/unhealthy/unknown과 generation/TTL을 확인한다. degraded route는 capability definition이 명시 허용한 경우에만 후보가 되며 unhealthy/unknown/stale health는 제외한다.
-- direct HWPX, hybrid, desktop automation 후보의 priority/cost가 같아도 stable backend ID로 deterministic order를 만들되 최고 후보가 둘 이상 동률이면 임의 선택하지 않고 `ambiguous_route`로 실패한다. fallback은 원래 정책/보존/지원 조건을 약화하지 않는다.
-- Windows/Linux routing matrix tests와 Clippy, exact profile/digest/sequence drift, policy/preservation/health/ambiguity negative tests, current/clean-clone FULL, security regression을 통과하고 P04-05 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
-
-### P04-06 Acceptance (completed)
-
-- filesystem-backed `operation-engine` workspace transaction을 별도 crate로 추가한다. P04-04 compiled plan 전체와 P04-05 route receipt 전체를 immutable execution manifest에 고정하고, raw public JSON/LLM action/COM/HAction/backend 세부 문자열은 입력으로 받지 않는다.
-- transaction은 `received → planned → preconditions_verified → workspace_prepared → executing → readback → validating → artifact_committed → revision_cas_committed → completed` finite state machine을 사용한다. illegal skip/repeat/backward transition, terminal 이후 mutation과 서로 다른 job/manifest receipt 혼용은 stable typed error로 실패한다.
-- source artifact는 read-only open 후 SHA-256/size와 expected artifact ID/base revision/compiled-plan hash/route hash를 재검증한다. isolated per-job directory에만 bounded copy를 만들고 source path/bytes는 어떤 성공·실패 경로에서도 수정·이동·삭제하지 않는다.
-- output은 create-new staging에 쓰고 bounded readback digest/size와 caller-supplied validator를 통과한 뒤에만 no-overwrite artifact path로 commit한다. partial output, validation 실패와 retry는 public artifact/revision을 만들지 않는다.
-- artifact commit과 revision CAS를 별도 명시 단계로 둔다. artifact commit 후 CAS 실패/interrupt이면 artifact를 orphan quarantine으로 원자 이동하거나 typed `published_incomplete`로 표시하며 정상 output과 completed receipt로 승격하지 않는다.
-- rollback은 unpublished staging/working copy만 제거하며 source와 이미 완료된 다른 transaction output을 건드리지 않는다. cleanup failure는 숨기지 않고 incomplete/quarantine 상태와 안정된 receipt로 보고한다.
-- 모든 경계는 finite file/job/receipt/byte limits, canonical containment, symlink/reparse deny, create-new/no-overwrite, deterministic job-relative names과 redacted Debug를 유지한다. same-volume atomicity 조건이 성립하지 않으면 시작 전에 실패한다.
-- 각 state transition 전후, source copy/readback/validation/artifact commit/CAS/quarantine/cleanup에 deterministic fault injector를 둔다. 전체 fault matrix에서 source digest 불변, public output absent-or-complete, terminal state 정확성과 retry determinism을 검증한다.
-- Windows/Linux transaction tests와 Clippy, fault injection/no-source-mutation, cross-job/revision/route mismatch, symlink/traversal, current/clean-clone FULL, security regression을 통과하고 P04-06 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
-
-### P04-07 Acceptance (completed)
-
-- `domain-ir`에 두 validated `DocumentGraph` snapshot을 입력으로 받는 pure semantic diff를 추가한다. filesystem/network/process/COM/HAction/backend 실행과 graph mutation은 수행하지 않는다.
-- 비교 전 exact graph schema, document identity, before/after revision identity와 canonical digest를 검증한다. 동일 revision에 다른 digest, 다른 document, invalid graph와 stale declared digest는 부분 diff 없이 stable typed error로 거절한다.
-- node delta는 stable logical ID로 added/removed/modified/moved를 분리하고, section/parent/sibling 순서 이동과 kind 변화, layout/semantic/provenance/preservation field 변화를 typed path로 기록한다. remove+add를 임의 rename/move로 추정하지 않는다.
-- style/resource delta는 ID별 add/remove/modify와 reference 영향을 분리한다. 표는 row/column/grid/span/cell payload, 수식은 source/AST/presentation, drawing/chart/embedded는 geometry/resource/anchor, bookmark/field/note/review/security reference는 target과 closure 변화를 각각 typed category로 표현한다.
-- unknown property와 opaque preservation handle 변화는 숨기거나 semantic-equal로 낮추지 않는다. raw bytes나 문서 본문을 diff receipt/Debug/error에 노출하지 않고 digest·count·typed path만 공개한다.
-- output은 versioned canonical schema, deterministic category/path/ID ordering과 finite graph/change/path/payload limits를 사용한다. 입력 collection 순서 차이는 동일 bytes를 내고, 같은 before/after는 empty diff, A→B와 B→A는 category/count가 정확히 반전되어야 한다.
-- golden corpus는 node/style/table/equation/object/reference 각각의 add/remove/modify/move, multi-category change, unknown/opaque change, invalid identity/version/digest, limit overflow와 privacy negative case를 포함한다.
-- Windows/Linux semantic-diff tests와 Clippy, byte-identical golden digest, current/clean-clone FULL, security regression을 통과하고 P04-07 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
-
-### P04-08 Acceptance (completed)
-
-- `operation-engine`에 in-memory reference idempotency/CAS service와 storage trait boundary를 추가한다. P14 durable DB 구현을 당겨오지 않으며 filesystem/network/process/COM/HAction/backend 실행은 수행하지 않는다.
-- bounded typed idempotency key는 exact request SHA-256, execution manifest SHA-256, expected head revision과 transaction identity에 한 번만 결합된다. 같은 key의 다른 request/manifest/revision/transaction 재사용은 stable `key_reuse_conflict`이며 기존 record를 변경하지 않는다.
-- 최초 claim은 monotonically increasing nonzero fencing generation과 owner token을 반환한다. 동일 hash의 concurrent duplicate는 owner가 되지 않고 `in_progress`/terminal replay를 받는다. stale owner/generation의 heartbeat, complete, fail, unknown 전이는 모두 거절한다.
-- 상태는 `claimed`, `in_progress`, `outcome_unknown`, `succeeded`, `failed_terminal`을 구분한다. outcome unknown은 새 side effect 실행을 허용하지 않고 exact artifact/revision observation으로 reconcile한 뒤에만 terminal replay가 된다.
-- 성공 terminal record는 result artifact ID/digest/size, committed revision ID, transaction receipt digest를 immutable하게 보존한다. 동일 요청 retry는 byte-identical replay receipt를 반환하고 artifact publication이나 revision mutation callback을 다시 호출하지 않는다.
-- revision head store는 project/document stream별 immutable head와 monotonically increasing generation을 유지한다. commit은 exact expected revision+generation CAS와 result identity를 모두 요구하며 stale/missing/conflicting head는 side effect 없이 실패한다. 동일 idempotency terminal commit만 exact replay될 수 있다.
-- claim→effect→CAS→terminal 경계에 deterministic concurrency/fault harness를 둔다. 2개 이상 thread barrier duplicate, owner crash/outcome unknown, stale revision, retry storm, conflicting key와 reconciliation에서 artifact/revision effect counter가 최대 1임을 증명한다.
-- 모든 key/record/thread/receipt/byte 수는 finite limit을 갖고 checked arithmetic, deterministic canonical v1 receipt와 redacted Debug/error를 유지한다. raw request, document ID, path, body와 owner token을 출력하지 않는다.
-- Windows/Linux idempotency/CAS tests와 Clippy, duplicate/stale revision E2E, current/clean-clone FULL, security regression을 통과하고 P04-08 report와 원장을 갱신한다. 이 task에는 사용자 로컬 조작이나 한글 runtime이 필요 없다.
-
-### P04-09 Acceptance
-
-- 새 `vertical CLI`는 versioned bounded request만 받아 synthetic 빈 A4, 한 style, 한 paragraph DocumentGraph와 exact base revision을 만든다. 사용자 문서, 임의 경로, raw XML/HAction/COM action 문자열을 입력으로 받지 않는다.
-- P04-03 selector와 P04-04 compiler로 정확한 create plan을 만들고 P04-05 policy/preservation 조건을 약화하지 않는 direct-HWPX route만 사용한다. verified evidence가 부족하면 임의 route를 만들지 않고 task 전용 signed/verified binding evidence를 먼저 생성한다.
-- P03 package graph/preserving writer와 P04-06 transaction을 통해 create-new staging, complete reopen validation, checksum artifact identity, no-overwrite publication을 수행한다. 출력은 A4 1 page/1 section/1 paragraph/1 style closure를 가져야 한다.
-- P04-08 store를 통해 exact request/manifest/head를 claim하고 artifact publication과 revision-head CAS를 한 번만 수행한다. 동일 CLI retry는 byte-identical terminal receipt와 기존 artifact/revision을 replay하며 두 번째 파일을 만들지 않는다.
-- CLI 자체 reopen은 bounded ZIP/package/XML/ID/reference closure와 semantic readback을 검사한다. 생성 bytes, artifact/revision/receipt digest와 trace correlation은 deterministic private evidence bundle에 기록하되 문서 본문과 로컬 절대 경로는 공개 로그/커밋에서 제외한다.
-- 실제 정품 한글 2020 `11.0.0.9136` x86에서 disposable output을 열고 오류 없는 open, A4/한 문단 normalized readback, 종료와 잔류 process 0을 확인한다. 2022/2024와 다른 PC 증거는 섞지 않는다.
-- 실제 한글 접근 허용 UI가 표시되면 사용자가 누르고, Computer Use는 screenshot-only로 상태만 확인한다. 자동 click/type이나 사용자 문서 접근은 수행하지 않는다.
-- Windows CLI unit/E2E, Linux direct-core tests, current/clean-clone FULL, security와 exact-2020 actual evidence를 통과한 뒤 P04 phase Gate를 `max`로 별도 감사한다.
-
-## Risks
-
-| ID | 위험 | 완화 |
-|---|---|---|
-| R-0001 | capability/schema semantic drift | pinned fail-closed validator와 generated drift 검사 |
-| R-0002 | generated source 수동 변경 | source/generated 경계와 재생성 비교 Gate |
-| R-0003 | 공통 COM ProgID로 release 증거 혼합 | profile/image/evidence bundle 독립성 |
-| R-0004 | 문서·secret·PII 로그/커밋 유출 | allowlisted event schema, redaction, private path ignore, secret scan |
-| R-0005 | unsafe archive/workdir publication | canonical containment, symlink deny, create-new staging, atomic no-overwrite |
-| R-0006 | CI가 실제 한글 검증을 모의 PASS | 일반 lane은 core만; 한글 oracle은 별도 `unverified`/protected lane |
-| R-0007 | dependency/toolchain drift | manifests·lockfiles·version preflight·SBOM/audit |
-
-## Archive References
-
-- P-0000~P-0006: 원본/설계 감사, 2020 probe, canonical contract 교정, offline diagnostics는 P00 report와 source lock에 보존.
-- P-0007~P-0010: 과거 blocked Gate, current-PC 재기준화, exact 2020 reference smoke, host baseline, P00 v10 scoped PASS.
-- P-0011: P01 repository·CI·security foundation은 `implementation/p01/P01_GATE_REPORT.md`에서 current-PC local scoped PASS.
-- P-0012: P02-01 SourceRecord contract는 `implementation/p02/P02-01_REPORT.md`에서 PASS.
-- P-0013: P02-02 Help extractor는 `implementation/p02/P02-02_REPORT.md`에서 PASS.
-- P-0014: P02-03 Automation PDF extractor는 `implementation/p02/P02-03_REPORT.md`에서 PASS.
-- P-0015: P02-04 OWPML extractor는 `implementation/p02/P02-04_REPORT.md`에서 PASS.
-- P-0016: P02-05 정규화·중복 후보는 `implementation/p02/P02-05_REPORT.md`에서 PASS.
-- P-0017: P02-06 semantic capability review는 `implementation/p02/P02-06_REPORT.md`에서 3,680 node/3,811 edge 100% disposition PASS.
-- P-0018: P02-07 binding model은 `implementation/p02/P02-07_REPORT.md`에서 exact 2020 기준 536/536 binding coverage PASS.
-- P-0019: P02-08 runtime probe는 `implementation/p02/P02-08_REPORT.md`에서 exact 2020 x86/STA disposable trace, independent verifier errors 0, 47/47 + 31/31 PASS.
-- P-0020: P02-09와 phase Gate는 `implementation/p02/P02-09_REPORT.md` 및 `implementation/p02/P02_GATE_REPORT.md`에서 current-PC local scoped PASS. Actual other-build drift는 `baseline_unavailable`.
-- P-0021: P03-01 bounded ZIP reader는 `implementation/p03/P03-01_REPORT.md`에서 Windows/Linux malicious corpus 8/8, current/clean-clone FULL 5/5와 보안 0건 PASS.
-- P-0022: P03-02 PackageGraph는 `implementation/p03/P03-02_REPORT.md`에서 namespace-resolved closed graph Windows/Linux 8/8, current/clean-clone FULL 5/5와 보안 0건 PASS.
-- P-0023: P03-03 safe XML reader는 `implementation/p03/P03-03_REPORT.md`에서 XML 1.0/UTF-8 namespace-resolved finite parser, Windows/Linux 5/5, PackageGraph/ZIP regression, current/clean-clone FULL 5/5와 보안 0건 PASS.
-- P-0024: P03-04 preserving XML token model은 `implementation/p03/P03-04_REPORT.md`에서 checked source spans, namespace tree, untouched byte/SHA equality, Windows/Linux core corpus, current/clean-clone FULL 5/5와 보안 0건 PASS.
-- P-0025: P03-05 part preservation map은 `implementation/p03/P03-05_REPORT.md`에서 authoritative graph/readback, evidence-ranked complete class map, Windows/Linux core corpus, current/clean-clone FULL 5/5와 보안 0건 PASS.
-- P-0026: P03-06 ID/reference index는 `implementation/p03/P03-06_REPORT.md`에서 typed part-scoped index, duplicate/dangling/wrong-type fail-closed, current-2020 disposable `2/2`, Windows/Linux `38/38`, current/clean-clone FULL 5/5와 보안 0건 PASS.
-- P-0027: P03-07 preserving patch engine은 `implementation/p03/P03-07_REPORT.md`에서 8종 typed intent, checked conflict/rollback/allocation/closure, fixed-seed property corpus, actual 2020 memory mutation `2/2`, Windows/Linux `43/43`, current/clean-clone FULL 5/5와 보안 0건 PASS.
-- P-0028: P03-08 atomic ZIP writer는 `implementation/p03/P03-08_REPORT.md`에서 preserving/normalized private writer, bounded construction, staged/full reopen, atomic no-overwrite, absent-or-complete fault model, actual 2020 writer `2/2`, Windows/Linux `45/45`, current/clean-clone FULL 5/5와 보안 0건 PASS.
-- P-0029: P03-09와 phase Gate는 `implementation/p03/P03-09_REPORT.md` 및 `implementation/p03/P03_GATE_REPORT.md`에서 128 valid/256 negative replay, 두 ASan fuzz target, exact 한글 2020 output `4/4`, Windows/Linux `48/48`, current/clean-clone FULL 5/5로 current-PC local scoped PASS.
-- P-0030: P04-01 DocumentGraph v2는 `implementation/p04/P04-01_REPORT.md`에서 pure typed graph, finite identity/closure/shape validation, Windows/Linux golden `2ab9ffef...f3c6`, current/clean-clone FULL 5/5로 PASS.
-- P-0031: P04-02 Unit·ID model은 `implementation/p04/P04-02_REPORT.md`에서 official `1/7200 inch` HWPUNIT, exact rational conversion, checked half-away rounding, coordinate/typed-ID validation, Windows/Linux `18/18`, current/clean-clone FULL 5/5로 PASS.
-- P-0032: P04-03 Selector engine은 `implementation/p04/P04-03_REPORT.md`에서 revision/digest snapshot, exact-one ID/name/path/text-context resolution, zero/multiple/stale fail-closed, Windows/Linux `27/27`, current/clean-clone FULL 5/5로 PASS.
-- P-0033: P04-04 OperationPlan compiler는 `implementation/p04/P04-04_REPORT.md`에서 typed selector/unit/default compile, atomic deterministic DAG, 1,000-op fixed-seed equality, Windows/Linux `36/36`, current/clean-clone FULL 5/5로 PASS.
-- P-0034: P04-05 Capability router는 `implementation/p04/P04-05_REPORT.md`에서 exact target/registry/support/policy/preservation/health routing, equal-top ambiguity, Windows/Linux `45/45`, current/clean-clone FULL 5/5로 PASS.
-- P-0035: P04-06 Workspace transaction은 `implementation/p04/P04-06_REPORT.md`에서 immutable manifest, finite state machine, staged validation/publication/CAS, fault 22/22, Windows/Linux `9/9`, current/clean-clone FULL 5/5로 PASS.
-- P-0036: P04-07 Semantic diff는 `implementation/p04/P04-07_REPORT.md`에서 9개 typed category, relative-order move, opaque/privacy/finite contract, Windows/Linux `55/55`, golden `b12f8a54...9f7e`, current/clean-clone FULL 5/5로 PASS.
-- P-0037: P04-08 Idempotency·CAS는 `implementation/p04/P04-08_REPORT.md`에서 exact binding/fencing/replay/reconciliation, object-safe storage boundary, Windows/Linux `20/20`, 32/16/32 concurrency, current/clean-clone FULL 5/5로 PASS.
-
-## Next
-
-P04-09 VS-0 core CLI를 `max`로 구현한다. synthetic A4/한 style/한 paragraph를 exact plan→verified direct route→transaction→idempotency/CAS→bounded reopen으로 연결하고 정품 한글 2020 open/readback/clean-shutdown actual evidence를 수집한다. 그 뒤 P04 phase Gate도 `max`로 별도 감사한다.
+Inspect the authoritative HWPX 2020 paragraph schema/source records and existing P03 preserving XML /
+P04 paragraph IR. Freeze `P05-01` typed elements and failure codes in a migration/policy, then implement
+the smallest safe lift/lower slice with Unicode/run-boundary tests. Next phase decision after P05-01:
+P05-02 at `max` if the task Gate passes.

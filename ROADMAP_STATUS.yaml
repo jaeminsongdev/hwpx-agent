@@ -1,7 +1,7 @@
 schema: hwpx-agent.roadmap-status/v2
-updated_at: 2026-09-02
-current_phase: P04
-status: p04_in_progress_current_pc_local_only
+updated_at: 2026-09-03
+current_phase: P05
+status: p05_in_progress_current_pc_local_only
 design_baseline:
   feature_domains: 16
   features: 609
@@ -401,8 +401,8 @@ p03_execution:
     user_documents_opened: false
     hancom_runtime_executed_by_task: true
 p04_execution:
-  current_task: P04-09
-  gate_state: in_progress_current_pc_local
+  current_task: complete
+  gate_state: passed_scoped_current_pc_local
   tasks:
     P04-01: passed_current_pc_local_pure_model
     P04-02: passed_current_pc_local_pure_model
@@ -412,7 +412,7 @@ p04_execution:
     P04-06: passed_current_pc_local_transaction_core
     P04-07: passed_current_pc_local_pure_model
     P04-08: passed_current_pc_local_reference_service
-    P04-09: in_progress_vs0_core_cli
+    P04-09: passed_current_pc_local_vs0
   document_graph_v2:
     audited_source_commit: 0408d8f19592641e8737544ea35377265f444a1b
     contract: hwpx-agent.document-graph/v2
@@ -580,13 +580,49 @@ p04_execution:
     clean_clone_sbom_components: 230
     user_documents_opened: false
     hancom_runtime_executed_by_task: false
+  vs0_core_cli:
+    implementation_commit: e42666ccc78d6a70fc142ccc1d9d86e4bc5aed3b
+    audited_source_commit: 6cc11f05d7d80314c6c56169a8cf37f7419a0d33
+    request_contract: hwpx-agent.vs0-create-request/v1
+    result_contract: hwpx-agent.vs0-create-result/v1
+    capability_id: document.create_vs0
+    backend_id: direct-hwpx-vs0
+    target_profile_id: hancom-hangul-2020-secondary
+    exact_build: 11.0.0.9136
+    vs0_package_tests_windows_linux: 3_of_3_passed
+    cli_tests_windows_linux: 3_of_3_passed
+    actual_bundle_verifier_tests: 5_of_5_passed
+    actual_open_readback_phases: 8_of_8_passed
+    actual_artifact_sha256: 57bfe1ce3b2b89fedbc5ffaf56e92cffb980afd368b7f83e05c0a13e8eccff06
+    actual_bundle_correlation_sha256: b16a24fdbb8480b190607e1df320edcdb8f1cb37cf4d58a81ae5a94242e57048
+    input_mutation_save_residual_process: 0
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    linux_clippy_and_workspace_tests_read_only: passed
+    secrets_vulnerabilities_forbidden_licenses: 0
+    scanned_files_current_and_clean_clone: 571
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: true
+p05_execution:
+  current_task: P05-01
+  gate_state: in_progress_current_pc_local
+  tasks:
+    P05-01: in_progress_text_flow_reader_writer
+    P05-02: blocked_by_P05-01
+    P05-03: blocked_by_P05-02
+    P05-04: blocked_by_P05-03
+    P05-05: blocked_by_P05-04
+    P05-06: blocked_by_P05-05
+    P05-07: blocked_by_P05-06
+    P05-08: blocked_by_P05-07
+    P05-09: blocked_by_P05-08
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope
   P02: completed_current_pc_local_scope
   P03: completed_current_pc_local_scope
-  P04: in_progress_current_pc_local_scope
-  P05: blocked_by_P04
+  P04: completed_current_pc_local_scope
+  P05: in_progress_current_pc_local_scope
   P06: blocked_by_P05
   P07: blocked_by_P05
   P08: blocked_by_P05
