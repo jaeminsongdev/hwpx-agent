@@ -22,6 +22,12 @@ $caseDefinitions = @(
         path = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..\tools\run-hancom-2020-header-footer-readback.ps1')).Path
         schema = 'hwpx-agent\.p05-08-hancom-2020-header-footer-readback/v1'
         prefix = 'HEADER_FOOTER_READBACK'
+    },
+    [ordered]@{
+        name = 'vs1_layout'
+        path = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..\tools\run-hancom-2020-vs1-layout-readback.ps1')).Path
+        schema = 'hwpx-agent\.p05-09-hancom-2020-vs1-layout-readback/v1'
+        prefix = 'VS1_LAYOUT_READBACK'
     }
 )
 $bounded = [System.IO.File]::ReadAllText($boundedPath)

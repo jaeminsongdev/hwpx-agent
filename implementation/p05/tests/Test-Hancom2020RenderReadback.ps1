@@ -16,9 +16,12 @@ $sectionPath = (Resolve-Path -LiteralPath (
 $headerPath = (Resolve-Path -LiteralPath (
     Join-Path $PSScriptRoot '..\tools\run-hancom-2020-header-footer-readback.ps1'
 )).Path
+$vs1Path = (Resolve-Path -LiteralPath (
+    Join-Path $PSScriptRoot '..\tools\run-hancom-2020-vs1-layout-readback.ps1'
+)).Path
 
 $sources = [ordered]@{}
-foreach ($path in @($boundedPath, $enginePath, $sectionPath, $headerPath)) {
+foreach ($path in @($boundedPath, $enginePath, $sectionPath, $headerPath, $vs1Path)) {
     $tokens = $null
     $errors = $null
     [void][System.Management.Automation.Language.Parser]::ParseFile(
@@ -34,7 +37,8 @@ $bounded = [string]$sources[$boundedPath].content
 $engine = [string]$sources[$enginePath].content
 $section = [string]$sources[$sectionPath].content
 $header = [string]$sources[$headerPath].content
-$all = $bounded + $engine + $section + $header
+$vs1 = [string]$sources[$vs1Path].content
+$all = $bounded + $engine + $section + $header + $vs1
 
 function Test-RenderPreflightFailure {
     param(
@@ -96,7 +100,7 @@ $outsideBoundaryFailsClosed = Test-RenderPreflightFailure `
 $checks = [ordered]@{
     all_scripts_parse = @($sources.Values | Where-Object errors -ne 0).Count -eq 0
     optional_render_parameter = $bounded -match "\[string\]\`$RenderPdfPath = ''" -and $engine -match "\[string\]\`$RenderPdfPath = ''"
-    layout_wrappers_forward_render = $section -match '-RenderPdfPath \$RenderPdfPath' -and $header -match '-RenderPdfPath \$RenderPdfPath'
+    layout_wrappers_forward_render = $section -match '-RenderPdfPath \$RenderPdfPath' -and $header -match '-RenderPdfPath \$RenderPdfPath' -and $vs1 -match '-RenderPdfPath \$RenderPdfPath'
     render_argument_only_when_requested = $bounded -match '(?s)if \(\$null -ne \$renderPdf\).*?\$arguments \+= @\(''-RenderPdfPath'', \$renderPdf\)'
     render_path_inside_fixture_boundary = $bounded -match 'progressFile, \$renderPdf' -and $engine -match 'progressFile, \$renderPdf'
     pdf_extension_required = $bounded -match "GetExtension\(\`$renderPdf\) -cne '\.pdf'" -and $engine -match "GetExtension\(\`$renderPdf\) -cne '\.pdf'"

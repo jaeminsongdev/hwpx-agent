@@ -62,6 +62,9 @@ class PdfVerifierContractTests(unittest.TestCase):
         header = MODULE.parse_expectation_bytes(
             (expectation_root / "p05-08-header-footer.json").read_bytes()
         )
+        layout = MODULE.parse_expectation_bytes(
+            (expectation_root / "p05-09-vs1-layout.json").read_bytes()
+        )
         self.assertEqual(section.page_count, 2)
         self.assertEqual(
             (section.pages[0].width_milli_mm, section.pages[0].height_milli_mm),
@@ -70,6 +73,12 @@ class PdfVerifierContractTests(unittest.TestCase):
         self.assertEqual(header.page_count, 4)
         self.assertIn("P05-08-MASTER-PAGE", header.pages[0].forbidden_text)
         self.assertIn("P05-08-MASTER-PAGE", header.pages[1].required_text)
+        self.assertEqual(layout.page_count, 1)
+        self.assertEqual(
+            (layout.pages[0].width_milli_mm, layout.pages[0].height_milli_mm),
+            (310_000, 230_000),
+        )
+        self.assertIn("P05-09 VS-1 레이아웃", layout.pages[0].required_text)
 
     def test_root_extra_field_is_rejected(self) -> None:
         value = expectation()
