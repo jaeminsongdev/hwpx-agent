@@ -1,4 +1,6 @@
+using Google.Protobuf;
 using HwpxAgent.Protocol.Foundation.V1;
+using HwpxAgent.Protocol.WindowsBridge.V1;
 using HwpxAgent.WindowsWorker;
 
 var valid = new WorkerRequestContext
@@ -43,5 +45,79 @@ catch (ArgumentException)
     // Expected fail-closed behavior.
 }
 
-Console.WriteLine("windows worker semantic boundary smoke passed");
+const string openCommandVector =
+    "08011a2430303030303030302d303030302d343030302d383030302d303030303030303030303031222430303030303030302d303030302d343030302d383030302d30303030303030303030303228073080a0f1c2b1343a2430303030303030302d303030302d343030302d383030302d303030303030303030303033aa01770a640a540a0d666978747572652d696e70757412406363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636318d23e120a696e7075745f303030311801120f66696c652e6c6f63616c5f72656164";
+var openBytes = Convert.FromHexString(openCommandVector);
+var openCommand = WorkerBoundary.DecodeAndValidate(openBytes);
+if (!openCommand.ToByteArray().AsSpan().SequenceEqual(openBytes))
+{
+    Console.Error.WriteLine("C# did not preserve the Rust bridge wire vector");
+    return 1;
+}
+
+var pathCommand = openCommand.Clone();
+pathCommand.OpenDocument.Input.SandboxHandle = "../user-document.hwpx";
+try
+{
+    WorkerBoundary.Validate(pathCommand);
+    Console.Error.WriteLine("path-like bridge sandbox handle was accepted");
+    return 1;
+}
+catch (ArgumentException)
+{
+    // Expected fail-closed behavior.
+}
+
+var uppercaseCommand = openCommand.Clone();
+uppercaseCommand.SessionId = "AAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAAA";
+try
+{
+    WorkerBoundary.Validate(uppercaseCommand);
+    Console.Error.WriteLine("noncanonical uppercase UUID was accepted");
+    return 1;
+}
+catch (ArgumentException)
+{
+    // Expected fail-closed behavior.
+}
+
+try
+{
+    WorkerBoundary.DecodeAndValidate(new byte[1_048_577]);
+    Console.Error.WriteLine("oversized Windows bridge frame was accepted");
+    return 1;
+}
+catch (ArgumentException)
+{
+    // Expected fail-closed behavior.
+}
+
+var rawActionCommand = openCommand.Clone();
+rawActionCommand.ExecutePlan = new StaExecutePlanCommand
+{
+    OperationPlan = openCommand.OpenDocument.Input.Clone(),
+    BindingBundleId = "haction.run",
+    BindingBundleSha256 = new string('d', 64),
+};
+try
+{
+    WorkerBoundary.Validate(rawActionCommand);
+    Console.Error.WriteLine("raw automation bridge binding was accepted");
+    return 1;
+}
+catch (ArgumentException)
+{
+    // Expected fail-closed behavior.
+}
+
+var bridgeService = WindowsBridgeReflection.Descriptor.Services[0];
+var bridgeMethods = bridgeService.Methods.Select(method => method.Name).ToArray();
+if (bridgeService.Name != "WindowsAgentControl"
+    || !bridgeMethods.SequenceEqual(["AcquireLease", "Heartbeat", "CommitExecution", "ReportProbe"]))
+{
+    Console.Error.WriteLine("Windows bridge service descriptor drifted");
+    return 1;
+}
+
+Console.WriteLine("windows worker semantic and P10 bridge compatibility smoke passed");
 return 0;

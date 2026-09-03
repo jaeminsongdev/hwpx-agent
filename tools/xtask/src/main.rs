@@ -14,8 +14,11 @@ use sha2::{Digest, Sha256};
 
 const GENERATED_FILES: &[&str] = &[
     "descriptor/hwpx-agent-foundation.pb",
+    "descriptor/hwpx-agent-windows-bridge.pb",
     "csharp/Foundation.cs",
+    "csharp/WindowsBridge.cs",
     "rust/src/hwpx_agent.foundation.v1.rs",
+    "rust/src/hwpx_agent.windows_bridge.v1.rs",
     "rust/src/schema_models.rs",
     "typescript/src/schema-models.ts",
     "typescript/schema-catalog.json",
@@ -52,21 +55,28 @@ fn generate(root: &Path, output: &Path) -> Result<(), Box<dyn std::error::Error>
     // codegen I/O를 ASCII temp 아래에서 수행하고 Rust fs로 결과만 게시한다.
     let native_staging = ascii_native_tempdir()?;
     let proto_root = native_staging.path().join("proto");
-    let proto = proto_root.join("hwpx_agent/foundation/v1/foundation.proto");
-    fs::create_dir_all(proto.parent().ok_or("proto has no parent")?)?;
-    fs::copy(
-        root.join("protocol/proto/hwpx_agent/foundation/v1/foundation.proto"),
-        &proto,
+    let foundation_proto = proto_root.join("hwpx_agent/foundation/v1/foundation.proto");
+    let bridge_proto = proto_root.join("hwpx_agent/windows_bridge/v1/windows_bridge.proto");
+    stage_proto(
+        &root.join("protocol/proto/hwpx_agent/foundation/v1/foundation.proto"),
+        &foundation_proto,
+    )?;
+    stage_proto(
+        &root.join("protocol/proto/hwpx_agent/windows_bridge/v1/windows_bridge.proto"),
+        &bridge_proto,
     )?;
     let rust_staging = native_staging.path().join("generated/rust/src");
     let csharp_staging = native_staging.path().join("generated/csharp");
-    let descriptor_staging = native_staging
+    let foundation_descriptor_staging = native_staging
         .path()
         .join("generated/descriptor/hwpx-agent-foundation.pb");
+    let bridge_descriptor_staging = native_staging
+        .path()
+        .join("generated/descriptor/hwpx-agent-windows-bridge.pb");
     for directory in [
         &rust_staging,
         &csharp_staging,
-        descriptor_staging
+        foundation_descriptor_staging
             .parent()
             .ok_or("descriptor has no parent")?,
         &output.join("rust/src"),
@@ -81,40 +91,123 @@ fn generate(root: &Path, output: &Path) -> Result<(), Box<dyn std::error::Error>
     }
 
     let protoc = protoc_bin_vendored::protoc_bin_path()?;
-    let status = Command::new(&protoc)
-        .arg(format!("--proto_path={}", proto_root.display()))
-        .arg(format!("--csharp_out={}", csharp_staging.display()))
-        .arg(format!(
-            "--descriptor_set_out={}",
-            descriptor_staging.display()
-        ))
-        .arg("--include_imports")
-        .arg(&proto)
-        .status()?;
-    if !status.success() {
-        return Err("protoc C#/descriptor generation failed".into());
-    }
-
-    let descriptor_bytes = fs::read(&descriptor_staging)?;
-    let descriptor_set = prost_types::FileDescriptorSet::decode(descriptor_bytes.as_slice())?;
-    let mut prost = prost_build::Config::new();
-    prost.out_dir(&rust_staging);
-    prost.compile_fds(descriptor_set)?;
-
-    fs::copy(
-        rust_staging.join("hwpx_agent.foundation.v1.rs"),
-        output.join("rust/src/hwpx_agent.foundation.v1.rs"),
+    run_protoc(
+        &protoc,
+        &proto_root,
+        &csharp_staging,
+        &foundation_proto,
+        &foundation_descriptor_staging,
+        "foundation",
     )?;
-    fs::copy(
-        csharp_staging.join("Foundation.cs"),
-        output.join("csharp/Foundation.cs"),
+    run_protoc(
+        &protoc,
+        &proto_root,
+        &csharp_staging,
+        &bridge_proto,
+        &bridge_descriptor_staging,
+        "windows bridge",
     )?;
-    fs::copy(
-        descriptor_staging,
-        output.join("descriptor/hwpx-agent-foundation.pb"),
+    compile_rust_protocols(
+        &rust_staging,
+        &foundation_descriptor_staging,
+        &bridge_descriptor_staging,
+    )?;
+    publish_protocol_artifacts(
+        output,
+        &rust_staging,
+        &csharp_staging,
+        &foundation_descriptor_staging,
+        &bridge_descriptor_staging,
     )?;
 
     generate_schema_models(root, output)?;
+    Ok(())
+}
+
+fn stage_proto(source: &Path, destination: &Path) -> Result<(), Box<dyn std::error::Error>> {
+    fs::create_dir_all(destination.parent().ok_or("proto has no parent")?)?;
+    fs::copy(source, destination)?;
+    Ok(())
+}
+
+fn run_protoc(
+    protoc: &Path,
+    proto_root: &Path,
+    csharp_staging: &Path,
+    proto: &Path,
+    descriptor: &Path,
+    label: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let status = Command::new(protoc)
+        .arg(format!("--proto_path={}", proto_root.display()))
+        .arg(format!("--csharp_out={}", csharp_staging.display()))
+        .arg(format!("--descriptor_set_out={}", descriptor.display()))
+        .arg("--include_imports")
+        .arg(proto)
+        .status()?;
+    if status.success() {
+        Ok(())
+    } else {
+        Err(format!("{label} protoc C#/descriptor generation failed").into())
+    }
+}
+
+fn compile_rust_protocols(
+    rust_staging: &Path,
+    foundation_descriptor: &Path,
+    bridge_descriptor: &Path,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let foundation_set =
+        prost_types::FileDescriptorSet::decode(fs::read(foundation_descriptor)?.as_slice())?;
+    let mut foundation_prost = prost_build::Config::new();
+    foundation_prost.out_dir(rust_staging);
+    foundation_prost.compile_fds(foundation_set)?;
+
+    let bridge_set =
+        prost_types::FileDescriptorSet::decode(fs::read(bridge_descriptor)?.as_slice())?;
+    let mut bridge_prost = prost_build::Config::new();
+    bridge_prost.out_dir(rust_staging);
+    bridge_prost.extern_path(".hwpx_agent.foundation.v1", "crate::foundation::v1");
+    bridge_prost.compile_fds(bridge_set)?;
+    Ok(())
+}
+
+fn publish_protocol_artifacts(
+    output: &Path,
+    rust_staging: &Path,
+    csharp_staging: &Path,
+    foundation_descriptor: &Path,
+    bridge_descriptor: &Path,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let copies = [
+        (
+            rust_staging.join("hwpx_agent.foundation.v1.rs"),
+            output.join("rust/src/hwpx_agent.foundation.v1.rs"),
+        ),
+        (
+            csharp_staging.join("Foundation.cs"),
+            output.join("csharp/Foundation.cs"),
+        ),
+        (
+            rust_staging.join("hwpx_agent.windows_bridge.v1.rs"),
+            output.join("rust/src/hwpx_agent.windows_bridge.v1.rs"),
+        ),
+        (
+            csharp_staging.join("WindowsBridge.cs"),
+            output.join("csharp/WindowsBridge.cs"),
+        ),
+        (
+            foundation_descriptor.to_path_buf(),
+            output.join("descriptor/hwpx-agent-foundation.pb"),
+        ),
+        (
+            bridge_descriptor.to_path_buf(),
+            output.join("descriptor/hwpx-agent-windows-bridge.pb"),
+        ),
+    ];
+    for (source, destination) in copies {
+        fs::copy(source, destination)?;
+    }
     Ok(())
 }
 

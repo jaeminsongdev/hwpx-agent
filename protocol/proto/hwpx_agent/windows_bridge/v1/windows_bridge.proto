@@ -1,0 +1,301 @@
+syntax = "proto3";
+
+package hwpx_agent.windows_bridge.v1;
+
+option csharp_namespace = "HwpxAgent.Protocol.WindowsBridge.V1";
+
+import "hwpx_agent/foundation/v1/foundation.proto";
+
+// The Windows Agent is an outbound client. The STA worker never exposes a
+// public or network RPC endpoint.
+service WindowsAgentControl {
+  rpc AcquireLease(AgentLeaseRequest) returns (AgentLeaseResponse);
+  rpc Heartbeat(AgentHeartbeatRequest) returns (AgentHeartbeatResponse);
+  rpc CommitExecution(AgentCommitRequest) returns (AgentCommitResponse);
+  rpc ReportProbe(AgentProbeRequest) returns (AgentProbeResponse);
+}
+
+enum LeaseDisposition {
+  LEASE_DISPOSITION_UNSPECIFIED = 0;
+  LEASE_DISPOSITION_NO_WORK = 1;
+  LEASE_DISPOSITION_ASSIGNED = 2;
+}
+
+enum ExecutionState {
+  EXECUTION_STATE_UNSPECIFIED = 0;
+  EXECUTION_STATE_ACCEPTED = 1;
+  EXECUTION_STATE_RUNNING = 2;
+  EXECUTION_STATE_SUCCEEDED = 3;
+  EXECUTION_STATE_FAILED = 4;
+  EXECUTION_STATE_CANCELLED = 5;
+  EXECUTION_STATE_UNKNOWN_OUTCOME = 6;
+}
+
+enum CommitDisposition {
+  COMMIT_DISPOSITION_UNSPECIFIED = 0;
+  COMMIT_DISPOSITION_ACCEPTED = 1;
+  COMMIT_DISPOSITION_STALE_LEASE = 2;
+  COMMIT_DISPOSITION_FENCING_MISMATCH = 3;
+  COMMIT_DISPOSITION_BINDING_MISMATCH = 4;
+  COMMIT_DISPOSITION_ALREADY_TERMINAL = 5;
+}
+
+enum ProbeHealth {
+  PROBE_HEALTH_UNSPECIFIED = 0;
+  PROBE_HEALTH_HEALTHY = 1;
+  PROBE_HEALTH_DEGRADED = 2;
+  PROBE_HEALTH_UNROUTABLE = 3;
+}
+
+enum BridgeErrorCode {
+  BRIDGE_ERROR_CODE_UNSPECIFIED = 0;
+  BRIDGE_ERROR_CODE_PROTOCOL_MISMATCH = 1;
+  BRIDGE_ERROR_CODE_INVALID_ENVELOPE = 2;
+  BRIDGE_ERROR_CODE_STALE_FENCING_TOKEN = 3;
+  BRIDGE_ERROR_CODE_PROFILE_MISMATCH = 4;
+  BRIDGE_ERROR_CODE_ARTIFACT_MISMATCH = 5;
+  BRIDGE_ERROR_CODE_POLICY_DENIED = 6;
+  BRIDGE_ERROR_CODE_UNKNOWN_BINDING = 7;
+  BRIDGE_ERROR_CODE_UNKNOWN_MODAL = 8;
+  BRIDGE_ERROR_CODE_TIMEOUT = 9;
+  BRIDGE_ERROR_CODE_CANCELLED = 10;
+  BRIDGE_ERROR_CODE_COM_FAILURE = 11;
+  BRIDGE_ERROR_CODE_VALIDATION_FAILED = 12;
+  BRIDGE_ERROR_CODE_OUTPUT_REJECTED = 13;
+  BRIDGE_ERROR_CODE_CLEANUP_FAILED = 14;
+  BRIDGE_ERROR_CODE_UNKNOWN_OUTCOME = 15;
+}
+
+enum StaEventType {
+  STA_EVENT_TYPE_UNSPECIFIED = 0;
+  STA_EVENT_TYPE_SESSION_STARTED = 1;
+  STA_EVENT_TYPE_DOCUMENT_OPENED = 2;
+  STA_EVENT_TYPE_PLAN_EXECUTED = 3;
+  STA_EVENT_TYPE_OUTPUT_SAVED = 4;
+  STA_EVENT_TYPE_READBACK_COMPLETED = 5;
+  STA_EVENT_TYPE_RENDER_COMPLETED = 6;
+  STA_EVENT_TYPE_EXPECTED_MODAL = 7;
+  STA_EVENT_TYPE_UNKNOWN_MODAL = 8;
+  STA_EVENT_TYPE_CLEANUP_COMPLETED = 9;
+}
+
+message TargetProfileIdentity {
+  string profile_id = 1;
+  string product_build = 2;
+  string locale = 3;
+  string process_architecture = 4;
+  string executable_sha256 = 5;
+  string environment_digest = 6;
+}
+
+message ResourceLimits {
+  uint32 command_timeout_seconds = 1;
+  uint32 job_timeout_seconds = 2;
+  uint64 memory_limit_bytes = 3;
+  uint64 max_output_bytes = 4;
+  uint32 max_event_count = 5;
+}
+
+message SecurityPolicy {
+  bool allow_external_network = 1;
+  bool allow_clipboard = 2;
+  bool allow_macros = 3;
+  bool allow_ole_activation = 4;
+  string file_access_policy_id = 5;
+  string modal_policy_id = 6;
+}
+
+// sandbox_handle is an opaque token resolved inside an already assigned job
+// sandbox. It MUST NOT contain an absolute or relative filesystem path.
+message StagedArtifactRef {
+  hwpx_agent.foundation.v1.ArtifactRef artifact = 1;
+  string sandbox_handle = 2;
+  bool read_only = 3;
+}
+
+message AgentLeaseRequest {
+  uint32 protocol_major = 1;
+  uint32 protocol_minor = 2;
+  string agent_instance_id = 3;
+  TargetProfileIdentity target_profile = 4;
+  string capability_registry_sha256 = 5;
+  uint32 available_job_slots = 6;
+  uint64 observed_at_unix_ms = 7;
+  string nonce_sha256 = 8;
+}
+
+message LeaseAssignment {
+  string lease_id = 1;
+  uint64 fencing_token = 2;
+  uint64 expires_at_unix_ms = 3;
+  string request_id = 4;
+  string job_id = 5;
+  string trace_id = 6;
+  string execution_id = 7;
+  string target_profile_id = 8;
+  StagedArtifactRef input = 9;
+  StagedArtifactRef operation_plan = 10;
+  StagedArtifactRef validation_contract = 11;
+  ResourceLimits resource_limits = 12;
+  SecurityPolicy security_policy = 13;
+}
+
+message AgentLeaseResponse {
+  LeaseDisposition disposition = 1;
+  LeaseAssignment assignment = 2;
+  uint64 retry_after_ms = 3;
+}
+
+message AgentHeartbeatRequest {
+  string lease_id = 1;
+  uint64 fencing_token = 2;
+  string execution_id = 3;
+  ExecutionState execution_state = 4;
+  uint64 observed_at_unix_ms = 5;
+  string progress_digest = 6;
+}
+
+message AgentHeartbeatResponse {
+  bool lease_current = 1;
+  bool cancel_requested = 2;
+  uint64 expires_at_unix_ms = 3;
+}
+
+message BridgeDiagnostic {
+  BridgeErrorCode error_code = 1;
+  string safe_detail_sha256 = 2;
+  bool retryable = 3;
+  bool effect_unknown = 4;
+}
+
+message AgentExecutionReceipt {
+  ExecutionState terminal_state = 1;
+  string backend_id = 2;
+  string binding_bundle_id = 3;
+  string binding_bundle_sha256 = 4;
+  hwpx_agent.foundation.v1.ArtifactRef input = 5;
+  repeated hwpx_agent.foundation.v1.ArtifactRef outputs = 6;
+  repeated hwpx_agent.foundation.v1.ArtifactRef evidence = 7;
+  hwpx_agent.foundation.v1.ValidationState validation_state = 8;
+  bool input_unchanged = 9;
+  bool external_network_invoked = 10;
+  bool registry_or_system_setting_changed = 11;
+  BridgeDiagnostic diagnostic = 12;
+}
+
+message AgentCommitRequest {
+  string lease_id = 1;
+  uint64 fencing_token = 2;
+  string execution_id = 3;
+  AgentExecutionReceipt receipt = 4;
+}
+
+message AgentCommitResponse {
+  CommitDisposition disposition = 1;
+  string receipt_sha256 = 2;
+}
+
+message RuntimeProbeReceipt {
+  TargetProfileIdentity target_profile = 1;
+  ProbeHealth health = 2;
+  string capability_registry_sha256 = 3;
+  string capability_set_sha256 = 4;
+  hwpx_agent.foundation.v1.ArtifactRef evidence = 5;
+  uint64 observed_at_unix_ms = 6;
+}
+
+message AgentProbeRequest {
+  uint32 protocol_major = 1;
+  uint32 protocol_minor = 2;
+  string agent_instance_id = 3;
+  RuntimeProbeReceipt probe = 4;
+}
+
+message AgentProbeResponse {
+  bool accepted = 1;
+  bool routable = 2;
+  string accepted_probe_sha256 = 3;
+}
+
+message StaStartSessionCommand {
+  TargetProfileIdentity target_profile = 1;
+  string capability_registry_sha256 = 2;
+  SecurityPolicy security_policy = 3;
+}
+
+message StaOpenDocumentCommand {
+  StagedArtifactRef input = 1;
+  string open_policy_id = 2;
+}
+
+message StaExecutePlanCommand {
+  StagedArtifactRef operation_plan = 1;
+  string binding_bundle_id = 2;
+  string binding_bundle_sha256 = 3;
+}
+
+message StaSaveDocumentCommand {
+  string output_slot = 1;
+  string format_id = 2;
+  bool reopen_and_readback = 3;
+}
+
+message StaRenderDocumentCommand {
+  string output_slot = 1;
+  string render_profile_id = 2;
+}
+
+message StaCloseSessionCommand {
+  bool discard_unsaved_changes = 1;
+}
+
+message StaCancelCommand {
+  string target_command_id = 1;
+}
+
+// These envelopes are length-delimited protobuf frames on an authenticated,
+// per-job named pipe. No generic action name or ParameterSet map is present.
+message StaCommandEnvelope {
+  uint32 protocol_major = 1;
+  uint32 protocol_minor = 2;
+  string session_id = 3;
+  string command_id = 4;
+  uint64 fencing_token = 5;
+  uint64 deadline_unix_ms = 6;
+  string trace_id = 7;
+
+  oneof command {
+    StaStartSessionCommand start_session = 20;
+    StaOpenDocumentCommand open_document = 21;
+    StaExecutePlanCommand execute_plan = 22;
+    StaSaveDocumentCommand save_document = 23;
+    StaRenderDocumentCommand render_document = 24;
+    StaCloseSessionCommand close_session = 25;
+    StaCancelCommand cancel = 26;
+  }
+}
+
+message StaEventRecord {
+  uint32 sequence = 1;
+  StaEventType event_type = 2;
+  uint64 recorded_at_unix_ms = 3;
+  string safe_metadata_sha256 = 4;
+}
+
+message StaCommandReceipt {
+  uint32 protocol_major = 1;
+  uint32 protocol_minor = 2;
+  string session_id = 3;
+  string command_id = 4;
+  uint64 fencing_token = 5;
+  ExecutionState state = 6;
+  repeated StagedArtifactRef outputs = 7;
+  hwpx_agent.foundation.v1.ValidationState validation_state = 8;
+  repeated StaEventRecord events = 9;
+  BridgeDiagnostic diagnostic = 10;
+  bool input_unchanged = 11;
+  bool raw_document_content_logged = 12;
+  bool external_network_invoked = 13;
+  bool registry_or_system_setting_changed = 14;
+  bool cleanup_required = 15;
+}

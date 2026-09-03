@@ -1,6 +1,8 @@
 #![forbid(unsafe_code)]
 #![allow(clippy::doc_markdown)]
 #![allow(clippy::must_use_candidate)]
+// Generated protobuf transport records intentionally carry independent policy/result flags.
+#![allow(clippy::struct_excessive_bools)]
 
 pub mod foundation {
     pub mod v1 {
@@ -8,7 +10,14 @@ pub mod foundation {
     }
 }
 
+pub mod windows_bridge {
+    pub mod v1 {
+        include!("hwpx_agent.windows_bridge.v1.rs");
+    }
+}
+
 pub mod schema_models;
+pub mod windows_bridge_validation;
 
 #[cfg(test)]
 mod tests {
