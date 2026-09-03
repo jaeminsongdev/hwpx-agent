@@ -9,7 +9,7 @@
 
 - 상태: `P05_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. Exact Hangul 2020에서 disposable VS-0 open/readback/clean shutdown actual evidence도 통과했고 P05-01 text flow reader/writer를 시작한다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. Exact Hangul 2020에서 disposable VS-0 open/readback/clean shutdown actual evidence를 통과했고 P05-01 bounded text-flow reader/writer도 완료했다. 현재 P05-02 character styles를 시작한다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -88,11 +88,12 @@
 
 ## P05 현재 상태
 
-- P05-01 `in_progress`: run, tab, line break와 field boundary를 보존하는 bounded typed text-flow reader/writer, deterministic lift/lower와 Unicode/run-boundary corpus를 구현한다.
+- P05-01 `PASS`: P03 preserving XML 위에서 exact 2011 paragraph namespace의 paragraph/run/text/tab/line-break/field boundary를 bounded typed model로 lift/lower한다. 128-case Unicode/run-boundary corpus와 aggregate `e7fefa65...70c60`, text-flow `12/12`, package `63/63`, Windows/Linux workspace, current/clean FULL `5/5`, security 0을 통과했다. Opaque possible-text는 semantic extraction을, 모든 opaque는 lowering을 fail closed한다. Authoritative report는 `implementation/p05/P05-01_REPORT.md`다.
+- P05-02 `in_progress`: exact current-2020 header의 language font slots, character size/scale/spacing/effects/color를 bounded typed char-style model과 deterministic dedup/lower/readback으로 구현한다.
 
 ## 다음 작업
 
-P05-01 Text flow reader/writer를 구현한다. 추론수준은 `max`다. P03 safe/preserving XML 위에서 run/tab/line-break/field-boundary를 typed model로 lift/lower하고, Unicode 정규화와 run 경계를 임의 병합하지 않으며, bounded malformed/limit/round-trip corpus를 통과시킨다. 현재 단계에는 한글 UI 조작이 필요 없다.
+P05-02 Character styles를 구현한다. 추론수준은 `max`다. exact current-2020 `header.xml` fontface/charPr 구조를 잠그고 언어별 font slot, 크기, 장평, 자간, 효과와 색을 typed value로 lift/lower한다. 동일 semantic style은 deterministic dedup하고 ID/reference readback을 검증한다. 현재 단계에는 한글 UI 조작이 필요 없다.
 
 ## 현재 blocker
 
@@ -102,4 +103,4 @@ P05-01 Text flow reader/writer를 구현한다. 추론수준은 `max`다. P03 sa
 
 ## 검증 한계
 
-제품 foundation, P02 signed registry, P03 package/preserving/round-trip core와 P04 typed model/transaction/diff/idempotency/VS-0 vertical은 재현 가능하다. 그러나 VS-0는 create-new 단일 문단이며 P05의 범용 HWPX text lifting/lowering, real-save ID 안정성, rendered fidelity, durable multi-process persistence와 public wire integration을 증명하지 않는다. P03/P04 actual evidence는 승인된 synthetic 생성물의 read-only open/readback이며 save/render/PDF 동등성이나 사용자 문서 호환성을 뜻하지 않는다. Signed registry의 general public routing은 0이고 VS-0만 task 전용 exact signed route다. Exact 2020 evidence는 이 Windows 설치의 개인 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00~P04 실제 상태는 각 authoritative Gate report를 따른다.
+제품 foundation, P02 signed registry, P03 package/preserving/round-trip core, P04 typed model/transaction/diff/idempotency/VS-0 vertical과 P05-01 bounded text flow는 재현 가능하다. 그러나 VS-0는 create-new 단일 문단이고 P05-01은 standalone paragraph text-flow 계약이라 arbitrary package editing, character/paragraph style semantics, real-save ID 안정성, rendered fidelity, durable multi-process persistence와 public wire integration을 증명하지 않는다. P03/P04 actual evidence는 승인된 synthetic 생성물의 read-only open/readback이며 save/render/PDF 동등성이나 사용자 문서 호환성을 뜻하지 않는다. Signed registry의 general public routing은 0이고 VS-0만 task 전용 exact signed route다. Exact 2020 evidence는 이 Windows 설치의 개인 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00~P04 실제 상태는 각 authoritative Gate report를, P05-01은 해당 task report를 따른다.

@@ -604,11 +604,11 @@ p04_execution:
     user_documents_opened: false
     hancom_runtime_executed_by_task: true
 p05_execution:
-  current_task: P05-01
+  current_task: P05-02
   gate_state: in_progress_current_pc_local
   tasks:
-    P05-01: in_progress_text_flow_reader_writer
-    P05-02: blocked_by_P05-01
+    P05-01: completed_current_pc_local_text_flow
+    P05-02: in_progress_character_styles
     P05-03: blocked_by_P05-02
     P05-04: blocked_by_P05-03
     P05-05: blocked_by_P05-04
@@ -616,6 +616,31 @@ p05_execution:
     P05-07: blocked_by_P05-06
     P05-08: blocked_by_P05-07
     P05-09: blocked_by_P05-08
+  text_flow:
+    contract: hwpx-agent.text-flow/v1
+    audited_source_commit: 08de88a0d6745398e8141190f204a93b009f770a
+    target_profile: hancom-hangul-2020-secondary
+    exact_build_scope: 11.0.0.9136
+    executable_namespace: http://www.hancom.co.kr/hwpml/2011/paragraph
+    official_structural_source: ks-x-6101-machine-content-20260901_appendix_E_record_466
+    official_source_sha256: c4a8bdb082cf8610fa2b3f6e709ca9058ab256a2371e9a779b9b323ca82638e4
+    text_flow_tests_windows_linux: 12_of_12_passed
+    hwpx_package_tests_windows_linux: 63_of_63_passed
+    unicode_run_boundary_cases: 128
+    unicode_run_boundary_sha256: e7fefa652acf7139c29ee29e7e2d5f90f0758850c01d6be9a0834c62f0c70c60
+    vs0_paragraph_runs_and_opaque: 2_runs_3_opaque
+    possible_visible_opaque_semantic_fallback: forbidden
+    opaque_lowering: forbidden
+    local_ci_lanes: 5_of_5_passed
+    clean_clone_bootstrap: passed_git_status_clean
+    linux_clippy_and_workspace_tests_read_only: passed
+    linux_clippy_derived_image_digest: sha256:bfda7f1ddbf0a192699d4b02dc3dbfefabe5eb7c0dd5527ba31acdaf0e4ab37f
+    secrets_vulnerabilities_forbidden_licenses: 0
+    scanned_files_current_and_clean_clone: 579
+    sbom_components: 273
+    clean_clone_sbom_components: 231
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope

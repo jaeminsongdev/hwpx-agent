@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-03
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-01 Text flow reader/writer`
+- Active phase/task: `P05 / P05-02 Character styles`
 - Active reasoning effort: `max`
 - Blocker: none
 
@@ -28,7 +28,7 @@ save, render, cross-version or production proof.
 | P02 | `pass_scoped_current_pc_local` | `implementation/p02/P02_GATE_REPORT.md` |
 | P03 | `pass_scoped_current_pc_local` | `implementation/p03/P03_GATE_REPORT.md` |
 | P04 | `pass_scoped_current_pc_local` | `implementation/p04/P04_GATE_REPORT.md` |
-| P05 | `in_progress_current_pc_local` | P05-01 active |
+| P05 | `in_progress_current_pc_local` | P05-01 pass; P05-02 active |
 | P06 | `blocked_by_P05` | table engine |
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
@@ -52,35 +52,37 @@ save, render, cross-version or production proof.
 | P-0030~0037 | P04-01~08 graph/unit/selector/plan/router/transaction/diff/idempotency | `pass` | task reports under `implementation/p04/` |
 | P-0038 | P04-09 VS-0 core CLI | `pass` | exact commit `6cc11f0`, actual 2020 run 6, current/clean FULL 5/5, Linux offline pass |
 | P-0039 | P04 phase Gate | `pass` | STRICT/max, findings 0/0/0, P05 authorized in current scope |
-| P-0040 | P05-01 Text flow reader/writer | `in_progress` | contract/source/failure model discovery |
+| P-0040 | P05-01 Text flow reader/writer | `pass` | commit `08de88a`, text-flow 12/12, package 63/63, current/clean FULL 5/5, Linux offline |
+| P-0041 | P05-02 Character styles | `in_progress` | exact 2020 header profile and typed style contract discovery |
 
-## P05-01 acceptance
+## P05-02 acceptance
 
-- Add a versioned bounded typed text-flow model that distinguishes text runs, tabs, line breaks,
-  field begin/end boundaries and any required opaque non-editable token. Do not collapse adjacent runs
-  when style/source boundaries differ, and do not infer unmatched field pairs.
-- Lift only from P03 safe/preserving XML with explicit namespace/name and checked source spans. Unknown
-  or unsafe constructs remain preserved/opaque or cause a stable typed rejection; they are never
-  silently discarded or interpreted as executable markup.
-- Lower deterministic XML through typed values only. Escape text correctly, preserve Unicode scalar
-  content and semantic NFC policy without changing source run boundaries, and reparse/re-lift the
-  result before publication. No raw caller XML fragments are accepted.
-- Apply finite limits for bytes, elements, runs, text, field depth and nesting with checked arithmetic;
-  duplicate/missing/misnested field boundaries, malformed XML, limit overflow and unsupported shapes
-  fail without partial flow or output.
-- Test Hangul/Latin/CJK/emoji/combining characters, tabs/line breaks, empty and adjacent runs, style
-  transitions, nested/sequential field boundaries, XML escaping, malformed/limit cases, deterministic
-  lift→lower→lift and untouched-byte preservation outside the targeted paragraph.
+- Lock a versioned bounded current-2020 `header.xml` character-style profile. Model all seven language
+  slots (Hangul/Latin/Hanja/Japanese/Other/Symbol/User), font identities/references, HWPUNIT height,
+  ratio, spacing, relative size, offset, font spacing/kerning, text/shade color and supported effects.
+- Lift only exact `http://www.hancom.co.kr/hwpml/2011/head` fontface/charProperties structures through
+  P03 preserving XML. Validate counts, unique dense IDs, references, ranges, enum/color syntax and
+  child cardinality. Unknown or unsafe shapes remain opaque/non-editable or reject; none are dropped.
+- Define semantic style identity separately from allocated ID. Deduplicate equal semantic styles in a
+  deterministic first-use/canonical order, allocate checked collision-free IDs and rewrite only typed
+  references. Repeated input order must produce byte-identical catalogs and receipts.
+- Lower typed fontface/charPr fragments with deterministic attribute/child order and escaped values,
+  then reparse and require exact semantic equality and reference closure. No raw XML, installed-font
+  assumption, arbitrary path or platform font fallback enters the contract.
+- Test the exact generated 2020 header (7 fontface groups, 7 charPr records), cross-language slot
+  variation, size/ratio/spacing/effects/colors, dedup/idempotence, missing/dangling/duplicate IDs,
+  malformed/limit/range/opaque cases and P05-01 run `charPrIDRef` readback.
 - Run Windows and offline read-only Linux unit/Clippy validation, current/clean-clone FULL 5/5 and
-  security. This task is a pure package/IR Gate and requires no Hangul UI or user document.
+  security. This task is a pure package/IR Gate and requires no Hangul UI or user document; actual
+  installed-font rendering and visual fidelity remain later oracle evidence.
 
-## P04 closure evidence
+## P05-01 closure evidence
 
-P04 built typed immutable DocumentGraph, exact selectors, deterministic atomic plans, signed
-capability routing, isolated workspace transactions, semantic diff, in-memory exactly-once/CAS and
-the VS-0 vertical. Actual 2020 open/readback/close/Quit passed with input/save/network/settings change
-and residual process all 0. The actual bundle is digest-correlated and independently checked; private
-body/path/key data is untracked. Durable cross-process idempotency remains explicitly P14.
+P05-01 added `hwpx-agent.text-flow/v1` with ordered run/text/tab/line-break/field boundaries, bounded
+lift/lower/lift, conservative opaque semantics and redacted diagnostics. Its 12 tests, 128-case fixed
+corpus, package 63/63, Windows/Linux workspace, current/clean FULL 5/5 and security all passed at exact
+commit `08de88a`; no Hangul runtime or user document was used. Character references remain unresolved
+numeric IDs until P05-02.
 
 ## Validation policy
 
@@ -91,7 +93,7 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next action
 
-Inspect the authoritative HWPX 2020 paragraph schema/source records and existing P03 preserving XML /
-P04 paragraph IR. Freeze `P05-01` typed elements and failure codes in a migration/policy, then implement
-the smallest safe lift/lower slice with Unicode/run-boundary tests. Next phase decision after P05-01:
-P05-02 at `max` if the task Gate passes.
+Inspect the exact current-2020 generated `header.xml`, the locked official head-schema records and P03
+ID/preserving XML contracts. Freeze `P05-02` char-style semantic identity, ranges, effects, dedup and
+failure codes in a migration/policy, then implement the smallest exact-profile lift/lower/readback
+slice. Continue at reasoning effort `max`.
