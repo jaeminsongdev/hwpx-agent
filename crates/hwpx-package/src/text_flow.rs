@@ -246,9 +246,9 @@ impl Debug for TextSpan {
 pub enum TextAtom {
     Text(String),
     Tab {
-        alignment: TabAlignment,
-        width: Option<u32>,
-        leader: Option<String>,
+        width: u32,
+        leader: u32,
+        tab_type: u32,
     },
     LineBreak,
 }
@@ -261,45 +261,16 @@ impl Debug for TextAtom {
                 .field("utf8_bytes", &text.len())
                 .finish(),
             Self::Tab {
-                alignment,
                 width,
                 leader,
+                tab_type,
             } => formatter
                 .debug_struct("Tab")
-                .field("alignment", alignment)
                 .field("width", width)
-                .field("leader_present", &leader.is_some())
+                .field("leader", leader)
+                .field("tab_type", tab_type)
                 .finish(),
             Self::LineBreak => formatter.write_str("LineBreak"),
-        }
-    }
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum TabAlignment {
-    Left,
-    Right,
-    Center,
-    Decimal,
-}
-
-impl TabAlignment {
-    const fn as_xml(self) -> &'static str {
-        match self {
-            Self::Left => "LEFT",
-            Self::Right => "RIGHT",
-            Self::Center => "CENTER",
-            Self::Decimal => "DECIMAL",
-        }
-    }
-
-    fn parse(value: &str) -> Result<Self, TextFlowError> {
-        match value {
-            "LEFT" => Ok(Self::Left),
-            "RIGHT" => Ok(Self::Right),
-            "CENTER" => Ok(Self::Center),
-            "DECIMAL" => Ok(Self::Decimal),
-            _ => Err(TextFlowError::InvalidTab),
         }
     }
 }
@@ -839,19 +810,13 @@ fn read_text_span(
 fn read_tab(document: &PreservingXmlDocument, index: usize) -> Result<TextAtom, TextFlowError> {
     let tab = element(document, index)?;
     read_empty_element(document, index, &["width", "leader", "type"])?;
-    let alignment = TabAlignment::parse(required_attribute(tab, "type")?)?;
-    let width = optional_u32(tab, "width")?;
-    let leader = optional_attribute(tab, "leader").map(ToOwned::to_owned);
-    if leader
-        .as_deref()
-        .is_some_and(|value| !valid_token(value, 64))
-    {
-        return Err(TextFlowError::InvalidTab);
-    }
+    let width = required_tab_u32(tab, "width")?;
+    let leader = required_tab_u32(tab, "leader")?;
+    let tab_type = required_tab_u32(tab, "type")?;
     Ok(TextAtom::Tab {
-        alignment,
         width,
         leader,
+        tab_type,
     })
 }
 
@@ -959,15 +924,7 @@ fn validate_flow(flow: &TextFlow, limits: TextFlowLimits) -> Result<(), TextFlow
                                 validate_text(text)?;
                                 state.count_text(text.len())?;
                             }
-                            TextAtom::Tab { leader, .. } => {
-                                if leader
-                                    .as_deref()
-                                    .is_some_and(|value| !valid_token(value, 64))
-                                {
-                                    return Err(TextFlowError::InvalidTab);
-                                }
-                            }
-                            TextAtom::LineBreak => {}
+                            TextAtom::Tab { .. } | TextAtom::LineBreak => {}
                         }
                     }
                 }
@@ -1005,19 +962,16 @@ fn lower_text_span(output: &mut BoundedXml, span: &TextSpan) -> Result<(), TextF
         match atom {
             TextAtom::Text(text) => output.escaped(text)?,
             TextAtom::Tab {
-                alignment,
                 width,
                 leader,
+                tab_type,
             } => {
-                output.push("<hp:tab")?;
-                output.optional_u32(" width=\"", *width)?;
-                if let Some(leader) = leader {
-                    output.push(" leader=\"")?;
-                    output.escaped(leader)?;
-                    output.push("\"")?;
-                }
-                output.push(" type=\"")?;
-                output.push(alignment.as_xml())?;
+                output.push("<hp:tab width=\"")?;
+                output.push_u32(*width)?;
+                output.push("\" leader=\"")?;
+                output.push_u32(*leader)?;
+                output.push("\" type=\"")?;
+                output.push_u32(*tab_type)?;
                 output.push("\"/>")?;
             }
             TextAtom::LineBreak => output.push("<hp:lineBreak/>")?,
@@ -1216,6 +1170,12 @@ fn required_u32(element: &XmlElementToken, name: &str) -> Result<u32, TextFlowEr
     parse_u32(required_attribute(element, name)?)
 }
 
+fn required_tab_u32(element: &XmlElementToken, name: &str) -> Result<u32, TextFlowError> {
+    required_attribute(element, name)
+        .and_then(parse_u32)
+        .map_err(|_| TextFlowError::InvalidTab)
+}
+
 fn optional_u32(element: &XmlElementToken, name: &str) -> Result<Option<u32>, TextFlowError> {
     optional_attribute(element, name).map(parse_u32).transpose()
 }
@@ -1395,12 +1355,4 @@ fn valid_attribute_text(value: &str) -> bool {
     !value.chars().any(|character| {
         character.is_control() || matches!(character as u32 & 0xffff, 0xfffe | 0xffff)
     })
-}
-
-fn valid_token(value: &str, maximum: usize) -> bool {
-    !value.is_empty()
-        && value.len() <= maximum
-        && value
-            .bytes()
-            .all(|byte| byte.is_ascii_uppercase() || byte.is_ascii_digit() || byte == b'_')
 }

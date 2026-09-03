@@ -52,6 +52,16 @@ flows, escapes deterministically, reparses and requires exact typed equality bef
 - No raw XML fragment, COM/HAction string, path or executable markup is accepted by the writer.
 - Final blocker/major/minor findings after remediation: `0/0/0`.
 
+## P05-04 integration correction
+
+The original `08de88a` commit and `e7fefa65...70c60` corpus digest above remain historical P05-01
+closure evidence. During P05-04 exact current-PC target readback, licensed Hangul 2020 and the locked
+Hancom OWPML model both established that occurrence-local `hp:tab` `width`, `leader` and `type` are
+required unsigned integers, not named alignment/leader enums. The current text-flow contract was
+corrected before any public service wire endpoint existed; its replacement 128-case digest is
+`947426874dd0f0e5680934cfdad687e01c23edb9f8126eeb942fe6245e11188b`. Named alignment and LineType2
+leader semantics are owned by the P05-04 header tab definition.
+
 ## Scope and remaining boundary
 
 P05-01 does not resolve character-style records; it preserves their numeric references for P05-02.

@@ -46,7 +46,7 @@ fn build(path: &Path) -> Result<(), Box<dyn Error>> {
     let source = Hancom2020Vs0Builder::build(FIXTURE_TEXT)?;
     let source_bytes = source.with_verified_bytes(ToOwned::to_owned)?;
     let bytes = rebuild_with_tabs(&source_bytes)?;
-    let inspection = inspect_bytes(&bytes)?;
+    let inspection = inspect_bytes(&bytes, &expected_source_catalog())?;
 
     let mut output = OpenOptions::new().write(true).create_new(true).open(path)?;
     output.write_all(&bytes)?;
@@ -64,7 +64,7 @@ fn build(path: &Path) -> Result<(), Box<dyn Error>> {
 
 fn inspect_path(path: &Path) -> Result<(), Box<dyn Error>> {
     let bytes = read_bounded_fixture(path)?;
-    let inspection = inspect_bytes(&bytes)?;
+    let inspection = inspect_bytes(&bytes, &expected_hancom_2020_saved_catalog())?;
     println!(
         "schema=hwpx-agent.p05-04-tab-target-fixture/v1 mode=inspect state=pass size={} sha256={} definitions={} stops={} text_sha256={}",
         bytes.len(),
@@ -98,7 +98,10 @@ struct Inspection {
     text_sha256: String,
 }
 
-fn inspect_bytes(bytes: &[u8]) -> Result<Inspection, Box<dyn Error>> {
+fn inspect_bytes(
+    bytes: &[u8],
+    expected_catalog: &TabDefinitionCatalog,
+) -> Result<Inspection, Box<dyn Error>> {
     let mut reader = BoundedZipReader::open(Cursor::new(bytes), PackageLimits::default())?;
     let graph = PackageGraph::build(&mut reader, PackageGraphLimits::default())?;
     let header = read_part(&mut reader, "Contents/header.xml")?;
@@ -106,7 +109,7 @@ fn inspect_bytes(bytes: &[u8]) -> Result<Inspection, Box<dyn Error>> {
 
     let catalog = TabDefinitionCatalogReader::read(&header, TabDefinitionLimits::default())
         .map_err(|error| std::io::Error::other(format!("tab_catalog:{error:?}")))?;
-    if catalog != expected_catalog() {
+    if catalog != *expected_catalog {
         return Err("target tab-definition semantic readback mismatch".into());
     }
     let paragraphs = ParagraphStyleCatalogReader::read(&header, ParagraphStyleLimits::default())
@@ -194,8 +197,10 @@ fn rebuild_with_tabs(source: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
 
 fn mutate_header(bytes: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
     let source = std::str::from_utf8(bytes)?;
-    let tab_xml =
-        TabDefinitionCatalogWriter::lower(&expected_catalog(), TabDefinitionLimits::default())?;
+    let tab_xml = TabDefinitionCatalogWriter::lower(
+        &expected_source_catalog(),
+        TabDefinitionLimits::default(),
+    )?;
     let tab_xml = std::str::from_utf8(&tab_xml)?;
     let replacement = extract_exact_element(
         tab_xml.as_bytes(),
@@ -222,10 +227,10 @@ fn mutate_section(bytes: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
     let source = std::str::from_utf8(bytes)?;
     let replacement = concat!(
         "<hp:t>P05-04",
-        "<hp:tab width=\"2000\" leader=\"DOT\" type=\"LEFT\"/>LEFT",
-        "<hp:tab width=\"2001\" leader=\"SOLID\" type=\"CENTER\"/>CENTER",
-        "<hp:tab width=\"1999\" leader=\"DASH\" type=\"RIGHT\"/>RIGHT",
-        "<hp:tab width=\"2000\" leader=\"DASH_DOT\" type=\"DECIMAL\"/>123.45",
+        "<hp:tab width=\"2000\" leader=\"0\" type=\"0\"/>LEFT",
+        "<hp:tab width=\"2001\" leader=\"0\" type=\"0\"/>CENTER",
+        "<hp:tab width=\"1999\" leader=\"0\" type=\"0\"/>RIGHT",
+        "<hp:tab width=\"2000\" leader=\"0\" type=\"0\"/>123.45",
         "</hp:t>",
     );
     Ok(replace_exact_once(source, "<hp:t>P05-04-TAB-FIXTURE</hp:t>", replacement)?.into_bytes())
@@ -261,10 +266,23 @@ fn extract_exact_element<'a>(
     Ok(&source[start_index..end_index])
 }
 
-fn expected_catalog() -> TabDefinitionCatalog {
+fn expected_source_catalog() -> TabDefinitionCatalog {
+    expected_catalog_with_center_fallback(4001)
+}
+
+fn expected_hancom_2020_saved_catalog() -> TabDefinitionCatalog {
+    expected_catalog_with_center_fallback(4000)
+}
+
+fn expected_catalog_with_center_fallback(center_fallback: i32) -> TabDefinitionCatalog {
     let custom = [
         (1000, 2000, TabStopAlignment::Left, LineType2::Dot),
-        (2000, 4001, TabStopAlignment::Center, LineType2::Solid),
+        (
+            2000,
+            center_fallback,
+            TabStopAlignment::Center,
+            LineType2::Solid,
+        ),
         (3000, 6000, TabStopAlignment::Right, LineType2::Dash),
         (4000, 8000, TabStopAlignment::Decimal, LineType2::DashDot),
     ]
@@ -335,5 +353,17 @@ mod tests {
         file.set_len(MAX_TARGET_FIXTURE_BYTES + 1)?;
         assert!(read_bounded_fixture(&oversized).is_err());
         Ok(())
+    }
+
+    #[test]
+    fn current_2020_save_expectation_changes_only_the_observed_odd_fallback() {
+        let mut source = expected_source_catalog();
+        let saved = expected_hancom_2020_saved_catalog();
+        let TabStop::HwpUnitChar { fallback, .. } = &mut source.definitions[3].stops[1] else {
+            panic!("fixture center stop must use HwpUnitChar");
+        };
+        assert_eq!(fallback.position, 4001);
+        fallback.position = 4000;
+        assert_eq!(source, saved);
     }
 }

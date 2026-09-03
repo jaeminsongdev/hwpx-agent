@@ -80,9 +80,8 @@ pub use tab_definition::{
 };
 pub use text_flow::{
     FieldBegin, FieldEnd, FieldType, HANCOM_2020_PARAGRAPH_NAMESPACE, OpaqueTextElement,
-    ParagraphChild, TabAlignment, TextAtom, TextFlow, TextFlowError, TextFlowLimitConfig,
-    TextFlowLimits, TextFlowReader, TextFlowWriter, TextParagraphProperties, TextRun, TextRunItem,
-    TextSpan,
+    ParagraphChild, TextAtom, TextFlow, TextFlowError, TextFlowLimitConfig, TextFlowLimits,
+    TextFlowReader, TextFlowWriter, TextParagraphProperties, TextRun, TextRunItem, TextSpan,
 };
 pub use vs0::{
     HANCOM_2020_VS0_MAX_TEXT_BYTES, Hancom2020Vs0Artifact, Hancom2020Vs0Builder, Hancom2020Vs0Error,

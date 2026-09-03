@@ -27,6 +27,11 @@ and exact nested/sequential `fieldBegin`/`fieldEnd` boundaries. Run and text-spa
 merged. Field IDs are unique within the flow, ends must close the active begin, and the field-type set
 is the locked standard enumeration.
 
+The exact current-2020 `hp:tab` occurrence carries required unsigned `width`, `leader` and `type`
+metadata. This numeric shape is confirmed both by the locked Hancom OWPML model and by the P05-04
+licensed Hangul 2020 SaveAs readback. Named alignment and LineType2 leader semantics belong to the
+referenced P05-04 header tab definition; they are not inferred from these occurrence-local integers.
+
 Unimplemented non-text elements become immutable `OpaqueTextElement` metadata containing only
 namespace/name accessors, a source digest, byte length and a conservative visible-text flag. Raw XML
 is not retained in or exposed by that object. Known current-profile layout elements (`secPr`, `colPr`,

@@ -9,7 +9,9 @@ accepted or rewritten.
 - One standalone current-profile `hp:p` is admitted only after P03 preserving XML validation.
 - Ordered paragraph children distinguish typed runs from opaque elements; ordered run items
   distinguish text spans, field begins, field ends and opaque elements.
-- Text spans preserve Unicode scalar content and explicit `tab`/`lineBreak` atoms. NFC is an explicit
+- Text spans preserve Unicode scalar content and explicit `tab`/`lineBreak` atoms. Exact current-2020
+  tab occurrences carry required unsigned `width`, `leader` and `type` metadata; named tab-stop
+  alignment and leader semantics are resolved through the P05-04 header definition. NFC is an explicit
   semantic comparison operation, not an in-place source rewrite.
 - Paragraph/run/text/field attributes are closed typed sets. Unknown attributes on a supported shape
   reject; unsupported non-text elements become digest-only opaque records.

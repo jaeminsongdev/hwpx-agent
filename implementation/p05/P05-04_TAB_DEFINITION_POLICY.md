@@ -62,3 +62,13 @@ negative cases and a fixed synthetic corpus. It does not prove that this Hangul 
 canonicalizes every custom shape. That claim requires the disposable target readback in this task. It
 does not prove arbitrary-document editing, visual alignment, tab behavior inside tables/columns, another
 PC or Hangul 2022/2024.
+
+## Exact Hangul 2020 save canonicalization
+
+The disposable current-PC target fixture deliberately writes one valid odd HwpUnitChar fallback pair
+(`current * 2 + 1`). Licensed Hangul 2020 build 11.0.0.9136 accepts the package and, on HWPX SaveAs,
+canonicalizes that fallback from 4001 to 4000 while preserving the current position, alignment, leader,
+paragraph tab reference and visible-text digest. The target inspector therefore compares the saved file
+against this one explicit observed canonical form. The public reader/writer still preserves either valid
+input pair exactly; it does not silently apply an application-side normalization or infer behavior for
+another build.

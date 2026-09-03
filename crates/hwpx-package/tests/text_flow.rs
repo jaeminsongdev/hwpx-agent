@@ -22,7 +22,7 @@ fn unicode_tabs_line_breaks_and_escaping_roundtrip() -> TestResult {
     let source = paragraph(concat!(
         r#"<hp:run charPrIDRef="4"><hp:t charStyleIDRef="5">"#,
         "한글 Latin 中 😀 e&#x301; &amp; &lt;",
-        r#"<hp:tab width="8000" leader="SOLID" type="DECIMAL"/>"#,
+        r#"<hp:tab width="8000" leader="4" type="3"/>"#,
         r#"<hp:lineBreak/>끝</hp:t></hp:run>"#,
     ));
     let flow = TextFlowReader::read(&source, TextFlowLimits::default())?;
@@ -192,7 +192,9 @@ fn invalid_profile_attributes_text_tabs_and_fields_are_distinct() {
             TextFlowError::InvalidNumber,
         ),
         (
-            paragraph(r#"<hp:run><hp:t><hp:tab type="MIDDLE"/></hp:t></hp:run>"#),
+            paragraph(
+                r#"<hp:run><hp:t><hp:tab width="1" leader="0" type="MIDDLE"/></hp:t></hp:run>"#,
+            ),
             TextFlowError::InvalidTab,
         ),
         (
@@ -295,9 +297,12 @@ fn fixed_unicode_run_boundary_corpus_is_deterministic() -> TestResult {
     let mut aggregate = Sha256::new();
     for index in 0..128_u32 {
         let source = paragraph(&format!(
-            "<hp:run charPrIDRef=\"{}\"><hp:t>한글-{index}-中-😀</hp:t></hp:run><hp:run charPrIDRef=\"{}\"><hp:t>e&#x301;<hp:tab type=\"LEFT\"/><hp:lineBreak/>끝</hp:t></hp:run>",
+            "<hp:run charPrIDRef=\"{}\"><hp:t>한글-{index}-中-😀</hp:t></hp:run><hp:run charPrIDRef=\"{}\"><hp:t>e&#x301;<hp:tab width=\"{}\" leader=\"{}\" type=\"{}\"/><hp:lineBreak/>끝</hp:t></hp:run>",
             index % 7,
             (index + 1) % 7,
+            1000 + index,
+            index % 12,
+            index % 4,
         ));
         let flow = TextFlowReader::read(&source, TextFlowLimits::default())?;
         let first = TextFlowWriter::lower(&flow, TextFlowLimits::default())?;
@@ -311,7 +316,7 @@ fn fixed_unicode_run_boundary_corpus_is_deterministic() -> TestResult {
     }
     assert_eq!(
         hex::encode(aggregate.finalize()),
-        "e7fefa652acf7139c29ee29e7e2d5f90f0758850c01d6be9a0834c62f0c70c60"
+        "947426874dd0f0e5680934cfdad687e01c23edb9f8126eeb942fe6245e11188b"
     );
     Ok(())
 }
