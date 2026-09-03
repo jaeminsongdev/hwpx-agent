@@ -58,8 +58,14 @@ def main() -> int:
     checks["cargo_audit"] = capture(["cargo", "audit", "--json"])
     checks["pnpm_audit"] = capture(["pnpm", "audit", "--audit-level", "high", "--json"])
     checks["pnpm_licenses"] = capture(["pnpm", "licenses", "list", "--json"])
-    project = "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.Smoke/HwpxAgent.WindowsWorker.Smoke.csproj"
-    checks["dotnet_vulnerable"] = capture(["dotnet", "list", project, "package", "--vulnerable", "--include-transitive", "--format", "json"])
+    dotnet_projects = {
+        "dotnet_vulnerable_windows_worker": "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.Smoke/HwpxAgent.WindowsWorker.Smoke.csproj",
+        "dotnet_vulnerable_windows_agent": "workers/windows-hancom-agent/tests/HwpxAgent.WindowsAgent.Smoke/HwpxAgent.WindowsAgent.Smoke.csproj",
+    }
+    for check_name, project in dotnet_projects.items():
+        checks[check_name] = capture(
+            ["dotnet", "list", project, "package", "--vulnerable", "--include-transitive", "--format", "json"]
+        )
 
     sbom_path = EVIDENCE / "sbom.cdx.json"
     syft_command = [

@@ -31,11 +31,15 @@ def linux_core() -> None:
 def windows_worker() -> None:
     if os.name != "nt":
         raise RuntimeError("windows-worker lane requires Windows")
-    project = "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.Smoke/HwpxAgent.WindowsWorker.Smoke.csproj"
-    run(["dotnet", "restore", "--locked-mode", project])
-    run(["dotnet", "format", project, "--verify-no-changes", "--no-restore"])
-    run(["dotnet", "build", "--no-restore", "--configuration", "Release", project])
-    run(["dotnet", "run", "--no-build", "--configuration", "Release", "--project", project])
+    projects = (
+        "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.Smoke/HwpxAgent.WindowsWorker.Smoke.csproj",
+        "workers/windows-hancom-agent/tests/HwpxAgent.WindowsAgent.Smoke/HwpxAgent.WindowsAgent.Smoke.csproj",
+    )
+    for project in projects:
+        run(["dotnet", "restore", "--locked-mode", project])
+        run(["dotnet", "format", project, "--verify-no-changes", "--no-restore"])
+        run(["dotnet", "build", "--no-restore", "--configuration", "Release", project])
+        run(["dotnet", "run", "--no-build", "--configuration", "Release", "--project", project])
 
 
 def widget() -> None:
