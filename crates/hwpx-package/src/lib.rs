@@ -11,6 +11,7 @@ mod graph;
 mod id_index;
 mod limits;
 mod list_definition;
+mod page_setup;
 mod paragraph_style;
 mod patch;
 mod path;
@@ -49,6 +50,11 @@ pub use list_definition::{
     ListDefinitionLoweringReceipt, ListSequenceEngine, ListSequenceItem, ListSequenceKind,
     ListSequenceResult, NumberFormat, NumberingDefinition, NumberingLevel,
     OutlineDefinitionBinding, OutlineDefinitionBindingReader, ParagraphHeadStyle, TextOffsetUnit,
+};
+pub use page_setup::{
+    PAGE_SETUP_PROFILE_ID, PageDimensions, PageGutterType, PageMargins, PageOrientation,
+    PagePreset, PageSetup, PageSetupError, PageSetupLimitConfig, PageSetupLimits, PageSetupLowerer,
+    PageSetupLoweringReceipt, PageSetupMetrics, PageSetupPatchReceipt, PageSetupReader,
 };
 pub use paragraph_style::{
     AutoSpacing, BorderFill, BorderLine, BorderWidth, BreakSettings, CenterLine, CompatibleHeading,
