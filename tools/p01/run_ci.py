@@ -59,6 +59,18 @@ def docs() -> None:
             "unittest",
             "discover",
             "-s",
+            "tools/p04/tests",
+            "-p",
+            "test_*.py",
+        ]
+    )
+    run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
             "tools/p02/tests",
             "-p",
             "test_*.py",
