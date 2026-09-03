@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-03
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-02 Character styles`
+- Active phase/task: `P05 / P05-03 Paragraph styles`
 - Active reasoning effort: `max`
 - Blocker: none
 
@@ -28,7 +28,7 @@ save, render, cross-version or production proof.
 | P02 | `pass_scoped_current_pc_local` | `implementation/p02/P02_GATE_REPORT.md` |
 | P03 | `pass_scoped_current_pc_local` | `implementation/p03/P03_GATE_REPORT.md` |
 | P04 | `pass_scoped_current_pc_local` | `implementation/p04/P04_GATE_REPORT.md` |
-| P05 | `in_progress_current_pc_local` | P05-01 pass; P05-02 active |
+| P05 | `in_progress_current_pc_local` | P05-01/02 pass; P05-03 active |
 | P06 | `blocked_by_P05` | table engine |
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
@@ -53,36 +53,40 @@ save, render, cross-version or production proof.
 | P-0038 | P04-09 VS-0 core CLI | `pass` | exact commit `6cc11f0`, actual 2020 run 6, current/clean FULL 5/5, Linux offline pass |
 | P-0039 | P04 phase Gate | `pass` | STRICT/max, findings 0/0/0, P05 authorized in current scope |
 | P-0040 | P05-01 Text flow reader/writer | `pass` | commit `08de88a`, text-flow 12/12, package 63/63, current/clean FULL 5/5, Linux offline |
-| P-0041 | P05-02 Character styles | `in_progress` | exact 2020 header profile and typed style contract discovery |
+| P-0041 | P05-02 Character styles | `pass` | commit `a810aa7`, style 11/11, package 74/74, current/clean FULL 5/5, Linux offline |
+| P-0042 | P05-03 Paragraph styles | `in_progress` | exact 2020 paraProperties and border/fill profile discovery |
 
-## P05-02 acceptance
+## P05-03 acceptance
 
-- Lock a versioned bounded current-2020 `header.xml` character-style profile. Model all seven language
-  slots (Hangul/Latin/Hanja/Japanese/Other/Symbol/User), font identities/references, HWPUNIT height,
-  ratio, spacing, relative size, offset, font spacing/kerning, text/shade color and supported effects.
-- Lift only exact `http://www.hancom.co.kr/hwpml/2011/head` fontface/charProperties structures through
-  P03 preserving XML. Validate counts, unique dense IDs, references, ranges, enum/color syntax and
-  child cardinality. Unknown or unsafe shapes remain opaque/non-editable or reject; none are dropped.
-- Define semantic style identity separately from allocated ID. Deduplicate equal semantic styles in a
-  deterministic first-use/canonical order, allocate checked collision-free IDs and rewrite only typed
-  references. Repeated input order must produce byte-identical catalogs and receipts.
-- Lower typed fontface/charPr fragments with deterministic attribute/child order and escaped values,
-  then reparse and require exact semantic equality and reference closure. No raw XML, installed-font
-  assumption, arbitrary path or platform font fallback enters the contract.
-- Test the exact generated 2020 header (7 fontface groups, 7 charPr records), cross-language slot
-  variation, size/ratio/spacing/effects/colors, dedup/idempotence, missing/dangling/duplicate IDs,
-  malformed/limit/range/opaque cases and P05-01 run `charPrIDRef` readback.
+- Lock a versioned bounded current-2020 `header.xml` paragraph-style profile from exact
+  `paraProperties` and the border/fill structures it references, cross-checked against the locked
+  official Appendix C/F records. Do not infer another Hangul release from a shared namespace.
+- Model paragraph alignment, margin/indent, paragraph-before/after and line spacing, line-break word
+  policy, condense/grid/font-line-height, widow/orphan, keep-with-next, keep-lines, page-break-before,
+  heading/outline and typed border/fill references using exact units, enums, defaults and ranges.
+- Lift only supported exact namespace shapes through P03 preserving XML. Validate counts, child
+  cardinality/order, unique dense IDs, numeric/enum/bool/range syntax and every in-scope reference.
+  Unknown content inside a typed record rejects or remains explicitly non-editable; none is dropped.
+- Define semantic paragraph-style identity separately from allocated ID. Deduplicate in deterministic
+  first-use order and atomically rewrite only typed P05-01 `paraPrIDRef` references after a complete
+  validation pass. Opaque content and unrelated IDs must remain untouched.
+- Lower deterministic escaped typed fragments, reparse for exact equality/reference closure, and emit
+  stable digest/count receipts. No raw XML, CSS-like style string, arbitrary path, COM/HAction name or
+  best-effort platform fallback enters the public contract.
+- Test the exact generated 2020 header, alignment/margins/negative indent/spacing/line-spacing and
+  keep/break variations, border/fill reference behavior, dedup/idempotence, malformed/count/ID/
+  reference/range/namespace/limit failures and P05-01 paragraph-reference readback.
 - Run Windows and offline read-only Linux unit/Clippy validation, current/clean-clone FULL 5/5 and
-  security. This task is a pure package/IR Gate and requires no Hangul UI or user document; actual
-  installed-font rendering and visual fidelity remain later oracle evidence.
+  security. This pure package/IR task requires no Hangul UI or user document; visual pagination and
+  installed-runtime fidelity remain later layout-oracle evidence.
 
-## P05-01 closure evidence
+## P05-02 closure evidence
 
-P05-01 added `hwpx-agent.text-flow/v1` with ordered run/text/tab/line-break/field boundaries, bounded
-lift/lower/lift, conservative opaque semantics and redacted diagnostics. Its 12 tests, 128-case fixed
-corpus, package 63/63, Windows/Linux workspace, current/clean FULL 5/5 and security all passed at exact
-commit `08de88a`; no Hangul runtime or user document was used. Character references remain unresolved
-numeric IDs until P05-02.
+P05-02 added `hwpx-agent.character-style/1` with seven language-local font domains, bounded typed
+font/style values, semantic dedup, atomic typed-reference rewrite and deterministic lower/readback
+receipts. Its 11 tests, fixed 128-case corpus `5d2a03a1...91e6d`, package 74/74, Windows/Linux,
+current/clean FULL 5/5 and security all passed at exact commit `a810aa7`; no Hangul runtime or user
+document was used. Installed-font/render compatibility remains unverified.
 
 ## Validation policy
 
@@ -93,7 +97,7 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next action
 
-Inspect the exact current-2020 generated `header.xml`, the locked official head-schema records and P03
-ID/preserving XML contracts. Freeze `P05-02` char-style semantic identity, ranges, effects, dedup and
-failure codes in a migration/policy, then implement the smallest exact-profile lift/lower/readback
-slice. Continue at reasoning effort `max`.
+Inspect the exact current-2020 generated `header.xml` paraProperties/borderFills, the locked official
+Appendix C/F records and P03 ID/preserving XML contracts. Freeze `P05-03` paragraph semantic identity,
+units, ranges, reference domains, defaults and failure codes in a migration/policy, then implement the
+smallest exact-profile lift/lower/readback slice. Continue at reasoning effort `max`.

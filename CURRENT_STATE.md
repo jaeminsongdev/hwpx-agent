@@ -9,7 +9,7 @@
 
 - 상태: `P05_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. Exact Hangul 2020에서 disposable VS-0 open/readback/clean shutdown actual evidence를 통과했고 P05-01 bounded text-flow reader/writer도 완료했다. 현재 P05-02 character styles를 시작한다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. Exact Hangul 2020에서 disposable VS-0 open/readback/clean shutdown actual evidence를 통과했고 P05-01 bounded text flow와 P05-02 character styles도 완료했다. 현재 P05-03 paragraph styles를 시작한다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -89,11 +89,12 @@
 ## P05 현재 상태
 
 - P05-01 `PASS`: P03 preserving XML 위에서 exact 2011 paragraph namespace의 paragraph/run/text/tab/line-break/field boundary를 bounded typed model로 lift/lower한다. 128-case Unicode/run-boundary corpus와 aggregate `e7fefa65...70c60`, text-flow `12/12`, package `63/63`, Windows/Linux workspace, current/clean FULL `5/5`, security 0을 통과했다. Opaque possible-text는 semantic extraction을, 모든 opaque는 lowering을 fail closed한다. Authoritative report는 `implementation/p05/P05-01_REPORT.md`다.
-- P05-02 `in_progress`: exact current-2020 header의 language font slots, character size/scale/spacing/effects/color를 bounded typed char-style model과 deterministic dedup/lower/readback으로 구현한다.
+- P05-02 `PASS`: exact current-2020 header의 7 language font domains와 14 fonts/7 charPr를 bounded typed model로 lift/lower한다. Semantic dedup, atomic typed-reference rewrite, deterministic receipt와 128-case corpus `5d2a03a1...91e6d`, character-style `11/11`, package `74/74`, Windows/Linux, current/clean FULL `5/5`, security 0을 통과했다. Authoritative report는 `implementation/p05/P05-02_REPORT.md`다.
+- P05-03 `in_progress`: exact current-2020 paraProperties와 border/fill 참조 구조를 조사하고 정렬·여백/들여쓰기·간격·줄 간격·keep/page-break를 bounded typed paragraph-style model과 deterministic lower/readback으로 구현한다.
 
 ## 다음 작업
 
-P05-02 Character styles를 구현한다. 추론수준은 `max`다. exact current-2020 `header.xml` fontface/charPr 구조를 잠그고 언어별 font slot, 크기, 장평, 자간, 효과와 색을 typed value로 lift/lower한다. 동일 semantic style은 deterministic dedup하고 ID/reference readback을 검증한다. 현재 단계에는 한글 UI 조작이 필요 없다.
+P05-03 Paragraph styles를 구현한다. 추론수준은 `max`다. exact current-2020 `header.xml` paraProperties와 연동되는 border/fill 구조를 공식 Appendix C/F와 대조해 잠그고 정렬, margin/indent, 문단·줄 간격, border/fill reference, keep/widow/page-break를 typed value로 lift/lower한다. Layout semantic/negative/readback을 검증하며 현재 단계에는 한글 UI 조작이 필요 없다.
 
 ## 현재 blocker
 
@@ -103,4 +104,4 @@ P05-02 Character styles를 구현한다. 추론수준은 `max`다. exact current
 
 ## 검증 한계
 
-제품 foundation, P02 signed registry, P03 package/preserving/round-trip core, P04 typed model/transaction/diff/idempotency/VS-0 vertical과 P05-01 bounded text flow는 재현 가능하다. 그러나 VS-0는 create-new 단일 문단이고 P05-01은 standalone paragraph text-flow 계약이라 arbitrary package editing, character/paragraph style semantics, real-save ID 안정성, rendered fidelity, durable multi-process persistence와 public wire integration을 증명하지 않는다. P03/P04 actual evidence는 승인된 synthetic 생성물의 read-only open/readback이며 save/render/PDF 동등성이나 사용자 문서 호환성을 뜻하지 않는다. Signed registry의 general public routing은 0이고 VS-0만 task 전용 exact signed route다. Exact 2020 evidence는 이 Windows 설치의 개인 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00~P04 실제 상태는 각 authoritative Gate report를, P05-01은 해당 task report를 따른다.
+제품 foundation, P02 signed registry, P03 package/preserving/round-trip core, P04 typed model/transaction/diff/idempotency/VS-0 vertical, P05-01 bounded text flow와 P05-02 bounded character styles는 재현 가능하다. 그러나 VS-0는 create-new 단일 문단이고 P05-01/02는 targeted text/header 계약이라 arbitrary package editing, paragraph/page/section semantics, installed-font substitution, real-save ID stability, rendered fidelity, durable multi-process persistence와 public wire integration을 증명하지 않는다. P03/P04 actual evidence는 승인된 synthetic 생성물의 read-only open/readback이며 save/render/PDF 동등성이나 사용자 문서 호환성을 뜻하지 않는다. Signed registry의 general public routing은 0이고 VS-0만 task 전용 exact signed route다. Exact 2020 evidence는 이 Windows 설치의 개인 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00~P04 실제 상태는 각 authoritative Gate report를, P05-01/02는 해당 task report를 따른다.
