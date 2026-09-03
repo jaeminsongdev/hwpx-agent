@@ -38,7 +38,7 @@ Windows Hancom Automation Bridge를 문서상 계획이 아니라 **재현 가�
 
 ## Phase hard gate
 
-- [ ] `P10-01` 산출물 `proto v1/generated SDK` 존재, 검증: compatibility test.
+- [x] `P10-01` 산출물 `proto v1/generated SDK` 존재, 검증: compatibility test.
 - [ ] `P10-02` 산출물 `agent service` 존재, 검증: lease/fencing E2E.
 - [ ] `P10-03` 산출물 `STA worker` 존재, 검증: COM apartment tests.
 - [ ] `P10-04` 산출물 `HancomSession` 존재, 검증: leak/crash tests.
