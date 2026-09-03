@@ -25,6 +25,7 @@ mod section_columns;
 mod tab_definition;
 mod text_flow;
 mod vs0;
+mod vs1_layout;
 mod writer;
 
 pub use character_style::{
@@ -118,6 +119,11 @@ pub use text_flow::{
 };
 pub use vs0::{
     HANCOM_2020_VS0_MAX_TEXT_BYTES, Hancom2020Vs0Artifact, Hancom2020Vs0Builder, Hancom2020Vs0Error,
+};
+pub use vs1_layout::{
+    HANCOM_2020_VS1_LAYOUT_MAX_PARAGRAPHS, HANCOM_2020_VS1_LAYOUT_MAX_TEXT_BYTES,
+    HANCOM_2020_VS1_LAYOUT_PROFILE_ID, Hancom2020Vs1LayoutArtifact, Hancom2020Vs1LayoutBuilder,
+    Hancom2020Vs1LayoutDocument, Hancom2020Vs1LayoutError, Hancom2020Vs1LayoutInspection,
 };
 pub use writer::{
     AtomicPackagePublisher, MetadataDisposition, NormalizedWriter, PackageArtifact,
