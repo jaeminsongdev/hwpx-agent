@@ -2,9 +2,9 @@
 
 - Updated: 2026-09-03
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-06 retry-05 actual acceptance` + `P10 / P10-02 Windows Agent`
+- Active phase/task: `P05 / P05-06 actual acceptance` + `P10 / P10-03 STA worker`
 - Active reasoning effort: `max`
-- Immediate UI dependency: retry-05 is live in `open_input`; the user must click each visible `접근 허용`
+- Immediate UI dependency: none live; launch the next P05 retry only when the user can immediately click every visible `접근 허용`
 
 ## Objective and non-negotiable boundaries
 
@@ -33,7 +33,7 @@ save, render, cross-version or production proof.
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
 | P09 | `blocked_by_P05` | fields/forms/notes/references |
-| P10 | `in_progress_current_pc_local` | P10-01 pass; P10-02 Windows Agent next |
+| P10 | `in_progress_current_pc_local` | P10-01~02 pass; P10-03 STA worker next |
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
@@ -62,22 +62,25 @@ save, render, cross-version or production proof.
 | P-0047 | P05-08 Header/footer/page number | `actual_render_pending` | commits `a6bcd35` + `6a46fbc`; 16 core + 2 fixture tests, current/clean FULL 5/5, offline Linux pass |
 | P-0048 | P05-09 VS-1 layout | `actual_render_pending` | commits `bd7428c` + `32d9810`; typed layout slice, exact target fixture and bounded Hangul/PDF harness ready |
 | P-0049 | P10-01 Windows bridge protocol | `pass` | commit `9e44190`; Rust/C# generated SDK, compatibility 7/7, current/clean FULL 5/5, offline Linux pass |
+| P-0050 | P10-02 Windows Agent | `pass` | commit `731f32a`; Agent E2E 11/11, current/clean FULL 5/5, STRICT findings 0/0/0 |
 
 ## Active evidence summary
 
 P05-01~05 are closed by their task reports. P05-06~09 core/static harnesses, deterministic disposable
 fixtures, current/exact-clean FULL checks and offline Linux checks passed, but P05-06 actual
-save/reopen and P05-07~09 actual save/render evidence remain open. `retry-04` timed out fail-closed
-while awaiting approval: no output, source unchanged and residual Hangul process count zero. The live
-`retry-05` uses the same fixed source SHA-256
-`c76816ca35352168955f47cb656ad2cb1ff049192fc10ce46db1465f7f43f0bc`; only its terminal trace and
+save/reopen and P05-07~09 actual save/render evidence remain open. `retry-04` through `retry-06`
+timed out fail-closed while awaiting the first access approval: no output, source unchanged and zero
+residual Hangul processes. Commit `d3ccd05` fixed the Windows PowerShell 5.1 progress parser;
+`retry-06` then recorded a valid three-event journal ending at `open_input/running`. The next retry
+must reuse the fixed source SHA-256
+`c76816ca35352168955f47cb656ad2cb1ff049192fc10ce46db1465f7f43f0bc`; only a terminal pass plus
 independent semantic readback may close P05-06.
 
-P10-01 is closed by `implementation/p10/P10-01_REPORT.md` at exact implementation commit `9e44190`.
-The additive v1 protobuf, Rust/C# message/reflection SDK, locked descriptor, fixed cross-language wire
-vector and fail-closed validators passed targeted tests, current/exact-clean FULL 5/5 and offline
-network-disabled Linux tests/Clippy. Live gRPC, named-pipe I/O, STA/COM and production behavior were
-not claimed and remain P10-02 onward.
+P10-01 and P10-02 are closed by their reports under `implementation/p10/`. At exact commit `731f32a`,
+the outbound authenticated Agent, fenced append-only journal, bounded artifact staging/sandbox/upload
+and durable commit/replay path passed 11/11 E2E scenarios plus current and exact-clean FULL 5/5.
+Live remote TLS/cloud storage, named-pipe I/O, STA/COM and production behavior were not claimed;
+P10-03 is next.
 
 ## Validation policy
 
@@ -88,9 +91,8 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next action
 
-Poll the live P05-06 retry-05 handle. Once the user has clicked every `접근 허용`, verify source
-immutability, terminal trace closure and independent product semantic readback, then write P05-06's
-task report. Run P05-07, P05-08 and P05-09 serially with their required PDF/render evidence before the
-strict P05 Gate. Independently start P10-02 from `implementation/p10/P10-01_REPORT.md`: implement the
-outbound authenticated Agent service, bounded staging/sandbox/upload and lease/fencing E2E at
-reasoning effort `max`.
+When the user is immediately available, launch one P05-06 retry and verify source immutability,
+terminal trace closure and independent product semantic readback before writing its task report. Then
+run P05-07, P05-08 and P05-09 serially with required PDF/render evidence before the strict P05 Gate.
+In parallel, start P10-03 from `implementation/p10/P10-02_REPORT.md`: implement the private local
+named-pipe STA command loop and prove its apartment/serialization boundary at reasoning effort `max`.
