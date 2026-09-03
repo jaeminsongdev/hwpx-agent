@@ -70,8 +70,15 @@ actual runs. Commit `2d2c884` extends the P05-07/P05-08 wrappers with optional b
 `IXHwpDocument.SaveAs/PDF` evidence: no-overwrite, same-fixture boundary, regular-file/reparse,
 32-MiB, `%PDF-`, length, SHA-256 and exact method checks run in both worker and watchdog. The six
 PowerShell suites passed 146/146 in the current and exact clean checkouts; both also passed FULL
-bootstrap 5/5, and the clean checkout had zero tracked changes. PDF page count, geometry, text and
-visual review remain required before any render Gate is promoted.
+bootstrap 5/5, and the clean checkout had zero tracked changes. Commit `62dbdb5` adds the independent
+fail-closed PDF verifier and locked P05-07/P05-08 render expectations. It binds the PDF, expectation,
+Python/verifier and `pdftoppm` identities; checks encryption, page count, rotation, geometry and
+fixture tokens; renders every page at 144 DPI; completely decodes bounded PNGs; and still requires
+human/agent visual review. Its 16/16 tests, Python compile and current/exact-commit-clean FULL 5/5
+passed. A read-only integration run against the existing disposable P00 actual PDF also passed exact
+hash, A4 geometry, three text tokens, PNG identity and visual review. That generic pipeline proof is
+not P05-07/P05-08 actual evidence; their own PDFs remain required before either render Gate is
+promoted.
 
 The latest core commit `6a46fbc` additionally passed offline network-disabled Linux
 `hwpx-package --all-targets` tests/Clippy with source and Cargo registry read-only. The authoritative
