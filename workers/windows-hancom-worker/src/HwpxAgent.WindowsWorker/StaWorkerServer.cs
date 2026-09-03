@@ -357,7 +357,8 @@ public sealed class StaWorkerServer(TimeProvider? timeProvider = null)
                                 break;
                             }
 
-                            cleanupOnly |= receipt.State == ExecutionState.UnknownOutcome;
+                            cleanupOnly |= receipt.State == ExecutionState.UnknownOutcome
+                                || receipt.CleanupRequired;
                             if (command.CommandCase == StaCommandEnvelope.CommandOneofCase.CloseSession)
                             {
                                 closed = receipt.State == ExecutionState.Succeeded;
@@ -435,7 +436,9 @@ public sealed class StaWorkerServer(TimeProvider? timeProvider = null)
         BridgeErrorCode errorCode,
         string safeCategory,
         bool effectUnknown,
-        bool cleanupRequired) =>
+        bool cleanupRequired,
+        IEnumerable<StaEventRecord>? events = null,
+        string? safeDetailSha256 = null) =>
         new()
         {
             ProtocolMajor = ProtocolMajor,
@@ -447,10 +450,11 @@ public sealed class StaWorkerServer(TimeProvider? timeProvider = null)
             ValidationState = ValidationState.Unverified,
             InputUnchanged = true,
             CleanupRequired = cleanupRequired,
+            Events = { events ?? [] },
             Diagnostic = new BridgeDiagnostic
             {
                 ErrorCode = errorCode,
-                SafeDetailSha256 = Sha256(safeCategory),
+                SafeDetailSha256 = safeDetailSha256 ?? Sha256(safeCategory),
                 Retryable = !effectUnknown && errorCode is BridgeErrorCode.Timeout or BridgeErrorCode.Cancelled,
                 EffectUnknown = effectUnknown,
             },

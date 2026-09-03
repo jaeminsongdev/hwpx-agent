@@ -233,7 +233,7 @@ public static class Program
             [new HancomBoundParameter("Count", 5)]);
 
         var validSet = new DynamicParameterSet("SyntheticSet", ["Count"]);
-        using (var runtime = new ComHancomAutomationRuntime(
+        using (var runtime = CreateComRuntime(
             new DynamicAutomation(new DynamicActionCollection(
                 new DynamicAction("SyntheticAction", "SyntheticSet", validSet)))))
         {
@@ -243,7 +243,7 @@ public static class Program
                 "typed runtime value was not set");
         }
 
-        using (var runtime = new ComHancomAutomationRuntime(
+        using (var runtime = CreateComRuntime(
             new DynamicAutomation(new DynamicActionCollection(
                 new DynamicAction(
                     "SyntheticAction",
@@ -253,7 +253,7 @@ public static class Program
             Require(!runtime.ExecuteAction(invocation), "runtime SetID drift was accepted");
         }
 
-        using (var runtime = new ComHancomAutomationRuntime(
+        using (var runtime = CreateComRuntime(
             new DynamicAutomation(new DynamicActionCollection(
                 new DynamicAction(
                     "SyntheticAction",
@@ -263,7 +263,7 @@ public static class Program
             Require(!runtime.ExecuteAction(invocation), "unknown runtime item was created implicitly");
         }
 
-        using (var runtime = new ComHancomAutomationRuntime(
+        using (var runtime = CreateComRuntime(
             new DynamicAutomation(new DynamicActionCollection(action: null, runResult: false))))
         {
             Require(
@@ -271,7 +271,7 @@ public static class Program
                 "false Run result was accepted");
         }
 
-        using (var runtime = new ComHancomAutomationRuntime(
+        using (var runtime = CreateComRuntime(
             new DynamicAutomation(new DynamicActionCollection(
                 new DynamicAction(
                     "SyntheticAction",
@@ -282,6 +282,9 @@ public static class Program
             Require(!runtime.ExecuteAction(invocation), "false Execute result was accepted");
         }
     }
+
+    private static ComHancomAutomationRuntime CreateComRuntime(object automation) =>
+        new(automation, NoOpHancomAutomationEventConnection.Instance);
 
     private static async Task DuplicateJsonStopsBeforeComAsync()
     {

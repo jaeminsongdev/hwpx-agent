@@ -37,6 +37,7 @@ def windows_worker() -> None:
         "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.LifecycleSmoke/HwpxAgent.WindowsWorker.LifecycleSmoke.csproj",
         "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.SecuritySmoke/HwpxAgent.WindowsWorker.SecuritySmoke.csproj",
         "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.BindingSmoke/HwpxAgent.WindowsWorker.BindingSmoke.csproj",
+        "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.ModalWatchdogSmoke/HwpxAgent.WindowsWorker.ModalWatchdogSmoke.csproj",
         "workers/windows-hancom-agent/tests/HwpxAgent.WindowsAgent.Smoke/HwpxAgent.WindowsAgent.Smoke.csproj",
     )
     for project in projects:
@@ -47,6 +48,7 @@ def windows_worker() -> None:
     run(["pwsh", "-NoProfile", "-File", "implementation/p10/tests/Test-Hancom2020Lifecycle.ps1"])
     run(["pwsh", "-NoProfile", "-File", "implementation/p10/tests/Test-Hancom2020SecurityAdapter.ps1"])
     run(["pwsh", "-NoProfile", "-File", "implementation/p10/tests/Test-Hancom2020BindingExecutor.ps1"])
+    run(["pwsh", "-NoProfile", "-File", "implementation/p10/tests/Test-Hancom2020EventModalWatchdog.ps1"])
     run([sys.executable, "implementation/p10/tests/validate_binding_schemas.py"])
 
 

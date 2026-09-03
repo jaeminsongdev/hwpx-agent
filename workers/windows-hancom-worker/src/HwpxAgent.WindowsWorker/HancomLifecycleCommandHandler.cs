@@ -20,10 +20,13 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
     private readonly IHancomSessionSecurity? sessionSecurity;
     private readonly IHancomPlanExecutionResolver? planExecutionResolver;
     private readonly HancomBindingExecutor bindingExecutor;
+    private readonly IHancomModalWatchdogFactory modalWatchdogFactory;
     private readonly TimeProvider timeProvider;
     private HancomSession? session;
     private HancomTargetProfile? targetProfile;
     private string? capabilityRegistrySha256;
+    private string? modalPolicyId;
+    private IHancomModalWatchdogSession? modalWatchdog;
 
     public HancomLifecycleCommandHandler()
         : this(
@@ -32,7 +35,8 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
             sessionSecurity: null,
             planExecutionResolver: null,
             new HancomBindingExecutor(),
-            TimeProvider.System)
+            TimeProvider.System,
+            new HancomModalWatchdogFactory(timeProvider: TimeProvider.System))
     {
     }
 
@@ -43,7 +47,8 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
             securityAdapter,
             securityAdapter,
             new HancomBindingExecutor(),
-            TimeProvider.System)
+            TimeProvider.System,
+            new HancomModalWatchdogFactory(timeProvider: TimeProvider.System))
     {
         ArgumentNullException.ThrowIfNull(securityAdapter);
     }
@@ -58,7 +63,8 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
             sessionSecurity: null,
             planExecutionResolver: null,
             new HancomBindingExecutor(),
-            timeProvider)
+            timeProvider,
+            NoOpHancomModalWatchdogFactory.Instance)
     {
     }
 
@@ -73,7 +79,8 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
             sessionSecurity,
             planExecutionResolver: null,
             new HancomBindingExecutor(),
-            timeProvider)
+            timeProvider,
+            NoOpHancomModalWatchdogFactory.Instance)
     {
     }
 
@@ -83,7 +90,8 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
         IHancomSessionSecurity? sessionSecurity,
         IHancomPlanExecutionResolver? planExecutionResolver,
         HancomBindingExecutor bindingExecutor,
-        TimeProvider timeProvider)
+        TimeProvider timeProvider,
+        IHancomModalWatchdogFactory? modalWatchdogFactory = null)
     {
         this.sessionFactory = sessionFactory ?? throw new ArgumentNullException(nameof(sessionFactory));
         this.documentResolver = documentResolver;
@@ -91,18 +99,44 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
         this.planExecutionResolver = planExecutionResolver;
         this.bindingExecutor = bindingExecutor ?? throw new ArgumentNullException(nameof(bindingExecutor));
         this.timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
+        this.modalWatchdogFactory = modalWatchdogFactory ?? NoOpHancomModalWatchdogFactory.Instance;
     }
 
     public StaCommandReceipt Execute(StaCommandEnvelope command, StaExecutionContext context)
     {
         ArgumentNullException.ThrowIfNull(command);
         ArgumentNullException.ThrowIfNull(context);
-        return command.CommandCase switch
+        try
         {
-            StaCommandEnvelope.CommandOneofCase.StartSession => Start(command, context),
-            StaCommandEnvelope.CommandOneofCase.OpenDocument => Open(command, context),
-            StaCommandEnvelope.CommandOneofCase.ExecutePlan => ExecutePlan(command, context),
-            StaCommandEnvelope.CommandOneofCase.CloseSession => Close(command, context),
+            return ExecuteCore(command, context);
+        }
+        catch (HancomLifecycleException error)
+        {
+            return Failure(
+                command,
+                error.Error,
+                cleanupRequired: session is not null || modalWatchdog is not null);
+        }
+    }
+
+    private StaCommandReceipt ExecuteCore(StaCommandEnvelope command, StaExecutionContext context)
+    {
+        var journal = new HancomEventJournal(timeProvider);
+        var before = InspectModal(journal);
+        if (before is not null
+            && command.CommandCase is not (
+                StaCommandEnvelope.CommandOneofCase.StartSession
+                or StaCommandEnvelope.CommandOneofCase.CloseSession))
+        {
+            return ModalFailure(command, before, journal, effectUnknown: false, cleanupCompleted: false);
+        }
+
+        var receipt = command.CommandCase switch
+        {
+            StaCommandEnvelope.CommandOneofCase.StartSession => Start(command, context, journal),
+            StaCommandEnvelope.CommandOneofCase.OpenDocument => Open(command, context, journal),
+            StaCommandEnvelope.CommandOneofCase.ExecutePlan => ExecutePlan(command, context, journal),
+            StaCommandEnvelope.CommandOneofCase.CloseSession => Close(command, context, journal),
             _ => StaWorkerServer.CreateFailureReceipt(
                 command,
                 ExecutionState.Failed,
@@ -111,31 +145,80 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
                 effectUnknown: false,
                 cleanupRequired: false),
         };
+
+        RecordAutomationSignals(journal, context, command.CommandCase);
+        var after = InspectModal(journal);
+        var incident = before ?? after;
+        if (incident is not null)
+        {
+            var cleanupCompleted = command.CommandCase == StaCommandEnvelope.CommandOneofCase.CloseSession
+                && session is null
+                && receipt.State == ExecutionState.Succeeded;
+            var effectUnknown = receipt.State == ExecutionState.UnknownOutcome
+                || (receipt.State == ExecutionState.Succeeded
+                    && command.CommandCase is StaCommandEnvelope.CommandOneofCase.ExecutePlan
+                        or StaCommandEnvelope.CommandOneofCase.SaveDocument
+                        or StaCommandEnvelope.CommandOneofCase.RenderDocument);
+            return ModalFailure(command, incident, journal, effectUnknown, cleanupCompleted);
+        }
+
+        receipt.Events.Clear();
+        receipt.Events.Add(journal.Snapshot());
+        return receipt;
     }
 
     public void Cleanup(StaExecutionContext context)
     {
         var current = session;
+        var watcher = Interlocked.Exchange(ref modalWatchdog, null);
+        Exception? watcherError = null;
+        try
+        {
+            watcher?.Dispose();
+        }
+        catch (Exception error)
+        {
+            watcherError = error;
+        }
+
         if (current is null)
         {
+            if (watcherError is not null)
+            {
+                throw new HancomLifecycleException(
+                    HancomLifecycleError.ModalWatchdogStopFailed,
+                    watcherError);
+            }
+
             return;
         }
 
         try
         {
             current.Shutdown(context);
-            session = null;
-            targetProfile = null;
-            capabilityRegistrySha256 = null;
         }
         catch
         {
             session = current;
             throw;
         }
+
+        session = null;
+        targetProfile = null;
+        capabilityRegistrySha256 = null;
+        modalPolicyId = null;
+        if (watcherError is not null)
+        {
+            throw new HancomLifecycleException(
+                HancomLifecycleError.ModalWatchdogStopFailed,
+                watcherError);
+        }
     }
 
-    private StaCommandReceipt Start(StaCommandEnvelope command, StaExecutionContext context)
+    private StaCommandReceipt Start(
+        StaCommandEnvelope command,
+        StaExecutionContext context,
+        HancomEventJournal journal)
     {
         if (session is not null)
         {
@@ -151,7 +234,14 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
             sessionSecurity?.Apply(command.StartSession, created, context);
             targetProfile = profile;
             capabilityRegistrySha256 = command.StartSession.CapabilityRegistrySha256;
-            return Success(command, StaEventType.SessionStarted, "hancom-session-started");
+            modalPolicyId = command.StartSession.SecurityPolicy.ModalPolicyId;
+            modalWatchdog = modalWatchdogFactory.Start(
+                created.OwnedProcessId
+                    ?? throw new HancomLifecycleException(HancomLifecycleError.ProcessOwnershipFailed),
+                profile,
+                modalPolicyId);
+            journal.Record(StaEventType.SessionStarted, "hancom-session-started");
+            return StaWorkerServer.CreateSuccessReceipt(command);
         }
         catch (HancomLifecycleException error)
         {
@@ -166,6 +256,9 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
                 session = null;
                 targetProfile = null;
                 capabilityRegistrySha256 = null;
+                modalPolicyId = null;
+                var watcher = Interlocked.Exchange(ref modalWatchdog, null);
+                watcher?.Dispose();
             }
             catch
             {
@@ -179,7 +272,10 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
         }
     }
 
-    private StaCommandReceipt ExecutePlan(StaCommandEnvelope command, StaExecutionContext context)
+    private StaCommandReceipt ExecutePlan(
+        StaCommandEnvelope command,
+        StaExecutionContext context,
+        HancomEventJournal journal)
     {
         if (session is null || targetProfile is null || capabilityRegistrySha256 is null)
         {
@@ -207,18 +303,10 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
                 targetProfile,
                 capabilityRegistrySha256,
                 context);
-            return StaWorkerServer.CreateSuccessReceipt(
-                command,
-                [
-                    new StaEventRecord
-                    {
-                        Sequence = 1,
-                        EventType = StaEventType.PlanExecuted,
-                        RecordedAtUnixMs = (ulong)timeProvider.GetUtcNow().ToUnixTimeMilliseconds(),
-                        SafeMetadataSha256 = StaWorkerServer.Sha256(
-                            $"hancom-plan-executed:{result.OperationCount}:{result.PlanSha256}:{result.BundleSha256}"),
-                    },
-                ]);
+            journal.Record(
+                StaEventType.PlanExecuted,
+                $"hancom-plan-executed:{result.OperationCount}:{result.PlanSha256}:{result.BundleSha256}");
+            return StaWorkerServer.CreateSuccessReceipt(command);
         }
         catch (HancomBindingException error)
         {
@@ -233,7 +321,10 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
         }
     }
 
-    private StaCommandReceipt Open(StaCommandEnvelope command, StaExecutionContext context)
+    private StaCommandReceipt Open(
+        StaCommandEnvelope command,
+        StaExecutionContext context,
+        HancomEventJournal journal)
     {
         if (session is null)
         {
@@ -257,7 +348,8 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
             approved = documentResolver.Resolve(command.OpenDocument, context);
             session.Open(approved, context);
             approved = null;
-            return Success(command, StaEventType.DocumentOpened, "hancom-document-opened");
+            journal.Record(StaEventType.DocumentOpened, "hancom-document-opened");
+            return StaWorkerServer.CreateSuccessReceipt(command);
         }
         catch (HancomLifecycleException error)
         {
@@ -272,7 +364,10 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
         }
     }
 
-    private StaCommandReceipt Close(StaCommandEnvelope command, StaExecutionContext context)
+    private StaCommandReceipt Close(
+        StaCommandEnvelope command,
+        StaExecutionContext context,
+        HancomEventJournal journal)
     {
         if (session is null)
         {
@@ -281,11 +376,19 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
 
         try
         {
-            session.Shutdown(context);
+            var current = session;
+            current.Shutdown(context);
+            journal.RecordAutomationSignals(
+                current.DrainAutomationSignals(context),
+                StaEventType.CleanupCompleted);
+            var watcher = Interlocked.Exchange(ref modalWatchdog, null);
+            watcher?.Dispose();
             session = null;
             targetProfile = null;
             capabilityRegistrySha256 = null;
-            return Success(command, StaEventType.CleanupCompleted, "hancom-session-closed");
+            modalPolicyId = null;
+            journal.Record(StaEventType.CleanupCompleted, "hancom-session-closed");
+            return StaWorkerServer.CreateSuccessReceipt(command);
         }
         catch (HancomLifecycleException error)
         {
@@ -319,21 +422,72 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
             cleanupRequired: uncertain);
     }
 
-    private StaCommandReceipt Success(
+    private void RecordAutomationSignals(
+        HancomEventJournal journal,
+        StaExecutionContext context,
+        StaCommandEnvelope.CommandOneofCase commandCase)
+    {
+        if (session is null)
+        {
+            return;
+        }
+
+        var carrierEventType = commandCase switch
+        {
+            StaCommandEnvelope.CommandOneofCase.StartSession => StaEventType.SessionStarted,
+            StaCommandEnvelope.CommandOneofCase.OpenDocument => StaEventType.DocumentOpened,
+            StaCommandEnvelope.CommandOneofCase.ExecutePlan => StaEventType.PlanExecuted,
+            StaCommandEnvelope.CommandOneofCase.SaveDocument => StaEventType.OutputSaved,
+            StaCommandEnvelope.CommandOneofCase.RenderDocument => StaEventType.RenderCompleted,
+            _ => StaEventType.Unspecified,
+        };
+        if (carrierEventType == StaEventType.Unspecified)
+        {
+            return;
+        }
+
+        journal.RecordAutomationSignals(
+            session.DrainAutomationSignals(context),
+            carrierEventType);
+    }
+
+    private HancomModalIncident? InspectModal(HancomEventJournal journal)
+    {
+        var watcher = modalWatchdog;
+        if (watcher is null)
+        {
+            return null;
+        }
+
+        watcher.ScanNow();
+        var incidents = watcher.DrainIncidents();
+        HancomModalIncident? first = null;
+        foreach (var incident in incidents)
+        {
+            journal.RecordDigest(incident.EventType, incident.SafeMetadataSha256);
+            first ??= incident;
+        }
+
+        return first;
+    }
+
+    private static StaCommandReceipt ModalFailure(
         StaCommandEnvelope command,
-        StaEventType eventType,
-        string category) =>
-        StaWorkerServer.CreateSuccessReceipt(
+        HancomModalIncident incident,
+        HancomEventJournal journal,
+        bool effectUnknown,
+        bool cleanupCompleted) =>
+        StaWorkerServer.CreateFailureReceipt(
             command,
-            [
-                new StaEventRecord
-                {
-                    Sequence = 1,
-                    EventType = eventType,
-                    RecordedAtUnixMs = (ulong)timeProvider.GetUtcNow().ToUnixTimeMilliseconds(),
-                    SafeMetadataSha256 = StaWorkerServer.Sha256(category),
-                },
-            ]);
+            effectUnknown ? ExecutionState.UnknownOutcome : ExecutionState.Failed,
+            incident.ErrorCode,
+            incident.Disposition == HancomModalDisposition.UnknownBlocked
+                ? "hancom-modal-unknown"
+                : "hancom-modal-expected-report-and-stop",
+            effectUnknown,
+            cleanupRequired: incident.RequiresRecycle && !cleanupCompleted,
+            events: journal.Snapshot(),
+            safeDetailSha256: incident.SafeMetadataSha256);
 
     private static StaCommandReceipt Failure(
         StaCommandEnvelope command,
@@ -363,6 +517,12 @@ public sealed class HancomLifecycleCommandHandler : IStaCommandHandler, IStaComm
                 or HancomLifecycleError.SecurityLeaseConsumed => BridgeErrorCode.PolicyDenied,
             HancomLifecycleError.SecurityModuleInvalid => BridgeErrorCode.ProfileMismatch,
             HancomLifecycleError.SecurityModuleRegistrationFailed => BridgeErrorCode.PolicyDenied,
+            HancomLifecycleError.EventSubscriptionFailed => BridgeErrorCode.ProfileMismatch,
+            HancomLifecycleError.ModalPolicyInvalid => BridgeErrorCode.PolicyDenied,
+            HancomLifecycleError.ModalWatchdogOverflow
+                or HancomLifecycleError.ModalWatchdogStopFailed => BridgeErrorCode.UnknownModal,
+            HancomLifecycleError.EventInvalid or HancomLifecycleError.EventOverflow =>
+                BridgeErrorCode.UnknownOutcome,
             HancomLifecycleError.CleanupFailed or HancomLifecycleError.CleanupOwnershipMismatch =>
                 BridgeErrorCode.CleanupFailed,
             HancomLifecycleError.InvalidState => BridgeErrorCode.InvalidEnvelope,

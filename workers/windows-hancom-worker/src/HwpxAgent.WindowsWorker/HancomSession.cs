@@ -42,6 +42,12 @@ public enum HancomLifecycleError
     QuitFailed,
     CleanupOwnershipMismatch,
     CleanupFailed,
+    EventSubscriptionFailed,
+    EventInvalid,
+    EventOverflow,
+    ModalPolicyInvalid,
+    ModalWatchdogOverflow,
+    ModalWatchdogStopFailed,
 }
 
 public sealed class HancomLifecycleException : Exception
@@ -257,6 +263,8 @@ internal interface IHancomAutomationRuntime : IDisposable
 
     bool ExecuteAction(HancomBoundAction invocation);
 
+    IReadOnlyList<HancomAutomationSignal> DrainAutomationSignals() => [];
+
     void Quit();
 }
 
@@ -282,6 +290,7 @@ public sealed class HancomSession
     private HancomRuntimeLease? lease;
     private IHancomAutomationDocument? document;
     private HancomApprovedDocument? openedInput;
+    private readonly List<HancomAutomationSignal> pendingAutomationSignals = [];
 
     public HancomSession()
         : this(new ComHancomRuntimeFactory())
@@ -444,6 +453,20 @@ public sealed class HancomSession
         }
     }
 
+    internal IReadOnlyList<HancomAutomationSignal> DrainAutomationSignals(StaExecutionContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        VerifyContext(context);
+        if (lease is not null)
+        {
+            CaptureAutomationSignals(lease.Automation);
+        }
+
+        var drained = pendingAutomationSignals.ToArray();
+        pendingAutomationSignals.Clear();
+        return drained;
+    }
+
     public void CloseDocument(StaExecutionContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
@@ -567,7 +590,24 @@ public sealed class HancomSession
             lease = null;
             try
             {
+                CaptureAutomationSignals(current.Automation);
+            }
+            catch
+            {
+                cleanupFailed = true;
+            }
+            try
+            {
                 current.Automation.Quit();
+            }
+            catch
+            {
+                cleanupFailed = true;
+            }
+            try
+            {
+                context.PumpPendingMessages();
+                CaptureAutomationSignals(current.Automation);
             }
             catch
             {
@@ -637,6 +677,17 @@ public sealed class HancomSession
 
     private HancomRuntimeLease RequireLease() =>
         lease ?? throw new HancomLifecycleException(HancomLifecycleError.InvalidState);
+
+    private void CaptureAutomationSignals(IHancomAutomationRuntime automation)
+    {
+        var signals = automation.DrainAutomationSignals();
+        if (signals.Count > 1_024 - pendingAutomationSignals.Count)
+        {
+            throw new HancomLifecycleException(HancomLifecycleError.EventOverflow);
+        }
+
+        pendingAutomationSignals.AddRange(signals);
+    }
 
     private void RequireState(HancomSessionState expected)
     {
@@ -750,24 +801,28 @@ internal sealed class ComHancomRuntimeFactory : IHancomRuntimeFactory
         var startedAt = DateTimeOffset.UtcNow;
         ComHancomAutomationRuntime? automation = null;
         OwnedHancomProcess? ownedProcess = null;
+        object? instance = null;
         try
         {
             var comType = Type.GetTypeFromProgID(profile.ProgId, throwOnError: true)
                 ?? throw new HancomLifecycleException(HancomLifecycleError.RegistrationMissing);
-            var instance = Activator.CreateInstance(comType)
+            instance = Activator.CreateInstance(comType)
                 ?? throw new HancomLifecycleException(HancomLifecycleError.ActivationFailed);
-            automation = new ComHancomAutomationRuntime(instance);
             ownedProcess = BindOwnedProcess(executable, startedAt, context);
+            automation = new ComHancomAutomationRuntime(instance);
+            instance = null;
             return new HancomRuntimeLease(automation, ownedProcess);
         }
         catch (HancomLifecycleException)
         {
             CleanupFailedActivation(automation, ownedProcess, context);
+            ComHancomAutomationRuntime.ReleaseComObject(instance);
             throw;
         }
         catch (Exception error)
         {
             CleanupFailedActivation(automation, ownedProcess, context);
+            ComHancomAutomationRuntime.ReleaseComObject(instance);
             throw new HancomLifecycleException(HancomLifecycleError.ActivationFailed, error);
         }
     }
@@ -961,9 +1016,23 @@ internal sealed class ComHancomRuntimeFactory : IHancomRuntimeFactory
     }
 }
 
-internal sealed class ComHancomAutomationRuntime(object instance) : IHancomAutomationRuntime
+internal sealed class ComHancomAutomationRuntime : IHancomAutomationRuntime
 {
-    private object? instance = instance;
+    private readonly IHancomAutomationEventConnection eventConnection;
+    private object? instance;
+
+    internal ComHancomAutomationRuntime(object instance)
+        : this(instance, HancomAutomationEventConnection.Attach(instance))
+    {
+    }
+
+    internal ComHancomAutomationRuntime(
+        object instance,
+        IHancomAutomationEventConnection eventConnection)
+    {
+        this.instance = instance ?? throw new ArgumentNullException(nameof(instance));
+        this.eventConnection = eventConnection ?? throw new ArgumentNullException(nameof(eventConnection));
+    }
 
     public string Version
     {
@@ -1091,6 +1160,8 @@ internal sealed class ComHancomAutomationRuntime(object instance) : IHancomAutom
         }
     }
 
+    public IReadOnlyList<HancomAutomationSignal> DrainAutomationSignals() => eventConnection.Drain();
+
     public void Quit()
     {
         dynamic automation = RequireInstance();
@@ -1100,7 +1171,14 @@ internal sealed class ComHancomAutomationRuntime(object instance) : IHancomAutom
     public void Dispose()
     {
         var current = Interlocked.Exchange(ref instance, null);
-        ReleaseComObject(current);
+        try
+        {
+            eventConnection.Dispose();
+        }
+        finally
+        {
+            ReleaseComObject(current);
+        }
     }
 
     private object RequireInstance() =>
