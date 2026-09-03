@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-03
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-05 Lists and numbering`
+- Active phase/task: `P05 / P05-05~08 exact Hangul 2020 acceptance queue`
 - Active reasoning effort: `max`
 - Blocker: none
 
@@ -28,7 +28,7 @@ save, render, cross-version or production proof.
 | P02 | `pass_scoped_current_pc_local` | `implementation/p02/P02_GATE_REPORT.md` |
 | P03 | `pass_scoped_current_pc_local` | `implementation/p03/P03_GATE_REPORT.md` |
 | P04 | `pass_scoped_current_pc_local` | `implementation/p04/P04_GATE_REPORT.md` |
-| P05 | `in_progress_current_pc_local` | P05-01/02/03/04 pass; P05-05 active |
+| P05 | `in_progress_current_pc_local` | P05-01~04 pass; P05-05~08 core ready, actual 2020 queue active |
 | P06 | `blocked_by_P05` | table engine |
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
@@ -56,26 +56,19 @@ save, render, cross-version or production proof.
 | P-0041 | P05-02 Character styles | `pass` | commit `a810aa7`, style 11/11, package 74/74, current/clean FULL 5/5, Linux offline |
 | P-0042 | P05-03 Paragraph styles | `pass` | commit `ec76232`, paragraph 12/12, package 86/86, current/clean FULL 5/5, Linux offline |
 | P-0043 | P05-04 Tabs | `pass` | commits `1a8723c` + `5cb4fe7`; tab 13/13, package 101/101, exact 2020 save/reopen semantic pass |
-| P-0044 | P05-05 Lists and numbering | `in_progress` | exact 2020 numbering/bullet/paraHead and paragraph heading discovery |
+| P-0044 | P05-05 Lists and numbering | `actual_in_progress` | commit `4afd8c0`; core/fixture/current-clean-Linux pass; exact 2020 open/save/reopen active |
+| P-0045 | P05-06 Page setup | `actual_pending` | commits `35b6d2c` + `453e1d4`; core/fixture/current-clean-Linux pass |
+| P-0046 | P05-07 Sections and columns | `actual_render_pending` | commits `cf01d27` + `dfd60e3`; core/fixture/current-clean-Linux pass |
+| P-0047 | P05-08 Header/footer/page number | `actual_render_pending` | commits `a6bcd35` + `6a46fbc`; 16 core + 2 fixture tests, current/clean FULL 5/5, offline Linux pass |
 
-## P05-05 acceptance
+## P05 active acceptance queue
 
-- Lock a bounded current-2020 `header.xml` list profile from exact `numberings`, optional `bullets`
-  and `paraHead` records, cross-checked against locked Appendix C/F and the official OWPML model.
-- Model one-based dense numbering/bullet IDs, ordered levels, start values, format expressions,
-  alignment, indentation/offset rules, character-style references and checked/image bullet states.
-- Bind NUMBER, BULLET and OUTLINE paragraph headings to typed definitions and levels. Validate all
-  references and level transitions before mutation; unknown content, unsupported image bullets and
-  ambiguous compatibility forms fail closed.
-- Define deterministic sequence/nesting semantics for continuity, level-up/down and restart. Restart
-  must be an explicit typed operation with reproducible definition/reference effects, not hidden state.
-- Deduplicate definitions in first-occurrence order, atomically rewrite only typed paragraph heading
-  references after complete map validation, lower bounded escaped fragments and re-lift for equality.
-- Test exact current numbering records, synthetic bullets, nested sequence/continuity/restart, format
-  expansion boundaries, dedup/idempotence, malformed/count/ID/reference/level/enum/namespace/limit
-  failures and fixed-seed deterministic cases.
-- Run Windows and offline read-only Linux unit/Clippy validation, current/clean-clone FULL 5/5 and
-  security. Request user UI input only for a disposable exact-2020 target fixture after the pure slice.
+P05-05~08 have bounded typed contracts, deterministic lower/readback, negative corpora and disposable
+target fixtures. The latest exact commit `6a46fbc` passed current and clean-clone FULL 5/5 plus offline
+network-disabled Linux `hwpx-package --all-targets` tests/Clippy with source and Cargo registry
+read-only. The authoritative task state remains open until the serialized exact Hangul 2020
+open/save/reopen runs finish and P05-07/P05-08 render evidence is captured. No synthetic or static
+result is promoted to actual behavior.
 
 ## P05-04 closure evidence
 
@@ -96,7 +89,7 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next action
 
-Inspect the exact current-2020 generated `header.xml` numberings/bullets/paraHead records, the locked
-official Appendix C/F records and P05-03 heading/reference contracts. Freeze `P05-05` definition,
-level, sequence, nesting, continuity/restart, limits and failure codes in a migration/policy, then
-implement the smallest exact-profile lift/lower/readback slice. Continue at reasoning effort `max`.
+Finish the active disposable P05-05 exact Hangul 2020 open/save/reopen run, verify source immutability,
+trace closure and product semantic readback, then write its task report. Run P05-06, P05-07 and P05-08
+actual fixtures serially; add required render evidence for P05-07/P05-08 before task closure. Continue
+at reasoning effort `max`.
