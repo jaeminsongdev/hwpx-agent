@@ -67,6 +67,7 @@ save, render, cross-version or production proof.
 | P-0052 | P10-04 HwpObject lifecycle | `pass` | commits `c10f97c` + `3281693` + `c06d12c`; actual attempt 09 plus x64+x86 cancellation/abrupt-exit lifecycle 10/10 |
 | P-0053 | P10-05 Security module | `core_ready_actual_module_pending` | commit `b830f74`; Agent 12/12, Worker 10/10, static 29/29, current/clean FULL 5/5, x86 pass; registered module count 0 |
 | P-0054 | P10-06 Signed binding executor | `core_ready_actual_bundle_builder_pending` | commit `3281693`; binding 14/14 x64+x86, static 35/35, schema 2 valid + 6 negative, current/clean FULL 5/5 |
+| P-0055 | P10-06 trusted offline bundle builder | `in_progress` | verify exact signed P02 registry, project only per-binding runtime-qualified entries, sign with separate P10 key, emit redacted receipt |
 
 ## Active evidence summary
 

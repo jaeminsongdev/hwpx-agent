@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/p10/binding-bundle-build-receipt-v1.schema.json",
+  "title": "P10BindingBundleBuildReceiptV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "state",
+    "bundle_id",
+    "sequence",
+    "target_profile_id",
+    "product_build",
+    "process_architecture",
+    "p02_envelope_sha256",
+    "p02_payload_sha256",
+    "source_registry_sha256",
+    "capability_registry_sha256",
+    "p10_key_id",
+    "p10_public_key_sha256",
+    "payload_sha256",
+    "signed_bundle_sha256",
+    "binding_count",
+    "probe_evidence_digest_count",
+    "source_registry_routing_enabled",
+    "raw_identifier_values_in_receipt",
+    "private_key_material_printed"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hwpx-agent.p10-06-binding-bundle-build-receipt/v1"
+    },
+    "state": { "const": "pass" },
+    "bundle_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:\\.[a-z0-9_-]+)+$"
+    },
+    "sequence": { "type": "integer", "minimum": 1, "maximum": 1000000000 },
+    "target_profile_id": { "const": "hancom-hangul-2020-secondary" },
+    "product_build": { "const": "11.0.0.9136" },
+    "process_architecture": { "const": "x86" },
+    "p02_envelope_sha256": { "$ref": "#/$defs/hash" },
+    "p02_payload_sha256": { "$ref": "#/$defs/hash" },
+    "source_registry_sha256": { "$ref": "#/$defs/hash" },
+    "capability_registry_sha256": { "$ref": "#/$defs/hash" },
+    "p10_key_id": {
+      "type": "string",
+      "pattern": "^ed25519-sha256-[0-9a-f]{64}$"
+    },
+    "p10_public_key_sha256": { "$ref": "#/$defs/hash" },
+    "payload_sha256": { "$ref": "#/$defs/hash" },
+    "signed_bundle_sha256": { "$ref": "#/$defs/hash" },
+    "binding_count": { "type": "integer", "minimum": 1, "maximum": 4096 },
+    "probe_evidence_digest_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4096
+    },
+    "source_registry_routing_enabled": { "const": false },
+    "raw_identifier_values_in_receipt": { "const": false },
+    "private_key_material_printed": { "const": false }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

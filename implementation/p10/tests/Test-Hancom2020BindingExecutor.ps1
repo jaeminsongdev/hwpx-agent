@@ -18,6 +18,8 @@ $agentWorkspace = Read-RepoFile 'workers\windows-hancom-agent\src\HwpxAgent.Wind
 $agentService = Read-RepoFile 'workers\windows-hancom-agent\src\HwpxAgent.WindowsAgent\WindowsAgentService.cs'
 $protocol = Read-RepoFile 'protocol\proto\hwpx_agent\windows_bridge\v1\windows_bridge.proto'
 $migration = Read-RepoFile 'protocol\migrations\p02-signed-registry-to-p10-execution-bundle-v1.md'
+$builder = Read-RepoFile 'tools\p10\binding_bundle.py'
+$builderPolicy = Read-RepoFile 'implementation\p10\P10-06_BINDING_BUNDLE_BUILDER_POLICY.md'
 $smoke = Read-RepoFile 'workers\windows-hancom-worker\tests\HwpxAgent.WindowsWorker.BindingSmoke\Program.cs'
 $project = Read-RepoFile 'workers\windows-hancom-worker\src\HwpxAgent.WindowsWorker\HwpxAgent.WindowsWorker.csproj'
 $envelopeSchemaPath = Join-Path $root 'protocol\json-schema\hancom-signed-binding-envelope-v1.schema.json'
@@ -107,6 +109,18 @@ $checks = [ordered]@{
         $smoke -match 'ComRuntimeRejectsRuntimeIdentityDrift'
     actual_private_ids_not_committed = $smoke -match 'SyntheticAction' -and
         $migration -match 'Raw Action, ParameterSet and item identifiers remain inside the signed private payload'
+    offline_builder_verifies_p02 = $builder -match 'verify_envelope_content' -and
+        $builder -match '_verify_exact_p02_target'
+    offline_builder_verified_only = $builder -match 'runtime_support_state.*verified_current_target' -and
+        $builder -match 'probe_disposition.*verified'
+    offline_builder_separate_key = $builder -match 'P10_PRIVATE_KEY_ROOT' -and
+        $builderPolicy -match 'separate Ed25519 key pair from P02'
+    offline_builder_trust_policy = $builder -match '_verify_policy_inputs' -and
+        $builder -match '_verify_projected_policy'
+    offline_builder_redacted_receipt = $builder -match 'raw_identifier_values_in_receipt.*False' -and
+        $builder -match 'private_key_material_printed.*False'
+    offline_builder_no_overwrite = $builder -match 'publish_no_overwrite' -and
+        $builder -match 'P10 bundle output already exists or collides'
 }
 
 $failed = @($checks.GetEnumerator() | Where-Object { -not $_.Value } | ForEach-Object Key)
