@@ -6,6 +6,7 @@
 //! fully verified in-memory value only after metadata, streaming size, CRC and
 //! nested-package checks have succeeded.
 
+mod character_style;
 mod graph;
 mod id_index;
 mod limits;
@@ -20,6 +21,15 @@ mod text_flow;
 mod vs0;
 mod writer;
 
+pub use character_style::{
+    BinaryProperty, CHARACTER_STYLE_PROFILE_ID, CharacterEffects, CharacterStyle,
+    CharacterStyleCatalog, CharacterStyleCatalogReader, CharacterStyleCatalogWriter,
+    CharacterStyleError, CharacterStyleLimitConfig, CharacterStyleLimits,
+    CharacterStyleLoweringReceipt, Color, DeduplicatedCharacterStyles, EmphasisMark, FontFace,
+    FontFaceGroup, FontFamily, FontType, FontTypeInfo, HANCOM_2020_HEAD_NAMESPACE, LanguageSlot,
+    LanguageValues, LineType1, LineType2, Shadow, ShadowType, Strikeout, SubstituteFont, Underline,
+    UnderlinePosition,
+};
 pub use graph::{
     GraphError, MediaType, PackageGraph, PackageGraphLimitConfig, PackageGraphLimits, PartRecord,
     PartRole, Relationship, RelationshipKind,
