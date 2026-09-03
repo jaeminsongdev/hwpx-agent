@@ -2,9 +2,9 @@
 
 - Updated: 2026-09-03
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-06~08 exact Hangul 2020 acceptance queue`
+- Active phase/task: `P05 / P05-06~09 exact Hangul 2020 acceptance queue`
 - Active reasoning effort: `max`
-- Blocker: none
+- Blocker: P05-06 actual retry needs the user's visible `접근 허용` click; retry-03 timed out fail-closed
 
 ## Objective and non-negotiable boundaries
 
@@ -28,7 +28,7 @@ save, render, cross-version or production proof.
 | P02 | `pass_scoped_current_pc_local` | `implementation/p02/P02_GATE_REPORT.md` |
 | P03 | `pass_scoped_current_pc_local` | `implementation/p03/P03_GATE_REPORT.md` |
 | P04 | `pass_scoped_current_pc_local` | `implementation/p04/P04_GATE_REPORT.md` |
-| P05 | `in_progress_current_pc_local` | P05-01~05 pass; P05-06~08 core ready, actual 2020 queue active |
+| P05 | `in_progress_current_pc_local` | P05-01~05 pass; P05-06~09 core ready, actual 2020 queue active |
 | P06 | `blocked_by_P05` | table engine |
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
@@ -60,10 +60,11 @@ save, render, cross-version or production proof.
 | P-0045 | P05-06 Page setup | `actual_pending` | commits `35b6d2c` + `453e1d4`; core/fixture/current-clean-Linux pass |
 | P-0046 | P05-07 Sections and columns | `actual_render_pending` | commits `cf01d27` + `dfd60e3`; core/fixture/current-clean-Linux pass |
 | P-0047 | P05-08 Header/footer/page number | `actual_render_pending` | commits `a6bcd35` + `6a46fbc`; 16 core + 2 fixture tests, current/clean FULL 5/5, offline Linux pass |
+| P-0048 | P05-09 VS-1 layout | `actual_render_pending` | commits `bd7428c` + `32d9810`; typed layout slice, exact target fixture and bounded Hangul/PDF harness ready |
 
 ## P05 active acceptance queue
 
-P05-05~08 have bounded typed contracts, deterministic lower/readback, negative corpora and disposable
+P05-05~09 have bounded typed contracts, deterministic lower/readback, negative corpora and disposable
 target fixtures. Commit `49ba92a` adds a 30--900 second watchdog, privacy-safe append-only progress
 journal, exact-process cleanup checks and version-specific wrappers for the current Hangul 2020
 actual runs. Commit `2d2c884` extends the P05-07/P05-08 wrappers with optional bounded
@@ -91,6 +92,20 @@ both copies of all six PowerShell suites passed 153/153, and offline read-only L
 Clippy passed. No synthetic, static, timed-out or pre-correction result was promoted to actual proof.
 P05-06 actual save/reopen and P05-07/P05-08 actual save/render evidence remain open.
 
+P05-09 core commit `bd7428c` combines the already typed character, paragraph, page, column and text
+modules into the bounded `hwpx-agent.hancom-2020-vs1-layout/v1` vertical slice. Its public input admits
+only NFC-normalized single-line text, fixed profile choices and finite counts; raw XML, package paths
+and automation commands are absent. The deterministic 11-part target is 8,018 bytes with SHA-256
+`185b0d685a0c07e6056e2a4b5d8e0f449f8073e35fce5313a16a2908a22db4dc`, five paragraphs, one explicit
+column break, 80,220 HWPUNIT body width, two columns, 1,700 HWPUNIT gap, seven character styles,
+twenty paragraph styles and visible-text SHA-256
+`2d93a6073c0703bdc54ccb4a6f12671604a7cac5207fd20744d264a5f93df33f`. Target tests, complete
+workspace tests/Clippy, current and exact-commit-clean FULL 5/5, clean P05 diagnostics and the fixed
+Linux image with network disabled plus source/Cargo registry read-only passed. Harness commit
+`32d9810` adds the exact P05-09 save/reopen/PDF wrapper and locked one-page 310 x 230 mm render
+expectation. The expanded six PowerShell suites pass 163/163 and the PDF verifier passes 16/16. These
+are core/static/synthetic results only; P05-09 remains pending exact Hangul save/reopen/render.
+
 ## P05-04 closure evidence
 
 P05-04 added `hwpx-agent.tab-definition/1` with bounded automatic/custom tab definitions, direct and
@@ -110,7 +125,7 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next action
 
-Run the existing disposable P05-06 custom landscape page-setup fixture through exact Hangul 2020,
-verify source immutability, trace closure and product semantic readback, then write its task report.
-Run P05-07 and P05-08 serially with their required PDF/render evidence before task closure. Continue
-at reasoning effort `max`.
+When the user confirms they are at the PC, immediately start P05-06 retry-04 and have them click every
+visible `접근 허용` prompt before the bounded timeout. Verify source immutability, trace closure and
+product semantic readback, then write its task report. Run P05-07, P05-08 and P05-09 serially with
+their required PDF/render evidence before the strict P05 Gate. Continue at reasoning effort `max`.
