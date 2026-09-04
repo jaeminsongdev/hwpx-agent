@@ -62,7 +62,8 @@ def canonical_bytes(value: Any) -> bytes:
 
 
 def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    content = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(content).hexdigest()
 
 
 def load_json(path: Path) -> dict[str, Any]:

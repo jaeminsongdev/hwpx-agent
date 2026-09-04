@@ -168,7 +168,8 @@ def load_json(path: Path) -> dict[str, Any]:
 
 
 def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    content = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(content).hexdigest()
 
 
 def safe_sha256(path: Path, errors: list[str], label: str) -> str:

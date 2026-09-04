@@ -130,6 +130,17 @@ class QuotaContractTests(unittest.TestCase):
         self.assertEqual(builder.SOURCE_PATHS, validator.EXPECTED_SOURCE_PATHS)
         self.assertEqual(len(builder.SOURCE_PATHS), len(set(builder.SOURCE_PATHS)))
 
+    def test_source_hashes_are_checkout_line_ending_independent(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            lf = root / "lf.txt"
+            crlf = root / "crlf.txt"
+            lf.write_bytes(b"first\nsecond\n")
+            crlf.write_bytes(b"first\r\nsecond\r\n")
+            self.assertEqual(builder.sha256_file(lf), builder.sha256_file(crlf))
+            self.assertEqual(validator.sha256(lf), validator.sha256(crlf))
+            self.assertEqual(builder.sha256_file(lf), validator.sha256(crlf))
+
 
 if __name__ == "__main__":
     unittest.main()
