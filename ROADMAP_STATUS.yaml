@@ -839,8 +839,28 @@ p14_execution:
     decision: pass_scoped_current_pc_local_reference_and_disposable_postgres
     p15_authorization: current_pc_local_only
 p15_execution:
-  current_task: P15-01_auth_tenant
-  gate_state: ready_to_start_current_pc_local
+  current_task: P15-02_public_tool_schemas
+  gate_state: in_progress_current_pc_local
+  tasks:
+    P15-01: passed_current_pc_local_reference_resource_server
+    P15-02: next
+  auth_tenant:
+    audited_source_commit: 8ac8d74a0f7795315d2dc2e0573f6b9a3a4e11e9
+    contract: hwpx-agent.p15-auth-tenant/v1
+    crate: auth-middleware
+    typed_scopes: 8
+    rust_tests_windows_linux: 17_of_17_passed
+    p15_contract_tests: 13_of_13_passed
+    current_exact_commit_ci_lanes: 5_of_5_passed
+    independent_checkout_ci_lanes: 5_of_5_passed
+    current_security_lane: passed
+    independent_checkout_security_lane: passed
+    offline_linux_network_disabled: passed
+    authorization_server_qualified: false
+    production_jwks_qualified: false
+    hosted_mcp_qualified: false
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope
@@ -857,7 +877,7 @@ phases:
   P12: blocked_by_P06_P07_P08_P09_P11
   P13: blocked_by_P10
   P14: completed_current_pc_local_reference_and_disposable_postgres
-  P15: ready_P15_01_current_pc_local
+  P15: in_progress_P15_02_current_pc_local
   P16: blocked_by_P15
   P17: blocked_by_P15
   P18: blocked_by_P12_P13_P16_P17

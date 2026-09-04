@@ -7,9 +7,9 @@
 
 ## 현재 상태
 
-- 상태: `P05_IN_PROGRESS_AND_P15_READY_CURRENT_PC_LOCAL_ONLY`
+- 상태: `P05_IN_PROGRESS_AND_P15_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT` + `P15_REMOTE_MCP_CONTROL_PLANE`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09 metadata/artifact/revision/history/job/scheduler/idempotency/cancel-cleanup/retention/local-mirror service와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했으며, P15-01 Auth/tenant가 다음 비-UI 구현이다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했다. P15-01은 bounded Auth/tenant resource-server middleware로 통과했고 P15-02 public tool schema가 다음 비-UI 구현이다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -107,9 +107,20 @@
 - P14-09은 commit `1d5de34`에서 7개 retention class, legal hold, tombstone, 3회 fenced purge, immutable receipt와 digest-only local mirror CAS/3개 conflict path를 구현했다. clean PostgreSQL 18.4에서 SQL 32/32×3과 P14-07 regression 28/28×3, rollback/reapply를 통과했고 P14 Python 132/132, Rust 15/15 Windows/Linux, 4개 non-security lane, security/SBOM 680이 모두 통과했다.
 - P14 Gate는 `PASS_SCOPED_CURRENT_PC_LOCAL_REFERENCE_AND_DISPOSABLE_POSTGRES`다. Production DB/service/object store/remote transport/HA/legal suitability는 계속 unverified이며, authoritative report는 `implementation/p14/P14_GATE_REPORT.md`다.
 
+## P15 현재 상태
+
+- P15-01은 commit `8ac8d74`에서 exact issuer/audience/time/tenant/scope 검증, immutable
+  issuer/subject tenant mapping, public user와 single-use internal service token 분리, finite
+  key/principal/revocation/replay registry와 redacted diagnostics를 구현했다.
+- Auth Rust 17/17, P15 contract/negative 13/13, 현재 exact commit과 독립 checkout의 전체 CI
+  각 5/5, 두 security run, network-disabled read-only Linux Clippy/17 tests가 통과했다.
+- 이 PASS는 현재-PC local reference resource server만 의미한다. Production IdP/JWKS,
+  authorization-code/PKCE 실행, hosted HTTPS, refresh propagation, multi-process replay와 secret
+  custody는 unverified다. Authoritative report는 `implementation/p15/P15-01_REPORT.md`다.
+
 ## 다음 작업
 
-비-UI 순서는 P15-01 OAuth/OIDC identity, tenant mapping, scoped service-token 계약과 fail-closed middleware를 구현하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
+비-UI 순서는 P15-02에서 18개 public MCP tool의 input/output, annotations, auth declaration과 deterministic schema snapshot을 고정하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
 
 ## 현재 blocker
 
