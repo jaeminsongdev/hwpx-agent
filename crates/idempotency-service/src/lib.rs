@@ -7,7 +7,7 @@ use std::sync::{Arc, Mutex};
 
 use artifact_service::{ArtifactId, ContentDigest, SubjectDigest, TenantId};
 use job_service::{JobId, JobRequestContext, LeaseGrant, TerminalErrorCode};
-use revision_service::{ProjectId, RevisionId};
+use revision_service::{BranchId, ProjectId, RevisionHead, RevisionId};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use thiserror::Error;
@@ -218,13 +218,15 @@ impl RetryPolicy {
 #[serde(deny_unknown_fields)]
 pub struct RequestBinding {
     project_id: ProjectId,
+    branch_id: BranchId,
     job_id: JobId,
     idempotency_key: IdempotencyKey,
     request_sha256: ContentDigest,
     execution_manifest_sha256: ContentDigest,
     source_artifact_sha256: ContentDigest,
     expected_effect_sha256: ContentDigest,
-    expected_revision_id: Option<RevisionId>,
+    transaction_receipt_sha256: ContentDigest,
+    expected_head: RevisionHead,
 }
 
 impl RequestBinding {
@@ -232,29 +234,38 @@ impl RequestBinding {
     #[allow(clippy::too_many_arguments)]
     pub const fn new(
         project_id: ProjectId,
+        branch_id: BranchId,
         job_id: JobId,
         idempotency_key: IdempotencyKey,
         request_sha256: ContentDigest,
         execution_manifest_sha256: ContentDigest,
         source_artifact_sha256: ContentDigest,
         expected_effect_sha256: ContentDigest,
-        expected_revision_id: Option<RevisionId>,
+        transaction_receipt_sha256: ContentDigest,
+        expected_head: RevisionHead,
     ) -> Self {
         Self {
             project_id,
+            branch_id,
             job_id,
             idempotency_key,
             request_sha256,
             execution_manifest_sha256,
             source_artifact_sha256,
             expected_effect_sha256,
-            expected_revision_id,
+            transaction_receipt_sha256,
+            expected_head,
         }
     }
 
     #[must_use]
     pub const fn project_id(&self) -> ProjectId {
         self.project_id
+    }
+
+    #[must_use]
+    pub const fn branch_id(&self) -> BranchId {
+        self.branch_id
     }
 
     #[must_use]
@@ -273,13 +284,15 @@ impl fmt::Debug for RequestBinding {
         formatter
             .debug_struct("RequestBinding")
             .field("project_id", &"<redacted>")
+            .field("branch_id", &"<redacted>")
             .field("job_id", &"<redacted>")
             .field("idempotency_key", &"<redacted>")
             .field("request_sha256", &"<redacted>")
             .field("execution_manifest_sha256", &"<redacted>")
             .field("source_artifact_sha256", &"<redacted>")
             .field("expected_effect_sha256", &"<redacted>")
-            .field("expected_revision_id", &"<redacted>")
+            .field("transaction_receipt_sha256", &"<redacted>")
+            .field("expected_head", &"<redacted>")
             .finish()
     }
 }
@@ -407,7 +420,7 @@ impl IdempotencyRecord {
 pub struct NoEffectProof {
     receipt_artifact_id: ArtifactId,
     source_artifact_sha256: ContentDigest,
-    observed_head_revision_id: Option<RevisionId>,
+    observed_head: RevisionHead,
 }
 
 impl fmt::Debug for NoEffectProof {
@@ -416,7 +429,7 @@ impl fmt::Debug for NoEffectProof {
             .debug_struct("NoEffectProof")
             .field("receipt_artifact_id", &"<redacted>")
             .field("source_artifact_sha256", &"<redacted>")
-            .field("observed_head_revision_id", &"<redacted>")
+            .field("observed_head", &"<redacted>")
             .finish()
     }
 }
@@ -426,18 +439,18 @@ impl NoEffectProof {
     pub const fn new(
         receipt_artifact_id: ArtifactId,
         source_artifact_sha256: ContentDigest,
-        observed_head_revision_id: Option<RevisionId>,
+        observed_head: RevisionHead,
     ) -> Self {
         Self {
             receipt_artifact_id,
             source_artifact_sha256,
-            observed_head_revision_id,
+            observed_head,
         }
     }
 
     fn validate(&self, binding: &RequestBinding) -> Result<(), IdempotencyError> {
         if self.source_artifact_sha256 != binding.source_artifact_sha256
-            || self.observed_head_revision_id != binding.expected_revision_id
+            || self.observed_head != binding.expected_head
         {
             return Err(IdempotencyError::ReconciliationMismatch);
         }
@@ -457,7 +470,8 @@ pub enum ReconciliationObservation {
         result_revision_id: RevisionId,
         receipt_artifact_id: ArtifactId,
         effect_sha256: ContentDigest,
-        observed_parent_revision_id: Option<RevisionId>,
+        transaction_receipt_sha256: ContentDigest,
+        observed_previous_head: RevisionHead,
     },
     NoEffect(NoEffectProof),
     StillUnknown,
@@ -601,7 +615,8 @@ impl IdempotencyService {
         result_revision_id: RevisionId,
         receipt_artifact_id: ArtifactId,
         effect_sha256: ContentDigest,
-        observed_parent_revision_id: Option<RevisionId>,
+        transaction_receipt_sha256: ContentDigest,
+        observed_previous_head: RevisionHead,
     ) -> Result<IdempotencyRecord, IdempotencyError> {
         let mut state = self.lock()?;
         let record = get_record_mut(&mut state, context, project_id, key)?;
@@ -610,7 +625,8 @@ impl IdempotencyService {
         }
         record.require_attempt(context, lease, false)?;
         if effect_sha256 != record.binding.expected_effect_sha256
-            || observed_parent_revision_id != record.binding.expected_revision_id
+            || transaction_receipt_sha256 != record.binding.transaction_receipt_sha256
+            || observed_previous_head != record.binding.expected_head
         {
             return Err(IdempotencyError::ReconciliationMismatch);
         }
@@ -716,10 +732,12 @@ impl IdempotencyService {
                 result_revision_id,
                 receipt_artifact_id,
                 effect_sha256,
-                observed_parent_revision_id,
+                transaction_receipt_sha256,
+                observed_previous_head,
             } => {
                 if effect_sha256 != record.binding.expected_effect_sha256
-                    || observed_parent_revision_id != record.binding.expected_revision_id
+                    || transaction_receipt_sha256 != record.binding.transaction_receipt_sha256
+                    || observed_previous_head != record.binding.expected_head
                 {
                     return Err(IdempotencyError::ReconciliationMismatch);
                 }
@@ -823,7 +841,7 @@ mod tests {
     use job_service::{
         AgentInstanceId, ExecutionId, JobId, JobRequestContext, LeaseGrant, TerminalErrorCode,
     };
-    use revision_service::{ProjectId, RevisionId};
+    use revision_service::{BranchId, ProjectId, RevisionHead, RevisionId};
     use uuid::Uuid;
 
     use super::{
@@ -855,6 +873,7 @@ mod tests {
         owner: SubjectDigest,
         other: SubjectDigest,
         project: ProjectId,
+        branch: BranchId,
         job: JobId,
         key: IdempotencyKey,
         binding: RequestBinding,
@@ -864,8 +883,11 @@ mod tests {
     impl Fixture {
         fn new() -> Self {
             let project = id("prj_", 3, ProjectId::parse);
+            let branch = id("brn_", 7, BranchId::parse);
             let job = id("job_", 4, JobId::parse);
             let key = id("idem_", 5, IdempotencyKey::parse);
+            let expected_head = RevisionHead::new(Some(id("rev_", 6, RevisionId::parse)), 1)
+                .unwrap_or_else(|error| panic!("head: {error}"));
             Self {
                 service: IdempotencyService::default(),
                 tenant: tenant(1),
@@ -875,17 +897,20 @@ mod tests {
                 other: SubjectDigest::from_authenticated_subject("idempotency-other")
                     .unwrap_or_else(|error| panic!("other: {error}")),
                 project,
+                branch,
                 job,
                 key,
                 binding: RequestBinding::new(
                     project,
+                    branch,
                     job,
                     key,
                     ContentDigest::of(b"request"),
                     ContentDigest::of(b"manifest"),
                     ContentDigest::of(b"source"),
                     ContentDigest::of(b"effect"),
-                    Some(id("rev_", 6, RevisionId::parse)),
+                    ContentDigest::of(b"transaction"),
+                    expected_head,
                 ),
                 policy: RetryPolicy::new(3, 10, 30)
                     .unwrap_or_else(|error| panic!("policy: {error}")),
@@ -948,13 +973,15 @@ mod tests {
             } else {
                 RequestBinding::new(
                     fixture.project,
+                    fixture.branch,
                     fixture.job,
                     fixture.key,
                     ContentDigest::of(b"drifted-request"),
                     ContentDigest::of(b"manifest"),
                     ContentDigest::of(b"source"),
                     ContentDigest::of(b"effect"),
-                    Some(id("rev_", 6, RevisionId::parse)),
+                    ContentDigest::of(b"transaction"),
+                    fixture.binding.expected_head,
                 )
             };
             let policy = if policy_drift {
@@ -1069,7 +1096,9 @@ mod tests {
                 revision,
                 receipt,
                 ContentDigest::of(b"effect"),
-                Some(id("rev_", 999, RevisionId::parse)),
+                ContentDigest::of(b"transaction"),
+                RevisionHead::new(Some(id("rev_", 999, RevisionId::parse)), 1)
+                    .unwrap_or_else(|error| panic!("head: {error}")),
             ),
             Err(IdempotencyError::ReconciliationMismatch)
         );
@@ -1083,7 +1112,8 @@ mod tests {
                 revision,
                 receipt,
                 ContentDigest::of(b"effect"),
-                Some(id("rev_", 6, RevisionId::parse)),
+                ContentDigest::of(b"transaction"),
+                fixture.binding.expected_head,
             )
             .unwrap_or_else(|error| panic!("success: {error}"));
         assert_eq!(succeeded.state(), IdempotencyState::Succeeded);
@@ -1098,7 +1128,8 @@ mod tests {
                 revision,
                 receipt,
                 ContentDigest::of(b"effect"),
-                Some(id("rev_", 6, RevisionId::parse)),
+                ContentDigest::of(b"transaction"),
+                fixture.binding.expected_head,
             ),
             Err(IdempotencyError::InvalidTransition)
         );
@@ -1119,7 +1150,7 @@ mod tests {
                 &first,
             )
             .unwrap_or_else(|error| panic!("begin: {error}"));
-        let expected_head = Some(id("rev_", 6, RevisionId::parse));
+        let expected_head = fixture.binding.expected_head;
         assert_eq!(
             fixture.service.retry_transient(
                 &fixture.context(fixture.owner, 109),
@@ -1224,7 +1255,8 @@ mod tests {
             result_revision_id: revision,
             receipt_artifact_id: artifact(62),
             effect_sha256: ContentDigest::of(b"wrong-effect"),
-            observed_parent_revision_id: Some(id("rev_", 6, RevisionId::parse)),
+            transaction_receipt_sha256: ContentDigest::of(b"transaction"),
+            observed_previous_head: fixture.binding.expected_head,
         };
         assert_eq!(
             fixture.service.reconcile(
@@ -1246,7 +1278,12 @@ mod tests {
                     result_revision_id: revision,
                     receipt_artifact_id: artifact(62),
                     effect_sha256: ContentDigest::of(b"effect"),
-                    observed_parent_revision_id: Some(id("rev_", 999, RevisionId::parse)),
+                    transaction_receipt_sha256: ContentDigest::of(b"transaction"),
+                    observed_previous_head: RevisionHead::new(
+                        Some(id("rev_", 999, RevisionId::parse)),
+                        1,
+                    )
+                    .unwrap_or_else(|error| panic!("head: {error}")),
                 },
             ),
             Err(IdempotencyError::ReconciliationMismatch)
@@ -1262,7 +1299,8 @@ mod tests {
                     result_revision_id: revision,
                     receipt_artifact_id: artifact(62),
                     effect_sha256: ContentDigest::of(b"effect"),
-                    observed_parent_revision_id: Some(id("rev_", 6, RevisionId::parse)),
+                    transaction_receipt_sha256: ContentDigest::of(b"transaction"),
+                    observed_previous_head: fixture.binding.expected_head,
                 },
             )
             .unwrap_or_else(|error| panic!("reconcile: {error}"));
@@ -1317,7 +1355,7 @@ mod tests {
                 ReconciliationObservation::NoEffect(NoEffectProof::new(
                     artifact(71),
                     ContentDigest::of(b"wrong-source"),
-                    Some(id("rev_", 6, RevisionId::parse)),
+                    fixture.binding.expected_head,
                 )),
             ),
             Err(IdempotencyError::ReconciliationMismatch)
@@ -1332,7 +1370,7 @@ mod tests {
                 ReconciliationObservation::NoEffect(NoEffectProof::new(
                     artifact(71),
                     ContentDigest::of(b"source"),
-                    Some(id("rev_", 6, RevisionId::parse)),
+                    fixture.binding.expected_head,
                 )),
             )
             .unwrap_or_else(|error| panic!("no effect: {error}"));
@@ -1380,7 +1418,7 @@ mod tests {
                 NoEffectProof::new(
                     artifact(80),
                     ContentDigest::of(b"source"),
-                    Some(id("rev_", 6, RevisionId::parse)),
+                    fixture.binding.expected_head,
                 ),
             ),
             Err(IdempotencyError::RetryExhausted)
@@ -1456,7 +1494,8 @@ mod tests {
                 id("rev_", 91, RevisionId::parse),
                 artifact(92),
                 ContentDigest::of(b"effect"),
-                Some(id("rev_", 6, RevisionId::parse)),
+                ContentDigest::of(b"transaction"),
+                fixture.binding.expected_head,
             ),
             Err(IdempotencyError::LeaseExpired)
         );
@@ -1485,15 +1524,17 @@ mod tests {
         let debug = format!("{record:?}");
         assert!(!debug.contains(&fixture.tenant.canonical()));
         assert!(!debug.contains(&fixture.project.public_id()));
+        assert!(!debug.contains(&fixture.branch.public_id()));
         assert!(!debug.contains(&fixture.job.public_id()));
         assert!(!debug.contains(&fixture.key.public_id()));
         assert!(!debug.contains(&fixture.owner.hex()));
         assert!(!debug.contains(&ContentDigest::of(b"request").hex()));
+        assert!(!debug.contains(&ContentDigest::of(b"transaction").hex()));
         assert!(!debug.contains(&id("rev_", 6, RevisionId::parse).public_id()));
         let proof = NoEffectProof::new(
             artifact(99),
             ContentDigest::of(b"source"),
-            Some(id("rev_", 6, RevisionId::parse)),
+            fixture.binding.expected_head,
         );
         let proof_debug = format!("{proof:?}");
         assert!(!proof_debug.contains(&artifact(99).public_id()));

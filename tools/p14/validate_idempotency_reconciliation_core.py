@@ -23,6 +23,7 @@ EXPECTED_PATHS = [
 ]
 EXPECTED_REQUIREMENTS = {
     "exact_request_and_manifest_binding": True,
+    "exact_revision_stream_generation_and_transaction_binding": True,
     "same_key_drift_rejected": True,
     "concurrent_claimers": 16,
     "concurrent_new_claims": 1,
@@ -160,6 +161,9 @@ def validate_contract(path: Path, root: Path = ROOT) -> dict[str, object]:
             "OutcomeUnknown",
             "pub struct RetryPolicy",
             "pub struct RequestBinding",
+            "branch_id: BranchId",
+            "transaction_receipt_sha256: ContentDigest",
+            "expected_head: RevisionHead",
             "pub struct NoEffectProof",
             "pub enum ClaimOutcome",
             "pub enum ReconciliationObservation",
