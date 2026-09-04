@@ -839,11 +839,12 @@ p14_execution:
     decision: pass_scoped_current_pc_local_reference_and_disposable_postgres
     p15_authorization: current_pc_local_only
 p15_execution:
-  current_task: P15-03_handlers
+  current_task: P15-04_async_job_ux
   gate_state: in_progress_current_pc_local
   tasks:
     P15-01: passed_current_pc_local_reference_resource_server
     P15-02: passed_current_pc_hancom_2020_contract_only
+    P15-03: passed_current_pc_local_reference_handlers
   auth_tenant:
     audited_source_commit: 8ac8d74a0f7795315d2dc2e0573f6b9a3a4e11e9
     contract: hwpx-agent.p15-auth-tenant/v1
@@ -879,6 +880,26 @@ p15_execution:
     hosted_mcp_qualified: false
     user_documents_opened: false
     hancom_runtime_executed_by_task: false
+  public_handlers:
+    audited_source_commit: 9e7ed73524be0049292fbdf45f2170df6f997fae
+    contract: hwpx-agent.p15-handler-contract/v1
+    crate: mcp-control-plane
+    public_tools: 18
+    ordered_handler_steps: 9
+    source_locks: 19
+    rust_tests_windows_linux: 16_of_16_passed
+    p15_contract_tests: 37_of_37_passed
+    current_exact_commit_ci_lanes: 5_of_5_passed
+    independent_checkout_ci_lanes: 5_of_5_passed
+    current_security_lane: passed
+    independent_checkout_security_lane: passed
+    offline_linux_network_disabled: passed
+    streamable_http_qualified: false
+    real_service_adapters_qualified: false
+    async_job_ux_qualified: false
+    hosted_mcp_qualified: false
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope
@@ -895,7 +916,7 @@ phases:
   P12: blocked_by_P06_P07_P08_P09_P11
   P13: blocked_by_P10
   P14: completed_current_pc_local_reference_and_disposable_postgres
-  P15: in_progress_P15_03_current_pc_local
+  P15: in_progress_P15_04_current_pc_local
   P16: blocked_by_P15
   P17: blocked_by_P15
   P18: blocked_by_P12_P13_P16_P17

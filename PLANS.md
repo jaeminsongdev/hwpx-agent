@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-04
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P15 / P15-03 Handlers`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P15 / P15-04 Async job UX`
 - Active reasoning effort: `max`
 - Immediate UI dependency: none live; P05-07 v2 attempts 10 through 16 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `모두 허용`
 
@@ -38,7 +38,7 @@ save, render, cross-version or production proof.
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
 | P14 | `pass_scoped_current_pc_local_reference_and_disposable_postgres` | `implementation/p14/P14_GATE_REPORT.md` |
-| P15 | `in_progress_current_pc_local` | P15-01~02 pass; P15-03 auth/schema/policy/service handler orchestration next |
+| P15 | `in_progress_current_pc_local` | P15-01~03 pass; P15-04 durable job/progress/cancel/terminal receipt next |
 | P16 | `blocked_by_P15` | ChatGPT Web plugin/widget |
 | P17 | `blocked_by_P15` | Codex remote/local companion |
 | P18 | `blocked_by_P12_P13_P16_P17` | quality/security/performance/DR |
@@ -68,6 +68,7 @@ save, render, cross-version or production proof.
 | P-0070 | P14 phase Gate | `pass_scoped_current_pc_local_reference_and_disposable_postgres` | STRICT/`max`; `implementation/p14/P14_GATE_REPORT.md` |
 | P-0071 | P15-01 Auth/tenant | `pass_scoped_current_pc_local_reference_resource_server` | commit `8ac8d74`; 17 Rust + 13 contract tests, exact checkout 5/5, security and offline Linux pass; `implementation/p15/P15-01_REPORT.md` |
 | P-0072 | P15-02 public tool schemas | `pass_scoped_current_pc_hancom_2020_contract_only` | commit `c3839df`; 18 input/output descriptors, 17/17 schema tests, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-02_REPORT.md` |
+| P-0073 | P15-03 public MCP handlers | `pass_scoped_current_pc_local_reference_handlers` | commit `9e7ed73`; 18 tools, Rust 16/16 and P15 37/37, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-03_REPORT.md` |
 
 ## Active evidence summary
 
@@ -121,6 +122,12 @@ save, render, cross-version or production proof.
   and independent CI are each 5/5, both security runs pass, and network-disabled read-only Linux
   validation passes. Handlers, transport and hosted OpenAI/OAuth integration remain unverified; see
   `implementation/p15/P15-02_REPORT.md`.
+- P15-03 commit `9e7ed73` implements the shared fail-closed handler sequence: public-user auth,
+  duplicate-key-free JSON, exact input schema, tenant/project policy, one service dispatch, output
+  schema and request/resource correlation. Rust handler tests are 16/16 and all P15 tests 37/37;
+  current and independent exact-commit CI are each 5/5, both security runs pass, and the
+  network-disabled read-only Linux run passes. Transport, real service wiring and async job UX remain
+  unverified; see `implementation/p15/P15-03_REPORT.md`.
 - Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with
   cleanup and succeeded on attempt 2, all other checks passed, and the SBOM contains 675 components.
 - A detached exact-commit worktree passed all four non-security lanes after the four digest-pinned,
@@ -137,9 +144,9 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next actions
 
-1. Non-UI: implement P15-03 handlers with the fixed sequence auth → input schema → policy and
-   tenant/resource ownership → exactly one service/job dispatch → output schema → bounded structured
-   result, while preserving P15-02 descriptor hashes.
+1. Non-UI: implement P15-04 Async job UX by binding long-running public calls to durable job IDs,
+   ordered bounded progress, safe cancellation and exactly one terminal receipt; prove the
+   polling/cancel/terminal flow without Hangul UI while preserving P15-03 handler order.
 2. UI-dependent: on a new explicit user request, rerun P05-07 once and require
    save/reopen/PDF/render evidence before P05-08, P05-09 and the P05 Gate.
 3. Keep P10-05/06 and P10-08 production claims open until their external controls exist.

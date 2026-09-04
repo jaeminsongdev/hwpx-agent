@@ -9,7 +9,7 @@
 
 - 상태: `P05_IN_PROGRESS_AND_P15_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT` + `P15_REMOTE_MCP_CONTROL_PLANE`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했다. P15-01 bounded Auth/tenant resource-server middleware와 P15-02의 18개 public MCP tool schema/snapshot이 통과했고 P15-03 handler가 다음 비-UI 구현이다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했다. P15-01 bounded Auth/tenant resource-server middleware, P15-02의 18개 public MCP tool schema/snapshot과 P15-03 공통 handler boundary가 통과했고 P15-04 Async job UX가 다음 비-UI 구현이다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -125,10 +125,18 @@
   5/5, 두 security run과 network-disabled read-only Linux 검증이 통과했다. 이는 contract-only
   PASS이며 handler/transport/hosted OpenAI connection은 unverified다. Authoritative report는
   `implementation/p15/P15-02_REPORT.md`다.
+- P15-03은 commit `9e7ed73`에서 18개 도구 공통 auth→unique JSON→input schema→tenant/project
+  policy→단일 gateway dispatch→output schema→correlation handler를 구현했다. 공개 bearer와
+  argument/debug는 redacted/zeroized되고, cross-tenant/non-member는 missing과 구분되지 않는다.
+- Handler Rust 16/16과 전체 P15 37/37, 현재 exact commit과 독립 checkout의 CI 각 5/5, 두
+  security run, network-disabled read-only Linux Clippy/16 tests가 통과했다. 이는 current-PC
+  in-process reference handler PASS이며 Streamable HTTP, real service adapters, async job UX,
+  hosted OAuth/OpenAI connection은 unverified다. Authoritative report는
+  `implementation/p15/P15-03_REPORT.md`다.
 
 ## 다음 작업
 
-비-UI 순서는 P15-03에서 P15-02 descriptor를 변경하지 않고 auth→schema→policy/tenant ownership→단일 service/job dispatch→output validation→bounded structured result handler를 구현하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
+비-UI 순서는 P15-04에서 P15-03 handler order를 보존하며 long-running public call을 durable job ID, ordered bounded progress, safe cancellation과 exactly one terminal receipt에 연결하고 polling/cancel/terminal E2E를 증명하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
 
 ## 현재 blocker
 
