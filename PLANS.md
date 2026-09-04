@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-05
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P15 / P15-05 Artifact delivery`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P15 / P15-06 Error mapping`
 - Active reasoning effort: `max`
 - Immediate UI dependency: none live; P05-07 v2 attempts 10 through 16 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `모두 허용`
 
@@ -38,7 +38,7 @@ save, render, cross-version or production proof.
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
 | P14 | `pass_scoped_current_pc_local_reference_and_disposable_postgres` | `implementation/p14/P14_GATE_REPORT.md` |
-| P15 | `in_progress_current_pc_local` | P15-01~04 pass; P15-05 attachment/signed URL/range/expiry next |
+| P15 | `in_progress_current_pc_local` | P15-01~05 pass; P15-06 stable public error mapping next |
 | P16 | `blocked_by_P15` | ChatGPT Web plugin/widget |
 | P17 | `blocked_by_P15` | Codex remote/local companion |
 | P18 | `blocked_by_P12_P13_P16_P17` | quality/security/performance/DR |
@@ -70,6 +70,7 @@ save, render, cross-version or production proof.
 | P-0072 | P15-02 public tool schemas | `pass_scoped_current_pc_hancom_2020_contract_only` | commit `c3839df`; 18 input/output descriptors, 17/17 schema tests, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-02_REPORT.md` |
 | P-0073 | P15-03 public MCP handlers | `pass_scoped_current_pc_local_reference_handlers` | commit `9e7ed73`; 18 tools, Rust 16/16 and P15 37/37, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-03_REPORT.md` |
 | P-0074 | P15-04 asynchronous job UX | `pass_scoped_current_pc_local_durable_job_reference` | implementation `f50c724`, closing audit `4c6224f`; Rust async 11/11 + handler 16/16, P15 44/44, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-04_REPORT.md` |
+| P-0075 | P15-05 artifact delivery | `pass_scoped_current_pc_local_artifact_delivery_reference` | commit `dde79ff`; Rust artifact 13/13 + async 11/11 + handler 16/16, P15 51/51, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-05_REPORT.md` |
 
 ## Active evidence summary
 
@@ -136,6 +137,14 @@ save, render, cross-version or production proof.
   Linux validation pass. This qualifies only the current-PC local append-only journal reference;
   production queue/database/transport and artifact byte delivery remain unverified. See
   `implementation/p15/P15-04_REPORT.md`.
+- P15-05 commit `dde79ff` connects frozen `artifact_get` to metadata, client-only signed preview and
+  opaque attachment resource-link results. Tenant/project/artifact binding generation, P14 subject
+  ACL/state/digest rechecks, 30~900 second expiry and strict bounded single ranges fail closed.
+  Artifact Rust 13/13, async 11/11, handler 16/16 and P15 Python 51/51 pass; current and independent
+  exact-commit CI are each 5/5, both security runs and network-disabled read-only Linux validation
+  pass. This qualifies only the current-PC local delivery reference; production HTTP/object storage,
+  streaming, hosted attachment resolution and key custody remain unverified. See
+  `implementation/p15/P15-05_REPORT.md`.
 - Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with
   cleanup and succeeded on attempt 2, all other checks passed, and the SBOM contains 675 components.
 - A detached exact-commit worktree passed all four non-security lanes after the four digest-pinned,
@@ -152,9 +161,9 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next actions
 
-1. Non-UI: implement P15-05 Artifact delivery with bounded attachment-or-signed-URL selection,
-   exact byte-range and expiry semantics, tenant/project ACL enforcement and negative tests while
-   preserving the frozen `artifact_get` schema and P15-03/P15-04 ordering.
+1. Non-UI: implement P15-06 Error mapping by freezing one stable public error catalog for
+   auth/schema/policy/service/job/artifact failures, with retryability and no-secret-leakage tests
+   while preserving the P15-03 through P15-05 ordering.
 2. UI-dependent: on a new explicit user request, rerun P05-07 once and require
    save/reopen/PDF/render evidence before P05-08, P05-09 and the P05 Gate.
 3. Keep P10-05/06 and P10-08 production claims open until their external controls exist.

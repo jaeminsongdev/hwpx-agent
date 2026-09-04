@@ -41,7 +41,7 @@ Remote MCP Control Plane를 문서상 계획이 아니라 **재현 가능한 산
 - [x] `P15-02` 산출물 `MCP descriptors` 존재, 검증: schema snapshots.
 - [x] `P15-03` 산출물 `MCP handlers` 존재, 검증: contract tests.
 - [x] `P15-04` 산출물 `job MCP tools` 존재, 검증: long-running E2E.
-- [ ] `P15-05` 산출물 `artifact_get` 존재, 검증: ACL/expiry tests.
+- [x] `P15-05` 산출물 `artifact_get` 존재, 검증: ACL/expiry tests.
 - [ ] `P15-06` 산출물 `error catalog` 존재, 검증: no secret leakage.
 - [ ] `P15-07` 산출물 `quota service` 존재, 검증: burst/fairness tests.
 - [ ] `P15-08` 산출물 `dashboards` 존재, 검증: sample trace complete.
