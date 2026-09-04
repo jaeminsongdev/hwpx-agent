@@ -44,7 +44,7 @@ Remote MCP Control Plane를 문서상 계획이 아니라 **재현 가능한 산
 - [x] `P15-05` 산출물 `artifact_get` 존재, 검증: ACL/expiry tests.
 - [x] `P15-06` 산출물 `error catalog` 존재, 검증: no secret leakage.
 - [x] `P15-07` 산출물 `quota service` 존재, 검증: burst/fairness tests.
-- [ ] `P15-08` 산출물 `dashboards` 존재, 검증: sample trace complete.
+- [x] `P15-08` 산출물 `dashboards` 존재, 검증: sample trace complete.
 - [ ] `P15-09` 산출물 `staging evidence` 존재, 검증: all tools green.
 - [ ] 새 capability/contract/schema에 migration과 negative test가 있다.
 - [ ] 실제 수행하지 않은 검증은 `unverified`로 남았다.
