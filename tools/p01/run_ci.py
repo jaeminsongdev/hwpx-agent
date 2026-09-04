@@ -177,6 +177,8 @@ def docs() -> None:
         ]
     )
     run([sys.executable, "tools/p15/validate_auth_tenant.py"])
+    run([sys.executable, "tools/p15/build_public_tool_schemas.py", "--check"])
+    run([sys.executable, "tools/p15/validate_public_tool_schemas.py"])
     run(
         [
             sys.executable,

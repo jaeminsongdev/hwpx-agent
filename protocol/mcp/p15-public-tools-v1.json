@@ -1,0 +1,4903 @@
+{
+  "descriptor_count": 18,
+  "official_sources": [
+    {
+      "retrieved_on": "2026-09-04",
+      "url": "https://developers.openai.com/plugins/build/mcp-server"
+    },
+    {
+      "retrieved_on": "2026-09-04",
+      "url": "https://developers.openai.com/plugins/reference"
+    },
+    {
+      "retrieved_on": "2026-09-04",
+      "url": "https://developers.openai.com/plugins/plan/tools"
+    }
+  ],
+  "safety_policy": {
+    "external_effects_exposed": false,
+    "raw_com_or_xml_exposed": false,
+    "structured_content_contains_secrets": false,
+    "unverified_backend_never_passes": true
+  },
+  "schema_version": "hwpx-agent.mcp-public-tools/v1",
+  "scope": "current_pc_hancom_2020_contract_only",
+  "tools": [
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "project.read"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
+      "description": "Use before planning when support for requested document capabilities must be checked against the current Hancom 2020 target and caller permissions. This does not run the operation.",
+      "inputSchema": {
+        "$defs": {
+          "capability_id": {
+            "maxLength": 160,
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9_]*(?:\\.[a-z][a-z0-9_]*)+$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "target_profile": {
+            "const": "hancom-hangul-2020-secondary"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/capability_check-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "capabilities": {
+            "items": {
+              "$ref": "#/$defs/capability_id"
+            },
+            "maxItems": 128,
+            "minItems": 1,
+            "type": "array"
+          },
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "requirements": {
+            "additionalProperties": false,
+            "properties": {
+              "native_editability": {
+                "type": "boolean"
+              },
+              "preserve_unknown": {
+                "type": "boolean"
+              },
+              "required_validation": {
+                "items": {
+                  "enum": [
+                    "package",
+                    "schema",
+                    "semantic",
+                    "reopen",
+                    "hancom_open",
+                    "hancom_save_reopen",
+                    "render",
+                    "visual_diff",
+                    "print_export",
+                    "accessibility",
+                    "security"
+                  ],
+                  "type": "string"
+                },
+                "maxItems": 11,
+                "minItems": 0,
+                "type": "array"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "revision_id": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "target_profile": {
+            "$ref": "#/$defs/target_profile"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "target_profile",
+          "capabilities"
+        ],
+        "title": "capability_check input v1",
+        "type": "object"
+      },
+      "name": "capability_check",
+      "outputSchema": {
+        "$defs": {
+          "capability_id": {
+            "maxLength": 160,
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9_]*(?:\\.[a-z][a-z0-9_]*)+$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/capability_check-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "capabilities": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "capability_id": {
+                  "$ref": "#/$defs/capability_id"
+                },
+                "constraints": {
+                  "items": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "maxItems": 32,
+                  "minItems": 0,
+                  "type": "array"
+                },
+                "estimated_job_class": {
+                  "enum": [
+                    "inline",
+                    "short",
+                    "long",
+                    "unavailable"
+                  ],
+                  "type": "string"
+                },
+                "selected_backend": {
+                  "enum": [
+                    "direct_hwpx",
+                    "hancom_2020",
+                    "hybrid",
+                    "none"
+                  ],
+                  "type": "string"
+                },
+                "support_level": {
+                  "enum": [
+                    "verified",
+                    "partial",
+                    "unverified",
+                    "unsupported"
+                  ],
+                  "type": "string"
+                },
+                "supported": {
+                  "type": "boolean"
+                },
+                "unverified_reasons": {
+                  "items": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "maxItems": 32,
+                  "minItems": 0,
+                  "type": "array"
+                }
+              },
+              "required": [
+                "capability_id",
+                "supported",
+                "support_level",
+                "selected_backend",
+                "estimated_job_class",
+                "constraints",
+                "unverified_reasons"
+              ],
+              "type": "object"
+            },
+            "maxItems": 128,
+            "minItems": 1,
+            "type": "array"
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "capabilities"
+        ],
+        "title": "capability_check output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "project.read"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Check document capability"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "project.read"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
+      "description": "Use to compile a bounded natural-language document request into a validated immutable plan. This never changes a project, document, job, or artifact.",
+      "inputSchema": {
+        "$defs": {
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "target_profile": {
+            "const": "hancom-hangul-2020-secondary"
+          },
+          "template_contract_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^tpl_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_plan-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "compile_only": {
+            "const": true
+          },
+          "constraints": {
+            "additionalProperties": false,
+            "properties": {
+              "max_pages": {
+                "maximum": 10000,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "native_editability": {
+                "type": "boolean"
+              },
+              "preserve_unknown": {
+                "type": "boolean"
+              },
+              "template_contract_id": {
+                "$ref": "#/$defs/template_contract_id"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "intent": {
+            "maxLength": 8000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "mode": {
+            "enum": [
+              "normalized_authoring",
+              "surgical_preserve",
+              "native_automation"
+            ],
+            "type": "string"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "source_revision_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/revision_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "target_profile": {
+            "$ref": "#/$defs/target_profile"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "target_profile",
+          "intent",
+          "mode",
+          "compile_only"
+        ],
+        "title": "document_plan input v1",
+        "type": "object"
+      },
+      "name": "document_plan",
+      "outputSchema": {
+        "$defs": {
+          "plan_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^plan_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_plan-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "ambiguities": {
+            "items": {
+              "maxLength": 1000,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          },
+          "estimated_page_effect": {
+            "enum": [
+              "none",
+              "local",
+              "document_wide",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "plan_id": {
+            "$ref": "#/$defs/plan_id"
+          },
+          "plan_state": {
+            "enum": [
+              "valid",
+              "needs_resolution",
+              "invalid"
+            ],
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "risk_level": {
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "type": "string"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "plan_id",
+          "plan_state",
+          "ambiguities",
+          "risk_level",
+          "estimated_page_effect"
+        ],
+        "title": "document_plan output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "project.read"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Plan document operation"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read",
+              "project.write"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use to create a new immutable document revision from a previously validated plan, optionally with a template. This may start a job and never overwrites an existing revision.",
+      "inputSchema": {
+        "$defs": {
+          "artifact_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^art_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "plan_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^plan_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "target_profile": {
+            "const": "hancom-hangul-2020-secondary"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_create-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "expected_revision": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "mode": {
+            "enum": [
+              "normalized_authoring",
+              "surgical_preserve",
+              "native_automation"
+            ],
+            "type": "string"
+          },
+          "plan_id": {
+            "$ref": "#/$defs/plan_id"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "target_profile": {
+            "$ref": "#/$defs/target_profile"
+          },
+          "template_artifact_id": {
+            "$ref": "#/$defs/artifact_id"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "target_profile",
+          "expected_revision",
+          "idempotency_key",
+          "plan_id",
+          "mode"
+        ],
+        "title": "document_create input v1",
+        "type": "object"
+      },
+      "name": "document_create",
+      "outputSchema": {
+        "$defs": {
+          "artifact_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^art_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "job_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^job_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "media_type": {
+            "maxLength": 127,
+            "minLength": 1,
+            "pattern": "^[a-z0-9!#$&^_.+-]+/[a-z0-9!#$&^_.+-]+$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_create-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "artifact": {
+            "oneOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "artifact_id": {
+                    "$ref": "#/$defs/artifact_id"
+                  },
+                  "bytes": {
+                    "maximum": 10737418240,
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "media_type": {
+                    "$ref": "#/$defs/media_type"
+                  },
+                  "sha256": {
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "artifact_id",
+                  "media_type",
+                  "bytes",
+                  "sha256"
+                ],
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "commit_state": {
+            "enum": [
+              "not_started",
+              "pending",
+              "committed"
+            ],
+            "type": "string"
+          },
+          "job_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/job_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "revision_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/revision_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "validation_state": {
+            "enum": [
+              "not_run",
+              "verified",
+              "partial",
+              "failed"
+            ],
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "job_id",
+          "revision_id",
+          "artifact",
+          "commit_state",
+          "validation_state"
+        ],
+        "title": "document_create output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "artifact.read",
+            "artifact.write",
+            "job.submit",
+            "project.read",
+            "project.write"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Create document"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "artifact.read",
+              "artifact.write",
+              "project.read"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use to inspect selected document structure, formatting, objects, package parts, or security facts. Full materialization may create a durable bounded snapshot, so it is not annotated read-only.",
+      "inputSchema": {
+        "$defs": {
+          "cursor": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+={0,2}$",
+            "type": "string"
+          },
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_inspect-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "cursor": {
+            "$ref": "#/$defs/cursor"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "materialization": {
+            "enum": [
+              "summary",
+              "properties",
+              "full"
+            ],
+            "type": "string"
+          },
+          "page_size": {
+            "maximum": 200,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "revision_id": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "selectors": {
+            "items": {
+              "enum": [
+                "outline",
+                "sections",
+                "range",
+                "node_ids",
+                "styles",
+                "tables",
+                "equations",
+                "drawings",
+                "fields_references",
+                "review_security",
+                "package_parts",
+                "capability_usage"
+              ],
+              "type": "string"
+            },
+            "maxItems": 12,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "idempotency_key",
+          "revision_id",
+          "selectors",
+          "materialization"
+        ],
+        "title": "document_inspect input v1",
+        "type": "object"
+      },
+      "name": "document_inspect",
+      "outputSchema": {
+        "$defs": {
+          "artifact_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^art_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "cursor": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+={0,2}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_inspect-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "maxLength": 160,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "kind": {
+                  "enum": [
+                    "outline",
+                    "section",
+                    "range",
+                    "node",
+                    "style",
+                    "table",
+                    "equation",
+                    "drawing",
+                    "reference",
+                    "security",
+                    "package_part",
+                    "capability"
+                  ],
+                  "type": "string"
+                },
+                "summary": {
+                  "maxLength": 1000,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "id",
+                "summary"
+              ],
+              "type": "object"
+            },
+            "maxItems": 200,
+            "minItems": 0,
+            "type": "array"
+          },
+          "next_cursor": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/cursor"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "snapshot_artifact_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/artifact_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "snapshot_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^snp_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "snapshot_id",
+          "items",
+          "next_cursor",
+          "snapshot_artifact_id"
+        ],
+        "title": "document_inspect output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "artifact.read",
+            "artifact.write",
+            "project.read"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Inspect document"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read",
+              "project.write"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use to atomically apply a validated plan to one source revision with an exact revision precondition. The source remains immutable; success creates a new revision.",
+      "inputSchema": {
+        "$defs": {
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "plan_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^plan_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "target_profile": {
+            "const": "hancom-hangul-2020-secondary"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_edit-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "allow_signature_invalidation": {
+            "type": "boolean"
+          },
+          "best_effort": {
+            "const": false
+          },
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "dry_run": {
+            "type": "boolean"
+          },
+          "expected_revision": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "plan_id": {
+            "$ref": "#/$defs/plan_id"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "source_revision_id": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "target_profile": {
+            "$ref": "#/$defs/target_profile"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "target_profile",
+          "expected_revision",
+          "idempotency_key",
+          "source_revision_id",
+          "plan_id",
+          "dry_run",
+          "best_effort"
+        ],
+        "title": "document_edit input v1",
+        "type": "object"
+      },
+      "name": "document_edit",
+      "outputSchema": {
+        "$defs": {
+          "artifact_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^art_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "job_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^job_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "media_type": {
+            "maxLength": 127,
+            "minLength": 1,
+            "pattern": "^[a-z0-9!#$&^_.+-]+/[a-z0-9!#$&^_.+-]+$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_edit-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "artifact": {
+            "oneOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "artifact_id": {
+                    "$ref": "#/$defs/artifact_id"
+                  },
+                  "bytes": {
+                    "maximum": 10737418240,
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "media_type": {
+                    "$ref": "#/$defs/media_type"
+                  },
+                  "sha256": {
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "artifact_id",
+                  "media_type",
+                  "bytes",
+                  "sha256"
+                ],
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "commit_state": {
+            "enum": [
+              "not_started",
+              "pending",
+              "committed"
+            ],
+            "type": "string"
+          },
+          "job_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/job_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "revision_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/revision_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "validation_state": {
+            "enum": [
+              "not_run",
+              "verified",
+              "partial",
+              "failed"
+            ],
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "job_id",
+          "revision_id",
+          "artifact",
+          "commit_state",
+          "validation_state"
+        ],
+        "title": "document_edit output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "artifact.read",
+            "artifact.write",
+            "job.submit",
+            "project.read",
+            "project.write"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Edit document revision"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read",
+              "project.write"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use for bounded merge, split, normalization, style mapping, or metadata sanitization across immutable source revisions. Always produces a preview diff and may run asynchronously.",
+      "inputSchema": {
+        "$defs": {
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "target_profile": {
+            "const": "hancom-hangul-2020-secondary"
+          },
+          "template_contract_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^tpl_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_transform-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "expected_revision": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "options": {
+            "additionalProperties": false,
+            "properties": {
+              "remove_external_links": {
+                "type": "boolean"
+              },
+              "remove_personal_metadata": {
+                "type": "boolean"
+              },
+              "split_after_pages": {
+                "items": {
+                  "maximum": 100000,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "maxItems": 1024,
+                "minItems": 0,
+                "type": "array"
+              },
+              "template_contract_id": {
+                "$ref": "#/$defs/template_contract_id"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "preview_diff": {
+            "const": true
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "source_revision_ids": {
+            "items": {
+              "$ref": "#/$defs/revision_id"
+            },
+            "maxItems": 64,
+            "minItems": 1,
+            "type": "array"
+          },
+          "target_profile": {
+            "$ref": "#/$defs/target_profile"
+          },
+          "transform": {
+            "enum": [
+              "merge",
+              "split",
+              "replace_formatting",
+              "normalize_tables",
+              "normalize_equations",
+              "normalize_drawings",
+              "deduplicate_styles",
+              "map_template_styles",
+              "sanitize_metadata"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "target_profile",
+          "expected_revision",
+          "idempotency_key",
+          "source_revision_ids",
+          "transform",
+          "preview_diff"
+        ],
+        "title": "document_transform input v1",
+        "type": "object"
+      },
+      "name": "document_transform",
+      "outputSchema": {
+        "$defs": {
+          "artifact_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^art_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "job_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^job_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "media_type": {
+            "maxLength": 127,
+            "minLength": 1,
+            "pattern": "^[a-z0-9!#$&^_.+-]+/[a-z0-9!#$&^_.+-]+$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_transform-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "artifact": {
+            "oneOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "artifact_id": {
+                    "$ref": "#/$defs/artifact_id"
+                  },
+                  "bytes": {
+                    "maximum": 10737418240,
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "media_type": {
+                    "$ref": "#/$defs/media_type"
+                  },
+                  "sha256": {
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "artifact_id",
+                  "media_type",
+                  "bytes",
+                  "sha256"
+                ],
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "commit_state": {
+            "enum": [
+              "not_started",
+              "pending",
+              "committed"
+            ],
+            "type": "string"
+          },
+          "job_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/job_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "revision_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/revision_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "validation_state": {
+            "enum": [
+              "not_run",
+              "verified",
+              "partial",
+              "failed"
+            ],
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "job_id",
+          "revision_id",
+          "artifact",
+          "commit_state",
+          "validation_state"
+        ],
+        "title": "document_transform output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "artifact.read",
+            "artifact.write",
+            "job.submit",
+            "project.read",
+            "project.write"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Transform document set"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "artifact.read",
+              "artifact.write",
+              "project.read"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use to derive slots, immutable regions, preserve rules, and risky-control inventory from a template revision. Materializing the template contract may create an artifact.",
+      "inputSchema": {
+        "$defs": {
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/template_analyze-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "include_inventory": {
+            "type": "boolean"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "materialize_contract": {
+            "type": "boolean"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "revision_id": {
+            "$ref": "#/$defs/revision_id"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "idempotency_key",
+          "revision_id",
+          "materialize_contract"
+        ],
+        "title": "template_analyze input v1",
+        "type": "object"
+      },
+      "name": "template_analyze",
+      "outputSchema": {
+        "$defs": {
+          "artifact_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^art_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "template_contract_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^tpl_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/template_analyze-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "contract_artifact_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/artifact_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fillable_slots": {
+            "maximum": 1000000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "immutable_regions": {
+            "maximum": 1000000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "template_contract_id": {
+            "$ref": "#/$defs/template_contract_id"
+          },
+          "unknown_controls": {
+            "maximum": 1000000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "template_contract_id",
+          "contract_artifact_id",
+          "immutable_regions",
+          "fillable_slots",
+          "unknown_controls"
+        ],
+        "title": "template_analyze output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "artifact.read",
+            "artifact.write",
+            "project.read"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Analyze document template"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use to run explicitly selected package, semantic, Hancom 2020, render, accessibility, or security checks. Missing backends remain unverified and validation creates evidence/job state.",
+      "inputSchema": {
+        "$defs": {
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "target_profile": {
+            "const": "hancom-hangul-2020-secondary"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_validate-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "baseline_revision_id": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "fail_on_unverified": {
+            "type": "boolean"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "levels": {
+            "items": {
+              "enum": [
+                "input",
+                "package",
+                "schema",
+                "relationships",
+                "semantic",
+                "reopen",
+                "hancom_open",
+                "hancom_save_reopen",
+                "render",
+                "visual_diff",
+                "print_export",
+                "accessibility",
+                "security"
+              ],
+              "type": "string"
+            },
+            "maxItems": 13,
+            "minItems": 1,
+            "type": "array"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "revision_id": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "target_profile": {
+            "$ref": "#/$defs/target_profile"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "target_profile",
+          "idempotency_key",
+          "revision_id",
+          "levels",
+          "fail_on_unverified"
+        ],
+        "title": "document_validate input v1",
+        "type": "object"
+      },
+      "name": "document_validate",
+      "outputSchema": {
+        "$defs": {
+          "artifact_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^art_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "job_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^job_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_validate-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "job_id": {
+            "$ref": "#/$defs/job_id"
+          },
+          "level_results": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "evidence_artifact_id": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/$defs/artifact_id"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "level": {
+                  "maxLength": 64,
+                  "minLength": 1,
+                  "pattern": "^[a-z][a-z0-9_]{1,63}$",
+                  "type": "string"
+                },
+                "state": {
+                  "enum": [
+                    "pass",
+                    "fail",
+                    "unverified",
+                    "not_run"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "level",
+                "state",
+                "evidence_artifact_id"
+              ],
+              "type": "object"
+            },
+            "maxItems": 13,
+            "minItems": 0,
+            "type": "array"
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "validation_state": {
+            "enum": [
+              "queued",
+              "running",
+              "verified",
+              "partial",
+              "failed",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "job_id",
+          "validation_state",
+          "level_results"
+        ],
+        "title": "document_validate output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "artifact.read",
+            "artifact.write",
+            "job.submit",
+            "project.read"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Validate document revision"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use to create bounded page previews or a PDF from a revision with renderer provenance. This creates a job or artifact and does not mutate the source revision.",
+      "inputSchema": {
+        "$defs": {
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "target_profile": {
+            "const": "hancom-hangul-2020-secondary"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_render-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "backend": {
+            "enum": [
+              "auto",
+              "hancom_2020",
+              "libreoffice",
+              "internal_preview"
+            ],
+            "type": "string"
+          },
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "crop": {
+            "enum": [
+              "page",
+              "content",
+              "bleed"
+            ],
+            "type": "string"
+          },
+          "dpi": {
+            "maximum": 600,
+            "minimum": 72,
+            "type": "integer"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "output": {
+            "enum": [
+              "png",
+              "webp",
+              "pdf"
+            ],
+            "type": "string"
+          },
+          "pages": {
+            "additionalProperties": false,
+            "properties": {
+              "first": {
+                "maximum": 100000,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "last": {
+                "maximum": 100000,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "first",
+              "last"
+            ],
+            "type": "object"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "revision_id": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "target_profile": {
+            "$ref": "#/$defs/target_profile"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "target_profile",
+          "idempotency_key",
+          "revision_id",
+          "pages",
+          "dpi",
+          "output",
+          "backend"
+        ],
+        "title": "document_render input v1",
+        "type": "object"
+      },
+      "name": "document_render",
+      "outputSchema": {
+        "$defs": {
+          "artifact_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^art_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "job_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^job_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_render-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "font_substitutions": {
+            "maximum": 1000000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "job_id": {
+            "$ref": "#/$defs/job_id"
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "page_count": {
+            "maximum": 100000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "preview_artifact_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/artifact_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "render_state": {
+            "enum": [
+              "queued",
+              "running",
+              "succeeded",
+              "partial",
+              "failed",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "renderer": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "job_id",
+          "render_state",
+          "page_count",
+          "preview_artifact_id",
+          "renderer",
+          "font_substitutions"
+        ],
+        "title": "document_render output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "artifact.read",
+            "artifact.write",
+            "job.submit",
+            "project.read"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Render document preview"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use to export an immutable revision to one supported document format and generate a semantic-loss report. This only creates local artifacts and never uploads, emails, or prints them.",
+      "inputSchema": {
+        "$defs": {
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "target_profile": {
+            "const": "hancom-hangul-2020-secondary"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_export-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "allow_lossy": {
+            "type": "boolean"
+          },
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "expected_revision": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "format": {
+            "enum": [
+              "hwp",
+              "hwpx",
+              "pdf",
+              "docx",
+              "rtf",
+              "txt",
+              "html",
+              "daisy",
+              "braille"
+            ],
+            "type": "string"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "include_loss_report": {
+            "const": true
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "profile": {
+            "enum": [
+              "editable",
+              "print",
+              "archive",
+              "accessible",
+              "web"
+            ],
+            "type": "string"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "source_revision_id": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "target_profile": {
+            "$ref": "#/$defs/target_profile"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "target_profile",
+          "expected_revision",
+          "idempotency_key",
+          "source_revision_id",
+          "format",
+          "profile",
+          "allow_lossy",
+          "include_loss_report"
+        ],
+        "title": "document_export input v1",
+        "type": "object"
+      },
+      "name": "document_export",
+      "outputSchema": {
+        "$defs": {
+          "artifact_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^art_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "job_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^job_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "media_type": {
+            "maxLength": 127,
+            "minLength": 1,
+            "pattern": "^[a-z0-9!#$&^_.+-]+/[a-z0-9!#$&^_.+-]+$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/document_export-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "artifact": {
+            "oneOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "artifact_id": {
+                    "$ref": "#/$defs/artifact_id"
+                  },
+                  "bytes": {
+                    "maximum": 10737418240,
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "media_type": {
+                    "$ref": "#/$defs/media_type"
+                  },
+                  "sha256": {
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "artifact_id",
+                  "media_type",
+                  "bytes",
+                  "sha256"
+                ],
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "export_state": {
+            "enum": [
+              "queued",
+              "running",
+              "succeeded",
+              "failed",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "job_id": {
+            "$ref": "#/$defs/job_id"
+          },
+          "loss_report_artifact_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/artifact_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "job_id",
+          "artifact",
+          "loss_report_artifact_id",
+          "export_state"
+        ],
+        "title": "document_export output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "artifact.read",
+            "artifact.write",
+            "job.submit",
+            "project.read"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Export document"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "project.write"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use to create a tenant-scoped document project with an explicit empty expected revision and replay-safe idempotency key.",
+      "inputSchema": {
+        "$defs": {
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "target_profile": {
+            "const": "hancom-hangul-2020-secondary"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/project_create-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "default_locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "display_name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "expected_revision": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "retention_class": {
+            "enum": [
+              "temporary",
+              "standard",
+              "regulated"
+            ],
+            "type": "string"
+          },
+          "target_profile": {
+            "$ref": "#/$defs/target_profile"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "target_profile",
+          "expected_revision",
+          "idempotency_key",
+          "display_name",
+          "default_locale",
+          "retention_class"
+        ],
+        "title": "project_create input v1",
+        "type": "object"
+      },
+      "name": "project_create",
+      "outputSchema": {
+        "$defs": {
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/project_create-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "revision_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/revision_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "project_id",
+          "revision_id"
+        ],
+        "title": "project_create output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "project.write"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Create document project"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "project.read"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
+      "description": "Use to resume a project by reading its current head, warnings, conflicts, target, recent artifacts, or recommended next actions. This creates no state.",
+      "inputSchema": {
+        "$defs": {
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/project_open-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "include": {
+            "items": {
+              "enum": [
+                "head",
+                "checkpoints",
+                "warnings",
+                "conflicts",
+                "target",
+                "recent_artifacts",
+                "recommended_actions"
+              ],
+              "type": "string"
+            },
+            "maxItems": 7,
+            "minItems": 1,
+            "type": "array"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "include"
+        ],
+        "title": "project_open input v1",
+        "type": "object"
+      },
+      "name": "project_open",
+      "outputSchema": {
+        "$defs": {
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/project_open-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "conflict_state": {
+            "enum": [
+              "none",
+              "locked",
+              "stale",
+              "diverged"
+            ],
+            "type": "string"
+          },
+          "head_revision_id": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/revision_id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "recommended_actions": {
+            "items": {
+              "maxLength": 500,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 32,
+            "minItems": 0,
+            "type": "array"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "warning_count": {
+            "maximum": 1000000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "project_id",
+          "head_revision_id",
+          "warning_count",
+          "conflict_state",
+          "recommended_actions"
+        ],
+        "title": "project_open output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "project.read"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Open document project"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "project.read"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
+      "description": "Use to page through the immutable revision graph and bounded semantic summaries between revisions. This creates no state.",
+      "inputSchema": {
+        "$defs": {
+          "cursor": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+={0,2}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/project_history-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "cursor": {
+            "$ref": "#/$defs/cursor"
+          },
+          "from_revision_id": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "include_diff_summary": {
+            "type": "boolean"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "page_size": {
+            "maximum": 200,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "to_revision_id": {
+            "$ref": "#/$defs/revision_id"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "include_diff_summary",
+          "page_size"
+        ],
+        "title": "project_history input v1",
+        "type": "object"
+      },
+      "name": "project_history",
+      "outputSchema": {
+        "$defs": {
+          "cursor": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+={0,2}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "timestamp": {
+            "maxLength": 40,
+            "minLength": 1,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,9})?Z$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/project_history-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "next_cursor": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/cursor"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "revisions": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "created_at": {
+                  "$ref": "#/$defs/timestamp"
+                },
+                "parent_revision_ids": {
+                  "items": {
+                    "$ref": "#/$defs/revision_id"
+                  },
+                  "maxItems": 8,
+                  "minItems": 0,
+                  "type": "array"
+                },
+                "revision_id": {
+                  "$ref": "#/$defs/revision_id"
+                },
+                "summary": {
+                  "maxLength": 500,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "revision_id",
+                "parent_revision_ids",
+                "created_at",
+                "summary"
+              ],
+              "type": "object"
+            },
+            "maxItems": 200,
+            "minItems": 0,
+            "type": "array"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "revisions",
+          "next_cursor"
+        ],
+        "title": "project_history output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "project.read"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Read project history"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "project.read",
+              "project.write"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use to attach an immutable label to an exact project revision. Retries with the same idempotency key return the same checkpoint.",
+      "inputSchema": {
+        "$defs": {
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/project_checkpoint-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "expected_revision": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "label": {
+            "maxLength": 120,
+            "minLength": 1,
+            "type": "string"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "note": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "revision_id": {
+            "$ref": "#/$defs/revision_id"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "expected_revision",
+          "idempotency_key",
+          "revision_id",
+          "label"
+        ],
+        "title": "project_checkpoint input v1",
+        "type": "object"
+      },
+      "name": "project_checkpoint",
+      "outputSchema": {
+        "$defs": {
+          "checkpoint_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^chk_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/project_checkpoint-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "checkpoint_id": {
+            "$ref": "#/$defs/checkpoint_id"
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "revision_id": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "checkpoint_id",
+          "revision_id",
+          "replayed"
+        ],
+        "title": "project_checkpoint output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "project.read",
+            "project.write"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Checkpoint project revision"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "project.read",
+              "project.write"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use to promote an exact revision to a local delivery label only after every requested validation gate passes. This does not transmit the artifact outside the service.",
+      "inputSchema": {
+        "$defs": {
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/project_publish-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "expected_revision": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "release_label": {
+            "maxLength": 120,
+            "minLength": 1,
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "required_gates": {
+            "items": {
+              "enum": [
+                "package",
+                "schema",
+                "semantic",
+                "hancom_save_reopen",
+                "render",
+                "visual_diff",
+                "accessibility",
+                "security"
+              ],
+              "type": "string"
+            },
+            "maxItems": 8,
+            "minItems": 1,
+            "type": "array"
+          },
+          "revision_id": {
+            "$ref": "#/$defs/revision_id"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "expected_revision",
+          "idempotency_key",
+          "revision_id",
+          "required_gates",
+          "release_label"
+        ],
+        "title": "project_publish input v1",
+        "type": "object"
+      },
+      "name": "project_publish",
+      "outputSchema": {
+        "$defs": {
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/project_publish-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "failed_gates": {
+            "items": {
+              "maxLength": 64,
+              "minLength": 1,
+              "pattern": "^[a-z][a-z0-9_]{1,63}$",
+              "type": "string"
+            },
+            "maxItems": 32,
+            "minItems": 0,
+            "type": "array"
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "publish_state": {
+            "enum": [
+              "published",
+              "gate_failed",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "release_label": {
+            "maxLength": 120,
+            "minLength": 1,
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "revision_id": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "revision_id",
+          "publish_state",
+          "release_label",
+          "failed_gates"
+        ],
+        "title": "project_publish output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "project.read",
+            "project.write"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Publish validated revision"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "project.read"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
+      "description": "Use to read the current state, progress, result artifacts, and bounded event cursor of one asynchronous job. This creates no state.",
+      "inputSchema": {
+        "$defs": {
+          "cursor": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+={0,2}$",
+            "type": "string"
+          },
+          "job_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^job_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/job_get-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "event_cursor": {
+            "$ref": "#/$defs/cursor"
+          },
+          "event_limit": {
+            "maximum": 200,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "include_events": {
+            "type": "boolean"
+          },
+          "job_id": {
+            "$ref": "#/$defs/job_id"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "job_id",
+          "include_events"
+        ],
+        "title": "job_get input v1",
+        "type": "object"
+      },
+      "name": "job_get",
+      "outputSchema": {
+        "$defs": {
+          "artifact_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^art_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "cursor": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+={0,2}$",
+            "type": "string"
+          },
+          "job_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^job_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/job_get-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "completed_units": {
+            "maximum": 1000000000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "job_id": {
+            "$ref": "#/$defs/job_id"
+          },
+          "next_event_cursor": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/cursor"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "result_artifact_ids": {
+            "items": {
+              "$ref": "#/$defs/artifact_id"
+            },
+            "maxItems": 128,
+            "minItems": 0,
+            "type": "array"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "stage": {
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9_]{1,63}$",
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "queued",
+              "leasing",
+              "running",
+              "validating",
+              "committing",
+              "succeeded",
+              "failed",
+              "cancelled",
+              "expired",
+              "quarantined"
+            ],
+            "type": "string"
+          },
+          "total_units": {
+            "oneOf": [
+              {
+                "maximum": 1000000000,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "job_id",
+          "state",
+          "stage",
+          "completed_units",
+          "total_units",
+          "result_artifact_ids",
+          "next_event_cursor"
+        ],
+        "title": "job_get output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "project.read"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Get document job"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "job.cancel"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use to request safe cancellation of one queued or running job. Cancellation is best-effort, receipt-backed, idempotent, and potentially irreversible for that job.",
+      "inputSchema": {
+        "$defs": {
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "job_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^job_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "revision_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rev_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/job_cancel-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "expected_revision": {
+            "$ref": "#/$defs/revision_id"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "job_id": {
+            "$ref": "#/$defs/job_id"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "expected_revision",
+          "idempotency_key",
+          "job_id",
+          "reason"
+        ],
+        "title": "job_cancel input v1",
+        "type": "object"
+      },
+      "name": "job_cancel",
+      "outputSchema": {
+        "$defs": {
+          "job_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^job_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/job_cancel-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "cancel_state": {
+            "enum": [
+              "requested",
+              "cancelled",
+              "already_terminal",
+              "not_cancellable"
+            ],
+            "type": "string"
+          },
+          "job_id": {
+            "$ref": "#/$defs/job_id"
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "receipt_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^rcp_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "job_id",
+          "cancel_state",
+          "receipt_id",
+          "replayed"
+        ],
+        "title": "job_cancel output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "job.cancel"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Cancel document job"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "artifact.read"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false
+      },
+      "description": "Use after authorization to request bounded artifact metadata, preview delivery, or attachment delivery. Delivery data stays in MCP content or client-only metadata, not structured output.",
+      "inputSchema": {
+        "$defs": {
+          "artifact_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^art_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "idempotency_key": {
+            "maxLength": 36,
+            "minLength": 1,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          "locale": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^prj_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/artifact_get-input-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "artifact_id": {
+            "$ref": "#/$defs/artifact_id"
+          },
+          "client_surface": {
+            "enum": [
+              "chatgpt_web",
+              "codex_remote",
+              "codex_local"
+            ],
+            "type": "string"
+          },
+          "delivery_ttl_seconds": {
+            "maximum": 900,
+            "minimum": 30,
+            "type": "integer"
+          },
+          "disposition": {
+            "enum": [
+              "metadata",
+              "preview",
+              "attachment"
+            ],
+            "type": "string"
+          },
+          "idempotency_key": {
+            "$ref": "#/$defs/idempotency_key"
+          },
+          "locale": {
+            "$ref": "#/$defs/locale"
+          },
+          "project_id": {
+            "$ref": "#/$defs/project_id"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          }
+        },
+        "required": [
+          "client_surface",
+          "locale",
+          "request_id",
+          "project_id",
+          "idempotency_key",
+          "artifact_id",
+          "disposition"
+        ],
+        "title": "artifact_get input v1",
+        "type": "object"
+      },
+      "name": "artifact_get",
+      "outputSchema": {
+        "$defs": {
+          "artifact_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^art_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "media_type": {
+            "maxLength": 127,
+            "minLength": 1,
+            "pattern": "^[a-z0-9!#$&^_.+-]+/[a-z0-9!#$&^_.+-]+$",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 124,
+            "minLength": 1,
+            "pattern": "^req_[A-Za-z0-9_-]{8,120}$",
+            "type": "string"
+          },
+          "timestamp": {
+            "maxLength": 40,
+            "minLength": 1,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,9})?Z$",
+            "type": "string"
+          },
+          "warning": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "maxLength": 96,
+                "minLength": 1,
+                "pattern": "^[A-Z][A-Z0-9_]{2,95}$",
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 1000,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "$id": "https://schemas.hwpx-agent.local/mcp/artifact_get-output-v1.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "artifact": {
+            "additionalProperties": false,
+            "properties": {
+              "artifact_id": {
+                "$ref": "#/$defs/artifact_id"
+              },
+              "bytes": {
+                "maximum": 10737418240,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "media_type": {
+                "$ref": "#/$defs/media_type"
+              },
+              "sha256": {
+                "maxLength": 64,
+                "minLength": 1,
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "media_type",
+              "bytes",
+              "sha256"
+            ],
+            "type": "object"
+          },
+          "delivery": {
+            "enum": [
+              "metadata",
+              "preview_in_meta",
+              "attachment_in_content"
+            ],
+            "type": "string"
+          },
+          "expires_at": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/timestamp"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outcome": {
+            "enum": [
+              "accepted",
+              "succeeded",
+              "partial",
+              "unverified"
+            ],
+            "type": "string"
+          },
+          "request_id": {
+            "$ref": "#/$defs/request_id"
+          },
+          "safe_summary": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "hwpx-agent.tool-result/v1"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/$defs/warning"
+            },
+            "maxItems": 64,
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "request_id",
+          "outcome",
+          "safe_summary",
+          "warnings",
+          "artifact",
+          "delivery",
+          "expires_at"
+        ],
+        "title": "artifact_get output v1",
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "artifact.read"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Get artifact"
+    }
+  ]
+}
