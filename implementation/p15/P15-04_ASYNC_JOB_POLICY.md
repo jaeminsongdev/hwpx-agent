@@ -31,8 +31,9 @@ cursor from another job, a future cursor or malformed cursor fails closed.
 - The reference limits are 4,096 jobs, 65,536 journal entries, 64 MiB total, 1 MiB per entry, 256
   events per job, 248 progress events, 200 events per public page and 128 result artifact IDs.
 - Job IDs are deterministic for the authenticated tenant, project, subject and idempotency key.
-  Exact replay returns the same job. Reuse with changed request identity, tool or arguments fails as
-  a conflict.
+  Exact semantic replay returns the same job even when the transport `request_id` is new. Reuse by a
+  different tenant, project or subject is a different identity; reuse with a changed tool or semantic
+  arguments fails as a conflict.
 
 This journal proves restart durability for the current-PC reference. It is not the production
 PostgreSQL adapter, a cross-process locking implementation, a queue, a scheduler or disaster
@@ -40,10 +41,10 @@ recovery evidence. Those claims remain open.
 
 ## Progress and terminal rules
 
-Progress uses ordered stages and explicit units rather than a synthetic percentage. Units cannot
-regress within a stage, known stages cannot move backward, public state cannot move backward, and
-time cannot regress. Worker-facing updates contain only a typed stage and numeric units; public
-messages are fixed server text.
+Progress uses ordered states, state-local stages and explicit units rather than a synthetic
+percentage. Units cannot regress within a stage, known stages cannot move backward within the same
+public state, public state cannot move backward, and time cannot regress. Worker-facing updates
+contain only a typed stage and numeric units; public messages are fixed server text.
 
 Every terminal path creates exactly one immutable terminal receipt and exactly one terminal event.
 Further progress or terminalization is rejected.

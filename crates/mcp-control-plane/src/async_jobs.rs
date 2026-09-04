@@ -568,6 +568,9 @@ impl DurableJobStore {
             .get(&locator_key(locator))
             .cloned()
             .ok_or(AsyncJobError::NotFound)?;
+        if current.cancellation_requested {
+            return Err(AsyncJobError::CancellationPending);
+        }
         if current.state.is_terminal() || now_unix_seconds < current.updated_at_unix_seconds {
             return Err(AsyncJobError::InvalidTransition);
         }

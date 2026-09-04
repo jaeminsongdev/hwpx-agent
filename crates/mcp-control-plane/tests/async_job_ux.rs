@@ -461,6 +461,12 @@ fn running_cancel_waits_for_safe_point_and_blocks_progress() {
     assert_eq!(
         fixture
             .store
+            .complete_failure(&locator, NOW + 3, "CANCEL_PENDING_FAILURE"),
+        Err(AsyncJobError::CancellationPending)
+    );
+    assert_eq!(
+        fixture
+            .store
             .acknowledge_cancellation(&locator, NOW + 3)
             .unwrap_or_else(|error| panic!("acknowledge: {error}")),
         receipt
