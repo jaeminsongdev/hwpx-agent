@@ -1,6 +1,6 @@
 # CURRENT STATE
 
-> 기준일: 2026-09-04
+> 기준일: 2026-09-05
 > 프로젝트 코드명: `hwpx-agent`  
 > 문서 세트 버전: `2.0-design`  
 > 규범 키워드: **MUST/SHALL=필수**, **SHOULD=권장**, **MAY=선택**
@@ -9,7 +9,7 @@
 
 - 상태: `P05_IN_PROGRESS_AND_P15_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT` + `P15_REMOTE_MCP_CONTROL_PLANE`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했다. P15-01 bounded Auth/tenant resource-server middleware, P15-02의 18개 public MCP tool schema/snapshot과 P15-03 공통 handler boundary가 통과했고 P15-04 Async job UX가 다음 비-UI 구현이다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했다. P15-01 bounded Auth/tenant resource-server middleware, P15-02의 18개 public MCP tool schema/snapshot, P15-03 공통 handler boundary와 P15-04 durable Async job UX가 통과했고 P15-05 Artifact delivery가 다음 비-UI 구현이다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -133,10 +133,20 @@
   in-process reference handler PASS이며 Streamable HTTP, real service adapters, async job UX,
   hosted OAuth/OpenAI connection은 unverified다. Authoritative report는
   `implementation/p15/P15-03_REPORT.md`다.
+- P15-04는 implementation commit `f50c724`와 closing audit commit `4c6224f`에서 여섯
+  long-running tool을 deterministic durable job ID, ordered bounded `_meta` progress, safe
+  cancellation과 exactly one immutable terminal receipt에 연결했다. Append-only checksum journal은
+  fsync-before-publish와 fail-closed restart replay를 적용하고 raw arguments, bearer, document
+  content, paths와 raw cancel reason을 저장하지 않는다.
+- Async Rust 11/11, handler 16/16, P15 Python 44/44, 현재 exact commit과 독립 checkout CI 각
+  5/5, 두 security run과 network-disabled read-only Linux 검증이 통과했다. 이는 current-PC
+  local durable journal reference PASS이며 production queue/database/transport, cross-process
+  writer와 artifact delivery는 unverified다. Authoritative report는
+  `implementation/p15/P15-04_REPORT.md`다.
 
 ## 다음 작업
 
-비-UI 순서는 P15-04에서 P15-03 handler order를 보존하며 long-running public call을 durable job ID, ordered bounded progress, safe cancellation과 exactly one terminal receipt에 연결하고 polling/cancel/terminal E2E를 증명하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
+비-UI 순서는 P15-05에서 frozen `artifact_get` schema와 P15-03/P15-04 ordering을 보존하며 attachment 또는 signed URL 선택, byte range, expiry, tenant/project ACL을 구현하고 negative/E2E를 증명하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
 
 ## 현재 blocker
 
