@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-04
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P10 / P10-10 runtime probe`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P14 / P14-01 metadata schema`
 - Active reasoning effort: `max`
 - Immediate UI dependency: none live; P05-07 v2 attempt 05 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `접근 허용`
 
@@ -33,11 +33,11 @@ save, render, cross-version or production proof.
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
 | P09 | `blocked_by_P05` | fields/forms/notes/references |
-| P10 | `in_progress_current_pc_local` | P10-01~04,07,09 pass; P10-05/06 actual dependencies pending; P10-08 current-PC core/audit done but dedicated controls unqualified; P10-10 next |
+| P10 | `in_progress_current_pc_local` | P10-01~04,07,09,10 pass; P10-05/06 actual dependencies pending; P10-08 current-PC core/audit done but dedicated controls unqualified |
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
-| P14 | `blocked_by_P04` | durable projects/revisions/jobs/artifacts |
+| P14 | `ready_in_progress` | P04 dependency passed; P14-01 metadata schema is the next independent non-UI task |
 | P15 | `blocked_by_P14` | remote MCP control plane |
 | P16 | `blocked_by_P15` | ChatGPT Web plugin/widget |
 | P17 | `blocked_by_P15` | Codex remote/local companion |
@@ -72,6 +72,7 @@ save, render, cross-version or production proof.
 | P-0057 | P10-08 worker isolation | `core_ready_current_pc_audit_pass_dedicated_unqualified` | mandatory machine-bound pre-lease/post-job guard; Agent 18/18, static 24/24, policy negatives 8/8; actual Session 1/workspace/process audit pass, OS outbound deny and dedicated controls false |
 | P-0058 | P01 security audit runner reliability | `harness_pass_actual_registry_audit_unverified_timeout` | 60s x 3 fail-closed retry, process-tree cleanup, immutable per-run report/SBOM; unit 8/8; actual audit timed out 3/3 while all other checks passed |
 | P-0059 | P10-09 timeout/recycle supervisor | `pass_scoped_current_pc_local` | commits `c1ed4b2` + `4fa4711`; Agent 28/28, static 28/28, policy/audit 10/10, integrated hard-timeout to actual Job Object tree recycle and byte-identical replay |
+| P-0060 | P10-10 runtime probe and lease admission | `pass_scoped_current_pc_local` | commit `57b0656`; Agent 32/32, static 29/29, policy/audit 11/11, actual target evidence 8/9 and missing security module reported `unroutable`, report 1 / lease 0 / executor 0 |
 
 ## Active evidence summary
 
@@ -115,6 +116,12 @@ root-plus-descendant process tree and the same execution replays byte-identical 
 without a duplicate executor effect. Its scope remains this current local PC and does not promote
 P10-05, P10-06 or P10-08.
 
+P10-10 commit `57b0656` makes runtime-probe collection and accepted+routable admission mandatory
+before the first lease RPC. The exact current-host audit verified target/Registry32/capability and
+P00 evidence, then honestly reported the missing file-path security module as `unroutable`. The
+control-plane adapter received one report while lease, executor and Hangul-process starts remained
+zero. This closes only P10-10; it does not promote the open P10-05/06/08 evidence.
+
 The exact `aee2818` clean clone passed the first four lanes, but two security runs failed only at the
 npm audit endpoint. The runner now bounds that call to 60 seconds x 3, retries only safely cleaned
 transient failures, records every attempt, and publishes each report/SBOM to a unique no-overwrite
@@ -134,6 +141,6 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 On a new explicit user request while the user is immediately available, rerun P05-07, then P05-08
 and P05-09 serially with required save/reopen/PDF/render evidence before the strict P05 Gate. In the
-non-UI lane, implement P10-10 runtime probe. Keep P10-05 actual module registration and dependent
-P10-06 production execution unverified until an approved module exists. Continue at reasoning effort
-`max`.
+independent non-UI lane, start P14-01 metadata schema because its P04 dependency is passed. Keep
+P10-05 actual module registration and dependent P10-06 production execution unverified until an
+approved module exists. Continue at reasoning effort `max`.

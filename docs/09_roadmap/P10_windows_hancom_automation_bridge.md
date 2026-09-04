@@ -47,7 +47,7 @@ Windows Hancom Automation Bridge를 문서상 계획이 아니라 **재현 가�
 - [x] `P10-07` 산출물 `watchdog` 존재, 검증: unknown modal fail-closed.
 - [ ] `P10-08` 산출물 `worker image/runbook` 존재, 검증: residue/isolation audit.
 - [x] `P10-09` 산출물 `supervisor` 존재, 검증: hang/retry/no duplicate effect.
-- [ ] `P10-10` 산출물 `probe agent` 존재, 검증: profile mismatch no lease.
+- [x] `P10-10` 산출물 `probe agent` 존재, 검증: profile mismatch no lease.
 - [ ] 새 capability/contract/schema에 migration과 negative test가 있다.
 - [ ] 실제 수행하지 않은 검증은 `unverified`로 남았다.
 - [ ] source artifact를 in-place로 수정한 경로가 없다.
@@ -61,6 +61,12 @@ P10-09는 현재 PC의 exact-commit 감사에서 hard timeout, unknown/no-effect
 실제 Windows Job Object 자식 트리 recycle, 동일 execution의 byte-identical terminal replay와
 executor effect 1회를 함께 검증했다. 이는 supervisor Gate만 닫으며 P10-05/06/08, 실제 사용자
 문서 timeout, 다른 PC 또는 한글 2022/2024 증거로 승격하지 않는다.
+
+P10-10은 현재 PC의 exact-commit 감사에서 정확한 target/Registry32/capability/P00 증거를
+수집해 content-addressed probe를 보고하고, profile mismatch는 outbound RPC 0회, 보안 모듈
+미등록으로 `unroutable`인 실제 상태는 report 1회 후 lease/executor 0회로 차단했다. 이는
+runtime-probe Gate만 닫는다. P10-05 실제 모듈, P10-06 실제 production COM 실행, P10-08 전용
+격리 증거가 없으므로 P10 phase 전체 hard gate는 계속 열린다.
 
 ## 금지
 
