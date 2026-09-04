@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import io
 from pathlib import Path
 import sys
 import tempfile
@@ -36,6 +37,40 @@ def result(
 
 
 class SecurityCaptureTests(unittest.TestCase):
+    def test_console_output_escapes_characters_missing_from_cp949(self) -> None:
+        class Cp949Stream(io.StringIO):
+            @property
+            def encoding(self) -> str:
+                return "cp949"
+
+        stream = Cp949Stream()
+        MODULE.print_console("license — detail", stream=stream)
+        self.assertEqual(stream.getvalue(), "license \\u2014 detail\n")
+
+    def test_node_license_exception_is_exact_to_package_version_and_license(self) -> None:
+        policy = {
+            "allowed_licenses": ["MIT", "(MIT OR CC0-1.0)"],
+            "node_license_exceptions": [
+                {
+                    "packages": ["lightningcss", "lightningcss-linux-x64-gnu"],
+                    "version": "1.33.0",
+                    "license": "MPL-2.0",
+                }
+            ],
+        }
+        accepted = {
+            "(MIT OR CC0-1.0)": [{"name": "type-fest", "versions": ["5.9.0"]}],
+            "MPL-2.0": [{"name": "lightningcss", "versions": ["1.33.0"]}],
+        }
+        self.assertEqual(MODULE.node_license_errors(accepted, policy), [])
+        rejected = {
+            "MPL-2.0": [
+                {"name": "lightningcss", "versions": ["1.34.0"]},
+                {"name": "unrelated", "versions": ["1.33.0"]},
+            ]
+        }
+        self.assertEqual(len(MODULE.node_license_errors(rejected, policy)), 2)
+
     def test_evidence_runs_are_unique_and_no_overwrite(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             with mock.patch.object(MODULE, "EVIDENCE", Path(temporary)):

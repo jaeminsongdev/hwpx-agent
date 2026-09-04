@@ -29,6 +29,13 @@ PNPM_AUDIT_TRANSIENT_MARKERS = (
 )
 
 
+def print_console(value: str, *, stream: object | None = None) -> None:
+    destination = sys.stdout if stream is None else stream
+    encoding = getattr(destination, "encoding", None) or "utf-8"
+    safe_value = value.encode(encoding, errors="backslashreplace").decode(encoding)
+    print(safe_value, file=destination)
+
+
 def resolved_command(command: list[str]) -> list[str]:
     resolved = list(command)
     if os.name == "nt" and resolved[0] == "pnpm":
@@ -100,9 +107,9 @@ def capture(
         stderr = f"{stderr.rstrip()}\n{timeout_message}".lstrip()
         exit_code = 124 if cleanup_succeeded else 125
     if stdout:
-        print(stdout.rstrip())
+        print_console(stdout.rstrip())
     if allow_stderr and stderr:
-        print(stderr.rstrip(), file=sys.stderr)
+        print_console(stderr.rstrip(), stream=sys.stderr)
     return {
         "command": resolved,
         "exit_code": exit_code,
@@ -149,7 +156,7 @@ def capture_pnpm_audit() -> dict[str, object]:
         if result["exit_code"] == 0 or not transient or attempt == PNPM_AUDIT_ATTEMPTS:
             break
         message = f"pnpm audit transient failure; retrying attempt {attempt + 1}/{PNPM_AUDIT_ATTEMPTS}"
-        print(message, file=sys.stderr)
+        print_console(message, stream=sys.stderr)
         time.sleep(1)
     result["attempt_history"] = history
     result["attempt_count"] = len(history)
@@ -187,6 +194,42 @@ def nuget_license_errors() -> list[str]:
     return errors
 
 
+def node_license_errors(
+    report: object, policy: dict[str, object] = POLICY
+) -> list[str]:
+    if not isinstance(report, dict):
+        return ["Node license report root is invalid"]
+    allowed = set(policy.get("allowed_licenses", []))
+    raw_exceptions = policy.get("node_license_exceptions", [])
+    exceptions = raw_exceptions if isinstance(raw_exceptions, list) else []
+    errors: list[str] = []
+    for license_name, packages in report.items():
+        if license_name in allowed:
+            continue
+        if not isinstance(license_name, str) or not isinstance(packages, list):
+            errors.append("Node license report entry is invalid")
+            continue
+        for package in packages:
+            if not isinstance(package, dict):
+                errors.append(f"Node license not allowlisted: {license_name} unknown")
+                continue
+            name = package.get("name")
+            versions = package.get("versions")
+            accepted = any(
+                isinstance(exception, dict)
+                and exception.get("license") == license_name
+                and isinstance(exception.get("packages"), list)
+                and name in exception["packages"]
+                and isinstance(versions, list)
+                and versions == [exception.get("version")]
+                for exception in exceptions
+            )
+            if not accepted:
+                safe_name = name if isinstance(name, str) else "unknown"
+                errors.append(f"Node license not allowlisted: {license_name} {safe_name}")
+    return errors
+
+
 def main() -> int:
     run_id, run_root = create_evidence_run()
     checks: dict[str, dict[str, object]] = {}
@@ -220,12 +263,7 @@ def main() -> int:
     if checks["pnpm_licenses"]["exit_code"] == 0:
         try:
             node_licenses = json.loads(str(checks["pnpm_licenses"]["stdout"]))
-            allowed = set(POLICY["allowed_licenses"])
-            license_errors.extend(
-                f"Node license not allowlisted: {license_name}"
-                for license_name in node_licenses
-                if license_name not in allowed
-            )
+            license_errors.extend(node_license_errors(node_licenses))
         except json.JSONDecodeError as error:
             license_errors.append(f"Node license report is invalid JSON: {error}")
     try:
@@ -269,7 +307,7 @@ def main() -> int:
     report_path = run_root / "report.json"
     with report_path.open("x", encoding="utf-8", newline="\n") as report_file:
         report_file.write(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
-    print(json.dumps(report, ensure_ascii=False, indent=2))
+    print_console(json.dumps(report, ensure_ascii=False, indent=2))
     return 1 if failed or license_errors else 0
 
 
