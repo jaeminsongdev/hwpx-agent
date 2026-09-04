@@ -1,6 +1,7 @@
 # P15-08 bounded telemetry and dashboard report
 
 - Generated: 2026-09-05
+- Audited source and closure commit: `9f9c6932518175906842a2cbb5915a0fb96d0d49`
 - Foundational implementation commit: `d492dc8badc64abc86d2d5ecb09901d58ac0d109`
 - Reasoning/review mode: `max` / strict correlation, privacy, bounded-state and dispatch-order audit
 - Decision: `pass_scoped_current_pc_hancom_2020_local_telemetry_reference`
