@@ -157,6 +157,7 @@ def docs() -> None:
     run([sys.executable, "tools/p14/validate_artifact_service_migration.py"])
     run([sys.executable, "tools/p14/validate_revision_cas_migration.py"])
     run([sys.executable, "tools/p14/validate_history_checkpoints_migration.py"])
+    run([sys.executable, "tools/p14/validate_job_state_machine_migration.py"])
     run(
         [
             sys.executable,

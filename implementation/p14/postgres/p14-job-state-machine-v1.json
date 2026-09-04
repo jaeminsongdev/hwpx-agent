@@ -1,0 +1,162 @@
+{
+  "schema_version": "hwpx-agent.p14-05-job-state-machine-contract/v1",
+  "contract_id": "p14-job-state-machine-v1",
+  "database": {
+    "engine": "PostgreSQL",
+    "server_version": "18.4",
+    "container_image": "postgres:18.4-bookworm@sha256:7e6103cf85f88f7a0eddb3ec0b1ba8940eba098ed118ade25a729ca9daee5568"
+  },
+  "prerequisites": [
+    {
+      "version": 1,
+      "name": "p14.metadata_v1",
+      "up_path": "migrations/postgres/0001_p14_metadata.up.sql",
+      "up_sha256": "7c00f744993581448acb4b6d4d8a46f1ff03d108750da0afc671c3b5e2b0a78d",
+      "down_path": "migrations/postgres/0001_p14_metadata.down.sql",
+      "down_sha256": "1c17c31ad8b19d16a64498ce9cb47cdf5c85a0cbd8450b079f8586d4960c8fa2"
+    },
+    {
+      "version": 2,
+      "name": "p14.artifact_service_v1",
+      "up_path": "migrations/postgres/0002_p14_artifact_service.up.sql",
+      "up_sha256": "202753fbd6f20f181b09bd6227766dfb808811bd4e734a4a418cb5bae4eaee56",
+      "down_path": "migrations/postgres/0002_p14_artifact_service.down.sql",
+      "down_sha256": "af04b1198d7c6f153cfc576036807bd1749746fcc17f480cd6d2d29d6a49f5ae"
+    },
+    {
+      "version": 3,
+      "name": "p14.revision_cas_v1",
+      "up_path": "migrations/postgres/0003_p14_revision_cas.up.sql",
+      "up_sha256": "beeac1f22fde0eb3474d40acc14838c1e9676a74b68c5b6f9608713ba6e6e53a",
+      "down_path": "migrations/postgres/0003_p14_revision_cas.down.sql",
+      "down_sha256": "cf99f107ebca0be77a18c23b83e937dff36e39a6610c6fa3b1fff9964d35cabb"
+    },
+    {
+      "version": 4,
+      "name": "p14.history_checkpoints_v1",
+      "up_path": "migrations/postgres/0004_p14_history_checkpoints.up.sql",
+      "up_sha256": "e336890d4ee3fdf4819f52c079ba320f450b01ec516bf5ffaaf505a76b14f249",
+      "down_path": "migrations/postgres/0004_p14_history_checkpoints.down.sql",
+      "down_sha256": "a2d635bfb50fb93e9bbbd1ff37a04e223aec456afa21098b9ef83047f25c05e4"
+    }
+  ],
+  "migration": {
+    "version": 5,
+    "name": "p14.job_state_machine_v1",
+    "up_path": "migrations/postgres/0005_p14_job_state_machine.up.sql",
+    "up_sha256": "4f15cd28510d55fa58a18aef7b8edf8b4606169fd722a0b8d2c63da2cfb4bf9b",
+    "down_path": "migrations/postgres/0005_p14_job_state_machine.down.sql",
+    "down_sha256": "ee57688b62ef4b6c90a89f5eff966f8b4ba1c237bffe494f34fcb596ea516c09"
+  },
+  "smoke_fixture": {
+    "path": "tools/p14/fixtures/p14_job_state_machine_smoke.sql",
+    "sha256": "9cc3364108701ddb24d5b2ba39eeee28b540e80d2768844583343c674b73c153",
+    "assertions_per_run": 30,
+    "pass_marker": "P14_JOB_STATE_MACHINE_SMOKE_PASS assertions=30"
+  },
+  "required_job_columns": [
+    "state_machine_version",
+    "active_execution_id",
+    "lease_issued_at"
+  ],
+  "required_attempt_columns": [
+    "state_machine_version",
+    "lease_expires_at",
+    "updated_at"
+  ],
+  "required_indexes": [
+    "jobs_state_machine_queue_idx",
+    "job_attempts_state_machine_active_idx"
+  ],
+  "required_functions": [
+    "guard_job_state_machine_update",
+    "guard_job_attempt_state_machine_update",
+    "verify_job_state_machine_consistency",
+    "enqueue_job_state_machine",
+    "lease_job_state_machine",
+    "advance_job_state_machine",
+    "commit_job_success",
+    "fail_job_state_machine",
+    "get_job_state_machine"
+  ],
+  "required_triggers": [
+    "jobs_state_machine_guard",
+    "job_attempts_state_machine_guard",
+    "jobs_state_machine_consistency",
+    "job_attempts_state_machine_consistency"
+  ],
+  "invariants": {
+    "exact_stage_chain": "queued->leased->staged->executing->validating->succeeded",
+    "active_failure_edges": [
+      "leased->failed",
+      "staged->failed",
+      "executing->failed",
+      "validating->failed"
+    ],
+    "skipped_repeated_backward_transitions_denied": true,
+    "terminal_state_immutable": true,
+    "job_spec_and_attempt_identity_immutable": true,
+    "monotonic_updated_at": true,
+    "job_attempt_state_consistent_at_commit": true,
+    "single_attempt_and_fence_in_p14_05": true,
+    "bounded_structural_lease_seconds": 3600,
+    "exact_execution_agent_attempt_fence_binding": true,
+    "qualified_input_artifact_and_acl_required": true,
+    "qualified_expected_and_result_revision_required": true,
+    "qualified_terminal_receipt_required": true,
+    "reader_observation_only": true,
+    "editor_or_owner_mutation": true,
+    "cross_tenant_context_denied": true,
+    "legacy_job_fail_closed": true,
+    "transaction_local_request_context": true,
+    "reserved_cancel_unknown_transitions": true,
+    "guarded_destructive_rollback": true,
+    "migration_digest_supplied_by_runner": true,
+    "database_extensions_required": false,
+    "public_privileges_revoked": true
+  },
+  "source_locks": [
+    {
+      "path": "docs/12_implementation_guides/09_project_jobs_storage.md",
+      "sha256": "946cac58f4984bb9da8055e4decc35b6259eb742270144c0f68d123bb4914a96"
+    },
+    {
+      "path": "docs/06_mcp_api/06_jobs_artifacts.md",
+      "sha256": "1aa997edfdebfd1605473f07c9d246a4b30f419b131dd4a9b7222cd7d33c76da"
+    },
+    {
+      "path": "docs/06_mcp_api/05_auth_permissions.md",
+      "sha256": "6f227a4cb42f0a4b27a9d28cdd055606eb51f8adb2e589de2f02bf1585ca6b38"
+    },
+    {
+      "path": "crates/job-service/Cargo.toml",
+      "sha256": "22bd11db6425d1be4f034573053453a0d42ea4e7894e9edc7ee6c5465628b557"
+    },
+    {
+      "path": "crates/job-service/src/lib.rs",
+      "sha256": "00f559b28e47afd5c6dfd8434f1d5174649dd8a551d9bb0594cd4a69773d98a0"
+    },
+    {
+      "path": "crates/job-service/src/types.rs",
+      "sha256": "609b46cf2fef794d4d51e627bf5f809292171042b5278751ac4e5e5d0f108106"
+    },
+    {
+      "path": "crates/job-service/src/store.rs",
+      "sha256": "b4ef6c3414e47b9a4450af9c650229a16ffab9c306a2482110c87c07ccf60bec"
+    },
+    {
+      "path": "crates/job-service/src/service.rs",
+      "sha256": "e58259376f9b49eec33f28ebdded175ca774dfb507c3eab56cd6b217aa182897"
+    }
+  ],
+  "scope": {
+    "current_pc_local_development_only": true,
+    "p14_06_capability_matching_expiry_fencing_qualified": false,
+    "p14_07_retry_idempotency_reconciliation_qualified": false,
+    "p14_08_cancel_cleanup_qualified": false,
+    "production_database_qualified": false,
+    "production_service_wiring_qualified": false,
+    "p14_phase_complete": false,
+    "user_documents_used": false
+  }
+}
