@@ -1,0 +1,212 @@
+{
+  "correlation_fields": [
+    "request_id",
+    "job_id",
+    "execution_id",
+    "revision_id",
+    "evidence_id"
+  ],
+  "dashboard_dimensions": [
+    "tool",
+    "tenant_class",
+    "job",
+    "backend",
+    "capability",
+    "validation_state"
+  ],
+  "dashboard_schema_version": "hwpx-agent.telemetry-dashboard/v1",
+  "handler_sequence_preserved": true,
+  "identifier_protection": "process_salted_sha256",
+  "limits": {
+    "capability_routes_per_trace": 128,
+    "traces": 2048
+  },
+  "p15_07_audited_source_commit": "e15921a59d45056c46b8ae94b6f6af778746c534",
+  "p15_07_contract_sha256": "787f88e79b0b1aa1dff483237cf60e9a30526ab686481ec779fe04a3cd3db872",
+  "public_meta_keys": [
+    "hwpx/telemetryPolicySha256"
+  ],
+  "public_trace_id_exposed": false,
+  "required_behaviors": [
+    "one_complete_trace_per_public_result",
+    "fixed_six_stage_hierarchy_with_explicit_not_applicable",
+    "whole_trace_fifo_eviction_at_bounded_capacity",
+    "tool_latency_and_status_by_closed_tenant_class",
+    "job_backend_capability_and_validation_sli",
+    "process_salted_identifier_and_capability_digests",
+    "no_body_credential_path_identity_or_backend_error_retention",
+    "telemetry_does_not_reorder_or_duplicate_gateway_dispatch",
+    "invalid_gateway_output_is_not_copied_into_telemetry",
+    "deterministic_dashboard_from_retained_complete_traces"
+  ],
+  "rust_regression_tests": 53,
+  "rust_telemetry_tests": 8,
+  "schema_version": "hwpx-agent.p15-telemetry-contract/v1",
+  "scope": "current_pc_hancom_2020_local_telemetry_reference",
+  "source_locks": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "dbf0bd590f36638a4a2b4f4f3e0fcfcb11b7178736b542c4420d51ec80342bc6"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "fa3ee66f3d9da7ff98381ab9118cf8f11f86e49e66d44054bf7d306a4f9e419b"
+    },
+    {
+      "path": "deny.toml",
+      "sha256": "1b7f0c7a65ba80242847fbb24483fa82708f28b361e425c76c48233d52073ef3"
+    },
+    {
+      "path": "security/dependency-policy.json",
+      "sha256": "753e93e1ee01ff92f965627b7a26baefaa90ca8e7e79a82b1afb87c08e8bff69"
+    },
+    {
+      "path": "docs/02_architecture/08_observability.md",
+      "sha256": "ce9ea2e88912887737040f1e2d848c6ce40358d726ae5be50ad562d153e66e98"
+    },
+    {
+      "path": "docs/09_roadmap/P15_remote_mcp_control_plane.md",
+      "sha256": "04976de5dbd34bb774d4777470cd5cb193d34bd8309cdb239f8cd21bd6b1998c"
+    },
+    {
+      "path": "docs/10_operations/05_observability_incidents.md",
+      "sha256": "3dde96fd608eeddc5e2e9a7f4dc302d83acb420058991fcd598d916b5b30c68e"
+    },
+    {
+      "path": "specs/work-breakdown-structure.json",
+      "sha256": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2"
+    },
+    {
+      "path": "protocol/mcp/p15-public-tools-v1.json",
+      "sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001"
+    },
+    {
+      "path": "protocol/mcp/p15-public-error-catalog-v2.json",
+      "sha256": "ac1eaf53e79f70a7bf35ba8aafa5e8f3e684a2a0df378a02fa1194384e31e849"
+    },
+    {
+      "path": "protocol/mcp/p15-quota-policy-v1.json",
+      "sha256": "aec54a5fa7f25c91ffa86d1d3a677c41ee68b1d3c974d21c734bad59ac19fd95"
+    },
+    {
+      "path": "protocol/mcp/p15-telemetry-policy-v1.json",
+      "sha256": "052607176a31b5bedda3210e27ddb35d92df1b5126d881219606fb8a960274d1"
+    },
+    {
+      "path": "implementation/p15/p15-quota-contract-v1.json",
+      "sha256": "787f88e79b0b1aa1dff483237cf60e9a30526ab686481ec779fe04a3cd3db872"
+    },
+    {
+      "path": "implementation/p15/P15-08_TELEMETRY.md",
+      "sha256": "3d0981904b573f596858e09751cbd2ff9d38e98879eee893ae83a22ac883a301"
+    },
+    {
+      "path": "crates/mcp-control-plane/Cargo.toml",
+      "sha256": "6e2c7d2b8a2a3c581114aba0c8cfbb5110c3157baaf717fb2b8748449e702bc5"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/lib.rs",
+      "sha256": "4a9323eb4e9cda732dc7620e142df158fcc161c9f74863afb074b80a2ba8d72a"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/catalog.rs",
+      "sha256": "69860323b71de2f2f1836fa90a78a41b44dd8a5016f9211a4d7f7e06373952cf"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/error_catalog.rs",
+      "sha256": "9f41149710b5fd3cb507969ce5c23c975bdb6eac405aecd06d5646a5d84f99e2"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/handler.rs",
+      "sha256": "8ff8a1be4750b842558ea0c5047431d5cb5aa76fc8a5e0651525c3e107b9d99d"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/policy.rs",
+      "sha256": "32513728470e18608d1eeff419e83ece628d6a9c4dd2a948c1c95012e97412ac"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/quota.rs",
+      "sha256": "7e01dcb4431aa801179db48e84e7d22e88b341c0b164664f75aea454e0fa2cb4"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/strict_json.rs",
+      "sha256": "f8c4e72cb8afa4c9df37259e6b9e143dbdada228cbf9456bad8a26360ac8a882"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/telemetry.rs",
+      "sha256": "9c3f44e82b0550f5a22110d39e4835e538996614e7fdd42d4b9ce9babb5ae6a3"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/async_jobs.rs",
+      "sha256": "4b5237c77d6e1c7c97d46ed87e31921c10958cec2d9ee3a01fd2c7d95a15c304"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/artifact_delivery.rs",
+      "sha256": "89865b110bd304f03ab2d9fa7c81bb074ead873f51b92b470792f46c7dc26915"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/handler_contract.rs",
+      "sha256": "5413f5f9cd00cbdf3f081ae37b50667e970d8033e0811d4bb5c5752ba62c63d2"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/async_job_ux.rs",
+      "sha256": "0870b6137fee8ab28f434fcdef3b7713611ff91572c2bf042b1e3f71764e6be6"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/artifact_delivery.rs",
+      "sha256": "cf7db5eb60f6511e9276162f02240ac0d43b91a25ab8246d0b0cfd2c76efe22a"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/error_mapping.rs",
+      "sha256": "1f6e3ff4ec2765897f2caa53e31c59de6e10b47eaedbef025017c3aa8163905d"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/quota_service.rs",
+      "sha256": "0ec1ed30f84ac30d1be3edf15eb31f61f5e31cb6b5d26981afcc6f1f80c1856a"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/telemetry.rs",
+      "sha256": "45850cae105323ddb520ddf09334f714f86fa1cfb2da4c7e28f9269c64f201ca"
+    },
+    {
+      "path": "tools/p15/build_quota_contract.py",
+      "sha256": "7ccbcfbd550551a1ca660a10351a8709f8928c84b053ba274bf25e7e7d5b67f3"
+    },
+    {
+      "path": "tools/p15/validate_quota_contract.py",
+      "sha256": "c9adf1940e67acab61cadd903d68c487df9f672282c14e6d01245769a4e53f10"
+    },
+    {
+      "path": "tools/p15/build_telemetry_contract.py",
+      "sha256": "2e646512a2a292da42583e88fd3e7bbf693b94ab256628bf49df8e10448332ce"
+    },
+    {
+      "path": "tools/p15/validate_telemetry_contract.py",
+      "sha256": "d0d88b516307a38606a55614303fb5cf988238e1730eaac8b26e5e0bdd6bbf7a"
+    },
+    {
+      "path": "tools/p15/tests/test_quota_contract.py",
+      "sha256": "9f6102c984041caca6d7bea12e7a2bd332b72f63c4d371bbf1a591e1c758ffdb"
+    },
+    {
+      "path": "tools/p15/tests/test_telemetry_contract.py",
+      "sha256": "5224ef4f1a3ccd7abad11904d9f19a7ce55c5563bedc3b4ae9ede0d6ee26bf01"
+    }
+  ],
+  "target_profile": "hancom-hangul-2020-secondary",
+  "telemetry_policy_sha256": "052607176a31b5bedda3210e27ddb35d92df1b5126d881219606fb8a960274d1",
+  "tenant_classes": [
+    "unattributed",
+    "local_reference"
+  ],
+  "tool_catalog_sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001",
+  "trace_schema_version": "hwpx-agent.telemetry-trace/v1",
+  "trace_stages": [
+    "mcp_request",
+    "capability_plan",
+    "job",
+    "backend_execution",
+    "validation_step",
+    "artifact_commit"
+  ]
+}

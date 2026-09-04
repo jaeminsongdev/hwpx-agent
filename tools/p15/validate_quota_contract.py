@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
@@ -17,6 +18,14 @@ ERROR_V1_PATH = ROOT / "protocol/mcp/p15-public-error-catalog-v1.json"
 ERROR_V2_PATH = ROOT / "protocol/mcp/p15-public-error-catalog-v2.json"
 P15_06_REVISION = "f36a07e988558b4481c50955a0f76bd69c516d9d"
 P15_06_CONTRACT_SHA256 = "ae33d499350ca53f55534744036fc5830e4748efe943482b90c9e063bf54bd8b"
+P15_08_SUPERSEDING_VALIDATOR = "tools/p15/validate_telemetry_contract.py"
+P15_07_AUDITED_REVISION = "e15921a59d45056c46b8ae94b6f6af778746c534"
+P15_08_SUPERSEDED_PATHS = {
+    "crates/mcp-control-plane/src/lib.rs",
+    "crates/mcp-control-plane/src/handler.rs",
+    "tools/p15/build_quota_contract.py",
+    "tools/p15/validate_quota_contract.py",
+}
 
 EXPECTED_KEYS = {
     "buckets",
@@ -220,8 +229,38 @@ def historical_p15_06_is_intact(root: Path, contract: dict[str, Any]) -> bool:
     return True
 
 
+def validate_p15_08_supersession(root: Path) -> list[str]:
+    validator_path = root / P15_08_SUPERSEDING_VALIDATOR
+    specification = importlib.util.spec_from_file_location(
+        "p15_telemetry_superseding_validator", validator_path
+    )
+    if specification is None or specification.loader is None:
+        return ["p15_08_supersession.validator_load"]
+    module = importlib.util.module_from_spec(specification)
+    try:
+        specification.loader.exec_module(module)
+        errors = module.validate(root)
+    except Exception:
+        return ["p15_08_supersession.validation"]
+    if errors:
+        return ["p15_08_supersession.contract"]
+    return []
+
+
+def historical_p15_07_source_matches(root: Path, relative: str, expected: str) -> bool:
+    result = subprocess.run(
+        ["git", "show", f"{P15_07_AUDITED_REVISION}:{relative}"],
+        cwd=root,
+        check=False,
+        capture_output=True,
+    )
+    content = result.stdout.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return result.returncode == 0 and hashlib.sha256(content).hexdigest() == expected
+
+
 def validate(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
+    p15_08_supersession_errors = validate_p15_08_supersession(root)
     try:
         contract = load_json(root / CONTRACT_PATH.relative_to(ROOT))
     except Exception as error:
@@ -409,7 +448,10 @@ def validate(root: Path = ROOT) -> list[str]:
             if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
                 errors.append(f"source_lock[{index}].digest_shape")
             elif sha256(source) != expected:
-                errors.append(f"source_lock[{index}].digest")
+                if relative not in P15_08_SUPERSEDED_PATHS or p15_08_supersession_errors:
+                    errors.append(f"source_lock[{index}].digest")
+                elif not historical_p15_07_source_matches(root, relative, expected):
+                    errors.append(f"source_lock[{index}].historical_digest")
 
     quota_source = (root / "crates/mcp-control-plane/src/quota.rs").read_text(encoding="utf-8")
     for token in [

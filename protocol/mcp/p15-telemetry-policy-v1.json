@@ -1,0 +1,32 @@
+{
+  "correlation_fields": [
+    "request_id",
+    "job_id",
+    "execution_id",
+    "revision_id",
+    "evidence_id"
+  ],
+  "dashboard_dimensions": [
+    "tool",
+    "tenant_class",
+    "job",
+    "backend",
+    "capability",
+    "validation_state"
+  ],
+  "max_capability_routes_per_trace": 128,
+  "schema_version": "hwpx-agent.telemetry-policy/v1",
+  "tenant_classes": [
+    "unattributed",
+    "local_reference"
+  ],
+  "trace_capacity": 2048,
+  "trace_stages": [
+    "mcp_request",
+    "capability_plan",
+    "job",
+    "backend_execution",
+    "validation_step",
+    "artifact_commit"
+  ]
+}

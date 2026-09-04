@@ -12,6 +12,7 @@ mod handler;
 mod policy;
 mod quota;
 mod strict_json;
+mod telemetry;
 
 pub use artifact_delivery::{
     ArtifactDeliveryConfig, ArtifactDeliveryError, ArtifactDeliveryGateway, ArtifactDeliverySigner,
@@ -38,4 +39,10 @@ pub use policy::{
 pub use quota::{
     InMemoryQuotaService, JobClass, MAX_QUOTA_BUCKET_ENTRIES, MAX_QUOTA_REPLAY_ENTRIES,
     QUOTA_POLICY_SHA256, QuotaAdmission, QuotaError, QuotaService, QuotaStateLimits,
+};
+pub use telemetry::{
+    BackendClass, CapabilityRoute, CorrelationDigests, InMemoryTelemetry,
+    MAX_CAPABILITY_ROUTES_PER_TRACE, MAX_TELEMETRY_TRACES, TELEMETRY_POLICY_SHA256,
+    TelemetryDashboard, TelemetryError, TelemetryJobState, TelemetrySpan, TelemetrySpanState,
+    TelemetryStage, TelemetryStatus, TelemetryTrace, TelemetryValidationState, TenantClass,
 };

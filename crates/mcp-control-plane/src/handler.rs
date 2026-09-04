@@ -18,6 +18,9 @@ use crate::error_catalog::{
 use crate::policy::ToolPolicy;
 use crate::quota::{InMemoryQuotaService, QUOTA_POLICY_SHA256, QuotaError, QuotaService};
 use crate::strict_json::parse_unique_value;
+use crate::telemetry::{
+    InMemoryTelemetry, TELEMETRY_POLICY_SHA256, TelemetryError, TraceObservation,
+};
 
 pub const MAX_TOOL_NAME_BYTES: usize = 64;
 pub const MAX_ARGUMENT_JSON_BYTES: usize = 262_144;
@@ -213,6 +216,7 @@ pub struct McpControlPlane<P, G, Q = InMemoryQuotaService> {
     error_catalog: PublicErrorCatalog,
     policy: P,
     quota: Q,
+    telemetry: InMemoryTelemetry,
     gateway: G,
 }
 
@@ -225,7 +229,7 @@ where
     ///
     /// # Errors
     ///
-    /// Fails closed on tool/error/quota catalog digest, shape, scope or JSON Schema drift.
+    /// Fails closed on tool/error/quota/telemetry catalog digest, shape, scope or JSON Schema drift.
     pub fn new(auth: AuthMiddleware, policy: P, gateway: G) -> Result<Self, InitializationError> {
         let quota = InMemoryQuotaService::new().map_err(InitializationError::Quota)?;
         Self::with_quota(auth, policy, quota, gateway)
@@ -242,11 +246,28 @@ where
     ///
     /// # Errors
     ///
-    /// Fails closed on tool or public-error catalog drift.
+    /// Fails closed on tool, public-error or telemetry catalog drift.
     pub fn with_quota(
         auth: AuthMiddleware,
         policy: P,
         quota: Q,
+        gateway: G,
+    ) -> Result<Self, InitializationError> {
+        let telemetry = InMemoryTelemetry::new().map_err(InitializationError::Telemetry)?;
+        Self::with_quota_and_telemetry(auth, policy, quota, telemetry, gateway)
+    }
+
+    /// Creates a control plane with explicitly bounded quota and telemetry services.
+    ///
+    /// # Errors
+    ///
+    /// Fails closed on tool or public-error catalog drift. The supplied telemetry service has
+    /// already validated the embedded telemetry policy.
+    pub fn with_quota_and_telemetry(
+        auth: AuthMiddleware,
+        policy: P,
+        quota: Q,
+        telemetry: InMemoryTelemetry,
         gateway: G,
     ) -> Result<Self, InitializationError> {
         Ok(Self {
@@ -255,6 +276,7 @@ where
             error_catalog: PublicErrorCatalog::load().map_err(InitializationError::ErrorCatalog)?,
             policy,
             quota,
+            telemetry,
             gateway,
         })
     }
@@ -275,8 +297,28 @@ where
     }
 
     #[must_use]
+    pub const fn telemetry(&self) -> &InMemoryTelemetry {
+        &self.telemetry
+    }
+
+    #[must_use]
     #[allow(clippy::too_many_lines)]
     pub fn handle(&mut self, request: McpToolRequest) -> McpToolResult {
+        let mut observation = self
+            .telemetry
+            .begin_trace(&request.fallback_request_id, request.now_unix_seconds);
+        let result = self.handle_observed(request, &mut observation);
+        let trace = observation.finish(result.telemetry_failure);
+        self.telemetry.commit(trace);
+        result
+    }
+
+    #[allow(clippy::too_many_lines)]
+    fn handle_observed(
+        &mut self,
+        request: McpToolRequest,
+        observation: &mut TraceObservation,
+    ) -> McpToolResult {
         let McpToolRequest {
             tool_name,
             authorization_header,
@@ -300,6 +342,7 @@ where
                 None,
             );
         };
+        observation.set_tool(tool);
         if arguments_json.is_empty() || arguments_json.len() > MAX_ARGUMENT_JSON_BYTES {
             return McpToolResult::error(
                 &self.error_catalog,
@@ -333,6 +376,7 @@ where
                 );
             }
         };
+        observation.mark_authenticated();
         let Ok(arguments) = parse_unique_value(&arguments_json) else {
             return McpToolResult::error(
                 &self.error_catalog,
@@ -370,6 +414,7 @@ where
                 None,
             );
         };
+        observation.observe_validated_input(&arguments, &request_id);
         if let Err(error) = self.policy.authorize(&context, tool, &arguments) {
             return McpToolResult::error(
                 &self.error_catalog,
@@ -378,6 +423,7 @@ where
                 None,
             );
         }
+        observation.mark_policy_completed();
         if let Err(error) = self
             .quota
             .admit(&context, tool, &arguments, now_unix_seconds)
@@ -416,8 +462,12 @@ where
             arguments,
             now_unix_seconds,
         };
+        observation.mark_dispatch_attempted();
         let service_output = match self.gateway.dispatch(call) {
-            Ok(output) => output,
+            Ok(output) => {
+                observation.mark_dispatch_returned();
+                output
+            }
             Err(error) => {
                 return McpToolResult::error(
                     &self.error_catalog,
@@ -476,6 +526,7 @@ where
                 None,
             );
         }
+        observation.observe_validated_output(&output);
         McpToolResult::success(tool, &request_id, output, job_event_page, artifact_delivery)
     }
 }
@@ -494,6 +545,7 @@ where
             .field("error_catalog", &self.error_catalog)
             .field("policy", &self.policy)
             .field("quota", &self.quota)
+            .field("telemetry", &self.telemetry)
             .field("gateway", &self.gateway)
             .finish()
     }
@@ -507,6 +559,8 @@ pub enum InitializationError {
     ErrorCatalog(#[source] ErrorCatalogError),
     #[error("quota service initialization failed")]
     Quota(#[source] QuotaError),
+    #[error("telemetry service initialization failed")]
+    Telemetry(#[source] TelemetryError),
 }
 
 #[derive(Serialize)]
@@ -518,6 +572,8 @@ pub struct McpToolResult {
     meta: Value,
     #[serde(rename = "isError")]
     is_error: bool,
+    #[serde(skip)]
+    telemetry_failure: Option<PublicFailure>,
 }
 
 impl McpToolResult {
@@ -542,6 +598,10 @@ impl McpToolResult {
             Value::String(QUOTA_POLICY_SHA256.to_owned()),
         );
         meta.insert(
+            "hwpx/telemetryPolicySha256".to_owned(),
+            Value::String(TELEMETRY_POLICY_SHA256.to_owned()),
+        );
+        meta.insert(
             "hwpx/requestId".to_owned(),
             Value::String(request_id.to_owned()),
         );
@@ -563,6 +623,7 @@ impl McpToolResult {
             content,
             meta: Value::Object(meta),
             is_error: false,
+            telemetry_failure: None,
         }
     }
 
@@ -606,6 +667,10 @@ impl McpToolResult {
             Value::String(QUOTA_POLICY_SHA256.to_owned()),
         );
         meta.insert(
+            "hwpx/telemetryPolicySha256".to_owned(),
+            Value::String(TELEMETRY_POLICY_SHA256.to_owned()),
+        );
+        meta.insert(
             "hwpx/requestId".to_owned(),
             Value::String(request_id.to_owned()),
         );
@@ -634,6 +699,7 @@ impl McpToolResult {
             content: vec![json!({"type": "text", "text": safe_message})],
             meta: Value::Object(meta),
             is_error: true,
+            telemetry_failure: Some(failure),
         }
     }
 
@@ -686,6 +752,7 @@ impl fmt::Debug for McpToolResult {
             .debug_struct("McpToolResult")
             .field("is_error", &self.is_error)
             .field("error_code", &self.error_code())
+            .field("telemetry_failure", &self.telemetry_failure)
             .field("structured_content", &"<redacted>")
             .field("content", &"<redacted>")
             .field("meta", &"<redacted>")
