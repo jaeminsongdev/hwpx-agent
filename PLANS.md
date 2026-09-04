@@ -4,7 +4,7 @@
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
 - Active phase/task: `P05 / P05-07 actual render acceptance` + `P10 / P10-09 timeout/recycle`
 - Active reasoning effort: `max`
-- Immediate UI dependency: none live; P05-07 v2 attempts timed out safely, relaunch only when the user can immediately click the visible `접근 허용`
+- Immediate UI dependency: none live; P05-07 v2 attempt 04 timed out safely, relaunch only when the user can immediately click the visible `접근 허용`
 
 ## Objective and non-negotiable boundaries
 
@@ -70,6 +70,7 @@ save, render, cross-version or production proof.
 | P-0055 | P10-06 trusted offline bundle builder | `pass_current_pc_local_builder` | commit `2f92654`; builder 11/11, static 41/41, actual bundle + independent redacted receipt, current/clean FULL 5/5 |
 | P-0056 | P10-07 Event/modal watchdog | `pass_scoped_current_pc_local` | commits `b0f3b6f` + `b4c7a54`; actual events 6, unknown modal fail-closed, smoke 13/13, static 23/23, clean FULL 5/5 |
 | P-0057 | P10-08 worker isolation | `core_ready_current_pc_audit_pass_dedicated_unqualified` | mandatory machine-bound pre-lease/post-job guard; Agent 18/18, static 24/24, policy negatives 8/8; actual Session 1/workspace/process audit pass, OS outbound deny and dedicated controls false |
+| P-0058 | P01 security audit runner reliability | `harness_pass_actual_registry_audit_unverified_timeout` | 60s x 3 fail-closed retry, process-tree cleanup, immutable per-run report/SBOM; unit 8/8; actual audit timed out 3/3 while all other checks passed |
 
 ## Active evidence summary
 
@@ -78,8 +79,9 @@ open/read/save/reopen/read/quit, unchanged source, equal text digest, a 19-event
 zero residual processes. P05-07 retry 10 exposed that both fixture spine rows were `linear=no` and
 Hangul read only section one. Commit `9096502` changes both to `linear=yes`, adds self-inspection and
 four builder tests. The v2 fixture independently inspects as two sections and one break, but its
-user-approved save/reopen/PDF acceptance has not run; bounded attempts left input unchanged, no
-output/PDF and zero residual processes. P05-08~09 actual render evidence is also open.
+user-approved save/reopen/PDF acceptance has not run. Attempt 04 timed out at `open_input`; it left
+the input digest unchanged, created no output/PDF, cleaned its one owned `Hwp.exe`, and left zero
+residual processes. P05-08~09 actual render evidence is also open.
 
 P10-01~04 are closed by their reports. P10-05 core commit `b830f74` has Agent/Worker lease, path and
 allowed/denied coverage, but Registry32 still reports zero registered security modules; no module was
@@ -101,6 +103,12 @@ marked workspace and zero `Hwp.exe` after execution. Agent smoke passes 18/18, p
 recorded that OS default outbound deny, dedicated identity/profile/window station, clipboard
 isolation and profile/recovery/printer residue audits are not qualified. The roadmap P10-08 hard
 gate therefore remains open while P10-09 implementation proceeds.
+
+The exact `aee2818` clean clone passed the first four lanes, but two security runs failed only at the
+npm audit endpoint. The runner now bounds that call to 60 seconds x 3, retries only safely cleaned
+transient failures, records every attempt, and publishes each report/SBOM to a unique no-overwrite
+run directory. Its actual validation still timed out 3/3, so exact-commit clean FULL and current npm
+dependency-audit evidence remain unverified rather than promoted from the other passing checks.
 
 ## Validation policy
 

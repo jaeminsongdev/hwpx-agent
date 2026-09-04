@@ -71,3 +71,12 @@ the actual audit, so the P10-08 roadmap hard-gate checkbox remains open.
 
 The next non-UI implementation is P10-09 timeout/recycle and unknown-outcome reconciliation at
 reasoning effort `max`. P05-07 actual render remains a separate user-approval dependency.
+
+## Exact-commit clean-clone follow-up
+
+The clean clone at exact P10-08 commit `aee2818` passed `linux-core` (`39.513s`), `windows-worker`
+(`54.548s`), `widget` (`4.009s`) and `docs` (`7.695s`). Its security lane did not pass because only
+`pnpm audit` timed out; all other security checks passed. A second security run produced the same
+single failed check. Consequently, this report does not claim an exact-commit clean-clone FULL pass.
+The bounded, no-overwrite security-harness remediation and its still-failing actual audit are tracked
+separately in `../p01/P01_SECURITY_REVALIDATION_20260904.md`.

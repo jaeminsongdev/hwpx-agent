@@ -5,25 +5,162 @@ from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
+import signal
 import shutil
 import subprocess
 import sys
+import time
+import uuid
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
 EVIDENCE = ROOT / "implementation" / "p01" / "evidence"
 POLICY = json.loads((ROOT / "security" / "dependency-policy.json").read_text(encoding="utf-8"))
+PNPM_AUDIT_ATTEMPTS = 3
+PNPM_AUDIT_TIMEOUT_SECONDS = 60
+PNPM_AUDIT_TRANSIENT_MARKERS = (
+    "operation was aborted due to timeout",
+    "etimedout",
+    "econnreset",
+    "eai_again",
+    "enotfound",
+    "socket hang up",
+    "network timeout",
+)
 
 
-def capture(command: list[str], *, allow_stderr: bool = True) -> dict[str, object]:
-    if os.name == "nt" and command[0] == "pnpm":
-        command[0] = shutil.which("pnpm.cmd") or "pnpm.cmd"
-    result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, encoding="utf-8", errors="replace")
-    if result.stdout:
-        print(result.stdout.rstrip())
-    if allow_stderr and result.stderr:
-        print(result.stderr.rstrip(), file=sys.stderr)
-    return {"command": command, "exit_code": result.returncode, "stdout": result.stdout, "stderr": result.stderr}
+def resolved_command(command: list[str]) -> list[str]:
+    resolved = list(command)
+    if os.name == "nt" and resolved[0] == "pnpm":
+        resolved[0] = shutil.which("pnpm.cmd") or "pnpm.cmd"
+    return resolved
+
+
+def terminate_process_tree(process: subprocess.Popen[str]) -> bool:
+    if process.poll() is not None:
+        return True
+    tree_kill_succeeded = True
+    try:
+        if os.name == "nt":
+            taskkill = subprocess.run(
+                ["taskkill", "/PID", str(process.pid), "/T", "/F"],
+                check=False,
+                capture_output=True,
+                text=True,
+                timeout=15,
+            )
+            tree_kill_succeeded = taskkill.returncode == 0
+        else:
+            os.killpg(process.pid, signal.SIGKILL)
+        process.wait(timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        try:
+            process.kill()
+            process.wait(timeout=5)
+        except (OSError, subprocess.SubprocessError):
+            return False
+        return False
+    return tree_kill_succeeded and process.poll() is not None
+
+
+def capture(
+    command: list[str],
+    *,
+    allow_stderr: bool = True,
+    timeout_seconds: float | None = None,
+) -> dict[str, object]:
+    resolved = resolved_command(command)
+    popen_arguments: dict[str, object] = {}
+    if os.name != "nt":
+        popen_arguments["start_new_session"] = True
+    process = subprocess.Popen(
+        resolved,
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        encoding="utf-8",
+        errors="replace",
+        **popen_arguments,
+    )
+    timed_out = False
+    cleanup_succeeded = True
+    try:
+        stdout, stderr = process.communicate(timeout=timeout_seconds)
+        exit_code = process.returncode
+    except subprocess.TimeoutExpired:
+        timed_out = True
+        cleanup_succeeded = terminate_process_tree(process)
+        try:
+            stdout, stderr = process.communicate(timeout=5)
+        except subprocess.TimeoutExpired:
+            stdout, stderr = "", ""
+            cleanup_succeeded = False
+        timeout_message = f"command exceeded {timeout_seconds:g} second timeout"
+        stderr = f"{stderr.rstrip()}\n{timeout_message}".lstrip()
+        exit_code = 124 if cleanup_succeeded else 125
+    if stdout:
+        print(stdout.rstrip())
+    if allow_stderr and stderr:
+        print(stderr.rstrip(), file=sys.stderr)
+    return {
+        "command": resolved,
+        "exit_code": exit_code,
+        "stdout": stdout,
+        "stderr": stderr,
+        "timed_out": timed_out,
+        "cleanup_succeeded": cleanup_succeeded,
+    }
+
+
+def is_transient_pnpm_audit_failure(result: dict[str, object]) -> bool:
+    if result.get("cleanup_succeeded") is False:
+        return False
+    if result.get("timed_out") is True:
+        return True
+    try:
+        audit_report = json.loads(str(result.get("stdout", "")))
+    except json.JSONDecodeError:
+        audit_report = None
+    if isinstance(audit_report, dict) and any(
+        key in audit_report for key in ("auditReportVersion", "advisories", "vulnerabilities", "metadata")
+    ):
+        return False
+    output = f"{result.get('stdout', '')}\n{result.get('stderr', '')}".lower()
+    return any(marker in output for marker in PNPM_AUDIT_TRANSIENT_MARKERS)
+
+
+def capture_pnpm_audit() -> dict[str, object]:
+    history: list[dict[str, object]] = []
+    result: dict[str, object] = {}
+    command = ["pnpm", "audit", "--audit-level", "high", "--json"]
+    for attempt in range(1, PNPM_AUDIT_ATTEMPTS + 1):
+        result = capture(command, timeout_seconds=PNPM_AUDIT_TIMEOUT_SECONDS)
+        transient = result["exit_code"] != 0 and is_transient_pnpm_audit_failure(result)
+        history.append(
+            {
+                "attempt": attempt,
+                "exit_code": result["exit_code"],
+                "timed_out": result["timed_out"],
+                "cleanup_succeeded": result["cleanup_succeeded"],
+                "transient_failure": transient,
+            }
+        )
+        if result["exit_code"] == 0 or not transient or attempt == PNPM_AUDIT_ATTEMPTS:
+            break
+        message = f"pnpm audit transient failure; retrying attempt {attempt + 1}/{PNPM_AUDIT_ATTEMPTS}"
+        print(message, file=sys.stderr)
+        time.sleep(1)
+    result["attempt_history"] = history
+    result["attempt_count"] = len(history)
+    return result
+
+
+def create_evidence_run() -> tuple[str, Path]:
+    run_id = uuid.uuid4().hex
+    run_root = EVIDENCE / "security-runs" / run_id
+    run_root.mkdir(parents=True, exist_ok=False)
+    return run_id, run_root
 
 
 def nuget_license_errors() -> list[str]:
@@ -51,12 +188,12 @@ def nuget_license_errors() -> list[str]:
 
 
 def main() -> int:
-    EVIDENCE.mkdir(parents=True, exist_ok=True)
+    run_id, run_root = create_evidence_run()
     checks: dict[str, dict[str, object]] = {}
     checks["secret_scan"] = capture([sys.executable, "tools/p01/scan_secrets.py"])
     checks["cargo_deny"] = capture(["cargo", "deny", "check"])
     checks["cargo_audit"] = capture(["cargo", "audit", "--json"])
-    checks["pnpm_audit"] = capture(["pnpm", "audit", "--audit-level", "high", "--json"])
+    checks["pnpm_audit"] = capture_pnpm_audit()
     checks["pnpm_licenses"] = capture(["pnpm", "licenses", "list", "--json"])
     dotnet_projects = {
         "dotnet_vulnerable_windows_worker": "workers/windows-hancom-worker/tests/HwpxAgent.WindowsWorker.SecuritySmoke/HwpxAgent.WindowsWorker.SecuritySmoke.csproj",
@@ -67,7 +204,7 @@ def main() -> int:
             ["dotnet", "list", project, "package", "--vulnerable", "--include-transitive", "--format", "json"]
         )
 
-    sbom_path = EVIDENCE / "sbom.cdx.json"
+    sbom_path = run_root / "sbom.cdx.json"
     syft_command = [
         "syft", "scan", "dir:.",
         "--source-name", "hwpx-agent",
@@ -105,16 +242,33 @@ def main() -> int:
     failed = [name for name, result in checks.items() if result["exit_code"] != 0]
     report = {
         "schema_version": "hwpx-agent.p01-security-report/v1",
+        "evidence_run_id": run_id,
+        "evidence_report_relative_path": (run_root / "report.json").relative_to(ROOT).as_posix(),
+        "sbom_relative_path": sbom_path.relative_to(ROOT).as_posix(),
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "scope": "current_pc_local_repository_only",
-        "checks": {name: {"exit_code": result["exit_code"]} for name, result in checks.items()},
+        "checks": {
+            name: {
+                "exit_code": result["exit_code"],
+                **(
+                    {
+                        "attempt_count": result["attempt_count"],
+                        "attempt_history": result["attempt_history"],
+                    }
+                    if name == "pnpm_audit"
+                    else {}
+                ),
+            }
+            for name, result in checks.items()
+        },
         "license_errors": license_errors,
         "forbidden_license_count": len(license_errors),
         "sbom_components": sbom_components,
         "failed_checks": failed,
     }
-    report_path = EVIDENCE / "security-report.20260901.json"
-    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    report_path = run_root / "report.json"
+    with report_path.open("x", encoding="utf-8", newline="\n") as report_file:
+        report_file.write(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 1 if failed or license_errors else 0
 

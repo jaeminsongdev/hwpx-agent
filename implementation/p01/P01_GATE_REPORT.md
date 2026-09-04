@@ -55,3 +55,12 @@ Local evidence is kept outside Git under `implementation/p01/evidence/`. The lat
 ## Next exact task
 
 Start `P02-01 SourceRecord schema`: define the common immutable official-source record, preserve source hash and locator, add valid samples and negative cases, and connect it to deterministic Rust/TypeScript codegen. Use reasoning effort `xhigh`; use `max` for the P02 final Gate. No local UI operation is required for P02-01.
+
+## 2026-09-04 current revalidation note
+
+The 2026-09-01 Gate decision above remains a historical exact-source decision, not a claim that every
+later dependency audit has run successfully. The current exact-commit clean clone could not obtain a
+real npm audit response, so its security lane remains failed/unverified. The fail-closed bounded
+retry and immutable per-run evidence change, including the current negative result, is recorded in
+`P01_SECURITY_REVALIDATION_20260904.md`. A fresh all-five-lane pass is still required before any later
+release or final product Gate may cite current dependency-security evidence.
