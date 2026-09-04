@@ -1,0 +1,18 @@
+[package]
+name = "scheduler-service"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+artifact-service = { version = "0.1.0", path = "../artifact-service" }
+job-service = { version = "0.1.0", path = "../job-service" }
+revision-service = { version = "0.1.0", path = "../revision-service" }
+thiserror.workspace = true
+
+[dev-dependencies]
+uuid.workspace = true
+
+[lints]
+workspace = true

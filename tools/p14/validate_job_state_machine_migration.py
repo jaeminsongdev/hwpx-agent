@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -110,6 +112,15 @@ EXPECTED_SOURCE_PATHS = [
     "crates/job-service/src/store.rs",
     "crates/job-service/src/service.rs",
 ]
+P14_05_IMPLEMENTATION_REVISION = "3876679eddff4b882142f5a5344fb7e75ede83ed"
+P14_06_SUPERSEDING_CONTRACT = (
+    ROOT / "implementation" / "p14" / "postgres" / "p14-worker-lease-fencing-v1.json"
+)
+P14_06_SUPERSEDED_PATHS = {
+    "crates/job-service/src/types.rs",
+    "crates/job-service/src/store.rs",
+    "crates/job-service/src/service.rs",
+}
 EXPECTED_SCOPE = {
     "current_pc_local_development_only": True,
     "p14_06_capability_matching_expiry_fencing_qualified": False,
@@ -187,6 +198,50 @@ def require_digest(path: Path, expected: Any, label: str) -> None:
     actual = digest(path)
     if actual != expected:
         raise ValueError(f"{label} mismatch: expected {expected}, got {actual}")
+
+
+def require_source_digest_with_supersession(
+    root: Path, relative_path: str, expected: Any, label: str
+) -> None:
+    path = resolve_bounded_file(root, relative_path, 2 * 1024 * 1024)
+    if not isinstance(expected, str) or HEX_64.fullmatch(expected) is None:
+        raise ValueError(f"{label} must be a lowercase SHA-256")
+    if digest(path) == expected:
+        return
+    if relative_path not in P14_06_SUPERSEDED_PATHS:
+        raise ValueError(
+            f"{label} mismatch without an allowed later-task supersession"
+        )
+
+    validator_path = ROOT / "tools" / "p14" / "validate_worker_lease_fencing_migration.py"
+    specification = importlib.util.spec_from_file_location(
+        "p14_validate_worker_lease_fencing_for_p14_05", validator_path
+    )
+    if specification is None or specification.loader is None:
+        raise ValueError("P14-06 superseding validator could not be loaded")
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    try:
+        validated = module.validate_contract(P14_06_SUPERSEDING_CONTRACT, ROOT)
+    except (module.ContractError, FileNotFoundError, json.JSONDecodeError) as error:
+        raise ValueError(f"P14-06 superseding contract failed: {error}") from error
+    if not isinstance(validated, dict) or validated.get("state") != "pass":
+        raise ValueError("P14-06 superseding contract did not validate")
+
+    historical = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(root),
+            "show",
+            f"{P14_05_IMPLEMENTATION_REVISION}:{relative_path}",
+        ],
+        capture_output=True,
+        timeout=15,
+        check=False,
+    )
+    if historical.returncode != 0 or hashlib.sha256(historical.stdout).hexdigest() != expected:
+        raise ValueError(f"{label} does not match the exact P14-05 Git blob")
 
 
 def validate_up_sql(up_sql: str) -> None:
@@ -361,10 +416,8 @@ def validate_contract(path: Path, root: Path = ROOT) -> dict[str, Any]:
         lock = require_object(value, f"source lock {index}")
         require_exact_keys(lock, {"path", "sha256"}, f"source lock {index}")
         observed_paths.append(str(lock["path"]))
-        require_digest(
-            resolve_bounded_file(root, lock["path"], 2 * 1024 * 1024),
-            lock["sha256"],
-            f"source lock {index}",
+        require_source_digest_with_supersession(
+            root, str(lock["path"]), lock["sha256"], f"source lock {index}"
         )
     if observed_paths != EXPECTED_SOURCE_PATHS:
         raise ValueError("source-lock path order differs")

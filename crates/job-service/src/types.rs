@@ -25,6 +25,10 @@ pub enum JobError {
     InvalidTransition,
     #[error("job lease binding is stale or mismatched")]
     LeaseMismatch,
+    #[error("job lease has expired")]
+    LeaseExpired,
+    #[error("job lease is still active")]
+    LeaseStillActive,
     #[error("job artifact is not qualified")]
     ArtifactNotQualified,
     #[error("job revision is not qualified")]
@@ -44,6 +48,8 @@ impl JobError {
             Self::DuplicateIdentity => "JOB_IDENTITY_ALREADY_EXISTS",
             Self::InvalidTransition => "JOB_TRANSITION_INVALID",
             Self::LeaseMismatch => "JOB_LEASE_MISMATCH",
+            Self::LeaseExpired => "JOB_LEASE_EXPIRED",
+            Self::LeaseStillActive => "JOB_LEASE_STILL_ACTIVE",
             Self::ArtifactNotQualified => "JOB_ARTIFACT_NOT_QUALIFIED",
             Self::RevisionNotQualified => "JOB_REVISION_NOT_QUALIFIED",
             Self::RepositoryFailure => "JOB_REPOSITORY_FAILED",
@@ -501,8 +507,49 @@ impl LeaseGrant {
     }
 
     #[must_use]
+    pub const fn issued_at_unix_seconds(&self) -> u64 {
+        self.issued_at_unix_seconds
+    }
+
+    #[must_use]
     pub const fn expires_at_unix_seconds(&self) -> u64 {
         self.expires_at_unix_seconds
+    }
+
+    /// Extends the same lease without changing its execution or fencing identity.
+    ///
+    /// # Errors
+    ///
+    /// Rejects late heartbeats, non-increasing expiry and renewal beyond the
+    /// absolute one-hour lifetime measured from the original issue time.
+    pub fn renewed(
+        &self,
+        now_unix_seconds: u64,
+        expires_at_unix_seconds: u64,
+    ) -> Result<Self, JobError> {
+        let absolute_limit = self
+            .issued_at_unix_seconds
+            .checked_add(MAX_LEASE_SECONDS)
+            .ok_or(JobError::InvalidRequest)?;
+        if now_unix_seconds < self.issued_at_unix_seconds
+            || now_unix_seconds >= self.expires_at_unix_seconds
+            || expires_at_unix_seconds <= self.expires_at_unix_seconds
+            || expires_at_unix_seconds > absolute_limit
+        {
+            return Err(if now_unix_seconds >= self.expires_at_unix_seconds {
+                JobError::LeaseExpired
+            } else {
+                JobError::InvalidRequest
+            });
+        }
+        Ok(Self {
+            agent_instance_id: self.agent_instance_id,
+            execution_id: self.execution_id,
+            attempt_no: self.attempt_no,
+            fencing_token: self.fencing_token,
+            issued_at_unix_seconds: self.issued_at_unix_seconds,
+            expires_at_unix_seconds,
+        })
     }
 }
 
@@ -631,7 +678,7 @@ impl JobRecord {
         if !valid {
             return Err(JobError::InvalidTransition);
         }
-        self.require_lease(lease)?;
+        self.require_live_lease(lease, now)?;
         self.state = next.state();
         self.updated_at_unix_seconds = now;
         Ok(())
@@ -648,7 +695,7 @@ impl JobRecord {
         if self.state != JobState::Validating {
             return Err(JobError::InvalidTransition);
         }
-        self.require_lease(lease)?;
+        self.require_live_lease(lease, now)?;
         self.state = JobState::Succeeded;
         self.active_lease = None;
         self.result_revision_id = Some(revision_id);
@@ -672,11 +719,65 @@ impl JobRecord {
         ) {
             return Err(JobError::InvalidTransition);
         }
-        self.require_lease(lease)?;
+        self.require_live_lease(lease, now)?;
         self.state = JobState::Failed;
         self.active_lease = None;
         self.terminal_receipt_artifact_id = Some(receipt_artifact_id);
         self.terminal_error_code = Some(error_code);
+        self.updated_at_unix_seconds = now;
+        self.completed_at_unix_seconds = Some(now);
+        Ok(())
+    }
+
+    pub(crate) fn heartbeat(
+        &mut self,
+        lease: &LeaseGrant,
+        renewed_lease: LeaseGrant,
+        now: u64,
+    ) -> Result<(), JobError> {
+        self.require_time(now)?;
+        if !matches!(
+            self.state,
+            JobState::Leased | JobState::Staged | JobState::Executing | JobState::Validating
+        ) {
+            return Err(JobError::InvalidTransition);
+        }
+        self.require_live_lease(lease, now)?;
+        if renewed_lease.agent_instance_id() != lease.agent_instance_id()
+            || renewed_lease.execution_id() != lease.execution_id()
+            || renewed_lease.attempt_no() != lease.attempt_no()
+            || renewed_lease.fencing_token() != lease.fencing_token()
+            || renewed_lease.issued_at_unix_seconds() != lease.issued_at_unix_seconds()
+            || renewed_lease.expires_at_unix_seconds() <= lease.expires_at_unix_seconds()
+        {
+            return Err(JobError::LeaseMismatch);
+        }
+        self.active_lease = Some(renewed_lease);
+        self.updated_at_unix_seconds = now;
+        Ok(())
+    }
+
+    pub(crate) fn expire(
+        &mut self,
+        lease: &LeaseGrant,
+        receipt_artifact_id: ArtifactId,
+        now: u64,
+    ) -> Result<(), JobError> {
+        self.require_time(now)?;
+        if !matches!(
+            self.state,
+            JobState::Leased | JobState::Staged | JobState::Executing | JobState::Validating
+        ) {
+            return Err(JobError::InvalidTransition);
+        }
+        self.require_lease(lease)?;
+        if now < lease.expires_at_unix_seconds() {
+            return Err(JobError::LeaseStillActive);
+        }
+        self.state = JobState::Failed;
+        self.active_lease = None;
+        self.terminal_receipt_artifact_id = Some(receipt_artifact_id);
+        self.terminal_error_code = Some(TerminalErrorCode::parse("LEASE_EXPIRED")?);
         self.updated_at_unix_seconds = now;
         self.completed_at_unix_seconds = Some(now);
         Ok(())
@@ -687,6 +788,15 @@ impl JobRecord {
             Ok(())
         } else {
             Err(JobError::LeaseMismatch)
+        }
+    }
+
+    fn require_live_lease(&self, lease: &LeaseGrant, now: u64) -> Result<(), JobError> {
+        self.require_lease(lease)?;
+        if now >= lease.expires_at_unix_seconds() {
+            Err(JobError::LeaseExpired)
+        } else {
+            Ok(())
         }
     }
 

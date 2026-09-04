@@ -51,6 +51,20 @@ pub trait JobRepository: Send + Sync {
         next: JobStage,
     ) -> Result<JobRecord, JobError>;
 
+    /// Renews one live lease without changing its fencing identity.
+    ///
+    /// # Errors
+    ///
+    /// Returns authorization, stale/expired lease or bounded-time failures.
+    fn heartbeat(
+        &self,
+        context: &JobRequestContext,
+        project_id: ProjectId,
+        job_id: JobId,
+        lease: &LeaseGrant,
+        renewed_lease: &LeaseGrant,
+    ) -> Result<JobRecord, JobError>;
+
     /// Commits a validated job to one qualified revision.
     ///
     /// # Errors
@@ -78,6 +92,20 @@ pub trait JobRepository: Send + Sync {
         job_id: JobId,
         lease: &LeaseGrant,
         error_code: &TerminalErrorCode,
+        receipt_artifact_id: ArtifactId,
+    ) -> Result<JobRecord, JobError>;
+
+    /// Finalizes one expired active attempt with a qualified receipt.
+    ///
+    /// # Errors
+    ///
+    /// Returns authorization, lease, qualification or still-active failures.
+    fn expire(
+        &self,
+        context: &JobRequestContext,
+        project_id: ProjectId,
+        job_id: JobId,
+        lease: &LeaseGrant,
         receipt_artifact_id: ArtifactId,
     ) -> Result<JobRecord, JobError>;
 
@@ -283,6 +311,24 @@ impl JobRepository for InMemoryJobRepository {
         Ok(record.clone())
     }
 
+    fn heartbeat(
+        &self,
+        context: &JobRequestContext,
+        project_id: ProjectId,
+        job_id: JobId,
+        lease: &LeaseGrant,
+        renewed_lease: &LeaseGrant,
+    ) -> Result<JobRecord, JobError> {
+        let mut state = self.lock()?;
+        require_role(&state, context, project_id, true)?;
+        let record = state
+            .jobs
+            .get_mut(&(context.tenant_id(), project_id, job_id))
+            .ok_or(JobError::NotFound)?;
+        record.heartbeat(lease, renewed_lease.clone(), context.now_unix_seconds())?;
+        Ok(record.clone())
+    }
+
     fn succeed(
         &self,
         context: &JobRequestContext,
@@ -337,6 +383,29 @@ impl JobRepository for InMemoryJobRepository {
             receipt_artifact_id,
             context.now_unix_seconds(),
         )?;
+        require_artifact(
+            &state,
+            context,
+            receipt_artifact_id,
+            QualifiedArtifactKind::Receipt,
+        )?;
+        state.jobs.insert(key, candidate.clone());
+        Ok(candidate)
+    }
+
+    fn expire(
+        &self,
+        context: &JobRequestContext,
+        project_id: ProjectId,
+        job_id: JobId,
+        lease: &LeaseGrant,
+        receipt_artifact_id: ArtifactId,
+    ) -> Result<JobRecord, JobError> {
+        let mut state = self.lock()?;
+        require_role(&state, context, project_id, true)?;
+        let key = (context.tenant_id(), project_id, job_id);
+        let mut candidate = state.jobs.get(&key).cloned().ok_or(JobError::NotFound)?;
+        candidate.expire(lease, receipt_artifact_id, context.now_unix_seconds())?;
         require_artifact(
             &state,
             context,

@@ -64,6 +64,23 @@ impl<R: JobRepository> JobService<R> {
             .advance(context, project_id, job_id, lease, next)
     }
 
+    /// Renews one live lease without changing its execution or fencing identity.
+    ///
+    /// # Errors
+    ///
+    /// Returns repository authorization, stale/expired lease or time failures.
+    pub fn heartbeat(
+        &self,
+        context: &JobRequestContext,
+        project_id: ProjectId,
+        job_id: JobId,
+        lease: &LeaseGrant,
+        renewed_lease: &LeaseGrant,
+    ) -> Result<JobRecord, JobError> {
+        self.repository
+            .heartbeat(context, project_id, job_id, lease, renewed_lease)
+    }
+
     /// Commits a validating job to a qualified revision and terminal success.
     ///
     /// # Errors
@@ -110,6 +127,23 @@ impl<R: JobRepository> JobService<R> {
             error_code,
             receipt_artifact_id,
         )
+    }
+
+    /// Finalizes one expired active attempt with a qualified receipt.
+    ///
+    /// # Errors
+    ///
+    /// Returns repository authorization, lease, qualification or still-active failures.
+    pub fn expire(
+        &self,
+        context: &JobRequestContext,
+        project_id: ProjectId,
+        job_id: JobId,
+        lease: &LeaseGrant,
+        receipt_artifact_id: ArtifactId,
+    ) -> Result<JobRecord, JobError> {
+        self.repository
+            .expire(context, project_id, job_id, lease, receipt_artifact_id)
     }
 
     /// Reads one authorized job projection.
