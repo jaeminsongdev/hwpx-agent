@@ -896,6 +896,7 @@ fn map_workspace(error: WorkspaceError) -> TransactionError {
         WorkspaceError::ArtifactPublishedIncomplete => TransactionError::ArtifactOutcomeIncomplete,
         WorkspaceError::InvalidRelativePath
         | WorkspaceError::EscapesWorkspace
+        | WorkspaceError::ArtifactDigestMismatch
         | WorkspaceError::LinkNotAllowed => TransactionError::WorkspaceFailure,
         WorkspaceError::Io(inner) => {
             drop(inner);

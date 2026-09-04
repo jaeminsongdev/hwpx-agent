@@ -680,6 +680,7 @@ impl EncryptedBlobStore for LocalEncryptedBlobStore {
 fn map_workspace_error(error: &WorkspaceError) -> ArtifactError {
     match error {
         WorkspaceError::ArtifactExists => ArtifactError::Conflict,
+        WorkspaceError::ArtifactDigestMismatch => ArtifactError::IntegrityMismatch,
         WorkspaceError::InvalidRelativePath | WorkspaceError::EscapesWorkspace => {
             ArtifactError::InvalidObjectKey
         }

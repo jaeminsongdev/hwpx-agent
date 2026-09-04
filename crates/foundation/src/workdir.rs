@@ -15,6 +15,8 @@ pub enum WorkspaceError {
     LinkNotAllowed,
     #[error("artifact already exists")]
     ArtifactExists,
+    #[error("published or quarantined artifact content does not match the expected digest")]
+    ArtifactDigestMismatch,
     #[error("artifact became atomically visible but durability or staging cleanup failed")]
     ArtifactPublishedIncomplete,
     #[error("I/O error: {0}")]
@@ -281,6 +283,32 @@ impl SecureWorkspace {
         Ok(())
     }
 
+    /// Completes a previously interrupted published-to-quarantine move.
+    ///
+    /// Both names must still contain the exact expected bytes. This content-addressed check
+    /// prevents a retry from deleting an unrelated output merely because a quarantine name exists.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error when either name is unsafe or absent, either digest does not match, the
+    /// size limit is exceeded, or removing and syncing the published name fails.
+    pub fn complete_incomplete_quarantine(
+        &self,
+        output_relative: &Path,
+        quarantine_relative: &Path,
+        expected_sha256: &[u8; 32],
+        max_bytes: u64,
+    ) -> Result<(), WorkspaceError> {
+        let source = self.resolve_existing(&self.output, output_relative)?;
+        let destination = self.resolve_existing(&self.quarantine, quarantine_relative)?;
+        verify_file_digest(&source, expected_sha256, max_bytes)?;
+        verify_file_digest(&destination, expected_sha256, max_bytes)?;
+        let source = self.resolve_existing(&self.output, output_relative)?;
+        verify_file_digest(&source, expected_sha256, max_bytes)?;
+        fs::remove_file(&source)?;
+        sync_parent(&source)
+    }
+
     /// Restores one quarantined file to a create-new output name without an overwrite window.
     ///
     /// This is the exact inverse needed to roll back an uncommitted quarantine metadata change.
@@ -441,6 +469,39 @@ fn reject_link(path: &Path) -> Result<(), WorkspaceError> {
     }
 }
 
+fn verify_file_digest(
+    path: &Path,
+    expected_sha256: &[u8; 32],
+    max_bytes: u64,
+) -> Result<(), WorkspaceError> {
+    let file = File::open(path)?;
+    if !file.metadata()?.is_file() {
+        return Err(WorkspaceError::InvalidRelativePath);
+    }
+    let mut reader = file.take(max_bytes.saturating_add(1));
+    let mut hasher = Sha256::new();
+    let mut observed_bytes = 0_u64;
+    let mut buffer = [0_u8; 8192];
+    loop {
+        let read = reader.read(&mut buffer)?;
+        if read == 0 {
+            break;
+        }
+        observed_bytes = observed_bytes
+            .checked_add(u64::try_from(read).map_err(|_| WorkspaceError::ArtifactDigestMismatch)?)
+            .ok_or(WorkspaceError::ArtifactDigestMismatch)?;
+        if observed_bytes > max_bytes {
+            return Err(WorkspaceError::ArtifactDigestMismatch);
+        }
+        hasher.update(&buffer[..read]);
+    }
+    let observed: [u8; 32] = hasher.finalize().into();
+    if &observed != expected_sha256 {
+        return Err(WorkspaceError::ArtifactDigestMismatch);
+    }
+    Ok(())
+}
+
 #[cfg(windows)]
 fn is_platform_reparse_point(metadata: &fs::Metadata) -> bool {
     use std::os::windows::fs::MetadataExt as _;
@@ -475,6 +536,7 @@ mod tests {
     use std::io::Read as _;
     use std::path::Path;
 
+    use sha2::{Digest as _, Sha256};
     use tempfile::tempdir;
 
     use super::{SecureWorkspace, WorkspaceError};
@@ -678,6 +740,82 @@ mod tests {
                 .unwrap_or_else(|error| panic!("read replacement: {error}")),
             b"replacement"
         );
+    }
+
+    #[test]
+    fn interrupted_quarantine_only_removes_the_matching_hard_link() {
+        let temporary = tempfile::tempdir().unwrap_or_else(|error| panic!("tempdir: {error}"));
+        let workspace = SecureWorkspace::create(temporary.path().join("work"))
+            .unwrap_or_else(|error| panic!("workspace: {error}"));
+        let relative = Path::new("artifact/output.bin");
+        let quarantine_relative = Path::new("orphan/output.bin");
+        let staged = workspace
+            .stage_bytes(Path::new("artifact.bin"), b"ciphertext")
+            .unwrap_or_else(|error| panic!("stage: {error}"));
+        let published = workspace
+            .publish(&staged, relative)
+            .unwrap_or_else(|error| panic!("publish: {error}"));
+        let quarantine = temporary.path().join("work/quarantine/orphan/output.bin");
+        std::fs::create_dir_all(
+            quarantine
+                .parent()
+                .unwrap_or_else(|| panic!("quarantine parent")),
+        )
+        .unwrap_or_else(|error| panic!("create quarantine parent: {error}"));
+        std::fs::hard_link(&published, &quarantine)
+            .unwrap_or_else(|error| panic!("create interrupted link: {error}"));
+
+        workspace
+            .complete_incomplete_quarantine(
+                relative,
+                quarantine_relative,
+                &Sha256::digest(b"ciphertext").into(),
+                1024,
+            )
+            .unwrap_or_else(|error| panic!("complete quarantine: {error}"));
+
+        assert!(workspace.open_output(relative).is_err());
+        let mut reader = workspace
+            .open_quarantined(quarantine_relative)
+            .unwrap_or_else(|error| panic!("open quarantine: {error}"));
+        let mut bytes = Vec::new();
+        reader
+            .read_to_end(&mut bytes)
+            .unwrap_or_else(|error| panic!("read quarantine: {error}"));
+        assert_eq!(bytes, b"ciphertext");
+    }
+
+    #[test]
+    fn interrupted_quarantine_rejects_different_content() {
+        let temporary = tempfile::tempdir().unwrap_or_else(|error| panic!("tempdir: {error}"));
+        let workspace = SecureWorkspace::create(temporary.path().join("work"))
+            .unwrap_or_else(|error| panic!("workspace: {error}"));
+        let relative = Path::new("artifact/output.bin");
+        let quarantine_relative = Path::new("orphan/output.bin");
+        let staged = workspace
+            .stage_bytes(Path::new("artifact.bin"), b"same bytes")
+            .unwrap_or_else(|error| panic!("stage output: {error}"));
+        workspace
+            .publish(&staged, relative)
+            .unwrap_or_else(|error| panic!("publish: {error}"));
+        let staged_quarantine = workspace
+            .stage_bytes(Path::new("quarantine.bin"), b"different bytes")
+            .unwrap_or_else(|error| panic!("stage quarantine: {error}"));
+        workspace
+            .quarantine(&staged_quarantine, quarantine_relative)
+            .unwrap_or_else(|error| panic!("quarantine: {error}"));
+
+        assert!(matches!(
+            workspace.complete_incomplete_quarantine(
+                relative,
+                quarantine_relative,
+                &Sha256::digest(b"same bytes").into(),
+                1024,
+            ),
+            Err(WorkspaceError::ArtifactDigestMismatch)
+        ));
+        assert!(workspace.open_output(relative).is_ok());
+        assert!(workspace.open_quarantined(quarantine_relative).is_ok());
     }
 
     #[test]
