@@ -1,15 +1,24 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
+import subprocess
 import sys
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = ROOT / "implementation/p15/p15-auth-tenant-v1.json"
 RUST_PATH = ROOT / "crates/auth-middleware/src/lib.rs"
+P15_01_IMPLEMENTATION_REVISION = "8ac8d74a0f7795315d2dc2e0573f6b9a3a4e11e9"
+P15_03_SUPERSEDING_VALIDATOR = "tools/p15/validate_handler_contract.py"
+P15_03_SUPERSEDED_PATHS = {
+    "Cargo.lock",
+    "Cargo.toml",
+    "tools/p15/validate_auth_tenant.py",
+}
 
 EXPECTED_SOURCE_PATHS = [
     ".gitignore",
@@ -176,8 +185,37 @@ def bounded_source_file(root: Path, relative: str, maximum_bytes: int) -> Path:
     return resolved
 
 
+def validate_p15_03_supersession(root: Path) -> list[str]:
+    validator_path = root / P15_03_SUPERSEDING_VALIDATOR
+    specification = importlib.util.spec_from_file_location(
+        "p15_handler_superseding_validator", validator_path
+    )
+    if specification is None or specification.loader is None:
+        return ["p15_03_supersession.validator_load"]
+    module = importlib.util.module_from_spec(specification)
+    try:
+        specification.loader.exec_module(module)
+        errors = module.validate(root)
+    except Exception:
+        return ["p15_03_supersession.validation"]
+    if errors:
+        return ["p15_03_supersession.contract"]
+    return []
+
+
+def historical_source_matches(root: Path, relative: str, expected: str) -> bool:
+    result = subprocess.run(
+        ["git", "show", f"{P15_01_IMPLEMENTATION_REVISION}:{relative}"],
+        cwd=root,
+        check=False,
+        capture_output=True,
+    )
+    return result.returncode == 0 and hashlib.sha256(result.stdout).hexdigest() == expected
+
+
 def validate_contract(contract: dict[str, Any], rust_text: str, root: Path) -> list[str]:
     errors: list[str] = []
+    p15_03_supersession_errors = validate_p15_03_supersession(root)
     if set(contract) != EXPECTED_TOP_LEVEL_KEYS:
         errors.append("top_level_keys")
     if contract.get("schema_version") != "hwpx-agent.p15-auth-tenant/v1":
@@ -284,7 +322,12 @@ def validate_contract(contract: dict[str, Any], rust_text: str, root: Path) -> l
                 errors.append(f"source_locks[{index}].missing")
                 continue
             if expected != sha256_file(path):
-                errors.append(f"source_locks[{index}].sha256")
+                if relative not in P15_03_SUPERSEDED_PATHS:
+                    errors.append(f"source_locks[{index}].sha256")
+                elif p15_03_supersession_errors:
+                    errors.extend(p15_03_supersession_errors)
+                elif not historical_source_matches(root, relative, expected):
+                    errors.append(f"source_locks[{index}].historical_sha256")
         if observed_paths != EXPECTED_SOURCE_PATHS:
             errors.append("source_locks.paths")
 

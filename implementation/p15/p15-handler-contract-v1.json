@@ -1,0 +1,107 @@
+{
+  "catalog_sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001",
+  "error_envelope_version": "hwpx-agent.tool-error/v1",
+  "handler_sequence": [
+    "transport_admission",
+    "authenticate_public_user",
+    "parse_unique_json",
+    "validate_input_schema",
+    "authorize_tenant_project_subject",
+    "dispatch_exactly_once",
+    "validate_output_schema",
+    "validate_result_correlation",
+    "return_bounded_mcp_result"
+  ],
+  "jsonschema_crate": {
+    "default_features": false,
+    "version": "0.53.0"
+  },
+  "limits": {
+    "argument_json_bytes": 262144,
+    "policy_memberships": 16384,
+    "policy_projects": 4096,
+    "public_tools": 18
+  },
+  "rust_contract_tests": 16,
+  "schema_version": "hwpx-agent.p15-handler-contract/v1",
+  "scope": "current_pc_hancom_2020_in_process_reference_handlers",
+  "source_locks": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "dbf0bd590f36638a4a2b4f4f3e0fcfcb11b7178736b542c4420d51ec80342bc6"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "46b3259e3a1fd86f6d7f8c3c676c5dfc1e4144c2bde1b78e61a811a0a92b0d49"
+    },
+    {
+      "path": "implementation/p15/P15-03_HANDLER_POLICY.md",
+      "sha256": "a7187644aec3cc9a449e86285dd3455ce0e759351b5ea25a8a813a77d3f99ba0"
+    },
+    {
+      "path": "implementation/p15/p15-auth-tenant-v1.json",
+      "sha256": "7bae38b349e394b53636462fe19cb8e1c057a35ab68e7c23161086af6400ad99"
+    },
+    {
+      "path": "implementation/p15/p15-public-tool-schema-contract-v1.json",
+      "sha256": "9e7099535bceced5295ce347afb4b9cc9a6dfa71db1f10d633ed9247d126681e"
+    },
+    {
+      "path": "protocol/mcp/p15-public-tools-v1.json",
+      "sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001"
+    },
+    {
+      "path": "crates/mcp-control-plane/Cargo.toml",
+      "sha256": "65b597b7fe8b2900af730506cf88e0df9563288dde0f8aeebc40852ef0b0e13f"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/lib.rs",
+      "sha256": "aab9942c733f85f6b24876a22bdc8b1bfaa2188ed1daf1ad1893cbb6af8004c7"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/catalog.rs",
+      "sha256": "69860323b71de2f2f1836fa90a78a41b44dd8a5016f9211a4d7f7e06373952cf"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/handler.rs",
+      "sha256": "652c9d214590d60cc466769918b801eac89743a70db4a0eeef02677a3f4668ae"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/policy.rs",
+      "sha256": "32513728470e18608d1eeff419e83ece628d6a9c4dd2a948c1c95012e97412ac"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/strict_json.rs",
+      "sha256": "f8c4e72cb8afa4c9df37259e6b9e143dbdada228cbf9456bad8a26360ac8a882"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/handler_contract.rs",
+      "sha256": "854d15c3b906793e4c55ed636797e531c439bba921e8d3713565419c811d9714"
+    },
+    {
+      "path": "tools/p15/build_handler_contract.py",
+      "sha256": "3de82fb4ead944867aa997d75168950ae603300dd395a9f183f433755fbc4e88"
+    },
+    {
+      "path": "tools/p15/validate_auth_tenant.py",
+      "sha256": "c8b55055d720b3a76d0cc92f6d0bb2e24caa8f9e076c00e1e4bef3d7b394fb47"
+    },
+    {
+      "path": "tools/p15/validate_handler_contract.py",
+      "sha256": "e0303836546d4f9b0cb9a004fece9c9c7ea2eac56b78ec0c349d8e0573c8c20f"
+    },
+    {
+      "path": "tools/p15/tests/test_handler_contract.py",
+      "sha256": "3091497208e7d44794313fd7f035f44f2fa52b6c6900d17a48a8ce90d9914683"
+    },
+    {
+      "path": "deny.toml",
+      "sha256": "1b7f0c7a65ba80242847fbb24483fa82708f28b361e425c76c48233d52073ef3"
+    },
+    {
+      "path": "security/dependency-policy.json",
+      "sha256": "753e93e1ee01ff92f965627b7a26baefaa90ca8e7e79a82b1afb87c08e8bff69"
+    }
+  ],
+  "target_profile": "hancom-hangul-2020-secondary"
+}

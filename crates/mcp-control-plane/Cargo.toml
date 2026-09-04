@@ -1,0 +1,25 @@
+[package]
+name = "mcp-control-plane"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+artifact-service = { version = "0.1.0", path = "../artifact-service" }
+auth-middleware = { version = "0.1.0", path = "../auth-middleware" }
+hex.workspace = true
+jsonschema.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+base64.workspace = true
+hmac.workspace = true
+uuid.workspace = true
+
+[lints]
+workspace = true

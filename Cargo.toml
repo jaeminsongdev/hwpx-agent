@@ -9,6 +9,7 @@ members = [
     "crates/hwpx-package",
     "crates/idempotency-service",
     "crates/job-service",
+    "crates/mcp-control-plane",
     "crates/operation-engine",
     "crates/product-cli",
     "crates/retention-sync-service",
@@ -30,6 +31,7 @@ base64 = { version = "=0.23.1", default-features = false, features = ["std"] }
 getrandom = { version = "=0.4.3", features = ["std"] }
 hex = "=0.4.3"
 hmac = { version = "=0.13.0", features = ["zeroize"] }
+jsonschema = { version = "=0.53.0", default-features = false }
 prost = "=0.14.4"
 prost-build = "=0.14.4"
 prost-types = "=0.14.4"

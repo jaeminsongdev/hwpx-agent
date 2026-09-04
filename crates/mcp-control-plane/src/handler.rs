@@ -1,0 +1,497 @@
+use std::fmt;
+
+use artifact_service::{ContentDigest, SubjectDigest, TenantId};
+use auth_middleware::{AuthContext, AuthMiddleware};
+use serde::Serialize;
+use serde_json::{Value, json};
+use thiserror::Error;
+use zeroize::Zeroizing;
+
+use crate::catalog::{CATALOG_SHA256, CatalogError, ToolCatalog, ToolKind};
+use crate::policy::{PolicyError, ToolPolicy};
+use crate::strict_json::parse_unique_value;
+
+pub const MAX_TOOL_NAME_BYTES: usize = 64;
+pub const MAX_ARGUMENT_JSON_BYTES: usize = 262_144;
+
+pub struct McpToolRequest {
+    tool_name: String,
+    authorization_header: Zeroizing<String>,
+    arguments_json: Zeroizing<Vec<u8>>,
+    now_unix_seconds: u64,
+}
+
+impl McpToolRequest {
+    #[must_use]
+    pub fn new(
+        tool_name: impl Into<String>,
+        authorization_header: impl Into<String>,
+        arguments_json: impl Into<Vec<u8>>,
+        now_unix_seconds: u64,
+    ) -> Self {
+        Self {
+            tool_name: tool_name.into(),
+            authorization_header: Zeroizing::new(authorization_header.into()),
+            arguments_json: Zeroizing::new(arguments_json.into()),
+            now_unix_seconds,
+        }
+    }
+}
+
+impl fmt::Debug for McpToolRequest {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("McpToolRequest")
+            .field("tool_name", &self.tool_name)
+            .field("authorization_header", &"<redacted>")
+            .field("arguments_json", &"<redacted>")
+            .field("arguments_bytes", &self.arguments_json.len())
+            .field("now_unix_seconds", &self.now_unix_seconds)
+            .finish()
+    }
+}
+
+pub struct AuthorizedToolCall {
+    tool: ToolKind,
+    context: AuthContext,
+    request_id: String,
+    project_id: Option<String>,
+    arguments_sha256: ContentDigest,
+    arguments: Value,
+}
+
+impl AuthorizedToolCall {
+    #[must_use]
+    pub const fn tool(&self) -> ToolKind {
+        self.tool
+    }
+
+    #[must_use]
+    pub const fn tenant_id(&self) -> TenantId {
+        self.context.tenant_id()
+    }
+
+    #[must_use]
+    pub const fn subject(&self) -> SubjectDigest {
+        self.context.subject()
+    }
+
+    #[must_use]
+    pub fn request_id(&self) -> &str {
+        &self.request_id
+    }
+
+    #[must_use]
+    pub fn project_id(&self) -> Option<&str> {
+        self.project_id.as_deref()
+    }
+
+    #[must_use]
+    pub const fn arguments_sha256(&self) -> ContentDigest {
+        self.arguments_sha256
+    }
+
+    #[must_use]
+    pub const fn arguments(&self) -> &Value {
+        &self.arguments
+    }
+}
+
+impl fmt::Debug for AuthorizedToolCall {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("AuthorizedToolCall")
+            .field("tool", &self.tool)
+            .field("context", &self.context)
+            .field("request_id", &"<redacted>")
+            .field(
+                "project_id",
+                &self.project_id.as_ref().map(|_| "<redacted>"),
+            )
+            .field("arguments_sha256", &"<redacted>")
+            .field("arguments", &"<redacted>")
+            .finish()
+    }
+}
+
+#[derive(Clone, Copy, Debug, Error, Eq, PartialEq)]
+pub enum GatewayError {
+    #[error("requested resource was not found")]
+    NotFound,
+    #[error("service request conflicts with current state")]
+    Conflict,
+    #[error("service is temporarily unavailable")]
+    Unavailable,
+    #[error("service rejected the request")]
+    Rejected,
+}
+
+pub trait ToolServiceGateway: fmt::Debug + Send {
+    /// Dispatches one fully authorized, schema-valid call.
+    ///
+    /// # Errors
+    ///
+    /// Returns only stable service categories. Implementations must re-check resource ownership at
+    /// their own repository boundary and never expose raw backend errors.
+    fn dispatch(&mut self, call: AuthorizedToolCall) -> Result<Value, GatewayError>;
+}
+
+pub struct McpControlPlane<P, G> {
+    auth: AuthMiddleware,
+    catalog: ToolCatalog,
+    policy: P,
+    gateway: G,
+}
+
+impl<P, G> McpControlPlane<P, G>
+where
+    P: ToolPolicy,
+    G: ToolServiceGateway,
+{
+    /// Creates a control plane only when the embedded, digest-pinned catalog compiles.
+    ///
+    /// # Errors
+    ///
+    /// Fails closed on catalog digest, shape, scope or JSON Schema drift.
+    pub fn new(auth: AuthMiddleware, policy: P, gateway: G) -> Result<Self, InitializationError> {
+        Ok(Self {
+            auth,
+            catalog: ToolCatalog::load().map_err(InitializationError::Catalog)?,
+            policy,
+            gateway,
+        })
+    }
+
+    #[must_use]
+    pub fn tool_count(&self) -> usize {
+        self.catalog.len()
+    }
+
+    #[must_use]
+    #[allow(clippy::too_many_lines)]
+    pub fn handle(&mut self, request: McpToolRequest) -> McpToolResult {
+        let McpToolRequest {
+            tool_name,
+            authorization_header,
+            arguments_json,
+            now_unix_seconds,
+        } = request;
+        if tool_name.is_empty() || tool_name.len() > MAX_TOOL_NAME_BYTES {
+            return McpToolResult::error(PublicErrorCode::ToolUnknown, None, None);
+        }
+        let Some(tool) = ToolKind::parse(&tool_name) else {
+            return McpToolResult::error(PublicErrorCode::ToolUnknown, None, None);
+        };
+        if arguments_json.is_empty() || arguments_json.len() > MAX_ARGUMENT_JSON_BYTES {
+            return McpToolResult::error(PublicErrorCode::RequestTooLarge, None, None);
+        }
+        let descriptor = self.catalog.get(tool);
+        let scopes = descriptor.scopes().to_vec();
+        let Ok(context) = self.auth.authenticate_public_mcp(
+            &authorization_header,
+            now_unix_seconds,
+            scopes.iter().copied(),
+        ) else {
+            let challenge = self
+                .auth
+                .challenge(scopes.iter().copied())
+                .ok()
+                .map(|value| value.www_authenticate());
+            return McpToolResult::error(PublicErrorCode::AuthenticationFailed, None, challenge);
+        };
+        let Ok(arguments) = parse_unique_value(&arguments_json) else {
+            return McpToolResult::error(PublicErrorCode::ArgumentsMalformed, None, None);
+        };
+        if !descriptor.input_is_valid(&arguments) {
+            return McpToolResult::error(PublicErrorCode::InputSchemaInvalid, None, None);
+        }
+        let request_id = arguments
+            .get("request_id")
+            .and_then(Value::as_str)
+            .map(str::to_owned);
+        let Some(request_id) = request_id else {
+            return McpToolResult::error(PublicErrorCode::InputSchemaInvalid, None, None);
+        };
+        if let Err(error) = self.policy.authorize(&context, tool, &arguments) {
+            let code = match error {
+                PolicyError::NotFound => PublicErrorCode::ResourceNotFound,
+                PolicyError::AccessDenied => PublicErrorCode::PolicyDenied,
+                PolicyError::InvalidConfiguration
+                | PolicyError::Conflict
+                | PolicyError::CapacityExceeded => PublicErrorCode::PolicyUnavailable,
+            };
+            return McpToolResult::error(code, Some(&request_id), None);
+        }
+        let Ok(canonical_arguments) = serde_json::to_vec(&arguments) else {
+            return McpToolResult::error(
+                PublicErrorCode::ArgumentsMalformed,
+                Some(&request_id),
+                None,
+            );
+        };
+        let canonical_arguments = Zeroizing::new(canonical_arguments);
+        let project_id = arguments
+            .get("project_id")
+            .and_then(Value::as_str)
+            .map(str::to_owned);
+        let correlation = ResultCorrelation::from_arguments(&arguments, &request_id);
+        let call = AuthorizedToolCall {
+            tool,
+            context,
+            request_id: request_id.clone(),
+            project_id,
+            arguments_sha256: ContentDigest::of(&canonical_arguments),
+            arguments,
+        };
+        let output = match self.gateway.dispatch(call) {
+            Ok(output) => output,
+            Err(error) => {
+                let code = match error {
+                    GatewayError::NotFound => PublicErrorCode::ResourceNotFound,
+                    GatewayError::Conflict => PublicErrorCode::RequestConflict,
+                    GatewayError::Unavailable => PublicErrorCode::ServiceUnavailable,
+                    GatewayError::Rejected => PublicErrorCode::ServiceRejected,
+                };
+                return McpToolResult::error(code, Some(&request_id), None);
+            }
+        };
+        if !descriptor.output_is_valid(&output) {
+            return McpToolResult::error(
+                PublicErrorCode::OutputSchemaInvalid,
+                Some(&request_id),
+                None,
+            );
+        }
+        if !correlation.matches(&output) {
+            return McpToolResult::error(
+                PublicErrorCode::CorrelationMismatch,
+                Some(&request_id),
+                None,
+            );
+        }
+        McpToolResult::success(tool, &request_id, output)
+    }
+}
+
+impl<P, G> fmt::Debug for McpControlPlane<P, G>
+where
+    P: ToolPolicy,
+    G: ToolServiceGateway,
+{
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("McpControlPlane")
+            .field("auth", &self.auth)
+            .field("catalog", &self.catalog)
+            .field("policy", &self.policy)
+            .field("gateway", &self.gateway)
+            .finish()
+    }
+}
+
+#[derive(Debug, Error)]
+pub enum InitializationError {
+    #[error("public tool catalog initialization failed")]
+    Catalog(#[source] CatalogError),
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum PublicErrorCode {
+    ToolUnknown,
+    RequestTooLarge,
+    AuthenticationFailed,
+    ArgumentsMalformed,
+    InputSchemaInvalid,
+    ResourceNotFound,
+    PolicyDenied,
+    PolicyUnavailable,
+    RequestConflict,
+    ServiceUnavailable,
+    ServiceRejected,
+    OutputSchemaInvalid,
+    CorrelationMismatch,
+}
+
+impl PublicErrorCode {
+    const fn as_str(self) -> &'static str {
+        match self {
+            Self::ToolUnknown => "TOOL_UNKNOWN",
+            Self::RequestTooLarge => "TOOL_REQUEST_TOO_LARGE",
+            Self::AuthenticationFailed => "AUTHENTICATION_FAILED",
+            Self::ArgumentsMalformed => "TOOL_ARGUMENTS_MALFORMED",
+            Self::InputSchemaInvalid => "TOOL_INPUT_SCHEMA_INVALID",
+            Self::ResourceNotFound => "RESOURCE_NOT_FOUND",
+            Self::PolicyDenied => "POLICY_DENIED",
+            Self::PolicyUnavailable => "POLICY_UNAVAILABLE",
+            Self::RequestConflict => "REQUEST_CONFLICT",
+            Self::ServiceUnavailable => "SERVICE_UNAVAILABLE",
+            Self::ServiceRejected => "SERVICE_REJECTED",
+            Self::OutputSchemaInvalid => "TOOL_OUTPUT_SCHEMA_INVALID",
+            Self::CorrelationMismatch => "TOOL_RESULT_CORRELATION_MISMATCH",
+        }
+    }
+
+    const fn safe_message(self) -> &'static str {
+        match self {
+            Self::ToolUnknown => "The requested tool is not available.",
+            Self::RequestTooLarge => "The tool request exceeds the allowed size.",
+            Self::AuthenticationFailed => "Authentication is required for this tool.",
+            Self::ArgumentsMalformed => "The tool arguments are not valid JSON.",
+            Self::InputSchemaInvalid => "The tool arguments do not match the public contract.",
+            Self::ResourceNotFound => "The requested resource was not found.",
+            Self::PolicyDenied => "The requested operation is not allowed.",
+            Self::PolicyUnavailable => "The authorization policy could not approve the request.",
+            Self::RequestConflict => "The request conflicts with the current resource state.",
+            Self::ServiceUnavailable => "The service is temporarily unavailable.",
+            Self::ServiceRejected => "The service rejected the request.",
+            Self::OutputSchemaInvalid => "The service returned an invalid result.",
+            Self::CorrelationMismatch => "The service result did not match the request.",
+        }
+    }
+
+    const fn retryable(self) -> bool {
+        matches!(self, Self::PolicyUnavailable | Self::ServiceUnavailable)
+    }
+}
+
+#[derive(Serialize)]
+pub struct McpToolResult {
+    #[serde(rename = "structuredContent")]
+    structured_content: Value,
+    content: Vec<TextContent>,
+    #[serde(rename = "_meta")]
+    meta: Value,
+    #[serde(rename = "isError")]
+    is_error: bool,
+}
+
+impl McpToolResult {
+    fn success(tool: ToolKind, request_id: &str, output: Value) -> Self {
+        Self {
+            structured_content: output,
+            content: vec![TextContent::new(format!(
+                "{} completed with a validated structured result.",
+                tool.name()
+            ))],
+            meta: json!({
+                "hwpx/catalogSha256": CATALOG_SHA256,
+                "hwpx/requestId": request_id,
+            }),
+            is_error: false,
+        }
+    }
+
+    fn error(
+        code: PublicErrorCode,
+        request_id: Option<&str>,
+        authentication_challenge: Option<String>,
+    ) -> Self {
+        let mut meta = serde_json::Map::new();
+        meta.insert(
+            "hwpx/catalogSha256".to_owned(),
+            Value::String(CATALOG_SHA256.to_owned()),
+        );
+        if let Some(request_id) = request_id {
+            meta.insert(
+                "hwpx/requestId".to_owned(),
+                Value::String(request_id.to_owned()),
+            );
+        }
+        if let Some(challenge) = authentication_challenge {
+            meta.insert("mcp/www_authenticate".to_owned(), json!([challenge]));
+        }
+        let safe_message = code.safe_message();
+        Self {
+            structured_content: json!({
+                "schema_version": "hwpx-agent.tool-error/v1",
+                "request_id": request_id,
+                "error_code": code.as_str(),
+                "retryable": code.retryable(),
+                "safe_message": safe_message,
+                "details": [],
+            }),
+            content: vec![TextContent::new(safe_message.to_owned())],
+            meta: Value::Object(meta),
+            is_error: true,
+        }
+    }
+
+    #[must_use]
+    pub const fn structured_content(&self) -> &Value {
+        &self.structured_content
+    }
+
+    #[must_use]
+    pub fn content_text(&self) -> &str {
+        &self.content[0].text
+    }
+
+    #[must_use]
+    pub const fn meta(&self) -> &Value {
+        &self.meta
+    }
+
+    #[must_use]
+    pub const fn is_error(&self) -> bool {
+        self.is_error
+    }
+
+    #[must_use]
+    pub fn error_code(&self) -> Option<&str> {
+        self.structured_content
+            .get("error_code")
+            .and_then(Value::as_str)
+    }
+}
+
+impl fmt::Debug for McpToolResult {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("McpToolResult")
+            .field("is_error", &self.is_error)
+            .field("error_code", &self.error_code())
+            .field("structured_content", &"<redacted>")
+            .field("content", &"<redacted>")
+            .field("meta", &"<redacted>")
+            .finish()
+    }
+}
+
+#[derive(Serialize)]
+struct TextContent {
+    #[serde(rename = "type")]
+    kind: &'static str,
+    text: String,
+}
+
+impl TextContent {
+    fn new(text: String) -> Self {
+        Self { kind: "text", text }
+    }
+}
+
+struct ResultCorrelation {
+    required_equal_fields: Vec<(&'static str, String)>,
+}
+
+impl ResultCorrelation {
+    fn from_arguments(arguments: &Value, request_id: &str) -> Self {
+        let mut required_equal_fields = vec![("request_id", request_id.to_owned())];
+        for field in ["project_id", "job_id", "revision_id", "release_label"] {
+            if let Some(value) = arguments.get(field).and_then(Value::as_str) {
+                required_equal_fields.push((field, value.to_owned()));
+            }
+        }
+        Self {
+            required_equal_fields,
+        }
+    }
+
+    fn matches(&self, output: &Value) -> bool {
+        self.required_equal_fields.iter().all(|(field, expected)| {
+            output
+                .get(*field)
+                .is_none_or(|actual| actual.as_str().is_some_and(|actual| actual == expected))
+        })
+    }
+}
