@@ -1,0 +1,629 @@
+{
+  "chatgpt_extension_policy": "feature_detect_window_openai_only_when_no_shared_mcp_apps_equivalent",
+  "csp_policy": {
+    "connect_domains": [],
+    "frame_domains": [],
+    "metadata_location": "resource_contents._meta.ui.csp",
+    "origin_scheme": "https",
+    "redirect_domains": [],
+    "resource_domains": [],
+    "wildcard_allowed": false
+  },
+  "deferred_evidence": [
+    {
+      "earliest_task": "P16-02",
+      "id": "registered_openai_app_id",
+      "reason": "Requires an actual developer-mode MCP registration; no identifier is invented or stored in P16-01.",
+      "state": "unverified"
+    },
+    {
+      "earliest_task": "P16-09",
+      "id": "chatgpt_developer_mode_connection",
+      "reason": "Requires user-operated ChatGPT account and workspace UI plus a reachable endpoint or secure tunnel.",
+      "state": "unverified"
+    },
+    {
+      "earliest_task": "P19",
+      "id": "public_https_and_unique_widget_domain",
+      "reason": "Production hosting and submission are outside the current-PC local scope.",
+      "state": "unverified"
+    },
+    {
+      "earliest_task": "P16-08",
+      "id": "chatgpt_file_library_roundtrip",
+      "reason": "The host extension and account capability must be feature-detected in an explicit user session.",
+      "state": "unverified"
+    },
+    {
+      "earliest_task": "P16-09",
+      "id": "real_hangul_execution_from_web",
+      "reason": "P16-01 is contract-only and does not launch Hangul or invoke COM.",
+      "state": "unverified"
+    },
+    {
+      "earliest_task": "later_cross_version_session",
+      "id": "hangul_2022_2024_or_other_pc",
+      "reason": "Only the current PC licensed Hangul 2020 target is in scope; later versions wait for their own PCs.",
+      "state": "unverified"
+    }
+  ],
+  "immutable_sources": [
+    {
+      "commit": "18cc38e78a968712c357bacdc3c79fead5bfc6b4",
+      "id": "openai.apps-sdk-examples",
+      "kind": "git_commit",
+      "ref": "refs/heads/main",
+      "retrieved_at": "2026-09-04T23:01:49Z",
+      "url": "https://github.com/openai/openai-apps-sdk-examples"
+    },
+    {
+      "commit": "92f46a574568a3ddac7600343b7d3c4c4ed7b588",
+      "id": "mcp.ext-apps-release",
+      "kind": "git_tag",
+      "ref": "refs/tags/v1.7.5",
+      "retrieved_at": "2026-09-04T23:01:49Z",
+      "url": "https://github.com/modelcontextprotocol/ext-apps"
+    },
+    {
+      "commit": "92f46a574568a3ddac7600343b7d3c4c4ed7b588",
+      "content_length_bytes": 59181,
+      "id": "mcp.apps-spec-2026-01-26",
+      "kind": "content_at_commit",
+      "retrieved_at": "2026-09-04T23:01:49Z",
+      "sha256": "ee452a7d1b9b7fb900acfeb4d6932d3963375b0f3f37d196a4b93eb80312af0e",
+      "status": "stable_2026-01-26",
+      "url": "https://raw.githubusercontent.com/modelcontextprotocol/ext-apps/92f46a574568a3ddac7600343b7d3c4c4ed7b588/specification/2026-01-26/apps.mdx"
+    }
+  ],
+  "mutable_documents": [
+    {
+      "content_length_bytes": 26036,
+      "id": "openai.chatgpt-ui",
+      "publisher": "OpenAI",
+      "retrieved_at": "2026-09-04T23:01:49Z",
+      "sha256": "2dcc3b5a9927a879670394cb755ea1e667f59baba344702f35fd655e66a690d9",
+      "snapshot_url": "https://developers.openai.com/plugins/build/chatgpt-ui.md",
+      "topics": [
+        "mcp_apps_first",
+        "decoupled_render_tools",
+        "resource_metadata",
+        "csp"
+      ],
+      "url": "https://developers.openai.com/plugins/build/chatgpt-ui"
+    },
+    {
+      "content_length_bytes": 22899,
+      "id": "openai.plugin-package",
+      "publisher": "OpenAI",
+      "retrieved_at": "2026-09-04T23:01:49Z",
+      "sha256": "605face331e44ea6befdc54c63b3d1e560f0595635db9083a20b9bbd19554e18",
+      "snapshot_url": "https://developers.openai.com/plugins/build/plugins.md",
+      "topics": [
+        "plugin_manifest",
+        "registered_app_mapping",
+        "path_rules",
+        "local_marketplace"
+      ],
+      "url": "https://developers.openai.com/plugins/build/plugins"
+    },
+    {
+      "content_length_bytes": 6554,
+      "id": "openai.connect-test",
+      "publisher": "OpenAI",
+      "retrieved_at": "2026-09-04T23:01:49Z",
+      "sha256": "11694ac732e312c06b92c8a29bc9cd4796bcbe075f890b5a3b50fe284fdca4ca",
+      "snapshot_url": "https://developers.openai.com/plugins/deploy/connect-chatgpt.md",
+      "topics": [
+        "developer_mode",
+        "inspector",
+        "positive_negative_eval",
+        "metadata_refresh"
+      ],
+      "url": "https://developers.openai.com/plugins/deploy/connect-chatgpt"
+    },
+    {
+      "content_length_bytes": 31711,
+      "id": "openai.plugin-reference",
+      "publisher": "OpenAI",
+      "retrieved_at": "2026-09-04T23:01:49Z",
+      "sha256": "3fb11cddbe6b48ee360217085c0debd08a72b9bd7cb52e982a045bd3f6df0704",
+      "snapshot_url": "https://developers.openai.com/plugins/reference.md",
+      "topics": [
+        "window_openai_extensions",
+        "result_visibility",
+        "legacy_compatibility",
+        "file_flow"
+      ],
+      "url": "https://developers.openai.com/plugins/reference"
+    },
+    {
+      "content_length_bytes": 12256,
+      "id": "openai.ui-guidelines",
+      "publisher": "OpenAI",
+      "retrieved_at": "2026-09-04T23:01:49Z",
+      "sha256": "30ef2884a431c31ac9aaff92a714dc561434132c064f69a31fa04ee357600481",
+      "snapshot_url": "https://developers.openai.com/plugins/concepts/ui-guidelines.md",
+      "topics": [
+        "inline_first",
+        "action_limits",
+        "responsive_layout",
+        "accessibility"
+      ],
+      "url": "https://developers.openai.com/plugins/concepts/ui-guidelines"
+    },
+    {
+      "content_length_bytes": 3387,
+      "id": "openai.security-privacy",
+      "publisher": "OpenAI",
+      "retrieved_at": "2026-09-04T23:01:49Z",
+      "sha256": "9d8e03b4e59413b8de01da3f5bc1d2f5bc7bdc6c4add398b538c6a85d559391b",
+      "snapshot_url": "https://developers.openai.com/plugins/guides/security-privacy.md",
+      "topics": [
+        "least_privilege",
+        "confirmation",
+        "server_validation",
+        "redaction"
+      ],
+      "url": "https://developers.openai.com/plugins/guides/security-privacy"
+    },
+    {
+      "content_length_bytes": 617,
+      "id": "openai.examples-index",
+      "publisher": "OpenAI",
+      "retrieved_at": "2026-09-04T23:01:49Z",
+      "sha256": "b77507dfcfec72650e72faf2b04db4369fe13916c735bea479bc71c5f5dc7035",
+      "snapshot_url": "https://developers.openai.com/plugins/build/examples.md",
+      "topics": [
+        "official_examples",
+        "end_to_end_reference"
+      ],
+      "url": "https://developers.openai.com/plugins/build/examples"
+    },
+    {
+      "content_length_bytes": 12907,
+      "id": "mcp.apps-overview",
+      "publisher": "Model Context Protocol",
+      "retrieved_at": "2026-09-04T23:01:49Z",
+      "sha256": "ebae6e6d71c0561230261caf3b84a7493bd55beae704593accc6e1bceedb0e39",
+      "snapshot_url": "https://modelcontextprotocol.io/extensions/apps/overview.md",
+      "topics": [
+        "progressive_enhancement",
+        "sandbox",
+        "postmessage",
+        "capability_negotiation"
+      ],
+      "url": "https://modelcontextprotocol.io/extensions/apps/overview"
+    },
+    {
+      "content_length_bytes": 20587,
+      "id": "mcp.apps-build",
+      "publisher": "Model Context Protocol",
+      "retrieved_at": "2026-09-04T23:01:49Z",
+      "sha256": "3b722db818cea428f123ff21e396847a4ddec2b31e83a90a86413ebb64727957",
+      "snapshot_url": "https://modelcontextprotocol.io/extensions/apps/build.md",
+      "topics": [
+        "register_app_tool",
+        "register_app_resource",
+        "single_file_bundle",
+        "deny_by_default_csp"
+      ],
+      "url": "https://modelcontextprotocol.io/extensions/apps/build"
+    }
+  ],
+  "next_task": "P16-02 Universal package",
+  "package_locks": [
+    {
+      "adoption": "required_for_p16_04_after_explicit_dependency_review",
+      "id": "mcp.ext-apps-package",
+      "integrity": "sha512-TjPH2S2y5UEGKhmI6+XGFuqfqOV4ppe1x6DA3txnUaEWkgtA4G5vo14jGKFZmegdkZ1H4QMLyujLvoU1BEdnAg==",
+      "name": "@modelcontextprotocol/ext-apps",
+      "tarball": "https://registry.npmjs.org/@modelcontextprotocol/ext-apps/-/ext-apps-1.7.5.tgz",
+      "version": "1.7.5"
+    },
+    {
+      "adoption": "optional_for_p16_04_after_bundle_and_accessibility_review",
+      "id": "openai.apps-sdk-ui-package",
+      "integrity": "sha512-KaG+6qcVCKVRe51wr2te68OKoHfjRQPDVVkugxiF+SaZlgLpNbxOfyrL/FyUBmHbjh1q4p7eWDYAd75jHseZ9A==",
+      "name": "@openai/apps-sdk-ui",
+      "tarball": "https://registry.npmjs.org/@openai/apps-sdk-ui/-/apps-sdk-ui-0.2.2.tgz",
+      "version": "0.2.2"
+    }
+  ],
+  "portable_bridge": "mcp_apps",
+  "requirements": [
+    {
+      "category": "architecture",
+      "id": "P16-R01",
+      "implementation_target": "P16-04",
+      "normative": "MUST",
+      "sources": [
+        "openai.chatgpt-ui",
+        "mcp.apps-overview"
+      ],
+      "statement": "Use MCP Apps as the portable UI foundation."
+    },
+    {
+      "category": "architecture",
+      "id": "P16-R02",
+      "implementation_target": "P16-04",
+      "normative": "MUST",
+      "sources": [
+        "openai.chatgpt-ui",
+        "mcp.apps-overview"
+      ],
+      "statement": "Keep every underlying MCP workflow useful when the host does not render UI."
+    },
+    {
+      "category": "architecture",
+      "id": "P16-R03",
+      "implementation_target": "P16-04",
+      "normative": "MUST",
+      "sources": [
+        "openai.chatgpt-ui"
+      ],
+      "statement": "Keep P15 data and action tools UI-independent; only dedicated versioned render tools may declare a UI resource."
+    },
+    {
+      "category": "ui_resource",
+      "id": "P16-R04",
+      "implementation_target": "P16-04",
+      "normative": "MUST",
+      "sources": [
+        "openai.chatgpt-ui",
+        "mcp.apps-build"
+      ],
+      "statement": "Use a versioned ui:// resource URI and change it for breaking HTML, JavaScript, or CSS revisions."
+    },
+    {
+      "category": "ui_resource",
+      "id": "P16-R05",
+      "implementation_target": "P16-04",
+      "normative": "MUST",
+      "sources": [
+        "openai.chatgpt-ui",
+        "mcp.apps-build",
+        "mcp.apps-spec-2026-01-26"
+      ],
+      "statement": "Serve UI resources as text/html;profile=mcp-app, preferably through RESOURCE_MIME_TYPE."
+    },
+    {
+      "category": "bridge",
+      "id": "P16-R06",
+      "implementation_target": "P16-04",
+      "normative": "MUST",
+      "sources": [
+        "openai.chatgpt-ui",
+        "mcp.apps-overview",
+        "mcp.apps-spec-2026-01-26"
+      ],
+      "statement": "Use the MCP Apps ui/* JSON-RPC lifecycle over postMessage for initialization, notifications, tool calls, messages, and context."
+    },
+    {
+      "category": "bridge",
+      "id": "P16-R07",
+      "implementation_target": "P16-04",
+      "normative": "MUST",
+      "sources": [
+        "openai.chatgpt-ui",
+        "openai.plugin-reference"
+      ],
+      "statement": "Use window.openai only for feature-detected ChatGPT extensions that have no shared MCP Apps equivalent; never branch on a host name."
+    },
+    {
+      "category": "bridge",
+      "id": "P16-R08",
+      "implementation_target": "P16-04",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-reference"
+      ],
+      "statement": "Treat absent approval-gated tool input before ui/notifications/tool-input as an expected lifecycle state."
+    },
+    {
+      "category": "result_data",
+      "id": "P16-R09",
+      "implementation_target": "P16-04",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-reference"
+      ],
+      "statement": "Keep structuredContent concise, output-schema-valid, and safe for both the model and component."
+    },
+    {
+      "category": "result_data",
+      "id": "P16-R10",
+      "implementation_target": "P16-04",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-reference",
+        "openai.security-privacy"
+      ],
+      "statement": "Place component-only hydration data in result _meta, exclude secrets, and re-authorize every server call instead of trusting hidden client data."
+    },
+    {
+      "category": "manifest",
+      "id": "P16-R11",
+      "implementation_target": "P16-02",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-package"
+      ],
+      "statement": "Provide the required plugin entry point at .codex-plugin/plugin.json."
+    },
+    {
+      "category": "manifest",
+      "id": "P16-R12",
+      "implementation_target": "P16-02",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-package"
+      ],
+      "statement": "Keep manifest paths ./-relative, resolve them from the plugin root, and reject root escape."
+    },
+    {
+      "category": "manifest",
+      "id": "P16-R13",
+      "implementation_target": "P16-02",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-package"
+      ],
+      "statement": "Use the compatibility apps field only for .app.json registered MCP mappings; accept the plugin_asdk_app identifier only from an actual developer-mode registration."
+    },
+    {
+      "category": "manifest",
+      "id": "P16-R14",
+      "implementation_target": "P16-02",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-package"
+      ],
+      "statement": "Use mcpServers/.mcp.json only for a bundled server and do not confuse it with a registered remote MCP mapping."
+    },
+    {
+      "category": "manifest",
+      "id": "P16-R15",
+      "implementation_target": "P16-03",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-package",
+        "openai.connect-test"
+      ],
+      "statement": "Package nine workflow skills and verify each skill against the actual versioned public tool names with positive and negative evaluations."
+    },
+    {
+      "category": "csp",
+      "id": "P16-R16",
+      "implementation_target": "P16-09",
+      "normative": "MUST",
+      "sources": [
+        "openai.chatgpt-ui",
+        "openai.security-privacy",
+        "mcp.apps-build"
+      ],
+      "statement": "Declare exact HTTPS origins only, with no wildcard, for every network or resource dependency."
+    },
+    {
+      "category": "csp",
+      "id": "P16-R17",
+      "implementation_target": "P16-04",
+      "normative": "MUST",
+      "sources": [
+        "openai.chatgpt-ui",
+        "mcp.apps-overview"
+      ],
+      "statement": "Place standard CSP in each returned resource content item at _meta.ui.csp."
+    },
+    {
+      "category": "csp",
+      "id": "P16-R18",
+      "implementation_target": "P16-09",
+      "normative": "MUST",
+      "sources": [
+        "openai.chatgpt-ui",
+        "openai.security-privacy"
+      ],
+      "statement": "Keep nested frames disabled by omitting frameDomains unless a reviewed exact origin is indispensable."
+    },
+    {
+      "category": "csp",
+      "id": "P16-R19",
+      "implementation_target": "P16-08",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-reference"
+      ],
+      "statement": "Prefer _meta.ui.csp; use legacy openai/widgetCSP only when compatibility is required, including redirect_domains for approved openExternal destinations."
+    },
+    {
+      "category": "csp",
+      "id": "P16-R20",
+      "implementation_target": "P16-09",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-reference"
+      ],
+      "statement": "Treat a unique hosted _meta.ui.domain as submission evidence and leave it unverified until hosting and submission scope exist."
+    },
+    {
+      "category": "file_flow",
+      "id": "P16-R21",
+      "implementation_target": "P16-08",
+      "normative": "MUST",
+      "sources": [
+        "openai.chatgpt-ui",
+        "openai.plugin-reference"
+      ],
+      "statement": "Feature-detect ChatGPT uploadFile, selectFiles, and getFileDownloadUrl and provide a non-ChatGPT fallback or an explicit unavailable state."
+    },
+    {
+      "category": "file_flow",
+      "id": "P16-R22",
+      "implementation_target": "P16-08",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-reference",
+        "openai.security-privacy"
+      ],
+      "statement": "Expose only bounded opaque file, artifact, project, revision, and job identifiers plus summaries to the model; never place document bytes in model-visible output."
+    },
+    {
+      "category": "file_flow",
+      "id": "P16-R23",
+      "implementation_target": "P16-08",
+      "normative": "MUST",
+      "sources": [
+        "openai.security-privacy"
+      ],
+      "statement": "Validate upload ownership, tenant, ACL, media type, size, and digest server-side and reject local filesystem paths."
+    },
+    {
+      "category": "file_flow",
+      "id": "P16-R24",
+      "implementation_target": "P16-08",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-reference",
+        "openai.connect-test"
+      ],
+      "statement": "Deliver outputs through artifact_get or a host file reference with bounded expiry and a fresh authorization and ACL check."
+    },
+    {
+      "category": "design",
+      "id": "P16-R25",
+      "implementation_target": "P16-04",
+      "normative": "SHOULD",
+      "sources": [
+        "openai.chatgpt-ui",
+        "openai.ui-guidelines"
+      ],
+      "statement": "Start inline and request the smallest display mode that can complete the task."
+    },
+    {
+      "category": "design",
+      "id": "P16-R26",
+      "implementation_target": "P16-05",
+      "normative": "MUST",
+      "sources": [
+        "openai.ui-guidelines"
+      ],
+      "statement": "Limit inline cards to one primary and at most one secondary action, with no deep navigation or nested scrolling."
+    },
+    {
+      "category": "accessibility",
+      "id": "P16-R27",
+      "implementation_target": "P16-09",
+      "normative": "MUST",
+      "sources": [
+        "openai.ui-guidelines"
+      ],
+      "statement": "Verify keyboard operation, visible focus, semantic labels, readable contrast, responsive sizing, host theme, locale, and reduced-motion behavior."
+    },
+    {
+      "category": "security",
+      "id": "P16-R28",
+      "implementation_target": "P16-06",
+      "normative": "MUST",
+      "sources": [
+        "openai.security-privacy"
+      ],
+      "statement": "Use least privilege, explicit consent, and host confirmation for write or irreversible actions."
+    },
+    {
+      "category": "security",
+      "id": "P16-R29",
+      "implementation_target": "P16-06",
+      "normative": "MUST",
+      "sources": [
+        "openai.security-privacy"
+      ],
+      "statement": "Validate every model- or UI-originated input server-side and treat prompt injection and malicious files as expected inputs."
+    },
+    {
+      "category": "security",
+      "id": "P16-R30",
+      "implementation_target": "P16-09",
+      "normative": "MUST",
+      "sources": [
+        "openai.security-privacy"
+      ],
+      "statement": "Redact PII and secrets from logs, retain bounded correlation identifiers, and avoid raw prompt or document logging."
+    },
+    {
+      "category": "validation",
+      "id": "P16-R31",
+      "implementation_target": "P16-09",
+      "normative": "MUST",
+      "sources": [
+        "openai.connect-test"
+      ],
+      "statement": "Use MCP Inspector to verify tool discovery and representative, edge, missing-identifier, empty-result, authentication, annotation, confirmation, and model-readable-result behavior."
+    },
+    {
+      "category": "validation",
+      "id": "P16-R32",
+      "implementation_target": "P16-09",
+      "normative": "MUST",
+      "sources": [
+        "openai.connect-test"
+      ],
+      "statement": "In an explicit user-operated developer-mode session, test positive, indirect, follow-up, write-confirmation, unsupported, and boundary prompts plus UI console and state restoration."
+    },
+    {
+      "category": "claim_boundary",
+      "id": "P16-R33",
+      "implementation_target": "P16-01",
+      "normative": "MUST",
+      "sources": [
+        "openai.plugin-package",
+        "openai.connect-test"
+      ],
+      "statement": "Do not claim local installation, developer-mode connectivity, public hosting, workspace publication, universal publication, or submission from this source-review card."
+    },
+    {
+      "category": "claim_boundary",
+      "id": "P16-R34",
+      "implementation_target": "P16-02",
+      "normative": "MUST",
+      "sources": [
+        "openai.security-privacy"
+      ],
+      "statement": "Never accept or emit raw HWPX XML, HAction or COM identifiers, arbitrary local paths, credentials, or unbounded document content through public or model-visible contracts."
+    }
+  ],
+  "retrieved_at": "2026-09-04T23:01:49Z",
+  "review_summary": {
+    "categories": [
+      "accessibility",
+      "architecture",
+      "bridge",
+      "claim_boundary",
+      "csp",
+      "design",
+      "file_flow",
+      "manifest",
+      "result_data",
+      "security",
+      "ui_resource",
+      "validation"
+    ],
+    "csp_reviewed": true,
+    "developer_mode_reviewed": true,
+    "document_count": 9,
+    "file_flow_reviewed": true,
+    "immutable_source_count": 3,
+    "manifest_reviewed": true,
+    "package_count": 2,
+    "requirement_count": 34,
+    "ui_reviewed": true
+  },
+  "schema_version": "hwpx-agent.p16-official-source-lock/v1",
+  "scope": "current_pc_hangul_2020_local_contract_only",
+  "source_precedence": [
+    "stable_mcp_apps_specification",
+    "current_openai_plugin_documentation",
+    "pinned_official_examples_and_package_releases",
+    "local_product_contracts"
+  ],
+  "task": "P16-01"
+}
