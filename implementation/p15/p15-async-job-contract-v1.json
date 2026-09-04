@@ -1,0 +1,144 @@
+{
+  "async_submission_tools": [
+    "document_create",
+    "document_edit",
+    "document_transform",
+    "document_validate",
+    "document_render",
+    "document_export"
+  ],
+  "catalog_sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001",
+  "client_event_meta_key": "hwpx/jobEvents",
+  "handler_sequence_preserved": true,
+  "job_tools": [
+    "job_get",
+    "job_cancel"
+  ],
+  "journal": {
+    "append_only": true,
+    "checksum": "sha256",
+    "file_name": "p15-job-journal-v1.jsonl",
+    "fsync_before_publish": true,
+    "schema_version": "hwpx-agent.p15-job-journal/v1"
+  },
+  "limits": {
+    "event_page": 200,
+    "events_per_job": 256,
+    "jobs": 4096,
+    "journal_bytes": 67108864,
+    "journal_entries": 65536,
+    "journal_entry_bytes": 1048576,
+    "progress_events_per_job": 248,
+    "result_artifacts": 128
+  },
+  "p15_03_implementation_commit": "9e7ed73524be0049292fbdf45f2170df6f997fae",
+  "required_behaviors": [
+    "deterministic_idempotent_job_id",
+    "ordered_bounded_progress_events",
+    "cursor_bound_to_job_and_sequence",
+    "queued_cancel_immediate",
+    "active_cancel_at_safe_point",
+    "committing_cancel_rejected",
+    "exactly_one_terminal_receipt",
+    "restart_replay_fail_closed",
+    "raw_arguments_and_cancel_reason_not_journaled"
+  ],
+  "rust_async_job_tests": 11,
+  "schema_version": "hwpx-agent.p15-async-job-contract/v1",
+  "scope": "current_pc_hancom_2020_local_durable_job_reference",
+  "source_locks": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "dbf0bd590f36638a4a2b4f4f3e0fcfcb11b7178736b542c4420d51ec80342bc6"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "fa3ee66f3d9da7ff98381ab9118cf8f11f86e49e66d44054bf7d306a4f9e419b"
+    },
+    {
+      "path": "deny.toml",
+      "sha256": "1b7f0c7a65ba80242847fbb24483fa82708f28b361e425c76c48233d52073ef3"
+    },
+    {
+      "path": "security/dependency-policy.json",
+      "sha256": "753e93e1ee01ff92f965627b7a26baefaa90ca8e7e79a82b1afb87c08e8bff69"
+    },
+    {
+      "path": "protocol/mcp/p15-public-tools-v1.json",
+      "sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001"
+    },
+    {
+      "path": "implementation/p15/p15-public-tool-schema-contract-v1.json",
+      "sha256": "9e7099535bceced5295ce347afb4b9cc9a6dfa71db1f10d633ed9247d126681e"
+    },
+    {
+      "path": "implementation/p15/p15-handler-contract-v1.json",
+      "sha256": "f79dfeac599b11a122569e1796d428298f341f53f91d3893460c6d7c1d704f0a"
+    },
+    {
+      "path": "implementation/p15/P15-04_ASYNC_JOB_POLICY.md",
+      "sha256": "83bcc8391dd4bfb3d315876966854604cf870f5f65a3bc41a83821c4ac81b801"
+    },
+    {
+      "path": "crates/mcp-control-plane/Cargo.toml",
+      "sha256": "9071541155fcfb9f1c239df32307cbf4176c7503118c1ca2f8563986f9aaf268"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/lib.rs",
+      "sha256": "a4e8dabaf67fddd6c669229b99b5792927487ed5390d6cf8a5ebf3a58bf4545d"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/catalog.rs",
+      "sha256": "69860323b71de2f2f1836fa90a78a41b44dd8a5016f9211a4d7f7e06373952cf"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/handler.rs",
+      "sha256": "ba25c82dbc3c791dab40787d58e3bb1065989973758c9488ff8e62ec7ced4b89"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/policy.rs",
+      "sha256": "32513728470e18608d1eeff419e83ece628d6a9c4dd2a948c1c95012e97412ac"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/strict_json.rs",
+      "sha256": "f8c4e72cb8afa4c9df37259e6b9e143dbdada228cbf9456bad8a26360ac8a882"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/async_jobs.rs",
+      "sha256": "d590b77bba3dff8752155b973e2b16b5bcd3a37fe7acfc1d3e176a2b03f680b8"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/handler_contract.rs",
+      "sha256": "e40ce71372b83ce3b76ce42da8b45031d3fcd8a31ae1f49e4940f3377ce01429"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/async_job_ux.rs",
+      "sha256": "10d4926eaf1d0d77134e616faf5de1e4de8800819a1ace6cd9502ae680db9376"
+    },
+    {
+      "path": "tools/p15/build_handler_contract.py",
+      "sha256": "cb1ced341772deea4adc638f468cb392ce9f50ab646ebc0e2db75e1e5ba0a59a"
+    },
+    {
+      "path": "tools/p15/validate_handler_contract.py",
+      "sha256": "929665827d6f7bc8ff43e0df7ce39807c77bd18db3b3944e19bfe6b776dd34a9"
+    },
+    {
+      "path": "tools/p15/build_async_job_contract.py",
+      "sha256": "e01a4216eb51227f4b5ef92e2dd659c0d89101d306c079c080043a93513cdd05"
+    },
+    {
+      "path": "tools/p15/validate_async_job_contract.py",
+      "sha256": "234926bcfe7b6076c6e3590029c1c615c8b57192b83edee40fb65842b5dc4b56"
+    },
+    {
+      "path": "tools/p15/tests/test_handler_contract.py",
+      "sha256": "3091497208e7d44794313fd7f035f44f2fa52b6c6900d17a48a8ce90d9914683"
+    },
+    {
+      "path": "tools/p15/tests/test_async_job_contract.py",
+      "sha256": "45b9559d160c36d064eb546b576e2888df350197120d5416b6e1c868222341f2"
+    }
+  ],
+  "target_profile": "hancom-hangul-2020-secondary"
+}

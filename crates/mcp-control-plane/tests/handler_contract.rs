@@ -12,6 +12,7 @@ use hmac::{Hmac, Mac as _};
 use mcp_control_plane::{
     AuthorizedToolCall, GatewayError, InMemoryProjectPolicy, McpControlPlane, McpToolRequest,
     ProjectAccess, ProjectPolicyLimits, ToolKind, ToolPolicy, ToolServiceGateway,
+    ToolServiceOutput,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value, json};
@@ -56,7 +57,7 @@ struct FixtureGateway {
 }
 
 impl ToolServiceGateway for FixtureGateway {
-    fn dispatch(&mut self, call: AuthorizedToolCall) -> Result<Value, GatewayError> {
+    fn dispatch(&mut self, call: AuthorizedToolCall) -> Result<ToolServiceOutput, GatewayError> {
         self.calls.fetch_add(1, Ordering::SeqCst);
         if matches!(self.mode, GatewayMode::Unavailable) {
             return Err(GatewayError::Unavailable);
@@ -96,7 +97,7 @@ impl ToolServiceGateway for FixtureGateway {
                     );
             }
         }
-        Ok(output)
+        Ok(ToolServiceOutput::new(output))
     }
 }
 

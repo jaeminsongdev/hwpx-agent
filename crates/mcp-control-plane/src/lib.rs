@@ -4,15 +4,20 @@
 //! the same boundary: authenticate, validate input, authorize the tenant/project, dispatch once,
 //! validate output, and return a bounded MCP result.
 
+mod async_jobs;
 mod catalog;
 mod handler;
 mod policy;
 mod strict_json;
 
+pub use async_jobs::{
+    AsyncJobError, DurableAsyncJobGateway, DurableJobStore, JobEventPage, JobLocator,
+    JobProgressStage,
+};
 pub use catalog::{CATALOG_SHA256, ToolKind};
 pub use handler::{
     AuthorizedToolCall, GatewayError, McpControlPlane, McpToolRequest, McpToolResult,
-    ToolServiceGateway,
+    ToolServiceGateway, ToolServiceOutput,
 };
 pub use policy::{
     InMemoryProjectPolicy, PolicyError, ProjectAccess, ProjectPolicyLimits, ToolPolicy,

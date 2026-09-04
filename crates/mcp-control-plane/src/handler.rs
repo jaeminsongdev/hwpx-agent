@@ -7,6 +7,7 @@ use serde_json::{Value, json};
 use thiserror::Error;
 use zeroize::Zeroizing;
 
+use crate::async_jobs::JobEventPage;
 use crate::catalog::{CATALOG_SHA256, CatalogError, ToolCatalog, ToolKind};
 use crate::policy::{PolicyError, ToolPolicy};
 use crate::strict_json::parse_unique_value;
@@ -58,6 +59,7 @@ pub struct AuthorizedToolCall {
     project_id: Option<String>,
     arguments_sha256: ContentDigest,
     arguments: Value,
+    now_unix_seconds: u64,
 }
 
 impl AuthorizedToolCall {
@@ -95,6 +97,11 @@ impl AuthorizedToolCall {
     pub const fn arguments(&self) -> &Value {
         &self.arguments
     }
+
+    #[must_use]
+    pub const fn now_unix_seconds(&self) -> u64 {
+        self.now_unix_seconds
+    }
 }
 
 impl fmt::Debug for AuthorizedToolCall {
@@ -110,6 +117,7 @@ impl fmt::Debug for AuthorizedToolCall {
             )
             .field("arguments_sha256", &"<redacted>")
             .field("arguments", &"<redacted>")
+            .field("now_unix_seconds", &self.now_unix_seconds)
             .finish()
     }
 }
@@ -133,7 +141,43 @@ pub trait ToolServiceGateway: fmt::Debug + Send {
     ///
     /// Returns only stable service categories. Implementations must re-check resource ownership at
     /// their own repository boundary and never expose raw backend errors.
-    fn dispatch(&mut self, call: AuthorizedToolCall) -> Result<Value, GatewayError>;
+    fn dispatch(&mut self, call: AuthorizedToolCall) -> Result<ToolServiceOutput, GatewayError>;
+}
+
+pub struct ToolServiceOutput {
+    structured_content: Value,
+    job_event_page: Option<JobEventPage>,
+}
+
+impl ToolServiceOutput {
+    #[must_use]
+    pub const fn new(structured_content: Value) -> Self {
+        Self {
+            structured_content,
+            job_event_page: None,
+        }
+    }
+
+    #[must_use]
+    pub const fn with_job_event_page(
+        structured_content: Value,
+        job_event_page: JobEventPage,
+    ) -> Self {
+        Self {
+            structured_content,
+            job_event_page: Some(job_event_page),
+        }
+    }
+}
+
+impl fmt::Debug for ToolServiceOutput {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("ToolServiceOutput")
+            .field("structured_content", &"<redacted>")
+            .field("has_job_event_page", &self.job_event_page.is_some())
+            .finish()
+    }
 }
 
 pub struct McpControlPlane<P, G> {
@@ -242,8 +286,9 @@ where
             project_id,
             arguments_sha256: ContentDigest::of(&canonical_arguments),
             arguments,
+            now_unix_seconds,
         };
-        let output = match self.gateway.dispatch(call) {
+        let service_output = match self.gateway.dispatch(call) {
             Ok(output) => output,
             Err(error) => {
                 let code = match error {
@@ -255,6 +300,17 @@ where
                 return McpToolResult::error(code, Some(&request_id), None);
             }
         };
+        let ToolServiceOutput {
+            structured_content: output,
+            job_event_page,
+        } = service_output;
+        if job_event_page.is_some() && tool != ToolKind::JobGet {
+            return McpToolResult::error(
+                PublicErrorCode::OutputSchemaInvalid,
+                Some(&request_id),
+                None,
+            );
+        }
         if !descriptor.output_is_valid(&output) {
             return McpToolResult::error(
                 PublicErrorCode::OutputSchemaInvalid,
@@ -269,7 +325,7 @@ where
                 None,
             );
         }
-        McpToolResult::success(tool, &request_id, output)
+        McpToolResult::success(tool, &request_id, output, job_event_page)
     }
 }
 
@@ -366,17 +422,31 @@ pub struct McpToolResult {
 }
 
 impl McpToolResult {
-    fn success(tool: ToolKind, request_id: &str, output: Value) -> Self {
+    fn success(
+        tool: ToolKind,
+        request_id: &str,
+        output: Value,
+        job_event_page: Option<JobEventPage>,
+    ) -> Self {
+        let mut meta = serde_json::Map::new();
+        meta.insert(
+            "hwpx/catalogSha256".to_owned(),
+            Value::String(CATALOG_SHA256.to_owned()),
+        );
+        meta.insert(
+            "hwpx/requestId".to_owned(),
+            Value::String(request_id.to_owned()),
+        );
+        if let Some(page) = job_event_page {
+            page.append_to_meta(&mut meta);
+        }
         Self {
             structured_content: output,
             content: vec![TextContent::new(format!(
                 "{} completed with a validated structured result.",
                 tool.name()
             ))],
-            meta: json!({
-                "hwpx/catalogSha256": CATALOG_SHA256,
-                "hwpx/requestId": request_id,
-            }),
+            meta: Value::Object(meta),
             is_error: false,
         }
     }
