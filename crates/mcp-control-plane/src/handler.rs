@@ -5,12 +5,17 @@ use auth_middleware::{AuthContext, AuthMiddleware};
 use serde::Serialize;
 use serde_json::{Value, json};
 use thiserror::Error;
+use uuid::Uuid;
 use zeroize::{Zeroize, Zeroizing};
 
 use crate::artifact_delivery::ArtifactToolDelivery;
 use crate::async_jobs::JobEventPage;
 use crate::catalog::{CATALOG_SHA256, CatalogError, ToolCatalog, ToolKind};
-use crate::policy::{PolicyError, ToolPolicy};
+use crate::error_catalog::{
+    ERROR_CATALOG_SHA256, ErrorCatalogError, PublicErrorCatalog, PublicErrorCode, PublicErrorStage,
+    PublicFailure, map_auth_error, map_gateway_error, map_policy_error,
+};
+use crate::policy::ToolPolicy;
 use crate::strict_json::parse_unique_value;
 
 pub const MAX_TOOL_NAME_BYTES: usize = 64;
@@ -21,6 +26,7 @@ pub struct McpToolRequest {
     authorization_header: Zeroizing<String>,
     arguments_json: Zeroizing<Vec<u8>>,
     now_unix_seconds: u64,
+    fallback_request_id: String,
 }
 
 impl McpToolRequest {
@@ -36,6 +42,7 @@ impl McpToolRequest {
             authorization_header: Zeroizing::new(authorization_header.into()),
             arguments_json: Zeroizing::new(arguments_json.into()),
             now_unix_seconds,
+            fallback_request_id: format!("req_server_{}", Uuid::new_v4().simple()),
         }
     }
 }
@@ -44,11 +51,13 @@ impl fmt::Debug for McpToolRequest {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         formatter
             .debug_struct("McpToolRequest")
-            .field("tool_name", &self.tool_name)
+            .field("tool_name", &"<redacted>")
+            .field("tool_name_bytes", &self.tool_name.len())
             .field("authorization_header", &"<redacted>")
             .field("arguments_json", &"<redacted>")
             .field("arguments_bytes", &self.arguments_json.len())
             .field("now_unix_seconds", &self.now_unix_seconds)
+            .field("fallback_request_id", &"<redacted>")
             .finish()
     }
 }
@@ -200,6 +209,7 @@ impl fmt::Debug for ToolServiceOutput {
 pub struct McpControlPlane<P, G> {
     auth: AuthMiddleware,
     catalog: ToolCatalog,
+    error_catalog: PublicErrorCatalog,
     policy: P,
     gateway: G,
 }
@@ -218,6 +228,7 @@ where
         Ok(Self {
             auth,
             catalog: ToolCatalog::load().map_err(InitializationError::Catalog)?,
+            error_catalog: PublicErrorCatalog::load().map_err(InitializationError::ErrorCatalog)?,
             policy,
             gateway,
         })
@@ -241,57 +252,110 @@ where
             authorization_header,
             arguments_json,
             now_unix_seconds,
+            fallback_request_id,
         } = request;
         if tool_name.is_empty() || tool_name.len() > MAX_TOOL_NAME_BYTES {
-            return McpToolResult::error(PublicErrorCode::ToolUnknown, None, None);
+            return McpToolResult::error(
+                &self.error_catalog,
+                PublicFailure::new(PublicErrorCode::ToolUnknown, PublicErrorStage::Admission),
+                &fallback_request_id,
+                None,
+            );
         }
         let Some(tool) = ToolKind::parse(&tool_name) else {
-            return McpToolResult::error(PublicErrorCode::ToolUnknown, None, None);
+            return McpToolResult::error(
+                &self.error_catalog,
+                PublicFailure::new(PublicErrorCode::ToolUnknown, PublicErrorStage::Admission),
+                &fallback_request_id,
+                None,
+            );
         };
         if arguments_json.is_empty() || arguments_json.len() > MAX_ARGUMENT_JSON_BYTES {
-            return McpToolResult::error(PublicErrorCode::RequestTooLarge, None, None);
+            return McpToolResult::error(
+                &self.error_catalog,
+                PublicFailure::new(
+                    PublicErrorCode::ToolRequestTooLarge,
+                    PublicErrorStage::Admission,
+                ),
+                &fallback_request_id,
+                None,
+            );
         }
         let descriptor = self.catalog.get(tool);
         let scopes = descriptor.scopes().to_vec();
-        let Ok(context) = self.auth.authenticate_public_mcp(
+        let context = match self.auth.authenticate_public_mcp(
             &authorization_header,
             now_unix_seconds,
             scopes.iter().copied(),
-        ) else {
-            let challenge = self
-                .auth
-                .challenge(scopes.iter().copied())
-                .ok()
-                .map(|value| value.www_authenticate());
-            return McpToolResult::error(PublicErrorCode::AuthenticationFailed, None, challenge);
+        ) {
+            Ok(context) => context,
+            Err(error) => {
+                let challenge = self
+                    .auth
+                    .challenge(scopes.iter().copied())
+                    .ok()
+                    .map(|value| value.www_authenticate());
+                return McpToolResult::error(
+                    &self.error_catalog,
+                    map_auth_error(error),
+                    &fallback_request_id,
+                    challenge,
+                );
+            }
         };
         let Ok(arguments) = parse_unique_value(&arguments_json) else {
-            return McpToolResult::error(PublicErrorCode::ArgumentsMalformed, None, None);
+            return McpToolResult::error(
+                &self.error_catalog,
+                PublicFailure::new(
+                    PublicErrorCode::ToolArgumentsMalformed,
+                    PublicErrorStage::Parse,
+                ),
+                &fallback_request_id,
+                None,
+            );
         };
         if !descriptor.input_is_valid(&arguments) {
-            return McpToolResult::error(PublicErrorCode::InputSchemaInvalid, None, None);
+            return McpToolResult::error(
+                &self.error_catalog,
+                PublicFailure::new(
+                    PublicErrorCode::ToolInputSchemaInvalid,
+                    PublicErrorStage::InputValidation,
+                ),
+                &fallback_request_id,
+                None,
+            );
         }
         let request_id = arguments
             .get("request_id")
             .and_then(Value::as_str)
             .map(str::to_owned);
         let Some(request_id) = request_id else {
-            return McpToolResult::error(PublicErrorCode::InputSchemaInvalid, None, None);
+            return McpToolResult::error(
+                &self.error_catalog,
+                PublicFailure::new(
+                    PublicErrorCode::ToolInputSchemaInvalid,
+                    PublicErrorStage::InputValidation,
+                ),
+                &fallback_request_id,
+                None,
+            );
         };
         if let Err(error) = self.policy.authorize(&context, tool, &arguments) {
-            let code = match error {
-                PolicyError::NotFound => PublicErrorCode::ResourceNotFound,
-                PolicyError::AccessDenied => PublicErrorCode::PolicyDenied,
-                PolicyError::InvalidConfiguration
-                | PolicyError::Conflict
-                | PolicyError::CapacityExceeded => PublicErrorCode::PolicyUnavailable,
-            };
-            return McpToolResult::error(code, Some(&request_id), None);
+            return McpToolResult::error(
+                &self.error_catalog,
+                map_policy_error(error),
+                &request_id,
+                None,
+            );
         }
         let Ok(canonical_arguments) = serde_json::to_vec(&arguments) else {
             return McpToolResult::error(
-                PublicErrorCode::ArgumentsMalformed,
-                Some(&request_id),
+                &self.error_catalog,
+                PublicFailure::new(
+                    PublicErrorCode::ToolArgumentsMalformed,
+                    PublicErrorStage::Parse,
+                ),
+                &request_id,
                 None,
             );
         };
@@ -313,13 +377,12 @@ where
         let service_output = match self.gateway.dispatch(call) {
             Ok(output) => output,
             Err(error) => {
-                let code = match error {
-                    GatewayError::NotFound => PublicErrorCode::ResourceNotFound,
-                    GatewayError::Conflict => PublicErrorCode::RequestConflict,
-                    GatewayError::Unavailable => PublicErrorCode::ServiceUnavailable,
-                    GatewayError::Rejected => PublicErrorCode::ServiceRejected,
-                };
-                return McpToolResult::error(code, Some(&request_id), None);
+                return McpToolResult::error(
+                    &self.error_catalog,
+                    map_gateway_error(error),
+                    &request_id,
+                    None,
+                );
             }
         };
         let ToolServiceOutput {
@@ -329,29 +392,45 @@ where
         } = service_output;
         if job_event_page.is_some() && tool != ToolKind::JobGet {
             return McpToolResult::error(
-                PublicErrorCode::OutputSchemaInvalid,
-                Some(&request_id),
+                &self.error_catalog,
+                PublicFailure::new(
+                    PublicErrorCode::ToolOutputSchemaInvalid,
+                    PublicErrorStage::OutputValidation,
+                ),
+                &request_id,
                 None,
             );
         }
         if artifact_delivery.is_some() && tool != ToolKind::ArtifactGet {
             return McpToolResult::error(
-                PublicErrorCode::OutputSchemaInvalid,
-                Some(&request_id),
+                &self.error_catalog,
+                PublicFailure::new(
+                    PublicErrorCode::ToolOutputSchemaInvalid,
+                    PublicErrorStage::OutputValidation,
+                ),
+                &request_id,
                 None,
             );
         }
         if !descriptor.output_is_valid(&output) {
             return McpToolResult::error(
-                PublicErrorCode::OutputSchemaInvalid,
-                Some(&request_id),
+                &self.error_catalog,
+                PublicFailure::new(
+                    PublicErrorCode::ToolOutputSchemaInvalid,
+                    PublicErrorStage::OutputValidation,
+                ),
+                &request_id,
                 None,
             );
         }
         if !correlation.matches(&output) {
             return McpToolResult::error(
-                PublicErrorCode::CorrelationMismatch,
-                Some(&request_id),
+                &self.error_catalog,
+                PublicFailure::new(
+                    PublicErrorCode::ToolResultCorrelationMismatch,
+                    PublicErrorStage::OutputValidation,
+                ),
+                &request_id,
                 None,
             );
         }
@@ -369,6 +448,7 @@ where
             .debug_struct("McpControlPlane")
             .field("auth", &self.auth)
             .field("catalog", &self.catalog)
+            .field("error_catalog", &self.error_catalog)
             .field("policy", &self.policy)
             .field("gateway", &self.gateway)
             .finish()
@@ -379,65 +459,8 @@ where
 pub enum InitializationError {
     #[error("public tool catalog initialization failed")]
     Catalog(#[source] CatalogError),
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-enum PublicErrorCode {
-    ToolUnknown,
-    RequestTooLarge,
-    AuthenticationFailed,
-    ArgumentsMalformed,
-    InputSchemaInvalid,
-    ResourceNotFound,
-    PolicyDenied,
-    PolicyUnavailable,
-    RequestConflict,
-    ServiceUnavailable,
-    ServiceRejected,
-    OutputSchemaInvalid,
-    CorrelationMismatch,
-}
-
-impl PublicErrorCode {
-    const fn as_str(self) -> &'static str {
-        match self {
-            Self::ToolUnknown => "TOOL_UNKNOWN",
-            Self::RequestTooLarge => "TOOL_REQUEST_TOO_LARGE",
-            Self::AuthenticationFailed => "AUTHENTICATION_FAILED",
-            Self::ArgumentsMalformed => "TOOL_ARGUMENTS_MALFORMED",
-            Self::InputSchemaInvalid => "TOOL_INPUT_SCHEMA_INVALID",
-            Self::ResourceNotFound => "RESOURCE_NOT_FOUND",
-            Self::PolicyDenied => "POLICY_DENIED",
-            Self::PolicyUnavailable => "POLICY_UNAVAILABLE",
-            Self::RequestConflict => "REQUEST_CONFLICT",
-            Self::ServiceUnavailable => "SERVICE_UNAVAILABLE",
-            Self::ServiceRejected => "SERVICE_REJECTED",
-            Self::OutputSchemaInvalid => "TOOL_OUTPUT_SCHEMA_INVALID",
-            Self::CorrelationMismatch => "TOOL_RESULT_CORRELATION_MISMATCH",
-        }
-    }
-
-    const fn safe_message(self) -> &'static str {
-        match self {
-            Self::ToolUnknown => "The requested tool is not available.",
-            Self::RequestTooLarge => "The tool request exceeds the allowed size.",
-            Self::AuthenticationFailed => "Authentication is required for this tool.",
-            Self::ArgumentsMalformed => "The tool arguments are not valid JSON.",
-            Self::InputSchemaInvalid => "The tool arguments do not match the public contract.",
-            Self::ResourceNotFound => "The requested resource was not found.",
-            Self::PolicyDenied => "The requested operation is not allowed.",
-            Self::PolicyUnavailable => "The authorization policy could not approve the request.",
-            Self::RequestConflict => "The request conflicts with the current resource state.",
-            Self::ServiceUnavailable => "The service is temporarily unavailable.",
-            Self::ServiceRejected => "The service rejected the request.",
-            Self::OutputSchemaInvalid => "The service returned an invalid result.",
-            Self::CorrelationMismatch => "The service result did not match the request.",
-        }
-    }
-
-    const fn retryable(self) -> bool {
-        matches!(self, Self::PolicyUnavailable | Self::ServiceUnavailable)
-    }
+    #[error("public error catalog initialization failed")]
+    ErrorCatalog(#[source] ErrorCatalogError),
 }
 
 #[derive(Serialize)]
@@ -465,6 +488,10 @@ impl McpToolResult {
             Value::String(CATALOG_SHA256.to_owned()),
         );
         meta.insert(
+            "hwpx/errorCatalogSha256".to_owned(),
+            Value::String(ERROR_CATALOG_SHA256.to_owned()),
+        );
+        meta.insert(
             "hwpx/requestId".to_owned(),
             Value::String(request_id.to_owned()),
         );
@@ -490,33 +517,40 @@ impl McpToolResult {
     }
 
     fn error(
-        code: PublicErrorCode,
-        request_id: Option<&str>,
+        catalog: &PublicErrorCatalog,
+        failure: PublicFailure,
+        request_id: &str,
         authentication_challenge: Option<String>,
     ) -> Self {
+        let descriptor = catalog.descriptor(failure);
         let mut meta = serde_json::Map::new();
         meta.insert(
             "hwpx/catalogSha256".to_owned(),
             Value::String(CATALOG_SHA256.to_owned()),
         );
-        if let Some(request_id) = request_id {
-            meta.insert(
-                "hwpx/requestId".to_owned(),
-                Value::String(request_id.to_owned()),
-            );
-        }
+        meta.insert(
+            "hwpx/errorCatalogSha256".to_owned(),
+            Value::String(ERROR_CATALOG_SHA256.to_owned()),
+        );
+        meta.insert(
+            "hwpx/requestId".to_owned(),
+            Value::String(request_id.to_owned()),
+        );
         if let Some(challenge) = authentication_challenge {
             meta.insert("mcp/www_authenticate".to_owned(), json!([challenge]));
         }
-        let safe_message = code.safe_message();
+        let safe_message = descriptor.safe_message();
         Self {
             structured_content: json!({
-                "schema_version": "hwpx-agent.tool-error/v1",
+                "schema_version": "hwpx-agent.error/v2",
                 "request_id": request_id,
-                "error_code": code.as_str(),
-                "retryable": code.retryable(),
+                "error_code": descriptor.error_code().as_str(),
+                "category": descriptor.category().as_str(),
                 "safe_message": safe_message,
-                "details": [],
+                "retryable": descriptor.retryable(),
+                "stage": failure.stage().as_str(),
+                "details": {},
+                "recovery": [{"action": descriptor.recovery_action().as_str()}],
             }),
             content: vec![json!({"type": "text", "text": safe_message})],
             meta: Value::Object(meta),

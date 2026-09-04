@@ -1,0 +1,183 @@
+{
+  "error_catalog_sha256": "7f85fb7a5c116ba6a262a5595906ccf3abf23df28ab5a567551f6904121ee2b7",
+  "error_codes": [
+    "AUTHENTICATION_FAILED",
+    "AUTHENTICATION_UNAVAILABLE",
+    "POLICY_DENIED",
+    "POLICY_UNAVAILABLE",
+    "REQUEST_CONFLICT",
+    "RESOURCE_NOT_FOUND",
+    "SERVICE_REJECTED",
+    "SERVICE_UNAVAILABLE",
+    "TOOL_ARGUMENTS_MALFORMED",
+    "TOOL_INPUT_SCHEMA_INVALID",
+    "TOOL_OUTPUT_SCHEMA_INVALID",
+    "TOOL_REQUEST_TOO_LARGE",
+    "TOOL_RESULT_CORRELATION_MISMATCH",
+    "TOOL_UNKNOWN"
+  ],
+  "error_envelope_schema_sha256": "b360d2f581150791c9a605553f64349db0fda6686d4539ee5cece346e47a24eb",
+  "handler_sequence_preserved": true,
+  "p15_05_implementation_commit": "dde79ff3fa86953c7f3e6e8e2402479eddee813e",
+  "public_envelope_version": "hwpx-agent.error/v2",
+  "required_behaviors": [
+    "digest_pinned_closed_error_catalog",
+    "authentication_before_argument_parse",
+    "server_correlation_before_validated_input",
+    "validated_public_request_id_after_input_validation",
+    "authentication_oracle_collapsed",
+    "typed_auth_policy_gateway_job_artifact_mapping",
+    "single_bounded_recovery_action",
+    "empty_public_details",
+    "no_secret_path_token_tenant_or_backend_leakage"
+  ],
+  "rust_error_mapping_tests": 5,
+  "rust_handler_regression_tests": 16,
+  "schema_version": "hwpx-agent.p15-error-mapping-contract/v1",
+  "scope": "current_pc_hancom_2020_local_public_error_reference",
+  "source_locks": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "dbf0bd590f36638a4a2b4f4f3e0fcfcb11b7178736b542c4420d51ec80342bc6"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "fa3ee66f3d9da7ff98381ab9118cf8f11f86e49e66d44054bf7d306a4f9e419b"
+    },
+    {
+      "path": "deny.toml",
+      "sha256": "1b7f0c7a65ba80242847fbb24483fa82708f28b361e425c76c48233d52073ef3"
+    },
+    {
+      "path": "security/dependency-policy.json",
+      "sha256": "753e93e1ee01ff92f965627b7a26baefaa90ca8e7e79a82b1afb87c08e8bff69"
+    },
+    {
+      "path": "docs/06_mcp_api/04_error_model.md",
+      "sha256": "8d2fe06289790df2b84ee4a937d8b25b637849a9e9daba0489267309f441b0b2"
+    },
+    {
+      "path": "docs/09_roadmap/P15_remote_mcp_control_plane.md",
+      "sha256": "5dfa9ef97733be0018aec70f862bf9a4d73301bd02c677b2122f982a18364648"
+    },
+    {
+      "path": "specs/error-envelope.schema.json",
+      "sha256": "b360d2f581150791c9a605553f64349db0fda6686d4539ee5cece346e47a24eb"
+    },
+    {
+      "path": "protocol/mcp/p15-public-tools-v1.json",
+      "sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001"
+    },
+    {
+      "path": "protocol/mcp/p15-public-error-catalog-v1.json",
+      "sha256": "7f85fb7a5c116ba6a262a5595906ccf3abf23df28ab5a567551f6904121ee2b7"
+    },
+    {
+      "path": "implementation/p15/p15-handler-contract-v1.json",
+      "sha256": "f79dfeac599b11a122569e1796d428298f341f53f91d3893460c6d7c1d704f0a"
+    },
+    {
+      "path": "implementation/p15/p15-async-job-contract-v1.json",
+      "sha256": "311e9272373da0129693ad87c8a42e1e6c56b17b34ccb1312eed630b7f049c32"
+    },
+    {
+      "path": "implementation/p15/p15-artifact-delivery-contract-v1.json",
+      "sha256": "df025b658d49991f80b392a8afa693c412ef14ad5e90c770356956405c7e42a5"
+    },
+    {
+      "path": "implementation/p15/P15-06_ERROR_MAPPING_POLICY.md",
+      "sha256": "35cd6db42b2154c89f79567d6d2f4bfd78dc3e75b6f92f3592ddaf71834209a8"
+    },
+    {
+      "path": "crates/mcp-control-plane/Cargo.toml",
+      "sha256": "6e2c7d2b8a2a3c581114aba0c8cfbb5110c3157baaf717fb2b8748449e702bc5"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/lib.rs",
+      "sha256": "5fed2176a417613c5a2e3b1ef4e148c5015594317ae92f7822db79196c727848"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/catalog.rs",
+      "sha256": "69860323b71de2f2f1836fa90a78a41b44dd8a5016f9211a4d7f7e06373952cf"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/error_catalog.rs",
+      "sha256": "1e77939f2ace14eab7b0a2b60a1aa7c3dc31181b919c28ccb1e0921b4bf23fef"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/handler.rs",
+      "sha256": "5f38d16a0765998f6119f60cb2f84cf2207c6ae946784c7789f8497d50eb663c"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/policy.rs",
+      "sha256": "32513728470e18608d1eeff419e83ece628d6a9c4dd2a948c1c95012e97412ac"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/strict_json.rs",
+      "sha256": "f8c4e72cb8afa4c9df37259e6b9e143dbdada228cbf9456bad8a26360ac8a882"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/async_jobs.rs",
+      "sha256": "4b5237c77d6e1c7c97d46ed87e31921c10958cec2d9ee3a01fd2c7d95a15c304"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/artifact_delivery.rs",
+      "sha256": "89865b110bd304f03ab2d9fa7c81bb074ead873f51b92b470792f46c7dc26915"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/handler_contract.rs",
+      "sha256": "5413f5f9cd00cbdf3f081ae37b50667e970d8033e0811d4bb5c5752ba62c63d2"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/async_job_ux.rs",
+      "sha256": "0870b6137fee8ab28f434fcdef3b7713611ff91572c2bf042b1e3f71764e6be6"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/artifact_delivery.rs",
+      "sha256": "cf7db5eb60f6511e9276162f02240ac0d43b91a25ab8246d0b0cfd2c76efe22a"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/error_mapping.rs",
+      "sha256": "ccc97909ca15a5ec3f124e048ef09ddb6a89a4725cf33dee6c70432290648cc1"
+    },
+    {
+      "path": "tools/p15/validate_async_job_contract.py",
+      "sha256": "f8efb3afdf5c35c6f8f8f787956b9d4e814609387c44ae804aeaa532716440a3"
+    },
+    {
+      "path": "tools/p15/build_artifact_delivery_contract.py",
+      "sha256": "1c23185500d6ed9605560c43395468ffa62d82677cc8ab465454bbf617620daf"
+    },
+    {
+      "path": "tools/p15/validate_artifact_delivery_contract.py",
+      "sha256": "7920e09b33ed103ec3d71b6011986e22fee3abe56fece4bb780792ff29208e53"
+    },
+    {
+      "path": "tools/p15/build_error_mapping_contract.py",
+      "sha256": "9bdeff309dd831ae4b6b5e8265e80f7404c123b76fc7aa8bb08e792962b89800"
+    },
+    {
+      "path": "tools/p15/validate_error_mapping_contract.py",
+      "sha256": "142a810d30d784556ae8c9400cde19b2cc5a5c55a50006ec7b8af8a74654400e"
+    },
+    {
+      "path": "tools/p15/tests/test_artifact_delivery_contract.py",
+      "sha256": "32cc6e88373523ab1c838c76cc1c2e86b2a3f9e4d97d180dd33c9b751c69c962"
+    },
+    {
+      "path": "tools/p15/tests/test_error_mapping_contract.py",
+      "sha256": "e9c0f2197707b7a515718178c83d4753656fa79bee52f84ddb6391b4597aa585"
+    }
+  ],
+  "stages": [
+    "admission",
+    "authenticate",
+    "parse",
+    "input_validation",
+    "policy",
+    "dispatch",
+    "output_validation"
+  ],
+  "target_profile": "hancom-hangul-2020-secondary",
+  "tool_catalog_sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001"
+}

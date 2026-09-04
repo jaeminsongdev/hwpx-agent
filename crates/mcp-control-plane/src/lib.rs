@@ -7,6 +7,7 @@
 mod artifact_delivery;
 mod async_jobs;
 mod catalog;
+mod error_catalog;
 mod handler;
 mod policy;
 mod strict_json;
@@ -20,6 +21,12 @@ pub use async_jobs::{
     JobProgressStage,
 };
 pub use catalog::{CATALOG_SHA256, ToolKind};
+pub use error_catalog::{
+    ERROR_CATALOG_SHA256, ErrorCatalogError, PublicErrorCategory, PublicErrorCode,
+    PublicErrorDescriptor, PublicErrorStage, PublicFailure, RecoveryAction,
+    map_artifact_delivery_error, map_async_job_error, map_auth_error, map_gateway_error,
+    map_policy_error,
+};
 pub use handler::{
     AuthorizedToolCall, GatewayError, McpControlPlane, McpToolRequest, McpToolResult,
     ToolServiceGateway, ToolServiceOutput,

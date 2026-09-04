@@ -1,0 +1,146 @@
+{
+  "errors": [
+    {
+      "allowed_stages": [
+        "authenticate"
+      ],
+      "category": "security",
+      "error_code": "AUTHENTICATION_FAILED",
+      "recovery_action": "reauthenticate",
+      "retryable": false,
+      "safe_message": "Authentication is required for this tool."
+    },
+    {
+      "allowed_stages": [
+        "authenticate"
+      ],
+      "category": "security",
+      "error_code": "AUTHENTICATION_UNAVAILABLE",
+      "recovery_action": "retry_later",
+      "retryable": true,
+      "safe_message": "The authentication service is temporarily unavailable."
+    },
+    {
+      "allowed_stages": [
+        "policy"
+      ],
+      "category": "security",
+      "error_code": "POLICY_DENIED",
+      "recovery_action": "request_access",
+      "retryable": false,
+      "safe_message": "The requested operation is not allowed."
+    },
+    {
+      "allowed_stages": [
+        "policy"
+      ],
+      "category": "security",
+      "error_code": "POLICY_UNAVAILABLE",
+      "recovery_action": "retry_later",
+      "retryable": true,
+      "safe_message": "The authorization policy could not approve the request."
+    },
+    {
+      "allowed_stages": [
+        "dispatch"
+      ],
+      "category": "conflict",
+      "error_code": "REQUEST_CONFLICT",
+      "recovery_action": "refresh_resource",
+      "retryable": false,
+      "safe_message": "The request conflicts with the current resource state."
+    },
+    {
+      "allowed_stages": [
+        "policy",
+        "dispatch"
+      ],
+      "category": "document",
+      "error_code": "RESOURCE_NOT_FOUND",
+      "recovery_action": "refresh_resource",
+      "retryable": false,
+      "safe_message": "The requested resource was not found."
+    },
+    {
+      "allowed_stages": [
+        "dispatch"
+      ],
+      "category": "backend",
+      "error_code": "SERVICE_REJECTED",
+      "recovery_action": "inspect_request",
+      "retryable": false,
+      "safe_message": "The service rejected the request."
+    },
+    {
+      "allowed_stages": [
+        "dispatch"
+      ],
+      "category": "backend",
+      "error_code": "SERVICE_UNAVAILABLE",
+      "recovery_action": "retry_later",
+      "retryable": true,
+      "safe_message": "The service is temporarily unavailable."
+    },
+    {
+      "allowed_stages": [
+        "parse"
+      ],
+      "category": "input",
+      "error_code": "TOOL_ARGUMENTS_MALFORMED",
+      "recovery_action": "fix_request",
+      "retryable": false,
+      "safe_message": "The tool arguments are not valid JSON."
+    },
+    {
+      "allowed_stages": [
+        "input_validation"
+      ],
+      "category": "input",
+      "error_code": "TOOL_INPUT_SCHEMA_INVALID",
+      "recovery_action": "fix_request",
+      "retryable": false,
+      "safe_message": "The tool arguments do not match the public contract."
+    },
+    {
+      "allowed_stages": [
+        "output_validation"
+      ],
+      "category": "internal",
+      "error_code": "TOOL_OUTPUT_SCHEMA_INVALID",
+      "recovery_action": "contact_support",
+      "retryable": false,
+      "safe_message": "The service returned an invalid result."
+    },
+    {
+      "allowed_stages": [
+        "admission"
+      ],
+      "category": "input",
+      "error_code": "TOOL_REQUEST_TOO_LARGE",
+      "recovery_action": "reduce_request",
+      "retryable": false,
+      "safe_message": "The tool request exceeds the allowed size."
+    },
+    {
+      "allowed_stages": [
+        "output_validation"
+      ],
+      "category": "internal",
+      "error_code": "TOOL_RESULT_CORRELATION_MISMATCH",
+      "recovery_action": "contact_support",
+      "retryable": false,
+      "safe_message": "The service result did not match the request."
+    },
+    {
+      "allowed_stages": [
+        "admission"
+      ],
+      "category": "input",
+      "error_code": "TOOL_UNKNOWN",
+      "recovery_action": "use_supported_tool",
+      "retryable": false,
+      "safe_message": "The requested tool is not available."
+    }
+  ],
+  "schema_version": "hwpx-agent.public-error-catalog/v1"
+}

@@ -17,6 +17,7 @@ P15_05_SUPERSEDED_PATHS = {
     "crates/mcp-control-plane/Cargo.toml",
     "crates/mcp-control-plane/src/lib.rs",
     "crates/mcp-control-plane/src/handler.rs",
+    "crates/mcp-control-plane/tests/handler_contract.rs",
     "tools/p15/build_async_job_contract.py",
     "tools/p15/validate_async_job_contract.py",
 }

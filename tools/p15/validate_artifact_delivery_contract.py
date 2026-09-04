@@ -1,14 +1,26 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
+import subprocess
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = ROOT / "implementation/p15/p15-artifact-delivery-contract-v1.json"
+P15_05_AUDITED_REVISION = "dde79ff3fa86953c7f3e6e8e2402479eddee813e"
+P15_06_SUPERSEDING_VALIDATOR = "tools/p15/validate_error_mapping_contract.py"
+P15_06_SUPERSEDED_PATHS = {
+    "crates/mcp-control-plane/src/lib.rs",
+    "crates/mcp-control-plane/src/handler.rs",
+    "crates/mcp-control-plane/tests/handler_contract.rs",
+    "tools/p15/build_artifact_delivery_contract.py",
+    "tools/p15/validate_async_job_contract.py",
+    "tools/p15/validate_artifact_delivery_contract.py",
+}
 
 EXPECTED_KEYS = {
     "artifact_tool",
@@ -123,8 +135,37 @@ def artifact_tool(catalog: dict[str, Any]) -> dict[str, Any] | None:
     return matches[0] if len(matches) == 1 else None
 
 
+def validate_p15_06_supersession(root: Path) -> list[str]:
+    validator_path = root / P15_06_SUPERSEDING_VALIDATOR
+    specification = importlib.util.spec_from_file_location(
+        "p15_error_mapping_superseding_validator", validator_path
+    )
+    if specification is None or specification.loader is None:
+        return ["p15_06_supersession.validator_load"]
+    module = importlib.util.module_from_spec(specification)
+    try:
+        specification.loader.exec_module(module)
+        errors = module.validate(root)
+    except Exception:
+        return ["p15_06_supersession.validation"]
+    if errors:
+        return ["p15_06_supersession.contract"]
+    return []
+
+
+def historical_source_matches(root: Path, relative: str, expected: str) -> bool:
+    result = subprocess.run(
+        ["git", "show", f"{P15_05_AUDITED_REVISION}:{relative}"],
+        cwd=root,
+        check=False,
+        capture_output=True,
+    )
+    return result.returncode == 0 and hashlib.sha256(result.stdout).hexdigest() == expected
+
+
 def validate(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
+    p15_06_supersession_errors = validate_p15_06_supersession(root)
     try:
         contract = load_json(root / CONTRACT_PATH.relative_to(ROOT))
     except Exception as error:
@@ -218,7 +259,10 @@ def validate(root: Path = ROOT) -> list[str]:
             if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
                 errors.append(f"source_lock[{index}].digest_shape")
             elif sha256(source) != expected:
-                errors.append(f"source_lock[{index}].digest")
+                if relative not in P15_06_SUPERSEDED_PATHS or p15_06_supersession_errors:
+                    errors.append(f"source_lock[{index}].digest")
+                elif not historical_source_matches(root, relative, expected):
+                    errors.append(f"source_lock[{index}].historical_digest")
 
     source = (root / "crates/mcp-control-plane/src/artifact_delivery.rs").read_text(
         encoding="utf-8"

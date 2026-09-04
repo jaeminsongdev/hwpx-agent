@@ -453,6 +453,38 @@ fn authentication_precedes_json_parsing_and_returns_discovery_challenge() {
         NOW,
     ));
     assert_eq!(result.error_code(), Some("AUTHENTICATION_FAILED"));
+    let fallback_request_id = result
+        .structured_content()
+        .get("request_id")
+        .and_then(Value::as_str)
+        .unwrap_or_else(|| panic!("missing server correlation id"));
+    assert!(fallback_request_id.starts_with("req_server_"));
+    assert_eq!(fallback_request_id.len(), 43);
+    assert_eq!(
+        result.structured_content(),
+        &json!({
+            "schema_version": "hwpx-agent.error/v2",
+            "request_id": fallback_request_id,
+            "error_code": "AUTHENTICATION_FAILED",
+            "category": "security",
+            "safe_message": "Authentication is required for this tool.",
+            "retryable": false,
+            "stage": "authenticate",
+            "details": {},
+            "recovery": [{"action": "reauthenticate"}],
+        })
+    );
+    assert_eq!(
+        result.meta().get("hwpx/requestId").and_then(Value::as_str),
+        Some(fallback_request_id)
+    );
+    assert_eq!(
+        result
+            .meta()
+            .get("hwpx/errorCatalogSha256")
+            .and_then(Value::as_str),
+        Some(mcp_control_plane::ERROR_CATALOG_SHA256)
+    );
     assert!(result.meta().get("mcp/www_authenticate").is_some());
     assert_eq!(fixture.policy_calls.load(Ordering::SeqCst), 0);
     assert_eq!(fixture.gateway_calls.load(Ordering::SeqCst), 0);
@@ -520,6 +552,20 @@ fn cross_tenant_project_is_indistinguishable_from_missing() {
     let request = request(&fixture, ToolKind::ProjectOpen);
     let result = fixture.control.handle(request);
     assert_eq!(result.error_code(), Some("RESOURCE_NOT_FOUND"));
+    assert_eq!(
+        result
+            .structured_content()
+            .get("request_id")
+            .and_then(Value::as_str),
+        Some("req_example01")
+    );
+    assert_eq!(
+        result
+            .structured_content()
+            .get("stage")
+            .and_then(Value::as_str),
+        Some("policy")
+    );
     assert_eq!(fixture.policy_calls.load(Ordering::SeqCst), 1);
     assert_eq!(fixture.gateway_calls.load(Ordering::SeqCst), 0);
 }
@@ -652,6 +698,13 @@ fn success_result_has_bounded_mcp_shape_and_no_bearer() {
             .and_then(Value::as_str),
         Some(mcp_control_plane::CATALOG_SHA256)
     );
+    assert_eq!(
+        result
+            .meta()
+            .get("hwpx/errorCatalogSha256")
+            .and_then(Value::as_str),
+        Some(mcp_control_plane::ERROR_CATALOG_SHA256)
+    );
     assert!(result.content_text().len() < 128);
     let serialized = serde_json::to_string(&result)
         .unwrap_or_else(|error| panic!("serialize success result: {error}"));
@@ -693,12 +746,13 @@ fn request_and_result_debug_output_redacts_bearer_and_arguments() {
         PolicyBinding::SameTenantOwner,
     );
     let private_request = McpToolRequest::new(
-        "project_open",
+        "TOP_SECRET_TOOL_NAME",
         "Bearer TOP_SECRET_TOKEN",
         br#"{"intent":"PRIVATE_DOCUMENT_TEXT"}"#.to_vec(),
         NOW,
     );
     let request_debug = format!("{private_request:?}");
+    assert!(!request_debug.contains("TOP_SECRET_TOOL_NAME"));
     assert!(!request_debug.contains("TOP_SECRET_TOKEN"));
     assert!(!request_debug.contains("PRIVATE_DOCUMENT_TEXT"));
     let valid_request = request(&fixture, ToolKind::ProjectOpen);
