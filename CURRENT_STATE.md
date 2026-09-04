@@ -9,7 +9,7 @@
 
 - 상태: `P05_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐으며, P14-01~05 metadata/artifact/revision/history/job service는 local in-memory 및 disposable PostgreSQL 범위의 각 Gate를 통과했다. 현재 비-UI 작업은 P14-06 worker lease/fencing이다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐으며, P14-01~05 metadata/artifact/revision/history/job service는 local in-memory 및 disposable PostgreSQL 범위의 각 Gate를 통과했다. P14-06 worker lease/fencing 구현과 non-security evidence는 완료됐고 NPM audit 응답을 기다린다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -90,7 +90,7 @@
 
 - P05-01~06 `PASS`: bounded text flow, character/paragraph styles, tabs, lists/numbering과 page setup이 각 typed contract, negative/fixed corpus, cross-platform tests와 해당 보고서의 범위에서 완료됐다.
 - P05-07~09 core는 section/columns, header/footer와 layout model/test fixture를 갖췄지만 release 판정에 필요한 실제 한글 2020 save/reopen/PDF/render evidence는 열려 있다.
-- P05-07 v2 시도 10~13은 모두 `open_input`에서 bounded timeout됐다. 입력은 불변이고 output/PDF는 없으며 owned `Hwp.exe`와 잔류 프로세스는 0이다. 따라서 P05-07~09와 P05 Gate를 PASS로 올리지 않는다.
+- P05-07 v2 시도 10~14는 모두 `open_input`에서 bounded timeout됐다. 입력은 불변이고 output/PDF는 없으며 owned `Hwp.exe`와 잔류 프로세스는 0이다. 따라서 P05-07~09와 P05 Gate를 PASS로 올리지 않는다.
 
 ## P10 현재 상태
 
@@ -101,15 +101,15 @@
 
 - P14-01~05는 각 exact clean source commit, digest-bound PostgreSQL 18.4 receipt, Rust/SQL negative tests, non-security CI, offline Linux와 current security evidence에 따라 scoped PASS다.
 - P14-04의 이전 `pnpm audit` timeout 조건은 commit `3876679`의 현재 bounded security run에서 첫 timeout cleanup 후 동일 2차 시도가 성공해 해소됐다.
-- P14-05 job service는 single-attempt structural lease/fence와 exact transition/ACL/qualification/terminal invariants만 증명한다. P14-06 expiry/heartbeat/late-worker fencing, P14-07 retry/reconciliation, P14-08 cancel/cleanup과 P14-09 retention/mirror는 아직 미구현이다.
+- P14-06은 core commit `205f4ac`에서 exact worker selection, bounded heartbeat/lease, late-worker/fence rejection과 qualified expiry를 Rust 및 disposable PostgreSQL로 증명했다. 다만 현재 security lane의 `pnpm audit`가 외부 advisory POST timeout 3회로 실패해 roadmap checkbox는 아직 열려 있다. P14-07 retry/reconciliation, P14-08 cancel/cleanup과 P14-09 retention/mirror는 미구현이다.
 
 ## 다음 작업
 
-비-UI 순서는 P14-06 scheduler capability/profile matching, heartbeat, lease expiry와 late-worker commit rejection 구현이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `접근 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
+비-UI 순서는 NPM advisory API가 응답할 때 변경 없는 P14-06 security lane을 다시 실행해 실제 PASS를 확보한 뒤 P14-07 durable idempotency/retry/reconciliation을 시작하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `접근 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
 
 ## 현재 blocker
 
-- 비-UI P14-06 구현 blocker는 없다.
+- P14-06 구현 blocker는 없고, formal closure만 NPM advisory API 응답을 기다린다.
 - P05-07 actual render는 한글 2020의 수동 `접근 허용` 타이밍에 의존한다.
 - P10-05/06과 P10-08 production 범위는 외부 보안 모듈·격리 환경이 제공되기 전까지 unqualified다.
 

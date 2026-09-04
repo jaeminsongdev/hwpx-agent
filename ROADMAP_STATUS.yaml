@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_to_p04_complete_p05_01_to_06_complete_p05_07_to_09_actual_render_pending_p10_partial_p14_01_to_05_complete
+  product_code_scope: p01_to_p04_complete_p05_01_to_06_complete_p05_07_to_09_actual_render_pending_p10_partial_p14_01_to_05_complete_p14_06_core_security_pending
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -743,7 +743,7 @@ p14_execution:
     P14-03: passed_local_disposable_postgres_and_in_memory_service
     P14-04: passed_local_disposable_postgres_and_in_memory_service
     P14-05: passed_local_disposable_postgres_and_in_memory_service
-    P14-06: next_worker_lease_fencing
+    P14-06: implementation_and_non_security_evidence_pass_security_audit_response_pending
     P14-07: blocked_by_P14-06
     P14-08: blocked_by_P14-07
     P14-09: blocked_by_P14-08
@@ -764,6 +764,24 @@ p14_execution:
     source_mutation_paths: 0
     user_documents_opened: false
     hancom_runtime_executed_by_task: false
+  worker_lease_fencing:
+    audited_source_commit: 205f4acd845bcd9ef968e87a7d912cb0d7e81abf
+    contract: hwpx-agent.p14-worker-lease-fencing/v1
+    crate: scheduler-service
+    rust_tests_windows_linux: 22_of_22_passed
+    p14_negative_tests: 76_of_76_passed
+    postgres_server: 18.4
+    postgres_smoke_assertions: 20_of_20_twice
+    migration_apply_reapply: passed
+    rollback_retains_v5: true
+    rollback_with_later_version_refused: true
+    source_tree_clean_receipt: true
+    local_non_security_ci_lanes: 4_of_4_passed
+    offline_linux_network_disabled: passed
+    security_lane: pending_pnpm_audit_advisory_api_response
+    source_mutation_paths: 0
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope
@@ -779,7 +797,7 @@ phases:
   P11: blocked_by_P06_P07_P08_P09_P10
   P12: blocked_by_P06_P07_P08_P09_P11
   P13: blocked_by_P10
-  P14: in_progress_P14_01_to_05_scoped_pass_P14_06_next
+  P14: in_progress_P14_01_to_05_scoped_pass_P14_06_security_pending
   P15: blocked_by_P14
   P16: blocked_by_P15
   P17: blocked_by_P15
