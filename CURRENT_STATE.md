@@ -9,7 +9,7 @@
 
 - 상태: `P05_IN_PROGRESS_AND_P15_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT` + `P15_REMOTE_MCP_CONTROL_PLANE`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했다. P15-01 bounded Auth/tenant resource-server middleware, P15-02의 18개 public MCP tool schema/snapshot, P15-03 공통 handler boundary, P15-04 durable Async job UX와 P15-05 bounded Artifact delivery가 통과했고 P15-06 Error mapping이 다음 비-UI 구현이다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했다. P15-01 bounded Auth/tenant resource-server middleware, P15-02의 18개 public MCP tool schema/snapshot, P15-03 공통 handler boundary, P15-04 durable Async job UX, P15-05 bounded Artifact delivery와 P15-06 stable public Error mapping이 통과했고 P15-07 Rate limit/quotas가 다음 비-UI 구현이다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -152,10 +152,20 @@
   이는 current-PC local delivery reference PASS이며 production HTTPS/object store/streaming,
   hosted attachment resolution과 key custody는 unverified다. Authoritative report는
   `implementation/p15/P15-05_REPORT.md`다.
+- P15-06은 commit `f36a07e`에서 digest-pinned 14-code catalog와 `hwpx-agent.error/v2`를
+  고정하고 Auth/Policy/Gateway/Async-job/Artifact-delivery 모든 현재 variant를 exhaustive하게
+  매핑했다. Authentication은 parse보다 먼저 유지되며, schema 검증 전에는 server-generated
+  correlation만 사용하고 raw error/token/path/identity/backend payload를 공개하거나 Debug에
+  남기지 않는다.
+- Error mapping Rust 5/5와 기존 artifact/async/handler 40/40, P15 Python 57/57, final exact
+  independent checkout CI 5/5, security와 network-disabled read-only Linux 검증이 통과했다.
+  이는 current-PC local public error reference PASS이며 production HTTP mapping, hosted
+  transport와 telemetry는 unverified다. Authoritative report는
+  `implementation/p15/P15-06_REPORT.md`다.
 
 ## 다음 작업
 
-비-UI 순서는 P15-06에서 auth/schema/policy/service/job/artifact 내부 오류를 하나의 stable public envelope/catalog로 매핑하고 retryability와 no-secret-leakage negative/E2E를 증명하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
+비-UI 순서는 P15-07에서 tenant/user/capability/job-class별 rate limit과 quota를 고정하고 bounded burst, fairness, retry guidance, concurrency/idempotency를 증명하는 것이며 추론수준은 `max`다. P05-07 actual render는 해당 UI 게이트가 활성화될 때 사용자에게 먼저 알리고, 사용자가 모든 `모두 허용`을 누르는 동안 save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
 
 ## 현재 blocker
 
