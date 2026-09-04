@@ -46,7 +46,7 @@ Windows Hancom Automation Bridge를 문서상 계획이 아니라 **재현 가�
 - [ ] `P10-06` 산출물 `executor` 존재, 검증: unknown/raw action rejection.
 - [x] `P10-07` 산출물 `watchdog` 존재, 검증: unknown modal fail-closed.
 - [ ] `P10-08` 산출물 `worker image/runbook` 존재, 검증: residue/isolation audit.
-- [ ] `P10-09` 산출물 `supervisor` 존재, 검증: hang/retry/no duplicate effect.
+- [x] `P10-09` 산출물 `supervisor` 존재, 검증: hang/retry/no duplicate effect.
 - [ ] `P10-10` 산출물 `probe agent` 존재, 검증: profile mismatch no lease.
 - [ ] 새 capability/contract/schema에 migration과 negative test가 있다.
 - [ ] 실제 수행하지 않은 검증은 `unverified`로 남았다.
@@ -56,6 +56,11 @@ Windows Hancom Automation Bridge를 문서상 계획이 아니라 **재현 가�
 현재-PC 개발용 P10-08 core와 실제 감사는 완료됐지만, 실제 감사에서 OS outbound deny,
 전용 identity/profile/window station, clipboard 격리와 profile/recovery/printer residue 감사가
 미충족으로 확인됐다. 따라서 위 P10-08 hard-gate checkbox는 전용 환경 증거 전까지 열어 둔다.
+
+P10-09는 현재 PC의 exact-commit 감사에서 hard timeout, unknown/no-effect reconciliation,
+실제 Windows Job Object 자식 트리 recycle, 동일 execution의 byte-identical terminal replay와
+executor effect 1회를 함께 검증했다. 이는 supervisor Gate만 닫으며 P10-05/06/08, 실제 사용자
+문서 timeout, 다른 PC 또는 한글 2022/2024 증거로 승격하지 않는다.
 
 ## 금지
 

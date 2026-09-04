@@ -2,9 +2,9 @@
 
 - Updated: 2026-09-04
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P10 / P10-09 timeout/recycle`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P10 / P10-10 runtime probe`
 - Active reasoning effort: `max`
-- Immediate UI dependency: none live; P05-07 v2 attempt 04 timed out safely, relaunch only when the user can immediately click the visible `접근 허용`
+- Immediate UI dependency: none live; P05-07 v2 attempt 05 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `접근 허용`
 
 ## Objective and non-negotiable boundaries
 
@@ -33,7 +33,7 @@ save, render, cross-version or production proof.
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
 | P09 | `blocked_by_P05` | fields/forms/notes/references |
-| P10 | `in_progress_current_pc_local` | P10-01~04,07 pass; P10-05/06 actual dependencies pending; P10-08 current-PC core/audit done but dedicated controls unqualified; P10-09 next |
+| P10 | `in_progress_current_pc_local` | P10-01~04,07,09 pass; P10-05/06 actual dependencies pending; P10-08 current-PC core/audit done but dedicated controls unqualified; P10-10 next |
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
@@ -71,6 +71,7 @@ save, render, cross-version or production proof.
 | P-0056 | P10-07 Event/modal watchdog | `pass_scoped_current_pc_local` | commits `b0f3b6f` + `b4c7a54`; actual events 6, unknown modal fail-closed, smoke 13/13, static 23/23, clean FULL 5/5 |
 | P-0057 | P10-08 worker isolation | `core_ready_current_pc_audit_pass_dedicated_unqualified` | mandatory machine-bound pre-lease/post-job guard; Agent 18/18, static 24/24, policy negatives 8/8; actual Session 1/workspace/process audit pass, OS outbound deny and dedicated controls false |
 | P-0058 | P01 security audit runner reliability | `harness_pass_actual_registry_audit_unverified_timeout` | 60s x 3 fail-closed retry, process-tree cleanup, immutable per-run report/SBOM; unit 8/8; actual audit timed out 3/3 while all other checks passed |
+| P-0059 | P10-09 timeout/recycle supervisor | `pass_scoped_current_pc_local` | commits `c1ed4b2` + `4fa4711`; Agent 28/28, static 28/28, policy/audit 10/10, integrated hard-timeout to actual Job Object tree recycle and byte-identical replay |
 
 ## Active evidence summary
 
@@ -79,9 +80,11 @@ open/read/save/reopen/read/quit, unchanged source, equal text digest, a 19-event
 zero residual processes. P05-07 retry 10 exposed that both fixture spine rows were `linear=no` and
 Hangul read only section one. Commit `9096502` changes both to `linear=yes`, adds self-inspection and
 four builder tests. The v2 fixture independently inspects as two sections and one break, but its
-user-approved save/reopen/PDF acceptance has not run. Attempt 04 timed out at `open_input`; it left
+user-approved save/reopen/PDF acceptance has not run. Attempt 05 timed out at `open_input`; it left
 the input digest unchanged, created no output/PDF, cleaned its one owned `Hwp.exe`, and left zero
-residual processes. P05-08~09 actual render evidence is also open.
+residual processes. Its immutable trace is 1,690 bytes with SHA-256
+`f9644cb119944baaf029ae5b142dee55bd8d68c91892227abccfaa412fc92764`. P05-08~09 actual render
+evidence is also open.
 
 P10-01~04 are closed by their reports. P10-05 core commit `b830f74` has Agent/Worker lease, path and
 allowed/denied coverage, but Registry32 still reports zero registered security modules; no module was
@@ -102,7 +105,15 @@ marked workspace and zero `Hwp.exe` after execution. Agent smoke passes 18/18, p
 8/8 and static checks 24/24. The actual current-PC audit passed only for local development; it also
 recorded that OS default outbound deny, dedicated identity/profile/window station, clipboard
 isolation and profile/recovery/printer residue audits are not qualified. The roadmap P10-08 hard
-gate therefore remains open while P10-09 implementation proceeds.
+gate therefore remains open.
+
+P10-09 commits `c1ed4b2` and `4fa4711` add bounded cancellation/reconciliation/recycle supervision,
+strict no-effect versus unknown-effect classification, startup quarantine and suspended-start Windows
+Job Object ownership. Agent smoke passes 28/28, static checks 28/28 and policy/audit tests 10/10. The
+accepted current-host audit at exact revision `4fa4711` proves one hard timeout terminates an actual
+root-plus-descendant process tree and the same execution replays byte-identical terminal evidence
+without a duplicate executor effect. Its scope remains this current local PC and does not promote
+P10-05, P10-06 or P10-08.
 
 The exact `aee2818` clean clone passed the first four lanes, but two security runs failed only at the
 npm audit endpoint. The runner now bounds that call to 60 seconds x 3, retries only safely cleaned
@@ -121,7 +132,8 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next action
 
-When the user is immediately available, rerun P05-07, then P05-08 and P05-09 serially with required
-save/reopen/PDF/render evidence before the strict P05 Gate. In the non-UI lane, implement P10-09
-timeout/recycle and unknown-outcome reconciliation. Keep P10-05 actual module registration and dependent P10-06
-production execution unverified until an approved module exists. Continue at reasoning effort `max`.
+On a new explicit user request while the user is immediately available, rerun P05-07, then P05-08
+and P05-09 serially with required save/reopen/PDF/render evidence before the strict P05 Gate. In the
+non-UI lane, implement P10-10 runtime probe. Keep P10-05 actual module registration and dependent
+P10-06 production execution unverified until an approved module exists. Continue at reasoning effort
+`max`.
