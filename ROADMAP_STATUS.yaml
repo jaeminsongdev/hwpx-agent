@@ -1,5 +1,5 @@
 schema: hwpx-agent.roadmap-status/v2
-updated_at: 2026-09-03
+updated_at: 2026-09-04
 current_phase: P05
 status: p05_in_progress_current_pc_local_only
 design_baseline:
@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_to_p04_complete_p05_text_character_paragraph_tabs_complete_lists_in_progress
+  product_code_scope: p01_to_p04_complete_p05_01_to_06_complete_p05_07_to_09_actual_render_pending_p10_partial_p14_01_to_05_complete
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -604,18 +604,18 @@ p04_execution:
     user_documents_opened: false
     hancom_runtime_executed_by_task: true
 p05_execution:
-  current_task: P05-05
+  current_task: P05-07_actual_render_acceptance
   gate_state: in_progress_current_pc_local
   tasks:
     P05-01: completed_current_pc_local_text_flow
     P05-02: completed_current_pc_local_character_styles
     P05-03: completed_current_pc_local_paragraph_styles
     P05-04: completed_current_pc_local_tabs
-    P05-05: in_progress_lists_numbering
-    P05-06: blocked_by_P05-05
-    P05-07: blocked_by_P05-06
-    P05-08: blocked_by_P05-07
-    P05-09: blocked_by_P05-08
+    P05-05: completed_current_pc_local_lists_numbering
+    P05-06: completed_current_pc_local_page_setup
+    P05-07: core_complete_actual_render_pending
+    P05-08: core_complete_actual_render_blocked_by_P05-07
+    P05-09: core_complete_actual_render_blocked_by_P05-08
   text_flow:
     contract: hwpx-agent.text-flow/v1
     audited_source_commit: 08de88a0d6745398e8141190f204a93b009f770a
@@ -723,6 +723,47 @@ p05_execution:
     clean_clone_sbom_components: 231
     user_documents_opened: false
     hancom_runtime_executed_by_task: true
+p10_execution:
+  current_task: mixed_current_pc_scope_external_dependencies_open
+  gate_state: in_progress_current_pc_local
+  tasks:
+    P10-01_to_P10-04: passed_current_pc_local
+    P10-05: registered_file_path_security_module_pending
+    P10-06: actual_production_com_execution_pending
+    P10-07: passed_current_pc_local
+    P10-08: current_pc_core_audit_pass_dedicated_production_unqualified
+    P10-09: passed_current_pc_local
+    P10-10: current_pc_probe_pass_general_routability_unverified
+p14_execution:
+  current_task: P14-06
+  gate_state: in_progress
+  tasks:
+    P14-01: passed_local_disposable_postgres
+    P14-02: passed_local_disposable_postgres_and_local_blob_adapter
+    P14-03: passed_local_disposable_postgres_and_in_memory_service
+    P14-04: passed_local_disposable_postgres_and_in_memory_service
+    P14-05: passed_local_disposable_postgres_and_in_memory_service
+    P14-06: next_worker_lease_fencing
+    P14-07: blocked_by_P14-06
+    P14-08: blocked_by_P14-07
+    P14-09: blocked_by_P14-08
+  job_state_machine:
+    audited_source_commit: 3876679eddff4b882142f5a5344fb7e75ede83ed
+    contract: hwpx-agent.p14-05-job-state-machine-contract/v1
+    crate: job-service
+    rust_tests_windows_linux: 13_of_13_passed
+    p14_negative_tests: 63_of_63_passed
+    postgres_server: 18.4
+    postgres_smoke_assertions: 30_of_30_twice
+    migration_apply_reapply: passed
+    rollback_retains_v4: true
+    rollback_with_later_version_refused: true
+    source_tree_clean_receipt: true
+    local_non_security_ci_lanes: 4_of_4_passed
+    security_lane: passed_after_one_cleaned_timeout_and_successful_retry
+    source_mutation_paths: 0
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope
@@ -734,11 +775,11 @@ phases:
   P07: blocked_by_P05
   P08: blocked_by_P05
   P09: blocked_by_P05
-  P10: ready_by_P03_current_pc_local_scope_deferred_to_sequential_roadmap
+  P10: in_progress_current_pc_local_scope
   P11: blocked_by_P06_P07_P08_P09_P10
   P12: blocked_by_P06_P07_P08_P09_P11
   P13: blocked_by_P10
-  P14: blocked_by_P04
+  P14: in_progress_P14_01_to_05_scoped_pass_P14_06_next
   P15: blocked_by_P14
   P16: blocked_by_P15
   P17: blocked_by_P15

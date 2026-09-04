@@ -70,7 +70,8 @@ verify cleanup and rerun later under the same bounded policy.
 
 ## Handoff
 
-Only check P14-04 in the roadmap after the exact clean PostgreSQL receipt, all four CI lanes,
-offline Linux validation, security checks and STRICT review pass. P14 remains open. Continue with
-P14-05 job state machine at reasoning effort `max`; production deployment and remote wiring remain
-unqualified until their own Gates.
+P14-04 is checked because the exact clean PostgreSQL receipt, all four CI lanes, offline Linux
+validation, current security checks and STRICT review passed. If a locked P14-04 source changes,
+rerun this runbook and replace rather than reuse the old evidence. P14 remains open. P14-05 is
+reported separately; continue with P14-06 worker lease/fencing at reasoning effort `max`.
+Production deployment and remote wiring remain unqualified until their own Gates.

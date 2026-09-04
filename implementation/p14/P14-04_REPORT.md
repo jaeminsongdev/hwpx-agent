@@ -2,7 +2,7 @@
 
 - Date: 2026-09-04
 - Implementation commit: `59e26b6`
-- Decision: `implementation_ready_security_revalidation_pending`
+- Decision: `pass_scoped_p14_04_local_disposable_postgres_and_in_memory_service`
 - Review: `STRICT / max`, code blocker/major/minor after correction `0/0/0`
 
 ## Delivered
@@ -82,19 +82,19 @@ used; the labeled container was removed.
 | Exact-commit `linux-core`, `windows-worker`, `widget`, `docs` | pass |
 | Offline Linux target Clippy/tests | pass, Rust 1.96.0, network/source/registry controls enforced |
 | Secret scan, Cargo deny/audit, licenses, .NET vulnerable, SBOM | pass |
-| `pnpm audit --audit-level high --json` | pending; 60-second timeout with cleanup, 3/3 twice |
+| `pnpm audit --audit-level high --json` | pass; attempt 1 timed out and cleaned, unchanged attempt 2 succeeded |
 | Residual P14 containers / `Hwp.exe` | pass, 0 / 0 |
 
-The latest exact-commit partial security report is Git-ignored at
-`implementation/p01/evidence/security-runs/3cf2056e0d7f4023a8dce0b5b8b08569/report.json`, bytes
-`1666`, SHA-256 `0d7eea3c80dd43e7726e274c15a0006bbd27b055f7742f289cfcb10f9ebe818a`.
-It scanned 860 files with zero secret findings; Rust advisory/deny, Node licenses, both .NET
-vulnerability checks and a 676-component SBOM passed. Only `pnpm_audit` timed out three times after
-successful process-tree cleanup. A second exact bounded run had the same result. The direct registry
-ping returned in 189 ms, while a standalone identical audit remained silent beyond 55 seconds and
-was stopped. The current `pnpm-lock.yaml` Git blob is exactly the already audited P14-03 blob
-`5290e78d56f2758e94b473eefd4d6525cec921df`, but that historical result is not promoted to a current
-online audit PASS.
+The closing security report is Git-ignored at
+`implementation/p01/evidence/security-runs/b5b22d3d1ce54ee29838130b850b8ad2/report.json`, bytes
+`1469`, SHA-256 `5f3c67664516a4100cc4f3cd5d10008362f21e0c3a1f41675d51a503bcb8af98`.
+It ran at exact current commit `3876679eddff4b882142f5a5344fb7e75ede83ed`, where the P14-04
+implementation sources are unchanged from `59e26b6`. It scanned 873 files with zero secret findings;
+Rust advisory/deny, Node licenses, both .NET vulnerability checks and a 677-component SBOM passed.
+The first bounded `pnpm audit` attempt timed out after 60 seconds and its process tree was cleaned;
+the unchanged second attempt returned successfully with zero vulnerabilities. No audit process
+remained. This current successful result, rather than the earlier timeout or a historical lockfile
+result, closes the security condition.
 
 The offline Linux audit used local image
 `hwpx-agent-rust-1.96-clippy:p03-08@sha256:bfda7f1ddbf0a192699d4b02dc3dbfefabe5eb7c0dd5527ba31acdaf0e4ab37f`.
@@ -105,12 +105,11 @@ remained.
 
 ## Decision and limits
 
-P14-04 implementation, local Rust behavior and disposable PostgreSQL behavior are ready, but the
-roadmap checkbox remains open until the exact current online `pnpm audit` succeeds. This report does
-not claim production PostgreSQL, an HTTP API, a Rust PostgreSQL adapter, KMS-backed cursor keys,
-multi-host behavior, performance capacity or later P14 tasks. No user document, original ZIP,
-registry/system setting or production database was read or changed.
+P14-04 is PASS only for the local in-memory service and disposable PostgreSQL scope proven above,
+and its roadmap row is checked. This report does not claim production PostgreSQL, an HTTP API, a
+Rust PostgreSQL adapter, KMS-backed cursor keys, multi-host behavior, performance capacity or later
+P14 tasks. No user document, original ZIP, registry/system setting or production database was read
+or changed.
 
-Retry the unchanged security harness and, only after it passes, change this decision to a scoped
-P14-04 PASS and check the roadmap. P14 remains open. P14-05 job state-machine implementation may
-continue independently at reasoning effort `max`.
+P14 remains open. P14-05 is reported separately; continue with P14-06 worker lease/fencing at
+reasoning effort `max`.

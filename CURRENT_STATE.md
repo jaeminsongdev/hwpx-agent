@@ -1,6 +1,6 @@
 # CURRENT STATE
 
-> 기준일: 2026-09-03
+> 기준일: 2026-09-04
 > 프로젝트 코드명: `hwpx-agent`  
 > 문서 세트 버전: `2.0-design`  
 > 규범 키워드: **MUST/SHALL=필수**, **SHOULD=권장**, **MAY=선택**
@@ -9,7 +9,7 @@
 
 - 상태: `P05_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. Exact Hangul 2020에서 disposable VS-0 open/readback/clean shutdown actual evidence를 통과했고 P05-01 bounded text flow, P05-02 character styles, P05-03 paragraph styles와 P05-04 tabs도 완료했다. 현재 P05-05 lists·numbering을 시작한다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐으며, P14-01~05 metadata/artifact/revision/history/job service는 local in-memory 및 disposable PostgreSQL 범위의 각 Gate를 통과했다. 현재 비-UI 작업은 P14-06 worker lease/fencing이다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -88,19 +88,30 @@
 
 ## P05 현재 상태
 
-- P05-01 `PASS`: P03 preserving XML 위에서 exact 2011 paragraph namespace의 paragraph/run/text/tab/line-break/field boundary를 bounded typed model로 lift/lower한다. 128-case Unicode/run-boundary corpus와 aggregate `e7fefa65...70c60`, text-flow `12/12`, package `63/63`, Windows/Linux workspace, current/clean FULL `5/5`, security 0을 통과했다. Opaque possible-text는 semantic extraction을, 모든 opaque는 lowering을 fail closed한다. Authoritative report는 `implementation/p05/P05-01_REPORT.md`다.
-- P05-02 `PASS`: exact current-2020 header의 7 language font domains와 14 fonts/7 charPr를 bounded typed model로 lift/lower한다. Semantic dedup, atomic typed-reference rewrite, deterministic receipt와 128-case corpus `5d2a03a1...91e6d`, character-style `11/11`, package `74/74`, Windows/Linux, current/clean FULL `5/5`, security 0을 통과했다. Authoritative report는 `implementation/p05/P05-02_REPORT.md`다.
-- P05-03 `PASS`: exact current-2020의 20 paraPr와 2 borderFill을 bounded typed model로 lift/lower한다. 정렬, signed margin/indent, 간격/줄 간격, keep/page-break, heading/layout compatibility branch, border/fill reference, semantic dedup과 atomic typed-reference rewrite를 구현했다. Fixed 128-case corpus `ae926c99...20ed339`, paragraph-style `12/12`, package `86/86`, Windows/Linux, current/clean FULL `5/5`, security 0을 통과했다. Authoritative report는 `implementation/p05/P05-03_REPORT.md`다.
-- P05-04 `PASS`: exact current-2020 tabProperties를 bounded typed model로 lift/lower한다. Automatic 및 ordered custom left/right/center/decimal tab, 12개 leader, direct/HwpUnitChar compatibility, semantic dedup과 atomic paragraph reference rewrite를 구현했다. Fixed 128-case corpus `f1f8d682...dd0a92`, tab-definition `13/13`, package `101/101`, Windows/Linux, current/clean FULL `5/5`, security 0과 disposable exact Hangul 2020 save/reopen semantic readback을 통과했다. Authoritative report는 `implementation/p05/P05-04_REPORT.md`다.
-- P05-05 `in_progress`: exact current-2020 numberings/bullets와 paragraph heading 참조를 조사해 글머리표/문단번호/개요, 재시작/연속성, 수준 전이를 bounded typed list engine으로 구현한다.
+- P05-01~06 `PASS`: bounded text flow, character/paragraph styles, tabs, lists/numbering과 page setup이 각 typed contract, negative/fixed corpus, cross-platform tests와 해당 보고서의 범위에서 완료됐다.
+- P05-07~09 core는 section/columns, header/footer와 layout model/test fixture를 갖췄지만 release 판정에 필요한 실제 한글 2020 save/reopen/PDF/render evidence는 열려 있다.
+- P05-07 v2 시도 10~13은 모두 `open_input`에서 bounded timeout됐다. 입력은 불변이고 output/PDF는 없으며 owned `Hwp.exe`와 잔류 프로세스는 0이다. 따라서 P05-07~09와 P05 Gate를 PASS로 올리지 않는다.
+
+## P10 현재 상태
+
+- P10-01~04, P10-07, P10-09와 현재-PC 범위의 P10-10은 각 보고서 범위에서 통과했다.
+- P10-05는 승인된 registered file-path security module이 없고, P10-06 actual production COM execution과 P10-10 general routability는 unverified다. P10-08은 현재-PC 개발 audit은 통과했지만 dedicated production isolation은 unqualified다.
+
+## P14 현재 상태
+
+- P14-01~05는 각 exact clean source commit, digest-bound PostgreSQL 18.4 receipt, Rust/SQL negative tests, non-security CI, offline Linux와 current security evidence에 따라 scoped PASS다.
+- P14-04의 이전 `pnpm audit` timeout 조건은 commit `3876679`의 현재 bounded security run에서 첫 timeout cleanup 후 동일 2차 시도가 성공해 해소됐다.
+- P14-05 job service는 single-attempt structural lease/fence와 exact transition/ACL/qualification/terminal invariants만 증명한다. P14-06 expiry/heartbeat/late-worker fencing, P14-07 retry/reconciliation, P14-08 cancel/cleanup과 P14-09 retention/mirror는 아직 미구현이다.
 
 ## 다음 작업
 
-P05-05 Lists·numbering을 구현한다. 추론수준은 `max`다. exact current-2020 `header.xml`의 numbering/bullet/paraHead 정의와 paragraph heading reference를 공식 Appendix C/F와 대조해 definition identity, level format, nesting, continuity/restart, reference closure와 deterministic lower/readback을 잠근다. 첫 package/IR 단계에는 한글 UI 조작이 필요 없고 target fixture가 준비되면 disposable Hangul 2020 readback만 사용자에게 요청한다.
+비-UI 순서는 P14-06 scheduler capability/profile matching, heartbeat, lease expiry와 late-worker commit rejection 구현이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `접근 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
 
 ## 현재 blocker
 
-- 현재 blocker 없음.
+- 비-UI P14-06 구현 blocker는 없다.
+- P05-07 actual render는 한글 2020의 수동 `접근 허용` 타이밍에 의존한다.
+- P10-05/06과 P10-08 production 범위는 외부 보안 모듈·격리 환경이 제공되기 전까지 unqualified다.
 
 2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.
 
