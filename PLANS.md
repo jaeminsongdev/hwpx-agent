@@ -4,7 +4,7 @@
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
 - Active phase/task: `P05 / P05-07 actual render acceptance` + `P14 / P14-06 security closure and P14-07 durable integration`
 - Active reasoning effort: `max`
-- Immediate UI dependency: none live; P05-07 v2 attempts 10 through 15 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `모두 허용`
+- Immediate UI dependency: none live; P05-07 v2 attempts 10 through 16 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `모두 허용`
 
 ## Objective and non-negotiable boundaries
 
@@ -72,7 +72,8 @@ save, render, cross-version or production proof.
   residual count is zero. Attempt 10 trace bytes/hash: `1690`/
   `f9644cb119944baaf029ae5b142dee55bd8d68c91892227abccfaa412fc92764`; attempts 11 through 14 each:
   `1366`/`a2c4560bcb5af1f0218ee76e2400e00b8a57cc193b8e81949f3a262bcb0f56d9`; attempt 15:
-  `1690`/`f9644cb119944baaf029ae5b142dee55bd8d68c91892227abccfaa412fc92764`.
+  `1690`/`f9644cb119944baaf029ae5b142dee55bd8d68c91892227abccfaa412fc92764`; attempt 16:
+  `1366`/`a2c4560bcb5af1f0218ee76e2400e00b8a57cc193b8e81949f3a262bcb0f56d9`.
   P05-08~09 render evidence stays open. Relaunch only on a new explicit user request with immediate
   manual approval.
 - P10-05 still lacks an approved registered file-path security module. P10-06 actual production COM

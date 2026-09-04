@@ -90,7 +90,7 @@
 
 - P05-01~06 `PASS`: bounded text flow, character/paragraph styles, tabs, lists/numbering과 page setup이 각 typed contract, negative/fixed corpus, cross-platform tests와 해당 보고서의 범위에서 완료됐다.
 - P05-07~09 core는 section/columns, header/footer와 layout model/test fixture를 갖췄지만 release 판정에 필요한 실제 한글 2020 save/reopen/PDF/render evidence는 열려 있다.
-- P05-07 v2 시도 10~14는 모두 `open_input`에서 bounded timeout됐다. 입력은 불변이고 output/PDF는 없으며 owned `Hwp.exe`와 잔류 프로세스는 0이다. 따라서 P05-07~09와 P05 Gate를 PASS로 올리지 않는다.
+- P05-07 v2 시도 10~16은 모두 `open_input`에서 bounded timeout됐다. 입력은 불변이고 output/PDF는 없으며 owned `Hwp.exe`와 잔류 프로세스는 0이다. 따라서 P05-07~09와 P05 Gate를 PASS로 올리지 않는다.
 
 ## P10 현재 상태
 
@@ -111,7 +111,7 @@
 ## 현재 blocker
 
 - P14-06 구현 blocker는 없고, formal closure만 NPM advisory API 응답을 기다린다.
-- P05-07 actual render는 한글 2020의 수동 `모두 허용` 타이밍에 의존한다. v2 attempt 15도 `open_input`에서 안전하게 timeout됐고 잔류 프로세스는 0이다.
+- P05-07 actual render는 한글 2020의 수동 `모두 허용` 타이밍에 의존한다. v2 attempt 16도 `open_input`에서 안전하게 timeout됐고 잔류 프로세스는 0이다.
 - P10-05/06과 P10-08 production 범위는 외부 보안 모듈·격리 환경이 제공되기 전까지 unqualified다.
 
 2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.
