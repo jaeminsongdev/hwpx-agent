@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 using Google.Protobuf;
@@ -19,10 +20,26 @@ internal static class Program
     {
         if (args.Length != 0)
         {
-            return args.Length == 2
-                && string.Equals(args[0], "--actual-current-host-isolation", StringComparison.Ordinal)
-                    ? RunActualCurrentHostIsolation(args[1])
-                    : 64;
+            if (args.Length == 2
+                && string.Equals(args[0], "--actual-current-host-isolation", StringComparison.Ordinal))
+            {
+                return RunActualCurrentHostIsolation(args[1]);
+            }
+
+            if (args.Length == 2
+                && string.Equals(args[0], "--p10-09-hang-tree-child", StringComparison.Ordinal))
+            {
+                return await RunHangTreeChildAsync(args[1]);
+            }
+
+            if (args.Length == 1
+                && string.Equals(args[0], "--p10-09-hang-leaf", StringComparison.Ordinal))
+            {
+                await Task.Delay(Timeout.InfiniteTimeSpan);
+                return 0;
+            }
+
+            return 64;
         }
 
         await SuccessfulLeaseReplaysWithoutDuplicateEffectAsync();
@@ -30,7 +47,15 @@ internal static class Program
         await HancomBindingLeaseCopiesPinnedPlanBundleAndKeyAsync();
         await ConcurrentDuplicateLeaseIsBusyAsync();
         await StaleLeaseNeverInvokesExecutorAsync();
-        await UnfinishedJournalBecomesUnknownWithoutReplayAsync();
+        await UnfinishedJournalNoEffectFailsWithoutReplayAsync();
+        await UnfinishedJournalUnknownEffectNeverReplaysAsync();
+        await HardCommandTimeoutRecyclesAndReplaysUnknownAsync();
+        await HardCommandTimeoutProvedNoEffectIsRetryableAsync();
+        await TerminalWorkerPolicyForcesRecycleAsync();
+        await RecycleFailureBecomesUnknownCleanupFailureAsync();
+        await StartupRecoveryQuarantinesOnlyOwnedResidueAsync();
+        await StartupRecoveryRefusesMixedResidueWithoutPartialMoveAsync();
+        await ActualWindowsJobKillsOwnedProcessTreeAsync();
         await FencingDriftIsRejectedWithoutCommitAsync();
         await ArtifactMismatchFailsBeforeExecutorAsync();
         await CommitDigestMismatchReplaysWithoutExecutorAsync();
@@ -43,8 +68,44 @@ internal static class Program
         await PostJobResidueBecomesUnknownOutcomeAsync();
         await StaleWorkspaceResidueIsRejectedAtStartupAsync();
         RejectsUnsafeTransportAndArtifactBoundaries();
-        Console.WriteLine("Windows Agent P10-02/P10-05/P10-06/P10-08 staging, isolation, security lease, fencing, upload and auth smoke passed (18/18)");
+        await RejectsUnboundedSupervisorPolicyAsync();
+        Console.WriteLine("Windows Agent P10-02/P10-05/P10-06/P10-08/P10-09 staging, isolation, supervision, reconciliation, process-tree recycle, fencing, upload and auth smoke passed (28/28)");
         return 0;
+    }
+
+    private static async Task<int> RunHangTreeChildAsync(string processIdsPath)
+    {
+        Process? leaf = null;
+        try
+        {
+            var startInfo = SelfStartInfo("--p10-09-hang-leaf");
+            leaf = Process.Start(startInfo)
+                ?? throw new InvalidOperationException("The process-tree leaf did not start.");
+            var payload = JsonSerializer.SerializeToUtf8Bytes(new
+            {
+                schema_version = "hwpx-agent.p10-09-owned-process-tree/v1",
+                root_process_id = Environment.ProcessId,
+                leaf_process_id = leaf.Id,
+            });
+            await using (var output = new FileStream(
+                processIdsPath,
+                FileMode.CreateNew,
+                FileAccess.Write,
+                FileShare.Read,
+                bufferSize: 4_096,
+                FileOptions.WriteThrough))
+            {
+                await output.WriteAsync(payload);
+                output.Flush(flushToDisk: true);
+            }
+
+            await Task.Delay(Timeout.InfiniteTimeSpan);
+            return 0;
+        }
+        finally
+        {
+            leaf?.Dispose();
+        }
     }
 
     private static int RunActualCurrentHostIsolation(string policyPath)
@@ -106,7 +167,8 @@ internal static class Program
                 RequiredString(target, "capability_registry_sha256"),
                 AvailableJobSlots: 1,
                 RpcTimeout: TimeSpan.FromSeconds(10),
-                WorkerIsolation: isolationPolicy);
+                WorkerIsolation: isolationPolicy,
+                WorkerSupervisor: CurrentSupervisorPolicy());
 
             Directory.CreateDirectory(root);
             var workspace = new AgentWorkspace(Path.Combine(root, "workspace"));
@@ -548,7 +610,7 @@ internal static class Program
         Require(executorCalls == 0 && environment.SandboxDirectories().Count == 0, "stale lease produced an effect");
     }
 
-    private static async Task UnfinishedJournalBecomesUnknownWithoutReplayAsync()
+    private static async Task UnfinishedJournalNoEffectFailsWithoutReplayAsync()
     {
         await using var environment = await TestEnvironment.CreateAsync("unknown");
         var assignment = environment.CreateAssignment(
@@ -581,8 +643,439 @@ internal static class Program
 
         var recovered = await service.RunOnceAsync(CancellationToken.None);
         Require(recovered.Disposition == AgentRunDisposition.Replayed
-            && recovered.TerminalState == ExecutionState.UnknownOutcome, "unfinished claim was not reconciled as unknown");
+            && recovered.TerminalState == ExecutionState.Failed,
+            "unfinished no-effect claim was not safely classified as failed");
         Require(executorCalls == 0, "unfinished claim was re-executed");
+    }
+
+    private static async Task UnfinishedJournalUnknownEffectNeverReplaysAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("unfinished-unknown");
+        var assignment = environment.CreateAssignment(
+            "10000000-0000-4000-8000-000000000021",
+            "20000000-0000-4000-8000-000000000021",
+            31);
+        var abandoned = await environment.Workspace.Journal.ClaimAsync(assignment, CancellationToken.None);
+        Require(abandoned.Disposition == JournalClaimDisposition.New, "unknown fixture claim was not new");
+        await abandoned.Ownership!.DisposeAsync();
+
+        AgentExecutionReceipt? committed = null;
+        var executorCalls = 0;
+        var recycleCalls = 0;
+        var invoker = new ScriptedCallInvoker((method, request, headers) =>
+        {
+            RequireAuthorization(headers);
+            return method switch
+            {
+                "AcquireLease" => Assigned(assignment),
+                "CommitExecution" => CaptureCommit(
+                    (AgentCommitRequest)request,
+                    receipt => committed = receipt),
+                _ => throw new InvalidOperationException("unfinished unknown recovery executed work"),
+            };
+        });
+        await using var client = AuthenticatedClient(invoker);
+        var executor = new DelegatingExecutor((_, _) =>
+        {
+            executorCalls++;
+            throw new InvalidOperationException("unknown abandoned claim reached executor");
+        })
+        {
+            ReconcileHandler = (candidate, _) => Task.FromResult(Observation(
+                candidate,
+                effectStarted: true,
+                outputPresent: true,
+                actionTracePresent: true,
+                actionTraceTerminal: false)),
+            RecycleHandler = (candidate, reason, _) =>
+            {
+                recycleCalls++;
+                return Task.FromResult(RecycleReceipt(candidate, reason));
+            },
+        };
+
+        var result = await environment.CreateService(client, executor).RunOnceAsync(CancellationToken.None);
+        Require(result.Disposition == AgentRunDisposition.Replayed
+            && result.TerminalState == ExecutionState.UnknownOutcome,
+            "unfinished effectful claim was not classified unknown");
+        Require(executorCalls == 0 && recycleCalls == 1, "unfinished unknown claim replayed or skipped recycle");
+        Require(committed?.Diagnostic?.ErrorCode == BridgeErrorCode.UnknownOutcome
+            && committed.Diagnostic.EffectUnknown
+            && !committed.Diagnostic.Retryable,
+            "unfinished unknown receipt lost fail-closed diagnostics");
+    }
+
+    private static async Task HardCommandTimeoutRecyclesAndReplaysUnknownAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("hard-timeout-unknown");
+        var assignment = environment.CreateAssignment(
+            "10000000-0000-4000-8000-000000000022",
+            "20000000-0000-4000-8000-000000000022",
+            32);
+        assignment.ResourceLimits.CommandTimeoutSeconds = 1;
+        assignment.ResourceLimits.JobTimeoutSeconds = 5;
+        var executorCalls = 0;
+        var cancellationCalls = 0;
+        var recycleCalls = 0;
+        var committed = new List<byte[]>();
+        var never = new TaskCompletionSource<AgentJobResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var invoker = new ScriptedCallInvoker((method, request, headers) =>
+        {
+            RequireAuthorization(headers);
+            return method switch
+            {
+                "AcquireLease" => Assigned(assignment),
+                "Heartbeat" => CurrentHeartbeat(),
+                "CommitExecution" => Commit((AgentCommitRequest)request, committed),
+                _ => throw new InvalidOperationException("unexpected timeout RPC"),
+            };
+        });
+        await using var client = AuthenticatedClient(invoker);
+        var executor = new DelegatingExecutor((_, _) =>
+        {
+            executorCalls++;
+            return never.Task;
+        })
+        {
+            CancellationHandler = (_, _) =>
+            {
+                cancellationCalls++;
+                return Task.CompletedTask;
+            },
+            ReconcileHandler = (candidate, _) => Task.FromResult(Observation(
+                candidate,
+                effectStarted: true,
+                outputPresent: false,
+                actionTracePresent: true,
+                actionTraceTerminal: false)),
+            RecycleHandler = (candidate, reason, _) =>
+            {
+                recycleCalls++;
+                Require(reason == WorkerRecycleReason.CommandTimeout, "hard timeout recycle reason drifted");
+                never.TrySetCanceled();
+                return Task.FromResult(RecycleReceipt(candidate, reason));
+            },
+        };
+        var service = environment.CreateService(client, executor);
+
+        var first = await service.RunOnceAsync(CancellationToken.None);
+        var second = await service.RunOnceAsync(CancellationToken.None);
+        Require(first.Disposition == AgentRunDisposition.UnknownOutcome
+            && first.TerminalState == ExecutionState.UnknownOutcome
+            && first.ExecutorInvoked,
+            "hard timeout did not become unknown outcome");
+        Require(second.Disposition == AgentRunDisposition.Replayed
+            && !second.ExecutorInvoked,
+            "hard timeout terminal receipt was not replayed");
+        Require(executorCalls == 1 && cancellationCalls == 1 && recycleCalls == 1,
+            "hard timeout duplicated execution or skipped containment");
+        Require(committed.Count == 2
+            && committed[0].AsSpan().SequenceEqual(committed[1]),
+            "hard timeout replay receipt drifted");
+        var receipt = AgentExecutionReceipt.Parser.ParseFrom(committed[0]);
+        Require(receipt.Diagnostic.ErrorCode == BridgeErrorCode.Timeout
+            && receipt.Diagnostic.EffectUnknown
+            && !receipt.Diagnostic.Retryable,
+            "hard timeout receipt allowed unsafe retry");
+    }
+
+    private static async Task HardCommandTimeoutProvedNoEffectIsRetryableAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("hard-timeout-no-effect");
+        var assignment = environment.CreateAssignment(
+            "10000000-0000-4000-8000-000000000023",
+            "20000000-0000-4000-8000-000000000023",
+            33);
+        assignment.ResourceLimits.CommandTimeoutSeconds = 1;
+        assignment.ResourceLimits.JobTimeoutSeconds = 5;
+        AgentExecutionReceipt? committed = null;
+        var never = new TaskCompletionSource<AgentJobResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var invoker = new ScriptedCallInvoker((method, request, headers) =>
+        {
+            RequireAuthorization(headers);
+            return method switch
+            {
+                "AcquireLease" => Assigned(assignment),
+                "Heartbeat" => CurrentHeartbeat(),
+                "CommitExecution" => CaptureCommit(
+                    (AgentCommitRequest)request,
+                    receipt => committed = receipt),
+                _ => throw new InvalidOperationException("unexpected no-effect timeout RPC"),
+            };
+        });
+        await using var client = AuthenticatedClient(invoker);
+        var executor = new DelegatingExecutor((_, _) => never.Task)
+        {
+            ReconcileHandler = (candidate, _) => Task.FromResult(Observation(
+                candidate,
+                effectStarted: false,
+                outputPresent: false,
+                actionTracePresent: false,
+                actionTraceTerminal: false)),
+            RecycleHandler = (candidate, reason, _) =>
+            {
+                never.TrySetCanceled();
+                return Task.FromResult(RecycleReceipt(candidate, reason));
+            },
+        };
+
+        var result = await environment.CreateService(client, executor).RunOnceAsync(CancellationToken.None);
+        Require(result.Disposition == AgentRunDisposition.Failed
+            && result.TerminalState == ExecutionState.Failed,
+            "proved no-effect timeout was not safely retryable");
+        Require(committed?.Diagnostic?.ErrorCode == BridgeErrorCode.Timeout
+            && !committed.Diagnostic.EffectUnknown
+            && committed.Diagnostic.Retryable,
+            "proved no-effect timeout lost retryable evidence");
+    }
+
+    private static async Task TerminalWorkerPolicyForcesRecycleAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("policy-recycle");
+        var assignment = environment.CreateAssignment(
+            "10000000-0000-4000-8000-000000000024",
+            "20000000-0000-4000-8000-000000000024",
+            34);
+        var configuration = environment.Configuration with
+        {
+            WorkerSupervisor = environment.Configuration.WorkerSupervisor with
+            {
+                MaximumJobsPerWorker = 1,
+            },
+        };
+        var recycleCalls = 0;
+        var invoker = new ScriptedCallInvoker((method, request, headers) =>
+        {
+            RequireAuthorization(headers);
+            return method switch
+            {
+                "AcquireLease" => Assigned(assignment),
+                "Heartbeat" => CurrentHeartbeat(),
+                "CommitExecution" => Commit((AgentCommitRequest)request, []),
+                _ => throw new InvalidOperationException("unexpected policy recycle RPC"),
+            };
+        });
+        await using var client = AuthenticatedClient(invoker);
+        var executor = new DelegatingExecutor(async (context, cancellationToken) =>
+        {
+            await using var output = context.CreateOutput("output_0024");
+            await output.WriteAsync(OutputBytes, cancellationToken);
+            return SuccessfulJob("output_0024", "fixture-output-policy-recycle");
+        })
+        {
+            RecycleHandler = (candidate, reason, _) =>
+            {
+                recycleCalls++;
+                Require(reason == WorkerRecycleReason.PolicyLimit, "policy recycle reason drifted");
+                return Task.FromResult(RecycleReceipt(candidate, reason));
+            },
+        };
+        var service = new WindowsAgentService(
+            configuration,
+            client,
+            environment.Store,
+            executor,
+            environment.Workspace,
+            environment.IsolationAttestor);
+
+        var result = await service.RunOnceAsync(CancellationToken.None);
+        Require(result.Disposition == AgentRunDisposition.Succeeded && recycleCalls == 1,
+            "terminal job quota did not recycle the worker");
+    }
+
+    private static async Task RecycleFailureBecomesUnknownCleanupFailureAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("recycle-failure");
+        var assignment = environment.CreateAssignment(
+            "10000000-0000-4000-8000-000000000025",
+            "20000000-0000-4000-8000-000000000025",
+            35);
+        var configuration = environment.Configuration with
+        {
+            WorkerSupervisor = environment.Configuration.WorkerSupervisor with
+            {
+                MaximumJobsPerWorker = 1,
+            },
+        };
+        AgentExecutionReceipt? committed = null;
+        var invoker = new ScriptedCallInvoker((method, request, headers) =>
+        {
+            RequireAuthorization(headers);
+            return method switch
+            {
+                "AcquireLease" => Assigned(assignment),
+                "Heartbeat" => CurrentHeartbeat(),
+                "CommitExecution" => CaptureCommit(
+                    (AgentCommitRequest)request,
+                    receipt => committed = receipt),
+                _ => throw new InvalidOperationException("unexpected recycle failure RPC"),
+            };
+        });
+        await using var client = AuthenticatedClient(invoker);
+        var executor = new DelegatingExecutor(async (context, cancellationToken) =>
+        {
+            await using var output = context.CreateOutput("output_0025");
+            await output.WriteAsync(OutputBytes, cancellationToken);
+            return SuccessfulJob("output_0025", "fixture-output-recycle-failure");
+        })
+        {
+            RecycleHandler = (_, _, _) => throw new InvalidOperationException("synthetic recycle failure"),
+        };
+        var service = new WindowsAgentService(
+            configuration,
+            client,
+            environment.Store,
+            executor,
+            environment.Workspace,
+            environment.IsolationAttestor);
+
+        var result = await service.RunOnceAsync(CancellationToken.None);
+        Require(result.Disposition == AgentRunDisposition.UnknownOutcome,
+            "recycle failure was not fail-closed");
+        Require(committed?.Diagnostic?.ErrorCode == BridgeErrorCode.CleanupFailed
+            && committed.Diagnostic.EffectUnknown
+            && !committed.Diagnostic.Retryable,
+            "recycle failure receipt lost cleanup diagnostics");
+    }
+
+    private static async Task StartupRecoveryQuarantinesOnlyOwnedResidueAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("startup-recovery");
+        var executionId = "20000000-0000-4000-8000-000000000026";
+        var residue = Path.Combine(environment.Workspace.RootPath, "sandboxes", $"job-{executionId}");
+        Directory.CreateDirectory(residue);
+        await File.WriteAllTextAsync(
+            Path.Combine(residue, ".hwpx-agent-sandbox"),
+            executionId,
+            new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+        var payload = Path.Combine(residue, "retained.bin");
+        await File.WriteAllBytesAsync(payload, [1, 2, 3, 4]);
+        var recoveryCalls = 0;
+        var invoker = new ScriptedCallInvoker((method, _, headers) =>
+        {
+            RequireAuthorization(headers);
+            return method == "AcquireLease"
+                ? new AgentLeaseResponse { Disposition = LeaseDisposition.NoWork }
+                : throw new InvalidOperationException("unexpected startup recovery RPC");
+        });
+        await using var client = AuthenticatedClient(invoker);
+        var executor = new DelegatingExecutor((_, _) =>
+            throw new InvalidOperationException("startup recovery reached executor"))
+        {
+            StartupRecoveryHandler = _ =>
+            {
+                recoveryCalls++;
+                return Task.FromResult(StartupReceipt());
+            },
+        };
+
+        var service = await WindowsAgentService.CreateRecoveredAsync(
+            environment.Configuration,
+            client,
+            environment.Store,
+            executor,
+            environment.Workspace,
+            environment.IsolationAttestor,
+            CancellationToken.None);
+        var result = await service.RunOnceAsync(CancellationToken.None);
+        var quarantine = Path.Combine(environment.Workspace.RootPath, "quarantine");
+        var retained = Directory.EnumerateFiles(
+            quarantine,
+            "retained.bin",
+            SearchOption.AllDirectories).Single();
+        Require(result.Disposition == AgentRunDisposition.NoWork && recoveryCalls == 1,
+            "startup recovery did not complete before lease acquisition");
+        Require(!Directory.Exists(residue)
+            && (await File.ReadAllBytesAsync(retained)).SequenceEqual(new byte[] { 1, 2, 3, 4 }),
+            "startup recovery deleted or altered owned residue instead of quarantining it");
+    }
+
+    private static async Task ActualWindowsJobKillsOwnedProcessTreeAsync()
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            throw new PlatformNotSupportedException(
+                "P10-09 process-tree evidence requires a Windows host.");
+        }
+
+        await using var environment = await TestEnvironment.CreateAsync("actual-process-tree");
+        var assignment = environment.CreateAssignment(
+            "10000000-0000-4000-8000-000000000027",
+            "20000000-0000-4000-8000-000000000027",
+            37);
+        var processIdsPath = Path.Combine(environment.Root, "owned process ids.json");
+        var executablePath = Environment.ProcessPath
+            ?? throw new InvalidOperationException("The smoke executable path is unavailable.");
+        var startInfo = SelfStartInfo("--p10-09-hang-tree-child", processIdsPath);
+        RequireThrows<AgentProtocolException>(() =>
+            WindowsOwnedWorkerProcess.Start(startInfo, Digest('0')));
+        Require(!File.Exists(processIdsPath),
+            "a digest-mismatched worker process was launched");
+        await using var owned = WindowsOwnedWorkerProcess.Start(
+            startInfo,
+            Sha256File(executablePath));
+
+        var processIds = await ReadOwnedProcessIdsAsync(processIdsPath, TimeSpan.FromSeconds(10));
+        Require(processIds.RootProcessId == owned.InitialProcessId,
+            "owned root process identity drifted");
+        Require(ProcessIsRunning(processIds.RootProcessId)
+            && ProcessIsRunning(processIds.LeafProcessId),
+            "owned process tree did not become live");
+
+        using var recycleTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        var receipt = await owned.RecycleAsync(
+            assignment,
+            WorkerRecycleReason.PolicyLimit,
+            recycleTimeout.Token);
+        AgentValidation.ValidateRecycleReceipt(
+            receipt,
+            assignment,
+            WorkerRecycleReason.PolicyLimit);
+        await WaitForProcessesToExitAsync(
+            [processIds.RootProcessId, processIds.LeafProcessId],
+            TimeSpan.FromSeconds(5));
+        Require(!ProcessIsRunning(processIds.RootProcessId)
+            && !ProcessIsRunning(processIds.LeafProcessId),
+            "Windows job recycle left an owned descendant running");
+    }
+
+    private static async Task StartupRecoveryRefusesMixedResidueWithoutPartialMoveAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("mixed-startup-residue");
+        var validExecutionId = "20000000-0000-4000-8000-000000000028";
+        var validResidue = Path.Combine(
+            environment.Workspace.RootPath,
+            "sandboxes",
+            $"job-{validExecutionId}");
+        Directory.CreateDirectory(validResidue);
+        await File.WriteAllTextAsync(
+            Path.Combine(validResidue, ".hwpx-agent-sandbox"),
+            validExecutionId,
+            new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+        var invalidResidue = Path.Combine(
+            environment.Workspace.RootPath,
+            "sandboxes",
+            "job-untrusted-residue");
+        Directory.CreateDirectory(invalidResidue);
+        var invoker = new ScriptedCallInvoker((_, _, _) =>
+            throw new InvalidOperationException("mixed residue reached the control plane"));
+        await using var client = AuthenticatedClient(invoker);
+
+        var error = await CaptureProtocolErrorAsync(() => WindowsAgentService.CreateRecoveredAsync(
+            environment.Configuration,
+            client,
+            environment.Store,
+            new DelegatingExecutor((_, _) =>
+                throw new InvalidOperationException("mixed residue reached executor")),
+            environment.Workspace,
+            environment.IsolationAttestor,
+            CancellationToken.None));
+        Require(error == AgentProtocolError.CleanupResidue,
+            "mixed startup residue was not rejected");
+        Require(Directory.Exists(validResidue)
+            && Directory.Exists(invalidResidue)
+            && invoker.Methods.Count == 0,
+            "mixed startup residue caused a partial move or outbound RPC");
     }
 
     private static async Task FencingDriftIsRejectedWithoutCommitAsync()
@@ -880,6 +1373,7 @@ internal static class Program
             WorkerIsolation: CurrentIsolationPolicy(
                 "hancom-hangul-2020-secondary",
                 Digest('b')),
+            WorkerSupervisor: CurrentSupervisorPolicy(),
             HancomSecurityModule: new HancomSecurityModulePin("SyntheticModule", Digest('d')));
         RequireThrows<ArgumentException>(() => AgentValidation.ValidateConfiguration(configuration with
         {
@@ -899,6 +1393,73 @@ internal static class Program
                 @"C:\trust\same.bin",
                 Digest('f')),
         }));
+    }
+
+    private static async Task RejectsUnboundedSupervisorPolicyAsync()
+    {
+        var valid = CurrentSupervisorPolicy();
+        foreach (var invalid in new[]
+        {
+            valid with { CooperativeStopTimeoutSeconds = 0 },
+            valid with { ReconciliationTimeoutSeconds = 0 },
+            valid with { RecycleTimeoutSeconds = 61 },
+            valid with { MaximumJobsPerWorker = 0 },
+            valid with { MaximumPrivateMemoryBytes = 17_179_869_185 },
+        })
+        {
+            RequireThrows<ArgumentException>(() =>
+                AgentValidation.ValidateWorkerSupervisorPolicy(invalid));
+        }
+
+        var assignment = new LeaseAssignment
+        {
+            ExecutionId = "20000000-0000-4000-8000-000000000029",
+        };
+        foreach (var contradictory in new[]
+        {
+            Observation(
+                assignment,
+                effectStarted: false,
+                outputPresent: false,
+                actionTracePresent: false,
+                actionTraceTerminal: false) with
+            {
+                OutputDigestVerified = true,
+            },
+            Observation(
+                assignment,
+                effectStarted: false,
+                outputPresent: false,
+                actionTracePresent: false,
+                actionTraceTerminal: true),
+            Observation(
+                assignment,
+                effectStarted: false,
+                outputPresent: false,
+                actionTracePresent: true,
+                actionTraceTerminal: true,
+                readbackVerified: true),
+        })
+        {
+            var error = CaptureProtocolError(() =>
+                AgentValidation.ValidateReconciliationObservation(contradictory, assignment));
+            Require(error == AgentProtocolError.ReconciliationFailed,
+                "contradictory reconciliation evidence was accepted");
+        }
+
+        await using var environment = await TestEnvironment.CreateAsync("equal-deadlines");
+        var equalDeadlines = environment.CreateAssignment(
+            "10000000-0000-4000-8000-000000000030",
+            "20000000-0000-4000-8000-000000000030",
+            39);
+        equalDeadlines.ResourceLimits.CommandTimeoutSeconds = 30;
+        equalDeadlines.ResourceLimits.JobTimeoutSeconds = 30;
+        var limitsError = CaptureProtocolError(() => AgentValidation.ValidateAssignment(
+            equalDeadlines,
+            environment.Configuration,
+            nowUnixMilliseconds: 1_800_000_000_000));
+        Require(limitsError == AgentProtocolError.InvalidLimits,
+            "equal command and job deadlines were accepted");
     }
 
     private static async Task IsolationDriftIsRejectedBeforeRpcAsync()
@@ -1152,6 +1713,109 @@ internal static class Program
             && authorization.Length == 47, "authenticated outbound metadata missing");
     }
 
+    private static ProcessStartInfo SelfStartInfo(params string[] arguments)
+    {
+        var processPath = Environment.ProcessPath
+            ?? throw new InvalidOperationException("The smoke process path is unavailable.");
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = processPath,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            WorkingDirectory = AppContext.BaseDirectory,
+        };
+        if (string.Equals(
+                Path.GetFileNameWithoutExtension(processPath),
+                "dotnet",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            startInfo.ArgumentList.Add(typeof(Program).Assembly.Location);
+        }
+
+        foreach (var argument in arguments)
+        {
+            startInfo.ArgumentList.Add(argument);
+        }
+
+        return startInfo;
+    }
+
+    private static string Sha256File(string path)
+    {
+        using var stream = new FileStream(
+            path,
+            FileMode.Open,
+            FileAccess.Read,
+            FileShare.Read,
+            bufferSize: 65_536,
+            FileOptions.SequentialScan);
+        return Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(stream));
+    }
+
+    private static async Task<OwnedProcessIds> ReadOwnedProcessIdsAsync(
+        string path,
+        TimeSpan timeout)
+    {
+        var elapsed = Stopwatch.StartNew();
+        while (elapsed.Elapsed < timeout)
+        {
+            try
+            {
+                if (File.Exists(path))
+                {
+                    var bytes = await File.ReadAllBytesAsync(path);
+                    using var document = JsonDocument.Parse(bytes);
+                    var root = document.RootElement;
+                    if (string.Equals(
+                            root.GetProperty("schema_version").GetString(),
+                            "hwpx-agent.p10-09-owned-process-tree/v1",
+                            StringComparison.Ordinal))
+                    {
+                        return new OwnedProcessIds(
+                            root.GetProperty("root_process_id").GetInt32(),
+                            root.GetProperty("leaf_process_id").GetInt32());
+                    }
+                }
+            }
+            catch (IOException)
+            {
+                // The child may still be publishing its bounded process receipt.
+            }
+            catch (JsonException)
+            {
+                // The file was observed between CreateNew and its durable flush.
+            }
+
+            await Task.Delay(TimeSpan.FromMilliseconds(25));
+        }
+
+        throw new TimeoutException("The owned process tree did not publish its process receipt.");
+    }
+
+    private static async Task WaitForProcessesToExitAsync(int[] processIds, TimeSpan timeout)
+    {
+        var elapsed = Stopwatch.StartNew();
+        while (elapsed.Elapsed < timeout && processIds.Any(ProcessIsRunning))
+        {
+            await Task.Delay(TimeSpan.FromMilliseconds(25));
+        }
+    }
+
+    private static bool ProcessIsRunning(int processId)
+    {
+        try
+        {
+            using var process = Process.GetProcessById(processId);
+            return !process.HasExited;
+        }
+        catch (ArgumentException)
+        {
+            return false;
+        }
+    }
+
+    private sealed record OwnedProcessIds(int RootProcessId, int LeafProcessId);
+
     private static WorkerIsolationPolicyPin CurrentIsolationPolicy(
         string targetProfileId,
         string hostBaselineSha256) =>
@@ -1163,6 +1827,62 @@ internal static class Program
             Digest('6'),
             Digest('e'),
             ProductionIsolationQualified: false);
+
+    private static WorkerSupervisorPolicyPin CurrentSupervisorPolicy() =>
+        new(
+            "supervisor.current_pc_local_v1",
+            CooperativeStopTimeoutSeconds: 2,
+            ReconciliationTimeoutSeconds: 2,
+            RecycleTimeoutSeconds: 2,
+            MaximumJobsPerWorker: 25,
+            MaximumPrivateMemoryBytes: 536_870_912);
+
+    private static WorkerStartupRecoveryReceipt StartupReceipt() =>
+        new(
+            ProbeComplete: true,
+            OwnedProcessCountBefore: 0,
+            OwnedProcessCountAfter: 0,
+            ProcessTreeTerminated: true,
+            FreshWorkerRequired: true,
+            RawProcessCommandLineStored: false,
+            SafeDetailSha256: Digest('1'));
+
+    private static WorkerRecycleReceipt RecycleReceipt(
+        LeaseAssignment assignment,
+        WorkerRecycleReason reason) =>
+        new(
+            assignment.ExecutionId,
+            AgentValidation.ComputeSha256(assignment),
+            reason,
+            ProcessTreeTerminated: true,
+            FreshWorkerRequired: true,
+            RawProcessCommandLineStored: false,
+            SafeDetailSha256: Digest('2'));
+
+    private static WorkerReconciliationObservation Observation(
+        LeaseAssignment assignment,
+        bool effectStarted,
+        bool outputPresent,
+        bool actionTracePresent,
+        bool actionTraceTerminal,
+        bool readbackVerified = false,
+        uint completedJobs = 0,
+        ulong privateMemoryBytes = 67_108_864) =>
+        new(
+            assignment.ExecutionId,
+            AgentValidation.ComputeSha256(assignment),
+            ProbeComplete: true,
+            WorkerProcessRunning: true,
+            EffectStarted: effectStarted,
+            SourceUnchanged: true,
+            OutputPresent: outputPresent,
+            OutputDigestVerified: outputPresent,
+            ActionTracePresent: actionTracePresent,
+            ActionTraceTerminal: actionTraceTerminal,
+            ReadbackVerified: readbackVerified,
+            CompletedJobs: completedJobs,
+            PrivateMemoryBytes: privateMemoryBytes,
+            RawDocumentContentStored: false);
 
     private static WorkerIsolationObservation PassingIsolationObservation(
         WorkerIsolationPolicyPin policy,
@@ -1227,6 +1947,20 @@ internal static class Program
         try
         {
             action();
+        }
+        catch (AgentProtocolException error)
+        {
+            return error.Error;
+        }
+
+        throw new InvalidOperationException("Expected AgentProtocolException.");
+    }
+
+    private static async Task<AgentProtocolError> CaptureProtocolErrorAsync(Func<Task> action)
+    {
+        try
+        {
+            await action();
         }
         catch (AgentProtocolException error)
         {
@@ -1315,6 +2049,7 @@ internal static class Program
                 WorkerIsolation: CurrentIsolationPolicy(
                     "hancom-hangul-2020-secondary",
                     Digest('b')),
+                WorkerSupervisor: CurrentSupervisorPolicy(),
                 HancomSecurityModule: new HancomSecurityModulePin(
                     "FilePathCheckerModuleExample",
                     Digest('d')));
@@ -1362,7 +2097,7 @@ internal static class Program
 
         internal WindowsAgentService CreateService(
             IWindowsAgentControlClient client,
-            IAgentJobExecutor executor) =>
+            ISupervisedAgentJobExecutor executor) =>
             new(Configuration, client, Store, executor, Workspace, IsolationAttestor);
 
         internal List<string> SandboxDirectories()
@@ -1407,11 +2142,99 @@ internal static class Program
     }
 
     private sealed class DelegatingExecutor(
-        Func<AgentJobContext, CancellationToken, Task<AgentJobResult>> execute) : IAgentJobExecutor
+        Func<AgentJobContext, CancellationToken, Task<AgentJobResult>> execute)
+        : ISupervisedAgentJobExecutor
     {
-        public Task<AgentJobResult> ExecuteAsync(
+        private readonly object sync = new();
+        private readonly Dictionary<string, AgentJobResult> completed = new(StringComparer.Ordinal);
+        private readonly HashSet<string> started = new(StringComparer.Ordinal);
+
+        internal Func<CancellationToken, Task<WorkerStartupRecoveryReceipt>>? StartupRecoveryHandler
+        {
+            get;
+            init;
+        }
+
+        internal Func<string, CancellationToken, Task>? CancellationHandler { get; init; }
+
+        internal Func<LeaseAssignment, CancellationToken, Task<WorkerReconciliationObservation>>?
+            ReconcileHandler
+        { get; init; }
+
+        internal Func<LeaseAssignment, WorkerRecycleReason, CancellationToken, Task<WorkerRecycleReceipt>>?
+            RecycleHandler
+        { get; init; }
+
+        public async Task<AgentJobResult> ExecuteAsync(
             AgentJobContext context,
-            CancellationToken cancellationToken) => execute(context, cancellationToken);
+            CancellationToken cancellationToken)
+        {
+            lock (sync)
+            {
+                started.Add(context.Assignment.ExecutionId);
+            }
+
+            var result = await execute(context, cancellationToken);
+            lock (sync)
+            {
+                completed[context.Assignment.ExecutionId] = result;
+            }
+
+            return result;
+        }
+
+        public Task<WorkerStartupRecoveryReceipt> RecoverStartupAsync(
+            CancellationToken cancellationToken) => StartupRecoveryHandler is null
+                ? Task.FromResult(StartupReceipt())
+                : StartupRecoveryHandler(cancellationToken);
+
+        public Task RequestCancellationAsync(
+            string executionId,
+            CancellationToken cancellationToken) => CancellationHandler is null
+                ? Task.CompletedTask
+                : CancellationHandler(executionId, cancellationToken);
+
+        public Task<WorkerReconciliationObservation> ReconcileAsync(
+            LeaseAssignment assignment,
+            CancellationToken cancellationToken)
+        {
+            if (ReconcileHandler is not null)
+            {
+                return ReconcileHandler(assignment, cancellationToken);
+            }
+
+            AgentJobResult? result;
+            bool executionStarted;
+            lock (sync)
+            {
+                completed.TryGetValue(assignment.ExecutionId, out result);
+                executionStarted = started.Contains(assignment.ExecutionId);
+            }
+
+            var succeeded = result?.TerminalState == ExecutionState.Succeeded;
+            return Task.FromResult(new WorkerReconciliationObservation(
+                assignment.ExecutionId,
+                AgentValidation.ComputeSha256(assignment),
+                ProbeComplete: true,
+                WorkerProcessRunning: true,
+                EffectStarted: executionStarted,
+                SourceUnchanged: true,
+                OutputPresent: succeeded && result!.Artifacts.Count != 0,
+                OutputDigestVerified: succeeded,
+                ActionTracePresent: result is not null,
+                ActionTraceTerminal: result is not null,
+                ReadbackVerified: succeeded,
+                CompletedJobs: result is null ? 0u : 1u,
+                PrivateMemoryBytes: 67_108_864,
+                RawDocumentContentStored: false));
+        }
+
+        public Task<WorkerRecycleReceipt> RecycleAsync(
+            LeaseAssignment assignment,
+            WorkerRecycleReason reason,
+            CancellationToken cancellationToken) => RecycleHandler is null
+                ? Task.FromResult(RecycleReceipt(assignment, reason))
+                : RecycleHandler(assignment, reason, cancellationToken);
     }
 
     private sealed class FixedIsolationAttestor(WorkerIsolationObservation observation)

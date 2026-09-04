@@ -47,6 +47,77 @@ public sealed class AgentWorkspace
         }
     }
 
+    internal uint QuarantineJobSandboxResidue()
+    {
+        AgentValidation.EnsurePlainDirectory(RootPath, nameof(RootPath));
+        AgentValidation.EnsurePlainDirectory(sandboxRoot, nameof(sandboxRoot));
+        var entries = Directory.EnumerateFileSystemEntries(sandboxRoot).ToArray();
+        if (entries.Length == 0)
+        {
+            return 0;
+        }
+
+        var quarantineRoot = Path.Combine(RootPath, "quarantine");
+        Directory.CreateDirectory(quarantineRoot);
+        AgentValidation.EnsurePlainDirectory(quarantineRoot, nameof(RootPath));
+        EnsureMarker(
+            quarantineRoot,
+            ".hwpx-agent-quarantine",
+            "hwpx-agent-windows-agent-quarantine/v1");
+        var validatedEntries = new List<(string Source, string Name)>();
+        try
+        {
+            foreach (var entry in entries)
+            {
+                var attributes = File.GetAttributes(entry);
+                var name = Path.GetFileName(entry);
+                if ((attributes & FileAttributes.Directory) == 0
+                    || (attributes & FileAttributes.ReparsePoint) != 0
+                    || !name.StartsWith("job-", StringComparison.Ordinal)
+                    || !Guid.TryParseExact(name[4..], "D", out var executionId)
+                    || !string.Equals(executionId.ToString("D"), name[4..], StringComparison.Ordinal))
+                {
+                    throw new AgentProtocolException(AgentProtocolError.CleanupResidue);
+                }
+
+                var marker = Path.Combine(entry, ".hwpx-agent-sandbox");
+                if (!File.Exists(marker)
+                    || (File.GetAttributes(marker) & FileAttributes.ReparsePoint) != 0
+                    || !string.Equals(
+                        File.ReadAllText(marker, System.Text.Encoding.UTF8),
+                        executionId.ToString("D"),
+                        StringComparison.Ordinal))
+                {
+                    throw new AgentProtocolException(AgentProtocolError.CleanupResidue);
+                }
+
+                validatedEntries.Add((entry, name));
+            }
+
+            uint moved = 0;
+            foreach (var (entry, name) in validatedEntries)
+            {
+                var destination = Path.Combine(
+                    quarantineRoot,
+                    $"{name}.{Guid.NewGuid():N}.quarantine");
+                Directory.Move(entry, destination);
+                moved = checked(moved + 1);
+            }
+
+            VerifyNoJobSandboxResidue();
+            return moved;
+        }
+        catch (AgentProtocolException)
+        {
+            throw;
+        }
+        catch
+        {
+            throw new AgentProtocolException(AgentProtocolError.CleanupResidue);
+        }
+
+    }
+
     internal AgentJobSandbox CreateSandbox(LeaseAssignment assignment)
     {
         AgentValidation.RequireGuid(assignment.ExecutionId, nameof(assignment));

@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/worker-supervisor-policy-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_id",
+    "scope",
+    "target",
+    "timeouts",
+    "recycle_limits",
+    "reconciliation",
+    "process_ownership",
+    "startup_recovery",
+    "scope_limits"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.p10-09-worker-supervisor-policy/v1" },
+    "policy_id": { "const": "supervisor.current_pc_local_v1" },
+    "scope": { "const": "current_pc_interactive_development" },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "product_build",
+        "locale",
+        "process_architecture",
+        "executable_sha256",
+        "host_baseline_sha256"
+      ],
+      "properties": {
+        "profile_id": { "const": "hancom-hangul-2020-secondary" },
+        "product_build": { "const": "11.0.0.9136" },
+        "locale": { "const": "ko-KR" },
+        "process_architecture": { "const": "x86" },
+        "executable_sha256": {
+          "const": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+        },
+        "host_baseline_sha256": {
+          "const": "7fbf6559fc3372b9da6c0b0ca53d9f4eb78b76a79df248c37ff009c13376adc0"
+        }
+      }
+    },
+    "timeouts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cooperative_stop_seconds",
+        "reconciliation_seconds",
+        "process_recycle_seconds",
+        "command_and_job_deadlines_are_distinct"
+      ],
+      "properties": {
+        "cooperative_stop_seconds": { "type": "integer", "minimum": 1, "maximum": 60 },
+        "reconciliation_seconds": { "type": "integer", "minimum": 1, "maximum": 60 },
+        "process_recycle_seconds": { "type": "integer", "minimum": 1, "maximum": 60 },
+        "command_and_job_deadlines_are_distinct": { "const": true }
+      }
+    },
+    "recycle_limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maximum_jobs_per_worker",
+        "maximum_private_memory_bytes",
+        "recycle_after_crash",
+        "recycle_after_unknown_outcome",
+        "fresh_worker_after_recycle"
+      ],
+      "properties": {
+        "maximum_jobs_per_worker": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "maximum_private_memory_bytes": {
+          "type": "integer",
+          "minimum": 67108864,
+          "maximum": 17179869184
+        },
+        "recycle_after_crash": { "const": true },
+        "recycle_after_unknown_outcome": { "const": true },
+        "fresh_worker_after_recycle": { "const": true }
+      }
+    },
+    "reconciliation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_unchanged_required",
+        "process_state_required",
+        "output_presence_required",
+        "output_digest_required_when_present",
+        "action_trace_required",
+        "semantic_readback_required_for_success",
+        "unknown_when_no_effect_is_not_proven",
+        "same_execution_automatic_replay_allowed"
+      ],
+      "properties": {
+        "source_unchanged_required": { "const": true },
+        "process_state_required": { "const": true },
+        "output_presence_required": { "const": true },
+        "output_digest_required_when_present": { "const": true },
+        "action_trace_required": { "const": true },
+        "semantic_readback_required_for_success": { "const": true },
+        "unknown_when_no_effect_is_not_proven": { "const": true },
+        "same_execution_automatic_replay_allowed": { "const": false }
+      }
+    },
+    "process_ownership": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "windows_job_object_required",
+        "kill_on_job_close_required",
+        "entire_owned_tree_must_exit",
+        "unowned_process_termination_allowed",
+        "raw_process_command_line_persisted"
+      ],
+      "properties": {
+        "windows_job_object_required": { "const": true },
+        "kill_on_job_close_required": { "const": true },
+        "entire_owned_tree_must_exit": { "const": true },
+        "unowned_process_termination_allowed": { "const": false },
+        "raw_process_command_line_persisted": { "const": false }
+      }
+    },
+    "startup_recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owned_process_probe_required",
+        "stale_marked_sandbox_quarantine_required",
+        "unmarked_or_ambiguous_residue_rejected",
+        "recursive_delete_allowed",
+        "lease_before_recovery_allowed"
+      ],
+      "properties": {
+        "owned_process_probe_required": { "const": true },
+        "stale_marked_sandbox_quarantine_required": { "const": true },
+        "unmarked_or_ambiguous_residue_rejected": { "const": true },
+        "recursive_delete_allowed": { "const": false },
+        "lease_before_recovery_allowed": { "const": false }
+      }
+    },
+    "scope_limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "production_or_provider_qualified",
+        "another_host_requires_independent_evidence",
+        "another_hancom_version_requires_independent_evidence",
+        "user_document_scan_allowed"
+      ],
+      "properties": {
+        "production_or_provider_qualified": { "const": false },
+        "another_host_requires_independent_evidence": { "const": true },
+        "another_hancom_version_requires_independent_evidence": { "const": true },
+        "user_document_scan_allowed": { "const": false }
+      }
+    }
+  }
+}

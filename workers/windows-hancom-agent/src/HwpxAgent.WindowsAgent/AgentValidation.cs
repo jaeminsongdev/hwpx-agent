@@ -24,6 +24,7 @@ internal static partial class AgentValidation
         }
 
         ValidateWorkerIsolationPolicy(configuration.WorkerIsolation, configuration.TargetProfile);
+        ValidateWorkerSupervisorPolicy(configuration.WorkerSupervisor);
         if (configuration.AvailableJobSlots != 1)
         {
             throw new ArgumentException(
@@ -116,6 +117,80 @@ internal static partial class AgentValidation
             throw new ArgumentException(
                 "The worker isolation scope cannot overclaim or underclaim production isolation.",
                 nameof(policy));
+        }
+    }
+
+    internal static void ValidateWorkerSupervisorPolicy(WorkerSupervisorPolicyPin policy)
+    {
+        ArgumentNullException.ThrowIfNull(policy);
+        RequireSemanticId(policy.PolicyId);
+        if (policy.CooperativeStopTimeoutSeconds is 0 or > 60
+            || policy.ReconciliationTimeoutSeconds is 0 or > 60
+            || policy.RecycleTimeoutSeconds is 0 or > 60
+            || policy.MaximumJobsPerWorker is 0 or > 100
+            || policy.MaximumPrivateMemoryBytes is < 67_108_864 or > 17_179_869_184)
+        {
+            throw new ArgumentException("The worker supervisor policy must be bounded.", nameof(policy));
+        }
+    }
+
+    internal static void ValidateStartupRecoveryReceipt(WorkerStartupRecoveryReceipt receipt)
+    {
+        ArgumentNullException.ThrowIfNull(receipt);
+        RequireDigest(receipt.SafeDetailSha256);
+        if (!receipt.ProbeComplete
+            || receipt.OwnedProcessCountAfter != 0
+            || !receipt.ProcessTreeTerminated
+            || !receipt.FreshWorkerRequired
+            || receipt.RawProcessCommandLineStored)
+        {
+            throw new AgentProtocolException(AgentProtocolError.CleanupResidue);
+        }
+    }
+
+    internal static void ValidateReconciliationObservation(
+        WorkerReconciliationObservation observation,
+        LeaseAssignment assignment)
+    {
+        ArgumentNullException.ThrowIfNull(observation);
+        ArgumentNullException.ThrowIfNull(assignment);
+        RequireGuid(observation.ExecutionId, nameof(observation));
+        RequireDigest(observation.AssignmentSha256);
+        if (!string.Equals(observation.ExecutionId, assignment.ExecutionId, StringComparison.Ordinal)
+            || !string.Equals(
+                observation.AssignmentSha256,
+                ComputeSha256(assignment),
+                StringComparison.Ordinal)
+            || (!observation.OutputPresent && observation.OutputDigestVerified)
+            || (!observation.ActionTracePresent && observation.ActionTraceTerminal)
+            || (observation.ReadbackVerified
+                && (!observation.EffectStarted || !observation.ActionTraceTerminal))
+            || (observation.WorkerProcessRunning && observation.PrivateMemoryBytes == 0)
+            || (!observation.WorkerProcessRunning && observation.PrivateMemoryBytes != 0)
+            || observation.RawDocumentContentStored)
+        {
+            throw new AgentProtocolException(AgentProtocolError.ReconciliationFailed);
+        }
+    }
+
+    internal static void ValidateRecycleReceipt(
+        WorkerRecycleReceipt receipt,
+        LeaseAssignment assignment,
+        WorkerRecycleReason expectedReason)
+    {
+        ArgumentNullException.ThrowIfNull(receipt);
+        ArgumentNullException.ThrowIfNull(assignment);
+        RequireGuid(receipt.ExecutionId, nameof(receipt));
+        RequireDigest(receipt.AssignmentSha256);
+        RequireDigest(receipt.SafeDetailSha256);
+        if (!string.Equals(receipt.ExecutionId, assignment.ExecutionId, StringComparison.Ordinal)
+            || !string.Equals(receipt.AssignmentSha256, ComputeSha256(assignment), StringComparison.Ordinal)
+            || receipt.Reason != expectedReason
+            || !receipt.ProcessTreeTerminated
+            || !receipt.FreshWorkerRequired
+            || receipt.RawProcessCommandLineStored)
+        {
+            throw new AgentProtocolException(AgentProtocolError.RecycleFailed);
         }
     }
 
@@ -423,7 +498,7 @@ internal static partial class AgentValidation
         if (limits is null
             || limits.CommandTimeoutSeconds is 0 or > 900
             || limits.JobTimeoutSeconds is 0 or > 3600
-            || limits.CommandTimeoutSeconds > limits.JobTimeoutSeconds
+            || limits.CommandTimeoutSeconds >= limits.JobTimeoutSeconds
             || limits.MemoryLimitBytes < 67_108_864
             || limits.MemoryLimitBytes > 17_179_869_184
             || limits.MaxOutputBytes is 0 or > MaximumArtifactBytes
@@ -490,6 +565,8 @@ public enum AgentProtocolError
     OutputLimit,
     IsolationNotReady,
     CleanupResidue,
+    ReconciliationFailed,
+    RecycleFailed,
 }
 
 public sealed class AgentProtocolException : Exception

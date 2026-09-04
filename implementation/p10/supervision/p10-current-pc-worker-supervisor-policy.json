@@ -1,0 +1,56 @@
+{
+  "schema_version": "hwpx-agent.p10-09-worker-supervisor-policy/v1",
+  "policy_id": "supervisor.current_pc_local_v1",
+  "scope": "current_pc_interactive_development",
+  "target": {
+    "profile_id": "hancom-hangul-2020-secondary",
+    "product_build": "11.0.0.9136",
+    "locale": "ko-KR",
+    "process_architecture": "x86",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    "host_baseline_sha256": "7fbf6559fc3372b9da6c0b0ca53d9f4eb78b76a79df248c37ff009c13376adc0"
+  },
+  "timeouts": {
+    "cooperative_stop_seconds": 2,
+    "reconciliation_seconds": 2,
+    "process_recycle_seconds": 2,
+    "command_and_job_deadlines_are_distinct": true
+  },
+  "recycle_limits": {
+    "maximum_jobs_per_worker": 25,
+    "maximum_private_memory_bytes": 536870912,
+    "recycle_after_crash": true,
+    "recycle_after_unknown_outcome": true,
+    "fresh_worker_after_recycle": true
+  },
+  "reconciliation": {
+    "source_unchanged_required": true,
+    "process_state_required": true,
+    "output_presence_required": true,
+    "output_digest_required_when_present": true,
+    "action_trace_required": true,
+    "semantic_readback_required_for_success": true,
+    "unknown_when_no_effect_is_not_proven": true,
+    "same_execution_automatic_replay_allowed": false
+  },
+  "process_ownership": {
+    "windows_job_object_required": true,
+    "kill_on_job_close_required": true,
+    "entire_owned_tree_must_exit": true,
+    "unowned_process_termination_allowed": false,
+    "raw_process_command_line_persisted": false
+  },
+  "startup_recovery": {
+    "owned_process_probe_required": true,
+    "stale_marked_sandbox_quarantine_required": true,
+    "unmarked_or_ambiguous_residue_rejected": true,
+    "recursive_delete_allowed": false,
+    "lease_before_recovery_allowed": false
+  },
+  "scope_limits": {
+    "production_or_provider_qualified": false,
+    "another_host_requires_independent_evidence": true,
+    "another_hancom_version_requires_independent_evidence": true,
+    "user_document_scan_allowed": false
+  }
+}

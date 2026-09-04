@@ -26,6 +26,22 @@ public interface IAgentJobExecutor
     Task<AgentJobResult> ExecuteAsync(AgentJobContext context, CancellationToken cancellationToken);
 }
 
+public interface ISupervisedAgentJobExecutor : IAgentJobExecutor
+{
+    Task<WorkerStartupRecoveryReceipt> RecoverStartupAsync(CancellationToken cancellationToken);
+
+    Task RequestCancellationAsync(string executionId, CancellationToken cancellationToken);
+
+    Task<WorkerReconciliationObservation> ReconcileAsync(
+        LeaseAssignment assignment,
+        CancellationToken cancellationToken);
+
+    Task<WorkerRecycleReceipt> RecycleAsync(
+        LeaseAssignment assignment,
+        WorkerRecycleReason reason,
+        CancellationToken cancellationToken);
+}
+
 public sealed record WindowsAgentConfiguration(
     string AgentInstanceId,
     TargetProfileIdentity TargetProfile,
@@ -33,8 +49,69 @@ public sealed record WindowsAgentConfiguration(
     uint AvailableJobSlots,
     TimeSpan RpcTimeout,
     WorkerIsolationPolicyPin WorkerIsolation,
+    WorkerSupervisorPolicyPin WorkerSupervisor,
     HancomSecurityModulePin? HancomSecurityModule = null,
     HancomBindingBundlePin? HancomBindingBundle = null);
+
+public sealed record WorkerSupervisorPolicyPin(
+    string PolicyId,
+    uint CooperativeStopTimeoutSeconds,
+    uint ReconciliationTimeoutSeconds,
+    uint RecycleTimeoutSeconds,
+    uint MaximumJobsPerWorker,
+    ulong MaximumPrivateMemoryBytes);
+
+public enum WorkerRecycleReason
+{
+    StartupRecovery = 1,
+    CommandTimeout = 2,
+    Cancellation = 3,
+    WorkerFailure = 4,
+    UnknownOutcome = 5,
+    PolicyLimit = 6,
+    CleanupFailure = 7,
+    AbandonedExecution = 8,
+}
+
+public sealed record WorkerStartupRecoveryReceipt(
+    bool ProbeComplete,
+    uint OwnedProcessCountBefore,
+    uint OwnedProcessCountAfter,
+    bool ProcessTreeTerminated,
+    bool FreshWorkerRequired,
+    bool RawProcessCommandLineStored,
+    string SafeDetailSha256);
+
+public sealed record WorkerReconciliationObservation(
+    string ExecutionId,
+    string AssignmentSha256,
+    bool ProbeComplete,
+    bool WorkerProcessRunning,
+    bool EffectStarted,
+    bool SourceUnchanged,
+    bool OutputPresent,
+    bool OutputDigestVerified,
+    bool ActionTracePresent,
+    bool ActionTraceTerminal,
+    bool ReadbackVerified,
+    uint CompletedJobs,
+    ulong PrivateMemoryBytes,
+    bool RawDocumentContentStored);
+
+public sealed record WorkerRecycleReceipt(
+    string ExecutionId,
+    string AssignmentSha256,
+    WorkerRecycleReason Reason,
+    bool ProcessTreeTerminated,
+    bool FreshWorkerRequired,
+    bool RawProcessCommandLineStored,
+    string SafeDetailSha256);
+
+public sealed record UnfinishedExecutionReconciliation(
+    ExecutionState TerminalState,
+    BridgeErrorCode ErrorCode,
+    string SafeCategory,
+    bool EffectUnknown);
 
 public enum WorkerIsolationScope
 {

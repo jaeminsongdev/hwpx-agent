@@ -13,7 +13,7 @@ public sealed class WindowsAgentService
     private readonly WindowsAgentConfiguration configuration;
     private readonly IWindowsAgentControlClient controlClient;
     private readonly IArtifactStore artifactStore;
-    private readonly IAgentJobExecutor executor;
+    private readonly AgentWorkerSupervisor supervisor;
     private readonly AgentWorkspace workspace;
     private readonly WorkerIsolationGuard isolationGuard;
     private readonly TimeProvider timeProvider;
@@ -23,7 +23,7 @@ public sealed class WindowsAgentService
         WindowsAgentConfiguration configuration,
         IWindowsAgentControlClient controlClient,
         IArtifactStore artifactStore,
-        IAgentJobExecutor executor,
+        ISupervisedAgentJobExecutor executor,
         AgentWorkspace workspace,
         IWorkerIsolationAttestor isolationAttestor,
         TimeProvider? timeProvider = null)
@@ -32,10 +32,39 @@ public sealed class WindowsAgentService
         this.configuration = configuration;
         this.controlClient = controlClient ?? throw new ArgumentNullException(nameof(controlClient));
         this.artifactStore = artifactStore ?? throw new ArgumentNullException(nameof(artifactStore));
-        this.executor = executor ?? throw new ArgumentNullException(nameof(executor));
+        supervisor = new AgentWorkerSupervisor(
+            executor ?? throw new ArgumentNullException(nameof(executor)),
+            configuration.WorkerSupervisor);
         this.workspace = workspace ?? throw new ArgumentNullException(nameof(workspace));
         isolationGuard = new WorkerIsolationGuard(configuration, workspace, isolationAttestor);
         this.timeProvider = timeProvider ?? TimeProvider.System;
+    }
+
+    public static async Task<WindowsAgentService> CreateRecoveredAsync(
+        WindowsAgentConfiguration configuration,
+        IWindowsAgentControlClient controlClient,
+        IArtifactStore artifactStore,
+        ISupervisedAgentJobExecutor executor,
+        AgentWorkspace workspace,
+        IWorkerIsolationAttestor isolationAttestor,
+        CancellationToken cancellationToken,
+        TimeProvider? timeProvider = null)
+    {
+        AgentValidation.ValidateConfiguration(configuration);
+        ArgumentNullException.ThrowIfNull(workspace);
+        var startupSupervisor = new AgentWorkerSupervisor(
+            executor ?? throw new ArgumentNullException(nameof(executor)),
+            configuration.WorkerSupervisor);
+        await startupSupervisor.RecoverStartupAsync(cancellationToken).ConfigureAwait(false);
+        workspace.QuarantineJobSandboxResidue();
+        return new WindowsAgentService(
+            configuration,
+            controlClient,
+            artifactStore,
+            executor,
+            workspace,
+            isolationAttestor,
+            timeProvider);
     }
 
     public async Task<AgentRunResult> RunOnceAsync(CancellationToken cancellationToken)
@@ -124,12 +153,15 @@ public sealed class WindowsAgentService
 
         if (claim.Disposition == JournalClaimDisposition.Unfinished)
         {
+            var reconciliation = await supervisor
+                .ReconcileUnfinishedAsync(assignment, cancellationToken)
+                .ConfigureAwait(false);
             var uncertain = CreateFailureReceipt(
                 assignment,
-                ExecutionState.UnknownOutcome,
-                BridgeErrorCode.UnknownOutcome,
-                "unfinished-journal-claim",
-                effectUnknown: true);
+                reconciliation.TerminalState,
+                reconciliation.ErrorCode,
+                reconciliation.SafeCategory,
+                reconciliation.EffectUnknown);
             await ownership.WriteTerminalAsync(uncertain, CancellationToken.None).ConfigureAwait(false);
             return await CommitRecordedAsync(
                 assignment,
@@ -159,6 +191,19 @@ public sealed class WindowsAgentService
                 callerCancelled ? BridgeErrorCode.Cancelled : BridgeErrorCode.Timeout,
                 callerCancelled ? "agent-run-cancelled" : "agent-job-timeout",
                 effectUnknown: executorInvoked);
+        }
+        catch (WorkerSupervisionException error)
+        {
+            var errorCode = error.ErrorCode == BridgeErrorCode.Cancelled
+                && !cancellationToken.IsCancellationRequested
+                    ? BridgeErrorCode.Timeout
+                    : error.ErrorCode;
+            terminalReceipt = CreateFailureReceipt(
+                assignment,
+                error.EffectUnknown ? ExecutionState.UnknownOutcome : ExecutionState.Failed,
+                errorCode,
+                error.SafeCategory,
+                error.EffectUnknown);
         }
         catch (AgentProtocolException error)
         {
@@ -309,8 +354,7 @@ public sealed class WindowsAgentService
                 effectUnknown: false);
         }
 
-        markExecutorInvoked();
-        var result = await executor
+        var result = await supervisor
             .ExecuteAsync(
                 new AgentJobContext(
                     assignment,
@@ -319,6 +363,7 @@ public sealed class WindowsAgentService
                     configuration.HancomBindingBundle,
                     configuration.CapabilityRegistrySha256,
                     timeProvider),
+                markExecutorInvoked,
                 cancellationToken)
             .ConfigureAwait(false);
         AgentValidation.ValidateJobResult(result);
@@ -566,6 +611,8 @@ public sealed class WindowsAgentService
         AgentProtocolError.JournalConflict => BridgeErrorCode.UnknownOutcome,
         AgentProtocolError.IsolationNotReady => BridgeErrorCode.PolicyDenied,
         AgentProtocolError.CleanupResidue => BridgeErrorCode.CleanupFailed,
+        AgentProtocolError.ReconciliationFailed => BridgeErrorCode.UnknownOutcome,
+        AgentProtocolError.RecycleFailed => BridgeErrorCode.CleanupFailed,
         _ => BridgeErrorCode.InvalidEnvelope,
     };
 

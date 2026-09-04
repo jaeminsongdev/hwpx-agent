@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/worker-supervisor-audit-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at_utc",
+    "state",
+    "policy_relative_path",
+    "policy_sha256",
+    "host_baseline_verification",
+    "execution",
+    "observed_invariants",
+    "scope",
+    "privacy"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.p10-09-worker-supervisor-audit/v1" },
+    "generated_at_utc": { "type": "string", "format": "date-time" },
+    "state": { "const": "pass_current_pc_development_only" },
+    "policy_relative_path": {
+      "const": "implementation/p10/supervision/p10-current-pc-worker-supervisor-policy.json"
+    },
+    "policy_sha256": { "$ref": "#/$defs/sha256" },
+    "host_baseline_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "baseline_digest_sha256", "verification_sha256"],
+      "properties": {
+        "state": { "const": "pass" },
+        "baseline_digest_sha256": {
+          "const": "7fbf6559fc3372b9da6c0b0ca53d9f4eb78b76a79df248c37ff009c13376adc0"
+        },
+        "verification_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent_smoke_assembly_sha256",
+        "source_revision",
+        "source_tree_clean",
+        "release_build_succeeded",
+        "exit_code",
+        "stdout_sha256",
+        "expected_marker_present",
+        "test_count"
+      ],
+      "properties": {
+        "agent_smoke_assembly_sha256": { "$ref": "#/$defs/sha256" },
+        "source_revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "source_tree_clean": { "const": true },
+        "release_build_succeeded": { "const": true },
+        "exit_code": { "const": 0 },
+        "stdout_sha256": { "$ref": "#/$defs/sha256" },
+        "expected_marker_present": { "const": true },
+        "test_count": { "const": 28 }
+      }
+    },
+    "observed_invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hancom_process_count_before",
+        "hancom_process_count_after",
+        "hard_timeout_exercised",
+        "unknown_outcome_reconciliation_exercised",
+        "proved_no_effect_retryable_exercised",
+        "same_execution_terminal_replay_exercised",
+        "duplicate_executor_effect_count",
+        "windows_job_object_tree_termination_exercised",
+        "owned_descendant_exit_verified",
+        "startup_quarantine_exercised",
+        "ambiguous_residue_fail_closed_exercised"
+      ],
+      "properties": {
+        "hancom_process_count_before": { "const": 0 },
+        "hancom_process_count_after": { "const": 0 },
+        "hard_timeout_exercised": { "const": true },
+        "unknown_outcome_reconciliation_exercised": { "const": true },
+        "proved_no_effect_retryable_exercised": { "const": true },
+        "same_execution_terminal_replay_exercised": { "const": true },
+        "duplicate_executor_effect_count": { "const": 0 },
+        "windows_job_object_tree_termination_exercised": { "const": true },
+        "owned_descendant_exit_verified": { "const": true },
+        "startup_quarantine_exercised": { "const": true },
+        "ambiguous_residue_fail_closed_exercised": { "const": true }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_profile_id",
+        "product_build",
+        "process_architecture",
+        "current_pc_local_development_qualified",
+        "production_or_provider_qualified",
+        "another_hancom_version_qualified"
+      ],
+      "properties": {
+        "target_profile_id": { "const": "hancom-hangul-2020-secondary" },
+        "product_build": { "const": "11.0.0.9136" },
+        "process_architecture": { "const": "x86" },
+        "current_pc_local_development_qualified": { "const": true },
+        "production_or_provider_qualified": { "const": false },
+        "another_hancom_version_qualified": { "const": false }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw_process_command_line_present",
+        "raw_document_text_present",
+        "user_document_scanned",
+        "external_network_invoked",
+        "system_setting_changed"
+      ],
+      "properties": {
+        "raw_process_command_line_present": { "const": false },
+        "raw_document_text_present": { "const": false },
+        "user_document_scanned": { "const": false },
+        "external_network_invoked": { "const": false },
+        "system_setting_changed": { "const": false }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}
