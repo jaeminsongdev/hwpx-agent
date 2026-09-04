@@ -2,8 +2,8 @@
 
 - Updated: 2026-09-05
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P15 / phase Gate audit`
-- Active reasoning effort: `max`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P16 / P16-01 Official docs lock`
+- Active reasoning effort: `high`
 - Immediate UI dependency: none live; P05-07 v2 attempts 10 through 16 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `모두 허용`
 
 ## Objective and non-negotiable boundaries
@@ -38,9 +38,9 @@ save, render, cross-version or production proof.
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
 | P14 | `pass_scoped_current_pc_local_reference_and_disposable_postgres` | `implementation/p14/P14_GATE_REPORT.md` |
-| P15 | `gate_audit_pending_current_pc_local` | P15-01~09 pass; separate STRICT/`max` phase Gate audit next |
-| P16 | `blocked_by_P15` | ChatGPT Web plugin/widget |
-| P17 | `blocked_by_P15` | Codex remote/local companion |
+| P15 | `pass_scoped_current_pc_hancom_2020_local_mcp_reference_and_inspector_staging` | `implementation/p15/P15_GATE_REPORT.md` |
+| P16 | `ready_current_pc_local` | P16-01 Official docs lock next |
+| P17 | `ready_current_pc_local` | Codex remote/local companion; not started |
 | P18 | `blocked_by_P12_P13_P16_P17` | quality/security/performance/DR |
 | P19 | `blocked_by_P18` | production/license/submission |
 | P20 | `post_GA` | parity and Rust-native expansion |
@@ -75,6 +75,7 @@ save, render, cross-version or production proof.
 | P-0077 | P15-07 rate limit/quotas | `pass_scoped_current_pc_hancom_2020_local_quota_reference` | commits `91e84f4` + `e15921a`; Rust 53/53 and P15 65/65, final exact current/independent CI each 5/5, security and offline Linux pass; `implementation/p15/P15-07_REPORT.md` |
 | P-0078 | P15-08 bounded telemetry/dashboards | `pass_scoped_current_pc_hancom_2020_local_telemetry_reference` | commit `d492dc8`; Rust 61/61 and P15 73/73, exact current/independent CI each 5/5, security and offline Linux pass; `implementation/p15/P15-08_REPORT.md` |
 | P-0079 | P15-09 Inspector/staging | `pass_scoped_current_pc_hancom_2020_local_inspector_staging` | runtime commits `3ea8e6b` + `81c1ef1`, closure-contract repair `7ea2f84`; Inspector 18/18 tools and 8/8 negatives, runtime current/independent CI each 5/5, security and offline Linux 64/64 pass; `implementation/p15/P15-09_REPORT.md` |
+| P-0080 | P15 phase Gate | `pass_scoped_current_pc_hancom_2020_local_mcp_reference_and_inspector_staging` | STRICT/`max`; P15-01~09 and all common constraints pass at closure `b823b32` without promoting local/synthetic evidence; `implementation/p15/P15_GATE_REPORT.md` |
 
 ## Active evidence summary
 
@@ -181,6 +182,11 @@ save, render, cross-version or production proof.
   2020 local staging; public
   deployment, real backend execution, ChatGPT/Codex attachment and 2022/2024 remain unverified. See
   `implementation/p15/P15-09_REPORT.md`.
+- P15 STRICT/`max` Gate audits all nine card reports and common constraints at closure commit
+  `b823b32`. It authorizes only current-PC Hangul 2020 local MCP reference development and
+  Inspector-qualified loopback staging. Production OAuth/JWKS, public hosting, distributed services,
+  real backend/Hangul execution, ChatGPT/Codex attachment, other PCs and 2022/2024 remain unverified.
+  P16 and P17 may start only in the same local scope; see `implementation/p15/P15_GATE_REPORT.md`.
 - Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with
   cleanup and succeeded on attempt 2, all other checks passed, and the SBOM contains 675 components.
 - A detached exact-commit worktree passed all four non-security lanes after the four digest-pinned,
@@ -197,11 +203,12 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next actions
 
-1. Non-UI: run the separate P15 STRICT/`max` phase Gate audit across P15-01~09 and the common phase
-   constraints. Authorize only current-PC local scope and keep public deployment, real backend
-   execution and ChatGPT/Codex attachment unverified.
+1. Non-UI: start P16-01 Official docs lock. Refresh authoritative OpenAI/MCP Apps SDK requirements
+   and freeze manifest, resource, tool metadata, CSP, file-flow and developer-mode obligations before
+   building the universal package or widget.
 2. UI-dependent: on a new explicit user request, rerun P05-07 once and require
    save/reopen/PDF/render evidence before P05-08, P05-09 and the P05 Gate.
 3. Keep P10-05/06 and P10-08 production claims open until their external controls exist.
 
-Continue these actions at reasoning effort `max`.
+Continue P16-01 at reasoning effort `high`; use `max` for security-sensitive implementation review
+and the P16 phase Gate.
