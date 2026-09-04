@@ -1,0 +1,141 @@
+{
+  "schema_version": "hwpx-agent.p14-04-history-checkpoints-contract/v1",
+  "contract_id": "p14-history-checkpoints-v1",
+  "database": {
+    "engine": "PostgreSQL",
+    "server_version": "18.4",
+    "container_image": "postgres:18.4-bookworm@sha256:7e6103cf85f88f7a0eddb3ec0b1ba8940eba098ed118ade25a729ca9daee5568"
+  },
+  "prerequisites": [
+    {
+      "version": 1,
+      "name": "p14.metadata_v1",
+      "up_path": "migrations/postgres/0001_p14_metadata.up.sql",
+      "up_sha256": "7c00f744993581448acb4b6d4d8a46f1ff03d108750da0afc671c3b5e2b0a78d",
+      "down_path": "migrations/postgres/0001_p14_metadata.down.sql",
+      "down_sha256": "1c17c31ad8b19d16a64498ce9cb47cdf5c85a0cbd8450b079f8586d4960c8fa2"
+    },
+    {
+      "version": 2,
+      "name": "p14.artifact_service_v1",
+      "up_path": "migrations/postgres/0002_p14_artifact_service.up.sql",
+      "up_sha256": "202753fbd6f20f181b09bd6227766dfb808811bd4e734a4a418cb5bae4eaee56",
+      "down_path": "migrations/postgres/0002_p14_artifact_service.down.sql",
+      "down_sha256": "af04b1198d7c6f153cfc576036807bd1749746fcc17f480cd6d2d29d6a49f5ae"
+    },
+    {
+      "version": 3,
+      "name": "p14.revision_cas_v1",
+      "up_path": "migrations/postgres/0003_p14_revision_cas.up.sql",
+      "up_sha256": "beeac1f22fde0eb3474d40acc14838c1e9676a74b68c5b6f9608713ba6e6e53a",
+      "down_path": "migrations/postgres/0003_p14_revision_cas.down.sql",
+      "down_sha256": "cf99f107ebca0be77a18c23b83e937dff36e39a6610c6fa3b1fff9964d35cabb"
+    }
+  ],
+  "migration": {
+    "version": 4,
+    "name": "p14.history_checkpoints_v1",
+    "up_path": "migrations/postgres/0004_p14_history_checkpoints.up.sql",
+    "up_sha256": "e336890d4ee3fdf4819f52c079ba320f450b01ec516bf5ffaaf505a76b14f249",
+    "down_path": "migrations/postgres/0004_p14_history_checkpoints.down.sql",
+    "down_sha256": "a2d635bfb50fb93e9bbbd1ff37a04e223aec456afa21098b9ef83047f25c05e4"
+  },
+  "smoke_fixture": {
+    "path": "tools/p14/fixtures/p14_history_checkpoints_smoke.sql",
+    "sha256": "d9aadde5dff7e02b6f6506a4f6c8caf5dbb168fee4ab1bec2e5ea0b2e5bddafd",
+    "assertions_per_run": 26,
+    "pass_marker": "P14_HISTORY_SMOKE_PASS assertions=26"
+  },
+  "required_tables": [
+    "history_checkpoint_requests"
+  ],
+  "required_indexes": [
+    "revision_graph_seals_history_order_idx"
+  ],
+  "required_functions": [
+    "create_history_checkpoint",
+    "create_history_branch",
+    "query_revision_history"
+  ],
+  "required_triggers": [
+    "history_checkpoint_requests_immutable"
+  ],
+  "tenant_scoped_tables": [
+    "history_checkpoint_requests"
+  ],
+  "invariants": {
+    "hmac_subject_tenant_bound_cursor": true,
+    "cursor_expiry_and_page_bounds": true,
+    "bounded_history_graph": true,
+    "parent_generation_precedes_child": true,
+    "stable_snapshot_head_pagination": true,
+    "deterministic_merge_dag_query": true,
+    "semantic_diff_artifact_indirection": true,
+    "immutable_checkpoint": true,
+    "checkpoint_idempotent_replay": true,
+    "checkpoint_request_drift_denied": true,
+    "qualified_revision_branch_only": true,
+    "reader_history_only": true,
+    "editor_or_owner_mutation": true,
+    "cross_tenant_absence_or_denial": true,
+    "legacy_revision_fail_closed": true,
+    "transaction_local_request_context": true,
+    "guarded_destructive_rollback": true,
+    "migration_digest_supplied_by_runner": true,
+    "database_extensions_required": false,
+    "public_privileges_revoked": true
+  },
+  "source_locks": [
+    {
+      "path": "docs/02_architecture/05_state_revision_transactions.md",
+      "sha256": "0fe0b6a42b3c13a887370c02b447c248419b4fa2ed64b30ad3b8731c988ed21f"
+    },
+    {
+      "path": "docs/12_implementation_guides/09_project_jobs_storage.md",
+      "sha256": "946cac58f4984bb9da8055e4decc35b6259eb742270144c0f68d123bb4914a96"
+    },
+    {
+      "path": "docs/06_mcp_api/01_tool_surface.md",
+      "sha256": "f41729952ca8734af8cdcffddb82dc591eabecdc8327e735fa452897ed150223"
+    },
+    {
+      "path": "docs/06_mcp_api/02_tool_contracts.md",
+      "sha256": "0742bd0c62ea7c29a9e653a857052161658ae97d7539ce61dad66be7440950ce"
+    },
+    {
+      "path": "docs/06_mcp_api/05_auth_permissions.md",
+      "sha256": "6f227a4cb42f0a4b27a9d28cdd055606eb51f8adb2e589de2f02bf1585ca6b38"
+    },
+    {
+      "path": "crates/history-service/Cargo.toml",
+      "sha256": "893cd9f66d1808a5561bd83127f1d3cd388a5528c4b78f5df7f65f35ac72776c"
+    },
+    {
+      "path": "crates/history-service/src/lib.rs",
+      "sha256": "b35d6e0412f0cccaad06b4b2f9f968af91786fd436dab9492771b4165a6c522f"
+    },
+    {
+      "path": "crates/history-service/src/cursor.rs",
+      "sha256": "33615eb82041f7223ea21150335debf3d416080ab134964969b738c3f8c89ef4"
+    },
+    {
+      "path": "crates/history-service/src/service.rs",
+      "sha256": "6ab577ecc81abc0b4334db69776501e1a006510bc3fdd7dd97806ceac3630048"
+    },
+    {
+      "path": "crates/history-service/src/store.rs",
+      "sha256": "8ebdb3fc06f59ac54cda8eabee2fb09746a0fb0ba9e13a845e99d398a7bac6f8"
+    },
+    {
+      "path": "crates/history-service/src/types.rs",
+      "sha256": "39d86068bb82e27c8b79bdb9be6da28ff66fd4f0cdffd9e0416f933b644b89eb"
+    }
+  ],
+  "scope": {
+    "current_pc_local_development_only": true,
+    "production_database_qualified": false,
+    "production_http_api_qualified": false,
+    "p14_phase_complete": false,
+    "user_documents_used": false
+  }
+}
