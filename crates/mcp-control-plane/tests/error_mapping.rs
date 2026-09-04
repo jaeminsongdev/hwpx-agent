@@ -3,7 +3,7 @@ use std::path::Path;
 
 use auth_middleware::AuthError;
 use mcp_control_plane::{
-    ArtifactDeliveryError, AsyncJobError, ERROR_CATALOG_SHA256, GatewayError, PolicyError,
+    ArtifactDeliveryError, AsyncJobError, GatewayError, P15_06_ERROR_CATALOG_SHA256, PolicyError,
     PublicErrorCode, PublicErrorStage, PublicFailure, map_artifact_delivery_error,
     map_async_job_error, map_auth_error, map_gateway_error, map_policy_error,
 };
@@ -24,7 +24,10 @@ fn embedded_catalog_is_digest_pinned_complete_and_sorted() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let bytes = fs::read(root.join("protocol/mcp/p15-public-error-catalog-v1.json"))
         .unwrap_or_else(|error| panic!("read catalog: {error}"));
-    assert_eq!(hex::encode(Sha256::digest(&bytes)), ERROR_CATALOG_SHA256);
+    assert_eq!(
+        hex::encode(Sha256::digest(&bytes)),
+        P15_06_ERROR_CATALOG_SHA256
+    );
     let document: Value =
         serde_json::from_slice(&bytes).unwrap_or_else(|error| panic!("parse catalog: {error}"));
     assert_eq!(
@@ -41,15 +44,25 @@ fn embedded_catalog_is_digest_pinned_complete_and_sorted() {
                 .unwrap_or_else(|| panic!("error_code is not a string"))
         })
         .collect::<Vec<_>>();
-    assert_eq!(codes.len(), PublicErrorCode::ALL.len());
+    let expected = [
+        "AUTHENTICATION_FAILED",
+        "AUTHENTICATION_UNAVAILABLE",
+        "POLICY_DENIED",
+        "POLICY_UNAVAILABLE",
+        "REQUEST_CONFLICT",
+        "RESOURCE_NOT_FOUND",
+        "SERVICE_REJECTED",
+        "SERVICE_UNAVAILABLE",
+        "TOOL_ARGUMENTS_MALFORMED",
+        "TOOL_INPUT_SCHEMA_INVALID",
+        "TOOL_OUTPUT_SCHEMA_INVALID",
+        "TOOL_REQUEST_TOO_LARGE",
+        "TOOL_RESULT_CORRELATION_MISMATCH",
+        "TOOL_UNKNOWN",
+    ];
+    assert_eq!(codes.len(), expected.len());
     assert!(codes.windows(2).all(|pair| pair[0] < pair[1]));
-    assert_eq!(
-        codes,
-        PublicErrorCode::ALL
-            .iter()
-            .map(|code| code.as_str())
-            .collect::<Vec<_>>()
-    );
+    assert_eq!(codes, expected);
 }
 
 #[test]

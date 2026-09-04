@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
+import subprocess
 from typing import Any
 
 from jsonschema import Draft202012Validator
@@ -12,6 +14,16 @@ from jsonschema import Draft202012Validator
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = ROOT / "implementation/p15/p15-error-mapping-contract-v1.json"
 ERROR_CATALOG_PATH = ROOT / "protocol/mcp/p15-public-error-catalog-v1.json"
+P15_07_SUPERSEDING_VALIDATOR = "tools/p15/validate_quota_contract.py"
+P15_06_AUDITED_REVISION = "f36a07e988558b4481c50955a0f76bd69c516d9d"
+P15_07_SUPERSEDED_PATHS = {
+    "crates/mcp-control-plane/src/lib.rs",
+    "crates/mcp-control-plane/src/error_catalog.rs",
+    "crates/mcp-control-plane/src/handler.rs",
+    "crates/mcp-control-plane/tests/error_mapping.rs",
+    "tools/p15/build_error_mapping_contract.py",
+    "tools/p15/validate_error_mapping_contract.py",
+}
 
 EXPECTED_KEYS = {
     "error_catalog_sha256",
@@ -145,8 +157,37 @@ def bounded_file(root: Path, relative: str) -> Path:
     return resolved
 
 
+def validate_p15_07_supersession(root: Path) -> list[str]:
+    validator_path = root / P15_07_SUPERSEDING_VALIDATOR
+    specification = importlib.util.spec_from_file_location(
+        "p15_quota_superseding_validator", validator_path
+    )
+    if specification is None or specification.loader is None:
+        return ["p15_07_supersession.validator_load"]
+    module = importlib.util.module_from_spec(specification)
+    try:
+        specification.loader.exec_module(module)
+        errors = module.validate(root)
+    except Exception:
+        return ["p15_07_supersession.validation"]
+    if errors:
+        return ["p15_07_supersession.contract"]
+    return []
+
+
+def historical_source_matches(root: Path, relative: str, expected: str) -> bool:
+    result = subprocess.run(
+        ["git", "show", f"{P15_06_AUDITED_REVISION}:{relative}"],
+        cwd=root,
+        check=False,
+        capture_output=True,
+    )
+    return result.returncode == 0 and hashlib.sha256(result.stdout).hexdigest() == expected
+
+
 def validate(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
+    p15_07_supersession_errors = validate_p15_07_supersession(root)
     try:
         contract = load_json(root / CONTRACT_PATH.relative_to(ROOT))
     except Exception as error:
@@ -326,12 +367,19 @@ def validate(root: Path = ROOT) -> list[str]:
             ):
                 errors.append(f"source_lock[{index}].digest_shape")
             elif sha256(source) != expected_hash:
-                errors.append(f"source_lock[{index}].digest")
+                if relative not in P15_07_SUPERSEDED_PATHS or p15_07_supersession_errors:
+                    errors.append(f"source_lock[{index}].digest")
+                elif not historical_source_matches(root, relative, expected_hash):
+                    errors.append(f"source_lock[{index}].historical_digest")
 
     rust_catalog = (root / "crates/mcp-control-plane/src/error_catalog.rs").read_text(
         encoding="utf-8"
     )
-    if f'pub const ERROR_CATALOG_SHA256: &str =\n    "{catalog_hash}";' not in rust_catalog:
+    if (
+        f'pub const P15_06_ERROR_CATALOG_SHA256: &str =\n    "{catalog_hash}";'
+        not in rust_catalog
+        and p15_07_supersession_errors
+    ):
         errors.append("rust.catalog_digest")
     for token in [
         "pub const fn map_auth_error(",

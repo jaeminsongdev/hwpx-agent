@@ -1,0 +1,45 @@
+{
+  "buckets": {
+    "capability": {
+      "capacity": 30,
+      "refill_tokens_per_window": 30
+    },
+    "tenant": {
+      "capacity": 120,
+      "refill_tokens_per_window": 120
+    },
+    "user": {
+      "capacity": 60,
+      "refill_tokens_per_window": 60
+    }
+  },
+  "job_classes": [
+    {
+      "capacity": 8,
+      "job_class": "standard",
+      "refill_tokens_per_window": 8,
+      "tools": [
+        "document_create",
+        "document_edit",
+        "document_transform",
+        "document_validate"
+      ]
+    },
+    {
+      "capacity": 2,
+      "job_class": "render",
+      "refill_tokens_per_window": 2,
+      "tools": [
+        "document_export",
+        "document_render"
+      ]
+    }
+  ],
+  "replay_ttl_seconds": 900,
+  "schema_version": "hwpx-agent.quota-policy/v1",
+  "state_limits": {
+    "bucket_entries": 65536,
+    "replay_entries": 65536
+  },
+  "window_seconds": 60
+}

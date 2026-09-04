@@ -1,0 +1,251 @@
+{
+  "buckets": {
+    "capability": {
+      "capacity": 30,
+      "refill_tokens_per_window": 30
+    },
+    "tenant": {
+      "capacity": 120,
+      "refill_tokens_per_window": 120
+    },
+    "user": {
+      "capacity": 60,
+      "refill_tokens_per_window": 60
+    }
+  },
+  "error_catalog_additions": [
+    "QUOTA_EXCEEDED",
+    "QUOTA_UNAVAILABLE"
+  ],
+  "error_catalog_v1_sha256": "7f85fb7a5c116ba6a262a5595906ccf3abf23df28ab5a567551f6904121ee2b7",
+  "error_catalog_v2_sha256": "ac1eaf53e79f70a7bf35ba8aafa5e8f3e684a2a0df378a02fa1194384e31e849",
+  "handler_sequence_preserved": true,
+  "job_classes": [
+    {
+      "capacity": 8,
+      "job_class": "standard",
+      "refill_tokens_per_window": 8,
+      "tools": [
+        "document_create",
+        "document_edit",
+        "document_transform",
+        "document_validate"
+      ]
+    },
+    {
+      "capacity": 2,
+      "job_class": "render",
+      "refill_tokens_per_window": 2,
+      "tools": [
+        "document_export",
+        "document_render"
+      ]
+    }
+  ],
+  "limits": {
+    "bucket_entries": 65536,
+    "replay_entries": 65536,
+    "replay_ttl_seconds": 900,
+    "window_seconds": 60
+  },
+  "meta_keys": [
+    "hwpx/quotaPolicySha256",
+    "hwpx/retryAfterSeconds"
+  ],
+  "p15_06_audited_source_commit": "f36a07e988558b4481c50955a0f76bd69c516d9d",
+  "p15_06_contract_sha256": "ae33d499350ca53f55534744036fc5830e4748efe943482b90c9e063bf54bd8b",
+  "public_envelope_version": "hwpx-agent.error/v2",
+  "quota_policy_sha256": "aec54a5fa7f25c91ffa86d1d3a677c41ee68b1d3c974d21c734bad59ac19fd95",
+  "required_behaviors": [
+    "authentication_schema_and_policy_before_quota",
+    "quota_before_exactly_one_dispatch",
+    "atomic_all_dimension_charge_or_no_charge",
+    "tenant_user_capability_and_job_class_isolation",
+    "integer_token_bucket_with_bounded_retry_guidance",
+    "async_idempotency_replay_without_recharge",
+    "idempotency_payload_conflict_fails_closed",
+    "bounded_state_and_clock_regression_fail_closed",
+    "additive_public_error_catalog_supersession",
+    "no_quota_identity_counter_or_fingerprint_leakage"
+  ],
+  "runtime_error_codes": [
+    "AUTHENTICATION_FAILED",
+    "AUTHENTICATION_UNAVAILABLE",
+    "POLICY_DENIED",
+    "POLICY_UNAVAILABLE",
+    "QUOTA_EXCEEDED",
+    "QUOTA_UNAVAILABLE",
+    "REQUEST_CONFLICT",
+    "RESOURCE_NOT_FOUND",
+    "SERVICE_REJECTED",
+    "SERVICE_UNAVAILABLE",
+    "TOOL_ARGUMENTS_MALFORMED",
+    "TOOL_INPUT_SCHEMA_INVALID",
+    "TOOL_OUTPUT_SCHEMA_INVALID",
+    "TOOL_REQUEST_TOO_LARGE",
+    "TOOL_RESULT_CORRELATION_MISMATCH",
+    "TOOL_UNKNOWN"
+  ],
+  "rust_quota_tests": 8,
+  "rust_regression_tests": 45,
+  "schema_version": "hwpx-agent.p15-quota-contract/v1",
+  "scope": "current_pc_hancom_2020_local_quota_reference",
+  "source_locks": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "dbf0bd590f36638a4a2b4f4f3e0fcfcb11b7178736b542c4420d51ec80342bc6"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "fa3ee66f3d9da7ff98381ab9118cf8f11f86e49e66d44054bf7d306a4f9e419b"
+    },
+    {
+      "path": "deny.toml",
+      "sha256": "1b7f0c7a65ba80242847fbb24483fa82708f28b361e425c76c48233d52073ef3"
+    },
+    {
+      "path": "security/dependency-policy.json",
+      "sha256": "753e93e1ee01ff92f965627b7a26baefaa90ca8e7e79a82b1afb87c08e8bff69"
+    },
+    {
+      "path": "docs/02_architecture/01_system_architecture.md",
+      "sha256": "45499e6d298db9a2d9717931e5430f1422779192153f67e2b3df20436135aa3d"
+    },
+    {
+      "path": "docs/02_architecture/04_deployment_topology.md",
+      "sha256": "7a59c3e5c14ff5b613e1436ae93473aa04b4689f3299993321b18ac463a5c024"
+    },
+    {
+      "path": "docs/06_mcp_api/04_error_model.md",
+      "sha256": "8d2fe06289790df2b84ee4a937d8b25b637849a9e9daba0489267309f441b0b2"
+    },
+    {
+      "path": "specs/error-envelope.schema.json",
+      "sha256": "b360d2f581150791c9a605553f64349db0fda6686d4539ee5cece346e47a24eb"
+    },
+    {
+      "path": "specs/work-breakdown-structure.json",
+      "sha256": "d0eb37d2181bd521dd83f0f8ccefbb3df33ff41509516e246e3397a0c9336ac7"
+    },
+    {
+      "path": "protocol/mcp/p15-public-tools-v1.json",
+      "sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001"
+    },
+    {
+      "path": "protocol/mcp/p15-public-error-catalog-v1.json",
+      "sha256": "7f85fb7a5c116ba6a262a5595906ccf3abf23df28ab5a567551f6904121ee2b7"
+    },
+    {
+      "path": "protocol/mcp/p15-public-error-catalog-v2.json",
+      "sha256": "ac1eaf53e79f70a7bf35ba8aafa5e8f3e684a2a0df378a02fa1194384e31e849"
+    },
+    {
+      "path": "protocol/mcp/p15-quota-policy-v1.json",
+      "sha256": "aec54a5fa7f25c91ffa86d1d3a677c41ee68b1d3c974d21c734bad59ac19fd95"
+    },
+    {
+      "path": "implementation/p15/p15-error-mapping-contract-v1.json",
+      "sha256": "ae33d499350ca53f55534744036fc5830e4748efe943482b90c9e063bf54bd8b"
+    },
+    {
+      "path": "implementation/p15/P15-07_QUOTA_POLICY.md",
+      "sha256": "17b2775ef87e72c5083eb20f42a8b1ef40160c179a6b3ded2d18205fb5caeb7c"
+    },
+    {
+      "path": "crates/mcp-control-plane/Cargo.toml",
+      "sha256": "6e2c7d2b8a2a3c581114aba0c8cfbb5110c3157baaf717fb2b8748449e702bc5"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/lib.rs",
+      "sha256": "9c7284f7c1f6e30ebc46c320e78af0861c84ad66ff0f9f3a0aae56a87d37ea99"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/catalog.rs",
+      "sha256": "69860323b71de2f2f1836fa90a78a41b44dd8a5016f9211a4d7f7e06373952cf"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/error_catalog.rs",
+      "sha256": "9f41149710b5fd3cb507969ce5c23c975bdb6eac405aecd06d5646a5d84f99e2"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/handler.rs",
+      "sha256": "aa9925cdc8b508980225c99d3386f1797422e974e631c8e63055326e78b97f85"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/policy.rs",
+      "sha256": "32513728470e18608d1eeff419e83ece628d6a9c4dd2a948c1c95012e97412ac"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/quota.rs",
+      "sha256": "7e01dcb4431aa801179db48e84e7d22e88b341c0b164664f75aea454e0fa2cb4"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/strict_json.rs",
+      "sha256": "f8c4e72cb8afa4c9df37259e6b9e143dbdada228cbf9456bad8a26360ac8a882"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/async_jobs.rs",
+      "sha256": "4b5237c77d6e1c7c97d46ed87e31921c10958cec2d9ee3a01fd2c7d95a15c304"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/artifact_delivery.rs",
+      "sha256": "89865b110bd304f03ab2d9fa7c81bb074ead873f51b92b470792f46c7dc26915"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/handler_contract.rs",
+      "sha256": "5413f5f9cd00cbdf3f081ae37b50667e970d8033e0811d4bb5c5752ba62c63d2"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/async_job_ux.rs",
+      "sha256": "0870b6137fee8ab28f434fcdef3b7713611ff91572c2bf042b1e3f71764e6be6"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/artifact_delivery.rs",
+      "sha256": "cf7db5eb60f6511e9276162f02240ac0d43b91a25ab8246d0b0cfd2c76efe22a"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/error_mapping.rs",
+      "sha256": "1f6e3ff4ec2765897f2caa53e31c59de6e10b47eaedbef025017c3aa8163905d"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/quota_service.rs",
+      "sha256": "0ec1ed30f84ac30d1be3edf15eb31f61f5e31cb6b5d26981afcc6f1f80c1856a"
+    },
+    {
+      "path": "tools/p15/build_error_mapping_contract.py",
+      "sha256": "c221296dbe1ff9be393e795f54dea7f86e285f796fd09ccbf08d729d7d04582f"
+    },
+    {
+      "path": "tools/p15/validate_error_mapping_contract.py",
+      "sha256": "c684a83c8583601df7612fb5116e271a35a521a8bd9651da131b2f24062f6ccf"
+    },
+    {
+      "path": "tools/p15/build_quota_contract.py",
+      "sha256": "ad16e97ad9467d0e54f05aa01f330692726a618726acc712ca1ddb9187f83730"
+    },
+    {
+      "path": "tools/p15/validate_quota_contract.py",
+      "sha256": "f6d9bba3c7e6d74d2b98ef115c1f5efc8bc586f6ea9dba556b9a9f951218e26b"
+    },
+    {
+      "path": "tools/p15/tests/test_error_mapping_contract.py",
+      "sha256": "e9c0f2197707b7a515718178c83d4753656fa79bee52f84ddb6391b4597aa585"
+    },
+    {
+      "path": "tools/p15/tests/test_quota_contract.py",
+      "sha256": "2a3ac9cf2ca8fcf431d1d6713a67f68d4a2eb239e9b6484b97598c9abea048af"
+    }
+  ],
+  "stages": [
+    "admission",
+    "authenticate",
+    "parse",
+    "input_validation",
+    "policy",
+    "quota",
+    "dispatch",
+    "output_validation"
+  ],
+  "target_profile": "hancom-hangul-2020-secondary",
+  "tool_catalog_sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001"
+}

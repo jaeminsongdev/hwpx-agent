@@ -10,14 +10,17 @@ use crate::artifact_delivery::ArtifactDeliveryError;
 use crate::async_jobs::AsyncJobError;
 use crate::handler::GatewayError;
 use crate::policy::PolicyError;
+use crate::quota::QuotaError;
 use crate::strict_json::parse_unique_value;
 
 const CATALOG_BYTES: &[u8] =
-    include_bytes!("../../../protocol/mcp/p15-public-error-catalog-v1.json");
-const CATALOG_SCHEMA_VERSION: &str = "hwpx-agent.public-error-catalog/v1";
+    include_bytes!("../../../protocol/mcp/p15-public-error-catalog-v2.json");
+const CATALOG_SCHEMA_VERSION: &str = "hwpx-agent.public-error-catalog/v2";
 const MAX_SAFE_MESSAGE_BYTES: usize = 200;
 
 pub const ERROR_CATALOG_SHA256: &str =
+    "ac1eaf53e79f70a7bf35ba8aafa5e8f3e684a2a0df378a02fa1194384e31e849";
+pub const P15_06_ERROR_CATALOG_SHA256: &str =
     "7f85fb7a5c116ba6a262a5595906ccf3abf23df28ab5a567551f6904121ee2b7";
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
@@ -27,6 +30,8 @@ pub enum PublicErrorCode {
     AuthenticationUnavailable,
     PolicyDenied,
     PolicyUnavailable,
+    QuotaExceeded,
+    QuotaUnavailable,
     RequestConflict,
     ResourceNotFound,
     ServiceRejected,
@@ -40,11 +45,13 @@ pub enum PublicErrorCode {
 }
 
 impl PublicErrorCode {
-    pub const ALL: [Self; 14] = [
+    pub const ALL: [Self; 16] = [
         Self::AuthenticationFailed,
         Self::AuthenticationUnavailable,
         Self::PolicyDenied,
         Self::PolicyUnavailable,
+        Self::QuotaExceeded,
+        Self::QuotaUnavailable,
         Self::RequestConflict,
         Self::ResourceNotFound,
         Self::ServiceRejected,
@@ -64,6 +71,8 @@ impl PublicErrorCode {
             Self::AuthenticationUnavailable => "AUTHENTICATION_UNAVAILABLE",
             Self::PolicyDenied => "POLICY_DENIED",
             Self::PolicyUnavailable => "POLICY_UNAVAILABLE",
+            Self::QuotaExceeded => "QUOTA_EXCEEDED",
+            Self::QuotaUnavailable => "QUOTA_UNAVAILABLE",
             Self::RequestConflict => "REQUEST_CONFLICT",
             Self::ResourceNotFound => "RESOURCE_NOT_FOUND",
             Self::ServiceRejected => "SERVICE_REJECTED",
@@ -83,9 +92,12 @@ impl PublicErrorCode {
             | Self::AuthenticationUnavailable
             | Self::PolicyDenied
             | Self::PolicyUnavailable => PublicErrorCategory::Security,
+            Self::QuotaExceeded => PublicErrorCategory::Storage,
             Self::RequestConflict => PublicErrorCategory::Conflict,
             Self::ResourceNotFound => PublicErrorCategory::Document,
-            Self::ServiceRejected | Self::ServiceUnavailable => PublicErrorCategory::Backend,
+            Self::QuotaUnavailable | Self::ServiceRejected | Self::ServiceUnavailable => {
+                PublicErrorCategory::Backend
+            }
             Self::ToolArgumentsMalformed
             | Self::ToolInputSchemaInvalid
             | Self::ToolRequestTooLarge
@@ -102,9 +114,9 @@ impl PublicErrorCode {
                 &[PublicErrorStage::Authenticate]
             }
             Self::PolicyDenied | Self::PolicyUnavailable => &[PublicErrorStage::Policy],
-            Self::RequestConflict | Self::ServiceRejected | Self::ServiceUnavailable => {
-                &[PublicErrorStage::Dispatch]
-            }
+            Self::QuotaExceeded | Self::QuotaUnavailable => &[PublicErrorStage::Quota],
+            Self::RequestConflict => &[PublicErrorStage::Quota, PublicErrorStage::Dispatch],
+            Self::ServiceRejected | Self::ServiceUnavailable => &[PublicErrorStage::Dispatch],
             Self::ResourceNotFound => &[PublicErrorStage::Policy, PublicErrorStage::Dispatch],
             Self::ToolArgumentsMalformed => &[PublicErrorStage::Parse],
             Self::ToolInputSchemaInvalid => &[PublicErrorStage::InputValidation],
@@ -118,7 +130,11 @@ impl PublicErrorCode {
     const fn expected_retryable(self) -> bool {
         matches!(
             self,
-            Self::AuthenticationUnavailable | Self::PolicyUnavailable | Self::ServiceUnavailable
+            Self::AuthenticationUnavailable
+                | Self::PolicyUnavailable
+                | Self::QuotaExceeded
+                | Self::QuotaUnavailable
+                | Self::ServiceUnavailable
         )
     }
 
@@ -127,6 +143,8 @@ impl PublicErrorCode {
             Self::AuthenticationFailed => RecoveryAction::Reauthenticate,
             Self::AuthenticationUnavailable
             | Self::PolicyUnavailable
+            | Self::QuotaExceeded
+            | Self::QuotaUnavailable
             | Self::ServiceUnavailable => RecoveryAction::RetryLater,
             Self::PolicyDenied => RecoveryAction::RequestAccess,
             Self::RequestConflict | Self::ResourceNotFound => RecoveryAction::RefreshResource,
@@ -150,6 +168,8 @@ impl PublicErrorCode {
             }
             Self::PolicyDenied => "The requested operation is not allowed.",
             Self::PolicyUnavailable => "The authorization policy could not approve the request.",
+            Self::QuotaExceeded => "The request quota is temporarily exhausted.",
+            Self::QuotaUnavailable => "The quota service is temporarily unavailable.",
             Self::RequestConflict => "The request conflicts with the current resource state.",
             Self::ResourceNotFound => "The requested resource was not found.",
             Self::ServiceRejected => "The service rejected the request.",
@@ -205,6 +225,7 @@ pub enum PublicErrorStage {
     Parse,
     InputValidation,
     Policy,
+    Quota,
     Dispatch,
     OutputValidation,
 }
@@ -218,6 +239,7 @@ impl PublicErrorStage {
             Self::Parse => "parse",
             Self::InputValidation => "input_validation",
             Self::Policy => "policy",
+            Self::Quota => "quota",
             Self::Dispatch => "dispatch",
             Self::OutputValidation => "output_validation",
         }
@@ -451,6 +473,18 @@ pub const fn map_gateway_error(error: GatewayError) -> PublicFailure {
         GatewayError::Rejected => PublicErrorCode::ServiceRejected,
     };
     PublicFailure::new(code, PublicErrorStage::Dispatch)
+}
+
+#[must_use]
+pub const fn map_quota_error(error: QuotaError) -> PublicFailure {
+    let code = match error {
+        QuotaError::Exhausted { .. } => PublicErrorCode::QuotaExceeded,
+        QuotaError::IdempotencyConflict => PublicErrorCode::RequestConflict,
+        QuotaError::InvalidConfiguration
+        | QuotaError::StateUnavailable
+        | QuotaError::StateCapacityExceeded => PublicErrorCode::QuotaUnavailable,
+    };
+    PublicFailure::new(code, PublicErrorStage::Quota)
 }
 
 #[must_use]

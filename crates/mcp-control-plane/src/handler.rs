@@ -13,9 +13,10 @@ use crate::async_jobs::JobEventPage;
 use crate::catalog::{CATALOG_SHA256, CatalogError, ToolCatalog, ToolKind};
 use crate::error_catalog::{
     ERROR_CATALOG_SHA256, ErrorCatalogError, PublicErrorCatalog, PublicErrorCode, PublicErrorStage,
-    PublicFailure, map_auth_error, map_gateway_error, map_policy_error,
+    PublicFailure, map_auth_error, map_gateway_error, map_policy_error, map_quota_error,
 };
 use crate::policy::ToolPolicy;
+use crate::quota::{InMemoryQuotaService, QUOTA_POLICY_SHA256, QuotaError, QuotaService};
 use crate::strict_json::parse_unique_value;
 
 pub const MAX_TOOL_NAME_BYTES: usize = 64;
@@ -206,15 +207,16 @@ impl fmt::Debug for ToolServiceOutput {
     }
 }
 
-pub struct McpControlPlane<P, G> {
+pub struct McpControlPlane<P, G, Q = InMemoryQuotaService> {
     auth: AuthMiddleware,
     catalog: ToolCatalog,
     error_catalog: PublicErrorCatalog,
     policy: P,
+    quota: Q,
     gateway: G,
 }
 
-impl<P, G> McpControlPlane<P, G>
+impl<P, G> McpControlPlane<P, G, InMemoryQuotaService>
 where
     P: ToolPolicy,
     G: ToolServiceGateway,
@@ -223,13 +225,36 @@ where
     ///
     /// # Errors
     ///
-    /// Fails closed on catalog digest, shape, scope or JSON Schema drift.
+    /// Fails closed on tool/error/quota catalog digest, shape, scope or JSON Schema drift.
     pub fn new(auth: AuthMiddleware, policy: P, gateway: G) -> Result<Self, InitializationError> {
+        let quota = InMemoryQuotaService::new().map_err(InitializationError::Quota)?;
+        Self::with_quota(auth, policy, quota, gateway)
+    }
+}
+
+impl<P, G, Q> McpControlPlane<P, G, Q>
+where
+    P: ToolPolicy,
+    G: ToolServiceGateway,
+    Q: QuotaService,
+{
+    /// Creates a control plane with one explicitly bounded quota service.
+    ///
+    /// # Errors
+    ///
+    /// Fails closed on tool or public-error catalog drift.
+    pub fn with_quota(
+        auth: AuthMiddleware,
+        policy: P,
+        quota: Q,
+        gateway: G,
+    ) -> Result<Self, InitializationError> {
         Ok(Self {
             auth,
             catalog: ToolCatalog::load().map_err(InitializationError::Catalog)?,
             error_catalog: PublicErrorCatalog::load().map_err(InitializationError::ErrorCatalog)?,
             policy,
+            quota,
             gateway,
         })
     }
@@ -242,6 +267,11 @@ where
     #[must_use]
     pub const fn gateway(&self) -> &G {
         &self.gateway
+    }
+
+    #[must_use]
+    pub const fn quota(&self) -> &Q {
+        &self.quota
     }
 
     #[must_use]
@@ -348,6 +378,18 @@ where
                 None,
             );
         }
+        if let Err(error) = self
+            .quota
+            .admit(&context, tool, &arguments, now_unix_seconds)
+        {
+            let retry_after_seconds = error.retry_after_seconds();
+            return McpToolResult::error_with_retry_after(
+                &self.error_catalog,
+                map_quota_error(error),
+                &request_id,
+                retry_after_seconds,
+            );
+        }
         let Ok(canonical_arguments) = serde_json::to_vec(&arguments) else {
             return McpToolResult::error(
                 &self.error_catalog,
@@ -438,10 +480,11 @@ where
     }
 }
 
-impl<P, G> fmt::Debug for McpControlPlane<P, G>
+impl<P, G, Q> fmt::Debug for McpControlPlane<P, G, Q>
 where
     P: ToolPolicy,
     G: ToolServiceGateway,
+    Q: QuotaService,
 {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         formatter
@@ -450,6 +493,7 @@ where
             .field("catalog", &self.catalog)
             .field("error_catalog", &self.error_catalog)
             .field("policy", &self.policy)
+            .field("quota", &self.quota)
             .field("gateway", &self.gateway)
             .finish()
     }
@@ -461,6 +505,8 @@ pub enum InitializationError {
     Catalog(#[source] CatalogError),
     #[error("public error catalog initialization failed")]
     ErrorCatalog(#[source] ErrorCatalogError),
+    #[error("quota service initialization failed")]
+    Quota(#[source] QuotaError),
 }
 
 #[derive(Serialize)]
@@ -490,6 +536,10 @@ impl McpToolResult {
         meta.insert(
             "hwpx/errorCatalogSha256".to_owned(),
             Value::String(ERROR_CATALOG_SHA256.to_owned()),
+        );
+        meta.insert(
+            "hwpx/quotaPolicySha256".to_owned(),
+            Value::String(QUOTA_POLICY_SHA256.to_owned()),
         );
         meta.insert(
             "hwpx/requestId".to_owned(),
@@ -522,6 +572,25 @@ impl McpToolResult {
         request_id: &str,
         authentication_challenge: Option<String>,
     ) -> Self {
+        Self::error_with_metadata(catalog, failure, request_id, authentication_challenge, None)
+    }
+
+    fn error_with_retry_after(
+        catalog: &PublicErrorCatalog,
+        failure: PublicFailure,
+        request_id: &str,
+        retry_after_seconds: Option<u64>,
+    ) -> Self {
+        Self::error_with_metadata(catalog, failure, request_id, None, retry_after_seconds)
+    }
+
+    fn error_with_metadata(
+        catalog: &PublicErrorCatalog,
+        failure: PublicFailure,
+        request_id: &str,
+        authentication_challenge: Option<String>,
+        retry_after_seconds: Option<u64>,
+    ) -> Self {
         let descriptor = catalog.descriptor(failure);
         let mut meta = serde_json::Map::new();
         meta.insert(
@@ -533,11 +602,21 @@ impl McpToolResult {
             Value::String(ERROR_CATALOG_SHA256.to_owned()),
         );
         meta.insert(
+            "hwpx/quotaPolicySha256".to_owned(),
+            Value::String(QUOTA_POLICY_SHA256.to_owned()),
+        );
+        meta.insert(
             "hwpx/requestId".to_owned(),
             Value::String(request_id.to_owned()),
         );
         if let Some(challenge) = authentication_challenge {
             meta.insert("mcp/www_authenticate".to_owned(), json!([challenge]));
+        }
+        if let Some(retry_after_seconds) = retry_after_seconds {
+            meta.insert(
+                "hwpx/retryAfterSeconds".to_owned(),
+                Value::from(retry_after_seconds),
+            );
         }
         let safe_message = descriptor.safe_message();
         Self {
