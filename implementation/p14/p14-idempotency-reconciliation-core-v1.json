@@ -1,0 +1,49 @@
+{
+  "schema_version": "hwpx-agent.p14-idempotency-reconciliation-core/v1",
+  "state": "rust_core_pass_sql_pending",
+  "source_files": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "6454a3df7a8fe2a1131c9252871a4c28efacc232647041d9474ef87f33e50e82"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "9c3f4bebed1df5ecfd93d5dfa1354f8b7a5cc6626239ef9e7252b89b51d4b1ff"
+    },
+    {
+      "path": "crates/idempotency-service/Cargo.toml",
+      "sha256": "547d7580c2444683bda66c40b4b49d35bf4363ecb43507b4c96ab1445c7c3f92"
+    },
+    {
+      "path": "crates/idempotency-service/src/lib.rs",
+      "sha256": "fab841e2890375b40cd7fad92276c131ea4154d311a02d62c70e9c94b9e8e7e7"
+    },
+    {
+      "path": "docs/12_implementation_guides/09_project_jobs_storage.md",
+      "sha256": "946cac58f4984bb9da8055e4decc35b6259eb742270144c0f68d123bb4914a96"
+    },
+    {
+      "path": "docs/12_implementation_guides/07_windows_automation_worker.md",
+      "sha256": "76e5cfb985f77b55347714f3d3d3b97c527c18d0d8238a4c0e79b3f680b44168"
+    },
+    {
+      "path": "implementation/p04/P04-08_IDEMPOTENCY_CAS_POLICY.md",
+      "sha256": "2d870d6fde40d7910491341c46fa3da063a3e07b66148ce5418f65784d1ac1d7"
+    }
+  ],
+  "requirements": {
+    "exact_request_and_manifest_binding": true,
+    "same_key_drift_rejected": true,
+    "concurrent_claimers": 16,
+    "concurrent_new_claims": 1,
+    "max_attempts": 10,
+    "max_retry_delay_seconds": 86400,
+    "max_record_ttl_seconds": 604800,
+    "retry_requires_proven_no_effect": true,
+    "unknown_outcome_blocks_new_effect": true,
+    "stale_attempt_and_fence_rejected": true,
+    "rust_tests": 10,
+    "postgres_migration_qualified": false,
+    "production_service_qualified": false
+  }
+}

@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
+import subprocess
 from pathlib import Path
 from typing import Any, NoReturn
 
@@ -16,6 +18,11 @@ EXPECTED_IMAGE = (
     "postgres:18.4-bookworm@"
     "sha256:7e6103cf85f88f7a0eddb3ec0b1ba8940eba098ed118ade25a729ca9daee5568"
 )
+P14_06_IMPLEMENTATION_REVISION = "205f4acd845bcd9ef968e87a7d912cb0d7e81abf"
+P14_07_SUPERSEDING_CONTRACT = (
+    ROOT / "implementation" / "p14" / "p14-idempotency-reconciliation-core-v1.json"
+)
+P14_07_SUPERSEDED_PATHS = {"Cargo.toml", "Cargo.lock"}
 
 
 class ContractError(RuntimeError):
@@ -60,6 +67,51 @@ def require_digest(entry: dict[str, Any], maximum_bytes: int) -> Path:
         fail(f"invalid digest for {entry['path']}")
     if sha256(path) != expected:
         fail(f"digest mismatch for {entry['path']}")
+    return path
+
+
+def require_source_digest_with_supersession(entry: dict[str, Any]) -> Path:
+    if set(entry) != {"path", "sha256"}:
+        fail("digest entry has unexpected keys")
+    relative = entry["path"]
+    path = bounded_repository_file(relative, 512 * 1024)
+    expected = entry["sha256"]
+    if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
+        fail(f"invalid digest for {relative}")
+    if sha256(path) == expected:
+        return path
+    if relative not in P14_07_SUPERSEDED_PATHS:
+        fail(f"digest mismatch for {relative}")
+
+    validator_path = ROOT / "tools" / "p14" / "validate_idempotency_reconciliation_core.py"
+    specification = importlib.util.spec_from_file_location(
+        "p14_validate_idempotency_core_for_p14_06", validator_path
+    )
+    if specification is None or specification.loader is None:
+        fail("P14-07 superseding validator could not be loaded")
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    try:
+        validated = module.validate_contract(P14_07_SUPERSEDING_CONTRACT, ROOT)
+    except (module.ContractError, FileNotFoundError, json.JSONDecodeError) as error:
+        fail(f"P14-07 superseding contract failed: {error}")
+    if not isinstance(validated, dict) or validated.get("state") != "pass":
+        fail("P14-07 superseding contract did not validate")
+
+    historical = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(ROOT),
+            "show",
+            f"{P14_06_IMPLEMENTATION_REVISION}:{relative}",
+        ],
+        capture_output=True,
+        timeout=15,
+        check=False,
+    )
+    if historical.returncode != 0 or hashlib.sha256(historical.stdout).hexdigest() != expected:
+        fail(f"{relative} does not match the exact P14-06 Git blob")
     return path
 
 
@@ -176,7 +228,7 @@ def validate_contract(path: Path, root: Path = ROOT) -> dict[str, object]:
     for entry in sources:
         if not isinstance(entry, dict):
             fail("worker lease source entry is not an object")
-        source_paths.append(require_digest(entry, 512 * 1024))
+        source_paths.append(require_source_digest_with_supersession(entry))
 
     requirements = document["requirements"]
     if requirements != {

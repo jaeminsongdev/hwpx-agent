@@ -429,6 +429,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "idempotency-service"
+version = "0.1.0"
+dependencies = [
+ "artifact-service",
+ "job-service",
+ "revision-service",
+ "serde",
+ "thiserror",
+ "uuid",
+]
+
+[[package]]
 name = "indexmap"
 version = "2.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"

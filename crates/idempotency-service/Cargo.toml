@@ -1,0 +1,17 @@
+[package]
+name = "idempotency-service"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+artifact-service = { version = "0.1.0", path = "../artifact-service" }
+job-service = { version = "0.1.0", path = "../job-service" }
+revision-service = { version = "0.1.0", path = "../revision-service" }
+serde.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+
+[lints]
+workspace = true
