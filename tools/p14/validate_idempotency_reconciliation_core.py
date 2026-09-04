@@ -33,6 +33,7 @@ EXPECTED_REQUIREMENTS = {
     "unknown_outcome_blocks_new_effect": True,
     "stale_attempt_and_fence_rejected": True,
     "rust_tests": 10,
+    "trusted_reconciliation_oracle_qualified": False,
     "postgres_migration_qualified": False,
     "production_service_qualified": False,
 }

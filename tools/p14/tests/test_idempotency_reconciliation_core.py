@@ -61,7 +61,11 @@ class IdempotencyReconciliationCoreTests(unittest.TestCase):
             self.validate_tampered(contract)
 
     def test_retry_or_production_scope_cannot_be_promoted(self) -> None:
-        for key in ["postgres_migration_qualified", "production_service_qualified"]:
+        for key in [
+            "trusted_reconciliation_oracle_qualified",
+            "postgres_migration_qualified",
+            "production_service_qualified",
+        ]:
             with self.subTest(key=key):
                 contract = copy.deepcopy(self.contract)
                 contract["requirements"][key] = True

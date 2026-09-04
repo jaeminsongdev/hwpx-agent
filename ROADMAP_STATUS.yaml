@@ -735,7 +735,7 @@ p10_execution:
     P10-09: passed_current_pc_local
     P10-10: current_pc_probe_pass_general_routability_unverified
 p14_execution:
-  current_task: P14-06
+  current_task: P14-06_security_plus_P14-07_durable_integration
   gate_state: in_progress
   tasks:
     P14-01: passed_local_disposable_postgres
@@ -744,7 +744,7 @@ p14_execution:
     P14-04: passed_local_disposable_postgres_and_in_memory_service
     P14-05: passed_local_disposable_postgres_and_in_memory_service
     P14-06: implementation_and_non_security_evidence_pass_security_audit_response_pending
-    P14-07: blocked_by_P14-06
+    P14-07: rust_core_pass_postgres_and_trusted_oracle_pending
     P14-08: blocked_by_P14-07
     P14-09: blocked_by_P14-08
   job_state_machine:
@@ -782,6 +782,20 @@ p14_execution:
     source_mutation_paths: 0
     user_documents_opened: false
     hancom_runtime_executed_by_task: false
+  idempotency_reconciliation:
+    rust_core_commit: 0f4128c73c55e14fac2c2e84dc5077fa2010119c
+    contract: hwpx-agent.p14-idempotency-reconciliation-core/v1
+    crate: idempotency-service
+    rust_tests: 10_of_10_passed
+    concurrent_claimers: 16
+    new_claim_winners: 1
+    p14_negative_tests: 82_of_82_passed
+    local_non_security_ci_lanes: 4_of_4_passed
+    postgres_migration_qualified: false
+    trusted_reconciliation_oracle_qualified: false
+    production_service_qualified: false
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope
@@ -797,7 +811,7 @@ phases:
   P11: blocked_by_P06_P07_P08_P09_P10
   P12: blocked_by_P06_P07_P08_P09_P11
   P13: blocked_by_P10
-  P14: in_progress_P14_01_to_05_scoped_pass_P14_06_security_pending
+  P14: in_progress_P14_01_to_05_scoped_pass_P14_06_security_pending_P14_07_core_sql_pending
   P15: blocked_by_P14
   P16: blocked_by_P15
   P17: blocked_by_P15
