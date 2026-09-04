@@ -839,11 +839,11 @@ p14_execution:
     decision: pass_scoped_current_pc_local_reference_and_disposable_postgres
     p15_authorization: current_pc_local_only
 p15_execution:
-  current_task: P15-02_public_tool_schemas
+  current_task: P15-03_handlers
   gate_state: in_progress_current_pc_local
   tasks:
     P15-01: passed_current_pc_local_reference_resource_server
-    P15-02: next
+    P15-02: passed_current_pc_hancom_2020_contract_only
   auth_tenant:
     audited_source_commit: 8ac8d74a0f7795315d2dc2e0573f6b9a3a4e11e9
     contract: hwpx-agent.p15-auth-tenant/v1
@@ -858,6 +858,24 @@ p15_execution:
     offline_linux_network_disabled: passed
     authorization_server_qualified: false
     production_jwks_qualified: false
+    hosted_mcp_qualified: false
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
+  public_tool_schemas:
+    audited_source_commit: c3839df89a9eaf5e8a4f0b1bae7e4f6edd724ff1
+    contract: hwpx-agent.p15-public-tool-schema-contract/v1
+    public_tools: 18
+    input_schemas: 18
+    output_schemas: 18
+    current_target_profile: hancom-hangul-2020-secondary
+    p15_02_schema_tests: 17_of_17_passed
+    total_p15_tests: 30_of_30_passed
+    current_exact_commit_ci_lanes: 5_of_5_passed
+    independent_checkout_ci_lanes: 5_of_5_passed
+    current_security_lane: passed
+    independent_checkout_security_lane: passed
+    offline_linux_network_disabled: passed
+    handlers_qualified: false
     hosted_mcp_qualified: false
     user_documents_opened: false
     hancom_runtime_executed_by_task: false
@@ -877,7 +895,7 @@ phases:
   P12: blocked_by_P06_P07_P08_P09_P11
   P13: blocked_by_P10
   P14: completed_current_pc_local_reference_and_disposable_postgres
-  P15: in_progress_P15_02_current_pc_local
+  P15: in_progress_P15_03_current_pc_local
   P16: blocked_by_P15
   P17: blocked_by_P15
   P18: blocked_by_P12_P13_P16_P17

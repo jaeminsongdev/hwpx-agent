@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-04
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P15 / P15-02 Public tool schemas`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P15 / P15-03 Handlers`
 - Active reasoning effort: `max`
 - Immediate UI dependency: none live; P05-07 v2 attempts 10 through 16 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `모두 허용`
 
@@ -38,7 +38,7 @@ save, render, cross-version or production proof.
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
 | P14 | `pass_scoped_current_pc_local_reference_and_disposable_postgres` | `implementation/p14/P14_GATE_REPORT.md` |
-| P15 | `in_progress_current_pc_local` | P15-01 pass; P15-02 freeze 18 public MCP tool schemas next |
+| P15 | `in_progress_current_pc_local` | P15-01~02 pass; P15-03 auth/schema/policy/service handler orchestration next |
 | P16 | `blocked_by_P15` | ChatGPT Web plugin/widget |
 | P17 | `blocked_by_P15` | Codex remote/local companion |
 | P18 | `blocked_by_P12_P13_P16_P17` | quality/security/performance/DR |
@@ -67,6 +67,7 @@ save, render, cross-version or production proof.
 | P-0069 | P14-09 retention/local mirror | `pass_scoped_local_disposable_postgres_and_in_memory_reference` | commit `1d5de34`; `implementation/p14/P14-09_REPORT.md` |
 | P-0070 | P14 phase Gate | `pass_scoped_current_pc_local_reference_and_disposable_postgres` | STRICT/`max`; `implementation/p14/P14_GATE_REPORT.md` |
 | P-0071 | P15-01 Auth/tenant | `pass_scoped_current_pc_local_reference_resource_server` | commit `8ac8d74`; 17 Rust + 13 contract tests, exact checkout 5/5, security and offline Linux pass; `implementation/p15/P15-01_REPORT.md` |
+| P-0072 | P15-02 public tool schemas | `pass_scoped_current_pc_hancom_2020_contract_only` | commit `c3839df`; 18 input/output descriptors, 17/17 schema tests, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-02_REPORT.md` |
 
 ## Active evidence summary
 
@@ -114,6 +115,12 @@ save, render, cross-version or production proof.
   contract tests 13/13 pass on Windows; exact-commit current and independent checkout CI are each
   5/5, both security runs pass, and network-disabled read-only Linux Clippy/tests pass. Production
   IdP/JWKS/hosted transport remains unverified; see `implementation/p15/P15-01_REPORT.md`.
+- P15-02 commit `c3839df` freezes exactly 18 public MCP tools with closed Draft 2020-12 input/output
+  schemas, exact OAuth scope mirrors, conservative annotations, bounded identifiers and deterministic
+  descriptor/schema snapshots. P15-02 tests are 17/17 and all P15 tests 30/30; exact-commit current
+  and independent CI are each 5/5, both security runs pass, and network-disabled read-only Linux
+  validation passes. Handlers, transport and hosted OpenAI/OAuth integration remain unverified; see
+  `implementation/p15/P15-02_REPORT.md`.
 - Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with
   cleanup and succeeded on attempt 2, all other checks passed, and the SBOM contains 675 components.
 - A detached exact-commit worktree passed all four non-security lanes after the four digest-pinned,
@@ -130,8 +137,9 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next actions
 
-1. Non-UI: implement P15-02 by freezing all 18 public MCP tool input/output schemas, annotations,
-   per-tool authentication declarations and deterministic schema snapshots before handler wiring.
+1. Non-UI: implement P15-03 handlers with the fixed sequence auth → input schema → policy and
+   tenant/resource ownership → exactly one service/job dispatch → output schema → bounded structured
+   result, while preserving P15-02 descriptor hashes.
 2. UI-dependent: on a new explicit user request, rerun P05-07 once and require
    save/reopen/PDF/render evidence before P05-08, P05-09 and the P05 Gate.
 3. Keep P10-05/06 and P10-08 production claims open until their external controls exist.

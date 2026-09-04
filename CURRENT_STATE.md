@@ -9,7 +9,7 @@
 
 - 상태: `P05_IN_PROGRESS_AND_P15_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT` + `P15_REMOTE_MCP_CONTROL_PLANE`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했다. P15-01은 bounded Auth/tenant resource-server middleware로 통과했고 P15-02 public tool schema가 다음 비-UI 구현이다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했다. P15-01 bounded Auth/tenant resource-server middleware와 P15-02의 18개 public MCP tool schema/snapshot이 통과했고 P15-03 handler가 다음 비-UI 구현이다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -117,10 +117,18 @@
 - 이 PASS는 현재-PC local reference resource server만 의미한다. Production IdP/JWKS,
   authorization-code/PKCE 실행, hosted HTTPS, refresh propagation, multi-process replay와 secret
   custody는 unverified다. Authoritative report는 `implementation/p15/P15-01_REPORT.md`다.
+- P15-02는 commit `c3839df`에서 정확히 18개 public MCP tool의 closed Draft 2020-12
+  input/output schema, exact OAuth scope mirror, conservative safety annotations와 deterministic
+  descriptor/schema snapshot을 고정했다. raw XML/COM action/path/token/document bytes는 노출하지
+  않고 현재 `hancom-hangul-2020-secondary` 프로필만 허용한다.
+- P15-02 schema/negative 17/17, 전체 P15 30/30, 현재 exact commit과 독립 checkout의 CI 각
+  5/5, 두 security run과 network-disabled read-only Linux 검증이 통과했다. 이는 contract-only
+  PASS이며 handler/transport/hosted OpenAI connection은 unverified다. Authoritative report는
+  `implementation/p15/P15-02_REPORT.md`다.
 
 ## 다음 작업
 
-비-UI 순서는 P15-02에서 18개 public MCP tool의 input/output, annotations, auth declaration과 deterministic schema snapshot을 고정하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
+비-UI 순서는 P15-03에서 P15-02 descriptor를 변경하지 않고 auth→schema→policy/tenant ownership→단일 service/job dispatch→output validation→bounded structured result handler를 구현하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
 
 ## 현재 blocker
 
