@@ -735,18 +735,18 @@ p10_execution:
     P10-09: passed_current_pc_local
     P10-10: current_pc_probe_pass_general_routability_unverified
 p14_execution:
-  current_task: P14-06_security_plus_P14-07_durable_integration
-  gate_state: in_progress
+  current_task: phase_gate_complete_handoff_to_P15_01
+  gate_state: completed_current_pc_local_reference_and_disposable_postgres
   tasks:
     P14-01: passed_local_disposable_postgres
     P14-02: passed_local_disposable_postgres_and_local_blob_adapter
     P14-03: passed_local_disposable_postgres_and_in_memory_service
     P14-04: passed_local_disposable_postgres_and_in_memory_service
     P14-05: passed_local_disposable_postgres_and_in_memory_service
-    P14-06: implementation_and_non_security_evidence_pass_security_audit_response_pending
-    P14-07: rust_core_pass_postgres_and_trusted_oracle_pending
-    P14-08: blocked_by_P14-07
-    P14-09: blocked_by_P14-08
+    P14-06: passed_local_disposable_postgres_and_in_memory_scheduler
+    P14-07: passed_local_disposable_postgres_and_in_memory_reference
+    P14-08: passed_local_disposable_postgres_and_reference_worker
+    P14-09: passed_local_disposable_postgres_and_in_memory_reference
   job_state_machine:
     audited_source_commit: 3876679eddff4b882142f5a5344fb7e75ede83ed
     contract: hwpx-agent.p14-05-job-state-machine-contract/v1
@@ -778,24 +778,69 @@ p14_execution:
     source_tree_clean_receipt: true
     local_non_security_ci_lanes: 4_of_4_passed
     offline_linux_network_disabled: passed
-    security_lane: pending_pnpm_audit_advisory_api_response
+    security_lane: passed_actual_advisory_response
     source_mutation_paths: 0
     user_documents_opened: false
     hancom_runtime_executed_by_task: false
   idempotency_reconciliation:
     rust_core_commit: fbcdcef946db4264195cfaa675570f3453ba8eb0
+    durable_commit: d84a442f866942a64dc478708dfd2942c4538af6
     contract: hwpx-agent.p14-idempotency-reconciliation-core/v1
     crate: idempotency-service
     rust_tests: 10_of_10_passed
     concurrent_claimers: 16
     new_claim_winners: 1
-    p14_negative_tests: 82_of_82_passed
+    p14_negative_tests_at_card_close: 101_of_101_passed
     local_non_security_ci_lanes: 4_of_4_passed
-    postgres_migration_qualified: false
-    trusted_reconciliation_oracle_qualified: false
+    postgres_migration_qualified: true_disposable_postgres_only
+    trusted_reconciliation_oracle_qualified: true_exact_local_reference_only
     production_service_qualified: false
     user_documents_opened: false
     hancom_runtime_executed_by_task: false
+  cancel_cleanup:
+    audited_source_commit: 8d03bb6b4fb69e73f8921aa26484b400dadf941b
+    contract: hwpx-agent.p14-cancel-cleanup/v1
+    reference_worker: p14-cleanup-worker
+    postgres_server: 18.4
+    postgres_smoke_assertions: 18_of_18_three_runs
+    p14_07_regression_assertions: 28_of_28_two_runs
+    concurrent_claim: 1_winner_7_bounded_misses
+    fault_windows: before_and_after_effect_passed
+    rollback_reapply: passed
+    local_non_security_ci_lanes: 4_of_4_passed
+    offline_linux_network_disabled: passed
+    security_lane: passed
+    source_mutation_paths: 0
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
+  retention_local_mirror:
+    audited_source_commit: 1d5de34121a8ba7cb9fc651cb90d63d7973db2dc
+    contract: hwpx-agent.p14-retention-local-mirror/v1
+    crate: retention-sync-service
+    rust_tests_windows_linux: 15_of_15_passed
+    p14_negative_tests: 132_of_132_passed
+    postgres_server: 18.4
+    postgres_smoke_assertions: 32_of_32_three_runs
+    p14_07_regression_assertions: 28_of_28_three_runs
+    retention_classes: 7
+    mirror_conflict_resolutions: 3
+    rollback_reapply: passed
+    source_tree_clean_receipt: true
+    local_non_security_ci_lanes: 4_of_4_passed
+    offline_linux_network_disabled: passed
+    security_lane: passed_first_actual_advisory_response
+    sbom_components: 680
+    source_mutation_paths: 0
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: false
+  phase_gate:
+    audit_mode: strict_max
+    blocker_major_minor_after_correction: 0_0_0
+    decision: pass_scoped_current_pc_local_reference_and_disposable_postgres
+    p15_authorization: current_pc_local_only
+p15_execution:
+  current_task: P15-01_auth_tenant
+  gate_state: ready_to_start_current_pc_local
 phases:
   P00: completed_current_pc_local_scope
   P01: completed_current_pc_local_scope
@@ -811,8 +856,8 @@ phases:
   P11: blocked_by_P06_P07_P08_P09_P10
   P12: blocked_by_P06_P07_P08_P09_P11
   P13: blocked_by_P10
-  P14: in_progress_P14_01_to_05_scoped_pass_P14_06_security_pending_P14_07_core_sql_pending
-  P15: blocked_by_P14
+  P14: completed_current_pc_local_reference_and_disposable_postgres
+  P15: ready_P15_01_current_pc_local
   P16: blocked_by_P15
   P17: blocked_by_P15
   P18: blocked_by_P12_P13_P16_P17

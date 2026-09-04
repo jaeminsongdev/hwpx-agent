@@ -7,9 +7,9 @@
 
 ## 현재 상태
 
-- 상태: `P05_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
-- 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐으며, P14-01~08 metadata/artifact/revision/history/job/scheduler/idempotency/cancel-cleanup service는 local reference 및 disposable PostgreSQL 범위의 각 카드 검증을 통과했다. P14-09 retention/mirror는 미구현이다.
+- 상태: `P05_IN_PROGRESS_AND_P15_READY_CURRENT_PC_LOCAL_ONLY`
+- 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT` + `P15_REMOTE_MCP_CONTROL_PLANE`
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09 metadata/artifact/revision/history/job/scheduler/idempotency/cancel-cleanup/retention/local-mirror service와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했으며, P15-01 Auth/tenant가 다음 비-UI 구현이다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -103,15 +103,17 @@
 - P14-04의 이전 `pnpm audit` timeout 조건은 commit `3876679`의 현재 bounded security run에서 첫 timeout cleanup 후 동일 2차 시도가 성공해 해소됐다.
 - P14-06은 core commit `205f4ac`에서 exact worker selection, bounded heartbeat/lease, late-worker/fence rejection과 qualified expiry를 Rust 및 disposable PostgreSQL로 증명했고, 후속 보안 run `9750c1226aa945ce98ad692b749f198e`가 모든 검사를 통과해 scoped PASS다.
 - P14-07은 core commit `fbcdcef`와 durable commit `d84a442`에서 bounded retry, unknown-outcome freeze, exact revision/artifact oracle, unpredictable attempt capability와 atomic job/revision fencing을 구현했다. clean PostgreSQL 18.4에서 SQL 28/28×3, 동시 claim `1 new + 15 replay`, commit/retry 정확히 한 승자, rollback/reapply를 통과해 scoped PASS다.
-- P14-08은 commit `8d03bb6`에서 safe cancellation, exact temp cleanup, source/reference-protected orphan quarantine, digest-bound interrupted-move recovery와 durable fenced receipt를 구현했다. clean PostgreSQL 18.4에서 SQL 18/18×3, P14-07 regression 28/28×2, 동시 claim `1 winner + 7 bounded misses`, 양쪽 fault window와 rollback/reapply를 통과해 scoped PASS다. P14-09 retention/mirror만 남았다.
+- P14-08은 commit `8d03bb6`에서 safe cancellation, exact temp cleanup, source/reference-protected orphan quarantine, digest-bound interrupted-move recovery와 durable fenced receipt를 구현했다. clean PostgreSQL 18.4에서 SQL 18/18×3, P14-07 regression 28/28×2, 동시 claim `1 winner + 7 bounded misses`, 양쪽 fault window와 rollback/reapply를 통과해 scoped PASS다.
+- P14-09은 commit `1d5de34`에서 7개 retention class, legal hold, tombstone, 3회 fenced purge, immutable receipt와 digest-only local mirror CAS/3개 conflict path를 구현했다. clean PostgreSQL 18.4에서 SQL 32/32×3과 P14-07 regression 28/28×3, rollback/reapply를 통과했고 P14 Python 132/132, Rust 15/15 Windows/Linux, 4개 non-security lane, security/SBOM 680이 모두 통과했다.
+- P14 Gate는 `PASS_SCOPED_CURRENT_PC_LOCAL_REFERENCE_AND_DISPOSABLE_POSTGRES`다. Production DB/service/object store/remote transport/HA/legal suitability는 계속 unverified이며, authoritative report는 `implementation/p14/P14_GATE_REPORT.md`다.
 
 ## 다음 작업
 
-비-UI 순서는 P14-09 retention/legal hold와 Codex project-state local mirror 및 delete/conflict test를 구현하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
+비-UI 순서는 P15-01 OAuth/OIDC identity, tenant mapping, scoped service-token 계약과 fail-closed middleware를 구현하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
 
 ## 현재 blocker
 
-- NPM advisory endpoint가 간헐적으로 timeout되지만 성공한 실제 보안 응답은 별도 보존됐고, 이는 P14-09 구현 blocker가 아니다.
+- NPM advisory endpoint는 간헐적 timeout 이력이 있지만 P14-09 exact commit 보안 run은 첫 시도 실제 응답으로 통과했으며 P15-01 blocker가 아니다.
 - P05-07 actual render는 한글 2020의 수동 `모두 허용` 타이밍에 의존한다. v2 attempt 16도 `open_input`에서 안전하게 timeout됐고 잔류 프로세스는 0이다.
 - P10-05/06과 P10-08 production 범위는 외부 보안 모듈·격리 환경이 제공되기 전까지 unqualified다.
 

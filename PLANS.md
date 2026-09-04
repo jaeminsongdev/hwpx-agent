@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-04
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P14 / P14-09 retention and local mirror`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P15 / P15-01 Auth/tenant`
 - Active reasoning effort: `max`
 - Immediate UI dependency: none live; P05-07 v2 attempts 10 through 16 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `모두 허용`
 
@@ -28,7 +28,7 @@ save, render, cross-version or production proof.
 | P02 | `pass_scoped_current_pc_local` | `implementation/p02/P02_GATE_REPORT.md` |
 | P03 | `pass_scoped_current_pc_local` | `implementation/p03/P03_GATE_REPORT.md` |
 | P04 | `pass_scoped_current_pc_local` | `implementation/p04/P04_GATE_REPORT.md` |
-| P05 | `in_progress_current_pc_local` | P05-01~06 pass; P05-07~09 core ready, actual 2020 render queue active |
+| P05 | `in_progress_current_pc_local` | P05-01~06 pass; P05-07~09 core ready, actual 2020 render requires a later explicit approval session |
 | P06 | `blocked_by_P05` | table engine |
 | P07 | `blocked_by_P05` | native equation engine |
 | P08 | `blocked_by_P05` | images/shapes/drawing/charts |
@@ -37,8 +37,8 @@ save, render, cross-version or production proof.
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
-| P14 | `in_progress` | P14-01~08 scoped pass; P14-09 retention/local mirror next |
-| P15 | `blocked_by_P14` | remote MCP control plane |
+| P14 | `pass_scoped_current_pc_local_reference_and_disposable_postgres` | `implementation/p14/P14_GATE_REPORT.md` |
+| P15 | `ready_current_pc_local` | P15-01 OAuth/OIDC identity, tenant mapping and service-token boundary next |
 | P16 | `blocked_by_P15` | ChatGPT Web plugin/widget |
 | P17 | `blocked_by_P15` | Codex remote/local companion |
 | P18 | `blocked_by_P12_P13_P16_P17` | quality/security/performance/DR |
@@ -64,6 +64,8 @@ save, render, cross-version or production proof.
 | P-0066 | P14-06 worker lease/fencing | `pass_scoped_local_disposable_postgres_and_in_memory_scheduler` | core commit `205f4ac`; closing security run `9750c1226aa945ce98ad692b749f198e`; `implementation/p14/P14-06_REPORT.md` |
 | P-0067 | P14-07 idempotency/reconciliation | `pass_scoped_local_disposable_postgres_and_in_memory_reference` | durable commit `d84a442`; `implementation/p14/P14-07_REPORT.md` |
 | P-0068 | P14-08 safe cancellation/cleanup | `pass_scoped_local_disposable_postgres_and_reference_worker` | commit `8d03bb6`; `implementation/p14/P14-08_REPORT.md` |
+| P-0069 | P14-09 retention/local mirror | `pass_scoped_local_disposable_postgres_and_in_memory_reference` | commit `1d5de34`; `implementation/p14/P14-09_REPORT.md` |
+| P-0070 | P14 phase Gate | `pass_scoped_current_pc_local_reference_and_disposable_postgres` | STRICT/`max`; `implementation/p14/P14_GATE_REPORT.md` |
 
 ## Active evidence summary
 
@@ -98,6 +100,13 @@ save, render, cross-version or production proof.
   misses`, stale-fence/reference-race rejection, before/after-effect crash recovery and exact v7
   rollback/reapply. Rust cleanup/foundation tests, four non-security lanes, independent security and
   network-disabled read-only Linux validation pass. See `implementation/p14/P14-08_REPORT.md`.
+- P14-09 commit `1d5de34` has a clean digest-bound PostgreSQL 18.4 receipt: 32 assertions and the
+  unchanged P14-07 regression 28 assertions, each in three transactions. Seven retention classes,
+  hold/tombstone/fenced purge, shared-reference recheck, immutable receipts, digest-only mirror CAS,
+  three conflict paths, fresh-ID expiry recovery and single generation reservation passed. P14 tests
+  are 132/132, Rust is 15/15 on Windows/Linux, all four non-security lanes and the exact-commit
+  security run pass with SBOM 680. The STRICT phase Gate closes P14 only for current-PC local
+  reference development and disposable PostgreSQL; see `implementation/p14/P14_GATE_REPORT.md`.
 - Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with
   cleanup and succeeded on attempt 2, all other checks passed, and the SBOM contains 675 components.
 - A detached exact-commit worktree passed all four non-security lanes after the four digest-pinned,
@@ -114,8 +123,8 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next actions
 
-1. Non-UI: implement P14-09 retention/legal hold and Codex project-state local mirror, including
-   deletion/hold/conflict tests and phase-handoff evidence.
+1. Non-UI: start P15-01 by locking OAuth/OIDC claim, tenant membership and scoped service-token
+   contracts, then implement fail-closed middleware with negative, expiry and replay tests.
 2. UI-dependent: on a new explicit user request, rerun P05-07 once and require
    save/reopen/PDF/render evidence before P05-08, P05-09 and the P05 Gate.
 3. Keep P10-05/06 and P10-08 production claims open until their external controls exist.

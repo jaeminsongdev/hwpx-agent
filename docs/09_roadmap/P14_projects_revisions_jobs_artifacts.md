@@ -45,11 +45,11 @@ Projects·Revisions·Jobs·Artifacts를 문서상 계획이 아니라 **재현 �
 - [x] `P14-06` 산출물 `scheduler` 존재, 검증: late worker commit rejection.
 - [x] `P14-07` 산출물 `idempotency module` 존재, 검증: duplicate side-effect tests.
 - [x] `P14-08` 산출물 `cleanup worker` 존재, 검증: fault injection.
-- [ ] `P14-09` 산출물 `retention/sync service` 존재, 검증: delete and conflict tests.
-- [ ] 새 capability/contract/schema에 migration과 negative test가 있다.
-- [ ] 실제 수행하지 않은 검증은 `unverified`로 남았다.
-- [ ] source artifact를 in-place로 수정한 경로가 없다.
-- [ ] phase handoff에 실패 fixture와 다음 exact task가 기록됐다.
+- [x] `P14-09` 산출물 `retention/sync service` 존재, 검증: delete and conflict tests.
+- [x] 새 capability/contract/schema에 migration과 negative test가 있다.
+- [x] 실제 수행하지 않은 검증은 `unverified`로 남았다.
+- [x] source artifact를 in-place로 수정한 경로가 없다.
+- [x] phase handoff에 실패 fixture와 다음 exact task가 기록됐다.
 
 ## 금지
 
