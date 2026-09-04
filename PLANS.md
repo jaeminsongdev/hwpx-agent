@@ -2,9 +2,9 @@
 
 - Updated: 2026-09-04
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P14 / P14-02 artifact service`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P14 / P14-03 revision CAS`
 - Active reasoning effort: `max`
-- Immediate UI dependency: none live; P05-07 v2 attempt 06 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `접근 허용`
+- Immediate UI dependency: none live; P05-07 v2 attempt 08 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `접근 허용`
 
 ## Objective and non-negotiable boundaries
 
@@ -37,7 +37,7 @@ save, render, cross-version or production proof.
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
-| P14 | `in_progress` | P14-01 pass; P14-02 artifact service is the next independent non-UI task |
+| P14 | `in_progress` | P14-01~02 pass; P14-03 revision CAS is the next independent non-UI task |
 | P15 | `blocked_by_P14` | remote MCP control plane |
 | P16 | `blocked_by_P15` | ChatGPT Web plugin/widget |
 | P17 | `blocked_by_P15` | Codex remote/local companion |
@@ -57,11 +57,13 @@ save, render, cross-version or production proof.
 | P-0058 | P01 security audit reliability | `harness_pass_online_pnpm_audit_unverified` | bounded 60s×3 cleanup; other checks pass |
 | P-0059~0060 | P10-09~10 supervisor/probe | `pass_scoped_current_pc_local` | reports under `implementation/p10/` |
 | P-0061 | P14-01 metadata schema | `pass_scoped_local_disposable_postgres` | commit `200806a`; `implementation/p14/P14-01_REPORT.md` |
+| P-0062 | P14-02 artifact service | `pass_scoped_local_disposable_postgres_and_local_blob_adapter` | commit `95f40ad`; `implementation/p14/P14-02_REPORT.md` |
 
 ## Active evidence summary
 
 - P05-07 v2 fixture commit `9096502` independently reads as two linear sections and one break.
-  Attempt 06 timed out at `open_input`; the input remained unchanged, no output/PDF was created, its
+  Attempt 08 timed out at `open_input` with `SECTION_COLUMNS_READBACK_TIMEOUT`; the input remained
+  unchanged, no output/PDF was created, its
   owned `Hwp.exe` was cleaned and residual count is zero. Trace bytes `1366`, SHA-256
   `a2c4560bcb5af1f0218ee76e2400e00b8a57cc193b8e81949f3a262bcb0f56d9`. P05-08~09 render evidence
   also stays open. Relaunch only on a new explicit user request with immediate manual approval.
@@ -70,8 +72,16 @@ save, render, cross-version or production proof.
 - P10-08 passes current-PC development checks, but dedicated production isolation remains unqualified.
 - P14-01 exact clean-commit PostgreSQL receipt is digest-bound in
   `implementation/p14/P14-01_REPORT.md`; it proves only local disposable migration/rollback behavior.
-- Repository security revalidation again timed out only at external `pnpm audit` 3/3 with cleanup
-  3/3. Secret, Rust, license, .NET and SBOM checks pass; the online audit remains `unverified`.
+- P14-02 exact clean-commit PostgreSQL receipt is digest-bound in
+  `implementation/p14/P14-02_REPORT.md`; service and SQL tests prove the scoped artifact-store and
+  cross-tenant invariants, not production object storage/KMS/HTTP deployment.
+- Exact commit `95f40ad` repository security revalidation passed every check. `pnpm audit` timed out
+  twice with cleanup and succeeded on attempt 3; secret, Rust, license, .NET and SBOM checks passed.
+- The exact-commit audit clone passed all four non-security lanes after four digest-pinned,
+  Git-ignored current-PC runtime evidence files were hydrated. Host command policy rejected removal
+  of the verified temporary clone `D:\개발\hwpx-agent-clean-audit-95f40ad`; it contains only this
+  repository clone, generated build outputs and copied private current-PC evidence and requires
+  local removal before the next clean-clone audit.
 
 ## Validation policy
 
@@ -82,8 +92,8 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next actions
 
-1. Non-UI: implement P14-02 artifact service from `implementation/p14/P14-01_RUNBOOK.md`, including
-   content-addressed storage, encryption/ACL/quarantine/signed-URL policy and cross-tenant denial.
+1. Non-UI: implement P14-03 immutable revision DAG and expected-head compare-and-swap service, with
+   deterministic race/conflict tests and actual PostgreSQL transaction evidence.
 2. UI-dependent: on a new explicit user request, rerun P05-07 once and require
    save/reopen/PDF/render evidence before P05-08, P05-09 and the P05 Gate.
 3. Keep P10-05/06 and P10-08 production claims open until their external controls exist.

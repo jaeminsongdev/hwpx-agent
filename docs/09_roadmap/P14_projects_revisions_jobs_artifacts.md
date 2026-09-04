@@ -38,7 +38,7 @@ Projects·Revisions·Jobs·Artifacts를 문서상 계획이 아니라 **재현 �
 ## Phase hard gate
 
 - [x] `P14-01` 산출물 `DB migrations` 존재, 검증: migration/rollback tests.
-- [ ] `P14-02` 산출물 `artifact service` 존재, 검증: cross-tenant denial.
+- [x] `P14-02` 산출물 `artifact service` 존재, 검증: cross-tenant denial.
 - [ ] `P14-03` 산출물 `revision service` 존재, 검증: race/conflict tests.
 - [ ] `P14-04` 산출물 `history API` 존재, 검증: DAG/query tests.
 - [ ] `P14-05` 산출물 `job service` 존재, 검증: invalid transition tests.
