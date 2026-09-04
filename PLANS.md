@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-04
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P14 / P14-08 safe cancellation and cleanup`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P14 / P14-09 retention and local mirror`
 - Active reasoning effort: `max`
 - Immediate UI dependency: none live; P05-07 v2 attempts 10 through 16 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `모두 허용`
 
@@ -37,7 +37,7 @@ save, render, cross-version or production proof.
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
-| P14 | `in_progress` | P14-01~07 scoped pass; P14-08 safe cancellation/cleanup next; P14-09 open |
+| P14 | `in_progress` | P14-01~08 scoped pass; P14-09 retention/local mirror next |
 | P15 | `blocked_by_P14` | remote MCP control plane |
 | P16 | `blocked_by_P15` | ChatGPT Web plugin/widget |
 | P17 | `blocked_by_P15` | Codex remote/local companion |
@@ -63,6 +63,7 @@ save, render, cross-version or production proof.
 | P-0065 | P14-05 job state machine | `pass_scoped_local_disposable_postgres_and_in_memory_service` | commit `3876679`; exact PostgreSQL/CI/Linux/security evidence; `implementation/p14/P14-05_REPORT.md` |
 | P-0066 | P14-06 worker lease/fencing | `pass_scoped_local_disposable_postgres_and_in_memory_scheduler` | core commit `205f4ac`; closing security run `9750c1226aa945ce98ad692b749f198e`; `implementation/p14/P14-06_REPORT.md` |
 | P-0067 | P14-07 idempotency/reconciliation | `pass_scoped_local_disposable_postgres_and_in_memory_reference` | durable commit `d84a442`; `implementation/p14/P14-07_REPORT.md` |
+| P-0068 | P14-08 safe cancellation/cleanup | `pass_scoped_local_disposable_postgres_and_reference_worker` | commit `8d03bb6`; `implementation/p14/P14-08_REPORT.md` |
 
 ## Active evidence summary
 
@@ -92,6 +93,11 @@ save, render, cross-version or production proof.
   the exact commit passes four non-security lanes. The same-content security run immediately before
   commit passes all checks; two later exact-commit probes preserve external `pnpm audit` timeout as
   diagnostics rather than PASS. See `implementation/p14/P14-07_REPORT.md`.
+- P14-08 commit `8d03bb6` has a clean digest-bound PostgreSQL 18.4 receipt: 18 assertions in three
+  runs, unchanged P14-07 regression 28 assertions twice, concurrent claim `1 winner + 7 bounded
+  misses`, stale-fence/reference-race rejection, before/after-effect crash recovery and exact v7
+  rollback/reapply. Rust cleanup/foundation tests, four non-security lanes, independent security and
+  network-disabled read-only Linux validation pass. See `implementation/p14/P14-08_REPORT.md`.
 - Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with
   cleanup and succeeded on attempt 2, all other checks passed, and the SBOM contains 675 components.
 - A detached exact-commit worktree passed all four non-security lanes after the four digest-pinned,
@@ -108,8 +114,8 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next actions
 
-1. Non-UI: implement P14-08 safe cancellation, orphan artifact and temporary-workspace cleanup,
-   including interruption/crash fault injection and exact no-source-mutation evidence.
+1. Non-UI: implement P14-09 retention/legal hold and Codex project-state local mirror, including
+   deletion/hold/conflict tests and phase-handoff evidence.
 2. UI-dependent: on a new explicit user request, rerun P05-07 once and require
    save/reopen/PDF/render evidence before P05-08, P05-09 and the P05 Gate.
 3. Keep P10-05/06 and P10-08 production claims open until their external controls exist.
