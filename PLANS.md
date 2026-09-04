@@ -2,9 +2,9 @@
 
 - Updated: 2026-09-04
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P14 / P14-04 history/checkpoints`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P14 / P14-04 security revalidation and P14-05 job-state preparation`
 - Active reasoning effort: `max`
-- Immediate UI dependency: none live; P05-07 v2 attempt 09 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `접근 허용`
+- Immediate UI dependency: none live; P05-07 v2 attempts 10 and 11 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `접근 허용`
 
 ## Objective and non-negotiable boundaries
 
@@ -37,7 +37,7 @@ save, render, cross-version or production proof.
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
-| P14 | `in_progress` | P14-01~03 pass; P14-04 history/checkpoints is the next independent non-UI task |
+| P14 | `in_progress` | P14-01~03 pass; P14-04 core/evidence ready but current `pnpm audit` timeout keeps its Gate open; P14-05 next implementation |
 | P15 | `blocked_by_P14` | remote MCP control plane |
 | P16 | `blocked_by_P15` | ChatGPT Web plugin/widget |
 | P17 | `blocked_by_P15` | Codex remote/local companion |
@@ -59,15 +59,17 @@ save, render, cross-version or production proof.
 | P-0061 | P14-01 metadata schema | `pass_scoped_local_disposable_postgres` | commit `200806a`; `implementation/p14/P14-01_REPORT.md` |
 | P-0062 | P14-02 artifact service | `pass_scoped_local_disposable_postgres_and_local_blob_adapter` | commit `95f40ad`; `implementation/p14/P14-02_REPORT.md` |
 | P-0063 | P14-03 revision CAS | `pass_scoped_local_disposable_postgres_and_in_memory_service` | commit `f225dbc`; `implementation/p14/P14-03_REPORT.md` |
+| P-0064 | P14-04 history/checkpoints | `implementation_ready_security_revalidation_pending` | commit `59e26b6`; clean PostgreSQL receipt + all non-security lanes/Linux pass; online `pnpm audit` pending |
 
 ## Active evidence summary
 
 - P05-07 v2 fixture commit `9096502` independently reads as two linear sections and one break.
-  Attempt 09 timed out at `open_input` with `SECTION_COLUMNS_READBACK_TIMEOUT`; the input remained
-  unchanged, no output/PDF was created, its
-  owned `Hwp.exe` was cleaned and residual count is zero. Trace bytes `1690`, SHA-256
-  `f9644cb119944baaf029ae5b142dee55bd8d68c91892227abccfaa412fc92764`. P05-08~09 render evidence
-  also stays open. Relaunch only on a new explicit user request with immediate manual approval.
+  Attempts 10 and 11 both timed out at `open_input` with `SECTION_COLUMNS_READBACK_TIMEOUT`; the
+  input remained unchanged, no output/PDF was created, owned `Hwp.exe` processes were cleaned and
+  residual count is zero. Attempt 10 trace bytes/hash: `1690`/
+  `f9644cb119944baaf029ae5b142dee55bd8d68c91892227abccfaa412fc92764`; attempt 11: `1366`/
+  `a2c4560bcb5af1f0218ee76e2400e00b8a57cc193b8e81949f3a262bcb0f56d9`. P05-08~09 render evidence
+  stays open. Relaunch only on a new explicit user request with immediate manual approval.
 - P10-05 still lacks an approved registered file-path security module. P10-06 actual production COM
   execution and P10-10 routability remain unverified; P10-10 correctly issues zero leases/executions.
 - P10-08 passes current-PC development checks, but dedicated production isolation remains unqualified.
@@ -79,6 +81,10 @@ save, render, cross-version or production proof.
 - P14-03 exact clean-commit PostgreSQL receipt is digest-bound in
   `implementation/p14/P14-03_REPORT.md`; immutable DAG and same-head single-winner CAS pass in the
   service and PostgreSQL scopes, not as a production/multi-host deployment claim.
+- P14-04 exact clean commit `59e26b6` has a digest-bound PostgreSQL receipt, 16 Rust tests, 49 P14
+  tests, four CI lanes and offline Linux PASS. Its exact security run passed every check except
+  `pnpm audit`, which timed out 60 seconds with successful cleanup on all three attempts in two runs;
+  do not check P14-04 until a current bounded audit succeeds. See `implementation/p14/P14-04_REPORT.md`.
 - Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with
   cleanup and succeeded on attempt 2, all other checks passed, and the SBOM contains 675 components.
 - A detached exact-commit worktree passed all four non-security lanes after the four digest-pinned,
@@ -95,10 +101,12 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next actions
 
-1. Non-UI: implement P14-04 history/checkpoints with bounded semantic-diff cursors, labels and
-   branch/history DAG query tests.
-2. UI-dependent: on a new explicit user request, rerun P05-07 once and require
+1. Non-UI: retry the unchanged bounded security harness; on a real all-check PASS, close P14-04 and
+   check only its roadmap row. Until then it remains implementation-ready, not PASS.
+2. Non-UI: start P14-05 job state machine independently with lease/fencing/cancel/retry tests and
+   PostgreSQL v5 evidence; keep P14-04's security result separate.
+3. UI-dependent: on a new explicit user request, rerun P05-07 once and require
    save/reopen/PDF/render evidence before P05-08, P05-09 and the P05 Gate.
-3. Keep P10-05/06 and P10-08 production claims open until their external controls exist.
+4. Keep P10-05/06 and P10-08 production claims open until their external controls exist.
 
-Continue all three at reasoning effort `max`.
+Continue these actions at reasoning effort `max`.
