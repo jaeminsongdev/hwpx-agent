@@ -51,6 +51,7 @@ def windows_worker() -> None:
     run(["pwsh", "-NoProfile", "-File", "implementation/p10/tests/Test-Hancom2020EventModalWatchdog.ps1"])
     run(["pwsh", "-NoProfile", "-File", "implementation/p10/tests/Test-Hancom2020Isolation.ps1"])
     run(["pwsh", "-NoProfile", "-File", "implementation/p10/tests/Test-Hancom2020Supervisor.ps1"])
+    run(["pwsh", "-NoProfile", "-File", "implementation/p10/tests/Test-Hancom2020RuntimeProbe.ps1"])
     run([sys.executable, "implementation/p10/tests/validate_binding_schemas.py"])
     run(
         [
@@ -66,6 +67,14 @@ def windows_worker() -> None:
             "tools/p10/validate_worker_supervision.py",
             "--policy",
             "implementation/p10/supervision/p10-current-pc-worker-supervisor-policy.json",
+        ]
+    )
+    run(
+        [
+            sys.executable,
+            "tools/p10/validate_runtime_probe.py",
+            "--policy",
+            "implementation/p10/probe/p10-current-pc-runtime-probe-policy.json",
         ]
     )
 

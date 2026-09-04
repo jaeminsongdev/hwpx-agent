@@ -25,6 +25,7 @@ internal static partial class AgentValidation
 
         ValidateWorkerIsolationPolicy(configuration.WorkerIsolation, configuration.TargetProfile);
         ValidateWorkerSupervisorPolicy(configuration.WorkerSupervisor);
+        ValidateRuntimeProbePolicy(configuration.RuntimeProbe);
         if (configuration.AvailableJobSlots != 1)
         {
             throw new ArgumentException(
@@ -131,6 +132,18 @@ internal static partial class AgentValidation
             || policy.MaximumPrivateMemoryBytes is < 67_108_864 or > 17_179_869_184)
         {
             throw new ArgumentException("The worker supervisor policy must be bounded.", nameof(policy));
+        }
+    }
+
+    internal static void ValidateRuntimeProbePolicy(RuntimeProbePolicyPin policy)
+    {
+        ArgumentNullException.ThrowIfNull(policy);
+        RequireSemanticId(policy.PolicyId);
+        RequireSemanticId(policy.EvidenceArtifactId);
+        if (policy.MaximumProbeAgeSeconds is < 30 or > 86_400
+            || policy.MaximumEvidenceBytes is < 1_024 or > 1_048_576)
+        {
+            throw new ArgumentException("The runtime probe policy must be bounded.", nameof(policy));
         }
     }
 
@@ -567,6 +580,8 @@ public enum AgentProtocolError
     CleanupResidue,
     ReconciliationFailed,
     RecycleFailed,
+    RuntimeProbeInvalid,
+    RuntimeProbeNotRoutable,
 }
 
 public sealed class AgentProtocolException : Exception

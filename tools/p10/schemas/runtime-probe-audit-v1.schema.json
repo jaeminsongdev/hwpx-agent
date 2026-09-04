@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/p10/runtime-probe-audit-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at_utc", "state", "policy_relative_path", "policy_sha256", "host_baseline_verification", "execution", "observation", "scope", "privacy"],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.p10-10-runtime-probe-audit/v1" },
+    "generated_at_utc": { "type": "string", "format": "date-time" },
+    "state": { "const": "pass_current_pc_development_only" },
+    "policy_relative_path": { "type": "string", "minLength": 1, "maxLength": 1024 },
+    "policy_sha256": { "$ref": "#/$defs/hash" },
+    "host_baseline_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "baseline_digest_sha256", "verification_sha256"],
+      "properties": {
+        "state": { "const": "pass" },
+        "baseline_digest_sha256": { "$ref": "#/$defs/hash" },
+        "verification_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent_smoke_assembly_sha256", "source_revision", "source_tree_clean", "release_build_succeeded", "full_smoke_exit_code", "full_smoke_stdout_sha256", "p10_10_marker_present", "agent_test_count", "actual_probe_exit_code", "actual_probe_stdout_sha256"],
+      "properties": {
+        "agent_smoke_assembly_sha256": { "$ref": "#/$defs/hash" },
+        "source_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "source_tree_clean": { "const": true },
+        "release_build_succeeded": { "const": true },
+        "full_smoke_exit_code": { "const": 0 },
+        "full_smoke_stdout_sha256": { "$ref": "#/$defs/hash" },
+        "p10_10_marker_present": { "const": true },
+        "agent_test_count": { "const": 32 },
+        "actual_probe_exit_code": { "const": 0 },
+        "actual_probe_stdout_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "state", "policy_sha256", "isolation_policy_sha256", "target_profile_id", "product_build", "process_architecture", "capability_registry_sha256", "probe_health", "capability_set_sha256", "evidence_artifact_sha256", "evidence_artifact_bytes", "capability_count", "verified_capability_count", "unavailable_capability_count", "security_module_state", "report_probe_calls", "acquire_lease_calls", "executor_calls", "profile_mismatch_no_rpc_tested", "unroutable_probe_no_lease_verified", "hancom_process_count_before", "hancom_process_count_after", "raw_path_present", "raw_document_content_present", "user_document_scanned", "external_network_invoked", "system_setting_changed", "hancom_process_started", "production_or_provider_qualified", "another_host_or_version_qualified"],
+      "properties": {
+        "schema_version": { "const": "hwpx-agent.p10-10-current-host-runtime-probe/v1" },
+        "state": { "const": "pass_current_pc_development_only" },
+        "policy_sha256": { "$ref": "#/$defs/hash" },
+        "isolation_policy_sha256": { "$ref": "#/$defs/hash" },
+        "target_profile_id": { "const": "hancom-hangul-2020-secondary" },
+        "product_build": { "const": "11.0.0.9136" },
+        "process_architecture": { "const": "x86" },
+        "capability_registry_sha256": { "$ref": "#/$defs/hash" },
+        "probe_health": { "const": "unroutable" },
+        "capability_set_sha256": { "$ref": "#/$defs/hash" },
+        "evidence_artifact_sha256": { "$ref": "#/$defs/hash" },
+        "evidence_artifact_bytes": { "type": "integer", "minimum": 1024, "maximum": 65536 },
+        "capability_count": { "type": "integer", "minimum": 1, "maximum": 256 },
+        "verified_capability_count": { "type": "integer", "minimum": 1 },
+        "unavailable_capability_count": { "const": 1 },
+        "security_module_state": { "const": "not_registered" },
+        "report_probe_calls": { "const": 1 },
+        "acquire_lease_calls": { "const": 0 },
+        "executor_calls": { "const": 0 },
+        "profile_mismatch_no_rpc_tested": { "const": true },
+        "unroutable_probe_no_lease_verified": { "const": true },
+        "hancom_process_count_before": { "const": 0 },
+        "hancom_process_count_after": { "const": 0 },
+        "raw_path_present": { "const": false },
+        "raw_document_content_present": { "const": false },
+        "user_document_scanned": { "const": false },
+        "external_network_invoked": { "const": false },
+        "system_setting_changed": { "const": false },
+        "hancom_process_started": { "const": false },
+        "production_or_provider_qualified": { "const": false },
+        "another_host_or_version_qualified": { "const": false }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current_pc_local_development_qualified", "production_or_provider_qualified", "another_hancom_version_qualified", "another_host_qualified"],
+      "properties": {
+        "current_pc_local_development_qualified": { "const": true },
+        "production_or_provider_qualified": { "const": false },
+        "another_hancom_version_qualified": { "const": false },
+        "another_host_qualified": { "const": false }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raw_path_present", "raw_document_content_present", "user_document_scanned", "external_network_invoked", "system_setting_changed", "hancom_process_started"],
+      "properties": {
+        "raw_path_present": { "const": false },
+        "raw_document_content_present": { "const": false },
+        "user_document_scanned": { "const": false },
+        "external_network_invoked": { "const": false },
+        "system_setting_changed": { "const": false },
+        "hancom_process_started": { "const": false }
+      }
+    }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

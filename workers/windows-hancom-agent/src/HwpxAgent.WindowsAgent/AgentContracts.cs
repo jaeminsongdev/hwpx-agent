@@ -42,6 +42,11 @@ public interface ISupervisedAgentJobExecutor : IAgentJobExecutor
         CancellationToken cancellationToken);
 }
 
+public interface IRuntimeProbeCollector
+{
+    Task<RuntimeProbeObservation> ObserveAsync(CancellationToken cancellationToken);
+}
+
 public sealed record WindowsAgentConfiguration(
     string AgentInstanceId,
     TargetProfileIdentity TargetProfile,
@@ -50,8 +55,44 @@ public sealed record WindowsAgentConfiguration(
     TimeSpan RpcTimeout,
     WorkerIsolationPolicyPin WorkerIsolation,
     WorkerSupervisorPolicyPin WorkerSupervisor,
+    RuntimeProbePolicyPin RuntimeProbe,
     HancomSecurityModulePin? HancomSecurityModule = null,
     HancomBindingBundlePin? HancomBindingBundle = null);
+
+public sealed record RuntimeProbePolicyPin(
+    string PolicyId,
+    string EvidenceArtifactId,
+    uint MaximumProbeAgeSeconds,
+    uint MaximumEvidenceBytes);
+
+public enum RuntimeCapabilityState
+{
+    Verified = 1,
+    Unavailable = 2,
+    Unverified = 3,
+    Drifted = 4,
+}
+
+public sealed record RuntimeCapabilityObservation(
+    string CapabilityId,
+    RuntimeCapabilityState State,
+    bool RequiredForLease,
+    string SafeCode,
+    string ObservationSha256);
+
+public sealed record RuntimeProbeObservation(
+    string PolicyId,
+    TargetProfileIdentity TargetProfile,
+    string CapabilityRegistrySha256,
+    ProbeHealth Health,
+    IReadOnlyList<RuntimeCapabilityObservation> Capabilities,
+    ulong ObservedAtUnixMs,
+    bool RawPathStored,
+    bool RawDocumentContentStored,
+    bool UserDocumentScanned,
+    bool ExternalNetworkInvoked,
+    bool SystemSettingChanged,
+    bool HancomProcessStarted);
 
 public sealed record WorkerSupervisorPolicyPin(
     string PolicyId,

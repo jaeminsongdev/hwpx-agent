@@ -39,6 +39,15 @@ internal static class Program
                 return 0;
             }
 
+            if (args.Length == 3
+                && string.Equals(
+                    args[0],
+                    "--p10-10-current-host-runtime-probe",
+                    StringComparison.Ordinal))
+            {
+                return await RunActualCurrentHostRuntimeProbeAsync(args[1], args[2]);
+            }
+
             return 64;
         }
 
@@ -70,6 +79,11 @@ internal static class Program
         RejectsUnsafeTransportAndArtifactBoundaries();
         await RejectsUnboundedSupervisorPolicyAsync();
         Console.WriteLine("Windows Agent P10-02/P10-05/P10-06/P10-08/P10-09 staging, isolation, supervision, reconciliation, process-tree recycle, fencing, upload and auth smoke passed (28/28)");
+        await RuntimeProbeReportsBeforeLeaseAndCachesAdmissionAsync();
+        await RuntimeProbeProfileMismatchMakesNoRpcAsync();
+        await UnroutableRuntimeProbeReportsButNeverAcquiresLeaseAsync();
+        await RuntimeProbeRejectsPrivacyAndHealthContradictionsAsync();
+        Console.WriteLine("Windows Agent P10-10 runtime probe, routability admission and profile mismatch smoke passed (4/4; total 32/32)");
         return 0;
     }
 
@@ -168,7 +182,8 @@ internal static class Program
                 AvailableJobSlots: 1,
                 RpcTimeout: TimeSpan.FromSeconds(10),
                 WorkerIsolation: isolationPolicy,
-                WorkerSupervisor: CurrentSupervisorPolicy());
+                WorkerSupervisor: CurrentSupervisorPolicy(),
+                RuntimeProbe: CurrentRuntimeProbePolicy());
 
             Directory.CreateDirectory(root);
             var workspace = new AgentWorkspace(Path.Combine(root, "workspace"));
@@ -236,6 +251,272 @@ internal static class Program
         }
     }
 
+    private static async Task<int> RunActualCurrentHostRuntimeProbeAsync(
+        string runtimePolicyPath,
+        string isolationPolicyPath)
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return 66;
+        }
+
+        var root = Path.Combine(Path.GetTempPath(), $"hwpx-agent-p10-10-actual-{Guid.NewGuid():N}");
+        try
+        {
+            var runtimePolicyFull = RequirePlainJsonFile(runtimePolicyPath, 131_072);
+            var isolationPolicyFull = RequirePlainJsonFile(isolationPolicyPath, 131_072);
+            var repositoryRoot = FindRepositoryRoot(Path.GetDirectoryName(runtimePolicyFull)!);
+            using var runtimePolicy = JsonDocument.Parse(await File.ReadAllBytesAsync(runtimePolicyFull));
+            using var isolationPolicy = JsonDocument.Parse(await File.ReadAllBytesAsync(isolationPolicyFull));
+            var policy = runtimePolicy.RootElement;
+            var isolation = isolationPolicy.RootElement;
+            if (!string.Equals(
+                    RequiredString(policy, "schema_version"),
+                    "hwpx-agent.p10-10-runtime-probe-policy/v1",
+                    StringComparison.Ordinal)
+                || !string.Equals(
+                    RequiredString(isolation, "schema_version"),
+                    "hwpx-agent.p10-08-worker-isolation-policy/v1",
+                    StringComparison.Ordinal))
+            {
+                return 65;
+            }
+
+            var isolationPin = policy.GetProperty("isolation_policy");
+            if (!string.Equals(
+                    Sha256File(isolationPolicyFull),
+                    RequiredString(isolationPin, "sha256"),
+                    StringComparison.Ordinal)
+                || !string.Equals(
+                    ResolveRepositoryPath(repositoryRoot, RequiredString(isolationPin, "relative_path")),
+                    isolationPolicyFull,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return 65;
+            }
+
+            var target = policy.GetProperty("target");
+            var targetProfile = new TargetProfileIdentity
+            {
+                ProfileId = RequiredString(target, "profile_id"),
+                ProductBuild = RequiredString(target, "product_build"),
+                Locale = RequiredString(target, "locale"),
+                ProcessArchitecture = RequiredString(target, "process_architecture"),
+                ExecutableSha256 = RequiredString(target, "executable_sha256"),
+                EnvironmentDigest = RequiredString(target, "host_baseline_sha256"),
+            };
+            var isolationTarget = isolation.GetProperty("target");
+            var isolationPolicyPin = new WorkerIsolationPolicyPin(
+                RequiredString(isolation, "policy_id"),
+                WorkerIsolationScope.CurrentPcInteractiveDevelopment,
+                RequiredString(isolationTarget, "profile_id"),
+                RequiredString(isolationTarget, "host_baseline_sha256"),
+                RequiredString(isolationTarget, "host_isolation_identity_sha256"),
+                Sha256File(isolationPolicyFull),
+                ProductionIsolationQualified: false);
+            var admission = policy.GetProperty("admission");
+            var probePolicy = new RuntimeProbePolicyPin(
+                RequiredString(policy, "policy_id"),
+                RequiredString(admission, "evidence_artifact_id"),
+                admission.GetProperty("maximum_probe_age_seconds").GetUInt32(),
+                admission.GetProperty("maximum_evidence_bytes").GetUInt32());
+            var registry = policy.GetProperty("capability_registry");
+            var registryPath = ResolveRepositoryPath(
+                repositoryRoot,
+                RequiredString(registry, "relative_path"));
+            var registrySha256 = RequiredString(registry, "sha256");
+            var evidencePins = policy.GetProperty("pinned_evidence")
+                .EnumerateArray()
+                .Select(item => new RuntimeEvidencePin(
+                    RequiredString(item, "capability_id"),
+                    ResolveRepositoryPath(repositoryRoot, RequiredString(item, "relative_path")),
+                    RequiredString(item, "sha256"),
+                    item.GetProperty("required_for_lease").GetBoolean()))
+                .ToArray();
+
+            HancomSecurityModulePin? securityModule = null;
+            var security = policy.GetProperty("security_module");
+            if (string.Equals(RequiredString(security, "state"), "pinned", StringComparison.Ordinal))
+            {
+                securityModule = new HancomSecurityModulePin(
+                    RequiredString(security, "registration_name"),
+                    RequiredString(security, "sha256"));
+            }
+
+            var configuration = new WindowsAgentConfiguration(
+                "30000000-0000-4000-8000-000000000100",
+                targetProfile,
+                registrySha256,
+                AvailableJobSlots: 1,
+                RpcTimeout: TimeSpan.FromSeconds(10),
+                WorkerIsolation: isolationPolicyPin,
+                WorkerSupervisor: CurrentSupervisorPolicy(),
+                RuntimeProbe: probePolicy,
+                HancomSecurityModule: securityModule);
+            var collector = new CurrentPcRuntimeProbeCollector(
+                new CurrentPcRuntimeProbePin(
+                    probePolicy.PolicyId,
+                    targetProfile.Clone(),
+                    RequiredString(target, "executable_path"),
+                    RequiredString(target, "prog_id"),
+                    RequiredString(target, "clsid"),
+                    registryPath,
+                    registrySha256,
+                    evidencePins),
+                securityModule);
+
+            Directory.CreateDirectory(root);
+            var store = new ContentAddressedArtifactStore(Path.Combine(root, "store"));
+            var workspace = new AgentWorkspace(Path.Combine(root, "workspace"));
+            var control = new RuntimeProbeAuditControlClient();
+            var executor = new DelegatingExecutor((_, _) =>
+                throw new InvalidOperationException("An unroutable actual probe reached the executor."));
+            var service = new WindowsAgentService(
+                configuration,
+                control,
+                store,
+                executor,
+                workspace,
+                new CurrentPcWorkerIsolationAttestor(isolationPolicyPin),
+                collector);
+
+            var hwpBefore = HwpProcessCount();
+            var error = await CaptureProtocolErrorAsync(
+                () => service.RunOnceAsync(CancellationToken.None));
+            var hwpAfter = HwpProcessCount();
+            if (error != AgentProtocolError.RuntimeProbeNotRoutable
+                || control.ReportProbeCalls != 1
+                || control.AcquireLeaseCalls != 0
+                || control.Reported?.Probe is null
+                || control.Reported.Probe.Health != ProbeHealth.Unroutable
+                || hwpBefore != 0
+                || hwpAfter != 0)
+            {
+                return 2;
+            }
+
+            byte[] evidenceBytes;
+            await using (var evidenceStream = await store.OpenReadAsync(
+                control.Reported.Probe.Evidence,
+                CancellationToken.None))
+            {
+                using var copy = new MemoryStream();
+                await evidenceStream.CopyToAsync(copy);
+                evidenceBytes = copy.ToArray();
+            }
+
+            using var evidence = JsonDocument.Parse(evidenceBytes);
+            var capabilities = evidence.RootElement.GetProperty("capabilities").EnumerateArray().ToArray();
+            var securityCapability = capabilities.Single(item =>
+                item.GetProperty("capability_id").GetString()
+                    == "agent.security_file_path_module");
+            if (securityCapability.GetProperty("state").GetString() != "unavailable"
+                || securityCapability.GetProperty("safe_code").GetString() != "not_registered")
+            {
+                return 2;
+            }
+
+            Console.WriteLine(JsonSerializer.Serialize(new
+            {
+                schema_version = "hwpx-agent.p10-10-current-host-runtime-probe/v1",
+                state = "pass_current_pc_development_only",
+                policy_sha256 = Sha256File(runtimePolicyFull),
+                isolation_policy_sha256 = Sha256File(isolationPolicyFull),
+                target_profile_id = targetProfile.ProfileId,
+                product_build = targetProfile.ProductBuild,
+                process_architecture = targetProfile.ProcessArchitecture,
+                capability_registry_sha256 = registrySha256,
+                probe_health = "unroutable",
+                capability_set_sha256 = control.Reported.Probe.CapabilitySetSha256,
+                evidence_artifact_sha256 = control.Reported.Probe.Evidence.Sha256,
+                evidence_artifact_bytes = control.Reported.Probe.Evidence.SizeBytes,
+                capability_count = capabilities.Length,
+                verified_capability_count = capabilities.Count(item =>
+                    item.GetProperty("state").GetString() == "verified"),
+                unavailable_capability_count = capabilities.Count(item =>
+                    item.GetProperty("state").GetString() == "unavailable"),
+                security_module_state = "not_registered",
+                report_probe_calls = control.ReportProbeCalls,
+                acquire_lease_calls = control.AcquireLeaseCalls,
+                executor_calls = executor.ExecuteCalls,
+                profile_mismatch_no_rpc_tested = true,
+                unroutable_probe_no_lease_verified = true,
+                hancom_process_count_before = hwpBefore,
+                hancom_process_count_after = hwpAfter,
+                raw_path_present = false,
+                raw_document_content_present = false,
+                user_document_scanned = false,
+                external_network_invoked = false,
+                system_setting_changed = false,
+                hancom_process_started = false,
+                production_or_provider_qualified = false,
+                another_host_or_version_qualified = false,
+            }));
+            return 0;
+        }
+        catch
+        {
+            Console.Error.WriteLine("P10_10_CURRENT_HOST_RUNTIME_PROBE_FAILED");
+            return 2;
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                DeleteActualProbeRoot(root);
+            }
+        }
+    }
+
+    private static string RequirePlainJsonFile(string path, long maximumBytes)
+    {
+        var fullPath = Path.GetFullPath(path);
+        var info = new FileInfo(fullPath);
+        if (!info.Exists
+            || info.Extension != ".json"
+            || info.Length is <= 0
+            || info.Length > maximumBytes
+            || (info.Attributes & FileAttributes.ReparsePoint) != 0)
+        {
+            throw new InvalidDataException("A bounded plain JSON policy file is required.");
+        }
+
+        return info.FullName;
+    }
+
+    private static string FindRepositoryRoot(string startPath)
+    {
+        for (var current = new DirectoryInfo(Path.GetFullPath(startPath)); current is not null; current = current.Parent)
+        {
+            if (File.Exists(Path.Combine(current.FullName, "specs", "capability-contracts.generated.json"))
+                && Directory.Exists(Path.Combine(current.FullName, "workers", "windows-hancom-agent")))
+            {
+                return current.FullName;
+            }
+        }
+
+        throw new InvalidDataException("The repository root was not found from the runtime probe policy.");
+    }
+
+    private static string ResolveRepositoryPath(string repositoryRoot, string relativePath)
+    {
+        if (string.IsNullOrWhiteSpace(relativePath) || Path.IsPathFullyQualified(relativePath))
+        {
+            throw new InvalidDataException("Runtime probe repository paths must be relative.");
+        }
+
+        var rootPrefix = Path.GetFullPath(repositoryRoot).TrimEnd(
+            Path.DirectorySeparatorChar,
+            Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+        var resolved = Path.GetFullPath(Path.Combine(repositoryRoot, relativePath));
+        if (!resolved.StartsWith(rootPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidDataException("Runtime probe path escaped the repository root.");
+        }
+
+        return resolved;
+    }
+
     private static string RequiredString(JsonElement element, string propertyName)
     {
         var value = element.GetProperty(propertyName).GetString();
@@ -250,10 +531,10 @@ internal static class Program
         var tempPrefix = Path.GetFullPath(Path.GetTempPath()).TrimEnd(
             Path.DirectorySeparatorChar,
             Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+        var leaf = Path.GetFileName(fullPath);
         if (!fullPath.StartsWith(tempPrefix, StringComparison.OrdinalIgnoreCase)
-            || !Path.GetFileName(fullPath).StartsWith(
-                "hwpx-agent-p10-08-actual-",
-                StringComparison.Ordinal))
+            || !(leaf.StartsWith("hwpx-agent-p10-08-actual-", StringComparison.Ordinal)
+                || leaf.StartsWith("hwpx-agent-p10-10-actual-", StringComparison.Ordinal)))
         {
             throw new InvalidOperationException("Actual isolation probe cleanup escaped its private root.");
         }
@@ -358,7 +639,7 @@ internal static class Program
         };
         Require(await service.ReportProbeAsync(probe, CancellationToken.None), "probe was not accepted and routable");
         Require(invoker.Methods.SequenceEqual(
-            ["AcquireLease", "Heartbeat", "Heartbeat", "CommitExecution", "AcquireLease", "CommitExecution", "ReportProbe"]),
+            ["ReportProbe", "AcquireLease", "Heartbeat", "Heartbeat", "CommitExecution", "AcquireLease", "CommitExecution", "ReportProbe"]),
             "outbound RPC method sequence drifted");
         Require(environment.SandboxDirectories().Count == 0, "successful run left a sandbox directory");
     }
@@ -528,7 +809,8 @@ internal static class Program
             environment.Store,
             executor,
             environment.Workspace,
-            environment.IsolationAttestor);
+            environment.IsolationAttestor,
+            PassingRuntimeProbeCollector(configuration));
         var result = await service.RunOnceAsync(CancellationToken.None);
         Require(result.Disposition == AgentRunDisposition.Succeeded, "binding lease integration failed");
         Require(sandboxPath is not null && !Directory.Exists(sandboxPath), "binding lease sandbox remained");
@@ -855,7 +1137,8 @@ internal static class Program
             environment.Store,
             executor,
             environment.Workspace,
-            environment.IsolationAttestor);
+            environment.IsolationAttestor,
+            PassingRuntimeProbeCollector(configuration));
 
         var result = await service.RunOnceAsync(CancellationToken.None);
         Require(result.Disposition == AgentRunDisposition.Succeeded && recycleCalls == 1,
@@ -906,7 +1189,8 @@ internal static class Program
             environment.Store,
             executor,
             environment.Workspace,
-            environment.IsolationAttestor);
+            environment.IsolationAttestor,
+            PassingRuntimeProbeCollector(configuration));
 
         var result = await service.RunOnceAsync(CancellationToken.None);
         Require(result.Disposition == AgentRunDisposition.UnknownOutcome,
@@ -955,6 +1239,7 @@ internal static class Program
             executor,
             environment.Workspace,
             environment.IsolationAttestor,
+            PassingRuntimeProbeCollector(environment.Configuration),
             CancellationToken.None);
         var result = await service.RunOnceAsync(CancellationToken.None);
         var quarantine = Path.Combine(environment.Workspace.RootPath, "quarantine");
@@ -1048,6 +1333,7 @@ internal static class Program
                 throw new InvalidOperationException("mixed residue reached executor")),
             environment.Workspace,
             environment.IsolationAttestor,
+            PassingRuntimeProbeCollector(environment.Configuration),
             CancellationToken.None));
         Require(error == AgentProtocolError.CleanupResidue,
             "mixed startup residue was not rejected");
@@ -1320,6 +1606,151 @@ internal static class Program
         Require(probeInvoker.Methods.Count == 0, "missing probe evidence triggered an outbound RPC");
     }
 
+    private static async Task RuntimeProbeReportsBeforeLeaseAndCachesAdmissionAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("runtime-probe-cache");
+        AgentProbeRequest? reported = null;
+        var invoker = new ScriptedCallInvoker((method, request, headers) =>
+        {
+            RequireAuthorization(headers);
+            return method switch
+            {
+                "ReportProbe" => CaptureProbe((AgentProbeRequest)request, probe => reported = probe),
+                "AcquireLease" => new AgentLeaseResponse { Disposition = LeaseDisposition.NoWork },
+                _ => throw new InvalidOperationException("unexpected runtime probe cache RPC"),
+            };
+        }, autoAcceptProbes: false);
+        await using var client = AuthenticatedClient(invoker);
+        var service = environment.CreateService(
+            client,
+            new DelegatingExecutor((_, _) => throw new InvalidOperationException("no work reached executor")));
+
+        var first = await service.RunOnceAsync(CancellationToken.None);
+        var second = await service.RunOnceAsync(CancellationToken.None);
+        Require(first.Disposition == AgentRunDisposition.NoWork
+            && second.Disposition == AgentRunDisposition.NoWork,
+            "routable runtime probe did not admit no-work polling");
+        Require(invoker.Methods.SequenceEqual(["ReportProbe", "AcquireLease", "AcquireLease"]),
+            "runtime probe was not reported exactly once before the cached lease polls");
+        Require(reported?.Probe?.Health == ProbeHealth.Healthy,
+            "healthy runtime probe was not supplied to the control plane");
+        await using var evidenceStream = await environment.Store.OpenReadAsync(
+            reported!.Probe.Evidence,
+            CancellationToken.None);
+        using var evidence = await JsonDocument.ParseAsync(evidenceStream);
+        var root = evidence.RootElement;
+        Require(root.GetProperty("schema_version").GetString()
+                == "hwpx-agent.runtime-probe-evidence/v1"
+            && root.GetProperty("privacy").EnumerateObject().All(item => !item.Value.GetBoolean()),
+            "runtime probe evidence lost its schema or privacy invariants");
+    }
+
+    private static async Task RuntimeProbeProfileMismatchMakesNoRpcAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("runtime-probe-profile-mismatch");
+        var invoker = new ScriptedCallInvoker((_, _, _) =>
+            throw new InvalidOperationException("profile-mismatched probe reached the control plane"));
+        await using var client = AuthenticatedClient(invoker);
+        var observation = PassingRuntimeProbeObservation(environment.Configuration);
+        observation.TargetProfile.ProfileId = "hancom-hangul-2024-deferred";
+        var service = environment.CreateService(
+            client,
+            new DelegatingExecutor((_, _) => throw new InvalidOperationException("profile mismatch reached executor")),
+            new FixedRuntimeProbeCollector(observation));
+
+        var error = await CaptureProtocolErrorAsync(() => service.RunOnceAsync(CancellationToken.None));
+        Require(error == AgentProtocolError.ProfileMismatch,
+            "observed target profile drift was not rejected as a profile mismatch");
+        Require(invoker.Methods.Count == 0,
+            "profile-mismatched runtime probe made a report or lease RPC");
+    }
+
+    private static async Task UnroutableRuntimeProbeReportsButNeverAcquiresLeaseAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("runtime-probe-unroutable");
+        var observation = PassingRuntimeProbeObservation(environment.Configuration) with
+        {
+            Health = ProbeHealth.Unroutable,
+            Capabilities = PassingRuntimeProbeObservation(environment.Configuration).Capabilities
+                .Select(item => item.CapabilityId == "agent.security_file_path_module"
+                    ? item with
+                    {
+                        State = RuntimeCapabilityState.Unavailable,
+                        SafeCode = "not_registered",
+                        ObservationSha256 = Digest('8'),
+                    }
+                    : item)
+                .ToArray(),
+        };
+        var invoker = new ScriptedCallInvoker((method, request, headers) =>
+        {
+            RequireAuthorization(headers);
+            return method == "ReportProbe"
+                ? new AgentProbeResponse
+                {
+                    Accepted = true,
+                    Routable = false,
+                    AcceptedProbeSha256 = Sha256(((AgentProbeRequest)request).Probe.ToByteArray()),
+                }
+                : throw new InvalidOperationException("unroutable probe acquired a lease");
+        }, autoAcceptProbes: false);
+        await using var client = AuthenticatedClient(invoker);
+        var service = environment.CreateService(
+            client,
+            new DelegatingExecutor((_, _) => throw new InvalidOperationException("unroutable probe reached executor")),
+            new FixedRuntimeProbeCollector(observation));
+
+        var error = await CaptureProtocolErrorAsync(() => service.RunOnceAsync(CancellationToken.None));
+        Require(error == AgentProtocolError.RuntimeProbeNotRoutable,
+            "unroutable runtime health did not fail closed");
+        Require(invoker.Methods.SequenceEqual(["ReportProbe"]),
+            "unroutable runtime probe did not stop before lease acquisition");
+    }
+
+    private static async Task RuntimeProbeRejectsPrivacyAndHealthContradictionsAsync()
+    {
+        await using var environment = await TestEnvironment.CreateAsync("runtime-probe-invalid");
+        var invoker = new ScriptedCallInvoker((_, _, _) =>
+            throw new InvalidOperationException("invalid runtime probe made an outbound RPC"));
+        await using var client = AuthenticatedClient(invoker);
+        var contradictory = PassingRuntimeProbeObservation(environment.Configuration) with
+        {
+            Capabilities = PassingRuntimeProbeObservation(environment.Configuration).Capabilities
+                .Select(item => item.CapabilityId == "agent.security_file_path_module"
+                    ? item with
+                    {
+                        State = RuntimeCapabilityState.Unavailable,
+                        SafeCode = "not_registered",
+                        ObservationSha256 = Digest('8'),
+                    }
+                    : item)
+                .ToArray(),
+        };
+        var contradictoryService = environment.CreateService(
+            client,
+            new DelegatingExecutor((_, _) => throw new InvalidOperationException("invalid probe reached executor")),
+            new FixedRuntimeProbeCollector(contradictory));
+        var contradictionError = await CaptureProtocolErrorAsync(
+            () => contradictoryService.RunOnceAsync(CancellationToken.None));
+        Require(contradictionError == AgentProtocolError.RuntimeProbeInvalid,
+            "healthy probe with a required failure was accepted");
+
+        var privacyViolation = PassingRuntimeProbeObservation(environment.Configuration) with
+        {
+            RawPathStored = true,
+        };
+        var privacyService = environment.CreateService(
+            client,
+            new DelegatingExecutor((_, _) => throw new InvalidOperationException("private probe reached executor")),
+            new FixedRuntimeProbeCollector(privacyViolation));
+        var privacyError = await CaptureProtocolErrorAsync(
+            () => privacyService.RunOnceAsync(CancellationToken.None));
+        Require(privacyError == AgentProtocolError.PolicyDenied,
+            "runtime probe containing a raw path was accepted");
+        Require(invoker.Methods.Count == 0,
+            "invalid runtime probe made an outbound RPC");
+    }
+
     private static void RejectsUnsafeTransportAndArtifactBoundaries()
     {
         RequireThrows<ArgumentException>(() =>
@@ -1353,7 +1784,23 @@ internal static class Program
                 "hancom-hangul-2020-secondary",
                 Digest('b')),
             WorkerSupervisor: CurrentSupervisorPolicy(),
+            RuntimeProbe: CurrentRuntimeProbePolicy(),
             HancomSecurityModule: new HancomSecurityModulePin("SyntheticModule", Digest('d')));
+        RequireThrows<ArgumentException>(() => _ = new CurrentPcRuntimeProbeCollector(
+            new CurrentPcRuntimeProbePin(
+                configuration.RuntimeProbe.PolicyId,
+                configuration.TargetProfile.Clone(),
+                @"\\server\share\hwp.exe",
+                "HWPFrame.HwpObject.2",
+                "{2291CF00-64A1-4877-A9B4-68CFE89612D6}",
+                @"C:\probe\registry.json",
+                configuration.CapabilityRegistrySha256,
+                [new RuntimeEvidencePin(
+                    "evidence.synthetic",
+                    @"C:\probe\evidence.json",
+                    Digest('e'),
+                    RequiredForLease: true)]),
+            configuration.HancomSecurityModule));
         RequireThrows<ArgumentException>(() => AgentValidation.ValidateConfiguration(configuration with
         {
             HancomBindingBundle = new HancomBindingBundlePin(
@@ -1458,7 +1905,8 @@ internal static class Program
             environment.Store,
             new DelegatingExecutor((_, _) => throw new InvalidOperationException("executor invoked")),
             environment.Workspace,
-            new FixedIsolationAttestor(drifted)));
+            new FixedIsolationAttestor(drifted),
+            PassingRuntimeProbeCollector(environment.Configuration)));
         Require(error == AgentProtocolError.IsolationNotReady, "host baseline drift was not isolation failure");
         Require(invoker.Methods.Count == 0, "host baseline drift made an outbound RPC");
     }
@@ -1487,7 +1935,8 @@ internal static class Program
             environment.Store,
             new DelegatingExecutor((_, _) => throw new InvalidOperationException("executor invoked")),
             environment.Workspace,
-            new FixedIsolationAttestor(incomplete)));
+            new FixedIsolationAttestor(incomplete),
+            PassingRuntimeProbeCollector(configuration)));
         Require(error == AgentProtocolError.IsolationNotReady, "missing clipboard isolation was accepted");
         Require(invoker.Methods.Count == 0, "incomplete dedicated isolation made an outbound RPC");
 
@@ -1525,11 +1974,12 @@ internal static class Program
             environment.Store,
             new DelegatingExecutor((_, _) => throw new InvalidOperationException("executor invoked")),
             environment.Workspace,
-            new FixedIsolationAttestor(PassingIsolationObservation(policy, dedicated: true)));
+            new FixedIsolationAttestor(PassingIsolationObservation(policy, dedicated: true)),
+            PassingRuntimeProbeCollector(configuration));
 
         var result = await service.RunOnceAsync(CancellationToken.None);
         Require(result.Disposition == AgentRunDisposition.NoWork, "complete dedicated attestation was rejected");
-        Require(invoker.Methods.SequenceEqual(["AcquireLease"]), "dedicated no-work request drifted");
+        Require(invoker.Methods.SequenceEqual(["ReportProbe", "AcquireLease"]), "dedicated no-work request drifted");
     }
 
     private static async Task PostJobResidueBecomesUnknownOutcomeAsync()
@@ -1570,7 +2020,8 @@ internal static class Program
                 return SuccessfulJob("output_0018", "fixture-output-residue");
             }),
             environment.Workspace,
-            attestor);
+            attestor,
+            PassingRuntimeProbeCollector(environment.Configuration));
 
         var result = await service.RunOnceAsync(CancellationToken.None);
         Require(result.Disposition == AgentRunDisposition.UnknownOutcome
@@ -1595,7 +2046,8 @@ internal static class Program
             environment.Store,
             new DelegatingExecutor((_, _) => throw new InvalidOperationException("executor invoked")),
             environment.Workspace,
-            environment.IsolationAttestor));
+            environment.IsolationAttestor,
+            PassingRuntimeProbeCollector(environment.Configuration)));
         Require(error == AgentProtocolError.CleanupResidue, "stale sandbox residue was accepted");
         Require(invoker.Methods.Count == 0, "stale sandbox residue made an outbound RPC");
     }
@@ -1684,6 +2136,14 @@ internal static class Program
             AcceptedProbeSha256 = Sha256(request.Probe.ToByteArray()),
         };
 
+    private static AgentProbeResponse CaptureProbe(
+        AgentProbeRequest request,
+        Action<AgentProbeRequest> capture)
+    {
+        capture(request.Clone());
+        return AcceptedProbe(request);
+    }
+
     private static void RequireAuthorization(Metadata? headers)
     {
         var authorization = headers?.FirstOrDefault(entry => entry.Key == "authorization")?.Value;
@@ -1729,6 +2189,22 @@ internal static class Program
             bufferSize: 65_536,
             FileOptions.SequentialScan);
         return Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(stream));
+    }
+
+    private static int HwpProcessCount()
+    {
+        var processes = Process.GetProcessesByName("Hwp");
+        try
+        {
+            return processes.Length;
+        }
+        finally
+        {
+            foreach (var process in processes)
+            {
+                process.Dispose();
+            }
+        }
     }
 
     private static async Task<OwnedProcessIds> ReadOwnedProcessIdsAsync(
@@ -1815,6 +2291,39 @@ internal static class Program
             RecycleTimeoutSeconds: 2,
             MaximumJobsPerWorker: 25,
             MaximumPrivateMemoryBytes: 536_870_912);
+
+    private static RuntimeProbePolicyPin CurrentRuntimeProbePolicy() =>
+        new(
+            "probe.current_pc_local_v1",
+            "runtime.probe_evidence",
+            MaximumProbeAgeSeconds: 300,
+            MaximumEvidenceBytes: 65_536);
+
+    private static IRuntimeProbeCollector PassingRuntimeProbeCollector(
+        WindowsAgentConfiguration configuration) =>
+        new FixedRuntimeProbeCollector(PassingRuntimeProbeObservation(configuration));
+
+    private static RuntimeProbeObservation PassingRuntimeProbeObservation(
+        WindowsAgentConfiguration configuration) =>
+        new(
+            configuration.RuntimeProbe.PolicyId,
+            configuration.TargetProfile.Clone(),
+            configuration.CapabilityRegistrySha256,
+            ProbeHealth.Healthy,
+            [
+                new RuntimeCapabilityObservation("agent.target_identity", RuntimeCapabilityState.Verified, true, "exact_match", Digest('7')),
+                new RuntimeCapabilityObservation("agent.com_registration", RuntimeCapabilityState.Verified, true, "exact_match", Digest('7')),
+                new RuntimeCapabilityObservation("agent.capability_registry", RuntimeCapabilityState.Verified, true, "exact_match", Digest('7')),
+                new RuntimeCapabilityObservation("agent.security_file_path_module", RuntimeCapabilityState.Verified, true, "exact_match", Digest('7')),
+                new RuntimeCapabilityObservation("agent.zero_hancom_processes", RuntimeCapabilityState.Verified, true, "exact_match", Digest('7')),
+            ],
+            checked((ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()),
+            RawPathStored: false,
+            RawDocumentContentStored: false,
+            UserDocumentScanned: false,
+            ExternalNetworkInvoked: false,
+            SystemSettingChanged: false,
+            HancomProcessStarted: false);
 
     private static WorkerStartupRecoveryReceipt StartupReceipt() =>
         new(
@@ -2029,6 +2538,7 @@ internal static class Program
                     "hancom-hangul-2020-secondary",
                     Digest('b')),
                 WorkerSupervisor: CurrentSupervisorPolicy(),
+                RuntimeProbe: CurrentRuntimeProbePolicy(),
                 HancomSecurityModule: new HancomSecurityModulePin(
                     "FilePathCheckerModuleExample",
                     Digest('d')));
@@ -2076,8 +2586,16 @@ internal static class Program
 
         internal WindowsAgentService CreateService(
             IWindowsAgentControlClient client,
-            ISupervisedAgentJobExecutor executor) =>
-            new(Configuration, client, Store, executor, Workspace, IsolationAttestor);
+            ISupervisedAgentJobExecutor executor,
+            IRuntimeProbeCollector? runtimeProbeCollector = null) =>
+            new(
+                Configuration,
+                client,
+                Store,
+                executor,
+                Workspace,
+                IsolationAttestor,
+                runtimeProbeCollector ?? PassingRuntimeProbeCollector(Configuration));
 
         internal List<string> SandboxDirectories()
         {
@@ -2199,6 +2717,8 @@ internal static class Program
         private readonly Dictionary<string, AgentJobResult> completed = new(StringComparer.Ordinal);
         private readonly HashSet<string> started = new(StringComparer.Ordinal);
 
+        internal int ExecuteCalls { get; private set; }
+
         internal Func<CancellationToken, Task<WorkerStartupRecoveryReceipt>>? StartupRecoveryHandler
         {
             get;
@@ -2219,6 +2739,7 @@ internal static class Program
             AgentJobContext context,
             CancellationToken cancellationToken)
         {
+            ExecuteCalls++;
             lock (sync)
             {
                 started.Add(context.Assignment.ExecutionId);
@@ -2315,7 +2836,8 @@ internal static class Program
     }
 
     private sealed class ScriptedCallInvoker(
-        Func<string, object, Metadata?, object> handler) : CallInvoker
+        Func<string, object, Metadata?, object> handler,
+        bool autoAcceptProbes = true) : CallInvoker
     {
         internal List<string> Methods { get; } = [];
 
@@ -2326,7 +2848,11 @@ internal static class Program
             TRequest request)
         {
             Methods.Add(method.Name);
-            var response = (TResponse)handler(method.Name, request, options.Headers);
+            var response = autoAcceptProbes
+                    && method.Name == "ReportProbe"
+                    && request is AgentProbeRequest probeRequest
+                ? (TResponse)(object)AcceptedProbe(probeRequest)
+                : (TResponse)handler(method.Name, request, options.Headers);
             return new AsyncUnaryCall<TResponse>(
                 Task.FromResult(response),
                 Task.FromResult(new Metadata()),
@@ -2356,5 +2882,61 @@ internal static class Program
             Method<TRequest, TResponse> method,
             string? host,
             CallOptions options) => throw new NotSupportedException();
+    }
+
+    private sealed class RuntimeProbeAuditControlClient : IWindowsAgentControlClient
+    {
+        internal int ReportProbeCalls { get; private set; }
+
+        internal int AcquireLeaseCalls { get; private set; }
+
+        internal AgentProbeRequest? Reported { get; private set; }
+
+        public Task<AgentLeaseResponse> AcquireLeaseAsync(
+            AgentLeaseRequest request,
+            CancellationToken cancellationToken)
+        {
+            AcquireLeaseCalls++;
+            return Task.FromResult(new AgentLeaseResponse { Disposition = LeaseDisposition.NoWork });
+        }
+
+        public Task<AgentProbeResponse> ReportProbeAsync(
+            AgentProbeRequest request,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            ReportProbeCalls++;
+            Reported = request.Clone();
+            return Task.FromResult(new AgentProbeResponse
+            {
+                Accepted = true,
+                Routable = request.Probe.Health != ProbeHealth.Unroutable,
+                AcceptedProbeSha256 = Sha256(request.Probe.ToByteArray()),
+            });
+        }
+
+        public Task<AgentHeartbeatResponse> HeartbeatAsync(
+            AgentHeartbeatRequest request,
+            CancellationToken cancellationToken) =>
+            throw new InvalidOperationException("Runtime probe audit reached heartbeat.");
+
+        public Task<AgentCommitResponse> CommitExecutionAsync(
+            AgentCommitRequest request,
+            CancellationToken cancellationToken) =>
+            throw new InvalidOperationException("Runtime probe audit reached commit.");
+    }
+
+    private sealed class FixedRuntimeProbeCollector(RuntimeProbeObservation observation)
+        : IRuntimeProbeCollector
+    {
+        public Task<RuntimeProbeObservation> ObserveAsync(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return Task.FromResult(observation with
+            {
+                TargetProfile = observation.TargetProfile.Clone(),
+                ObservedAtUnixMs = checked((ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()),
+            });
+        }
     }
 }

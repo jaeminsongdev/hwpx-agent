@@ -1,0 +1,73 @@
+{
+  "schema_version": "hwpx-agent.p10-10-runtime-probe-policy/v1",
+  "policy_id": "probe.current_pc_local_v1",
+  "target": {
+    "profile_id": "hancom-hangul-2020-secondary",
+    "product_build": "11.0.0.9136",
+    "locale": "ko-KR",
+    "process_architecture": "x86",
+    "executable_path": "C:\\Program Files (x86)\\HNC\\Office 2020\\HOffice110\\bin\\hwp.exe",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    "host_baseline_sha256": "7fbf6559fc3372b9da6c0b0ca53d9f4eb78b76a79df248c37ff009c13376adc0",
+    "prog_id": "HWPFrame.HwpObject.2",
+    "clsid": "{2291CF00-64A1-4877-A9B4-68CFE89612D6}",
+    "registry_view": "Registry32"
+  },
+  "capability_registry": {
+    "relative_path": "specs/capability-contracts.generated.json",
+    "sha256": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306"
+  },
+  "pinned_evidence": [
+    {
+      "capability_id": "evidence.current_host_baseline",
+      "relative_path": "implementation/p00/evidence/current-host-baseline.20260901.json",
+      "sha256": "1d10d5ee8ea0a7ee2e348802fd979bbec15595242993d5005d16f972ce6e6d09",
+      "required_for_lease": true
+    },
+    {
+      "capability_id": "evidence.automation_lifecycle",
+      "relative_path": "implementation/p00/evidence/runtime-probe.2020.20260901.v3.json",
+      "sha256": "7799cb1cded776db9dd01c1059db7d4f83a440f75a1a3cd7007245bca2e3563a",
+      "required_for_lease": true
+    },
+    {
+      "capability_id": "evidence.document_open_save",
+      "relative_path": "implementation/p00/evidence/document-smoke-runs/98798b1801314a5e9bebf0f2505bc763/receipt.json",
+      "sha256": "97cffdbe93c5b5843385d5141d0bcab1cdd0e726ff7dcd2b5c26510658387bfa",
+      "required_for_lease": true
+    },
+    {
+      "capability_id": "evidence.font_printer",
+      "relative_path": "implementation/p00/evidence/font-printer-reference-smoke.20260901.json",
+      "sha256": "c9f750e4407db506bdb3211dbc5ac08e717922c3abbb46fefa81e6af39a5f33f",
+      "required_for_lease": true
+    }
+  ],
+  "security_module": {
+    "required_for_lease": true,
+    "state": "not_configured",
+    "registration_name": null,
+    "sha256": null
+  },
+  "admission": {
+    "evidence_artifact_id": "runtime.probe_evidence",
+    "maximum_probe_age_seconds": 300,
+    "maximum_evidence_bytes": 65536,
+    "report_before_acquire_lease": true,
+    "accepted_and_routable_required": true,
+    "unroutable_probe_acquires_lease": false
+  },
+  "isolation_policy": {
+    "relative_path": "implementation/p10/isolation/p10-current-pc-local-worker-policy.json",
+    "sha256": "0abaddd0032214a6d7c71dbb14526cf0da56de274654ecd1eef8b78c0fdfe188"
+  },
+  "scope": {
+    "current_pc_local_development_only": true,
+    "production_or_provider_qualified": false,
+    "another_hancom_version_requires_independent_evidence": true,
+    "another_host_requires_independent_evidence": true,
+    "user_document_scan_allowed": false,
+    "external_network_allowed": false,
+    "system_setting_change_allowed": false
+  }
+}

@@ -16,7 +16,9 @@ public sealed class WindowsAgentService
     private readonly AgentWorkerSupervisor supervisor;
     private readonly AgentWorkspace workspace;
     private readonly WorkerIsolationGuard isolationGuard;
+    private readonly IRuntimeProbeCollector runtimeProbeCollector;
     private readonly TimeProvider timeProvider;
+    private ulong routableProbeExpiresAtUnixMs;
     private int activeRun;
 
     public WindowsAgentService(
@@ -26,6 +28,7 @@ public sealed class WindowsAgentService
         ISupervisedAgentJobExecutor executor,
         AgentWorkspace workspace,
         IWorkerIsolationAttestor isolationAttestor,
+        IRuntimeProbeCollector runtimeProbeCollector,
         TimeProvider? timeProvider = null)
     {
         AgentValidation.ValidateConfiguration(configuration);
@@ -37,6 +40,8 @@ public sealed class WindowsAgentService
             configuration.WorkerSupervisor);
         this.workspace = workspace ?? throw new ArgumentNullException(nameof(workspace));
         isolationGuard = new WorkerIsolationGuard(configuration, workspace, isolationAttestor);
+        this.runtimeProbeCollector = runtimeProbeCollector
+            ?? throw new ArgumentNullException(nameof(runtimeProbeCollector));
         this.timeProvider = timeProvider ?? TimeProvider.System;
     }
 
@@ -47,6 +52,7 @@ public sealed class WindowsAgentService
         ISupervisedAgentJobExecutor executor,
         AgentWorkspace workspace,
         IWorkerIsolationAttestor isolationAttestor,
+        IRuntimeProbeCollector runtimeProbeCollector,
         CancellationToken cancellationToken,
         TimeProvider? timeProvider = null)
     {
@@ -64,6 +70,7 @@ public sealed class WindowsAgentService
             executor,
             workspace,
             isolationAttestor,
+            runtimeProbeCollector,
             timeProvider);
     }
 
@@ -91,6 +98,7 @@ public sealed class WindowsAgentService
     private async Task<AgentRunResult> RunOnceCoreAsync(CancellationToken cancellationToken)
     {
         var isolationBefore = isolationGuard.VerifyBeforeLease();
+        await EnsureRoutableRuntimeProbeAsync(cancellationToken).ConfigureAwait(false);
         var leaseResponse = await controlClient
             .AcquireLeaseAsync(CreateLeaseRequest(), cancellationToken)
             .ConfigureAwait(false);
@@ -278,6 +286,11 @@ public sealed class WindowsAgentService
                 Probe = probe.Clone(),
             },
             cancellationToken).ConfigureAwait(false);
+        if (response.Routable && !response.Accepted)
+        {
+            throw new AgentProtocolException(AgentProtocolError.InvalidState);
+        }
+
         if (response.Accepted)
         {
             AgentValidation.RequireDigest(response.AcceptedProbeSha256);
@@ -291,6 +304,41 @@ public sealed class WindowsAgentService
         }
 
         return response.Accepted && response.Routable;
+    }
+
+    private async Task EnsureRoutableRuntimeProbeAsync(CancellationToken cancellationToken)
+    {
+        var nowUnixMs = checked((ulong)timeProvider.GetUtcNow().ToUnixTimeMilliseconds());
+        if (nowUnixMs < routableProbeExpiresAtUnixMs)
+        {
+            return;
+        }
+
+        var observation = await runtimeProbeCollector
+            .ObserveAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var materialized = RuntimeProbeMaterializer.Materialize(
+            configuration,
+            observation,
+            nowUnixMs);
+        await using (var content = new MemoryStream(materialized.EvidenceBytes, writable: false))
+        {
+            await artifactStore.UploadAsync(
+                materialized.Receipt.Evidence,
+                content,
+                cancellationToken).ConfigureAwait(false);
+        }
+
+        var routable = await ReportProbeAsync(materialized.Receipt, cancellationToken)
+            .ConfigureAwait(false);
+        if (!routable || materialized.Receipt.Health == ProbeHealth.Unroutable)
+        {
+            throw new AgentProtocolException(AgentProtocolError.RuntimeProbeNotRoutable);
+        }
+
+        routableProbeExpiresAtUnixMs = checked(
+            materialized.Receipt.ObservedAtUnixMs
+            + configuration.RuntimeProbe.MaximumProbeAgeSeconds * 1_000UL);
     }
 
     private async Task<AgentExecutionReceipt> ExecuteLeaseAsync(
