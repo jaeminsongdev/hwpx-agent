@@ -5,8 +5,9 @@ use auth_middleware::{AuthContext, AuthMiddleware};
 use serde::Serialize;
 use serde_json::{Value, json};
 use thiserror::Error;
-use zeroize::Zeroizing;
+use zeroize::{Zeroize, Zeroizing};
 
+use crate::artifact_delivery::ArtifactToolDelivery;
 use crate::async_jobs::JobEventPage;
 use crate::catalog::{CATALOG_SHA256, CatalogError, ToolCatalog, ToolKind};
 use crate::policy::{PolicyError, ToolPolicy};
@@ -147,6 +148,7 @@ pub trait ToolServiceGateway: fmt::Debug + Send {
 pub struct ToolServiceOutput {
     structured_content: Value,
     job_event_page: Option<JobEventPage>,
+    artifact_delivery: Option<ArtifactToolDelivery>,
 }
 
 impl ToolServiceOutput {
@@ -155,6 +157,7 @@ impl ToolServiceOutput {
         Self {
             structured_content,
             job_event_page: None,
+            artifact_delivery: None,
         }
     }
 
@@ -166,6 +169,19 @@ impl ToolServiceOutput {
         Self {
             structured_content,
             job_event_page: Some(job_event_page),
+            artifact_delivery: None,
+        }
+    }
+
+    #[must_use]
+    pub(crate) const fn with_artifact_delivery(
+        structured_content: Value,
+        artifact_delivery: ArtifactToolDelivery,
+    ) -> Self {
+        Self {
+            structured_content,
+            job_event_page: None,
+            artifact_delivery: Some(artifact_delivery),
         }
     }
 }
@@ -176,6 +192,7 @@ impl fmt::Debug for ToolServiceOutput {
             .debug_struct("ToolServiceOutput")
             .field("structured_content", &"<redacted>")
             .field("has_job_event_page", &self.job_event_page.is_some())
+            .field("has_artifact_delivery", &self.artifact_delivery.is_some())
             .finish()
     }
 }
@@ -209,6 +226,11 @@ where
     #[must_use]
     pub fn tool_count(&self) -> usize {
         self.catalog.len()
+    }
+
+    #[must_use]
+    pub const fn gateway(&self) -> &G {
+        &self.gateway
     }
 
     #[must_use]
@@ -303,8 +325,16 @@ where
         let ToolServiceOutput {
             structured_content: output,
             job_event_page,
+            artifact_delivery,
         } = service_output;
         if job_event_page.is_some() && tool != ToolKind::JobGet {
+            return McpToolResult::error(
+                PublicErrorCode::OutputSchemaInvalid,
+                Some(&request_id),
+                None,
+            );
+        }
+        if artifact_delivery.is_some() && tool != ToolKind::ArtifactGet {
             return McpToolResult::error(
                 PublicErrorCode::OutputSchemaInvalid,
                 Some(&request_id),
@@ -325,7 +355,7 @@ where
                 None,
             );
         }
-        McpToolResult::success(tool, &request_id, output, job_event_page)
+        McpToolResult::success(tool, &request_id, output, job_event_page, artifact_delivery)
     }
 }
 
@@ -414,7 +444,7 @@ impl PublicErrorCode {
 pub struct McpToolResult {
     #[serde(rename = "structuredContent")]
     structured_content: Value,
-    content: Vec<TextContent>,
+    content: Vec<Value>,
     #[serde(rename = "_meta")]
     meta: Value,
     #[serde(rename = "isError")]
@@ -427,6 +457,7 @@ impl McpToolResult {
         request_id: &str,
         output: Value,
         job_event_page: Option<JobEventPage>,
+        artifact_delivery: Option<ArtifactToolDelivery>,
     ) -> Self {
         let mut meta = serde_json::Map::new();
         meta.insert(
@@ -440,12 +471,19 @@ impl McpToolResult {
         if let Some(page) = job_event_page {
             page.append_to_meta(&mut meta);
         }
-        Self {
-            structured_content: output,
-            content: vec![TextContent::new(format!(
+        let mut content = vec![json!({
+            "type": "text",
+            "text": format!(
                 "{} completed with a validated structured result.",
                 tool.name()
-            ))],
+            ),
+        })];
+        if let Some(delivery) = artifact_delivery {
+            delivery.append_to_result(&mut content, &mut meta);
+        }
+        Self {
+            structured_content: output,
+            content,
             meta: Value::Object(meta),
             is_error: false,
         }
@@ -480,7 +518,7 @@ impl McpToolResult {
                 "safe_message": safe_message,
                 "details": [],
             }),
-            content: vec![TextContent::new(safe_message.to_owned())],
+            content: vec![json!({"type": "text", "text": safe_message})],
             meta: Value::Object(meta),
             is_error: true,
         }
@@ -493,7 +531,10 @@ impl McpToolResult {
 
     #[must_use]
     pub fn content_text(&self) -> &str {
-        &self.content[0].text
+        self.content[0]
+            .get("text")
+            .and_then(Value::as_str)
+            .unwrap_or_default()
     }
 
     #[must_use]
@@ -514,6 +555,18 @@ impl McpToolResult {
     }
 }
 
+impl Drop for McpToolResult {
+    fn drop(&mut self) {
+        if let Some(Value::String(signed_url)) = self
+            .meta
+            .get_mut("hwpx/artifactDelivery")
+            .and_then(|delivery| delivery.get_mut("signedUrl"))
+        {
+            signed_url.zeroize();
+        }
+    }
+}
+
 impl fmt::Debug for McpToolResult {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         formatter
@@ -524,19 +577,6 @@ impl fmt::Debug for McpToolResult {
             .field("content", &"<redacted>")
             .field("meta", &"<redacted>")
             .finish()
-    }
-}
-
-#[derive(Serialize)]
-struct TextContent {
-    #[serde(rename = "type")]
-    kind: &'static str,
-    text: String,
-}
-
-impl TextContent {
-    fn new(text: String) -> Self {
-        Self { kind: "text", text }
     }
 }
 

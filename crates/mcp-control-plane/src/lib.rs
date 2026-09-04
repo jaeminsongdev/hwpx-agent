@@ -4,12 +4,17 @@
 //! the same boundary: authenticate, validate input, authorize the tenant/project, dispatch once,
 //! validate output, and return a bounded MCP result.
 
+mod artifact_delivery;
 mod async_jobs;
 mod catalog;
 mod handler;
 mod policy;
 mod strict_json;
 
+pub use artifact_delivery::{
+    ArtifactDeliveryConfig, ArtifactDeliveryError, ArtifactDeliveryGateway, ArtifactDeliverySigner,
+    ArtifactDeliverySource, ArtifactProjectRegistry, ArtifactRangeResponse, SignedArtifactUrl,
+};
 pub use async_jobs::{
     AsyncJobError, DurableAsyncJobGateway, DurableJobStore, JobEventPage, JobLocator,
     JobProgressStage,

@@ -1,0 +1,188 @@
+{
+  "artifact_tool": "artifact_get",
+  "catalog_sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001",
+  "client_delivery_meta_key": "hwpx/artifactDelivery",
+  "content_attachment_type": "resource_link",
+  "limits": {
+    "bindings": 65536,
+    "default_ttl_seconds": 120,
+    "max_range_bytes": 67108864,
+    "max_ttl_seconds": 900,
+    "max_url_bytes": 2048,
+    "min_ttl_seconds": 30
+  },
+  "p15_04_audited_source_commit": "4c6224f6001c5daadaaaec907c0bba86db7c6c0f",
+  "required_behaviors": [
+    "frozen_artifact_get_schema",
+    "tenant_project_artifact_binding",
+    "artifact_acl_rechecked",
+    "binding_generation_revokes_old_url",
+    "signed_url_only_in_client_meta",
+    "subject_project_content_and_expiry_signed",
+    "single_bounded_byte_range",
+    "current_acl_state_and_digest_rechecked_at_redemption",
+    "model_visible_content_has_no_token_or_bytes"
+  ],
+  "rust_artifact_delivery_tests": 13,
+  "schema_version": "hwpx-agent.p15-artifact-delivery-contract/v1",
+  "scope": "current_pc_hancom_2020_local_artifact_delivery_reference",
+  "source_locks": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "dbf0bd590f36638a4a2b4f4f3e0fcfcb11b7178736b542c4420d51ec80342bc6"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "fa3ee66f3d9da7ff98381ab9118cf8f11f86e49e66d44054bf7d306a4f9e419b"
+    },
+    {
+      "path": "deny.toml",
+      "sha256": "1b7f0c7a65ba80242847fbb24483fa82708f28b361e425c76c48233d52073ef3"
+    },
+    {
+      "path": "security/dependency-policy.json",
+      "sha256": "753e93e1ee01ff92f965627b7a26baefaa90ca8e7e79a82b1afb87c08e8bff69"
+    },
+    {
+      "path": "docs/06_mcp_api/01_tool_surface.md",
+      "sha256": "f41729952ca8734af8cdcffddb82dc591eabecdc8327e735fa452897ed150223"
+    },
+    {
+      "path": "docs/06_mcp_api/02_tool_contracts.md",
+      "sha256": "0742bd0c62ea7c29a9e653a857052161658ae97d7539ce61dad66be7440950ce"
+    },
+    {
+      "path": "docs/06_mcp_api/06_jobs_artifacts.md",
+      "sha256": "1aa997edfdebfd1605473f07c9d246a4b30f419b131dd4a9b7222cd7d33c76da"
+    },
+    {
+      "path": "docs/12_implementation_guides/09_project_jobs_storage.md",
+      "sha256": "946cac58f4984bb9da8055e4decc35b6259eb742270144c0f68d123bb4914a96"
+    },
+    {
+      "path": "protocol/mcp/p15-public-tools-v1.json",
+      "sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001"
+    },
+    {
+      "path": "implementation/p14/postgres/p14-artifact-service-v1.json",
+      "sha256": "92c2cfc91ff9def57649124a196ffddac5d9b68e1899c544e2ebff0abec91c82"
+    },
+    {
+      "path": "implementation/p15/p15-auth-tenant-v1.json",
+      "sha256": "7bae38b349e394b53636462fe19cb8e1c057a35ab68e7c23161086af6400ad99"
+    },
+    {
+      "path": "implementation/p15/p15-public-tool-schema-contract-v1.json",
+      "sha256": "9e7099535bceced5295ce347afb4b9cc9a6dfa71db1f10d633ed9247d126681e"
+    },
+    {
+      "path": "implementation/p15/p15-handler-contract-v1.json",
+      "sha256": "f79dfeac599b11a122569e1796d428298f341f53f91d3893460c6d7c1d704f0a"
+    },
+    {
+      "path": "implementation/p15/p15-async-job-contract-v1.json",
+      "sha256": "311e9272373da0129693ad87c8a42e1e6c56b17b34ccb1312eed630b7f049c32"
+    },
+    {
+      "path": "implementation/p15/P15-05_ARTIFACT_DELIVERY_POLICY.md",
+      "sha256": "782663db87eef1f46275f9aa8963edfb3e3bda18bba2cb0d477a1ce70f475963"
+    },
+    {
+      "path": "crates/artifact-service/Cargo.toml",
+      "sha256": "13e9eaf8ab4d754f91673190b7dbf53bb968b000c8d8d33ba5d915c4d9cf72d1"
+    },
+    {
+      "path": "crates/artifact-service/src/lib.rs",
+      "sha256": "d803de5bd3314afc4c601eecf810abbdf98f1c77924bb56ca5df7220c8ca8729"
+    },
+    {
+      "path": "crates/artifact-service/src/crypto.rs",
+      "sha256": "1f2e229e921d17cf8b5163ec0ee282b3f51293b3ec0617ae378b81aa87838cca"
+    },
+    {
+      "path": "crates/artifact-service/src/service.rs",
+      "sha256": "d69af7f2a6e3411f6b367252c0ecddca8a9b7dd4bdf690ea459f987aaadf8c54"
+    },
+    {
+      "path": "crates/artifact-service/src/signed_url.rs",
+      "sha256": "de89897f490271ff595602bd7501fc8dd562f3278f8a4e76737716b895ced7a9"
+    },
+    {
+      "path": "crates/artifact-service/src/store.rs",
+      "sha256": "72d4a74d318743494cefb842554a671ae212f56133d0f9987395c2f3dcb2c4e2"
+    },
+    {
+      "path": "crates/artifact-service/src/types.rs",
+      "sha256": "03815656b6cf8828a6877987ca8259dd2974161434ec18406bf227930475cb1e"
+    },
+    {
+      "path": "crates/mcp-control-plane/Cargo.toml",
+      "sha256": "6e2c7d2b8a2a3c581114aba0c8cfbb5110c3157baaf717fb2b8748449e702bc5"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/lib.rs",
+      "sha256": "8cfd804e56a7794519e7ebfe5970463ae165cd023674a74749785140534249a2"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/catalog.rs",
+      "sha256": "69860323b71de2f2f1836fa90a78a41b44dd8a5016f9211a4d7f7e06373952cf"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/handler.rs",
+      "sha256": "3ec5639b4508e2c891df9547ddce096dce861b339000fcbe1779d76739576133"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/policy.rs",
+      "sha256": "32513728470e18608d1eeff419e83ece628d6a9c4dd2a948c1c95012e97412ac"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/strict_json.rs",
+      "sha256": "f8c4e72cb8afa4c9df37259e6b9e143dbdada228cbf9456bad8a26360ac8a882"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/async_jobs.rs",
+      "sha256": "4b5237c77d6e1c7c97d46ed87e31921c10958cec2d9ee3a01fd2c7d95a15c304"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/artifact_delivery.rs",
+      "sha256": "89865b110bd304f03ab2d9fa7c81bb074ead873f51b92b470792f46c7dc26915"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/handler_contract.rs",
+      "sha256": "e40ce71372b83ce3b76ce42da8b45031d3fcd8a31ae1f49e4940f3377ce01429"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/async_job_ux.rs",
+      "sha256": "0870b6137fee8ab28f434fcdef3b7713611ff91572c2bf042b1e3f71764e6be6"
+    },
+    {
+      "path": "crates/mcp-control-plane/tests/artifact_delivery.rs",
+      "sha256": "cf7db5eb60f6511e9276162f02240ac0d43b91a25ab8246d0b0cfd2c76efe22a"
+    },
+    {
+      "path": "tools/p15/build_async_job_contract.py",
+      "sha256": "f64c405bf51c650fc02a9e0ad2d78e8fadb17f67d61b2058c0c3be26b9639aba"
+    },
+    {
+      "path": "tools/p15/validate_async_job_contract.py",
+      "sha256": "7063af4a6c358bf49eea74bfbc9146b29dafe095b0b77edfae06e742cb5f24b6"
+    },
+    {
+      "path": "tools/p15/build_artifact_delivery_contract.py",
+      "sha256": "1ddf7a136061b497ece04aff15384b965ae842353a5aaae9ed43e20e6e057df3"
+    },
+    {
+      "path": "tools/p15/validate_artifact_delivery_contract.py",
+      "sha256": "c4b4e308574d4fbc86f15861931bec4e6b95b65ca2a4cdfa461bd1fb92306932"
+    },
+    {
+      "path": "tools/p15/tests/test_async_job_contract.py",
+      "sha256": "45b9559d160c36d064eb546b576e2888df350197120d5416b6e1c868222341f2"
+    },
+    {
+      "path": "tools/p15/tests/test_artifact_delivery_contract.py",
+      "sha256": "32cc6e88373523ab1c838c76cc1c2e86b2a3f9e4d97d180dd33c9b751c69c962"
+    }
+  ],
+  "target_profile": "hancom-hangul-2020-secondary"
+}

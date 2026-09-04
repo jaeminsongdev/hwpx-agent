@@ -8,7 +8,9 @@ rust-version.workspace = true
 [dependencies]
 artifact-service = { version = "0.1.0", path = "../artifact-service" }
 auth-middleware = { version = "0.1.0", path = "../auth-middleware" }
+base64.workspace = true
 hex.workspace = true
+hmac.workspace = true
 jsonschema.workspace = true
 serde.workspace = true
 serde_json.workspace = true
@@ -18,8 +20,6 @@ uuid.workspace = true
 zeroize.workspace = true
 
 [dev-dependencies]
-base64.workspace = true
-hmac.workspace = true
 tempfile.workspace = true
 
 [lints]

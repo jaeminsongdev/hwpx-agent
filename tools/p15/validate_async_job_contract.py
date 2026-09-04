@@ -1,14 +1,25 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
+import subprocess
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = ROOT / "implementation/p15/p15-async-job-contract-v1.json"
+P15_04_AUDITED_REVISION = "4c6224f6001c5daadaaaec907c0bba86db7c6c0f"
+P15_05_SUPERSEDING_VALIDATOR = "tools/p15/validate_artifact_delivery_contract.py"
+P15_05_SUPERSEDED_PATHS = {
+    "crates/mcp-control-plane/Cargo.toml",
+    "crates/mcp-control-plane/src/lib.rs",
+    "crates/mcp-control-plane/src/handler.rs",
+    "tools/p15/build_async_job_contract.py",
+    "tools/p15/validate_async_job_contract.py",
+}
 
 EXPECTED_KEYS = {
     "async_submission_tools",
@@ -109,8 +120,37 @@ def bounded_file(root: Path, relative: str) -> Path:
     return resolved
 
 
+def validate_p15_05_supersession(root: Path) -> list[str]:
+    validator_path = root / P15_05_SUPERSEDING_VALIDATOR
+    specification = importlib.util.spec_from_file_location(
+        "p15_artifact_delivery_superseding_validator", validator_path
+    )
+    if specification is None or specification.loader is None:
+        return ["p15_05_supersession.validator_load"]
+    module = importlib.util.module_from_spec(specification)
+    try:
+        specification.loader.exec_module(module)
+        errors = module.validate(root)
+    except Exception:
+        return ["p15_05_supersession.validation"]
+    if errors:
+        return ["p15_05_supersession.contract"]
+    return []
+
+
+def historical_source_matches(root: Path, relative: str, expected: str) -> bool:
+    result = subprocess.run(
+        ["git", "show", f"{P15_04_AUDITED_REVISION}:{relative}"],
+        cwd=root,
+        check=False,
+        capture_output=True,
+    )
+    return result.returncode == 0 and hashlib.sha256(result.stdout).hexdigest() == expected
+
+
 def validate(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
+    p15_05_supersession_errors = validate_p15_05_supersession(root)
     try:
         contract = load_json(root / CONTRACT_PATH.relative_to(ROOT))
     except Exception as error:
@@ -195,7 +235,10 @@ def validate(root: Path = ROOT) -> list[str]:
             if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
                 errors.append(f"source_lock[{index}].digest_shape")
             elif sha256(source) != expected:
-                errors.append(f"source_lock[{index}].digest")
+                if relative not in P15_05_SUPERSEDED_PATHS or p15_05_supersession_errors:
+                    errors.append(f"source_lock[{index}].digest")
+                elif not historical_source_matches(root, relative, expected):
+                    errors.append(f"source_lock[{index}].historical_digest")
 
     source = (root / "crates/mcp-control-plane/src/async_jobs.rs").read_text(
         encoding="utf-8"
