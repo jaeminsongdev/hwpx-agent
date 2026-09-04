@@ -1,0 +1,155 @@
+{
+  "schema_version": "hwpx-agent.p14-retention-local-mirror/v1",
+  "state": "pass",
+  "container_image": "postgres:18.4-bookworm@sha256:7e6103cf85f88f7a0eddb3ec0b1ba8940eba098ed118ade25a729ca9daee5568",
+  "prerequisites": [
+    {
+      "version": 1,
+      "up_path": "migrations/postgres/0001_p14_metadata.up.sql",
+      "up_sha256": "7c00f744993581448acb4b6d4d8a46f1ff03d108750da0afc671c3b5e2b0a78d",
+      "down_path": "migrations/postgres/0001_p14_metadata.down.sql",
+      "down_sha256": "1c17c31ad8b19d16a64498ce9cb47cdf5c85a0cbd8450b079f8586d4960c8fa2"
+    },
+    {
+      "version": 2,
+      "up_path": "migrations/postgres/0002_p14_artifact_service.up.sql",
+      "up_sha256": "202753fbd6f20f181b09bd6227766dfb808811bd4e734a4a418cb5bae4eaee56",
+      "down_path": "migrations/postgres/0002_p14_artifact_service.down.sql",
+      "down_sha256": "af04b1198d7c6f153cfc576036807bd1749746fcc17f480cd6d2d29d6a49f5ae"
+    },
+    {
+      "version": 3,
+      "up_path": "migrations/postgres/0003_p14_revision_cas.up.sql",
+      "up_sha256": "beeac1f22fde0eb3474d40acc14838c1e9676a74b68c5b6f9608713ba6e6e53a",
+      "down_path": "migrations/postgres/0003_p14_revision_cas.down.sql",
+      "down_sha256": "cf99f107ebca0be77a18c23b83e937dff36e39a6610c6fa3b1fff9964d35cabb"
+    },
+    {
+      "version": 4,
+      "up_path": "migrations/postgres/0004_p14_history_checkpoints.up.sql",
+      "up_sha256": "e336890d4ee3fdf4819f52c079ba320f450b01ec516bf5ffaaf505a76b14f249",
+      "down_path": "migrations/postgres/0004_p14_history_checkpoints.down.sql",
+      "down_sha256": "a2d635bfb50fb93e9bbbd1ff37a04e223aec456afa21098b9ef83047f25c05e4"
+    },
+    {
+      "version": 5,
+      "up_path": "migrations/postgres/0005_p14_job_state_machine.up.sql",
+      "up_sha256": "4f15cd28510d55fa58a18aef7b8edf8b4606169fd722a0b8d2c63da2cfb4bf9b",
+      "down_path": "migrations/postgres/0005_p14_job_state_machine.down.sql",
+      "down_sha256": "ee57688b62ef4b6c90a89f5eff966f8b4ba1c237bffe494f34fcb596ea516c09"
+    },
+    {
+      "version": 6,
+      "up_path": "migrations/postgres/0006_p14_worker_lease_fencing.up.sql",
+      "up_sha256": "03af7cc8b2ae883ff132e3b1737b29c3829fcb0fa9887566485f865b3c0393ab",
+      "down_path": "migrations/postgres/0006_p14_worker_lease_fencing.down.sql",
+      "down_sha256": "bf1b9c5c8310dbb981bec3e150383474521941eb6ad9e47d23593a18a2388a90"
+    },
+    {
+      "version": 7,
+      "up_path": "migrations/postgres/0007_p14_idempotency_reconciliation.up.sql",
+      "up_sha256": "cc60353df6cf3c51155417e39d0f1f4c348d2a6282bba7d63de9ea0282be5e5d",
+      "down_path": "migrations/postgres/0007_p14_idempotency_reconciliation.down.sql",
+      "down_sha256": "01e22824016dac04931b4e72e25167f13f659cbc333e80754f004a67579b373b"
+    },
+    {
+      "version": 8,
+      "up_path": "migrations/postgres/0008_p14_cancel_cleanup.up.sql",
+      "up_sha256": "2ba28c1386db9c5aeb4661d11069e48f8624c2560b69301a0750ab9344c46f29",
+      "down_path": "migrations/postgres/0008_p14_cancel_cleanup.down.sql",
+      "down_sha256": "e47f286a755d7928d2a9db9c5b1ee4af2aad5661e346568ae2116ec7d2922599"
+    }
+  ],
+  "migration": {
+    "version": 9,
+    "name": "p14.retention_local_mirror_v1",
+    "up_path": "migrations/postgres/0009_p14_retention_local_mirror.up.sql",
+    "up_sha256": "272da51d665be7b9c0b5150a641ca1f9f51b9b78cddb839096acb57eb71e9ec2",
+    "down_path": "migrations/postgres/0009_p14_retention_local_mirror.down.sql",
+    "down_sha256": "64d087d6bf6a1ff5abbaab80d3706d229dfcc1756732f6c2c95f5334f3ab1f62"
+  },
+  "smoke_fixture": {
+    "path": "tools/p14/fixtures/p14_retention_local_mirror_smoke.sql",
+    "sha256": "73c511a84003792ab6763b85f66e1c328558428b11be937c52d7f3fd6d82eda9",
+    "assertion_count": 32,
+    "pass_marker": "P14_RETENTION_LOCAL_MIRROR_SMOKE_PASS assertions=32"
+  },
+  "regression_fixture": {
+    "path": "tools/p14/fixtures/p14_idempotency_reconciliation_smoke.sql",
+    "sha256": "c671b18f8d180f38cdd8d07a67918295621c5acc688cb55471cf89f248baf1f9",
+    "assertion_count": 28,
+    "pass_marker": "P14_IDEMPOTENCY_RECONCILIATION_SMOKE_PASS assertions=28"
+  },
+  "source_files": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "8fd1277275366b4e02fcda4750027254d7997062904649c0a2bcd10101550a59"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "9ac2dbd3b86a74b0229c76181e3335b537e67a6077e7287e181eae3f9e1c0fcd"
+    },
+    {
+      "path": "crates/retention-sync-service/Cargo.toml",
+      "sha256": "5d3089b66c63ffd93056b27bcb5b978bc4c517a2a9264371c52cb3de20b153f5"
+    },
+    {
+      "path": "crates/retention-sync-service/src/lib.rs",
+      "sha256": "02f851ef208441afca254f219a3c052bfd10ccfe6ce352bd7763c1db727781c6"
+    },
+    {
+      "path": "implementation/p14/P14-09_RETENTION_SYNC_POLICY.md",
+      "sha256": "86a8514ea8a90c9030fffb31a08bda6302349b9da6ba7804fd4ffc6da09c259f"
+    },
+    {
+      "path": "tools/p14/test_retention_local_mirror_migration.py",
+      "sha256": "0bf2cef3676483deb123049c87fbc74a8d900e07ea66110c5dc89a8195f39b4e"
+    },
+    {
+      "path": "tools/p14/validate_idempotency_reconciliation_core.py",
+      "sha256": "629735e5068f8c4c1005499702d18f8cc960e47f02dfe0445524d5d0f4b4a724"
+    },
+    {
+      "path": "tools/p14/validate_idempotency_reconciliation_migration.py",
+      "sha256": "6a60cef67fdf63b9ce1593725dea162ea2af6b6281c19eeab89203c969278859"
+    },
+    {
+      "path": "tools/p14/validate_retention_local_mirror.py",
+      "sha256": "11b87d37cfb76b523c29ee9dfb28500b4f57e2cb38d61f21e08f2fcc46b24676"
+    }
+  ],
+  "requirements": {
+    "retention_class_count": 7,
+    "retention_max_seconds": 315360000,
+    "tombstone_grace_max_seconds": 604800,
+    "purge_lease_max_seconds": 300,
+    "purge_max_attempts": 3,
+    "legal_hold_blocks_delete": true,
+    "active_purge_blocks_new_hold": true,
+    "shared_reference_rechecked": true,
+    "new_references_blocked_after_tombstone": true,
+    "exact_delete_replay": true,
+    "immutable_purge_receipt": true,
+    "trusted_subject_context_bound": true,
+    "mirror_digest_only": true,
+    "mirror_exact_head_cas": true,
+    "mirror_push_subject_bound": true,
+    "revision_receipt_bound": true,
+    "operation_plan_bound": true,
+    "conflict_resolutions": [
+      "rebase_operation_plan",
+      "branch",
+      "manual_merge"
+    ],
+    "expired_push_recoverable": true,
+    "expired_push_requires_new_identity": true,
+    "single_generation_reservation": true,
+    "unique_active_push_identity": true,
+    "forced_tenant_rls": true,
+    "public_execute_revoked": true,
+    "rollback_refuses_v9_data": true,
+    "fixture_remote_seed_is_temporary": true,
+    "hangul_runtime_required": false,
+    "production_service_qualified": false
+  }
+}

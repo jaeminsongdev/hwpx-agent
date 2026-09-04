@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
+import subprocess
 from pathlib import Path
 from typing import Any, NoReturn
 
@@ -12,6 +14,15 @@ ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONTRACT = (
     ROOT / "implementation" / "p14" / "p14-idempotency-reconciliation-core-v1.json"
 )
+P14_07_IMPLEMENTATION_REVISION = "0f4128c73c55e14fac2c2e84dc5077fa2010119c"
+P14_09_SUPERSEDING_CONTRACT = (
+    ROOT
+    / "implementation"
+    / "p14"
+    / "postgres"
+    / "p14-retention-local-mirror-v1.json"
+)
+P14_09_SUPERSEDED_PATHS = {"Cargo.toml", "Cargo.lock"}
 EXPECTED_PATHS = [
     "Cargo.toml",
     "Cargo.lock",
@@ -101,6 +112,48 @@ def require_tokens(text: str, tokens: list[str], label: str) -> None:
         fail(f"{label} is missing required tokens: {missing}")
 
 
+def require_source_digest_with_supersession(
+    root: Path, relative: str, expected: str
+) -> Path:
+    source = bounded_repository_file(root, relative)
+    if sha256(source) == expected:
+        return source
+    if relative not in P14_09_SUPERSEDED_PATHS:
+        fail(f"source digest mismatch: {relative}")
+
+    validator_path = ROOT / "tools" / "p14" / "validate_retention_local_mirror.py"
+    specification = importlib.util.spec_from_file_location(
+        "p14_validate_retention_for_idempotency_core", validator_path
+    )
+    if specification is None or specification.loader is None:
+        fail("P14-09 superseding validator could not be loaded")
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    try:
+        validated = module.validate_contract(P14_09_SUPERSEDING_CONTRACT, ROOT)
+    except (module.ContractError, FileNotFoundError, json.JSONDecodeError) as error:
+        fail(f"P14-09 superseding contract failed: {error}")
+    if not isinstance(validated, dict) or validated.get("state") != "pass":
+        fail("P14-09 superseding contract did not validate")
+
+    historical = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(root),
+            "show",
+            f"{P14_07_IMPLEMENTATION_REVISION}:{relative}",
+        ],
+        check=False,
+        capture_output=True,
+    )
+    if historical.returncode != 0:
+        fail(f"P14-07 historical source could not be read: {relative}")
+    if hashlib.sha256(historical.stdout).hexdigest() != expected:
+        fail(f"P14-07 historical source digest mismatch: {relative}")
+    return source
+
+
 def validate_contract(path: Path, root: Path = ROOT) -> dict[str, object]:
     if root.resolve() != ROOT.resolve():
         fail("idempotency core validator only accepts the repository root")
@@ -126,9 +179,7 @@ def validate_contract(path: Path, root: Path = ROOT) -> dict[str, object]:
         expected = entry["sha256"]
         if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
             fail(f"invalid source digest: {relative}")
-        source = bounded_repository_file(root, relative)
-        if sha256(source) != expected:
-            fail(f"source digest mismatch: {relative}")
+        source = require_source_digest_with_supersession(root, relative, expected)
         observed_paths.append(relative)
         source_text[relative] = source.read_text(encoding="utf-8")
     if observed_paths != EXPECTED_PATHS:

@@ -162,6 +162,7 @@ def docs() -> None:
     run([sys.executable, "tools/p14/validate_idempotency_reconciliation_core.py"])
     run([sys.executable, "tools/p14/validate_idempotency_reconciliation_migration.py"])
     run([sys.executable, "tools/p14/validate_cancel_cleanup.py"])
+    run([sys.executable, "tools/p14/validate_retention_local_mirror.py"])
     run(
         [
             sys.executable,
