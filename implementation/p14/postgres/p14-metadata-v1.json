@@ -1,0 +1,86 @@
+{
+  "schema_version": "hwpx-agent.p14-01-postgres-migration-contract/v1",
+  "contract_id": "p14-metadata-v1",
+  "database": {
+    "engine": "postgresql",
+    "tested_server_version": "18.4",
+    "container_image": "postgres:18.4-bookworm@sha256:7e6103cf85f88f7a0eddb3ec0b1ba8940eba098ed118ade25a729ca9daee5568"
+  },
+  "migrations": {
+    "up_path": "migrations/postgres/0001_p14_metadata.up.sql",
+    "up_sha256": "7c00f744993581448acb4b6d4d8a46f1ff03d108750da0afc671c3b5e2b0a78d",
+    "down_path": "migrations/postgres/0001_p14_metadata.down.sql",
+    "down_sha256": "1c17c31ad8b19d16a64498ce9cb47cdf5c85a0cbd8450b079f8586d4960c8fa2",
+    "rollback_gate_setting": "hwpx_agent.allow_destructive_rollback=on"
+  },
+  "smoke_fixture": {
+    "path": "tools/p14/fixtures/p14_metadata_smoke.sql",
+    "sha256": "a03d8fbf5ec8d0a0e7ad56e1211ccb0f69424b3aef41f883dc2b1fb42573bfbc",
+    "assertions_per_run": 19
+  },
+  "required_tables": [
+    "schema_versions",
+    "tenants",
+    "projects",
+    "project_acl",
+    "artifacts",
+    "revisions",
+    "branches",
+    "revision_parents",
+    "checkpoints",
+    "jobs",
+    "job_attempts",
+    "idempotency_records",
+    "audit_events"
+  ],
+  "tenant_scoped_tables": [
+    "tenants",
+    "projects",
+    "branches",
+    "project_acl",
+    "artifacts",
+    "revisions",
+    "revision_parents",
+    "checkpoints",
+    "jobs",
+    "job_attempts",
+    "idempotency_records",
+    "audit_events"
+  ],
+  "invariants": {
+    "row_level_security_forced": true,
+    "cross_tenant_foreign_keys_composite": true,
+    "revisions_immutable": true,
+    "checkpoints_immutable": true,
+    "audit_events_immutable": true,
+    "artifact_content_identity_immutable": true,
+    "job_request_identity_immutable": true,
+    "job_attempt_identity_immutable": true,
+    "idempotency_request_identity_immutable": true,
+    "migration_digest_supplied_by_runner": true,
+    "public_privileges_revoked": true,
+    "database_extensions_required": false
+  },
+  "source_locks": [
+    {
+      "path": "docs/02_architecture/04_deployment_topology.md",
+      "sha256": "7a59c3e5c14ff5b613e1436ae93473aa04b4689f3299993321b18ac463a5c024"
+    },
+    {
+      "path": "docs/12_implementation_guides/09_project_jobs_storage.md",
+      "sha256": "946cac58f4984bb9da8055e4decc35b6259eb742270144c0f68d123bb4914a96"
+    },
+    {
+      "path": "docs/02_architecture/05_state_revision_transactions.md",
+      "sha256": "0fe0b6a42b3c13a887370c02b447c248419b4fa2ed64b30ad3b8731c988ed21f"
+    }
+  ],
+  "scope": {
+    "task": "P14-01",
+    "current_pc_hancom_invoked": false,
+    "user_documents_scanned": false,
+    "production_database_qualified": false,
+    "artifact_service_qualified": false,
+    "later_p14_tasks_qualified": false
+  }
+}

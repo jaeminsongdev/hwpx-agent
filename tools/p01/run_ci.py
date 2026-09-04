@@ -88,7 +88,19 @@ def widget() -> None:
 
 
 def docs() -> None:
-    run([sys.executable, "-m", "compileall", "-q", "tools/p01", "tools/p02", "tools/p04", "tools/p10"])
+    run(
+        [
+            sys.executable,
+            "-m",
+            "compileall",
+            "-q",
+            "tools/p01",
+            "tools/p02",
+            "tools/p04",
+            "tools/p10",
+            "tools/p14",
+        ]
+    )
     run(
         [
             sys.executable,
@@ -137,6 +149,19 @@ def docs() -> None:
             "discover",
             "-s",
             "tools/p10/tests",
+            "-p",
+            "test_*.py",
+        ]
+    )
+    run([sys.executable, "tools/p14/validate_metadata_migrations.py"])
+    run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tools/p14/tests",
             "-p",
             "test_*.py",
         ]
