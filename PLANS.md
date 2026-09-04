@@ -109,6 +109,8 @@ npm audit endpoint. The runner now bounds that call to 60 seconds x 3, retries o
 transient failures, records every attempt, and publishes each report/SBOM to a unique no-overwrite
 run directory. Its actual validation still timed out 3/3, so exact-commit clean FULL and current npm
 dependency-audit evidence remain unverified rather than promoted from the other passing checks.
+Exact code commit `5fe8c8e` passed the clean docs lane and reproduced the same single security failure
+with zero residual audit processes; the detached clean clone remained Git-clean.
 
 ## Validation policy
 

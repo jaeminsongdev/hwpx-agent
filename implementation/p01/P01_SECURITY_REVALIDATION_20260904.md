@@ -50,6 +50,15 @@ its SBOM is 635,548 bytes with SHA-256
 `567c80e1eeb3e4ad53ebb3ac34a569fac2922fa27744d3e6ff3699294e69bdeb`. The legacy fixed files
 retained their pre-run hashes, and residual `pnpm audit`/security-runner processes were zero.
 
+The exact code commit is `5fe8c8e7223b0ac6951d5faac2e6ff039e3a327d`. A fresh no-hardlink
+detached clone at that commit passed the docs lane in `6.494s` and remained Git-clean. Its security
+lane failed in `191.335s` only because all three bounded npm audit attempts timed out; every attempt
+reported successful cleanup, the other security checks passed, and residual processes were zero.
+Ignored clean-clone run `3152f73f46014731a6e4a2699cc3953f` contains a 1,666-byte report with
+SHA-256 `cd177cc4da1bc65d63e5846a19bb6b5784ec98f1a7b2e19d02f4f4435c7ee4e9` and a
+301,074-byte SBOM with SHA-256
+`ec062621d8da5bd2aee01143b52028050b454589b8f2e25e3d06d8279a093646`.
+
 ## Gate boundary
 
 This change improves failure containment and evidence durability; it does not turn the failed audit
