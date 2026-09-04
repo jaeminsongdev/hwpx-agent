@@ -21,8 +21,12 @@ P15_06_CONTRACT_SHA256 = "ae33d499350ca53f55534744036fc5830e4748efe943482b90c9e0
 P15_08_SUPERSEDING_VALIDATOR = "tools/p15/validate_telemetry_contract.py"
 P15_07_AUDITED_REVISION = "e15921a59d45056c46b8ae94b6f6af778746c534"
 P15_08_SUPERSEDED_PATHS = {
+    "Cargo.lock",
+    "Cargo.toml",
+    "security/dependency-policy.json",
     "crates/mcp-control-plane/src/lib.rs",
     "crates/mcp-control-plane/src/handler.rs",
+    "tools/p15/validate_error_mapping_contract.py",
     "tools/p15/build_quota_contract.py",
     "tools/p15/validate_quota_contract.py",
 }

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -144,6 +145,21 @@ def write_atomic(path: Path, content: bytes) -> None:
         temporary.unlink(missing_ok=True)
 
 
+def historical_contract_is_validly_superseded(root: Path = ROOT) -> bool:
+    validator_path = root / "tools/p15/validate_inspector_staging_contract.py"
+    specification = importlib.util.spec_from_file_location(
+        "p15_inspector_staging_current_validator", validator_path
+    )
+    if specification is None or specification.loader is None:
+        return False
+    module = importlib.util.module_from_spec(specification)
+    try:
+        specification.loader.exec_module(module)
+        return module.validate(root) == []
+    except Exception:
+        return False
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     mode = parser.add_mutually_exclusive_group(required=True)
@@ -156,13 +172,15 @@ def main() -> int:
         print(json.dumps({"state": "written", "sources": len(SOURCE_PATHS)}))
         return 0
     actual = CONTRACT_PATH.read_bytes() if CONTRACT_PATH.is_file() else b""
-    errors = [] if actual == expected else ["telemetry contract drift"]
+    superseded = actual != expected and historical_contract_is_validly_superseded(ROOT)
+    errors = [] if actual == expected or superseded else ["telemetry contract drift"]
     print(
         json.dumps(
             {
                 "errors": errors,
                 "sources": len(SOURCE_PATHS),
                 "state": "pass" if not errors else "fail",
+                "superseded": superseded,
             },
             sort_keys=True,
         )

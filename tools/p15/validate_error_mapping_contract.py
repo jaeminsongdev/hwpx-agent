@@ -17,10 +17,15 @@ ERROR_CATALOG_PATH = ROOT / "protocol/mcp/p15-public-error-catalog-v1.json"
 P15_07_SUPERSEDING_VALIDATOR = "tools/p15/validate_quota_contract.py"
 P15_06_AUDITED_REVISION = "f36a07e988558b4481c50955a0f76bd69c516d9d"
 P15_07_SUPERSEDED_PATHS = {
+    "Cargo.lock",
+    "Cargo.toml",
+    "security/dependency-policy.json",
     "crates/mcp-control-plane/src/lib.rs",
     "crates/mcp-control-plane/src/error_catalog.rs",
     "crates/mcp-control-plane/src/handler.rs",
     "crates/mcp-control-plane/tests/error_mapping.rs",
+    "tools/p15/validate_async_job_contract.py",
+    "tools/p15/validate_artifact_delivery_contract.py",
     "tools/p15/build_error_mapping_contract.py",
     "tools/p15/validate_error_mapping_contract.py",
 }

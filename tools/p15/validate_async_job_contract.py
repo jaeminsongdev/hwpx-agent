@@ -14,10 +14,14 @@ CONTRACT_PATH = ROOT / "implementation/p15/p15-async-job-contract-v1.json"
 P15_04_AUDITED_REVISION = "4c6224f6001c5daadaaaec907c0bba86db7c6c0f"
 P15_05_SUPERSEDING_VALIDATOR = "tools/p15/validate_artifact_delivery_contract.py"
 P15_05_SUPERSEDED_PATHS = {
+    "Cargo.lock",
+    "Cargo.toml",
+    "security/dependency-policy.json",
     "crates/mcp-control-plane/Cargo.toml",
     "crates/mcp-control-plane/src/lib.rs",
     "crates/mcp-control-plane/src/handler.rs",
     "crates/mcp-control-plane/tests/handler_contract.rs",
+    "tools/p15/validate_handler_contract.py",
     "tools/p15/build_async_job_contract.py",
     "tools/p15/validate_async_job_contract.py",
 }

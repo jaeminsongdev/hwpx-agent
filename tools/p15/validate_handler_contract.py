@@ -39,6 +39,8 @@ P15_03_IMPLEMENTATION_REVISION = "9e7ed73524be0049292fbdf45f2170df6f997fae"
 P15_04_SUPERSEDING_VALIDATOR = "tools/p15/validate_async_job_contract.py"
 P15_04_SUPERSEDED_PATHS = {
     "Cargo.lock",
+    "Cargo.toml",
+    "security/dependency-policy.json",
     "crates/mcp-control-plane/Cargo.toml",
     "crates/mcp-control-plane/src/lib.rs",
     "crates/mcp-control-plane/src/handler.rs",

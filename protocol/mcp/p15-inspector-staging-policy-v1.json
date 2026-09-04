@@ -1,0 +1,78 @@
+{
+  "authentication": {
+    "bearer_forwarding": "stdin_only",
+    "front_door_probe_scopes": [
+      "artifact.read",
+      "artifact.write",
+      "job.cancel",
+      "job.submit",
+      "mirror.sync",
+      "project.read",
+      "project.write",
+      "retention.manage"
+    ],
+    "runtime_hmac_key_bytes": 32,
+    "runtime_token_kind": "user"
+  },
+  "evidence": {
+    "arguments_persisted": false,
+    "bearer_persisted": false,
+    "certificate_persisted": false,
+    "private_key_persisted": false,
+    "result_payload_persisted": false,
+    "result_sha256_persisted": true,
+    "temporary_bearer_configuration": "deleted_before_receipt"
+  },
+  "limits": {
+    "driver_concurrency": 4,
+    "driver_request_bytes": 300000,
+    "driver_response_bytes": 1048576,
+    "driver_timeout_milliseconds": 15000,
+    "http_body_bytes": 300000,
+    "http_connections": 32,
+    "http_header_bytes": 16384,
+    "server_lifetime_seconds_maximum": 900
+  },
+  "negative_probes": [
+    "missing_auth",
+    "invalid_auth",
+    "wrong_path",
+    "host_rebinding",
+    "hostile_origin",
+    "wrong_method",
+    "oversized_body",
+    "plaintext_http_rejected"
+  ],
+  "official_sources": [
+    "https://github.com/modelcontextprotocol/inspector",
+    "https://github.com/modelcontextprotocol/typescript-sdk",
+    "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports"
+  ],
+  "out_of_scope": [
+    "public_internet_deployment",
+    "production_oauth_provider",
+    "chatgpt_remote_connection",
+    "hancom_2022_runtime",
+    "hancom_2024_runtime"
+  ],
+  "protocol": {
+    "endpoint": "/mcp",
+    "inspector_protocol_era": "modern",
+    "legacy_posture": "2025_stateless",
+    "transport": "streamable_http"
+  },
+  "runtime": {
+    "bind": "127.0.0.1",
+    "driver_lifecycle": "persistent_per_server_run",
+    "ephemeral_port": true,
+    "host_validation": "localhost_allowlist",
+    "origin_validation": "localhost_allowlist",
+    "scheme": "https",
+    "shutdown": "graceful_stdin_eof",
+    "tls_certificate": "ephemeral_self_signed_p256_sha256"
+  },
+  "schema_version": "hwpx-agent.p15-inspector-staging-policy/v1",
+  "scope": "current_pc_hancom_2020_local_inspector_staging",
+  "target_profile": "hancom-hangul-2020-secondary",
+  "tool_count": 18
+}

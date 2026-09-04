@@ -14,6 +14,9 @@ CONTRACT_PATH = ROOT / "implementation/p15/p15-artifact-delivery-contract-v1.jso
 P15_05_AUDITED_REVISION = "dde79ff3fa86953c7f3e6e8e2402479eddee813e"
 P15_06_SUPERSEDING_VALIDATOR = "tools/p15/validate_error_mapping_contract.py"
 P15_06_SUPERSEDED_PATHS = {
+    "Cargo.lock",
+    "Cargo.toml",
+    "security/dependency-policy.json",
     "crates/mcp-control-plane/src/lib.rs",
     "crates/mcp-control-plane/src/handler.rs",
     "crates/mcp-control-plane/tests/handler_contract.rs",

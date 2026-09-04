@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
@@ -16,6 +17,16 @@ P15_07_REVISION = "e15921a59d45056c46b8ae94b6f6af778746c534"
 P15_07_CONTRACT_SHA256 = (
     "787f88e79b0b1aa1dff483237cf60e9a30526ab686481ec779fe04a3cd3db872"
 )
+P15_09_SUPERSEDING_VALIDATOR = "tools/p15/validate_inspector_staging_contract.py"
+P15_08_AUDITED_REVISION = "9f9c6932518175906842a2cbb5915a0fb96d0d49"
+P15_09_SUPERSEDED_PATHS = {
+    "Cargo.toml",
+    "security/dependency-policy.json",
+    "Cargo.lock",
+    "tools/p15/validate_quota_contract.py",
+    "tools/p15/build_telemetry_contract.py",
+    "tools/p15/validate_telemetry_contract.py",
+}
 
 EXPECTED_KEYS = {
     "correlation_fields",
@@ -196,8 +207,38 @@ def historical_p15_07_is_intact(root: Path, contract: dict[str, Any]) -> bool:
     return True
 
 
+def validate_p15_09_supersession(root: Path) -> list[str]:
+    validator_path = root / P15_09_SUPERSEDING_VALIDATOR
+    specification = importlib.util.spec_from_file_location(
+        "p15_inspector_staging_superseding_validator", validator_path
+    )
+    if specification is None or specification.loader is None:
+        return ["p15_09_supersession.validator_load"]
+    module = importlib.util.module_from_spec(specification)
+    try:
+        specification.loader.exec_module(module)
+        supersession_errors = module.validate(root)
+    except Exception:
+        return ["p15_09_supersession.validation"]
+    if supersession_errors:
+        return ["p15_09_supersession.contract"]
+    return []
+
+
+def historical_p15_08_source_matches(root: Path, relative: str, expected: str) -> bool:
+    result = subprocess.run(
+        ["git", "show", f"{P15_08_AUDITED_REVISION}:{relative}"],
+        cwd=root,
+        check=False,
+        capture_output=True,
+    )
+    content = result.stdout.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return result.returncode == 0 and hashlib.sha256(content).hexdigest() == expected
+
+
 def validate(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
+    p15_09_supersession_errors = validate_p15_09_supersession(root)
     try:
         contract = load_json(root / CONTRACT_PATH.relative_to(ROOT))
     except Exception as error:
@@ -298,7 +339,10 @@ def validate(root: Path = ROOT) -> list[str]:
             if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
                 errors.append(f"source_lock[{index}].digest_shape")
             elif sha256(source) != expected:
-                errors.append(f"source_lock[{index}].digest")
+                if relative not in P15_09_SUPERSEDED_PATHS or p15_09_supersession_errors:
+                    errors.append(f"source_lock[{index}].digest")
+                elif not historical_p15_08_source_matches(root, relative, expected):
+                    errors.append(f"source_lock[{index}].historical_digest")
 
     telemetry = (root / "crates/mcp-control-plane/src/telemetry.rs").read_text(
         encoding="utf-8"
