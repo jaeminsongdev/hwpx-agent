@@ -72,7 +72,9 @@ $checks = [ordered]@{
     quarantine_is_no_delete_and_no_reparse = $workspace -match 'FileAttributes\.ReparsePoint' -and
         $workspace -notmatch 'QuarantineJobSandboxResidue[\s\S]{0,4000}Directory\.Delete'
     hang_retry_no_duplicate_tests = $smoke -match 'HardCommandTimeoutRecyclesAndReplaysUnknownAsync' -and
-        $smoke -match 'executorCalls == 1 && cancellationCalls == 1 && recycleCalls == 1' -and
+        $smoke -match 'executor\.ExecuteCalls == 1' -and
+        $smoke -match 'ActualHangingProcessExecutor' -and
+        $smoke -match 'hard timeout left its actual owned process tree running' -and
         $smoke -match 'committed\[0\].*SequenceEqual\(committed\[1\]\)'
     actual_process_tree_test = $smoke -match 'ActualWindowsJobKillsOwnedProcessTreeAsync' -and
         $smoke -match 'ProcessIsRunning\(processIds\.LeafProcessId\)' -and

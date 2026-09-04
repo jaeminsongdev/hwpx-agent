@@ -714,11 +714,8 @@ internal static class Program
             32);
         assignment.ResourceLimits.CommandTimeoutSeconds = 1;
         assignment.ResourceLimits.JobTimeoutSeconds = 5;
-        var executorCalls = 0;
-        var cancellationCalls = 0;
-        var recycleCalls = 0;
         var committed = new List<byte[]>();
-        var never = new TaskCompletionSource<AgentJobResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var processIdsPath = Path.Combine(environment.Root, "timed out process ids.json");
         var invoker = new ScriptedCallInvoker((method, request, headers) =>
         {
             RequireAuthorization(headers);
@@ -731,31 +728,7 @@ internal static class Program
             };
         });
         await using var client = AuthenticatedClient(invoker);
-        var executor = new DelegatingExecutor((_, _) =>
-        {
-            executorCalls++;
-            return never.Task;
-        })
-        {
-            CancellationHandler = (_, _) =>
-            {
-                cancellationCalls++;
-                return Task.CompletedTask;
-            },
-            ReconcileHandler = (candidate, _) => Task.FromResult(Observation(
-                candidate,
-                effectStarted: true,
-                outputPresent: false,
-                actionTracePresent: true,
-                actionTraceTerminal: false)),
-            RecycleHandler = (candidate, reason, _) =>
-            {
-                recycleCalls++;
-                Require(reason == WorkerRecycleReason.CommandTimeout, "hard timeout recycle reason drifted");
-                never.TrySetCanceled();
-                return Task.FromResult(RecycleReceipt(candidate, reason));
-            },
-        };
+        await using var executor = new ActualHangingProcessExecutor(processIdsPath);
         var service = environment.CreateService(client, executor);
 
         var first = await service.RunOnceAsync(CancellationToken.None);
@@ -767,8 +740,14 @@ internal static class Program
         Require(second.Disposition == AgentRunDisposition.Replayed
             && !second.ExecutorInvoked,
             "hard timeout terminal receipt was not replayed");
-        Require(executorCalls == 1 && cancellationCalls == 1 && recycleCalls == 1,
+        Require(executor.ExecuteCalls == 1
+            && executor.CancellationCalls == 1
+            && executor.RecycleCalls == 1,
             "hard timeout duplicated execution or skipped containment");
+        Require(executor.ProcessIds is not null
+            && !ProcessIsRunning(executor.ProcessIds.RootProcessId)
+            && !ProcessIsRunning(executor.ProcessIds.LeafProcessId),
+            "hard timeout left its actual owned process tree running");
         Require(committed.Count == 2
             && committed[0].AsSpan().SequenceEqual(committed[1]),
             "hard timeout replay receipt drifted");
@@ -2139,6 +2118,77 @@ internal static class Program
                 SandboxHandle = handle,
                 ReadOnly = true,
             };
+    }
+
+    private sealed class ActualHangingProcessExecutor(string processIdsPath)
+        : ISupervisedAgentJobExecutor, IAsyncDisposable
+    {
+        private WindowsOwnedWorkerProcess? owned;
+
+        internal int ExecuteCalls { get; private set; }
+
+        internal int CancellationCalls { get; private set; }
+
+        internal int RecycleCalls { get; private set; }
+
+        internal OwnedProcessIds? ProcessIds { get; private set; }
+
+        public Task<WorkerStartupRecoveryReceipt> RecoverStartupAsync(
+            CancellationToken cancellationToken) => Task.FromResult(StartupReceipt());
+
+        public async Task<AgentJobResult> ExecuteAsync(
+            AgentJobContext context,
+            CancellationToken cancellationToken)
+        {
+            ExecuteCalls++;
+            var executablePath = Environment.ProcessPath
+                ?? throw new InvalidOperationException("The smoke executable path is unavailable.");
+            owned = WindowsOwnedWorkerProcess.Start(
+                SelfStartInfo("--p10-09-hang-tree-child", processIdsPath),
+                Sha256File(executablePath));
+            ProcessIds = await ReadOwnedProcessIdsAsync(processIdsPath, TimeSpan.FromSeconds(10));
+            await owned.WaitForExitAsync(CancellationToken.None);
+            throw new InvalidOperationException("The contained hang process exited without a receipt.");
+        }
+
+        public Task RequestCancellationAsync(
+            string executionId,
+            CancellationToken cancellationToken)
+        {
+            CancellationCalls++;
+            return Task.CompletedTask;
+        }
+
+        public Task<WorkerReconciliationObservation> ReconcileAsync(
+            LeaseAssignment assignment,
+            CancellationToken cancellationToken) =>
+            Task.FromResult(Observation(
+                assignment,
+                effectStarted: true,
+                outputPresent: false,
+                actionTracePresent: true,
+                actionTraceTerminal: false));
+
+        public async Task<WorkerRecycleReceipt> RecycleAsync(
+            LeaseAssignment assignment,
+            WorkerRecycleReason reason,
+            CancellationToken cancellationToken)
+        {
+            RecycleCalls++;
+            Require(reason == WorkerRecycleReason.CommandTimeout,
+                "actual hard-timeout recycle reason drifted");
+            var process = owned
+                ?? throw new InvalidOperationException("No owned process exists to recycle.");
+            return await process.RecycleAsync(assignment, reason, cancellationToken);
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            if (owned is not null)
+            {
+                await owned.DisposeAsync();
+            }
+        }
     }
 
     private sealed class DelegatingExecutor(

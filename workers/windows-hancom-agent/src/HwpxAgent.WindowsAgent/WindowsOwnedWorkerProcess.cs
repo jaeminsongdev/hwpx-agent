@@ -31,6 +31,9 @@ internal sealed class WindowsOwnedWorkerProcess : IAsyncDisposable
 
     internal int InitialProcessId { get; }
 
+    internal Task WaitForExitAsync(CancellationToken cancellationToken) =>
+        process.WaitForExitAsync(cancellationToken);
+
     internal static WindowsOwnedWorkerProcess Start(
         ProcessStartInfo startInfo,
         string expectedExecutableSha256)
