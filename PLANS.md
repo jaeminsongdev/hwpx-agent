@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-05
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P15 / P15-07 Rate limit/quotas`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P15 / P15-08 Telemetry`
 - Active reasoning effort: `max`
 - Immediate UI dependency: none live; P05-07 v2 attempts 10 through 16 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `모두 허용`
 
@@ -38,7 +38,7 @@ save, render, cross-version or production proof.
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
 | P14 | `pass_scoped_current_pc_local_reference_and_disposable_postgres` | `implementation/p14/P14_GATE_REPORT.md` |
-| P15 | `in_progress_current_pc_local` | P15-01~06 pass; P15-07 rate limit/quotas next |
+| P15 | `in_progress_current_pc_local` | P15-01~07 pass; P15-08 telemetry next |
 | P16 | `blocked_by_P15` | ChatGPT Web plugin/widget |
 | P17 | `blocked_by_P15` | Codex remote/local companion |
 | P18 | `blocked_by_P12_P13_P16_P17` | quality/security/performance/DR |
@@ -72,6 +72,7 @@ save, render, cross-version or production proof.
 | P-0074 | P15-04 asynchronous job UX | `pass_scoped_current_pc_local_durable_job_reference` | implementation `f50c724`, closing audit `4c6224f`; Rust async 11/11 + handler 16/16, P15 44/44, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-04_REPORT.md` |
 | P-0075 | P15-05 artifact delivery | `pass_scoped_current_pc_local_artifact_delivery_reference` | commit `dde79ff`; Rust artifact 13/13 + async 11/11 + handler 16/16, P15 51/51, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-05_REPORT.md` |
 | P-0076 | P15-06 public error mapping | `pass_scoped_current_pc_local_public_error_reference` | commit `f36a07e`; 14-code digest-pinned catalog, Rust 45/45 and P15 57/57, final exact independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-06_REPORT.md` |
+| P-0077 | P15-07 rate limit/quotas | `pass_scoped_current_pc_hancom_2020_local_quota_reference` | commits `91e84f4` + `e15921a`; Rust 53/53 and P15 65/65, final exact current/independent CI each 5/5, security and offline Linux pass; `implementation/p15/P15-07_REPORT.md` |
 
 ## Active evidence summary
 
@@ -154,6 +155,13 @@ save, render, cross-version or production proof.
   read-only Linux validation pass. This qualifies only the current-PC local public error reference;
   production HTTP/hosted transport/telemetry remain unverified. See
   `implementation/p15/P15-06_REPORT.md`.
+- P15-07 foundational commit `91e84f4` and checkout-independence repair `e15921a` implement atomic
+  tenant/user/capability/job-class token buckets, bounded retry guidance, six-tool durable replay
+  without recharge, payload-conflict rejection, finite state and clock-regression fail-closed
+  behavior. Quota Rust 8/8 plus predecessor Rust 45/45 and P15 Python 65/65 pass; exact-commit main
+  and independent CI are each 5/5, both security runs and network-disabled read-only Linux validation
+  pass. This qualifies only the current-PC Hangul 2020 local quota reference; distributed accounting,
+  production traffic and telemetry remain unverified. See `implementation/p15/P15-07_REPORT.md`.
 - Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with
   cleanup and succeeded on attempt 2, all other checks passed, and the SBOM contains 675 components.
 - A detached exact-commit worktree passed all four non-security lanes after the four digest-pinned,
@@ -170,9 +178,9 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next actions
 
-1. Non-UI: implement P15-07 Rate limit/quotas with tenant/user/capability/job-class accounting,
-   bounded burst handling, fairness, retry guidance and fail-closed concurrency/idempotency tests
-   while preserving the P15-01 through P15-06 boundaries.
+1. Non-UI: implement P15-08 Telemetry with bounded tool/job/backend/capability SLI events, trace
+   correlation, redaction and one complete sample trace while preserving the P15-01 through P15-07
+   boundaries.
 2. UI-dependent: on a new explicit user request, rerun P05-07 once and require
    save/reopen/PDF/render evidence before P05-08, P05-09 and the P05 Gate.
 3. Keep P10-05/06 and P10-08 production claims open until their external controls exist.

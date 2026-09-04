@@ -9,7 +9,7 @@
 
 - 상태: `P05_IN_PROGRESS_AND_P15_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT` + `P15_REMOTE_MCP_CONTROL_PLANE`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했다. P15-01 bounded Auth/tenant resource-server middleware, P15-02의 18개 public MCP tool schema/snapshot, P15-03 공통 handler boundary, P15-04 durable Async job UX, P15-05 bounded Artifact delivery와 P15-06 stable public Error mapping이 통과했고 P15-07 Rate limit/quotas가 다음 비-UI 구현이다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했다. P15-01 bounded Auth/tenant resource-server middleware, P15-02의 18개 public MCP tool schema/snapshot, P15-03 공통 handler boundary, P15-04 durable Async job UX, P15-05 bounded Artifact delivery, P15-06 stable public Error mapping과 P15-07 bounded Rate limit/quotas가 통과했고 P15-08 Telemetry가 다음 비-UI 구현이다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -162,10 +162,18 @@
   이는 current-PC local public error reference PASS이며 production HTTP mapping, hosted
   transport와 telemetry는 unverified다. Authoritative report는
   `implementation/p15/P15-06_REPORT.md`다.
+- P15-07은 foundational commit `91e84f4`와 checkout-independence repair `e15921a`에서
+  tenant/user/capability/job-class별 atomic token bucket, bounded retry guidance, durable submission
+  replay 무과금, payload conflict, finite state와 clock-regression fail-closed 처리를 구현했다.
+- Quota Rust 8/8와 predecessor Rust 45/45, P15 Python 65/65, final exact current/independent checkout
+  CI 각 5/5, 두 security run과 network-disabled read-only Linux 검증이 통과했다. 이는
+  current-PC Hangul 2020 local quota reference PASS이며 distributed/persistent accounting,
+  production traffic과 telemetry는 unverified다. Authoritative report는
+  `implementation/p15/P15-07_REPORT.md`다.
 
 ## 다음 작업
 
-비-UI 순서는 P15-07에서 tenant/user/capability/job-class별 rate limit과 quota를 고정하고 bounded burst, fairness, retry guidance, concurrency/idempotency를 증명하는 것이며 추론수준은 `max`다. P05-07 actual render는 해당 UI 게이트가 활성화될 때 사용자에게 먼저 알리고, 사용자가 모든 `모두 허용`을 누르는 동안 save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
+비-UI 순서는 P15-08에서 bounded tool/job/backend/capability SLI event, trace correlation, redaction과 complete sample trace를 구현·증명하는 것이며 추론수준은 `max`다. P05-07 actual render는 해당 UI 게이트가 활성화될 때 사용자에게 먼저 알리고, 사용자가 모든 `모두 허용`을 누르는 동안 save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
 
 ## 현재 blocker
 
