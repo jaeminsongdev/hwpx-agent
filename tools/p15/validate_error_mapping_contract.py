@@ -78,7 +78,6 @@ EXPECTED_SOURCE_PATHS = [
     "deny.toml",
     "security/dependency-policy.json",
     "docs/06_mcp_api/04_error_model.md",
-    "docs/09_roadmap/P15_remote_mcp_control_plane.md",
     "specs/error-envelope.schema.json",
     "protocol/mcp/p15-public-tools-v1.json",
     "protocol/mcp/p15-public-error-catalog-v1.json",
