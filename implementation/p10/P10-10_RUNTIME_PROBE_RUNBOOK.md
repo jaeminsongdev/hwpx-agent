@@ -94,4 +94,3 @@ approved file-path security module, pin its DLL and registration, and rerun P10-
 P10-10 audit. P10-08 still needs a separately qualified dedicated worker environment for production.
 The next independent non-UI product task is P14-01 metadata schema at reasoning effort `max`; the
 next UI-dependent task remains P05-07 actual save/reopen/PDF acceptance, also at `max`.
-

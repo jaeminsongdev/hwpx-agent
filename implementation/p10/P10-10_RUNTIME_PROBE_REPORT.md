@@ -81,4 +81,3 @@ This does not close P10. P10-05 remains `core_ready_actual_module_pending`, P10-
 COM execution remains dependent on P10-05, and P10-08 dedicated production isolation remains
 unqualified. It does not claim another PC, Hangul 2022/2024, provider operation or production
 readiness. P05-07 through P05-09 actual render acceptance also remains independent and pending.
-
