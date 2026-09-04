@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
+import subprocess
 from pathlib import Path
 from typing import Any, NoReturn
 
@@ -14,6 +16,14 @@ EXPECTED_IMAGE = (
     "postgres:18.4-bookworm@"
     "sha256:7e6103cf85f88f7a0eddb3ec0b1ba8940eba098ed118ade25a729ca9daee5568"
 )
+P14_09_IMPLEMENTATION_REVISION = "1d5de34121a8ba7cb9fc651cb90d63d7973db2dc"
+P15_SUPERSEDING_CONTRACT = ROOT / "implementation/p15/p15-auth-tenant-v1.json"
+P15_SUPERSEDING_VALIDATOR = ROOT / "tools/p15/validate_auth_tenant.py"
+P15_SUPERSEDED_PATHS = {
+    "Cargo.lock",
+    "Cargo.toml",
+    "tools/p14/validate_retention_local_mirror.py",
+}
 
 
 class ContractError(RuntimeError):
@@ -75,6 +85,55 @@ def require_digest(entry: dict[str, Any], maximum_bytes: int) -> Path:
         fail(f"invalid digest for {entry['path']}")
     if sha256(path) != expected:
         fail(f"digest mismatch for {entry['path']}")
+    return path
+
+
+def require_source_digest_with_supersession(
+    entry: dict[str, Any], maximum_bytes: int
+) -> Path:
+    if set(entry) != {"path", "sha256"}:
+        fail("digest entry has unexpected keys")
+    relative = entry["path"]
+    path = bounded_file(relative, maximum_bytes)
+    expected = entry["sha256"]
+    if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
+        fail(f"invalid digest for {relative}")
+    if sha256(path) == expected:
+        return path
+    if relative not in P15_SUPERSEDED_PATHS:
+        fail(f"digest mismatch for {relative}")
+
+    specification = importlib.util.spec_from_file_location(
+        "p15_validate_auth_for_retention", P15_SUPERSEDING_VALIDATOR
+    )
+    if specification is None or specification.loader is None:
+        fail("P15 superseding validator could not be loaded")
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    try:
+        contract = module.load_contract(P15_SUPERSEDING_CONTRACT)
+        rust_text = module.RUST_PATH.read_text(encoding="utf-8")
+        errors = module.validate_contract(contract, rust_text, ROOT)
+    except (OSError, ValueError, json.JSONDecodeError) as error:
+        fail(f"P15 superseding contract failed: {error}")
+    if errors:
+        fail(f"P15 superseding contract failed: {errors}")
+
+    historical = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(ROOT),
+            "show",
+            f"{P14_09_IMPLEMENTATION_REVISION}:{relative}",
+        ],
+        check=False,
+        capture_output=True,
+    )
+    if historical.returncode != 0:
+        fail(f"P14-09 historical source could not be read: {relative}")
+    if hashlib.sha256(historical.stdout).hexdigest() != expected:
+        fail(f"P14-09 historical source digest mismatch: {relative}")
     return path
 
 
@@ -197,7 +256,10 @@ def validate_contract(path: Path, root: Path = ROOT) -> dict[str, object]:
     source_files = document["source_files"]
     if not isinstance(source_files, list) or len(source_files) != 9:
         fail("retention mirror source manifest must contain exactly nine files")
-    source_paths = [require_digest(entry, 512 * 1024) for entry in source_files]
+    source_paths = [
+        require_source_digest_with_supersession(entry, 512 * 1024)
+        for entry in source_files
+    ]
     if [item.relative_to(ROOT).as_posix() for item in source_paths] != [
         "Cargo.lock",
         "Cargo.toml",

@@ -1,0 +1,119 @@
+{
+  "schema_version": "hwpx-agent.p15-auth-tenant/v1",
+  "scope": "current_pc_local_resource_server_reference",
+  "official_source": {
+    "retrieved_on": "2026-09-04",
+    "url": "https://developers.openai.com/plugins/build/auth"
+  },
+  "boundary": {
+    "authorization_server_implemented": false,
+    "production_jwks_implemented": false,
+    "public_mcp_principal_kind": "user",
+    "internal_service_principal_kind": "service",
+    "service_tokens_accepted_from_openai_host": false,
+    "service_tokens_single_use": true
+  },
+  "jwt": {
+    "local_reference_algorithm": "HS256",
+    "user_typ": "at+jwt",
+    "service_typ": "hwpx-service+jwt",
+    "required_claims": [
+      "aud",
+      "exp",
+      "iat",
+      "iss",
+      "jti",
+      "nbf",
+      "scope",
+      "sub",
+      "tenant_id",
+      "token_kind"
+    ],
+    "unknown_claims_rejected": true,
+    "duplicate_claims_rejected": true,
+    "multi_audience_rejected": true
+  },
+  "limits": {
+    "bearer_token_bytes": 8192,
+    "claims_json_bytes": 4096,
+    "clock_skew_seconds": 300,
+    "header_json_bytes": 1024,
+    "hmac_key_bytes_max": 128,
+    "hmac_key_bytes_min": 32,
+    "issuer_bytes": 256,
+    "key_id_bytes": 64,
+    "principal_records": 4096,
+    "revocation_records": 8192,
+    "scope_count": 32,
+    "service_token_lifetime_seconds": 300,
+    "service_token_replay_records": 8192,
+    "signing_key_records": 64,
+    "subject_bytes": 200,
+    "token_id_bytes": 128,
+    "user_token_lifetime_seconds": 3600
+  },
+  "scopes": [
+    "artifact.read",
+    "artifact.write",
+    "job.cancel",
+    "job.submit",
+    "mirror.sync",
+    "project.read",
+    "project.write",
+    "retention.manage"
+  ],
+  "required_behaviors": [
+    "exact_https_resource_metadata",
+    "signature_before_trust",
+    "exact_issuer_key_binding",
+    "exact_single_audience",
+    "expiry_not_before_issue_and_lifetime",
+    "issuer_subject_to_tenant_mapping",
+    "tenant_role_scope_ceiling",
+    "token_scope_subset_of_grant",
+    "required_scope_subset_of_token",
+    "public_user_internal_service_separation",
+    "service_token_single_use_after_all_checks",
+    "issuer_token_id_revocation",
+    "secret_and_identity_redacted_debug"
+  ],
+  "rust_tests": 17,
+  "source_locks": [
+    {
+      "path": ".gitignore",
+      "sha256": "2d7542751dc35306217f170fbf2bfd2e29f8a89f450fd7557d0974904aa17775"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "2b4847338a70ca8b749fe0a30d4167d413fd67a1ea49e1c8aa1d49cb1c881d0e"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "317b38412eaddc5c2a630ad753ac1370f38358aff619940b4537ed63f3a29c28"
+    },
+    {
+      "path": "crates/auth-middleware/Cargo.toml",
+      "sha256": "7a7fc342eba0ec5b447dc2a0b85cc99c15405d08807a41ee8ea61c41b6e5bcb2"
+    },
+    {
+      "path": "crates/auth-middleware/src/lib.rs",
+      "sha256": "3381470e4a4251a444d76e09652efc5563800dff45e18b9763c8eaaf777b658d"
+    },
+    {
+      "path": "implementation/p15/P15-01_AUTH_POLICY.md",
+      "sha256": "6c6bbb5505b00a186df3da7bfca520659f0a6684e7350c1cb9b529d2c0a5b796"
+    },
+    {
+      "path": "tools/p14/validate_cancel_cleanup.py",
+      "sha256": "b1b6f3ae67d28ac42e5cdd18d7dcc787f8f7fcfd59dcdf9f441d095d5eaf10da"
+    },
+    {
+      "path": "tools/p14/validate_retention_local_mirror.py",
+      "sha256": "c154aaa5d9762b70d18d2dcf764a4f94bf98e2d4bd94aeb3c3e541776ec15394"
+    },
+    {
+      "path": "tools/p15/validate_auth_tenant.py",
+      "sha256": "b46ced237b1cf73ae706c99750d012b2e30ec1e34d4c86b535a629de1661c28a"
+    }
+  ]
+}

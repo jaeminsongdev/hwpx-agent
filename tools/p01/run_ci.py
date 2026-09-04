@@ -99,6 +99,7 @@ def docs() -> None:
             "tools/p04",
             "tools/p10",
             "tools/p14",
+            "tools/p15",
         ]
     )
     run(
@@ -171,6 +172,19 @@ def docs() -> None:
             "discover",
             "-s",
             "tools/p14/tests",
+            "-p",
+            "test_*.py",
+        ]
+    )
+    run([sys.executable, "tools/p15/validate_auth_tenant.py"])
+    run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tools/p15/tests",
             "-p",
             "test_*.py",
         ]
