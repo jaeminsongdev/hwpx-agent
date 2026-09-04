@@ -44,6 +44,22 @@ impl Seek for StagedReader {
     }
 }
 
+/// Read/seek access to one containment-checked published or quarantined file.
+#[derive(Debug)]
+pub struct StoredArtifactReader(File);
+
+impl Read for StoredArtifactReader {
+    fn read(&mut self, buffer: &mut [u8]) -> io::Result<usize> {
+        self.0.read(buffer)
+    }
+}
+
+impl Seek for StoredArtifactReader {
+    fn seek(&mut self, position: SeekFrom) -> io::Result<u64> {
+        self.0.seek(position)
+    }
+}
+
 #[derive(Clone, Debug)]
 pub struct SecureWorkspace {
     root: PathBuf,
@@ -120,6 +136,27 @@ impl SecureWorkspace {
         Ok(StagedReader(file))
     }
 
+    /// Opens one published artifact read-only after containment and link revalidation.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the path is unsafe, absent, not a regular file or cannot be opened.
+    pub fn open_output(&self, relative: &Path) -> Result<StoredArtifactReader, WorkspaceError> {
+        self.open_stored(&self.output, relative)
+    }
+
+    /// Opens one quarantined artifact read-only after containment and link revalidation.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the path is unsafe, absent, not a regular file or cannot be opened.
+    pub fn open_quarantined(
+        &self,
+        relative: &Path,
+    ) -> Result<StoredArtifactReader, WorkspaceError> {
+        self.open_stored(&self.quarantine, relative)
+    }
+
     /// Removes one unpublished staged artifact after rechecking containment.
     ///
     /// # Errors
@@ -193,8 +230,12 @@ impl SecureWorkspace {
             }
             Err(error) => return Err(WorkspaceError::Io(error)),
         }
-        sync_parent(&destination)?;
-        fs::remove_file(&staged.path)?;
+        if sync_parent(&destination).is_err() {
+            return Err(WorkspaceError::ArtifactPublishedIncomplete);
+        }
+        if fs::remove_file(&staged.path).is_err() || sync_parent(&staged.path).is_err() {
+            return Err(WorkspaceError::ArtifactPublishedIncomplete);
+        }
         Ok(destination)
     }
 
@@ -218,6 +259,46 @@ impl SecureWorkspace {
             return Err(WorkspaceError::InvalidRelativePath);
         }
         let destination = self.resolve_for_create(&self.quarantine, quarantine_relative)?;
+        create_parent_chain(
+            &self.root,
+            destination
+                .parent()
+                .ok_or(WorkspaceError::InvalidRelativePath)?,
+        )?;
+        match fs::hard_link(&source, &destination) {
+            Ok(()) => {}
+            Err(error) if error.kind() == io::ErrorKind::AlreadyExists => {
+                return Err(WorkspaceError::ArtifactExists);
+            }
+            Err(error) => return Err(WorkspaceError::Io(error)),
+        }
+        if sync_parent(&destination).is_err() {
+            return Err(WorkspaceError::ArtifactPublishedIncomplete);
+        }
+        if fs::remove_file(&source).is_err() || sync_parent(&source).is_err() {
+            return Err(WorkspaceError::ArtifactPublishedIncomplete);
+        }
+        Ok(())
+    }
+
+    /// Restores one quarantined file to a create-new output name without an overwrite window.
+    ///
+    /// This is the exact inverse needed to roll back an uncommitted quarantine metadata change.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error for containment/link violations, an existing output or an I/O/durability
+    /// failure. It never replaces either name.
+    pub fn restore_quarantined(
+        &self,
+        quarantine_relative: &Path,
+        output_relative: &Path,
+    ) -> Result<(), WorkspaceError> {
+        let source = self.resolve_existing(&self.quarantine, quarantine_relative)?;
+        if !source.is_file() {
+            return Err(WorkspaceError::InvalidRelativePath);
+        }
+        let destination = self.resolve_for_create(&self.output, output_relative)?;
         create_parent_chain(
             &self.root,
             destination
@@ -275,6 +356,19 @@ impl SecureWorkspace {
         let canonical = path.canonicalize()?;
         ensure_under_root(&canonical, base)?;
         reject_existing_links(&self.root, path)
+    }
+
+    fn open_stored(
+        &self,
+        base: &Path,
+        relative: &Path,
+    ) -> Result<StoredArtifactReader, WorkspaceError> {
+        let path = self.resolve_existing(base, relative)?;
+        let file = File::open(path)?;
+        if !file.metadata()?.is_file() {
+            return Err(WorkspaceError::InvalidRelativePath);
+        }
+        Ok(StoredArtifactReader(file))
     }
 }
 
@@ -340,11 +434,24 @@ fn reject_existing_links(root: &Path, path: &Path) -> Result<(), WorkspaceError>
 
 fn reject_link(path: &Path) -> Result<(), WorkspaceError> {
     let metadata = fs::symlink_metadata(path)?;
-    if metadata.file_type().is_symlink() {
+    if metadata.file_type().is_symlink() || is_platform_reparse_point(&metadata) {
         Err(WorkspaceError::LinkNotAllowed)
     } else {
         Ok(())
     }
+}
+
+#[cfg(windows)]
+fn is_platform_reparse_point(metadata: &fs::Metadata) -> bool {
+    use std::os::windows::fs::MetadataExt as _;
+
+    const FILE_ATTRIBUTE_REPARSE_POINT: u32 = 0x0000_0400;
+    metadata.file_attributes() & FILE_ATTRIBUTE_REPARSE_POINT != 0
+}
+
+#[cfg(not(windows))]
+const fn is_platform_reparse_point(_metadata: &fs::Metadata) -> bool {
+    false
 }
 
 #[cfg(not(windows))]
@@ -571,5 +678,56 @@ mod tests {
                 .unwrap_or_else(|error| panic!("read replacement: {error}")),
             b"replacement"
         );
+    }
+
+    #[test]
+    fn stored_readers_and_quarantine_restore_preserve_exact_bytes() {
+        let temporary = tempfile::tempdir().unwrap_or_else(|error| panic!("tempdir: {error}"));
+        let workspace = SecureWorkspace::create(temporary.path())
+            .unwrap_or_else(|error| panic!("workspace: {error}"));
+        let relative = Path::new("artifact/ciphertext.bin");
+        let quarantined = Path::new("artifact/quarantined.bin");
+        let staged = workspace
+            .stage_bytes(Path::new("job/ciphertext.bin"), b"ciphertext")
+            .unwrap_or_else(|error| panic!("stage: {error}"));
+        workspace
+            .publish(&staged, relative)
+            .unwrap_or_else(|error| panic!("publish: {error}"));
+
+        let mut output_reader = workspace
+            .open_output(relative)
+            .unwrap_or_else(|error| panic!("open output: {error}"));
+        let mut output = Vec::new();
+        output_reader
+            .read_to_end(&mut output)
+            .unwrap_or_else(|error| panic!("read output: {error}"));
+        assert_eq!(output, b"ciphertext");
+        drop(output_reader);
+
+        workspace
+            .quarantine_published(relative, quarantined)
+            .unwrap_or_else(|error| panic!("quarantine: {error}"));
+        let mut quarantine_reader = workspace
+            .open_quarantined(quarantined)
+            .unwrap_or_else(|error| panic!("open quarantine: {error}"));
+        let mut quarantined_bytes = Vec::new();
+        quarantine_reader
+            .read_to_end(&mut quarantined_bytes)
+            .unwrap_or_else(|error| panic!("read quarantine: {error}"));
+        assert_eq!(quarantined_bytes, b"ciphertext");
+        drop(quarantine_reader);
+
+        workspace
+            .restore_quarantined(quarantined, relative)
+            .unwrap_or_else(|error| panic!("restore: {error}"));
+        assert!(workspace.open_quarantined(quarantined).is_err());
+        let mut restored_reader = workspace
+            .open_output(relative)
+            .unwrap_or_else(|error| panic!("open restored: {error}"));
+        let mut restored = Vec::new();
+        restored_reader
+            .read_to_end(&mut restored)
+            .unwrap_or_else(|error| panic!("read restored: {error}"));
+        assert_eq!(restored, b"ciphertext");
     }
 }

@@ -1,0 +1,142 @@
+{
+  "schema_version": "hwpx-agent.p14-02-artifact-service-contract/v1",
+  "contract_id": "p14-artifact-service-v1",
+  "database": {
+    "engine": "postgresql",
+    "tested_server_version": "18.4",
+    "container_image": "postgres:18.4-bookworm@sha256:7e6103cf85f88f7a0eddb3ec0b1ba8940eba098ed118ade25a729ca9daee5568"
+  },
+  "prerequisite": {
+    "version": 1,
+    "migration_name": "p14.metadata_v1",
+    "up_path": "migrations/postgres/0001_p14_metadata.up.sql",
+    "up_sha256": "7c00f744993581448acb4b6d4d8a46f1ff03d108750da0afc671c3b5e2b0a78d",
+    "down_path": "migrations/postgres/0001_p14_metadata.down.sql",
+    "down_sha256": "1c17c31ad8b19d16a64498ce9cb47cdf5c85a0cbd8450b079f8586d4960c8fa2"
+  },
+  "migration": {
+    "version": 2,
+    "migration_name": "p14.artifact_service_v1",
+    "up_path": "migrations/postgres/0002_p14_artifact_service.up.sql",
+    "up_sha256": "202753fbd6f20f181b09bd6227766dfb808811bd4e734a4a418cb5bae4eaee56",
+    "down_path": "migrations/postgres/0002_p14_artifact_service.down.sql",
+    "down_sha256": "af04b1198d7c6f153cfc576036807bd1749746fcc17f480cd6d2d29d6a49f5ae",
+    "rollback_gate_setting": "hwpx_agent.allow_destructive_rollback=on"
+  },
+  "smoke_fixture": {
+    "path": "tools/p14/fixtures/p14_artifact_service_smoke.sql",
+    "sha256": "26ed06c05035af1086d4657ecaa758197916db062e4f4e609abcce5aa5e2e59c",
+    "assertions_per_run": 22,
+    "pass_marker": "P14_ARTIFACT_SERVICE_SMOKE_PASS assertions=22"
+  },
+  "required_artifact_columns": [
+    "service_metadata_version",
+    "filename",
+    "object_key",
+    "encryption_algorithm",
+    "encryption_nonce",
+    "aad_sha256",
+    "ciphertext_sha256",
+    "validation_state",
+    "scanner_engine_ref",
+    "scanner_signature_version",
+    "authorization_generation",
+    "legacy_storage_state",
+    "legacy_quarantine_reason_code",
+    "legacy_verified_at"
+  ],
+  "required_tables": [
+    "artifact_acl"
+  ],
+  "required_functions": [
+    "protect_artifact_service_identity",
+    "protect_artifact_acl_identity",
+    "bump_artifact_acl_generation",
+    "require_artifact_manager"
+  ],
+  "required_triggers": [
+    "artifacts_protect_service_identity",
+    "artifact_acl_protect_identity",
+    "artifact_acl_touch_updated_at",
+    "artifact_acl_bump_generation",
+    "artifact_acl_manager_required",
+    "artifact_service_manager_required"
+  ],
+  "tenant_scoped_tables": [
+    "artifact_acl"
+  ],
+  "invariants": {
+    "content_addressed_object_key_bound": true,
+    "aes_256_gcm_metadata_complete": true,
+    "legacy_artifact_fail_closed": true,
+    "scanner_evidence_complete": true,
+    "artifact_acl_forced_rls": true,
+    "cross_tenant_artifact_denial": true,
+    "cross_tenant_acl_denial": true,
+    "authorization_generation_on_acl_change": true,
+    "authorization_generation_on_quarantine_change": true,
+    "final_manager_required": true,
+    "encryption_identity_immutable": true,
+    "rollback_preserves_version_1": true,
+    "legacy_artifact_rollback_restores_v1": true,
+    "transaction_local_tenant_context": true,
+    "migration_digest_supplied_by_runner": true,
+    "database_extensions_required": false,
+    "public_privileges_revoked": true
+  },
+  "source_locks": [
+    {
+      "path": "docs/12_implementation_guides/09_project_jobs_storage.md",
+      "sha256": "946cac58f4984bb9da8055e4decc35b6259eb742270144c0f68d123bb4914a96"
+    },
+    {
+      "path": "docs/06_mcp_api/06_jobs_artifacts.md",
+      "sha256": "1aa997edfdebfd1605473f07c9d246a4b30f419b131dd4a9b7222cd7d33c76da"
+    },
+    {
+      "path": "docs/06_mcp_api/05_auth_permissions.md",
+      "sha256": "6f227a4cb42f0a4b27a9d28cdd055606eb51f8adb2e589de2f02bf1585ca6b38"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "a0fd14dc78a76ef8c8687a104f49dc9d55093deda21bac250149f0b15c935e0e"
+    },
+    {
+      "path": "crates/artifact-service/Cargo.toml",
+      "sha256": "13e9eaf8ab4d754f91673190b7dbf53bb968b000c8d8d33ba5d915c4d9cf72d1"
+    },
+    {
+      "path": "crates/foundation/src/workdir.rs",
+      "sha256": "6d048513cff41bc5340b9d1a0d40d04164ecac0d40295755595597d2faeb6969"
+    },
+    {
+      "path": "crates/artifact-service/src/crypto.rs",
+      "sha256": "1f2e229e921d17cf8b5163ec0ee282b3f51293b3ec0617ae378b81aa87838cca"
+    },
+    {
+      "path": "crates/artifact-service/src/service.rs",
+      "sha256": "d69af7f2a6e3411f6b367252c0ecddca8a9b7dd4bdf690ea459f987aaadf8c54"
+    },
+    {
+      "path": "crates/artifact-service/src/signed_url.rs",
+      "sha256": "de89897f490271ff595602bd7501fc8dd562f3278f8a4e76737716b895ced7a9"
+    },
+    {
+      "path": "crates/artifact-service/src/store.rs",
+      "sha256": "acca554ea84a4068bfa3b2aa2c29f2ce64c15a89956f1ef48cd25b7fffc739d5"
+    },
+    {
+      "path": "crates/artifact-service/src/types.rs",
+      "sha256": "03815656b6cf8828a6877987ca8259dd2974161434ec18406bf227930475cb1e"
+    }
+  ],
+  "scope": {
+    "task": "P14-02",
+    "current_pc_hancom_invoked": false,
+    "user_documents_scanned": false,
+    "production_object_store_qualified": false,
+    "production_kms_qualified": false,
+    "production_malware_scanner_qualified": false,
+    "later_p14_tasks_qualified": false
+  }
+}

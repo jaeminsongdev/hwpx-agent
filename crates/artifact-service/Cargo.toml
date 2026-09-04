@@ -1,0 +1,27 @@
+[package]
+name = "artifact-service"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+aes-gcm.workspace = true
+base64.workspace = true
+getrandom.workspace = true
+hex.workspace = true
+hmac.workspace = true
+hwpx-agent-foundation = { version = "0.1.0", path = "../foundation" }
+serde.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+unicode-normalization.workspace = true
+uuid.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+tempfile.workspace = true
+
+[lints]
+workspace = true

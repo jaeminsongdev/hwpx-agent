@@ -154,6 +154,7 @@ def docs() -> None:
         ]
     )
     run([sys.executable, "tools/p14/validate_metadata_migrations.py"])
+    run([sys.executable, "tools/p14/validate_artifact_service_migration.py"])
     run(
         [
             sys.executable,

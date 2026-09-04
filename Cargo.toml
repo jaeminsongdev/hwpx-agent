@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
 members = [
+    "crates/artifact-service",
     "crates/domain-ir",
     "crates/foundation",
     "crates/hwpx-package",
@@ -17,7 +18,11 @@ license = "Apache-2.0"
 rust-version = "1.96"
 
 [workspace.dependencies]
+aes-gcm = { version = "=0.11.1", features = ["zeroize"] }
+base64 = { version = "=0.23.1", default-features = false, features = ["std"] }
+getrandom = { version = "=0.4.3", features = ["std"] }
 hex = "=0.4.3"
+hmac = { version = "=0.13.0", features = ["zeroize"] }
 prost = "=0.14.4"
 prost-build = "=0.14.4"
 prost-types = "=0.14.4"
@@ -32,6 +37,7 @@ thiserror = "=2.0.20"
 unicode-casefold = "=0.2.0"
 unicode-normalization = "=0.1.25"
 uuid = { version = "=1.26.0", features = ["serde", "v4"] }
+zeroize = "=1.9.0"
 zip = { version = "=8.6.0", default-features = false, features = ["deflate-flate2-zlib-rs"] }
 
 [workspace.lints.rust]
