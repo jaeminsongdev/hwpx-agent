@@ -1,14 +1,15 @@
 # P14-07 idempotency/reconciliation core checkpoint
 
 - Date: 2026-09-04
-- Rust implementation commit: `0f4128c73c55e14fac2c2e84dc5077fa2010119c`
+- Rust implementation commit: `fbcdcef946db4264195cfaa675570f3453ba8eb0`
 - Decision: `rust_core_pass_postgres_and_trusted_oracle_pending`
 - Review: `STRICT / max`; scoped blocker/major after correction `0/0`
 
 ## Delivered
 
-- A new `idempotency-service` Rust crate with an exact tenant/project/job/key request binding,
-  immutable request/manifest/source/effect digests and a finite record lifetime.
+- A new `idempotency-service` Rust crate with an exact tenant/project/branch/job/key request binding,
+  immutable request/manifest/source/effect/transaction digests, expected revision generation and a
+  finite record lifetime.
 - Atomic claim/replay semantics with one winner under 16 concurrent claimers and side-effect-free
   rejection of request or retry-policy drift.
 - A bounded deterministic retry policy: at most 10 attempts, one-day maximum delay and seven-day
@@ -16,8 +17,8 @@
 - Exact attempt/fence checks, live-lease and record-TTL bounds, terminal immutability, and
   cross-tenant/cross-subject denial.
 - `OutcomeUnknown` freezes a second effect until reconciliation. A committed observation must match
-  the expected effect and parent; a no-effect observation must match source identity and unchanged
-  expected head before a delayed retry is scheduled.
+  the expected effect, transaction receipt and previous head revision/generation; a no-effect
+  observation must match source identity and the unchanged exact head before a delayed retry.
 - A digest-pinned scope contract, strict negative validator, CI docs-lane integration and historical
   P14-06 Cargo lock supersession that still proves the exact P14-06 Git blobs.
 

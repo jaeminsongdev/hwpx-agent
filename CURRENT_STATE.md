@@ -102,7 +102,7 @@
 - P14-01~05는 각 exact clean source commit, digest-bound PostgreSQL 18.4 receipt, Rust/SQL negative tests, non-security CI, offline Linux와 current security evidence에 따라 scoped PASS다.
 - P14-04의 이전 `pnpm audit` timeout 조건은 commit `3876679`의 현재 bounded security run에서 첫 timeout cleanup 후 동일 2차 시도가 성공해 해소됐다.
 - P14-06은 core commit `205f4ac`에서 exact worker selection, bounded heartbeat/lease, late-worker/fence rejection과 qualified expiry를 Rust 및 disposable PostgreSQL로 증명했다. 다만 현재 security lane의 `pnpm audit`가 외부 advisory POST timeout 3회로 실패해 roadmap checkbox는 아직 열려 있다.
-- P14-07 Rust core commit `0f4128c`는 concurrent single claim, bounded retry, unknown-outcome freeze, exact effect/head evidence binding, stale fence와 tenant/subject denial을 10개 Rust 테스트로 증명했다. PostgreSQL v7, 신뢰 가능한 revision/artifact oracle 및 job/scheduler 원자 통합이 없으므로 P14-07 checkbox는 열려 있다. P14-08 cancel/cleanup과 P14-09 retention/mirror도 미구현이다.
+- P14-07 Rust core commit `fbcdcef`는 concurrent single claim, bounded retry, unknown-outcome freeze, exact branch/head-generation/effect/transaction evidence binding, stale fence와 tenant/subject denial을 10개 Rust 테스트로 증명했다. PostgreSQL v7, 신뢰 가능한 revision/artifact oracle 및 job/scheduler 원자 통합이 없으므로 P14-07 checkbox는 열려 있다. P14-08 cancel/cleanup과 P14-09 retention/mirror도 미구현이다.
 
 ## 다음 작업
 

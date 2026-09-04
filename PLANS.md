@@ -62,7 +62,7 @@ save, render, cross-version or production proof.
 | P-0064 | P14-04 history/checkpoints | `pass_scoped_local_disposable_postgres_and_in_memory_service` | commit `59e26b6`; current security revalidation closed at `3876679`; `implementation/p14/P14-04_REPORT.md` |
 | P-0065 | P14-05 job state machine | `pass_scoped_local_disposable_postgres_and_in_memory_service` | commit `3876679`; exact PostgreSQL/CI/Linux/security evidence; `implementation/p14/P14-05_REPORT.md` |
 | P-0066 | P14-06 worker lease/fencing | `pending_security_audit_response` | core commit `205f4ac`; all non-security evidence pass; `implementation/p14/P14-06_REPORT.md` |
-| P-0067 | P14-07 idempotency/reconciliation | `rust_core_pass_postgres_and_trusted_oracle_pending` | core commit `0f4128c`; `implementation/p14/P14-07_CORE_REPORT.md` |
+| P-0067 | P14-07 idempotency/reconciliation | `rust_core_pass_postgres_and_trusted_oracle_pending` | core commit `fbcdcef`; `implementation/p14/P14-07_CORE_REPORT.md` |
 
 ## Active evidence summary
 
@@ -86,7 +86,7 @@ save, render, cross-version or production proof.
   P14 tests are 76/76, four non-security CI lanes and offline Linux pass. The current security run
   passes every local check but `pnpm audit`; the NPM advisory POST timed out three times and P14-06
   remains unchecked until an actual successful response. See `implementation/p14/P14-06_REPORT.md`.
-- P14-07 Rust core commit `0f4128c` passes 10/10 unit tests, P14 82/82, workspace format/Clippy/tests
+- P14-07 Rust core commit `fbcdcef` passes 10/10 unit tests, P14 82/82, workspace format/Clippy/tests
   and four non-security CI lanes. PostgreSQL v7, trusted revision/artifact reconciliation and atomic
   job/scheduler integration remain open; see `implementation/p14/P14-07_CORE_REPORT.md`.
 - Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with
