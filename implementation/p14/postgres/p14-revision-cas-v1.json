@@ -1,0 +1,118 @@
+{
+  "schema_version": "hwpx-agent.p14-03-revision-cas-contract/v1",
+  "contract_id": "p14-revision-cas-v1",
+  "database": {
+    "engine": "PostgreSQL",
+    "server_version": "18.4",
+    "container_image": "postgres:18.4-bookworm@sha256:7e6103cf85f88f7a0eddb3ec0b1ba8940eba098ed118ade25a729ca9daee5568"
+  },
+  "prerequisites": [
+    {
+      "version": 1,
+      "name": "p14.metadata_v1",
+      "up_path": "migrations/postgres/0001_p14_metadata.up.sql",
+      "up_sha256": "7c00f744993581448acb4b6d4d8a46f1ff03d108750da0afc671c3b5e2b0a78d",
+      "down_path": "migrations/postgres/0001_p14_metadata.down.sql",
+      "down_sha256": "1c17c31ad8b19d16a64498ce9cb47cdf5c85a0cbd8450b079f8586d4960c8fa2"
+    },
+    {
+      "version": 2,
+      "name": "p14.artifact_service_v1",
+      "up_path": "migrations/postgres/0002_p14_artifact_service.up.sql",
+      "up_sha256": "202753fbd6f20f181b09bd6227766dfb808811bd4e734a4a418cb5bae4eaee56",
+      "down_path": "migrations/postgres/0002_p14_artifact_service.down.sql",
+      "down_sha256": "af04b1198d7c6f153cfc576036807bd1749746fcc17f480cd6d2d29d6a49f5ae"
+    }
+  ],
+  "migration": {
+    "version": 3,
+    "name": "p14.revision_cas_v1",
+    "up_path": "migrations/postgres/0003_p14_revision_cas.up.sql",
+    "up_sha256": "beeac1f22fde0eb3474d40acc14838c1e9676a74b68c5b6f9608713ba6e6e53a",
+    "down_path": "migrations/postgres/0003_p14_revision_cas.down.sql",
+    "down_sha256": "cf99f107ebca0be77a18c23b83e937dff36e39a6610c6fa3b1fff9964d35cabb"
+  },
+  "smoke_fixture": {
+    "path": "tools/p14/fixtures/p14_revision_cas_smoke.sql",
+    "sha256": "fe73afa47dc88f70d55f6b7f7889b7ce64c7f7bd8ce1c827ff76989d66f68dfb",
+    "assertions_per_run": 20,
+    "pass_marker": "P14_REVISION_CAS_SMOKE_PASS assertions=20"
+  },
+  "required_columns": [
+    "projects.head_generation",
+    "branches.head_generation"
+  ],
+  "required_tables": [
+    "revision_graph_seals",
+    "revision_commit_receipts"
+  ],
+  "required_functions": [
+    "current_subject_sha256",
+    "guard_revision_parent_insert",
+    "commit_revision_cas"
+  ],
+  "required_triggers": [
+    "revision_parents_guard_insert",
+    "revision_graph_seals_immutable",
+    "revision_commit_receipts_immutable"
+  ],
+  "tenant_scoped_tables": [
+    "revision_graph_seals",
+    "revision_commit_receipts"
+  ],
+  "invariants": {
+    "immutable_sealed_dag": true,
+    "expected_head_generation_cas": true,
+    "stale_conflict_side_effect_free": true,
+    "concurrent_single_winner": true,
+    "default_project_branch_atomic_mirror": true,
+    "independent_branch_heads": true,
+    "cross_tenant_revision_denial": true,
+    "project_editor_or_owner_required": true,
+    "available_verified_artifacts_required": true,
+    "verified_revision_only": true,
+    "legacy_heads_fail_closed": true,
+    "transaction_local_request_context": true,
+    "guarded_destructive_rollback": true,
+    "migration_digest_supplied_by_runner": true,
+    "database_extensions_required": false,
+    "public_privileges_revoked": true
+  },
+  "source_locks": [
+    {
+      "path": "docs/02_architecture/05_state_revision_transactions.md",
+      "sha256": "0fe0b6a42b3c13a887370c02b447c248419b4fa2ed64b30ad3b8731c988ed21f"
+    },
+    {
+      "path": "docs/12_implementation_guides/09_project_jobs_storage.md",
+      "sha256": "946cac58f4984bb9da8055e4decc35b6259eb742270144c0f68d123bb4914a96"
+    },
+    {
+      "path": "crates/revision-service/Cargo.toml",
+      "sha256": "d3a96043b58c145dc1f278267088fb81eb3f0976f46d971def44a3faec72ac3d"
+    },
+    {
+      "path": "crates/revision-service/src/lib.rs",
+      "sha256": "9e04c037e228646adfa9300b19992aaa5dda7f0be9b9521b1913c297db535850"
+    },
+    {
+      "path": "crates/revision-service/src/service.rs",
+      "sha256": "3a032ba0ce4d6fd72f58f8cdf8fc72a12ef169d8d8be1e2e85192c3631446519"
+    },
+    {
+      "path": "crates/revision-service/src/store.rs",
+      "sha256": "d880275ce42094f024ec34c17b8ba36abcdbedd7919d4ead757d188bd09c31e3"
+    },
+    {
+      "path": "crates/revision-service/src/types.rs",
+      "sha256": "bea6d44a4685dd64211788f0aa2a1d043e8a738f3d866b37f0cd1f92e6fe19da"
+    }
+  ],
+  "scope": {
+    "current_pc_local_development_only": true,
+    "production_database_qualified": false,
+    "production_object_store_qualified": false,
+    "p14_phase_complete": false,
+    "user_documents_used": false
+  }
+}

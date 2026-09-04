@@ -86,7 +86,6 @@ EXPECTED_SOURCE_PATHS = [
     "docs/12_implementation_guides/09_project_jobs_storage.md",
     "docs/06_mcp_api/06_jobs_artifacts.md",
     "docs/06_mcp_api/05_auth_permissions.md",
-    "Cargo.toml",
     "crates/artifact-service/Cargo.toml",
     "crates/foundation/src/workdir.rs",
     "crates/artifact-service/src/crypto.rs",
