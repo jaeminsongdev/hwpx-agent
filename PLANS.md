@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-04
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P14 / P14-06 security closure and P14-07 durable integration`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P14 / P14-08 safe cancellation and cleanup`
 - Active reasoning effort: `max`
 - Immediate UI dependency: none live; P05-07 v2 attempts 10 through 16 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `모두 허용`
 
@@ -37,7 +37,7 @@ save, render, cross-version or production proof.
 | P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
 | P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
 | P13 | `blocked_by_P10` | validation/oracle/render |
-| P14 | `in_progress` | P14-01~05 pass; P14-06 security response pending; P14-07 Rust core pass, PostgreSQL/trusted oracle pending |
+| P14 | `in_progress` | P14-01~07 scoped pass; P14-08 safe cancellation/cleanup next; P14-09 open |
 | P15 | `blocked_by_P14` | remote MCP control plane |
 | P16 | `blocked_by_P15` | ChatGPT Web plugin/widget |
 | P17 | `blocked_by_P15` | Codex remote/local companion |
@@ -61,13 +61,13 @@ save, render, cross-version or production proof.
 | P-0063 | P14-03 revision CAS | `pass_scoped_local_disposable_postgres_and_in_memory_service` | commit `f225dbc`; `implementation/p14/P14-03_REPORT.md` |
 | P-0064 | P14-04 history/checkpoints | `pass_scoped_local_disposable_postgres_and_in_memory_service` | commit `59e26b6`; current security revalidation closed at `3876679`; `implementation/p14/P14-04_REPORT.md` |
 | P-0065 | P14-05 job state machine | `pass_scoped_local_disposable_postgres_and_in_memory_service` | commit `3876679`; exact PostgreSQL/CI/Linux/security evidence; `implementation/p14/P14-05_REPORT.md` |
-| P-0066 | P14-06 worker lease/fencing | `pending_security_audit_response` | core commit `205f4ac`; all non-security evidence pass; `implementation/p14/P14-06_REPORT.md` |
-| P-0067 | P14-07 idempotency/reconciliation | `rust_core_pass_postgres_and_trusted_oracle_pending` | core commit `fbcdcef`; `implementation/p14/P14-07_CORE_REPORT.md` |
+| P-0066 | P14-06 worker lease/fencing | `pass_scoped_local_disposable_postgres_and_in_memory_scheduler` | core commit `205f4ac`; closing security run `9750c1226aa945ce98ad692b749f198e`; `implementation/p14/P14-06_REPORT.md` |
+| P-0067 | P14-07 idempotency/reconciliation | `pass_scoped_local_disposable_postgres_and_in_memory_reference` | durable commit `d84a442`; `implementation/p14/P14-07_REPORT.md` |
 
 ## Active evidence summary
 
 - P05-07 v2 fixture commit `9096502` independently reads as two linear sections and one break.
-  Attempts 10 through 15 timed out at `open_input` with `SECTION_COLUMNS_READBACK_TIMEOUT`; the
+  Attempts 10 through 16 timed out at `open_input` with `SECTION_COLUMNS_READBACK_TIMEOUT`; the
   input remained unchanged, no output/PDF was created, owned `Hwp.exe` processes were cleaned and
   residual count is zero. Attempt 10 trace bytes/hash: `1690`/
   `f9644cb119944baaf029ae5b142dee55bd8d68c91892227abccfaa412fc92764`; attempts 11 through 14 each:
@@ -83,13 +83,15 @@ save, render, cross-version or production proof.
   `P14-05_REPORT.md`; each is digest-bound to its exact local disposable PostgreSQL/Rust evidence.
 - P14-06 core commit `205f4ac` has a clean digest-bound PostgreSQL 18.4 receipt: 20 assertions
   twice, guarded rollback retaining v5, exact profile/capability selection, bounded heartbeats,
-  late-worker/fence rejection and qualified expiry. Rust job/scheduler tests are 13/13 + 9/9,
-  P14 tests are 76/76, four non-security CI lanes and offline Linux pass. The current security run
-  passes every local check but `pnpm audit`; the NPM advisory POST timed out three times and P14-06
-  remains unchecked until an actual successful response. See `implementation/p14/P14-06_REPORT.md`.
-- P14-07 Rust core commit `fbcdcef` passes 10/10 unit tests, P14 82/82, workspace format/Clippy/tests
-  and four non-security CI lanes. PostgreSQL v7, trusted revision/artifact reconciliation and atomic
-  job/scheduler integration remain open; see `implementation/p14/P14-07_CORE_REPORT.md`.
+  late-worker/fence rejection and qualified expiry. Closing security run
+  `9750c1226aa945ce98ad692b749f198e` passes every check including an actual first-attempt
+  `pnpm audit` response; see `implementation/p14/P14-06_REPORT.md`.
+- P14-07 durable commit `d84a442` has a clean digest-bound PostgreSQL 18.4 receipt: 28 assertions
+  in three transactions, 16-client `1 new + 15 replay`, exactly one commit/retry race winner,
+  stale/late/unbound commit rejection, v6-preserving rollback and reapply. P14 tests are 101/101;
+  the exact commit passes four non-security lanes. The same-content security run immediately before
+  commit passes all checks; two later exact-commit probes preserve external `pnpm audit` timeout as
+  diagnostics rather than PASS. See `implementation/p14/P14-07_REPORT.md`.
 - Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with
   cleanup and succeeded on attempt 2, all other checks passed, and the SBOM contains 675 components.
 - A detached exact-commit worktree passed all four non-security lanes after the four digest-pinned,
@@ -106,9 +108,8 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next actions
 
-1. Non-UI: implement P14-07 PostgreSQL v7, trusted revision/artifact reconciliation and atomic
-   job/scheduler retry integration. Rerun the unchanged P14-06 security lane only when the NPM
-   advisory API responds; never check it from timeout evidence.
+1. Non-UI: implement P14-08 safe cancellation, orphan artifact and temporary-workspace cleanup,
+   including interruption/crash fault injection and exact no-source-mutation evidence.
 2. UI-dependent: on a new explicit user request, rerun P05-07 once and require
    save/reopen/PDF/render evidence before P05-08, P05-09 and the P05 Gate.
 3. Keep P10-05/06 and P10-08 production claims open until their external controls exist.

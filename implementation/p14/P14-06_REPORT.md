@@ -2,7 +2,7 @@
 
 - Date: 2026-09-04
 - Core implementation commit: `205f4ac`
-- Decision: `pending_security_audit_response`
+- Decision: `pass_scoped_local_disposable_postgres_and_in_memory_scheduler`
 - Review: `STRICT / max`, blocker/major/minor after correction `0/0/0`
 
 ## Delivered
@@ -75,17 +75,18 @@ used `--network none`, persisted no secret and removed its labeled container.
 | Gated rollback retaining v5 / later-version refusal | pass / pass |
 | Exact-core-commit `linux-core`, `windows-worker`, `widget`, `docs` | pass, 4/4 |
 | Offline Linux Clippy/tests | pass, Rust 1.96.0, network off, source/registry read-only |
-| Secret, Cargo, license, .NET and SBOM checks | pass in current security attempt |
-| `pnpm audit` | pending; npm advisory POST timed out three bounded attempts |
+| Secret, Cargo, license, .NET and SBOM checks | pass |
+| `pnpm audit` | pass, actual advisory response on first bounded attempt |
 | Residual P14 containers / `Hwp.exe` | pass, 0 / 0 |
 
-Security report
-`implementation/p01/evidence/security-runs/c9f057196cee45caa48128b3d861f2ba/report.json`
-(bytes `1666`, SHA-256
-`5b9f11428fa3ab93727e687ada8a5cdc30f9835ebda0adfc423c060cfbd6ba1c`)
-records the current failed security attempt. The NPM registry root returned `HTTP 200`, but the
-advisory bulk POST and all three bounded `pnpm audit` attempts returned no response before timeout;
-each process tree cleanup succeeded. This report is diagnostic evidence, not a PASS receipt.
+The closing security report is
+`implementation/p01/evidence/security-runs/9750c1226aa945ce98ad692b749f198e/report.json`
+(bytes `1294`, SHA-256
+`4fd40486d40619492b1a726fd6a35bdadad33f22cc0dd25e509affc51fcd7d70`).
+Every check returned exit code zero, `pnpm audit` received an actual advisory response on its first
+bounded attempt, the secret scan found zero findings and the SBOM contains 679 components. This
+successful current-source audit supersedes the earlier diagnostic-only timeout report; the failed
+report remains preserved rather than being rewritten or promoted.
 
 The offline Linux audit used local image
 `hwpx-agent-rust-1.96-clippy:p03-08@sha256:bfda7f1ddbf0a192699d4b02dc3dbfefabe5eb7c0dd5527ba31acdaf0e4ab37f`.
@@ -95,15 +96,11 @@ tests passed, and no labeled container remained.
 
 ## Decision and limits
 
-P14-06 is not checked while `pnpm audit` lacks an actual successful response. All implementation,
-PostgreSQL, cross-platform and other security evidence is complete, but the task remains
-`pending_security_audit_response` rather than being promoted from partial evidence.
-
-Once that unchanged audit succeeds, the scoped decision may become PASS for the local in-memory
-scheduler and disposable PostgreSQL behavior proven above. It still will not claim production or
-multi-host deployment, retry/requeue/takeover, unknown-outcome reconciliation, cancellation/cleanup
-or retention/mirror behavior. Those belong to P14-07 through P14-09.
+The unchanged audit did receive an actual successful response, so P14-06 is checked for the local
+in-memory scheduler and disposable PostgreSQL behavior proven above. It does not claim production
+or multi-host deployment, retry/requeue/takeover, unknown-outcome reconciliation,
+cancellation/cleanup or retention/mirror behavior. Those belong to P14-07 through P14-09.
 
 No Hangul process, user document, original ZIP, registry/system setting or production database was
-used or changed by P14-06. P14 remains open. After security closure, continue with P14-07 at reasoning
-effort `max`.
+used or changed by P14-06. P14 remains open. P14-07 is recorded separately; continue with P14-08
+at reasoning effort `max`.

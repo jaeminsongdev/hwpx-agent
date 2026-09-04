@@ -42,8 +42,8 @@ Projects·Revisions·Jobs·Artifacts를 문서상 계획이 아니라 **재현 �
 - [x] `P14-03` 산출물 `revision service` 존재, 검증: race/conflict tests.
 - [x] `P14-04` 산출물 `history API` 존재, 검증: DAG/query tests.
 - [x] `P14-05` 산출물 `job service` 존재, 검증: invalid transition tests.
-- [ ] `P14-06` 산출물 `scheduler` 존재, 검증: late worker commit rejection.
-- [ ] `P14-07` 산출물 `idempotency module` 존재, 검증: duplicate side-effect tests.
+- [x] `P14-06` 산출물 `scheduler` 존재, 검증: late worker commit rejection.
+- [x] `P14-07` 산출물 `idempotency module` 존재, 검증: duplicate side-effect tests.
 - [ ] `P14-08` 산출물 `cleanup worker` 존재, 검증: fault injection.
 - [ ] `P14-09` 산출물 `retention/sync service` 존재, 검증: delete and conflict tests.
 - [ ] 새 capability/contract/schema에 migration과 negative test가 있다.

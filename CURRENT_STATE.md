@@ -9,7 +9,7 @@
 
 - 상태: `P05_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐으며, P14-01~05 metadata/artifact/revision/history/job service는 local in-memory 및 disposable PostgreSQL 범위의 각 Gate를 통과했다. P14-06 worker lease/fencing의 non-security evidence는 완료됐고, P14-07 idempotency/reconciliation Rust core는 완료됐지만 PostgreSQL·신뢰 oracle 통합은 아직 열려 있다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐으며, P14-01~07 metadata/artifact/revision/history/job/scheduler/idempotency service는 local in-memory 및 disposable PostgreSQL 범위의 각 카드 검증을 통과했다. P14-08 cancel/cleanup과 P14-09 retention/mirror는 미구현이다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -101,16 +101,16 @@
 
 - P14-01~05는 각 exact clean source commit, digest-bound PostgreSQL 18.4 receipt, Rust/SQL negative tests, non-security CI, offline Linux와 current security evidence에 따라 scoped PASS다.
 - P14-04의 이전 `pnpm audit` timeout 조건은 commit `3876679`의 현재 bounded security run에서 첫 timeout cleanup 후 동일 2차 시도가 성공해 해소됐다.
-- P14-06은 core commit `205f4ac`에서 exact worker selection, bounded heartbeat/lease, late-worker/fence rejection과 qualified expiry를 Rust 및 disposable PostgreSQL로 증명했다. 다만 현재 security lane의 `pnpm audit`가 외부 advisory POST timeout 3회로 실패해 roadmap checkbox는 아직 열려 있다.
-- P14-07 Rust core commit `fbcdcef`는 concurrent single claim, bounded retry, unknown-outcome freeze, exact branch/head-generation/effect/transaction evidence binding, stale fence와 tenant/subject denial을 10개 Rust 테스트로 증명했다. PostgreSQL v7, 신뢰 가능한 revision/artifact oracle 및 job/scheduler 원자 통합이 없으므로 P14-07 checkbox는 열려 있다. P14-08 cancel/cleanup과 P14-09 retention/mirror도 미구현이다.
+- P14-06은 core commit `205f4ac`에서 exact worker selection, bounded heartbeat/lease, late-worker/fence rejection과 qualified expiry를 Rust 및 disposable PostgreSQL로 증명했고, 후속 보안 run `9750c1226aa945ce98ad692b749f198e`가 모든 검사를 통과해 scoped PASS다.
+- P14-07은 core commit `fbcdcef`와 durable commit `d84a442`에서 bounded retry, unknown-outcome freeze, exact revision/artifact oracle, unpredictable attempt capability와 atomic job/revision fencing을 구현했다. clean PostgreSQL 18.4에서 SQL 28/28×3, 동시 claim `1 new + 15 replay`, commit/retry 정확히 한 승자, rollback/reapply를 통과해 scoped PASS다. P14-08 cancel/cleanup과 P14-09 retention/mirror는 미구현이다.
 
 ## 다음 작업
 
-비-UI 순서는 P14-07 PostgreSQL v7과 신뢰 reconciliation/job retry 통합을 구현하는 것이며 추론수준은 `max`다. P14-06 security lane은 NPM advisory API가 응답할 때 변경 없이 다시 실행한다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
+비-UI 순서는 P14-08 safe cancellation, orphan artifact와 temp cleanup worker 및 fault injection을 구현하는 것이며 추론수준은 `max`다. P05-07 actual render는 사용자가 즉시 모든 `모두 허용`을 누를 수 있다고 명시한 새 실행에서만 재시도하고, save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
 
 ## 현재 blocker
 
-- P14-06 구현 blocker는 없고, formal closure만 NPM advisory API 응답을 기다린다.
+- NPM advisory endpoint가 간헐적으로 timeout되지만 성공한 실제 보안 응답은 별도 보존됐고, 이는 P14-08 구현 blocker가 아니다.
 - P05-07 actual render는 한글 2020의 수동 `모두 허용` 타이밍에 의존한다. v2 attempt 16도 `open_input`에서 안전하게 timeout됐고 잔류 프로세스는 0이다.
 - P10-05/06과 P10-08 production 범위는 외부 보안 모듈·격리 환경이 제공되기 전까지 unqualified다.
 
