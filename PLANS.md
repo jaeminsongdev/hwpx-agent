@@ -74,7 +74,7 @@ save, render, cross-version or production proof.
 | P-0076 | P15-06 public error mapping | `pass_scoped_current_pc_local_public_error_reference` | commit `f36a07e`; 14-code digest-pinned catalog, Rust 45/45 and P15 57/57, final exact independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-06_REPORT.md` |
 | P-0077 | P15-07 rate limit/quotas | `pass_scoped_current_pc_hancom_2020_local_quota_reference` | commits `91e84f4` + `e15921a`; Rust 53/53 and P15 65/65, final exact current/independent CI each 5/5, security and offline Linux pass; `implementation/p15/P15-07_REPORT.md` |
 | P-0078 | P15-08 bounded telemetry/dashboards | `pass_scoped_current_pc_hancom_2020_local_telemetry_reference` | commit `d492dc8`; Rust 61/61 and P15 73/73, exact current/independent CI each 5/5, security and offline Linux pass; `implementation/p15/P15-08_REPORT.md` |
-| P-0079 | P15-09 Inspector/staging | `pass_scoped_current_pc_hancom_2020_local_inspector_staging` | commits `3ea8e6b` + `81c1ef1`; Inspector 18/18 tools and 8/8 negatives, exact current/independent CI each 5/5, security and offline Linux 64/64 pass; `implementation/p15/P15-09_REPORT.md` |
+| P-0079 | P15-09 Inspector/staging | `pass_scoped_current_pc_hancom_2020_local_inspector_staging` | runtime commits `3ea8e6b` + `81c1ef1`, closure-contract repair `7ea2f84`; Inspector 18/18 tools and 8/8 negatives, runtime current/independent CI each 5/5, security and offline Linux 64/64 pass; `implementation/p15/P15-09_REPORT.md` |
 
 ## Active evidence summary
 
@@ -171,12 +171,14 @@ save, render, cross-version or production proof.
   both security runs and network-disabled read-only Linux validation pass. This qualifies only the
   current-PC Hangul 2020 local telemetry reference; hosted exporters, production SLOs and staging
   HTTPS remain unverified. See `implementation/p15/P15-08_REPORT.md`.
-- P15-09 foundational commit `3ea8e6b` and repaired exact source commit `81c1ef1` expose the same
+- P15-09 foundational commit `3ea8e6b`, runtime/security repair `81c1ef1` and closure-contract repair
+  `7ea2f84` expose the same
   control plane through loopback-only ephemeral HTTPS and the official SDK transport. A clean pinned
   Inspector run discovers exact schemas and passes all 18 tool calls plus 8 fail-closed network/auth
   probes; Node and the persistent Rust driver shut down before the secret-free receipt is published.
-  P15 Python 84/84, exact current and independent CI 5/5 each, both security runs and network-disabled
-  Linux Rust 64/64 plus Clippy pass. This qualifies only current-PC Hangul 2020 local staging; public
+  P15 Python 84/84 at the closure repair, runtime current and independent CI 5/5 each, both security
+  runs and network-disabled Linux Rust 64/64 plus Clippy pass. This qualifies only current-PC Hangul
+  2020 local staging; public
   deployment, real backend execution, ChatGPT/Codex attachment and 2022/2024 remain unverified. See
   `implementation/p15/P15-09_REPORT.md`.
 - Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with

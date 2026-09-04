@@ -2,7 +2,8 @@
 
 - Generated: 2026-09-05
 - Foundational implementation commit: `3ea8e6b664f0d83cd065fd8c23d5ec3ba7b68a18`
-- Audited implementation source commit: `81c1ef14f210e78df5bd6658aa6922ce528f4250`
+- Runtime/security repair commit: `81c1ef14f210e78df5bd6658aa6922ce528f4250`
+- Audited exact acceptance and closure-contract repair commit: `7ea2f84c244fe5bbd7926ba3f176dc5acafcf624`
 - Audit mode: `STRICT / max`
 - Decision: `pass_scoped_current_pc_hancom_2020_local_inspector_staging`
 
@@ -15,15 +16,15 @@ artifact and external side effects.
 
 ## Qualified acceptance receipt
 
-The clean exact-commit run published
-`implementation/p15/evidence/staging-runs/744eed6f306a451a99df2ddcc174a42d/receipt.json` only after
+The final clean exact-commit run published
+`implementation/p15/evidence/staging-runs/9a4fe4d8a8e248ecb8e0117c0652ecd3/receipt.json` only after
 the temporary Inspector configuration and public certificate were deleted and both the Node server
 and Rust driver exited cleanly.
 
 | Receipt field | Qualified value |
 |---|---|
 | Decision / qualifying | `PASS` / `true` |
-| Source commit | `81c1ef14f210e78df5bd6658aa6922ce528f4250` |
+| Source commit | `7ea2f84c244fe5bbd7926ba3f176dc5acafcf624` |
 | Scope | `current_pc_hancom_2020_local_inspector_staging` |
 | Transport | HTTPS, `127.0.0.1`, ephemeral port, `/mcp` only |
 | Protocol | Inspector `2.5.0`, SDK `2.0.0`, selected `modern` |
@@ -33,7 +34,7 @@ and Rust driver exited cleanly.
 | Lifecycle | persistent driver, graceful Node/Rust shutdown |
 | Secret posture | runtime-only key/token/private key; no durable secret material |
 | Hangul/document/artifact effects | `false` / none |
-| Receipt identity | 15,052 bytes; SHA-256 `0ed6e00e3f54e684617cc4c8933681d1768a312311a9e2f1607c02d491f1ae4a` |
+| Receipt identity | 15,051 bytes; SHA-256 `4cb414b842b24f50a1b9b9bb7705f9d291c260742d4aad1765d27e768d85cf4a` |
 
 The negative outcomes were missing authorization `401`, invalid authorization `401`, wrong path
 `404`, hostile Host `403`, hostile Origin `403`, wrong method `405`, oversized body `413`, and
@@ -52,9 +53,10 @@ payloads, bearers, HMAC keys, private keys, absolute paths or document data.
 | `web/mcp-staging/src/server.test.ts` | 1,987 | `82a32c79f781099ea3117c1584f6653e939c1e2ba59e71e37f022f6b4e073065` |
 | `tools/p15/run_inspector_staging.py` | 29,123 | `30f1a35a3cf22b45beed41971400f6d9a97d6c25bbb937c81ed9dec51cd976c7` |
 | `implementation/p15/P15-09_INSPECTOR_STAGING.md` | 3,916 | `f28c1db5daffb8bd8d2e827bae2d934e2aa402a7ff7221a1efb8f8389914d833` |
-| `implementation/p15/p15-inspector-staging-contract-v1.json` | 6,658 | `685ca72a16ecaf8c53e4ca2a942b831ec40ef8d3bc790d9cf4c9c0889d7da2de` |
+| `implementation/p15/p15-inspector-staging-contract-v1.json` | 6,658 | `09335ea42021c782f75010d7e873de11c36c834bb33ba8cafde529f824e3b907` |
 | `tools/p15/build_inspector_staging_contract.py` | 6,422 | `f91c0c5a7fbd533dd1ac30f403168473a89c9cc54f88b4fd81a72cd60f7fe55d` |
 | `tools/p15/validate_inspector_staging_contract.py` | 14,500 | `b52aa2e28ed0a6281d5df7e284169c56163994d09050ca2859888a8294734f87` |
+| `tools/p15/validate_telemetry_contract.py` | 18,001 | `b4930d621a4c6cef48083ecc4ec150d614dddeeb76fe383900460ec9697b83b1` |
 | `tools/p15/tests/test_inspector_staging.py` | 4,197 | `c89b49fb4a6d40fccef22bfcc0ac4088dc28fd11782b5fc650854991b3d0e7d2` |
 | `tools/p15/tests/test_inspector_staging_contract.py` | 4,058 | `2777aa55d2aa8bd6997f802c97f9189675dca6dc70521f7f14ecdc74f0c79536` |
 
@@ -70,6 +72,7 @@ commit `9f9c6932518175906842a2cbb5915a0fb96d0d49`, and the P15-08 contract diges
 |---|---|
 | Inspector staging policy builder/check/validator | pass, 33 ordered source locks |
 | Exact clean Inspector acceptance | pass, 18/18 tools and 8/8 negative probes |
+| Closure-contract roadmap regression | pass, P15 84/84 at `7ea2f84c` |
 | Rust staging driver tests | pass, 3/3 on Windows and isolated Linux |
 | Rust predecessor control-plane tests | pass, 61/61 on Windows and isolated Linux |
 | Node staging tests | pass, 3/3; typecheck/build pass |
@@ -77,8 +80,8 @@ commit `9f9c6932518175906842a2cbb5915a0fb96d0d49`, and the P15-08 contract diges
 | P01 security regression tests | pass, 10/10 |
 | P14 Python regressions | pass, 132/132 |
 | Design model | pass, 16 schemas, 609 features, 609 contracts, 190 WBS tasks, 0 errors |
-| Final exact-commit main checkout full CI | pass, 5/5 lanes at `81c1ef14` |
-| Final exact-commit independent checkout full CI | pass, 5/5 lanes at `81c1ef14`; tracked changes 0 |
+| Runtime/security source main checkout full CI | pass, 5/5 lanes at `81c1ef14` |
+| Runtime/security source independent checkout full CI | pass, 5/5 lanes at `81c1ef14`; tracked changes 0 |
 | Main security lane | pass, all checks exit 0; failed checks 0; forbidden licenses 0; SBOM 984 components |
 | Independent security lane | pass, all checks exit 0; failed checks 0; forbidden licenses 0; SBOM 751 components |
 | Offline Linux validation | pass, 64/64 Rust tests and Clippy |
@@ -121,6 +124,11 @@ control-plane tests, 3 staging-driver tests and Clippy `-D warnings`.
   failed security when Windows CP949 could not encode a dependency-license character. It is not
   counted as PASS. The security runner now emits cross-locale diagnostics with `backslashreplace`,
   has dedicated regressions, and the exact repaired commit passes both full CI reproductions.
+- The first Gate mutation correctly exposed that P15-08 had historically locked the mutable roadmap.
+  The Gate was not accepted in that state. The exact repair allows only that roadmap path to be
+  superseded when the complete P15-09 contract validates, while still comparing every historical
+  P15-08 source lock to its audited commit. The rebuilt 33-lock contract, all 84 P15 regressions and a
+  new clean exact-commit Inspector acceptance pass at `7ea2f84c`.
 - The independent checkout received only the four exact digest-pinned current-PC diagnostic JSON
   records required by the P10 runtime validator. No HWPX, PDF, key or user document was copied.
 - No Hangul process, COM call, local UI, user document, artifact, external account, public endpoint or
