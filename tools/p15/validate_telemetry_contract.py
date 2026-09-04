@@ -21,6 +21,7 @@ P15_09_SUPERSEDING_VALIDATOR = "tools/p15/validate_inspector_staging_contract.py
 P15_08_AUDITED_REVISION = "9f9c6932518175906842a2cbb5915a0fb96d0d49"
 P15_09_SUPERSEDED_PATHS = {
     "Cargo.toml",
+    "docs/09_roadmap/P15_remote_mcp_control_plane.md",
     "security/dependency-policy.json",
     "Cargo.lock",
     "tools/p15/validate_quota_contract.py",
