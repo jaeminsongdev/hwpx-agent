@@ -2,8 +2,9 @@
 
 - Date: 2026-09-05
 - Review: STRICT / HIGH; recommended reasoning `max`.
-- State: `core_repair_target_tests_pass_actual_2020_pending`.
+- State: `core_repair_current_and_independent_full_pass_actual_2020_pending`.
 - Parent implementation: `9360c47fc6c8958f6f9a16b954491579d774342d`.
+- Repair implementation checkpoint: `e82cf95abb6d4109e81e6ecf7b450de0f1d4b55a`.
 - Full product and P05 Gate are not complete.
 
 ## Finding and evidence
@@ -50,10 +51,10 @@ validation. The new count reader similarly does not claim complete header/style 
 | V3 build and product inspection | PASS: two sections, one boundary, unchanged expected text digest |
 | Independent ZIP part comparison | 12 parts in both; only header.xml differs, exactly secCnt 1 to 2 |
 | Old v2 fixture through repaired inspector | Correctly rejected with SectionCountMismatch |
-| Current checkout full CI | Running; final all-lane receipt not yet available |
+| Current checkout full CI | PASS, five terminal lanes, session 5232 exit 0 |
 | Offline Linux package all-target tests and Clippy | PASS, exact Rust 1.96.0 image; network disabled and source/registry read-only |
-| Exact clean-checkout/full | Not yet run for this repair |
-| Actual Hangul 2020 v3 readback/PDF/visual Gate | Not run; still required |
+| Exact clean-checkout/full | PASS at e82cf95, five terminal lanes, session 68068 exit 0 |
+| Actual Hangul 2020 v3 readback/PDF/visual Gate | Attempt 18 timed out at open_input; no save/readback/PDF acceptance |
 
 Negative coverage includes root/attribute namespace spoofing, missing/duplicate counts, child
 decoys, DTD/entity declarations, multiple roots, invalid/oversized numbers, count disagreement,
@@ -70,6 +71,22 @@ relaxing source/registry protection. It ran `cargo test --locked --offline -p hw
 were container-local and removed with that container. This is package portability evidence,
 not a whole-workspace Linux or actual-Hangul claim.
 
+The exact detached checkout is `D:\개발\hwpx-agent-audit-p05-count-e82cf95`. Only the four
+hash-pinned P10 diagnostic JSON records were copied into its ignored evidence paths; tracked Git
+status was clean before the run. Its live full-CI log is `artifacts/p05-count-repair/full-ci.log`.
+The current run started against the same implementation bytes before checkpointing; it is not an
+independent-checkout receipt. The current run terminated with all five lanes passed: linux-core
+17.412 s, windows-worker 61.095 s, widget 5.766 s, docs 1370.430 s and security 23.220 s. Its
+security report is `implementation/p01/evidence/security-runs/3f6dece28e8b4072829e5899261ebfcf/report.json`:
+nine checks exit 0, no failed check or forbidden license. Existing duplicate-crate warnings remain
+warnings, not silently removed. The independent run also terminated exit 0 with all five lanes
+passed: linux-core 55.415 s, windows-worker 67.547 s, widget 6.470 s, docs 1346.156 s and security
+14.233 s. Its tracked checkout remains clean. Durable log SHA-256 is
+`35fdafdca5a6fef5055c25d05b4cc8cb4bf0cc87241aaea1a8c97c71fa95990c`.
+The independent security run `b6c4d8947cee48dc984526bfaa5f6a7a` has nine zero-exit checks, no failed
+check or forbidden license. These full runs qualify the count-repair checkpoint only; they do not
+qualify later P16 safety edits or supply missing actual Hangul acceptance.
+
 ## Fresh disposable v3 target
 
 - Directory: `fixtures/target-build/p05-07-current-2020-20260905-v3/` (Git-ignored).
@@ -77,7 +94,12 @@ not a whole-workspace Linux or actual-Hangul claim.
 - SHA-256: `dc2d385ecdc60a396f5740d604b8ce379f25733c87bf98ed3e3baa32291e49a5`.
 - Expected normalized text SHA-256 remains
   `92d2179169f1102d256589c2ca90b8422405076927d91c6e5ba2e91f28381d2f`.
-- Existing v2 fixture and all attempts are preserved. No v3 Hangul process has been launched.
+- Existing v2 fixture and all attempts are preserved. V3 attempt 18 launched on 2026-09-05
+  after the user explicitly offered immediate access approval. The unchanged wrapper uses a
+  600-second watchdog and new attempt-18 output/trace/PDF names; expected text is unchanged.
+  Progress stopped after preflight/com_create pass and open_input running. The 600-second watchdog
+  terminated the worker and one owned Hwp process; input is unchanged, no output/PDF, no residual
+  Hwp process. See `P05-07_ATTEMPT18_DIAGNOSTIC.md`; this is not actual acceptance.
 
 ## Next acceptance
 

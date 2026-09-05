@@ -4,7 +4,8 @@
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
 - Active: P05-07 header-count repair verification and P16-06 Plan/diff UI audit.
 - Recommended reasoning: max for preservation, authorization and Gate review; high for routine work.
-- UI status: attempt 17 terminated; no live Hwp process or access prompt. Do not relaunch unchanged.
+- UI status: v3 attempt 18 timed out at open_input; session 44056 exit 2, residual Hwp zero.
+  Do not automatically retry unchanged. A future user-present session needs screenshot evidence.
 
 ## Objective and boundaries
 
@@ -52,7 +53,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   count updates and header/sequence correlation, with failing-before/passing-after evidence.
   Fresh v3 differs only in that count; old v2 now fails product inspection as intended.
   Offline Linux package all-target tests/Clippy pass with source/registry read-only and no network.
-  See implementation/p05/P05-07_SECTION_COUNT_REPAIR.md; full CI is running, actual v3 is NOT_RUN.
+  Current and exact clean-checkout full CI both pass 5/5. V3 attempt 18 timed out before
+  readback, with unchanged input and no output/PDF. See P05-07_ATTEMPT18_DIAGNOSTIC.md and count report.
 - P16-05 implementation 118928b, closure fae5bc0: TS/React 41/41, local bridge calls 3/3,
   P16 Python 77/77, current/independent CI 5/5 and offline Linux evidence are recorded in its report.
 - P16-06 9360c47 has a separate versioned plan-review resource and local component/E2E artifacts.
@@ -73,8 +75,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 ## Exact next actions and validation policy
 
-1. Finish P05-07 count-repair verification. On a user-present approval session, use the fresh v3
-   fixture and unchanged two-section expected text; require actual save/reopen/render evidence.
+1. P05 count-repair software CI is verified. Actual attempt 18 is terminal, not PASS; next user-present
+   session must observe the blocking UI before any retry. Keep two-section save/reopen/render criteria.
 2. Repair P16-06 safety defects with failing-before/passing-after regressions, then audit integration.
 3. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,
    applicable offline Linux checks, security and STRICT review before any implementation closure.
@@ -83,9 +85,18 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 ## Context Pack and archive references
 
-- Root: D:\개발\hwpx-agent; last implementation commit 9360c47.
+- Root: D:\개발\hwpx-agent; count-repair checkpoint e82cf95; P16-06 baseline 9360c47.
+- Both count-repair FULL sessions terminated exit 0, 5/5 lanes PASS: current 5232 and exact e82cf95
+  detached-checkout 68068 at D:\개발\hwpx-agent-audit-p05-count-e82cf95. Do not poll those handles.
+  The independent log is artifacts/p05-count-repair/full-ci.log inside that checkout. Only the four
+  exact hash-pinned P10 diagnostic JSON records were hydrated; no user document or key was copied.
+- P16-06 safety work is isolated at D:\개발\hwpx-agent-work-p16-06-safety (base e82cf95).
+  Target safety regressions and widget tests pass 109/109; local bridge E2E passes five calls.
+  Visual/contract/full audit and server projection remain open. Integrate only reviewed/tested changes.
 - First reads: this ledger; P05 attempt-17 report; implementation/p16/P16-06_PLAN_REVIEW_POLICY.md.
 - First checks: git status --short; named attempt-17 trace; P16 plan-review controller/model/tests.
+- Attempt 18 trace/progress: fixtures/target-build/p05-07-current-2020-20260905-v3/
+  p05-07-hancom-2020-trace-attempt18.json[.progress.jsonl]; former Hwp 23600/worker 7832 are stopped.
 - Do not touch user originals, earlier failed evidence, predecessor contract locks or unrelated processes.
 - Detailed completed task history through P-0085 remains in Git fae5bc0:PLANS.md, plus individual
   reports under implementation/p00/–implementation/p16/; this ledger is a bounded snapshot.
