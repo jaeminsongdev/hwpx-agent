@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
 from pathlib import Path
@@ -161,6 +162,21 @@ def require_digest(path: Path, expected: Any, label: str) -> None:
     actual = digest(path)
     if actual != expected:
         raise ValueError(f"{label} mismatch: expected {expected}, got {actual}")
+
+
+def qualified_source_replacements(root: Path) -> dict[str, tuple[str, str]]:
+    # Execute the validator's trusted sibling, never Python supplied by a candidate data root.
+    path = Path(__file__).resolve().parents[1] / "p16/postgres_artifact_qualification.py"
+    try:
+        spec = importlib.util.spec_from_file_location("p14_p16_postgres_source_qualification", path)
+        if spec is None or spec.loader is None:
+            return {}
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module.verified_replacements(root)
+    except (OSError, ImportError, ValueError):
+        # An absent/invalid successor is not permission: the original digest check below fails.
+        return {}
 
 
 def validate_up_sql(up_sql: str) -> None:
@@ -328,6 +344,12 @@ def validate_contract(
     if contract["invariants"] != EXPECTED_INVARIANTS:
         raise ValueError("artifact invariant declaration differs")
 
+    # Keep malformed SQL mutations attributable to their semantic guard. Source admission remains
+    # mandatory after these read-only checks and before a successful result.
+    validate_up_sql(up_path.read_text(encoding="utf-8"))
+    validate_down_sql(down_path.read_text(encoding="utf-8"))
+    replacements = None
+    successor_bound: list[str] = []
     sources = contract["source_locks"]
     if not isinstance(sources, list) or [source.get("path") for source in sources] != EXPECTED_SOURCE_PATHS:
         raise ValueError("source lock path sequence differs")
@@ -335,7 +357,15 @@ def validate_contract(
         source_object = require_object(source, f"source_locks[{index}]")
         require_exact_keys(source_object, {"path", "sha256"}, f"source_locks[{index}]")
         source_path = resolve_bounded_file(root, source_object["path"], 512 * 1024)
-        require_digest(source_path, source_object["sha256"], f"source lock {index} digest")
+        expected = source_object["sha256"]
+        observed = digest(source_path)
+        if isinstance(expected, str) and HEX_64.fullmatch(expected) and observed != expected:
+            if replacements is None:
+                replacements = qualified_source_replacements(root)
+            if replacements.get(source_object["path"]) == (expected, observed):
+                successor_bound.append(source_object["path"])
+                continue
+        require_digest(source_path, expected, f"source lock {index} digest")
 
     expected_scope = {
         "task": "P14-02",
@@ -349,8 +379,6 @@ def validate_contract(
     if contract["scope"] != expected_scope:
         raise ValueError("P14-02 scope declaration differs")
 
-    validate_up_sql(up_path.read_text(encoding="utf-8"))
-    validate_down_sql(down_path.read_text(encoding="utf-8"))
     return {
         "schema_version": contract["schema_version"],
         "contract_id": contract["contract_id"],
@@ -361,6 +389,11 @@ def validate_contract(
         "up_sha256": migration["up_sha256"],
         "down_sha256": migration["down_sha256"],
         "smoke_fixture_sha256": smoke["sha256"],
+        "source_qualification": {
+            "successor_id": "p16.local_postgres_artifact.217ba56" if successor_bound else None,
+            "successor_bound_paths": successor_bound,
+            "phase_completion_claimed": False,
+        },
         "state": "pass",
     }
 
