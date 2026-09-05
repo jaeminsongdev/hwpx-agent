@@ -9,7 +9,8 @@ use hwpx_package::{
     ColumnSeparator, ColumnSize, ColumnSizing, ColumnType, Hancom2020Vs0Builder, PackageGraph,
     PackageGraphLimits, PackageLimits, PageDimensions, PageGutterType, PageMargins,
     PageOrientation, PageSetup, PageSetupLimits, PageSetupLowerer, PageSetupReader,
-    SectionColumnLimits, SectionColumnLowerer, SectionColumnReader, TextFlowLimits, TextFlowReader,
+    RelationshipKind, SectionColumnLimits, SectionColumnLowerer, SectionColumnReader,
+    TextFlowLimits, TextFlowReader,
 };
 use sha2::{Digest as _, Sha256};
 use zip::write::SimpleFileOptions;
@@ -104,8 +105,7 @@ fn inspect_bytes(bytes: &[u8]) -> Result<Inspection, Box<dyn Error>> {
     let header = read_part(&mut reader, "Contents/header.xml")?;
     let section0 = read_part(&mut reader, "Contents/section0.xml")?;
     let section1 = read_part(&mut reader, "Contents/section1.xml")?;
-    let package_document = read_part(&mut reader, "Contents/content.hpf")?;
-    verify_linear_spine(&package_document)?;
+    verify_linear_spine(&graph)?;
     let setup = expected_page_setup()?;
     let metrics = setup.metrics(PageSetupLimits::default())?;
     for section in [&section0, &section1] {
@@ -162,16 +162,22 @@ fn inspect_bytes(bytes: &[u8]) -> Result<Inspection, Box<dyn Error>> {
     })
 }
 
-fn verify_linear_spine(package_document: &[u8]) -> Result<(), Box<dyn Error>> {
-    let source = std::str::from_utf8(package_document)?;
-    let section0 = r#"<opf:itemref idref="section0" linear="yes"/>"#;
-    let section1 = r#"<opf:itemref idref="section1" linear="yes"/>"#;
-    if source.matches(section0).count() != 1
-        || source.matches(section1).count() != 1
-        || source.contains(r#"<opf:itemref idref="section0" linear="no"/>"#)
-        || source.contains(r#"<opf:itemref idref="section1" linear="no"/>"#)
-    {
-        return Err("target multi-section spine is not linear".into());
+fn verify_linear_spine(graph: &PackageGraph) -> Result<(), Box<dyn Error>> {
+    // Graph admission already resolves namespace aliases, references, order and duplicates.
+    // OPF itemref linear defaults to yes. Do not search raw XML or comments for proof.
+    for path in ["Contents/section0.xml", "Contents/section1.xml"] {
+        let mut relationships = graph.relationships.iter().filter(|relationship| {
+            relationship.kind == RelationshipKind::SpineItem && relationship.target.as_str() == path
+        });
+        let relationship = relationships
+            .next()
+            .ok_or("target section spine item is missing")?;
+        if relationship.source != graph.package_document
+            || !relationship.linear
+            || relationships.next().is_some()
+        {
+            return Err("target multi-section spine is not linear".into());
+        }
     }
 
     Ok(())
@@ -448,6 +454,103 @@ fn extract_exact_element<'a>(
 mod tests {
     use super::*;
 
+    fn fixture_with_opf_change(
+        mut change: impl FnMut(&str) -> String,
+    ) -> Result<Vec<u8>, Box<dyn Error>> {
+        let source = Hancom2020Vs0Builder::build(SECTION_ONE_TEXT)?;
+        let valid = source.with_verified_bytes(rebuild_with_two_sections)??;
+        let mut archive = ZipArchive::new(Cursor::new(&valid))?;
+        let mut writer = ZipWriter::new(Cursor::new(Vec::new()));
+        let mut changed = 0;
+        for index in 0..archive.len() {
+            let mut entry = archive.by_index(index)?;
+            let mut bytes = Vec::new();
+            entry.read_to_end(&mut bytes)?;
+            if entry.name() == "Contents/content.hpf" {
+                bytes = change(std::str::from_utf8(&bytes)?).into_bytes();
+                changed += 1;
+            }
+            writer.start_file(
+                entry.name(),
+                SimpleFileOptions::default().compression_method(entry.compression()),
+            )?;
+            writer.write_all(&bytes)?;
+        }
+        assert_eq!(changed, 1);
+        Ok(writer.finish()?.into_inner())
+    }
+
+    #[test]
+    fn inspector_accepts_implicit_linear_from_actual_saved_spine() -> Result<(), Box<dyn Error>> {
+        let bytes = fixture_with_opf_change(|source| {
+            source.replace(
+                r#"<opf:itemref idref="section0" linear="yes"/>"#,
+                r#"<opf:itemref idref="section0"/>"#,
+            )
+        })?;
+        assert_eq!(inspect_bytes(&bytes)?.section_count, 2);
+        Ok(())
+    }
+
+    #[test]
+    fn inspector_accepts_namespace_prefix_quotes_and_attribute_order() -> Result<(), Box<dyn Error>>
+    {
+        let bytes = fixture_with_opf_change(|source| {
+            source
+                .replace(
+                    r#"<opf:itemref idref="section0" linear="yes"/>"#,
+                    "<opf:itemref linear='yes' idref='section0' ></opf:itemref>",
+                )
+                .replace("opf:", "pkg:")
+                .replace("xmlns:opf", "xmlns:pkg")
+        })?;
+        assert_eq!(inspect_bytes(&bytes)?.section_count, 2);
+        Ok(())
+    }
+
+    #[test]
+    fn comment_decoys_cannot_mask_non_linear_spine_relationships() -> Result<(), Box<dyn Error>> {
+        let bytes = fixture_with_opf_change(|source| {
+            source
+                .replace(
+                    r#"<opf:itemref idref="section0" linear="yes"/>"#,
+                    r#"<opf:itemref idref="section0" linear="no"/>"#,
+                )
+                .replace("opf:", "pkg:")
+                .replace("xmlns:opf", "xmlns:pkg")
+                .replace(
+                    "</pkg:spine>",
+                    concat!(
+                        "<!--",
+                        r#"<opf:itemref idref="section0" linear="yes"/>"#,
+                        r#"<opf:itemref idref="section1" linear="yes"/>"#,
+                        "--></pkg:spine>"
+                    ),
+                )
+        })?;
+        assert!(inspect_bytes(&bytes).is_err());
+        Ok(())
+    }
+
+    #[test]
+    fn semantic_spine_check_keeps_order_namespace_and_reference_closure()
+    -> Result<(), Box<dyn Error>> {
+        let first = r#"<opf:itemref idref="section0" linear="yes"/>"#;
+        let second = r#"<opf:itemref idref="section1" linear="yes"/>"#;
+        let swapped = fixture_with_opf_change(|source| {
+            source.replace(&format!("{first}{second}"), &format!("{second}{first}"))
+        })?;
+        assert!(inspect_bytes(&swapped).is_err());
+        for replacement in [
+            r#"<opf:itemref idref="missing" linear="yes"/>"#,
+            r#"<opf:itemref xmlns:opf="urn:foreign" idref="section0" linear="yes"/>"#,
+        ] {
+            let bytes = fixture_with_opf_change(|source| source.replace(first, replacement))?;
+            assert!(inspect_bytes(&bytes).is_err());
+        }
+        Ok(())
+    }
+
     #[test]
     fn generated_header_declares_both_spine_sections() -> Result<(), Box<dyn Error>> {
         let source = Hancom2020Vs0Builder::build(SECTION_ONE_TEXT)?;
@@ -529,30 +632,25 @@ mod tests {
     }
 
     #[test]
-    fn exact_two_section_linear_spine_is_accepted() {
-        let package_document = concat!(
-            r#"<opf:spine>"#,
-            r#"<opf:itemref idref="section0" linear="yes"/>"#,
-            r#"<opf:itemref idref="section1" linear="yes"/>"#,
-            r#"</opf:spine>"#,
-        );
-        verify_linear_spine(package_document.as_bytes()).expect("linear spine must pass");
+    fn exact_two_section_linear_spine_is_accepted() -> Result<(), Box<dyn Error>> {
+        let bytes = fixture_with_opf_change(str::to_owned)?;
+        assert_eq!(inspect_bytes(&bytes)?.section_count, 2);
+        Ok(())
     }
 
     #[test]
-    fn non_linear_or_duplicate_section_spine_is_rejected() {
-        let non_linear = concat!(
-            r#"<opf:itemref idref="section0" linear="yes"/>"#,
-            r#"<opf:itemref idref="section1" linear="no"/>"#,
-        );
-        assert!(verify_linear_spine(non_linear.as_bytes()).is_err());
-
-        let duplicate = concat!(
-            r#"<opf:itemref idref="section0" linear="yes"/>"#,
-            r#"<opf:itemref idref="section0" linear="yes"/>"#,
-            r#"<opf:itemref idref="section1" linear="yes"/>"#,
-        );
-        assert!(verify_linear_spine(duplicate.as_bytes()).is_err());
+    fn non_linear_or_duplicate_section_spine_is_rejected() -> Result<(), Box<dyn Error>> {
+        let anchor = r#"<opf:itemref idref="section0" linear="yes"/>"#;
+        for replacement in [
+            r#"<opf:itemref idref="section0" linear="no"/>"#.to_owned(),
+            format!("{anchor}{anchor}"),
+            r#"<opf:itemref idref="section0" linear="unknown"/>"#.to_owned(),
+            String::new(),
+        ] {
+            let bytes = fixture_with_opf_change(|source| source.replace(anchor, &replacement))?;
+            assert!(inspect_bytes(&bytes).is_err());
+        }
+        Ok(())
     }
 
     #[test]

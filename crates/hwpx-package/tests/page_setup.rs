@@ -39,16 +39,16 @@ fn a4_portrait() -> PageSetup {
 #[test]
 fn exact_current_2020_page_setup_lifts_with_checked_metrics() -> TestResult {
     let setup = PageSetupReader::read(PAGE.as_bytes(), PageSetupLimits::default())?;
-    assert_eq!(setup.orientation, PageOrientation::Landscape);
+    assert_eq!(setup.orientation, PageOrientation::Portrait);
     assert_eq!(setup.dimensions.width, 59_528);
     assert_eq!(setup.dimensions.height, 84_186);
     assert_eq!(setup.gutter_type, PageGutterType::LeftOnly);
     assert_eq!(setup.margins, margins());
     let metrics = setup.metrics(PageSetupLimits::default())?;
-    assert_eq!(metrics.effective_width, 84_186);
-    assert_eq!(metrics.effective_height, 59_528);
-    assert_eq!(metrics.body_width, 67_178);
-    assert_eq!(metrics.body_height, 49_608);
+    assert_eq!(metrics.effective_width, 59_528);
+    assert_eq!(metrics.effective_height, 84_186);
+    assert_eq!(metrics.body_width, 42_520);
+    assert_eq!(metrics.body_height, 74_266);
     assert_eq!(
         PageSetupReader::read(SECTION.as_bytes(), PageSetupLimits::default())?,
         setup
@@ -101,7 +101,7 @@ fn lower_is_deterministic_and_exactly_readable() -> TestResult {
     );
     assert_eq!(
         std::str::from_utf8(&first)?,
-        r#"<hp:pagePr xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph" landscape="NARROWLY" width="59528" height="84186" gutterType="LEFT_ONLY"><hp:margin header="4252" footer="4252" gutter="0" left="8504" right="8504" top="5668" bottom="4252"/></hp:pagePr>"#
+        r#"<hp:pagePr xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph" landscape="WIDELY" width="59528" height="84186" gutterType="LEFT_ONLY"><hp:margin header="4252" footer="4252" gutter="0" left="8504" right="8504" top="5668" bottom="4252"/></hp:pagePr>"#
     );
     Ok(())
 }
@@ -334,6 +334,7 @@ fn fixed_128_case_page_setup_corpus_is_deterministic() -> TestResult {
         PagePreset::Tabloid,
     ];
     let mut aggregate = Sha256::new();
+    let mut legacy_aggregate = Sha256::new();
     for case in 0_u32..128 {
         let preset_index = usize::try_from(case % u32::try_from(presets.len())?)?;
         let gutter_type = match case % 3 {
@@ -361,11 +362,26 @@ fn fixed_128_case_page_setup_corpus_is_deterministic() -> TestResult {
             PageSetupLimits::default(),
         )?;
         let bytes = PageSetupLowerer::lower(&setup, PageSetupLimits::default())?;
+        let (corrected, legacy) = if setup.orientation == PageOrientation::Portrait {
+            ("landscape=\"WIDELY\"", "landscape=\"NARROWLY\"")
+        } else {
+            ("landscape=\"NARROWLY\"", "landscape=\"WIDELY\"")
+        };
+        let xml = std::str::from_utf8(&bytes)?;
+        assert_eq!(xml.matches(corrected).count(), 1);
+        let legacy_bytes = xml.replacen(corrected, legacy, 1).into_bytes();
+        legacy_aggregate.update(u64::try_from(legacy_bytes.len())?.to_le_bytes());
+        legacy_aggregate.update(legacy_bytes);
         aggregate.update(u64::try_from(bytes.len())?.to_le_bytes());
         aggregate.update(bytes);
     }
     assert_eq!(
         hex::encode(aggregate.finalize()),
+        "6a8a3e417e8cc992c5bafe1f45ea176aec6f15adf37cbb9589a9dd1f535bf2aa"
+    );
+    // Keep the predecessor pin: exactly the direction token changes in this corpus.
+    assert_eq!(
+        hex::encode(legacy_aggregate.finalize()),
         "415b0a465a046f89d88481c3a9f8518e430517bbe3b46cb3564bc942ffbebc00"
     );
     Ok(())

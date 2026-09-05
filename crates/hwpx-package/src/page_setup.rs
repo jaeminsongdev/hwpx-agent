@@ -7,7 +7,7 @@ use crate::preserving_xml::{
     PreservingXmlDocument, PreservingXmlError, XmlAttributeToken, XmlElementToken, XmlTokenKind,
 };
 
-pub const PAGE_SETUP_PROFILE_ID: &str = "hwpx-agent.page-setup/1";
+pub const PAGE_SETUP_PROFILE_ID: &str = "hwpx-agent.page-setup/2";
 
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const SECTION_NS: &str = "http://www.hancom.co.kr/hwpml/2011/section";
@@ -75,16 +75,18 @@ pub enum PageOrientation {
 impl PageOrientation {
     fn parse(value: &str) -> Result<Self, PageSetupError> {
         match value {
-            "WIDELY" => Ok(Self::Landscape),
-            "NARROWLY" => Ok(Self::Portrait),
+            // The current Hangul 2020 token mapping is contrary to the English names.
+            // Actual P05-07 attempt21 WIDELY input/save/PDF evidence is portrait.
+            "WIDELY" => Ok(Self::Portrait),
+            "NARROWLY" => Ok(Self::Landscape),
             _ => Err(PageSetupError::InvalidEnum),
         }
     }
 
     const fn as_str(self) -> &'static str {
         match self {
-            Self::Landscape => "WIDELY",
-            Self::Portrait => "NARROWLY",
+            Self::Landscape => "NARROWLY",
+            Self::Portrait => "WIDELY",
         }
     }
 }

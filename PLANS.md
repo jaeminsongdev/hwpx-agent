@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-05
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05-07 saved-output/layout repair and P16-06 durable Plan/diff integration.
+- Active: P05-06/07 orientation/spine repair audits and P16-06 durable Plan/diff integration.
 - Recommended reasoning: max for preservation, authorization and Gate review; high for routine work.
 - UI status: v3 attempt 21 passed open/save/reopen/text/PDF export; layout acceptance failed.
   Session 13431 terminal exit 0; normal quit, residual zero. No additional click or automatic relaunch.
@@ -21,7 +21,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | Phase | State | Authoritative evidence / dependency |
 |---|---|---|
 | P00–P04 | scoped current-PC local PASS | implementation/p00/ through p04/, phase Gate reports |
-| P05 | in progress | 01–06 pass; 07 readback passes but saved-output/PDF checks fail; 08–09 pending |
+| P05 | in progress | 01–05 pass; 06 orientation reopened; 07 saved-output/PDF checks fail; 08–09 pending |
 | P06–P09 | blocked by P05 | table, equation, graphics, fields engines |
 | P10 | in progress | 01–04,07,09,10 scoped pass; 05/06 actual dependencies; 08 dedicated controls unqualified |
 | P11 | blocked by P06–P10 | advanced desktop features |
@@ -39,7 +39,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 | ID | Task | State / next check |
 |---|---|---|
-| P-0046–0048 | P05-07–09 | v3 two-section readback passes; spine normalization and portrait PDF need repair |
+| P-0045–0048 | P05-06–09 | Orientation v2/spine repair: 193 target tests/Clippy pass; FULL and actual audits open |
 | P-0082 | P16-02 registration | Local bundle ready; actual registered app/host receipt absent |
 | P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; actual registered host pending |
 | P-0086 | P16-06 Plan/diff UI | Registry checkpoint complete; PostgreSQL artifact adapter uncommitted, renderer wiring open |
@@ -68,13 +68,13 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 - New registry: 14 target tests, workspace Rust lane (481 tests) and nine security checks pass.
   Source/revision/owner/ACL/expiry/clock rollback checks are implemented; storage is process-local.
   Actual Linux 157 tests/Clippy PASS. Durable artifact adapter work is uncommitted; no renderer/permit.
-- Attempt 21 opened/saved/reopened both sections and exported PDF, with unchanged input and normal quit.
-  Saved-output inspection rejects omitted spine linear; formal PDF check rejects portrait versus landscape.
-  Both diagnostic pages viewed. See P05-07_ATTEMPT21_DIAGNOSTIC.md; full actual acceptance stays open.
+- Attempt21 saved/reopened both sections and exported portrait PDF; actual landscape acceptance failed.
+  Orientation v1 reversed the tokens; v2 corrects them and invalidates the earlier landscape interpretation.
+  Spine checking now uses the graph and blocks comment decoys. Read P05-07_ORIENTATION_SPINE_REPAIR.md.
 
 ## Open risks and holds
 
-- R-0001: V3 text recovery is proven; saved-output normalization and PDF page orientation remain unresolved.
+- R-0001: V2 mapping/spine component repair passes; FULL audits, column IDs and actual landscape render remain open.
 - R-0002: Registry target behavior passes; durable adapter, actual renderer and current formal evidence remain open.
 - HOLD-0001: P16-02 actual registration and P16-05/06 registered-host E2E remain unverified.
 - HOLD-0002: P10-05 registered path-security module and P10-06 production COM execution remain open.
@@ -84,8 +84,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 ## Exact next actions and validation policy
 
-1. Attempt 21 is terminal; read P05-07_ATTEMPT21_DIAGNOSTIC.md and inspect saved files offline first.
-   Fix normalization/orientation without weakening criteria. Require fresh user-present request to relaunch.
+1. Audit P05-07_ORIENTATION_SPINE_REPAIR.md with current/independent FULL and offline Linux checks.
+   Resolve column IDs offline next. Attempt21 is terminal; fresh user-present request required to relaunch.
 2. Resume uncommitted PostgreSQL artifact adapter: first actual DB check failed at guarded empty rollback.
    Inspect v10 schema_versions immutable trigger handling, then qualify durable source/plan/renderer wiring.
 3. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,
@@ -108,7 +108,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   Prior 5957/7210 terminal PASS is registry-only. New PostgreSQL files/dependency/CAS changes are unqualified.
 - External QA: Codex workspace p16-response-contract-20260905/inspection.md and run-03/receipt.json.
   Thirteen captures automated, six directly reviewed; exact HTML/script hashes bound, no user browser profile.
-- First reads: this ledger; P05 attempt-21 report; implementation/p16/P16-06_PLAN_REVIEW_POLICY.md.
+- First reads: this ledger; P05 orientation/spine repair and attempt21 reports; P16 Plan-review policy.
 - First checks: git status in both worktrees; saved attempt21 HWPX/PDF; P16 PostgreSQL first-failure report.
 - Attempt21 trace/progress: fixtures/target-build/p05-07-current-2020-20260905-v3/
   p05-07-hancom-2020-trace-attempt21.json[.progress.jsonl]. Former worker 31488/Hwp 43524 exited normally.

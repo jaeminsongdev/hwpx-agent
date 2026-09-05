@@ -1,8 +1,14 @@
 # P05-06 page-setup report
 
+> 2026-09-05 correction: the historical acceptance below used the reversed version-1 orientation
+> mapping. Its actual save/reopen/text observations remain evidence, but its landscape/effective
+> geometry interpretation is invalidated by attempt21's portrait PDF. P05-06 orientation acceptance
+> is reopened. Version 2 repairs the mapping; its actual landscape render acceptance is pending.
+> See `P05-07_ATTEMPT21_DIAGNOSTIC.md` and `protocol/migrations/page-setup-v1-to-v2.md` from repo root.
+
 - Generated: 2026-09-04
 - Implementation commits: `35b6d2c`, `453e1d4`, `d3ccd05`
-- State: `pass_current_pc_local_page_setup`
+- Historical state: `pass_current_pc_local_page_setup` (orientation claim superseded as noted above)
 - Reasoning/review mode: `max` / exact-target save/reopen, semantic readback and fail-closed audit
 
 `hwpx-package` now exposes the bounded `hwpx-agent.page-setup/1` model and preserving lowerer for

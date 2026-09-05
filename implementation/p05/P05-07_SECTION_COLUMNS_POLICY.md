@@ -63,6 +63,21 @@ requires at least one section, consistent with the existing nonempty sequence co
 
 Repair evidence and remaining validation are in `P05-07_SECTION_COUNT_REPAIR.md`.
 
+## Saved-spine admission correction
+
+The target inspector now uses the existing closed `PackageGraph` relationships, not raw XML
+substring matching. Each expected section must have exactly one linear spine relationship from
+the admitted package document; exact section order, graph closure and header count remain required.
+OPF `linear` omission means yes, as already represented by the graph parser. Namespace aliases,
+attribute order, quotes and empty-element serialization cannot change that meaning. Explicit no,
+unknown values, missing/duplicate targets and comment decoys must fail. This matches the
+[OPF itemref default](https://www.w3.org/publishing/epub32/epub-packages.html#sec-itemref-elem)
+and the omitted section0 attribute in the actual attempt21 saved HWPX.
+
+This correction does not waive column control-ID preservation or accept portrait output for a
+landscape request. Attempt21 remains failed at those broader semantics; the orientation mapping
+is repaired under page-setup version 2 and still requires fresh actual landscape acceptance.
+
 ## Equal and custom column rules
 
 The caller supplies the printable body width already validated by P05-06.

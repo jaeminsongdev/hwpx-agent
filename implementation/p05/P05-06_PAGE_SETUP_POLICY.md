@@ -1,7 +1,7 @@
 # P05-06 page-setup policy
 
 - Scope: current-PC licensed Hangul 2020 `11.0.0.9136` x86, direct HWPX page setup
-- Contract: `hwpx-agent.page-setup/1`
+- Contract: `hwpx-agent.page-setup/2` (current-2020 orientation repair; actual rerun pending)
 - Source lock: `source-lock-P00-20260901-v9-final-current-scope`
 - Locked source SHA-256: `c4a8bdb082cf8610fa2b3f6e709ca9058ab256a2371e9a779b9b323ca82638e4`
 - Reasoning/review mode: `max`
@@ -21,7 +21,10 @@ bottom `4252`. These observed numbers are target evidence, not universal preset 
 ## Public model and normalization
 
 - Public dimensions are positive unrotated sheet width/height in HWPUNIT with `width <= height`.
-- Orientation is independent and typed. `WIDELY` maps to landscape and `NARROWLY` to portrait.
+- Orientation is independent and typed. In the current-2020 profile, `WIDELY` maps to portrait and
+  `NARROWLY` to landscape. Version 1 reversed these meanings; it is superseded and must not qualify
+  orientation or derived body dimensions. See `P05-07_ATTEMPT21_DIAGNOSTIC.md` and the v1-to-v2 migration.
+  The 2024 schema's token enumeration/default does not by itself prove the installed 2020 mapping.
 - Named presets lower their standards-defined millimetres using exact `7200 / 25.4` conversion and
   checked half-up rounding. The lowering receipt records exact resulting HWPUNIT dimensions.
 - Custom dimensions use thousandths of a millimetre. Floating point and implicit locale parsing are
@@ -57,3 +60,7 @@ A3/B4 and other named preset canonicalization, printer feasibility, rendered pag
 multi-section selection, columns, headers/footers, borders/backgrounds, and Hangul 2022/2024 are not
 proved by this pure slice. They require their P05-06 target fixture, P05-07/P05-08/P05-09 Gates, or a
 separately qualified machine. Until then those claims remain unverified.
+
+Attempt21 provides actual portrait WIDELY output evidence and contradicts the former landscape
+claim for that fixture. The repaired landscape writer still needs a new user-present 2020 run;
+no old saved HWPX, PDF or receipt is automatically relabeled or transformed into a version-2 pass.
