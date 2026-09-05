@@ -42,7 +42,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0046–0048 | P05-07–09 | Header secCnt mismatch repaired; 29 target tests pass, v3 actual acceptance pending |
 | P-0082 | P16-02 registration | Local bundle ready; actual registered app/host receipt absent |
 | P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; actual registered host pending |
-| P-0086 | P16-06 Plan/diff UI | 477d402 response repair; target PASS, formal evidence refresh and stored-plan integration open |
+| P-0086 | P16-06 Plan/diff UI | Authenticated compiler-plan registry implemented; durable source adapter and renderer wiring open |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempts 10–16 timed out at open_input; attempt 17 instead passed open and failed
@@ -65,11 +65,14 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   public-schema oracle and 13-view/five-call browser checks pass. Earlier 10+2 failing regressions preserved.
   Current P16 93-test suite has two failures/one error, all policy.visual.preview_digest. The old
   visual/source contract is not rewritten as current proof. Stored-plan and real-host integration remain open.
+- New registry: 14 target tests, workspace Rust lane (481 tests) and nine security checks pass.
+  Source/revision/owner/ACL/expiry/clock rollback checks are implemented; storage is process-local.
+  Actual Linux 157 tests/Clippy PASS. No durable adapter, renderer endpoint or execution permit yet.
 
 ## Open risks and holds
 
 - R-0001: Header-count defect is fixed in software; actual v3 recovery and rendering remain unproven.
-- R-0002: 477d402 target behavior passes; current formal evidence and authenticated plan renderer remain open.
+- R-0002: Registry target behavior passes; durable adapter, actual renderer and current formal evidence remain open.
 - HOLD-0001: P16-02 actual registration and P16-05/06 registered-host E2E remain unverified.
 - HOLD-0002: P10-05 registered path-security module and P10-06 production COM execution remain open.
 - HOLD-0003: P10-08 dedicated production isolation and later-version PCs remain unqualified.
@@ -80,8 +83,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 1. Attempt 20 is terminal; read P05-07_ATTEMPT20_DIAGNOSTIC.md. Require a fresh user-present request
    before relaunch. Keep two-section save/reopen/render criteria unchanged.
-2. Continue 477d402: real authenticated stored-plan lookup, ownership and compiled-plan/source binding.
-   Then refresh exact P16 visual/source evidence and rerun full checks; do not claim existing pins match.
+2. Implement authoritative durable source/plan adapter and renderer wiring after the registry checkpoint.
+   Bind real execution/diff receipts; refresh P16 evidence and run both FULL audits before closure.
 3. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,
    applicable offline Linux checks, security and STRICT review before any implementation closure.
 4. Close P05 only with save/reopen, semantic inspection, PDF verification and visual evidence.
@@ -100,9 +103,9 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   Read implementation/p16/P16-06_SAFETY_AUDIT.md and P16-06_SOURCE_DIFF_PROJECTION.md there.
 - Independent FULL 68679: D:\개발\hwpx-agent-audit-p16-9a16c2d, same checkpoint, terminal 5/5 PASS.
   Linux domain tests/Clippy PASS, session 2297 exit 0. Details: P16-06_AUDIT_HANDOFF_20260905.md in main.
-- Active worktree: D:\개발\hwpx-agent-work-p16-plan-service, checkpoint 477d4023d6e29c944d08fb81b9193d0fe3010276.
-  Artifact, partial-commit, plan-ID/new-revision and Unicode repairs; main not integrated. No live test handles.
-  Target logs: artifacts/p16/response-contract/; widget/security final CI exit 0, P16 formal suite still fails.
+- Active worktree: D:\개발\hwpx-agent-work-p16-plan-service; clean checkpoint 9c120ac7407c00a7454a195c403330b47ff0524f.
+  Details: implementation/p16/P16-06_AUTHENTICATED_PLAN_REGISTRY.md; artifacts/p16/stored-plan/ logs.
+  5957 terminal: Rust/security PASS; 7210 terminal: Linux 157/Clippy PASS. No live handles; see registry report.
 - External QA: Codex workspace p16-response-contract-20260905/inspection.md and run-03/receipt.json.
   Thirteen captures automated, six directly reviewed; exact HTML/script hashes bound, no user browser profile.
 - First reads: this ledger; P05 attempt-17 report; implementation/p16/P16-06_PLAN_REVIEW_POLICY.md.
