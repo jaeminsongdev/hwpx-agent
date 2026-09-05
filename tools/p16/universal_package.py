@@ -236,6 +236,8 @@ def validate_base_entries(entries: Mapping[str, bytes]) -> list[str]:
             continue
         if "\x00" in text:
             errors.append(f"{name}.nul")
+        if "\r" in text:
+            errors.append(f"{name}.line_endings")
         if any(marker.casefold() in text.casefold() for marker in FORBIDDEN_PLACEHOLDERS):
             errors.append(f"{name}.placeholder")
 

@@ -39,7 +39,7 @@ def build_contract() -> dict[str, Any]:
     if errors:
         raise ValueError(",".join(sorted(set(errors))))
     predecessor_sha = sha256_file(PREDECESSOR_PATH)
-    if predecessor_sha != "e1c8d6432fa8da4bb87b89900b58c0936c17502001dc15957820d9127140b3ef":
+    if predecessor_sha != "d9a29252d0377053fdd02ff6b48e13df189cb9119811dd9fecf9e2e8de87445c":
         raise ValueError("predecessor.digest")
     referenced_names = sorted({
         tool["name"]

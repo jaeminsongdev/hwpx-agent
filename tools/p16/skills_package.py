@@ -235,6 +235,8 @@ def validate_skill_bytes(name: str, value: bytes, catalog: Mapping[str, Any]) ->
         return sorted(set(errors + ["skill.utf8"]))
     if "\x00" in text:
         errors.append("skill.nul")
+    if "\r" in text:
+        errors.append("skill.line_endings")
     if any(marker.casefold() in text.casefold() for marker in FORBIDDEN_TEXT):
         errors.append("skill.forbidden_text")
     fields, body, frontmatter_errors = parse_frontmatter(text)

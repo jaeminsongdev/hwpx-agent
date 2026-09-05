@@ -48,6 +48,11 @@ class UniversalPackageTests(unittest.TestCase):
         entries[".app.json"] = b'{"apps":{}}\n'
         self.assertIn("package.entries", package.validate_base_entries(entries))
 
+    def test_text_entry_rejects_non_lf_line_endings(self) -> None:
+        entries = self.base_entries()
+        entries["README.md"] = entries["README.md"].replace(b"\n", b"\r\n", 1)
+        self.assertIn("README.md.line_endings", package.validate_base_entries(entries))
+
     def test_manifest_path_escape_and_placeholder_are_rejected(self) -> None:
         entries = self.base_entries()
         manifest = json.loads(entries[".codex-plugin/plugin.json"])
