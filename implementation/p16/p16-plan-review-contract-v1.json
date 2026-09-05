@@ -1,0 +1,254 @@
+{
+  "bundles": {
+    "harness": {
+      "bytes": 433647,
+      "path": "web/plugin-widget/dist/plan-review-e2e-host.html",
+      "sha256": "4d79e5d80f7b756f432bc95b56bd60035db7530364e33c8b471f5646e5663061"
+    },
+    "preview": {
+      "bytes": 210036,
+      "path": "web/plugin-widget/dist/plan-review-preview.html",
+      "sha256": "631ba328099ee6bd839bdd521294eb91f583e7468a40d5ab897372053491f5cb"
+    },
+    "resource": {
+      "bytes": 658891,
+      "path": "web/plugin-widget/dist/plan-review-widget-v1.html",
+      "sha256": "2ceb8c34c4a4057ccf516f1b32b603a38e007799148a3c93d62c5bdebee128ae"
+    }
+  },
+  "catalog": {
+    "path": "protocol/mcp/p15-public-tools-v1.json",
+    "sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001",
+    "tools": [
+      "capability_check",
+      "document_edit"
+    ]
+  },
+  "claims": {
+    "actual_chatgpt_or_codex_host_tested": false,
+    "developer_mode_tested": false,
+    "file_transfer_tested": false,
+    "hangul_2022_2024_or_other_pc_tested": false,
+    "hangul_or_com_invoked": false,
+    "public_or_production_ready": false,
+    "registered_plugin_tested": false,
+    "remote_mcp_tested": false
+  },
+  "decision": "pass_scoped_local_high_risk_confirmation_component_e2e_actual_host_pending",
+  "e2e": {
+    "bridge": "real_ext_apps_appbridge_postmessage_iframe",
+    "call_count": 5,
+    "call_order": [
+      "capability_check",
+      "document_edit_dry",
+      "capability_check",
+      "document_edit_dry",
+      "document_edit_execute"
+    ],
+    "evidence_level": "local_browser_component_not_actual_chatgpt_or_codex_host",
+    "runner": "tools/p16/run_plan_review_e2e.py"
+  },
+  "limits": {
+    "capability_routes": 12,
+    "diff_categories": 8,
+    "minimum_css_width": 320,
+    "primary_actions": 1,
+    "secondary_actions": 1,
+    "warnings": 8
+  },
+  "next_task": "P16-07 Preview/job UI",
+  "predecessor": {
+    "path": "implementation/p16/p16-continuity-contract-v1.json",
+    "sha256": "227be012d78ad9d055f85873096d4a3c3e3faebfde3e3de6f97d2efe8fc81e48"
+  },
+  "requirements": [
+    "P16-R01",
+    "P16-R02",
+    "P16-R03",
+    "P16-R04",
+    "P16-R05",
+    "P16-R06",
+    "P16-R09",
+    "P16-R10",
+    "P16-R17",
+    "P16-R26",
+    "P16-R28",
+    "P16-R29",
+    "P16-R34"
+  ],
+  "schema_version": "hwpx-agent.p16-plan-review-contract/v1",
+  "scope": "current_pc_local_mcp_apps_bridge_component",
+  "source_locks": [
+    {
+      "bytes": 4494,
+      "path": "implementation/p16/P16-06_PLAN_REVIEW_DESIGN_SPEC.md",
+      "sha256": "a82aaa4b5ebd957cc41c36ba02ad87dfe6258c257002b029cb1919845d78b540"
+    },
+    {
+      "bytes": 2086,
+      "path": "implementation/p16/P16-06_PLAN_REVIEW_POLICY.md",
+      "sha256": "3396db48ff31b11e8ed5333906fd9f61ff2052b8c171e0240b4ec63d455d4ecc"
+    },
+    {
+      "bytes": 2485,
+      "path": "implementation/p16/P16-06_VISUAL_QA.md",
+      "sha256": "c116b4260fb74da1e5f524c1ca99b042a81e77420baeaa1987258ec35bd37ac5"
+    },
+    {
+      "bytes": 4184,
+      "path": "implementation/p16/p16-plan-review-policy-v1.json",
+      "sha256": "62e389f6d61eac94733f5464a8177605e5622fce52d115268683180ed9645ee5"
+    },
+    {
+      "bytes": 1182885,
+      "path": "implementation/p16/design/p16-06-plan-review-concept.png",
+      "sha256": "06b8750663041d690c02804da7c1d5bc628290aef5012c756c96cc1e1aa8aa41"
+    },
+    {
+      "bytes": 60846,
+      "path": "implementation/p16/visual-qa/p16-06-desktop-blocked.png",
+      "sha256": "d3e97198e5f37688b6ef8361c65888c48477101821cc1f62daca35fe26f1c9eb"
+    },
+    {
+      "bytes": 69292,
+      "path": "implementation/p16/visual-qa/p16-06-desktop-confirm.png",
+      "sha256": "6a6efb7f7718f9799cf2c7fa6323b94ea42d20b2a9eca164358d5f3ea10d1617"
+    },
+    {
+      "bytes": 66726,
+      "path": "implementation/p16/visual-qa/p16-06-desktop-dark-submitted.png",
+      "sha256": "781f5e7f63d08195db4cc41c96262e84a4eb7a437f406274f537049283cf8273"
+    },
+    {
+      "bytes": 65078,
+      "path": "implementation/p16/visual-qa/p16-06-desktop-ready.png",
+      "sha256": "995b05c677a7fbf847678d9d449c98f474d28e23ed1d79ddcc944bba005af1d0"
+    },
+    {
+      "bytes": 53880,
+      "path": "implementation/p16/visual-qa/p16-06-narrow-blocked.png",
+      "sha256": "9d6e4d98dec7f259bb1aa4542feedb36db5963c44c17b9bd546561c31c365cfe"
+    },
+    {
+      "bytes": 62266,
+      "path": "implementation/p16/visual-qa/p16-06-narrow-confirm.png",
+      "sha256": "6fc0ab775fb931a077d8918d3cba5eddd8f92c84d2225d4efa0627309ae18320"
+    },
+    {
+      "bytes": 57996,
+      "path": "implementation/p16/visual-qa/p16-06-narrow-ready.png",
+      "sha256": "e974d3e655577e7fc987edf5b8a469ccbbea53a70f81a15540ff24c16b985f70"
+    },
+    {
+      "bytes": 8494,
+      "path": "implementation/p16/p16-continuity-contract-v1.json",
+      "sha256": "227be012d78ad9d055f85873096d4a3c3e3faebfde3e3de6f97d2efe8fc81e48"
+    },
+    {
+      "bytes": 134758,
+      "path": "protocol/mcp/p15-public-tools-v1.json",
+      "sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001"
+    },
+    {
+      "bytes": 3236,
+      "path": "web/plugin-widget/scripts/build-plan-review-widget.mjs",
+      "sha256": "031b2382faab3cdf7963c04bb65ec117f5803f25fbfcfbeddef80d428913ebcd"
+    },
+    {
+      "bytes": 2314,
+      "path": "web/plugin-widget/src/plan-review-component.tsx",
+      "sha256": "0b74e0815febb8f476fdcc0ddccf483258264ea542d2f4418eb27eedf0190468"
+    },
+    {
+      "bytes": 12777,
+      "path": "web/plugin-widget/src/plan-review-controller.test.ts",
+      "sha256": "90669aad3a266e25c4923413f2536d67120012a0cb4cc09254d94b9eec9b4cb2"
+    },
+    {
+      "bytes": 17493,
+      "path": "web/plugin-widget/src/plan-review-controller.ts",
+      "sha256": "7ba1abd3094a6cf04f7c71d781c0f01988fc2035fda0cbb4eb71a48050c4b7e2"
+    },
+    {
+      "bytes": 9359,
+      "path": "web/plugin-widget/src/plan-review-e2e-host.ts",
+      "sha256": "f434fba8fce9d3ca95a6bd8bfcb8f38e7dc87081c9113ac48e3138bd0c1950f8"
+    },
+    {
+      "bytes": 3097,
+      "path": "web/plugin-widget/src/plan-review-mcp-app-port.ts",
+      "sha256": "5fd69470a5b269b206065752b91320b9af1103d0321d3469fae1c46ef4cc516b"
+    },
+    {
+      "bytes": 7482,
+      "path": "web/plugin-widget/src/plan-review-model.test.ts",
+      "sha256": "3a0f8e1a0cdc33c8bbdba7a5ee36cbee31fb39282b70492538746c1be843952b"
+    },
+    {
+      "bytes": 19613,
+      "path": "web/plugin-widget/src/plan-review-model.ts",
+      "sha256": "08b3d1a770186fb417b417e386d79f62cccd79a6997dc58880d5d506ad2354ad"
+    },
+    {
+      "bytes": 3915,
+      "path": "web/plugin-widget/src/plan-review-preview.tsx",
+      "sha256": "8e45f81dbe63c69c730647267cdd11439c7faba3adc76bb5fb022fb32a88f052"
+    },
+    {
+      "bytes": 2273,
+      "path": "web/plugin-widget/src/plan-review-resource.test.ts",
+      "sha256": "67dc61f10d0c7b7f8cdbb4e659669e3fa3b5ab80664265e049f2e60d61eb7218"
+    },
+    {
+      "bytes": 7745,
+      "path": "web/plugin-widget/src/plan-review-resource.ts",
+      "sha256": "e98a2389d5a18f9259ae902ceb69fc0db26c2b0f0c05fe939e3fa90f5b59d6b3"
+    },
+    {
+      "bytes": 8848,
+      "path": "web/plugin-widget/src/plan-review-styles.css",
+      "sha256": "bdb77e8f3b364614c67077b33dab28a443217b8157666186d1052ffcaccc5ce7"
+    },
+    {
+      "bytes": 3431,
+      "path": "web/plugin-widget/src/plan-review-ui.test.tsx",
+      "sha256": "8e764496505dd4ff94ebbb683f3daf714a7d01580068244baff19a790689202f"
+    },
+    {
+      "bytes": 15507,
+      "path": "web/plugin-widget/src/plan-review-ui.tsx",
+      "sha256": "a0970b9132ffcd5f507ecad9977b2024569151679752d31bd5bfe1199268e5f8"
+    },
+    {
+      "bytes": 11801,
+      "path": "tools/p16/plan_review.py",
+      "sha256": "4d6ba98ddaa83af5e589aea6eebbe59235eee1600cfcbdf764c8bc8ff2f311b4"
+    },
+    {
+      "bytes": 4254,
+      "path": "tools/p16/build_plan_review_contract.py",
+      "sha256": "4dcef5d671aaa118bfb02ce92da2a0c2f07aa17a06b0f5db04586b6ca7d13f9a"
+    },
+    {
+      "bytes": 1476,
+      "path": "tools/p16/run_plan_review_checks.py",
+      "sha256": "5eef6067f881edd8b951af59634b17b38de3f23ef8361bde59c55e8965850df9"
+    },
+    {
+      "bytes": 4801,
+      "path": "tools/p16/run_plan_review_e2e.py",
+      "sha256": "c687fcb60003086966653670eabaa386d7a6fd95b61d063dfacbfa67edf09aab"
+    },
+    {
+      "bytes": 466,
+      "path": "tools/p16/validate_plan_review.py",
+      "sha256": "c7bf2ed32c6f3f785fcb884e0aac33657798eebd142441cdc59407c42a2ec9b0"
+    },
+    {
+      "bytes": 3323,
+      "path": "tools/p16/tests/test_plan_review.py",
+      "sha256": "107d80c72df56686f654ed23ed9c782216088bf34639863eb0b355e6ad0d13e8"
+    }
+  ],
+  "task": "P16-06"
+}
