@@ -30,8 +30,9 @@ local closed copy, and keeps every opaque identifier abbreviated.
 
 - Missing approved input is `approval_pending`, not an error. Tool input alone never becomes
   authoritative; the server result must strictly match project, source revision and plan identity.
-- `execution_allowed` is accepted only when every route is supported at `verified` or `partial`,
-  dry-run state is `verified`, signature impact is `none`, and no warning is blocking.
+- `execution_allowed=true` is accepted only when every route is supported at `verified`,
+  dry-run state is `verified`, signature impact is `none`, and no warning is blocking. Server
+  `execution_allowed=false` is preserved even when those necessary conditions pass.
 - `계획 다시 검증` calls exact `capability_check` and then exact `document_edit` with
   `dry_run=true`, `best_effort=false`, exact base revision and signature invalidation disabled.
 - `실행 검토` makes no server call. It opens a separate confirmation region. Execution remains
@@ -44,11 +45,23 @@ local closed copy, and keeps every opaque identifier abbreviated.
   revalidation prevents all later dry-run and execution calls; stale results are ignored.
 - In-widget consent does not replace host confirmation or server authentication, authorization,
   ownership, quota, idempotency and exact-revision checks.
+- A dispatched plan is never rearmed in the same controller session. Its project/base/plan binding
+  is reserved before dispatch; lost or invalid replies retain `unconfirmed` and explicit
+  verification-needed copy. Valid accepted replies mean `submitted`, not document completion.
+  Late replies cannot replace newer approved views. These bounded no-eviction records are not
+  durable server reconciliation, and all post-dispatch primary/confirmation actions are disabled.
 
 ## Semantic diff and warning safety
 
 - Diff data contains only integer totals and closed categories: paragraph, table, style, image,
   field, section, metadata or other. It contains no changed content or positional selector.
+- The source-backed `domain-ir::SemanticDiffSummary` projects the immutable semantic diff only
+  after streaming digest checks against both exact graphs. Counts are semantic records, not unique
+  document objects or user operations; moves and modified-and-moved each count once as modified.
+  Node/resource kinds come from the corresponding before/after graph, with changed kinds classified
+  as other. All graph nodes, including table/drawing/note children, have bounded traversal.
+  Projection is not authorization: authenticated plan storage, compiled-plan binding, current route
+  and dry-run evidence still need integration before this data reaches the registered renderer.
 - Warning data contains only a bounded uppercase code, closed severity and closed category. The
   browser maps the category to local Korean/English copy and discards server prose.
 - Capability IDs are constrained to the existing dotted identifier grammar. Backends are only

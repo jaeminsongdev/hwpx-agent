@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 from pathlib import Path
 import tempfile
+import sys
 from typing import Any
 
 import widget_shell as shell
@@ -63,6 +65,32 @@ LOCAL_SOURCE_PATHS = (
 
 def sha256_file(path: Path) -> str:
     return shell.sha256_bytes(path.read_bytes())
+
+
+def qualified_source_hash(relative: str) -> str:
+    actual = sha256_file(ROOT / relative)
+    path = (ROOT / "tools/p16/p15_source_qualification.py").resolve()
+    name = "_hwpx_agent_p16_p15_source_qualification"
+    module = sys.modules.get(name)
+    try:
+        if module is None or Path(str(getattr(module, "__file__", ""))).resolve() != path:
+            sys.modules.pop(name, None)
+            specification = importlib.util.spec_from_file_location(name, path)
+            if specification is None or specification.loader is None:
+                return actual
+            module = importlib.util.module_from_spec(specification)
+            sys.modules[name] = module
+            try:
+                specification.loader.exec_module(module)
+            except Exception:
+                sys.modules.pop(name, None)
+                return actual
+        pair = module.verified_widget_replacements(ROOT).get(relative)
+    except Exception:
+        return actual
+    if pair is not None and pair[1] == actual:
+        return pair[0]
+    return actual
 
 
 def build_contract() -> dict[str, Any]:
@@ -151,7 +179,7 @@ def build_contract() -> dict[str, Any]:
             "hangul_2022_2024_or_other_pc_tested": False,
         },
         "source_locks": [
-            {"path": relative, "sha256": sha256_file(ROOT / relative)}
+            {"path": relative, "sha256": qualified_source_hash(relative)}
             for relative in LOCAL_SOURCE_PATHS
         ],
         "next_task": "P16-05 core document workflow UI",

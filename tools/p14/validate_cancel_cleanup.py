@@ -6,6 +6,7 @@ import importlib.util
 import json
 import re
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any, NoReturn
 
@@ -20,6 +21,7 @@ P14_08_IMPLEMENTATION_REVISION = "8d03bb6b4fb69e73f8921aa26484b400dadf941b"
 P15_SUPERSEDING_CONTRACT = ROOT / "implementation/p15/p15-auth-tenant-v1.json"
 P15_SUPERSEDING_VALIDATOR = ROOT / "tools/p15/validate_auth_tenant.py"
 P15_SUPERSEDED_PATHS = {".gitignore", "tools/p14/validate_cancel_cleanup.py"}
+P16_SOURCE_QUALIFICATION = "tools/p16/p15_source_qualification.py"
 
 
 class ContractError(RuntimeError):
@@ -84,6 +86,28 @@ def require_digest(entry: dict[str, Any], maximum_bytes: int) -> Path:
     return path
 
 
+def validate_p16_source_qualification() -> dict[str, tuple[str, str]]:
+    validator_path = (Path(__file__).resolve().parents[1] / "p16/p15_source_qualification.py").resolve()
+    name = "_hwpx_agent_p16_p15_source_qualification"
+    module = sys.modules.get(name)
+    if module is None or Path(str(getattr(module, "__file__", ""))).resolve() != validator_path:
+        sys.modules.pop(name, None)
+        specification = importlib.util.spec_from_file_location(name, validator_path)
+        if specification is None or specification.loader is None:
+            return {}
+        module = importlib.util.module_from_spec(specification)
+        sys.modules[name] = module
+        try:
+            specification.loader.exec_module(module)
+        except Exception:
+            sys.modules.pop(name, None)
+            return {}
+    try:
+        return module.verified_cancel_replacements(ROOT)
+    except Exception:
+        return {}
+
+
 def require_source_digest_with_supersession(
     entry: dict[str, Any], maximum_bytes: int
 ) -> Path:
@@ -94,7 +118,10 @@ def require_source_digest_with_supersession(
     expected = entry["sha256"]
     if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
         fail(f"invalid digest for {relative}")
-    if sha256(path) == expected:
+    observed = sha256(path)
+    if observed == expected:
+        return path
+    if validate_p16_source_qualification().get(relative) == (expected, observed):
         return path
     if relative not in P15_SUPERSEDED_PATHS:
         fail(f"digest mismatch for {relative}")

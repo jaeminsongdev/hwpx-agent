@@ -1,0 +1,75 @@
+{
+  "claims": {
+    "actual_hangul": false,
+    "actual_integrated_postgres_retested": false,
+    "other_pc_or_version": false,
+    "p15_phase_complete": false,
+    "p16_phase_complete": false,
+    "production": false,
+    "registered_host": false,
+    "source_qualification_only": true
+  },
+  "guard_sources": [
+    {
+      "path": "tools/p16/integrated_source_qualification.py",
+      "sha256": "43fc5f526597d08eecac720674ed0c3cb039d146dd28c48c62ecf62c16b1f775"
+    },
+    {
+      "path": "tools/p16/tests/test_integrated_source_qualification.py",
+      "sha256": "9ad0c151c7d63bb5067395463522946d86bf656da8d3805623155c4df054a397"
+    },
+    {
+      "path": "implementation/p16/P16-06_MAIN_INTEGRATION_QUALIFICATION.md",
+      "sha256": "62b575291c91b3e7ad59b4bf8b670db6ae52a788b2d863b507fd4f3d9362e725"
+    }
+  ],
+  "parents": {
+    "main": "9cc1db3b222a8e8f2b79ebf9ade7e3c8d6813a98",
+    "p16": "62542b0e0126f0687f97fcb2c1357c3600d87fdf"
+  },
+  "predecessors": [
+    {
+      "path": "implementation/p16/qualification/postgres-217ba56/contract.json",
+      "sha256": "c37e5b773a9117ffdb4af40c95d1263e08fdf7f6e25c69c6daa3108086497530"
+    },
+    {
+      "path": "implementation/p16/qualification/p15-current-source-v1/contract.json",
+      "sha256": "5391428d584f7be36ed532ea446a07372761fb28bad9446972cef307c35a13e0"
+    }
+  ],
+  "qualification_id": "p16.main.9cc1db3.62542b0.v1",
+  "replacements": [
+    {
+      "path": "Cargo.lock",
+      "predecessor_sha256": "6561e43d46f89ee42773840dd33747cfa23bd55b0927f1da41e357bf3b97c639",
+      "successor_sha256": "7cb6ea91c65c226f2769af0d33906b39970efa0c81b286aa32ca282ef8614d69"
+    },
+    {
+      "path": "crates/hwpx-package/Cargo.toml",
+      "predecessor_sha256": "6d3c404804f313b758223d2f21d400066d9b69e8c5df17e3446f36eb34442a73",
+      "successor_sha256": "8ad8656643ccfc352aab4a7db1720e8ea2e911aa2837d0d74b73d9349adc392d"
+    },
+    {
+      "path": "tools/p16/postgres_artifact_qualification.py",
+      "predecessor_sha256": "0c70221a2a6cf80b26970ea259bb58a0b46dabb3a21398abec43b6e8d619be81",
+      "successor_sha256": "dc0099886582bd9a01fdc0693ecc4d58a2617ab7ab78babc4fbc6c8b99b34a4a"
+    },
+    {
+      "path": "tools/p16/p15_source_qualification.py",
+      "predecessor_sha256": "e4c424920bcc040f1f1ea9aaac3e624eb1478866e9d9458dbe75b778bb2cbd5f",
+      "successor_sha256": "6e3ba421f4c0d5f34b8123e918892bf52fca1f11e0263349e8bb59462863bd21"
+    },
+    {
+      "path": "tools/p16/tests/test_postgres_artifact_qualification.py",
+      "predecessor_sha256": "0cda7bc4d46aa169dfabb4ec55084059ad54d09ce196bd4404d6206b6b90b041",
+      "successor_sha256": "a18415a26fd851b9c88512c0db2f8ce761d00ee4d1f30213319c304bd5475430"
+    },
+    {
+      "path": "tools/p16/tests/test_p15_source_qualification.py",
+      "predecessor_sha256": "76ac1f16b8d0ce831eaaccd0d91f74d6dc601f3d58fc2868a8674761922a1fdd",
+      "successor_sha256": "483c22b852742df6a9c55b3f80bb26425b58e70cf9fe16195a01f3479886160b"
+    }
+  ],
+  "schema_version": "hwpx-agent.p16-main-integration-source-qualification/v1",
+  "scope": "current_pc_merged_source_binding_successor_only"
+}

@@ -11,6 +11,10 @@ pub use service::{
     ArtifactScanner, ArtifactService, ArtifactServiceConfig, FailClosedScanner, ScanRequest,
 };
 pub use signed_url::{DownloadClaims, DownloadSigner};
+pub use store::postgres_repository::{
+    LocalPostgresConfig, LocalPostgresMetadataRepository, PostgresConnectFailure,
+    PostgresConnectStage,
+};
 pub use store::{
     ArtifactMetadataRepository, ArtifactRecord, EncryptedBlobStore, InMemoryBlobStore,
     InMemoryMetadataRepository, LocalEncryptedBlobStore, ObjectKey,

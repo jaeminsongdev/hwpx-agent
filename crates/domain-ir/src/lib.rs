@@ -6,6 +6,7 @@ mod identity;
 mod operation_plan;
 mod selector;
 mod semantic_diff;
+mod semantic_summary;
 mod units;
 
 pub use capability_router::{
@@ -46,6 +47,10 @@ pub use semantic_diff::{
     ChangeCategory, ChangeKind, EntityKind, PathScope, SEMANTIC_DIFF_SCHEMA_VERSION,
     SemanticChange, SemanticDiff, SemanticDiffError, SemanticDiffLimits, SemanticDiffSnapshot,
     SemanticPath,
+};
+pub use semantic_summary::{
+    SemanticDiffSummary, SemanticSummaryCategory, SemanticSummaryError, SemanticSummaryKind,
+    SemanticSummaryLimits,
 };
 pub use units::{
     AngleMicrodegrees, Conversion, ConversionReceipt, CoordinateAnchor, CoordinateSpace, HwpUnit,

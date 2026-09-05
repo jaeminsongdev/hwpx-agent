@@ -30,8 +30,10 @@ interface Copy {
     approval: string;
     failed: string;
     revalidated: string;
+    unconfirmed: string;
     submitted: string;
     committed: string;
+    committedUnverified: string;
     noWarnings: string;
 }
 
@@ -56,8 +58,12 @@ const COPY: Record<"ko-KR" | "en-US", Copy> = {
         approval: "서버에서 승인된 계획 결과를 기다리고 있습니다.",
         failed: "계획 정보를 신뢰할 수 없어 닫았습니다.",
         revalidated: "계획과 기능 경로를 다시 검증했습니다.",
+        unconfirmed:
+            "실행 결과를 확인해야 합니다. 같은 계획은 다시 전송하지 않습니다.",
         submitted: "검증된 작업을 제출했습니다.",
         committed: "새 리비전을 만들었습니다.",
+        committedUnverified:
+            "새 리비전이 저장되었지만 검증이 완료되지 않았습니다. 결과를 확인하세요. 같은 계획은 다시 전송하지 않습니다.",
         noWarnings: "추가 경고가 없습니다.",
     },
     "en-US": {
@@ -82,8 +88,12 @@ const COPY: Record<"ko-KR" | "en-US", Copy> = {
         approval: "Waiting for an approved plan result from the server.",
         failed: "Plan data was not trustworthy, so the view was closed.",
         revalidated: "The plan and capability route were revalidated.",
+        unconfirmed:
+            "The execution result needs verification. This plan will not be sent again.",
         submitted: "The validated job was submitted.",
         committed: "A new revision was created.",
+        committedUnverified:
+            "A new revision was saved, but validation is not complete. Check the result. This plan will not be sent again.",
         noWarnings: "No additional warnings.",
     },
 };
@@ -158,7 +168,11 @@ function SpinnerState({
             ? copy.connecting
             : state.phase === "approval_pending"
               ? copy.approval
-              : errorText(state.errorCode, copy);
+              : state.executionState === "committed_unverified"
+                ? copy.committedUnverified
+                : state.executionState === "unconfirmed"
+                  ? copy.unconfirmed
+                  : errorText(state.errorCode, copy);
     return (
         <main className="plan-shell plan-centered" data-theme={state.theme}>
             <div
@@ -326,14 +340,26 @@ export function PlanReviewView({
         return <SpinnerState state={state} copy={copy} />;
     const snapshot = state.snapshot;
     const korean = state.locale === "ko-KR";
+    const dispatched =
+        state.executionState === "unconfirmed" ||
+        state.executionState === "submitted" ||
+        state.executionState === "committed" ||
+        state.executionState === "committed_unverified";
+    const needsAttention =
+        state.executionState === "unconfirmed" ||
+        state.executionState === "committed_unverified";
     const status =
-        state.executionState === "revalidated"
-            ? copy.revalidated
-            : state.executionState === "submitted"
-              ? copy.submitted
-              : state.executionState === "committed"
-                ? copy.committed
-                : null;
+        state.executionState === "committed_unverified"
+            ? copy.committedUnverified
+            : state.executionState === "unconfirmed"
+              ? copy.unconfirmed
+              : state.executionState === "revalidated"
+                ? copy.revalidated
+                : state.executionState === "submitted"
+                  ? copy.submitted
+                  : state.executionState === "committed"
+                    ? copy.committed
+                    : null;
     return (
         <main className="plan-shell" data-theme={state.theme}>
             <header className="plan-header">
@@ -367,7 +393,10 @@ export function PlanReviewView({
             </div>
             <Warnings snapshot={snapshot} copy={copy} korean={korean} />
             {status !== null && (
-                <p className="action-status" role="status">
+                <p
+                    className={`action-status execution-${state.executionState}`}
+                    role={needsAttention ? "alert" : "status"}
+                >
                     {status}
                 </p>
             )}
@@ -385,7 +414,11 @@ export function PlanReviewView({
                             onChange={(event) =>
                                 onAcknowledged(event.currentTarget.checked)
                             }
-                            disabled={state.actionPending}
+                            disabled={
+                                state.actionPending ||
+                                dispatched ||
+                                !snapshot.execution_allowed
+                            }
                         />
                         <span>{copy.acknowledge}</span>
                     </label>
@@ -403,7 +436,10 @@ export function PlanReviewView({
                             type="button"
                             onClick={onConfirmExecution}
                             disabled={
-                                !state.acknowledged || state.actionPending
+                                !state.acknowledged ||
+                                state.actionPending ||
+                                dispatched ||
+                                !snapshot.execution_allowed
                             }
                         >
                             {state.actionPending ? "…" : copy.execute}
@@ -416,7 +452,7 @@ export function PlanReviewView({
                         className="secondary"
                         type="button"
                         onClick={onRevalidate}
-                        disabled={state.actionPending}
+                        disabled={state.actionPending || dispatched}
                     >
                         {state.actionPending ? "…" : copy.revalidate}
                     </button>
@@ -425,7 +461,9 @@ export function PlanReviewView({
                         type="button"
                         onClick={onBeginExecution}
                         disabled={
-                            state.actionPending || !snapshot.execution_allowed
+                            state.actionPending ||
+                            dispatched ||
+                            !snapshot.execution_allowed
                         }
                     >
                         {copy.review}

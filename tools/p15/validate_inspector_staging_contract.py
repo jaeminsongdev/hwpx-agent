@@ -19,11 +19,19 @@ P15_08_CONTRACT_SHA256 = (
     "9a0e32959a6129f316f609069e87e22f22fb68b11622935c7ca32c080f44e402"
 )
 P15_09_AUDITED_REVISION = "7ea2f84c244fe5bbd7926ba3f176dc5acafcf624"
-P16_04_SUPERSEDING_VALIDATOR = "tools/p16/validate_widget_shell.py"
+P16_04_SUPERSEDING_VALIDATOR = "tools/p16/validate_widget_shell_successor.py"
 P16_04_SUPERSEDED_PATHS = {
+    "Cargo.toml",
+    "Cargo.lock",
     "package.json",
     "pnpm-lock.yaml",
     "pnpm-workspace.yaml",
+    "tools/p15/validate_artifact_delivery_contract.py",
+    "tools/p15/validate_async_job_contract.py",
+    "tools/p15/validate_error_mapping_contract.py",
+    "tools/p15/validate_handler_contract.py",
+    "tools/p15/validate_quota_contract.py",
+    "tools/p15/validate_telemetry_contract.py",
     "tools/p15/validate_inspector_staging_contract.py",
     "tools/p15/tests/test_inspector_staging_contract.py",
 }

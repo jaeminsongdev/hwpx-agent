@@ -49,18 +49,30 @@ def validate_policy(policy: Any, root: Path = ROOT) -> list[str]:
         errors.append("policy.confirmation")
     errors.extend(f"policy.design.{item}" for item in continuity.validate_image_entry(policy.get("design_source"), root, (1536, 1024)))
     expected_captures = {
-        "implementation/p16/visual-qa/p16-06-desktop-blocked.png": (1200, 760),
-        "implementation/p16/visual-qa/p16-06-desktop-confirm.png": (1200, 760),
-        "implementation/p16/visual-qa/p16-06-desktop-dark-submitted.png": (1200, 760),
-        "implementation/p16/visual-qa/p16-06-desktop-ready.png": (1200, 760),
-        "implementation/p16/visual-qa/p16-06-narrow-blocked.png": (500, 1200),
-        "implementation/p16/visual-qa/p16-06-narrow-confirm.png": (500, 1200),
-        "implementation/p16/visual-qa/p16-06-narrow-ready.png": (500, 1200),
+        "implementation/p16/visual-qa/response-v3/p16-06-desktop-blocked.png": (1200, 760),
+        "implementation/p16/visual-qa/response-v3/p16-06-desktop-committed_unverified.png": (1200, 760),
+        "implementation/p16/visual-qa/response-v3/p16-06-desktop-confirm.png": (1200, 760),
+        "implementation/p16/visual-qa/response-v3/p16-06-desktop-dark-submitted.png": (1200, 760),
+        "implementation/p16/visual-qa/response-v3/p16-06-desktop-ready.png": (1200, 760),
+        "implementation/p16/visual-qa/response-v3/p16-06-desktop-unconfirmed.png": (1200, 760),
+        "implementation/p16/visual-qa/response-v3/p16-06-minimum-committed_unverified.png": (320, 1600),
+        "implementation/p16/visual-qa/response-v3/p16-06-minimum-ready.png": (320, 1600),
+        "implementation/p16/visual-qa/response-v3/p16-06-narrow-blocked.png": (500, 1200),
+        "implementation/p16/visual-qa/response-v3/p16-06-narrow-committed_unverified.png": (500, 1200),
+        "implementation/p16/visual-qa/response-v3/p16-06-narrow-confirm.png": (500, 1200),
+        "implementation/p16/visual-qa/response-v3/p16-06-narrow-ready.png": (500, 1200),
+        "implementation/p16/visual-qa/response-v3/p16-06-narrow-unconfirmed.png": (500, 1200),
     }
     visual = policy.get("visual_qa")
-    if not isinstance(visual, dict) or set(visual) != {"browser", "capture_method", "captures"} or visual.get("browser") != "Google Chrome 152.0.7977.76" or visual.get("capture_method") != "isolated_headless_file_preview" or not isinstance(visual.get("captures"), list) or len(visual["captures"]) != 7:
+    if not isinstance(visual, dict) or set(visual) != {"browser", "capture_method", "captures", "preview_sha256", "inspection"} or visual.get("browser") != "Google Chrome 152.0.7977.76" or visual.get("capture_method") != "isolated_headless_file_preview" or visual.get("inspection") != "all_captures_view_image_original" or not isinstance(visual.get("captures"), list) or len(visual["captures"]) != 13:
         errors.append("policy.visual")
     else:
+        try:
+            preview_digest = continuity.sha256_bytes((root / PREVIEW_PATH.relative_to(ROOT)).read_bytes())
+        except OSError:
+            preview_digest = None
+        if preview_digest is None or visual.get("preview_sha256") != preview_digest:
+            errors.append("policy.visual.preview_digest")
         seen: set[str] = set()
         for item in visual["captures"]:
             relative = item.get("path") if isinstance(item, dict) else None

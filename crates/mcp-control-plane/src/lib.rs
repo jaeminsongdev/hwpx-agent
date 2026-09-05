@@ -11,6 +11,7 @@ mod error_catalog;
 mod handler;
 mod policy;
 mod quota;
+mod stored_plan;
 mod strict_json;
 mod telemetry;
 
@@ -34,11 +35,16 @@ pub use handler::{
     ToolServiceGateway, ToolServiceOutput,
 };
 pub use policy::{
-    InMemoryProjectPolicy, PolicyError, ProjectAccess, ProjectPolicyLimits, ToolPolicy,
+    InMemoryProjectPolicy, PolicyError, ProjectAccess, ProjectPolicy, ProjectPolicyLimits,
+    ToolPolicy,
 };
 pub use quota::{
     InMemoryQuotaService, JobClass, MAX_QUOTA_BUCKET_ENTRIES, MAX_QUOTA_REPLAY_ENTRIES,
     QUOTA_POLICY_SHA256, QuotaAdmission, QuotaError, QuotaService, QuotaStateLimits,
+};
+pub use stored_plan::{
+    AuthorizedStoredPlan, CompiledPlanSubmission, CurrentPlanSource, PlanLookupRequest,
+    PlanSourceRepository, StoredPlanError, StoredPlanLimits, StoredPlanRegistry,
 };
 pub use telemetry::{
     BackendClass, CapabilityRoute, CorrelationDigests, InMemoryTelemetry,

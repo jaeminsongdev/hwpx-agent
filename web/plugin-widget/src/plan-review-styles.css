@@ -398,6 +398,11 @@ input:focus-visible {
     color: var(--green);
     font-size: 12px;
 }
+.action-status.execution-unconfirmed,
+.action-status.execution-committed_unverified {
+    color: var(--amber);
+    background: color-mix(in srgb, var(--amber) 7%, var(--surface));
+}
 .blocked-message {
     color: var(--red);
     background: color-mix(in srgb, var(--red) 8%, var(--surface));

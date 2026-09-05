@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 from typing import Any
 
 from jsonschema import Draft202012Validator
@@ -15,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = ROOT / "implementation/p15/p15-error-mapping-contract-v1.json"
 ERROR_CATALOG_PATH = ROOT / "protocol/mcp/p15-public-error-catalog-v1.json"
 P15_07_SUPERSEDING_VALIDATOR = "tools/p15/validate_quota_contract.py"
+P16_SOURCE_QUALIFICATION = "tools/p16/p15_source_qualification.py"
 P15_06_AUDITED_REVISION = "f36a07e988558b4481c50955a0f76bd69c516d9d"
 P15_07_SUPERSEDED_PATHS = {
     "Cargo.lock",
@@ -180,6 +182,28 @@ def validate_p15_07_supersession(root: Path) -> list[str]:
     return []
 
 
+def validate_p16_source_qualification(root: Path) -> dict[str, tuple[str, str]]:
+    path = (Path(__file__).resolve().parents[1] / "p16/p15_source_qualification.py").resolve()
+    name = "_hwpx_agent_p16_p15_source_qualification"
+    module = sys.modules.get(name)
+    if module is None or Path(str(getattr(module, "__file__", ""))).resolve() != path:
+        sys.modules.pop(name, None)
+        specification = importlib.util.spec_from_file_location(name, path)
+        if specification is None or specification.loader is None:
+            return {}
+        module = importlib.util.module_from_spec(specification)
+        sys.modules[name] = module
+        try:
+            specification.loader.exec_module(module)
+        except Exception:
+            sys.modules.pop(name, None)
+            return {}
+    try:
+        return module.verified_error_replacements(root)
+    except Exception:
+        return {}
+
+
 def historical_source_matches(root: Path, relative: str, expected: str) -> bool:
     result = subprocess.run(
         ["git", "show", f"{P15_06_AUDITED_REVISION}:{relative}"],
@@ -193,6 +217,7 @@ def historical_source_matches(root: Path, relative: str, expected: str) -> bool:
 def validate(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
     p15_07_supersession_errors = validate_p15_07_supersession(root)
+    p16_source_replacements = validate_p16_source_qualification(root)
     try:
         contract = load_json(root / CONTRACT_PATH.relative_to(ROOT))
     except Exception as error:
@@ -372,6 +397,9 @@ def validate(root: Path = ROOT) -> list[str]:
             ):
                 errors.append(f"source_lock[{index}].digest_shape")
             elif sha256(source) != expected_hash:
+                observed = sha256(source)
+                if p16_source_replacements.get(relative) == (expected_hash, observed):
+                    continue
                 if relative not in P15_07_SUPERSEDED_PATHS or p15_07_supersession_errors:
                     errors.append(f"source_lock[{index}].digest")
                 elif not historical_source_matches(root, relative, expected_hash):

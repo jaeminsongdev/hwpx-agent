@@ -59,6 +59,9 @@ function findButton(label: string): HTMLButtonElement | undefined {
 function button(label: string): HTMLButtonElement {
     return findButton(label) ?? fail(`button_missing:${label}`);
 }
+function requireCallCount(expected: number, code: string): void {
+    if (calls.length !== expected) fail(code);
+}
 
 async function runFlow() {
     await waitFor(
@@ -83,6 +86,11 @@ async function runFlow() {
         'input[type="checkbox"]',
     ) as HTMLInputElement | null;
     if (checkbox === null) fail("acknowledgement_missing");
+    if (!button("확인 후 실행").disabled)
+        fail("execution_enabled_before_acknowledgement");
+    requireCallCount(2, "execution_before_acknowledgement");
+    button("확인 후 실행").click();
+    requireCallCount(2, "early_execution_dispatched");
     checkbox.click();
     await waitFor(
         () => button("확인 후 실행").disabled === false,
@@ -118,6 +126,14 @@ async function runFlow() {
         dryTwo?.arguments.idempotency_key === execute?.arguments.idempotency_key
     )
         fail("call_contract_mismatch");
+    if (!button("실행 검토").disabled || !button("계획 다시 검증").disabled)
+        fail("submitted_plan_can_be_rearmed");
+    button("실행 검토").click();
+    button("계획 다시 검증").click();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    requireCallCount(5, "submitted_plan_dispatched_again");
+    if (findButton("확인 후 실행") !== undefined)
+        fail("submitted_plan_dispatched_again");
     if (result !== null) {
         result.dataset.state = "pass";
         result.textContent =
@@ -138,7 +154,8 @@ async function main() {
         {
             capability_id: "table.cell_style",
             selected_backend: "hancom_2020",
-            support_level: "partial",
+            // Synthetic bridge fixture, not an actual Hangul capability receipt.
+            support_level: "verified",
             supported: true,
         },
         {

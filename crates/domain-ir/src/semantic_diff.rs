@@ -1206,7 +1206,7 @@ fn canonical_sha256<T: Serialize + ?Sized>(value: &T) -> Result<[u8; 32], Semant
     Ok(Sha256::digest(bytes).into())
 }
 
-fn subject_ref(kind: EntityKind, raw_id: &str) -> [u8; 32] {
+pub(crate) fn subject_ref(kind: EntityKind, raw_id: &str) -> [u8; 32] {
     typed_ref(entity_kind_name(kind), raw_id)
 }
 

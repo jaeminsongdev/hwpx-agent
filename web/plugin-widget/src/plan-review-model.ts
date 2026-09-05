@@ -95,12 +95,20 @@ export interface CapabilityCheckResult {
 
 export interface DocumentEditResult {
     readonly request_id: string;
-    readonly outcome: "accepted" | "succeeded";
+    readonly outcome: "accepted" | "succeeded" | "partial" | "unverified";
     readonly job_id: string | null;
     readonly revision_id: string | null;
+    readonly artifact: DocumentEditArtifact | null;
     readonly commit_state: "not_started" | "pending" | "committed";
     readonly validation_state: "not_run" | "verified" | "partial" | "failed";
     readonly warning_codes: readonly string[];
+}
+
+export interface DocumentEditArtifact {
+    readonly artifact_id: string;
+    readonly media_type: string;
+    readonly bytes: number;
+    readonly sha256: string;
 }
 
 const CLIENT_SURFACES = new Set<ClientSurface>([
@@ -163,9 +171,12 @@ const DIFF_KINDS = new Set<DiffKind>([
 ]);
 const PROJECT_ID = /^prj_[A-Za-z0-9_-]{8,120}$/;
 const REVISION_ID = /^rev_[A-Za-z0-9_-]{8,120}$/;
-const PLAN_ID = /^plan_[A-Za-z0-9_-]{8,120}$/;
+// P15's total maxLength is 124, including the five-character prefix.
+const PLAN_ID = /^plan_[A-Za-z0-9_-]{8,119}$/;
 const REQUEST_ID = /^req_[A-Za-z0-9_-]{8,120}$/;
 const JOB_ID = /^job_[A-Za-z0-9_-]{8,120}$/;
+const ARTIFACT_ID = /^art_[A-Za-z0-9_-]{8,120}$/;
+const MEDIA_TYPE = /^[a-z0-9!#$&^_.+-]+\/[a-z0-9!#$&^_.+-]+$/;
 const CAPABILITY_ID = /^[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+$/;
 const WARNING_CODE = /^[A-Z][A-Z0-9_]{2,95}$/;
 const SHA256 = /^[0-9a-f]{64}$/;
@@ -199,6 +210,24 @@ function boundedInteger(value: unknown, maximum = 100_000): value is number {
     );
 }
 
+// JSON Schema maxLength counts Unicode code points, not JavaScript UTF-16 units.
+function boundedText(value: unknown, maximum: number): value is string {
+    if (
+        typeof value !== "string" ||
+        value.length === 0 ||
+        value.length > maximum * 2
+    )
+        return false;
+    if (value.length <= maximum) return true;
+    let count = 0;
+    for (let index = 0; index < value.length; index += 1) {
+        if (value.codePointAt(index)! > 0xffff) index += 1;
+        count += 1;
+        if (count > maximum) return false;
+    }
+    return true;
+}
+
 function parseRoute(value: unknown): CapabilityRoute | null {
     if (
         !record(value) ||
@@ -211,6 +240,8 @@ function parseRoute(value: unknown): CapabilityRoute | null {
     )
         return null;
     if (
+        typeof value.capability_id !== "string" ||
+        value.capability_id.length > 160 ||
         !identifier(value.capability_id, CAPABILITY_ID) ||
         typeof value.selected_backend !== "string" ||
         !BACKENDS.has(value.selected_backend as SelectedBackend) ||
@@ -291,7 +322,7 @@ export function parsePlanReviewRenderRequest(
         !identifier(value.plan_id, PLAN_ID)
     )
         return null;
-    return value as unknown as PlanReviewRenderRequest;
+    return { ...value } as unknown as PlanReviewRenderRequest;
 }
 
 export function parsePlanReviewSnapshot(
@@ -371,15 +402,13 @@ export function parsePlanReviewSnapshot(
         return null;
     const canExecute =
         route.every(
-            (item) =>
-                item!.supported &&
-                (item!.support_level === "verified" ||
-                    item!.support_level === "partial"),
+            (item) => item!.supported && item!.support_level === "verified",
         ) &&
         value.signature_impact === "none" &&
         value.dry_run_state === "verified" &&
         warnings.every((item) => item!.severity !== "blocking");
-    if (value.execution_allowed !== canExecute) return null;
+    // The server may deny an otherwise valid plan; the client can never grant permission.
+    if (value.execution_allowed && !canExecute) return null;
     return {
         ...(value as unknown as PlanReviewSnapshot),
         route: route as CapabilityRoute[],
@@ -415,9 +444,7 @@ function parsePublicBase(
         !["accepted", "succeeded", "partial", "unverified"].includes(
             value.outcome,
         ) ||
-        typeof value.safe_summary !== "string" ||
-        value.safe_summary.length < 1 ||
-        value.safe_summary.length > 1000 ||
+        !boundedText(value.safe_summary, 1000) ||
         !Array.isArray(value.warnings) ||
         value.warnings.length > 64
     )
@@ -427,9 +454,7 @@ function parsePublicBase(
             !record(warning) ||
             !exact(warning, ["code", "message"]) ||
             !identifier(warning.code, WARNING_CODE) ||
-            typeof warning.message !== "string" ||
-            warning.message.length < 1 ||
-            warning.message.length > 1000
+            !boundedText(warning.message, 1000)
         )
             return null;
     }
@@ -489,10 +514,7 @@ export function parseCapabilityCheckResult(
             return null;
         if (
             ![...candidate.constraints, ...candidate.unverified_reasons].every(
-                (item) =>
-                    typeof item === "string" &&
-                    item.length >= 1 &&
-                    item.length <= 500,
+                (item) => boundedText(item, 500),
             )
         )
             return null;
@@ -512,6 +534,26 @@ export function parseCapabilityCheckResult(
     };
 }
 
+function parseEditArtifact(value: unknown): DocumentEditArtifact | null {
+    if (
+        !record(value) ||
+        !exact(value, ["artifact_id", "media_type", "bytes", "sha256"]) ||
+        !identifier(value.artifact_id, ARTIFACT_ID) ||
+        typeof value.media_type !== "string" ||
+        value.media_type.length > 127 ||
+        !MEDIA_TYPE.test(value.media_type) ||
+        !boundedInteger(value.bytes, 10_737_418_240) ||
+        !identifier(value.sha256, SHA256)
+    )
+        return null;
+    return {
+        artifact_id: value.artifact_id,
+        media_type: value.media_type,
+        bytes: value.bytes,
+        sha256: value.sha256,
+    };
+}
+
 export function parseDocumentEditResult(
     value: unknown,
 ): DocumentEditResult | null {
@@ -523,15 +565,16 @@ export function parseDocumentEditResult(
         "commit_state",
         "validation_state",
     ]);
+    const artifact =
+        value.artifact === null ? null : parseEditArtifact(value.artifact);
     if (
         base === null ||
-        (value.outcome !== "accepted" && value.outcome !== "succeeded") ||
         !(value.job_id === null || identifier(value.job_id, JOB_ID)) ||
         !(
             value.revision_id === null ||
             identifier(value.revision_id, REVISION_ID)
         ) ||
-        value.artifact !== null ||
+        (value.artifact !== null && artifact === null) ||
         typeof value.commit_state !== "string" ||
         !["not_started", "pending", "committed"].includes(value.commit_state) ||
         typeof value.validation_state !== "string" ||
@@ -542,9 +585,10 @@ export function parseDocumentEditResult(
         return null;
     return {
         request_id: base.request_id,
-        outcome: value.outcome,
+        outcome: value.outcome as DocumentEditResult["outcome"],
         job_id: value.job_id as string | null,
         revision_id: value.revision_id as string | null,
+        artifact,
         commit_state: value.commit_state as DocumentEditResult["commit_state"],
         validation_state:
             value.validation_state as DocumentEditResult["validation_state"],
@@ -574,6 +618,7 @@ export function isVerifiedDryRun(result: DocumentEditResult): boolean {
         result.outcome === "succeeded" &&
         result.job_id === null &&
         result.revision_id === null &&
+        result.artifact === null &&
         result.commit_state === "not_started" &&
         result.validation_state === "verified"
     );
@@ -584,13 +629,29 @@ export function isAcceptedExecution(result: DocumentEditResult): boolean {
         (result.outcome === "accepted" &&
             result.job_id !== null &&
             result.revision_id === null &&
+            result.artifact === null &&
             result.commit_state === "pending" &&
             result.validation_state === "not_run") ||
         (result.outcome === "succeeded" &&
             result.revision_id !== null &&
             result.commit_state === "committed" &&
-            (result.validation_state === "verified" ||
-                result.validation_state === "partial"))
+            result.validation_state === "verified")
+    );
+}
+
+// A known commit is an external effect even when validation is incomplete or failed.
+// Keep it non-retryable, but never present it as a fully verified completion.
+export function isCommittedUnverifiedExecution(
+    result: DocumentEditResult,
+): boolean {
+    return (
+        result.outcome !== "accepted" &&
+        result.revision_id !== null &&
+        result.commit_state === "committed" &&
+        !(
+            result.outcome === "succeeded" &&
+            result.validation_state === "verified"
+        )
     );
 }
 

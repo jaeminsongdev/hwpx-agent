@@ -387,6 +387,7 @@ where
         let changed = self.metadata.set_permissions(
             context.tenant_id(),
             artifact_id,
+            record.acl_version(),
             subject,
             permissions,
         )?;
@@ -438,6 +439,7 @@ where
         let changed = match self.metadata.transition_state(
             record.tenant_id(),
             record.artifact_id(),
+            record.acl_version(),
             StorageState::Available,
             StorageState::Quarantined,
             ValidationState::Quarantined,

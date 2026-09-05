@@ -1,0 +1,126 @@
+{
+  "claims": {
+    "actual_hangul": false,
+    "actual_integrated_postgres_retested": true,
+    "other_pc_or_version": false,
+    "owned_resources_removed": true,
+    "p15_phase_complete": false,
+    "p16_phase_complete": false,
+    "production": false,
+    "registered_host": false
+  },
+  "evidence": {
+    "original_receipt_sha256": "7b42b454571db49d4a71641b9ce07c46c0c7ae5e0f739acc5c4ca0a73b0c0e98",
+    "path": "implementation/p16/qualification/main-9cc1-p16-62542-postgres-v1/current-db.json",
+    "probe_sha256": "496d23c3f8700c3c22eed5b2fa9e823ff4d0bc9469c8e333b66855b80e9eee2a",
+    "run_id": "20dff2d03ef04bb39abce731d9331565",
+    "sha256": "dac4957bacee0cde7ee59f85cffcc71cfe00dfa412c3a0d151572e91a889e117"
+  },
+  "guard_sources": [
+    {
+      "path": "tools/p16/integrated_postgres_acceptance.py",
+      "sha256": "4104a6e841e33e7e63222186e871b31a45fe428482041f22e238a8b1d19b72ff"
+    },
+    {
+      "path": "tools/p16/tests/test_integrated_postgres_acceptance.py",
+      "sha256": "3b1ecf8d3bbfa0e90c4c6b727a5a967a585a5244f4012b25691a4f3c0979f029"
+    },
+    {
+      "path": "implementation/p16/P16-06_MAIN_INTEGRATED_POSTGRES_ACCEPTANCE.md",
+      "sha256": "6185cec37fe5f40c6d663a31c77e771a334c03e9c70a0c2c6872f4bd4b2cf6f9"
+    }
+  ],
+  "qualification_id": "p16.main.9cc1db3.62542b0.postgres.v1",
+  "runtime_sources": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "7cb6ea91c65c226f2769af0d33906b39970efa0c81b286aa32ca282ef8614d69"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "f8281c9c13ea981ab8652819f1e3946ea942bca2d952f68b05ee61f3a3179c03"
+    },
+    {
+      "path": "crates/artifact-service/Cargo.toml",
+      "sha256": "574c7dbfb13194183afe5664ff1bc43142e7730e0a0ce2086687d9bed981c69f"
+    },
+    {
+      "path": "crates/artifact-service/examples/postgres_artifact_probe.rs",
+      "sha256": "4d11fc703c914cd0448dd1df489b2e85bfc0876f84ecadc2e0591d919f7bcab3"
+    },
+    {
+      "path": "crates/artifact-service/src/lib.rs",
+      "sha256": "de4a072dd03cb1c450953277148d6c342355ae8185a2371b273876bc024225a5"
+    },
+    {
+      "path": "crates/artifact-service/src/service.rs",
+      "sha256": "f6c9f9eec62944434cd0eeca40fa1767bffbf49bfb92a99cd543a50b29fb1713"
+    },
+    {
+      "path": "crates/artifact-service/src/store.rs",
+      "sha256": "ff803fce425c82cf19ed10b0aaa8b6b377c6bc9525f77ec8d70fa2168509f672"
+    },
+    {
+      "path": "crates/artifact-service/src/store/postgres_repository.rs",
+      "sha256": "52f583c2b18d33a009db93ef59127d9cf2b13000e9e83db5bef523c748bc33aa"
+    },
+    {
+      "path": "migrations/postgres/0001_p14_metadata.up.sql",
+      "sha256": "7c00f744993581448acb4b6d4d8a46f1ff03d108750da0afc671c3b5e2b0a78d"
+    },
+    {
+      "path": "migrations/postgres/0002_p14_artifact_service.up.sql",
+      "sha256": "202753fbd6f20f181b09bd6227766dfb808811bd4e734a4a418cb5bae4eaee56"
+    },
+    {
+      "path": "migrations/postgres/0003_p14_revision_cas.up.sql",
+      "sha256": "beeac1f22fde0eb3474d40acc14838c1e9676a74b68c5b6f9608713ba6e6e53a"
+    },
+    {
+      "path": "migrations/postgres/0004_p14_history_checkpoints.up.sql",
+      "sha256": "e336890d4ee3fdf4819f52c079ba320f450b01ec516bf5ffaaf505a76b14f249"
+    },
+    {
+      "path": "migrations/postgres/0005_p14_job_state_machine.up.sql",
+      "sha256": "4f15cd28510d55fa58a18aef7b8edf8b4606169fd722a0b8d2c63da2cfb4bf9b"
+    },
+    {
+      "path": "migrations/postgres/0006_p14_worker_lease_fencing.up.sql",
+      "sha256": "03af7cc8b2ae883ff132e3b1737b29c3829fcb0fa9887566485f865b3c0393ab"
+    },
+    {
+      "path": "migrations/postgres/0007_p14_idempotency_reconciliation.up.sql",
+      "sha256": "cc60353df6cf3c51155417e39d0f1f4c348d2a6282bba7d63de9ea0282be5e5d"
+    },
+    {
+      "path": "migrations/postgres/0008_p14_cancel_cleanup.up.sql",
+      "sha256": "2ba28c1386db9c5aeb4661d11069e48f8624c2560b69301a0750ab9344c46f29"
+    },
+    {
+      "path": "migrations/postgres/0009_p14_retention_local_mirror.up.sql",
+      "sha256": "272da51d665be7b9c0b5150a641ca1f9f51b9b78cddb839096acb57eb71e9ec2"
+    },
+    {
+      "path": "migrations/postgres/0010_p16_artifact_repository.down.sql",
+      "sha256": "8b2160fa5c7d411daf325b3fe3c7b594f2f2c42d743d6582fd6f5ae94bcca719"
+    },
+    {
+      "path": "migrations/postgres/0010_p16_artifact_repository.up.sql",
+      "sha256": "3d1ce21be0cb100bbc098e798b1917e52c4767da9a832359578179d9b0522420"
+    },
+    {
+      "path": "tools/p16/run_postgres_artifact_checks.py",
+      "sha256": "8fa11f1137591c18d8160985687ab1e6f9e27d83495424cb7158fd68cb4a5f3a"
+    },
+    {
+      "path": "tools/p16/tests/test_postgres_artifact_checks.py",
+      "sha256": "b3067b75185437f712b9a3b8c0d4ea22fe467d6d4936c1a99834c0a63d03d56a"
+    }
+  ],
+  "schema_version": "hwpx-agent.p16-main-integrated-postgres-acceptance/v1",
+  "scope": "current_pc_merged_source_actual_postgres_only",
+  "source_qualification": {
+    "path": "implementation/p16/qualification/main-9cc1-p16-62542-v1/contract.json",
+    "sha256": "890c72ac61c2c7d4e871958ff684de513fe1fe7e888e1264cba0eaec4bab52df"
+  }
+}
