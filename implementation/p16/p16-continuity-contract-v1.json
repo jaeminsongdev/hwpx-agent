@@ -1,0 +1,251 @@
+{
+  "bundles": {
+    "harness": {
+      "bytes": 432754,
+      "path": "web/plugin-widget/dist/continuity-e2e-host.html",
+      "sha256": "ffa482e1557f6b6ae6d1e090bd6ef232a7090e1a4ca24a7cf3a1fe6caccb9c07"
+    },
+    "preview": {
+      "bytes": 209160,
+      "path": "web/plugin-widget/dist/continuity-preview.html",
+      "sha256": "cef1458dd74af2bc56814351b0e184697fbb4acd8f918b321b46094de2d78622"
+    },
+    "resource": {
+      "bytes": 655998,
+      "path": "web/plugin-widget/dist/continuity-widget-v1.html",
+      "sha256": "cb79603ec437d83535185e881e488ae481e40e51d7c8181e98e64cc2318249ce"
+    }
+  },
+  "catalog": {
+    "path": "protocol/mcp/p15-public-tools-v1.json",
+    "sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001",
+    "tools": [
+      "project_checkpoint",
+      "project_history",
+      "project_open"
+    ]
+  },
+  "claims": {
+    "actual_chatgpt_or_codex_host_tested": false,
+    "developer_mode_tested": false,
+    "file_transfer_tested": false,
+    "hangul_2022_2024_or_other_pc_tested": false,
+    "hangul_or_com_invoked": false,
+    "public_or_production_ready": false,
+    "registered_plugin_tested": false,
+    "remote_mcp_tested": false
+  },
+  "decision": "pass_scoped_local_mcp_apps_bridge_component_e2e_actual_host_pending",
+  "e2e": {
+    "bridge": "real_ext_apps_appbridge_postmessage_iframe",
+    "call_count": 3,
+    "call_order": [
+      "project_open",
+      "project_history",
+      "project_checkpoint"
+    ],
+    "evidence_level": "local_browser_component_not_actual_chatgpt_or_codex_host",
+    "runner": "tools/p16/run_continuity_e2e.py"
+  },
+  "limits": {
+    "minimum_css_width": 320,
+    "primary_actions": 1,
+    "rendered_revisions": 6,
+    "secondary_actions": 1,
+    "snapshot_revisions": 12
+  },
+  "next_task": "P16-06 Plan/diff UI",
+  "predecessor": {
+    "path": "implementation/p16/p16-widget-shell-contract-v1.json",
+    "sha256": "2d8dad6318bc9090b0a7db70d19f1470e6ce0fa97bb177755cff993f9b94f09e"
+  },
+  "requirements": [
+    "P16-R01",
+    "P16-R02",
+    "P16-R03",
+    "P16-R04",
+    "P16-R05",
+    "P16-R06",
+    "P16-R09",
+    "P16-R10",
+    "P16-R17",
+    "P16-R26",
+    "P16-R28",
+    "P16-R34"
+  ],
+  "schema_version": "hwpx-agent.p16-continuity-contract/v1",
+  "scope": "current_pc_local_mcp_apps_bridge_component",
+  "source_locks": [
+    {
+      "bytes": 4462,
+      "path": "implementation/p16/P16-05_CONTINUITY_DESIGN_SPEC.md",
+      "sha256": "02c456e4044994e984532875258164f0ecbcfca0acf6ca6df07da6417baed194"
+    },
+    {
+      "bytes": 2747,
+      "path": "implementation/p16/P16-05_CONTINUITY_POLICY.md",
+      "sha256": "022313ce446a6fd9e5efc95dc9ebaf7afb7e30392c71c5448d33fff215ca90a6"
+    },
+    {
+      "bytes": 3091,
+      "path": "implementation/p16/P16-05_VISUAL_QA.md",
+      "sha256": "133c327d8370d007ba4d065fe7c21503483be658082a8136e9762a8379157290"
+    },
+    {
+      "bytes": 3707,
+      "path": "implementation/p16/p16-continuity-policy-v1.json",
+      "sha256": "19f01aaab0307d263d947a01ed8feb2cfb5bb99bbc594232a0a356996514880e"
+    },
+    {
+      "bytes": 1216196,
+      "path": "implementation/p16/design/p16-05-continuity-concept.png",
+      "sha256": "29f7ff6667073c8b3a00d9c08aeb29165a69c52fe3d17c04d10c547b72fed923"
+    },
+    {
+      "bytes": 42150,
+      "path": "implementation/p16/visual-qa/p16-05-desktop-confirm.png",
+      "sha256": "b8b96630cc3dc21e99522b3846fc11de2dd04dd9e67bf990f273c3e08e71de28"
+    },
+    {
+      "bytes": 41210,
+      "path": "implementation/p16/visual-qa/p16-05-desktop-conflict.png",
+      "sha256": "0a1a15279aae69d2c6779c23de1f48f0207741cb6e94ba5dbc38b56d17335b2b"
+    },
+    {
+      "bytes": 39063,
+      "path": "implementation/p16/visual-qa/p16-05-desktop-dark-saved.png",
+      "sha256": "4f84531b2dffac491568ce9825e3a2836ed6402cb671e49a0725f1740fb93d36"
+    },
+    {
+      "bytes": 36750,
+      "path": "implementation/p16/visual-qa/p16-05-desktop-ready.png",
+      "sha256": "ce3be74593fed26c574b6092f17b3a9478bef2aa8c8dc89bb449af26311cd8c9"
+    },
+    {
+      "bytes": 38439,
+      "path": "implementation/p16/visual-qa/p16-05-narrow-confirm.png",
+      "sha256": "60945372f3a6fc30f4d88fd10d481193c7f5e449775e8f3e60190ba251006650"
+    },
+    {
+      "bytes": 37529,
+      "path": "implementation/p16/visual-qa/p16-05-narrow-conflict.png",
+      "sha256": "859d77937e7d3a4e9b534f7e88653ec0674707ab9041e6d5b746625238690a1f"
+    },
+    {
+      "bytes": 32838,
+      "path": "implementation/p16/visual-qa/p16-05-narrow-ready.png",
+      "sha256": "ad12c8dff9bfcd761c0f458ecc46c96eb512ff428df10c6346afd87091760405"
+    },
+    {
+      "bytes": 13758,
+      "path": "implementation/p16/p16-widget-shell-contract-v1.json",
+      "sha256": "2d8dad6318bc9090b0a7db70d19f1470e6ce0fa97bb177755cff993f9b94f09e"
+    },
+    {
+      "bytes": 134758,
+      "path": "protocol/mcp/p15-public-tools-v1.json",
+      "sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001"
+    },
+    {
+      "bytes": 3326,
+      "path": "web/plugin-widget/scripts/build-continuity-widget.mjs",
+      "sha256": "8843a4b3b7c483546d0a5bebf3bd693590db2522f46a16736eba58bf8c6838e1"
+    },
+    {
+      "bytes": 2265,
+      "path": "web/plugin-widget/src/continuity-component.tsx",
+      "sha256": "7830a17182edd16cc8ba71a5655487a62309996367e4239d8901de7db244758d"
+    },
+    {
+      "bytes": 10871,
+      "path": "web/plugin-widget/src/continuity-controller.test.ts",
+      "sha256": "86d3b816a1c3cb78d6c6dc401c74c4a27db000e9a97a823db8a04e71b2475661"
+    },
+    {
+      "bytes": 15534,
+      "path": "web/plugin-widget/src/continuity-controller.ts",
+      "sha256": "b95154b591a03a76246e45d19425d4f44e78e71c5d7d7b889c61e534fe5c529e"
+    },
+    {
+      "bytes": 7760,
+      "path": "web/plugin-widget/src/continuity-e2e-host.ts",
+      "sha256": "506440a1287b4956cac8f2da6721ebba39c7c3abd10a693c5087706a72232f94"
+    },
+    {
+      "bytes": 3199,
+      "path": "web/plugin-widget/src/continuity-mcp-app-port.ts",
+      "sha256": "f4e45192784193bdd5d34e0650d739405a3707d2b19046d2e714b97040937627"
+    },
+    {
+      "bytes": 5412,
+      "path": "web/plugin-widget/src/continuity-model.test.ts",
+      "sha256": "98130dcab197dce66a7d0ce11a9c776a5d6d283c3e7eea163dd8fd69b709e18d"
+    },
+    {
+      "bytes": 14124,
+      "path": "web/plugin-widget/src/continuity-model.ts",
+      "sha256": "9d8e1688234fecc17537f2a7ad80fa9da57b0799c5da268033654b735c8bd15e"
+    },
+    {
+      "bytes": 2442,
+      "path": "web/plugin-widget/src/continuity-preview.tsx",
+      "sha256": "be6e51d5cf43df12fdf85f697d54251c43c16f15fecf4ca59eacac8a8f4cbe0c"
+    },
+    {
+      "bytes": 2668,
+      "path": "web/plugin-widget/src/continuity-resource.test.ts",
+      "sha256": "3cf335c749e5356f1d356b197d12f29ad56813da079514ec2f5f84271d4fe522"
+    },
+    {
+      "bytes": 6375,
+      "path": "web/plugin-widget/src/continuity-resource.ts",
+      "sha256": "876b7fb3bd1dbe0b3159de6d4503ed61cf561adacac973d6341c0c75c9f32b83"
+    },
+    {
+      "bytes": 8445,
+      "path": "web/plugin-widget/src/continuity-styles.css",
+      "sha256": "67a06079832b46c36ef31a240676e60d3267df6badd2affa6b68d0a4dbd2f231"
+    },
+    {
+      "bytes": 3240,
+      "path": "web/plugin-widget/src/continuity-ui.test.tsx",
+      "sha256": "2f470067eb060e6d166f56fc992e4d035f83646139a9e4cb7004e21ee40b372a"
+    },
+    {
+      "bytes": 17339,
+      "path": "web/plugin-widget/src/continuity-ui.tsx",
+      "sha256": "8a87ffa1d777f5df4dbb079ff8c8d564001ce095ab592dbbf3c188d57fd51a6a"
+    },
+    {
+      "bytes": 15576,
+      "path": "tools/p16/continuity.py",
+      "sha256": "a5d5cbcb3148edacea37e6872cdd3801fb2deb263052ca2b2197cb9c02f7b9c9"
+    },
+    {
+      "bytes": 4984,
+      "path": "tools/p16/build_continuity_contract.py",
+      "sha256": "d521035d5544b7b5de963a1a862f3d79615d3f3fc008cb6ea2a2717e3ec89dcc"
+    },
+    {
+      "bytes": 1546,
+      "path": "tools/p16/run_continuity_checks.py",
+      "sha256": "2795171ec62ec1406b10f9d817f588879b858664cab7266f6311b8c16a05377a"
+    },
+    {
+      "bytes": 5441,
+      "path": "tools/p16/run_continuity_e2e.py",
+      "sha256": "0faf9f5e6ab172b0966e9dc1b50008b940583e9a4faf6f5b9fafbb1f6a0c5159"
+    },
+    {
+      "bytes": 2309,
+      "path": "tools/p16/validate_continuity.py",
+      "sha256": "f70cf6702e89c164a9b635f007dd2f296c5b756a0053133dd9c570bdc58c70e6"
+    },
+    {
+      "bytes": 4879,
+      "path": "tools/p16/tests/test_continuity.py",
+      "sha256": "12aa1f02f65640e3e7a5971afd62aede59547f339775e97f2787d2187faf0f7d"
+    }
+  ],
+  "task": "P16-05"
+}

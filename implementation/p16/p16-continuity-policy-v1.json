@@ -1,0 +1,139 @@
+{
+  "schema_version": "hwpx-agent.p16-continuity-policy/v1",
+  "task": "P16-05",
+  "requirements": [
+    "P16-R01",
+    "P16-R02",
+    "P16-R03",
+    "P16-R04",
+    "P16-R05",
+    "P16-R06",
+    "P16-R09",
+    "P16-R10",
+    "P16-R17",
+    "P16-R26",
+    "P16-R28",
+    "P16-R34"
+  ],
+  "resource": {
+    "uri": "ui://hwpx-agent/project-continuity/v1.html",
+    "mime_type": "text/html;profile=mcp-app",
+    "html": "web/plugin-widget/dist/continuity-widget-v1.html",
+    "max_bytes": 800000,
+    "csp": {
+      "connectDomains": [],
+      "resourceDomains": []
+    }
+  },
+  "render_tool": {
+    "name": "render_project_continuity_widget",
+    "oauth_scopes": [
+      "project.read"
+    ],
+    "read_only": true
+  },
+  "server_calls": [
+    {
+      "name": "project_open",
+      "mode": "read",
+      "oauth_scopes": [
+        "project.read"
+      ]
+    },
+    {
+      "name": "project_history",
+      "mode": "read",
+      "oauth_scopes": [
+        "project.read"
+      ]
+    },
+    {
+      "name": "project_checkpoint",
+      "mode": "write_confirmed",
+      "oauth_scopes": [
+        "project.read",
+        "project.write"
+      ]
+    }
+  ],
+  "bounds": {
+    "snapshot_revisions": 12,
+    "rendered_revisions": 6,
+    "primary_actions": 1,
+    "secondary_actions": 1,
+    "minimum_css_width": 320,
+    "responsive_breakpoint": 720
+  },
+  "design_source": {
+    "path": "implementation/p16/design/p16-05-continuity-concept.png",
+    "bytes": 1216196,
+    "width": 1536,
+    "height": 1024,
+    "sha256": "29f7ff6667073c8b3a00d9c08aeb29165a69c52fe3d17c04d10c547b72fed923"
+  },
+  "visual_qa": {
+    "browser": "Google Chrome 152.0.7977.76",
+    "capture_method": "isolated_headless_file_preview",
+    "captures": [
+      {
+        "path": "implementation/p16/visual-qa/p16-05-desktop-confirm.png",
+        "bytes": 42150,
+        "width": 1200,
+        "height": 720,
+        "sha256": "b8b96630cc3dc21e99522b3846fc11de2dd04dd9e67bf990f273c3e08e71de28"
+      },
+      {
+        "path": "implementation/p16/visual-qa/p16-05-desktop-conflict.png",
+        "bytes": 41210,
+        "width": 1200,
+        "height": 720,
+        "sha256": "0a1a15279aae69d2c6779c23de1f48f0207741cb6e94ba5dbc38b56d17335b2b"
+      },
+      {
+        "path": "implementation/p16/visual-qa/p16-05-desktop-dark-saved.png",
+        "bytes": 39063,
+        "width": 1200,
+        "height": 720,
+        "sha256": "4f84531b2dffac491568ce9825e3a2836ed6402cb671e49a0725f1740fb93d36"
+      },
+      {
+        "path": "implementation/p16/visual-qa/p16-05-desktop-ready.png",
+        "bytes": 36750,
+        "width": 1200,
+        "height": 720,
+        "sha256": "ce3be74593fed26c574b6092f17b3a9478bef2aa8c8dc89bb449af26311cd8c9"
+      },
+      {
+        "path": "implementation/p16/visual-qa/p16-05-narrow-confirm.png",
+        "bytes": 38439,
+        "width": 500,
+        "height": 760,
+        "sha256": "60945372f3a6fc30f4d88fd10d481193c7f5e449775e8f3e60190ba251006650"
+      },
+      {
+        "path": "implementation/p16/visual-qa/p16-05-narrow-conflict.png",
+        "bytes": 37529,
+        "width": 500,
+        "height": 760,
+        "sha256": "859d77937e7d3a4e9b534f7e88653ec0674707ab9041e6d5b746625238690a1f"
+      },
+      {
+        "path": "implementation/p16/visual-qa/p16-05-narrow-ready.png",
+        "bytes": 32838,
+        "width": 500,
+        "height": 760,
+        "sha256": "ad12c8dff9bfcd761c0f458ecc46c96eb512ff428df10c6346afd87091760405"
+      }
+    ]
+  },
+  "e2e": {
+    "runner": "tools/p16/run_continuity_e2e.py",
+    "bridge": "real_ext_apps_appbridge_postmessage_iframe",
+    "expected_calls": [
+      "project_open",
+      "project_history",
+      "project_checkpoint"
+    ],
+    "actual_host": false
+  }
+}
