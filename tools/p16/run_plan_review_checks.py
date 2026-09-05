@@ -15,6 +15,7 @@ def main()->int:
     run(sys.executable,"-m","compileall","-q","tools/p16")
     run("pnpm","--filter","@hwpx-agent/plugin-widget","typecheck")
     run("pnpm","--filter","@hwpx-agent/plugin-widget","build")
+    run("node","web/plugin-widget/scripts/build-continuity-widget.mjs")
     run("node","web/plugin-widget/scripts/build-plan-review-widget.mjs")
     first=hashlib.sha256((ROOT/"web/plugin-widget/dist/plan-review-widget-v1.html").read_bytes()).hexdigest()
     run("node","web/plugin-widget/scripts/build-plan-review-widget.mjs")

@@ -49,8 +49,11 @@ class PlanReviewTests(unittest.TestCase):
 
     def test_unknown_execution_and_minimum_width_captures_are_required(self) -> None:
         expected = {
+            "p16-06-desktop-committed_unverified.png",
             "p16-06-desktop-unconfirmed.png",
+            "p16-06-minimum-committed_unverified.png",
             "p16-06-narrow-unconfirmed.png",
+            "p16-06-narrow-committed_unverified.png",
             "p16-06-minimum-ready.png",
         }
         actual = {Path(item["path"]).name for item in self.policy["visual_qa"]["captures"]}
@@ -87,6 +90,13 @@ class PlanReviewTests(unittest.TestCase):
 
     def test_contract_source_paths_are_unique(self) -> None:
         self.assertEqual(len(build_plan_review_contract.LOCAL_SOURCES), len(set(build_plan_review_contract.LOCAL_SOURCES)))
+
+    def test_runner_builds_the_continuity_predecessor_before_plan_review(self) -> None:
+        runner = (plan_review.ROOT / "tools/p16/run_plan_review_checks.py").read_text(encoding="utf-8")
+        predecessor = 'run("node","web/plugin-widget/scripts/build-continuity-widget.mjs")'
+        current = 'run("node","web/plugin-widget/scripts/build-plan-review-widget.mjs")'
+        self.assertIn(predecessor, runner)
+        self.assertLess(runner.index(predecessor), runner.index(current))
 
     def test_contract_declares_only_local_component_claim(self) -> None:
         contract = build_plan_review_contract.build()
