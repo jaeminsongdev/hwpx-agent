@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-05
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P16 / P16-03 Skills`
+- Active phase/task: `P05 / P05-07 actual render acceptance` + `P16 / P16-04 Widget shell`
 - Active reasoning effort: `high`
 - Immediate UI dependency: none live; P05-07 v2 attempts 10 through 16 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `모두 허용`
 
@@ -39,7 +39,7 @@ save, render, cross-version or production proof.
 | P13 | `blocked_by_P10` | validation/oracle/render |
 | P14 | `pass_scoped_current_pc_local_reference_and_disposable_postgres` | `implementation/p14/P14_GATE_REPORT.md` |
 | P15 | `pass_scoped_current_pc_hancom_2020_local_mcp_reference_and_inspector_staging` | `implementation/p15/P15_GATE_REPORT.md` |
-| P16 | `in_progress_current_pc_local` | P16-01 pass; P16-02 base ready/actual registration pending; P16-03 Skills active |
+| P16 | `in_progress_current_pc_local` | P16-01 and P16-03 pass; P16-02 base ready/actual registration pending; P16-04 Widget shell active |
 | P17 | `ready_current_pc_local` | Codex remote/local companion; not started |
 | P18 | `blocked_by_P12_P13_P16_P17` | quality/security/performance/DR |
 | P19 | `blocked_by_P18` | production/license/submission |
@@ -77,7 +77,8 @@ save, render, cross-version or production proof.
 | P-0079 | P15-09 Inspector/staging | `pass_scoped_current_pc_hancom_2020_local_inspector_staging` | runtime commits `3ea8e6b` + `81c1ef1`, closure-contract repair `7ea2f84`; Inspector 18/18 tools and 8/8 negatives, runtime current/independent CI each 5/5, security and offline Linux 64/64 pass; `implementation/p15/P15-09_REPORT.md` |
 | P-0080 | P15 phase Gate | `pass_scoped_current_pc_hancom_2020_local_mcp_reference_and_inspector_staging` | STRICT/`max`; P15-01~09 and all common constraints pass at closure `b823b32` without promoting local/synthetic evidence; `implementation/p15/P15_GATE_REPORT.md` |
 | P-0081 | P16-01 official docs lock | `pass_scoped_current_pc_hangul_2020_source_contract_only` | commit `276143f`; 9 documents, 3 immutable sources, 2 packages, 34 requirements; exact current/independent CI 5/5 and offline Linux 16/16 pass; `implementation/p16/P16-01_REPORT.md` |
-| P-0082 | P16-02 Universal package | `implementation_ready_actual_registration_pending` | commit `89fee00`; valid four-entry unregistered base, deterministic archive and fail-closed receipt/composition; current CI 5/5, offline P16 32/32; actual app ID and independent registered-package evidence open; `implementation/p16/P16-02_REPORT.md` |
+| P-0082 | P16-02 Universal package | `implementation_ready_actual_registration_pending` | commits `89fee00` + portability repair `916a778`; valid LF-stable four-entry unregistered base, current/independent CI 5/5 and offline P16 50/50; actual app ID and independent registered-package evidence open; `implementation/p16/P16-02_REPORT.md` |
+| P-0083 | P16-03 Skills | `pass_scoped_local_skills_component_and_deterministic_routing` | commits `b352d4f` + `916a778`; 9 skills, exact 18-tool catalog, routing 36/36, official validators, current/independent CI 5/5 and offline P16 50/50; `implementation/p16/P16-03_REPORT.md` |
 
 ## Active evidence summary
 
@@ -196,13 +197,18 @@ save, render, cross-version or production proof.
   P15 source lock and was not accepted; P16 now uses its own byte-locked runner. Plugin bundle,
   registered app, widget, Developer mode, web-to-Hangul execution and production remain unverified;
   see `implementation/p16/P16-01_REPORT.md`.
-- P16-02 commit `89fee00` implements a valid four-entry unregistered plugin base, eleven source
-  locks, strict actual-registration receipt admission and deterministic atomic no-overwrite ZIP
-  publication. Current exact-commit CI passes 5/5, P14 132/132 and P15 84/84 remain green, and
-  network-disabled read-only Linux passes cumulative P16 32/32. The ignored unregistered archive is
-  reproducible; actual registered app ID, Developer mode connection and independent registered-
-  package acceptance remain open, so the roadmap checkbox is not promoted. P16-03 can proceed as a
-  separate immutable skills component; see `implementation/p16/P16-02_REPORT.md`.
+- P16-02 commits `89fee00` + `916a778` implement a valid LF-stable four-entry unregistered plugin
+  base, eleven source locks, strict actual-registration receipt admission and deterministic atomic
+  no-overwrite ZIP publication. Current and independent exact-repair-commit CI each pass 5/5, P14
+  132/132 and P15 84/84 remain green, and network-disabled read-only Linux passes cumulative P16
+  50/50. Actual registered app ID, Developer mode connection and registered-package acceptance
+  remain open, so the roadmap checkbox is not promoted; see `implementation/p16/P16-02_REPORT.md`.
+- P16-03 commits `b352d4f` + `916a778` implement nine immutable workflow skills synchronized to the
+  exact 18-tool P15 catalog. Deterministic routing passes 36/36, official skill validation passes
+  9/9, the composed 13-entry plugin validates, current and independent CI each pass 5/5, and offline
+  Linux passes cumulative P16 50/50. The first independent run correctly failed on CRLF/LF source
+  drift and was not promoted; the repair is regression-tested. This is local component evidence,
+  not ChatGPT host routing or Hangul execution; see `implementation/p16/P16-03_REPORT.md`.
 - Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with
   cleanup and succeeded on attempt 2, all other checks passed, and the SBOM contains 675 components.
 - A detached exact-commit worktree passed all four non-security lanes after the four digest-pinned,
@@ -219,14 +225,14 @@ STRICT/`max` Gate audit updates the roadmap, status and this ledger.
 
 ## Exact next actions
 
-1. Non-UI: implement P16-03 as a separate immutable package of nine workflow skills synchronized to
-   the exact P15 18-tool public catalog, with deterministic positive/negative trigger evaluation and
-   fail-closed source-preservation/destructive-action guardrails. Do not mutate the P16-02 base.
+1. Non-UI first: implement P16-04 as a versioned React widget shell using the MCP Apps lifecycle,
+   exact `ui://` resource identity and `text/html;profile=mcp-app`, with bounded theme/locale/context,
+   approval-pending initialization and host-agnostic feature detection. Keep P15 tools UI-independent.
 2. Account/UI-dependent: keep P16-02 actual registered app mapping and Developer mode acceptance
    open until a user-confirmed real registration receipt exists; never invent `plugin_asdk_app...`.
 3. UI-dependent: on a new explicit user request, rerun P05-07 once and require
    save/reopen/PDF/render evidence before P05-08, P05-09 and the P05 Gate.
 4. Keep P10-05/06 and P10-08 production claims open until their external controls exist.
 
-Continue P16-03 at reasoning effort `high`; use `max` for tool mapping, destructive-action and
-trigger/negative-eval review, actual registration acceptance and the P16 phase Gate.
+Continue P16-04 at reasoning effort `high`; use `max` for MCP Apps bridge lifecycle, resource
+MIME/URI, result-data/CSP security review, actual registration acceptance and the P16 phase Gate.
