@@ -20,6 +20,9 @@ const SECTION_ONE_TEXT: &str = "P05-07-SECTION-ONE";
 const SECTION_TWO_TEXT: &str = "P05-07-SECTION-TWO";
 const MAX_TARGET_FIXTURE_BYTES: u64 = 8 * 1024 * 1024;
 
+#[path = "p05_07_support/diagnostics.rs"]
+mod diagnostics;
+
 fn main() -> Result<(), Box<dyn Error>> {
     let mut arguments = env::args_os();
     let _program = arguments.next();
@@ -27,6 +30,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         .next()
         .and_then(|value| value.into_string().ok())
         .ok_or("usage: p05_07_section_columns_target_fixture <build|inspect> <path.hwpx>")?;
+    if mode == "diagnose" {
+        return diagnostics::run(arguments);
+    }
     let path = arguments
         .next()
         .map(PathBuf::from)
