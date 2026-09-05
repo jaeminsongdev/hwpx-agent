@@ -15,6 +15,8 @@ use crate::types::{
     ScannerSignatureVersion, StorageState, SubjectDigest, TenantId, ValidationState,
 };
 
+pub mod postgres_repository;
+
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(transparent)]
 pub struct ObjectKey(String);
@@ -330,6 +332,7 @@ pub trait ArtifactMetadataRepository: fmt::Debug + Send + Sync {
         &self,
         tenant_id: TenantId,
         artifact_id: ArtifactId,
+        expected_acl_version: u64,
         expected_state: StorageState,
         new_state: StorageState,
         validation_state: ValidationState,
@@ -346,6 +349,7 @@ pub trait ArtifactMetadataRepository: fmt::Debug + Send + Sync {
         &self,
         tenant_id: TenantId,
         artifact_id: ArtifactId,
+        expected_acl_version: u64,
         subject: SubjectDigest,
         permissions: BTreeSet<ArtifactPermission>,
     ) -> Result<ArtifactRecord, ArtifactError>;
@@ -449,6 +453,7 @@ impl ArtifactMetadataRepository for InMemoryMetadataRepository {
         &self,
         tenant_id: TenantId,
         artifact_id: ArtifactId,
+        expected_acl_version: u64,
         expected_state: StorageState,
         new_state: StorageState,
         validation_state: ValidationState,
@@ -460,7 +465,7 @@ impl ArtifactMetadataRepository for InMemoryMetadataRepository {
             .records
             .get(&(tenant_id, artifact_id))
             .ok_or(ArtifactError::NotFound)?;
-        if current.storage_state != expected_state {
+        if current.storage_state != expected_state || current.acl_version != expected_acl_version {
             return Err(ArtifactError::Conflict);
         }
         let mut changed = current.clone();
@@ -483,6 +488,7 @@ impl ArtifactMetadataRepository for InMemoryMetadataRepository {
         &self,
         tenant_id: TenantId,
         artifact_id: ArtifactId,
+        expected_acl_version: u64,
         subject: SubjectDigest,
         permissions: BTreeSet<ArtifactPermission>,
     ) -> Result<ArtifactRecord, ArtifactError> {
@@ -491,6 +497,9 @@ impl ArtifactMetadataRepository for InMemoryMetadataRepository {
             .records
             .get(&(tenant_id, artifact_id))
             .ok_or(ArtifactError::NotFound)?;
+        if current.acl_version != expected_acl_version {
+            return Err(ArtifactError::Conflict);
+        }
         let mut changed = current.clone();
         if permissions.is_empty() {
             changed.acl.remove(&subject);
@@ -793,6 +802,7 @@ mod tests {
             repository.set_permissions(
                 record.tenant_id(),
                 record.artifact_id(),
+                record.acl_version(),
                 owner,
                 BTreeSet::new(),
             ),
@@ -823,6 +833,7 @@ mod tests {
         let result = repository.transition_state(
             record.tenant_id(),
             record.artifact_id(),
+            record.acl_version(),
             StorageState::Available,
             StorageState::Quarantined,
             ValidationState::Verified,
@@ -839,6 +850,66 @@ mod tests {
             .unwrap_or_else(|| panic!("record missing"));
         assert_eq!(preserved.storage_state(), StorageState::Available);
         assert_eq!(preserved.acl_version(), 1);
+    }
+
+    #[test]
+    fn stale_acl_authority_cannot_mutate_permissions_or_storage() {
+        let repository = InMemoryMetadataRepository::default();
+        let record = fixture_record();
+        repository
+            .insert(record.clone())
+            .unwrap_or_else(|error| panic!("fixture insert: {error}"));
+        let subject = SubjectDigest::from_authenticated_subject("another-manager")
+            .unwrap_or_else(|error| panic!("fixture subject: {error}"));
+        let changed = repository
+            .set_permissions(
+                record.tenant_id(),
+                record.artifact_id(),
+                1,
+                subject,
+                BTreeSet::from([ArtifactPermission::Manage]),
+            )
+            .unwrap_or_else(|error| panic!("fixture grant: {error}"));
+        assert_eq!(changed.acl_version(), 2);
+        assert_eq!(
+            repository.set_permissions(
+                record.tenant_id(),
+                record.artifact_id(),
+                1,
+                subject,
+                BTreeSet::new()
+            ),
+            Err(ArtifactError::Conflict)
+        );
+        let target = ObjectKey::for_artifact(
+            record.tenant_id(),
+            record.kind(),
+            StorageState::Quarantined,
+            record.content_sha256(),
+        )
+        .unwrap_or_else(|error| panic!("fixture key: {error}"));
+        assert_eq!(
+            repository.transition_state(
+                record.tenant_id(),
+                record.artifact_id(),
+                1,
+                StorageState::Available,
+                StorageState::Quarantined,
+                ValidationState::Quarantined,
+                Some(
+                    QuarantineReason::parse("MANUAL_REVIEW")
+                        .unwrap_or_else(|error| panic!("reason: {error}"))
+                ),
+                target
+            ),
+            Err(ArtifactError::Conflict)
+        );
+        assert_eq!(
+            repository
+                .find(record.tenant_id(), record.artifact_id())
+                .unwrap_or_else(|error| panic!("find: {error}")),
+            Some(changed)
+        );
     }
 
     #[test]
