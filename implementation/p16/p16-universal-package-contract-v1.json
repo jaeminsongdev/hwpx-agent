@@ -1,0 +1,112 @@
+{
+  "claims": {
+    "base_assets_valid": true,
+    "base_manifest_valid": true,
+    "connected_plugin_tested": false,
+    "deterministic_unregistered_archive_tested": true,
+    "developer_mode_tested": false,
+    "hangul_or_com_invoked": false,
+    "public_or_production_ready": false,
+    "registered_app_mapping_implemented": false,
+    "source_preserved": true
+  },
+  "decision": "implementation_ready_actual_registration_pending",
+  "next_task": "P16-02 actual registration receipt; P16-03 skills may proceed independently",
+  "package": {
+    "archive_policy": "sorted_fixed_metadata_zip_stored_atomic_no_overwrite",
+    "entries": [
+      {
+        "bytes": 1070,
+        "path": ".codex-plugin/plugin.json",
+        "sha256": "54d72eeb4d27591c05a5ea2c5692fdbf5d292d3b9241ea962f2edf6aab80c1f7"
+      },
+      {
+        "bytes": 840,
+        "path": "README.md",
+        "sha256": "33b97d5c67c8dad0168917346c38dac98064e6718e5ac62913e1e9bb94c37ba6"
+      },
+      {
+        "bytes": 644,
+        "path": "assets/icon.png",
+        "sha256": "6702c31e42679dcde3cc44a7f843a4884faa36413e98d7d5ae4ff42c2c7cb0ea"
+      },
+      {
+        "bytes": 2938,
+        "path": "assets/logo.png",
+        "sha256": "7b6780bd1a39e7ff4a2b4a599497a7f9c338b3be620b87bc04bea6b9d2eb5495"
+      }
+    ],
+    "entry_count": 4,
+    "root": "plugins/hwpx-agent",
+    "total_bytes": 5492
+  },
+  "predecessor": {
+    "path": "implementation/p16/p16-official-source-contract-v1.json",
+    "sha256": "dd46a4b41f27fa5dfbd3c52e8b6ed7bc2447cddb1bac9cac516b6c36d0dadb2f"
+  },
+  "registration": {
+    "actual_receipt_required": true,
+    "artifact_root": "artifacts/p16",
+    "placeholder_allowed": false,
+    "receipt_schema": "hwpx-agent.p16-registration-receipt/v1",
+    "registered_app_id": null,
+    "state": "unverified",
+    "tracked_app_manifest_present": false
+  },
+  "requirements": [
+    "P16-R11",
+    "P16-R12",
+    "P16-R13",
+    "P16-R14",
+    "P16-R34"
+  ],
+  "schema_version": "hwpx-agent.p16-universal-package-contract/v1",
+  "scope": "current_pc_hangul_2020_local_unregistered_package_base",
+  "source_locks": [
+    {
+      "path": "implementation/p16/P16-02_UNIVERSAL_PACKAGE_POLICY.md",
+      "sha256": "6c817ea90962744cdf59d4190e855225713ec5c570d443956886ff14da2af390"
+    },
+    {
+      "path": "plugins/hwpx-agent/.codex-plugin/plugin.json",
+      "sha256": "54d72eeb4d27591c05a5ea2c5692fdbf5d292d3b9241ea962f2edf6aab80c1f7"
+    },
+    {
+      "path": "plugins/hwpx-agent/README.md",
+      "sha256": "33b97d5c67c8dad0168917346c38dac98064e6718e5ac62913e1e9bb94c37ba6"
+    },
+    {
+      "path": "plugins/hwpx-agent/assets/icon.png",
+      "sha256": "6702c31e42679dcde3cc44a7f843a4884faa36413e98d7d5ae4ff42c2c7cb0ea"
+    },
+    {
+      "path": "plugins/hwpx-agent/assets/logo.png",
+      "sha256": "7b6780bd1a39e7ff4a2b4a599497a7f9c338b3be620b87bc04bea6b9d2eb5495"
+    },
+    {
+      "path": "tools/p16/universal_package.py",
+      "sha256": "88f0e3b746a4b1ad4c568d2bae29fe2a91784230713cd3ef563c1eba617b9c52"
+    },
+    {
+      "path": "tools/p16/build_universal_package.py",
+      "sha256": "2435afa6c104d2680d8e9df5d415b716b522e6fb2af7780b240acdbb33ff8ded"
+    },
+    {
+      "path": "tools/p16/build_universal_package_contract.py",
+      "sha256": "cb2d4cbc22eb6a3709a2c453f2a3830b75523f24792cd0f1f41f758bec46227d"
+    },
+    {
+      "path": "tools/p16/validate_universal_package.py",
+      "sha256": "450636b59992885735dd327a32957d4b210c8f831d404621b8658d799170dba6"
+    },
+    {
+      "path": "tools/p16/run_universal_package_checks.py",
+      "sha256": "d03b45e32ccf575b0632660fca35c5daf28607be7b776c4e6991fca8ace56b48"
+    },
+    {
+      "path": "tools/p16/tests/test_universal_package.py",
+      "sha256": "b874c4f1ed262b143617317a9c104f40f240022483d675cce6de166afe23d4cb"
+    }
+  ],
+  "task": "P16-02"
+}
