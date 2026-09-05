@@ -1,8 +1,8 @@
 # HWPX Agent implementation ledger
 
-- Updated: 2026-09-05
+- Updated: 2026-09-06
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05-07 source-bound diagnostics/identity and P16-06 durable Plan/diff integration.
+- Active: P05-07 layout identity and P16-06 authoritative durable Plan-to-renderer integration.
 - Recommended reasoning: max for preservation, authorization and Gate review; high for routine work.
 - UI status: v3 attempt 21 passed open/save/reopen/text/PDF export; layout acceptance failed.
   Session 13431 terminal exit 0; normal quit, residual zero. No additional click or automatic relaunch.
@@ -29,7 +29,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P13 | blocked by P10 | validation/oracle/render |
 | P14 | scoped local reference/disposable PostgreSQL PASS | implementation/p14/P14_GATE_REPORT.md |
 | P15 | scoped local MCP reference/Inspector staging PASS | implementation/p15/P15_GATE_REPORT.md |
-| P16 | in progress | 01,03,04 pass; 02 registration pending; 05 local component pass; 06 audit open |
+| P16 | in progress | 01,03,04 pass; 02 registration pending; 05 local pass; 06 merged local/DB PASS, host open |
 | P17 | ready, not started | current-PC Codex companion only |
 | P18 | blocked by P12/P13/P16/P17 | quality/security/performance/DR |
 | P19 | blocked by P18 | production/license/submission |
@@ -42,7 +42,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0045–0048 | P05-06–09 | Orientation FULL/Linux pass; diagnostics 205 pass; both FULL fail source-lock qualification |
 | P-0082 | P16-02 registration | Local bundle ready; actual registered app/host receipt absent |
 | P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; actual registered host pending |
-| P-0086 | P16-06 Plan/diff UI | PostgreSQL adapter actual PASS at 217ba56; source qualification and renderer wiring open |
+| P-0086 | P16-06 Plan/diff UI | Merged at 0512883; current/independent source, DB, UI and CI PASS; durable renderer path open |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.
@@ -54,17 +54,12 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   readback, with unchanged input and no output/PDF. See P05-07_ATTEMPT18_DIAGNOSTIC.md and count report.
 - P16-05 implementation 118928b, closure fae5bc0: TS/React 41/41, local bridge calls 3/3,
   P16 Python 77/77, current/independent CI 5/5 and offline Linux evidence are recorded in its report.
-- P16-06 safety repairs 5079402 and source-bound diff/visual refresh 9a16c2d are isolated, not integrated.
-  Widget 109/109, domain 65/65, P16 Python 92/92, five-call bridge and 43-source formal contract pass.
-  Ten verified current captures are archived separately; predecessor locks/old captures preserved.
-  FULL sessions 24388/68679 both terminal exit 0, 5/5; independent P16 runner 36525 exit 0, 92/92.
-- Response repair 477d402 is also isolated: widget 126/126, full widget lane, nine security checks,
-  public-schema oracle and 13-view/five-call browser checks pass. Earlier 10+2 failing regressions preserved.
-  Current P16 93-test suite has two failures/one error, all policy.visual.preview_digest. The old
-  visual/source contract is not rewritten as current proof. Stored-plan and real-host integration remain open.
-- New registry: 14 target tests, workspace Rust lane (481 tests) and nine security checks pass.
-  Source/revision/owner/ACL/expiry/clock rollback checks are implemented; storage is process-local.
-  Registry Linux 157 pass; adapter Windows/Linux 35, workspace 485, actual DB twice PASS; no renderer/permit.
+- P16 branch `62542b0` is merged into MAIN as exact two-parent commit `0512883`. Immutable predecessor
+  locks remain intact; explicit six-path integration and 21-source actual-DB successors pass closed.
+- Current/independent: P14 132, P15 84, P16 144, widget 126, plan policy 16, five-call bridge and all
+  five CI lanes PASS. Actual PostgreSQL 25/25 passes in both; owned containers/volumes are removed.
+- Stored-plan auth checks cover source/revision/owner/ACL/expiry/clock rollback, but registry is
+  process-local and authoritative durable `PlanSourceRepository` plus actual renderer wiring remain open.
 - Attempt21 saved/reopened both sections and exported portrait PDF; actual landscape acceptance failed.
   Orientation v1 reversed the tokens; v2 corrects them and invalidates the earlier landscape interpretation.
   Spine checking now uses the graph and blocks comment decoys. Read P05-07_ORIENTATION_SPINE_REPAIR.md.
@@ -72,7 +67,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 ## Open risks and holds
 
 - R-0001: Diagnostic FULL fails Cargo.lock source binding; column IDs and actual landscape render remain open.
-- R-0002: Adapter actual PASS; P14/P15 source qualification, durable Plan/source and actual renderer remain open.
+- R-0002: Integrated source/DB PASS; durable Plan/source adapter and actual renderer/registered host remain open.
 - R-0003: One independent worker timeout smoke failed; unchanged retries pass 3/3, root cause not proven.
 - HOLD-0001: P16-02 actual registration and P16-05/06 registered-host E2E remain unverified.
 - HOLD-0002: P10-05 registered path-security module and P10-06 production COM execution remain open.
@@ -84,8 +79,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 1. Resolve diagnostic Cargo.lock source binding; read P05-07_DIAGNOSTIC_AUDIT_STATUS.md.
    Main 92ce629/independent 3827c21: 205/Clippy PASS, both FULL exit 1; security not run. No Hancom wait.
-2. Qualify PostgreSQL adapter successor source contracts at 217ba56; actual DB, Linux and security pass.
-   Read P16-06_POSTGRES_ADAPTER_CONTINUATION.md; both FULL fail P14 source binding; Plan/renderer open.
+2. Implement authoritative durable `PlanSourceRepository`/stored-plan lookup and bind the actual renderer.
+   Read P16-06_MAIN_INTEGRATION_AUDIT.md; registered-host and actual Hangul remain separate evidence.
 3. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,
    applicable offline Linux checks, security and STRICT review before any implementation closure.
 4. Close P05 only with save/reopen, semantic inspection, PDF verification and visual evidence.
@@ -97,19 +92,14 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   Independent checkout D:\개발\hwpx-agent-audit-p05-count-e82cf95, artifacts/p05-count-repair/full-ci.log.
 - P05 repair 9f493a5: FULL 84430/81116 terminal 5/5 PASS; Linux 57646 terminal 193/Clippy PASS.
   First 71568 failed; smoke 42848 passed. Diagnostic FULL 76659/40541 terminal FAIL; Linux 96358 PASS.
-- P16-06 checkpoint 9a16c2d55f82a012d9b354b5df2db983b07c4060 at D:\개발\hwpx-agent-work-p16-06-safety.
-  FULL log: artifacts/p16/safety-summary-full-9a16c2d/full-ci.log; 24388 terminal 5/5 PASS.
-  Target runner 49438 is terminal exit 0. Four exact P10 JSON records hydrated for FULL, no user docs/keys.
-  Read implementation/p16/P16-06_SAFETY_AUDIT.md and P16-06_SOURCE_DIFF_PROJECTION.md there.
-- Independent FULL 68679: D:\개발\hwpx-agent-audit-p16-9a16c2d, same checkpoint, terminal 5/5 PASS.
-  Linux domain tests/Clippy PASS, session 2297 exit 0. Details: P16-06_AUDIT_HANDOFF_20260905.md in main.
-- Active worktree: D:\개발\hwpx-agent-work-p16-plan-service; clean HEAD 217ba56cd8a88e4d3560a5735052b18880481ff4.
-  Independent: D:\개발\hwpx-agent-audit-p16-postgres-217ba56; same clean source, actual DB and Inspector PASS.
-  FULL 84481/54118/18353 terminal FAIL; Linux 69697/security 41295/Inspector 51120 terminal PASS. No polls.
+- P16 integrated source: D:\개발\hwpx-agent at clean merge `0512883`; implementation parent `62542b0`.
+  Detached audit: D:\개발\hwpx-agent-audit-main-0512883; exact source and 5/5 CI PASS, tree clean.
+  Current/independent DB runs 20dff2d03ef04bb39abce731d9331565/827b7df672264573a69f80993db50921,
+  both 25/25 PASS and cleaned. Read implementation/p16/P16-06_MAIN_INTEGRATION_AUDIT.md.
 - External QA: Codex workspace p16-response-contract-20260905/inspection.md and run-03/receipt.json.
   Thirteen captures automated, six directly reviewed; exact HTML/script hashes bound, no user browser profile.
-- First reads: this ledger; P05 audit status/column-ID admission plan and attempt21; P16 Plan-review policy.
-- First checks: worktrees' git status; saved attempt21 HWPX/PDF; P05/P16 source-qualification failures.
+- First reads: this ledger; P05 audit status/column-ID admission plan and attempt21; P16 MAIN audit/policy.
+- First checks: MAIN/audit status; saved attempt21 HWPX/PDF; durable PlanSource/renderer boundaries.
 - Attempt21 trace/progress: fixtures/target-build/p05-07-current-2020-20260905-v3/
   p05-07-hancom-2020-trace-attempt21.json[.progress.jsonl]. Former worker 31488/Hwp 43524 exited normally.
   P16 actual runs 5a68a12751804d6f84df2b42ebed2f11/a06f2d898dd943e89ab6353e0a6f331b PASS; DBs cleaned.
