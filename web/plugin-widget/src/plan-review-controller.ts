@@ -4,6 +4,7 @@ import {
     parsePlanReviewRenderRequest,
     parsePlanReviewSnapshot,
     isAcceptedExecution,
+    isCommittedUnverifiedExecution,
     isVerifiedDryRun,
     routeMatches,
     warningsCovered,
@@ -23,10 +24,15 @@ export type PlanReviewPhase =
     | "closed";
 export type PlanReviewMode = "view" | "confirm_execution";
 export type ExecutionState =
-    "none" | "revalidated" | "unconfirmed" | "submitted" | "committed";
+    | "none"
+    | "revalidated"
+    | "unconfirmed"
+    | "submitted"
+    | "committed"
+    | "committed_unverified";
 type DispatchedState = Extract<
     ExecutionState,
-    "unconfirmed" | "submitted" | "committed"
+    "unconfirmed" | "submitted" | "committed" | "committed_unverified"
 >;
 export type PlanReviewErrorCode =
     | "CONNECT_FAILED"
@@ -296,15 +302,22 @@ export class PlanReviewController {
             if (
                 result === null ||
                 result.request_id !== requestId ||
+                result.revision_id === snapshot.source_revision_id ||
                 !warningsCovered(snapshot.warnings, result.warning_codes) ||
-                !isAcceptedExecution(result)
+                !(
+                    isAcceptedExecution(result) ||
+                    isCommittedUnverifiedExecution(result)
+                )
             ) {
                 if (this.isOperationCurrent(snapshot, "confirm_execution"))
                     this.fail("EXECUTION_FAILED");
                 return;
             }
-            const executionState =
-                result.commit_state === "committed" ? "committed" : "submitted";
+            const executionState = isCommittedUnverifiedExecution(result)
+                ? "committed_unverified"
+                : result.commit_state === "committed"
+                  ? "committed"
+                  : "submitted";
             this.dispatchedExecutions.set(binding, executionState);
             if (!this.isOperationCurrent(snapshot, "confirm_execution")) return;
             this.setState({
@@ -555,7 +568,8 @@ export class PlanReviewController {
             this.executionFor(this.state.snapshot) ??
             (this.state.executionState === "unconfirmed" ||
             this.state.executionState === "submitted" ||
-            this.state.executionState === "committed"
+            this.state.executionState === "committed" ||
+            this.state.executionState === "committed_unverified"
                 ? this.state.executionState
                 : "none");
         this.setState({

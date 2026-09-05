@@ -87,11 +87,13 @@ function Preview() {
         actionPending: false,
         acknowledged: params.get("ack") === "1",
         executionState:
-            params.get("state") === "unconfirmed"
-                ? "unconfirmed"
-                : params.get("done") === "1"
-                  ? "submitted"
-                  : "none",
+            params.get("state") === "committed_unverified"
+                ? "committed_unverified"
+                : params.get("state") === "unconfirmed"
+                  ? "unconfirmed"
+                  : params.get("done") === "1"
+                    ? "submitted"
+                    : "none",
     });
     return (
         <PlanReviewView

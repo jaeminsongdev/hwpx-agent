@@ -5,6 +5,7 @@ import {
     PLAN_REVIEW_SNAPSHOT_SCHEMA,
     PUBLIC_RESULT_SCHEMA,
     isAcceptedExecution,
+    isCommittedUnverifiedExecution,
     isVerifiedDryRun,
     parseCapabilityCheckResult,
     parseDocumentEditResult,
@@ -73,6 +74,20 @@ test("rejects malformed identifiers", () =>
         parsePlanReviewRenderRequest({ ...request, plan_id: "bad" }),
         null,
     ));
+test("plan identifiers stop at the public total length of 124", () => {
+    for (const length of [12, 13, 124, 125, 1000]) {
+        const plan_id = `plan_${"a".repeat(length - 5)}`;
+        const valid = length >= 13 && length <= 124;
+        assert.equal(
+            parsePlanReviewRenderRequest({ ...request, plan_id }) !== null,
+            valid,
+        );
+        assert.equal(
+            parsePlanReviewSnapshot({ ...snapshot, plan_id }) !== null,
+            valid,
+        );
+    }
+});
 test("accepts executable snapshot", () =>
     assert.equal(parsePlanReviewSnapshot(snapshot)?.execution_allowed, true));
 
@@ -268,6 +283,164 @@ test("accepts committed execution", () => {
     });
     assert.ok(parsed);
     assert.equal(isAcceptedExecution(parsed), true);
+});
+const artifact = {
+    artifact_id: "art_abcdefgh",
+    media_type: "application/hwp+zip",
+    bytes: 1234,
+    sha256: "b".repeat(64),
+};
+const committed = {
+    ...base,
+    revision_id: "rev_newvalue1",
+    job_id: null,
+    artifact,
+    commit_state: "committed",
+    validation_state: "verified",
+};
+test("accepts the public artifact-bearing committed response", () => {
+    const parsed = parseDocumentEditResult(committed);
+    assert.ok(parsed);
+    assert.equal(isAcceptedExecution(parsed), true);
+});
+test("artifact metadata obeys every public boundary and exact keys", () => {
+    for (const valid of [
+        { ...artifact, bytes: 0 },
+        { ...artifact, bytes: 10_737_418_240 },
+        { ...artifact, artifact_id: `art_${"x".repeat(120)}` },
+        { ...artifact, media_type: `a/${"b".repeat(125)}` },
+    ])
+        assert.ok(parseDocumentEditResult({ ...committed, artifact: valid }));
+    for (const invalid of [
+        {},
+        { ...artifact, url: "private" },
+        { ...artifact, bytes: -1 },
+        { ...artifact, bytes: 10_737_418_241 },
+        { ...artifact, bytes: 1.5 },
+        { ...artifact, bytes: NaN },
+        { ...artifact, sha256: "A".repeat(64) },
+        { ...artifact, artifact_id: `art_${"x".repeat(121)}` },
+        { ...artifact, media_type: `a/${"b".repeat(126)}` },
+        { ...artifact, media_type: "text/plain; charset=utf-8" },
+    ])
+        assert.equal(
+            parseDocumentEditResult({ ...committed, artifact: invalid }),
+            null,
+        );
+});
+test("dry-run and queued acceptance cannot carry a published artifact", () => {
+    const dry = parseDocumentEditResult({
+        ...committed,
+        revision_id: null,
+        commit_state: "not_started",
+    });
+    assert.ok(dry);
+    assert.equal(isVerifiedDryRun(dry), false);
+    const queued = parseDocumentEditResult({
+        ...committed,
+        outcome: "accepted",
+        job_id: "job_abcdefgh",
+        revision_id: null,
+        commit_state: "pending",
+        validation_state: "not_run",
+    });
+    assert.ok(queued);
+    assert.equal(isAcceptedExecution(queued), false);
+});
+test("partial committed validation is not a fully verified execution", () => {
+    const parsed = parseDocumentEditResult({
+        ...committed,
+        artifact: null,
+        validation_state: "partial",
+    });
+    assert.ok(parsed);
+    assert.equal(isAcceptedExecution(parsed), false);
+});
+test("public partial and unverified outcomes remain parseable", () => {
+    for (const outcome of ["partial", "unverified"]) {
+        const parsed = parseDocumentEditResult({ ...committed, outcome });
+        assert.ok(parsed);
+        assert.equal(isAcceptedExecution(parsed), false);
+    }
+});
+test("committed classification preserves partial outcomes without claiming verified success", () => {
+    for (const outcome of [
+        "accepted",
+        "succeeded",
+        "partial",
+        "unverified",
+    ] as const) {
+        for (const validation_state of [
+            "not_run",
+            "verified",
+            "partial",
+            "failed",
+        ] as const) {
+            const parsed = parseDocumentEditResult({
+                ...committed,
+                outcome,
+                validation_state,
+            });
+            assert.ok(parsed);
+            const verified =
+                outcome === "succeeded" && validation_state === "verified";
+            assert.equal(isAcceptedExecution(parsed), verified);
+            assert.equal(
+                isCommittedUnverifiedExecution(parsed),
+                outcome !== "accepted" && !verified,
+            );
+            assert.equal(isVerifiedDryRun(parsed), false);
+        }
+    }
+});
+test("artifact projection does not alias the original host payload", () => {
+    const payload = { ...committed, artifact: { ...artifact } };
+    const parsed = parseDocumentEditResult(payload);
+    assert.ok(parsed?.artifact);
+    payload.artifact.artifact_id = "art_changed1";
+    payload.artifact.bytes = -1;
+    assert.deepEqual(parsed.artifact, artifact);
+});
+test("public summary and warning bounds count Unicode characters, not UTF-16 units", () => {
+    for (const length of [1000, 1001]) {
+        const text = "😀".repeat(length);
+        assert.equal(
+            parseDocumentEditResult({ ...committed, safe_summary: text }) !==
+                null,
+            length === 1000,
+        );
+        assert.equal(
+            parseDocumentEditResult({
+                ...committed,
+                warnings: [{ code: "SAFE_WARNING", message: text }],
+            }) !== null,
+            length === 1000,
+        );
+    }
+});
+test("capability detail bounds count Unicode characters without displaying content", () => {
+    for (const length of [500, 501]) {
+        const detail = "😀".repeat(length);
+        for (const key of ["constraints", "unverified_reasons"]) {
+            const parsed = parseCapabilityCheckResult({
+                ...base,
+                capabilities: [
+                    {
+                        ...route[0],
+                        estimated_job_class: "short",
+                        constraints: [],
+                        unverified_reasons: [],
+                        [key]: [detail],
+                    },
+                ],
+            });
+            assert.equal(parsed !== null, length === 500);
+            if (parsed !== null) {
+                assert.equal(parsed.detail_count, 1);
+                assert.doesNotMatch(JSON.stringify(parsed), /😀/u);
+            }
+        }
+    }
 });
 test("rejects inconsistent execution state", () => {
     const parsed = parseDocumentEditResult({

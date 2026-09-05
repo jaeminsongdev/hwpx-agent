@@ -201,6 +201,51 @@ test("entering confirmation makes no server call", async () => {
     assert.equal(controller.getState().mode, "confirm_execution");
     assert.equal(port.calls.length, 0);
 });
+for (const validation_state of [
+    "verified",
+    "partial",
+    "failed",
+    "not_run",
+] as const) {
+    test(`artifact-bearing ${validation_state} commit preserves receipt and prevents resubmission`, async () => {
+        const { controller, port } = await ready();
+        port.responses = [
+            (call) => capability(call.arguments.request_id),
+            (call) => dryRun(call.arguments.request_id),
+            (call) =>
+                dryRun(call.arguments.request_id, {
+                    revision_id: "rev_newvalue1",
+                    commit_state: "committed",
+                    validation_state,
+                    artifact: {
+                        artifact_id: "art_abcdefgh",
+                        media_type: "application/hwp+zip",
+                        bytes: 1234,
+                        sha256: "b".repeat(64),
+                    },
+                }),
+        ];
+        controller.beginExecution();
+        controller.setAcknowledged(true);
+        await controller.confirmExecution();
+        const expected =
+            validation_state === "verified"
+                ? "committed"
+                : "committed_unverified";
+        assert.equal(controller.getState().phase, "ready");
+        assert.equal(controller.getState().executionState, expected);
+        port.cancelled?.();
+        assert.equal(controller.getState().executionState, expected);
+        port.input?.(input);
+        port.result?.({ structuredContent: snapshot });
+        assert.equal(controller.getState().executionState, expected);
+        controller.beginExecution();
+        controller.setAcknowledged(true);
+        await controller.confirmExecution();
+        await controller.revalidate();
+        assert.equal(port.calls.length, 3);
+    });
+}
 test("execution requires explicit acknowledgement", async () => {
     const { controller, port } = await ready();
     controller.beginExecution();
@@ -208,6 +253,28 @@ test("execution requires explicit acknowledgement", async () => {
     assert.equal(port.calls.length, 0);
     controller.setAcknowledged(true);
     assert.equal(controller.getState().acknowledged, true);
+});
+test("claimed commit of the unchanged source revision stays unconfirmed and non-retryable", async () => {
+    const { controller, port } = await ready();
+    port.responses = [
+        (call) => capability(call.arguments.request_id),
+        (call) => dryRun(call.arguments.request_id),
+        (call) =>
+            dryRun(call.arguments.request_id, {
+                revision_id: input.source_revision_id,
+                commit_state: "committed",
+            }),
+    ];
+    controller.beginExecution();
+    controller.setAcknowledged(true);
+    await controller.confirmExecution();
+    assert.equal(controller.getState().executionState, "unconfirmed");
+    port.input?.(input);
+    port.result?.({ structuredContent: snapshot });
+    controller.beginExecution();
+    controller.setAcknowledged(true);
+    await controller.confirmExecution();
+    assert.equal(port.calls.length, 3);
 });
 test("revalidation calls exact route then dry-run", async () => {
     const { controller, port } = await ready();

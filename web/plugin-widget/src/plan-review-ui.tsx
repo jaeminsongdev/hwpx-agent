@@ -33,6 +33,7 @@ interface Copy {
     unconfirmed: string;
     submitted: string;
     committed: string;
+    committedUnverified: string;
     noWarnings: string;
 }
 
@@ -61,6 +62,8 @@ const COPY: Record<"ko-KR" | "en-US", Copy> = {
             "실행 결과를 확인해야 합니다. 같은 계획은 다시 전송하지 않습니다.",
         submitted: "검증된 작업을 제출했습니다.",
         committed: "새 리비전을 만들었습니다.",
+        committedUnverified:
+            "새 리비전이 저장되었지만 검증이 완료되지 않았습니다. 결과를 확인하세요. 같은 계획은 다시 전송하지 않습니다.",
         noWarnings: "추가 경고가 없습니다.",
     },
     "en-US": {
@@ -89,6 +92,8 @@ const COPY: Record<"ko-KR" | "en-US", Copy> = {
             "The execution result needs verification. This plan will not be sent again.",
         submitted: "The validated job was submitted.",
         committed: "A new revision was created.",
+        committedUnverified:
+            "A new revision was saved, but validation is not complete. Check the result. This plan will not be sent again.",
         noWarnings: "No additional warnings.",
     },
 };
@@ -163,9 +168,11 @@ function SpinnerState({
             ? copy.connecting
             : state.phase === "approval_pending"
               ? copy.approval
-              : state.executionState === "unconfirmed"
-                ? copy.unconfirmed
-                : errorText(state.errorCode, copy);
+              : state.executionState === "committed_unverified"
+                ? copy.committedUnverified
+                : state.executionState === "unconfirmed"
+                  ? copy.unconfirmed
+                  : errorText(state.errorCode, copy);
     return (
         <main className="plan-shell plan-centered" data-theme={state.theme}>
             <div
@@ -336,17 +343,23 @@ export function PlanReviewView({
     const dispatched =
         state.executionState === "unconfirmed" ||
         state.executionState === "submitted" ||
-        state.executionState === "committed";
+        state.executionState === "committed" ||
+        state.executionState === "committed_unverified";
+    const needsAttention =
+        state.executionState === "unconfirmed" ||
+        state.executionState === "committed_unverified";
     const status =
-        state.executionState === "unconfirmed"
-            ? copy.unconfirmed
-            : state.executionState === "revalidated"
-              ? copy.revalidated
-              : state.executionState === "submitted"
-                ? copy.submitted
-                : state.executionState === "committed"
-                  ? copy.committed
-                  : null;
+        state.executionState === "committed_unverified"
+            ? copy.committedUnverified
+            : state.executionState === "unconfirmed"
+              ? copy.unconfirmed
+              : state.executionState === "revalidated"
+                ? copy.revalidated
+                : state.executionState === "submitted"
+                  ? copy.submitted
+                  : state.executionState === "committed"
+                    ? copy.committed
+                    : null;
     return (
         <main className="plan-shell" data-theme={state.theme}>
             <header className="plan-header">
@@ -382,11 +395,7 @@ export function PlanReviewView({
             {status !== null && (
                 <p
                     className={`action-status execution-${state.executionState}`}
-                    role={
-                        state.executionState === "unconfirmed"
-                            ? "alert"
-                            : "status"
-                    }
+                    role={needsAttention ? "alert" : "status"}
                 >
                     {status}
                 </p>

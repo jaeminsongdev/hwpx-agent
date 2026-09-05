@@ -100,6 +100,7 @@ for (const executionState of [
     "unconfirmed",
     "submitted",
     "committed",
+    "committed_unverified",
 ] as const) {
     test(`${executionState} plan disables review and confirmation actions`, () => {
         const html = render({ executionState });
@@ -142,6 +143,35 @@ test("unknown execution is explained without a false failure or completion claim
             html,
             /새 리비전을 만들었습니다|검증된 작업을 제출했습니다|계획 정보를 신뢰할 수 없어/,
         );
+    }
+});
+test("saved but unverified result remains an alert in both languages and after cancellation", () => {
+    for (const locale of ["ko-KR", "en-US"] as const) {
+        for (const phase of ["ready", "recoverable_error"] as const) {
+            const html = render({
+                locale,
+                phase,
+                snapshot: phase === "ready" ? snapshot : null,
+                executionState: "committed_unverified",
+            });
+            assert.match(html, /role="alert"/);
+            assert.match(
+                html,
+                locale === "ko-KR"
+                    ? /새 리비전이 저장되었지만 검증이 완료되지 않았습니다/
+                    : /revision was saved, but validation is not complete/,
+            );
+            assert.match(
+                html,
+                locale === "ko-KR"
+                    ? /같은 계획은 다시 전송하지 않습니다/
+                    : /will not be sent again/,
+            );
+            assert.doesNotMatch(
+                html,
+                /새 리비전을 만들었습니다|A new revision was created/,
+            );
+        }
     }
 });
 test("blocked snapshot has no enabled primary action", () => {
