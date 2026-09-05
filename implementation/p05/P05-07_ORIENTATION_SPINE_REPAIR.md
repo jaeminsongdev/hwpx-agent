@@ -2,7 +2,9 @@
 
 - Date: 2026-09-05; parent main checkpoint d354aa2.
 - Review: STRICT / HIGH, recommended reasoning max.
-- State: component tests pass; FULL/independent/Linux audits and actual repaired render remain open.
+- State at implementation checkpoint: component tests pass; broader audits and actual render open.
+- Continuation: actual offline Linux 193/193 tests and Clippy passed. FULL audits are live; see
+  `P05-07_ORIENTATION_AUDIT_STATUS.md` for current handles, first failure and unchanged retries.
 - Scope: current PC's licensed Hangul 2020 only. No new Hangul launch or UI input occurred.
 
 ## Findings and implementation
@@ -71,6 +73,6 @@ uncommitted PostgreSQL work in the separate P16 worktree; its prior checks do no
 
 ## Next actions
 
-Run current and exact clean-checkout FULL audits and actual offline Linux package tests/Clippy.
-Then complete the column identity policy from bounded saved-document and authoritative source
-evidence before preparing a corrected actual test. No blind or automatic Hangul relaunch.
+Resume the already-live FULL handles in the audit-status report; do not restart them. Linux is done.
+Read `P05-07_COLUMN_ID_ADMISSION_PLAN.md` for the next source-bound diagnostic and identity boundary
+before preparing a corrected actual test. No blind or automatic Hangul relaunch.
