@@ -4,8 +4,6 @@ import importlib.util
 import json
 from pathlib import Path
 import shutil
-import subprocess
-import sys
 import tempfile
 import unittest
 
@@ -32,15 +30,28 @@ validator = load_module(
 
 
 class InspectorStagingContractTests(unittest.TestCase):
-    def test_generated_contract_is_current(self) -> None:
-        result = subprocess.run(
-            [sys.executable, "tools/p15/build_inspector_staging_contract.py", "--check"],
-            cwd=ROOT,
-            check=False,
-            capture_output=True,
-            text=True,
-        )
-        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+    def test_historical_contract_is_superseded_only_by_valid_p16_04(self) -> None:
+        historical = json.loads(builder.CONTRACT_PATH.read_text(encoding="utf-8"))
+        current = builder.build_contract(ROOT)
+        historical_locks = {
+            item["path"]: item["sha256"] for item in historical["source_locks"]
+        }
+        current_locks = {
+            item["path"]: item["sha256"] for item in current["source_locks"]
+        }
+        drifted = {
+            path
+            for path, digest in current_locks.items()
+            if historical_locks.get(path) != digest
+        }
+        self.assertEqual(validator.P16_04_SUPERSEDED_PATHS, drifted)
+        self.assertEqual([], validator.validate_p16_04_supersession(ROOT))
+        for path in drifted:
+            self.assertTrue(
+                validator.historical_p15_09_source_matches(
+                    ROOT, path, historical_locks[path]
+                )
+            )
 
     def test_validator_passes_repository(self) -> None:
         self.assertEqual(validator.validate(ROOT), [])

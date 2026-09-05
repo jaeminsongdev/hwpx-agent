@@ -59,3 +59,12 @@ without echoing the value.
 - The package-local TypeScript project uses bundler resolution and `skipLibCheck` only for external
   declarations because ext-apps 1.7.5 publishes extensionless internal declaration imports that do
   not type-resolve under NodeNext. HWPX Agent source remains strictly type-checked.
+
+## P15 staging compatibility
+
+P16-04 intentionally changes only three files that P15-09 had locked for its Node staging package:
+`package.json`, `pnpm-lock.yaml` and `pnpm-workspace.yaml`. The P15-09 contract remains immutable.
+Its validator accepts those three dependency-file changes, plus the validator and its regression
+test, only when the complete P16-04 contract passes and every former byte still matches audited P15
+revision `7ea2f84c244fe5bbd7926ba3f176dc5acafcf624`. No P15 server, public tool, policy or runtime source
+is superseded.

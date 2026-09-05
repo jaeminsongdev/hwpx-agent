@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 from typing import Any
 
 
@@ -16,6 +18,15 @@ P15_08_REVISION = "9f9c6932518175906842a2cbb5915a0fb96d0d49"
 P15_08_CONTRACT_SHA256 = (
     "9a0e32959a6129f316f609069e87e22f22fb68b11622935c7ca32c080f44e402"
 )
+P15_09_AUDITED_REVISION = "7ea2f84c244fe5bbd7926ba3f176dc5acafcf624"
+P16_04_SUPERSEDING_VALIDATOR = "tools/p16/validate_widget_shell.py"
+P16_04_SUPERSEDED_PATHS = {
+    "package.json",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "tools/p15/validate_inspector_staging_contract.py",
+    "tools/p15/tests/test_inspector_staging_contract.py",
+}
 EXPECTED_KEYS = {
     "driver_lifecycle",
     "evidence_schema_version",
@@ -151,8 +162,57 @@ def historical_predecessor_is_intact(root: Path, contract: dict[str, Any]) -> bo
     return True
 
 
+def validate_p16_04_supersession(root: Path) -> list[str]:
+    validator_path = root / P16_04_SUPERSEDING_VALIDATOR
+    if not validator_path.is_file():
+        return ["p16_04_supersession.validator_missing"]
+    tools_path = str(validator_path.parent)
+    inserted = tools_path not in sys.path
+    try:
+        if inserted:
+            sys.path.insert(0, tools_path)
+        specification = importlib.util.spec_from_file_location(
+            "p16_widget_shell_superseding_validator", validator_path
+        )
+        if specification is None or specification.loader is None:
+            return ["p16_04_supersession.validator_load"]
+        module = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(module)
+        contract = json.loads(
+            (root / "implementation/p16/p16-widget-shell-contract-v1.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        errors = module.validate(contract)
+    except Exception:
+        return ["p16_04_supersession.validation"]
+    finally:
+        if inserted:
+            sys.path.remove(tools_path)
+    if errors:
+        return ["p16_04_supersession.contract"]
+    return []
+
+
+def historical_p15_09_source_matches(
+    root: Path, relative: str, expected: str
+) -> bool:
+    result = subprocess.run(
+        ["git", "show", f"{P15_09_AUDITED_REVISION}:{relative}"],
+        cwd=root,
+        check=False,
+        capture_output=True,
+    )
+    normalized = result.stdout.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return (
+        result.returncode == 0
+        and hashlib.sha256(normalized).hexdigest() == expected
+    )
+
+
 def validate(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
+    p16_04_supersession_errors = validate_p16_04_supersession(root)
     try:
         contract = load_json(root / CONTRACT_PATH.relative_to(ROOT))
         policy = load_json(root / POLICY_PATH.relative_to(ROOT))
@@ -296,7 +356,13 @@ def validate(root: Path = ROOT) -> list[str]:
             if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
                 errors.append(f"source_lock[{index}].digest_shape")
             elif sha256(source) != expected:
-                errors.append(f"source_lock[{index}].digest")
+                if (
+                    relative not in P16_04_SUPERSEDED_PATHS
+                    or p16_04_supersession_errors
+                ):
+                    errors.append(f"source_lock[{index}].digest")
+                elif not historical_p15_09_source_matches(root, relative, expected):
+                    errors.append(f"source_lock[{index}].historical_digest")
 
     server = (root / "web/mcp-staging/src/server.ts").read_text(encoding="utf-8")
     for token in [

@@ -29,6 +29,9 @@ LOCAL_SOURCE_PATHS = (
     "package.json",
     "pnpm-lock.yaml",
     "pnpm-workspace.yaml",
+    "implementation/p15/p15-inspector-staging-contract-v1.json",
+    "tools/p15/validate_inspector_staging_contract.py",
+    "tools/p15/tests/test_inspector_staging_contract.py",
     "web/plugin-widget/package.json",
     "web/plugin-widget/tsconfig.json",
     "web/plugin-widget/scripts/build-widget.mjs",
@@ -82,6 +85,20 @@ def build_contract() -> dict[str, Any]:
         "official_source_contract": {
             "path": "implementation/p16/p16-official-source-contract-v1.json",
             "sha256": sha256_file(ROOT / "implementation/p16/p16-official-source-contract-v1.json"),
+        },
+        "p15_staging_compatibility": {
+            "audited_revision": "7ea2f84c244fe5bbd7926ba3f176dc5acafcf624",
+            "contract_path": "implementation/p15/p15-inspector-staging-contract-v1.json",
+            "contract_sha256": sha256_file(
+                ROOT / "implementation/p15/p15-inspector-staging-contract-v1.json"
+            ),
+            "superseded_paths": [
+                "package.json",
+                "pnpm-lock.yaml",
+                "pnpm-workspace.yaml",
+                "tools/p15/validate_inspector_staging_contract.py",
+                "tools/p15/tests/test_inspector_staging_contract.py",
+            ],
         },
         "policy": {
             "path": shell.POLICY_PATH.relative_to(ROOT).as_posix(),
