@@ -40,7 +40,7 @@ ChatGPT Web Plugin·Widget를 문서상 계획이 아니라 **재현 가능한 �
 - [x] `P16-01` 산출물 `OpenAI source lock` 존재, 검증: manifest/UI requirements reviewed.
 - [ ] `P16-02` 산출물 `plugin bundle` 존재, 검증: package validation.
 - [x] `P16-03` 산출물 `skills package` 존재, 검증: trigger/negative eval.
-- [ ] `P16-04` 산출물 `React widget` 존재, 검증: bridge lifecycle tests.
+- [x] `P16-04` 산출물 `React widget` 존재, 검증: bridge lifecycle tests.
 - [ ] `P16-05` 산출물 `continuity UI` 존재, 검증: Web↔Codex E2E.
 - [ ] `P16-06` 산출물 `dry-run UI` 존재, 검증: high-risk confirmation tests.
 - [ ] `P16-07` 산출물 `preview UI` 존재, 검증: large job tests.
