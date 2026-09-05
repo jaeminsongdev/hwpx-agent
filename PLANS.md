@@ -29,7 +29,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P13 | blocked by P10 | validation/oracle/render |
 | P14 | scoped local reference/disposable PostgreSQL PASS | implementation/p14/P14_GATE_REPORT.md |
 | P15 | scoped local MCP reference/Inspector staging PASS | implementation/p15/P15_GATE_REPORT.md |
-| P16 | in progress | 01,03,04 pass; 02 registration pending; 05 local pass; 06 merged local/DB PASS, host open |
+| P16 | in progress | 01,03,04 pass; 02 pending; 05 local pass; 06 merged plus authoritative source v11 PASS |
 | P17 | ready, not started | current-PC Codex companion only |
 | P18 | blocked by P12/P13/P16/P17 | quality/security/performance/DR |
 | P19 | blocked by P18 | production/license/submission |
@@ -42,7 +42,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0045–0048 | P05-06–09 | Orientation FULL/Linux pass; diagnostics 205 pass; both FULL fail source-lock qualification |
 | P-0082 | P16-02 registration | Local bundle ready; actual registered app/host receipt absent |
 | P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; actual registered host pending |
-| P-0086 | P16-06 Plan/diff UI | Merged at 0512883; current/independent source, DB, UI and CI PASS; durable renderer path open |
+| P-0086 | P16-06 Plan/diff UI | Merged 0512883; PostgreSQL source v11 29/29 PASS; durable plan/renderer open |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.
@@ -58,8 +58,10 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   locks remain intact; explicit six-path integration and 21-source actual-DB successors pass closed.
 - Current/independent: P14 132, P15 84, P16 144, widget 126, plan policy 16, five-call bridge and all
   five CI lanes PASS. Actual PostgreSQL 25/25 passes in both; owned containers/volumes are removed.
-- Stored-plan auth checks cover source/revision/owner/ACL/expiry/clock rollback, but registry is
-  process-local and authoritative durable `PlanSourceRepository` plus actual renderer wiring remain open.
+- PostgreSQL v11 now rechecks active tenant/project, ACL, exact default head, verified source,
+  service seal/receipt and immutable graph digest. Final run b4ad5c05 passed 29/29 and cleaned.
+- Stored-plan registry remains process-local; encrypted durable plan persistence, receipt-bound
+  route/dry-run/diff projection and actual renderer wiring remain open.
 - Attempt21 saved/reopened both sections and exported portrait PDF; actual landscape acceptance failed.
   Orientation v1 reversed the tokens; v2 corrects them and invalidates the earlier landscape interpretation.
   Spine checking now uses the graph and blocks comment decoys. Read P05-07_ORIENTATION_SPINE_REPAIR.md.
@@ -79,8 +81,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 1. Resolve diagnostic Cargo.lock source binding; read P05-07_DIAGNOSTIC_AUDIT_STATUS.md.
    Main 92ce629/independent 3827c21: 205/Clippy PASS, both FULL exit 1; security not run. No Hancom wait.
-2. Implement authoritative durable `PlanSourceRepository`/stored-plan lookup and bind the actual renderer.
-   Read P16-06_MAIN_INTEGRATION_AUDIT.md; registered-host and actual Hangul remain separate evidence.
+2. Implement encrypted durable compiled-plan storage, then bind the actual renderer to exact
+   route/dry-run/diff/signature receipts. Read P16-06_POSTGRES_PLAN_SOURCE_V11.md.
 3. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,
    applicable offline Linux checks, security and STRICT review before any implementation closure.
 4. Close P05 only with save/reopen, semantic inspection, PDF verification and visual evidence.
@@ -96,6 +98,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   Detached audit: D:\개발\hwpx-agent-audit-main-0512883; exact source and 5/5 CI PASS, tree clean.
   Current/independent DB runs 20dff2d03ef04bb39abce731d9331565/827b7df672264573a69f80993db50921,
   both 25/25 PASS and cleaned. Read implementation/p16/P16-06_MAIN_INTEGRATION_AUDIT.md.
+- P16 source v11 worktree: D:\개발\hwpx-agent-work-p16-durable-plan-renderer; actual DB run
+  b4ad5c050f0d42509da56f072ba5d6fa passed 29/29 and cleaned; phase/renderer/host remain open.
 - External QA: Codex workspace p16-response-contract-20260905/inspection.md and run-03/receipt.json.
   Thirteen captures automated, six directly reviewed; exact HTML/script hashes bound, no user browser profile.
 - First reads: this ledger; P05 audit status/column-ID admission plan and attempt21; P16 MAIN audit/policy.

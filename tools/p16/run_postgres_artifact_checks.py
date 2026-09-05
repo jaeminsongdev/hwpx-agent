@@ -18,7 +18,7 @@ MIGRATIONS = (
     "0001_p14_metadata", "0002_p14_artifact_service", "0003_p14_revision_cas",
     "0004_p14_history_checkpoints", "0005_p14_job_state_machine", "0006_p14_worker_lease_fencing",
     "0007_p14_idempotency_reconciliation", "0008_p14_cancel_cleanup", "0009_p14_retention_local_mirror",
-    "0010_p16_artifact_repository",
+    "0010_p16_artifact_repository", "0011_p16_plan_source",
 )
 
 
@@ -96,7 +96,8 @@ def main() -> int:
     require(probe.is_file(), "probe_not_built")
     migration_paths = [ROOT / "migrations/postgres" / f"{name}.up.sql" for name in MIGRATIONS]
     source_paths = migration_paths + [
-        ROOT / "migrations/postgres/0010_p16_artifact_repository.down.sql", ROOT / "Cargo.toml", ROOT / "Cargo.lock",
+        ROOT / "migrations/postgres/0010_p16_artifact_repository.down.sql",
+        ROOT / "migrations/postgres/0011_p16_plan_source.down.sql", ROOT / "Cargo.toml", ROOT / "Cargo.lock",
         ROOT / "crates/artifact-service/Cargo.toml", ROOT / "crates/artifact-service/src/store.rs",
         ROOT / "crates/artifact-service/src/store/postgres_repository.rs", ROOT / "crates/artifact-service/src/service.rs",
         ROOT / "crates/artifact-service/src/lib.rs", ROOT / "crates/artifact-service/examples/postgres_artifact_probe.rs",
@@ -140,8 +141,14 @@ def main() -> int:
         for path in migration_paths:
             stage = path.name
             up(path)
-        checks.append("all_ten_migrations_applied")
-        stage = "empty_rollback"
+        checks.append("all_eleven_migrations_applied")
+        stage = "plan_source_empty_rollback"
+        plan_source_down = (ROOT / "migrations/postgres/0011_p16_plan_source.down.sql").read_text(encoding="utf-8")
+        require(sql(plan_source_down, expected=False).returncode != 0, "unguarded_plan_source_rollback_accepted")
+        sql("SELECT set_config('hwpx_agent.allow_p16_plan_source_rollback','yes',false);\n" + plan_source_down)
+        require(sql("SELECT count(*) FROM hwpx_agent.schema_versions;").stdout.strip() == "10", "plan_source_rollback_schema_count_mismatch")
+        checks.append("plan_source_guarded_empty_rollback_preserves_artifact_schema")
+        stage = "artifact_empty_rollback"
         down = (ROOT / "migrations/postgres/0010_p16_artifact_repository.down.sql").read_text(encoding="utf-8")
         history_query = "SELECT version,migration_name,migration_sha256 FROM hwpx_agent.schema_versions WHERE version < 10 ORDER BY version;"
         history_before = sql(history_query).stdout
@@ -163,8 +170,9 @@ END
 $$;
 """)
         checks.append("rollback_preserves_predecessors_and_restores_immutable_guard")
+        up(migration_paths[-2])
         up(migration_paths[-1])
-        checks.append("guarded_empty_rollback_reapply")
+        checks.append("guarded_predecessor_rollback_reapplies_versions_ten_and_eleven")
         stage = "least_privilege_role"
         sql(f"""
 CREATE ROLE hwpx_p16_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS CONNECTION LIMIT 8 PASSWORD '{app_password}';

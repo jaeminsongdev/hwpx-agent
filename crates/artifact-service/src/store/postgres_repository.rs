@@ -50,7 +50,7 @@ macro_rules! migration {
         .as_slice()
     };
 }
-const MIGRATIONS: [&[u8]; 10] = [
+const MIGRATIONS: [&[u8]; 11] = [
     migration!("0001_p14_metadata.up.sql"),
     migration!("0002_p14_artifact_service.up.sql"),
     migration!("0003_p14_revision_cas.up.sql"),
@@ -61,6 +61,7 @@ const MIGRATIONS: [&[u8]; 10] = [
     migration!("0008_p14_cancel_cleanup.up.sql"),
     migration!("0009_p14_retention_local_mirror.up.sql"),
     migration!("0010_p16_artifact_repository.up.sql"),
+    migration!("0011_p16_plan_source.up.sql"),
 ];
 
 pub struct LocalPostgresConfig {
@@ -185,7 +186,7 @@ impl fmt::Debug for LocalPostgresMetadataRepository {
 }
 
 impl LocalPostgresMetadataRepository {
-    /// Connects with a non-owner, non-superuser, non-BYPASSRLS application role to exact v10 metadata.
+    /// Connects with a non-owner, non-superuser, non-BYPASSRLS application role to exact v11 metadata.
     ///
     /// # Errors
     /// Fails closed for unsafe privileges, wrong migrations, disabled RLS or a connection failure.
@@ -280,7 +281,7 @@ fn verify_role(client: &mut Client) -> Result<(), ArtifactError> {
 }
 
 fn verify_migrations(client: &mut Client) -> Result<(), ArtifactError> {
-    let rows = client.query("SELECT version, migration_sha256::text FROM hwpx_agent.schema_versions ORDER BY version LIMIT 11", &[]).map_err(db_error)?;
+    let rows = client.query("SELECT version, migration_sha256::text FROM hwpx_agent.schema_versions ORDER BY version LIMIT 12", &[]).map_err(db_error)?;
     if rows.len() != MIGRATIONS.len() {
         return Err(ArtifactError::InvalidState);
     }

@@ -132,6 +132,30 @@ impl CurrentPlanSource {
             graph_sha256,
         })
     }
+
+    /// Binds an authoritative repository digest without accepting public graph bytes.
+    ///
+    /// # Errors
+    /// Rejects malformed public identities. This constructor is intended only for repository
+    /// adapters that established the immutable graph digest and current revision themselves.
+    pub fn from_repository_digest(
+        tenant_id: TenantId,
+        project_id: impl Into<String>,
+        revision_id: impl Into<String>,
+        graph_sha256: [u8; 32],
+    ) -> Result<Self, StoredPlanError> {
+        let project_id = project_id.into();
+        let revision_id = revision_id.into();
+        if !public_id(&project_id, "prj_") || !public_id(&revision_id, "rev_") {
+            return Err(StoredPlanError::InvalidRequest);
+        }
+        Ok(Self {
+            tenant_id,
+            project_id,
+            revision_id,
+            graph_sha256,
+        })
+    }
 }
 
 impl fmt::Debug for CurrentPlanSource {
