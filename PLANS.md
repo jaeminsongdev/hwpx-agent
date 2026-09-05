@@ -39,7 +39,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 | ID | Task | State / next check |
 |---|---|---|
-| P-0045–0048 | P05-06–09 | Orientation FULL/Linux pass; diagnostics Windows/Linux 205 pass, own FULL still pending |
+| P-0045–0048 | P05-06–09 | Orientation FULL/Linux pass; diagnostics 205 pass; both FULL fail source-lock qualification |
 | P-0082 | P16-02 registration | Local bundle ready; actual registered app/host receipt absent |
 | P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; actual registered host pending |
 | P-0086 | P16-06 Plan/diff UI | Registry checkpoint complete; PostgreSQL artifact adapter uncommitted, renderer wiring open |
@@ -71,7 +71,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 ## Open risks and holds
 
-- R-0001: Orientation FULL/LINUX pass; new diagnostic audits, column IDs and actual landscape render remain open.
+- R-0001: Diagnostic FULL fails Cargo.lock source binding; column IDs and actual landscape render remain open.
 - R-0002: Registry target behavior passes; durable adapter, actual renderer and current formal evidence remain open.
 - R-0003: One independent worker timeout smoke failed; unchanged retries pass 3/3, root cause not proven.
 - HOLD-0001: P16-02 actual registration and P16-05/06 registered-host E2E remain unverified.
@@ -82,10 +82,10 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 ## Exact next actions and validation policy
 
-1. Qualify source-bound diagnostics 3827c21 in D:\개발\hwpx-agent-work-p05-diagnostics; 205 tests/Clippy pass.
-   Read its P05-07_SOURCE_BOUND_DIAGNOSTICS.md; Linux 96358 terminal PASS, FULL pending. No relaunch.
-2. Resume uncommitted PostgreSQL artifact adapter: first actual DB check failed at guarded empty rollback.
-   Inspect v10 schema_versions immutable trigger handling, then qualify durable source/plan/renderer wiring.
+1. Resolve diagnostic Cargo.lock source binding; read P05-07_DIAGNOSTIC_AUDIT_STATUS.md.
+   Main 92ce629/independent 3827c21: 205/Clippy PASS, both FULL exit 1; security not run. No Hancom wait.
+2. Resume uncommitted PostgreSQL adapter: rollback repair passes, latest failure is CONNECT verification.
+   Read P16-06_POSTGRES_ADAPTER_CONTINUATION.md; source/plan/renderer qualification remains open.
 3. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,
    applicable offline Linux checks, security and STRICT review before any implementation closure.
 4. Close P05 only with save/reopen, semantic inspection, PDF verification and visual evidence.
@@ -96,7 +96,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 - Root: D:\개발\hwpx-agent; count-repair e82cf95; P16 baseline 9360c47. Count FULL 5232/68068: 5/5 PASS.
   Independent checkout D:\개발\hwpx-agent-audit-p05-count-e82cf95, artifacts/p05-count-repair/full-ci.log.
 - P05 repair 9f493a5: FULL 84430/81116 terminal 5/5 PASS; Linux 57646 terminal 193/Clippy PASS.
-  First 71568 failed; smoke 42848 passed. Diagnostics work-p05-diagnostics HEAD 3827c21, clean.
+  First 71568 failed; smoke 42848 passed. Diagnostic FULL 76659/40541 terminal FAIL; Linux 96358 PASS.
 - P16-06 checkpoint 9a16c2d55f82a012d9b354b5df2db983b07c4060 at D:\개발\hwpx-agent-work-p16-06-safety.
   FULL log: artifacts/p16/safety-summary-full-9a16c2d/full-ci.log; 24388 terminal 5/5 PASS.
   Target runner 49438 is terminal exit 0. Four exact P10 JSON records hydrated for FULL, no user docs/keys.
@@ -109,10 +109,10 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 - External QA: Codex workspace p16-response-contract-20260905/inspection.md and run-03/receipt.json.
   Thirteen captures automated, six directly reviewed; exact HTML/script hashes bound, no user browser profile.
 - First reads: this ledger; P05 audit status/column-ID admission plan and attempt21; P16 Plan-review policy.
-- First checks: git status in both worktrees; saved attempt21 HWPX/PDF; P16 PostgreSQL first-failure report.
+- First checks: both worktrees' git status; saved attempt21 HWPX/PDF; P16 latest CONNECT failure report.
 - Attempt21 trace/progress: fixtures/target-build/p05-07-current-2020-20260905-v3/
   p05-07-hancom-2020-trace-attempt21.json[.progress.jsonl]. Former worker 31488/Hwp 43524 exited normally.
-  P16 DB report: artifacts/p16/postgres-artifacts/runs/73be1b04dcbc4cd0879de93c5956fe0e/report.json; cleaned.
+  Latest P16 run afee7194223c4389900cfcd5fff57ac9: 51036 terminal FAIL, owned DB resources cleaned.
 - Do not touch user originals, earlier failed evidence, predecessor contract locks or unrelated processes.
 - Detailed completed task history through P-0085 remains in Git fae5bc0:PLANS.md, plus individual
   reports under implementation/p00/–implementation/p16/; this ledger is a bounded snapshot.
