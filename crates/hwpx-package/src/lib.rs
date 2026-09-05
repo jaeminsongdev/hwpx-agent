@@ -104,7 +104,7 @@ pub use section_columns::{
     ColumnMetrics, ColumnSeparator, ColumnSize, ColumnSizing, ColumnType, SectionBoundary,
     SectionColumnError, SectionColumnLimitConfig, SectionColumnLimits, SectionColumnLowerer,
     SectionColumnLoweringReceipt, SectionColumnPatchReceipt, SectionColumnReader,
-    SectionColumnSequence, SectionColumns,
+    SectionColumnSequence, SectionColumns, SectionCountPatchReceipt,
 };
 pub use tab_definition::{
     DeduplicatedTabDefinitions, TAB_DEFINITION_PROFILE_ID, TabDefinition, TabDefinitionCatalog,

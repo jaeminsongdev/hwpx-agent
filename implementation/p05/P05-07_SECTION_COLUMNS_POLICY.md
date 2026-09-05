@@ -37,6 +37,32 @@ Page-side start/restart belongs to P05-08. Package manifest/spine publication an
 creation are exercised by the P05-07 target fixture rather than being hidden inside the XML value
 model.
 
+## Header and section-sequence consistency
+
+Attempt 17 exposed a fixture-publication defect: the package contained two section parts and two
+linear spine entries, while the current-profile `hh:head/@secCnt` still declared one section.
+The graph and section-value checks alone did not detect the contradiction. The pinned Appendix C
+source declares `secCnt` as a required non-negative integer; current document admission additionally
+requires at least one section, consistent with the existing nonempty sequence contract.
+
+- `read_header_section_count` reads only the namespace-qualified current-profile header root count;
+  it is not a complete header/style validator. Wrong roots, missing/namespaced/duplicate count
+  attributes, invalid decimal values and configured count/input/element bounds reject.
+- `read_sequence_with_header` compares the declared count to the entire supplied sequence before
+  lifting any section. The caller remains responsible for graph closure and the exact ordered
+  spine; this API must not be advertised as independent package-closure verification.
+- `replace_header_section_count` requires an explicit prior count and a bounded new count. It
+  changes only the root attribute's preserving value span, retains all other header bytes and
+  quote style, reparses the output, and returns source/output digests and the changed byte range.
+  It never creates or removes sections itself; the caller publishes header, manifest and section
+  changes atomically after complete package verification.
+- The target fixture now updates one to two before publication, and its inspector uses the
+  header-aware sequence admission in addition to its exact manifest/spine/part/text checks.
+- The original v2 fixture and failed actual traces remain untouched. The v3 fixture differs in
+  only the header count. Actual Hangul save/reopen/render acceptance remains open until rerun.
+
+Repair evidence and remaining validation are in `P05-07_SECTION_COUNT_REPAIR.md`.
+
 ## Equal and custom column rules
 
 The caller supplies the printable body width already validated by P05-06.

@@ -101,6 +101,7 @@ struct Inspection {
 fn inspect_bytes(bytes: &[u8]) -> Result<Inspection, Box<dyn Error>> {
     let mut reader = BoundedZipReader::open(Cursor::new(bytes), PackageLimits::default())?;
     let graph = PackageGraph::build(&mut reader, PackageGraphLimits::default())?;
+    let header = read_part(&mut reader, "Contents/header.xml")?;
     let section0 = read_part(&mut reader, "Contents/section0.xml")?;
     let section1 = read_part(&mut reader, "Contents/section1.xml")?;
     let package_document = read_part(&mut reader, "Contents/content.hpf")?;
@@ -116,7 +117,11 @@ fn inspect_bytes(bytes: &[u8]) -> Result<Inspection, Box<dyn Error>> {
         (section0.as_slice(), metrics.body_width),
         (section1.as_slice(), metrics.body_width),
     ];
-    let sequence = SectionColumnReader::read_sequence(&inputs, SectionColumnLimits::default())?;
+    let sequence = SectionColumnReader::read_sequence_with_header(
+        &header,
+        &inputs,
+        SectionColumnLimits::default(),
+    )?;
     if sequence.sections[0].spans != vec![section_one_columns()]
         || sequence.sections[1].spans != vec![section_two_columns()]
     {
@@ -208,6 +213,15 @@ fn rebuild_with_two_sections(source: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
         let mut bytes = Vec::new();
         entry.read_to_end(&mut bytes)?;
         match path.as_str() {
+            "Contents/header.xml" => {
+                bytes = SectionColumnLowerer::replace_header_section_count(
+                    &bytes,
+                    1,
+                    2,
+                    SectionColumnLimits::default(),
+                )?
+                .0;
+            }
             "Contents/section0.xml" => {
                 let base = PageSetupLowerer::replace_in_section(
                     &bytes,
@@ -433,6 +447,86 @@ fn extract_exact_element<'a>(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn generated_header_declares_both_spine_sections() -> Result<(), Box<dyn Error>> {
+        let source = Hancom2020Vs0Builder::build(SECTION_ONE_TEXT)?;
+        let bytes = source.with_verified_bytes(rebuild_with_two_sections)??;
+        let mut reader =
+            BoundedZipReader::open(Cursor::new(bytes.as_slice()), PackageLimits::default())?;
+        let header = read_part(&mut reader, "Contents/header.xml")?;
+        let document = hwpx_package::PreservingXmlDocument::parse(&header)?;
+        let root = &document.elements()[document.root_element()];
+        assert_eq!(
+            root.name().namespace(),
+            Some("http://www.hancom.co.kr/hwpml/2011/head")
+        );
+        assert_eq!(root.name().local_name(), "head");
+        let count = root
+            .attributes()
+            .iter()
+            .find(|attribute| {
+                attribute.name().namespace().is_none() && attribute.name().local_name() == "secCnt"
+            })
+            .ok_or("header section count missing")?;
+        assert_eq!(
+            std::str::from_utf8(&header[count.value_span().start()..count.value_span().end()])?,
+            "2"
+        );
+        assert_eq!(inspect_bytes(&bytes)?.section_count, 2);
+        Ok(())
+    }
+
+    #[test]
+    fn fixture_inspector_rejects_a_stale_header_even_with_valid_spine() -> Result<(), Box<dyn Error>>
+    {
+        let source = Hancom2020Vs0Builder::build(SECTION_ONE_TEXT)?;
+        let valid = source.with_verified_bytes(rebuild_with_two_sections)??;
+        let mut archive = ZipArchive::new(Cursor::new(&valid))?;
+        let mut writer = ZipWriter::new(Cursor::new(Vec::new()));
+        for index in 0..archive.len() {
+            let mut entry = archive.by_index(index)?;
+            let mut bytes = Vec::new();
+            entry.read_to_end(&mut bytes)?;
+            if entry.name() == "Contents/header.xml" {
+                bytes = SectionColumnLowerer::replace_header_section_count(
+                    &bytes,
+                    2,
+                    1,
+                    SectionColumnLimits::default(),
+                )?
+                .0;
+            }
+            writer.start_file(
+                entry.name(),
+                SimpleFileOptions::default().compression_method(entry.compression()),
+            )?;
+            writer.write_all(&bytes)?;
+        }
+        let stale = writer.finish()?.into_inner();
+        let failure = inspect_bytes(&stale)
+            .err()
+            .ok_or("stale header unexpectedly qualified")?;
+        assert_eq!(
+            failure.downcast_ref::<hwpx_package::SectionColumnError>(),
+            Some(&hwpx_package::SectionColumnError::SectionCountMismatch)
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn fixture_build_is_deterministic_and_never_overwrites() -> Result<(), Box<dyn Error>> {
+        let directory = tempfile::tempdir()?;
+        let first = directory.path().join("first.hwpx");
+        let second = directory.path().join("second.hwpx");
+        build(&first)?;
+        build(&second)?;
+        let original = fs::read(&first)?;
+        assert_eq!(original, fs::read(&second)?);
+        assert!(build(&first).is_err());
+        assert_eq!(original, fs::read(&first)?);
+        Ok(())
+    }
 
     #[test]
     fn exact_two_section_linear_spine_is_accepted() {

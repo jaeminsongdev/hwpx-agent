@@ -1,250 +1,93 @@
 # HWPX Agent implementation ledger
 
 - Updated: 2026-09-05
-- Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only
-- Active phase/task: `P05 / P05-07 actual render acceptance` + `P16 / P16-06 Plan/diff UI`
-- Active reasoning effort: `high`
-- Immediate UI dependency: none live; P05-07 v2 attempts 10 through 16 timed out safely, relaunch only on a new explicit user request when the user can immediately click every visible `모두 허용`
+- Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
+- Active: P05-07 header-count repair verification and P16-06 Plan/diff UI audit.
+- Recommended reasoning: max for preservation, authorization and Gate review; high for routine work.
+- UI status: attempt 17 terminated; no live Hwp process or access prompt. Do not relaunch unchanged.
 
-## Objective and non-negotiable boundaries
+## Objective and boundaries
 
-Implement the P00→P20 product roadmap without weakening Gates. Only exact target evidence can prove
-actual Hangul behavior. Disposable synthetic documents are allowed; user documents are never opened
-or modified. Computer Use is screenshot-only and any local UI input is performed by the user.
-Hangul 2022/2024 and other PCs are deferred until those machines are available. Production/provider,
-server/VM, customer distribution and commercial licensing remain disabled until their own Gates.
+Complete P00–P20 without weakening Gates. Preserve user documents, source ZIPs, private evidence and
+secrets. Use only named disposable fixtures for actual tests. Computer Use is screenshot-only;
+the user performs all UI input. Later Hangul versions/other PCs are deferred until available.
+Production/provider/server/VM/customer distribution and commercial licensing require separate Gates.
+Raw XML, COM/HAction identifiers, arbitrary paths and unverified routes never enter public/LLM actions.
+Synthetic/component evidence is not actual render, save, cross-version or production proof.
 
-Raw XML, COM/HAction identifiers, arbitrary paths and unverified routes never enter public/LLM action
-inputs. Work is bounded, deterministic, fail closed, no-overwrite and source preserving. Private
-runtime evidence and keys stay outside Git. Synthetic/component evidence is not promoted to actual,
-save, render, cross-version or production proof.
+## Phase snapshot
 
-## Phase ledger
-
-| Phase | State | Authoritative evidence / next dependency |
+| Phase | State | Authoritative evidence / dependency |
 |---|---|---|
-| P00 | `pass_scoped_current_pc_local` | `implementation/p00/P00_GATE_REPORT.md` |
-| P01 | `pass_scoped_current_pc_local` | `implementation/p01/P01_GATE_REPORT.md` |
-| P02 | `pass_scoped_current_pc_local` | `implementation/p02/P02_GATE_REPORT.md` |
-| P03 | `pass_scoped_current_pc_local` | `implementation/p03/P03_GATE_REPORT.md` |
-| P04 | `pass_scoped_current_pc_local` | `implementation/p04/P04_GATE_REPORT.md` |
-| P05 | `in_progress_current_pc_local` | P05-01~06 pass; P05-07~09 core ready, actual 2020 render requires a later explicit approval session |
-| P06 | `blocked_by_P05` | table engine |
-| P07 | `blocked_by_P05` | native equation engine |
-| P08 | `blocked_by_P05` | images/shapes/drawing/charts |
-| P09 | `blocked_by_P05` | fields/forms/notes/references |
-| P10 | `in_progress_current_pc_local` | P10-01~04,07,09,10 pass; P10-05/06 actual dependencies pending; P10-08 current-PC core/audit done but dedicated controls unqualified |
-| P11 | `blocked_by_P06_P07_P08_P09_P10` | advanced desktop features |
-| P12 | `blocked_by_P11` | surgical edit/cross-backend normalization |
-| P13 | `blocked_by_P10` | validation/oracle/render |
-| P14 | `pass_scoped_current_pc_local_reference_and_disposable_postgres` | `implementation/p14/P14_GATE_REPORT.md` |
-| P15 | `pass_scoped_current_pc_hancom_2020_local_mcp_reference_and_inspector_staging` | `implementation/p15/P15_GATE_REPORT.md` |
-| P16 | `in_progress_current_pc_local` | P16-01,03,04 pass; P16-02 base ready/actual registration pending; P16-05 local component pass/actual host pending; P16-06 active |
-| P17 | `ready_current_pc_local` | Codex remote/local companion; not started |
-| P18 | `blocked_by_P12_P13_P16_P17` | quality/security/performance/DR |
-| P19 | `blocked_by_P18` | production/license/submission |
-| P20 | `post_GA` | parity and Rust-native expansion |
+| P00–P04 | scoped current-PC local PASS | implementation/p00/ through p04/, phase Gate reports |
+| P05 | in progress | 01–06 pass; 07 actual readback mismatch; 08–09 actual rendering pending |
+| P06–P09 | blocked by P05 | table, equation, graphics, fields engines |
+| P10 | in progress | 01–04,07,09,10 scoped pass; 05/06 actual dependencies; 08 dedicated controls unqualified |
+| P11 | blocked by P06–P10 | advanced desktop features |
+| P12 | blocked by P11 | surgical edit and cross-backend normalization |
+| P13 | blocked by P10 | validation/oracle/render |
+| P14 | scoped local reference/disposable PostgreSQL PASS | implementation/p14/P14_GATE_REPORT.md |
+| P15 | scoped local MCP reference/Inspector staging PASS | implementation/p15/P15_GATE_REPORT.md |
+| P16 | in progress | 01,03,04 pass; 02 registration pending; 05 local component pass; 06 audit open |
+| P17 | ready, not started | current-PC Codex companion only |
+| P18 | blocked by P12/P13/P16/P17 | quality/security/performance/DR |
+| P19 | blocked by P18 | production/license/submission |
+| P20 | post-GA | parity and Rust-native expansion |
 
-## Recent task ledger
+## Active tasks and current evidence
 
-| ID | Task | State | Evidence |
-|---|---|---|---|
-| P-0030~0039 | P04 graph through phase Gate | `pass` | reports under `implementation/p04/`; exact VS-0 commit `6cc11f0` |
-| P-0040~0045 | P05-01~06 typed layout and actual readback | `pass` | reports under `implementation/p05/` |
-| P-0046~0048 | P05-07~09 layout core | `actual_render_pending` | typed fixtures/harnesses pass; licensed render evidence open |
-| P-0049~0056 | P10-01~07 | `mixed_scoped_pass` | reports under `implementation/p10/`; P10-05/06 actual dependency open |
-| P-0057 | P10-08 isolation | `core_ready_current_pc_audit_pass_dedicated_unqualified` | dedicated controls open |
-| P-0058 | P01 security audit reliability | `pass_current_bounded_retry` | current attempt 1 timeout cleaned; unchanged attempt 2 and all checks pass |
-| P-0059~0060 | P10-09~10 supervisor/probe | `pass_scoped_current_pc_local` | reports under `implementation/p10/` |
-| P-0061 | P14-01 metadata schema | `pass_scoped_local_disposable_postgres` | commit `200806a`; `implementation/p14/P14-01_REPORT.md` |
-| P-0062 | P14-02 artifact service | `pass_scoped_local_disposable_postgres_and_local_blob_adapter` | commit `95f40ad`; `implementation/p14/P14-02_REPORT.md` |
-| P-0063 | P14-03 revision CAS | `pass_scoped_local_disposable_postgres_and_in_memory_service` | commit `f225dbc`; `implementation/p14/P14-03_REPORT.md` |
-| P-0064 | P14-04 history/checkpoints | `pass_scoped_local_disposable_postgres_and_in_memory_service` | commit `59e26b6`; current security revalidation closed at `3876679`; `implementation/p14/P14-04_REPORT.md` |
-| P-0065 | P14-05 job state machine | `pass_scoped_local_disposable_postgres_and_in_memory_service` | commit `3876679`; exact PostgreSQL/CI/Linux/security evidence; `implementation/p14/P14-05_REPORT.md` |
-| P-0066 | P14-06 worker lease/fencing | `pass_scoped_local_disposable_postgres_and_in_memory_scheduler` | core commit `205f4ac`; closing security run `9750c1226aa945ce98ad692b749f198e`; `implementation/p14/P14-06_REPORT.md` |
-| P-0067 | P14-07 idempotency/reconciliation | `pass_scoped_local_disposable_postgres_and_in_memory_reference` | durable commit `d84a442`; `implementation/p14/P14-07_REPORT.md` |
-| P-0068 | P14-08 safe cancellation/cleanup | `pass_scoped_local_disposable_postgres_and_reference_worker` | commit `8d03bb6`; `implementation/p14/P14-08_REPORT.md` |
-| P-0069 | P14-09 retention/local mirror | `pass_scoped_local_disposable_postgres_and_in_memory_reference` | commit `1d5de34`; `implementation/p14/P14-09_REPORT.md` |
-| P-0070 | P14 phase Gate | `pass_scoped_current_pc_local_reference_and_disposable_postgres` | STRICT/`max`; `implementation/p14/P14_GATE_REPORT.md` |
-| P-0071 | P15-01 Auth/tenant | `pass_scoped_current_pc_local_reference_resource_server` | commit `8ac8d74`; 17 Rust + 13 contract tests, exact checkout 5/5, security and offline Linux pass; `implementation/p15/P15-01_REPORT.md` |
-| P-0072 | P15-02 public tool schemas | `pass_scoped_current_pc_hancom_2020_contract_only` | commit `c3839df`; 18 input/output descriptors, 17/17 schema tests, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-02_REPORT.md` |
-| P-0073 | P15-03 public MCP handlers | `pass_scoped_current_pc_local_reference_handlers` | commit `9e7ed73`; 18 tools, Rust 16/16 and P15 37/37, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-03_REPORT.md` |
-| P-0074 | P15-04 asynchronous job UX | `pass_scoped_current_pc_local_durable_job_reference` | implementation `f50c724`, closing audit `4c6224f`; Rust async 11/11 + handler 16/16, P15 44/44, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-04_REPORT.md` |
-| P-0075 | P15-05 artifact delivery | `pass_scoped_current_pc_local_artifact_delivery_reference` | commit `dde79ff`; Rust artifact 13/13 + async 11/11 + handler 16/16, P15 51/51, exact and independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-05_REPORT.md` |
-| P-0076 | P15-06 public error mapping | `pass_scoped_current_pc_local_public_error_reference` | commit `f36a07e`; 14-code digest-pinned catalog, Rust 45/45 and P15 57/57, final exact independent CI 5/5, security and offline Linux pass; `implementation/p15/P15-06_REPORT.md` |
-| P-0077 | P15-07 rate limit/quotas | `pass_scoped_current_pc_hancom_2020_local_quota_reference` | commits `91e84f4` + `e15921a`; Rust 53/53 and P15 65/65, final exact current/independent CI each 5/5, security and offline Linux pass; `implementation/p15/P15-07_REPORT.md` |
-| P-0078 | P15-08 bounded telemetry/dashboards | `pass_scoped_current_pc_hancom_2020_local_telemetry_reference` | commit `d492dc8`; Rust 61/61 and P15 73/73, exact current/independent CI each 5/5, security and offline Linux pass; `implementation/p15/P15-08_REPORT.md` |
-| P-0079 | P15-09 Inspector/staging | `pass_scoped_current_pc_hancom_2020_local_inspector_staging` | runtime commits `3ea8e6b` + `81c1ef1`, closure-contract repair `7ea2f84`; Inspector 18/18 tools and 8/8 negatives, runtime current/independent CI each 5/5, security and offline Linux 64/64 pass; `implementation/p15/P15-09_REPORT.md` |
-| P-0080 | P15 phase Gate | `pass_scoped_current_pc_hancom_2020_local_mcp_reference_and_inspector_staging` | STRICT/`max`; P15-01~09 and all common constraints pass at closure `b823b32` without promoting local/synthetic evidence; `implementation/p15/P15_GATE_REPORT.md` |
-| P-0081 | P16-01 official docs lock | `pass_scoped_current_pc_hangul_2020_source_contract_only` | commit `276143f`; 9 documents, 3 immutable sources, 2 packages, 34 requirements; exact current/independent CI 5/5 and offline Linux 16/16 pass; `implementation/p16/P16-01_REPORT.md` |
-| P-0082 | P16-02 Universal package | `implementation_ready_actual_registration_pending` | commits `89fee00` + portability repair `916a778`; valid LF-stable four-entry unregistered base, current/independent CI 5/5 and offline P16 50/50; actual app ID and independent registered-package evidence open; `implementation/p16/P16-02_REPORT.md` |
-| P-0083 | P16-03 Skills | `pass_scoped_local_skills_component_and_deterministic_routing` | commits `b352d4f` + `916a778`; 9 skills, exact 18-tool catalog, routing 36/36, official validators, current/independent CI 5/5 and offline P16 50/50; `implementation/p16/P16-03_REPORT.md` |
-| P-0084 | P16-04 Widget shell | `pass_scoped_local_widget_shell_component` | commits `745d76a` + `19d1cf7`; React/MCP Apps lifecycle 21/21 + 14/14, cumulative 64/64, current/independent CI 5/5 and offline Linux pass; `implementation/p16/P16-04_REPORT.md` |
-| P-0085 | P16-05 Project/revision UI | `pass_scoped_local_mcp_apps_bridge_component_e2e_actual_host_pending` | commit `118928b`; TS/React 41/41 + Python 13/13, real local MCP Apps bridge calls 3/3, cumulative 77/77, current/independent CI 5/5 and offline Linux pass; actual registered-host E2E remains open; `implementation/p16/P16-05_REPORT.md` |
+| ID | Task | State / next check |
+|---|---|---|
+| P-0046–0048 | P05-07–09 | Header secCnt mismatch repaired; 29 target tests pass, v3 actual acceptance pending |
+| P-0082 | P16-02 registration | Local bundle ready; actual registered app/host receipt absent |
+| P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; actual registered host pending |
+| P-0086 | P16-06 Plan/diff UI | Implementation 9360c47; safety/contract audit and final verification still open |
 
-## Active evidence summary
+- P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
+  Attempts 10–16 timed out at open_input; attempt 17 instead passed open and failed
+  SECTION_COLUMNS_READBACK_INPUT_TEXT_MISMATCH. Its text digest matches the first marker alone.
+  The input is unchanged; no output/PDF was saved; quit passed and residual Hwp count is zero.
+  See implementation/p05/P05-07_ATTEMPT17_DIAGNOSTIC.md for evidence digests and limits.
+- The v2 generator omitted updating header secCnt from one to two. The repair adds preserving
+  count updates and header/sequence correlation, with failing-before/passing-after evidence.
+  Fresh v3 differs only in that count; old v2 now fails product inspection as intended.
+  Offline Linux package all-target tests/Clippy pass with source/registry read-only and no network.
+  See implementation/p05/P05-07_SECTION_COUNT_REPAIR.md; full CI is running, actual v3 is NOT_RUN.
+- P16-05 implementation 118928b, closure fae5bc0: TS/React 41/41, local bridge calls 3/3,
+  P16 Python 77/77, current/independent CI 5/5 and offline Linux evidence are recorded in its report.
+- P16-06 9360c47 has a separate versioned plan-review resource and local component/E2E artifacts.
+  The interrupted full-CI run has no final all-lane receipt and is NOT PASS. Re-audit repeat-write
+  prevention, stale async failures and partial-route authorization against the domain router before
+  final verification. Real server diff projection and registered-host integration must be evaluated
+  explicitly; fixture-driven component evidence cannot close those boundaries.
 
-- P05-07 v2 fixture commit `9096502` independently reads as two linear sections and one break.
-  Attempts 10 through 16 timed out at `open_input` with `SECTION_COLUMNS_READBACK_TIMEOUT`; the
-  input remained unchanged, no output/PDF was created, owned `Hwp.exe` processes were cleaned and
-  residual count is zero. Attempt 10 trace bytes/hash: `1690`/
-  `f9644cb119944baaf029ae5b142dee55bd8d68c91892227abccfaa412fc92764`; attempts 11 through 14 each:
-  `1366`/`a2c4560bcb5af1f0218ee76e2400e00b8a57cc193b8e81949f3a262bcb0f56d9`; attempt 15:
-  `1690`/`f9644cb119944baaf029ae5b142dee55bd8d68c91892227abccfaa412fc92764`; attempt 16:
-  `1366`/`a2c4560bcb5af1f0218ee76e2400e00b8a57cc193b8e81949f3a262bcb0f56d9`.
-  P05-08~09 render evidence stays open. Relaunch only on a new explicit user request with immediate
-  manual approval.
-- P10-05 still lacks an approved registered file-path security module. P10-06 actual production COM
-  execution and P10-10 routability remain unverified; P10-10 correctly issues zero leases/executions.
-- P10-08 passes current-PC development checks, but dedicated production isolation remains unqualified.
-- P14-01~05 scoped PASS receipts and limits remain in `implementation/p14/P14-01_REPORT.md` through
-  `P14-05_REPORT.md`; each is digest-bound to its exact local disposable PostgreSQL/Rust evidence.
-- P14-06 core commit `205f4ac` has a clean digest-bound PostgreSQL 18.4 receipt: 20 assertions
-  twice, guarded rollback retaining v5, exact profile/capability selection, bounded heartbeats,
-  late-worker/fence rejection and qualified expiry. Closing security run
-  `9750c1226aa945ce98ad692b749f198e` passes every check including an actual first-attempt
-  `pnpm audit` response; see `implementation/p14/P14-06_REPORT.md`.
-- P14-07 durable commit `d84a442` has a clean digest-bound PostgreSQL 18.4 receipt: 28 assertions
-  in three transactions, 16-client `1 new + 15 replay`, exactly one commit/retry race winner,
-  stale/late/unbound commit rejection, v6-preserving rollback and reapply. P14 tests are 101/101;
-  the exact commit passes four non-security lanes. The same-content security run immediately before
-  commit passes all checks; two later exact-commit probes preserve external `pnpm audit` timeout as
-  diagnostics rather than PASS. See `implementation/p14/P14-07_REPORT.md`.
-- P14-08 commit `8d03bb6` has a clean digest-bound PostgreSQL 18.4 receipt: 18 assertions in three
-  runs, unchanged P14-07 regression 28 assertions twice, concurrent claim `1 winner + 7 bounded
-  misses`, stale-fence/reference-race rejection, before/after-effect crash recovery and exact v7
-  rollback/reapply. Rust cleanup/foundation tests, four non-security lanes, independent security and
-  network-disabled read-only Linux validation pass. See `implementation/p14/P14-08_REPORT.md`.
-- P14-09 commit `1d5de34` has a clean digest-bound PostgreSQL 18.4 receipt: 32 assertions and the
-  unchanged P14-07 regression 28 assertions, each in three transactions. Seven retention classes,
-  hold/tombstone/fenced purge, shared-reference recheck, immutable receipts, digest-only mirror CAS,
-  three conflict paths, fresh-ID expiry recovery and single generation reservation passed. P14 tests
-  are 132/132, Rust is 15/15 on Windows/Linux, all four non-security lanes and the exact-commit
-  security run pass with SBOM 680. The STRICT phase Gate closes P14 only for current-PC local
-  reference development and disposable PostgreSQL; see `implementation/p14/P14_GATE_REPORT.md`.
-- P15-01 commit `8ac8d74` implements exact OAuth resource/audience verification, immutable
-  issuer/subject-to-tenant mapping, eight typed scopes with role ceilings, bounded key/principal/
-  revocation/replay registries and public-user/internal-service separation. Rust 17/17 and P15
-  contract tests 13/13 pass on Windows; exact-commit current and independent checkout CI are each
-  5/5, both security runs pass, and network-disabled read-only Linux Clippy/tests pass. Production
-  IdP/JWKS/hosted transport remains unverified; see `implementation/p15/P15-01_REPORT.md`.
-- P15-02 commit `c3839df` freezes exactly 18 public MCP tools with closed Draft 2020-12 input/output
-  schemas, exact OAuth scope mirrors, conservative annotations, bounded identifiers and deterministic
-  descriptor/schema snapshots. P15-02 tests are 17/17 and all P15 tests 30/30; exact-commit current
-  and independent CI are each 5/5, both security runs pass, and network-disabled read-only Linux
-  validation passes. Handlers, transport and hosted OpenAI/OAuth integration remain unverified; see
-  `implementation/p15/P15-02_REPORT.md`.
-- P15-03 commit `9e7ed73` implements the shared fail-closed handler sequence: public-user auth,
-  duplicate-key-free JSON, exact input schema, tenant/project policy, one service dispatch, output
-  schema and request/resource correlation. Rust handler tests are 16/16 and all P15 tests 37/37;
-  current and independent exact-commit CI are each 5/5, both security runs pass, and the
-  network-disabled read-only Linux run passes. Transport, real service wiring and async job UX remain
-  unverified; see `implementation/p15/P15-03_REPORT.md`.
-- P15-04 implementation commit `f50c724` and closing audit commit `4c6224f` bind six long-running
-  calls to deterministic durable job IDs, ordered bounded `_meta` events, safe cancellation and one
-  immutable terminal receipt. Rust async 11/11 plus handler 16/16 and P15 Python 44/44 pass; current
-  and independent exact-commit CI are each 5/5, both security runs and network-disabled read-only
-  Linux validation pass. This qualifies only the current-PC local append-only journal reference;
-  production queue/database/transport and artifact byte delivery remain unverified. See
-  `implementation/p15/P15-04_REPORT.md`.
-- P15-05 commit `dde79ff` connects frozen `artifact_get` to metadata, client-only signed preview and
-  opaque attachment resource-link results. Tenant/project/artifact binding generation, P14 subject
-  ACL/state/digest rechecks, 30~900 second expiry and strict bounded single ranges fail closed.
-  Artifact Rust 13/13, async 11/11, handler 16/16 and P15 Python 51/51 pass; current and independent
-  exact-commit CI are each 5/5, both security runs and network-disabled read-only Linux validation
-  pass. This qualifies only the current-PC local delivery reference; production HTTP/object storage,
-  streaming, hosted attachment resolution and key custody remain unverified. See
-  `implementation/p15/P15-05_REPORT.md`.
-- P15-06 commit `f36a07e` freezes a digest-pinned 14-code public error catalog and exhaustively maps
-  Auth, Policy, Gateway, Async-job and Artifact-delivery failures into `hwpx-agent.error/v2`.
-  Authentication remains before parse, untrusted request IDs are not echoed before validation, and
-  raw errors, credentials, paths, identities and backend payloads are excluded from public and Debug
-  output. Rust 45/45, P15 Python 57/57, final exact independent CI 5/5, security and network-disabled
-  read-only Linux validation pass. This qualifies only the current-PC local public error reference;
-  production HTTP/hosted transport/telemetry remain unverified. See
-  `implementation/p15/P15-06_REPORT.md`.
-- P15-07 foundational commit `91e84f4` and checkout-independence repair `e15921a` implement atomic
-  tenant/user/capability/job-class token buckets, bounded retry guidance, six-tool durable replay
-  without recharge, payload-conflict rejection, finite state and clock-regression fail-closed
-  behavior. Quota Rust 8/8 plus predecessor Rust 45/45 and P15 Python 65/65 pass; exact-commit main
-  and independent CI are each 5/5, both security runs and network-disabled read-only Linux validation
-  pass. This qualifies only the current-PC Hangul 2020 local quota reference; distributed accounting,
-  production traffic and telemetry remain unverified. See `implementation/p15/P15-07_REPORT.md`.
-- P15-08 commit `d492dc8` adds one bounded 2,048-trace collector around the public handler, six-stage
-  complete traces, process-salted request/job/execution/revision/evidence and capability correlation,
-  closed tool/job/backend/validation SLIs and deterministic dashboards. Telemetry Rust 8/8 plus 53
-  predecessor tests and P15 Python 73/73 pass; exact-commit main and independent CI are each 5/5,
-  both security runs and network-disabled read-only Linux validation pass. This qualifies only the
-  current-PC Hangul 2020 local telemetry reference; hosted exporters, production SLOs and staging
-  HTTPS remain unverified. See `implementation/p15/P15-08_REPORT.md`.
-- P15-09 foundational commit `3ea8e6b`, runtime/security repair `81c1ef1` and closure-contract repair
-  `7ea2f84` expose the same
-  control plane through loopback-only ephemeral HTTPS and the official SDK transport. A clean pinned
-  Inspector run discovers exact schemas and passes all 18 tool calls plus 8 fail-closed network/auth
-  probes; Node and the persistent Rust driver shut down before the secret-free receipt is published.
-  P15 Python 84/84 at the closure repair, runtime current and independent CI 5/5 each, both security
-  runs and network-disabled Linux Rust 64/64 plus Clippy pass. This qualifies only current-PC Hangul
-  2020 local staging; public
-  deployment, real backend execution, ChatGPT/Codex attachment and 2022/2024 remain unverified. See
-  `implementation/p15/P15-09_REPORT.md`.
-- P15 STRICT/`max` Gate audits all nine card reports and common constraints at closure commit
-  `b823b32`. It authorizes only current-PC Hangul 2020 local MCP reference development and
-  Inspector-qualified loopback staging. Production OAuth/JWKS, public hosting, distributed services,
-  real backend/Hangul execution, ChatGPT/Codex attachment, other PCs and 2022/2024 remain unverified.
-  P16 and P17 may start only in the same local scope; see `implementation/p15/P15_GATE_REPORT.md`.
-- P16-01 commit `276143f` locks nine current official documents, three immutable sources, two
-  package integrities and 34 implementation requirements across twelve categories. Exact current and
-  independent checkouts each pass all five CI lanes, P14 132/132 and P15 84/84 remain green, and
-  network-disabled read-only Linux passes P16 16/16. An initial shared-CI edit correctly broke the
-  P15 source lock and was not accepted; P16 now uses its own byte-locked runner. Plugin bundle,
-  registered app, widget, Developer mode, web-to-Hangul execution and production remain unverified;
-  see `implementation/p16/P16-01_REPORT.md`.
-- P16-02 commits `89fee00` + `916a778` implement a valid LF-stable four-entry unregistered plugin
-  base, eleven source locks, strict actual-registration receipt admission and deterministic atomic
-  no-overwrite ZIP publication. Current and independent exact-repair-commit CI each pass 5/5, P14
-  132/132 and P15 84/84 remain green, and network-disabled read-only Linux passes cumulative P16
-  50/50. Actual registered app ID, Developer mode connection and registered-package acceptance
-  remain open, so the roadmap checkbox is not promoted; see `implementation/p16/P16-02_REPORT.md`.
-- P16-03 commits `b352d4f` + `916a778` implement nine immutable workflow skills synchronized to the
-  exact 18-tool P15 catalog. Deterministic routing passes 36/36, official skill validation passes
-  9/9, the composed 13-entry plugin validates, current and independent CI each pass 5/5, and offline
-  Linux passes cumulative P16 50/50. The first independent run correctly failed on CRLF/LF source
-  drift and was not promoted; the repair is regression-tested. This is local component evidence,
-  not ChatGPT host routing or Hangul execution; see `implementation/p16/P16-03_REPORT.md`.
-- P16-04 commits `745d76a` + `19d1cf7` implement the strict MCP Apps/React shell as a deterministic
-  643,174-byte self-contained resource with a closed CSP, approval-pending lifecycle, exact
-  server-result binding and read-only `project_open` continuation. Target TypeScript 21/21, Python
-  14/14 and cumulative P16 64/64 pass; current and final independent exact-commit CI each pass 5/5,
-  P14 132/132 and P15 84/84 remain green, and network-disabled read-only Linux passes. The first
-  implementation correctly exposed and repaired P15 successor-lock drift; one independent attempt
-  was externally interrupted by a Windows reboot and was not promoted. Actual ChatGPT rendering,
-  registration, Developer mode, Hangul/COM and production remain unverified; see
-  `implementation/p16/P16-04_REPORT.md`.
-- Exact commit `f225dbc` passed repository security validation; `pnpm audit` timed out once with
-  cleanup and succeeded on attempt 2, all other checks passed, and the SBOM contains 675 components.
-- A detached exact-commit worktree passed all four non-security lanes after the four digest-pinned,
-  Git-ignored current-PC runtime evidence files were hydrated, then was removed. The older verified
-  P14-02 clone `D:\개발\hwpx-agent-clean-audit-95f40ad` still requires user-local removal because the
-  earlier host command policy rejected its cleanup.
+## Open risks and holds
 
-## Validation policy
+- R-0001: Header-count defect is fixed in software; actual v3 recovery and rendering remain unproven.
+- R-0002: P16-06 authorization and asynchronous state safety are not yet accepted.
+- HOLD-0001: P16-02 actual registration and P16-05/06 registered-host E2E remain unverified.
+- HOLD-0002: P10-05 registered path-security module and P10-06 production COM execution remain open.
+- HOLD-0003: P10-08 dedicated production isolation and later-version PCs remain unqualified.
+- Do not infer PASS from CURRENT_STATE.md introductory prose; per-card/phase reports and evidence
+  are authoritative. That introductory summary lags the P15/P16 work.
 
-Every implementation task gets target tests plus format/Clippy, relevant regressions, current checkout
-FULL, exact-commit clean clone FULL, offline network-disabled Linux core where applicable, security
-checks, strict self-review and an authoritative report. A phase closes only after its separate
-STRICT/`max` Gate audit updates the roadmap, status and this ledger.
+## Exact next actions and validation policy
 
-## Exact next actions
+1. Finish P05-07 count-repair verification. On a user-present approval session, use the fresh v3
+   fixture and unchanged two-section expected text; require actual save/reopen/render evidence.
+2. Repair P16-06 safety defects with failing-before/passing-after regressions, then audit integration.
+3. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,
+   applicable offline Linux checks, security and STRICT review before any implementation closure.
+4. Close P05 only with save/reopen, semantic inspection, PDF verification and visual evidence.
+5. Keep actual-registration, production and other-PC claims open until their own evidence exists.
 
-1. Non-UI first: implement P16-06 as an additive versioned dry-run resource over approved
-   capability routing, bounded semantic diff, warnings and explicit high-risk confirmation; fail
-   closed on route, risk, identity or base-revision disagreement without changing earlier widgets.
-2. Account/UI-dependent: keep P16-02 actual registered app mapping and Developer mode acceptance
-   open until a user-confirmed real registration receipt exists; never invent `plugin_asdk_app...`.
-3. UI-dependent: on a new explicit user request, rerun P05-07 once and require
-   save/reopen/PDF/render evidence before P05-08, P05-09 and the P05 Gate.
-4. Keep P10-05/06 and P10-08 production claims open until their external controls exist.
+## Context Pack and archive references
 
-Continue P16-06 at reasoning effort `high`; use `max` for high-risk confirmation, malicious or
-contradictory tool results, capability-route authorization, any write action, actual-host acceptance
-and the P16 phase Gate.
+- Root: D:\개발\hwpx-agent; last implementation commit 9360c47.
+- First reads: this ledger; P05 attempt-17 report; implementation/p16/P16-06_PLAN_REVIEW_POLICY.md.
+- First checks: git status --short; named attempt-17 trace; P16 plan-review controller/model/tests.
+- Do not touch user originals, earlier failed evidence, predecessor contract locks or unrelated processes.
+- Detailed completed task history through P-0085 remains in Git fae5bc0:PLANS.md, plus individual
+  reports under implementation/p00/–implementation/p16/; this ledger is a bounded snapshot.
+- No broad cleanup, new deployment, security-prompt bypass or external account changes are authorized
+  by a local test. The full product goal remains active, not complete or globally blocked.

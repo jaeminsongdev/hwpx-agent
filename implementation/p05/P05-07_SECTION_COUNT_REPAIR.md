@@ -1,0 +1,88 @@
+# P05-07 header section-count repair
+
+- Date: 2026-09-05
+- Review: STRICT / HIGH; recommended reasoning `max`.
+- State: `core_repair_target_tests_pass_actual_2020_pending`.
+- Parent implementation: `9360c47fc6c8958f6f9a16b954491579d774342d`.
+- Full product and P05 Gate are not complete.
+
+## Finding and evidence
+
+The v2 multi-section fixture still has `hh:head/@secCnt="1"`, despite containing two section
+parts and two ordered linear spine entries. Its generator copied the one-section VS-0 header
+unchanged; its inspector validated both body parts but never correlated the declared header count.
+This is a confirmed generator/admission defect, not evidence of a PC or licensing fault.
+
+Attempt 17 opened this v2 fixture in the exact licensed Hangul 2020 and read a text digest that
+matches the first section marker alone. The stale count is consistent with that symptom, but
+causation and actual-Hangul recovery require a v3 run; neither is claimed from pure tests.
+See `P05-07_ATTEMPT17_DIAGNOSTIC.md` for the preserved actual trace.
+
+The locally locked official machine-readable KS X 6101 Appendix C declares `secCnt` as required
+`xs:nonNegativeInteger`. Source digest was rechecked as
+`c4a8bdb082cf8610fa2b3f6e709ca9058ab256a2371e9a779b9b323ca82638e4`; extracted record is
+`ks-x-6101-machine-content-20260901:xsd:000051`. That 2024 source is structural documentation,
+not 2020 runtime proof. The namespace and original one-section header come from the exact
+current-2020 VS-0 template, which remains unchanged.
+
+## Implementation
+
+The product section/column module now offers bounded header-count reading, header-aware sequence
+admission and a preserving count lowerer with an expected-prior-count precondition. The lowerer
+replaces only the value span and returns a digest-bound receipt; the source is immutable.
+`section_columns_section_count_mismatch` is an additive stable error code. No dependency, public
+MCP schema, security-prompt behavior, Registry value or predecessor template changed.
+
+The P05-07 generator updates the count before creating a new package; its inspector combines
+header-aware sequence admission with its existing exact spine, graph closure, text and geometry
+checks. The old header-free sequence API remains a value-level API, explicitly not whole-package
+validation. The new count reader similarly does not claim complete header/style validation.
+
+## Validation
+
+| Check | Current result |
+|---|---|
+| Regression before repair | Fails at generated header: actual 1, expected 2 |
+| Section/column tests | 14/14 pass |
+| New header-count tests | 8/8 pass |
+| Target fixture tests | 7/7 pass, including stale-header rejection and deterministic/no-overwrite build |
+| Workspace all-target/all-feature Clippy | PASS; subsequent CI Clippy also passes |
+| V3 build and product inspection | PASS: two sections, one boundary, unchanged expected text digest |
+| Independent ZIP part comparison | 12 parts in both; only header.xml differs, exactly secCnt 1 to 2 |
+| Old v2 fixture through repaired inspector | Correctly rejected with SectionCountMismatch |
+| Current checkout full CI | Running; final all-lane receipt not yet available |
+| Offline Linux package all-target tests and Clippy | PASS, exact Rust 1.96.0 image; network disabled and source/registry read-only |
+| Exact clean-checkout/full | Not yet run for this repair |
+| Actual Hangul 2020 v3 readback/PDF/visual Gate | Not run; still required |
+
+Negative coverage includes root/attribute namespace spoofing, missing/duplicate counts, child
+decoys, DTD/entity declarations, multiple roots, invalid/oversized numbers, count disagreement,
+empty/invalid sequences, prior-count conflicts and input/output/element/count bounds. Positive
+preservation checks cover BOM, CRLF, single quotes, numeric character references, Korean text,
+comments and repeatable receipts without altering any byte outside the selected value span.
+
+The first Linux invocation stopped before compilation when rustup tried to update requested
+components in a read-only root. It was not accepted. The successful invocation explicitly selected
+the already-installed `1.96.0-x86_64-unknown-linux-gnu` toolchain in image
+`sha256:bfda7f1ddbf0a192699d4b02dc3dbfefabe5eb7c0dd5527ba31acdaf0e4ab37f`, without network or
+relaxing source/registry protection. It ran `cargo test --locked --offline -p hwpx-package
+--all-targets -j 4` and package all-target Clippy with warnings denied. Its temporary build/cache
+were container-local and removed with that container. This is package portability evidence,
+not a whole-workspace Linux or actual-Hangul claim.
+
+## Fresh disposable v3 target
+
+- Directory: `fixtures/target-build/p05-07-current-2020-20260905-v3/` (Git-ignored).
+- Input: `p05-07-section-columns-input.hwpx`, 8,842 bytes.
+- SHA-256: `dc2d385ecdc60a396f5740d604b8ce379f25733c87bf98ed3e3baa32291e49a5`.
+- Expected normalized text SHA-256 remains
+  `92d2179169f1102d256589c2ca90b8422405076927d91c6e5ba2e91f28381d2f`.
+- Existing v2 fixture and all attempts are preserved. No v3 Hangul process has been launched.
+
+## Next acceptance
+
+Finish the software verification without promoting it into actual acceptance. In a user-present
+approval session, run the unchanged bounded 2020 wrapper against v3 using new output/trace/PDF
+names. Require both section markers before saving, then verify saved/reopened semantics, exact
+PDF geometry/text and every rendered page. Do not change expected text to the observed v2 result.
+If actual readback still fails, investigate extraction/import with focused evidence, not blind retries.

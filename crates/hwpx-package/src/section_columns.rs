@@ -12,6 +12,7 @@ pub const COLUMN_PROFILE_ID: &str = "hwpx-agent.section-columns/1";
 
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const SECTION_NS: &str = "http://www.hancom.co.kr/hwpml/2011/section";
+const HEAD_NS: &str = "http://www.hancom.co.kr/hwpml/2011/head";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct SectionColumnLimitConfig {
@@ -370,6 +371,19 @@ pub struct SectionColumnPatchReceipt {
     pub metrics: ColumnMetrics,
 }
 
+/// Evidence for a preserving change to the header's declared section count only.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct SectionCountPatchReceipt {
+    pub profile_id: &'static str,
+    pub source_sha256: [u8; 32],
+    pub output_sha256: [u8; 32],
+    pub output_bytes: usize,
+    pub previous_count: usize,
+    pub section_count: usize,
+    pub replaced_start: usize,
+    pub replaced_end: usize,
+}
+
 #[derive(Debug, Eq, Error, PartialEq)]
 pub enum SectionColumnError {
     #[error("section/column limits are invalid")]
@@ -380,6 +394,8 @@ pub enum SectionColumnError {
     ElementLimit,
     #[error("section count exceeds its finite limit")]
     SectionLimit,
+    #[error("header section count differs from the expected section sequence")]
+    SectionCountMismatch,
     #[error("column span count exceeds its finite limit")]
     SpanLimit,
     #[error("column count exceeds its finite limit")]
@@ -424,6 +440,7 @@ impl SectionColumnError {
             Self::InputLimit => "section_columns_input_limit",
             Self::ElementLimit => "section_columns_element_limit",
             Self::SectionLimit => "section_columns_section_limit",
+            Self::SectionCountMismatch => "section_columns_section_count_mismatch",
             Self::SpanLimit => "section_columns_span_limit",
             Self::ColumnLimit => "section_columns_column_limit",
             Self::Preserving(_) => "section_columns_preserving_xml",
@@ -465,6 +482,39 @@ impl ColumnDefinition {
 pub struct SectionColumnReader;
 
 impl SectionColumnReader {
+    /// Reads the bounded, nonzero `secCnt` from the current-profile header root.
+    /// This checks the count, not the complete header's style/reference semantics.
+    ///
+    /// # Errors
+    ///
+    /// Rejects malformed XML, wrong roots, missing/ambiguous attributes and invalid counts.
+    pub fn read_header_section_count(
+        header: &[u8],
+        limits: SectionColumnLimits,
+    ) -> Result<usize, SectionColumnError> {
+        let document = parse_document(header, limits)?;
+        header_section_count(&document, limits)
+    }
+
+    /// Reads a section sequence only when its length agrees with the header's `secCnt`.
+    /// The package consumer must supply the complete, graph-validated spine in order.
+    ///
+    /// # Errors
+    ///
+    /// Rejects inconsistent header/sequence counts before lifting any section, as well as all
+    /// failures of [`Self::read_sequence`]. This does not validate package/spine closure itself.
+    pub fn read_sequence_with_header(
+        header: &[u8],
+        sections: &[(&[u8], u32)],
+        limits: SectionColumnLimits,
+    ) -> Result<SectionColumnSequence, SectionColumnError> {
+        validate_section_count(sections.len(), limits)?;
+        if Self::read_header_section_count(header, limits)? != sections.len() {
+            return Err(SectionColumnError::SectionCountMismatch);
+        }
+        Self::read_sequence(sections, limits)
+    }
+
     /// Reads one standalone current-profile `colPr`.
     ///
     /// # Errors
@@ -550,6 +600,68 @@ impl SectionColumnReader {
 pub struct SectionColumnLowerer;
 
 impl SectionColumnLowerer {
+    /// Changes only the root `secCnt` value, preserving all other header bytes and quote style.
+    /// The expected count is a precondition; callers publish the matching spine/parts atomically.
+    ///
+    /// # Errors
+    ///
+    /// Rejects invalid counts, malformed headers, precondition conflicts, output limits and
+    /// readback mismatch. This does not create/remove sections or modify an input in place.
+    pub fn replace_header_section_count(
+        header: &[u8],
+        expected_count: usize,
+        section_count: usize,
+        limits: SectionColumnLimits,
+    ) -> Result<(Vec<u8>, SectionCountPatchReceipt), SectionColumnError> {
+        validate_section_count(expected_count, limits)?;
+        validate_section_count(section_count, limits)?;
+        let document = parse_document(header, limits)?;
+        if header_section_count(&document, limits)? != expected_count {
+            return Err(SectionColumnError::SectionCountMismatch);
+        }
+        let root = element(&document, document.root_element())?;
+        let attribute = root
+            .attributes()
+            .iter()
+            .find(|attribute| {
+                !attribute.is_namespace_declaration()
+                    && attribute.name().namespace().is_none()
+                    && attribute.name().local_name() == "secCnt"
+            })
+            .ok_or(SectionColumnError::UnsupportedShape)?;
+        let span = attribute.value_span();
+        let replacement = section_count.to_string();
+        let output_len = header
+            .len()
+            .checked_sub(span.len())
+            .and_then(|value| value.checked_add(replacement.len()))
+            .ok_or(SectionColumnError::OutputLimit)?;
+        if output_len > limits.config().output_bytes {
+            return Err(SectionColumnError::OutputLimit);
+        }
+        let mut output = Vec::new();
+        output
+            .try_reserve_exact(output_len)
+            .map_err(|_| SectionColumnError::AllocationFailed)?;
+        output.extend_from_slice(&header[..span.start()]);
+        output.extend_from_slice(replacement.as_bytes());
+        output.extend_from_slice(&header[span.end()..]);
+        if SectionColumnReader::read_header_section_count(&output, limits)? != section_count {
+            return Err(SectionColumnError::ReadbackMismatch);
+        }
+        let receipt = SectionCountPatchReceipt {
+            profile_id: COLUMN_PROFILE_ID,
+            source_sha256: Sha256::digest(header).into(),
+            output_sha256: Sha256::digest(&output).into(),
+            output_bytes: output.len(),
+            previous_count: expected_count,
+            section_count,
+            replaced_start: span.start(),
+            replaced_end: span.end(),
+        };
+        Ok((output, receipt))
+    }
+
     /// Lowers one deterministic standalone `colPr` and re-lifts it for semantic equality.
     ///
     /// # Errors
@@ -767,6 +879,32 @@ fn parse_document(
     }
     validate_document_envelope(&document)?;
     Ok(document)
+}
+
+fn validate_section_count(
+    count: usize,
+    limits: SectionColumnLimits,
+) -> Result<(), SectionColumnError> {
+    if count == 0 || count > limits.config().sections {
+        return Err(SectionColumnError::SectionLimit);
+    }
+    Ok(())
+}
+
+fn header_section_count(
+    document: &PreservingXmlDocument,
+    limits: SectionColumnLimits,
+) -> Result<usize, SectionColumnError> {
+    let root = element(document, document.root_element())?;
+    if !has_name(root, HEAD_NS, "head") {
+        return Err(SectionColumnError::WrongRoot);
+    }
+    validate_attributes(root, &["version", "secCnt"])?;
+    let count = required_decimal(root, "secCnt")?
+        .parse()
+        .map_err(|_| SectionColumnError::InvalidNumber)?;
+    validate_section_count(count, limits)?;
+    Ok(count)
 }
 
 fn parse_section(
