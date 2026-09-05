@@ -30,7 +30,8 @@ const snapshot: PlanReviewSnapshot = {
         {
             capability_id: "table.cell_style",
             selected_backend: "hancom_2020",
-            support_level: blocked ? "unverified" : "partial",
+            // Synthetic preview only; this does not qualify the real table capability.
+            support_level: blocked ? "unverified" : "verified",
             supported: true,
         },
         {
@@ -85,7 +86,12 @@ function Preview() {
         errorCode: null,
         actionPending: false,
         acknowledged: params.get("ack") === "1",
-        executionState: params.get("done") === "1" ? "submitted" : "none",
+        executionState:
+            params.get("state") === "unconfirmed"
+                ? "unconfirmed"
+                : params.get("done") === "1"
+                  ? "submitted"
+                  : "none",
     });
     return (
         <PlanReviewView

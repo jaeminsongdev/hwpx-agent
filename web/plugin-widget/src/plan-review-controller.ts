@@ -22,14 +22,20 @@ export type PlanReviewPhase =
     | "recoverable_error"
     | "closed";
 export type PlanReviewMode = "view" | "confirm_execution";
-export type ExecutionState = "none" | "revalidated" | "submitted" | "committed";
+export type ExecutionState =
+    "none" | "revalidated" | "unconfirmed" | "submitted" | "committed";
+type DispatchedState = Extract<
+    ExecutionState,
+    "unconfirmed" | "submitted" | "committed"
+>;
 export type PlanReviewErrorCode =
     | "CONNECT_FAILED"
     | "INVALID_TOOL_INPUT"
     | "INVALID_TOOL_RESULT"
     | "TOOL_CANCELLED"
     | "REVALIDATION_FAILED"
-    | "EXECUTION_FAILED";
+    | "EXECUTION_FAILED"
+    | "SESSION_LIMIT_REACHED";
 
 export interface PlanReviewHostContext {
     readonly locale?: unknown;
@@ -109,6 +115,16 @@ type Listener = (state: PlanReviewViewState) => void;
 const REQUEST_ID = /^req_[A-Za-z0-9_-]{8,120}$/;
 const IDEMPOTENCY_KEY =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+export const MAX_EXECUTION_BINDINGS = 128;
+export const MAX_CORRELATION_IDS = 1024;
+
+function executionBinding(snapshot: PlanReviewSnapshot): string {
+    return JSON.stringify([
+        snapshot.project_id,
+        snapshot.source_revision_id,
+        snapshot.plan_id,
+    ]);
+}
 
 function structuredContent(value: unknown): unknown | null {
     if (
@@ -139,6 +155,11 @@ export class PlanReviewController {
     private started = false;
     private closeStarted = false;
     private approvedRequest: PlanReviewRenderRequest | null = null;
+    // Session-local duplicate suppression, not server authorization or cross-widget deduplication.
+    // Entries are never evicted to make room: eviction could re-enable a dispatched write.
+    private readonly dispatchedExecutions = new Map<string, DispatchedState>();
+    private readonly usedRequestIds = new Set<string>();
+    private readonly usedIdempotencyKeys = new Set<string>();
 
     constructor(
         private readonly port: PlanReviewPort,
@@ -175,9 +196,14 @@ export class PlanReviewController {
             this.state.phase !== "ready" ||
             this.state.mode !== "view" ||
             this.state.actionPending ||
-            this.state.snapshot?.execution_allowed !== true
+            this.state.snapshot?.execution_allowed !== true ||
+            this.executionFor(this.state.snapshot) !== undefined
         )
             return;
+        if (this.dispatchedExecutions.size >= MAX_EXECUTION_BINDINGS) {
+            this.fail("SESSION_LIMIT_REACHED");
+            return;
+        }
         this.setState({
             mode: "confirm_execution",
             acknowledged: false,
@@ -209,7 +235,8 @@ export class PlanReviewController {
             this.state.phase !== "ready" ||
             this.state.mode !== "view" ||
             this.state.actionPending ||
-            snapshot === null
+            snapshot === null ||
+            this.executionFor(snapshot) !== undefined
         )
             return;
         this.setState({ actionPending: true, executionState: "none" });
@@ -232,7 +259,8 @@ export class PlanReviewController {
             this.state.mode !== "confirm_execution" ||
             this.state.actionPending ||
             !this.state.acknowledged ||
-            snapshot?.execution_allowed !== true
+            snapshot?.execution_allowed !== true ||
+            this.executionFor(snapshot) !== undefined
         )
             return;
         this.setState({ actionPending: true });
@@ -248,6 +276,15 @@ export class PlanReviewController {
             this.fail("EXECUTION_FAILED");
             return;
         }
+        if (this.executionFor(snapshot) !== undefined) return;
+        if (this.dispatchedExecutions.size >= MAX_EXECUTION_BINDINGS) {
+            this.fail("SESSION_LIMIT_REACHED");
+            return;
+        }
+        const binding = executionBinding(snapshot);
+        // Reserve BEFORE dispatch: a throw, lost reply, cancellation or new render must not
+        // convert an unknown external effect into permission to send the same plan again.
+        this.dispatchedExecutions.set(binding, "unconfirmed");
         try {
             const result = parseDocumentEditResult(
                 structuredContent(
@@ -256,27 +293,29 @@ export class PlanReviewController {
                     ),
                 ),
             );
-            if (!this.isOperationCurrent(snapshot, "confirm_execution")) return;
             if (
                 result === null ||
                 result.request_id !== requestId ||
                 !warningsCovered(snapshot.warnings, result.warning_codes) ||
                 !isAcceptedExecution(result)
             ) {
-                this.fail("EXECUTION_FAILED");
+                if (this.isOperationCurrent(snapshot, "confirm_execution"))
+                    this.fail("EXECUTION_FAILED");
                 return;
             }
+            const executionState =
+                result.commit_state === "committed" ? "committed" : "submitted";
+            this.dispatchedExecutions.set(binding, executionState);
+            if (!this.isOperationCurrent(snapshot, "confirm_execution")) return;
             this.setState({
                 mode: "view",
                 actionPending: false,
                 acknowledged: false,
-                executionState:
-                    result.commit_state === "committed"
-                        ? "committed"
-                        : "submitted",
+                executionState,
             });
         } catch {
-            this.fail("EXECUTION_FAILED");
+            if (this.isOperationCurrent(snapshot, "confirm_execution"))
+                this.fail("EXECUTION_FAILED");
         }
     }
 
@@ -392,6 +431,14 @@ export class PlanReviewController {
         );
     }
 
+    private executionFor(
+        snapshot: PlanReviewSnapshot | null,
+    ): DispatchedState | undefined {
+        return snapshot === null
+            ? undefined
+            : this.dispatchedExecutions.get(executionBinding(snapshot));
+    }
+
     private registerHandlers(): void {
         this.unregister = [
             this.port.onToolInput((value) => this.acceptRenderRequest(value)),
@@ -455,7 +502,7 @@ export class PlanReviewController {
             errorCode: null,
             actionPending: false,
             acknowledged: false,
-            executionState: "none",
+            executionState: this.executionFor(snapshot) ?? "none",
         };
         this.emit();
     }
@@ -471,7 +518,15 @@ export class PlanReviewController {
     private nextRequestId(): string | null {
         try {
             const value = this.requestId();
-            return REQUEST_ID.test(value) ? value : null;
+            if (
+                typeof value !== "string" ||
+                !REQUEST_ID.test(value) ||
+                this.usedRequestIds.has(value) ||
+                this.usedRequestIds.size >= MAX_CORRELATION_IDS
+            )
+                return null;
+            this.usedRequestIds.add(value);
+            return value;
         } catch {
             return null;
         }
@@ -480,7 +535,15 @@ export class PlanReviewController {
     private nextIdempotencyKey(): string | null {
         try {
             const value = this.idempotencyKey();
-            return IDEMPOTENCY_KEY.test(value) ? value : null;
+            if (
+                typeof value !== "string" ||
+                !IDEMPOTENCY_KEY.test(value) ||
+                this.usedIdempotencyKeys.has(value) ||
+                this.usedIdempotencyKeys.size >= MAX_CORRELATION_IDS
+            )
+                return null;
+            this.usedIdempotencyKeys.add(value);
+            return value;
         } catch {
             return null;
         }
@@ -488,6 +551,13 @@ export class PlanReviewController {
 
     private fail(code: PlanReviewErrorCode): void {
         if (this.state.phase === "closed") return;
+        const executionState =
+            this.executionFor(this.state.snapshot) ??
+            (this.state.executionState === "unconfirmed" ||
+            this.state.executionState === "submitted" ||
+            this.state.executionState === "committed"
+                ? this.state.executionState
+                : "none");
         this.setState({
             phase: "recoverable_error",
             mode: "view",
@@ -495,7 +565,7 @@ export class PlanReviewController {
             errorCode: code,
             actionPending: false,
             acknowledged: false,
-            executionState: "none",
+            executionState,
         });
     }
 

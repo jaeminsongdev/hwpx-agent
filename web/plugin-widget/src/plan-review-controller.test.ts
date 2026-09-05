@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
     PlanReviewController,
+    MAX_EXECUTION_BINDINGS,
+    MAX_CORRELATION_IDS,
     type PlanReviewHostContext,
     type PlanReviewPort,
     type PlanReviewServerCall,
@@ -342,6 +344,70 @@ test("malformed execution response is never promoted", async () => {
     assert.equal(controller.getState().errorCode, "EXECUTION_FAILED");
     assert.equal(controller.getState().snapshot, null);
 });
+
+test("submitted plan cannot execute again after review refresh", async () => {
+    const { controller, port } = await ready();
+    port.responses = [
+        (call) => capability(call.arguments.request_id),
+        (call) => dryRun(call.arguments.request_id),
+        (call) => execution(call.arguments.request_id),
+    ];
+    controller.beginExecution();
+    controller.setAcknowledged(true);
+    await controller.confirmExecution();
+    controller.beginExecution();
+    assert.equal(controller.getState().mode, "view");
+    await controller.revalidate();
+    assert.equal(controller.getState().executionState, "submitted");
+    port.input?.({ ...input });
+    port.result?.({ structuredContent: { ...snapshot } });
+    assert.equal(controller.getState().executionState, "submitted");
+    controller.beginExecution();
+    controller.setAcknowledged(true);
+    await controller.confirmExecution();
+    assert.equal(port.calls.length, 3);
+});
+
+test("late execution rejection preserves a newer approved plan", async () => {
+    const { controller, port } = await ready();
+    const reply = Promise.withResolvers<unknown>();
+    const dispatched = Promise.withResolvers<void>();
+    port.responses = [
+        (call) => capability(call.arguments.request_id),
+        (call) => dryRun(call.arguments.request_id),
+        () => {
+            dispatched.resolve();
+            return reply.promise;
+        },
+    ];
+    controller.beginExecution();
+    controller.setAcknowledged(true);
+    const pending = controller.confirmExecution();
+    await dispatched.promise;
+    port.input?.({ ...input, plan_id: "plan_newvalue1" });
+    port.result?.({
+        structuredContent: { ...snapshot, plan_id: "plan_newvalue1" },
+    });
+    reply.reject(new Error("untrusted transport details"));
+    await pending;
+    assert.equal(controller.getState().phase, "ready");
+    assert.equal(controller.getState().snapshot?.plan_id, "plan_newvalue1");
+    assert.equal(controller.getState().errorCode, null);
+});
+
+test("approved request identity does not alias host input", async () => {
+    const port = new FakePort();
+    const controller = new PlanReviewController(port, ids(), keys());
+    await controller.start();
+    const message = { ...input };
+    port.input?.(message);
+    message.plan_id = "plan_unapproved";
+    port.result?.({
+        structuredContent: { ...snapshot, plan_id: message.plan_id },
+    });
+    assert.equal(controller.getState().phase, "recoverable_error");
+    assert.equal(controller.getState().snapshot, null);
+});
 test("blocked snapshot never enters confirmation", async () => {
     const port = new FakePort();
     const controller = new PlanReviewController(port, ids(), keys());
@@ -358,6 +424,226 @@ test("blocked snapshot never enters confirmation", async () => {
     });
     controller.beginExecution();
     assert.equal(controller.getState().mode, "view");
+});
+
+for (const outcome of [
+    "lost",
+    "malformed",
+    "wrong_request",
+    "new_warning",
+] as const) {
+    test(`uncertain ${outcome} execution stays non-retryable across refresh`, async () => {
+        const { controller, port } = await ready();
+        port.responses = [
+            (call) => capability(call.arguments.request_id),
+            (call) => dryRun(call.arguments.request_id),
+            (call) => {
+                if (outcome === "lost")
+                    throw new Error("private transport detail");
+                if (outcome === "malformed") return {};
+                const response = execution(
+                    outcome === "wrong_request"
+                        ? "req_mismatch1"
+                        : call.arguments.request_id,
+                );
+                return outcome === "new_warning"
+                    ? {
+                          structuredContent: {
+                              ...response.structuredContent,
+                              warnings: [
+                                  {
+                                      code: "NEW_WARNING",
+                                      message: "not approved",
+                                  },
+                              ],
+                          },
+                      }
+                    : response;
+            },
+        ];
+        controller.beginExecution();
+        controller.setAcknowledged(true);
+        await controller.confirmExecution();
+        assert.equal(controller.getState().phase, "recoverable_error");
+        assert.equal(controller.getState().executionState, "unconfirmed");
+        assert.equal(controller.getState().snapshot, null);
+        port.input?.({
+            ...input,
+            locale: "en-US",
+            client_surface: "codex_remote",
+        });
+        port.result?.({
+            structuredContent: {
+                ...snapshot,
+                locale: "en-US",
+                client_surface: "codex_remote",
+            },
+        });
+        assert.equal(controller.getState().executionState, "unconfirmed");
+        controller.beginExecution();
+        controller.setAcknowledged(true);
+        await controller.confirmExecution();
+        await controller.revalidate();
+        assert.equal(port.calls.length, 3);
+    });
+}
+
+test("late accepted execution is recorded without replacing a newer plan", async () => {
+    const { controller, port } = await ready();
+    const reply = Promise.withResolvers<unknown>();
+    const dispatched = Promise.withResolvers<PlanReviewServerCall>();
+    port.responses = [
+        (call) => capability(call.arguments.request_id),
+        (call) => dryRun(call.arguments.request_id),
+        (call) => {
+            dispatched.resolve(call);
+            return reply.promise;
+        },
+    ];
+    controller.beginExecution();
+    controller.setAcknowledged(true);
+    const pending = controller.confirmExecution();
+    const write = await dispatched.promise;
+    port.input?.({ ...input, plan_id: "plan_newvalue1" });
+    port.result?.({
+        structuredContent: { ...snapshot, plan_id: "plan_newvalue1" },
+    });
+    reply.resolve(execution(write.arguments.request_id));
+    await pending;
+    assert.equal(controller.getState().snapshot?.plan_id, "plan_newvalue1");
+    assert.equal(controller.getState().executionState, "none");
+    controller.beginExecution();
+    assert.equal(controller.getState().mode, "confirm_execution");
+    controller.cancelExecution();
+    port.input?.(input);
+    port.result?.({ structuredContent: snapshot });
+    assert.equal(controller.getState().executionState, "submitted");
+    controller.beginExecution();
+    assert.equal(controller.getState().mode, "view");
+    assert.equal(port.calls.length, 3);
+});
+
+test("cancellation after dispatch cannot grant a second write", async () => {
+    const { controller, port } = await ready();
+    const reply = Promise.withResolvers<unknown>();
+    const dispatched = Promise.withResolvers<void>();
+    port.responses = [
+        (call) => capability(call.arguments.request_id),
+        (call) => dryRun(call.arguments.request_id),
+        () => {
+            dispatched.resolve();
+            return reply.promise;
+        },
+    ];
+    controller.beginExecution();
+    controller.setAcknowledged(true);
+    const pending = controller.confirmExecution();
+    await dispatched.promise;
+    port.cancelled?.();
+    assert.equal(controller.getState().executionState, "unconfirmed");
+    port.input?.(input);
+    port.result?.({ structuredContent: snapshot });
+    controller.beginExecution();
+    controller.setAcknowledged(true);
+    await controller.confirmExecution();
+    reply.reject(new Error("lost reply"));
+    await pending;
+    assert.equal(controller.getState().phase, "ready");
+    assert.equal(controller.getState().executionState, "unconfirmed");
+    assert.equal(port.calls.length, 3);
+});
+
+test("overlapping confirm calls dispatch exactly once", async () => {
+    const { controller, port } = await ready();
+    port.responses = [
+        (call) => capability(call.arguments.request_id),
+        (call) => dryRun(call.arguments.request_id),
+        (call) => execution(call.arguments.request_id),
+    ];
+    controller.beginExecution();
+    controller.setAcknowledged(true);
+    await Promise.all([
+        controller.confirmExecution(),
+        controller.confirmExecution(),
+        controller.confirmExecution(),
+    ]);
+    assert.equal(port.calls.length, 3);
+    assert.equal(controller.getState().executionState, "submitted");
+});
+
+for (const duplicate of ["request", "key"] as const) {
+    test(`duplicate ${duplicate} correlation is rejected before write`, async () => {
+        const port = new FakePort();
+        const nextId = ids();
+        let idCalls = 0;
+        const controller = new PlanReviewController(
+            port,
+            duplicate === "request"
+                ? () => (++idCalls === 3 ? "req_00000001" : nextId())
+                : nextId,
+            duplicate === "key"
+                ? () => "00000000-0000-4000-8000-000000000001"
+                : keys(),
+        );
+        await controller.start();
+        port.input?.(input);
+        port.result?.({ structuredContent: snapshot });
+        port.responses = [
+            (call) => capability(call.arguments.request_id),
+            (call) => dryRun(call.arguments.request_id),
+        ];
+        controller.beginExecution();
+        controller.setAcknowledged(true);
+        await controller.confirmExecution();
+        assert.equal(controller.getState().errorCode, "EXECUTION_FAILED");
+        assert.equal(controller.getState().executionState, "none");
+        assert.equal(port.calls.length, 2);
+    });
+}
+
+test("execution cache reaches a hard bound without evicting old plans", async () => {
+    const { controller, port } = await ready();
+    for (let i = 0; i < MAX_EXECUTION_BINDINGS; i++) {
+        const plan_id = `plan_${String(i).padStart(8, "0")}`;
+        port.input?.({ ...input, plan_id });
+        port.result?.({ structuredContent: { ...snapshot, plan_id } });
+        port.responses = [
+            (call) => capability(call.arguments.request_id),
+            (call) => dryRun(call.arguments.request_id),
+            (call) => execution(call.arguments.request_id),
+        ];
+        controller.beginExecution();
+        controller.setAcknowledged(true);
+        await controller.confirmExecution();
+        assert.equal(controller.getState().executionState, "submitted");
+    }
+    port.input?.(input);
+    port.result?.({ structuredContent: snapshot });
+    controller.beginExecution();
+    assert.equal(controller.getState().errorCode, "SESSION_LIMIT_REACHED");
+    port.input?.({ ...input, plan_id: "plan_00000000" });
+    port.result?.({
+        structuredContent: { ...snapshot, plan_id: "plan_00000000" },
+    });
+    assert.equal(controller.getState().executionState, "submitted");
+    controller.beginExecution();
+    await controller.confirmExecution();
+    assert.equal(port.calls.length, 3 * MAX_EXECUTION_BINDINGS);
+});
+
+test("correlation history has a hard bound across repeated validation", async () => {
+    const { controller, port } = await ready();
+    for (let i = 0; i < MAX_CORRELATION_IDS / 2; i++) {
+        port.responses = [
+            (call) => capability(call.arguments.request_id),
+            (call) => dryRun(call.arguments.request_id),
+        ];
+        await controller.revalidate();
+        assert.equal(controller.getState().executionState, "revalidated");
+    }
+    await controller.revalidate();
+    assert.equal(controller.getState().errorCode, "REVALIDATION_FAILED");
+    assert.equal(port.calls.length, MAX_CORRELATION_IDS);
 });
 test("cancellation clears authoritative data", async () => {
     const { controller, port } = await ready();

@@ -211,6 +211,8 @@ function parseRoute(value: unknown): CapabilityRoute | null {
     )
         return null;
     if (
+        typeof value.capability_id !== "string" ||
+        value.capability_id.length > 160 ||
         !identifier(value.capability_id, CAPABILITY_ID) ||
         typeof value.selected_backend !== "string" ||
         !BACKENDS.has(value.selected_backend as SelectedBackend) ||
@@ -291,7 +293,7 @@ export function parsePlanReviewRenderRequest(
         !identifier(value.plan_id, PLAN_ID)
     )
         return null;
-    return value as unknown as PlanReviewRenderRequest;
+    return { ...value } as unknown as PlanReviewRenderRequest;
 }
 
 export function parsePlanReviewSnapshot(
@@ -371,15 +373,13 @@ export function parsePlanReviewSnapshot(
         return null;
     const canExecute =
         route.every(
-            (item) =>
-                item!.supported &&
-                (item!.support_level === "verified" ||
-                    item!.support_level === "partial"),
+            (item) => item!.supported && item!.support_level === "verified",
         ) &&
         value.signature_impact === "none" &&
         value.dry_run_state === "verified" &&
         warnings.every((item) => item!.severity !== "blocking");
-    if (value.execution_allowed !== canExecute) return null;
+    // The server may deny an otherwise valid plan; the client can never grant permission.
+    if (value.execution_allowed && !canExecute) return null;
     return {
         ...(value as unknown as PlanReviewSnapshot),
         route: route as CapabilityRoute[],

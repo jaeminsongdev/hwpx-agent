@@ -75,6 +75,49 @@ test("rejects malformed identifiers", () =>
     ));
 test("accepts executable snapshot", () =>
     assert.equal(parsePlanReviewSnapshot(snapshot)?.execution_allowed, true));
+
+test("capability identifiers obey the public 160-character bound", () => {
+    for (const length of [160, 161]) {
+        const capability_id = `a.${"b".repeat(length - 2)}`;
+        const parsed = parsePlanReviewSnapshot({
+            ...snapshot,
+            route: [{ ...route[0], capability_id }],
+        });
+        assert.equal(parsed !== null, length === 160);
+        const result = parseCapabilityCheckResult({
+            ...base,
+            capabilities: [
+                {
+                    ...route[0],
+                    capability_id,
+                    estimated_job_class: "short",
+                    constraints: [],
+                    unverified_reasons: [],
+                },
+            ],
+        });
+        assert.equal(result !== null, length === 160);
+    }
+});
+test("partial capability route cannot authorize execution", () => {
+    const partial = {
+        ...snapshot,
+        route: [{ ...route[0], support_level: "partial" }],
+    };
+    assert.equal(parsePlanReviewSnapshot(partial), null);
+    assert.equal(
+        parsePlanReviewSnapshot({ ...partial, execution_allowed: false })
+            ?.execution_allowed,
+        false,
+    );
+});
+test("server may deny execution even when component checks pass", () => {
+    assert.equal(
+        parsePlanReviewSnapshot({ ...snapshot, execution_allowed: false })
+            ?.execution_allowed,
+        false,
+    );
+});
 test("rejects duplicate route IDs", () =>
     assert.equal(
         parsePlanReviewSnapshot({ ...snapshot, route: [...route, ...route] }),

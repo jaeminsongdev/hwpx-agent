@@ -1,5 +1,17 @@
 # P16-06 visual QA
 
+## Current safety-audit status (2026-09-05)
+
+The table below is the historical baseline from `9360c47`, not current-source proof. P16 safety
+changes require refreshed formal image/source locks before closure; those historical images are
+preserved. Ten new desktop/narrow/minimum-width screenshots were inspected at original resolution
+outside the repository in the Codex workspace's `p16-06-safety-qa-20260905/retry-05/`.
+Its automatic receipt SHA-256 is `03e36bdeceafa66d37a5d64b5cb3ecb02dbaa8a7759fdd264ece3f85d08f274d`;
+`inspection.md` records subsequent image inspection. See `P16-06_SAFETY_AUDIT.md` for the exact
+scope, failures, successful isolation remedy and outstanding formal contract/integration checks.
+
+## Historical baseline
+
 - Browser: Google Chrome `152.0.7977.76`, isolated headless file preview with networking disabled.
 - Concept source: 1536×1024, 1,182,885 bytes, SHA-256
   `06b8750663041d690c02804da7c1d5bc628290aef5012c756c96cc1e1aa8aa41`.
