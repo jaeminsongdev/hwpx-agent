@@ -1,0 +1,1825 @@
+{
+  "claims": {
+    "chatgpt_host_routing_tested": false,
+    "developer_mode_tested": false,
+    "direct_print_supported": false,
+    "hangul_or_com_invoked": false,
+    "nine_skills_packaged": true,
+    "positive_negative_local_eval_passed": true,
+    "public_or_production_ready": false,
+    "public_tool_names_synchronized": true,
+    "registered_plugin_tested": false,
+    "source_preserved": true
+  },
+  "component": {
+    "archive_policy": "sorted_fixed_metadata_zip_stored_atomic_no_overwrite",
+    "composition": "adds_manifest_skills_path_and_nine_files_without_mutating_base",
+    "entries": [
+      {
+        "bytes": 1321,
+        "path": "skills/build-hancom-tables/SKILL.md",
+        "sha256": "2ca75321ec0e349f37479e63e466b0db28eaef90ee5e2710fad5edf03373c2a1"
+      },
+      {
+        "bytes": 1280,
+        "path": "skills/compose-math-exam/SKILL.md",
+        "sha256": "0d0b285f678289b5ecf4928507ea94f4b28af740da243d656e84f0d85171fa18"
+      },
+      {
+        "bytes": 1159,
+        "path": "skills/configure-page-layout/SKILL.md",
+        "sha256": "c37b979b741cf3f87ed3518829969854e0396604bef7cfbb2aa657c19865c7be"
+      },
+      {
+        "bytes": 1306,
+        "path": "skills/create-hancom-document/SKILL.md",
+        "sha256": "c6ae2095391275883516f1d9e909ac3d976cb8988789c1905379ec61bc270432"
+      },
+      {
+        "bytes": 1204,
+        "path": "skills/edit-hancom-document/SKILL.md",
+        "sha256": "a035595a7ffbfe7f952b6b15ba393541a3dfca09064f5944b559ab0556ae788b"
+      },
+      {
+        "bytes": 1223,
+        "path": "skills/insert-native-equations/SKILL.md",
+        "sha256": "ae8817486bf12b41683e00b9c6e1f2312162811580782bafdd3d07cbe543dd98"
+      },
+      {
+        "bytes": 1231,
+        "path": "skills/resume-hancom-project/SKILL.md",
+        "sha256": "c4665e827c8c6055b482cf4eebc7a515742556fc18ce010fdb6ee131b3ce9095"
+      },
+      {
+        "bytes": 1238,
+        "path": "skills/template-preserve-fill/SKILL.md",
+        "sha256": "683ab0cbf5214a63daa36479525fe11f0af06fc00eafc559d9536aec348eb5ea"
+      },
+      {
+        "bytes": 1320,
+        "path": "skills/validate-export-hancom/SKILL.md",
+        "sha256": "ed571eae13a365ec720f2972f75e8fe7cd5aed0f1c0bee9f82708c028c302a9b"
+      }
+    ],
+    "entry_count": 9,
+    "root": "plugins/components/hwpx-agent-skills",
+    "skill_count": 9,
+    "skills": [
+      {
+        "name": "build-hancom-tables",
+        "primary_tool_sequence": [
+          "project_open",
+          "capability_check",
+          "document_plan",
+          "document_edit",
+          "job_get",
+          "document_inspect",
+          "document_validate",
+          "document_render"
+        ],
+        "referenced_tools": [
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "capability_check",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "capabilities"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_edit",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read",
+              "project.write"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "expected_revision",
+              "idempotency_key",
+              "source_revision_id",
+              "plan_id",
+              "dry_run",
+              "best_effort"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_inspect",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "idempotency_key",
+              "revision_id",
+              "selectors",
+              "materialization"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "document_plan",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "intent",
+              "mode",
+              "compile_only"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_render",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "pages",
+              "dpi",
+              "output",
+              "backend"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_validate",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "levels",
+              "fail_on_unverified"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "job_get",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "job_id",
+              "include_events"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "project_open",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "include"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "compose-math-exam",
+        "primary_tool_sequence": [
+          "project_create",
+          "capability_check",
+          "document_plan",
+          "document_create",
+          "job_get",
+          "document_validate",
+          "document_render",
+          "artifact_get"
+        ],
+        "referenced_tools": [
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "artifact_get",
+            "oauth_scopes": [
+              "artifact.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "idempotency_key",
+              "artifact_id",
+              "disposition"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "capability_check",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "capabilities"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_create",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read",
+              "project.write"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "expected_revision",
+              "idempotency_key",
+              "plan_id",
+              "mode"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "document_plan",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "intent",
+              "mode",
+              "compile_only"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_render",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "pages",
+              "dpi",
+              "output",
+              "backend"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_validate",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "levels",
+              "fail_on_unverified"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "job_get",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "job_id",
+              "include_events"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "project_create",
+            "oauth_scopes": [
+              "project.write"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "target_profile",
+              "expected_revision",
+              "idempotency_key",
+              "display_name",
+              "default_locale",
+              "retention_class"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "configure-page-layout",
+        "primary_tool_sequence": [
+          "project_open",
+          "document_inspect",
+          "capability_check",
+          "document_plan",
+          "document_edit",
+          "job_get",
+          "document_validate",
+          "document_render"
+        ],
+        "referenced_tools": [
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "capability_check",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "capabilities"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_edit",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read",
+              "project.write"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "expected_revision",
+              "idempotency_key",
+              "source_revision_id",
+              "plan_id",
+              "dry_run",
+              "best_effort"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_inspect",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "idempotency_key",
+              "revision_id",
+              "selectors",
+              "materialization"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "document_plan",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "intent",
+              "mode",
+              "compile_only"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_render",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "pages",
+              "dpi",
+              "output",
+              "backend"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_validate",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "levels",
+              "fail_on_unverified"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "job_get",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "job_id",
+              "include_events"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "project_open",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "include"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "create-hancom-document",
+        "primary_tool_sequence": [
+          "project_create",
+          "capability_check",
+          "document_plan",
+          "document_create",
+          "job_get",
+          "document_validate",
+          "document_render",
+          "artifact_get"
+        ],
+        "referenced_tools": [
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "artifact_get",
+            "oauth_scopes": [
+              "artifact.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "idempotency_key",
+              "artifact_id",
+              "disposition"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "capability_check",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "capabilities"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_create",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read",
+              "project.write"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "expected_revision",
+              "idempotency_key",
+              "plan_id",
+              "mode"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "document_plan",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "intent",
+              "mode",
+              "compile_only"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_render",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "pages",
+              "dpi",
+              "output",
+              "backend"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_validate",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "levels",
+              "fail_on_unverified"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "job_get",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "job_id",
+              "include_events"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "project_create",
+            "oauth_scopes": [
+              "project.write"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "target_profile",
+              "expected_revision",
+              "idempotency_key",
+              "display_name",
+              "default_locale",
+              "retention_class"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "edit-hancom-document",
+        "primary_tool_sequence": [
+          "project_open",
+          "document_inspect",
+          "document_plan",
+          "document_edit",
+          "job_get",
+          "document_validate",
+          "document_render"
+        ],
+        "referenced_tools": [
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_edit",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read",
+              "project.write"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "expected_revision",
+              "idempotency_key",
+              "source_revision_id",
+              "plan_id",
+              "dry_run",
+              "best_effort"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_inspect",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "idempotency_key",
+              "revision_id",
+              "selectors",
+              "materialization"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "document_plan",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "intent",
+              "mode",
+              "compile_only"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_render",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "pages",
+              "dpi",
+              "output",
+              "backend"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_validate",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "levels",
+              "fail_on_unverified"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "job_get",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "job_id",
+              "include_events"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "project_open",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "include"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "insert-native-equations",
+        "primary_tool_sequence": [
+          "project_open",
+          "document_inspect",
+          "capability_check",
+          "document_plan",
+          "document_edit",
+          "job_get",
+          "document_validate",
+          "document_render"
+        ],
+        "referenced_tools": [
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "capability_check",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "capabilities"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_edit",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read",
+              "project.write"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "expected_revision",
+              "idempotency_key",
+              "source_revision_id",
+              "plan_id",
+              "dry_run",
+              "best_effort"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_inspect",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "idempotency_key",
+              "revision_id",
+              "selectors",
+              "materialization"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "document_plan",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "intent",
+              "mode",
+              "compile_only"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_render",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "pages",
+              "dpi",
+              "output",
+              "backend"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_validate",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "levels",
+              "fail_on_unverified"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "job_get",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "job_id",
+              "include_events"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "project_open",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "include"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "resume-hancom-project",
+        "primary_tool_sequence": [
+          "project_open",
+          "project_history",
+          "job_get",
+          "project_checkpoint"
+        ],
+        "referenced_tools": [
+          {
+            "annotations": {
+              "destructiveHint": true,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "job_cancel",
+            "oauth_scopes": [
+              "job.cancel"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "expected_revision",
+              "idempotency_key",
+              "job_id",
+              "reason"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "job_get",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "job_id",
+              "include_events"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "project_checkpoint",
+            "oauth_scopes": [
+              "project.read",
+              "project.write"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "expected_revision",
+              "idempotency_key",
+              "revision_id",
+              "label"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "project_history",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "include_diff_summary",
+              "page_size"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "project_open",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "include"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "template-preserve-fill",
+        "primary_tool_sequence": [
+          "project_open",
+          "template_analyze",
+          "document_plan",
+          "document_edit",
+          "job_get",
+          "document_validate",
+          "document_render"
+        ],
+        "referenced_tools": [
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_edit",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read",
+              "project.write"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "expected_revision",
+              "idempotency_key",
+              "source_revision_id",
+              "plan_id",
+              "dry_run",
+              "best_effort"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "document_plan",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "intent",
+              "mode",
+              "compile_only"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_render",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "pages",
+              "dpi",
+              "output",
+              "backend"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_validate",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "levels",
+              "fail_on_unverified"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "job_get",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "job_id",
+              "include_events"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "project_open",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "include"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "template_analyze",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "idempotency_key",
+              "revision_id",
+              "materialize_contract"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "validate-export-hancom",
+        "primary_tool_sequence": [
+          "document_inspect",
+          "document_validate",
+          "job_get",
+          "document_render",
+          "document_export",
+          "artifact_get"
+        ],
+        "referenced_tools": [
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "artifact_get",
+            "oauth_scopes": [
+              "artifact.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "idempotency_key",
+              "artifact_id",
+              "disposition"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_export",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "expected_revision",
+              "idempotency_key",
+              "source_revision_id",
+              "format",
+              "profile",
+              "allow_lossy",
+              "include_loss_report"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_inspect",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "idempotency_key",
+              "revision_id",
+              "selectors",
+              "materialization"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_render",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "pages",
+              "dpi",
+              "output",
+              "backend"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": false
+            },
+            "name": "document_validate",
+            "oauth_scopes": [
+              "artifact.read",
+              "artifact.write",
+              "job.submit",
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "target_profile",
+              "idempotency_key",
+              "revision_id",
+              "levels",
+              "fail_on_unverified"
+            ]
+          },
+          {
+            "annotations": {
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false,
+              "readOnlyHint": true
+            },
+            "name": "job_get",
+            "oauth_scopes": [
+              "project.read"
+            ],
+            "required_input_fields": [
+              "client_surface",
+              "locale",
+              "request_id",
+              "project_id",
+              "job_id",
+              "include_events"
+            ]
+          }
+        ]
+      }
+    ],
+    "total_bytes": 11282
+  },
+  "decision": "pass_scoped_local_skills_component_and_deterministic_routing",
+  "next_task": "P16-04 Widget shell; P16-02 actual registration remains independently pending",
+  "predecessor": {
+    "path": "implementation/p16/p16-universal-package-contract-v1.json",
+    "sha256": "e1c8d6432fa8da4bb87b89900b58c0936c17502001dc15957820d9127140b3ef"
+  },
+  "public_tool_catalog": {
+    "bytes": 134758,
+    "destructive_tools": [
+      "job_cancel"
+    ],
+    "path": "protocol/mcp/p15-public-tools-v1.json",
+    "referenced_tool_count": 16,
+    "sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001",
+    "tool_count": 18
+  },
+  "requirements": [
+    "P16-R15",
+    "P16-R34"
+  ],
+  "routing_evaluation": {
+    "case_count": 36,
+    "case_path": "implementation/p16/p16-skill-routing-cases-v1.json",
+    "case_sha256": "0fcd396a0d68724b518d4d881ba595c1e401975d8b892c04061e366ad600ff7b",
+    "evidence_level": "deterministic_local_component_not_chatgpt_host_behavior",
+    "negative_count": 18,
+    "passed_count": 36,
+    "positive_count": 18
+  },
+  "schema_version": "hwpx-agent.p16-skills-package-contract/v1",
+  "scope": "current_pc_hangul_2020_local_skills_component",
+  "source_locks": [
+    {
+      "path": "implementation/p16/P16-03_SKILLS_POLICY.md",
+      "sha256": "ffb632c3963ccc775b13fedefcc920d9abd5196b498e9d9441b4bba5077a4440"
+    },
+    {
+      "path": "implementation/p16/p16-skill-routing-cases-v1.json",
+      "sha256": "0fcd396a0d68724b518d4d881ba595c1e401975d8b892c04061e366ad600ff7b"
+    },
+    {
+      "path": "plugins/components/hwpx-agent-skills/skills/build-hancom-tables/SKILL.md",
+      "sha256": "2ca75321ec0e349f37479e63e466b0db28eaef90ee5e2710fad5edf03373c2a1"
+    },
+    {
+      "path": "plugins/components/hwpx-agent-skills/skills/compose-math-exam/SKILL.md",
+      "sha256": "0d0b285f678289b5ecf4928507ea94f4b28af740da243d656e84f0d85171fa18"
+    },
+    {
+      "path": "plugins/components/hwpx-agent-skills/skills/configure-page-layout/SKILL.md",
+      "sha256": "c37b979b741cf3f87ed3518829969854e0396604bef7cfbb2aa657c19865c7be"
+    },
+    {
+      "path": "plugins/components/hwpx-agent-skills/skills/create-hancom-document/SKILL.md",
+      "sha256": "c6ae2095391275883516f1d9e909ac3d976cb8988789c1905379ec61bc270432"
+    },
+    {
+      "path": "plugins/components/hwpx-agent-skills/skills/edit-hancom-document/SKILL.md",
+      "sha256": "a035595a7ffbfe7f952b6b15ba393541a3dfca09064f5944b559ab0556ae788b"
+    },
+    {
+      "path": "plugins/components/hwpx-agent-skills/skills/insert-native-equations/SKILL.md",
+      "sha256": "ae8817486bf12b41683e00b9c6e1f2312162811580782bafdd3d07cbe543dd98"
+    },
+    {
+      "path": "plugins/components/hwpx-agent-skills/skills/resume-hancom-project/SKILL.md",
+      "sha256": "c4665e827c8c6055b482cf4eebc7a515742556fc18ce010fdb6ee131b3ce9095"
+    },
+    {
+      "path": "plugins/components/hwpx-agent-skills/skills/template-preserve-fill/SKILL.md",
+      "sha256": "683ab0cbf5214a63daa36479525fe11f0af06fc00eafc559d9536aec348eb5ea"
+    },
+    {
+      "path": "plugins/components/hwpx-agent-skills/skills/validate-export-hancom/SKILL.md",
+      "sha256": "ed571eae13a365ec720f2972f75e8fe7cd5aed0f1c0bee9f82708c028c302a9b"
+    },
+    {
+      "path": "tools/p16/skills_package.py",
+      "sha256": "ab90e62466b1d4a6a8f3043488593b751a4bf05aa117f3916fb2b694c3b1e45c"
+    },
+    {
+      "path": "tools/p16/build_skills_package.py",
+      "sha256": "2401f02dd643a4a66a270ca65fe034fa5444c8668f1954c171d11beea71e26f8"
+    },
+    {
+      "path": "tools/p16/build_skills_package_contract.py",
+      "sha256": "d72910fee6120e0d57a27caa00eedee6cdd6da4c1eaa9ae10b985fc03c4e7ab0"
+    },
+    {
+      "path": "tools/p16/validate_skills_package.py",
+      "sha256": "6b74aa2f912a651c9717c420d0362325455c9074414e727274bb898898b53ade"
+    },
+    {
+      "path": "tools/p16/run_skills_checks.py",
+      "sha256": "2c411b320ccf8e54d61304d373fc67a3c11fc510c55514b0f251415b35a698be"
+    },
+    {
+      "path": "tools/p16/tests/test_skills_package.py",
+      "sha256": "9d1c41279352f4a2b32ccc1dc1ce0584c0916259cb7c8b8f6f72816307d4a3cd"
+    }
+  ],
+  "task": "P16-03"
+}
