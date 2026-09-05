@@ -37,7 +37,7 @@ ChatGPT Web Plugin·Widget를 문서상 계획이 아니라 **재현 가능한 �
 
 ## Phase hard gate
 
-- [ ] `P16-01` 산출물 `OpenAI source lock` 존재, 검증: manifest/UI requirements reviewed.
+- [x] `P16-01` 산출물 `OpenAI source lock` 존재, 검증: manifest/UI requirements reviewed.
 - [ ] `P16-02` 산출물 `plugin bundle` 존재, 검증: package validation.
 - [ ] `P16-03` 산출물 `skills package` 존재, 검증: trigger/negative eval.
 - [ ] `P16-04` 산출물 `React widget` 존재, 검증: bridge lifecycle tests.
