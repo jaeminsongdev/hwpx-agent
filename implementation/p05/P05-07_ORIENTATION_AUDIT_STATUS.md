@@ -2,8 +2,8 @@
 
 - Date: 2026-09-05; implementation checkpoint `9f493a5fef097e6b1a232ea8e2b16408e6a2ed51`.
 - Goal/card status: active/in progress, not complete or blocked.
-- This file records audit progress after the checkpoint report; do not infer completion from launch.
-- Only documentation may change while these audits run; keep implementation bytes at this checkpoint.
+- The two FULL audits are now terminal. This qualifies the orientation/spine implementation checks,
+  not actual repaired layout, logical identity preservation or the later diagnostic implementation.
 
 ## Verified results
 
@@ -22,23 +22,28 @@ build filesystem (1.8 GiB used). No toolchain update, installation or test suppr
 | spine-before.log | 9f19ac066827965270fa9ec3d5bf82a13316afa0479e274f0bd5d968424f0c80 |
 | linux-offline-9f493a5.log | 39c795b17c45ca19266a1765959ba3473d00325a2d4b340cdeccb525f24222ea |
 
-## FULL audits: live handles, not terminal results
+## FULL audits: terminal results
 
-1. Current checkout `D:\개발\hwpx-agent`, session **84430**, still live on last tool observation.
-   `artifacts/p05-orientation-repair/full-current-9f493a5.log`: Rust, Windows worker and widget
-   lanes passed into the docs lane; latest output advanced through all P14 contract validators
-   to `python -m unittest discover -s tools/p14/tests -p test_*.py`. Security/overall result pending.
+1. Current checkout `D:\개발\hwpx-agent`, session **84430**, terminal exit 0, **5/5 lanes PASS**.
+   `artifacts/p05-orientation-repair/full-current-9f493a5.log` SHA-256:
+   `4b16a21f4f8b07b8f6710a561f06f9b3d0330927591be3339246f637d6b8667d`.
+   Rust 19.434 s, Windows worker 101.113 s, widget 6.803 s, docs 1724.735 s, security 19.840 s.
+   P14: 132 tests; P15: 84 tests. All nine security checks exited 0, forbidden licenses zero.
+   Security receipt: `implementation/p01/evidence/security-runs/43ce31dcc9f8474c9a12be2f189c86d4/report.json`.
 2. Exact clean detached checkout `D:\개발\hwpx-agent-audit-p05-orientation-9f493a5`, retry session
-   **81116**, still live on last observation. `full-independent-retry02-9f493a5.log` in the same
-   artifact subdirectory. It also reached the P14 unittest suite in docs. Four exact digest-pinned
-   diagnostic JSON records were copied to ignored paths; no user documents or keys were copied.
+   **81116**, terminal exit 0, **5/5 lanes PASS**. `full-independent-retry02-9f493a5.log` SHA-256:
+   `939c60877d9ba5d8050c9840670e7a037390fd000c972f76a62eb533dba1b831`.
+   Rust 10.778 s, Windows worker 64.420 s, widget 6.335 s, docs 1807.061 s, security 12.729 s.
+   P14: 132 tests; P15: 84 tests. All nine security checks exited 0, forbidden licenses zero.
+   Security receipt: `implementation/p01/evidence/security-runs/ff7684ea553741f28727cc3939c06ed7/report.json`.
+   Four pinned diagnostic JSON records were hydrated; no user documents/keys. Tracked tree is clean.
 3. First independent session **71568** is terminal exit 1. Do not poll/restart that handle.
    `full-independent-9f493a5.log` SHA-256:
    `b19688f4e72002c2dc16e4cd664358af5021820f4238e75b9d9b9ef805bf9676`.
 
-Recheck 84430 and 81116 with their existing handles. An observation timeout is not termination.
-Do not start another FULL run merely because the docs lane is slow. Both implementation trees
-were clean at the last source check, before this audit-status documentation update in main.
+Do not poll/restart these terminal handles. Main changed only documentation during the audit;
+implementation remained `9f493a5`. New source-bound diagnostics were developed separately and
+require their own checks; these FULL results do not qualify that implementation.
 
 ## First independent failure: retained, not explained away
 
@@ -55,10 +60,12 @@ compiled C# smoke was then executed three times sequentially: all three passed 3
 checkout. No timeout, assertion, production code or test was changed. The failed run remains
 failed; these retries do not retroactively establish its cause or eliminate the reproducibility risk.
 The new FULL retry started only after the failed run and all three probes were confirmed terminal.
+That retry subsequently passed. R-0003 remains open because the first failure's cause is unproven.
 
 ## Remaining next work
 
-- Finish the two live FULL audits before a closure decision. Record terminal results and hashes.
+- Orientation/spine current/independent FULL and Linux checks are complete. Actual layout/identity
+  acceptance is still open; do not close P05-06/07 or the phase on component/audit evidence alone.
 - If the worker assertion repeats, separate the missing-receipt and live-process diagnostics and
   repair the actual readiness/termination race with deterministic coverage; do not increase a
   timeout or drop an assertion simply to get a pass. Track uncertainty even if the retry passes.

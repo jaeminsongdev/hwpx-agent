@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-05
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05-06/07 orientation/spine repair audits and P16-06 durable Plan/diff integration.
+- Active: P05-07 source-bound diagnostics/identity and P16-06 durable Plan/diff integration.
 - Recommended reasoning: max for preservation, authorization and Gate review; high for routine work.
 - UI status: v3 attempt 21 passed open/save/reopen/text/PDF export; layout acceptance failed.
   Session 13431 terminal exit 0; normal quit, residual zero. No additional click or automatic relaunch.
@@ -39,7 +39,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 | ID | Task | State / next check |
 |---|---|---|
-| P-0045–0048 | P05-06–09 | Orientation v2/spine repair: 193 target tests/Clippy pass; FULL and actual audits open |
+| P-0045–0048 | P05-06–09 | Orientation FULL/Linux pass; diagnostics Windows/Linux 205 pass, own FULL still pending |
 | P-0082 | P16-02 registration | Local bundle ready; actual registered app/host receipt absent |
 | P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; actual registered host pending |
 | P-0086 | P16-06 Plan/diff UI | Registry checkpoint complete; PostgreSQL artifact adapter uncommitted, renderer wiring open |
@@ -71,7 +71,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 ## Open risks and holds
 
-- R-0001: V2 mapping/spine component repair passes; FULL audits, column IDs and actual landscape render remain open.
+- R-0001: Orientation FULL/LINUX pass; new diagnostic audits, column IDs and actual landscape render remain open.
 - R-0002: Registry target behavior passes; durable adapter, actual renderer and current formal evidence remain open.
 - R-0003: One independent worker timeout smoke failed; unchanged retries pass 3/3, root cause not proven.
 - HOLD-0001: P16-02 actual registration and P16-05/06 registered-host E2E remain unverified.
@@ -82,8 +82,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 ## Exact next actions and validation policy
 
-1. Poll live FULL 84430/81116; read P05-07_ORIENTATION_AUDIT_STATUS.md. Linux 193/Clippy passed.
-   Read P05-07_COLUMN_ID_ADMISSION_PLAN.md for offline diagnosis; fresh user-present request to relaunch.
+1. Qualify source-bound diagnostics 3827c21 in D:\개발\hwpx-agent-work-p05-diagnostics; 205 tests/Clippy pass.
+   Read its P05-07_SOURCE_BOUND_DIAGNOSTICS.md; Linux 96358 terminal PASS, FULL pending. No relaunch.
 2. Resume uncommitted PostgreSQL artifact adapter: first actual DB check failed at guarded empty rollback.
    Inspect v10 schema_versions immutable trigger handling, then qualify durable source/plan/renderer wiring.
 3. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,
@@ -95,8 +95,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 - Root: D:\개발\hwpx-agent; count-repair e82cf95; P16 baseline 9360c47. Count FULL 5232/68068: 5/5 PASS.
   Independent checkout D:\개발\hwpx-agent-audit-p05-count-e82cf95, artifacts/p05-count-repair/full-ci.log.
-- P05 repair 9f493a5: main FULL 84430 and exact audit-p05-orientation-9f493a5 retry FULL 81116 live.
-  Prior 71568 failed/terminal; smoke 42848 and Linux 57646 passed/terminal. See orientation audit status.
+- P05 repair 9f493a5: FULL 84430/81116 terminal 5/5 PASS; Linux 57646 terminal 193/Clippy PASS.
+  First 71568 failed; smoke 42848 passed. Diagnostics work-p05-diagnostics HEAD 3827c21, clean.
 - P16-06 checkpoint 9a16c2d55f82a012d9b354b5df2db983b07c4060 at D:\개발\hwpx-agent-work-p16-06-safety.
   FULL log: artifacts/p16/safety-summary-full-9a16c2d/full-ci.log; 24388 terminal 5/5 PASS.
   Target runner 49438 is terminal exit 0. Four exact P10 JSON records hydrated for FULL, no user docs/keys.

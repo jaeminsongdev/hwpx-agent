@@ -3,8 +3,8 @@
 - Date: 2026-09-05; parent main checkpoint d354aa2.
 - Review: STRICT / HIGH, recommended reasoning max.
 - State at implementation checkpoint: component tests pass; broader audits and actual render open.
-- Continuation: actual offline Linux 193/193 tests and Clippy passed. FULL audits are live; see
-  `P05-07_ORIENTATION_AUDIT_STATUS.md` for current handles, first failure and unchanged retries.
+- Continuation: actual offline Linux 193/193 tests and Clippy passed; current and independent FULL
+  each passed 5/5. See `P05-07_ORIENTATION_AUDIT_STATUS.md` for terminal evidence and retained failure.
 - Scope: current PC's licensed Hangul 2020 only. No new Hangul launch or UI input occurred.
 
 ## Findings and implementation
@@ -73,6 +73,6 @@ uncommitted PostgreSQL work in the separate P16 worktree; its prior checks do no
 
 ## Next actions
 
-Resume the already-live FULL handles in the audit-status report; do not restart them. Linux is done.
+The FULL and Linux handles are terminal; do not restart them. See the audit-status report.
 Read `P05-07_COLUMN_ID_ADMISSION_PLAN.md` for the next source-bound diagnostic and identity boundary
 before preparing a corrected actual test. No blind or automatic Hangul relaunch.
