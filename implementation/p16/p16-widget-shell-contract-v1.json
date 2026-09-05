@@ -1,0 +1,355 @@
+{
+  "claims": {
+    "actual_chatgpt_host_render_tested": false,
+    "closed_csp_component_tested": true,
+    "developer_mode_tested": false,
+    "file_transfer_tested": false,
+    "hangul_2022_2024_or_other_pc_tested": false,
+    "hangul_or_com_invoked": false,
+    "mcp_apps_bridge_implemented": true,
+    "p15_tools_remain_ui_independent": true,
+    "public_or_production_ready": false,
+    "react_widget_shell_implemented": true,
+    "registered_plugin_tested": false,
+    "responsive_concept_sources_locked": true,
+    "versioned_self_contained_resource_implemented": true
+  },
+  "decision": "pass_scoped_local_widget_shell_component",
+  "dependencies": [
+    {
+      "integrity": "sha512-TjPH2S2y5UEGKhmI6+XGFuqfqOV4ppe1x6DA3txnUaEWkgtA4G5vo14jGKFZmegdkZ1H4QMLyujLvoU1BEdnAg==",
+      "name": "@modelcontextprotocol/ext-apps",
+      "scope": "runtime",
+      "version": "1.7.5"
+    },
+    {
+      "integrity": "sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw==",
+      "name": "react",
+      "scope": "runtime",
+      "version": "19.2.8"
+    },
+    {
+      "integrity": "sha512-rVprimfGBG3DR+Tq0IQG2DT5PxKth1WIGDmj5yPmlzr4YBe7uyE+Du4oVqTDXZSHGGGXRtTJEGSSePyQCMBglQ==",
+      "name": "react-dom",
+      "scope": "runtime",
+      "version": "19.2.8"
+    },
+    {
+      "integrity": "sha512-HKVLS8dvII+xoKW9kmqxbRKrnWEXfJJr/FZhhJmiqIB0e053QNYFqOBouTMO/k5sID4MvCiUCvv8b9M4h32wIA==",
+      "name": "esbuild",
+      "scope": "development",
+      "version": "0.28.2"
+    }
+  ],
+  "design_sources": [
+    {
+      "bytes": 894309,
+      "height": 998,
+      "path": "implementation/p16/design/p16-04-widget-shell-desktop-concept.png",
+      "sha256": "e8ff3d4ac6136f79cd8ecc767affff441a77f9d1beed2a3b83af4e51dcdb4f3f",
+      "width": 1576
+    },
+    {
+      "bytes": 996990,
+      "height": 1536,
+      "path": "implementation/p16/design/p16-04-widget-shell-narrow-concept.png",
+      "sha256": "584f0e003e93a5f944007faba5376dea7a7305145249d95fa6cda239db2b674e",
+      "width": 1024
+    }
+  ],
+  "lifecycle": {
+    "approval_pending_is_expected": true,
+    "approved_input_required_before_result": true,
+    "handlers_registered_before_connect": true,
+    "host_detection": "capability_methods_only_no_hostname_branch",
+    "model_input_cannot_set_ready": true,
+    "result_bound_to_approved_surface_project": true,
+    "strict_bridge": true,
+    "teardown_idempotent": true,
+    "unsafe_eval_allowed": false
+  },
+  "next_task": "P16-05 core document workflow UI",
+  "official_source_contract": {
+    "path": "implementation/p16/p16-official-source-contract-v1.json",
+    "sha256": "dd46a4b41f27fa5dfbd3c52e8b6ed7bc2447cddb1bac9cac516b6c36d0dadb2f"
+  },
+  "policy": {
+    "path": "implementation/p16/p16-widget-shell-policy-v1.json",
+    "sha256": "1a41fec81b7519ad7223591366ed4242bbc897e329c0d76fb7dee674dbffce09"
+  },
+  "predecessor": {
+    "path": "implementation/p16/p16-skills-package-contract-v1.json",
+    "sha256": "900d1ef22af22e3c701f49d9a8b3e8cd912ebbf559a9b31222051e7c3e6bf8e9"
+  },
+  "public_tool_boundary": {
+    "continue_tool": "project_open",
+    "continue_tool_read_only": true,
+    "path": "protocol/mcp/p15-public-tools-v1.json",
+    "sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001",
+    "tool_count": 18,
+    "ui_resource_metadata_count": 0
+  },
+  "requirements": [
+    "P16-R01",
+    "P16-R02",
+    "P16-R03",
+    "P16-R04",
+    "P16-R05",
+    "P16-R06",
+    "P16-R07",
+    "P16-R08",
+    "P16-R09",
+    "P16-R10",
+    "P16-R17",
+    "P16-R25"
+  ],
+  "resource": {
+    "bundle": {
+      "bytes": 643174,
+      "path": "web/plugin-widget/dist/widget-v1.html",
+      "preview_bytes": 203381,
+      "preview_path": "web/plugin-widget/dist/preview.html",
+      "preview_sha256": "bcf8db422a876efdbb93acef0b09c5e313eac32c95b5d92e15aea38dcad2300d",
+      "sha256": "7298d67619fa5afb3c9e870f59dce1412a2de77741474e8b522006d4f469db78"
+    },
+    "csp": {
+      "connectDomains": [],
+      "frameDomains": null,
+      "resourceDomains": []
+    },
+    "display_mode": "inline",
+    "mime_type": "text/html;profile=mcp-app",
+    "render_tool": "render_document_work_widget",
+    "uri": "ui://hwpx-agent/document-work/v1.html"
+  },
+  "schema_version": "hwpx-agent.p16-widget-shell-contract/v1",
+  "scope": "current_pc_hangul_2020_local_widget_shell_component",
+  "source_locks": [
+    {
+      "path": "implementation/p16/P16-04_WIDGET_DESIGN_SPEC.md",
+      "sha256": "091f826687b6269bcd86be7c366cee4a3ed588738b8ecb292053e44d902a6cae"
+    },
+    {
+      "path": "implementation/p16/P16-04_WIDGET_SHELL_POLICY.md",
+      "sha256": "61b57cfebf03778cc44a3a2b6a40b30779d48fc9a8abcf1d1193916ce49c1043"
+    },
+    {
+      "path": "implementation/p16/P16-04_VISUAL_QA.md",
+      "sha256": "cc8ff5ce841e4a54b97191e2e183d007f14ef603f2952fea366edd55a934806c"
+    },
+    {
+      "path": "implementation/p16/p16-widget-shell-policy-v1.json",
+      "sha256": "1a41fec81b7519ad7223591366ed4242bbc897e329c0d76fb7dee674dbffce09"
+    },
+    {
+      "path": "implementation/p16/design/p16-04-widget-shell-desktop-concept.png",
+      "sha256": "e8ff3d4ac6136f79cd8ecc767affff441a77f9d1beed2a3b83af4e51dcdb4f3f"
+    },
+    {
+      "path": "implementation/p16/design/p16-04-widget-shell-narrow-concept.png",
+      "sha256": "584f0e003e93a5f944007faba5376dea7a7305145249d95fa6cda239db2b674e"
+    },
+    {
+      "path": "implementation/p16/visual-qa/p16-04-desktop-approval.png",
+      "sha256": "fb83b66541a3cd642381ea3fe3a89860a05d9ef9bffc32b113c5d91292e700f6"
+    },
+    {
+      "path": "implementation/p16/visual-qa/p16-04-desktop-dark-ready.png",
+      "sha256": "fe55b0f067732bf45ecf86a4688d3c8aac14a0c0cf178d037fcac1fe951631a6"
+    },
+    {
+      "path": "implementation/p16/visual-qa/p16-04-desktop-error.png",
+      "sha256": "48189381753a4cbe46bb72b148d89598f5d44991b4f0dda89ec2d389a3bfc355"
+    },
+    {
+      "path": "implementation/p16/visual-qa/p16-04-desktop-ready.png",
+      "sha256": "1262ac4520db011b194c4312e7bf86c6daa2062571a8be61b6700a288bba303e"
+    },
+    {
+      "path": "implementation/p16/visual-qa/p16-04-narrow-approval.png",
+      "sha256": "71f852c6bf2c7aa247564105a8c3cbed8fa0c47a4bd14701e2dac20be219f48f"
+    },
+    {
+      "path": "implementation/p16/visual-qa/p16-04-narrow-error.png",
+      "sha256": "7e2578d8e921c4613d3592b79466fbb8de49e34c50056edbfb4a89f694847d38"
+    },
+    {
+      "path": "implementation/p16/visual-qa/p16-04-narrow-ready.png",
+      "sha256": "ce8b473c4ab0d734642c751d9e32ca418038028e7720aba09a554f0d0d4c6fcf"
+    },
+    {
+      "path": "package.json",
+      "sha256": "4a7abe93f16995ab956902a2996d38273984145ba7bec76af322152c970b2e18"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "ba4d49cc2326c4fc7f43c71396eccbeaf48fcb2f8cf586b6f5e0f2507fd8c3f9"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "sha256": "89f033167ee02f33dc9998c18c69accd01e4f854e4321f76095826e6a3f75807"
+    },
+    {
+      "path": "web/plugin-widget/package.json",
+      "sha256": "121732b780367d79b68fdd7aac695e8dc7f7ca2549bd57092f4cc2d2092476f8"
+    },
+    {
+      "path": "web/plugin-widget/tsconfig.json",
+      "sha256": "f0559bb19608ad4978c42db2036f5018605a8762bcffc4c1f2946e3f6c241fea"
+    },
+    {
+      "path": "web/plugin-widget/scripts/build-widget.mjs",
+      "sha256": "d87b6ea4737a76bec765d492a34b21839f791af6d3df12aa62e18ca29197f343"
+    },
+    {
+      "path": "web/plugin-widget/src/bridge.ts",
+      "sha256": "b089ae381fecafb1995d8bcf8a950f6284d9dca8586f06a6bc089d4a3548edb7"
+    },
+    {
+      "path": "web/plugin-widget/src/bridge.test.ts",
+      "sha256": "3c686c477105308a56b845c4d99435e174dc12c993dcd9d05f6e219b6dfef914"
+    },
+    {
+      "path": "web/plugin-widget/src/component.tsx",
+      "sha256": "c9941a020bc8756a9d545916b7f373aa7eb304c9fa54382079caf925759e78d3"
+    },
+    {
+      "path": "web/plugin-widget/src/global.d.ts",
+      "sha256": "35d26ea66c86da9701e4f4b467913481ffeae910761cea34c775c5dacb7f8eaa"
+    },
+    {
+      "path": "web/plugin-widget/src/host-extensions.ts",
+      "sha256": "1dcd0264d622e3b1a905f143181e1f3186b1243abd1d8d4351415edd68c92360"
+    },
+    {
+      "path": "web/plugin-widget/src/host-extensions.test.ts",
+      "sha256": "0c8bddccbe30f12f0cebe1b7d8b0867a7f06d3c5d623a7064baa15991242e033"
+    },
+    {
+      "path": "web/plugin-widget/src/index.ts",
+      "sha256": "0cbe74dbd8d0ce92adf1169da28299063e34f55180cb34daf5f8222153610a81"
+    },
+    {
+      "path": "web/plugin-widget/src/index.test.ts",
+      "sha256": "308689b2f5a8775bfdeebaf7a9f24331b9273f6855caada735aa512e03a6f7a6"
+    },
+    {
+      "path": "web/plugin-widget/src/mcp-app-port.ts",
+      "sha256": "fcf9caf405a903964791f556b5df34ed474280cf894c4bc2890ca594d269283d"
+    },
+    {
+      "path": "web/plugin-widget/src/model.ts",
+      "sha256": "60aac6e4fec7b7a8b23001f3c1517428833935823488096c2ed3103ccbfae00b"
+    },
+    {
+      "path": "web/plugin-widget/src/model.test.ts",
+      "sha256": "66c03afd65103a279bbaf7daf54756dc75a6eb328ea6fe9bb5e88ab0ed6ad244"
+    },
+    {
+      "path": "web/plugin-widget/src/preview.css",
+      "sha256": "a30a68173014c74fbb7e382e0f9e091b6f1f1b6135a489a1ff24cfaea6a18336"
+    },
+    {
+      "path": "web/plugin-widget/src/preview.tsx",
+      "sha256": "6f3e4b0b4ec531013cdd96f36fd3636ffdc8fd77282fa785a5c89241495d9e8a"
+    },
+    {
+      "path": "web/plugin-widget/src/resource.ts",
+      "sha256": "c590960edd5e557f89a1d6727843ef91243108566376782d0f7bc99d0e70dd8c"
+    },
+    {
+      "path": "web/plugin-widget/src/resource.test.ts",
+      "sha256": "872dd3a5e3cec9d835be64ba8ea47fe044e0b1d231c6312a040427efef380967"
+    },
+    {
+      "path": "web/plugin-widget/src/styles.css",
+      "sha256": "8150f870c9fd1de009f2f8d52c6862fc4c30e3484a45655de39e35c44d7a36c2"
+    },
+    {
+      "path": "web/plugin-widget/src/ui.tsx",
+      "sha256": "bc0082d464b94f335be9d2767234a68ccadcc3fd2f1c4b98429b9b29847ab086"
+    },
+    {
+      "path": "web/plugin-widget/src/ui.test.tsx",
+      "sha256": "ea3c57f0794baeb87fa64e913cb0d3a4eeeddc6d33b6ec3827807a6d91d9e3c9"
+    },
+    {
+      "path": "tools/p16/widget_shell.py",
+      "sha256": "fb15a5f4536d3720c477ccf69f0e0cf5e02fe3be73a174ae9b68e933cb748b31"
+    },
+    {
+      "path": "tools/p16/build_widget_shell_contract.py",
+      "sha256": "89d33bfc87829eccea61bea2d436aaecfe753bc881b9fd1a9f2f86c9eeac21d8"
+    },
+    {
+      "path": "tools/p16/validate_widget_shell.py",
+      "sha256": "58b88159e16edef36657d8c5765a8063046513193183e1138d3f263d755e9fdd"
+    },
+    {
+      "path": "tools/p16/run_widget_shell_checks.py",
+      "sha256": "722da0f57359f0034fee2bee8705c9a8b1802d115e9e29950c7183f93b591f11"
+    },
+    {
+      "path": "tools/p16/tests/test_widget_shell.py",
+      "sha256": "665ac8beb9311175e36cf26a2d3ea289aa7efd5c9bfbd3fe53b9856001fa124f"
+    }
+  ],
+  "task": "P16-04",
+  "visual_qa": {
+    "browser": "Google Chrome 152.0.7977.65",
+    "capture_method": "isolated_headless_file_preview",
+    "captures": [
+      {
+        "bytes": 21047,
+        "height": 720,
+        "path": "implementation/p16/visual-qa/p16-04-desktop-approval.png",
+        "sha256": "fb83b66541a3cd642381ea3fe3a89860a05d9ef9bffc32b113c5d91292e700f6",
+        "width": 1200
+      },
+      {
+        "bytes": 26275,
+        "height": 720,
+        "path": "implementation/p16/visual-qa/p16-04-desktop-dark-ready.png",
+        "sha256": "fe55b0f067732bf45ecf86a4688d3c8aac14a0c0cf178d037fcac1fe951631a6",
+        "width": 1200
+      },
+      {
+        "bytes": 19743,
+        "height": 720,
+        "path": "implementation/p16/visual-qa/p16-04-desktop-error.png",
+        "sha256": "48189381753a4cbe46bb72b148d89598f5d44991b4f0dda89ec2d389a3bfc355",
+        "width": 1200
+      },
+      {
+        "bytes": 21710,
+        "height": 720,
+        "path": "implementation/p16/visual-qa/p16-04-desktop-ready.png",
+        "sha256": "1262ac4520db011b194c4312e7bf86c6daa2062571a8be61b6700a288bba303e",
+        "width": 1200
+      },
+      {
+        "bytes": 17229,
+        "height": 720,
+        "path": "implementation/p16/visual-qa/p16-04-narrow-approval.png",
+        "sha256": "71f852c6bf2c7aa247564105a8c3cbed8fa0c47a4bd14701e2dac20be219f48f",
+        "width": 500
+      },
+      {
+        "bytes": 16725,
+        "height": 720,
+        "path": "implementation/p16/visual-qa/p16-04-narrow-error.png",
+        "sha256": "7e2578d8e921c4613d3592b79466fbb8de49e34c50056edbfb4a89f694847d38",
+        "width": 500
+      },
+      {
+        "bytes": 18593,
+        "height": 720,
+        "path": "implementation/p16/visual-qa/p16-04-narrow-ready.png",
+        "sha256": "ce8b473c4ab0d734642c751d9e32ca418038028e7720aba09a554f0d0d4c6fcf",
+        "width": 500
+      }
+    ],
+    "concept_and_capture_inspection": "view_image_original",
+    "minimum_css_width": 320
+  }
+}

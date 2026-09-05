@@ -1,0 +1,45 @@
+body {
+    background: #f3f6fa;
+}
+
+html[data-preview-theme="dark"] body {
+    background: #111722;
+}
+
+.preview-canvas {
+    display: grid;
+    min-height: 100vh;
+    place-content: center;
+    padding: 48px;
+}
+
+.preview-canvas > .widget-shell {
+    width: min(960px, calc(100vw - 96px));
+}
+
+.preview-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 16px;
+}
+
+.preview-controls button {
+    min-height: 36px;
+    padding: 6px 10px;
+    color: #172033;
+    background: #ffffff;
+    border: 1px solid #d8dee8;
+    border-radius: 6px;
+}
+
+@media (max-width: 719px) {
+    .preview-canvas {
+        display: block;
+        padding: 16px;
+    }
+
+    .preview-canvas > .widget-shell {
+        width: 100%;
+    }
+}

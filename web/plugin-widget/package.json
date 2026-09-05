@@ -6,11 +6,20 @@
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "test": "node --test dist/index.test.js",
+    "build": "tsc -p tsconfig.json && node scripts/build-widget.mjs",
+    "build:widget": "node scripts/build-widget.mjs",
+    "test": "node --test dist/*.test.js",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@hwpx-agent/schema-models": "workspace:*"
+    "@hwpx-agent/schema-models": "workspace:*",
+    "@modelcontextprotocol/ext-apps": "1.7.5",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "esbuild": "0.28.2"
   }
 }
