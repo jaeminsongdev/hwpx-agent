@@ -44,6 +44,23 @@ fn chooses_one_verified_exact_healthy_route_and_emits_stable_receipt() -> TestRe
     assert_eq!(first.health_generation(), 3);
     assert_eq!(first.canonical_json()?, second.canonical_json()?);
     assert_eq!(first.canonical_sha256()?, second.canonical_sha256()?);
+    let canonical = first.canonical_json()?;
+    assert_eq!(
+        domain_ir::RouteDecision::from_canonical_json(&canonical)?,
+        first
+    );
+    let mut noncanonical = canonical.clone();
+    noncanonical.push(b'\n');
+    assert_error(
+        domain_ir::RouteDecision::from_canonical_json(&noncanonical),
+        "capability_router_invalid_route_receipt",
+    );
+    let mut drifted: serde_json::Value = serde_json::from_slice(&canonical)?;
+    drifted["health_generation"] = serde_json::json!(0);
+    assert_error(
+        domain_ir::RouteDecision::from_canonical_json(&serde_json::to_vec(&drifted)?),
+        "capability_router_invalid_route_receipt",
+    );
     Ok(())
 }
 

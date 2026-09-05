@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sha2::{Digest as _, Sha256};
 use thiserror::Error;
 
@@ -15,7 +15,7 @@ const HARD_MAX_HEALTH_ENTRIES: usize = 100_000;
 const HARD_MAX_BUILD_BYTES: usize = 512;
 const HARD_MAX_HEALTH_TTL_MS: u64 = 31 * 24 * 60 * 60 * 1_000;
 
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Architecture {
     X86,
@@ -80,7 +80,7 @@ impl fmt::Debug for ExactTargetProfile {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum BackendKind {
     DirectHwpx,
@@ -123,7 +123,7 @@ pub enum PreservationRequirement {
     Exact,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum PreservationImpact {
     Normalized,
@@ -459,7 +459,7 @@ impl CapabilityRouterLimits {
     }
 }
 
-#[derive(Clone, Eq, PartialEq, Serialize)]
+#[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct RouteDecision {
     schema_version: String,
@@ -477,6 +477,29 @@ pub struct RouteDecision {
 }
 
 impl RouteDecision {
+    /// Restores a previously authenticated canonical route receipt.
+    ///
+    /// # Errors
+    ///
+    /// Rejects non-canonical JSON, unknown fields, invalid identifiers and incomplete registry or
+    /// backend-health evidence. This does not independently prove that the route is current.
+    pub fn from_canonical_json(bytes: &[u8]) -> Result<Self, CapabilityRouterError> {
+        if bytes.is_empty() || bytes.len() > 64 * 1024 {
+            return Err(CapabilityRouterError::LimitExceeded);
+        }
+        let decision: Self = serde_json::from_slice(bytes)
+            .map_err(|_| CapabilityRouterError::InvalidRouteReceipt)?;
+        if decision.schema_version != CAPABILITY_ROUTE_DECISION_SCHEMA_VERSION
+            || decision.registry_payload_sha256 == [0; 32]
+            || decision.registry_sequence == 0
+            || decision.health_generation == 0
+            || decision.canonical_json()?.as_slice() != bytes
+        {
+            return Err(CapabilityRouterError::InvalidRouteReceipt);
+        }
+        Ok(decision)
+    }
+
     #[must_use]
     pub const fn operation_id(&self) -> &OperationId {
         &self.operation_id
@@ -581,6 +604,8 @@ pub enum CapabilityRouterError {
     AmbiguousRoute,
     #[error("route receipt serialization failed")]
     SerializationFailed,
+    #[error("persisted route receipt is invalid")]
+    InvalidRouteReceipt,
 }
 
 impl CapabilityRouterError {
@@ -603,6 +628,7 @@ impl CapabilityRouterError {
             Self::HealthUnavailable => "capability_router_health_unavailable",
             Self::AmbiguousRoute => "capability_router_ambiguous_route",
             Self::SerializationFailed => "capability_router_serialization_failed",
+            Self::InvalidRouteReceipt => "capability_router_invalid_route_receipt",
         }
     }
 }

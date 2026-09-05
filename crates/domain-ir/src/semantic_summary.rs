@@ -8,7 +8,7 @@ use std::collections::BTreeMap;
 use std::fmt;
 use std::io::{self, Write};
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sha2::{Digest as _, Sha256};
 use thiserror::Error;
 
@@ -57,7 +57,7 @@ impl SemanticSummaryLimits {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum SemanticSummaryKind {
     Paragraph,
@@ -167,6 +167,63 @@ impl SemanticDiffSummary {
         Ok(summary)
     }
 
+    /// Restores a content-free summary that was integrity-protected by an authoritative store.
+    ///
+    /// # Errors
+    /// Rejects zero binding digests, unordered or duplicate categories, count drift and limits.
+    /// The caller must authenticate the storage record before using this constructor.
+    #[allow(clippy::too_many_arguments)]
+    pub fn from_authenticated_projection(
+        added: u32,
+        modified: u32,
+        removed: u32,
+        categories: Vec<(SemanticSummaryKind, u32)>,
+        source_diff_sha256: [u8; 32],
+        before_graph_sha256: [u8; 32],
+        after_graph_sha256: [u8; 32],
+        limits: SemanticSummaryLimits,
+    ) -> Result<Self, SemanticSummaryError> {
+        limits.validate()?;
+        if source_diff_sha256 == [0; 32]
+            || before_graph_sha256 == [0; 32]
+            || after_graph_sha256 == [0; 32]
+        {
+            return Err(SemanticSummaryError::GraphMismatch);
+        }
+        let total = u64::from(added)
+            .checked_add(u64::from(modified))
+            .and_then(|value| value.checked_add(u64::from(removed)))
+            .ok_or(SemanticSummaryError::LimitExceeded)?;
+        if total > limits.max_changes as u64 || categories.len() > 8 {
+            return Err(SemanticSummaryError::LimitExceeded);
+        }
+        let mut previous = None;
+        let mut category_total = 0_u64;
+        let mut restored = Vec::with_capacity(categories.len());
+        for (kind, count) in categories {
+            if count == 0 || previous.is_some_and(|prior| prior >= kind) {
+                return Err(SemanticSummaryError::InvalidProjection);
+            }
+            previous = Some(kind);
+            category_total = category_total
+                .checked_add(u64::from(count))
+                .ok_or(SemanticSummaryError::LimitExceeded)?;
+            restored.push(SemanticSummaryCategory { kind, count });
+        }
+        if total != category_total {
+            return Err(SemanticSummaryError::InvalidProjection);
+        }
+        Ok(Self {
+            added,
+            modified,
+            removed,
+            categories: restored,
+            source_diff_sha256,
+            before_graph_sha256,
+            after_graph_sha256,
+        })
+    }
+
     #[must_use]
     pub const fn source_diff_sha256(&self) -> [u8; 32] {
         self.source_diff_sha256
@@ -209,6 +266,8 @@ pub enum SemanticSummaryError {
     InvalidSourceIndex,
     #[error("semantic-summary source serialization failed")]
     SerializationFailed,
+    #[error("persisted semantic-summary projection is invalid")]
+    InvalidProjection,
 }
 
 impl SemanticSummaryError {
@@ -220,6 +279,7 @@ impl SemanticSummaryError {
             Self::GraphMismatch => "semantic_summary_graph_mismatch",
             Self::InvalidSourceIndex => "semantic_summary_invalid_source_index",
             Self::SerializationFailed => "semantic_summary_serialization_failed",
+            Self::InvalidProjection => "semantic_summary_invalid_projection",
         }
     }
 }

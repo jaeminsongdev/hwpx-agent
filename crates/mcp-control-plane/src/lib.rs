@@ -11,6 +11,7 @@ mod error_catalog;
 mod handler;
 mod plan_review;
 mod policy;
+mod postgres_plan_review;
 mod postgres_plan_source;
 mod postgres_stored_plan;
 mod quota;
@@ -47,6 +48,11 @@ pub use plan_review::{
 pub use policy::{
     InMemoryProjectPolicy, PolicyError, ProjectAccess, ProjectPolicy, ProjectPolicyLimits,
     ToolPolicy,
+};
+pub use postgres_plan_review::{
+    DurablePlanReviewEvidenceKeyring, LocalPostgresPlanReviewEvidenceConfig,
+    LocalPostgresPlanReviewEvidenceRepository, PlanReviewEvidenceConnectFailure,
+    PlanReviewEvidenceConnectStage,
 };
 pub use postgres_plan_source::{
     LocalPostgresPlanSourceConfig, LocalPostgresPlanSourceRepository, PlanSourceConnectFailure,

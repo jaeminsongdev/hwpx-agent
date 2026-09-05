@@ -13,7 +13,7 @@ use domain_ir::{
     Architecture, BackendKind, CompiledOperationPlan, ExactTargetProfile, RouteDecision,
     SemanticDiffSummary, SemanticSummaryKind,
 };
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sha2::{Digest as _, Sha256};
 use thiserror::Error;
 use zeroize::Zeroizing;
@@ -34,6 +34,8 @@ const SIGNATURE_RECEIPT_SCHEMA_VERSION: &str = "hwpx-agent.plan-signature-receip
 const POLICY_RECEIPT_SCHEMA_VERSION: &str = "hwpx-agent.plan-review-policy-receipt/v1";
 const MAX_PUBLIC_ROUTES: usize = 12;
 const MAX_WARNINGS: usize = 8;
+const PLAN_REVIEW_EVIDENCE_STORAGE_SCHEMA_VERSION: &str =
+    "hwpx-agent.plan-review-evidence-storage/v1";
 
 /// Store boundary used by the renderer. Implemented by both volatile and `PostgreSQL` registries.
 pub trait PlanReviewPlanStore {
@@ -117,6 +119,19 @@ pub struct PlanReviewEvidenceQuery<'a> {
 }
 
 impl PlanReviewEvidenceQuery<'_> {
+    /// Creates the exact evidence-generation query for a freshly authorized stored plan.
+    #[must_use]
+    pub fn for_authorized(authorized: &AuthorizedStoredPlan) -> PlanReviewEvidenceQuery<'_> {
+        let record = &authorized.record;
+        PlanReviewEvidenceQuery {
+            tenant: record.tenant,
+            subject: record.owner,
+            project_id: &record.project_id,
+            plan: &record.plan,
+            compiled_plan_sha256: record.sha256,
+        }
+    }
+
     #[must_use]
     pub const fn tenant_id(&self) -> TenantId {
         self.tenant
@@ -157,7 +172,7 @@ pub trait PlanReviewEvidenceRepository: fmt::Debug + Send {
     ) -> Result<PlanReviewEvidence, PlanReviewError>;
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum PlanReviewRisk {
     Low,
@@ -165,7 +180,7 @@ pub enum PlanReviewRisk {
     High,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum EstimatedPageEffect {
     None,
@@ -174,7 +189,7 @@ pub enum EstimatedPageEffect {
     Unknown,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum DryRunState {
     Verified,
@@ -183,7 +198,7 @@ pub enum DryRunState {
     NotRun,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum PlanReviewSignatureImpact {
     None,
@@ -191,7 +206,7 @@ pub enum PlanReviewSignatureImpact {
     Unknown,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum PlanReviewWarningSeverity {
     Notice,
@@ -199,7 +214,7 @@ pub enum PlanReviewWarningSeverity {
     Blocking,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum PlanReviewWarningKind {
     Validation,
@@ -640,6 +655,205 @@ impl PlanReviewEvidence {
             policy,
         }
     }
+
+    pub(crate) fn canonical_storage_json(
+        &self,
+        query: &PlanReviewEvidenceQuery<'_>,
+    ) -> Result<Vec<u8>, PlanReviewError> {
+        validate_evidence(query, self)?;
+        let route_decisions = self
+            .route_set
+            .decisions
+            .iter()
+            .map(|decision| {
+                let bytes = decision
+                    .canonical_json()
+                    .map_err(|_| PlanReviewError::InvalidEvidence)?;
+                String::from_utf8(bytes).map_err(|_| PlanReviewError::InvalidEvidence)
+            })
+            .collect::<Result<Vec<_>, _>>()?;
+        let categories = self
+            .diff
+            .categories()
+            .iter()
+            .map(|category| StoredDiffCategory {
+                kind: category.kind(),
+                count: category.count(),
+            })
+            .collect();
+        let warnings = self
+            .dry_run
+            .warnings
+            .iter()
+            .map(|warning| StoredWarning {
+                code: warning.code.clone(),
+                severity: warning.severity,
+                kind: warning.kind,
+            })
+            .collect();
+        serde_json::to_vec(&StoredEvidenceEnvelope {
+            schema_version: PLAN_REVIEW_EVIDENCE_STORAGE_SCHEMA_VERSION.to_owned(),
+            route_decisions,
+            diff: StoredDiffProjection {
+                added: self.diff.added(),
+                modified: self.diff.modified(),
+                removed: self.diff.removed(),
+                categories,
+                source_diff_sha256: self.diff.source_diff_sha256(),
+                before_graph_sha256: self.diff.before_graph_sha256(),
+                after_graph_sha256: self.diff.after_graph_sha256(),
+            },
+            dry_run: StoredDryRunProjection {
+                state: self.dry_run.state,
+                risk_level: self.dry_run.risk_level,
+                estimated_page_effect: self.dry_run.estimated_page_effect,
+                warnings,
+            },
+            signature_impact: self.signature.impact,
+            allows_execution: self.policy.allows_execution,
+        })
+        .map_err(|_| PlanReviewError::SerializationFailed)
+    }
+
+    pub(crate) fn from_canonical_storage_json(
+        query: &PlanReviewEvidenceQuery<'_>,
+        bytes: &[u8],
+    ) -> Result<Self, PlanReviewError> {
+        if bytes.is_empty() || bytes.len() > 1024 * 1024 {
+            return Err(PlanReviewError::LimitExceeded);
+        }
+        let envelope: StoredEvidenceEnvelope =
+            serde_json::from_slice(bytes).map_err(|_| PlanReviewError::InvalidEvidence)?;
+        if envelope.schema_version != PLAN_REVIEW_EVIDENCE_STORAGE_SCHEMA_VERSION
+            || serde_json::to_vec(&envelope)
+                .map_err(|_| PlanReviewError::SerializationFailed)?
+                .as_slice()
+                != bytes
+        {
+            return Err(PlanReviewError::InvalidEvidence);
+        }
+        let decisions = envelope
+            .route_decisions
+            .iter()
+            .map(|receipt| {
+                RouteDecision::from_canonical_json(receipt.as_bytes())
+                    .map_err(|_| PlanReviewError::InvalidEvidence)
+            })
+            .collect::<Result<Vec<_>, _>>()?;
+        let target = ExactTargetProfile::new(
+            domain_ir::TargetProfileId::parse(CURRENT_TARGET_PROFILE)
+                .map_err(|_| PlanReviewError::InvalidEvidence)?,
+            CURRENT_TARGET_BUILD,
+            Architecture::X86,
+        )
+        .map_err(|_| PlanReviewError::InvalidEvidence)?;
+        let routes = PlanReviewRouteSet::from_decisions(query.plan, &target, decisions)?;
+        let diff = SemanticDiffSummary::from_authenticated_projection(
+            envelope.diff.added,
+            envelope.diff.modified,
+            envelope.diff.removed,
+            envelope
+                .diff
+                .categories
+                .into_iter()
+                .map(|category| (category.kind, category.count))
+                .collect(),
+            envelope.diff.source_diff_sha256,
+            envelope.diff.before_graph_sha256,
+            envelope.diff.after_graph_sha256,
+            domain_ir::SemanticSummaryLimits::default(),
+        )
+        .map_err(|_| PlanReviewError::InvalidEvidence)?;
+        let warnings = envelope
+            .dry_run
+            .warnings
+            .into_iter()
+            .map(|warning| PlanReviewWarning::new(warning.code, warning.severity, warning.kind))
+            .collect::<Result<Vec<_>, _>>()?;
+        let dry_run = PlanDryRunReceipt::new(
+            query.plan,
+            &routes,
+            &diff,
+            envelope.dry_run.state,
+            envelope.dry_run.risk_level,
+            envelope.dry_run.estimated_page_effect,
+            warnings,
+        )?;
+        let signature =
+            PlanSignatureReceipt::new(query.plan, &routes, &diff, envelope.signature_impact)?;
+        let policy = PlanExecutionPolicyReceipt::new(
+            query,
+            &routes,
+            &dry_run,
+            &signature,
+            envelope.allows_execution,
+        )?;
+        let evidence = Self::new(routes, diff, dry_run, signature, policy);
+        validate_evidence(query, &evidence)?;
+        Ok(evidence)
+    }
+
+    pub(crate) const fn storage_binding(&self) -> PlanReviewEvidenceStorageBinding {
+        PlanReviewEvidenceStorageBinding {
+            route_set: self.route_set.route_set_sha256,
+            semantic_diff: self.diff.source_diff_sha256(),
+            result_graph: self.diff.after_graph_sha256(),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct PlanReviewEvidenceStorageBinding {
+    pub(crate) route_set: [u8; 32],
+    pub(crate) semantic_diff: [u8; 32],
+    pub(crate) result_graph: [u8; 32],
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+struct StoredEvidenceEnvelope {
+    schema_version: String,
+    route_decisions: Vec<String>,
+    diff: StoredDiffProjection,
+    dry_run: StoredDryRunProjection,
+    signature_impact: PlanReviewSignatureImpact,
+    allows_execution: bool,
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+struct StoredDiffProjection {
+    added: u32,
+    modified: u32,
+    removed: u32,
+    categories: Vec<StoredDiffCategory>,
+    source_diff_sha256: [u8; 32],
+    before_graph_sha256: [u8; 32],
+    after_graph_sha256: [u8; 32],
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+struct StoredDiffCategory {
+    kind: SemanticSummaryKind,
+    count: u32,
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+struct StoredDryRunProjection {
+    state: DryRunState,
+    risk_level: PlanReviewRisk,
+    estimated_page_effect: EstimatedPageEffect,
+    warnings: Vec<StoredWarning>,
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+struct StoredWarning {
+    code: String,
+    severity: PlanReviewWarningSeverity,
+    kind: PlanReviewWarningKind,
 }
 
 impl fmt::Debug for PlanReviewEvidence {

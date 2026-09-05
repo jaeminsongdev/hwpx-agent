@@ -405,3 +405,55 @@ fn repeat_projection_is_deterministic_and_sources_remain_immutable() -> TestResu
     assert_eq!(after.canonical_json()?, after_bytes);
     Ok(())
 }
+
+#[test]
+fn authenticated_projection_restore_is_exact_and_fail_closed() -> TestResult {
+    use domain_ir::SemanticSummaryKind;
+
+    let restored = SemanticDiffSummary::from_authenticated_projection(
+        1,
+        2,
+        0,
+        vec![
+            (SemanticSummaryKind::Paragraph, 2),
+            (SemanticSummaryKind::Table, 1),
+        ],
+        [1; 32],
+        [2; 32],
+        [3; 32],
+        SemanticSummaryLimits::default(),
+    )?;
+    assert_eq!(restored.added(), 1);
+    assert_eq!(restored.modified(), 2);
+    assert_eq!(restored.source_diff_sha256(), [1; 32]);
+    assert_eq!(
+        SemanticDiffSummary::from_authenticated_projection(
+            1,
+            2,
+            0,
+            vec![
+                (SemanticSummaryKind::Table, 1),
+                (SemanticSummaryKind::Paragraph, 2)
+            ],
+            [1; 32],
+            [2; 32],
+            [3; 32],
+            SemanticSummaryLimits::default(),
+        ),
+        Err(SemanticSummaryError::InvalidProjection)
+    );
+    assert_eq!(
+        SemanticDiffSummary::from_authenticated_projection(
+            1,
+            2,
+            0,
+            vec![(SemanticSummaryKind::Paragraph, 2)],
+            [1; 32],
+            [2; 32],
+            [3; 32],
+            SemanticSummaryLimits::default(),
+        ),
+        Err(SemanticSummaryError::InvalidProjection)
+    );
+    Ok(())
+}
