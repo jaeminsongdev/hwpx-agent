@@ -480,6 +480,12 @@ impl CompiledOperationPlan {
         &self.base_revision
     }
 
+    /// Exact graph used by selector resolution and compilation; not a package-file digest.
+    #[must_use]
+    pub const fn base_graph_sha256(&self) -> [u8; 32] {
+        self.base_graph_sha256
+    }
+
     #[must_use]
     pub fn operations(&self) -> &[CompiledOperation] {
         &self.operations

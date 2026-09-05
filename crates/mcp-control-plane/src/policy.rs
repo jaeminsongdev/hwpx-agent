@@ -85,6 +85,21 @@ pub trait ToolPolicy: fmt::Debug + Send + Sync {
     ) -> Result<(), PolicyError>;
 }
 
+/// Project authorization shared by public tools and UI-only read services.
+/// UI services must not impersonate an unrelated public tool to obtain authorization.
+pub trait ProjectPolicy: fmt::Debug + Send + Sync {
+    /// Checks current tenant membership and required access without a document effect.
+    ///
+    /// # Errors
+    /// Unknown, cross-tenant or non-member projects must remain indistinguishable.
+    fn authorize_project(
+        &self,
+        context: &AuthContext,
+        project_id: &str,
+        write: bool,
+    ) -> Result<(), PolicyError>;
+}
+
 pub struct InMemoryProjectPolicy {
     limits: ProjectPolicyLimits,
     projects: BTreeMap<String, TenantId>,
@@ -173,6 +188,20 @@ impl ToolPolicy for InMemoryProjectPolicy {
             .get("project_id")
             .and_then(Value::as_str)
             .ok_or(PolicyError::InvalidConfiguration)?;
+        self.authorize_project(context, project_id, tool.requires_project_write())
+    }
+}
+
+impl ProjectPolicy for InMemoryProjectPolicy {
+    fn authorize_project(
+        &self,
+        context: &AuthContext,
+        project_id: &str,
+        write: bool,
+    ) -> Result<(), PolicyError> {
+        if !is_project_id(project_id) {
+            return Err(PolicyError::InvalidConfiguration);
+        }
         let Some(tenant_id) = self.projects.get(project_id) else {
             return Err(PolicyError::NotFound);
         };
@@ -185,7 +214,7 @@ impl ToolPolicy for InMemoryProjectPolicy {
         else {
             return Err(PolicyError::NotFound);
         };
-        if tool.requires_project_write() && !access.can_write() {
+        if write && !access.can_write() {
             return Err(PolicyError::AccessDenied);
         }
         Ok(())
