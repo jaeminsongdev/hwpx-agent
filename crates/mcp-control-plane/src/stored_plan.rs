@@ -281,15 +281,17 @@ impl fmt::Debug for PlanLookupRequest {
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct LookupArguments {
-    schema_version: String,
-    client_surface: String,
-    locale: String,
+    pub(crate) schema_version: String,
+    pub(crate) client_surface: String,
+    pub(crate) locale: String,
     pub(crate) project_id: String,
     pub(crate) source_revision_id: String,
     pub(crate) plan_id: String,
 }
 
 pub(crate) struct StoredPlan {
+    pub(crate) tenant: TenantId,
+    pub(crate) project_id: String,
     pub(crate) owner: SubjectDigest,
     pub(crate) plan: CompiledOperationPlan,
     pub(crate) sha256: [u8; 32],
@@ -413,9 +415,12 @@ impl StoredPlanRegistry {
             return Err(StoredPlanError::CapacityExceeded);
         }
         self.total_bytes += bytes;
+        let stored_project_id = key.1.clone();
         self.records.insert(
             key,
             Arc::new(StoredPlan {
+                tenant: context.tenant_id(),
+                project_id: stored_project_id,
                 owner: context.subject(),
                 plan,
                 sha256,

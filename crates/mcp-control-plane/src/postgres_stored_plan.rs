@@ -707,6 +707,8 @@ impl LocalPostgresStoredPlanRegistry {
             return Err(StoredPlanError::SourceUnavailable);
         }
         Ok(StoredPlan {
+            tenant: self.tenant,
+            project_id: project_id.to_owned(),
             owner,
             plan,
             sha256: plan_sha256,

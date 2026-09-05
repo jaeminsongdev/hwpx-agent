@@ -9,6 +9,7 @@ mod async_jobs;
 mod catalog;
 mod error_catalog;
 mod handler;
+mod plan_review;
 mod policy;
 mod postgres_plan_source;
 mod postgres_stored_plan;
@@ -35,6 +36,13 @@ pub use error_catalog::{
 pub use handler::{
     AuthorizedToolCall, GatewayError, McpControlPlane, McpToolRequest, McpToolResult,
     ToolServiceGateway, ToolServiceOutput,
+};
+pub use plan_review::{
+    DryRunState, EstimatedPageEffect, PlanDryRunReceipt, PlanExecutionPolicyReceipt,
+    PlanReviewError, PlanReviewEvidence, PlanReviewEvidenceQuery, PlanReviewEvidenceRepository,
+    PlanReviewPlanStore, PlanReviewRenderRequest, PlanReviewRenderer, PlanReviewRisk,
+    PlanReviewRouteSet, PlanReviewSelectedBackend, PlanReviewSignatureImpact, PlanReviewSnapshot,
+    PlanReviewWarning, PlanReviewWarningKind, PlanReviewWarningSeverity, PlanSignatureReceipt,
 };
 pub use policy::{
     InMemoryProjectPolicy, PolicyError, ProjectAccess, ProjectPolicy, ProjectPolicyLimits,
