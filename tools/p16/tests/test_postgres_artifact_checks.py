@@ -20,6 +20,12 @@ def state(port="54321", ip="127.0.0.1", owner="owned"):
 
 
 class PostgresArtifactHarnessTests(unittest.TestCase):
+    def test_harness_rebuilds_the_locked_probe_before_acceptance(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        build = 'invoke([cargo, "build", "--locked", "-p", "artifact-service", "--example",'
+        self.assertIn(build, source)
+        self.assertLess(source.index(build), source.index("require(probe.is_file()"))
+
     def test_current_ephemeral_endpoint_is_not_cached(self):
         self.assertEqual(checks.loopback_port(state("54321"), "owned"), "54321")
         self.assertEqual(checks.loopback_port(state("54322"), "owned"), "54322")

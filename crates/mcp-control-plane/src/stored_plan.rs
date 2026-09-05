@@ -95,6 +95,22 @@ impl StoredPlanLimits {
             lifetime_seconds: MAX_LIFETIME_SECONDS,
         }
     }
+
+    pub(crate) const fn entries(self) -> usize {
+        self.entries
+    }
+
+    pub(crate) const fn plan_bytes(self) -> usize {
+        self.plan_bytes
+    }
+
+    pub(crate) const fn total_bytes(self) -> usize {
+        self.total_bytes
+    }
+
+    pub(crate) const fn lifetime_seconds(self) -> u64 {
+        self.lifetime_seconds
+    }
 }
 
 /// Repository receipt for the current authorized source, with an exact graph digest.
@@ -204,6 +220,15 @@ impl CompiledPlanSubmission {
             now_unix_seconds,
         }
     }
+
+    pub(crate) fn into_parts(self) -> (Zeroizing<String>, String, CompiledOperationPlan, u64) {
+        (
+            self.authorization_header,
+            self.project_id,
+            self.plan,
+            self.now_unix_seconds,
+        )
+    }
 }
 
 impl fmt::Debug for CompiledPlanSubmission {
@@ -235,6 +260,14 @@ impl PlanLookupRequest {
             now_unix_seconds,
         }
     }
+
+    pub(crate) fn into_parts(self) -> (Zeroizing<String>, Zeroizing<Vec<u8>>, u64) {
+        (
+            self.authorization_header,
+            self.arguments_json,
+            self.now_unix_seconds,
+        )
+    }
 }
 
 impl fmt::Debug for PlanLookupRequest {
@@ -247,27 +280,27 @@ impl fmt::Debug for PlanLookupRequest {
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
-struct LookupArguments {
+pub(crate) struct LookupArguments {
     schema_version: String,
     client_surface: String,
     locale: String,
-    project_id: String,
-    source_revision_id: String,
-    plan_id: String,
+    pub(crate) project_id: String,
+    pub(crate) source_revision_id: String,
+    pub(crate) plan_id: String,
 }
 
-struct StoredPlan {
-    owner: SubjectDigest,
-    plan: CompiledOperationPlan,
-    sha256: [u8; 32],
-    stored_at: u64,
-    expires_at: u64,
+pub(crate) struct StoredPlan {
+    pub(crate) owner: SubjectDigest,
+    pub(crate) plan: CompiledOperationPlan,
+    pub(crate) sha256: [u8; 32],
+    pub(crate) stored_at: u64,
+    pub(crate) expires_at: u64,
 }
 
 /// A request-scoped read result for internal renderer use, never an execution authorization.
 /// Do not cache this result across requests; its authorization is checked only at lookup time.
 pub struct AuthorizedStoredPlan {
-    record: Arc<StoredPlan>,
+    pub(crate) record: Arc<StoredPlan>,
 }
 
 impl AuthorizedStoredPlan {
@@ -451,7 +484,7 @@ impl StoredPlanRegistry {
     }
 }
 
-fn authenticate(
+pub(crate) fn authenticate(
     auth: &mut AuthMiddleware,
     bearer: &str,
     now: u64,
@@ -467,7 +500,7 @@ fn authenticate(
     Ok(context)
 }
 
-fn authorize<P: ProjectPolicy>(
+pub(crate) fn authorize<P: ProjectPolicy>(
     policy: &P,
     context: &AuthContext,
     project_id: &str,
@@ -482,25 +515,39 @@ fn authorize<P: ProjectPolicy>(
         })
 }
 
-fn check_source<R: PlanSourceRepository>(
+pub(crate) fn check_source<R: PlanSourceRepository>(
     sources: &R,
     context: &AuthContext,
     project_id: &str,
     plan: &CompiledOperationPlan,
 ) -> Result<(), StoredPlanError> {
+    check_source_identity(
+        sources,
+        context,
+        project_id,
+        plan.base_revision().as_str(),
+        plan.base_graph_sha256(),
+    )
+}
+
+pub(crate) fn check_source_identity<R: PlanSourceRepository>(
+    sources: &R,
+    context: &AuthContext,
+    project_id: &str,
+    revision_id: &str,
+    graph_sha256: [u8; 32],
+) -> Result<(), StoredPlanError> {
     let source = sources.current_source(context, project_id)?;
     if source.tenant_id != context.tenant_id() || source.project_id != project_id {
         return Err(StoredPlanError::SourceUnavailable);
     }
-    if source.revision_id != plan.base_revision().as_str()
-        || source.graph_sha256 != plan.base_graph_sha256()
-    {
+    if source.revision_id != revision_id || source.graph_sha256 != graph_sha256 {
         return Err(StoredPlanError::StaleSource);
     }
     Ok(())
 }
 
-fn parse_arguments(bytes: &[u8]) -> Result<LookupArguments, StoredPlanError> {
+pub(crate) fn parse_arguments(bytes: &[u8]) -> Result<LookupArguments, StoredPlanError> {
     if bytes.len() > MAX_LOOKUP_BYTES {
         return Err(StoredPlanError::InvalidRequest);
     }
@@ -522,7 +569,7 @@ fn parse_arguments(bytes: &[u8]) -> Result<LookupArguments, StoredPlanError> {
     Ok(args)
 }
 
-fn public_id(value: &str, prefix: &str) -> bool {
+pub(crate) fn public_id(value: &str, prefix: &str) -> bool {
     value.len() <= 124
         && value.strip_prefix(prefix).is_some_and(|tail| {
             (8..=120).contains(&tail.len())
@@ -578,7 +625,7 @@ impl Write for BoundedHasher {
         Ok(())
     }
 }
-fn bounded_hash(
+pub(crate) fn bounded_hash(
     value: &impl Serialize,
     limit: usize,
 ) -> Result<([u8; 32], usize), StoredPlanError> {

@@ -29,7 +29,7 @@ macro_rules! migration {
     };
 }
 
-const MIGRATIONS: [&[u8]; 11] = [
+const MIGRATIONS: [&[u8]; 12] = [
     migration!("0001_p14_metadata.up.sql"),
     migration!("0002_p14_artifact_service.up.sql"),
     migration!("0003_p14_revision_cas.up.sql"),
@@ -41,6 +41,7 @@ const MIGRATIONS: [&[u8]; 11] = [
     migration!("0009_p14_retention_local_mirror.up.sql"),
     migration!("0010_p16_artifact_repository.up.sql"),
     migration!("0011_p16_plan_source.up.sql"),
+    migration!("0012_p16_durable_plan_store.up.sql"),
 ];
 
 pub struct LocalPostgresPlanSourceConfig {
@@ -168,7 +169,7 @@ impl fmt::Debug for LocalPostgresPlanSourceRepository {
 }
 
 impl LocalPostgresPlanSourceRepository {
-    /// Connects a least-privilege reader to the exact v11 schema.
+    /// Connects a least-privilege reader to the exact v12 schema.
     ///
     /// # Errors
     /// Fails closed for an unsafe role, schema drift, RLS drift, excessive privileges or transport
@@ -371,7 +372,7 @@ fn verify_role(client: &mut Client) -> Result<(), StoredPlanError> {
 fn verify_migrations(client: &mut Client) -> Result<(), StoredPlanError> {
     let rows = client
         .query(
-            "SELECT version,migration_sha256::text FROM hwpx_agent.schema_versions ORDER BY version LIMIT 12",
+            "SELECT version,migration_sha256::text FROM hwpx_agent.schema_versions ORDER BY version LIMIT 13",
             &[],
         )
         .map_err(db_error)?;
@@ -438,6 +439,7 @@ fn verify_privileges(client: &mut Client) -> Result<(), StoredPlanError> {
                  OR has_table_privilege('hwpx_agent.revision_commit_receipts','INSERT,UPDATE,DELETE,TRUNCATE,TRIGGER')
                  OR has_table_privilege('hwpx_agent.revision_graph_bindings','INSERT,UPDATE,DELETE,TRUNCATE,TRIGGER')
                  OR NOT has_table_privilege('hwpx_agent.schema_versions','SELECT')
+                 OR has_table_privilege('hwpx_agent.schema_versions','INSERT,UPDATE,DELETE,TRUNCATE,TRIGGER')
                  OR NOT has_table_privilege('hwpx_agent.tenants','SELECT')
                  OR NOT has_table_privilege('hwpx_agent.projects','SELECT')
                  OR NOT has_table_privilege('hwpx_agent.branches','SELECT')

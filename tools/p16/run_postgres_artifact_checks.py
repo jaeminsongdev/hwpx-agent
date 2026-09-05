@@ -18,7 +18,7 @@ MIGRATIONS = (
     "0001_p14_metadata", "0002_p14_artifact_service", "0003_p14_revision_cas",
     "0004_p14_history_checkpoints", "0005_p14_job_state_machine", "0006_p14_worker_lease_fencing",
     "0007_p14_idempotency_reconciliation", "0008_p14_cancel_cleanup", "0009_p14_retention_local_mirror",
-    "0010_p16_artifact_repository", "0011_p16_plan_source",
+    "0010_p16_artifact_repository", "0011_p16_plan_source", "0012_p16_durable_plan_store",
 )
 
 
@@ -82,7 +82,9 @@ def owned(docker: str, kind: str, name: str, run_id: str) -> bool:
 
 def main() -> int:
     docker = shutil.which("docker")
+    cargo = shutil.which("cargo")
     require(docker is not None, "docker_missing")
+    require(cargo is not None, "cargo_missing")
     run_id = uuid.uuid4().hex
     run_root = ROOT / "artifacts/p16/postgres-artifacts/runs" / run_id
     run_root.mkdir(parents=True, exist_ok=False)
@@ -92,12 +94,16 @@ def main() -> int:
     image = contract["database"]["container_image"]
     require(re.fullmatch(r"postgres:18\.4-bookworm@sha256:[0-9a-f]{64}", image) is not None, "unpinned_image")
     invoke([docker, "image", "inspect", image])  # No pull or external installation.
+    invoke([cargo, "build", "--locked", "-p", "artifact-service", "--example",
+            "postgres_artifact_probe"], timeout=180)
     probe = ROOT / "target/debug/examples" / ("postgres_artifact_probe.exe" if os.name == "nt" else "postgres_artifact_probe")
     require(probe.is_file(), "probe_not_built")
     migration_paths = [ROOT / "migrations/postgres" / f"{name}.up.sql" for name in MIGRATIONS]
     source_paths = migration_paths + [
         ROOT / "migrations/postgres/0010_p16_artifact_repository.down.sql",
-        ROOT / "migrations/postgres/0011_p16_plan_source.down.sql", ROOT / "Cargo.toml", ROOT / "Cargo.lock",
+        ROOT / "migrations/postgres/0011_p16_plan_source.down.sql",
+        ROOT / "migrations/postgres/0012_p16_durable_plan_store.down.sql",
+        ROOT / "Cargo.toml", ROOT / "Cargo.lock",
         ROOT / "crates/artifact-service/Cargo.toml", ROOT / "crates/artifact-service/src/store.rs",
         ROOT / "crates/artifact-service/src/store/postgres_repository.rs", ROOT / "crates/artifact-service/src/service.rs",
         ROOT / "crates/artifact-service/src/lib.rs", ROOT / "crates/artifact-service/examples/postgres_artifact_probe.rs",
@@ -141,7 +147,16 @@ def main() -> int:
         for path in migration_paths:
             stage = path.name
             up(path)
-        checks.append("all_eleven_migrations_applied")
+        checks.append("all_twelve_migrations_applied")
+        stage = "durable_plan_empty_rollback"
+        durable_plan_down = (ROOT / "migrations/postgres/0012_p16_durable_plan_store.down.sql").read_text(encoding="utf-8")
+        require(sql(durable_plan_down, expected=False).returncode != 0,
+                "unguarded_durable_plan_rollback_accepted")
+        sql("SELECT set_config('hwpx_agent.allow_p16_durable_plan_rollback','yes',false);\n"
+            + durable_plan_down)
+        require(sql("SELECT count(*) FROM hwpx_agent.schema_versions;").stdout.strip() == "11",
+                "durable_plan_rollback_schema_count_mismatch")
+        checks.append("durable_plan_guarded_empty_rollback_preserves_plan_source_schema")
         stage = "plan_source_empty_rollback"
         plan_source_down = (ROOT / "migrations/postgres/0011_p16_plan_source.down.sql").read_text(encoding="utf-8")
         require(sql(plan_source_down, expected=False).returncode != 0, "unguarded_plan_source_rollback_accepted")
@@ -170,9 +185,10 @@ END
 $$;
 """)
         checks.append("rollback_preserves_predecessors_and_restores_immutable_guard")
+        up(migration_paths[-3])
         up(migration_paths[-2])
         up(migration_paths[-1])
-        checks.append("guarded_predecessor_rollback_reapplies_versions_ten_and_eleven")
+        checks.append("guarded_predecessor_rollback_reapplies_versions_ten_through_twelve")
         stage = "least_privilege_role"
         sql(f"""
 CREATE ROLE hwpx_p16_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS CONNECTION LIMIT 8 PASSWORD '{app_password}';

@@ -11,6 +11,7 @@ mod error_catalog;
 mod handler;
 mod policy;
 mod postgres_plan_source;
+mod postgres_stored_plan;
 mod quota;
 mod stored_plan;
 mod strict_json;
@@ -42,6 +43,10 @@ pub use policy::{
 pub use postgres_plan_source::{
     LocalPostgresPlanSourceConfig, LocalPostgresPlanSourceRepository, PlanSourceConnectFailure,
     PlanSourceConnectStage,
+};
+pub use postgres_stored_plan::{
+    DurablePlanConnectFailure, DurablePlanConnectStage, DurablePlanKeyring,
+    LocalPostgresStoredPlanConfig, LocalPostgresStoredPlanRegistry,
 };
 pub use quota::{
     InMemoryQuotaService, JobClass, MAX_QUOTA_BUCKET_ENTRIES, MAX_QUOTA_REPLAY_ENTRIES,

@@ -18,7 +18,7 @@ MIGRATIONS = (
     "0001_p14_metadata", "0002_p14_artifact_service", "0003_p14_revision_cas",
     "0004_p14_history_checkpoints", "0005_p14_job_state_machine", "0006_p14_worker_lease_fencing",
     "0007_p14_idempotency_reconciliation", "0008_p14_cancel_cleanup", "0009_p14_retention_local_mirror",
-    "0010_p16_artifact_repository", "0011_p16_plan_source",
+    "0010_p16_artifact_repository", "0011_p16_plan_source", "0012_p16_durable_plan_store",
 )
 TENANT = "00000000-0000-0000-0000-000000000001"
 FOREIGN_TENANT = "00000000-0000-0000-0000-000000000002"
@@ -112,7 +112,9 @@ def main() -> int:
     migration_paths = [ROOT / "migrations/postgres" / f"{name}.up.sql" for name in MIGRATIONS]
     source_paths = migration_paths + [
         ROOT / "migrations/postgres/0010_p16_artifact_repository.down.sql",
-        ROOT / "migrations/postgres/0011_p16_plan_source.down.sql", ROOT / "Cargo.toml", ROOT / "Cargo.lock",
+        ROOT / "migrations/postgres/0011_p16_plan_source.down.sql",
+        ROOT / "migrations/postgres/0012_p16_durable_plan_store.down.sql",
+        ROOT / "Cargo.toml", ROOT / "Cargo.lock",
         ROOT / "crates/mcp-control-plane/Cargo.toml", ROOT / "crates/mcp-control-plane/src/lib.rs",
         ROOT / "crates/mcp-control-plane/src/stored_plan.rs",
         ROOT / "crates/mcp-control-plane/src/postgres_plan_source.rs",
@@ -177,7 +179,17 @@ def main() -> int:
         for path in migration_paths:
             stage = path.name
             up(path)
-        checks.append("all_eleven_migrations_applied")
+        checks.append("all_twelve_migrations_applied")
+
+        stage = "empty_v12_rollback"
+        durable_down = (ROOT / "migrations/postgres/0012_p16_durable_plan_store.down.sql").read_text(encoding="utf-8")
+        require(sql(durable_down, expected=False).returncode != 0,
+                "unguarded_durable_plan_rollback_accepted")
+        sql("SELECT set_config('hwpx_agent.allow_p16_durable_plan_rollback','yes',false);\n"
+            + durable_down)
+        require(sql("SELECT count(*) FROM hwpx_agent.schema_versions;").stdout.strip() == "11",
+                "durable_plan_rollback_schema_count_mismatch")
+        checks.append("guarded_empty_v12_rollback_preserves_plan_source_schema")
 
         stage = "empty_v11_rollback"
         down = (ROOT / "migrations/postgres/0011_p16_plan_source.down.sql").read_text(encoding="utf-8")
@@ -188,8 +200,9 @@ def main() -> int:
         require(sql(history_query).stdout == history_before, "predecessor_migration_history_changed")
         require(sql("SELECT count(*) FROM hwpx_agent.schema_versions;").stdout.strip() == "10",
                 "rollback_schema_count_mismatch")
+        up(migration_paths[-2])
         up(migration_paths[-1])
-        checks.append("guarded_empty_v11_rollback_reapply")
+        checks.append("guarded_empty_v11_v12_rollback_reapply")
 
         stage = "seed_metadata"
         source_content = "1" * 64
@@ -360,13 +373,13 @@ DROP ROLE hwpx_p16_plan_owner;
 """)
 
         stage = "migration_digest_drift_rejected"
-        expected_v11_digest = digest(migration_paths[-1])
+        expected_v12_digest = digest(migration_paths[-1])
         sql("ALTER TABLE hwpx_agent.schema_versions DISABLE TRIGGER schema_versions_immutable;"
-            "UPDATE hwpx_agent.schema_versions SET migration_sha256=repeat('f',64) WHERE version=11;"
+            "UPDATE hwpx_agent.schema_versions SET migration_sha256=repeat('f',64) WHERE version=12;"
             "ALTER TABLE hwpx_agent.schema_versions ENABLE TRIGGER schema_versions_immutable;")
         probe_run("reject-migrations", port)
         sql("ALTER TABLE hwpx_agent.schema_versions DISABLE TRIGGER schema_versions_immutable;"
-            f"UPDATE hwpx_agent.schema_versions SET migration_sha256='{expected_v11_digest}' WHERE version=11;"
+            f"UPDATE hwpx_agent.schema_versions SET migration_sha256='{expected_v12_digest}' WHERE version=12;"
             "ALTER TABLE hwpx_agent.schema_versions ENABLE TRIGGER schema_versions_immutable;")
 
         stage = "binding_immutable"
@@ -377,9 +390,11 @@ DROP ROLE hwpx_p16_plan_owner;
         checks.append(stage)
 
         stage = "nonempty_rollback_rejected"
+        sql("SELECT set_config('hwpx_agent.allow_p16_durable_plan_rollback','yes',false);\n" + durable_down)
         require(sql("SELECT set_config('hwpx_agent.allow_p16_plan_source_rollback','yes',false);\n" + down,
                     expected=False).returncode != 0, "nonempty_rollback_accepted")
         checks.append(stage)
+        up(migration_paths[-1])
         probe_run("verify", port)
         require(source_hashes == {str(path.relative_to(ROOT)).replace("\\", "/"): digest(path)
                                   for path in source_paths}, "source_changed_during_acceptance")

@@ -1,0 +1,140 @@
+{
+  "base_commit": "5166fe5a684415534af920d55b06043168302d37",
+  "claims": {
+    "actual_hangul": false,
+    "actual_renderer": false,
+    "authoritative_plan_source": true,
+    "database_time_expiry_purge": true,
+    "durable_plan_store": true,
+    "encrypted_at_rest": true,
+    "key_rotation": true,
+    "phase_complete": false,
+    "postgres_restart": true,
+    "production": false,
+    "registered_host": false
+  },
+  "evidence": {
+    "canonical_sha256": "490e2bfff7854c8210136b1c75d88fa36bc8f2aa15c0a78cfcbb174218fd7d1f",
+    "path": "implementation/p16/qualification/durable-plan-v12-20260906-v1/current-db.json",
+    "run_id": "1828b246e92746789fa5d6501e7f1ac2"
+  },
+  "guard_sources": [
+    {
+      "path": "tools/p16/postgres_durable_plan_qualification.py",
+      "sha256": "09bfa4c453e0360776b53493084d0cf3c2289a59f39e05c0ea8b3c8c975b302d"
+    },
+    {
+      "path": "tools/p16/tests/test_postgres_durable_plan_qualification.py",
+      "sha256": "612e9ff4094d8c4f519c6c99880f18b57b04042324dec40b1ad258f164c6e2e6"
+    },
+    {
+      "path": "implementation/p16/P16-06_POSTGRES_DURABLE_PLAN_V12.md",
+      "sha256": "cdc9e5a6c81789af8ac10e5cf5419e3536d6fe241d67989641608b8584b0ae74"
+    }
+  ],
+  "qualification_id": "p16.durable-plan.v12.20260906.v1",
+  "runtime_sources": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "8f7b78854e069af9883890d7fe0f1fc5f3cbb6e1b539f4627490961364d3693d"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "f8281c9c13ea981ab8652819f1e3946ea942bca2d952f68b05ee61f3a3179c03"
+    },
+    {
+      "path": "crates/domain-ir/src/operation_plan.rs",
+      "sha256": "e901c0e7ac6f09216b54de1fa43a655e3a00e688b4c1eae738125e6ce3e577a2"
+    },
+    {
+      "path": "crates/domain-ir/src/selector.rs",
+      "sha256": "1f07f0ed4b0f6473828052f0bc1869db31cc3cf318ddac1bb5e2c0e03196eb78"
+    },
+    {
+      "path": "crates/mcp-control-plane/Cargo.toml",
+      "sha256": "bed1fcd842f320c3f8df11a80458df94007e9dd86125421fbcb6e48cdc09ca42"
+    },
+    {
+      "path": "crates/mcp-control-plane/examples/postgres_durable_plan_probe.rs",
+      "sha256": "1c8fac7ac0b86492814a1c2663c1cc45264aaad79ea03da3bbb1b7e642b884e1"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/lib.rs",
+      "sha256": "2fd71b8a436c114d644a6c9ad9ca149f91404e162fa11924b170de885c8d276c"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/postgres_plan_source.rs",
+      "sha256": "dbad8cbb86954026a093a1e5df3342a78ff0724ba2778889c4c5223437db0897"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/postgres_stored_plan.rs",
+      "sha256": "7b54104946af042aef2d5d2911e19bc166517abba52afd026112ee8ded9229bc"
+    },
+    {
+      "path": "crates/mcp-control-plane/src/stored_plan.rs",
+      "sha256": "b1c9084fe70b7184486dfa74b9768d03486c57e8b142bdef0c41d23350ec9977"
+    },
+    {
+      "path": "migrations/postgres/0001_p14_metadata.up.sql",
+      "sha256": "7c00f744993581448acb4b6d4d8a46f1ff03d108750da0afc671c3b5e2b0a78d"
+    },
+    {
+      "path": "migrations/postgres/0002_p14_artifact_service.up.sql",
+      "sha256": "202753fbd6f20f181b09bd6227766dfb808811bd4e734a4a418cb5bae4eaee56"
+    },
+    {
+      "path": "migrations/postgres/0003_p14_revision_cas.up.sql",
+      "sha256": "beeac1f22fde0eb3474d40acc14838c1e9676a74b68c5b6f9608713ba6e6e53a"
+    },
+    {
+      "path": "migrations/postgres/0004_p14_history_checkpoints.up.sql",
+      "sha256": "e336890d4ee3fdf4819f52c079ba320f450b01ec516bf5ffaaf505a76b14f249"
+    },
+    {
+      "path": "migrations/postgres/0005_p14_job_state_machine.up.sql",
+      "sha256": "4f15cd28510d55fa58a18aef7b8edf8b4606169fd722a0b8d2c63da2cfb4bf9b"
+    },
+    {
+      "path": "migrations/postgres/0006_p14_worker_lease_fencing.up.sql",
+      "sha256": "03af7cc8b2ae883ff132e3b1737b29c3829fcb0fa9887566485f865b3c0393ab"
+    },
+    {
+      "path": "migrations/postgres/0007_p14_idempotency_reconciliation.up.sql",
+      "sha256": "cc60353df6cf3c51155417e39d0f1f4c348d2a6282bba7d63de9ea0282be5e5d"
+    },
+    {
+      "path": "migrations/postgres/0008_p14_cancel_cleanup.up.sql",
+      "sha256": "2ba28c1386db9c5aeb4661d11069e48f8624c2560b69301a0750ab9344c46f29"
+    },
+    {
+      "path": "migrations/postgres/0009_p14_retention_local_mirror.up.sql",
+      "sha256": "272da51d665be7b9c0b5150a641ca1f9f51b9b78cddb839096acb57eb71e9ec2"
+    },
+    {
+      "path": "migrations/postgres/0010_p16_artifact_repository.up.sql",
+      "sha256": "3d1ce21be0cb100bbc098e798b1917e52c4767da9a832359578179d9b0522420"
+    },
+    {
+      "path": "migrations/postgres/0011_p16_plan_source.up.sql",
+      "sha256": "3aa21685e7511322414265b076f1ed43ff6b7e39c4dd1ee695e121a161777bbc"
+    },
+    {
+      "path": "migrations/postgres/0012_p16_durable_plan_store.down.sql",
+      "sha256": "699fca7835ead6c86468c70caf6369c427e21762d46697952b81be961453ec4d"
+    },
+    {
+      "path": "migrations/postgres/0012_p16_durable_plan_store.up.sql",
+      "sha256": "d85b1b4bbfbf8f63d85ae1088ae676d5c70bf926d6eb3c1cdb070a4b297d6cc0"
+    },
+    {
+      "path": "tools/p16/run_postgres_durable_plan_checks.py",
+      "sha256": "e2638b9a1d56bbf8b070a6e075699139fa2f3593c8523b660f4343b5eedd5945"
+    },
+    {
+      "path": "tools/p16/tests/test_postgres_durable_plan_checks.py",
+      "sha256": "09a516c37f7f9b3a28010f0bee2b5f2442fea0854369976037d35a6e6e143cd2"
+    }
+  ],
+  "schema_version": "hwpx-agent.p16-postgres-durable-plan-qualification/v1",
+  "scope": "current_pc_encrypted_durable_compiled_plan_successor_only"
+}
