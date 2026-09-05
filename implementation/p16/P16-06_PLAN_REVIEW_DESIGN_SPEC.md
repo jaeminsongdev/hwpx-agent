@@ -55,6 +55,13 @@ local closed copy, and keeps every opaque identifier abbreviated.
 
 - Diff data contains only integer totals and closed categories: paragraph, table, style, image,
   field, section, metadata or other. It contains no changed content or positional selector.
+- The source-backed `domain-ir::SemanticDiffSummary` projects the immutable semantic diff only
+  after streaming digest checks against both exact graphs. Counts are semantic records, not unique
+  document objects or user operations; moves and modified-and-moved each count once as modified.
+  Node/resource kinds come from the corresponding before/after graph, with changed kinds classified
+  as other. All graph nodes, including table/drawing/note children, have bounded traversal.
+  Projection is not authorization: authenticated plan storage, compiled-plan binding, current route
+  and dry-run evidence still need integration before this data reaches the registered renderer.
 - Warning data contains only a bounded uppercase code, closed severity and closed category. The
   browser maps the category to local Korean/English copy and discards server prose.
 - Capability IDs are constrained to the existing dotted identifier grammar. Backends are only

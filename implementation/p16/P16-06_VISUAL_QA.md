@@ -2,13 +2,31 @@
 
 ## Current safety-audit status (2026-09-05)
 
-The table below is the historical baseline from `9360c47`, not current-source proof. P16 safety
-changes require refreshed formal image/source locks before closure; those historical images are
-preserved. Ten new desktop/narrow/minimum-width screenshots were inspected at original resolution
-outside the repository in the Codex workspace's `p16-06-safety-qa-20260905/retry-05/`.
+The historical baseline from `9360c47` is preserved below, not substituted for current-source proof.
+Ten new desktop/narrow/minimum-width screenshots were inspected at original resolution outside the
+repository in the Codex workspace's `p16-06-safety-qa-20260905/retry-05/`. Their verified bytes are now
+archived under `implementation/p16/visual-qa/safety-v2/`; the policy binds all ten digests and sizes
+to preview HTML SHA-256 `3e630033cbf234a126642021f67f05c318b54fb4a1f5c877797e202e20ed1b8a`.
 Its automatic receipt SHA-256 is `03e36bdeceafa66d37a5d64b5cb3ecb02dbaa8a7759fdd264ece3f85d08f274d`;
 `inspection.md` records subsequent image inspection. See `P16-06_SAFETY_AUDIT.md` for the exact
-scope, failures, successful isolation remedy and outstanding formal contract/integration checks.
+scope, failures, successful isolation remedy and outstanding integration checks.
+
+## Current capture coverage
+
+The authoritative per-image hashes and byte sizes are in `p16-plan-review-policy-v1.json`,
+`visual_qa.captures`. Each source was verified before copying to the new archive directory.
+
+| Viewport | Captured states | Direct inspection |
+|---|---|---|
+| 1200x760 | ready, confirm, blocked, dark-submitted, unconfirmed | clear risk/route/diff; pre-ack execute disabled; submitted actions disabled; unknown outcome amber alert |
+| 500x1200 | ready, confirm, blocked, unconfirmed | one column, visible actions, no horizontal clipping or overlap |
+| 320x1600 | ready | minimum-width content and action fit; not short-phone viewport proof |
+
+All ten current images were inspected with `view_image` at original resolution. The isolated
+browser also checked the disabled controls, alert/status roles, contrast tokens, no unexpected
+horizontal overflow and no page/console errors. The separate bridge flow made exactly five calls.
+These are local component observations with synthetic route/plan responses, not registered-host,
+server execution, accessibility assistive-technology or actual-Hangul proof.
 
 ## Historical baseline
 

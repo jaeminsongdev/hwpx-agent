@@ -9,10 +9,71 @@ use domain_ir::{
     Flow, FormControlNode, Inline, LogicalId, Node, NodeCommon, Note, OpaqueExtension,
     OpaquePreservation, ParagraphNode, Properties, PropertyValue, Reference, Resource,
     ResourceKind, ReviewEntry, RevisionId, Section, SemanticDiff, SemanticDiffError,
-    SemanticDiffLimits, SemanticDiffSnapshot, Style, TableCell, TableNode,
+    SemanticDiffLimits, SemanticDiffSnapshot, SemanticSummaryKind, Style, TableCell, TableNode,
 };
 
 type TestResult = Result<(), Box<dyn Error>>;
+
+#[test]
+fn full_typed_graph_projects_all_eight_review_categories_without_losing_records() -> TestResult {
+    let mut after_draft = base_draft(false)?;
+    let mut before_draft = after_draft.clone();
+    before_draft.sections[0].body.children.clear();
+    before_draft.resources.clear();
+    before_draft.styles.clear();
+    before_draft.notes.clear();
+    before_draft.references.clear();
+    before_draft.review.clear();
+    before_draft.opaque_preservation_bag.clear();
+    after_draft.sections[0]
+        .properties
+        .insert("review-test", PropertyValue::Integer(1));
+    let before = graph(before_draft)?;
+    let after = graph(after_draft)?;
+    let difference = diff(
+        &before,
+        &RevisionId::parse("before")?,
+        &after,
+        &RevisionId::parse("after")?,
+        SemanticDiffLimits::default(),
+    )?;
+    let summary = domain_ir::SemanticDiffSummary::from_diff(
+        &difference,
+        &before,
+        &after,
+        domain_ir::SemanticSummaryLimits::default(),
+    )?;
+    assert_eq!(
+        summary
+            .categories()
+            .iter()
+            .map(domain_ir::SemanticSummaryCategory::kind)
+            .collect::<Vec<_>>(),
+        vec![
+            SemanticSummaryKind::Paragraph,
+            SemanticSummaryKind::Table,
+            SemanticSummaryKind::Style,
+            SemanticSummaryKind::Image,
+            SemanticSummaryKind::Field,
+            SemanticSummaryKind::Section,
+            SemanticSummaryKind::Metadata,
+            SemanticSummaryKind::Other,
+        ]
+    );
+    assert_eq!(
+        usize::try_from(summary.added() + summary.modified() + summary.removed())?,
+        difference.changes().len()
+    );
+    assert_eq!(
+        summary
+            .categories()
+            .iter()
+            .map(domain_ir::SemanticSummaryCategory::count)
+            .sum::<u32>(),
+        summary.added() + summary.modified() + summary.removed()
+    );
+    Ok(())
+}
 
 #[test]
 fn identical_graph_has_empty_deterministic_diff() -> TestResult {

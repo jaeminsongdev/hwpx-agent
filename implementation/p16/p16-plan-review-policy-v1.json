@@ -21,18 +21,25 @@
     "mime_type": "text/html;profile=mcp-app",
     "html": "web/plugin-widget/dist/plan-review-widget-v1.html",
     "max_bytes": 800000,
-    "csp": { "connectDomains": [], "resourceDomains": [] }
+    "csp": {
+      "connectDomains": [],
+      "resourceDomains": []
+    }
   },
   "render_tool": {
     "name": "render_plan_review_widget",
-    "oauth_scopes": ["project.read"],
+    "oauth_scopes": [
+      "project.read"
+    ],
     "read_only": true
   },
   "server_calls": [
     {
       "name": "capability_check",
       "mode": "read",
-      "oauth_scopes": ["project.read"]
+      "oauth_scopes": [
+        "project.read"
+      ]
     },
     {
       "name": "document_edit",
@@ -87,55 +94,78 @@
     "capture_method": "isolated_headless_file_preview",
     "captures": [
       {
-        "path": "implementation/p16/visual-qa/p16-06-desktop-blocked.png",
-        "bytes": 60846,
+        "path": "implementation/p16/visual-qa/safety-v2/p16-06-desktop-blocked.png",
+        "bytes": 63746,
         "width": 1200,
         "height": 760,
-        "sha256": "d3e97198e5f37688b6ef8361c65888c48477101821cc1f62daca35fe26f1c9eb"
+        "sha256": "2c85f22e08f8adaf0e1785523c24b5e24e89fa537b0029015e4eb331e8215c27"
       },
       {
-        "path": "implementation/p16/visual-qa/p16-06-desktop-confirm.png",
-        "bytes": 69292,
+        "path": "implementation/p16/visual-qa/safety-v2/p16-06-desktop-confirm.png",
+        "bytes": 72413,
         "width": 1200,
         "height": 760,
-        "sha256": "6a6efb7f7718f9799cf2c7fa6323b94ea42d20b2a9eca164358d5f3ea10d1617"
+        "sha256": "005ca8ef99d59764c555c5e9d6bbfbae0008557c0250d48982bdf8f18aab83e7"
       },
       {
-        "path": "implementation/p16/visual-qa/p16-06-desktop-dark-submitted.png",
-        "bytes": 66726,
+        "path": "implementation/p16/visual-qa/safety-v2/p16-06-desktop-dark-submitted.png",
+        "bytes": 65236,
         "width": 1200,
         "height": 760,
-        "sha256": "781f5e7f63d08195db4cc41c96262e84a4eb7a437f406274f537049283cf8273"
+        "sha256": "6d3d6eea5c743e776dd852135dc211762cd1d74bbe32e0cb9c452947d87ac5bf"
       },
       {
-        "path": "implementation/p16/visual-qa/p16-06-desktop-ready.png",
-        "bytes": 65078,
+        "path": "implementation/p16/visual-qa/safety-v2/p16-06-desktop-ready.png",
+        "bytes": 68205,
         "width": 1200,
         "height": 760,
-        "sha256": "995b05c677a7fbf847678d9d449c98f474d28e23ed1d79ddcc944bba005af1d0"
+        "sha256": "a7e504282ae15f9c714171225eff2824e326d016defce43c1295a333343cae0d"
       },
       {
-        "path": "implementation/p16/visual-qa/p16-06-narrow-blocked.png",
-        "bytes": 53880,
+        "path": "implementation/p16/visual-qa/safety-v2/p16-06-desktop-unconfirmed.png",
+        "bytes": 73062,
+        "width": 1200,
+        "height": 760,
+        "sha256": "31b5c65aa666e4c735f2a64a41d8d3e003e24b487b364444dd2bc170db75ad76"
+      },
+      {
+        "path": "implementation/p16/visual-qa/safety-v2/p16-06-minimum-ready.png",
+        "bytes": 59651,
+        "width": 320,
+        "height": 1600,
+        "sha256": "bbac7e283725f2728be35fa9c48b44637fea34157076b2fb4c6bbc806eb90eec"
+      },
+      {
+        "path": "implementation/p16/visual-qa/safety-v2/p16-06-narrow-blocked.png",
+        "bytes": 56537,
         "width": 500,
         "height": 1200,
-        "sha256": "9d6e4d98dec7f259bb1aa4542feedb36db5963c44c17b9bd546561c31c365cfe"
+        "sha256": "46f465e063805d1db3d1ffce76b1178fa86b11f0150eaf2d3f1e645ef2172a7a"
       },
       {
-        "path": "implementation/p16/visual-qa/p16-06-narrow-confirm.png",
-        "bytes": 62266,
+        "path": "implementation/p16/visual-qa/safety-v2/p16-06-narrow-confirm.png",
+        "bytes": 64912,
         "width": 500,
         "height": 1200,
-        "sha256": "6fc0ab775fb931a077d8918d3cba5eddd8f92c84d2225d4efa0627309ae18320"
+        "sha256": "34b678d5c97bafd18e551314af9b23313030a6cc3a65bd6af2bcbc4cdabe18ad"
       },
       {
-        "path": "implementation/p16/visual-qa/p16-06-narrow-ready.png",
-        "bytes": 57996,
+        "path": "implementation/p16/visual-qa/safety-v2/p16-06-narrow-ready.png",
+        "bytes": 60634,
         "width": 500,
         "height": 1200,
-        "sha256": "e974d3e655577e7fc987edf5b8a469ccbbea53a70f81a15540ff24c16b985f70"
+        "sha256": "eb1e91c6f2a522c734f9e229aa179cc6aefd00e7f6b42176e61c7f0f5180c7fe"
+      },
+      {
+        "path": "implementation/p16/visual-qa/safety-v2/p16-06-narrow-unconfirmed.png",
+        "bytes": 65588,
+        "width": 500,
+        "height": 1200,
+        "sha256": "a05888ff2806c60a17f16e9dfda97e4844356beb6bd4521105937c63e8fc8fca"
       }
-    ]
+    ],
+    "preview_sha256": "3e630033cbf234a126642021f67f05c318b54fb4a1f5c877797e202e20ed1b8a",
+    "inspection": "all_captures_view_image_original"
   },
   "e2e": {
     "runner": "tools/p16/run_plan_review_e2e.py",

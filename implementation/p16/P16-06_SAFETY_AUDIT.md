@@ -2,7 +2,7 @@
 
 - Date: 2026-09-05; review STRICT / risk HIGH; recommended reasoning `max`.
 - Implementation worktree: `D:\개발\hwpx-agent-work-p16-06-safety`, base `e82cf95`.
-- State: target/unit/local-browser evidence passes; **formal contract, full audit and integration open**.
+- State: target/unit/local-browser and refreshed formal contract pass; **full audit and integration open**.
 - No actual host registration, server-side document execution, Hangul/COM or other-PC proof.
 
 ## Findings repaired
@@ -41,8 +41,8 @@ reject partial execution. No real capability support state or predecessor contra
   before the warning-role change and passed afterward. The existing acknowledgement test's weak
   alternation was replaced with an exact disabled-button assertion plus an enabled positive case.
 - Current TypeScript/React package: **109/109 PASS**, zero skipped/cancelled; typecheck and build PASS.
-- Plan-review source/style/bundle validator PASS; plan-review Python tests **13/13 PASS**.
-- All P16 Python tests **90/90 PASS**, including predecessor contract validation.
+- Plan-review source/style/bundle validator PASS; plan-review Python tests **15/15 PASS**.
+- All P16 Python tests **92/92 PASS**, including predecessor contract validation.
 - Selected changed-file Prettier and `git diff --check` PASS.
 - Real App/AppBridge local browser flow: five calls in exact route/dry-run/recheck/dry-run/write
   order. Disabled pre-acknowledgement and post-submission buttons were exercised without extra calls.
@@ -74,18 +74,23 @@ Current rendered bundle digests:
 
 ## Open acceptance and exact next work
 
-- `python tools/p16/build_plan_review_contract.py --check` currently **fails** with
-  `P16 plan-review contract is stale`. The original contract and historical image locks were not
-  rewritten to conceal that. Refresh this card's formal visual/source locks only against verified
-  current evidence, preserve all P16-05/P15 predecessor locks, then rerun the complete P16 checks.
-- Source/style validation and unit PASS do not replace this stale-contract failure. Current and
-  independent P05 full CI qualify e82cf95 only, not the later safety changes in this worktree.
+- The earlier `P16 plan-review contract is stale` failure is repaired. This card now binds 43
+  source files and ten verified current captures, with preview-digest and coverage regressions.
+  P16-05/P15 predecessor locks and seven historical captures remain unchanged. The full plan-review
+  check runner exited 0 (session 49438), including deterministic bundle build, 109 widget tests,
+  source/style/contract validation, real five-call local bridge E2E and 15 policy tests.
+- The new source-bound semantic summary has 10 additional tests; domain all-target tests 65/65,
+  package all-target Clippy, selected-file formatting and workspace format checks pass. Post-format
+  Clippy found two missing semicolons and one test import placement issue; each was fixed and the
+  checks rerun without suppression. See `P16-06_SOURCE_DIFF_PROJECTION.md` for limits and non-claims.
+- Current and independent P05 full CI qualify e82cf95 only, not these later P16 changes.
 - Current-source full CI, independent exact-checkout full CI, applicable Linux checks and final
   STRICT audit remain required before implementation closure/integration.
 - `render_plan_review_widget` is currently located in the TypeScript resource descriptor; no
   matching implementation was found in the inspected MCP control-plane source/catalog. Trace the
-  real plan storage, semantic diff and authorization boundary and implement source-backed projection;
-  synthetic fixture rendering alone cannot satisfy the end-product requirement.
+  real plan storage and authorization boundary. The pure domain diff projector is now implemented,
+  but authenticated stored-plan binding to the renderer remains absent. Synthetic fixture rendering
+  and pure graph tests alone cannot satisfy that end-product requirement.
 - Actual registered-host confirmation and server document execution remain independently unverified.
   Evaluate artifact-bearing and partially validated committed responses against the public contract
   as part of integration; do not silently narrow the product to artifact-null mock responses.
