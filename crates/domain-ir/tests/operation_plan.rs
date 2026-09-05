@@ -62,6 +62,80 @@ fn compiles_units_defaults_and_stable_bytes_without_partial_state() -> TestResul
 }
 
 #[test]
+fn canonical_compiled_plan_restore_revalidates_bytes_targets_and_receipts() -> TestResult {
+    let graph = fixture_graph()?;
+    let snapshot = fixture_snapshot(&graph, "rev-1")?;
+    let mut arguments = BTreeMap::new();
+    let _ = arguments.insert(
+        "width".into(),
+        numeric(RationalInput::integer(10), Some(NumericUnit::Millimeter)),
+    );
+    let compiled = compiler()?.compile(
+        plan(vec![operation(
+            "op-1",
+            "layout.box",
+            arguments,
+            Vec::new(),
+        )?])?,
+        &layout_catalog()?,
+        &snapshot,
+        &snapshot.expectation(),
+    )?;
+    let bytes = compiled.canonical_json()?;
+    let restored = domain_ir::CompiledOperationPlan::from_canonical_json(
+        &bytes,
+        OperationPlanLimits::default(),
+    )?;
+    assert_eq!(restored, compiled);
+    assert_eq!(restored.canonical_json()?, bytes);
+
+    let mut noncanonical = b" ".to_vec();
+    noncanonical.extend_from_slice(&bytes);
+    assert_error(
+        domain_ir::CompiledOperationPlan::from_canonical_json(
+            &noncanonical,
+            OperationPlanLimits::default(),
+        ),
+        "operation_plan_invalid_serialized_plan",
+    );
+    let text = String::from_utf8(bytes.clone())?;
+    for (from, to) in [
+        (
+            "\"failure_policy\":\"atomic\"",
+            "\"failure_policy\":\"best_effort\"",
+        ),
+        (
+            "\"expected_kind\":\"paragraph\"",
+            "\"expected_kind\":\"drawing\"",
+        ),
+        (
+            "\"value_type\":\"length_micrometers\"",
+            "\"value_type\":\"point_milli\"",
+        ),
+        ("\"normalized_value\":10000", "\"normalized_value\":10001"),
+    ] {
+        let tampered = text.replacen(from, to, 1);
+        assert_ne!(tampered, text);
+        assert_error(
+            domain_ir::CompiledOperationPlan::from_canonical_json(
+                tampered.as_bytes(),
+                OperationPlanLimits::default(),
+            ),
+            "operation_plan_invalid_serialized_plan",
+        );
+    }
+    let too_small = OperationPlanLimits {
+        max_serialized_bytes: bytes.len() - 1,
+        ..OperationPlanLimits::default()
+    };
+    assert_error(
+        domain_ir::CompiledOperationPlan::from_canonical_json(&bytes, too_small),
+        "operation_plan_limit_exceeded",
+    );
+    Ok(())
+}
+
+#[test]
 fn mixed_empty_and_unsupported_selectors_never_fall_back() -> TestResult {
     let graph = fixture_graph()?;
     let snapshot = fixture_snapshot(&graph, "rev-1")?;

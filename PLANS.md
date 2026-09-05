@@ -60,8 +60,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   five CI lanes PASS. Actual PostgreSQL 25/25 passes in both; owned containers/volumes are removed.
 - PostgreSQL v11 now rechecks active tenant/project, ACL, exact default head, verified source,
   service seal/receipt and immutable graph digest. Final run b4ad5c05 passed 29/29 and cleaned.
-- Stored-plan registry remains process-local; encrypted durable plan persistence, receipt-bound
-  route/dry-run/diff projection and actual renderer wiring remain open.
+- Canonical compiled-plan restore now rechecks byte form, target paths, unit receipts and DAG order.
+  The registry remains process-local; encrypted persistence and receipt-bound renderer wiring are open.
 - Attempt21 saved/reopened both sections and exported portrait PDF; actual landscape acceptance failed.
   Orientation v1 reversed the tokens; v2 corrects them and invalidates the earlier landscape interpretation.
   Spine checking now uses the graph and blocks comment decoys. Read P05-07_ORIENTATION_SPINE_REPAIR.md.
@@ -69,7 +69,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 ## Open risks and holds
 
 - R-0001: Diagnostic FULL fails Cargo.lock source binding; column IDs and actual landscape render remain open.
-- R-0002: Integrated source/DB PASS; durable Plan/source adapter and actual renderer/registered host remain open.
+- R-0002: Integrated source/DB PASS; durable plan store and actual renderer/registered host remain open.
 - R-0003: One independent worker timeout smoke failed; unchanged retries pass 3/3, root cause not proven.
 - HOLD-0001: P16-02 actual registration and P16-05/06 registered-host E2E remain unverified.
 - HOLD-0002: P10-05 registered path-security module and P10-06 production COM execution remain open.

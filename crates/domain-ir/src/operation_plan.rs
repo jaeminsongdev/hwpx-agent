@@ -1,14 +1,15 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sha2::{Digest as _, Sha256};
 use thiserror::Error;
 
 use crate::{
-    AngleMicrodegrees, CapabilityId, ConversionReceipt, HwpUnit, LengthMicrometers, OperationId,
-    PlanId, PointMilli, RatioMillionths, RationalInput, ResolvedTarget, RevisionId, Selector,
-    SelectorError, SelectorExpectation, SelectorSnapshot, UnitError,
+    AngleMicrodegrees, CapabilityId, ConversionReceipt, HwpUnit, LengthMicrometers, LogicalId,
+    NodeKind, OperationId, PlanId, PointMilli, RatioMillionths, RationalInput, ResolvedTarget,
+    RevisionId, Selector, SelectorError, SelectorExpectation, SelectorSnapshot, StructuralRoot,
+    StructuralStep, UnitError, UnitKind,
 };
 
 pub const OPERATION_PLAN_SCHEMA_VERSION: &str = "hwpx-agent.operation-plan/v2";
@@ -508,6 +509,28 @@ impl CompiledOperationPlan {
     pub fn canonical_sha256(&self) -> Result<[u8; 32], OperationPlanError> {
         Ok(Sha256::digest(self.canonical_json()?).into())
     }
+
+    /// Restores only byte-exact canonical compiler output and revalidates every embedded invariant.
+    ///
+    /// # Errors
+    /// Rejects noncanonical JSON, unsupported versions, malformed targets, forged argument receipts,
+    /// noncanonical dependency order and any configured or product limit violation.
+    pub fn from_canonical_json(
+        bytes: &[u8],
+        limits: OperationPlanLimits,
+    ) -> Result<Self, OperationPlanError> {
+        limits.validate()?;
+        if bytes.is_empty() || bytes.len() > limits.max_serialized_bytes {
+            return Err(OperationPlanError::LimitExceeded);
+        }
+        let wire: CompiledOperationPlanWire =
+            serde_json::from_slice(bytes).map_err(|_| OperationPlanError::InvalidSerializedPlan)?;
+        let result = restore_plan(wire, limits)?;
+        if result.canonical_json()?.as_slice() != bytes {
+            return Err(OperationPlanError::InvalidSerializedPlan);
+        }
+        Ok(result)
+    }
 }
 
 impl fmt::Debug for CompiledOperationPlan {
@@ -516,6 +539,488 @@ impl fmt::Debug for CompiledOperationPlan {
             .debug_struct("CompiledOperationPlan")
             .field("operation_count", &self.operations.len())
             .finish_non_exhaustive()
+    }
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct CompiledOperationPlanWire {
+    schema_version: String,
+    plan_id: PlanId,
+    base_revision: RevisionId,
+    base_graph_sha256: [u8; 32],
+    failure_policy: FailurePolicyWire,
+    operations: Vec<CompiledOperationWire>,
+}
+
+#[derive(Clone, Copy, Deserialize)]
+#[serde(rename_all = "snake_case")]
+enum FailurePolicyWire {
+    Atomic,
+    BestEffort,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct CompiledOperationWire {
+    operation_id: OperationId,
+    capability_id: CapabilityId,
+    target: ResolvedTargetWire,
+    arguments: BTreeMap<String, CompiledArgumentWire>,
+    depends_on: Vec<OperationId>,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct ResolvedTargetWire {
+    node_id: LogicalId,
+    node_kind: NodeKindWire,
+    structural_path: StructuralPathWire,
+    text_range: Option<TextRangeWire>,
+    node_fingerprint_sha256: [u8; 32],
+}
+
+#[derive(Clone, Copy, Deserialize)]
+#[serde(rename_all = "snake_case")]
+enum NodeKindWire {
+    Paragraph,
+    Table,
+    Equation,
+    Drawing,
+    Chart,
+    Field,
+    FormControl,
+    Break,
+    EmbeddedObject,
+}
+
+impl NodeKindWire {
+    const fn restore(self) -> NodeKind {
+        match self {
+            Self::Paragraph => NodeKind::Paragraph,
+            Self::Table => NodeKind::Table,
+            Self::Equation => NodeKind::Equation,
+            Self::Drawing => NodeKind::Drawing,
+            Self::Chart => NodeKind::Chart,
+            Self::Field => NodeKind::Field,
+            Self::FormControl => NodeKind::FormControl,
+            Self::Break => NodeKind::Break,
+            Self::EmbeddedObject => NodeKind::EmbeddedObject,
+        }
+    }
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct StructuralPathWire {
+    root: StructuralRootWire,
+    steps: Vec<StructuralStepWire>,
+}
+
+#[derive(Deserialize)]
+#[serde(tag = "root", rename_all = "snake_case")]
+enum StructuralRootWire {
+    Section { index: u32 },
+    Note { index: u32 },
+}
+
+impl StructuralRootWire {
+    const fn restore(self) -> StructuralRoot {
+        match self {
+            Self::Section { index } => StructuralRoot::Section { index },
+            Self::Note { index } => StructuralRoot::Note { index },
+        }
+    }
+}
+
+#[derive(Deserialize)]
+#[serde(tag = "step", rename_all = "snake_case")]
+enum StructuralStepWire {
+    FlowChild {
+        index: u32,
+        expected_kind: NodeKindWire,
+    },
+    TableCell {
+        row: u32,
+        column: u32,
+    },
+}
+
+impl StructuralStepWire {
+    fn restore(self) -> StructuralStep {
+        match self {
+            Self::FlowChild {
+                index,
+                expected_kind,
+            } => StructuralStep::FlowChild {
+                index,
+                expected_kind: expected_kind.restore(),
+            },
+            Self::TableCell { row, column } => StructuralStep::TableCell { row, column },
+        }
+    }
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct TextRangeWire {
+    start_scalar: u64,
+    end_scalar: u64,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct CompiledArgumentWire {
+    source: ArgumentSourceWire,
+    value: CanonicalArgumentValueWire,
+    conversion_receipt: Option<ConversionReceiptWire>,
+    value_sha256: [u8; 32],
+}
+
+#[derive(Clone, Copy, Deserialize)]
+#[serde(rename_all = "snake_case")]
+enum ArgumentSourceWire {
+    Caller,
+    CapabilityDefault,
+}
+
+impl ArgumentSourceWire {
+    const fn restore(self) -> ArgumentSource {
+        match self {
+            Self::Caller => ArgumentSource::Caller,
+            Self::CapabilityDefault => ArgumentSource::CapabilityDefault,
+        }
+    }
+}
+
+#[derive(Deserialize)]
+#[serde(tag = "value_type", content = "value", rename_all = "snake_case")]
+enum CanonicalArgumentValueWire {
+    Text(String),
+    Boolean(bool),
+    Integer(i64),
+    LengthMicrometers(i64),
+    PointMilli(i64),
+    RatioMillionths(i64),
+    AngleMicrodegrees(i64),
+}
+
+impl CanonicalArgumentValueWire {
+    fn restore(self) -> CanonicalArgumentValue {
+        match self {
+            Self::Text(value) => CanonicalArgumentValue::Text(value),
+            Self::Boolean(value) => CanonicalArgumentValue::Boolean(value),
+            Self::Integer(value) => CanonicalArgumentValue::Integer(value),
+            Self::LengthMicrometers(value) => {
+                CanonicalArgumentValue::LengthMicrometers(LengthMicrometers::from_raw(value))
+            }
+            Self::PointMilli(value) => {
+                CanonicalArgumentValue::PointMilli(PointMilli::from_raw(value))
+            }
+            Self::RatioMillionths(value) => {
+                CanonicalArgumentValue::RatioMillionths(RatioMillionths::from_raw(value))
+            }
+            Self::AngleMicrodegrees(value) => {
+                CanonicalArgumentValue::AngleMicrodegrees(AngleMicrodegrees::from_raw(value))
+            }
+        }
+    }
+}
+
+#[derive(Clone, Copy, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct ConversionReceiptWire {
+    source_unit: UnitKind,
+    target_unit: UnitKind,
+    source_numerator: i64,
+    source_denominator: u32,
+    normalized_value: i64,
+    rounding_delta_numerator: i64,
+    rounding_delta_denominator: u64,
+    context_dpi: Option<u32>,
+}
+
+fn restore_plan(
+    wire: CompiledOperationPlanWire,
+    limits: OperationPlanLimits,
+) -> Result<CompiledOperationPlan, OperationPlanError> {
+    if wire.schema_version != OPERATION_PLAN_SCHEMA_VERSION {
+        return Err(OperationPlanError::UnsupportedVersion);
+    }
+    if !matches!(wire.failure_policy, FailurePolicyWire::Atomic)
+        || wire.base_graph_sha256 == [0; 32]
+    {
+        return Err(OperationPlanError::InvalidSerializedPlan);
+    }
+    if wire.operations.is_empty() {
+        return Err(OperationPlanError::MissingOperation);
+    }
+    if wire.operations.len() > limits.max_operations {
+        return Err(OperationPlanError::LimitExceeded);
+    }
+    let mut operations = Vec::with_capacity(wire.operations.len());
+    let mut dependency_count = 0_usize;
+    let mut total_argument_bytes = 0_usize;
+    for operation in wire.operations {
+        if operation.arguments.len() > limits.max_arguments_per_operation {
+            return Err(OperationPlanError::LimitExceeded);
+        }
+        dependency_count = dependency_count
+            .checked_add(operation.depends_on.len())
+            .ok_or(OperationPlanError::LimitExceeded)?;
+        if dependency_count > limits.max_dependencies {
+            return Err(OperationPlanError::LimitExceeded);
+        }
+        let target = restore_target(operation.target)?;
+        let mut arguments = BTreeMap::new();
+        for (name, argument) in operation.arguments {
+            validate_argument_name(&name).map_err(|_| OperationPlanError::InvalidSerializedPlan)?;
+            let argument = restore_compiled_argument(argument, limits.max_string_bytes)?;
+            total_argument_bytes = total_argument_bytes
+                .checked_add(name.len())
+                .and_then(|total| total.checked_add(canonical_argument_size(&argument)))
+                .ok_or(OperationPlanError::LimitExceeded)?;
+            if total_argument_bytes > limits.max_total_argument_bytes {
+                return Err(OperationPlanError::LimitExceeded);
+            }
+            let previous = arguments.insert(name, argument);
+            if previous.is_some() {
+                return Err(OperationPlanError::InvalidSerializedPlan);
+            }
+        }
+        operations.push(CompiledOperation {
+            operation_id: operation.operation_id,
+            capability_id: operation.capability_id,
+            target,
+            arguments,
+            depends_on: operation.depends_on,
+        });
+    }
+    validate_compiled_order(&operations)?;
+    Ok(CompiledOperationPlan {
+        schema_version: wire.schema_version,
+        plan_id: wire.plan_id,
+        base_revision: wire.base_revision,
+        base_graph_sha256: wire.base_graph_sha256,
+        failure_policy: FailurePolicy::Atomic,
+        operations,
+    })
+}
+
+fn restore_target(wire: ResolvedTargetWire) -> Result<ResolvedTarget, OperationPlanError> {
+    let node_kind = wire.node_kind.restore();
+    let text_range = wire
+        .text_range
+        .map(|range| (range.start_scalar, range.end_scalar));
+    ResolvedTarget::restore(
+        wire.node_id,
+        node_kind,
+        wire.structural_path.root.restore(),
+        wire.structural_path
+            .steps
+            .into_iter()
+            .map(StructuralStepWire::restore)
+            .collect(),
+        text_range,
+        wire.node_fingerprint_sha256,
+    )
+    .map_err(|_| OperationPlanError::InvalidSerializedPlan)
+}
+
+fn restore_compiled_argument(
+    wire: CompiledArgumentWire,
+    max_string_bytes: usize,
+) -> Result<CompiledArgument, OperationPlanError> {
+    let value = wire.value.restore();
+    let conversion_receipt = match (&value, wire.conversion_receipt) {
+        (CanonicalArgumentValue::Text(text), None) => {
+            if text.len() > max_string_bytes
+                || text
+                    .chars()
+                    .any(|character| character.is_control() && !matches!(character, '\n' | '\t'))
+            {
+                return Err(OperationPlanError::LimitExceeded);
+            }
+            None
+        }
+        (CanonicalArgumentValue::Boolean(_) | CanonicalArgumentValue::Integer(_), None) => None,
+        (
+            CanonicalArgumentValue::LengthMicrometers(_)
+            | CanonicalArgumentValue::PointMilli(_)
+            | CanonicalArgumentValue::RatioMillionths(_)
+            | CanonicalArgumentValue::AngleMicrodegrees(_),
+            Some(receipt),
+        ) => Some(restore_conversion_receipt(receipt, &value)?),
+        _ => return Err(OperationPlanError::InvalidSerializedPlan),
+    };
+    let expected_sha256: [u8; 32] = Sha256::digest(
+        serde_json::to_vec(&value).map_err(|_| OperationPlanError::SerializationFailed)?,
+    )
+    .into();
+    if wire.value_sha256 != expected_sha256 {
+        return Err(OperationPlanError::InvalidSerializedPlan);
+    }
+    Ok(CompiledArgument {
+        source: wire.source.restore(),
+        value,
+        conversion_receipt,
+        value_sha256: wire.value_sha256,
+    })
+}
+
+fn restore_conversion_receipt(
+    wire: ConversionReceiptWire,
+    value: &CanonicalArgumentValue,
+) -> Result<ConversionReceipt, OperationPlanError> {
+    let input = RationalInput::new(wire.source_numerator, wire.source_denominator)
+        .map_err(|_| OperationPlanError::InvalidSerializedPlan)?;
+    let (normalized, receipt) = match (wire.source_unit, wire.target_unit, wire.context_dpi) {
+        (UnitKind::Millimeter, UnitKind::Micrometer, None) => {
+            let value = LengthMicrometers::from_millimeters(input)
+                .map_err(|_| OperationPlanError::InvalidSerializedPlan)?;
+            (value.value().as_i64(), value.receipt())
+        }
+        (UnitKind::Point, UnitKind::Micrometer, None) => {
+            let value = LengthMicrometers::from_points(input)
+                .map_err(|_| OperationPlanError::InvalidSerializedPlan)?;
+            (value.value().as_i64(), value.receipt())
+        }
+        (UnitKind::HwpUnit, UnitKind::Micrometer, None) if input.denominator() == 1 => {
+            let value = LengthMicrometers::from_hwp_unit(HwpUnit::from_raw(input.numerator()))
+                .map_err(|_| OperationPlanError::InvalidSerializedPlan)?;
+            (value.value().as_i64(), value.receipt())
+        }
+        (UnitKind::Pixel, UnitKind::Micrometer, Some(dpi)) => {
+            let value = LengthMicrometers::from_pixels(input, dpi)
+                .map_err(|_| OperationPlanError::InvalidSerializedPlan)?;
+            (value.value().as_i64(), value.receipt())
+        }
+        (UnitKind::Point, UnitKind::PointMilli, None) => {
+            let value = PointMilli::from_points(input)
+                .map_err(|_| OperationPlanError::InvalidSerializedPlan)?;
+            (value.value().as_i64(), value.receipt())
+        }
+        (UnitKind::Ratio, UnitKind::RatioMillionths, None) => {
+            let value = RatioMillionths::from_ratio(input)
+                .map_err(|_| OperationPlanError::InvalidSerializedPlan)?;
+            (value.value().as_i64(), value.receipt())
+        }
+        (UnitKind::Percent, UnitKind::RatioMillionths, None) => {
+            let value = RatioMillionths::from_percent(input)
+                .map_err(|_| OperationPlanError::InvalidSerializedPlan)?;
+            (value.value().as_i64(), value.receipt())
+        }
+        (UnitKind::Degree, UnitKind::Microdegree, None) => {
+            let value = AngleMicrodegrees::from_degrees(input)
+                .map_err(|_| OperationPlanError::InvalidSerializedPlan)?;
+            (value.value().as_i64(), value.receipt())
+        }
+        _ => return Err(OperationPlanError::InvalidSerializedPlan),
+    };
+    let value_matches = match (wire.target_unit, value) {
+        (UnitKind::Micrometer, CanonicalArgumentValue::LengthMicrometers(value)) => {
+            value.as_i64() == normalized
+        }
+        (UnitKind::PointMilli, CanonicalArgumentValue::PointMilli(value)) => {
+            value.as_i64() == normalized
+        }
+        (UnitKind::RatioMillionths, CanonicalArgumentValue::RatioMillionths(value)) => {
+            value.as_i64() == normalized
+        }
+        (UnitKind::Microdegree, CanonicalArgumentValue::AngleMicrodegrees(value)) => {
+            value.as_i64() == normalized
+        }
+        _ => false,
+    };
+    if !value_matches
+        || wire.normalized_value != receipt.normalized_value()
+        || wire.rounding_delta_numerator != receipt.rounding_delta().0
+        || wire.rounding_delta_denominator != receipt.rounding_delta().1
+        || wire.source_unit != receipt.source_unit()
+        || wire.target_unit != receipt.target_unit()
+        || wire.context_dpi != receipt.context_dpi()
+    {
+        return Err(OperationPlanError::InvalidSerializedPlan);
+    }
+    Ok(receipt)
+}
+
+fn validate_compiled_order(operations: &[CompiledOperation]) -> Result<(), OperationPlanError> {
+    let ids: BTreeSet<_> = operations
+        .iter()
+        .map(|operation| operation.operation_id.clone())
+        .collect();
+    if ids.len() != operations.len() {
+        return Err(OperationPlanError::DuplicateOperation);
+    }
+    let mut indegree: BTreeMap<OperationId, usize> =
+        ids.iter().cloned().map(|id| (id, 0)).collect();
+    let mut outgoing: BTreeMap<OperationId, BTreeSet<OperationId>> = BTreeMap::new();
+    for operation in operations {
+        if operation
+            .depends_on
+            .windows(2)
+            .any(|pair| pair[0] >= pair[1])
+        {
+            return Err(OperationPlanError::InvalidDependency);
+        }
+        for dependency in &operation.depends_on {
+            if dependency == &operation.operation_id || !ids.contains(dependency) {
+                return Err(OperationPlanError::InvalidDependency);
+            }
+            let degree = indegree
+                .get_mut(&operation.operation_id)
+                .ok_or(OperationPlanError::InvalidDependency)?;
+            *degree = degree
+                .checked_add(1)
+                .ok_or(OperationPlanError::LimitExceeded)?;
+            let _ = outgoing
+                .entry(dependency.clone())
+                .or_default()
+                .insert(operation.operation_id.clone());
+        }
+    }
+    let mut ready: BTreeSet<_> = indegree
+        .iter()
+        .filter_map(|(id, degree)| (*degree == 0).then_some(id.clone()))
+        .collect();
+    let mut expected = Vec::with_capacity(operations.len());
+    while let Some(next) = ready.pop_first() {
+        expected.push(next.clone());
+        if let Some(children) = outgoing.get(&next) {
+            for child in children {
+                let degree = indegree
+                    .get_mut(child)
+                    .ok_or(OperationPlanError::InvalidDependency)?;
+                *degree = degree
+                    .checked_sub(1)
+                    .ok_or(OperationPlanError::InvalidDependency)?;
+                if *degree == 0 {
+                    let _ = ready.insert(child.clone());
+                }
+            }
+        }
+    }
+    if expected.len() != operations.len()
+        || expected
+            .iter()
+            .zip(operations)
+            .any(|(expected, actual)| expected != &actual.operation_id)
+    {
+        return Err(OperationPlanError::InvalidDependency);
+    }
+    Ok(())
+}
+
+fn canonical_argument_size(argument: &CompiledArgument) -> usize {
+    match &argument.value {
+        CanonicalArgumentValue::Text(value) => value.len(),
+        CanonicalArgumentValue::Boolean(_)
+        | CanonicalArgumentValue::Integer(_)
+        | CanonicalArgumentValue::LengthMicrometers(_)
+        | CanonicalArgumentValue::PointMilli(_)
+        | CanonicalArgumentValue::RatioMillionths(_)
+        | CanonicalArgumentValue::AngleMicrodegrees(_) => size_of::<CompiledArgument>(),
     }
 }
 
@@ -557,6 +1062,8 @@ pub enum OperationPlanError {
     UnitConversion,
     #[error("compiled operation-plan serialization failed")]
     SerializationFailed,
+    #[error("serialized compiled operation-plan is invalid")]
+    InvalidSerializedPlan,
 }
 
 impl OperationPlanError {
@@ -581,6 +1088,7 @@ impl OperationPlanError {
             Self::InvalidArgument => "operation_plan_invalid_argument",
             Self::UnitConversion => "operation_plan_unit_conversion",
             Self::SerializationFailed => "operation_plan_serialization_failed",
+            Self::InvalidSerializedPlan => "operation_plan_invalid_serialized_plan",
         }
     }
 }

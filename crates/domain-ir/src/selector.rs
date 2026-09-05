@@ -366,6 +366,41 @@ pub struct ResolvedTarget {
 }
 
 impl ResolvedTarget {
+    pub(crate) fn restore(
+        node_id: LogicalId,
+        node_kind: NodeKind,
+        root: StructuralRoot,
+        steps: Vec<StructuralStep>,
+        text_range: Option<(u64, u64)>,
+        node_fingerprint_sha256: [u8; 32],
+    ) -> Result<Self, SelectorError> {
+        if !valid_restored_path(&steps, node_kind) || node_fingerprint_sha256 == [0; 32] {
+            return Err(SelectorError::InvalidSelector);
+        }
+        let structural_path = StructuralPath::from_root(root, steps)?;
+        let text_range = match text_range {
+            Some((start_scalar, end_scalar))
+                if node_kind == NodeKind::Paragraph
+                    && start_scalar < end_scalar
+                    && end_scalar - start_scalar <= HARD_MAX_QUERY_BYTES as u64 =>
+            {
+                Some(TextRange {
+                    start_scalar,
+                    end_scalar,
+                })
+            }
+            None => None,
+            Some(_) => return Err(SelectorError::InvalidSelector),
+        };
+        Ok(Self {
+            node_id,
+            node_kind,
+            structural_path,
+            text_range,
+            node_fingerprint_sha256,
+        })
+    }
+
     #[must_use]
     pub const fn node_id(&self) -> &LogicalId {
         &self.node_id
@@ -390,6 +425,38 @@ impl ResolvedTarget {
     pub const fn node_fingerprint_sha256(&self) -> [u8; 32] {
         self.node_fingerprint_sha256
     }
+}
+
+fn valid_restored_path(steps: &[StructuralStep], node_kind: NodeKind) -> bool {
+    if !matches!(steps.first(), Some(StructuralStep::FlowChild { .. }))
+        || !matches!(
+            steps.last(),
+            Some(StructuralStep::FlowChild { expected_kind, .. }) if *expected_kind == node_kind
+        )
+    {
+        return false;
+    }
+    steps.windows(2).all(|pair| {
+        matches!(
+            (&pair[0], &pair[1]),
+            (
+                StructuralStep::FlowChild {
+                    expected_kind: NodeKind::Table,
+                    ..
+                },
+                StructuralStep::TableCell { .. },
+            ) | (
+                StructuralStep::FlowChild {
+                    expected_kind: NodeKind::Drawing,
+                    ..
+                },
+                StructuralStep::FlowChild { .. },
+            ) | (
+                StructuralStep::TableCell { .. },
+                StructuralStep::FlowChild { .. },
+            )
+        )
+    })
 }
 
 impl fmt::Debug for ResolvedTarget {
