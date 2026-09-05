@@ -42,7 +42,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0045–0048 | P05-06–09 | Orientation FULL/Linux pass; diagnostics 205 pass; both FULL fail source-lock qualification |
 | P-0082 | P16-02 registration | Local bundle ready; actual registered app/host receipt absent |
 | P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; actual registered host pending |
-| P-0086 | P16-06 Plan/diff UI | Registry checkpoint complete; PostgreSQL artifact adapter uncommitted, renderer wiring open |
+| P-0086 | P16-06 Plan/diff UI | PostgreSQL adapter actual PASS at 217ba56; source qualification and renderer wiring open |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.
@@ -64,7 +64,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   visual/source contract is not rewritten as current proof. Stored-plan and real-host integration remain open.
 - New registry: 14 target tests, workspace Rust lane (481 tests) and nine security checks pass.
   Source/revision/owner/ACL/expiry/clock rollback checks are implemented; storage is process-local.
-  Actual Linux 157 tests/Clippy PASS. Durable artifact adapter work is uncommitted; no renderer/permit.
+  Registry Linux 157 pass; adapter Windows/Linux 35, workspace 485, actual DB twice PASS; no renderer/permit.
 - Attempt21 saved/reopened both sections and exported portrait PDF; actual landscape acceptance failed.
   Orientation v1 reversed the tokens; v2 corrects them and invalidates the earlier landscape interpretation.
   Spine checking now uses the graph and blocks comment decoys. Read P05-07_ORIENTATION_SPINE_REPAIR.md.
@@ -72,7 +72,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 ## Open risks and holds
 
 - R-0001: Diagnostic FULL fails Cargo.lock source binding; column IDs and actual landscape render remain open.
-- R-0002: Registry target behavior passes; durable adapter, actual renderer and current formal evidence remain open.
+- R-0002: Adapter actual PASS; P14/P15 source qualification, durable Plan/source and actual renderer remain open.
 - R-0003: One independent worker timeout smoke failed; unchanged retries pass 3/3, root cause not proven.
 - HOLD-0001: P16-02 actual registration and P16-05/06 registered-host E2E remain unverified.
 - HOLD-0002: P10-05 registered path-security module and P10-06 production COM execution remain open.
@@ -84,8 +84,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 1. Resolve diagnostic Cargo.lock source binding; read P05-07_DIAGNOSTIC_AUDIT_STATUS.md.
    Main 92ce629/independent 3827c21: 205/Clippy PASS, both FULL exit 1; security not run. No Hancom wait.
-2. Resume uncommitted PostgreSQL adapter: rollback repair passes, latest failure is CONNECT verification.
-   Read P16-06_POSTGRES_ADAPTER_CONTINUATION.md; source/plan/renderer qualification remains open.
+2. Qualify PostgreSQL adapter successor source contracts at 217ba56; actual DB, Linux and security pass.
+   Read P16-06_POSTGRES_ADAPTER_CONTINUATION.md; both FULL fail P14 source binding; Plan/renderer open.
 3. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,
    applicable offline Linux checks, security and STRICT review before any implementation closure.
 4. Close P05 only with save/reopen, semantic inspection, PDF verification and visual evidence.
@@ -103,16 +103,16 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   Read implementation/p16/P16-06_SAFETY_AUDIT.md and P16-06_SOURCE_DIFF_PROJECTION.md there.
 - Independent FULL 68679: D:\개발\hwpx-agent-audit-p16-9a16c2d, same checkpoint, terminal 5/5 PASS.
   Linux domain tests/Clippy PASS, session 2297 exit 0. Details: P16-06_AUDIT_HANDOFF_20260905.md in main.
-- Active worktree: D:\개발\hwpx-agent-work-p16-plan-service; HEAD 9c120ac7407c00a7454a195c403330b47ff0524f, dirty.
-  Details: implementation/p16/P16-06_AUTHENTICATED_PLAN_REGISTRY.md; artifacts/p16/stored-plan/ logs.
-  Prior 5957/7210 terminal PASS is registry-only. New PostgreSQL files/dependency/CAS changes are unqualified.
+- Active worktree: D:\개발\hwpx-agent-work-p16-plan-service; clean HEAD 217ba56cd8a88e4d3560a5735052b18880481ff4.
+  Independent: D:\개발\hwpx-agent-audit-p16-postgres-217ba56; same clean source, actual DB and Inspector PASS.
+  FULL 84481/54118/18353 terminal FAIL; Linux 69697/security 41295/Inspector 51120 terminal PASS. No polls.
 - External QA: Codex workspace p16-response-contract-20260905/inspection.md and run-03/receipt.json.
   Thirteen captures automated, six directly reviewed; exact HTML/script hashes bound, no user browser profile.
 - First reads: this ledger; P05 audit status/column-ID admission plan and attempt21; P16 Plan-review policy.
-- First checks: both worktrees' git status; saved attempt21 HWPX/PDF; P16 latest CONNECT failure report.
+- First checks: worktrees' git status; saved attempt21 HWPX/PDF; P05/P16 source-qualification failures.
 - Attempt21 trace/progress: fixtures/target-build/p05-07-current-2020-20260905-v3/
   p05-07-hancom-2020-trace-attempt21.json[.progress.jsonl]. Former worker 31488/Hwp 43524 exited normally.
-  Latest P16 run afee7194223c4389900cfcd5fff57ac9: 51036 terminal FAIL, owned DB resources cleaned.
+  P16 actual runs 5a68a12751804d6f84df2b42ebed2f11/a06f2d898dd943e89ab6353e0a6f331b PASS; DBs cleaned.
 - Do not touch user originals, earlier failed evidence, predecessor contract locks or unrelated processes.
 - Detailed completed task history through P-0085 remains in Git fae5bc0:PLANS.md, plus individual
   reports under implementation/p00/–implementation/p16/; this ledger is a bounded snapshot.

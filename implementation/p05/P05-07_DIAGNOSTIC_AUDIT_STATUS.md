@@ -42,9 +42,9 @@ normalization permission or accepting alternative inspector was added. No actual
 
 Qualify the diagnostic dependency change without weakening predecessor source binding, then run
 target checks and both FULL audits. No new security receipt or component closure is claimed.
-The separate P16 PostgreSQL adapter passed guarded empty rollback/reapply and immutable-history
-guard restoration, but its latest actual disposable-DB run failed at connection/initial verification.
-Read `../p16/P16-06_POSTGRES_ADAPTER_CONTINUATION.md`; preserve its uncommitted source changes.
+The separate P16 PostgreSQL adapter now passes actual acceptance in current/independent checkouts
+at clean checkpoint 217ba56. Its FULL still fails predecessor source qualification, not DB operation.
+Read `../p16/P16-06_POSTGRES_ADAPTER_CONTINUATION.md`; preserve its source checkpoint and old failures.
 P05 actual corrected layout, identity preservation/rebinding and later phase Gates remain open.
 The user's latest offer to click access permission was checked: no `Hwp.exe` or pending test window
 was present. No new test was launched because a qualified corrected fixture is not ready.
