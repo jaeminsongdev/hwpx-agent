@@ -2,10 +2,10 @@
 
 - Updated: 2026-09-05
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05-07 header-count repair verification and P16-06 Plan/diff UI audit.
+- Active: P05-07 saved-output/layout repair and P16-06 durable Plan/diff integration.
 - Recommended reasoning: max for preservation, authorization and Gate review; high for routine work.
-- UI status: v3 attempt 20 timed out at first input access; two screenshots showed the prompt.
-  Session 63850 terminal exit 1; owned Hwp cleaned, residual zero. No automatic relaunch.
+- UI status: v3 attempt 21 passed open/save/reopen/text/PDF export; layout acceptance failed.
+  Session 13431 terminal exit 0; normal quit, residual zero. No additional click or automatic relaunch.
 
 ## Objective and boundaries
 
@@ -21,7 +21,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | Phase | State | Authoritative evidence / dependency |
 |---|---|---|
 | P00–P04 | scoped current-PC local PASS | implementation/p00/ through p04/, phase Gate reports |
-| P05 | in progress | 01–06 pass; 07 actual readback mismatch; 08–09 actual rendering pending |
+| P05 | in progress | 01–06 pass; 07 readback passes but saved-output/PDF checks fail; 08–09 pending |
 | P06–P09 | blocked by P05 | table, equation, graphics, fields engines |
 | P10 | in progress | 01–04,07,09,10 scoped pass; 05/06 actual dependencies; 08 dedicated controls unqualified |
 | P11 | blocked by P06–P10 | advanced desktop features |
@@ -39,10 +39,10 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 | ID | Task | State / next check |
 |---|---|---|
-| P-0046–0048 | P05-07–09 | Header secCnt mismatch repaired; 29 target tests pass, v3 actual acceptance pending |
+| P-0046–0048 | P05-07–09 | v3 two-section readback passes; spine normalization and portrait PDF need repair |
 | P-0082 | P16-02 registration | Local bundle ready; actual registered app/host receipt absent |
 | P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; actual registered host pending |
-| P-0086 | P16-06 Plan/diff UI | Authenticated compiler-plan registry implemented; durable source adapter and renderer wiring open |
+| P-0086 | P16-06 Plan/diff UI | Registry checkpoint complete; PostgreSQL artifact adapter uncommitted, renderer wiring open |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempts 10–16 timed out at open_input; attempt 17 instead passed open and failed
@@ -67,11 +67,14 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   visual/source contract is not rewritten as current proof. Stored-plan and real-host integration remain open.
 - New registry: 14 target tests, workspace Rust lane (481 tests) and nine security checks pass.
   Source/revision/owner/ACL/expiry/clock rollback checks are implemented; storage is process-local.
-  Actual Linux 157 tests/Clippy PASS. No durable adapter, renderer endpoint or execution permit yet.
+  Actual Linux 157 tests/Clippy PASS. Durable artifact adapter work is uncommitted; no renderer/permit.
+- Attempt 21 opened/saved/reopened both sections and exported PDF, with unchanged input and normal quit.
+  Saved-output inspection rejects omitted spine linear; formal PDF check rejects portrait versus landscape.
+  Both diagnostic pages viewed. See P05-07_ATTEMPT21_DIAGNOSTIC.md; full actual acceptance stays open.
 
 ## Open risks and holds
 
-- R-0001: Header-count defect is fixed in software; actual v3 recovery and rendering remain unproven.
+- R-0001: V3 text recovery is proven; saved-output normalization and PDF page orientation remain unresolved.
 - R-0002: Registry target behavior passes; durable adapter, actual renderer and current formal evidence remain open.
 - HOLD-0001: P16-02 actual registration and P16-05/06 registered-host E2E remain unverified.
 - HOLD-0002: P10-05 registered path-security module and P10-06 production COM execution remain open.
@@ -81,10 +84,10 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 ## Exact next actions and validation policy
 
-1. Attempt 20 is terminal; read P05-07_ATTEMPT20_DIAGNOSTIC.md. Require a fresh user-present request
-   before relaunch. Keep two-section save/reopen/render criteria unchanged.
-2. Implement authoritative durable source/plan adapter and renderer wiring after the registry checkpoint.
-   Bind real execution/diff receipts; refresh P16 evidence and run both FULL audits before closure.
+1. Attempt 21 is terminal; read P05-07_ATTEMPT21_DIAGNOSTIC.md and inspect saved files offline first.
+   Fix normalization/orientation without weakening criteria. Require fresh user-present request to relaunch.
+2. Resume uncommitted PostgreSQL artifact adapter: first actual DB check failed at guarded empty rollback.
+   Inspect v10 schema_versions immutable trigger handling, then qualify durable source/plan/renderer wiring.
 3. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,
    applicable offline Linux checks, security and STRICT review before any implementation closure.
 4. Close P05 only with save/reopen, semantic inspection, PDF verification and visual evidence.
@@ -92,27 +95,24 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 ## Context Pack and archive references
 
-- Root: D:\개발\hwpx-agent; count-repair checkpoint e82cf95; P16-06 baseline 9360c47.
-- Both count-repair FULL sessions terminated exit 0, 5/5 lanes PASS: current 5232 and exact e82cf95
-  detached-checkout 68068 at D:\개발\hwpx-agent-audit-p05-count-e82cf95. Do not poll those handles.
-  The independent log is artifacts/p05-count-repair/full-ci.log inside that checkout. Only the four
-  exact hash-pinned P10 diagnostic JSON records were hydrated; no user document or key was copied.
+- Root: D:\개발\hwpx-agent; count-repair e82cf95; P16 baseline 9360c47. Count FULL 5232/68068: 5/5 PASS.
+  Independent checkout D:\개발\hwpx-agent-audit-p05-count-e82cf95, artifacts/p05-count-repair/full-ci.log.
 - P16-06 checkpoint 9a16c2d55f82a012d9b354b5df2db983b07c4060 at D:\개발\hwpx-agent-work-p16-06-safety.
   FULL log: artifacts/p16/safety-summary-full-9a16c2d/full-ci.log; 24388 terminal 5/5 PASS.
   Target runner 49438 is terminal exit 0. Four exact P10 JSON records hydrated for FULL, no user docs/keys.
   Read implementation/p16/P16-06_SAFETY_AUDIT.md and P16-06_SOURCE_DIFF_PROJECTION.md there.
 - Independent FULL 68679: D:\개발\hwpx-agent-audit-p16-9a16c2d, same checkpoint, terminal 5/5 PASS.
   Linux domain tests/Clippy PASS, session 2297 exit 0. Details: P16-06_AUDIT_HANDOFF_20260905.md in main.
-- Active worktree: D:\개발\hwpx-agent-work-p16-plan-service; clean checkpoint 9c120ac7407c00a7454a195c403330b47ff0524f.
+- Active worktree: D:\개발\hwpx-agent-work-p16-plan-service; HEAD 9c120ac7407c00a7454a195c403330b47ff0524f, dirty.
   Details: implementation/p16/P16-06_AUTHENTICATED_PLAN_REGISTRY.md; artifacts/p16/stored-plan/ logs.
-  5957 terminal: Rust/security PASS; 7210 terminal: Linux 157/Clippy PASS. No live handles; see registry report.
+  Prior 5957/7210 terminal PASS is registry-only. New PostgreSQL files/dependency/CAS changes are unqualified.
 - External QA: Codex workspace p16-response-contract-20260905/inspection.md and run-03/receipt.json.
   Thirteen captures automated, six directly reviewed; exact HTML/script hashes bound, no user browser profile.
-- First reads: this ledger; P05 attempt-17 report; implementation/p16/P16-06_PLAN_REVIEW_POLICY.md.
-- First checks: git status --short; named attempt-17 trace; P16 plan-review controller/model/tests.
-- Attempt20 trace/progress: fixtures/target-build/p05-07-current-2020-20260905-v3/
-  p05-07-hancom-2020-trace-attempt20.json[.progress.jsonl]. Former worker 35804/Hwp 30084 stopped.
-  Same wrapper implementation/p05/tools/run-hancom-2020-section-columns-readback.ps1; earlier evidence intact.
+- First reads: this ledger; P05 attempt-21 report; implementation/p16/P16-06_PLAN_REVIEW_POLICY.md.
+- First checks: git status in both worktrees; saved attempt21 HWPX/PDF; P16 PostgreSQL first-failure report.
+- Attempt21 trace/progress: fixtures/target-build/p05-07-current-2020-20260905-v3/
+  p05-07-hancom-2020-trace-attempt21.json[.progress.jsonl]. Former worker 31488/Hwp 43524 exited normally.
+  P16 DB report: artifacts/p16/postgres-artifacts/runs/73be1b04dcbc4cd0879de93c5956fe0e/report.json; cleaned.
 - Do not touch user originals, earlier failed evidence, predecessor contract locks or unrelated processes.
 - Detailed completed task history through P-0085 remains in Git fae5bc0:PLANS.md, plus individual
   reports under implementation/p00/–implementation/p16/; this ledger is a bounded snapshot.
