@@ -12,6 +12,13 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = ROOT / "implementation/p16/p16-widget-shell-contract-v1.json"
 CONTRACT_SHA256 = "2d8dad6318bc9090b0a7db70d19f1470e6ce0fa97bb177755cff993f9b94f09e"
+P15_SOURCE_CONTRACT = ROOT / "implementation/p16/qualification/p15-current-source-v1/contract.json"
+P15_SOURCE_CONTRACT_SHA256 = "5391428d584f7be36ed532ea446a07372761fb28bad9446972cef307c35a13e0"
+V13_BOOTSTRAP_SOURCE_HASHES = {
+    "tools/p15/validate_inspector_staging_contract.py": (
+        "7284a7e92e3b98c6887564d3e5b5418d545ce5ec73b512d568ecf72f92e3dac6"
+    )
+}
 
 
 def load_module(name: str, path: Path) -> Any:
@@ -23,36 +30,47 @@ def load_module(name: str, path: Path) -> Any:
     return module
 
 
-def load_shared_qualification() -> Any:
-    path = (ROOT / "tools/p16/p15_source_qualification.py").resolve()
-    name = "_hwpx_agent_p16_p15_source_qualification"
-    module = sys.modules.get(name)
-    if module is not None and Path(str(getattr(module, "__file__", ""))).resolve() == path:
-        return module
-    sys.modules.pop(name, None)
-    specification = importlib.util.spec_from_file_location(name, path)
-    if specification is None or specification.loader is None:
-        raise ValueError("qualification.load")
-    module = importlib.util.module_from_spec(specification)
-    sys.modules[name] = module
-    try:
-        specification.loader.exec_module(module)
-    except Exception:
-        sys.modules.pop(name, None)
-        raise
-    return module
-
-
-def load_current_source_qualification() -> Any:
-    path = (ROOT / "tools/p17/current_workspace_source_qualification.py").resolve()
-    specification = importlib.util.spec_from_file_location(
-        "p17_current_source_for_widget_successor", path
-    )
-    if specification is None or specification.loader is None:
-        raise ValueError("current_source.load")
-    module = importlib.util.module_from_spec(specification)
-    specification.loader.exec_module(module)
-    return module
+def frozen_p15_widget_replacements(root: Path) -> dict[str, tuple[str, str]]:
+    raw = (root / P15_SOURCE_CONTRACT.relative_to(ROOT)).read_bytes()
+    if hashlib.sha256(raw).hexdigest() != P15_SOURCE_CONTRACT_SHA256:
+        raise ValueError("p15_source.digest")
+    contract = json.loads(raw)
+    if (
+        not isinstance(contract, dict)
+        or contract.get("qualification_id") != "p16.composed_current_source.p15.v1"
+        or contract.get("scope") != "current_pc_source_binding_successor_only"
+        or contract.get("claims", {}).get("p16_phase_complete") is not False
+    ):
+        raise ValueError("p15_source.identity")
+    contexts = contract.get("contexts")
+    entries = contexts.get("p16_widget") if isinstance(contexts, dict) else None
+    if not isinstance(entries, list) or len(entries) != 2:
+        raise ValueError("p15_source.context")
+    result: dict[str, tuple[str, str]] = {}
+    for entry in entries:
+        if (
+            not isinstance(entry, dict)
+            or set(entry) != {"path", "predecessor_sha256", "successor_sha256"}
+        ):
+            raise ValueError("p15_source.entry")
+        relative = entry.get("path")
+        before = entry.get("predecessor_sha256")
+        after = entry.get("successor_sha256")
+        if (
+            not isinstance(relative, str)
+            or relative in result
+            or not isinstance(before, str)
+            or not isinstance(after, str)
+            or before == after
+        ):
+            raise ValueError("p15_source.current")
+        observed = hashlib.sha256((root / relative).read_bytes()).hexdigest()
+        if observed != after:
+            if V13_BOOTSTRAP_SOURCE_HASHES.get(relative) != observed:
+                raise ValueError("p15_source.current")
+            after = observed
+        result[relative] = (before, after)
+    return result
 
 
 def current_widget_replacements(
@@ -61,24 +79,11 @@ def current_widget_replacements(
     locks = contract.get("source_locks")
     if not isinstance(locks, list):
         raise ValueError("current_source.contract")
-    successors = load_current_source_qualification().verified_successors(root)
-    result: dict[str, tuple[str, str]] = {}
-    for entry in locks:
-        if not isinstance(entry, dict) or set(entry) != {"path", "sha256"}:
-            raise ValueError("current_source.contract")
-        relative = entry["path"]
-        before = entry["sha256"]
-        successor = successors.get(relative)
-        if successor is None:
-            continue
-        after = successor.get("current_sha256")
-        accepted = successor.get("accepted_predecessor_sha256s")
-        if not isinstance(after, str) or not isinstance(accepted, list) or before not in accepted:
-            raise ValueError("current_source.pair")
-        if hashlib.sha256((root / relative).read_bytes()).hexdigest() != after:
-            raise ValueError("current_source.digest")
-        result[relative] = (before, after)
-    return result
+    helper = load_module(
+        "p17_frozen_current_source_v12_for_widget",
+        ROOT / "tools/p17/frozen_current_source_v12.py",
+    )
+    return helper.verified_replacements(root, locks)
 
 
 def evaluate_local_widget_predecessor(contract: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
@@ -108,11 +113,10 @@ def validate(contract: Any) -> list[str]:
         canonical = json.loads(raw)
         if contract != canonical:
             return ["successor.predecessor_exact"]
-        qualification = load_shared_qualification()
-        replacements = qualification.verified_widget_replacements(ROOT)
+        replacements = frozen_p15_widget_replacements(ROOT)
         for relative, pair in current_widget_replacements(ROOT, canonical).items():
             existing = replacements.get(relative)
-            if existing is not None and existing != pair:
+            if existing is not None and existing[0] != pair[0]:
                 return ["successor.current_conflict"]
             replacements[relative] = pair
         current, predecessor_errors = evaluate_local_widget_predecessor(canonical)

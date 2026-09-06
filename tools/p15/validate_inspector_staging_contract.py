@@ -20,6 +20,7 @@ P15_08_CONTRACT_SHA256 = (
 )
 P15_09_AUDITED_REVISION = "7ea2f84c244fe5bbd7926ba3f176dc5acafcf624"
 P16_04_SUPERSEDING_VALIDATOR = "tools/p16/validate_widget_shell_successor.py"
+CURRENT_SOURCE_HELPER = "tools/p17/frozen_current_source_v12.py"
 P16_04_SUPERSEDED_PATHS = {
     "Cargo.toml",
     "Cargo.lock",
@@ -202,6 +203,23 @@ def validate_p16_04_supersession(root: Path) -> list[str]:
     return []
 
 
+def validate_current_source_qualification(
+    root: Path, locks: list[dict[str, Any]]
+) -> dict[str, tuple[str, str]]:
+    helper_path = Path(__file__).resolve().parents[1] / "p17/frozen_current_source_v12.py"
+    try:
+        specification = importlib.util.spec_from_file_location(
+            "p17_frozen_current_source_v12_for_inspector", helper_path
+        )
+        if specification is None or specification.loader is None:
+            return {}
+        module = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(module)
+        return module.verified_replacements(root, locks)
+    except Exception:
+        return {}
+
+
 def historical_p15_09_source_matches(
     root: Path, relative: str, expected: str
 ) -> bool:
@@ -220,7 +238,6 @@ def historical_p15_09_source_matches(
 
 def validate(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
-    p16_04_supersession_errors = validate_p16_04_supersession(root)
     try:
         contract = load_json(root / CONTRACT_PATH.relative_to(ROOT))
         policy = load_json(root / POLICY_PATH.relative_to(ROOT))
@@ -338,6 +355,12 @@ def validate(root: Path = ROOT) -> list[str]:
         errors.append("package.inspector")
 
     locks = contract.get("source_locks")
+    current_source_replacements = (
+        validate_current_source_qualification(root, locks)
+        if isinstance(locks, list)
+        else {}
+    )
+    p16_04_supersession_errors: list[str] | None = None
     if not isinstance(locks, list) or len(locks) != len(EXPECTED_SOURCE_PATHS):
         errors.append("contract.source_locks")
     else:
@@ -364,6 +387,11 @@ def validate(root: Path = ROOT) -> list[str]:
             if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
                 errors.append(f"source_lock[{index}].digest_shape")
             elif sha256(source) != expected:
+                observed = sha256(source)
+                if current_source_replacements.get(relative) == (expected, observed):
+                    continue
+                if p16_04_supersession_errors is None:
+                    p16_04_supersession_errors = validate_p16_04_supersession(root)
                 if (
                     relative not in P16_04_SUPERSEDED_PATHS
                     or p16_04_supersession_errors
