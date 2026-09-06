@@ -20,6 +20,10 @@ P15_07_CONTRACT_SHA256 = (
 )
 P15_09_SUPERSEDING_VALIDATOR = "tools/p15/validate_inspector_staging_contract.py"
 P16_SOURCE_QUALIFICATION = "tools/p16/p15_source_qualification.py"
+P16_SOURCE_CONTRACT = "implementation/p16/qualification/p15-current-source-v1/contract.json"
+P16_SOURCE_CONTRACT_SHA256 = (
+    "5391428d584f7be36ed532ea446a07372761fb28bad9446972cef307c35a13e0"
+)
 P15_08_AUDITED_REVISION = "9f9c6932518175906842a2cbb5915a0fb96d0d49"
 P15_09_SUPERSEDED_PATHS = {
     "Cargo.toml",
@@ -250,6 +254,90 @@ def validate_p16_source_qualification(root: Path) -> dict[str, tuple[str, str]]:
         return {}
 
 
+def validate_current_source_qualification(
+    root: Path, locks: list[dict[str, Any]]
+) -> dict[str, tuple[str, str]]:
+    helper_path = Path(__file__).resolve().parents[1] / "p17/frozen_current_source_v12.py"
+    try:
+        specification = importlib.util.spec_from_file_location(
+            "p17_frozen_current_source_v12_for_telemetry", helper_path
+        )
+        if specification is None or specification.loader is None:
+            return {}
+        module = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(module)
+        return module.verified_replacements(root, locks)
+    except Exception:
+        return {}
+
+
+def validate_frozen_p16_source_qualification(
+    root: Path, locks: list[dict[str, Any]]
+) -> dict[str, tuple[str, str]]:
+    try:
+        path = bounded_file(root, P16_SOURCE_CONTRACT)
+        if hashlib.sha256(path.read_bytes()).hexdigest() != P16_SOURCE_CONTRACT_SHA256:
+            return {}
+        contract = load_json(path)
+        if (
+            contract.get("qualification_id") != "p16.composed_current_source.p15.v1"
+            or contract.get("scope") != "current_pc_source_binding_successor_only"
+            or contract.get("claims")
+            != {
+                "actual_hangul": False,
+                "other_pc_or_version": False,
+                "p15_phase_retested": False,
+                "p16_phase_complete": False,
+                "production": False,
+                "registered_host": False,
+                "source_qualification_only": True,
+            }
+        ):
+            return {}
+        contexts = contract.get("contexts")
+        entries = contexts.get("p15_telemetry") if isinstance(contexts, dict) else None
+        if not isinstance(entries, list) or len(entries) != 3:
+            return {}
+        lock_map = {
+            entry["path"]: entry["sha256"]
+            for entry in locks
+            if isinstance(entry, dict) and set(entry) == {"path", "sha256"}
+        }
+        if len(lock_map) != len(locks):
+            return {}
+        result: dict[str, tuple[str, str]] = {}
+        for entry in entries:
+            if not isinstance(entry, dict) or set(entry) != {
+                "path",
+                "predecessor_sha256",
+                "successor_sha256",
+            }:
+                return {}
+            relative = entry.get("path")
+            before = entry.get("predecessor_sha256")
+            after = entry.get("successor_sha256")
+            if (
+                not isinstance(relative, str)
+                or relative in result
+                or not isinstance(before, str)
+                or not isinstance(after, str)
+                or lock_map.get(relative) != before
+                or re.fullmatch(r"[0-9a-f]{64}", before) is None
+                or re.fullmatch(r"[0-9a-f]{64}", after) is None
+                or before == after
+            ):
+                return {}
+            observed = sha256(bounded_file(root, relative))
+            if observed != after:
+                continue
+            if not historical_p15_08_source_matches(root, relative, before):
+                return {}
+            result[relative] = (before, after)
+        return result
+    except Exception:
+        return {}
+
+
 def historical_p15_08_source_matches(root: Path, relative: str, expected: str) -> bool:
     result = subprocess.run(
         ["git", "show", f"{P15_08_AUDITED_REVISION}:{relative}"],
@@ -264,7 +352,7 @@ def historical_p15_08_source_matches(root: Path, relative: str, expected: str) -
 def validate(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
     p15_09_supersession_errors = validate_p15_09_supersession(root)
-    p16_source_replacements = validate_p16_source_qualification(root)
+    p16_source_replacements: dict[str, tuple[str, str]] | None = None
     try:
         contract = load_json(root / CONTRACT_PATH.relative_to(ROOT))
     except Exception as error:
@@ -339,6 +427,16 @@ def validate(root: Path = ROOT) -> list[str]:
         errors.append("contract.tool_catalog_digest")
 
     locks = contract.get("source_locks")
+    current_source_replacements = (
+        validate_current_source_qualification(root, locks)
+        if isinstance(locks, list)
+        else {}
+    )
+    frozen_p16_source_replacements = (
+        validate_frozen_p16_source_qualification(root, locks)
+        if isinstance(locks, list)
+        else {}
+    )
     if not isinstance(locks, list) or len(locks) != len(EXPECTED_SOURCE_PATHS):
         errors.append("contract.source_locks")
     else:
@@ -366,12 +464,23 @@ def validate(root: Path = ROOT) -> list[str]:
                 errors.append(f"source_lock[{index}].digest_shape")
             elif sha256(source) != expected:
                 observed = sha256(source)
+                if current_source_replacements.get(relative) == (expected, observed):
+                    continue
+                if frozen_p16_source_replacements.get(relative) == (expected, observed):
+                    continue
+                historical_error = False
+                if relative in P15_09_SUPERSEDED_PATHS and not p15_09_supersession_errors:
+                    if historical_p15_08_source_matches(root, relative, expected):
+                        continue
+                    historical_error = True
+                if p16_source_replacements is None:
+                    p16_source_replacements = validate_p16_source_qualification(root)
                 if p16_source_replacements.get(relative) == (expected, observed):
                     continue
-                if relative not in P15_09_SUPERSEDED_PATHS or p15_09_supersession_errors:
-                    errors.append(f"source_lock[{index}].digest")
-                elif not historical_p15_08_source_matches(root, relative, expected):
+                if historical_error:
                     errors.append(f"source_lock[{index}].historical_digest")
+                else:
+                    errors.append(f"source_lock[{index}].digest")
 
     telemetry = (root / "crates/mcp-control-plane/src/telemetry.rs").read_text(
         encoding="utf-8"

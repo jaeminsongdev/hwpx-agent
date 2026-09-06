@@ -19,6 +19,11 @@ V13_BOOTSTRAP_SOURCE_HASHES = {
         "7284a7e92e3b98c6887564d3e5b5418d545ce5ec73b512d568ecf72f92e3dac6"
     )
 }
+V14_WIDGET_LOCK_BOOTSTRAP_SOURCE_HASHES = {
+    "tools/p15/tests/test_inspector_staging_contract.py": (
+        "41f8fe1ab6c35d2d4895ba6b320a8d1bd1418c74ff5ee63fc3bd7945a7fb957a"
+    )
+}
 
 
 def load_module(name: str, path: Path) -> Any:
@@ -83,7 +88,29 @@ def current_widget_replacements(
         "p17_frozen_current_source_v12_for_widget",
         ROOT / "tools/p17/frozen_current_source_v12.py",
     )
-    return helper.verified_replacements(root, locks)
+    result = helper.verified_replacements(root, locks)
+    lock_map: dict[str, str] = {}
+    for entry in locks:
+        if not isinstance(entry, dict) or set(entry) != {"path", "sha256"}:
+            raise ValueError("current_source.contract")
+        relative = entry.get("path")
+        before = entry.get("sha256")
+        if (
+            not isinstance(relative, str)
+            or relative in lock_map
+            or not isinstance(before, str)
+        ):
+            raise ValueError("current_source.contract")
+        lock_map[relative] = before
+    for relative, current in V14_WIDGET_LOCK_BOOTSTRAP_SOURCE_HASHES.items():
+        before = lock_map.get(relative)
+        if before is None:
+            raise ValueError("current_source.bootstrap_path")
+        observed = hashlib.sha256(helper.bounded_file(root, relative).read_bytes()).hexdigest()
+        if observed != current or helper.git_blob_digest(root, relative) != before:
+            raise ValueError("current_source.bootstrap_digest")
+        result[relative] = (before, current)
+    return result
 
 
 def evaluate_local_widget_predecessor(contract: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:

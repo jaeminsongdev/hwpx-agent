@@ -44,7 +44,13 @@ class InspectorStagingContractTests(unittest.TestCase):
             for path, digest in current_locks.items()
             if historical_locks.get(path) != digest
         }
-        self.assertEqual(validator.P16_04_SUPERSEDED_PATHS, drifted)
+        current_source_replacements = validator.validate_current_source_qualification(
+            ROOT, historical["source_locks"]
+        )
+        self.assertEqual(
+            validator.P16_04_SUPERSEDED_PATHS | set(current_source_replacements),
+            drifted,
+        )
         self.assertEqual([], validator.validate_p16_04_supersession(ROOT))
         for path in drifted:
             self.assertTrue(
