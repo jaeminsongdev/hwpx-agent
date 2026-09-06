@@ -16,7 +16,7 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
         contract = qualification.verify()
         self.assertEqual(
             contract["qualification_id"],
-            "p17.current-workspace-source.v1.20260906",
+            "p17.current-workspace-source.v2.20260906",
         )
         self.assertTrue(contract["claims"]["source_qualification_only"])
         self.assertTrue(contract["claims"]["p05_diagnostic_dependencies_bound"])

@@ -27,15 +27,19 @@ acceptance = load_acceptance()
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = "implementation/p17/qualification/current-workspace-source-v1-20260906"
+BASE = "implementation/p17/qualification/current-workspace-source-v2-20260906"
 QUALIFICATION = ROOT / BASE
-RUN_ID = "86a24815db10424993c588a6a448556c"
-BASE_COMMIT = "949bcb4dd1376cc580c550ffea9e18d46918a31f"
-RECEIPT_SHA256 = "213881e250d42a1e831fb304a97147d99ab537eec522ebc5f4d27ccd0b6c1ee0"
+RUN_ID = "6cc220553ca8460281f58d5db10ac7ea"
+BASE_COMMIT = "54c6c144c90fffb7a850967d43014771ee04aae1"
+RECEIPT_SHA256 = "ff149e89fa9f12cb7b1882ee4be280f9408edd553579c9a77e1cd43782545fc3"
 CARGO_METADATA_PROJECTION_SHA256 = (
-    "8071ba0ee448f663054c4786cc646ebf2bf49307dc773d71b1e347dbd1b43403"
+    "d956979b62019ff5b89a3c6b2ab506a7f102ae0fcb4f86ce70717ac2fca2d51d"
 )
 WORKSPACE_MEMBER_COUNT = 23
+PREVIOUS_QUALIFICATION = (
+    "implementation/p17/qualification/current-workspace-source-v1-20260906/contract.json",
+    "d93361927f2577aa4fbc1bb5595332ad3a92037b0f4663f3ac3b07fbe3e3e8ed",
+)
 SUCCESSORS: tuple[dict[str, Any], ...] = (
     {
         "accepted_predecessor_sha256s": [
@@ -43,7 +47,7 @@ SUCCESSORS: tuple[dict[str, Any], ...] = (
             "7cb6ea91c65c226f2769af0d33906b39970efa0c81b286aa32ca282ef8614d69",
         ],
         "composition_predecessor_sha256": "6561e43d46f89ee42773840dd33747cfa23bd55b0927f1da41e357bf3b97c639",
-        "current_sha256": "f578f33ab4d24464883c204cf6f04b8f3a4715d6db7132bbf392175e9c54f7b3",
+        "current_sha256": "49e39ae27dd47faaf20c79ad154c930cf515721d84a5fd3659bf14d41366e6a3",
         "path": "Cargo.lock",
     },
     {
@@ -166,7 +170,7 @@ GUARD_SOURCES = (
     "tools/p17/run_current_workspace_source_checks.py",
     "tools/p17/current_workspace_source_qualification.py",
     "tools/p17/tests/test_current_workspace_source_qualification.py",
-    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V1.md",
+    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V2.md",
 )
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -257,7 +261,7 @@ def receipt_path(root: Path) -> Path:
 
 def expected_current(root: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v1",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v2",
         "scope": "current_pc_source_binding_successor_only",
         "run_id": RUN_ID,
         "source_commit": BASE_COMMIT,
@@ -275,15 +279,16 @@ def expected_current(root: Path) -> dict[str, Any]:
 
 def expected_contract(root: Path, current_path: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v1",
-        "qualification_id": "p17.current-workspace-source.v1.20260906",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v2",
+        "qualification_id": "p17.current-workspace-source.v2.20260906",
         "base_commit": BASE_COMMIT,
         "scope": "current_pc_source_binding_successor_only",
         "claims": CLAIMS,
         "predecessors": [
             {"path": relative, "sha256": expected}
             for relative, expected in acceptance.PINNED_CONTRACTS.items()
-        ],
+        ]
+        + [{"path": PREVIOUS_QUALIFICATION[0], "sha256": PREVIOUS_QUALIFICATION[1]}],
         "evidence": {
             "path": f"{BASE}/current-host.json",
             "canonical_sha256": digest(current_path),

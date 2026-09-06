@@ -69,8 +69,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Other current evidence
 
-- Current source successor run `86a24815db10424993c588a6a448556c` passed 11/11 at independent
-  clean `949bcb4`; 14 exact replacements, 23 locked/offline Cargo members and P05 dev-edges bound.
+- Current source successor v2 run `6cc220553ca8460281f58d5db10ac7ea` passed 11/11 at independent
+  clean `54c6c14`; 14 exact replacements, 23 locked/offline Cargo members and P05 dev-edges bound.
 - P05 diagnostic checkpoint `35d7876`: target 205/205 plus Clippy PASS; current and clean detached
   FULL both exit 0 with 5/5 lanes, including P14 132/132, P15 84/84 and nine security checks.
   Attempt 21 saved/reopened both sections and exported PDF, but actual landscape validation failed.
