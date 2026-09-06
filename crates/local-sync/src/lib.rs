@@ -5,6 +5,10 @@ use std::fmt;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
+mod store;
+
+pub use store::{DurableMirrorStore, LoadedMirror, StoreError, StoreRevision};
+
 const MAX_ID_BYTES: usize = 120;
 const MAX_IDEMPOTENCY_BYTES: usize = 120;
 
@@ -337,6 +341,7 @@ impl fmt::Debug for CheckpointOutcome {
 }
 
 #[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MirrorSnapshot {
     pub schema_version: String,
     pub project_id: String,
@@ -346,6 +351,8 @@ pub struct MirrorSnapshot {
     pub phase: MirrorPhase,
     pub observed_revision_id: Option<String>,
     pub observed_generation: u64,
+    #[serde(default)]
+    pub observed_snapshot_sha256: Option<String>,
     pub snapshot_sha256: String,
     pub pending_plan_sha256: Option<String>,
     pub pending_push_idempotency_key: Option<String>,
@@ -381,6 +388,7 @@ pub struct LocalMirror {
     connectivity: Connectivity,
     phase: MirrorPhase,
     observed_head: RemoteHead,
+    observed_snapshot_sha256: String,
     snapshot_sha256: String,
     pending_plan_sha256: Option<String>,
     pending_push_idempotency_key: Option<String>,
@@ -438,11 +446,111 @@ impl LocalMirror {
             connectivity,
             phase: MirrorPhase::Clean,
             observed_head,
+            observed_snapshot_sha256: snapshot_sha256.clone(),
             snapshot_sha256,
             pending_plan_sha256: None,
             pending_push_idempotency_key: None,
             conflict_head: None,
             last_checkpoint_id: None,
+        })
+    }
+
+    /// Restores one durable mirror snapshot after validating every state invariant.
+    ///
+    /// # Errors
+    ///
+    /// Rejects unknown schemas, malformed private fields and impossible state combinations.
+    pub fn restore(snapshot: MirrorSnapshot) -> Result<Self, SyncError> {
+        if !matches!(
+            snapshot.schema_version.as_str(),
+            "hwpx-agent.local-mirror/v1" | "hwpx-agent.local-mirror/v2"
+        ) || !valid_prefixed_identifier(&snapshot.project_id, "prj_")
+            || !valid_prefixed_identifier(&snapshot.branch_id, "brn_")
+            || !valid_prefixed_identifier(&snapshot.mirror_id, "mir_")
+            || !valid_digest(&snapshot.snapshot_sha256)
+            || snapshot
+                .pending_plan_sha256
+                .as_deref()
+                .is_some_and(|value| !valid_digest(value))
+            || snapshot
+                .pending_push_idempotency_key
+                .as_deref()
+                .is_some_and(|value| !valid_idempotency_key(value))
+            || snapshot
+                .last_checkpoint_id
+                .as_deref()
+                .is_some_and(|value| !valid_prefixed_identifier(value, "chk_"))
+        {
+            return Err(SyncError::InvalidRequest);
+        }
+        let observed_head = RemoteHead::new(
+            snapshot.observed_revision_id.clone(),
+            snapshot.observed_generation,
+        )?;
+        let observed_snapshot_sha256 = match snapshot.schema_version.as_str() {
+            "hwpx-agent.local-mirror/v2" => snapshot
+                .observed_snapshot_sha256
+                .clone()
+                .filter(|value| valid_digest(value))
+                .ok_or(SyncError::InvalidRequest)?,
+            "hwpx-agent.local-mirror/v1"
+                if snapshot.phase == MirrorPhase::Clean
+                    && snapshot.pending_plan_sha256.is_none()
+                    && snapshot.observed_snapshot_sha256.is_none()
+                    && snapshot.conflict_generation.is_none() =>
+            {
+                snapshot.snapshot_sha256.clone()
+            }
+            _ => return Err(SyncError::InvalidRequest),
+        };
+        let conflict_head = match (
+            snapshot.conflict_revision_id.clone(),
+            snapshot.conflict_generation,
+        ) {
+            (None, None) => None,
+            (revision_id, Some(generation)) => {
+                let head = RemoteHead::new(revision_id, generation)?;
+                if head.generation <= observed_head.generation
+                    || head.revision_id == observed_head.revision_id
+                {
+                    return Err(SyncError::InvalidRequest);
+                }
+                Some(head)
+            }
+            (Some(_), None) => return Err(SyncError::InvalidRequest),
+        };
+        let state_is_valid = match snapshot.phase {
+            MirrorPhase::Clean => {
+                snapshot.pending_plan_sha256.is_none()
+                    && snapshot.pending_push_idempotency_key.is_none()
+                    && conflict_head.is_none()
+            }
+            MirrorPhase::Ahead => snapshot.pending_plan_sha256.is_some() && conflict_head.is_none(),
+            MirrorPhase::Conflict => {
+                conflict_head.is_some() && snapshot.pending_push_idempotency_key.is_none()
+            }
+        };
+        if !state_is_valid
+            || (snapshot.pending_push_idempotency_key.is_some()
+                && snapshot.pending_plan_sha256.is_none())
+            || (snapshot.last_checkpoint_id.is_some()
+                && (snapshot.phase != MirrorPhase::Clean || observed_head.revision_id.is_none()))
+        {
+            return Err(SyncError::InvalidRequest);
+        }
+        Ok(Self {
+            project_id: snapshot.project_id,
+            branch_id: snapshot.branch_id,
+            mirror_id: snapshot.mirror_id,
+            connectivity: snapshot.connectivity,
+            phase: snapshot.phase,
+            observed_head,
+            observed_snapshot_sha256,
+            snapshot_sha256: snapshot.snapshot_sha256,
+            pending_plan_sha256: snapshot.pending_plan_sha256,
+            pending_push_idempotency_key: snapshot.pending_push_idempotency_key,
+            conflict_head,
+            last_checkpoint_id: snapshot.last_checkpoint_id,
         })
     }
 
@@ -459,7 +567,7 @@ impl LocalMirror {
     #[must_use]
     pub fn snapshot(&self) -> MirrorSnapshot {
         MirrorSnapshot {
-            schema_version: "hwpx-agent.local-mirror/v1".to_owned(),
+            schema_version: "hwpx-agent.local-mirror/v2".to_owned(),
             project_id: self.project_id.clone(),
             branch_id: self.branch_id.clone(),
             mirror_id: self.mirror_id.clone(),
@@ -467,6 +575,7 @@ impl LocalMirror {
             phase: self.phase,
             observed_revision_id: self.observed_head.revision_id.clone(),
             observed_generation: self.observed_head.generation,
+            observed_snapshot_sha256: Some(self.observed_snapshot_sha256.clone()),
             snapshot_sha256: self.snapshot_sha256.clone(),
             pending_plan_sha256: self.pending_plan_sha256.clone(),
             pending_push_idempotency_key: self.pending_push_idempotency_key.clone(),
@@ -503,6 +612,7 @@ impl LocalMirror {
         self.pending_plan_sha256 = Some(operation_plan_sha256);
         self.pending_push_idempotency_key = None;
         self.phase = MirrorPhase::Ahead;
+        self.last_checkpoint_id = None;
         Ok(())
     }
 
@@ -524,7 +634,7 @@ impl LocalMirror {
         let remote = match port.pull(&request) {
             Ok(remote) => remote,
             Err(RemoteFailure::Conflict(head)) => {
-                validate_head(&head)?;
+                validate_conflict_head(&self.observed_head, &head)?;
                 self.conflict_head = Some(head);
                 self.phase = MirrorPhase::Conflict;
                 return Err(SyncError::Conflict);
@@ -533,17 +643,20 @@ impl LocalMirror {
         };
         validate_remote_snapshot(&remote)?;
         if remote.head == self.observed_head {
-            if self.phase == MirrorPhase::Clean && remote.snapshot_sha256 != self.snapshot_sha256 {
+            if remote.snapshot_sha256 != self.observed_snapshot_sha256 {
                 return Err(SyncError::InvalidResponse);
             }
             return Ok(PullOutcome::Unchanged);
         }
+        validate_forward_head(&self.observed_head, &remote.head)?;
         if self.phase == MirrorPhase::Ahead {
             self.conflict_head = Some(remote.head);
             self.phase = MirrorPhase::Conflict;
             return Err(SyncError::Conflict);
         }
         self.observed_head = remote.head;
+        self.observed_snapshot_sha256
+            .clone_from(&remote.snapshot_sha256);
         self.snapshot_sha256 = remote.snapshot_sha256;
         self.last_checkpoint_id = None;
         Ok(PullOutcome::Updated)
@@ -587,7 +700,7 @@ impl LocalMirror {
         let receipt = match port.push(&request) {
             Ok(receipt) => receipt,
             Err(RemoteFailure::Conflict(head)) => {
-                validate_head(&head)?;
+                validate_conflict_head(&self.observed_head, &head)?;
                 self.conflict_head = Some(head);
                 self.pending_push_idempotency_key = None;
                 self.phase = MirrorPhase::Conflict;
@@ -601,6 +714,8 @@ impl LocalMirror {
         };
         validate_push_receipt(&request, &receipt)?;
         self.observed_head = receipt.head.clone();
+        self.observed_snapshot_sha256
+            .clone_from(&receipt.snapshot_sha256);
         self.pending_plan_sha256 = None;
         self.pending_push_idempotency_key = None;
         self.conflict_head = None;
@@ -635,7 +750,7 @@ impl LocalMirror {
         let receipt = match port.checkpoint(&request) {
             Ok(receipt) => receipt,
             Err(RemoteFailure::Conflict(head)) => {
-                validate_head(&head)?;
+                validate_conflict_head(&self.observed_head, &head)?;
                 self.conflict_head = Some(head);
                 self.phase = MirrorPhase::Conflict;
                 return Err(SyncError::Conflict);
@@ -699,6 +814,20 @@ fn validate_head(head: &RemoteHead) -> Result<(), SyncError> {
             .revision_id
             .as_deref()
             .is_some_and(|value| !valid_prefixed_identifier(value, "rev_"))
+    {
+        Err(SyncError::InvalidResponse)
+    } else {
+        Ok(())
+    }
+}
+
+fn validate_conflict_head(observed: &RemoteHead, conflict: &RemoteHead) -> Result<(), SyncError> {
+    validate_head(conflict)?;
+    validate_forward_head(observed, conflict)
+}
+
+fn validate_forward_head(observed: &RemoteHead, candidate: &RemoteHead) -> Result<(), SyncError> {
+    if candidate.generation <= observed.generation || candidate.revision_id == observed.revision_id
     {
         Err(SyncError::InvalidResponse)
     } else {

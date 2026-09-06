@@ -1,0 +1,78 @@
+{
+  "schema_version": "hwpx-agent.local-sync-cli/v2",
+  "scope": "durable_local_only_sync_cli",
+  "binary": "local-sync",
+  "commands": {
+    "init": {
+      "mutates": true,
+      "requires_empty_store": true,
+      "remote_calls": 0
+    },
+    "status": {
+      "mutates": false,
+      "creates_missing_store": false,
+      "remote_calls": 0
+    },
+    "set-connectivity": {
+      "mutates": true,
+      "values": [
+        "offline",
+        "online"
+      ],
+      "remote_calls": 0
+    },
+    "queue": {
+      "mutates": true,
+      "requires": [
+        "snapshot_sha256",
+        "operation_plan_sha256"
+      ],
+      "remote_calls": 0
+    }
+  },
+  "journal": {
+    "schema_version": "hwpx-agent.local-sync-journal-entry/v1",
+    "directory": "p17-local-sync-journal-v1",
+    "publication": "immutable_create_new_sequence_file",
+    "checksum_chain": true,
+    "strict_contiguous_sequence": true,
+    "max_entries": 4096,
+    "max_entry_bytes": 65536,
+    "max_journal_bytes": 67108864,
+    "links_and_reparse_points": "rejected",
+    "concurrent_stale_writer": "conflict_without_overwrite"
+  },
+  "mirror_snapshot": {
+    "schema_version": "hwpx-agent.local-mirror/v2",
+    "separates_observed_and_local_snapshot_digests": true,
+    "migration": {
+      "from": "hwpx-agent.local-mirror/v1",
+      "accepted_state": "clean_only",
+      "ahead_or_conflict": "fail_closed"
+    }
+  },
+  "public_output": {
+    "format": "json",
+    "contains_paths": false,
+    "contains_project_branch_mirror_ids": false,
+    "contains_digests": false,
+    "contains_idempotency_keys": false
+  },
+  "implemented_evidence": {
+    "state_machine_tests": 10,
+    "durable_store_tests": 5,
+    "cli_tests": 2,
+    "offline_online_transition": true,
+    "actual_process_cli": true
+  },
+  "not_claimed": {
+    "authenticated_remote_adapter": false,
+    "pull_cli": false,
+    "push_cli": false,
+    "checkpoint_cli": false,
+    "daemon_mcp_wiring": false,
+    "actual_remote_service": false,
+    "actual_hangul": false,
+    "p17_06_pass": false
+  }
+}

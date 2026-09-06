@@ -298,3 +298,75 @@ fn debug_output_redacts_identifiers_digests_and_keys() -> TestResult {
     assert!(!checkpoint_debug.contains("rev_remote0001"));
     Ok(())
 }
+
+#[test]
+fn durable_snapshot_restore_rejects_impossible_combinations() -> TestResult {
+    let original = mirror(Connectivity::Offline)?;
+    let snapshot = original.snapshot();
+    assert_eq!(LocalMirror::restore(snapshot.clone())?.snapshot(), snapshot);
+
+    let mut legacy_clean = snapshot.clone();
+    legacy_clean.schema_version = "hwpx-agent.local-mirror/v1".to_owned();
+    legacy_clean.observed_snapshot_sha256 = None;
+    let migrated = LocalMirror::restore(legacy_clean)?.snapshot();
+    assert_eq!(migrated.schema_version, "hwpx-agent.local-mirror/v2");
+    assert_eq!(migrated.observed_snapshot_sha256, Some(digest('a')));
+
+    let mut impossible = snapshot.clone();
+    impossible.phase = MirrorPhase::Ahead;
+    assert!(matches!(
+        LocalMirror::restore(impossible),
+        Err(SyncError::InvalidRequest)
+    ));
+
+    let mut stale_conflict = snapshot;
+    stale_conflict.phase = MirrorPhase::Conflict;
+    stale_conflict.conflict_revision_id = Some("rev_00000009".to_owned());
+    stale_conflict.conflict_generation = Some(1);
+    assert!(matches!(
+        LocalMirror::restore(stale_conflict),
+        Err(SyncError::InvalidRequest)
+    ));
+    Ok(())
+}
+
+#[test]
+fn pull_and_conflict_responses_cannot_roll_back_or_alias_the_observed_head() -> TestResult {
+    let mut mirror = mirror(Connectivity::Online)?;
+    let before = mirror.snapshot();
+    let mut rollback = FakePort {
+        pull_result: Some(Ok(RemoteSnapshot {
+            head: RemoteHead::new(None, 0)?,
+            snapshot_sha256: digest('d'),
+        })),
+        ..FakePort::default()
+    };
+    assert_eq!(mirror.pull(&mut rollback), Err(SyncError::InvalidResponse));
+    assert_eq!(mirror.snapshot(), before);
+
+    let mut aliased_conflict = FakePort {
+        pull_result: Some(Err(RemoteFailure::Conflict(head(9, 1)?))),
+        ..FakePort::default()
+    };
+    assert_eq!(
+        mirror.pull(&mut aliased_conflict),
+        Err(SyncError::InvalidResponse)
+    );
+    assert_eq!(mirror.snapshot(), before);
+
+    mirror.queue_local_change(digest('b'), digest('c'))?;
+    let ahead = mirror.snapshot();
+    let mut same_head_wrong_digest = FakePort {
+        pull_result: Some(Ok(RemoteSnapshot {
+            head: head(1, 1)?,
+            snapshot_sha256: digest('d'),
+        })),
+        ..FakePort::default()
+    };
+    assert_eq!(
+        mirror.pull(&mut same_head_wrong_digest),
+        Err(SyncError::InvalidResponse)
+    );
+    assert_eq!(mirror.snapshot(), ahead);
+    Ok(())
+}

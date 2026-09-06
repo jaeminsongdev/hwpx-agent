@@ -1,0 +1,245 @@
+#![forbid(unsafe_code)]
+
+use std::env;
+use std::ffi::OsString;
+use std::path::PathBuf;
+use std::process::ExitCode;
+
+use local_sync::{
+    Connectivity, DurableMirrorStore, LocalMirror, MirrorSnapshot, RemoteHead, StoreError,
+    SyncError,
+};
+use serde::Serialize;
+use thiserror::Error;
+
+fn main() -> ExitCode {
+    match run(env::args_os().skip(1).collect()) {
+        Ok(output) => {
+            if let Ok(json) = serde_json::to_string(&output) {
+                println!("{json}");
+                ExitCode::SUCCESS
+            } else {
+                eprintln!("SERIALIZATION_FAILED");
+                ExitCode::from(2)
+            }
+        }
+        Err(error) => {
+            eprintln!("{}", error.code());
+            ExitCode::from(2)
+        }
+    }
+}
+
+#[derive(Debug, Error)]
+enum CliError {
+    #[error("invalid CLI request")]
+    InvalidRequest,
+    #[error("local sync state is absent")]
+    StateAbsent,
+    #[error("local sync state rejected the transition")]
+    StateRejected,
+    #[error("local sync store is invalid")]
+    StoreInvalid,
+    #[error("local sync store is unavailable")]
+    StoreUnavailable,
+    #[error("local sync store is corrupt")]
+    StoreCorrupt,
+    #[error("local sync store capacity is exhausted")]
+    StoreCapacity,
+    #[error("local sync store was changed concurrently")]
+    StoreConflict,
+}
+
+impl CliError {
+    const fn code(&self) -> &'static str {
+        match self {
+            Self::InvalidRequest => "INVALID_REQUEST",
+            Self::StateAbsent => "STATE_ABSENT",
+            Self::StateRejected => "STATE_REJECTED",
+            Self::StoreInvalid => "STORE_INVALID",
+            Self::StoreUnavailable => "STORE_UNAVAILABLE",
+            Self::StoreCorrupt => "STORE_CORRUPT",
+            Self::StoreCapacity => "STORE_CAPACITY",
+            Self::StoreConflict => "STORE_CONFLICT",
+        }
+    }
+}
+
+impl From<StoreError> for CliError {
+    fn from(error: StoreError) -> Self {
+        match error {
+            StoreError::InvalidConfiguration => Self::StoreInvalid,
+            StoreError::Unavailable => Self::StoreUnavailable,
+            StoreError::Corrupt => Self::StoreCorrupt,
+            StoreError::CapacityExceeded => Self::StoreCapacity,
+            StoreError::Conflict => Self::StoreConflict,
+            StoreError::TransitionRejected => Self::StateRejected,
+        }
+    }
+}
+
+#[derive(Serialize)]
+struct PublicOutput {
+    schema_version: &'static str,
+    command: &'static str,
+    sequence: u64,
+    connectivity: Connectivity,
+    phase: local_sync::MirrorPhase,
+    observed_generation: u64,
+    pending: PublicPending,
+    remote: PublicRemote,
+}
+
+#[derive(Serialize)]
+struct PublicPending {
+    plan: bool,
+    uncertain_push: bool,
+}
+
+#[derive(Serialize)]
+struct PublicRemote {
+    conflict: bool,
+    checkpoint: bool,
+}
+
+fn run(arguments: Vec<OsString>) -> Result<PublicOutput, CliError> {
+    let mut arguments = arguments.into_iter();
+    let command = text(arguments.next())?;
+    match command.as_str() {
+        "init" => {
+            let root = path(arguments.next())?;
+            let project_id = text(arguments.next())?;
+            let branch_id = text(arguments.next())?;
+            let mirror_id = text(arguments.next())?;
+            let snapshot_sha256 = text(arguments.next())?;
+            let connectivity = connectivity(arguments.next())?;
+            let remaining: Vec<_> = arguments.collect();
+            let observed_head = match remaining.as_slice() {
+                [] => RemoteHead::new(None, 0).map_err(|error| map_sync_error(&error))?,
+                [revision, generation] => RemoteHead::new(
+                    Some(text(Some(revision.clone()))?),
+                    text(Some(generation.clone()))?
+                        .parse()
+                        .map_err(|_| CliError::InvalidRequest)?,
+                )
+                .map_err(|error| map_sync_error(&error))?,
+                _ => return Err(CliError::InvalidRequest),
+            };
+            let mirror = LocalMirror::new(
+                project_id,
+                branch_id,
+                mirror_id,
+                observed_head,
+                snapshot_sha256,
+                connectivity,
+            )
+            .map_err(|error| map_sync_error(&error))?;
+            let store = DurableMirrorStore::open(root)?;
+            let revision = store.initialize(&mirror)?;
+            Ok(public_output(
+                "init",
+                revision.sequence(),
+                &mirror.snapshot(),
+            ))
+        }
+        "status" => {
+            let root = path(arguments.next())?;
+            no_more(arguments)?;
+            let store = DurableMirrorStore::open_existing(root)?;
+            let loaded = store.load()?.ok_or(CliError::StateAbsent)?;
+            Ok(public_output(
+                "status",
+                loaded.revision().sequence(),
+                &loaded.mirror().snapshot(),
+            ))
+        }
+        "set-connectivity" => {
+            let root = path(arguments.next())?;
+            let connectivity = connectivity(arguments.next())?;
+            no_more(arguments)?;
+            let store = DurableMirrorStore::open_existing(root)?;
+            let loaded = store.load()?.ok_or(CliError::StateAbsent)?;
+            let (revision, snapshot) = store.update(loaded.revision(), |mirror| {
+                mirror.set_connectivity(connectivity);
+                Ok(mirror.snapshot())
+            })?;
+            Ok(public_output(
+                "set-connectivity",
+                revision.sequence(),
+                &snapshot,
+            ))
+        }
+        "queue" => {
+            let root = path(arguments.next())?;
+            let snapshot_sha256 = text(arguments.next())?;
+            let operation_plan_sha256 = text(arguments.next())?;
+            no_more(arguments)?;
+            let store = DurableMirrorStore::open_existing(root)?;
+            let loaded = store.load()?.ok_or(CliError::StateAbsent)?;
+            let (revision, snapshot) = store.update(loaded.revision(), |mirror| {
+                mirror.queue_local_change(snapshot_sha256, operation_plan_sha256)?;
+                Ok(mirror.snapshot())
+            })?;
+            Ok(public_output("queue", revision.sequence(), &snapshot))
+        }
+        _ => Err(CliError::InvalidRequest),
+    }
+}
+
+fn public_output(command: &'static str, sequence: u64, snapshot: &MirrorSnapshot) -> PublicOutput {
+    PublicOutput {
+        schema_version: "hwpx-agent.local-sync-cli-output/v1",
+        command,
+        sequence,
+        connectivity: snapshot.connectivity,
+        phase: snapshot.phase,
+        observed_generation: snapshot.observed_generation,
+        pending: PublicPending {
+            plan: snapshot.pending_plan_sha256.is_some(),
+            uncertain_push: snapshot.pending_push_idempotency_key.is_some(),
+        },
+        remote: PublicRemote {
+            conflict: snapshot.conflict_generation.is_some(),
+            checkpoint: snapshot.last_checkpoint_id.is_some(),
+        },
+    }
+}
+
+fn text(value: Option<OsString>) -> Result<String, CliError> {
+    value
+        .ok_or(CliError::InvalidRequest)?
+        .into_string()
+        .map_err(|_| CliError::InvalidRequest)
+}
+
+fn path(value: Option<OsString>) -> Result<PathBuf, CliError> {
+    value.map(PathBuf::from).ok_or(CliError::InvalidRequest)
+}
+
+fn connectivity(value: Option<OsString>) -> Result<Connectivity, CliError> {
+    match text(value)?.as_str() {
+        "offline" => Ok(Connectivity::Offline),
+        "online" => Ok(Connectivity::Online),
+        _ => Err(CliError::InvalidRequest),
+    }
+}
+
+fn no_more(mut arguments: impl Iterator<Item = OsString>) -> Result<(), CliError> {
+    if arguments.next().is_none() {
+        Ok(())
+    } else {
+        Err(CliError::InvalidRequest)
+    }
+}
+
+const fn map_sync_error(error: &SyncError) -> CliError {
+    match error {
+        SyncError::InvalidRequest => CliError::InvalidRequest,
+        SyncError::Offline
+        | SyncError::InvalidState
+        | SyncError::RemoteUnavailable
+        | SyncError::RemoteRejected
+        | SyncError::Conflict
+        | SyncError::InvalidResponse => CliError::StateRejected,
+    }
+}
