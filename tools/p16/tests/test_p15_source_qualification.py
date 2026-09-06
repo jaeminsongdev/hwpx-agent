@@ -124,8 +124,10 @@ class P15SourceQualificationTests(unittest.TestCase):
         for relative in qualification.WIDGET_PATHS:
             self.history[(qualification.P16_WIDGET_REVISION, relative)] = widget_locks[relative]
         for relative in qualification.PLAN_AUTH_PATHS:
-            self.history[(qualification.P16_PLAN_AUTH_REVISION, relative)] = qualification.digest(
-                (ROOT / relative).read_bytes()
+            observed = qualification.digest((ROOT / relative).read_bytes())
+            pair = self.integration.get(relative)
+            self.history[(qualification.P16_PLAN_AUTH_REVISION, relative)] = (
+                pair[0] if pair is not None and pair[1] == observed else observed
             )
 
     def historical(self, _root: Path, revision: str, relative: str) -> str:

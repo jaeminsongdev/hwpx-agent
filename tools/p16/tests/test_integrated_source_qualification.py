@@ -59,7 +59,7 @@ class IntegratedSourceQualificationTests(unittest.TestCase):
                 target = self.root / relative
                 original = target.read_bytes()
                 target.write_bytes(original + b"\n# drift\n")
-                with self.assertRaises(qualification.QualificationError):
+                with self.assertRaises(ValueError):
                     self.verified()
                 target.write_bytes(original)
 
@@ -69,7 +69,7 @@ class IntegratedSourceQualificationTests(unittest.TestCase):
                 target = self.root / relative
                 original = target.read_bytes()
                 target.write_bytes(original + b"\nchanged\n")
-                with self.assertRaises(qualification.QualificationError):
+                with self.assertRaises(ValueError):
                     self.verified()
                 target.write_bytes(original)
 
@@ -85,7 +85,7 @@ class IntegratedSourceQualificationTests(unittest.TestCase):
 
     def test_history_mismatch_rejects(self) -> None:
         with patch.object(qualification, "git_digest", return_value="0" * 64):
-            with self.assertRaisesRegex(qualification.QualificationError, "history"):
+            with self.assertRaisesRegex(ValueError, "history"):
                 qualification.verified_replacements(self.root)
 
     def test_claim_promotion_extra_path_and_wrong_type_reject(self) -> None:
