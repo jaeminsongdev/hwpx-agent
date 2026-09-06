@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-06
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05-07 layout identity and P16-06 authoritative durable Plan-to-renderer integration.
+- Active: P05-07 layout identity and P16-02 actual Codex app registration.
 - Recommended reasoning: max for preservation, authorization and Gate review; high for routine work.
 - UI status: v3 attempt 21 passed open/save/reopen/text/PDF export; layout acceptance failed.
   Session 13431 terminal exit 0; normal quit, residual zero. No additional click or automatic relaunch.
@@ -29,7 +29,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P13 | blocked by P10 | validation/oracle/render |
 | P14 | scoped local reference/disposable PostgreSQL PASS | implementation/p14/P14_GATE_REPORT.md |
 | P15 | scoped local MCP reference/Inspector staging PASS | implementation/p15/P15_GATE_REPORT.md |
-| P16 | in progress | 01,03,04 pass; 02 pending; 05 local pass; 06 source v11, durable plan v12, renderer/evidence v13 PASS |
+| P16 | in progress | 01,03,04 pass; 02 actual app pending; 05 local pass; 06 dedicated local host v14 PASS |
 | P17 | ready, not started | current-PC Codex companion only |
 | P18 | blocked by P12/P13/P16/P17 | quality/security/performance/DR |
 | P19 | blocked by P18 | production/license/submission |
@@ -41,9 +41,9 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 |---|---|---|
 | P-0045–0048 | P05-06–09 | Orientation FULL/Linux pass; diagnostics 205 pass; both FULL fail source-lock qualification |
 | P-0082 | P16-02 registration | Local bundle ready; actual registered app/host receipt absent |
-| P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; actual registered host pending |
-| P-0086 | P16-06 Plan/diff UI | Source v11 29/29; durable plan v12 39/39; renderer and durable evidence v13 PASS; registered host open |
-| P-0087 | P16-06 registered renderer | In progress: add a dedicated one-tool MCP host outside the immutable P15 catalog; bind source/plan/evidence PostgreSQL readers and verify with a disposable full-stack run |
+| P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; dedicated local host v14 PASS; actual Codex app pending |
+| P-0086 | P16-06 Plan/diff UI | Source v11, durable plan v12, renderer/evidence v13 and dedicated local host v14 PASS; actual app/Hangul open |
+| P-0087 | P16-06 registered renderer | PASS for dedicated local one-tool MCP host: run d22e85581cd44d06a016f3460a43de12, exact v14 qualification; actual Codex app installation remains open |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.
@@ -68,7 +68,10 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   evidence, then binds the exact 2020 build/x86 route, diff, dry-run, signature and caller policy.
   Its tenant-isolated AES-256-GCM evidence repository passed 19/19 in disposable PostgreSQL run
   2b01ce0ff66045f29a32c67d217aa9bd, including restart, rotation, tamper, RLS and cleanup. Workspace
-  tests/Clippy and widget 126/126 pass. The registered `render_plan_review_widget` boundary remains
+  tests/Clippy and widget 126/126 pass. Dedicated local host v14 registers exactly one
+  `render_plan_review_widget` tool and one immutable resource outside the P15 catalog. Clean run
+  d22e85581cd44d06a016f3460a43de12 passed 14/14 with exact restart snapshot, network rejection,
+  ciphertext-tamper rejection and cleanup. Actual Codex app installation and Hangul execution remain
   open. The immutable predecessor plan-review contract is intentionally stale for successor sources.
 - Attempt21 saved/reopened both sections and exported portrait PDF; actual landscape acceptance failed.
   Orientation v1 reversed the tokens; v2 corrects them and invalidates the earlier landscape interpretation.
@@ -77,11 +80,12 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 ## Open risks and holds
 
 - R-0001: Diagnostic FULL fails Cargo.lock source binding; column IDs and actual landscape render remain open.
-- R-0002: Source, durable plan, in-process renderer and durable evidence PASS; registered host remains open.
+- R-0002: Source, durable plan, in-process renderer, durable evidence and dedicated local MCP host PASS;
+  actual Codex app installation and registered-app E2E remain open.
 - R-0003: One independent worker timeout smoke failed; unchanged retries pass 3/3, root cause not proven.
 - R-0004: Broad P16 Python discovery remains red on immutable predecessor source locks, the absent
   ignored widget bundle and legacy preview digest; v12 targeted qualification remains PASS.
-- HOLD-0001: P16-02 actual registration and P16-05/06 registered-host E2E remain unverified.
+- HOLD-0001: P16-02 actual Codex app installation and P16-05/06 registered-app E2E remain unverified.
 - HOLD-0002: P10-05 registered path-security module and P10-06 production COM execution remain open.
 - HOLD-0003: P10-08 dedicated production isolation and later-version PCs remain unqualified.
 - Do not infer PASS from CURRENT_STATE.md introductory prose; per-card/phase reports and evidence
@@ -91,9 +95,9 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 1. Resolve diagnostic Cargo.lock source binding; read P05-07_DIAGNOSTIC_AUDIT_STATUS.md.
    Main 92ce629/independent 3827c21: 205/Clippy PASS, both FULL exit 1; security not run. No Hancom wait.
-2. Register the dedicated read-only `render_plan_review_widget` endpoint outside the immutable P15
-   catalog and bind it to the durable plan/evidence repositories. Read
-   P16-06_POSTGRES_PLAN_REVIEW_EVIDENCE_V13.md and P16-06_RECEIPT_BOUND_RENDERER_V13.md.
+2. Install/register the qualified dedicated `render_plan_review_widget` host in the actual local Codex
+   app without changing the immutable P15 catalog, then capture exact tool/resource discovery and E2E.
+   Read P16-06_REGISTERED_PLAN_REVIEW_HOST_V14.md and its checked-in qualification contract.
 3. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,
    applicable offline Linux checks, security and STRICT review before any implementation closure.
 4. Close P05 only with save/reopen, semantic inspection, PDF verification and visual evidence.
@@ -112,7 +116,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 - P16 source v11 worktree: D:\개발\hwpx-agent-work-p16-durable-plan-renderer; actual DB run
   b4ad5c050f0d42509da56f072ba5d6fa passed 29/29. Durable v12 run 1828b246e92746789fa5d6501e7f1ac2
   passed 39/39. Renderer/evidence v13 run 2b01ce0ff66045f29a32c67d217aa9bd passed
-  19/19; all resources cleaned. Phase and registered host remain open.
+  19/19. Dedicated local host v14 run d22e85581cd44d06a016f3460a43de12 passed 14/14; all resources
+  cleaned. Actual Codex app installation, Hangul execution and phase completion remain open.
 - External QA: Codex workspace p16-response-contract-20260905/inspection.md and run-03/receipt.json.
   Thirteen captures automated, six directly reviewed; exact HTML/script hashes bound, no user browser profile.
 - First reads: this ledger; P05 audit status/column-ID admission plan and attempt21; P16 MAIN audit/policy.
