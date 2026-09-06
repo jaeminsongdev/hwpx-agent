@@ -119,9 +119,16 @@ class RetentionLocalMirrorContractTests(unittest.TestCase):
         )
 
     def test_current_retention_service_fails_closed_without_qualification(self) -> None:
+        retention_source = "crates/retention-sync-service/src/lib.rs"
+
+        def reject_only_retention_source(relative: str, _expected: str, _observed: str) -> bool:
+            return relative != retention_source
+
         with patch.object(
-            MODULE, "current_source_qualification_accepts", return_value=False
-        ), self.assertRaisesRegex(MODULE.ContractError, "retention-sync-service/src/lib.rs"):
+            MODULE,
+            "current_source_qualification_accepts",
+            side_effect=reject_only_retention_source,
+        ), self.assertRaisesRegex(MODULE.ContractError, retention_source):
             MODULE.validate_contract(CONTRACT_PATH, ROOT)
 
     def test_required_sql_tokens_are_fail_closed(self) -> None:
