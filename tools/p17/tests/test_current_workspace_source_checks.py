@@ -19,6 +19,8 @@ class CurrentWorkspaceSourceChecksTests(unittest.TestCase):
         self.assertIn("Cargo.lock", expectations)
         self.assertIn("Cargo.lock", main)
         self.assertIn("tools/p16/integrated_source_qualification.py", expectations)
+        self.assertIn("crates/retention-sync-service/src/lib.rs", expectations)
+        self.assertIn(checks.RETENTION_CONTRACT, checks.PINNED_CONTRACTS)
         self.assertEqual(
             checks.PINNED_AMBIGUOUS_BASELINES,
             {

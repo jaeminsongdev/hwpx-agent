@@ -88,6 +88,29 @@ def require_digest(entry: dict[str, Any], maximum_bytes: int) -> Path:
     return path
 
 
+def current_source_qualification_accepts(
+    relative: str, expected: str, observed: str
+) -> bool:
+    validator_path = ROOT / "tools/p17/current_workspace_source_qualification.py"
+    specification = importlib.util.spec_from_file_location(
+        "p17_current_source_for_p14_retention", validator_path
+    )
+    if specification is None or specification.loader is None:
+        return False
+    module = importlib.util.module_from_spec(specification)
+    try:
+        specification.loader.exec_module(module)
+        entry = module.verified_successors(ROOT).get(relative)
+    except Exception:
+        return False
+    accepted = entry.get("accepted_predecessor_sha256s") if isinstance(entry, dict) else None
+    return (
+        isinstance(accepted, list)
+        and entry.get("current_sha256") == observed
+        and expected in accepted
+    )
+
+
 def require_source_digest_with_supersession(
     entry: dict[str, Any], maximum_bytes: int
 ) -> Path:
@@ -98,7 +121,10 @@ def require_source_digest_with_supersession(
     expected = entry["sha256"]
     if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
         fail(f"invalid digest for {relative}")
-    if sha256(path) == expected:
+    observed = sha256(path)
+    if observed == expected:
+        return path
+    if current_source_qualification_accepts(relative, expected, observed):
         return path
     if relative not in P15_SUPERSEDED_PATHS:
         fail(f"digest mismatch for {relative}")

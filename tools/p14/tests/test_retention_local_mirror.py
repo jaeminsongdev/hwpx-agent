@@ -6,6 +6,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -107,6 +108,21 @@ class RetentionLocalMirrorContractTests(unittest.TestCase):
         contract["source_files"].pop()
         with self.assertRaises(MODULE.ContractError):
             self.validate_tampered(contract)
+
+    def test_current_retention_service_successor_is_exactly_qualified(self) -> None:
+        entry = self.contract["source_files"][3]
+        observed = MODULE.sha256(ROOT / entry["path"])
+        self.assertTrue(
+            MODULE.current_source_qualification_accepts(
+                entry["path"], entry["sha256"], observed
+            )
+        )
+
+    def test_current_retention_service_fails_closed_without_qualification(self) -> None:
+        with patch.object(
+            MODULE, "current_source_qualification_accepts", return_value=False
+        ), self.assertRaisesRegex(MODULE.ContractError, "retention-sync-service/src/lib.rs"):
+            MODULE.validate_contract(CONTRACT_PATH, ROOT)
 
     def test_required_sql_tokens_are_fail_closed(self) -> None:
         up_sql = (
