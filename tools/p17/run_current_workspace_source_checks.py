@@ -211,13 +211,13 @@ def current_source_entries(root: Path, commit: str) -> list[dict[str, Any]]:
     entries: list[dict[str, Any]] = []
     for relative in sorted(expectations):
         current = digest(bounded_file(root, relative))
-        baseline = (
-            main_replacements[relative][1]
-            if relative in main_replacements
-            else next(iter(expectations[relative]))
-        )
-        if relative not in main_replacements:
+        if relative in main_replacements:
+            baseline = main_replacements[relative][1]
+        else:
+            if current in expectations[relative]:
+                continue
             require(len(expectations[relative]) == 1, "predecessor.ambiguous")
+            baseline = next(iter(expectations[relative]))
         if current == baseline:
             continue
         require(git_blob_digest(root, commit, relative) == current, "git.current_blob")
