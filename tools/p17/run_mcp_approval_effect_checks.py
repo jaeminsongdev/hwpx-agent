@@ -140,10 +140,18 @@ def send(process: subprocess.Popen[str], value: object) -> None:
     process.stdin.flush()
 
 
-def read_response(process: subprocess.Popen[str], request_id: int) -> dict[str, object]:
+def read_response(
+    process: subprocess.Popen[str],
+    request_id: int,
+    maximum_bytes: int = 262_144,
+) -> dict[str, object]:
     require(process.stdout is not None, "stdout_missing")
-    line = process.stdout.readline(262_145)
-    require(line != "" and len(line.encode("utf-8")) <= 262_144, "response_missing")
+    require(1 <= maximum_bytes <= 1_048_576, "response_bound")
+    line = process.stdout.readline(maximum_bytes + 1)
+    require(
+        line != "" and len(line.encode("utf-8")) <= maximum_bytes,
+        "response_missing",
+    )
     require(line.endswith("\n") and "\r" not in line, "response_framing")
     try:
         value = json.loads(line)
@@ -384,7 +392,7 @@ def run() -> dict[str, object]:
                 "resource_catalog",
             )
             send(process, request(4, "resources/read", {"uri": RESOURCE_URI}))
-            resource_response = read_response(process, 4)
+            resource_response = read_response(process, 4, 900_000)
             resource_result = resource_response.get("result")
             contents = (
                 resource_result.get("contents")
