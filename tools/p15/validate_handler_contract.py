@@ -123,6 +123,40 @@ def validate_p16_source_qualification(root: Path) -> dict[str, tuple[str, str]]:
         return {}
 
 
+def validate_current_source_qualification(
+    root: Path, locks: list[dict[str, Any]]
+) -> dict[str, tuple[str, str]]:
+    helper_path = Path(__file__).resolve().parents[1] / "p17/frozen_current_source_v12.py"
+    try:
+        specification = importlib.util.spec_from_file_location(
+            "p17_frozen_current_source_v12_for_handler", helper_path
+        )
+        if specification is None or specification.loader is None:
+            return {}
+        module = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(module)
+        return module.verified_replacements(root, locks)
+    except Exception:
+        return {}
+
+
+def validate_frozen_p16_source_qualification(
+    root: Path, locks: list[dict[str, Any]]
+) -> dict[str, tuple[str, str]]:
+    helper_path = Path(__file__).resolve().parents[1] / "p17/frozen_p15_source_v1.py"
+    try:
+        specification = importlib.util.spec_from_file_location(
+            "p17_frozen_p15_source_v1_for_handler", helper_path
+        )
+        if specification is None or specification.loader is None:
+            return {}
+        module = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(module)
+        return module.verified_replacements(root, locks, "p15_handler")
+    except Exception:
+        return {}
+
+
 def historical_source_matches(root: Path, relative: str, expected: str) -> bool:
     result = subprocess.run(
         ["git", "show", f"{P15_03_IMPLEMENTATION_REVISION}:{relative}"],
@@ -168,6 +202,16 @@ def validate(root: Path = ROOT) -> list[str]:
         errors.append("contract.catalog_sha256")
 
     locks = contract.get("source_locks")
+    current_source_replacements = (
+        validate_current_source_qualification(root, locks)
+        if isinstance(locks, list)
+        else {}
+    )
+    frozen_p16_source_replacements = (
+        validate_frozen_p16_source_qualification(root, locks)
+        if isinstance(locks, list)
+        else {}
+    )
     if not isinstance(locks, list) or len(locks) != 19:
         errors.append("contract.source_locks")
     else:
@@ -191,6 +235,10 @@ def validate(root: Path = ROOT) -> list[str]:
                 errors.append(f"source_lock[{index}].digest_shape")
             elif sha256(source) != expected:
                 observed = sha256(source)
+                if current_source_replacements.get(relative) == (expected, observed):
+                    continue
+                if frozen_p16_source_replacements.get(relative) == (expected, observed):
+                    continue
                 if p16_source_replacements.get(relative) == (expected, observed):
                     continue
                 if relative not in P15_04_SUPERSEDED_PATHS or p15_04_supersession_errors:
