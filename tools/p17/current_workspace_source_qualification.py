@@ -27,18 +27,18 @@ acceptance = load_acceptance()
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = "implementation/p17/qualification/current-workspace-source-v11-20260906"
+BASE = "implementation/p17/qualification/current-workspace-source-v12-20260907"
 QUALIFICATION = ROOT / BASE
-RUN_ID = "a42ea2f0cf5b4548a29c1a2ac162443e"
-BASE_COMMIT = "aa404c2bcdf8a627645c46dd188bea6129b1c856"
-RECEIPT_SHA256 = "616b59cc5c2f255e8d6c5fd96bdc1c3eaf37c8d7adb36539b9da4b9c3d1daa9e"
+RUN_ID = "7b45b92ba5c84ad7a2241b960871a58b"
+BASE_COMMIT = "240f270e09ec8e7576d49430f514dbd29e5ce689"
+RECEIPT_SHA256 = "b5112efac6e9a1031da522e2c0e1c4620ad6444aef3307ac0200c0edbdec1ff2"
 CARGO_METADATA_PROJECTION_SHA256 = (
-    "a80808d0aea3190f5d1ac4298d0b2c2fc3e1e3d443a3e1284f680372430fcd72"
+    "d7dd720fa29a88f5df06dc692b0a56c1d8c70142a88227b4c8ca5f14962bd856"
 )
 WORKSPACE_MEMBER_COUNT = 25
 PREVIOUS_QUALIFICATION = (
-    "implementation/p17/qualification/current-workspace-source-v10-20260906/contract.json",
-    "210acd575d411d84f6bfd9395e26d42c80188a309aa28fecc6b49e09d65ada2d",
+    "implementation/p17/qualification/current-workspace-source-v11-20260906/contract.json",
+    "31b7f7f7011136206b9fb699fbe18fb779a968b8972a448b70cd448e8ecf196b",
 )
 IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     {
@@ -358,8 +358,8 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     },
     {
         "path": "crates/history-service/src/types.rs",
-        "bytes": 23463,
-        "sha256": "d8916e97b81773d26e0257a3c7adb1b13e37013533b7057be3d8393ea7e4f489",
+        "bytes": 23665,
+        "sha256": "92d44d57e9fbbea26cfcf8a43d3c2a960aa99ba0b18a65a4597e5159092a39d4",
     },
     {
         "path": "crates/local-sync/Cargo.toml",
@@ -388,13 +388,13 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     },
     {
         "path": "crates/remote-sync-host/Cargo.toml",
-        "bytes": 885,
-        "sha256": "f80cd7824625ccf795a4375d4a54c3072a32f28a35469a0a31795bc64da6563d",
+        "bytes": 936,
+        "sha256": "6961157e09817ae082f049404df28e22175a9afd25296781f84ba2f8ba21a161",
     },
     {
         "path": "crates/remote-sync-host/src/lib.rs",
-        "bytes": 44905,
-        "sha256": "89c5be9f31d877f67c7f04eb3227f3985c26968d827814e68438ed3e5bef4a30",
+        "bytes": 47583,
+        "sha256": "1dcfa7c9a8b132f396a28e4e4083cdc05176e9413d46a6f78e713cd6dc3430f7",
     },
     {
         "path": "crates/remote-sync-host/src/socket.rs",
@@ -481,6 +481,101 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
         "bytes": 1947,
         "sha256": "79cfd99e25586e0eea0e5dc5124544ef31d14db66d5ac6096783037fdce6b2a4",
     },
+    {
+        "path": "crates/mcp-control-plane/src/postgres_plan_review.rs",
+        "bytes": 31077,
+        "sha256": "ce983cb07a19d6835091dc2a6f4254c33d530060ec25090b4f21a9f8e2edb383",
+    },
+    {
+        "path": "crates/mcp-control-plane/src/postgres_plan_source.rs",
+        "bytes": 23339,
+        "sha256": "0453647abe8545302d954034b3554d4a1a2853b7e6711329852d9a70ccbf8050",
+    },
+    {
+        "path": "crates/mcp-control-plane/src/postgres_stored_plan.rs",
+        "bytes": 42198,
+        "sha256": "beb1185bdd364c0b1d3a8f4a8679fcd03b0e93d2cd5b843fbb5de74e579801fa",
+    },
+    {
+        "path": "crates/remote-sync-host/examples/postgres_checkpoint_client.rs",
+        "bytes": 3344,
+        "sha256": "d7e8288b78a2aec6386cb06810766c6f270f0feab3e98a20d52529f88c5c1e55",
+    },
+    {
+        "path": "crates/remote-sync-host/examples/postgres_checkpoint_host.rs",
+        "bytes": 10278,
+        "sha256": "b9b908ecc70cc61f268188c963ed2db241776f1d51b41ba00497ba6ab5736330",
+    },
+    {
+        "path": "crates/remote-sync-host/src/postgres.rs",
+        "bytes": 24194,
+        "sha256": "7e049991583d739872c3b6822bd807741c1f98586142c6702a03f431875f8fce",
+    },
+    {
+        "path": "deny.toml",
+        "bytes": 471,
+        "sha256": "a939acc670946e472480d5dde52b0bc19caa326abd14418e90b522deb03025bd",
+    },
+    {
+        "path": "implementation/p17/P17-06_POSTGRES_CHECKPOINT_HOST_V11.md",
+        "bytes": 4035,
+        "sha256": "e5e301a356afd2d97b98f49d6f0e24e13f70cd04824571ddf0ac0ac459b00832",
+    },
+    {
+        "path": "implementation/p17/qualification/postgres-checkpoint-host-v1-20260907/contract.json",
+        "bytes": 6535,
+        "sha256": "c8b594781c5b05f4d1487c956661a72a3ea93a5cb109186a8aacf9f8f7d08e55",
+    },
+    {
+        "path": "implementation/p17/qualification/postgres-checkpoint-host-v1-20260907/current-host.json",
+        "bytes": 5216,
+        "sha256": "75c7bc2dfafffa58098160cdaa6729ca728fa8e59e28e490b191d11ee6d3ad40",
+    },
+    {
+        "path": "migrations/postgres/0014_p17_history_checkpoint_note.down.sql",
+        "bytes": 1742,
+        "sha256": "533a082ce83e0a77b9cd3b71a951a3adeb4df9356caa802490ad2f582086c4c6",
+    },
+    {
+        "path": "migrations/postgres/0014_p17_history_checkpoint_note.up.sql",
+        "bytes": 7542,
+        "sha256": "d3e8a2846780f9442ea4b3acf55c072a2ba663590e3b24c9e46736517bb4c129",
+    },
+    {
+        "path": "protocol/migrations/p17-postgres-checkpoint-host-v1.md",
+        "bytes": 1498,
+        "sha256": "d33d5d35b16f9249f7d3602bcc40f5b267a038f89a5d85fe07331827a3dc43b1",
+    },
+    {
+        "path": "protocol/private/p17-postgres-checkpoint-host-v1.json",
+        "bytes": 3298,
+        "sha256": "899622f73d39c7fc3af18e0922d03762e013fd19bcbab696f1b0255d6bfd250c",
+    },
+    {
+        "path": "tools/p17/fixtures/p17_postgres_checkpoint_setup.sql",
+        "bytes": 2946,
+        "sha256": "c59c04ba8aa279b60d7901bcbb3394aad587f94cfade1c5b2062aa3507cf1d4d",
+    },
+    {
+        "path": "tools/p17/postgres_checkpoint_host_qualification.py",
+        "bytes": 13200,
+        "sha256": "b2a658a3046b0df1036f9622f37cbd56e472ba068983ed6702a675b8cea31cad",
+    },
+    {
+        "path": "tools/p17/run_postgres_checkpoint_host_checks.py",
+        "bytes": 24927,
+        "sha256": "254c37cb56f6ea26e02f12f9de11d758117810a3a37413402b1920ec13dbbef6",
+    },
+    {
+        "path": "tools/p17/tests/test_postgres_checkpoint_host_checks.py",
+        "bytes": 7341,
+        "sha256": "c6fe2fbb35237b4f9646fbc8b663bb62d8cd080525722d8960c26f252a736094",
+    },
+    {
+        "path": "tools/p17/tests/test_postgres_checkpoint_host_qualification.py",
+        "bytes": 2847,
+        "sha256": "7501627a4cbb9fcfe74f745c451541b5afaac57a592bc2b0a1e89e23d186f1f1",
+    },
 )
 SUCCESSORS: tuple[dict[str, Any], ...] = (
     {
@@ -489,7 +584,7 @@ SUCCESSORS: tuple[dict[str, Any], ...] = (
             "7cb6ea91c65c226f2769af0d33906b39970efa0c81b286aa32ca282ef8614d69",
         ],
         "composition_predecessor_sha256": "6561e43d46f89ee42773840dd33747cfa23bd55b0927f1da41e357bf3b97c639",
-        "current_sha256": "4af155b2068fe78d372faf9085c4ad316563cd50b3ad3f88b33a75bf34136cd1",
+        "current_sha256": "180eb9a48c33c51bf1325b824115f40039a064aa94dc200af0dca0f60f43c1ed",
         "path": "Cargo.lock",
     },
     {
@@ -505,7 +600,7 @@ SUCCESSORS: tuple[dict[str, Any], ...] = (
             "52f583c2b18d33a009db93ef59127d9cf2b13000e9e83db5bef523c748bc33aa"
         ],
         "composition_predecessor_sha256": "52f583c2b18d33a009db93ef59127d9cf2b13000e9e83db5bef523c748bc33aa",
-        "current_sha256": "7f44605e82a9b8a290961553fc2993b8d7209003d2c55157258d80f7e36e5cb6",
+        "current_sha256": "994d2a2578a2b9bcfa9fbbf43a113eb54ab21ef01ec3a2ace311b15a90cba96a",
         "path": "crates/artifact-service/src/store/postgres_repository.rs",
     },
     {
@@ -618,6 +713,7 @@ CLAIMS = {
     "p17_authenticated_checkpoint_host_v8_bound": True,
     "p17_history_checkpoint_dispatch_v9_bound": True,
     "p17_loopback_tcp_transport_v10_bound": True,
+    "p17_postgres_checkpoint_host_v11_bound": True,
     "actual_hangul": False,
     "registered_host": False,
     "production": False,
@@ -628,7 +724,7 @@ GUARD_SOURCES = (
     "tools/p17/run_current_workspace_source_checks.py",
     "tools/p17/current_workspace_source_qualification.py",
     "tools/p17/tests/test_current_workspace_source_qualification.py",
-    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V11.md",
+    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V12.md",
 )
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -719,7 +815,7 @@ def receipt_path(root: Path) -> Path:
 
 def expected_current(root: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v11",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v12",
         "scope": "current_pc_source_binding_successor_only",
         "run_id": RUN_ID,
         "source_commit": BASE_COMMIT,
@@ -738,8 +834,8 @@ def expected_current(root: Path) -> dict[str, Any]:
 
 def expected_contract(root: Path, current_path: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v11",
-        "qualification_id": "p17.current-workspace-source.v11.20260906",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v12",
+        "qualification_id": "p17.current-workspace-source.v12.20260907",
         "base_commit": BASE_COMMIT,
         "scope": "current_pc_source_binding_successor_only",
         "claims": CLAIMS,

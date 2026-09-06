@@ -79,11 +79,11 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
-  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v11
-  passed 11/11 at run `a42ea2f0cf5b4548a29c1a2ac162443e` on clean commit `aa404c2`; it composes
-  v10 and binds the authenticated checkpoint/loopback transport successor through 88 exact
-  implementation files and 25 locked/offline Cargo members. Contract SHA-256 is
-  `31b7f7f7011136206b9fb699fbe18fb779a968b8972a448b70cd448e8ecf196b`.
+  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v12
+  passed 11/11 at run `7b45b92ba5c84ad7a2241b960871a58b` on clean commit `240f270`; it composes
+  v11 and binds the PostgreSQL checkpoint-host successor through 107 exact implementation files
+  and 25 locked/offline Cargo members. Contract SHA-256 is
+  `4a03e390c3973c0ec8f6d7b69c33f0d8961967135b40d217c725d38af6d6a027`.
   Current/independent FULL remain pending.
 - P05-08 fixed input passed strict product inspection and the policy-locked official Hancom model
   parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
@@ -120,10 +120,10 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P17-06 private request v3 retains exact `mirror_id` binding and adds the required checkpoint
   label/optional note. Local-mirror v5 persists the exact encoded request SHA-256 with the replay
   key, rejects same-key metadata drift before remote I/O, and never journals label/note text. The
-  local suite passes 39/39; workspace build, full tests and all-target Clippy pass. This is a host
-  prerequisite, not actual transport or remote-service evidence. Current source successor v11
-  composes and qualifies this contract plus the later authenticated-host/TCP sources at commit
-  `aa404c2`; it does not supply durable service/process evidence.
+  local suite passes 39/39; workspace build, full tests and all-target Clippy pass. This remains a
+  host prerequisite. Current source successor v12 composes it with the later authenticated-host,
+  TCP and PostgreSQL checkpoint sources at commit `240f270`; atomic durable mirror admission and
+  actual pull/push remain absent.
 - P17-06 checkpoint service mapping preserves the exact P15 project/revision/label/note input,
   derives a stable UUIDv5 idempotency key from the private project/branch/mirror/key identity, and
   retains branch, mirror, generation and private request SHA-256 outside the public arguments. The
@@ -170,7 +170,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   This is actual durable checkpoint evidence only; mirror role/head admission remains process-local
   and non-atomic, while pull/push, persistent credential custody, Hangul and production remain
   unproven. See
-  `implementation/p17/P17-06_POSTGRES_CHECKPOINT_HOST_V11.md` and its frozen qualification.
+  `implementation/p17/P17-06_POSTGRES_CHECKPOINT_HOST_V11.md` and its frozen qualification. Current
+  source successor v12 independently binds the exact committed implementation without expanding
+  those claims.
 
 ## Risks and holds
 

@@ -16,7 +16,7 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
         contract = qualification.verify()
         self.assertEqual(
             contract["qualification_id"],
-            "p17.current-workspace-source.v11.20260906",
+            "p17.current-workspace-source.v12.20260907",
         )
         self.assertTrue(contract["claims"]["source_qualification_only"])
         self.assertTrue(contract["claims"]["p05_diagnostic_dependencies_bound"])
@@ -50,6 +50,9 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
             contract["claims"]["p17_history_checkpoint_dispatch_v9_bound"]
         )
         self.assertTrue(contract["claims"]["p17_loopback_tcp_transport_v10_bound"])
+        self.assertTrue(
+            contract["claims"]["p17_postgres_checkpoint_host_v11_bound"]
+        )
         self.assertFalse(contract["claims"]["actual_hangul"])
         self.assertFalse(contract["claims"]["phase_complete"])
 
@@ -69,7 +72,7 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
 
     def test_implementation_sources_are_exact_base_commit_blobs(self) -> None:
         sources = qualification.verified_implementation_sources()
-        self.assertEqual(len(sources), 88)
+        self.assertEqual(len(sources), 107)
         self.assertEqual(
             set(sources),
             {entry["path"] for entry in qualification.IMPLEMENTATION_SOURCES},
