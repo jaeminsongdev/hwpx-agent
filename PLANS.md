@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-06
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05-07 layout identity and P17-05 local file/Git workflow.
+- Active: P05-07 layout identity and P17-06 project sync.
 - Recommended reasoning: max for preservation, authorization and Gate review; high for routine work.
 - UI status: v3 attempt 21 passed open/save/reopen/text/PDF export; layout acceptance failed.
   Session 13431 terminal exit 0; normal quit, residual zero. No additional click or automatic relaunch.
@@ -47,7 +47,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0088 | P17-03 local daemon | PASS: run 4b1c023ca40c4a02b6dc25ac77ca656b, canonical LF receipt, 11/11; private auth/config/workspace sandbox and binary smoke |
 | P-0089 | P17-04 local MCP config | PASS: bridge d1a376b7563c4654b15fccbaa98645e0 12/12; installed plugin 273f6ccaac644836814b87679ab4eb0c 12/12 through fresh Codex |
 | P-0089A | P17-04 main binding | PASS: cachebuster reinstall bound to integrated main; run 890e1150a2184172abbe8af0ef3eb7b2 11/11 through fresh Codex |
-| P-0090 | P17-05 local file/Git | In progress: path-free daemon/MCP v2 integrated; clean-commit acceptance and approved commit executor remain |
+| P-0090 | P17-05 local file/Git | PASS: exact-commit MCP run bf248400ce1c4985bb2353aa9209ec02, 16/16; path-free IDs, traversal/large-file rejection, Git plan only |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.
@@ -101,8 +101,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 1. Resolve diagnostic Cargo.lock source binding; read P05-07_DIAGNOSTIC_AUDIT_STATUS.md.
    Main 92ce629/independent 3827c21: 205/Clippy PASS, both FULL exit 1; security not run. No Hancom wait.
-2. Implement P17-05 bounded local fixture/materialize/output/diff/commit helpers. Keep public inputs
-   path-free, use the qualified workspace IDs, and deny traversal/large files before side effects.
+2. Implement P17-06 local mirror pull/push/checkpoint state with explicit offline transitions. Keep
+   remote I/O behind an injected adapter and test the state machine without network first.
 3. Connect the qualified `render_plan_review_widget` host only after a local secret/PostgreSQL
    lifecycle exists; keep remote Developer mode registration independently open.
 4. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,

@@ -2,7 +2,7 @@
 
 Date: 2026-09-06
 Scope: current PC, path-free local workflow integration
-Decision: **implemented; clean-commit MCP acceptance pending**
+Decision: **PASS for current-PC local file/Git-plan workflow**
 
 The private daemon now preserves the qualified v1 health and path-authorization protocol while
 adding a versioned v2 boundary for materialize, identity-only diff, create-new publish and
@@ -21,11 +21,20 @@ an existing output. Diff returns only digest, size and equality. The Git helper 
 returns `executed=false`; it does not spawn Git or change the index. Actual commit execution remains
 reserved for the denied-by-default P17-08 approval policy.
 
-The current implementation passed the Rust daemon tests and Clippy as well as MCP TypeScript
-typecheck, build and eight unit tests. These component results are not the clean-commit MCP
-acceptance. `tools/p17/run_local_workflow_checks.py` must still run from a clean implementation
-commit and prove discovery and real Node-to-Rust calls in a disposable workspace before this
-increment can be qualified.
+Clean implementation commit `e1e3edaa7e830cc05086bc1af2847bdbf00c8506` produced actual MCP
+stdio run `bf248400ce1c4985bb2353aa9209ec02`. All 16 checks passed. The run initialized
+MCP `2025-11-25`, discovered the exact five-tool catalog, called the real Node bridge and Rust
+daemon through materialize, diff, publish and Git-plan preparation, and rejected traversal,
+oversized input and unknown fields without a partial workflow file. The disposable workspace was
+removed and residual daemon/Hangul process counts were both zero.
 
-No Hangul process, access prompt, user document, network request, personal-plugin reinstall or real
-Git commit is part of this increment.
+The canonical 990-byte receipt is Git-ignored at
+`artifacts/p17/local-workflow-runs/bf248400ce1c4985bb2353aa9209ec02/receipt.json`; its SHA-256 is
+`36641be1a6bf7d37c3a796c624cfcb885b6c650acffac14e3d4d8fe1b55fe721`. Component validation also
+passed 9 local-workflow tests, 13 daemon tests, Rust Clippy with warnings denied, TypeScript
+typecheck/build, eight bridge tests and four acceptance-harness tests.
+
+This PASS satisfies the P17-05 path traversal/large-file acceptance for the local workflow helper.
+It does not claim a Codex client call, personal-plugin reinstall, real Git commit or approval-policy
+execution. Those remain P17-08 work. No Hangul process, access prompt, user document or network
+request is part of this evidence.
