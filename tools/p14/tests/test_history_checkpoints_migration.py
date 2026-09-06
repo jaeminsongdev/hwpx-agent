@@ -35,6 +35,19 @@ class HistoryCheckpointsMigrationContractTests(unittest.TestCase):
         validated = MODULE.validate_contract(CONTRACT_PATH, ROOT)
         self.assertEqual(validated["state"], "pass")
         self.assertEqual(validated["smoke_assertions_per_run"], 26)
+        self.assertEqual(
+            validated["source_qualification"]["successor_id"],
+            "p17.current-workspace-source.v12.20260907",
+        )
+        self.assertEqual(
+            validated["source_qualification"]["successor_bound_paths"],
+            [
+                "crates/history-service/src/lib.rs",
+                "crates/history-service/src/service.rs",
+                "crates/history-service/src/store.rs",
+                "crates/history-service/src/types.rs",
+            ],
+        )
 
     def test_unknown_property_is_rejected(self) -> None:
         contract = copy.deepcopy(self.contract)
@@ -82,6 +95,13 @@ class HistoryCheckpointsMigrationContractTests(unittest.TestCase):
     def test_source_lock_removal_is_rejected(self) -> None:
         contract = copy.deepcopy(self.contract)
         contract["source_locks"].pop()
+        with self.assertRaises(ValueError):
+            self.validate_tampered(contract)
+
+    def test_source_lock_digest_cannot_be_rewritten_to_current_bytes(self) -> None:
+        contract = copy.deepcopy(self.contract)
+        source = contract["source_locks"][6]
+        source["sha256"] = MODULE.digest(ROOT / source["path"])
         with self.assertRaises(ValueError):
             self.validate_tampered(contract)
 

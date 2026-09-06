@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -81,6 +82,21 @@ EXPECTED_SOURCE_PATHS = [
     "crates/history-service/src/store.rs",
     "crates/history-service/src/types.rs",
 ]
+LEGACY_CONTRACT_RELATIVE = (
+    "implementation/p14/postgres/p14-history-checkpoints-v1.json"
+)
+LEGACY_CONTRACT_SHA256 = (
+    "e7713ccd37697a1a46f544e5961640d7d0835d521b71eee3116411136108fa13"
+)
+SOURCE_SUCCESSOR_RELATIVE = (
+    "implementation/p17/qualification/"
+    "current-workspace-source-v12-20260907/contract.json"
+)
+SOURCE_SUCCESSOR_SHA256 = (
+    "4a03e390c3973c0ec8f6d7b69c33f0d8961967135b40d217c725d38af6d6a027"
+)
+SOURCE_SUCCESSOR_ID = "p17.current-workspace-source.v12.20260907"
+SOURCE_SUCCESSOR_COMMIT = "240f270e09ec8e7576d49430f514dbd29e5ce689"
 
 
 def reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -148,6 +164,109 @@ def require_digest(path: Path, expected: Any, label: str) -> None:
     actual = digest(path)
     if actual != expected:
         raise ValueError(f"{label} mismatch: expected {expected}, got {actual}")
+
+
+def git_blob_digest(root: Path, revision: str, relative_path: str) -> str:
+    completed = subprocess.run(
+        ["git", "show", f"{revision}:{relative_path}"],
+        cwd=root,
+        stdin=subprocess.DEVNULL,
+        check=False,
+        capture_output=True,
+        timeout=30,
+    )
+    if completed.returncode != 0 or not (0 < len(completed.stdout) <= 2 * 1024 * 1024):
+        raise ValueError("qualified source Git blob is unavailable")
+    return hashlib.sha256(completed.stdout).hexdigest()
+
+
+def qualified_source_state(
+    root: Path,
+) -> tuple[dict[str, str], dict[str, tuple[str, str]]]:
+    legacy_path = resolve_bounded_file(root, LEGACY_CONTRACT_RELATIVE, 512 * 1024)
+    require_digest(legacy_path, LEGACY_CONTRACT_SHA256, "legacy history contract")
+    legacy = load_json(legacy_path)
+    legacy_locks = legacy.get("source_locks")
+    if not isinstance(legacy_locks, list):
+        raise ValueError("legacy source locks are unavailable")
+    legacy_sources: dict[str, str] = {}
+    for entry in legacy_locks:
+        if not isinstance(entry, dict) or set(entry) != {"path", "sha256"}:
+            raise ValueError("legacy source lock shape differs")
+        relative = entry.get("path")
+        expected = entry.get("sha256")
+        if (
+            not isinstance(relative, str)
+            or relative in legacy_sources
+            or not isinstance(expected, str)
+            or HEX_64.fullmatch(expected) is None
+        ):
+            raise ValueError("legacy source lock identity differs")
+        legacy_sources[relative] = expected
+    if list(legacy_sources) != EXPECTED_SOURCE_PATHS:
+        raise ValueError("legacy source lock sequence differs")
+
+    successor_path = resolve_bounded_file(root, SOURCE_SUCCESSOR_RELATIVE, 512 * 1024)
+    require_digest(successor_path, SOURCE_SUCCESSOR_SHA256, "source successor contract")
+    successor = load_json(successor_path)
+    if (
+        successor.get("schema_version")
+        != "hwpx-agent.p17-current-workspace-source-qualification/v12"
+        or successor.get("qualification_id") != SOURCE_SUCCESSOR_ID
+        or successor.get("base_commit") != SOURCE_SUCCESSOR_COMMIT
+        or successor.get("scope") != "current_pc_source_binding_successor_only"
+    ):
+        raise ValueError("source successor identity differs")
+    claims = successor.get("claims")
+    if not isinstance(claims, dict) or any(
+        claims.get(key) is not expected
+        for key, expected in {
+            "source_qualification_only": True,
+            "p17_postgres_checkpoint_host_v11_bound": True,
+            "actual_hangul": False,
+            "other_pc_or_version": False,
+            "phase_complete": False,
+            "production": False,
+        }.items()
+    ):
+        raise ValueError("source successor claims differ")
+    implementation = successor.get("implementation_sources")
+    if not isinstance(implementation, list) or len(implementation) != 107:
+        raise ValueError("source successor implementation set differs")
+    current_sources: dict[str, tuple[int, str]] = {}
+    for entry in implementation:
+        if not isinstance(entry, dict) or set(entry) != {"path", "bytes", "sha256"}:
+            raise ValueError("source successor entry shape differs")
+        relative = entry.get("path")
+        size = entry.get("bytes")
+        expected = entry.get("sha256")
+        if (
+            not isinstance(relative, str)
+            or relative in current_sources
+            or not isinstance(size, int)
+            or size <= 0
+            or not isinstance(expected, str)
+            or HEX_64.fullmatch(expected) is None
+        ):
+            raise ValueError("source successor entry identity differs")
+        current_sources[relative] = (size, expected)
+
+    replacements: dict[str, tuple[str, str]] = {}
+    for relative in EXPECTED_SOURCE_PATHS:
+        path = resolve_bounded_file(root, relative, 2 * 1024 * 1024)
+        observed = digest(path)
+        predecessor = legacy_sources[relative]
+        if observed == predecessor:
+            continue
+        current = current_sources.get(relative)
+        if (
+            current is None
+            or current != (path.stat().st_size, observed)
+            or git_blob_digest(root, SOURCE_SUCCESSOR_COMMIT, relative) != observed
+        ):
+            raise ValueError(f"unqualified history source successor: {relative}")
+        replacements[relative] = (predecessor, observed)
+    return legacy_sources, replacements
 
 
 def validate_up_sql(up_sql: str) -> None:
@@ -302,6 +421,7 @@ def validate_contract(path: Path, root: Path = ROOT) -> dict[str, Any]:
     if contract["invariants"] != EXPECTED_INVARIANTS:
         raise ValueError("invariant contract differs")
 
+    legacy_sources, replacements = qualified_source_state(root)
     source_locks = contract["source_locks"]
     if not isinstance(source_locks, list) or len(source_locks) != len(EXPECTED_SOURCE_PATHS):
         raise ValueError("source-lock count differs")
@@ -311,7 +431,13 @@ def validate_contract(path: Path, root: Path = ROOT) -> dict[str, Any]:
         require_exact_keys(lock, {"path", "sha256"}, f"source lock {index}")
         observed_paths.append(str(lock["path"]))
         source_path = resolve_bounded_file(root, lock["path"], 2 * 1024 * 1024)
-        require_digest(source_path, lock["sha256"], f"source lock {index}")
+        expected = lock["sha256"]
+        relative = str(lock["path"])
+        if expected != legacy_sources.get(relative):
+            raise ValueError(f"source lock {index} predecessor digest differs")
+        observed = digest(source_path)
+        if observed != expected and replacements.get(relative) != (expected, observed):
+            require_digest(source_path, expected, f"source lock {index}")
     if observed_paths != EXPECTED_SOURCE_PATHS:
         raise ValueError("source-lock path order differs")
 
@@ -345,6 +471,11 @@ def validate_contract(path: Path, root: Path = ROOT) -> dict[str, Any]:
         "down_sha256": migration["down_sha256"],
         "smoke_fixture_sha256": smoke["sha256"],
         "smoke_assertions_per_run": smoke["assertions_per_run"],
+        "source_qualification": {
+            "successor_id": SOURCE_SUCCESSOR_ID if replacements else None,
+            "successor_bound_paths": sorted(replacements),
+            "phase_completion_claimed": False,
+        },
         "state": "pass",
     }
 
