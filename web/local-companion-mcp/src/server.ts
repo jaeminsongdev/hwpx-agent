@@ -248,6 +248,8 @@ export function childEffectEnvironment(
         environment[GIT_PROGRAM_ENV] = gitProgram;
         environment[APPROVAL_STATE_ROOT_ENV] = stateRoot;
         environment[APPROVAL_SECRET_ENV] = secret;
+        environment.TEMP = stateRoot;
+        environment.TMP = stateRoot;
         return environment;
     } finally {
         secretBytes.fill(0);

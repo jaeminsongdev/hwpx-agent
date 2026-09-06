@@ -113,6 +113,8 @@ test("effect child environment is all-or-none, bounded, and allowlisted", () => 
         HWPX_AGENT_GIT_PROGRAM: "C:\\Program Files\\Git\\cmd\\git.exe",
         HWPX_AGENT_APPROVAL_STATE_ROOT: "D:\\runtime\\approval-state",
         HWPX_AGENT_APPROVAL_SECRET: "A".repeat(43),
+        TEMP: "D:\\runtime\\approval-state",
+        TMP: "D:\\runtime\\approval-state",
     });
     assert.throws(() =>
         childEffectEnvironment(token, {
