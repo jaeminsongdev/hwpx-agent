@@ -78,10 +78,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
-  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v6
-  passed 11/11 at run `4fd776f6b1384c599de66d2000013d54`; it retains the v5 diagnostic and
-  coordinate-Gate sources and binds the numeric paragraph-ID repair as exact commit blobs.
-  Current/independent FULL remain pending.
+  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v7
+  passed 11/11 at run `ee35b31e5192420d8292c7659655311d`; it retains all v6 P05 sources and
+  additionally binds the P17-07 local resolver. Current/independent FULL remain pending.
 - P05-08 fixed input passed strict product inspection and the policy-locked official Hancom model
   parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
   `open_input` without a positive receipt that the user completed the displayed access request;
@@ -111,7 +110,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Risks and holds
 
-- R-0001: P05-07 dense attempt02 current-PC actual subgate and source successor v6 pass.
+- R-0001: P05-07 dense attempt02 current-PC actual subgate and latest source successor v7 pass.
   P05-08 authorized open/save/reopen/render, P05-09 and final current/independent FULL remain open;
   no later-version or arbitrary-document claim.
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence remains open.
@@ -152,6 +151,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P05-08 successor: read `implementation/p05/P05-08_NUMERIC_PARAGRAPH_ID_REPAIR.md`; corrected input
   and the pending Hangul-authored reference are under
   `fixtures/target-build/p05-08-current-2020-20260906-v2/`.
+- P17-07 successor: read `implementation/p17/P17-07_LOCAL_CONFLICT_RESOLVER_V1.md` and
+  `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V7.md`; actual host/UI/concurrent evidence is
+  intentionally absent.
 - Detailed history through P-0085 remains in `fae5bc0:PLANS.md`; later evidence is in individual
   reports and Git. Never touch user originals, failed evidence, predecessor locks or unrelated processes.
 - Per-card/phase reports and bound evidence are authoritative; broad introductory prose is not.

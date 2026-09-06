@@ -27,18 +27,18 @@ acceptance = load_acceptance()
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = "implementation/p17/qualification/current-workspace-source-v6-20260906"
+BASE = "implementation/p17/qualification/current-workspace-source-v7-20260906"
 QUALIFICATION = ROOT / BASE
-RUN_ID = "4fd776f6b1384c599de66d2000013d54"
-BASE_COMMIT = "6b7237a4e77ae66384a9c288ba91f310970e63be"
-RECEIPT_SHA256 = "a4b5ea7603a69a472aaef932877ac2c1724394d7ecb6a6e236660b05069b33e0"
+RUN_ID = "ee35b31e5192420d8292c7659655311d"
+BASE_COMMIT = "83be65026e1d13a6d16fd3e16f860c2223cc092e"
+RECEIPT_SHA256 = "d1d21296d0a5904d7a942942c210e00102565238b2d70828abecabfc83824ec8"
 CARGO_METADATA_PROJECTION_SHA256 = (
     "d956979b62019ff5b89a3c6b2ab506a7f102ae0fcb4f86ce70717ac2fca2d51d"
 )
 WORKSPACE_MEMBER_COUNT = 23
 PREVIOUS_QUALIFICATION = (
-    "implementation/p17/qualification/current-workspace-source-v5-20260906/contract.json",
-    "2a79699f673d7bd23ac9de9d7de290886312828b87ec0d88585e4908eadd4420",
+    "implementation/p17/qualification/current-workspace-source-v6-20260906/contract.json",
+    "b1fa0f102d847069d7679638650454c19132786a1b92a1b27831696d1bcf7c2c",
 )
 IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     {
@@ -140,6 +140,41 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
         "path": "implementation/p05/P05-08_NUMERIC_PARAGRAPH_ID_REPAIR.md",
         "bytes": 3656,
         "sha256": "2b1783165951ce54ab7994ae83be2632d2372268703792e2e1b0bb218d4b8bf3",
+    },
+    {
+        "path": "crates/local-sync/src/lib.rs",
+        "bytes": 39086,
+        "sha256": "25509ed8a452561874e785e3283ef17f9729cd05ed8442432d7b8a3f11f5a2ee",
+    },
+    {
+        "path": "crates/local-sync/src/main.rs",
+        "bytes": 16273,
+        "sha256": "0ef7421689d888c565fc3619b931c708907b3314d303e725f66dd887b70695fb",
+    },
+    {
+        "path": "crates/local-sync/tests/state_machine.rs",
+        "bytes": 20704,
+        "sha256": "07821c15027d77b138ea4f8f37c74b9162b5255059db1f280d41b036a989f65e",
+    },
+    {
+        "path": "crates/local-sync/tests/durable_remote.rs",
+        "bytes": 16032,
+        "sha256": "23bcddc58583ebb390ac0776dd54684ce58e52a93f7fb7bfb7f53480935bc0d5",
+    },
+    {
+        "path": "crates/local-sync/tests/cli.rs",
+        "bytes": 12528,
+        "sha256": "5ae19c12b2abbceb3f34d8d5ee6ac5e5a9cf35e5e7d10935b0f3fd16c9a976e4",
+    },
+    {
+        "path": "protocol/private/p17-local-conflict-resolver-v1.json",
+        "bytes": 2511,
+        "sha256": "c932ff45888865adfc25ad7500d6a51f9e87d2f9f4b37d54d42ec41a0dcb9199",
+    },
+    {
+        "path": "implementation/p17/P17-07_LOCAL_CONFLICT_RESOLVER_V1.md",
+        "bytes": 2377,
+        "sha256": "61980228a0bb48d15be28a4ab1d0fc28259eadfee45f3b99bbc871bd98c277c8",
     },
 )
 SUCCESSORS: tuple[dict[str, Any], ...] = (
@@ -268,6 +303,7 @@ CLAIMS = {
     "p05_header_footer_failed_attempts_bound": True,
     "p05_header_footer_numeric_paragraph_id_repair_bound": True,
     "p05_vs1_coordinate_gate_sources_bound": True,
+    "p17_local_conflict_resolver_bound": True,
     "actual_hangul": False,
     "registered_host": False,
     "production": False,
@@ -278,7 +314,7 @@ GUARD_SOURCES = (
     "tools/p17/run_current_workspace_source_checks.py",
     "tools/p17/current_workspace_source_qualification.py",
     "tools/p17/tests/test_current_workspace_source_qualification.py",
-    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V6.md",
+    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V7.md",
 )
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -369,7 +405,7 @@ def receipt_path(root: Path) -> Path:
 
 def expected_current(root: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v6",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v7",
         "scope": "current_pc_source_binding_successor_only",
         "run_id": RUN_ID,
         "source_commit": BASE_COMMIT,
@@ -388,8 +424,8 @@ def expected_current(root: Path) -> dict[str, Any]:
 
 def expected_contract(root: Path, current_path: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v6",
-        "qualification_id": "p17.current-workspace-source.v6.20260906",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v7",
+        "qualification_id": "p17.current-workspace-source.v7.20260906",
         "base_commit": BASE_COMMIT,
         "scope": "current_pc_source_binding_successor_only",
         "claims": CLAIMS,
