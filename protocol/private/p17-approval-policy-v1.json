@@ -1,0 +1,55 @@
+{
+  "schema_version": "hwpx-agent.p17-approval-policy/v1",
+  "scope": "pure_local_reference_approval_core",
+  "effects": {
+    "git_commit": "workstation_control",
+    "automation_execute": "automation_use",
+    "external_invoke": "external_service_use",
+    "print_execute": "print_execute",
+    "security_modify": "security_modify"
+  },
+  "decision_requirements": [
+    "effect_allowlisted_by_tenant_policy",
+    "required_user_scope_present",
+    "fresh_explicit_user_confirmation_present",
+    "confirmation_hmac_valid",
+    "actor_tenant_effect_operation_target_plan_exactly_bound",
+    "confirmation_time_window_valid",
+    "confirmation_not_previously_consumed"
+  ],
+  "confirmation": {
+    "schema_version": "hwpx-agent.confirmation/v1",
+    "transport_prefix": "confirm_v1",
+    "maximum_token_bytes": 4096,
+    "maximum_payload_bytes": 2048,
+    "maximum_lifetime_seconds": 300,
+    "maximum_request_age_seconds": 300,
+    "local_reference_signature": "hmac_sha256",
+    "production_replacement": "host_confirmation_service"
+  },
+  "audit": {
+    "schema_version": "hwpx-agent.approval-receipt/v1",
+    "contains_document_body": false,
+    "contains_raw_operation_id": false,
+    "contains_confirmation_token": false,
+    "contains_secret": false
+  },
+  "implemented_evidence": {
+    "unit_tests": 9,
+    "default_deny": true,
+    "scope_separation": true,
+    "binding_drift_rejected": true,
+    "tamper_expiry_future_rejected": true,
+    "process_local_replay_rejected": true,
+    "arbitrary_shell_command_model_present": false
+  },
+  "not_claimed": {
+    "durable_replay_ledger": false,
+    "cross_process_replay_rejected": false,
+    "actual_shell_execution": false,
+    "actual_automation_execution": false,
+    "actual_external_invocation": false,
+    "daemon_mcp_wiring": false,
+    "p17_08_pass": false
+  }
+}
