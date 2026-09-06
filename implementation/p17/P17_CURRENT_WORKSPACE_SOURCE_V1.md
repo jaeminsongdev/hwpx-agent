@@ -7,12 +7,12 @@ Decision: **qualified for the exact current source; no phase or runtime PASS**
 The immutable P15 Inspector, P16 PostgreSQL and P16 main-integration contracts remain byte-for-byte
 unchanged. Their exact SHA-256 values are prerequisites. A new successor maps only the historical
 hashes those contracts already authorize to the source blobs at clean commit
-`3b575dbb47d2e93a9825f7982d1a47d287600d3c`. It cannot admit an unknown path, an unlisted historical
+`949bcb4dd1376cc580c550ffea9e18d46918a31f`. It cannot admit an unknown path, an unlisted historical
 hash or working-tree content that differs from that commit.
 
-Acceptance run `72027184ccae49c784362e57a3d11b95` passed all 11 checks in an independent clean
+Acceptance run `86a24815db10424993c588a6a448556c` passed all 11 checks in an independent clean
 worktree. The canonical receipt SHA-256 is
-`642d5a60eb0b37d65b2f52e699849597017f5b79cccac02b98fb4611f7797297`. Exactly fourteen current
+`213881e250d42a1e831fb304a97147d99ab537eec522ebc5f4d27ccd0b6c1ee0`. Exactly fourteen current
 successors were required: root Cargo manifest/lock, the later PostgreSQL repository and harness,
 the later MCP control-plane manifest/library, the integration/source/widget successor validators,
 the composed-successor test, the pnpm lock and widget build script. Every current digest equals its

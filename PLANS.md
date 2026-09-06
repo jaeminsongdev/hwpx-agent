@@ -69,8 +69,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Other current evidence
 
-- Current source successor run `72027184ccae49c784362e57a3d11b95` passed 11/11 at independent
-  clean `3b575db`; 14 exact replacements, 23 locked/offline Cargo members and P05 dev-edges bound.
+- Current source successor run `86a24815db10424993c588a6a448556c` passed 11/11 at independent
+  clean `949bcb4`; 14 exact replacements, 23 locked/offline Cargo members and P05 dev-edges bound.
 - P05 v3 repairs section count and orientation token mapping; clean current and exact-checkout FULL
   predecessor passed; diagnostic FULL reruns remain. Attempt 21 saved/reopened both sections and
   exported PDF, but actual landscape validation failed.
