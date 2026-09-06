@@ -40,8 +40,10 @@ normalization permission or accepting alternative inspector was added. No actual
 
 ## Next bounded work
 
-Qualify the diagnostic dependency change without weakening predecessor source binding, then run
-target checks and both FULL audits. No new security receipt or component closure is claimed.
+The diagnostic dependency change is now covered by the exact P17 current-workspace source successor:
+independent clean run `72027184ccae49c784362e57a3d11b95` passed 11/11 and kept every predecessor contract
+immutable. Target checks and both FULL audits must still pass before this source-binding failure is
+closed. No new security receipt or component closure is claimed.
 The separate P16 PostgreSQL adapter now passes actual acceptance in current/independent checkouts
 at clean checkpoint 217ba56. Its FULL still fails predecessor source qualification, not DB operation.
 Read `../p16/P16-06_POSTGRES_ADAPTER_CONTINUATION.md`; preserve its source checkpoint and old failures.

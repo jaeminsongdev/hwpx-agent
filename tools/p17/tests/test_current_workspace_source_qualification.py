@@ -1,0 +1,60 @@
+from __future__ import annotations
+
+import copy
+from pathlib import Path
+import sys
+import unittest
+
+
+TOOLS = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(TOOLS))
+import current_workspace_source_qualification as qualification  # noqa: E402
+
+
+class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
+    def test_checked_in_contract_is_exact_and_bounded(self) -> None:
+        contract = qualification.verify()
+        self.assertEqual(
+            contract["qualification_id"],
+            "p17.current-workspace-source.v1.20260906",
+        )
+        self.assertTrue(contract["claims"]["source_qualification_only"])
+        self.assertTrue(contract["claims"]["p05_diagnostic_dependencies_bound"])
+        self.assertFalse(contract["claims"]["actual_hangul"])
+        self.assertFalse(contract["claims"]["phase_complete"])
+
+    def test_successors_are_current_commit_exact_and_unique(self) -> None:
+        successors = qualification.verified_successors()
+        self.assertEqual(len(successors), 14)
+        self.assertEqual(set(successors), {entry["path"] for entry in qualification.SUCCESSORS})
+        for relative, entry in successors.items():
+            self.assertEqual(
+                qualification.digest(qualification.acceptance.bounded_file(qualification.ROOT, relative)),
+                entry["current_sha256"],
+            )
+            self.assertEqual(
+                qualification.git_digest(qualification.ROOT, qualification.BASE_COMMIT, relative),
+                entry["current_sha256"],
+            )
+
+    def test_receipt_promotion_and_unknown_path_fail_closed(self) -> None:
+        receipt = qualification.expected_receipt()
+        promoted = copy.deepcopy(receipt)
+        promoted["phase_complete"] = True
+        with self.assertRaisesRegex(qualification.QualificationError, "receipt.exact"):
+            qualification.validate_receipt(promoted)
+        expanded = copy.deepcopy(receipt)
+        expanded["successors"].append(
+            {
+                "path": "unknown",
+                "accepted_predecessor_sha256s": ["0" * 64],
+                "composition_predecessor_sha256": "0" * 64,
+                "current_sha256": "1" * 64,
+            }
+        )
+        with self.assertRaisesRegex(qualification.QualificationError, "receipt.exact"):
+            qualification.validate_receipt(expanded)
+
+
+if __name__ == "__main__":
+    unittest.main()

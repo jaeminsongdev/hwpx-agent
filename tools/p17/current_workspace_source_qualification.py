@@ -2,25 +2,157 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
 import subprocess
 import sys
-from typing import Any
+from typing import Any, Callable
 
-import run_current_workspace_source_checks as acceptance
+
+def load_acceptance() -> Any:
+    path = Path(__file__).resolve().with_name("run_current_workspace_source_checks.py")
+    specification = importlib.util.spec_from_file_location(
+        "p17_current_workspace_source_acceptance", path
+    )
+    if specification is None or specification.loader is None:
+        raise RuntimeError("acceptance.load")
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    return module
+
+
+acceptance = load_acceptance()
 
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = "implementation/p17/qualification/current-workspace-source-v1-20260906"
 QUALIFICATION = ROOT / BASE
-RUN_ID = "PENDING"
-BASE_COMMIT = "PENDING"
-RECEIPT_SHA256 = "PENDING"
-CARGO_METADATA_PROJECTION_SHA256 = "PENDING"
-WORKSPACE_MEMBER_COUNT = 0
-SUCCESSORS: tuple[dict[str, Any], ...] = ()
+RUN_ID = "72027184ccae49c784362e57a3d11b95"
+BASE_COMMIT = "3b575dbb47d2e93a9825f7982d1a47d287600d3c"
+RECEIPT_SHA256 = "642d5a60eb0b37d65b2f52e699849597017f5b79cccac02b98fb4611f7797297"
+CARGO_METADATA_PROJECTION_SHA256 = (
+    "8071ba0ee448f663054c4786cc646ebf2bf49307dc773d71b1e347dbd1b43403"
+)
+WORKSPACE_MEMBER_COUNT = 23
+SUCCESSORS: tuple[dict[str, Any], ...] = (
+    {
+        "accepted_predecessor_sha256s": [
+            "6561e43d46f89ee42773840dd33747cfa23bd55b0927f1da41e357bf3b97c639",
+            "7cb6ea91c65c226f2769af0d33906b39970efa0c81b286aa32ca282ef8614d69",
+        ],
+        "composition_predecessor_sha256": "6561e43d46f89ee42773840dd33747cfa23bd55b0927f1da41e357bf3b97c639",
+        "current_sha256": "f578f33ab4d24464883c204cf6f04b8f3a4715d6db7132bbf392175e9c54f7b3",
+        "path": "Cargo.lock",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "f8281c9c13ea981ab8652819f1e3946ea942bca2d952f68b05ee61f3a3179c03"
+        ],
+        "composition_predecessor_sha256": "f8281c9c13ea981ab8652819f1e3946ea942bca2d952f68b05ee61f3a3179c03",
+        "current_sha256": "8d48d90ef0f432236cc89a288bc0803ec9cd228d5b7183a4360f6609f53d7a9e",
+        "path": "Cargo.toml",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "52f583c2b18d33a009db93ef59127d9cf2b13000e9e83db5bef523c748bc33aa"
+        ],
+        "composition_predecessor_sha256": "52f583c2b18d33a009db93ef59127d9cf2b13000e9e83db5bef523c748bc33aa",
+        "current_sha256": "7f44605e82a9b8a290961553fc2993b8d7209003d2c55157258d80f7e36e5cb6",
+        "path": "crates/artifact-service/src/store/postgres_repository.rs",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "2c510c70ceca388d0858f0a0e887b84fcbde64d7b2b24cc266d377ec9fc04f63"
+        ],
+        "composition_predecessor_sha256": "2c510c70ceca388d0858f0a0e887b84fcbde64d7b2b24cc266d377ec9fc04f63",
+        "current_sha256": "bed1fcd842f320c3f8df11a80458df94007e9dd86125421fbcb6e48cdc09ca42",
+        "path": "crates/mcp-control-plane/Cargo.toml",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "92a8fe6aad98619ad106f4d037d4002d1049078a07fc2e3d85fa5e0c4fc661dc"
+        ],
+        "composition_predecessor_sha256": "92a8fe6aad98619ad106f4d037d4002d1049078a07fc2e3d85fa5e0c4fc661dc",
+        "current_sha256": "3d066f53a353552e5c1d66c891c7ca2167b92fd07bcdb84f29737513c14e1864",
+        "path": "crates/mcp-control-plane/src/lib.rs",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "ba4d49cc2326c4fc7f43c71396eccbeaf48fcb2f8cf586b6f5e0f2507fd8c3f9"
+        ],
+        "composition_predecessor_sha256": "ba4d49cc2326c4fc7f43c71396eccbeaf48fcb2f8cf586b6f5e0f2507fd8c3f9",
+        "current_sha256": "034eecd9cb64d7b072a4096d320d7f53ff8cfb86c797a44edabeceb5e745d5f9",
+        "path": "pnpm-lock.yaml",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "43fc5f526597d08eecac720674ed0c3cb039d146dd28c48c62ecf62c16b1f775"
+        ],
+        "composition_predecessor_sha256": "43fc5f526597d08eecac720674ed0c3cb039d146dd28c48c62ecf62c16b1f775",
+        "current_sha256": "e8e122e48d97694af7bc59738e96c886795e16d3c50f90b51af6a682c1836400",
+        "path": "tools/p16/integrated_source_qualification.py",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "6e3ba421f4c0d5f34b8123e918892bf52fca1f11e0263349e8bb59462863bd21",
+            "e4c424920bcc040f1f1ea9aaac3e624eb1478866e9d9458dbe75b778bb2cbd5f",
+        ],
+        "composition_predecessor_sha256": "e4c424920bcc040f1f1ea9aaac3e624eb1478866e9d9458dbe75b778bb2cbd5f",
+        "current_sha256": "70b04f9edd7c0d7ef88b09f82ca399663dc7d0aa74d1536ca6876114720a89bc",
+        "path": "tools/p16/p15_source_qualification.py",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "8fa11f1137591c18d8160985687ab1e6f9e27d83495424cb7158fd68cb4a5f3a"
+        ],
+        "composition_predecessor_sha256": "8fa11f1137591c18d8160985687ab1e6f9e27d83495424cb7158fd68cb4a5f3a",
+        "current_sha256": "7ecaa4939b0bacc92d3eb0c6c69e9610069193604d7a9f942314d8f80f3ea332",
+        "path": "tools/p16/run_postgres_artifact_checks.py",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "9ad0c151c7d63bb5067395463522946d86bf656da8d3805623155c4df054a397"
+        ],
+        "composition_predecessor_sha256": "9ad0c151c7d63bb5067395463522946d86bf656da8d3805623155c4df054a397",
+        "current_sha256": "c4e12a506a5bbf6cab74bb27a7eea6737147b8fe878118c7570c270e1ce7bd8e",
+        "path": "tools/p16/tests/test_integrated_source_qualification.py",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "483c22b852742df6a9c55b3f80bb26425b58e70cf9fe16195a01f3479886160b",
+            "76ac1f16b8d0ce831eaaccd0d91f74d6dc601f3d58fc2868a8674761922a1fdd",
+        ],
+        "composition_predecessor_sha256": "76ac1f16b8d0ce831eaaccd0d91f74d6dc601f3d58fc2868a8674761922a1fdd",
+        "current_sha256": "ff77693dc9c309f4f44f2ad9c885fb73862eeb87b1f87d3e284cbf5045fcfc2f",
+        "path": "tools/p16/tests/test_p15_source_qualification.py",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "b3067b75185437f712b9a3b8c0d4ea22fe467d6d4936c1a99834c0a63d03d56a"
+        ],
+        "composition_predecessor_sha256": "b3067b75185437f712b9a3b8c0d4ea22fe467d6d4936c1a99834c0a63d03d56a",
+        "current_sha256": "a1cf888bf867637d087abc8dd37640a167949bf2c98f81fb02b68b8a733fbe5c",
+        "path": "tools/p16/tests/test_postgres_artifact_checks.py",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "599197fa02f6f2c9d3ff08efd72db417fcd70becab5544abdf013d4b859d9ded"
+        ],
+        "composition_predecessor_sha256": "599197fa02f6f2c9d3ff08efd72db417fcd70becab5544abdf013d4b859d9ded",
+        "current_sha256": "f0fde73e5e506e5ea46daef3acd1fa265df4719c3d08fdeeb0071c2e44bd25d6",
+        "path": "tools/p16/validate_widget_shell_successor.py",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "d87b6ea4737a76bec765d492a34b21839f791af6d3df12aa62e18ca29197f343"
+        ],
+        "composition_predecessor_sha256": "d87b6ea4737a76bec765d492a34b21839f791af6d3df12aa62e18ca29197f343",
+        "current_sha256": "abcd83a904cf0501e0c466d218a498025e4541ef93a21136fccda8536b754f0e",
+        "path": "web/plugin-widget/scripts/build-widget.mjs",
+    },
+)
 CLAIMS = {
     "source_qualification_only": True,
     "p05_diagnostic_dependencies_bound": True,
@@ -31,6 +163,7 @@ CLAIMS = {
     "phase_complete": False,
 }
 GUARD_SOURCES = (
+    "tools/p17/run_current_workspace_source_checks.py",
     "tools/p17/current_workspace_source_qualification.py",
     "tools/p17/tests/test_current_workspace_source_qualification.py",
     "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V1.md",
@@ -171,7 +304,10 @@ def verify(root: Path = ROOT) -> dict[str, Any]:
     return contract
 
 
-def verified_successors(root: Path = ROOT) -> dict[str, dict[str, Any]]:
+def verified_successors(
+    root: Path = ROOT,
+    history_digest: Callable[[str, str], str] | None = None,
+) -> dict[str, dict[str, Any]]:
     verify(root)
     result: dict[str, dict[str, Any]] = {}
     for entry in SUCCESSORS:
@@ -193,7 +329,12 @@ def verified_successors(root: Path = ROOT) -> dict[str, dict[str, Any]]:
         )
         path = acceptance.bounded_file(root, relative)
         require(digest(path) == current, "successor.current")
-        require(git_digest(root, BASE_COMMIT, relative) == current, "successor.history")
+        historical = (
+            git_digest(root, BASE_COMMIT, relative)
+            if history_digest is None
+            else history_digest(BASE_COMMIT, relative)
+        )
+        require(historical == current, "successor.history")
         result[relative] = dict(entry)
     require(result, "successor.empty")
     return result
