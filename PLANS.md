@@ -118,6 +118,9 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   passed 39/39. Renderer/evidence v13 run 2b01ce0ff66045f29a32c67d217aa9bd passed
   19/19. Dedicated local host v14 run d22e85581cd44d06a016f3460a43de12 passed 14/14; all resources
   cleaned. Actual Codex app installation, Hangul execution and phase completion remain open.
+- P16 host v14 detached audit: D:\개발\hwpx-agent-audit-p16-host-06494a9 at `06494a9`;
+  frozen offline dependency restore, Node format/typecheck/build/135 tests, Python 10, exact
+  qualification verification, Rust workspace tests and Clippy `-D warnings` PASS; tracked tree clean.
 - External QA: Codex workspace p16-response-contract-20260905/inspection.md and run-03/receipt.json.
   Thirteen captures automated, six directly reviewed; exact HTML/script hashes bound, no user browser profile.
 - First reads: this ledger; P05 audit status/column-ID admission plan and attempt21; P16 MAIN audit/policy.

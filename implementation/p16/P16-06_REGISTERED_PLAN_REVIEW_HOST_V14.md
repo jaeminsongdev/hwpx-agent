@@ -40,6 +40,12 @@ Workspace Rust tests and Clippy, Node formatting/typecheck/build/tests, the targ
 and the P01 security lane pass. The security lane covered secret scanning, Cargo deny/audit, pnpm
 audit/licenses, NuGet vulnerability checks and a CycloneDX SBOM.
 
+Closure commit `06494a9a3932cf40c87b1749f46210a890fa5c95` was then checked out detached at
+`D:\개발\hwpx-agent-audit-p16-host-06494a9`. With no ignored run receipt and no pre-existing
+dependencies, frozen offline pnpm restore, formatting, typecheck, build, 135 Node tests, 10 targeted
+Python tests, exact qualification verification, Rust workspace all-target/all-feature tests and
+Clippy with `-D warnings` all passed. The detached tracked tree remained clean.
+
 ## Explicit non-claims
 
 - No Hangul process, COM call, user document, access prompt or UI automation was used.
