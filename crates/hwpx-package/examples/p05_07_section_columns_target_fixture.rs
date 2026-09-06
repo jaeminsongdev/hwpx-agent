@@ -29,9 +29,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mode = arguments
         .next()
         .and_then(|value| value.into_string().ok())
-        .ok_or("usage: p05_07_section_columns_target_fixture <build|inspect> <path.hwpx>")?;
+        .ok_or("usage: p05_07_section_columns_target_fixture <build|inspect|diagnose|rebind-identity> ...")?;
     if mode == "diagnose" {
         return diagnostics::run(arguments);
+    }
+    if mode == "rebind-identity" {
+        return diagnostics::run_rebind(arguments);
     }
     let path = arguments
         .next()

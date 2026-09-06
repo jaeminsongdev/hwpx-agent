@@ -1,0 +1,79 @@
+{
+  "schema_version": "hwpx-agent.p05-07-identity-rebinding/v1",
+  "scope": "fixed_synthetic_fixture_current_hangul_2020_build_only",
+  "mode": "native_automation_bounded_normalization",
+  "decision_id": "P05-07-H2020-COLPR-ID-ABSENCE-V1",
+  "target": {
+    "product": "Hangul 2020",
+    "file_version": "11.0.0.9136",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+  },
+  "required_bindings": [
+    "source_package_sha256",
+    "saved_package_sha256",
+    "successful_execution_trace_sha256",
+    "pdf_sha256",
+    "pdf_verification_sha256",
+    "render_expectation_sha256",
+    "both_rendered_png_sha256"
+  ],
+  "logical_identity": {
+    "selector": "section_ordinal_plus_exact_typed_context_fingerprint",
+    "fingerprint_fields": [
+      "section_ordinal",
+      "page_setup",
+      "column_type",
+      "column_layout",
+      "column_sizing",
+      "column_separator",
+      "normalized_visible_text_sha256"
+    ],
+    "source_backend_identifier": "required_nonempty_unique_and_target_exact",
+    "saved_backend_identifier": [
+      "exactly_preserved",
+      "absent_only"
+    ],
+    "empty_backend_identifier_is_a_key": false,
+    "duplicate_or_ambiguous_context": "reject",
+    "reordered_or_changed_context": "reject",
+    "foreign_nonempty_saved_identifier": "reject"
+  },
+  "normalization": {
+    "allowed_event": "removed_backend_identifier",
+    "event_count": "zero_to_two_by_observation",
+    "backend_identifier_preserved_when_absent": false,
+    "stable_distinct_logical_id_required": true,
+    "general_cross_backend_normalizer": false
+  },
+  "render": {
+    "expected_pages": 2,
+    "expected_orientation": "landscape",
+    "expected_width_milli_mm": 310000,
+    "expected_height_milli_mm": 230000,
+    "geometry_tolerance_milli_mm": 500,
+    "expected_png_pixels_at_144_dpi": [
+      1756,
+      1302
+    ],
+    "page_specific_text_digest_required": true,
+    "other_page_text_forbidden": true
+  },
+  "fail_closed": [
+    "malformed_or_unbounded_input",
+    "graph_header_or_spine_mismatch",
+    "stale_or_malformed_execution_trace",
+    "semantic_or_text_change",
+    "page_or_column_target_mismatch",
+    "ambiguous_or_duplicate_identity_context",
+    "stale_pdf_expectation_or_png_binding"
+  ],
+  "not_authorized": {
+    "strict_inspector_relaxation": false,
+    "package_rewrite": false,
+    "automatic_revision_publication": false,
+    "general_hancom_version_admission": false,
+    "hangul_2022_or_2024_admission": false,
+    "dense_column_flow_or_balancing_claim": false,
+    "overall_p05_or_product_pass": false
+  }
+}

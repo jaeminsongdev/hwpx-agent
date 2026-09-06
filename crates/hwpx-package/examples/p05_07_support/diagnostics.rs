@@ -18,6 +18,13 @@ const BUILD: &str = "11.0.0.9136";
 const EXECUTABLE: &str = "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce";
 const USAGE: &str = "usage: diagnose <source.hwpx> <saved.hwpx> <trace.json> <trace-sha256>";
 
+#[path = "identity_rebinding.rs"]
+mod identity_rebinding;
+
+pub(super) fn run_rebind(arguments: impl Iterator<Item = OsString>) -> Result<(), Box<dyn Error>> {
+    identity_rebinding::run(arguments)
+}
+
 pub(super) fn run(arguments: impl Iterator<Item = OsString>) -> Result<(), Box<dyn Error>> {
     let arguments: Vec<_> = arguments.take(5).collect();
     if arguments.len() != 4 {
@@ -481,12 +488,17 @@ mod tests {
     use std::io::Write as _;
     use zip::{ZipArchive, ZipWriter, write::SimpleFileOptions};
 
-    fn fixture() -> Result<Vec<u8>, Box<dyn Error>> {
+    pub(super) fn fixture() -> Result<Vec<u8>, Box<dyn Error>> {
         let source = crate::Hancom2020Vs0Builder::build(crate::SECTION_ONE_TEXT)?;
         crate::rebuild_with_two_sections(&source.with_verified_bytes(ToOwned::to_owned)?)
     }
 
-    fn rewrite(bytes: &[u8], part: &str, from: &str, to: &str) -> Result<Vec<u8>, Box<dyn Error>> {
+    pub(super) fn rewrite(
+        bytes: &[u8],
+        part: &str,
+        from: &str,
+        to: &str,
+    ) -> Result<Vec<u8>, Box<dyn Error>> {
         let mut archive = ZipArchive::new(Cursor::new(bytes))?;
         let mut writer = ZipWriter::new(Cursor::new(Vec::new()));
         let mut changed = false;
@@ -510,7 +522,7 @@ mod tests {
         Ok(writer.finish()?.into_inner())
     }
 
-    fn trace_value(source: &[u8], saved: &[u8]) -> Result<Value, Box<dyn Error>> {
+    pub(super) fn trace_value(source: &[u8], saved: &[u8]) -> Result<Value, Box<dyn Error>> {
         let text_hash = |bytes| -> Result<String, Box<dyn Error>> {
             Ok(digest(
                 snapshot(bytes)?
