@@ -79,11 +79,11 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
-  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v12
-  passed 11/11 at run `7b45b92ba5c84ad7a2241b960871a58b` on clean commit `240f270`; it composes
-  v11 and binds the PostgreSQL checkpoint-host successor through 107 exact implementation files
-  and 25 locked/offline Cargo members. Contract SHA-256 is
-  `4a03e390c3973c0ec8f6d7b69c33f0d8961967135b40d217c725d38af6d6a027`.
+  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v13
+  passed 11/11 at run `10f7052eef92401cb7bb6802cc3ea1b1` on clean commit `c84da41`; it composes
+  v12 and binds the documentation successor bridge through 15 exact successors, 112 exact
+  implementation files and 25 locked/offline Cargo members. Contract SHA-256 is
+  `066de4844b0f43276f18e93157508112cddf762eda8a43a8450c229d6a4a4189`.
   Current/independent FULL remain pending.
 - P05-08 fixed input passed strict product inspection and the policy-locked official Hancom model
   parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
@@ -171,8 +171,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   and non-atomic, while pull/push, persistent credential custody, Hangul and production remain
   unproven. See
   `implementation/p17/P17-06_POSTGRES_CHECKPOINT_HOST_V11.md` and its frozen qualification. Current
-  source successor v12 independently binds the exact committed implementation without expanding
-  those claims.
+  source successor v13 composes the v12 PostgreSQL binding with the later documentation
+  source-successor bridge without expanding those claims.
 
 ## Risks and holds
 
