@@ -235,6 +235,8 @@ def run() -> dict[str, object]:
             temporary_path = Path(temporary).resolve()
             workspace = temporary_path / "workspace"
             workspace.mkdir()
+            (workspace / "input").mkdir()
+            (workspace / "output").mkdir()
             git = shutil.which("git")
             node = shutil.which("node")
             require(git is not None and Path(git).is_absolute(), "git_missing")
@@ -246,7 +248,6 @@ def run() -> dict[str, object]:
             command([git, "add", "--", "README.md"], cwd=workspace)
             command([git, "commit", "--no-gpg-sign", "-m", "initial"], cwd=workspace)
             initial_head = command([git, "rev-parse", "HEAD"], cwd=workspace).stdout.strip()
-            (workspace / "output").mkdir()
             output_bytes = b"P17_MCP_APPROVED_SYNTHETIC_HWPX"
             (workspace / "output/result-01.hwpx").write_bytes(output_bytes)
             output_sha256 = sha256_bytes(output_bytes)
