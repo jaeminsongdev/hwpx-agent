@@ -42,6 +42,22 @@ const token = "A".repeat(43);
 const daemon = "D:\\product\\local-companion-daemon.exe";
 const config = "D:\\runtime\\config.json";
 const widget = "D:\\runtime\\git-approval-widget-v1.html";
+const gitProgram = "C:\\Program Files\\Git\\cmd\\git.exe";
+const approvalStateRoot = "D:\\runtime\\approval-state";
+
+function runtimeConfig(): RuntimeConfig {
+    return {
+        daemonPath: daemon,
+        configPath: config,
+        widgetPath: widget,
+        widgetHtml: "<!doctype html><div id=\"root\"></div>",
+        gitProgram,
+        approvalStateRoot,
+        approvalSecret: Buffer.alloc(32, 7),
+        actorSha256: "a".repeat(64),
+        tenantSha256: "b".repeat(64),
+    };
+}
 
 function validEnvelope(): Record<string, unknown> {
     return {
@@ -68,8 +84,18 @@ test("runtime arguments require exact absolute daemon, config and widget paths",
             config,
             "--widget",
             widget,
+            "--git",
+            gitProgram,
+            "--approval-state",
+            approvalStateRoot,
         ]),
-        { daemonPath: daemon, configPath: config, widgetPath: widget },
+        {
+            daemonPath: daemon,
+            configPath: config,
+            widgetPath: widget,
+            gitProgram,
+            approvalStateRoot,
+        },
     );
     assert.throws(() => parseRuntimeArguments([]));
     assert.throws(() =>
@@ -83,6 +109,10 @@ test("runtime arguments require exact absolute daemon, config and widget paths",
             config,
             "--widget",
             widget,
+            "--git",
+            gitProgram,
+            "--approval-state",
+            approvalStateRoot,
         ]),
     );
     assert.throws(() =>
@@ -93,6 +123,10 @@ test("runtime arguments require exact absolute daemon, config and widget paths",
             config,
             "--widget",
             widget,
+            "--git",
+            gitProgram,
+            "--approval-state",
+            approvalStateRoot,
             "extra",
         ]),
     );
@@ -128,31 +162,28 @@ test("effect child environment is all-or-none, bounded, and allowlisted", () => 
         SystemRoot: "C:\\Windows",
         WINDIR: "C:\\Windows",
         PATH: "D:\\untrusted-bin",
-        HWPX_AGENT_GIT_PROGRAM: "C:\\Program Files\\Git\\cmd\\git.exe",
-        HWPX_AGENT_APPROVAL_STATE_ROOT: "D:\\runtime\\approval-state",
-        HWPX_AGENT_APPROVAL_SECRET: "A".repeat(43),
         SHOULD_NOT_PASS: "private",
     };
-    assert.deepEqual(childEffectEnvironment(token, source), {
+    assert.deepEqual(childEffectEnvironment(token, runtimeConfig(), source), {
         HWPX_AGENT_LOCAL_SESSION_TOKEN: token,
         SystemRoot: "C:\\Windows",
         WINDIR: "C:\\Windows",
-        HWPX_AGENT_GIT_PROGRAM: "C:\\Program Files\\Git\\cmd\\git.exe",
-        HWPX_AGENT_APPROVAL_STATE_ROOT: "D:\\runtime\\approval-state",
-        HWPX_AGENT_APPROVAL_SECRET: "A".repeat(43),
-        TEMP: "D:\\runtime\\approval-state",
-        TMP: "D:\\runtime\\approval-state",
+        HWPX_AGENT_GIT_PROGRAM: gitProgram,
+        HWPX_AGENT_APPROVAL_STATE_ROOT: approvalStateRoot,
+        HWPX_AGENT_APPROVAL_SECRET: Buffer.alloc(32, 7).toString("base64url"),
+        TEMP: approvalStateRoot,
+        TMP: approvalStateRoot,
     });
     assert.throws(() =>
         childEffectEnvironment(token, {
-            ...source,
-            HWPX_AGENT_APPROVAL_SECRET: undefined,
+            ...runtimeConfig(),
+            approvalSecret: Buffer.alloc(1),
         }),
     );
     assert.throws(() =>
         childEffectEnvironment(token, {
-            ...source,
-            HWPX_AGENT_GIT_PROGRAM: "git.exe",
+            ...runtimeConfig(),
+            gitProgram: "git.exe",
         }),
     );
 });
@@ -435,12 +466,7 @@ test("effect request and result require the exact protocol-v4 binding", () => {
 });
 
 test("trusted identity and token minting are exact, short-lived and HMAC bound", () => {
-    const encodedSecret = Buffer.alloc(32, 7).toString("base64url");
-    const identity = loadConfirmationIdentity({
-        HWPX_AGENT_APPROVAL_ACTOR_SHA256: "a".repeat(64),
-        HWPX_AGENT_APPROVAL_TENANT_SHA256: "b".repeat(64),
-        HWPX_AGENT_APPROVAL_SECRET: encodedSecret,
-    });
+    const identity = loadConfirmationIdentity(runtimeConfig());
     const plan: GitApprovalPlanResult = {
         workspace_id: "primary",
         operation_id: "op_widget_01",
@@ -477,20 +503,14 @@ test("trusted identity and token minting are exact, short-lived and HMAC bound",
     identity.secret.fill(0);
     assert.throws(() =>
         loadConfirmationIdentity({
-            HWPX_AGENT_APPROVAL_ACTOR_SHA256: "a".repeat(64),
-            HWPX_AGENT_APPROVAL_TENANT_SHA256: "b".repeat(64),
-            HWPX_AGENT_APPROVAL_SECRET: "short",
+            ...runtimeConfig(),
+            approvalSecret: Buffer.alloc(1),
         }),
     );
 });
 
 test("app confirmation revalidates the displayed plan and never accepts a caller token", async () => {
-    const runtime: RuntimeConfig = {
-        daemonPath: daemon,
-        configPath: config,
-        widgetPath: widget,
-        widgetHtml: "<!doctype html><div id=\"root\"></div>",
-    };
+    const runtime = runtimeConfig();
     const plan: GitApprovalPlanResult = {
         workspace_id: "primary",
         operation_id: "op_widget_01",
@@ -541,11 +561,6 @@ test("app confirmation revalidates the displayed plan and never accepts a caller
             } satisfies GitCommitEffectResult;
         },
         () => 100,
-        {
-            HWPX_AGENT_APPROVAL_ACTOR_SHA256: "a".repeat(64),
-            HWPX_AGENT_APPROVAL_TENANT_SHA256: "b".repeat(64),
-            HWPX_AGENT_APPROVAL_SECRET: Buffer.alloc(32, 7).toString("base64url"),
-        },
     );
     assert.equal(result.executed, true);
     assert.match(
@@ -561,7 +576,6 @@ test("app confirmation revalidates the displayed plan and never accepts a caller
             async () => plan,
             async () => result,
             () => 100,
-            {},
         ),
     );
     await assert.rejects(() =>
@@ -571,7 +585,6 @@ test("app confirmation revalidates the displayed plan and never accepts a caller
             async () => ({ ...plan, expected_head: "2".repeat(40) }),
             async () => result,
             () => 100,
-            {},
         ),
     );
 });

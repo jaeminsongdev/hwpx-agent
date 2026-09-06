@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
-import { createHmac, randomBytes, randomUUID } from "node:crypto";
+import { createHash, createHmac, randomBytes, randomUUID } from "node:crypto";
 import { lstat, readFile, realpath } from "node:fs/promises";
-import { dirname, extname, isAbsolute } from "node:path";
+import { dirname, extname, isAbsolute, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { TextDecoder } from "node:util";
 
@@ -33,8 +33,6 @@ const SESSION_ENV = "HWPX_AGENT_LOCAL_SESSION_TOKEN";
 const GIT_PROGRAM_ENV = "HWPX_AGENT_GIT_PROGRAM";
 const APPROVAL_STATE_ROOT_ENV = "HWPX_AGENT_APPROVAL_STATE_ROOT";
 const APPROVAL_SECRET_ENV = "HWPX_AGENT_APPROVAL_SECRET";
-const APPROVAL_ACTOR_ENV = "HWPX_AGENT_APPROVAL_ACTOR_SHA256";
-const APPROVAL_TENANT_ENV = "HWPX_AGENT_APPROVAL_TENANT_SHA256";
 const REQUEST_ID = "mcp-health";
 const MAX_STDOUT_BYTES = 16_384;
 const MAX_STDERR_BYTES = 4_096;
@@ -54,6 +52,11 @@ export interface RuntimeConfig {
     readonly configPath: string;
     readonly widgetPath: string;
     readonly widgetHtml: string;
+    readonly gitProgram: string;
+    readonly approvalStateRoot: string;
+    readonly approvalSecret: Buffer;
+    readonly actorSha256: string;
+    readonly tenantSha256: string;
 }
 
 export interface HealthResult {
@@ -163,43 +166,63 @@ export function parseRuntimeArguments(argumentsValue: readonly string[]): {
     readonly daemonPath: string;
     readonly configPath: string;
     readonly widgetPath: string;
+    readonly gitProgram: string;
+    readonly approvalStateRoot: string;
 } {
     if (
-        argumentsValue.length !== 6 ||
+        argumentsValue.length !== 10 ||
         argumentsValue[0] !== "--daemon" ||
         argumentsValue[2] !== "--config" ||
-        argumentsValue[4] !== "--widget"
+        argumentsValue[4] !== "--widget" ||
+        argumentsValue[6] !== "--git" ||
+        argumentsValue[8] !== "--approval-state"
     ) {
         throw new Error("invalid local companion arguments");
     }
     const daemonPath = argumentsValue[1];
     const configPath = argumentsValue[3];
     const widgetPath = argumentsValue[5];
+    const gitProgram = argumentsValue[7];
+    const approvalStateRoot = argumentsValue[9];
     if (
         daemonPath === undefined ||
         configPath === undefined ||
         widgetPath === undefined ||
+        gitProgram === undefined ||
+        approvalStateRoot === undefined ||
         !isAbsolute(daemonPath) ||
         !isAbsolute(configPath) ||
         !isAbsolute(widgetPath) ||
+        !isAbsolute(gitProgram) ||
+        !isAbsolute(approvalStateRoot) ||
         daemonPath.length > 1_024 ||
         configPath.length > 1_024 ||
-        widgetPath.length > 1_024
+        widgetPath.length > 1_024 ||
+        gitProgram.length > 1_024 ||
+        approvalStateRoot.length > 1_024
     ) {
         throw new Error("invalid local companion paths");
     }
-    return { daemonPath, configPath, widgetPath };
+    return {
+        daemonPath,
+        configPath,
+        widgetPath,
+        gitProgram,
+        approvalStateRoot,
+    };
 }
 
 export async function loadRuntimeConfig(
     argumentsValue: readonly string[],
 ): Promise<RuntimeConfig> {
     const parsed = parseRuntimeArguments(argumentsValue);
-    const [daemonMetadata, configMetadata, widgetMetadata] = await Promise.all([
-        lstat(parsed.daemonPath),
-        lstat(parsed.configPath),
-        lstat(parsed.widgetPath),
-    ]);
+    const [daemonMetadata, configMetadata, widgetMetadata, gitMetadata] =
+        await Promise.all([
+            lstat(parsed.daemonPath),
+            lstat(parsed.configPath),
+            lstat(parsed.widgetPath),
+            lstat(parsed.gitProgram),
+        ]);
     if (
         !daemonMetadata.isFile() ||
         daemonMetadata.isSymbolicLink() ||
@@ -207,20 +230,25 @@ export async function loadRuntimeConfig(
         configMetadata.isSymbolicLink() ||
         !widgetMetadata.isFile() ||
         widgetMetadata.isSymbolicLink() ||
+        !gitMetadata.isFile() ||
+        gitMetadata.isSymbolicLink() ||
         configMetadata.size < 1 ||
         configMetadata.size > MAX_CONFIG_BYTES ||
         widgetMetadata.size < 1 ||
         widgetMetadata.size > MAX_WIDGET_BYTES ||
         (process.platform === "win32" &&
-            extname(parsed.daemonPath).toLowerCase() !== ".exe")
+            (extname(parsed.daemonPath).toLowerCase() !== ".exe" ||
+                extname(parsed.gitProgram).toLowerCase() !== ".exe"))
     ) {
         throw new Error("invalid local companion files");
     }
-    const [daemonPath, configPath, widgetPath] = await Promise.all([
+    const [daemonPath, configPath, widgetPath, gitProgram] = await Promise.all([
         realpath(parsed.daemonPath),
         realpath(parsed.configPath),
         realpath(parsed.widgetPath),
+        realpath(parsed.gitProgram),
     ]);
+    const approvalStateRoot = resolve(parsed.approvalStateRoot);
     const widgetHtml = await readFile(widgetPath, "utf8");
     if (
         Buffer.byteLength(widgetHtml, "utf8") > MAX_WIDGET_BYTES ||
@@ -236,7 +264,26 @@ export async function loadRuntimeConfig(
     ) {
         throw new Error("invalid local companion widget");
     }
-    return { daemonPath, configPath, widgetPath, widgetHtml };
+    const approvalSecret = randomBytes(32);
+    const actorSha256 = createHash("sha256")
+        .update("hwpx-agent.local-actor/v1\0", "utf8")
+        .update(approvalStateRoot, "utf8")
+        .digest("hex");
+    const tenantSha256 = createHash("sha256")
+        .update("hwpx-agent.local-tenant/v1\0", "utf8")
+        .update(configPath, "utf8")
+        .digest("hex");
+    return {
+        daemonPath,
+        configPath,
+        widgetPath,
+        widgetHtml,
+        gitProgram,
+        approvalStateRoot,
+        approvalSecret,
+        actorSha256,
+        tenantSha256,
+    };
 }
 
 export function childEnvironment(
@@ -258,39 +305,29 @@ export function childEnvironment(
 
 export function childEffectEnvironment(
     token: string,
+    config: RuntimeConfig,
     source: NodeJS.ProcessEnv = process.env,
 ): NodeJS.ProcessEnv {
     const environment = childEnvironment(token, source);
-    const gitProgram = source[GIT_PROGRAM_ENV];
-    const stateRoot = source[APPROVAL_STATE_ROOT_ENV];
-    const secret = source[APPROVAL_SECRET_ENV];
     if (
-        gitProgram === undefined ||
-        stateRoot === undefined ||
-        secret === undefined ||
-        !isAbsolute(gitProgram) ||
-        !isAbsolute(stateRoot) ||
-        gitProgram.length > 1_024 ||
-        stateRoot.length > 1_024 ||
-        !/^[A-Za-z0-9_-]{43,171}$/.test(secret) ||
-        Buffer.from(secret, "base64url").toString("base64url") !== secret
+        !isAbsolute(config.gitProgram) ||
+        !isAbsolute(config.approvalStateRoot) ||
+        config.gitProgram.length > 1_024 ||
+        config.approvalStateRoot.length > 1_024 ||
+        config.approvalSecret.length < 32 ||
+        config.approvalSecret.length > 128
     ) {
         throw new Error("local effect host is not configured");
     }
-    const secretBytes = Buffer.from(secret, "base64url");
-    try {
-        if (secretBytes.length < 32 || secretBytes.length > 128) {
-            throw new Error("local effect host is not configured");
-        }
-        environment[GIT_PROGRAM_ENV] = gitProgram;
-        environment[APPROVAL_STATE_ROOT_ENV] = stateRoot;
-        environment[APPROVAL_SECRET_ENV] = secret;
-        environment.TEMP = stateRoot;
-        environment.TMP = stateRoot;
-        return environment;
-    } finally {
-        secretBytes.fill(0);
-    }
+    const encodedSecret = config.approvalSecret.toString("base64url");
+    environment[GIT_PROGRAM_ENV] = config.gitProgram;
+    environment[APPROVAL_STATE_ROOT_ENV] = config.approvalStateRoot;
+    environment[APPROVAL_SECRET_ENV] = encodedSecret;
+    environment.TEMP = config.approvalStateRoot;
+    environment.TMP = config.approvalStateRoot;
+    // JavaScript strings cannot be reliably zeroized. The encoded copy exists only in
+    // this child environment; the source key is a bridge-owned in-memory Buffer.
+    return environment;
 }
 
 export function privateHealthRequest(token: string): JsonRecord {
@@ -821,27 +858,21 @@ interface ConfirmationIdentity {
 }
 
 export function loadConfirmationIdentity(
-    source: NodeJS.ProcessEnv = process.env,
+    config: RuntimeConfig,
 ): ConfirmationIdentity {
-    const actorSha256 = source[APPROVAL_ACTOR_ENV];
-    const tenantSha256 = source[APPROVAL_TENANT_ENV];
-    const encodedSecret = source[APPROVAL_SECRET_ENV];
     if (
-        !isDigest(actorSha256) ||
-        !isDigest(tenantSha256) ||
-        encodedSecret === undefined ||
-        !/^[A-Za-z0-9_-]{43,171}$/.test(encodedSecret) ||
-        Buffer.from(encodedSecret, "base64url").toString("base64url") !==
-            encodedSecret
+        !isDigest(config.actorSha256) ||
+        !isDigest(config.tenantSha256) ||
+        config.approvalSecret.length < 32 ||
+        config.approvalSecret.length > 128
     ) {
         throw new Error("trusted confirmation authority is not configured");
     }
-    const secret = Buffer.from(encodedSecret, "base64url");
-    if (secret.length < 32 || secret.length > 128) {
-        secret.fill(0);
-        throw new Error("trusted confirmation authority is not configured");
-    }
-    return { actorSha256, tenantSha256, secret };
+    return {
+        actorSha256: config.actorSha256,
+        tenantSha256: config.tenantSha256,
+        secret: Buffer.from(config.approvalSecret),
+    };
 }
 
 export function mintGitConfirmation(
@@ -1229,7 +1260,7 @@ export async function callLocalEffect(
             config,
             token,
             privateEffectRequest(token, params),
-            childEffectEnvironment(token),
+            childEffectEnvironment(token, config),
         );
         if (
             output.code !== 0 ||
@@ -1282,7 +1313,6 @@ export async function confirmAndExecuteGitCommit(
         params: JsonRecord,
     ) => Promise<GitCommitEffectResult> = callLocalEffect,
     now: () => number = () => Math.floor(Date.now() / 1_000),
-    environment: NodeJS.ProcessEnv = process.env,
 ): Promise<GitCommitEffectResult> {
     validateConfirmationParams(params);
     const approvalParams: JsonRecord = {
@@ -1296,7 +1326,7 @@ export async function confirmAndExecuteGitCommit(
     if (!confirmationMatchesPlan(params, currentPlan)) {
         throw new Error("trusted confirmation no longer matches current Git state");
     }
-    const identity = loadConfirmationIdentity(environment);
+    const identity = loadConfirmationIdentity(config);
     let confirmationToken = "";
     try {
         const requestedAt = now();

@@ -1,12 +1,10 @@
 """Run the P17-08 confirmed Git effect through the real local MCP bridge."""
 from __future__ import annotations
 
-import base64
 import hashlib
 import json
 import os
 from pathlib import Path
-import secrets
 import shutil
 import subprocess
 import tempfile
@@ -40,14 +38,14 @@ CHECKS = (
     "self_contained_closed_csp_widget_resource",
     "real_git_repository_disposable",
     "exact_target_and_plan_digests_prepared",
-    "trusted_identity_supplied_only_by_server_environment",
+    "trusted_identity_derived_and_secret_generated_in_memory",
     "confirmation_token_absent_from_public_tool_inputs",
     "server_revalidates_displayed_plan_before_internal_signing",
     "actual_mcp_daemon_git_commit_executed",
     "committed_bytes_and_parent_verified",
     "unrelated_staged_entry_preserved",
     "same_displayed_plan_second_execution_rejected",
-    "token_secret_paths_and_content_absent_from_responses",
+    "token_key_paths_and_content_absent_from_responses",
     "graceful_shutdown_and_cleanup",
     "no_hangul_user_repository_or_network_used",
 )
@@ -72,10 +70,6 @@ def compact(document: object) -> bytes:
 
 def sha256_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
-
-
-def base64url(value: bytes) -> str:
-    return base64.urlsafe_b64encode(value).rstrip(b"=").decode("ascii")
 
 
 def command(
@@ -256,24 +250,11 @@ def run() -> dict[str, object]:
                 ).encode("utf-8")
             )
             approval_state = temporary_path / "approval-state"
-            secret = secrets.token_bytes(32)
-            encoded_secret = base64url(secret)
-            actor_sha256 = sha256_bytes(b"p17 trusted test actor")
-            tenant_sha256 = sha256_bytes(b"p17 trusted test tenant")
             environment = {
                 name: value
                 for name in ("SystemRoot", "WINDIR")
                 if (value := os.environ.get(name)) is not None
             }
-            environment.update(
-                {
-                    "HWPX_AGENT_GIT_PROGRAM": str(Path(git).resolve()),
-                    "HWPX_AGENT_APPROVAL_STATE_ROOT": str(approval_state),
-                    "HWPX_AGENT_APPROVAL_SECRET": encoded_secret,
-                    "HWPX_AGENT_APPROVAL_ACTOR_SHA256": actor_sha256,
-                    "HWPX_AGENT_APPROVAL_TENANT_SHA256": tenant_sha256,
-                }
-            )
             process = subprocess.Popen(
                 [
                     node,
@@ -284,6 +265,10 @@ def run() -> dict[str, object]:
                     str(config_path),
                     "--widget",
                     str(widget_path()),
+                    "--git",
+                    str(Path(git).resolve()),
+                    "--approval-state",
+                    str(approval_state),
                 ],
                 cwd=ROOT,
                 env=environment,
@@ -505,7 +490,6 @@ def run() -> dict[str, object]:
             require(
                 str(temporary_path) not in transcript
                 and str(workspace) not in transcript
-                and encoded_secret not in transcript
                 and "P17_MCP_APPROVED_SYNTHETIC_HWPX" not in transcript
                 and "session_token" not in transcript,
                 "private_data_exposed",
@@ -516,7 +500,6 @@ def run() -> dict[str, object]:
             require(process.returncode == 0, "bridge_exit")
             require(process.stderr is not None and process.stderr.read() == "", "bridge_stderr")
             process = None
-            secret = b"\x00" * len(secret)
     finally:
         if process is not None and process.poll() is None:
             process.kill()
