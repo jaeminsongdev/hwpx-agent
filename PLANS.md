@@ -79,11 +79,11 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
-  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v14
-  passed 11/11 at run `7e27407ba8b1486bb991ab7928b08494` on clean commit `b763c3d`; it composes
-  v13 and binds the Telemetry/documentation successor bridge through 17 exact successors, 113 exact
+  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v15
+  passed 11/11 at run `bf3d71cdd1044b6995d7539af2959d43` on clean commit `e8b209a`; it composes
+  v14 and binds the exact frozen P15 context bridge through 22 exact successors, 115 exact
   implementation files and 25 locked/offline Cargo members. Contract SHA-256 is
-  `ed4bff5f70b73b39b51cecf546bd444c4236140b997fd5380a6a3d0a182a5dfb`.
+  `f7b7922b12a2891e33fae1adbefe36565e7918e8535b4037f276058f3d901384`.
   Current/independent FULL remain pending.
 - P05-08 fixed input passed strict product inspection and the policy-locked official Hancom model
   parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
@@ -176,8 +176,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   and non-atomic, while pull/push, persistent credential custody, Hangul and production remain
   unproven. See
   `implementation/p17/P17-06_POSTGRES_CHECKPOINT_HOST_V11.md` and its frozen qualification. Current
-  source successor v14 composes the v12 PostgreSQL binding with the later documentation and
-  Telemetry source-successor bridges without expanding those claims.
+  source successor v15 composes the v12 PostgreSQL binding with the later documentation,
+  Telemetry and frozen P15 context bridges without expanding those claims.
 
 ## Risks and holds
 
