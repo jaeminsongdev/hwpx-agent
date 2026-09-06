@@ -36,6 +36,21 @@ importers:
         specifier: 2.5.0
         version: 2.5.0(@modelcontextprotocol/sdk@1.30.0(zod@4.5.4))(@types/node@24.13.3)(@types/react@19.2.18)(esbuild@0.28.2)(express@5.2.1)(react-dom@19.2.8(react@19.2.8))
 
+  web/plan-review-staging:
+    dependencies:
+      '@hwpx-agent/plugin-widget':
+        specifier: workspace:*
+        version: link:../plugin-widget
+      '@modelcontextprotocol/node':
+        specifier: 2.0.0
+        version: 2.0.0(@modelcontextprotocol/server@2.0.0)(hono@4.13.5)
+      '@modelcontextprotocol/server':
+        specifier: 2.0.0
+        version: 2.0.0
+      selfsigned:
+        specifier: 5.5.0
+        version: 5.5.0
+
   web/plugin-widget:
     dependencies:
       '@hwpx-agent/schema-models':

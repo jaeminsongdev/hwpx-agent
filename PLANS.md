@@ -43,6 +43,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0082 | P16-02 registration | Local bundle ready; actual registered app/host receipt absent |
 | P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; actual registered host pending |
 | P-0086 | P16-06 Plan/diff UI | Source v11 29/29; durable plan v12 39/39; renderer and durable evidence v13 PASS; registered host open |
+| P-0087 | P16-06 registered renderer | In progress: add a dedicated one-tool MCP host outside the immutable P15 catalog; bind source/plan/evidence PostgreSQL readers and verify with a disposable full-stack run |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.
