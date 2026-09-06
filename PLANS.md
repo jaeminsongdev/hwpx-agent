@@ -79,9 +79,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
-  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v7
-  v8 passed 11/11 at run `51a6e677832c4646b97f585125b4130b` on clean commit `57ab50f`; it
-  retains all v7 sources and binds the P17-07 graphical stale-head component through 47 exact
+  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v9
+  passed 11/11 at run `bec4941448134e6e99f8b0c4cc393eb3` on clean commit `4be56ea`; it retains
+  the v8 source bundle and binds the P17-06 exact-mirror request successor through 52 exact
   implementation files. Current/independent FULL remain pending.
 - P05-08 fixed input passed strict product inspection and the policy-locked official Hancom model
   parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
@@ -116,7 +116,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   `784ceb1476354f51b73fb5cbf40d8e1c` passes. This is graphical component evidence only:
   `project_conflict_resolve` is not registered and actual concurrent Web/Codex evidence is absent.
 - P17-06 private request v2 now binds every pull/push/checkpoint exchange to the exact opaque
-  `mirror_id`; this is a required host prerequisite, not actual transport or remote-service evidence.
+  `mirror_id`; source successor v9 proves its exact implementation blobs. This is a required host
+  prerequisite, not actual transport or remote-service evidence.
 
 ## Risks and holds
 
