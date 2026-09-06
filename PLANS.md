@@ -30,7 +30,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P14 | scoped local reference/disposable PostgreSQL PASS | implementation/p14/P14_GATE_REPORT.md |
 | P15 | scoped local MCP reference/Inspector staging PASS | implementation/p15/P15_GATE_REPORT.md |
 | P16 | in progress | 01,03,04 pass; 02 actual app pending; 05 local pass; 06 dedicated local host v14 PASS |
-| P17 | in progress | 03 implementation complete, canonical qualification rerun pending; 01/02 and 04–09 pending |
+| P17 | in progress | 03 bounded local daemon PASS; 01/02 and 04–09 pending |
 | P18 | blocked by P12/P13/P16/P17 | quality/security/performance/DR |
 | P19 | blocked by P18 | production/license/submission |
 | P20 | post-GA | parity and Rust-native expansion |
@@ -44,7 +44,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; dedicated local host v14 PASS; actual Codex app pending |
 | P-0086 | P16-06 Plan/diff UI | Source v11, durable plan v12, renderer/evidence v13 and dedicated local host v14 PASS; actual app/Hangul open |
 | P-0087 | P16-06 registered renderer | PASS for dedicated local one-tool MCP host: run d22e85581cd44d06a016f3460a43de12, exact v14 qualification; actual Codex app installation remains open |
-| P-0088 | P17-03 local daemon | 11/11 behavior at run 23cfab98b711491aacb2940ca7cf32a8; CRLF receipt rejected by canonical Gate, clean rerun pending |
+| P-0088 | P17-03 local daemon | PASS: run 4b1c023ca40c4a02b6dc25ac77ca656b, canonical LF receipt, 11/11; private auth/config/workspace sandbox and binary smoke |
 | P-0089 | P17-04 local MCP config | In progress: stdio bridge, process startup/auth, personal plugin composition and fresh-install smoke; persistent secrets remain excluded |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
@@ -126,10 +126,10 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 - P16 host v14 detached audit: D:\개발\hwpx-agent-audit-p16-host-06494a9 at `06494a9`;
   frozen offline dependency restore, Node format/typecheck/build/135 tests, Python 10, exact
   qualification verification, Rust workspace tests and Clippy `-D warnings` PASS; tracked tree clean.
-- P17-03 implementation `f3a27a6`; actual local daemon run 23cfab98b711491aacb2940ca7cf32a8
-  passed 11/11 and cleaned, but its CRLF receipt failed canonical qualification and is not promoted.
-  Explicit-byte receipt repair awaits a clean successor run. Rust target 10/10, full workspace and
-  Clippy PASS; no Hangul/network/plugin.
+- P17-03 repair `ca1a332`; qualifying local daemon run 4b1c023ca40c4a02b6dc25ac77ca656b
+  passed 11/11 and cleaned with canonical LF receipt. Earlier run 23cfab98b711491aacb2940ca7cf32a8
+  remains non-qualifying because its receipt used CRLF. Rust target 10/10, full workspace and Clippy
+  PASS; no Hangul/network/plugin.
 - External QA: Codex workspace p16-response-contract-20260905/inspection.md and run-03/receipt.json.
   Thirteen captures automated, six directly reviewed; exact HTML/script hashes bound, no user browser profile.
 - First reads: this ledger; P05 audit status/column-ID admission plan and attempt21; P16 MAIN audit/policy.
