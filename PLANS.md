@@ -129,7 +129,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 - P17-03 repair `ca1a332`; qualifying local daemon run 4b1c023ca40c4a02b6dc25ac77ca656b
   passed 11/11 and cleaned with canonical LF receipt. Earlier run 23cfab98b711491aacb2940ca7cf32a8
   remains non-qualifying because its receipt used CRLF. Rust target 10/10, full workspace and Clippy
-  PASS; no Hangul/network/plugin.
+  PASS. Detached audit at `05ad6bb` reverified the qualification, full workspace, Clippy and P01
+  security regressions from a clean checkout; no Hangul/network/plugin.
 - External QA: Codex workspace p16-response-contract-20260905/inspection.md and run-03/receipt.json.
   Thirteen captures automated, six directly reviewed; exact HTML/script hashes bound, no user browser profile.
 - First reads: this ledger; P05 audit status/column-ID admission plan and attempt21; P16 MAIN audit/policy.
