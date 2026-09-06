@@ -1,0 +1,101 @@
+{
+  "schema_version": "hwpx-agent.p05-07-dense-column-flow-qualification/v1",
+  "state": "pass",
+  "qualified_source_commit": "536aabee6866154b1676cf09b9c49d202112eae7",
+  "scope": {
+    "fixture_profile": "hwpx-agent.hancom-2020-dense-column-flow/v1",
+    "target_product": "Hangul 2020",
+    "target_file_version": "11.0.0.9136",
+    "target_registry_view": "Registry32",
+    "target_client": "windows_powershell_x86_sta",
+    "target_executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    "attempt": 2
+  },
+  "artifacts": {
+    "input_hwpx_sha256": "eee4e18ec85f51592b574d02c21bbf59d20143f0ef78db9704b773724654ec23",
+    "saved_hwpx_sha256": "74ec063b3a222041c03509462f41210452235c503a4ed23fac95746f88d198e0",
+    "execution_trace_sha256": "9d79e85053f578c6f3845ac7d376f4deeba37e821b8e12a5a2581ee00f905fd8",
+    "progress_journal_sha256": "0a98fc3c32170d999965b48517def29b55c88b46cd2c4b89905ca376210c2cde",
+    "pdf_sha256": "0bb647bb7685dd4fb9e8854503c6bab204cb06fcf429d0a776d3197f04d26ad4",
+    "render_expectation_sha256": "6ca7926efb1b9e6f9c1c8b0b5cce97cb8ae69ae91640b1bcc3cdbc62f67d0ad3",
+    "pdf_verification_sha256": "7d3e61f6497cae15ee97599f425e2f074e5ee3bcef8fb96b7331f54927126982",
+    "rendered_page_sha256": [
+      "2169300a1960b1d4437a81d937a6cf7d89630c37c418bc3b1b183ccd01ad2135",
+      "9a0c307b0d839ec0f49857d940c24cf52d3a5ade28e84854bb6cb2e2cb3cb22e"
+    ]
+  },
+  "execution": {
+    "input_unchanged": true,
+    "open_save_reopen_text_pdf_quit_passed": true,
+    "progress_event_count": 21,
+    "progress_terminal_state": "pass",
+    "watchdog_timed_out": false,
+    "remaining_hwp_process_count": 0
+  },
+  "saved_semantics": {
+    "strict_inspector_passed": true,
+    "paragraph_count": 31,
+    "explicit_column_break_count": 0,
+    "body_width_hwpunit": 80220,
+    "column_count": 2,
+    "column_gap_hwpunit": 1700,
+    "canonical_visible_text_sha256": "21c67a1e9786886923a8d803cee9cd46d2881967e1f17f91f5f93f872f838b83",
+    "source_backend_column_id_empty": true,
+    "saved_backend_column_id_empty": true
+  },
+  "pdf_flow": {
+    "verification_schema": "hwpx-agent.p05-hancom-pdf-verification/v2",
+    "page_count": 2,
+    "page_geometry_milli_mm": [
+      [309739, 229658],
+      [309739, 229658]
+    ],
+    "page_1": {
+      "left_text_fragment_count": 180,
+      "right_text_fragment_count": 180,
+      "unclassified_text_fragment_count": 0,
+      "bottom_baseline_delta_milli_mm": 4481,
+      "left_anchor_x_milli_mm": 52998,
+      "right_anchor_x_milli_mm": 159331
+    },
+    "page_2": {
+      "left_text_fragment_count": 91,
+      "right_text_fragment_count": 91,
+      "unclassified_text_fragment_count": 0,
+      "bottom_baseline_delta_milli_mm": 5622,
+      "left_anchor_x_milli_mm": 14973,
+      "right_anchor_x_milli_mm": 172739
+    },
+    "maximum_allowed_bottom_baseline_delta_milli_mm": 12000
+  },
+  "visual_review": {
+    "reviewed": true,
+    "page_count": 2,
+    "landscape_pages": 2,
+    "separator_visible_on_every_page": true,
+    "ordered_left_to_right_flow_visible": true,
+    "clipping_observed": false,
+    "overlap_observed": false,
+    "unexpected_blank_column_observed": false,
+    "review_is_independent_of_machine_coordinate_assertions": true
+  },
+  "preserved_failure": {
+    "attempt_1_execution_passed": true,
+    "attempt_1_pdf_verification_state": "failed",
+    "attempt_1_pdf_error_code": "PDF_PAGE_COUNT_MISMATCH",
+    "attempt_1_one_page_expectation_sha256": "785fe01f866f6b4a7db024447f6aecfeac9a88325fe9576af86596e9c9aabd1c",
+    "attempt_1_failed_pdf_verification_sha256": "f73d4a0c6467ff74650dc625089d4f73af275eada81dbac907e5b8924f2018ba",
+    "attempt_1_promoted_to_pass": false
+  },
+  "claim_boundary": {
+    "actual_current_pc_hangul_2020_dense_flow": true,
+    "actual_current_pc_hangul_2020_balance": true,
+    "arbitrary_document_support": false,
+    "hangul_2022_or_2024_support": false,
+    "p05_phase_gate": false,
+    "publication_or_production": false
+  },
+  "raw_document_text_present": false,
+  "user_document_scanned": false,
+  "external_network_invoked": false
+}

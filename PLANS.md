@@ -5,7 +5,7 @@
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
 - Active: P05-07 dense automatic column flow, P17-06 project sync, P17-08 trusted approval boundary.
 - Reasoning: max for preservation, authorization and Gate work; high for routine implementation.
-- UI: attempt23 passed corrected landscape open/save/reopen/text/PDF; bounded ID rebinding passed.
+- UI: attempt23 sparse layout/identity and dense attempt02 automatic flow/balance passed on Hangul 2020.
 
 ## Objective and boundaries
 
@@ -21,7 +21,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | Phase | State | Evidence or dependency |
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | `implementation/p00/` through `implementation/p04/` |
-| P05 | in progress | 01-05 pass; 06 reopened; 07 sparse subgate pass and dense source prepared; actual dense flow and 08-09 pending |
+| P05 | in progress | 01-05 pass; 06 reopened; 07 sparse plus dense current-2020 subgates pass; 08-09 pending |
 | P06-P09 | blocked by P05 | table, equation, graphics and fields engines |
 | P10 | in progress | 01-04,07,09,10 scoped pass; 05/06 actual dependencies; 08 unqualified |
 | P11-P13 | blocked | depend on P06-P10 |
@@ -36,7 +36,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 | ID | Task | State and next evidence |
 |---|---|---|
-| P-0045-0048 | P05-06-09 | Sparse subgate pass; dense attempt01 lifecycle/semantics PASS but one-page PDF expectation failed; two-page successor prepared |
+| P-0045-0048 | P05-06-09 | Sparse subgate pass; dense attempt01 page-count failure preserved; attempt02 lifecycle/semantic/PDF/visual PASS; 08-09 remain |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -71,9 +71,11 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 - Current source successor v2 run `6cc220553ca8460281f58d5db10ac7ea` passed 11/11 at independent
   clean `54c6c14`; 14 exact replacements, 23 locked/offline Cargo members and P05 dev-edges bound.
-- P05 attempt23: actual Hangul 2020 corrected landscape save/reopen/PDF PASS. Exact-fixture logical
-  rebinding records two removed backend IDs without calling them preserved; package tests 210/210
-  and Clippy PASS. Current/independent FULL for this successor remains pending.
+- P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
+  records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
+  31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
+  and visual review. Attempt01's one-page expectation failure is preserved. Successor source
+  qualification and current/independent FULL remain pending.
 - P16 merge `0512883`; durable plan PostgreSQL run `1828b246e92746789fa5d6501e7f1ac2`
   passed 39/39, renderer/evidence run `2b01ce0ff66045f29a32c67d217aa9bd` passed 19/19,
   dedicated host run `d22e85581cd44d06a016f3460a43de12` passed 14/14; resources cleaned.
@@ -82,9 +84,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Risks and holds
 
-- R-0001: P05-07 dense attempt01 source, Hangul lifecycle and saved semantics pass; initial PDF
-  verification correctly failed on a one-vs-two-page mismatch. Fresh two-page coordinate/balance,
-  visual evidence and successor FULL remain open.
+- R-0001: P05-07 dense attempt02 current-PC actual subgate passes. Source successor qualification,
+  current/independent FULL and P05-08/09 remain open; no later-version or arbitrary-document claim.
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence remains open.
 - R-0003: One independent worker timeout smoke failed; retries passed, root cause unproven.
 - R-0004: Broad P16 discovery remains red on immutable predecessor locks and legacy assets;
@@ -97,9 +98,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 1. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
-2. Run the prepared fixed P05-07 dense-flow fixture through bounded Hangul 2020, then verify the
-   saved semantics, PDF column coordinates/bottom balance and PNG with the user performing any
-   permission/UI input.
+2. Bind the P05-07 dense implementation/evidence into the next source successor, run current and
+   clean-checkout FULL, then advance to the bounded P05-08 actual Hangul 2020 Gate.
 3. Wire P17-06 to a qualified host credential/transport adapter, then capture an actual remote
    pull/push/checkpoint transition without promoting the current injected component evidence.
 4. Before closure run target tests, regressions, current and clean-checkout FULL, applicable offline

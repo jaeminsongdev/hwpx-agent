@@ -114,6 +114,22 @@ class PdfVerifierContractTests(unittest.TestCase):
         self.assertIsNotNone(dense.pages[1].column_flow)
         self.assertEqual(dense.pages[1].column_flow.right_anchor_text, "P05-07-DENSE-END")
 
+    def test_dense_qualification_receipt_is_redacted_and_scoped(self) -> None:
+        receipt_path = MODULE_PATH.parents[1] / "qualification" / "p05-07-dense-attempt02-qualification.json"
+        raw = receipt_path.read_bytes()
+        receipt = json.loads(raw.decode("utf-8"), object_pairs_hook=MODULE._reject_duplicate_pairs)
+        self.assertEqual(receipt["state"], "pass")
+        self.assertTrue(receipt["claim_boundary"]["actual_current_pc_hangul_2020_dense_flow"])
+        self.assertFalse(receipt["claim_boundary"]["hangul_2022_or_2024_support"])
+        self.assertFalse(receipt["claim_boundary"]["p05_phase_gate"])
+        self.assertFalse(receipt["preserved_failure"]["attempt_1_promoted_to_pass"])
+        self.assertFalse(receipt["raw_document_text_present"])
+        self.assertNotIn(b"automatic balanced column flow keeps", raw)
+        for name, digest in receipt["artifacts"].items():
+            values = digest if isinstance(digest, list) else [digest]
+            for value in values:
+                self.assertRegex(value, r"^[0-9a-f]{64}$", name)
+
     def test_v2_column_flow_contract_is_exact_and_anchors_are_required(self) -> None:
         parsed = self.parse(dense_expectation())
         self.assertEqual(parsed.pages[0].column_flow.min_text_fragments_per_column, 2)
