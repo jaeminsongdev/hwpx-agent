@@ -2,7 +2,7 @@
 
 Date: 2026-09-06
 Scope: current PC, local-only health boundary
-Decision: **bridge PASS; installed-plugin qualification pending durable acceptance receipt**
+Decision: **PASS for current-PC local MCP config and personal plugin fresh-install smoke**
 
 ## Bounded increment
 
@@ -33,8 +33,14 @@ The personal package `hwpx-agent-local@personal` was then scaffolded with the pl
 validated, discovered in the default personal marketplace and installed. `codex mcp get` reported
 the server enabled with stdio transport and no environment values. A fresh ephemeral read-only Codex
 session called only `local_companion_health` and returned `ready` for the exact current profile with
-automation and network both false. The durable installed-plugin harness must repeat and bind these
-observations on a clean commit before the installed-plugin portion is PASS.
+automation and network both false.
+
+Clean commit `e942e000be88894c70150af3a266bb892be8fa9e` then produced installed-plugin run
+`273f6ccaac644836814b87679ab4eb0c`, which repeated and bound all 12 checks through a new ephemeral
+Codex session. Its canonical receipt has SHA-256
+`c421cfcefc0157ad2eea1b6d3cb7f8bf0bdb6931b2fe630d2857ede6ce6ec332`. The local plugin manifest,
+MCP configuration and runtime configuration are bound by digest; no raw private path is copied into
+the checked-in qualification.
 
 The first clean-commit acceptance attempt stopped before MCP startup because the Python harness did
 not resolve the Windows `pnpm.cmd` shim while keeping `shell=False`. It produced no PASS evidence.
@@ -46,7 +52,9 @@ private path or fixture content. A fresh clean repair-commit run is required.
 
 ## Explicit non-claims
 
-- No personal Codex marketplace or plugin is installed by this increment.
-- No current Codex thread has discovered or called the tool.
+- The plugin is installed only in the current user's personal Codex environment; it is not a
+  production or distributable package claim.
+- The current pre-install conversation does not gain the new tool retroactively; two new ephemeral
+  Codex sessions discovered and called it successfully.
 - No persistent credential provider, PostgreSQL lifecycle or plan-review host is connected.
 - No Hangul process, access prompt, COM call, user document or network connection is used.

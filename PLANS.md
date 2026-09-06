@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-06
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05-07 layout identity and P17-04 local MCP/plugin installation.
+- Active: P05-07 layout identity and P17-05 local file/Git workflow.
 - Recommended reasoning: max for preservation, authorization and Gate review; high for routine work.
 - UI status: v3 attempt 21 passed open/save/reopen/text/PDF export; layout acceptance failed.
   Session 13431 terminal exit 0; normal quit, residual zero. No additional click or automatic relaunch.
@@ -30,7 +30,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P14 | scoped local reference/disposable PostgreSQL PASS | implementation/p14/P14_GATE_REPORT.md |
 | P15 | scoped local MCP reference/Inspector staging PASS | implementation/p15/P15_GATE_REPORT.md |
 | P16 | in progress | 01,03,04 pass; 02 actual app pending; 05 local pass; 06 dedicated local host v14 PASS |
-| P17 | in progress | 03 bounded local daemon PASS; 01/02 and 04–09 pending |
+| P17 | in progress | 03 local daemon and 04 local MCP/plugin PASS; 01/02 and 05–09 pending |
 | P18 | blocked by P12/P13/P16/P17 | quality/security/performance/DR |
 | P19 | blocked by P18 | production/license/submission |
 | P20 | post-GA | parity and Rust-native expansion |
@@ -45,7 +45,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0086 | P16-06 Plan/diff UI | Source v11, durable plan v12, renderer/evidence v13 and dedicated local host v14 PASS; actual app/Hangul open |
 | P-0087 | P16-06 registered renderer | PASS for dedicated local one-tool MCP host: run d22e85581cd44d06a016f3460a43de12, exact v14 qualification; actual Codex app installation remains open |
 | P-0088 | P17-03 local daemon | PASS: run 4b1c023ca40c4a02b6dc25ac77ca656b, canonical LF receipt, 11/11; private auth/config/workspace sandbox and binary smoke |
-| P-0089 | P17-04 local MCP config | Bridge run d1a376b7563c4654b15fccbaa98645e0 PASS 12/12; personal plugin installed and fresh Codex call observed, durable receipt pending |
+| P-0089 | P17-04 local MCP config | PASS: bridge d1a376b7563c4654b15fccbaa98645e0 12/12; installed plugin 273f6ccaac644836814b87679ab4eb0c 12/12 through fresh Codex |
+| P-0090 | P17-05 local file/Git | In progress: bounded fixture/materialize/output/diff/commit helpers; path traversal and large-file tests first |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.
@@ -99,8 +100,8 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 
 1. Resolve diagnostic Cargo.lock source binding; read P05-07_DIAGNOSTIC_AUDIT_STATUS.md.
    Main 92ce629/independent 3827c21: 205/Clippy PASS, both FULL exit 1; security not run. No Hancom wait.
-2. Implement P17-04 stdio MCP startup/auth and a separate local-companion plugin package, then run
-   a personal-marketplace fresh-install health smoke. Do not place credentials in `.mcp.json`.
+2. Implement P17-05 bounded local fixture/materialize/output/diff/commit helpers. Keep public inputs
+   path-free, use the qualified workspace IDs, and deny traversal/large files before side effects.
 3. Connect the qualified `render_plan_review_widget` host only after a local secret/PostgreSQL
    lifecycle exists; keep remote Developer mode registration independently open.
 4. Run target tests, relevant regressions, current checkout FULL, exact clean-checkout FULL,
