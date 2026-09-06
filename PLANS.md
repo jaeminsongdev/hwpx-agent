@@ -79,10 +79,11 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
-  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v9
-  passed 11/11 at run `bec4941448134e6e99f8b0c4cc393eb3` on clean commit `4be56ea`; it retains
-  the v8 source bundle and binds the P17-06 exact-mirror request successor through 52 exact
-  implementation files. Current/independent FULL remain pending.
+  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v10
+  passed 11/11 at run `ff13d539c1f64cbc988dbddac859529a` on clean commit `02ce014`; it composes
+  v9 and binds the P17-06 checkpoint-intent/request-digest successor through 60 exact implementation
+  files. Contract SHA-256 is `210acd575d411d84f6bfd9395e26d42c80188a309aa28fecc6b49e09d65ada2d`.
+  Current/independent FULL remain pending.
 - P05-08 fixed input passed strict product inspection and the policy-locked official Hancom model
   parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
   `open_input` without a positive receipt that the user completed the displayed access request;
@@ -106,9 +107,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P17-04 bridge run `d1a376b7563c4654b15fccbaa98645e0` and personal-plugin run
   `273f6ccaac644836814b87679ab4eb0c` passed 12/12; actual Hangul operations remain open.
 - P17-07 local conflict resolver persists exact rebase, exact-base branch and manual-merge
-  transitions through one journal CAS. All 37 `local-sync` tests pass and public stale-head output
+  transitions through one journal CAS. All 39 `local-sync` tests pass and public stale-head output
   is identity/digest/path-free. Actual host receipt and concurrent Web/Codex evidence remain open;
-  see `implementation/p17/P17-07_LOCAL_CONFLICT_RESOLVER_V1.md`.
+  see `implementation/p17/P17-07_LOCAL_CONFLICT_RESOLVER_V2.md`.
 - P17-07 stale-head widget v2 adds checked observed/current generations, a unique server-allowed
   resolution list and a mandatory second confirmation. Selection makes zero calls; confirmation
   binds expected revision/generation and idempotency, then requires an authoritative open/history
@@ -119,8 +120,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   label/optional note. Local-mirror v5 persists the exact encoded request SHA-256 with the replay
   key, rejects same-key metadata drift before remote I/O, and never journals label/note text. The
   local suite passes 39/39; workspace build, full tests and all-target Clippy pass. This is a host
-  prerequisite, not actual transport or remote-service evidence. Current source successor v10 is
-  still pending; v9 remains proof only for predecessor commit `4be56ea`.
+  prerequisite, not actual transport or remote-service evidence. Current source successor v10
+  qualifies these exact sources at commit `02ce014`; it does not supply the missing host evidence.
 
 ## Risks and holds
 

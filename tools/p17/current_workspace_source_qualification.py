@@ -27,18 +27,18 @@ acceptance = load_acceptance()
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = "implementation/p17/qualification/current-workspace-source-v9-20260906"
+BASE = "implementation/p17/qualification/current-workspace-source-v10-20260906"
 QUALIFICATION = ROOT / BASE
-RUN_ID = "bec4941448134e6e99f8b0c4cc393eb3"
-BASE_COMMIT = "4be56eaf3f5b5eaf29233ba56f0769e25b99c503"
-RECEIPT_SHA256 = "fc8c2fd42fcf38326108f1efb5b2890d6c43eeb19c8a5218935926ee18919f67"
+RUN_ID = "ff13d539c1f64cbc988dbddac859529a"
+BASE_COMMIT = "02ce014fe739dd51de347ba71313c042ace76621"
+RECEIPT_SHA256 = "e89ec763b27c27afad21977e34145ddae49b0f0a3752c793f17a509273db5e95"
 CARGO_METADATA_PROJECTION_SHA256 = (
     "d956979b62019ff5b89a3c6b2ab506a7f102ae0fcb4f86ce70717ac2fca2d51d"
 )
 WORKSPACE_MEMBER_COUNT = 23
 PREVIOUS_QUALIFICATION = (
-    "implementation/p17/qualification/current-workspace-source-v8-20260906/contract.json",
-    "541d7afead5e00d875e0676f69818d868f9b56086148a5f6d09926a799e67eac",
+    "implementation/p17/qualification/current-workspace-source-v9-20260906/contract.json",
+    "6f6beada33d8d73ba372781cff40507071d3ee754697241a983865b8e42617c2",
 )
 IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     {
@@ -143,28 +143,28 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     },
     {
         "path": "crates/local-sync/src/lib.rs",
-        "bytes": 39692,
-        "sha256": "72972e8c12d2203e49fdc7de3987e1c1e45d59911924af0353959dbb35b09ea0",
+        "bytes": 44276,
+        "sha256": "71090b74d643e21aeb7756bdf6a33928bb0c8eb82e65a713057b5ca053191484",
     },
     {
         "path": "crates/local-sync/src/main.rs",
-        "bytes": 16273,
-        "sha256": "0ef7421689d888c565fc3619b931c708907b3314d303e725f66dd887b70695fb",
+        "bytes": 16471,
+        "sha256": "9f104d841783b9bee242188e72b68c4aa171ac06f697e94c44b567b9f176ce07",
     },
     {
         "path": "crates/local-sync/tests/state_machine.rs",
-        "bytes": 20704,
-        "sha256": "07821c15027d77b138ea4f8f37c74b9162b5255059db1f280d41b036a989f65e",
+        "bytes": 24364,
+        "sha256": "161d7735f154b3a1f1ba3837b90e533b0d33da7f20a4b11117b6d5af47225caa",
     },
     {
         "path": "crates/local-sync/tests/durable_remote.rs",
-        "bytes": 16032,
-        "sha256": "23bcddc58583ebb390ac0776dd54684ce58e52a93f7fb7bfb7f53480935bc0d5",
+        "bytes": 17965,
+        "sha256": "9694ab58edbf80f3015533288fccb070b4522305f892078ca315717945947e5c",
     },
     {
         "path": "crates/local-sync/tests/cli.rs",
-        "bytes": 12528,
-        "sha256": "5ae19c12b2abbceb3f34d8d5ee6ac5e5a9cf35e5e7d10935b0f3fd16c9a976e4",
+        "bytes": 13936,
+        "sha256": "fdadb4ba651d3c6bec7f2ac524333a91c51a8344ab9c17ee66426b4f0bfe516a",
     },
     {
         "path": "protocol/private/p17-local-conflict-resolver-v1.json",
@@ -278,13 +278,13 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     },
     {
         "path": "crates/local-sync/src/adapter.rs",
-        "bytes": 11682,
-        "sha256": "af3b2a4cb9ca73744e9dbbe13ad77953126ff2c725744162bb3d0dbd1d6e03fe",
+        "bytes": 11328,
+        "sha256": "ef3f2cadaeb03b367e8bdc787954fd0273a9a836ccdeafd1b661228df7d22b86",
     },
     {
         "path": "crates/local-sync/tests/remote_adapter.rs",
-        "bytes": 9998,
-        "sha256": "984e5ecd44ece7a8a7c4161a45c76838f82552ce1afafc4c3bb4f645059cf36b",
+        "bytes": 12029,
+        "sha256": "bbc49abc5f15bd92e73342e48fc98797d2752af4180deb46ba0d0b3cd41f5d88",
     },
     {
         "path": "protocol/private/p17-remote-sync-adapter-v2.json",
@@ -300,6 +300,46 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
         "path": "implementation/p17/P17-06_MIRROR_BINDING_V4.md",
         "bytes": 1481,
         "sha256": "51ca4df4fd651837e3850984ac106e67dd9f27b7351e2109f36026fb52a5f5c1",
+    },
+    {
+        "path": "crates/local-sync/src/store.rs",
+        "bytes": 18376,
+        "sha256": "590b2bd6f7579c4705ca786e80ac02f0c5fed249c5bff9bfa767bb9ea718de1f",
+    },
+    {
+        "path": "protocol/private/p17-remote-sync-adapter-v3.json",
+        "bytes": 3181,
+        "sha256": "7fd7849e1e166ac615288299c0f309efee9233e664b899706d32bbfe3c6d2f70",
+    },
+    {
+        "path": "protocol/migrations/p17-remote-sync-request-v2-to-v3.md",
+        "bytes": 1017,
+        "sha256": "5cda59d50d52aec5c3b2b7054ae2ce38f0f65bc1dc09170cb48e412ea14fb7d1",
+    },
+    {
+        "path": "protocol/migrations/p17-local-mirror-v4-to-v5.md",
+        "bytes": 928,
+        "sha256": "ebf7b3d258d0e6e9497b04b136fbfb23bab561b8fa0c535fa09345e2ed19a9d9",
+    },
+    {
+        "path": "protocol/private/p17-local-sync-cli-v4.json",
+        "bytes": 3980,
+        "sha256": "c9ceb95848c1c814da6d62f013fd284add9f993e437789d5a5b0a2f5f394ba06",
+    },
+    {
+        "path": "protocol/private/p17-local-conflict-resolver-v2.json",
+        "bytes": 2498,
+        "sha256": "5eef47fec56113b89f89f4b2d002e4076b0ffd2d920e3660ecd29d66e8e7e084",
+    },
+    {
+        "path": "implementation/p17/P17-06_CHECKPOINT_INTENT_BINDING_V5.md",
+        "bytes": 1625,
+        "sha256": "7ca5cba235f6a1bd954b54167df75e11366fae796a379e7d6d89b5afaa3d53d7",
+    },
+    {
+        "path": "implementation/p17/P17-07_LOCAL_CONFLICT_RESOLVER_V2.md",
+        "bytes": 963,
+        "sha256": "388d6824c350ae311d1f4e407e16759126c1c9e28eb55aca2c91dc08836d26e0",
     },
 )
 SUCCESSORS: tuple[dict[str, Any], ...] = (
@@ -431,6 +471,8 @@ CLAIMS = {
     "p17_local_conflict_resolver_bound": True,
     "p17_stale_head_widget_v2_bound": True,
     "p17_remote_sync_mirror_binding_v2_bound": True,
+    "p17_remote_sync_checkpoint_intent_v3_bound": True,
+    "p17_local_mirror_v5_bound": True,
     "actual_hangul": False,
     "registered_host": False,
     "production": False,
@@ -441,7 +483,7 @@ GUARD_SOURCES = (
     "tools/p17/run_current_workspace_source_checks.py",
     "tools/p17/current_workspace_source_qualification.py",
     "tools/p17/tests/test_current_workspace_source_qualification.py",
-    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V9.md",
+    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V10.md",
 )
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -532,7 +574,7 @@ def receipt_path(root: Path) -> Path:
 
 def expected_current(root: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v9",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v10",
         "scope": "current_pc_source_binding_successor_only",
         "run_id": RUN_ID,
         "source_commit": BASE_COMMIT,
@@ -551,8 +593,8 @@ def expected_current(root: Path) -> dict[str, Any]:
 
 def expected_contract(root: Path, current_path: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v9",
-        "qualification_id": "p17.current-workspace-source.v9.20260906",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v10",
+        "qualification_id": "p17.current-workspace-source.v10.20260906",
         "base_commit": BASE_COMMIT,
         "scope": "current_pc_source_binding_successor_only",
         "claims": CLAIMS,
