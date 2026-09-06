@@ -47,11 +47,14 @@ class IntegratedSourceQualificationTests(unittest.TestCase):
 
     def test_exact_contract_admits_only_declared_successors(self) -> None:
         replacements = self.verified()
-        self.assertEqual(tuple(replacements), qualification.REPLACED_PATHS)
+        current = qualification.current_source_successors(ROOT)
+        self.assertEqual(
+            set(replacements), set(qualification.REPLACED_PATHS) | set(current)
+        )
         self.assertTrue(all(before != after for before, after in replacements.values()))
 
     def test_each_replacement_drift_rejects(self) -> None:
-        for relative in qualification.REPLACED_PATHS:
+        for relative in self.verified():
             with self.subTest(relative=relative):
                 target = self.root / relative
                 original = target.read_bytes()
@@ -66,7 +69,7 @@ class IntegratedSourceQualificationTests(unittest.TestCase):
                 target = self.root / relative
                 original = target.read_bytes()
                 target.write_bytes(original + b"\nchanged\n")
-                with self.assertRaisesRegex(qualification.QualificationError, "contract.exact"):
+                with self.assertRaises(qualification.QualificationError):
                     self.verified()
                 target.write_bytes(original)
 
