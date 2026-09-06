@@ -109,7 +109,10 @@ class PdfVerifierContractTests(unittest.TestCase):
         )
         self.assertIn("P05-09 VS-1 레이아웃", layout.pages[0].required_text)
         self.assertEqual(dense.schema_version, MODULE.EXPECTATION_SCHEMA_V2)
+        self.assertEqual(dense.page_count, 2)
         self.assertIsNotNone(dense.pages[0].column_flow)
+        self.assertIsNotNone(dense.pages[1].column_flow)
+        self.assertEqual(dense.pages[1].column_flow.right_anchor_text, "P05-07-DENSE-END")
 
     def test_v2_column_flow_contract_is_exact_and_anchors_are_required(self) -> None:
         parsed = self.parse(dense_expectation())

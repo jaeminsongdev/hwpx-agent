@@ -36,7 +36,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 | ID | Task | State and next evidence |
 |---|---|---|
-| P-0045-0048 | P05-06-09 | Attempt23 sparse subgate pass; 31-paragraph zero-break dense fixture/verifier prepared; actual run, 08-09 and phase Gate remain |
+| P-0045-0048 | P05-06-09 | Sparse subgate pass; dense attempt01 lifecycle/semantics PASS but one-page PDF expectation failed; two-page successor prepared |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -82,8 +82,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Risks and holds
 
-- R-0001: P05-07 dense source and coordinate/balance verifier pass locally; actual Hangul 2020
-  save/reopen/PDF/visual evidence and successor FULL remain open.
+- R-0001: P05-07 dense attempt01 source, Hangul lifecycle and saved semantics pass; initial PDF
+  verification correctly failed on a one-vs-two-page mismatch. Fresh two-page coordinate/balance,
+  visual evidence and successor FULL remain open.
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence remains open.
 - R-0003: One independent worker timeout smoke failed; retries passed, root cause unproven.
 - R-0004: Broad P16 discovery remains red on immutable predecessor locks and legacy assets;

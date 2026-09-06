@@ -1,6 +1,6 @@
 {
   "schema_version": "hwpx-agent.p05-render-expectation/v2",
-  "expected_page_count": 1,
+  "expected_page_count": 2,
   "geometry_tolerance_milli_mm": 500,
   "pages": [
     {
@@ -8,14 +8,49 @@
       "width_milli_mm": 310000,
       "height_milli_mm": 230000,
       "rotation": 0,
-      "required_text": ["P05-07-DENSE-START", "P05-07-DENSE-END"],
-      "forbidden_text": ["P05-07-SECTION-ONE", "P05-07-SECTION-TWO"],
+      "required_text": [
+        "P05-07-DENSE-START",
+        "P05-07-DENSE-LINE-01",
+        "P05-07-DENSE-LINE-11",
+        "P05-07-DENSE-LINE-20"
+      ],
+      "forbidden_text": [
+        "P05-07-DENSE-LINE-21",
+        "P05-07-DENSE-END",
+        "P05-07-SECTION-ONE",
+        "P05-07-SECTION-TWO"
+      ],
       "column_flow": {
         "split_x_milli_mm": 156000,
         "split_guard_milli_mm": 3000,
         "min_text_fragments_per_column": 8,
         "max_bottom_baseline_delta_milli_mm": 12000,
         "left_anchor_text": "P05-07-DENSE-START",
+        "right_anchor_text": "P05-07-DENSE-LINE-20"
+      }
+    },
+    {
+      "index": 2,
+      "width_milli_mm": 310000,
+      "height_milli_mm": 230000,
+      "rotation": 0,
+      "required_text": [
+        "P05-07-DENSE-LINE-21",
+        "P05-07-DENSE-LINE-26",
+        "P05-07-DENSE-END"
+      ],
+      "forbidden_text": [
+        "P05-07-DENSE-START",
+        "P05-07-DENSE-LINE-20",
+        "P05-07-SECTION-ONE",
+        "P05-07-SECTION-TWO"
+      ],
+      "column_flow": {
+        "split_x_milli_mm": 156000,
+        "split_guard_milli_mm": 3000,
+        "min_text_fragments_per_column": 8,
+        "max_bottom_baseline_delta_milli_mm": 12000,
+        "left_anchor_text": "P05-07-DENSE-LINE-21",
         "right_anchor_text": "P05-07-DENSE-END"
       }
     }
