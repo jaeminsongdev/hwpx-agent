@@ -46,7 +46,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0087 | P16-06 registered renderer | PASS for dedicated local one-tool MCP host: run d22e85581cd44d06a016f3460a43de12, exact v14 qualification; actual Codex app installation remains open |
 | P-0088 | P17-03 local daemon | PASS: run 4b1c023ca40c4a02b6dc25ac77ca656b, canonical LF receipt, 11/11; private auth/config/workspace sandbox and binary smoke |
 | P-0089 | P17-04 local MCP config | PASS: bridge d1a376b7563c4654b15fccbaa98645e0 12/12; installed plugin 273f6ccaac644836814b87679ab4eb0c 12/12 through fresh Codex |
-| P-0089A | P17-04 main binding | In progress: cachebuster plugin rebound to integrated main root and fresh Codex call observed; durable successor receipt pending |
+| P-0089A | P17-04 main binding | PASS: cachebuster reinstall bound to integrated main; run 890e1150a2184172abbe8af0ef3eb7b2 11/11 through fresh Codex |
 | P-0090 | P17-05 local file/Git | In progress: bounded fixture/materialize/output/diff/commit helpers; path traversal and large-file tests first |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
