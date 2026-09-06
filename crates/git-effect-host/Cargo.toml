@@ -1,0 +1,20 @@
+[package]
+name = "git-effect-host"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+approval-policy = { path = "../approval-policy" }
+hex.workspace = true
+local-workflow = { path = "../local-workflow" }
+sha2.workspace = true
+tempfile.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[lints]
+workspace = true

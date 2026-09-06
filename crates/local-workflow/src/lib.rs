@@ -476,7 +476,22 @@ fn read_bounded_text(path: &Path, max_bytes: u64) -> Result<String, WorkflowErro
 }
 
 fn validate_git_reference(value: &str) -> Result<PathBuf, WorkflowError> {
-    if !value.starts_with("refs/heads/") || value.len() > 200 {
+    if !value.starts_with("refs/heads/")
+        || value.len() > 200
+        || value.contains("..")
+        || value.contains("@{")
+        || value.ends_with(['/', '.'])
+        || value
+            .bytes()
+            .any(|byte| !byte.is_ascii_alphanumeric() && !matches!(byte, b'/' | b'.' | b'_' | b'-'))
+        || value.split('/').any(|component| {
+            component.is_empty()
+                || component.starts_with('.')
+                || Path::new(component)
+                    .extension()
+                    .is_some_and(|extension| extension.eq_ignore_ascii_case("lock"))
+        })
+    {
         return Err(WorkflowError::GitState);
     }
     let relative = validate_relative(value).map_err(|_| WorkflowError::GitState)?;

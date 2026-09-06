@@ -1,0 +1,68 @@
+{
+  "schema_version": "hwpx-agent.git-effect-host/v1",
+  "scope": "current_pc_local_semantic_git_commit_executor",
+  "input": {
+    "semantic_effect": "git_commit",
+    "accepts_shell_command": false,
+    "binds_operation_id": true,
+    "binds_workspace_target": true,
+    "binds_output_sha256": true,
+    "binds_head_object": true,
+    "binds_head_reference_or_detached_state": true,
+    "binds_message": true
+  },
+  "authorization": {
+    "required_scope": "workstation_control",
+    "receipt_schema": "hwpx-agent.approval-receipt/v1",
+    "durable_confirmation_supported": true,
+    "maximum_execution_delay_seconds": 60,
+    "authorized_effect_consumed_by_value": true,
+    "host_can_mint_confirmation": false
+  },
+  "git_execution": {
+    "explicit_absolute_regular_git_executable": true,
+    "environment_cleared": true,
+    "interactive_prompt_disabled": true,
+    "replace_objects_disabled": true,
+    "repository_hooks_disabled": true,
+    "clean_filters_bypassed": true,
+    "approved_bytes_snapshotted_and_sha256_rechecked": true,
+    "temporary_index_from_expected_head": true,
+    "commit_tree_parent_is_expected_head": true,
+    "reference_update_uses_old_oid_cas_transaction": true,
+    "detached_head_supported": true,
+    "target_staged_change_rejected": true,
+    "unrelated_staged_changes_preserved": true,
+    "real_index_updates_only_approved_path": true,
+    "command_output_bounded_bytes": 256
+  },
+  "receipt": {
+    "schema_version": "hwpx-agent.git-commit-effect-receipt/v1",
+    "contains_document_content": false,
+    "contains_absolute_path": false,
+    "contains_commit_message": false,
+    "contains_confirmation_token": false,
+    "contains_secret": false
+  },
+  "implemented_evidence": {
+    "disposable_actual_git_tests": 7,
+    "exact_committed_bytes": true,
+    "exact_parent_and_reference": true,
+    "default_deny": true,
+    "stale_and_drift_rejected_before_ref_update": true,
+    "wrong_plan_authorization_rejected": true,
+    "staged_target_preserved_on_rejection": true,
+    "unrelated_staging_preserved_on_success": true,
+    "reference_transaction_hook_not_invoked": true,
+    "symbolic_and_detached_head_covered": true,
+    "all_target_clippy_warnings_denied": true
+  },
+  "not_claimed": {
+    "current_repository_committed_by_effect_host": false,
+    "daemon_execution_method": false,
+    "mcp_execution_tool": false,
+    "trusted_host_confirmation_ui": false,
+    "automation_external_print_security_executors": false,
+    "p17_08_pass": false
+  }
+}

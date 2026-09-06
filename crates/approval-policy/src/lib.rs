@@ -392,7 +392,7 @@ impl fmt::Debug for ApprovalReceipt {
     }
 }
 
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Eq, PartialEq)]
 pub struct AuthorizedEffect {
     effect: EffectKind,
     receipt: ApprovalReceipt,
@@ -420,6 +420,11 @@ impl AuthorizedEffect {
     #[must_use]
     pub const fn receipt(&self) -> &ApprovalReceipt {
         &self.receipt
+    }
+
+    #[must_use]
+    pub fn into_receipt(self) -> ApprovalReceipt {
+        self.receipt
     }
 }
 
