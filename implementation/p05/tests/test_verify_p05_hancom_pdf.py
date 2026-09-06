@@ -108,6 +108,16 @@ class PdfVerifierContractTests(unittest.TestCase):
             (310_000, 230_000),
         )
         self.assertIn("P05-09 VS-1 레이아웃", layout.pages[0].required_text)
+        self.assertEqual(layout.schema_version, MODULE.EXPECTATION_SCHEMA_V2)
+        self.assertIsNotNone(layout.pages[0].column_flow)
+        self.assertEqual(
+            layout.pages[0].column_flow.left_anchor_text,
+            "사용자 정의 용지와 제목 스타일",
+        )
+        self.assertEqual(
+            layout.pages[0].column_flow.right_anchor_text,
+            "둘째 단은 명시적인 단 나누기",
+        )
         self.assertEqual(dense.schema_version, MODULE.EXPECTATION_SCHEMA_V2)
         self.assertEqual(dense.page_count, 2)
         self.assertIsNotNone(dense.pages[0].column_flow)

@@ -3,7 +3,7 @@
 - Updated: 2026-09-06
 - Root: `D:\개발\hwpx-agent`
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05-08 actual header/footer Gate, P17-06 project sync, P17-08 trusted approval boundary.
+- Active: P05-08 actual header/footer Gate, P05-09 coordinate-aware Gate preparation, P17-06/P17-08.
 - Reasoning: max for preservation, authorization and Gate work; high for routine implementation.
 - UI: attempt23 sparse layout/identity and dense attempt02 automatic flow/balance passed on Hangul 2020;
   P05-08 attempts 01-02 stopped fail-closed at open without a confirmed access-click receipt.
@@ -81,6 +81,11 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
   `open_input` without a positive receipt that the user completed the displayed access request;
   neither is PASS. See `implementation/p05/P05-08_ATTEMPT01_02_DIAGNOSTIC.md`.
+- P05-09 has a fresh deterministic input at SHA-256
+  `acce8f8a68ea9b4b6e9f629235bf6fa018fd7cfccf45384b316d2d2401ce2c97`. Its render contract was
+  strengthened from text-only v1 to coordinate-aware v2 at SHA-256
+  `eec108ed9bcc0cb15c6634db9a340d944cc305cdcfe5b428a0ccf076d8f845a8`, requiring left/right
+  anchors and populated columns; verifier tests pass 21/21. Actual Hangul execution remains open.
 - The old independent FULL process at `285c0ce` reached later lanes and terminated, but its detached
   console exit status was unavailable. It was not promoted; the clean exact worktree was removed.
   A fresh independent FULL remains required at the final implementation successor.
@@ -107,8 +112,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 1. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
-2. With the user present, rerun the bounded P05-08 Hangul 2020 fixture and require confirmed access,
-   lifecycle, semantic, four-page PDF and visual evidence. Preserve any new failure.
+2. With the user present, rerun bounded P05-08 and then P05-09 Hangul 2020 fixtures. Require
+   confirmed access, lifecycle, semantic, coordinate-aware PDF and visual evidence; preserve any
+   new failure.
 3. Wire P17-06 to a qualified host credential/transport adapter, then capture an actual remote
    pull/push/checkpoint transition without promoting the current injected component evidence.
 4. Before closure run target tests, regressions, current and clean-checkout FULL, applicable offline

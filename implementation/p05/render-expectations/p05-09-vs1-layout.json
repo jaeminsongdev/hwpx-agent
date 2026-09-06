@@ -1,5 +1,5 @@
 {
-  "schema_version": "hwpx-agent.p05-render-expectation/v1",
+  "schema_version": "hwpx-agent.p05-render-expectation/v2",
   "expected_page_count": 1,
   "geometry_tolerance_milli_mm": 500,
   "pages": [
@@ -10,11 +10,20 @@
       "rotation": 0,
       "required_text": [
         "P05-09 VS-1 레이아웃",
+        "사용자 정의 용지와 제목 스타일",
         "첫째 단의 마지막 단락",
         "둘째 단은 명시적인 단 나누기",
         "저장·재열기·렌더"
       ],
-      "forbidden_text": ["__HWPX_AGENT_VS1_LAYOUT_TITLE__"]
+      "forbidden_text": ["__HWPX_AGENT_VS1_LAYOUT_TITLE__"],
+      "column_flow": {
+        "split_x_milli_mm": 156000,
+        "split_guard_milli_mm": 3000,
+        "min_text_fragments_per_column": 4,
+        "max_bottom_baseline_delta_milli_mm": 30000,
+        "left_anchor_text": "사용자 정의 용지와 제목 스타일",
+        "right_anchor_text": "둘째 단은 명시적인 단 나누기"
+      }
     }
   ]
 }

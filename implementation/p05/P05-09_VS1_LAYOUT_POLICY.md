@@ -39,6 +39,8 @@ VS-0 package deterministically and releases bytes only through `with_verified_by
 1. Rust unit/integration tests, formatting, Clippy, package regressions, and clean-checkout FULL pass.
 2. Deterministic target build and product-side semantic inspection pass.
 3. Exact Hangul 2020 save/reopen succeeds with unchanged canonical visible-text digest.
-4. PDF export passes bounded PDF structure and nonblank render verification.
+4. PDF export passes bounded PDF structure, fixed landscape geometry, required/forbidden text,
+   left/right column anchor positions, minimum text fragments in both columns, and a bounded
+   bottom-baseline delta through the v2 coordinate-aware verifier.
 5. A separate strict P05 Gate audits P05-01 through P05-09 without promoting synthetic evidence to
    actual target evidence.
