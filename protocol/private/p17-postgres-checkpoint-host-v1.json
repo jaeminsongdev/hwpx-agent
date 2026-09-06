@@ -1,0 +1,95 @@
+{
+  "schema_version": "hwpx-agent.p17-postgres-checkpoint-host/v1",
+  "scope": "current_pc_loopback_postgres_history_checkpoint_only",
+  "transport": {
+    "address": "127.0.0.1",
+    "frame": "hwpx-agent.remote-sync-frame/v1",
+    "listener_and_client_processes": "separate",
+    "tls": false,
+    "remote_network": false
+  },
+  "database": {
+    "engine": "PostgreSQL",
+    "required_schema_versions": "exact_contiguous_1_through_14",
+    "latest_migration": "p17.history_checkpoint_note_v2",
+    "connection": {
+      "address": "127.0.0.1",
+      "connect_timeout_seconds": 3,
+      "statement_timeout_milliseconds": 5000,
+      "lock_timeout_milliseconds": 1000,
+      "idle_transaction_timeout_milliseconds": 5000,
+      "transaction_timeout_milliseconds": 10000,
+      "tls": false
+    },
+    "role_admission": {
+      "superuser": false,
+      "bypass_rls": false,
+      "create_role": false,
+      "create_database": false,
+      "replication": false,
+      "schema_create": false,
+      "table_write_or_trigger_privileges": false,
+      "legacy_checkpoint_execute": false,
+      "v2_checkpoint_execute": true,
+      "owner_role_membership": false
+    },
+    "row_security": {
+      "tables": [
+        "history_checkpoint_requests",
+        "checkpoints"
+      ],
+      "enabled": true,
+      "forced": true,
+      "single_policy": "tenant_isolation"
+    }
+  },
+  "checkpoint": {
+    "function": "hwpx_agent.create_history_checkpoint_v2",
+    "transaction_isolation": "serializable",
+    "retry_after_uncertain_outcome": false,
+    "tenant_and_subject": "fixed_at_dispatcher_connection",
+    "label": "exact_immutable_1_to_120_noncontrol_trimmed_chars",
+    "note": "optional_exact_immutable_1_to_1000_chars",
+    "nul_note": "rejected_before_database_call",
+    "revision": "active_project_service_v1_sealed_revision_only",
+    "authorization": "editor_or_owner",
+    "idempotency": {
+      "same_request_and_exact_payload": "replayed",
+      "same_request_and_changed_payload": "P1701_rejected",
+      "postgres_serialization_failure": "unavailable_without_retry"
+    },
+    "receipt": "checkpoint_revision_label_note_and_request_digest_must_match_exactly_before_commit"
+  },
+  "diagnostics": {
+    "admission_stages": [
+      "TRANSPORT",
+      "ROLE",
+      "MIGRATIONS",
+      "POLICIES",
+      "PRIVILEGES"
+    ],
+    "backend_error_text_retained": false,
+    "password_debug": "redacted",
+    "tenant_subject_and_client_debug": "redacted",
+    "definite_input_acl_fk_unique_or_idempotency_failure": "rejected",
+    "serialization_transport_or_unknown_failure": "unavailable"
+  },
+  "migration_rollback": {
+    "explicit_setting": "hwpx_agent.allow_p17_history_checkpoint_note_rollback=yes",
+    "exact_version_14_required": true,
+    "later_versions_forbidden": true,
+    "nonnull_note_rows_forbidden": true
+  },
+  "evidence_boundary": {
+    "actual_current_pc_disposable_postgresql": true,
+    "actual_separate_host_and_client_processes": true,
+    "actual_loopback_checkpoint_create_replay_and_drift_rejection": true,
+    "durable_retention_mirror_admission": false,
+    "atomic_mirror_admission_and_checkpoint": false,
+    "pull_or_push": false,
+    "persistent_credential_custody": false,
+    "actual_hangul": false,
+    "production": false,
+    "p17_06_complete": false
+  }
+}

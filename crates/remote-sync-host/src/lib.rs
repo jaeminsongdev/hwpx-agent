@@ -28,8 +28,13 @@ use serde::Serialize;
 use thiserror::Error;
 use uuid::Uuid;
 
+mod postgres;
 mod socket;
 
+pub use postgres::{
+    LocalPostgresHistoryCheckpointConfig, LocalPostgresHistoryCheckpointDispatcher,
+    PostgresCheckpointConnectFailure, PostgresCheckpointConnectStage,
+};
 pub use socket::{CheckpointServeOutcome, CheckpointServerFailure, LoopbackCheckpointServer};
 
 const RESPONSE_SCHEMA_VERSION: &str = "hwpx-agent.remote-sync-response/v1";
@@ -62,6 +67,16 @@ pub enum CheckpointDispatchError {
     Rejected,
     #[error("checkpoint service outcome is unavailable")]
     Unavailable,
+}
+
+impl CheckpointDispatchError {
+    #[must_use]
+    pub const fn code(self) -> &'static str {
+        match self {
+            Self::Rejected => "CHECKPOINT_DISPATCH_REJECTED",
+            Self::Unavailable => "CHECKPOINT_DISPATCH_UNAVAILABLE",
+        }
+    }
 }
 
 #[derive(Clone, Eq, PartialEq)]
@@ -198,55 +213,9 @@ impl<R: HistoryRepository> CheckpointDispatcher for HistoryCheckpointDispatcher<
         &self,
         request: &CheckpointDispatchRequest<'_>,
     ) -> Result<CheckpointDispatchOutcome, CheckpointDispatchError> {
-        let arguments = request.arguments();
-        let project_id = ProjectId::parse(arguments.project_id())
-            .map_err(|_| CheckpointDispatchError::Rejected)?;
-        let revision_id = RevisionId::parse(arguments.revision_id())
-            .map_err(|_| CheckpointDispatchError::Rejected)?;
-        if arguments.expected_revision() != arguments.revision_id() {
-            return Err(CheckpointDispatchError::Rejected);
-        }
-        let idempotency_uuid = Uuid::parse_str(arguments.idempotency_key())
-            .map_err(|_| CheckpointDispatchError::Rejected)?;
-        if idempotency_uuid.is_nil()
-            || idempotency_uuid.hyphenated().to_string() != arguments.idempotency_key()
-        {
-            return Err(CheckpointDispatchError::Rejected);
-        }
-        let request_id = RequestId::parse(&format!("req_{}", idempotency_uuid.simple()))
-            .map_err(|_| CheckpointDispatchError::Rejected)?;
-        let mut checkpoint_name = Vec::with_capacity(48);
-        checkpoint_name.extend_from_slice(request.tenant_id().as_uuid().as_bytes());
-        checkpoint_name.extend_from_slice(project_id.as_uuid().as_bytes());
-        checkpoint_name.extend_from_slice(idempotency_uuid.as_bytes());
-        let checkpoint_id = CheckpointId::parse(&format!(
-            "chk_{}",
-            Uuid::new_v5(&HISTORY_CHECKPOINT_NAMESPACE, &checkpoint_name).simple()
-        ))
-        .map_err(|_| CheckpointDispatchError::Rejected)?;
-        let label = CheckpointLabel::parse(arguments.label().to_owned())
-            .map_err(|_| CheckpointDispatchError::Rejected)?;
-        if label.as_str() != arguments.label() {
-            return Err(CheckpointDispatchError::Rejected);
-        }
-        let note = arguments
-            .note()
-            .map(|value| CheckpointNote::parse(value.to_owned()))
-            .transpose()
-            .map_err(|_| CheckpointDispatchError::Rejected)?;
-        let history_context = HistoryRequestContext::new(
-            request.tenant_id(),
-            request.subject(),
-            request.now_unix_seconds(),
-        );
-        let history_request = HistoryCheckpointRequest::new_with_note(
-            request_id,
-            project_id,
-            checkpoint_id,
-            revision_id,
-            label,
-            note,
-        );
+        let (history_context, history_request) = map_history_checkpoint_request(request)?;
+        let project_id = history_request.project_id();
+        let revision_id = history_request.revision_id();
         let (record, replayed) = match self.service.checkpoint(&history_context, &history_request) {
             Ok(HistoryCheckpointOutcome::Created(record)) => (record, false),
             Ok(HistoryCheckpointOutcome::Replayed(record)) => (record, true),
@@ -261,6 +230,67 @@ impl<R: HistoryRepository> CheckpointDispatcher for HistoryCheckpointDispatcher<
             replayed,
         ))
     }
+}
+
+fn map_history_checkpoint_request(
+    request: &CheckpointDispatchRequest<'_>,
+) -> Result<(HistoryRequestContext, HistoryCheckpointRequest), CheckpointDispatchError> {
+    let arguments = request.arguments();
+    let project_id =
+        ProjectId::parse(arguments.project_id()).map_err(|_| CheckpointDispatchError::Rejected)?;
+    let revision_id = RevisionId::parse(arguments.revision_id())
+        .map_err(|_| CheckpointDispatchError::Rejected)?;
+    if arguments.expected_revision() != arguments.revision_id() {
+        return Err(CheckpointDispatchError::Rejected);
+    }
+    let idempotency_uuid = Uuid::parse_str(arguments.idempotency_key())
+        .map_err(|_| CheckpointDispatchError::Rejected)?;
+    if idempotency_uuid.is_nil()
+        || idempotency_uuid.hyphenated().to_string() != arguments.idempotency_key()
+    {
+        return Err(CheckpointDispatchError::Rejected);
+    }
+    let request_id = RequestId::parse(&format!("req_{}", idempotency_uuid.simple()))
+        .map_err(|_| CheckpointDispatchError::Rejected)?;
+    let mut checkpoint_name = Vec::with_capacity(48);
+    checkpoint_name.extend_from_slice(request.tenant_id().as_uuid().as_bytes());
+    checkpoint_name.extend_from_slice(project_id.as_uuid().as_bytes());
+    checkpoint_name.extend_from_slice(idempotency_uuid.as_bytes());
+    let checkpoint_id = CheckpointId::parse(&format!(
+        "chk_{}",
+        Uuid::new_v5(&HISTORY_CHECKPOINT_NAMESPACE, &checkpoint_name).simple()
+    ))
+    .map_err(|_| CheckpointDispatchError::Rejected)?;
+    let label = CheckpointLabel::parse(arguments.label().to_owned())
+        .map_err(|_| CheckpointDispatchError::Rejected)?;
+    if label.as_str() != arguments.label() {
+        return Err(CheckpointDispatchError::Rejected);
+    }
+    let note = arguments
+        .note()
+        .map(|value| {
+            if value.contains('\0') {
+                return Err(HistoryError::InvalidRequest);
+            }
+            CheckpointNote::parse(value.to_owned())
+        })
+        .transpose()
+        .map_err(|_| CheckpointDispatchError::Rejected)?;
+    Ok((
+        HistoryRequestContext::new(
+            request.tenant_id(),
+            request.subject(),
+            request.now_unix_seconds(),
+        ),
+        HistoryCheckpointRequest::new_with_note(
+            request_id,
+            project_id,
+            checkpoint_id,
+            revision_id,
+            label,
+            note,
+        ),
+    ))
 }
 
 pub struct CheckpointHost<D> {
@@ -1082,6 +1112,48 @@ mod tests {
         let (credentials, transport) = adapter.into_parts();
         assert!(credentials.headers.is_empty());
         assert_eq!(transport.exchanges, 2);
+    }
+
+    #[test]
+    fn history_mapping_rejects_nul_note_before_repository_dispatch() {
+        let fixture = Fixture::new(DispatchMode::Success);
+        let request_bytes = serde_json::to_vec(&TestCheckpointRequest {
+            schema_version: "hwpx-agent.remote-sync-request/v3",
+            operation: "checkpoint",
+            project_id: &fixture.project_id.public_id(),
+            branch_id: &fixture.branch_id.public_id(),
+            mirror_id: &fixture.mirror_id.public_id(),
+            expected_head: TestHead {
+                revision_id: &fixture.revision_id.public_id(),
+                generation: 1,
+            },
+            idempotency_key: "checkpoint-request-0001",
+            label: "release-candidate",
+            note: "invalid\0postgres-note",
+        })
+        .unwrap_or_else(|error| panic!("request: {error}"));
+        let context =
+            CheckpointServiceContext::new("req_checkpoint0001".to_owned(), "ko-KR".to_owned())
+                .unwrap_or_else(|error| panic!("context: {error}"));
+        let binding = decode_checkpoint_to_service(&request_bytes, &context)
+            .unwrap_or_else(|error| panic!("binding: {error}"));
+        let request = CheckpointDispatchRequest {
+            tenant_id: fixture.tenant_id,
+            subject: fixture.service_subject,
+            now_unix_seconds: NOW,
+            binding: &binding,
+        };
+        let repository = Arc::new(InMemoryHistoryRepository::default());
+        let service = HistoryService::new(
+            repository,
+            CursorCodec::new(b"history-cursor-key-0123456789abcdef".to_vec(), 300)
+                .unwrap_or_else(|error| panic!("cursor: {error}")),
+        );
+        let dispatcher = HistoryCheckpointDispatcher::new(service);
+        assert_eq!(
+            dispatcher.dispatch(&request),
+            Err(CheckpointDispatchError::Rejected)
+        );
     }
 
     #[test]

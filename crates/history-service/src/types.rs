@@ -616,7 +616,12 @@ impl CheckpointRequest {
         self.note.as_ref()
     }
 
-    pub(crate) fn canonical_sha256(&self) -> Result<ContentDigest, HistoryError> {
+    /// Returns the digest used to bind this exact immutable checkpoint request.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`HistoryError::Serialization`] if the closed request shape cannot be encoded.
+    pub fn canonical_sha256(&self) -> Result<ContentDigest, HistoryError> {
         serde_json::to_vec(self)
             .map(|bytes| ContentDigest::of(&bytes))
             .map_err(|_| HistoryError::Serialization)

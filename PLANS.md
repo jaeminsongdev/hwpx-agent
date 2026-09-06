@@ -1,6 +1,6 @@
 # HWPX Agent implementation ledger
 
-- Updated: 2026-09-06
+- Updated: 2026-09-07
 - Root: `D:\개발\hwpx-agent`
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
 - Active: P05-08 Hangul-authored reference comparison and actual Gate, P05-09 coordinate-aware Gate,
@@ -45,7 +45,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
 | P-0089/0089A | P17-04 | Bridge and installed-plugin qualification PASS; main binding PASS |
 | P-0090 | P17-05 | Exact-commit MCP local file/Git plan-only run 16/16 PASS |
-| P-0091/0091A/0091B/0091C/0091D/0091E/0091F | P17-06 | Durable local sync; exact v3 mapping, authenticated host/history dispatch and bounded loopback TCP pass; durable service/process evidence remains |
+| P-0091/0091A/0091B/0091C/0091D/0091E/0091F/0091G | P17-06 | Durable local sync; exact v3 mapping, authenticated host/history dispatch, bounded loopback TCP and actual PostgreSQL checkpoint process evidence pass; atomic durable mirror admission and pull/push remain |
 | P-0092 | P17-01 | Deterministic 19-entry package core 7/7; registered remote app absent |
 | P-0093 | P17-08 | Widget 133/133, MCP 13/13, disposable Git 20/20, installed v0.4 prepare 18/18; visible click/effect open |
 | P-0094 | P17-07 | Local rebase/branch/manual resolver and stale-head CLI surface 37/37; host/UI/concurrent evidence open |
@@ -159,6 +159,18 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   still same-process component evidence with ephemeral HMAC and in-memory repositories, not a
   durable daemon or actual remote transition; see
   `implementation/p17/P17-06_LOOPBACK_TCP_TRANSPORT_V10.md`.
+- P17-06 PostgreSQL checkpoint successor adds exact migration 14, optional immutable note,
+  v2-only least-privilege execution, forced tenant RLS, exact migration admission and one
+  serializable no-retry transaction. Current-PC run `12e4189fc3864f0faedacd6d8e8f6adf`
+  launched one host and four client processes against the pinned disposable PostgreSQL image and
+  passed 15/15: create, exact replay, changed-note rejection, corrupted-row replay refusal,
+  immutable rows, guarded rollback, migration/privilege drift rejection and owned-resource cleanup.
+  FULL security run `dc6b4f31b22946f39dc98f164b0eb5a3` also passed every lane after aligning
+  the repository's existing `BSD-3-Clause` policy with `cargo-deny`; `deny.toml` is qualification-bound.
+  This is actual durable checkpoint evidence only; mirror role/head admission remains process-local
+  and non-atomic, while pull/push, persistent credential custody, Hangul and production remain
+  unproven. See
+  `implementation/p17/P17-06_POSTGRES_CHECKPOINT_HOST_V11.md` and its frozen qualification.
 
 ## Risks and holds
 
@@ -169,8 +181,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - R-0003: One independent worker timeout smoke failed; retries passed, root cause unproven.
 - R-0004: Broad P16 discovery remains red on immutable predecessor locks and legacy assets;
   targeted successor qualification is authoritative only for its stated scope.
-- R-0005: P17-03/P17-06 lack persistent credential custody and PostgreSQL service lifecycle; the
-  new transport is loopback-only and fails closed meanwhile.
+- R-0005: P17-06 now has current-PC disposable PostgreSQL checkpoint lifecycle evidence, but lacks
+  persistent credential custody, a production PostgreSQL service lifecycle and one atomic durable
+  mirror role/head admission plus checkpoint transaction. Transport remains loopback-only.
 - R-0006: P17-07 local resolver and graphical stale-head widget are component evidence only;
   qualified `project_conflict_resolve` host wiring and concurrent Web/Codex verification remain open.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution are open.
@@ -184,9 +197,10 @@ Synthetic or component evidence never proves actual render, save, cross-version 
    saved structure with the corrected fixture, and repair the next proven incompatibility. Then
    rerun P05-08 and P05-09 with the user present. Require lifecycle, semantic, coordinate-aware PDF
    and visual evidence and preserve every failure.
-3. Add PostgreSQL-backed checkpoint state and a separately launched current-PC host/client behind
-   the new bounded loopback transport, then implement and capture actual pull/push/checkpoint
-   transitions without promoting same-process or in-memory component evidence.
+3. Move mirror role/head admission into durable PostgreSQL and combine it atomically with the
+   qualified checkpoint transaction, then implement and capture actual bounded pull/push
+   transitions. Preserve the current separately launched PostgreSQL checkpoint run as the narrower
+   predecessor; do not promote it to a full remote-sync or production PASS.
 4. Extend that host protocol with the widget's bounded P17-07 `project_conflict_resolve` contract,
    register it only after authenticated transport exists, and run one real concurrent Web/Codex
    conflict per resolution path. The graphical component itself is implemented and locally tested.
@@ -227,6 +241,12 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   `implementation/p17/P17-06_HISTORY_CHECKPOINT_DISPATCH_V9.md` and
   `protocol/private/p17-history-checkpoint-dispatch-v1.json`. Concrete in-memory create/replay and
   exact loopback compatibility pass; durable service state and actual transport remain next.
+- P17-06 PostgreSQL checkpoint successor: read
+  `implementation/p17/P17-06_POSTGRES_CHECKPOINT_HOST_V11.md`,
+  `protocol/private/p17-postgres-checkpoint-host-v1.json` and
+  `implementation/p17/qualification/postgres-checkpoint-host-v1-20260907/contract.json`.
+  Durable checkpoint/process evidence passes; durable atomic mirror admission and pull/push are the
+  next host increment.
 - Detailed history through P-0085 remains in `fae5bc0:PLANS.md`; later evidence is in individual
   reports and Git. Never touch user originals, failed evidence, predecessor locks or unrelated processes.
 - Per-card/phase reports and bound evidence are authoritative; broad introductory prose is not.
