@@ -27,6 +27,9 @@ PINNED_CONTRACTS = {
     RETENTION_CONTRACT: "080dda5dd65a7e803c49d73648691dd49971c0a8ade1b70b8521a7a5a9e6d7c5",
 }
 PINNED_AMBIGUOUS_BASELINES = {
+    "Cargo.toml": (
+        "f8281c9c13ea981ab8652819f1e3946ea942bca2d952f68b05ee61f3a3179c03"
+    ),
     "tools/p15/validate_inspector_staging_contract.py": (
         "d9869d7a01b2cea5eeeb0a9d5f64dae79cccf523dbdec8811f812551ef16d7d3"
     ),
