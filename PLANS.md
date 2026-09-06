@@ -132,6 +132,10 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
   remains non-qualifying because its receipt used CRLF. Rust target 10/10, full workspace and Clippy
   PASS. Detached audit at `05ad6bb` reverified the qualification, full workspace, Clippy and P01
   security regressions from a clean checkout; no Hangul/network/plugin.
+- P17-04 qualification `dd4e605`; bridge run d1a376b7563c4654b15fccbaa98645e0 and personal
+  plugin run 273f6ccaac644836814b87679ab4eb0c both PASS 12/12. Detached audit reverified the
+  installed host hashes, Node 139/139, P17 Python 17/17, daemon Rust 10/10, Clippy and P01 security
+  regressions; actual Hangul/document operations remain open.
 - External QA: Codex workspace p16-response-contract-20260905/inspection.md and run-03/receipt.json.
   Thirteen captures automated, six directly reviewed; exact HTML/script hashes bound, no user browser profile.
 - First reads: this ledger; P05 audit status/column-ID admission plan and attempt21; P16 MAIN audit/policy.
