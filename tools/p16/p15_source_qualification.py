@@ -249,9 +249,14 @@ def expected_contract(root: Path) -> dict[str, Any]:
 
     successors = {relative: runtime[relative] for relative in POSTGRES_PATHS}
     for relative in PLAN_AUTH_PATHS:
-        current = digest(postgres.read_bounded(root, relative))
-        require(source_at_revision(root, P16_PLAN_AUTH_REVISION, relative) == current, "history.plan_auth")
-        successors[relative] = current
+        observed = digest(postgres.read_bounded(root, relative))
+        pair = integration.get(relative)
+        qualified = pair[0] if pair is not None and pair[1] == observed else observed
+        require(
+            source_at_revision(root, P16_PLAN_AUTH_REVISION, relative) == qualified,
+            "history.plan_auth",
+        )
+        successors[relative] = qualified
     for relative in GUARD_PATHS:
         observed = digest(postgres.read_bounded(root, relative))
         pair = integration.get(relative)
