@@ -16,7 +16,7 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
         contract = qualification.verify()
         self.assertEqual(
             contract["qualification_id"],
-            "p17.current-workspace-source.v15.20260907",
+            "p17.current-workspace-source.v16.20260907",
         )
         self.assertTrue(contract["claims"]["source_qualification_only"])
         self.assertTrue(contract["claims"]["p05_diagnostic_dependencies_bound"])
@@ -62,6 +62,9 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
         )
         self.assertTrue(
             contract["claims"]["frozen_p15_source_contexts_v15_bound"]
+        )
+        self.assertTrue(
+            contract["claims"]["docs_source_only_widget_validation_v16_bound"]
         )
         self.assertFalse(contract["claims"]["actual_hangul"])
         self.assertFalse(contract["claims"]["phase_complete"])
