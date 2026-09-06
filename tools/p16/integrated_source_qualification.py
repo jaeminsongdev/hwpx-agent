@@ -104,7 +104,10 @@ def load_current_source_qualifier() -> Any:
 
 
 def current_source_successors(root: Path) -> dict[str, dict[str, Any]]:
-    values = load_current_source_qualifier().verified_successors(root)
+    values = load_current_source_qualifier().verified_successors(
+        root,
+        history_digest=lambda revision, relative: git_digest(root, revision, relative),
+    )
     require(isinstance(values, dict), "current_source.successors")
     return values
 
