@@ -622,7 +622,7 @@ def main() -> int:
             "HWPX_AGENT_PLAN_REVIEW_EVIDENCE_ACTIVE_KEY_B64": base64url(evidence_key),
         }
 
-    def run_host_round(*, include_network_probes: bool) -> str:
+    def run_host_round(*, include_network_probes: bool) -> tuple[str, dict[str, int]]:
         nonlocal process
         process, ready = start_server(node, server_environment())
         url = ready.get("url")
@@ -678,11 +678,14 @@ def main() -> int:
                 ),
                 widget_sha256,
             )
+            network_results: dict[str, int] = {}
             if include_network_probes:
                 context = ssl.create_default_context(cafile=str(certificate_path))
                 context.check_hostname = True
                 server_port = int(url.split(":")[2].split("/")[0])
-                negative_network_probes(server_port, context, token())
+                network_results = negative_network_probes(
+                    server_port, context, token()
+                )
             snapshot_sha256 = validate_render(
                 inspector_call(
                     node,
@@ -710,7 +713,7 @@ def main() -> int:
             )
         stop_server(process)
         process = None
-        return snapshot_sha256
+        return snapshot_sha256, network_results
 
     try:
         facts_result = invoke(
@@ -865,7 +868,7 @@ GRANT SELECT,INSERT ON hwpx_agent.plan_review_evidence_records TO hwpx_p16_revie
         checks.append("encrypted_plan_and_evidence_seeded")
 
         stage = "registered_host_first_round"
-        first_snapshot = run_host_round(include_network_probes=True)
+        first_snapshot, network_results = run_host_round(include_network_probes=True)
         checks.extend(
             [
                 "dedicated_tool_discovered_strict",
@@ -880,7 +883,7 @@ GRANT SELECT,INSERT ON hwpx_agent.plan_review_evidence_records TO hwpx_p16_revie
         stage = "postgres_restart"
         invoke([docker, "restart", container])
         database_ready()
-        second_snapshot = run_host_round(include_network_probes=False)
+        second_snapshot, _ = run_host_round(include_network_probes=False)
         require(first_snapshot == second_snapshot, "restart_snapshot_drift")
         checks.append("postgres_and_host_restart_restore_exact")
 
@@ -993,6 +996,19 @@ ALTER TABLE hwpx_agent.plan_review_evidence_records
             != P15_CATALOG_SHA256
         ),
         "p15_catalog_sha256": hashlib.sha256(P15_CATALOG.read_bytes()).hexdigest(),
+        "observations": {
+            "tool_name": "render_plan_review_widget",
+            "resource_uri": "ui://hwpx-agent/plan-review/v1.html",
+            "resource_sha256": hashlib.sha256(WIDGET.read_bytes()).hexdigest(),
+            "render_snapshot_sha256": first_snapshot if failure is None else None,
+            "restart_snapshot_sha256": second_snapshot if failure is None else None,
+            "restart_snapshot_equal": (
+                first_snapshot == second_snapshot if failure is None else False
+            ),
+            "network_rejections": network_results if failure is None else {},
+            "migration_count": 13,
+            "transport": "https_loopback_ephemeral",
+        },
     }
     raw = json.dumps(receipt, indent=2, sort_keys=True).encode() + b"\n"
     for secret_value in (

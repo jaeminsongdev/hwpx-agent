@@ -63,6 +63,8 @@ class PlanReviewStagingChecksTests(unittest.TestCase):
             '"hostile_origin": 403',
             '"oversized_body": 413',
             "registered_path_rejects_ciphertext_tamper",
+            '"render_snapshot_sha256"',
+            '"network_rejections"',
         ):
             self.assertIn(expected, source)
 
