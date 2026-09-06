@@ -1,7 +1,7 @@
 schema: hwpx-agent.roadmap-status/v2
-updated_at: 2026-09-04
-current_phase: P05
-status: p05_in_progress_current_pc_local_only
+updated_at: 2026-09-07
+current_phase: P06
+status: p05_completed_p06_ready_current_pc_local_only
 design_baseline:
   feature_domains: 16
   features: 609
@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_to_p04_complete_p05_01_to_06_complete_p05_07_to_09_actual_render_pending_p10_partial_p14_01_to_05_complete_p14_06_core_security_pending
+  product_code_scope: p01_to_p05_complete_current_pc_local_p06_ready_p10_partial_p14_scoped_complete_p15_in_progress
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -604,8 +604,11 @@ p04_execution:
     user_documents_opened: false
     hancom_runtime_executed_by_task: true
 p05_execution:
-  current_task: P05_phase_source_successor_and_full_gate
-  gate_state: in_progress_actual_subgates_passed_current_pc_local
+  current_task: phase_gate_complete_handoff_to_P06_01
+  gate_state: completed_scoped_current_pc_hangul_2020_local_layout
+  implementation_base_commit: cacbc936e4d225e1a4424efb806aa96f86965ec5
+  source_qualification_commit: 23b2a534cb65d1e2f99e594eca89861cffae36bb
+  audited_full_commit: cf5475379422899ac25fecb78968802d53442b3c
   tasks:
     P05-01: completed_current_pc_local_text_flow
     P05-02: completed_current_pc_local_character_styles
@@ -744,8 +747,8 @@ p05_execution:
     input_unchanged: true
     text_digest_preserved: true
     remaining_hwp_processes: 0
-    source_successor_qualification: pending
-    current_and_independent_full: pending
+    source_successor_qualification: passed_v20_11_of_11
+    current_and_independent_full: passed_5_of_5_each_at_exact_commit
     user_documents_opened: false
     hancom_runtime_executed_by_task: true
   vs1_layout:
@@ -770,10 +773,29 @@ p05_execution:
     input_unchanged: true
     text_digest_preserved: true
     remaining_hwp_processes: 0
-    source_successor_qualification: pending
-    current_and_independent_full: pending
+    source_successor_qualification: passed_v20_11_of_11
+    current_and_independent_full: passed_5_of_5_each_at_exact_commit
     user_documents_opened: false
     hancom_runtime_executed_by_task: true
+  phase_gate:
+    audit_mode: strict
+    reasoning_recommendation: high
+    source_qualification_id: p17.current-workspace-source.v20.20260907
+    source_qualification_run: 7f1b1756db794407a6256398170b7bf8
+    source_qualification_checks: 11_of_11_passed
+    source_receipt_sha256: f5eafd5b3d1fef9d46c9fb7b2eb5179e9d2e1998387025470cc93484aee4c2c3
+    source_contract_sha256: adca1fbccedad8b4c6dfb7dbd223f86b02a7ba5f9357c21220340b3796969d22
+    current_full_lanes: 5_of_5_passed
+    independent_full_lanes: 5_of_5_passed
+    current_security_run: 401faa204de34bd1aca467ac4491efc4
+    independent_security_run: 5c87496e8ba3491ba93edc577e2d5e61
+    secrets_vulnerabilities_forbidden_licenses: 0
+    offline_linux_p05_package_tests: 210_of_210_passed
+    offline_linux_clippy_warnings_denied: passed
+    linux_image_digest: sha256:bfda7f1ddbf0a192699d4b02dc3dbfefabe5eb7c0dd5527ba31acdaf0e4ab37f
+    blocker_major_minor_after_correction: 0_0_0
+    decision: pass_scoped_current_pc_hangul_2020_local_layout
+    p06_authorization: current_pc_local_only
 p10_execution:
   current_task: mixed_current_pc_scope_external_dependencies_open
   gate_state: in_progress_current_pc_local
@@ -981,11 +1003,11 @@ phases:
   P02: completed_current_pc_local_scope
   P03: completed_current_pc_local_scope
   P04: completed_current_pc_local_scope
-  P05: in_progress_current_pc_local_scope
-  P06: blocked_by_P05
-  P07: blocked_by_P05
-  P08: blocked_by_P05
-  P09: blocked_by_P05
+  P05: completed_current_pc_hangul_2020_local_layout
+  P06: ready_current_pc_local_scope
+  P07: blocked_by_P06
+  P08: blocked_by_P07
+  P09: blocked_by_P08
   P10: in_progress_current_pc_local_scope
   P11: blocked_by_P06_P07_P08_P09_P10
   P12: blocked_by_P06_P07_P08_P09_P11

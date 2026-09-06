@@ -3,8 +3,8 @@
 - Updated: 2026-09-07
 - Root: `D:\개발\hwpx-agent`
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05 final source/FULL Gate, P17-06/P17-07/P17-08 and final product qualification.
-- Reasoning: max for preservation, authorization and Gate work; high for routine implementation.
+- Active: P06-01 TableGrid, P17-06/P17-07/P17-08 and final product qualification.
+- Reasoning: high for P06-01 typed model/property work; max for preservation, authorization and final Gate work.
 - UI: attempt23 sparse layout/identity, dense attempt02 automatic flow/balance, P05-08 v12
   odd/even/first-page header/footer/master and P05-09 v2 coordinate-aware VS-1 rendering passed on
   Hangul 2020. Computer Use performed no click or typing; the user approved the visible Hangul
@@ -24,8 +24,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | Phase | State | Evidence or dependency |
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | `implementation/p00/` through `implementation/p04/` |
-| P05 | in progress | 01-05 pass; 06 reopened; 07 sparse plus dense current-2020 subgates pass; 08 current-2020 fixture pass; 09 pending |
-| P06-P09 | blocked by P05 | table, equation, graphics and fields engines |
+| P05 | scoped current-PC PASS | 01-09 plus actual save/reopen/readback/PDF/visual, source v20 and dual FULL Gate |
+| P06 | ready | start 01 Grid/span invariant; current-PC local scope only |
+| P07-P09 | blocked in sequence | equation, graphics and fields engines follow P06 and their stated dependencies |
 | P10 | in progress | 01-04,07,09,10 scoped pass; 05/06 actual dependencies; 08 unqualified |
 | P11-P13 | blocked | depend on P06-P10 |
 | P14 | scoped local PASS | disposable PostgreSQL reference Gate |
@@ -39,7 +40,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 | ID | Task | State and next evidence |
 |---|---|---|
-| P-0045-0048 | P05-06-09 | P05-07 sparse/dense, P05-08 v12 and P05-09 v2 current-2020 actual subgates pass; phase source/FULL Gate remains |
+| P-0045-0048 | P05-06-09 | Complete; authoritative scoped phase decision in `implementation/p05/P05_GATE_REPORT.md` |
+| P-0049 | P06-01 | Ready: bounded TableGrid, slot→master mapping, rectangular spans and property/negative contract |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -74,17 +76,15 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Other current evidence
 
-- Current source successor v2 run `6cc220553ca8460281f58d5db10ac7ea` passed 11/11 at independent
-  clean `54c6c14`; 14 exact replacements, 23 locked/offline Cargo members and P05 dev-edges bound.
+- Current source successor v20 run `7f1b1756db794407a6256398170b7bf8` passed 11/11 and binds
+  implementation commit `cacbc936e4d225e1a4424efb806aa96f86965ec5`, 25 exact predecessors,
+  118 implementation files and 25 locked/offline Cargo members. Receipt SHA-256 is
+  `f5eafd5b3d1fef9d46c9fb7b2eb5179e9d2e1998387025470cc93484aee4c2c3`; contract SHA-256 is
+  `adca1fbccedad8b4c6dfb7dbd223f86b02a7ba5f9357c21220340b3796969d22`.
 - P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
-  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v19
-  passed 11/11 at run `8945f8951aa14b13b5757b63725bd71e` on clean commit `4b7d6b1`; it composes
-  v18 and binds the P15 auth source bridge through 25 exact successors, 115 exact
-  implementation files and 25 locked/offline Cargo members. Contract SHA-256 is
-  `79b3fafc8bb080ad271b6d44cfae9754dfc3e613eaa788425e762a94a6fabcfa`.
-  Current/independent FULL remain pending.
+  and visual review. Attempt01's one-page expectation failure is preserved.
 - P05-08 used Hangul-authored header/footer and master-page references to repair numeric paragraph
   IDs, the standalone unqualified `masterPage` root, manifest/root/section identity, non-spine
   publication, archive order, sublist line caches and control placement in the body run. Hangul's
@@ -108,9 +108,13 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   callback verification failure remain preserved. `hwpx-package` passes 218/218, six bounded
   PowerShell suites 164/164 and the PDF verifier 21/21. See
   `implementation/p05/P05-09_HANCOM2020_ACTUAL_GATE.md`.
-- The old independent FULL process at `285c0ce` reached later lanes and terminated, but its detached
-  console exit status was unavailable. It was not promoted; the clean exact worktree was removed.
-  A fresh independent FULL remains required at the final implementation successor.
+- The old independent FULL process at `285c0ce` remains an unpromoted historical failure because its
+  detached console exit status was unavailable. Exact audited commit
+  `cf5475379422899ac25fecb78968802d53442b3c` subsequently passed current and clean independent FULL
+  `5/5` each. Current security run `401faa204de34bd1aca467ac4491efc4` and independent run
+  `5c87496e8ba3491ba93edc577e2d5e61` reported failed checks/vulnerabilities/forbidden licenses 0.
+  Offline Linux P05 package tests passed 210/210 and Clippy `-D warnings` passed with network disabled
+  and source/registry read-only. `implementation/p05/P05_GATE_REPORT.md` is authoritative.
 - P16 merge `0512883`; durable plan PostgreSQL run `1828b246e92746789fa5d6501e7f1ac2`
   passed 39/39, renderer/evidence run `2b01ce0ff66045f29a32c67d217aa9bd` passed 19/19,
   dedicated host run `d22e85581cd44d06a016f3460a43de12` passed 14/14; resources cleaned.
@@ -186,9 +190,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Risks and holds
 
-- R-0001: P05-07 dense attempt02, P05-08 v12 and P05-09 v2 current-PC actual subgates pass. Final
-  source successor and current/independent FULL remain open; no later-version or arbitrary-document
-  claim.
+- R-0001 closed for the scoped current-PC P05 Gate: actual subgates, source v20 and current/independent
+  FULL pass. Later-version, other-PC and arbitrary-document claims remain explicitly deferred.
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence remains open.
 - R-0003: One independent worker timeout smoke failed; retries passed, root cause unproven.
 - R-0004: Broad P16 discovery remains red on immutable predecessor locks and legacy assets;
@@ -203,10 +206,10 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Next actions and validation
 
-1. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
+1. Start P06-01 at reasoning `high`: lock bounded `TableGrid`, slot→master mapping, rectangular span,
+   finite limits, canonical serialization and deterministic property/negative tests before mutations.
+2. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
-2. Bind the completed P05-09 v2 actual evidence into the P05 phase Gate, source successor and final
-   current/independent FULL runs. Preserve every earlier failed fixture and verifier receipt.
 3. Move mirror role/head admission into durable PostgreSQL and combine it atomically with the
    qualified checkpoint transaction, then implement and capture actual bounded pull/push
    transitions. Preserve the current separately launched PostgreSQL checkpoint run as the narrower
@@ -214,12 +217,13 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 4. Extend that host protocol with the widget's bounded P17-07 `project_conflict_resolve` contract,
    register it only after authenticated transport exists, and run one real concurrent Web/Codex
    conflict per resolution path. The graphical component itself is implemented and locally tested.
-5. Before closure run target tests, regressions, current and clean-checkout FULL, applicable offline
-   Linux/security/STRICT checks. Close P05 only with save/reopen, semantic, PDF and visual evidence.
+5. At each phase closure run target tests, regressions, current and clean-checkout FULL, applicable
+   offline Linux/security/STRICT checks without weakening the phase-specific actual evidence Gate.
 
 ## Handoff pointers
 
-- First read: this file, `implementation/p05/P05-07_DIAGNOSTIC_AUDIT_STATUS.md`,
+- First read: this file, `implementation/p05/P05_GATE_REPORT.md`,
+  `implementation/p05/P05-07_DIAGNOSTIC_AUDIT_STATUS.md`,
   `implementation/p17/P17-08_TRUSTED_WIDGET_V7.md`, and P16 main integration audit.
 - Attempt23 evidence: `fixtures/target-build/p05-07-current-2020-20260906-v4/`; read
   `implementation/p05/P05-07_ATTEMPT23_IDENTITY_REBINDING.md` before the dense-flow successor.

@@ -46,10 +46,13 @@ Text·Character·Paragraph·Page·Section를 문서상 계획이 아니라 **재
 - [x] `P05-07` 산출물 `section/column engine` 존재, 검증: multi-section render tests.
 - [x] `P05-08` 산출물 `header/footer module` 존재, 검증: odd/even/first-page fixtures.
 - [x] `P05-09` 산출물 `layout vertical slice` 존재, 검증: Hancom save/reopen/render pass.
-- [ ] 새 capability/contract/schema에 migration과 negative test가 있다.
-- [ ] 실제 수행하지 않은 검증은 `unverified`로 남았다.
-- [ ] source artifact를 in-place로 수정한 경로가 없다.
-- [ ] phase handoff에 실패 fixture와 다음 exact task가 기록됐다.
+- [x] 새 capability/contract/schema에 migration과 negative test가 있다.
+- [x] 실제 수행하지 않은 검증은 `unverified`로 남았다.
+- [x] source artifact를 in-place로 수정한 경로가 없다.
+- [x] phase handoff에 실패 fixture와 다음 exact task가 기록됐다.
+
+Authoritative scoped Gate decision: `implementation/p05/P05_GATE_REPORT.md`. P05는 현재 PC의
+정품 한글 2020 개인·비상업·로컬 개발 범위에서 완료됐으며, P06만 동일 범위로 승인한다.
 
 ## 금지
 

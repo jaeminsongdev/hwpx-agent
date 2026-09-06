@@ -7,9 +7,9 @@
 
 ## 현재 상태
 
-- 상태: `P05_IN_PROGRESS_AND_P15_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
-- 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT` + `P15_REMOTE_MCP_CONTROL_PLANE`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~09 core와 P05-07 sparse/dense, P05-08 odd/even/first-page, P05-09 coordinate-aware VS-1 actual Hangul 2020 fixture가 통과했다. P05 phase 최종 source/FULL Gate는 진행 중이다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14와 P15는 각 보고서의 scoped local 범위에서 통과했고 P16/P17 local 구현은 `PLANS.md`의 최신 원장을 따른다.
+- 상태: `P05_COMPLETE_P06_READY_AND_P15_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
+- 현재 phase: `P06_TABLE_ENGINE` + `P15_REMOTE_MCP_CONTROL_PLANE`
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~09와 P05-07 sparse/dense, P05-08 odd/even/first-page, P05-09 coordinate-aware VS-1 actual Hangul 2020 fixture가 통과했고, source successor v20과 동일 커밋의 current/independent FULL Gate까지 닫혔다. P06-01을 현재 PC 로컬 범위에서 시작할 수 있다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14와 P15는 각 보고서의 scoped local 범위에서 통과했고 P16/P17 local 구현은 `PLANS.md`의 최신 원장을 따른다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -91,7 +91,8 @@
 - P05-01~06 `PASS`: bounded text flow, character/paragraph styles, tabs, lists/numbering과 page setup이 각 typed contract, negative/fixed corpus, cross-platform tests와 해당 보고서의 범위에서 완료됐다.
 - P05-07은 sparse layout/identity와 dense automatic flow/balance current-PC actual subgate를 통과했다. 이전 timeout과 기대 불일치 시도는 그대로 보존한다.
 - P05-08은 한글 2020 생성 reference로 standalone master-page와 control placement를 교정했다. v12 actual fixture는 open-save-reopen, strict 4쪽/4 definition/8 field/1 master readback, PDF 계약, 원본 해상도 전수 검토와 잔류 프로세스 0을 통과했다. 이 PASS는 고정 fixture/current PC에 한정된다.
-- P05-09 v2는 ordinary two-column+explicit break, current-target empty backend ID로 교정한 뒤 actual open-save-reopen, strict semantic readback, coordinate-aware PDF와 원본 해상도 검토를 통과했다. P05 phase 최종 source/FULL Gate는 열려 있다.
+- P05-09 v2는 ordinary two-column+explicit break, current-target empty backend ID로 교정한 뒤 actual open-save-reopen, strict semantic readback, coordinate-aware PDF와 원본 해상도 검토를 통과했다.
+- P05 Gate `PASS_SCOPED_CURRENT_PC_HANGUL_2020_LOCAL_LAYOUT`: source successor v20 11/11, audited commit `cf5475379422899ac25fecb78968802d53442b3c`의 current/independent FULL 각 5/5, offline Linux P05 package 210/210과 Clippy, security findings 0, STRICT blocker/major/minor 0/0/0을 통과했다. Authoritative report는 `implementation/p05/P05_GATE_REPORT.md`이며 P06만 동일 범위로 승인한다.
 
 ## P10 현재 상태
 
@@ -174,16 +175,18 @@
 
 ## 다음 작업
 
-다음 P05 작업은 P05-09 actual PASS를 포함한 최종 source successor와 current/independent FULL Gate를 닫는 것이며 추론수준은 `max`다. 비-UI 구현과 P16/P17 최신 순서는 `PLANS.md`를 따른다.
+다음 exact task는 `P06-01 Grid/span invariant`다. Bounded `TableGrid`, slot→master-cell 매핑,
+rectangular span과 finite limit/typed negative/property contract를 먼저 잠그며 권장 추론수준은
+`high`다. 비-UI 구현과 P16/P17 최신 순서는 `PLANS.md`를 따른다.
 
 ## 현재 blocker
 
 - NPM advisory endpoint는 간헐적 timeout 이력이 있지만 P14-09 exact commit 보안 run은 첫 시도 실제 응답으로 통과했으며 P15-01 blocker가 아니다.
-- P05 actual 대상 실행은 완료됐다. 이후 회귀 때문에 한글 2020 재실행이 필요해질 때만 직전에 사용자에게 알리고, timeout/실패는 보존하며 자동 PASS로 승격하지 않는다.
+- P05 actual 대상 실행과 phase Gate는 완료됐다. 이후 회귀 때문에 한글 2020 재실행이 필요해질 때만 직전에 사용자에게 알리고, timeout/실패는 보존하며 자동 PASS로 승격하지 않는다.
 - P10-05/06과 P10-08 production 범위는 외부 보안 모듈·격리 환경이 제공되기 전까지 unqualified다.
 
 2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.
 
 ## 검증 한계
 
-제품 foundation, P02 signed registry, P03 package/preserving/round-trip core, P04 typed model/transaction/diff/idempotency/VS-0 vertical, P05-01 bounded text flow, P05-02 bounded character styles, P05-03 bounded paragraph styles와 P05-04 bounded tabs는 재현 가능하다. 그러나 VS-0는 create-new 단일 문단이고 P05-01~04는 targeted text/header 계약이라 arbitrary package editing, complete list/page/section semantics, installed-font substitution, rendered fidelity, durable multi-process persistence와 public wire integration을 증명하지 않는다. P05-04 actual save/reopen은 exact current-PC semantic readback이며 visual tab layout이나 사용자 문서 호환성을 뜻하지 않는다. Signed registry의 general public routing은 0이고 VS-0만 task 전용 exact signed route다. Exact 2020 evidence는 이 Windows 설치의 개인 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00~P04 실제 상태는 각 authoritative Gate report를, P05-01~04는 해당 task report를 따른다.
+제품 foundation, P02 signed registry, P03 package/preserving/round-trip core, P04 typed model/transaction/diff/idempotency/VS-0 vertical과 P05 text/style/page/section/layout Gate는 재현 가능하다. 그러나 P05 실제 증거는 named disposable fixture와 exact current-PC Hangul 2020에 한정되며 arbitrary package editing, 사용자 문서 호환성, installed-font substitution 전수성, table/equation/graphics semantics, durable multi-process persistence와 public wire integration을 증명하지 않는다. Signed registry의 general public routing은 0이고 VS-0만 task 전용 exact signed route다. Exact 2020 evidence는 이 Windows 설치의 개인 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00~P05 실제 상태는 각 authoritative Gate report를 따른다.
