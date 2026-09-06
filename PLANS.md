@@ -3,8 +3,8 @@
 - Updated: 2026-09-07
 - Root: `D:\개발\hwpx-agent`
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P06-01 TableGrid, P17-06/P17-07/P17-08 and final product qualification.
-- Reasoning: high for P06-01 typed model/property work; max for preservation, authorization and final Gate work.
+- Active: P06-02 table create/insert/delete, P17-06/P17-07/P17-08 and final product qualification.
+- Reasoning: high for P06-02 mutation/index/property work; max for preservation, authorization and final Gate work.
 - UI: attempt23 sparse layout/identity, dense attempt02 automatic flow/balance, P05-08 v12
   odd/even/first-page header/footer/master and P05-09 v2 coordinate-aware VS-1 rendering passed on
   Hangul 2020. Computer Use performed no click or typing; the user approved the visible Hangul
@@ -25,7 +25,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | `implementation/p00/` through `implementation/p04/` |
 | P05 | scoped current-PC PASS | 01-09 plus actual save/reopen/readback/PDF/visual, source v20 and dual FULL Gate |
-| P06 | ready | start 01 Grid/span invariant; current-PC local scope only |
+| P06 | in progress | 01 pure `TableGrid` invariant PASS; 02 create/insert/delete ready |
 | P07-P09 | blocked in sequence | equation, graphics and fields engines follow P06 and their stated dependencies |
 | P10 | in progress | 01-04,07,09,10 scoped pass; 05/06 actual dependencies; 08 unqualified |
 | P11-P13 | blocked | depend on P06-P10 |
@@ -41,7 +41,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | ID | Task | State and next evidence |
 |---|---|---|
 | P-0045-0048 | P05-06-09 | Complete; authoritative scoped phase decision in `implementation/p05/P05_GATE_REPORT.md` |
-| P-0049 | P06-01 | Ready: bounded TableGrid, slot→master mapping, rectangular spans and property/negative contract |
+| P-0049 | P06-01 | Complete: report `implementation/p06/P06-01_REPORT.md`; source v21 and dual FULL PASS |
+| P-0050 | P06-02 | Ready: deterministic table/row/column create, insert, delete and boundary/index tests |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -115,6 +116,12 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   `5c87496e8ba3491ba93edc577e2d5e61` reported failed checks/vulnerabilities/forbidden licenses 0.
   Offline Linux P05 package tests passed 210/210 and Clippy `-D warnings` passed with network disabled
   and source/registry read-only. `implementation/p05/P05_GATE_REPORT.md` is authoritative.
+- P06-01 final implementation commit `6e49b0f6d3937d1026f3a0395e1a58bf405a148c` and source/audit
+  commit `823c35255bd178de167a0f50503788e1ee886000` lock the bounded `TableGrid`. Rust 7/7,
+  256 property cases, P06 validator 5/5, source v21 3/3, offline Linux tests/Clippy and
+  current/independent FULL 5/5 passed. Raw-byte source locks were repaired to UTF-8/LF canonical
+  hashes after an independent CRLF/LF checkout failure. No Hangul runtime or user document was used.
+  `implementation/p06/P06-01_REPORT.md` is authoritative.
 - P16 merge `0512883`; durable plan PostgreSQL run `1828b246e92746789fa5d6501e7f1ac2`
   passed 39/39, renderer/evidence run `2b01ce0ff66045f29a32c67d217aa9bd` passed 19/19,
   dedicated host run `d22e85581cd44d06a016f3460a43de12` passed 14/14; resources cleaned.
@@ -201,13 +208,16 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   mirror role/head admission plus checkpoint transaction. Transport remains loopback-only.
 - R-0006: P17-07 local resolver and graphical stale-head widget are component evidence only;
   qualified `project_conflict_resolve` host wiring and concurrent Web/Codex verification remain open.
+- R-0007: P06-01 proves only the pure logical grid. HWPX table lift/lower, actual Hangul 2020
+  save/reopen/render, mutations, merge/split and later table features remain open in P06-02~09.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution are open.
 - HOLD-0003: P10-08 production isolation and later-version PCs are unqualified.
 
 ## Next actions and validation
 
-1. Start P06-01 at reasoning `high`: lock bounded `TableGrid`, slot→master mapping, rectangular span,
-   finite limits, canonical serialization and deterministic property/negative tests before mutations.
+1. Start P06-02 at reasoning `high`: implement deterministic table/row/column create, insert and
+   delete over validated `TableGrid`; lock master identity/index remapping, span-boundary and atomic
+   failure policies with boundary/index/property tests before P06-03 merge/split.
 2. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
 3. Move mirror role/head admission into durable PostgreSQL and combine it atomically with the
@@ -222,7 +232,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Handoff pointers
 
-- First read: this file, `implementation/p05/P05_GATE_REPORT.md`,
+- First read: this file, `implementation/p06/P06-01_REPORT.md`, `implementation/p05/P05_GATE_REPORT.md`,
   `implementation/p05/P05-07_DIAGNOSTIC_AUDIT_STATUS.md`,
   `implementation/p17/P17-08_TRUSTED_WIDGET_V7.md`, and P16 main integration audit.
 - Attempt23 evidence: `fixtures/target-build/p05-07-current-2020-20260906-v4/`; read
