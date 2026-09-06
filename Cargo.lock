@@ -1447,6 +1447,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
 
 [[package]]
+name = "remote-sync-host"
+version = "0.1.0"
+dependencies = [
+ "artifact-service",
+ "auth-middleware",
+ "base64 0.23.1",
+ "hex",
+ "hmac",
+ "local-sync",
+ "retention-sync-service",
+ "revision-service",
+ "serde",
+ "serde_json",
+ "sha2",
+ "thiserror",
+ "uuid",
+]
+
+[[package]]
 name = "retention-sync-service"
 version = "0.1.0"
 dependencies = [

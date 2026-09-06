@@ -1,0 +1,76 @@
+{
+  "schema_version": "hwpx-agent.p17-checkpoint-authenticated-host/v1",
+  "scope": "current_pc_injected_checkpoint_host_component",
+  "exchange_order": [
+    "bound_request_and_host_context",
+    "authenticate_and_consume_one_time_service_token",
+    "decode_exact_canonical_private_checkpoint",
+    "parse_exact_project_branch_mirror_revision_ids",
+    "authorize_tenant_subject_mirror_and_head",
+    "dispatch_exact_p15_arguments",
+    "validate_and_encode_bound_response"
+  ],
+  "authentication": {
+    "middleware": "auth-middleware",
+    "principal_kind": "service",
+    "required_scope": "mirror.sync",
+    "token_use": "single",
+    "malformed_body_after_auth_consumes_token": true,
+    "production_identity_provider": "not_implemented"
+  },
+  "request": {
+    "maximum_bytes": 16384,
+    "schema_version": "hwpx-agent.remote-sync-request/v3",
+    "operation": "checkpoint",
+    "canonical_bytes_required": true,
+    "host_request_id_and_locale": "p15_schema_checked"
+  },
+  "authorization": {
+    "registry_contract": "hwpx-agent.p17-checkpoint-host-admission/v1",
+    "tenant_and_subject_source": "authenticated_context",
+    "exact_project_branch_mirror_revision_generation": true,
+    "stale_head": "bound_conflict_current_head_without_dispatch",
+    "alias_or_non_idle": "bound_rejected_without_dispatch"
+  },
+  "dispatch": {
+    "boundary": "injected_trait",
+    "arguments": "exact_p15_project_checkpoint_input_v1",
+    "includes_authenticated_tenant_and_subject": true,
+    "includes_service_intent_and_arguments_sha256": true,
+    "definitive_denial": "bound_rejected",
+    "uncertain_outcome": "host_unavailable"
+  },
+  "response": {
+    "schema_version": "hwpx-agent.remote-sync-response/v1",
+    "bound_to_exact_private_request_sha256": true,
+    "outcomes": [
+      "succeeded",
+      "conflict",
+      "rejected"
+    ],
+    "success_revision_must_equal_expected_revision": true,
+    "checkpoint_id_must_match_p15_and_local_adapter_bounds": true,
+    "invalid_post_dispatch_receipt": "host_unavailable"
+  },
+  "privacy": {
+    "debug_authentication_dispatcher_or_identity": "redacted",
+    "bearer_logged_or_persisted": false,
+    "label_or_note_logged": false
+  },
+  "evidence": {
+    "remote_sync_host_tests": 6,
+    "cargo_fmt": "pass",
+    "cargo_clippy_all_targets_all_features_deny_warnings": "pass",
+    "auth_replay_canonical_body_cross_mirror_stale_head_dispatch_and_receipt_negatives": true
+  },
+  "not_claimed": {
+    "network_listener": false,
+    "remote_credential_provider": false,
+    "asymmetric_jwks_or_external_idp": false,
+    "concrete_p15_checkpoint_service": false,
+    "durable_transaction_across_admission_and_dispatch": false,
+    "actual_remote_transition": false,
+    "production": false,
+    "p17_06_pass": false
+  }
+}
