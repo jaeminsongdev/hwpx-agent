@@ -77,9 +77,10 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
-  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v5
-  passed 11/11 at run `fd792613ed0044ebb2c6516c493911e0` and binds the newer P05 diagnostics and
-  P05-09 coordinate Gate sources; current/independent FULL remain pending.
+  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v6
+  passed 11/11 at run `4fd776f6b1384c599de66d2000013d54`; it retains the v5 diagnostic and
+  coordinate-Gate sources and binds the numeric paragraph-ID repair as exact commit blobs.
+  Current/independent FULL remain pending.
 - P05-08 fixed input passed strict product inspection and the policy-locked official Hancom model
   parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
   `open_input` without a positive receipt that the user completed the displayed access request;
@@ -105,7 +106,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Risks and holds
 
-- R-0001: P05-07 dense attempt02 current-PC actual subgate and source successor v5 pass.
+- R-0001: P05-07 dense attempt02 current-PC actual subgate and source successor v6 pass.
   P05-08 authorized open/save/reopen/render, P05-09 and final current/independent FULL remain open;
   no later-version or arbitrary-document claim.
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence remains open.
