@@ -32,7 +32,9 @@ did not time out, the input digest remained unchanged and zero Hwp processes rem
 | identity receipt | `e752fd21557f06f6fbea6b93489444f97937abb935d2a3f2f862dc55a60a142a` |
 
 The ignored evidence directory is
-`fixtures/target-build/p05-07-current-2020-20260906-v4/`. It contains no user document.
+`fixtures/target-build/p05-07-current-2020-20260906-v4/`. It contains no user document. A redacted,
+machine-readable copy of the identity receipt is checked in at
+`implementation/p05/qualification/p05-07-attempt23-identity-rebinding-receipt.json`.
 
 ## Layout and render result
 
