@@ -246,7 +246,13 @@ class P15SourceQualificationTests(unittest.TestCase):
         self.assertEqual(inspector_validator.validate(ROOT), [])
 
     def test_artifact_chain_fails_closed_without_exact_qualification(self):
-        with patch.object(artifact_validator, "validate_p16_source_qualification", return_value={}):
+        with patch.object(
+            artifact_validator, "validate_p16_source_qualification", return_value={}
+        ), patch.object(
+            artifact_validator, "validate_current_source_qualification", return_value={}
+        ), patch.object(
+            artifact_validator, "validate_frozen_p16_source_qualification", return_value={}
+        ):
             errors = artifact_validator.validate(ROOT)
         self.assertTrue(any(error.startswith("source_lock[") for error in errors))
 
