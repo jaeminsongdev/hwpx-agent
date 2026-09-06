@@ -267,6 +267,39 @@ class P15SourceQualificationTests(unittest.TestCase):
         ):
             self.assertEqual(widget_successor.validate(contract), [])
 
+    def test_widget_successor_accepts_source_only_docs_checkout(self):
+        contract = json.loads(widget_successor.CONTRACT_PATH.read_bytes())
+        generated = {
+            (ROOT / "web/plugin-widget/dist/widget-v1.html").resolve(),
+            (ROOT / "web/plugin-widget/dist/preview.html").resolve(),
+        }
+        original_is_file = Path.is_file
+
+        def generated_files_are_absent(path: Path) -> bool:
+            if path.resolve() in generated:
+                return False
+            return original_is_file(path)
+
+        with patch.object(Path, "is_file", new=generated_files_are_absent):
+            self.assertEqual(widget_successor.validate(contract), [])
+
+    def test_widget_successor_rejects_partial_generated_bundle(self):
+        contract = json.loads(widget_successor.CONTRACT_PATH.read_bytes())
+        bundle = (ROOT / "web/plugin-widget/dist/widget-v1.html").resolve()
+        preview = (ROOT / "web/plugin-widget/dist/preview.html").resolve()
+        original_is_file = Path.is_file
+
+        def only_preview_exists(path: Path) -> bool:
+            resolved = path.resolve()
+            if resolved == bundle:
+                return False
+            if resolved == preview:
+                return True
+            return original_is_file(path)
+
+        with patch.object(Path, "is_file", new=only_preview_exists):
+            self.assertEqual(widget_successor.validate(contract), ["successor.unavailable"])
+
     def test_qualification_cli_has_no_phase_completion_claim(self):
         output = io.StringIO()
         with contextlib.redirect_stdout(output), patch("sys.argv", ["qualification", "--check"]):

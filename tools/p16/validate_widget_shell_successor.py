@@ -113,6 +113,26 @@ def current_widget_replacements(
     return result
 
 
+def validate_widget_sources_without_generated_bundle(
+    shell: Any, contract: dict[str, Any]
+) -> tuple[dict[str, Any] | None, list[str]]:
+    """Rebuild source semantics for the docs lane without claiming bundle validation."""
+    resource = contract.get("resource")
+    frozen_bundle = resource.get("bundle") if isinstance(resource, dict) else None
+    if not isinstance(frozen_bundle, dict):
+        return None, ["bundle.contract"]
+    policy, parse_errors = shell.load_json(shell.POLICY_PATH)
+    errors = list(parse_errors)
+    if not isinstance(policy, dict):
+        return None, sorted(set(errors + ["policy.object"]))
+    errors.extend(shell.validate_policy(policy, shell.ROOT))
+    errors.extend(shell.validate_dependencies(policy, shell.ROOT))
+    errors.extend(shell.validate_public_catalog(shell.ROOT))
+    errors.extend(shell.validate_authored_browser_sources(shell.ROOT))
+    errors.extend(shell.validate_css_contract(shell.ROOT))
+    return dict(frozen_bundle), sorted(set(errors))
+
+
 def evaluate_local_widget_predecessor(contract: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
     tools_path = str(ROOT / "tools/p16")
     module_names = ("widget_shell", "build_widget_shell_contract")
@@ -123,7 +143,21 @@ def evaluate_local_widget_predecessor(contract: dict[str, Any]) -> tuple[dict[st
             "p16_widget_predecessor_validator_for_successor",
             ROOT / "tools/p16/validate_widget_shell.py",
         )
-        return predecessor.builder.build_contract(), predecessor.validate(contract)
+        shell = predecessor.builder.shell
+        bundle_exists = shell.BUNDLE_PATH.is_file()
+        preview_exists = shell.PREVIEW_PATH.is_file()
+        if bundle_exists != preview_exists:
+            raise ValueError("bundle.partial")
+        if bundle_exists:
+            return predecessor.builder.build_contract(), predecessor.validate(contract)
+        original_validate_all = shell.validate_all
+        shell.validate_all = lambda: validate_widget_sources_without_generated_bundle(
+            shell, contract
+        )
+        try:
+            return predecessor.builder.build_contract(), predecessor.validate(contract)
+        finally:
+            shell.validate_all = original_validate_all
     finally:
         sys.path.remove(tools_path)
         for name in module_names:
