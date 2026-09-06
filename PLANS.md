@@ -44,6 +44,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0085 | P16-05 continuity | Local bridge/component evidence closed at fae5bc0; dedicated local host v14 PASS; actual Codex app pending |
 | P-0086 | P16-06 Plan/diff UI | Source v11, durable plan v12, renderer/evidence v13 and dedicated local host v14 PASS; actual app/Hangul open |
 | P-0087 | P16-06 registered renderer | PASS for dedicated local one-tool MCP host: run d22e85581cd44d06a016f3460a43de12, exact v14 qualification; actual Codex app installation remains open |
+| P-0088 | P17-03 local daemon | In progress: implement bounded private protocol, process-scoped auth, current-PC config and workspace sandbox before stdio/plugin installation |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.

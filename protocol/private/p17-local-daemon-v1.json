@@ -1,0 +1,34 @@
+{
+  "schema_version": "hwpx-agent.p17-local-daemon-contract/v1",
+  "transport": "bounded_json_lines_private_child_process",
+  "protocol_version": "hwpx-agent.local-companion-private/v1",
+  "configuration": {
+    "schema_version": "hwpx-agent.local-companion-config/v1",
+    "target_profile": "hancom-2020-x86-11.0.0.9136",
+    "automation_mode": "disabled",
+    "network_mode": "disabled",
+    "max_workspaces": 8,
+    "max_file_bytes": 1073741824
+  },
+  "authentication": {
+    "kind": "process_scoped_random_token",
+    "environment": "HWPX_AGENT_LOCAL_SESSION_TOKEN",
+    "decoded_bytes": 32,
+    "persistent_secret": false
+  },
+  "methods": [
+    "health",
+    "authorize_path"
+  ],
+  "public_data": {
+    "absolute_paths": false,
+    "session_tokens": false,
+    "document_content": false,
+    "hwp_actions": false
+  },
+  "write_policy": {
+    "namespace": "output/",
+    "overwrite": false,
+    "automation": false
+  }
+}
