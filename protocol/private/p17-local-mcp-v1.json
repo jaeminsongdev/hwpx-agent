@@ -1,0 +1,71 @@
+{
+  "schema_version": "hwpx-agent.local-mcp/v1",
+  "transport": "stdio",
+  "server": {
+    "name": "hwpx-agent-local-companion",
+    "version": "0.1.0"
+  },
+  "tools": [
+    {
+      "name": "local_companion_health",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ready"
+          },
+          "target_profile": {
+            "type": "string",
+            "const": "hancom-2020-x86-11.0.0.9136"
+          },
+          "automation_enabled": {
+            "type": "boolean",
+            "const": false
+          },
+          "network_enabled": {
+            "type": "boolean",
+            "const": false
+          },
+          "workspace_count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8
+          },
+          "config_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "status",
+          "target_profile",
+          "automation_enabled",
+          "network_enabled",
+          "workspace_count",
+          "config_sha256"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ],
+  "claims": {
+    "opens_hangul": false,
+    "reads_document_content": false,
+    "accepts_paths": false,
+    "uses_network": false,
+    "persists_credentials": false
+  }
+}
