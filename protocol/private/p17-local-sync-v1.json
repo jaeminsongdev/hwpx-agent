@@ -1,0 +1,72 @@
+{
+  "schema_version": "hwpx-agent.local-sync/v1",
+  "scope": "pure_local_state_machine_with_injected_remote_port",
+  "states": [
+    "clean",
+    "ahead",
+    "conflict"
+  ],
+  "connectivity": [
+    "offline",
+    "online"
+  ],
+  "operations": {
+    "queue_local_change": {
+      "remote_calls": 0,
+      "from": "clean",
+      "to": "ahead",
+      "requires": [
+        "snapshot_sha256",
+        "operation_plan_sha256"
+      ]
+    },
+    "pull": {
+      "requires_online": true,
+      "expected_head_bound": true,
+      "clean_remote_advance": "adopt",
+      "ahead_remote_advance": "conflict_without_overwrite"
+    },
+    "push": {
+      "requires_online": true,
+      "from": "ahead",
+      "expected_head_bound": true,
+      "snapshot_bound": true,
+      "operation_plan_bound": true,
+      "idempotency_key_bound": true,
+      "uncertain_retry_requires_same_idempotency_key": true,
+      "success": "clean"
+    },
+    "checkpoint": {
+      "requires_online": true,
+      "from": "clean",
+      "expected_head_bound": true,
+      "idempotency_key_bound": true
+    }
+  },
+  "adapter": {
+    "trait": "RemoteSyncPort",
+    "methods": [
+      "pull",
+      "push",
+      "checkpoint"
+    ],
+    "failures": [
+      "unavailable",
+      "rejected",
+      "conflict"
+    ]
+  },
+  "invariants": {
+    "offline_remote_calls": 0,
+    "invalid_response_mutation": false,
+    "unavailable_push_forgets_idempotency_key": false,
+    "conflict_overwrites_local_plan": false,
+    "debug_contains_identifiers": false,
+    "debug_contains_digests": false,
+    "network_implementation_present": false,
+    "cli_present": false,
+    "durable_store_present": false,
+    "actual_remote_evidence": false,
+    "actual_hangul": false
+  }
+}

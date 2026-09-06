@@ -48,6 +48,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0089 | P17-04 local MCP config | PASS: bridge d1a376b7563c4654b15fccbaa98645e0 12/12; installed plugin 273f6ccaac644836814b87679ab4eb0c 12/12 through fresh Codex |
 | P-0089A | P17-04 main binding | PASS: cachebuster reinstall bound to integrated main; run 890e1150a2184172abbe8af0ef3eb7b2 11/11 through fresh Codex |
 | P-0090 | P17-05 local file/Git | PASS: exact-commit MCP run bf248400ce1c4985bb2353aa9209ec02, 16/16; path-free IDs, traversal/large-file rejection, Git plan only |
+| P-0091 | P17-06 project sync | In progress: pure offline/online mirror core 8/8; durable store, CLI, daemon/MCP and authenticated remote adapter remain |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.
