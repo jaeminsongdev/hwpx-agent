@@ -24,6 +24,11 @@ PINNED_CONTRACTS = {
     P15_CONTRACT: "5391428d584f7be36ed532ea446a07372761fb28bad9446972cef307c35a13e0",
     WIDGET_CONTRACT: "2d8dad6318bc9090b0a7db70d19f1470e6ce0fa97bb177755cff993f9b94f09e",
 }
+PINNED_AMBIGUOUS_BASELINES = {
+    "tools/p15/validate_inspector_staging_contract.py": (
+        "d9869d7a01b2cea5eeeb0a9d5f64dae79cccf523dbdec8811f812551ef16d7d3"
+    ),
+}
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 CHECKS = (
     "clean_tracked_source",
@@ -196,6 +201,13 @@ def source_expectations(
         require(isinstance(entry, dict), "widget.source")
         add_expectation(expectations, entry.get("path"), entry.get("sha256"))
     require(len(expectations) == len(set(expectations)), "predecessor.duplicates")
+    for relative, baseline in PINNED_AMBIGUOUS_BASELINES.items():
+        require(
+            relative in expectations
+            and len(expectations[relative]) > 1
+            and baseline in expectations[relative],
+            "predecessor.pinned_baseline",
+        )
     return expectations, main_replacements
 
 
@@ -216,8 +228,12 @@ def current_source_entries(root: Path, commit: str) -> list[dict[str, Any]]:
         else:
             if current in expectations[relative]:
                 continue
-            require(len(expectations[relative]) == 1, "predecessor.ambiguous")
-            baseline = next(iter(expectations[relative]))
+            baseline = PINNED_AMBIGUOUS_BASELINES.get(relative)
+            if baseline is None:
+                require(len(expectations[relative]) == 1, "predecessor.ambiguous")
+                baseline = next(iter(expectations[relative]))
+            else:
+                require(baseline in expectations[relative], "predecessor.pinned_baseline")
         if current == baseline:
             continue
         require(git_blob_digest(root, commit, relative) == current, "git.current_blob")

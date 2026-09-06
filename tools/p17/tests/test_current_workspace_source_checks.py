@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import patch
 
 
 TOOLS = Path(__file__).resolve().parents[1]
@@ -18,6 +19,14 @@ class CurrentWorkspaceSourceChecksTests(unittest.TestCase):
         self.assertIn("Cargo.lock", expectations)
         self.assertIn("Cargo.lock", main)
         self.assertIn("tools/p16/integrated_source_qualification.py", expectations)
+        self.assertEqual(
+            checks.PINNED_AMBIGUOUS_BASELINES,
+            {
+                "tools/p15/validate_inspector_staging_contract.py": (
+                    "d9869d7a01b2cea5eeeb0a9d5f64dae79cccf523dbdec8811f812551ef16d7d3"
+                )
+            },
+        )
         self.assertEqual(len(checks.SOURCES), len(set(checks.SOURCES)))
         for relative in checks.SOURCES:
             self.assertTrue((checks.ROOT / relative).is_file(), relative)
@@ -36,6 +45,47 @@ class CurrentWorkspaceSourceChecksTests(unittest.TestCase):
                 checks.digest(checks.bounded_file(checks.ROOT, entry["path"])),
                 entry["current_sha256"],
             )
+        inspector = next(
+            entry
+            for entry in entries
+            if entry["path"] == "tools/p15/validate_inspector_staging_contract.py"
+        )
+        self.assertEqual(
+            inspector["accepted_predecessor_sha256s"],
+            [
+                "d4370aabc28cc26ac931caaa5ec7172d7a3455e05732026018bec704e684a937",
+                "d9869d7a01b2cea5eeeb0a9d5f64dae79cccf523dbdec8811f812551ef16d7d3",
+            ],
+        )
+        self.assertEqual(
+            inspector["composition_predecessor_sha256"],
+            "d9869d7a01b2cea5eeeb0a9d5f64dae79cccf523dbdec8811f812551ef16d7d3",
+        )
+
+    def test_unknown_ambiguous_predecessors_remain_rejected(self) -> None:
+        relative = "tools/p16/validate_widget_shell_successor.py"
+        with (
+            patch.object(checks, "load_pinned_contracts", return_value={}),
+            patch.object(
+                checks,
+                "source_expectations",
+                return_value=({relative: {"0" * 64, "1" * 64}}, {}),
+            ),
+        ):
+            with self.assertRaisesRegex(checks.AcceptanceError, "predecessor.ambiguous"):
+                checks.current_source_entries(checks.ROOT, checks.tracked_identity(checks.ROOT)[0])
+
+    def test_pinned_ambiguous_baseline_must_come_from_exact_contracts(self) -> None:
+        contracts = checks.load_pinned_contracts(checks.ROOT)
+        with patch.dict(
+            checks.PINNED_AMBIGUOUS_BASELINES,
+            {"tools/p15/validate_inspector_staging_contract.py": "0" * 64},
+            clear=True,
+        ):
+            with self.assertRaisesRegex(
+                checks.AcceptanceError, "predecessor.pinned_baseline"
+            ):
+                checks.source_expectations(contracts)
 
     def test_acceptance_claims_are_bounded(self) -> None:
         source = (checks.ROOT / "tools/p17/run_current_workspace_source_checks.py").read_text(
