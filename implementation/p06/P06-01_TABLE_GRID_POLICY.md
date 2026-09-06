@@ -9,7 +9,9 @@
 
 The locked product-design sources are `docs/03_document_model/06_table_model.md`,
 `docs/12_implementation_guides/05_page_table_layout_algorithms.md`, the 61-feature table contract and
-the P06 roadmap. Their exact hashes are recorded in the private contract. They require a logical grid
+the P06 roadmap. Their UTF-8 text is line-ending-normalized to LF before the exact SHA-256 values are
+recorded in the private contract, so LF and CRLF checkouts remain equivalent while content drift still
+fails closed. The sources require a logical grid
 that preserves pre-merge coordinates, maps each slot to one master cell and permits only rectangular
 spans. P06-01 does not infer direct HWPX element or attribute names from those requirements.
 

@@ -25,6 +25,19 @@ class TableGridContractTests(unittest.TestCase):
             self.assertEqual(result["state"], "fail")
             self.assertIn("source_lock_digest", result["errors"])
 
+    def test_source_locks_are_portable_across_lf_and_crlf_checkouts(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_validation_tree(Path(directory))
+            source = root / "docs/09_roadmap/P06_table_engine.md"
+            text = source.read_text(encoding="utf-8")
+            source.write_bytes(text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8"))
+            lf_result = validator.validate(root)
+            self.assertEqual(lf_result["state"], "pass", lf_result)
+
+            source.write_bytes(text.replace("\r\n", "\n").replace("\r", "\n").replace("\n", "\r\n").encode("utf-8"))
+            crlf_result = validator.validate(root)
+            self.assertEqual(crlf_result["state"], "pass", crlf_result)
+
     def test_traversal_source_path_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = self.copy_validation_tree(Path(directory))

@@ -79,12 +79,10 @@ def bounded_file(root: Path, relative: str) -> Path:
     return path
 
 
-def sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+def sha256_utf8_lf(path: Path) -> str:
+    text = path.read_text(encoding="utf-8")
+    canonical = text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest()
 
 
 def validate(root: Path = ROOT) -> dict[str, Any]:
@@ -101,6 +99,8 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         errors.append("model_schema_version")
     if contract.get("scope") != "p06_01_pure_logical_grid_current_pc_local_development":
         errors.append("scope")
+    if contract.get("source_lock_canonicalization") != "utf8_lf_sha256":
+        errors.append("source_lock_canonicalization")
     if contract.get("default_limits") != EXPECTED_DEFAULT_LIMITS:
         errors.append("default_limits")
     if contract.get("migration") != "protocol/migrations/p06-table-grid-v0-to-v1.md":
@@ -130,7 +130,12 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
             except (OSError, ValueError):
                 errors.append("source_lock_path")
                 continue
-            if sha256(path) != expected_digest:
+            try:
+                actual_digest = sha256_utf8_lf(path)
+            except (OSError, UnicodeDecodeError):
+                errors.append("source_lock_encoding")
+                continue
+            if actual_digest != expected_digest:
                 errors.append("source_lock_digest")
         if declared_paths != EXPECTED_SOURCE_PATHS:
             errors.append("source_lock_paths_exact")
