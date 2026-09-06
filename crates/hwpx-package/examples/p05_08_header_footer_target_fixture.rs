@@ -441,7 +441,7 @@ fn header_footer_definition(
         applies_to,
         body: typed_body(
             &format!("p05-08-body-{id}"),
-            &format!("p05-08-paragraph-{id}"),
+            &format!("{}", 10_000 + id),
             inlines,
         ),
     }
@@ -468,7 +468,7 @@ fn target_master_page() -> MasterPageDefinition {
         in_front: false,
         body: typed_body(
             "p05-08-master-body",
-            "p05-08-master-paragraph",
+            "30000",
             vec![HeaderFooterInline::Text {
                 value: "P05-08-MASTER-PAGE".to_owned(),
                 character_style_id_ref: Some(0),

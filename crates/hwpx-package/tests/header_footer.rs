@@ -76,7 +76,7 @@ fn definition(kind: HeaderFooterKind, applies_to: PageVariant, id: u32) -> Heade
         applies_to,
         body: body(
             &format!("body-{id}"),
-            &format!("paragraph-{id}"),
+            &format!("{}", 10_000 + id),
             match kind {
                 HeaderFooterKind::Header => "머리말<&>",
                 HeaderFooterKind::Footer => "꼬리말",
@@ -287,7 +287,7 @@ fn master_page_variants_and_exact_links_are_closed() -> TestResult {
             in_front: index % 2 == 1,
             body: body(
                 &format!("master-body-{index}"),
-                &format!("master-p-{index}"),
+                &format!("{}", 20_000 + index),
                 "바탕쪽",
             ),
         })
@@ -319,7 +319,7 @@ fn dangling_duplicate_and_count_drift_master_pages_fail_closed() {
         optional_page_number: None,
         duplicate_on_page: false,
         in_front: false,
-        body: body("master-body", "master-p", "바탕쪽"),
+        body: body("master-body", "20000", "바탕쪽"),
     };
     let mut expected = policy(Vec::new());
     expected.master_page_references = vec!["missing".to_owned()];
@@ -496,7 +496,7 @@ fn finite_input_element_definition_text_and_output_limits_hold() -> TestResult {
 }
 
 #[test]
-fn image_page_field_negative_number_and_invalid_identity_fail_closed() {
+fn image_field_negative_number_non_numeric_paragraph_and_invalid_identity_fail_closed() {
     let mut expected = definition(HeaderFooterKind::Header, PageVariant::Both, 1);
     if let HeaderFooterInline::PageField(page_field) =
         &mut expected.body.paragraphs[0].runs[0].inlines[2]
@@ -528,6 +528,20 @@ fn image_page_field_negative_number_and_invalid_identity_fail_closed() {
     } else {
         panic!("fixture field missing");
     }
+    expected.body.paragraphs[0].id = "paragraph-1".to_owned();
+    assert_eq!(
+        HeaderFooterLowerer::lower_definition(&expected, HeaderFooterLimits::default()),
+        Err(HeaderFooterError::InvalidNumber)
+    );
+    expected.body.paragraphs[0].id = "10001".to_owned();
+    let mut numerically_duplicate = expected.body.paragraphs[0].clone();
+    numerically_duplicate.id = "010001".to_owned();
+    expected.body.paragraphs.push(numerically_duplicate);
+    assert_eq!(
+        HeaderFooterLowerer::lower_definition(&expected, HeaderFooterLimits::default()),
+        Err(HeaderFooterError::InvalidIdentity)
+    );
+    expected.body.paragraphs.pop();
     expected.body.id = "private/path".to_owned();
     assert_eq!(
         HeaderFooterLowerer::lower_definition(&expected, HeaderFooterLimits::default()),
@@ -575,7 +589,7 @@ fn fixed_128_case_header_footer_corpus_is_deterministic() -> TestResult {
     }
     assert_eq!(
         hex::encode(digest.finalize()),
-        "8a773267deaa3b10d610d2216eb4cd7e2bd421a2d47815b46a26c7337a2a840d"
+        "b1723d2df9135ab2a5051597cac64c50dc33b50d259c622fc975b24b89e6e4aa"
     );
     Ok(())
 }

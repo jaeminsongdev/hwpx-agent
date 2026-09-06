@@ -1504,8 +1504,8 @@ fn validate_body(
     let mut text_bytes = 0usize;
     let mut page_field_count = 0usize;
     for paragraph in &body.paragraphs {
-        validate_identity(&paragraph.id, limits, false)?;
-        if !paragraph_ids.insert(paragraph.id.as_str()) || paragraph.runs.is_empty() {
+        let paragraph_id = validate_paragraph_identity(&paragraph.id, limits)?;
+        if !paragraph_ids.insert(paragraph_id) || paragraph.runs.is_empty() {
             return Err(HeaderFooterError::InvalidIdentity);
         }
         run_count = run_count
@@ -1695,6 +1695,16 @@ fn validate_identity(
         return Err(HeaderFooterError::InvalidIdentity);
     }
     Ok(())
+}
+
+fn validate_paragraph_identity(
+    value: &str,
+    limits: HeaderFooterLimits,
+) -> Result<u32, HeaderFooterError> {
+    validate_identity(value, limits, false)?;
+    value
+        .parse::<u32>()
+        .map_err(|_| HeaderFooterError::InvalidNumber)
 }
 
 fn validate_text(value: &str, limits: HeaderFooterLimits) -> Result<(), HeaderFooterError> {

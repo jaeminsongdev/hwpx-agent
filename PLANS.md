@@ -3,11 +3,12 @@
 - Updated: 2026-09-06
 - Root: `D:\개발\hwpx-agent`
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05-08 actual header/footer Gate, P05-09 coordinate-aware Gate preparation, P17-06/P17-08.
+- Active: P05-08 Hangul-authored reference comparison and actual Gate, P05-09 coordinate-aware Gate,
+  P17-06/P17-08.
 - Reasoning: max for preservation, authorization and Gate work; high for routine implementation.
 - UI: attempt23 sparse layout/identity and dense attempt02 automatic flow/balance passed on Hangul 2020;
   P05-08 attempts 01-02 stopped fail-closed at open without a confirmed access-click receipt;
-  attempt03 also returned false after 7 seconds and awaits the user's click confirmation.
+  attempt03 and the numeric-ID v2 attempt01 also returned false; click confirmation remains absent.
 
 ## Objective and boundaries
 
@@ -38,7 +39,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 | ID | Task | State and next evidence |
 |---|---|---|
-| P-0045-0048 | P05-06-09 | Sparse and dense subgates pass; P05-08 attempts 01-03 open-false preserved, attempt03 click confirmation pending, actual lifecycle still open; 09 remains |
+| P-0045-0048 | P05-06-09 | Sparse/dense pass; P05-08 numeric paragraph-ID defect fixed and attempts preserved, Hangul-authored reference/current lifecycle open; 09 remains |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -84,6 +85,10 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   `open_input` without a positive receipt that the user completed the displayed access request;
   neither is PASS. Attempt03 likewise failed at `open_input` after 7 seconds; whether access was
   clicked is awaiting explicit user confirmation. See `implementation/p05/P05-08_ATTEMPT01_02_DIAGNOSTIC.md`.
+- P05-08 nested body paragraph IDs were incorrectly emitted as strings although the official model
+  uses `UINT`. The product now rejects non-numeric values and the corrected fixture uses numeric
+  IDs; package clippy and all 175 tests pass. Its actual open still returned false without a click
+  receipt, so the Gate remains open. See `implementation/p05/P05-08_NUMERIC_PARAGRAPH_ID_REPAIR.md`.
 - P05-09 has a fresh deterministic input at SHA-256
   `acce8f8a68ea9b4b6e9f629235bf6fa018fd7cfccf45384b316d2d2401ce2c97`. Its render contract was
   strengthened from text-only v1 to coordinate-aware v2 at SHA-256
@@ -115,10 +120,10 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 1. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
-2. Obtain explicit confirmation whether attempt03 access was clicked. If clicked, diagnose and
-   repair P05-08 compatibility before another run; otherwise rerun it only with the user present.
-   Then run P05-09. Require lifecycle, semantic, coordinate-aware PDF and visual evidence and
-   preserve every failure.
+2. Complete the currently open Hangul-authored minimal header/footer reference, compare its exact
+   saved structure with the corrected fixture, and repair the next proven incompatibility. Then
+   rerun P05-08 and P05-09 with the user present. Require lifecycle, semantic, coordinate-aware PDF
+   and visual evidence and preserve every failure.
 3. Wire P17-06 to a qualified host credential/transport adapter, then capture an actual remote
    pull/push/checkpoint transition without promoting the current injected component evidence.
 4. Before closure run target tests, regressions, current and clean-checkout FULL, applicable offline
@@ -134,6 +139,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   input is `fixtures/target-build/p05-07-dense-current-2020-20260906-v1/`.
 - P05-08 diagnostic: read `implementation/p05/P05-08_ATTEMPT01_02_DIAGNOSTIC.md`; ignored prepared
   input and failed attempts are under `fixtures/target-build/p05-08-current-2020-20260906-v1/`.
+- P05-08 successor: read `implementation/p05/P05-08_NUMERIC_PARAGRAPH_ID_REPAIR.md`; corrected input
+  and the pending Hangul-authored reference are under
+  `fixtures/target-build/p05-08-current-2020-20260906-v2/`.
 - Detailed history through P-0085 remains in `fae5bc0:PLANS.md`; later evidence is in individual
   reports and Git. Never touch user originals, failed evidence, predecessor locks or unrelated processes.
 - Per-card/phase reports and bound evidence are authoritative; broad introductory prose is not.

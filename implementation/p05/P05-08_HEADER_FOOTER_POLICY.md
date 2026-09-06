@@ -22,6 +22,7 @@
 | section master-page link/count | `xsd:000576`, `xsd:000594` |
 | `HeaderFooterType` | `xsd:001001`–`001004` |
 | `MasterPageType` | `xsd:001103`–`001110` |
+| paragraph `PType.id` | `xsd:000393`, `xsd:000520` |
 
 로컬 공식 OWPML 모델은 commit `1453388472c703a4b299a0834f425cdac16644b9`에서 다음 선언을 교차 확인했다.
 
@@ -30,6 +31,7 @@
 - `pageNum`: 공식 11개 위치, `formatType`, `sideChar`
 - `startNum`: 쪽·그림·표·수식 시작 번호와 시작 면
 - `MasterPageType`: `BOTH | EVEN | ODD | LAST_PAGE | OPTIONAL_PAGE`
+- `PType`: paragraph `id` is represented by the official model as `UINT`
 
 ## 공개 의미 계약
 
@@ -41,6 +43,9 @@
 - definition 숫자 ID도 section 안에서 유일해야 한다.
 - `subList`는 방향, 줄 나눔, 세로 정렬, 연결 목록, text box 크기, 참조 플래그를 보존한다.
 - paragraph/run/text는 typed model로 내리고 raw XML을 public API에 노출하지 않는다.
+- lowerer와 reader는 머리말·꼬리말·바탕쪽 내부 `hp:p id`를 bounded decimal `u32`로
+  검증한다. 비숫자 identity를 XML에 내보내지 않고 `InvalidNumber`로 실패하며, `1`과
+  `01`처럼 lexical form이 달라도 같은 숫자값이면 중복 `InvalidIdentity`로 실패한다.
 
 ### 쪽 번호 필드
 
@@ -73,8 +78,11 @@
 - 관련 local name이 틀린 namespace나 구조 위치에 나타나면 무시하지 않고 실패한다.
 - 공개 `Debug`는 본문 문자열과 문자열 ID 대신 byte 길이만 표시한다.
 - deterministic lowering 후 동일 reader로 재승격하여 semantic equality를 확인한다.
-- 128-case 고정 corpus digest는 `8a773267deaa3b10d610d2216eb4cd7e2bd421a2d47815b46a26c7337a2a840d`다.
+- 128-case 고정 corpus digest는 `b1723d2df9135ab2a5051597cac64c50dc33b50d259c622fc975b24b89e6e4aa`다.
 
 ## 실제 검증 전 판정
 
-이 정책과 테스트는 제품 코어의 구조·의미 계약 증거다. 한글 2020이 실제로 odd/even/first-page를 렌더링하고 저장 후 유지한다는 증거로 대체하지 않는다. P05-08 hard gate는 target fixture를 한글 2020에서 open-save-reopen/render하고 제품 reader로 재검증할 때까지 열어 둔다.
+이 정책과 테스트는 제품 코어의 구조·의미 계약 증거다. 숫자 paragraph ID로 교정한
+fixture도 아직 실제 한글 2020 `Open` PASS를 만들지 못했으므로, 이 수정만으로 호환성을
+주장하지 않는다. P05-08 hard gate는 target fixture를 한글 2020에서
+open-save-reopen/render하고 제품 reader로 재검증할 때까지 열어 둔다.
