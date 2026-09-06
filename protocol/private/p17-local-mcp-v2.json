@@ -1,0 +1,110 @@
+{
+  "schema_version": "hwpx-agent.local-mcp/v2",
+  "transport": "stdio",
+  "server": {
+    "name": "hwpx-agent-local-companion",
+    "version": "0.2.0"
+  },
+  "migration": {
+    "from": "hwpx-agent.local-mcp/v1",
+    "health_tool_preserved": true,
+    "old_server_version": "0.1.0",
+    "new_tools_are_additive": true
+  },
+  "identifier_schema": {
+    "type": "string",
+    "pattern": "^[A-Za-z0-9_-]{1,64}$"
+  },
+  "digest_schema": {
+    "type": "string",
+    "pattern": "^[0-9a-f]{64}$",
+    "all_zero_rejected_at_runtime": true
+  },
+  "tools": [
+    {
+      "name": "local_companion_health",
+      "method": "health",
+      "input_fields": [],
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "local_companion_materialize",
+      "method": "materialize",
+      "input_fields": [
+        "workspace_id",
+        "operation_id",
+        "slot",
+        "fixture_id",
+        "expected_sha256"
+      ],
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "local_companion_diff",
+      "method": "diff",
+      "input_fields": [
+        "workspace_id",
+        "operation_id"
+      ],
+      "returns_document_content": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "local_companion_publish",
+      "method": "publish",
+      "input_fields": [
+        "workspace_id",
+        "operation_id",
+        "output_id",
+        "expected_sha256"
+      ],
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "local_companion_prepare_git_commit",
+      "method": "prepare_git_commit",
+      "input_fields": [
+        "workspace_id",
+        "output_id",
+        "expected_sha256",
+        "message"
+      ],
+      "executes_git": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ],
+  "claims": {
+    "opens_hangul": false,
+    "accepts_paths": false,
+    "returns_absolute_paths": false,
+    "returns_document_content": false,
+    "uses_network": false,
+    "persists_credentials": false,
+    "executes_git": false
+  }
+}

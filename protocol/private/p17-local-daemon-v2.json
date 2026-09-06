@@ -1,0 +1,76 @@
+{
+  "schema_version": "hwpx-agent.local-companion-private-contract/v2",
+  "protocol_version": "hwpx-agent.local-companion-private/v2",
+  "migration": {
+    "from": "hwpx-agent.local-companion-private/v1",
+    "v1_health_preserved": true,
+    "v1_authorize_path_preserved": true,
+    "v1_rejects_v2_methods": true,
+    "v2_rejects_v1_path_method": true
+  },
+  "methods": {
+    "materialize": {
+      "parameters": [
+        "workspace_id",
+        "operation_id",
+        "slot",
+        "fixture_id",
+        "expected_sha256"
+      ],
+      "slots": [
+        "source",
+        "candidate"
+      ]
+    },
+    "diff": {
+      "parameters": [
+        "workspace_id",
+        "operation_id"
+      ],
+      "returns_content": false
+    },
+    "publish": {
+      "parameters": [
+        "workspace_id",
+        "operation_id",
+        "output_id",
+        "expected_sha256"
+      ]
+    },
+    "prepare_git_commit": {
+      "parameters": [
+        "workspace_id",
+        "output_id",
+        "expected_sha256",
+        "message"
+      ],
+      "executed": false
+    }
+  },
+  "public_identifiers": {
+    "accepts_paths": false,
+    "identifier_pattern": "^[A-Za-z0-9_-]{1,64}$",
+    "fixture_mapping": "input/{fixture_id}.hwpx",
+    "output_mapping": "output/{output_id}.hwpx"
+  },
+  "write_policy": {
+    "create_new": true,
+    "overwrite": false,
+    "source_in_place": false,
+    "checksum_bound": true,
+    "max_file_bytes_from_config": true
+  },
+  "git": {
+    "reads_head": true,
+    "returns_bound_plan": true,
+    "mutates_index": false,
+    "executes_process": false,
+    "requires_p17_08_for_execution": true
+  },
+  "claims": {
+    "opens_hangul": false,
+    "uses_network": false,
+    "returns_absolute_paths": false,
+    "returns_document_content": false
+  }
+}

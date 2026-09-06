@@ -3,9 +3,10 @@ use std::path::Path;
 
 use local_companion_daemon::{
     CONFIG_VERSION, LocalCompanionConfig, LocalCompanionDaemon, PROTOCOL_VERSION, SessionToken,
-    TARGET_PROFILE,
+    TARGET_PROFILE, WORKFLOW_PROTOCOL_VERSION,
 };
 use serde_json::{Value, json};
+use sha2::{Digest as _, Sha256};
 use tempfile::TempDir;
 
 const TOKEN: &str = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
@@ -45,14 +46,26 @@ fn token() -> SessionToken {
 }
 
 fn request(method: &str, params: &Value) -> Vec<u8> {
+    request_with_protocol(PROTOCOL_VERSION, method, params)
+}
+
+fn workflow_request(method: &str, params: &Value) -> Vec<u8> {
+    request_with_protocol(WORKFLOW_PROTOCOL_VERSION, method, params)
+}
+
+fn request_with_protocol(protocol: &str, method: &str, params: &Value) -> Vec<u8> {
     serde_json::to_vec(&json!({
-        "protocol_version": PROTOCOL_VERSION,
+        "protocol_version": protocol,
         "request_id": "request-01",
         "session_token": TOKEN,
         "method": method,
         "params": params,
     }))
     .unwrap_or_else(|error| panic!("request: {error}"))
+}
+
+fn digest(bytes: &[u8]) -> String {
+    hex::encode(Sha256::digest(bytes))
 }
 
 #[test]
@@ -222,6 +235,175 @@ fn malformed_config_and_duplicate_root_are_rejected() {
 }
 
 #[test]
+fn workflow_v2_is_path_free_identity_bound_and_preserves_inputs() {
+    let (temporary, config) = fixture();
+    let workspace = temporary.path().join("workspace");
+    let source = b"bounded";
+    let candidate = b"candidate";
+    fs::write(workspace.join("input/candidate.hwpx"), candidate)
+        .unwrap_or_else(|error| panic!("candidate: {error}"));
+    fs::create_dir_all(workspace.join(".git/refs/heads"))
+        .unwrap_or_else(|error| panic!("git refs: {error}"));
+    fs::write(workspace.join(".git/HEAD"), b"ref: refs/heads/main\n")
+        .unwrap_or_else(|error| panic!("git head: {error}"));
+    fs::write(
+        workspace.join(".git/refs/heads/main"),
+        format!("{}\n", "a".repeat(40)),
+    )
+    .unwrap_or_else(|error| panic!("git ref: {error}"));
+    let daemon = LocalCompanionDaemon::new(config);
+
+    for (slot, fixture_id, expected) in [
+        ("source", "fixture", digest(source)),
+        ("candidate", "candidate", digest(candidate)),
+    ] {
+        let response = daemon.handle(
+            &workflow_request(
+                "materialize",
+                &json!({
+                    "workspace_id": "primary",
+                    "operation_id": "operation-01",
+                    "slot": slot,
+                    "fixture_id": fixture_id,
+                    "expected_sha256": expected,
+                }),
+            ),
+            &token(),
+        );
+        assert_eq!(response["protocol_version"], WORKFLOW_PROTOCOL_VERSION);
+        assert_eq!(response["ok"], true);
+        assert!(response.to_string().find("input/").is_none());
+    }
+
+    let difference = daemon.handle(
+        &workflow_request(
+            "diff",
+            &json!({
+                "workspace_id": "primary",
+                "operation_id": "operation-01",
+            }),
+        ),
+        &token(),
+    );
+    assert_eq!(difference["ok"], true);
+    assert_eq!(difference["result"]["identical"], false);
+    assert_eq!(difference["result"]["source"]["size_bytes"], source.len());
+
+    let published = daemon.handle(
+        &workflow_request(
+            "publish",
+            &json!({
+                "workspace_id": "primary",
+                "operation_id": "operation-01",
+                "output_id": "result-01",
+                "expected_sha256": digest(candidate),
+            }),
+        ),
+        &token(),
+    );
+    assert_eq!(published["ok"], true);
+    assert_eq!(published["result"]["output_id"], "result-01");
+    assert_eq!(
+        fs::read(workspace.join("output/result-01.hwpx"))
+            .unwrap_or_else(|error| panic!("output: {error}")),
+        candidate
+    );
+    assert_eq!(
+        fs::read(workspace.join("input/fixture.hwpx"))
+            .unwrap_or_else(|error| panic!("source: {error}")),
+        source
+    );
+
+    let plan = daemon.handle(
+        &workflow_request(
+            "prepare_git_commit",
+            &json!({
+                "workspace_id": "primary",
+                "output_id": "result-01",
+                "expected_sha256": digest(candidate),
+                "message": "Publish verified HWPX",
+            }),
+        ),
+        &token(),
+    );
+    assert_eq!(plan["ok"], true);
+    assert_eq!(plan["result"]["expected_head"], "a".repeat(40));
+    assert_eq!(plan["result"]["output_pathspec"], "output/result-01.hwpx");
+    assert_eq!(plan["result"]["executed"], false);
+    assert!(
+        !plan
+            .to_string()
+            .contains(&workspace.to_string_lossy().to_string())
+    );
+}
+
+#[test]
+fn protocol_versions_and_workflow_negatives_fail_closed() {
+    let (temporary, config) = fixture();
+    let workspace = temporary.path().join("workspace");
+    let large = vec![7_u8; 129];
+    fs::write(workspace.join("input/large.hwpx"), &large)
+        .unwrap_or_else(|error| panic!("large: {error}"));
+    let daemon = LocalCompanionDaemon::new(config);
+    let params = json!({
+        "workspace_id": "primary",
+        "operation_id": "operation-bad",
+        "slot": "source",
+        "fixture_id": "large",
+        "expected_sha256": digest(&large),
+    });
+    assert_eq!(
+        daemon.handle(&request("materialize", &params), &token())["ok"],
+        false
+    );
+    assert_eq!(
+        daemon.handle(
+            &workflow_request(
+                "authorize_path",
+                &json!({
+                    "workspace_id": "primary",
+                    "relative_path": "input/fixture.hwpx",
+                    "access": "read_existing",
+                }),
+            ),
+            &token(),
+        )["ok"],
+        false
+    );
+    assert_eq!(
+        daemon.handle(&workflow_request("materialize", &params), &token())["ok"],
+        false
+    );
+    assert!(
+        !workspace
+            .join(".hwpx-agent/work/operation-bad/source.hwpx")
+            .exists()
+    );
+
+    for invalid in [
+        json!({ "fixture_id": "../large" }),
+        json!({ "expected_sha256": "A".repeat(64) }),
+        json!({ "expected_sha256": "0".repeat(64) }),
+        json!({ "extra": true }),
+    ] {
+        let mut value = params.clone();
+        let object = value
+            .as_object_mut()
+            .unwrap_or_else(|| panic!("fixture params must be an object"));
+        for (key, replacement) in invalid
+            .as_object()
+            .unwrap_or_else(|| panic!("invalid fixture must be an object"))
+        {
+            object.insert(key.clone(), replacement.clone());
+        }
+        assert_eq!(
+            daemon.handle(&workflow_request("materialize", &value), &token())["ok"],
+            false
+        );
+    }
+}
+
+#[test]
 fn checked_in_private_contract_matches_runtime_constants() {
     let contract: Value = serde_json::from_str(include_str!(
         "../../../protocol/private/p17-local-daemon-v1.json"
@@ -233,6 +415,19 @@ fn checked_in_private_contract_matches_runtime_constants() {
     assert_eq!(contract["configuration"]["max_workspaces"], 8);
     assert_eq!(contract["authentication"]["decoded_bytes"], 32);
     assert_eq!(contract["public_data"]["absolute_paths"], false);
+    assert_eq!(contract["write_policy"]["overwrite"], false);
+}
+
+#[test]
+fn checked_in_workflow_contract_matches_runtime_constants() {
+    let contract: Value = serde_json::from_str(include_str!(
+        "../../../protocol/private/p17-local-daemon-v2.json"
+    ))
+    .unwrap_or_else(|error| panic!("contract: {error}"));
+    assert_eq!(contract["protocol_version"], WORKFLOW_PROTOCOL_VERSION);
+    assert_eq!(contract["migration"]["v1_health_preserved"], true);
+    assert_eq!(contract["public_identifiers"]["accepts_paths"], false);
+    assert_eq!(contract["git"]["executes_process"], false);
     assert_eq!(contract["write_policy"]["overwrite"], false);
 }
 

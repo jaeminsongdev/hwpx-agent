@@ -6,6 +6,7 @@ use std::path::{Component, Path, PathBuf};
 
 use base64::Engine as _;
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
+use local_workflow::{LocalWorkflow, MaterializeSlot};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use sha2::{Digest as _, Sha256};
@@ -13,6 +14,7 @@ use thiserror::Error;
 use zeroize::Zeroizing;
 
 pub const PROTOCOL_VERSION: &str = "hwpx-agent.local-companion-private/v1";
+pub const WORKFLOW_PROTOCOL_VERSION: &str = "hwpx-agent.local-companion-private/v2";
 pub const CONFIG_VERSION: &str = "hwpx-agent.local-companion-config/v1";
 pub const TARGET_PROFILE: &str = "hancom-2020-x86-11.0.0.9136";
 pub const SESSION_TOKEN_ENV: &str = "HWPX_AGENT_LOCAL_SESSION_TOKEN";
@@ -152,6 +154,18 @@ impl LocalCompanionConfig {
     pub fn digest(&self) -> &str {
         &self.digest
     }
+
+    fn workflow(&self, workspace_id: &str) -> Result<LocalWorkflow, DaemonError> {
+        if !valid_identifier(workspace_id) {
+            return Err(DaemonError::Workspace);
+        }
+        let workspace = self
+            .workspaces
+            .get(workspace_id)
+            .ok_or(DaemonError::Workspace)?;
+        LocalWorkflow::open(&workspace.root, self.max_file_bytes)
+            .map_err(|_| DaemonError::Workspace)
+    }
 }
 
 pub struct SessionToken(Zeroizing<String>);
@@ -217,6 +231,9 @@ pub struct LocalCompanionDaemon {
     config: LocalCompanionConfig,
 }
 
+type HandleSuccess = (&'static str, String, Value);
+type HandleFailure = (Option<&'static str>, Option<String>, DaemonError);
+
 impl LocalCompanionDaemon {
     #[must_use]
     pub fn new(config: LocalCompanionConfig) -> Self {
@@ -230,8 +247,11 @@ impl LocalCompanionDaemon {
     pub fn handle(&self, bytes: &[u8], token: &SessionToken) -> Value {
         let parsed = self.handle_inner(bytes, token);
         match parsed {
-            Ok((request_id, result)) => response_ok(&request_id, result),
-            Err((request_id, _)) => response_error(request_id.as_deref().unwrap_or("invalid")),
+            Ok((protocol, request_id, result)) => response_ok(protocol, &request_id, result),
+            Err((protocol, request_id, _)) => response_error(
+                protocol.unwrap_or(PROTOCOL_VERSION),
+                request_id.as_deref().unwrap_or("invalid"),
+            ),
         }
     }
 
@@ -239,27 +259,30 @@ impl LocalCompanionDaemon {
         &self,
         bytes: &[u8],
         token: &SessionToken,
-    ) -> Result<(String, Value), (Option<String>, DaemonError)> {
+    ) -> Result<HandleSuccess, HandleFailure> {
         if bytes.is_empty() || bytes.len() > MAX_REQUEST_BYTES {
-            return Err((None, DaemonError::Request));
+            return Err((None, None, DaemonError::Request));
         }
         let mut request: PrivateRequest =
-            serde_json::from_slice(bytes).map_err(|_| (None, DaemonError::Request))?;
+            serde_json::from_slice(bytes).map_err(|_| (None, None, DaemonError::Request))?;
         let request_id = if valid_identifier(&request.request_id) {
             request.request_id.clone()
         } else {
-            return Err((None, DaemonError::Request));
+            return Err((None, None, DaemonError::Request));
         };
-        if request.protocol_version != PROTOCOL_VERSION {
-            return Err((Some(request_id), DaemonError::Request));
-        }
+        let protocol = match request.protocol_version.as_str() {
+            PROTOCOL_VERSION => PROTOCOL_VERSION,
+            WORKFLOW_PROTOCOL_VERSION => WORKFLOW_PROTOCOL_VERSION,
+            _ => return Err((None, Some(request_id), DaemonError::Request)),
+        };
         let supplied = Zeroizing::new(std::mem::take(&mut request.session_token));
         if !token.matches(supplied.as_bytes()) {
-            return Err((Some(request_id), DaemonError::Request));
+            return Err((Some(protocol), Some(request_id), DaemonError::Request));
         }
-        let result = match request.method {
-            PrivateMethod::Health => {
-                parse_exact_params::<EmptyParams>(request.params)?;
+        let result = match (protocol, request.method) {
+            (_, PrivateMethod::Health) => {
+                parse_exact_params::<EmptyParams>(request.params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
                 json!({
                     "status": "ready",
                     "target_profile": TARGET_PROFILE,
@@ -269,13 +292,41 @@ impl LocalCompanionDaemon {
                     "config_sha256": self.config.digest(),
                 })
             }
-            PrivateMethod::AuthorizePath => {
-                let params = parse_exact_params::<AuthorizePathParams>(request.params)?;
+            (PROTOCOL_VERSION, PrivateMethod::AuthorizePath) => {
+                let params = parse_exact_params::<AuthorizePathParams>(request.params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
                 self.authorize_path(&params)
-                    .map_err(|error| (Some(request_id.clone()), error))?
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?
+            }
+            (WORKFLOW_PROTOCOL_VERSION, PrivateMethod::Materialize) => {
+                let params = parse_exact_params(request.params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
+                self.materialize(&params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?
+            }
+            (WORKFLOW_PROTOCOL_VERSION, PrivateMethod::Diff) => {
+                let params = parse_exact_params(request.params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
+                self.diff(&params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?
+            }
+            (WORKFLOW_PROTOCOL_VERSION, PrivateMethod::Publish) => {
+                let params = parse_exact_params(request.params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
+                self.publish(&params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?
+            }
+            (WORKFLOW_PROTOCOL_VERSION, PrivateMethod::PrepareGitCommit) => {
+                let params = parse_exact_params(request.params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
+                self.prepare_git_commit(&params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?
+            }
+            _ => {
+                return Err((Some(protocol), Some(request_id), DaemonError::Request));
             }
         };
-        Ok((request_id, result))
+        Ok((protocol, request_id, result))
     }
 
     fn authorize_path(&self, params: &AuthorizePathParams) -> Result<Value, DaemonError> {
@@ -326,6 +377,96 @@ impl LocalCompanionDaemon {
             }
         }
     }
+
+    fn materialize(&self, params: &MaterializeParams) -> Result<Value, DaemonError> {
+        if !valid_identifier(&params.fixture_id) || !valid_identifier(&params.operation_id) {
+            return Err(DaemonError::Workspace);
+        }
+        let digest = parse_digest(&params.expected_sha256)?;
+        let slot = match params.slot {
+            WorkflowSlot::Source => MaterializeSlot::Source,
+            WorkflowSlot::Candidate => MaterializeSlot::Candidate,
+        };
+        let input_relative = format!("input/{}.hwpx", params.fixture_id);
+        let receipt = self
+            .config
+            .workflow(&params.workspace_id)?
+            .materialize(&params.operation_id, slot, &input_relative, &digest)
+            .map_err(|_| DaemonError::Workspace)?;
+        Ok(json!({
+            "workspace_id": params.workspace_id,
+            "operation_id": receipt.operation_id,
+            "slot": params.slot,
+            "sha256": receipt.sha256,
+            "size_bytes": receipt.size_bytes,
+        }))
+    }
+
+    fn diff(&self, params: &DiffParams) -> Result<Value, DaemonError> {
+        if !valid_identifier(&params.operation_id) {
+            return Err(DaemonError::Workspace);
+        }
+        let receipt = self
+            .config
+            .workflow(&params.workspace_id)?
+            .diff(&params.operation_id)
+            .map_err(|_| DaemonError::Workspace)?;
+        Ok(json!({
+            "workspace_id": params.workspace_id,
+            "operation_id": receipt.operation_id,
+            "identical": receipt.identical,
+            "source": {
+                "sha256": receipt.source.sha256,
+                "size_bytes": receipt.source.size_bytes,
+            },
+            "candidate": {
+                "sha256": receipt.candidate.sha256,
+                "size_bytes": receipt.candidate.size_bytes,
+            },
+        }))
+    }
+
+    fn publish(&self, params: &PublishParams) -> Result<Value, DaemonError> {
+        if !valid_identifier(&params.operation_id) || !valid_identifier(&params.output_id) {
+            return Err(DaemonError::Workspace);
+        }
+        let digest = parse_digest(&params.expected_sha256)?;
+        let output_name = format!("{}.hwpx", params.output_id);
+        let receipt = self
+            .config
+            .workflow(&params.workspace_id)?
+            .publish(&params.operation_id, &output_name, &digest)
+            .map_err(|_| DaemonError::Workspace)?;
+        Ok(json!({
+            "workspace_id": params.workspace_id,
+            "operation_id": receipt.operation_id,
+            "output_id": params.output_id,
+            "sha256": receipt.sha256,
+            "size_bytes": receipt.size_bytes,
+        }))
+    }
+
+    fn prepare_git_commit(&self, params: &PrepareGitCommitParams) -> Result<Value, DaemonError> {
+        if !valid_identifier(&params.output_id) {
+            return Err(DaemonError::Workspace);
+        }
+        let digest = parse_digest(&params.expected_sha256)?;
+        let output_name = format!("{}.hwpx", params.output_id);
+        let plan = self
+            .config
+            .workflow(&params.workspace_id)?
+            .prepare_git_commit(&output_name, &digest, &params.message)
+            .map_err(|_| DaemonError::Workspace)?;
+        Ok(json!({
+            "workspace_id": params.workspace_id,
+            "output_id": params.output_id,
+            "output_pathspec": plan.output_pathspec,
+            "expected_output_sha256": plan.expected_output_sha256,
+            "expected_head": plan.expected_head,
+            "message": plan.message,
+            "executed": false,
+        }))
+    }
 }
 
 #[derive(Deserialize)]
@@ -343,6 +484,10 @@ struct PrivateRequest {
 enum PrivateMethod {
     Health,
     AuthorizePath,
+    Materialize,
+    Diff,
+    Publish,
+    PrepareGitCommit,
 }
 
 #[derive(Deserialize)]
@@ -357,6 +502,48 @@ struct AuthorizePathParams {
     access: PathAccess,
 }
 
+#[derive(Clone, Copy, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+enum WorkflowSlot {
+    Source,
+    Candidate,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct MaterializeParams {
+    workspace_id: String,
+    operation_id: String,
+    slot: WorkflowSlot,
+    fixture_id: String,
+    expected_sha256: String,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct DiffParams {
+    workspace_id: String,
+    operation_id: String,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct PublishParams {
+    workspace_id: String,
+    operation_id: String,
+    output_id: String,
+    expected_sha256: String,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct PrepareGitCommitParams {
+    workspace_id: String,
+    output_id: String,
+    expected_sha256: String,
+    message: String,
+}
+
 #[derive(Clone, Copy, Deserialize)]
 #[serde(rename_all = "snake_case")]
 enum PathAccess {
@@ -364,16 +551,16 @@ enum PathAccess {
     CreateOutput,
 }
 
-fn parse_exact_params<T>(value: Value) -> Result<T, (Option<String>, DaemonError)>
+fn parse_exact_params<T>(value: Value) -> Result<T, DaemonError>
 where
     T: for<'de> Deserialize<'de>,
 {
-    serde_json::from_value(value).map_err(|_| (None, DaemonError::Request))
+    serde_json::from_value(value).map_err(|_| DaemonError::Request)
 }
 
 #[derive(Serialize)]
 struct PrivateResponse<'a> {
-    protocol_version: &'static str,
+    protocol_version: &'a str,
     request_id: &'a str,
     ok: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -382,24 +569,40 @@ struct PrivateResponse<'a> {
     error: Option<&'static str>,
 }
 
-fn response_ok(request_id: &str, result: Value) -> Value {
+fn response_ok<'a>(protocol_version: &'a str, request_id: &'a str, result: Value) -> Value {
     serde_json::to_value(PrivateResponse {
-        protocol_version: PROTOCOL_VERSION,
+        protocol_version,
         request_id,
         ok: true,
         result: Some(result),
         error: None,
     })
-    .unwrap_or_else(|_| response_error("invalid"))
+    .unwrap_or_else(|_| response_error(PROTOCOL_VERSION, "invalid"))
 }
 
-fn response_error(request_id: &str) -> Value {
+fn response_error(protocol_version: &str, request_id: &str) -> Value {
     json!({
-        "protocol_version": PROTOCOL_VERSION,
+        "protocol_version": protocol_version,
         "request_id": request_id,
         "ok": false,
         "error": "request_rejected",
     })
+}
+
+fn parse_digest(value: &str) -> Result<[u8; 32], DaemonError> {
+    if value.len() != 64
+        || !value
+            .bytes()
+            .all(|byte| byte.is_ascii_digit() || matches!(byte, b'a'..=b'f'))
+    {
+        return Err(DaemonError::Request);
+    }
+    let mut digest = [0_u8; 32];
+    hex::decode_to_slice(value, &mut digest).map_err(|_| DaemonError::Request)?;
+    if digest == [0; 32] {
+        return Err(DaemonError::Request);
+    }
+    Ok(digest)
 }
 
 fn valid_identifier(value: &str) -> bool {
