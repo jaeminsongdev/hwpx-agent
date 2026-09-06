@@ -6,7 +6,8 @@
 - Active: P05-08 actual header/footer Gate, P05-09 coordinate-aware Gate preparation, P17-06/P17-08.
 - Reasoning: max for preservation, authorization and Gate work; high for routine implementation.
 - UI: attempt23 sparse layout/identity and dense attempt02 automatic flow/balance passed on Hangul 2020;
-  P05-08 attempts 01-02 stopped fail-closed at open without a confirmed access-click receipt.
+  P05-08 attempts 01-02 stopped fail-closed at open without a confirmed access-click receipt;
+  attempt03 also returned false after 7 seconds and awaits the user's click confirmation.
 
 ## Objective and boundaries
 
@@ -37,7 +38,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 | ID | Task | State and next evidence |
 |---|---|---|
-| P-0045-0048 | P05-06-09 | Sparse and dense subgates pass; P05-08 attempts 01-02 open-false preserved, official model parses fixture, actual authorized lifecycle still open; 09 remains |
+| P-0045-0048 | P05-06-09 | Sparse and dense subgates pass; P05-08 attempts 01-03 open-false preserved, attempt03 click confirmation pending, actual lifecycle still open; 09 remains |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -75,12 +76,14 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
-  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v4
-  passed 11/11 at run `707f3b7dd24f45c297f228914597ce64`; current/independent FULL remain pending.
+  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v5
+  passed 11/11 at run `fd792613ed0044ebb2c6516c493911e0` and binds the newer P05 diagnostics and
+  P05-09 coordinate Gate sources; current/independent FULL remain pending.
 - P05-08 fixed input passed strict product inspection and the policy-locked official Hancom model
   parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
   `open_input` without a positive receipt that the user completed the displayed access request;
-  neither is PASS. See `implementation/p05/P05-08_ATTEMPT01_02_DIAGNOSTIC.md`.
+  neither is PASS. Attempt03 likewise failed at `open_input` after 7 seconds; whether access was
+  clicked is awaiting explicit user confirmation. See `implementation/p05/P05-08_ATTEMPT01_02_DIAGNOSTIC.md`.
 - P05-09 has a fresh deterministic input at SHA-256
   `acce8f8a68ea9b4b6e9f629235bf6fa018fd7cfccf45384b316d2d2401ce2c97`. Its render contract was
   strengthened from text-only v1 to coordinate-aware v2 at SHA-256
@@ -97,7 +100,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Risks and holds
 
-- R-0001: P05-07 dense attempt02 current-PC actual subgate and source successor v4 pass.
+- R-0001: P05-07 dense attempt02 current-PC actual subgate and source successor v5 pass.
   P05-08 authorized open/save/reopen/render, P05-09 and final current/independent FULL remain open;
   no later-version or arbitrary-document claim.
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence remains open.
@@ -112,9 +115,10 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 1. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
-2. With the user present, rerun bounded P05-08 and then P05-09 Hangul 2020 fixtures. Require
-   confirmed access, lifecycle, semantic, coordinate-aware PDF and visual evidence; preserve any
-   new failure.
+2. Obtain explicit confirmation whether attempt03 access was clicked. If clicked, diagnose and
+   repair P05-08 compatibility before another run; otherwise rerun it only with the user present.
+   Then run P05-09. Require lifecycle, semantic, coordinate-aware PDF and visual evidence and
+   preserve every failure.
 3. Wire P17-06 to a qualified host credential/transport adapter, then capture an actual remote
    pull/push/checkpoint transition without promoting the current injected component evidence.
 4. Before closure run target tests, regressions, current and clean-checkout FULL, applicable offline
