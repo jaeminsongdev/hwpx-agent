@@ -32,6 +32,12 @@ PINNED_AMBIGUOUS_BASELINES = {
     "Cargo.toml": (
         "f8281c9c13ea981ab8652819f1e3946ea942bca2d952f68b05ee61f3a3179c03"
     ),
+    "tools/p14/validate_retention_local_mirror.py": (
+        "11b87d37cfb76b523c29ee9dfb28500b4f57e2cb38d61f21e08f2fcc46b24676"
+    ),
+    "tools/p15/validate_auth_tenant.py": (
+        "c805d097d92c6e41d8434de8d62aed3fd88bf95cfc81a2fab4cc3d389ccfb86a"
+    ),
     "tools/p15/validate_inspector_staging_contract.py": (
         "d9869d7a01b2cea5eeeb0a9d5f64dae79cccf523dbdec8811f812551ef16d7d3"
     ),
