@@ -25,9 +25,9 @@ predecessor = load_predecessor()
 ROOT = Path(__file__).resolve().parents[2]
 BASE = "implementation/p17/qualification/current-workspace-source-v21-20260907"
 QUALIFICATION = ROOT / BASE
-RUN_ID = "ad8c1afa1c6b42d0a34469dbbd4471ca"
-BASE_COMMIT = "0b8db6e695f60cae8b9e59bd988922fb7e90b9f1"
-RECEIPT_SHA256 = "2ec4bd69fbe3f20003ce2b0774dc6e62fb5b039b0d3798e68502321d1e22d94f"
+RUN_ID = "70de52be98564f43b030557435682606"
+BASE_COMMIT = "6e49b0f6d3937d1026f3a0395e1a58bf405a148c"
+RECEIPT_SHA256 = "c44885ee42ef8e245fb6120b542474a32998ce4afe4d33d9326946dfb2b01d9d"
 PREVIOUS_QUALIFICATION = (
     "implementation/p17/qualification/current-workspace-source-v20-20260907/contract.json",
     "adca1fbccedad8b4c6dfb7dbd223f86b02a7ba5f9357c21220340b3796969d22",
@@ -50,8 +50,8 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     },
     {
         "path": "protocol/private/p06-table-grid-v1.json",
-        "bytes": 2498,
-        "sha256": "cb856ac0cad0209b86c940044393bed4d3ec95341bcafa7a7f921bd69d624901",
+        "bytes": 2550,
+        "sha256": "e6e66cd98baf7d3a72529622a55b66839db2af706a8dc1e64536d30769089a33",
     },
     {
         "path": "protocol/migrations/p06-table-grid-v0-to-v1.md",
@@ -60,18 +60,18 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     },
     {
         "path": "implementation/p06/P06-01_TABLE_GRID_POLICY.md",
-        "bytes": 3575,
-        "sha256": "adaeada3b696c8479126292c550525edfec12ebff7d240b96572695c1854cc5d",
+        "bytes": 3727,
+        "sha256": "bdbea94f327aa8bd90cf819e71b2e6177e302f6fb911fe962457bc5f5088883a",
     },
     {
         "path": "tools/p06/validate_table_grid_contract.py",
-        "bytes": 6902,
-        "sha256": "488dbd15fee04baf8bb238731e6b2deec69f996f27c8deb771ba840e60c4f79c",
+        "bytes": 7214,
+        "sha256": "ceb4d7ab9b37e0c1643e5aaee6929940bb9fdbfcacc2025582c195604b2662c7",
     },
     {
         "path": "tools/p06/tests/test_table_grid_contract.py",
-        "bytes": 3111,
-        "sha256": "19052978ae5bdad94ea77599e3e8a1a09d93ad3cd863ccfaca9ffa3b89bf7d39",
+        "bytes": 3887,
+        "sha256": "cd619c0eefe1ac03e18c04de46adfa1af8cb37798cf7a83c3ba7814aadf83c40",
     },
 )
 GUARD_SOURCES = (
