@@ -79,17 +79,22 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
-  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v13
-  passed 11/11 at run `10f7052eef92401cb7bb6802cc3ea1b1` on clean commit `c84da41`; it composes
-  v12 and binds the documentation successor bridge through 15 exact successors, 112 exact
+  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v14
+  passed 11/11 at run `7e27407ba8b1486bb991ab7928b08494` on clean commit `b763c3d`; it composes
+  v13 and binds the Telemetry/documentation successor bridge through 17 exact successors, 113 exact
   implementation files and 25 locked/offline Cargo members. Contract SHA-256 is
-  `066de4844b0f43276f18e93157508112cddf762eda8a43a8450c229d6a4a4189`.
+  `ed4bff5f70b73b39b51cecf546bd444c4236140b997fd5380a6a3d0a182a5dfb`.
   Current/independent FULL remain pending.
 - P05-08 fixed input passed strict product inspection and the policy-locked official Hancom model
   parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
   `open_input` without a positive receipt that the user completed the displayed access request;
-  neither is PASS. Attempt03 likewise failed at `open_input` after 7 seconds; whether access was
-  clicked is awaiting explicit user confirmation. See `implementation/p05/P05-08_ATTEMPT01_02_DIAGNOSTIC.md`.
+  neither is PASS. Attempt03 and the later numeric-ID v2 attempt02 also failed at `open_input`
+  without a positive click receipt, so neither is treated as a structural rejection. See
+  `implementation/p05/P05-08_ATTEMPT01_02_DIAGNOSTIC.md`.
+- A separate minimal x86 COM diagnostic created a new header/footer document with Hangul's own
+  `HeaderFooter` action after the user approved the visible prompts, then saved a 14,587-byte HWPX
+  at SHA-256 `9f11420b67d456ff31fd92ec3254ccbae0ea7d75c43ccb60ac03287f5486cbaa`.
+  Its official control shape is diagnostic input for the next comparison, not P05-08 product PASS.
 - P05-08 nested body paragraph IDs were incorrectly emitted as strings although the official model
   uses `UINT`. The product now rejects non-numeric values and the corrected fixture uses numeric
   IDs; package clippy and all 175 tests pass. Its actual open still returned false without a click
@@ -171,8 +176,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   and non-atomic, while pull/push, persistent credential custody, Hangul and production remain
   unproven. See
   `implementation/p17/P17-06_POSTGRES_CHECKPOINT_HOST_V11.md` and its frozen qualification. Current
-  source successor v13 composes the v12 PostgreSQL binding with the later documentation
-  source-successor bridge without expanding those claims.
+  source successor v14 composes the v12 PostgreSQL binding with the later documentation and
+  Telemetry source-successor bridges without expanding those claims.
 
 ## Risks and holds
 
