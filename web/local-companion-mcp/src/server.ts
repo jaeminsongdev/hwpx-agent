@@ -16,12 +16,20 @@ import { serveStdio } from "@modelcontextprotocol/server/stdio";
 export const TOOL_NAME = "local_companion_health";
 export const PRIVATE_PROTOCOL = "hwpx-agent.local-companion-private/v1";
 export const WORKFLOW_PROTOCOL = "hwpx-agent.local-companion-private/v2";
+export const APPROVAL_PROTOCOL = "hwpx-agent.local-companion-private/v3";
+export const EFFECT_PROTOCOL = "hwpx-agent.local-companion-private/v4";
 export const MATERIALIZE_TOOL_NAME = "local_companion_materialize";
 export const DIFF_TOOL_NAME = "local_companion_diff";
 export const PUBLISH_TOOL_NAME = "local_companion_publish";
 export const PREPARE_COMMIT_TOOL_NAME = "local_companion_prepare_git_commit";
+export const PREPARE_APPROVAL_TOOL_NAME =
+    "local_companion_prepare_git_commit_approval";
+export const EXECUTE_COMMIT_TOOL_NAME = "local_companion_execute_git_commit";
 export const TARGET_PROFILE = "hancom-2020-x86-11.0.0.9136";
 const SESSION_ENV = "HWPX_AGENT_LOCAL_SESSION_TOKEN";
+const GIT_PROGRAM_ENV = "HWPX_AGENT_GIT_PROGRAM";
+const APPROVAL_STATE_ROOT_ENV = "HWPX_AGENT_APPROVAL_STATE_ROOT";
+const APPROVAL_SECRET_ENV = "HWPX_AGENT_APPROVAL_SECRET";
 const REQUEST_ID = "mcp-health";
 const MAX_STDOUT_BYTES = 16_384;
 const MAX_STDERR_BYTES = 4_096;
@@ -90,6 +98,38 @@ export interface GitCommitPlanResult {
     readonly expected_head: string;
     readonly message: string;
     readonly executed: false;
+}
+
+export interface GitApprovalPlanResult {
+    readonly workspace_id: string;
+    readonly operation_id: string;
+    readonly output_id: string;
+    readonly output_pathspec: string;
+    readonly expected_output_sha256: string;
+    readonly expected_head: string;
+    readonly expected_head_reference: string | null;
+    readonly message: string;
+    readonly approval: {
+        readonly effect: "git_commit";
+        readonly target_sha256: string;
+        readonly plan_sha256: string;
+    };
+    readonly executed: false;
+}
+
+export interface GitCommitEffectResult {
+    readonly workspace_id: string;
+    readonly operation_id: string;
+    readonly output_id: string;
+    readonly commit_oid: string;
+    readonly previous_head: string;
+    readonly updated_reference: string | null;
+    readonly output_sha256: string;
+    readonly target_sha256: string;
+    readonly plan_sha256: string;
+    readonly approved_at_unix_seconds: number;
+    readonly index_synchronized: true;
+    readonly executed: true;
 }
 
 export type WorkflowResult =
@@ -162,18 +202,56 @@ export async function loadRuntimeConfig(
     return { daemonPath, configPath };
 }
 
-export function childEnvironment(token: string): NodeJS.ProcessEnv {
+export function childEnvironment(
+    token: string,
+    source: NodeJS.ProcessEnv = process.env,
+): NodeJS.ProcessEnv {
     if (!/^[A-Za-z0-9_-]{43}$/.test(token)) {
         throw new Error("invalid local companion token");
     }
     const environment: NodeJS.ProcessEnv = { [SESSION_ENV]: token };
     for (const name of ["SystemRoot", "WINDIR"] as const) {
-        const value = process.env[name];
+        const value = source[name];
         if (value !== undefined && value.length > 0 && value.length <= 1_024) {
             environment[name] = value;
         }
     }
     return environment;
+}
+
+export function childEffectEnvironment(
+    token: string,
+    source: NodeJS.ProcessEnv = process.env,
+): NodeJS.ProcessEnv {
+    const environment = childEnvironment(token, source);
+    const gitProgram = source[GIT_PROGRAM_ENV];
+    const stateRoot = source[APPROVAL_STATE_ROOT_ENV];
+    const secret = source[APPROVAL_SECRET_ENV];
+    if (
+        gitProgram === undefined ||
+        stateRoot === undefined ||
+        secret === undefined ||
+        !isAbsolute(gitProgram) ||
+        !isAbsolute(stateRoot) ||
+        gitProgram.length > 1_024 ||
+        stateRoot.length > 1_024 ||
+        !/^[A-Za-z0-9_-]{43,171}$/.test(secret) ||
+        Buffer.from(secret, "base64url").toString("base64url") !== secret
+    ) {
+        throw new Error("local effect host is not configured");
+    }
+    const secretBytes = Buffer.from(secret, "base64url");
+    try {
+        if (secretBytes.length < 32 || secretBytes.length > 128) {
+            throw new Error("local effect host is not configured");
+        }
+        environment[GIT_PROGRAM_ENV] = gitProgram;
+        environment[APPROVAL_STATE_ROOT_ENV] = stateRoot;
+        environment[APPROVAL_SECRET_ENV] = secret;
+        return environment;
+    } finally {
+        secretBytes.fill(0);
+    }
 }
 
 export function privateHealthRequest(token: string): JsonRecord {
@@ -275,6 +353,36 @@ function isCommitMessage(value: unknown): value is string {
         value.trim() === value &&
         !/[\u0000-\u001f\u007f]/u.test(value)
     );
+}
+
+function isGitOid(value: unknown): value is string {
+    return (
+        typeof value === "string" &&
+        /^(?!0+$)(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(value)
+    );
+}
+
+function isHeadReference(value: unknown): value is string {
+    return (
+        typeof value === "string" &&
+        /^refs\/heads\/(?!\.)(?!.*\.\.)(?!.*@\{)(?!.*\.lock(?:\/|$))[A-Za-z0-9._/-]+$/i.test(
+            value,
+        ) &&
+        !value.endsWith("/") &&
+        !value.endsWith(".")
+    );
+}
+
+function isConfirmation(value: unknown): value is string {
+    return (
+        typeof value === "string" &&
+        value.length <= 4_096 &&
+        /^confirm_v1\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(value)
+    );
+}
+
+function isUnixSeconds(value: unknown): value is number {
+    return Number.isSafeInteger(value) && (value as number) > 0;
 }
 
 function workflowRequestId(method: WorkflowMethod): string {
@@ -488,6 +596,205 @@ export function validateWorkflowEnvelope(
     return result as unknown as GitCommitPlanResult;
 }
 
+function validateApprovalParams(params: JsonRecord): void {
+    if (
+        !hasExactKeys(params, [
+            "expected_sha256",
+            "message",
+            "operation_id",
+            "output_id",
+            "workspace_id",
+        ]) ||
+        !isIdentifier(params.workspace_id) ||
+        !isIdentifier(params.operation_id) ||
+        !isIdentifier(params.output_id) ||
+        !isDigest(params.expected_sha256) ||
+        !isCommitMessage(params.message)
+    ) {
+        throw new Error("invalid approval preparation request");
+    }
+}
+
+export function privateApprovalRequest(
+    token: string,
+    params: JsonRecord,
+): JsonRecord {
+    if (!/^[A-Za-z0-9_-]{43}$/.test(token)) {
+        throw new Error("invalid local companion token");
+    }
+    validateApprovalParams(params);
+    return {
+        protocol_version: APPROVAL_PROTOCOL,
+        request_id: "mcp-approval-prepare_git_commit_approval",
+        session_token: token,
+        method: "prepare_git_commit_approval",
+        params,
+    };
+}
+
+export function validateApprovalEnvelope(
+    value: unknown,
+    params: JsonRecord,
+): GitApprovalPlanResult {
+    if (
+        !isRecord(value) ||
+        !hasExactKeys(value, [
+            "ok",
+            "protocol_version",
+            "request_id",
+            "result",
+        ]) ||
+        value.protocol_version !== APPROVAL_PROTOCOL ||
+        value.request_id !== "mcp-approval-prepare_git_commit_approval" ||
+        value.ok !== true ||
+        !isRecord(value.result)
+    ) {
+        throw new Error("invalid approval preparation response");
+    }
+    validateApprovalParams(params);
+    const result = value.result;
+    const expectedPathspec = `output/${String(params.output_id)}.hwpx`;
+    if (
+        !hasExactKeys(result, [
+            "approval",
+            "executed",
+            "expected_head",
+            "expected_head_reference",
+            "expected_output_sha256",
+            "message",
+            "operation_id",
+            "output_id",
+            "output_pathspec",
+            "workspace_id",
+        ]) ||
+        result.workspace_id !== params.workspace_id ||
+        result.operation_id !== params.operation_id ||
+        result.output_id !== params.output_id ||
+        result.output_pathspec !== expectedPathspec ||
+        result.expected_output_sha256 !== params.expected_sha256 ||
+        result.message !== params.message ||
+        result.executed !== false ||
+        !isGitOid(result.expected_head) ||
+        (result.expected_head_reference !== null &&
+            !isHeadReference(result.expected_head_reference)) ||
+        !isRecord(result.approval) ||
+        !hasExactKeys(result.approval, [
+            "effect",
+            "plan_sha256",
+            "target_sha256",
+        ]) ||
+        result.approval.effect !== "git_commit" ||
+        !isDigest(result.approval.target_sha256) ||
+        !isDigest(result.approval.plan_sha256)
+    ) {
+        throw new Error("invalid approval preparation result");
+    }
+    return result as unknown as GitApprovalPlanResult;
+}
+
+function validateEffectParams(params: JsonRecord): void {
+    if (
+        !hasExactKeys(params, [
+            "actor_sha256",
+            "confirmation_token",
+            "expected_sha256",
+            "message",
+            "operation_id",
+            "output_id",
+            "requested_at_unix_seconds",
+            "tenant_sha256",
+            "workspace_id",
+        ]) ||
+        !isIdentifier(params.workspace_id) ||
+        !isIdentifier(params.operation_id) ||
+        !isIdentifier(params.output_id) ||
+        !isDigest(params.expected_sha256) ||
+        !isCommitMessage(params.message) ||
+        !isDigest(params.actor_sha256) ||
+        !isDigest(params.tenant_sha256) ||
+        !isUnixSeconds(params.requested_at_unix_seconds) ||
+        !isConfirmation(params.confirmation_token)
+    ) {
+        throw new Error("invalid Git effect request");
+    }
+}
+
+export function privateEffectRequest(
+    token: string,
+    params: JsonRecord,
+): JsonRecord {
+    if (!/^[A-Za-z0-9_-]{43}$/.test(token)) {
+        throw new Error("invalid local companion token");
+    }
+    validateEffectParams(params);
+    return {
+        protocol_version: EFFECT_PROTOCOL,
+        request_id: "mcp-effect-execute_git_commit",
+        session_token: token,
+        method: "execute_git_commit",
+        params,
+    };
+}
+
+export function validateEffectEnvelope(
+    value: unknown,
+    params: JsonRecord,
+): GitCommitEffectResult {
+    if (
+        !isRecord(value) ||
+        !hasExactKeys(value, [
+            "ok",
+            "protocol_version",
+            "request_id",
+            "result",
+        ]) ||
+        value.protocol_version !== EFFECT_PROTOCOL ||
+        value.request_id !== "mcp-effect-execute_git_commit" ||
+        value.ok !== true ||
+        !isRecord(value.result)
+    ) {
+        throw new Error("invalid Git effect response");
+    }
+    validateEffectParams(params);
+    const result = value.result;
+    if (
+        !hasExactKeys(result, [
+            "approved_at_unix_seconds",
+            "commit_oid",
+            "executed",
+            "index_synchronized",
+            "operation_id",
+            "output_id",
+            "output_sha256",
+            "plan_sha256",
+            "previous_head",
+            "target_sha256",
+            "updated_reference",
+            "workspace_id",
+        ]) ||
+        result.workspace_id !== params.workspace_id ||
+        result.operation_id !== params.operation_id ||
+        result.output_id !== params.output_id ||
+        result.output_sha256 !== params.expected_sha256 ||
+        !isGitOid(result.commit_oid) ||
+        !isGitOid(result.previous_head) ||
+        result.commit_oid === result.previous_head ||
+        result.commit_oid.length !== result.previous_head.length ||
+        (result.updated_reference !== null &&
+            !isHeadReference(result.updated_reference)) ||
+        !isDigest(result.target_sha256) ||
+        !isDigest(result.plan_sha256) ||
+        !isUnixSeconds(result.approved_at_unix_seconds) ||
+        (result.approved_at_unix_seconds as number) <
+            (params.requested_at_unix_seconds as number) ||
+        result.index_synchronized !== true ||
+        result.executed !== true
+    ) {
+        throw new Error("invalid Git effect result");
+    }
+    return result as unknown as GitCommitEffectResult;
+}
+
 function appendBounded(
     chunks: Buffer[],
     chunk: Buffer,
@@ -503,10 +810,11 @@ async function runDaemon(
     config: RuntimeConfig,
     token: string,
     request: JsonRecord,
+    environment: NodeJS.ProcessEnv = childEnvironment(token),
 ): Promise<BoundedOutput & SpawnOutcome> {
     const child = spawn(config.daemonPath, ["--config", config.configPath], {
         cwd: dirname(config.configPath),
-        env: childEnvironment(token),
+        env: environment,
         shell: false,
         stdio: ["pipe", "pipe", "pipe"],
         windowsHide: true,
@@ -659,6 +967,106 @@ export async function callLocalWorkflow(
             throw new Error("invalid daemon framing");
         }
         return validateWorkflowEnvelope(JSON.parse(line), method, params);
+    } finally {
+        token = "";
+        tokenBytes.fill(0);
+    }
+}
+
+export async function callLocalApproval(
+    config: RuntimeConfig,
+    params: JsonRecord,
+): Promise<GitApprovalPlanResult> {
+    const tokenBytes = randomBytes(32);
+    let token = tokenBytes.toString("base64url");
+    try {
+        const output = await runDaemon(
+            config,
+            token,
+            privateApprovalRequest(token, params),
+        );
+        if (
+            output.code !== 0 ||
+            output.signal !== null ||
+            output.overflowed ||
+            output.stderr.length !== 0
+        ) {
+            throw new Error("daemon failed");
+        }
+        const text = new TextDecoder("utf-8", { fatal: true }).decode(
+            output.stdout,
+        );
+        if (
+            text.includes("\r") ||
+            text.includes(token) ||
+            text.includes(config.daemonPath) ||
+            text.includes(config.configPath)
+        ) {
+            throw new Error("daemon response disclosed private data");
+        }
+        const lines = text.split("\n");
+        const line = lines[0];
+        if (
+            lines.length !== 2 ||
+            line === undefined ||
+            line === "" ||
+            lines[1] !== ""
+        ) {
+            throw new Error("invalid daemon framing");
+        }
+        return validateApprovalEnvelope(JSON.parse(line), params);
+    } finally {
+        token = "";
+        tokenBytes.fill(0);
+    }
+}
+
+export async function callLocalEffect(
+    config: RuntimeConfig,
+    params: JsonRecord,
+): Promise<GitCommitEffectResult> {
+    const tokenBytes = randomBytes(32);
+    let token = tokenBytes.toString("base64url");
+    try {
+        const output = await runDaemon(
+            config,
+            token,
+            privateEffectRequest(token, params),
+            childEffectEnvironment(token),
+        );
+        if (
+            output.code !== 0 ||
+            output.signal !== null ||
+            output.overflowed ||
+            output.stderr.length !== 0
+        ) {
+            throw new Error("daemon failed");
+        }
+        const text = new TextDecoder("utf-8", { fatal: true }).decode(
+            output.stdout,
+        );
+        const confirmation = params.confirmation_token;
+        if (
+            text.includes("\r") ||
+            text.includes(token) ||
+            (typeof confirmation === "string" &&
+                text.includes(confirmation)) ||
+            text.includes(config.daemonPath) ||
+            text.includes(config.configPath)
+        ) {
+            throw new Error("daemon response disclosed private data");
+        }
+        const lines = text.split("\n");
+        const line = lines[0];
+        if (
+            lines.length !== 2 ||
+            line === undefined ||
+            line === "" ||
+            lines[1] !== ""
+        ) {
+            throw new Error("invalid daemon framing");
+        }
+        return validateEffectEnvelope(JSON.parse(line), params);
     } finally {
         token = "";
         tokenBytes.fill(0);
@@ -961,6 +1369,252 @@ function registerWorkflowTools(
     });
 }
 
+function registerApprovalTools(
+    server: McpServer,
+    config: RuntimeConfig,
+    approval: (
+        config: RuntimeConfig,
+        params: JsonRecord,
+    ) => Promise<GitApprovalPlanResult>,
+    effect: (
+        config: RuntimeConfig,
+        params: JsonRecord,
+    ) => Promise<GitCommitEffectResult>,
+): void {
+    const commitMessageSchema: JsonRecord = {
+        type: "string",
+        minLength: 1,
+        maxLength: 128,
+        pattern: "^[^\\u0000-\\u001F\\u007F]+$",
+    };
+    const gitOidSchema: JsonRecord = {
+        type: "string",
+        pattern: "^(?!0+$)(?:[0-9a-f]{40}|[0-9a-f]{64})$",
+    };
+    const headReferenceSchema: JsonRecord = {
+        anyOf: [
+            {
+                type: "string",
+                pattern:
+                    "^refs/heads/(?!\\.)(?!.*\\.\\.)(?!.*@\\{)(?!.*\\.[lL][oO][cC][kK](?:/|$))[A-Za-z0-9._/-]+$",
+            },
+            { type: "null" },
+        ],
+    };
+    const approvalInputSchema: JsonRecord = {
+        type: "object",
+        properties: {
+            workspace_id: IDENTIFIER_SCHEMA,
+            operation_id: IDENTIFIER_SCHEMA,
+            output_id: IDENTIFIER_SCHEMA,
+            expected_sha256: DIGEST_SCHEMA,
+            message: commitMessageSchema,
+        },
+        required: [
+            "workspace_id",
+            "operation_id",
+            "output_id",
+            "expected_sha256",
+            "message",
+        ],
+        additionalProperties: false,
+    };
+    server.registerTool(
+        PREPARE_APPROVAL_TOOL_NAME,
+        {
+            title: "Prepare an approval-bound local Git commit",
+            description:
+                "Read the exact local Git state and return target and plan digests for trusted user confirmation. This tool never executes Git or creates a confirmation token.",
+            inputSchema: fromJsonSchema<JsonRecord>(approvalInputSchema),
+            outputSchema: fromJsonSchema<JsonRecord>({
+                type: "object",
+                properties: {
+                    workspace_id: IDENTIFIER_SCHEMA,
+                    operation_id: IDENTIFIER_SCHEMA,
+                    output_id: IDENTIFIER_SCHEMA,
+                    output_pathspec: {
+                        type: "string",
+                        pattern: "^output/[A-Za-z0-9_-]{1,64}\\.hwpx$",
+                    },
+                    expected_output_sha256: DIGEST_SCHEMA,
+                    expected_head: gitOidSchema,
+                    expected_head_reference: headReferenceSchema,
+                    message: commitMessageSchema,
+                    approval: {
+                        type: "object",
+                        properties: {
+                            effect: { type: "string", const: "git_commit" },
+                            target_sha256: DIGEST_SCHEMA,
+                            plan_sha256: DIGEST_SCHEMA,
+                        },
+                        required: [
+                            "effect",
+                            "target_sha256",
+                            "plan_sha256",
+                        ],
+                        additionalProperties: false,
+                    },
+                    executed: { type: "boolean", const: false },
+                },
+                required: [
+                    "workspace_id",
+                    "operation_id",
+                    "output_id",
+                    "output_pathspec",
+                    "expected_output_sha256",
+                    "expected_head",
+                    "expected_head_reference",
+                    "message",
+                    "approval",
+                    "executed",
+                ],
+                additionalProperties: false,
+            }),
+            annotations: {
+                readOnlyHint: true,
+                destructiveHint: false,
+                idempotentHint: true,
+                openWorldHint: false,
+            },
+        },
+        async (argumentsValue): Promise<CallToolResult> => {
+            try {
+                const result = await approval(config, argumentsValue);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: "Approval-bound Git plan prepared; no effect executed.",
+                        },
+                    ],
+                    structuredContent: result as unknown as JsonRecord,
+                    isError: false,
+                };
+            } catch {
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: "Approval-bound Git plan was rejected.",
+                        },
+                    ],
+                    isError: true,
+                };
+            }
+        },
+    );
+
+    server.registerTool(
+        EXECUTE_COMMIT_TOOL_NAME,
+        {
+            title: "Execute one confirmed local Git commit",
+            description:
+                "Execute only the exact digest-bound Git commit authorized by a sensitive, signed, single-use confirmation token from a trusted local confirmation surface. This tool cannot mint tokens.",
+            inputSchema: fromJsonSchema<JsonRecord>({
+                type: "object",
+                properties: {
+                    workspace_id: IDENTIFIER_SCHEMA,
+                    operation_id: IDENTIFIER_SCHEMA,
+                    output_id: IDENTIFIER_SCHEMA,
+                    expected_sha256: DIGEST_SCHEMA,
+                    message: commitMessageSchema,
+                    actor_sha256: DIGEST_SCHEMA,
+                    tenant_sha256: DIGEST_SCHEMA,
+                    requested_at_unix_seconds: {
+                        type: "integer",
+                        minimum: 1,
+                    },
+                    confirmation_token: {
+                        type: "string",
+                        minLength: 1,
+                        maxLength: 4_096,
+                        pattern:
+                            "^confirm_v1\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$",
+                    },
+                },
+                required: [
+                    "workspace_id",
+                    "operation_id",
+                    "output_id",
+                    "expected_sha256",
+                    "message",
+                    "actor_sha256",
+                    "tenant_sha256",
+                    "requested_at_unix_seconds",
+                    "confirmation_token",
+                ],
+                additionalProperties: false,
+            }),
+            outputSchema: fromJsonSchema<JsonRecord>({
+                type: "object",
+                properties: {
+                    workspace_id: IDENTIFIER_SCHEMA,
+                    operation_id: IDENTIFIER_SCHEMA,
+                    output_id: IDENTIFIER_SCHEMA,
+                    commit_oid: gitOidSchema,
+                    previous_head: gitOidSchema,
+                    updated_reference: headReferenceSchema,
+                    output_sha256: DIGEST_SCHEMA,
+                    target_sha256: DIGEST_SCHEMA,
+                    plan_sha256: DIGEST_SCHEMA,
+                    approved_at_unix_seconds: {
+                        type: "integer",
+                        minimum: 1,
+                    },
+                    index_synchronized: { type: "boolean", const: true },
+                    executed: { type: "boolean", const: true },
+                },
+                required: [
+                    "workspace_id",
+                    "operation_id",
+                    "output_id",
+                    "commit_oid",
+                    "previous_head",
+                    "updated_reference",
+                    "output_sha256",
+                    "target_sha256",
+                    "plan_sha256",
+                    "approved_at_unix_seconds",
+                    "index_synchronized",
+                    "executed",
+                ],
+                additionalProperties: false,
+            }),
+            annotations: {
+                readOnlyHint: false,
+                destructiveHint: true,
+                idempotentHint: false,
+                openWorldHint: false,
+            },
+        },
+        async (argumentsValue): Promise<CallToolResult> => {
+            try {
+                const result = await effect(config, argumentsValue);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: "The exact confirmed local Git commit was executed.",
+                        },
+                    ],
+                    structuredContent: result as unknown as JsonRecord,
+                    isError: false,
+                };
+            } catch {
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: "The confirmed local Git commit was rejected.",
+                        },
+                    ],
+                    isError: true,
+                };
+            }
+        },
+    );
+}
+
 export function createLocalCompanionServer(
     config: RuntimeConfig,
     health: (config: RuntimeConfig) => Promise<HealthResult> = callLocalHealth,
@@ -969,10 +1623,18 @@ export function createLocalCompanionServer(
         method: WorkflowMethod,
         params: JsonRecord,
     ) => Promise<WorkflowResult> = callLocalWorkflow,
+    approval: (
+        config: RuntimeConfig,
+        params: JsonRecord,
+    ) => Promise<GitApprovalPlanResult> = callLocalApproval,
+    effect: (
+        config: RuntimeConfig,
+        params: JsonRecord,
+    ) => Promise<GitCommitEffectResult> = callLocalEffect,
 ): McpServer {
     const server = new McpServer({
         name: "hwpx-agent-local-companion",
-        version: "0.2.0",
+        version: "0.3.0",
     });
     server.registerTool(
         TOOL_NAME,
@@ -1044,6 +1706,7 @@ export function createLocalCompanionServer(
         },
     );
     registerWorkflowTools(server, config, workflow);
+    registerApprovalTools(server, config, approval, effect);
     return server;
 }
 
