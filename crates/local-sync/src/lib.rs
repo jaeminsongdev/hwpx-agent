@@ -7,11 +7,16 @@ use sha2::{Digest as _, Sha256};
 use thiserror::Error;
 
 mod adapter;
+mod service_mapping;
 mod store;
 
 pub use adapter::{
     AuthenticatedRemoteSyncAdapter, AuthorizationHeader, CredentialFailure,
     RemoteCredentialProvider, RemoteTransport, TransportFailure,
+};
+pub use service_mapping::{
+    CheckpointServiceArguments, CheckpointServiceBinding, CheckpointServiceContext,
+    map_checkpoint_to_service,
 };
 pub use store::{DurableMirrorStore, DurableSyncError, LoadedMirror, StoreError, StoreRevision};
 

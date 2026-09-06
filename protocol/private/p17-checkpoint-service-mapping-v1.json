@@ -1,0 +1,96 @@
+{
+  "schema_version": "hwpx-agent.p17-checkpoint-service-mapping/v1",
+  "scope": "current_pc_private_checkpoint_to_p15_service_input",
+  "source": {
+    "schema_version": "hwpx-agent.remote-sync-request/v3",
+    "operation": "checkpoint",
+    "exact_private_request_sha256_retained": true
+  },
+  "target": {
+    "catalog": "protocol/mcp/p15-public-tools-v1.json",
+    "catalog_sha256": "94e6d24563bff94ca05283a9434887b2b2622c61789ce42fb6a8cdd1568f7001",
+    "tool": "project_checkpoint",
+    "input_schema": "https://schemas.hwpx-agent.local/mcp/project_checkpoint-input-v1.schema.json",
+    "client_surface": "codex_local"
+  },
+  "mapping": {
+    "preserved_exact": [
+      "project_id",
+      "label",
+      "note"
+    ],
+    "expected_revision_source": "expected_head.revision_id",
+    "revision_id_source": "expected_head.revision_id",
+    "host_context_fields": [
+      "request_id",
+      "locale"
+    ],
+    "absent_note_encoding": "field_omitted",
+    "service_idempotency_key": {
+      "format": "uuid_v5_lowercase_hyphenated",
+      "namespace": "41af5ff2-7349-5aa1-a197-a41738e81006",
+      "name_encoding": "canonical_json",
+      "name_fields": [
+        "project_id",
+        "branch_id",
+        "mirror_id",
+        "private_idempotency_key"
+      ],
+      "same_private_identity_and_key_is_stable_across_request_id_or_locale": true,
+      "cross_mirror_key_alias": "rejected_by_distinct_derived_key"
+    }
+  },
+  "private_host_binding": {
+    "retained_outside_p15_arguments": [
+      "branch_id",
+      "mirror_id",
+      "expected_generation",
+      "private_request_sha256"
+    ],
+    "must_verify_authenticated_exact_mirror_before_dispatch": true,
+    "cross_project_branch_or_mirror_alias": "reject"
+  },
+  "digests": {
+    "algorithm": "sha256",
+    "service_intent_excludes_correlation": [
+      "client_surface",
+      "locale",
+      "request_id"
+    ],
+    "service_intent_includes": [
+      "project_id",
+      "expected_revision",
+      "idempotency_key",
+      "revision_id",
+      "label",
+      "note_when_present"
+    ],
+    "service_arguments_covers_exact_canonical_p15_json": true
+  },
+  "bounds": {
+    "request_id": "p15_req_prefix_and_ascii_bounds",
+    "locale": "p15_bounded_bcp47_subset",
+    "mapped_input_must_validate_against_p15_schema": true,
+    "unknown_fields": "not_constructible"
+  },
+  "privacy": {
+    "debug_contains_private_identity_label_note_or_digest": false,
+    "public_arguments_contain_branch_or_mirror": false,
+    "credential_processed": false
+  },
+  "evidence": {
+    "mapping_tests": 3,
+    "local_sync_tests": 42,
+    "p15_schema_validation": true,
+    "stable_retry_and_cross_mirror_negative_tests": true
+  },
+  "not_claimed": {
+    "authenticated_mirror_registry": false,
+    "credential_provider": false,
+    "host_transport": false,
+    "service_dispatch": false,
+    "actual_remote_transition": false,
+    "production": false,
+    "p17_06_pass": false
+  }
+}
