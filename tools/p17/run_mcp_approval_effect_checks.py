@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import base64
 import hashlib
-import hmac
 import json
 import os
 from pathlib import Path
@@ -11,7 +10,6 @@ import secrets
 import shutil
 import subprocess
 import tempfile
-import time
 import uuid
 
 
@@ -20,7 +18,8 @@ RUNS = ROOT / "artifacts/p17/mcp-approval-effect-runs"
 MCP_PROTOCOL = "2025-11-25"
 TARGET_PROFILE = "hancom-2020-x86-11.0.0.9136"
 PREPARE_TOOL = "local_companion_prepare_git_commit_approval"
-EXECUTE_TOOL = "local_companion_execute_git_commit"
+EXECUTE_TOOL = "local_companion_confirm_and_execute_git_commit"
+RESOURCE_URI = "ui://hwpx-agent/local-git-approval/v1.html"
 TOOLS = (
     "local_companion_health",
     "local_companion_materialize",
@@ -36,16 +35,18 @@ CHECKS = (
     "modern_stdio_mcp_initialized",
     "exact_seven_tool_catalog",
     "closed_path_free_public_input_schemas",
-    "approval_prepare_read_only_annotation",
-    "effect_destructive_non_idempotent_annotation",
+    "approval_prepare_read_only_widget_annotation",
+    "effect_app_only_destructive_non_idempotent_annotation",
+    "self_contained_closed_csp_widget_resource",
     "real_git_repository_disposable",
     "exact_target_and_plan_digests_prepared",
-    "trusted_host_test_authority_separate_from_mcp",
-    "signed_confirmation_exactly_bound",
+    "trusted_identity_supplied_only_by_server_environment",
+    "confirmation_token_absent_from_public_tool_inputs",
+    "server_revalidates_displayed_plan_before_internal_signing",
     "actual_mcp_daemon_git_commit_executed",
     "committed_bytes_and_parent_verified",
     "unrelated_staged_entry_preserved",
-    "durable_same_token_replay_rejected",
+    "same_displayed_plan_second_execution_rejected",
     "token_secret_paths_and_content_absent_from_responses",
     "graceful_shutdown_and_cleanup",
     "no_hangul_user_repository_or_network_used",
@@ -123,6 +124,12 @@ def bridge_path() -> Path:
     return path.resolve()
 
 
+def widget_path() -> Path:
+    path = ROOT / "web/plugin-widget/dist/git-approval-widget-v1.html"
+    require(path.is_file() and 0 < path.stat().st_size <= 800_000, "widget_missing")
+    return path.resolve()
+
+
 def request(request_id: int, method: str, params: object) -> dict[str, object]:
     return {"jsonrpc": "2.0", "id": request_id, "method": method, "params": params}
 
@@ -188,41 +195,12 @@ def call_rejected(
     return response
 
 
-def mint_test_confirmation(
-    *,
-    secret: bytes,
-    token_id: str,
-    operation_id: str,
-    actor_sha256: str,
-    tenant_sha256: str,
-    target_sha256: str,
-    plan_sha256: str,
-    issued_at_unix_seconds: int,
-) -> str:
-    """Model the trusted host authority; this helper is not part of the MCP server."""
-    payload = {
-        "schema_version": "hwpx-agent.confirmation/v1",
-        "token_id": token_id,
-        "operation_id": operation_id,
-        "actor_sha256": actor_sha256,
-        "tenant_sha256": tenant_sha256,
-        "effect": "git_commit",
-        "target_sha256": target_sha256,
-        "plan_sha256": plan_sha256,
-        "issued_at_unix_seconds": issued_at_unix_seconds,
-        "expires_at_unix_seconds": issued_at_unix_seconds + 60,
-        "user_confirmed": True,
-    }
-    encoded_payload = compact(payload)
-    signature = hmac.new(secret, encoded_payload, hashlib.sha256).digest()
-    return f"confirm_v1.{base64url(encoded_payload)}.{base64url(signature)}"
-
-
 def run() -> dict[str, object]:
     source_commit, clean = tracked_identity()
     require(clean, "tracked_source_dirty")
     command(["cargo", "build", "-p", "local-companion-daemon", "--locked", "--offline"])
     command(["pnpm", "install", "--offline", "--frozen-lockfile"])
+    command(["pnpm", "--filter", "@hwpx-agent/plugin-widget", "build"])
     command(["pnpm", "--filter", "@hwpx-agent/local-companion-mcp", "build"])
     run_id = uuid.uuid4().hex
     run_dir = RUNS / run_id
@@ -272,6 +250,8 @@ def run() -> dict[str, object]:
             approval_state = temporary_path / "approval-state"
             secret = secrets.token_bytes(32)
             encoded_secret = base64url(secret)
+            actor_sha256 = sha256_bytes(b"p17 trusted test actor")
+            tenant_sha256 = sha256_bytes(b"p17 trusted test tenant")
             environment = {
                 name: value
                 for name in ("SystemRoot", "WINDIR")
@@ -282,6 +262,8 @@ def run() -> dict[str, object]:
                     "HWPX_AGENT_GIT_PROGRAM": str(Path(git).resolve()),
                     "HWPX_AGENT_APPROVAL_STATE_ROOT": str(approval_state),
                     "HWPX_AGENT_APPROVAL_SECRET": encoded_secret,
+                    "HWPX_AGENT_APPROVAL_ACTOR_SHA256": actor_sha256,
+                    "HWPX_AGENT_APPROVAL_TENANT_SHA256": tenant_sha256,
                 }
             )
             process = subprocess.Popen(
@@ -292,6 +274,8 @@ def run() -> dict[str, object]:
                     str(binary_path()),
                     "--config",
                     str(config_path),
+                    "--widget",
+                    str(widget_path()),
                 ],
                 cwd=ROOT,
                 env=environment,
@@ -321,7 +305,7 @@ def run() -> dict[str, object]:
                 isinstance(initialized_result, dict)
                 and initialized_result.get("protocolVersion") == MCP_PROTOCOL
                 and initialized_result.get("serverInfo")
-                == {"name": "hwpx-agent-local-companion", "version": "0.3.0"},
+                == {"name": "hwpx-agent-local-companion", "version": "0.4.0"},
                 "initialize",
             )
             send(process, {"jsonrpc": "2.0", "method": "notifications/initialized", "params": {}})
@@ -354,6 +338,12 @@ def run() -> dict[str, object]:
                 },
                 "prepare_annotations",
             )
+            prepare_meta = catalog[PREPARE_TOOL].get("_meta")
+            require(
+                isinstance(prepare_meta, dict)
+                and prepare_meta.get("ui") == {"resourceUri": RESOURCE_URI},
+                "prepare_widget_binding",
+            )
             require(
                 catalog[EXECUTE_TOOL].get("annotations")
                 == {
@@ -363,6 +353,60 @@ def run() -> dict[str, object]:
                     "openWorldHint": False,
                 },
                 "effect_annotations",
+            )
+            effect_meta = catalog[EXECUTE_TOOL].get("_meta")
+            require(
+                isinstance(effect_meta, dict)
+                and effect_meta.get("ui") == {"visibility": ["app"]},
+                "effect_visibility",
+            )
+            effect_schema = catalog[EXECUTE_TOOL]["inputSchema"]
+            require(
+                isinstance(effect_schema, dict)
+                and "confirmation_token" not in effect_schema.get("properties", {})
+                and "actor_sha256" not in effect_schema.get("properties", {})
+                and "tenant_sha256" not in effect_schema.get("properties", {}),
+                "effect_public_authority_fields",
+            )
+            send(process, request(3, "resources/list", {}))
+            resources_response = read_response(process, 3)
+            resources_result = resources_response.get("result")
+            resources = (
+                resources_result.get("resources")
+                if isinstance(resources_result, dict)
+                else None
+            )
+            require(
+                isinstance(resources, list)
+                and len(resources) == 1
+                and resources[0].get("uri") == RESOURCE_URI
+                and resources[0].get("mimeType") == "text/html;profile=mcp-app",
+                "resource_catalog",
+            )
+            send(process, request(4, "resources/read", {"uri": RESOURCE_URI}))
+            resource_response = read_response(process, 4)
+            resource_result = resource_response.get("result")
+            contents = (
+                resource_result.get("contents")
+                if isinstance(resource_result, dict)
+                else None
+            )
+            require(isinstance(contents, list) and len(contents) == 1, "resource_read")
+            resource = contents[0]
+            require(
+                isinstance(resource, dict)
+                and resource.get("uri") == RESOURCE_URI
+                and resource.get("mimeType") == "text/html;profile=mcp-app"
+                and isinstance(resource.get("text"), str)
+                and "<div id=\"root\"></div>" in resource["text"]
+                and resource.get("_meta")
+                == {
+                    "ui": {
+                        "csp": {"connectDomains": [], "resourceDomains": []},
+                        "prefersBorder": True,
+                    }
+                },
+                "resource_content",
             )
 
             operation_id = "op_mcpapproved01"
@@ -374,7 +418,18 @@ def run() -> dict[str, object]:
                 "expected_sha256": output_sha256,
                 "message": message,
             }
-            plan, plan_response = call_tool(process, 3, PREPARE_TOOL, prepare_arguments)
+            plan, plan_response = call_tool(process, 5, PREPARE_TOOL, prepare_arguments)
+            plan_tool_result = plan_response.get("result")
+            plan_meta = (
+                plan_tool_result.get("_meta")
+                if isinstance(plan_tool_result, dict)
+                else None
+            )
+            approval_challenge = (
+                plan_meta.get("hwpx-agent/git-approval-challenge")
+                if isinstance(plan_meta, dict)
+                else None
+            )
             approval = plan.get("approval")
             require(
                 plan.get("executed") is False
@@ -383,30 +438,21 @@ def run() -> dict[str, object]:
                 and isinstance(approval, dict)
                 and approval.get("effect") == "git_commit"
                 and isinstance(approval.get("target_sha256"), str)
-                and isinstance(approval.get("plan_sha256"), str),
+                and isinstance(approval.get("plan_sha256"), str)
+                and isinstance(approval_challenge, str)
+                and len(approval_challenge) == 43
+                and "approval_challenge" not in plan,
                 "approval_plan",
-            )
-            actor_sha256 = sha256_bytes(b"p17 trusted test actor")
-            tenant_sha256 = sha256_bytes(b"p17 trusted test tenant")
-            requested_at = int(time.time())
-            confirmation = mint_test_confirmation(
-                secret=secret,
-                token_id="cnf_mcpapproved01",
-                operation_id=operation_id,
-                actor_sha256=actor_sha256,
-                tenant_sha256=tenant_sha256,
-                target_sha256=approval["target_sha256"],
-                plan_sha256=approval["plan_sha256"],
-                issued_at_unix_seconds=requested_at,
             )
             effect_arguments = {
                 **prepare_arguments,
-                "actor_sha256": actor_sha256,
-                "tenant_sha256": tenant_sha256,
-                "requested_at_unix_seconds": requested_at,
-                "confirmation_token": confirmation,
+                "expected_head": plan["expected_head"],
+                "expected_head_reference": plan["expected_head_reference"],
+                "target_sha256": approval["target_sha256"],
+                "plan_sha256": approval["plan_sha256"],
+                "approval_challenge": approval_challenge,
             }
-            effect, effect_response = call_tool(process, 4, EXECUTE_TOOL, effect_arguments)
+            effect, effect_response = call_tool(process, 6, EXECUTE_TOOL, effect_arguments)
             require(
                 effect.get("executed") is True
                 and effect.get("previous_head") == initial_head
@@ -435,15 +481,22 @@ def run() -> dict[str, object]:
                 [git, "diff", "--cached", "--name-only"], cwd=workspace
             ).stdout.splitlines()
             require(staged == ["unrelated.txt"], "unrelated_index")
-            replay_response = call_rejected(process, 5, EXECUTE_TOOL, effect_arguments)
+            replay_response = call_rejected(process, 7, EXECUTE_TOOL, effect_arguments)
 
             transcript = canonical(
-                [initialized, listed_response, plan_response, effect_response, replay_response]
+                [
+                    initialized,
+                    listed_response,
+                    resources_response,
+                    resource_response,
+                    plan_response,
+                    effect_response,
+                    replay_response,
+                ]
             )
             require(
                 str(temporary_path) not in transcript
                 and str(workspace) not in transcript
-                and confirmation not in transcript
                 and encoded_secret not in transcript
                 and "P17_MCP_APPROVED_SYNTHETIC_HWPX" not in transcript
                 and "session_token" not in transcript,

@@ -1,11 +1,13 @@
 import assert from "node:assert/strict";
+import { createHmac } from "node:crypto";
 import test from "node:test";
 
 import {
     APPROVAL_PROTOCOL,
+    CONFIRM_COMMIT_TOOL_NAME,
     DIFF_TOOL_NAME,
     EFFECT_PROTOCOL,
-    EXECUTE_COMMIT_TOOL_NAME,
+    GIT_APPROVAL_RESOURCE_URI,
     MATERIALIZE_TOOL_NAME,
     PRIVATE_PROTOCOL,
     PREPARE_APPROVAL_TOOL_NAME,
@@ -16,6 +18,9 @@ import {
     WORKFLOW_PROTOCOL,
     childEffectEnvironment,
     childEnvironment,
+    confirmAndExecuteGitCommit,
+    loadConfirmationIdentity,
+    mintGitConfirmation,
     parseRuntimeArguments,
     privateApprovalRequest,
     privateEffectRequest,
@@ -26,11 +31,17 @@ import {
     validateHealthEnvelope,
     validateWorkflowEnvelope,
 } from "./server.js";
-import type { GitCommitPlanResult } from "./server.js";
+import type {
+    GitApprovalPlanResult,
+    GitCommitEffectResult,
+    GitCommitPlanResult,
+    RuntimeConfig,
+} from "./server.js";
 
 const token = "A".repeat(43);
 const daemon = "D:\\product\\local-companion-daemon.exe";
 const config = "D:\\runtime\\config.json";
+const widget = "D:\\runtime\\git-approval-widget-v1.html";
 
 function validEnvelope(): Record<string, unknown> {
     return {
@@ -48,17 +59,31 @@ function validEnvelope(): Record<string, unknown> {
     };
 }
 
-test("runtime arguments require exact absolute daemon and config paths", () => {
+test("runtime arguments require exact absolute daemon, config and widget paths", () => {
     assert.deepEqual(
-        parseRuntimeArguments(["--daemon", daemon, "--config", config]),
-        { daemonPath: daemon, configPath: config },
+        parseRuntimeArguments([
+            "--daemon",
+            daemon,
+            "--config",
+            config,
+            "--widget",
+            widget,
+        ]),
+        { daemonPath: daemon, configPath: config, widgetPath: widget },
     );
     assert.throws(() => parseRuntimeArguments([]));
     assert.throws(() =>
         parseRuntimeArguments(["--config", config, "--daemon", daemon]),
     );
     assert.throws(() =>
-        parseRuntimeArguments(["--daemon", "relative.exe", "--config", config]),
+        parseRuntimeArguments([
+            "--daemon",
+            "relative.exe",
+            "--config",
+            config,
+            "--widget",
+            widget,
+        ]),
     );
     assert.throws(() =>
         parseRuntimeArguments([
@@ -66,6 +91,8 @@ test("runtime arguments require exact absolute daemon and config paths", () => {
             daemon,
             "--config",
             config,
+            "--widget",
+            widget,
             "extra",
         ]),
     );
@@ -407,6 +434,148 @@ test("effect request and result require the exact protocol-v4 binding", () => {
     assert.throws(() => validateEffectEnvelope(leaked, params));
 });
 
+test("trusted identity and token minting are exact, short-lived and HMAC bound", () => {
+    const encodedSecret = Buffer.alloc(32, 7).toString("base64url");
+    const identity = loadConfirmationIdentity({
+        HWPX_AGENT_APPROVAL_ACTOR_SHA256: "a".repeat(64),
+        HWPX_AGENT_APPROVAL_TENANT_SHA256: "b".repeat(64),
+        HWPX_AGENT_APPROVAL_SECRET: encodedSecret,
+    });
+    const plan: GitApprovalPlanResult = {
+        workspace_id: "primary",
+        operation_id: "op_widget_01",
+        output_id: "result_01",
+        output_pathspec: "output/result_01.hwpx",
+        expected_output_sha256: "c".repeat(64),
+        expected_head: "d".repeat(40),
+        expected_head_reference: "refs/heads/main",
+        message: "Publish verified HWPX",
+        approval: {
+            effect: "git_commit",
+            target_sha256: "e".repeat(64),
+            plan_sha256: "f".repeat(64),
+        },
+        executed: false,
+    };
+    const confirmation = mintGitConfirmation(plan, identity, 100);
+    const [prefix, encodedPayload, encodedSignature] = confirmation.split(".");
+    assert.equal(prefix, "confirm_v1");
+    const payload = Buffer.from(encodedPayload!, "base64url");
+    const parsed = JSON.parse(payload.toString("utf8")) as Record<string, unknown>;
+    assert.equal(parsed.operation_id, "op_widget_01");
+    assert.equal(parsed.issued_at_unix_seconds, 100);
+    assert.equal(parsed.expires_at_unix_seconds, 160);
+    assert.match(String(parsed.token_id), /^cnf_[0-9a-f]{32}$/);
+    assert.equal(parsed.user_confirmed, true);
+    assert.equal(
+        encodedSignature,
+        createHmac("sha256", Buffer.alloc(32, 7))
+            .update(payload)
+            .digest("base64url"),
+    );
+    payload.fill(0);
+    identity.secret.fill(0);
+    assert.throws(() =>
+        loadConfirmationIdentity({
+            HWPX_AGENT_APPROVAL_ACTOR_SHA256: "a".repeat(64),
+            HWPX_AGENT_APPROVAL_TENANT_SHA256: "b".repeat(64),
+            HWPX_AGENT_APPROVAL_SECRET: "short",
+        }),
+    );
+});
+
+test("app confirmation revalidates the displayed plan and never accepts a caller token", async () => {
+    const runtime: RuntimeConfig = {
+        daemonPath: daemon,
+        configPath: config,
+        widgetPath: widget,
+        widgetHtml: "<!doctype html><div id=\"root\"></div>",
+    };
+    const plan: GitApprovalPlanResult = {
+        workspace_id: "primary",
+        operation_id: "op_widget_01",
+        output_id: "result_01",
+        output_pathspec: "output/result_01.hwpx",
+        expected_output_sha256: "c".repeat(64),
+        expected_head: "d".repeat(40),
+        expected_head_reference: "refs/heads/main",
+        message: "Publish verified HWPX",
+        approval: {
+            effect: "git_commit",
+            target_sha256: "e".repeat(64),
+            plan_sha256: "f".repeat(64),
+        },
+        executed: false,
+    };
+    const confirmationParams = {
+        workspace_id: plan.workspace_id,
+        operation_id: plan.operation_id,
+        output_id: plan.output_id,
+        expected_sha256: plan.expected_output_sha256,
+        message: plan.message,
+        expected_head: plan.expected_head,
+        expected_head_reference: plan.expected_head_reference,
+        target_sha256: plan.approval.target_sha256,
+        plan_sha256: plan.approval.plan_sha256,
+    };
+    let effectParams: Record<string, unknown> | null = null;
+    const result = await confirmAndExecuteGitCommit(
+        runtime,
+        confirmationParams,
+        async () => plan,
+        async (_runtime, params) => {
+            effectParams = params;
+            return {
+                workspace_id: plan.workspace_id,
+                operation_id: plan.operation_id,
+                output_id: plan.output_id,
+                commit_oid: "1".repeat(40),
+                previous_head: plan.expected_head,
+                updated_reference: plan.expected_head_reference,
+                output_sha256: plan.expected_output_sha256,
+                target_sha256: plan.approval.target_sha256,
+                plan_sha256: plan.approval.plan_sha256,
+                approved_at_unix_seconds: 100,
+                index_synchronized: true,
+                executed: true,
+            } satisfies GitCommitEffectResult;
+        },
+        () => 100,
+        {
+            HWPX_AGENT_APPROVAL_ACTOR_SHA256: "a".repeat(64),
+            HWPX_AGENT_APPROVAL_TENANT_SHA256: "b".repeat(64),
+            HWPX_AGENT_APPROVAL_SECRET: Buffer.alloc(32, 7).toString("base64url"),
+        },
+    );
+    assert.equal(result.executed, true);
+    assert.match(
+        String(effectParams!.confirmation_token),
+        /^confirm_v1\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/,
+    );
+    assert.equal(effectParams!.actor_sha256, "a".repeat(64));
+    assert.equal(effectParams!.tenant_sha256, "b".repeat(64));
+    await assert.rejects(() =>
+        confirmAndExecuteGitCommit(
+            runtime,
+            { ...confirmationParams, confirmation_token: "caller-token" },
+            async () => plan,
+            async () => result,
+            () => 100,
+            {},
+        ),
+    );
+    await assert.rejects(() =>
+        confirmAndExecuteGitCommit(
+            runtime,
+            confirmationParams,
+            async () => ({ ...plan, expected_head: "2".repeat(40) }),
+            async () => result,
+            () => 100,
+            {},
+        ),
+    );
+});
+
 test("all seven tool names are fixed and distinct", () => {
     assert.deepEqual(
         [
@@ -416,7 +585,7 @@ test("all seven tool names are fixed and distinct", () => {
             PUBLISH_TOOL_NAME,
             PREPARE_COMMIT_TOOL_NAME,
             PREPARE_APPROVAL_TOOL_NAME,
-            EXECUTE_COMMIT_TOOL_NAME,
+            CONFIRM_COMMIT_TOOL_NAME,
         ],
         [
             "local_companion_health",
@@ -425,7 +594,11 @@ test("all seven tool names are fixed and distinct", () => {
             "local_companion_publish",
             "local_companion_prepare_git_commit",
             "local_companion_prepare_git_commit_approval",
-            "local_companion_execute_git_commit",
+            "local_companion_confirm_and_execute_git_commit",
         ],
+    );
+    assert.equal(
+        GIT_APPROVAL_RESOURCE_URI,
+        "ui://hwpx-agent/local-git-approval/v1.html",
     );
 });

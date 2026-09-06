@@ -53,3 +53,9 @@ await bundle(
     "preview.html",
     "HWPX Agent preview",
 );
+await bundle(
+    "src/git-approval-component.tsx",
+    null,
+    "git-approval-widget-v1.html",
+    "HWPX Agent Git approval",
+);

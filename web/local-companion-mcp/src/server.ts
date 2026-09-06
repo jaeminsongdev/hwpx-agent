@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
-import { randomBytes } from "node:crypto";
-import { lstat, realpath } from "node:fs/promises";
+import { createHmac, randomBytes, randomUUID } from "node:crypto";
+import { lstat, readFile, realpath } from "node:fs/promises";
 import { dirname, extname, isAbsolute } from "node:path";
 import { pathToFileURL } from "node:url";
 import { TextDecoder } from "node:util";
@@ -24,16 +24,24 @@ export const PUBLISH_TOOL_NAME = "local_companion_publish";
 export const PREPARE_COMMIT_TOOL_NAME = "local_companion_prepare_git_commit";
 export const PREPARE_APPROVAL_TOOL_NAME =
     "local_companion_prepare_git_commit_approval";
-export const EXECUTE_COMMIT_TOOL_NAME = "local_companion_execute_git_commit";
+export const CONFIRM_COMMIT_TOOL_NAME =
+    "local_companion_confirm_and_execute_git_commit";
+export const GIT_APPROVAL_RESOURCE_URI =
+    "ui://hwpx-agent/local-git-approval/v1.html";
 export const TARGET_PROFILE = "hancom-2020-x86-11.0.0.9136";
 const SESSION_ENV = "HWPX_AGENT_LOCAL_SESSION_TOKEN";
 const GIT_PROGRAM_ENV = "HWPX_AGENT_GIT_PROGRAM";
 const APPROVAL_STATE_ROOT_ENV = "HWPX_AGENT_APPROVAL_STATE_ROOT";
 const APPROVAL_SECRET_ENV = "HWPX_AGENT_APPROVAL_SECRET";
+const APPROVAL_ACTOR_ENV = "HWPX_AGENT_APPROVAL_ACTOR_SHA256";
+const APPROVAL_TENANT_ENV = "HWPX_AGENT_APPROVAL_TENANT_SHA256";
 const REQUEST_ID = "mcp-health";
 const MAX_STDOUT_BYTES = 16_384;
 const MAX_STDERR_BYTES = 4_096;
 const MAX_CONFIG_BYTES = 65_536;
+const MAX_WIDGET_BYTES = 800_000;
+const MAX_PENDING_WIDGET_APPROVALS = 128;
+const WIDGET_APPROVAL_TTL_SECONDS = 300;
 const DAEMON_TIMEOUT_MS = 10_000;
 const MAX_FILE_BYTES = 1_073_741_824;
 const IDENTIFIER_PATTERN = "^[A-Za-z0-9_-]{1,64}$";
@@ -44,6 +52,8 @@ type JsonRecord = Record<string, JSONValue>;
 export interface RuntimeConfig {
     readonly daemonPath: string;
     readonly configPath: string;
+    readonly widgetPath: string;
+    readonly widgetHtml: string;
 }
 
 export interface HealthResult {
@@ -152,54 +162,81 @@ interface BoundedOutput {
 export function parseRuntimeArguments(argumentsValue: readonly string[]): {
     readonly daemonPath: string;
     readonly configPath: string;
+    readonly widgetPath: string;
 } {
     if (
-        argumentsValue.length !== 4 ||
+        argumentsValue.length !== 6 ||
         argumentsValue[0] !== "--daemon" ||
-        argumentsValue[2] !== "--config"
+        argumentsValue[2] !== "--config" ||
+        argumentsValue[4] !== "--widget"
     ) {
         throw new Error("invalid local companion arguments");
     }
     const daemonPath = argumentsValue[1];
     const configPath = argumentsValue[3];
+    const widgetPath = argumentsValue[5];
     if (
         daemonPath === undefined ||
         configPath === undefined ||
+        widgetPath === undefined ||
         !isAbsolute(daemonPath) ||
         !isAbsolute(configPath) ||
+        !isAbsolute(widgetPath) ||
         daemonPath.length > 1_024 ||
-        configPath.length > 1_024
+        configPath.length > 1_024 ||
+        widgetPath.length > 1_024
     ) {
         throw new Error("invalid local companion paths");
     }
-    return { daemonPath, configPath };
+    return { daemonPath, configPath, widgetPath };
 }
 
 export async function loadRuntimeConfig(
     argumentsValue: readonly string[],
 ): Promise<RuntimeConfig> {
     const parsed = parseRuntimeArguments(argumentsValue);
-    const [daemonMetadata, configMetadata] = await Promise.all([
+    const [daemonMetadata, configMetadata, widgetMetadata] = await Promise.all([
         lstat(parsed.daemonPath),
         lstat(parsed.configPath),
+        lstat(parsed.widgetPath),
     ]);
     if (
         !daemonMetadata.isFile() ||
         daemonMetadata.isSymbolicLink() ||
         !configMetadata.isFile() ||
         configMetadata.isSymbolicLink() ||
+        !widgetMetadata.isFile() ||
+        widgetMetadata.isSymbolicLink() ||
         configMetadata.size < 1 ||
         configMetadata.size > MAX_CONFIG_BYTES ||
+        widgetMetadata.size < 1 ||
+        widgetMetadata.size > MAX_WIDGET_BYTES ||
         (process.platform === "win32" &&
             extname(parsed.daemonPath).toLowerCase() !== ".exe")
     ) {
         throw new Error("invalid local companion files");
     }
-    const [daemonPath, configPath] = await Promise.all([
+    const [daemonPath, configPath, widgetPath] = await Promise.all([
         realpath(parsed.daemonPath),
         realpath(parsed.configPath),
+        realpath(parsed.widgetPath),
     ]);
-    return { daemonPath, configPath };
+    const widgetHtml = await readFile(widgetPath, "utf8");
+    if (
+        Buffer.byteLength(widgetHtml, "utf8") > MAX_WIDGET_BYTES ||
+        /<(?:base|embed|form|iframe|object)\b/iu.test(widgetHtml) ||
+        /<meta\b[^>]*http-equiv\s*=\s*["']?refresh/iu.test(widgetHtml) ||
+        /<(?:audio|img|link|script|source|track|video)\b[^>]*(?:href|poster|src|srcset)\s*=/iu.test(
+            widgetHtml,
+        ) ||
+        /\b(?:action|href|poster|src|srcset)\s*=\s*["']?\s*(?:https?:|\/\/)/iu.test(
+            widgetHtml,
+        ) ||
+        /@import\s|url\(\s*["']?(?:https?:|\/\/)/iu.test(widgetHtml)
+    ) {
+        throw new Error("invalid local companion widget");
+    }
+    return { daemonPath, configPath, widgetPath, widgetHtml };
 }
 
 export function childEnvironment(
@@ -694,6 +731,164 @@ export function validateApprovalEnvelope(
     return result as unknown as GitApprovalPlanResult;
 }
 
+function validateConfirmationParams(params: JsonRecord): void {
+    if (
+        !hasExactKeys(params, [
+            "expected_head",
+            "expected_head_reference",
+            "expected_sha256",
+            "message",
+            "operation_id",
+            "output_id",
+            "plan_sha256",
+            "target_sha256",
+            "workspace_id",
+        ]) ||
+        !isIdentifier(params.workspace_id) ||
+        !isIdentifier(params.operation_id) ||
+        !isIdentifier(params.output_id) ||
+        !isDigest(params.expected_sha256) ||
+        !isCommitMessage(params.message) ||
+        !isGitOid(params.expected_head) ||
+        !(params.expected_head_reference === null ||
+            isHeadReference(params.expected_head_reference)) ||
+        !isDigest(params.target_sha256) ||
+        !isDigest(params.plan_sha256)
+    ) {
+        throw new Error("invalid trusted confirmation request");
+    }
+}
+
+function widgetConfirmationParams(params: JsonRecord): {
+    readonly challenge: string;
+    readonly confirmed: JsonRecord;
+} {
+    if (
+        !hasExactKeys(params, [
+            "approval_challenge",
+            "expected_head",
+            "expected_head_reference",
+            "expected_sha256",
+            "message",
+            "operation_id",
+            "output_id",
+            "plan_sha256",
+            "target_sha256",
+            "workspace_id",
+        ]) ||
+        typeof params.approval_challenge !== "string" ||
+        !/^[A-Za-z0-9_-]{43}$/.test(params.approval_challenge)
+    ) {
+        throw new Error("invalid trusted widget confirmation request");
+    }
+    const confirmed: JsonRecord = {
+        workspace_id: params.workspace_id as JSONValue,
+        operation_id: params.operation_id as JSONValue,
+        output_id: params.output_id as JSONValue,
+        expected_sha256: params.expected_sha256 as JSONValue,
+        message: params.message as JSONValue,
+        expected_head: params.expected_head as JSONValue,
+        expected_head_reference: params.expected_head_reference as JSONValue,
+        target_sha256: params.target_sha256 as JSONValue,
+        plan_sha256: params.plan_sha256 as JSONValue,
+    };
+    validateConfirmationParams(confirmed);
+    return { challenge: params.approval_challenge, confirmed };
+}
+
+function confirmationMatchesPlan(
+    params: JsonRecord,
+    plan: GitApprovalPlanResult,
+): boolean {
+    return (
+        params.workspace_id === plan.workspace_id &&
+        params.operation_id === plan.operation_id &&
+        params.output_id === plan.output_id &&
+        params.expected_sha256 === plan.expected_output_sha256 &&
+        params.message === plan.message &&
+        params.expected_head === plan.expected_head &&
+        params.expected_head_reference === plan.expected_head_reference &&
+        params.target_sha256 === plan.approval.target_sha256 &&
+        params.plan_sha256 === plan.approval.plan_sha256 &&
+        plan.executed === false
+    );
+}
+
+interface ConfirmationIdentity {
+    readonly actorSha256: string;
+    readonly tenantSha256: string;
+    readonly secret: Buffer;
+}
+
+export function loadConfirmationIdentity(
+    source: NodeJS.ProcessEnv = process.env,
+): ConfirmationIdentity {
+    const actorSha256 = source[APPROVAL_ACTOR_ENV];
+    const tenantSha256 = source[APPROVAL_TENANT_ENV];
+    const encodedSecret = source[APPROVAL_SECRET_ENV];
+    if (
+        !isDigest(actorSha256) ||
+        !isDigest(tenantSha256) ||
+        encodedSecret === undefined ||
+        !/^[A-Za-z0-9_-]{43,171}$/.test(encodedSecret) ||
+        Buffer.from(encodedSecret, "base64url").toString("base64url") !==
+            encodedSecret
+    ) {
+        throw new Error("trusted confirmation authority is not configured");
+    }
+    const secret = Buffer.from(encodedSecret, "base64url");
+    if (secret.length < 32 || secret.length > 128) {
+        secret.fill(0);
+        throw new Error("trusted confirmation authority is not configured");
+    }
+    return { actorSha256, tenantSha256, secret };
+}
+
+export function mintGitConfirmation(
+    plan: GitApprovalPlanResult,
+    identity: ConfirmationIdentity,
+    issuedAtUnixSeconds: number,
+): string {
+    if (
+        !Number.isSafeInteger(issuedAtUnixSeconds) ||
+        issuedAtUnixSeconds <= 0 ||
+        identity.secret.length < 32 ||
+        identity.secret.length > 128 ||
+        !isDigest(identity.actorSha256) ||
+        !isDigest(identity.tenantSha256)
+    ) {
+        throw new Error("invalid confirmation authority");
+    }
+    const payload = Buffer.from(
+        JSON.stringify({
+            schema_version: "hwpx-agent.confirmation/v1",
+            token_id: `cnf_${randomUUID().replaceAll("-", "")}`,
+            operation_id: plan.operation_id,
+            actor_sha256: identity.actorSha256,
+            tenant_sha256: identity.tenantSha256,
+            effect: "git_commit",
+            target_sha256: plan.approval.target_sha256,
+            plan_sha256: plan.approval.plan_sha256,
+            issued_at_unix_seconds: issuedAtUnixSeconds,
+            expires_at_unix_seconds: issuedAtUnixSeconds + 60,
+            user_confirmed: true,
+        }),
+        "utf8",
+    );
+    try {
+        const signature = createHmac("sha256", identity.secret)
+            .update(payload)
+            .digest();
+        try {
+            return `confirm_v1.${payload.toString("base64url")}.${signature.toString("base64url")}`;
+        } finally {
+            signature.fill(0);
+        }
+    } finally {
+        payload.fill(0);
+    }
+}
+
 function validateEffectParams(params: JsonRecord): void {
     if (
         !hasExactKeys(params, [
@@ -1075,6 +1270,65 @@ export async function callLocalEffect(
     }
 }
 
+export async function confirmAndExecuteGitCommit(
+    config: RuntimeConfig,
+    params: JsonRecord,
+    approval: (
+        config: RuntimeConfig,
+        params: JsonRecord,
+    ) => Promise<GitApprovalPlanResult> = callLocalApproval,
+    effect: (
+        config: RuntimeConfig,
+        params: JsonRecord,
+    ) => Promise<GitCommitEffectResult> = callLocalEffect,
+    now: () => number = () => Math.floor(Date.now() / 1_000),
+    environment: NodeJS.ProcessEnv = process.env,
+): Promise<GitCommitEffectResult> {
+    validateConfirmationParams(params);
+    const approvalParams: JsonRecord = {
+        workspace_id: params.workspace_id as JSONValue,
+        operation_id: params.operation_id as JSONValue,
+        output_id: params.output_id as JSONValue,
+        expected_sha256: params.expected_sha256 as JSONValue,
+        message: params.message as JSONValue,
+    };
+    const currentPlan = await approval(config, approvalParams);
+    if (!confirmationMatchesPlan(params, currentPlan)) {
+        throw new Error("trusted confirmation no longer matches current Git state");
+    }
+    const identity = loadConfirmationIdentity(environment);
+    let confirmationToken = "";
+    try {
+        const requestedAt = now();
+        confirmationToken = mintGitConfirmation(
+            currentPlan,
+            identity,
+            requestedAt,
+        );
+        const result = await effect(config, {
+            ...approvalParams,
+            actor_sha256: identity.actorSha256,
+            tenant_sha256: identity.tenantSha256,
+            requested_at_unix_seconds: requestedAt,
+            confirmation_token: confirmationToken,
+        });
+        if (
+            result.target_sha256 !== currentPlan.approval.target_sha256 ||
+            result.plan_sha256 !== currentPlan.approval.plan_sha256 ||
+            result.previous_head !== currentPlan.expected_head ||
+            result.updated_reference !== currentPlan.expected_head_reference ||
+            result.output_sha256 !== currentPlan.expected_output_sha256 ||
+            result.approved_at_unix_seconds < requestedAt
+        ) {
+            throw new Error("Git effect receipt did not match the confirmed plan");
+        }
+        return result;
+    } finally {
+        confirmationToken = "";
+        identity.secret.fill(0);
+    }
+}
+
 const IDENTIFIER_SCHEMA: JsonRecord = {
     type: "string",
     pattern: IDENTIFIER_PATTERN,
@@ -1383,6 +1637,20 @@ function registerApprovalTools(
         params: JsonRecord,
     ) => Promise<GitCommitEffectResult>,
 ): void {
+    const pendingApprovals = new Map<
+        string,
+        {
+            readonly plan: GitApprovalPlanResult;
+            readonly expiresAtUnixSeconds: number;
+        }
+    >();
+    const nowSeconds = (): number => Math.floor(Date.now() / 1_000);
+    const mintChallenge = (): string => {
+        let challenge = randomBytes(32).toString("base64url");
+        while (pendingApprovals.has(challenge))
+            challenge = randomBytes(32).toString("base64url");
+        return challenge;
+    };
     const commitMessageSchema: JsonRecord = {
         type: "string",
         minLength: 1,
@@ -1478,10 +1746,25 @@ function registerApprovalTools(
                 idempotentHint: true,
                 openWorldHint: false,
             },
+            _meta: {
+                ui: { resourceUri: GIT_APPROVAL_RESOURCE_URI },
+            },
         },
         async (argumentsValue): Promise<CallToolResult> => {
             try {
                 const result = await approval(config, argumentsValue);
+                const now = nowSeconds();
+                for (const [challenge, pending] of pendingApprovals) {
+                    if (pending.expiresAtUnixSeconds < now)
+                        pendingApprovals.delete(challenge);
+                }
+                if (pendingApprovals.size >= MAX_PENDING_WIDGET_APPROVALS)
+                    throw new Error("pending trusted confirmations are full");
+                const challenge = mintChallenge();
+                pendingApprovals.set(challenge, {
+                    plan: result,
+                    expiresAtUnixSeconds: now + WIDGET_APPROVAL_TTL_SECONDS,
+                });
                 return {
                     content: [
                         {
@@ -1490,6 +1773,9 @@ function registerApprovalTools(
                         },
                     ],
                     structuredContent: result as unknown as JsonRecord,
+                    _meta: {
+                        "hwpx-agent/git-approval-challenge": challenge,
+                    },
                     isError: false,
                 };
             } catch {
@@ -1507,11 +1793,11 @@ function registerApprovalTools(
     );
 
     server.registerTool(
-        EXECUTE_COMMIT_TOOL_NAME,
+        CONFIRM_COMMIT_TOOL_NAME,
         {
-            title: "Execute one confirmed local Git commit",
+            title: "Confirm and execute one local Git commit",
             description:
-                "Execute only the exact digest-bound Git commit authorized by a sensitive, signed, single-use confirmation token from a trusted local confirmation surface. This tool cannot mint tokens.",
+                "App-only action for the trusted local confirmation widget. It revalidates the displayed Git plan, internally mints a signed single-use confirmation, and executes only that exact commit.",
             inputSchema: fromJsonSchema<JsonRecord>({
                 type: "object",
                 properties: {
@@ -1520,18 +1806,15 @@ function registerApprovalTools(
                     output_id: IDENTIFIER_SCHEMA,
                     expected_sha256: DIGEST_SCHEMA,
                     message: commitMessageSchema,
-                    actor_sha256: DIGEST_SCHEMA,
-                    tenant_sha256: DIGEST_SCHEMA,
-                    requested_at_unix_seconds: {
-                        type: "integer",
-                        minimum: 1,
-                    },
-                    confirmation_token: {
+                    expected_head: gitOidSchema,
+                    expected_head_reference: headReferenceSchema,
+                    target_sha256: DIGEST_SCHEMA,
+                    plan_sha256: DIGEST_SCHEMA,
+                    approval_challenge: {
                         type: "string",
-                        minLength: 1,
-                        maxLength: 4_096,
-                        pattern:
-                            "^confirm_v1\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$",
+                        minLength: 43,
+                        maxLength: 43,
+                        pattern: "^[A-Za-z0-9_-]{43}$",
                     },
                 },
                 required: [
@@ -1540,10 +1823,11 @@ function registerApprovalTools(
                     "output_id",
                     "expected_sha256",
                     "message",
-                    "actor_sha256",
-                    "tenant_sha256",
-                    "requested_at_unix_seconds",
-                    "confirmation_token",
+                    "expected_head",
+                    "expected_head_reference",
+                    "target_sha256",
+                    "plan_sha256",
+                    "approval_challenge",
                 ],
                 additionalProperties: false,
             }),
@@ -1588,10 +1872,30 @@ function registerApprovalTools(
                 idempotentHint: false,
                 openWorldHint: false,
             },
+            _meta: {
+                ui: { visibility: ["app"] },
+            },
         },
         async (argumentsValue): Promise<CallToolResult> => {
             try {
-                const result = await effect(config, argumentsValue);
+                const { challenge, confirmed } =
+                    widgetConfirmationParams(argumentsValue);
+                const pending = pendingApprovals.get(challenge);
+                // Consume before any asynchronous work. Failure and lost replies are non-retryable.
+                pendingApprovals.delete(challenge);
+                if (
+                    pending === undefined ||
+                    pending.expiresAtUnixSeconds < nowSeconds() ||
+                    !confirmationMatchesPlan(confirmed, pending.plan)
+                ) {
+                    throw new Error("trusted widget confirmation was rejected");
+                }
+                const result = await confirmAndExecuteGitCommit(
+                    config,
+                    confirmed,
+                    approval,
+                    effect,
+                );
                 return {
                     content: [
                         {
@@ -1636,8 +1940,36 @@ export function createLocalCompanionServer(
 ): McpServer {
     const server = new McpServer({
         name: "hwpx-agent-local-companion",
-        version: "0.3.0",
+        version: "0.4.0",
     });
+    server.registerResource(
+        "local-git-approval-v1",
+        GIT_APPROVAL_RESOURCE_URI,
+        {
+            title: "HWPX Agent local Git approval",
+            description:
+                "Self-contained trusted confirmation interface for one exact local Git commit.",
+            mimeType: "text/html;profile=mcp-app",
+        },
+        async () => ({
+            contents: [
+                {
+                    uri: GIT_APPROVAL_RESOURCE_URI,
+                    mimeType: "text/html;profile=mcp-app",
+                    text: config.widgetHtml,
+                    _meta: {
+                        ui: {
+                            csp: {
+                                connectDomains: [],
+                                resourceDomains: [],
+                            },
+                            prefersBorder: true,
+                        },
+                    },
+                },
+            ],
+        }),
+    );
     server.registerTool(
         TOOL_NAME,
         {
