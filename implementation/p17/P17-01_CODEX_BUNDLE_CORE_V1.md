@@ -21,6 +21,12 @@ Seven bundle tests pass, including deterministic rebuild, exact entry set, conne
 negative source checks, traversal rejection and no-overwrite publication. The predecessor P16 base
 and skills suites pass 17/17 each, and the standard plugin validator accepts the tracked base.
 
+The exact committed source `0c0e3e4c54089baca318fd971c9f44562a052c23` produced ignored run
+`81de11bb748649cbbae25972cdbd30df`. Its 19-entry, 20,501-byte archive has SHA-256
+`586cf63fc1bf9be608e4ea225c56d8f02457c516d47210e661e8128968783e5a`; extraction and the standard
+plugin validator both passed. The archive and extracted tree remain local evidence under
+`artifacts/p17/packages/` and are not tracked product source.
+
 This artifact deliberately contains no `.app.json` or `.mcp.json`. A remote app mapping cannot be
 created honestly until an actual Developer mode registration receipt supplies the real app ID and
 HTTPS MCP endpoint. The current-PC local MCP plugin remains separately qualified; absolute local

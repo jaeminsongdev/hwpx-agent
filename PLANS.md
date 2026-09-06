@@ -49,7 +49,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0089A | P17-04 main binding | PASS: cachebuster reinstall bound to integrated main; run 890e1150a2184172abbe8af0ef3eb7b2 11/11 through fresh Codex |
 | P-0090 | P17-05 local file/Git | PASS: exact-commit MCP run bf248400ce1c4985bb2353aa9209ec02, 16/16; path-free IDs, traversal/large-file rejection, Git plan only |
 | P-0091 | P17-06 project sync | In progress: state machine + create-new durable journal + local CLI 17/17; authenticated remote adapter and pull/push/checkpoint CLI remain |
-| P-0092 | P17-01 Codex package | In progress: deterministic 19-entry package core 7/7; registered remote app and qualified connection are absent |
+| P-0092 | P17-01 Codex package | In progress: exact-commit run 81de11bb748649cbbae25972cdbd30df, deterministic 19-entry package core 7/7; registered remote app absent |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.
