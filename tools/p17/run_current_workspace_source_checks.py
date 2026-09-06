@@ -17,12 +17,14 @@ RUNS = ROOT / "artifacts/p17/current-workspace-source-runs"
 MAIN_CONTRACT = "implementation/p16/qualification/main-9cc1-p16-62542-v1/contract.json"
 POSTGRES_CONTRACT = "implementation/p16/qualification/postgres-217ba56/contract.json"
 P15_CONTRACT = "implementation/p16/qualification/p15-current-source-v1/contract.json"
+P15_AUTH_CONTRACT = "implementation/p15/p15-auth-tenant-v1.json"
 WIDGET_CONTRACT = "implementation/p16/p16-widget-shell-contract-v1.json"
 RETENTION_CONTRACT = "implementation/p14/postgres/p14-retention-local-mirror-v1.json"
 PINNED_CONTRACTS = {
     MAIN_CONTRACT: "890c72ac61c2c7d4e871958ff684de513fe1fe7e888e1264cba0eaec4bab52df",
     POSTGRES_CONTRACT: "c37e5b773a9117ffdb4af40c95d1263e08fdf7f6e25c69c6daa3108086497530",
     P15_CONTRACT: "5391428d584f7be36ed532ea446a07372761fb28bad9446972cef307c35a13e0",
+    P15_AUTH_CONTRACT: "7bae38b349e394b53636462fe19cb8e1c057a35ab68e7c23161086af6400ad99",
     WIDGET_CONTRACT: "2d8dad6318bc9090b0a7db70d19f1470e6ce0fa97bb177755cff993f9b94f09e",
     RETENTION_CONTRACT: "080dda5dd65a7e803c49d73648691dd49971c0a8ade1b70b8521a7a5a9e6d7c5",
 }
@@ -55,6 +57,7 @@ SOURCES = (
     MAIN_CONTRACT,
     POSTGRES_CONTRACT,
     P15_CONTRACT,
+    P15_AUTH_CONTRACT,
     WIDGET_CONTRACT,
     RETENTION_CONTRACT,
     "tools/p16/integrated_source_qualification.py",
@@ -175,6 +178,7 @@ def source_expectations(
     main = contracts[MAIN_CONTRACT]
     postgres = contracts[POSTGRES_CONTRACT]
     p15 = contracts[P15_CONTRACT]
+    p15_auth = contracts[P15_AUTH_CONTRACT]
     widget = contracts[WIDGET_CONTRACT]
     retention = contracts[RETENTION_CONTRACT]
     expectations: dict[str, set[str]] = {}
@@ -203,6 +207,9 @@ def source_expectations(
             add_expectation(expectations, entry.get("path"), entry.get("successor_sha256"))
     for entry in p15.get("guard_sources", []):
         require(isinstance(entry, dict), "p15.guard")
+        add_expectation(expectations, entry.get("path"), entry.get("sha256"))
+    for entry in p15_auth.get("source_locks", []):
+        require(isinstance(entry, dict), "p15_auth.source")
         add_expectation(expectations, entry.get("path"), entry.get("sha256"))
     for entry in widget.get("source_locks", []):
         require(isinstance(entry, dict), "widget.source")

@@ -226,6 +226,40 @@ def validate_p16_source_qualification(root: Path) -> dict[str, tuple[str, str]]:
         return {}
 
 
+def validate_current_source_qualification(
+    root: Path, locks: list[dict[str, Any]]
+) -> dict[str, tuple[str, str]]:
+    path = (Path(__file__).resolve().parents[1] / "p17/current_workspace_source_qualification.py").resolve()
+    specification = importlib.util.spec_from_file_location(
+        "p17_current_source_for_p15_auth", path
+    )
+    if specification is None or specification.loader is None:
+        return {}
+    module = importlib.util.module_from_spec(specification)
+    try:
+        specification.loader.exec_module(module)
+        successors = module.verified_successors(root)
+    except Exception:
+        return {}
+    result: dict[str, tuple[str, str]] = {}
+    for lock in locks:
+        if not isinstance(lock, dict) or set(lock) != {"path", "sha256"}:
+            return {}
+        relative = lock.get("path")
+        expected = lock.get("sha256")
+        entry = successors.get(relative) if isinstance(relative, str) else None
+        accepted = entry.get("accepted_predecessor_sha256s") if isinstance(entry, dict) else None
+        current = entry.get("current_sha256") if isinstance(entry, dict) else None
+        if (
+            isinstance(expected, str)
+            and isinstance(accepted, list)
+            and expected in accepted
+            and isinstance(current, str)
+        ):
+            result[relative] = (expected, current)
+    return result
+
+
 def historical_source_matches(root: Path, relative: str, expected: str) -> bool:
     result = subprocess.run(
         ["git", "show", f"{P15_01_IMPLEMENTATION_REVISION}:{relative}"],
@@ -240,6 +274,12 @@ def validate_contract(contract: dict[str, Any], rust_text: str, root: Path) -> l
     errors: list[str] = []
     p15_03_supersession_errors = validate_p15_03_supersession(root)
     p16_source_replacements = validate_p16_source_qualification(root)
+    locks = contract.get("source_locks")
+    current_source_replacements = (
+        validate_current_source_qualification(root, locks)
+        if isinstance(locks, list)
+        else {}
+    )
     if set(contract) != EXPECTED_TOP_LEVEL_KEYS:
         errors.append("top_level_keys")
     if contract.get("schema_version") != "hwpx-agent.p15-auth-tenant/v1":
@@ -316,7 +356,6 @@ def validate_contract(contract: dict[str, Any], rust_text: str, root: Path) -> l
     if behaviors != EXPECTED_BEHAVIORS:
         errors.append("required_behaviors")
 
-    locks = contract.get("source_locks")
     if not isinstance(locks, list) or len(locks) != len(EXPECTED_SOURCE_PATHS):
         errors.append("source_locks")
     else:
@@ -347,6 +386,8 @@ def validate_contract(contract: dict[str, Any], rust_text: str, root: Path) -> l
                 continue
             observed = sha256_file(path)
             if expected != observed:
+                if current_source_replacements.get(relative) == (expected, observed):
+                    continue
                 if p16_source_replacements.get(relative) == (expected, observed):
                     continue
                 if relative not in P15_03_SUPERSEDED_PATHS:

@@ -13,7 +13,9 @@ from validate_auth_tenant import (  # noqa: E402
     CONTRACT_PATH,
     EXPECTED_SOURCE_PATHS,
     RUST_PATH,
+    sha256_file,
     validate_contract,
+    validate_current_source_qualification,
 )
 
 
@@ -83,6 +85,16 @@ class AuthTenantContractTests(unittest.TestCase):
                 changed = copy.deepcopy(self.contract)
                 changed["source_locks"][index]["sha256"] = "0" * 64
                 self.assertIn(f"source_locks[{index}].sha256", self.errors(changed))
+
+    def test_current_retention_validator_successor_is_exactly_qualified(self) -> None:
+        replacements = validate_current_source_qualification(
+            ROOT, self.contract["source_locks"]
+        )
+        relative = "tools/p14/validate_retention_local_mirror.py"
+        index = EXPECTED_SOURCE_PATHS.index(relative)
+        expected = self.contract["source_locks"][index]["sha256"]
+        observed = sha256_file(ROOT / relative)
+        self.assertEqual(replacements.get(relative), (expected, observed))
 
     def test_security_critical_rust_token_is_required(self) -> None:
         changed = self.rust_text.replace("verify_slice(&signature)", "verify_slice(removed)", 1)
