@@ -1,13 +1,36 @@
-# P05 source-bound diagnostic audit continuation
+# P05 source-bound diagnostic audit status and continuation
 
-- Date: 2026-09-05. Implementation `3827c213cfed8d162ba6c58c408ab76c9668cd29` in the clean
-  detached worktree `D:\개발\hwpx-agent-work-p05-diagnostics`.
-- Same implementation integrated as main `92ce62976f417ed80aefe5cafd2ad742055403c5`.
-- Verified tree differences are only PLANS.md and the predecessor orientation/spine audit reports.
-- Target Windows and actual offline Linux: 205/205 tests, all-target/all-feature Clippy PASS.
+- Updated: 2026-09-06. Diagnostic implementation began at
+  `3827c213cfed8d162ba6c58c408ab76c9668cd29`; the exact current qualification checkpoint is
+  `35d7876fb9874a9bf22a062478d7a58247862c24`.
+- Target Windows at the exact checkpoint: 205/205 all-target tests and all-target/all-feature
+  Clippy with warnings denied PASS. `target-final-35d7876.log` SHA-256:
+  `e60c2c0ae13d0cd27685c4a636bfce4751fd65db43be3950419de715e06881e9`.
   Read `P05-07_SOURCE_BOUND_DIAGNOSTICS.md` for logs, preserved failures and limitations.
 
-## Terminal FULL checks: failed, not an access-prompt wait
+## Exact-checkpoint FULL checks: terminal PASS
+
+- Main `D:\개발\hwpx-agent`: `artifacts/p05-source-diagnostics/full-current-35d7876.log`,
+  SHA-256 `11e19e4e8632b021d62e239cbb0739c5459c22600dbba5d6c155b6fdb951f5d4`.
+- Clean detached `D:\개발\hwpx-agent-audit-p05-diagnostics-35d7876`:
+  `artifacts/p05-source-diagnostics/full-independent-35d7876.log`, SHA-256
+  `131e22c264cfbfebdeb86667b0f7952bbdfdb3379debfffec9b96ddeaee0749b`.
+- Both ran `python tools/p01/run_ci.py --lane all`, terminated exit 0 and passed all five lanes.
+  Main/independent P14 totals were 132/132; P15 totals were 84/84. Security passed all nine checks,
+  with zero forbidden licenses and receipts `74b456868c6e44438a5bf97927d048ac` and
+  `6ea77bd02f5d42ccb587ddcabe2b4a23` respectively.
+- The exact current-workspace successor run `86a24815db10424993c588a6a448556c` passed 11/11 in a
+  clean checkout and binds the P05 development-dependency edges plus all current successors.
+  Exact local path dependency versions at `35d7876` also make `cargo deny check` pass. Historical
+  qualification inputs and expected digests remain immutable.
+- Four SHA-256-pinned P10 runtime-policy evidence JSON files under ignored P00 evidence paths were
+  hydrated into the detached checkout only after root containment, no-overwrite and digest checks.
+  No user documents, private keys, settings, trust records or Hangul processes were copied or used.
+
+This closes the diagnostic source-binding and current/independent FULL rerun requirement. It does
+not close the actual layout/identity acceptance or P05-06 through P05-09.
+
+## Preserved predecessor FULL failures
 
 - Main session **76659**: `artifacts/p05-source-diagnostics/full-current-3827c21.log`.
 - Independent implementation worktree session **40541**:
@@ -21,10 +44,9 @@
   `Cargo.lock`, while this diagnostic adds the existing `serde` and `serde_json` packages as
   development-dependency edges of `hwpx-package`. Package versions did not change. This is a
   current-source qualification failure, not evidence that the older P15 audit itself failed.
-- No historical source lock, expected value or validator has been rewritten to suppress the failure.
-  Resolve the dependency integration and its evidence before a new pair of FULL runs.
-- Four exact SHA-256-pinned P10 JSON records were copied into ignored worktree paths after verifying
-  root containment and no overwrite. No user documents, keys, settings or trust records were copied.
+- No historical source lock, expected value or validator was rewritten to suppress this failure.
+  The later exact-source qualification and two successful FULL runs supersede only its open
+  remediation requirement; both failed logs remain failed evidence.
 
 ## Separate predecessor and actual-document states
 
@@ -40,14 +62,11 @@ normalization permission or accepting alternative inspector was added. No actual
 
 ## Next bounded work
 
-The diagnostic dependency change is now covered by the exact P17 current-workspace source successor:
-independent clean run `86a24815db10424993c588a6a448556c` passed 11/11 and kept every predecessor contract
-immutable. Target checks and both FULL audits must still pass before this source-binding failure is
-closed. No new security receipt or component closure is claimed.
 The separate P16 PostgreSQL adapter now passes actual acceptance in current/independent checkouts
 at clean checkpoint 217ba56. Its FULL still fails predecessor source qualification, not DB operation.
 Read `../p16/P16-06_POSTGRES_ADAPTER_CONTINUATION.md`; preserve its source checkpoint and old failures.
 P05 actual corrected layout, identity preservation/rebinding and later phase Gates remain open.
-The user's latest offer to click access permission was checked: no `Hwp.exe` or pending test window
-was present. No new test was launched because a qualified corrected fixture is not ready.
+No actual Hangul relaunch or access prompt occurred during these source, FULL or target checks. Start
+the next actual run only after a corrected fixture and its expected identity/layout contract are ready;
+the user performs all UI input when that bounded run explicitly reaches the permission prompt.
 Recommended reasoning: `max`.

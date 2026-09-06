@@ -36,7 +36,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 | ID | Task | State and next evidence |
 |---|---|---|
-| P-0045-0048 | P05-06-09 | Source successor 11/11; target/current+independent FULL reruns and landscape remain |
+| P-0045-0048 | P05-06-09 | Source 11/11, target and current/independent FULL PASS; actual landscape remains |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -71,9 +71,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 - Current source successor run `86a24815db10424993c588a6a448556c` passed 11/11 at independent
   clean `949bcb4`; 14 exact replacements, 23 locked/offline Cargo members and P05 dev-edges bound.
-- P05 v3 repairs section count and orientation token mapping; clean current and exact-checkout FULL
-  predecessor passed; diagnostic FULL reruns remain. Attempt 21 saved/reopened both sections and
-  exported PDF, but actual landscape validation failed.
+- P05 diagnostic checkpoint `35d7876`: target 205/205 plus Clippy PASS; current and clean detached
+  FULL both exit 0 with 5/5 lanes, including P14 132/132, P15 84/84 and nine security checks.
+  Attempt 21 saved/reopened both sections and exported PDF, but actual landscape validation failed.
 - P16 merge `0512883`; durable plan PostgreSQL run `1828b246e92746789fa5d6501e7f1ac2`
   passed 39/39, renderer/evidence run `2b01ce0ff66045f29a32c67d217aa9bd` passed 19/19,
   dedicated host run `d22e85581cd44d06a016f3460a43de12` passed 14/14; resources cleaned.
@@ -82,7 +82,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Risks and holds
 
-- R-0001: Current/independent diagnostic FULL reruns and actual landscape render remain open.
+- R-0001: Actual corrected landscape render and identity acceptance remain open.
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence remains open.
 - R-0003: One independent worker timeout smoke failed; retries passed, root cause unproven.
 - R-0004: Broad P16 discovery remains red on immutable predecessor locks and legacy assets;
@@ -95,10 +95,10 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 1. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
-2. Verify the current workspace source successor, rerun P05 targeted/current and independent FULL,
-   then resume actual landscape evidence only when Hangul interaction is needed.
+2. Prepare the corrected P05 fixture and expected identity/layout contract, then run bounded actual
+   Hangul 2020 landscape evidence with the user performing any permission/UI input.
 3. Complete P17-06 injected remote adapter and offline pull/push/checkpoint state-machine tests.
-5. Before closure run target tests, regressions, current and clean-checkout FULL, applicable offline
+4. Before closure run target tests, regressions, current and clean-checkout FULL, applicable offline
    Linux/security/STRICT checks. Close P05 only with save/reopen, semantic, PDF and visual evidence.
 
 ## Handoff pointers
