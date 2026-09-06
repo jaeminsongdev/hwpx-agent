@@ -69,10 +69,7 @@ export interface HealthResult {
 }
 
 export type WorkflowMethod =
-    | "materialize"
-    | "diff"
-    | "publish"
-    | "prepare_git_commit";
+    "materialize" | "diff" | "publish" | "prepare_git_commit";
 
 export interface MaterializeResult {
     readonly workspace_id: string;
@@ -146,10 +143,7 @@ export interface GitCommitEffectResult {
 }
 
 export type WorkflowResult =
-    | MaterializeResult
-    | DiffResult
-    | PublishResult
-    | GitCommitPlanResult;
+    MaterializeResult | DiffResult | PublishResult | GitCommitPlanResult;
 
 interface SpawnOutcome {
     readonly code: number | null;
@@ -787,8 +781,10 @@ function validateConfirmationParams(params: JsonRecord): void {
         !isDigest(params.expected_sha256) ||
         !isCommitMessage(params.message) ||
         !isGitOid(params.expected_head) ||
-        !(params.expected_head_reference === null ||
-            isHeadReference(params.expected_head_reference)) ||
+        !(
+            params.expected_head_reference === null ||
+            isHeadReference(params.expected_head_reference)
+        ) ||
         !isDigest(params.target_sha256) ||
         !isDigest(params.plan_sha256)
     ) {
@@ -1277,8 +1273,7 @@ export async function callLocalEffect(
         if (
             text.includes("\r") ||
             text.includes(token) ||
-            (typeof confirmation === "string" &&
-                text.includes(confirmation)) ||
+            (typeof confirmation === "string" && text.includes(confirmation)) ||
             text.includes(config.daemonPath) ||
             text.includes(config.configPath)
         ) {
@@ -1324,7 +1319,9 @@ export async function confirmAndExecuteGitCommit(
     };
     const currentPlan = await approval(config, approvalParams);
     if (!confirmationMatchesPlan(params, currentPlan)) {
-        throw new Error("trusted confirmation no longer matches current Git state");
+        throw new Error(
+            "trusted confirmation no longer matches current Git state",
+        );
     }
     const identity = loadConfirmationIdentity(config);
     let confirmationToken = "";
@@ -1350,7 +1347,9 @@ export async function confirmAndExecuteGitCommit(
             result.output_sha256 !== currentPlan.expected_output_sha256 ||
             result.approved_at_unix_seconds < requestedAt
         ) {
-            throw new Error("Git effect receipt did not match the confirmed plan");
+            throw new Error(
+                "Git effect receipt did not match the confirmed plan",
+            );
         }
         return result;
     } finally {
@@ -1747,11 +1746,7 @@ function registerApprovalTools(
                             target_sha256: DIGEST_SCHEMA,
                             plan_sha256: DIGEST_SCHEMA,
                         },
-                        required: [
-                            "effect",
-                            "target_sha256",
-                            "plan_sha256",
-                        ],
+                        required: ["effect", "target_sha256", "plan_sha256"],
                         additionalProperties: false,
                     },
                     executed: { type: "boolean", const: false },

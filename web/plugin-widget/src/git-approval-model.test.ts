@@ -40,8 +40,14 @@ test("approval input and plan parsers require exact path-free bindings", () => {
     assert.notEqual(parsedInput, null);
     assert.notEqual(parsedPlan, null);
     assert.equal(inputMatchesPlan(parsedInput!, parsedPlan!), true);
-    assert.equal(parseGitApprovalInput({ ...input, path: "D:\\private.hwpx" }), null);
-    assert.equal(parseGitApprovalPlan({ ...plan, confirmation_token: "secret" }), null);
+    assert.equal(
+        parseGitApprovalInput({ ...input, path: "D:\\private.hwpx" }),
+        null,
+    );
+    assert.equal(
+        parseGitApprovalPlan({ ...plan, confirmation_token: "secret" }),
+        null,
+    );
     assert.equal(
         parseGitApprovalPlan({ ...plan, output_pathspec: "../result.hwpx" }),
         null,
@@ -88,11 +94,17 @@ test("effect receipt must match every plan digest and identity", () => {
     };
     assert.equal(parseGitEffectReceipt(receipt, parsed)?.executed, true);
     assert.equal(
-        parseGitEffectReceipt({ ...receipt, plan_sha256: "f".repeat(64) }, parsed),
+        parseGitEffectReceipt(
+            { ...receipt, plan_sha256: "f".repeat(64) },
+            parsed,
+        ),
         null,
     );
     assert.equal(
-        parseGitEffectReceipt({ ...receipt, confirmation_token: "secret" }, parsed),
+        parseGitEffectReceipt(
+            { ...receipt, confirmation_token: "secret" },
+            parsed,
+        ),
         null,
     );
 });

@@ -119,7 +119,11 @@ test("confirmation cannot dispatch before explicit acknowledgement", async () =>
 test("one widget instance never repeats a dispatched effect", async () => {
     const { port, controller } = await ready();
     controller.setAcknowledged(true);
-    await Promise.all([controller.confirm(), controller.confirm(), controller.confirm()]);
+    await Promise.all([
+        controller.confirm(),
+        controller.confirm(),
+        controller.confirm(),
+    ]);
     assert.equal(port.calls.length, 1);
     controller.setAcknowledged(true);
     await controller.confirm();

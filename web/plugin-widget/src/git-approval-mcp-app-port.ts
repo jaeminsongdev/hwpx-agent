@@ -48,7 +48,8 @@ export class GitApprovalMcpAppPort implements GitApprovalPort {
             handler(params);
         };
         this.app.addEventListener("hostcontextchanged", callback);
-        return () => this.app.removeEventListener("hostcontextchanged", callback);
+        return () =>
+            this.app.removeEventListener("hostcontextchanged", callback);
     }
     onTeardown(handler: () => void): () => void {
         const callback = () => {

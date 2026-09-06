@@ -50,7 +50,7 @@ function runtimeConfig(): RuntimeConfig {
         daemonPath: daemon,
         configPath: config,
         widgetPath: widget,
-        widgetHtml: "<!doctype html><div id=\"root\"></div>",
+        widgetHtml: '<!doctype html><div id="root"></div>',
         gitProgram,
         approvalStateRoot,
         approvalSecret: Buffer.alloc(32, 7),
@@ -487,7 +487,10 @@ test("trusted identity and token minting are exact, short-lived and HMAC bound",
     const [prefix, encodedPayload, encodedSignature] = confirmation.split(".");
     assert.equal(prefix, "confirm_v1");
     const payload = Buffer.from(encodedPayload!, "base64url");
-    const parsed = JSON.parse(payload.toString("utf8")) as Record<string, unknown>;
+    const parsed = JSON.parse(payload.toString("utf8")) as Record<
+        string,
+        unknown
+    >;
     assert.equal(parsed.operation_id, "op_widget_01");
     assert.equal(parsed.issued_at_unix_seconds, 100);
     assert.equal(parsed.expires_at_unix_seconds, 160);

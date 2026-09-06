@@ -74,7 +74,10 @@ function oid(value: unknown): value is string {
 }
 
 function headReference(value: unknown): value is string | null {
-    return value === null || (typeof value === "string" && HEAD_REFERENCE.test(value));
+    return (
+        value === null ||
+        (typeof value === "string" && HEAD_REFERENCE.test(value))
+    );
 }
 
 function message(value: unknown): value is string {
@@ -180,7 +183,8 @@ export function parseGitEffectReceipt(
         !oid(value.commit_oid) ||
         !oid(value.previous_head) ||
         value.commit_oid === value.previous_head ||
-        (value.commit_oid as string).length !== (value.previous_head as string).length ||
+        (value.commit_oid as string).length !==
+            (value.previous_head as string).length ||
         !headReference(value.updated_reference) ||
         value.output_sha256 !== plan.expected_output_sha256 ||
         value.target_sha256 !== plan.approval.target_sha256 ||
@@ -200,9 +204,13 @@ export function parseApprovalChallenge(value: unknown): string | null {
         : null;
 }
 
-export function confirmationArguments(plan: GitApprovalPlan, challenge: string) {
+export function confirmationArguments(
+    plan: GitApprovalPlan,
+    challenge: string,
+) {
     const approvalChallenge = parseApprovalChallenge(challenge);
-    if (approvalChallenge === null) throw new Error("invalid approval challenge");
+    if (approvalChallenge === null)
+        throw new Error("invalid approval challenge");
     return {
         workspace_id: plan.workspace_id,
         operation_id: plan.operation_id,

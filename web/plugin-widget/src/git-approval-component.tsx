@@ -18,7 +18,9 @@ const INITIAL: GitApprovalState = {
 
 function GitApprovalApplication() {
     const [state, setState] = useState(INITIAL);
-    const [controller, setController] = useState<GitApprovalController | null>(null);
+    const [controller, setController] = useState<GitApprovalController | null>(
+        null,
+    );
     useEffect(() => {
         const next = new GitApprovalController(new GitApprovalMcpAppPort());
         const unsubscribe = next.subscribe(setState);
@@ -36,7 +38,10 @@ function GitApprovalApplication() {
                 (value) => controller?.setAcknowledged(value),
                 [controller],
             )}
-            onConfirm={useCallback(() => void controller?.confirm(), [controller])}
+            onConfirm={useCallback(
+                () => void controller?.confirm(),
+                [controller],
+            )}
         />
     );
 }

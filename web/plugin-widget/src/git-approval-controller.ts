@@ -142,7 +142,10 @@ export class GitApprovalController {
                 name: CONFIRM_GIT_APPROVAL_TOOL_NAME,
                 arguments: confirmationArguments(plan, approvalChallenge),
             });
-            const receipt = parseGitEffectReceipt(structuredContent(result), plan);
+            const receipt = parseGitEffectReceipt(
+                structuredContent(result),
+                plan,
+            );
             if (receipt === null) {
                 this.setState({ phase: "unconfirmed" });
                 return;
