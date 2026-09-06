@@ -45,7 +45,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
 | P-0089/0089A | P17-04 | Bridge and installed-plugin qualification PASS; main binding PASS |
 | P-0090 | P17-05 | Exact-commit MCP local file/Git plan-only run 16/16 PASS |
-| P-0091/0091A/0091B | P17-06 | Durable sync/adapter/CLI component; exact canonical v3 checkpoint maps to P15 with private mirror/head binding and stable UUIDv5 idempotency; 43/43 local tests; authenticated host transport remains |
+| P-0091/0091A/0091B/0091C | P17-06 | Durable sync/adapter/CLI; exact v3 checkpoint mapping plus tenant/project/branch/mirror/head registry admission; authenticated host transport remains |
 | P-0092 | P17-01 | Deterministic 19-entry package core 7/7; registered remote app absent |
 | P-0093 | P17-08 | Widget 133/133, MCP 13/13, disposable Git 20/20, installed v0.4 prepare 18/18; visible click/effect open |
 | P-0094 | P17-07 | Local rebase/branch/manual resolver and stale-head CLI surface 37/37; host/UI/concurrent evidence open |
@@ -129,6 +129,12 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   validates against the actual P15 Draft 2020-12 schema, and all 43 local tests pass. Authenticated
   mirror/head verification and service dispatch remain intentionally open; see
   `implementation/p17/P17-06_CHECKPOINT_SERVICE_MAPPING_V6.md`.
+- P17-06 retention-mirror admission now parses exact public mirror IDs, requires the authenticated
+  tenant subject's editor role, binds the exact project/branch/mirror and admits only a clean mirror
+  at the exact registered branch/observed head. Stale heads return the current head without mutation;
+  aliases and missing roles disclose no identity. The target suite passes 18/18. Bearer
+  authentication and dispatch remain open; see
+  `implementation/p17/P17-06_AUTHORIZED_MIRROR_ADMISSION_V7.md`.
 
 ## Risks and holds
 
@@ -153,10 +159,11 @@ Synthetic or component evidence never proves actual render, save, cross-version 
    saved structure with the corrected fixture, and repair the next proven incompatibility. Then
    rerun P05-08 and P05-09 with the user present. Require lifecycle, semantic, coordinate-aware PDF
    and visual evidence and preserve every failure.
-3. Implement the authenticated P17-06 host boundary around the now-qualified checkpoint mapping:
-   verify the exact tenant-owned project/branch/mirror/head before P15 dispatch, then connect the
-   qualified credential/transport adapter and capture an actual remote pull/push/checkpoint
-   transition without promoting injected component evidence.
+3. Implement the authenticated P17-06 host around the checkpoint mapping and now-implemented exact
+   registry admission: authenticate one-time `mirror.sync` service credentials, bind the resulting
+   tenant/subject to admission before injected P15 dispatch, then connect the qualified
+   credential/transport adapter and capture an actual remote pull/push/checkpoint transition without
+   promoting injected component evidence.
 4. Extend that host protocol with the widget's bounded P17-07 `project_conflict_resolve` contract,
    register it only after authenticated transport exists, and run one real concurrent Web/Codex
    conflict per resolution path. The graphical component itself is implemented and locally tested.
@@ -186,7 +193,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P17-06 service-mapping successor: read
   `implementation/p17/P17-06_CHECKPOINT_SERVICE_MAPPING_V6.md` and
   `protocol/private/p17-checkpoint-service-mapping-v1.json`. The mapping is implemented; exact
-  authenticated mirror/head verification and dispatch remain the next host task.
+  authenticated mirror/head verification and dispatch remain the next host task. The registry half
+  is implemented in `implementation/p17/P17-06_AUTHORIZED_MIRROR_ADMISSION_V7.md` and
+  `protocol/private/p17-checkpoint-host-admission-v1.json`.
 - Detailed history through P-0085 remains in `fae5bc0:PLANS.md`; later evidence is in individual
   reports and Git. Never touch user originals, failed evidence, predecessor locks or unrelated processes.
 - Per-card/phase reports and bound evidence are authoritative; broad introductory prose is not.

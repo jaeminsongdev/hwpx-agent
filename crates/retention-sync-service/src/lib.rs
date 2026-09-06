@@ -149,6 +149,34 @@ opaque_uuid!(MirrorId);
 opaque_uuid!(MirrorPushId);
 opaque_uuid!(MirrorConflictId);
 
+impl MirrorId {
+    /// Parses the exact lowercase public mirror identifier form.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`RetentionSyncError::InvalidRequest`] for a noncanonical or nil UUID.
+    pub fn parse_public(value: &str) -> Result<Self, RetentionSyncError> {
+        let encoded = value
+            .strip_prefix("mir_")
+            .ok_or(RetentionSyncError::InvalidRequest)?;
+        if encoded.len() != 32
+            || !encoded
+                .as_bytes()
+                .iter()
+                .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(byte))
+        {
+            return Err(RetentionSyncError::InvalidRequest);
+        }
+        let value = Uuid::parse_str(encoded).map_err(|_| RetentionSyncError::InvalidRequest)?;
+        Self::from_uuid(value).ok_or(RetentionSyncError::InvalidRequest)
+    }
+
+    #[must_use]
+    pub fn public_id(self) -> String {
+        format!("mir_{}", self.0.simple())
+    }
+}
+
 #[derive(Debug, Error, Clone, Eq, PartialEq)]
 pub enum RetentionSyncError {
     #[error("identifier or request is invalid")]
@@ -375,6 +403,12 @@ impl fmt::Debug for MirrorPushLease {
 pub enum PushDecision {
     Prepared,
     Conflict(MirrorConflictId),
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum MirrorCheckpointDecision {
+    Authorized,
+    Conflict(RemoteHead),
 }
 
 #[derive(Clone)]
@@ -1030,6 +1064,42 @@ impl RetentionSyncService {
             },
         );
         Ok(())
+    }
+
+    pub fn authorize_mirror_checkpoint(
+        &self,
+        context: &RequestContext,
+        project_id: ProjectId,
+        branch_id: BranchId,
+        mirror_id: MirrorId,
+        expected_head: RemoteHead,
+    ) -> Result<MirrorCheckpointDecision, RetentionSyncError> {
+        if expected_head.revision_id.is_none() != (expected_head.generation == 0) {
+            return Err(RetentionSyncError::InvalidRequest);
+        }
+        let state = self.lock()?;
+        let mirror = state
+            .mirrors
+            .get(&(context.tenant_id, mirror_id))
+            .ok_or(RetentionSyncError::NotFound)?;
+        if mirror.project_id != project_id || mirror.branch_id != branch_id {
+            return Err(RetentionSyncError::NotFound);
+        }
+        require_role(&state, context, project_id, ProjectRole::Editor)?;
+        let current = *state
+            .branches
+            .get(&(context.tenant_id, project_id, branch_id))
+            .ok_or(RetentionSyncError::NotFound)?;
+        if current != expected_head || mirror.observed_head != expected_head {
+            return Ok(MirrorCheckpointDecision::Conflict(current));
+        }
+        if mirror.state != MirrorState::Clean
+            || mirror.pending_plan_sha256.is_some()
+            || mirror.active_push.is_some()
+        {
+            return Err(RetentionSyncError::Conflict);
+        }
+        Ok(MirrorCheckpointDecision::Authorized)
     }
 
     pub fn queue_local_plan(
@@ -1915,7 +1985,7 @@ mod tests {
         );
     }
 
-    fn mirror_fixture() -> (Fixture, BranchId, MirrorId, RemoteHead) {
+    fn clean_mirror_fixture() -> (Fixture, BranchId, MirrorId, RemoteHead) {
         let fixture = Fixture::new(ArtifactKind::Receipt);
         let branch_id = branch(30);
         let mirror_id = id(31, MirrorId::from_uuid);
@@ -1939,14 +2009,6 @@ mod tests {
                     },
                 )
             })
-            .and_then(|()| {
-                fixture.service.queue_local_plan(
-                    &fixture.context(101),
-                    mirror_id,
-                    ContentDigest::of(b"local snapshot"),
-                    ContentDigest::of(b"plan"),
-                )
-            })
             .unwrap_or_else(|error| panic!("mirror: {error}"));
         assert_eq!(
             fixture.service.register_branch(
@@ -1961,6 +2023,155 @@ mod tests {
             Err(RetentionSyncError::Conflict)
         );
         (fixture, branch_id, mirror_id, head)
+    }
+
+    fn mirror_fixture() -> (Fixture, BranchId, MirrorId, RemoteHead) {
+        let (fixture, branch_id, mirror_id, head) = clean_mirror_fixture();
+        fixture
+            .service
+            .queue_local_plan(
+                &fixture.context(101),
+                mirror_id,
+                ContentDigest::of(b"local snapshot"),
+                ContentDigest::of(b"plan"),
+            )
+            .unwrap_or_else(|error| panic!("local plan: {error}"));
+        (fixture, branch_id, mirror_id, head)
+    }
+
+    #[test]
+    fn mirror_public_identifier_requires_exact_lowercase_non_nil_form() {
+        let mirror_id = id(31, MirrorId::from_uuid);
+        let public_id = "mir_0000000000000000000000000000001f";
+        assert_eq!(MirrorId::parse_public(public_id), Ok(mirror_id));
+        assert_eq!(mirror_id.public_id(), public_id);
+        for invalid in [
+            "MIR_0000000000000000000000000000001f",
+            "mir_0000000000000000000000000000001F",
+            "mir_00000000000000000000000000000000",
+            "mir_00000000-0000-0000-0000-00000000001f",
+            "0000000000000000000000000000001f",
+        ] {
+            assert_eq!(
+                MirrorId::parse_public(invalid),
+                Err(RetentionSyncError::InvalidRequest)
+            );
+        }
+    }
+
+    #[test]
+    fn checkpoint_authorization_binds_exact_mirror_and_idle_head() {
+        let (fixture, branch_id, mirror_id, head) = clean_mirror_fixture();
+        assert_eq!(
+            fixture.service.authorize_mirror_checkpoint(
+                &fixture.context(101),
+                fixture.project_id,
+                branch_id,
+                mirror_id,
+                head,
+            ),
+            Ok(MirrorCheckpointDecision::Authorized)
+        );
+        assert_eq!(
+            fixture.service.authorize_mirror_checkpoint(
+                &fixture.context(101),
+                project(98),
+                branch_id,
+                mirror_id,
+                head,
+            ),
+            Err(RetentionSyncError::NotFound)
+        );
+        assert_eq!(
+            fixture.service.authorize_mirror_checkpoint(
+                &fixture.context(101),
+                fixture.project_id,
+                branch(98),
+                mirror_id,
+                head,
+            ),
+            Err(RetentionSyncError::NotFound)
+        );
+        assert_eq!(
+            fixture.service.authorize_mirror_checkpoint(
+                &fixture.context(101),
+                fixture.project_id,
+                branch_id,
+                id(98, MirrorId::from_uuid),
+                head,
+            ),
+            Err(RetentionSyncError::NotFound)
+        );
+        assert_eq!(
+            fixture.service.authorize_mirror_checkpoint(
+                &RequestContext::new(tenant(98), fixture.owner, 101),
+                fixture.project_id,
+                branch_id,
+                mirror_id,
+                head,
+            ),
+            Err(RetentionSyncError::NotFound)
+        );
+        assert_eq!(
+            fixture.service.authorize_mirror_checkpoint(
+                &RequestContext::new(fixture.tenant_id, subject("unknown"), 101),
+                fixture.project_id,
+                branch_id,
+                mirror_id,
+                head,
+            ),
+            Err(RetentionSyncError::NotFound)
+        );
+        fixture
+            .service
+            .queue_local_plan(
+                &fixture.context(102),
+                mirror_id,
+                ContentDigest::of(b"changed snapshot"),
+                ContentDigest::of(b"changed plan"),
+            )
+            .unwrap_or_else(|error| panic!("queue: {error}"));
+        assert_eq!(
+            fixture.service.authorize_mirror_checkpoint(
+                &fixture.context(103),
+                fixture.project_id,
+                branch_id,
+                mirror_id,
+                head,
+            ),
+            Err(RetentionSyncError::Conflict)
+        );
+    }
+
+    #[test]
+    fn checkpoint_authorization_reports_current_head_without_mutation() {
+        let (fixture, branch_id, mirror_id, head) = clean_mirror_fixture();
+        let current = fixture
+            .service
+            .advance_remote_for_test(
+                fixture.tenant_id,
+                fixture.project_id,
+                branch_id,
+                head,
+                revision(99),
+            )
+            .unwrap_or_else(|error| panic!("advance: {error}"));
+        assert_eq!(
+            fixture.service.authorize_mirror_checkpoint(
+                &fixture.context(102),
+                fixture.project_id,
+                branch_id,
+                mirror_id,
+                head,
+            ),
+            Ok(MirrorCheckpointDecision::Conflict(current))
+        );
+        assert_eq!(
+            fixture
+                .service
+                .mirror_state(&fixture.context(102), mirror_id),
+            Ok(MirrorState::Clean)
+        );
     }
 
     #[test]

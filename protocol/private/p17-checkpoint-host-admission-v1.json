@@ -1,0 +1,50 @@
+{
+  "schema_version": "hwpx-agent.p17-checkpoint-host-admission/v1",
+  "scope": "current_pc_retention_mirror_registry_checkpoint_admission",
+  "identity": {
+    "project_id": "exact_prj_lowercase_uuid",
+    "branch_id": "exact_brn_lowercase_uuid",
+    "mirror_id": "exact_mir_lowercase_uuid",
+    "revision_id": "exact_rev_lowercase_uuid",
+    "nil_or_noncanonical": "reject"
+  },
+  "authorization": {
+    "tenant_source": "authenticated_request_context",
+    "subject_source": "authenticated_request_context",
+    "minimum_project_role": "editor",
+    "mirror_must_belong_to_exact_project_and_branch": true,
+    "cross_tenant_project_branch_or_mirror_alias": "not_found"
+  },
+  "head": {
+    "requested_expected_head_must_equal_current_branch_head": true,
+    "registered_mirror_observed_head_must_equal_requested_expected_head": true,
+    "stale_head_result": "conflict_with_current_head",
+    "stale_head_mutates_registry": false
+  },
+  "mirror_state": {
+    "required": "clean",
+    "pending_operation_plan": "absent",
+    "active_push": "absent",
+    "non_idle_result": "conflict"
+  },
+  "privacy": {
+    "mirror_debug": "opaque",
+    "authorization_failure_identity_disclosure": false
+  },
+  "evidence": {
+    "retention_sync_service_tests": 18,
+    "exact_identifier_negative_tests": true,
+    "exact_binding_role_idle_and_stale_head_tests": true,
+    "cargo_fmt": "pass",
+    "cargo_clippy_all_targets_all_features_deny_warnings": "pass"
+  },
+  "not_claimed": {
+    "bearer_authentication": false,
+    "credential_provider": false,
+    "network_transport": false,
+    "p15_service_dispatch": false,
+    "actual_remote_transition": false,
+    "production": false,
+    "p17_06_pass": false
+  }
+}
