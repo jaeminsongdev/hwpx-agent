@@ -42,7 +42,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
 | P-0089/0089A | P17-04 | Bridge and installed-plugin qualification PASS; main binding PASS |
 | P-0090 | P17-05 | Exact-commit MCP local file/Git plan-only run 16/16 PASS |
-| P-0091 | P17-06 | State/create journal/CLI 17/17; adapter and pull/push/checkpoint remain |
+| P-0091 | P17-06 | Durable sync/adapter/CLI component 31/31; actual host transport remains |
 | P-0092 | P17-01 | Deterministic 19-entry package core 7/7; registered remote app absent |
 | P-0093 | P17-08 | Widget 133/133, MCP 13/13, disposable Git 20/20, installed v0.4 prepare 18/18; visible click/effect open |
 
@@ -97,7 +97,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
 2. Prepare the corrected P05 fixture and expected identity/layout contract, then run bounded actual
    Hangul 2020 landscape evidence with the user performing any permission/UI input.
-3. Complete P17-06 injected remote adapter and offline pull/push/checkpoint state-machine tests.
+3. Wire P17-06 to a qualified host credential/transport adapter, then capture an actual remote
+   pull/push/checkpoint transition without promoting the current injected component evidence.
 4. Before closure run target tests, regressions, current and clean-checkout FULL, applicable offline
    Linux/security/STRICT checks. Close P05 only with save/reopen, semantic, PDF and visual evidence.
 

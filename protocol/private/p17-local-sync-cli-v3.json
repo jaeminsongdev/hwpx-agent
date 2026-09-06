@@ -1,0 +1,117 @@
+{
+  "schema_version": "hwpx-agent.local-sync-cli/v3",
+  "scope": "durable_sync_cli_with_fail_closed_host_adapter_boundary",
+  "binary": "local-sync",
+  "commands": {
+    "init": {
+      "mutates": true,
+      "requires_empty_store": true,
+      "remote_calls": 0
+    },
+    "status": {
+      "mutates": false,
+      "creates_missing_store": false,
+      "remote_calls": 0
+    },
+    "set-connectivity": {
+      "mutates": true,
+      "values": [
+        "offline",
+        "online"
+      ],
+      "remote_calls": 0
+    },
+    "queue": {
+      "mutates": true,
+      "requires": [
+        "snapshot_sha256",
+        "operation_plan_sha256"
+      ],
+      "remote_calls": 0
+    },
+    "pull": {
+      "requires_online": true,
+      "remote_calls": "at_most_one",
+      "local_change_remote_advance": "durable_conflict_without_overwrite"
+    },
+    "push": {
+      "requires_online": true,
+      "remote_calls": "at_most_one",
+      "intent_before_remote_effect": true,
+      "uncertain_retry_requires_exact_first_key": true
+    },
+    "checkpoint": {
+      "requires_online": true,
+      "remote_calls": "at_most_one",
+      "intent_before_remote_effect": true,
+      "uncertain_retry_requires_exact_first_key": true
+    }
+  },
+  "journal": {
+    "schema_version": "hwpx-agent.local-sync-journal-entry/v1",
+    "directory": "p17-local-sync-journal-v1",
+    "publication": "immutable_create_new_sequence_file",
+    "checksum_chain": true,
+    "strict_contiguous_sequence": true,
+    "exact_compare_and_append": true,
+    "max_entries": 4096,
+    "max_entry_bytes": 65536,
+    "max_journal_bytes": 67108864,
+    "links_and_reparse_points": "rejected",
+    "concurrent_stale_writer": "conflict_without_overwrite"
+  },
+  "mirror_snapshot": {
+    "schema_version": "hwpx-agent.local-mirror/v3",
+    "separates_observed_and_local_snapshot_digests": true,
+    "durable_pending_push_key": true,
+    "durable_pending_checkpoint_key": true,
+    "migration": {
+      "from": [
+        "hwpx-agent.local-mirror/v1",
+        "hwpx-agent.local-mirror/v2"
+      ],
+      "v1_accepted_state": "clean_only",
+      "v1_ahead_or_conflict": "fail_closed",
+      "successor_output": "hwpx-agent.local-mirror/v3"
+    }
+  },
+  "public_output": {
+    "format": "json",
+    "contains_paths": false,
+    "contains_project_branch_mirror_ids": false,
+    "contains_digests": false,
+    "contains_idempotency_keys": false,
+    "pending_markers": [
+      "plan",
+      "uncertain_push",
+      "uncertain_checkpoint"
+    ]
+  },
+  "host_adapter": {
+    "actual_transport_wired": false,
+    "online_remote_command_without_adapter": "REMOTE_UNAVAILABLE",
+    "offline_remote_command": "STATE_REJECTED"
+  },
+  "implemented_evidence": {
+    "state_machine_tests": 10,
+    "durable_store_tests": 5,
+    "durable_remote_tests": 7,
+    "adapter_tests": 4,
+    "cli_tests": 5,
+    "total_tests": 31,
+    "actual_process_cli": true,
+    "offline_zero_remote_call": true,
+    "intent_before_injected_remote_effect": true,
+    "same_key_recovery_after_reopen": true,
+    "malformed_response_retains_replay_key": true,
+    "definitive_rejection_releases_replay_key": true,
+    "post_effect_concurrent_writer_fails_closed": true
+  },
+  "not_claimed": {
+    "daemon_mcp_wiring": false,
+    "actual_remote_transport": false,
+    "actual_remote_service": false,
+    "actual_hangul": false,
+    "p17_06_pass": false
+  }
+}

@@ -5,9 +5,14 @@ use std::fmt;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
+mod adapter;
 mod store;
 
-pub use store::{DurableMirrorStore, LoadedMirror, StoreError, StoreRevision};
+pub use adapter::{
+    AuthenticatedRemoteSyncAdapter, AuthorizationHeader, CredentialFailure,
+    RemoteCredentialProvider, RemoteTransport, TransportFailure,
+};
+pub use store::{DurableMirrorStore, DurableSyncError, LoadedMirror, StoreError, StoreRevision};
 
 const MAX_ID_BYTES: usize = 120;
 const MAX_IDEMPOTENCY_BYTES: usize = 120;
@@ -100,6 +105,7 @@ pub enum RemoteFailure {
     Unavailable,
     Rejected,
     Conflict(RemoteHead),
+    InvalidResponse,
 }
 
 #[derive(Clone, Eq, PartialEq)]
@@ -356,6 +362,8 @@ pub struct MirrorSnapshot {
     pub snapshot_sha256: String,
     pub pending_plan_sha256: Option<String>,
     pub pending_push_idempotency_key: Option<String>,
+    #[serde(default)]
+    pub pending_checkpoint_idempotency_key: Option<String>,
     pub conflict_revision_id: Option<String>,
     pub conflict_generation: Option<u64>,
     pub last_checkpoint_id: Option<String>,
@@ -373,6 +381,10 @@ impl fmt::Debug for MirrorSnapshot {
             .field(
                 "has_pending_push",
                 &self.pending_push_idempotency_key.is_some(),
+            )
+            .field(
+                "has_pending_checkpoint",
+                &self.pending_checkpoint_idempotency_key.is_some(),
             )
             .field("has_conflict", &self.conflict_generation.is_some())
             .field("has_checkpoint", &self.last_checkpoint_id.is_some())
@@ -392,6 +404,7 @@ pub struct LocalMirror {
     snapshot_sha256: String,
     pending_plan_sha256: Option<String>,
     pending_push_idempotency_key: Option<String>,
+    pending_checkpoint_idempotency_key: Option<String>,
     conflict_head: Option<RemoteHead>,
     last_checkpoint_id: Option<String>,
 }
@@ -411,6 +424,10 @@ impl fmt::Debug for LocalMirror {
             .field(
                 "has_pending_push",
                 &self.pending_push_idempotency_key.is_some(),
+            )
+            .field(
+                "has_pending_checkpoint",
+                &self.pending_checkpoint_idempotency_key.is_some(),
             )
             .field("has_conflict", &self.conflict_head.is_some())
             .field("has_checkpoint", &self.last_checkpoint_id.is_some())
@@ -450,6 +467,7 @@ impl LocalMirror {
             snapshot_sha256,
             pending_plan_sha256: None,
             pending_push_idempotency_key: None,
+            pending_checkpoint_idempotency_key: None,
             conflict_head: None,
             last_checkpoint_id: None,
         })
@@ -461,83 +479,14 @@ impl LocalMirror {
     ///
     /// Rejects unknown schemas, malformed private fields and impossible state combinations.
     pub fn restore(snapshot: MirrorSnapshot) -> Result<Self, SyncError> {
-        if !matches!(
-            snapshot.schema_version.as_str(),
-            "hwpx-agent.local-mirror/v1" | "hwpx-agent.local-mirror/v2"
-        ) || !valid_prefixed_identifier(&snapshot.project_id, "prj_")
-            || !valid_prefixed_identifier(&snapshot.branch_id, "brn_")
-            || !valid_prefixed_identifier(&snapshot.mirror_id, "mir_")
-            || !valid_digest(&snapshot.snapshot_sha256)
-            || snapshot
-                .pending_plan_sha256
-                .as_deref()
-                .is_some_and(|value| !valid_digest(value))
-            || snapshot
-                .pending_push_idempotency_key
-                .as_deref()
-                .is_some_and(|value| !valid_idempotency_key(value))
-            || snapshot
-                .last_checkpoint_id
-                .as_deref()
-                .is_some_and(|value| !valid_prefixed_identifier(value, "chk_"))
-        {
-            return Err(SyncError::InvalidRequest);
-        }
+        validate_snapshot_fields(&snapshot)?;
         let observed_head = RemoteHead::new(
             snapshot.observed_revision_id.clone(),
             snapshot.observed_generation,
         )?;
-        let observed_snapshot_sha256 = match snapshot.schema_version.as_str() {
-            "hwpx-agent.local-mirror/v2" => snapshot
-                .observed_snapshot_sha256
-                .clone()
-                .filter(|value| valid_digest(value))
-                .ok_or(SyncError::InvalidRequest)?,
-            "hwpx-agent.local-mirror/v1"
-                if snapshot.phase == MirrorPhase::Clean
-                    && snapshot.pending_plan_sha256.is_none()
-                    && snapshot.observed_snapshot_sha256.is_none()
-                    && snapshot.conflict_generation.is_none() =>
-            {
-                snapshot.snapshot_sha256.clone()
-            }
-            _ => return Err(SyncError::InvalidRequest),
-        };
-        let conflict_head = match (
-            snapshot.conflict_revision_id.clone(),
-            snapshot.conflict_generation,
-        ) {
-            (None, None) => None,
-            (revision_id, Some(generation)) => {
-                let head = RemoteHead::new(revision_id, generation)?;
-                if head.generation <= observed_head.generation
-                    || head.revision_id == observed_head.revision_id
-                {
-                    return Err(SyncError::InvalidRequest);
-                }
-                Some(head)
-            }
-            (Some(_), None) => return Err(SyncError::InvalidRequest),
-        };
-        let state_is_valid = match snapshot.phase {
-            MirrorPhase::Clean => {
-                snapshot.pending_plan_sha256.is_none()
-                    && snapshot.pending_push_idempotency_key.is_none()
-                    && conflict_head.is_none()
-            }
-            MirrorPhase::Ahead => snapshot.pending_plan_sha256.is_some() && conflict_head.is_none(),
-            MirrorPhase::Conflict => {
-                conflict_head.is_some() && snapshot.pending_push_idempotency_key.is_none()
-            }
-        };
-        if !state_is_valid
-            || (snapshot.pending_push_idempotency_key.is_some()
-                && snapshot.pending_plan_sha256.is_none())
-            || (snapshot.last_checkpoint_id.is_some()
-                && (snapshot.phase != MirrorPhase::Clean || observed_head.revision_id.is_none()))
-        {
-            return Err(SyncError::InvalidRequest);
-        }
+        let observed_snapshot_sha256 = restore_observed_snapshot(&snapshot)?;
+        let conflict_head = restore_conflict_head(&snapshot, &observed_head)?;
+        validate_snapshot_state(&snapshot, &observed_head, conflict_head.as_ref())?;
         Ok(Self {
             project_id: snapshot.project_id,
             branch_id: snapshot.branch_id,
@@ -549,6 +498,7 @@ impl LocalMirror {
             snapshot_sha256: snapshot.snapshot_sha256,
             pending_plan_sha256: snapshot.pending_plan_sha256,
             pending_push_idempotency_key: snapshot.pending_push_idempotency_key,
+            pending_checkpoint_idempotency_key: snapshot.pending_checkpoint_idempotency_key,
             conflict_head,
             last_checkpoint_id: snapshot.last_checkpoint_id,
         })
@@ -567,7 +517,7 @@ impl LocalMirror {
     #[must_use]
     pub fn snapshot(&self) -> MirrorSnapshot {
         MirrorSnapshot {
-            schema_version: "hwpx-agent.local-mirror/v2".to_owned(),
+            schema_version: "hwpx-agent.local-mirror/v3".to_owned(),
             project_id: self.project_id.clone(),
             branch_id: self.branch_id.clone(),
             mirror_id: self.mirror_id.clone(),
@@ -579,6 +529,7 @@ impl LocalMirror {
             snapshot_sha256: self.snapshot_sha256.clone(),
             pending_plan_sha256: self.pending_plan_sha256.clone(),
             pending_push_idempotency_key: self.pending_push_idempotency_key.clone(),
+            pending_checkpoint_idempotency_key: self.pending_checkpoint_idempotency_key.clone(),
             conflict_revision_id: self
                 .conflict_head
                 .as_ref()
@@ -605,12 +556,16 @@ impl LocalMirror {
         if !valid_digest(&snapshot_sha256) || !valid_digest(&operation_plan_sha256) {
             return Err(SyncError::InvalidRequest);
         }
-        if self.phase != MirrorPhase::Clean || self.pending_plan_sha256.is_some() {
+        if self.phase != MirrorPhase::Clean
+            || self.pending_plan_sha256.is_some()
+            || self.pending_checkpoint_idempotency_key.is_some()
+        {
             return Err(SyncError::InvalidState);
         }
         self.snapshot_sha256 = snapshot_sha256;
         self.pending_plan_sha256 = Some(operation_plan_sha256);
         self.pending_push_idempotency_key = None;
+        self.pending_checkpoint_idempotency_key = None;
         self.phase = MirrorPhase::Ahead;
         self.last_checkpoint_id = None;
         Ok(())
@@ -623,7 +578,10 @@ impl LocalMirror {
     /// Rejects offline/conflicted state and malformed or conflicting responses.
     pub fn pull(&mut self, port: &mut impl RemoteSyncPort) -> Result<PullOutcome, SyncError> {
         self.require_online()?;
-        if self.phase == MirrorPhase::Conflict || self.pending_push_idempotency_key.is_some() {
+        if self.phase == MirrorPhase::Conflict
+            || self.pending_push_idempotency_key.is_some()
+            || self.pending_checkpoint_idempotency_key.is_some()
+        {
             return Err(SyncError::InvalidState);
         }
         let request = PullRequest {
@@ -672,6 +630,15 @@ impl LocalMirror {
         port: &mut impl RemoteSyncPort,
         idempotency_key: String,
     ) -> Result<PushOutcome, SyncError> {
+        let (request, _) = self.prepare_push(idempotency_key)?;
+        let response = port.push(&request);
+        self.apply_push_result(&request, response)
+    }
+
+    pub(crate) fn prepare_push(
+        &mut self,
+        idempotency_key: String,
+    ) -> Result<(PushRequest, bool), SyncError> {
         self.require_online()?;
         if !valid_idempotency_key(&idempotency_key) {
             return Err(SyncError::InvalidRequest);
@@ -696,8 +663,20 @@ impl LocalMirror {
             operation_plan_sha256: pending,
             idempotency_key: idempotency_key.clone(),
         };
+        let changed = self.pending_push_idempotency_key.is_none();
         self.pending_push_idempotency_key = Some(idempotency_key);
-        let receipt = match port.push(&request) {
+        Ok((request, changed))
+    }
+
+    pub(crate) fn apply_push_result(
+        &mut self,
+        request: &PushRequest,
+        response: Result<RemotePushReceipt, RemoteFailure>,
+    ) -> Result<PushOutcome, SyncError> {
+        if self.pending_push_idempotency_key.as_deref() != Some(request.idempotency_key()) {
+            return Err(SyncError::InvalidState);
+        }
+        let receipt = match response {
             Ok(receipt) => receipt,
             Err(RemoteFailure::Conflict(head)) => {
                 validate_conflict_head(&self.observed_head, &head)?;
@@ -711,8 +690,9 @@ impl LocalMirror {
                 return Err(SyncError::RemoteRejected);
             }
             Err(RemoteFailure::Unavailable) => return Err(SyncError::RemoteUnavailable),
+            Err(RemoteFailure::InvalidResponse) => return Err(SyncError::InvalidResponse),
         };
-        validate_push_receipt(&request, &receipt)?;
+        validate_push_receipt(request, &receipt)?;
         self.observed_head = receipt.head.clone();
         self.observed_snapshot_sha256
             .clone_from(&receipt.snapshot_sha256);
@@ -734,34 +714,68 @@ impl LocalMirror {
         port: &mut impl RemoteSyncPort,
         idempotency_key: String,
     ) -> Result<CheckpointOutcome, SyncError> {
+        let (request, _) = self.prepare_checkpoint(idempotency_key)?;
+        let response = port.checkpoint(&request);
+        self.apply_checkpoint_result(response)
+    }
+
+    pub(crate) fn prepare_checkpoint(
+        &mut self,
+        idempotency_key: String,
+    ) -> Result<(CheckpointRequest, bool), SyncError> {
         self.require_online()?;
         if !valid_idempotency_key(&idempotency_key) {
             return Err(SyncError::InvalidRequest);
         }
-        if self.phase != MirrorPhase::Clean || self.observed_head.revision_id.is_none() {
+        if self.phase != MirrorPhase::Clean
+            || self.observed_head.revision_id.is_none()
+            || self
+                .pending_checkpoint_idempotency_key
+                .as_ref()
+                .is_some_and(|expected| expected != &idempotency_key)
+        {
             return Err(SyncError::InvalidState);
         }
         let request = CheckpointRequest {
             project_id: self.project_id.clone(),
             branch_id: self.branch_id.clone(),
             expected_head: self.observed_head.clone(),
-            idempotency_key,
+            idempotency_key: idempotency_key.clone(),
         };
-        let receipt = match port.checkpoint(&request) {
+        let changed = self.pending_checkpoint_idempotency_key.is_none();
+        self.pending_checkpoint_idempotency_key = Some(idempotency_key);
+        Ok((request, changed))
+    }
+
+    pub(crate) fn apply_checkpoint_result(
+        &mut self,
+        response: Result<RemoteCheckpointReceipt, RemoteFailure>,
+    ) -> Result<CheckpointOutcome, SyncError> {
+        if self.pending_checkpoint_idempotency_key.is_none() {
+            return Err(SyncError::InvalidState);
+        }
+        let receipt = match response {
             Ok(receipt) => receipt,
             Err(RemoteFailure::Conflict(head)) => {
                 validate_conflict_head(&self.observed_head, &head)?;
                 self.conflict_head = Some(head);
+                self.pending_checkpoint_idempotency_key = None;
                 self.phase = MirrorPhase::Conflict;
                 return Err(SyncError::Conflict);
             }
-            Err(error) => return Err(map_remote_failure(&error)),
+            Err(RemoteFailure::Rejected) => {
+                self.pending_checkpoint_idempotency_key = None;
+                return Err(SyncError::RemoteRejected);
+            }
+            Err(RemoteFailure::Unavailable) => return Err(SyncError::RemoteUnavailable),
+            Err(RemoteFailure::InvalidResponse) => return Err(SyncError::InvalidResponse),
         };
         if !valid_prefixed_identifier(&receipt.checkpoint_id, "chk_")
             || Some(receipt.revision_id.as_str()) != self.observed_head.revision_id()
         {
             return Err(SyncError::InvalidResponse);
         }
+        self.pending_checkpoint_idempotency_key = None;
         self.last_checkpoint_id = Some(receipt.checkpoint_id.clone());
         Ok(CheckpointOutcome {
             checkpoint_id: receipt.checkpoint_id,
@@ -777,6 +791,109 @@ impl LocalMirror {
             Err(SyncError::Offline)
         }
     }
+}
+
+fn validate_snapshot_fields(snapshot: &MirrorSnapshot) -> Result<(), SyncError> {
+    let valid = matches!(
+        snapshot.schema_version.as_str(),
+        "hwpx-agent.local-mirror/v1" | "hwpx-agent.local-mirror/v2" | "hwpx-agent.local-mirror/v3"
+    ) && valid_prefixed_identifier(&snapshot.project_id, "prj_")
+        && valid_prefixed_identifier(&snapshot.branch_id, "brn_")
+        && valid_prefixed_identifier(&snapshot.mirror_id, "mir_")
+        && valid_digest(&snapshot.snapshot_sha256)
+        && snapshot
+            .pending_plan_sha256
+            .as_deref()
+            .is_none_or(valid_digest)
+        && snapshot
+            .pending_push_idempotency_key
+            .as_deref()
+            .is_none_or(valid_idempotency_key)
+        && snapshot
+            .pending_checkpoint_idempotency_key
+            .as_deref()
+            .is_none_or(valid_idempotency_key)
+        && (snapshot.schema_version == "hwpx-agent.local-mirror/v3"
+            || snapshot.pending_checkpoint_idempotency_key.is_none())
+        && snapshot
+            .last_checkpoint_id
+            .as_deref()
+            .is_none_or(|value| valid_prefixed_identifier(value, "chk_"));
+    valid.then_some(()).ok_or(SyncError::InvalidRequest)
+}
+
+fn restore_observed_snapshot(snapshot: &MirrorSnapshot) -> Result<String, SyncError> {
+    match snapshot.schema_version.as_str() {
+        "hwpx-agent.local-mirror/v2" | "hwpx-agent.local-mirror/v3" => snapshot
+            .observed_snapshot_sha256
+            .clone()
+            .filter(|value| valid_digest(value))
+            .ok_or(SyncError::InvalidRequest),
+        "hwpx-agent.local-mirror/v1"
+            if snapshot.phase == MirrorPhase::Clean
+                && snapshot.pending_plan_sha256.is_none()
+                && snapshot.observed_snapshot_sha256.is_none()
+                && snapshot.conflict_generation.is_none() =>
+        {
+            Ok(snapshot.snapshot_sha256.clone())
+        }
+        _ => Err(SyncError::InvalidRequest),
+    }
+}
+
+fn restore_conflict_head(
+    snapshot: &MirrorSnapshot,
+    observed: &RemoteHead,
+) -> Result<Option<RemoteHead>, SyncError> {
+    match (
+        snapshot.conflict_revision_id.clone(),
+        snapshot.conflict_generation,
+    ) {
+        (None, None) => Ok(None),
+        (revision_id, Some(generation)) => {
+            let head = RemoteHead::new(revision_id, generation)?;
+            if head.generation <= observed.generation || head.revision_id == observed.revision_id {
+                Err(SyncError::InvalidRequest)
+            } else {
+                Ok(Some(head))
+            }
+        }
+        (Some(_), None) => Err(SyncError::InvalidRequest),
+    }
+}
+
+fn validate_snapshot_state(
+    snapshot: &MirrorSnapshot,
+    observed: &RemoteHead,
+    conflict: Option<&RemoteHead>,
+) -> Result<(), SyncError> {
+    let phase_is_valid = match snapshot.phase {
+        MirrorPhase::Clean => {
+            snapshot.pending_plan_sha256.is_none()
+                && snapshot.pending_push_idempotency_key.is_none()
+                && conflict.is_none()
+        }
+        MirrorPhase::Ahead => {
+            snapshot.pending_plan_sha256.is_some()
+                && snapshot.pending_checkpoint_idempotency_key.is_none()
+                && conflict.is_none()
+        }
+        MirrorPhase::Conflict => {
+            conflict.is_some()
+                && snapshot.pending_push_idempotency_key.is_none()
+                && snapshot.pending_checkpoint_idempotency_key.is_none()
+        }
+    };
+    let keys_are_valid = !(snapshot.pending_push_idempotency_key.is_some()
+        && (snapshot.pending_plan_sha256.is_none()
+            || snapshot.pending_checkpoint_idempotency_key.is_some()))
+        && !(snapshot.pending_checkpoint_idempotency_key.is_some()
+            && observed.revision_id.is_none());
+    let checkpoint_is_valid = snapshot.last_checkpoint_id.is_none()
+        || (snapshot.phase == MirrorPhase::Clean && observed.revision_id.is_some());
+    (phase_is_valid && keys_are_valid && checkpoint_is_valid)
+        .then_some(())
+        .ok_or(SyncError::InvalidRequest)
 }
 
 fn validate_remote_snapshot(remote: &RemoteSnapshot) -> Result<(), SyncError> {
@@ -840,6 +957,7 @@ fn map_remote_failure(error: &RemoteFailure) -> SyncError {
         RemoteFailure::Unavailable => SyncError::RemoteUnavailable,
         RemoteFailure::Rejected => SyncError::RemoteRejected,
         RemoteFailure::Conflict(_) => SyncError::Conflict,
+        RemoteFailure::InvalidResponse => SyncError::InvalidResponse,
     }
 }
 

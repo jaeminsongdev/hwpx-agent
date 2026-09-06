@@ -88,3 +88,126 @@ fn status_does_not_create_a_missing_store_and_errors_are_coded() -> TestResult {
     );
     Ok(())
 }
+
+#[test]
+fn offline_remote_commands_fail_before_appending_an_intent() -> TestResult {
+    let temporary = tempdir()?;
+    let initial = run(
+        temporary.path(),
+        &[
+            "init",
+            "prj_project01",
+            "brn_branch001",
+            "mir_mirror001",
+            &digest('a'),
+            "offline",
+            "rev_00000001",
+            "1",
+        ],
+    )?;
+    assert!(initial.status.success());
+    let queued = run(temporary.path(), &["queue", &digest('b'), &digest('c')])?;
+    assert!(queued.status.success());
+
+    let push = run(temporary.path(), &["push", "push-key-0001"])?;
+    assert!(!push.status.success());
+    assert_eq!(String::from_utf8_lossy(&push.stderr), "STATE_REJECTED\n");
+    let pull = run(temporary.path(), &["pull"])?;
+    assert!(!pull.status.success());
+    assert_eq!(String::from_utf8_lossy(&pull.stderr), "STATE_REJECTED\n");
+
+    let status = run(temporary.path(), &["status"])?;
+    assert!(status.status.success());
+    let status = json(&status)?;
+    assert_eq!(status["sequence"], 2);
+    assert_eq!(status["pending"]["uncertain_push"], false);
+    assert_eq!(status["pending"]["uncertain_checkpoint"], false);
+    Ok(())
+}
+
+#[test]
+fn unavailable_host_adapter_leaves_exact_push_key_for_replay() -> TestResult {
+    let temporary = tempdir()?;
+    assert!(
+        run(
+            temporary.path(),
+            &[
+                "init",
+                "prj_project01",
+                "brn_branch001",
+                "mir_mirror001",
+                &digest('a'),
+                "online",
+                "rev_00000001",
+                "1",
+            ],
+        )?
+        .status
+        .success()
+    );
+    assert!(
+        run(temporary.path(), &["queue", &digest('b'), &digest('c')])?
+            .status
+            .success()
+    );
+
+    let first = run(temporary.path(), &["push", "push-key-0001"])?;
+    assert!(!first.status.success());
+    assert_eq!(
+        String::from_utf8_lossy(&first.stderr),
+        "REMOTE_UNAVAILABLE\n"
+    );
+    let status = json(&run(temporary.path(), &["status"])?)?;
+    assert_eq!(status["sequence"], 3);
+    assert_eq!(status["pending"]["uncertain_push"], true);
+
+    let wrong_key = run(temporary.path(), &["push", "push-key-0002"])?;
+    assert!(!wrong_key.status.success());
+    assert_eq!(
+        String::from_utf8_lossy(&wrong_key.stderr),
+        "STATE_REJECTED\n"
+    );
+    assert_eq!(json(&run(temporary.path(), &["status"])?)?["sequence"], 3);
+    Ok(())
+}
+
+#[test]
+fn unavailable_host_adapter_leaves_exact_checkpoint_key_for_replay() -> TestResult {
+    let temporary = tempdir()?;
+    assert!(
+        run(
+            temporary.path(),
+            &[
+                "init",
+                "prj_project01",
+                "brn_branch001",
+                "mir_mirror001",
+                &digest('a'),
+                "online",
+                "rev_00000001",
+                "1",
+            ],
+        )?
+        .status
+        .success()
+    );
+
+    let first = run(temporary.path(), &["checkpoint", "checkpoint-key-0001"])?;
+    assert!(!first.status.success());
+    assert_eq!(
+        String::from_utf8_lossy(&first.stderr),
+        "REMOTE_UNAVAILABLE\n"
+    );
+    let status = json(&run(temporary.path(), &["status"])?)?;
+    assert_eq!(status["sequence"], 2);
+    assert_eq!(status["pending"]["uncertain_checkpoint"], true);
+
+    let wrong_key = run(temporary.path(), &["checkpoint", "checkpoint-key-0002"])?;
+    assert!(!wrong_key.status.success());
+    assert_eq!(
+        String::from_utf8_lossy(&wrong_key.stderr),
+        "STATE_REJECTED\n"
+    );
+    assert_eq!(json(&run(temporary.path(), &["status"])?)?["sequence"], 2);
+    Ok(())
+}

@@ -6,14 +6,16 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 
 use local_sync::{
-    Connectivity, DurableMirrorStore, LocalMirror, MirrorSnapshot, RemoteHead, StoreError,
-    SyncError,
+    CheckpointRequest, Connectivity, DurableMirrorStore, DurableSyncError, LocalMirror,
+    MirrorSnapshot, PullRequest, PushRequest, RemoteCheckpointReceipt, RemoteFailure, RemoteHead,
+    RemotePushReceipt, RemoteSnapshot, RemoteSyncPort, StoreError, SyncError,
 };
 use serde::Serialize;
 use thiserror::Error;
 
 fn main() -> ExitCode {
-    match run(env::args_os().skip(1).collect()) {
+    let mut remote = HostAdapterRequiredPort;
+    match run(env::args_os().skip(1).collect(), &mut remote) {
         Ok(output) => {
             if let Ok(json) = serde_json::to_string(&output) {
                 println!("{json}");
@@ -38,6 +40,14 @@ enum CliError {
     StateAbsent,
     #[error("local sync state rejected the transition")]
     StateRejected,
+    #[error("remote sync transport is unavailable")]
+    RemoteUnavailable,
+    #[error("remote sync request was rejected")]
+    RemoteRejected,
+    #[error("remote sync head conflicts with local state")]
+    RemoteConflict,
+    #[error("remote sync response was invalid")]
+    RemoteInvalid,
     #[error("local sync store is invalid")]
     StoreInvalid,
     #[error("local sync store is unavailable")]
@@ -56,6 +66,10 @@ impl CliError {
             Self::InvalidRequest => "INVALID_REQUEST",
             Self::StateAbsent => "STATE_ABSENT",
             Self::StateRejected => "STATE_REJECTED",
+            Self::RemoteUnavailable => "REMOTE_UNAVAILABLE",
+            Self::RemoteRejected => "REMOTE_REJECTED",
+            Self::RemoteConflict => "REMOTE_CONFLICT",
+            Self::RemoteInvalid => "REMOTE_INVALID",
             Self::StoreInvalid => "STORE_INVALID",
             Self::StoreUnavailable => "STORE_UNAVAILABLE",
             Self::StoreCorrupt => "STORE_CORRUPT",
@@ -78,6 +92,15 @@ impl From<StoreError> for CliError {
     }
 }
 
+impl From<DurableSyncError> for CliError {
+    fn from(error: DurableSyncError) -> Self {
+        match error {
+            DurableSyncError::Store(error) => Self::from(error),
+            DurableSyncError::Sync(error) => map_sync_error(&error),
+        }
+    }
+}
+
 #[derive(Serialize)]
 struct PublicOutput {
     schema_version: &'static str,
@@ -94,6 +117,7 @@ struct PublicOutput {
 struct PublicPending {
     plan: bool,
     uncertain_push: bool,
+    uncertain_checkpoint: bool,
 }
 
 #[derive(Serialize)]
@@ -102,46 +126,14 @@ struct PublicRemote {
     checkpoint: bool,
 }
 
-fn run(arguments: Vec<OsString>) -> Result<PublicOutput, CliError> {
+fn run(
+    arguments: Vec<OsString>,
+    remote: &mut impl RemoteSyncPort,
+) -> Result<PublicOutput, CliError> {
     let mut arguments = arguments.into_iter();
     let command = text(arguments.next())?;
     match command.as_str() {
-        "init" => {
-            let root = path(arguments.next())?;
-            let project_id = text(arguments.next())?;
-            let branch_id = text(arguments.next())?;
-            let mirror_id = text(arguments.next())?;
-            let snapshot_sha256 = text(arguments.next())?;
-            let connectivity = connectivity(arguments.next())?;
-            let remaining: Vec<_> = arguments.collect();
-            let observed_head = match remaining.as_slice() {
-                [] => RemoteHead::new(None, 0).map_err(|error| map_sync_error(&error))?,
-                [revision, generation] => RemoteHead::new(
-                    Some(text(Some(revision.clone()))?),
-                    text(Some(generation.clone()))?
-                        .parse()
-                        .map_err(|_| CliError::InvalidRequest)?,
-                )
-                .map_err(|error| map_sync_error(&error))?,
-                _ => return Err(CliError::InvalidRequest),
-            };
-            let mirror = LocalMirror::new(
-                project_id,
-                branch_id,
-                mirror_id,
-                observed_head,
-                snapshot_sha256,
-                connectivity,
-            )
-            .map_err(|error| map_sync_error(&error))?;
-            let store = DurableMirrorStore::open(root)?;
-            let revision = store.initialize(&mirror)?;
-            Ok(public_output(
-                "init",
-                revision.sequence(),
-                &mirror.snapshot(),
-            ))
-        }
+        "init" => initialize(arguments),
         "status" => {
             let root = path(arguments.next())?;
             no_more(arguments)?;
@@ -182,8 +174,83 @@ fn run(arguments: Vec<OsString>) -> Result<PublicOutput, CliError> {
             })?;
             Ok(public_output("queue", revision.sequence(), &snapshot))
         }
+        "pull" => {
+            let root = path(arguments.next())?;
+            no_more(arguments)?;
+            let store = DurableMirrorStore::open_existing(root)?;
+            let (revision, _) = store.pull_remote(remote)?;
+            let snapshot = store
+                .load()?
+                .ok_or(CliError::StateAbsent)?
+                .mirror()
+                .snapshot();
+            Ok(public_output("pull", revision.sequence(), &snapshot))
+        }
+        "push" => {
+            let root = path(arguments.next())?;
+            let idempotency_key = text(arguments.next())?;
+            no_more(arguments)?;
+            let store = DurableMirrorStore::open_existing(root)?;
+            let (revision, _) = store.push_remote(remote, idempotency_key)?;
+            let snapshot = store
+                .load()?
+                .ok_or(CliError::StateAbsent)?
+                .mirror()
+                .snapshot();
+            Ok(public_output("push", revision.sequence(), &snapshot))
+        }
+        "checkpoint" => {
+            let root = path(arguments.next())?;
+            let idempotency_key = text(arguments.next())?;
+            no_more(arguments)?;
+            let store = DurableMirrorStore::open_existing(root)?;
+            let (revision, _) = store.checkpoint_remote(remote, idempotency_key)?;
+            let snapshot = store
+                .load()?
+                .ok_or(CliError::StateAbsent)?
+                .mirror()
+                .snapshot();
+            Ok(public_output("checkpoint", revision.sequence(), &snapshot))
+        }
         _ => Err(CliError::InvalidRequest),
     }
+}
+
+fn initialize(mut arguments: impl Iterator<Item = OsString>) -> Result<PublicOutput, CliError> {
+    let root = path(arguments.next())?;
+    let project_id = text(arguments.next())?;
+    let branch_id = text(arguments.next())?;
+    let mirror_id = text(arguments.next())?;
+    let snapshot_sha256 = text(arguments.next())?;
+    let connectivity = connectivity(arguments.next())?;
+    let remaining: Vec<_> = arguments.collect();
+    let observed_head = match remaining.as_slice() {
+        [] => RemoteHead::new(None, 0).map_err(|error| map_sync_error(&error))?,
+        [revision, generation] => RemoteHead::new(
+            Some(text(Some(revision.clone()))?),
+            text(Some(generation.clone()))?
+                .parse()
+                .map_err(|_| CliError::InvalidRequest)?,
+        )
+        .map_err(|error| map_sync_error(&error))?,
+        _ => return Err(CliError::InvalidRequest),
+    };
+    let mirror = LocalMirror::new(
+        project_id,
+        branch_id,
+        mirror_id,
+        observed_head,
+        snapshot_sha256,
+        connectivity,
+    )
+    .map_err(|error| map_sync_error(&error))?;
+    let store = DurableMirrorStore::open(root)?;
+    let revision = store.initialize(&mirror)?;
+    Ok(public_output(
+        "init",
+        revision.sequence(),
+        &mirror.snapshot(),
+    ))
 }
 
 fn public_output(command: &'static str, sequence: u64, snapshot: &MirrorSnapshot) -> PublicOutput {
@@ -197,6 +264,7 @@ fn public_output(command: &'static str, sequence: u64, snapshot: &MirrorSnapshot
         pending: PublicPending {
             plan: snapshot.pending_plan_sha256.is_some(),
             uncertain_push: snapshot.pending_push_idempotency_key.is_some(),
+            uncertain_checkpoint: snapshot.pending_checkpoint_idempotency_key.is_some(),
         },
         remote: PublicRemote {
             conflict: snapshot.conflict_generation.is_some(),
@@ -235,11 +303,30 @@ fn no_more(mut arguments: impl Iterator<Item = OsString>) -> Result<(), CliError
 const fn map_sync_error(error: &SyncError) -> CliError {
     match error {
         SyncError::InvalidRequest => CliError::InvalidRequest,
-        SyncError::Offline
-        | SyncError::InvalidState
-        | SyncError::RemoteUnavailable
-        | SyncError::RemoteRejected
-        | SyncError::Conflict
-        | SyncError::InvalidResponse => CliError::StateRejected,
+        SyncError::Offline | SyncError::InvalidState => CliError::StateRejected,
+        SyncError::RemoteUnavailable => CliError::RemoteUnavailable,
+        SyncError::RemoteRejected => CliError::RemoteRejected,
+        SyncError::Conflict => CliError::RemoteConflict,
+        SyncError::InvalidResponse => CliError::RemoteInvalid,
+    }
+}
+
+#[derive(Debug)]
+struct HostAdapterRequiredPort;
+
+impl RemoteSyncPort for HostAdapterRequiredPort {
+    fn pull(&mut self, _request: &PullRequest) -> Result<RemoteSnapshot, RemoteFailure> {
+        Err(RemoteFailure::Unavailable)
+    }
+
+    fn push(&mut self, _request: &PushRequest) -> Result<RemotePushReceipt, RemoteFailure> {
+        Err(RemoteFailure::Unavailable)
+    }
+
+    fn checkpoint(
+        &mut self,
+        _request: &CheckpointRequest,
+    ) -> Result<RemoteCheckpointReceipt, RemoteFailure> {
+        Err(RemoteFailure::Unavailable)
     }
 }

@@ -1,0 +1,51 @@
+{
+  "schema_version": "hwpx-agent.remote-sync-adapter/v1",
+  "scope": "authenticated_private_adapter_over_injected_transport",
+  "request_schema_version": "hwpx-agent.remote-sync-request/v1",
+  "response_schema_version": "hwpx-agent.remote-sync-response/v1",
+  "operations": [
+    "pull",
+    "push",
+    "checkpoint"
+  ],
+  "authentication": {
+    "scheme": "Bearer",
+    "required_service_scope": "mirror.sync",
+    "fresh_credential_per_exchange": true,
+    "maximum_header_bytes": 8199,
+    "credential_storage_in_adapter": false,
+    "owned_header_zeroized_on_drop": true,
+    "provider_enforces_issuer_audience_expiry_scope_and_single_use": true
+  },
+  "binding": {
+    "algorithm": "sha256",
+    "field": "request_sha256",
+    "covers_exact_encoded_request": true,
+    "mismatch": "invalid_response"
+  },
+  "bounds": {
+    "maximum_request_bytes": 16384,
+    "maximum_response_bytes": 65536,
+    "unknown_response_fields": "rejected",
+    "malformed_head": "invalid_response"
+  },
+  "transport": {
+    "implementation": "injected_RemoteTransport",
+    "unavailable": "uncertain_remote_outcome",
+    "rejected": "definitive_remote_denial",
+    "network_client_in_crate": false
+  },
+  "privacy": {
+    "authorization_in_debug": false,
+    "request_body_contains_authorization": false,
+    "adapter_debug_contains_provider_or_transport_state": false
+  },
+  "not_claimed": {
+    "actual_credential_provider": false,
+    "actual_http_transport": false,
+    "actual_remote_service": false,
+    "production_authentication": false,
+    "actual_hangul": false,
+    "p17_06_pass": false
+  }
+}

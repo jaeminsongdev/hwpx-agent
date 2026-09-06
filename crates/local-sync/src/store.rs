@@ -7,7 +7,10 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use thiserror::Error;
 
-use crate::{LocalMirror, MirrorSnapshot, SyncError};
+use crate::{
+    CheckpointOutcome, LocalMirror, MirrorSnapshot, PullOutcome, PushOutcome, RemoteSyncPort,
+    SyncError,
+};
 
 const ENTRY_SCHEMA_VERSION: &str = "hwpx-agent.local-sync-journal-entry/v1";
 const ENTRY_DIRECTORY_NAME: &str = "p17-local-sync-journal-v1";
@@ -29,6 +32,14 @@ pub enum StoreError {
     Conflict,
     #[error("local sync state transition was rejected")]
     TransitionRejected,
+}
+
+#[derive(Clone, Debug, Error, Eq, PartialEq)]
+pub enum DurableSyncError {
+    #[error("local sync durable store rejected the operation")]
+    Store(#[from] StoreError),
+    #[error("local sync state or remote operation was rejected")]
+    Sync(#[from] SyncError),
 }
 
 #[derive(Clone, Eq, PartialEq)]
@@ -170,9 +181,8 @@ impl DurableMirrorStore {
 
     /// Applies one pure local transition to the exact expected durable revision.
     ///
-    /// This method is intentionally for local-only mutations. A future remote adapter must persist
-    /// its network intent before performing an external effect instead of invoking remote I/O in
-    /// this closure.
+    /// This method is intentionally for local-only mutations. Remote operations must use the
+    /// dedicated methods below, which persist effect intent before push/checkpoint I/O.
     ///
     /// # Errors
     ///
@@ -190,6 +200,108 @@ impl DurableMirrorStore {
         let output = operation(&mut mirror).map_err(|_| StoreError::TransitionRejected)?;
         let revision = self.append(Some(expected), &mirror)?;
         Ok((revision, output))
+    }
+
+    /// Executes a read-only remote pull and persists any accepted update or conflict transition.
+    ///
+    /// # Errors
+    ///
+    /// Fails before remote I/O for invalid/offline/stale state. Remote conflict state is durably
+    /// recorded before the semantic conflict is returned.
+    pub fn pull_remote(
+        &self,
+        port: &mut impl RemoteSyncPort,
+    ) -> Result<(StoreRevision, PullOutcome), DurableSyncError> {
+        let current = self.load()?.ok_or(StoreError::Conflict)?;
+        let expected = current.revision;
+        let mut mirror = current.mirror;
+        let before = mirror.snapshot();
+        let outcome = mirror.pull(port);
+        let revision = if mirror.snapshot() == before {
+            expected
+        } else {
+            self.append_exact(&expected, &mirror)?
+        };
+        outcome
+            .map(|value| (revision, value))
+            .map_err(DurableSyncError::Sync)
+    }
+
+    /// Persists a push idempotency intent, performs one injected remote exchange, then persists the
+    /// terminal response using an exact journal CAS.
+    ///
+    /// # Errors
+    ///
+    /// Unavailable or malformed outcomes leave the first idempotency key durably pending. A later
+    /// retry must use the same key. Stale writers fail before or after I/O without overwriting.
+    pub fn push_remote(
+        &self,
+        port: &mut impl RemoteSyncPort,
+        idempotency_key: String,
+    ) -> Result<(StoreRevision, PushOutcome), DurableSyncError> {
+        let current = self.load()?.ok_or(StoreError::Conflict)?;
+        let mut mirror = current.mirror;
+        let (request, intent_changed) = mirror.prepare_push(idempotency_key)?;
+        let intent_revision = if intent_changed {
+            self.append_exact(&current.revision, &mirror)?
+        } else {
+            current.revision
+        };
+        let pending = mirror.snapshot();
+        let response = port.push(&request);
+        let outcome = mirror.apply_push_result(&request, response);
+        let revision = if mirror.snapshot() == pending {
+            intent_revision
+        } else {
+            self.append_exact(&intent_revision, &mirror)?
+        };
+        outcome
+            .map(|value| (revision, value))
+            .map_err(DurableSyncError::Sync)
+    }
+
+    /// Persists a checkpoint idempotency intent before performing the injected remote exchange.
+    ///
+    /// # Errors
+    ///
+    /// Unavailable or malformed outcomes retain the exact pending key for safe replay. Definitive
+    /// rejection, conflict and success are durably recorded with an exact journal CAS.
+    pub fn checkpoint_remote(
+        &self,
+        port: &mut impl RemoteSyncPort,
+        idempotency_key: String,
+    ) -> Result<(StoreRevision, CheckpointOutcome), DurableSyncError> {
+        let current = self.load()?.ok_or(StoreError::Conflict)?;
+        let mut mirror = current.mirror;
+        let (request, intent_changed) = mirror.prepare_checkpoint(idempotency_key)?;
+        let intent_revision = if intent_changed {
+            self.append_exact(&current.revision, &mirror)?
+        } else {
+            current.revision
+        };
+        let pending = mirror.snapshot();
+        let response = port.checkpoint(&request);
+        let outcome = mirror.apply_checkpoint_result(response);
+        let revision = if mirror.snapshot() == pending {
+            intent_revision
+        } else {
+            self.append_exact(&intent_revision, &mirror)?
+        };
+        outcome
+            .map(|value| (revision, value))
+            .map_err(DurableSyncError::Sync)
+    }
+
+    fn append_exact(
+        &self,
+        expected: &StoreRevision,
+        mirror: &LocalMirror,
+    ) -> Result<StoreRevision, StoreError> {
+        let current = self.load()?.ok_or(StoreError::Conflict)?;
+        if current.revision != *expected {
+            return Err(StoreError::Conflict);
+        }
+        self.append(Some(expected), mirror)
     }
 
     fn append(

@@ -227,7 +227,7 @@ fn unavailable_and_invalid_responses_never_advance_local_state() -> TestResult {
 }
 
 #[test]
-fn checkpoint_mismatch_is_rejected_without_recording_it() -> TestResult {
+fn checkpoint_mismatch_is_rejected_and_retains_the_replay_key() -> TestResult {
     let mut mirror = mirror(Connectivity::Online)?;
     let before = mirror.snapshot();
     let mut port = FakePort {
@@ -242,7 +242,15 @@ fn checkpoint_mismatch_is_rejected_without_recording_it() -> TestResult {
         mirror.checkpoint(&mut port, "checkpoint-key-01".to_owned()),
         Err(SyncError::InvalidResponse)
     );
-    assert_eq!(mirror.snapshot(), before);
+    let after = mirror.snapshot();
+    assert_eq!(after.phase, before.phase);
+    assert_eq!(after.observed_generation, before.observed_generation);
+    assert_eq!(after.snapshot_sha256, before.snapshot_sha256);
+    assert_eq!(
+        after.pending_checkpoint_idempotency_key.as_deref(),
+        Some("checkpoint-key-01")
+    );
+    assert!(after.last_checkpoint_id.is_none());
     Ok(())
 }
 
@@ -309,8 +317,15 @@ fn durable_snapshot_restore_rejects_impossible_combinations() -> TestResult {
     legacy_clean.schema_version = "hwpx-agent.local-mirror/v1".to_owned();
     legacy_clean.observed_snapshot_sha256 = None;
     let migrated = LocalMirror::restore(legacy_clean)?.snapshot();
-    assert_eq!(migrated.schema_version, "hwpx-agent.local-mirror/v2");
+    assert_eq!(migrated.schema_version, "hwpx-agent.local-mirror/v3");
     assert_eq!(migrated.observed_snapshot_sha256, Some(digest('a')));
+
+    let mut v2 = snapshot.clone();
+    v2.schema_version = "hwpx-agent.local-mirror/v2".to_owned();
+    assert_eq!(
+        LocalMirror::restore(v2)?.snapshot().schema_version,
+        "hwpx-agent.local-mirror/v3"
+    );
 
     let mut impossible = snapshot.clone();
     impossible.phase = MirrorPhase::Ahead;
