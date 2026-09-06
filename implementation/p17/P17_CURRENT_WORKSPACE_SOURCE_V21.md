@@ -16,10 +16,11 @@ canonical receipt SHA-256 is
 `2ec4bd69fbe3f20003ce2b0774dc6e62fb5b039b0d3798e68502321d1e22d94f`. The twenty-five legacy
 successors and locked/offline 25-member Cargo projection remain exact.
 
-This layer additionally binds nine exact P06 implementation files: the `domain-ir` TableGrid module,
+This layer additionally binds eight exact P06 implementation files: the `domain-ir` TableGrid module,
 exports and tests; the private v1 contract and explicit migration; the P06-01 policy; the contract
-validator and negative tests; and CI registration. The qualification guard, tests and this report are
-also digest-bound in the v21 contract.
+validator and negative tests. P06 validation is executed as separately recorded evidence so the
+immutable P15 CI source-lock chain is not rewritten. The qualification guard, tests and this report
+are also digest-bound in the v21 contract.
 
 This proves only exact source bytes and composition. P06-01 requires separate Windows/offline Linux,
 current/independent FULL, security and strict-review evidence before it can be marked complete. It does

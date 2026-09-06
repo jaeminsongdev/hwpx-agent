@@ -73,11 +73,6 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
         "bytes": 3111,
         "sha256": "19052978ae5bdad94ea77599e3e8a1a09d93ad3cd863ccfaca9ffa3b89bf7d39",
     },
-    {
-        "path": "tools/p01/run_ci.py",
-        "bytes": 8392,
-        "sha256": "a23677452a69ecb3a9031022d03e4e685a86ec848189b5b1d980344fe08d7cf2",
-    },
 )
 GUARD_SOURCES = (
     "tools/p17/current_workspace_source_qualification_v21.py",
