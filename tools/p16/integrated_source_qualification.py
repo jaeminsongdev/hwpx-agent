@@ -19,6 +19,7 @@ POSTGRES_CONTRACT = "implementation/p16/qualification/postgres-217ba56/contract.
 POSTGRES_CONTRACT_SHA256 = "c37e5b773a9117ffdb4af40c95d1263e08fdf7f6e25c69c6daa3108086497530"
 P15_CONTRACT = "implementation/p16/qualification/p15-current-source-v1/contract.json"
 P15_CONTRACT_SHA256 = "5391428d584f7be36ed532ea446a07372761fb28bad9446972cef307c35a13e0"
+CURRENT_SOURCE_QUALIFIER = "tools/p17/current_workspace_source_qualification.py"
 
 REPLACED_BASE_HASHES = {
     "Cargo.lock": "6561e43d46f89ee42773840dd33747cfa23bd55b0927f1da41e357bf3b97c639",
@@ -29,11 +30,24 @@ REPLACED_BASE_HASHES = {
     "tools/p16/tests/test_p15_source_qualification.py": "76ac1f16b8d0ce831eaaccd0d91f74d6dc601f3d58fc2868a8674761922a1fdd",
 }
 REPLACED_PATHS = tuple(REPLACED_BASE_HASHES)
+REPLACED_SUCCESSOR_HASHES = {
+    "Cargo.lock": "7cb6ea91c65c226f2769af0d33906b39970efa0c81b286aa32ca282ef8614d69",
+    "crates/hwpx-package/Cargo.toml": "8ad8656643ccfc352aab4a7db1720e8ea2e911aa2837d0d74b73d9349adc392d",
+    "tools/p16/postgres_artifact_qualification.py": "dc0099886582bd9a01fdc0693ecc4d58a2617ab7ab78babc4fbc6c8b99b34a4a",
+    "tools/p16/p15_source_qualification.py": "6e3ba421f4c0d5f34b8123e918892bf52fca1f11e0263349e8bb59462863bd21",
+    "tools/p16/tests/test_postgres_artifact_qualification.py": "a18415a26fd851b9c88512c0db2f8ce761d00ee4d1f30213319c304bd5475430",
+    "tools/p16/tests/test_p15_source_qualification.py": "483c22b852742df6a9c55b3f80bb26425b58e70cf9fe16195a01f3479886160b",
+}
 GUARD_PATHS = (
     "tools/p16/integrated_source_qualification.py",
     "tools/p16/tests/test_integrated_source_qualification.py",
     "implementation/p16/P16-06_MAIN_INTEGRATION_QUALIFICATION.md",
 )
+GUARD_HASHES = {
+    "tools/p16/integrated_source_qualification.py": "43fc5f526597d08eecac720674ed0c3cb039d146dd28c48c62ecf62c16b1f775",
+    "tools/p16/tests/test_integrated_source_qualification.py": "9ad0c151c7d63bb5067395463522946d86bf656da8d3805623155c4df054a397",
+    "implementation/p16/P16-06_MAIN_INTEGRATION_QUALIFICATION.md": "62b575291c91b3e7ad59b4bf8b670db6ae52a788b2d863b507fd4f3d9362e725",
+}
 CONTEXT_REVISIONS = {
     "p14_cancel": "8d03bb6b4fb69e73f8921aa26484b400dadf941b",
     "p15_artifact": "dde79ff3fa86953c7f3e6e8e2402479eddee813e",
@@ -82,6 +96,19 @@ def modules() -> tuple[Any, Any]:
     return postgres, p15
 
 
+def load_current_source_qualifier() -> Any:
+    return load_module(
+        "p17_current_workspace_source_for_p16_integration",
+        CURRENT_SOURCE_QUALIFIER,
+    )
+
+
+def current_source_successors(root: Path) -> dict[str, dict[str, Any]]:
+    values = load_current_source_qualifier().verified_successors(root)
+    require(isinstance(values, dict), "current_source.successors")
+    return values
+
+
 def git_digest(root: Path, revision: str, relative: str) -> str:
     completed = subprocess.run(
         ["git", "show", f"{revision}:{relative}"],
@@ -101,11 +128,35 @@ def pinned_contract(postgres: Any, root: Path, relative: str, expected: str) -> 
     return value
 
 
-def replacement_pairs(postgres: Any, root: Path) -> dict[str, tuple[str, str]]:
+def require_qualified_current(
+    relative: str,
+    expected: str,
+    observed: str,
+    successors: dict[str, dict[str, Any]],
+) -> None:
+    if observed == expected:
+        return
+    entry = successors.get(relative)
+    require(
+        isinstance(entry, dict)
+        and entry.get("current_sha256") == observed
+        and isinstance(entry.get("accepted_predecessor_sha256s"), list)
+        and expected in entry["accepted_predecessor_sha256s"],
+        "source.current",
+    )
+
+
+def replacement_pairs(
+    postgres: Any,
+    root: Path,
+    successors: dict[str, dict[str, Any]],
+) -> dict[str, tuple[str, str]]:
     result: dict[str, tuple[str, str]] = {}
     for relative, before in REPLACED_BASE_HASHES.items():
         require(git_digest(root, P16_PARENT, relative) == before, "history.base")
-        after = digest(postgres.read_bounded(root, relative))
+        after = REPLACED_SUCCESSOR_HASHES[relative]
+        observed = digest(postgres.read_bounded(root, relative))
+        require_qualified_current(relative, after, observed, successors)
         require(before != after, "replacement.unchanged")
         result[relative] = (before, after)
     require(
@@ -122,15 +173,19 @@ def require_current(
     pairs: dict[str, tuple[str, str]],
     relative: str,
     expected: str,
+    successors: dict[str, dict[str, Any]],
 ) -> None:
     observed = digest(postgres.read_bounded(root, relative))
-    require(observed == expected or pairs.get(relative) == (expected, observed), "source.current")
+    if observed == expected or pairs.get(relative) == (expected, observed):
+        return
+    require_qualified_current(relative, expected, observed, successors)
 
 
 def validate_postgres_predecessor(
     postgres: Any,
     root: Path,
     pairs: dict[str, tuple[str, str]],
+    successors: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
     contract = pinned_contract(postgres, root, POSTGRES_CONTRACT, POSTGRES_CONTRACT_SHA256)
     predecessor = contract.get("predecessor")
@@ -146,7 +201,7 @@ def validate_postgres_predecessor(
         require(isinstance(entry, dict) and set(entry) == {"path", "sha256"}, "postgres.runtime")
         require(entry["path"] not in runtime, "postgres.runtime")
         runtime[entry["path"]] = entry["sha256"]
-        require_current(postgres, root, pairs, entry["path"], entry["sha256"])
+        require_current(postgres, root, pairs, entry["path"], entry["sha256"], successors)
     evidence = contract.get("evidence")
     require(isinstance(evidence, list) and len(evidence) == 2, "postgres.evidence")
     observed_sources = None
@@ -160,7 +215,7 @@ def validate_postgres_predecessor(
     guards = contract.get("guard_sources")
     require(isinstance(guards, list), "postgres.guards")
     for entry in guards:
-        require_current(postgres, root, pairs, entry["path"], entry["sha256"])
+        require_current(postgres, root, pairs, entry["path"], entry["sha256"], successors)
     audited = contract.get("audited_source_commit")
     replacements = contract.get("replacements")
     require(isinstance(audited, str) and isinstance(replacements, list), "postgres.replacements")
@@ -176,6 +231,7 @@ def validate_p15_predecessor(
     postgres: Any,
     root: Path,
     pairs: dict[str, tuple[str, str]],
+    successors: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
     contract = pinned_contract(postgres, root, P15_CONTRACT, P15_CONTRACT_SHA256)
     predecessors = contract.get("predecessors")
@@ -195,14 +251,14 @@ def validate_p15_predecessor(
             after = entry["successor_sha256"]
             require(git_digest(root, CONTEXT_REVISIONS[name], relative) == before, "p15.history_before")
             require(git_digest(root, P16_PARENT, relative) == after, "p15.history_after")
-            require_current(postgres, root, pairs, relative, after)
+            require_current(postgres, root, pairs, relative, after, successors)
     guards = contract.get("guard_sources")
     require(isinstance(guards, list), "p15.guards")
     for entry in guards:
         relative = entry["path"]
         expected = entry["sha256"]
         require(git_digest(root, P16_PARENT, relative) == expected, "p15.guard_history")
-        require_current(postgres, root, pairs, relative, expected)
+        require_current(postgres, root, pairs, relative, expected, successors)
     return contract
 
 
@@ -219,14 +275,20 @@ def verification_paths(root: Path = ROOT) -> set[str]:
     paths.update(entry["path"] for entry in p15_contract["guard_sources"])
     for entries in p15_contract["contexts"].values():
         paths.update(entry["path"] for entry in entries)
+    current = load_current_source_qualifier()
+    paths.update(current.verification_paths(root))
     return paths
 
 
 def expected_contract(root: Path) -> dict[str, Any]:
     postgres, _ = modules()
-    pairs = replacement_pairs(postgres, root)
-    validate_postgres_predecessor(postgres, root, pairs)
-    validate_p15_predecessor(postgres, root, pairs)
+    successors = current_source_successors(root)
+    pairs = replacement_pairs(postgres, root, successors)
+    validate_postgres_predecessor(postgres, root, pairs, successors)
+    validate_p15_predecessor(postgres, root, pairs, successors)
+    for relative in GUARD_PATHS:
+        observed = digest(postgres.read_bounded(root, relative))
+        require_qualified_current(relative, GUARD_HASHES[relative], observed, successors)
     return {
         "schema_version": "hwpx-agent.p16-main-integration-source-qualification/v1",
         "qualification_id": "p16.main.9cc1db3.62542b0.v1",
@@ -241,7 +303,7 @@ def expected_contract(root: Path) -> dict[str, Any]:
             for relative, (before, after) in pairs.items()
         ],
         "guard_sources": [
-            {"path": relative, "sha256": digest(postgres.read_bounded(root, relative))}
+            {"path": relative, "sha256": GUARD_HASHES[relative]}
             for relative in GUARD_PATHS
         ],
         "claims": {
@@ -263,10 +325,20 @@ def verified_replacements(root: Path) -> dict[str, tuple[str, str]]:
         contract = postgres.json_value(postgres.read_bounded(root, CONTRACT_PATH, 128 * 1024))
         expected = expected_contract(root)
         require(postgres.exact(contract, expected), "contract.exact")
-        return {
+        result = {
             entry["path"]: (entry["predecessor_sha256"], entry["successor_sha256"])
             for entry in expected["replacements"]
         }
+        successors = current_source_successors(root)
+        for relative, entry in successors.items():
+            current = entry["current_sha256"]
+            if relative in result:
+                before, after = result[relative]
+                if after in entry["accepted_predecessor_sha256s"]:
+                    result[relative] = (before, current)
+            else:
+                result[relative] = (entry["composition_predecessor_sha256"], current)
+        return result
     except (OSError, KeyError, TypeError, RecursionError) as error:
         raise QualificationError("qualification.unavailable") from error
 
