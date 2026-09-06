@@ -1,0 +1,87 @@
+{
+  "schema_version": "hwpx-agent.table-operations-contract/v1",
+  "model_schema_version": "hwpx-agent.table-operations/v1",
+  "table_grid_prerequisite": "hwpx-agent.table-grid/v1",
+  "scope": "p06_02_pure_grid_create_insert_delete_current_pc_local_development",
+  "source_lock_canonicalization": "utf8_lf_sha256",
+  "source_locks": [
+    {
+      "path": "docs/03_document_model/06_table_model.md",
+      "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"
+    },
+    {
+      "path": "docs/12_implementation_guides/05_page_table_layout_algorithms.md",
+      "sha256": "4d94e6d462f7fc2f2187827ab436eb17c2bb2fe8f728ba8eee5f051c16bb4274"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    }
+  ],
+  "capabilities": [
+    "table.create",
+    "table.insert_rows",
+    "table.insert_columns",
+    "table.delete_rows",
+    "table.delete_columns"
+  ],
+  "operations": {
+    "create": "exact_rows_times_columns_caller_ids_become_row_major_1x1_masters",
+    "insert_rows": "index_in_zero_through_rows_and_one_new_1x1_master_per_inserted_slot",
+    "insert_columns": "index_in_zero_through_columns_and_one_new_1x1_master_per_inserted_slot",
+    "delete_rows": "nonempty_in_bounds_interval_must_fully_contain_every_intersected_master",
+    "delete_columns": "nonempty_in_bounds_interval_must_fully_contain_every_intersected_master"
+  },
+  "span_policy": {
+    "insert_inside_span": "reject",
+    "insert_at_span_edge": "preserve_identity_and_shift_if_after",
+    "delete_full_span": "remove_master_identity",
+    "delete_partial_span": "reject",
+    "implicit_expand_shrink_or_split": "forbidden_until_p06_03"
+  },
+  "identity_policy": {
+    "new_ids": "caller_supplied_exact_unique_bounded",
+    "survivors": "same_logical_id_and_span_with_deterministic_coordinate_remap",
+    "deleted": "canonical_original_master_order",
+    "debug_output": "dimensions_and_counts_only"
+  },
+  "validation_order": [
+    "nonzero_count",
+    "index_or_range",
+    "result_dimension_and_slot_limits",
+    "exact_new_master_id_count",
+    "span_boundary_conflict",
+    "fallible_allocation",
+    "table_grid_invariant_and_bounded_serialization"
+  ],
+  "failure_policy": [
+    "zero_count",
+    "insertion_index_out_of_bounds",
+    "deletion_range_out_of_bounds",
+    "would_empty_grid",
+    "new_master_cell_count_mismatch",
+    "span_boundary_conflict",
+    "dimension_overflow",
+    "underlying_table_grid_error"
+  ],
+  "atomicity": "source_grid_is_immutable_and_only_a_fully_validated_result_is_returned",
+  "migration": "protocol/migrations/p06-table-operations-v0-to-v1.md",
+  "not_claimed": {
+    "cell_content_or_style_inheritance": false,
+    "span_expand_shrink_or_split": false,
+    "merge_or_split": false,
+    "formula_reference_movement": false,
+    "hwpx_xml_lift_or_lower": false,
+    "hancom_runtime_execution": false,
+    "semantic_reopen_or_render": false,
+    "public_tool_support": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "phase_complete": false,
+    "product_complete": false
+  }
+}

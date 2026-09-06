@@ -8,6 +8,7 @@ mod selector;
 mod semantic_diff;
 mod semantic_summary;
 mod table_grid;
+mod table_operations;
 mod units;
 
 pub use capability_router::{
@@ -56,6 +57,10 @@ pub use semantic_summary::{
 pub use table_grid::{
     CellCoordinate, TABLE_GRID_SCHEMA_VERSION, TableCellSpan, TableGrid, TableGridDraft,
     TableGridError, TableGridLimitConfig, TableGridLimits,
+};
+pub use table_operations::{
+    TABLE_OPERATIONS_SCHEMA_VERSION, TableCellRemap, TableDimensions, TableOperationError,
+    TableOperationKind, TableOperationReceipt, TableOperationResult,
 };
 pub use units::{
     AngleMicrodegrees, Conversion, ConversionReceipt, CoordinateAnchor, CoordinateSpace, HwpUnit,
