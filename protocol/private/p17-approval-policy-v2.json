@@ -1,0 +1,58 @@
+{
+  "schema_version": "hwpx-agent.p17-approval-policy/v2",
+  "scope": "local_reference_approval_with_durable_replay",
+  "effects": {
+    "git_commit": "workstation_control",
+    "automation_execute": "automation_use",
+    "external_invoke": "external_service_use",
+    "print_execute": "print_execute",
+    "security_modify": "security_modify"
+  },
+  "decision_requirements": [
+    "effect_allowlisted_by_tenant_policy",
+    "required_user_scope_present",
+    "fresh_explicit_user_confirmation_present",
+    "confirmation_hmac_valid",
+    "actor_tenant_effect_operation_target_plan_exactly_bound",
+    "confirmation_time_window_valid",
+    "confirmation_not_previously_consumed"
+  ],
+  "durable_replay": {
+    "schema_version": "hwpx-agent.approval-replay-entry/v1",
+    "directory": "p17-approval-replay-v1",
+    "publication": "create_new_staging_then_atomic_hard_link",
+    "entry_order": "fixed_width_monotonic_sequence",
+    "integrity": "sha256_chain",
+    "maximum_entries": 65536,
+    "maximum_entry_bytes": 2048,
+    "maximum_ledger_bytes": 67108864,
+    "retains_consumed_identity_after_expiry": true,
+    "stores_raw_confirmation_id": false,
+    "stores_encoded_confirmation": false,
+    "stores_signing_secret": false,
+    "stores_operation_id": false,
+    "stores_document_content": false
+  },
+  "implemented_evidence": {
+    "tests": 14,
+    "default_deny": true,
+    "scope_separation": true,
+    "exact_binding": true,
+    "restart_replay_rejected": true,
+    "concurrent_same_token_single_winner": true,
+    "gap_unknown_link_size_and_checksum_fail_closed": true,
+    "durable_capacity_enforced": true,
+    "all_target_clippy_warnings_denied": true,
+    "arbitrary_shell_command_model_present": false
+  },
+  "not_claimed": {
+    "daemon_effect_host_wiring": false,
+    "trusted_host_confirmation_service": false,
+    "actual_git_commit": false,
+    "actual_automation_execution": false,
+    "actual_external_invocation": false,
+    "actual_print_execution": false,
+    "actual_security_modification": false,
+    "p17_08_pass": false
+  }
+}

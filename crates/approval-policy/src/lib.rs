@@ -11,6 +11,10 @@ use sha2::{Digest as _, Sha256};
 use thiserror::Error;
 use zeroize::Zeroizing;
 
+mod replay;
+
+pub use replay::DurableReplayLedger;
+
 type HmacSha256 = Hmac<Sha256>;
 
 const TOKEN_PREFIX: &str = "confirm_v1";
@@ -78,6 +82,12 @@ pub enum ApprovalError {
     ConfirmationReplay,
     #[error("approval replay registry reached its bound")]
     CapacityExceeded,
+    #[error("approval replay ledger is unavailable")]
+    LedgerUnavailable,
+    #[error("approval replay ledger is corrupt")]
+    LedgerCorrupt,
+    #[error("approval replay ledger changed concurrently")]
+    LedgerConflict,
 }
 
 impl ApprovalError {
@@ -94,6 +104,9 @@ impl ApprovalError {
             Self::ConfirmationExpired => "APPROVAL_CONFIRMATION_EXPIRED",
             Self::ConfirmationReplay => "APPROVAL_CONFIRMATION_REPLAY",
             Self::CapacityExceeded => "APPROVAL_CAPACITY_EXCEEDED",
+            Self::LedgerUnavailable => "APPROVAL_LEDGER_UNAVAILABLE",
+            Self::LedgerCorrupt => "APPROVAL_LEDGER_CORRUPT",
+            Self::LedgerConflict => "APPROVAL_LEDGER_CONFLICT",
         }
     }
 }
@@ -410,10 +423,61 @@ impl AuthorizedEffect {
     }
 }
 
+pub trait ConfirmationReplayLedger: fmt::Debug + Send {
+    /// Atomically consumes one hashed confirmation identity.
+    ///
+    /// # Errors
+    ///
+    /// Rejects replay, capacity, corruption, concurrent changes and storage failure.
+    fn consume(
+        &mut self,
+        token_id_sha256: &str,
+        expires_at_unix_seconds: u64,
+        now_unix_seconds: u64,
+        capacity: usize,
+    ) -> Result<(), ApprovalError>;
+}
+
+#[derive(Default)]
+struct ProcessLocalReplayLedger {
+    consumed: BTreeMap<String, u64>,
+}
+
+impl fmt::Debug for ProcessLocalReplayLedger {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("ProcessLocalReplayLedger")
+            .field("consumed_count", &self.consumed.len())
+            .finish()
+    }
+}
+
+impl ConfirmationReplayLedger for ProcessLocalReplayLedger {
+    fn consume(
+        &mut self,
+        token_id_sha256: &str,
+        expires_at_unix_seconds: u64,
+        now_unix_seconds: u64,
+        capacity: usize,
+    ) -> Result<(), ApprovalError> {
+        self.consumed
+            .retain(|_, expires_at| *expires_at > now_unix_seconds);
+        if self.consumed.contains_key(token_id_sha256) {
+            return Err(ApprovalError::ConfirmationReplay);
+        }
+        if self.consumed.len() >= capacity {
+            return Err(ApprovalError::CapacityExceeded);
+        }
+        self.consumed
+            .insert(token_id_sha256.to_owned(), expires_at_unix_seconds);
+        Ok(())
+    }
+}
+
 pub struct ApprovalEvaluator {
     policy: ApprovalPolicy,
     secret: Zeroizing<Vec<u8>>,
-    consumed: BTreeMap<String, u64>,
+    replay_ledger: Box<dyn ConfirmationReplayLedger>,
 }
 
 impl fmt::Debug for ApprovalEvaluator {
@@ -422,7 +486,7 @@ impl fmt::Debug for ApprovalEvaluator {
             .debug_struct("ApprovalEvaluator")
             .field("policy", &self.policy)
             .field("secret", &"<redacted>")
-            .field("consumed_count", &self.consumed.len())
+            .field("replay_ledger", &self.replay_ledger)
             .finish()
     }
 }
@@ -434,13 +498,26 @@ impl ApprovalEvaluator {
     ///
     /// Rejects keys outside the bounded 32..=128-byte range.
     pub fn new(policy: ApprovalPolicy, secret: &[u8]) -> Result<Self, ApprovalError> {
+        Self::with_replay_ledger(policy, secret, Box::<ProcessLocalReplayLedger>::default())
+    }
+
+    /// Creates an evaluator with an injected replay ledger, including the durable implementation.
+    ///
+    /// # Errors
+    ///
+    /// Rejects keys outside the bounded 32..=128-byte range.
+    pub fn with_replay_ledger(
+        policy: ApprovalPolicy,
+        secret: &[u8],
+        replay_ledger: Box<dyn ConfirmationReplayLedger>,
+    ) -> Result<Self, ApprovalError> {
         if !(MIN_KEY_BYTES..=MAX_KEY_BYTES).contains(&secret.len()) {
             return Err(ApprovalError::InvalidConfiguration);
         }
         Ok(Self {
             policy,
             secret: Zeroizing::new(secret.to_vec()),
-            consumed: BTreeMap::new(),
+            replay_ledger,
         })
     }
 
@@ -457,8 +534,6 @@ impl ApprovalEvaluator {
         confirmation: Option<&ConfirmationToken>,
         now_unix_seconds: u64,
     ) -> Result<AuthorizedEffect, ApprovalError> {
-        self.consumed
-            .retain(|_, expires_at| *expires_at > now_unix_seconds);
         if !self.policy.allowed_effects.contains(&request.effect) {
             return Err(ApprovalError::DeniedByPolicy);
         }
@@ -493,14 +568,13 @@ impl ApprovalEvaluator {
         {
             return Err(ApprovalError::ConfirmationExpired);
         }
-        if self.consumed.contains_key(&payload.token_id) {
-            return Err(ApprovalError::ConfirmationReplay);
-        }
-        if self.consumed.len() >= self.policy.max_consumed_tokens {
-            return Err(ApprovalError::CapacityExceeded);
-        }
-        self.consumed
-            .insert(payload.token_id, payload.expires_at_unix_seconds);
+        let token_id_sha256 = digest(payload.token_id.as_bytes());
+        self.replay_ledger.consume(
+            &token_id_sha256,
+            payload.expires_at_unix_seconds,
+            now_unix_seconds,
+            self.policy.max_consumed_tokens,
+        )?;
         let receipt = ApprovalReceipt {
             schema_version: RECEIPT_SCHEMA,
             effect: request.effect,

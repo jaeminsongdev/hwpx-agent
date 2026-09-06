@@ -2,7 +2,7 @@
 
 - Updated: 2026-09-06
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05-07 layout identity and P17-06 project sync.
+- Active: P05-07 layout identity, P17-06 project sync and P17-08 approval boundary.
 - Recommended reasoning: max for preservation, authorization and Gate review; high for routine work.
 - UI status: v3 attempt 21 passed open/save/reopen/text/PDF export; layout acceptance failed.
   Session 13431 terminal exit 0; normal quit, residual zero. No additional click or automatic relaunch.
@@ -50,7 +50,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0090 | P17-05 local file/Git | PASS: exact-commit MCP run bf248400ce1c4985bb2353aa9209ec02, 16/16; path-free IDs, traversal/large-file rejection, Git plan only |
 | P-0091 | P17-06 project sync | In progress: state machine + create-new durable journal + local CLI 17/17; authenticated remote adapter and pull/push/checkpoint CLI remain |
 | P-0092 | P17-01 Codex package | In progress: exact-commit run 81de11bb748649cbbae25972cdbd30df, deterministic 19-entry package core 7/7; registered remote app absent |
-| P-0093 | P17-08 approvals | In progress: default-deny exact-bound confirmation core 9/9; durable replay ledger and daemon/MCP execution wiring remain |
+| P-0093 | P17-08 approvals | In progress: default-deny exact binding plus durable cross-process replay ledger 14/14; daemon/MCP effect-host wiring and trusted-host confirmation remain |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.
