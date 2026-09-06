@@ -1,0 +1,43 @@
+{
+  "schema_version": "hwpx-agent.local-workflow/v2",
+  "scope": "private_git_approval_binding_without_execution",
+  "migration": {
+    "from": "hwpx-agent.local-workflow/v1",
+    "materialize_diff_publish_preserved": true,
+    "git_plan_adds_head_reference": true
+  },
+  "git_approval": {
+    "target_digest_schema": "hwpx-agent.git-approval-target/v1",
+    "plan_digest_schema": "hwpx-agent.git-commit-plan/v1",
+    "length_prefix": "u64_big_endian",
+    "target_fields": [
+      "canonical_workspace_root"
+    ],
+    "plan_fields": [
+      "output_pathspec",
+      "expected_output_sha256",
+      "expected_head",
+      "expected_head_reference_or_detached",
+      "message"
+    ],
+    "binds_symbolic_and_detached_head_distinctly": true,
+    "returns_absolute_path": false,
+    "executes_git": false
+  },
+  "implemented_evidence": {
+    "local_workflow_tests": 11,
+    "local_daemon_tests": 13,
+    "stable_cross_process_digest_vector": true,
+    "output_drift_rejected": true,
+    "older_protocols_reject_new_method": true,
+    "all_target_clippy_warnings_denied": true
+  },
+  "not_claimed": {
+    "confirmation_consumed": false,
+    "git_process_spawned": false,
+    "git_index_mutated": false,
+    "git_ref_updated": false,
+    "mcp_tool_exposed": false,
+    "p17_08_pass": false
+  }
+}

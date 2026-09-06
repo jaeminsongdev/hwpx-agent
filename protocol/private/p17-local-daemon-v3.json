@@ -1,0 +1,58 @@
+{
+  "schema_version": "hwpx-agent.local-companion-private-contract/v3",
+  "protocol_version": "hwpx-agent.local-companion-private/v3",
+  "migration": {
+    "from": "hwpx-agent.local-companion-private/v2",
+    "v1_health_and_path_preserved": true,
+    "v2_workflow_preserved": true,
+    "older_versions_reject_v3_method": true,
+    "v3_rejects_older_mutation_methods": true
+  },
+  "methods": {
+    "prepare_git_commit_approval": {
+      "parameters": [
+        "workspace_id",
+        "operation_id",
+        "output_id",
+        "expected_sha256",
+        "message"
+      ],
+      "returns": [
+        "workspace_id",
+        "operation_id",
+        "output_id",
+        "output_pathspec",
+        "expected_output_sha256",
+        "expected_head",
+        "expected_head_reference",
+        "message",
+        "approval",
+        "executed"
+      ]
+    }
+  },
+  "approval": {
+    "effect": "git_commit",
+    "target_digest_schema": "hwpx-agent.git-approval-target/v1",
+    "plan_digest_schema": "hwpx-agent.git-commit-plan/v1",
+    "binds_output_pathspec": true,
+    "binds_output_sha256": true,
+    "binds_head_object": true,
+    "binds_head_reference": true,
+    "binds_commit_message": true,
+    "executes_process": false,
+    "requires_p17_08_confirmation_for_execution": true
+  },
+  "public_identifiers": {
+    "accepts_paths": false,
+    "identifier_pattern": "^[A-Za-z0-9_-]{1,64}$",
+    "output_mapping": "output/{output_id}.hwpx"
+  },
+  "claims": {
+    "opens_hangul": false,
+    "uses_network": false,
+    "returns_absolute_paths": false,
+    "returns_document_content": false,
+    "executes_git": false
+  }
+}

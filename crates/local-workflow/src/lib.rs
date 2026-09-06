@@ -8,6 +8,8 @@ use sha2::{Digest as _, Sha256};
 use thiserror::Error;
 
 pub const MAX_WORKFLOW_FILE_BYTES: u64 = 1_073_741_824;
+pub const GIT_APPROVAL_TARGET_SCHEMA: &str = "hwpx-agent.git-approval-target/v1";
+pub const GIT_COMMIT_PLAN_SCHEMA: &str = "hwpx-agent.git-commit-plan/v1";
 const MAX_RELATIVE_PATH_BYTES: usize = 1_024;
 const MAX_PATH_COMPONENTS: usize = 32;
 const MAX_COMMIT_MESSAGE_BYTES: usize = 128;
@@ -101,7 +103,27 @@ pub struct GitCommitPlan {
     pub output_pathspec: String,
     pub expected_output_sha256: String,
     pub expected_head: String,
+    pub expected_head_reference: Option<String>,
     pub message: String,
+}
+
+impl GitCommitPlan {
+    /// Returns the domain-separated digest presented for exact-plan approval.
+    #[must_use]
+    pub fn approval_plan_sha256(&self) -> String {
+        bound_digest(
+            GIT_COMMIT_PLAN_SCHEMA,
+            &[
+                &self.output_pathspec,
+                &self.expected_output_sha256,
+                &self.expected_head,
+                self.expected_head_reference
+                    .as_deref()
+                    .unwrap_or("detached"),
+                &self.message,
+            ],
+        )
+    }
 }
 
 impl LocalWorkflow {
@@ -264,9 +286,24 @@ impl LocalWorkflow {
         Ok(GitCommitPlan {
             output_pathspec: format!("output/{output_name}"),
             expected_output_sha256: identity.sha256,
-            expected_head,
+            expected_head: expected_head.object_id,
+            expected_head_reference: expected_head.reference,
             message: message.to_owned(),
         })
+    }
+
+    /// Returns a domain-separated digest for this exact canonical workspace root.
+    ///
+    /// # Errors
+    ///
+    /// Rejects a root that cannot be represented without lossy path conversion.
+    pub fn git_approval_target_sha256(&self) -> Result<String, WorkflowError> {
+        let root = self.root.to_str().ok_or(WorkflowError::GitState)?;
+        #[cfg(windows)]
+        let root = root.replace('/', "\\").to_lowercase();
+        #[cfg(not(windows))]
+        let root = root.to_owned();
+        Ok(bound_digest(GIT_APPROVAL_TARGET_SCHEMA, &[&root]))
     }
 
     fn operation_directory(&self, operation_id: &str) -> Result<PathBuf, WorkflowError> {
@@ -379,7 +416,12 @@ fn identify_existing(
     })
 }
 
-fn read_git_head(root: &Path) -> Result<String, WorkflowError> {
+struct GitHeadState {
+    object_id: String,
+    reference: Option<String>,
+}
+
+fn read_git_head(root: &Path) -> Result<GitHeadState, WorkflowError> {
     let git = root.join(".git");
     let metadata = fs::symlink_metadata(&git).map_err(|_| WorkflowError::GitState)?;
     if !metadata.is_dir() || is_link_or_reparse(&metadata) {
@@ -393,10 +435,31 @@ fn read_git_head(root: &Path) -> Result<String, WorkflowError> {
         let reference_path = git.join(relative);
         reject_links_between(root, &reference_path)?;
         let value = read_bounded_text(&reference_path, 128)?;
-        validate_object_id(&value)
+        Ok(GitHeadState {
+            object_id: validate_object_id(&value)?,
+            reference: Some(reference.to_owned()),
+        })
     } else {
-        validate_object_id(&head)
+        Ok(GitHeadState {
+            object_id: validate_object_id(&head)?,
+            reference: None,
+        })
     }
+}
+
+fn bound_digest(domain: &str, fields: &[&str]) -> String {
+    let mut hasher = Sha256::new();
+    update_digest_field(&mut hasher, domain.as_bytes());
+    for field in fields {
+        update_digest_field(&mut hasher, field.as_bytes());
+    }
+    hex::encode(hasher.finalize())
+}
+
+fn update_digest_field(hasher: &mut Sha256, field: &[u8]) {
+    let length = u64::try_from(field.len()).unwrap_or(u64::MAX);
+    hasher.update(length.to_be_bytes());
+    hasher.update(field);
 }
 
 fn read_bounded_text(path: &Path, max_bytes: u64) -> Result<String, WorkflowError> {

@@ -2,8 +2,8 @@ use std::fs;
 use std::path::Path;
 
 use local_companion_daemon::{
-    CONFIG_VERSION, LocalCompanionConfig, LocalCompanionDaemon, PROTOCOL_VERSION, SessionToken,
-    TARGET_PROFILE, WORKFLOW_PROTOCOL_VERSION,
+    APPROVAL_PROTOCOL_VERSION, CONFIG_VERSION, LocalCompanionConfig, LocalCompanionDaemon,
+    PROTOCOL_VERSION, SessionToken, TARGET_PROFILE, WORKFLOW_PROTOCOL_VERSION,
 };
 use serde_json::{Value, json};
 use sha2::{Digest as _, Sha256};
@@ -51,6 +51,10 @@ fn request(method: &str, params: &Value) -> Vec<u8> {
 
 fn workflow_request(method: &str, params: &Value) -> Vec<u8> {
     request_with_protocol(WORKFLOW_PROTOCOL_VERSION, method, params)
+}
+
+fn approval_request(method: &str, params: &Value) -> Vec<u8> {
+    request_with_protocol(APPROVAL_PROTOCOL_VERSION, method, params)
 }
 
 fn request_with_protocol(protocol: &str, method: &str, params: &Value) -> Vec<u8> {
@@ -404,6 +408,79 @@ fn protocol_versions_and_workflow_negatives_fail_closed() {
 }
 
 #[test]
+fn approval_v3_prepares_exact_git_target_and_plan_without_execution() {
+    let (temporary, config) = fixture();
+    let workspace = temporary.path().join("workspace");
+    let output = b"approval-bound output";
+    fs::write(workspace.join("output/result-01.hwpx"), output)
+        .unwrap_or_else(|error| panic!("output: {error}"));
+    fs::create_dir_all(workspace.join(".git/refs/heads"))
+        .unwrap_or_else(|error| panic!("git refs: {error}"));
+    fs::write(workspace.join(".git/HEAD"), b"ref: refs/heads/main\n")
+        .unwrap_or_else(|error| panic!("git head: {error}"));
+    fs::write(
+        workspace.join(".git/refs/heads/main"),
+        format!("{}\n", "d".repeat(40)),
+    )
+    .unwrap_or_else(|error| panic!("git ref: {error}"));
+    let daemon = LocalCompanionDaemon::new(config);
+    let params = json!({
+        "workspace_id": "primary",
+        "operation_id": "operation-approval-01",
+        "output_id": "result-01",
+        "expected_sha256": digest(output),
+        "message": "Publish approved HWPX",
+    });
+    let prepared = daemon.handle(
+        &approval_request("prepare_git_commit_approval", &params),
+        &token(),
+    );
+    assert_eq!(prepared["protocol_version"], APPROVAL_PROTOCOL_VERSION);
+    assert_eq!(prepared["ok"], true);
+    assert_eq!(prepared["result"]["operation_id"], "operation-approval-01");
+    assert_eq!(prepared["result"]["expected_head"], "d".repeat(40));
+    assert_eq!(
+        prepared["result"]["expected_head_reference"],
+        "refs/heads/main"
+    );
+    assert_eq!(prepared["result"]["approval"]["effect"], "git_commit");
+    for field in ["target_sha256", "plan_sha256"] {
+        let value = prepared["result"]["approval"][field]
+            .as_str()
+            .unwrap_or_else(|| panic!("missing approval digest: {field}"));
+        assert_eq!(value.len(), 64);
+        assert!(value.bytes().all(|byte| byte.is_ascii_hexdigit()));
+    }
+    assert_eq!(prepared["result"]["executed"], false);
+    assert!(
+        !prepared
+            .to_string()
+            .contains(workspace.to_string_lossy().as_ref())
+    );
+    assert_eq!(
+        daemon.handle(
+            &workflow_request("prepare_git_commit_approval", &params),
+            &token()
+        )["ok"],
+        false
+    );
+    assert_eq!(
+        daemon.handle(&approval_request("prepare_git_commit", &params), &token())["ok"],
+        false
+    );
+
+    fs::write(workspace.join("output/result-01.hwpx"), b"drift")
+        .unwrap_or_else(|error| panic!("drift: {error}"));
+    assert_eq!(
+        daemon.handle(
+            &approval_request("prepare_git_commit_approval", &params),
+            &token()
+        )["ok"],
+        false
+    );
+}
+
+#[test]
 fn checked_in_private_contract_matches_runtime_constants() {
     let contract: Value = serde_json::from_str(include_str!(
         "../../../protocol/private/p17-local-daemon-v1.json"
@@ -429,6 +506,19 @@ fn checked_in_workflow_contract_matches_runtime_constants() {
     assert_eq!(contract["public_identifiers"]["accepts_paths"], false);
     assert_eq!(contract["git"]["executes_process"], false);
     assert_eq!(contract["write_policy"]["overwrite"], false);
+}
+
+#[test]
+fn checked_in_approval_binding_contract_matches_runtime_constants() {
+    let contract: Value = serde_json::from_str(include_str!(
+        "../../../protocol/private/p17-local-daemon-v3.json"
+    ))
+    .unwrap_or_else(|error| panic!("contract: {error}"));
+    assert_eq!(contract["protocol_version"], APPROVAL_PROTOCOL_VERSION);
+    assert_eq!(contract["migration"]["v2_workflow_preserved"], true);
+    assert_eq!(contract["approval"]["effect"], "git_commit");
+    assert_eq!(contract["approval"]["executes_process"], false);
+    assert_eq!(contract["public_identifiers"]["accepts_paths"], false);
 }
 
 #[cfg(windows)]

@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use local_workflow::{LocalWorkflow, MaterializeSlot, WorkflowError};
+use local_workflow::{GitCommitPlan, LocalWorkflow, MaterializeSlot, WorkflowError};
 use sha2::{Digest as _, Sha256};
 use tempfile::TempDir;
 
@@ -70,7 +70,20 @@ fn materialize_diff_publish_and_commit_plan_are_identity_bound() -> TestResult {
         workflow.prepare_git_commit("result.hwpx", &candidate_sha, "Publish verified HWPX")?;
     assert_eq!(plan.output_pathspec, "output/result.hwpx");
     assert_eq!(plan.expected_head, "a".repeat(40));
+    assert_eq!(
+        plan.expected_head_reference.as_deref(),
+        Some("refs/heads/main")
+    );
     assert_eq!(plan.expected_output_sha256, hex::encode(candidate_sha));
+    let plan_sha256 = plan.approval_plan_sha256();
+    let target_sha256 = workflow.git_approval_target_sha256()?;
+    assert_eq!(plan_sha256.len(), 64);
+    assert_eq!(target_sha256.len(), 64);
+    assert_ne!(plan_sha256, target_sha256);
+    assert!(!target_sha256.contains(root.to_string_lossy().as_ref()));
+    let mut drifted = plan.clone();
+    drifted.message.push('!');
+    assert_ne!(drifted.approval_plan_sha256(), plan_sha256);
     Ok(())
 }
 
@@ -218,6 +231,49 @@ fn commit_plan_rejects_missing_malformed_or_drifted_git_state() -> TestResult {
         Err(WorkflowError::Digest)
     ));
     Ok(())
+}
+
+#[test]
+fn detached_and_symbolic_heads_have_distinct_approval_plan_digests() -> TestResult {
+    let (_temporary, root, workflow) = fixture(1_048_576)?;
+    let digest = write_input(&root, "candidate.hwpx", b"candidate")?;
+    workflow.materialize(
+        "op_git",
+        MaterializeSlot::Candidate,
+        "input/candidate.hwpx",
+        &digest,
+    )?;
+    workflow.publish("op_git", "result.hwpx", &digest)?;
+    fs::create_dir_all(root.join(".git/refs/heads"))?;
+    fs::write(root.join(".git/HEAD"), b"ref: refs/heads/main\n")?;
+    fs::write(
+        root.join(".git/refs/heads/main"),
+        format!("{}\n", "a".repeat(40)),
+    )?;
+    let symbolic = workflow.prepare_git_commit("result.hwpx", &digest, "Commit")?;
+    fs::write(root.join(".git/HEAD"), format!("{}\n", "a".repeat(40)))?;
+    let detached = workflow.prepare_git_commit("result.hwpx", &digest, "Commit")?;
+    assert_eq!(detached.expected_head_reference, None);
+    assert_ne!(
+        symbolic.approval_plan_sha256(),
+        detached.approval_plan_sha256()
+    );
+    Ok(())
+}
+
+#[test]
+fn approval_plan_digest_has_a_stable_cross_process_vector() {
+    let plan = GitCommitPlan {
+        output_pathspec: "output/result.hwpx".to_owned(),
+        expected_output_sha256: "a".repeat(64),
+        expected_head: "b".repeat(40),
+        expected_head_reference: Some("refs/heads/main".to_owned()),
+        message: "Publish verified HWPX".to_owned(),
+    };
+    assert_eq!(
+        plan.approval_plan_sha256(),
+        "c4a3647a6735d43456952042e2d6c9adc2b44180c182ac060844bbaf0f1a7267"
+    );
 }
 
 #[test]

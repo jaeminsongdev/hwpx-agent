@@ -15,6 +15,7 @@ use zeroize::Zeroizing;
 
 pub const PROTOCOL_VERSION: &str = "hwpx-agent.local-companion-private/v1";
 pub const WORKFLOW_PROTOCOL_VERSION: &str = "hwpx-agent.local-companion-private/v2";
+pub const APPROVAL_PROTOCOL_VERSION: &str = "hwpx-agent.local-companion-private/v3";
 pub const CONFIG_VERSION: &str = "hwpx-agent.local-companion-config/v1";
 pub const TARGET_PROFILE: &str = "hancom-2020-x86-11.0.0.9136";
 pub const SESSION_TOKEN_ENV: &str = "HWPX_AGENT_LOCAL_SESSION_TOKEN";
@@ -273,6 +274,7 @@ impl LocalCompanionDaemon {
         let protocol = match request.protocol_version.as_str() {
             PROTOCOL_VERSION => PROTOCOL_VERSION,
             WORKFLOW_PROTOCOL_VERSION => WORKFLOW_PROTOCOL_VERSION,
+            APPROVAL_PROTOCOL_VERSION => APPROVAL_PROTOCOL_VERSION,
             _ => return Err((None, Some(request_id), DaemonError::Request)),
         };
         let supplied = Zeroizing::new(std::mem::take(&mut request.session_token));
@@ -320,6 +322,12 @@ impl LocalCompanionDaemon {
                 let params = parse_exact_params(request.params)
                     .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
                 self.prepare_git_commit(&params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?
+            }
+            (APPROVAL_PROTOCOL_VERSION, PrivateMethod::PrepareGitCommitApproval) => {
+                let params = parse_exact_params(request.params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
+                self.prepare_git_commit_approval(&params)
                     .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?
             }
             _ => {
@@ -467,6 +475,41 @@ impl LocalCompanionDaemon {
             "executed": false,
         }))
     }
+
+    fn prepare_git_commit_approval(
+        &self,
+        params: &PrepareGitCommitApprovalParams,
+    ) -> Result<Value, DaemonError> {
+        if !valid_identifier(&params.operation_id) || !valid_identifier(&params.output_id) {
+            return Err(DaemonError::Workspace);
+        }
+        let digest = parse_digest(&params.expected_sha256)?;
+        let output_name = format!("{}.hwpx", params.output_id);
+        let workflow = self.config.workflow(&params.workspace_id)?;
+        let plan = workflow
+            .prepare_git_commit(&output_name, &digest, &params.message)
+            .map_err(|_| DaemonError::Workspace)?;
+        let target_sha256 = workflow
+            .git_approval_target_sha256()
+            .map_err(|_| DaemonError::Workspace)?;
+        let plan_sha256 = plan.approval_plan_sha256();
+        Ok(json!({
+            "workspace_id": params.workspace_id,
+            "operation_id": params.operation_id,
+            "output_id": params.output_id,
+            "output_pathspec": plan.output_pathspec,
+            "expected_output_sha256": plan.expected_output_sha256,
+            "expected_head": plan.expected_head,
+            "expected_head_reference": plan.expected_head_reference,
+            "message": plan.message,
+            "approval": {
+                "effect": "git_commit",
+                "target_sha256": target_sha256,
+                "plan_sha256": plan_sha256,
+            },
+            "executed": false,
+        }))
+    }
 }
 
 #[derive(Deserialize)]
@@ -488,6 +531,7 @@ enum PrivateMethod {
     Diff,
     Publish,
     PrepareGitCommit,
+    PrepareGitCommitApproval,
 }
 
 #[derive(Deserialize)]
@@ -539,6 +583,16 @@ struct PublishParams {
 #[serde(deny_unknown_fields)]
 struct PrepareGitCommitParams {
     workspace_id: String,
+    output_id: String,
+    expected_sha256: String,
+    message: String,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct PrepareGitCommitApprovalParams {
+    workspace_id: String,
+    operation_id: String,
     output_id: String,
     expected_sha256: String,
     message: String,
