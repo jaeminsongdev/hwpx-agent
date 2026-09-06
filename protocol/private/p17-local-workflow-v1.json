@@ -1,0 +1,29 @@
+{
+  "schema_version": "hwpx-agent.local-workflow/v1",
+  "scope": "private_core_not_yet_exposed_by_mcp",
+  "operations": [
+    "materialize_source",
+    "materialize_candidate",
+    "diff",
+    "publish_output",
+    "prepare_git_commit"
+  ],
+  "invariants": {
+    "input_namespace_only": true,
+    "checksum_bound_materialization": true,
+    "create_new_slots": true,
+    "bounded_streaming_io": true,
+    "output_no_overwrite": true,
+    "source_preserved": true,
+    "git_head_bound_plan": true,
+    "git_process_spawned": false,
+    "public_mcp_exposed": false,
+    "actual_hangul": false
+  },
+  "limits": {
+    "max_file_bytes": 1073741824,
+    "max_relative_path_bytes": 1024,
+    "max_path_components": 32,
+    "max_commit_message_bytes": 128
+  }
+}
