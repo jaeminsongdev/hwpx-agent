@@ -32,6 +32,13 @@ class LocalDaemonChecksTests(unittest.TestCase):
         self.assertIn('"network_used": False', source)
         self.assertNotIn("shell=True", source)
 
+    def test_receipt_writer_preserves_canonical_lf_bytes(self) -> None:
+        source = (checks.ROOT / "tools/p17/run_local_daemon_checks.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('(canonical(receipt) + "\\n").encode("utf-8")', source)
+        self.assertNotIn('(run_dir / "receipt.json").write_text', source)
+
     def test_response_validator_requires_exact_success_and_error_shapes(self) -> None:
         success = {
             "protocol_version": checks.PROTOCOL_VERSION,

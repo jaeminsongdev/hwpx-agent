@@ -276,7 +276,11 @@ def run() -> dict[str, object]:
         "actual_codex_plugin": False,
         "network_used": False,
     }
-    (run_dir / "receipt.json").write_text(canonical(receipt) + "\n", encoding="utf-8")
+    # Write the evidence bytes explicitly. Path.write_text translates newlines on
+    # Windows, which would turn the canonical LF terminator into CRLF.
+    (run_dir / "receipt.json").write_bytes(
+        (canonical(receipt) + "\n").encode("utf-8")
+    )
     return receipt
 
 
