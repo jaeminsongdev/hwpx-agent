@@ -17,10 +17,12 @@ RUNS = ROOT / "artifacts/p17/current-workspace-source-runs"
 MAIN_CONTRACT = "implementation/p16/qualification/main-9cc1-p16-62542-v1/contract.json"
 POSTGRES_CONTRACT = "implementation/p16/qualification/postgres-217ba56/contract.json"
 P15_CONTRACT = "implementation/p16/qualification/p15-current-source-v1/contract.json"
+WIDGET_CONTRACT = "implementation/p16/p16-widget-shell-contract-v1.json"
 PINNED_CONTRACTS = {
     MAIN_CONTRACT: "890c72ac61c2c7d4e871958ff684de513fe1fe7e888e1264cba0eaec4bab52df",
     POSTGRES_CONTRACT: "c37e5b773a9117ffdb4af40c95d1263e08fdf7f6e25c69c6daa3108086497530",
     P15_CONTRACT: "5391428d584f7be36ed532ea446a07372761fb28bad9446972cef307c35a13e0",
+    WIDGET_CONTRACT: "2d8dad6318bc9090b0a7db70d19f1470e6ce0fa97bb177755cff993f9b94f09e",
 }
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 CHECKS = (
@@ -43,6 +45,7 @@ SOURCES = (
     MAIN_CONTRACT,
     POSTGRES_CONTRACT,
     P15_CONTRACT,
+    WIDGET_CONTRACT,
     "tools/p16/integrated_source_qualification.py",
     "tools/p17/run_current_workspace_source_checks.py",
     "tools/p17/tests/test_current_workspace_source_checks.py",
@@ -161,6 +164,7 @@ def source_expectations(
     main = contracts[MAIN_CONTRACT]
     postgres = contracts[POSTGRES_CONTRACT]
     p15 = contracts[P15_CONTRACT]
+    widget = contracts[WIDGET_CONTRACT]
     expectations: dict[str, set[str]] = {}
     main_replacements: dict[str, tuple[str, str]] = {}
     for entry in main.get("replacements", []):
@@ -187,6 +191,9 @@ def source_expectations(
             add_expectation(expectations, entry.get("path"), entry.get("successor_sha256"))
     for entry in p15.get("guard_sources", []):
         require(isinstance(entry, dict), "p15.guard")
+        add_expectation(expectations, entry.get("path"), entry.get("sha256"))
+    for entry in widget.get("source_locks", []):
+        require(isinstance(entry, dict), "widget.source")
         add_expectation(expectations, entry.get("path"), entry.get("sha256"))
     require(len(expectations) == len(set(expectations)), "predecessor.duplicates")
     return expectations, main_replacements

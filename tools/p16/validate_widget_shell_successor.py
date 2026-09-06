@@ -43,6 +43,44 @@ def load_shared_qualification() -> Any:
     return module
 
 
+def load_current_source_qualification() -> Any:
+    path = (ROOT / "tools/p17/current_workspace_source_qualification.py").resolve()
+    specification = importlib.util.spec_from_file_location(
+        "p17_current_source_for_widget_successor", path
+    )
+    if specification is None or specification.loader is None:
+        raise ValueError("current_source.load")
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    return module
+
+
+def current_widget_replacements(
+    root: Path, contract: dict[str, Any]
+) -> dict[str, tuple[str, str]]:
+    locks = contract.get("source_locks")
+    if not isinstance(locks, list):
+        raise ValueError("current_source.contract")
+    successors = load_current_source_qualification().verified_successors(root)
+    result: dict[str, tuple[str, str]] = {}
+    for entry in locks:
+        if not isinstance(entry, dict) or set(entry) != {"path", "sha256"}:
+            raise ValueError("current_source.contract")
+        relative = entry["path"]
+        before = entry["sha256"]
+        successor = successors.get(relative)
+        if successor is None:
+            continue
+        after = successor.get("current_sha256")
+        accepted = successor.get("accepted_predecessor_sha256s")
+        if not isinstance(after, str) or not isinstance(accepted, list) or before not in accepted:
+            raise ValueError("current_source.pair")
+        if hashlib.sha256((root / relative).read_bytes()).hexdigest() != after:
+            raise ValueError("current_source.digest")
+        result[relative] = (before, after)
+    return result
+
+
 def evaluate_local_widget_predecessor(contract: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
     tools_path = str(ROOT / "tools/p16")
     module_names = ("widget_shell", "build_widget_shell_contract")
@@ -72,6 +110,11 @@ def validate(contract: Any) -> list[str]:
             return ["successor.predecessor_exact"]
         qualification = load_shared_qualification()
         replacements = qualification.verified_widget_replacements(ROOT)
+        for relative, pair in current_widget_replacements(ROOT, canonical).items():
+            existing = replacements.get(relative)
+            if existing is not None and existing != pair:
+                return ["successor.current_conflict"]
+            replacements[relative] = pair
         current, predecessor_errors = evaluate_local_widget_predecessor(canonical)
         locks = canonical.get("source_locks")
         if not isinstance(locks, list):
@@ -90,7 +133,18 @@ def validate(contract: Any) -> list[str]:
                 observed.add(relative)
         if observed != set(replacements):
             return ["successor.diff_scope"]
-        if current != canonical or predecessor_errors:
+        normalized = json.loads(json.dumps(current))
+        normalized_locks = normalized.get("source_locks")
+        if not isinstance(normalized_locks, list):
+            return ["successor.predecessor_semantics"]
+        for entry in normalized_locks:
+            if not isinstance(entry, dict):
+                return ["successor.predecessor_semantics"]
+            pair = replacements.get(entry.get("path"))
+            if pair is not None and entry.get("sha256") == pair[1]:
+                entry["sha256"] = pair[0]
+        expected_errors = [] if current == canonical else ["contract.exact"]
+        if normalized != canonical or predecessor_errors != expected_errors:
             return ["successor.predecessor_semantics"]
     except Exception:
         errors.append("successor.unavailable")
