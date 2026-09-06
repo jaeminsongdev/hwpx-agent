@@ -80,8 +80,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
   and visual review. Attempt01's one-page expectation failure is preserved. Source successor v7
-  passed 11/11 at run `ee35b31e5192420d8292c7659655311d`; it retains all v6 P05 sources and
-  additionally binds the P17-07 local resolver. Current/independent FULL remain pending.
+  v8 passed 11/11 at run `51a6e677832c4646b97f585125b4130b` on clean commit `57ab50f`; it
+  retains all v7 sources and binds the P17-07 graphical stale-head component through 47 exact
+  implementation files. Current/independent FULL remain pending.
 - P05-08 fixed input passed strict product inspection and the policy-locked official Hancom model
   parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
   `open_input` without a positive receipt that the user completed the displayed access request;
@@ -117,7 +118,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Risks and holds
 
-- R-0001: P05-07 dense attempt02 current-PC actual subgate and latest source successor v7 pass.
+- R-0001: P05-07 dense attempt02 current-PC actual subgate and latest source successor v8 pass.
   P05-08 authorized open/save/reopen/render, P05-09 and final current/independent FULL remain open;
   no later-version or arbitrary-document claim.
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence remains open.
@@ -161,7 +162,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   `fixtures/target-build/p05-08-current-2020-20260906-v2/`.
 - P17-07 successor: read `implementation/p17/P17-07_LOCAL_CONFLICT_RESOLVER_V1.md` and
   `implementation/p17/P17-07_STALE_HEAD_WIDGET_V2.md`, then
-  `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V7.md`; the local resolver and graphical
+  `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V8.md`; the local resolver and graphical
   component exist, while host registration/actual concurrent evidence is intentionally absent.
 - Detailed history through P-0085 remains in `fae5bc0:PLANS.md`; later evidence is in individual
   reports and Git. Never touch user originals, failed evidence, predecessor locks or unrelated processes.

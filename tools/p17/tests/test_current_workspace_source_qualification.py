@@ -16,7 +16,7 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
         contract = qualification.verify()
         self.assertEqual(
             contract["qualification_id"],
-            "p17.current-workspace-source.v7.20260906",
+            "p17.current-workspace-source.v8.20260906",
         )
         self.assertTrue(contract["claims"]["source_qualification_only"])
         self.assertTrue(contract["claims"]["p05_diagnostic_dependencies_bound"])
@@ -29,6 +29,7 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
         )
         self.assertTrue(contract["claims"]["p05_vs1_coordinate_gate_sources_bound"])
         self.assertTrue(contract["claims"]["p17_local_conflict_resolver_bound"])
+        self.assertTrue(contract["claims"]["p17_stale_head_widget_v2_bound"])
         self.assertFalse(contract["claims"]["actual_hangul"])
         self.assertFalse(contract["claims"]["phase_complete"])
 
@@ -46,9 +47,9 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
                 entry["current_sha256"],
             )
 
-    def test_p05_gate_sources_are_exact_base_commit_blobs(self) -> None:
+    def test_implementation_sources_are_exact_base_commit_blobs(self) -> None:
         sources = qualification.verified_implementation_sources()
-        self.assertEqual(len(sources), 27)
+        self.assertEqual(len(sources), 47)
         self.assertEqual(
             set(sources),
             {entry["path"] for entry in qualification.IMPLEMENTATION_SOURCES},

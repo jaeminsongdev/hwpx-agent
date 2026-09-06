@@ -27,18 +27,18 @@ acceptance = load_acceptance()
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = "implementation/p17/qualification/current-workspace-source-v7-20260906"
+BASE = "implementation/p17/qualification/current-workspace-source-v8-20260906"
 QUALIFICATION = ROOT / BASE
-RUN_ID = "ee35b31e5192420d8292c7659655311d"
-BASE_COMMIT = "83be65026e1d13a6d16fd3e16f860c2223cc092e"
-RECEIPT_SHA256 = "d1d21296d0a5904d7a942942c210e00102565238b2d70828abecabfc83824ec8"
+RUN_ID = "51a6e677832c4646b97f585125b4130b"
+BASE_COMMIT = "57ab50f6fefa288bd13471472f7545c665687293"
+RECEIPT_SHA256 = "76d72489688a8705c2d6eab24fca6488e8efb2e8f1f60ab27fc9f50c4ead05bd"
 CARGO_METADATA_PROJECTION_SHA256 = (
     "d956979b62019ff5b89a3c6b2ab506a7f102ae0fcb4f86ce70717ac2fca2d51d"
 )
 WORKSPACE_MEMBER_COUNT = 23
 PREVIOUS_QUALIFICATION = (
-    "implementation/p17/qualification/current-workspace-source-v6-20260906/contract.json",
-    "b1fa0f102d847069d7679638650454c19132786a1b92a1b27831696d1bcf7c2c",
+    "implementation/p17/qualification/current-workspace-source-v7-20260906/contract.json",
+    "81e8abce12ad8216bead2dd76fc30b85135f9bec9fafe9de16e9deab400b7d1a",
 )
 IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     {
@@ -176,6 +176,106 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
         "bytes": 2377,
         "sha256": "61980228a0bb48d15be28a4ab1d0fc28259eadfee45f3b99bbc871bd98c277c8",
     },
+    {
+        "path": "web/plugin-widget/scripts/build-continuity-widget.mjs",
+        "bytes": 3651,
+        "sha256": "6fbd5601929e84c45a7de8c0ad1122d7ab1917b6b9c2c0e500e50d2dbe2c6d5c",
+    },
+    {
+        "path": "web/plugin-widget/src/continuity-component.tsx",
+        "bytes": 2930,
+        "sha256": "eb2fc1b4e352c76f3d4854824425281c55067f7339d7ce0a7ec9b69d037fe064",
+    },
+    {
+        "path": "web/plugin-widget/src/continuity-controller.test.ts",
+        "bytes": 16489,
+        "sha256": "4290b6fc4bbb13642eb1b497da196df526b956f9c025ee996b31b5a164d8781a",
+    },
+    {
+        "path": "web/plugin-widget/src/continuity-controller.ts",
+        "bytes": 21528,
+        "sha256": "467e66139f48d2287b768718938627f800f7316029934b9640666306168fe72b",
+    },
+    {
+        "path": "web/plugin-widget/src/continuity-model.test.ts",
+        "bytes": 8200,
+        "sha256": "c76a29a76294831725005bd3c4c7a4df3e2895499adb839bc24fa3accad5f094",
+    },
+    {
+        "path": "web/plugin-widget/src/continuity-model.ts",
+        "bytes": 24463,
+        "sha256": "b3f480324909f3c4ba009e09b1457025410a9d27912a5c93b6f6387b8806e12b",
+    },
+    {
+        "path": "web/plugin-widget/src/continuity-preview.tsx",
+        "bytes": 3012,
+        "sha256": "f19afeed48e9d5fccfd76c0a3d3f88f679495635a072d8ae6f3a12a432b8c8cb",
+    },
+    {
+        "path": "web/plugin-widget/src/continuity-resource.test.ts",
+        "bytes": 4672,
+        "sha256": "becc4cd32f74b0a711a9564ab0bb5d2eba7d242163b314b3f5518726c3a400f6",
+    },
+    {
+        "path": "web/plugin-widget/src/continuity-resource.ts",
+        "bytes": 10606,
+        "sha256": "4a57767e6a6e1b392f72a42e935ffc5c53ca9ecf8eb715eed50b08c2e9a3b305",
+    },
+    {
+        "path": "web/plugin-widget/src/continuity-styles.css",
+        "bytes": 10432,
+        "sha256": "326a966f08020a6492b91a8d9803e01c8b165e16d1bfe5c32d710a4e36781b6c",
+    },
+    {
+        "path": "web/plugin-widget/src/continuity-ui.test.tsx",
+        "bytes": 5674,
+        "sha256": "5846d9c9cbbeae4a519d850b050a8fb633e95bef592e4b2d9ccbe55efd346fb4",
+    },
+    {
+        "path": "web/plugin-widget/src/continuity-ui.tsx",
+        "bytes": 27068,
+        "sha256": "c6f6dcffb0349ff548bc6813ad7982994de5a9491372075d7bdf235beb628f92",
+    },
+    {
+        "path": "web/plugin-widget/src/continuity-v2-e2e-host.ts",
+        "bytes": 8181,
+        "sha256": "09683e8e3f05b2ca27c6a6b3fcb86f71abb1c8780734ab69fe5ef89ad1dc027b",
+    },
+    {
+        "path": "tools/p17/run_stale_head_widget_e2e.py",
+        "bytes": 5738,
+        "sha256": "36be58eddae2f657c51c3189de4b13ee27981ce93f07ec22eb18c6d001977ce1",
+    },
+    {
+        "path": "tools/p17/stale_head_widget.py",
+        "bytes": 10806,
+        "sha256": "16b474b5082517c4697d2d9c24b30fd82f853d52e9cfb23a7ca1b291e901d0c2",
+    },
+    {
+        "path": "tools/p17/tests/test_stale_head_widget.py",
+        "bytes": 2176,
+        "sha256": "8c36fbb43874d6540a7fead64607132ec1ad40d9829dea89a0632a9152b8b58e",
+    },
+    {
+        "path": "protocol/migrations/p17-continuity-v1-to-v2.md",
+        "bytes": 1708,
+        "sha256": "0f49483bfbd64d1a7192978c75f129bf22f92a7c3e9234640f244c8e468b9ba8",
+    },
+    {
+        "path": "protocol/private/p17-stale-head-widget-v1.json",
+        "bytes": 2605,
+        "sha256": "f4c5765927ca110b2907b26015698a0039327980c1c9958c99f2a92cfcdf607c",
+    },
+    {
+        "path": "implementation/p17/P17-07_STALE_HEAD_WIDGET_V2.md",
+        "bytes": 2761,
+        "sha256": "e5d5dac479061a1f2b66748ad101946217ef7a25e8cc712aa5917f4cefe19364",
+    },
+    {
+        "path": "implementation/p17/p17-stale-head-widget-contract-v1.json",
+        "bytes": 5484,
+        "sha256": "10b6b4ee473bd7712c626fdfbed6c93f01208e368831e42376ea5152285edc43",
+    },
 )
 SUCCESSORS: tuple[dict[str, Any], ...] = (
     {
@@ -304,6 +404,7 @@ CLAIMS = {
     "p05_header_footer_numeric_paragraph_id_repair_bound": True,
     "p05_vs1_coordinate_gate_sources_bound": True,
     "p17_local_conflict_resolver_bound": True,
+    "p17_stale_head_widget_v2_bound": True,
     "actual_hangul": False,
     "registered_host": False,
     "production": False,
@@ -314,7 +415,7 @@ GUARD_SOURCES = (
     "tools/p17/run_current_workspace_source_checks.py",
     "tools/p17/current_workspace_source_qualification.py",
     "tools/p17/tests/test_current_workspace_source_qualification.py",
-    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V7.md",
+    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V8.md",
 )
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -405,7 +506,7 @@ def receipt_path(root: Path) -> Path:
 
 def expected_current(root: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v7",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v8",
         "scope": "current_pc_source_binding_successor_only",
         "run_id": RUN_ID,
         "source_commit": BASE_COMMIT,
@@ -424,8 +525,8 @@ def expected_current(root: Path) -> dict[str, Any]:
 
 def expected_contract(root: Path, current_path: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v7",
-        "qualification_id": "p17.current-workspace-source.v7.20260906",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v8",
+        "qualification_id": "p17.current-workspace-source.v8.20260906",
         "base_commit": BASE_COMMIT,
         "scope": "current_pc_source_binding_successor_only",
         "claims": CLAIMS,
