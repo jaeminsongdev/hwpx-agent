@@ -143,6 +143,12 @@ fn header_and_footer_with_page_fields_roundtrip() -> TestResult {
     ] {
         let (bytes, receipt) =
             HeaderFooterLowerer::lower_definition(&expected, HeaderFooterLimits::default())?;
+        let xml = std::str::from_utf8(&bytes)?;
+        assert!(xml.contains(concat!(
+            r#"<hp:linesegarray><hp:lineseg textpos="0" vertpos="0" "#,
+            r#"vertsize="1000" textheight="1000" baseline="850" spacing="600" "#,
+            r#"horzpos="0" horzsize="42520" flags="393216"/></hp:linesegarray>"#,
+        )));
         assert_eq!(receipt.profile_id, HEADER_FOOTER_PROFILE_ID);
         assert_eq!(receipt.sha256, Sha256::digest(&bytes).as_slice());
         assert_eq!(
@@ -150,6 +156,21 @@ fn header_and_footer_with_page_fields_roundtrip() -> TestResult {
             expected
         );
     }
+    Ok(())
+}
+
+#[test]
+fn hangul_2020_empty_text_after_field_is_semantically_empty() -> TestResult {
+    let expected = definition(HeaderFooterKind::Header, PageVariant::Both, 1);
+    let (bytes, _) =
+        HeaderFooterLowerer::lower_definition(&expected, HeaderFooterLimits::default())?;
+    let xml = std::str::from_utf8(&bytes)?;
+    let xml = xml.replacen("</hp:run>", "<hp:t/></hp:run>", 1);
+
+    assert_eq!(
+        HeaderFooterReader::read_definition(xml.as_bytes(), HeaderFooterLimits::default())?,
+        expected
+    );
     Ok(())
 }
 
@@ -298,6 +319,14 @@ fn master_page_variants_and_exact_links_are_closed() -> TestResult {
     for page in &pages {
         let (bytes, _) =
             HeaderFooterLowerer::lower_master_page(page, HeaderFooterLimits::default())?;
+        assert!(bytes.starts_with(
+            br#"<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><masterPage "#
+        ));
+        assert!(
+            !bytes
+                .windows(b"<hm:masterPage".len())
+                .any(|value| value == b"<hm:masterPage")
+        );
         assert_eq!(
             HeaderFooterReader::read_master_page(&bytes, HeaderFooterLimits::default())?,
             *page
@@ -589,7 +618,7 @@ fn fixed_128_case_header_footer_corpus_is_deterministic() -> TestResult {
     }
     assert_eq!(
         hex::encode(digest.finalize()),
-        "b1723d2df9135ab2a5051597cac64c50dc33b50d259c622fc975b24b89e6e4aa"
+        "67ed13c27ab4c7197dfec1c1853554a19fd21b93b0bb4fb4bc282f0b61f45bc9"
     );
     Ok(())
 }

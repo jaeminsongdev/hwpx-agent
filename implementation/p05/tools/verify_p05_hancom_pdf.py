@@ -356,6 +356,34 @@ def extract_positioned_text(page: Any) -> tuple[str, tuple[PositionedText, ...]]
     return extracted, tuple(fragments)
 
 
+def find_unique_anchor_origin(
+    fragments: tuple[PositionedText, ...],
+    anchor_text: str,
+    page_height_milli_mm: int,
+    geometry_tolerance_milli_mm: int,
+) -> PositionedText:
+    """Find one normalized anchor even when a PDF producer splits it across text fragments."""
+    joined = " ".join(fragment.text for fragment in fragments)
+    start = joined.find(anchor_text)
+    if start < 0 or joined.find(anchor_text, start + 1) >= 0:
+        fail("PDF_COLUMN_FLOW_ANCHOR_CARDINALITY")
+
+    anchor_end = start + len(anchor_text)
+    cursor = 0
+    for fragment in fragments:
+        end = cursor + len(fragment.text)
+        overlaps_anchor = cursor < anchor_end and end > start
+        unpositioned_page_edge_callback = (
+            fragment.x_milli_mm == 0
+            and abs(fragment.y_milli_mm - page_height_milli_mm)
+            <= geometry_tolerance_milli_mm
+        )
+        if overlaps_anchor and not unpositioned_page_edge_callback:
+            return fragment
+        cursor = end + 1
+    fail("PDF_COLUMN_FLOW_ANCHOR_CARDINALITY")
+
+
 def verify_column_flow(
     fragments: tuple[PositionedText, ...],
     expectation: ColumnFlowExpectation,
@@ -375,26 +403,39 @@ def verify_column_flow(
             <= page_height_milli_mm + geometry_tolerance_milli_mm
         ):
             fail("PDF_COLUMN_FLOW_COORDINATE_OUT_OF_PAGE")
+    positioned = tuple(
+        fragment
+        for fragment in fragments
+        if not (
+            fragment.x_milli_mm == 0
+            and abs(fragment.y_milli_mm - page_height_milli_mm)
+            <= geometry_tolerance_milli_mm
+        )
+    )
     left_limit = expectation.split_x_milli_mm - expectation.split_guard_milli_mm
     right_limit = expectation.split_x_milli_mm + expectation.split_guard_milli_mm
-    left = tuple(fragment for fragment in fragments if fragment.x_milli_mm < left_limit)
-    right = tuple(fragment for fragment in fragments if fragment.x_milli_mm > right_limit)
+    left = tuple(fragment for fragment in positioned if fragment.x_milli_mm < left_limit)
+    right = tuple(fragment for fragment in positioned if fragment.x_milli_mm > right_limit)
     if (
         len(left) < expectation.min_text_fragments_per_column
         or len(right) < expectation.min_text_fragments_per_column
     ):
         fail("PDF_COLUMN_FLOW_COLUMN_UNDERFILLED")
-    left_anchors = tuple(
-        fragment for fragment in fragments if expectation.left_anchor_text in fragment.text
+    left_anchor = find_unique_anchor_origin(
+        fragments,
+        expectation.left_anchor_text,
+        page_height_milli_mm,
+        geometry_tolerance_milli_mm,
     )
-    right_anchors = tuple(
-        fragment for fragment in fragments if expectation.right_anchor_text in fragment.text
+    right_anchor = find_unique_anchor_origin(
+        fragments,
+        expectation.right_anchor_text,
+        page_height_milli_mm,
+        geometry_tolerance_milli_mm,
     )
-    if len(left_anchors) != 1 or len(right_anchors) != 1:
-        fail("PDF_COLUMN_FLOW_ANCHOR_CARDINALITY")
-    if left_anchors[0].x_milli_mm >= left_limit:
+    if left_anchor.x_milli_mm >= left_limit:
         fail("PDF_COLUMN_FLOW_LEFT_ANCHOR_MISMATCH")
-    if right_anchors[0].x_milli_mm <= right_limit:
+    if right_anchor.x_milli_mm <= right_limit:
         fail("PDF_COLUMN_FLOW_RIGHT_ANCHOR_MISMATCH")
     left_bottom = min(fragment.y_milli_mm for fragment in left)
     right_bottom = min(fragment.y_milli_mm for fragment in right)
@@ -412,10 +453,10 @@ def verify_column_flow(
         "bottom_baseline_delta_milli_mm": bottom_delta,
         "left_anchor_text_sha256": sha256_text(expectation.left_anchor_text),
         "right_anchor_text_sha256": sha256_text(expectation.right_anchor_text),
-        "left_anchor_x_milli_mm": left_anchors[0].x_milli_mm,
-        "left_anchor_y_milli_mm": left_anchors[0].y_milli_mm,
-        "right_anchor_x_milli_mm": right_anchors[0].x_milli_mm,
-        "right_anchor_y_milli_mm": right_anchors[0].y_milli_mm,
+        "left_anchor_x_milli_mm": left_anchor.x_milli_mm,
+        "left_anchor_y_milli_mm": left_anchor.y_milli_mm,
+        "right_anchor_x_milli_mm": right_anchor.x_milli_mm,
+        "right_anchor_y_milli_mm": right_anchor.y_milli_mm,
         "raw_document_text_present": False,
     }
 

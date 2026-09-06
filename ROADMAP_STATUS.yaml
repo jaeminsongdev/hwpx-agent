@@ -604,8 +604,8 @@ p04_execution:
     user_documents_opened: false
     hancom_runtime_executed_by_task: true
 p05_execution:
-  current_task: P05-07_actual_render_acceptance
-  gate_state: in_progress_current_pc_local
+  current_task: P05_phase_source_successor_and_full_gate
+  gate_state: in_progress_actual_subgates_passed_current_pc_local
   tasks:
     P05-01: completed_current_pc_local_text_flow
     P05-02: completed_current_pc_local_character_styles
@@ -613,9 +613,9 @@ p05_execution:
     P05-04: completed_current_pc_local_tabs
     P05-05: completed_current_pc_local_lists_numbering
     P05-06: completed_current_pc_local_page_setup
-    P05-07: core_complete_actual_render_pending
-    P05-08: core_complete_actual_render_blocked_by_P05-07
-    P05-09: core_complete_actual_render_blocked_by_P05-08
+    P05-07: completed_current_pc_actual_sparse_and_dense_render
+    P05-08: completed_current_pc_actual_odd_even_first_page_fixture
+    P05-09: completed_current_pc_actual_coordinate_aware_vs1
   text_flow:
     contract: hwpx-agent.text-flow/v1
     audited_source_commit: 08de88a0d6745398e8141190f204a93b009f770a
@@ -721,6 +721,57 @@ p05_execution:
     scanned_files_current_and_clean_clone: 600_and_597
     sbom_components: 273
     clean_clone_sbom_components: 231
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: true
+  header_footer:
+    contract: hwpx-agent.header-footer/1
+    target_profile: hancom-hangul-2020-secondary
+    exact_build_scope: 11.0.0.9136
+    master_page_root: standalone_unqualified_masterPage
+    master_manifest_section_identity: masterpage0
+    master_in_spine: false
+    header_footer_tests: 17_of_17_passed
+    hwpx_package_all_targets_all_features: 217_of_217_passed
+    pdf_verifier_tests: 21_of_21_passed
+    header_footer_variation_cases: 128
+    header_footer_variation_sha256: 67ed13c27ab4c7197dfec1c1853554a19fd21b93b0bb4fb4bc282f0b61f45bc9
+    exact_hancom_2020_open_save_reopen_pdf: passed
+    exact_input_sha256: 226122eaac21031270316819c89c43e029f48417aae742d69edbde9e0b230475
+    exact_output_sha256: 2fd7af9efb54132160b617b7b28399804596115fb2758bf193e5b0cd830838ac
+    exact_pdf_sha256: 649452bdc3f755def558fbe70a6be5ad8a75e6d6e2dc9059e6fee96e82a7838a
+    strict_readback: 4_pages_4_definitions_8_fields_1_master_first_page_hidden
+    original_resolution_visual_review: passed_no_overlap_or_clipping
+    input_unchanged: true
+    text_digest_preserved: true
+    remaining_hwp_processes: 0
+    source_successor_qualification: pending
+    current_and_independent_full: pending
+    user_documents_opened: false
+    hancom_runtime_executed_by_task: true
+  vs1_layout:
+    profile: hwpx-agent.hancom-2020-vs1-layout/v1
+    target_profile: hancom-hangul-2020-secondary
+    exact_build_scope: 11.0.0.9136
+    explicit_column_type: NEWSPAPER
+    automatic_balanced_column_type: BALANCED_NEWSPAPER
+    current_target_backend_column_id: empty
+    hwpx_package_all_targets_all_features: 218_of_218_passed
+    pdf_verifier_tests: 21_of_21_passed
+    bounded_powershell_static_suites: 164_of_164_passed
+    exact_hancom_2020_open_save_reopen_pdf: passed
+    exact_input_sha256: 7274a592905e15a0b4a2d58a38a827e45cc4f7e5717e1c8c6c986a9597e91666
+    exact_output_sha256: 35169882bd81981fc516a86de8c2082e596b5448fc64f4a0de5fe3095d5a4ea2
+    exact_pdf_sha256: f2df223831be330e81103f0db3d338a6aae3f45b8160b9f808aafaa6af03484d
+    exact_text_sha256: 2d93a6073c0703bdc54ccb4a6f12671604a7cac5207fd20744d264a5f93df33f
+    strict_readback: 11_parts_5_paragraphs_1_break_2_columns_1700_gap
+    coordinate_verification: 24_left_17_right_1_page_edge_callback_10145_bottom_delta
+    original_resolution_visual_review: passed_no_overlap_or_clipping
+    dense_pdf_regression_replay: passed_exact_png_hashes_preserved
+    input_unchanged: true
+    text_digest_preserved: true
+    remaining_hwp_processes: 0
+    source_successor_qualification: pending
+    current_and_independent_full: pending
     user_documents_opened: false
     hancom_runtime_executed_by_task: true
 p10_execution:

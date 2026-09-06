@@ -43,9 +43,9 @@ Text·Character·Paragraph·Page·Section를 문서상 계획이 아니라 **재
 - [x] `P05-04` 산출물 `tab model` 존재, 검증: target readback fixtures.
 - [x] `P05-05` 산출물 `list engine` 존재, 검증: sequence and nesting tests.
 - [x] `P05-06` 산출물 `PageSetup lowerer` 존재, 검증: impossible layout negative tests.
-- [ ] `P05-07` 산출물 `section/column engine` 존재, 검증: multi-section render tests.
-- [ ] `P05-08` 산출물 `header/footer module` 존재, 검증: odd/even/first-page fixtures.
-- [ ] `P05-09` 산출물 `layout vertical slice` 존재, 검증: Hancom save/reopen/render pass.
+- [x] `P05-07` 산출물 `section/column engine` 존재, 검증: multi-section render tests.
+- [x] `P05-08` 산출물 `header/footer module` 존재, 검증: odd/even/first-page fixtures.
+- [x] `P05-09` 산출물 `layout vertical slice` 존재, 검증: Hancom save/reopen/render pass.
 - [ ] 새 capability/contract/schema에 migration과 negative test가 있다.
 - [ ] 실제 수행하지 않은 검증은 `unverified`로 남았다.
 - [ ] source artifact를 in-place로 수정한 경로가 없다.

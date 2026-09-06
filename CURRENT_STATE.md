@@ -1,6 +1,6 @@
 # CURRENT STATE
 
-> 기준일: 2026-09-05
+> 기준일: 2026-09-07
 > 프로젝트 코드명: `hwpx-agent`  
 > 문서 세트 버전: `2.0-design`  
 > 규범 키워드: **MUST/SHALL=필수**, **SHOULD=권장**, **MAY=선택**
@@ -9,7 +9,7 @@
 
 - 상태: `P05_IN_PROGRESS_AND_P15_IN_PROGRESS_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P05_TEXT_PARAGRAPH_STYLE_LAYOUT` + `P15_REMOTE_MCP_CONTROL_PLANE`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~06 typed text/style/layout core는 완료했고 P05-07~09 core는 실제 한글 2020 render evidence를 기다린다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14-01~09와 P14 Gate는 local reference 및 disposable PostgreSQL 범위에서 통과했다. P15-01 bounded Auth/tenant resource-server middleware, P15-02의 18개 public MCP tool schema/snapshot, P15-03 공통 handler boundary, P15-04 durable Async job UX, P15-05 bounded Artifact delivery, P15-06 stable public Error mapping과 P15-07 bounded Rate limit/quotas가 통과했고 P15-08 Telemetry가 다음 비-UI 구현이다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~09 core와 P05-07 sparse/dense, P05-08 odd/even/first-page, P05-09 coordinate-aware VS-1 actual Hangul 2020 fixture가 통과했다. P05 phase 최종 source/FULL Gate는 진행 중이다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14와 P15는 각 보고서의 scoped local 범위에서 통과했고 P16/P17 local 구현은 `PLANS.md`의 최신 원장을 따른다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -89,8 +89,9 @@
 ## P05 현재 상태
 
 - P05-01~06 `PASS`: bounded text flow, character/paragraph styles, tabs, lists/numbering과 page setup이 각 typed contract, negative/fixed corpus, cross-platform tests와 해당 보고서의 범위에서 완료됐다.
-- P05-07~09 core는 section/columns, header/footer와 layout model/test fixture를 갖췄지만 release 판정에 필요한 실제 한글 2020 save/reopen/PDF/render evidence는 열려 있다.
-- P05-07 v2 시도 10~16은 모두 `open_input`에서 bounded timeout됐다. 입력은 불변이고 output/PDF는 없으며 owned `Hwp.exe`와 잔류 프로세스는 0이다. 따라서 P05-07~09와 P05 Gate를 PASS로 올리지 않는다.
+- P05-07은 sparse layout/identity와 dense automatic flow/balance current-PC actual subgate를 통과했다. 이전 timeout과 기대 불일치 시도는 그대로 보존한다.
+- P05-08은 한글 2020 생성 reference로 standalone master-page와 control placement를 교정했다. v12 actual fixture는 open-save-reopen, strict 4쪽/4 definition/8 field/1 master readback, PDF 계약, 원본 해상도 전수 검토와 잔류 프로세스 0을 통과했다. 이 PASS는 고정 fixture/current PC에 한정된다.
+- P05-09 v2는 ordinary two-column+explicit break, current-target empty backend ID로 교정한 뒤 actual open-save-reopen, strict semantic readback, coordinate-aware PDF와 원본 해상도 검토를 통과했다. P05 phase 최종 source/FULL Gate는 열려 있다.
 
 ## P10 현재 상태
 
@@ -173,12 +174,12 @@
 
 ## 다음 작업
 
-비-UI 순서는 P15-08에서 bounded tool/job/backend/capability SLI event, trace correlation, redaction과 complete sample trace를 구현·증명하는 것이며 추론수준은 `max`다. P05-07 actual render는 해당 UI 게이트가 활성화될 때 사용자에게 먼저 알리고, 사용자가 모든 `모두 허용`을 누르는 동안 save/reopen/PDF/render가 실제로 완성되기 전에는 다음 P05 Gate로 승격하지 않는다.
+다음 P05 작업은 P05-09 actual PASS를 포함한 최종 source successor와 current/independent FULL Gate를 닫는 것이며 추론수준은 `max`다. 비-UI 구현과 P16/P17 최신 순서는 `PLANS.md`를 따른다.
 
 ## 현재 blocker
 
 - NPM advisory endpoint는 간헐적 timeout 이력이 있지만 P14-09 exact commit 보안 run은 첫 시도 실제 응답으로 통과했으며 P15-01 blocker가 아니다.
-- P05-07 actual render는 한글 2020의 수동 `모두 허용` 타이밍에 의존한다. v2 attempt 16도 `open_input`에서 안전하게 timeout됐고 잔류 프로세스는 0이다.
+- P05 actual 대상 실행은 완료됐다. 이후 회귀 때문에 한글 2020 재실행이 필요해질 때만 직전에 사용자에게 알리고, timeout/실패는 보존하며 자동 PASS로 승격하지 않는다.
 - P10-05/06과 P10-08 production 범위는 외부 보안 모듈·격리 환경이 제공되기 전까지 unqualified다.
 
 2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.

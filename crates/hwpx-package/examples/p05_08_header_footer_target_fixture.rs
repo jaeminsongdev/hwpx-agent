@@ -24,8 +24,23 @@ const PAGE_TEXTS: [&str; 4] = [
     "P05-08-PAGE-FOUR-EVEN",
 ];
 const MASTER_PAGE_PATH: &str = "Contents/masterpage0.xml";
-const MASTER_PAGE_ID: &str = "p05-08-master";
+// Section master-page references are package manifest item IDs.  Keep the
+// manifest item, section idRef, and current-profile master root identity equal
+// so Hangul 2020 can resolve the external part without an alias layer.
+const MASTER_PAGE_ID: &str = "masterpage0";
 const MAX_TARGET_FIXTURE_BYTES: u64 = 8 * 1024 * 1024;
+
+#[derive(Clone, Copy)]
+enum ProbeProfile {
+    BasicHeader,
+    FullWithoutMasterPage,
+}
+
+#[derive(Clone, Copy)]
+enum MasterSectionProfile {
+    Target,
+    MasterOnly,
+}
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut arguments = env::args_os();
@@ -33,20 +48,29 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mode = arguments
         .next()
         .and_then(|value| value.into_string().ok())
-        .ok_or("usage: p05_08_header_footer_target_fixture <build|inspect> <path.hwpx>")?;
-    let path = arguments
-        .next()
-        .map(PathBuf::from)
-        .ok_or("usage: p05_08_header_footer_target_fixture <build|inspect> <path.hwpx>")?;
+        .ok_or(concat!(
+            "usage: p05_08_header_footer_target_fixture ",
+            "<build|build-probe-basic|build-probe-no-master|build-probe-master-only|inspect|inspect-probe-master-only> <path.hwpx>"
+        ))?;
+    let path = arguments.next().map(PathBuf::from).ok_or(concat!(
+        "usage: p05_08_header_footer_target_fixture ",
+        "<build|build-probe-basic|build-probe-no-master|build-probe-master-only|inspect|inspect-probe-master-only> <path.hwpx>"
+    ))?;
     if arguments.next().is_some() {
-        return Err(
-            "usage: p05_08_header_footer_target_fixture <build|inspect> <path.hwpx>".into(),
-        );
+        return Err(concat!(
+            "usage: p05_08_header_footer_target_fixture ",
+            "<build|build-probe-basic|build-probe-no-master|build-probe-master-only|inspect|inspect-probe-master-only> <path.hwpx>"
+        )
+        .into());
     }
     match mode.as_str() {
         "build" => build(&path),
+        "build-probe-basic" => build_probe(&path, ProbeProfile::BasicHeader),
+        "build-probe-no-master" => build_probe(&path, ProbeProfile::FullWithoutMasterPage),
+        "build-probe-master-only" => build_master_only_probe(&path),
         "inspect" => inspect_path(&path),
-        _ => Err("mode must be build or inspect".into()),
+        "inspect-probe-master-only" => inspect_master_only_probe_path(&path),
+        _ => Err("unsupported fixture mode".into()),
     }
 }
 
@@ -59,6 +83,54 @@ fn build(path: &Path) -> Result<(), Box<dyn Error>> {
     output.write_all(&bytes)?;
     output.sync_all()?;
     print_result("build", &bytes, &inspection);
+    Ok(())
+}
+
+fn build_probe(path: &Path, profile: ProbeProfile) -> Result<(), Box<dyn Error>> {
+    let source = Hancom2020Vs0Builder::build(PAGE_TEXTS[0])?;
+    let source_bytes = source.with_verified_bytes(ToOwned::to_owned)?;
+    let bytes = rebuild_probe(&source_bytes, profile)?;
+    let expected = probe_policy(profile);
+    inspect_probe_bytes(&bytes, &expected)?;
+    let mut output = OpenOptions::new().write(true).create_new(true).open(path)?;
+    output.write_all(&bytes)?;
+    output.sync_all()?;
+    println!(
+        "schema=hwpx-agent.p05-08-compatibility-probe/v1 mode=build state=pass size={} sha256={} definitions={} masters=0 text_sha256={}",
+        bytes.len(),
+        hex::encode(Sha256::digest(&bytes)),
+        expected.definitions.len(),
+        hex::encode(Sha256::digest(PAGE_TEXTS.join("\n").as_bytes())),
+    );
+    Ok(())
+}
+
+fn build_master_only_probe(path: &Path) -> Result<(), Box<dyn Error>> {
+    let source = Hancom2020Vs0Builder::build(PAGE_TEXTS[0])?;
+    let source_bytes = source.with_verified_bytes(ToOwned::to_owned)?;
+    let bytes = rebuild_with_master(&source_bytes, MasterSectionProfile::MasterOnly)?;
+    inspect_master_only_probe_bytes(&bytes)?;
+    let mut output = OpenOptions::new().write(true).create_new(true).open(path)?;
+    output.write_all(&bytes)?;
+    output.sync_all()?;
+    println!(
+        "schema=hwpx-agent.p05-08-master-only-probe/v1 mode=build state=pass size={} sha256={} pages=4 masters=1 text_sha256={}",
+        bytes.len(),
+        hex::encode(Sha256::digest(&bytes)),
+        hex::encode(Sha256::digest(PAGE_TEXTS.join("\n").as_bytes())),
+    );
+    Ok(())
+}
+
+fn inspect_master_only_probe_path(path: &Path) -> Result<(), Box<dyn Error>> {
+    let bytes = read_bounded_fixture(path)?;
+    inspect_master_only_probe_bytes(&bytes)?;
+    println!(
+        "schema=hwpx-agent.p05-08-master-only-probe/v1 mode=inspect state=pass size={} sha256={} pages=4 masters=1 text_sha256={}",
+        bytes.len(),
+        hex::encode(Sha256::digest(&bytes)),
+        hex::encode(Sha256::digest(PAGE_TEXTS.join("\n").as_bytes())),
+    );
     Ok(())
 }
 
@@ -126,6 +198,26 @@ fn inspect_bytes(bytes: &[u8]) -> Result<Inspection, Box<dyn Error>> {
     if graph.parts.len() != reader.entries().len() {
         return Err("package graph does not cover every entry".into());
     }
+    if graph
+        .spine
+        .iter()
+        .any(|path| path.as_str() == MASTER_PAGE_PATH)
+    {
+        return Err("target master-page manifest resource must not be an OPF spine item".into());
+    }
+    let master_archive_index = reader
+        .entries()
+        .iter()
+        .position(|entry| entry.path.as_str() == MASTER_PAGE_PATH)
+        .ok_or("required master-page fixture part is missing")?;
+    let section_archive_index = reader
+        .entries()
+        .iter()
+        .position(|entry| entry.path.as_str() == "Contents/section0.xml")
+        .ok_or("required section fixture part is missing")?;
+    if master_archive_index >= section_archive_index {
+        return Err("target master-page archive entry must precede its referring section".into());
+    }
     let section = read_part(&mut reader, "Contents/section0.xml")?;
     let master_bytes = read_part(&mut reader, MASTER_PAGE_PATH)?;
     let actual_policy = HeaderFooterReader::read_section(&section, HeaderFooterLimits::default())?;
@@ -172,6 +264,67 @@ fn inspect_bytes(bytes: &[u8]) -> Result<Inspection, Box<dyn Error>> {
         first_page_hidden,
         text_sha256: hex::encode(Sha256::digest(canonical_text.as_bytes())),
     })
+}
+
+fn inspect_probe_bytes(
+    bytes: &[u8],
+    expected_policy: &SectionPagePolicy,
+) -> Result<(), Box<dyn Error>> {
+    let mut reader = BoundedZipReader::open(Cursor::new(bytes), PackageLimits::default())?;
+    let graph = PackageGraph::build(&mut reader, PackageGraphLimits::default())?;
+    if graph.parts.len() != reader.entries().len() {
+        return Err("probe package graph does not cover every entry".into());
+    }
+    let section = read_part(&mut reader, "Contents/section0.xml")?;
+    let actual_policy = HeaderFooterReader::read_section(&section, HeaderFooterLimits::default())?;
+    if actual_policy != *expected_policy {
+        return Err("probe section semantic readback mismatch".into());
+    }
+    let main = read_main_paragraphs(&section)?;
+    if main.texts != PAGE_TEXTS || main.page_breaks != [false, true, true, true] {
+        return Err("probe main page text or forced break sequence mismatch".into());
+    }
+    Ok(())
+}
+
+fn inspect_master_only_probe_bytes(bytes: &[u8]) -> Result<(), Box<dyn Error>> {
+    let mut reader = BoundedZipReader::open(Cursor::new(bytes), PackageLimits::default())?;
+    let graph = PackageGraph::build(&mut reader, PackageGraphLimits::default())?;
+    if graph.parts.len() != reader.entries().len()
+        || graph
+            .spine
+            .iter()
+            .any(|path| path.as_str() == MASTER_PAGE_PATH)
+    {
+        return Err("master-only probe package graph mismatch".into());
+    }
+    let master_archive_index = reader
+        .entries()
+        .iter()
+        .position(|entry| entry.path.as_str() == MASTER_PAGE_PATH)
+        .ok_or("master-only probe master part is missing")?;
+    let section_archive_index = reader
+        .entries()
+        .iter()
+        .position(|entry| entry.path.as_str() == "Contents/section0.xml")
+        .ok_or("master-only probe section part is missing")?;
+    if master_archive_index >= section_archive_index {
+        return Err("master-only probe archive order mismatch".into());
+    }
+    let section = read_part(&mut reader, "Contents/section0.xml")?;
+    let master_bytes = read_part(&mut reader, MASTER_PAGE_PATH)?;
+    if HeaderFooterReader::read_section(&section, HeaderFooterLimits::default())?
+        != master_only_probe_policy()
+        || HeaderFooterReader::read_master_page(&master_bytes, HeaderFooterLimits::default())?
+            != target_master_page()
+    {
+        return Err("master-only probe semantic readback mismatch".into());
+    }
+    let main = read_main_paragraphs(&section)?;
+    if main.texts != PAGE_TEXTS || main.page_breaks != [false, true, true, true] {
+        return Err("master-only probe main page sequence mismatch".into());
+    }
+    Ok(())
 }
 
 fn read_part(
@@ -239,12 +392,21 @@ fn read_main_paragraphs(section: &[u8]) -> Result<MainParagraphReadback, Box<dyn
 }
 
 fn rebuild_target(source: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
+    rebuild_with_master(source, MasterSectionProfile::Target)
+}
+
+fn rebuild_with_master(
+    source: &[u8],
+    profile: MasterSectionProfile,
+) -> Result<Vec<u8>, Box<dyn Error>> {
     let mut archive = ZipArchive::new(Cursor::new(source))?;
-    let master_page = HeaderFooterLowerer::lower_master_page(
-        &target_master_page(),
-        HeaderFooterLimits::default(),
-    )?
-    .0;
+    let mut master_page = Some(
+        HeaderFooterLowerer::lower_master_page(
+            &target_master_page(),
+            HeaderFooterLimits::default(),
+        )?
+        .0,
+    );
     let mut parts = Vec::with_capacity(archive.len() + 1);
     for index in 0..archive.len() {
         let mut entry = archive.by_index(index)?;
@@ -252,10 +414,23 @@ fn rebuild_target(source: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
         let method = entry.compression();
         let mut bytes = Vec::new();
         entry.read_to_end(&mut bytes)?;
+        if path == "Contents/section0.xml" {
+            parts.push((
+                MASTER_PAGE_PATH.to_owned(),
+                CompressionMethod::Deflated,
+                master_page
+                    .take()
+                    .ok_or("master-page fixture insertion was attempted more than once")?,
+            ));
+        }
         match path.as_str() {
-            "Contents/section0.xml" => bytes = build_section(&bytes)?,
+            "Contents/section0.xml" => {
+                bytes = match profile {
+                    MasterSectionProfile::Target => build_section(&bytes)?,
+                    MasterSectionProfile::MasterOnly => build_master_only_probe_section(&bytes)?,
+                };
+            }
             "Contents/content.hpf" => bytes = add_master_to_package_document(&bytes)?,
-            "META-INF/container.rdf" => bytes = add_master_to_rdf(&bytes)?,
             "Preview/PrvText.txt" => {
                 bytes = format!("HWPX Agent P05-08\n{}\n", PAGE_TEXTS.join("\n")).into_bytes();
             }
@@ -263,11 +438,9 @@ fn rebuild_target(source: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
         }
         parts.push((path, method, bytes));
     }
-    parts.push((
-        MASTER_PAGE_PATH.to_owned(),
-        CompressionMethod::Deflated,
-        master_page,
-    ));
+    if master_page.is_some() {
+        return Err("section fixture insertion anchor is missing".into());
+    }
     let mut writer = ZipWriter::new(Cursor::new(Vec::new()));
     for (path, method, bytes) in parts {
         let mut options = SimpleFileOptions::default()
@@ -282,6 +455,93 @@ fn rebuild_target(source: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
         writer.write_all(&bytes)?;
     }
     Ok(writer.finish()?.into_inner())
+}
+
+fn rebuild_probe(source: &[u8], profile: ProbeProfile) -> Result<Vec<u8>, Box<dyn Error>> {
+    let mut archive = ZipArchive::new(Cursor::new(source))?;
+    let mut parts = Vec::with_capacity(archive.len());
+    for index in 0..archive.len() {
+        let mut entry = archive.by_index(index)?;
+        let path = entry.name().to_owned();
+        let method = entry.compression();
+        let mut bytes = Vec::new();
+        entry.read_to_end(&mut bytes)?;
+        match path.as_str() {
+            "Contents/section0.xml" => bytes = build_probe_section(&bytes, profile)?,
+            "Preview/PrvText.txt" => {
+                bytes =
+                    format!("HWPX Agent P05-08 probe\n{}\n", PAGE_TEXTS.join("\n")).into_bytes();
+            }
+            _ => {}
+        }
+        parts.push((path, method, bytes));
+    }
+    let mut writer = ZipWriter::new(Cursor::new(Vec::new()));
+    for (path, method, bytes) in parts {
+        let mut options = SimpleFileOptions::default()
+            .compression_method(method)
+            .last_modified_time(DateTime::default())
+            .system(zip::System::Unix)
+            .unix_permissions(0o644);
+        if method == CompressionMethod::Deflated {
+            options = options.compression_level(Some(6));
+        }
+        writer.start_file(path, options)?;
+        writer.write_all(&bytes)?;
+    }
+    Ok(writer.finish()?.into_inner())
+}
+
+fn build_probe_section(source: &[u8], profile: ProbeProfile) -> Result<Vec<u8>, Box<dyn Error>> {
+    let mut section = match profile {
+        ProbeProfile::BasicHeader => std::str::from_utf8(source)?.to_owned(),
+        ProbeProfile::FullWithoutMasterPage => {
+            let full = String::from_utf8(build_section(source)?)?;
+            let without_count =
+                replace_exact_once(&full, "masterPageCnt=\"1\"", "masterPageCnt=\"0\"")?;
+            replace_exact_once(
+                &without_count,
+                &format!("<hp:masterPage idRef=\"{MASTER_PAGE_ID}\"/>"),
+                "",
+            )?
+        }
+    };
+    if matches!(profile, ProbeProfile::BasicHeader) {
+        let controls = HeaderFooterLowerer::lower_section_controls(
+            &probe_policy(profile),
+            HeaderFooterLimits::default(),
+        )?;
+        section = replace_exact_once(
+            &section,
+            r#"</hp:ctrl></hp:run><hp:run charPrIDRef="0"><hp:t>"#,
+            &format!(
+                r#"</hp:ctrl></hp:run><hp:run charPrIDRef="0">{}<hp:t>"#,
+                std::str::from_utf8(&controls)?
+            ),
+        )?;
+        let mut extra_pages = String::new();
+        for (index, text) in PAGE_TEXTS.iter().enumerate().skip(1) {
+            extra_pages.push_str(&main_paragraph(index + 1, text));
+        }
+        section = replace_exact_once(&section, "</hs:sec>", &format!("{extra_pages}</hs:sec>"))?;
+    }
+    Ok(section.into_bytes())
+}
+
+fn build_master_only_probe_section(source: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
+    let mut section = std::str::from_utf8(source)?.to_owned();
+    section = replace_exact_once(&section, "masterPageCnt=\"0\"", "masterPageCnt=\"1\"")?;
+    section = replace_exact_once(
+        &section,
+        "</hp:secPr>",
+        &format!("<hp:masterPage idRef=\"{MASTER_PAGE_ID}\"/></hp:secPr>"),
+    )?;
+    let mut extra_pages = String::new();
+    for (index, text) in PAGE_TEXTS.iter().enumerate().skip(1) {
+        extra_pages.push_str(&main_paragraph(index + 1, text));
+    }
+    replace_exact_once(&section, "</hs:sec>", &format!("{extra_pages}</hs:sec>"))
+        .map(String::into_bytes)
 }
 
 fn build_section(source: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
@@ -315,9 +575,9 @@ fn build_section(source: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
     )?;
     section = replace_exact_once(
         &section,
-        "</hp:secPr><hp:ctrl><hp:colPr",
+        r#"</hp:ctrl></hp:run><hp:run charPrIDRef="0"><hp:t>"#,
         &format!(
-            "</hp:secPr>{}<hp:ctrl><hp:colPr",
+            r#"</hp:ctrl></hp:run><hp:run charPrIDRef="0">{}<hp:t>"#,
             std::str::from_utf8(&controls)?
         ),
     )?;
@@ -344,37 +604,20 @@ fn main_paragraph(id: usize, text: &str) -> String {
 
 fn add_master_to_package_document(bytes: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
     let source = std::str::from_utf8(bytes)?;
-    Ok(replace_exact_once(
+    let with_master = replace_exact_once(
         source,
         r#"<opf:item id="section0" href="Contents/section0.xml" media-type="application/xml"/>"#,
         concat!(
-            r#"<opf:item id="section0" href="Contents/section0.xml" media-type="application/xml"/>"#,
             r#"<opf:item id="masterpage0" href="Contents/masterpage0.xml" media-type="application/xml"/>"#,
+            r#"<opf:item id="section0" href="Contents/section0.xml" media-type="application/xml"/>"#,
         ),
+    )?;
+    Ok(replace_exact_once(
+        &with_master,
+        r#"<opf:itemref idref="header" linear="no"/>"#,
+        r#"<opf:itemref idref="header" linear="yes"/>"#,
     )?
     .into_bytes())
-}
-
-fn add_master_to_rdf(bytes: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
-    let source = std::str::from_utf8(bytes)?;
-    let anchor = concat!(
-        r#"<rdf:Description rdf:about="Contents/section0.xml"><rdf:type "#,
-        r#"rdf:resource="http://www.hancom.co.kr/hwpml/2016/meta/pkg#SectionFile"/>"#,
-        r#"</rdf:Description>"#,
-    );
-    let replacement = format!(
-        concat!(
-            "{}",
-            r#"<rdf:Description rdf:about=""><ns0:hasPart "#,
-            r#"xmlns:ns0="http://www.hancom.co.kr/hwpml/2016/meta/pkg#" "#,
-            r#"rdf:resource="Contents/masterpage0.xml"/></rdf:Description>"#,
-            r#"<rdf:Description rdf:about="Contents/masterpage0.xml"><rdf:type "#,
-            r#"rdf:resource="http://www.hancom.co.kr/hwpml/2016/meta/pkg#MasterPageFile"/>"#,
-            r#"</rdf:Description>"#,
-        ),
-        anchor
-    );
-    Ok(replace_exact_once(source, anchor, &replacement)?.into_bytes())
 }
 
 fn target_policy() -> SectionPagePolicy {
@@ -409,6 +652,72 @@ fn target_policy() -> SectionPagePolicy {
     }
 }
 
+fn master_only_probe_policy() -> SectionPagePolicy {
+    SectionPagePolicy {
+        restart: PageNumberRestart {
+            page_starts_on: PageVariant::Both,
+            page: 0,
+            picture: 0,
+            table: 0,
+            equation: 0,
+        },
+        first_page: FirstPageVisibility {
+            header: FirstPageDisplay::Show,
+            footer: FirstPageDisplay::Show,
+            master_page: FirstPageDisplay::Show,
+            page_number: FirstPageDisplay::Show,
+        },
+        page_starts_on: None,
+        page_number: None,
+        definitions: Vec::new(),
+        master_page_references: vec![MASTER_PAGE_ID.to_owned()],
+        declared_master_page_count: 1,
+    }
+}
+
+fn probe_policy(profile: ProbeProfile) -> SectionPagePolicy {
+    match profile {
+        ProbeProfile::BasicHeader => SectionPagePolicy {
+            restart: PageNumberRestart {
+                page_starts_on: PageVariant::Both,
+                page: 0,
+                picture: 0,
+                table: 0,
+                equation: 0,
+            },
+            first_page: FirstPageVisibility {
+                header: FirstPageDisplay::Show,
+                footer: FirstPageDisplay::Show,
+                master_page: FirstPageDisplay::Show,
+                page_number: FirstPageDisplay::Show,
+            },
+            page_starts_on: None,
+            page_number: None,
+            definitions: vec![HeaderFooterDefinition {
+                id: 1,
+                kind: HeaderFooterKind::Header,
+                applies_to: PageVariant::Both,
+                body: typed_body(
+                    "",
+                    "10001",
+                    vec![HeaderFooterInline::Text {
+                        value: "P05-08-PROBE-HEADER".to_owned(),
+                        character_style_id_ref: None,
+                    }],
+                ),
+            }],
+            master_page_references: Vec::new(),
+            declared_master_page_count: 0,
+        },
+        ProbeProfile::FullWithoutMasterPage => {
+            let mut policy = target_policy();
+            policy.master_page_references.clear();
+            policy.declared_master_page_count = 0;
+            policy
+        }
+    }
+}
+
 fn header_footer_definition(
     kind: HeaderFooterKind,
     applies_to: PageVariant,
@@ -426,12 +735,12 @@ fn header_footer_definition(
     let inlines = vec![
         HeaderFooterInline::Text {
             value: format!("P05-08-{variant_label}-{kind_label}-"),
-            character_style_id_ref: Some(0),
+            character_style_id_ref: None,
         },
         HeaderFooterInline::PageField(page_field(PageFieldKind::Page)),
         HeaderFooterInline::Text {
             value: "-OF-".to_owned(),
-            character_style_id_ref: Some(0),
+            character_style_id_ref: None,
         },
         HeaderFooterInline::PageField(page_field(PageFieldKind::TotalPage)),
     ];
@@ -439,11 +748,7 @@ fn header_footer_definition(
         id,
         kind,
         applies_to,
-        body: typed_body(
-            &format!("p05-08-body-{id}"),
-            &format!("{}", 10_000 + id),
-            inlines,
-        ),
+        body: typed_body("", &format!("{}", 10_000 + id), inlines),
     }
 }
 
@@ -460,20 +765,36 @@ fn page_field(kind: PageFieldKind) -> PageField {
 }
 
 fn target_master_page() -> MasterPageDefinition {
+    let mut body = typed_body(
+        "",
+        "0",
+        vec![
+            // Keep the disposable master marker visually separate from the
+            // body marker so the original-resolution review can detect real
+            // clipping or layer loss instead of an intentional collision.
+            HeaderFooterInline::Tab {
+                width: 26_000,
+                leader: 0,
+                tab_type: 0,
+            },
+            HeaderFooterInline::Text {
+                value: "P05-08-MASTER-PAGE".to_owned(),
+                character_style_id_ref: None,
+            },
+        ],
+    );
+    body.vertical_alignment = hwpx_package::HeaderFooterVerticalAlignment::Top;
+    // Default A4 text area after the current section's top, bottom, header,
+    // and footer margins. This is the exact value emitted by licensed Hangul
+    // 2020 build 11.0.0.9136 for the same VS0 page geometry.
+    body.text_height = 65_762;
     MasterPageDefinition {
         id: MASTER_PAGE_ID.to_owned(),
         applies_to: MasterPageVariant::Both,
         optional_page_number: None,
         duplicate_on_page: false,
         in_front: false,
-        body: typed_body(
-            "p05-08-master-body",
-            "30000",
-            vec![HeaderFooterInline::Text {
-                value: "P05-08-MASTER-PAGE".to_owned(),
-                character_style_id_ref: Some(0),
-            }],
-        ),
+        body,
     }
 }
 
@@ -489,7 +810,7 @@ fn typed_body(id: &str, paragraph_id: &str, inlines: Vec<HeaderFooterInline>) ->
         link_list_id_ref: 0,
         link_list_next_id_ref: 0,
         text_width: 42_520,
-        text_height: 2_000,
+        text_height: 4_252,
         has_text_reference: false,
         has_number_reference,
         paragraphs: vec![HeaderFooterParagraph {
@@ -553,6 +874,16 @@ mod tests {
             &[target_master_page()],
             HeaderFooterLimits::default(),
         )?;
+        Ok(())
+    }
+
+    #[test]
+    fn rebuilt_target_keeps_the_master_page_as_a_manifest_resource() -> TestResult {
+        let source = Hancom2020Vs0Builder::build(PAGE_TEXTS[0])?;
+        let source_bytes = source.with_verified_bytes(ToOwned::to_owned)?;
+        let bytes = rebuild_target(&source_bytes)?;
+        let inspection = inspect_bytes(&bytes)?;
+        assert_eq!(inspection.master_page_count, 1);
         Ok(())
     }
 }

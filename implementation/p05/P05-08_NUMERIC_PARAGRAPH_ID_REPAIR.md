@@ -1,5 +1,8 @@
 # P05-08 numeric paragraph-ID repair
 
+> Superseded for current status by `P05-08_HANCOM2020_MASTER_PAGE_REPAIR.md`. This record remains
+> authoritative only for the earlier numeric paragraph-ID defect and preserved failed attempts.
+
 - Date: 2026-09-06.
 - Scope: current licensed Hangul 2020 `11.0.0.9136` x86 and the fixed synthetic P05-08 fixture.
 - Decision: **product contract defect repaired; actual Hangul 2020 Gate remains UNVERIFIED**.

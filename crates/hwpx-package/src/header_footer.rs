@@ -15,6 +15,23 @@ pub const HEADER_FOOTER_PROFILE_ID: &str = "hwpx-agent.header-footer/1";
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const SECTION_NS: &str = "http://www.hancom.co.kr/hwpml/2011/section";
 const MASTER_PAGE_NS: &str = "http://www.hancom.co.kr/hwpml/2011/master-page";
+const MASTER_PAGE_ROOT_NAMESPACES: &str = concat!(
+    r#" xmlns:ha="http://www.hancom.co.kr/hwpml/2011/app""#,
+    r#" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph""#,
+    r#" xmlns:hp10="http://www.hancom.co.kr/hwpml/2016/paragraph""#,
+    r#" xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section""#,
+    r#" xmlns:hc="http://www.hancom.co.kr/hwpml/2011/core""#,
+    r#" xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head""#,
+    r#" xmlns:hhs="http://www.hancom.co.kr/hwpml/2011/history""#,
+    r#" xmlns:hm="http://www.hancom.co.kr/hwpml/2011/master-page""#,
+    r#" xmlns:hpf="http://www.hancom.co.kr/schema/2011/hpf""#,
+    r#" xmlns:dc="http://purl.org/dc/elements/1.1/""#,
+    r#" xmlns:opf="http://www.idpf.org/2007/opf/""#,
+    r#" xmlns:ooxmlchart="http://www.hancom.co.kr/hwpml/2016/ooxmlchart""#,
+    r#" xmlns:hwpunitchar="http://www.hancom.co.kr/hwpml/2016/HwpUnitChar""#,
+    r#" xmlns:epub="http://www.idpf.org/2007/ops""#,
+    r#" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0""#,
+);
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct HeaderFooterLimitConfig {
@@ -816,11 +833,13 @@ impl HeaderFooterLowerer {
     ) -> Result<(Vec<u8>, HeaderFooterLoweringReceipt), HeaderFooterError> {
         validate_master_page(page, limits)?;
         let mut output = BoundedXml::new(limits.config().output_bytes)?;
-        output.push("<hm:masterPage xmlns:hm=\"")?;
-        output.push(MASTER_PAGE_NS)?;
-        output.push("\" xmlns:hp=\"")?;
-        output.push(PARAGRAPH_NS)?;
-        output.push("\" id=\"")?;
+        // Hangul's standalone master-page part uses an unqualified
+        // `masterPage` document element. `hm:masterPage` is the section-level
+        // reference vocabulary, not the root name used by the external part.
+        output.push("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>")?;
+        output.push("<masterPage")?;
+        output.push(MASTER_PAGE_ROOT_NAMESPACES)?;
+        output.push(" id=\"")?;
         output.escaped(&page.id)?;
         output.push("\" type=\"")?;
         output.push(page.applies_to.as_str())?;
@@ -832,7 +851,7 @@ impl HeaderFooterLowerer {
         output.bool01(page.in_front)?;
         output.push("\">")?;
         lower_body(&mut output, &page.body)?;
-        output.push("</hm:masterPage>")?;
+        output.push("</masterPage>")?;
         let bytes = output.finish();
         if HeaderFooterReader::read_master_page(&bytes, limits)? != *page {
             return Err(HeaderFooterError::ReadbackMismatch);
@@ -1104,7 +1123,9 @@ fn read_master_page_at(
     limits: HeaderFooterLimits,
 ) -> Result<MasterPageDefinition, HeaderFooterError> {
     let root = element(document, index)?;
-    if !has_name(root, MASTER_PAGE_NS, "masterPage") {
+    if root.name().local_name() != "masterPage"
+        || !matches!(root.name().namespace(), None | Some(MASTER_PAGE_NS))
+    {
         return Err(HeaderFooterError::WrongRoot);
     }
     validate_attributes(
@@ -1274,6 +1295,16 @@ fn read_text_inlines(
     let root = element(document, index)?;
     validate_attributes(root, &["charStyleIDRef"])?;
     let character_style_id_ref = optional_u32(root, "charStyleIDRef")?;
+    // Hangul 2020 emits an empty `hp:t` after some field controls. An empty
+    // element owns a single token, so its end token is the start token rather
+    // than a later closing-tag token. It contributes no semantic inline.
+    if root.is_empty() {
+        return if root.first_child().is_none() {
+            Ok(())
+        } else {
+            Err(HeaderFooterError::UnsupportedShape)
+        };
+    }
     let end = root
         .end_token()
         .ok_or(HeaderFooterError::UnsupportedShape)?;
@@ -1587,7 +1618,7 @@ fn lower_body(output: &mut BoundedXml, body: &HeaderFooterBody) -> Result<(), He
     output.push("\" hasNumRef=\"")?;
     output.bool01(body.has_number_reference)?;
     output.push("\">")?;
-    for paragraph in &body.paragraphs {
+    for (paragraph_index, paragraph) in body.paragraphs.iter().enumerate() {
         output.push("<hp:p id=\"")?;
         output.escaped(&paragraph.id)?;
         output.push("\" paraPrIDRef=\"")?;
@@ -1610,6 +1641,23 @@ fn lower_body(output: &mut BoundedXml, body: &HeaderFooterBody) -> Result<(), He
             }
             output.push("</hp:run>")?;
         }
+        // Hangul 2020 preserves a line-layout cache for paragraphs that live in
+        // header, footer, and master-page sublists.  The OWPML model accepts the
+        // array as optional, but omitting it produces a package that the exact
+        // desktop build refuses to open.  Use the same bounded deterministic
+        // 10 pt cache shape as the VS0 body builder; later layout stages may
+        // replace these cached metrics without changing the semantic model.
+        let vertical_position = u32::try_from(paragraph_index)
+            .ok()
+            .and_then(|value| value.checked_mul(1_000))
+            .ok_or(HeaderFooterError::OutputLimit)?;
+        output.push("<hp:linesegarray><hp:lineseg textpos=\"0\" vertpos=\"")?;
+        output.u32(vertical_position)?;
+        output.push(
+            "\" vertsize=\"1000\" textheight=\"1000\" baseline=\"850\" spacing=\"600\" horzpos=\"0\" horzsize=\"",
+        )?;
+        output.u32(body.text_width)?;
+        output.push("\" flags=\"393216\"/></hp:linesegarray>")?;
         output.push("</hp:p>")?;
     }
     output.push("</hp:subList>")

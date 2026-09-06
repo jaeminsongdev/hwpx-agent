@@ -411,11 +411,14 @@ const fn profile_id(policy: Hancom2020ColumnFlowPolicy) -> &'static str {
 
 fn expected_columns(policy: Hancom2020ColumnFlowPolicy) -> ColumnDefinition {
     ColumnDefinition {
-        control_id: match policy {
-            Hancom2020ColumnFlowPolicy::ExplicitMidpointBreak => "p05-09-vs1-layout".to_owned(),
-            Hancom2020ColumnFlowPolicy::AutomaticBalanced => String::new(),
+        // The current Hangul 2020 target serializes section-column backend IDs as empty. Logical
+        // identity is carried above this value model, so the fixed VS-1 artifact uses the exact
+        // target form instead of creating a backend identifier that SaveAs will erase.
+        control_id: String::new(),
+        column_type: match policy {
+            Hancom2020ColumnFlowPolicy::ExplicitMidpointBreak => ColumnType::Newspaper,
+            Hancom2020ColumnFlowPolicy::AutomaticBalanced => ColumnType::BalancedNewspaper,
         },
-        column_type: ColumnType::BalancedNewspaper,
         layout: ColumnLayout::Left,
         sizing: ColumnSizing::Equal {
             count: 2,
@@ -1058,6 +1061,17 @@ mod tests {
         assert_eq!(artifact.inspection().column_break_count, 0);
         artifact.verify()?;
         Ok(())
+    }
+
+    #[test]
+    fn explicit_and_automatic_profiles_keep_distinct_current_target_column_types() {
+        let explicit = expected_columns(Hancom2020ColumnFlowPolicy::ExplicitMidpointBreak);
+        assert!(explicit.control_id.is_empty());
+        assert_eq!(explicit.column_type, ColumnType::Newspaper);
+
+        let automatic = expected_columns(Hancom2020ColumnFlowPolicy::AutomaticBalanced);
+        assert!(automatic.control_id.is_empty());
+        assert_eq!(automatic.column_type, ColumnType::BalancedNewspaper);
     }
 
     #[test]

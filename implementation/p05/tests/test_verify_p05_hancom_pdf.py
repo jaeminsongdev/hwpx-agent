@@ -234,6 +234,49 @@ class PdfVerifierContractTests(unittest.TestCase):
             500,
         )
 
+        split_contract = MODULE.ColumnFlowExpectation(
+            156_000, 3_000, 2, 12_000, "left anchor", "right anchor"
+        )
+        split_fragments = (
+            MODULE.PositionedText("left", 15_000, 205_000),
+            MODULE.PositionedText("anchor suffix", 15_000, 205_000),
+            MODULE.PositionedText("left body", 15_000, 180_000),
+            MODULE.PositionedText("right body", 165_000, 201_000),
+            MODULE.PositionedText("right", 165_000, 181_000),
+            MODULE.PositionedText("anchor suffix", 165_000, 181_000),
+        )
+        split_result = MODULE.verify_column_flow(
+            split_fragments, split_contract, 310_000, 230_000, 500
+        )
+        self.assertEqual(split_result["left_anchor_x_milli_mm"], 15_000)
+        self.assertEqual(split_result["right_anchor_x_milli_mm"], 165_000)
+
+        duplicate_left = split_fragments + (
+            MODULE.PositionedText("left anchor", 20_000, 170_000),
+        )
+        self.assert_code(
+            "PDF_COLUMN_FLOW_ANCHOR_CARDINALITY",
+            MODULE.verify_column_flow,
+            duplicate_left,
+            split_contract,
+            310_000,
+            230_000,
+            500,
+        )
+
+        hancom_edge_callback = (
+            MODULE.PositionedText("left anchor", 15_000, 205_000),
+            MODULE.PositionedText("left body", 15_000, 180_000),
+            MODULE.PositionedText("right", 0, 230_000),
+            MODULE.PositionedText("anchor suffix", 165_000, 181_000),
+            MODULE.PositionedText("right body", 165_000, 175_000),
+        )
+        edge_result = MODULE.verify_column_flow(
+            hancom_edge_callback, split_contract, 310_000, 230_000, 500
+        )
+        self.assertEqual(edge_result["right_anchor_x_milli_mm"], 165_000)
+        self.assertEqual(edge_result["unclassified_text_fragment_count"], 1)
+
     def test_only_default_pdf_user_unit_is_accepted(self) -> None:
         MODULE.require_default_user_unit({})
         MODULE.require_default_user_unit({"/UserUnit": 1.0})

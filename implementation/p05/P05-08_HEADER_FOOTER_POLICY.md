@@ -5,8 +5,10 @@
 - Contract: `hwpx-agent.header-footer/1`
 - 구현 범위: 현재 PC의 정품 한글 2020 exact build `11.0.0.9136` x86 및 HWPX 2011 namespace
 - 구현 위치: `crates/hwpx-package/src/header_footer.rs`
-- 현재 증거: Rust semantic/readback/negative/corpus test 완료
-- 한글 2020 실제 open-save-reopen 및 odd/even/first-page render: `unverified`
+- 현재 증거: Rust semantic/readback/negative/corpus test 및 한글 2020 v12 실제
+  open-save-reopen, 엄격 readback, odd/even/first-page PDF와 원본 해상도 전수 검토 완료
+- 한글 2020 실제 open-save-reopen 및 odd/even/first-page render: `pass` for the fixed v12
+  disposable fixture
 - 한글 2022/2024: 해당 버전 PC에서 별도 target profile로 검증하기 전까지 `unverified`
 
 ## 근거 잠금
@@ -69,6 +71,18 @@
 - ID 중복, dangling reference, 동일 적용 variant 중복은 실패한다.
 - `OPTIONAL_PAGE`만 1 이상의 `pageNumber`를 가질 수 있고 다른 variant의 `pageNumber`는 0이어야 한다.
 - part 순서는 section의 reference 순서를 보존한다.
+- 현재 한글 2020 profile의 standalone part root는 XML 선언 뒤 unqualified `masterPage`를 쓰며,
+  `hm:masterPage`는 section reference vocabulary와 혼동하지 않는다.
+- `content.hpf` manifest item ID, section `idRef`, standalone root `id`는 동일한
+  `masterpage0` identity로 묶는다. master resource는 OPF spine에 넣지 않고 section part보다
+  앞선 archive entry로 발행한다.
+- section-level header/footer/page-number controls는 `secPr`를 보유한 첫 run이 아니라 실제
+  본문을 보유한 두 번째 run에 둔다. 이는 이 PC의 한글 2020 생성 문서와 동일한 control
+  placement다.
+- header/footer/master sublist paragraph는 한글 2020이 사용하는 bounded deterministic
+  `hp:linesegarray` cache를 함께 발행한다. 의미 판독기는 cache를 의미 모델로 승격하지 않는다.
+- 한글 2020이 field control 뒤에 저장하는 유효한 빈 `<hp:t/>`는 zero-inline으로 읽으며,
+  empty-element token range를 일반 닫힘 요소처럼 slicing하지 않는다.
 
 ## 안전성과 결정성
 
@@ -78,11 +92,22 @@
 - 관련 local name이 틀린 namespace나 구조 위치에 나타나면 무시하지 않고 실패한다.
 - 공개 `Debug`는 본문 문자열과 문자열 ID 대신 byte 길이만 표시한다.
 - deterministic lowering 후 동일 reader로 재승격하여 semantic equality를 확인한다.
-- 128-case 고정 corpus digest는 `b1723d2df9135ab2a5051597cac64c50dc33b50d259c622fc975b24b89e6e4aa`다.
+- 128-case 고정 corpus digest는 `67ed13c27ab4c7197dfec1c1853554a19fd21b93b0bb4fb4bc282f0b61f45bc9`다.
 
-## 실제 검증 전 판정
+## 현재 실제 검증 판정
 
-이 정책과 테스트는 제품 코어의 구조·의미 계약 증거다. 숫자 paragraph ID로 교정한
-fixture도 아직 실제 한글 2020 `Open` PASS를 만들지 못했으므로, 이 수정만으로 호환성을
-주장하지 않는다. P05-08 hard gate는 target fixture를 한글 2020에서
-open-save-reopen/render하고 제품 reader로 재검증할 때까지 열어 둔다.
+v11 fixture는 사용자 승인 아래 이 PC의 한글 2020에서 open-save-reopen/PDF export를 모두
+완료했고, 원본 불변·본문 text hash·zero process residue를 만족했다. 저장 산출물은 제품
+reader의 4쪽, definition 4개, page field 8개, master 1개, first-page suppression과 본문 hash
+엄격 검사를 통과했고 PDF text/geometry verifier도 4쪽 모두 통과했다. 이 결과는 이전의
+master-part 소실을 실제로 해소했다는 current-build 증거다.
+
+원본 해상도 PNG 전수 검토에서 2~4쪽 body marker와 master marker가 같은 시작 위치에 겹친
+v11은 최종 시각 PASS로 승격하지 않았다. master marker를 별도 가로 위치로 옮긴
+deterministic v12의 attempt01도 사용자 access click 없이 `open_input` timeout되어 PASS로
+쓰지 않았다. 사용자 승인 아래 실행한 v12 attempt02는 전 생명주기, strict semantic
+readback, 4쪽 PDF text/forbidden-text/geometry verifier, 원본 해상도 전수 검토와 zero process
+residue를 모두 통과했다. 1쪽에는 first-page suppression이 적용됐고, 2~4쪽에는 홀짝
+머리말·본문·우측 바탕쪽·홀짝 꼬리말·하단 중앙 쪽 번호가 겹침이나 잘림 없이 분리됐다.
+따라서 P05-08의 고정 current-PC Hangul 2020 fixture hard gate는 `PASS`다. 이 판정은 임의
+문서, 한글 2022/2024, 다른 PC, P05-09 또는 P05 phase 전체를 포함하지 않는다.

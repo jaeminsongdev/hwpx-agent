@@ -3,12 +3,12 @@
 - Updated: 2026-09-07
 - Root: `D:\개발\hwpx-agent`
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05-08 Hangul-authored reference comparison and actual Gate, P05-09 coordinate-aware Gate,
-  P17-06/P17-07/P17-08.
+- Active: P05 final source/FULL Gate, P17-06/P17-07/P17-08 and final product qualification.
 - Reasoning: max for preservation, authorization and Gate work; high for routine implementation.
-- UI: attempt23 sparse layout/identity and dense attempt02 automatic flow/balance passed on Hangul 2020;
-  P05-08 attempts 01-02 stopped fail-closed at open without a confirmed access-click receipt;
-  attempt03 and the numeric-ID v2 attempt01 also returned false; click confirmation remains absent.
+- UI: attempt23 sparse layout/identity, dense attempt02 automatic flow/balance, P05-08 v12
+  odd/even/first-page header/footer/master and P05-09 v2 coordinate-aware VS-1 rendering passed on
+  Hangul 2020. Computer Use performed no click or typing; the user approved the visible Hangul
+  access prompts.
 
 ## Objective and boundaries
 
@@ -24,7 +24,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | Phase | State | Evidence or dependency |
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | `implementation/p00/` through `implementation/p04/` |
-| P05 | in progress | 01-05 pass; 06 reopened; 07 sparse plus dense current-2020 subgates pass; 08-09 pending |
+| P05 | in progress | 01-05 pass; 06 reopened; 07 sparse plus dense current-2020 subgates pass; 08 current-2020 fixture pass; 09 pending |
 | P06-P09 | blocked by P05 | table, equation, graphics and fields engines |
 | P10 | in progress | 01-04,07,09,10 scoped pass; 05/06 actual dependencies; 08 unqualified |
 | P11-P13 | blocked | depend on P06-P10 |
@@ -39,7 +39,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 | ID | Task | State and next evidence |
 |---|---|---|
-| P-0045-0048 | P05-06-09 | Sparse/dense pass; P05-08 numeric paragraph-ID defect fixed and attempts preserved, Hangul-authored reference/current lifecycle open; 09 remains |
+| P-0045-0048 | P05-06-09 | P05-07 sparse/dense, P05-08 v12 and P05-09 v2 current-2020 actual subgates pass; phase source/FULL Gate remains |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -85,25 +85,29 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   implementation files and 25 locked/offline Cargo members. Contract SHA-256 is
   `79b3fafc8bb080ad271b6d44cfae9754dfc3e613eaa788425e762a94a6fabcfa`.
   Current/independent FULL remain pending.
-- P05-08 fixed input passed strict product inspection and the policy-locked official Hancom model
-  parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
-  `open_input` without a positive receipt that the user completed the displayed access request;
-  neither is PASS. Attempt03 and the later numeric-ID v2 attempt02 also failed at `open_input`
-  without a positive click receipt, so neither is treated as a structural rejection. See
-  `implementation/p05/P05-08_ATTEMPT01_02_DIAGNOSTIC.md`.
-- A separate minimal x86 COM diagnostic created a new header/footer document with Hangul's own
-  `HeaderFooter` action after the user approved the visible prompts, then saved a 14,587-byte HWPX
-  at SHA-256 `9f11420b67d456ff31fd92ec3254ccbae0ea7d75c43ccb60ac03287f5486cbaa`.
-  Its official control shape is diagnostic input for the next comparison, not P05-08 product PASS.
-- P05-08 nested body paragraph IDs were incorrectly emitted as strings although the official model
-  uses `UINT`. The product now rejects non-numeric values and the corrected fixture uses numeric
-  IDs; package clippy and all 175 tests pass. Its actual open still returned false without a click
-  receipt, so the Gate remains open. See `implementation/p05/P05-08_NUMERIC_PARAGRAPH_ID_REPAIR.md`.
-- P05-09 has a fresh deterministic input at SHA-256
-  `acce8f8a68ea9b4b6e9f629235bf6fa018fd7cfccf45384b316d2d2401ce2c97`. Its render contract was
-  strengthened from text-only v1 to coordinate-aware v2 at SHA-256
-  `eec108ed9bcc0cb15c6634db9a340d944cc305cdcfe5b428a0ccf076d8f845a8`, requiring left/right
-  anchors and populated columns; verifier tests pass 21/21. Actual Hangul execution remains open.
+- P05-08 used Hangul-authored header/footer and master-page references to repair numeric paragraph
+  IDs, the standalone unqualified `masterPage` root, manifest/root/section identity, non-spine
+  publication, archive order, sublist line caches and control placement in the body run. Hangul's
+  saved empty `<hp:t/>` exposed and now has a fail-closed, non-panicking zero-inline reader path.
+  Earlier failed variants and the v11 marker-overlap result remain preserved and are not relabeled.
+- User-authorized v12 attempt02 passed every Hangul 2020 lifecycle phase with input immutability and
+  zero process residue. Saved HWPX SHA-256
+  `2fd7af9efb54132160b617b7b28399804596115fb2758bf193e5b0cd830838ac` strictly read back 4 pages,
+  4 definitions, 8 page fields, 1 master, first-page hiding and the locked body digest. PDF SHA-256
+  `649452bdc3f755def558fbe70a6be5ad8a75e6d6e2dc9059e6fee96e82a7838a` passed its four-page
+  text/forbidden-text/geometry contract; original-resolution review confirmed separated even/odd
+  header, body, right-side master, footer and bottom-center number markers with no clipping or
+  overlap. `hwpx-package` all-target/all-feature tests pass 217/217, warnings-denied Clippy passes
+  and PDF verifier tests pass 21/21. See
+  `implementation/p05/P05-08_HANCOM2020_MASTER_PAGE_REPAIR.md`.
+- P05-09 v2 uses ordinary two-column flow with one explicit break and the current-target empty
+  backend column ID. Actual Hangul 2020 open/save/reopen/PDF passed; strict saved inspection retained
+  five paragraphs, one break, two columns and the exact visible-text digest. Coordinate verification
+  passed with 24 left/17 right fragments and a 10.145 mm bottom delta; original-resolution review
+  found no overlap or clipping. The previous nonempty-ID/balanced attempt and the first page-edge
+  callback verification failure remain preserved. `hwpx-package` passes 218/218, six bounded
+  PowerShell suites 164/164 and the PDF verifier 21/21. See
+  `implementation/p05/P05-09_HANCOM2020_ACTUAL_GATE.md`.
 - The old independent FULL process at `285c0ce` reached later lanes and terminated, but its detached
   console exit status was unavailable. It was not promoted; the clean exact worktree was removed.
   A fresh independent FULL remains required at the final implementation successor.
@@ -182,9 +186,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Risks and holds
 
-- R-0001: P05-07 dense attempt02 current-PC actual subgate and latest source successor v8 pass.
-  P05-08 authorized open/save/reopen/render, P05-09 and final current/independent FULL remain open;
-  no later-version or arbitrary-document claim.
+- R-0001: P05-07 dense attempt02, P05-08 v12 and P05-09 v2 current-PC actual subgates pass. Final
+  source successor and current/independent FULL remain open; no later-version or arbitrary-document
+  claim.
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence remains open.
 - R-0003: One independent worker timeout smoke failed; retries passed, root cause unproven.
 - R-0004: Broad P16 discovery remains red on immutable predecessor locks and legacy assets;
@@ -201,10 +205,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 1. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
-2. Complete the currently open Hangul-authored minimal header/footer reference, compare its exact
-   saved structure with the corrected fixture, and repair the next proven incompatibility. Then
-   rerun P05-08 and P05-09 with the user present. Require lifecycle, semantic, coordinate-aware PDF
-   and visual evidence and preserve every failure.
+2. Bind the completed P05-09 v2 actual evidence into the P05 phase Gate, source successor and final
+   current/independent FULL runs. Preserve every earlier failed fixture and verifier receipt.
 3. Move mirror role/head admission into durable PostgreSQL and combine it atomically with the
    qualified checkpoint transaction, then implement and capture actual bounded pull/push
    transitions. Preserve the current separately launched PostgreSQL checkpoint run as the narrower
@@ -225,9 +227,12 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   input is `fixtures/target-build/p05-07-dense-current-2020-20260906-v1/`.
 - P05-08 diagnostic: read `implementation/p05/P05-08_ATTEMPT01_02_DIAGNOSTIC.md`; ignored prepared
   input and failed attempts are under `fixtures/target-build/p05-08-current-2020-20260906-v1/`.
-- P05-08 successor: read `implementation/p05/P05-08_NUMERIC_PARAGRAPH_ID_REPAIR.md`; corrected input
-  and the pending Hangul-authored reference are under
-  `fixtures/target-build/p05-08-current-2020-20260906-v2/`.
+- P05-08 successor: read `implementation/p05/P05-08_HANCOM2020_MASTER_PAGE_REPAIR.md`. The ignored
+  current-PC PASS evidence is under `fixtures/target-build/p05-08-current-2020-20260907-v12/`;
+  the Hangul-authored master reference is under
+  `fixtures/target-build/p05-08-hancom-2020-master-reference-20260907-v1/`.
+- P05-09 successor: read `implementation/p05/P05-09_HANCOM2020_ACTUAL_GATE.md`. The ignored
+  current-PC PASS evidence is under `fixtures/target-build/p05-09-current-2020-20260907-v2/`.
 - P17-07 successor: read `implementation/p17/P17-07_LOCAL_CONFLICT_RESOLVER_V1.md` and
   `implementation/p17/P17-07_STALE_HEAD_WIDGET_V2.md`, then
   `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V8.md`; the local resolver and graphical

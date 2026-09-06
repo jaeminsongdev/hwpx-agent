@@ -3,8 +3,9 @@
 ## Scope
 
 P05-09 closes only the **layout portion** of VS-1 defined by the P05 roadmap: one deterministic
-current-PC Hangul 2020 document combining a custom 230 x 310 mm landscape page, a balanced two-column
-section, and typed title/body character and paragraph styles. The broader product VS-1 still requires
+current-PC Hangul 2020 document combining a custom 230 x 310 mm landscape page, an ordinary
+two-column section with one explicit midpoint break, and typed title/body character and paragraph
+styles. The broader product VS-1 still requires
 the P06 table, P07 native equation, P10 Windows worker, and their own target evidence.
 
 ## Public boundary
@@ -24,6 +25,11 @@ VS-0 package deterministically and releases bytes only through `with_verified_by
 - title/body style signature and reference validation;
 - exact paragraph count, one explicit column break, and NFC visible-text digest validation.
 
+The explicit-break profile uses `NEWSPAPER`; the independent automatic-balance profile keeps
+`BALANCED_NEWSPAPER`. Both use the empty current-target backend column ID. P05-07 separately binds
+the observed nonempty-to-empty ID rewrite to a fixed-fixture logical-identity receipt, so P05-09 does
+not invent another backend ID solely to have Hangul erase it during SaveAs.
+
 ## Failure and preservation rules
 
 - Missing or non-unique template anchors fail closed; no heuristic mutation is used.
@@ -31,8 +37,8 @@ VS-0 package deterministically and releases bytes only through `with_verified_by
 - Output publication in the target fixture uses `create_new`; an existing path is not overwritten.
 - Debug output contains only counts, sizes, digests, profile IDs, and stable error codes, not document
   text.
-- P05-09 remains `unverified` until the generated target is saved, reopened, and rendered by the exact
-  licensed Hangul 2020 build on the current PC, with source immutability and semantic readback proven.
+- P05-09 is accepted only for the fixed generated target saved, reopened, and rendered by the exact
+  licensed Hangul 2020 build on this PC, with source immutability and semantic readback proven.
 
 ## Required evidence
 
@@ -44,3 +50,11 @@ VS-0 package deterministically and releases bytes only through `with_verified_by
    bottom-baseline delta through the v2 coordinate-aware verifier.
 5. A separate strict P05 Gate audits P05-01 through P05-09 without promoting synthetic evidence to
    actual target evidence.
+
+## Current-PC result
+
+The fixed v2 input passed the complete licensed Hangul 2020 lifecycle, strict saved-package
+inspection, coordinate-aware PDF verification and original-resolution visual review on 2026-09-07.
+The input and visible-text digests were unchanged and no Hwp process remained. The PDF verifier
+replay also retained the prior dense automatic-flow result. Exact identities, preserved failures and
+the limited acceptance boundary are recorded in `P05-09_HANCOM2020_ACTUAL_GATE.md`.
