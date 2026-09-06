@@ -16,10 +16,11 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
         contract = qualification.verify()
         self.assertEqual(
             contract["qualification_id"],
-            "p17.current-workspace-source.v2.20260906",
+            "p17.current-workspace-source.v3.20260906",
         )
         self.assertTrue(contract["claims"]["source_qualification_only"])
         self.assertTrue(contract["claims"]["p05_diagnostic_dependencies_bound"])
+        self.assertTrue(contract["claims"]["p05_identity_rebinding_sources_bound"])
         self.assertFalse(contract["claims"]["actual_hangul"])
         self.assertFalse(contract["claims"]["phase_complete"])
 
@@ -36,6 +37,14 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
                 qualification.git_digest(qualification.ROOT, qualification.BASE_COMMIT, relative),
                 entry["current_sha256"],
             )
+
+    def test_p05_identity_rebinding_sources_are_exact_base_commit_blobs(self) -> None:
+        sources = qualification.verified_implementation_sources()
+        self.assertEqual(len(sources), 6)
+        self.assertEqual(
+            set(sources),
+            {entry["path"] for entry in qualification.IMPLEMENTATION_SOURCES},
+        )
 
     def test_receipt_promotion_and_unknown_path_fail_closed(self) -> None:
         receipt = qualification.expected_receipt()

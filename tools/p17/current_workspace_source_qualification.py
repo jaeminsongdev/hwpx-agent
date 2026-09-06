@@ -27,18 +27,50 @@ acceptance = load_acceptance()
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = "implementation/p17/qualification/current-workspace-source-v2-20260906"
+BASE = "implementation/p17/qualification/current-workspace-source-v3-20260906"
 QUALIFICATION = ROOT / BASE
-RUN_ID = "6cc220553ca8460281f58d5db10ac7ea"
-BASE_COMMIT = "54c6c144c90fffb7a850967d43014771ee04aae1"
-RECEIPT_SHA256 = "ff149e89fa9f12cb7b1882ee4be280f9408edd553579c9a77e1cd43782545fc3"
+RUN_ID = "0674ea9cc4cc4f02bf921c88f7a3233b"
+BASE_COMMIT = "70e78dd042245b50ea20e3648029dc509c66bb38"
+RECEIPT_SHA256 = "fd70a48ad69214ab15bf5fde482b0b29e0e7df37ad83c5b91af3ebbd00024aff"
 CARGO_METADATA_PROJECTION_SHA256 = (
     "d956979b62019ff5b89a3c6b2ab506a7f102ae0fcb4f86ce70717ac2fca2d51d"
 )
 WORKSPACE_MEMBER_COUNT = 23
 PREVIOUS_QUALIFICATION = (
-    "implementation/p17/qualification/current-workspace-source-v1-20260906/contract.json",
-    "d93361927f2577aa4fbc1bb5595332ad3a92037b0f4663f3ac3b07fbe3e3e8ed",
+    "implementation/p17/qualification/current-workspace-source-v2-20260906/contract.json",
+    "608cc6804e6a77908775a545f374483e50d113b1a3980c05b1c36c06c5358448",
+)
+IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
+    {
+        "path": "crates/hwpx-package/examples/p05_07_section_columns_target_fixture.rs",
+        "bytes": 25917,
+        "sha256": "0d3d3911ea555c94b584c30582922c0b4f333fd56e073d2fc92cdaf881ccd0c3",
+    },
+    {
+        "path": "crates/hwpx-package/examples/p05_07_support/diagnostics.rs",
+        "bytes": 32268,
+        "sha256": "148c27c6a2aea95fe32eaaafbfad6f5e8e2beaf85d6f0b8014d7f954f9fcd106",
+    },
+    {
+        "path": "crates/hwpx-package/examples/p05_07_support/identity_rebinding.rs",
+        "bytes": 33566,
+        "sha256": "8a950ebc1a1df669f6a0aa94bd333d00e811a2297e03d920c005850128ad93e9",
+    },
+    {
+        "path": "implementation/p05/P05-07_ATTEMPT23_IDENTITY_REBINDING.md",
+        "bytes": 5150,
+        "sha256": "687179c2113a6011a4f2a131e182e75f070eb857381831fc3c711d2099db959c",
+    },
+    {
+        "path": "implementation/p05/qualification/p05-07-attempt23-identity-rebinding-receipt.json",
+        "bytes": 3611,
+        "sha256": "e752fd21557f06f6fbea6b93489444f97937abb935d2a3f2f862dc55a60a142a",
+    },
+    {
+        "path": "protocol/private/p05-07-identity-rebinding-v1.json",
+        "bytes": 2591,
+        "sha256": "d393d03fbeac3cc0ff8a1167ce5a1288d9a0c5c47bf9300a4aab61ba717bba8b",
+    },
 )
 SUCCESSORS: tuple[dict[str, Any], ...] = (
     {
@@ -160,6 +192,7 @@ SUCCESSORS: tuple[dict[str, Any], ...] = (
 CLAIMS = {
     "source_qualification_only": True,
     "p05_diagnostic_dependencies_bound": True,
+    "p05_identity_rebinding_sources_bound": True,
     "actual_hangul": False,
     "registered_host": False,
     "production": False,
@@ -170,7 +203,7 @@ GUARD_SOURCES = (
     "tools/p17/run_current_workspace_source_checks.py",
     "tools/p17/current_workspace_source_qualification.py",
     "tools/p17/tests/test_current_workspace_source_qualification.py",
-    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V2.md",
+    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V3.md",
 )
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -261,12 +294,13 @@ def receipt_path(root: Path) -> Path:
 
 def expected_current(root: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v2",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v3",
         "scope": "current_pc_source_binding_successor_only",
         "run_id": RUN_ID,
         "source_commit": BASE_COMMIT,
         "predecessor_contract_sha256": acceptance.PINNED_CONTRACTS,
         "successors": list(SUCCESSORS),
+        "implementation_sources": list(IMPLEMENTATION_SOURCES),
         "cargo_metadata_projection_sha256": CARGO_METADATA_PROJECTION_SHA256,
         "cargo_workspace_member_count": WORKSPACE_MEMBER_COUNT,
         "claims": CLAIMS,
@@ -279,8 +313,8 @@ def expected_current(root: Path) -> dict[str, Any]:
 
 def expected_contract(root: Path, current_path: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v2",
-        "qualification_id": "p17.current-workspace-source.v2.20260906",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v3",
+        "qualification_id": "p17.current-workspace-source.v3.20260906",
         "base_commit": BASE_COMMIT,
         "scope": "current_pc_source_binding_successor_only",
         "claims": CLAIMS,
@@ -289,6 +323,7 @@ def expected_contract(root: Path, current_path: Path) -> dict[str, Any]:
             for relative, expected in acceptance.PINNED_CONTRACTS.items()
         ]
         + [{"path": PREVIOUS_QUALIFICATION[0], "sha256": PREVIOUS_QUALIFICATION[1]}],
+        "implementation_sources": list(IMPLEMENTATION_SOURCES),
         "evidence": {
             "path": f"{BASE}/current-host.json",
             "canonical_sha256": digest(current_path),
@@ -345,6 +380,38 @@ def verified_successors(
     return result
 
 
+def validate_implementation_sources(root: Path) -> dict[str, dict[str, Any]]:
+    result: dict[str, dict[str, Any]] = {}
+    for entry in IMPLEMENTATION_SOURCES:
+        relative = entry.get("path")
+        expected_bytes = entry.get("bytes")
+        expected_sha256 = entry.get("sha256")
+        require(
+            isinstance(relative, str)
+            and relative not in result
+            and isinstance(expected_bytes, int)
+            and expected_bytes > 0
+            and isinstance(expected_sha256, str)
+            and HEX.fullmatch(expected_sha256) is not None,
+            "implementation.shape",
+        )
+        path = acceptance.bounded_file(root, relative)
+        require(
+            path.stat().st_size == expected_bytes
+            and digest(path) == expected_sha256
+            and git_digest(root, BASE_COMMIT, relative) == expected_sha256,
+            "implementation.identity",
+        )
+        result[relative] = dict(entry)
+    require(result, "implementation.empty")
+    return result
+
+
+def verified_implementation_sources(root: Path = ROOT) -> dict[str, dict[str, Any]]:
+    verify(root)
+    return validate_implementation_sources(root)
+
+
 def verification_paths(root: Path = ROOT) -> set[str]:
     del root
     return {
@@ -352,6 +419,7 @@ def verification_paths(root: Path = ROOT) -> set[str]:
         f"{BASE}/contract.json",
         *acceptance.PINNED_CONTRACTS,
         *(entry["path"] for entry in SUCCESSORS),
+        *(entry["path"] for entry in IMPLEMENTATION_SOURCES),
         *GUARD_SOURCES,
     }
 
@@ -360,11 +428,17 @@ def qualify() -> tuple[Path, Path]:
     receipt = load_document(receipt_path(ROOT), "receipt")
     validate_receipt(receipt)
     require(digest(receipt_path(ROOT)) == RECEIPT_SHA256, "receipt.digest")
+    validate_implementation_sources(ROOT)
     verified_successors_from_receipt = {entry["path"]: entry for entry in receipt["successors"]}
     require(len(verified_successors_from_receipt) == len(SUCCESSORS), "receipt.successors")
     for entry in SUCCESSORS:
         require(verified_successors_from_receipt.get(entry["path"]) == entry, "receipt.successor")
         require(git_digest(ROOT, BASE_COMMIT, entry["path"]) == entry["current_sha256"], "history.source")
+    for entry in IMPLEMENTATION_SOURCES:
+        require(
+            git_digest(ROOT, BASE_COMMIT, entry["path"]) == entry["sha256"],
+            "history.implementation",
+        )
     QUALIFICATION.mkdir(parents=True, exist_ok=True)
     current_path = QUALIFICATION / "current-host.json"
     current_path.write_bytes(canonical(expected_current(ROOT)))
