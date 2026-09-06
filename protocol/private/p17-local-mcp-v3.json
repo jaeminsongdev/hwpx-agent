@@ -1,0 +1,98 @@
+{
+  "schema_version": "hwpx-agent.local-mcp/v3",
+  "transport": "stdio",
+  "server": {
+    "name": "hwpx-agent-local-companion",
+    "version": "0.3.0"
+  },
+  "migration": {
+    "from": "hwpx-agent.local-mcp/v2",
+    "health_and_four_workflow_tools_preserved": true,
+    "new_tools_are_additive": true
+  },
+  "tools": {
+    "preserved": [
+      "local_companion_health",
+      "local_companion_materialize",
+      "local_companion_diff",
+      "local_companion_publish",
+      "local_companion_prepare_git_commit"
+    ],
+    "local_companion_prepare_git_commit_approval": {
+      "private_protocol": "hwpx-agent.local-companion-private/v3",
+      "input_fields": [
+        "workspace_id",
+        "operation_id",
+        "output_id",
+        "expected_sha256",
+        "message"
+      ],
+      "returns_target_and_plan_digests": true,
+      "creates_confirmation_token": false,
+      "executes_git": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    "local_companion_execute_git_commit": {
+      "private_protocol": "hwpx-agent.local-companion-private/v4",
+      "input_fields": [
+        "workspace_id",
+        "operation_id",
+        "output_id",
+        "expected_sha256",
+        "message",
+        "actor_sha256",
+        "tenant_sha256",
+        "requested_at_unix_seconds",
+        "confirmation_token"
+      ],
+      "confirmation_token": {
+        "sensitive": true,
+        "signed": true,
+        "single_use": true,
+        "maximum_bytes": 4096,
+        "minting_capability_exposed": false
+      },
+      "semantic_effect": "git_commit",
+      "arbitrary_shell_accepted": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    }
+  },
+  "child_environment": {
+    "default_calls_receive_effect_configuration": false,
+    "effect_call_requires_all": [
+      "HWPX_AGENT_GIT_PROGRAM",
+      "HWPX_AGENT_APPROVAL_STATE_ROOT",
+      "HWPX_AGENT_APPROVAL_SECRET"
+    ],
+    "effect_temp_and_tmp_are_derived_from_approval_state_root": true,
+    "path_inherited": false,
+    "unrelated_environment_inherited": false
+  },
+  "public_boundary": {
+    "accepts_absolute_paths": false,
+    "returns_absolute_paths": false,
+    "returns_document_content": false,
+    "returns_confirmation_token": false,
+    "returns_signing_secret": false
+  },
+  "claims": {
+    "opens_hangul": false,
+    "uses_network": false,
+    "actual_mcp_stdio": true,
+    "actual_disposable_git_commit": true,
+    "actual_codex_client": false,
+    "actual_personal_plugin": false,
+    "actual_trusted_host_confirmation_ui": false,
+    "p17_08_pass": false
+  }
+}
