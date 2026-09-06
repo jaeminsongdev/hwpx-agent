@@ -10,14 +10,27 @@ export const CONTINUITY_RENDER_REQUEST_SCHEMA =
     "hwpx-agent.continuity-render-request/v1" as const;
 export const CONTINUITY_SNAPSHOT_SCHEMA =
     "hwpx-agent.project-continuity/v1" as const;
+export const CONTINUITY_RENDER_REQUEST_V2_SCHEMA =
+    "hwpx-agent.continuity-render-request/v2" as const;
+export const CONTINUITY_SNAPSHOT_V2_SCHEMA =
+    "hwpx-agent.project-continuity/v2" as const;
 export const PUBLIC_RESULT_SCHEMA = "hwpx-agent.tool-result/v1" as const;
 
 export type ConflictState = "none" | "locked" | "stale" | "diverged";
+export type ConflictResolution =
+    "rebase_operation_plan" | "branch" | "manual_merge";
 export type RevisionChangeKind =
     "created" | "edited" | "transformed" | "validated" | "imported" | "unknown";
 
 export interface ContinuityRenderRequest {
     readonly schema_version: typeof CONTINUITY_RENDER_REQUEST_SCHEMA;
+    readonly client_surface: ClientSurface;
+    readonly locale: string;
+    readonly project_id: string;
+}
+
+export interface ContinuityRenderRequestV2 {
+    readonly schema_version: typeof CONTINUITY_RENDER_REQUEST_V2_SCHEMA;
     readonly client_surface: ClientSurface;
     readonly locale: string;
     readonly project_id: string;
@@ -42,6 +55,30 @@ export interface ContinuitySnapshot {
     readonly next_cursor: string | null;
 }
 
+export interface StaleHeadDetail {
+    readonly observed_generation: number;
+    readonly current_generation: number;
+    readonly delta: number;
+    readonly allowed_resolutions: readonly ConflictResolution[];
+}
+
+export interface ContinuitySnapshotV2 {
+    readonly schema_version: typeof CONTINUITY_SNAPSHOT_V2_SCHEMA;
+    readonly client_surface: ClientSurface;
+    readonly locale: string;
+    readonly project_id: string;
+    readonly head_revision_id: string | null;
+    readonly warning_count: number;
+    readonly conflict_state: ConflictState;
+    readonly stale_head: StaleHeadDetail | null;
+    readonly revisions: readonly ContinuityRevision[];
+    readonly next_cursor: string | null;
+}
+
+export type AnyContinuityRenderRequest =
+    ContinuityRenderRequest | ContinuityRenderRequestV2;
+export type AnyContinuitySnapshot = ContinuitySnapshot | ContinuitySnapshotV2;
+
 export interface ProjectOpenResult {
     readonly request_id: string;
     readonly project_id: string;
@@ -63,6 +100,20 @@ export interface ProjectCheckpointResult {
     readonly replayed: boolean;
 }
 
+export interface ProjectOpenResultV2 extends ProjectOpenResult {
+    readonly stale_head: StaleHeadDetail | null;
+}
+
+export interface ProjectConflictResolveResult {
+    readonly request_id: string;
+    readonly project_id: string;
+    readonly expected_revision: string;
+    readonly resolution: ConflictResolution;
+    readonly current_generation: number;
+    readonly conflict_state: "none";
+    readonly replayed: boolean;
+}
+
 const CLIENT_SURFACES = new Set<ClientSurface>([
     "chatgpt_web",
     "codex_remote",
@@ -73,6 +124,11 @@ const CONFLICT_STATES = new Set<ConflictState>([
     "locked",
     "stale",
     "diverged",
+]);
+const CONFLICT_RESOLUTIONS = new Set<ConflictResolution>([
+    "rebase_operation_plan",
+    "branch",
+    "manual_merge",
 ]);
 const CHANGE_KINDS = new Set<RevisionChangeKind>([
     "created",
@@ -100,6 +156,12 @@ const RENDER_REQUEST_KEYS = [
     "locale",
     "project_id",
 ] as const;
+const STALE_HEAD_KEYS = [
+    "observed_generation",
+    "current_generation",
+    "delta",
+    "allowed_resolutions",
+] as const;
 const SNAPSHOT_KEYS = [
     "schema_version",
     "client_surface",
@@ -108,6 +170,18 @@ const SNAPSHOT_KEYS = [
     "head_revision_id",
     "warning_count",
     "conflict_state",
+    "revisions",
+    "next_cursor",
+] as const;
+const SNAPSHOT_V2_KEYS = [
+    "schema_version",
+    "client_surface",
+    "locale",
+    "project_id",
+    "head_revision_id",
+    "warning_count",
+    "conflict_state",
+    "stale_head",
     "revisions",
     "next_cursor",
 ] as const;
@@ -167,6 +241,40 @@ function isCursor(value: unknown): value is string | null {
             value.length <= 2048 &&
             CURSOR_PATTERN.test(value))
     );
+}
+
+function isGeneration(value: unknown): value is number {
+    return Number.isSafeInteger(value) && (value as number) >= 0;
+}
+
+function parseStaleHeadDetail(value: unknown): StaleHeadDetail | null {
+    if (
+        !isRecord(value) ||
+        !hasExactKeys(value, STALE_HEAD_KEYS) ||
+        !isGeneration(value.observed_generation) ||
+        !isGeneration(value.current_generation) ||
+        !isGeneration(value.delta) ||
+        value.current_generation <= value.observed_generation ||
+        value.delta !== value.current_generation - value.observed_generation ||
+        !Array.isArray(value.allowed_resolutions) ||
+        value.allowed_resolutions.length < 1 ||
+        value.allowed_resolutions.length > CONFLICT_RESOLUTIONS.size ||
+        !value.allowed_resolutions.every(
+            (item) =>
+                typeof item === "string" &&
+                CONFLICT_RESOLUTIONS.has(item as ConflictResolution),
+        ) ||
+        new Set(value.allowed_resolutions).size !==
+            value.allowed_resolutions.length
+    ) {
+        return null;
+    }
+    return {
+        observed_generation: value.observed_generation,
+        current_generation: value.current_generation,
+        delta: value.delta,
+        allowed_resolutions: value.allowed_resolutions as ConflictResolution[],
+    };
 }
 
 function parseBasePublicResult(
@@ -279,6 +387,40 @@ export function parseContinuityRenderRequest(
     };
 }
 
+export function parseContinuityRenderRequestV2(
+    value: unknown,
+): ContinuityRenderRequestV2 | null {
+    if (!isRecord(value) || !hasExactKeys(value, RENDER_REQUEST_KEYS)) {
+        return null;
+    }
+    if (
+        value.schema_version !== CONTINUITY_RENDER_REQUEST_V2_SCHEMA ||
+        typeof value.client_surface !== "string" ||
+        !CLIENT_SURFACES.has(value.client_surface as ClientSurface) ||
+        typeof value.locale !== "string" ||
+        value.locale.length > 35 ||
+        !LOCALE_PATTERN.test(value.locale) ||
+        !isIdentifier(value.project_id, PROJECT_ID_PATTERN)
+    ) {
+        return null;
+    }
+    return {
+        schema_version: CONTINUITY_RENDER_REQUEST_V2_SCHEMA,
+        client_surface: value.client_surface as ClientSurface,
+        locale: value.locale,
+        project_id: value.project_id,
+    };
+}
+
+export function parseAnyContinuityRenderRequest(
+    value: unknown,
+): AnyContinuityRenderRequest | null {
+    return (
+        parseContinuityRenderRequest(value) ??
+        parseContinuityRenderRequestV2(value)
+    );
+}
+
 export function parseContinuitySnapshot(
     value: unknown,
 ): ContinuitySnapshot | null {
@@ -333,6 +475,74 @@ export function parseContinuitySnapshot(
     };
 }
 
+export function parseContinuitySnapshotV2(
+    value: unknown,
+): ContinuitySnapshotV2 | null {
+    if (!isRecord(value) || !hasExactKeys(value, SNAPSHOT_V2_KEYS)) {
+        return null;
+    }
+    if (
+        value.schema_version !== CONTINUITY_SNAPSHOT_V2_SCHEMA ||
+        typeof value.client_surface !== "string" ||
+        !CLIENT_SURFACES.has(value.client_surface as ClientSurface) ||
+        typeof value.locale !== "string" ||
+        value.locale.length > 35 ||
+        !LOCALE_PATTERN.test(value.locale) ||
+        !isIdentifier(value.project_id, PROJECT_ID_PATTERN) ||
+        !isNullableIdentifier(value.head_revision_id, REVISION_ID_PATTERN) ||
+        !Number.isInteger(value.warning_count) ||
+        (value.warning_count as number) < 0 ||
+        (value.warning_count as number) > 1_000_000 ||
+        typeof value.conflict_state !== "string" ||
+        !CONFLICT_STATES.has(value.conflict_state as ConflictState) ||
+        !Array.isArray(value.revisions) ||
+        value.revisions.length > 12 ||
+        !isCursor(value.next_cursor)
+    ) {
+        return null;
+    }
+    const staleHead =
+        value.stale_head === null
+            ? null
+            : parseStaleHeadDetail(value.stale_head);
+    if (
+        (value.conflict_state === "stale" &&
+            (staleHead === null || value.head_revision_id === null)) ||
+        (value.conflict_state !== "stale" && value.stale_head !== null)
+    ) {
+        return null;
+    }
+    const revisions = value.revisions.map(parseContinuityRevision);
+    if (revisions.some((item) => item === null)) return null;
+    const ids = revisions.map((item) => item!.revision_id);
+    if (new Set(ids).size !== ids.length) return null;
+    if (
+        value.head_revision_id !== null &&
+        revisions.length > 0 &&
+        revisions[0]!.revision_id !== value.head_revision_id
+    ) {
+        return null;
+    }
+    return {
+        schema_version: CONTINUITY_SNAPSHOT_V2_SCHEMA,
+        client_surface: value.client_surface as ClientSurface,
+        locale: value.locale,
+        project_id: value.project_id,
+        head_revision_id: value.head_revision_id,
+        warning_count: value.warning_count as number,
+        conflict_state: value.conflict_state as ConflictState,
+        stale_head: staleHead,
+        revisions: revisions as ContinuityRevision[],
+        next_cursor: value.next_cursor,
+    };
+}
+
+export function parseAnyContinuitySnapshot(
+    value: unknown,
+): AnyContinuitySnapshot | null {
+    return parseContinuitySnapshot(value) ?? parseContinuitySnapshotV2(value);
+}
+
 export function parseProjectOpenResult(
     value: unknown,
 ): ProjectOpenResult | null {
@@ -366,6 +576,55 @@ export function parseProjectOpenResult(
         head_revision_id: value.head_revision_id,
         warning_count: value.warning_count as number,
         conflict_state: value.conflict_state as ConflictState,
+    };
+}
+
+export function parseProjectOpenResultV2(
+    value: unknown,
+): ProjectOpenResultV2 | null {
+    if (!isRecord(value)) return null;
+    const requestId = parseBasePublicResult(value, [
+        "project_id",
+        "head_revision_id",
+        "warning_count",
+        "conflict_state",
+        "stale_head",
+        "recommended_actions",
+    ]);
+    if (
+        requestId === null ||
+        value.outcome !== "succeeded" ||
+        !isIdentifier(value.project_id, PROJECT_ID_PATTERN) ||
+        !isNullableIdentifier(value.head_revision_id, REVISION_ID_PATTERN) ||
+        !Number.isInteger(value.warning_count) ||
+        (value.warning_count as number) < 0 ||
+        (value.warning_count as number) > 1_000_000 ||
+        typeof value.conflict_state !== "string" ||
+        !CONFLICT_STATES.has(value.conflict_state as ConflictState) ||
+        !Array.isArray(value.recommended_actions) ||
+        value.recommended_actions.length > 32 ||
+        !value.recommended_actions.every((item) => isBoundedString(item, 500))
+    ) {
+        return null;
+    }
+    const staleHead =
+        value.stale_head === null
+            ? null
+            : parseStaleHeadDetail(value.stale_head);
+    if (
+        (value.conflict_state === "stale" &&
+            (staleHead === null || value.head_revision_id === null)) ||
+        (value.conflict_state !== "stale" && value.stale_head !== null)
+    ) {
+        return null;
+    }
+    return {
+        request_id: requestId,
+        project_id: value.project_id,
+        head_revision_id: value.head_revision_id,
+        warning_count: value.warning_count as number,
+        conflict_state: value.conflict_state as ConflictState,
+        stale_head: staleHead,
     };
 }
 
@@ -421,6 +680,48 @@ export function parseProjectCheckpointResult(
         revision_id: value.revision_id,
         replayed: value.replayed,
     };
+}
+
+export function parseProjectConflictResolveResult(
+    value: unknown,
+): ProjectConflictResolveResult | null {
+    if (!isRecord(value)) return null;
+    const requestId = parseBasePublicResult(value, [
+        "project_id",
+        "expected_revision",
+        "resolution",
+        "current_generation",
+        "conflict_state",
+        "replayed",
+    ]);
+    if (
+        requestId === null ||
+        value.outcome !== "succeeded" ||
+        !isIdentifier(value.project_id, PROJECT_ID_PATTERN) ||
+        !isIdentifier(value.expected_revision, REVISION_ID_PATTERN) ||
+        typeof value.resolution !== "string" ||
+        !CONFLICT_RESOLUTIONS.has(value.resolution as ConflictResolution) ||
+        !isGeneration(value.current_generation) ||
+        value.conflict_state !== "none" ||
+        typeof value.replayed !== "boolean"
+    ) {
+        return null;
+    }
+    return {
+        request_id: requestId,
+        project_id: value.project_id,
+        expected_revision: value.expected_revision,
+        resolution: value.resolution as ConflictResolution,
+        current_generation: value.current_generation,
+        conflict_state: "none",
+        replayed: value.replayed,
+    };
+}
+
+export function isContinuitySnapshotV2(
+    value: AnyContinuitySnapshot,
+): value is ContinuitySnapshotV2 {
+    return value.schema_version === CONTINUITY_SNAPSHOT_V2_SCHEMA;
 }
 
 export function classifyRevisionChange(summary: string): RevisionChangeKind {

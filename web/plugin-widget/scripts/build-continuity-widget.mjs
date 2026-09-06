@@ -40,12 +40,12 @@ async function bundle(entry, outputName, title) {
     await writeFile(resolve(outputDirectory, outputName), html, "utf8");
 }
 
-async function hostHarness() {
+async function hostHarness(entry, outputName, title, height) {
     const result = await build({
         absWorkingDir: packageRoot,
         bundle: true,
         charset: "utf8",
-        entryPoints: ["src/continuity-e2e-host.ts"],
+        entryPoints: [entry],
         format: "iife",
         legalComments: "none",
         minify: true,
@@ -61,12 +61,8 @@ async function hostHarness() {
     );
     if (javascript === undefined)
         throw new Error("missing E2E host JavaScript");
-    const html = `<!doctype html>\n<html lang="ko-KR">\n<head>\n<meta charset="utf-8">\n<title>HWPX Agent continuity E2E</title>\n<style>body{font-family:system-ui;margin:16px}iframe{width:900px;height:620px;border:0}#e2e-result{font:14px monospace}#e2e-result[data-state="pass"]{color:#117a4b}#e2e-result[data-state="fail"]{color:#b42318}</style>\n</head>\n<body>\n<p id="e2e-result" data-state="running">RUNNING</p>\n<iframe id="continuity-frame"></iframe>\n<script>${javascript.text.replaceAll("</script", "<\\/script")}</script>\n</body>\n</html>\n`;
-    await writeFile(
-        resolve(outputDirectory, "continuity-e2e-host.html"),
-        html,
-        "utf8",
-    );
+    const html = `<!doctype html>\n<html lang="ko-KR">\n<head>\n<meta charset="utf-8">\n<title>${title}</title>\n<style>body{font-family:system-ui;margin:16px}iframe{width:900px;height:${height}px;border:0}#e2e-result{font:14px monospace}#e2e-result[data-state="pass"]{color:#117a4b}#e2e-result[data-state="fail"]{color:#b42318}</style>\n</head>\n<body>\n<p id="e2e-result" data-state="running">RUNNING</p>\n<iframe id="continuity-frame"></iframe>\n<script>${javascript.text.replaceAll("</script", "<\\/script")}</script>\n</body>\n</html>\n`;
+    await writeFile(resolve(outputDirectory, outputName), html, "utf8");
 }
 
 await mkdir(outputDirectory, { recursive: true });
@@ -76,8 +72,24 @@ await bundle(
     "HWPX Agent project continuity",
 );
 await bundle(
+    "src/continuity-component.tsx",
+    "continuity-widget-v2.html",
+    "HWPX Agent stale-head resolution",
+);
+await bundle(
     "src/continuity-preview.tsx",
     "continuity-preview.html",
     "HWPX Agent continuity preview",
 );
-await hostHarness();
+await hostHarness(
+    "src/continuity-e2e-host.ts",
+    "continuity-e2e-host.html",
+    "HWPX Agent continuity E2E",
+    620,
+);
+await hostHarness(
+    "src/continuity-v2-e2e-host.ts",
+    "continuity-v2-e2e-host.html",
+    "HWPX Agent continuity v2 E2E",
+    760,
+);

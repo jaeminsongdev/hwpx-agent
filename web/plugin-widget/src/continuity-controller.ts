@@ -1,14 +1,20 @@
 import {
+    CONTINUITY_RENDER_REQUEST_V2_SCHEMA,
     CONTINUITY_SNAPSHOT_SCHEMA,
-    parseContinuityRenderRequest,
-    parseContinuitySnapshot,
+    CONTINUITY_SNAPSHOT_V2_SCHEMA,
+    isContinuitySnapshotV2,
+    parseAnyContinuityRenderRequest,
+    parseAnyContinuitySnapshot,
     parseProjectCheckpointResult,
+    parseProjectConflictResolveResult,
     parseProjectHistoryResult,
     parseProjectOpenResult,
+    parseProjectOpenResultV2,
     resolveHostTheme,
     resolveViewLocale,
-    type ContinuityRenderRequest,
-    type ContinuitySnapshot,
+    type AnyContinuityRenderRequest,
+    type AnyContinuitySnapshot,
+    type ConflictResolution,
     type HostTheme,
     type ViewLocale,
 } from "./continuity-model.js";
@@ -19,15 +25,18 @@ export type ContinuityPhase =
     | "ready"
     | "recoverable_error"
     | "closed";
-export type ContinuityMode = "view" | "confirm_checkpoint";
+export type ContinuityMode =
+    "view" | "confirm_checkpoint" | "confirm_resolution";
 export type CheckpointState = "none" | "saved" | "replayed";
+export type ConflictResolutionState = "none" | "resolved" | "replayed";
 export type ContinuityErrorCode =
     | "CONNECT_FAILED"
     | "INVALID_TOOL_INPUT"
     | "INVALID_TOOL_RESULT"
     | "TOOL_CANCELLED"
     | "REFRESH_FAILED"
-    | "CHECKPOINT_FAILED";
+    | "CHECKPOINT_FAILED"
+    | "RESOLUTION_FAILED";
 
 export interface ContinuityHostContext {
     readonly locale?: unknown;
@@ -40,7 +49,7 @@ export interface ContinuityToolResultNotification {
 }
 
 type CallContext = {
-    readonly client_surface: ContinuitySnapshot["client_surface"];
+    readonly client_surface: AnyContinuitySnapshot["client_surface"];
     readonly locale: string;
     readonly request_id: string;
     readonly project_id: string;
@@ -77,8 +86,21 @@ export interface ProjectCheckpointCall {
     };
 }
 
+export interface ProjectConflictResolveCall {
+    readonly name: "project_conflict_resolve";
+    readonly arguments: CallContext & {
+        readonly expected_revision: string;
+        readonly expected_generation: number;
+        readonly resolution: ConflictResolution;
+        readonly idempotency_key: string;
+    };
+}
+
 export type ContinuityServerCall =
-    ProjectOpenCall | ProjectHistoryCall | ProjectCheckpointCall;
+    | ProjectOpenCall
+    | ProjectHistoryCall
+    | ProjectCheckpointCall
+    | ProjectConflictResolveCall;
 
 export interface ContinuityPort {
     onToolInput(handler: (value: unknown) => void): () => void;
@@ -101,10 +123,12 @@ export interface ContinuityViewState {
     readonly mode: ContinuityMode;
     readonly locale: ViewLocale;
     readonly theme: HostTheme;
-    readonly snapshot: ContinuitySnapshot | null;
+    readonly snapshot: AnyContinuitySnapshot | null;
     readonly errorCode: ContinuityErrorCode | null;
     readonly actionPending: boolean;
     readonly checkpointState: CheckpointState;
+    readonly selectedResolution: ConflictResolution | null;
+    readonly resolutionState: ConflictResolutionState;
 }
 
 type Listener = (state: ContinuityViewState) => void;
@@ -143,12 +167,14 @@ export class ContinuityController {
         errorCode: null,
         actionPending: false,
         checkpointState: "none",
+        selectedResolution: null,
+        resolutionState: "none",
     };
     private readonly listeners = new Set<Listener>();
     private unregister: Array<() => void> = [];
     private started = false;
     private closeStarted = false;
-    private approvedRequest: ContinuityRenderRequest | null = null;
+    private approvedRequest: AnyContinuityRenderRequest | null = null;
 
     constructor(
         private readonly port: ContinuityPort,
@@ -260,7 +286,104 @@ export class ContinuityController {
         }
     }
 
-    async refresh(): Promise<void> {
+    beginResolution(resolution: ConflictResolution): void {
+        const snapshot = this.state.snapshot;
+        if (
+            this.state.phase !== "ready" ||
+            this.state.actionPending ||
+            this.state.mode !== "view" ||
+            snapshot === null ||
+            !isContinuitySnapshotV2(snapshot) ||
+            snapshot.conflict_state !== "stale" ||
+            snapshot.stale_head === null ||
+            !snapshot.stale_head.allowed_resolutions.includes(resolution)
+        ) {
+            return;
+        }
+        this.setState({
+            mode: "confirm_resolution",
+            selectedResolution: resolution,
+            resolutionState: "none",
+            checkpointState: "none",
+        });
+    }
+
+    cancelResolution(): void {
+        if (
+            this.state.phase === "ready" &&
+            this.state.mode === "confirm_resolution" &&
+            !this.state.actionPending
+        ) {
+            this.setState({ mode: "view", selectedResolution: null });
+        }
+    }
+
+    async confirmResolution(): Promise<void> {
+        const snapshot = this.state.snapshot;
+        const resolution = this.state.selectedResolution;
+        if (
+            this.state.phase !== "ready" ||
+            this.state.mode !== "confirm_resolution" ||
+            this.state.actionPending ||
+            snapshot === null ||
+            !isContinuitySnapshotV2(snapshot) ||
+            snapshot.head_revision_id === null ||
+            snapshot.conflict_state !== "stale" ||
+            snapshot.stale_head === null ||
+            resolution === null ||
+            !snapshot.stale_head.allowed_resolutions.includes(resolution)
+        ) {
+            return;
+        }
+        const requestId = this.nextRequestId();
+        const idempotencyKey = this.nextIdempotencyKey();
+        if (requestId === null || idempotencyKey === null) {
+            this.fail("RESOLUTION_FAILED");
+            return;
+        }
+        const expectedGeneration = snapshot.stale_head.current_generation;
+        this.setState({ actionPending: true });
+        const call: ProjectConflictResolveCall = {
+            name: "project_conflict_resolve",
+            arguments: {
+                client_surface: snapshot.client_surface,
+                locale: snapshot.locale,
+                request_id: requestId,
+                project_id: snapshot.project_id,
+                expected_revision: snapshot.head_revision_id,
+                expected_generation: expectedGeneration,
+                resolution,
+                idempotency_key: idempotencyKey,
+            },
+        };
+        try {
+            const result = parseProjectConflictResolveResult(
+                structuredContent(await this.port.callServerTool(call)),
+            );
+            if (
+                result === null ||
+                result.request_id !== requestId ||
+                result.project_id !== snapshot.project_id ||
+                result.expected_revision !== snapshot.head_revision_id ||
+                result.resolution !== resolution ||
+                result.current_generation !== expectedGeneration
+            ) {
+                this.fail("RESOLUTION_FAILED");
+                return;
+            }
+            this.setState({
+                mode: "view",
+                actionPending: false,
+                selectedResolution: null,
+                resolutionState: result.replayed ? "replayed" : "resolved",
+            });
+            await this.refresh(requestId);
+        } catch {
+            this.fail("RESOLUTION_FAILED");
+        }
+    }
+
+    async refresh(excludedRequestId: string | null = null): Promise<void> {
         const snapshot = this.state.snapshot;
         if (
             this.state.phase !== "ready" ||
@@ -275,7 +398,9 @@ export class ContinuityController {
         if (
             openRequestId === null ||
             historyRequestId === null ||
-            openRequestId === historyRequestId
+            openRequestId === historyRequestId ||
+            openRequestId === excludedRequestId ||
+            historyRequestId === excludedRequestId
         ) {
             this.fail("REFRESH_FAILED");
             return;
@@ -304,9 +429,12 @@ export class ContinuityController {
             },
         };
         try {
-            const open = parseProjectOpenResult(
-                structuredContent(await this.port.callServerTool(openCall)),
+            const openContent = structuredContent(
+                await this.port.callServerTool(openCall),
             );
+            const v2 = isContinuitySnapshotV2(snapshot);
+            const openV2 = v2 ? parseProjectOpenResultV2(openContent) : null;
+            const open = v2 ? openV2 : parseProjectOpenResult(openContent);
             const history = parseProjectHistoryResult(
                 structuredContent(await this.port.callServerTool(historyCall)),
             );
@@ -335,17 +463,30 @@ export class ContinuityController {
             }
             this.setState({
                 actionPending: false,
-                snapshot: {
-                    schema_version: CONTINUITY_SNAPSHOT_SCHEMA,
-                    client_surface: snapshot.client_surface,
-                    locale: snapshot.locale,
-                    project_id: open.project_id,
-                    head_revision_id: open.head_revision_id,
-                    warning_count: open.warning_count,
-                    conflict_state: open.conflict_state,
-                    revisions,
-                    next_cursor: history.next_cursor,
-                },
+                snapshot: v2
+                    ? {
+                          schema_version: CONTINUITY_SNAPSHOT_V2_SCHEMA,
+                          client_surface: snapshot.client_surface,
+                          locale: snapshot.locale,
+                          project_id: open.project_id,
+                          head_revision_id: open.head_revision_id,
+                          warning_count: open.warning_count,
+                          conflict_state: open.conflict_state,
+                          stale_head: openV2?.stale_head ?? null,
+                          revisions,
+                          next_cursor: history.next_cursor,
+                      }
+                    : {
+                          schema_version: CONTINUITY_SNAPSHOT_SCHEMA,
+                          client_surface: snapshot.client_surface,
+                          locale: snapshot.locale,
+                          project_id: open.project_id,
+                          head_revision_id: open.head_revision_id,
+                          warning_count: open.warning_count,
+                          conflict_state: open.conflict_state,
+                          revisions,
+                          next_cursor: history.next_cursor,
+                      },
             });
         } catch {
             this.fail("REFRESH_FAILED");
@@ -380,7 +521,7 @@ export class ContinuityController {
 
     private acceptRenderRequest(value: unknown): void {
         if (this.state.phase === "closed") return;
-        const request = parseContinuityRenderRequest(value);
+        const request = parseAnyContinuityRenderRequest(value);
         if (request === null) {
             this.fail("INVALID_TOOL_INPUT");
             return;
@@ -394,16 +535,21 @@ export class ContinuityController {
             errorCode: null,
             actionPending: false,
             checkpointState: "none",
+            selectedResolution: null,
+            resolutionState: "none",
         });
     }
 
     private acceptSnapshot(value: unknown): void {
         if (this.state.phase === "closed") return;
-        const snapshot = parseContinuitySnapshot(value);
+        const snapshot = parseAnyContinuitySnapshot(value);
         const approved = this.approvedRequest;
         if (
             snapshot === null ||
             approved === null ||
+            (approved.schema_version ===
+                CONTINUITY_RENDER_REQUEST_V2_SCHEMA) !==
+                isContinuitySnapshotV2(snapshot) ||
             snapshot.client_surface !== approved.client_surface ||
             snapshot.project_id !== approved.project_id
         ) {
@@ -419,6 +565,8 @@ export class ContinuityController {
             errorCode: null,
             actionPending: false,
             checkpointState: "none",
+            selectedResolution: null,
+            resolutionState: "none",
         };
         this.emit();
     }
@@ -458,6 +606,8 @@ export class ContinuityController {
             errorCode: code,
             actionPending: false,
             checkpointState: "none",
+            selectedResolution: null,
+            resolutionState: "none",
         });
     }
 
@@ -471,6 +621,8 @@ export class ContinuityController {
             errorCode: null,
             actionPending: false,
             checkpointState: "none",
+            selectedResolution: null,
+            resolutionState: "none",
         });
     }
 

@@ -1,0 +1,85 @@
+{
+  "schema_version": "hwpx-agent.p17-stale-head-widget/v1",
+  "scope": "local_mcp_apps_stale_head_component",
+  "predecessors": [
+    "implementation/p16/p16-continuity-contract-v1.json",
+    "protocol/private/p17-local-conflict-resolver-v1.json"
+  ],
+  "resource": {
+    "uri": "ui://hwpx-agent/project-continuity/v2.html",
+    "render_tool": "render_project_continuity_widget_v2",
+    "render_request": "hwpx-agent.continuity-render-request/v2",
+    "snapshot": "hwpx-agent.project-continuity/v2",
+    "maximum_bytes": 800000,
+    "connect_domains": [],
+    "resource_domains": []
+  },
+  "stale_head": {
+    "fields": [
+      "observed_generation",
+      "current_generation",
+      "delta",
+      "allowed_resolutions"
+    ],
+    "resolution_values": ["rebase_operation_plan", "branch", "manual_merge"],
+    "delta_must_equal_current_minus_observed": true,
+    "stale_requires_non_null_head_revision": true,
+    "duplicate_resolutions_rejected": true,
+    "unknown_fields_rejected": true
+  },
+  "interaction": {
+    "selection_server_calls": 0,
+    "confirmation_required": true,
+    "confirmed_call_order": [
+      "project_conflict_resolve",
+      "project_open",
+      "project_history"
+    ],
+    "resolution_request_binds": [
+      "project_id",
+      "expected_revision",
+      "expected_generation",
+      "resolution",
+      "idempotency_key"
+    ],
+    "resolution_response_rebinds": [
+      "request_id",
+      "project_id",
+      "expected_revision",
+      "current_generation",
+      "resolution"
+    ],
+    "post_resolution_authoritative_refresh": true,
+    "three_request_ids_must_be_distinct": true,
+    "server_result_mismatch": "fail_closed"
+  },
+  "compatibility": {
+    "v1_input_accepts_v2_snapshot": false,
+    "v1_snapshot_shape_changed": false,
+    "v2_downgrade": "rejected",
+    "migration": "protocol/migrations/p17-continuity-v1-to-v2.md"
+  },
+  "host_boundary": {
+    "project_conflict_resolve_registered": false,
+    "unregistered_call": "host_rejection_without_local_state_change",
+    "public_catalog_changed": false
+  },
+  "evidence": {
+    "plugin_widget_tests": 144,
+    "contract_tests": 4,
+    "local_headless_mcp_apps_e2e": true,
+    "desktop_viewport": "1200x900",
+    "mobile_viewport": "390x844",
+    "horizontal_overflow": false,
+    "console_errors_or_warnings": 0
+  },
+  "not_claimed": {
+    "actual_chatgpt_or_codex_host_tested": false,
+    "actual_remote_transport_tested": false,
+    "actual_concurrent_web_codex_tested": false,
+    "actual_hangul_tested": false,
+    "p17_07_pass": false,
+    "phase_complete": false,
+    "product_complete": false
+  }
+}

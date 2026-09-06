@@ -3,7 +3,10 @@ import test from "node:test";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import type { ContinuityViewState } from "./continuity-controller.js";
-import { CONTINUITY_SNAPSHOT_SCHEMA } from "./continuity-model.js";
+import {
+    CONTINUITY_SNAPSHOT_SCHEMA,
+    CONTINUITY_SNAPSHOT_V2_SCHEMA,
+} from "./continuity-model.js";
 import { ContinuityView } from "./continuity-ui.js";
 
 const state: ContinuityViewState = {
@@ -14,6 +17,8 @@ const state: ContinuityViewState = {
     errorCode: null,
     actionPending: false,
     checkpointState: "none",
+    selectedResolution: null,
+    resolutionState: "none",
     snapshot: {
         schema_version: CONTINUITY_SNAPSHOT_SCHEMA,
         client_surface: "chatgpt_web",
@@ -38,6 +43,9 @@ const handlers = {
     onConfirmCheckpoint: () => undefined,
     onCancelCheckpoint: () => undefined,
     onRefresh: () => undefined,
+    onBeginResolution: () => undefined,
+    onConfirmResolution: () => undefined,
+    onCancelResolution: () => undefined,
 };
 
 test("renders bounded project continuity with two actions and no raw IDs", () => {
@@ -78,6 +86,66 @@ test("renders an explicit checkpoint confirmation with primary and secondary act
     assert.match(html, /변경 불가능한 체크포인트/);
     assert.match(html, /확인 후 만들기/);
     assert.match(html, /취소/);
+    assert.equal((html.match(/<button/g) ?? []).length, 2);
+});
+
+test("renders bounded stale-head generations and only server-allowed resolution choices", () => {
+    const html = renderToStaticMarkup(
+        <ContinuityView
+            state={{
+                ...state,
+                snapshot: {
+                    ...state.snapshot!,
+                    schema_version: CONTINUITY_SNAPSHOT_V2_SCHEMA,
+                    conflict_state: "stale",
+                    stale_head: {
+                        observed_generation: 7,
+                        current_generation: 9,
+                        delta: 2,
+                        allowed_resolutions: [
+                            "rebase_operation_plan",
+                            "branch",
+                        ],
+                    },
+                },
+            }}
+            {...handlers}
+        />,
+    );
+    assert.match(html, /작업 계획 재배치/);
+    assert.match(html, /새 브랜치로 분리/);
+    assert.doesNotMatch(html, /수동 병합/);
+    assert.match(html, /해결 방법을 선택하거나 새로고침/);
+    assert.doesNotMatch(html, /새로고침이 필요합니다/);
+    assert.match(html, /\+2/);
+    assert.doesNotMatch(html, /prj_12345678|rev_abcdefgh/);
+    assert.equal((html.match(/<button/g) ?? []).length, 3);
+});
+
+test("requires an explicit second action before resolving a stale head", () => {
+    const html = renderToStaticMarkup(
+        <ContinuityView
+            state={{
+                ...state,
+                mode: "confirm_resolution",
+                selectedResolution: "manual_merge",
+                snapshot: {
+                    ...state.snapshot!,
+                    schema_version: CONTINUITY_SNAPSHOT_V2_SCHEMA,
+                    conflict_state: "stale",
+                    stale_head: {
+                        observed_generation: 4,
+                        current_generation: 5,
+                        delta: 1,
+                        allowed_resolutions: ["manual_merge"],
+                    },
+                },
+            }}
+            {...handlers}
+        />,
+    );
+    assert.match(html, /확인 후 해결/);
+    assert.match(html, /선택한 방법/);
     assert.equal((html.match(/<button/g) ?? []).length, 2);
 });
 

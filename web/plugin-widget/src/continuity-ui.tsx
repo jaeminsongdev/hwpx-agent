@@ -2,11 +2,14 @@ import type { ReactNode } from "react";
 
 import type {
     CheckpointState,
+    ConflictResolutionState,
     ContinuityErrorCode,
     ContinuityPhase,
     ContinuityViewState,
 } from "./continuity-controller.js";
 import {
+    isContinuitySnapshotV2,
+    type ConflictResolution,
     type ConflictState,
     type RevisionChangeKind,
 } from "./continuity-model.js";
@@ -24,10 +27,21 @@ type Copy = {
     noHistory: string;
     conflict: Record<ConflictState, string>;
     conflictMessage: Record<Exclude<ConflictState, "none">, string>;
+    staleHeadConflictMessage: string;
     change: Record<RevisionChangeKind, string>;
     checkpoint: string;
     checkpointConfirm: string;
     checkpointSaved: Record<Exclude<CheckpointState, "none">, string>;
+    staleHead: string;
+    observedGeneration: string;
+    currentGeneration: string;
+    generationDelta: string;
+    chooseResolution: string;
+    resolution: Record<ConflictResolution, string>;
+    resolutionDescription: Record<ConflictResolution, string>;
+    resolutionConfirm: string;
+    confirmResolution: string;
+    resolutionSaved: Record<Exclude<ConflictResolutionState, "none">, string>;
     createCheckpoint: string;
     confirmCreate: string;
     cancel: string;
@@ -69,6 +83,8 @@ const COPY: Record<ContinuityViewState["locale"], Copy> = {
             stale: "표시된 리비전이 최신이 아닙니다. 새로고침이 필요합니다.",
             diverged: "리비전이 갈라졌습니다. 쓰기 작업을 중지했습니다.",
         },
+        staleHeadConflictMessage:
+            "원격 상태가 변경되었습니다. 해결 방법을 선택하거나 새로고침해 다시 확인하세요.",
         change: {
             created: "생성",
             edited: "편집",
@@ -83,6 +99,31 @@ const COPY: Record<ContinuityViewState["locale"], Copy> = {
             saved: "체크포인트를 만들었습니다.",
             replayed: "동일 요청의 기존 체크포인트를 확인했습니다.",
         },
+        staleHead: "원격 상태 변경",
+        observedGeneration: "작업 시작 세대",
+        currentGeneration: "현재 원격 세대",
+        generationDelta: "변경 차이",
+        chooseResolution:
+            "해결 방법을 선택하세요. 선택만으로는 변경되지 않습니다.",
+        resolution: {
+            rebase_operation_plan: "작업 계획 재배치",
+            branch: "새 브랜치로 분리",
+            manual_merge: "수동 병합",
+        },
+        resolutionDescription: {
+            rebase_operation_plan:
+                "현재 원격 상태 위에 승인된 작업 계획을 다시 적용합니다.",
+            branch: "기존 로컬 작업을 별도 브랜치로 보존합니다.",
+            manual_merge:
+                "준비된 병합 결과를 사용해 충돌을 명시적으로 해결합니다.",
+        },
+        resolutionConfirm:
+            "선택한 방법으로 현재 세대의 충돌을 해결할까요? 서버가 상태를 다시 확인한 뒤 처리합니다.",
+        confirmResolution: "확인 후 해결",
+        resolutionSaved: {
+            resolved: "충돌 해결 후 최신 상태를 다시 확인했습니다.",
+            replayed: "동일 요청의 기존 충돌 해결 결과를 다시 확인했습니다.",
+        },
         createCheckpoint: "체크포인트 만들기",
         confirmCreate: "확인 후 만들기",
         cancel: "취소",
@@ -94,6 +135,7 @@ const COPY: Record<ContinuityViewState["locale"], Copy> = {
             TOOL_CANCELLED: "요청이 취소되었습니다.",
             REFRESH_FAILED: "최신 프로젝트 기록을 확인하지 못했습니다.",
             CHECKPOINT_FAILED: "체크포인트를 만들지 못했습니다.",
+            RESOLUTION_FAILED: "충돌 해결 요청을 완료하지 못했습니다.",
         },
     },
     "en-US": {
@@ -129,6 +171,8 @@ const COPY: Record<ContinuityViewState["locale"], Copy> = {
             stale: "The displayed revision is stale. Refresh is required.",
             diverged: "The revision graph diverged. Write actions are stopped.",
         },
+        staleHeadConflictMessage:
+            "The remote state changed. Choose a resolution or refresh to review it again.",
         change: {
             created: "Created",
             edited: "Edited",
@@ -144,6 +188,31 @@ const COPY: Record<ContinuityViewState["locale"], Copy> = {
             saved: "Checkpoint created.",
             replayed: "The existing checkpoint for this request was confirmed.",
         },
+        staleHead: "Remote state changed",
+        observedGeneration: "Starting generation",
+        currentGeneration: "Current remote generation",
+        generationDelta: "Generation delta",
+        chooseResolution:
+            "Choose a resolution. Selecting an option does not change state.",
+        resolution: {
+            rebase_operation_plan: "Rebase operation plan",
+            branch: "Preserve on new branch",
+            manual_merge: "Manual merge",
+        },
+        resolutionDescription: {
+            rebase_operation_plan:
+                "Reapply the approved operation plan on the current remote state.",
+            branch: "Preserve the existing local work on a separate branch.",
+            manual_merge:
+                "Resolve the conflict with an already prepared merge result.",
+        },
+        resolutionConfirm:
+            "Resolve the current generation conflict with this method? The server revalidates state before applying it.",
+        confirmResolution: "Confirm resolution",
+        resolutionSaved: {
+            resolved: "The latest state was verified after resolution.",
+            replayed: "The existing resolution for this request was confirmed.",
+        },
         createCheckpoint: "Create checkpoint",
         confirmCreate: "Confirm and create",
         cancel: "Cancel",
@@ -156,6 +225,8 @@ const COPY: Record<ContinuityViewState["locale"], Copy> = {
             TOOL_CANCELLED: "The request was cancelled.",
             REFRESH_FAILED: "Current project history could not be verified.",
             CHECKPOINT_FAILED: "The checkpoint could not be created.",
+            RESOLUTION_FAILED:
+                "The conflict resolution could not be completed.",
         },
     },
 };
@@ -220,6 +291,9 @@ export interface ContinuityViewProps {
     readonly onConfirmCheckpoint: () => void;
     readonly onCancelCheckpoint: () => void;
     readonly onRefresh: () => void;
+    readonly onBeginResolution: (resolution: ConflictResolution) => void;
+    readonly onConfirmResolution: () => void;
+    readonly onCancelResolution: () => void;
 }
 
 export function ContinuityView({
@@ -228,6 +302,9 @@ export function ContinuityView({
     onConfirmCheckpoint,
     onCancelCheckpoint,
     onRefresh,
+    onBeginResolution,
+    onConfirmResolution,
+    onCancelResolution,
 }: ContinuityViewProps) {
     const copy = COPY[state.locale];
     const snapshot = state.snapshot;
@@ -237,6 +314,11 @@ export function ContinuityView({
             ? copy.error[state.errorCode]
             : copy.message[state.phase];
     const conflict = snapshot?.conflict_state ?? "none";
+    const staleHead =
+        snapshot !== null && isContinuitySnapshotV2(snapshot)
+            ? snapshot.stale_head
+            : null;
+    const selectedResolution = state.selectedResolution;
     const checkpointAllowed =
         state.phase === "ready" &&
         state.mode === "view" &&
@@ -283,8 +365,74 @@ export function ContinuityView({
                     {conflict !== "none" && (
                         <aside className="continuity-conflict" role="alert">
                             <strong>{copy.conflict[conflict]}</strong>
-                            <span>{copy.conflictMessage[conflict]}</span>
+                            <span>
+                                {conflict === "stale" && staleHead !== null
+                                    ? copy.staleHeadConflictMessage
+                                    : copy.conflictMessage[conflict]}
+                            </span>
                         </aside>
+                    )}
+
+                    {conflict === "stale" && staleHead !== null && (
+                        <section
+                            className="continuity-resolution"
+                            aria-labelledby="resolution-heading"
+                        >
+                            <h2 id="resolution-heading">{copy.staleHead}</h2>
+                            <dl>
+                                <div>
+                                    <dt>{copy.observedGeneration}</dt>
+                                    <dd>{staleHead.observed_generation}</dd>
+                                </div>
+                                <div>
+                                    <dt>{copy.currentGeneration}</dt>
+                                    <dd>{staleHead.current_generation}</dd>
+                                </div>
+                                <div>
+                                    <dt>{copy.generationDelta}</dt>
+                                    <dd>+{staleHead.delta}</dd>
+                                </div>
+                            </dl>
+                            {state.mode === "view" && (
+                                <>
+                                    <p>{copy.chooseResolution}</p>
+                                    <div className="continuity-resolution-options">
+                                        {staleHead.allowed_resolutions.map(
+                                            (resolution) => (
+                                                <button
+                                                    type="button"
+                                                    key={resolution}
+                                                    onClick={() =>
+                                                        onBeginResolution(
+                                                            resolution,
+                                                        )
+                                                    }
+                                                    disabled={
+                                                        state.actionPending
+                                                    }
+                                                >
+                                                    <strong>
+                                                        {
+                                                            copy.resolution[
+                                                                resolution
+                                                            ]
+                                                        }
+                                                    </strong>
+                                                    <span>
+                                                        {
+                                                            copy
+                                                                .resolutionDescription[
+                                                                resolution
+                                                            ]
+                                                        }
+                                                    </span>
+                                                </button>
+                                            ),
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                        </section>
                     )}
 
                     <section className="continuity-grid">
@@ -371,9 +519,34 @@ export function ContinuityView({
                         </section>
                     )}
 
+                    {state.mode === "confirm_resolution" &&
+                        selectedResolution !== null && (
+                            <section
+                                className="continuity-confirm"
+                                aria-labelledby="resolution-confirm-heading"
+                            >
+                                <h2 id="resolution-confirm-heading">
+                                    {copy.resolution[selectedResolution]}
+                                </h2>
+                                <p>{copy.resolutionConfirm}</p>
+                                <span>
+                                    {
+                                        copy.resolutionDescription[
+                                            selectedResolution
+                                        ]
+                                    }
+                                </span>
+                            </section>
+                        )}
+
                     {state.checkpointState !== "none" && (
                         <p className="continuity-success" role="status">
                             {copy.checkpointSaved[state.checkpointState]}
+                        </p>
+                    )}
+                    {state.resolutionState !== "none" && (
+                        <p className="continuity-success" role="status">
+                            {copy.resolutionSaved[state.resolutionState]}
                         </p>
                     )}
                 </>
@@ -397,6 +570,24 @@ export function ContinuityView({
                                 disabled={state.actionPending}
                             >
                                 {copy.confirmCreate}
+                            </button>
+                        </>
+                    ) : state.mode === "confirm_resolution" ? (
+                        <>
+                            <button
+                                type="button"
+                                className="continuity-secondary"
+                                onClick={onCancelResolution}
+                                disabled={state.actionPending}
+                            >
+                                {copy.cancel}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={onConfirmResolution}
+                                disabled={state.actionPending}
+                            >
+                                {copy.confirmResolution}
                             </button>
                         </>
                     ) : conflict === "none" ? (

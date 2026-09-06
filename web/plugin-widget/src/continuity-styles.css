@@ -191,6 +191,86 @@ button {
     line-height: 1.45;
 }
 
+.continuity-resolution {
+    margin: 0 24px 18px;
+    padding: 14px 16px;
+    background: var(--surface-soft);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+}
+.continuity-resolution h2 {
+    margin: 0 0 10px;
+    font-size: 14px;
+}
+.continuity-resolution dl {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0 0 12px;
+}
+.continuity-resolution dl div {
+    padding: 8px 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+}
+.continuity-resolution dt,
+.continuity-resolution dd {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.4;
+}
+.continuity-resolution dt {
+    color: var(--muted);
+}
+.continuity-resolution dd {
+    margin-top: 2px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+}
+.continuity-resolution > p {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+}
+.continuity-resolution-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+.continuity-resolution-options button {
+    display: grid;
+    gap: 4px;
+    min-height: 76px;
+    padding: 10px 12px;
+    color: var(--ink);
+    text-align: start;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    cursor: pointer;
+}
+.continuity-resolution-options button:hover:not(:disabled) {
+    border-color: var(--primary);
+}
+.continuity-resolution-options button:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+}
+.continuity-resolution-options button:disabled {
+    cursor: wait;
+    opacity: 0.58;
+}
+.continuity-resolution-options strong {
+    font-size: 13px;
+}
+.continuity-resolution-options span {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.4;
+}
+
 .continuity-grid {
     display: grid;
     grid-template-columns: minmax(220px, 0.8fr) minmax(280px, 1.2fr);
@@ -364,6 +444,13 @@ button {
     }
     .continuity-conflict {
         margin: 0 16px 14px;
+    }
+    .continuity-resolution {
+        margin: 0 16px 14px;
+    }
+    .continuity-resolution dl,
+    .continuity-resolution-options {
+        grid-template-columns: 1fr;
     }
     .continuity-grid {
         grid-template-columns: 1fr;

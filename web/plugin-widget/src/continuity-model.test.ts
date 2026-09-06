@@ -3,12 +3,17 @@ import test from "node:test";
 
 import {
     CONTINUITY_RENDER_REQUEST_SCHEMA,
+    CONTINUITY_RENDER_REQUEST_V2_SCHEMA,
     CONTINUITY_SNAPSHOT_SCHEMA,
+    CONTINUITY_SNAPSHOT_V2_SCHEMA,
     PUBLIC_RESULT_SCHEMA,
     classifyRevisionChange,
     parseContinuityRenderRequest,
+    parseContinuityRenderRequestV2,
     parseContinuitySnapshot,
+    parseContinuitySnapshotV2,
     parseProjectCheckpointResult,
+    parseProjectConflictResolveResult,
     parseProjectHistoryResult,
     parseProjectOpenResult,
 } from "./continuity-model.js";
@@ -88,6 +93,79 @@ test("rejects unknown fields, duplicated revisions and head mismatch", () => {
     );
 });
 
+test("accepts exact v2 stale-head generations and rejects inconsistent successors", () => {
+    assert.notEqual(
+        parseContinuityRenderRequestV2({
+            schema_version: CONTINUITY_RENDER_REQUEST_V2_SCHEMA,
+            client_surface: "codex_local",
+            locale: "ko-KR",
+            project_id: "prj_12345678",
+        }),
+        null,
+    );
+    const value = {
+        schema_version: CONTINUITY_SNAPSHOT_V2_SCHEMA,
+        client_surface: "codex_local",
+        locale: "ko-KR",
+        project_id: "prj_12345678",
+        head_revision_id: "rev_abcdefgh",
+        warning_count: 1,
+        conflict_state: "stale",
+        stale_head: {
+            observed_generation: 10,
+            current_generation: 12,
+            delta: 2,
+            allowed_resolutions: [
+                "rebase_operation_plan",
+                "branch",
+                "manual_merge",
+            ],
+        },
+        revisions: [
+            {
+                revision_id: "rev_abcdefgh",
+                parent_revision_ids: [],
+                created_at: "2026-09-05T00:00:00Z",
+                change_kind: "edited",
+            },
+        ],
+        next_cursor: null,
+    } as const;
+    assert.notEqual(parseContinuitySnapshotV2(value), null);
+    assert.equal(
+        parseContinuitySnapshotV2({
+            ...value,
+            stale_head: { ...value.stale_head, delta: 1 },
+        }),
+        null,
+    );
+    assert.equal(
+        parseContinuitySnapshotV2({
+            ...value,
+            conflict_state: "none",
+        }),
+        null,
+    );
+    assert.equal(
+        parseContinuitySnapshotV2({
+            ...value,
+            head_revision_id: null,
+            revisions: [],
+        }),
+        null,
+    );
+    assert.equal(
+        parseContinuitySnapshotV2({
+            ...value,
+            stale_head: {
+                ...value.stale_head,
+                allowed_resolutions: ["branch", "branch"],
+            },
+        }),
+        null,
+    );
+});
+
 test("parses exact public open history and checkpoint results", () => {
     assert.deepEqual(
         parseProjectOpenResult({
@@ -129,6 +207,26 @@ test("parses exact public open history and checkpoint results", () => {
             replayed: false,
         }),
         null,
+    );
+    assert.deepEqual(
+        parseProjectConflictResolveResult({
+            ...base,
+            project_id: "prj_12345678",
+            expected_revision: "rev_abcdefgh",
+            resolution: "branch",
+            current_generation: 12,
+            conflict_state: "none",
+            replayed: false,
+        }),
+        {
+            request_id: "req_12345678",
+            project_id: "prj_12345678",
+            expected_revision: "rev_abcdefgh",
+            resolution: "branch",
+            current_generation: 12,
+            conflict_state: "none",
+            replayed: false,
+        },
     );
 });
 

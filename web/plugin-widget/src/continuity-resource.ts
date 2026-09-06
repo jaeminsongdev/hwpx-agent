@@ -2,14 +2,21 @@ import { RESOURCE_MIME_TYPE } from "@modelcontextprotocol/ext-apps/server";
 
 import {
     CONTINUITY_RENDER_REQUEST_SCHEMA,
+    CONTINUITY_RENDER_REQUEST_V2_SCHEMA,
     CONTINUITY_SNAPSHOT_SCHEMA,
+    CONTINUITY_SNAPSHOT_V2_SCHEMA,
     parseContinuitySnapshot,
+    parseContinuitySnapshotV2,
 } from "./continuity-model.js";
 
 export const CONTINUITY_RESOURCE_URI =
     "ui://hwpx-agent/project-continuity/v1.html" as const;
 export const CONTINUITY_RENDER_TOOL_NAME =
     "render_project_continuity_widget" as const;
+export const CONTINUITY_RESOURCE_V2_URI =
+    "ui://hwpx-agent/project-continuity/v2.html" as const;
+export const CONTINUITY_RENDER_V2_TOOL_NAME =
+    "render_project_continuity_widget_v2" as const;
 export const CONTINUITY_MAX_HTML_BYTES = 800_000;
 export const CONTINUITY_CSP = Object.freeze({
     connectDomains: Object.freeze([] as string[]),
@@ -58,6 +65,21 @@ export const CONTINUITY_RENDER_INPUT_SCHEMA = Object.freeze({
     additionalProperties: false,
     properties: {
         schema_version: { const: CONTINUITY_RENDER_REQUEST_SCHEMA },
+        client_surface: {
+            type: "string",
+            enum: ["chatgpt_web", "codex_remote", "codex_local"],
+        },
+        locale: LOCALE_SCHEMA,
+        project_id: PROJECT_ID_SCHEMA,
+    },
+    required: ["schema_version", "client_surface", "locale", "project_id"],
+});
+
+export const CONTINUITY_RENDER_V2_INPUT_SCHEMA = Object.freeze({
+    type: "object",
+    additionalProperties: false,
+    properties: {
+        schema_version: { const: CONTINUITY_RENDER_REQUEST_V2_SCHEMA },
         client_surface: {
             type: "string",
             enum: ["chatgpt_web", "codex_remote", "codex_local"],
@@ -137,7 +159,71 @@ export const CONTINUITY_RENDER_OUTPUT_SCHEMA = Object.freeze({
     ],
 });
 
-export function createContinuityResource(html: string) {
+const STALE_HEAD_SCHEMA = Object.freeze({
+    type: "object",
+    additionalProperties: false,
+    properties: {
+        observed_generation: { type: "integer", minimum: 0 },
+        current_generation: { type: "integer", minimum: 1 },
+        delta: { type: "integer", minimum: 1 },
+        allowed_resolutions: {
+            type: "array",
+            minItems: 1,
+            maxItems: 3,
+            uniqueItems: true,
+            items: {
+                type: "string",
+                enum: ["rebase_operation_plan", "branch", "manual_merge"],
+            },
+        },
+    },
+    required: [
+        "observed_generation",
+        "current_generation",
+        "delta",
+        "allowed_resolutions",
+    ],
+});
+
+export const CONTINUITY_RENDER_V2_OUTPUT_SCHEMA = Object.freeze({
+    type: "object",
+    additionalProperties: false,
+    properties: {
+        schema_version: { const: CONTINUITY_SNAPSHOT_V2_SCHEMA },
+        client_surface: {
+            type: "string",
+            enum: ["chatgpt_web", "codex_remote", "codex_local"],
+        },
+        locale: LOCALE_SCHEMA,
+        project_id: PROJECT_ID_SCHEMA,
+        head_revision_id: NULLABLE_REVISION_ID_SCHEMA,
+        warning_count: { type: "integer", minimum: 0, maximum: 1_000_000 },
+        conflict_state: {
+            type: "string",
+            enum: ["none", "locked", "stale", "diverged"],
+        },
+        stale_head: { oneOf: [STALE_HEAD_SCHEMA, { type: "null" }] },
+        revisions: { type: "array", maxItems: 12, items: REVISION_SCHEMA },
+        next_cursor: CURSOR_SCHEMA,
+    },
+    required: [
+        "schema_version",
+        "client_surface",
+        "locale",
+        "project_id",
+        "head_revision_id",
+        "warning_count",
+        "conflict_state",
+        "stale_head",
+        "revisions",
+        "next_cursor",
+    ],
+});
+
+function createContinuityResourceAt(
+    html: string,
+    uri: typeof CONTINUITY_RESOURCE_URI | typeof CONTINUITY_RESOURCE_V2_URI,
+) {
     if (Buffer.byteLength(html, "utf8") > CONTINUITY_MAX_HTML_BYTES) {
         throw new Error("continuity HTML exceeds the bounded resource size");
     }
@@ -157,7 +243,7 @@ export function createContinuityResource(html: string) {
     return {
         contents: [
             {
-                uri: CONTINUITY_RESOURCE_URI,
+                uri,
                 mimeType: RESOURCE_MIME_TYPE,
                 text: html,
                 _meta: {
@@ -169,6 +255,14 @@ export function createContinuityResource(html: string) {
             },
         ],
     } as const;
+}
+
+export function createContinuityResource(html: string) {
+    return createContinuityResourceAt(html, CONTINUITY_RESOURCE_URI);
+}
+
+export function createContinuityResourceV2(html: string) {
+    return createContinuityResourceAt(html, CONTINUITY_RESOURCE_V2_URI);
 }
 
 export const CONTINUITY_RENDER_TOOL_DESCRIPTOR = Object.freeze({
@@ -191,6 +285,26 @@ export const CONTINUITY_RENDER_TOOL_DESCRIPTOR = Object.freeze({
     }),
 });
 
+export const CONTINUITY_RENDER_V2_TOOL_DESCRIPTOR = Object.freeze({
+    name: CONTINUITY_RENDER_V2_TOOL_NAME,
+    title: "Render project stale-head resolution widget",
+    description:
+        "Render bounded project continuity and stale-head resolution choices. Rendering creates no state.",
+    annotations: Object.freeze({
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+    }),
+    inputSchema: CONTINUITY_RENDER_V2_INPUT_SCHEMA,
+    outputSchema: CONTINUITY_RENDER_V2_OUTPUT_SCHEMA,
+    securitySchemes: Object.freeze([PROJECT_READ_SECURITY]),
+    _meta: Object.freeze({
+        securitySchemes: Object.freeze([PROJECT_READ_SECURITY]),
+        ui: Object.freeze({ resourceUri: CONTINUITY_RESOURCE_V2_URI }),
+    }),
+});
+
 export function createContinuityToolResult(value: unknown) {
     const snapshot = parseContinuitySnapshot(value);
     if (snapshot === null) throw new Error("invalid continuity snapshot");
@@ -199,6 +313,19 @@ export function createContinuityToolResult(value: unknown) {
         content: [{ type: "text", text: "Project continuity is ready." }],
         _meta: {
             "hwpx-agent/continuity-version": "1",
+            "hwpx-agent/preferred-display-mode": "inline",
+        },
+    } as const;
+}
+
+export function createContinuityToolResultV2(value: unknown) {
+    const snapshot = parseContinuitySnapshotV2(value);
+    if (snapshot === null) throw new Error("invalid continuity v2 snapshot");
+    return {
+        structuredContent: snapshot,
+        content: [{ type: "text", text: "Project continuity is ready." }],
+        _meta: {
+            "hwpx-agent/continuity-version": "2",
             "hwpx-agent/preferred-display-mode": "inline",
         },
     } as const;

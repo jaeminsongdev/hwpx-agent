@@ -18,6 +18,8 @@ const INITIAL_STATE: ContinuityViewState = {
     errorCode: null,
     actionPending: false,
     checkpointState: "none",
+    selectedResolution: null,
+    resolutionState: "none",
 };
 
 function requestId(): string {
@@ -65,6 +67,19 @@ function ContinuityApplication() {
         () => void controller?.refresh(),
         [controller],
     );
+    const onBeginResolution = useCallback(
+        (resolution: Parameters<ContinuityController["beginResolution"]>[0]) =>
+            controller?.beginResolution(resolution),
+        [controller],
+    );
+    const onConfirmResolution = useCallback(
+        () => void controller?.confirmResolution(),
+        [controller],
+    );
+    const onCancelResolution = useCallback(
+        () => controller?.cancelResolution(),
+        [controller],
+    );
 
     return (
         <ContinuityView
@@ -73,6 +88,9 @@ function ContinuityApplication() {
             onConfirmCheckpoint={onConfirmCheckpoint}
             onCancelCheckpoint={onCancelCheckpoint}
             onRefresh={onRefresh}
+            onBeginResolution={onBeginResolution}
+            onConfirmResolution={onConfirmResolution}
+            onCancelResolution={onCancelResolution}
         />
     );
 }

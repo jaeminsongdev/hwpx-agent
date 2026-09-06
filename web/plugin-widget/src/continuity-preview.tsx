@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
 
 import type { ContinuityViewState } from "./continuity-controller.js";
-import { CONTINUITY_SNAPSHOT_SCHEMA } from "./continuity-model.js";
+import { CONTINUITY_SNAPSHOT_V2_SCHEMA } from "./continuity-model.js";
 import { ContinuityView } from "./continuity-ui.js";
 import "./continuity-styles.css";
 
@@ -18,14 +18,28 @@ const state: ContinuityViewState = {
     errorCode: null,
     actionPending: false,
     checkpointState: params.get("state") === "saved" ? "saved" : "none",
+    selectedResolution: null,
+    resolutionState: "none",
     snapshot: {
-        schema_version: CONTINUITY_SNAPSHOT_SCHEMA,
+        schema_version: CONTINUITY_SNAPSHOT_V2_SCHEMA,
         client_surface: "chatgpt_web",
         locale: "ko-KR",
         project_id: "prj_preview1234",
         head_revision_id: "rev_current1234",
         warning_count: conflict ? 2 : 0,
-        conflict_state: conflict ? "diverged" : "none",
+        conflict_state: conflict ? "stale" : "none",
+        stale_head: conflict
+            ? {
+                  observed_generation: 12,
+                  current_generation: 14,
+                  delta: 2,
+                  allowed_resolutions: [
+                      "rebase_operation_plan",
+                      "branch",
+                      "manual_merge",
+                  ],
+              }
+            : null,
         revisions: [
             {
                 revision_id: "rev_current1234",
@@ -61,5 +75,8 @@ createRoot(document.getElementById("root")!).render(
         onConfirmCheckpoint={() => undefined}
         onCancelCheckpoint={() => undefined}
         onRefresh={() => undefined}
+        onBeginResolution={() => undefined}
+        onConfirmResolution={() => undefined}
+        onCancelResolution={() => undefined}
     />,
 );

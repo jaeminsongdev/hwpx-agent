@@ -49,6 +49,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0092 | P17-01 | Deterministic 19-entry package core 7/7; registered remote app absent |
 | P-0093 | P17-08 | Widget 133/133, MCP 13/13, disposable Git 20/20, installed v0.4 prepare 18/18; visible click/effect open |
 | P-0094 | P17-07 | Local rebase/branch/manual resolver and stale-head CLI surface 37/37; host/UI/concurrent evidence open |
+| P-0094A | P17-07 | Graphical stale-head v2 component 144/144 and local iframe E2E pass; host registration/concurrent evidence open |
 
 ## Current P17-08 evidence
 
@@ -105,8 +106,14 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   `273f6ccaac644836814b87679ab4eb0c` passed 12/12; actual Hangul operations remain open.
 - P17-07 local conflict resolver persists exact rebase, exact-base branch and manual-merge
   transitions through one journal CAS. All 37 `local-sync` tests pass and public stale-head output
-  is identity/digest/path-free. Actual host receipt, graphical UI and concurrent Web/Codex evidence
-  remain open; see `implementation/p17/P17-07_LOCAL_CONFLICT_RESOLVER_V1.md`.
+  is identity/digest/path-free. Actual host receipt and concurrent Web/Codex evidence remain open;
+  see `implementation/p17/P17-07_LOCAL_CONFLICT_RESOLVER_V1.md`.
+- P17-07 stale-head widget v2 adds checked observed/current generations, a unique server-allowed
+  resolution list and a mandatory second confirmation. Selection makes zero calls; confirmation
+  binds expected revision/generation and idempotency, then requires an authoritative open/history
+  refresh. The plugin widget passes 144 tests, v1 regression E2E passes and v2 local iframe run
+  `784ceb1476354f51b73fb5cbf40d8e1c` passes. This is graphical component evidence only:
+  `project_conflict_resolve` is not registered and actual concurrent Web/Codex evidence is absent.
 
 ## Risks and holds
 
@@ -118,8 +125,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - R-0004: Broad P16 discovery remains red on immutable predecessor locks and legacy assets;
   targeted successor qualification is authoritative only for its stated scope.
 - R-0005: P17-03 lacks persistent credential provider/PostgreSQL lifecycle; fail closed meanwhile.
-- R-0006: P17-07 local resolver is component evidence only; qualified host/UI wiring and concurrent
-  Web/Codex verification remain open.
+- R-0006: P17-07 local resolver and graphical stale-head widget are component evidence only;
+  qualified `project_conflict_resolve` host wiring and concurrent Web/Codex verification remain open.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution are open.
 - HOLD-0003: P10-08 production isolation and later-version PCs are unqualified.
 
@@ -133,8 +140,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
    and visual evidence and preserve every failure.
 3. Wire P17-06 to a qualified host credential/transport adapter, then capture an actual remote
    pull/push/checkpoint transition without promoting the current injected component evidence.
-4. Extend that host protocol with P17-07 conflict resolution, wire the bounded stale-head surface to
-   the widget, and run one real concurrent Web/Codex conflict per resolution path.
+4. Extend that host protocol with the widget's bounded P17-07 `project_conflict_resolve` contract,
+   register it only after authenticated transport exists, and run one real concurrent Web/Codex
+   conflict per resolution path. The graphical component itself is implemented and locally tested.
 5. Before closure run target tests, regressions, current and clean-checkout FULL, applicable offline
    Linux/security/STRICT checks. Close P05 only with save/reopen, semantic, PDF and visual evidence.
 
@@ -152,8 +160,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   and the pending Hangul-authored reference are under
   `fixtures/target-build/p05-08-current-2020-20260906-v2/`.
 - P17-07 successor: read `implementation/p17/P17-07_LOCAL_CONFLICT_RESOLVER_V1.md` and
-  `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V7.md`; actual host/UI/concurrent evidence is
-  intentionally absent.
+  `implementation/p17/P17-07_STALE_HEAD_WIDGET_V2.md`, then
+  `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V7.md`; the local resolver and graphical
+  component exist, while host registration/actual concurrent evidence is intentionally absent.
 - Detailed history through P-0085 remains in `fae5bc0:PLANS.md`; later evidence is in individual
   reports and Git. Never touch user originals, failed evidence, predecessor locks or unrelated processes.
 - Per-card/phase reports and bound evidence are authoritative; broad introductory prose is not.

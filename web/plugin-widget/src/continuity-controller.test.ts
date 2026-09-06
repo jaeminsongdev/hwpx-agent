@@ -10,7 +10,9 @@ import {
 } from "./continuity-controller.js";
 import {
     CONTINUITY_RENDER_REQUEST_SCHEMA,
+    CONTINUITY_RENDER_REQUEST_V2_SCHEMA,
     CONTINUITY_SNAPSHOT_SCHEMA,
+    CONTINUITY_SNAPSHOT_V2_SCHEMA,
     PUBLIC_RESULT_SCHEMA,
 } from "./continuity-model.js";
 
@@ -37,6 +39,25 @@ const SNAPSHOT = {
         },
     ],
     next_cursor: null,
+} as const;
+const RENDER_REQUEST_V2 = {
+    ...RENDER_REQUEST,
+    schema_version: CONTINUITY_RENDER_REQUEST_V2_SCHEMA,
+} as const;
+const STALE_SNAPSHOT_V2 = {
+    ...SNAPSHOT,
+    schema_version: CONTINUITY_SNAPSHOT_V2_SCHEMA,
+    conflict_state: "stale",
+    stale_head: {
+        observed_generation: 1,
+        current_generation: 3,
+        delta: 2,
+        allowed_resolutions: [
+            "rebase_operation_plan",
+            "branch",
+            "manual_merge",
+        ],
+    },
 } as const;
 
 function publicBase(requestId: string) {
@@ -144,6 +165,18 @@ async function ready(port: FakePort, value: unknown = SNAPSHOT) {
     await valueController.start();
     port.toolInput?.(RENDER_REQUEST);
     port.toolResult?.({ structuredContent: value });
+    return valueController;
+}
+
+async function readyV2(port: FakePort) {
+    const valueController = controller(port, [
+        "req_resolve1",
+        "req_openv201",
+        "req_historyv2",
+    ]);
+    await valueController.start();
+    port.toolInput?.(RENDER_REQUEST_V2);
+    port.toolResult?.({ structuredContent: STALE_SNAPSHOT_V2 });
     return valueController;
 }
 
@@ -296,6 +329,140 @@ test("conflicts disable checkpoint and cancellation causes no server call", asyn
     clean.cancelCheckpoint();
     assert.equal(clean.getState().mode, "view");
     assert.equal(cleanPort.calls.length, 0);
+});
+
+for (const resolution of [
+    "rebase_operation_plan",
+    "branch",
+    "manual_merge",
+] as const) {
+    test(`stale-head ${resolution} requires confirmation and authoritative refresh`, async () => {
+        const port = new FakePort();
+        const value = await readyV2(port);
+        value.beginResolution(resolution);
+        assert.equal(value.getState().mode, "confirm_resolution");
+        assert.equal(port.calls.length, 0);
+        port.results.push(
+            {
+                structuredContent: {
+                    ...publicBase("req_resolve1"),
+                    project_id: "prj_12345678",
+                    expected_revision: "rev_abcdefgh",
+                    resolution,
+                    current_generation: 3,
+                    conflict_state: "none",
+                    replayed: false,
+                },
+            },
+            {
+                structuredContent: {
+                    ...publicBase("req_openv201"),
+                    project_id: "prj_12345678",
+                    head_revision_id: "rev_abcdefgh",
+                    warning_count: 0,
+                    conflict_state: "none",
+                    stale_head: null,
+                    recommended_actions: [],
+                },
+            },
+            {
+                structuredContent: {
+                    ...publicBase("req_historyv2"),
+                    revisions: [
+                        {
+                            revision_id: "rev_abcdefgh",
+                            parent_revision_ids: ["rev_parent123"],
+                            created_at: "2026-09-05T00:00:00Z",
+                            summary: "edited",
+                        },
+                    ],
+                    next_cursor: null,
+                },
+            },
+        );
+        await value.confirmResolution();
+        assert.deepEqual(
+            port.calls.map((call) => call.name),
+            ["project_conflict_resolve", "project_open", "project_history"],
+        );
+        assert.deepEqual(port.calls[0], {
+            name: "project_conflict_resolve",
+            arguments: {
+                client_surface: "chatgpt_web",
+                locale: "ko-KR",
+                request_id: "req_resolve1",
+                project_id: "prj_12345678",
+                expected_revision: "rev_abcdefgh",
+                expected_generation: 3,
+                resolution,
+                idempotency_key: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            },
+        });
+        assert.equal(value.getState().snapshot?.conflict_state, "none");
+        assert.equal(value.getState().resolutionState, "resolved");
+    });
+}
+
+test("resolution response must rebind the exact displayed revision", async () => {
+    const port = new FakePort();
+    const value = await readyV2(port);
+    value.beginResolution("branch");
+    port.results.push({
+        structuredContent: {
+            ...publicBase("req_resolve1"),
+            project_id: "prj_12345678",
+            expected_revision: "rev_wrong1234",
+            resolution: "branch",
+            current_generation: 3,
+            conflict_state: "none",
+            replayed: false,
+        },
+    });
+    await value.confirmResolution();
+    assert.equal(value.getState().errorCode, "RESOLUTION_FAILED");
+    assert.deepEqual(
+        port.calls.map((call) => call.name),
+        ["project_conflict_resolve"],
+    );
+});
+
+test("resolution and authoritative refresh require three distinct request IDs", async () => {
+    const port = new FakePort();
+    const value = controller(port, [
+        "req_resolve1",
+        "req_resolve1",
+        "req_historyv2",
+    ]);
+    await value.start();
+    port.toolInput?.(RENDER_REQUEST_V2);
+    port.toolResult?.({ structuredContent: STALE_SNAPSHOT_V2 });
+    value.beginResolution("branch");
+    port.results.push({
+        structuredContent: {
+            ...publicBase("req_resolve1"),
+            project_id: "prj_12345678",
+            expected_revision: "rev_abcdefgh",
+            resolution: "branch",
+            current_generation: 3,
+            conflict_state: "none",
+            replayed: false,
+        },
+    });
+    await value.confirmResolution();
+    assert.equal(value.getState().errorCode, "REFRESH_FAILED");
+    assert.deepEqual(
+        port.calls.map((call) => call.name),
+        ["project_conflict_resolve"],
+    );
+});
+
+test("v1 input cannot authorize a v2 stale-head result", async () => {
+    const port = new FakePort();
+    const value = controller(port);
+    await value.start();
+    port.toolInput?.(RENDER_REQUEST);
+    port.toolResult?.({ structuredContent: STALE_SNAPSHOT_V2 });
+    assert.equal(value.getState().errorCode, "INVALID_TOOL_RESULT");
 });
 
 test("fails closed on mismatched response IDs and raw tool errors", async () => {
