@@ -100,6 +100,7 @@ def docs() -> None:
             "tools/p10",
             "tools/p14",
             "tools/p15",
+            "tools/p06",
         ]
     )
     run(
@@ -187,6 +188,19 @@ def docs() -> None:
             "discover",
             "-s",
             "tools/p15/tests",
+            "-p",
+            "test_*.py",
+        ]
+    )
+    run([sys.executable, "tools/p06/validate_table_grid_contract.py"])
+    run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tools/p06/tests",
             "-p",
             "test_*.py",
         ]

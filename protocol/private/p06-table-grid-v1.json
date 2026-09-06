@@ -1,0 +1,68 @@
+{
+  "schema_version": "hwpx-agent.table-grid-contract/v1",
+  "model_schema_version": "hwpx-agent.table-grid/v1",
+  "scope": "p06_01_pure_logical_grid_current_pc_local_development",
+  "source_locks": [
+    {
+      "path": "docs/03_document_model/06_table_model.md",
+      "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"
+    },
+    {
+      "path": "docs/12_implementation_guides/05_page_table_layout_algorithms.md",
+      "sha256": "4d94e6d462f7fc2f2187827ab436eb17c2bb2fe8f728ba8eee5f051c16bb4274"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "392fc4417e28f8abaeed03bf999cd2180b90d8e7c2488ff80307149ed3b749c3"
+    }
+  ],
+  "logical_model": {
+    "dimensions": "nonzero_rows_and_columns_with_checked_slot_product",
+    "master_cell": "unique_bounded_logical_id_plus_top_left_row_column_and_nonzero_row_column_span",
+    "slot_mapping": "every_logical_slot_resolves_to_exactly_one_master_cell",
+    "span_shape": "one_complete_axis_aligned_rectangle",
+    "canonical_order": "master_cells_sorted_by_row_column_then_logical_id"
+  },
+  "default_limits": {
+    "rows": 10000,
+    "columns": 1024,
+    "slots": 1000000,
+    "master_cells": 1000000,
+    "identifier_bytes": 256,
+    "serialized_bytes": 33554432
+  },
+  "failure_policy": [
+    "invalid_or_unbounded_limit",
+    "unsupported_version_or_invalid_json",
+    "zero_or_over_limit_dimensions",
+    "checked_slot_capacity_overflow",
+    "duplicate_or_oversized_master_id",
+    "empty_overflowing_or_out_of_bounds_span",
+    "duplicate_or_nonrectangular_explicit_coverage",
+    "overlapping_span_or_uncovered_slot",
+    "out_of_bounds_lookup",
+    "bounded_serialization_or_allocation_failure"
+  ],
+  "canonicalization": {
+    "encoding": "utf8_compact_json",
+    "unknown_fields": "rejected",
+    "input_order": "not_semantic",
+    "digest": "sha256_over_canonical_bytes"
+  },
+  "migration": "protocol/migrations/p06-table-grid-v0-to-v1.md",
+  "not_claimed": {
+    "table_mutation_operations": false,
+    "merge_split_content_policy": false,
+    "hwpx_xml_lift_or_lower": false,
+    "hancom_runtime_execution": false,
+    "render_or_pagination_fidelity": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "phase_complete": false,
+    "product_complete": false
+  }
+}
