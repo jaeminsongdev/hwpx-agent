@@ -1,0 +1,114 @@
+{
+  "schema_version": "hwpx-agent.local-mcp/v4",
+  "transport": "stdio",
+  "server": {
+    "name": "hwpx-agent-local-companion",
+    "version": "0.4.0"
+  },
+  "migration": {
+    "from": "hwpx-agent.local-mcp/v3",
+    "health_and_four_workflow_tools_preserved": true,
+    "approval_prepare_tool_preserved": true,
+    "model_visible_raw_token_execution_tool_removed": true,
+    "replacement_is_app_only": "local_companion_confirm_and_execute_git_commit"
+  },
+  "resource": {
+    "uri": "ui://hwpx-agent/local-git-approval/v1.html",
+    "mime_type": "text/html;profile=mcp-app",
+    "maximum_bytes": 800000,
+    "self_contained": true,
+    "connect_domains": [],
+    "resource_domains": [],
+    "external_references_rejected": true
+  },
+  "tools": {
+    "preserved": [
+      "local_companion_health",
+      "local_companion_materialize",
+      "local_companion_diff",
+      "local_companion_publish",
+      "local_companion_prepare_git_commit"
+    ],
+    "local_companion_prepare_git_commit_approval": {
+      "visibility": [
+        "model",
+        "app"
+      ],
+      "ui_resource": "ui://hwpx-agent/local-git-approval/v1.html",
+      "returns_exact_plan": true,
+      "returns_component_only_challenge": true,
+      "challenge_in_structured_content": false,
+      "challenge_lifetime_seconds": 300,
+      "maximum_pending_challenges": 128,
+      "executes_git": false,
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    "local_companion_confirm_and_execute_git_commit": {
+      "visibility": [
+        "app"
+      ],
+      "input_fields": [
+        "workspace_id",
+        "operation_id",
+        "output_id",
+        "expected_sha256",
+        "message",
+        "expected_head",
+        "expected_head_reference",
+        "target_sha256",
+        "plan_sha256",
+        "approval_challenge"
+      ],
+      "accepts_confirmation_token": false,
+      "accepts_actor_or_tenant": false,
+      "challenge_consumed_before_async_work": true,
+      "current_plan_revalidated": true,
+      "internal_confirmation_lifetime_seconds": 60,
+      "semantic_effect": "git_commit",
+      "arbitrary_shell_accepted": false,
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    }
+  },
+  "runtime": {
+    "arguments": [
+      "--daemon",
+      "--config",
+      "--widget",
+      "--git",
+      "--approval-state"
+    ],
+    "persistent_secret_configuration": false,
+    "approval_key_generated_in_bridge_memory": true,
+    "effect_child_receives_key_only_in_its_process_environment": true,
+    "path_inherited": false,
+    "unrelated_environment_inherited": false
+  },
+  "public_boundary": {
+    "accepts_user_absolute_paths": false,
+    "returns_absolute_paths": false,
+    "returns_document_content": false,
+    "returns_confirmation_token": false,
+    "returns_signing_secret": false,
+    "model_receives_component_challenge": false
+  },
+  "claims": {
+    "actual_mcp_stdio": true,
+    "actual_disposable_git_commit": true,
+    "actual_personal_plugin_health": true,
+    "actual_personal_plugin_plan_prepare": true,
+    "actual_trusted_host_confirmation_click": false,
+    "actual_hangul": false,
+    "actual_user_repository": false,
+    "p17_08_pass": false
+  }
+}

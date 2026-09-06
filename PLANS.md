@@ -50,7 +50,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0090 | P17-05 local file/Git | PASS: exact-commit MCP run bf248400ce1c4985bb2353aa9209ec02, 16/16; path-free IDs, traversal/large-file rejection, Git plan only |
 | P-0091 | P17-06 project sync | In progress: state machine + create-new durable journal + local CLI 17/17; authenticated remote adapter and pull/push/checkpoint CLI remain |
 | P-0092 | P17-01 Codex package | In progress: exact-commit run 81de11bb748649cbbae25972cdbd30df, deterministic 19-entry package core 7/7; registered remote app absent |
-| P-0093 | P17-08 approvals | In progress: durable default-deny 14/14, Git binding 11/11, effect host 7/7, daemon v4 18/18 and MCP v3 18/18 with disposable actual Git; trusted-host confirmation UI and fresh installed-plugin Codex qualification remain |
+| P-0093 | P17-08 approvals | In progress: durable default-deny 14/14, Git binding 11/11, effect host 7/7, daemon v4 18/18, MCP v4 trusted-widget path 20/20 with disposable actual Git, widget 133/133 and MCP 13/13; personal plugin v0.4 health/prepare passed, while a visible user confirmation click and canonical installed-plugin qualification remain |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.
