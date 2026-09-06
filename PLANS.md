@@ -3,7 +3,7 @@
 - Updated: 2026-09-06
 - Root: `D:\개발\hwpx-agent`
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P05-07 layout identity, P17-06 project sync, P17-08 trusted approval boundary.
+- Active: P05-07 dense automatic column flow, P17-06 project sync, P17-08 trusted approval boundary.
 - Reasoning: max for preservation, authorization and Gate work; high for routine implementation.
 - UI: attempt23 passed corrected landscape open/save/reopen/text/PDF; bounded ID rebinding passed.
 
@@ -21,7 +21,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | Phase | State | Evidence or dependency |
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | `implementation/p00/` through `implementation/p04/` |
-| P05 | in progress | 01-05 pass; 06 reopened; 07 exact sparse current-2020 subgate pass; dense flow and 08-09 pending |
+| P05 | in progress | 01-05 pass; 06 reopened; 07 sparse subgate pass and dense source prepared; actual dense flow and 08-09 pending |
 | P06-P09 | blocked by P05 | table, equation, graphics and fields engines |
 | P10 | in progress | 01-04,07,09,10 scoped pass; 05/06 actual dependencies; 08 unqualified |
 | P11-P13 | blocked | depend on P06-P10 |
@@ -36,7 +36,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 | ID | Task | State and next evidence |
 |---|---|---|
-| P-0045-0048 | P05-06-09 | Attempt23 corrected landscape/PDF/ID subgate pass; dense flow, 08-09 and phase Gate remain |
+| P-0045-0048 | P05-06-09 | Attempt23 sparse subgate pass; 31-paragraph zero-break dense fixture/verifier prepared; actual run, 08-09 and phase Gate remain |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -82,7 +82,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Risks and holds
 
-- R-0001: P05-07 dense multi-column flow/balancing and successor FULL remain open.
+- R-0001: P05-07 dense source and coordinate/balance verifier pass locally; actual Hangul 2020
+  save/reopen/PDF/visual evidence and successor FULL remain open.
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence remains open.
 - R-0003: One independent worker timeout smoke failed; retries passed, root cause unproven.
 - R-0004: Broad P16 discovery remains red on immutable predecessor locks and legacy assets;
@@ -95,8 +96,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 1. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
-2. Add a dense P05-07 text-flow/balancing fixture, then capture bounded actual Hangul 2020
-   save/reopen/PDF evidence with the user performing any permission/UI input.
+2. Run the prepared fixed P05-07 dense-flow fixture through bounded Hangul 2020, then verify the
+   saved semantics, PDF column coordinates/bottom balance and PNG with the user performing any
+   permission/UI input.
 3. Wire P17-06 to a qualified host credential/transport adapter, then capture an actual remote
    pull/push/checkpoint transition without promoting the current injected component evidence.
 4. Before closure run target tests, regressions, current and clean-checkout FULL, applicable offline
@@ -108,6 +110,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   `implementation/p17/P17-08_TRUSTED_WIDGET_V7.md`, and P16 main integration audit.
 - Attempt23 evidence: `fixtures/target-build/p05-07-current-2020-20260906-v4/`; read
   `implementation/p05/P05-07_ATTEMPT23_IDENTITY_REBINDING.md` before the dense-flow successor.
+- Dense successor: read `implementation/p05/P05-07_DENSE_COLUMN_FLOW_POLICY.md`; ignored prepared
+  input is `fixtures/target-build/p05-07-dense-current-2020-20260906-v1/`.
 - Detailed history through P-0085 remains in `fae5bc0:PLANS.md`; later evidence is in individual
   reports and Git. Never touch user originals, failed evidence, predecessor locks or unrelated processes.
 - Per-card/phase reports and bound evidence are authoritative; broad introductory prose is not.

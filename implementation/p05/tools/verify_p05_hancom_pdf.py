@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import re
 import stat
@@ -24,6 +25,8 @@ from PIL import Image, __version__ as PILLOW_VERSION
 
 SCHEMA = "hwpx-agent.p05-hancom-pdf-verification/v1"
 EXPECTATION_SCHEMA = "hwpx-agent.p05-render-expectation/v1"
+SCHEMA_V2 = "hwpx-agent.p05-hancom-pdf-verification/v2"
+EXPECTATION_SCHEMA_V2 = "hwpx-agent.p05-render-expectation/v2"
 MAX_PDF_BYTES = 32 * 1024 * 1024
 MAX_MANIFEST_BYTES = 64 * 1024
 MAX_TRACE_BYTES = 256 * 1024
@@ -50,6 +53,16 @@ class VerificationError(Exception):
 
 
 @dataclass(frozen=True)
+class ColumnFlowExpectation:
+    split_x_milli_mm: int
+    split_guard_milli_mm: int
+    min_text_fragments_per_column: int
+    max_bottom_baseline_delta_milli_mm: int
+    left_anchor_text: str
+    right_anchor_text: str
+
+
+@dataclass(frozen=True)
 class PageExpectation:
     index: int
     width_milli_mm: int
@@ -57,13 +70,22 @@ class PageExpectation:
     rotation: int
     required_text: tuple[str, ...]
     forbidden_text: tuple[str, ...]
+    column_flow: ColumnFlowExpectation | None
 
 
 @dataclass(frozen=True)
 class Expectation:
+    schema_version: str
     page_count: int
     tolerance_milli_mm: int
     pages: tuple[PageExpectation, ...]
+
+
+@dataclass(frozen=True)
+class PositionedText:
+    text: str
+    x_milli_mm: int
+    y_milli_mm: int
 
 
 def fail(code: str) -> NoReturn:
@@ -118,6 +140,63 @@ def validate_token_list(value: Any) -> tuple[str, ...]:
     return tokens
 
 
+def parse_column_flow(value: Any, page_width_milli_mm: int, rotation: int) -> ColumnFlowExpectation:
+    if not isinstance(value, dict):
+        fail("PDF_EXPECTATION_COLUMN_FLOW_INVALID")
+    require_exact_keys(
+        value,
+        {
+            "split_x_milli_mm",
+            "split_guard_milli_mm",
+            "min_text_fragments_per_column",
+            "max_bottom_baseline_delta_milli_mm",
+            "left_anchor_text",
+            "right_anchor_text",
+        },
+        "PDF_EXPECTATION_COLUMN_FLOW_FIELDS_INVALID",
+    )
+    if rotation != 0:
+        fail("PDF_EXPECTATION_COLUMN_FLOW_ROTATION_UNSUPPORTED")
+    split = require_int(
+        value["split_x_milli_mm"],
+        10_000,
+        page_width_milli_mm - 10_000,
+        "PDF_EXPECTATION_COLUMN_FLOW_SPLIT_INVALID",
+    )
+    guard = require_int(
+        value["split_guard_milli_mm"],
+        100,
+        10_000,
+        "PDF_EXPECTATION_COLUMN_FLOW_GUARD_INVALID",
+    )
+    if split - guard <= 0 or split + guard >= page_width_milli_mm:
+        fail("PDF_EXPECTATION_COLUMN_FLOW_GUARD_INVALID")
+    minimum = require_int(
+        value["min_text_fragments_per_column"],
+        2,
+        256,
+        "PDF_EXPECTATION_COLUMN_FLOW_MINIMUM_INVALID",
+    )
+    bottom_delta = require_int(
+        value["max_bottom_baseline_delta_milli_mm"],
+        0,
+        50_000,
+        "PDF_EXPECTATION_COLUMN_FLOW_BALANCE_INVALID",
+    )
+    left_anchor = validate_token(value["left_anchor_text"])
+    right_anchor = validate_token(value["right_anchor_text"])
+    if left_anchor == right_anchor:
+        fail("PDF_EXPECTATION_COLUMN_FLOW_ANCHOR_CONFLICT")
+    return ColumnFlowExpectation(
+        split,
+        guard,
+        minimum,
+        bottom_delta,
+        left_anchor,
+        right_anchor,
+    )
+
+
 def parse_expectation_bytes(raw: bytes) -> Expectation:
     if not raw or len(raw) > MAX_MANIFEST_BYTES:
         fail("PDF_EXPECTATION_SIZE_INVALID")
@@ -132,7 +211,11 @@ def parse_expectation_bytes(raw: bytes) -> Expectation:
         {"schema_version", "expected_page_count", "geometry_tolerance_milli_mm", "pages"},
         "PDF_EXPECTATION_FIELDS_INVALID",
     )
-    if value["schema_version"] != EXPECTATION_SCHEMA:
+    schema_version = value["schema_version"]
+    if not isinstance(schema_version, str) or schema_version not in {
+        EXPECTATION_SCHEMA,
+        EXPECTATION_SCHEMA_V2,
+    }:
         fail("PDF_EXPECTATION_SCHEMA_INVALID")
     page_count = require_int(value["expected_page_count"], 1, MAX_PAGES, "PDF_EXPECTATION_PAGE_COUNT_INVALID")
     tolerance = require_int(
@@ -145,11 +228,17 @@ def parse_expectation_bytes(raw: bytes) -> Expectation:
     for expected_index, page in enumerate(pages_value, start=1):
         if not isinstance(page, dict):
             fail("PDF_EXPECTATION_PAGE_INVALID")
-        require_exact_keys(
-            page,
-            {"index", "width_milli_mm", "height_milli_mm", "rotation", "required_text", "forbidden_text"},
-            "PDF_EXPECTATION_PAGE_FIELDS_INVALID",
-        )
+        page_fields = {
+            "index",
+            "width_milli_mm",
+            "height_milli_mm",
+            "rotation",
+            "required_text",
+            "forbidden_text",
+        }
+        if schema_version == EXPECTATION_SCHEMA_V2:
+            page_fields.add("column_flow")
+        require_exact_keys(page, page_fields, "PDF_EXPECTATION_PAGE_FIELDS_INVALID")
         index = require_int(page["index"], 1, MAX_PAGES, "PDF_EXPECTATION_PAGE_INDEX_INVALID")
         if index != expected_index:
             fail("PDF_EXPECTATION_PAGE_ORDER_INVALID")
@@ -162,8 +251,18 @@ def parse_expectation_bytes(raw: bytes) -> Expectation:
         forbidden = validate_token_list(page["forbidden_text"])
         if set(required) & set(forbidden):
             fail("PDF_EXPECTATION_TOKEN_CONFLICT")
-        pages.append(PageExpectation(index, width, height, rotation, required, forbidden))
-    return Expectation(page_count, tolerance, tuple(pages))
+        column_flow = (
+            parse_column_flow(page["column_flow"], width, rotation)
+            if schema_version == EXPECTATION_SCHEMA_V2
+            else None
+        )
+        if column_flow is not None and (
+            column_flow.left_anchor_text not in required
+            or column_flow.right_anchor_text not in required
+        ):
+            fail("PDF_EXPECTATION_COLUMN_FLOW_ANCHOR_NOT_REQUIRED")
+        pages.append(PageExpectation(index, width, height, rotation, required, forbidden, column_flow))
+    return Expectation(schema_version, page_count, tolerance, tuple(pages))
 
 
 def _reject_duplicate_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -209,6 +308,116 @@ def points_to_milli_mm(points: Any) -> int:
     except Exception:
         fail("PDF_PAGE_GEOMETRY_INVALID")
     return int(value.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+
+
+def require_matrix(value: Any) -> tuple[float, float, float, float, float, float]:
+    if not isinstance(value, (list, tuple)) or len(value) != 6:
+        fail("PDF_TEXT_MATRIX_INVALID")
+    matrix: list[float] = []
+    for component in value:
+        if isinstance(component, bool):
+            fail("PDF_TEXT_MATRIX_INVALID")
+        try:
+            number = float(component)
+        except (TypeError, ValueError, OverflowError):
+            fail("PDF_TEXT_MATRIX_INVALID")
+        if not math.isfinite(number):
+            fail("PDF_TEXT_MATRIX_INVALID")
+        matrix.append(number)
+    return (matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5])
+
+
+def text_origin_milli_mm(cm: Any, tm: Any) -> tuple[int, int]:
+    content = require_matrix(cm)
+    text = require_matrix(tm)
+    x_points = text[4] * content[0] + text[5] * content[2] + content[4]
+    y_points = text[4] * content[1] + text[5] * content[3] + content[5]
+    return points_to_milli_mm(x_points), points_to_milli_mm(y_points)
+
+
+def extract_positioned_text(page: Any) -> tuple[str, tuple[PositionedText, ...]]:
+    fragments: list[PositionedText] = []
+
+    def visitor(text: Any, cm: Any, tm: Any, _font: Any, _font_size: Any) -> None:
+        if not isinstance(text, str):
+            fail("PDF_TEXT_FRAGMENT_INVALID")
+        normalized = normalize_text(text)
+        if not normalized:
+            return
+        x, y = text_origin_milli_mm(cm, tm)
+        fragments.append(PositionedText(normalized, x, y))
+
+    try:
+        extracted = normalize_text(page.extract_text(visitor_text=visitor) or "")
+    except VerificationError:
+        raise
+    except Exception:
+        fail("PDF_TEXT_EXTRACTION_FAILED")
+    return extracted, tuple(fragments)
+
+
+def verify_column_flow(
+    fragments: tuple[PositionedText, ...],
+    expectation: ColumnFlowExpectation,
+    page_width_milli_mm: int,
+    page_height_milli_mm: int,
+    geometry_tolerance_milli_mm: int,
+) -> dict[str, Any]:
+    if not fragments:
+        fail("PDF_COLUMN_FLOW_TEXT_MISSING")
+    for fragment in fragments:
+        if not (
+            -geometry_tolerance_milli_mm
+            <= fragment.x_milli_mm
+            <= page_width_milli_mm + geometry_tolerance_milli_mm
+            and -geometry_tolerance_milli_mm
+            <= fragment.y_milli_mm
+            <= page_height_milli_mm + geometry_tolerance_milli_mm
+        ):
+            fail("PDF_COLUMN_FLOW_COORDINATE_OUT_OF_PAGE")
+    left_limit = expectation.split_x_milli_mm - expectation.split_guard_milli_mm
+    right_limit = expectation.split_x_milli_mm + expectation.split_guard_milli_mm
+    left = tuple(fragment for fragment in fragments if fragment.x_milli_mm < left_limit)
+    right = tuple(fragment for fragment in fragments if fragment.x_milli_mm > right_limit)
+    if (
+        len(left) < expectation.min_text_fragments_per_column
+        or len(right) < expectation.min_text_fragments_per_column
+    ):
+        fail("PDF_COLUMN_FLOW_COLUMN_UNDERFILLED")
+    left_anchors = tuple(
+        fragment for fragment in fragments if expectation.left_anchor_text in fragment.text
+    )
+    right_anchors = tuple(
+        fragment for fragment in fragments if expectation.right_anchor_text in fragment.text
+    )
+    if len(left_anchors) != 1 or len(right_anchors) != 1:
+        fail("PDF_COLUMN_FLOW_ANCHOR_CARDINALITY")
+    if left_anchors[0].x_milli_mm >= left_limit:
+        fail("PDF_COLUMN_FLOW_LEFT_ANCHOR_MISMATCH")
+    if right_anchors[0].x_milli_mm <= right_limit:
+        fail("PDF_COLUMN_FLOW_RIGHT_ANCHOR_MISMATCH")
+    left_bottom = min(fragment.y_milli_mm for fragment in left)
+    right_bottom = min(fragment.y_milli_mm for fragment in right)
+    bottom_delta = abs(left_bottom - right_bottom)
+    if bottom_delta > expectation.max_bottom_baseline_delta_milli_mm:
+        fail("PDF_COLUMN_FLOW_BALANCE_MISMATCH")
+    return {
+        "split_x_milli_mm": expectation.split_x_milli_mm,
+        "split_guard_milli_mm": expectation.split_guard_milli_mm,
+        "left_text_fragment_count": len(left),
+        "right_text_fragment_count": len(right),
+        "unclassified_text_fragment_count": len(fragments) - len(left) - len(right),
+        "left_bottom_baseline_milli_mm": left_bottom,
+        "right_bottom_baseline_milli_mm": right_bottom,
+        "bottom_baseline_delta_milli_mm": bottom_delta,
+        "left_anchor_text_sha256": sha256_text(expectation.left_anchor_text),
+        "right_anchor_text_sha256": sha256_text(expectation.right_anchor_text),
+        "left_anchor_x_milli_mm": left_anchors[0].x_milli_mm,
+        "left_anchor_y_milli_mm": left_anchors[0].y_milli_mm,
+        "right_anchor_x_milli_mm": right_anchors[0].x_milli_mm,
+        "right_anchor_y_milli_mm": right_anchors[0].y_milli_mm,
+        "raw_document_text_present": False,
+    }
 
 
 def require_default_user_unit(page: Any) -> None:
@@ -418,10 +627,21 @@ def verify(arguments: argparse.Namespace) -> dict[str, Any]:
             or abs(height - page_expectation.height_milli_mm) > expectation.tolerance_milli_mm
         ):
             fail("PDF_PAGE_GEOMETRY_MISMATCH")
-        try:
-            text = normalize_text(page.extract_text() or "")
-        except Exception:
-            fail("PDF_TEXT_EXTRACTION_FAILED")
+        column_flow_result: dict[str, Any] | None = None
+        if page_expectation.column_flow is not None:
+            text, fragments = extract_positioned_text(page)
+            column_flow_result = verify_column_flow(
+                fragments,
+                page_expectation.column_flow,
+                width,
+                height,
+                expectation.tolerance_milli_mm,
+            )
+        else:
+            try:
+                text = normalize_text(page.extract_text() or "")
+            except Exception:
+                fail("PDF_TEXT_EXTRACTION_FAILED")
         missing = [token for token in page_expectation.required_text if token not in text]
         forbidden = [token for token in page_expectation.forbidden_text if token in text]
         if missing:
@@ -443,22 +663,23 @@ def verify(arguments: argparse.Namespace) -> dict[str, Any]:
             fail("PDF_RENDER_TOTAL_SIZE_LIMIT")
         if abs(png_width - expected_png_width) > 3 or abs(png_height - expected_png_height) > 3:
             fail("PDF_RENDER_PNG_GEOMETRY_MISMATCH")
-        page_results.append(
-            {
-                "index": page_expectation.index,
-                "width_milli_mm": width,
-                "height_milli_mm": height,
-                "rotation": rotation,
-                "extracted_text_sha256": sha256_text(text),
-                "extracted_text_utf8_bytes": len(text.encode("utf-8")),
-                "required_text_sha256": [sha256_text(token) for token in page_expectation.required_text],
-                "forbidden_text_sha256": [sha256_text(token) for token in page_expectation.forbidden_text],
-                "png_sha256": png_sha256,
-                "png_bytes": png_bytes,
-                "png_width": png_width,
-                "png_height": png_height,
-            }
-        )
+        page_result = {
+            "index": page_expectation.index,
+            "width_milli_mm": width,
+            "height_milli_mm": height,
+            "rotation": rotation,
+            "extracted_text_sha256": sha256_text(text),
+            "extracted_text_utf8_bytes": len(text.encode("utf-8")),
+            "required_text_sha256": [sha256_text(token) for token in page_expectation.required_text],
+            "forbidden_text_sha256": [sha256_text(token) for token in page_expectation.forbidden_text],
+            "png_sha256": png_sha256,
+            "png_bytes": png_bytes,
+            "png_width": png_width,
+            "png_height": png_height,
+        }
+        if column_flow_result is not None:
+            page_result["column_flow"] = column_flow_result
+        page_results.append(page_result)
 
     expected_outputs = {render_dir / f"page-{index:04d}.png" for index in range(1, expectation.page_count + 1)}
     try:
@@ -479,7 +700,7 @@ def verify(arguments: argparse.Namespace) -> dict[str, Any]:
         fail("PDF_VERIFIER_CHANGED_DURING_VERIFICATION")
 
     result = {
-        "schema_version": SCHEMA,
+        "schema_version": SCHEMA_V2 if expectation.schema_version == EXPECTATION_SCHEMA_V2 else SCHEMA,
         "state": "pass",
         "error_code": None,
         "pdf_sha256": pdf_sha256,

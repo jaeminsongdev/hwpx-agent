@@ -23,6 +23,8 @@ use crate::{
 };
 
 pub const HANCOM_2020_VS1_LAYOUT_PROFILE_ID: &str = "hwpx-agent.hancom-2020-vs1-layout/v1";
+pub const HANCOM_2020_DENSE_COLUMN_FLOW_PROFILE_ID: &str =
+    "hwpx-agent.hancom-2020-dense-column-flow/v1";
 pub const HANCOM_2020_VS1_LAYOUT_MAX_PARAGRAPHS: usize = 32;
 pub const HANCOM_2020_VS1_LAYOUT_MAX_TEXT_BYTES: usize = 32 * 1024;
 
@@ -35,10 +37,17 @@ const TITLE_PARAGRAPH_STYLE_ID: u32 = 1;
 const BODY_PARAGRAPH_STYLE_ID: u32 = 0;
 const NORMALIZED_DEFLATE_LEVEL: i64 = 6;
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum Hancom2020ColumnFlowPolicy {
+    ExplicitMidpointBreak,
+    AutomaticBalanced,
+}
+
 #[derive(Clone, Eq, PartialEq)]
 pub struct Hancom2020Vs1LayoutDocument {
     title: String,
     body_paragraphs: Vec<String>,
+    column_flow_policy: Hancom2020ColumnFlowPolicy,
 }
 
 impl Hancom2020Vs1LayoutDocument {
@@ -50,6 +59,35 @@ impl Hancom2020Vs1LayoutDocument {
     pub fn new(
         title: &str,
         body_paragraphs: Vec<String>,
+    ) -> Result<Self, Hancom2020Vs1LayoutError> {
+        Self::new_with_policy(
+            title,
+            body_paragraphs,
+            Hancom2020ColumnFlowPolicy::ExplicitMidpointBreak,
+        )
+    }
+
+    /// Creates a bounded layout input whose balanced columns are filled without an explicit
+    /// column-break paragraph.
+    ///
+    /// # Errors
+    ///
+    /// Rejects the same invalid text and size shapes as [`Self::new`].
+    pub fn new_automatic_balanced(
+        title: &str,
+        body_paragraphs: Vec<String>,
+    ) -> Result<Self, Hancom2020Vs1LayoutError> {
+        Self::new_with_policy(
+            title,
+            body_paragraphs,
+            Hancom2020ColumnFlowPolicy::AutomaticBalanced,
+        )
+    }
+
+    fn new_with_policy(
+        title: &str,
+        body_paragraphs: Vec<String>,
+        column_flow_policy: Hancom2020ColumnFlowPolicy,
     ) -> Result<Self, Hancom2020Vs1LayoutError> {
         validate_line(title)?;
         if !(MIN_BODY_PARAGRAPHS..=HANCOM_2020_VS1_LAYOUT_MAX_PARAGRAPHS)
@@ -75,6 +113,7 @@ impl Hancom2020Vs1LayoutDocument {
                 .into_iter()
                 .map(|paragraph| paragraph.nfc().collect())
                 .collect(),
+            column_flow_policy,
         })
     }
 
@@ -93,6 +132,22 @@ impl Hancom2020Vs1LayoutDocument {
         self.body_paragraphs.len() + 1
     }
 
+    #[must_use]
+    pub const fn column_flow_policy(&self) -> Hancom2020ColumnFlowPolicy {
+        self.column_flow_policy
+    }
+
+    const fn expected_column_break_count(&self) -> usize {
+        match self.column_flow_policy {
+            Hancom2020ColumnFlowPolicy::ExplicitMidpointBreak => 1,
+            Hancom2020ColumnFlowPolicy::AutomaticBalanced => 0,
+        }
+    }
+
+    const fn profile_id(&self) -> &'static str {
+        profile_id(self.column_flow_policy)
+    }
+
     fn canonical_text(&self) -> String {
         let mut result = self.title.clone();
         for paragraph in &self.body_paragraphs {
@@ -109,6 +164,7 @@ impl fmt::Debug for Hancom2020Vs1LayoutDocument {
             .debug_struct("Hancom2020Vs1LayoutDocument")
             .field("title_bytes", &self.title.len())
             .field("body_paragraph_count", &self.body_paragraphs.len())
+            .field("column_flow_policy", &self.column_flow_policy)
             .field(
                 "body_text_bytes",
                 &self.body_paragraphs.iter().map(String::len).sum::<usize>(),
@@ -120,6 +176,7 @@ impl fmt::Debug for Hancom2020Vs1LayoutDocument {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Hancom2020Vs1LayoutInspection {
     pub profile_id: &'static str,
+    pub column_flow_policy: Hancom2020ColumnFlowPolicy,
     pub part_count: usize,
     pub paragraph_count: usize,
     pub column_break_count: usize,
@@ -220,7 +277,9 @@ impl Hancom2020Vs1LayoutBuilder {
         let expected_text_sha256: [u8; 32] =
             Sha256::digest(document.canonical_text().as_bytes()).into();
         if inspection.paragraph_count != document.paragraph_count()
-            || inspection.column_break_count != 1
+            || inspection.column_break_count != document.expected_column_break_count()
+            || inspection.profile_id != document.profile_id()
+            || inspection.column_flow_policy != document.column_flow_policy
             || inspection.visible_text_sha256 != expected_text_sha256
         {
             return Err(Hancom2020Vs1LayoutError::ReadbackMismatch);
@@ -315,8 +374,11 @@ fn validate_line(value: &str) -> Result<(), Hancom2020Vs1LayoutError> {
 fn validate_document(
     document: &Hancom2020Vs1LayoutDocument,
 ) -> Result<(), Hancom2020Vs1LayoutError> {
-    let normalized =
-        Hancom2020Vs1LayoutDocument::new(&document.title, document.body_paragraphs.clone())?;
+    let normalized = Hancom2020Vs1LayoutDocument::new_with_policy(
+        &document.title,
+        document.body_paragraphs.clone(),
+        document.column_flow_policy,
+    )?;
     if normalized != *document {
         return Err(Hancom2020Vs1LayoutError::InvalidDocument);
     }
@@ -340,9 +402,19 @@ fn expected_page_setup() -> Result<PageSetup, Hancom2020Vs1LayoutError> {
     })
 }
 
-fn expected_columns() -> ColumnDefinition {
+const fn profile_id(policy: Hancom2020ColumnFlowPolicy) -> &'static str {
+    match policy {
+        Hancom2020ColumnFlowPolicy::ExplicitMidpointBreak => HANCOM_2020_VS1_LAYOUT_PROFILE_ID,
+        Hancom2020ColumnFlowPolicy::AutomaticBalanced => HANCOM_2020_DENSE_COLUMN_FLOW_PROFILE_ID,
+    }
+}
+
+fn expected_columns(policy: Hancom2020ColumnFlowPolicy) -> ColumnDefinition {
     ColumnDefinition {
-        control_id: "p05-09-vs1-layout".to_owned(),
+        control_id: match policy {
+            Hancom2020ColumnFlowPolicy::ExplicitMidpointBreak => "p05-09-vs1-layout".to_owned(),
+            Hancom2020ColumnFlowPolicy::AutomaticBalanced => String::new(),
+        },
         column_type: ColumnType::BalancedNewspaper,
         layout: ColumnLayout::Left,
         sizing: ColumnSizing::Equal {
@@ -427,7 +499,7 @@ fn compose_section(
     let (mut section, _) = SectionColumnLowerer::replace_in_section(
         &section,
         0,
-        &expected_columns(),
+        &expected_columns(document.column_flow_policy),
         page_metrics.body_width,
         SectionColumnLimits::default(),
     )?;
@@ -451,7 +523,10 @@ fn compose_section(
             .ok()
             .and_then(|value| value.checked_add(2))
             .ok_or(Hancom2020Vs1LayoutError::InvalidDocument)?;
-        let flow = typed_paragraph(id, paragraph, index == column_break_index);
+        let column_break = document.column_flow_policy
+            == Hancom2020ColumnFlowPolicy::ExplicitMidpointBreak
+            && index == column_break_index;
+        let flow = typed_paragraph(id, paragraph, column_break);
         let lowered = TextFlowWriter::lower(&flow, TextFlowLimits::default())?;
         body_xml.extend_from_slice(&nested_paragraph(&lowered)?);
     }
@@ -602,12 +677,6 @@ fn inspect_package(
         page_metrics.body_width,
         SectionColumnLimits::default(),
     )?;
-    if columns.spans != vec![expected_columns()] {
-        return Err(Hancom2020Vs1LayoutError::ReadbackMismatch);
-    }
-    let column_metrics =
-        expected_columns().metrics(page_metrics.body_width, SectionColumnLimits::default())?;
-
     let flows = read_paragraphs(&section)?;
     if !(MIN_BODY_PARAGRAPHS + 1..=HANCOM_2020_VS1_LAYOUT_MAX_PARAGRAPHS + 1).contains(&flows.len())
     {
@@ -650,11 +719,20 @@ fn inspect_package(
         }
         visible.push_str(&line);
     }
-    if column_break_count != 1 {
+    let column_flow_policy = match column_break_count {
+        0 => Hancom2020ColumnFlowPolicy::AutomaticBalanced,
+        1 => Hancom2020ColumnFlowPolicy::ExplicitMidpointBreak,
+        _ => return Err(Hancom2020Vs1LayoutError::ReadbackMismatch),
+    };
+    let expected_columns = expected_columns(column_flow_policy);
+    if columns.spans != vec![expected_columns.clone()] {
         return Err(Hancom2020Vs1LayoutError::ReadbackMismatch);
     }
+    let column_metrics =
+        expected_columns.metrics(page_metrics.body_width, SectionColumnLimits::default())?;
     Ok(Hancom2020Vs1LayoutInspection {
-        profile_id: HANCOM_2020_VS1_LAYOUT_PROFILE_ID,
+        profile_id: profile_id(column_flow_policy),
+        column_flow_policy,
         part_count: graph.parts.len(),
         paragraph_count: flows.len(),
         column_break_count,
@@ -958,6 +1036,27 @@ mod tests {
         assert_eq!(first.inspection().page_metrics.body_width, 80_220);
         assert_eq!(first.inspection().column_metrics.column_count, 2);
         first.verify()?;
+        Ok(())
+    }
+
+    #[test]
+    fn automatic_balanced_profile_has_no_explicit_column_break() -> TestResult {
+        let source = sample()?;
+        let document = Hancom2020Vs1LayoutDocument::new_automatic_balanced(
+            source.title(),
+            source.body_paragraphs().to_vec(),
+        )?;
+        let artifact = Hancom2020Vs1LayoutBuilder::build(&document)?;
+        assert_eq!(
+            artifact.inspection().profile_id,
+            HANCOM_2020_DENSE_COLUMN_FLOW_PROFILE_ID
+        );
+        assert_eq!(
+            artifact.inspection().column_flow_policy,
+            Hancom2020ColumnFlowPolicy::AutomaticBalanced
+        );
+        assert_eq!(artifact.inspection().column_break_count, 0);
+        artifact.verify()?;
         Ok(())
     }
 

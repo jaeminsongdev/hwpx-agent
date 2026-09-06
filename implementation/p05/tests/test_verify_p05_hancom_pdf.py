@@ -38,6 +38,32 @@ def expectation() -> dict[str, object]:
     }
 
 
+def dense_expectation() -> dict[str, object]:
+    return {
+        "schema_version": MODULE.EXPECTATION_SCHEMA_V2,
+        "expected_page_count": 1,
+        "geometry_tolerance_milli_mm": 500,
+        "pages": [
+            {
+                "index": 1,
+                "width_milli_mm": 310_000,
+                "height_milli_mm": 230_000,
+                "rotation": 0,
+                "required_text": ["left-anchor", "right-anchor"],
+                "forbidden_text": [],
+                "column_flow": {
+                    "split_x_milli_mm": 156_000,
+                    "split_guard_milli_mm": 3_000,
+                    "min_text_fragments_per_column": 2,
+                    "max_bottom_baseline_delta_milli_mm": 12_000,
+                    "left_anchor_text": "left-anchor",
+                    "right_anchor_text": "right-anchor",
+                },
+            }
+        ],
+    }
+
+
 class PdfVerifierContractTests(unittest.TestCase):
     def parse(self, value: object) -> object:
         return MODULE.parse_expectation_bytes(
@@ -65,6 +91,9 @@ class PdfVerifierContractTests(unittest.TestCase):
         layout = MODULE.parse_expectation_bytes(
             (expectation_root / "p05-09-vs1-layout.json").read_bytes()
         )
+        dense = MODULE.parse_expectation_bytes(
+            (expectation_root / "p05-07-dense-column-flow.json").read_bytes()
+        )
         self.assertEqual(section.page_count, 2)
         self.assertEqual(
             (section.pages[0].width_milli_mm, section.pages[0].height_milli_mm),
@@ -79,6 +108,23 @@ class PdfVerifierContractTests(unittest.TestCase):
             (310_000, 230_000),
         )
         self.assertIn("P05-09 VS-1 레이아웃", layout.pages[0].required_text)
+        self.assertEqual(dense.schema_version, MODULE.EXPECTATION_SCHEMA_V2)
+        self.assertIsNotNone(dense.pages[0].column_flow)
+
+    def test_v2_column_flow_contract_is_exact_and_anchors_are_required(self) -> None:
+        parsed = self.parse(dense_expectation())
+        self.assertEqual(parsed.pages[0].column_flow.min_text_fragments_per_column, 2)
+        value = dense_expectation()
+        value["pages"][0]["column_flow"]["extra"] = True
+        self.assert_code("PDF_EXPECTATION_COLUMN_FLOW_FIELDS_INVALID", self.parse, value)
+        value = dense_expectation()
+        value["pages"][0]["required_text"] = ["left-anchor"]
+        self.assert_code("PDF_EXPECTATION_COLUMN_FLOW_ANCHOR_NOT_REQUIRED", self.parse, value)
+
+    def test_v1_expectation_cannot_smuggle_column_flow_fields(self) -> None:
+        value = expectation()
+        value["pages"][0]["column_flow"] = dense_expectation()["pages"][0]["column_flow"]
+        self.assert_code("PDF_EXPECTATION_PAGE_FIELDS_INVALID", self.parse, value)
 
     def test_root_extra_field_is_rejected(self) -> None:
         value = expectation()
@@ -119,6 +165,45 @@ class PdfVerifierContractTests(unittest.TestCase):
     def test_point_and_pixel_conversion_use_half_up_rounding(self) -> None:
         self.assertEqual(MODULE.points_to_milli_mm("595.275590551"), 210_000)
         self.assertEqual(MODULE.milli_mm_to_pixels(210_000), 1_191)
+
+    def test_text_origin_composes_text_and_content_matrices(self) -> None:
+        self.assertEqual(
+            MODULE.text_origin_milli_mm(
+                [0.119896, 0.0, 0.0, -0.119823, 0.0, 651.0],
+                [1.0, 0.0, 0.0, -1.0, 354.0, 898.0],
+            ),
+            (14_973, 191_699),
+        )
+        self.assert_code(
+            "PDF_TEXT_MATRIX_INVALID",
+            MODULE.text_origin_milli_mm,
+            [1, 0, 0, 1, 0, float("nan")],
+            [1, 0, 0, 1, 0, 0],
+        )
+
+    def test_column_flow_requires_both_columns_anchors_and_balanced_bottoms(self) -> None:
+        contract = MODULE.ColumnFlowExpectation(156_000, 3_000, 2, 12_000, "left-anchor", "right-anchor")
+        fragments = (
+            MODULE.PositionedText("left-anchor", 15_000, 205_000),
+            MODULE.PositionedText("left body", 15_000, 180_000),
+            MODULE.PositionedText("right body", 165_000, 201_000),
+            MODULE.PositionedText("right-anchor", 165_000, 181_000),
+        )
+        result = MODULE.verify_column_flow(fragments, contract, 310_000, 230_000, 500)
+        self.assertEqual(result["left_text_fragment_count"], 2)
+        self.assertEqual(result["right_text_fragment_count"], 2)
+        self.assertEqual(result["bottom_baseline_delta_milli_mm"], 1_000)
+
+        unbalanced = fragments[:-1] + (MODULE.PositionedText("right-anchor", 165_000, 200_000),)
+        self.assert_code(
+            "PDF_COLUMN_FLOW_BALANCE_MISMATCH",
+            MODULE.verify_column_flow,
+            unbalanced,
+            contract,
+            310_000,
+            230_000,
+            500,
+        )
 
     def test_only_default_pdf_user_unit_is_accepted(self) -> None:
         MODULE.require_default_user_unit({})

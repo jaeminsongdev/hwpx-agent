@@ -121,8 +121,9 @@ pub use vs0::{
     HANCOM_2020_VS0_MAX_TEXT_BYTES, Hancom2020Vs0Artifact, Hancom2020Vs0Builder, Hancom2020Vs0Error,
 };
 pub use vs1_layout::{
-    HANCOM_2020_VS1_LAYOUT_MAX_PARAGRAPHS, HANCOM_2020_VS1_LAYOUT_MAX_TEXT_BYTES,
-    HANCOM_2020_VS1_LAYOUT_PROFILE_ID, Hancom2020Vs1LayoutArtifact, Hancom2020Vs1LayoutBuilder,
+    HANCOM_2020_DENSE_COLUMN_FLOW_PROFILE_ID, HANCOM_2020_VS1_LAYOUT_MAX_PARAGRAPHS,
+    HANCOM_2020_VS1_LAYOUT_MAX_TEXT_BYTES, HANCOM_2020_VS1_LAYOUT_PROFILE_ID,
+    Hancom2020ColumnFlowPolicy, Hancom2020Vs1LayoutArtifact, Hancom2020Vs1LayoutBuilder,
     Hancom2020Vs1LayoutDocument, Hancom2020Vs1LayoutError, Hancom2020Vs1LayoutInspection,
 };
 pub use writer::{

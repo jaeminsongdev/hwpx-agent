@@ -112,3 +112,8 @@ negative cases, deterministic corpus, and surgical span preservation. They do no
 multi-section pagination, visual balance, column separator rendering, Hancom normalization, print
 output, arbitrary existing documents, or Hangul 2022/2024. Those claims stay unverified until the
 disposable exact Hangul 2020 multi-section save/reopen/render target and later machine Gates pass.
+
+The separate zero-break, 31-paragraph automatic-balance successor and its coordinate-aware PDF
+contract are specified in `P05-07_DENSE_COLUMN_FLOW_POLICY.md`. Its prepared source evidence does
+not become actual flow/balance evidence until the bounded Hangul 2020 lifecycle and visual checks
+pass.
