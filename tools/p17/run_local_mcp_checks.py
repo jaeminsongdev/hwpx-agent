@@ -279,7 +279,19 @@ def run() -> dict[str, object]:
                 ),
             )
             rejected = read_response(process, 4)
-            require("error" in rejected, "unknown_argument_admitted")
+            rejected_result = rejected.get("result")
+            require(
+                isinstance(rejected_result, dict)
+                and set(rejected_result) == {"content", "isError"}
+                and rejected_result.get("isError") is True
+                and isinstance(rejected_result.get("content"), list)
+                and len(rejected_result["content"]) == 1
+                and isinstance(rejected_result["content"][0], dict)
+                and rejected_result["content"][0].get("type") == "text"
+                and isinstance(rejected_result["content"][0].get("text"), str)
+                and len(rejected_result["content"][0]["text"]) <= 2_048,
+                "unknown_argument_admitted",
+            )
             transcript = canonical([initialized, listed, called, rejected])
             require(
                 str(temporary_path) not in transcript

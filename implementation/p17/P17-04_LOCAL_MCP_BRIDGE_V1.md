@@ -27,8 +27,11 @@ actual Node-to-Rust call, redaction, shutdown and cleanup before the bridge can 
 
 The first clean-commit acceptance attempt stopped before MCP startup because the Python harness did
 not resolve the Windows `pnpm.cmd` shim while keeping `shell=False`. It produced no PASS evidence.
-The harness now resolves each executable explicitly and still never invokes a shell; a fresh clean
-repair-commit run is required.
+The second attempt reached the actual health call but the harness expected invalid tool input as a
+top-level JSON-RPC error. MCP SDK 2.0 correctly represents `tools/call` validation failures as an
+`isError: true` tool result. Neither failed attempt is PASS evidence. The harness now requires that
+exact bounded error form, verifies it has no structured output, and still rejects any reflected
+private path or fixture content. A fresh clean repair-commit run is required.
 
 ## Explicit non-claims
 
