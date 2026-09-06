@@ -1,0 +1,105 @@
+{
+  "schema_version": "hwpx-agent.remote-sync-adapter/v3",
+  "scope": "authenticated_private_adapter_with_bound_checkpoint_metadata",
+  "request_schema_version": "hwpx-agent.remote-sync-request/v3",
+  "response_schema_version": "hwpx-agent.remote-sync-response/v1",
+  "migration": {
+    "from": "hwpx-agent.remote-sync-adapter/v2",
+    "response_contract_unchanged": true,
+    "checkpoint_new_required_fields": [
+      "label"
+    ],
+    "checkpoint_new_optional_fields": [
+      "note"
+    ],
+    "v2_request_accepted_by_v3_host": false
+  },
+  "operations": [
+    "pull",
+    "push",
+    "checkpoint"
+  ],
+  "identity_binding": {
+    "required_on_every_operation": [
+      "project_id",
+      "branch_id",
+      "mirror_id"
+    ],
+    "server_must_bind_mirror_to_project_and_branch": true,
+    "server_must_reject_cross_mirror_alias": true,
+    "mirror_id_model_visible": false
+  },
+  "checkpoint": {
+    "required_fields": [
+      "expected_head",
+      "idempotency_key",
+      "label"
+    ],
+    "optional_fields": [
+      "note"
+    ],
+    "label_unicode_scalar_length": {
+      "minimum": 1,
+      "maximum": 120
+    },
+    "label_leading_or_trailing_ascii_space": "rejected",
+    "label_control_characters": "rejected",
+    "note_unicode_scalar_length_when_present": {
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "absent_note_encoding": "field_omitted",
+    "durable_retry_binding": {
+      "local_snapshot_schema": "hwpx-agent.local-mirror/v5",
+      "stored_private_fields": [
+        "pending_checkpoint_idempotency_key",
+        "pending_checkpoint_request_sha256"
+      ],
+      "request_sha256_covers_exact_encoded_v3_request": true,
+      "label_or_note_stored_in_local_journal": false,
+      "same_key_changed_request": "invalid_state_before_remote_io"
+    }
+  },
+  "authentication": {
+    "scheme": "Bearer",
+    "required_service_scope": "mirror.sync",
+    "fresh_credential_per_exchange": true,
+    "maximum_header_bytes": 8199,
+    "credential_storage_in_adapter": false,
+    "owned_header_zeroized_on_drop": true,
+    "provider_enforces_issuer_audience_expiry_scope_and_single_use": true
+  },
+  "binding": {
+    "algorithm": "sha256",
+    "field": "request_sha256",
+    "covers_exact_encoded_request": true,
+    "mismatch": "invalid_response"
+  },
+  "bounds": {
+    "maximum_request_bytes": 16384,
+    "maximum_response_bytes": 65536,
+    "unknown_response_fields": "rejected",
+    "malformed_head": "invalid_response"
+  },
+  "transport": {
+    "implementation": "injected_RemoteTransport",
+    "unavailable": "uncertain_remote_outcome",
+    "rejected": "definitive_remote_denial",
+    "network_client_in_crate": false
+  },
+  "privacy": {
+    "authorization_in_debug": false,
+    "request_body_contains_authorization": false,
+    "adapter_debug_contains_provider_or_transport_state": false,
+    "request_debug_contains_private_ids_label_or_note": false,
+    "public_cli_contains_label_note_or_request_digest": false
+  },
+  "not_claimed": {
+    "actual_credential_provider": false,
+    "actual_host_transport": false,
+    "actual_remote_service": false,
+    "production_authentication": false,
+    "actual_hangul": false,
+    "p17_06_pass": false
+  }
+}

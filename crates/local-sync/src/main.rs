@@ -212,9 +212,14 @@ fn run(
         "checkpoint" => {
             let root = path(arguments.next())?;
             let idempotency_key = text(arguments.next())?;
+            let label = text(arguments.next())?;
+            let note = arguments
+                .next()
+                .map(|value| text(Some(value)))
+                .transpose()?;
             no_more(arguments)?;
             let store = DurableMirrorStore::open_existing(root)?;
-            let (revision, _) = store.checkpoint_remote(remote, idempotency_key)?;
+            let (revision, _) = store.checkpoint_remote(remote, idempotency_key, label, note)?;
             let snapshot = store
                 .load()?
                 .ok_or(CliError::StateAbsent)?

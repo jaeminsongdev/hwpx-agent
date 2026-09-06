@@ -3,6 +3,7 @@
 use std::fmt;
 
 use serde::{Deserialize, Serialize};
+use sha2::{Digest as _, Sha256};
 use thiserror::Error;
 
 mod adapter;
@@ -16,6 +17,9 @@ pub use store::{DurableMirrorStore, DurableSyncError, LoadedMirror, StoreError, 
 
 const MAX_ID_BYTES: usize = 120;
 const MAX_IDEMPOTENCY_BYTES: usize = 120;
+const MAX_CHECKPOINT_LABEL_CHARS: usize = 120;
+const MAX_CHECKPOINT_NOTE_CHARS: usize = 1_000;
+pub(crate) const REMOTE_SYNC_REQUEST_SCHEMA_VERSION: &str = "hwpx-agent.remote-sync-request/v3";
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -228,6 +232,8 @@ pub struct CheckpointRequest {
     mirror_id: String,
     expected_head: RemoteHead,
     idempotency_key: String,
+    label: String,
+    note: Option<String>,
 }
 
 impl fmt::Debug for CheckpointRequest {
@@ -239,6 +245,8 @@ impl fmt::Debug for CheckpointRequest {
             .field("mirror_id", &"<redacted>")
             .field("expected_generation", &self.expected_head.generation)
             .field("idempotency_key", &"<redacted>")
+            .field("label", &"<redacted>")
+            .field("has_note", &self.note.is_some())
             .finish()
     }
 }
@@ -268,6 +276,58 @@ impl CheckpointRequest {
     pub fn idempotency_key(&self) -> &str {
         &self.idempotency_key
     }
+
+    #[must_use]
+    pub fn label(&self) -> &str {
+        &self.label
+    }
+
+    #[must_use]
+    pub fn note(&self) -> Option<&str> {
+        self.note.as_deref()
+    }
+
+    fn encoded_wire_request(&self) -> Result<Vec<u8>, SyncError> {
+        serde_json::to_vec(&CheckpointWireRequest {
+            schema_version: REMOTE_SYNC_REQUEST_SCHEMA_VERSION,
+            operation: "checkpoint",
+            project_id: &self.project_id,
+            branch_id: &self.branch_id,
+            mirror_id: &self.mirror_id,
+            expected_head: CheckpointWireHead {
+                revision_id: self.expected_head.revision_id(),
+                generation: self.expected_head.generation(),
+            },
+            idempotency_key: &self.idempotency_key,
+            label: &self.label,
+            note: self.note.as_deref(),
+        })
+        .map_err(|_| SyncError::InvalidRequest)
+    }
+
+    fn wire_sha256(&self) -> Result<String, SyncError> {
+        Ok(hex::encode(Sha256::digest(self.encoded_wire_request()?)))
+    }
+}
+
+#[derive(Serialize)]
+struct CheckpointWireRequest<'a> {
+    schema_version: &'static str,
+    operation: &'static str,
+    project_id: &'a str,
+    branch_id: &'a str,
+    mirror_id: &'a str,
+    expected_head: CheckpointWireHead<'a>,
+    idempotency_key: &'a str,
+    label: &'a str,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    note: Option<&'a str>,
+}
+
+#[derive(Serialize)]
+struct CheckpointWireHead<'a> {
+    revision_id: Option<&'a str>,
+    generation: u64,
 }
 
 #[derive(Clone, Eq, PartialEq)]
@@ -393,6 +453,8 @@ pub struct MirrorSnapshot {
     pub pending_push_idempotency_key: Option<String>,
     #[serde(default)]
     pub pending_checkpoint_idempotency_key: Option<String>,
+    #[serde(default)]
+    pub pending_checkpoint_request_sha256: Option<String>,
     pub conflict_revision_id: Option<String>,
     pub conflict_generation: Option<u64>,
     #[serde(default)]
@@ -437,6 +499,7 @@ pub struct LocalMirror {
     pending_plan_sha256: Option<String>,
     pending_push_idempotency_key: Option<String>,
     pending_checkpoint_idempotency_key: Option<String>,
+    pending_checkpoint_request_sha256: Option<String>,
     conflict_head: Option<RemoteHead>,
     last_conflict_resolution: Option<ConflictResolution>,
     last_checkpoint_id: Option<String>,
@@ -502,6 +565,7 @@ impl LocalMirror {
             pending_plan_sha256: None,
             pending_push_idempotency_key: None,
             pending_checkpoint_idempotency_key: None,
+            pending_checkpoint_request_sha256: None,
             conflict_head: None,
             last_conflict_resolution: None,
             last_checkpoint_id: None,
@@ -534,6 +598,7 @@ impl LocalMirror {
             pending_plan_sha256: snapshot.pending_plan_sha256,
             pending_push_idempotency_key: snapshot.pending_push_idempotency_key,
             pending_checkpoint_idempotency_key: snapshot.pending_checkpoint_idempotency_key,
+            pending_checkpoint_request_sha256: snapshot.pending_checkpoint_request_sha256,
             conflict_head,
             last_conflict_resolution: snapshot.last_conflict_resolution,
             last_checkpoint_id: snapshot.last_checkpoint_id,
@@ -553,7 +618,7 @@ impl LocalMirror {
     #[must_use]
     pub fn snapshot(&self) -> MirrorSnapshot {
         MirrorSnapshot {
-            schema_version: "hwpx-agent.local-mirror/v4".to_owned(),
+            schema_version: "hwpx-agent.local-mirror/v5".to_owned(),
             project_id: self.project_id.clone(),
             branch_id: self.branch_id.clone(),
             mirror_id: self.mirror_id.clone(),
@@ -566,6 +631,7 @@ impl LocalMirror {
             pending_plan_sha256: self.pending_plan_sha256.clone(),
             pending_push_idempotency_key: self.pending_push_idempotency_key.clone(),
             pending_checkpoint_idempotency_key: self.pending_checkpoint_idempotency_key.clone(),
+            pending_checkpoint_request_sha256: self.pending_checkpoint_request_sha256.clone(),
             conflict_revision_id: self
                 .conflict_head
                 .as_ref()
@@ -603,6 +669,7 @@ impl LocalMirror {
         self.pending_plan_sha256 = Some(operation_plan_sha256);
         self.pending_push_idempotency_key = None;
         self.pending_checkpoint_idempotency_key = None;
+        self.pending_checkpoint_request_sha256 = None;
         self.phase = MirrorPhase::Ahead;
         self.last_conflict_resolution = None;
         self.last_checkpoint_id = None;
@@ -865,36 +932,37 @@ impl LocalMirror {
         Ok(PushOutcome { head: receipt.head })
     }
 
-    /// Creates or replays a remote checkpoint for the exact clean observed head.
+    /// Creates or replays a metadata-bound remote checkpoint for the exact clean observed head.
     ///
     /// # Errors
     ///
-    /// Rejects offline/non-clean state, invalid keys and mismatched receipts.
+    /// Rejects offline/non-clean state, invalid keys or metadata and mismatched receipts.
     pub fn checkpoint(
         &mut self,
         port: &mut impl RemoteSyncPort,
         idempotency_key: String,
+        label: String,
+        note: Option<String>,
     ) -> Result<CheckpointOutcome, SyncError> {
-        let (request, _) = self.prepare_checkpoint(idempotency_key)?;
+        let (request, _) = self.prepare_checkpoint(idempotency_key, label, note)?;
         let response = port.checkpoint(&request);
-        self.apply_checkpoint_result(response)
+        self.apply_checkpoint_result(&request, response)
     }
 
     pub(crate) fn prepare_checkpoint(
         &mut self,
         idempotency_key: String,
+        label: String,
+        note: Option<String>,
     ) -> Result<(CheckpointRequest, bool), SyncError> {
         self.require_online()?;
-        if !valid_idempotency_key(&idempotency_key) {
+        if !valid_idempotency_key(&idempotency_key)
+            || !valid_checkpoint_label(&label)
+            || !valid_checkpoint_note(note.as_deref())
+        {
             return Err(SyncError::InvalidRequest);
         }
-        if self.phase != MirrorPhase::Clean
-            || self.observed_head.revision_id.is_none()
-            || self
-                .pending_checkpoint_idempotency_key
-                .as_ref()
-                .is_some_and(|expected| expected != &idempotency_key)
-        {
+        if self.phase != MirrorPhase::Clean || self.observed_head.revision_id.is_none() {
             return Err(SyncError::InvalidState);
         }
         let request = CheckpointRequest {
@@ -903,17 +971,38 @@ impl LocalMirror {
             mirror_id: self.mirror_id.clone(),
             expected_head: self.observed_head.clone(),
             idempotency_key: idempotency_key.clone(),
+            label,
+            note,
         };
+        let request_sha256 = request.wire_sha256()?;
+        if self
+            .pending_checkpoint_idempotency_key
+            .as_ref()
+            .is_some_and(|expected| expected != &idempotency_key)
+            || self
+                .pending_checkpoint_request_sha256
+                .as_ref()
+                .is_some_and(|expected| expected != &request_sha256)
+            || self.pending_checkpoint_idempotency_key.is_some()
+                != self.pending_checkpoint_request_sha256.is_some()
+        {
+            return Err(SyncError::InvalidState);
+        }
         let changed = self.pending_checkpoint_idempotency_key.is_none();
         self.pending_checkpoint_idempotency_key = Some(idempotency_key);
+        self.pending_checkpoint_request_sha256 = Some(request_sha256);
         Ok((request, changed))
     }
 
     pub(crate) fn apply_checkpoint_result(
         &mut self,
+        request: &CheckpointRequest,
         response: Result<RemoteCheckpointReceipt, RemoteFailure>,
     ) -> Result<CheckpointOutcome, SyncError> {
-        if self.pending_checkpoint_idempotency_key.is_none() {
+        let request_sha256 = request.wire_sha256()?;
+        if self.pending_checkpoint_idempotency_key.as_deref() != Some(request.idempotency_key())
+            || self.pending_checkpoint_request_sha256.as_deref() != Some(request_sha256.as_str())
+        {
             return Err(SyncError::InvalidState);
         }
         let receipt = match response {
@@ -922,12 +1011,14 @@ impl LocalMirror {
                 validate_conflict_head(&self.observed_head, &head)?;
                 self.conflict_head = Some(head);
                 self.pending_checkpoint_idempotency_key = None;
+                self.pending_checkpoint_request_sha256 = None;
                 self.phase = MirrorPhase::Conflict;
                 self.last_conflict_resolution = None;
                 return Err(SyncError::Conflict);
             }
             Err(RemoteFailure::Rejected) => {
                 self.pending_checkpoint_idempotency_key = None;
+                self.pending_checkpoint_request_sha256 = None;
                 return Err(SyncError::RemoteRejected);
             }
             Err(RemoteFailure::Unavailable) => return Err(SyncError::RemoteUnavailable),
@@ -939,6 +1030,7 @@ impl LocalMirror {
             return Err(SyncError::InvalidResponse);
         }
         self.pending_checkpoint_idempotency_key = None;
+        self.pending_checkpoint_request_sha256 = None;
         self.last_checkpoint_id = Some(receipt.checkpoint_id.clone());
         Ok(CheckpointOutcome {
             checkpoint_id: receipt.checkpoint_id,
@@ -957,12 +1049,31 @@ impl LocalMirror {
 }
 
 fn validate_snapshot_fields(snapshot: &MirrorSnapshot) -> Result<(), SyncError> {
+    let checkpoint_binding_is_valid = match snapshot.schema_version.as_str() {
+        "hwpx-agent.local-mirror/v5" => {
+            snapshot.pending_checkpoint_idempotency_key.is_some()
+                == snapshot.pending_checkpoint_request_sha256.is_some()
+                && snapshot
+                    .pending_checkpoint_request_sha256
+                    .as_deref()
+                    .is_none_or(valid_digest)
+        }
+        "hwpx-agent.local-mirror/v1"
+        | "hwpx-agent.local-mirror/v2"
+        | "hwpx-agent.local-mirror/v3"
+        | "hwpx-agent.local-mirror/v4" => {
+            snapshot.pending_checkpoint_idempotency_key.is_none()
+                && snapshot.pending_checkpoint_request_sha256.is_none()
+        }
+        _ => false,
+    };
     let valid = matches!(
         snapshot.schema_version.as_str(),
         "hwpx-agent.local-mirror/v1"
             | "hwpx-agent.local-mirror/v2"
             | "hwpx-agent.local-mirror/v3"
             | "hwpx-agent.local-mirror/v4"
+            | "hwpx-agent.local-mirror/v5"
     ) && valid_prefixed_identifier(&snapshot.project_id, "prj_")
         && valid_prefixed_identifier(&snapshot.branch_id, "brn_")
         && valid_prefixed_identifier(&snapshot.mirror_id, "mir_")
@@ -979,10 +1090,9 @@ fn validate_snapshot_fields(snapshot: &MirrorSnapshot) -> Result<(), SyncError> 
             .pending_checkpoint_idempotency_key
             .as_deref()
             .is_none_or(valid_idempotency_key)
-        && (snapshot.schema_version == "hwpx-agent.local-mirror/v3"
-            || snapshot.schema_version == "hwpx-agent.local-mirror/v4"
-            || snapshot.pending_checkpoint_idempotency_key.is_none())
+        && checkpoint_binding_is_valid
         && (snapshot.schema_version == "hwpx-agent.local-mirror/v4"
+            || snapshot.schema_version == "hwpx-agent.local-mirror/v5"
             || snapshot.last_conflict_resolution.is_none())
         && snapshot
             .last_checkpoint_id
@@ -995,7 +1105,8 @@ fn restore_observed_snapshot(snapshot: &MirrorSnapshot) -> Result<String, SyncEr
     match snapshot.schema_version.as_str() {
         "hwpx-agent.local-mirror/v2"
         | "hwpx-agent.local-mirror/v3"
-        | "hwpx-agent.local-mirror/v4" => snapshot
+        | "hwpx-agent.local-mirror/v4"
+        | "hwpx-agent.local-mirror/v5" => snapshot
             .observed_snapshot_sha256
             .clone()
             .filter(|value| valid_digest(value))
@@ -1154,4 +1265,14 @@ fn valid_idempotency_key(value: &str) -> bool {
         && value
             .bytes()
             .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'-' | b'_'))
+}
+
+fn valid_checkpoint_label(value: &str) -> bool {
+    (1..=MAX_CHECKPOINT_LABEL_CHARS).contains(&value.chars().count())
+        && value.trim_matches(' ') == value
+        && !value.chars().any(char::is_control)
+}
+
+fn valid_checkpoint_note(value: Option<&str>) -> bool {
+    value.is_none_or(|note| (1..=MAX_CHECKPOINT_NOTE_CHARS).contains(&note.chars().count()))
 }

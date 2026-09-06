@@ -5,11 +5,11 @@ use sha2::{Digest as _, Sha256};
 use zeroize::Zeroizing;
 
 use crate::{
-    CheckpointRequest, PullRequest, PushRequest, RemoteCheckpointReceipt, RemoteFailure,
-    RemoteHead, RemotePushReceipt, RemoteSnapshot, RemoteSyncPort,
+    CheckpointRequest, PullRequest, PushRequest, REMOTE_SYNC_REQUEST_SCHEMA_VERSION,
+    RemoteCheckpointReceipt, RemoteFailure, RemoteHead, RemotePushReceipt, RemoteSnapshot,
+    RemoteSyncPort,
 };
 
-const REQUEST_SCHEMA_VERSION: &str = "hwpx-agent.remote-sync-request/v2";
 const RESPONSE_SCHEMA_VERSION: &str = "hwpx-agent.remote-sync-response/v1";
 const MAX_AUTHORIZATION_BYTES: usize = 8_199;
 const MAX_REQUEST_BYTES: usize = 16_384;
@@ -141,17 +141,24 @@ where
         request: &impl Serialize,
     ) -> Result<R, RemoteFailure> {
         let encoded = serde_json::to_vec(request).map_err(|_| RemoteFailure::InvalidResponse)?;
+        self.exchange_encoded(&encoded)
+    }
+
+    fn exchange_encoded<R: for<'de> Deserialize<'de>>(
+        &mut self,
+        encoded: &[u8],
+    ) -> Result<R, RemoteFailure> {
         if encoded.is_empty() || encoded.len() > MAX_REQUEST_BYTES {
             return Err(RemoteFailure::InvalidResponse);
         }
-        let request_sha256 = hex::encode(Sha256::digest(&encoded));
+        let request_sha256 = hex::encode(Sha256::digest(encoded));
         let authorization = self
             .credentials
             .authorization_header()
             .map_err(map_credential_failure)?;
         let response = self
             .transport
-            .exchange(authorization.expose(), &encoded)
+            .exchange(authorization.expose(), encoded)
             .map_err(map_transport_failure)?;
         if response.is_empty() || response.len() > MAX_RESPONSE_BYTES {
             return Err(RemoteFailure::InvalidResponse);
@@ -174,7 +181,7 @@ where
 {
     fn pull(&mut self, request: &PullRequest) -> Result<RemoteSnapshot, RemoteFailure> {
         let wire = PullWireRequest {
-            schema_version: REQUEST_SCHEMA_VERSION,
+            schema_version: REMOTE_SYNC_REQUEST_SCHEMA_VERSION,
             operation: "pull",
             project_id: request.project_id(),
             branch_id: request.branch_id(),
@@ -196,7 +203,7 @@ where
 
     fn push(&mut self, request: &PushRequest) -> Result<RemotePushReceipt, RemoteFailure> {
         let wire = PushWireRequest {
-            schema_version: REQUEST_SCHEMA_VERSION,
+            schema_version: REMOTE_SYNC_REQUEST_SCHEMA_VERSION,
             operation: "push",
             project_id: request.project_id(),
             branch_id: request.branch_id(),
@@ -223,16 +230,10 @@ where
         &mut self,
         request: &CheckpointRequest,
     ) -> Result<RemoteCheckpointReceipt, RemoteFailure> {
-        let wire = CheckpointWireRequest {
-            schema_version: REQUEST_SCHEMA_VERSION,
-            operation: "checkpoint",
-            project_id: request.project_id(),
-            branch_id: request.branch_id(),
-            mirror_id: request.mirror_id(),
-            expected_head: WireHead::from(request.expected_head()),
-            idempotency_key: request.idempotency_key(),
-        };
-        match self.exchange::<CheckpointWireResult>(&wire)? {
+        let encoded = request
+            .encoded_wire_request()
+            .map_err(|_| RemoteFailure::InvalidResponse)?;
+        match self.exchange_encoded::<CheckpointWireResult>(&encoded)? {
             CheckpointWireResult::Succeeded {
                 checkpoint_id,
                 revision_id,
@@ -268,17 +269,6 @@ struct PushWireRequest<'a> {
     expected_head: WireHead<'a>,
     snapshot_sha256: &'a str,
     operation_plan_sha256: &'a str,
-    idempotency_key: &'a str,
-}
-
-#[derive(Serialize)]
-struct CheckpointWireRequest<'a> {
-    schema_version: &'static str,
-    operation: &'static str,
-    project_id: &'a str,
-    branch_id: &'a str,
-    mirror_id: &'a str,
-    expected_head: WireHead<'a>,
     idempotency_key: &'a str,
 }
 

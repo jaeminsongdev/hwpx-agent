@@ -83,7 +83,12 @@ fn offline_remote_commands_never_call_the_port_or_append_intent() -> TestResult 
         Err(DurableSyncError::Sync(SyncError::Offline))
     );
     assert_eq!(
-        store.checkpoint_remote(&mut port, "checkpoint-key-0001".to_owned()),
+        store.checkpoint_remote(
+            &mut port,
+            "checkpoint-key-0001".to_owned(),
+            "Milestone 1".to_owned(),
+            None,
+        ),
         Err(DurableSyncError::Sync(SyncError::Offline))
     );
     assert_eq!(
@@ -164,7 +169,12 @@ fn unavailable_checkpoint_persists_key_and_replay_records_receipt() -> TestResul
     store.initialize(&mirror(Connectivity::Online)?)?;
     let mut unavailable = FakePort::default();
     assert_eq!(
-        store.checkpoint_remote(&mut unavailable, "checkpoint-key-0001".to_owned()),
+        store.checkpoint_remote(
+            &mut unavailable,
+            "checkpoint-key-0001".to_owned(),
+            "Milestone 1".to_owned(),
+            Some("Operator note".to_owned()),
+        ),
         Err(DurableSyncError::Sync(SyncError::RemoteUnavailable))
     );
     let pending = store.load()?.ok_or("missing pending mirror")?;
@@ -177,13 +187,46 @@ fn unavailable_checkpoint_persists_key_and_replay_records_receipt() -> TestResul
             .as_deref(),
         Some("checkpoint-key-0001")
     );
+    assert!(
+        pending
+            .mirror()
+            .snapshot()
+            .pending_checkpoint_request_sha256
+            .is_some()
+    );
 
     let mut wrong_key = FakePort::default();
     assert_eq!(
-        store.checkpoint_remote(&mut wrong_key, "checkpoint-key-0002".to_owned()),
+        store.checkpoint_remote(
+            &mut wrong_key,
+            "checkpoint-key-0002".to_owned(),
+            "Milestone 1".to_owned(),
+            Some("Operator note".to_owned()),
+        ),
         Err(DurableSyncError::Sync(SyncError::InvalidState))
     );
     assert_eq!(wrong_key.checkpoint_calls, 0);
+
+    for (label, note) in [
+        ("Milestone 2".to_owned(), Some("Operator note".to_owned())),
+        ("Milestone 1".to_owned(), Some("Changed note".to_owned())),
+        ("Milestone 1".to_owned(), None),
+    ] {
+        let mut drift = FakePort::default();
+        assert_eq!(
+            store.checkpoint_remote(&mut drift, "checkpoint-key-0001".to_owned(), label, note,),
+            Err(DurableSyncError::Sync(SyncError::InvalidState))
+        );
+        assert_eq!(drift.checkpoint_calls, 0);
+        assert_eq!(
+            store
+                .load()?
+                .ok_or("missing pending mirror")?
+                .revision()
+                .sequence(),
+            2
+        );
+    }
 
     let mut replay = FakePort {
         checkpoint_result: Some(Ok(RemoteCheckpointReceipt {
@@ -193,8 +236,12 @@ fn unavailable_checkpoint_persists_key_and_replay_records_receipt() -> TestResul
         })),
         ..FakePort::default()
     };
-    let (revision, outcome) =
-        store.checkpoint_remote(&mut replay, "checkpoint-key-0001".to_owned())?;
+    let (revision, outcome) = store.checkpoint_remote(
+        &mut replay,
+        "checkpoint-key-0001".to_owned(),
+        "Milestone 1".to_owned(),
+        Some("Operator note".to_owned()),
+    )?;
     assert_eq!(revision.sequence(), 3);
     assert!(outcome.replayed);
     let complete = store
@@ -203,6 +250,7 @@ fn unavailable_checkpoint_persists_key_and_replay_records_receipt() -> TestResul
         .mirror()
         .snapshot();
     assert!(complete.pending_checkpoint_idempotency_key.is_none());
+    assert!(complete.pending_checkpoint_request_sha256.is_none());
     assert_eq!(
         complete.last_checkpoint_id.as_deref(),
         Some("chk_checkpoint01")
@@ -252,8 +300,12 @@ fn malformed_receipts_keep_push_and_checkpoint_keys_durable() -> TestResult {
         ..FakePort::default()
     };
     assert_eq!(
-        checkpoint_store
-            .checkpoint_remote(&mut invalid_checkpoint, "checkpoint-key-0001".to_owned()),
+        checkpoint_store.checkpoint_remote(
+            &mut invalid_checkpoint,
+            "checkpoint-key-0001".to_owned(),
+            "Milestone 1".to_owned(),
+            None,
+        ),
         Err(DurableSyncError::Sync(SyncError::InvalidResponse))
     );
     assert_eq!(
@@ -265,6 +317,15 @@ fn malformed_receipts_keep_push_and_checkpoint_keys_durable() -> TestResult {
             .pending_checkpoint_idempotency_key
             .as_deref(),
         Some("checkpoint-key-0001")
+    );
+    assert!(
+        DurableMirrorStore::open(checkpoint_root.path())?
+            .load()?
+            .ok_or("missing invalid checkpoint mirror")?
+            .mirror()
+            .snapshot()
+            .pending_checkpoint_request_sha256
+            .is_some()
     );
     Ok(())
 }
@@ -294,7 +355,6 @@ fn definitive_rejection_clears_pending_keys_durably() -> TestResult {
             .pending_push_idempotency_key
             .is_none()
     );
-
     let checkpoint_root = tempdir()?;
     let checkpoint_store = DurableMirrorStore::open(checkpoint_root.path())?;
     checkpoint_store.initialize(&mirror(Connectivity::Online)?)?;
@@ -303,8 +363,12 @@ fn definitive_rejection_clears_pending_keys_durably() -> TestResult {
         ..FakePort::default()
     };
     assert_eq!(
-        checkpoint_store
-            .checkpoint_remote(&mut rejected_checkpoint, "checkpoint-key-0001".to_owned()),
+        checkpoint_store.checkpoint_remote(
+            &mut rejected_checkpoint,
+            "checkpoint-key-0001".to_owned(),
+            "Milestone 1".to_owned(),
+            None,
+        ),
         Err(DurableSyncError::Sync(SyncError::RemoteRejected))
     );
     let rejected_checkpoint = checkpoint_store
@@ -316,6 +380,13 @@ fn definitive_rejection_clears_pending_keys_durably() -> TestResult {
             .mirror()
             .snapshot()
             .pending_checkpoint_idempotency_key
+            .is_none()
+    );
+    assert!(
+        rejected_checkpoint
+            .mirror()
+            .snapshot()
+            .pending_checkpoint_request_sha256
             .is_none()
     );
     Ok(())

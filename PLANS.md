@@ -45,7 +45,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
 | P-0089/0089A | P17-04 | Bridge and installed-plugin qualification PASS; main binding PASS |
 | P-0090 | P17-05 | Exact-commit MCP local file/Git plan-only run 16/16 PASS |
-| P-0091 | P17-06 | Durable sync/adapter/CLI component; v2 requests now require exact mirror binding; actual host transport remains |
+| P-0091/0091A | P17-06 | Durable sync/adapter/CLI component; v3 requests bind mirror plus checkpoint label/note and exact durable request digest; 39/39 local tests; actual host transport remains |
 | P-0092 | P17-01 | Deterministic 19-entry package core 7/7; registered remote app absent |
 | P-0093 | P17-08 | Widget 133/133, MCP 13/13, disposable Git 20/20, installed v0.4 prepare 18/18; visible click/effect open |
 | P-0094 | P17-07 | Local rebase/branch/manual resolver and stale-head CLI surface 37/37; host/UI/concurrent evidence open |
@@ -115,9 +115,12 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   refresh. The plugin widget passes 144 tests, v1 regression E2E passes and v2 local iframe run
   `784ceb1476354f51b73fb5cbf40d8e1c` passes. This is graphical component evidence only:
   `project_conflict_resolve` is not registered and actual concurrent Web/Codex evidence is absent.
-- P17-06 private request v2 now binds every pull/push/checkpoint exchange to the exact opaque
-  `mirror_id`; source successor v9 proves its exact implementation blobs. This is a required host
-  prerequisite, not actual transport or remote-service evidence.
+- P17-06 private request v3 retains exact `mirror_id` binding and adds the required checkpoint
+  label/optional note. Local-mirror v5 persists the exact encoded request SHA-256 with the replay
+  key, rejects same-key metadata drift before remote I/O, and never journals label/note text. The
+  local suite passes 39/39; workspace build, full tests and all-target Clippy pass. This is a host
+  prerequisite, not actual transport or remote-service evidence. Current source successor v10 is
+  still pending; v9 remains proof only for predecessor commit `4be56ea`.
 
 ## Risks and holds
 
@@ -142,8 +145,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
    saved structure with the corrected fixture, and repair the next proven incompatibility. Then
    rerun P05-08 and P05-09 with the user present. Require lifecycle, semantic, coordinate-aware PDF
    and visual evidence and preserve every failure.
-3. Wire P17-06 to a qualified host credential/transport adapter, then capture an actual remote
-   pull/push/checkpoint transition without promoting the current injected component evidence.
+3. Finish the private-to-service checkpoint mapping and wire P17-06 to a qualified host
+   credential/transport adapter. Then capture an actual remote pull/push/checkpoint transition
+   without promoting the current injected component evidence.
 4. Extend that host protocol with the widget's bounded P17-07 `project_conflict_resolve` contract,
    register it only after authenticated transport exists, and run one real concurrent Web/Codex
    conflict per resolution path. The graphical component itself is implemented and locally tested.
@@ -167,6 +171,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   `implementation/p17/P17-07_STALE_HEAD_WIDGET_V2.md`, then
   `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V8.md`; the local resolver and graphical
   component exist, while host registration/actual concurrent evidence is intentionally absent.
+- P17-06 checkpoint successor: read `implementation/p17/P17-06_CHECKPOINT_INTENT_BINDING_V5.md`,
+  `protocol/private/p17-remote-sync-adapter-v3.json` and both v3/v5 migration notes. The compatible
+  conflict contract is `protocol/private/p17-local-conflict-resolver-v2.json`.
 - Detailed history through P-0085 remains in `fae5bc0:PLANS.md`; later evidence is in individual
   reports and Git. Never touch user originals, failed evidence, predecessor locks or unrelated processes.
 - Per-card/phase reports and bound evidence are authoritative; broad introductory prose is not.

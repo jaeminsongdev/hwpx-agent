@@ -1,4 +1,5 @@
 use std::error::Error;
+use std::fs;
 use std::path::Path;
 use std::process::{Command, Output};
 
@@ -240,7 +241,23 @@ fn unavailable_host_adapter_leaves_exact_checkpoint_key_for_replay() -> TestResu
         .success()
     );
 
-    let first = run(temporary.path(), &["checkpoint", "checkpoint-key-0001"])?;
+    let missing_label = run(temporary.path(), &["checkpoint", "checkpoint-key-0001"])?;
+    assert!(!missing_label.status.success());
+    assert_eq!(
+        String::from_utf8_lossy(&missing_label.stderr),
+        "INVALID_REQUEST\n"
+    );
+    assert_eq!(json(&run(temporary.path(), &["status"])?)?["sequence"], 1);
+
+    let first = run(
+        temporary.path(),
+        &[
+            "checkpoint",
+            "checkpoint-key-0001",
+            "Milestone 1",
+            "Operator note",
+        ],
+    )?;
     assert!(!first.status.success());
     assert_eq!(
         String::from_utf8_lossy(&first.stderr),
@@ -250,10 +267,42 @@ fn unavailable_host_adapter_leaves_exact_checkpoint_key_for_replay() -> TestResu
     assert_eq!(status["sequence"], 2);
     assert_eq!(status["pending"]["uncertain_checkpoint"], true);
 
-    let wrong_key = run(temporary.path(), &["checkpoint", "checkpoint-key-0002"])?;
+    for entry in fs::read_dir(temporary.path().join("p17-local-sync-journal-v1"))? {
+        let persisted = fs::read_to_string(entry?.path())?;
+        assert!(!persisted.contains("Milestone 1"));
+        assert!(!persisted.contains("Operator note"));
+    }
+    assert!(!String::from_utf8_lossy(&first.stdout).contains("Milestone 1"));
+    assert!(!String::from_utf8_lossy(&first.stderr).contains("Operator note"));
+
+    let wrong_key = run(
+        temporary.path(),
+        &[
+            "checkpoint",
+            "checkpoint-key-0002",
+            "Milestone 1",
+            "Operator note",
+        ],
+    )?;
     assert!(!wrong_key.status.success());
     assert_eq!(
         String::from_utf8_lossy(&wrong_key.stderr),
+        "STATE_REJECTED\n"
+    );
+    assert_eq!(json(&run(temporary.path(), &["status"])?)?["sequence"], 2);
+
+    let changed_label = run(
+        temporary.path(),
+        &[
+            "checkpoint",
+            "checkpoint-key-0001",
+            "Milestone 2",
+            "Operator note",
+        ],
+    )?;
+    assert!(!changed_label.status.success());
+    assert_eq!(
+        String::from_utf8_lossy(&changed_label.stderr),
         "STATE_REJECTED\n"
     );
     assert_eq!(json(&run(temporary.path(), &["status"])?)?["sequence"], 2);

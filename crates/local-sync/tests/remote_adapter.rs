@@ -66,6 +66,7 @@ enum ResponsePlan {
 struct FakeTransport {
     plans: VecDeque<ResponsePlan>,
     requests: Vec<Value>,
+    request_sha256s: Vec<String>,
     authorizations: Vec<String>,
 }
 
@@ -75,6 +76,7 @@ impl fmt::Debug for FakeTransport {
             .debug_struct("FakeTransport")
             .field("remaining", &self.plans.len())
             .field("request_count", &self.requests.len())
+            .field("request_digest_count", &self.request_sha256s.len())
             .field("authorization_count", &self.authorizations.len())
             .finish()
     }
@@ -89,6 +91,8 @@ impl RemoteTransport for FakeTransport {
         let value: Value =
             serde_json::from_slice(request).map_err(|_| TransportFailure::Rejected)?;
         self.requests.push(value.clone());
+        self.request_sha256s
+            .push(hex::encode(Sha256::digest(request)));
         self.authorizations.push(authorization_header.to_owned());
         let plan = self
             .plans
@@ -191,6 +195,7 @@ fn adapter(
         FakeTransport {
             plans: plans.into_iter().collect(),
             requests: Vec::new(),
+            request_sha256s: Vec::new(),
             authorizations: Vec::new(),
         },
     )
@@ -217,7 +222,12 @@ fn authenticated_adapter_maps_exact_pull_push_and_checkpoint_exchanges() -> Test
     mirror.pull(&mut adapter)?;
     mirror.queue_local_change(digest('c'), digest('d'))?;
     mirror.push(&mut adapter, "push-key-0001".to_owned())?;
-    mirror.checkpoint(&mut adapter, "checkpoint-key-0001".to_owned())?;
+    mirror.checkpoint(
+        &mut adapter,
+        "checkpoint-key-0001".to_owned(),
+        "Milestone 1".to_owned(),
+        Some("Operator note".to_owned()),
+    )?;
 
     let (credentials, transport) = adapter.into_parts();
     assert_eq!(credentials.calls, 3);
@@ -249,10 +259,60 @@ fn authenticated_adapter_maps_exact_pull_push_and_checkpoint_exchanges() -> Test
     for request in &transport.requests {
         assert_eq!(
             request["schema_version"],
-            "hwpx-agent.remote-sync-request/v2"
+            "hwpx-agent.remote-sync-request/v3"
         );
         assert_eq!(request["mirror_id"], "mir_mirror001");
     }
+    let checkpoint = &transport.requests[2];
+    assert_eq!(checkpoint["label"], "Milestone 1");
+    assert_eq!(checkpoint["note"], "Operator note");
+    Ok(())
+}
+
+#[test]
+fn checkpoint_without_note_omits_the_optional_wire_field() -> TestResult {
+    let mut mirror = mirror()?;
+    let mut adapter = adapter([ResponsePlan::CheckpointSuccess {
+        checkpoint: "chk_checkpoint01".to_owned(),
+        revision: "rev_00000001".to_owned(),
+    }]);
+    mirror.checkpoint(
+        &mut adapter,
+        "checkpoint-key-0001".to_owned(),
+        "Milestone 1".to_owned(),
+        None,
+    )?;
+    let (_, transport) = adapter.into_parts();
+    let request = transport.requests.first().ok_or("missing request")?;
+    assert_eq!(
+        request["schema_version"],
+        "hwpx-agent.remote-sync-request/v3"
+    );
+    assert_eq!(request["operation"], "checkpoint");
+    assert_eq!(request["label"], "Milestone 1");
+    assert!(request.get("note").is_none());
+    Ok(())
+}
+
+#[test]
+fn pending_checkpoint_digest_matches_the_exact_transmitted_request() -> TestResult {
+    let mut mirror = mirror()?;
+    let mut adapter = adapter([ResponsePlan::Transport(TransportFailure::Unavailable)]);
+    assert_eq!(
+        mirror.checkpoint(
+            &mut adapter,
+            "checkpoint-key-0001".to_owned(),
+            "Milestone 1".to_owned(),
+            Some("Operator note".to_owned()),
+        ),
+        Err(SyncError::RemoteUnavailable)
+    );
+    let pending_sha256 = mirror
+        .snapshot()
+        .pending_checkpoint_request_sha256
+        .ok_or("missing pending request digest")?;
+    let (_, transport) = adapter.into_parts();
+    assert_eq!(transport.request_sha256s, [pending_sha256]);
     Ok(())
 }
 

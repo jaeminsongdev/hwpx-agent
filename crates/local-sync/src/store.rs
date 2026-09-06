@@ -260,20 +260,22 @@ impl DurableMirrorStore {
             .map_err(DurableSyncError::Sync)
     }
 
-    /// Persists a checkpoint idempotency intent before performing the injected remote exchange.
+    /// Persists an exact checkpoint-request intent before performing the injected remote exchange.
     ///
     /// # Errors
     ///
-    /// Unavailable or malformed outcomes retain the exact pending key for safe replay. Definitive
-    /// rejection, conflict and success are durably recorded with an exact journal CAS.
+    /// Unavailable or malformed outcomes retain the pending key and request digest for safe replay.
+    /// Definitive rejection, conflict and success are durably recorded with an exact journal CAS.
     pub fn checkpoint_remote(
         &self,
         port: &mut impl RemoteSyncPort,
         idempotency_key: String,
+        label: String,
+        note: Option<String>,
     ) -> Result<(StoreRevision, CheckpointOutcome), DurableSyncError> {
         let current = self.load()?.ok_or(StoreError::Conflict)?;
         let mut mirror = current.mirror;
-        let (request, intent_changed) = mirror.prepare_checkpoint(idempotency_key)?;
+        let (request, intent_changed) = mirror.prepare_checkpoint(idempotency_key, label, note)?;
         let intent_revision = if intent_changed {
             self.append_exact(&current.revision, &mirror)?
         } else {
@@ -281,7 +283,7 @@ impl DurableMirrorStore {
         };
         let pending = mirror.snapshot();
         let response = port.checkpoint(&request);
-        let outcome = mirror.apply_checkpoint_result(response);
+        let outcome = mirror.apply_checkpoint_result(&request, response);
         let revision = if mirror.snapshot() == pending {
             intent_revision
         } else {

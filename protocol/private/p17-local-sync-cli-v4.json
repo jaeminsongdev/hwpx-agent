@@ -1,0 +1,136 @@
+{
+  "schema_version": "hwpx-agent.local-sync-cli/v4",
+  "scope": "durable_sync_cli_with_checkpoint_request_binding",
+  "predecessor": "protocol/private/p17-local-sync-cli-v3.json",
+  "binary": "local-sync",
+  "commands": {
+    "init": {
+      "mutates": true,
+      "requires_empty_store": true,
+      "remote_calls": 0
+    },
+    "status": {
+      "mutates": false,
+      "creates_missing_store": false,
+      "remote_calls": 0
+    },
+    "set-connectivity": {
+      "mutates": true,
+      "values": [
+        "offline",
+        "online"
+      ],
+      "remote_calls": 0
+    },
+    "queue": {
+      "mutates": true,
+      "requires": [
+        "snapshot_sha256",
+        "operation_plan_sha256"
+      ],
+      "remote_calls": 0
+    },
+    "pull": {
+      "requires_online": true,
+      "remote_calls": "at_most_one",
+      "local_change_remote_advance": "durable_conflict_without_overwrite"
+    },
+    "push": {
+      "requires_online": true,
+      "remote_calls": "at_most_one",
+      "intent_before_remote_effect": true,
+      "uncertain_retry_requires_exact_first_key": true
+    },
+    "checkpoint": {
+      "arguments": [
+        "idempotency_key",
+        "label",
+        "optional_note"
+      ],
+      "requires_online": true,
+      "remote_calls": "at_most_one",
+      "intent_before_remote_effect": true,
+      "uncertain_retry_requires_exact_v3_request": true,
+      "same_key_changed_label_or_note": "STATE_REJECTED_before_remote_io"
+    },
+    "resolve-rebase": {
+      "remote_calls": 0
+    },
+    "resolve-branch": {
+      "remote_calls": 0
+    },
+    "resolve-manual": {
+      "remote_calls": 0
+    }
+  },
+  "journal": {
+    "schema_version": "hwpx-agent.local-sync-journal-entry/v1",
+    "directory": "p17-local-sync-journal-v1",
+    "publication": "immutable_create_new_sequence_file",
+    "checksum_chain": true,
+    "strict_contiguous_sequence": true,
+    "exact_compare_and_append": true,
+    "max_entries": 4096,
+    "max_entry_bytes": 65536,
+    "max_journal_bytes": 67108864,
+    "links_and_reparse_points": "rejected",
+    "concurrent_stale_writer": "conflict_without_overwrite",
+    "checkpoint_label_or_note_persisted": false
+  },
+  "mirror_snapshot": {
+    "schema_version": "hwpx-agent.local-mirror/v5",
+    "separates_observed_and_local_snapshot_digests": true,
+    "durable_pending_push_key": true,
+    "durable_pending_checkpoint_key": true,
+    "durable_pending_checkpoint_request_sha256": true,
+    "migration": {
+      "clean_from": [
+        "hwpx-agent.local-mirror/v1",
+        "hwpx-agent.local-mirror/v2",
+        "hwpx-agent.local-mirror/v3",
+        "hwpx-agent.local-mirror/v4"
+      ],
+      "legacy_pending_checkpoint": "fail_closed",
+      "successor_output": "hwpx-agent.local-mirror/v5"
+    }
+  },
+  "public_output": {
+    "schema_version": "hwpx-agent.local-sync-cli-output/v2",
+    "format": "json",
+    "contains_paths": false,
+    "contains_project_branch_mirror_ids": false,
+    "contains_digests": false,
+    "contains_idempotency_keys": false,
+    "contains_checkpoint_label_or_note": false,
+    "pending_markers": [
+      "plan",
+      "uncertain_push",
+      "uncertain_checkpoint"
+    ]
+  },
+  "host_adapter": {
+    "private_request_schema": "hwpx-agent.remote-sync-request/v3",
+    "actual_transport_wired": false,
+    "online_remote_command_without_adapter": "REMOTE_UNAVAILABLE",
+    "offline_remote_command": "STATE_REJECTED"
+  },
+  "implemented_evidence": {
+    "state_machine_tests": 13,
+    "durable_store_tests": 5,
+    "durable_remote_tests": 8,
+    "adapter_tests": 6,
+    "cli_tests": 7,
+    "total_tests": 39,
+    "actual_process_cli": true,
+    "exact_transmitted_checkpoint_digest_bound": true,
+    "same_key_metadata_drift_rejected_before_port": true,
+    "checkpoint_text_absent_from_journal_and_public_output": true
+  },
+  "not_claimed": {
+    "daemon_mcp_wiring": false,
+    "actual_remote_transport": false,
+    "actual_remote_service": false,
+    "actual_hangul": false,
+    "p17_06_pass": false
+  }
+}
