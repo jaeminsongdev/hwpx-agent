@@ -45,7 +45,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
 | P-0089/0089A | P17-04 | Bridge and installed-plugin qualification PASS; main binding PASS |
 | P-0090 | P17-05 | Exact-commit MCP local file/Git plan-only run 16/16 PASS |
-| P-0091/0091A/0091B/0091C/0091D | P17-06 | Durable sync/adapter/CLI; exact v3 mapping, registry admission and one-time authenticated injected host; concrete P15/transport remain |
+| P-0091/0091A/0091B/0091C/0091D/0091E | P17-06 | Durable local sync; exact v3 mapping, authenticated host and concrete history checkpoint create/replay; durable remote transport remains |
 | P-0092 | P17-01 | Deterministic 19-entry package core 7/7; registered remote app absent |
 | P-0093 | P17-08 | Widget 133/133, MCP 13/13, disposable Git 20/20, installed v0.4 prepare 18/18; visible click/effect open |
 | P-0094 | P17-07 | Local rebase/branch/manual resolver and stale-head CLI surface 37/37; host/UI/concurrent evidence open |
@@ -142,6 +142,13 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   The HMAC verifier and dispatcher are local/injected references; no listener, durable credential,
   concrete P15 backend or actual remote transition is claimed. See
   `implementation/p17/P17-06_AUTHENTICATED_CHECKPOINT_HOST_V8.md`.
+- P17-06 history dispatch now preserves the optional note exactly and immutably, derives stable
+  request/checkpoint identities from the service idempotency UUID, and rejects label normalization
+  drift. One loopback test crosses the existing local authenticated adapter, two fresh one-time
+  credentials, authenticated host, exact mirror admission and concrete history service: create then
+  replay returns the same checkpoint. History tests are 17/17 and host tests 7/7. The repository and
+  transport remain in-memory/loopback component evidence; see
+  `implementation/p17/P17-06_HISTORY_CHECKPOINT_DISPATCH_V9.md`.
 
 ## Risks and holds
 
@@ -166,11 +173,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
    saved structure with the corrected fixture, and repair the next proven incompatibility. Then
    rerun P05-08 and P05-09 with the user present. Require lifecycle, semantic, coordinate-aware PDF
    and visual evidence and preserve every failure.
-3. Implement the concrete P15-compatible checkpoint service adapter behind the now-authenticated
-   P17-06 injected host, including exact idempotency and note semantics. Run an in-process
-   `AuthenticatedRemoteSyncAdapter` compatibility test, then add a bounded transport/credential
-   host and capture an actual remote pull/push/checkpoint transition without promoting injected
-   component evidence.
+3. Add the bounded concrete transport/credential host and durable service state behind the now
+   compatible P17-06 checkpoint path, then capture a current-PC actual remote
+   pull/push/checkpoint transition without promoting loopback or in-memory component evidence.
 4. Extend that host protocol with the widget's bounded P17-07 `project_conflict_resolve` contract,
    register it only after authenticated transport exists, and run one real concurrent Web/Codex
    conflict per resolution path. The graphical component itself is implemented and locally tested.
@@ -207,6 +212,10 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   `implementation/p17/P17-06_AUTHENTICATED_CHECKPOINT_HOST_V8.md` and
   `protocol/private/p17-checkpoint-authenticated-host-v1.json`. Authentication and admission are
   implemented as component boundaries; concrete P15 dispatch and actual transport are next.
+- P17-06 concrete-dispatch successor: read
+  `implementation/p17/P17-06_HISTORY_CHECKPOINT_DISPATCH_V9.md` and
+  `protocol/private/p17-history-checkpoint-dispatch-v1.json`. Concrete in-memory create/replay and
+  exact loopback compatibility pass; durable service state and actual transport remain next.
 - Detailed history through P-0085 remains in `fae5bc0:PLANS.md`; later evidence is in individual
   reports and Git. Never touch user originals, failed evidence, predecessor locks or unrelated processes.
 - Per-card/phase reports and bound evidence are authoritative; broad introductory prose is not.

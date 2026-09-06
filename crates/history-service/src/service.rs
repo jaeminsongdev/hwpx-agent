@@ -366,9 +366,9 @@ mod tests {
     use crate::types::MAX_HISTORY_NODES;
     use crate::{
         BranchCreateRequest, BranchName, BranchRecord, CheckpointId, CheckpointLabel,
-        CheckpointOutcome, CheckpointRecord, CheckpointRequest, CommittedRevisionProjection,
-        CursorCodec, HistoryError, HistoryQuery, HistoryRepository, HistoryRequestContext,
-        HistorySnapshot, InMemoryHistoryRepository, ProjectRole, RequestId,
+        CheckpointNote, CheckpointOutcome, CheckpointRecord, CheckpointRequest,
+        CommittedRevisionProjection, CursorCodec, HistoryError, HistoryQuery, HistoryRepository,
+        HistoryRequestContext, HistorySnapshot, InMemoryHistoryRepository, ProjectRole, RequestId,
     };
 
     #[derive(Clone, Debug)]
@@ -625,6 +625,53 @@ mod tests {
             .find(|entry| entry.revision_id() == fixture.child)
             .unwrap_or_else(|| panic!("child missing"));
         assert_eq!(child.checkpoint_labels(), &[request.label().clone()]);
+    }
+
+    #[test]
+    fn checkpoint_note_is_exact_immutable_and_redacted_from_debug() {
+        let fixture = Fixture::new();
+        let context = fixture.context(fixture.owner, 100);
+        let note = CheckpointNote::parse("한글 2020 검토 메모")
+            .unwrap_or_else(|error| panic!("note: {error}"));
+        let request = CheckpointRequest::new_with_note(
+            id("req_", 43, RequestId::parse),
+            fixture.project,
+            id("chk_", 44, CheckpointId::parse),
+            fixture.child,
+            CheckpointLabel::parse("Noted baseline")
+                .unwrap_or_else(|error| panic!("label: {error}")),
+            Some(note.clone()),
+        );
+        let created = fixture
+            .service
+            .checkpoint(&context, &request)
+            .unwrap_or_else(|error| panic!("checkpoint: {error}"));
+        let CheckpointOutcome::Created(record) = created else {
+            panic!("expected created checkpoint");
+        };
+        assert_eq!(record.note(), Some(&note));
+        assert!(!format!("{record:?}").contains(note.as_str()));
+
+        let drifted = CheckpointRequest::new_with_note(
+            request.request_id(),
+            request.project_id(),
+            request.checkpoint_id(),
+            request.revision_id(),
+            request.label().clone(),
+            Some(
+                CheckpointNote::parse("다른 메모")
+                    .unwrap_or_else(|error| panic!("drifted note: {error}")),
+            ),
+        );
+        assert_eq!(
+            fixture.service.checkpoint(&context, &drifted),
+            Err(HistoryError::IdempotencyConflict)
+        );
+        assert_eq!(CheckpointNote::parse(""), Err(HistoryError::InvalidRequest));
+        assert_eq!(
+            CheckpointNote::parse("가".repeat(1_001)),
+            Err(HistoryError::InvalidRequest)
+        );
     }
 
     #[test]
@@ -1013,6 +1060,7 @@ mod tests {
             fixture.root,
             CheckpointLabel::parse("Wrong project")
                 .unwrap_or_else(|error| panic!("label: {error}")),
+            None,
             id("req_", 82, RequestId::parse),
             ContentDigest::of(b"wrong-project-checkpoint"),
         );

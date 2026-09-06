@@ -13,6 +13,7 @@ pub const MAX_HISTORY_PAGE_SIZE: u16 = 100;
 pub const MAX_HISTORY_NODES: usize = 10_000;
 const MAX_BRANCH_NAME_BYTES: usize = 127;
 const MAX_CHECKPOINT_LABEL_CHARS: usize = 120;
+const MAX_CHECKPOINT_NOTE_CHARS: usize = 1_000;
 const MAX_REVISION_PARENTS: usize = 32;
 
 #[derive(Clone, Debug, Error, Eq, PartialEq)]
@@ -255,6 +256,45 @@ impl<'de> Deserialize<'de> for CheckpointLabel {
     }
 }
 
+#[derive(Clone, Eq, PartialEq, Serialize)]
+#[serde(transparent)]
+pub struct CheckpointNote(String);
+
+impl CheckpointNote {
+    /// Validates an optional immutable P15 checkpoint note without changing its text.
+    ///
+    /// # Errors
+    ///
+    /// Rejects an empty or oversized note.
+    pub fn parse(value: impl Into<String>) -> Result<Self, HistoryError> {
+        let value = value.into();
+        if !(1..=MAX_CHECKPOINT_NOTE_CHARS).contains(&value.chars().count()) {
+            return Err(HistoryError::InvalidRequest);
+        }
+        Ok(Self(value))
+    }
+
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+}
+
+impl fmt::Debug for CheckpointNote {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str("<redacted>")
+    }
+}
+
+impl<'de> Deserialize<'de> for CheckpointNote {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        Self::parse(String::deserialize(deserializer)?).map_err(D::Error::custom)
+    }
+}
+
 #[derive(Clone, Eq, PartialEq)]
 pub struct HistoryRequestContext {
     tenant_id: TenantId,
@@ -432,6 +472,8 @@ pub struct CheckpointRecord {
     checkpoint_id: CheckpointId,
     revision_id: RevisionId,
     label: CheckpointLabel,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    note: Option<CheckpointNote>,
     request_id: RequestId,
     request_sha256: ContentDigest,
 }
@@ -442,6 +484,7 @@ impl CheckpointRecord {
         checkpoint_id: CheckpointId,
         revision_id: RevisionId,
         label: CheckpointLabel,
+        note: Option<CheckpointNote>,
         request_id: RequestId,
         request_sha256: ContentDigest,
     ) -> Self {
@@ -450,6 +493,7 @@ impl CheckpointRecord {
             checkpoint_id,
             revision_id,
             label,
+            note,
             request_id,
             request_sha256,
         }
@@ -476,6 +520,11 @@ impl CheckpointRecord {
     }
 
     #[must_use]
+    pub const fn note(&self) -> Option<&CheckpointNote> {
+        self.note.as_ref()
+    }
+
+    #[must_use]
     pub const fn request_sha256(&self) -> ContentDigest {
         self.request_sha256
     }
@@ -495,6 +544,8 @@ pub struct CheckpointRequest {
     checkpoint_id: CheckpointId,
     revision_id: RevisionId,
     label: CheckpointLabel,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    note: Option<CheckpointNote>,
 }
 
 impl CheckpointRequest {
@@ -506,12 +557,32 @@ impl CheckpointRequest {
         revision_id: RevisionId,
         label: CheckpointLabel,
     ) -> Self {
+        Self::new_with_note(
+            request_id,
+            project_id,
+            checkpoint_id,
+            revision_id,
+            label,
+            None,
+        )
+    }
+
+    #[must_use]
+    pub const fn new_with_note(
+        request_id: RequestId,
+        project_id: ProjectId,
+        checkpoint_id: CheckpointId,
+        revision_id: RevisionId,
+        label: CheckpointLabel,
+        note: Option<CheckpointNote>,
+    ) -> Self {
         Self {
             request_id,
             project_id,
             checkpoint_id,
             revision_id,
             label,
+            note,
         }
     }
 
@@ -538,6 +609,11 @@ impl CheckpointRequest {
     #[must_use]
     pub fn label(&self) -> &CheckpointLabel {
         &self.label
+    }
+
+    #[must_use]
+    pub const fn note(&self) -> Option<&CheckpointNote> {
+        self.note.as_ref()
     }
 
     pub(crate) fn canonical_sha256(&self) -> Result<ContentDigest, HistoryError> {

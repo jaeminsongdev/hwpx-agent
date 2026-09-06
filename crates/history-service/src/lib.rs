@@ -9,7 +9,7 @@ pub use cursor::CursorCodec;
 pub use service::HistoryService;
 pub use store::{HistoryRepository, InMemoryHistoryRepository};
 pub use types::{
-    BranchCreateRequest, BranchName, BranchRecord, CheckpointId, CheckpointLabel,
+    BranchCreateRequest, BranchName, BranchRecord, CheckpointId, CheckpointLabel, CheckpointNote,
     CheckpointOutcome, CheckpointRecord, CheckpointRequest, CommittedRevisionProjection,
     HistoryEntry, HistoryError, HistoryPage, HistoryQuery, HistoryRequestContext, HistorySnapshot,
     ProjectRole, RequestId, SemanticDiffReference,

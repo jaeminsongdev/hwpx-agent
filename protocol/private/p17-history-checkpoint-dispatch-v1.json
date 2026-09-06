@@ -1,0 +1,58 @@
+{
+  "schema_version": "hwpx-agent.p17-history-checkpoint-dispatch/v1",
+  "scope": "current_pc_p15_history_checkpoint_dispatch_component",
+  "source": {
+    "arguments": "project_checkpoint_input_v1",
+    "tenant_and_subject": "authenticated_checkpoint_dispatch_request",
+    "now_unix_seconds": "host_clock",
+    "service_idempotency_key": "canonical_lowercase_uuid"
+  },
+  "mapping": {
+    "history_request_id": "req_plus_service_idempotency_uuid_simple",
+    "checkpoint_id": {
+      "algorithm": "uuid_v5",
+      "namespace": "a9950b64-8833-5e26-88e7-53c22c082535",
+      "name_fields": [
+        "tenant_uuid",
+        "project_uuid",
+        "service_idempotency_uuid"
+      ]
+    },
+    "project_and_revision": "exact_canonical_ids",
+    "label": "exact_after_history_validation_no_normalization_drift",
+    "note": "optional_exact_immutable_history_value"
+  },
+  "idempotency": {
+    "host_correlation_request_id_excluded": true,
+    "locale_excluded": true,
+    "same_authenticated_subject_and_service_key": "same_checkpoint_replay",
+    "changed_revision_label_or_note": "idempotency_conflict",
+    "cross_subject_replay": "reject"
+  },
+  "receipt": {
+    "checkpoint_id": "history_record_checkpoint_id",
+    "revision_id": "must_equal_exact_requested_revision",
+    "created_replayed_mapping": "false_true"
+  },
+  "privacy": {
+    "checkpoint_note_debug": "redacted",
+    "host_dispatcher_debug": "redacted",
+    "bearer_persisted": false
+  },
+  "evidence": {
+    "history_service_tests": 17,
+    "remote_sync_host_tests": 7,
+    "exact_local_adapter_to_host_to_history_create_and_replay": true,
+    "cargo_fmt": "pass",
+    "target_clippy_deny_warnings": "pass"
+  },
+  "not_claimed": {
+    "durable_history_repository": false,
+    "network_transport": false,
+    "remote_credential_provider": false,
+    "external_identity_provider": false,
+    "actual_remote_transition": false,
+    "production": false,
+    "p17_06_pass": false
+  }
+}

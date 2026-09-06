@@ -352,6 +352,7 @@ impl HistoryRepository for InMemoryHistoryRepository {
             request.checkpoint_id(),
             request.revision_id(),
             request.label().clone(),
+            request.note().cloned(),
             request.request_id(),
             request_sha256,
         );

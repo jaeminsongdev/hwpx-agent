@@ -10,6 +10,11 @@ use std::sync::Mutex;
 
 use artifact_service::{SubjectDigest, TenantId};
 use auth_middleware::{AuthMiddleware, AuthScope};
+use history_service::{
+    CheckpointId, CheckpointLabel, CheckpointNote, CheckpointOutcome as HistoryCheckpointOutcome,
+    CheckpointRequest as HistoryCheckpointRequest, HistoryError, HistoryRepository,
+    HistoryRequestContext, HistoryService, RequestId,
+};
 use local_sync::{
     CheckpointServiceArguments, CheckpointServiceBinding, CheckpointServiceContext,
     decode_checkpoint_to_service,
@@ -21,10 +26,13 @@ use retention_sync_service::{
 use revision_service::{BranchId, ProjectId, RevisionId};
 use serde::Serialize;
 use thiserror::Error;
+use uuid::Uuid;
 
 const RESPONSE_SCHEMA_VERSION: &str = "hwpx-agent.remote-sync-response/v1";
 const MAX_REQUEST_BYTES: usize = 16_384;
 const MAX_CHECKPOINT_ID_BYTES: usize = 120;
+const HISTORY_CHECKPOINT_NAMESPACE: Uuid =
+    Uuid::from_u128(0xa995_0b64_8833_5e26_88e7_53c2_2c08_2535);
 
 #[derive(Clone, Copy, Debug, Error, Eq, PartialEq)]
 pub enum CheckpointHostFailure {
@@ -99,6 +107,7 @@ impl fmt::Debug for CheckpointDispatchOutcome {
 pub struct CheckpointDispatchRequest<'a> {
     tenant_id: TenantId,
     subject: SubjectDigest,
+    now_unix_seconds: u64,
     binding: &'a CheckpointServiceBinding,
 }
 
@@ -111,6 +120,11 @@ impl CheckpointDispatchRequest<'_> {
     #[must_use]
     pub const fn subject(&self) -> SubjectDigest {
         self.subject
+    }
+
+    #[must_use]
+    pub const fn now_unix_seconds(&self) -> u64 {
+        self.now_unix_seconds
     }
 
     #[must_use]
@@ -135,6 +149,7 @@ impl fmt::Debug for CheckpointDispatchRequest<'_> {
             .debug_struct("CheckpointDispatchRequest")
             .field("tenant_id", &"<redacted>")
             .field("subject", &"<redacted>")
+            .field("now_unix_seconds", &self.now_unix_seconds)
             .field("arguments", &self.binding.arguments())
             .field("service_intent_sha256", &"<redacted>")
             .field("service_arguments_sha256", &"<redacted>")
@@ -152,6 +167,96 @@ pub trait CheckpointDispatcher: fmt::Debug {
         &self,
         request: &CheckpointDispatchRequest<'_>,
     ) -> Result<CheckpointDispatchOutcome, CheckpointDispatchError>;
+}
+
+pub struct HistoryCheckpointDispatcher<R: HistoryRepository> {
+    service: HistoryService<R>,
+}
+
+impl<R: HistoryRepository> HistoryCheckpointDispatcher<R> {
+    #[must_use]
+    pub const fn new(service: HistoryService<R>) -> Self {
+        Self { service }
+    }
+}
+
+impl<R: HistoryRepository> fmt::Debug for HistoryCheckpointDispatcher<R> {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("HistoryCheckpointDispatcher")
+            .field("service", &"<redacted>")
+            .finish()
+    }
+}
+
+impl<R: HistoryRepository> CheckpointDispatcher for HistoryCheckpointDispatcher<R> {
+    fn dispatch(
+        &self,
+        request: &CheckpointDispatchRequest<'_>,
+    ) -> Result<CheckpointDispatchOutcome, CheckpointDispatchError> {
+        let arguments = request.arguments();
+        let project_id = ProjectId::parse(arguments.project_id())
+            .map_err(|_| CheckpointDispatchError::Rejected)?;
+        let revision_id = RevisionId::parse(arguments.revision_id())
+            .map_err(|_| CheckpointDispatchError::Rejected)?;
+        if arguments.expected_revision() != arguments.revision_id() {
+            return Err(CheckpointDispatchError::Rejected);
+        }
+        let idempotency_uuid = Uuid::parse_str(arguments.idempotency_key())
+            .map_err(|_| CheckpointDispatchError::Rejected)?;
+        if idempotency_uuid.is_nil()
+            || idempotency_uuid.hyphenated().to_string() != arguments.idempotency_key()
+        {
+            return Err(CheckpointDispatchError::Rejected);
+        }
+        let request_id = RequestId::parse(&format!("req_{}", idempotency_uuid.simple()))
+            .map_err(|_| CheckpointDispatchError::Rejected)?;
+        let mut checkpoint_name = Vec::with_capacity(48);
+        checkpoint_name.extend_from_slice(request.tenant_id().as_uuid().as_bytes());
+        checkpoint_name.extend_from_slice(project_id.as_uuid().as_bytes());
+        checkpoint_name.extend_from_slice(idempotency_uuid.as_bytes());
+        let checkpoint_id = CheckpointId::parse(&format!(
+            "chk_{}",
+            Uuid::new_v5(&HISTORY_CHECKPOINT_NAMESPACE, &checkpoint_name).simple()
+        ))
+        .map_err(|_| CheckpointDispatchError::Rejected)?;
+        let label = CheckpointLabel::parse(arguments.label().to_owned())
+            .map_err(|_| CheckpointDispatchError::Rejected)?;
+        if label.as_str() != arguments.label() {
+            return Err(CheckpointDispatchError::Rejected);
+        }
+        let note = arguments
+            .note()
+            .map(|value| CheckpointNote::parse(value.to_owned()))
+            .transpose()
+            .map_err(|_| CheckpointDispatchError::Rejected)?;
+        let history_context = HistoryRequestContext::new(
+            request.tenant_id(),
+            request.subject(),
+            request.now_unix_seconds(),
+        );
+        let history_request = HistoryCheckpointRequest::new_with_note(
+            request_id,
+            project_id,
+            checkpoint_id,
+            revision_id,
+            label,
+            note,
+        );
+        let (record, replayed) = match self.service.checkpoint(&history_context, &history_request) {
+            Ok(HistoryCheckpointOutcome::Created(record)) => (record, false),
+            Ok(HistoryCheckpointOutcome::Replayed(record)) => (record, true),
+            Err(error) => return Err(map_history_error(&error)),
+        };
+        if record.project_id() != project_id || record.revision_id() != revision_id {
+            return Err(CheckpointDispatchError::Unavailable);
+        }
+        Ok(CheckpointDispatchOutcome::new(
+            record.checkpoint_id().public_id(),
+            record.revision_id().public_id(),
+            replayed,
+        ))
+    }
 }
 
 pub struct CheckpointHost<D> {
@@ -272,6 +377,7 @@ where
         let dispatch_request = CheckpointDispatchRequest {
             tenant_id: auth_context.tenant_id(),
             subject: auth_context.subject(),
+            now_unix_seconds,
             binding: &binding,
         };
         let outcome = match self.dispatcher.dispatch(&dispatch_request) {
@@ -358,15 +464,45 @@ fn valid_checkpoint_id(value: &str) -> bool {
             .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'-' | b'_'))
 }
 
+const fn map_history_error(error: &HistoryError) -> CheckpointDispatchError {
+    match error {
+        HistoryError::InvalidIdentifier
+        | HistoryError::InvalidRequest
+        | HistoryError::NotFound
+        | HistoryError::AccessDenied
+        | HistoryError::DuplicateIdentity
+        | HistoryError::IdempotencyConflict => CheckpointDispatchError::Rejected,
+        HistoryError::InvalidCursor
+        | HistoryError::CursorExpired
+        | HistoryError::InvalidGraph
+        | HistoryError::GraphLimitExceeded
+        | HistoryError::Serialization
+        | HistoryError::CryptoFailure
+        | HistoryError::RepositoryFailure => CheckpointDispatchError::Unavailable,
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use std::collections::VecDeque;
+    use std::fmt;
+    use std::sync::Arc;
     use std::sync::atomic::{AtomicUsize, Ordering};
 
-    use artifact_service::ContentDigest;
+    use artifact_service::{ArtifactId, ContentDigest};
     use auth_middleware::{AuthRegistryLimits, PrincipalGrant, TenantRole};
     use base64::Engine as _;
     use base64::engine::general_purpose::URL_SAFE_NO_PAD;
+    use history_service::{
+        CommittedRevisionProjection, CursorCodec, InMemoryHistoryRepository,
+        ProjectRole as HistoryProjectRole,
+    };
     use hmac::{Hmac, Mac as _};
+    use local_sync::{
+        AuthenticatedRemoteSyncAdapter, AuthorizationHeader, Connectivity, CredentialFailure,
+        LocalMirror, RemoteCredentialProvider, RemoteHead as LocalRemoteHead, RemoteTransport,
+        TransportFailure,
+    };
     use retention_sync_service::{
         MirrorRegistration, ProjectRole, RetentionClass, RetentionPolicy,
     };
@@ -443,6 +579,65 @@ mod tests {
         }
     }
 
+    struct TestCredentials {
+        headers: VecDeque<String>,
+    }
+
+    impl fmt::Debug for TestCredentials {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            formatter
+                .debug_struct("TestCredentials")
+                .field("remaining", &self.headers.len())
+                .finish()
+        }
+    }
+
+    impl RemoteCredentialProvider for TestCredentials {
+        fn authorization_header(&mut self) -> Result<AuthorizationHeader, CredentialFailure> {
+            self.headers
+                .pop_front()
+                .ok_or(CredentialFailure::Unavailable)
+                .and_then(AuthorizationHeader::new)
+        }
+    }
+
+    struct HistoryLoopbackTransport {
+        host: CheckpointHost<HistoryCheckpointDispatcher<InMemoryHistoryRepository>>,
+        exchanges: usize,
+    }
+
+    impl fmt::Debug for HistoryLoopbackTransport {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            formatter
+                .debug_struct("HistoryLoopbackTransport")
+                .field("host", &"<redacted>")
+                .field("exchanges", &self.exchanges)
+                .finish()
+        }
+    }
+
+    impl RemoteTransport for HistoryLoopbackTransport {
+        fn exchange(
+            &mut self,
+            authorization_header: &str,
+            request: &[u8],
+        ) -> Result<Vec<u8>, TransportFailure> {
+            self.exchanges = self.exchanges.saturating_add(1);
+            self.host
+                .handle_checkpoint(
+                    authorization_header,
+                    request,
+                    format!("req_loopback{:08}", self.exchanges),
+                    "ko-KR".to_owned(),
+                    NOW,
+                )
+                .map_err(|failure| match failure {
+                    CheckpointHostFailure::Rejected => TransportFailure::Rejected,
+                    CheckpointHostFailure::Unavailable => TransportFailure::Unavailable,
+                })
+        }
+    }
+
     #[derive(Serialize)]
     struct TestClaims {
         iss: String,
@@ -484,6 +679,7 @@ mod tests {
         branch_id: BranchId,
         mirror_id: MirrorId,
         revision_id: RevisionId,
+        service_subject: SubjectDigest,
     }
 
     impl Fixture {
@@ -540,7 +736,7 @@ mod tests {
                         branch_id,
                         RemoteHead {
                             revision_id: Some(revision_id),
-                            generation: 7,
+                            generation: 1,
                         },
                     )
                 })
@@ -554,7 +750,7 @@ mod tests {
                             device_sha256: ContentDigest::of(b"device"),
                             observed_head: RemoteHead {
                                 revision_id: Some(revision_id),
-                                generation: 7,
+                                generation: 1,
                             },
                             snapshot_sha256: ContentDigest::of(b"snapshot"),
                         },
@@ -568,6 +764,7 @@ mod tests {
                 branch_id,
                 mirror_id,
                 revision_id,
+                service_subject,
             }
         }
 
@@ -610,7 +807,7 @@ mod tests {
             self.request(
                 &self.mirror_id.public_id(),
                 &self.revision_id.public_id(),
-                7,
+                1,
             )
         }
 
@@ -695,14 +892,14 @@ mod tests {
         let request = fixture.request(
             &fixture.mirror_id.public_id(),
             "rev_00000000000000000000000000000006",
-            8,
+            2,
         );
         let response = fixture
             .handle("service-token-0002", &request)
             .unwrap_or_else(|error| panic!("handle: {error}"));
         let value = decode(&response);
         assert_eq!(value["result"]["outcome"], "conflict");
-        assert_eq!(value["result"]["head"]["generation"], 7);
+        assert_eq!(value["result"]["head"]["generation"], 1);
         assert_eq!(
             value["result"]["head"]["revision_id"],
             fixture.revision_id.public_id()
@@ -716,7 +913,7 @@ mod tests {
         let request = cross.request(
             "mir_00000000000000000000000000000099",
             &cross.revision_id.public_id(),
-            7,
+            1,
         );
         let response = cross
             .handle("service-token-0003", &request)
@@ -781,6 +978,101 @@ mod tests {
             );
             assert_eq!(fixture.host.dispatcher.calls.load(Ordering::SeqCst), 1);
         }
+    }
+
+    #[test]
+    fn exact_local_adapter_and_history_host_create_then_replay_same_checkpoint() {
+        let fixture = Fixture::new(DispatchMode::Success);
+        let first_header = fixture.header("service-token-history-0001");
+        let second_header = fixture.header("service-token-history-0002");
+        let tenant_id = fixture.tenant_id;
+        let project_id = fixture.project_id;
+        let revision_id = fixture.revision_id;
+        let service_subject = fixture.service_subject;
+        let CheckpointHost {
+            authentication,
+            registry,
+            dispatcher: _,
+        } = fixture.host;
+        let authentication = authentication
+            .into_inner()
+            .unwrap_or_else(|error| panic!("authentication mutex: {error}"));
+
+        let repository = Arc::new(InMemoryHistoryRepository::default());
+        repository
+            .provision_project(
+                tenant_id,
+                project_id,
+                [(service_subject, HistoryProjectRole::Owner)],
+            )
+            .and_then(|()| {
+                repository.record_committed_revision(
+                    tenant_id,
+                    CommittedRevisionProjection::new(
+                        project_id,
+                        revision_id,
+                        Vec::new(),
+                        ArtifactId::generate(),
+                        None,
+                        1,
+                    )?,
+                )
+            })
+            .unwrap_or_else(|error| panic!("history repository: {error}"));
+        let history = HistoryService::new(
+            repository,
+            CursorCodec::new(b"history-cursor-key-0123456789abcdef".to_vec(), 300)
+                .unwrap_or_else(|error| panic!("cursor: {error}")),
+        );
+        let transport = HistoryLoopbackTransport {
+            host: CheckpointHost::new(
+                authentication,
+                registry,
+                HistoryCheckpointDispatcher::new(history),
+            ),
+            exchanges: 0,
+        };
+        let credentials = TestCredentials {
+            headers: VecDeque::from([first_header, second_header]),
+        };
+        let mut adapter = AuthenticatedRemoteSyncAdapter::new(credentials, transport);
+        let mut mirror = LocalMirror::new(
+            project_id.public_id(),
+            fixture.branch_id.public_id(),
+            fixture.mirror_id.public_id(),
+            LocalRemoteHead::new(Some(revision_id.public_id()), 1)
+                .unwrap_or_else(|error| panic!("local head: {error}")),
+            "1".repeat(64),
+            Connectivity::Online,
+        )
+        .unwrap_or_else(|error| panic!("local mirror: {error}"));
+        let first = mirror
+            .checkpoint(
+                &mut adapter,
+                "checkpoint-request-0001".to_owned(),
+                "release-candidate".to_owned(),
+                Some("reviewed locally".to_owned()),
+            )
+            .unwrap_or_else(|error| panic!("first: {error}"));
+        let second = mirror
+            .checkpoint(
+                &mut adapter,
+                "checkpoint-request-0001".to_owned(),
+                "release-candidate".to_owned(),
+                Some("reviewed locally".to_owned()),
+            )
+            .unwrap_or_else(|error| panic!("second: {error}"));
+        assert!(!first.replayed);
+        assert!(second.replayed);
+        assert_eq!(first.checkpoint_id, second.checkpoint_id);
+        assert_eq!(first.revision_id, revision_id.public_id());
+        assert_eq!(
+            mirror.snapshot().last_checkpoint_id,
+            Some(first.checkpoint_id)
+        );
+        let (credentials, transport) = adapter.into_parts();
+        assert!(credentials.headers.is_empty());
+        assert_eq!(transport.exchanges, 2);
     }
 
     #[test]
