@@ -27,18 +27,18 @@ acceptance = load_acceptance()
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = "implementation/p17/qualification/current-workspace-source-v18-20260907"
+BASE = "implementation/p17/qualification/current-workspace-source-v19-20260907"
 QUALIFICATION = ROOT / BASE
-RUN_ID = "b025d97ee6cf49c1887363ed8125835d"
-BASE_COMMIT = "15d8f9b2602f2b7793dc1195d6a19982fecb2fbf"
-RECEIPT_SHA256 = "3febbec118cf424c733365d9724c902b73b7ef685309086b67213279bf0b5fb4"
+RUN_ID = "8945f8951aa14b13b5757b63725bd71e"
+BASE_COMMIT = "4b7d6b1f0fd2ca5f16f42843abfdd56eda9f68f1"
+RECEIPT_SHA256 = "b686f8d69e2a63b29bd45b3af75fbcc91ce63d91953b5773e7ab6984f9c9db46"
 CARGO_METADATA_PROJECTION_SHA256 = (
     "d7dd720fa29a88f5df06dc692b0a56c1d8c70142a88227b4c8ca5f14962bd856"
 )
 WORKSPACE_MEMBER_COUNT = 25
 PREVIOUS_QUALIFICATION = (
-    "implementation/p17/qualification/current-workspace-source-v17-20260907/contract.json",
-    "3c4082a70f45d2359f46d78baffd17e6da53c48de80f315d73314c5344a59e7e",
+    "implementation/p17/qualification/current-workspace-source-v18-20260907/contract.json",
+    "accd545b2c32cbc578904f6583716209acabbd982d70cbbc1d1780013a692e4e",
 )
 IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     {
@@ -598,8 +598,8 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     },
     {
         "path": "tools/p17/tests/test_current_workspace_source_checks.py",
-        "bytes": 4482,
-        "sha256": "b8abaa35c9396d8bb6a9a81dda086557b2962f9eb3c3b0e280fd35412b26a37d",
+        "bytes": 4972,
+        "sha256": "69d16bbd1142a8730e228c391e6704d698eadaa8e05ac2ebf168badcd16dbb4d",
     },
     {
         "path": "tools/p17/tests/test_telemetry_source_successor_bridge.py",
@@ -620,6 +620,7 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
 SUCCESSORS: tuple[dict[str, Any], ...] = (
     {
         "accepted_predecessor_sha256s": [
+            "2b4847338a70ca8b749fe0a30d4167d413fd67a1ea49e1c8aa1d49cb1c881d0e",
             "6561e43d46f89ee42773840dd33747cfa23bd55b0927f1da41e357bf3b97c639",
             "7cb6ea91c65c226f2769af0d33906b39970efa0c81b286aa32ca282ef8614d69",
             "8fd1277275366b4e02fcda4750027254d7997062904649c0a2bcd10101550a59",
@@ -630,6 +631,7 @@ SUCCESSORS: tuple[dict[str, Any], ...] = (
     },
     {
         "accepted_predecessor_sha256s": [
+            "317b38412eaddc5c2a630ad753ac1370f38358aff619940b4537ed63f3a29c28",
             "9ac2dbd3b86a74b0229c76181e3335b537e67a6077e7287e181eae3f9e1c0fcd",
             "f8281c9c13ea981ab8652819f1e3946ea942bca2d952f68b05ee61f3a3179c03",
         ],
@@ -679,7 +681,8 @@ SUCCESSORS: tuple[dict[str, Any], ...] = (
     },
     {
         "accepted_predecessor_sha256s": [
-            "11b87d37cfb76b523c29ee9dfb28500b4f57e2cb38d61f21e08f2fcc46b24676"
+            "11b87d37cfb76b523c29ee9dfb28500b4f57e2cb38d61f21e08f2fcc46b24676",
+            "c154aaa5d9762b70d18d2dcf764a4f94bf98e2d4bd94aeb3c3e541776ec15394",
         ],
         "composition_predecessor_sha256": "11b87d37cfb76b523c29ee9dfb28500b4f57e2cb38d61f21e08f2fcc46b24676",
         "current_sha256": "4a818a1eea37c595dbf670919d31bc1d9c1db48b217ff69b3f31cc081b7db7d2",
@@ -708,6 +711,15 @@ SUCCESSORS: tuple[dict[str, Any], ...] = (
         "composition_predecessor_sha256": "8d1186ec2fe481f4307ebc26efaaaf3b33d9c6d1ed40349d7bbf74c7172a3077",
         "current_sha256": "1a80a1a076b0b0697f03c86cd9e834c4c50d256d76b35fdf418a054aebeb12da",
         "path": "tools/p15/validate_async_job_contract.py",
+    },
+    {
+        "accepted_predecessor_sha256s": [
+            "b46ced237b1cf73ae706c99750d012b2e30ec1e34d4c86b535a629de1661c28a",
+            "c805d097d92c6e41d8434de8d62aed3fd88bf95cfc81a2fab4cc3d389ccfb86a",
+        ],
+        "composition_predecessor_sha256": "c805d097d92c6e41d8434de8d62aed3fd88bf95cfc81a2fab4cc3d389ccfb86a",
+        "current_sha256": "208cd83a4ae3fa4accc6e4a438299125b99cc91d20a66c4468d1e63baa819bd1",
+        "path": "tools/p15/validate_auth_tenant.py",
     },
     {
         "accepted_predecessor_sha256s": [
@@ -844,6 +856,7 @@ CLAIMS = {
     "docs_source_only_widget_validation_v16_bound": True,
     "complete_source_fallback_negative_v17_bound": True,
     "retention_mirror_source_successor_v18_bound": True,
+    "p15_auth_source_successor_v19_bound": True,
     "actual_hangul": False,
     "registered_host": False,
     "production": False,
@@ -854,7 +867,7 @@ GUARD_SOURCES = (
     "tools/p17/run_current_workspace_source_checks.py",
     "tools/p17/current_workspace_source_qualification.py",
     "tools/p17/tests/test_current_workspace_source_qualification.py",
-    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V18.md",
+    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V19.md",
 )
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -945,7 +958,7 @@ def receipt_path(root: Path) -> Path:
 
 def expected_current(root: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v18",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v19",
         "scope": "current_pc_source_binding_successor_only",
         "run_id": RUN_ID,
         "source_commit": BASE_COMMIT,
@@ -964,8 +977,8 @@ def expected_current(root: Path) -> dict[str, Any]:
 
 def expected_contract(root: Path, current_path: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v18",
-        "qualification_id": "p17.current-workspace-source.v18.20260907",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v19",
+        "qualification_id": "p17.current-workspace-source.v19.20260907",
         "base_commit": BASE_COMMIT,
         "scope": "current_pc_source_binding_successor_only",
         "claims": CLAIMS,

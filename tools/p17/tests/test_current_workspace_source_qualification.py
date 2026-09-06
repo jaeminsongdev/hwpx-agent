@@ -16,7 +16,7 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
         contract = qualification.verify()
         self.assertEqual(
             contract["qualification_id"],
-            "p17.current-workspace-source.v18.20260907",
+            "p17.current-workspace-source.v19.20260907",
         )
         self.assertTrue(contract["claims"]["source_qualification_only"])
         self.assertTrue(contract["claims"]["p05_diagnostic_dependencies_bound"])
@@ -72,12 +72,15 @@ class CurrentWorkspaceSourceQualificationTests(unittest.TestCase):
         self.assertTrue(
             contract["claims"]["retention_mirror_source_successor_v18_bound"]
         )
+        self.assertTrue(
+            contract["claims"]["p15_auth_source_successor_v19_bound"]
+        )
         self.assertFalse(contract["claims"]["actual_hangul"])
         self.assertFalse(contract["claims"]["phase_complete"])
 
     def test_successors_are_current_commit_exact_and_unique(self) -> None:
         successors = qualification.verified_successors()
-        self.assertEqual(len(successors), 24)
+        self.assertEqual(len(successors), 25)
         self.assertEqual(set(successors), {entry["path"] for entry in qualification.SUCCESSORS})
         for relative, entry in successors.items():
             self.assertEqual(
