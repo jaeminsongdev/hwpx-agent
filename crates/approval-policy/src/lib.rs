@@ -233,7 +233,7 @@ impl ApprovalPolicy {
 }
 
 #[derive(Clone, Eq, PartialEq)]
-pub struct ConfirmationToken(String);
+pub struct ConfirmationToken(Zeroizing<String>);
 
 impl fmt::Debug for ConfirmationToken {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -256,7 +256,7 @@ impl ConfirmationToken {
         {
             return Err(ApprovalError::InvalidConfirmation);
         }
-        Ok(Self(encoded))
+        Ok(Self(Zeroizing::new(encoded)))
     }
 
     #[must_use]
@@ -336,11 +336,11 @@ impl ConfirmationAuthority {
             return Err(ApprovalError::InvalidRequest);
         }
         let signature = sign(&self.secret, &encoded)?;
-        Ok(ConfirmationToken(format!(
+        Ok(ConfirmationToken(Zeroizing::new(format!(
             "{TOKEN_PREFIX}.{}.{}",
             URL_SAFE_NO_PAD.encode(encoded),
             URL_SAFE_NO_PAD.encode(signature)
-        )))
+        ))))
     }
 }
 

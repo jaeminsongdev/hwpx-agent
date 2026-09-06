@@ -4,7 +4,7 @@ use std::io::{self, BufRead, Write as _};
 use std::path::PathBuf;
 
 use local_companion_daemon::{
-    LocalCompanionConfig, LocalCompanionDaemon, MAX_REQUEST_BYTES, SessionToken,
+    ApprovalRuntime, LocalCompanionConfig, LocalCompanionDaemon, MAX_REQUEST_BYTES, SessionToken,
 };
 
 fn main() {
@@ -17,8 +17,12 @@ fn main() {
 fn run() -> Result<(), ()> {
     let config_path = exact_config_argument()?;
     let config = LocalCompanionConfig::load(&config_path).map_err(|_| ())?;
+    let approval = ApprovalRuntime::from_environment(&config).map_err(|_| ())?;
     let token = SessionToken::from_environment().map_err(|_| ())?;
-    let daemon = LocalCompanionDaemon::new(config);
+    let daemon = match approval {
+        Some(runtime) => LocalCompanionDaemon::with_approval_runtime(config, runtime),
+        None => LocalCompanionDaemon::new(config),
+    };
     let stdin = io::stdin();
     let mut reader = io::BufReader::new(stdin.lock());
     loop {

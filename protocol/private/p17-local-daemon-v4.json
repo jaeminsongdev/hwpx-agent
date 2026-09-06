@@ -1,0 +1,70 @@
+{
+  "schema_version": "hwpx-agent.local-companion-private-contract/v4",
+  "protocol_version": "hwpx-agent.local-companion-private/v4",
+  "migration": {
+    "from": "hwpx-agent.local-companion-private/v3",
+    "v1_health_and_path_preserved": true,
+    "v2_workflow_preserved": true,
+    "v3_approval_preparation_preserved": true,
+    "older_versions_reject_v4_method": true,
+    "v4_rejects_older_mutation_methods": true
+  },
+  "default": {
+    "git_commit_enabled": false,
+    "partial_environment_configuration_rejected": true
+  },
+  "private_host_environment": {
+    "git_program": "HWPX_AGENT_GIT_PROGRAM",
+    "approval_state_root": "HWPX_AGENT_APPROVAL_STATE_ROOT",
+    "approval_secret": "HWPX_AGENT_APPROVAL_SECRET",
+    "configuration_mode": "all_or_none",
+    "secret_encoding": "base64url_no_padding",
+    "secret_decoded_bytes_minimum": 32,
+    "secret_decoded_bytes_maximum": 128
+  },
+  "methods": {
+    "execute_git_commit": {
+      "parameters": [
+        "workspace_id",
+        "operation_id",
+        "output_id",
+        "expected_sha256",
+        "message",
+        "actor_sha256",
+        "tenant_sha256",
+        "requested_at_unix_seconds",
+        "confirmation_token"
+      ],
+      "returns_confirmation_token": false,
+      "returns_document_content": false,
+      "returns_absolute_path": false
+    }
+  },
+  "confirmation": {
+    "minting_api_exposed": false,
+    "durable_replay_ledger": true,
+    "scope_source": "private_host_runtime",
+    "required_scope": "workstation_control",
+    "maximum_confirmation_lifetime_seconds": 120,
+    "maximum_execution_delay_seconds": 30
+  },
+  "execution": {
+    "semantic_effect": "git_commit",
+    "arbitrary_shell_command_accepted": false,
+    "exact_plan_rebuilt_before_authorize": true,
+    "exact_plan_rebuilt_before_ref_update": true,
+    "reference_old_oid_cas": true,
+    "index_synchronized": true
+  },
+  "public_identifiers": {
+    "accepts_paths": false,
+    "workspace_output_mapping": "output/{output_id}.hwpx"
+  },
+  "claims": {
+    "opens_hangul": false,
+    "uses_network": false,
+    "mcp_tool_exposed": false,
+    "trusted_host_confirmation_ui": false,
+    "p17_08_pass": false
+  }
+}

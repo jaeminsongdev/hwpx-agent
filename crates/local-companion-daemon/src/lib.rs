@@ -3,9 +3,16 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Component, Path, PathBuf};
+use std::sync::{Arc, Mutex};
+use std::time::{SystemTime, UNIX_EPOCH};
 
+use approval_policy::{
+    ApprovalEvaluator, ApprovalPolicy, ApprovalScope, ConfirmationToken, DurableReplayLedger,
+    EffectKind,
+};
 use base64::Engine as _;
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
+use git_effect_host::{GitCommitEffectInput, GitEffectHost};
 use local_workflow::{LocalWorkflow, MaterializeSlot};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -16,15 +23,22 @@ use zeroize::Zeroizing;
 pub const PROTOCOL_VERSION: &str = "hwpx-agent.local-companion-private/v1";
 pub const WORKFLOW_PROTOCOL_VERSION: &str = "hwpx-agent.local-companion-private/v2";
 pub const APPROVAL_PROTOCOL_VERSION: &str = "hwpx-agent.local-companion-private/v3";
+pub const EFFECT_PROTOCOL_VERSION: &str = "hwpx-agent.local-companion-private/v4";
 pub const CONFIG_VERSION: &str = "hwpx-agent.local-companion-config/v1";
 pub const TARGET_PROFILE: &str = "hancom-2020-x86-11.0.0.9136";
 pub const SESSION_TOKEN_ENV: &str = "HWPX_AGENT_LOCAL_SESSION_TOKEN";
+pub const APPROVAL_SECRET_ENV: &str = "HWPX_AGENT_APPROVAL_SECRET";
+pub const APPROVAL_STATE_ROOT_ENV: &str = "HWPX_AGENT_APPROVAL_STATE_ROOT";
+pub const GIT_PROGRAM_ENV: &str = "HWPX_AGENT_GIT_PROGRAM";
 pub const MAX_CONFIG_BYTES: u64 = 65_536;
 pub const MAX_REQUEST_BYTES: usize = 16_384;
 const MAX_WORKSPACES: usize = 8;
 const MAX_RELATIVE_PATH_BYTES: usize = 1_024;
 const MAX_PATH_COMPONENTS: usize = 32;
 const MAX_FILE_BYTES_LIMIT: u64 = 1_073_741_824;
+const APPROVAL_MAX_TTL_SECONDS: u64 = 120;
+const APPROVAL_MAX_CONSUMED_TOKENS: usize = 4_096;
+const EFFECT_MAX_EXECUTION_DELAY_SECONDS: u64 = 30;
 
 #[derive(Debug, Error)]
 pub enum DaemonError {
@@ -36,6 +50,8 @@ pub enum DaemonError {
     Workspace,
     #[error("local I/O rejected")]
     Io,
+    #[error("side effect rejected")]
+    Effect,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -73,11 +89,22 @@ struct Workspace {
     root: PathBuf,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct LocalCompanionConfig {
     max_file_bytes: u64,
     workspaces: BTreeMap<String, Workspace>,
     digest: String,
+}
+
+impl std::fmt::Debug for LocalCompanionConfig {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        formatter
+            .debug_struct("LocalCompanionConfig")
+            .field("max_file_bytes", &self.max_file_bytes)
+            .field("workspace_count", &self.workspaces.len())
+            .field("digest", &self.digest)
+            .finish()
+    }
 }
 
 impl LocalCompanionConfig {
@@ -169,6 +196,164 @@ impl LocalCompanionConfig {
     }
 }
 
+struct ApprovalRuntimeState {
+    evaluator: ApprovalEvaluator,
+    hosts: BTreeMap<String, GitEffectHost>,
+}
+
+#[derive(Clone)]
+pub struct ApprovalRuntime {
+    state: Arc<Mutex<ApprovalRuntimeState>>,
+}
+
+impl std::fmt::Debug for ApprovalRuntime {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        formatter
+            .debug_struct("ApprovalRuntime")
+            .field("state", &"<redacted>")
+            .finish()
+    }
+}
+
+impl ApprovalRuntime {
+    /// Builds the opt-in Git approval runtime without exposing a confirmation minting API.
+    ///
+    /// # Errors
+    ///
+    /// Rejects unsafe state/Git paths, invalid keys, ledger failures and unsupported workspaces.
+    pub fn new(
+        config: &LocalCompanionConfig,
+        git_program: &Path,
+        state_root: &Path,
+        secret: &[u8],
+    ) -> Result<Self, DaemonError> {
+        if !state_root.is_absolute() {
+            return Err(DaemonError::Configuration);
+        }
+        let ledger =
+            DurableReplayLedger::open(state_root).map_err(|_| DaemonError::Configuration)?;
+        let policy = ApprovalPolicy::new(
+            [EffectKind::GitCommit],
+            APPROVAL_MAX_TTL_SECONDS,
+            APPROVAL_MAX_CONSUMED_TOKENS,
+        )
+        .map_err(|_| DaemonError::Configuration)?;
+        let evaluator = ApprovalEvaluator::with_replay_ledger(policy, secret, Box::new(ledger))
+            .map_err(|_| DaemonError::Configuration)?;
+        let mut hosts = BTreeMap::new();
+        for (workspace_id, workspace) in &config.workspaces {
+            let host = GitEffectHost::open(
+                &workspace.root,
+                git_program,
+                config.max_file_bytes,
+                EFFECT_MAX_EXECUTION_DELAY_SECONDS,
+            )
+            .map_err(|_| DaemonError::Configuration)?;
+            hosts.insert(workspace_id.clone(), host);
+        }
+        Ok(Self {
+            state: Arc::new(Mutex::new(ApprovalRuntimeState { evaluator, hosts })),
+        })
+    }
+
+    /// Loads an all-or-none opt-in runtime from private host environment values.
+    ///
+    /// # Errors
+    ///
+    /// Rejects partial, malformed, non-canonical or unsafe configuration.
+    pub fn from_environment(config: &LocalCompanionConfig) -> Result<Option<Self>, DaemonError> {
+        let git_program = std::env::var_os(GIT_PROGRAM_ENV);
+        let state_root = std::env::var_os(APPROVAL_STATE_ROOT_ENV);
+        let encoded_secret = std::env::var_os(APPROVAL_SECRET_ENV);
+        if git_program.is_none() && state_root.is_none() && encoded_secret.is_none() {
+            return Ok(None);
+        }
+        let git_program = PathBuf::from(git_program.ok_or(DaemonError::Configuration)?);
+        let state_root = PathBuf::from(state_root.ok_or(DaemonError::Configuration)?);
+        let encoded_secret = encoded_secret
+            .and_then(|value| value.into_string().ok())
+            .ok_or(DaemonError::Configuration)?;
+        if !(43..=171).contains(&encoded_secret.len())
+            || encoded_secret.contains('=')
+            || !encoded_secret
+                .bytes()
+                .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'-' | b'_'))
+        {
+            return Err(DaemonError::Configuration);
+        }
+        let secret = Zeroizing::new(
+            URL_SAFE_NO_PAD
+                .decode(encoded_secret.as_bytes())
+                .map_err(|_| DaemonError::Configuration)?,
+        );
+        if !(32..=128).contains(&secret.len())
+            || URL_SAFE_NO_PAD.encode(secret.as_slice()) != encoded_secret
+        {
+            return Err(DaemonError::Configuration);
+        }
+        Self::new(config, &git_program, &state_root, &secret).map(Some)
+    }
+
+    fn execute_git_commit(
+        &self,
+        mut params: ExecuteGitCommitParams,
+        now_unix_seconds: u64,
+    ) -> Result<Value, DaemonError> {
+        if !valid_identifier(&params.workspace_id)
+            || !valid_identifier(&params.operation_id)
+            || !valid_identifier(&params.output_id)
+        {
+            return Err(DaemonError::Effect);
+        }
+        let expected_sha256 = parse_digest(&params.expected_sha256)?;
+        let input = GitCommitEffectInput::new(
+            params.operation_id.clone(),
+            format!("{}.hwpx", params.output_id),
+            expected_sha256,
+            params.message.clone(),
+        )
+        .map_err(|_| DaemonError::Effect)?;
+        let confirmation = ConfirmationToken::parse(std::mem::take(&mut params.confirmation_token))
+            .map_err(|_| DaemonError::Effect)?;
+        let mut state = self.state.lock().map_err(|_| DaemonError::Effect)?;
+        let host = state
+            .hosts
+            .get(&params.workspace_id)
+            .cloned()
+            .ok_or(DaemonError::Effect)?;
+        let request = host
+            .prepare_approval_request(
+                &input,
+                params.actor_sha256.clone(),
+                params.tenant_sha256.clone(),
+                params.requested_at_unix_seconds,
+            )
+            .map_err(|_| DaemonError::Effect)?;
+        let scopes = BTreeSet::from([ApprovalScope::WorkstationControl]);
+        let authorization = state
+            .evaluator
+            .authorize(&request, &scopes, Some(&confirmation), now_unix_seconds)
+            .map_err(|_| DaemonError::Effect)?;
+        let receipt = host
+            .execute_git_commit(&input, authorization, now_unix_seconds)
+            .map_err(|_| DaemonError::Effect)?;
+        Ok(json!({
+            "workspace_id": params.workspace_id,
+            "operation_id": params.operation_id,
+            "output_id": params.output_id,
+            "commit_oid": receipt.commit_oid,
+            "previous_head": receipt.previous_head,
+            "updated_reference": receipt.updated_reference,
+            "output_sha256": receipt.output_sha256,
+            "target_sha256": receipt.target_sha256,
+            "plan_sha256": receipt.plan_sha256,
+            "approved_at_unix_seconds": receipt.approval.approved_at_unix_seconds,
+            "index_synchronized": receipt.index_synchronized,
+            "executed": true,
+        }))
+    }
+}
+
 pub struct SessionToken(Zeroizing<String>);
 
 impl std::fmt::Debug for SessionToken {
@@ -230,6 +415,7 @@ impl SessionToken {
 #[derive(Clone, Debug)]
 pub struct LocalCompanionDaemon {
     config: LocalCompanionConfig,
+    approval: Option<ApprovalRuntime>,
 }
 
 type HandleSuccess = (&'static str, String, Value);
@@ -238,7 +424,18 @@ type HandleFailure = (Option<&'static str>, Option<String>, DaemonError);
 impl LocalCompanionDaemon {
     #[must_use]
     pub fn new(config: LocalCompanionConfig) -> Self {
-        Self { config }
+        Self {
+            config,
+            approval: None,
+        }
+    }
+
+    #[must_use]
+    pub fn with_approval_runtime(config: LocalCompanionConfig, approval: ApprovalRuntime) -> Self {
+        Self {
+            config,
+            approval: Some(approval),
+        }
     }
 
     /// Handles one bounded private-protocol JSON value and returns a bounded response.
@@ -275,6 +472,7 @@ impl LocalCompanionDaemon {
             PROTOCOL_VERSION => PROTOCOL_VERSION,
             WORKFLOW_PROTOCOL_VERSION => WORKFLOW_PROTOCOL_VERSION,
             APPROVAL_PROTOCOL_VERSION => APPROVAL_PROTOCOL_VERSION,
+            EFFECT_PROTOCOL_VERSION => EFFECT_PROTOCOL_VERSION,
             _ => return Err((None, Some(request_id), DaemonError::Request)),
         };
         let supplied = Zeroizing::new(std::mem::take(&mut request.session_token));
@@ -328,6 +526,23 @@ impl LocalCompanionDaemon {
                 let params = parse_exact_params(request.params)
                     .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
                 self.prepare_git_commit_approval(&params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?
+            }
+            (EFFECT_PROTOCOL_VERSION, PrivateMethod::ExecuteGitCommit) => {
+                let params = parse_exact_params(request.params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
+                let now = current_unix_seconds()
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
+                self.approval
+                    .as_ref()
+                    .ok_or_else(|| {
+                        (
+                            Some(protocol),
+                            Some(request_id.clone()),
+                            DaemonError::Effect,
+                        )
+                    })?
+                    .execute_git_commit(params, now)
                     .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?
             }
             _ => {
@@ -532,6 +747,7 @@ enum PrivateMethod {
     Publish,
     PrepareGitCommit,
     PrepareGitCommitApproval,
+    ExecuteGitCommit,
 }
 
 #[derive(Deserialize)]
@@ -596,6 +812,20 @@ struct PrepareGitCommitApprovalParams {
     output_id: String,
     expected_sha256: String,
     message: String,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct ExecuteGitCommitParams {
+    workspace_id: String,
+    operation_id: String,
+    output_id: String,
+    expected_sha256: String,
+    message: String,
+    actor_sha256: String,
+    tenant_sha256: String,
+    requested_at_unix_seconds: u64,
+    confirmation_token: String,
 }
 
 #[derive(Clone, Copy, Deserialize)]
@@ -817,4 +1047,11 @@ fn path_identity(path: &Path) -> Result<String, DaemonError> {
 
 fn hex_digest(bytes: &[u8]) -> String {
     hex::encode(Sha256::digest(bytes))
+}
+
+fn current_unix_seconds() -> Result<u64, DaemonError> {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|duration| duration.as_secs())
+        .map_err(|_| DaemonError::Effect)
 }

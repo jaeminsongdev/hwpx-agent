@@ -2,8 +2,9 @@ use std::fs;
 use std::path::Path;
 
 use local_companion_daemon::{
-    APPROVAL_PROTOCOL_VERSION, CONFIG_VERSION, LocalCompanionConfig, LocalCompanionDaemon,
-    PROTOCOL_VERSION, SessionToken, TARGET_PROFILE, WORKFLOW_PROTOCOL_VERSION,
+    APPROVAL_PROTOCOL_VERSION, CONFIG_VERSION, EFFECT_PROTOCOL_VERSION, LocalCompanionConfig,
+    LocalCompanionDaemon, PROTOCOL_VERSION, SessionToken, TARGET_PROFILE,
+    WORKFLOW_PROTOCOL_VERSION,
 };
 use serde_json::{Value, json};
 use sha2::{Digest as _, Sha256};
@@ -57,6 +58,10 @@ fn approval_request(method: &str, params: &Value) -> Vec<u8> {
     request_with_protocol(APPROVAL_PROTOCOL_VERSION, method, params)
 }
 
+fn effect_request(method: &str, params: &Value) -> Vec<u8> {
+    request_with_protocol(EFFECT_PROTOCOL_VERSION, method, params)
+}
+
 fn request_with_protocol(protocol: &str, method: &str, params: &Value) -> Vec<u8> {
     serde_json::to_vec(&json!({
         "protocol_version": protocol,
@@ -75,7 +80,11 @@ fn digest(bytes: &[u8]) -> String {
 #[test]
 fn health_is_bounded_and_redacts_paths_and_token() {
     let (temporary, config) = fixture();
+    let config_debug = format!("{config:?}");
+    assert!(!config_debug.contains(&temporary.path().to_string_lossy().to_string()));
     let daemon = LocalCompanionDaemon::new(config);
+    let daemon_debug = format!("{daemon:?}");
+    assert!(!daemon_debug.contains(&temporary.path().to_string_lossy().to_string()));
     let response = daemon.handle(&request("health", &json!({})), &token());
     assert_eq!(response["ok"], true);
     assert_eq!(response["result"]["status"], "ready");
@@ -481,6 +490,41 @@ fn approval_v3_prepares_exact_git_target_and_plan_without_execution() {
 }
 
 #[test]
+fn effect_v4_is_default_off_and_version_crossing_fails_closed() {
+    let (_temporary, config) = fixture();
+    let daemon = LocalCompanionDaemon::new(config);
+    let params = json!({
+        "workspace_id": "primary",
+        "operation_id": "op_commit0001",
+        "output_id": "result-01",
+        "expected_sha256": "a".repeat(64),
+        "message": "Publish approved HWPX",
+        "actor_sha256": "b".repeat(64),
+        "tenant_sha256": "c".repeat(64),
+        "requested_at_unix_seconds": 2_000_000_000_u64,
+        "confirmation_token": "confirm_v1.invalid.invalid",
+    });
+    assert_eq!(
+        daemon.handle(&effect_request("execute_git_commit", &params), &token())["ok"],
+        false
+    );
+    for protocol_request in [
+        request_with_protocol(PROTOCOL_VERSION, "execute_git_commit", &params),
+        workflow_request("execute_git_commit", &params),
+        approval_request("execute_git_commit", &params),
+    ] {
+        assert_eq!(daemon.handle(&protocol_request, &token())["ok"], false);
+    }
+    assert_eq!(
+        daemon.handle(
+            &effect_request("prepare_git_commit_approval", &params),
+            &token()
+        )["ok"],
+        false
+    );
+}
+
+#[test]
 fn checked_in_private_contract_matches_runtime_constants() {
     let contract: Value = serde_json::from_str(include_str!(
         "../../../protocol/private/p17-local-daemon-v1.json"
@@ -518,6 +562,19 @@ fn checked_in_approval_binding_contract_matches_runtime_constants() {
     assert_eq!(contract["migration"]["v2_workflow_preserved"], true);
     assert_eq!(contract["approval"]["effect"], "git_commit");
     assert_eq!(contract["approval"]["executes_process"], false);
+    assert_eq!(contract["public_identifiers"]["accepts_paths"], false);
+}
+
+#[test]
+fn checked_in_effect_contract_matches_runtime_constants() {
+    let contract: Value = serde_json::from_str(include_str!(
+        "../../../protocol/private/p17-local-daemon-v4.json"
+    ))
+    .unwrap_or_else(|error| panic!("contract: {error}"));
+    assert_eq!(contract["protocol_version"], EFFECT_PROTOCOL_VERSION);
+    assert_eq!(contract["default"]["git_commit_enabled"], false);
+    assert_eq!(contract["confirmation"]["minting_api_exposed"], false);
+    assert_eq!(contract["execution"]["semantic_effect"], "git_commit");
     assert_eq!(contract["public_identifiers"]["accepts_paths"], false);
 }
 
