@@ -44,7 +44,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0090 | P17-05 | Exact-commit MCP local file/Git plan-only run 16/16 PASS |
 | P-0091 | P17-06 | State/create journal/CLI 17/17; adapter and pull/push/checkpoint remain |
 | P-0092 | P17-01 | Deterministic 19-entry package core 7/7; registered remote app absent |
-| P-0093 | P17-08 | Widget 133/133, MCP 13/13, actual disposable Git 20/20; visible click and canonical installed-plugin v0.4 qualification open |
+| P-0093 | P17-08 | Widget 133/133, MCP 13/13, disposable Git 20/20, installed v0.4 prepare 18/18; visible click/effect open |
 
 ## Current P17-08 evidence
 
@@ -59,7 +59,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - Personal plugin source: `C:\Users\thdqu\plugins\hwpx-agent-local`, version
   `0.4.0+codex.20260906130036`; enabled and configured without MCP env secrets.
 - Fresh Codex CLI health and prepare calls passed. They did not render trusted UI and did not
-  execute Git. A challenge seen in diagnostic event output is dead because that process ended.
+  execute Git. Canonical run `9e2a6c6e958642e6a7f72dc9dac0bf25` passed 18/18 and bound exact
+  installed arguments/artifact hashes while preserving Git state and leaving no approval-state file.
 - Visible confirmation requires a newly loaded Codex GUI task because this task's tool inventory
   predates plugin v0.4. Do not describe the CLI diagnostic as an actual user click.
 - Disposable click fixture: `D:\개발\hwpx-agent-local-workspace`, branch `main`, HEAD

@@ -41,7 +41,14 @@ prepared the exact plan for a copied synthetic HWPX in the dedicated disposable 
 diagnostics prove the installed plugin can start v0.4 and reach the prepare boundary, but they are
 not a trusted confirmation click.
 
+The canonical installed-plugin successor run `9e2a6c6e958642e6a7f72dc9dac0bf25` passed all 18
+checks from clean source commit `48061260f36619077fb8114ecb8eb86c18edbca5`. It bound the exact
+installed arguments and hashes for Node, the bridge, daemon, widget, Git executable and three plugin
+configuration files. One fresh session called health exactly once and a second called only the
+read-only prepare tool. The disposable repository HEAD, index, status and output hash were identical
+before and after; no approval-state file remained. The checked-in qualification intentionally records
+`actual_trusted_ui=false`, `actual_git_effect=false` and `actual_hangul=false`.
+
 P17-08 therefore remains open. The remaining acceptance is a visible MCP App render in a freshly
 loaded Codex task, an actual user checkbox/button action, receipt verification in the disposable
-workspace, and a canonical installed-plugin qualification record. No Hangul process or access
-prompt is part of this Git-widget gate.
+workspace and replay rejection. No Hangul process or access prompt is part of this Git-widget gate.
