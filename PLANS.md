@@ -30,7 +30,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P14 | scoped local reference/disposable PostgreSQL PASS | implementation/p14/P14_GATE_REPORT.md |
 | P15 | scoped local MCP reference/Inspector staging PASS | implementation/p15/P15_GATE_REPORT.md |
 | P16 | in progress | 01,03,04 pass; 02 actual app pending; 05 local pass; 06 dedicated local host v14 PASS |
-| P17 | in progress | 03 local daemon and 04 local MCP/plugin PASS; 01/02 and 05–09 pending |
+| P17 | in progress | 01 package core and 03–05 implemented; 01 remote app, 02 and 06–09 remain open |
 | P18 | blocked by P12/P13/P16/P17 | quality/security/performance/DR |
 | P19 | blocked by P18 | production/license/submission |
 | P20 | post-GA | parity and Rust-native expansion |
@@ -49,6 +49,7 @@ Synthetic/component evidence is not actual render, save, cross-version or produc
 | P-0089A | P17-04 main binding | PASS: cachebuster reinstall bound to integrated main; run 890e1150a2184172abbe8af0ef3eb7b2 11/11 through fresh Codex |
 | P-0090 | P17-05 local file/Git | PASS: exact-commit MCP run bf248400ce1c4985bb2353aa9209ec02, 16/16; path-free IDs, traversal/large-file rejection, Git plan only |
 | P-0091 | P17-06 project sync | In progress: state machine + create-new durable journal + local CLI 17/17; authenticated remote adapter and pull/push/checkpoint CLI remain |
+| P-0092 | P17-01 Codex package | In progress: deterministic 19-entry package core 7/7; registered remote app and qualified connection are absent |
 
 - P05-07 v2 fixture 9096502 has two linear sections and one break in product inspection.
   Attempt17 read only the first marker. Earlier timeouts/failures remain preserved in their reports.
