@@ -27,18 +27,18 @@ acceptance = load_acceptance()
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = "implementation/p17/qualification/current-workspace-source-v19-20260907"
+BASE = "implementation/p17/qualification/current-workspace-source-v20-20260907"
 QUALIFICATION = ROOT / BASE
-RUN_ID = "8945f8951aa14b13b5757b63725bd71e"
-BASE_COMMIT = "4b7d6b1f0fd2ca5f16f42843abfdd56eda9f68f1"
-RECEIPT_SHA256 = "b686f8d69e2a63b29bd45b3af75fbcc91ce63d91953b5773e7ab6984f9c9db46"
+RUN_ID = "7f1b1756db794407a6256398170b7bf8"
+BASE_COMMIT = "cacbc936e4d225e1a4424efb806aa96f86965ec5"
+RECEIPT_SHA256 = "f5eafd5b3d1fef9d46c9fb7b2eb5179e9d2e1998387025470cc93484aee4c2c3"
 CARGO_METADATA_PROJECTION_SHA256 = (
     "d7dd720fa29a88f5df06dc692b0a56c1d8c70142a88227b4c8ca5f14962bd856"
 )
 WORKSPACE_MEMBER_COUNT = 25
 PREVIOUS_QUALIFICATION = (
-    "implementation/p17/qualification/current-workspace-source-v18-20260907/contract.json",
-    "accd545b2c32cbc578904f6583716209acabbd982d70cbbc1d1780013a692e4e",
+    "implementation/p17/qualification/current-workspace-source-v19-20260907/contract.json",
+    "79b3fafc8bb080ad271b6d44cfae9754dfc3e613eaa788425e762a94a6fabcfa",
 )
 IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     {
@@ -48,8 +48,8 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     },
     {
         "path": "crates/hwpx-package/src/vs1_layout.rs",
-        "bytes": 41224,
-        "sha256": "afe3a9061c5827456f464c8999df07816e6412237477d107c67d0436f53b0292",
+        "bytes": 42022,
+        "sha256": "cddf9ee844f9a4665a2dc6c94cd1582689caebbab6970a2c0b6da395aaae4e25",
     },
     {
         "path": "crates/hwpx-package/tests/vs1_layout.rs",
@@ -88,13 +88,13 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     },
     {
         "path": "implementation/p05/tools/verify_p05_hancom_pdf.py",
-        "bytes": 29680,
-        "sha256": "5e35f27b5d58cc5c11119725a3506cdd6afa19d45cdd5228f572f55dd3d075f2",
+        "bytes": 30958,
+        "sha256": "9baab720b20b4465d1f33d3c72870f4de19b45785061718a4ebfb68891e92deb",
     },
     {
         "path": "implementation/p05/tests/test_verify_p05_hancom_pdf.py",
-        "bytes": 12310,
-        "sha256": "d3cd7f9d253113ed74085060a3f3506d76383d37fbb4fd4a1ca63798b84231b7",
+        "bytes": 14165,
+        "sha256": "d4daaefd9f61b5dc1b58c8ae63ae54e91f2255c5c38e0f95f1a4408e44c740d5",
     },
     {
         "path": "crates/hwpx-package/examples/p05_09_vs1_layout_target_fixture.rs",
@@ -108,8 +108,8 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     },
     {
         "path": "implementation/p05/P05-09_VS1_LAYOUT_POLICY.md",
-        "bytes": 2644,
-        "sha256": "82a9ac8ae87cb1f73e10eaf147fd1af3d8cf97b23ee2bf3712afbe855e5a7a52",
+        "bytes": 3534,
+        "sha256": "c35a93cc7bbe79ad895cee9ddca6089fafd951bc0e3149f0900632493181771f",
     },
     {
         "path": "implementation/p05/render-expectations/p05-09-vs1-layout.json",
@@ -118,28 +118,43 @@ IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     },
     {
         "path": "crates/hwpx-package/src/header_footer.rs",
-        "bytes": 67813,
-        "sha256": "a5e8fb915d1334aaa802ad09b2c1bbad66a4a3e3fd718ea1c373f5933ace732f",
+        "bytes": 70628,
+        "sha256": "4dc7041d72d9c8db2e8b741ee9f9dd78e6aa6dad2c9d4abccd858129d66a21de",
     },
     {
         "path": "crates/hwpx-package/tests/header_footer.rs",
-        "bytes": 23371,
-        "sha256": "6ec0a7c23d0846612b3dc56bcd91ed970abc65adcf6f5b06beedfd20a0519ad9",
+        "bytes": 24526,
+        "sha256": "711ec716efb68c02d9e5bec0e7303252ecdf0ddb2451ac03665769133e9a1d81",
     },
     {
         "path": "crates/hwpx-package/examples/p05_08_header_footer_target_fixture.rs",
-        "bytes": 20367,
-        "sha256": "a14151e6d7ed923ddd38c841167d7d5e6c92866c0dbabfb37aff53a9fdb8b31d",
+        "bytes": 33795,
+        "sha256": "42e73472e9491e9e59a4ed4c2fa918193985c72dcd23f1e41bd3135901daf90e",
     },
     {
         "path": "implementation/p05/P05-08_HEADER_FOOTER_POLICY.md",
-        "bytes": 5007,
-        "sha256": "f4ce9064b30de8e939b9153b80da314e0492693eee8564704dffb6b60bc9dc8c",
+        "bytes": 7272,
+        "sha256": "30386ea5a1f438dc42c6f25c98660f20ab9e47620681ce4df0412776150ebae3",
     },
     {
         "path": "implementation/p05/P05-08_NUMERIC_PARAGRAPH_ID_REPAIR.md",
-        "bytes": 3656,
-        "sha256": "2b1783165951ce54ab7994ae83be2632d2372268703792e2e1b0bb218d4b8bf3",
+        "bytes": 3851,
+        "sha256": "6567064395c1f8a3df1aaabaa5d56a8b0181610f5465d5461361812fede30e6c",
+    },
+    {
+        "path": "implementation/p05/P05-08_HANCOM2020_MASTER_PAGE_REPAIR.md",
+        "bytes": 6233,
+        "sha256": "88d76133576de8bc86b5be4ec7731440da2fc2669d407bdf9ffc8d46d394a385",
+    },
+    {
+        "path": "implementation/p05/P05-09_HANCOM2020_ACTUAL_GATE.md",
+        "bytes": 4604,
+        "sha256": "a86a506d554463a257867006167adfa8433e3e77872b2ca01add90eeeb5a243b",
+    },
+    {
+        "path": "implementation/p05/tools/create-hancom-2020-master-reference.ps1",
+        "bytes": 3631,
+        "sha256": "5dbb7b3efa643e8e8ad04cd4aa0d4ac3d1cc3cb1eca555b9b1a07fbef20c9784",
     },
     {
         "path": "crates/local-sync/src/lib.rs",
@@ -857,6 +872,7 @@ CLAIMS = {
     "complete_source_fallback_negative_v17_bound": True,
     "retention_mirror_source_successor_v18_bound": True,
     "p15_auth_source_successor_v19_bound": True,
+    "p05_current_hangul_gate_sources_v20_bound": True,
     "actual_hangul": False,
     "registered_host": False,
     "production": False,
@@ -867,7 +883,7 @@ GUARD_SOURCES = (
     "tools/p17/run_current_workspace_source_checks.py",
     "tools/p17/current_workspace_source_qualification.py",
     "tools/p17/tests/test_current_workspace_source_qualification.py",
-    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V19.md",
+    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V20.md",
 )
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -958,7 +974,7 @@ def receipt_path(root: Path) -> Path:
 
 def expected_current(root: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v19",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v20",
         "scope": "current_pc_source_binding_successor_only",
         "run_id": RUN_ID,
         "source_commit": BASE_COMMIT,
@@ -977,8 +993,8 @@ def expected_current(root: Path) -> dict[str, Any]:
 
 def expected_contract(root: Path, current_path: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v19",
-        "qualification_id": "p17.current-workspace-source.v19.20260907",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v20",
+        "qualification_id": "p17.current-workspace-source.v20.20260907",
         "base_commit": BASE_COMMIT,
         "scope": "current_pc_source_binding_successor_only",
         "claims": CLAIMS,
