@@ -79,11 +79,11 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
-  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v17
-  passed 11/11 at run `97f6eb9cdecf4d51862983f2ba1474b6` on clean commit `d07b412`; it composes
-  v16 and binds the complete fallback-negative regression through 22 exact successors, 115 exact
+  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v18
+  passed 11/11 at run `b025d97ee6cf49c1887363ed8125835d` on clean commit `15d8f9b`; it composes
+  v17 and binds the retention mirror source bridge through 24 exact successors, 115 exact
   implementation files and 25 locked/offline Cargo members. Contract SHA-256 is
-  `3c4082a70f45d2359f46d78baffd17e6da53c48de80f315d73314c5344a59e7e`.
+  `accd545b2c32cbc578904f6583716209acabbd982d70cbbc1d1780013a692e4e`.
   Current/independent FULL remain pending.
 - P05-08 fixed input passed strict product inspection and the policy-locked official Hancom model
   parsed all synthetic main/header/footer markers. Actual attempts 01-02 each returned false from
@@ -176,9 +176,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   and non-atomic, while pull/push, persistent credential custody, Hangul and production remain
   unproven. See
   `implementation/p17/P17-06_POSTGRES_CHECKPOINT_HOST_V11.md` and its frozen qualification. Current
-  source successor v17 composes the v12 PostgreSQL binding with the later documentation,
-  Telemetry, frozen P15 context, docs/widget validation and complete negative-test bridges without
-  expanding those claims.
+  source successor v18 composes the v12 PostgreSQL binding with the later documentation,
+  Telemetry, frozen P15 context, docs/widget validation, negative-test and retention mirror source
+  bridges without expanding those claims.
 
 ## Risks and holds
 
