@@ -32,6 +32,14 @@ class LocalMcpChecksTests(unittest.TestCase):
         self.assertIn('"network_used": False', source)
         self.assertNotIn("shell=True", source)
 
+    def test_windows_build_tools_are_resolved_without_a_shell(self) -> None:
+        source = (checks.ROOT / "tools/p17/run_local_mcp_checks.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("shutil.which(arguments[0])", source)
+        self.assertIn("[executable, *arguments[1:]]", source)
+        self.assertNotIn("shell=True", source)
+
     def test_checked_in_contract_has_one_closed_health_tool(self) -> None:
         import json
 

@@ -63,8 +63,11 @@ def canonical(document: object) -> str:
 
 
 def command(arguments: list[str], *, timeout: int = 180) -> subprocess.CompletedProcess[str]:
+    executable = shutil.which(arguments[0])
+    if executable is None:
+        raise AcceptanceError("build_tool_missing")
     completed = subprocess.run(
-        arguments,
+        [executable, *arguments[1:]],
         cwd=ROOT,
         check=False,
         capture_output=True,

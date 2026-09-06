@@ -25,6 +25,11 @@ The machine-readable boundary is `protocol/private/p17-local-mcp-v1.json`. The c
 acceptance must prove modern MCP initialization, one-tool discovery, strict schema rejection, the
 actual Node-to-Rust call, redaction, shutdown and cleanup before the bridge can be qualified.
 
+The first clean-commit acceptance attempt stopped before MCP startup because the Python harness did
+not resolve the Windows `pnpm.cmd` shim while keeping `shell=False`. It produced no PASS evidence.
+The harness now resolves each executable explicitly and still never invokes a shell; a fresh clean
+repair-commit run is required.
+
 ## Explicit non-claims
 
 - No personal Codex marketplace or plugin is installed by this increment.
