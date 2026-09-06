@@ -45,7 +45,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
 | P-0089/0089A | P17-04 | Bridge and installed-plugin qualification PASS; main binding PASS |
 | P-0090 | P17-05 | Exact-commit MCP local file/Git plan-only run 16/16 PASS |
-| P-0091/0091A/0091B | P17-06 | Durable sync/adapter/CLI component; v3 checkpoint maps exactly to P15 with private mirror/head binding and stable UUIDv5 idempotency; 42/42 local tests; authenticated host transport remains |
+| P-0091/0091A/0091B | P17-06 | Durable sync/adapter/CLI component; exact canonical v3 checkpoint maps to P15 with private mirror/head binding and stable UUIDv5 idempotency; 43/43 local tests; authenticated host transport remains |
 | P-0092 | P17-01 | Deterministic 19-entry package core 7/7; registered remote app absent |
 | P-0093 | P17-08 | Widget 133/133, MCP 13/13, disposable Git 20/20, installed v0.4 prepare 18/18; visible click/effect open |
 | P-0094 | P17-07 | Local rebase/branch/manual resolver and stale-head CLI surface 37/37; host/UI/concurrent evidence open |
@@ -125,8 +125,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P17-06 checkpoint service mapping preserves the exact P15 project/revision/label/note input,
   derives a stable UUIDv5 idempotency key from the private project/branch/mirror/key identity, and
   retains branch, mirror, generation and private request SHA-256 outside the public arguments. The
-  mapped JSON validates against the actual P15 Draft 2020-12 schema and all 42 local tests pass.
-  Authenticated mirror/head verification and service dispatch remain intentionally open; see
+  server decoder rejects duplicate/unknown/old-version/noncanonical requests, the mapped JSON
+  validates against the actual P15 Draft 2020-12 schema, and all 43 local tests pass. Authenticated
+  mirror/head verification and service dispatch remain intentionally open; see
   `implementation/p17/P17-06_CHECKPOINT_SERVICE_MAPPING_V6.md`.
 
 ## Risks and holds

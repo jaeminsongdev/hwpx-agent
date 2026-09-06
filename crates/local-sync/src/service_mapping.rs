@@ -1,13 +1,18 @@
 use std::fmt;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sha2::{Digest as _, Sha256};
 use uuid::Uuid;
 
-use crate::{CheckpointRequest, SyncError};
+use crate::{
+    CheckpointRequest, REMOTE_SYNC_REQUEST_SCHEMA_VERSION, RemoteHead, SyncError,
+    strict_json::parse_unique_value, valid_checkpoint_label, valid_checkpoint_note,
+    valid_idempotency_key, valid_prefixed_identifier,
+};
 
 const CHECKPOINT_IDEMPOTENCY_NAMESPACE: Uuid =
     Uuid::from_u128(0x41af_5ff2_7349_5aa1_a197_a417_38e8_1006);
+const MAX_PRIVATE_REQUEST_BYTES: usize = 16_384;
 
 /// Host-owned correlation fields required by the P15 `project_checkpoint` input contract.
 #[derive(Clone, Eq, PartialEq)]
@@ -267,6 +272,53 @@ pub fn map_checkpoint_to_service(
     })
 }
 
+/// Decodes the exact canonical P17 private checkpoint bytes and maps them to P15 service input.
+///
+/// # Errors
+///
+/// Rejects empty/oversized JSON, duplicate or unknown fields, non-v3 requests, non-checkpoint
+/// operations, invalid values and any alternate byte encoding of an otherwise equivalent request.
+pub fn decode_checkpoint_to_service(
+    request_bytes: &[u8],
+    context: &CheckpointServiceContext,
+) -> Result<CheckpointServiceBinding, SyncError> {
+    if request_bytes.is_empty() || request_bytes.len() > MAX_PRIVATE_REQUEST_BYTES {
+        return Err(SyncError::InvalidRequest);
+    }
+    let value = parse_unique_value(request_bytes).map_err(|()| SyncError::InvalidRequest)?;
+    let wire: IncomingCheckpointWireRequest =
+        serde_json::from_value(value).map_err(|_| SyncError::InvalidRequest)?;
+    if wire.schema_version != REMOTE_SYNC_REQUEST_SCHEMA_VERSION
+        || wire.operation != "checkpoint"
+        || !valid_prefixed_identifier(&wire.project_id, "prj_")
+        || !valid_prefixed_identifier(&wire.branch_id, "brn_")
+        || !valid_prefixed_identifier(&wire.mirror_id, "mir_")
+        || !valid_idempotency_key(&wire.idempotency_key)
+        || !valid_checkpoint_label(&wire.label)
+        || !valid_checkpoint_note(wire.note.as_deref())
+    {
+        return Err(SyncError::InvalidRequest);
+    }
+    let request = CheckpointRequest {
+        project_id: wire.project_id,
+        branch_id: wire.branch_id,
+        mirror_id: wire.mirror_id,
+        expected_head: RemoteHead::new(
+            wire.expected_head.revision_id,
+            wire.expected_head.generation,
+        )?,
+        idempotency_key: wire.idempotency_key,
+        label: wire.label,
+        note: wire.note,
+    };
+    if request.expected_head().revision_id().is_none()
+        || request.encoded_wire_request()? != request_bytes
+    {
+        return Err(SyncError::InvalidRequest);
+    }
+    map_checkpoint_to_service(&request, context)
+}
+
 #[derive(Serialize)]
 struct CheckpointIdempotencyName<'a> {
     project_id: &'a str,
@@ -284,6 +336,27 @@ struct CheckpointServiceIntent<'a> {
     label: &'a str,
     #[serde(skip_serializing_if = "Option::is_none")]
     note: Option<&'a str>,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct IncomingCheckpointWireRequest {
+    schema_version: String,
+    operation: String,
+    project_id: String,
+    branch_id: String,
+    mirror_id: String,
+    expected_head: IncomingCheckpointWireHead,
+    idempotency_key: String,
+    label: String,
+    note: Option<String>,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct IncomingCheckpointWireHead {
+    revision_id: Option<String>,
+    generation: u64,
 }
 
 fn valid_request_id(value: &str) -> bool {

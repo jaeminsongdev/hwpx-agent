@@ -2,7 +2,8 @@ use std::fmt;
 
 use local_sync::{
     CheckpointRequest, CheckpointServiceContext, Connectivity, LocalMirror, PullRequest,
-    PushRequest, RemoteFailure, RemoteHead, RemoteSyncPort, SyncError, map_checkpoint_to_service,
+    PushRequest, RemoteFailure, RemoteHead, RemoteSyncPort, SyncError,
+    decode_checkpoint_to_service, map_checkpoint_to_service,
 };
 use serde_json::Value;
 use sha2::{Digest as _, Sha256};
@@ -192,5 +193,35 @@ fn mapping_debug_and_validation_fail_closed() -> TestResult {
             Err(SyncError::InvalidRequest)
         );
     }
+    Ok(())
+}
+
+#[test]
+fn exact_private_decoder_rejects_alternate_or_ambiguous_json() -> TestResult {
+    let context = CheckpointServiceContext::new("req_checkpoint01".to_owned(), "ko-KR".to_owned())?;
+    let exact = br#"{"schema_version":"hwpx-agent.remote-sync-request/v3","operation":"checkpoint","project_id":"prj_project01","branch_id":"brn_branch001","mirror_id":"mir_mirror001","expected_head":{"revision_id":"rev_revision01","generation":7},"idempotency_key":"checkpoint-key-0001","label":"Reviewed baseline"}"#;
+    let binding = decode_checkpoint_to_service(exact, &context)?;
+    assert_eq!(binding.expected_generation(), 7);
+    assert_eq!(binding.arguments().label(), "Reviewed baseline");
+
+    let candidates: &[&[u8]] = &[
+        b"",
+        br#"{"schema_version":"hwpx-agent.remote-sync-request/v2","operation":"checkpoint","project_id":"prj_project01","branch_id":"brn_branch001","mirror_id":"mir_mirror001","expected_head":{"revision_id":"rev_revision01","generation":7},"idempotency_key":"checkpoint-key-0001","label":"Reviewed baseline"}"#,
+        br#"{"schema_version":"hwpx-agent.remote-sync-request/v3","operation":"pull","project_id":"prj_project01","branch_id":"brn_branch001","mirror_id":"mir_mirror001","expected_head":{"revision_id":"rev_revision01","generation":7},"idempotency_key":"checkpoint-key-0001","label":"Reviewed baseline"}"#,
+        br#"{"schema_version":"hwpx-agent.remote-sync-request/v3","operation":"checkpoint","project_id":"prj_project01","project_id":"prj_project02","branch_id":"brn_branch001","mirror_id":"mir_mirror001","expected_head":{"revision_id":"rev_revision01","generation":7},"idempotency_key":"checkpoint-key-0001","label":"Reviewed baseline"}"#,
+        br#"{"schema_version":"hwpx-agent.remote-sync-request/v3","operation":"checkpoint","project_id":"prj_project01","branch_id":"brn_branch001","mirror_id":"mir_mirror001","expected_head":{"revision_id":"rev_revision01","generation":7},"idempotency_key":"checkpoint-key-0001","label":"Reviewed baseline","extra":true}"#,
+        br#" {"schema_version":"hwpx-agent.remote-sync-request/v3","operation":"checkpoint","project_id":"prj_project01","branch_id":"brn_branch001","mirror_id":"mir_mirror001","expected_head":{"revision_id":"rev_revision01","generation":7},"idempotency_key":"checkpoint-key-0001","label":"Reviewed baseline"}"#,
+        br#"{"operation":"checkpoint","schema_version":"hwpx-agent.remote-sync-request/v3","project_id":"prj_project01","branch_id":"brn_branch001","mirror_id":"mir_mirror001","expected_head":{"revision_id":"rev_revision01","generation":7},"idempotency_key":"checkpoint-key-0001","label":"Reviewed baseline"}"#,
+    ];
+    for candidate in candidates {
+        assert_eq!(
+            decode_checkpoint_to_service(candidate, &context),
+            Err(SyncError::InvalidRequest)
+        );
+    }
+    assert_eq!(
+        decode_checkpoint_to_service(&vec![b' '; 16_385], &context),
+        Err(SyncError::InvalidRequest)
+    );
     Ok(())
 }

@@ -9,6 +9,7 @@ use thiserror::Error;
 mod adapter;
 mod service_mapping;
 mod store;
+mod strict_json;
 
 pub use adapter::{
     AuthenticatedRemoteSyncAdapter, AuthorizationHeader, CredentialFailure,
@@ -16,7 +17,7 @@ pub use adapter::{
 };
 pub use service_mapping::{
     CheckpointServiceArguments, CheckpointServiceBinding, CheckpointServiceContext,
-    map_checkpoint_to_service,
+    decode_checkpoint_to_service, map_checkpoint_to_service,
 };
 pub use store::{DurableMirrorStore, DurableSyncError, LoadedMirror, StoreError, StoreRevision};
 

@@ -20,7 +20,9 @@ Branch ID, mirror ID, expected generation and the exact private request SHA-256 
 binding object outside the public P15 arguments. Debug output redacts all identities, label, note,
 idempotency keys and digests. The new tests validate the actual mapped JSON against the embedded P15
 Draft 2020-12 schema, cover stable retry/cross-mirror separation and verify redaction and invalid
-context rejection. The complete `local-sync` suite passes 42 tests.
+context rejection. A server-side decoder additionally accepts only the exact canonical v3 checkpoint
+bytes and rejects duplicate or unknown keys, older versions, other operations, excess size and
+alternate key-order/whitespace encodings. The complete `local-sync` suite passes 43 tests.
 
 The machine contract is `protocol/private/p17-checkpoint-service-mapping-v1.json`; first-version
 admission and future versioning rules are recorded in

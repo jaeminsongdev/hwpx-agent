@@ -4,7 +4,14 @@
   "source": {
     "schema_version": "hwpx-agent.remote-sync-request/v3",
     "operation": "checkpoint",
-    "exact_private_request_sha256_retained": true
+    "exact_private_request_sha256_retained": true,
+    "decoder": {
+      "maximum_bytes": 16384,
+      "canonical_client_encoding_required": true,
+      "duplicate_or_unknown_fields": "reject",
+      "alternate_key_order_or_whitespace": "reject",
+      "v1_v2_or_non_checkpoint": "reject"
+    }
   },
   "target": {
     "catalog": "protocol/mcp/p15-public-tools-v1.json",
@@ -79,10 +86,11 @@
     "credential_processed": false
   },
   "evidence": {
-    "mapping_tests": 3,
-    "local_sync_tests": 42,
+    "mapping_tests": 4,
+    "local_sync_tests": 43,
     "p15_schema_validation": true,
-    "stable_retry_and_cross_mirror_negative_tests": true
+    "stable_retry_and_cross_mirror_negative_tests": true,
+    "duplicate_unknown_old_version_and_noncanonical_json_tests": true
   },
   "not_claimed": {
     "authenticated_mirror_registry": false,
