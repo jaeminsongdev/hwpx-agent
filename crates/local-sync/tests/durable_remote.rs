@@ -1,9 +1,9 @@
 use std::error::Error;
 
 use local_sync::{
-    CheckpointRequest, Connectivity, DurableMirrorStore, DurableSyncError, LocalMirror,
-    MirrorPhase, PullRequest, PushRequest, RemoteCheckpointReceipt, RemoteFailure, RemoteHead,
-    RemotePushReceipt, RemoteSnapshot, RemoteSyncPort, StoreError, SyncError,
+    CheckpointRequest, ConflictResolution, Connectivity, DurableMirrorStore, DurableSyncError,
+    LocalMirror, MirrorPhase, PullRequest, PushRequest, RemoteCheckpointReceipt, RemoteFailure,
+    RemoteHead, RemotePushReceipt, RemoteSnapshot, RemoteSyncPort, StoreError, SyncError,
 };
 use tempfile::tempdir;
 
@@ -347,6 +347,70 @@ fn pull_conflict_is_durably_recorded_without_overwriting_local_work() -> TestRes
     assert_eq!(snapshot.snapshot_sha256, digest('b'));
     assert_eq!(snapshot.pending_plan_sha256, Some(digest('c')));
     assert_eq!(snapshot.conflict_generation, Some(2));
+    Ok(())
+}
+
+#[test]
+fn conflict_resolution_is_one_exact_append_and_stale_writers_fail_closed() -> TestResult {
+    let temporary = tempdir()?;
+    let store = DurableMirrorStore::open(temporary.path())?;
+    let first = store.initialize(&mirror(Connectivity::Online)?)?;
+    store.update(&first, |state| {
+        state.queue_local_change(digest('b'), digest('c'))
+    })?;
+    let mut port = FakePort {
+        pull_result: Some(Ok(RemoteSnapshot {
+            head: head(2, 2)?,
+            snapshot_sha256: digest('d'),
+        })),
+        ..FakePort::default()
+    };
+    assert_eq!(
+        store.pull_remote(&mut port),
+        Err(DurableSyncError::Sync(SyncError::Conflict))
+    );
+    let conflict = store.load()?.ok_or("missing conflict")?;
+    assert_eq!(conflict.revision().sequence(), 3);
+    let stale_revision = conflict.revision().clone();
+
+    let (resolved_revision, ()) = store.update(conflict.revision(), |state| {
+        state.resolve_rebase(
+            RemoteSnapshot {
+                head: head(2, 2)?,
+                snapshot_sha256: digest('d'),
+            },
+            Some((digest('e'), digest('f'))),
+        )
+    })?;
+    assert_eq!(resolved_revision.sequence(), 4);
+    let resolved = store
+        .load()?
+        .ok_or("missing resolved state")?
+        .mirror()
+        .snapshot();
+    assert_eq!(resolved.phase, MirrorPhase::Ahead);
+    assert_eq!(
+        resolved.last_conflict_resolution,
+        Some(ConflictResolution::RebaseOperationPlan)
+    );
+    assert_eq!(resolved.snapshot_sha256, digest('e'));
+    assert_eq!(resolved.pending_plan_sha256, Some(digest('f')));
+
+    assert_eq!(
+        store.update(&stale_revision, |state| {
+            state.set_connectivity(Connectivity::Offline);
+            Ok(())
+        }),
+        Err(StoreError::Conflict)
+    );
+    assert_eq!(
+        store
+            .load()?
+            .ok_or("missing final state")?
+            .revision()
+            .sequence(),
+        4
+    );
     Ok(())
 }
 

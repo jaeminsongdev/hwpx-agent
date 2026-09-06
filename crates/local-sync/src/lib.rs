@@ -32,6 +32,14 @@ pub enum MirrorPhase {
     Conflict,
 }
 
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ConflictResolution {
+    RebaseOperationPlan,
+    Branch,
+    ManualMerge,
+}
+
 #[derive(Clone, Debug, Error, Eq, PartialEq)]
 pub enum SyncError {
     #[error("local sync request rejected")]
@@ -366,6 +374,8 @@ pub struct MirrorSnapshot {
     pub pending_checkpoint_idempotency_key: Option<String>,
     pub conflict_revision_id: Option<String>,
     pub conflict_generation: Option<u64>,
+    #[serde(default)]
+    pub last_conflict_resolution: Option<ConflictResolution>,
     pub last_checkpoint_id: Option<String>,
 }
 
@@ -387,6 +397,7 @@ impl fmt::Debug for MirrorSnapshot {
                 &self.pending_checkpoint_idempotency_key.is_some(),
             )
             .field("has_conflict", &self.conflict_generation.is_some())
+            .field("last_conflict_resolution", &self.last_conflict_resolution)
             .field("has_checkpoint", &self.last_checkpoint_id.is_some())
             .finish_non_exhaustive()
     }
@@ -406,6 +417,7 @@ pub struct LocalMirror {
     pending_push_idempotency_key: Option<String>,
     pending_checkpoint_idempotency_key: Option<String>,
     conflict_head: Option<RemoteHead>,
+    last_conflict_resolution: Option<ConflictResolution>,
     last_checkpoint_id: Option<String>,
 }
 
@@ -430,6 +442,7 @@ impl fmt::Debug for LocalMirror {
                 &self.pending_checkpoint_idempotency_key.is_some(),
             )
             .field("has_conflict", &self.conflict_head.is_some())
+            .field("last_conflict_resolution", &self.last_conflict_resolution)
             .field("has_checkpoint", &self.last_checkpoint_id.is_some())
             .finish_non_exhaustive()
     }
@@ -469,6 +482,7 @@ impl LocalMirror {
             pending_push_idempotency_key: None,
             pending_checkpoint_idempotency_key: None,
             conflict_head: None,
+            last_conflict_resolution: None,
             last_checkpoint_id: None,
         })
     }
@@ -500,6 +514,7 @@ impl LocalMirror {
             pending_push_idempotency_key: snapshot.pending_push_idempotency_key,
             pending_checkpoint_idempotency_key: snapshot.pending_checkpoint_idempotency_key,
             conflict_head,
+            last_conflict_resolution: snapshot.last_conflict_resolution,
             last_checkpoint_id: snapshot.last_checkpoint_id,
         })
     }
@@ -517,7 +532,7 @@ impl LocalMirror {
     #[must_use]
     pub fn snapshot(&self) -> MirrorSnapshot {
         MirrorSnapshot {
-            schema_version: "hwpx-agent.local-mirror/v3".to_owned(),
+            schema_version: "hwpx-agent.local-mirror/v4".to_owned(),
             project_id: self.project_id.clone(),
             branch_id: self.branch_id.clone(),
             mirror_id: self.mirror_id.clone(),
@@ -535,6 +550,7 @@ impl LocalMirror {
                 .as_ref()
                 .and_then(|head| head.revision_id.clone()),
             conflict_generation: self.conflict_head.as_ref().map(|head| head.generation),
+            last_conflict_resolution: self.last_conflict_resolution,
             last_checkpoint_id: self.last_checkpoint_id.clone(),
         }
     }
@@ -567,8 +583,127 @@ impl LocalMirror {
         self.pending_push_idempotency_key = None;
         self.pending_checkpoint_idempotency_key = None;
         self.phase = MirrorPhase::Ahead;
+        self.last_conflict_resolution = None;
         self.last_checkpoint_id = None;
         Ok(())
+    }
+
+    /// Resolves an exact stale head by rebasing the pending operation plan onto that head.
+    ///
+    /// A conflict without local work may omit the rebased pair and adopts the remote snapshot as
+    /// clean state. A conflict with local work must supply both the rebased output snapshot and
+    /// replacement operation-plan digest.
+    ///
+    /// # Errors
+    ///
+    /// Rejects non-conflict state, stale/mismatched remote evidence, malformed digests and partial
+    /// rebased pairs without changing the mirror.
+    pub fn resolve_rebase(
+        &mut self,
+        remote: RemoteSnapshot,
+        rebased: Option<(String, String)>,
+    ) -> Result<(), SyncError> {
+        self.validate_resolution_remote(&remote)?;
+        let had_local_plan = self.pending_plan_sha256.is_some();
+        let (snapshot_sha256, pending_plan_sha256, phase) = match (had_local_plan, rebased) {
+            (false, None) => (remote.snapshot_sha256.clone(), None, MirrorPhase::Clean),
+            (true, Some((snapshot, plan))) if valid_digest(&snapshot) && valid_digest(&plan) => {
+                (snapshot, Some(plan), MirrorPhase::Ahead)
+            }
+            _ => return Err(SyncError::InvalidRequest),
+        };
+        self.observed_head = remote.head;
+        self.observed_snapshot_sha256 = remote.snapshot_sha256;
+        self.snapshot_sha256 = snapshot_sha256;
+        self.pending_plan_sha256 = pending_plan_sha256;
+        self.conflict_head = None;
+        self.phase = phase;
+        self.last_conflict_resolution = Some(ConflictResolution::RebaseOperationPlan);
+        self.last_checkpoint_id = None;
+        Ok(())
+    }
+
+    /// Moves the pending local plan to a separately created branch at the exact old base.
+    ///
+    /// # Errors
+    ///
+    /// Rejects the current branch, a different base head/snapshot, malformed identity or any
+    /// non-conflict state without changing the mirror.
+    pub fn resolve_branch(
+        &mut self,
+        branch_id: String,
+        branch_base: RemoteSnapshot,
+    ) -> Result<(), SyncError> {
+        self.require_resolvable_conflict()?;
+        validate_remote_snapshot(&branch_base)?;
+        if !valid_prefixed_identifier(&branch_id, "brn_")
+            || branch_id == self.branch_id
+            || branch_base.head != self.observed_head
+            || branch_base.snapshot_sha256 != self.observed_snapshot_sha256
+        {
+            return Err(SyncError::InvalidRequest);
+        }
+        self.branch_id = branch_id;
+        self.observed_head = branch_base.head;
+        self.observed_snapshot_sha256 = branch_base.snapshot_sha256;
+        self.conflict_head = None;
+        self.phase = if self.pending_plan_sha256.is_some() {
+            MirrorPhase::Ahead
+        } else {
+            MirrorPhase::Clean
+        };
+        self.last_conflict_resolution = Some(ConflictResolution::Branch);
+        self.last_checkpoint_id = None;
+        Ok(())
+    }
+
+    /// Accepts one externally completed manual merge against the exact conflicting remote head.
+    ///
+    /// # Errors
+    ///
+    /// Rejects stale/mismatched remote evidence or malformed merged digests without changing the
+    /// mirror. The merged result always remains ahead until a normal push succeeds.
+    pub fn resolve_manual_merge(
+        &mut self,
+        remote: RemoteSnapshot,
+        merged_snapshot_sha256: String,
+        merged_operation_plan_sha256: String,
+    ) -> Result<(), SyncError> {
+        self.validate_resolution_remote(&remote)?;
+        if !valid_digest(&merged_snapshot_sha256) || !valid_digest(&merged_operation_plan_sha256) {
+            return Err(SyncError::InvalidRequest);
+        }
+        self.observed_head = remote.head;
+        self.observed_snapshot_sha256 = remote.snapshot_sha256;
+        self.snapshot_sha256 = merged_snapshot_sha256;
+        self.pending_plan_sha256 = Some(merged_operation_plan_sha256);
+        self.conflict_head = None;
+        self.phase = MirrorPhase::Ahead;
+        self.last_conflict_resolution = Some(ConflictResolution::ManualMerge);
+        self.last_checkpoint_id = None;
+        Ok(())
+    }
+
+    fn require_resolvable_conflict(&self) -> Result<(), SyncError> {
+        if self.phase == MirrorPhase::Conflict
+            && self.conflict_head.is_some()
+            && self.pending_push_idempotency_key.is_none()
+            && self.pending_checkpoint_idempotency_key.is_none()
+        {
+            Ok(())
+        } else {
+            Err(SyncError::InvalidState)
+        }
+    }
+
+    fn validate_resolution_remote(&self, remote: &RemoteSnapshot) -> Result<(), SyncError> {
+        self.require_resolvable_conflict()?;
+        validate_remote_snapshot(remote)?;
+        if self.conflict_head.as_ref() == Some(&remote.head) {
+            Ok(())
+        } else {
+            Err(SyncError::InvalidResponse)
+        }
     }
 
     /// Pulls a remote snapshot only through the injected port.
@@ -595,6 +730,7 @@ impl LocalMirror {
                 validate_conflict_head(&self.observed_head, &head)?;
                 self.conflict_head = Some(head);
                 self.phase = MirrorPhase::Conflict;
+                self.last_conflict_resolution = None;
                 return Err(SyncError::Conflict);
             }
             Err(error) => return Err(map_remote_failure(&error)),
@@ -610,6 +746,7 @@ impl LocalMirror {
         if self.phase == MirrorPhase::Ahead {
             self.conflict_head = Some(remote.head);
             self.phase = MirrorPhase::Conflict;
+            self.last_conflict_resolution = None;
             return Err(SyncError::Conflict);
         }
         self.observed_head = remote.head;
@@ -683,6 +820,7 @@ impl LocalMirror {
                 self.conflict_head = Some(head);
                 self.pending_push_idempotency_key = None;
                 self.phase = MirrorPhase::Conflict;
+                self.last_conflict_resolution = None;
                 return Err(SyncError::Conflict);
             }
             Err(RemoteFailure::Rejected) => {
@@ -761,6 +899,7 @@ impl LocalMirror {
                 self.conflict_head = Some(head);
                 self.pending_checkpoint_idempotency_key = None;
                 self.phase = MirrorPhase::Conflict;
+                self.last_conflict_resolution = None;
                 return Err(SyncError::Conflict);
             }
             Err(RemoteFailure::Rejected) => {
@@ -796,7 +935,10 @@ impl LocalMirror {
 fn validate_snapshot_fields(snapshot: &MirrorSnapshot) -> Result<(), SyncError> {
     let valid = matches!(
         snapshot.schema_version.as_str(),
-        "hwpx-agent.local-mirror/v1" | "hwpx-agent.local-mirror/v2" | "hwpx-agent.local-mirror/v3"
+        "hwpx-agent.local-mirror/v1"
+            | "hwpx-agent.local-mirror/v2"
+            | "hwpx-agent.local-mirror/v3"
+            | "hwpx-agent.local-mirror/v4"
     ) && valid_prefixed_identifier(&snapshot.project_id, "prj_")
         && valid_prefixed_identifier(&snapshot.branch_id, "brn_")
         && valid_prefixed_identifier(&snapshot.mirror_id, "mir_")
@@ -814,7 +956,10 @@ fn validate_snapshot_fields(snapshot: &MirrorSnapshot) -> Result<(), SyncError> 
             .as_deref()
             .is_none_or(valid_idempotency_key)
         && (snapshot.schema_version == "hwpx-agent.local-mirror/v3"
+            || snapshot.schema_version == "hwpx-agent.local-mirror/v4"
             || snapshot.pending_checkpoint_idempotency_key.is_none())
+        && (snapshot.schema_version == "hwpx-agent.local-mirror/v4"
+            || snapshot.last_conflict_resolution.is_none())
         && snapshot
             .last_checkpoint_id
             .as_deref()
@@ -824,7 +969,9 @@ fn validate_snapshot_fields(snapshot: &MirrorSnapshot) -> Result<(), SyncError> 
 
 fn restore_observed_snapshot(snapshot: &MirrorSnapshot) -> Result<String, SyncError> {
     match snapshot.schema_version.as_str() {
-        "hwpx-agent.local-mirror/v2" | "hwpx-agent.local-mirror/v3" => snapshot
+        "hwpx-agent.local-mirror/v2"
+        | "hwpx-agent.local-mirror/v3"
+        | "hwpx-agent.local-mirror/v4" => snapshot
             .observed_snapshot_sha256
             .clone()
             .filter(|value| valid_digest(value))
@@ -882,6 +1029,7 @@ fn validate_snapshot_state(
             conflict.is_some()
                 && snapshot.pending_push_idempotency_key.is_none()
                 && snapshot.pending_checkpoint_idempotency_key.is_none()
+                && snapshot.last_conflict_resolution.is_none()
         }
     };
     let keys_are_valid = !(snapshot.pending_push_idempotency_key.is_some()

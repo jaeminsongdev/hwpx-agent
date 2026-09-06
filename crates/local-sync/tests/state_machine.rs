@@ -1,9 +1,9 @@
 use std::error::Error;
 
 use local_sync::{
-    CheckpointRequest, Connectivity, LocalMirror, MirrorPhase, PullOutcome, PullRequest,
-    PushRequest, RemoteCheckpointReceipt, RemoteFailure, RemoteHead, RemotePushReceipt,
-    RemoteSnapshot, RemoteSyncPort, SyncError,
+    CheckpointRequest, ConflictResolution, Connectivity, LocalMirror, MirrorPhase, PullOutcome,
+    PullRequest, PushRequest, RemoteCheckpointReceipt, RemoteFailure, RemoteHead,
+    RemotePushReceipt, RemoteSnapshot, RemoteSyncPort, SyncError,
 };
 
 type TestResult = Result<(), Box<dyn Error>>;
@@ -158,6 +158,200 @@ fn local_ahead_plus_remote_advance_becomes_conflict_without_overwrite() -> TestR
     assert_eq!(after.pending_plan_sha256, before.pending_plan_sha256);
     assert_eq!(after.observed_generation, before.observed_generation);
     assert_eq!(after.conflict_generation, Some(2));
+    Ok(())
+}
+
+#[test]
+fn conflict_rebase_requires_exact_remote_head_and_rebased_pair() -> TestResult {
+    let mut mirror = mirror(Connectivity::Online)?;
+    mirror.queue_local_change(digest('b'), digest('c'))?;
+    let mut port = FakePort {
+        pull_result: Some(Ok(RemoteSnapshot {
+            head: head(2, 2)?,
+            snapshot_sha256: digest('d'),
+        })),
+        ..FakePort::default()
+    };
+    assert_eq!(mirror.pull(&mut port), Err(SyncError::Conflict));
+    let conflict = mirror.snapshot();
+
+    assert_eq!(
+        mirror.resolve_rebase(
+            RemoteSnapshot {
+                head: head(3, 3)?,
+                snapshot_sha256: digest('d'),
+            },
+            Some((digest('e'), digest('f'))),
+        ),
+        Err(SyncError::InvalidResponse)
+    );
+    assert_eq!(mirror.snapshot(), conflict);
+    assert_eq!(
+        mirror.resolve_rebase(
+            RemoteSnapshot {
+                head: head(2, 2)?,
+                snapshot_sha256: digest('d'),
+            },
+            None,
+        ),
+        Err(SyncError::InvalidRequest)
+    );
+    assert_eq!(mirror.snapshot(), conflict);
+
+    mirror.resolve_rebase(
+        RemoteSnapshot {
+            head: head(2, 2)?,
+            snapshot_sha256: digest('d'),
+        },
+        Some((digest('e'), digest('f'))),
+    )?;
+    let resolved = mirror.snapshot();
+    assert_eq!(resolved.phase, MirrorPhase::Ahead);
+    assert_eq!(resolved.observed_generation, 2);
+    assert_eq!(resolved.observed_snapshot_sha256, Some(digest('d')));
+    assert_eq!(resolved.snapshot_sha256, digest('e'));
+    assert_eq!(resolved.pending_plan_sha256, Some(digest('f')));
+    assert!(resolved.conflict_generation.is_none());
+    assert_eq!(
+        resolved.last_conflict_resolution,
+        Some(ConflictResolution::RebaseOperationPlan)
+    );
+
+    let mut push = FakePort {
+        push_result: Some(Ok(RemotePushReceipt {
+            head: head(3, 3)?,
+            snapshot_sha256: digest('e'),
+        })),
+        ..FakePort::default()
+    };
+    mirror.push(&mut push, "push-key-01".to_owned())?;
+    assert_eq!(mirror.phase(), MirrorPhase::Clean);
+    assert_eq!(
+        push.seen_push
+            .as_ref()
+            .ok_or("missing rebased push")?
+            .expected_head()
+            .generation(),
+        2
+    );
+    Ok(())
+}
+
+#[test]
+fn conflict_branch_requires_a_new_branch_at_the_exact_old_base() -> TestResult {
+    let mut mirror = mirror(Connectivity::Online)?;
+    mirror.queue_local_change(digest('b'), digest('c'))?;
+    let mut port = FakePort {
+        pull_result: Some(Ok(RemoteSnapshot {
+            head: head(2, 2)?,
+            snapshot_sha256: digest('d'),
+        })),
+        ..FakePort::default()
+    };
+    assert_eq!(mirror.pull(&mut port), Err(SyncError::Conflict));
+    let conflict = mirror.snapshot();
+    let old_base = RemoteSnapshot {
+        head: head(1, 1)?,
+        snapshot_sha256: digest('a'),
+    };
+    assert_eq!(
+        mirror.resolve_branch("brn_branch001".to_owned(), old_base.clone()),
+        Err(SyncError::InvalidRequest)
+    );
+    assert_eq!(mirror.snapshot(), conflict);
+    assert_eq!(
+        mirror.resolve_branch(
+            "brn_branch002".to_owned(),
+            RemoteSnapshot {
+                head: head(2, 2)?,
+                snapshot_sha256: digest('d'),
+            },
+        ),
+        Err(SyncError::InvalidRequest)
+    );
+    assert_eq!(mirror.snapshot(), conflict);
+
+    mirror.resolve_branch("brn_branch002".to_owned(), old_base)?;
+    let resolved = mirror.snapshot();
+    assert_eq!(resolved.branch_id, "brn_branch002");
+    assert_eq!(resolved.phase, MirrorPhase::Ahead);
+    assert_eq!(resolved.snapshot_sha256, digest('b'));
+    assert_eq!(resolved.pending_plan_sha256, Some(digest('c')));
+    assert_eq!(
+        resolved.last_conflict_resolution,
+        Some(ConflictResolution::Branch)
+    );
+    assert!(resolved.conflict_generation.is_none());
+    Ok(())
+}
+
+#[test]
+fn manual_merge_and_clean_checkpoint_rebase_are_explicit() -> TestResult {
+    let mut manual = mirror(Connectivity::Online)?;
+    manual.queue_local_change(digest('b'), digest('c'))?;
+    let mut pull = FakePort {
+        pull_result: Some(Ok(RemoteSnapshot {
+            head: head(2, 2)?,
+            snapshot_sha256: digest('d'),
+        })),
+        ..FakePort::default()
+    };
+    assert_eq!(manual.pull(&mut pull), Err(SyncError::Conflict));
+    let unresolved = manual.snapshot();
+    assert_eq!(
+        manual.resolve_manual_merge(
+            RemoteSnapshot {
+                head: head(2, 2)?,
+                snapshot_sha256: digest('d'),
+            },
+            "A".repeat(64),
+            digest('f'),
+        ),
+        Err(SyncError::InvalidRequest)
+    );
+    assert_eq!(manual.snapshot(), unresolved);
+    manual.resolve_manual_merge(
+        RemoteSnapshot {
+            head: head(2, 2)?,
+            snapshot_sha256: digest('d'),
+        },
+        digest('e'),
+        digest('f'),
+    )?;
+    let merged = manual.snapshot();
+    assert_eq!(merged.phase, MirrorPhase::Ahead);
+    assert_eq!(merged.snapshot_sha256, digest('e'));
+    assert_eq!(merged.pending_plan_sha256, Some(digest('f')));
+    assert_eq!(
+        merged.last_conflict_resolution,
+        Some(ConflictResolution::ManualMerge)
+    );
+
+    let mut checkpoint = mirror(Connectivity::Online)?;
+    let mut conflict = FakePort {
+        checkpoint_result: Some(Err(RemoteFailure::Conflict(head(2, 2)?))),
+        ..FakePort::default()
+    };
+    assert_eq!(
+        checkpoint.checkpoint(&mut conflict, "checkpoint-key-01".to_owned()),
+        Err(SyncError::Conflict)
+    );
+    assert!(checkpoint.snapshot().pending_plan_sha256.is_none());
+    checkpoint.resolve_rebase(
+        RemoteSnapshot {
+            head: head(2, 2)?,
+            snapshot_sha256: digest('d'),
+        },
+        None,
+    )?;
+    let accepted = checkpoint.snapshot();
+    assert_eq!(accepted.phase, MirrorPhase::Clean);
+    assert_eq!(accepted.snapshot_sha256, digest('d'));
+    assert_eq!(accepted.observed_snapshot_sha256, Some(digest('d')));
+    assert_eq!(
+        accepted.last_conflict_resolution,
+        Some(ConflictResolution::RebaseOperationPlan)
+    );
     Ok(())
 }
 
@@ -317,15 +511,27 @@ fn durable_snapshot_restore_rejects_impossible_combinations() -> TestResult {
     legacy_clean.schema_version = "hwpx-agent.local-mirror/v1".to_owned();
     legacy_clean.observed_snapshot_sha256 = None;
     let migrated = LocalMirror::restore(legacy_clean)?.snapshot();
-    assert_eq!(migrated.schema_version, "hwpx-agent.local-mirror/v3");
+    assert_eq!(migrated.schema_version, "hwpx-agent.local-mirror/v4");
     assert_eq!(migrated.observed_snapshot_sha256, Some(digest('a')));
 
     let mut v2 = snapshot.clone();
     v2.schema_version = "hwpx-agent.local-mirror/v2".to_owned();
     assert_eq!(
         LocalMirror::restore(v2)?.snapshot().schema_version,
-        "hwpx-agent.local-mirror/v3"
+        "hwpx-agent.local-mirror/v4"
     );
+
+    let mut v3 = snapshot.clone();
+    v3.schema_version = "hwpx-agent.local-mirror/v3".to_owned();
+    assert_eq!(
+        LocalMirror::restore(v3.clone())?.snapshot().schema_version,
+        "hwpx-agent.local-mirror/v4"
+    );
+    v3.last_conflict_resolution = Some(ConflictResolution::Branch);
+    assert!(matches!(
+        LocalMirror::restore(v3),
+        Err(SyncError::InvalidRequest)
+    ));
 
     let mut impossible = snapshot.clone();
     impossible.phase = MirrorPhase::Ahead;
@@ -340,6 +546,26 @@ fn durable_snapshot_restore_rejects_impossible_combinations() -> TestResult {
     stale_conflict.conflict_generation = Some(1);
     assert!(matches!(
         LocalMirror::restore(stale_conflict),
+        Err(SyncError::InvalidRequest)
+    ));
+
+    let mut unresolved_with_resolution = mirror(Connectivity::Online)?;
+    unresolved_with_resolution.queue_local_change(digest('b'), digest('c'))?;
+    let mut conflict_port = FakePort {
+        pull_result: Some(Ok(RemoteSnapshot {
+            head: head(2, 2)?,
+            snapshot_sha256: digest('d'),
+        })),
+        ..FakePort::default()
+    };
+    assert_eq!(
+        unresolved_with_resolution.pull(&mut conflict_port),
+        Err(SyncError::Conflict)
+    );
+    let mut impossible_resolution = unresolved_with_resolution.snapshot();
+    impossible_resolution.last_conflict_resolution = Some(ConflictResolution::ManualMerge);
+    assert!(matches!(
+        LocalMirror::restore(impossible_resolution),
         Err(SyncError::InvalidRequest)
     ));
     Ok(())

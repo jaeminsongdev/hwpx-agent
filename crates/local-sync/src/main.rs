@@ -6,9 +6,9 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 
 use local_sync::{
-    CheckpointRequest, Connectivity, DurableMirrorStore, DurableSyncError, LocalMirror,
-    MirrorSnapshot, PullRequest, PushRequest, RemoteCheckpointReceipt, RemoteFailure, RemoteHead,
-    RemotePushReceipt, RemoteSnapshot, RemoteSyncPort, StoreError, SyncError,
+    CheckpointRequest, ConflictResolution, Connectivity, DurableMirrorStore, DurableSyncError,
+    LocalMirror, MirrorSnapshot, PullRequest, PushRequest, RemoteCheckpointReceipt, RemoteFailure,
+    RemoteHead, RemotePushReceipt, RemoteSnapshot, RemoteSyncPort, StoreError, SyncError,
 };
 use serde::Serialize;
 use thiserror::Error;
@@ -111,6 +111,8 @@ struct PublicOutput {
     observed_generation: u64,
     pending: PublicPending,
     remote: PublicRemote,
+    last_resolution: Option<ConflictResolution>,
+    stale_head: PublicStaleHead,
 }
 
 #[derive(Serialize)]
@@ -124,6 +126,14 @@ struct PublicPending {
 struct PublicRemote {
     conflict: bool,
     checkpoint: bool,
+}
+
+#[derive(Serialize)]
+struct PublicStaleHead {
+    active: bool,
+    current_generation: Option<u64>,
+    delta: Option<u64>,
+    allowed_resolutions: Vec<ConflictResolution>,
 }
 
 fn run(
@@ -212,6 +222,9 @@ fn run(
                 .snapshot();
             Ok(public_output("checkpoint", revision.sequence(), &snapshot))
         }
+        "resolve-rebase" => resolve_rebase_command(arguments),
+        "resolve-branch" => resolve_branch_command(arguments),
+        "resolve-manual" => resolve_manual_command(arguments),
         _ => Err(CliError::InvalidRequest),
     }
 }
@@ -255,7 +268,7 @@ fn initialize(mut arguments: impl Iterator<Item = OsString>) -> Result<PublicOut
 
 fn public_output(command: &'static str, sequence: u64, snapshot: &MirrorSnapshot) -> PublicOutput {
     PublicOutput {
-        schema_version: "hwpx-agent.local-sync-cli-output/v1",
+        schema_version: "hwpx-agent.local-sync-cli-output/v2",
         command,
         sequence,
         connectivity: snapshot.connectivity,
@@ -270,7 +283,132 @@ fn public_output(command: &'static str, sequence: u64, snapshot: &MirrorSnapshot
             conflict: snapshot.conflict_generation.is_some(),
             checkpoint: snapshot.last_checkpoint_id.is_some(),
         },
+        last_resolution: snapshot.last_conflict_resolution,
+        stale_head: PublicStaleHead {
+            active: snapshot.conflict_generation.is_some(),
+            current_generation: snapshot.conflict_generation,
+            delta: snapshot
+                .conflict_generation
+                .and_then(|generation| generation.checked_sub(snapshot.observed_generation)),
+            allowed_resolutions: if snapshot.conflict_generation.is_some() {
+                vec![
+                    ConflictResolution::RebaseOperationPlan,
+                    ConflictResolution::Branch,
+                    ConflictResolution::ManualMerge,
+                ]
+            } else {
+                Vec::new()
+            },
+        },
     }
+}
+
+fn resolve_rebase_command(
+    mut arguments: impl Iterator<Item = OsString>,
+) -> Result<PublicOutput, CliError> {
+    let root = path(arguments.next())?;
+    let remaining: Vec<_> = arguments.collect();
+    let (remote, rebased) = match remaining.as_slice() {
+        [revision_id, generation, remote_snapshot] => (
+            remote_snapshot_from(revision_id, generation, remote_snapshot)?,
+            None,
+        ),
+        [
+            revision_id,
+            generation,
+            remote_snapshot,
+            rebased_snapshot,
+            rebased_plan,
+        ] => (
+            remote_snapshot_from(revision_id, generation, remote_snapshot)?,
+            Some((
+                text(Some(rebased_snapshot.clone()))?,
+                text(Some(rebased_plan.clone()))?,
+            )),
+        ),
+        _ => return Err(CliError::InvalidRequest),
+    };
+    let store = DurableMirrorStore::open_existing(root)?;
+    let loaded = store.load()?.ok_or(CliError::StateAbsent)?;
+    let (revision, snapshot) = store.update(loaded.revision(), |mirror| {
+        mirror.resolve_rebase(remote, rebased)?;
+        Ok(mirror.snapshot())
+    })?;
+    Ok(public_output(
+        "resolve-rebase",
+        revision.sequence(),
+        &snapshot,
+    ))
+}
+
+fn resolve_branch_command(
+    mut arguments: impl Iterator<Item = OsString>,
+) -> Result<PublicOutput, CliError> {
+    let root = path(arguments.next())?;
+    let branch_id = text(arguments.next())?;
+    let base = remote_snapshot_from(
+        &arguments.next().ok_or(CliError::InvalidRequest)?,
+        &arguments.next().ok_or(CliError::InvalidRequest)?,
+        &arguments.next().ok_or(CliError::InvalidRequest)?,
+    )?;
+    no_more(arguments)?;
+    let store = DurableMirrorStore::open_existing(root)?;
+    let loaded = store.load()?.ok_or(CliError::StateAbsent)?;
+    let (revision, snapshot) = store.update(loaded.revision(), |mirror| {
+        mirror.resolve_branch(branch_id, base)?;
+        Ok(mirror.snapshot())
+    })?;
+    Ok(public_output(
+        "resolve-branch",
+        revision.sequence(),
+        &snapshot,
+    ))
+}
+
+fn resolve_manual_command(
+    mut arguments: impl Iterator<Item = OsString>,
+) -> Result<PublicOutput, CliError> {
+    let root = path(arguments.next())?;
+    let remote = remote_snapshot_from(
+        &arguments.next().ok_or(CliError::InvalidRequest)?,
+        &arguments.next().ok_or(CliError::InvalidRequest)?,
+        &arguments.next().ok_or(CliError::InvalidRequest)?,
+    )?;
+    let merged_snapshot = text(arguments.next())?;
+    let merged_plan = text(arguments.next())?;
+    no_more(arguments)?;
+    let store = DurableMirrorStore::open_existing(root)?;
+    let loaded = store.load()?.ok_or(CliError::StateAbsent)?;
+    let (revision, snapshot) = store.update(loaded.revision(), |mirror| {
+        mirror.resolve_manual_merge(remote, merged_snapshot, merged_plan)?;
+        Ok(mirror.snapshot())
+    })?;
+    Ok(public_output(
+        "resolve-manual",
+        revision.sequence(),
+        &snapshot,
+    ))
+}
+
+fn remote_snapshot_from(
+    revision_id: &OsString,
+    generation: &OsString,
+    snapshot_sha256: &OsString,
+) -> Result<RemoteSnapshot, CliError> {
+    let revision_id = text(Some(revision_id.clone()))?;
+    let generation = text(Some(generation.clone()))?
+        .parse()
+        .map_err(|_| CliError::InvalidRequest)?;
+    let revision_id = if revision_id == "none" {
+        None
+    } else {
+        Some(revision_id)
+    };
+    let head = RemoteHead::new(revision_id, generation).map_err(|error| map_sync_error(&error))?;
+    Ok(RemoteSnapshot {
+        head,
+        snapshot_sha256: text(Some(snapshot_sha256.clone()))?,
+    })
 }
 
 fn text(value: Option<OsString>) -> Result<String, CliError> {

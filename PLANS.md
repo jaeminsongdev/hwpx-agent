@@ -4,7 +4,7 @@
 - Root: `D:\개발\hwpx-agent`
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
 - Active: P05-08 Hangul-authored reference comparison and actual Gate, P05-09 coordinate-aware Gate,
-  P17-06/P17-08.
+  P17-06/P17-07/P17-08.
 - Reasoning: max for preservation, authorization and Gate work; high for routine implementation.
 - UI: attempt23 sparse layout/identity and dense attempt02 automatic flow/balance passed on Hangul 2020;
   P05-08 attempts 01-02 stopped fail-closed at open without a confirmed access-click receipt;
@@ -31,7 +31,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P14 | scoped local PASS | disposable PostgreSQL reference Gate |
 | P15 | scoped local PASS | local MCP/Inspector staging Gate |
 | P16 | in progress | local source/plan/renderer/host pass; registered-app/Hangul open |
-| P17 | in progress | package core and 03-05 implemented; 01 remote, 02, 06-09 open |
+| P17 | in progress | package core and 03-05 implemented; 06/07 local components; 01 remote, 02, 06-09 open |
 | P18-P19 | blocked | quality/security/DR then production/license/submission |
 | P20 | post-GA | parity and Rust-native expansion |
 
@@ -48,6 +48,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0091 | P17-06 | Durable sync/adapter/CLI component 31/31; actual host transport remains |
 | P-0092 | P17-01 | Deterministic 19-entry package core 7/7; registered remote app absent |
 | P-0093 | P17-08 | Widget 133/133, MCP 13/13, disposable Git 20/20, installed v0.4 prepare 18/18; visible click/effect open |
+| P-0094 | P17-07 | Local rebase/branch/manual resolver and stale-head CLI surface 37/37; host/UI/concurrent evidence open |
 
 ## Current P17-08 evidence
 
@@ -103,6 +104,10 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   dedicated host run `d22e85581cd44d06a016f3460a43de12` passed 14/14; resources cleaned.
 - P17-04 bridge run `d1a376b7563c4654b15fccbaa98645e0` and personal-plugin run
   `273f6ccaac644836814b87679ab4eb0c` passed 12/12; actual Hangul operations remain open.
+- P17-07 local conflict resolver persists exact rebase, exact-base branch and manual-merge
+  transitions through one journal CAS. All 37 `local-sync` tests pass and public stale-head output
+  is identity/digest/path-free. Actual host receipt, graphical UI and concurrent Web/Codex evidence
+  remain open; see `implementation/p17/P17-07_LOCAL_CONFLICT_RESOLVER_V1.md`.
 
 ## Risks and holds
 
@@ -114,6 +119,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - R-0004: Broad P16 discovery remains red on immutable predecessor locks and legacy assets;
   targeted successor qualification is authoritative only for its stated scope.
 - R-0005: P17-03 lacks persistent credential provider/PostgreSQL lifecycle; fail closed meanwhile.
+- R-0006: P17-07 local resolver is component evidence only; qualified host/UI wiring and concurrent
+  Web/Codex verification remain open.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution are open.
 - HOLD-0003: P10-08 production isolation and later-version PCs are unqualified.
 
@@ -127,7 +134,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
    and visual evidence and preserve every failure.
 3. Wire P17-06 to a qualified host credential/transport adapter, then capture an actual remote
    pull/push/checkpoint transition without promoting the current injected component evidence.
-4. Before closure run target tests, regressions, current and clean-checkout FULL, applicable offline
+4. Extend that host protocol with P17-07 conflict resolution, wire the bounded stale-head surface to
+   the widget, and run one real concurrent Web/Codex conflict per resolution path.
+5. Before closure run target tests, regressions, current and clean-checkout FULL, applicable offline
    Linux/security/STRICT checks. Close P05 only with save/reopen, semantic, PDF and visual evidence.
 
 ## Handoff pointers
