@@ -9,7 +9,7 @@ use crate::{
     RemoteHead, RemotePushReceipt, RemoteSnapshot, RemoteSyncPort,
 };
 
-const REQUEST_SCHEMA_VERSION: &str = "hwpx-agent.remote-sync-request/v1";
+const REQUEST_SCHEMA_VERSION: &str = "hwpx-agent.remote-sync-request/v2";
 const RESPONSE_SCHEMA_VERSION: &str = "hwpx-agent.remote-sync-response/v1";
 const MAX_AUTHORIZATION_BYTES: usize = 8_199;
 const MAX_REQUEST_BYTES: usize = 16_384;
@@ -178,6 +178,7 @@ where
             operation: "pull",
             project_id: request.project_id(),
             branch_id: request.branch_id(),
+            mirror_id: request.mirror_id(),
             observed_head: WireHead::from(request.observed_head()),
         };
         match self.exchange::<PullWireResult>(&wire)? {
@@ -199,6 +200,7 @@ where
             operation: "push",
             project_id: request.project_id(),
             branch_id: request.branch_id(),
+            mirror_id: request.mirror_id(),
             expected_head: WireHead::from(request.expected_head()),
             snapshot_sha256: request.snapshot_sha256(),
             operation_plan_sha256: request.operation_plan_sha256(),
@@ -226,6 +228,7 @@ where
             operation: "checkpoint",
             project_id: request.project_id(),
             branch_id: request.branch_id(),
+            mirror_id: request.mirror_id(),
             expected_head: WireHead::from(request.expected_head()),
             idempotency_key: request.idempotency_key(),
         };
@@ -251,6 +254,7 @@ struct PullWireRequest<'a> {
     operation: &'static str,
     project_id: &'a str,
     branch_id: &'a str,
+    mirror_id: &'a str,
     observed_head: WireHead<'a>,
 }
 
@@ -260,6 +264,7 @@ struct PushWireRequest<'a> {
     operation: &'static str,
     project_id: &'a str,
     branch_id: &'a str,
+    mirror_id: &'a str,
     expected_head: WireHead<'a>,
     snapshot_sha256: &'a str,
     operation_plan_sha256: &'a str,
@@ -272,6 +277,7 @@ struct CheckpointWireRequest<'a> {
     operation: &'static str,
     project_id: &'a str,
     branch_id: &'a str,
+    mirror_id: &'a str,
     expected_head: WireHead<'a>,
     idempotency_key: &'a str,
 }

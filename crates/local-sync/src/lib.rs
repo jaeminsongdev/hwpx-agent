@@ -120,6 +120,7 @@ pub enum RemoteFailure {
 pub struct PullRequest {
     project_id: String,
     branch_id: String,
+    mirror_id: String,
     observed_head: RemoteHead,
 }
 
@@ -129,6 +130,7 @@ impl fmt::Debug for PullRequest {
             .debug_struct("PullRequest")
             .field("project_id", &"<redacted>")
             .field("branch_id", &"<redacted>")
+            .field("mirror_id", &"<redacted>")
             .field("observed_generation", &self.observed_head.generation)
             .finish()
     }
@@ -146,6 +148,11 @@ impl PullRequest {
     }
 
     #[must_use]
+    pub fn mirror_id(&self) -> &str {
+        &self.mirror_id
+    }
+
+    #[must_use]
     pub const fn observed_head(&self) -> &RemoteHead {
         &self.observed_head
     }
@@ -155,6 +162,7 @@ impl PullRequest {
 pub struct PushRequest {
     project_id: String,
     branch_id: String,
+    mirror_id: String,
     expected_head: RemoteHead,
     snapshot_sha256: String,
     operation_plan_sha256: String,
@@ -167,6 +175,7 @@ impl fmt::Debug for PushRequest {
             .debug_struct("PushRequest")
             .field("project_id", &"<redacted>")
             .field("branch_id", &"<redacted>")
+            .field("mirror_id", &"<redacted>")
             .field("expected_generation", &self.expected_head.generation)
             .field("snapshot_sha256", &"<redacted>")
             .field("operation_plan_sha256", &"<redacted>")
@@ -184,6 +193,11 @@ impl PushRequest {
     #[must_use]
     pub fn branch_id(&self) -> &str {
         &self.branch_id
+    }
+
+    #[must_use]
+    pub fn mirror_id(&self) -> &str {
+        &self.mirror_id
     }
 
     #[must_use]
@@ -211,6 +225,7 @@ impl PushRequest {
 pub struct CheckpointRequest {
     project_id: String,
     branch_id: String,
+    mirror_id: String,
     expected_head: RemoteHead,
     idempotency_key: String,
 }
@@ -221,6 +236,7 @@ impl fmt::Debug for CheckpointRequest {
             .debug_struct("CheckpointRequest")
             .field("project_id", &"<redacted>")
             .field("branch_id", &"<redacted>")
+            .field("mirror_id", &"<redacted>")
             .field("expected_generation", &self.expected_head.generation)
             .field("idempotency_key", &"<redacted>")
             .finish()
@@ -236,6 +252,11 @@ impl CheckpointRequest {
     #[must_use]
     pub fn branch_id(&self) -> &str {
         &self.branch_id
+    }
+
+    #[must_use]
+    pub fn mirror_id(&self) -> &str {
+        &self.mirror_id
     }
 
     #[must_use]
@@ -722,6 +743,7 @@ impl LocalMirror {
         let request = PullRequest {
             project_id: self.project_id.clone(),
             branch_id: self.branch_id.clone(),
+            mirror_id: self.mirror_id.clone(),
             observed_head: self.observed_head.clone(),
         };
         let remote = match port.pull(&request) {
@@ -795,6 +817,7 @@ impl LocalMirror {
         let request = PushRequest {
             project_id: self.project_id.clone(),
             branch_id: self.branch_id.clone(),
+            mirror_id: self.mirror_id.clone(),
             expected_head: self.observed_head.clone(),
             snapshot_sha256: self.snapshot_sha256.clone(),
             operation_plan_sha256: pending,
@@ -877,6 +900,7 @@ impl LocalMirror {
         let request = CheckpointRequest {
             project_id: self.project_id.clone(),
             branch_id: self.branch_id.clone(),
+            mirror_id: self.mirror_id.clone(),
             expected_head: self.observed_head.clone(),
             idempotency_key: idempotency_key.clone(),
         };
