@@ -27,49 +27,74 @@ acceptance = load_acceptance()
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = "implementation/p17/qualification/current-workspace-source-v3-20260906"
+BASE = "implementation/p17/qualification/current-workspace-source-v4-20260906"
 QUALIFICATION = ROOT / BASE
-RUN_ID = "0674ea9cc4cc4f02bf921c88f7a3233b"
-BASE_COMMIT = "70e78dd042245b50ea20e3648029dc509c66bb38"
-RECEIPT_SHA256 = "fd70a48ad69214ab15bf5fde482b0b29e0e7df37ad83c5b91af3ebbd00024aff"
+RUN_ID = "707f3b7dd24f45c297f228914597ce64"
+BASE_COMMIT = "75b4f32379cf47fa9e1f46951a9a5f5380d09dde"
+RECEIPT_SHA256 = "4f0eaf39bc72cfecaa459f2401ad9e3423429bc361bd581a2cb01a7a3c29e2a8"
 CARGO_METADATA_PROJECTION_SHA256 = (
     "d956979b62019ff5b89a3c6b2ab506a7f102ae0fcb4f86ce70717ac2fca2d51d"
 )
 WORKSPACE_MEMBER_COUNT = 23
 PREVIOUS_QUALIFICATION = (
-    "implementation/p17/qualification/current-workspace-source-v2-20260906/contract.json",
-    "608cc6804e6a77908775a545f374483e50d113b1a3980c05b1c36c06c5358448",
+    "implementation/p17/qualification/current-workspace-source-v3-20260906/contract.json",
+    "d74d837511f7611ba3d6815d217483887cd2b7e1887fbb092f2cbeda4bff0f6d",
 )
 IMPLEMENTATION_SOURCES: tuple[dict[str, Any], ...] = (
     {
-        "path": "crates/hwpx-package/examples/p05_07_section_columns_target_fixture.rs",
-        "bytes": 25917,
-        "sha256": "0d3d3911ea555c94b584c30582922c0b4f333fd56e073d2fc92cdaf881ccd0c3",
+        "path": "crates/hwpx-package/src/lib.rs",
+        "bytes": 6737,
+        "sha256": "af517aa9b10110d887484d8f14be26ce635896e836c286183a20be29f55ea3f5",
     },
     {
-        "path": "crates/hwpx-package/examples/p05_07_support/diagnostics.rs",
-        "bytes": 32268,
-        "sha256": "148c27c6a2aea95fe32eaaafbfad6f5e8e2beaf85d6f0b8014d7f954f9fcd106",
+        "path": "crates/hwpx-package/src/vs1_layout.rs",
+        "bytes": 41224,
+        "sha256": "afe3a9061c5827456f464c8999df07816e6412237477d107c67d0436f53b0292",
     },
     {
-        "path": "crates/hwpx-package/examples/p05_07_support/identity_rebinding.rs",
-        "bytes": 33566,
-        "sha256": "8a950ebc1a1df669f6a0aa94bd333d00e811a2297e03d920c005850128ad93e9",
+        "path": "crates/hwpx-package/tests/vs1_layout.rs",
+        "bytes": 2549,
+        "sha256": "3a0094752123426c271ed12dfc6bb30a5397f0862f73732cb21795a150062525",
     },
     {
-        "path": "implementation/p05/P05-07_ATTEMPT23_IDENTITY_REBINDING.md",
-        "bytes": 5150,
-        "sha256": "687179c2113a6011a4f2a131e182e75f070eb857381831fc3c711d2099db959c",
+        "path": "crates/hwpx-package/examples/p05_07_dense_column_flow_target_fixture.rs",
+        "bytes": 6775,
+        "sha256": "d1a151eecd00fa4678ab5dbdb4c7813a659e28c0b991c1dbdbaf6481916085f8",
     },
     {
-        "path": "implementation/p05/qualification/p05-07-attempt23-identity-rebinding-receipt.json",
-        "bytes": 3611,
-        "sha256": "e752fd21557f06f6fbea6b93489444f97937abb935d2a3f2f862dc55a60a142a",
+        "path": "implementation/p05/P05-07_SECTION_COLUMNS_POLICY.md",
+        "bytes": 7824,
+        "sha256": "6749418b3a8a5c698165e88343a2355bbe810a6bef68beb5ca1e4ae6b3243a10",
     },
     {
-        "path": "protocol/private/p05-07-identity-rebinding-v1.json",
-        "bytes": 2591,
-        "sha256": "d393d03fbeac3cc0ff8a1167ce5a1288d9a0c5c47bf9300a4aab61ba717bba8b",
+        "path": "implementation/p05/P05-07_DENSE_COLUMN_FLOW_POLICY.md",
+        "bytes": 5012,
+        "sha256": "87db4e5a132d7e7286e5c4a23eb01fabaeb333c057bc1fbe81f04cc4d728698d",
+    },
+    {
+        "path": "implementation/p05/P05-07_DENSE_COLUMN_FLOW_ATTEMPT02.md",
+        "bytes": 5329,
+        "sha256": "111e6141f18303a75b2a51bf4270d2628fd82828006e22c9175d8da5ff66823d",
+    },
+    {
+        "path": "implementation/p05/qualification/p05-07-dense-attempt02-qualification.json",
+        "bytes": 4081,
+        "sha256": "a11a32991998b928a6a3faea1d12d76b57f750ab190b1c525e4c040b6b756293",
+    },
+    {
+        "path": "implementation/p05/render-expectations/p05-07-dense-column-flow.json",
+        "bytes": 1580,
+        "sha256": "6ca7926efb1b9e6f9c1c8b0b5cce97cb8ae69ae91640b1bcc3cdbc62f67d0ad3",
+    },
+    {
+        "path": "implementation/p05/tools/verify_p05_hancom_pdf.py",
+        "bytes": 29680,
+        "sha256": "5e35f27b5d58cc5c11119725a3506cdd6afa19d45cdd5228f572f55dd3d075f2",
+    },
+    {
+        "path": "implementation/p05/tests/test_verify_p05_hancom_pdf.py",
+        "bytes": 11870,
+        "sha256": "bf4e6cc910af8bb8d350ec22fc5265dd5b9559cfa9acf4724780132ca1a16f5a",
     },
 )
 SUCCESSORS: tuple[dict[str, Any], ...] = (
@@ -193,6 +218,8 @@ CLAIMS = {
     "source_qualification_only": True,
     "p05_diagnostic_dependencies_bound": True,
     "p05_identity_rebinding_sources_bound": True,
+    "p05_dense_flow_sources_bound": True,
+    "p05_dense_actual_receipt_bound": True,
     "actual_hangul": False,
     "registered_host": False,
     "production": False,
@@ -203,7 +230,7 @@ GUARD_SOURCES = (
     "tools/p17/run_current_workspace_source_checks.py",
     "tools/p17/current_workspace_source_qualification.py",
     "tools/p17/tests/test_current_workspace_source_qualification.py",
-    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V3.md",
+    "implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V4.md",
 )
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -294,7 +321,7 @@ def receipt_path(root: Path) -> Path:
 
 def expected_current(root: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v3",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-current/v4",
         "scope": "current_pc_source_binding_successor_only",
         "run_id": RUN_ID,
         "source_commit": BASE_COMMIT,
@@ -313,8 +340,8 @@ def expected_current(root: Path) -> dict[str, Any]:
 
 def expected_contract(root: Path, current_path: Path) -> dict[str, Any]:
     return {
-        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v3",
-        "qualification_id": "p17.current-workspace-source.v3.20260906",
+        "schema_version": "hwpx-agent.p17-current-workspace-source-qualification/v4",
+        "qualification_id": "p17.current-workspace-source.v4.20260906",
         "base_commit": BASE_COMMIT,
         "scope": "current_pc_source_binding_successor_only",
         "claims": CLAIMS,

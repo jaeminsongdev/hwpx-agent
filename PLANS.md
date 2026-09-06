@@ -74,8 +74,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - P05 attempt23: actual sparse landscape save/reopen/PDF PASS; exact-fixture logical rebinding
   records two removed backend IDs without calling them preserved. Dense attempt02 also passed actual
   31-paragraph zero-break save/reopen, strict semantics, two-page coordinate/balance verification
-  and visual review. Attempt01's one-page expectation failure is preserved. Successor source
-  qualification and current/independent FULL remain pending.
+  and visual review. Attempt01's one-page expectation failure is preserved. Source successor v4
+  passed 11/11 at run `707f3b7dd24f45c297f228914597ce64`; current/independent FULL remain pending.
 - P16 merge `0512883`; durable plan PostgreSQL run `1828b246e92746789fa5d6501e7f1ac2`
   passed 39/39, renderer/evidence run `2b01ce0ff66045f29a32c67d217aa9bd` passed 19/19,
   dedicated host run `d22e85581cd44d06a016f3460a43de12` passed 14/14; resources cleaned.
@@ -84,8 +84,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Risks and holds
 
-- R-0001: P05-07 dense attempt02 current-PC actual subgate passes. Source successor qualification,
-  current/independent FULL and P05-08/09 remain open; no later-version or arbitrary-document claim.
+- R-0001: P05-07 dense attempt02 current-PC actual subgate and source successor v4 pass.
+  Current/independent FULL and P05-08/09 remain open; no later-version or arbitrary-document claim.
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence remains open.
 - R-0003: One independent worker timeout smoke failed; retries passed, root cause unproven.
 - R-0004: Broad P16 discovery remains red on immutable predecessor locks and legacy assets;
