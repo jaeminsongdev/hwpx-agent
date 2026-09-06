@@ -16,13 +16,16 @@ declared_local_evidence_links = 0
 EXCLUDED_TREE_PARTS = {
     '.git',
     '__pycache__',
+    'artifacts',
     'bin',
     'dist',
     'evidence',
+    'licensed-private',
     'node_modules',
     'obj',
     'source-archive',
     'target',
+    'target-build',
     'tmp',
 }
 
