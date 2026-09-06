@@ -2,7 +2,7 @@
 
 Date: 2026-09-06
 Scope: current PC, local-only health boundary
-Decision: **implementation pending actual clean-commit acceptance**
+Decision: **bridge PASS; installed-plugin qualification pending durable acceptance receipt**
 
 ## Bounded increment
 
@@ -24,6 +24,17 @@ persist a credential or expose a plan-review/PostgreSQL route.
 The machine-readable boundary is `protocol/private/p17-local-mcp-v1.json`. The clean-commit
 acceptance must prove modern MCP initialization, one-tool discovery, strict schema rejection, the
 actual Node-to-Rust call, redaction, shutdown and cleanup before the bridge can be qualified.
+
+Clean repair commit `62844aef98cb114e08ac2e394ef5fbad32565bbb` produced bridge run
+`d1a376b7563c4654b15fccbaa98645e0`, which passed all 12 checks. The canonical receipt has SHA-256
+`c6ca18e2ad30454850b53284227f23abed10871e1ce532a633b8279550817c3e`.
+
+The personal package `hwpx-agent-local@personal` was then scaffolded with the plugin creator,
+validated, discovered in the default personal marketplace and installed. `codex mcp get` reported
+the server enabled with stdio transport and no environment values. A fresh ephemeral read-only Codex
+session called only `local_companion_health` and returned `ready` for the exact current profile with
+automation and network both false. The durable installed-plugin harness must repeat and bind these
+observations on a clean commit before the installed-plugin portion is PASS.
 
 The first clean-commit acceptance attempt stopped before MCP startup because the Python harness did
 not resolve the Windows `pnpm.cmd` shim while keeping `shell=False`. It produced no PASS evidence.
