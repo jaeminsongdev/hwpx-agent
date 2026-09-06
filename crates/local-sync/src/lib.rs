@@ -8,17 +8,19 @@ use thiserror::Error;
 
 mod adapter;
 mod service_mapping;
+mod socket;
 mod store;
 mod strict_json;
 
 pub use adapter::{
     AuthenticatedRemoteSyncAdapter, AuthorizationHeader, CredentialFailure,
-    RemoteCredentialProvider, RemoteTransport, TransportFailure,
+    RemoteCredentialProvider, RemoteTransport, SingleUseCredentialProvider, TransportFailure,
 };
 pub use service_mapping::{
     CheckpointServiceArguments, CheckpointServiceBinding, CheckpointServiceContext,
     decode_checkpoint_to_service, map_checkpoint_to_service,
 };
+pub use socket::LoopbackTcpTransport;
 pub use store::{DurableMirrorStore, DurableSyncError, LoadedMirror, StoreError, StoreRevision};
 
 const MAX_ID_BYTES: usize = 120;

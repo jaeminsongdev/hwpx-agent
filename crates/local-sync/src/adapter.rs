@@ -47,6 +47,7 @@ impl AuthorizationHeader {
     /// Rejects non-canonical casing, whitespace, control bytes, non-base64url token bytes and
     /// anything other than three non-empty JWT segments.
     pub fn new(value: String) -> Result<Self, CredentialFailure> {
+        let value = Zeroizing::new(value);
         if value.is_empty()
             || value.len() > MAX_AUTHORIZATION_BYTES
             || value.as_bytes().iter().any(u8::is_ascii_control)
@@ -71,7 +72,7 @@ impl AuthorizationHeader {
         {
             return Err(CredentialFailure::Rejected);
         }
-        Ok(Self(Zeroizing::new(value)))
+        Ok(Self(value))
     }
 
     fn expose(&self) -> &str {
@@ -86,6 +87,44 @@ pub trait RemoteCredentialProvider: fmt::Debug {
     ///
     /// Distinguishes unavailable credential custody from a rejected credential request.
     fn authorization_header(&mut self) -> Result<AuthorizationHeader, CredentialFailure>;
+}
+
+/// Process-local single-use credential handoff for a trusted launcher or broker.
+///
+/// The provider never persists or logs the credential. A second request fails closed, so callers
+/// must inject a newly issued short-lived header for every exchange.
+pub struct SingleUseCredentialProvider {
+    authorization_header: Option<AuthorizationHeader>,
+}
+
+impl fmt::Debug for SingleUseCredentialProvider {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("SingleUseCredentialProvider")
+            .field("available", &self.authorization_header.is_some())
+            .finish()
+    }
+}
+
+impl SingleUseCredentialProvider {
+    /// Accepts one already-issued, bounded bearer header without storing it outside this process.
+    ///
+    /// # Errors
+    ///
+    /// Rejects a malformed authorization header.
+    pub fn new(authorization_header: String) -> Result<Self, CredentialFailure> {
+        Ok(Self {
+            authorization_header: Some(AuthorizationHeader::new(authorization_header)?),
+        })
+    }
+}
+
+impl RemoteCredentialProvider for SingleUseCredentialProvider {
+    fn authorization_header(&mut self) -> Result<AuthorizationHeader, CredentialFailure> {
+        self.authorization_header
+            .take()
+            .ok_or(CredentialFailure::Unavailable)
+    }
 }
 
 pub trait RemoteTransport: fmt::Debug {

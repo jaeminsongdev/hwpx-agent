@@ -821,6 +821,7 @@ version = "0.1.0"
 dependencies = [
  "hex",
  "jsonschema",
+ "remote-sync-wire",
  "serde",
  "serde_json",
  "sha2",
@@ -1457,6 +1458,7 @@ dependencies = [
  "history-service",
  "hmac",
  "local-sync",
+ "remote-sync-wire",
  "retention-sync-service",
  "revision-service",
  "serde",
@@ -1464,6 +1466,14 @@ dependencies = [
  "sha2",
  "thiserror",
  "uuid",
+]
+
+[[package]]
+name = "remote-sync-wire"
+version = "0.1.0"
+dependencies = [
+ "thiserror",
+ "zeroize",
 ]
 
 [[package]]

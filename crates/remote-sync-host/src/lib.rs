@@ -28,6 +28,10 @@ use serde::Serialize;
 use thiserror::Error;
 use uuid::Uuid;
 
+mod socket;
+
+pub use socket::{CheckpointServeOutcome, CheckpointServerFailure, LoopbackCheckpointServer};
+
 const RESPONSE_SCHEMA_VERSION: &str = "hwpx-agent.remote-sync-response/v1";
 const MAX_REQUEST_BYTES: usize = 16_384;
 const MAX_CHECKPOINT_ID_BYTES: usize = 120;
@@ -486,8 +490,12 @@ const fn map_history_error(error: &HistoryError) -> CheckpointDispatchError {
 mod tests {
     use std::collections::VecDeque;
     use std::fmt;
+    use std::io::Write;
+    use std::net::{Ipv4Addr, Ipv6Addr, Shutdown, SocketAddr, TcpStream};
     use std::sync::Arc;
     use std::sync::atomic::{AtomicUsize, Ordering};
+    use std::thread;
+    use std::time::Duration;
 
     use artifact_service::{ArtifactId, ContentDigest};
     use auth_middleware::{AuthRegistryLimits, PrincipalGrant, TenantRole};
@@ -500,9 +508,10 @@ mod tests {
     use hmac::{Hmac, Mac as _};
     use local_sync::{
         AuthenticatedRemoteSyncAdapter, AuthorizationHeader, Connectivity, CredentialFailure,
-        LocalMirror, RemoteCredentialProvider, RemoteHead as LocalRemoteHead, RemoteTransport,
-        TransportFailure,
+        LocalMirror, LoopbackTcpTransport, RemoteCredentialProvider, RemoteHead as LocalRemoteHead,
+        RemoteTransport, SingleUseCredentialProvider, TransportFailure,
     };
+    use remote_sync_wire::{ResponseStatus, read_response, write_request};
     use retention_sync_service::{
         MirrorRegistration, ProjectRole, RetentionClass, RetentionPolicy,
     };
@@ -1073,6 +1082,139 @@ mod tests {
         let (credentials, transport) = adapter.into_parts();
         assert!(credentials.headers.is_empty());
         assert_eq!(transport.exchanges, 2);
+    }
+
+    #[test]
+    fn actual_loopback_tcp_checkpoint_crosses_the_framed_host_boundary() {
+        let fixture = Fixture::new(DispatchMode::Success);
+        let header = fixture.header("service-token-tcp-0001");
+        let project_id = fixture.project_id.public_id();
+        let branch_id = fixture.branch_id.public_id();
+        let mirror_id = fixture.mirror_id.public_id();
+        let revision_id = fixture.revision_id.public_id();
+        let server = LoopbackCheckpointServer::bind(
+            SocketAddr::from((Ipv4Addr::LOCALHOST, 0)),
+            fixture.host,
+            "ko-KR".to_owned(),
+            Duration::from_secs(5),
+        )
+        .unwrap_or_else(|error| panic!("bind: {error}"));
+        let endpoint = server
+            .local_addr()
+            .unwrap_or_else(|error| panic!("local address: {error}"));
+        let serving = thread::spawn(move || server.serve_one_at(NOW));
+
+        let credentials = SingleUseCredentialProvider::new(header)
+            .unwrap_or_else(|error| panic!("credentials: {error}"));
+        let transport = LoopbackTcpTransport::new(endpoint, Duration::from_secs(5))
+            .unwrap_or_else(|error| panic!("transport: {error}"));
+        let mut adapter = AuthenticatedRemoteSyncAdapter::new(credentials, transport);
+        let mut mirror = LocalMirror::new(
+            project_id,
+            branch_id,
+            mirror_id,
+            LocalRemoteHead::new(Some(revision_id.clone()), 1)
+                .unwrap_or_else(|error| panic!("head: {error}")),
+            "1".repeat(64),
+            Connectivity::Online,
+        )
+        .unwrap_or_else(|error| panic!("mirror: {error}"));
+        let receipt = mirror
+            .checkpoint(
+                &mut adapter,
+                "checkpoint-request-0001".to_owned(),
+                "release-candidate".to_owned(),
+                Some("reviewed locally".to_owned()),
+            )
+            .unwrap_or_else(|error| panic!("checkpoint: {error}"));
+        assert_eq!(receipt.revision_id, revision_id);
+        assert!(!receipt.replayed);
+        assert_eq!(
+            serving
+                .join()
+                .unwrap_or_else(|_| panic!("server thread panicked"))
+                .unwrap_or_else(|error| panic!("server: {error}")),
+            CheckpointServeOutcome::Succeeded
+        );
+        let (mut credentials, transport) = adapter.into_parts();
+        assert!(matches!(
+            credentials.authorization_header(),
+            Err(CredentialFailure::Unavailable)
+        ));
+        assert_eq!(transport.endpoint(), endpoint);
+    }
+
+    #[test]
+    fn loopback_server_rejects_public_locale_and_timeout_drift() {
+        let public = SocketAddr::from((Ipv4Addr::new(192, 0, 2, 1), 0));
+        let fixture = Fixture::new(DispatchMode::Success);
+        assert!(matches!(
+            LoopbackCheckpointServer::bind(
+                public,
+                fixture.host,
+                "ko-KR".to_owned(),
+                Duration::from_secs(1)
+            ),
+            Err(CheckpointServerFailure::Rejected)
+        ));
+
+        let fixture = Fixture::new(DispatchMode::Success);
+        assert!(matches!(
+            LoopbackCheckpointServer::bind(
+                SocketAddr::from((Ipv6Addr::LOCALHOST, 0)),
+                fixture.host,
+                "ko_KR".to_owned(),
+                Duration::from_secs(1)
+            ),
+            Err(CheckpointServerFailure::Rejected)
+        ));
+
+        let fixture = Fixture::new(DispatchMode::Success);
+        assert!(matches!(
+            LoopbackCheckpointServer::bind(
+                SocketAddr::from((Ipv4Addr::LOCALHOST, 0)),
+                fixture.host,
+                "ko-KR".to_owned(),
+                Duration::from_secs(61)
+            ),
+            Err(CheckpointServerFailure::Rejected)
+        ));
+    }
+
+    #[test]
+    fn loopback_server_rejects_trailing_request_bytes_before_dispatch() {
+        let fixture = Fixture::new(DispatchMode::Success);
+        let header = fixture.header("service-token-trailing-0001");
+        let request = fixture.exact_request();
+        let server = LoopbackCheckpointServer::bind(
+            SocketAddr::from((Ipv4Addr::LOCALHOST, 0)),
+            fixture.host,
+            "ko-KR".to_owned(),
+            Duration::from_secs(5),
+        )
+        .unwrap_or_else(|error| panic!("bind: {error}"));
+        let endpoint = server
+            .local_addr()
+            .unwrap_or_else(|error| panic!("address: {error}"));
+        let serving = thread::spawn(move || server.serve_one_at(NOW));
+        let mut stream =
+            TcpStream::connect(endpoint).unwrap_or_else(|error| panic!("connect: {error}"));
+        write_request(&mut stream, &header, &request)
+            .unwrap_or_else(|error| panic!("request: {error}"));
+        stream
+            .write_all(b"x")
+            .and_then(|()| stream.shutdown(Shutdown::Write))
+            .unwrap_or_else(|error| panic!("trailing request: {error}"));
+        let response =
+            read_response(&mut stream).unwrap_or_else(|error| panic!("response: {error}"));
+        assert_eq!(response.status(), ResponseStatus::Rejected);
+        assert_eq!(
+            serving
+                .join()
+                .unwrap_or_else(|_| panic!("server thread panicked"))
+                .unwrap_or_else(|error| panic!("server: {error}")),
+            CheckpointServeOutcome::Rejected
+        );
     }
 
     #[test]

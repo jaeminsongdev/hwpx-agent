@@ -45,7 +45,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
 | P-0089/0089A | P17-04 | Bridge and installed-plugin qualification PASS; main binding PASS |
 | P-0090 | P17-05 | Exact-commit MCP local file/Git plan-only run 16/16 PASS |
-| P-0091/0091A/0091B/0091C/0091D/0091E | P17-06 | Durable local sync; exact v3 mapping, authenticated host and concrete history checkpoint create/replay; durable remote transport remains |
+| P-0091/0091A/0091B/0091C/0091D/0091E/0091F | P17-06 | Durable local sync; exact v3 mapping, authenticated host/history dispatch and bounded loopback TCP pass; durable service/process evidence remains |
 | P-0092 | P17-01 | Deterministic 19-entry package core 7/7; registered remote app absent |
 | P-0093 | P17-08 | Widget 133/133, MCP 13/13, disposable Git 20/20, installed v0.4 prepare 18/18; visible click/effect open |
 | P-0094 | P17-07 | Local rebase/branch/manual resolver and stale-head CLI surface 37/37; host/UI/concurrent evidence open |
@@ -149,6 +149,14 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   replay returns the same checkpoint. History tests are 17/17 and host tests 7/7. The repository and
   transport remain in-memory/loopback component evidence; see
   `implementation/p17/P17-06_HISTORY_CHECKPOINT_DISPATCH_V9.md`.
+- P17-06 now has one shared strict binary frame, a client and server restricted to exact loopback
+  endpoints, bounded connect/read/write deadlines, trailing-byte rejection and a process-local
+  single-use credential handoff that zeroizes and redacts the bearer. A real OS TCP test crosses
+  authentication, exact mirror/head admission and checkpoint dispatch. `remote-sync-wire` is 3/3,
+  `local-sync` is 45/45 and `remote-sync-host` is 10/10; targeted all-target Clippy is clean. This is
+  still same-process component evidence with ephemeral HMAC and in-memory repositories, not a
+  durable daemon or actual remote transition; see
+  `implementation/p17/P17-06_LOOPBACK_TCP_TRANSPORT_V10.md`.
 
 ## Risks and holds
 
@@ -159,7 +167,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - R-0003: One independent worker timeout smoke failed; retries passed, root cause unproven.
 - R-0004: Broad P16 discovery remains red on immutable predecessor locks and legacy assets;
   targeted successor qualification is authoritative only for its stated scope.
-- R-0005: P17-03 lacks persistent credential provider/PostgreSQL lifecycle; fail closed meanwhile.
+- R-0005: P17-03/P17-06 lack persistent credential custody and PostgreSQL service lifecycle; the
+  new transport is loopback-only and fails closed meanwhile.
 - R-0006: P17-07 local resolver and graphical stale-head widget are component evidence only;
   qualified `project_conflict_resolve` host wiring and concurrent Web/Codex verification remain open.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution are open.
@@ -173,9 +182,9 @@ Synthetic or component evidence never proves actual render, save, cross-version 
    saved structure with the corrected fixture, and repair the next proven incompatibility. Then
    rerun P05-08 and P05-09 with the user present. Require lifecycle, semantic, coordinate-aware PDF
    and visual evidence and preserve every failure.
-3. Add the bounded concrete transport/credential host and durable service state behind the now
-   compatible P17-06 checkpoint path, then capture a current-PC actual remote
-   pull/push/checkpoint transition without promoting loopback or in-memory component evidence.
+3. Add PostgreSQL-backed checkpoint state and a separately launched current-PC host/client behind
+   the new bounded loopback transport, then implement and capture actual pull/push/checkpoint
+   transitions without promoting same-process or in-memory component evidence.
 4. Extend that host protocol with the widget's bounded P17-07 `project_conflict_resolve` contract,
    register it only after authenticated transport exists, and run one real concurrent Web/Codex
    conflict per resolution path. The graphical component itself is implemented and locally tested.
