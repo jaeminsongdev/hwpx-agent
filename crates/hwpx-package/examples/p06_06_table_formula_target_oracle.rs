@@ -9,7 +9,7 @@ use hwpx_package::{
     BoundedZipReader, HANCOM_2020_PARAGRAPH_NAMESPACE, IdIndex, IdIndexLimits, IdRuleProfile,
     PackageGraph, PackageGraphLimits, PackageLimits, PreservingXmlDocument, TableFormulaHwpxLimits,
     TableFormulaHwpxReadback, TableFormulaHwpxReader, TableLayoutHwpxLimits,
-    TableLayoutHwpxReadback, TableLayoutHwpxReader, TextFlowLimits, TextFlowReader,
+    TableLayoutHwpxReadback, TableLayoutHwpxReader, TextFlowLimits, TextFlowReader, XmlByteSpan,
     XmlElementToken,
 };
 use sha2::{Digest as _, Sha256};
@@ -17,7 +17,10 @@ use sha2::{Digest as _, Sha256};
 const MAX_FIXTURE_BYTES: u64 = 8 * 1024 * 1024;
 const EXPECTED_TARGET_SHA256: &str =
     "6514a69b8c8c9d320bc19a032b16f2b71d59a38f164c690bc9e3d320a93320e5";
+const EXPECTED_ORACLE_SHA256: &str =
+    "8b33d2353ebec9eccbcbbde0c0b31eb440390ddf9c38bad7c064f179b1ab2325";
 const EXPECTED_PREVIEW: &[u8] = b"<0><0><0><0><17><10><25><52>\r\n\r\n";
+const EXPECTED_ORACLE_PREVIEW: &[u8] = b"<0><0><0><0>\r\n<17><10><25><52>\r\n\r\n";
 const EXPECTED_VISIBLE: &[&str] = &["0", "0", "0", "0", "17", "10", "25", "52"];
 const EXPECTED_ROWS: u32 = 2;
 const EXPECTED_COLUMNS: u32 = 4;
@@ -25,6 +28,11 @@ const EXPECTED_CELL_WIDTH: u32 = 10_488;
 const EXPECTED_CELL_HEIGHT: u32 = 282;
 const EXPECTED_TABLE_WIDTH: u32 = 41_952;
 const EXPECTED_TARGET_TABLE_HEIGHT: u32 = 2_564;
+const EXPECTED_INNER_MARGIN: u32 = 510;
+const EXPECTED_INNER_MARGIN_VERTICAL: u32 = 141;
+const EXPECTED_PACKAGE_PARTS: usize = 11;
+const EXPECTED_ORACLE_SECTION_CACHE_COUNT: usize = 10;
+const EXPECTED_ORACLE_CELL_CACHE_WIDTH: u32 = 9_468;
 
 struct Arguments {
     target: PathBuf,
@@ -60,6 +68,9 @@ fn run(arguments: &Arguments) -> Result<(), Box<dyn Error>> {
     if arguments.expected_target_sha256 != EXPECTED_TARGET_SHA256 {
         return Err("exact structural target identity differs".into());
     }
+    if arguments.expected_oracle_sha256 != EXPECTED_ORACLE_SHA256 {
+        return Err("exact Hangul 2020 oracle identity differs".into());
+    }
     if arguments.target == arguments.oracle {
         return Err("target and oracle paths must differ".into());
     }
@@ -91,7 +102,10 @@ fn run(arguments: &Arguments) -> Result<(), Box<dyn Error>> {
             "target_sha256={} oracle_sha256={} formula_sha256={} content_sha256={} ",
             "cell_text_set_sha256={} rows={} columns={} owner_row={} owner_column={} ",
             "target_table_height_hwpunit={} oracle_table_height_hwpunit={} ",
-            "oracle_line_cache_counts={} cache_value=52 cache_oracle=verified_external_receipt"
+            "target_formula_unowned_sha256={} oracle_formula_unowned_sha256={} ",
+            "oracle_renderer_cache_sha256={} oracle_section_cache_count={} ",
+            "oracle_line_cache_counts={} section_equal_after_renderer_cache_strip=true ",
+            "cache_value=52 cache_oracle=verified_external_receipt"
         ),
         arguments.expected_target_sha256,
         arguments.expected_oracle_sha256,
@@ -107,6 +121,10 @@ fn run(arguments: &Arguments) -> Result<(), Box<dyn Error>> {
         oracle.formula.formula.owner().column,
         target.layout.table_height_hwpunit,
         oracle.layout.table_height_hwpunit,
+        hex(target.formula.unowned_sha256),
+        hex(oracle.formula.unowned_sha256),
+        hex(oracle.renderer_cache.sha256),
+        oracle.renderer_cache.total_count,
         join_usize(&oracle.line_cache_counts),
     );
     Ok(())
@@ -119,6 +137,22 @@ struct PackageInspection {
     layout: TableLayoutHwpxReadback,
     cell_text_set_sha256: [u8; 32],
     line_cache_counts: Vec<usize>,
+    section_without_renderer_cache: Vec<u8>,
+    renderer_cache: RendererCacheEvidence,
+}
+
+struct RendererCacheEvidence {
+    total_count: usize,
+    cell_count: usize,
+    outside_positions_and_widths: Vec<(u32, u32)>,
+    sha256: [u8; 32],
+}
+
+struct RendererCacheRecord {
+    span: XmlByteSpan,
+    in_cell: bool,
+    vertpos: u32,
+    horzsize: u32,
 }
 
 fn inspect_package(bytes: &[u8]) -> Result<PackageInspection, Box<dyn Error>> {
@@ -154,6 +188,8 @@ fn inspect_package(bytes: &[u8]) -> Result<PackageInspection, Box<dyn Error>> {
     let layout =
         TableLayoutHwpxReader::read_in_section(&section, 0, TableLayoutHwpxLimits::default())?;
     let (cell_text_set_sha256, line_cache_counts) = read_cell_evidence(&section, &formula)?;
+    let (section_without_renderer_cache, renderer_cache) =
+        strip_and_inspect_renderer_caches(&section)?;
     Ok(PackageInspection {
         part_count: graph.parts.len(),
         preview,
@@ -161,12 +197,16 @@ fn inspect_package(bytes: &[u8]) -> Result<PackageInspection, Box<dyn Error>> {
         layout,
         cell_text_set_sha256,
         line_cache_counts,
+        section_without_renderer_cache,
+        renderer_cache,
     })
 }
 
 fn require_target(value: &PackageInspection) -> Result<(), Box<dyn Error>> {
     let formula_limits = FormulaLimits::default();
-    if value.preview != EXPECTED_PREVIEW
+    if value.part_count != EXPECTED_PACKAGE_PARTS
+        || value.preview != EXPECTED_PREVIEW
+        || value.formula.formula_field_count != 1
         || (value.formula.rows, value.formula.columns) != (EXPECTED_ROWS, EXPECTED_COLUMNS)
         || (
             value.formula.formula.owner().row,
@@ -184,6 +224,10 @@ fn require_target(value: &PackageInspection) -> Result<(), Box<dyn Error>> {
         || value.layout.cells.len() != EXPECTED_VISIBLE.len()
         || value.layout.table_width_hwpunit != EXPECTED_TABLE_WIDTH
         || value.layout.table_height_hwpunit != EXPECTED_TARGET_TABLE_HEIGHT
+        || value.layout.inner_margin.left_hwpunit != EXPECTED_INNER_MARGIN
+        || value.layout.inner_margin.right_hwpunit != EXPECTED_INNER_MARGIN
+        || value.layout.inner_margin.top_hwpunit != EXPECTED_INNER_MARGIN_VERTICAL
+        || value.layout.inner_margin.bottom_hwpunit != EXPECTED_INNER_MARGIN_VERTICAL
         || value.layout.cells.iter().any(|cell| {
             cell.width_hwpunit != EXPECTED_CELL_WIDTH
                 || cell.height_hwpunit != EXPECTED_CELL_HEIGHT
@@ -192,6 +236,9 @@ fn require_target(value: &PackageInspection) -> Result<(), Box<dyn Error>> {
         })
         || value.cell_text_set_sha256 != expected_text_set_sha256()
         || value.line_cache_counts != vec![0; EXPECTED_VISIBLE.len()]
+        || value.renderer_cache.total_count != 0
+        || value.renderer_cache.cell_count != 0
+        || !value.renderer_cache.outside_positions_and_widths.is_empty()
     {
         return Err("target semantic profile differs".into());
     }
@@ -203,20 +250,183 @@ fn require_oracle(
     oracle: &PackageInspection,
 ) -> Result<(), Box<dyn Error>> {
     if oracle.part_count != target.part_count
-        || oracle.preview != target.preview
-        || oracle.formula != target.formula
+        || oracle.preview != EXPECTED_ORACLE_PREVIEW
+        || oracle.formula.profile_id != target.formula.profile_id
+        || oracle.formula.rows != target.formula.rows
+        || oracle.formula.columns != target.formula.columns
+        || oracle.formula.formula != target.formula.formula
+        || oracle.formula.formula_field_count != target.formula.formula_field_count
         || (oracle.layout.rows, oracle.layout.columns) != (EXPECTED_ROWS, EXPECTED_COLUMNS)
         || oracle.layout.cells.len() != EXPECTED_VISIBLE.len()
         || oracle.layout.table_width_hwpunit != EXPECTED_TABLE_WIDTH
+        || oracle.layout.table_height_hwpunit != EXPECTED_TARGET_TABLE_HEIGHT
+        || oracle.layout.inner_margin != target.layout.inner_margin
         || oracle.layout.cells != target.layout.cells
         || oracle.layout.content_sha256 != target.layout.content_sha256
         || oracle.cell_text_set_sha256 != target.cell_text_set_sha256
-        || oracle.line_cache_counts.len() != EXPECTED_VISIBLE.len()
-        || oracle.line_cache_counts.contains(&0)
+        || oracle.line_cache_counts != vec![1; EXPECTED_VISIBLE.len()]
+        || oracle.renderer_cache.total_count != EXPECTED_ORACLE_SECTION_CACHE_COUNT
+        || oracle.renderer_cache.cell_count != EXPECTED_VISIBLE.len()
+        || oracle.renderer_cache.outside_positions_and_widths != [(0, 0), (3_130, 42_520)]
+        || oracle.section_without_renderer_cache != target.section_without_renderer_cache
     {
         return Err("oracle semantic readback differs".into());
     }
     Ok(())
+}
+
+fn strip_and_inspect_renderer_caches(
+    section: &[u8],
+) -> Result<(Vec<u8>, RendererCacheEvidence), Box<dyn Error>> {
+    let document = PreservingXmlDocument::parse(section)?;
+    let arrays: Vec<_> = document
+        .elements()
+        .iter()
+        .enumerate()
+        .filter(|(_, element)| has_name(element, "linesegarray"))
+        .map(|(index, _)| index)
+        .collect();
+    let mut spans = Vec::new();
+    spans.try_reserve_exact(arrays.len())?;
+    let mut cell_count = 0usize;
+    let mut outside_positions_and_widths = Vec::new();
+    let mut digest = Sha256::new();
+    digest.update(b"hwpx-agent.p06-06-renderer-cache/v1\0");
+
+    for array in arrays.iter().copied() {
+        let record = inspect_renderer_cache(section, &document, array)?;
+        if record.in_cell {
+            if record.vertpos != 0 || record.horzsize != EXPECTED_ORACLE_CELL_CACHE_WIDTH {
+                return Err("cell renderer cache geometry differs".into());
+            }
+            cell_count = cell_count
+                .checked_add(1)
+                .ok_or("renderer cache count overflow")?;
+        } else {
+            outside_positions_and_widths
+                .try_reserve(1)
+                .map_err(|_| "renderer cache allocation failed")?;
+            outside_positions_and_widths.push((record.vertpos, record.horzsize));
+        }
+        let raw = section
+            .get(record.span.start()..record.span.end())
+            .ok_or("renderer cache span is outside section")?;
+        digest.update(Sha256::digest(raw));
+        spans.push(record.span);
+    }
+
+    let stripped = strip_renderer_cache_spans(section, &mut spans)?;
+    Ok((
+        stripped,
+        RendererCacheEvidence {
+            total_count: arrays.len(),
+            cell_count,
+            outside_positions_and_widths,
+            sha256: digest.finalize().into(),
+        },
+    ))
+}
+
+fn inspect_renderer_cache(
+    section: &[u8],
+    document: &PreservingXmlDocument,
+    array: usize,
+) -> Result<RendererCacheRecord, Box<dyn Error>> {
+    let array_element = document
+        .elements()
+        .get(array)
+        .ok_or("renderer cache array is missing")?;
+    if !array_element.attributes().is_empty()
+        || array_element
+            .parent()
+            .and_then(|parent| document.elements().get(parent))
+            .is_none_or(|parent| !has_name(parent, "p"))
+    {
+        return Err("renderer cache array shape differs".into());
+    }
+    let segment_index = array_element
+        .first_child()
+        .ok_or("renderer cache segment is missing")?;
+    if array_element.last_child() != Some(segment_index) {
+        return Err("renderer cache segment cardinality differs".into());
+    }
+    let segment = document
+        .elements()
+        .get(segment_index)
+        .ok_or("renderer cache segment is missing")?;
+    if !has_name(segment, "lineseg") || !segment.is_empty() {
+        return Err("renderer cache segment shape differs".into());
+    }
+    let attributes = [
+        exact_u32_attribute(section, segment, "textpos")?,
+        exact_u32_attribute(section, segment, "vertsize")?,
+        exact_u32_attribute(section, segment, "textheight")?,
+        exact_u32_attribute(section, segment, "baseline")?,
+        exact_u32_attribute(section, segment, "spacing")?,
+        exact_u32_attribute(section, segment, "horzpos")?,
+        exact_u32_attribute(section, segment, "flags")?,
+    ];
+    if segment.attributes().len() != 9 || attributes != [0, 1_000, 1_000, 850, 600, 0, 393_216] {
+        return Err("renderer cache attribute profile differs".into());
+    }
+    Ok(RendererCacheRecord {
+        span: array_element
+            .outer_span()
+            .ok_or("renderer cache span is missing")?,
+        in_cell: nearest_ancestor(document, array, "tc").is_some(),
+        vertpos: exact_u32_attribute(section, segment, "vertpos")?,
+        horzsize: exact_u32_attribute(section, segment, "horzsize")?,
+    })
+}
+
+fn strip_renderer_cache_spans(
+    section: &[u8],
+    spans: &mut [XmlByteSpan],
+) -> Result<Vec<u8>, Box<dyn Error>> {
+    spans.sort_by_key(|span| span.start());
+    let removed_bytes = spans.iter().try_fold(0usize, |total, span| {
+        total
+            .checked_add(span.end().saturating_sub(span.start()))
+            .ok_or("renderer cache size overflow")
+    })?;
+    let mut stripped = Vec::new();
+    stripped.try_reserve_exact(
+        section
+            .len()
+            .checked_sub(removed_bytes)
+            .ok_or("renderer cache size underflow")?,
+    )?;
+    let mut cursor = 0usize;
+    for span in spans {
+        if span.start() < cursor || span.end() > section.len() {
+            return Err("renderer cache spans overlap".into());
+        }
+        stripped.extend_from_slice(&section[cursor..span.start()]);
+        cursor = span.end();
+    }
+    stripped.extend_from_slice(&section[cursor..]);
+    Ok(stripped)
+}
+
+fn exact_u32_attribute(
+    source: &[u8],
+    element: &XmlElementToken,
+    name: &str,
+) -> Result<u32, Box<dyn Error>> {
+    let mut values = element.attributes().iter().filter(|attribute| {
+        !attribute.is_namespace_declaration()
+            && attribute.name().namespace().is_none()
+            && attribute.name().local_name() == name
+    });
+    let attribute = values.next().ok_or("renderer cache attribute is missing")?;
+    if values.next().is_some() {
+        return Err("renderer cache attribute is duplicated".into());
+    }
+    let span = attribute.value_span();
+    let raw = source
+        .get(span.start()..span.end())
+        .ok_or("renderer cache attribute span is outside section")?;
+    Ok(std::str::from_utf8(raw)?.parse()?)
 }
 
 fn read_cell_evidence(
@@ -477,4 +687,57 @@ fn hex(value: [u8; 32]) -> String {
         output.push(char::from(DIGITS[usize::from(byte & 0x0f)]));
     }
     output
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const PREFIX: &str = concat!(
+        "<hs:sec xmlns:hs=\"http://www.hancom.co.kr/hwpml/2011/section\" ",
+        "xmlns:hp=\"http://www.hancom.co.kr/hwpml/2011/paragraph\">"
+    );
+    const SEGMENT: &str = concat!(
+        "<hp:linesegarray><hp:lineseg textpos=\"0\" vertpos=\"0\" vertsize=\"1000\" ",
+        "textheight=\"1000\" baseline=\"850\" spacing=\"600\" horzpos=\"0\" ",
+        "horzsize=\"9468\" flags=\"393216\"/></hp:linesegarray>"
+    );
+
+    fn section(segment: &str) -> Vec<u8> {
+        format!(
+            "{PREFIX}<hp:tbl><hp:tr><hp:tc><hp:p><hp:run><hp:t>52</hp:t></hp:run>{segment}</hp:p></hp:tc></hp:tr></hp:tbl></hs:sec>"
+        )
+        .into_bytes()
+    }
+
+    #[test]
+    fn exact_cell_renderer_cache_is_stripped_without_other_byte_drift() {
+        let source = section(SEGMENT);
+        let expected = section("");
+        let (stripped, evidence) = strip_and_inspect_renderer_caches(&source).unwrap();
+        assert_eq!(stripped, expected);
+        assert_eq!(evidence.total_count, 1);
+        assert_eq!(evidence.cell_count, 1);
+        assert!(evidence.outside_positions_and_widths.is_empty());
+    }
+
+    #[test]
+    fn renderer_cache_attribute_drift_fails_closed() {
+        let source = section(&SEGMENT.replacen("baseline=\"850\"", "baseline=\"851\"", 1));
+        assert!(strip_and_inspect_renderer_caches(&source).is_err());
+    }
+
+    #[test]
+    fn duplicate_renderer_cache_segment_fails_closed() {
+        let duplicate = SEGMENT.replacen(
+            "</hp:linesegarray>",
+            concat!(
+                "<hp:lineseg textpos=\"0\" vertpos=\"0\" vertsize=\"1000\" ",
+                "textheight=\"1000\" baseline=\"850\" spacing=\"600\" horzpos=\"0\" ",
+                "horzsize=\"9468\" flags=\"393216\"/></hp:linesegarray>"
+            ),
+            1,
+        );
+        assert!(strip_and_inspect_renderer_caches(&section(&duplicate)).is_err());
+    }
 }

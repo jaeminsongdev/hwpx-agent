@@ -1,6 +1,6 @@
 # HWPX Agent implementation ledger
 
-- Updated: 2026-09-07
+- Updated: 2026-09-08
 - Root: `D:\개발\hwpx-agent`
 - Objective: complete P00-P20 without weakening evidence Gates.
 - Current target: licensed Hangul 2020 `11.0.0.9136` x86 on this PC only.
@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-05 current-PC PASS; 06 source/adapter and exact structural differential PASS; licensed product-target oracle blocked at user access approval |
+| P06 | in progress | 01-06 current-PC PASS; P06-07 pagination is next |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -39,7 +39,7 @@
 |---|---|---|
 | P-0052 | P06-04 cell formatting | current-PC PASS: actual source plus v2 product target `264b062c...a48d28a`, Hangul 2020 save/reopen text identity, semantic/style digest identity and PDF visual review pass on attempt04; attempts 01-03 remain timeout diagnostics |
 | P-0053 | P06-05 sizing/autofit | current-PC PASS: pure solver, installed-font receipt and HWPX v2 adapter; failed `Open=false`, zero-guard and 4-micrometer calibration evidence preserved; calibrated target `3dfcf2a1...d9bcb5`, actual Hangul 2020 save/reopen lines `1,3,1,1`, PDF visual oracle, v2 contract and source v36 pass |
-| P-0054 | P06-06 FormulaAst | pure core, source capture and adapter pass; deterministic 2x4 row/column structural target `6514a69b...320e5` and pre-runtime oracle checker pass; three actual target attempts stopped at `open_input` without a completed approval signal, so licensed save/reopen/PDF oracle remains and the card is not complete |
+| P-0054 | P06-06 FormulaAst | current-PC PASS: pure core, source/adapter, deterministic 2x4 row/column target `6514a69b...320e5`, actual Hangul 2020 attempt04 save/reopen, strict saved-HWPX formula/cache/layout oracle and PDF visual review pass; attempts 01-03 remain failed timeout diagnostics |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint evidence pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -164,14 +164,29 @@
   owned Hwp process and left residue zero. They are access-wait diagnostics, not semantic failures
   and not PASS. Exact receipts: `implementation/p06/P06-06_TARGET_ATTEMPTS_DIAGNOSTIC.md`.
 - The watchdog now preserves the observed progress phase and infers window visibility only from the
-  engine's validated post-Visible progress ordering. A fresh user-approved target save/reopen,
-  typed oracle and PDF visual review remain; P06-06 is not complete.
+  engine's validated post-Visible progress ordering.
 - Source v38 acceptance run `cbc7c29f6e684595a4c0c3bf49029d48` passed 11/11 at clean commit
   `6e906ae7aa3a77a850c7c95b8cd3bb40795befe6`; receipt SHA-256 is
   `e8492a60f732c424ca7b2a5316dba6c036bcd10d9030895c0d02d50d4649d951`. Qualification contract
   SHA-256 `818e41c4e8ee46eea3b0f31b7d769eb56d19f9de46310ed73e37285cb237ebe0` binds nine structural,
   oracle and diagnostic sources over immutable v37 while keeping runtime/P06-06/product claims
   false.
+- Actual target attempt04 completed after the user approved all three access prompts. Its 21-event
+  journal reached `terminal/pass`; input/output visible-text SHA-256 stayed
+  `91fd67b8cae0b9da6f05a8e960e061c239f58979cdfe19d4aabb40a445571644`, input stayed unchanged,
+  save/reopen/PDF/quit passed and Hwp residue was zero. Saved HWPX SHA-256 is
+  `8b33d2353ebec9eccbcbbde0c0b31eb440390ddf9c38bad7c064f179b1ab2325`.
+- The strict oracle preserves the exact D2 `SUM(A2:C2)` AST, value 52, 2x4 topology, all eight
+  visible values, table/cell geometry, margins and content digest. Each cell has one exact one-line
+  cache. Removing all ten renderer-owned section caches makes the saved section byte-identical to
+  the target section; remaining package drift is limited to three exact heading fallbacks,
+  modified-date/header-spine metadata, caret position, row-boundary preview text and regenerated
+  preview image.
+- PDF SHA-256 `e09e5a0d...0149f0` is a valid one-page A4 render; visual review confirms the 2x4
+  table and all values with no clipping or overlap. V2 contract, migration, report, ignored-artifact
+  validator and five tamper test groups pass. P06-06 is current-PC PASS; P06 remains in progress.
+- Workspace all-target Rust tests, Clippy `-D warnings` and formatting pass; P06 Python tests pass
+  62/62 and the 11 P05/P06 PowerShell static safety suites pass.
 
 ## Open risks and holds
 
@@ -180,7 +195,7 @@
 - R-0005: P17 durable checkpoint exists, but atomic durable mirror role/head admission, persistent
   credential custody, production lifecycle and real pull/push do not.
 - R-0006: P17 conflict resolver/widget are component evidence only.
-- R-0007: P06-06~09 still require actual Hangul 2020 formula, pagination, inspect/select and the
+- R-0007: P06-07~09 still require actual Hangul 2020 pagination, inspect/select and the
   61-capability target conformance matrix. P06-05's exact fixture PASS does not prove arbitrary
   documents or other PCs/versions.
 - R-0008: bulk discovery of historical source-qualification tests currently reports 12 errors in
@@ -192,18 +207,17 @@
 
 ## Next actions
 
-1. At `max`, run one fresh P06-06 product-target attempt only while the user is present to approve
-   Hangul access; keep cache `unverified` until its exact saved-HWPX and PDF oracle passes.
-2. Close P06-06 only after formula/cache semantic readback and licensed Hangul 2020 save/reopen
-   evidence; then proceed to P06-07 pagination at `max`.
-3. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
+1. At `max`, start P06-07 pagination from its roadmap requirements and current Hangul 2020 source
+   truth; keep renderer/page claims unverified until an exact save/reopen/PDF oracle passes.
+2. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
    applicable offline Linux/security/STRICT checks without weakening actual-evidence Gates.
 
 ## Context pack and archive pointers
 
 - Read first: this file, `implementation/p06/P06-04_CELL_STYLE_POLICY.md`,
-  `implementation/p06/P06-06_FORMULA_AST_POLICY.md`, `implementation/p06/P06-03_REPORT.md`, and
-  `implementation/p05/P05_GATE_REPORT.md`.
+  `implementation/p06/P06-06_FORMULA_AST_POLICY.md`,
+  `implementation/p06/P06-06_TARGET_READBACK_REPORT.md`, `implementation/p06/P06-03_REPORT.md`,
+  and `implementation/p05/P05_GATE_REPORT.md`.
 - P06-04 source tool: `implementation/p06/tools/create-hancom-2020-table-source.ps1`.
 - P06-05 metric qualification: commits `af3dbf0`, `42aba1c`, `742b3d2`.
 - P17 source qualification: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V38.md`; other details

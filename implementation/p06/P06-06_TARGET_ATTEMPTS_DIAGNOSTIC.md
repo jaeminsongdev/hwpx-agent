@@ -1,9 +1,10 @@
 # P06-06 product-target Hangul 2020 attempt diagnostics
 
-Date: 2026-09-07
+Date: 2026-09-07; successor closure recorded 2026-09-08
 
-Decision: **NOT PASS**. These runs prove bounded cleanup and the exact blocking phase only; they do
-not prove formula evaluation, save/reopen, PDF rendering, or a product-target oracle.
+Decision for attempts 01-03: **NOT PASS**. These runs prove bounded cleanup and the exact blocking
+phase only; they do not prove formula evaluation, save/reopen, PDF rendering, or a product-target
+oracle. Attempt 04 is separate successful evidence recorded below and in the v2 report.
 
 ## Exact target
 
@@ -46,9 +47,11 @@ diagnostics only: it does not bypass access
 approval, extend scope, weaken success criteria, or promote any failed attempt. The three historical
 traces above remain immutable evidence produced before this correction.
 
-## Exact next action
+## Successor closure
 
-Do not retry automatically. When the user is present to approve every Hangul file-access prompt,
-run one fresh attempt with new output, trace, progress, and PDF paths. P06-06 can close only if the
-full lifecycle passes, the exact text digest remains stable, the saved HWPX passes the typed formula
-and layout oracle, the PDF passes visual review, and Hwp residue is zero.
+Attempt 04 completed on 2026-09-08 after the user approved all three access prompts. Its 21-event
+lifecycle reached `terminal/pass`, the input and visible-text digest stayed exact, the saved HWPX
+passed the typed formula/layout/renderer-cache oracle, the PDF passed visual review, and Hwp residue
+was zero. This later result does not modify or promote attempts 01-03. The exact closure evidence is
+bound by `protocol/private/p06-table-formula-target-v2.json` and reported in
+`implementation/p06/P06-06_TARGET_READBACK_REPORT.md`.
