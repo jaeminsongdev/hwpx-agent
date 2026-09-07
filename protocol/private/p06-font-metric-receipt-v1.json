@@ -1,0 +1,158 @@
+{
+  "schema_version": "hwpx-agent.font-metric-receipt-contract/v1",
+  "model_schema_version": "hwpx-agent.p06-05-current-font-metric-receipt/v1",
+  "scope": "p06_05_current_pc_hancom_2020_named_synthetic_font_metric_component",
+  "prerequisites": [
+    "hwpx-agent.table-layout/v1",
+    "current_pc_exact_hancom_2020_target_profile",
+    "installed_HANBatang_ttf_identity"
+  ],
+  "source_lock_canonicalization": "utf8_lf_sha256",
+  "source_locks": [
+    {
+      "path": "docs/03_document_model/06_table_model.md",
+      "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"
+    },
+    {
+      "path": "docs/12_implementation_guides/05_page_table_layout_algorithms.md",
+      "sha256": "4d94e6d462f7fc2f2187827ab436eb17c2bb2fe8f728ba8eee5f051c16bb4274"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "protocol/private/p06-table-layout-v1.json",
+      "sha256": "a376aea78209005518cd886a33bb47baaadc0955022bf5f85ac86f7189ac43e9"
+    },
+    {
+      "path": "protocol/private/p06-table-layout-hwpx-v1.json",
+      "sha256": "ab21dbcb1b646956f5e645ef10ea37c68e6416f9384fc7292bdc565acf8f4092"
+    },
+    {
+      "path": "implementation/p00/target-profile.yaml",
+      "sha256": "538b7b2eb953ea81d95b30f46479e81983d309277f6d16ca6e6f8d0a24d48af2"
+    },
+    {
+      "path": "implementation/p00/font-printer-manifest.yaml",
+      "sha256": "67637dfd6c97f683a87262197780f9cb7f6e829629ba1ab8da42dfb156e301a3"
+    }
+  ],
+  "component_capabilities": [
+    "table.width_height",
+    "table.column_fixed_width",
+    "table.autofit_content",
+    "table.autofit_page"
+  ],
+  "exact_target": {
+    "profile_id": "hancom-hangul-2020-secondary",
+    "hangul_build": "11.0.0.9136",
+    "architecture": "x86",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    "font_file_name": "HANBatang.ttf",
+    "font_file_bytes": 28412796,
+    "font_file_sha256": "0dbeb7b129fcec63f8d6b7f1d3b5bb991c1d599e725286518ccc598de643f014",
+    "font_family": "함초롬바탕"
+  },
+  "measurement_profile": {
+    "profile_id": "hwpx-agent.font-metric.gdiplus-typographic-96dpi/1",
+    "provider": "System.Drawing.GDIPlus.GenericTypographic/1",
+    "dpi": 96,
+    "font_size_millipoints": 10000,
+    "repeat_count": 2,
+    "conversion": "micrometers=round_away_from_zero(pixels*25400/96)",
+    "font_source": "exact_private_font_file_loaded_into_PrivateFontCollection",
+    "family_name_admission": "canonical_Hangul_name_or_localized_HCR_Batang_under_the_same_exact_font_file_sha256_then_emit_canonical_name"
+  },
+  "named_fixture": {
+    "scope": "current_pc_named_synthetic_fixture_only",
+    "ordered_cell_ids": [
+      "cell-a",
+      "cell-b",
+      "cell-c",
+      "cell-d"
+    ],
+    "measurement_set_sha256": "96e3ad33591b098d3ca15c88242303aa7b11dc1730cf2a499273afe3ad7790a9",
+    "cell_count": 4,
+    "raw_text_in_receipt": false
+  },
+  "admission": {
+    "json": "bounded_UTF8_exact_shape_unknown_and_duplicate_fields_rejected",
+    "identity": "exact_schema_run_scope_state_profile_target_font_provider_and_conversion",
+    "cells": "exact_order_ids_text_sha256_and_positive_bounded_metrics",
+    "digest": "canonical_cells_sha256_must_match_both_receipt_and_qualified_measurement_set",
+    "claims": "all_privacy_renderer_version_production_and_completion_claims_must_be_false"
+  },
+  "solver_binding": {
+    "status": "FontMetricStatus_Verified_only_after_full_receipt_admission",
+    "profile": "exact_current_font_metric_profile_id",
+    "source": "sha256_of_exact_admitted_receipt_bytes",
+    "text": "never_returned_or_logged",
+    "margins": "caller_supplied_nonnegative_checked_micrometers"
+  },
+  "privacy_and_side_effects": {
+    "user_document": "never_opened",
+    "font_copy_or_redistribution": "never_performed",
+    "hangul_process": "not_created_by_measurement",
+    "ui_input": "not_invoked",
+    "network": "not_invoked",
+    "registry_or_system_setting": "not_changed",
+    "publication": "create_new_run_directory_and_ASCII_safe_JSON_receipt_only_under_ignored_artifacts_root"
+  },
+  "default_limits": {
+    "input_bytes": 262144,
+    "cells": 4,
+    "dimension_micrometers": 1000000000
+  },
+  "validation_order": [
+    "finite_receipt_bytes_and_strict_JSON_shape",
+    "exact_target_font_provider_profile_and_false_claims",
+    "exact_four_cell_count_and_canonical_measurement_digest",
+    "qualified_measurement_set_digest_allowlist",
+    "exact_order_cell_identity_text_digest_and_metric_bounds",
+    "checked_margin_and_outer_width_construction",
+    "verified_solver_evidence_bound_to_exact_receipt_sha256"
+  ],
+  "failure_policy": [
+    "invalid_or_above_ceiling_limit",
+    "empty_oversized_malformed_unknown_or_duplicate_JSON",
+    "run_scope_target_font_provider_or_profile_drift",
+    "unsafe_true_claim",
+    "cell_count_order_identity_or_text_digest_drift",
+    "self_consistent_but_unqualified_measurement_set_digest",
+    "nonpositive_preferred_below_minimum_or_above_limit_metric",
+    "missing_cell_negative_margin_or_checked_outer_width_overflow"
+  ],
+  "actual_evidence": {
+    "windows_powershell_5_1_run_id": "4b9b0cac589946918140abc4a12c1be1",
+    "windows_powershell_5_1_receipt_sha256": "c4755f99ebf1e49010bf26425d61f77c496fa713d86404004348027acfc1d2ab",
+    "powershell_7_run_id": "cb76a3477e2c4bcdac78b6647e187acf",
+    "powershell_7_receipt_sha256": "329d424445c463bae9c84215cc627a1e9b1b1e3287de6f8d1eb01439ccdde6f3",
+    "measurement_set_sha256": "96e3ad33591b098d3ca15c88242303aa7b11dc1730cf2a499273afe3ad7790a9",
+    "cell_count": 4,
+    "static_checks_each": "16_of_16_passed",
+    "python_verifier_each": "passed",
+    "rust_actual_receipt_consumer_each": "passed",
+    "artifact_git_tracked": false,
+    "actual_hangul_renderer": false
+  },
+  "migration": "protocol/migrations/p06-font-metric-receipt-v0-to-v1.md",
+  "not_claimed": {
+    "actual_hangul_text_layout_equivalence": false,
+    "actual_hangul_2020_renderer_oracle": false,
+    "pdf_render_equivalence": false,
+    "font_copy_embedding_or_redistribution": false,
+    "arbitrary_text_font_or_point_size": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_04_complete": false,
+    "p06_05_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

@@ -7,6 +7,7 @@
 //! nested-package checks have succeeded.
 
 mod character_style;
+mod font_metric_receipt;
 mod graph;
 mod header_footer;
 mod id_index;
@@ -38,6 +39,10 @@ pub use character_style::{
     FontFaceGroup, FontFamily, FontType, FontTypeInfo, HANCOM_2020_HEAD_NAMESPACE, LanguageSlot,
     LanguageValues, LineType1, LineType2, Shadow, ShadowType, Strikeout, SubstituteFont, Underline,
     UnderlinePosition,
+};
+pub use font_metric_receipt::{
+    CURRENT_FONT_METRIC_PROFILE_ID, CurrentFontMetricCell, CurrentFontMetricLimits,
+    CurrentFontMetricReceipt, FontMetricReceiptError,
 };
 pub use graph::{
     GraphError, MediaType, PackageGraph, PackageGraphLimitConfig, PackageGraphLimits, PartRecord,
