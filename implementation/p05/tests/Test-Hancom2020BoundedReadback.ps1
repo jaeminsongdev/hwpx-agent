@@ -22,6 +22,94 @@ $engineErrors = $null
 )
 $bounded = [System.IO.File]::ReadAllText($boundedPath)
 $engine = [System.IO.File]::ReadAllText($enginePath)
+
+function Test-ProgressObservation {
+    param(
+        [Parameter(Mandatory)]
+        [ValidateSet('preflight_terminal', 'open_running', 'skipped_open')]
+        [string]$Case
+    )
+
+    $ast = [System.Management.Automation.Language.Parser]::ParseFile(
+        $boundedPath, [ref]$null, [ref]$null
+    )
+    $definition = @($ast.FindAll({
+        param($node)
+        $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and
+            $node.Name -ceq 'Read-ProgressJournal'
+    }, $true))
+    if ($definition.Count -ne 1) { return $false }
+    . ([scriptblock]::Create($definition[0].Extent.Text))
+
+    $temporaryRoot = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath()).TrimEnd('\')
+    $directory = Join-Path $temporaryRoot (
+        'hwpx-agent-p05-progress-observation-' + [guid]::NewGuid().ToString('N')
+    )
+    $path = Join-Path $directory 'progress.jsonl'
+    [void][System.IO.Directory]::CreateDirectory($directory)
+    $event = {
+        param($Sequence, $Phase, $State, $HwpProcessId)
+        [ordered]@{
+            schema_version = 'hwpx-agent.p05-hancom-readback-progress/v1'
+            sequence = $Sequence
+            recorded_at_utc = '2026-09-07T00:00:00.0000000Z'
+            worker_process_id = 123
+            hwp_process_id = $HwpProcessId
+            phase = $Phase
+            state = $State
+            raw_document_text_present = $false
+        } | ConvertTo-Json -Compress
+    }
+    try {
+        $lines = if ($Case -ceq 'preflight_terminal') {
+            @(
+                (& $event 1 'preflight' 'pass' $null),
+                (& $event 2 'terminal' 'failed' $null)
+            )
+        }
+        elseif ($Case -ceq 'skipped_open') {
+            @(
+                (& $event 1 'preflight' 'pass' $null),
+                (& $event 2 'read_input' 'running' 456)
+            )
+        }
+        else {
+            @(
+                (& $event 1 'preflight' 'pass' $null),
+                (& $event 2 'com_create' 'pass' 456),
+                (& $event 3 'open_input' 'running' 456)
+            )
+        }
+        [System.IO.File]::WriteAllText(
+            $path, ($lines -join "`n"), [System.Text.UTF8Encoding]::new($false)
+        )
+        $summary = Read-ProgressJournal -Path $path
+        if ($Case -ceq 'preflight_terminal') {
+            return [bool]$summary.valid -and
+                -not [bool]$summary.window_visible_for_user_access -and
+                [string]$summary.observed_phase -ceq 'preflight'
+        }
+        if ($Case -ceq 'skipped_open') {
+            return [bool]$summary.valid -and
+                -not [bool]$summary.window_visible_for_user_access -and
+                [string]$summary.observed_phase -ceq 'read_input'
+        }
+        return [bool]$summary.valid -and
+            [bool]$summary.window_visible_for_user_access -and
+            [string]$summary.observed_phase -ceq 'open_input'
+    }
+    finally {
+        if ([System.IO.File]::Exists($path)) { [System.IO.File]::Delete($path) }
+        if ([System.IO.Directory]::Exists($directory) -and
+            [System.IO.Path]::GetFullPath($directory).StartsWith(
+                $temporaryRoot + '\hwpx-agent-p05-progress-observation-',
+                [System.StringComparison]::OrdinalIgnoreCase
+            )) {
+            [System.IO.Directory]::Delete($directory, $false)
+        }
+    }
+}
+
 $checks = [ordered]@{
     bounded_parses = $boundedErrors.Count -eq 0
     engine_parses = $engineErrors.Count -eq 0
@@ -45,6 +133,11 @@ $checks = [ordered]@{
     progress_exact_types = $bounded -match 'sequenceIsInteger' -and $bounded -match 'privacyIsBoolean'
     progress_pid_correlation = $bounded -match 'workerProcessId -ne \[long\]\$event\.worker_process_id' -and $bounded -match 'hwpProcessId -ne \[long\]\$event\.hwp_process_id'
     progress_terminal_required = $bounded -match "progress\.last_phase -cne 'terminal'" -and $bounded -match "progress\.last_state -cne 'pass'"
+    progress_observed_phase_preserved = $bounded -match 'summary\.observed_phase = \[string\]\$event\.phase' -and $bounded -match 'failed_phase = \$observedFailurePhase'
+    progress_window_visibility_inferred = $bounded -match 'exact prefix only after setting XHwpWindows\.Visible' -and $bounded -match 'window_visible_for_user_access = \$windowVisibleForUserAccess'
+    terminal_without_open_is_not_visible = Test-ProgressObservation -Case 'preflight_terminal'
+    open_running_is_visible = Test-ProgressObservation -Case 'open_running'
+    skipped_open_is_not_visible = Test-ProgressObservation -Case 'skipped_open'
     inner_trace_correlated = $bounded -match "trace\.schema_version -ceq 'hwpx-agent\.p05-04-hancom-2020-tab-readback/v1'" -and $bounded -match 'trace\.input_sha256 -ceq \$ExpectedInputSha256'
     wrapper_rechecks_input_after_child = $bounded -match 'trace\.input_unchanged = \(Get-Sha256File -Path \$input\)'
     inner_failure_phase_preserved = $bounded -match 'childReportedFailure = \$childExitCode -ne 0' -and $bounded -match 'if \(-not \$childReportedFailure\)'

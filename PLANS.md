@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-05 current-PC PASS; 06 actual source capture and exact HWPX adapter component PASS; structural differential and product-target oracle remain |
+| P06 | in progress | 01-05 current-PC PASS; 06 source/adapter and exact structural differential PASS; licensed product-target oracle blocked at user access approval |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -39,7 +39,7 @@
 |---|---|---|
 | P-0052 | P06-04 cell formatting | current-PC PASS: actual source plus v2 product target `264b062c...a48d28a`, Hangul 2020 save/reopen text identity, semantic/style digest identity and PDF visual review pass on attempt04; attempts 01-03 remain timeout diagnostics |
 | P-0053 | P06-05 sizing/autofit | current-PC PASS: pure solver, installed-font receipt and HWPX v2 adapter; failed `Open=false`, zero-guard and 4-micrometer calibration evidence preserved; calibrated target `3dfcf2a1...d9bcb5`, actual Hangul 2020 save/reopen lines `1,3,1,1`, PDF visual oracle, v2 contract and source v36 pass |
-| P-0054 | P06-06 FormulaAst | pure core `cc92565`; actual licensed Hangul 2020 synthetic source capture `d968cae...7d38f` and exact left-prefix HWPX lift/lower adapter component pass; row/column structural differential and altered product-target oracle remain; card is not complete |
+| P-0054 | P06-06 FormulaAst | pure core, source capture and adapter pass; deterministic 2x4 row/column structural target `6514a69b...320e5` and pre-runtime oracle checker pass; three actual target attempts stopped at `open_input` without a completed approval signal, so licensed save/reopen/PDF oracle remains and the card is not complete |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint evidence pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -151,9 +151,21 @@
   57/57; workspace all-target tests, Clippy `-D warnings` and formatting pass. Contract/report:
   `protocol/private/p06-table-formula-hwpx-v1.json` and
   `implementation/p06/P06-06_FORMULA_HWPX_ADAPTER_REPORT.md`.
-- This is source-capture and adapter-component evidence only. Row/column structural differential,
-  altered product target, cache oracle and licensed Hangul target save/reopen remain `NOT_RUN`;
-  P06-06 is not complete.
+- Exact structural builder commit `95a973c` inserts column 1 and row 0, moves the owner C1 to D2,
+  transforms `SUM(A1:B1)` to `SUM(A2:C2)`, changes the unverified cache to 52, removes stale line
+  caches, and publishes three byte-identical create-new targets at SHA-256
+  `6514a69b8c8c9d320bc19a032b16f2b71d59a38f164c690bc9e3d320a93320e5`. Wrong identity and
+  overwrite paths fail closed. Formula-aware ID profile v3 accepts only the exact begin/end ID pairs.
+- Pre-runtime oracle checker commit `c8d0517` binds target identity, package graph, formula-v3 IDs,
+  exact 2x4 grid/geometry/text, formula/cache semantics, zero target line caches, and strict target
+  versus Hangul-saved comparison. Same-target substitution and wrong digest reject.
+- Actual target attempts 01-03 reached validated `open_input/running` and timed out at 600, 900 and
+  900 seconds without approval. All preserved the input, emitted no HWPX/PDF, cleaned exactly one
+  owned Hwp process and left residue zero. They are access-wait diagnostics, not semantic failures
+  and not PASS. Exact receipts: `implementation/p06/P06-06_TARGET_ATTEMPTS_DIAGNOSTIC.md`.
+- The watchdog now preserves the observed progress phase and infers window visibility only from the
+  engine's validated post-Visible progress ordering. A fresh user-approved target save/reopen,
+  typed oracle and PDF visual review remain; P06-06 is not complete.
 
 ## Open risks and holds
 
@@ -170,10 +182,10 @@
 
 ## Next actions
 
-1. At `max`, build the exact P06-06 row/column structural differential and altered product target
-   from the now-qualified adapter; keep cache `unverified` until the actual target oracle.
+1. At `max`, run one fresh P06-06 product-target attempt only while the user is present to approve
+   Hangul access; keep cache `unverified` until its exact saved-HWPX and PDF oracle passes.
 2. Close P06-06 only after formula/cache semantic readback and licensed Hangul 2020 save/reopen
-   evidence; then proceed to P06-07 pagination.
+   evidence; then proceed to P06-07 pagination at `max`.
 3. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
    applicable offline Linux/security/STRICT checks without weakening actual-evidence Gates.
 

@@ -109,6 +109,8 @@ function Read-ProgressJournal {
         event_count = 0
         last_phase = $null
         last_state = $null
+        observed_phase = $null
+        window_visible_for_user_access = $false
     }
     if (-not $summary.present) { return $summary }
     $item = Get-Item -LiteralPath $Path -Force
@@ -127,6 +129,8 @@ function Read-ProgressJournal {
     $expectedSequence = 1
     $workerProcessId = $null
     $hwpProcessId = $null
+    $preflightPrefixValid = $false
+    $comCreatePrefixValid = $false
     foreach ($line in @(Get-Content -LiteralPath $Path -Encoding UTF8)) {
         if ($expectedSequence -gt 32) { return $summary }
         if ([string]::IsNullOrWhiteSpace($line)) { return $summary }
@@ -172,6 +176,24 @@ function Read-ProgressJournal {
         $summary.event_count += 1
         $summary.last_phase = [string]$event.phase
         $summary.last_state = [string]$event.state
+        if ([string]$event.phase -cne 'terminal') {
+            $summary.observed_phase = [string]$event.phase
+        }
+        if ($expectedSequence -eq 1) {
+            $preflightPrefixValid = [string]$event.phase -ceq 'preflight' -and
+                [string]$event.state -ceq 'pass' -and $null -eq $event.hwp_process_id
+        }
+        elseif ($expectedSequence -eq 2) {
+            $comCreatePrefixValid = $preflightPrefixValid -and
+                [string]$event.phase -ceq 'com_create' -and
+                [string]$event.state -ceq 'pass' -and $null -ne $event.hwp_process_id
+        }
+        elseif ($expectedSequence -eq 3 -and $comCreatePrefixValid -and
+            [string]$event.phase -ceq 'open_input' -and
+            [string]$event.state -ceq 'running' -and $null -ne $event.hwp_process_id) {
+            # The engine publishes this exact prefix only after setting XHwpWindows.Visible.
+            $summary.window_visible_for_user_access = $true
+        }
         $expectedSequence += 1
     }
     $summary.valid = $summary.event_count -gt 0
@@ -341,6 +363,13 @@ $cleanup = Stop-OwnedHancomProcesses `
 Start-Sleep -Milliseconds 250
 $remaining = @(Get-CimInstance Win32_Process -Filter "Name='Hwp.exe'" -ErrorAction SilentlyContinue)
 $progress = Read-ProgressJournal -Path $progressFile
+$observedFailurePhase = if ([bool]$progress.valid -and
+    -not [string]::IsNullOrWhiteSpace([string]$progress.observed_phase)) {
+    [string]$progress.observed_phase
+}
+else { 'watchdog' }
+$windowVisibleForUserAccess = [bool]$progress.valid -and
+    [bool]$progress.window_visible_for_user_access
 
 $trace = $null
 if (Test-Path -LiteralPath $innerTrace -PathType Leaf) {
@@ -402,13 +431,13 @@ if ($null -eq $trace) {
         render_pdf_export_method = $null
         phases = $null
         error_code = $wrapperError
-        failed_phase = 'watchdog'
+        failed_phase = $observedFailurePhase
         raw_document_text_present = $false
         user_document_scanned = $false
         external_network_invoked = $false
         registry_or_system_setting_changed = $false
         computer_use_click_or_type_invoked = $false
-        window_visible_for_user_access = $false
+        window_visible_for_user_access = $windowVisibleForUserAccess
     }
 }
 else {
@@ -442,6 +471,8 @@ $trace | Add-Member -NotePropertyName watchdog -NotePropertyValue ([ordered]@{
     progress_event_count = [int]$progress.event_count
     progress_last_phase = $progress.last_phase
     progress_last_state = $progress.last_state
+    progress_observed_phase = $progress.observed_phase
+    window_visible_for_user_access = $windowVisibleForUserAccess
 }) -Force
 
 $json = $trace | ConvertTo-Json -Depth 10
