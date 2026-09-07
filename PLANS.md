@@ -3,8 +3,10 @@
 - Updated: 2026-09-07
 - Root: `D:\개발\hwpx-agent`
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P06-04 cell formatting, P17-06/P17-07/P17-08 and final product qualification.
-- Reasoning: max for P06-04 style lowering/readback/render, preservation, authorization and final Gate work.
+- Active: P06-04 actual Hangul cell-formatting Gate, P06-05 installed-font/render qualification,
+  P17-06/P17-07/P17-08 and final product qualification.
+- Reasoning: max for P06-04/P06-05 target-bound readback/render, preservation, authorization and
+  final Gate work.
 - UI: attempt23 sparse layout/identity, dense attempt02 automatic flow/balance, P05-08 v12
   odd/even/first-page header/footer/master and P05-09 v2 coordinate-aware VS-1 rendering passed on
   Hangul 2020. Computer Use performed no click or typing; the user approved the visible Hangul
@@ -25,7 +27,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | `implementation/p00/` through `implementation/p04/` |
 | P05 | scoped current-PC PASS | 01-09 plus actual save/reopen/readback/PDF/visual, source v20 and dual FULL Gate |
-| P06 | in progress | 01 grid, 02 operations and 03 merge/split pure-IR PASS; 04 cell formatting ready |
+| P06 | in progress | 01-03 scoped PASS; 04 lowerer ready/actual runtime waiting; 05 pure solver and HWPX adapter qualified components |
 | P07-P09 | blocked in sequence | equation, graphics and fields engines follow P06 and their stated dependencies |
 | P10 | in progress | 01-04,07,09,10 scoped pass; 05/06 actual dependencies; 08 unqualified |
 | P11-P13 | blocked | depend on P06-P10 |
@@ -44,7 +46,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0049 | P06-01 | Complete: report `implementation/p06/P06-01_REPORT.md`; source v21 and dual FULL PASS |
 | P-0050 | P06-02 | Complete: report `implementation/p06/P06-02_REPORT.md`; source v22 and dual FULL PASS |
 | P-0051 | P06-03 | Complete: report `implementation/p06/P06-03_REPORT.md`; source v23 and dual FULL PASS |
-| P-0052 | P06-04 | Ready: bounded cell style lowerer plus exact Hangul 2020 readback/render tests |
+| P-0052 | P06-04 | Runtime pending: bounded cell style lowerer/runner ready; launched blank-document source run waits for user file-access approval |
+| P-0053 | P06-05 | In progress: pure solver 15/15 and HWPX adapter 12/12; source v28 qualified; installed-font and actual Hangul renderer evidence open |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -224,29 +227,33 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   mirror role/head admission plus checkpoint transaction. Transport remains loopback-only.
 - R-0006: P17-07 local resolver and graphical stale-head widget are component evidence only;
   qualified `project_conflict_resolve` host wiring and concurrent Web/Codex verification remain open.
-- R-0007: P06-01/02/03 prove only the pure logical grid, create/insert/delete and explicit
-  merge/split content/identity transfer semantics. HWPX/Flow table lift/lower, actual Hangul 2020
-  save/reopen/readback/render, rich cell style/formula/sizing/pagination and later table features
-  remain open in P06-04~09.
+- R-0007: P06-01/02/03 prove the pure grid and structural semantics. P06-04 adds a bounded cell-style
+  lowerer and P06-05 adds a verified pure solver plus preserving HWPX size adapter, but actual Hangul
+  2020 save/reopen/render, installed-font equivalence, formula/pagination/inspection and the 61-row
+  target conformance matrix remain open in P06-04~09.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution are open.
 - HOLD-0003: P10-08 production isolation and later-version PCs are unqualified.
 
 ## Next actions and validation
 
-1. Start P06-04 at reasoning `max`: define bounded margin, border/fill, horizontal/vertical
-   alignment, direction and protection types; implement a validated cell style lowerer, prepare a
-   named disposable fixture and strict semantic/PDF verifier, then request the user's Hangul 2020
-   access approval only immediately before the actual save/reopen/readback/render run.
-2. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
+1. Complete the already launched P06-04 run at reasoning `max` after the user approves the visible
+   Hangul 2020 file-access prompt. Require the exact source HWPX/PDF/trace, zero Hwp residue, then
+   lower the target style and run the same bounded save/reopen/semantic/PDF verifier. Do not restart
+   merely because the visible approval wait produces no terminal output.
+2. Continue P06-05 at reasoning `max`: produce a bounded current-PC installed-font metric receipt,
+   bind it to the exact font source and synthetic table text, feed only verified metrics into the
+   solver, lower one named HWPX fixture, and compare semantic geometry and signed PDF rendering in
+   licensed Hangul 2020. Component tests alone do not close the card.
+3. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
-3. Move mirror role/head admission into durable PostgreSQL and combine it atomically with the
+4. Move mirror role/head admission into durable PostgreSQL and combine it atomically with the
    qualified checkpoint transaction, then implement and capture actual bounded pull/push
    transitions. Preserve the current separately launched PostgreSQL checkpoint run as the narrower
    predecessor; do not promote it to a full remote-sync or production PASS.
-4. Extend that host protocol with the widget's bounded P17-07 `project_conflict_resolve` contract,
+5. Extend that host protocol with the widget's bounded P17-07 `project_conflict_resolve` contract,
    register it only after authenticated transport exists, and run one real concurrent Web/Codex
    conflict per resolution path. The graphical component itself is implemented and locally tested.
-5. At each phase closure run target tests, regressions, current and clean-checkout FULL, applicable
+6. At each phase closure run target tests, regressions, current and clean-checkout FULL, applicable
    offline Linux/security/STRICT checks without weakening the phase-specific actual evidence Gate.
 
 ## Handoff pointers
