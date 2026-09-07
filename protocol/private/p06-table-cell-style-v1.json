@@ -1,0 +1,107 @@
+{
+  "schema_version": "hwpx-agent.table-cell-style-contract/v1",
+  "model_schema_version": "hwpx-agent.table-cell-style.hancom-2020/1",
+  "prerequisites": [
+    "hwpx-agent.paragraph-style/1",
+    "p03_preserving_xml_exact_source_spans"
+  ],
+  "scope": "p06_04_current_pc_hancom_2020_cell_style_lowering_and_readback",
+  "source_lock_canonicalization": "utf8_lf_sha256",
+  "source_locks": [
+    {
+      "path": "docs/03_document_model/06_table_model.md",
+      "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"
+    },
+    {
+      "path": "docs/12_implementation_guides/05_page_table_layout_algorithms.md",
+      "sha256": "4d94e6d462f7fc2f2187827ab436eb17c2bb2fe8f728ba8eee5f051c16bb4274"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "implementation/p02/evidence/owpml/owpml.records.v1.json",
+      "sha256": "c32f323a8fd22f228cc0a116c81881f9ae6c846525c19209142cfe7adcef6ea1"
+    },
+    {
+      "path": "implementation/p02/evidence/automation/automation-pdf.records.v1.json",
+      "sha256": "03db035d408d03ce3f78d4eca8ca76d7f9e8076ef8fadd49d8f3ed4b885317b5"
+    }
+  ],
+  "capabilities": [
+    "table.cell_padding",
+    "table.cell_border",
+    "table.cell_fill",
+    "table.cell_alignment",
+    "table.cell_text_direction",
+    "table.cell_protection"
+  ],
+  "representation": {
+    "margins": "optional_four_unsigned_hwpunit_values_with_canonical_zero_when_absent",
+    "border_and_fill": "one_exact_unique_header_borderFillIDRef",
+    "horizontal_alignment": "one_exact_unique_paraPrIDRef_whose_catalog_semantics_match",
+    "vertical_alignment": "TOP_CENTER_BOTTOM",
+    "text_direction": "HORIZONTAL_VERTICAL_VERTICALALL",
+    "protection": "all_four_exact_combinations_of_independent_protect_and_editable_bits"
+  },
+  "current_2020_shape": {
+    "cell": "hp_tc_with_exact_cellAddr_cellSpan_cellSz_cellMargin_subList_child_order",
+    "paragraphs": "one_or_more_direct_hp_p_children_with_one_uniform_paraPrIDRef",
+    "reference_width": "borderFillIDRef_is_current_implementation_uint16",
+    "unknown_style_attribute": "reject",
+    "unrelated_cell_content": "preserve_exact_bytes"
+  },
+  "lowering": {
+    "entrypoints": "standalone_tc_or_zero_based_cell_in_exact_section_with_total_cell_limit",
+    "mutation": "only_existing_style_attribute_value_spans",
+    "margins_absent": "hasMargin_zero_and_all_four_stored_values_zero",
+    "paragraph_alignment": "rewrite_every_direct_cell_paragraph_to_one_validated_reference",
+    "readback": "reparse_and_compare_all_style_fields_paragraph_count_and_content_digest",
+    "receipt": "source_output_and_content_sha256_with_bounded_lengths_and_count"
+  },
+  "validation_order": [
+    "finite_input_element_and_total_cell_limits",
+    "namespace_root_and_exact_current_shape",
+    "source_style_and_uniform_paragraph_reference",
+    "target_margin_and_uint16_reference_range",
+    "unique_border_fill_and_paragraph_reference_resolution",
+    "horizontal_alignment_semantic_match",
+    "checked_nonoverlapping_attribute_edits",
+    "finite_output_limit",
+    "semantic_and_content_readback"
+  ],
+  "failure_policy": [
+    "malformed_or_unsafe_xml",
+    "wrong_root_namespace_or_child_order",
+    "missing_duplicate_or_unknown_style_attribute",
+    "invalid_number_boolean_or_enum",
+    "noncanonical_absent_margin",
+    "mixed_cell_paragraph_references",
+    "missing_or_ambiguous_header_reference",
+    "reference_semantic_mismatch",
+    "finite_limit_or_allocation_failure",
+    "readback_or_content_drift"
+  ],
+  "source_evidence": {
+    "owpml": "P02 locked records plus official Apache-2.0 model source define tc cellMargin subList and token names",
+    "automation": "TableCreate CellBorder CellFill alignment direction and vertical actions remain documentation_only_until_runtime_gate",
+    "runtime_target": "licensed_local_Hangul_2020_11.0.0.9136_x86_only"
+  },
+  "atomicity": "source_bytes_are_immutable_and_only_a_fully_reparsed_semantically_equal_result_returns",
+  "migration": "protocol/migrations/p06-table-cell-style-v0-to-v1.md",
+  "not_claimed": {
+    "new_border_fill_catalog_insertion": false,
+    "arbitrary_table_shape_repair": false,
+    "formula_or_layout_semantics": false,
+    "general_public_automation_route": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "phase_complete": false,
+    "product_complete": false
+  }
+}

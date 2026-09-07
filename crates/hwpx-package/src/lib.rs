@@ -23,6 +23,7 @@ mod roundtrip;
 mod safe_xml;
 mod section_columns;
 mod tab_definition;
+mod table_cell_style;
 mod text_flow;
 mod vs0;
 mod vs1_layout;
@@ -111,6 +112,12 @@ pub use tab_definition::{
     TabDefinitionCatalogReader, TabDefinitionCatalogWriter, TabDefinitionError,
     TabDefinitionLimitConfig, TabDefinitionLimits, TabDefinitionLoweringReceipt, TabItem,
     TabPositionUnit, TabStop, TabStopAlignment,
+};
+pub use table_cell_style::{
+    CellMargins, CellProtection, CellTextDirection, CellVerticalAlignment,
+    TABLE_CELL_STYLE_PROFILE_ID, TableCellStyle, TableCellStyleError, TableCellStyleLimitConfig,
+    TableCellStyleLimits, TableCellStyleLowerer, TableCellStyleLoweringReceipt,
+    TableCellStyleReadback, TableCellStyleReader,
 };
 pub use text_flow::{
     FieldBegin, FieldEnd, FieldType, HANCOM_2020_PARAGRAPH_NAMESPACE, OpaqueTextElement,
