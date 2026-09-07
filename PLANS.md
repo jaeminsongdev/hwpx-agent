@@ -27,7 +27,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | `implementation/p00/` through `implementation/p04/` |
 | P05 | scoped current-PC PASS | 01-09 plus actual save/reopen/readback/PDF/visual, source v20 and dual FULL Gate |
-| P06 | in progress | 01-03 scoped PASS; 04 lowerer ready/actual runtime waiting; 05 pure solver and HWPX adapter qualified components |
+| P06 | in progress | 01-03 scoped PASS; 04 lowerer ready/actual runtime waiting; 05 solver, HWPX adapter and current installed-font metric qualified components |
 | P07-P09 | blocked in sequence | equation, graphics and fields engines follow P06 and their stated dependencies |
 | P10 | in progress | 01-04,07,09,10 scoped pass; 05/06 actual dependencies; 08 unqualified |
 | P11-P13 | blocked | depend on P06-P10 |
@@ -46,8 +46,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0049 | P06-01 | Complete: report `implementation/p06/P06-01_REPORT.md`; source v21 and dual FULL PASS |
 | P-0050 | P06-02 | Complete: report `implementation/p06/P06-02_REPORT.md`; source v22 and dual FULL PASS |
 | P-0051 | P06-03 | Complete: report `implementation/p06/P06-03_REPORT.md`; source v23 and dual FULL PASS |
-| P-0052 | P06-04 | Runtime pending: bounded cell style lowerer/runner ready; launched blank-document source run waits for user file-access approval |
-| P-0053 | P06-05 | In progress: pure solver 15/15 and HWPX adapter 12/12; source v28 qualified; installed-font and actual Hangul renderer evidence open |
+| P-0052 | P06-04 | Runtime retry pending: attempt03 safely failed because actions targeted the initial document while a second blank document was saved; commit `8143d2c` binds/validates the active document before attempt04 |
+| P-0053 | P06-05 | In progress: pure solver 15/15, HWPX adapter 12/12 and font receipt 6/6; source v29 qualified; named HWPX/Hangul semantic and PDF renderer evidence open |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -141,6 +141,23 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   17/17, source v23 4/4, offline Linux tests/Clippy and current/independent FULL 5/5. Both security
   runs had zero findings and STRICT blocker/major/minor was 0/0/0. No Hangul runtime or user
   document was used. `implementation/p06/P06-03_REPORT.md` is authoritative.
+- P06-04 source attempt03 created exact disposable HWPX SHA-256
+  `65c43887b4170e8ae4e09b0ba64abe6a6850692c3757a8542ce94a0549a80cb5` but failed closed at
+  reopen with `HWPX_REOPEN_MARKER_MISSING`; inspection proved the saved section contained no table.
+  The generator had not activated its newly added document, so eight successful `HAction` calls
+  affected the initial document while `SaveAs` wrote the second blank one. Commit `8143d2c`
+  explicitly binds the document and requires all four markers before save; static readback tests are
+  17/17 and P06 contracts remain 33/33. attempt03 is diagnostic evidence only, never PASS.
+- P06-05 current font-metric implementation commits `af3dbf0`/`42aba1c` and source qualification
+  commit `742b3d2` bind exact Hangul 2020 build `11.0.0.9136` x86 and installed
+  `HANBatang.ttf` without copying it. Windows PowerShell 5.1 run
+  `4b9b0cac589946918140abc4a12c1be1` and PowerShell 7 run
+  `cb76a3477e2c4bcdac78b6647e187acf` independently produced measurement-set SHA-256
+  `96e3ad33591b098d3ca15c88242303aa7b11dc1730cf2a499273afe3ad7790a9`; both passed 16/16,
+  independent Python verification and exact Rust product consumption. Receipt tests are 6/6, P06
+  contracts 33/33, all `hwpx-package` targets, full workspace tests, formatting and warning-denied
+  Clippy pass. Source v29 run `99fd2af086e14d3e9d97daa2f01b6408` passed 11/11. This proves
+  verified GDI+ solver input only, not Hangul layout/render equivalence or P06-05 completion.
 - P16 merge `0512883`; durable plan PostgreSQL run `1828b246e92746789fa5d6501e7f1ac2`
   passed 39/39, renderer/evidence run `2b01ce0ff66045f29a32c67d217aa9bd` passed 19/19,
   dedicated host run `d22e85581cd44d06a016f3460a43de12` passed 14/14; resources cleaned.
@@ -228,22 +245,23 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 - R-0006: P17-07 local resolver and graphical stale-head widget are component evidence only;
   qualified `project_conflict_resolve` host wiring and concurrent Web/Codex verification remain open.
 - R-0007: P06-01/02/03 prove the pure grid and structural semantics. P06-04 adds a bounded cell-style
-  lowerer and P06-05 adds a verified pure solver plus preserving HWPX size adapter, but actual Hangul
-  2020 save/reopen/render, installed-font equivalence, formula/pagination/inspection and the 61-row
-  target conformance matrix remain open in P06-04~09.
+  lowerer and P06-05 adds a verified pure solver, preserving HWPX size adapter and exact current
+  installed-font GDI+ receipt. GDI+ is not the Hangul renderer: actual Hangul 2020
+  save/reopen/wrap/render, formula/pagination/inspection and the 61-row target conformance matrix
+  remain open in P06-04~09.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution are open.
 - HOLD-0003: P10-08 production isolation and later-version PCs are unqualified.
 
 ## Next actions and validation
 
-1. Complete the already launched P06-04 run at reasoning `max` after the user approves the visible
-   Hangul 2020 file-access prompt. Require the exact source HWPX/PDF/trace, zero Hwp residue, then
-   lower the target style and run the same bounded save/reopen/semantic/PDF verifier. Do not restart
-   merely because the visible approval wait produces no terminal output.
-2. Continue P06-05 at reasoning `max`: produce a bounded current-PC installed-font metric receipt,
-   bind it to the exact font source and synthetic table text, feed only verified metrics into the
-   solver, lower one named HWPX fixture, and compare semantic geometry and signed PDF rendering in
-   licensed Hangul 2020. Component tests alone do not close the card.
+1. At reasoning `max`, source-qualify commit `8143d2c`, launch corrected P06-04 attempt04, and wait
+   for the user's visible Hangul 2020 file-access approval. Require pre-save markers, exact source
+   HWPX/PDF/trace, zero Hwp residue, then lower the target style and run the same bounded
+   save/reopen/semantic/PDF verifier. Do not promote diagnostic attempt03.
+2. Continue P06-05 at reasoning `max`: consume the qualified current-PC font receipt, feed only its
+   verified metrics into the solver, lower one named HWPX fixture, and compare semantic geometry,
+   wrapping and signed PDF rendering in licensed Hangul 2020. The receipt and component tests alone
+   do not close the card.
 3. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
 4. Move mirror role/head admission into durable PostgreSQL and combine it atomically with the
