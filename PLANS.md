@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-05 current-PC PASS; 05 calibrated target/Hangul readback/PDF oracle complete; 06 pure core/source tooling qualified and actual source capture is next |
+| P06 | in progress | 01-05 current-PC PASS; 06 actual source capture and exact HWPX adapter component PASS; structural differential and product-target oracle remain |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -39,7 +39,7 @@
 |---|---|---|
 | P-0052 | P06-04 cell formatting | current-PC PASS: actual source plus v2 product target `264b062c...a48d28a`, Hangul 2020 save/reopen text identity, semantic/style digest identity and PDF visual review pass on attempt04; attempts 01-03 remain timeout diagnostics |
 | P-0053 | P06-05 sizing/autofit | current-PC PASS: pure solver, installed-font receipt and HWPX v2 adapter; failed `Open=false`, zero-guard and 4-micrometer calibration evidence preserved; calibrated target `3dfcf2a1...d9bcb5`, actual Hangul 2020 save/reopen lines `1,3,1,1`, PDF visual oracle, v2 contract and source v36 pass |
-| P-0054 | P06-06 FormulaAst | pure core `cc92565`; bounded Hangul-authored source capture `e28220e` and source qualification `d25a174`/v32 pass as tooling only; capture execution, exact HWPX adapter, oracle receipt and row/column differential remain; card is not complete |
+| P-0054 | P06-06 FormulaAst | pure core `cc92565`; actual licensed Hangul 2020 synthetic source capture `d968cae...7d38f` and exact left-prefix HWPX lift/lower adapter component pass; row/column structural differential and altered product-target oracle remain; card is not complete |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint evidence pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -139,6 +139,21 @@
 - Source v32: run `f043ce35eb9a4d68bf1da27ee1c3ef3a` passed 11/11 at clean commit
   `e28220e7f50b0556fc028a1e45d9addfd70619a7`; exact-build worker, watchdog and privacy-safe progress
   are bound. Capture execution, field shape, evaluation, oracle, P06-06/P06 and product remain false.
+- Actual licensed Hangul 2020 source capture passed on a new synthetic 1x3 table: operands `17,25`,
+  formula action result `42`, save/reopen visible-text identity and PDF export all passed; HWPX SHA-256
+  is `d968cae419a3754b1dc65eb845f9d1d6bf8bbb486736359cd9b838a78e47d38f`, trace SHA-256 is
+  `2bb67d3d53611dcbfb70ab014e5f3499bcc44885b7ce5ed024798e8abd10a1d7`, and Hwp residue is zero.
+- Adapter profile `hwpx-agent.table-formula-hwpx.hancom-2020/1` lifts the exact native directional
+  left-sum field to pure `SUM(A1:B1)` and lowers only a complete relative left-prefix sum. Native
+  commands remain private; cache remains `unverified`; unknown shapes and non-left-prefix ASTs fail
+  closed. Actual-source identity lowering is byte-exact.
+- Adapter integration tests pass 8/8; contract/tamper tests pass 4/4; all P06 Python tests pass
+  57/57; workspace all-target tests, Clippy `-D warnings` and formatting pass. Contract/report:
+  `protocol/private/p06-table-formula-hwpx-v1.json` and
+  `implementation/p06/P06-06_FORMULA_HWPX_ADAPTER_REPORT.md`.
+- This is source-capture and adapter-component evidence only. Row/column structural differential,
+  altered product target, cache oracle and licensed Hangul target save/reopen remain `NOT_RUN`;
+  P06-06 is not complete.
 
 ## Open risks and holds
 
@@ -155,10 +170,10 @@
 
 ## Next actions
 
-1. At `max`, execute the bounded P06-06 source capture, inspect its exact
-   FORMULA field, then build the target-bound lift/lower adapter; keep cache `unverified` until oracle.
-2. Close P06-06 only after row/column move differential, formula/cache semantic readback and licensed
-   Hangul 2020 save/reopen evidence; then proceed to P06-07 pagination.
+1. At `max`, build the exact P06-06 row/column structural differential and altered product target
+   from the now-qualified adapter; keep cache `unverified` until the actual target oracle.
+2. Close P06-06 only after formula/cache semantic readback and licensed Hangul 2020 save/reopen
+   evidence; then proceed to P06-07 pagination.
 3. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
    applicable offline Linux/security/STRICT checks without weakening actual-evidence Gates.
 

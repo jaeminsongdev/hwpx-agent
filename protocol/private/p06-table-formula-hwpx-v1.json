@@ -1,0 +1,135 @@
+{
+  "schema_version": "hwpx-agent.p06-06-table-formula-hwpx-contract/v1",
+  "model_schema_version": "hwpx-agent.table-formula/v1",
+  "adapter_profile_id": "hwpx-agent.table-formula-hwpx.hancom-2020/1",
+  "scope": "p06_06_exact_current_pc_hancom_2020_formula_source_and_adapter_component",
+  "predecessor": {
+    "path": "protocol/private/p06-table-formula-v1.json",
+    "sha256": "5bec3721f4283549af8cd1e7c850600d56ddc4a02a329298cecfa5920d7db0f3",
+    "state": "immutable_pure_formula_contract"
+  },
+  "source_lock_canonicalization": "exact_file_bytes_sha256",
+  "source_locks": [
+    {
+      "path": "protocol/private/p06-table-formula-v1.json",
+      "sha256": "5bec3721f4283549af8cd1e7c850600d56ddc4a02a329298cecfa5920d7db0f3"
+    },
+    {
+      "path": "implementation/p06/tools/create-hancom-2020-formula-source.ps1",
+      "sha256": "ff5ee4457a061e6c1dfc99ed6faa7990e8da1350b2f1b37af403da87a1e638b3"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-formula-source.ps1",
+      "sha256": "8088beff9f4c9652cc54c765ceada439e6d09cabef4f8fc5d789dd5ee6f2889f"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_formula.rs",
+      "sha256": "f9d802195d3f86fab07b1c0fcbb33131cf37b47db8910d348c6492693c394540"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_formula.rs",
+      "sha256": "c279de8ab7e976071446d5fa74d7bb24fc5c39d6383f82aadf03b365eafef5f3"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_06_table_formula_source_adapter.rs",
+      "sha256": "630d7efe3dbd4409378d5eea0519ba4f5131e9bcea7d8e7996f8249ccabc51ce"
+    }
+  ],
+  "capture_evidence": {
+    "directory": "fixtures/target-build/p06-06-formula-source-20260907-01",
+    "hwpx": {
+      "path": "fixtures/target-build/p06-06-formula-source-20260907-01/source.hwpx",
+      "sha256": "d968cae419a3754b1dc65eb845f9d1d6bf8bbb486736359cd9b838a78e47d38f",
+      "bytes": 13828
+    },
+    "pdf": {
+      "path": "fixtures/target-build/p06-06-formula-source-20260907-01/source.pdf",
+      "sha256": "adbd88f65b0a31ab769c0a277d340a1ffcb8165a93b263c557eaff4d1baeab26",
+      "bytes": 9830
+    },
+    "trace": {
+      "path": "fixtures/target-build/p06-06-formula-source-20260907-01/trace.json",
+      "sha256": "2bb67d3d53611dcbfb70ab014e5f3499bcc44885b7ce5ed024798e8abd10a1d7",
+      "bytes": 2051
+    },
+    "progress": {
+      "path": "fixtures/target-build/p06-06-formula-source-20260907-01/trace.json.progress.jsonl",
+      "sha256": "c2d0ce33751b53dacf688369b366c86de606c160f6e189253d7c674891cb3348",
+      "bytes": 5305
+    }
+  },
+  "actual_source_semantics": {
+    "section_path": "Contents/section0.xml",
+    "section_sha256": "5d106d507b899dbbff1f0b790e975889d88cc9974f89d4c4163b8f6f6afa0de8",
+    "formula_sha256": "49453797e05490cd92a1dd9a9a58bb4156b346c06726977e86c5e1454089f3f8",
+    "unowned_sha256": "de3b176dbe0c9dec25f38aa8284f5be2737efd1eb9ddc92a27d6768cfb5ba759",
+    "rows": 1,
+    "columns": 3,
+    "owner": {"row": 0, "column": 2},
+    "locale_neutral_formula": "SUM(A1:B1)",
+    "operand_values": [17, 25],
+    "unverified_cache_value": 42,
+    "formula_field_count": 1,
+    "native_admission": "exact_directional_left_sum_shape_only",
+    "identity_lowering": "pass_exact_section_bytes",
+    "raw_native_command_exposed": false
+  },
+  "actual_capture_runtime": {
+    "hancom_file_version": "11.0.0.9136",
+    "hancom_executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    "table_create": "pass",
+    "operand_cells_written": 2,
+    "formula_action": "pass",
+    "save_reopen": "pass",
+    "pdf_export": "pass",
+    "visible_text_sha256_before_and_after": "b3cc193c31f1bd7402576b13822eb4025dc49893dd7f4de84a8b21de8e074265",
+    "remaining_hwp_process_count": 0,
+    "input_was_new_synthetic_document": true,
+    "user_document_opened": false,
+    "raw_formula_or_command_in_trace": false
+  },
+  "adapter_policy": {
+    "lift": "exact_native_left_sum_to_complete_relative_left_prefix_range",
+    "lower": "complete_relative_left_prefix_range_to_exact_native_left_sum_only",
+    "cache_provenance": "unverified_until_exact_target_oracle_receipt",
+    "number_format": "general_only",
+    "owned_text_slots": ["command", "formula", "result_format", "last_result", "visible_result"],
+    "lowering_mutable_slots": ["command", "last_result", "visible_result"],
+    "unowned_bytes": "sha256_preserved",
+    "unknown_shape_or_formula": "reject",
+    "public_native_command": "forbidden"
+  },
+  "gate_decision": {
+    "actual_hancom_2020_source_capture": "pass",
+    "source_identity_adapter_check": "pass",
+    "adapter_component": "pass",
+    "row_column_structural_differential": "not_run",
+    "product_target_hancom_2020_oracle": "not_run",
+    "p06_06": "in_progress",
+    "p06": "in_progress"
+  },
+  "failure_policy": [
+    "wrong_source_digest_rejects_before_readback",
+    "unknown_native_formula_or_parameter_shape_rejects",
+    "mismatched_begin_end_field_identity_rejects",
+    "grid_gap_overlap_or_non_unit_span_rejects",
+    "non_left_prefix_ast_rejects_without_guessing",
+    "absent_text_or_non_decimal_cache_rejects",
+    "semantic_readback_or_unowned_digest_drift_rejects",
+    "component_or_source_capture_never_implies_product_target_oracle"
+  ],
+  "migration": "protocol/migrations/p06-table-formula-v1-to-hwpx-v1.md",
+  "report": "implementation/p06/P06-06_FORMULA_HWPX_ADAPTER_REPORT.md",
+  "not_claimed": {
+    "arbitrary_native_formula_syntax": false,
+    "arbitrary_user_document_compatibility": false,
+    "verified_formula_cache": false,
+    "row_column_structural_edit": false,
+    "product_target_hancom_oracle": false,
+    "other_pc_or_hancom_version": false,
+    "p06_06_complete": false,
+    "p06_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

@@ -25,6 +25,7 @@ mod safe_xml;
 mod section_columns;
 mod tab_definition;
 mod table_cell_style;
+mod table_formula;
 mod table_layout;
 mod text_flow;
 mod vs0;
@@ -125,6 +126,11 @@ pub use table_cell_style::{
     TableCellStyleError, TableCellStyleLimitConfig, TableCellStyleLimits, TableCellStyleLowerer,
     TableCellStyleLoweringReceipt, TableCellStyleProfile, TableCellStyleReadback,
     TableCellStyleReader,
+};
+pub use table_formula::{
+    TABLE_FORMULA_HWPX_PROFILE_ID, TableFormulaHwpxError, TableFormulaHwpxLimitConfig,
+    TableFormulaHwpxLimits, TableFormulaHwpxLowerer, TableFormulaHwpxLoweringReceipt,
+    TableFormulaHwpxReadback, TableFormulaHwpxReader,
 };
 pub use table_layout::{
     TABLE_LAYOUT_HWPX_PROFILE_ID, TABLE_LAYOUT_HWPX_PROFILE_ID_V1, TableCellSizeReadback,
