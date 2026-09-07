@@ -1,0 +1,116 @@
+{
+  "schema_version": "hwpx-agent.table-merge-split-contract/v1",
+  "model_schema_version": "hwpx-agent.table-merge-split/v1",
+  "prerequisites": [
+    "hwpx-agent.table-grid/v1",
+    "hwpx-agent.table-operations/v1"
+  ],
+  "scope": "p06_03_pure_ir_merge_split_content_ownership_current_pc_local_development",
+  "source_lock_canonicalization": "utf8_lf_sha256",
+  "source_locks": [
+    {
+      "path": "docs/03_document_model/06_table_model.md",
+      "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"
+    },
+    {
+      "path": "docs/12_implementation_guides/05_page_table_layout_algorithms.md",
+      "sha256": "4d94e6d462f7fc2f2187827ab436eb17c2bb2fe8f728ba8eee5f051c16bb4274"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    }
+  ],
+  "capabilities": [
+    "table.merge_cells",
+    "table.split_cell"
+  ],
+  "content_state": {
+    "master_entries": "exactly_one_per_current_grid_master",
+    "content_block_ownership": "globally_unique_ordered_logical_ids",
+    "grid_binding": "canonical_grid_sha256",
+    "lookup": "private_sorted_id_index_logarithmic",
+    "limits": "identifier_and_total_block_count_are_finite",
+    "debug_output": "counts_only"
+  },
+  "merge_geometry": {
+    "request": "explicit_complete_rectangular_slot_set",
+    "partial_existing_master": "reject",
+    "nonrectangular_or_duplicate": "reject",
+    "single_master_noop": "reject"
+  },
+  "merge_content_policy": {
+    "concatenate": "all_blocks_in_canonical_source_cell_then_intra_cell_order",
+    "distribute": "one_destination_equivalent_to_lossless_canonical_concatenation",
+    "first": "top_left_source_only_and_all_other_blocks_explicitly_receipted_as_discarded",
+    "reject_if_multiple": "fail_when_more_than_one_source_cell_is_nonempty"
+  },
+  "split_geometry": {
+    "request": "nonzero_row_and_column_part_counts_inside_one_existing_master",
+    "divisibility": "both_source_spans_must_divide_evenly",
+    "logical_grid_dimensions": "unchanged",
+    "single_part_noop": "reject"
+  },
+  "split_content_policy": {
+    "distribute": "stable_contiguous_balanced_chunks_in_row_major_destination_order",
+    "concatenate_first_reject_if_multiple": "all_source_blocks_remain_in_preserved_top_left_result",
+    "discard": "forbidden"
+  },
+  "identity_policy": {
+    "merge_survivor": "master_covering_region_top_left",
+    "merge_retired": "other_selected_masters_in_canonical_premerge_order",
+    "split_survivor": "source_master_at_top_left",
+    "split_created": "exact_caller_ids_in_row_major_order_excluding_top_left"
+  },
+  "receipt": {
+    "binding": "before_and_after_canonical_grid_sha256",
+    "fields": "operation_policy_region_preserved_retired_created_transfers_discarded",
+    "ordering": "deterministic",
+    "serialization": "bounded_compact_json",
+    "mutation": "private_fields_read_only_getters"
+  },
+  "validation_order": [
+    "content_state_grid_binding",
+    "selection_or_subdivision_geometry",
+    "existing_master_span_containment",
+    "explicit_content_policy",
+    "exact_new_master_id_count",
+    "fallible_bounded_allocation",
+    "table_grid_invariant",
+    "content_ownership_invariant",
+    "bounded_receipt_serialization"
+  ],
+  "failure_policy": [
+    "content_master_set_mismatch",
+    "duplicate_content_master_or_block",
+    "content_grid_mismatch",
+    "empty_duplicate_out_of_bounds_or_nonrectangular_selection",
+    "partial_master_selection",
+    "no_structural_change",
+    "multiple_nonempty_cells",
+    "invalid_or_nondivisible_split",
+    "new_master_cell_count_mismatch",
+    "finite_limit_or_allocation_failure",
+    "underlying_table_grid_error"
+  ],
+  "atomicity": "source_grid_and_content_are_immutable_and_only_fully_revalidated_results_return",
+  "migration": "protocol/migrations/p06-table-merge-split-v0-to-v1.md",
+  "not_claimed": {
+    "flow_body_bytes_validated": false,
+    "style_or_formula_semantics": false,
+    "table_split_or_join": false,
+    "split_with_logical_grid_expansion": false,
+    "hwpx_xml_lift_or_lower": false,
+    "hancom_runtime_execution": false,
+    "semantic_reopen_or_render": false,
+    "public_tool_support": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "phase_complete": false,
+    "product_complete": false
+  }
+}
