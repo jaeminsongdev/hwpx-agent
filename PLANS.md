@@ -3,8 +3,8 @@
 - Updated: 2026-09-07
 - Root: `D:\개발\hwpx-agent`
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P06-03 table merge/split, P17-06/P17-07/P17-08 and final product qualification.
-- Reasoning: high for P06-03 merge/split invariant/property work; max for preservation, authorization and final Gate work.
+- Active: P06-04 cell formatting, P17-06/P17-07/P17-08 and final product qualification.
+- Reasoning: max for P06-04 style lowering/readback/render, preservation, authorization and final Gate work.
 - UI: attempt23 sparse layout/identity, dense attempt02 automatic flow/balance, P05-08 v12
   odd/even/first-page header/footer/master and P05-09 v2 coordinate-aware VS-1 rendering passed on
   Hangul 2020. Computer Use performed no click or typing; the user approved the visible Hangul
@@ -25,7 +25,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | `implementation/p00/` through `implementation/p04/` |
 | P05 | scoped current-PC PASS | 01-09 plus actual save/reopen/readback/PDF/visual, source v20 and dual FULL Gate |
-| P06 | in progress | 01 pure `TableGrid` invariant and 02 create/insert/delete PASS; 03 merge/split ready |
+| P06 | in progress | 01 grid, 02 operations and 03 merge/split pure-IR PASS; 04 cell formatting ready |
 | P07-P09 | blocked in sequence | equation, graphics and fields engines follow P06 and their stated dependencies |
 | P10 | in progress | 01-04,07,09,10 scoped pass; 05/06 actual dependencies; 08 unqualified |
 | P11-P13 | blocked | depend on P06-P10 |
@@ -43,7 +43,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 | P-0045-0048 | P05-06-09 | Complete; authoritative scoped phase decision in `implementation/p05/P05_GATE_REPORT.md` |
 | P-0049 | P06-01 | Complete: report `implementation/p06/P06-01_REPORT.md`; source v21 and dual FULL PASS |
 | P-0050 | P06-02 | Complete: report `implementation/p06/P06-02_REPORT.md`; source v22 and dual FULL PASS |
-| P-0051 | P06-03 | Ready: content-preserving rectangular merge/split and nonrectangular/conflict tests |
+| P-0051 | P06-03 | Complete: report `implementation/p06/P06-03_REPORT.md`; source v23 and dual FULL PASS |
+| P-0052 | P06-04 | Ready: bounded cell style lowerer plus exact Hangul 2020 readback/render tests |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -130,6 +131,13 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   15/15, offline Linux tests/Clippy and current/independent FULL 5/5. Both security runs had zero
   failed checks/forbidden licenses and all vulnerability checks exited 0. No Hangul runtime or user
   document was used. `implementation/p06/P06-02_REPORT.md` is authoritative.
+- P06-03 implementation commit `0bd152dd85fa42632f8f7213e96e445af44524be` and source/audit
+  commit `5cfa20e54566652f0d3cd17d26996bc45379ea33` lock complete rectangular merge,
+  evenly divisible split, top-left/caller-owned identity, four explicit content policies and
+  deterministic transfer/discard receipts. `domain-ir` passed 95/95, merge/split 12/12, P06 Python
+  17/17, source v23 4/4, offline Linux tests/Clippy and current/independent FULL 5/5. Both security
+  runs had zero findings and STRICT blocker/major/minor was 0/0/0. No Hangul runtime or user
+  document was used. `implementation/p06/P06-03_REPORT.md` is authoritative.
 - P16 merge `0512883`; durable plan PostgreSQL run `1828b246e92746789fa5d6501e7f1ac2`
   passed 39/39, renderer/evidence run `2b01ce0ff66045f29a32c67d217aa9bd` passed 19/19,
   dedicated host run `d22e85581cd44d06a016f3460a43de12` passed 14/14; resources cleaned.
@@ -216,18 +224,19 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   mirror role/head admission plus checkpoint transaction. Transport remains loopback-only.
 - R-0006: P17-07 local resolver and graphical stale-head widget are component evidence only;
   qualified `project_conflict_resolve` host wiring and concurrent Web/Codex verification remain open.
-- R-0007: P06-01/02 prove only the pure logical grid and create/insert/delete semantics. HWPX table
-  lift/lower, actual Hangul 2020 save/reopen/render, content/style preservation, merge/split and
-  later table features remain open in P06-03~09.
+- R-0007: P06-01/02/03 prove only the pure logical grid, create/insert/delete and explicit
+  merge/split content/identity transfer semantics. HWPX/Flow table lift/lower, actual Hangul 2020
+  save/reopen/readback/render, rich cell style/formula/sizing/pagination and later table features
+  remain open in P06-04~09.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution are open.
 - HOLD-0003: P10-08 production isolation and later-version PCs are unqualified.
 
 ## Next actions and validation
 
-1. Start P06-03 at reasoning `high`: define explicit content-preservation and identity policy,
-   implement checked rectangular merge and deterministic split span transformations, reject
-   nonrectangular/overlap/conflict cases atomically, and lock content/identity/span remap receipts
-   with fixed-seed property and negative tests.
+1. Start P06-04 at reasoning `max`: define bounded margin, border/fill, horizontal/vertical
+   alignment, direction and protection types; implement a validated cell style lowerer, prepare a
+   named disposable fixture and strict semantic/PDF verifier, then request the user's Hangul 2020
+   access approval only immediately before the actual save/reopen/readback/render run.
 2. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
 3. Move mirror role/head admission into durable PostgreSQL and combine it atomically with the
@@ -242,7 +251,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Handoff pointers
 
-- First read: this file, `implementation/p06/P06-02_REPORT.md`, `implementation/p06/P06-01_REPORT.md`, `implementation/p05/P05_GATE_REPORT.md`,
+- First read: this file, `implementation/p06/P06-03_REPORT.md`, `implementation/p06/P06-02_REPORT.md`, `implementation/p06/P06-01_REPORT.md`, `implementation/p05/P05_GATE_REPORT.md`,
   `implementation/p05/P05-07_DIAGNOSTIC_AUDIT_STATUS.md`,
   `implementation/p17/P17-08_TRUSTED_WIDGET_V7.md`, and P16 main integration audit.
 - Attempt23 evidence: `fixtures/target-build/p05-07-current-2020-20260906-v4/`; read

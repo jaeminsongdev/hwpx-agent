@@ -797,15 +797,16 @@ p05_execution:
     decision: pass_scoped_current_pc_hangul_2020_local_layout
     p06_authorization: current_pc_local_only
 p06_execution:
-  current_task: P06-03_merge_split_ready
+  current_task: P06-04_cell_formatting_ready
   gate_state: in_progress_current_pc_local
-  implementation_base_commit: f0f5c1e162d46993593b1f4a45fc8afd2c620a34
-  source_qualification_and_audited_full_commit: 8d4ed84d89c558bfc262a923b09d988333bec41a
+  implementation_base_commit: 0bd152dd85fa42632f8f7213e96e445af44524be
+  source_qualification_and_audited_full_commit: 5cfa20e54566652f0d3cd17d26996bc45379ea33
+  next_task_reasoning_recommendation: max
   tasks:
     P06-01: completed_scoped_current_pc_local_pure_ir
     P06-02: completed_scoped_current_pc_local_pure_ir
-    P06-03: ready_current_pc_local
-    P06-04: blocked_by_P06_03
+    P06-03: completed_scoped_current_pc_local_pure_ir
+    P06-04: ready_current_pc_local
     P06-05: blocked_by_P06_04
     P06-06: blocked_by_P06_05
     P06-07: blocked_by_P06_06
@@ -839,6 +840,24 @@ p06_execution:
     current_and_independent_full_lanes: 5_of_5_passed_each
     current_security_run: 9bebc4756fda4b58bb9eadab60afd301
     independent_security_run: e9f87315ca5345faac8470ed7e346886
+    security_findings_current_and_independent: 0
+    strict_findings_blocker_major_minor: 0_0_0
+    hangul_runtime_executed: false
+    user_documents_opened: false
+    other_pc_or_version_qualified: false
+    decision: pass_scoped_current_pc_local_pure_ir
+  table_merge_split:
+    schema_version: hwpx-agent.table-merge-split/v1
+    rust_domain_ir_tests_windows_linux: 95_of_95_passed
+    rust_table_merge_split_tests_windows_linux: 12_of_12_passed
+    p06_contract_tests_current_and_independent: 17_of_17_passed_each
+    source_qualification_tests_current_and_independent: 4_of_4_passed_each
+    source_qualification_run_id: d39fd169945141d5ae2f968cb0b10b08
+    source_receipt_sha256: e6ba2648c19874056a22646db9fde8948d89864227d260546ecd40768fb043bf
+    source_contract_sha256: 62ed365ab62c367f4c25483a53333c185d34bfcbca09aa60d695da5780184aff
+    current_and_independent_full_lanes: 5_of_5_passed_each
+    current_security_run: 67c9ad9dc71745ce827418d6b51444d2
+    independent_security_run: 03f269bd9a9c4fed81afe549d6bfa16d
     security_findings_current_and_independent: 0
     strict_findings_blocker_major_minor: 0_0_0
     hangul_runtime_executed: false

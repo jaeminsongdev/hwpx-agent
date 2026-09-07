@@ -7,9 +7,9 @@
 
 ## 현재 상태
 
-- 상태: `P06_IN_PROGRESS_P06_01_02_COMPLETE_P06_03_READY_CURRENT_PC_LOCAL_ONLY`
+- 상태: `P06_IN_PROGRESS_P06_01_02_03_COMPLETE_P06_04_READY_CURRENT_PC_LOCAL_ONLY`
 - 현재 phase: `P06_TABLE_ENGINE` + `P15_REMOTE_MCP_CONTROL_PLANE`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~09와 실제 한글 2020 layout Gate가 닫혔다. P06-01 bounded `TableGrid`/rectangular span invariant와 P06-02 deterministic create/insert/delete/identity remap은 source successor v21/v22, cross-platform property/negative tests와 exact commit current/independent FULL로 완료됐고 P06-03이 준비됐다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14와 P15는 각 보고서의 scoped local 범위에서 통과했고 P16/P17 local 구현은 `PLANS.md`의 최신 원장을 따른다.
+- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~09와 실제 한글 2020 layout Gate가 닫혔다. P06-01 bounded `TableGrid`, P06-02 deterministic create/insert/delete, P06-03 rectangular merge/split와 explicit content/identity transfer가 source successor v21~v23, cross-platform property/negative tests와 exact commit current/independent FULL로 완료됐고 P06-04가 준비됐다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14와 P15는 각 보고서의 scoped local 범위에서 통과했고 P16/P17 local 구현은 `PLANS.md`의 최신 원장을 따른다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -113,6 +113,16 @@
 - 이 PASS 역시 순수 IR 범위다. 셀 내용·스타일 보존, merge/split, FormulaAst 이동, HWPX
   lift/lower와 실제 한글 2020 save/reopen/render는 증명하지 않았다. Authoritative task report는
   `implementation/p06/P06-02_REPORT.md`다.
+- P06-03 `PASS_SCOPED_CURRENT_PC_LOCAL_PURE_IR`: 완전한 rectangular merge, evenly divisible
+  split, top-left identity survival, caller-owned replacement IDs와 explicit concatenate/first/
+  distribute/reject content policy 및 deterministic transfer/discard receipt를 구현했다.
+- `domain-ir` 95/95, merge/split 12/12, P06 Python 17/17, v23 qualification 4/4, offline Linux
+  tests/Clippy와 exact audited commit `5cfa20e54566652f0d3cd17d26996bc45379ea33`의
+  current/independent FULL 각 5/5가 통과했다. 두 security run은 findings 0이고 STRICT
+  blocker/major/minor는 0/0/0이다.
+- 이 PASS도 순수 IR 범위다. HWPX/Flow bytes, rich text·style·formula 의미론, 실제 한글 2020
+  save/reopen/readback/render는 증명하지 않았다. Authoritative task report는
+  `implementation/p06/P06-03_REPORT.md`다.
 
 ## P10 현재 상태
 
@@ -195,21 +205,20 @@
 
 ## 다음 작업
 
-다음 exact task는 `P06-03 Merge/split`이다. 명시적인 content-preservation/identity 정책 아래
-rectangular merge와 deterministic split span transformation을 구현하고, nonrectangular·overlap·
-conflict를 atomic하게 거부하며 content/identity/span remap receipt와 fixed-seed property/negative
-tests를 잠근다. 권장 추론수준은 `high`다.
+다음 exact task는 `P06-04 Cell formatting`이다. bounded margin, border/fill, horizontal/vertical
+alignment, text direction과 protection model을 정의하고 validated cell style lowerer와 exact
+current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 추론수준은 `max`다.
 비-UI 구현과 P16/P17 최신 순서는 `PLANS.md`를 따른다.
 
 ## 현재 blocker
 
 - NPM advisory endpoint는 간헐적 timeout 이력이 있지만 P14-09 exact commit 보안 run은 첫 시도 실제 응답으로 통과했으며 P15-01 blocker가 아니다.
 - P05 actual 대상 실행과 phase Gate는 완료됐다. 이후 회귀 때문에 한글 2020 재실행이 필요해질 때만 직전에 사용자에게 알리고, timeout/실패는 보존하며 자동 PASS로 승격하지 않는다.
-- P06-01/02에는 한글 실행이 필요 없었다. P06 후속 task에서 실제 한글 2020 표 검증이 필요해질 때만 접근허용을 요청한다.
+- P06-01/02/03에는 한글 실행이 필요 없었다. P06-04의 model·fixture·harness를 먼저 준비하고 실제 한글 2020 readback/render 직전에만 접근허용을 요청한다.
 - P10-05/06과 P10-08 production 범위는 외부 보안 모듈·격리 환경이 제공되기 전까지 unqualified다.
 
 2022/2024 runtime과 production 상업/서버/VM·배포 라이선스는 현재 blocker가 아니라 deferred release blocker다.
 
 ## 검증 한계
 
-제품 foundation, P02 signed registry, P03 package/preserving/round-trip core, P04 typed model/transaction/diff/idempotency/VS-0 vertical, P05 text/style/page/section/layout Gate와 P06-01/02 순수 TableGrid invariant·create/insert/delete는 재현 가능하다. 그러나 P05 실제 증거는 named disposable fixture와 exact current-PC Hangul 2020에 한정되고 P06-01/02는 HWPX lift/lower나 실제 표 렌더를 증명하지 않는다. Arbitrary package editing, 사용자 문서 호환성, installed-font substitution 전수성, table merge/split/content/style/formula/pagination semantics, durable multi-process persistence와 public wire integration은 미완료다. Signed registry의 general public routing은 0이고 VS-0만 task 전용 exact signed route다. Exact 2020 evidence는 이 Windows 설치의 개인 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00~P05 phase와 P06-01/02 실제 상태는 각 authoritative report를 따른다.
+제품 foundation, P02 signed registry, P03 package/preserving/round-trip core, P04 typed model/transaction/diff/idempotency/VS-0 vertical, P05 text/style/page/section/layout Gate와 P06-01/02/03 순수 TableGrid invariant·create/insert/delete·merge/split/content transfer는 재현 가능하다. 그러나 P05 실제 증거는 named disposable fixture와 exact current-PC Hangul 2020에 한정되고 P06-01/02/03은 HWPX lift/lower나 실제 표 렌더를 증명하지 않는다. Arbitrary package editing, 사용자 문서 호환성, installed-font substitution 전수성, table cell style/formula/sizing/pagination semantics, durable multi-process persistence와 public wire integration은 미완료다. Signed registry의 general public routing은 0이고 VS-0만 task 전용 exact signed route다. Exact 2020 evidence는 이 Windows 설치의 개인 로컬 개발만 승인하며 clean-image/다른 PC/지원 release를 증명하지 않는다. Native 수식 round-trip, 인쇄 경로, deferred 2022/2024 runtime, ChatGPT/Codex E2E는 수행하지 않았다. Offline bundle은 integrity/request correlation을 검증하지만 signed remote-host identity는 P10 범위다. P00~P05 phase와 P06-01/02/03 실제 상태는 각 authoritative report를 따른다.
