@@ -3,7 +3,7 @@ use std::io::{Cursor, Write};
 
 use hwpx_package::{
     BoundedZipReader, Compression, PackageGraph, PackageGraphLimits, PackageLimits,
-    PartPreservationRecord, PreservationClass, PreservationReport,
+    PartPreservationRecord, PreservationClass, PreservationReport, PreservationRuleProfile,
 };
 use zip::write::SimpleFileOptions;
 use zip::{CompressionMethod, ZipWriter};
@@ -163,6 +163,61 @@ fn unknown_non_xml_part_stays_opaque_without_semantic_promotion() -> TestResult 
     assert_eq!(report.counts().semantic, 0);
     assert_eq!(report.counts().regenerated, 0);
     assert!(report.direct_preserve_ready());
+    Ok(())
+}
+
+#[test]
+fn exact_plain_text_preview_may_start_with_table_angle_brackets() -> TestResult {
+    let bytes = valid_archive(
+        b"<header/>",
+        "../Preview/PrvText.txt",
+        "Preview/PrvText.txt",
+        "text/plain",
+        b"<first-cell><second-cell>\r\n",
+    )?;
+    let (mut reader, graph) = open_graph(bytes.clone())?;
+    let v1_report = PreservationReport::build(&mut reader, &graph)?;
+    let v1_preview = record(&v1_report, "Preview/PrvText.txt");
+    assert_eq!(v1_preview.class(), PreservationClass::Rejected);
+    assert_eq!(
+        v1_preview.reason_code(),
+        "preservation_rejected_xml_content_media_mismatch"
+    );
+
+    let (mut reader, graph) = open_graph(bytes)?;
+    let report = PreservationReport::build_with_profile(
+        &mut reader,
+        &graph,
+        PreservationRuleProfile::Hangul2020PreviewTextV2,
+    )?;
+    let preview = record(&report, "Preview/PrvText.txt");
+
+    assert_eq!(preview.class(), PreservationClass::Opaque);
+    assert_eq!(preview.reason_code(), "preservation_opaque_preview_text");
+    assert_eq!(report.counts().rejected, 0);
+    assert!(report.direct_preserve_ready());
+    Ok(())
+}
+
+#[test]
+fn angle_bracket_text_outside_exact_preview_path_stays_rejected() -> TestResult {
+    let bytes = valid_archive(
+        b"<header/>",
+        "../Other/notes.txt",
+        "Other/notes.txt",
+        "text/plain",
+        b"<not-the-preview/>",
+    )?;
+    let (mut reader, graph) = open_graph(bytes)?;
+    let report = PreservationReport::build(&mut reader, &graph)?;
+    let notes = record(&report, "Other/notes.txt");
+
+    assert_eq!(notes.class(), PreservationClass::Rejected);
+    assert_eq!(
+        notes.reason_code(),
+        "preservation_rejected_xml_content_media_mismatch"
+    );
+    assert!(!report.direct_preserve_ready());
     Ok(())
 }
 

@@ -20,11 +20,31 @@ pub enum PreservationClass {
     Rejected,
 }
 
+/// Versioned classification rules. The default v1 profile remains fail-closed;
+/// exact Hangul-2020 preview text admission is opt-in.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub enum PreservationRuleProfile {
+    #[default]
+    CoreV1,
+    Hangul2020PreviewTextV2,
+}
+
+impl PreservationRuleProfile {
+    #[must_use]
+    pub const fn version(self) -> &'static str {
+        match self {
+            Self::CoreV1 => "hwpx-agent.preservation/core-v1",
+            Self::Hangul2020PreviewTextV2 => "hwpx-agent.preservation/hancom-2020-preview-text-v2",
+        }
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum PreservationReason {
     ExactMimetype,
     SafeXmlTokenModel,
     OpaqueBinarySignature,
+    OpaquePreviewText,
     OpaqueUnrecognizedMedia,
     XmlMediaPathMismatch,
     XmlContentMediaMismatch,
@@ -39,6 +59,7 @@ impl PreservationReason {
             Self::ExactMimetype => "preservation_byte_exact_mimetype",
             Self::SafeXmlTokenModel => "preservation_token_stable_safe_xml",
             Self::OpaqueBinarySignature => "preservation_opaque_binary_signature",
+            Self::OpaquePreviewText => "preservation_opaque_preview_text",
             Self::OpaqueUnrecognizedMedia => "preservation_opaque_unrecognized_media",
             Self::XmlMediaPathMismatch => "preservation_rejected_xml_media_path_mismatch",
             Self::XmlContentMediaMismatch => "preservation_rejected_xml_content_media_mismatch",
@@ -216,7 +237,25 @@ impl PreservationReport {
         reader: &mut BoundedZipReader<R>,
         graph: &PackageGraph,
     ) -> Result<Self, PreservationError> {
-        Self::build_with_graph_limits(reader, graph, PackageGraphLimits::default())
+        Self::build_with_profile(reader, graph, PreservationRuleProfile::CoreV1)
+    }
+
+    /// Rebuilds preservation evidence under one explicit rule profile.
+    ///
+    /// # Errors
+    ///
+    /// Returns the same fail-closed errors as [`Self::build`].
+    pub fn build_with_profile<R: Read + Seek>(
+        reader: &mut BoundedZipReader<R>,
+        graph: &PackageGraph,
+        profile: PreservationRuleProfile,
+    ) -> Result<Self, PreservationError> {
+        Self::build_with_graph_limits_and_profile(
+            reader,
+            graph,
+            PackageGraphLimits::default(),
+            profile,
+        )
     }
 
     /// Same as [`Self::build`] with the caller's already-validated graph limits.
@@ -228,6 +267,25 @@ impl PreservationReport {
         reader: &mut BoundedZipReader<R>,
         graph: &PackageGraph,
         graph_limits: PackageGraphLimits,
+    ) -> Result<Self, PreservationError> {
+        Self::build_with_graph_limits_and_profile(
+            reader,
+            graph,
+            graph_limits,
+            PreservationRuleProfile::CoreV1,
+        )
+    }
+
+    /// Same as [`Self::build_with_profile`] with the caller's graph limits.
+    ///
+    /// # Errors
+    ///
+    /// Returns the same fail-closed errors as [`Self::build`].
+    pub fn build_with_graph_limits_and_profile<R: Read + Seek>(
+        reader: &mut BoundedZipReader<R>,
+        graph: &PackageGraph,
+        graph_limits: PackageGraphLimits,
+        profile: PreservationRuleProfile,
     ) -> Result<Self, PreservationError> {
         let authoritative = PackageGraph::build(reader, graph_limits)?;
         validate_graph_snapshot(graph, &authoritative)?;
@@ -261,7 +319,7 @@ impl PreservationReport {
             if bytes.len() as u64 != part.expanded_size || digest != part.raw_sha256 {
                 return Err(PreservationError::IdentityMismatch);
             }
-            let classification = classify(part, &bytes)?;
+            let classification = classify(part, &bytes, profile)?;
             counts.increment(classification.class);
             records.push(PartPreservationRecord {
                 path: part.path.clone(),
@@ -395,7 +453,11 @@ struct Classification {
     token_evidence: Option<TokenPreservationEvidence>,
 }
 
-fn classify(part: &PartRecord, bytes: &[u8]) -> Result<Classification, PreservationError> {
+fn classify(
+    part: &PartRecord,
+    bytes: &[u8],
+    profile: PreservationRuleProfile,
+) -> Result<Classification, PreservationError> {
     if part.path.as_str() == "mimetype" {
         return Ok(classification(
             PreservationClass::ByteExact,
@@ -412,6 +474,15 @@ fn classify(part: &PartRecord, bytes: &[u8]) -> Result<Classification, Preservat
     }
     if media_xml {
         return classify_xml(bytes);
+    }
+    if profile == PreservationRuleProfile::Hangul2020PreviewTextV2
+        && part.path.as_str() == "Preview/PrvText.txt"
+        && part.media_type.as_str() == "text/plain"
+    {
+        return Ok(classification(
+            PreservationClass::Opaque,
+            PreservationReason::OpaquePreviewText,
+        ));
     }
     if content_looks_xml(bytes) {
         return Ok(classification(

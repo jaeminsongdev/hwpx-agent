@@ -8,8 +8,8 @@ use hwpx_package::{
     BoundedZipReader, CellMargins, CellProtection, CellTextDirection, CellVerticalAlignment,
     Compression, IdIndex, IdIndexLimits, IdRuleProfile, PackageGraph, PackageGraphLimits,
     PackageLimits, ParagraphStyleCatalog, ParagraphStyleCatalogReader, ParagraphStyleLimits,
-    TableCellStyle, TableCellStyleLimits, TableCellStyleLowerer, TableCellStyleReadback,
-    TableCellStyleReader,
+    TableCellStyle, TableCellStyleLimits, TableCellStyleLowerer, TableCellStyleProfile,
+    TableCellStyleReadback, TableCellStyleReader,
 };
 use sha2::{Digest as _, Sha256};
 use zip::write::SimpleFileOptions;
@@ -114,7 +114,7 @@ fn inspect_package(bytes: &[u8]) -> Result<PackageInspection, Box<dyn Error>> {
     let _index = IdIndex::build(
         &mut reader,
         &graph,
-        IdRuleProfile::current_hancom_2020_core_v1(),
+        IdRuleProfile::current_hancom_2020_table_v2(),
         IdIndexLimits::default(),
     )?;
     let header = read_part(&mut reader, "Contents/header.xml")?;
@@ -127,9 +127,10 @@ fn inspect_package(bytes: &[u8]) -> Result<PackageInspection, Box<dyn Error>> {
     }
     let mut cells = Vec::new();
     for ordinal in 0..EXPECTED_CELL_COUNT {
-        cells.push(TableCellStyleReader::read_in_section(
+        cells.push(TableCellStyleReader::read_in_section_with_profile(
             &section,
             ordinal,
+            TableCellStyleProfile::Hangul2020V2,
             &catalog,
             TableCellStyleLimits::default(),
         )?);
@@ -224,9 +225,10 @@ fn compose_target_package(
         let mut bytes = archive.read_entry(entry.index)?;
         if path == "Contents/section0.xml" {
             for (ordinal, style) in targets.iter().enumerate() {
-                bytes = TableCellStyleLowerer::lower_in_section(
+                bytes = TableCellStyleLowerer::lower_in_section_with_profile(
                     &bytes,
                     ordinal,
+                    TableCellStyleProfile::Hangul2020V2,
                     style,
                     catalog,
                     TableCellStyleLimits::default(),
@@ -294,7 +296,7 @@ fn print_inspection(mode: &str, bytes: &[u8], inspection: &PackageInspection) {
             digest
         });
     println!(
-        "schema=hwpx-agent.p06-04-table-cell-style-target/v1 mode={mode} state=pass size={} sha256={} parts={} cells={} border_fills={} para_styles={} style_digest={}",
+        "schema=hwpx-agent.p06-04-table-cell-style-target/v2 mode={mode} state=pass preservation_profile=hwpx-agent.preservation/hancom-2020-preview-text-v2 id_profile=hancom-2020-hwpml-2011-table/v2 style_profile=hwpx-agent.table-cell-style.hancom-2020/2 size={} sha256={} parts={} cells={} border_fills={} para_styles={} style_digest={}",
         bytes.len(),
         hex::encode(Sha256::digest(bytes)),
         inspection.part_count,

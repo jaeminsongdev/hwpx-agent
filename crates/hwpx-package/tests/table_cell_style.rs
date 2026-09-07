@@ -2,7 +2,7 @@ use hwpx_package::{
     CellMargins, CellProtection, CellTextDirection, CellVerticalAlignment, HorizontalAlignment,
     ParagraphStyleCatalog, ParagraphStyleCatalogReader, ParagraphStyleLimits, TableCellStyle,
     TableCellStyleError, TableCellStyleLimitConfig, TableCellStyleLimits, TableCellStyleLowerer,
-    TableCellStyleReader,
+    TableCellStyleProfile, TableCellStyleReader,
 };
 use sha2::{Digest as _, Sha256};
 
@@ -37,6 +37,17 @@ fn fragment() -> Vec<u8> {
         NS
     )
     .into_bytes()
+}
+
+fn hangul_2020_fragment() -> Result<Vec<u8>, Box<dyn std::error::Error>> {
+    let source = String::from_utf8(fragment())?;
+    let start = source.find("<hp:cellAddr").ok_or("cell address missing")?;
+    let split = source.find("<hp:subList").ok_or("sub-list missing")?;
+    let end = source.rfind("</hp:tc>").ok_or("cell end missing")?;
+    let prefix = &source[..start];
+    let address_through_margin = &source[start..split];
+    let sub_list = &source[split..end];
+    Ok(format!("{prefix}{sub_list}{address_through_margin}</hp:tc>").into_bytes())
 }
 
 fn target(alignment: HorizontalAlignment) -> TableCellStyle {
@@ -95,6 +106,91 @@ fn lowers_every_style_dimension_and_preserves_content() -> TestResult {
     assert!(text.contains("A &amp; B"));
     assert!(text.contains("둘째 줄"));
     assert_eq!(text.matches("paraPrIDRef=\"0\"").count(), 2);
+    Ok(())
+}
+
+#[test]
+fn exact_hangul_2020_v2_order_is_explicit_and_preserving() -> TestResult {
+    let source = hangul_2020_fragment()?;
+    let catalog = sample_catalog(HorizontalAlignment::Center)?;
+    let Err(v1_error) =
+        TableCellStyleReader::read(&source, &catalog, TableCellStyleLimits::default())
+    else {
+        return Err("v1 silently accepted the v2 child order".into());
+    };
+    assert_eq!(v1_error.code(), "table_cell_style_unsupported_shape");
+
+    let source_readback = TableCellStyleReader::read_with_profile(
+        &source,
+        TableCellStyleProfile::Hangul2020V2,
+        &sample_catalog(HorizontalAlignment::Justify)?,
+        TableCellStyleLimits::default(),
+    )?;
+    let (output, receipt) = TableCellStyleLowerer::lower_with_profile_and_receipt(
+        &source,
+        TableCellStyleProfile::Hangul2020V2,
+        &target(HorizontalAlignment::Center),
+        &catalog,
+        TableCellStyleLimits::default(),
+    )?;
+    let readback = TableCellStyleReader::read_with_profile(
+        &output,
+        TableCellStyleProfile::Hangul2020V2,
+        &catalog,
+        TableCellStyleLimits::default(),
+    )?;
+    assert_eq!(readback.style, target(HorizontalAlignment::Center));
+    assert_eq!(readback.content_sha256, source_readback.content_sha256);
+    assert_eq!(
+        receipt.profile_id,
+        "hwpx-agent.table-cell-style.hancom-2020/2"
+    );
+    assert!(
+        std::str::from_utf8(&output)?
+            .contains("<hp:subList id=\"cell-a1\" textDirection=\"VERTICALALL\"")
+    );
+    Ok(())
+}
+
+#[test]
+fn hangul_2020_v2_preserves_inactive_default_margin_numbers() -> TestResult {
+    let mut source = String::from_utf8(hangul_2020_fragment()?)?;
+    source = source.replace("hasMargin=\"1\"", "hasMargin=\"0\"");
+    source = source.replace(
+        "left=\"141\" right=\"141\" top=\"141\" bottom=\"141\"",
+        "left=\"510\" right=\"510\" top=\"141\" bottom=\"141\"",
+    );
+    let source = source.into_bytes();
+    let catalog = sample_catalog(HorizontalAlignment::Center)?;
+
+    let Err(v1_error) =
+        TableCellStyleReader::read(&source, &catalog, TableCellStyleLimits::default())
+    else {
+        return Err("v1 silently accepted inactive nonzero margins".into());
+    };
+    assert_eq!(v1_error.code(), "table_cell_style_unsupported_shape");
+
+    let readback = TableCellStyleReader::read_with_profile(
+        &source,
+        TableCellStyleProfile::Hangul2020V2,
+        &catalog,
+        TableCellStyleLimits::default(),
+    )?;
+    assert_eq!(readback.style.margins, None);
+
+    let mut no_margin = target(HorizontalAlignment::Center);
+    no_margin.margins = None;
+    let output = TableCellStyleLowerer::lower_with_profile(
+        &source,
+        TableCellStyleProfile::Hangul2020V2,
+        &no_margin,
+        &catalog,
+        TableCellStyleLimits::default(),
+    )?;
+    assert!(
+        std::str::from_utf8(&output)?
+            .contains("<hp:cellMargin left=\"510\" right=\"510\" top=\"141\" bottom=\"141\"/>")
+    );
     Ok(())
 }
 

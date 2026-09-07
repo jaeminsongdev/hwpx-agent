@@ -12,9 +12,28 @@ use crate::preserving_xml::{
 };
 
 pub const TABLE_CELL_STYLE_PROFILE_ID: &str = "hwpx-agent.table-cell-style.hancom-2020/1";
+pub const TABLE_CELL_STYLE_HANCOM_2020_PROFILE_ID: &str =
+    "hwpx-agent.table-cell-style.hancom-2020/2";
 
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const SECTION_NS: &str = "http://www.hancom.co.kr/hwpml/2011/section";
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub enum TableCellStyleProfile {
+    #[default]
+    ContractV1,
+    Hangul2020V2,
+}
+
+impl TableCellStyleProfile {
+    #[must_use]
+    pub const fn profile_id(self) -> &'static str {
+        match self {
+            Self::ContractV1 => TABLE_CELL_STYLE_PROFILE_ID,
+            Self::Hangul2020V2 => TABLE_CELL_STYLE_HANCOM_2020_PROFILE_ID,
+        }
+    }
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct TableCellStyleLimitConfig {
@@ -292,6 +311,20 @@ impl TableCellStyleReader {
         catalog: &ParagraphStyleCatalog,
         limits: TableCellStyleLimits,
     ) -> Result<TableCellStyleReadback, TableCellStyleError> {
+        Self::read_with_profile(bytes, TableCellStyleProfile::ContractV1, catalog, limits)
+    }
+
+    /// Lifts a standalone cell under one exact, explicitly selected shape profile.
+    ///
+    /// # Errors
+    ///
+    /// Applies the same fail-closed checks as [`Self::read`] without profile auto-detection.
+    pub fn read_with_profile(
+        bytes: &[u8],
+        profile: TableCellStyleProfile,
+        catalog: &ParagraphStyleCatalog,
+        limits: TableCellStyleLimits,
+    ) -> Result<TableCellStyleReadback, TableCellStyleError> {
         let document = parse_document(bytes, limits)?;
         validate_document_envelope(&document)?;
         let root = document.root_element();
@@ -299,7 +332,7 @@ impl TableCellStyleReader {
             return Err(TableCellStyleError::WrongRoot);
         }
         validate_catalog(catalog)?;
-        read_from_document(&document, root, catalog, limits)
+        read_from_document(&document, root, profile, catalog, limits)
     }
 
     /// Lifts one cell selected by zero-based document order from a full section XML part.
@@ -314,12 +347,34 @@ impl TableCellStyleReader {
         catalog: &ParagraphStyleCatalog,
         limits: TableCellStyleLimits,
     ) -> Result<TableCellStyleReadback, TableCellStyleError> {
+        Self::read_in_section_with_profile(
+            bytes,
+            cell_ordinal,
+            TableCellStyleProfile::ContractV1,
+            catalog,
+            limits,
+        )
+    }
+
+    /// Lifts one section cell under one exact, explicitly selected shape profile.
+    ///
+    /// # Errors
+    ///
+    /// Applies the same fail-closed checks as [`Self::read_in_section`] without profile
+    /// auto-detection.
+    pub fn read_in_section_with_profile(
+        bytes: &[u8],
+        cell_ordinal: usize,
+        profile: TableCellStyleProfile,
+        catalog: &ParagraphStyleCatalog,
+        limits: TableCellStyleLimits,
+    ) -> Result<TableCellStyleReadback, TableCellStyleError> {
         let document = parse_document(bytes, limits)?;
         validate_document_envelope(&document)?;
         validate_section_root(&document)?;
         validate_catalog(catalog)?;
         let root = select_cell(&document, cell_ordinal, limits)?;
-        read_from_document(&document, root, catalog, limits)
+        read_from_document(&document, root, profile, catalog, limits)
     }
 
     /// Counts every admitted `hp:tc` element in one exact current-Hangul-2020 section part.
@@ -341,10 +396,11 @@ impl TableCellStyleReader {
 fn read_from_document(
     document: &PreservingXmlDocument,
     root_index: usize,
+    profile: TableCellStyleProfile,
     catalog: &ParagraphStyleCatalog,
     limits: TableCellStyleLimits,
 ) -> Result<TableCellStyleReadback, TableCellStyleError> {
-    let shape = CellShape::read(document, root_index, limits)?;
+    let shape = CellShape::read(document, root_index, profile, limits)?;
     let root = element(document, shape.root)?;
     let margin_element = element(document, shape.margin)?;
     let sub_list = element(document, shape.sub_list)?;
@@ -359,7 +415,10 @@ fn read_from_document(
     validate_margins(raw_margins, limits)?;
     let margins = if has_margin {
         Some(raw_margins)
-    } else if raw_margins == CellMargins::zero() {
+    } else if raw_margins == CellMargins::zero() || profile == TableCellStyleProfile::Hangul2020V2 {
+        // Hangul 2020 keeps its inherited/default margin numbers in `hp:cellMargin`
+        // even while `hasMargin="0"` makes those numbers semantically inactive.  The
+        // v1 contract deliberately retains its stricter canonical-zero rule.
         None
     } else {
         return Err(TableCellStyleError::UnsupportedShape);
@@ -411,7 +470,29 @@ impl TableCellStyleLowerer {
         catalog: &ParagraphStyleCatalog,
         limits: TableCellStyleLimits,
     ) -> Result<Vec<u8>, TableCellStyleError> {
-        Self::lower_with_receipt(source, style, catalog, limits).map(|(bytes, _)| bytes)
+        Self::lower_with_profile(
+            source,
+            TableCellStyleProfile::ContractV1,
+            style,
+            catalog,
+            limits,
+        )
+    }
+
+    /// Rewrites a standalone cell under one exact, explicitly selected shape profile.
+    ///
+    /// # Errors
+    ///
+    /// Applies the same checks as [`Self::lower`] without profile auto-detection.
+    pub fn lower_with_profile(
+        source: &[u8],
+        profile: TableCellStyleProfile,
+        style: &TableCellStyle,
+        catalog: &ParagraphStyleCatalog,
+        limits: TableCellStyleLimits,
+    ) -> Result<Vec<u8>, TableCellStyleError> {
+        Self::lower_with_profile_and_receipt(source, profile, style, catalog, limits)
+            .map(|(bytes, _)| bytes)
     }
 
     /// Lowers a cell style and returns exact input/output and preserved-content evidence.
@@ -425,7 +506,28 @@ impl TableCellStyleLowerer {
         catalog: &ParagraphStyleCatalog,
         limits: TableCellStyleLimits,
     ) -> Result<(Vec<u8>, TableCellStyleLoweringReceipt), TableCellStyleError> {
-        lower_selected(source, None, style, catalog, limits)
+        Self::lower_with_profile_and_receipt(
+            source,
+            TableCellStyleProfile::ContractV1,
+            style,
+            catalog,
+            limits,
+        )
+    }
+
+    /// Rewrites a standalone cell and returns evidence bound to the selected shape profile.
+    ///
+    /// # Errors
+    ///
+    /// Applies the same checks as [`Self::lower_with_receipt`] without profile auto-detection.
+    pub fn lower_with_profile_and_receipt(
+        source: &[u8],
+        profile: TableCellStyleProfile,
+        style: &TableCellStyle,
+        catalog: &ParagraphStyleCatalog,
+        limits: TableCellStyleLimits,
+    ) -> Result<(Vec<u8>, TableCellStyleLoweringReceipt), TableCellStyleError> {
+        lower_selected(source, None, profile, style, catalog, limits)
     }
 
     /// Rewrites one cell selected by zero-based document order inside a full section XML part.
@@ -441,8 +543,38 @@ impl TableCellStyleLowerer {
         catalog: &ParagraphStyleCatalog,
         limits: TableCellStyleLimits,
     ) -> Result<Vec<u8>, TableCellStyleError> {
-        Self::lower_in_section_with_receipt(source, cell_ordinal, style, catalog, limits)
-            .map(|(bytes, _)| bytes)
+        Self::lower_in_section_with_profile(
+            source,
+            cell_ordinal,
+            TableCellStyleProfile::ContractV1,
+            style,
+            catalog,
+            limits,
+        )
+    }
+
+    /// Rewrites one section cell under one exact, explicitly selected shape profile.
+    ///
+    /// # Errors
+    ///
+    /// Applies the same checks as [`Self::lower_in_section`] without profile auto-detection.
+    pub fn lower_in_section_with_profile(
+        source: &[u8],
+        cell_ordinal: usize,
+        profile: TableCellStyleProfile,
+        style: &TableCellStyle,
+        catalog: &ParagraphStyleCatalog,
+        limits: TableCellStyleLimits,
+    ) -> Result<Vec<u8>, TableCellStyleError> {
+        Self::lower_in_section_with_profile_and_receipt(
+            source,
+            cell_ordinal,
+            profile,
+            style,
+            catalog,
+            limits,
+        )
+        .map(|(bytes, _)| bytes)
     }
 
     /// Rewrites one selected section cell and returns exact integrity evidence.
@@ -457,13 +589,38 @@ impl TableCellStyleLowerer {
         catalog: &ParagraphStyleCatalog,
         limits: TableCellStyleLimits,
     ) -> Result<(Vec<u8>, TableCellStyleLoweringReceipt), TableCellStyleError> {
-        lower_selected(source, Some(cell_ordinal), style, catalog, limits)
+        Self::lower_in_section_with_profile_and_receipt(
+            source,
+            cell_ordinal,
+            TableCellStyleProfile::ContractV1,
+            style,
+            catalog,
+            limits,
+        )
+    }
+
+    /// Rewrites one section cell and returns evidence bound to the selected shape profile.
+    ///
+    /// # Errors
+    ///
+    /// Applies the same checks as [`Self::lower_in_section_with_receipt`] without profile
+    /// auto-detection.
+    pub fn lower_in_section_with_profile_and_receipt(
+        source: &[u8],
+        cell_ordinal: usize,
+        profile: TableCellStyleProfile,
+        style: &TableCellStyle,
+        catalog: &ParagraphStyleCatalog,
+        limits: TableCellStyleLimits,
+    ) -> Result<(Vec<u8>, TableCellStyleLoweringReceipt), TableCellStyleError> {
+        lower_selected(source, Some(cell_ordinal), profile, style, catalog, limits)
     }
 }
 
 fn lower_selected(
     source: &[u8],
     cell_ordinal: Option<usize>,
+    profile: TableCellStyleProfile,
     style: &TableCellStyle,
     catalog: &ParagraphStyleCatalog,
     limits: TableCellStyleLimits,
@@ -481,10 +638,10 @@ fn lower_selected(
         root
     };
     validate_catalog(catalog)?;
-    let source_readback = read_from_document(&document, root, catalog, limits)?;
+    let source_readback = read_from_document(&document, root, profile, catalog, limits)?;
     validate_target_style(style, catalog, limits)?;
-    let shape = CellShape::read(&document, root, limits)?;
-    let mut edits = style_edits(&document, &shape, style)?;
+    let shape = CellShape::read(&document, root, profile, limits)?;
+    let mut edits = style_edits(&document, &shape, profile, style)?;
     let output = apply_edits(source, &mut edits, limits)?;
     let output_document = parse_document(&output, limits)?;
     validate_document_envelope(&output_document)?;
@@ -498,7 +655,8 @@ fn lower_selected(
         }
         root
     };
-    let output_readback = read_from_document(&output_document, output_root, catalog, limits)?;
+    let output_readback =
+        read_from_document(&output_document, output_root, profile, catalog, limits)?;
     if output_readback.style != *style
         || output_readback.paragraph_count != source_readback.paragraph_count
         || output_readback.content_sha256 != source_readback.content_sha256
@@ -506,7 +664,7 @@ fn lower_selected(
         return Err(TableCellStyleError::ReadbackMismatch);
     }
     let receipt = TableCellStyleLoweringReceipt {
-        profile_id: TABLE_CELL_STYLE_PROFILE_ID,
+        profile_id: profile.profile_id(),
         source_sha256: Sha256::digest(source).into(),
         output_sha256: Sha256::digest(&output).into(),
         source_bytes: source.len(),
@@ -520,9 +678,9 @@ fn lower_selected(
 fn style_edits(
     document: &PreservingXmlDocument,
     shape: &CellShape,
+    profile: TableCellStyleProfile,
     style: &TableCellStyle,
 ) -> Result<Vec<ByteEdit>, TableCellStyleError> {
-    let margin_values = style.margins.unwrap_or_else(CellMargins::zero);
     let (protect, editable) = style.protection.flags();
     let mut edits = Vec::new();
     edits
@@ -550,13 +708,20 @@ fn style_edits(
         bool01(editable),
         &mut edits,
     )?;
-    for (name, value) in [
-        ("left", margin_values.left),
-        ("right", margin_values.right),
-        ("top", margin_values.top),
-        ("bottom", margin_values.bottom),
-    ] {
-        push_attribute_edit(document, shape.margin, name, &value.to_string(), &mut edits)?;
+    // With the Hangul-2020 profile, inactive margin numbers are inherited/default
+    // serialization state. Preserve those exact spans instead of normalizing them.
+    if let Some(margin_values) = style
+        .margins
+        .or_else(|| (profile == TableCellStyleProfile::ContractV1).then_some(CellMargins::zero()))
+    {
+        for (name, value) in [
+            ("left", margin_values.left),
+            ("right", margin_values.right),
+            ("top", margin_values.top),
+            ("bottom", margin_values.bottom),
+        ] {
+            push_attribute_edit(document, shape.margin, name, &value.to_string(), &mut edits)?;
+        }
     }
     push_attribute_edit(
         document,
@@ -597,6 +762,7 @@ impl CellShape {
     fn read(
         document: &PreservingXmlDocument,
         root: usize,
+        profile: TableCellStyleProfile,
         limits: TableCellStyleLimits,
     ) -> Result<Self, TableCellStyleError> {
         let root_element = element(document, root)?;
@@ -616,7 +782,18 @@ impl CellShape {
             ],
         )?;
         let children = child_indexes(document, root)?;
-        let expected = ["cellAddr", "cellSpan", "cellSz", "cellMargin", "subList"];
+        let (expected, margin_offset, sub_list_offset) = match profile {
+            TableCellStyleProfile::ContractV1 => (
+                ["cellAddr", "cellSpan", "cellSz", "cellMargin", "subList"],
+                3,
+                4,
+            ),
+            TableCellStyleProfile::Hangul2020V2 => (
+                ["subList", "cellAddr", "cellSpan", "cellSz", "cellMargin"],
+                4,
+                0,
+            ),
+        };
         if children.len() != expected.len()
             || children
                 .iter()
@@ -625,13 +802,13 @@ impl CellShape {
         {
             return Err(TableCellStyleError::UnsupportedShape);
         }
-        let margin = children[3];
+        let margin = children[margin_offset];
         validate_attributes(
             element(document, margin)?,
             &["left", "right", "top", "bottom"],
         )?;
         require_no_children(document, margin)?;
-        let sub_list = children[4];
+        let sub_list = children[sub_list_offset];
         validate_attributes(
             element(document, sub_list)?,
             &[

@@ -94,7 +94,7 @@ pub use patch::{
 pub use path::PackagePath;
 pub use preservation::{
     PartPreservationRecord, PreservationClass, PreservationCounts, PreservationError,
-    PreservationReason, PreservationReport, TokenPreservationEvidence,
+    PreservationReason, PreservationReport, PreservationRuleProfile, TokenPreservationEvidence,
 };
 pub use preserving_xml::{
     PreservingXmlDocument, PreservingXmlError, XmlAttributeToken, XmlByteSpan, XmlElementToken,
@@ -121,9 +121,10 @@ pub use tab_definition::{
 };
 pub use table_cell_style::{
     CellMargins, CellProtection, CellTextDirection, CellVerticalAlignment,
-    TABLE_CELL_STYLE_PROFILE_ID, TableCellStyle, TableCellStyleError, TableCellStyleLimitConfig,
-    TableCellStyleLimits, TableCellStyleLowerer, TableCellStyleLoweringReceipt,
-    TableCellStyleReadback, TableCellStyleReader,
+    TABLE_CELL_STYLE_HANCOM_2020_PROFILE_ID, TABLE_CELL_STYLE_PROFILE_ID, TableCellStyle,
+    TableCellStyleError, TableCellStyleLimitConfig, TableCellStyleLimits, TableCellStyleLowerer,
+    TableCellStyleLoweringReceipt, TableCellStyleProfile, TableCellStyleReadback,
+    TableCellStyleReader,
 };
 pub use table_layout::{
     TABLE_LAYOUT_HWPX_PROFILE_ID, TableCellSizeReadback, TableLayoutHwpxError,

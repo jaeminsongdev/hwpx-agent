@@ -1,0 +1,121 @@
+{
+  "schema_version": "hwpx-agent.table-cell-style-contract/v2",
+  "model_schema_version": "hwpx-agent.table-cell-style.hancom-2020/2",
+  "predecessor": {
+    "path": "protocol/private/p06-table-cell-style-v1.json",
+    "sha256": "8788b6a5dd96d56d40c9bc3f5dfaf3ea307efdaa5c1ee66700a48dd7cf51ff08"
+  },
+  "prerequisites": [
+    "hwpx-agent.table-cell-style.hancom-2020/1",
+    "hwpx-agent.paragraph-style/1",
+    "hwpx-agent.preservation/hancom-2020-preview-text-v2",
+    "hancom-2020-hwpml-2011-table/v2",
+    "p03_preserving_xml_exact_source_spans"
+  ],
+  "scope": "p06_04_exact_current_pc_hancom_2020_observed_cell_style_lowering_and_readback",
+  "source_lock_canonicalization": "utf8_lf_sha256",
+  "source_locks": [
+    {
+      "path": "docs/03_document_model/06_table_model.md",
+      "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"
+    },
+    {
+      "path": "docs/12_implementation_guides/05_page_table_layout_algorithms.md",
+      "sha256": "4d94e6d462f7fc2f2187827ab436eb17c2bb2fe8f728ba8eee5f051c16bb4274"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "implementation/p02/evidence/owpml/owpml.records.v1.json",
+      "sha256": "c32f323a8fd22f228cc0a116c81881f9ae6c846525c19209142cfe7adcef6ea1"
+    },
+    {
+      "path": "implementation/p02/evidence/automation/automation-pdf.records.v1.json",
+      "sha256": "03db035d408d03ce3f78d4eca8ca76d7f9e8076ef8fadd49d8f3ed4b885317b5"
+    }
+  ],
+  "capabilities": [
+    "table.cell_padding",
+    "table.cell_border",
+    "table.cell_fill",
+    "table.cell_alignment",
+    "table.cell_text_direction",
+    "table.cell_protection"
+  ],
+  "representation": {
+    "margins": "optional_four_unsigned_hwpunit_values; hasMargin_zero_makes_stored_default_values_semantically_inactive",
+    "border_and_fill": "one_exact_unique_header_borderFillIDRef",
+    "horizontal_alignment": "one_exact_unique_paraPrIDRef_whose_catalog_semantics_match",
+    "vertical_alignment": "TOP_CENTER_BOTTOM",
+    "text_direction": "HORIZONTAL_VERTICAL_VERTICALALL",
+    "protection": "all_four_exact_combinations_of_independent_protect_and_editable_bits"
+  },
+  "current_2020_shape": {
+    "cell": "hp_tc_with_exact_subList_cellAddr_cellSpan_cellSz_cellMargin_child_order",
+    "paragraphs": "one_or_more_direct_hp_p_children_with_one_uniform_paraPrIDRef",
+    "reference_width": "borderFillIDRef_is_current_implementation_uint16",
+    "table_id_profile": "table_and_subList_declarations_plus_borderFill_and_zero_sentinel_link_references",
+    "preview_text_profile": "only_exact_Preview_PrVText_txt_text_plain_is_opaque_even_when_visible_text_starts_with_angle_brackets",
+    "unknown_style_attribute": "reject",
+    "unrelated_cell_content": "preserve_exact_bytes"
+  },
+  "lowering": {
+    "entrypoints": "standalone_tc_or_zero_based_cell_in_exact_section_with_total_cell_limit_and_explicit_v2_profile",
+    "mutation": "only_existing_style_attribute_value_spans",
+    "margins_absent": "hasMargin_zero_and_preserve_exact_inactive_stored_margin_value_spans",
+    "paragraph_alignment": "rewrite_every_direct_cell_paragraph_to_one_validated_reference",
+    "readback": "reparse_under_same_explicit_profile_and_compare_all_style_fields_paragraph_count_and_content_digest",
+    "receipt": "selected_profile_source_output_and_content_sha256_with_bounded_lengths_and_count"
+  },
+  "validation_order": [
+    "finite_package_input_element_and_total_cell_limits",
+    "exact_preview_path_and_text_plain_media_profile_before_nonxml_content_sniff",
+    "namespace_root_and_exact_observed_current_2020_shape",
+    "closed_table_id_and_reference_index_with_zero_link_sentinels",
+    "source_style_and_uniform_paragraph_reference",
+    "target_margin_and_uint16_reference_range",
+    "unique_border_fill_and_paragraph_reference_resolution",
+    "horizontal_alignment_semantic_match",
+    "checked_nonoverlapping_attribute_edits",
+    "finite_output_limit",
+    "same_profile_semantic_and_content_readback"
+  ],
+  "failure_policy": [
+    "malformed_or_unsafe_xml",
+    "preview_path_or_media_mismatch",
+    "angle_bracket_text_outside_exact_preview_exception",
+    "wrong_root_namespace_or_v1_or_unknown_child_order",
+    "missing_duplicate_or_unknown_style_attribute",
+    "invalid_number_boolean_or_enum",
+    "mixed_cell_paragraph_references",
+    "missing_ambiguous_dangling_or_wrong_type_id_reference",
+    "reference_semantic_mismatch",
+    "finite_limit_or_allocation_failure",
+    "readback_or_content_drift"
+  ],
+  "source_evidence": {
+    "owpml": "P02 locked records plus official Apache-2.0 model source define tc cellMargin subList and token names",
+    "automation": "TableCreate and fixed style actions produced the bounded synthetic source only",
+    "actual_observation": "exact_build_source_sha256_814c481da946e760b2bc3b90b996863786652001e49f8b2b422e13c3d3e477a4_showed_subList_first_inactive_nonzero_margins_table_ids_and_angle_bracket_preview_text",
+    "runtime_target": "licensed_local_Hangul_2020_11.0.0.9136_x86_only"
+  },
+  "atomicity": "source_bytes_are_immutable_and_only_a_fully_reparsed_same_profile_semantically_equal_result_returns",
+  "runtime_readback": "active_document_binding_pre_save_markers_bounded_x86_sta_watchdog_exact_input_and_text_digests_save_reopen_pdf_and_zero_process_residue",
+  "migration": "protocol/migrations/p06-table-cell-style-v1-to-v2.md",
+  "not_claimed": {
+    "new_border_fill_catalog_insertion": false,
+    "arbitrary_table_shape_repair": false,
+    "formula_or_layout_semantics": false,
+    "general_public_automation_route": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "phase_complete": false,
+    "product_complete": false
+  }
+}

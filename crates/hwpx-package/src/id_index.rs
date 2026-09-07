@@ -7,7 +7,7 @@ use thiserror::Error;
 use crate::{
     BoundedZipReader, PackageError, PackageGraph, PackageGraphLimits, PackagePath,
     PartPreservationRecord, PartRole, PreservationClass, PreservationError, PreservationReport,
-    PreservingXmlDocument, PreservingXmlError, XmlByteSpan,
+    PreservationRuleProfile, PreservingXmlDocument, PreservingXmlError, XmlByteSpan,
 };
 
 const OPF_NAMESPACE: &str = "http://www.idpf.org/2007/opf";
@@ -99,6 +99,7 @@ pub struct IdRuleProfile(ProfileKind);
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum ProfileKind {
     CurrentHancom2020CoreV1,
+    CurrentHancom2020TableV2,
 }
 
 impl IdRuleProfile {
@@ -107,10 +108,31 @@ impl IdRuleProfile {
         Self(ProfileKind::CurrentHancom2020CoreV1)
     }
 
+    /// Extends the immutable core profile with the table and cell ID domains
+    /// observed in exact-build Hangul 2020 HWPX output.
+    #[must_use]
+    pub const fn current_hancom_2020_table_v2() -> Self {
+        Self(ProfileKind::CurrentHancom2020TableV2)
+    }
+
     #[must_use]
     pub const fn version(self) -> &'static str {
         match self.0 {
             ProfileKind::CurrentHancom2020CoreV1 => "hancom-2020-hwpml-2011-core/v1",
+            ProfileKind::CurrentHancom2020TableV2 => "hancom-2020-hwpml-2011-table/v2",
+        }
+    }
+
+    const fn includes_table_rules(self) -> bool {
+        matches!(self.0, ProfileKind::CurrentHancom2020TableV2)
+    }
+
+    const fn preservation_profile(self) -> PreservationRuleProfile {
+        match self.0 {
+            ProfileKind::CurrentHancom2020CoreV1 => PreservationRuleProfile::CoreV1,
+            ProfileKind::CurrentHancom2020TableV2 => {
+                PreservationRuleProfile::Hangul2020PreviewTextV2
+            }
         }
     }
 }
@@ -137,6 +159,8 @@ pub enum IdKind {
     Paragraph,
     SectionProperties,
     ColumnProperties,
+    Table,
+    SubList,
 }
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
@@ -298,8 +322,12 @@ impl IdIndex {
         profile: IdRuleProfile,
         limits: IdIndexLimits,
     ) -> Result<Self, IdIndexError> {
-        let preservation =
-            PreservationReport::build_with_graph_limits(reader, graph, graph_limits)?;
+        let preservation = PreservationReport::build_with_graph_limits_and_profile(
+            reader,
+            graph,
+            graph_limits,
+            profile.preservation_profile(),
+        )?;
         if !preservation.direct_preserve_ready() {
             return Err(IdIndexError::PreservationRejected);
         }
@@ -358,7 +386,7 @@ pub(crate) fn allocation_declaration_kind(
     document: &PreservingXmlDocument,
     element_index: usize,
     attribute_index: usize,
-    _profile: IdRuleProfile,
+    profile: IdRuleProfile,
 ) -> Result<Option<(IdKind, bool)>, IdIndexError> {
     let Some(element) = document.elements().get(element_index) else {
         return Ok(None);
@@ -367,6 +395,7 @@ pub(crate) fn allocation_declaration_kind(
         return Ok(None);
     };
     let Some(rule) = matching_declaration_rule(
+        profile,
         graph,
         part,
         element.name().namespace(),
@@ -681,6 +710,25 @@ const DECLARATION_RULES: &[DeclarationRule] = &[
     ),
 ];
 
+const TABLE_DECLARATION_RULES: &[DeclarationRule] = &[
+    declaration(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "tbl",
+        "id",
+        IdKind::Table,
+        ValueSyntax::Decimal,
+    ),
+    declaration(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "subList",
+        "id",
+        IdKind::SubList,
+        ValueSyntax::Decimal,
+    ),
+];
+
 const REFERENCE_RULES: &[ReferenceRule] = &[
     reference(
         PartSelector::PackageDocument,
@@ -869,6 +917,45 @@ const REFERENCE_RULES: &[ReferenceRule] = &[
         "outlineShapeIDRef",
         TargetSelector::Exact(HEADER_PART),
         IdKind::Numbering,
+        ValueSyntax::Decimal,
+    ),
+];
+
+const TABLE_REFERENCE_RULES: &[ReferenceRule] = &[
+    reference(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "tbl",
+        "borderFillIDRef",
+        TargetSelector::Exact(HEADER_PART),
+        IdKind::BorderFill,
+        ValueSyntax::Decimal,
+    ),
+    reference(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "tc",
+        "borderFillIDRef",
+        TargetSelector::Exact(HEADER_PART),
+        IdKind::BorderFill,
+        ValueSyntax::Decimal,
+    ),
+    reference_optional_zero(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "subList",
+        "linkListIDRef",
+        TargetSelector::SamePart,
+        IdKind::SubList,
+        ValueSyntax::Decimal,
+    ),
+    reference_optional_zero(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "subList",
+        "linkListNextIDRef",
+        TargetSelector::SamePart,
+        IdKind::SubList,
         ValueSyntax::Decimal,
     ),
 ];
@@ -1079,6 +1166,7 @@ impl<'a> IndexBuilder<'a> {
             return Ok(());
         }
         let declaration_rule = matching_declaration_rule(
+            self.profile,
             self.graph,
             part,
             element.name().namespace(),
@@ -1087,6 +1175,7 @@ impl<'a> IndexBuilder<'a> {
             attribute.name().local_name(),
         )?;
         let reference_rule = matching_reference_rule(
+            self.profile,
             self.graph,
             part,
             element.name().namespace(),
@@ -1139,6 +1228,7 @@ impl<'a> IndexBuilder<'a> {
         rule: &DeclarationRule,
     ) -> Result<(), IdIndexError> {
         if known_declaration_sentinel(
+            self.profile,
             part,
             document.elements()[element_index].name().namespace(),
             document.elements()[element_index].name().local_name(),
@@ -1403,6 +1493,7 @@ impl<'a> IndexBuilder<'a> {
 }
 
 fn matching_declaration_rule(
+    profile: IdRuleProfile,
     graph: &PackageGraph,
     part: &PartPreservationRecord,
     element_namespace: Option<&str>,
@@ -1411,7 +1502,12 @@ fn matching_declaration_rule(
     attribute_local: &str,
 ) -> Result<Option<&'static DeclarationRule>, IdIndexError> {
     let mut matched = None;
-    for rule in DECLARATION_RULES {
+    let additional = if profile.includes_table_rules() {
+        TABLE_DECLARATION_RULES
+    } else {
+        &[]
+    };
+    for rule in DECLARATION_RULES.iter().chain(additional) {
         if part_matches(rule.part, graph, part)
             && rule_namespace_matches(element_namespace, rule.namespace)
             && element_local == rule.element
@@ -1426,6 +1522,7 @@ fn matching_declaration_rule(
 }
 
 fn matching_reference_rule(
+    profile: IdRuleProfile,
     graph: &PackageGraph,
     part: &PartPreservationRecord,
     element_namespace: Option<&str>,
@@ -1434,7 +1531,12 @@ fn matching_reference_rule(
     attribute_local: &str,
 ) -> Result<Option<&'static ReferenceRule>, IdIndexError> {
     let mut matched = None;
-    for rule in REFERENCE_RULES {
+    let additional = if profile.includes_table_rules() {
+        TABLE_REFERENCE_RULES
+    } else {
+        &[]
+    };
+    for rule in REFERENCE_RULES.iter().chain(additional) {
         if part_matches(rule.part, graph, part)
             && rule_namespace_matches(element_namespace, rule.namespace)
             && element_local == rule.element
@@ -1512,6 +1614,7 @@ fn decimal_equals(value: &str, expected: u64) -> bool {
 }
 
 fn known_declaration_sentinel(
+    profile: IdRuleProfile,
     part: &PartPreservationRecord,
     element_namespace: Option<&str>,
     element_local: &str,
@@ -1537,7 +1640,14 @@ fn known_declaration_sentinel(
         && attribute_namespace.is_none()
         && attribute_local == "id"
         && value.is_empty();
-    paragraph_zero || empty_package || empty_section_metadata
+    let empty_sub_list = profile.includes_table_rules()
+        && part.role() == PartRole::SpineDocument
+        && element_namespace == Some(HWPML_2011_PARAGRAPH_NAMESPACE)
+        && element_local == "subList"
+        && attribute_namespace.is_none()
+        && attribute_local == "id"
+        && value.is_empty();
+    paragraph_zero || empty_package || empty_section_metadata || empty_sub_list
 }
 
 fn valid_text_id(raw: &str) -> bool {

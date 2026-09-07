@@ -45,6 +45,18 @@ const SECTION: &str = r#"<q:section xmlns:q="http://www.hancom.co.kr/hwpml/2011/
   <q:p id="1" paraPrIDRef="1" styleIDRef="01"><q:run charPrIDRef="1"/></q:p>
 </q:section>"#;
 
+const TABLE_SECTION: &str = r#"<q:section xmlns:q="http://www.hancom.co.kr/hwpml/2011/paragraph">
+  <q:secPr id="section-one" memoShapeIDRef="1" outlineShapeIDRef="1">
+    <q:colPr id="column-one"/>
+    <q:pageBorderFill borderFillIDRef="1"/>
+  </q:secPr>
+  <q:p id="1" paraPrIDRef="1" styleIDRef="1"><q:run charPrIDRef="1">
+    <q:tbl id="10" borderFillIDRef="1"><q:tc borderFillIDRef="1">
+      <q:subList id="" linkListIDRef="0" linkListNextIDRef="00"/>
+    </q:tc></q:tbl>
+  </q:run></q:p>
+</q:section>"#;
+
 #[test]
 fn current_2020_core_profile_indexes_typed_cross_part_references_without_value_leak() -> TestResult
 {
@@ -127,6 +139,81 @@ fn current_2020_core_profile_indexes_typed_cross_part_references_without_value_l
         IdIndexLimits::default(),
     )?;
     assert_eq!(empty_index.declarations().len(), 18);
+    Ok(())
+}
+
+#[test]
+fn table_v2_adds_typed_table_domains_without_weakening_core_v1() -> TestResult {
+    let bytes = valid_archive(Some(HEADER), TABLE_SECTION, "pkg")?;
+    let (mut core_reader, core_graph) = open_graph(bytes.clone())?;
+    let Err(core_error) = IdIndex::build(
+        &mut core_reader,
+        &core_graph,
+        IdRuleProfile::current_hancom_2020_core_v1(),
+        IdIndexLimits::default(),
+    ) else {
+        return Err("core v1 silently accepted table ID domains".into());
+    };
+    assert!(validation_codes(&core_error).contains(&"id_index_unknown_id_like_attribute"));
+
+    let (mut table_reader, table_graph) = open_graph(bytes)?;
+    let index = IdIndex::build(
+        &mut table_reader,
+        &table_graph,
+        IdRuleProfile::current_hancom_2020_table_v2(),
+        IdIndexLimits::default(),
+    )?;
+    assert_eq!(index.profile_version(), "hancom-2020-hwpml-2011-table/v2");
+    assert_eq!(index.declarations().len(), 22);
+    assert_eq!(index.references().len(), 22);
+    assert!(
+        index
+            .declarations()
+            .iter()
+            .any(|declaration| declaration.kind() == IdKind::Table)
+    );
+    assert!(
+        !index
+            .declarations()
+            .iter()
+            .any(|declaration| declaration.kind() == IdKind::SubList)
+    );
+
+    let linked = TABLE_SECTION
+        .replace("id=\"\"", "id=\"20\"")
+        .replace("linkListIDRef=\"0\"", "linkListIDRef=\"20\"")
+        .replace("linkListNextIDRef=\"00\"", "linkListNextIDRef=\"020\"");
+    let (mut linked_reader, linked_graph) =
+        open_graph(valid_archive(Some(HEADER), &linked, "pkg")?)?;
+    let linked_index = IdIndex::build(
+        &mut linked_reader,
+        &linked_graph,
+        IdRuleProfile::current_hancom_2020_table_v2(),
+        IdIndexLimits::default(),
+    )?;
+    assert_eq!(linked_index.declarations().len(), 23);
+    assert_eq!(linked_index.references().len(), 24);
+    assert_eq!(
+        linked_index
+            .declarations()
+            .iter()
+            .filter(|declaration| declaration.kind() == IdKind::SubList)
+            .count(),
+        1
+    );
+
+    let dangling = linked.replace("linkListNextIDRef=\"020\"", "linkListNextIDRef=\"21\"");
+    let (mut dangling_reader, dangling_graph) =
+        open_graph(valid_archive(Some(HEADER), &dangling, "pkg")?)?;
+    let Err(error) = IdIndex::build(
+        &mut dangling_reader,
+        &dangling_graph,
+        IdRuleProfile::current_hancom_2020_table_v2(),
+        IdIndexLimits::default(),
+    ) else {
+        return Err("dangling sub-list reference was accepted".into());
+    };
+    assert!(validation_codes(&error).contains(&"id_index_dangling_reference"));
     Ok(())
 }
 

@@ -1,7 +1,8 @@
 # P06-04 Cell formatting policy
 
-- Contract: `hwpx-agent.table-cell-style.hancom-2020/1`
-- Contract record: `protocol/private/p06-table-cell-style-v1.json`
+- Current exact-build contract: `hwpx-agent.table-cell-style.hancom-2020/2`
+- Contract record: `protocol/private/p06-table-cell-style-v2.json`
+- Immutable predecessor: `hwpx-agent.table-cell-style.hancom-2020/1`
 - Implementation: `hwpx_package::TableCellStyleLowerer` and `TableCellStyleReader`
 - Runtime target: this PC's licensed Hangul 2020 `11.0.0.9136` x86 installation
 
@@ -19,7 +20,10 @@ until a PC carrying those licensed versions is available; no guessed compatibili
 ## Typed style and references
 
 Margins are either absent or four unsigned HWPUNIT values under a finite configured ceiling.
-Absence is serialized canonically as `hasMargin="0"` and four stored zero values. Border and fill
+The exact Hangul 2020 output can retain inherited/default nonzero margin numbers while
+`hasMargin="0"` makes them semantically inactive. The v2 reader maps that form to absence, and a
+v2 lowering to absence preserves the inactive numeric spans instead of inventing normalization.
+The v1 default APIs retain their canonical-zero rule. Border and fill
 are selected by one exact `borderFillIDRef`; it must resolve exactly once in the validated header
 catalog and stay within the current implementation's unsigned 16-bit storage width.
 
@@ -32,10 +36,12 @@ independent `protect` and `editable` bits instead of inventing an undocumented d
 
 ## Preserving lowerer
 
-The admitted current profile has exactly `cellAddr`, `cellSpan`, `cellSz`, `cellMargin` and
-`subList` children in official order, and at least one direct `hp:p` child under `subList`. Unknown
-style attributes, duplicate attributes, wrong namespaces, malformed values and noncanonical absent
-margins reject.
+The observed exact-build v2 profile has exactly `subList`, `cellAddr`, `cellSpan`, `cellSz` and
+`cellMargin` children in that order, and at least one direct `hp:p` child under `subList`. It also
+uses the explicit table-ID v2 profile and the exact-path `Preview/PrvText.txt` text/plain
+preservation rule. The immutable v1 order and preview rejection remain available through v1 APIs;
+there is no auto-detection. Unknown style attributes, duplicate attributes, wrong namespaces and
+malformed values reject.
 
 Standalone-cell and full-section entry points share one implementation. The section form requires
 the exact section root namespace, counts every cell under a separate finite total-cell limit, and
