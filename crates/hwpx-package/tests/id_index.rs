@@ -57,6 +57,20 @@ const TABLE_SECTION: &str = r#"<q:section xmlns:q="http://www.hancom.co.kr/hwpml
   </q:run></q:p>
 </q:section>"#;
 
+const FORMULA_SECTION: &str = r#"<q:section xmlns:q="http://www.hancom.co.kr/hwpml/2011/paragraph">
+  <q:secPr id="section-one" memoShapeIDRef="1" outlineShapeIDRef="1">
+    <q:colPr id="column-one"/>
+    <q:pageBorderFill borderFillIDRef="1"/>
+  </q:secPr>
+  <q:p id="1" paraPrIDRef="1" styleIDRef="1"><q:run charPrIDRef="1">
+    <q:tbl id="10" borderFillIDRef="1"><q:tc borderFillIDRef="1">
+      <q:subList id="" linkListIDRef="0" linkListNextIDRef="00">
+        <q:p id="0"><q:run><q:fieldBegin id="101" fieldid="202"/><q:fieldEnd beginIDRef="101" fieldid="202"/></q:run></q:p>
+      </q:subList>
+    </q:tc></q:tbl>
+  </q:run></q:p>
+</q:section>"#;
+
 #[test]
 fn current_2020_core_profile_indexes_typed_cross_part_references_without_value_leak() -> TestResult
 {
@@ -214,6 +228,70 @@ fn table_v2_adds_typed_table_domains_without_weakening_core_v1() -> TestResult {
         return Err("dangling sub-list reference was accepted".into());
     };
     assert!(validation_codes(&error).contains(&"id_index_dangling_reference"));
+    Ok(())
+}
+
+#[test]
+fn formula_v3_adds_typed_field_domains_without_weakening_table_v2() -> TestResult {
+    let bytes = valid_archive(Some(HEADER), FORMULA_SECTION, "pkg")?;
+    let (mut table_reader, table_graph) = open_graph(bytes.clone())?;
+    let Err(table_error) = IdIndex::build(
+        &mut table_reader,
+        &table_graph,
+        IdRuleProfile::current_hancom_2020_table_v2(),
+        IdIndexLimits::default(),
+    ) else {
+        return Err("table v2 silently accepted formula ID domains".into());
+    };
+    assert_eq!(
+        validation_codes(&table_error)
+            .into_iter()
+            .filter(|code| *code == "id_index_unknown_id_like_attribute")
+            .count(),
+        2
+    );
+
+    let (mut formula_reader, formula_graph) = open_graph(bytes)?;
+    let index = IdIndex::build(
+        &mut formula_reader,
+        &formula_graph,
+        IdRuleProfile::current_hancom_2020_formula_v3(),
+        IdIndexLimits::default(),
+    )?;
+    assert_eq!(index.profile_version(), "hancom-2020-hwpml-2011-formula/v3");
+    assert_eq!(index.declarations().len(), 24);
+    assert_eq!(index.references().len(), 24);
+    assert!(
+        index
+            .declarations()
+            .iter()
+            .any(|declaration| declaration.kind() == IdKind::FieldBegin)
+    );
+    assert!(
+        index
+            .declarations()
+            .iter()
+            .any(|declaration| declaration.kind() == IdKind::FieldInstance)
+    );
+
+    for dangling in [
+        FORMULA_SECTION.replace("beginIDRef=\"101\"", "beginIDRef=\"999\""),
+        FORMULA_SECTION.replace(
+            "<q:fieldEnd beginIDRef=\"101\" fieldid=\"202\"/>",
+            "<q:fieldEnd beginIDRef=\"101\" fieldid=\"999\"/>",
+        ),
+    ] {
+        let (mut reader, graph) = open_graph(valid_archive(Some(HEADER), &dangling, "pkg")?)?;
+        let Err(error) = IdIndex::build(
+            &mut reader,
+            &graph,
+            IdRuleProfile::current_hancom_2020_formula_v3(),
+            IdIndexLimits::default(),
+        ) else {
+            return Err("dangling formula field reference was accepted".into());
+        };
+        assert!(validation_codes(&error).contains(&"id_index_dangling_reference"));
+    }
     Ok(())
 }
 

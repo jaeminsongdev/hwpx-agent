@@ -100,6 +100,7 @@ pub struct IdRuleProfile(ProfileKind);
 enum ProfileKind {
     CurrentHancom2020CoreV1,
     CurrentHancom2020TableV2,
+    CurrentHancom2020FormulaV3,
 }
 
 impl IdRuleProfile {
@@ -115,22 +116,37 @@ impl IdRuleProfile {
         Self(ProfileKind::CurrentHancom2020TableV2)
     }
 
+    /// Extends the immutable table profile with the two exact field-ID domains
+    /// observed in exact-build Hangul 2020 formula fields.
+    #[must_use]
+    pub const fn current_hancom_2020_formula_v3() -> Self {
+        Self(ProfileKind::CurrentHancom2020FormulaV3)
+    }
+
     #[must_use]
     pub const fn version(self) -> &'static str {
         match self.0 {
             ProfileKind::CurrentHancom2020CoreV1 => "hancom-2020-hwpml-2011-core/v1",
             ProfileKind::CurrentHancom2020TableV2 => "hancom-2020-hwpml-2011-table/v2",
+            ProfileKind::CurrentHancom2020FormulaV3 => "hancom-2020-hwpml-2011-formula/v3",
         }
     }
 
     const fn includes_table_rules(self) -> bool {
-        matches!(self.0, ProfileKind::CurrentHancom2020TableV2)
+        matches!(
+            self.0,
+            ProfileKind::CurrentHancom2020TableV2 | ProfileKind::CurrentHancom2020FormulaV3
+        )
+    }
+
+    const fn includes_formula_rules(self) -> bool {
+        matches!(self.0, ProfileKind::CurrentHancom2020FormulaV3)
     }
 
     const fn preservation_profile(self) -> PreservationRuleProfile {
         match self.0 {
             ProfileKind::CurrentHancom2020CoreV1 => PreservationRuleProfile::CoreV1,
-            ProfileKind::CurrentHancom2020TableV2 => {
+            ProfileKind::CurrentHancom2020TableV2 | ProfileKind::CurrentHancom2020FormulaV3 => {
                 PreservationRuleProfile::Hangul2020PreviewTextV2
             }
         }
@@ -161,6 +177,8 @@ pub enum IdKind {
     ColumnProperties,
     Table,
     SubList,
+    FieldBegin,
+    FieldInstance,
 }
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
@@ -729,6 +747,25 @@ const TABLE_DECLARATION_RULES: &[DeclarationRule] = &[
     ),
 ];
 
+const FORMULA_DECLARATION_RULES: &[DeclarationRule] = &[
+    declaration(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "fieldBegin",
+        "id",
+        IdKind::FieldBegin,
+        ValueSyntax::Decimal,
+    ),
+    declaration(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "fieldBegin",
+        "fieldid",
+        IdKind::FieldInstance,
+        ValueSyntax::Decimal,
+    ),
+];
+
 const REFERENCE_RULES: &[ReferenceRule] = &[
     reference(
         PartSelector::PackageDocument,
@@ -956,6 +993,27 @@ const TABLE_REFERENCE_RULES: &[ReferenceRule] = &[
         "linkListNextIDRef",
         TargetSelector::SamePart,
         IdKind::SubList,
+        ValueSyntax::Decimal,
+    ),
+];
+
+const FORMULA_REFERENCE_RULES: &[ReferenceRule] = &[
+    reference(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "fieldEnd",
+        "beginIDRef",
+        TargetSelector::SamePart,
+        IdKind::FieldBegin,
+        ValueSyntax::Decimal,
+    ),
+    reference(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "fieldEnd",
+        "fieldid",
+        TargetSelector::SamePart,
+        IdKind::FieldInstance,
         ValueSyntax::Decimal,
     ),
 ];
@@ -1502,12 +1560,17 @@ fn matching_declaration_rule(
     attribute_local: &str,
 ) -> Result<Option<&'static DeclarationRule>, IdIndexError> {
     let mut matched = None;
-    let additional = if profile.includes_table_rules() {
+    let table = if profile.includes_table_rules() {
         TABLE_DECLARATION_RULES
     } else {
         &[]
     };
-    for rule in DECLARATION_RULES.iter().chain(additional) {
+    let formula = if profile.includes_formula_rules() {
+        FORMULA_DECLARATION_RULES
+    } else {
+        &[]
+    };
+    for rule in DECLARATION_RULES.iter().chain(table).chain(formula) {
         if part_matches(rule.part, graph, part)
             && rule_namespace_matches(element_namespace, rule.namespace)
             && element_local == rule.element
@@ -1531,12 +1594,17 @@ fn matching_reference_rule(
     attribute_local: &str,
 ) -> Result<Option<&'static ReferenceRule>, IdIndexError> {
     let mut matched = None;
-    let additional = if profile.includes_table_rules() {
+    let table = if profile.includes_table_rules() {
         TABLE_REFERENCE_RULES
     } else {
         &[]
     };
-    for rule in REFERENCE_RULES.iter().chain(additional) {
+    let formula = if profile.includes_formula_rules() {
+        FORMULA_REFERENCE_RULES
+    } else {
+        &[]
+    };
+    for rule in REFERENCE_RULES.iter().chain(table).chain(formula) {
         if part_matches(rule.part, graph, part)
             && rule_namespace_matches(element_namespace, rule.namespace)
             && element_local == rule.element
