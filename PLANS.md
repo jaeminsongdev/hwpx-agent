@@ -166,6 +166,12 @@
 - The watchdog now preserves the observed progress phase and infers window visibility only from the
   engine's validated post-Visible progress ordering. A fresh user-approved target save/reopen,
   typed oracle and PDF visual review remain; P06-06 is not complete.
+- Source v38 acceptance run `cbc7c29f6e684595a4c0c3bf49029d48` passed 11/11 at clean commit
+  `6e906ae7aa3a77a850c7c95b8cd3bb40795befe6`; receipt SHA-256 is
+  `e8492a60f732c424ca7b2a5316dba6c036bcd10d9030895c0d02d50d4649d951`. Qualification contract
+  SHA-256 `818e41c4e8ee46eea3b0f31b7d769eb56d19f9de46310ed73e37285cb237ebe0` binds nine structural,
+  oracle and diagnostic sources over immutable v37 while keeping runtime/P06-06/product claims
+  false.
 
 ## Open risks and holds
 
@@ -177,6 +183,10 @@
 - R-0007: P06-06~09 still require actual Hangul 2020 formula, pagination, inspect/select and the
   61-capability target conformance matrix. P06-05's exact fixture PASS does not prove arbitrary
   documents or other PCs/versions.
+- R-0008: bulk discovery of historical source-qualification tests currently reports 12 errors in
+  v21-v30 and v33-v34 because those legacy verifiers reread mutable current files. Exact v37/v38
+  verification and their 10 focused tests pass. Before the final Gate, make the legacy audit
+  forward-stable against immutable commit blobs without rewriting its historical contracts.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 
@@ -196,7 +206,7 @@
   `implementation/p05/P05_GATE_REPORT.md`.
 - P06-04 source tool: `implementation/p06/tools/create-hancom-2020-table-source.ps1`.
 - P06-05 metric qualification: commits `af3dbf0`, `42aba1c`, `742b3d2`.
-- P17 source qualification: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V36.md`; other details
+- P17 source qualification: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V38.md`; other details
   are under `implementation/p17/`; detailed ledger history through
   P-0085 is recoverable from `fae5bc0:PLANS.md` and later Git history.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.
