@@ -3,8 +3,8 @@
 - Updated: 2026-09-07
 - Root: `D:\개발\hwpx-agent`
 - Scope: current PC, licensed Hangul 2020 `11.0.0.9136` x86, personal local development only.
-- Active: P06-02 table create/insert/delete, P17-06/P17-07/P17-08 and final product qualification.
-- Reasoning: high for P06-02 mutation/index/property work; max for preservation, authorization and final Gate work.
+- Active: P06-03 table merge/split, P17-06/P17-07/P17-08 and final product qualification.
+- Reasoning: high for P06-03 merge/split invariant/property work; max for preservation, authorization and final Gate work.
 - UI: attempt23 sparse layout/identity, dense attempt02 automatic flow/balance, P05-08 v12
   odd/even/first-page header/footer/master and P05-09 v2 coordinate-aware VS-1 rendering passed on
   Hangul 2020. Computer Use performed no click or typing; the user approved the visible Hangul
@@ -25,7 +25,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | `implementation/p00/` through `implementation/p04/` |
 | P05 | scoped current-PC PASS | 01-09 plus actual save/reopen/readback/PDF/visual, source v20 and dual FULL Gate |
-| P06 | in progress | 01 pure `TableGrid` invariant PASS; 02 create/insert/delete ready |
+| P06 | in progress | 01 pure `TableGrid` invariant and 02 create/insert/delete PASS; 03 merge/split ready |
 | P07-P09 | blocked in sequence | equation, graphics and fields engines follow P06 and their stated dependencies |
 | P10 | in progress | 01-04,07,09,10 scoped pass; 05/06 actual dependencies; 08 unqualified |
 | P11-P13 | blocked | depend on P06-P10 |
@@ -42,7 +42,8 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 |---|---|---|
 | P-0045-0048 | P05-06-09 | Complete; authoritative scoped phase decision in `implementation/p05/P05_GATE_REPORT.md` |
 | P-0049 | P06-01 | Complete: report `implementation/p06/P06-01_REPORT.md`; source v21 and dual FULL PASS |
-| P-0050 | P06-02 | Ready: deterministic table/row/column create, insert, delete and boundary/index tests |
+| P-0050 | P06-02 | Complete: report `implementation/p06/P06-02_REPORT.md`; source v22 and dual FULL PASS |
+| P-0051 | P06-03 | Ready: content-preserving rectangular merge/split and nonrectangular/conflict tests |
 | P-0082 | P16-02 | Local bundle ready; actual registered app/host receipt absent |
 | P-0085-0087 | P16-05/06 | Dedicated local one-tool MCP host v14 14/14; actual app/Hangul open |
 | P-0088 | P17-03 | Daemon qualification 11/11 at run `4b1c023ca40c4a02b6dc25ac77ca656b` |
@@ -122,6 +123,13 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   current/independent FULL 5/5 passed. Raw-byte source locks were repaired to UTF-8/LF canonical
   hashes after an independent CRLF/LF checkout failure. No Hangul runtime or user document was used.
   `implementation/p06/P06-01_REPORT.md` is authoritative.
+- P06-02 implementation commit `f0f5c1e162d46993593b1f4a45fc8afd2c620a34` and source/audit
+  commit `8d4ed84d89c558bfc262a923b09d988333bec41a` lock bounded table create/insert/delete,
+  survivor identity/coordinate remapping, exact caller IDs, span-boundary rejection and atomic
+  receipts. `domain-ir` passed 83/83, table operations 9/9, P06 Python 11/11, source v22 combined
+  15/15, offline Linux tests/Clippy and current/independent FULL 5/5. Both security runs had zero
+  failed checks/forbidden licenses and all vulnerability checks exited 0. No Hangul runtime or user
+  document was used. `implementation/p06/P06-02_REPORT.md` is authoritative.
 - P16 merge `0512883`; durable plan PostgreSQL run `1828b246e92746789fa5d6501e7f1ac2`
   passed 39/39, renderer/evidence run `2b01ce0ff66045f29a32c67d217aa9bd` passed 19/19,
   dedicated host run `d22e85581cd44d06a016f3460a43de12` passed 14/14; resources cleaned.
@@ -208,16 +216,18 @@ Synthetic or component evidence never proves actual render, save, cross-version 
   mirror role/head admission plus checkpoint transaction. Transport remains loopback-only.
 - R-0006: P17-07 local resolver and graphical stale-head widget are component evidence only;
   qualified `project_conflict_resolve` host wiring and concurrent Web/Codex verification remain open.
-- R-0007: P06-01 proves only the pure logical grid. HWPX table lift/lower, actual Hangul 2020
-  save/reopen/render, mutations, merge/split and later table features remain open in P06-02~09.
+- R-0007: P06-01/02 prove only the pure logical grid and create/insert/delete semantics. HWPX table
+  lift/lower, actual Hangul 2020 save/reopen/render, content/style preservation, merge/split and
+  later table features remain open in P06-03~09.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution are open.
 - HOLD-0003: P10-08 production isolation and later-version PCs are unqualified.
 
 ## Next actions and validation
 
-1. Start P06-02 at reasoning `high`: implement deterministic table/row/column create, insert and
-   delete over validated `TableGrid`; lock master identity/index remapping, span-boundary and atomic
-   failure policies with boundary/index/property tests before P06-03 merge/split.
+1. Start P06-03 at reasoning `high`: define explicit content-preservation and identity policy,
+   implement checked rectangular merge and deterministic split span transformations, reject
+   nonrectangular/overlap/conflict cases atomically, and lock content/identity/span remap receipts
+   with fixed-seed property and negative tests.
 2. In a freshly loaded Codex GUI task, run one disposable v0.4 prepare/confirm flow and capture
    visible user approval plus exact Git effect/replay evidence. No Hangul access prompt is needed.
 3. Move mirror role/head admission into durable PostgreSQL and combine it atomically with the
@@ -232,7 +242,7 @@ Synthetic or component evidence never proves actual render, save, cross-version 
 
 ## Handoff pointers
 
-- First read: this file, `implementation/p06/P06-01_REPORT.md`, `implementation/p05/P05_GATE_REPORT.md`,
+- First read: this file, `implementation/p06/P06-02_REPORT.md`, `implementation/p06/P06-01_REPORT.md`, `implementation/p05/P05_GATE_REPORT.md`,
   `implementation/p05/P05-07_DIAGNOSTIC_AUDIT_STATUS.md`,
   `implementation/p17/P17-08_TRUSTED_WIDGET_V7.md`, and P16 main integration audit.
 - Attempt23 evidence: `fixtures/target-build/p05-07-current-2020-20260906-v4/`; read

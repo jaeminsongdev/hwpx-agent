@@ -1,7 +1,7 @@
 schema: hwpx-agent.roadmap-status/v2
 updated_at: 2026-09-07
 current_phase: P06
-status: p06_in_progress_p06_01_complete_p06_02_ready_current_pc_local_only
+status: p06_in_progress_p06_01_02_complete_p06_03_ready_current_pc_local_only
 design_baseline:
   feature_domains: 16
   features: 609
@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_to_p05_complete_p06_01_pure_ir_complete_current_pc_local_p10_partial_p14_scoped_complete_p15_in_progress
+  product_code_scope: p01_to_p05_complete_p06_01_02_pure_ir_complete_current_pc_local_p10_partial_p14_scoped_complete_p15_in_progress
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -797,14 +797,14 @@ p05_execution:
     decision: pass_scoped_current_pc_hangul_2020_local_layout
     p06_authorization: current_pc_local_only
 p06_execution:
-  current_task: P06-02_create_insert_delete_ready
+  current_task: P06-03_merge_split_ready
   gate_state: in_progress_current_pc_local
-  implementation_base_commit: 6e49b0f6d3937d1026f3a0395e1a58bf405a148c
-  source_qualification_and_audited_full_commit: 823c35255bd178de167a0f50503788e1ee886000
+  implementation_base_commit: f0f5c1e162d46993593b1f4a45fc8afd2c620a34
+  source_qualification_and_audited_full_commit: 8d4ed84d89c558bfc262a923b09d988333bec41a
   tasks:
     P06-01: completed_scoped_current_pc_local_pure_ir
-    P06-02: ready_current_pc_local
-    P06-03: blocked_by_P06_02
+    P06-02: completed_scoped_current_pc_local_pure_ir
+    P06-03: ready_current_pc_local
     P06-04: blocked_by_P06_03
     P06-05: blocked_by_P06_04
     P06-06: blocked_by_P06_05
@@ -826,6 +826,25 @@ p06_execution:
     hangul_runtime_executed: false
     user_documents_opened: false
     other_pc_or_version_qualified: false
+  table_operations:
+    schema_version: hwpx-agent.table-operations/v1
+    rust_domain_ir_tests_windows_linux: 83_of_83_passed
+    rust_table_operation_tests_windows_linux: 9_of_9_passed
+    fixed_seed_operation_sequences: 128_times_24
+    p06_contract_tests: 11_of_11_passed
+    source_qualification_combined_tests: 15_of_15_passed
+    source_qualification_run_id: b3105583c99c49878eeeda58e5841567
+    source_receipt_sha256: f527e309bc07c6217a63d07cdfa0576b38106e451a0e113e1574ec695d19ea5b
+    source_contract_sha256: 2d52898b8d232ea819f4f875a3760ba676dc7d67899f78687987014cead3e176
+    current_and_independent_full_lanes: 5_of_5_passed_each
+    current_security_run: 9bebc4756fda4b58bb9eadab60afd301
+    independent_security_run: e9f87315ca5345faac8470ed7e346886
+    security_findings_current_and_independent: 0
+    strict_findings_blocker_major_minor: 0_0_0
+    hangul_runtime_executed: false
+    user_documents_opened: false
+    other_pc_or_version_qualified: false
+    decision: pass_scoped_current_pc_local_pure_ir
 p10_execution:
   current_task: mixed_current_pc_scope_external_dependencies_open
   gate_state: in_progress_current_pc_local
@@ -1034,7 +1053,7 @@ phases:
   P03: completed_current_pc_local_scope
   P04: completed_current_pc_local_scope
   P05: completed_current_pc_hangul_2020_local_layout
-  P06: in_progress_P06_01_complete_P06_02_ready_current_pc_local_scope
+  P06: in_progress_P06_01_02_complete_P06_03_ready_current_pc_local_scope
   P07: blocked_by_P06
   P08: blocked_by_P07
   P09: blocked_by_P08
