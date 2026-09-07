@@ -1,0 +1,119 @@
+{
+  "schema_version": "hwpx-agent.table-layout-contract/v1",
+  "model_schema_version": "hwpx-agent.table-layout/v1",
+  "scope": "p06_05_pure_table_width_solver_component_current_pc_local_development",
+  "prerequisites": [
+    "hwpx-agent.table-grid/v1",
+    "checked_length_micrometers_and_ratio_millionths"
+  ],
+  "source_lock_canonicalization": "utf8_lf_sha256",
+  "source_locks": [
+    {
+      "path": "docs/03_document_model/06_table_model.md",
+      "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"
+    },
+    {
+      "path": "docs/12_implementation_guides/05_page_table_layout_algorithms.md",
+      "sha256": "4d94e6d462f7fc2f2187827ab436eb17c2bb2fe8f728ba8eee5f051c16bb4274"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "FEATURE_COVERAGE_MATRIX.csv",
+      "sha256": "a95c521352f2a58beb674cd13d6020379ae3d0abd9b914cde05996deab326a40"
+    },
+    {
+      "path": "specs/capability-contracts.generated.json",
+      "sha256": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306"
+    }
+  ],
+  "component_capabilities": [
+    "table.width_height",
+    "table.column_fixed_width",
+    "table.autofit_content",
+    "table.autofit_page"
+  ],
+  "width_modes": {
+    "absolute": "positive_exact_micrometer_target",
+    "percent": "positive_ratio_millionths_at_most_10000000_resolved_against_body_with_integer_half_up_rounding",
+    "fit_content": "minimum_then_preferred_without_forced_unused_body_fill",
+    "fit_page": "body_width_is_exact_target_and_fixed_columns_remain_immutable"
+  },
+  "column_constraints": {
+    "cardinality": "exactly_grid_column_count",
+    "minimum": "positive_hard_never_shrunk",
+    "preferred": "positive_and_not_below_minimum",
+    "previous": "positive_third_order_stability_target",
+    "fixed": "optional_positive_not_below_minimum_and_never_changed"
+  },
+  "cell_measurements": {
+    "cardinality": "exactly_one_per_canonical_master_cell",
+    "minimum_outer_width": "leading_plus_trailing_margin_plus_unbreakable_content",
+    "preferred_outer_width": "leading_plus_trailing_margin_plus_measured_preferred_content",
+    "merged_span": "deficit_distributed_only_across_automatic_columns",
+    "row_estimate": "checked_wrapped_lines_times_line_height_evenly_shared_across_row_span"
+  },
+  "font_metric_evidence": {
+    "verified_or_estimated": "bounded_profile_id_and_exact_lowercase_source_sha256_required",
+    "missing": "profile_and_source_digest_must_be_absent",
+    "plan_binding": "sha256_over_canonical_master_cell_order_and_length_delimited_evidence",
+    "promotion": "every_cell_must_be_verified"
+  },
+  "objective_order": [
+    "body_target_and_content_constraint_violations",
+    "estimated_wrapped_row_height",
+    "previous_column_width_change"
+  ],
+  "explicit_nonfit_receipts": [
+    "body_overflow",
+    "target_overflow",
+    "target_underfill",
+    "fixed_span_cell_width_deficit"
+  ],
+  "determinism": {
+    "cell_order": "validated_table_grid_canonical_master_order",
+    "minimum_distribution": "even_with_remainder_to_ascending_automatic_column",
+    "preferred_distribution": "proportional_integer_allocation_with_ascending_remainder",
+    "grid_binding": "canonical_table_grid_sha256",
+    "serialization": "bounded_canonical_json_and_sha256"
+  },
+  "default_limits": {
+    "columns": 1024,
+    "cells": 1000000,
+    "rows": 10000,
+    "dimension_micrometers": 1000000000,
+    "serialized_bytes": 33554432
+  },
+  "failure_policy": [
+    "unsupported_or_unknown_shape",
+    "grid_column_or_cell_cardinality_mismatch",
+    "duplicate_or_missing_master_cell_measurement",
+    "negative_zero_or_over_ceiling_dimension",
+    "preferred_below_minimum_or_fixed_below_minimum",
+    "invalid_width_specification_or_percent_ratio",
+    "invalid_or_noncanonical_font_metric_evidence",
+    "arithmetic_allocation_or_output_limit",
+    "verified_promotion_with_any_nonfit_or_unverified_font"
+  ],
+  "migration": "protocol/migrations/p06-table-layout-v0-to-v1.md",
+  "not_claimed": {
+    "installed_font_extraction": false,
+    "hancom_2020_renderer_oracle": false,
+    "hwpx_layout_lowering_or_readback": false,
+    "row_minimum_or_fixed_height_solver": false,
+    "equal_row_or_column_operation": false,
+    "pagination_or_formula_semantics": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_05_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

@@ -8,6 +8,7 @@ mod selector;
 mod semantic_diff;
 mod semantic_summary;
 mod table_grid;
+mod table_layout;
 mod table_merge_split;
 mod table_operations;
 mod units;
@@ -58,6 +59,12 @@ pub use semantic_summary::{
 pub use table_grid::{
     CellCoordinate, TABLE_GRID_SCHEMA_VERSION, TableCellSpan, TableGrid, TableGridDraft,
     TableGridError, TableGridLimitConfig, TableGridLimits,
+};
+pub use table_layout::{
+    CellWidthDeficit, FontMetricEvidence, FontMetricStatus, FontMetricVerification,
+    TABLE_LAYOUT_SCHEMA_VERSION, TableCellMeasure, TableColumnConstraint, TableLayoutError,
+    TableLayoutLimitConfig, TableLayoutLimits, TableLayoutObjective, TableLayoutPlan,
+    TableLayoutProblem, TableLayoutSolver, TableWidthSpec,
 };
 pub use table_merge_split::{
     ContentPreservationPolicy, TABLE_MERGE_SPLIT_SCHEMA_VERSION, TableCellContent,
