@@ -39,7 +39,7 @@
 |---|---|---|
 | P-0052 | P06-04 cell formatting | attempt04 is live from exact source commit `f6d617b`; wait for user access approval, then require source HWPX/PDF/trace, four pre-save and reopen markers, exact build, input immutability and zero Hwp residue |
 | P-0053 | P06-05 sizing/autofit | pure solver, HWPX adapter and current installed-font metric components pass; named HWPX/Hangul semantic geometry, wrapping and signed PDF evidence remain |
-| P-0054 | P06-06 FormulaAst | pure core commit `cc92565`, source qualification `f64b80f`/v31 pass; exact HWPX formula/cache/number-format adapter, save/reopen/oracle receipt and row/column differential evidence remain; card is not complete |
+| P-0054 | P06-06 FormulaAst | pure core `cc92565`; bounded Hangul-authored source capture `e28220e` and source qualification `d25a174`/v32 pass as tooling only; capture execution, exact HWPX adapter, oracle receipt and row/column differential remain; card is not complete |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint evidence pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -62,8 +62,9 @@
 - Source v31: run `7fe87b6cf5ea435ca8f037559d371b0e` passed 11/11 at clean commit
   `cc925658d2c08e1a67118fc2a1b426f3c9929651`; receipt SHA-256
   `98ca665071096c1c1e95ad919b0b0acbf632cbc8928ea39c0ab63ce5f7ae6481`.
-- Qualification: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V31.md`; claims explicitly keep
-  evaluation, HWPX lowering, Hangul oracle, P06-06/P06, production and product complete false.
+- Source v32: run `f043ce35eb9a4d68bf1da27ee1c3ef3a` passed 11/11 at clean commit
+  `e28220e7f50b0556fc028a1e45d9addfd70619a7`; exact-build worker, watchdog and privacy-safe progress
+  are bound. Capture execution, field shape, evaluation, oracle, P06-06/P06 and product remain false.
 
 ## Live P06-04 runtime
 
@@ -93,8 +94,8 @@
    save/reopen/semantic/PDF chain. Never promote attempt03.
 2. At `max`, finish P06-05 with the qualified font receipt, one named HWPX fixture and actual Hangul
    2020 geometry/wrapping/PDF comparison.
-3. At `max`, build the P06-06 target-bound HWPX formula/cache/number-format lift/lower adapter from
-   exact source evidence; preserve the pure core's `unverified` cache boundary until oracle receipt.
+3. At `max`, after zero Hwp residue, execute the bounded P06-06 source capture, inspect its exact
+   FORMULA field, then build the target-bound lift/lower adapter; keep cache `unverified` until oracle.
 4. Close P06-06 only after row/column move differential, formula/cache semantic readback and licensed
    Hangul 2020 save/reopen evidence; then proceed to P06-07 pagination.
 5. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
@@ -107,6 +108,7 @@
   `implementation/p05/P05_GATE_REPORT.md`.
 - P06-04 source tool: `implementation/p06/tools/create-hancom-2020-table-source.ps1`.
 - P06-05 metric qualification: commits `af3dbf0`, `42aba1c`, `742b3d2`.
-- P17 details: individual reports under `implementation/p17/`; detailed ledger history through
+- P17 source qualification: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V32.md`; other details
+  are under `implementation/p17/`; detailed ledger history through
   P-0085 is recoverable from `fae5bc0:PLANS.md` and later Git history.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.
