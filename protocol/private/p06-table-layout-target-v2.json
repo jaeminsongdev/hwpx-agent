@@ -1,0 +1,142 @@
+{
+  "schema_version": "hwpx-agent.p06-05-table-layout-target-contract/v2",
+  "model_schema_version": "hwpx-agent.p06-05-table-layout-calibrated-target/v1",
+  "scope": "p06_05_exact_current_pc_hancom_2020_calibrated_layout_oracle",
+  "predecessor": {
+    "path": "protocol/private/p06-table-layout-target-v1.json",
+    "sha256": "6944329a8846a21960b3c1327be4124f88c0005ba3ed77eb16ec6aef012cddde",
+    "state": "immutable_pre_calibration_target_contract"
+  },
+  "prerequisites": [
+    "hwpx-agent.p06-05-table-layout-target-contract/v1",
+    "hwpx-agent.table-layout-hwpx.hancom-2020/2",
+    "hwpx-agent.p06-05-current-font-metric-receipt/v1",
+    "exact_licensed_current_pc_hancom_2020_11.0.0.9136"
+  ],
+  "source_lock_canonicalization": "utf8_lf_sha256",
+  "source_locks": [
+    {
+      "path": "protocol/private/p06-table-layout-target-v1.json",
+      "sha256": "6944329a8846a21960b3c1327be4124f88c0005ba3ed77eb16ec6aef012cddde"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_05_table_layout_calibrated_target_fixture.rs",
+      "sha256": "193958e8b1269895f205c18521526307acb5f9b81f86966a5c51ee8f802571f6"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-layout-readback.ps1",
+      "sha256": "17f7b99adb0c1ba3cfaf46f6ff7067d1c16c27d3699e12b4fe4550cef782f169"
+    }
+  ],
+  "exact_inputs": {
+    "base_target_path": "fixtures/target-build/p06-05-table-layout-20260907-03/target.hwpx",
+    "base_target_sha256": "b2887c929cdeb81fa1f5f3bac086265e19fb92a8bbf063f75e5ab0fbfa5cb299",
+    "font_receipt_path": "artifacts/p06/font-metric-runs/4b9b0cac589946918140abc4a12c1be1/receipt.json",
+    "font_receipt_sha256": "c4755f99ebf1e49010bf26425d61f77c496fa713d86404004348027acfc1d2ab",
+    "calibration_hwpx_path": "fixtures/target-build/p06-05-table-layout-20260907-03/target-readback-output-02.hwpx",
+    "calibration_hwpx_sha256": "09f3e8b27167a43650d710f6338b5712655e9fd70a30cef9c97dbe28abab1954"
+  },
+  "calibration_profile": {
+    "profile_id": "hwpx-agent.font-metric.hancom-2020-line-box-100-hwpunit-bucket/1",
+    "guard_micrometers": 350,
+    "observed_line_box_quantum_hwpunit": 100,
+    "base_left_cell_width_hwpunit": 15021,
+    "base_left_line_box_hwpunit": 14000,
+    "calibrated_left_cell_width_hwpunit": 15120,
+    "calibrated_left_line_box_hwpunit": 14100,
+    "rule": "advance_the_left_content_box_to_the_next_observed_100_hwpunit_line_box_bucket",
+    "evidence_binding": "exact_current_pc_hancom_2020_saved_hwpx_only"
+  },
+  "layout_profile": {
+    "grid_sha256": "2c21be8ef4d42da0b4c387395a235a9978bf53c7480f4159f815795799633c49",
+    "plan_sha256": "7a9c19014be2ceffb5648d62270bd42ed67ac0db46f0b16101b5174ae2218cf3",
+    "content_sha256": "5542afbe344fa447f2598491ec7e0f7b473b2832402bfd203f26713d6448d86c",
+    "table_width_hwpunit": 19843,
+    "target_table_height_hwpunit": 5200,
+    "column_widths_micrometers": [53340, 16660],
+    "row_heights_micrometers": [13758, 4586],
+    "cell_widths_hwpunit": [15120, 4723, 15120, 4723],
+    "cell_heights_hwpunit": [3900, 3900, 1300, 1300],
+    "inner_margin_hwpunit": [510, 510, 141, 141]
+  },
+  "publication": {
+    "directory": "fixtures/target-build/p06-05-table-layout-20260907-05",
+    "files": ["target.hwpx", "target-repeat.hwpx", "target-current.hwpx"],
+    "sha256": "3dfcf2a185a4129989b29877b7df7dadb638071aed5ccddd1476e46f76d9bcb5",
+    "write_mode": "three_independent_create_new_writes",
+    "byte_deterministic": true,
+    "git_tracked": false
+  },
+  "historical_calibration_evidence": [
+    {
+      "guard_micrometers": 0,
+      "output_hwpx_path": "fixtures/target-build/p06-05-table-layout-20260907-03/target-readback-output-02.hwpx",
+      "output_hwpx_sha256": "09f3e8b27167a43650d710f6338b5712655e9fd70a30cef9c97dbe28abab1954",
+      "trace_path": "fixtures/target-build/p06-05-table-layout-20260907-03/target-readback-trace-02.json",
+      "trace_sha256": "a0d8c28f3fd5f3fe38f460ecfb30d3610459b55f2011c3bc2d11178acfe932c6",
+      "cell_line_counts": [1, 3, 2, 1],
+      "cell_line_box_widths_hwpunit": [14000, 3800, 14000, 3800],
+      "decision": "runtime_lifecycle_pass_but_expected_cell_c_wrap_failed"
+    },
+    {
+      "guard_micrometers": 4,
+      "target_path": "fixtures/target-build/p06-05-table-layout-20260907-04/target.hwpx",
+      "target_sha256": "0a05a32de46568bdde0eba301e719a8efcb4142167e6860124691563363b32dd",
+      "output_hwpx_path": "fixtures/target-build/p06-05-table-layout-20260907-04/target-readback-output-01.hwpx",
+      "output_hwpx_sha256": "870d908666d1699f437a86bb6d53dd84023bbf64e9fe895c0903acd20a720293",
+      "trace_path": "fixtures/target-build/p06-05-table-layout-20260907-04/target-readback-trace-01.json",
+      "trace_sha256": "9ccbccbeb7b5318407f821e652576a5b74064849dc0ca4a4e149e699c786b42b",
+      "cell_line_counts": [1, 3, 2, 1],
+      "cell_line_box_widths_hwpunit": [14000, 3800, 14000, 3800],
+      "decision": "runtime_lifecycle_pass_but_guard_did_not_cross_renderer_bucket"
+    }
+  ],
+  "actual_oracle": {
+    "trace_path": "fixtures/target-build/p06-05-table-layout-20260907-05/target-readback-trace-01.json",
+    "trace_sha256": "8de3eac36c748b3852b517a8e302ab5b8062d672279b1b7963dab839b4fdbf19",
+    "output_hwpx_path": "fixtures/target-build/p06-05-table-layout-20260907-05/target-readback-output-01.hwpx",
+    "output_hwpx_sha256": "ec08dc8e07dfc1b18c5916b44917b00d27da9905bea26f57e9b16991396c1ec7",
+    "output_pdf_path": "fixtures/target-build/p06-05-table-layout-20260907-05/target-readback-output-01.pdf",
+    "output_pdf_sha256": "6e929f5cf56d2ac0c36587c5bdfd60f41a4d100b35c72356d85bb3ea1cf54606",
+    "output_pdf_bytes": 15421,
+    "expected_text_sha256": "a73ff5335c34949be0d3a539eaf7d86404f2045cd9315f5f43b9e28836fd28d1",
+    "hancom_file_version": "11.0.0.9136",
+    "hancom_executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    "saved_table_height_hwpunit": 5782,
+    "cell_line_counts": [1, 3, 1, 1],
+    "cell_line_box_widths_hwpunit": [14100, 3700, 14100, 3700],
+    "cell_line_text_positions": [[0], [0, 5, 8], [0], [0]],
+    "target_cell_dimensions_preserved": true,
+    "content_sha256_preserved": true,
+    "input_unchanged": true,
+    "save_reopen_pass": true,
+    "pdf_signature_valid": true,
+    "pdf_visual_review": "pass_no_clipping_no_overlap_all_four_strings_visible",
+    "remaining_hwp_process_count": 0
+  },
+  "gate_decision": {
+    "current_pc_exact_fixture_p06_05": "pass",
+    "reason": "verified_solver_plan_is_lowered_deterministically_and_matches_exact_Hangul_2020_wrap_and_visual_oracle",
+    "aggregate_saved_table_height_note": "Hangul_regenerates_the_table_aggregate_height_while_preserving_all_requested_cell_dimensions_and_semantics"
+  },
+  "failure_policy": [
+    "wrong_input_receipt_or_calibration_digest_rejects_before_output",
+    "existing_output_path_rejects_without_overwrite",
+    "source_inputs_are_rehashed_after_build",
+    "publication_digest_or_determinism_drift_rejects",
+    "runtime_trace_failure_input_change_or_process_residue_rejects",
+    "text_digest_or_target_cell_dimension_drift_rejects",
+    "actual_cell_line_count_width_or_text_position_drift_rejects",
+    "missing_invalid_or_digest_mismatched_pdf_rejects",
+    "historical_failed_calibration_is_never_promoted_to_pass",
+    "other_pc_or_version_evidence_is_never_inferred"
+  ],
+  "migration": "protocol/migrations/p06-table-layout-target-v1-to-v2.md",
+  "not_claimed": {
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_hancom_version": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}
