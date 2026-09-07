@@ -51,9 +51,11 @@ digests; it never contains cell text.
 ## Runtime Gate
 
 The runtime fixture is created only from a new blank document and fixed synthetic markers. The
-runner verifies the exact executable identity, requires 32-bit STA automation, leaves the window
-visible for the user's file-access approval, saves HWPX, reopens it, verifies all markers and exports
-a signed PDF-shaped artifact. Product-generated style output must then pass the same
+runner verifies the exact executable identity, requires 32-bit STA automation, explicitly activates
+the exact document object before any `HAction`, and leaves the window visible for the user's
+file-access approval. It verifies every marker in that active document before saving, saves HWPX,
+reopens it, verifies all markers again and exports a signed PDF-shaped artifact. Product-generated
+style output must then pass the same
 save/reopen/readback/render sequence before P06-04 can close.
 
 The P06-04 runtime wrapper delegates to the already qualified bounded x86 STA watchdog. It binds

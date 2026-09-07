@@ -93,6 +93,13 @@ function Insert-Marker {
     finally { Clear-ComObject $hset; Clear-ComObject $parameter }
 }
 
+function Assert-AllMarkers {
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Text)
+    foreach ($marker in @('P06-04-A', 'P06-04-B', 'P06-04-C', 'P06-04-D')) {
+        if (-not $Text.Contains($marker)) { throw 'HWPX_DOCUMENT_MARKER_MISSING' }
+    }
+}
+
 if ([IntPtr]::Size -ne 4) { throw 'X86_POWERSHELL_REQUIRED' }
 if ($ProgId -cne 'HWPFrame.HwpObject.2') { throw 'PROGID_NOT_ALLOWED' }
 if ($ExpectedBuild -cne '11.0.0.9136') { throw 'BUILD_NOT_ALLOWED' }
@@ -120,9 +127,11 @@ $trace = [ordered]@{
     target_build = $ExpectedBuild
     executable_sha256 = $null
     hwp_process_id = $null
+    active_document_bound = $false
     table_create = 'not_run'
     cells_written = 0
     style_actions_executed = 0
+    pre_save_text_sha256 = $null
     save_hwpx = 'not_run'
     reopen_hwpx = 'not_run'
     save_pdf = 'not_run'
@@ -174,6 +183,8 @@ try {
     $window = $hwp.XHwpWindows.Item(0)
     $window.Visible = $true
     $trace.window_visible_for_user_access = $true
+    [void]$document.SetActive_XHwpDocument()
+    $trace.active_document_bound = $true
 
     $phase = 'table_create'
     $creation = $hwp.HParameterSet.HTableCreation
@@ -204,6 +215,13 @@ try {
         if ($index -lt $cases.Count - 1) { Invoke-ActionRun -Hwp $hwp -Action 'TableRightCell' }
     }
 
+    $phase = 'pre_save_semantic'
+    $preSaveText = [string]$hwp.GetTextFile('UNICODE', '')
+    Assert-AllMarkers -Text $preSaveText
+    $trace.pre_save_text_sha256 = Get-Sha256String -Value (
+        ConvertTo-CanonicalText -Value $preSaveText
+    )
+
     $phase = 'save_hwpx'
     [void]$document.SaveAs($output, 'HWPX', '')
     if (-not (Test-Path -LiteralPath $output -PathType Leaf)) { throw 'HWPX_OUTPUT_MISSING' }
@@ -222,9 +240,7 @@ try {
     }
     [void]$document.SetActive_XHwpDocument()
     $reopenText = [string]$hwp.GetTextFile('UNICODE', '')
-    foreach ($marker in @('P06-04-A', 'P06-04-B', 'P06-04-C', 'P06-04-D')) {
-        if (-not $reopenText.Contains($marker)) { throw 'HWPX_REOPEN_MARKER_MISSING' }
-    }
+    Assert-AllMarkers -Text $reopenText
     $canonicalReopenText = ConvertTo-CanonicalText -Value $reopenText
     $trace.reopen_text_sha256 = Get-Sha256String -Value $canonicalReopenText
     $trace.reopen_hwpx = 'pass'

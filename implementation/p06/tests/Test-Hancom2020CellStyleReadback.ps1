@@ -13,9 +13,12 @@ $boundedPath = (Resolve-Path -LiteralPath (
 $enginePath = (Resolve-Path -LiteralPath (
     Join-Path $PSScriptRoot '..\..\p05\tools\run-hancom-2020-tab-readback.ps1'
 )).Path
+$sourcePath = (Resolve-Path -LiteralPath (
+    Join-Path $PSScriptRoot '..\tools\create-hancom-2020-table-source.ps1'
+)).Path
 
 $sources = [ordered]@{}
-foreach ($path in @($wrapperPath, $boundedPath, $enginePath)) {
+foreach ($path in @($wrapperPath, $boundedPath, $enginePath, $sourcePath)) {
     $tokens = $null
     $errors = $null
     [void][System.Management.Automation.Language.Parser]::ParseFile(
@@ -30,7 +33,8 @@ foreach ($path in @($wrapperPath, $boundedPath, $enginePath)) {
 $wrapper = [string]$sources[$wrapperPath].content
 $bounded = [string]$sources[$boundedPath].content
 $engine = [string]$sources[$enginePath].content
-$all = $wrapper + $bounded + $engine
+$source = [string]$sources[$sourcePath].content
+$all = $wrapper + $bounded + $engine + $source
 
 function Test-PreflightFailure {
     $temporaryRoot = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath()).TrimEnd('\')
@@ -86,6 +90,11 @@ $checks = [ordered]@{
     exact_input_and_text_digest_forwarded = $wrapper -match '-ExpectedInputSha256 \$ExpectedInputSha256' -and
         $wrapper -match '-ExpectedTextSha256 \$ExpectedTextSha256'
     render_forwarded = $wrapper -match '-RenderPdfPath \$RenderPdfPath'
+    source_active_document_bound = $source -match '\$document\.SetActive_XHwpDocument\(\)' -and
+        $source -match 'active_document_bound = \$true'
+    source_pre_save_semantic = $source -match '\$phase = ''pre_save_semantic''' -and
+        $source -match 'Assert-AllMarkers -Text \$preSaveText' -and
+        $source -match 'pre_save_text_sha256'
     progress_journal = $engine -match 'hwpx-agent\.p05-hancom-readback-progress/v1'
     process_cleanup = $bounded -match 'Stop-OwnedHancomProcesses' -and
         $bounded -match 'remaining_hwp_process_count'

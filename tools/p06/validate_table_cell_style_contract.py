@@ -92,6 +92,10 @@ IMPLEMENTATION_MARKERS = {
         "TableCreate",
         "TableCellAlignCenterCenter",
         "TableCellTextVertAll",
+        "$document.SetActive_XHwpDocument()",
+        "$phase = 'pre_save_semantic'",
+        "Assert-AllMarkers -Text $preSaveText",
+        "pre_save_text_sha256",
         "ConvertTo-CanonicalText",
         "Get-Sha256String -Value $canonicalReopenText",
         "SaveAs($output, 'HWPX', '')",
@@ -111,6 +115,8 @@ IMPLEMENTATION_MARKERS = {
         "all_scripts_parse",
         "preflight_fails_before_com",
         "process_cleanup",
+        "source_active_document_bound",
+        "source_pre_save_semantic",
         "no_register_module",
         "no_ui_input",
         "no_network",
@@ -150,7 +156,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
             "source_bytes_are_immutable_and_only_a_fully_reparsed_semantically_equal_result_returns"
         ),
         "runtime_readback": (
-            "bounded_x86_sta_watchdog_exact_input_and_text_digests_save_reopen_pdf_and_zero_process_residue"
+            "active_document_binding_pre_save_markers_bounded_x86_sta_watchdog_exact_input_and_text_digests_save_reopen_pdf_and_zero_process_residue"
         ),
         "migration": "protocol/migrations/p06-table-cell-style-v0-to-v1.md",
     }
