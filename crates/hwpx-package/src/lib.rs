@@ -24,6 +24,7 @@ mod safe_xml;
 mod section_columns;
 mod tab_definition;
 mod table_cell_style;
+mod table_layout;
 mod text_flow;
 mod vs0;
 mod vs1_layout;
@@ -118,6 +119,11 @@ pub use table_cell_style::{
     TABLE_CELL_STYLE_PROFILE_ID, TableCellStyle, TableCellStyleError, TableCellStyleLimitConfig,
     TableCellStyleLimits, TableCellStyleLowerer, TableCellStyleLoweringReceipt,
     TableCellStyleReadback, TableCellStyleReader,
+};
+pub use table_layout::{
+    TABLE_LAYOUT_HWPX_PROFILE_ID, TableCellSizeReadback, TableLayoutHwpxError,
+    TableLayoutHwpxLimitConfig, TableLayoutHwpxLimits, TableLayoutHwpxLowerer,
+    TableLayoutHwpxLoweringReceipt, TableLayoutHwpxReadback, TableLayoutHwpxReader,
 };
 pub use text_flow::{
     FieldBegin, FieldEnd, FieldType, HANCOM_2020_PARAGRAPH_NAMESPACE, OpaqueTextElement,
