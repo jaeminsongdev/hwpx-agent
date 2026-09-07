@@ -1,0 +1,99 @@
+{
+  "schema_version": "hwpx-agent.p06-05-table-layout-target-contract/v1",
+  "model_schema_version": "hwpx-agent.p06-05-table-layout-target/v2",
+  "scope": "p06_05_exact_current_pc_hancom_2020_product_target_assembly",
+  "prerequisites": [
+    "hwpx-agent.table-layout-hwpx.hancom-2020/2",
+    "hwpx-agent.p06-05-current-font-metric-receipt/v1",
+    "exact_p06_04_current_pc_synthetic_source"
+  ],
+  "source_lock_canonicalization": "utf8_lf_sha256",
+  "source_locks": [
+    {
+      "path": "protocol/private/p06-table-layout-hwpx-v2.json",
+      "sha256": "6ce63a1ba5749aaa5f593add993bbb4fc68c86ec485837cc4c00e5e5f44a6008"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_05_table_layout_target_fixture.rs",
+      "sha256": "96c654e0b063303cde61c9d958f0120fb12e7737b01b3c98d3dcf58632746274"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-layout-readback.ps1",
+      "sha256": "17f7b99adb0c1ba3cfaf46f6ff7067d1c16c27d3699e12b4fe4550cef782f169"
+    }
+  ],
+  "exact_inputs": {
+    "source_path": "fixtures/target-build/p06-04-cell-style-source-20260907-04/source.hwpx",
+    "source_sha256": "814c481da946e760b2bc3b90b996863786652001e49f8b2b422e13c3d3e477a4",
+    "font_receipt_path": "artifacts/p06/font-metric-runs/4b9b0cac589946918140abc4a12c1be1/receipt.json",
+    "font_receipt_sha256": "c4755f99ebf1e49010bf26425d61f77c496fa713d86404004348027acfc1d2ab",
+    "component_contract_sha256": "6ce63a1ba5749aaa5f593add993bbb4fc68c86ec485837cc4c00e5e5f44a6008"
+  },
+  "text_profile": {
+    "ordered_cell_ids": ["cell-a", "cell-b", "cell-c", "cell-d"],
+    "ordered_text_sha256": [
+      "df47d07aa15a6493ed52bcddfbd594ff255d9566138ab7137f90b13fedd2ed98",
+      "b81461d5ac0a8865284ef84c147e0743da482750e1a499d80126e31c7324ee7b",
+      "25dfcb4b0c5e694cf7bf977f1870cd2025fa363bfa2a26118ea00f305a3afdd3",
+      "d932f7dee69be5f5763a0647e1ed14067e5231e783b4039a9aabbf8387405845"
+    ],
+    "text_set_sha256": "4edc218a49149201f2c37504a489594f4bb92951c0414437ca66934d9441522d",
+    "character_property_binding": "preserve_each_exact_source_charPrIDRef"
+  },
+  "layout_profile": {
+    "grid_sha256": "2c21be8ef4d42da0b4c387395a235a9978bf53c7480f4159f815795799633c49",
+    "plan_sha256": "bef03b662eadb78284d0fc7e5057fde2063f0f7cd249ea88551a5207487ba69b",
+    "table_width_hwpunit": 19843,
+    "table_height_hwpunit": 5200,
+    "column_widths_micrometers": [52990, 17010],
+    "row_heights_micrometers": [13758, 4586],
+    "inner_margin_hwpunit": [510, 510, 141, 141]
+  },
+  "layout_cache_policy": {
+    "source_admission": "each_edited_cell_paragraph_requires_exactly_one_direct_hp_linesegarray",
+    "mutation": "delete_each_exact_outer_hp_linesegarray_byte_span_after_text_change",
+    "target_readback": "each_edited_cell_paragraph_requires_zero_hp_linesegarray",
+    "reason": "source_layout_cache_is_invalid_after_text_or_geometry_changes_and_must_be_regenerated_by_Hangul",
+    "repair": "never_guess_or_synthesize_lineseg_values"
+  },
+  "publication": {
+    "directory": "fixtures/target-build/p06-05-table-layout-20260907-03",
+    "files": ["target.hwpx", "target-repeat.hwpx", "target-current.hwpx"],
+    "sha256": "b2887c929cdeb81fa1f5f3bac086265e19fb92a8bbf063f75e5ab0fbfa5cb299",
+    "write_mode": "three_independent_create_new_writes",
+    "byte_deterministic": true,
+    "git_tracked": false
+  },
+  "superseded_diagnostic": {
+    "builder_schema": "hwpx-agent.p06-05-table-layout-target/v1",
+    "target_sha256": "a678588188593c250b33205f1660fef6c301280cd5ae30deb4b6a03f185055bc",
+    "trace_path": "fixtures/target-build/p06-05-table-layout-20260907-02/target-text-discovery-trace-01.json",
+    "trace_sha256": "42a15b0f44fd34c2a46466ff81b6108f661f04f09fcc395aa5e8212583bd06fa",
+    "result": "rejected_by_exact_Hangul_2020_Open_false",
+    "error_code": "TABLE_LAYOUT_READBACK_INPUT_OPEN_RETURNED_FALSE",
+    "semantic_evidence": "none"
+  },
+  "failure_policy": [
+    "wrong_source_or_font_receipt_digest_rejects_before_output",
+    "missing_or_duplicate_direct_cell_line_cache_rejects_before_output",
+    "unexpected_visible_or_opaque_paragraph_shape_rejects_before_output",
+    "overlapping_or_out_of_bounds_text_and_cache_edits_reject",
+    "target_text_style_layout_margin_or_package_readback_drift_rejects",
+    "existing_output_path_rejects_without_overwrite",
+    "source_and_font_receipt_are_rehashed_after_build",
+    "missing_mismatched_or_nondeterministic_evidence_artifact_rejects_contract_validation"
+  ],
+  "migration": "protocol/migrations/p06-table-layout-target-v0-to-v1.md",
+  "not_claimed": {
+    "new_target_hancom_2020_open": false,
+    "new_target_hancom_2020_save_reopen": false,
+    "new_target_hancom_2020_geometry_or_wrapping": false,
+    "new_target_pdf_visual_oracle": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_05_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

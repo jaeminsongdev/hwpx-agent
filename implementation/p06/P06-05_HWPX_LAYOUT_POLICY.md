@@ -63,15 +63,23 @@ stable diagnostics, exact readback and proof that no unrelated source byte chang
 
 The bounded target builder binds the exact current-PC synthetic source, the exact installed
 `함초롬바탕` 10 pt metric receipt, the four target text hashes and the verified 70,000 micrometer
-layout plan. Three independent create-new outputs are byte-identical. `Preview/PrvText.txt` is
+layout plan. Its product-assembly stage treats each direct `hp:linesegarray` as a derived cache:
+after changing cell text, it deletes the exact existing cache element and requires zero caches on
+target readback. It never guesses new line positions. This is outside the layout component's owned
+width/height edits and is bound separately by
+`hwpx-agent.p06-05-table-layout-target-contract/v1`.
+
+The original target SHA-256 `a6785881...8555bc` preserved stale caches and exact Hangul 2020
+returned `Open=false`; it is retained only as failed diagnostic evidence. Three independent `/v2`
+create-new outputs are byte-identical at SHA-256 `b2887c92...cb299`. `Preview/PrvText.txt` is
 rewritten to the target strings. The source-derived `Preview/PrvImage.png` remains preserved and is
 explicitly not visual evidence; only a fresh Hangul save and exported PDF can refresh and validate
 the rendered preview.
 
 ## Not claimed yet
 
-The current target fixture's actual Hangul 2020 readback and PDF comparison are **NOT RUN**. This
-boundary does not claim actual Hangul 2020 line/page/render equality,
+The replacement target fixture's actual Hangul 2020 open/readback and PDF comparison are **NOT RUN**.
+This boundary does not claim actual Hangul 2020 line/page/render equality,
 row minimum or fixed-height solving, equal-row/equal-column operations, pagination, formulas,
 arbitrary shape repair, arbitrary user documents, another PC or Hangul version, P06-05 completion,
 P06 completion, production, or product completion. Those remain separate gates.

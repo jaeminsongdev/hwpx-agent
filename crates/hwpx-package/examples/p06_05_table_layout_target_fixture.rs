@@ -19,7 +19,7 @@ use hwpx_package::{
     PreservingXmlDocument, TableCellStyleLimits, TableCellStyleLowerer, TableCellStyleProfile,
     TableCellStyleReader, TableInnerMarginReadback, TableLayoutHwpxLimits, TableLayoutHwpxLowerer,
     TableLayoutHwpxLoweringReceipt, TableLayoutHwpxReadback, TableLayoutHwpxReader, TextAtom,
-    TextFlow, TextFlowLimits, TextFlowReader, TextRunItem, XmlElementToken,
+    TextFlow, TextFlowLimits, TextFlowReader, TextRunItem, XmlByteSpan, XmlElementToken,
 };
 use quick_xml::escape::escape;
 use sha2::{Digest as _, Sha256};
@@ -126,7 +126,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     println!(
         concat!(
-            "schema=hwpx-agent.p06-05-table-layout-target/v1 state=pass ",
+            "schema=hwpx-agent.p06-05-table-layout-target/v2 state=pass ",
             "source_sha256={} font_receipt_sha256={} output_sha256={} parts={} ",
             "grid_sha256={} plan_sha256={} text_set_sha256={} ",
             "font_binding=hancom_2020_hcr_batang_10pt cells={} directions=horizontal ",
@@ -426,6 +426,7 @@ fn replace_cell_texts(source: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
     let mut edits = Vec::new();
     for (ordinal, paragraph) in paragraphs.iter().copied().enumerate() {
         let text = exactly_one_text_element(&document, paragraph)?;
+        let line_cache = exactly_one_line_cache_span(&document, paragraph)?;
         let element = document
             .elements()
             .get(text)
@@ -438,6 +439,7 @@ fn replace_cell_texts(source: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
             .ok_or("text content span is missing")?;
         let escaped: Cow<'_, str> = escape(TARGET_TEXTS[ordinal].1);
         edits.push((span, escaped.into_owned().into_bytes()));
+        edits.push((line_cache, Vec::new()));
     }
     edits.sort_unstable_by_key(|(span, _)| span.start());
     if edits
@@ -457,10 +459,11 @@ fn replace_cell_texts(source: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
     let output_paragraphs = table_cell_paragraphs(&output_document)?;
     let after = read_text_evidence_from_paragraphs(&output, &output_document, &output_paragraphs)?;
     validate_expected_texts(&after, TextProfile::Target)?;
-    if before.iter().zip(&after).any(|(left, right)| {
-        left.character_property_id_ref != right.character_property_id_ref
-            || left.opaque_non_text_count != right.opaque_non_text_count
-    }) {
+    if before
+        .iter()
+        .zip(&after)
+        .any(|(left, right)| left.character_property_id_ref != right.character_property_id_ref)
+    {
         return Err("text replacement changed paragraph structure or font binding".into());
     }
     Ok(output)
@@ -504,8 +507,11 @@ fn simple_text_evidence(flow: &TextFlow) -> Result<CellTextEvidence, Box<dyn Err
             ParagraphChild::Run(_) => None,
         })
         .try_fold(0_usize, |count, opaque| {
-            if opaque.may_contain_visible_text() {
-                Err("opaque element may contain visible text")
+            if opaque.may_contain_visible_text()
+                || opaque.namespace() != Some(PARAGRAPH_NS)
+                || opaque.local_name() != "linesegarray"
+            {
+                Err("unexpected opaque cell paragraph element")
             } else {
                 count.checked_add(1).ok_or("opaque count overflow")
             }
@@ -513,8 +519,8 @@ fn simple_text_evidence(flow: &TextFlow) -> Result<CellTextEvidence, Box<dyn Err
     if runs.len() != 1 || runs[0].items.len() != 1 {
         return Err("cell paragraph must contain one typed text run".into());
     }
-    if opaque_non_text_count != 1 {
-        return Err("cell paragraph must preserve one non-text line-segment element".into());
+    if opaque_non_text_count > 1 {
+        return Err("cell paragraph has duplicate line-segment caches".into());
     }
     let TextRunItem::Text(span) = &runs[0].items[0] else {
         return Err("cell paragraph item is not typed text".into());
@@ -654,6 +660,25 @@ fn exactly_one_text_element(
     Ok(matches[0])
 }
 
+fn exactly_one_line_cache_span(
+    document: &PreservingXmlDocument,
+    paragraph: usize,
+) -> Result<XmlByteSpan, Box<dyn Error>> {
+    let matches: Vec<_> = document
+        .elements()
+        .iter()
+        .filter(|element| {
+            has_name(element, PARAGRAPH_NS, "linesegarray") && element.parent() == Some(paragraph)
+        })
+        .collect();
+    if matches.len() != 1 {
+        return Err("cell paragraph must contain exactly one direct line-segment cache".into());
+    }
+    matches[0]
+        .outer_span()
+        .ok_or_else(|| "line-segment cache span is missing".into())
+}
+
 fn nearest_ancestor(
     document: &PreservingXmlDocument,
     index: usize,
@@ -683,12 +708,17 @@ fn validate_expected_texts(
         return Err("cell text cardinality mismatch".into());
     }
     for (ordinal, evidence) in actual.iter().enumerate() {
-        let expected = match profile {
-            TextProfile::Source => hex(Sha256::digest(SOURCE_TEXTS[ordinal].as_bytes()).into()),
-            TextProfile::Target => TARGET_TEXTS[ordinal].2.to_owned(),
+        let (expected, expected_line_cache_count) = match profile {
+            TextProfile::Source => (
+                hex(Sha256::digest(SOURCE_TEXTS[ordinal].as_bytes()).into()),
+                1,
+            ),
+            TextProfile::Target => (TARGET_TEXTS[ordinal].2.to_owned(), 0),
         };
-        if hex(evidence.sha256) != expected {
-            return Err(format!("cell {ordinal} text digest mismatch").into());
+        if hex(evidence.sha256) != expected
+            || evidence.opaque_non_text_count != expected_line_cache_count
+        {
+            return Err(format!("cell {ordinal} text or line-cache profile mismatch").into());
         }
     }
     Ok(())
@@ -858,19 +888,29 @@ mod tests {
     use super::*;
 
     #[test]
-    fn structured_text_rewrite_changes_only_four_text_spans() -> Result<(), Box<dyn Error>> {
+    fn structured_text_rewrite_invalidates_four_line_caches() -> Result<(), Box<dyn Error>> {
         let source = synthetic_section(&SOURCE_TEXTS);
         let target = replace_cell_texts(source.as_bytes())?;
         let evidence = read_cell_text_evidence(&target)?;
         validate_expected_texts(&evidence, TextProfile::Target)?;
         let target_text = std::str::from_utf8(&target)?;
-        assert!(target_text.contains("<hp:linesegarray>"));
+        assert!(!target_text.contains("<hp:linesegarray>"));
         assert!(
             SOURCE_TEXTS
                 .iter()
                 .all(|value| !target_text.contains(value))
         );
         Ok(())
+    }
+
+    #[test]
+    fn text_rewrite_rejects_missing_or_duplicate_line_cache() {
+        let source = synthetic_section(&SOURCE_TEXTS);
+        let missing = source.replacen("<hp:linesegarray></hp:linesegarray>", "", 1);
+        assert!(replace_cell_texts(missing.as_bytes()).is_err());
+
+        let duplicate = source.replacen("</hp:p>", "<hp:linesegarray></hp:linesegarray></hp:p>", 1);
+        assert!(replace_cell_texts(duplicate.as_bytes()).is_err());
     }
 
     fn synthetic_section(texts: &[&str; CELL_COUNT]) -> String {
