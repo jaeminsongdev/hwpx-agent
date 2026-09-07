@@ -52,8 +52,8 @@ CHECKS = (
     "replacement_scope_is_complete_and_minimal",
     "cargo_metadata_locked_offline",
     "workspace_members_match_root_manifest",
-    "hwpx_package_diagnostic_dev_edges_exact",
-    "cargo_lock_contains_diagnostic_dev_edges",
+    "hwpx_package_font_metric_product_edges_exact",
+    "cargo_lock_contains_font_metric_product_edges",
     "canonical_receipt_written",
 )
 SOURCES = (
@@ -352,12 +352,16 @@ def cargo_projection(root: Path) -> tuple[str, int]:
     hwpx_manifest = tomllib.loads(
         (root / "crates/hwpx-package/Cargo.toml").read_text(encoding="utf-8")
     )
+    dependencies = hwpx_manifest.get("dependencies")
     dev = hwpx_manifest.get("dev-dependencies")
     require(
-        isinstance(dev, dict)
-        and dev.get("serde") == {"workspace": True}
-        and dev.get("serde_json") == {"workspace": True},
-        "cargo.hwpx_diagnostic_edges",
+        isinstance(dependencies, dict)
+        and dependencies.get("serde") == {"workspace": True}
+        and dependencies.get("serde_json") == {"workspace": True}
+        and isinstance(dev, dict)
+        and "serde" not in dev
+        and "serde_json" not in dev,
+        "cargo.hwpx_font_metric_product_edges",
     )
     lock = tomllib.loads((root / "Cargo.lock").read_text(encoding="utf-8"))
     lock_packages = lock.get("package")
@@ -369,7 +373,7 @@ def cargo_projection(root: Path) -> tuple[str, int]:
         isinstance(lock_dependencies, list)
         and "serde" in lock_dependencies
         and "serde_json" in lock_dependencies,
-        "cargo.lock_diagnostic_edges",
+        "cargo.lock_font_metric_product_edges",
     )
     return digest_bytes(canonical(sorted(projection, key=lambda value: value["name"]))), len(projection)
 

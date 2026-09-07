@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 import sys
+import tomllib
 import unittest
 from unittest.mock import patch
 
@@ -109,6 +110,21 @@ class CurrentWorkspaceSourceChecksTests(unittest.TestCase):
         self.assertIn('"production": False', source)
         self.assertIn('"phase_complete": False', source)
         self.assertNotIn("shell=True", source)
+
+    def test_hwpx_font_metric_dependencies_are_product_only(self) -> None:
+        manifest = tomllib.loads(
+            (checks.ROOT / "crates/hwpx-package/Cargo.toml").read_text(encoding="utf-8")
+        )
+        dependencies = manifest["dependencies"]
+        development = manifest["dev-dependencies"]
+        self.assertEqual(dependencies["serde"], {"workspace": True})
+        self.assertEqual(dependencies["serde_json"], {"workspace": True})
+        self.assertNotIn("serde", development)
+        self.assertNotIn("serde_json", development)
+        self.assertIn(
+            "hwpx_package_font_metric_product_edges_exact",
+            checks.CHECKS,
+        )
 
 
 if __name__ == "__main__":
