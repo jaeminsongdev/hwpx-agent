@@ -96,6 +96,24 @@ IMPLEMENTATION_MARKERS = {
         "SaveAs($pdf, 'PDF', '')",
         "computer_use_click_or_type_invoked = $false",
     ),
+    "implementation/p06/tools/run-hancom-2020-cell-style-readback.ps1": (
+        "invoke-hancom-2020-bounded-readback.ps1",
+        "hwpx-agent.p06-04-hancom-2020-cell-style-readback/v1",
+        "TABLE_CELL_STYLE_READBACK",
+        "ExpectedInputSha256",
+        "ExpectedTextSha256",
+        "RenderPdfPath",
+        "TimeoutSeconds",
+    ),
+    "implementation/p06/tests/Test-Hancom2020CellStyleReadback.ps1": (
+        "all_scripts_parse",
+        "preflight_fails_before_com",
+        "process_cleanup",
+        "no_register_module",
+        "no_ui_input",
+        "no_network",
+        "no_registry_write",
+    ),
 }
 
 
@@ -128,6 +146,9 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         "source_lock_canonicalization": "utf8_lf_sha256",
         "atomicity": (
             "source_bytes_are_immutable_and_only_a_fully_reparsed_semantically_equal_result_returns"
+        ),
+        "runtime_readback": (
+            "bounded_x86_sta_watchdog_exact_input_and_text_digests_save_reopen_pdf_and_zero_process_residue"
         ),
         "migration": "protocol/migrations/p06-table-cell-style-v0-to-v1.md",
     }
@@ -239,7 +260,7 @@ def main() -> int:
     print(json.dumps(validation, ensure_ascii=False, sort_keys=True))
     if validation["errors"]:
         return 1
-    print("P06_TABLE_CELL_STYLE_CONTRACT_PASS source_locks=6 implementation_files=5")
+    print("P06_TABLE_CELL_STYLE_CONTRACT_PASS source_locks=6 implementation_files=7")
     return 0
 
 

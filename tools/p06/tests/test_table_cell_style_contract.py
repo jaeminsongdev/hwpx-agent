@@ -14,7 +14,7 @@ class TableCellStyleContractTests(unittest.TestCase):
         result = validator.validate()
         self.assertEqual(result["state"], "pass", result)
         self.assertEqual(result["source_locks"], 6)
-        self.assertEqual(result["implementation_files"], 5)
+        self.assertEqual(result["implementation_files"], 7)
 
     def test_source_tamper_fails(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

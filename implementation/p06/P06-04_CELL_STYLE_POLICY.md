@@ -56,6 +56,11 @@ visible for the user's file-access approval, saves HWPX, reopens it, verifies al
 a signed PDF-shaped artifact. Product-generated style output must then pass the same
 save/reopen/readback/render sequence before P06-04 can close.
 
+The P06-04 runtime wrapper delegates to the already qualified bounded x86 STA watchdog. It binds
+the exact input digest and canonical visible-text digest, requires create-new HWPX/PDF/trace paths,
+records a bounded progress journal, verifies the exact executable identity, and treats timeout,
+unknown output, invalid trace, PDF mismatch or any remaining Hwp process as failure or unverified.
+
 No user document is scanned or opened. A component test, documentation record, source fixture or
 PDF signature alone is not promoted to the actual runtime PASS.
 
