@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-03 PASS; 04 actual source and product lowering pass but target Hangul readback awaits user approval; 05 target evidence open; 06 pure core/source tooling qualified |
+| P06 | in progress | 01-04 current-PC PASS; 05 v2 source and exact target prepared but target Hangul geometry/wrapping/PDF remain; 06 pure core/source tooling qualified |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -37,8 +37,8 @@
 
 | ID | Task | Current state and exact next evidence |
 |---|---|---|
-| P-0052 | P06-04 cell formatting | actual source capture PASS; explicit observed-shape v2 product support `5adba7d` and source qualification `14f215a`/v33 pass; product target SHA-256 `264b062c...a48d28a` passes offline semantic/content inspection; two target Hangul attempts timed out only at user-controlled access approval, so save/reopen/text/PDF PASS remains open |
-| P-0053 | P06-05 sizing/autofit | pure solver, HWPX adapter and current installed-font metric components pass; named HWPX/Hangul semantic geometry, wrapping and signed PDF evidence remain |
+| P-0052 | P06-04 cell formatting | current-PC PASS: actual source plus v2 product target `264b062c...a48d28a`, Hangul 2020 save/reopen text identity, semantic/style digest identity and PDF visual review pass on attempt04; attempts 01-03 remain timeout diagnostics |
+| P-0053 | P06-05 sizing/autofit | pure solver, installed-font metric receipt, HWPX v2 adapter, exact deterministic target `a6785881...8555bc` and source qualification `cfb6628`/v34 pass; actual Hangul geometry, wrapping and signed PDF evidence remain |
 | P-0054 | P06-06 FormulaAst | pure core `cc92565`; bounded Hangul-authored source capture `e28220e` and source qualification `d25a174`/v32 pass as tooling only; capture execution, exact HWPX adapter, oracle receipt and row/column differential remain; card is not complete |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint evidence pass; atomic durable mirror admission and real pull/push remain |
@@ -63,9 +63,35 @@
   `5adba7d2b1c98f7e2fa87671f321ff6d599dde48`; receipt SHA-256
   `2239e1722f4a7df6c4c1f79cb3fc95a318ae6bdbfa5d5e3368d8e4e65ae773e2`. Qualification commit
   `14f215a` binds 14 implementation/contract/test sources with all runtime/product claims false.
-- Product-target attempts 01 and 02 each waited 600 seconds at `open_input`, then failed with
-  `TABLE_CELL_STYLE_READBACK_TIMEOUT`; both kept the target unchanged, emitted no derived HWPX/PDF,
-  and cleaned the owned Hwp process. They are not semantic failures and are not PASS.
+- Product-target attempts 01-03 each waited 600 seconds at `open_input`, then failed with
+  `TABLE_CELL_STYLE_READBACK_TIMEOUT`; all kept the target unchanged, emitted no derived HWPX/PDF,
+  and cleaned their owned Hwp process. They are not semantic failures and are not PASS.
+- Attempt04 passed every bounded phase on the exact target: input open/read, create-new HWPX save,
+  close, output reopen/read, PDF export and quit. Input/output visible-text SHA-256 is equal, the
+  semantic/style digest is equal before/after the Hangul round trip, the PDF shows all four intended
+  style combinations without clipping or overlap, and Hwp residue is zero. Report:
+  `implementation/p06/P06-04_TARGET_READBACK_REPORT.md`.
+
+## Latest P06-05 evidence
+
+- Active exact-build contract is `hwpx-agent.table-layout-hwpx.hancom-2020/2`; immutable `/1` is
+  hash-bound. V2 adds typed bounded inherited `hp:inMargin` readback and post-lowering identity.
+- Exact installed-font receipt SHA-256 is
+  `c4755f99ebf1e49010bf26425d61f77c496fa713d86404004348027acfc1d2ab` for the four named target
+  strings under 10 pt `함초롬바탕` TTF metrics.
+- Verified plan is 70,000 micrometers wide with columns `52990,17010`, rows `13758,4586`, zero
+  overflow/underfill and no content deficit. Exact HWPX readback is table `19843 x 5200` HWPUNIT,
+  columns `15021,4822`, rows `3900,1300`, and inner margins `510,510,141,141`.
+- Four independent create-new builds are byte-identical at target SHA-256
+  `a678588188593c250b33205f1660fef6c301280cd5ae30deb4b6a03f185055bc`. Wrong source digest and
+  existing-output cases fail before publication. Preview text is current; preserved preview image
+  is not visual evidence.
+- Implementation commit `84437dd`; source v34 acceptance run `8b080b651ade4e5d85701bd47bd9e6b6`
+  passed 11/11 at the exact clean commit. Qualification commit `cfb6628` binds 15 implementation
+  sources while P06-05 actual Hangul/PDF, P06, production and product claims remain false.
+- `hwpx-package` tests, Clippy `-D warnings`, formatting, P06 Python 45/45, v1/v2 contract tests 8/8,
+  contract validators and readback-wrapper static tests 15/15 pass. Actual target Hangul 2020
+  save/reopen, geometry, wrapping and PDF visual comparison are still not run.
 
 ## Latest P06-06 evidence
 
@@ -95,24 +121,21 @@
 - R-0005: P17 durable checkpoint exists, but atomic durable mirror role/head admission, persistent
   credential custody, production lifecycle and real pull/push do not.
 - R-0006: P17 conflict resolver/widget are component evidence only.
-- R-0007: P06-04~09 still require actual Hangul 2020 semantics, save/reopen/PDF/pagination and the
+- R-0007: P06-05~09 still require actual Hangul 2020 semantics, save/reopen/PDF/pagination and the
   61-capability target conformance matrix. GDI+ metrics are not Hangul render evidence.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 
 ## Next actions
 
-1. At `max`, when the user is at the PC, launch one fresh create-new-path P06-04 target readback and
-   have the user approve every access prompt immediately. Require exact target input/text digests,
-   save/reopen equality, valid PDF evidence, input immutability and zero Hwp residue. Never promote
-   attempts 01/02 or historical attempt03.
-2. At `max`, finish P06-05 with the qualified font receipt, one named HWPX fixture and actual Hangul
-   2020 geometry/wrapping/PDF comparison.
-3. At `max`, after zero Hwp residue, execute the bounded P06-06 source capture, inspect its exact
+1. At `max`, when the user is at the PC, run the exact P06-05 target through the bounded Hangul 2020
+   wrapper. Require target input/text digests, save/reopen equality, input immutability, exact
+   semantic geometry, wrapping/PDF visual review and zero Hwp residue.
+2. At `max`, after zero Hwp residue, execute the bounded P06-06 source capture, inspect its exact
    FORMULA field, then build the target-bound lift/lower adapter; keep cache `unverified` until oracle.
-4. Close P06-06 only after row/column move differential, formula/cache semantic readback and licensed
+3. Close P06-06 only after row/column move differential, formula/cache semantic readback and licensed
    Hangul 2020 save/reopen evidence; then proceed to P06-07 pagination.
-5. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
+4. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
    applicable offline Linux/security/STRICT checks without weakening actual-evidence Gates.
 
 ## Context pack and archive pointers
@@ -122,7 +145,7 @@
   `implementation/p05/P05_GATE_REPORT.md`.
 - P06-04 source tool: `implementation/p06/tools/create-hancom-2020-table-source.ps1`.
 - P06-05 metric qualification: commits `af3dbf0`, `42aba1c`, `742b3d2`.
-- P17 source qualification: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V33.md`; other details
+- P17 source qualification: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V34.md`; other details
   are under `implementation/p17/`; detailed ledger history through
   P-0085 is recoverable from `fae5bc0:PLANS.md` and later Git history.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.
