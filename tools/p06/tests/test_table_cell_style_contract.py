@@ -64,6 +64,18 @@ class TableCellStyleContractTests(unittest.TestCase):
             )
             self.assertIn("implementation_marker", validator.validate(root)["errors"])
 
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_validation_tree(Path(directory))
+            script = root / "implementation/p06/tools/create-hancom-2020-table-source.ps1"
+            script.write_text(
+                script.read_text(encoding="utf-8").replace(
+                    "Get-Sha256String -Value $canonicalReopenText",
+                    "Get-Sha256String -Value $reopenText",
+                ),
+                encoding="utf-8",
+            )
+            self.assertIn("implementation_marker", validator.validate(root)["errors"])
+
     @staticmethod
     def copy_validation_tree(destination: Path) -> Path:
         root = destination / "repo"

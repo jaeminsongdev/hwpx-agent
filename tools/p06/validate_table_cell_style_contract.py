@@ -92,6 +92,8 @@ IMPLEMENTATION_MARKERS = {
         "TableCreate",
         "TableCellAlignCenterCenter",
         "TableCellTextVertAll",
+        "ConvertTo-CanonicalText",
+        "Get-Sha256String -Value $canonicalReopenText",
         "SaveAs($output, 'HWPX', '')",
         "SaveAs($pdf, 'PDF', '')",
         "computer_use_click_or_type_invoked = $false",

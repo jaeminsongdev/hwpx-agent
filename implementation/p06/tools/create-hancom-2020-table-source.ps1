@@ -29,6 +29,14 @@ function Get-Sha256String {
     finally { $algorithm.Dispose() }
 }
 
+function ConvertTo-CanonicalText {
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Value)
+
+    $normalized = $Value.Replace("`0", '')
+    $normalized = $normalized.Replace("`r`n", "`n").Replace("`r", "`n")
+    return $normalized.Normalize([System.Text.NormalizationForm]::FormC).TrimEnd([char]"`n")
+}
+
 function Write-NewJson {
     param([Parameter(Mandatory)][string]$Path, [Parameter(Mandatory)][object]$Value)
     $content = $Value | ConvertTo-Json -Depth 10
@@ -217,7 +225,8 @@ try {
     foreach ($marker in @('P06-04-A', 'P06-04-B', 'P06-04-C', 'P06-04-D')) {
         if (-not $reopenText.Contains($marker)) { throw 'HWPX_REOPEN_MARKER_MISSING' }
     }
-    $trace.reopen_text_sha256 = Get-Sha256String -Value $reopenText
+    $canonicalReopenText = ConvertTo-CanonicalText -Value $reopenText
+    $trace.reopen_text_sha256 = Get-Sha256String -Value $canonicalReopenText
     $trace.reopen_hwpx = 'pass'
 
     $phase = 'save_pdf'
