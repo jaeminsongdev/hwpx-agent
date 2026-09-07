@@ -127,9 +127,10 @@ pub use table_cell_style::{
     TableCellStyleReader,
 };
 pub use table_layout::{
-    TABLE_LAYOUT_HWPX_PROFILE_ID, TableCellSizeReadback, TableLayoutHwpxError,
-    TableLayoutHwpxLimitConfig, TableLayoutHwpxLimits, TableLayoutHwpxLowerer,
-    TableLayoutHwpxLoweringReceipt, TableLayoutHwpxReadback, TableLayoutHwpxReader,
+    TABLE_LAYOUT_HWPX_PROFILE_ID, TABLE_LAYOUT_HWPX_PROFILE_ID_V1, TableCellSizeReadback,
+    TableInnerMarginReadback, TableLayoutHwpxError, TableLayoutHwpxLimitConfig,
+    TableLayoutHwpxLimits, TableLayoutHwpxLowerer, TableLayoutHwpxLoweringReceipt,
+    TableLayoutHwpxReadback, TableLayoutHwpxReader,
 };
 pub use text_flow::{
     FieldBegin, FieldEnd, FieldType, HANCOM_2020_PARAGRAPH_NAMESPACE, OpaqueTextElement,

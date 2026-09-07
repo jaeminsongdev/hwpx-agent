@@ -159,7 +159,7 @@ fn table(identifier: u32, rows: &[Vec<String>]) -> String {
             r#"<hp:sz width="2000" widthRelTo="ABSOLUTE" height="1000" heightRelTo="ABSOLUTE" protect="0"/>"#,
             r#"<hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/>"#,
             r#"<hp:outMargin left="0" right="0" top="0" bottom="0"/>"#,
-            r#"<hp:inMargin left="0" right="0" top="0" bottom="0"/>"#,
+            r#"<hp:inMargin left="510" right="511" top="141" bottom="142"/>"#,
             "{body}</hp:tbl>"
         ),
         PARAGRAPH_NS = PARAGRAPH_NS,
@@ -219,6 +219,11 @@ fn verified_plan_lowers_table_and_cells_and_preserves_content() -> TestResult {
 
     assert_eq!(after.table_width_hwpunit, 10_800);
     assert_eq!(after.table_height_hwpunit, 1_080);
+    assert_eq!(after.inner_margin, before.inner_margin);
+    assert_eq!(after.inner_margin.left_hwpunit, 510);
+    assert_eq!(after.inner_margin.right_hwpunit, 511);
+    assert_eq!(after.inner_margin.top_hwpunit, 141);
+    assert_eq!(after.inner_margin.bottom_hwpunit, 142);
     assert_eq!(
         after
             .cells
@@ -468,6 +473,16 @@ fn finite_input_output_element_cell_and_dimension_limits_hold() -> TestResult {
     })?;
     assert_eq!(
         TableLayoutHwpxReader::read(&source, dimensions),
+        Err(TableLayoutHwpxError::OutOfRange)
+    );
+
+    let margin_source = std::str::from_utf8(&source)?.replacen(
+        r#"<hp:inMargin left="510""#,
+        r#"<hp:inMargin left="1000""#,
+        1,
+    );
+    assert_eq!(
+        TableLayoutHwpxReader::read(margin_source.as_bytes(), dimensions),
         Err(TableLayoutHwpxError::OutOfRange)
     );
 

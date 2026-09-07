@@ -12,7 +12,8 @@ use crate::preserving_xml::{
     XmlTokenKind,
 };
 
-pub const TABLE_LAYOUT_HWPX_PROFILE_ID: &str = "hwpx-agent.table-layout-hwpx.hancom-2020/1";
+pub const TABLE_LAYOUT_HWPX_PROFILE_ID_V1: &str = "hwpx-agent.table-layout-hwpx.hancom-2020/1";
+pub const TABLE_LAYOUT_HWPX_PROFILE_ID: &str = "hwpx-agent.table-layout-hwpx.hancom-2020/2";
 
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const SECTION_NS: &str = "http://www.hancom.co.kr/hwpml/2011/section";
@@ -106,12 +107,21 @@ pub struct TableCellSizeReadback {
     pub height_hwpunit: u32,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct TableInnerMarginReadback {
+    pub left_hwpunit: u32,
+    pub right_hwpunit: u32,
+    pub top_hwpunit: u32,
+    pub bottom_hwpunit: u32,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TableLayoutHwpxReadback {
     pub rows: u32,
     pub columns: u32,
     pub table_width_hwpunit: u32,
     pub table_height_hwpunit: u32,
+    pub inner_margin: TableInnerMarginReadback,
     pub cells: Vec<TableCellSizeReadback>,
     pub content_sha256: [u8; 32],
 }
@@ -354,7 +364,10 @@ fn lower_selected(
     validate_document_envelope(&output_document)?;
     let output_root = selected_root(&output_document, table_ordinal, limits)?;
     let output_shape = TableShape::read(&output_document, output_root, limits)?;
-    let expected = target.readback(source_shape.readback.content_sha256)?;
+    let expected = target.readback(
+        source_shape.readback.inner_margin,
+        source_shape.readback.content_sha256,
+    )?;
     if output_shape.readback != expected {
         return Err(TableLayoutHwpxError::ReadbackMismatch);
     }
@@ -460,6 +473,7 @@ impl TargetLayout {
 
     fn readback(
         &self,
+        inner_margin: TableInnerMarginReadback,
         content_sha256: [u8; 32],
     ) -> Result<TableLayoutHwpxReadback, TableLayoutHwpxError> {
         let mut cells = Vec::new();
@@ -472,6 +486,7 @@ impl TargetLayout {
             columns: self.columns,
             table_width_hwpunit: self.table_width,
             table_height_hwpunit: self.table_height,
+            inner_margin,
             cells,
             content_sha256,
         })
@@ -595,6 +610,7 @@ impl TableShape {
             columns: dimensions.columns,
             table_width_hwpunit,
             table_height_hwpunit,
+            inner_margin: read_margin(document, children.inner_margin, limits)?,
             cells: readback_cells,
             content_sha256: content_sha256(document, root)?,
         };
@@ -674,6 +690,7 @@ fn read_table_dimensions(
 #[derive(Debug)]
 struct TableChildren {
     size: usize,
+    inner_margin: usize,
     rows: Vec<usize>,
 }
 
@@ -716,7 +733,11 @@ fn read_table_children(
     validate_position(document, position)?;
     validate_margin(document, outer_margin)?;
     validate_margin(document, inner_margin)?;
-    Ok(TableChildren { size, rows })
+    Ok(TableChildren {
+        size,
+        inner_margin,
+        rows,
+    })
 }
 
 fn read_table_cells(
@@ -973,6 +994,20 @@ fn validate_margin(
         let _ = required_u32(value, name)?;
     }
     require_no_children(document, index)
+}
+
+fn read_margin(
+    document: &PreservingXmlDocument,
+    index: usize,
+    limits: TableLayoutHwpxLimits,
+) -> Result<TableInnerMarginReadback, TableLayoutHwpxError> {
+    let value = element(document, index)?;
+    Ok(TableInnerMarginReadback {
+        left_hwpunit: bounded_u32(value, "left", limits)?,
+        right_hwpunit: bounded_u32(value, "right", limits)?,
+        top_hwpunit: bounded_u32(value, "top", limits)?,
+        bottom_hwpunit: bounded_u32(value, "bottom", limits)?,
+    })
 }
 
 fn selected_root(
@@ -1234,6 +1269,18 @@ fn bounded_positive_u32(
 ) -> Result<u32, TableLayoutHwpxError> {
     let value = required_u32(element, name)?;
     if value == 0 || value > limits.0.dimension_hwpunit {
+        return Err(TableLayoutHwpxError::OutOfRange);
+    }
+    Ok(value)
+}
+
+fn bounded_u32(
+    element: &XmlElementToken,
+    name: &str,
+    limits: TableLayoutHwpxLimits,
+) -> Result<u32, TableLayoutHwpxError> {
+    let value = required_u32(element, name)?;
+    if value > limits.0.dimension_hwpunit {
         return Err(TableLayoutHwpxError::OutOfRange);
     }
     Ok(value)

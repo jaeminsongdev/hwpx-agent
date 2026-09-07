@@ -63,7 +63,8 @@ EXPECTED_NOT_CLAIMED = {
 }
 IMPLEMENTATION_MARKERS = {
     "crates/hwpx-package/src/table_layout.rs": (
-        'TABLE_LAYOUT_HWPX_PROFILE_ID: &str = "hwpx-agent.table-layout-hwpx.hancom-2020/1"',
+        'TABLE_LAYOUT_HWPX_PROFILE_ID_V1: &str =',
+        '"hwpx-agent.table-layout-hwpx.hancom-2020/1"',
         "pub struct TableLayoutHwpxReader",
         "pub struct TableLayoutHwpxLowerer",
         "pub fn count_in_section",

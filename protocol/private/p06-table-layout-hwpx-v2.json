@@ -1,0 +1,143 @@
+{
+  "schema_version": "hwpx-agent.table-layout-hwpx-contract/v2",
+  "model_schema_version": "hwpx-agent.table-layout-hwpx.hancom-2020/2",
+  "predecessor": {
+    "path": "protocol/private/p06-table-layout-hwpx-v1.json",
+    "sha256": "ab21dbcb1b646956f5e645ef10ea37c68e6416f9384fc7292bdc565acf8f4092"
+  },
+  "scope": "p06_05_exact_current_pc_hancom_2020_hwpx_table_layout_lowering_and_readback_component",
+  "prerequisites": [
+    "hwpx-agent.table-layout-hwpx.hancom-2020/1",
+    "hwpx-agent.table-layout/v1",
+    "hwpx-agent.table-grid/v1",
+    "hwpx-agent.table-cell-style.hancom-2020/2",
+    "hwpx-agent.p06-05-current-font-metric-receipt/v1",
+    "p03_preserving_xml_exact_source_spans"
+  ],
+  "source_lock_canonicalization": "utf8_lf_sha256",
+  "source_locks": [
+    {
+      "path": "docs/03_document_model/06_table_model.md",
+      "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"
+    },
+    {
+      "path": "docs/12_implementation_guides/05_page_table_layout_algorithms.md",
+      "sha256": "4d94e6d462f7fc2f2187827ab436eb17c2bb2fe8f728ba8eee5f051c16bb4274"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "implementation/p02/evidence/owpml/owpml.records.v1.json",
+      "sha256": "c32f323a8fd22f228cc0a116c81881f9ae6c846525c19209142cfe7adcef6ea1"
+    },
+    {
+      "path": "protocol/private/p06-table-layout-v1.json",
+      "sha256": "a376aea78209005518cd886a33bb47baaadc0955022bf5f85ac86f7189ac43e9"
+    }
+  ],
+  "capabilities": [
+    "table.width_height",
+    "table.column_fixed_width",
+    "table.autofit_content",
+    "table.autofit_page"
+  ],
+  "plan_admission": {
+    "verification": "TableLayoutPlan_require_verified_must_pass_before_source_parse_or_mutation",
+    "grid_binding": "plan_grid_sha256_must_equal_the_exact_requested_canonical_TableGrid_sha256",
+    "shape": "column_width_row_height_and_master_cell_cardinalities_must_equal_the_grid",
+    "totals": "checked_plan_micrometer_totals_must_equal_the_plan_receipt_totals",
+    "font_receipt": "the_product_fixture_requires_one_exact_current_installed_font_metric_receipt_and_hash"
+  },
+  "current_2020_shape": {
+    "roots": "standalone_hp_tbl_or_one_zero_based_hp_tbl_in_an_exact_hs_sec",
+    "table": "absolute_width_and_height_zero_cellSpacing_positive_bounded_dimensions_and_exact_supported_direct_child_set",
+    "inner_margin": "one_exact_hp_inMargin_with_four_unsigned_hwpunit_values_each_zero_allowed_and_bounded_by_dimension_hwpunit",
+    "rows": "declared_rowCnt_exactly_matches_direct_hp_tr_count_and_each_row_contains_only_hp_tc",
+    "cells": "each_hp_tc_has_exactly_one_cellAddr_cellSpan_cellSz_cellMargin_subList_in_any_source_order",
+    "coverage": "addresses_and_spans_form_one_gap_free_nonoverlapping_grid_identical_to_the_requested_TableGrid",
+    "unknown_shape": "reject_without_mutation"
+  },
+  "quantization": {
+    "unit": "checked_LengthMicrometers_to_HWPUNIT_conversion_per_logical_column_and_row",
+    "table_width": "exact_checked_sum_of_quantized_logical_column_widths",
+    "table_height": "exact_checked_sum_of_quantized_logical_row_heights",
+    "merged_cell": "exact_checked_sum_of_quantized_columns_and_rows_covered_by_the_master_cell",
+    "solver_margin_input": "the_exact_typed_inherited_table_inner_margin_is_converted_and_bound_into_each_cell_measurement"
+  },
+  "lowering": {
+    "entrypoints": "standalone_table_or_zero_based_table_in_exact_section",
+    "mutation": "only_existing_hp_sz_width_height_and_each_hp_cellSz_width_height_attribute_value_spans",
+    "inner_margin_identity": "all_four_hp_inMargin_values_are_typed_readback_fields_and_must_remain_exactly_equal_after_lowering",
+    "sibling_preservation": "all_nonselected_table_and_nonowned_source_bytes_remain_exact",
+    "readback": "reparse_and_compare_table_dimensions_inner_margin_every_canonical_master_cell_dimension_and_content_token_sha256",
+    "receipt": "active_v2_profile_source_output_grid_plan_and_content_sha256_with_bounded_counts_and_dimensions_without_visible_text"
+  },
+  "target_fixture": {
+    "source": "exact_build_synthetic_source_sha256_814c481da946e760b2bc3b90b996863786652001e49f8b2b422e13c3d3e477a4",
+    "font_receipt": "sha256_c4755f99ebf1e49010bf26425d61f77c496fa713d86404004348027acfc1d2ab_exact_hcr_batang_10pt_metrics",
+    "plan": "verified_70000_micrometer_table_columns_52990_17010_rows_13758_4586_no_overflow_or_content_deficit",
+    "target": "three_independent_create_new_writes_sha256_a678588188593c250b33205f1660fef6c301280cd5ae30deb4b6a03f185055bc",
+    "preview": "Preview_PrVText_txt_is_updated_to_the_four_exact_target_strings_but_Preview_PrVImage_png_is_not_visual_evidence",
+    "runtime_gate": "actual_Hangul_2020_save_reopen_text_geometry_wrapping_and_pdf_visual_evidence_remains_required"
+  },
+  "validation_order": [
+    "verified_plan_grid_digest_plan_shape_and_exact_font_receipt",
+    "finite_input_element_table_cell_row_column_slot_dimension_and_inner_margin_limits",
+    "safe_preserving_xml_envelope_namespace_root_and_exact_supported_shape",
+    "gap_free_nonoverlapping_source_grid_equal_to_requested_grid",
+    "checked_micrometer_to_hwpunit_quantization_margin_conversion_and_span_sums",
+    "checked_nonoverlapping_attribute_value_edits_and_finite_output",
+    "full_reparse_exact_layout_inner_margin_and_content_digest_identity",
+    "deterministic_create_new_package_publication_and_exact_source_receipt_recheck"
+  ],
+  "default_limits": {
+    "input_bytes": 8388608,
+    "output_bytes": 8388608,
+    "elements": 131072,
+    "tables": 4096,
+    "cells": 32768,
+    "rows": 10000,
+    "columns": 1024,
+    "slots": 1000000,
+    "dimension_hwpunit": 100000000
+  },
+  "failure_policy": [
+    "unverified_plan_or_plan_grid_digest_drift",
+    "font_receipt_identity_metric_or_target_text_drift",
+    "plan_or_source_grid_shape_mismatch",
+    "relative_table_sizing_or_nonzero_cell_spacing",
+    "unknown_duplicate_missing_or_wrong_namespace_shape",
+    "malformed_noncanonical_or_out_of_range_number_boolean_or_inner_margin",
+    "grid_overlap_gap_out_of_bounds_or_row_placement_drift",
+    "unit_arithmetic_allocation_input_output_or_count_limit",
+    "readback_inner_margin_content_digest_or_determinism_drift"
+  ],
+  "source_evidence": {
+    "owpml": "P02_locked_official_records_define_tbl_tr_tc_sz_inMargin_cellAddr_cellSpan_cellSz_and_dimension_attribute_names",
+    "solver": "the_immutable_p06_table_layout_v1_contract_defines_verified_plan_semantics",
+    "actual_observation": "the_exact_build_source_exposes_table_inner_margins_510_510_141_141_and_four_cells_under_the_observed_table_id_and_preview_profiles",
+    "runtime_target": "licensed_local_Hangul_2020_11.0.0.9136_x86_only"
+  },
+  "atomicity": "source_and_font_receipt_bytes_are_immutable_and_only_a_fully_reparsed_exact_v2_layout_margin_content_and_package_result_returns",
+  "migration": "protocol/migrations/p06-table-layout-hwpx-v1-to-v2.md",
+  "not_claimed": {
+    "hancom_2020_target_runtime_readback": false,
+    "hancom_2020_target_visual_oracle": false,
+    "row_minimum_or_fixed_height_solver": false,
+    "equal_row_or_column_operation": false,
+    "pagination_or_formula_semantics": false,
+    "arbitrary_table_shape_repair": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_05_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}
