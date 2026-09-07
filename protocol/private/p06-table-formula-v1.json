@@ -1,0 +1,152 @@
+{
+  "schema_version": "hwpx-agent.table-formula-contract/v1",
+  "model_schema_version": "hwpx-agent.table-formula/v1",
+  "scope": "p06_06_pure_formula_ast_reference_cache_number_format_component_current_pc_local_development",
+  "prerequisites": [
+    "hwpx-agent.table-grid/v1",
+    "checked_zero_based_cell_coordinates"
+  ],
+  "source_lock_canonicalization": "utf8_lf_sha256",
+  "source_locks": [
+    {
+      "path": "docs/03_document_model/06_table_model.md",
+      "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"
+    },
+    {
+      "path": "docs/12_implementation_guides/05_page_table_layout_algorithms.md",
+      "sha256": "4d94e6d462f7fc2f2187827ab436eb17c2bb2fe8f728ba8eee5f051c16bb4274"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "FEATURE_COVERAGE_MATRIX.csv",
+      "sha256": "a95c521352f2a58beb674cd13d6020379ae3d0abd9b914cde05996deab326a40"
+    },
+    {
+      "path": "specs/capability-contracts.generated.json",
+      "sha256": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306"
+    },
+    {
+      "path": "specs/examples/recipes/04_advanced_table.json",
+      "sha256": "0e21bac5098a5fc57d556c49c550c2c1962d9ae58204de179882e8ff96bdb2b2"
+    }
+  ],
+  "component_capabilities": [
+    "table.block_sum",
+    "table.block_average",
+    "table.block_product",
+    "table.horizontal_sum",
+    "table.vertical_sum",
+    "table.horizontal_average",
+    "table.vertical_average",
+    "table.horizontal_product",
+    "table.vertical_product",
+    "table.formula",
+    "table.number_format",
+    "table.formula_relative_ref",
+    "table.formula_absolute_ref",
+    "table.formula_cache"
+  ],
+  "grammar": {
+    "encoding": "bounded_ascii_locale_neutral",
+    "literals": "exact_base10_i64_coefficient_and_scale_without_exponent_or_redundant_fractional_zeroes",
+    "references": "uppercase_A1_output_with_independent_dollar_anchored_row_and_column_axes",
+    "ranges": "ordered_rectangular_two_endpoint_A1_ranges",
+    "operators": [
+      "unary_plus",
+      "unary_minus",
+      "add",
+      "subtract",
+      "multiply",
+      "divide",
+      "power"
+    ],
+    "functions": [
+      "SUM",
+      "AVG",
+      "PRODUCT"
+    ],
+    "canonical_output": "fully_parenthesized_no_whitespace_uppercase_functions_and_references"
+  },
+  "reference_transform": {
+    "copy_rebase": "exact_current_dimensions_are_required_relative_axes_shift_by_owner_delta_and_absolute_axes_remain_fixed",
+    "structural_insert_delete": "exact_pre_edit_dimensions_are_required_and_both_relative_and_absolute_axes_follow_surviving_cells_into_checked_post_dimensions",
+    "range_interior_edit": "surviving_endpoints_expand_or_contract_deterministically",
+    "deleted_endpoint": "fail_closed_without_broken_reference_or_partial_result",
+    "bounds": "zero_based_rows_and_columns_must_remain_inside_nonzero_exact_dimensions_and_configured_hard_limits"
+  },
+  "cache": {
+    "separation": "formula_ast_and_cached_result_are_distinct_fields",
+    "states": [
+      "absent",
+      "unverified"
+    ],
+    "oracle_binding": "not_admitted_by_this_pure_component_and_requires_a_later_receipt_verifying_adapter",
+    "preserve": "allowed_only_when_canonical_formula_digest_is_unchanged",
+    "clear": "produces_absent_cache_and_rejects_a_replacement",
+    "update": "requires_a_non_absent_explicitly_unverified_replacement"
+  },
+  "number_formats": {
+    "supported": [
+      "general",
+      "number",
+      "percent",
+      "scientific"
+    ],
+    "decimal_places": "bounded_unsigned_exact_value",
+    "target_compilation": "deferred_until_exact_HWPX_and_Hancom_2020_source_evidence"
+  },
+  "determinism": {
+    "ast": "closed_tagged_enums_and_canonical_decimal_normalization",
+    "serialization": "bounded_serde_field_order_JSON_with_strict_exact_grid_formula_cell_readback",
+    "digest": "sha256_over_canonical_JSON",
+    "privacy": "Debug_redacts_formula_literals_cache_text_and_values"
+  },
+  "default_limits": {
+    "input_bytes": 8192,
+    "nodes": 2048,
+    "depth": 64,
+    "function_arguments": 256,
+    "cache_text_bytes": 4096,
+    "rows": 10000,
+    "columns": 1024,
+    "decimal_places": 12,
+    "serialized_bytes": 1048576
+  },
+  "failure_policy": [
+    "wrong_version_or_unknown_JSON_field",
+    "empty_oversized_non_ASCII_or_ambiguous_formula_source",
+    "unsupported_function_operator_or_malformed_token",
+    "node_depth_argument_or_output_limit",
+    "noncanonical_or_over_precision_decimal",
+    "out_of_bounds_reference_or_reversed_range",
+    "invalid_exact_grid_dimensions_structural_edit_or_deleted_owner_or_reference",
+    "relative_rebase_underflow_overflow_or_grid_escape",
+    "cache_policy_shape_or_formula_digest_mismatch",
+    "number_format_limit_or_unknown_variant",
+    "arithmetic_serialization_or_allocation_failure"
+  ],
+  "migration": "protocol/migrations/p06-table-formula-v0-to-v1.md",
+  "not_claimed": {
+    "formula_evaluation_correctness": false,
+    "dependency_graph_or_cycle_detection": false,
+    "arbitrary_or_locale_specific_function_grammar": false,
+    "currency_date_or_custom_number_format": false,
+    "hwpx_formula_lowering_or_readback": false,
+    "hancom_2020_formula_oracle": false,
+    "formula_cache_value_verified_without_oracle_receipt": false,
+    "pagination_or_render": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_06_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

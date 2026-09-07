@@ -7,6 +7,7 @@ mod operation_plan;
 mod selector;
 mod semantic_diff;
 mod semantic_summary;
+mod table_formula;
 mod table_grid;
 mod table_layout;
 mod table_merge_split;
@@ -55,6 +56,13 @@ pub use semantic_diff::{
 pub use semantic_summary::{
     SemanticDiffSummary, SemanticSummaryCategory, SemanticSummaryError, SemanticSummaryKind,
     SemanticSummaryLimits,
+};
+pub use table_formula::{
+    FormulaAst, FormulaAstDraft, FormulaBinaryOperator, FormulaCache, FormulaCachePolicy,
+    FormulaCell, FormulaCellDraft, FormulaCellReference, FormulaDecimal, FormulaError,
+    FormulaErrorValue, FormulaExpression, FormulaFunction, FormulaGridDimensions, FormulaGridEdit,
+    FormulaLimitConfig, FormulaLimits, FormulaNumberFormat, FormulaRange, FormulaReferenceKind,
+    FormulaUnaryOperator, FormulaValue, TABLE_FORMULA_SCHEMA_VERSION,
 };
 pub use table_grid::{
     CellCoordinate, TABLE_GRID_SCHEMA_VERSION, TableCellSpan, TableGrid, TableGridDraft,
