@@ -187,6 +187,12 @@
   validator and five tamper test groups pass. P06-06 is current-PC PASS; P06 remains in progress.
 - Workspace all-target Rust tests, Clippy `-D warnings` and formatting pass; P06 Python tests pass
   62/62 and the 11 P05/P06 PowerShell static safety suites pass.
+- Source v39 acceptance run `e159d3cf21df48b38bda3f9813d8a0d1` passed 11/11 at clean commit
+  `103bbf5b0448076e3f95db939b4d186100b6a4f4`; receipt SHA-256 is
+  `b3d0349d0e0b84900f7200938d8687cbe3b636ffecd62d2670c7197da77815c3`. Qualification contract
+  SHA-256 `544c68cdea536e234139bd492f7e2812fe1b7ab02826af580f307284835f287c`
+  binds the seven exact P06-06 closure sources over immutable v38. V39 focused tests pass 5/5,
+  `verify` passes, and its generic source-only runtime/P06/product claims remain false.
 
 ## Open risks and holds
 
@@ -198,10 +204,11 @@
 - R-0007: P06-07~09 still require actual Hangul 2020 pagination, inspect/select and the
   61-capability target conformance matrix. P06-05's exact fixture PASS does not prove arbitrary
   documents or other PCs/versions.
-- R-0008: bulk discovery of historical source-qualification tests currently reports 12 errors in
-  v21-v30 and v33-v34 because those legacy verifiers reread mutable current files. Exact v37/v38
-  verification and their 10 focused tests pass. Before the final Gate, make the legacy audit
-  forward-stable against immutable commit blobs without rewriting its historical contracts.
+- R-0008: bulk discovery of historical source-qualification tests reports forward-stability errors
+  in v21-v30, v33-v34 and now direct v38 verification because those legacy verifiers reread mutable
+  files after qualified successors change them. The authoritative latest v39 verifies and its five
+  focused tests pass. Before the final Gate, make the legacy audit forward-stable against immutable
+  commit blobs without rewriting its historical contracts or reclassifying old evidence.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 
@@ -220,7 +227,7 @@
   and `implementation/p05/P05_GATE_REPORT.md`.
 - P06-04 source tool: `implementation/p06/tools/create-hancom-2020-table-source.ps1`.
 - P06-05 metric qualification: commits `af3dbf0`, `42aba1c`, `742b3d2`.
-- P17 source qualification: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V38.md`; other details
+- P17 source qualification: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V39.md`; other details
   are under `implementation/p17/`; detailed ledger history through
   P-0085 is recoverable from `fae5bc0:PLANS.md` and later Git history.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.
