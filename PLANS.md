@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-06 current-PC PASS; P06-08 pure inspector PASS; P06-09 matrix plus first table-geometry component slice PASS but required matrix 0/61 green; P06-07 renderer and row closures remain |
+| P06 | in progress | 01-06 current-PC PASS; P06-08 pure inspector PASS; P06-09 matrix plus geometry and aggregate component slices PASS but required matrix 0/61 green; P06-07 renderer and row closures remain |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -42,7 +42,7 @@
 | P-0054 | P06-06 FormulaAst | current-PC PASS: pure core, source/adapter, deterministic 2x4 row/column target `6514a69b...320e5`, actual Hangul 2020 attempt04 save/reopen, strict saved-HWPX formula/cache/layout oracle and PDF visual review pass; attempts 01-03 remain failed timeout diagnostics |
 | P-0055 | P06-07 pagination | pure component, static current-PC HWPX adapter, exact composite target builder and pre-runtime oracle PASS; first actual target exposed clipped long-cell/boundary calibration failure, corrected target awaits licensed Hangul 2020 access and renderer rerun |
 | P-0056 | P06-08 inspect/select | scoped pure-IR PASS at `293053e`: revision/graph/path/ID/fingerprint-bound table and merged-cell selectors, nested/drawing/note indexing, bounded metadata snapshot; Rust 11/11 and contract/tamper 4/4 pass; no HWPX/Hangul selection claim |
-| P-0057 | P06-09 table conformance | matrix engine/current snapshot PASS; `583096f` adds bounded geometry semantics and `b75909e` adds preserving direct-HWPX integration for TABLE-018/019/050; exact 61-row current-PC/Hangul 2020 required release matrix remains 0/61 green, so P06-09/P06/product remain in progress |
+| P-0057 | P06-09 table conformance | matrix engine/current snapshot PASS; geometry semantics/HWPX integration cover TABLE-018/019/050 and `d9f1349` adds bounded aggregate planning for eight more rows; exact 61-row current-PC/Hangul 2020 required release matrix remains 0/61 green, so P06-09/P06/product remain in progress |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint evidence pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -262,7 +262,7 @@
   `TABLE-001` through `TABLE-061`. The report joins the canonical feature catalog, generated
   capability contracts, a redacted exact-target automation projection and hash-bound direct
   evidence without exposing raw Hancom identifiers or probe values.
-- Current required matrix is **0/61 green**. Direct stages are 30 cataloged, 13 unit-passed, seven
+- Current required matrix is **0/61 green**. Direct stages are 22 cataloged, 21 unit-passed, seven
   integration-passed and 11 oracle-verified; automation has six candidate-unverified and 55
   unavailable-with-reason rows, while all runtime states and differentials remain unverified/not-run.
   This is a prioritized implementation ledger, not a claim that completed P06 components are 0%.
@@ -291,6 +291,12 @@
   Python tests pass when invoked by module name (Python discovery cannot import the non-ASCII
   `D:\개발` start path on this host). The matrix remains truthfully 0/61 green while aggregate
   missing validation instances decrease from 241 to 235.
+- Commit `d9f1349` adds an exact-dimension, bounded aggregate planner for block, horizontal and
+  vertical `SUM`/`AVG`/`PRODUCT`. Eight previously catalog-only rows move to unit evidence while
+  TABLE-025 keeps its stronger oracle evidence. Workspace Rust tests, Clippy `-D warnings`, the
+  dedicated contract/tamper suite and all 97 P06 Python tests pass. The conformance contract now
+  locks 53 sources; the matrix remains 0/61 green with 22 catalog-only rows and 227 missing
+  validation instances. No HWPX lowering or licensed Hangul result is claimed.
 - Current FULL lanes linux-core, windows-worker and widget pass; a separate security lane passes
   with zero failed checks and 1,057 SBOM components. Docs remains non-green only at the pre-existing
   R-0008 P14 historical source-lock forward-stability defect, so FULL 5/5 is not claimed.
@@ -325,8 +331,8 @@
    Hangul 2020 access prompts, then collect repeat-header/caption save/reopen/PDF evidence for
    one-line-before, exact-boundary, one-line-after, merged-cell, nested-table and long-equation
    cases. Keep renderer/page claims unverified until visual and structural evidence both pass.
-2. At `max`, use the remaining blocker rows to implement the 30 catalog-only direct operations in
-   bounded semantic groups, lower the 13 component-only rows, close the seven static-only target
+2. At `max`, use the remaining blocker rows to implement the 22 catalog-only direct operations in
+   bounded semantic groups, lower the 21 component-only rows, close the seven static-only target
    oracles, then qualify exact current-target automation bindings and disposable differentials.
 3. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
    applicable offline Linux/security/STRICT checks without weakening actual-evidence Gates.
