@@ -293,71 +293,41 @@ fn generate_schema_models(root: &Path, output: &Path) -> Result<(), Box<dyn std:
         &output.join("typescript/schema-catalog.json"),
         &foundation_catalog,
     )?;
-    let additive_catalog_v2 = schemas
-        .iter()
-        .filter(|(_, _, schema, _)| {
-            schema
-                .get("x-catalog-version")
-                .and_then(Value::as_u64)
-                .is_none_or(|version| version <= 2)
-        })
-        .map(|(id, title, _, sha256)| {
-            serde_json::json!({ "id": id, "title": title, "sha256": sha256 })
-        })
-        .collect::<Vec<_>>();
     write_schema_catalog(
         &output.join("typescript/schema-catalog-v2.json"),
-        &additive_catalog_v2,
+        &schema_catalog_entries(&schemas, 2),
     )?;
-    let additive_catalog_v3 = schemas
-        .iter()
-        .filter(|(_, _, schema, _)| {
-            schema
-                .get("x-catalog-version")
-                .and_then(Value::as_u64)
-                .is_none_or(|version| version <= 3)
-        })
-        .map(|(id, title, _, sha256)| {
-            serde_json::json!({ "id": id, "title": title, "sha256": sha256 })
-        })
-        .collect::<Vec<_>>();
     write_schema_catalog(
         &output.join("typescript/schema-catalog-v3.json"),
-        &additive_catalog_v3,
+        &schema_catalog_entries(&schemas, 3),
     )?;
-    let additive_catalog_v4 = schemas
-        .iter()
-        .filter(|(_, _, schema, _)| {
-            schema
-                .get("x-catalog-version")
-                .and_then(Value::as_u64)
-                .is_none_or(|version| version <= 4)
-        })
-        .map(|(id, title, _, sha256)| {
-            serde_json::json!({ "id": id, "title": title, "sha256": sha256 })
-        })
-        .collect::<Vec<_>>();
     write_schema_catalog(
         &output.join("typescript/schema-catalog-v4.json"),
-        &additive_catalog_v4,
+        &schema_catalog_entries(&schemas, 4),
     )?;
-    let additive_catalog_v5 = schemas
+    write_schema_catalog(
+        &output.join("typescript/schema-catalog-v5.json"),
+        &schema_catalog_entries(&schemas, 5),
+    )?;
+    Ok(())
+}
+
+fn schema_catalog_entries(
+    schemas: &[(String, String, Value, String)],
+    maximum_version: u64,
+) -> Vec<Value> {
+    schemas
         .iter()
         .filter(|(_, _, schema, _)| {
             schema
                 .get("x-catalog-version")
                 .and_then(Value::as_u64)
-                .is_none_or(|version| version <= 5)
+                .is_none_or(|version| version <= maximum_version)
         })
         .map(|(id, title, _, sha256)| {
             serde_json::json!({ "id": id, "title": title, "sha256": sha256 })
         })
-        .collect::<Vec<_>>();
-    write_schema_catalog(
-        &output.join("typescript/schema-catalog-v5.json"),
-        &additive_catalog_v5,
-    )?;
-    Ok(())
+        .collect()
 }
 
 fn write_schema_catalog(path: &Path, schemas: &[Value]) -> Result<(), Box<dyn std::error::Error>> {
