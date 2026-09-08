@@ -65,14 +65,16 @@ input requires a new output path or an explicitly reviewed successor update.
 ## Current result
 
 - Required rows: 61; green: 0; non-green: 61.
-- Direct stages: 0 cataloged, 43 unit-passed, 3 integration-passed, 15 oracle-verified.
+- Direct stages: 0 cataloged, 40 unit-passed, 6 integration-passed, 15 oracle-verified.
 - Automation bindings: 6 candidate-unverified, 55 unavailable-with-reason.
 - Automation runtime support: 61 unverified.
 - Direct/automation differential: 61 not-run.
 
-The current matrix is a truthful implementation backlog, not a P06-09 PASS. P06-07 now contributes
-four exact-target oracle rows, but the remaining direct operations and exact automation
-bindings/probes have not been manufactured from menu names.
+The current matrix is a truthful implementation backlog, not a P06-09 PASS. P06-07 contributes
+four exact-target oracle rows. The fixed-column, fit-content and fit-page layout modes now have
+operation-specific static direct-HWPX integration evidence, but no licensed application oracle.
+The remaining direct operations and exact automation bindings/probes have not been manufactured
+from menu names.
 
 ## Not claimed
 

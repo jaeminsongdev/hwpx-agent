@@ -1,0 +1,106 @@
+{
+  "schema_version": "hwpx-agent.table-layout-modes-hwpx-contract/v1",
+  "profile_id": "hwpx-agent.table-layout-modes-hwpx.hancom-2020/1",
+  "lowerer_profile_id": "hwpx-agent.table-layout-hwpx.hancom-2020/2",
+  "scope": "p06_09_static_current_pc_hancom_2020_hwpx_layout_mode_admission",
+  "features": {
+    "TABLE-051": "table.column_fixed_width",
+    "TABLE-052": "table.autofit_content",
+    "TABLE-053": "table.autofit_page"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "protocol/private/p06-table-layout-hwpx-v2.json",
+      "sha256": "6ce63a1ba5749aaa5f593add993bbb4fc68c86ec485837cc4c00e5e5f44a6008"
+    }
+  ],
+  "input": {
+    "plan": "verified_hwpx-agent.table-layout_v1_plan_bound_to_exact_canonical_grid",
+    "source": "standalone_hp_tbl_or_zero_based_table_in_hs_sec",
+    "profile": "existing_strict_hwpx-agent.table-layout-hwpx.hancom-2020_2_shape"
+  },
+  "mode_semantics": {
+    "column_fixed_width": "mixed_fixed_automatic_exact_target_keeps_fixed_track_and_assigns_eligible_remainder_only_to_automatic_track",
+    "autofit_content": "nonexact_body_target_stops_at_verified_preferred_widths_and_may_leave_body_width_unused",
+    "autofit_page": "exact_body_target_deterministically_distributes_all_eligible_remainder_across_automatic_tracks",
+    "distinctness": "identical_automatic_constraints_produce_38100_micrometer_fit_content_and_50800_micrometer_fit_page_totals"
+  },
+  "lowering": {
+    "unit_conversion": "integer_micrometers_to_official_hwpunit",
+    "editable_attributes": "selected_hp_sz_and_hp_cellSz_width_height_only",
+    "merged_cells": "checked_sum_of_covered_logical_tracks",
+    "publication": "return_only_after_strict_output_reparse_and_exact_readback"
+  },
+  "preservation": {
+    "cell_text_comments": "exact_digest",
+    "inner_margins": "exact_values",
+    "unselected_tables": "byte_identical",
+    "formula": "exact_ast_cache_semantic_readback_in_closed_package",
+    "pagination": "exact_page_split_repeat_header_caption_semantic_readback_in_closed_package",
+    "non_section_parts": "exact_expanded_byte_sha256_in_closed_package",
+    "package_rebuild": "deterministic_and_closed_graph_reopen",
+    "source": "never_mutated"
+  },
+  "receipt": {
+    "profile": "existing_layout_lowerer_profile",
+    "binding": "source_output_grid_verified_layout_plan_and_content_sha256",
+    "counts": "rows_columns_cells_modified_attributes_and_bytes",
+    "visible_text": "omitted"
+  },
+  "limits_profile": "TableLayoutHwpxLimits",
+  "failure_policy": [
+    "wrong_namespace_root_or_unsupported_shape",
+    "unverified_plan_or_grid_identity_mismatch",
+    "incomplete_overlapping_or_out_of_bounds_cells",
+    "invalid_boolean_number_dimension_or_layout_total",
+    "input_output_element_table_cell_or_grid_limit",
+    "unit_conversion_allocation_or_serialization_failure",
+    "content_or_semantic_readback_mismatch"
+  ],
+  "migration": "protocol/migrations/p06-table-layout-modes-hwpx-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_LAYOUT_MODES_HWPX_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_LAYOUT_MODES_HWPX_REPORT.md",
+  "expected_evidence": {
+    "adapter_tests": 7,
+    "feature_count": 3,
+    "backend": "direct_hwpx",
+    "direct_stage": "integration_passed",
+    "validations": [
+      "formula_readback",
+      "page_split",
+      "schema",
+      "semantic_reopen"
+    ]
+  },
+  "not_claimed": {
+    "render_diff": false,
+    "hangul_2020_target_build": false,
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "rollback_or_retry": false,
+    "release_enabled": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

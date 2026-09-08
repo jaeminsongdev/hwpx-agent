@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 15 |
-| direct `integration_passed` | 3 |
-| direct `unit_passed` | 43 |
+| direct `integration_passed` | 6 |
+| direct `unit_passed` | 40 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -34,8 +34,8 @@ The machine-readable authority is
   merge/split; they are not represented as HWPX bindings.
 - P06-04 contributes exact-target oracle evidence for cell margin, alignment, direction,
   protection, border and fill.
-- P06-05 contributes exact-target width/height evidence, while fixed-column and autofit modes remain
-  component-only because the successful target used an absolute automatic-column plan.
+- P06-05 contributes exact-target width/height evidence. That oracle still covers only its absolute
+  automatic-column plan; it is not reused as a fixed-column or autofit application oracle.
 - P06-06 contributes exact-target formula, horizontal sum, relative-reference and cache evidence;
   number-format and absolute-reference support remain component-only.
 - P06-07 contributes exact current-PC Hangul 2020 target evidence for repeat header, cell-content
@@ -48,6 +48,11 @@ The machine-readable authority is
   disposable package now proves formula/cache and pagination-policy readback plus exact preservation
   of every non-section part across all three operations. It does not include a licensed Hangul 2020
   target-build oracle.
+- The table-layout mode slice contributes operation-specific static direct-HWPX integration for
+  TABLE-051/052/053. A mixed plan keeps its fixed column exact, fit-content stops at verified
+  preferred widths, and fit-page fills the exact body width. All three reopen through the closed
+  package fixture with exact formula/cache, pagination-policy and non-section-part preservation;
+  no licensed Hangul target-build or render result is inferred.
 - The aggregate planner adds bounded selection-to-formula unit evidence for block, horizontal and
   vertical `SUM`/`AVG`/`PRODUCT`. Eight previously catalog-only rows move to unit evidence while
   the already stronger horizontal-sum oracle remains unchanged.
@@ -112,7 +117,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-197 missing validation instances, 61 unverified automation runtime rows and 61 missing
+188 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -120,8 +125,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the 43 unit-only rows through preserving HWPX adapters;
-2. close the three integration-only target oracles;
+1. lower the 40 unit-only rows through preserving HWPX adapters;
+2. close the six integration-only target oracles;
 3. supply remaining feature-specific validations, including formula readback where required;
 4. qualify exact current-target automation bindings and run safe disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.
