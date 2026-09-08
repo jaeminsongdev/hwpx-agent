@@ -72,7 +72,7 @@ P06-09's matrix engine and current snapshot are implemented, but the roadmap com
 
 1. complete P06-07 corrected-target renderer evidence;
 2. implement the 30 remaining catalog-only direct operations in bounded semantic groups;
-3. lower the 13 component-only rows and close the four static-only target oracles;
+3. lower the 16 component-only rows and close the four static-only target oracles;
 4. qualify exact current-target automation bindings and run safe disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.
 
