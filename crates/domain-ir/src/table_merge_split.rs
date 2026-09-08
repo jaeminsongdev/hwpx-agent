@@ -1,7 +1,7 @@
 use std::fmt;
 use std::io;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 use crate::{CellCoordinate, LogicalId, TableCellSpan, TableGrid, TableGridError, TableGridLimits};
@@ -10,7 +10,7 @@ pub const TABLE_MERGE_SPLIT_SCHEMA_VERSION: &str = "hwpx-agent.table-merge-split
 
 const HARD_MAX_RECEIPT_BYTES: usize = 256 * 1024 * 1024;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ContentPreservationPolicy {
     Concatenate,

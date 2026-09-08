@@ -1,0 +1,131 @@
+{
+  "schema_version": "hwpx-agent.table-merge-split-hwpx-contract/v1",
+  "profile_id": "hwpx-agent.table-merge-split-hwpx.hancom-2020/1",
+  "model_profile_ids": {
+    "merge_split": "hwpx-agent.table-merge-split/v1",
+    "ruling": "hwpx-agent.table-ruling/v1"
+  },
+  "scope": "p06_09_static_current_pc_hancom_2020_hwpx_exact_merge_split_admission",
+  "features": {
+    "TABLE-016": "table.split_cell",
+    "TABLE-017": "table.merge_cells"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "protocol/private/p06-table-merge-split-v1.json",
+      "sha256": "df000b5250c7538ff9dfa29e46ea2e737957706cbc242c712370bf287f7f3af7"
+    }
+  ],
+  "input": {
+    "existing_table": "complete_validated_ruling_state_grid_content_formula_cache_header_section_and_logical_physical_binding",
+    "merge": "explicit_exact_rectangular_logical_slot_set_and_one_content_policy",
+    "split": "one_exact_master_identity_even_subdivision_new_row_major_identities_content_policy_and_existing_edge_line_identity",
+    "profile": "strict_current_hangul_2020_table_grid_cell_style_border_fill_formula_and_paragraph_shape"
+  },
+  "topology": {
+    "merge": "preserve_top_left_master_retire_every_other_selected_master_and_remove_only_edges_newly_internal_to_the_result",
+    "split": "preserve_source_master_at_top_left_create_exact_caller_bound_row_major_masters_and_add_only_new_internal_edges",
+    "edge_transition": "derive_each_normalized_unit_edge_from_exact_before_and_after_slot_ownership_without_coordinate_guessing",
+    "inverse_transition": "merge_may_not_create_a_split_edge_and_split_may_not_remove_a_structural_edge"
+  },
+  "content_policies": {
+    "merge_concatenate": "preserve_all_selected_payload_blocks_in_stable_row_major_cell_and_block_order",
+    "merge_distribute": "same_lossless_row_major_merge_semantics_as_the_authoritative_domain_model",
+    "merge_first": "preserve_only_top_left_payload_and_explicitly_receipt_every_discarded_later_block",
+    "merge_reject_if_multiple": "fail_when_more_than_one_selected_cell_is_nonempty",
+    "split_distribute": "assign_stable_balanced_contiguous_payload_chunks_in_row_major_target_order",
+    "split_keep": "concatenate_first_and_reject_if_multiple_keep_all_payload_in_the_preserved_top_left_target"
+  },
+  "binding": {
+    "request": "table_source_state_grid_content_and_document_flow_sha256_plus_complete_typed_operation",
+    "build": "revalidate_source_and_flow_then_rebuild_authoritative_domain_result_and_complete_target_state",
+    "lower": "bind_header_section_source_state_grid_content_request_plan_and_document_flow_then_relift_and_rebuild_before_edit",
+    "publication": "return_only_after_exact_target_grid_state_content_formula_cache_and_payload_semantic_reopen"
+  },
+  "preservation": {
+    "payload": "exact_ordered_raw_paragraph_bytes_for_every_preserved_content_block",
+    "properties": "complete_unselected_properties_and_identical_selected_merge_properties_or_inherited_split_properties",
+    "formula": "selected_formula_cells_fail_closed_while_unselected_owner_ast_number_format_and_display_cache_remain_exact",
+    "diagonal": "selected_visible_diagonal_cells_fail_closed_while_unselected_diagonal_state_remains_exact",
+    "geometry": "exact_logical_dimensions_physical_boundaries_cell_extents_table_properties_and_pagination_attributes",
+    "package": "source_never_mutated_sibling_tables_and_non_target_parts_byte_identical"
+  },
+  "native_profile": {
+    "split_line": "must_be_a_bound_sha256_identity_already_present_in_the_source_header_edge_line_catalog",
+    "merge_properties": "all_selected_complete_cell_properties_must_be_identical",
+    "formula_readback": "merged_topology_is_admitted_only_for_preserving_readback_not_public_formula_mutation",
+    "edits": "selected_table_topology_cell_order_payload_ownership_and_needed_border_fill_references_only"
+  },
+  "receipt": {
+    "hashes": "source_output_parts_source_target_state_grid_content_request_plan_and_document_flow_sha256",
+    "counts": "source_target_payloads_preserved_formulas_added_border_fills_and_explicitly_discarded_blocks",
+    "debug": "all_hashes_logical_ids_payloads_formulas_cache_and_raw_xml_omitted"
+  },
+  "limits_profiles": [
+    "TableLayoutHwpxLimits",
+    "ParagraphStyleLimits",
+    "TableFormulaHwpxLimits",
+    "FormulaLimits",
+    "TableGridLimits",
+    "TableRulingLimits"
+  ],
+  "failure_policy": [
+    "invalid_duplicate_unknown_empty_or_oversized_json_and_malformed_digest",
+    "source_state_grid_content_package_part_or_document_flow_drift",
+    "nonrectangular_partial_noop_nondivisible_or_colliding_domain_operation",
+    "selected_formula_diagonal_or_nonidentical_complete_merge_properties",
+    "split_line_absent_from_the_bound_source_edge_line_catalog",
+    "payload_identity_or_paragraph_byte_loss_reorder_or_duplicate_ownership",
+    "inverse_topology_transition_or_semantic_reopen_mismatch",
+    "input_output_allocation_serialization_xml_layout_grid_formula_ruling_or_catalog_limit",
+    "no_partial_header_section_binding_or_receipt_returned"
+  ],
+  "migration": "protocol/migrations/p06-table-merge-split-hwpx-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_MERGE_SPLIT_HWPX_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_MERGE_SPLIT_HWPX_REPORT.md",
+  "expected_evidence": {
+    "adapter_tests": 6,
+    "feature_count": 2,
+    "backend": "direct_hwpx",
+    "direct_stage": "integration_passed",
+    "validations": [
+      "formula_readback",
+      "page_split",
+      "schema",
+      "semantic_reopen"
+    ]
+  },
+  "not_claimed": {
+    "render_diff": false,
+    "hangul_2020_target_build": false,
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "rollback_or_retry": false,
+    "release_enabled": false,
+    "arbitrary_user_document_compatibility": false,
+    "selected_formula_rewrite": false,
+    "selected_diagonal_rewrite": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 15 |
-| direct `integration_passed` | 17 |
-| direct `unit_passed` | 29 |
+| direct `integration_passed` | 19 |
+| direct `unit_passed` | 27 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -30,8 +30,8 @@ The machine-readable authority is
 
 ## Existing evidence admitted conservatively
 
-- P06-02 and P06-03 contribute bounded pure unit evidence for create/row-column edits and
-  merge/split; they are not represented as HWPX bindings.
+- P06-02 contributes bounded pure unit evidence for create/row-column edits. P06-03's exact
+  merge/split model now also has static preserving HWPX integration, but no licensed target oracle.
 - P06-04 contributes exact-target oracle evidence for cell margin, alignment, direction,
   protection, border and fill.
 - P06-05 contributes exact-target width/height evidence. That oracle still covers only its absolute
@@ -113,6 +113,13 @@ The machine-readable authority is
   pagination in a closed package. Outer creation uses a digest-bound empty paragraph and reviewed
   1x1 native wrapper. Structural formula topology changes remain native fail-closed; no licensed
   Hangul execution or renderer result is claimed.
+- The merge/split preserving HWPX adapter covers TABLE-016/017 with the complete domain content
+  policies. Merge preserves the top-left master and removes only newly internal edges; split uses
+  exact row-major identities and a source-catalog-bound edge line. Paragraph blocks remain exact,
+  `First` receipts intentional discards, and request/build/lower all recheck source state, grid,
+  content and flow. Selected formulas, diagonals or unequal complete merge-cell properties fail
+  closed, while an unselected same-table formula/cache survives topology change and strict reopen.
+  This is static integration evidence, not licensed Hangul or render evidence.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 
@@ -132,7 +139,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-155 missing validation instances, 61 unverified automation runtime rows and 61 missing
+149 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -140,8 +147,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the 29 unit-only rows through preserving HWPX adapters;
-2. close the seventeen integration-only target oracles;
+1. lower the 27 unit-only rows through preserving HWPX adapters;
+2. close the nineteen integration-only target oracles;
 3. supply remaining feature-specific validations, including formula readback where required;
 4. qualify exact current-target automation bindings and run safe disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.

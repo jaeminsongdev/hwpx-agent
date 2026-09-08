@@ -202,7 +202,16 @@ impl TableFormulaHwpxReader {
         limits: TableFormulaHwpxLimits,
         formula_limits: FormulaLimits,
     ) -> Result<TableFormulaHwpxReadback, TableFormulaHwpxError> {
-        Ok(read_shape(bytes, table_ordinal, limits, formula_limits)?.readback)
+        Ok(read_shape(bytes, table_ordinal, limits, formula_limits, false)?.readback)
+    }
+
+    pub(crate) fn read_in_section_preserving_merged_topology(
+        bytes: &[u8],
+        table_ordinal: usize,
+        limits: TableFormulaHwpxLimits,
+        formula_limits: FormulaLimits,
+    ) -> Result<TableFormulaHwpxReadback, TableFormulaHwpxError> {
+        Ok(read_shape(bytes, table_ordinal, limits, formula_limits, true)?.readback)
     }
 
     /// Counts selected-profile formulas in one selected table after applying the same exact-shape
@@ -217,9 +226,11 @@ impl TableFormulaHwpxReader {
         limits: TableFormulaHwpxLimits,
         formula_limits: FormulaLimits,
     ) -> Result<usize, TableFormulaHwpxError> {
-        Ok(read_shape(bytes, table_ordinal, limits, formula_limits)?
-            .readback
-            .formula_field_count)
+        Ok(
+            read_shape(bytes, table_ordinal, limits, formula_limits, false)?
+                .readback
+                .formula_field_count,
+        )
     }
 }
 
@@ -267,7 +278,7 @@ impl TableFormulaHwpxLowerer {
         limits: TableFormulaHwpxLimits,
         formula_limits: FormulaLimits,
     ) -> Result<(Vec<u8>, TableFormulaHwpxLoweringReceipt), TableFormulaHwpxError> {
-        let source_shape = read_shape(source, table_ordinal, limits, formula_limits)?;
+        let source_shape = read_shape(source, table_ordinal, limits, formula_limits, false)?;
         if dimensions.rows != source_shape.readback.rows
             || dimensions.columns != source_shape.readback.columns
             || target.owner() != source_shape.readback.formula.owner()
@@ -293,7 +304,7 @@ impl TableFormulaHwpxLowerer {
             ByteEdit::new(source_shape.visible_result_span, result.into_bytes()),
         ];
         let output = apply_edits(source, &mut edits, limits)?;
-        let output_shape = read_shape(&output, table_ordinal, limits, formula_limits)?;
+        let output_shape = read_shape(&output, table_ordinal, limits, formula_limits, false)?;
         if &output_shape.readback.formula != target
             || output_shape.readback.rows != dimensions.rows
             || output_shape.readback.columns != dimensions.columns
@@ -337,6 +348,7 @@ fn read_shape(
     table_ordinal: usize,
     limits: TableFormulaHwpxLimits,
     formula_limits: FormulaLimits,
+    allow_merged_cells: bool,
 ) -> Result<FormulaShape, TableFormulaHwpxError> {
     let document = parse_document(bytes, limits)?;
     validate_document_envelope(&document)?;
@@ -346,7 +358,7 @@ fn read_shape(
         .get(table_ordinal)
         .copied()
         .ok_or(TableFormulaHwpxError::UnsupportedShape)?;
-    let grid = read_cells(&document, table, limits)?;
+    let grid = read_cells(&document, table, limits, allow_merged_cells)?;
     let formula_fields = formula_fields(&document, table, limits)?;
     if formula_fields.len() != 1 {
         return Err(TableFormulaHwpxError::UnsupportedShape);
@@ -746,6 +758,7 @@ fn read_cells(
     document: &PreservingXmlDocument,
     table: usize,
     limits: TableFormulaHwpxLimits,
+    allow_merged_cells: bool,
 ) -> Result<TableGridCells, TableFormulaHwpxError> {
     let table_value = element(document, table)?;
     let rows = required_positive_u32(table_value, "rowCnt")?;
@@ -771,7 +784,8 @@ fn read_cells(
     cells
         .try_reserve_exact(expected)
         .map_err(|_| TableFormulaHwpxError::AllocationFailed)?;
-    let mut coordinates = BTreeSet::new();
+    let mut master_coordinates = BTreeSet::new();
+    let mut covered_slots = BTreeSet::new();
     for row in row_indexes {
         for cell in child_indexes(document, row)? {
             if !has_paragraph_name(element(document, cell)?, "tc") {
@@ -785,9 +799,9 @@ fn read_cells(
             let span = unique_named_child(document, &children, "cellSpan")?;
             validate_attributes(element(document, address)?, &["colAddr", "rowAddr"])?;
             validate_attributes(element(document, span)?, &["colSpan", "rowSpan"])?;
-            if required_positive_u32(element(document, span)?, "colSpan")? != 1
-                || required_positive_u32(element(document, span)?, "rowSpan")? != 1
-            {
+            let column_span = required_positive_u32(element(document, span)?, "colSpan")?;
+            let row_span = required_positive_u32(element(document, span)?, "rowSpan")?;
+            if !allow_merged_cells && (column_span != 1 || row_span != 1) {
                 return Err(TableFormulaHwpxError::UnsupportedShape);
             }
             let coordinate = CellCoordinate {
@@ -796,14 +810,32 @@ fn read_cells(
             };
             if coordinate.row >= rows
                 || coordinate.column >= columns
-                || !coordinates.insert(coordinate)
+                || !master_coordinates.insert(coordinate)
             {
                 return Err(TableFormulaHwpxError::UnsupportedShape);
+            }
+            let row_end = coordinate
+                .row
+                .checked_add(row_span)
+                .ok_or(TableFormulaHwpxError::UnsupportedShape)?;
+            let column_end = coordinate
+                .column
+                .checked_add(column_span)
+                .ok_or(TableFormulaHwpxError::UnsupportedShape)?;
+            if row_end > rows || column_end > columns {
+                return Err(TableFormulaHwpxError::UnsupportedShape);
+            }
+            for row in coordinate.row..row_end {
+                for column in coordinate.column..column_end {
+                    if !covered_slots.insert(CellCoordinate { row, column }) {
+                        return Err(TableFormulaHwpxError::UnsupportedShape);
+                    }
+                }
             }
             cells.push((cell, coordinate));
         }
     }
-    if cells.len() != expected || coordinates.len() != expected {
+    if covered_slots.len() != expected {
         return Err(TableFormulaHwpxError::UnsupportedShape);
     }
     Ok(TableGridCells {

@@ -2,14 +2,19 @@ use std::collections::BTreeMap;
 use std::io::{Cursor, Write};
 
 use domain_ir::{
-    FormulaLimits, LogicalId, TABLE_RULING_SCHEMA_VERSION, TableGrid, TableGridLimits,
-    TableRulingAxis, TableRulingBuilder, TableRulingDiagonalDirection, TableRulingFormulaPolicy,
-    TableRulingLimits, TableRulingOperation, TableRulingPlan, TableRulingRequest,
-    TableRulingRequestDraft, TableRulingState, TableRulingStroke,
+    CellCoordinate, ContentPreservationPolicy, FormulaLimits, LogicalId,
+    TABLE_RULING_SCHEMA_VERSION, TableGrid, TableGridLimits, TableRulingAxis, TableRulingBuilder,
+    TableRulingDiagonalDirection, TableRulingFormulaPolicy, TableRulingLimits,
+    TableRulingOperation, TableRulingPlan, TableRulingRequest, TableRulingRequestDraft,
+    TableRulingState, TableRulingStroke,
 };
 use hwpx_package::{
     BoundedZipReader, Compression, PackageGraph, PackageGraphLimits, PackageLimits,
-    TABLE_RULING_HWPX_PROFILE_ID, TableFormulaHwpxLimits, TableFormulaHwpxReader,
+    TABLE_MERGE_SPLIT_HWPX_SCHEMA_VERSION, TABLE_RULING_HWPX_PROFILE_ID, TableFormulaHwpxLimits,
+    TableFormulaHwpxReader, TableMergeSplitHwpxBuilder, TableMergeSplitHwpxError,
+    TableMergeSplitHwpxLimits, TableMergeSplitHwpxLowerer, TableMergeSplitHwpxOperation,
+    TableMergeSplitHwpxPartBinding, TableMergeSplitHwpxPlan, TableMergeSplitHwpxReadback,
+    TableMergeSplitHwpxReader, TableMergeSplitHwpxRequest, TableMergeSplitHwpxRequestDraft,
     TablePaginationHwpxLimits, TablePaginationHwpxReader, TableRulingHwpxBinding,
     TableRulingHwpxCellBinding, TableRulingHwpxError, TableRulingHwpxLimits,
     TableRulingHwpxLowerer, TableRulingHwpxReader,
@@ -255,6 +260,18 @@ fn merged_section() -> Vec<u8> {
     )
 }
 
+fn merged_four_payload_section() -> Vec<u8> {
+    let payload = ["A", "B", "C", "D"]
+        .into_iter()
+        .map(text_paragraph)
+        .collect::<String>();
+    table(
+        &[vec![cell(0, 0, 2, 2, 2000, 1000, 3, &payload)], vec![]],
+        2,
+        2,
+    )
+}
+
 fn single_section() -> Vec<u8> {
     table(
         &[vec![cell(
@@ -457,6 +474,26 @@ fn assert_package_preservation(
     Ok(())
 }
 
+fn assert_section_only_package_change(
+    source: &PackageGraph,
+    source_hashes: BTreeMap<String, [u8; 32]>,
+    target: &PackageGraph,
+) -> TestResult {
+    assert_eq!(source.package_document, target.package_document);
+    assert_eq!(source.relationships, target.relationships);
+    assert_eq!(source.spine, target.spine);
+    let target_hashes = part_hashes(target);
+    for (path, source_sha256) in source_hashes {
+        let target_sha256 = target_hashes.get(&path).ok_or("target part missing")?;
+        if path == "Contents/section0.xml" {
+            assert_ne!(&source_sha256, target_sha256);
+        } else {
+            assert_eq!(&source_sha256, target_sha256, "part changed: {path}");
+        }
+    }
+    Ok(())
+}
+
 fn binding(payload_counts: &[usize]) -> Result<TableRulingHwpxBinding, Box<dyn std::error::Error>> {
     binding_with_boundaries(payload_counts, vec![0, 500, 1000], vec![0, 1000, 2000])
 }
@@ -612,6 +649,72 @@ fn build_outer_plan(
         FormulaLimits::default(),
         TableRulingLimits::default(),
     )?)
+}
+
+fn build_merge_split_plan(
+    source: &TableMergeSplitHwpxReadback,
+    operation: TableMergeSplitHwpxOperation,
+) -> Result<
+    (
+        TableMergeSplitHwpxRequest,
+        TableMergeSplitHwpxPlan,
+        TableMergeSplitHwpxPartBinding,
+    ),
+    Box<dyn std::error::Error>,
+> {
+    let limits = TableMergeSplitHwpxLimits::default();
+    let flow = digest('f');
+    let request = TableMergeSplitHwpxRequest::from_draft(
+        merge_split_request_draft(source, operation)?,
+        source,
+        &flow,
+        limits,
+    )?;
+    let plan = TableMergeSplitHwpxBuilder::build(&request, source, &flow, limits)?;
+    let part_binding =
+        TableMergeSplitHwpxPartBinding::from_readback(source, &request, &plan, flow, limits)?;
+    Ok((request, plan, part_binding))
+}
+
+fn merge_split_request_draft(
+    source: &TableMergeSplitHwpxReadback,
+    operation: TableMergeSplitHwpxOperation,
+) -> Result<TableMergeSplitHwpxRequestDraft, Box<dyn std::error::Error>> {
+    let limits = TableMergeSplitHwpxLimits::default();
+    Ok(TableMergeSplitHwpxRequestDraft {
+        schema_version: TABLE_MERGE_SPLIT_HWPX_SCHEMA_VERSION.to_owned(),
+        table_id: source.ruling.state.table_id().clone(),
+        expected_state_sha256: hex(source.ruling.state.canonical_sha256(limits.ruling.ruling)?),
+        expected_grid_sha256: hex(source.ruling.grid.canonical_sha256()?),
+        expected_content_sha256: hex(source.content_state_sha256),
+        expected_document_flow_sha256: digest('f'),
+        operation,
+    })
+}
+
+fn assert_merge_request_canonicalization(
+    source: &TableMergeSplitHwpxReadback,
+    selected_slots: &[CellCoordinate],
+    request: &TableMergeSplitHwpxRequest,
+    limits: &TableMergeSplitHwpxLimits,
+) -> TestResult {
+    let reordered = TableMergeSplitHwpxRequest::from_draft(
+        merge_split_request_draft(
+            source,
+            TableMergeSplitHwpxOperation::Merge {
+                selected_slots: selected_slots.iter().rev().copied().collect(),
+                content_policy: ContentPreservationPolicy::Concatenate,
+            },
+        )?,
+        source,
+        &digest('f'),
+        *limits,
+    )?;
+    assert_eq!(
+        request.canonical_json(*limits)?,
+        reordered.canonical_json(*limits)?
+    );
+    Ok(())
 }
 
 fn assert_diagonal_round_trip(
@@ -1511,6 +1614,7 @@ fn line_only_edit_preserves_formula_and_structural_formula_change_fails_closed()
         ),
         Err(TableRulingHwpxError::UnsupportedFormulaMutation)
     ));
+
     Ok(())
 }
 
@@ -1608,6 +1712,497 @@ fn closed_package_reopen_preserves_formula_pagination_and_unselected_parts() -> 
         source_formula.formula_field_count,
         target_formula.formula_field_count
     );
+    assert_eq!(source_pagination, target_pagination);
+    Ok(())
+}
+
+#[test]
+fn merge_split_hwpx_split_distributes_payload_and_reopens_exactly() -> TestResult {
+    let header = header()?;
+    let section = merged_four_payload_section();
+    let source_binding = binding(&[4])?;
+    let limits = TableMergeSplitHwpxLimits::default();
+    let source =
+        TableMergeSplitHwpxReader::read_existing(&header, &section, 0, &source_binding, limits)?;
+    let split_line_sha256 = source
+        .ruling
+        .state
+        .edge(TableRulingAxis::Horizontal, 0, 0)
+        .and_then(|edge| edge.line_sha256.clone())
+        .ok_or("source line identity missing")?;
+    let (request, plan, part_binding) = build_merge_split_plan(
+        &source,
+        TableMergeSplitHwpxOperation::Split {
+            master_cell_id: id("cell-0")?,
+            rows: 2,
+            columns: 2,
+            new_master_cell_ids: vec![id("cell-1")?, id("cell-2")?, id("cell-3")?],
+            content_policy: ContentPreservationPolicy::Distribute,
+            split_line_sha256,
+        },
+    )?;
+    assert_eq!(plan.target_grid().master_cell_count(), 4);
+    assert!(
+        plan.target_state()
+            .cells()
+            .iter()
+            .all(|cell| cell.payload().len() == 1)
+    );
+
+    let output = TableMergeSplitHwpxLowerer::lower_existing(
+        &header,
+        &section,
+        0,
+        &source_binding,
+        &part_binding,
+        &digest('f'),
+        &request,
+        &plan,
+        limits,
+    )?;
+    assert_eq!(output.receipt.source_payload_block_count, 4);
+    assert_eq!(output.receipt.target_payload_block_count, 4);
+    assert_eq!(output.receipt.discarded_content_block_count, 0);
+    assert_eq!(output.receipt.preserved_formula_count, 0);
+    assert_eq!(output.binding.cells.len(), 4);
+    let reopened = TableMergeSplitHwpxReader::read_existing(
+        &output.header,
+        &output.section,
+        0,
+        &output.binding,
+        limits,
+    )?;
+    assert_eq!(reopened.ruling.grid, *plan.target_grid());
+    assert_eq!(reopened.ruling.state, *plan.target_state());
+    let xml = String::from_utf8(output.section)?;
+    assert_eq!(xml.matches("<hp:tc ").count(), 4);
+    for value in ["A", "B", "C", "D"] {
+        assert_eq!(xml.matches(&format!(">{value}<")).count(), 1);
+    }
+    let debug = format!("{:?}", output.receipt);
+    assert!(!debug.contains(&digest('f')));
+    assert!(!debug.contains("secret-table"));
+    Ok(())
+}
+
+#[test]
+fn merge_split_hwpx_merge_supports_every_content_policy() -> TestResult {
+    let header = header()?;
+    let section = ordinary_section();
+    let source_binding = binding(&[1, 1, 1, 1])?;
+    let limits = TableMergeSplitHwpxLimits::default();
+    let source =
+        TableMergeSplitHwpxReader::read_existing(&header, &section, 0, &source_binding, limits)?;
+    let selected_slots = vec![
+        CellCoordinate { row: 0, column: 0 },
+        CellCoordinate { row: 0, column: 1 },
+        CellCoordinate { row: 1, column: 0 },
+        CellCoordinate { row: 1, column: 1 },
+    ];
+
+    for policy in [
+        ContentPreservationPolicy::Concatenate,
+        ContentPreservationPolicy::Distribute,
+        ContentPreservationPolicy::First,
+    ] {
+        let (request, plan, part_binding) = build_merge_split_plan(
+            &source,
+            TableMergeSplitHwpxOperation::Merge {
+                selected_slots: selected_slots.clone(),
+                content_policy: policy,
+            },
+        )?;
+        let output = TableMergeSplitHwpxLowerer::lower_existing(
+            &header,
+            &section,
+            0,
+            &source_binding,
+            &part_binding,
+            &digest('f'),
+            &request,
+            &plan,
+            limits,
+        )?;
+        assert_eq!(plan.target_grid().master_cell_count(), 1);
+        let expected_payloads = if policy == ContentPreservationPolicy::First {
+            1
+        } else {
+            4
+        };
+        assert_eq!(output.receipt.target_payload_block_count, expected_payloads);
+        assert_eq!(
+            output.binding.cells[0].payload_block_ids.len(),
+            expected_payloads
+        );
+        assert_eq!(
+            output.receipt.discarded_content_block_count,
+            if policy == ContentPreservationPolicy::First {
+                3
+            } else {
+                0
+            }
+        );
+        let xml = String::from_utf8(output.section)?;
+        assert_eq!(xml.matches("<hp:tc ").count(), 1);
+        assert!(xml.contains(">A<"));
+        if policy == ContentPreservationPolicy::First {
+            for value in ["B", "C", "D"] {
+                assert!(!xml.contains(&format!(">{value}<")));
+            }
+        } else {
+            let mut positions = Vec::new();
+            for value in ["A", "B", "C", "D"] {
+                positions.push(
+                    xml.find(&format!(">{value}<"))
+                        .ok_or("preserved payload missing")?,
+                );
+            }
+            assert!(positions.windows(2).all(|pair| pair[0] < pair[1]));
+        }
+    }
+
+    let error = TableMergeSplitHwpxRequest::from_draft(
+        merge_split_request_draft(
+            &source,
+            TableMergeSplitHwpxOperation::Merge {
+                selected_slots,
+                content_policy: ContentPreservationPolicy::RejectIfMultiple,
+            },
+        )?,
+        &source,
+        &digest('f'),
+        limits,
+    );
+    assert!(matches!(
+        error,
+        Err(TableMergeSplitHwpxError::Domain(
+            domain_ir::TableMergeSplitError::MultipleNonemptyCells
+        ))
+    ));
+    Ok(())
+}
+
+#[test]
+fn merge_split_hwpx_drift_and_json_tamper_fail_closed() -> TestResult {
+    let header = header()?;
+    let section = ordinary_section();
+    let source_binding = binding(&[1, 1, 1, 1])?;
+    let limits = TableMergeSplitHwpxLimits::default();
+    let source =
+        TableMergeSplitHwpxReader::read_existing(&header, &section, 0, &source_binding, limits)?;
+    let selected_top = vec![
+        CellCoordinate { row: 0, column: 0 },
+        CellCoordinate { row: 0, column: 1 },
+    ];
+    let operation = TableMergeSplitHwpxOperation::Merge {
+        selected_slots: selected_top.clone(),
+        content_policy: ContentPreservationPolicy::Concatenate,
+    };
+    let (request, plan, part_binding) = build_merge_split_plan(&source, operation.clone())?;
+    assert_merge_request_canonicalization(&source, &selected_top, &request, &limits)?;
+
+    let mut state_drift = merge_split_request_draft(&source, operation.clone())?;
+    state_drift.expected_state_sha256 = digest('a');
+    assert!(matches!(
+        TableMergeSplitHwpxRequest::from_draft(state_drift, &source, &digest('f'), limits),
+        Err(TableMergeSplitHwpxError::SourceStateMismatch)
+    ));
+    assert!(matches!(
+        TableMergeSplitHwpxBuilder::build(&request, &source, &digest('e'), limits),
+        Err(TableMergeSplitHwpxError::FlowBindingMismatch)
+    ));
+    let mut drifted_header = header.clone();
+    drifted_header.push(b' ');
+    assert!(matches!(
+        TableMergeSplitHwpxLowerer::lower_existing(
+            &drifted_header,
+            &section,
+            0,
+            &source_binding,
+            &part_binding,
+            &digest('f'),
+            &request,
+            &plan,
+            limits,
+        ),
+        Err(TableMergeSplitHwpxError::PartBindingMismatch)
+    ));
+    let mut binding_drift = part_binding.clone();
+    binding_drift.source_content_sha256 = digest('b');
+    assert!(matches!(
+        TableMergeSplitHwpxLowerer::lower_existing(
+            &header,
+            &section,
+            0,
+            &source_binding,
+            &binding_drift,
+            &digest('f'),
+            &request,
+            &plan,
+            limits,
+        ),
+        Err(TableMergeSplitHwpxError::PartBindingMismatch)
+    ));
+    let (alternate_request, alternate_plan, _) = build_merge_split_plan(
+        &source,
+        TableMergeSplitHwpxOperation::Merge {
+            selected_slots: selected_top.clone(),
+            content_policy: ContentPreservationPolicy::First,
+        },
+    )?;
+    assert!(matches!(
+        TableMergeSplitHwpxLowerer::lower_existing(
+            &header,
+            &section,
+            0,
+            &source_binding,
+            &part_binding,
+            &digest('f'),
+            &alternate_request,
+            &alternate_plan,
+            limits,
+        ),
+        Err(TableMergeSplitHwpxError::PartBindingMismatch)
+    ));
+    assert!(matches!(
+        TableMergeSplitHwpxRequest::from_json(b"", &source, &digest('f'), limits),
+        Err(TableMergeSplitHwpxError::InputLimit)
+    ));
+    let unknown_json =
+        String::from_utf8(request.canonical_json(limits)?)?.replacen('{', r#"{"unknown":0,"#, 1);
+    assert!(matches!(
+        TableMergeSplitHwpxRequest::from_json(
+            unknown_json.as_bytes(),
+            &source,
+            &digest('f'),
+            limits
+        ),
+        Err(TableMergeSplitHwpxError::InvalidJson)
+    ));
+
+    let debug = format!("{request:?}{part_binding:?}{operation:?}");
+    assert!(!debug.contains("secret-table"));
+    assert!(!debug.contains(&digest('f')));
+    Ok(())
+}
+
+#[test]
+fn merge_split_hwpx_property_and_diagonal_selection_fail_closed() -> TestResult {
+    let header = header()?;
+    let section = ordinary_section();
+    let source_binding = binding(&[1, 1, 1, 1])?;
+    let limits = TableMergeSplitHwpxLimits::default();
+    let operation = TableMergeSplitHwpxOperation::Merge {
+        selected_slots: vec![
+            CellCoordinate { row: 0, column: 0 },
+            CellCoordinate { row: 0, column: 1 },
+        ],
+        content_policy: ContentPreservationPolicy::Concatenate,
+    };
+
+    let property_section = String::from_utf8(section.clone())?
+        .replacen(
+            r#"name="" header="0" hasMargin="0" protect="0""#,
+            r#"name="" header="0" hasMargin="0" protect="1""#,
+            1,
+        )
+        .into_bytes();
+    let property_source = TableMergeSplitHwpxReader::read_existing(
+        &header,
+        &property_section,
+        0,
+        &source_binding,
+        limits,
+    )?;
+    assert!(matches!(
+        TableMergeSplitHwpxRequest::from_draft(
+            merge_split_request_draft(&property_source, operation.clone())?,
+            &property_source,
+            &digest('f'),
+            limits,
+        ),
+        Err(TableMergeSplitHwpxError::UnsupportedSelectedProperties)
+    ));
+
+    let diagonal_section = String::from_utf8(section.clone())?
+        .replacen("borderFillIDRef=\"3\"", "borderFillIDRef=\"4\"", 1)
+        .into_bytes();
+    let diagonal_source = TableMergeSplitHwpxReader::read_existing(
+        &header,
+        &diagonal_section,
+        0,
+        &source_binding,
+        limits,
+    )?;
+    assert!(matches!(
+        TableMergeSplitHwpxRequest::from_draft(
+            merge_split_request_draft(&diagonal_source, operation.clone())?,
+            &diagonal_source,
+            &digest('f'),
+            limits,
+        ),
+        Err(TableMergeSplitHwpxError::UnsupportedSelectedDiagonal)
+    ));
+    Ok(())
+}
+
+#[test]
+fn merge_split_hwpx_formula_and_split_line_selection_fail_closed() -> TestResult {
+    let header = header()?;
+    let limits = TableMergeSplitHwpxLimits::default();
+    assert_eq!(
+        TableMergeSplitHwpxError::UnsupportedSelectedFormula.code(),
+        "table_merge_split_hwpx_unsupported_selected_formula"
+    );
+
+    let formula_section = formula_section();
+    let formula_binding = binding(&[1, 1, 1, 0])?;
+    let formula_source = TableMergeSplitHwpxReader::read_existing(
+        &header,
+        &formula_section,
+        0,
+        &formula_binding,
+        limits,
+    )?;
+    let formula_operation = TableMergeSplitHwpxOperation::Merge {
+        selected_slots: vec![
+            CellCoordinate { row: 1, column: 0 },
+            CellCoordinate { row: 1, column: 1 },
+        ],
+        content_policy: ContentPreservationPolicy::Concatenate,
+    };
+    assert!(matches!(
+        TableMergeSplitHwpxRequest::from_draft(
+            merge_split_request_draft(&formula_source, formula_operation)?,
+            &formula_source,
+            &digest('f'),
+            limits,
+        ),
+        Err(TableMergeSplitHwpxError::UnsupportedSelectedFormula)
+    ));
+
+    let split_section = merged_four_payload_section();
+    let split_binding = binding(&[4])?;
+    let split_source = TableMergeSplitHwpxReader::read_existing(
+        &header,
+        &split_section,
+        0,
+        &split_binding,
+        limits,
+    )?;
+    assert!(matches!(
+        TableMergeSplitHwpxRequest::from_draft(
+            merge_split_request_draft(
+                &split_source,
+                TableMergeSplitHwpxOperation::Split {
+                    master_cell_id: id("cell-0")?,
+                    rows: 2,
+                    columns: 2,
+                    new_master_cell_ids: vec![id("cell-1")?, id("cell-2")?, id("cell-3")?],
+                    content_policy: ContentPreservationPolicy::Concatenate,
+                    split_line_sha256: digest('a'),
+                },
+            )?,
+            &split_source,
+            &digest('f'),
+            limits,
+        ),
+        Err(TableMergeSplitHwpxError::UnsupportedSplitLine)
+    ));
+    Ok(())
+}
+
+#[test]
+fn merge_split_hwpx_closed_package_preserves_unselected_formula_and_table() -> TestResult {
+    let header = header()?;
+    let first_table = table_fragment(formula_section())?;
+    let second_table = table_fragment(ordinary_section())?.replacen("id=\"700\"", "id=\"701\"", 1);
+    let section = format!(
+        r#"<hs:sec xmlns:hs="{SECTION_NS}" xmlns:hp="{PARAGRAPH_NS}">{first_table}{second_table}</hs:sec>"#
+    )
+    .into_bytes();
+    let source_package = package(&header, &section)?;
+    let immutable_source = source_package.clone();
+    let (source_graph, reopened_header, reopened_section) = inspect_package(&source_package)?;
+    let source_hashes = part_hashes(&source_graph);
+    let source_formula = TableFormulaHwpxReader::read_in_section(
+        &reopened_section,
+        0,
+        TableFormulaHwpxLimits::default(),
+        FormulaLimits::default(),
+    )?;
+    let source_pagination = TablePaginationHwpxReader::read_in_section(
+        &reopened_section,
+        0,
+        TablePaginationHwpxLimits::default(),
+    )?;
+    let source_binding = binding(&[1, 1, 1, 0])?;
+    let limits = TableMergeSplitHwpxLimits::default();
+    let source = TableMergeSplitHwpxReader::read_existing(
+        &reopened_header,
+        &reopened_section,
+        0,
+        &source_binding,
+        limits,
+    )?;
+    let (request, plan, part_binding) = build_merge_split_plan(
+        &source,
+        TableMergeSplitHwpxOperation::Merge {
+            selected_slots: vec![
+                CellCoordinate { row: 0, column: 0 },
+                CellCoordinate { row: 0, column: 1 },
+            ],
+            content_policy: ContentPreservationPolicy::Concatenate,
+        },
+    )?;
+    let lowered = TableMergeSplitHwpxLowerer::lower_existing(
+        &reopened_header,
+        &reopened_section,
+        0,
+        &source_binding,
+        &part_binding,
+        &digest('f'),
+        &request,
+        &plan,
+        limits,
+    )?;
+    assert_eq!(lowered.receipt.preserved_formula_count, 1);
+    assert_eq!(lowered.receipt.source_payload_block_count, 3);
+    assert_eq!(lowered.receipt.target_payload_block_count, 3);
+    assert!(String::from_utf8(lowered.section.clone())?.contains(&second_table));
+
+    let target_package =
+        replace_header_and_section(&source_package, &lowered.header, &lowered.section)?;
+    assert_eq!(
+        target_package,
+        replace_header_and_section(&source_package, &lowered.header, &lowered.section)?
+    );
+    assert_eq!(source_package, immutable_source);
+    let (target_graph, target_header, target_section) = inspect_package(&target_package)?;
+    assert_section_only_package_change(&source_graph, source_hashes, &target_graph)?;
+    let target_readback = TableMergeSplitHwpxReader::read_existing(
+        &target_header,
+        &target_section,
+        0,
+        &lowered.binding,
+        limits,
+    )?;
+    assert_eq!(target_readback.ruling.state, *plan.target_state());
+    assert_eq!(target_readback.ruling.grid, *plan.target_grid());
+    let target_formula = target_readback
+        .ruling
+        .state
+        .cells()
+        .iter()
+        .find_map(|cell| cell.formula())
+        .ok_or("preserved formula missing")?;
+    let target_pagination = TablePaginationHwpxReader::read_in_section(
+        &target_section,
+        0,
+        TablePaginationHwpxLimits::default(),
+    )?;
+    assert_eq!(&source_formula.formula, target_formula);
+    assert_eq!(source_formula.formula_field_count, 1);
     assert_eq!(source_pagination, target_pagination);
     Ok(())
 }

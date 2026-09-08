@@ -155,7 +155,13 @@ pub use table_placement::{
     TablePlacementHwpxReader,
 };
 pub use table_ruling_hwpx::{
+    TABLE_MERGE_SPLIT_HWPX_PROFILE_ID, TABLE_MERGE_SPLIT_HWPX_SCHEMA_VERSION,
     TABLE_PROPERTIES_HWPX_PROFILE_ID, TABLE_RULING_HWPX_PROFILE_ID, TABLE_STYLE_HWPX_PROFILE_ID,
+    TableMergeSplitHwpxBuilder, TableMergeSplitHwpxError, TableMergeSplitHwpxLimits,
+    TableMergeSplitHwpxLoweredParts, TableMergeSplitHwpxLowerer,
+    TableMergeSplitHwpxLoweringReceipt, TableMergeSplitHwpxOperation,
+    TableMergeSplitHwpxPartBinding, TableMergeSplitHwpxPlan, TableMergeSplitHwpxReadback,
+    TableMergeSplitHwpxReader, TableMergeSplitHwpxRequest, TableMergeSplitHwpxRequestDraft,
     TablePropertiesHwpxBinding, TablePropertiesHwpxCellValue, TablePropertiesHwpxDiagonalBinding,
     TablePropertiesHwpxError, TablePropertiesHwpxLimits, TablePropertiesHwpxLoweredParts,
     TablePropertiesHwpxLowerer, TablePropertiesHwpxLoweringReceipt, TablePropertiesHwpxPartBinding,

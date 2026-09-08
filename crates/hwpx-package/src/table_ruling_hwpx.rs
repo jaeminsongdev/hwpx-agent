@@ -19,9 +19,18 @@ use crate::{
     TableLayoutHwpxError, TableLayoutHwpxLimits, TableLayoutHwpxReader,
 };
 
+mod merge_split_hwpx;
 mod properties_hwpx;
 mod style_hwpx;
 
+pub use merge_split_hwpx::{
+    TABLE_MERGE_SPLIT_HWPX_PROFILE_ID, TABLE_MERGE_SPLIT_HWPX_SCHEMA_VERSION,
+    TableMergeSplitHwpxBuilder, TableMergeSplitHwpxError, TableMergeSplitHwpxLimits,
+    TableMergeSplitHwpxLoweredParts, TableMergeSplitHwpxLowerer,
+    TableMergeSplitHwpxLoweringReceipt, TableMergeSplitHwpxOperation,
+    TableMergeSplitHwpxPartBinding, TableMergeSplitHwpxPlan, TableMergeSplitHwpxReadback,
+    TableMergeSplitHwpxReader, TableMergeSplitHwpxRequest, TableMergeSplitHwpxRequestDraft,
+};
 pub use properties_hwpx::{
     TABLE_PROPERTIES_HWPX_PROFILE_ID, TablePropertiesHwpxBinding, TablePropertiesHwpxCellValue,
     TablePropertiesHwpxDiagonalBinding, TablePropertiesHwpxError, TablePropertiesHwpxLimits,
@@ -656,7 +665,7 @@ fn validate_outer_template(
     Ok(())
 }
 
-fn binding_from_state(
+pub(super) fn binding_from_state(
     state: &TableRulingState,
     grid: &TableGrid,
 ) -> Result<TableRulingHwpxBinding, TableRulingHwpxError> {
@@ -750,10 +759,10 @@ struct StyleResolver {
 }
 
 #[derive(Debug)]
-struct RenderedParts {
-    header: Vec<u8>,
-    section: Vec<u8>,
-    added_border_fill_count: usize,
+pub(super) struct RenderedParts {
+    pub(super) header: Vec<u8>,
+    pub(super) section: Vec<u8>,
+    pub(super) added_border_fill_count: usize,
 }
 
 #[derive(Debug)]
@@ -764,7 +773,7 @@ struct RawEdit {
 }
 
 #[allow(clippy::too_many_arguments)]
-fn render_existing(
+pub(super) fn render_existing(
     header: &[u8],
     section: &[u8],
     table_ordinal: usize,
@@ -780,16 +789,7 @@ fn render_existing(
     {
         return Err(TableRulingHwpxError::PlanBindingMismatch);
     }
-    if topology_changed
-        && (source_state
-            .cells()
-            .iter()
-            .any(|cell| cell.formula().is_some())
-            || target_state
-                .cells()
-                .iter()
-                .any(|cell| cell.formula().is_some()))
-    {
+    if topology_changed && !topology_formulas_are_exactly_preserved(source_state, target_state) {
         return Err(TableRulingHwpxError::UnsupportedFormulaMutation);
     }
     let catalog = ParagraphStyleCatalogReader::read(header, limits.paragraph_style)?;
@@ -836,6 +836,23 @@ fn render_existing(
         header,
         section,
         added_border_fill_count: new_borders.len(),
+    })
+}
+
+fn topology_formulas_are_exactly_preserved(
+    source: &TableRulingState,
+    target: &TableRulingState,
+) -> bool {
+    source.cells().iter().all(|source_cell| {
+        source_cell.formula().is_none()
+            || target
+                .cell(source_cell.master_cell_id())
+                .is_some_and(|target_cell| target_cell.formula() == source_cell.formula())
+    }) && target.cells().iter().all(|target_cell| {
+        target_cell.formula().is_none()
+            || source
+                .cell(target_cell.master_cell_id())
+                .is_some_and(|source_cell| source_cell.formula() == target_cell.formula())
     })
 }
 
@@ -1143,15 +1160,15 @@ fn target_content(
     topology_changed: bool,
     output_limit: usize,
 ) -> Result<Vec<u8>, TableRulingHwpxError> {
-    if !topology_changed {
-        let source_cell = source_cell.ok_or(TableRulingHwpxError::SourceStateMismatch)?;
-        if source_cell.payload() != target_cell.payload()
-            || source_cell.formula() != target_cell.formula()
-            || template.master_cell_id != *target_cell.master_cell_id()
-        {
-            return Err(TableRulingHwpxError::PlanBindingMismatch);
-        }
+    if source_cell.is_some_and(|source_cell| {
+        source_cell.payload() == target_cell.payload()
+            && source_cell.formula() == target_cell.formula()
+            && template.master_cell_id == *target_cell.master_cell_id()
+    }) {
         return Ok(template.content.clone());
+    }
+    if !topology_changed {
+        return Err(TableRulingHwpxError::PlanBindingMismatch);
     }
     if target_cell.formula().is_some() {
         return Err(TableRulingHwpxError::UnsupportedFormulaMutation);
@@ -1721,7 +1738,7 @@ fn read_existing(
     let formula = match formula_count {
         0 => None,
         1 => Some(
-            TableFormulaHwpxReader::read_in_section(
+            TableFormulaHwpxReader::read_in_section_preserving_merged_topology(
                 section,
                 table_ordinal,
                 limits.formula_hwpx,
