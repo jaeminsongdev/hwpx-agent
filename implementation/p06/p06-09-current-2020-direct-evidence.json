@@ -138,7 +138,27 @@
       ]
     },
     {
-      "feature_ids": ["TABLE-020", "TABLE-021"],
+      "feature_ids": ["TABLE-020"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-09_TABLE_STYLE_TRANSPOSE_REPORT.md",
+          "sha256": "036bdafd0420a1030ad0499bba50a18133978e2aeae91c49eeab4ac6f7a91879"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_STYLE_HWPX_REPORT.md",
+          "sha256": "8840b9079d29e29ae3b90e9ca775a26b1c245f76004ac8745addaf0173a79260"
+        }
+      ]
+    },
+    {
+      "feature_ids": ["TABLE-021"],
       "backend": "component_only",
       "stage": "unit_passed",
       "validations_passed": ["schema"],

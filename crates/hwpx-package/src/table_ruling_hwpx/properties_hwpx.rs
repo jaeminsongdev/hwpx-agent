@@ -445,7 +445,7 @@ impl TablePropertiesHwpxLowerer {
             &source,
             &target_state,
             &target_binding,
-            plan,
+            plan.mutations(),
             values,
             &limits,
         )?;
@@ -484,7 +484,7 @@ impl TablePropertiesHwpxLowerer {
     }
 }
 
-fn read_existing(
+pub(super) fn read_existing(
     header: &[u8],
     section: &[u8],
     table_ordinal: usize,
@@ -758,14 +758,14 @@ fn validate_plan(
 }
 
 #[derive(Debug)]
-struct PropertiesRenderedParts {
-    header: Vec<u8>,
-    section: Vec<u8>,
-    added_border_fill_count: usize,
+pub(super) struct PropertiesRenderedParts {
+    pub(super) header: Vec<u8>,
+    pub(super) section: Vec<u8>,
+    pub(super) added_border_fill_count: usize,
 }
 
 #[allow(clippy::too_many_arguments)]
-fn render(
+pub(super) fn render(
     header: &[u8],
     section: &[u8],
     table_ordinal: usize,
@@ -773,7 +773,7 @@ fn render(
     source: &TablePropertiesHwpxReadback,
     target_state: &TablePropertiesState,
     target_binding: &TablePropertiesHwpxBinding,
-    plan: &TablePropertiesPlan,
+    mutations: &[domain_ir::TableCellPropertyMutation],
     values: &TablePropertiesHwpxValueCatalog,
     limits: &TablePropertiesHwpxLimits,
 ) -> Result<PropertiesRenderedParts, TablePropertiesHwpxError> {
@@ -803,12 +803,11 @@ fn render(
         .ok_or(TablePropertiesHwpxError::MissingCatalogValue)?;
     let table_border_id = resolver.intern(table_border)?;
     let target_diagonals = diagonal_binding_map(&target_binding.diagonals)?;
-    let mutation_map = plan
-        .mutations()
+    let mutation_map = mutations
         .iter()
         .map(|value| (value.master_cell_id.clone(), value))
         .collect::<BTreeMap<_, _>>();
-    if mutation_map.len() != plan.mutations().len() {
+    if mutation_map.len() != mutations.len() {
         return Err(TablePropertiesHwpxError::PlanBindingMismatch);
     }
     let mut edits = Vec::new();
@@ -816,7 +815,7 @@ fn render(
         .try_reserve_exact(
             4_usize
                 .checked_add(
-                    plan.mutations()
+                    mutations
                         .len()
                         .checked_mul(16)
                         .ok_or(TablePropertiesHwpxError::AllocationFailed)?,
@@ -1008,16 +1007,16 @@ fn resolve_table_value<'a>(
     }
 }
 
-struct ValueMaps {
-    table_values: BTreeMap<String, TablePropertiesHwpxTableValue>,
-    cell_values: BTreeMap<String, TablePropertiesHwpxCellValue>,
-    lines: BTreeMap<String, BorderLine>,
-    backgrounds: BTreeMap<String, FillBrush>,
+pub(super) struct ValueMaps {
+    pub(super) table_values: BTreeMap<String, TablePropertiesHwpxTableValue>,
+    pub(super) cell_values: BTreeMap<String, TablePropertiesHwpxCellValue>,
+    pub(super) lines: BTreeMap<String, BorderLine>,
+    pub(super) backgrounds: BTreeMap<String, FillBrush>,
     border_fills: BTreeMap<String, BorderFill>,
 }
 
 impl ValueMaps {
-    fn new(
+    pub(super) fn new(
         catalog: &crate::ParagraphStyleCatalog,
         values: &TablePropertiesHwpxValueCatalog,
         resolver: &mut StyleResolver,
@@ -1096,7 +1095,7 @@ fn insert_line(
     Ok(())
 }
 
-fn validate_catalog_bounds(
+pub(super) fn validate_catalog_bounds(
     values: &TablePropertiesHwpxValueCatalog,
     limits: &TablePropertiesHwpxLimits,
 ) -> Result<(), TablePropertiesHwpxError> {

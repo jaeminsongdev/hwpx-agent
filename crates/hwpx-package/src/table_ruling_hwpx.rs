@@ -20,6 +20,7 @@ use crate::{
 };
 
 mod properties_hwpx;
+mod style_hwpx;
 
 pub use properties_hwpx::{
     TABLE_PROPERTIES_HWPX_PROFILE_ID, TablePropertiesHwpxBinding, TablePropertiesHwpxCellValue,
@@ -28,6 +29,12 @@ pub use properties_hwpx::{
     TablePropertiesHwpxLoweringReceipt, TablePropertiesHwpxPartBinding,
     TablePropertiesHwpxReadback, TablePropertiesHwpxReader, TablePropertiesHwpxTableValue,
     TablePropertiesHwpxValueCatalog,
+};
+pub use style_hwpx::{
+    TABLE_STYLE_HWPX_PROFILE_ID, TableStyleHwpxCellValue, TableStyleHwpxError,
+    TableStyleHwpxLimits, TableStyleHwpxLoweredParts, TableStyleHwpxLowerer,
+    TableStyleHwpxLoweringReceipt, TableStyleHwpxPartBinding, TableStyleHwpxReadback,
+    TableStyleHwpxReader, TableStyleHwpxValueCatalog,
 };
 
 pub const TABLE_RULING_HWPX_PROFILE_ID: &str = "hwpx-agent.table-ruling-hwpx.hancom-2020/1";

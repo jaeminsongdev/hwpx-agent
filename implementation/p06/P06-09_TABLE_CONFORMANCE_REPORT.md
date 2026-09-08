@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 15 |
-| direct `integration_passed` | 16 |
-| direct `unit_passed` | 30 |
+| direct `integration_passed` | 17 |
+| direct `unit_passed` | 29 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -74,9 +74,15 @@ The machine-readable authority is
   exact-region scalar mutation plan for TABLE-057/058. Traversal, start index, existing formula
   replacement and style preservation are digest-bound; rich-content/formula generation, native
   series-index mapping and HWPX execution remain unclaimed.
-- The table-style and transpose components add fixed-precedence, merged-cell-aware style resolution
-  for TABLE-020 and complete grid/span/formula-axis transposition for TABLE-021. Payload/style or
-  formula state outside each operation is digest-bound, but neither component is an HWPX adapter.
+- The table-style component and preserving HWPX adapter cover TABLE-020. Fixed-precedence,
+  merged-cell-aware regions resolve to a complete typed visual identity spanning non-border cell
+  properties, four borders, backgrounds and visible diagonals. The lowerer binds exact source,
+  grid, flow, definition, request and plan state, preserves truthful unified diagonal provenance and
+  normalizes a broken group to exact each-cell intent. Closed-package reopen preserves payload,
+  formula/cache, pagination and unrelated parts; no licensed Hangul or renderer result is inferred.
+- The transpose component keeps TABLE-021 at pure-unit scope with complete grid/span/formula-axis
+  transposition. Payload/style or formula state outside the operation is digest-bound, but it is not
+  an HWPX adapter.
 - The table-properties model and preserving HWPX adapter cover TABLE-007/008/009/047. The strict
   reader binds complete grid/state, typed table and cell semantics, four independent border sides,
   backgrounds, payload/formula identities and explicit each-cell or unified diagonal intent.
@@ -126,7 +132,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-158 missing validation instances, 61 unverified automation runtime rows and 61 missing
+155 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -134,8 +140,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the 30 unit-only rows through preserving HWPX adapters;
-2. close the sixteen integration-only target oracles;
+1. lower the 29 unit-only rows through preserving HWPX adapters;
+2. close the seventeen integration-only target oracles;
 3. supply remaining feature-specific validations, including formula readback where required;
 4. qualify exact current-target automation bindings and run safe disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.

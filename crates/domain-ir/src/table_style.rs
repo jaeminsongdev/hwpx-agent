@@ -518,6 +518,26 @@ impl TableStyleRequest {
     }
 
     #[must_use]
+    pub fn grid_sha256(&self) -> &str {
+        &self.grid_sha256
+    }
+
+    #[must_use]
+    pub const fn style_id(&self) -> &LogicalId {
+        &self.style_id
+    }
+
+    #[must_use]
+    pub fn style_definition_sha256(&self) -> &str {
+        &self.style_definition_sha256
+    }
+
+    #[must_use]
+    pub fn current_table_properties_sha256(&self) -> &str {
+        &self.current_table_properties_sha256
+    }
+
+    #[must_use]
     pub fn cells(&self) -> &[TableStyleCellDraft] {
         &self.cells
     }
