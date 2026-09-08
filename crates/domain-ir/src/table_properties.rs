@@ -10,6 +10,7 @@ pub const TABLE_PROPERTIES_SCHEMA_VERSION: &str = "hwpx-agent.table-properties/v
 pub const TABLE_PROPERTIES_CAPABILITY_ID: &str = "table.properties";
 pub const TABLE_CELL_BORDER_EACH_CAPABILITY_ID: &str = "table.cell_border_each";
 pub const TABLE_CELL_BORDER_UNIFIED_CAPABILITY_ID: &str = "table.cell_border_unified";
+pub const TABLE_CELL_DIAGONAL_CAPABILITY_ID: &str = "table.cell_diagonal";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct TablePropertiesLimitConfig {
@@ -205,6 +206,82 @@ impl fmt::Debug for TableUnifiedBorderPatch {
             .field("inner_horizontal", &self.inner_horizontal)
             .field("inner_vertical", &self.inner_vertical)
             .finish()
+    }
+}
+
+/// Whether a diagonal is repeated in each selected cell or spans one rectangular selection.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum TableDiagonalApplyMode {
+    EachCell,
+    Unified,
+}
+
+/// OWPML slash topology. `None` disables the corresponding slash direction.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum TableDiagonalSlashType {
+    None,
+    Center,
+    CenterBelow,
+    CenterAbove,
+    All,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct TableDiagonalSlash {
+    pub slash_type: TableDiagonalSlashType,
+    pub crooked: bool,
+    pub is_counter: bool,
+}
+
+/// Optional horizontal/vertical center lines from the same OWPML border-fill facet.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum TableDiagonalCenterLine {
+    None,
+    Horizontal,
+    Vertical,
+    Cross,
+}
+
+/// Complete semantic value for one diagonal operation.
+#[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct TableDiagonalValue {
+    pub slash: TableDiagonalSlash,
+    pub back_slash: TableDiagonalSlash,
+    pub center_line: TableDiagonalCenterLine,
+    /// Identity of the validated line type, width, and color tuple.
+    pub line_sha256: String,
+}
+
+impl fmt::Debug for TableDiagonalValue {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("TableDiagonalValue")
+            .field("slash", &self.slash)
+            .field("back_slash", &self.back_slash)
+            .field("center_line", &self.center_line)
+            .field("line_sha256", &"<redacted>")
+            .finish()
+    }
+}
+
+#[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum TableDiagonalPatch {
+    Clear,
+    Set { value: TableDiagonalValue },
+}
+
+impl fmt::Debug for TableDiagonalPatch {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Clear => formatter.write_str("Clear"),
+            Self::Set { value } => formatter.debug_tuple("Set").field(value).finish(),
+        }
     }
 }
 
@@ -449,6 +526,10 @@ pub enum TablePropertiesOperation {
         border: TableUnifiedBorderPatch,
         background: TablePropertyDigestPatch,
     },
+    CellDiagonal {
+        apply_mode: TableDiagonalApplyMode,
+        patch: TableDiagonalPatch,
+    },
 }
 
 impl TablePropertiesOperation {
@@ -458,6 +539,7 @@ impl TablePropertiesOperation {
             Self::SetProperties { .. } => TABLE_PROPERTIES_CAPABILITY_ID,
             Self::BorderEach { .. } => TABLE_CELL_BORDER_EACH_CAPABILITY_ID,
             Self::BorderUnified { .. } => TABLE_CELL_BORDER_UNIFIED_CAPABILITY_ID,
+            Self::CellDiagonal { .. } => TABLE_CELL_DIAGONAL_CAPABILITY_ID,
         }
     }
 }
@@ -488,6 +570,11 @@ impl fmt::Debug for TablePropertiesOperation {
                 .debug_struct("BorderUnified")
                 .field("border", border)
                 .field("background", background)
+                .finish(),
+            Self::CellDiagonal { apply_mode, patch } => formatter
+                .debug_struct("CellDiagonal")
+                .field("apply_mode", apply_mode)
+                .field("patch", patch)
                 .finish(),
         }
     }
@@ -609,7 +696,7 @@ impl TablePropertiesRequest {
             validate_selection(
                 &mut selected_slots,
                 grid,
-                matches!(operation, TablePropertiesOperation::BorderUnified { .. }),
+                operation_requires_rectangle(&operation),
                 limits,
             )?
         };
@@ -753,6 +840,7 @@ pub struct TableCellPropertyMutation {
     pub payload_sha256: String,
     pub formula_sha256: Option<String>,
     pub border_roles: Option<TableResolvedBorderRoles>,
+    pub diagonal_apply_mode: Option<TableDiagonalApplyMode>,
 }
 
 impl fmt::Debug for TableCellPropertyMutation {
@@ -769,6 +857,7 @@ impl fmt::Debug for TableCellPropertyMutation {
                 &self.formula_sha256.as_ref().map(|_| "<redacted>"),
             )
             .field("border_roles", &self.border_roles)
+            .field("diagonal_apply_mode", &self.diagonal_apply_mode)
             .finish()
     }
 }
@@ -795,6 +884,8 @@ pub struct TablePropertiesReceipt {
     pub cell_properties_change_count: usize,
     pub border_side_change_count: usize,
     pub background_change_count: usize,
+    pub diagonal_change_count: usize,
+    pub diagonal_assignment_count: usize,
     pub per_cell_edge_assignment_count: usize,
     pub outer_edge_assignment_count: usize,
     pub inner_edge_assignment_count: usize,
@@ -842,6 +933,8 @@ impl fmt::Debug for TablePropertiesReceipt {
             )
             .field("border_side_change_count", &self.border_side_change_count)
             .field("background_change_count", &self.background_change_count)
+            .field("diagonal_change_count", &self.diagonal_change_count)
+            .field("diagonal_assignment_count", &self.diagonal_assignment_count)
             .field(
                 "per_cell_edge_assignment_count",
                 &self.per_cell_edge_assignment_count,
@@ -963,7 +1056,7 @@ impl TablePropertiesBuilder {
             return Err(TablePropertiesError::BindingDrift);
         }
 
-        let (after_cells, mutations, counts) = build_after_cells(request, state, grid)?;
+        let (after_cells, mutations, counts) = build_after_cells(request, state, grid, limits)?;
 
         let after_table_properties_sha256 = match &request.operation {
             TablePropertiesOperation::SetProperties {
@@ -1013,12 +1106,18 @@ impl TablePropertiesBuilder {
             cell_properties_change_count: counts.cell_properties,
             border_side_change_count: counts.border_sides,
             background_change_count: counts.backgrounds,
+            diagonal_change_count: counts.diagonals,
+            diagonal_assignment_count: counts.diagonal_assignments,
             per_cell_edge_assignment_count: counts.per_cell_assignments,
             outer_edge_assignment_count: counts.outer_assignments,
             inner_edge_assignment_count: counts.inner_assignments,
             payload_preserved_count: state.cells.len(),
             formula_preserved_count,
-            diagonal_preserved_count: state.cells.len(),
+            diagonal_preserved_count: state
+                .cells
+                .len()
+                .checked_sub(counts.diagonals)
+                .ok_or(TablePropertiesError::MasterCellLimit)?,
         };
         let plan = TablePropertiesPlan {
             schema_version: TABLE_PROPERTIES_SCHEMA_VERSION,
@@ -1041,15 +1140,58 @@ struct MutationCounts {
     cell_properties: usize,
     border_sides: usize,
     backgrounds: usize,
+    diagonals: usize,
+    diagonal_assignments: usize,
     per_cell_assignments: usize,
     outer_assignments: usize,
     inner_assignments: usize,
+}
+
+enum DiagonalResolution {
+    NotTargeted,
+    Clear,
+    Set(String),
+}
+
+#[derive(Serialize)]
+struct TableDiagonalIdentity<'a> {
+    schema_version: &'static str,
+    table_id: &'a LogicalId,
+    grid_sha256: &'a str,
+    apply_mode: TableDiagonalApplyMode,
+    region: Option<TablePropertyRegion>,
+    value: &'a TableDiagonalValue,
+}
+
+fn resolve_diagonal_identity(
+    request: &TablePropertiesRequest,
+    limits: TablePropertiesLimits,
+) -> Result<DiagonalResolution, TablePropertiesError> {
+    let TablePropertiesOperation::CellDiagonal { apply_mode, patch } = &request.operation else {
+        return Ok(DiagonalResolution::NotTargeted);
+    };
+    match patch {
+        TableDiagonalPatch::Clear => Ok(DiagonalResolution::Clear),
+        TableDiagonalPatch::Set { value } => {
+            let identity = TableDiagonalIdentity {
+                schema_version: "hwpx-agent.table-diagonal-identity/v1",
+                table_id: &request.table_id,
+                grid_sha256: &request.grid_sha256,
+                apply_mode: *apply_mode,
+                region: request.region,
+                value,
+            };
+            let bytes = serialize_bounded(&identity, limits.0.serialized_bytes)?;
+            Ok(DiagonalResolution::Set(hex(Sha256::digest(bytes).into())))
+        }
+    }
 }
 
 fn build_after_cells(
     request: &TablePropertiesRequest,
     state: &TablePropertiesState,
     grid: &TableGrid,
+    limits: TablePropertiesLimits,
 ) -> Result<
     (
         Vec<TableCellPropertyDraft>,
@@ -1058,6 +1200,7 @@ fn build_after_cells(
     ),
     TablePropertiesError,
 > {
+    let diagonal_resolution = resolve_diagonal_identity(request, limits)?;
     let mut after_cells = Vec::new();
     after_cells
         .try_reserve_exact(state.cells.len())
@@ -1073,11 +1216,12 @@ fn build_after_cells(
             after_cells.push(cell.clone());
             continue;
         }
-        let (after, roles) = apply_operation(
+        let (after, roles, diagonal_apply_mode) = apply_operation(
             &cell.properties,
             span,
             request.region,
             &request.operation,
+            &diagonal_resolution,
             &mut counts,
         )?;
         if after == cell.properties {
@@ -1096,6 +1240,7 @@ fn build_after_cells(
             payload_sha256: cell.payload_sha256.clone(),
             formula_sha256: cell.formula_sha256.clone(),
             border_roles: roles,
+            diagonal_apply_mode,
         });
         after_cells.push(TableCellPropertyDraft {
             master_cell_id: cell.master_cell_id.clone(),
@@ -1117,10 +1262,18 @@ fn apply_operation(
     span: &TableCellSpan,
     region: Option<TablePropertyRegion>,
     operation: &TablePropertiesOperation,
+    diagonal_resolution: &DiagonalResolution,
     counts: &mut MutationCounts,
-) -> Result<(TableCellPropertyValue, Option<TableResolvedBorderRoles>), TablePropertiesError> {
+) -> Result<
+    (
+        TableCellPropertyValue,
+        Option<TableResolvedBorderRoles>,
+        Option<TableDiagonalApplyMode>,
+    ),
+    TablePropertiesError,
+> {
     let mut after = before.clone();
-    let roles = match operation {
+    let (roles, diagonal_apply_mode) = match operation {
         TablePropertiesOperation::SetProperties {
             cell_properties_sha256,
             ..
@@ -1131,18 +1284,21 @@ fn apply_operation(
                 after.non_border_properties_sha256.clone_from(sha256);
                 counts.cell_properties = checked_add(counts.cell_properties, 1)?;
             }
-            None
+            (None, None)
         }
         TablePropertiesOperation::BorderEach { border, background } => {
             apply_border_patch(&mut after, border, counts)?;
             apply_background_patch(&mut after, background, counts)?;
             counts.per_cell_assignments = checked_add(counts.per_cell_assignments, 4)?;
-            Some(TableResolvedBorderRoles {
-                top: TableBorderEdgeRole::PerCell,
-                right: TableBorderEdgeRole::PerCell,
-                bottom: TableBorderEdgeRole::PerCell,
-                left: TableBorderEdgeRole::PerCell,
-            })
+            (
+                Some(TableResolvedBorderRoles {
+                    top: TableBorderEdgeRole::PerCell,
+                    right: TableBorderEdgeRole::PerCell,
+                    bottom: TableBorderEdgeRole::PerCell,
+                    left: TableBorderEdgeRole::PerCell,
+                }),
+                None,
+            )
         }
         TablePropertiesOperation::BorderUnified { border, background } => {
             let region = region.ok_or(TablePropertiesError::BindingDrift)?;
@@ -1191,10 +1347,23 @@ fn apply_operation(
                     counts.inner_assignments = checked_add(counts.inner_assignments, 1)?;
                 }
             }
-            Some(roles)
+            (Some(roles), None)
+        }
+        TablePropertiesOperation::CellDiagonal { apply_mode, .. } => {
+            let resolved = match diagonal_resolution {
+                DiagonalResolution::NotTargeted => return Err(TablePropertiesError::BindingDrift),
+                DiagonalResolution::Clear => None,
+                DiagonalResolution::Set(sha256) => Some(sha256.clone()),
+            };
+            if after.diagonal_sha256 != resolved {
+                after.diagonal_sha256 = resolved;
+                counts.diagonals = checked_add(counts.diagonals, 1)?;
+            }
+            counts.diagonal_assignments = checked_add(counts.diagonal_assignments, 1)?;
+            (None, Some(*apply_mode))
         }
     };
-    Ok((after, roles))
+    Ok((after, roles, diagonal_apply_mode))
 }
 
 const fn edge_role(outer: bool) -> TableBorderEdgeRole {
@@ -1288,6 +1457,11 @@ fn validate_operation(operation: &TablePropertiesOperation) -> Result<(), TableP
                 return Err(TablePropertiesError::EmptyOperation);
             }
         }
+        TablePropertiesOperation::CellDiagonal { patch, .. } => {
+            if let TableDiagonalPatch::Set { value } = patch {
+                validate_diagonal_value(value)?;
+            }
+        }
     }
     Ok(())
 }
@@ -1299,8 +1473,31 @@ const fn operation_requires_cells(operation: &TablePropertiesOperation) -> bool 
             ..
         } => cell_properties_sha256.is_some(),
         TablePropertiesOperation::BorderEach { .. }
-        | TablePropertiesOperation::BorderUnified { .. } => true,
+        | TablePropertiesOperation::BorderUnified { .. }
+        | TablePropertiesOperation::CellDiagonal { .. } => true,
     }
+}
+
+const fn operation_requires_rectangle(operation: &TablePropertiesOperation) -> bool {
+    matches!(
+        operation,
+        TablePropertiesOperation::BorderUnified { .. }
+            | TablePropertiesOperation::CellDiagonal {
+                apply_mode: TableDiagonalApplyMode::Unified,
+                ..
+            }
+    )
+}
+
+fn validate_diagonal_value(value: &TableDiagonalValue) -> Result<(), TablePropertiesError> {
+    validate_digest(&value.line_sha256)?;
+    if value.slash.slash_type == TableDiagonalSlashType::None
+        && value.back_slash.slash_type == TableDiagonalSlashType::None
+        && value.center_line == TableDiagonalCenterLine::None
+    {
+        return Err(TablePropertiesError::EmptyOperation);
+    }
+    Ok(())
 }
 
 fn validate_border_patch(patch: &TableCellBorderPatch) -> Result<(), TablePropertiesError> {

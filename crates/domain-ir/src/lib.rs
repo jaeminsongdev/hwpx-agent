@@ -134,11 +134,13 @@ pub use table_placement::{
 };
 pub use table_properties::{
     TABLE_CELL_BORDER_EACH_CAPABILITY_ID, TABLE_CELL_BORDER_UNIFIED_CAPABILITY_ID,
-    TABLE_PROPERTIES_CAPABILITY_ID, TABLE_PROPERTIES_SCHEMA_VERSION, TableBorderEdgeRole,
-    TableCellBorderPatch, TableCellBorderState, TableCellPropertyDraft, TableCellPropertyMutation,
-    TableCellPropertyValue, TablePropertiesBuilder, TablePropertiesError,
-    TablePropertiesLimitConfig, TablePropertiesLimits, TablePropertiesOperation,
-    TablePropertiesPlan, TablePropertiesReceipt, TablePropertiesRequest,
+    TABLE_CELL_DIAGONAL_CAPABILITY_ID, TABLE_PROPERTIES_CAPABILITY_ID,
+    TABLE_PROPERTIES_SCHEMA_VERSION, TableBorderEdgeRole, TableCellBorderPatch,
+    TableCellBorderState, TableCellPropertyDraft, TableCellPropertyMutation,
+    TableCellPropertyValue, TableDiagonalApplyMode, TableDiagonalCenterLine, TableDiagonalPatch,
+    TableDiagonalSlash, TableDiagonalSlashType, TableDiagonalValue, TablePropertiesBuilder,
+    TablePropertiesError, TablePropertiesLimitConfig, TablePropertiesLimits,
+    TablePropertiesOperation, TablePropertiesPlan, TablePropertiesReceipt, TablePropertiesRequest,
     TablePropertiesRequestDraft, TablePropertiesState, TablePropertiesStateDraft,
     TablePropertyDigestPatch, TablePropertyRegion, TableResolvedBorderRoles,
     TableUnifiedBorderPatch,

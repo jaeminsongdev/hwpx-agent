@@ -235,8 +235,8 @@ def validate_contract_shape(contract: dict[str, Any], errors: list[str]) -> None
         "green_rows": 0,
         "non_green_rows": 61,
         "direct_stage_counts": {
-            "cataloged": 6,
-            "unit_passed": 37,
+            "cataloged": 5,
+            "unit_passed": 38,
             "integration_passed": 7,
             "oracle_verified": 11,
         },

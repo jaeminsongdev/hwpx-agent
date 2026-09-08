@@ -15,7 +15,7 @@ class TablePropertiesContractTests(unittest.TestCase):
         self.assertEqual(report["state"], "pass", report)
         self.assertEqual(report["source_locks"], 4)
         self.assertEqual(report["implementation_files"], 5)
-        self.assertEqual(report["features"], 3)
+        self.assertEqual(report["features"], 4)
         self.assertEqual(report["direct_stage"], "unit_passed")
         self.assertFalse(report["actual_hwpx"])
         self.assertFalse(report["actual_hangul"])
@@ -60,11 +60,13 @@ class TablePropertiesContractTests(unittest.TestCase):
             contract = json.loads(contract_path.read_text(encoding="utf-8"))
             contract["source_locks"][0]["path"] = "../outside.md"
             contract["semantics"]["unified_border"] = "copy_first_cell"
+            contract["semantics"]["diagonal"] = "opaque_boolean"
             contract_path.write_text(json.dumps(contract), encoding="utf-8")
             errors = validator.validate(root)["errors"]
             self.assertIn("source_lock_path", errors)
             self.assertIn("source_lock_paths_exact", errors)
             self.assertIn("semantics_unified_border", errors)
+            self.assertIn("semantics_diagonal", errors)
 
     def test_nonclaim_limit_failure_policy_and_migration_tamper_fail(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

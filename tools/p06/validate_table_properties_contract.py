@@ -22,11 +22,13 @@ EXPECTED_FEATURES = [
     {"feature_id": "TABLE-007", "capability_id": "table.properties"},
     {"feature_id": "TABLE-008", "capability_id": "table.cell_border_each"},
     {"feature_id": "TABLE-009", "capability_id": "table.cell_border_unified"},
+    {"feature_id": "TABLE-047", "capability_id": "table.cell_diagonal"},
 ]
 EXPECTED_REFERENCES = [
     "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/cellborder/cellborder(each).htm",
     "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/cellborder/cellborder(many).htm",
     "https://help.hancom.com/hoffice110/ko-KR/Hwp/table/cellborder/cellborder(background).htm",
+    "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/cellborder/cellborder(diagonal).htm",
 ]
 EXPECTED_SOURCE_PATHS = {
     "WORK_BREAKDOWN_STRUCTURE.csv",
@@ -50,7 +52,7 @@ EXPECTED_NOT_CLAIMED = {
     "page_split_or_render": False,
     "hancom_2020_target_build": False,
     "automation_or_differential": False,
-    "diagonal_editing_table_047": False,
+    "diagonal_hwpx_lowering": False,
     "arbitrary_user_document_compatibility": False,
     "other_pc_or_version": False,
     "p06_09_complete": False,
@@ -64,12 +66,19 @@ IMPLEMENTATION_MARKERS = {
         "TablePropertiesBuilder",
         "TableUnifiedBorderPatch",
         "TABLE_CELL_BORDER_UNIFIED_CAPABILITY_ID",
+        "TABLE_CELL_DIAGONAL_CAPABILITY_ID",
+        "TableDiagonalValue",
     ),
     "crates/domain-ir/src/table_properties.rs": (
         'TABLE_PROPERTIES_SCHEMA_VERSION: &str = "hwpx-agent.table-properties/v1"',
         'TABLE_PROPERTIES_CAPABILITY_ID: &str = "table.properties"',
         'TABLE_CELL_BORDER_EACH_CAPABILITY_ID: &str = "table.cell_border_each"',
         'TABLE_CELL_BORDER_UNIFIED_CAPABILITY_ID: &str = "table.cell_border_unified"',
+        'TABLE_CELL_DIAGONAL_CAPABILITY_ID: &str = "table.cell_diagonal"',
+        "pub enum TableDiagonalApplyMode",
+        "pub struct TableDiagonalValue",
+        "fn resolve_diagonal_identity",
+        "fn validate_diagonal_value",
         "pub struct TablePropertiesState",
         "pub enum TablePropertiesOperation",
         "pub struct TablePropertiesPlan",
@@ -86,6 +95,10 @@ IMPLEMENTATION_MARKERS = {
         "selected_cell_properties_change_only_the_declared_non_border_facet",
         "each_cell_border_applies_four_independent_edges_and_background_per_master",
         "unified_border_maps_outer_frame_and_internal_grid_lines_separately",
+        "each_cell_diagonal_accepts_non_contiguous_cells_and_preserves_other_facets",
+        "unified_diagonal_requires_a_rectangle_and_binds_one_region_identity",
+        "unified_diagonal_accepts_only_complete_merged_cells",
+        "diagonal_clear_empty_topology_and_independent_flags_are_explicit",
         "merged_cells_must_be_fully_selected_and_resolve_from_their_real_edges",
         "duplicate_out_of_bounds_and_non_rectangular_unified_selections_fail_closed",
         "properties_and_each_cell_border_accept_exact_non_contiguous_cell_sets",
@@ -97,15 +110,16 @@ IMPLEMENTATION_MARKERS = {
         "component_only / unit_passed",
         "non-contiguous multi-cell blocks cannot use the unified operation",
         "outer top/right/bottom/left",
-        "clearing an already absent side is not counted as a change",
+        "## TABLE-047 diagonal semantics",
+        "clearing an already absent side or diagonal is not counted as a change",
         "reasoning level max",
     ),
     REPORT: (
         "Result: component_pass",
-        "Focused Rust table-properties tests: 17/17 PASS.",
+        "Focused Rust table-properties tests: 21/21 PASS.",
         "deterministic 144-shape corpus",
-        "cataloged 9 to 6",
-        "unit_passed 34 to 37",
+        "cataloged 9 to 5",
+        "unit_passed 34 to 38",
         "green rows: remains 0/61",
     ),
 }
@@ -183,6 +197,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
             "each_border",
             "unified_border",
             "background",
+            "diagonal",
             "preservation",
         },
         "binding": {"identity", "cells", "plan", "receipt", "serialization"},
@@ -196,7 +211,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         exact_semantics = {
             "selection": (
                 "canonical_exact_slot_sets_with_complete_merged_containment_"
-                "and_rectangle_required_only_for_unified"
+                "and_rectangle_required_for_unified_border_or_diagonal"
             ),
             "each_border": (
                 "same_four_side_patch_roles_resolved_independently_for_"
@@ -205,6 +220,10 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
             "unified_border": (
                 "selection_outer_frame_and_inner_horizontal_vertical_"
                 "patches_resolved_over_real_master_edges"
+            ),
+            "diagonal": (
+                "explicit_each_cell_or_unified_region_identity_with_unmodified_"
+                "slash_flags_back_slash_center_line_and_line_tuple_digest"
             ),
         }
         for key, expected in exact_semantics.items():
@@ -296,7 +315,7 @@ def result(errors: list[str], source_locks: int, implementation_files: int) -> d
         "errors": unique,
         "source_locks": source_locks,
         "implementation_files": implementation_files,
-        "features": 3,
+        "features": 4,
         "direct_stage": "unit_passed" if not unique else "not_proven",
         "actual_hwpx": False,
         "actual_hangul": False,

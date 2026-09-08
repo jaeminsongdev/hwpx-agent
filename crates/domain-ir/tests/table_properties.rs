@@ -1,13 +1,14 @@
 use domain_ir::{
     CellCoordinate, LogicalId, TABLE_CELL_BORDER_EACH_CAPABILITY_ID,
-    TABLE_CELL_BORDER_UNIFIED_CAPABILITY_ID, TABLE_GRID_SCHEMA_VERSION,
-    TABLE_PROPERTIES_CAPABILITY_ID, TABLE_PROPERTIES_SCHEMA_VERSION, TableBorderEdgeRole,
-    TableCellBorderPatch, TableCellBorderState, TableCellPropertyDraft, TableCellPropertyValue,
-    TableCellSpan, TableGrid, TableGridDraft, TableGridLimits, TablePropertiesBuilder,
-    TablePropertiesError, TablePropertiesLimitConfig, TablePropertiesLimits,
-    TablePropertiesOperation, TablePropertiesRequest, TablePropertiesRequestDraft,
-    TablePropertiesState, TablePropertiesStateDraft, TablePropertyDigestPatch,
-    TableUnifiedBorderPatch,
+    TABLE_CELL_BORDER_UNIFIED_CAPABILITY_ID, TABLE_CELL_DIAGONAL_CAPABILITY_ID,
+    TABLE_GRID_SCHEMA_VERSION, TABLE_PROPERTIES_CAPABILITY_ID, TABLE_PROPERTIES_SCHEMA_VERSION,
+    TableBorderEdgeRole, TableCellBorderPatch, TableCellBorderState, TableCellPropertyDraft,
+    TableCellPropertyValue, TableCellSpan, TableDiagonalApplyMode, TableDiagonalCenterLine,
+    TableDiagonalPatch, TableDiagonalSlash, TableDiagonalSlashType, TableDiagonalValue, TableGrid,
+    TableGridDraft, TableGridLimits, TablePropertiesBuilder, TablePropertiesError,
+    TablePropertiesLimitConfig, TablePropertiesLimits, TablePropertiesOperation,
+    TablePropertiesRequest, TablePropertiesRequestDraft, TablePropertiesState,
+    TablePropertiesStateDraft, TablePropertyDigestPatch, TableUnifiedBorderPatch,
 };
 
 type TestResult = Result<(), Box<dyn std::error::Error>>;
@@ -218,6 +219,32 @@ fn unified_operation() -> TablePropertiesOperation {
     }
 }
 
+fn diagonal_value() -> TableDiagonalValue {
+    TableDiagonalValue {
+        slash: TableDiagonalSlash {
+            slash_type: TableDiagonalSlashType::Center,
+            crooked: false,
+            is_counter: false,
+        },
+        back_slash: TableDiagonalSlash {
+            slash_type: TableDiagonalSlashType::All,
+            crooked: true,
+            is_counter: true,
+        },
+        center_line: TableDiagonalCenterLine::Horizontal,
+        line_sha256: digest('5'),
+    }
+}
+
+fn diagonal_operation(apply_mode: TableDiagonalApplyMode) -> TablePropertiesOperation {
+    TablePropertiesOperation::CellDiagonal {
+        apply_mode,
+        patch: TableDiagonalPatch::Set {
+            value: diagonal_value(),
+        },
+    }
+}
+
 fn hex(value: [u8; 32]) -> String {
     const DIGITS: &[u8; 16] = b"0123456789abcdef";
     let mut output = String::with_capacity(64);
@@ -356,6 +383,221 @@ fn unified_border_maps_outer_frame_and_internal_grid_lines_separately() -> TestR
     assert_eq!(bottom_right.after.borders.top_sha256, Some(digest('5')));
     assert_eq!(bottom_right.after.borders.left_sha256, Some(digest('6')));
     assert_eq!(bottom_right.after.background_sha256, Some(digest('7')));
+    Ok(())
+}
+
+#[test]
+fn each_cell_diagonal_accepts_non_contiguous_cells_and_preserves_other_facets() -> TestResult {
+    let grid = unmerged_grid(3, 3)?;
+    let state = state(&grid)?;
+    let selected_slots = vec![
+        CellCoordinate { row: 0, column: 0 },
+        CellCoordinate { row: 2, column: 2 },
+    ];
+    let request = request(
+        &state,
+        &grid,
+        selected_slots,
+        diagonal_operation(TableDiagonalApplyMode::EachCell),
+    )?;
+    assert_eq!(request.capability_id(), TABLE_CELL_DIAGONAL_CAPABILITY_ID);
+    assert_eq!(request.region(), None);
+    let plan =
+        TablePropertiesBuilder::build(&request, &state, &grid, TablePropertiesLimits::default())?;
+    assert_eq!(plan.receipt().diagonal_assignment_count, 2);
+    assert_eq!(plan.receipt().diagonal_change_count, 2);
+    assert_eq!(plan.receipt().diagonal_preserved_count, 7);
+    assert_eq!(plan.receipt().payload_preserved_count, 9);
+    assert_eq!(plan.mutations().len(), 2);
+    let expected_identity = plan.mutations()[0]
+        .after
+        .diagonal_sha256
+        .clone()
+        .ok_or("missing diagonal identity")?;
+    assert_ne!(expected_identity, digest('d'));
+    for mutation in plan.mutations() {
+        assert_eq!(
+            mutation.diagonal_apply_mode,
+            Some(TableDiagonalApplyMode::EachCell)
+        );
+        assert_eq!(
+            mutation.after.diagonal_sha256.as_deref(),
+            Some(expected_identity.as_str())
+        );
+        assert_eq!(
+            mutation.before.non_border_properties_sha256,
+            mutation.after.non_border_properties_sha256
+        );
+        assert_eq!(mutation.before.borders, mutation.after.borders);
+        assert_eq!(
+            mutation.before.background_sha256,
+            mutation.after.background_sha256
+        );
+    }
+    Ok(())
+}
+
+#[test]
+fn unified_diagonal_requires_a_rectangle_and_binds_one_region_identity() -> TestResult {
+    let grid = unmerged_grid(2, 2)?;
+    let state = state(&grid)?;
+    let invalid = TablePropertiesRequest::from_draft(
+        TablePropertiesRequestDraft {
+            schema_version: TABLE_PROPERTIES_SCHEMA_VERSION.to_owned(),
+            table_id: state.table_id().clone(),
+            expected_state_sha256: hex(state.canonical_sha256(TablePropertiesLimits::default())?),
+            selected_slots: vec![
+                CellCoordinate { row: 0, column: 0 },
+                CellCoordinate { row: 1, column: 1 },
+            ],
+            operation: diagonal_operation(TableDiagonalApplyMode::Unified),
+        },
+        &state,
+        &grid,
+        TablePropertiesLimits::default(),
+    );
+    assert_eq!(invalid, Err(TablePropertiesError::NonRectangularSelection));
+
+    let unified = request(
+        &state,
+        &grid,
+        slots(0, 0, 2, 2),
+        diagonal_operation(TableDiagonalApplyMode::Unified),
+    )?;
+    let region = unified.region().ok_or("missing unified region")?;
+    assert_eq!((region.row_span(), region.column_span()), (2, 2));
+    let unified_plan =
+        TablePropertiesBuilder::build(&unified, &state, &grid, TablePropertiesLimits::default())?;
+    let identities: Vec<_> = unified_plan
+        .mutations()
+        .iter()
+        .map(|mutation| mutation.after.diagonal_sha256.as_deref())
+        .collect();
+    assert!(identities.iter().all(|identity| *identity == identities[0]));
+    assert!(
+        unified_plan.mutations().iter().all(|mutation| {
+            mutation.diagonal_apply_mode == Some(TableDiagonalApplyMode::Unified)
+        })
+    );
+
+    let each = request(
+        &state,
+        &grid,
+        slots(0, 0, 2, 2),
+        diagonal_operation(TableDiagonalApplyMode::EachCell),
+    )?;
+    let each_plan =
+        TablePropertiesBuilder::build(&each, &state, &grid, TablePropertiesLimits::default())?;
+    assert_ne!(
+        unified_plan.mutations()[0].after.diagonal_sha256,
+        each_plan.mutations()[0].after.diagonal_sha256
+    );
+    Ok(())
+}
+
+#[test]
+fn unified_diagonal_accepts_only_complete_merged_cells() -> TestResult {
+    let grid = merged_grid()?;
+    let state = state(&grid)?;
+    let partial = TablePropertiesRequest::from_draft(
+        TablePropertiesRequestDraft {
+            schema_version: TABLE_PROPERTIES_SCHEMA_VERSION.to_owned(),
+            table_id: state.table_id().clone(),
+            expected_state_sha256: hex(state.canonical_sha256(TablePropertiesLimits::default())?),
+            selected_slots: vec![CellCoordinate { row: 0, column: 0 }],
+            operation: diagonal_operation(TableDiagonalApplyMode::Unified),
+        },
+        &state,
+        &grid,
+        TablePropertiesLimits::default(),
+    );
+    assert_eq!(partial, Err(TablePropertiesError::MergedSelectionConflict));
+
+    let request = request(
+        &state,
+        &grid,
+        slots(0, 0, 1, 3),
+        diagonal_operation(TableDiagonalApplyMode::Unified),
+    )?;
+    let plan =
+        TablePropertiesBuilder::build(&request, &state, &grid, TablePropertiesLimits::default())?;
+    assert_eq!(plan.receipt().selected_slot_count, 3);
+    assert_eq!(plan.receipt().selected_master_cell_count, 2);
+    assert_eq!(plan.receipt().selected_merged_cell_count, 1);
+    assert_eq!(plan.receipt().diagonal_assignment_count, 2);
+    assert_eq!(plan.mutations()[0].master_cell_id.as_str(), "merged");
+    Ok(())
+}
+
+#[test]
+fn diagonal_clear_empty_topology_and_independent_flags_are_explicit() -> TestResult {
+    let grid = unmerged_grid(1, 1)?;
+    let state = state(&grid)?;
+    let clear = request(
+        &state,
+        &grid,
+        slots(0, 0, 1, 1),
+        TablePropertiesOperation::CellDiagonal {
+            apply_mode: TableDiagonalApplyMode::EachCell,
+            patch: TableDiagonalPatch::Clear,
+        },
+    )?;
+    let clear_plan =
+        TablePropertiesBuilder::build(&clear, &state, &grid, TablePropertiesLimits::default())?;
+    assert_eq!(clear_plan.mutations()[0].after.diagonal_sha256, None);
+    assert_eq!(clear_plan.receipt().diagonal_change_count, 1);
+
+    let mut empty = diagonal_value();
+    empty.slash.slash_type = TableDiagonalSlashType::None;
+    empty.back_slash = TableDiagonalSlash {
+        slash_type: TableDiagonalSlashType::None,
+        crooked: false,
+        is_counter: false,
+    };
+    empty.center_line = TableDiagonalCenterLine::None;
+    let empty_result = TablePropertiesRequest::from_draft(
+        TablePropertiesRequestDraft {
+            schema_version: TABLE_PROPERTIES_SCHEMA_VERSION.to_owned(),
+            table_id: state.table_id().clone(),
+            expected_state_sha256: hex(state.canonical_sha256(TablePropertiesLimits::default())?),
+            selected_slots: slots(0, 0, 1, 1),
+            operation: TablePropertiesOperation::CellDiagonal {
+                apply_mode: TableDiagonalApplyMode::EachCell,
+                patch: TableDiagonalPatch::Set { value: empty },
+            },
+        },
+        &state,
+        &grid,
+        TablePropertiesLimits::default(),
+    );
+    assert_eq!(empty_result, Err(TablePropertiesError::EmptyOperation));
+
+    let mut independent_flags = diagonal_value();
+    independent_flags.slash = TableDiagonalSlash {
+        slash_type: TableDiagonalSlashType::None,
+        crooked: true,
+        is_counter: true,
+    };
+    let flagged_request = TablePropertiesRequest::from_draft(
+        TablePropertiesRequestDraft {
+            schema_version: TABLE_PROPERTIES_SCHEMA_VERSION.to_owned(),
+            table_id: state.table_id().clone(),
+            expected_state_sha256: hex(state.canonical_sha256(TablePropertiesLimits::default())?),
+            selected_slots: slots(0, 0, 1, 1),
+            operation: TablePropertiesOperation::CellDiagonal {
+                apply_mode: TableDiagonalApplyMode::EachCell,
+                patch: TableDiagonalPatch::Set {
+                    value: independent_flags,
+                },
+            },
+        },
+        &state,
+        &grid,
+        TablePropertiesLimits::default(),
+    )?;
+    let flagged_json =
+        String::from_utf8(flagged_request.canonical_json(TablePropertiesLimits::default())?)?;
+    assert!(flagged_json.contains(r#""crooked":true,"is_counter":true"#));
     Ok(())
 }
 
