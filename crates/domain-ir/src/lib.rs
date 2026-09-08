@@ -19,8 +19,10 @@ mod table_operations;
 mod table_pagination;
 mod table_placement;
 mod table_sort;
+mod table_style;
 mod table_text_conversion;
 mod table_thousands;
+mod table_transpose;
 mod units;
 
 pub use capability_router::{
@@ -136,6 +138,14 @@ pub use table_sort::{
     TableSortRegion, TableSortRelocation, TableSortRequest, TableSortRequestDraft, TableSortValue,
     TableTextCollation,
 };
+pub use table_style::{
+    TABLE_STYLE_CAPABILITY_ID, TABLE_STYLE_DEFINITION_SCHEMA_VERSION, TABLE_STYLE_SCHEMA_VERSION,
+    TableStyleBandPrecedence, TableStyleBanding, TableStyleBuilder, TableStyleCellDraft,
+    TableStyleColumnEmphasis, TableStyleDefinition, TableStyleDefinitionDraft, TableStyleError,
+    TableStyleLimitConfig, TableStyleLimits, TableStyleMergedCellPolicy, TableStyleMutation,
+    TableStylePlan, TableStyleReceipt, TableStyleRegion, TableStyleRequest, TableStyleRequestDraft,
+    TableStyleRule,
+};
 pub use table_text_conversion::{
     TABLE_TABLE_TO_TEXT_CAPABILITY_ID, TABLE_TEXT_CONVERSION_SCHEMA_VERSION,
     TABLE_TEXT_TO_TABLE_CAPABILITY_ID, TableDelimiter, TableLineEnding, TableTextConversionError,
@@ -144,6 +154,12 @@ pub use table_text_conversion::{
 pub use table_thousands::{
     TABLE_THOUSANDS_SCHEMA_VERSION, TableThousandsBuilder, TableThousandsError, TableThousandsMode,
     TableThousandsPlan, TableThousandsRequest, TableThousandsRequestDraft,
+};
+pub use table_transpose::{
+    TABLE_TRANSPOSE_CAPABILITY_ID, TABLE_TRANSPOSE_SCHEMA_VERSION, TableTransposeBuilder,
+    TableTransposeCell, TableTransposeCellDraft, TableTransposeError, TableTransposeFormulaPolicy,
+    TableTransposeLimitConfig, TableTransposeLimits, TableTransposePlan, TableTransposeReceipt,
+    TableTransposeRelocation, TableTransposeRequest, TableTransposeRequestDraft,
 };
 pub use units::{
     AngleMicrodegrees, Conversion, ConversionReceipt, CoordinateAnchor, CoordinateSpace, HwpUnit,

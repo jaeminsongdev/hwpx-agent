@@ -1,0 +1,125 @@
+{
+  "schema_version": "hwpx-agent.table-style-transpose-contract/v1",
+  "model_schema_versions": {
+    "style_definition": "hwpx-agent.table-style-definition/v1",
+    "style_request": "hwpx-agent.table-style/v1",
+    "transpose_request": "hwpx-agent.table-transpose/v1"
+  },
+  "scope": "p06_09_pure_bounded_table_style_and_transpose_current_pc_local_development",
+  "features": [
+    {
+      "feature_id": "TABLE-020",
+      "capability_id": "table.table_style"
+    },
+    {
+      "feature_id": "TABLE-021",
+      "capability_id": "table.transpose"
+    }
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    }
+  ],
+  "migration": "protocol/migrations/p06-table-style-transpose-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_STYLE_TRANSPOSE_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_STYLE_TRANSPOSE_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/table_formula.rs",
+    "crates/domain-ir/src/table_style.rs",
+    "crates/domain-ir/src/table_transpose.rs",
+    "crates/domain-ir/tests/table_style.rs",
+    "crates/domain-ir/tests/table_transpose.rs",
+    "implementation/p06/P06-09_TABLE_STYLE_TRANSPOSE_POLICY.md",
+    "implementation/p06/P06-09_TABLE_STYLE_TRANSPOSE_REPORT.md"
+  ],
+  "semantics": {
+    "style_definition": "mandatory_whole_table_plus_unique_optional_region_digest_rules",
+    "style_precedence": "enabled_corners_then_header_footer_then_first_last_columns_then_explicit_band_precedence_then_whole_table",
+    "merged_style": "reject_mixed_resolved_style_or_explicit_master_anchor",
+    "transpose_grid": "swap_dimensions_coordinates_and_rectangular_span_axes_while_preserving_master_identity",
+    "transpose_formula": "swap_owner_reference_coordinates_and_anchor_axes_then_clear_unverified_cache",
+    "preservation": "payload_formula_or_style_state_not_targeted_by_each_operation_is_digest_bound"
+  },
+  "binding": {
+    "identity": "validated_logical_table_style_and_master_cell_ids_plus_canonical_grid_definition_and_request_sha256",
+    "cells": "complete_unique_master_cell_coverage_with_exact_top_left_coordinates",
+    "style_plan": "table_properties_and_per_master_before_after_style_digest_with_resolved_region",
+    "transpose_plan": "validated_output_grid_and_per_master_relocation_span_payload_style_and_typed_formula",
+    "receipt": "request_grid_definition_output_preservation_and_semantic_change_counts",
+    "serialization": "deterministic_compact_bounded_json_and_sha256"
+  },
+  "default_limits": {
+    "style": {
+      "input_bytes": 8388608,
+      "master_cells": 1000000,
+      "style_rules": 13,
+      "identifier_bytes": 256,
+      "serialized_bytes": 67108864
+    },
+    "transpose": {
+      "input_bytes": 16777216,
+      "master_cells": 1000000,
+      "identifier_bytes": 256,
+      "serialized_bytes": 134217728
+    }
+  },
+  "failure_policy": [
+    "invalid_or_over_ceiling_limits_rejected",
+    "empty_or_oversized_json_rejected",
+    "malformed_unknown_or_duplicate_json_rejected",
+    "unsupported_definition_or_request_schema_rejected",
+    "missing_whole_table_or_duplicate_region_rule_rejected",
+    "invalid_identifier_or_digest_rejected",
+    "definition_style_grid_or_request_binding_drift_rejected",
+    "overlapping_header_footer_or_invalid_band_rejected",
+    "incomplete_duplicate_extra_or_mismatched_master_cell_set_rejected",
+    "merged_cells_with_mixed_resolved_styles_rejected_under_strict_policy",
+    "formula_rejected_without_explicit_transpose_policy",
+    "formula_owner_or_reference_outside_exact_grid_rejected",
+    "formula_coordinates_and_anchor_axes_transposed_together",
+    "unverified_formula_cache_cleared_after_transpose",
+    "transposed_grid_or_formula_dimension_ceiling_rejected",
+    "output_limit_serialization_or_allocation_failure_rejected",
+    "no_partial_plan_or_receipt_returned"
+  ],
+  "not_claimed": {
+    "direct_hwpx_adapter": false,
+    "style_catalog_materialization": false,
+    "package_mutation_or_preservation": false,
+    "semantic_reopen": false,
+    "formula_readback": false,
+    "page_split_or_render": false,
+    "hancom_2020_target_build": false,
+    "automation_or_differential": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "p06_09": "in_progress",
+    "product_complete": false
+  }
+}

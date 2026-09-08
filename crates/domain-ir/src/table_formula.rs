@@ -443,6 +443,43 @@ impl FormulaAst {
         validate_expression_dimensions(&result.expression, after)?;
         Ok(result)
     }
+
+    /// Transposes every cell reference from an exact `rows x columns` grid into the corresponding
+    /// `columns x rows` grid.
+    ///
+    /// Row and column anchor kinds are axes, not decorations, so they are swapped together with
+    /// their indexes. The expression tree, operators and function order remain unchanged.
+    ///
+    /// # Errors
+    ///
+    /// Rejects invalid or unsupported before/after dimensions, out-of-grid references and any
+    /// resulting invalid or over-limit AST.
+    pub fn transpose(
+        &self,
+        before: FormulaGridDimensions,
+        limits: FormulaLimits,
+    ) -> Result<Self, FormulaError> {
+        validate_grid_dimensions(before, limits)?;
+        validate_expression_dimensions(&self.expression, before)?;
+        let after = transposed_dimensions(before, limits)?;
+        let expression = map_expression(&self.expression, &mut |reference| {
+            Ok(FormulaCellReference {
+                row: reference.column,
+                column: reference.row,
+                row_kind: reference.column_kind,
+                column_kind: reference.row_kind,
+            })
+        })?;
+        let result = Self::from_draft(
+            FormulaAstDraft {
+                schema_version: TABLE_FORMULA_SCHEMA_VERSION.to_owned(),
+                expression,
+            },
+            limits,
+        )?;
+        validate_expression_dimensions(&result.expression, after)?;
+        Ok(result)
+    }
 }
 
 impl fmt::Debug for FormulaAst {
@@ -718,6 +755,44 @@ impl FormulaCell {
             limits,
         )?;
         Self::from_parts(to, ast, cache, self.number_format, dimensions, limits)
+    }
+
+    /// Moves a formula cell and all of its references through a full-table transpose.
+    ///
+    /// Cache handling is explicit. `preserve` is accepted only when the canonical AST is
+    /// unchanged, `clear` removes the unverified cache, and `update` requires a separately supplied
+    /// non-absent cache. This component never claims that a cached value was recalculated by
+    /// Hangul.
+    ///
+    /// # Errors
+    ///
+    /// Rejects invalid dimensions, owners or references, unsupported transposed dimensions,
+    /// cache-policy mismatches and any invalid or over-limit result.
+    pub fn transpose(
+        &self,
+        before: FormulaGridDimensions,
+        cache_policy: FormulaCachePolicy,
+        updated_cache: Option<FormulaCache>,
+        limits: FormulaLimits,
+    ) -> Result<Self, FormulaError> {
+        validate_grid_dimensions(before, limits)?;
+        validate_coordinate_dimensions(self.owner, before)?;
+        let after = transposed_dimensions(before, limits)?;
+        let owner = CellCoordinate {
+            row: self.owner.column,
+            column: self.owner.row,
+        };
+        let ast = self.ast.transpose(before, limits)?;
+        let before_digest = self.ast.canonical_sha256(limits)?;
+        let after_digest = ast.canonical_sha256(limits)?;
+        let cache = resolve_cache_policy(
+            &self.cache,
+            cache_policy,
+            updated_cache,
+            before_digest == after_digest,
+            limits,
+        )?;
+        Self::from_parts(owner, ast, cache, self.number_format, after, limits)
     }
 
     /// Serializes the complete formula cell to bounded canonical JSON.
@@ -1177,6 +1252,18 @@ fn validate_grid_edit(
         }
     };
     Ok((before, after))
+}
+
+fn transposed_dimensions(
+    before: FormulaGridDimensions,
+    limits: FormulaLimits,
+) -> Result<FormulaGridDimensions, FormulaError> {
+    let after = FormulaGridDimensions {
+        rows: before.columns,
+        columns: before.rows,
+    };
+    validate_grid_dimensions(after, limits)?;
+    Ok(after)
 }
 
 fn transform_reference(

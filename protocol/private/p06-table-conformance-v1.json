@@ -31,8 +31,8 @@
     "green_rows": 0,
     "non_green_rows": 61,
     "direct_stage_counts": {
-      "cataloged": 11,
-      "unit_passed": 32,
+      "cataloged": 9,
+      "unit_passed": 34,
       "integration_passed": 7,
       "oracle_verified": 11
     },
@@ -49,7 +49,7 @@
   "source_locks": [
     {
       "path": "crates/domain-ir/src/lib.rs",
-      "sha256": "cb767d0e87175c0da9a27c9c0e1d008920ee1989778919d433abf2a565ff7ce0"
+      "sha256": "afb9937a2e4377e8f20056c534ce921b55430943b13cc790d34979a275ec9402"
     },
     {
       "path": "crates/domain-ir/src/table_aggregate.rs",
@@ -58,6 +58,10 @@
     {
       "path": "crates/domain-ir/src/table_auto_fill.rs",
       "sha256": "f98af3fa4384e49ed11070455581d8c0f895b76d1dc7c956c64c82d902f1410a"
+    },
+    {
+      "path": "crates/domain-ir/src/table_formula.rs",
+      "sha256": "5628d27b40420bf72f9f12b134e2972c24bf82212b0cb99e7d28e75fa5c215ea"
     },
     {
       "path": "crates/domain-ir/src/table_geometry.rs",
@@ -72,12 +76,20 @@
       "sha256": "ae2aa27faa76bfb1965e605338cc9446f89313a01c8bafb3b098dfea28b025cc"
     },
     {
+      "path": "crates/domain-ir/src/table_style.rs",
+      "sha256": "b774cf6d137f26e39b35be01e854cd636b3b9d3436f2bb02a698aa9a32d064d1"
+    },
+    {
       "path": "crates/domain-ir/src/table_text_conversion.rs",
       "sha256": "a6f8af7f102dabcc8603e78eeb5a09830f10e30c3bd3dcf7003e22fc1c5ca7f1"
     },
     {
       "path": "crates/domain-ir/src/table_thousands.rs",
       "sha256": "5c94390f6925641f1c88940cdb184112fdf92f2c141ecd117b7210f00e8ae513"
+    },
+    {
+      "path": "crates/domain-ir/src/table_transpose.rs",
+      "sha256": "7062d07818717611765c0a39fec06e61e95a96974072bb4785fe5dff320d51a1"
     },
     {
       "path": "crates/domain-ir/tests/table_aggregate.rs",
@@ -100,12 +112,20 @@
       "sha256": "624c6518ebe6cbe64dba5efc833d552c9dd6f1ab9fbad4993848b6ca57e06595"
     },
     {
+      "path": "crates/domain-ir/tests/table_style.rs",
+      "sha256": "97d9bd02f7d7dc990245b146cfc46397ded230c96e22afb71bd90a6791502e89"
+    },
+    {
       "path": "crates/domain-ir/tests/table_text_conversion.rs",
       "sha256": "3676a342a0aeb0a6bef9b20af02c4a712ba493514ab5477b83ddcfc145acfbc8"
     },
     {
       "path": "crates/domain-ir/tests/table_thousands.rs",
       "sha256": "6c4fdc188d9547935f52f9039f4ffeaca14d3ec550adcb97d9af194aeaf5790b"
+    },
+    {
+      "path": "crates/domain-ir/tests/table_transpose.rs",
+      "sha256": "2915ad5e8c39826eab393611c8e45766297211daa517dad54137967d8fa57a2d"
     },
     {
       "path": "crates/hwpx-package/src/lib.rs",
@@ -141,7 +161,7 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "8eaef6cfe0287f1a155675936e1e5602564f77d4bd3ae53cb92677f34709a778"
+      "sha256": "a33f144b1a3e8aa7d5daf6ff7c656dc8cce21ddaa6c96b6f99a3367b546d3b2a"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_AGGREGATE_POLICY.md",
@@ -192,6 +212,14 @@
       "sha256": "a15547e745082a33877d9f7336b1440dcc27fb7d0dd9c6943543bd24c24bd4f3"
     },
     {
+      "path": "implementation/p06/P06-09_TABLE_STYLE_TRANSPOSE_POLICY.md",
+      "sha256": "fcf067868b7e91fe1caf0cfb805e17e9bff47749cf24a13135cf1d33947a59d5"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_STYLE_TRANSPOSE_REPORT.md",
+      "sha256": "036bdafd0420a1030ad0499bba50a18133978e2aeae91c49eeab4ac6f7a91879"
+    },
+    {
       "path": "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_POLICY.md",
       "sha256": "af2b1d0a529fa06d46dd27c372deb257b46a9d6ff59822a46134a45458df7fca"
     },
@@ -209,7 +237,7 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "9f4f4688eec9760de2a1a94b56b375121a3cf9b17094df4aea10563fbfb9192b"
+      "sha256": "833a9dc3e895414ca4757a9d810e9e06bbdf245f0bbf65053a659922a1df35d5"
     },
     {
       "path": "implementation/p06/p06-09-current-2020-automation-projection.json",
@@ -217,7 +245,7 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "0d300ef9b2d5ea4f901afdba631bc7b996a0ec11190f80f69b8751957dbba862"
+      "sha256": "b86aa88a864bfbb70c29a8ec47030590487f79b4127522f80e74d9f0dc6b3bb2"
     },
     {
       "path": "protocol/json-schema/p06-table-automation-projection-v1.schema.json",
@@ -280,6 +308,10 @@
       "sha256": "22cc7ad76529c6845e5d85a465ed0682a41f082e5a7dae199256875c0d1c9aa8"
     },
     {
+      "path": "protocol/migrations/p06-table-style-transpose-v0-to-v1.md",
+      "sha256": "205fda055ec44c4ff02b783de88769ff5272579b61955a320e8dce503069ab6e"
+    },
+    {
       "path": "protocol/migrations/p06-table-text-conversion-v0-to-v1.md",
       "sha256": "4f049d9467a78a62993b3a1cf7a46b59d5700557dd903c8e20de0b2656c33990"
     },
@@ -310,6 +342,10 @@
     {
       "path": "protocol/private/p06-table-sort-v1.json",
       "sha256": "d972bbd90324d6e628fc4f8021f346f5e540f255fe2be64ad99b662e49951d21"
+    },
+    {
+      "path": "protocol/private/p06-table-style-transpose-v1.json",
+      "sha256": "206c89d7b82c2640489ab095703dc10b6c94232fe417973b161f32cd074f7a7e"
     },
     {
       "path": "protocol/private/p06-table-text-conversion-v1.json",
@@ -349,11 +385,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "92410addf7fea4c9dc710cd2a63dca10fae5c037bbb06e6146574230810a27e9"
+      "sha256": "f90a75e368d39819fbd2982f3e8d21287c97c0c096d83f9445580df6b26c6ea0"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "2f92428e528f9226a3964301e0dbe7a174174e50b96fb34698cf4fd6d70be5a2"
+      "sha256": "9641c2ea622d3f9ade1a6fef85a9a9935e55b257cc94b07401eec5b6b92dafda"
     },
     {
       "path": "tools/p06/tests/test_table_geometry_contract.py",
@@ -370,6 +406,10 @@
     {
       "path": "tools/p06/tests/test_table_sort_contract.py",
       "sha256": "1194f087f360812cbfb4af56d815654b9326b3438a7d640228e71b6b2bda0d46"
+    },
+    {
+      "path": "tools/p06/tests/test_table_style_transpose_contract.py",
+      "sha256": "28b743574d03c2000d0ce7ff81603d16e2e0b47acf97f1920e6962c0eb6febcd"
     },
     {
       "path": "tools/p06/tests/test_table_text_conversion_contract.py",
@@ -389,7 +429,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "d111ccd6aa2bca150a10c1b1aacf7761bf9fd09f60c720aa0e4f6a2cce7bfbb7"
+      "sha256": "9d4e4ede07259545ecabf112057834baa4752ae9cf849e05f1740725e2641d65"
     },
     {
       "path": "tools/p06/validate_table_geometry_contract.py",
@@ -406,6 +446,10 @@
     {
       "path": "tools/p06/validate_table_sort_contract.py",
       "sha256": "2887713f26e0ca78bf9d5410bb4600436acfddc8189fd6b655d1c05ee4806f46"
+    },
+    {
+      "path": "tools/p06/validate_table_style_transpose_contract.py",
+      "sha256": "d4f0043c681753759e109ca95b2b1a89b858501832ada9623fdce6a3a2574ba0"
     },
     {
       "path": "tools/p06/validate_table_text_conversion_contract.py",
