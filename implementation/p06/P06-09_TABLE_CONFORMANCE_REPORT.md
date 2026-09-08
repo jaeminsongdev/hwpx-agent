@@ -42,8 +42,10 @@ The machine-readable authority is
   caption, but its corrected renderer target remains `NOT_RUN`.
 - P06-08 contributes bounded nested-table inspection evidence, not nested-table mutation/lowering.
 - The first P06-09 implementation slice contributes bounded pure unit and static direct-HWPX
-  integration evidence for equal row height, equal column width and row minimum height. It does
-  not include a licensed Hangul 2020 target-build oracle.
+  integration evidence for equal row height, equal column width and row minimum height. A closed
+  disposable package now proves formula/cache and pagination-policy readback plus exact preservation
+  of every non-section part across all three operations. It does not include a licensed Hangul 2020
+  target-build oracle.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 
@@ -63,8 +65,8 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 30 missing direct evidence rows, 50 rows below direct oracle,
-61 unverified automation runtime rows and 61 missing differentials. A row can carry multiple
-blockers, so blocker counts are not intended to sum to 61.
+235 missing validation instances, 61 unverified automation runtime rows and 61 missing
+differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
 

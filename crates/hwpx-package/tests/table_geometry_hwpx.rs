@@ -1,15 +1,36 @@
+use std::collections::BTreeMap;
+use std::io::{Cursor, Write};
+
 use domain_ir::{
-    LengthMicrometers, LogicalId, TableCellSpan, TableGeometryLimits, TableGeometryOperation,
-    TableGeometryState, TableGrid, TableGridLimits, TableTrackRange,
+    FormulaLimitConfig, FormulaLimits, LengthMicrometers, LogicalId, TableCellSpan,
+    TableGeometryLimits, TableGeometryOperation, TableGeometryState, TableGrid, TableGridLimits,
+    TableTrackRange,
 };
 use hwpx_package::{
-    TABLE_GEOMETRY_HWPX_PROFILE_ID, TableGeometryHwpxLowerer, TableLayoutHwpxError,
-    TableLayoutHwpxLimitConfig, TableLayoutHwpxLimits, TableLayoutHwpxReader,
+    BoundedZipReader, Compression, PackageGraph, PackageGraphLimits, PackageLimits,
+    TABLE_GEOMETRY_HWPX_PROFILE_ID, TableFormulaHwpxLimits, TableFormulaHwpxReader,
+    TableGeometryHwpxLowerer, TableLayoutHwpxError, TableLayoutHwpxLimitConfig,
+    TableLayoutHwpxLimits, TableLayoutHwpxReader, TablePaginationHwpxLimits,
+    TablePaginationHwpxReader,
 };
 use sha2::{Digest as _, Sha256};
+use zip::write::SimpleFileOptions;
+use zip::{CompressionMethod, DateTime, ZipWriter};
 
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const SECTION_NS: &str = "http://www.hancom.co.kr/hwpml/2011/section";
+const CONTAINER: &str = r#"<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0">
+  <rootfiles><rootfile full-path="Contents/content.hpf" media-type="application/oebps-package+xml"/></rootfiles>
+</container>"#;
+const OPF: &str = r#"<?xml version="1.0" encoding="UTF-8"?>
+<opf:package xmlns:opf="http://www.idpf.org/2007/opf" version="2.0">
+  <opf:manifest>
+    <opf:item id="header" href="header.xml" media-type="application/xml"/>
+    <opf:item id="section0" href="section0.xml" media-type="application/xml"/>
+  </opf:manifest>
+  <opf:spine><opf:itemref idref="section0" linear="yes"/></opf:spine>
+</opf:package>"#;
 
 type TestResult = Result<(), Box<dyn std::error::Error>>;
 
@@ -130,6 +151,41 @@ fn ordinary_table(identifier: u32, prefix: &str) -> String {
     )
 }
 
+fn formula_cell(row: u32, column: u32) -> String {
+    format!(
+        concat!(
+            r#"<hp:tc name="" header="0" hasMargin="0" protect="0" editable="0" dirty="0" borderFillIDRef="1">"#,
+            r#"<hp:cellAddr colAddr="{column}" rowAddr="{row}"/>"#,
+            r#"<hp:cellSpan colSpan="1" rowSpan="1"/>"#,
+            r#"<hp:cellSz width="1000" height="500"/>"#,
+            r#"<hp:cellMargin left="0" right="0" top="0" bottom="0"/>"#,
+            r#"<hp:subList id="" textDirection="HORIZONTAL" lineWrap="BREAK" vertAlign="CENTER" linkListIDRef="0" linkListNextIDRef="0" textWidth="0" textHeight="0" hasTextRef="0" hasNumRef="0">"#,
+            r#"<hp:p id="0" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"><hp:ctrl>"#,
+            r#"<hp:fieldBegin id="101" type="FORMULA" name="" editable="0" dirty="0" zorder="-1" fieldid="202">"#,
+            r#"<hp:parameters cnt="5" name=""><hp:integerParam name="Prop">8</hp:integerParam>"#,
+            r#"<hp:stringParam name="Command">=SUM(LEFT)??%g,;;7</hp:stringParam>"#,
+            r#"<hp:stringParam name="Formula">=SUM(LEFT)</hp:stringParam>"#,
+            r#"<hp:stringParam name="ResultFormat">%g,</hp:stringParam>"#,
+            r#"<hp:stringParam name="LastResult">7</hp:stringParam></hp:parameters>"#,
+            r#"</hp:fieldBegin></hp:ctrl><hp:t>7</hp:t><hp:ctrl>"#,
+            r#"<hp:fieldEnd beginIDRef="101" fieldid="202"/></hp:ctrl><hp:t/></hp:run></hp:p>"#,
+            r#"</hp:subList></hp:tc>"#,
+        ),
+        row = row,
+        column = column,
+    )
+}
+
+fn formula_table(identifier: u32) -> String {
+    table(
+        identifier,
+        &[
+            vec![cell(0, 0, 1, 1, "1"), cell(0, 1, 1, 1, "2")],
+            vec![cell(1, 0, 1, 1, "7"), formula_cell(1, 1)],
+        ],
+    )
+}
+
 fn merged_table(identifier: u32) -> String {
     table(
         identifier,
@@ -146,6 +202,112 @@ fn section(tables: &[String]) -> Vec<u8> {
         tables.concat()
     )
     .into_bytes()
+}
+
+fn package(section: &[u8]) -> Result<Vec<u8>, zip::result::ZipError> {
+    archive(vec![
+        (
+            "mimetype".to_owned(),
+            b"application/hwp+zip".to_vec(),
+            CompressionMethod::Stored,
+        ),
+        (
+            "version.xml".to_owned(),
+            b"<version/>".to_vec(),
+            CompressionMethod::Stored,
+        ),
+        (
+            "META-INF/container.xml".to_owned(),
+            CONTAINER.as_bytes().to_vec(),
+            CompressionMethod::Deflated,
+        ),
+        (
+            "Contents/content.hpf".to_owned(),
+            OPF.as_bytes().to_vec(),
+            CompressionMethod::Deflated,
+        ),
+        (
+            "Contents/header.xml".to_owned(),
+            b"<header/>".to_vec(),
+            CompressionMethod::Deflated,
+        ),
+        (
+            "Contents/section0.xml".to_owned(),
+            section.to_vec(),
+            CompressionMethod::Deflated,
+        ),
+    ])
+}
+
+fn replace_section(source: &[u8], section: &[u8]) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
+    let mut reader = BoundedZipReader::open(Cursor::new(source), PackageLimits::default())?;
+    let entries = reader.entries().to_vec();
+    let mut parts = Vec::new();
+    parts.try_reserve_exact(entries.len())?;
+    let mut replacements = 0_usize;
+    for entry in entries {
+        let path = entry.path.as_str().to_owned();
+        let method = match entry.compression {
+            Compression::Stored => CompressionMethod::Stored,
+            Compression::Deflated => CompressionMethod::Deflated,
+        };
+        let bytes = if path == "Contents/section0.xml" {
+            replacements += 1;
+            section.to_vec()
+        } else {
+            reader.read_entry(entry.index)?
+        };
+        parts.push((path, bytes, method));
+    }
+    if replacements != 1 {
+        return Err("section replacement cardinality mismatch".into());
+    }
+    Ok(archive(parts)?)
+}
+
+fn archive(
+    parts: Vec<(String, Vec<u8>, CompressionMethod)>,
+) -> Result<Vec<u8>, zip::result::ZipError> {
+    let mut writer = ZipWriter::new(Cursor::new(Vec::new()));
+    for (path, bytes, method) in parts {
+        let options = SimpleFileOptions::default()
+            .compression_method(method)
+            .last_modified_time(DateTime::default())
+            .system(zip::System::Unix)
+            .unix_permissions(0o644);
+        writer.start_file(path, options)?;
+        writer.write_all(&bytes)?;
+    }
+    Ok(writer.finish()?.into_inner())
+}
+
+fn inspect_package(source: &[u8]) -> Result<(PackageGraph, Vec<u8>), Box<dyn std::error::Error>> {
+    let mut reader = BoundedZipReader::open(Cursor::new(source), PackageLimits::default())?;
+    let graph = PackageGraph::build(&mut reader, PackageGraphLimits::default())?;
+    let section_index = reader
+        .entries()
+        .iter()
+        .find(|entry| entry.path.as_str() == "Contents/section0.xml")
+        .map(|entry| entry.index)
+        .ok_or("section part missing")?;
+    let section = reader.read_entry(section_index)?;
+    Ok((graph, section))
+}
+
+fn part_hashes(graph: &PackageGraph) -> BTreeMap<String, [u8; 32]> {
+    graph
+        .parts
+        .iter()
+        .map(|part| (part.path.as_str().to_owned(), part.raw_sha256))
+        .collect()
+}
+
+fn formula_limits() -> Result<FormulaLimits, Box<dyn std::error::Error>> {
+    Ok(FormulaLimits::new(FormulaLimitConfig {
+        rows: 10,
+        columns: 10,
+        ..FormulaLimitConfig::default()
+    })?)
 }
 
 #[test]
@@ -198,6 +360,107 @@ fn lowers_all_three_geometry_operations_with_exact_readback() -> TestResult {
             (readback.table_width_hwpunit, readback.table_height_hwpunit),
             table_size
         );
+    }
+    Ok(())
+}
+
+#[test]
+fn full_package_preserves_formula_pagination_and_all_non_section_parts() -> TestResult {
+    let grid = grid_2x2()?;
+    let base = state(&grid)?;
+    let source_package = package(&section(&[formula_table(15)]))?;
+    let source_copy = source_package.clone();
+    let (source_graph, source_section) = inspect_package(&source_package)?;
+    let source_formula = TableFormulaHwpxReader::read_in_section(
+        &source_section,
+        0,
+        TableFormulaHwpxLimits::default(),
+        formula_limits()?,
+    )?;
+    let source_pagination = TablePaginationHwpxReader::read_in_section(
+        &source_section,
+        0,
+        TablePaginationHwpxLimits::default(),
+    )?;
+    let source_hashes = part_hashes(&source_graph);
+    let operations = [
+        TableGeometryOperation::EqualRowHeights {
+            range: TableTrackRange::new(0, 2),
+        },
+        TableGeometryOperation::EqualColumnWidths {
+            range: TableTrackRange::new(0, 2),
+        },
+        TableGeometryOperation::SetRowMinimumHeight {
+            range: TableTrackRange::new(0, 2),
+            minimum_height: um(1_905),
+        },
+    ];
+
+    for operation in operations {
+        let result = base.apply(&grid, operation, TableGeometryLimits::default())?;
+        let target_section = TableGeometryHwpxLowerer::lower_in_section(
+            &source_section,
+            0,
+            &grid,
+            result.state(),
+            TableLayoutHwpxLimits::default(),
+        )?;
+        let target_package = replace_section(&source_package, &target_section)?;
+        assert_eq!(
+            target_package,
+            replace_section(&source_package, &target_section)?,
+            "full-package rebuild must be deterministic"
+        );
+        assert_eq!(
+            source_package, source_copy,
+            "source package must be immutable"
+        );
+
+        let (target_graph, reopened_section) = inspect_package(&target_package)?;
+        assert_eq!(source_graph.package_document, target_graph.package_document);
+        assert_eq!(source_graph.relationships, target_graph.relationships);
+        assert_eq!(source_graph.spine, target_graph.spine);
+        let target_hashes = part_hashes(&target_graph);
+        assert_eq!(source_hashes.len(), target_hashes.len());
+        for (path, source_sha256) in &source_hashes {
+            let target_sha256 = target_hashes.get(path).ok_or("target part missing")?;
+            if path == "Contents/section0.xml" {
+                assert_ne!(source_sha256, target_sha256);
+            } else {
+                assert_eq!(source_sha256, target_sha256, "part changed: {path}");
+            }
+        }
+
+        let target_formula = TableFormulaHwpxReader::read_in_section(
+            &reopened_section,
+            0,
+            TableFormulaHwpxLimits::default(),
+            formula_limits()?,
+        )?;
+        assert_eq!(source_formula.rows, target_formula.rows);
+        assert_eq!(source_formula.columns, target_formula.columns);
+        assert_eq!(source_formula.formula, target_formula.formula);
+        assert_eq!(
+            source_formula.formula_field_count,
+            target_formula.formula_field_count
+        );
+
+        let target_pagination = TablePaginationHwpxReader::read_in_section(
+            &reopened_section,
+            0,
+            TablePaginationHwpxLimits::default(),
+        )?;
+        assert_eq!(source_pagination.page_split, target_pagination.page_split);
+        assert_eq!(
+            source_pagination.repeat_header_rows,
+            target_pagination.repeat_header_rows
+        );
+        assert_eq!(source_pagination.row_count, target_pagination.row_count);
+        assert_eq!(
+            source_pagination.column_count,
+            target_pagination.column_count
+        );
+        assert_eq!(source_pagination.caption, target_pagination.caption);
     }
     Ok(())
 }

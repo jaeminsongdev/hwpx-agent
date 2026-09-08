@@ -21,6 +21,9 @@ part. Selection by application cursor or private automation identifier is outsid
   Master-cell sizes are checked sums of their covered logical tracks.
 - The output is reparsed through the strict reader. Exact table/cell size readback, cell text/comment
   digest and inner margins must match the expected result before bytes or a receipt are returned.
+- The disposable full-package fixture reopens a closed HWPX package graph after each of the three
+  operations. It requires exact formula AST/cache and pagination-policy readback, exact hashes for
+  every non-section part, source immutability and deterministic rebuilt package bytes.
 
 ## Integrity and failure behavior
 
@@ -33,7 +36,7 @@ returns no output.
 ## Evidence promotion rule
 
 Passing the adapter and tamper suites promotes only `TABLE-018`, `TABLE-019` and `TABLE-050` to
-`direct_hwpx / integration_passed` with `schema` and static `semantic_reopen` evidence. It does not
-prove formula preservation, page splitting, renderer identity, licensed Hangul 2020 save/reopen,
+`direct_hwpx / integration_passed` with `schema`, static `semantic_reopen`, `formula_readback` and
+`page_split` evidence. It does not prove renderer identity, licensed Hangul 2020 save/reopen,
 automation runtime, differential exact match, release-enabled status, P06-09/P06 PASS, production,
 other-PC/version compatibility, or product completion.

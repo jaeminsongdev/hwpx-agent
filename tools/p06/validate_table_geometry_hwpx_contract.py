@@ -25,16 +25,13 @@ EXPECTED_FEATURES = {
     "TABLE-050": "table.row_min_height",
 }
 EXPECTED_EVIDENCE = {
-    "adapter_tests": 8,
+    "adapter_tests": 9,
     "feature_count": 3,
     "backend": "direct_hwpx",
     "direct_stage": "integration_passed",
-    "validations": ["schema", "semantic_reopen"],
+    "validations": ["formula_readback", "page_split", "schema", "semantic_reopen"],
 }
 EXPECTED_NOT_CLAIMED = {
-    "full_package_fixture": False,
-    "formula_readback": False,
-    "page_split": False,
     "render_diff": False,
     "hangul_2020_target_build": False,
     "automation_runtime": False,
@@ -72,6 +69,7 @@ IMPLEMENTATION_MARKERS = {
     ),
     "crates/hwpx-package/tests/table_geometry_hwpx.rs": (
         "lowers_all_three_geometry_operations_with_exact_readback",
+        "full_package_preserves_formula_pagination_and_all_non_section_parts",
         "receipt_binds_state_and_preserves_content_and_margins",
         "merged_cell_uses_exact_row_and_column_track_sums",
         "section_selection_preserves_the_unselected_table_exactly",
@@ -88,7 +86,8 @@ IMPLEMENTATION_MARKERS = {
     ),
     REPORT: (
         "Result: `integration_pass`",
-        "8/8 PASS",
+        "9/9 PASS",
+        "Formula AST/cache and pagination policy",
         "byte-identical",
         "green rows: remains 0/61",
         "No Hangul process",
@@ -195,7 +194,16 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     expected_objects = {
         "input": {"state", "source", "profile"},
         "lowering": {"unit_conversion", "editable_attributes", "merged_cells", "publication"},
-        "preservation": {"cell_text_comments", "inner_margins", "unselected_tables", "source"},
+        "preservation": {
+            "cell_text_comments",
+            "inner_margins",
+            "unselected_tables",
+            "formula",
+            "pagination",
+            "non_section_parts",
+            "package_rebuild",
+            "source",
+        },
         "receipt": {"binding", "counts", "semantic_readback", "debug"},
     }
     for key, keys in expected_objects.items():

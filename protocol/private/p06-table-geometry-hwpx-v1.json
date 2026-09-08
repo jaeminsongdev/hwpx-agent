@@ -45,6 +45,10 @@
     "cell_text_comments": "exact_digest",
     "inner_margins": "exact_values",
     "unselected_tables": "byte_identical",
+    "formula": "exact_ast_cache_semantic_readback_in_closed_package",
+    "pagination": "exact_page_split_repeat_header_caption_semantic_readback_in_closed_package",
+    "non_section_parts": "exact_expanded_byte_sha256_in_closed_package",
+    "package_rebuild": "deterministic_and_closed_graph_reopen",
     "source": "never_mutated"
   },
   "receipt": {
@@ -67,16 +71,13 @@
   "policy": "implementation/p06/P06-09_TABLE_GEOMETRY_HWPX_POLICY.md",
   "report": "implementation/p06/P06-09_TABLE_GEOMETRY_HWPX_REPORT.md",
   "expected_evidence": {
-    "adapter_tests": 8,
+    "adapter_tests": 9,
     "feature_count": 3,
     "backend": "direct_hwpx",
     "direct_stage": "integration_passed",
-    "validations": ["schema", "semantic_reopen"]
+    "validations": ["formula_readback", "page_split", "schema", "semantic_reopen"]
   },
   "not_claimed": {
-    "full_package_fixture": false,
-    "formula_readback": false,
-    "page_split": false,
     "render_diff": false,
     "hangul_2020_target_build": false,
     "automation_runtime": false,

@@ -17,8 +17,11 @@ output is returned.
 
 | Check | Result |
 |---|---:|
-| Dedicated adapter tests | 8/8 PASS |
+| Dedicated adapter tests | 9/9 PASS |
 | All three geometry operations | exact static readback PASS |
+| Closed full-package reopen | all three operations PASS |
+| Formula AST/cache and pagination policy | preserved by exact semantic readback |
+| Non-section package parts | exact expanded-byte SHA-256 |
 | Merged-cell span sums | PASS |
 | Cell text/comment digest | preserved |
 | Inner margins | preserved |
@@ -27,9 +30,11 @@ output is returned.
 | Grid/shape/limit negatives | fail closed |
 | Receipt Debug hashes/dimensions | redacted |
 
-The dedicated tests cover standalone and section-part XML, exact source/output/state receipt
-digests, all three operation results, content and margin preservation, merged spans, a same-shape
-wrong-grid identity, malformed source coverage, output/dimension limits and stable public errors.
+The dedicated tests cover standalone, section-part and closed-package HWPX, exact
+source/output/state receipt digests, all three operation results, formula AST/cache and pagination
+policy readback, non-section part hashes, source immutability, content and margin preservation,
+merged spans, a same-shape wrong-grid identity, malformed source coverage, output/dimension limits
+and stable public errors.
 The full locked `hwpx-package --all-targets` test suite, Clippy with `-D warnings`, and repository
 format check also pass before evidence admission.
 
@@ -43,9 +48,9 @@ After the report is hash-admitted, the strict matrix changes only as follows:
 - direct `oracle_verified`: remains 11
 - green rows: remains 0/61
 
-Static reparse is `semantic_reopen` integration evidence, not a licensed desktop application
-oracle. The three rows still lack formula readback, page-split, render-diff, target-build,
-rollback/retry, automation runtime and direct/automation differential evidence.
+The package test admits `formula_readback` and `page_split` alongside static `semantic_reopen`, but
+it is not a licensed desktop application oracle. The three rows still lack render-diff,
+target-build, rollback/retry, automation runtime and direct/automation differential evidence.
 
 ## Preserved boundaries
 
@@ -54,6 +59,5 @@ prompt, save/reopen, PDF render or other PC/version was used. The adapter does n
 internal minimum constraint separately; it lowers the validated effective row height and binds the
 full geometry state in the receipt. P06-09, P06, production and the product remain in progress.
 
-The next exact step is a disposable full-package fixture plus formula/page preservation checks,
-followed later by licensed Hangul 2020 target-build save/reopen and renderer evidence. Recommended
-reasoning remains `max`.
+The next exact step is the next bounded catalog-only semantic group, followed later by licensed
+Hangul 2020 target-build save/reopen and renderer evidence. Recommended reasoning remains `max`.
