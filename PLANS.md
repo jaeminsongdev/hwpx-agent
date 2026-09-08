@@ -42,7 +42,7 @@
 | P-0054 | P06-06 FormulaAst | current-PC PASS: pure core, source/adapter, deterministic 2x4 row/column target `6514a69b...320e5`, actual Hangul 2020 attempt04 save/reopen, strict saved-HWPX formula/cache/layout oracle and PDF visual review pass; attempts 01-03 remain failed timeout diagnostics |
 | P-0055 | P06-07 pagination | pure component, static current-PC HWPX adapter, exact composite target builder and pre-runtime oracle PASS; first actual target exposed clipped long-cell/boundary calibration failure, corrected target awaits licensed Hangul 2020 access and renderer rerun |
 | P-0056 | P06-08 inspect/select | scoped pure-IR PASS at `293053e`: revision/graph/path/ID/fingerprint-bound table and merged-cell selectors, nested/drawing/note indexing, bounded metadata snapshot; Rust 11/11 and contract/tamper 4/4 pass; no HWPX/Hangul selection claim |
-| P-0057 | P06-09 table conformance | matrix engine/current snapshot PASS; `583096f` adds bounded geometry semantics for TABLE-018/019/050 and promotes only those rows to component `unit_passed`; exact 61-row current-PC/Hangul 2020 required release matrix remains 0/61 green, so P06-09/P06/product remain in progress |
+| P-0057 | P06-09 table conformance | matrix engine/current snapshot PASS; `583096f` adds bounded geometry semantics and `b75909e` adds preserving direct-HWPX integration for TABLE-018/019/050; exact 61-row current-PC/Hangul 2020 required release matrix remains 0/61 green, so P06-09/P06/product remain in progress |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint evidence pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -262,7 +262,7 @@
   `TABLE-001` through `TABLE-061`. The report joins the canonical feature catalog, generated
   capability contracts, a redacted exact-target automation projection and hash-bound direct
   evidence without exposing raw Hancom identifiers or probe values.
-- Current required matrix is **0/61 green**. Direct stages are 30 cataloged, 16 unit-passed, four
+- Current required matrix is **0/61 green**. Direct stages are 30 cataloged, 13 unit-passed, seven
   integration-passed and 11 oracle-verified; automation has six candidate-unverified and 55
   unavailable-with-reason rows, while all runtime states and differentials remain unverified/not-run.
   This is a prioritized implementation ledger, not a claim that completed P06 components are 0%.
@@ -278,8 +278,12 @@
 - Commit `583096f` implements deterministic table geometry for equal row height, equal column width
   and row minimum height with exact grid binding, content minima, bounded receipts and atomic
   failures. Rust geometry tests pass 13/13, the fixed-seed corpus passes 256/256, P06 tests pass
-  89/89, and the expanded conformance contract locks 36 sources. These three rows remain below
-  direct HWPX integration and licensed Hangul oracle.
+  89/89, and the expanded conformance contract locks 36 sources.
+- Commit `b75909e` lowers those three operations into selected Hancom 2020 HWPX table/merged-cell
+  size attributes, preserves cell content/margins/unselected tables, and reparses exact semantic
+  output before publication. Adapter tests pass 8/8, the full locked `hwpx-package` suite and
+  Clippy pass, P06 tests pass 93/93, and the matrix contract locks 45 sources. The rows are now
+  `direct_hwpx / integration_passed` but remain below licensed Hangul target-build oracle.
 - Current FULL lanes linux-core, windows-worker and widget pass; a separate security lane passes
   with zero failed checks and 1,057 SBOM components. Docs remains non-green only at the pre-existing
   R-0008 P14 historical source-lock forward-stability defect, so FULL 5/5 is not claimed.
@@ -301,8 +305,10 @@
 - R-0008: bulk discovery of historical source-qualification tests reports forward-stability errors
   in v21-v30, v33-v34 and now direct v38 verification because those legacy verifiers reread mutable
   files after qualified successors change them. The authoritative latest v39 verifies and its five
-  focused tests pass. Before the final Gate, make the legacy audit forward-stable against immutable
-  commit blobs without rewriting its historical contracts or reclassifying old evidence.
+  focused tests pass. The P06-06 target-v2 validator now reads its source locks from immutable
+  qualification commit `103bbf5` when Git is present, fixing the table-layout successor regression
+  without changing the historical contract. Before the final Gate, apply the same rule to remaining
+  legacy validators without rewriting their contracts or reclassifying old evidence.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 
@@ -312,8 +318,9 @@
    Hangul 2020 access prompts, then collect repeat-header/caption save/reopen/PDF evidence for
    one-line-before, exact-boundary, one-line-after, merged-cell, nested-table and long-equation
    cases. Keep renderer/page claims unverified until visual and structural evidence both pass.
-2. At `max`, use the P06-09 blocker rows to implement the 30 remaining catalog-only direct
-   operations in bounded semantic groups, lower the 16 component-only rows, close the four static-only target
+2. At `max`, add a disposable full-package formula/page preservation fixture for TABLE-018/019/050,
+   then use the remaining blocker rows to implement the 30 catalog-only direct operations in
+   bounded semantic groups, lower the 13 component-only rows, close the seven static-only target
    oracles, then qualify exact current-target automation bindings and disposable differentials.
 3. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
    applicable offline Linux/security/STRICT checks without weakening actual-evidence Gates.
