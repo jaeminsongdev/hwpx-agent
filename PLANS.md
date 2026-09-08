@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-06 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 43 unit, 7 integration and 11 oracle rows but 0/61 release-green; P06-07 renderer and row closures remain |
+| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 43 unit, 3 integration and 15 oracle rows but 0/61 release-green; row closures remain |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -37,7 +37,7 @@
 
 | ID | Task | Current state and exact next evidence |
 |---|---|---|
-| P-0055 | P06-07 pagination | pure component, static current-PC HWPX adapter and exact composite target v2 pass pre-runtime; corrected target still needs licensed Hangul 2020 save/reopen/page/PDF oracle |
+| P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
 | P-0057 | P06-09 table conformance | fail-closed matrix and bounded slices pass at component level; `2c91e43` adds TABLE-010/011 whole-table split/join planning; exact 61-row current-PC release matrix remains 0/61 green |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint pass; atomic durable mirror admission and real pull/push remain |
@@ -55,16 +55,16 @@
 - P06-08 inspect/select is scoped pure-IR PASS at `293053e`; it makes no HWPX/Hangul cursor claim.
   Authority: `implementation/p06/P06-08_REPORT.md`.
 
-## Active P06-07 evidence
+## Closed current-PC P06-07 evidence
 
-- Pure schemas and static Hancom 2020 HWPX adapter bind exact grids, row fragments, repeat headers,
-  captions, split policies and renderer observations; Rust and contract tests pass.
-- Composite target v2 SHA-256 `98aab83f...d9eb33` passes the pre-runtime oracle with six typed
-  tables. Its predecessor completed Hangul but failed visual calibration; later v2 runs either
-  produced diagnostic calibration or timed out at a distinct access prompt without outputs.
-- Required next evidence is one exact licensed Hangul 2020 lifecycle over v2, followed by structural
-  page-count/readback and PDF visual review. Until then P06-07 is `in_progress`.
-- Authorities: `implementation/p06/P06-07_TABLE_PAGINATION_POLICY.md` and its HWPX adapter report.
+- Exact target v2 `44cfcd14...8316` passed the licensed Hangul 2020 lifecycle, immutable-input and
+  exact-text checks, save/reopen structural oracle and renderer-cache accounting.
+- The Hancom PDF has ten A4 pages. Repeat headers, ALLOW row fragmentation, AVOID_ROW preservation,
+  nested table/equation containment, BEFORE/EXACT/AFTER boundaries and five captions passed visual
+  review; zero glyphs lie outside a page. No automation differential or other-version claim is made.
+- The earlier eight-page run remains failed evidence: inline top-level tables overflowed and created
+  a blank page. The corrected target uses non-inline top-level pagination without relabeling history.
+- Authority: `implementation/p06/P06-07_TARGET_READBACK_REPORT.md`.
 
 ## Active P06-09 evidence
 
@@ -72,7 +72,7 @@
   HWPX oracle, every required validation/fixture, negative and rollback evidence, current-target
   automation runtime and exact differential all pass.
 - Current authority reports 0/61 green with direct stages: 0 cataloged, 43 unit-passed,
-  7 integration-passed and 11 oracle-verified. Automation is six candidate-unverified plus
+  3 integration-passed and 15 oracle-verified. Automation is six candidate-unverified plus
   55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
 - Bounded slices through `8955f9d` cover geometry, aggregates, formats, conversion, placement,
   sort/fill, style/transpose and TABLE-007/008/009/047 property/border/diagonal planning.
@@ -80,10 +80,10 @@
   lattice, formula rebase/cache clearing and request/build-time document-flow drift rejection.
 - Latest slice adds TABLE-002/003 as one exact ruling/topology model: outer rectangle, full and
   local strokes, directional diagonals, structural shared-edge merge, transparent nonstructural
-  erase, complete state preservation and dual drift checks. Rust 17/17, contract 4/4, P06 137/137,
-  workspace FULL/Clippy/format and 136-source conformance-lock validation PASS.
-- These rows remain component-only unit evidence. HWPX lowering, Hangul target build, automation
-  runtime and exact differential evidence remain false/unverified.
+  erase, complete state preservation and dual drift checks. Rust 17/17, contract 4/4, P06 142/142,
+  workspace FULL/Clippy/format and 144-source conformance-lock validation PASS.
+- TABLE-042/043/044/055 now have the direct P06-07 oracle. The 43 unit rows remain component-only;
+  their HWPX lowering, Hangul target build, automation runtime and exact differential stay open.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`,
   `implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json`,
   `protocol/private/p06-table-conformance-v1.json`.
@@ -95,8 +95,8 @@
 - R-0005: P17 durable checkpoint exists, but atomic durable mirror role/head admission, persistent
   credential custody, production lifecycle and real pull/push do not.
 - R-0006: P17 conflict resolver/widget are component evidence only.
-- R-0007: P06-07 needs current Hangul 2020 page/PDF oracle. P06-09 remains 0/61 release-green until
-  direct, automation runtime and exact differential evidence close each row.
+- R-0007: P06-09 remains 0/61 release-green until direct validations, fixtures, rollback/retry,
+  current-target automation runtime and exact differential evidence close every row.
 - R-0008: historical source-qualification validators reread mutable successor files. Latest v39
   verifies, but remaining legacy validators need immutable-commit reads before the final Gate.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
@@ -104,11 +104,9 @@
 
 ## Next actions
 
-1. At `max`, when the user can approve visible access prompts, rerun the exact P06-07 target v2 and
-   collect repeat-header/caption boundary save/reopen/PDF evidence.
-2. At `max`, lower the 43 unit-only rows to preserving HWPX adapters, close seven integration-only
+1. At `max`, lower the 43 unit-only rows to preserving HWPX adapters, close three integration-only
    target oracles, then qualify exact current-target automation bindings and disposable differentials.
-3. At every closure run target, regression, current and clean-checkout FULL plus applicable offline
+2. At every closure run target, regression, current and clean-checkout FULL plus applicable offline
    Linux/security/STRICT checks without weakening evidence Gates.
 
 ## Context pack and archive pointers
@@ -116,5 +114,5 @@
 - Read first: this file, active P06-07 policies/reports, P06-09 conformance authorities, and
   `implementation/p05/P05_GATE_REPORT.md`.
 - P17 source authority: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V39.md`.
-- Detailed closed-card history is in the named reports and Git history through `2c91e43`.
+- Detailed closed-card history is in the named reports and Git history through `2f04480`.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.

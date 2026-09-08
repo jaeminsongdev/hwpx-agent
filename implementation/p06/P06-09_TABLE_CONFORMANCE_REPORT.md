@@ -1,6 +1,6 @@
 # P06-09 current-PC table conformance report
 
-- Generated: 2026-09-08
+- Generated: 2026-09-09
 - Target: licensed Hancom Hangul 2020 `11.0.0.9136`, `ko-KR`, x86 on this PC
 - Matrix schema: `hwpx-agent.table-conformance-report/v1`
 - Matrix state: `non_green`
@@ -15,8 +15,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 
 | Dimension | Current evidence |
 |---|---:|
-| direct `oracle_verified` | 11 |
-| direct `integration_passed` | 7 |
+| direct `oracle_verified` | 15 |
+| direct `integration_passed` | 3 |
 | direct `unit_passed` | 43 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
@@ -38,8 +38,10 @@ The machine-readable authority is
   component-only because the successful target used an absolute automatic-column plan.
 - P06-06 contributes exact-target formula, horizontal sum, relative-reference and cache evidence;
   number-format and absolute-reference support remain component-only.
-- P06-07 contributes static HWPX integration evidence for repeat header, page split, row policy and
-  caption, but its corrected renderer target remains `NOT_RUN`.
+- P06-07 contributes exact current-PC Hangul 2020 target evidence for repeat header, cell-content
+  splitting, row-boundary splitting, before/exact/after whole-table boundaries and top/bottom
+  captions. TABLE-042/043/044/055 are now `oracle_verified`; their automation and formula-readback
+  requirements remain open, so none is release-green.
 - P06-08 contributes bounded nested-table inspection evidence, not nested-table mutation/lowering.
 - The first P06-09 implementation slice contributes bounded pure unit and static direct-HWPX
   integration evidence for equal row height, equal column width and row minimum height. A closed
@@ -109,8 +111,8 @@ ordering; duplicate JSON keys; finite files; path containment; privacy; and crea
 Protocol code generation publishes the three P06 schemas through additive catalog v5 while baseline
 locks prove catalogs v2 through v4 remain unchanged.
 
-Current aggregate blockers include 0 missing direct evidence rows, 50 rows below direct oracle,
-205 missing validation instances, 61 unverified automation runtime rows and 61 missing
+Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
+197 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -118,9 +120,9 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. complete P06-07 corrected-target renderer evidence when interactive access approval is available;
-2. lower the 43 unit-only rows through preserving HWPX adapters;
-3. close the seven integration-only target oracles;
+1. lower the 43 unit-only rows through preserving HWPX adapters;
+2. close the three integration-only target oracles;
+3. supply remaining feature-specific validations, including formula readback where required;
 4. qualify exact current-target automation bindings and run safe disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.
 

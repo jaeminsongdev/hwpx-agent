@@ -1,6 +1,6 @@
 # P06-09 current-PC table conformance policy v1
 
-Date: 2026-09-08
+Date: 2026-09-09
 
 Decision: **fail-closed 61-row matrix implemented; required matrix remains non-green**.
 
@@ -65,17 +65,18 @@ input requires a new output path or an explicitly reviewed successor update.
 ## Current result
 
 - Required rows: 61; green: 0; non-green: 61.
-- Direct stages: 0 cataloged, 43 unit-passed, 7 integration-passed, 11 oracle-verified.
+- Direct stages: 0 cataloged, 43 unit-passed, 3 integration-passed, 15 oracle-verified.
 - Automation bindings: 6 candidate-unverified, 55 unavailable-with-reason.
 - Automation runtime support: 61 unverified.
 - Direct/automation differential: 61 not-run.
 
-The current matrix is a truthful implementation backlog, not a P06-09 PASS. P06-07's corrected
-renderer target is still `NOT_RUN`, and the remaining direct operations and exact automation
+The current matrix is a truthful implementation backlog, not a P06-09 PASS. P06-07 now contributes
+four exact-target oracle rows, but the remaining direct operations and exact automation
 bindings/probes have not been manufactured from menu names.
 
 ## Not claimed
 
 - No table capability is release-enabled by this matrix.
-- P06-07, P06-09, P06, production and the product are not complete.
+- P06-07 is complete only for its exact current-PC target; P06-09, P06, production and the product
+  are not complete.
 - No arbitrary user document, other PC, Hangul 2022/2024, provider or redistribution claim exists.

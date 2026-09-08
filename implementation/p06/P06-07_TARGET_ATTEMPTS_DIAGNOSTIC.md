@@ -1,6 +1,6 @@
 # P06-07 current-PC target attempts diagnostic
 
-Date: 2026-09-08
+Date: 2026-09-09
 
 This file records failed or superseded renderer attempts. An attempt here is not P06-07 PASS.
 
@@ -57,3 +57,29 @@ It reached visible `open_input`, but the new access prompt was not approved with
 The runner recorded `TABLE_PAGINATION_READBACK_TIMEOUT`, published no output HWPX or PDF, verified
 the input remained unchanged, terminated only its exact automation-owned process, and reported
 zero remaining `Hwp.exe` processes. The successor renderer state therefore remains `NOT_RUN`.
+
+## Successor attempt 04: lifecycle PASS, renderer layout FAIL
+
+The same successor target was copied byte-exact into a new create-only evidence directory and
+completed the licensed Hangul 2020 lifecycle. The saved HWPX SHA-256 was
+`3b46ba1b4f4484cc77190276cef9d6724f1982b3a8206b9960e3f585eab5b9f5`; the eight-page PDF
+SHA-256 was `b38fbb2489a3d15f7033e676b032ed285a3d97a64c831b15707211b7df2114f1`.
+
+Visual and PDF text-geometry inspection failed the renderer Gate. The `CELL` long cell still laid
+all 64 items into page 1's content stream while only items 001-022 were inside the visible page;
+page 2 was blank. The `TABLE` case similarly extended past page 4 instead of continuing, so its
+equation and bottom caption were outside the visible page. Save/reopen and text identity passed,
+but page splitting and repeated-header rendering did not. This attempt is permanently diagnostic
+and is not promoted.
+
+The newly isolated root cause was `treatAsChar="1"` on every generated table. Inline tables do not
+participate in automatic multi-page table layout. The previous height-only correction therefore
+could not make either table paginate.
+
+## Corrected create-only target (contract v2)
+
+The next create-only target sets `treatAsChar="0"` on all five top-level tables and retains
+`treatAsChar="1"` only on the nested table. Its exact SHA-256 is
+`44cfcd14d867e6b53f4a015061666fe3b9ac990d3b3c321faae863d172fe8316`. Its successful lifecycle
+and ten-page visual oracle are recorded separately in `P06-07_TARGET_READBACK_REPORT.md`; that
+success does not modify or erase any attempt in this diagnostic.

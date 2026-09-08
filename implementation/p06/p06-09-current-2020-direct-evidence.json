@@ -296,16 +296,20 @@
     {
       "feature_ids": ["TABLE-042", "TABLE-043", "TABLE-044", "TABLE-055"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["page_split", "render_diff", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "differential_state": "not_run",
       "evidence_files": [
         {
           "path": "implementation/p06/P06-07_TABLE_PAGINATION_HWPX_ADAPTER_REPORT.md",
           "sha256": "080d460e1bb610780c8bcc98057b735f8b2a5e5a1f8e41a7ba901911308f4ab9"
+        },
+        {
+          "path": "implementation/p06/P06-07_TARGET_READBACK_REPORT.md",
+          "sha256": "75201108b7f0b362353b2d6bf60bf990df3380ccd685a956e9cfd0a3951e8e08"
         }
       ]
     },

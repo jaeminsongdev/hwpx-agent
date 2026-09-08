@@ -13,10 +13,11 @@ class TableConformanceContractTests(unittest.TestCase):
     def test_repository_contract_passes_without_promoting_matrix(self) -> None:
         report = validator.validate()
         self.assertEqual(report["state"], "pass", report)
-        self.assertEqual(report["source_locks"], 136)
+        self.assertEqual(report["source_locks"], 144)
         self.assertEqual(report["schemas"], 3)
         self.assertEqual(report["green_rows"], 0)
         self.assertEqual(report["required_matrix"], "non_green")
+        self.assertEqual(report["p06_07"], "pass")
         self.assertEqual(report["p06_09"], "in_progress")
         self.assertFalse(report["product_complete"])
 

@@ -14,7 +14,7 @@ use sha2::{Digest as _, Sha256};
 
 const MAX_FIXTURE_BYTES: u64 = 8 * 1024 * 1024;
 const EXACT_TARGET_SHA256: &str =
-    "98aab83ffb874c32cd339cbf4aa8966f20d36a02dedd9b05e23bbf1888d9eb33";
+    "44cfcd14d867e6b53f4a015061666fe3b9ac990d3b3c321faae863d172fe8316";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum Role {
@@ -282,7 +282,7 @@ mod tests {
     fn target_artifact_passes_when_present() {
         let path = concat!(
             env!("CARGO_MANIFEST_DIR"),
-            "/../../fixtures/target-build/p06-07-table-pagination-target-20260908-02/target.hwpx"
+            "/../../fixtures/target-build/p06-07-table-pagination-target-20260909-04/target.hwpx"
         );
         let Ok(bytes) = fs::read(path) else {
             return;
@@ -295,7 +295,7 @@ mod tests {
     fn target_artifact_fails_closed_as_renderer_readback() {
         let path = concat!(
             env!("CARGO_MANIFEST_DIR"),
-            "/../../fixtures/target-build/p06-07-table-pagination-target-20260908-02/target.hwpx"
+            "/../../fixtures/target-build/p06-07-table-pagination-target-20260909-04/target.hwpx"
         );
         let Ok(bytes) = fs::read(path) else {
             return;

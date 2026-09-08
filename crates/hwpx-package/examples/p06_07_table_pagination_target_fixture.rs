@@ -245,6 +245,7 @@ fn build_allow_table(id: u32) -> String {
         2,
         2,
         2_700,
+        false,
         Some(caption("P06-07 ALLOW TOP", CaptionSide::Top)),
         &(header + &body),
     )
@@ -330,6 +331,7 @@ fn build_avoid_row_table(id: u32) -> String {
         34,
         2,
         86_400,
+        false,
         Some(caption("P06-07 AVOID-ROW BOTTOM", CaptionSide::Top)),
         &(header + &merged + &ordinary_rows + &nested_row + &equation_row),
     )
@@ -364,6 +366,7 @@ fn build_boundary_case(id: u32, label: &str, side: CaptionSide) -> String {
         2,
         1,
         5_600,
+        false,
         Some(caption(&format!("P06-07 {label}"), side)),
         &rows,
     )
@@ -374,6 +377,7 @@ fn table(
     rows: u32,
     columns: u32,
     height: u32,
+    treat_as_char: bool,
     caption: Option<String>,
     row_xml: &str,
 ) -> String {
@@ -384,7 +388,7 @@ fn table(
             "dropcapstyle=\"None\" pageBreak=\"CELL\" repeatHeader=\"0\" ",
             "rowCnt=\"{}\" colCnt=\"{}\" cellSpacing=\"0\" borderFillIDRef=\"3\" noAdjust=\"0\">",
             "<hp:sz width=\"19843\" widthRelTo=\"ABSOLUTE\" height=\"{}\" heightRelTo=\"ABSOLUTE\" protect=\"0\"/>",
-            "<hp:pos treatAsChar=\"1\" affectLSpacing=\"1\" flowWithText=\"1\" allowOverlap=\"0\" holdAnchorAndSO=\"0\" vertRelTo=\"PARA\" horzRelTo=\"COLUMN\" vertAlign=\"TOP\" horzAlign=\"LEFT\" vertOffset=\"0\" horzOffset=\"0\"/>",
+            "<hp:pos treatAsChar=\"{}\" affectLSpacing=\"1\" flowWithText=\"1\" allowOverlap=\"0\" holdAnchorAndSO=\"0\" vertRelTo=\"PARA\" horzRelTo=\"COLUMN\" vertAlign=\"TOP\" horzAlign=\"LEFT\" vertOffset=\"0\" horzOffset=\"0\"/>",
             "<hp:outMargin left=\"283\" right=\"283\" top=\"283\" bottom=\"283\"/>{}",
             "<hp:inMargin left=\"510\" right=\"510\" top=\"141\" bottom=\"141\"/>{}</hp:tbl>"
         ),
@@ -392,6 +396,7 @@ fn table(
         rows,
         columns,
         height,
+        u8::from(treat_as_char),
         caption.unwrap_or_default(),
         row_xml,
     )
@@ -480,7 +485,7 @@ fn nested_table(id: u32) -> String {
         "<hp:tr>{}</hp:tr>",
         text_cell("P06-07 NESTED TABLE CELL", 0, 0, 1, 1, 15_000, 2_000, false)
     );
-    table(id, 1, 1, 2_000, None, &row)
+    table(id, 1, 1, 2_000, true, None, &row)
 }
 
 fn equation(id: u32) -> String {
