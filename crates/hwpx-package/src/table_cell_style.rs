@@ -393,7 +393,7 @@ impl TableCellStyleReader {
     }
 }
 
-fn read_from_document(
+pub(crate) fn read_from_document(
     document: &PreservingXmlDocument,
     root_index: usize,
     profile: TableCellStyleProfile,

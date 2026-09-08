@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 15 |
-| direct `integration_passed` | 12 |
-| direct `unit_passed` | 34 |
+| direct `integration_passed` | 16 |
+| direct `unit_passed` | 30 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -77,11 +77,14 @@ The machine-readable authority is
 - The table-style and transpose components add fixed-precedence, merged-cell-aware style resolution
   for TABLE-020 and complete grid/span/formula-axis transposition for TABLE-021. Payload/style or
   formula state outside each operation is digest-bound, but neither component is an HWPX adapter.
-- The table-properties component adds complete grid/state binding for TABLE-007/008/009/047, strict
-  exact logical-slot selection with a rectangle required for unified border or diagonal application,
-  full merged-cell containment, per-cell/unified border topology and explicit two-direction slash,
-  center-line and line-tuple diagonal semantics. Untargeted cells, properties, payload and formula
-  identities remain bound. It is not yet an HWPX adapter.
+- The table-properties model and preserving HWPX adapter cover TABLE-007/008/009/047. The strict
+  reader binds complete grid/state, typed table and cell semantics, four independent border sides,
+  backgrounds, payload/formula identities and explicit each-cell or unified diagonal intent.
+  Lowering accepts only a fully prevalidated typed value catalog, relifts parts/state/grid before
+  mutation, verifies current document flow, interns exact border fills and reopens target semantics.
+  Native cell spacing remains geometry-bound and preserved. Closed synthetic packages preserve the
+  sibling table's formula/cache and pagination plus all non-target parts; no licensed Hangul or
+  renderer result is inferred.
 - The whole-table partition component adds TABLE-010/011 cursor-row split and whitespace-only join
   plans. Split inherits exact table width, column tracks and table properties while rebasing rows;
   join retains the leading table identity/properties, chooses the larger source width and maps both
@@ -123,7 +126,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-170 missing validation instances, 61 unverified automation runtime rows and 61 missing
+158 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -131,8 +134,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the 34 unit-only rows through preserving HWPX adapters;
-2. close the twelve integration-only target oracles;
+1. lower the 30 unit-only rows through preserving HWPX adapters;
+2. close the sixteen integration-only target oracles;
 3. supply remaining feature-specific validations, including formula readback where required;
 4. qualify exact current-target automation bindings and run safe disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.

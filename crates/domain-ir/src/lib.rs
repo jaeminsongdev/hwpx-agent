@@ -163,7 +163,7 @@ pub use table_properties::{
     TablePropertiesOperation, TablePropertiesPlan, TablePropertiesReceipt, TablePropertiesRequest,
     TablePropertiesRequestDraft, TablePropertiesState, TablePropertiesStateDraft,
     TablePropertyDigestPatch, TablePropertyRegion, TableResolvedBorderRoles,
-    TableUnifiedBorderPatch,
+    TableUnifiedBorderPatch, table_diagonal_identity_sha256,
 };
 pub use table_ruling::{
     TABLE_DRAW_CAPABILITY_ID, TABLE_ERASER_CAPABILITY_ID, TABLE_RULING_SCHEMA_VERSION,

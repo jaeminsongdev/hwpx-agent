@@ -245,6 +245,55 @@ fn diagonal_operation(apply_mode: TableDiagonalApplyMode) -> TablePropertiesOper
     }
 }
 
+#[test]
+fn public_diagonal_identity_matches_planner_for_each_and_unified_modes() -> TestResult {
+    let grid = unmerged_grid(2, 2)?;
+    let state = state(&grid)?;
+    for (mode, selected) in [
+        (
+            TableDiagonalApplyMode::EachCell,
+            vec![CellCoordinate { row: 0, column: 0 }],
+        ),
+        (TableDiagonalApplyMode::Unified, slots(0, 0, 2, 2)),
+    ] {
+        let request = request(&state, &grid, selected, diagonal_operation(mode))?;
+        let region = request.region();
+        let plan = TablePropertiesBuilder::build(
+            &request,
+            &state,
+            &grid,
+            TablePropertiesLimits::default(),
+        )?;
+        let expected = domain_ir::table_diagonal_identity_sha256(
+            state.table_id(),
+            state.grid_sha256(),
+            mode,
+            region,
+            &diagonal_value(),
+            TablePropertiesLimits::default(),
+        )?;
+        assert!(plan.mutations().iter().all(|mutation| {
+            mutation.after.diagonal_sha256.as_deref() == Some(expected.as_str())
+        }));
+    }
+    assert!(matches!(
+        domain_ir::table_diagonal_identity_sha256(
+            state.table_id(),
+            state.grid_sha256(),
+            TableDiagonalApplyMode::EachCell,
+            Some(domain_ir::TablePropertyRegion::new(0, 0, 1, 1)?),
+            &diagonal_value(),
+            TablePropertiesLimits::default(),
+        ),
+        Err(TablePropertiesError::BindingDrift)
+    ));
+    assert!(matches!(
+        domain_ir::TablePropertyRegion::new(0, 0, 0, 1),
+        Err(TablePropertiesError::DimensionOverflow)
+    ));
+    Ok(())
+}
+
 fn hex(value: [u8; 32]) -> String {
     const DIGITS: &[u8; 16] = b"0123456789abcdef";
     let mut output = String::with_capacity(64);

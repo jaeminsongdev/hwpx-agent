@@ -19,6 +19,17 @@ use crate::{
     TableLayoutHwpxError, TableLayoutHwpxLimits, TableLayoutHwpxReader,
 };
 
+mod properties_hwpx;
+
+pub use properties_hwpx::{
+    TABLE_PROPERTIES_HWPX_PROFILE_ID, TablePropertiesHwpxBinding, TablePropertiesHwpxCellValue,
+    TablePropertiesHwpxDiagonalBinding, TablePropertiesHwpxError, TablePropertiesHwpxLimits,
+    TablePropertiesHwpxLoweredParts, TablePropertiesHwpxLowerer,
+    TablePropertiesHwpxLoweringReceipt, TablePropertiesHwpxPartBinding,
+    TablePropertiesHwpxReadback, TablePropertiesHwpxReader, TablePropertiesHwpxTableValue,
+    TablePropertiesHwpxValueCatalog,
+};
+
 pub const TABLE_RULING_HWPX_PROFILE_ID: &str = "hwpx-agent.table-ruling-hwpx.hancom-2020/1";
 
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";

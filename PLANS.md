@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 34 unit, 12 integration and 15 oracle rows but 0/61 release-green; row closures remain |
+| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 30 unit, 16 integration and 15 oracle rows but 0/61 release-green; row closures remain |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -38,7 +38,7 @@
 | ID | Task | Current state and exact next evidence |
 |---|---|---|
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
-| P-0057 | P06-09 table conformance | fail-closed matrix plus bounded component/static-HWPX slices pass; TABLE-034/036/037/038 and TABLE-051/052/053 have operation-specific preserving integration evidence; exact current-PC release matrix remains 0/61 green |
+| P-0057 | P06-09 table conformance | fail-closed matrix plus bounded component/static-HWPX slices pass; ruling, properties, placement and layout-mode groups have preserving integration evidence; exact current-PC release matrix remains 0/61 green |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -71,22 +71,23 @@
 - Commit `97b3008` introduced the deterministic 61-row matrix. A row is green only when direct
   HWPX oracle, every required validation/fixture, negative and rollback evidence, current-target
   automation runtime and exact differential all pass.
-- Current authority reports 0/61 green with direct stages: 0 cataloged, 34 unit-passed,
-  12 integration-passed and 15 oracle-verified. Automation is six candidate-unverified plus
+- Current authority reports 0/61 green with direct stages: 0 cataloged, 30 unit-passed,
+  16 integration-passed and 15 oracle-verified. Automation is six candidate-unverified plus
   55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
-- Bounded slices through `8955f9d` cover geometry, aggregates, formats, conversion, placement,
-  sort/fill, style/transpose and TABLE-007/008/009/047 property/border/diagonal planning.
+- Bounded slices through `8955f9d` cover geometry, aggregates, formats, conversion, placement, sort/fill, style/transpose and property/border/diagonal planning.
 - `2c91e43` adds TABLE-010/011 cursor-row split and whitespace-only join, rational common-column
   lattice, formula rebase/cache clearing and request/build-time document-flow drift rejection.
 - The ruling slice adds TABLE-002/003 as one exact ruling/topology model: outer rectangle, full and
   local strokes, directional diagonals, structural shared-edge merge, transparent nonstructural
   erase and exact closed-package relift/lower/readback; structural formula mutation stays fail-closed.
+- The property HWPX slice maps TABLE-007/008/009/047 through typed catalogs, exact diagonal intent,
+  part/state/grid/flow checks and closed-package semantic reopen; no Hangul/render claim was added.
 - The layout-mode slice gives TABLE-051/052/053 distinct fixed/content/page allocation with closed
   package preservation: Rust 7/7, contract 4/4 and prior FULL checks PASS; no Hangul claim was added.
 - The placement HWPX slice maps TABLE-034/036/037/038 across all position, attachment, wrap/flow and
   margins while preserving inactive fields, merged siblings, formula/cache and pagination; Rust 7/7 and tamper 4/4 PASS without a Hangul claim.
-- TABLE-042/043/044/055 have the direct P06-07 oracle. The remaining 34 unit rows still need HWPX
-  lowering; all twelve integration rows still need exact target oracles and later automation evidence.
+- TABLE-042/043/044/055 have the direct P06-07 oracle. The remaining 30 unit rows still need HWPX
+  lowering; all sixteen integration rows still need exact target oracles and later automation evidence.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`,
   `implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json`,
   `protocol/private/p06-table-conformance-v1.json`.
@@ -107,9 +108,8 @@
 
 ## Next actions
 
-1. At `max`, lower 34 unit-only rows, close twelve integration-only target oracles, then qualify exact current-target automation bindings and disposable differentials.
-2. At every closure run target, regression, current and clean-checkout FULL plus applicable offline
-   Linux/security/STRICT checks without weakening evidence Gates.
+1. At `max`, lower 30 unit-only rows, close sixteen integration-only target oracles, then qualify exact current-target automation bindings and disposable differentials.
+2. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
 
 ## Context pack and archive pointers
 

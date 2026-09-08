@@ -589,6 +589,33 @@ pub struct TablePropertyRegion {
 }
 
 impl TablePropertyRegion {
+    /// Creates one non-empty bounded rectangular property region.
+    ///
+    /// # Errors
+    ///
+    /// Rejects zero spans and coordinate overflow. Grid containment remains the responsibility of
+    /// the request validator that owns the exact [`TableGrid`].
+    pub fn new(
+        row: u32,
+        column: u32,
+        row_span: u32,
+        column_span: u32,
+    ) -> Result<Self, TablePropertiesError> {
+        if row_span == 0
+            || column_span == 0
+            || row.checked_add(row_span).is_none()
+            || column.checked_add(column_span).is_none()
+        {
+            return Err(TablePropertiesError::DimensionOverflow);
+        }
+        Ok(Self {
+            row,
+            column,
+            row_span,
+            column_span,
+        })
+    }
+
     #[must_use]
     pub const fn row(self) -> u32 {
         self.row
@@ -1173,18 +1200,59 @@ fn resolve_diagonal_identity(
     match patch {
         TableDiagonalPatch::Clear => Ok(DiagonalResolution::Clear),
         TableDiagonalPatch::Set { value } => {
-            let identity = TableDiagonalIdentity {
-                schema_version: "hwpx-agent.table-diagonal-identity/v1",
-                table_id: &request.table_id,
-                grid_sha256: &request.grid_sha256,
-                apply_mode: *apply_mode,
-                region: request.region,
+            Ok(DiagonalResolution::Set(table_diagonal_identity_sha256(
+                &request.table_id,
+                &request.grid_sha256,
+                *apply_mode,
+                request.region,
                 value,
-            };
-            let bytes = serialize_bounded(&identity, limits.0.serialized_bytes)?;
-            Ok(DiagonalResolution::Set(hex(Sha256::digest(bytes).into())))
+                limits,
+            )?))
         }
     }
+}
+
+/// Computes the exact logical identity used for a native-validated table diagonal.
+///
+/// This is exposed for preserving adapters because HWPX stores the visible slash topology but not
+/// whether multiple equal diagonals originated from one unified logical selection. The caller must
+/// therefore supply the original application mode and region, which are validated and bound into
+/// the same digest used by [`TablePropertiesBuilder`].
+///
+/// # Errors
+///
+/// Rejects malformed identifiers, grid or line digests, empty diagonal values, mode/region
+/// mismatches, invalid regions, allocation failure, or bounded serialization failure.
+pub fn table_diagonal_identity_sha256(
+    table_id: &LogicalId,
+    grid_sha256: &str,
+    apply_mode: TableDiagonalApplyMode,
+    region: Option<TablePropertyRegion>,
+    value: &TableDiagonalValue,
+    limits: TablePropertiesLimits,
+) -> Result<String, TablePropertiesError> {
+    validate_identifier(table_id, limits)?;
+    validate_digest(grid_sha256)?;
+    validate_diagonal_value(value)?;
+    match (apply_mode, region) {
+        (TableDiagonalApplyMode::EachCell, None) => {}
+        (TableDiagonalApplyMode::Unified, Some(region))
+            if region.row_span != 0
+                && region.column_span != 0
+                && region.row.checked_add(region.row_span).is_some()
+                && region.column.checked_add(region.column_span).is_some() => {}
+        _ => return Err(TablePropertiesError::BindingDrift),
+    }
+    let identity = TableDiagonalIdentity {
+        schema_version: "hwpx-agent.table-diagonal-identity/v1",
+        table_id,
+        grid_sha256,
+        apply_mode,
+        region,
+        value,
+    };
+    let bytes = serialize_bounded(&identity, limits.0.serialized_bytes)?;
+    Ok(hex(Sha256::digest(bytes).into()))
 }
 
 fn build_after_cells(

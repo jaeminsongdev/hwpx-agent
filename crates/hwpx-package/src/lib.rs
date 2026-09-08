@@ -155,7 +155,12 @@ pub use table_placement::{
     TablePlacementHwpxReader,
 };
 pub use table_ruling_hwpx::{
-    TABLE_RULING_HWPX_PROFILE_ID, TableRulingHwpxBinding, TableRulingHwpxCellBinding,
+    TABLE_PROPERTIES_HWPX_PROFILE_ID, TABLE_RULING_HWPX_PROFILE_ID, TablePropertiesHwpxBinding,
+    TablePropertiesHwpxCellValue, TablePropertiesHwpxDiagonalBinding, TablePropertiesHwpxError,
+    TablePropertiesHwpxLimits, TablePropertiesHwpxLoweredParts, TablePropertiesHwpxLowerer,
+    TablePropertiesHwpxLoweringReceipt, TablePropertiesHwpxPartBinding,
+    TablePropertiesHwpxReadback, TablePropertiesHwpxReader, TablePropertiesHwpxTableValue,
+    TablePropertiesHwpxValueCatalog, TableRulingHwpxBinding, TableRulingHwpxCellBinding,
     TableRulingHwpxError, TableRulingHwpxLimits, TableRulingHwpxLoweredParts,
     TableRulingHwpxLowerer, TableRulingHwpxLoweringReceipt, TableRulingHwpxReadback,
     TableRulingHwpxReader, TableRulingHwpxStyleCatalog,
