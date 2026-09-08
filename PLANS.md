@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-06 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 5 cataloged, 38 unit, 7 integration and 11 oracle rows but 0/61 release-green; P06-07 renderer and row closures remain |
+| P06 | in progress | 01-06 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 3 cataloged, 40 unit, 7 integration and 11 oracle rows but 0/61 release-green; P06-07 renderer and row closures remain |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -38,7 +38,7 @@
 | ID | Task | Current state and exact next evidence |
 |---|---|---|
 | P-0055 | P06-07 pagination | pure component, static current-PC HWPX adapter and exact composite target v2 pass pre-runtime; corrected target still needs licensed Hangul 2020 save/reopen/page/PDF oracle |
-| P-0057 | P06-09 table conformance | fail-closed matrix and bounded slices pass at component level; `8955f9d` adds TABLE-047 each-cell/unified diagonal planning; exact 61-row current-PC release matrix remains 0/61 green |
+| P-0057 | P06-09 table conformance | fail-closed matrix and bounded slices pass at component level; `2c91e43` adds TABLE-010/011 whole-table split/join planning; exact 61-row current-PC release matrix remains 0/61 green |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -71,15 +71,15 @@
 - Commit `97b3008` introduced the deterministic 61-row matrix. A row is green only when direct
   HWPX oracle, every required validation/fixture, negative and rollback evidence, current-target
   automation runtime and exact differential all pass.
-- Current authority reports 0/61 green with direct stages: 5 cataloged, 38 unit-passed,
+- Current authority reports 0/61 green with direct stages: 3 cataloged, 40 unit-passed,
   7 integration-passed and 11 oracle-verified. Automation is six candidate-unverified plus
   55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
-- Bounded slices through `2217358` cover geometry, aggregates, formats, conversion, placement,
-  sort/fill, TABLE-020/021 style/transpose and TABLE-007/008/009 property/border planning.
-- `8955f9d` adds TABLE-047 OWPML slash/backSlash/center-line semantics without invented flag
-  normalization, including each-cell sets and rectangle-bound unified selection identity.
-- Latest verification: properties 21/21, P06 Python 125/125, workspace all-target tests, Clippy
-  `-D warnings`, formatting, contract/tamper and 112-source conformance locks PASS.
+- Bounded slices through `8955f9d` cover geometry, aggregates, formats, conversion, placement,
+  sort/fill, style/transpose and TABLE-007/008/009/047 property/border/diagonal planning.
+- `2c91e43` adds TABLE-010/011 cursor-row split and whitespace-only join, rational common-column
+  lattice, formula rebase/cache clearing and request/build-time document-flow drift rejection.
+- Latest verification: partition 13/13, P06 Python 129/129, workspace all-target tests, Clippy
+  `-D warnings`, formatting, contract/tamper and 120-source conformance locks PASS.
 - These rows remain component-only unit evidence. HWPX lowering, Hangul target build, automation
   runtime and exact differential evidence remain false/unverified.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`,
@@ -102,11 +102,11 @@
 
 ## Next actions
 
-1. At `max`, implement the 5 remaining catalog-only rows: TABLE-002/003/006/010/011.
-   Next implement TABLE-010/011 whole-table split/join semantics and preserving lowering boundary.
+1. At `max`, implement the 3 remaining catalog-only rows: TABLE-002/003/006.
+   Next group TABLE-002 draw, TABLE-003 eraser and TABLE-006 chart-from-table without backend claims.
 2. At `max`, when the user can approve visible access prompts, rerun the exact P06-07 target v2 and
    collect repeat-header/caption boundary save/reopen/PDF evidence.
-3. At `max`, lower the 38 component-only rows to preserving HWPX adapters, close seven static-only
+3. At `max`, lower the 40 component-only rows to preserving HWPX adapters, close seven static-only
    target oracles, then qualify exact current-target automation bindings and disposable differentials.
 4. At every closure run target, regression, current and clean-checkout FULL plus applicable offline
    Linux/security/STRICT checks without weakening evidence Gates.
@@ -116,5 +116,5 @@
 - Read first: this file, active P06-07 policies/reports, P06-09 conformance authorities, and
   `implementation/p05/P05_GATE_REPORT.md`.
 - P17 source authority: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V39.md`.
-- Detailed closed-card history is in the named reports and Git history through `8955f9d`.
+- Detailed closed-card history is in the named reports and Git history through `2c91e43`.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.
