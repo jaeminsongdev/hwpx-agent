@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 15 |
-| direct `integration_passed` | 6 |
-| direct `unit_passed` | 40 |
+| direct `integration_passed` | 10 |
+| direct `unit_passed` | 36 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -62,10 +62,11 @@ The machine-readable authority is
 - The text conversion component adds bounded UTF-8 tab/comma/semicolon parsing and deterministic
   writing for TABLE-004/005. Quoting, Unicode, multiline and empty cells roundtrip semantically;
   malformed or ragged input fails closed.
-- The placement component adds a bounded, deterministic state machine for TABLE-034/036/037/038.
-  Position, inline/floating mode, wrap/flow and four outer margins preserve unrelated state and
-  fail closed for inactive inline-only combinations or out-of-range values; no HWPX lowering or
-  licensed Hangul result is claimed.
+- The placement component and preserving HWPX adapter cover TABLE-034/036/037/038. Position tests
+  span every reference and alignment value, signed offsets and the three flags; attachment changes
+  preserve inactive native fields; all 16 table wrap/side-flow pairs and four margins read back
+  exactly. Closed synthetic packages preserve grid/cell content, formulas/caches, pagination,
+  merged siblings and all non-section parts. No licensed Hangul result is claimed.
 - The table-sort component adds a stable, bounded whole-cell relocation plan for TABLE-056. It
   supports ordered row/column keys, explicit blank and text-collation policies, exact fixed-decimal
   comparison, merge rejection and formula-movement policy binding without claiming HWPX execution.
@@ -117,7 +118,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-188 missing validation instances, 61 unverified automation runtime rows and 61 missing
+176 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -125,8 +126,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the 40 unit-only rows through preserving HWPX adapters;
-2. close the six integration-only target oracles;
+1. lower the 36 unit-only rows through preserving HWPX adapters;
+2. close the ten integration-only target oracles;
 3. supply remaining feature-specific validations, including formula readback where required;
 4. qualify exact current-target automation bindings and run safe disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.

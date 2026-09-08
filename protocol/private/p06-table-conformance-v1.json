@@ -32,8 +32,8 @@
     "non_green_rows": 61,
     "direct_stage_counts": {
       "cataloged": 0,
-      "unit_passed": 40,
-      "integration_passed": 6,
+      "unit_passed": 36,
+      "integration_passed": 10,
       "oracle_verified": 15
     },
     "automation_binding_counts": {
@@ -161,11 +161,15 @@
     },
     {
       "path": "crates/hwpx-package/src/lib.rs",
-      "sha256": "82dd131e036710e275937cf5d86fc0a157e0576bbbb210da59722545632c9062"
+      "sha256": "7a92192c0b6fad3dcb331bd218b715c6d4199972b448030cc81515a74b05ca83"
     },
     {
       "path": "crates/hwpx-package/src/table_layout.rs",
       "sha256": "67a79d14a16e1d1a90f94a20571b7651a07a7a4e070654f039283fa075297087"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_placement.rs",
+      "sha256": "35005787f2a8681eeede158c93805625455bea83a47b13ed8d99330c0b588e97"
     },
     {
       "path": "crates/hwpx-package/tests/table_geometry_hwpx.rs",
@@ -174,6 +178,10 @@
     {
       "path": "crates/hwpx-package/tests/table_layout_modes_hwpx.rs",
       "sha256": "eb8658285b65df941c3bebe4ae81b129b33ee92a6741dfe1ec901384de07fc7e"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_placement_hwpx.rs",
+      "sha256": "1f71ebcfc95554085c04cd94dc10116f59378b8e55db24e8c1ecd2ad29b10d84"
     },
     {
       "path": "crates/hwpx-package/examples/p06_07_table_pagination_target_fixture.rs",
@@ -225,11 +233,11 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_POLICY.md",
-      "sha256": "40af702c2b8f912ea6e0a0261a8231049b7630b9f1b8cb45966cc65876435cf0"
+      "sha256": "36285a43959524c34567d72b5d65e62e9eda91183c8f86cdead4a371fa173597"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "b047711cb3ecf7810b2201a897b5afcb8732f1c1c96be5428a7684835b75826d"
+      "sha256": "771aeb549179fb7374bf5d2ed0af5d9f585654cc22f2a7ced3f58936f8e4bf4a"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_GEOMETRY_HWPX_POLICY.md",
@@ -270,6 +278,14 @@
     {
       "path": "implementation/p06/P06-09_TABLE_PLACEMENT_REPORT.md",
       "sha256": "d746919f35402fb81484267743c9fe27e8d43c0d8a26e52b1793bcdfd1454dd3"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_PLACEMENT_HWPX_POLICY.md",
+      "sha256": "bc128b0892b880e6386849c80d9376de702a8872216aad01f91c88a07299c122"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_PLACEMENT_HWPX_REPORT.md",
+      "sha256": "9ce8e69e81e6ef3665c44769d365f0cb95c7f3f4236cf70f4bfe5ffe23b7ef09"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_PROPERTIES_POLICY.md",
@@ -329,7 +345,7 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "6f6155046cb07907eccf4aaa0c2f56dedfcdc5f7000e73b8af74be90ea1e962e"
+      "sha256": "d9cd5af0cb64e84cc571b7e470595cb70a0104362e9771d0c250d60e22acbff8"
     },
     {
       "path": "implementation/p06/p06-09-current-2020-automation-projection.json",
@@ -337,7 +353,7 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "e920761a0a0d82337044255a3a75fe1266b2d9dfee82400d1d241ac707b99a8b"
+      "sha256": "7c3aef8ec3fd4ec0ba534ab121e41d45d769f791ceaf3e289da489c1f08f9cd8"
     },
     {
       "path": "protocol/baseline/catalog-v5.lock.json",
@@ -408,6 +424,10 @@
       "sha256": "8840f9c1145d077870d6a065826bdd59a69f14585f8facfa988bb027bc4e40c5"
     },
     {
+      "path": "protocol/migrations/p06-table-placement-hwpx-v0-to-v1.md",
+      "sha256": "fca54fe5955e2459209c65b00c195d957b9fd808e583fe9444f5bb7e55c840dd"
+    },
+    {
       "path": "protocol/migrations/p06-table-properties-v0-to-v1.md",
       "sha256": "b1933ec4a2851657c94864b24f1a747d51b06bd31e3060c157f76130102a37c4"
     },
@@ -466,6 +486,10 @@
     {
       "path": "protocol/private/p06-table-placement-v1.json",
       "sha256": "d3a3d498397cfee4c1277068e6668fa9a870e73c977f2914b61aca2520b81c04"
+    },
+    {
+      "path": "protocol/private/p06-table-placement-hwpx-v1.json",
+      "sha256": "38177c7a7b96b392b5adb6f81ebaa18f58e4e01db8060792474cd7733b759bbc"
     },
     {
       "path": "protocol/private/p06-table-properties-v1.json",
@@ -529,11 +553,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "b6d25e1b6ae059e6530f21acb7b70ea528e37c38f998b5d9887dbb452a0d5408"
+      "sha256": "f4f6b6939a0beb2eaee0ff546d9fb24dca6e92748bf724dcb44935732dbb9a7c"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "bb204afcdd33a59599b9e55e18671fdaa07cf056a2e4dd54d374b8b0c6f168bc"
+      "sha256": "112b8d9a3f3eb1f5e299a7df5487492a150edd1259f758d30245666075de741e"
     },
     {
       "path": "tools/p06/tests/test_table_geometry_contract.py",
@@ -554,6 +578,10 @@
     {
       "path": "tools/p06/tests/test_table_placement_contract.py",
       "sha256": "c4cb48cad177aa137aec204f6e9187754fb2d4ac12d6098d0336712a6ef10fe9"
+    },
+    {
+      "path": "tools/p06/tests/test_table_placement_hwpx_contract.py",
+      "sha256": "1b0b5e3856e8bd25ec51f15d275b88c0d86d4168093efc67ea02bdbbc12f6187"
     },
     {
       "path": "tools/p06/tests/test_table_properties_contract.py",
@@ -597,7 +625,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "0852fe2e25b1ed46d815560dd8d2e9945382a7dafdb393bc5ebb3bfb058f33cc"
+      "sha256": "ae5ae94c62caa739998447b80042d66ca2d1f46fad0e60fde4416e0e404e7d66"
     },
     {
       "path": "tools/p06/validate_table_geometry_contract.py",
@@ -618,6 +646,10 @@
     {
       "path": "tools/p06/validate_table_placement_contract.py",
       "sha256": "4bea97fdd255e21b582c6fa175ef1c7d33fa073ecbf9484b9e9308fda586016f"
+    },
+    {
+      "path": "tools/p06/validate_table_placement_hwpx_contract.py",
+      "sha256": "be94d012ebb8f4f097df694df559e6c3bccccf647bdc73141c297ddf47f0f1e0"
     },
     {
       "path": "tools/p06/validate_table_properties_contract.py",

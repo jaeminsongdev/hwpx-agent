@@ -199,17 +199,17 @@
     },
     {
       "feature_ids": ["TABLE-034", "TABLE-036", "TABLE-037", "TABLE-038"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
       "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
       "negative_passed": true,
       "rollback_or_retry_passed": false,
       "differential_state": "not_run",
       "evidence_files": [
         {
-          "path": "implementation/p06/P06-09_TABLE_PLACEMENT_REPORT.md",
-          "sha256": "d746919f35402fb81484267743c9fe27e8d43c0d8a26e52b1793bcdfd1454dd3"
+          "path": "implementation/p06/P06-09_TABLE_PLACEMENT_HWPX_REPORT.md",
+          "sha256": "9ce8e69e81e6ef3665c44769d365f0cb95c7f3f4236cf70f4bfe5ffe23b7ef09"
         }
       ]
     },
