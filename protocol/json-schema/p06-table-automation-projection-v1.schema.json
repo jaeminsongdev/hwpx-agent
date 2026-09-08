@@ -65,12 +65,22 @@
   },
   "$defs": {
     "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-    "featureId": { "type": "string", "pattern": "^TABLE-(00[1-9]|0[1-5][0-9]|06[01])$" },
+    "featureId": {
+      "type": "string",
+      "pattern": "^TABLE-(00[1-9]|0[1-5][0-9]|06[01])$"
+    },
     "capabilityId": { "type": "string", "pattern": "^table\\.[a-z0-9_]+$" },
     "target": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["profile_id", "product", "build", "locale", "architecture", "scope"],
+      "required": [
+        "profile_id",
+        "product",
+        "build",
+        "locale",
+        "architecture",
+        "scope"
+      ],
       "properties": {
         "profile_id": { "const": "hancom-hangul-2020-secondary" },
         "product": { "const": "Hancom Hangul 2020" },

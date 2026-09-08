@@ -5,11 +5,21 @@
   "x-catalog-version": 5,
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "scope", "target", "sources", "summary", "rows", "privacy"],
+  "required": [
+    "schema_version",
+    "scope",
+    "target",
+    "sources",
+    "summary",
+    "rows",
+    "privacy"
+  ],
   "properties": {
     "schema_version": { "const": "hwpx-agent.table-conformance-report/v1" },
     "scope": { "const": "p06_09_current_pc_hancom_2020_fail_closed_matrix" },
-    "target": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/target" },
+    "target": {
+      "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/target"
+    },
     "sources": {
       "type": "object",
       "additionalProperties": false,
@@ -21,11 +31,21 @@
         "direct_evidence_sha256"
       ],
       "properties": {
-        "feature_catalog_sha256": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256" },
-        "capability_contracts_sha256": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256" },
-        "automation_projection_sha256": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256" },
-        "automation_source_registry_sha256": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256" },
-        "direct_evidence_sha256": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256" }
+        "feature_catalog_sha256": {
+          "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256"
+        },
+        "capability_contracts_sha256": {
+          "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256"
+        },
+        "automation_projection_sha256": {
+          "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256"
+        },
+        "automation_source_registry_sha256": {
+          "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256"
+        },
+        "direct_evidence_sha256": {
+          "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256"
+        }
       }
     },
     "summary": {
@@ -77,7 +97,11 @@
   "$defs": {
     "countMap": {
       "type": "object",
-      "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 1000000 }
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000
+      }
     },
     "evidenceFile": {
       "type": "object",
@@ -85,7 +109,9 @@
       "required": ["path", "sha256"],
       "properties": {
         "path": { "type": "string", "minLength": 1, "maxLength": 512 },
-        "sha256": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256" }
+        "sha256": {
+          "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256"
+        }
       }
     },
     "row": {
@@ -103,13 +129,30 @@
         "blockers"
       ],
       "properties": {
-        "feature_id": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/featureId" },
-        "capability_id": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/capabilityId" },
-        "required_validations": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "feature_id": {
+          "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/featureId"
+        },
+        "capability_id": {
+          "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/capabilityId"
+        },
+        "required_validations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
         "required_fixture_classes": {
           "type": "array",
           "uniqueItems": true,
-          "items": { "enum": ["happy_path", "boundary", "negative", "preservation", "target_build", "security"] }
+          "items": {
+            "enum": [
+              "happy_path",
+              "boundary",
+              "negative",
+              "preservation",
+              "target_build",
+              "security"
+            ]
+          }
         },
         "direct": {
           "type": "object",
@@ -125,31 +168,79 @@
           ],
           "properties": {
             "backend": { "enum": ["component_only", "direct_hwpx"] },
-            "stage": { "enum": ["cataloged", "unit_passed", "integration_passed", "oracle_verified"] },
-            "validations_passed": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+            "stage": {
+              "enum": [
+                "cataloged",
+                "unit_passed",
+                "integration_passed",
+                "oracle_verified"
+              ]
+            },
+            "validations_passed": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
             "fixture_classes_passed": {
               "type": "array",
               "uniqueItems": true,
-              "items": { "enum": ["happy_path", "boundary", "negative", "preservation", "target_build", "security"] }
+              "items": {
+                "enum": [
+                  "happy_path",
+                  "boundary",
+                  "negative",
+                  "preservation",
+                  "target_build",
+                  "security"
+                ]
+              }
             },
             "negative_passed": { "type": "boolean" },
             "rollback_or_retry_passed": { "type": "boolean" },
-            "evidence_files": { "type": "array", "maxItems": 32, "items": { "$ref": "#/$defs/evidenceFile" } }
+            "evidence_files": {
+              "type": "array",
+              "maxItems": 32,
+              "items": { "$ref": "#/$defs/evidenceFile" }
+            }
           }
         },
         "automation": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["binding_status", "runtime_support_state", "routing_enabled"],
+          "required": [
+            "binding_status",
+            "runtime_support_state",
+            "routing_enabled"
+          ],
           "properties": {
-            "binding_status": { "enum": ["candidate_unverified", "unavailable_with_reason", "verified_current_target"] },
-            "runtime_support_state": { "enum": ["unverified", "verified_current_target", "failed_current_target", "blocked_by_policy", "unverified_not_run"] },
+            "binding_status": {
+              "enum": [
+                "candidate_unverified",
+                "unavailable_with_reason",
+                "verified_current_target"
+              ]
+            },
+            "runtime_support_state": {
+              "enum": [
+                "unverified",
+                "verified_current_target",
+                "failed_current_target",
+                "blocked_by_policy",
+                "unverified_not_run"
+              ]
+            },
             "routing_enabled": { "type": "boolean" }
           }
         },
-        "differential_state": { "enum": ["not_run", "exact_match", "mismatch"] },
+        "differential_state": {
+          "enum": ["not_run", "exact_match", "mismatch"]
+        },
         "gate_state": { "enum": ["green", "non_green"] },
-        "blockers": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+        "blockers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
       }
     }
   }
