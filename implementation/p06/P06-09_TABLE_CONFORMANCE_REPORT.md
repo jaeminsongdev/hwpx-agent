@@ -17,8 +17,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 |---|---:|
 | direct `oracle_verified` | 11 |
 | direct `integration_passed` | 7 |
-| direct `unit_passed` | 30 |
-| direct `cataloged` only | 13 |
+| direct `unit_passed` | 32 |
+| direct `cataloged` only | 11 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
 | automation runtime verified | 0 |
@@ -62,6 +62,10 @@ The machine-readable authority is
 - The table-sort component adds a stable, bounded whole-cell relocation plan for TABLE-056. It
   supports ordered row/column keys, explicit blank and text-collation policies, exact fixed-decimal
   comparison, merge rejection and formula-movement policy binding without claiming HWPX execution.
+- The table-auto-fill components add reusable explicit, exact-number and date-day series plus an
+  exact-region scalar mutation plan for TABLE-057/058. Traversal, start index, existing formula
+  replacement and style preservation are digest-bound; rich-content/formula generation, native
+  series-index mapping and HWPX execution remain unclaimed.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 
@@ -80,8 +84,8 @@ ordering; duplicate JSON keys; finite files; path containment; privacy; and crea
 Protocol code generation publishes the three P06 schemas through additive catalog v5 while baseline
 locks prove catalogs v2 through v4 remain unchanged.
 
-Current aggregate blockers include 13 missing direct evidence rows, 50 rows below direct oracle,
-218 missing validation instances, 61 unverified automation runtime rows and 61 missing
+Current aggregate blockers include 11 missing direct evidence rows, 50 rows below direct oracle,
+216 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -90,8 +94,8 @@ P06-09's matrix engine and current snapshot are implemented, but the roadmap com
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
 1. complete P06-07 corrected-target renderer evidence;
-2. implement the 13 remaining catalog-only direct operations in bounded semantic groups;
-3. lower the 30 component-only rows and close the seven static-only target oracles;
+2. implement the 11 remaining catalog-only direct operations in bounded semantic groups;
+3. lower the 32 component-only rows and close the seven static-only target oracles;
 4. qualify exact current-target automation bindings and run safe disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.
 

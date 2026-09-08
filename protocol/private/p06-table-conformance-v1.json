@@ -31,8 +31,8 @@
     "green_rows": 0,
     "non_green_rows": 61,
     "direct_stage_counts": {
-      "cataloged": 13,
-      "unit_passed": 30,
+      "cataloged": 11,
+      "unit_passed": 32,
       "integration_passed": 7,
       "oracle_verified": 11
     },
@@ -49,11 +49,15 @@
   "source_locks": [
     {
       "path": "crates/domain-ir/src/lib.rs",
-      "sha256": "f86be9f915479f347635bf1133176929dd5003cd9704ae9a3f27da648f69e948"
+      "sha256": "cb767d0e87175c0da9a27c9c0e1d008920ee1989778919d433abf2a565ff7ce0"
     },
     {
       "path": "crates/domain-ir/src/table_aggregate.rs",
       "sha256": "255575310f9b140380af794775e5a8f455cb39f3a50b2521b7a53494bd10ecd3"
+    },
+    {
+      "path": "crates/domain-ir/src/table_auto_fill.rs",
+      "sha256": "f98af3fa4384e49ed11070455581d8c0f895b76d1dc7c956c64c82d902f1410a"
     },
     {
       "path": "crates/domain-ir/src/table_geometry.rs",
@@ -78,6 +82,10 @@
     {
       "path": "crates/domain-ir/tests/table_aggregate.rs",
       "sha256": "d81db949a6dc4568c5d175a2bf02897f936bbc0d3650420fbd01cfaa58f40a5e"
+    },
+    {
+      "path": "crates/domain-ir/tests/table_auto_fill.rs",
+      "sha256": "1f1e17f0b7fa883f274506c5da6cfff643650491a54b53826c3e488ac00f498e"
     },
     {
       "path": "crates/domain-ir/tests/table_geometry.rs",
@@ -133,7 +141,7 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "be8137a7c3a37b6c60e67b31afa955e537662be17fd954a3388af69d56a09e19"
+      "sha256": "8eaef6cfe0287f1a155675936e1e5602564f77d4bd3ae53cb92677f34709a778"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_AGGREGATE_POLICY.md",
@@ -142,6 +150,14 @@
     {
       "path": "implementation/p06/P06-09_TABLE_AGGREGATE_REPORT.md",
       "sha256": "a25a02b99c15b29c867d4ded9c9b0f24f74502914449035c076daea8c884e8b4"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_AUTO_FILL_POLICY.md",
+      "sha256": "126e6b98c635e7d441bb14e99c59830dd6be8491d83cfcf8b8edf260fb4a2532"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_AUTO_FILL_REPORT.md",
+      "sha256": "3cd8641735e2afbe60f01983a5fe27139c0db7c05e45afc8a7d4e051465451da"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_GEOMETRY_HWPX_POLICY.md",
@@ -193,7 +209,7 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "4e5b23ef5ef887ca199f88d2fb580333b7aeac46c341ada2ad36434d314c62e6"
+      "sha256": "9f4f4688eec9760de2a1a94b56b375121a3cf9b17094df4aea10563fbfb9192b"
     },
     {
       "path": "implementation/p06/p06-09-current-2020-automation-projection.json",
@@ -201,7 +217,7 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "c3e00a5480b9c8ef6f4e6f23e3c946702296abf697fa4a59bb4f8b4971d1f7ed"
+      "sha256": "0d300ef9b2d5ea4f901afdba631bc7b996a0ec11190f80f69b8751957dbba862"
     },
     {
       "path": "protocol/json-schema/p06-table-automation-projection-v1.schema.json",
@@ -240,6 +256,10 @@
       "sha256": "8478960225b2a08f44ed7a645607826d4b3b3b56ec474b04dce71c460bb561de"
     },
     {
+      "path": "protocol/migrations/p06-table-auto-fill-v0-to-v1.md",
+      "sha256": "bdb4aed96eb3d8daf06152eb776061eb62bf256e37146579bf6abc3e452fefe5"
+    },
+    {
       "path": "protocol/migrations/p06-table-conformance-v0-to-v1.md",
       "sha256": "2ebef830bfa3d757467947324d416a11a941a55483cc83f22f1970537711e933"
     },
@@ -270,6 +290,10 @@
     {
       "path": "protocol/private/p06-table-aggregate-v1.json",
       "sha256": "6fefb06c4c788fd0e52aa30e7c8b5dae4019d3714ca079fcf90e93bafbe9862c"
+    },
+    {
+      "path": "protocol/private/p06-table-auto-fill-v1.json",
+      "sha256": "9070715450f5d7d53e9697427bcd094ffd490a24a685c861105658ac540124e0"
     },
     {
       "path": "protocol/private/p06-table-geometry-v1.json",
@@ -320,12 +344,16 @@
       "sha256": "9ec0bd45dd0a4929ac5d105e364a068be62cb2f16482ec8f2b67bf756ccdc792"
     },
     {
+      "path": "tools/p06/tests/test_table_auto_fill_contract.py",
+      "sha256": "08a195e7633bf2c427024d8dd6c46d308d4b75a081f4be37d969368eac33cc65"
+    },
+    {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "93f21de40bd07f8a92a1a50a52cc490bdbcd0b1c6282f7251b40f2e00c0a0a87"
+      "sha256": "92410addf7fea4c9dc710cd2a63dca10fae5c037bbb06e6146574230810a27e9"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "ca9abde71caa9b66680f22a1e3480f74cc848b7b8e6834c5ac7149d380e0dffa"
+      "sha256": "2f92428e528f9226a3964301e0dbe7a174174e50b96fb34698cf4fd6d70be5a2"
     },
     {
       "path": "tools/p06/tests/test_table_geometry_contract.py",
@@ -356,8 +384,12 @@
       "sha256": "32b37db7d2c4fc01238b72682d5b1324357543283934e8415c1b664748e57c86"
     },
     {
+      "path": "tools/p06/validate_table_auto_fill_contract.py",
+      "sha256": "1c9f694f991e1d83f5872290cc4f164b43b73afdbe1aa9fb1c47284e9dc34f99"
+    },
+    {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "f848cf60105e6f916f57754ff33f1762c046beae7b9eaf90912372ba82451013"
+      "sha256": "d111ccd6aa2bca150a10c1b1aacf7761bf9fd09f60c720aa0e4f6a2cce7bfbb7"
     },
     {
       "path": "tools/p06/validate_table_geometry_contract.py",

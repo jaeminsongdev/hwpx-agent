@@ -8,6 +8,7 @@ mod selector;
 mod semantic_diff;
 mod semantic_summary;
 mod table_aggregate;
+mod table_auto_fill;
 mod table_formula;
 mod table_geometry;
 mod table_grid;
@@ -68,6 +69,15 @@ pub use semantic_summary::{
 pub use table_aggregate::{
     TABLE_AGGREGATE_SCHEMA_VERSION, TableAggregateAxis, TableAggregateBuilder, TableAggregateError,
     TableAggregatePlan, TableAggregateRange, TableAggregateRequest, TableAggregateRequestDraft,
+};
+pub use table_auto_fill::{
+    TABLE_AUTO_FILL_CAPABILITY_ID, TABLE_AUTO_FILL_SCHEMA_VERSION,
+    TABLE_AUTO_FILL_SERIES_CAPABILITY_ID, TABLE_AUTO_FILL_SERIES_SCHEMA_VERSION,
+    TableAutoFillBuilder, TableAutoFillCellDraft, TableAutoFillDefinition, TableAutoFillError,
+    TableAutoFillFormulaPolicy, TableAutoFillLimitConfig, TableAutoFillLimits,
+    TableAutoFillMutation, TableAutoFillNumber, TableAutoFillOrder, TableAutoFillPlan,
+    TableAutoFillReceipt, TableAutoFillRegion, TableAutoFillRequest, TableAutoFillRequestDraft,
+    TableAutoFillSeries, TableAutoFillSeriesDraft, TableAutoFillValue,
 };
 pub use table_formula::{
     FormulaAst, FormulaAstDraft, FormulaBinaryOperator, FormulaCache, FormulaCachePolicy,

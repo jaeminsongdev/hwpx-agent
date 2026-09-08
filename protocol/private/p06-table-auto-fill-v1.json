@@ -1,0 +1,114 @@
+{
+  "schema_version": "hwpx-agent.table-auto-fill-contract/v1",
+  "model_schema_versions": {
+    "series": "hwpx-agent.table-auto-fill-series/v1",
+    "request": "hwpx-agent.table-auto-fill/v1"
+  },
+  "scope": "p06_09_pure_bounded_table_auto_fill_current_pc_local_development",
+  "features": [
+    {
+      "feature_id": "TABLE-057",
+      "capability_id": "table.auto_fill"
+    },
+    {
+      "feature_id": "TABLE-058",
+      "capability_id": "table.auto_fill_series"
+    }
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    }
+  ],
+  "migration": "protocol/migrations/p06-table-auto-fill-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_AUTO_FILL_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_AUTO_FILL_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/table_auto_fill.rs",
+    "crates/domain-ir/tests/table_auto_fill.rs",
+    "implementation/p06/P06-09_TABLE_AUTO_FILL_POLICY.md",
+    "implementation/p06/P06-09_TABLE_AUTO_FILL_REPORT.md"
+  ],
+  "semantics": {
+    "series": "explicit_cycle_exact_linear_number_or_linear_date_days",
+    "number": "scale_18_checked_fixed_decimal_without_floating_point",
+    "region": "exact_rectangular_merge_free_table_grid_region",
+    "order": "explicit_row_major_or_column_major_with_checked_start_index",
+    "formula": "reject_or_replace_exactly_bound_existing_formula_without_generation_claim",
+    "style": "preserved_style_sha256_bound_for_every_selected_coordinate"
+  },
+  "binding": {
+    "identity": "validated_logical_table_and_series_ids_plus_canonical_grid_and_series_sha256",
+    "cells": "complete_unique_region_coverage_with_payload_formula_style_and_current_value",
+    "mutation": "coordinate_sequence_prior_state_preserved_style_generated_value_and_formula_clear",
+    "receipt": "table_grid_series_request_mutation_formula_policy_and_semantic_change_count",
+    "serialization": "deterministic_compact_bounded_json_and_sha256"
+  },
+  "default_limits": {
+    "input_bytes": 4194304,
+    "selected_cells": 1000000,
+    "series_items": 4096,
+    "text_bytes": 16384,
+    "total_text_bytes": 4194304,
+    "generation_work": 1000000,
+    "serialized_bytes": 67108864
+  },
+  "failure_policy": [
+    "invalid_or_over_ceiling_limits_rejected",
+    "empty_or_oversized_json_rejected",
+    "malformed_unknown_or_duplicate_json_rejected",
+    "unsupported_series_or_request_schema_rejected",
+    "empty_or_oversized_series_rejected",
+    "invalid_scale_text_or_aggregate_text_rejected",
+    "series_id_or_digest_mismatch_rejected",
+    "reversed_or_out_of_grid_region_rejected",
+    "merged_selected_region_rejected",
+    "incomplete_duplicate_or_extra_cell_set_rejected",
+    "invalid_payload_formula_or_style_digest_rejected",
+    "formula_rejected_without_explicit_replace_bound_policy",
+    "generation_work_limit_rejected_before_build",
+    "numeric_date_or_index_overflow_rejected",
+    "output_limit_or_serialization_failure_rejected",
+    "no_partial_plan_or_receipt_returned"
+  ],
+  "not_claimed": {
+    "direct_hwpx_adapter": false,
+    "rich_content_lowering": false,
+    "formula_generation_or_propagation": false,
+    "native_series_index_mapping": false,
+    "semantic_reopen": false,
+    "formula_readback": false,
+    "page_split_or_render": false,
+    "hancom_2020_target_build": false,
+    "automation_or_differential": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "p06_09": "in_progress",
+    "product_complete": false
+  }
+}
