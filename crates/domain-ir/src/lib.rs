@@ -18,6 +18,7 @@ mod table_merge_split;
 mod table_operations;
 mod table_pagination;
 mod table_placement;
+mod table_properties;
 mod table_sort;
 mod table_style;
 mod table_text_conversion;
@@ -130,6 +131,17 @@ pub use table_placement::{
     TablePlacementLimitConfig, TablePlacementLimits, TablePlacementOperation,
     TablePlacementReceipt, TablePlacementResult, TablePlacementState, TablePlacementStateDraft,
     TableTextFlow, TableTextWrap, TableVerticalAlignment, TableVerticalReference,
+};
+pub use table_properties::{
+    TABLE_CELL_BORDER_EACH_CAPABILITY_ID, TABLE_CELL_BORDER_UNIFIED_CAPABILITY_ID,
+    TABLE_PROPERTIES_CAPABILITY_ID, TABLE_PROPERTIES_SCHEMA_VERSION, TableBorderEdgeRole,
+    TableCellBorderPatch, TableCellBorderState, TableCellPropertyDraft, TableCellPropertyMutation,
+    TableCellPropertyValue, TablePropertiesBuilder, TablePropertiesError,
+    TablePropertiesLimitConfig, TablePropertiesLimits, TablePropertiesOperation,
+    TablePropertiesPlan, TablePropertiesReceipt, TablePropertiesRequest,
+    TablePropertiesRequestDraft, TablePropertiesState, TablePropertiesStateDraft,
+    TablePropertyDigestPatch, TablePropertyRegion, TableResolvedBorderRoles,
+    TableUnifiedBorderPatch,
 };
 pub use table_sort::{
     TABLE_SORT_CAPABILITY_ID, TABLE_SORT_SCHEMA_VERSION, TableBlankOrder, TableFormulaMovePolicy,

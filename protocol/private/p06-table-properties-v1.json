@@ -1,0 +1,119 @@
+{
+  "schema_version": "hwpx-agent.table-properties-contract/v1",
+  "model_schema_version": "hwpx-agent.table-properties/v1",
+  "scope": "p06_09_pure_bounded_table_and_cell_properties_current_pc_local_development",
+  "features": [
+    {
+      "feature_id": "TABLE-007",
+      "capability_id": "table.properties"
+    },
+    {
+      "feature_id": "TABLE-008",
+      "capability_id": "table.cell_border_each"
+    },
+    {
+      "feature_id": "TABLE-009",
+      "capability_id": "table.cell_border_unified"
+    }
+  ],
+  "official_references": [
+    "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/cellborder/cellborder(each).htm",
+    "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/cellborder/cellborder(many).htm",
+    "https://help.hancom.com/hoffice110/ko-KR/Hwp/table/cellborder/cellborder(background).htm"
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    }
+  ],
+  "migration": "protocol/migrations/p06-table-properties-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_PROPERTIES_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_PROPERTIES_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/table_properties.rs",
+    "crates/domain-ir/tests/table_properties.rs",
+    "implementation/p06/P06-09_TABLE_PROPERTIES_POLICY.md",
+    "implementation/p06/P06-09_TABLE_PROPERTIES_REPORT.md"
+  ],
+  "semantics": {
+    "selection": "canonical_exact_slot_sets_with_complete_merged_containment_and_rectangle_required_only_for_unified",
+    "properties": "table_digest_and_selected_non_border_cell_digest_change_only_when_explicitly_declared",
+    "each_border": "same_four_side_patch_roles_resolved_independently_for_every_selected_master_cell",
+    "unified_border": "selection_outer_frame_and_inner_horizontal_vertical_patches_resolved_over_real_master_edges",
+    "background": "preserve_clear_or_set_cell_background_identity_applied_per_selected_master_cell",
+    "preservation": "unselected_cells_payload_formula_diagonal_and_untargeted_property_facets_are_digest_bound"
+  },
+  "binding": {
+    "identity": "validated_logical_table_and_master_cell_ids_plus_canonical_grid_state_and_request_sha256",
+    "cells": "complete_unique_master_cell_coverage_with_exact_top_left_coordinates_and_property_facets",
+    "plan": "per_selected_master_before_after_values_and_explicit_per_cell_outer_or_inner_edge_roles",
+    "receipt": "before_after_state_and_actual_property_border_background_assignment_and_preservation_counts",
+    "serialization": "deterministic_compact_bounded_json_and_sha256"
+  },
+  "default_limits": {
+    "input_bytes": 16777216,
+    "master_cells": 1000000,
+    "selected_slots": 1000000,
+    "identifier_bytes": 256,
+    "serialized_bytes": 134217728
+  },
+  "failure_policy": [
+    "invalid_or_over_ceiling_limits_rejected",
+    "empty_or_oversized_json_rejected",
+    "malformed_unknown_or_duplicate_json_rejected",
+    "unsupported_state_or_request_schema_rejected",
+    "invalid_identifier_or_digest_rejected",
+    "incomplete_duplicate_extra_or_mismatched_master_cell_state_rejected",
+    "empty_property_or_border_operation_rejected",
+    "table_only_operation_with_cell_selection_rejected",
+    "cell_operation_without_selection_rejected",
+    "duplicate_or_out_of_bounds_selection_rejected",
+    "non_rectangular_unified_selection_rejected",
+    "partially_selected_merged_master_cell_rejected",
+    "state_grid_or_request_binding_drift_rejected",
+    "preserve_clear_and_set_remain_distinct",
+    "actual_changes_not_inflated_by_noop_assignments",
+    "output_limit_serialization_or_allocation_failure_rejected",
+    "no_partial_plan_or_receipt_returned"
+  ],
+  "not_claimed": {
+    "direct_hwpx_adapter": false,
+    "border_fill_catalog_materialization": false,
+    "package_mutation_or_preservation": false,
+    "semantic_reopen": false,
+    "formula_readback": false,
+    "page_split_or_render": false,
+    "hancom_2020_target_build": false,
+    "automation_or_differential": false,
+    "diagonal_editing_table_047": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "p06_09": "in_progress",
+    "product_complete": false
+  }
+}
