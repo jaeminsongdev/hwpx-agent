@@ -12,6 +12,7 @@ mod table_grid;
 mod table_layout;
 mod table_merge_split;
 mod table_operations;
+mod table_pagination;
 mod units;
 
 pub use capability_router::{
@@ -82,6 +83,13 @@ pub use table_merge_split::{
 pub use table_operations::{
     TABLE_OPERATIONS_SCHEMA_VERSION, TableCellRemap, TableDimensions, TableOperationError,
     TableOperationKind, TableOperationReceipt, TableOperationResult,
+};
+pub use table_pagination::{
+    CaptionSide, RowSplitEligibility, TABLE_PAGINATION_OBSERVATION_SCHEMA_VERSION,
+    TABLE_PAGINATION_SCHEMA_VERSION, TableCaption, TablePage, TablePageItem, TablePageSplitPolicy,
+    TablePaginationError, TablePaginationLimitConfig, TablePaginationLimits,
+    TablePaginationObservation, TablePaginationPolicy, TablePaginationReceipt, TablePaginationRow,
+    TablePaginationValidator,
 };
 pub use units::{
     AngleMicrodegrees, Conversion, ConversionReceipt, CoordinateAnchor, CoordinateSpace, HwpUnit,

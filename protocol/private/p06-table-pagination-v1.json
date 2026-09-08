@@ -1,0 +1,118 @@
+{
+  "schema_version": "hwpx-agent.table-pagination-contract/v1",
+  "model_schema_version": "hwpx-agent.table-pagination/v1",
+  "observation_schema_version": "hwpx-agent.table-pagination-observation/v1",
+  "scope": "p06_07_pure_bounded_table_pagination_observation_validator_current_pc_local_development",
+  "prerequisites": [
+    "hwpx-agent.table-grid/v1",
+    "checked_length_micrometers"
+  ],
+  "source_lock_canonicalization": "utf8_lf_sha256",
+  "source_locks": [
+    {
+      "path": "docs/03_document_model/06_table_model.md",
+      "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"
+    },
+    {
+      "path": "docs/12_implementation_guides/05_page_table_layout_algorithms.md",
+      "sha256": "4d94e6d462f7fc2f2187827ab436eb17c2bb2fe8f728ba8eee5f051c16bb4274"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "FEATURE_COVERAGE_MATRIX.csv",
+      "sha256": "a95c521352f2a58beb674cd13d6020379ae3d0abd9b914cde05996deab326a40"
+    },
+    {
+      "path": "specs/capability-contracts.generated.json",
+      "sha256": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306"
+    }
+  ],
+  "component_capabilities": [
+    "table.repeat_header",
+    "table.allow_page_split",
+    "table.row_split_policy",
+    "table.caption"
+  ],
+  "page_split_policies": {
+    "allow": "table_and_only_explicitly_eligible_rows_may_cross_contiguous_page_boundaries",
+    "avoid_row": "only_complete_row_and_cell_boundaries_may_split_and_vertical_merges_remain_atomic",
+    "avoid_table": "the_complete_table_must_remain_on_one_observed_page",
+    "required_keep": "the_complete_table_and_any_keep_bound_caption_must_remain_on_one_observed_page"
+  },
+  "repeat_header": {
+    "selection": "zero_based_contiguous_prefix_length",
+    "span_rule": "a_header_master_cell_may_not_extend_into_the_body_and_a_logical_header_row_may_not_fragment",
+    "first_page": "logical_header_rows_are_not_copies",
+    "continuation_pages": "exact_prefix_copies_first_in_ascending_order",
+    "capacity": "each_header_copy_consumes_its_exact_declared_row_height"
+  },
+  "row_fragments": {
+    "coverage": "every_grid_row_exactly_once_in_ascending_order",
+    "sequence": "zero_based_contiguous_fragment_indexes_with_canonical_begin_and_end_flags",
+    "height": "positive_fragments_sum_exactly_to_the_declared_positive_row_height",
+    "continuation": "an_incomplete_row_resumes_on_the_immediately_following_page_before_a_new_row",
+    "blocked_shapes": "forbidden_nested_table_and_unbreakable_object_rows_never_split"
+  },
+  "captions": {
+    "v1_sides": [
+      "top",
+      "bottom"
+    ],
+    "identity": "lowercase_semantic_content_sha256",
+    "capacity": "positive_block_height_plus_nonnegative_gap",
+    "top_order": "one_caption_before_the_first_logical_row_on_the_first_page",
+    "bottom_order": "one_caption_after_the_final_logical_row_on_the_last_page",
+    "required_keep": "required_keep_rejects_an_attached_caption_without_keep_with_table"
+  },
+  "page_observation": {
+    "identity": "nonempty_contiguous_indexes_beginning_at_anchor_page_index",
+    "capacities": "separate_positive_first_and_continuation_available_heights",
+    "accounting": "header_copies_row_fragments_caption_block_and_gap_must_not_exceed_capacity",
+    "authority": "observation_is_input_from_an_external_identified_renderer_and_not_inferred_here"
+  },
+  "determinism": {
+    "policy_binding": "bounded_canonical_json_sha256",
+    "observation_binding": "bounded_canonical_json_sha256",
+    "grid_binding": "canonical_table_grid_sha256",
+    "receipt": "all_three_hashes_and_exact_page_fragment_header_caption_counts"
+  },
+  "default_limits": {
+    "rows": 10000,
+    "pages": 20000,
+    "fragments": 1000000,
+    "dimension_micrometers": 1000000000,
+    "serialized_bytes": 33554432
+  },
+  "failure_policy": [
+    "unsupported_or_unknown_schema_or_json_shape",
+    "row_count_order_height_or_fragment_coverage_mismatch",
+    "noncontiguous_or_over_limit_page_indexes",
+    "repeat_header_range_order_or_span_mismatch",
+    "illegal_row_cell_table_nested_or_unbreakable_object_split",
+    "caption_digest_side_order_height_gap_or_keep_mismatch",
+    "page_capacity_overflow",
+    "arithmetic_allocation_serialization_or_output_limit",
+    "missing_duplicate_or_unexpected_rows_headers_or_caption"
+  ],
+  "migration": "protocol/migrations/p06-table-pagination-v0-to-v1.md",
+  "not_claimed": {
+    "hancom_2020_page_count_or_bounding_boxes": false,
+    "hancom_2020_save_reopen_or_pdf": false,
+    "hwpx_pagination_lowering_or_readback": false,
+    "automation_pagination_binding": false,
+    "left_or_right_caption_layout": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_07_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}
