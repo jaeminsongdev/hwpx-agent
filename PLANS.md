@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-06 current-PC PASS; P06-08 pure inspector PASS; P06-09 matrix plus geometry, aggregate, numeric-format, text-conversion, placement and sort slices PASS but required matrix 0/61 green; P06-07 renderer and row closures remain |
+| P06 | in progress | 01-06 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 11 cataloged, 32 unit, 7 integration and 11 oracle rows but 0/61 release-green; P06-07 renderer and row closures remain |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -37,303 +37,63 @@
 
 | ID | Task | Current state and exact next evidence |
 |---|---|---|
-| P-0052 | P06-04 cell formatting | current-PC PASS: actual source plus v2 product target `264b062c...a48d28a`, Hangul 2020 save/reopen text identity, semantic/style digest identity and PDF visual review pass on attempt04; attempts 01-03 remain timeout diagnostics |
-| P-0053 | P06-05 sizing/autofit | current-PC PASS: pure solver, installed-font receipt and HWPX v2 adapter; failed `Open=false`, zero-guard and 4-micrometer calibration evidence preserved; calibrated target `3dfcf2a1...d9bcb5`, actual Hangul 2020 save/reopen lines `1,3,1,1`, PDF visual oracle, v2 contract and source v36 pass |
-| P-0054 | P06-06 FormulaAst | current-PC PASS: pure core, source/adapter, deterministic 2x4 row/column target `6514a69b...320e5`, actual Hangul 2020 attempt04 save/reopen, strict saved-HWPX formula/cache/layout oracle and PDF visual review pass; attempts 01-03 remain failed timeout diagnostics |
-| P-0055 | P06-07 pagination | pure component, static current-PC HWPX adapter, exact composite target builder and pre-runtime oracle PASS; first actual target exposed clipped long-cell/boundary calibration failure, corrected target awaits licensed Hangul 2020 access and renderer rerun |
-| P-0056 | P06-08 inspect/select | scoped pure-IR PASS at `293053e`: revision/graph/path/ID/fingerprint-bound table and merged-cell selectors, nested/drawing/note indexing, bounded metadata snapshot; Rust 11/11 and contract/tamper 4/4 pass; no HWPX/Hangul selection claim |
-| P-0057 | P06-09 table conformance | matrix/current snapshot PASS; geometry/HWPX covers TABLE-018/019/050, aggregate/grouping/text-conversion planners cover twelve rows, `47dc5cc` adds TABLE-034/036/037/038 placement state and `f4f3cba` adds TABLE-056 sort planning; exact 61-row current-PC/Hangul 2020 release matrix remains 0/61 green, so P06-09/P06/product remain in progress |
+| P-0055 | P06-07 pagination | pure component, static current-PC HWPX adapter and exact composite target v2 pass pre-runtime; corrected target still needs licensed Hangul 2020 save/reopen/page/PDF oracle |
+| P-0057 | P06-09 table conformance | fail-closed matrix and bounded slices pass at component level; `0566034` adds TABLE-057/058 series/fill planning; exact 61-row current-PC release matrix remains 0/61 green |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
-| P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint evidence pass; atomic durable mirror admission and real pull/push remain |
+| P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
-| P-0093 | P17-08 trusted Git UI | local widget/MCP/disposable Git evidence passes; one fresh GUI user confirmation/effect/replay run remains |
+| P-0093 | P17-08 trusted Git UI | local widget/MCP/disposable Git pass; one fresh GUI confirmation/effect/replay run remains |
 
-## Latest P06-04 evidence
+## Closed current-PC P06 evidence
 
-- Actual source attempt04 completed on licensed Hangul 2020 `11.0.0.9136` x86: 4 cells, 8 style
-  actions, equal pre-save/reopen text SHA-256, source HWPX and PDF saved, input was a new synthetic
-  document, and final Hwp process count was zero.
-- Source HWPX SHA-256 is `814c481da946e760b2bc3b90b996863786652001e49f8b2b422e13c3d3e477a4`;
-  PDF SHA-256 is `08b0bd6b6c84ef9199c119faa6d71917de88977bb91faccc5f16f82598880fbd`.
-- Actual serialization required explicit v2 rules for exact preview text, table/sub-list IDs,
-  `subList`-first cell order and inactive nonzero stored margins. Core v1 behavior remains unchanged.
-- Product lowering created a distinct target HWPX at SHA-256
-  `264b062c8a2477cf4167cef5b9db7d51a83594ed024b572d7ff2ea533a48d28a`; v2 preservation, ID,
-  style and content readback inspection pass. The source remained byte-identical.
-- `hwpx-package` complete tests, Clippy `-D warnings`, formatting, v1/v2 contract validators and
-  their 8 Python tests pass. New forbidden Rust patterns and dependencies are zero.
-- Source v33: run `7783a21d553e45eaab55497fea2b3f1c` passed 11/11 at clean commit
-  `5adba7d2b1c98f7e2fa87671f321ff6d599dde48`; receipt SHA-256
-  `2239e1722f4a7df6c4c1f79cb3fc95a318ae6bdbfa5d5e3368d8e4e65ae773e2`. Qualification commit
-  `14f215a` binds 14 implementation/contract/test sources with all runtime/product claims false.
-- Product-target attempts 01-03 each waited 600 seconds at `open_input`, then failed with
-  `TABLE_CELL_STYLE_READBACK_TIMEOUT`; all kept the target unchanged, emitted no derived HWPX/PDF,
-  and cleaned their owned Hwp process. They are not semantic failures and are not PASS.
-- Attempt04 passed every bounded phase on the exact target: input open/read, create-new HWPX save,
-  close, output reopen/read, PDF export and quit. Input/output visible-text SHA-256 is equal, the
-  semantic/style digest is equal before/after the Hangul round trip, the PDF shows all four intended
-  style combinations without clipping or overlap, and Hwp residue is zero. Report:
-  `implementation/p06/P06-04_TARGET_READBACK_REPORT.md`.
+- P06-04 cell formatting is current-PC PASS: exact source and v2 target completed licensed Hangul
+  2020 save/reopen, semantic/style readback and PDF review. Historical timeouts remain diagnostics.
+  Authority: `implementation/p06/P06-04_TARGET_READBACK_REPORT.md`.
+- P06-05 sizing/autofit is current-PC PASS for its exact calibrated fixture: installed-font metrics,
+  HWPX v2 adapter, actual line counts `1,3,1,1`, save/reopen and PDF review pass. This does not
+  prove arbitrary documents. Authority: `implementation/p06/P06-05_TARGET_READBACK_REPORT.md`.
+- P06-06 FormulaAst is current-PC PASS: bounded parser/transform/cache model, actual source capture,
+  exact 2x4 structural target, formula/cache/layout readback and PDF review pass.
+  Authority: `implementation/p06/P06-06_TARGET_READBACK_REPORT.md`.
+- P06-08 inspect/select is scoped pure-IR PASS at `293053e`; it makes no HWPX/Hangul cursor claim.
+  Authority: `implementation/p06/P06-08_REPORT.md`.
 
-## Latest P06-05 evidence
+## Active P06-07 evidence
 
-- Active exact-build contract is `hwpx-agent.table-layout-hwpx.hancom-2020/2`; immutable `/1` is
-  hash-bound. V2 adds typed bounded inherited `hp:inMargin` readback and post-lowering identity.
-- Exact installed-font receipt SHA-256 is
-  `c4755f99ebf1e49010bf26425d61f77c496fa713d86404004348027acfc1d2ab` for the four named target
-  strings under 10 pt `함초롬바탕` TTF metrics.
-- Verified plan is 70,000 micrometers wide with columns `52990,17010`, rows `13758,4586`, zero
-  overflow/underfill and no content deficit. Exact HWPX readback is table `19843 x 5200` HWPUNIT,
-  columns `15021,4822`, rows `3900,1300`, and inner margins `510,510,141,141`.
-- Historical builder `/v1` target SHA-256
-  `a678588188593c250b33205f1660fef6c301280cd5ae30deb4b6a03f185055bc` reached exact licensed
-  Hangul 2020 after the user's access approval, but `Open` returned `false`. No text, save/reopen or
-  PDF evidence was produced; input remained unchanged, quit passed and Hwp residue was zero.
-- The concrete package defect and leading cause is stale source-derived `hp:linesegarray` data whose
-  cached text positions conflict with the changed cell texts. Builder `/v2` requires exactly one
-  direct cache per edited source paragraph, deletes its exact outer span, requires zero target
-  caches and never guesses values.
-- Three independent repaired create-new builds are byte-identical at target SHA-256
-  `b2887c929cdeb81fa1f5f3bac086265e19fb92a8bbf063f75e5ab0fbfa5cb299`. Wrong source digest makes
-  no output; an existing output remains unchanged; exact source and font receipt remain unchanged.
-- Product-target contract `protocol/private/p06-table-layout-target-v1.json`, migration, exact
-  failed-attempt diagnostic and ignored-artifact/tamper validator pass. Repair commit is `73576de`.
-- Source v35 acceptance run `c8a25b992e9643148c5c8d295ae589b5` passed 11/11 at that exact clean
-  commit; receipt SHA-256 is `83cd3f3a42e317e9db1ce51ae18d4f9e0f3f7203018259d84c558d1c9a3df418`.
-  Qualification commit `c18f08b` binds eight repair sources over immutable v34.
-- The repaired zero-guard target completed its lifecycle but actual lines were `1,3,2,1`; a
-  four-micrometer guard remained in the same `14000` HWPUNIT bucket and also failed cell C's one-line
-  intent. Both remain failed semantic calibration evidence, not PASS.
-- Calibrated builder `/v1` binds the exact prior Hangul save and applies a 350-micrometer guard to
-  cross the observed 100-HWPUNIT line-box bucket. Three create-new targets are byte-identical at
-  SHA-256 `3dfcf2a185a4129989b29877b7df7dadb638071aed5ccddd1476e46f76d9bcb5`; wrong identity and
-  overwrite attempts fail closed.
-- Exact licensed Hangul 2020 `11.0.0.9136` passed open/read, create-new save, reopen/read, PDF export,
-  close and quit. Input and visible text are unchanged, requested cell dimensions/margins/content
-  are preserved, actual line counts are `1,3,1,1`, line-box widths are `14100,3700,14100,3700`, and
-  Hwp residue is zero. PDF SHA-256 `6e929f5c...1cf54606` visually has no clipping or overlap.
-- V2 contract `protocol/private/p06-table-layout-target-v2.json`, migration, report, exact ignored-
-  artifact validator and four tamper tests pass. Implementation commit is `9774156`.
-- Source v36 acceptance run `3d1319eb167744489cc5b282f4b41a72` passed 11/11 at clean commit
-  `97741561c748e575eaf4c06c47acb4c15a9ab266`; receipt SHA-256 is
-  `932e64ef14546a04186c454b4bbffdc1afd14072d7f0e11ac08e9770fcd0df08`. Qualification commit
-  `450bfd2` binds the six calibrated successor sources while keeping source-only runtime claims false.
-- Workspace all-target tests, Clippy `-D warnings`, formatting, P06 Python 53/53, four PowerShell
-  static suites, v1/v2 target validators and negative tests pass. P06-05 is PASS only for this exact
-  current-PC fixture; arbitrary documents and other PCs/versions remain unclaimed.
+- Pure pagination schemas bind exact grids, row fragments, repeat headers, captions, split policies
+  and renderer observations. Rust and contract tests pass.
+- Static Hancom 2020 HWPX adapter maps admitted page/split/header/caption shapes and rejects
+  unsupported required-keep or inconsistent sources.
+- Composite target v2 SHA-256 `98aab83f...d9eb33` passes the pre-runtime oracle with six typed
+  tables. Its predecessor completed Hangul but failed visual calibration; later v2 runs either
+  produced diagnostic calibration or timed out at a distinct access prompt without outputs.
+- Required next evidence is one exact licensed Hangul 2020 lifecycle over v2, followed by structural
+  page-count/readback and PDF visual review. Until then P06-07 is `in_progress`.
+- Authorities: `implementation/p06/P06-07_TABLE_PAGINATION_POLICY.md`,
+  `implementation/p06/P06-07_TABLE_PAGINATION_HWPX_ADAPTER_REPORT.md`.
 
-## Latest P06-06 evidence
+## Active P06-09 evidence
 
-- Contract: `protocol/private/p06-table-formula-v1.json`; migration:
-  `protocol/migrations/p06-table-formula-v0-to-v1.md`.
-- Pure model: bounded ASCII parser, exact decimal AST, arithmetic, A1 cell/range references,
-  independent relative/absolute axes, `SUM`/`AVG`/`PRODUCT`, exact grid-bound copy and structural
-  transforms, separate unverified cache and bounded number formats.
-- Safety: unknown JSON fields, invalid dimensions, deleted owners/endpoints, grid escape, cache
-  policy mismatch and over-limit inputs fail closed; Debug redacts formula/cache values.
-- Oracle boundary: pure v1 admits only `absent` and `unverified` cache. Only a later adapter that
-  verifies an actual target receipt may promote an oracle-qualified result.
-- Validation: formula tests 15/15; `domain-ir` 125/125; P06 Python 37/37; full workspace tests pass
-  with one explicitly environment-gated PostgreSQL test ignored; workspace Clippy `-D warnings`
-  and formatting pass. No dependency added.
-- Source v31: run `7fe87b6cf5ea435ca8f037559d371b0e` passed 11/11 at clean commit
-  `cc925658d2c08e1a67118fc2a1b426f3c9929651`; receipt SHA-256
-  `98ca665071096c1c1e95ad919b0b0acbf632cbc8928ea39c0ab63ce5f7ae6481`.
-- Source v32: run `f043ce35eb9a4d68bf1da27ee1c3ef3a` passed 11/11 at clean commit
-  `e28220e7f50b0556fc028a1e45d9addfd70619a7`; exact-build worker, watchdog and privacy-safe progress
-  are bound. Capture execution, field shape, evaluation, oracle, P06-06/P06 and product remain false.
-- Actual licensed Hangul 2020 source capture passed on a new synthetic 1x3 table: operands `17,25`,
-  formula action result `42`, save/reopen visible-text identity and PDF export all passed; HWPX SHA-256
-  is `d968cae419a3754b1dc65eb845f9d1d6bf8bbb486736359cd9b838a78e47d38f`, trace SHA-256 is
-  `2bb67d3d53611dcbfb70ab014e5f3499bcc44885b7ce5ed024798e8abd10a1d7`, and Hwp residue is zero.
-- Adapter profile `hwpx-agent.table-formula-hwpx.hancom-2020/1` lifts the exact native directional
-  left-sum field to pure `SUM(A1:B1)` and lowers only a complete relative left-prefix sum. Native
-  commands remain private; cache remains `unverified`; unknown shapes and non-left-prefix ASTs fail
-  closed. Actual-source identity lowering is byte-exact.
-- Adapter integration tests pass 8/8; contract/tamper tests pass 4/4; all P06 Python tests pass
-  57/57; workspace all-target tests, Clippy `-D warnings` and formatting pass. Contract/report:
-  `protocol/private/p06-table-formula-hwpx-v1.json` and
-  `implementation/p06/P06-06_FORMULA_HWPX_ADAPTER_REPORT.md`.
-- Exact structural builder commit `95a973c` inserts column 1 and row 0, moves the owner C1 to D2,
-  transforms `SUM(A1:B1)` to `SUM(A2:C2)`, changes the unverified cache to 52, removes stale line
-  caches, and publishes three byte-identical create-new targets at SHA-256
-  `6514a69b8c8c9d320bc19a032b16f2b71d59a38f164c690bc9e3d320a93320e5`. Wrong identity and
-  overwrite paths fail closed. Formula-aware ID profile v3 accepts only the exact begin/end ID pairs.
-- Pre-runtime oracle checker commit `c8d0517` binds target identity, package graph, formula-v3 IDs,
-  exact 2x4 grid/geometry/text, formula/cache semantics, zero target line caches, and strict target
-  versus Hangul-saved comparison. Same-target substitution and wrong digest reject.
-- Actual target attempts 01-03 reached validated `open_input/running` and timed out at 600, 900 and
-  900 seconds without approval. All preserved the input, emitted no HWPX/PDF, cleaned exactly one
-  owned Hwp process and left residue zero. They are access-wait diagnostics, not semantic failures
-  and not PASS. Exact receipts: `implementation/p06/P06-06_TARGET_ATTEMPTS_DIAGNOSTIC.md`.
-- The watchdog now preserves the observed progress phase and infers window visibility only from the
-  engine's validated post-Visible progress ordering.
-- Source v38 acceptance run `cbc7c29f6e684595a4c0c3bf49029d48` passed 11/11 at clean commit
-  `6e906ae7aa3a77a850c7c95b8cd3bb40795befe6`; receipt SHA-256 is
-  `e8492a60f732c424ca7b2a5316dba6c036bcd10d9030895c0d02d50d4649d951`. Qualification contract
-  SHA-256 `818e41c4e8ee46eea3b0f31b7d769eb56d19f9de46310ed73e37285cb237ebe0` binds nine structural,
-  oracle and diagnostic sources over immutable v37 while keeping runtime/P06-06/product claims
-  false.
-- Actual target attempt04 completed after the user approved all three access prompts. Its 21-event
-  journal reached `terminal/pass`; input/output visible-text SHA-256 stayed
-  `91fd67b8cae0b9da6f05a8e960e061c239f58979cdfe19d4aabb40a445571644`, input stayed unchanged,
-  save/reopen/PDF/quit passed and Hwp residue was zero. Saved HWPX SHA-256 is
-  `8b33d2353ebec9eccbcbbde0c0b31eb440390ddf9c38bad7c064f179b1ab2325`.
-- The strict oracle preserves the exact D2 `SUM(A2:C2)` AST, value 52, 2x4 topology, all eight
-  visible values, table/cell geometry, margins and content digest. Each cell has one exact one-line
-  cache. Removing all ten renderer-owned section caches makes the saved section byte-identical to
-  the target section; remaining package drift is limited to three exact heading fallbacks,
-  modified-date/header-spine metadata, caret position, row-boundary preview text and regenerated
-  preview image.
-- PDF SHA-256 `e09e5a0d...0149f0` is a valid one-page A4 render; visual review confirms the 2x4
-  table and all values with no clipping or overlap. V2 contract, migration, report, ignored-artifact
-  validator and five tamper test groups pass. P06-06 is current-PC PASS; P06 remains in progress.
-- Workspace all-target Rust tests, Clippy `-D warnings` and formatting pass; P06 Python tests pass
-  62/62 and the 11 P05/P06 PowerShell static safety suites pass.
-- Source v39 acceptance run `e159d3cf21df48b38bda3f9813d8a0d1` passed 11/11 at clean commit
-  `103bbf5b0448076e3f95db939b4d186100b6a4f4`; receipt SHA-256 is
-  `b3d0349d0e0b84900f7200938d8687cbe3b636ffecd62d2670c7197da77815c3`. Qualification contract
-  SHA-256 `544c68cdea536e234139bd492f7e2812fe1b7ab02826af580f307284835f287c`
-  binds the seven exact P06-06 closure sources over immutable v38. V39 focused tests pass 5/5,
-  `verify` passes, and its generic source-only runtime/P06/product claims remain false.
-
-## Latest P06-07 evidence
-
-- Pure schemas `hwpx-agent.table-pagination/v1` and
-  `hwpx-agent.table-pagination-observation/v1` bind one validated `TableGrid` to exact row heights,
-  typed split eligibility, page capacities, ordered fragments, repeated header copies, and a
-  renderer observation without predicting renderer output.
-- `allow`, `avoid_row`, `avoid_table`, and `required_keep` are distinct. Avoid-row rejects a page
-  boundary through a vertically merged cell; nested-table and unbreakable-object rows cannot be
-  silently split; required keep rejects a detached caption policy.
-- Repeat headers are a contiguous prefix and may not contain a master cell that crosses into the
-  body. Top/bottom captions bind semantic content SHA-256, block height, gap and explicit keep.
-- Rust P06-07 boundary tests pass 11/11, including one micrometer before/exactly at/after capacity,
-  row fragments, header mismatch, merged/nested/unbreakable rows, caption order, malformed JSON,
-  finite limits and stable public error codes. Full `domain-ir` tests and Clippy `-D warnings` pass.
-- Contract validator and four tamper tests pass with six immutable source locks and four
-  implementation files. This component does not claim current Hangul page counts, HWPX lowering,
-  save/reopen/PDF, left/right captions, P06-07 completion, production or product completion.
-- Static current-PC adapter profile `hwpx-agent.table-pagination-hwpx.hancom-2020/1` maps `CELL`,
-  `TABLE`, and `NONE` exactly to allow, avoid-row, and avoid-table. `required_keep` rejects because
-  no exact table-level native attribute is admitted.
-- Repeated headers bind the table `repeatHeader` flag to a contiguous prefix of rows whose direct
-  cells uniformly carry `header="1"`; mixed, non-contiguous and flag-inconsistent sources reject.
-  Existing top/bottom caption attributes lower only when their semantic-content SHA-256 remains
-  exact. Caption creation/removal and left/right flow remain outside V1.
-- Adapter tests pass 10/10, full `hwpx-package --all-targets` passes, package Clippy
-  `-D warnings`, formatting and diff checks pass. The HWPX adapter contract plus four tamper tests
-  pass; the complete P06 Python suite passes 70/70.
-- The pure/adapter PASS results do not establish renderer behavior. A predecessor target has
-  diagnostic-only Hangul 2020 lifecycle evidence, while the corrected qualifying target v2 still
-  has `NOT_RUN` boundary, repeated-header/caption and PDF geometry evidence; P06-07 and P06 remain
-  in progress.
-- Exact composite target v2 SHA-256 `98aab83f...d9eb33` passes the pre-runtime oracle with six
-  typed tables (five top-level and one nested), five captions, one native equation and zero stale
-  line caches. Its builder is deterministic, create-only and source-SHA locked. The predecessor
-  target completed the full Hangul 2020 save/reopen/PDF lifecycle, but visual review found long-cell
-  clipping, a blank continuation page, no useful before/exact/after separation, and no avoid-row
-  page crossing. It is retained as failed diagnostic evidence. V2 removes the artificial long-cell
-  height, forces the avoid-row case across pages and recalibrates the boundary fillers; its first
-  launch timed out waiting for access before file open. A later approved calibration measured exact
-  successor text SHA-256 `19e2e32f...b5a8855` and then failed closed before save as intended; the
-  following full save/reopen/PDF launch again timed out at its separate input-access prompt with no
-  outputs and zero process residue. V2 renderer evidence therefore remains `NOT_RUN`.
-
-## Latest P06-08 evidence
-
-- Exact commit `293053e2c756d145fea6caf899dd636a6978757b` implements schema
-  `hwpx-agent.table-inspection/v1`: stable table/cell selectors bind revision, canonical graph SHA,
-  typed structural path, logical ID and fingerprints; merged covered coordinates retain the
-  requested coordinate while resolving to the canonical master.
-- Top-level, cell/drawing-nested and note-root tables are recursively indexed. Snapshot output is
-  metadata-only, deterministic and finite; cell bodies are omitted and fingerprinting streams into
-  bounded SHA-256 state.
-- Primary Rust boundary tests pass 11/11, P06 Python passes 74/74, contract/tamper passes 4/4,
-  `domain-ir` all-targets, Clippy `-D warnings` and formatting pass. STRICT review closed three
-  allocation/coverage findings with final blocker/major/minor `0/0/0`.
-- Primary FULL lanes linux-core/windows-worker/widget and a separate security lane pass. Docs is
-  not green because R-0008's historical P14 validator rereads a mutable successor file; FULL 5/5
-  is not claimed. Clean checkout independently passes linux-core, P06-08 contract 4/4 and Rust
-  11/11; its wider Windows/P06 runs stop on intentionally ignored current-PC evidence absence.
-- Report: `implementation/p06/P06-08_REPORT.md`. P06-08 does not claim HWPX/Hangul cursor/readback,
-  P06-07 renderer closure, P06-09 matrix, P06 or product completion.
-
-## Latest P06-09 evidence
-
-- Commit `97b3008` implements the fail-closed matrix engine and truthful current snapshot for exactly
-  `TABLE-001` through `TABLE-061`. The report joins the canonical feature catalog, generated
-  capability contracts, a redacted exact-target automation projection and hash-bound direct
-  evidence without exposing raw Hancom identifiers or probe values.
-- Current required matrix is **0/61 green**. Direct stages are 18 cataloged, 25 unit-passed, seven
-  integration-passed and 11 oracle-verified; automation has six candidate-unverified and 55
-  unavailable-with-reason rows, while all runtime states and differentials remain unverified/not-run.
-  This is a prioritized implementation ledger, not a claim that completed P06 components are 0%.
-- A row becomes green only with direct HWPX oracle evidence, every required validation and fixture,
-  negative plus rollback/retry evidence, current-target automation runtime qualification and an
-  exact direct/automation differential. Missing evidence stays non-green.
-- Commits `abccb71`, `1094274` and `e099c86` publish the three public schemas through additive
-  `schema-catalog-v5.json`, preserve immutable catalog v2-v4 hashes, and close codegen, Clippy and
-  Prettier findings. TypeScript build/typecheck/tests and generated-artifact verification pass.
-- Commit `55303d7` makes the original 27 source locks stable across LF/CRLF Windows checkouts while
-  still rejecting bare CR and content drift. Current checkout P06 tests passed 85/85; an independent clean
-  checkout passes the P06-09 validator and its five focused tests without private ignored evidence.
-- Commit `583096f` implements deterministic table geometry for equal row height, equal column width
-  and row minimum height with exact grid binding, content minima, bounded receipts and atomic
-  failures. Rust geometry tests pass 13/13, the fixed-seed corpus passes 256/256, P06 tests pass
-  89/89, and the expanded conformance contract locks 36 sources.
-- Commit `b75909e` lowers those three operations into selected Hancom 2020 HWPX table/merged-cell
-  size attributes, preserves cell content/margins/unselected tables, and reparses exact semantic
-  output before publication. Adapter tests pass 8/8, the full locked `hwpx-package` suite and
-  Clippy pass, P06 tests pass 93/93, and the matrix contract locks 45 sources. The rows are now
-  `direct_hwpx / integration_passed` but remain below licensed Hangul target-build oracle.
-- Commit `3756cb0` adds a disposable closed-package HWPX fixture for all three geometry operations.
-  Reopened formula AST/cache and pagination policy stay exact, every non-section part keeps its
-  expanded-byte SHA-256, source bytes remain immutable and rebuilt packages are deterministic.
-  Adapter tests now pass 9/9, the full locked `hwpx-package` suite and Clippy pass, and all 93 P06
-  Python tests pass when invoked by module name (Python discovery cannot import the non-ASCII
-  `D:\개발` start path on this host). The matrix remains truthfully 0/61 green while aggregate
-  missing validation instances decrease from 241 to 235.
-- Commit `d9f1349` adds an exact-dimension, bounded aggregate planner for block, horizontal and
-  vertical `SUM`/`AVG`/`PRODUCT`. Eight previously catalog-only rows move to unit evidence while
-  TABLE-025 keeps its stronger oracle evidence. Workspace Rust tests, Clippy `-D warnings`, the
-  dedicated contract/tamper suite and all 97 P06 Python tests pass. The conformance contract now
-  locks 53 sources; the matrix remains 0/61 green with 22 catalog-only rows and 227 missing
-  validation instances. No HWPX lowering or licensed Hangul result is claimed.
-- Commit `62dfbe0` adds an exact-selection grouping-format planner for TABLE-032/033. It changes only
-  `use_grouping` on existing numeric formula-cell formats while preserving decimal places, owner,
-  formula AST and cache; unsupported formats and mismatched cell sets fail atomically. Dedicated
-  Rust tests pass 9/9, workspace tests and Clippy `-D warnings` pass, all 101 P06 Python tests pass,
-  and the conformance contract locks 61 sources. The matrix remains 0/61 green with 20 catalog-only
-  rows and 225 missing validation instances; no HWPX or licensed Hangul result is claimed.
-- Commit `8cb012b` adds bounded UTF-8 tab/comma/semicolon conversion for TABLE-004/005, including
-  quoted delimiters, doubled quotes, Unicode, multiline and empty cells, exact rectangular-grid
-  validation, LF/CRLF policy, deterministic semantic roundtrip and typed finite-limit failures.
-  Dedicated Rust tests pass 9/9, workspace tests and Clippy `-D warnings` pass, all 105 P06 Python
-  tests pass, and the conformance contract locks 69 sources. The matrix remains 0/61 green with 18
-  catalog-only rows and 223 missing validations; document-graph/HWPX/Hangul claims remain false.
-  The same commit also removes `lib.rs` whole-file hashes from the two newest slice contracts so
-  later additive exports do not invalidate prior evidence; implementation markers and the top-level
-  conformance digest still fail closed on actual implementation drift.
-- Commit `47dc5cc` adds bounded deterministic placement state for TABLE-034/036/037/038: complete
-  floating position, explicit inline/floating transitions, wrap/side-flow and four outer margins.
-  Inactive inline position/wrap, malformed JSON and out-of-range values fail closed; unrelated state
-  and logical identity remain exact. Dedicated Rust tests pass 13/13, workspace tests and Clippy
-  `-D warnings` pass, all 109 P06 Python tests pass, and the conformance contract locks 77 sources.
-  The matrix remains 0/61 green with 14 catalog-only rows and 219 missing validations; HWPX lowering,
-  licensed Hangul and differential claims remain false.
-- Commit `f4f3cba` adds bounded stable row/column sorting for TABLE-056 over an exact merge-free
-  region. Ordered multi-key precedence, direction-independent blank placement, exact integer/fixed-
-  decimal comparison, explicit binary/ASCII-case-insensitive text collation, full-cell payload
-  relocation and formula movement policy are request- and receipt-bound. Dedicated Rust tests pass
-  14/14, workspace tests and Clippy `-D warnings` pass, all 113 P06 Python tests pass, and the
-  conformance contract locks 85 sources. The matrix remains 0/61 green with 13 catalog-only rows and
-  218 missing validations; HWPX lowering, licensed Hangul and differential claims remain false.
-- Current FULL lanes linux-core, windows-worker and widget pass; a separate security lane passes
-  with zero failed checks and 1,057 SBOM components. Docs remains non-green only at the pre-existing
-  R-0008 P14 historical source-lock forward-stability defect, so FULL 5/5 is not claimed.
+- Commit `97b3008` introduced the deterministic 61-row matrix. A row is green only when direct
+  HWPX oracle, every required validation/fixture, negative and rollback evidence, current-target
+  automation runtime and exact differential all pass.
+- Current authority reports 0/61 green with direct stages: 11 cataloged, 32 unit-passed,
+  7 integration-passed and 11 oracle-verified. Automation is six candidate-unverified plus
+  55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
+- Implemented bounded slices:
+  - `583096f`, `b75909e`, `3756cb0`: table geometry plus static HWPX/disposable package proof.
+  - `d9f1349`: block/horizontal/vertical aggregate formulas.
+  - `62dfbe0`: numeric grouping-format toggles.
+  - `8cb012b`: tab/comma/semicolon table-text conversion.
+  - `47dc5cc`: TABLE-034/036/037/038 placement state.
+  - `f4f3cba`: TABLE-056 stable whole-cell sort plan.
+  - `0566034`: TABLE-057/058 reusable series and exact-region scalar auto-fill plan.
+- Auto-fill verification: dedicated Rust 16/16, P06 Python 117/117, workspace all-target tests,
+  Clippy `-D warnings`, formatting, contract/tamper and 93-source conformance locks pass.
+- Auto-fill remains unit evidence only. Rich-content/formula generation, HWPX lowering, licensed
+  Hangul target-build, native series-index mapping and differential evidence are false/unverified.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`,
-  `implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json` and
+  `implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json`,
   `protocol/private/p06-table-conformance-v1.json`.
 
 ## Open risks and holds
@@ -343,44 +103,30 @@
 - R-0005: P17 durable checkpoint exists, but atomic durable mirror role/head admission, persistent
   credential custody, production lifecycle and real pull/push do not.
 - R-0006: P17 conflict resolver/widget are component evidence only.
-- R-0007: P06-07 still requires the actual current Hangul 2020 boundary-page and exact page/PDF
-  oracle. P06-09's matrix engine exists, but the required 61-capability matrix is 0/61 green until
-  direct, automation runtime and exact differential evidence close each row. P06-05's exact fixture
-  PASS does not prove arbitrary documents or other PCs/versions.
-- R-0008: bulk discovery of historical source-qualification tests reports forward-stability errors
-  in v21-v30, v33-v34 and now direct v38 verification because those legacy verifiers reread mutable
-  files after qualified successors change them. The authoritative latest v39 verifies and its five
-  focused tests pass. The P06-06 target-v2 validator now reads its source locks from immutable
-  qualification commit `103bbf5` when Git is present, fixing the table-layout successor regression
-  without changing the historical contract. Before the final Gate, apply the same rule to remaining
-  legacy validators without rewriting their contracts or reclassifying old evidence.
+- R-0007: P06-07 needs current Hangul 2020 page/PDF oracle. P06-09 remains 0/61 release-green until
+  direct, automation runtime and exact differential evidence close each row.
+- R-0008: historical source-qualification validators reread mutable successor files. Latest v39
+  verifies, but remaining legacy validators need immutable-commit reads before the final Gate.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 
 ## Next actions
 
-1. At `max`, rerun the exact composite P06-07 target v2 when the user can approve the visible
-   Hangul 2020 access prompts, then collect repeat-header/caption save/reopen/PDF evidence for
-   one-line-before, exact-boundary, one-line-after, merged-cell, nested-table and long-equation
-   cases. Keep renderer/page claims unverified until visual and structural evidence both pass.
-2. At `max`, use the remaining blocker rows to implement the 13 catalog-only direct operations in
-   bounded semantic groups, lower the 30 component-only rows, close the seven static-only target
-   oracles, then qualify exact current-target automation bindings and disposable differentials.
-3. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
-   applicable offline Linux/security/STRICT checks without weakening actual-evidence Gates.
+1. At `max`, implement the 11 remaining catalog-only P06-09 operations in bounded semantic groups.
+   The next efficient group is TABLE-020/021 table style and transpose, followed by TABLE-007/008/009
+   properties and border semantics.
+2. At `max`, when the user can approve visible access prompts, rerun the exact P06-07 target v2 and
+   collect repeat-header/caption boundary save/reopen/PDF evidence.
+3. At `max`, lower the 32 component-only rows to preserving HWPX adapters, close seven static-only
+   target oracles, then qualify exact current-target automation bindings and disposable differentials.
+4. At every closure run target, regression, current and clean-checkout FULL plus applicable offline
+   Linux/security/STRICT checks without weakening evidence Gates.
 
 ## Context pack and archive pointers
 
-- Read first: this file, `implementation/p06/P06-04_CELL_STYLE_POLICY.md`,
-  `implementation/p06/P06-06_FORMULA_AST_POLICY.md`,
-  `implementation/p06/P06-06_TARGET_READBACK_REPORT.md`, `implementation/p06/P06-03_REPORT.md`,
-  `implementation/p06/P06-07_TABLE_PAGINATION_POLICY.md`,
-  `implementation/p06/P06-07_TABLE_PAGINATION_HWPX_ADAPTER_REPORT.md`,
-  `implementation/p06/P06-08_REPORT.md`, and
+- Read first: this file, active P06-07 policies/reports, P06-09 conformance authorities, and
   `implementation/p05/P05_GATE_REPORT.md`.
 - P06-04 source tool: `implementation/p06/tools/create-hancom-2020-table-source.ps1`.
-- P06-05 metric qualification: commits `af3dbf0`, `42aba1c`, `742b3d2`.
-- P17 source qualification: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V39.md`; other details
-  are under `implementation/p17/`; detailed ledger history through
-  P-0085 is recoverable from `fae5bc0:PLANS.md` and later Git history.
+- P17 source authority: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V39.md`.
+- Detailed closed-card history is in the named reports and Git history through `0566034`.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.
