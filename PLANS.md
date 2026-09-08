@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-06 current-PC PASS; P06-08 pure inspector PASS; P06-09 matrix plus geometry, aggregate, numeric-format, text-conversion and placement slices PASS but required matrix 0/61 green; P06-07 renderer and row closures remain |
+| P06 | in progress | 01-06 current-PC PASS; P06-08 pure inspector PASS; P06-09 matrix plus geometry, aggregate, numeric-format, text-conversion, placement and sort slices PASS but required matrix 0/61 green; P06-07 renderer and row closures remain |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -42,7 +42,7 @@
 | P-0054 | P06-06 FormulaAst | current-PC PASS: pure core, source/adapter, deterministic 2x4 row/column target `6514a69b...320e5`, actual Hangul 2020 attempt04 save/reopen, strict saved-HWPX formula/cache/layout oracle and PDF visual review pass; attempts 01-03 remain failed timeout diagnostics |
 | P-0055 | P06-07 pagination | pure component, static current-PC HWPX adapter, exact composite target builder and pre-runtime oracle PASS; first actual target exposed clipped long-cell/boundary calibration failure, corrected target awaits licensed Hangul 2020 access and renderer rerun |
 | P-0056 | P06-08 inspect/select | scoped pure-IR PASS at `293053e`: revision/graph/path/ID/fingerprint-bound table and merged-cell selectors, nested/drawing/note indexing, bounded metadata snapshot; Rust 11/11 and contract/tamper 4/4 pass; no HWPX/Hangul selection claim |
-| P-0057 | P06-09 table conformance | matrix/current snapshot PASS; geometry/HWPX covers TABLE-018/019/050, aggregate/grouping/text-conversion planners cover twelve rows, and `47dc5cc` adds TABLE-034/036/037/038 placement state; exact 61-row current-PC/Hangul 2020 release matrix remains 0/61 green, so P06-09/P06/product remain in progress |
+| P-0057 | P06-09 table conformance | matrix/current snapshot PASS; geometry/HWPX covers TABLE-018/019/050, aggregate/grouping/text-conversion planners cover twelve rows, `47dc5cc` adds TABLE-034/036/037/038 placement state and `f4f3cba` adds TABLE-056 sort planning; exact 61-row current-PC/Hangul 2020 release matrix remains 0/61 green, so P06-09/P06/product remain in progress |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint evidence pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -322,6 +322,13 @@
   `-D warnings` pass, all 109 P06 Python tests pass, and the conformance contract locks 77 sources.
   The matrix remains 0/61 green with 14 catalog-only rows and 219 missing validations; HWPX lowering,
   licensed Hangul and differential claims remain false.
+- Commit `f4f3cba` adds bounded stable row/column sorting for TABLE-056 over an exact merge-free
+  region. Ordered multi-key precedence, direction-independent blank placement, exact integer/fixed-
+  decimal comparison, explicit binary/ASCII-case-insensitive text collation, full-cell payload
+  relocation and formula movement policy are request- and receipt-bound. Dedicated Rust tests pass
+  14/14, workspace tests and Clippy `-D warnings` pass, all 113 P06 Python tests pass, and the
+  conformance contract locks 85 sources. The matrix remains 0/61 green with 13 catalog-only rows and
+  218 missing validations; HWPX lowering, licensed Hangul and differential claims remain false.
 - Current FULL lanes linux-core, windows-worker and widget pass; a separate security lane passes
   with zero failed checks and 1,057 SBOM components. Docs remains non-green only at the pre-existing
   R-0008 P14 historical source-lock forward-stability defect, so FULL 5/5 is not claimed.
@@ -356,8 +363,8 @@
    Hangul 2020 access prompts, then collect repeat-header/caption save/reopen/PDF evidence for
    one-line-before, exact-boundary, one-line-after, merged-cell, nested-table and long-equation
    cases. Keep renderer/page claims unverified until visual and structural evidence both pass.
-2. At `max`, use the remaining blocker rows to implement the 14 catalog-only direct operations in
-   bounded semantic groups, lower the 29 component-only rows, close the seven static-only target
+2. At `max`, use the remaining blocker rows to implement the 13 catalog-only direct operations in
+   bounded semantic groups, lower the 30 component-only rows, close the seven static-only target
    oracles, then qualify exact current-target automation bindings and disposable differentials.
 3. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
    applicable offline Linux/security/STRICT checks without weakening actual-evidence Gates.
