@@ -53,9 +53,10 @@ private registry is present, validation may independently rebuild and byte-compa
 
 Every positive direct/component record lists sorted feature IDs, backend, stage, passed validation
 and fixture subsets, negative/rollback state, differential state, and one or more repository-relative
-evidence files with exact SHA-256. Missing records and missing fields fail closed. Evidence paths
-reject traversal, symlink/junction escape, empty files, oversized files, duplicate keys and digest
-drift.
+evidence files with exact SHA-256. Contract source locks hash bounded UTF-8 text after the sole
+cross-platform normalization CRLF to LF; bare CR and content drift reject. Missing records and
+missing fields fail closed. Evidence paths reject traversal, symlink/junction escape, empty files,
+oversized files, duplicate keys and digest drift.
 
 The report is canonical UTF-8 JSON with stable row order and source digests. It exposes row blockers
 and aggregate counts but no private automation identifiers. Publication is create-only; a changed

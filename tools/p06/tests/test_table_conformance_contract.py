@@ -81,6 +81,16 @@ class TableConformanceContractTests(unittest.TestCase):
             self.assertIn("source_lock_digest", errors)
             self.assertIn("schema_invalid", errors)
 
+    def test_source_locks_accept_a_crlf_checkout_without_weakening_content(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_tree(Path(directory))
+            roadmap = root / "docs/09_roadmap/P06_table_engine.md"
+            source = roadmap.read_bytes().replace(b"\r\n", b"\n")
+            self.assertNotIn(b"\r", source)
+            roadmap.write_bytes(source.replace(b"\n", b"\r\n"))
+            report = validator.validate(root)
+            self.assertEqual(report["state"], "pass", report)
+
     @staticmethod
     def copy_tree(destination: Path) -> Path:
         root = destination / "repo"

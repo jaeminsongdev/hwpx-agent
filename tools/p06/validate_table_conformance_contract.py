@@ -109,7 +109,7 @@ def validate_contract_shape(contract: dict[str, Any], errors: list[str]) -> None
     exact = {
         "schema_version": "hwpx-agent.p06-table-conformance-contract/v1",
         "scope": "p06_09_current_pc_hancom_2020_fail_closed_matrix",
-        "source_lock_canonicalization": "exact_file_bytes_sha256",
+        "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
         "schemas": list(SCHEMAS),
         "migration": MIGRATION,
         "schema_catalog": SCHEMA_CATALOG,
@@ -213,8 +213,12 @@ def validate_source_locks(root: Path, contract: dict[str, Any], errors: list[str
             continue
         declared[path] = expected
         try:
-            actual = conformance.sha256_file(conformance.bounded_repo_file(root, path))
-        except (OSError, conformance.ConformanceError):
+            source = conformance.bounded_repo_file(root, path).read_bytes()
+            text = source.decode("utf-8")
+            if "\r" in text.replace("\r\n", ""):
+                raise conformance.ConformanceError("source_lock_bare_cr")
+            actual = conformance.sha256_bytes(text.replace("\r\n", "\n").encode("utf-8"))
+        except (OSError, UnicodeDecodeError, conformance.ConformanceError):
             add_error(errors, "source_lock_path")
             continue
         if actual != expected:
