@@ -1,0 +1,112 @@
+{
+  "schema_version": "hwpx-agent.table-text-conversion-contract/v1",
+  "model_schema_version": "hwpx-agent.table-text-conversion/v1",
+  "scope": "p06_09_pure_delimited_text_grid_component_current_pc_local_development",
+  "features": [
+    {
+      "feature_id": "TABLE-004",
+      "capability_id": "table.text_to_table"
+    },
+    {
+      "feature_id": "TABLE-005",
+      "capability_id": "table.table_to_text"
+    }
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/03_document_model/06_table_model.md",
+      "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    }
+  ],
+  "migration": "protocol/migrations/p06-table-text-conversion-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/table_text_conversion.rs",
+    "crates/domain-ir/tests/table_text_conversion.rs",
+    "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_POLICY.md",
+    "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_REPORT.md"
+  ],
+  "syntax": {
+    "encoding": "utf8_only",
+    "delimiters": ["tab", "comma", "semicolon"],
+    "quotes": "double_quote_with_doubled_quote_escape",
+    "input_line_endings": ["LF", "CRLF"],
+    "semantic_cell_line_ending": "LF",
+    "output_line_endings": ["LF", "CRLF"],
+    "final_record_ending": "not_emitted"
+  },
+  "semantics": {
+    "grid": "nonempty_rectangular_rows_and_columns",
+    "empty_fields": "preserved_as_cells",
+    "text_to_table": "bounded_delimited_text_to_semantic_grid",
+    "table_to_text": "semantic_grid_to_minimally_quoted_bytes",
+    "roundtrip": "writer_output_reparses_to_exact_semantic_grid",
+    "privacy": "debug_redacts_cell_content"
+  },
+  "default_limits": {
+    "input_bytes": 33554432,
+    "output_bytes": 33554432,
+    "rows": 10000,
+    "columns": 1024,
+    "cells": 1000000,
+    "cell_bytes": 1048576,
+    "serialized_bytes": 67108864
+  },
+  "failure_policy": [
+    "invalid_limits_rejected",
+    "empty_or_oversized_input_rejected",
+    "invalid_utf8_rejected",
+    "malformed_unknown_or_duplicate_json_rejected",
+    "unsupported_schema_rejected",
+    "malformed_quote_transition_rejected",
+    "bare_carriage_return_or_nul_rejected",
+    "empty_or_ragged_grid_rejected",
+    "row_column_cell_and_cell_byte_limits_rejected",
+    "allocation_failure_rejected",
+    "output_or_serialization_limit_rejected",
+    "no_partial_grid_or_output_returned"
+  ],
+  "not_claimed": {
+    "locale_dependent_or_arbitrary_delimiters": false,
+    "document_graph_table_mutation": false,
+    "merged_cell_style_or_formula_preservation": false,
+    "hwpx_table_lowering_or_readback": false,
+    "hancom_2020_target_build": false,
+    "pagination_or_render": false,
+    "automation_or_differential": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "actual_document_graph": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "p06_09": "in_progress",
+    "product_complete": false
+  }
+}

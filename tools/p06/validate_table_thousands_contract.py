@@ -23,11 +23,11 @@ EXPECTED_FEATURES = [
     {"feature_id": "TABLE-033", "capability_id": "table.thousands_remove"},
 ]
 EXPECTED_SOURCE_PATHS = {
-    "crates/domain-ir/src/lib.rs",
-    "crates/domain-ir/src/table_thousands.rs",
-    "crates/domain-ir/tests/table_thousands.rs",
-    POLICY,
-    REPORT,
+    "WORK_BREAKDOWN_STRUCTURE.csv",
+    "docs/04_feature_catalog/07_table.md",
+    "docs/04_feature_catalog/contracts/07_table_contracts.md",
+    "docs/09_roadmap/P06_table_engine.md",
+    "protocol/private/p06-table-formula-v1.json",
 }
 EXPECTED_LIMITS = {
     "input_bytes": 8_192,
@@ -139,7 +139,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         "migration": MIGRATION,
         "policy": POLICY,
         "report": REPORT,
-        "implementation_files": sorted(EXPECTED_SOURCE_PATHS),
+        "implementation_files": sorted(IMPLEMENTATION_MARKERS),
         "default_limits": EXPECTED_LIMITS,
         "not_claimed": EXPECTED_NOT_CLAIMED,
         "gate_decision": {

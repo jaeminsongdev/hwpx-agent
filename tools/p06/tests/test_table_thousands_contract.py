@@ -23,7 +23,7 @@ class TableThousandsContractTests(unittest.TestCase):
     def test_source_and_implementation_drift_fail(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = self.copy_tree(Path(directory))
-            source = root / "crates/domain-ir/tests/table_thousands.rs"
+            source = root / "protocol/private/p06-table-formula-v1.json"
             source.write_text(source.read_text(encoding="utf-8") + "\n", encoding="utf-8")
             self.assertIn("source_lock_digest", validator.validate(root)["errors"])
 

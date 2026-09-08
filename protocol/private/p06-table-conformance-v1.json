@@ -31,8 +31,8 @@
     "green_rows": 0,
     "non_green_rows": 61,
     "direct_stage_counts": {
-      "cataloged": 20,
-      "unit_passed": 23,
+      "cataloged": 18,
+      "unit_passed": 25,
       "integration_passed": 7,
       "oracle_verified": 11
     },
@@ -49,7 +49,7 @@
   "source_locks": [
     {
       "path": "crates/domain-ir/src/lib.rs",
-      "sha256": "7001bf59dcebaf5a049585219f7d20ca943835818afdddd59a885721f3ebd912"
+      "sha256": "cddd108cdbfa03fe057137339cf2f929274051148d91a575c09231a1aad52b14"
     },
     {
       "path": "crates/domain-ir/src/table_aggregate.rs",
@@ -58,6 +58,10 @@
     {
       "path": "crates/domain-ir/src/table_geometry.rs",
       "sha256": "fc4a78856072be136fcc0e9e0ed5999753df228db051b55d060707af046b1914"
+    },
+    {
+      "path": "crates/domain-ir/src/table_text_conversion.rs",
+      "sha256": "a6f8af7f102dabcc8603e78eeb5a09830f10e30c3bd3dcf7003e22fc1c5ca7f1"
     },
     {
       "path": "crates/domain-ir/src/table_thousands.rs",
@@ -70,6 +74,10 @@
     {
       "path": "crates/domain-ir/tests/table_geometry.rs",
       "sha256": "284bfeb99d3bb6604e961b7d07539b723cbaef77d450cff1963cd2d81e121709"
+    },
+    {
+      "path": "crates/domain-ir/tests/table_text_conversion.rs",
+      "sha256": "3676a342a0aeb0a6bef9b20af02c4a712ba493514ab5477b83ddcfc145acfbc8"
     },
     {
       "path": "crates/domain-ir/tests/table_thousands.rs",
@@ -109,7 +117,7 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "1cae4a21aab39f57223e4deb84e1e5cb4661740af4eacb51180c6bb9acf790f8"
+      "sha256": "1847298a9000e4a4b59b13853a48d74bc046a6eb779644152e0f8ae7722656c6"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_AGGREGATE_POLICY.md",
@@ -136,6 +144,14 @@
       "sha256": "36fdd5a147e36c80462b56cb5028bd8b5e4108b01607418399d6d253cd7f1bcb"
     },
     {
+      "path": "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_POLICY.md",
+      "sha256": "af2b1d0a529fa06d46dd27c372deb257b46a9d6ff59822a46134a45458df7fca"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_REPORT.md",
+      "sha256": "f92d66e5860f47efab504a94d6292481cefb429b9b0af7b0cd538bdfd9bb42d3"
+    },
+    {
       "path": "implementation/p06/P06-09_TABLE_THOUSANDS_POLICY.md",
       "sha256": "862d0fc2047541c8ba5f3ed2e0b5e2c3344e982a4c8ece724f066b379c14762b"
     },
@@ -145,7 +161,7 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "4dd53d1bc61425b795993cbd510c510f945f2bd7c22b04185320338866374768"
+      "sha256": "f34279285ad6a336fcbc4ab8059e667d4d02df8896f70589f7197fe0655cbfb5"
     },
     {
       "path": "implementation/p06/p06-09-current-2020-automation-projection.json",
@@ -153,7 +169,7 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "4345e4866bf81f58c729baff70f3a60727e1a94fb053274fbb92433327025ee6"
+      "sha256": "0d4039fa7157672f906fba3772257c51224761930456cea24211e1af62c50564"
     },
     {
       "path": "protocol/json-schema/p06-table-automation-projection-v1.schema.json",
@@ -204,6 +220,10 @@
       "sha256": "f4cce219f539b3838f8391a5e7bff4107f34fb861734d826399b893cdaaa5e57"
     },
     {
+      "path": "protocol/migrations/p06-table-text-conversion-v0-to-v1.md",
+      "sha256": "4f049d9467a78a62993b3a1cf7a46b59d5700557dd903c8e20de0b2656c33990"
+    },
+    {
       "path": "protocol/migrations/p06-table-thousands-v0-to-v1.md",
       "sha256": "d43c0559d2d28e002e3e79e68fcf524efc5c6f93f18408f2d2ed971c51219ebc"
     },
@@ -220,8 +240,12 @@
       "sha256": "87bfdd79b7c7b5ceccbfcd6cd2137e2e0416ca4ac5e1ea61c68c256be834706d"
     },
     {
+      "path": "protocol/private/p06-table-text-conversion-v1.json",
+      "sha256": "ab0815e2c4c592f2d68e8f9cee2f433fb3d1b9d6ecfc30702406614d84433968"
+    },
+    {
       "path": "protocol/private/p06-table-thousands-v1.json",
-      "sha256": "9a054f0ba10bd2faa0b736f7015115184a121db51490c06ee286fffca68cf0a4"
+      "sha256": "40962ec31a4079c38a9e979c32744bb0e171b1469ad09f5f8a13b7befe90896d"
     },
     {
       "path": "specs/capability-contracts.generated.json",
@@ -249,11 +273,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "cff4e845f930aa6eaa6b3c0baf4d904f1ff64cb677c66e80c251c511e9144dd5"
+      "sha256": "76b13e40e9b0e2440b711513b00a63074c1e15890c471764789540a899c314d7"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "3344dddfdc767bf5b6eccd3886aba1827c1f604b61722e521d965aefac3d99ee"
+      "sha256": "9cdf86b297ba6074ad910175dba1a0b0f271f441a1755b298c25c16f88a16329"
     },
     {
       "path": "tools/p06/tests/test_table_geometry_contract.py",
@@ -264,8 +288,12 @@
       "sha256": "4da3b66b033a5eb81bf4e652bf7b44fc9aa0a97efe1329c22c56ed86db41fb24"
     },
     {
+      "path": "tools/p06/tests/test_table_text_conversion_contract.py",
+      "sha256": "fa5f6d914f30733de629df938993a0098fa6b559ef3fcab28fa473a53cc7824c"
+    },
+    {
       "path": "tools/p06/tests/test_table_thousands_contract.py",
-      "sha256": "e57a1223743d01e2e46e1ba757f7d4c954f351ab0ec3ffd5c84ea3390a38fcf0"
+      "sha256": "dd4b4461a1c76581dc9d835ebfb8641f5c018007fd5a574b8673aacdbdceecd6"
     },
     {
       "path": "tools/p06/validate_table_aggregate_contract.py",
@@ -273,7 +301,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "4a24ff57634a4ac49e71ffee1629f8f453607fa18e2752043526f77d00585e6e"
+      "sha256": "b881477698cc5cdde262209bdf9e1a66337b399b3bc2c4d3cb28ba0e238e98eb"
     },
     {
       "path": "tools/p06/validate_table_geometry_contract.py",
@@ -284,8 +312,12 @@
       "sha256": "1b8c71551c59951ffd769c87d3c706d519a87b70a6714668b88477031e0b4b88"
     },
     {
+      "path": "tools/p06/validate_table_text_conversion_contract.py",
+      "sha256": "c33893e78ebc15586dceb3184b94e9e0ede9164903dd4dcb15d72114cc51292a"
+    },
+    {
       "path": "tools/p06/validate_table_thousands_contract.py",
-      "sha256": "b2fd63f239edcfe2ed3f7dec21b43cd0a98693ac70991f8e3e4ee369ccc84a02"
+      "sha256": "7d39a217ced3db023cab5ba3d70234c26bbacc21a438825e2eb3af664492fa97"
     },
     {
       "path": "tools/xtask/src/main.rs",

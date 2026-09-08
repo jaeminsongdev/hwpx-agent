@@ -16,6 +16,7 @@ mod table_layout;
 mod table_merge_split;
 mod table_operations;
 mod table_pagination;
+mod table_text_conversion;
 mod table_thousands;
 mod units;
 
@@ -108,6 +109,11 @@ pub use table_pagination::{
     TablePaginationError, TablePaginationLimitConfig, TablePaginationLimits,
     TablePaginationObservation, TablePaginationPolicy, TablePaginationReceipt, TablePaginationRow,
     TablePaginationValidator,
+};
+pub use table_text_conversion::{
+    TABLE_TABLE_TO_TEXT_CAPABILITY_ID, TABLE_TEXT_CONVERSION_SCHEMA_VERSION,
+    TABLE_TEXT_TO_TABLE_CAPABILITY_ID, TableDelimiter, TableLineEnding, TableTextConversionError,
+    TableTextConversionLimitConfig, TableTextConversionLimits, TableTextGrid, TableTextGridDraft,
 };
 pub use table_thousands::{
     TABLE_THOUSANDS_SCHEMA_VERSION, TableThousandsBuilder, TableThousandsError, TableThousandsMode,
