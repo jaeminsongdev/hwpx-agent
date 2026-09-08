@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-06 current-PC PASS; P06-07 pure validator and static HWPX adapter PASS, current-PC renderer oracle next |
+| P06 | in progress | 01-06 current-PC PASS; P06-08 pure inspector PASS; P06-07 renderer oracle and P06-09 matrix remain |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -41,6 +41,7 @@
 | P-0053 | P06-05 sizing/autofit | current-PC PASS: pure solver, installed-font receipt and HWPX v2 adapter; failed `Open=false`, zero-guard and 4-micrometer calibration evidence preserved; calibrated target `3dfcf2a1...d9bcb5`, actual Hangul 2020 save/reopen lines `1,3,1,1`, PDF visual oracle, v2 contract and source v36 pass |
 | P-0054 | P06-06 FormulaAst | current-PC PASS: pure core, source/adapter, deterministic 2x4 row/column target `6514a69b...320e5`, actual Hangul 2020 attempt04 save/reopen, strict saved-HWPX formula/cache/layout oracle and PDF visual review pass; attempts 01-03 remain failed timeout diagnostics |
 | P-0055 | P06-07 pagination | pure component, static current-PC HWPX adapter, exact composite target builder and pre-runtime oracle PASS; first actual target exposed clipped long-cell/boundary calibration failure, corrected target awaits licensed Hangul 2020 access and renderer rerun |
+| P-0056 | P06-08 inspect/select | scoped pure-IR PASS at `293053e`: revision/graph/path/ID/fingerprint-bound table and merged-cell selectors, nested/drawing/note indexing, bounded metadata snapshot; Rust 11/11 and contract/tamper 4/4 pass; no HWPX/Hangul selection claim |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint evidence pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -235,6 +236,25 @@
   height, forces the avoid-row case across pages and recalibrates the boundary fillers; its first
   launch timed out waiting for access before file open, so v2 renderer evidence remains `NOT_RUN`.
 
+## Latest P06-08 evidence
+
+- Exact commit `293053e2c756d145fea6caf899dd636a6978757b` implements schema
+  `hwpx-agent.table-inspection/v1`: stable table/cell selectors bind revision, canonical graph SHA,
+  typed structural path, logical ID and fingerprints; merged covered coordinates retain the
+  requested coordinate while resolving to the canonical master.
+- Top-level, cell/drawing-nested and note-root tables are recursively indexed. Snapshot output is
+  metadata-only, deterministic and finite; cell bodies are omitted and fingerprinting streams into
+  bounded SHA-256 state.
+- Primary Rust boundary tests pass 11/11, P06 Python passes 74/74, contract/tamper passes 4/4,
+  `domain-ir` all-targets, Clippy `-D warnings` and formatting pass. STRICT review closed three
+  allocation/coverage findings with final blocker/major/minor `0/0/0`.
+- Primary FULL lanes linux-core/windows-worker/widget and a separate security lane pass. Docs is
+  not green because R-0008's historical P14 validator rereads a mutable successor file; FULL 5/5
+  is not claimed. Clean checkout independently passes linux-core, P06-08 contract 4/4 and Rust
+  11/11; its wider Windows/P06 runs stop on intentionally ignored current-PC evidence absence.
+- Report: `implementation/p06/P06-08_REPORT.md`. P06-08 does not claim HWPX/Hangul cursor/readback,
+  P06-07 renderer closure, P06-09 matrix, P06 or product completion.
+
 ## Open risks and holds
 
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence absent.
@@ -243,7 +263,7 @@
   credential custody, production lifecycle and real pull/push do not.
 - R-0006: P17 conflict resolver/widget are component evidence only.
 - R-0007: P06-07 still requires the actual current Hangul 2020 boundary-page and exact page/PDF
-  oracle; P06-08 inspect/select and P06-09's
+  oracle; P06-09's
   61-capability target conformance matrix. P06-05's exact fixture PASS does not prove arbitrary
   documents or other PCs/versions.
 - R-0008: bulk discovery of historical source-qualification tests reports forward-stability errors
@@ -260,7 +280,10 @@
    Hangul 2020 access prompts, then collect repeat-header/caption save/reopen/PDF evidence for
    one-line-before, exact-boundary, one-line-after, merged-cell, nested-table and long-equation
    cases. Keep renderer/page claims unverified until visual and structural evidence both pass.
-2. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
+2. At `max`, implement P06-09's fail-closed 61-capability current-PC target conformance matrix.
+   Bind every row to source contract, exact implementation and actual/static evidence; missing
+   P06-07 renderer evidence must remain non-green.
+3. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
    applicable offline Linux/security/STRICT checks without weakening actual-evidence Gates.
 
 ## Context pack and archive pointers
@@ -269,7 +292,8 @@
   `implementation/p06/P06-06_FORMULA_AST_POLICY.md`,
   `implementation/p06/P06-06_TARGET_READBACK_REPORT.md`, `implementation/p06/P06-03_REPORT.md`,
   `implementation/p06/P06-07_TABLE_PAGINATION_POLICY.md`,
-  `implementation/p06/P06-07_TABLE_PAGINATION_HWPX_ADAPTER_REPORT.md`, and
+  `implementation/p06/P06-07_TABLE_PAGINATION_HWPX_ADAPTER_REPORT.md`,
+  `implementation/p06/P06-08_REPORT.md`, and
   `implementation/p05/P05_GATE_REPORT.md`.
 - P06-04 source tool: `implementation/p06/tools/create-hancom-2020-table-source.ps1`.
 - P06-05 metric qualification: commits `af3dbf0`, `42aba1c`, `742b3d2`.
