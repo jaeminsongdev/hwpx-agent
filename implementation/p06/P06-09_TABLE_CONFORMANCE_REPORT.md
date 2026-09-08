@@ -17,8 +17,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 |---|---:|
 | direct `oracle_verified` | 11 |
 | direct `integration_passed` | 7 |
-| direct `unit_passed` | 13 |
-| direct `cataloged` only | 30 |
+| direct `unit_passed` | 21 |
+| direct `cataloged` only | 22 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
 | automation runtime verified | 0 |
@@ -46,6 +46,9 @@ The machine-readable authority is
   disposable package now proves formula/cache and pagination-policy readback plus exact preservation
   of every non-section part across all three operations. It does not include a licensed Hangul 2020
   target-build oracle.
+- The aggregate planner adds bounded selection-to-formula unit evidence for block, horizontal and
+  vertical `SUM`/`AVG`/`PRODUCT`. Eight previously catalog-only rows move to unit evidence while
+  the already stronger horizontal-sum oracle remains unchanged.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 
@@ -64,8 +67,8 @@ ordering; duplicate JSON keys; finite files; path containment; privacy; and crea
 Protocol code generation publishes the three P06 schemas through additive catalog v5 while baseline
 locks prove catalogs v2 through v4 remain unchanged.
 
-Current aggregate blockers include 30 missing direct evidence rows, 50 rows below direct oracle,
-235 missing validation instances, 61 unverified automation runtime rows and 61 missing
+Current aggregate blockers include 22 missing direct evidence rows, 50 rows below direct oracle,
+227 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -74,8 +77,8 @@ P06-09's matrix engine and current snapshot are implemented, but the roadmap com
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
 1. complete P06-07 corrected-target renderer evidence;
-2. implement the 30 remaining catalog-only direct operations in bounded semantic groups;
-3. lower the 13 component-only rows and close the seven static-only target oracles;
+2. implement the 22 remaining catalog-only direct operations in bounded semantic groups;
+3. lower the 21 component-only rows and close the seven static-only target oracles;
 4. qualify exact current-target automation bindings and run safe disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.
 

@@ -7,6 +7,7 @@ mod operation_plan;
 mod selector;
 mod semantic_diff;
 mod semantic_summary;
+mod table_aggregate;
 mod table_formula;
 mod table_geometry;
 mod table_grid;
@@ -59,6 +60,10 @@ pub use semantic_diff::{
 pub use semantic_summary::{
     SemanticDiffSummary, SemanticSummaryCategory, SemanticSummaryError, SemanticSummaryKind,
     SemanticSummaryLimits,
+};
+pub use table_aggregate::{
+    TABLE_AGGREGATE_SCHEMA_VERSION, TableAggregateAxis, TableAggregateBuilder, TableAggregateError,
+    TableAggregatePlan, TableAggregateRange, TableAggregateRequest, TableAggregateRequestDraft,
 };
 pub use table_formula::{
     FormulaAst, FormulaAstDraft, FormulaBinaryOperator, FormulaCache, FormulaCachePolicy,

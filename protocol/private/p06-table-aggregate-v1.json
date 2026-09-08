@@ -1,0 +1,101 @@
+{
+  "schema_version": "hwpx-agent.table-aggregate-contract/v1",
+  "model_schema_version": "hwpx-agent.table-aggregate/v1",
+  "scope": "p06_09_pure_bounded_table_aggregate_planner_current_pc_local_development",
+  "features": {
+    "TABLE-022": "table.block_sum",
+    "TABLE-023": "table.block_average",
+    "TABLE-024": "table.block_product",
+    "TABLE-026": "table.vertical_sum",
+    "TABLE-027": "table.horizontal_average",
+    "TABLE-028": "table.vertical_average",
+    "TABLE-029": "table.horizontal_product",
+    "TABLE-030": "table.vertical_product"
+  },
+  "compatibility_regression": {
+    "TABLE-025": "table.horizontal_sum"
+  },
+  "prerequisites": [
+    "hwpx-agent.table-formula/v1",
+    "checked_zero_based_cell_coordinates",
+    "exact_table_dimensions"
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "protocol/private/p06-table-formula-v1.json",
+      "sha256": "5bec3721f4283549af8cd1e7c850600d56ddc4a02a329298cecfa5920d7db0f3"
+    }
+  ],
+  "semantics": {
+    "block": "ordered_nonempty_rectangle_outside_destination",
+    "horizontal": "one_row_strictly_left_of_destination",
+    "vertical": "one_column_strictly_above_destination",
+    "functions": ["SUM", "AVG", "PRODUCT"],
+    "references": "relative_A1_range",
+    "cache": "absent",
+    "number_format": "general"
+  },
+  "binding": {
+    "dimensions": "exact_nonzero_rows_columns_within_formula_limits",
+    "coordinates": "zero_based_source_and_destination_inside_exact_dimensions",
+    "capability": "exact_axis_function_pair",
+    "serialization": "deterministic_compact_bounded_JSON_and_SHA256"
+  },
+  "default_limits": {
+    "rows": 10000,
+    "columns": 1024,
+    "serialized_bytes": 1048576
+  },
+  "failure_policy": [
+    "unsupported_version_or_invalid_json",
+    "duplicate_or_unknown_JSON_field",
+    "invalid_or_over_limit_dimensions",
+    "source_or_destination_out_of_bounds",
+    "reversed_source_range",
+    "destination_inside_source_range",
+    "horizontal_or_vertical_axis_mismatch",
+    "formula_or_serialization_failure"
+  ],
+  "migration": "protocol/migrations/p06-table-aggregate-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_AGGREGATE_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_AGGREGATE_REPORT.md",
+  "expected_evidence": {
+    "rust_tests": 8,
+    "axis_function_combinations": 9,
+    "contract_tests": 4,
+    "backend": "component_only",
+    "direct_stage": "unit_passed",
+    "validations": ["schema"]
+  },
+  "not_claimed": {
+    "formula_evaluation_or_verified_cache": false,
+    "direct_hwpx_adapter": false,
+    "semantic_reopen_or_formula_readback": false,
+    "page_split_or_render_diff": false,
+    "hangul_2020_target_oracle": false,
+    "automation_or_differential": false,
+    "release_enabled": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

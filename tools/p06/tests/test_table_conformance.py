@@ -42,10 +42,10 @@ class TableConformanceTests(unittest.TestCase):
         self.assertEqual(
             report["summary"]["direct_stage_counts"],
             {
-                "cataloged": 30,
+                "cataloged": 22,
                 "integration_passed": 7,
                 "oracle_verified": 11,
-                "unit_passed": 13,
+                "unit_passed": 21,
             },
         )
         self.assertEqual(
