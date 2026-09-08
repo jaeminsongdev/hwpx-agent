@@ -1,0 +1,108 @@
+{
+  "schema_version": "hwpx-agent.p06-07-table-pagination-hwpx-contract/v1",
+  "model_schema_version": "hwpx-agent.table-pagination/v1",
+  "observation_schema_version": "hwpx-agent.table-pagination-observation/v1",
+  "adapter_profile_id": "hwpx-agent.table-pagination-hwpx.hancom-2020/1",
+  "scope": "p06_07_bounded_current_pc_hancom_2020_static_hwpx_adapter_component",
+  "predecessor": {
+    "path": "protocol/private/p06-table-pagination-v1.json",
+    "sha256": "b9315b6d6010703ca246497a8ec3395517a48230255197e81a2560f3436d70a8",
+    "state": "immutable_pure_pagination_contract"
+  },
+  "source_lock_canonicalization": "exact_file_bytes_sha256",
+  "source_locks": [
+    {
+      "path": "protocol/private/p06-table-pagination-v1.json",
+      "sha256": "b9315b6d6010703ca246497a8ec3395517a48230255197e81a2560f3436d70a8"
+    },
+    {
+      "path": "implementation/p06/P06-07_TABLE_PAGINATION_POLICY.md",
+      "sha256": "426b44021d7e9e0097bd33031c4ca3b20b131f8f78e0e537d4b2204037871f9a"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_pagination.rs",
+      "sha256": "d667a4e34248379c6139ac62d1e0b385541d6dd959aeb8444b143077c6578e04"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_pagination.rs",
+      "sha256": "7485a352eef9f75aa1abb0016eb114cb227f13a49b7e0fbd178e648c6d01daf1"
+    }
+  ],
+  "native_mapping": {
+    "page_break": {
+      "CELL": "allow",
+      "TABLE": "avoid_row",
+      "NONE": "avoid_table",
+      "required_keep": "reject_no_exact_table_attribute"
+    },
+    "repeat_header": "table_boolean_plus_contiguous_uniform_cell_header_prefix",
+    "caption": "existing_top_or_bottom_attributes_with_content_sha256_binding",
+    "caption_creation_or_removal": "reject",
+    "left_or_right_caption": "reject_v1"
+  },
+  "owned_attribute_values": [
+    "tbl.pageBreak",
+    "tbl.repeatHeader",
+    "tc.header",
+    "caption.side",
+    "caption.fullSz",
+    "caption.width",
+    "caption.gap",
+    "caption.lastWidth"
+  ],
+  "preservation_policy": {
+    "source_bytes": "immutable",
+    "unchanged_attribute_values": "byte_exact",
+    "unowned_tokens": "byte_exact",
+    "caption_content": "semantic_sha256_exact",
+    "post_lowering": "reparse_and_exact_typed_readback",
+    "repeat_lowering": "byte_idempotent_zero_edits"
+  },
+  "finite_limits": {
+    "input_bytes": 2097152,
+    "output_bytes": 2097152,
+    "elements": 100000,
+    "tables": 4096,
+    "rows": 10000,
+    "columns": 1024,
+    "dimension_hwpunit": 100000000
+  },
+  "static_verification": {
+    "focused_rust_tests": 10,
+    "focused_rust_result": "pass",
+    "package_clippy_all_targets_deny_warnings": "pass",
+    "malformed_and_tamper_cases": "pass"
+  },
+  "gate_decision": {
+    "pure_pagination_validator": "pass",
+    "static_hwpx_adapter_component": "pass",
+    "actual_hancom_2020_boundary_page_suite": "not_run",
+    "actual_hancom_2020_save_reopen_pdf_oracle": "not_run",
+    "p06_07": "in_progress",
+    "p06": "in_progress"
+  },
+  "failure_policy": [
+    "unknown_namespace_shape_or_enum_rejects",
+    "mixed_noncontiguous_or_flag_inconsistent_header_rows_reject",
+    "required_keep_rejects_without_approximation",
+    "caption_presence_or_content_binding_drift_rejects",
+    "numeric_boolean_dimension_or_cardinality_drift_rejects",
+    "semantic_readback_drift_rejects",
+    "static_adapter_never_implies_renderer_or_product_gate"
+  ],
+  "migration": "protocol/migrations/p06-table-pagination-v1-to-hwpx-v1.md",
+  "report": "implementation/p06/P06-07_TABLE_PAGINATION_HWPX_ADAPTER_REPORT.md",
+  "not_claimed": {
+    "actual_renderer_behavior": false,
+    "boundary_page_suite": false,
+    "licensed_hancom_save_reopen_pdf_oracle": false,
+    "caption_creation_or_removal": false,
+    "left_or_right_caption": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_hancom_version": false,
+    "p06_07_complete": false,
+    "p06_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

@@ -72,6 +72,7 @@ top/bottom captions, required keep, malformed JSON, incomplete rows, and public 
 
 - No current Hangul 2020 page count, bounding box, save/reopen, or PDF has been validated by this
   pure component.
-- No HWPX `pageBreak`/`repeatHeader`/`caption` adapter has been promoted by this component.
+- The separate current-PC Hangul 2020 HWPX adapter profile now maps the bounded native attributes,
+  but this pure component does not promote adapter or renderer evidence into its receipt.
 - No left/right caption layout, arbitrary document compatibility, other PC/version, P06-07
   completion, P06 completion, production, or product completion is claimed.

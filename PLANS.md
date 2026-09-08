@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-06 current-PC PASS; P06-07 pure pagination validator PASS, current-PC HWPX/renderer oracle next |
+| P06 | in progress | 01-06 current-PC PASS; P06-07 pure validator and static HWPX adapter PASS, current-PC renderer oracle next |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -40,7 +40,7 @@
 | P-0052 | P06-04 cell formatting | current-PC PASS: actual source plus v2 product target `264b062c...a48d28a`, Hangul 2020 save/reopen text identity, semantic/style digest identity and PDF visual review pass on attempt04; attempts 01-03 remain timeout diagnostics |
 | P-0053 | P06-05 sizing/autofit | current-PC PASS: pure solver, installed-font receipt and HWPX v2 adapter; failed `Open=false`, zero-guard and 4-micrometer calibration evidence preserved; calibrated target `3dfcf2a1...d9bcb5`, actual Hangul 2020 save/reopen lines `1,3,1,1`, PDF visual oracle, v2 contract and source v36 pass |
 | P-0054 | P06-06 FormulaAst | current-PC PASS: pure core, source/adapter, deterministic 2x4 row/column target `6514a69b...320e5`, actual Hangul 2020 attempt04 save/reopen, strict saved-HWPX formula/cache/layout oracle and PDF visual review pass; attempts 01-03 remain failed timeout diagnostics |
-| P-0055 | P06-07 pagination | pure component PASS: typed allow/avoid-row/avoid-table/required-keep policy, exact row fragments, repeat-header prefix, caption/keep and boundary validator; current Hangul 2020 HWPX mapping and renderer page/PDF oracle remain |
+| P-0055 | P06-07 pagination | pure component and static current-PC HWPX adapter PASS: exact split mapping, contiguous cell-header prefix and preserving existing-caption lowering; actual Hangul 2020 boundary page/save-reopen/PDF oracle remains |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint evidence pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -212,6 +212,19 @@
 - Contract validator and four tamper tests pass with six immutable source locks and four
   implementation files. This component does not claim current Hangul page counts, HWPX lowering,
   save/reopen/PDF, left/right captions, P06-07 completion, production or product completion.
+- Static current-PC adapter profile `hwpx-agent.table-pagination-hwpx.hancom-2020/1` maps `CELL`,
+  `TABLE`, and `NONE` exactly to allow, avoid-row, and avoid-table. `required_keep` rejects because
+  no exact table-level native attribute is admitted.
+- Repeated headers bind the table `repeatHeader` flag to a contiguous prefix of rows whose direct
+  cells uniformly carry `header="1"`; mixed, non-contiguous and flag-inconsistent sources reject.
+  Existing top/bottom caption attributes lower only when their semantic-content SHA-256 remains
+  exact. Caption creation/removal and left/right flow remain outside V1.
+- Adapter tests pass 10/10, full `hwpx-package --all-targets` passes, package Clippy
+  `-D warnings`, formatting and diff checks pass. The HWPX adapter contract plus four tamper tests
+  pass; the complete P06 Python suite passes 70/70.
+- These are static component results only. The licensed Hangul 2020 boundary-page suite,
+  save/reopen semantic oracle, repeated-header/caption render inspection and PDF geometry remain
+  `NOT_RUN`; P06-07 and P06 remain in progress.
 
 ## Open risks and holds
 
@@ -220,8 +233,8 @@
 - R-0005: P17 durable checkpoint exists, but atomic durable mirror role/head admission, persistent
   credential custody, production lifecycle and real pull/push do not.
 - R-0006: P17 conflict resolver/widget are component evidence only.
-- R-0007: P06-07 still requires current Hangul 2020 HWPX mapping and exact page/PDF oracle; P06-08
-  inspect/select and P06-09's
+- R-0007: P06-07 still requires the actual current Hangul 2020 boundary-page and exact page/PDF
+  oracle; P06-08 inspect/select and P06-09's
   61-capability target conformance matrix. P06-05's exact fixture PASS does not prove arbitrary
   documents or other PCs/versions.
 - R-0008: bulk discovery of historical source-qualification tests reports forward-stability errors
@@ -234,9 +247,10 @@
 
 ## Next actions
 
-1. At `max`, implement the current Hangul 2020 P06-07 HWPX policy reader/lowerer and then collect
-   an exact multi-page repeat-header/caption save/reopen/PDF oracle; keep renderer/page claims
-   unverified until that target evidence passes.
+1. At `max`, build the exact disposable multi-page P06-07 target and strict oracle, then collect
+   licensed Hangul 2020 repeat-header/caption save/reopen/PDF evidence for one-line-before,
+   exact-boundary, one-line-after, merged-cell, nested-table and long equation/image cases. Keep
+   renderer/page claims unverified until the target evidence passes.
 2. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
    applicable offline Linux/security/STRICT checks without weakening actual-evidence Gates.
 
@@ -245,7 +259,8 @@
 - Read first: this file, `implementation/p06/P06-04_CELL_STYLE_POLICY.md`,
   `implementation/p06/P06-06_FORMULA_AST_POLICY.md`,
   `implementation/p06/P06-06_TARGET_READBACK_REPORT.md`, `implementation/p06/P06-03_REPORT.md`,
-  `implementation/p06/P06-07_TABLE_PAGINATION_POLICY.md`, and
+  `implementation/p06/P06-07_TABLE_PAGINATION_POLICY.md`,
+  `implementation/p06/P06-07_TABLE_PAGINATION_HWPX_ADAPTER_REPORT.md`, and
   `implementation/p05/P05_GATE_REPORT.md`.
 - P06-04 source tool: `implementation/p06/tools/create-hancom-2020-table-source.ps1`.
 - P06-05 metric qualification: commits `af3dbf0`, `42aba1c`, `742b3d2`.
