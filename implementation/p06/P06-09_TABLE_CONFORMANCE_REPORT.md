@@ -17,8 +17,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 |---|---:|
 | direct `oracle_verified` | 11 |
 | direct `integration_passed` | 7 |
-| direct `unit_passed` | 40 |
-| direct `cataloged` only | 3 |
+| direct `unit_passed` | 41 |
+| direct `cataloged` only | 2 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
 | automation runtime verified | 0 |
@@ -80,6 +80,11 @@ The machine-readable authority is
   source grids onto a reduced-rational common lattice. Cross-boundary merges, unsupported separators,
   collapsed tracks and unsafe formula crossings fail closed. Formula moves use the shared AST rebase
   engine and clear caches, but no HWPX lowering or licensed Hangul result is claimed.
+- The table-chart component adds TABLE-006 exact rectangular cell-block projection. It ignores the
+  documented top-left corner, maps first-row series labels and first-column category labels, keeps
+  exact numeric/blank data points and formula-display-cache origins, and binds source state plus
+  document flow. Cursor-only default-data creation, merged source cells and body text fail closed;
+  no chart XML, package mutation, linked save/reopen or licensed Hangul result is claimed.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 

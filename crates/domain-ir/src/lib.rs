@@ -9,6 +9,7 @@ mod semantic_diff;
 mod semantic_summary;
 mod table_aggregate;
 mod table_auto_fill;
+mod table_chart;
 mod table_formula;
 mod table_geometry;
 mod table_grid;
@@ -82,6 +83,14 @@ pub use table_auto_fill::{
     TableAutoFillMutation, TableAutoFillNumber, TableAutoFillOrder, TableAutoFillPlan,
     TableAutoFillReceipt, TableAutoFillRegion, TableAutoFillRequest, TableAutoFillRequestDraft,
     TableAutoFillSeries, TableAutoFillSeriesDraft, TableAutoFillValue,
+};
+pub use table_chart::{
+    TABLE_CHART_FROM_TABLE_CAPABILITY_ID, TABLE_CHART_SCHEMA_VERSION, TableChartBuilder,
+    TableChartCategory, TableChartCell, TableChartCellDraft, TableChartDataPoint, TableChartError,
+    TableChartInitialType, TableChartInsertionContext, TableChartLimitConfig, TableChartLimits,
+    TableChartPlan, TableChartReceipt, TableChartRegion, TableChartRequest, TableChartRequestDraft,
+    TableChartSeries, TableChartSourceState, TableChartSourceStateDraft, TableChartValue,
+    TableChartValueOrigin,
 };
 pub use table_formula::{
     FormulaAst, FormulaAstDraft, FormulaBinaryOperator, FormulaCache, FormulaCachePolicy,

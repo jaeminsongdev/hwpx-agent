@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-06 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 3 cataloged, 40 unit, 7 integration and 11 oracle rows but 0/61 release-green; P06-07 renderer and row closures remain |
+| P06 | in progress | 01-06 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 2 cataloged, 41 unit, 7 integration and 11 oracle rows but 0/61 release-green; P06-07 renderer and row closures remain |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -71,15 +71,15 @@
 - Commit `97b3008` introduced the deterministic 61-row matrix. A row is green only when direct
   HWPX oracle, every required validation/fixture, negative and rollback evidence, current-target
   automation runtime and exact differential all pass.
-- Current authority reports 0/61 green with direct stages: 3 cataloged, 40 unit-passed,
+- Current authority reports 0/61 green with direct stages: 2 cataloged, 41 unit-passed,
   7 integration-passed and 11 oracle-verified. Automation is six candidate-unverified plus
   55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
 - Bounded slices through `8955f9d` cover geometry, aggregates, formats, conversion, placement,
   sort/fill, style/transpose and TABLE-007/008/009/047 property/border/diagonal planning.
 - `2c91e43` adds TABLE-010/011 cursor-row split and whitespace-only join, rational common-column
   lattice, formula rebase/cache clearing and request/build-time document-flow drift rejection.
-- Latest verification: partition 13/13, P06 Python 129/129, workspace all-target tests, Clippy
-  `-D warnings`, formatting, contract/tamper and 120-source conformance locks PASS.
+- Latest slice adds TABLE-006 exact cell-block chart projection; 12/12 Rust, 4/4 contract, P06
+  133/133, workspace FULL/Clippy/format and 128-source conformance-lock validation PASS.
 - These rows remain component-only unit evidence. HWPX lowering, Hangul target build, automation
   runtime and exact differential evidence remain false/unverified.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`,
@@ -102,8 +102,8 @@
 
 ## Next actions
 
-1. At `max`, implement the 3 remaining catalog-only rows: TABLE-002/003/006.
-   Next group TABLE-002 draw, TABLE-003 eraser and TABLE-006 chart-from-table without backend claims.
+1. At `max`, implement the 2 remaining catalog-only rows TABLE-002 draw and TABLE-003 eraser as one
+   exact table-ruling/topology model, without HWPX or licensed-Hangul backend claims.
 2. At `max`, when the user can approve visible access prompts, rerun the exact P06-07 target v2 and
    collect repeat-header/caption boundary save/reopen/PDF evidence.
 3. At `max`, lower the 40 component-only rows to preserving HWPX adapters, close seven static-only
