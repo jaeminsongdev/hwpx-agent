@@ -16,6 +16,7 @@ mod table_layout;
 mod table_merge_split;
 mod table_operations;
 mod table_pagination;
+mod table_placement;
 mod table_text_conversion;
 mod table_thousands;
 mod units;
@@ -109,6 +110,13 @@ pub use table_pagination::{
     TablePaginationError, TablePaginationLimitConfig, TablePaginationLimits,
     TablePaginationObservation, TablePaginationPolicy, TablePaginationReceipt, TablePaginationRow,
     TablePaginationValidator,
+};
+pub use table_placement::{
+    TABLE_PLACEMENT_SCHEMA_VERSION, TableAttachmentMode, TableFloatingPlacement,
+    TableHorizontalAlignment, TableHorizontalReference, TableOuterMargins, TablePlacementError,
+    TablePlacementLimitConfig, TablePlacementLimits, TablePlacementOperation,
+    TablePlacementReceipt, TablePlacementResult, TablePlacementState, TablePlacementStateDraft,
+    TableTextFlow, TableTextWrap, TableVerticalAlignment, TableVerticalReference,
 };
 pub use table_text_conversion::{
     TABLE_TABLE_TO_TEXT_CAPABILITY_ID, TABLE_TEXT_CONVERSION_SCHEMA_VERSION,

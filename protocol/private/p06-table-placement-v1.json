@@ -1,0 +1,110 @@
+{
+  "schema_version": "hwpx-agent.table-placement-contract/v1",
+  "model_schema_version": "hwpx-agent.table-placement/v1",
+  "scope": "p06_09_pure_bounded_table_placement_current_pc_local_development",
+  "features": [
+    {
+      "feature_id": "TABLE-034",
+      "capability_id": "table.position"
+    },
+    {
+      "feature_id": "TABLE-036",
+      "capability_id": "table.inline_floating"
+    },
+    {
+      "feature_id": "TABLE-037",
+      "capability_id": "table.wrap"
+    },
+    {
+      "feature_id": "TABLE-038",
+      "capability_id": "table.outer_margin"
+    }
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    }
+  ],
+  "migration": "protocol/migrations/p06-table-placement-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_PLACEMENT_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_PLACEMENT_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/table_placement.rs",
+    "crates/domain-ir/tests/table_placement.rs",
+    "implementation/p06/P06-09_TABLE_PLACEMENT_POLICY.md",
+    "implementation/p06/P06-09_TABLE_PLACEMENT_REPORT.md"
+  ],
+  "semantics": {
+    "position": "replace_complete_floating_position_payload_only",
+    "attachment": "explicit_inline_or_floating_transition_preserving_wrap_flow_and_margins",
+    "wrap": "replace_text_wrap_and_side_flow_together_on_floating_table_only",
+    "outer_margin": "replace_four_nonnegative_margins_only_in_either_attachment_mode",
+    "inactive_values": "inline_retains_wrap_flow_and_margins_without_admitting_inactive_mutation",
+    "idempotence": "same_operation_same_canonical_state_and_changed_false_on_repeat"
+  },
+  "binding": {
+    "identity": "one_validated_logical_table_id_preserved_exactly",
+    "references": "paper_page_column_paragraph_horizontal_and_paper_page_paragraph_vertical",
+    "alignments": "horizontal_left_center_right_inside_outside_and_vertical_top_center_bottom_inside_outside",
+    "offsets": "signed_integer_micrometers_with_absolute_bound",
+    "margins": "four_nonnegative_integer_micrometers_with_independent_bound",
+    "receipt": "capability_operation_table_source_output_and_changed",
+    "serialization": "deterministic_compact_bounded_json_and_sha256"
+  },
+  "default_limits": {
+    "input_bytes": 65536,
+    "offset_micrometers": 1000000000,
+    "margin_micrometers": 1000000000,
+    "serialized_bytes": 65536
+  },
+  "failure_policy": [
+    "invalid_or_over_ceiling_limits_rejected",
+    "empty_or_oversized_json_rejected",
+    "malformed_unknown_or_duplicate_json_rejected",
+    "unsupported_schema_rejected",
+    "signed_offset_outside_absolute_bound_rejected",
+    "negative_or_over_bound_margin_rejected",
+    "position_or_wrap_on_inline_table_rejected",
+    "candidate_state_revalidated_before_publication",
+    "output_limit_or_serialization_failure_rejected",
+    "no_partial_state_or_receipt_returned"
+  ],
+  "not_claimed": {
+    "direct_hwpx_adapter": false,
+    "native_attribute_normalization": false,
+    "semantic_reopen": false,
+    "formula_or_page_preservation": false,
+    "pagination_or_render": false,
+    "hancom_2020_target_build": false,
+    "automation_or_differential": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "p06_09": "in_progress",
+    "product_complete": false
+  }
+}

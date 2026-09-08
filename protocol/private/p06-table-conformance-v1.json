@@ -31,8 +31,8 @@
     "green_rows": 0,
     "non_green_rows": 61,
     "direct_stage_counts": {
-      "cataloged": 18,
-      "unit_passed": 25,
+      "cataloged": 14,
+      "unit_passed": 29,
       "integration_passed": 7,
       "oracle_verified": 11
     },
@@ -49,7 +49,7 @@
   "source_locks": [
     {
       "path": "crates/domain-ir/src/lib.rs",
-      "sha256": "cddd108cdbfa03fe057137339cf2f929274051148d91a575c09231a1aad52b14"
+      "sha256": "367c4d8602916b83a8fcd5ff73c54a1f46f1af6eff974d765f5f1cdeb76e90b4"
     },
     {
       "path": "crates/domain-ir/src/table_aggregate.rs",
@@ -58,6 +58,10 @@
     {
       "path": "crates/domain-ir/src/table_geometry.rs",
       "sha256": "fc4a78856072be136fcc0e9e0ed5999753df228db051b55d060707af046b1914"
+    },
+    {
+      "path": "crates/domain-ir/src/table_placement.rs",
+      "sha256": "5049b9780ec8de075bc5943983ef856c5c6f1cedbdd609bafa2696caa9eb47d9"
     },
     {
       "path": "crates/domain-ir/src/table_text_conversion.rs",
@@ -74,6 +78,10 @@
     {
       "path": "crates/domain-ir/tests/table_geometry.rs",
       "sha256": "284bfeb99d3bb6604e961b7d07539b723cbaef77d450cff1963cd2d81e121709"
+    },
+    {
+      "path": "crates/domain-ir/tests/table_placement.rs",
+      "sha256": "805a33b26a465c94340ead7c2f7f82558e36a3c5177371c2f90d3ffbffce9094"
     },
     {
       "path": "crates/domain-ir/tests/table_text_conversion.rs",
@@ -117,7 +125,7 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "1847298a9000e4a4b59b13853a48d74bc046a6eb779644152e0f8ae7722656c6"
+      "sha256": "06a5260f9acdb8d7bfa5e432a5435168b893201f3c0d001ded1c797bfe203a36"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_AGGREGATE_POLICY.md",
@@ -144,6 +152,14 @@
       "sha256": "36fdd5a147e36c80462b56cb5028bd8b5e4108b01607418399d6d253cd7f1bcb"
     },
     {
+      "path": "implementation/p06/P06-09_TABLE_PLACEMENT_POLICY.md",
+      "sha256": "1f1ecd80e28de47786a9d24dd4aa05e3e2589e584c5746db106f20fef8fc0d8f"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_PLACEMENT_REPORT.md",
+      "sha256": "d746919f35402fb81484267743c9fe27e8d43c0d8a26e52b1793bcdfd1454dd3"
+    },
+    {
       "path": "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_POLICY.md",
       "sha256": "af2b1d0a529fa06d46dd27c372deb257b46a9d6ff59822a46134a45458df7fca"
     },
@@ -161,7 +177,7 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "f34279285ad6a336fcbc4ab8059e667d4d02df8896f70589f7197fe0655cbfb5"
+      "sha256": "a4cedc221412a4711a7b8c6fa82c03f3635c1d626d28d040191d30791ed978c8"
     },
     {
       "path": "implementation/p06/p06-09-current-2020-automation-projection.json",
@@ -169,7 +185,7 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "0d4039fa7157672f906fba3772257c51224761930456cea24211e1af62c50564"
+      "sha256": "0ef4540705e05c10bec9cf9eeb8f44f57ce036d3c55ac7a7db15c81d291f73ea"
     },
     {
       "path": "protocol/json-schema/p06-table-automation-projection-v1.schema.json",
@@ -220,6 +236,10 @@
       "sha256": "f4cce219f539b3838f8391a5e7bff4107f34fb861734d826399b893cdaaa5e57"
     },
     {
+      "path": "protocol/migrations/p06-table-placement-v0-to-v1.md",
+      "sha256": "8840f9c1145d077870d6a065826bdd59a69f14585f8facfa988bb027bc4e40c5"
+    },
+    {
       "path": "protocol/migrations/p06-table-text-conversion-v0-to-v1.md",
       "sha256": "4f049d9467a78a62993b3a1cf7a46b59d5700557dd903c8e20de0b2656c33990"
     },
@@ -238,6 +258,10 @@
     {
       "path": "protocol/private/p06-table-geometry-hwpx-v1.json",
       "sha256": "87bfdd79b7c7b5ceccbfcd6cd2137e2e0416ca4ac5e1ea61c68c256be834706d"
+    },
+    {
+      "path": "protocol/private/p06-table-placement-v1.json",
+      "sha256": "d3a3d498397cfee4c1277068e6668fa9a870e73c977f2914b61aca2520b81c04"
     },
     {
       "path": "protocol/private/p06-table-text-conversion-v1.json",
@@ -273,11 +297,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "76b13e40e9b0e2440b711513b00a63074c1e15890c471764789540a899c314d7"
+      "sha256": "3743196aa804709837eb8bdccdee3dc914b40dd6e249cd0f0d9893d3afb373a5"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "9cdf86b297ba6074ad910175dba1a0b0f271f441a1755b298c25c16f88a16329"
+      "sha256": "42296871652d048074094e664fc352922004ccbfc81997c648a7028d16ba4b8e"
     },
     {
       "path": "tools/p06/tests/test_table_geometry_contract.py",
@@ -286,6 +310,10 @@
     {
       "path": "tools/p06/tests/test_table_geometry_hwpx_contract.py",
       "sha256": "4da3b66b033a5eb81bf4e652bf7b44fc9aa0a97efe1329c22c56ed86db41fb24"
+    },
+    {
+      "path": "tools/p06/tests/test_table_placement_contract.py",
+      "sha256": "c4cb48cad177aa137aec204f6e9187754fb2d4ac12d6098d0336712a6ef10fe9"
     },
     {
       "path": "tools/p06/tests/test_table_text_conversion_contract.py",
@@ -301,7 +329,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "b881477698cc5cdde262209bdf9e1a66337b399b3bc2c4d3cb28ba0e238e98eb"
+      "sha256": "90e1fae25f1be450ba2387a53cd5dad0fc8b221fd65cde42a581307d826d7c19"
     },
     {
       "path": "tools/p06/validate_table_geometry_contract.py",
@@ -310,6 +338,10 @@
     {
       "path": "tools/p06/validate_table_geometry_hwpx_contract.py",
       "sha256": "1b8c71551c59951ffd769c87d3c706d519a87b70a6714668b88477031e0b4b88"
+    },
+    {
+      "path": "tools/p06/validate_table_placement_contract.py",
+      "sha256": "4bea97fdd255e21b582c6fa175ef1c7d33fa073ecbf9484b9e9308fda586016f"
     },
     {
       "path": "tools/p06/validate_table_text_conversion_contract.py",
