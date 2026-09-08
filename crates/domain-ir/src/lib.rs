@@ -9,6 +9,7 @@ mod semantic_diff;
 mod semantic_summary;
 mod table_formula;
 mod table_grid;
+mod table_inspector;
 mod table_layout;
 mod table_merge_split;
 mod table_operations;
@@ -68,6 +69,11 @@ pub use table_formula::{
 pub use table_grid::{
     CellCoordinate, TABLE_GRID_SCHEMA_VERSION, TableCellSpan, TableGrid, TableGridDraft,
     TableGridError, TableGridLimitConfig, TableGridLimits,
+};
+pub use table_inspector::{
+    ResolvedTableCell, TABLE_INSPECTION_SCHEMA_VERSION, TableCellSelector, TableInspection,
+    TableInspectionError, TableInspectionExpectation, TableInspectionLimitConfig,
+    TableInspectionLimits, TableInspectionSnapshot, TableSelector,
 };
 pub use table_layout::{
     CellWidthDeficit, FontMetricEvidence, FontMetricStatus, FontMetricVerification,

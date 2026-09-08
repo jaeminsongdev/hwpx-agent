@@ -1,0 +1,87 @@
+{
+  "schema_version": "hwpx-agent.table-inspection-contract/v1",
+  "model_schema_version": "hwpx-agent.table-inspection/v1",
+  "scope": "p06_08_pure_bounded_table_inspector_current_pc_local_development",
+  "prerequisites": [
+    "hwpx-agent.document-graph/v2",
+    "hwpx-agent.table-grid/v1",
+    "p04_selector_structural_path"
+  ],
+  "source_lock_canonicalization": "utf8_lf_sha256",
+  "source_locks": [
+    {
+      "path": "docs/03_document_model/06_table_model.md",
+      "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    }
+  ],
+  "table_selector": {
+    "identity": "globally_unique_logical_table_id",
+    "location": "exact_section_or_note_structural_path_including_parent_cells",
+    "content_anchor": "complete_logical_table_fingerprint_sha256",
+    "resolution": "revision_and_graph_first_then_all_table_anchors_exactly",
+    "fallback": "none"
+  },
+  "cell_selector": {
+    "table_anchor": "complete_stable_table_selector",
+    "coordinate": "requested_zero_based_pre_merge_logical_slot",
+    "master_anchor": "canonical_master_cell_id_and_fingerprint_sha256",
+    "covered_slot": "resolves_to_the_single_master_while_preserving_requested_coordinate",
+    "fallback": "none"
+  },
+  "nested_tables": {
+    "path": "parent_table_flow_child_then_parent_master_cell_coordinate_then_nested_flow_child",
+    "siblings": "distinct_logical_ids_paths_and_fingerprints_never_first_match",
+    "direct_membership": "cell_lists_only_immediate_nested_table_roots",
+    "drawing_flow": "nested_table_inside_a_cell_drawing_remains_owned_by_that_cell"
+  },
+  "snapshot": {
+    "authority": "one_validated_document_graph_revision",
+    "binding": "revision_id_and_canonical_graph_sha256",
+    "ordering": "table_id_then_canonical_master_cell_coordinate_and_id",
+    "content_policy": "metadata_only_cell_bodies_never_serialized_or_debugged",
+    "digest": "bounded_canonical_json_sha256"
+  },
+  "default_limits": {
+    "tables": 100000,
+    "master_cells": 1000000,
+    "path_steps": 64,
+    "nested_depth": 64,
+    "serialized_bytes": 33554432
+  },
+  "failure_policy": [
+    "invalid_or_over_ceiling_limits",
+    "graph_or_logical_grid_inconsistency",
+    "duplicate_table_path_or_identity",
+    "excessive_table_cell_path_depth_or_output",
+    "revision_or_graph_digest_drift",
+    "table_path_or_table_fingerprint_drift",
+    "master_cell_identity_or_fingerprint_drift",
+    "unknown_table_or_master_cell",
+    "coordinate_out_of_bounds",
+    "allocation_or_serialization_failure"
+  ],
+  "migration": "protocol/migrations/p06-table-inspection-v0-to-v1.md",
+  "not_claimed": {
+    "hwpx_selector_lift_or_lower": false,
+    "hangul_2020_cursor_or_selection": false,
+    "hangul_2020_save_reopen_or_render": false,
+    "automation_selection": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}
