@@ -40,7 +40,7 @@
 | P-0052 | P06-04 cell formatting | current-PC PASS: actual source plus v2 product target `264b062c...a48d28a`, Hangul 2020 save/reopen text identity, semantic/style digest identity and PDF visual review pass on attempt04; attempts 01-03 remain timeout diagnostics |
 | P-0053 | P06-05 sizing/autofit | current-PC PASS: pure solver, installed-font receipt and HWPX v2 adapter; failed `Open=false`, zero-guard and 4-micrometer calibration evidence preserved; calibrated target `3dfcf2a1...d9bcb5`, actual Hangul 2020 save/reopen lines `1,3,1,1`, PDF visual oracle, v2 contract and source v36 pass |
 | P-0054 | P06-06 FormulaAst | current-PC PASS: pure core, source/adapter, deterministic 2x4 row/column target `6514a69b...320e5`, actual Hangul 2020 attempt04 save/reopen, strict saved-HWPX formula/cache/layout oracle and PDF visual review pass; attempts 01-03 remain failed timeout diagnostics |
-| P-0055 | P06-07 pagination | pure component and static current-PC HWPX adapter PASS: exact split mapping, contiguous cell-header prefix and preserving existing-caption lowering; actual Hangul 2020 boundary page/save-reopen/PDF oracle remains |
+| P-0055 | P06-07 pagination | pure component, static current-PC HWPX adapter, exact composite target builder and pre-runtime oracle PASS; first actual target exposed clipped long-cell/boundary calibration failure, corrected target awaits licensed Hangul 2020 access and renderer rerun |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint evidence pass; atomic durable mirror admission and real pull/push remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -222,9 +222,18 @@
 - Adapter tests pass 10/10, full `hwpx-package --all-targets` passes, package Clippy
   `-D warnings`, formatting and diff checks pass. The HWPX adapter contract plus four tamper tests
   pass; the complete P06 Python suite passes 70/70.
-- These are static component results only. The licensed Hangul 2020 boundary-page suite,
-  save/reopen semantic oracle, repeated-header/caption render inspection and PDF geometry remain
-  `NOT_RUN`; P06-07 and P06 remain in progress.
+- The pure/adapter PASS results do not establish renderer behavior. A predecessor target has
+  diagnostic-only Hangul 2020 lifecycle evidence, while the corrected qualifying target v2 still
+  has `NOT_RUN` boundary, repeated-header/caption and PDF geometry evidence; P06-07 and P06 remain
+  in progress.
+- Exact composite target v2 SHA-256 `98aab83f...d9eb33` passes the pre-runtime oracle with six
+  typed tables (five top-level and one nested), five captions, one native equation and zero stale
+  line caches. Its builder is deterministic, create-only and source-SHA locked. The predecessor
+  target completed the full Hangul 2020 save/reopen/PDF lifecycle, but visual review found long-cell
+  clipping, a blank continuation page, no useful before/exact/after separation, and no avoid-row
+  page crossing. It is retained as failed diagnostic evidence. V2 removes the artificial long-cell
+  height, forces the avoid-row case across pages and recalibrates the boundary fillers; its first
+  launch timed out waiting for access before file open, so v2 renderer evidence remains `NOT_RUN`.
 
 ## Open risks and holds
 
@@ -247,10 +256,10 @@
 
 ## Next actions
 
-1. At `max`, build the exact disposable multi-page P06-07 target and strict oracle, then collect
-   licensed Hangul 2020 repeat-header/caption save/reopen/PDF evidence for one-line-before,
-   exact-boundary, one-line-after, merged-cell, nested-table and long equation/image cases. Keep
-   renderer/page claims unverified until the target evidence passes.
+1. At `max`, rerun the exact composite P06-07 target v2 when the user can approve the visible
+   Hangul 2020 access prompts, then collect repeat-header/caption save/reopen/PDF evidence for
+   one-line-before, exact-boundary, one-line-after, merged-cell, nested-table and long-equation
+   cases. Keep renderer/page claims unverified until visual and structural evidence both pass.
 2. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
    applicable offline Linux/security/STRICT checks without weakening actual-evidence Gates.
 
