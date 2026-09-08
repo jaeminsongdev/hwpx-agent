@@ -29,6 +29,7 @@ mod table_formula;
 mod table_layout;
 mod table_pagination;
 mod table_placement;
+mod table_ruling_hwpx;
 mod text_flow;
 mod vs0;
 mod vs1_layout;
@@ -152,6 +153,12 @@ pub use table_placement::{
     TableFloatingFlagsHwpxReadback, TableOuterMarginsHwpxReadback, TablePlacementHwpxError,
     TablePlacementHwpxLowerer, TablePlacementHwpxLoweringReceipt, TablePlacementHwpxReadback,
     TablePlacementHwpxReader,
+};
+pub use table_ruling_hwpx::{
+    TABLE_RULING_HWPX_PROFILE_ID, TableRulingHwpxBinding, TableRulingHwpxCellBinding,
+    TableRulingHwpxError, TableRulingHwpxLimits, TableRulingHwpxLoweredParts,
+    TableRulingHwpxLowerer, TableRulingHwpxLoweringReceipt, TableRulingHwpxReadback,
+    TableRulingHwpxReader, TableRulingHwpxStyleCatalog,
 };
 pub use text_flow::{
     FieldBegin, FieldEnd, FieldType, HANCOM_2020_PARAGRAPH_NAMESPACE, OpaqueTextElement,

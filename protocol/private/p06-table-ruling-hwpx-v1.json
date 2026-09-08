@@ -1,0 +1,123 @@
+{
+  "schema_version": "hwpx-agent.table-ruling-hwpx-contract/v1",
+  "profile_id": "hwpx-agent.table-ruling-hwpx.hancom-2020/1",
+  "model_profile_id": "hwpx-agent.table-ruling/v1",
+  "scope": "p06_09_static_current_pc_hancom_2020_hwpx_table_ruling_admission",
+  "features": {
+    "TABLE-002": "table.draw",
+    "TABLE-003": "table.eraser"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "protocol/private/p06-table-ruling-v1.json",
+      "sha256": "e40768374aa847a254b5c15671db67b0d08c109f05ac479c6dae3d16542ab6f6"
+    }
+  ],
+  "input": {
+    "existing_table": "complete_validated_table_state_grid_header_section_and_explicit_logical_physical_binding",
+    "outer_rectangle": "validated_outer_plan_exact_empty_top_level_paragraph_and_reviewed_empty_1x1_native_template",
+    "source_binding": "logical_table_cell_payload_ids_plus_complete_row_column_physical_boundaries",
+    "profile": "strict_current_hangul_2020_table_grid_border_fill_and_formula_shape"
+  },
+  "native_mapping": {
+    "grid_topology": "hp_tbl_rowCnt_colCnt_hp_tr_hp_tc_cellAddr_cellSpan_cellSz",
+    "edges": "all_cell_sides_resolve_through_header_borderFillIDRef_and_matching_shared_sides",
+    "diagonals": "hh_slash_backSlash_and_diagonal_line_with_separate_semantic_identities",
+    "outer_creation": "replace_one_digest_bound_empty_top_level_hp_p_with_one_reviewed_native_table_wrapper",
+    "payload_formula": "ordered_nonempty_nonformula_hp_p_payloads_and_one_strict_supported_formula_cell",
+    "canonical_values": "exact_decimal_hwpunit_dense_border_fill_ids_and_reviewed_line_enums"
+  },
+  "lowering": {
+    "existing_precondition": "relift_exact_source_state_grid_then_verify_plan_before_after_state_grid_and_document_flow",
+    "existing_edit_scope": "selected_table_rows_owned_geometry_and_coordinated_header_border_fill_append_only",
+    "outer_precondition": "recompute_full_section_insertion_context_validate_empty_formula_free_1x1_template_and_native_id_uniqueness",
+    "publication": "return_only_after_header_section_reparse_and_exact_target_state_grid_readback"
+  },
+  "preservation": {
+    "payload_order": "exact_raw_paragraph_bytes_and_row_major_structural_merge_order",
+    "cell_properties": "exact_non_ruling_background_and_directional_diagonal_semantics",
+    "formula": "line_only_exact_ast_cache_bytes_and_structural_formula_mutation_fail_closed",
+    "pagination": "unselected_table_exact_page_split_repeat_header_caption_readback",
+    "unselected_section": "byte_identical_outside_selected_table_or_exact_outer_placeholder",
+    "non_section_parts": "exact_expanded_byte_sha256_in_closed_package_except_coordinated_header_and_section",
+    "package_rebuild": "deterministic_and_closed_graph_reopen",
+    "source": "never_mutated"
+  },
+  "representability": {
+    "cell_side": "one_uniform_line_identity_per_native_master_cell_side_or_fail_closed",
+    "diagonal_pair": "simultaneous_slash_and_back_slash_require_one_shared_native_diagonal_line_or_fail_closed",
+    "structural_formula": "current_native_formula_profile_rejects_topology_mutation_instead_of_guessing_rebase_or_cache_serialization",
+    "outer_template": "native_wrapper_and_unowned_properties_are_supplied_and_validated_not_synthesized"
+  },
+  "receipt": {
+    "profile": "hwpx-agent.table-ruling-hwpx.hancom-2020/1",
+    "binding": "source_output_header_section_optional_template_source_target_state_grid_flow_and_optional_insertion_context_sha256",
+    "counts": "added_border_fills_target_cells_payload_blocks_and_formulas",
+    "debug": "all_hashes_logical_ids_payloads_formulas_cache_and_raw_xml_omitted"
+  },
+  "limits_profiles": [
+    "TableLayoutHwpxLimits",
+    "ParagraphStyleLimits",
+    "TableFormulaHwpxLimits",
+    "FormulaLimits",
+    "TableGridLimits",
+    "TableRulingLimits"
+  ],
+  "failure_policy": [
+    "invalid_logical_or_physical_binding_and_native_cell_extent",
+    "dangling_border_fill_or_mismatched_shared_edge",
+    "source_state_grid_plan_flow_or_insertion_context_drift",
+    "missing_line_identity_nonuniform_side_or_incompatible_diagonal_pair",
+    "payload_formula_property_or_outer_template_mismatch",
+    "native_table_id_collision_or_border_fill_catalog_exhaustion",
+    "input_output_allocation_xml_layout_grid_formula_or_domain_limit",
+    "no_partial_header_section_or_receipt_returned"
+  ],
+  "migration": "protocol/migrations/p06-table-ruling-hwpx-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_RULING_HWPX_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_RULING_HWPX_REPORT.md",
+  "expected_evidence": {
+    "adapter_tests": 15,
+    "feature_count": 2,
+    "backend": "direct_hwpx",
+    "direct_stage": "integration_passed",
+    "validations": [
+      "formula_readback",
+      "page_split",
+      "schema",
+      "semantic_reopen"
+    ]
+  },
+  "not_claimed": {
+    "render_diff": false,
+    "hangul_2020_target_build": false,
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "rollback_or_retry": false,
+    "release_enabled": false,
+    "arbitrary_user_document_compatibility": false,
+    "structural_formula_native_lowering": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

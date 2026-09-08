@@ -35,9 +35,9 @@
     },
     {
       "feature_ids": ["TABLE-002", "TABLE-003"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
       "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
       "negative_passed": true,
       "rollback_or_retry_passed": false,
@@ -46,6 +46,10 @@
         {
           "path": "implementation/p06/P06-09_TABLE_RULING_REPORT.md",
           "sha256": "92f91b10fd1de874ff27b7acab6d59701995fe1eb77fcf9278a7c392bbbf4efa"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_RULING_HWPX_REPORT.md",
+          "sha256": "ce77915fbc3822fdfa7106f103d10e1ca850aab851eb896d7e61f7422c55d7f0"
         }
       ]
     },

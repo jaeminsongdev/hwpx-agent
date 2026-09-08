@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 15 |
-| direct `integration_passed` | 10 |
-| direct `unit_passed` | 36 |
+| direct `integration_passed` | 12 |
+| direct `unit_passed` | 34 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -93,12 +93,17 @@ The machine-readable authority is
   exact numeric/blank data points and formula-display-cache origins, and binds source state plus
   document flow. Cursor-only default-data creation, merged source cells and body text fail closed;
   no chart XML, package mutation, linked save/reopen or licensed Hangul result is claimed.
-- The table-ruling component adds TABLE-002/003 as one exact physical-lattice and topology model.
+- The table-ruling model and preserving HWPX adapter cover TABLE-002/003 as one exact
+  physical-lattice and topology model.
   Drawing covers a new outer rectangle, full row/column strokes, rectangular local cell splits,
   existing-line style changes and two cell-local diagonal directions. Erasing a shared edge merges
   only rectangular compatible cells, while outer or same-master edges become explicitly
   transparent. Complete normalized edges, ordered payload blocks, properties, formulas, caches,
-  table state, grid and document flow are bound; no HWPX or licensed Hangul execution is claimed.
+  table state, grid and document flow are bound. Static lowering relifts source state/grid, updates
+  coordinated section/header XML, reopens exact semantics and preserves sibling formula/cache plus
+  pagination in a closed package. Outer creation uses a digest-bound empty paragraph and reviewed
+  1x1 native wrapper. Structural formula topology changes remain native fail-closed; no licensed
+  Hangul execution or renderer result is claimed.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 
@@ -118,7 +123,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-176 missing validation instances, 61 unverified automation runtime rows and 61 missing
+170 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -126,8 +131,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the 36 unit-only rows through preserving HWPX adapters;
-2. close the ten integration-only target oracles;
+1. lower the 34 unit-only rows through preserving HWPX adapters;
+2. close the twelve integration-only target oracles;
 3. supply remaining feature-specific validations, including formula readback where required;
 4. qualify exact current-target automation bindings and run safe disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.

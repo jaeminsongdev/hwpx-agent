@@ -882,6 +882,31 @@ pub struct TableRulingReceipt {
 
 impl TableRulingReceipt {
     #[must_use]
+    pub fn before_state_sha256(&self) -> Option<&str> {
+        self.before_state_sha256.as_deref()
+    }
+
+    #[must_use]
+    pub fn after_state_sha256(&self) -> &str {
+        &self.after_state_sha256
+    }
+
+    #[must_use]
+    pub fn before_grid_sha256(&self) -> Option<&str> {
+        self.before_grid_sha256.as_deref()
+    }
+
+    #[must_use]
+    pub fn after_grid_sha256(&self) -> &str {
+        &self.after_grid_sha256
+    }
+
+    #[must_use]
+    pub fn document_flow_sha256(&self) -> &str {
+        &self.document_flow_sha256
+    }
+
+    #[must_use]
     pub fn insertion_context_sha256(&self) -> Option<&str> {
         self.insertion_context_sha256.as_deref()
     }
