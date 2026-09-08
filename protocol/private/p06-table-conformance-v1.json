@@ -31,8 +31,8 @@
     "green_rows": 0,
     "non_green_rows": 61,
     "direct_stage_counts": {
-      "cataloged": 5,
-      "unit_passed": 38,
+      "cataloged": 3,
+      "unit_passed": 40,
       "integration_passed": 7,
       "oracle_verified": 11
     },
@@ -49,7 +49,7 @@
   "source_locks": [
     {
       "path": "crates/domain-ir/src/lib.rs",
-      "sha256": "a02d4bd1601192e966a2f98e93a518f27ab4acfbb021cdd38a30a945782476bc"
+      "sha256": "7a03f0b9ac140d17ef1d8e647f96a729d3a0be7b5b6fbc3fdb7a9bc6aaa93ef5"
     },
     {
       "path": "crates/domain-ir/src/table_aggregate.rs",
@@ -66,6 +66,10 @@
     {
       "path": "crates/domain-ir/src/table_geometry.rs",
       "sha256": "fc4a78856072be136fcc0e9e0ed5999753df228db051b55d060707af046b1914"
+    },
+    {
+      "path": "crates/domain-ir/src/table_partition.rs",
+      "sha256": "46ebf19cc9f0cae2595b8e72d624cbe9d10362f08cc6b3d25449def725518ff5"
     },
     {
       "path": "crates/domain-ir/src/table_placement.rs",
@@ -106,6 +110,10 @@
     {
       "path": "crates/domain-ir/tests/table_geometry.rs",
       "sha256": "284bfeb99d3bb6604e961b7d07539b723cbaef77d450cff1963cd2d81e121709"
+    },
+    {
+      "path": "crates/domain-ir/tests/table_partition.rs",
+      "sha256": "499ac7f6fb4b3e712821e323fe221b34c2544397f135c0bfd4001c56065d827d"
     },
     {
       "path": "crates/domain-ir/tests/table_placement.rs",
@@ -164,14 +172,6 @@
       "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
     },
     {
-      "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_POLICY.md",
-      "sha256": "3f6f95567d92b519645626202845f69006a99b1e922a1828e1681f8044db3bad"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "ea8d1ec534db097bf850b91230637984d21808abc76267f1fa0a2116458abd0a"
-    },
-    {
       "path": "implementation/p06/P06-09_TABLE_AGGREGATE_POLICY.md",
       "sha256": "79aad86d3ce44eef6aaf7810fdfd56d0eb685a3d1214d120df55d905ac748cf3"
     },
@@ -188,6 +188,14 @@
       "sha256": "3cd8641735e2afbe60f01983a5fe27139c0db7c05e45afc8a7d4e051465451da"
     },
     {
+      "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_POLICY.md",
+      "sha256": "1b4a14456c15795c387530bc1aef9ef62634745b1f96c36527dae97c9e8a3b1e"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
+      "sha256": "f1868f062fc3187d78619bc83e94247543a6bb4f14d25b26af2985fbf3f9799d"
+    },
+    {
       "path": "implementation/p06/P06-09_TABLE_GEOMETRY_HWPX_POLICY.md",
       "sha256": "9f18bbed53a687efe893149de09df2d0848f0ba103252ea1b9fcd2a1e1b5288e"
     },
@@ -202,6 +210,14 @@
     {
       "path": "implementation/p06/P06-09_TABLE_GEOMETRY_REPORT.md",
       "sha256": "36fdd5a147e36c80462b56cb5028bd8b5e4108b01607418399d6d253cd7f1bcb"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_PARTITION_POLICY.md",
+      "sha256": "a887777a4f83a9ac8f0d49d482d583b57451c7f4cce7bff04e27bd0baef7a501"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_PARTITION_REPORT.md",
+      "sha256": "d0c9304a4b9daf5fef2d061a0ff24cd23601677183be0b96b6ff99213604cb1e"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_PLACEMENT_POLICY.md",
@@ -253,7 +269,7 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "4bdc9b5fd654758ced632846488a92c7fbdb61445e8125b954eacd6f89002631"
+      "sha256": "f0bdc4bdd9eaf020bfe07848548e919ec2c64e2cbbd41f76e66d088a13f48ddf"
     },
     {
       "path": "implementation/p06/p06-09-current-2020-automation-projection.json",
@@ -261,7 +277,23 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "f9dd0d34e173ddf11c071471e6507dc491805090ee7b2c9b5a471f5f645efd96"
+      "sha256": "d9da16c50ee0b7262ca8cd0c99f09dcf1b738fb359faab446d41c164df0a19bc"
+    },
+    {
+      "path": "protocol/baseline/catalog-v5.lock.json",
+      "sha256": "cc3c5970ebbffa902f1dc21b41606ec3513f4c26cab1cba566491483f5566cbc"
+    },
+    {
+      "path": "protocol/generated/typescript/schema-catalog-v5.json",
+      "sha256": "ce694417dd52ddeed3dc8907564920400b992841c1326497833eb178c1e044c3"
+    },
+    {
+      "path": "protocol/generated/typescript/src/schema-models.test.ts",
+      "sha256": "4db31d922f67fe6c412ad526e36cd9aea9bf974aee99e8abfeadc7394da6f4a6"
+    },
+    {
+      "path": "protocol/generated/typescript/src/schema-models.ts",
+      "sha256": "d21e56c13c6e1bd8b1bbeb8ae96b6c0978ac82b472b77c4e204f0fe6711c1461"
     },
     {
       "path": "protocol/json-schema/p06-table-automation-projection-v1.schema.json",
@@ -274,22 +306,6 @@
     {
       "path": "protocol/json-schema/p06-table-conformance-report-v1.schema.json",
       "sha256": "9da2263d7fa77ef16cbd9fc221efdc6f27088f914ef9d62e5e7b1123cb2410de"
-    },
-    {
-      "path": "protocol/baseline/catalog-v5.lock.json",
-      "sha256": "cc3c5970ebbffa902f1dc21b41606ec3513f4c26cab1cba566491483f5566cbc"
-    },
-    {
-      "path": "protocol/generated/typescript/schema-catalog-v5.json",
-      "sha256": "ce694417dd52ddeed3dc8907564920400b992841c1326497833eb178c1e044c3"
-    },
-    {
-      "path": "protocol/generated/typescript/src/schema-models.ts",
-      "sha256": "d21e56c13c6e1bd8b1bbeb8ae96b6c0978ac82b472b77c4e204f0fe6711c1461"
-    },
-    {
-      "path": "protocol/generated/typescript/src/schema-models.test.ts",
-      "sha256": "4db31d922f67fe6c412ad526e36cd9aea9bf974aee99e8abfeadc7394da6f4a6"
     },
     {
       "path": "protocol/migrations/catalog-v4-to-v5.md",
@@ -308,12 +324,16 @@
       "sha256": "2ebef830bfa3d757467947324d416a11a941a55483cc83f22f1970537711e933"
     },
     {
+      "path": "protocol/migrations/p06-table-geometry-hwpx-v0-to-v1.md",
+      "sha256": "f4cce219f539b3838f8391a5e7bff4107f34fb861734d826399b893cdaaa5e57"
+    },
+    {
       "path": "protocol/migrations/p06-table-geometry-v0-to-v1.md",
       "sha256": "2aa607d143e393731015189a2ef82b767411200ad9a66df18eb403f38451b669"
     },
     {
-      "path": "protocol/migrations/p06-table-geometry-hwpx-v0-to-v1.md",
-      "sha256": "f4cce219f539b3838f8391a5e7bff4107f34fb861734d826399b893cdaaa5e57"
+      "path": "protocol/migrations/p06-table-partition-v0-to-v1.md",
+      "sha256": "83edfc87a36b98f5acfc69cf2b15fe2c88d56f69f579723933cd52ee12f46a35"
     },
     {
       "path": "protocol/migrations/p06-table-placement-v0-to-v1.md",
@@ -348,12 +368,16 @@
       "sha256": "9070715450f5d7d53e9697427bcd094ffd490a24a685c861105658ac540124e0"
     },
     {
+      "path": "protocol/private/p06-table-geometry-hwpx-v1.json",
+      "sha256": "87bfdd79b7c7b5ceccbfcd6cd2137e2e0416ca4ac5e1ea61c68c256be834706d"
+    },
+    {
       "path": "protocol/private/p06-table-geometry-v1.json",
       "sha256": "8f6c38510ab73c0bd169d6432801c5328c7aa995fb73fc65b5beddcb5b29fe42"
     },
     {
-      "path": "protocol/private/p06-table-geometry-hwpx-v1.json",
-      "sha256": "87bfdd79b7c7b5ceccbfcd6cd2137e2e0416ca4ac5e1ea61c68c256be834706d"
+      "path": "protocol/private/p06-table-partition-v1.json",
+      "sha256": "871ef74f7c10cb34b805becda60f53f497a0e1cef2e7031cb647007561ae9334"
     },
     {
       "path": "protocol/private/p06-table-placement-v1.json",
@@ -409,11 +433,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "f39f1532f3a09ac6dffe0723365347e7697a9940733f0d2349ccc98154d809e5"
+      "sha256": "fe71756b42489ba45f3d572ad35c4f18b240e2bc8b95feefae4f3e35eb9af08f"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "74137094f68a8ce926223b8fe46c1fd87ac557cfe7baa11c48bda49dc5a68063"
+      "sha256": "56246b3bd8bbdd50b3841f603b5aa728353e017285c425fed37446385adf0e4e"
     },
     {
       "path": "tools/p06/tests/test_table_geometry_contract.py",
@@ -422,6 +446,10 @@
     {
       "path": "tools/p06/tests/test_table_geometry_hwpx_contract.py",
       "sha256": "4da3b66b033a5eb81bf4e652bf7b44fc9aa0a97efe1329c22c56ed86db41fb24"
+    },
+    {
+      "path": "tools/p06/tests/test_table_partition_contract.py",
+      "sha256": "f8580d62c65298b8584e10534df0701fa13336a725b4e4379764c992f31bf57e"
     },
     {
       "path": "tools/p06/tests/test_table_placement_contract.py",
@@ -457,7 +485,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "13ba51bdcae9e2fd86de0d12647694c30deac54ebe9d8daccfe5ee1e69aabdcd"
+      "sha256": "639d5d59d3592ec0560667926f302b8fa8011c407b92695b7a348ad21ba6b58f"
     },
     {
       "path": "tools/p06/validate_table_geometry_contract.py",
@@ -466,6 +494,10 @@
     {
       "path": "tools/p06/validate_table_geometry_hwpx_contract.py",
       "sha256": "1b8c71551c59951ffd769c87d3c706d519a87b70a6714668b88477031e0b4b88"
+    },
+    {
+      "path": "tools/p06/validate_table_partition_contract.py",
+      "sha256": "d14459201ed9ceb7d986fb9a70d10cb1e12a6b74a453655d8242c5cabc950b7a"
     },
     {
       "path": "tools/p06/validate_table_placement_contract.py",

@@ -65,7 +65,7 @@ input requires a new output path or an explicitly reviewed successor update.
 ## Current result
 
 - Required rows: 61; green: 0; non-green: 61.
-- Direct stages: 5 cataloged, 38 unit-passed, 7 integration-passed, 11 oracle-verified.
+- Direct stages: 3 cataloged, 40 unit-passed, 7 integration-passed, 11 oracle-verified.
 - Automation bindings: 6 candidate-unverified, 55 unavailable-with-reason.
 - Automation runtime support: 61 unverified.
 - Direct/automation differential: 61 not-run.

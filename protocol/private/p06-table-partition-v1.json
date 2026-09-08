@@ -1,0 +1,118 @@
+{
+  "schema_version": "hwpx-agent.table-partition-contract/v1",
+  "model_schema_version": "hwpx-agent.table-partition/v1",
+  "scope": "p06_09_pure_bounded_whole_table_split_join_current_pc_local_development",
+  "features": [
+    {
+      "feature_id": "TABLE-010",
+      "capability_id": "table.split_table"
+    },
+    {
+      "feature_id": "TABLE-011",
+      "capability_id": "table.join_table"
+    }
+  ],
+  "official_references": [
+    "https://help.hancom.com/hoffice110/ko-KR/Hwp/table/table(dividing).htm",
+    "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/table(attach).htm",
+    "https://help.hancom.com/hoffice/multi/ko_kr/hwp/toolbox/object_table.htm"
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    }
+  ],
+  "migration": "protocol/migrations/p06-table-partition-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_PARTITION_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_PARTITION_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/table_partition.rs",
+    "crates/domain-ir/tests/table_partition.rs",
+    "implementation/p06/P06-09_TABLE_PARTITION_POLICY.md",
+    "implementation/p06/P06-09_TABLE_PARTITION_REPORT.md"
+  ],
+  "semantics": {
+    "state": "complete_exact_grid_table_width_column_tracks_master_payload_cell_property_and_validated_formula_state",
+    "split_boundary": "cursor_row_starts_second_table_first_row_rejected_and_crossing_row_spans_fail_closed",
+    "split_preservation": "leading_identity_and_all_master_payload_cell_properties_preserved_both_tables_inherit_source_properties",
+    "join_gap": "positive_space_runs_and_paragraph_breaks_only_with_at_least_one_paragraph_break",
+    "join_properties": "leading_table_identity_and_properties_retained_trailing_rows_appended_and_larger_width_used",
+    "join_columns": "unequal_column_layouts_projected_to_reduced_rational_union_with_deterministic_hwpunit_materialization",
+    "formulas": "explicit_reject_or_rebase_and_clear_cache_cross_split_boundary_references_rejected",
+    "preservation": "state_request_and_document_flow_sha256_bound_with_no_source_mutation_or_partial_plan"
+  },
+  "binding": {
+    "identity": "validated_logical_table_master_cell_second_table_and_separator_paragraph_ids",
+    "split": "exact_pre_state_grid_cursor_row_and_surrounding_flow_sha256",
+    "join": "exact_leading_trailing_states_grids_separator_token_sequence_and_surrounding_flow_sha256",
+    "plan": "lowering_ready_rows_columns_spans_widths_cells_formulas_and_topology_receipt",
+    "serialization": "deterministic_compact_bounded_json_and_sha256"
+  },
+  "default_limits": {
+    "input_bytes": 33554432,
+    "master_cells": 1000000,
+    "separator_tokens": 4096,
+    "separator_spaces": 1000000,
+    "identifier_bytes": 256,
+    "serialized_bytes": 134217728,
+    "table_width_hwpunit": 100000000
+  },
+  "failure_policy": [
+    "invalid_or_over_ceiling_limits_rejected",
+    "empty_oversized_malformed_unknown_or_duplicate_json_rejected",
+    "unsupported_state_or_request_schema_rejected",
+    "invalid_identifier_digest_or_grid_binding_rejected",
+    "incomplete_duplicate_extra_or_mismatched_master_cell_state_rejected",
+    "inexact_table_width_or_column_sum_rejected",
+    "first_row_or_out_of_grid_split_rejected",
+    "split_boundary_crossing_row_span_rejected",
+    "cross_split_formula_reference_rejected",
+    "non_whitespace_join_gap_or_missing_paragraph_break_rejected",
+    "duplicate_table_or_master_cell_identity_rejected",
+    "unrepresentable_common_hwpunit_column_boundary_rejected",
+    "formula_policy_owner_or_transform_failure_rejected",
+    "state_grid_or_document_flow_binding_drift_rejected",
+    "output_limit_serialization_or_allocation_failure_rejected",
+    "no_partial_plan_or_receipt_returned"
+  ],
+  "not_claimed": {
+    "direct_hwpx_adapter": false,
+    "section_xml_lowering": false,
+    "package_mutation_or_preservation": false,
+    "semantic_reopen": false,
+    "formula_readback": false,
+    "page_split_or_render": false,
+    "hancom_2020_target_build": false,
+    "automation_or_differential": false,
+    "common_lattice_target_rounding_verified": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "p06_09": "in_progress",
+    "product_complete": false
+  }
+}

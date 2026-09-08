@@ -17,8 +17,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 |---|---:|
 | direct `oracle_verified` | 11 |
 | direct `integration_passed` | 7 |
-| direct `unit_passed` | 38 |
-| direct `cataloged` only | 5 |
+| direct `unit_passed` | 40 |
+| direct `cataloged` only | 3 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
 | automation runtime verified | 0 |
@@ -74,6 +74,12 @@ The machine-readable authority is
   full merged-cell containment, per-cell/unified border topology and explicit two-direction slash,
   center-line and line-tuple diagonal semantics. Untargeted cells, properties, payload and formula
   identities remain bound. It is not yet an HWPX adapter.
+- The whole-table partition component adds TABLE-010/011 cursor-row split and whitespace-only join
+  plans. Split inherits exact table width, column tracks and table properties while rebasing rows;
+  join retains the leading table identity/properties, chooses the larger source width and maps both
+  source grids onto a reduced-rational common lattice. Cross-boundary merges, unsupported separators,
+  collapsed tracks and unsafe formula crossings fail closed. Formula moves use the shared AST rebase
+  engine and clear caches, but no HWPX lowering or licensed Hangul result is claimed.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 
@@ -92,8 +98,8 @@ ordering; duplicate JSON keys; finite files; path containment; privacy; and crea
 Protocol code generation publishes the three P06 schemas through additive catalog v5 while baseline
 locks prove catalogs v2 through v4 remain unchanged.
 
-Current aggregate blockers include 5 missing direct evidence rows, 50 rows below direct oracle,
-210 missing validation instances, 61 unverified automation runtime rows and 61 missing
+Current aggregate blockers include 3 missing direct evidence rows, 50 rows below direct oracle,
+208 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -102,8 +108,8 @@ P06-09's matrix engine and current snapshot are implemented, but the roadmap com
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
 1. complete P06-07 corrected-target renderer evidence when interactive access approval is available;
-2. implement the 5 remaining catalog-only direct operations in bounded semantic groups;
-3. lower the 38 component-only rows and close the seven static-only target oracles;
+2. implement the 3 remaining catalog-only direct operations in bounded semantic groups;
+3. lower the 40 component-only rows and close the seven static-only target oracles;
 4. qualify exact current-target automation bindings and run safe disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.
 

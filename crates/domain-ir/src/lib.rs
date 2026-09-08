@@ -17,6 +17,7 @@ mod table_layout;
 mod table_merge_split;
 mod table_operations;
 mod table_pagination;
+mod table_partition;
 mod table_placement;
 mod table_properties;
 mod table_sort;
@@ -124,6 +125,15 @@ pub use table_pagination::{
     TablePaginationError, TablePaginationLimitConfig, TablePaginationLimits,
     TablePaginationObservation, TablePaginationPolicy, TablePaginationReceipt, TablePaginationRow,
     TablePaginationValidator,
+};
+pub use table_partition::{
+    PlannedWholeTable, TABLE_JOIN_TABLE_CAPABILITY_ID, TABLE_PARTITION_SCHEMA_VERSION,
+    TABLE_SPLIT_TABLE_CAPABILITY_ID, TableJoinSeparatorToken, TablePartitionBuilder,
+    TablePartitionCell, TablePartitionCellDraft, TablePartitionError, TablePartitionFormulaPolicy,
+    TablePartitionLimitConfig, TablePartitionLimits, TablePartitionState, TablePartitionStateDraft,
+    WholeTableJoinPlan, WholeTableJoinReceipt, WholeTableJoinRequest, WholeTableJoinRequestDraft,
+    WholeTableSplitPlan, WholeTableSplitReceipt, WholeTableSplitRequest,
+    WholeTableSplitRequestDraft,
 };
 pub use table_placement::{
     TABLE_PLACEMENT_SCHEMA_VERSION, TableAttachmentMode, TableFloatingPlacement,
