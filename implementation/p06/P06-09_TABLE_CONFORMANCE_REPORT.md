@@ -56,6 +56,8 @@ verified undo/redo canaries are unrelated to the table domain and are not reused
 The generator verifies 61-row identity across catalog, contract and projection; exact target;
 operation schema presence; required validation/fixture subsets; evidence file digests; canonical
 ordering; duplicate JSON keys; finite files; path containment; privacy; and create-only publication.
+Protocol code generation publishes the three P06 schemas through additive catalog v5 while baseline
+locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 33 missing direct evidence rows, 50 rows below direct oracle,
 61 unverified automation runtime rows and 61 missing differentials. A row can carry multiple

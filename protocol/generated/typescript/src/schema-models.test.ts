@@ -8,7 +8,7 @@ import {
 } from "./schema-models.js";
 
 test("generated schema catalog is sorted and complete", () => {
-    assert.equal(schemaIds.length, 7);
+    assert.equal(schemaIds.length, 10);
     assert.deepEqual(schemaIds, [...schemaIds].sort());
     assert.ok(
         schemaIds.includes(
@@ -18,6 +18,21 @@ test("generated schema catalog is sorted and complete", () => {
     assert.ok(
         schemaIds.includes(
             "https://hwpx-agent.local/schemas/windows/hancom-signed-binding-envelope-v1.schema.json",
+        ),
+    );
+    assert.ok(
+        schemaIds.includes(
+            "https://hwpx-agent.local/schemas/p06-table-automation-projection-v1.schema.json",
+        ),
+    );
+    assert.ok(
+        schemaIds.includes(
+            "https://hwpx-agent.local/schemas/p06-table-conformance-evidence-v1.schema.json",
+        ),
+    );
+    assert.ok(
+        schemaIds.includes(
+            "https://hwpx-agent.local/schemas/p06-table-conformance-report-v1.schema.json",
         ),
     );
 });

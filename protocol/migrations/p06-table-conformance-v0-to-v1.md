@@ -5,6 +5,9 @@ P06-09 introduces `hwpx-agent.table-automation-projection/v1`,
 `hwpx-agent.table-conformance-report/v1` as additive contracts. There is no predecessor wire
 payload to coerce.
 
+These public schemas first appear in additive `schema-catalog-v5.json`. Catalog v2, v3 and v4
+remain byte-for-byte immutable; consumers pinned to those catalogs do not receive the new schemas.
+
 The report joins exactly 61 `TABLE-001` through `TABLE-061` rows across the canonical feature
 catalog, generated capability contracts, one redacted exact-target automation projection, and
 hash-bound direct evidence. Missing records are interpreted as `cataloged`, never as tested.

@@ -16,6 +16,9 @@ The only admitted target is licensed Hancom Hangul 2020 `11.0.0.9136`, `ko-KR`, 
 personal local development. Other PCs and Hangul 2022/2024 require separate projections, evidence,
 and reports. Evidence is never inherited across targets.
 
+The three public P06 schemas are published only through additive `schema-catalog-v5.json`; immutable
+catalogs v2 through v4 remain byte-identical.
+
 ## Row states and green rule
 
 Direct evidence stages are `cataloged`, `unit_passed`, `integration_passed`, and

@@ -32,6 +32,9 @@ REPORT = "implementation/p06/evidence/conformance/p06-table-conformance.current-
 POLICY = "implementation/p06/P06-09_TABLE_CONFORMANCE_POLICY.md"
 HUMAN_REPORT = "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md"
 MIGRATION = "protocol/migrations/p06-table-conformance-v0-to-v1.md"
+SCHEMA_CATALOG = "protocol/generated/typescript/schema-catalog-v5.json"
+CATALOG_MIGRATION = "protocol/migrations/catalog-v4-to-v5.md"
+CATALOG_BASELINE = "protocol/baseline/catalog-v5.lock.json"
 PRIVATE_REGISTRY = "implementation/p02/evidence/bindings/automation-bindings.2020.v1.final.json"
 SCHEMAS = (
     "protocol/json-schema/p06-table-automation-projection-v1.schema.json",
@@ -51,7 +54,13 @@ EXPECTED_SOURCE_PATHS = {
     POLICY,
     HUMAN_REPORT,
     MIGRATION,
+    SCHEMA_CATALOG,
+    CATALOG_MIGRATION,
+    CATALOG_BASELINE,
     *SCHEMAS,
+    "protocol/generated/typescript/src/schema-models.ts",
+    "protocol/generated/typescript/src/schema-models.test.ts",
+    "tools/xtask/src/main.rs",
     "tools/p06/table_conformance.py",
     "tools/p06/build_table_conformance_report.py",
     "tools/p06/project_table_automation_bindings.py",
@@ -85,6 +94,9 @@ def validate_contract_shape(contract: dict[str, Any], errors: list[str]) -> None
         "source_locks",
         "schemas",
         "migration",
+        "schema_catalog",
+        "catalog_migration",
+        "catalog_baseline",
         "policy",
         "human_report",
         "machine_report",
@@ -100,6 +112,9 @@ def validate_contract_shape(contract: dict[str, Any], errors: list[str]) -> None
         "source_lock_canonicalization": "exact_file_bytes_sha256",
         "schemas": list(SCHEMAS),
         "migration": MIGRATION,
+        "schema_catalog": SCHEMA_CATALOG,
+        "catalog_migration": CATALOG_MIGRATION,
+        "catalog_baseline": CATALOG_BASELINE,
         "policy": POLICY,
         "human_report": HUMAN_REPORT,
         "machine_report": REPORT,

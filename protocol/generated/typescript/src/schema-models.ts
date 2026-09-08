@@ -6,6 +6,9 @@ export const schemaIds = [
   "https://hwpx-agent.local/schemas/foundation/fixture-manifest-v1.schema.json",
   "https://hwpx-agent.local/schemas/foundation/log-event-v1.schema.json",
   "https://hwpx-agent.local/schemas/foundation/workspace-policy-v1.schema.json",
+  "https://hwpx-agent.local/schemas/p06-table-automation-projection-v1.schema.json",
+  "https://hwpx-agent.local/schemas/p06-table-conformance-evidence-v1.schema.json",
+  "https://hwpx-agent.local/schemas/p06-table-conformance-report-v1.schema.json",
   "https://hwpx-agent.local/schemas/windows/hancom-binding-bundle-v1.schema.json",
   "https://hwpx-agent.local/schemas/windows/hancom-signed-binding-envelope-v1.schema.json",
 ] as const;
@@ -62,6 +65,33 @@ export interface WorkspacePolicyV1 {
   areas: Array<"staging" | "quarantine" | "output">;
   max_artifact_bytes: number;
   schema_version: "hwpx-agent.workspace-policy/v1";
+}
+
+export interface P06TableAutomationProjectionV1 {
+  privacy: {"raw_action_identifiers":false,"raw_parameter_identifiers":false,"raw_probe_values":false};
+  row_count: 61;
+  rows: Array<Record<string, unknown>>;
+  schema_version: "hwpx-agent.table-automation-projection/v1";
+  source_registry_sha256: unknown;
+  target: unknown;
+}
+
+export interface P06TableConformanceEvidenceV1 {
+  not_claimed: {"other_pc_or_version":false,"p06_07_renderer_gate":false,"p06_09_complete":false,"p06_phase_complete":false,"product_complete":false,"production":false};
+  records: Array<Record<string, unknown>>;
+  required_fixture_classes: ["happy_path","boundary","negative","preservation","target_build","security"];
+  schema_version: "hwpx-agent.table-conformance-evidence/v1";
+  target: unknown;
+}
+
+export interface P06TableConformanceReportV1 {
+  privacy: {"absolute_private_paths":false,"document_content":false,"raw_action_identifiers":false,"raw_parameter_identifiers":false,"raw_probe_values":false};
+  rows: Array<unknown>;
+  schema_version: "hwpx-agent.table-conformance-report/v1";
+  scope: "p06_09_current_pc_hancom_2020_fail_closed_matrix";
+  sources: Record<string, unknown>;
+  summary: Record<string, unknown>;
+  target: unknown;
 }
 
 export interface HancomBindingBundleV1 {
