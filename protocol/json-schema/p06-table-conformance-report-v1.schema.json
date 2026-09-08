@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/p06-table-conformance-report-v1.schema.json",
+  "title": "P06TableConformanceReportV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "scope", "target", "sources", "summary", "rows", "privacy"],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.table-conformance-report/v1" },
+    "scope": { "const": "p06_09_current_pc_hancom_2020_fail_closed_matrix" },
+    "target": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/target" },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "feature_catalog_sha256",
+        "capability_contracts_sha256",
+        "automation_projection_sha256",
+        "automation_source_registry_sha256",
+        "direct_evidence_sha256"
+      ],
+      "properties": {
+        "feature_catalog_sha256": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256" },
+        "capability_contracts_sha256": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256" },
+        "automation_projection_sha256": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256" },
+        "automation_source_registry_sha256": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256" },
+        "direct_evidence_sha256": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256" }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_rows",
+        "green_rows",
+        "non_green_rows",
+        "direct_stage_counts",
+        "automation_binding_counts",
+        "differential_counts",
+        "blocker_counts",
+        "required_matrix",
+        "p06_09",
+        "p06_phase",
+        "product_complete"
+      ],
+      "properties": {
+        "required_rows": { "const": 61 },
+        "green_rows": { "type": "integer", "minimum": 0, "maximum": 61 },
+        "non_green_rows": { "type": "integer", "minimum": 0, "maximum": 61 },
+        "direct_stage_counts": { "$ref": "#/$defs/countMap" },
+        "automation_binding_counts": { "$ref": "#/$defs/countMap" },
+        "differential_counts": { "$ref": "#/$defs/countMap" },
+        "blocker_counts": { "$ref": "#/$defs/countMap" },
+        "required_matrix": { "enum": ["green", "non_green"] },
+        "p06_09": { "enum": ["pass", "in_progress"] },
+        "p06_phase": { "const": "in_progress" },
+        "product_complete": { "const": false }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 61,
+      "maxItems": 61,
+      "items": { "$ref": "#/$defs/row" }
+    },
+    "privacy": {
+      "const": {
+        "raw_action_identifiers": false,
+        "raw_parameter_identifiers": false,
+        "raw_probe_values": false,
+        "document_content": false,
+        "absolute_private_paths": false
+      }
+    }
+  },
+  "$defs": {
+    "countMap": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 1000000 }
+    },
+    "evidenceFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "sha256": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/sha256" }
+      }
+    },
+    "row": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "feature_id",
+        "capability_id",
+        "required_validations",
+        "required_fixture_classes",
+        "direct",
+        "automation",
+        "differential_state",
+        "gate_state",
+        "blockers"
+      ],
+      "properties": {
+        "feature_id": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/featureId" },
+        "capability_id": { "$ref": "p06-table-automation-projection-v1.schema.json#/$defs/capabilityId" },
+        "required_validations": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "required_fixture_classes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["happy_path", "boundary", "negative", "preservation", "target_build", "security"] }
+        },
+        "direct": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "backend",
+            "stage",
+            "validations_passed",
+            "fixture_classes_passed",
+            "negative_passed",
+            "rollback_or_retry_passed",
+            "evidence_files"
+          ],
+          "properties": {
+            "backend": { "enum": ["component_only", "direct_hwpx"] },
+            "stage": { "enum": ["cataloged", "unit_passed", "integration_passed", "oracle_verified"] },
+            "validations_passed": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+            "fixture_classes_passed": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "enum": ["happy_path", "boundary", "negative", "preservation", "target_build", "security"] }
+            },
+            "negative_passed": { "type": "boolean" },
+            "rollback_or_retry_passed": { "type": "boolean" },
+            "evidence_files": { "type": "array", "maxItems": 32, "items": { "$ref": "#/$defs/evidenceFile" } }
+          }
+        },
+        "automation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["binding_status", "runtime_support_state", "routing_enabled"],
+          "properties": {
+            "binding_status": { "enum": ["candidate_unverified", "unavailable_with_reason", "verified_current_target"] },
+            "runtime_support_state": { "enum": ["unverified", "verified_current_target", "failed_current_target", "blocked_by_policy", "unverified_not_run"] },
+            "routing_enabled": { "type": "boolean" }
+          }
+        },
+        "differential_state": { "enum": ["not_run", "exact_match", "mismatch"] },
+        "gate_state": { "enum": ["green", "non_green"] },
+        "blockers": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}

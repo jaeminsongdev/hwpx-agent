@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hwpx-agent.local/schemas/p06-table-automation-projection-v1.schema.json",
+  "title": "P06TableAutomationProjectionV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_registry_sha256",
+    "target",
+    "row_count",
+    "rows",
+    "privacy"
+  ],
+  "properties": {
+    "schema_version": { "const": "hwpx-agent.table-automation-projection/v1" },
+    "source_registry_sha256": { "$ref": "#/$defs/sha256" },
+    "target": { "$ref": "#/$defs/target" },
+    "row_count": { "const": 61 },
+    "rows": {
+      "type": "array",
+      "minItems": 61,
+      "maxItems": 61,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "feature_id",
+          "capability_id",
+          "binding_status",
+          "runtime_support_state",
+          "routing_enabled"
+        ],
+        "properties": {
+          "feature_id": { "$ref": "#/$defs/featureId" },
+          "capability_id": { "$ref": "#/$defs/capabilityId" },
+          "binding_status": {
+            "enum": [
+              "candidate_unverified",
+              "unavailable_with_reason",
+              "verified_current_target"
+            ]
+          },
+          "runtime_support_state": {
+            "enum": [
+              "unverified",
+              "verified_current_target",
+              "failed_current_target",
+              "blocked_by_policy",
+              "unverified_not_run"
+            ]
+          },
+          "routing_enabled": { "type": "boolean" }
+        }
+      }
+    },
+    "privacy": {
+      "const": {
+        "raw_action_identifiers": false,
+        "raw_parameter_identifiers": false,
+        "raw_probe_values": false
+      }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "featureId": { "type": "string", "pattern": "^TABLE-(00[1-9]|0[1-5][0-9]|06[01])$" },
+    "capabilityId": { "type": "string", "pattern": "^table\\.[a-z0-9_]+$" },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_id", "product", "build", "locale", "architecture", "scope"],
+      "properties": {
+        "profile_id": { "const": "hancom-hangul-2020-secondary" },
+        "product": { "const": "Hancom Hangul 2020" },
+        "build": { "const": "11.0.0.9136" },
+        "locale": { "const": "ko-KR" },
+        "architecture": { "const": "x86" },
+        "scope": { "const": "current_pc_personal_local_development" }
+      }
+    }
+  }
+}

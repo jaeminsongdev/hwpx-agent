@@ -1,0 +1,173 @@
+{
+  "schema_version": "hwpx-agent.table-conformance-evidence/v1",
+  "target": {
+    "profile_id": "hancom-hangul-2020-secondary",
+    "product": "Hancom Hangul 2020",
+    "build": "11.0.0.9136",
+    "locale": "ko-KR",
+    "architecture": "x86",
+    "scope": "current_pc_personal_local_development"
+  },
+  "required_fixture_classes": [
+    "happy_path",
+    "boundary",
+    "negative",
+    "preservation",
+    "target_build",
+    "security"
+  ],
+  "records": [
+    {
+      "feature_ids": ["TABLE-001", "TABLE-012", "TABLE-013", "TABLE-014", "TABLE-015"],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": ["schema"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-02_REPORT.md",
+          "sha256": "af394576cdf8893290d34d5bca3926b42e80908e8aa2f9444539b1b496edbd6d"
+        }
+      ]
+    },
+    {
+      "feature_ids": ["TABLE-016", "TABLE-017"],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": ["schema"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-03_REPORT.md",
+          "sha256": "28d69c1e37d79793a36fdc346e114e7d21ecd8176ca34c9a0203029fbf71fd56"
+        }
+      ]
+    },
+    {
+      "feature_ids": ["TABLE-039", "TABLE-040", "TABLE-041", "TABLE-045", "TABLE-046", "TABLE-048"],
+      "backend": "direct_hwpx",
+      "stage": "oracle_verified",
+      "validations_passed": ["render_diff", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": true,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-04_TARGET_READBACK_REPORT.md",
+          "sha256": "0aa66bb33471edfeb67d7b8856f3075e8c8c4f589f1fdf650bb8e03fb8e88348"
+        }
+      ]
+    },
+    {
+      "feature_ids": ["TABLE-035"],
+      "backend": "direct_hwpx",
+      "stage": "oracle_verified",
+      "validations_passed": ["render_diff", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": true,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-05_TARGET_READBACK_REPORT.md",
+          "sha256": "e52bdecbc84852a41110992c89358e74e36ad137da1063b7d5a9551ed6900022"
+        }
+      ]
+    },
+    {
+      "feature_ids": ["TABLE-051", "TABLE-052", "TABLE-053"],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": ["schema"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-05_TARGET_READBACK_REPORT.md",
+          "sha256": "e52bdecbc84852a41110992c89358e74e36ad137da1063b7d5a9551ed6900022"
+        }
+      ]
+    },
+    {
+      "feature_ids": ["TABLE-025", "TABLE-031", "TABLE-059", "TABLE-061"],
+      "backend": "direct_hwpx",
+      "stage": "oracle_verified",
+      "validations_passed": ["formula_readback", "render_diff", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": true,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-06_TARGET_READBACK_REPORT.md",
+          "sha256": "f7eddc72e4d213025ff92131af5ae3d2d230bcfc88bb20d004dcfdfd76d93255"
+        }
+      ]
+    },
+    {
+      "feature_ids": ["TABLE-049", "TABLE-060"],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": ["schema"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-06_FORMULA_AST_POLICY.md",
+          "sha256": "b416dad4e346ea9a168f65ece73464e76c7d4c815988691eba61c2bc47a16d14"
+        }
+      ]
+    },
+    {
+      "feature_ids": ["TABLE-042", "TABLE-043", "TABLE-044", "TABLE-055"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-07_TABLE_PAGINATION_HWPX_ADAPTER_REPORT.md",
+          "sha256": "080d460e1bb610780c8bcc98057b735f8b2a5e5a1f8e41a7ba901911308f4ab9"
+        }
+      ]
+    },
+    {
+      "feature_ids": ["TABLE-054"],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": ["schema"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-08_REPORT.md",
+          "sha256": "67976729039bc5eaf22f6344f5a4292758c1fb340b2df93ab0a5d65b532bf921"
+        }
+      ]
+    }
+  ],
+  "not_claimed": {
+    "p06_07_renderer_gate": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "other_pc_or_version": false,
+    "product_complete": false
+  }
+}
