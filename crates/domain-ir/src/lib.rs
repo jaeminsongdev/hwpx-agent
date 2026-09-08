@@ -17,6 +17,7 @@ mod table_merge_split;
 mod table_operations;
 mod table_pagination;
 mod table_placement;
+mod table_sort;
 mod table_text_conversion;
 mod table_thousands;
 mod units;
@@ -117,6 +118,13 @@ pub use table_placement::{
     TablePlacementLimitConfig, TablePlacementLimits, TablePlacementOperation,
     TablePlacementReceipt, TablePlacementResult, TablePlacementState, TablePlacementStateDraft,
     TableTextFlow, TableTextWrap, TableVerticalAlignment, TableVerticalReference,
+};
+pub use table_sort::{
+    TABLE_SORT_CAPABILITY_ID, TABLE_SORT_SCHEMA_VERSION, TableBlankOrder, TableFormulaMovePolicy,
+    TableSortAxis, TableSortBuilder, TableSortCellDraft, TableSortDirection, TableSortError,
+    TableSortKey, TableSortLimitConfig, TableSortLimits, TableSortPlan, TableSortReceipt,
+    TableSortRegion, TableSortRelocation, TableSortRequest, TableSortRequestDraft, TableSortValue,
+    TableTextCollation,
 };
 pub use table_text_conversion::{
     TABLE_TABLE_TO_TEXT_CAPABILITY_ID, TABLE_TEXT_CONVERSION_SCHEMA_VERSION,

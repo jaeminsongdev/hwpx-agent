@@ -1,0 +1,103 @@
+{
+  "schema_version": "hwpx-agent.table-sort-contract/v1",
+  "model_schema_version": "hwpx-agent.table-sort/v1",
+  "scope": "p06_09_pure_bounded_table_sort_current_pc_local_development",
+  "feature": {
+    "feature_id": "TABLE-056",
+    "capability_id": "table.sort_cells"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    }
+  ],
+  "migration": "protocol/migrations/p06-table-sort-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_SORT_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_SORT_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/table_sort.rs",
+    "crates/domain-ir/tests/table_sort.rs",
+    "implementation/p06/P06-09_TABLE_SORT_POLICY.md",
+    "implementation/p06/P06-09_TABLE_SORT_REPORT.md"
+  ],
+  "semantics": {
+    "region": "exact_rectangular_merge_free_table_grid_region",
+    "line_unit": "complete_rows_or_columns_move_as_whole_cell_payloads",
+    "key_precedence": "caller_order_is_semantic_and_equal_lines_keep_original_order",
+    "blank_order": "first_or_last_is_independent_of_sort_direction",
+    "value_order": "blank_then_boolean_numeric_date_text_with_blank_overridden_per_key",
+    "numeric": "integer_and_scale_18_fixed_decimal_canonical_and_exact_without_floating_point",
+    "text": "explicit_binary_or_ascii_case_insensitive_non_locale_collation",
+    "formula": "reject_move_verbatim_or_rebase_relative_policy_bound_without_claiming_execution"
+  },
+  "binding": {
+    "identity": "validated_logical_table_id_and_canonical_grid_sha256",
+    "cells": "complete_unique_region_coverage_with_payload_and_optional_formula_sha256",
+    "relocation": "destination_ordered_source_destination_payload_formula_mapping",
+    "receipt": "table_grid_request_relocation_formula_policy_and_changed",
+    "serialization": "deterministic_compact_bounded_json_and_sha256"
+  },
+  "default_limits": {
+    "input_bytes": 4194304,
+    "selected_cells": 1000000,
+    "sort_keys": 64,
+    "text_bytes": 16384,
+    "comparison_work": 100000000,
+    "serialized_bytes": 67108864
+  },
+  "failure_policy": [
+    "invalid_or_over_ceiling_limits_rejected",
+    "empty_or_oversized_json_rejected",
+    "malformed_unknown_or_duplicate_json_rejected",
+    "unsupported_schema_rejected",
+    "reversed_or_out_of_grid_region_rejected",
+    "merged_selected_region_rejected",
+    "empty_duplicate_out_of_region_or_over_limit_keys_rejected",
+    "incomplete_duplicate_or_extra_cell_set_rejected",
+    "invalid_payload_or_formula_digest_rejected",
+    "invalid_or_over_limit_sort_value_rejected",
+    "formula_rejected_without_explicit_admitting_policy",
+    "comparison_work_limit_rejected_before_sort",
+    "output_limit_or_serialization_failure_rejected",
+    "no_partial_plan_or_receipt_returned"
+  ],
+  "not_claimed": {
+    "direct_hwpx_adapter": false,
+    "locale_sensitive_hancom_collation": false,
+    "native_formula_rebase": false,
+    "semantic_reopen": false,
+    "formula_readback": false,
+    "page_split_or_render": false,
+    "hancom_2020_target_build": false,
+    "automation_or_differential": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "p06_09": "in_progress",
+    "product_complete": false
+  }
+}
