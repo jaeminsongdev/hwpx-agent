@@ -21,6 +21,7 @@ mod table_pagination;
 mod table_partition;
 mod table_placement;
 mod table_properties;
+mod table_ruling;
 mod table_sort;
 mod table_style;
 mod table_text_conversion;
@@ -163,6 +164,15 @@ pub use table_properties::{
     TablePropertiesRequestDraft, TablePropertiesState, TablePropertiesStateDraft,
     TablePropertyDigestPatch, TablePropertyRegion, TableResolvedBorderRoles,
     TableUnifiedBorderPatch,
+};
+pub use table_ruling::{
+    TABLE_DRAW_CAPABILITY_ID, TABLE_ERASER_CAPABILITY_ID, TABLE_RULING_SCHEMA_VERSION,
+    TableRulingAxis, TableRulingBuilder, TableRulingCell, TableRulingCellDraft,
+    TableRulingCellProperties, TableRulingDiagonalDirection, TableRulingEdge, TableRulingError,
+    TableRulingFormulaPolicy, TableRulingFrame, TableRulingLimitConfig, TableRulingLimits,
+    TableRulingOperation, TableRulingPayloadBlock, TableRulingPlan, TableRulingPlanKind,
+    TableRulingPlannedGrid, TableRulingReceipt, TableRulingRequest, TableRulingRequestDraft,
+    TableRulingState, TableRulingStateDraft, TableRulingStroke,
 };
 pub use table_sort::{
     TABLE_SORT_CAPABILITY_ID, TABLE_SORT_SCHEMA_VERSION, TableBlankOrder, TableFormulaMovePolicy,

@@ -496,6 +496,8 @@ def build_report(
         )
     green = sum(row["gate_state"] == "green" for row in report_rows)
     stage_counts = Counter(row["direct"]["stage"] for row in report_rows)
+    for stage in STAGE_RANK:
+        stage_counts.setdefault(stage, 0)
     binding_counts = Counter(row["automation"]["binding_status"] for row in report_rows)
     differential_counts = Counter(row["differential_state"] for row in report_rows)
     return {

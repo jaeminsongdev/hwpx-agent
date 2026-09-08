@@ -31,8 +31,8 @@
     "green_rows": 0,
     "non_green_rows": 61,
     "direct_stage_counts": {
-      "cataloged": 2,
-      "unit_passed": 41,
+      "cataloged": 0,
+      "unit_passed": 43,
       "integration_passed": 7,
       "oracle_verified": 11
     },
@@ -49,7 +49,7 @@
   "source_locks": [
     {
       "path": "crates/domain-ir/src/lib.rs",
-      "sha256": "17e9b7f6db9c7bd59c645542bc8aef5d574eb709f584445b9779ce6ae8a86279"
+      "sha256": "93e55d50aac0054240900a77c2624e28909ba75d8978dbe215918972c0648d50"
     },
     {
       "path": "crates/domain-ir/src/table_aggregate.rs",
@@ -82,6 +82,10 @@
     {
       "path": "crates/domain-ir/src/table_properties.rs",
       "sha256": "11a9860f749dd2a6243a9d0246085ba2b1d8c7b48f1de79ced92e9cc9103ee05"
+    },
+    {
+      "path": "crates/domain-ir/src/table_ruling.rs",
+      "sha256": "5fe8b342596f33e7fc813b29a8030f80d296ca3512ad1e9facd1115fe79d59a0"
     },
     {
       "path": "crates/domain-ir/src/table_sort.rs",
@@ -130,6 +134,10 @@
     {
       "path": "crates/domain-ir/tests/table_properties.rs",
       "sha256": "e03dd0565b19e7be9e74182af955b19aba801936d8cb1329bc6921ce6f2b48ab"
+    },
+    {
+      "path": "crates/domain-ir/tests/table_ruling.rs",
+      "sha256": "d0b8f31625c8ffbf5eda50e80a9bd4a9d1ce7015d0d341504ba0baf9a2f48235"
     },
     {
       "path": "crates/domain-ir/tests/table_sort.rs",
@@ -205,11 +213,11 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_POLICY.md",
-      "sha256": "b645ff7766e7491d6f0a029d0acd6a66fb494ed0d6a8f7a6c64cbf9a1f479ddd"
+      "sha256": "59877b6a23edff8b5e3c198774582faa3346182ba84c2125be18e2217fbf50c3"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "fe19cf92326a7a1146daf897f280ceada158fa97b9f4d5159f01df629068b9a3"
+      "sha256": "90acc173b6b444c4a328501f52a57426633631ae87bf53b89805661de25658e5"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_GEOMETRY_HWPX_POLICY.md",
@@ -252,6 +260,14 @@
       "sha256": "a01da79f47f544ac034341261e14fb4a649a62d3bf02222628e57aefc36abab6"
     },
     {
+      "path": "implementation/p06/P06-09_TABLE_RULING_POLICY.md",
+      "sha256": "f9cfd84d0d1f37122eb93d181d94b89022854960ce8071376bcef9e1f336aa4c"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_RULING_REPORT.md",
+      "sha256": "92f91b10fd1de874ff27b7acab6d59701995fe1eb77fcf9278a7c392bbbf4efa"
+    },
+    {
       "path": "implementation/p06/P06-09_TABLE_SORT_POLICY.md",
       "sha256": "ed9ccca835dc667ca1ddcb8ab157dfc3525cc4b6e04373c150417338ef474a2b"
     },
@@ -285,7 +301,7 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "63dd39b71e18c4deeb37e891f3b5a019f88df880692c5bf0a0d414499f090abc"
+      "sha256": "a60ffe6ab4a27347969fc9f2d00e6c670d5a8cceb1547134000e3972575a9741"
     },
     {
       "path": "implementation/p06/p06-09-current-2020-automation-projection.json",
@@ -293,7 +309,7 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "4b8911241daec02633b64b293ab2633943bd5cf413d7b09ecfcf8cb1ae5b1f6b"
+      "sha256": "a18c42ebb3f37b84104e80187a1d3ffeca9f76de25e187d9fcbdda59db0d94c3"
     },
     {
       "path": "protocol/baseline/catalog-v5.lock.json",
@@ -364,6 +380,10 @@
       "sha256": "b1933ec4a2851657c94864b24f1a747d51b06bd31e3060c157f76130102a37c4"
     },
     {
+      "path": "protocol/migrations/p06-table-ruling-v0-to-v1.md",
+      "sha256": "d25d59c1a085bdf927a6cc2dfcf30b3b6657007c0a7c39a07105a5f1ba015c18"
+    },
+    {
       "path": "protocol/migrations/p06-table-sort-v0-to-v1.md",
       "sha256": "22cc7ad76529c6845e5d85a465ed0682a41f082e5a7dae199256875c0d1c9aa8"
     },
@@ -412,6 +432,10 @@
       "sha256": "39fd90b62365ffde2e109a9ffbfec742cb0dccd78f4f84a30744e8401d5cec7b"
     },
     {
+      "path": "protocol/private/p06-table-ruling-v1.json",
+      "sha256": "e40768374aa847a254b5c15671db67b0d08c109f05ac479c6dae3d16542ab6f6"
+    },
+    {
       "path": "protocol/private/p06-table-sort-v1.json",
       "sha256": "d972bbd90324d6e628fc4f8021f346f5e540f255fe2be64ad99b662e49951d21"
     },
@@ -445,7 +469,7 @@
     },
     {
       "path": "tools/p06/table_conformance.py",
-      "sha256": "786e4f8f34a5d5f46d1063b3e58f13576252862872762c3ce6d0f3edd242015b"
+      "sha256": "56c699758357daff5125dd938b1d3eb7a6ebfdcd07d7552cf8a6b38b652e6ded"
     },
     {
       "path": "tools/p06/tests/test_table_aggregate_contract.py",
@@ -461,11 +485,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "9907c4b55b25513acaa2d0bed0fa44e0f39ff3fdd62e080e98adf0d1201c5bfb"
+      "sha256": "5aa257250308a938b972e5ad5d085180cb10637090c5706af0f5aff61ba5984e"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "0d684531fe8f41293dc65b192135d33f6013e87a2acfc81aadb7995eb33853eb"
+      "sha256": "22814e6cf2de80f950335938f13651885df82a2d12e9041aae6c8faa04a13758"
     },
     {
       "path": "tools/p06/tests/test_table_geometry_contract.py",
@@ -486,6 +510,10 @@
     {
       "path": "tools/p06/tests/test_table_properties_contract.py",
       "sha256": "4a124c18fe6e1e9199d68dee87e21100bc4bdcc30865a40fcfcc861a9e37313b"
+    },
+    {
+      "path": "tools/p06/tests/test_table_ruling_contract.py",
+      "sha256": "63df141b2dfebaf6636694a0e5bf5a484a7c96c1472eed08de970d365ca8334c"
     },
     {
       "path": "tools/p06/tests/test_table_sort_contract.py",
@@ -517,7 +545,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "63136adafea92a833ad3f63a26526c1748772abc5ac6edf972c0717f6b12cce9"
+      "sha256": "5bda05a48238dc770f0a195aadd0997939b8d6a921b63df241fb8f352d4f3b0a"
     },
     {
       "path": "tools/p06/validate_table_geometry_contract.py",
@@ -538,6 +566,10 @@
     {
       "path": "tools/p06/validate_table_properties_contract.py",
       "sha256": "d3d3bb5847e8efb54c54c8b9e8a759d2d822f603d4ab8ce2c77cf6d1173c0eb7"
+    },
+    {
+      "path": "tools/p06/validate_table_ruling_contract.py",
+      "sha256": "058c9c580d2c4848375510350e0ce5a9328c19e85302da8392b644bb3df4b6a2"
     },
     {
       "path": "tools/p06/validate_table_sort_contract.py",

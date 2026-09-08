@@ -1,0 +1,116 @@
+{
+  "schema_version": "hwpx-agent.table-ruling-contract/v1",
+  "model_schema_version": "hwpx-agent.table-ruling/v1",
+  "scope": "p06_09_pure_bounded_table_draw_eraser_ruling_topology_current_pc_local_development",
+  "features": [
+    {
+      "feature_id": "TABLE-002",
+      "capability_id": "table.draw"
+    },
+    {
+      "feature_id": "TABLE-003",
+      "capability_id": "table.eraser"
+    }
+  ],
+  "official_references": [
+    "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/table(draw).htm",
+    "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/table(eraser).htm"
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    }
+  ],
+  "migration": "protocol/migrations/p06-table-ruling-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_RULING_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_RULING_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/table_ruling.rs",
+    "crates/domain-ir/tests/table_ruling.rs",
+    "implementation/p06/P06-09_TABLE_RULING_POLICY.md",
+    "implementation/p06/P06-09_TABLE_RULING_REPORT.md"
+  ],
+  "semantics": {
+    "state": "complete_exact_frame_physical_lattice_normalized_unit_edges_master_cells_payload_properties_formula_and_cache",
+    "outer_rectangle": "no_existing_table_context_creates_exact_one_cell_frame_with_four_visible_edges",
+    "draw_stroke": "physical_lattice_refinement_and_rectangular_connectivity_partition_for_full_row_full_column_and_local_cell_split",
+    "diagonal": "independent_cell_local_slash_and_back_slash_line_identity_without_topology_change",
+    "eraser": "shared_distinct_master_edge_structural_rectangular_merge_otherwise_explicit_transparent_line",
+    "preservation": "ordered_payloads_equal_merge_properties_single_formula_rebase_topology_stale_cache_clear_and_atomic_no_partial_result"
+  },
+  "binding": {
+    "identity": "validated_distinct_table_existing_new_master_cell_and_global_payload_block_ids",
+    "source": "complete_exact_grid_physical_boundaries_edges_cells_properties_formula_and_cache",
+    "request": "existing_operations_bind_exact_state_grid_table_and_current_document_flow_outer_creation_binds_insertion_context_and_flow",
+    "plan": "lowering_ready_after_grid_after_state_and_preservation_receipt",
+    "serialization": "deterministic_compact_bounded_json_and_sha256"
+  },
+  "default_limits": {
+    "input_bytes": 33554432,
+    "cells": 1000000,
+    "edges": 2100000,
+    "payload_blocks": 1000000,
+    "identifier_bytes": 256,
+    "dimension_hwpunit": 1000000000,
+    "serialized_bytes": 134217728
+  },
+  "failure_policy": [
+    "invalid_or_over_ceiling_limits_rejected",
+    "oversized_malformed_unknown_or_duplicate_json_rejected",
+    "unsupported_state_or_request_schema_rejected",
+    "invalid_identifier_digest_frame_or_lattice_rejected",
+    "incomplete_duplicate_or_mismatched_edge_cell_or_payload_state_rejected",
+    "state_grid_table_or_document_flow_binding_drift_rejected_at_request_and_build",
+    "outer_creation_with_existing_state_or_grid_rejected",
+    "eraser_off_existing_ruling_coordinates_rejected",
+    "inexact_duplicate_or_colliding_new_master_cell_ids_rejected",
+    "nonrectangular_draw_partition_or_eraser_merge_rejected",
+    "diagonal_split_or_merge_ambiguity_rejected",
+    "merge_property_conflict_or_multiple_formula_state_rejected",
+    "formula_rebase_or_topology_stale_cache_without_explicit_clear_policy_rejected",
+    "existing_merged_lattice_split_with_formula_state_rejected",
+    "payload_or_formula_preservation_invariant_failure_rejected",
+    "semantic_noop_rejected",
+    "output_limit_serialization_or_allocation_failure_rejected",
+    "no_partial_state_plan_or_receipt_returned"
+  ],
+  "not_claimed": {
+    "direct_hwpx_adapter": false,
+    "package_mutation_or_preservation": false,
+    "semantic_reopen": false,
+    "formula_cache_readback": false,
+    "page_split_or_render": false,
+    "hancom_2020_target_build": false,
+    "ui_coordinate_calibration": false,
+    "automation_or_differential": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "p06_09": "in_progress",
+    "product_complete": false
+  }
+}
