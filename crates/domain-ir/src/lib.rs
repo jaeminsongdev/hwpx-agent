@@ -16,6 +16,7 @@ mod table_layout;
 mod table_merge_split;
 mod table_operations;
 mod table_pagination;
+mod table_thousands;
 mod units;
 
 pub use capability_router::{
@@ -107,6 +108,10 @@ pub use table_pagination::{
     TablePaginationError, TablePaginationLimitConfig, TablePaginationLimits,
     TablePaginationObservation, TablePaginationPolicy, TablePaginationReceipt, TablePaginationRow,
     TablePaginationValidator,
+};
+pub use table_thousands::{
+    TABLE_THOUSANDS_SCHEMA_VERSION, TableThousandsBuilder, TableThousandsError, TableThousandsMode,
+    TableThousandsPlan, TableThousandsRequest, TableThousandsRequestDraft,
 };
 pub use units::{
     AngleMicrodegrees, Conversion, ConversionReceipt, CoordinateAnchor, CoordinateSpace, HwpUnit,

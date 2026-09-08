@@ -86,6 +86,22 @@
       ]
     },
     {
+      "feature_ids": ["TABLE-032", "TABLE-033"],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": ["schema"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-09_TABLE_THOUSANDS_REPORT.md",
+          "sha256": "1d14b56ea1919cc99d2a0f9ffa24a701b9d63e92a9992b9755c320a3d46fbe74"
+        }
+      ]
+    },
+    {
       "feature_ids": ["TABLE-039", "TABLE-040", "TABLE-041", "TABLE-045", "TABLE-046", "TABLE-048"],
       "backend": "direct_hwpx",
       "stage": "oracle_verified",
