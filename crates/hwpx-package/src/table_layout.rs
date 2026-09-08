@@ -1,8 +1,8 @@
 use std::collections::BTreeSet;
 
 use domain_ir::{
-    LengthMicrometers, TableGrid, TableGridError, TableLayoutError, TableLayoutLimits,
-    TableLayoutPlan, UnitError,
+    LengthMicrometers, TableGeometryError, TableGeometryLimits, TableGeometryState, TableGrid,
+    TableGridError, TableLayoutError, TableLayoutLimits, TableLayoutPlan, UnitError,
 };
 use sha2::{Digest as _, Sha256};
 use thiserror::Error;
@@ -14,6 +14,7 @@ use crate::preserving_xml::{
 
 pub const TABLE_LAYOUT_HWPX_PROFILE_ID_V1: &str = "hwpx-agent.table-layout-hwpx.hancom-2020/1";
 pub const TABLE_LAYOUT_HWPX_PROFILE_ID: &str = "hwpx-agent.table-layout-hwpx.hancom-2020/2";
+pub const TABLE_GEOMETRY_HWPX_PROFILE_ID: &str = "hwpx-agent.table-geometry-hwpx.hancom-2020/1";
 
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const SECTION_NS: &str = "http://www.hancom.co.kr/hwpml/2011/section";
@@ -144,6 +145,39 @@ pub struct TableLayoutHwpxLoweringReceipt {
     pub content_sha256: [u8; 32],
 }
 
+#[derive(Clone, Eq, PartialEq)]
+pub struct TableGeometryHwpxLoweringReceipt {
+    pub profile_id: &'static str,
+    pub source_sha256: [u8; 32],
+    pub output_sha256: [u8; 32],
+    pub grid_sha256: [u8; 32],
+    pub geometry_state_sha256: [u8; 32],
+    pub source_bytes: usize,
+    pub output_bytes: usize,
+    pub rows: u32,
+    pub columns: u32,
+    pub cells: usize,
+    pub modified_attribute_count: usize,
+    pub table_width_hwpunit: u32,
+    pub table_height_hwpunit: u32,
+    pub content_sha256: [u8; 32],
+}
+
+impl std::fmt::Debug for TableGeometryHwpxLoweringReceipt {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        formatter
+            .debug_struct("TableGeometryHwpxLoweringReceipt")
+            .field("profile_id", &self.profile_id)
+            .field("source_bytes", &self.source_bytes)
+            .field("output_bytes", &self.output_bytes)
+            .field("rows", &self.rows)
+            .field("columns", &self.columns)
+            .field("cells", &self.cells)
+            .field("modified_attribute_count", &self.modified_attribute_count)
+            .finish_non_exhaustive()
+    }
+}
+
 #[derive(Debug, Eq, Error, PartialEq)]
 pub enum TableLayoutHwpxError {
     #[error("table layout HWPX limits are invalid")]
@@ -176,6 +210,10 @@ pub enum TableLayoutHwpxError {
     PlanGridMismatch,
     #[error("table layout plan shape is inconsistent")]
     PlanShapeMismatch,
+    #[error("table geometry state is bound to a different grid")]
+    GeometryGridMismatch,
+    #[error("table geometry state shape is inconsistent")]
+    GeometryShapeMismatch,
     #[error("table layout HWPX grid differs from the requested grid")]
     GridShapeMismatch,
     #[error("table layout HWPX allocation failed")]
@@ -188,6 +226,8 @@ pub enum TableLayoutHwpxError {
     Unit(#[from] UnitError),
     #[error("table layout plan serialization failed")]
     Layout(#[from] TableLayoutError),
+    #[error("table geometry state validation failed")]
+    Geometry(#[from] TableGeometryError),
     #[error("table layout grid serialization failed")]
     Grid(#[from] TableGridError),
 }
@@ -211,12 +251,15 @@ impl TableLayoutHwpxError {
             Self::UnverifiedPlan => "table_layout_hwpx_unverified_plan",
             Self::PlanGridMismatch => "table_layout_hwpx_plan_grid_mismatch",
             Self::PlanShapeMismatch => "table_layout_hwpx_plan_shape_mismatch",
+            Self::GeometryGridMismatch => "table_layout_hwpx_geometry_grid_mismatch",
+            Self::GeometryShapeMismatch => "table_layout_hwpx_geometry_shape_mismatch",
             Self::GridShapeMismatch => "table_layout_hwpx_grid_shape_mismatch",
             Self::AllocationFailed => "table_layout_hwpx_allocation_failed",
             Self::ReadbackMismatch => "table_layout_hwpx_readback_mismatch",
             Self::Preserving(_) => "table_layout_hwpx_preserving_xml",
             Self::Unit(_) => "table_layout_hwpx_unit_conversion",
             Self::Layout(_) => "table_layout_hwpx_plan_serialization",
+            Self::Geometry(_) => "table_layout_hwpx_geometry_validation",
             Self::Grid(_) => "table_layout_hwpx_grid_serialization",
         }
     }
@@ -342,6 +385,120 @@ impl TableLayoutHwpxLowerer {
     }
 }
 
+#[derive(Debug)]
+pub struct TableGeometryHwpxLowerer;
+
+impl TableGeometryHwpxLowerer {
+    /// Lowers one validated geometry state into a standalone current-profile table fragment.
+    ///
+    /// # Errors
+    ///
+    /// Rejects grid drift, unsupported source shape, unit/limit failures, content drift, or
+    /// semantic readback drift.
+    pub fn lower(
+        source: &[u8],
+        grid: &TableGrid,
+        state: &TableGeometryState,
+        limits: TableLayoutHwpxLimits,
+    ) -> Result<Vec<u8>, TableLayoutHwpxError> {
+        Self::lower_with_receipt(source, grid, state, limits).map(|(bytes, _)| bytes)
+    }
+
+    /// Lowers a standalone table and returns exact integrity and state-binding evidence.
+    ///
+    /// # Errors
+    ///
+    /// Applies the same checks as [`Self::lower`].
+    pub fn lower_with_receipt(
+        source: &[u8],
+        grid: &TableGrid,
+        state: &TableGeometryState,
+        limits: TableLayoutHwpxLimits,
+    ) -> Result<(Vec<u8>, TableGeometryHwpxLoweringReceipt), TableLayoutHwpxError> {
+        lower_geometry_selected(source, None, grid, state, limits)
+    }
+
+    /// Lowers one table selected by zero-based document order inside a section part.
+    ///
+    /// # Errors
+    ///
+    /// Applies the same state, structure, preservation, and readback checks as [`Self::lower`].
+    pub fn lower_in_section(
+        source: &[u8],
+        table_ordinal: usize,
+        grid: &TableGrid,
+        state: &TableGeometryState,
+        limits: TableLayoutHwpxLimits,
+    ) -> Result<Vec<u8>, TableLayoutHwpxError> {
+        Self::lower_in_section_with_receipt(source, table_ordinal, grid, state, limits)
+            .map(|(bytes, _)| bytes)
+    }
+
+    /// Lowers one selected section table and returns exact integrity evidence.
+    ///
+    /// # Errors
+    ///
+    /// Applies the same checks as [`Self::lower_in_section`].
+    pub fn lower_in_section_with_receipt(
+        source: &[u8],
+        table_ordinal: usize,
+        grid: &TableGrid,
+        state: &TableGeometryState,
+        limits: TableLayoutHwpxLimits,
+    ) -> Result<(Vec<u8>, TableGeometryHwpxLoweringReceipt), TableLayoutHwpxError> {
+        lower_geometry_selected(source, Some(table_ordinal), grid, state, limits)
+    }
+}
+
+fn lower_geometry_selected(
+    source: &[u8],
+    table_ordinal: Option<usize>,
+    grid: &TableGrid,
+    state: &TableGeometryState,
+    limits: TableLayoutHwpxLimits,
+) -> Result<(Vec<u8>, TableGeometryHwpxLoweringReceipt), TableLayoutHwpxError> {
+    let target = TargetLayout::from_geometry(grid, state, limits)?;
+    let document = parse_document(source, limits)?;
+    validate_document_envelope(&document)?;
+    let root = selected_root(&document, table_ordinal, limits)?;
+    let source_shape = TableShape::read(&document, root, limits)?;
+    validate_source_grid(&source_shape.readback, &target)?;
+
+    let mut edits = layout_edits(&document, &source_shape, &target)?;
+    let modified_attribute_count = edits.len();
+    let output = apply_edits(source, &mut edits, limits)?;
+
+    let output_document = parse_document(&output, limits)?;
+    validate_document_envelope(&output_document)?;
+    let output_root = selected_root(&output_document, table_ordinal, limits)?;
+    let output_shape = TableShape::read(&output_document, output_root, limits)?;
+    let expected = target.readback(
+        source_shape.readback.inner_margin,
+        source_shape.readback.content_sha256,
+    )?;
+    if output_shape.readback != expected {
+        return Err(TableLayoutHwpxError::ReadbackMismatch);
+    }
+
+    let receipt = TableGeometryHwpxLoweringReceipt {
+        profile_id: TABLE_GEOMETRY_HWPX_PROFILE_ID,
+        source_sha256: Sha256::digest(source).into(),
+        output_sha256: Sha256::digest(&output).into(),
+        grid_sha256: target.grid_sha256,
+        geometry_state_sha256: target.semantic_state_sha256,
+        source_bytes: source.len(),
+        output_bytes: output.len(),
+        rows: target.rows,
+        columns: target.columns,
+        cells: target.cells.len(),
+        modified_attribute_count,
+        table_width_hwpunit: target.table_width,
+        table_height_hwpunit: target.table_height,
+        content_sha256: expected.content_sha256,
+    };
+    Ok((output, receipt))
+}
+
 fn lower_selected(
     source: &[u8],
     table_ordinal: Option<usize>,
@@ -377,7 +534,7 @@ fn lower_selected(
         source_sha256: Sha256::digest(source).into(),
         output_sha256: Sha256::digest(&output).into(),
         grid_sha256: target.grid_sha256,
-        layout_plan_sha256: target.plan_sha256,
+        layout_plan_sha256: target.semantic_state_sha256,
         source_bytes: source.len(),
         output_bytes: output.len(),
         rows: target.rows,
@@ -399,7 +556,7 @@ struct TargetLayout {
     table_height: u32,
     cells: Vec<TableCellSizeReadback>,
     grid_sha256: [u8; 32],
-    plan_sha256: [u8; 32],
+    semantic_state_sha256: [u8; 32],
 }
 
 impl TargetLayout {
@@ -459,7 +616,7 @@ impl TargetLayout {
             });
         }
         cells.sort_unstable();
-        let plan_sha256 = plan.canonical_sha256(TableLayoutLimits::default())?;
+        let semantic_state_sha256 = plan.canonical_sha256(TableLayoutLimits::default())?;
         Ok(Self {
             rows: grid.rows(),
             columns: grid.columns(),
@@ -467,7 +624,74 @@ impl TargetLayout {
             table_height,
             cells,
             grid_sha256,
-            plan_sha256,
+            semantic_state_sha256,
+        })
+    }
+
+    fn from_geometry(
+        grid: &TableGrid,
+        state: &TableGeometryState,
+        limits: TableLayoutHwpxLimits,
+    ) -> Result<Self, TableLayoutHwpxError> {
+        let grid_sha256 = grid.canonical_sha256()?;
+        if state.grid_sha256() != hex_digest(grid_sha256) {
+            return Err(TableLayoutHwpxError::GeometryGridMismatch);
+        }
+        let rows = usize::try_from(grid.rows()).map_err(|_| TableLayoutHwpxError::GridLimit)?;
+        let columns =
+            usize::try_from(grid.columns()).map_err(|_| TableLayoutHwpxError::GridLimit)?;
+        if rows == 0
+            || rows > limits.0.rows
+            || columns == 0
+            || columns > limits.0.columns
+            || state.column_widths().len() != columns
+            || state.row_heights().len() != rows
+            || state.column_minimum_widths().len() != columns
+            || state.row_minimum_heights().len() != rows
+            || grid.master_cell_count() > limits.0.cells
+        {
+            return Err(TableLayoutHwpxError::GeometryShapeMismatch);
+        }
+        let columns_hwpunit = quantize_dimensions(state.column_widths(), limits)?;
+        let rows_hwpunit = quantize_dimensions(state.row_heights(), limits)?;
+        let table_width = checked_hwpunit_sum(&columns_hwpunit, limits)?;
+        let table_height = checked_hwpunit_sum(&rows_hwpunit, limits)?;
+
+        let mut cells = Vec::new();
+        cells
+            .try_reserve_exact(grid.master_cell_count())
+            .map_err(|_| TableLayoutHwpxError::AllocationFailed)?;
+        for cell in grid.master_cells() {
+            let column_start =
+                usize::try_from(cell.column).map_err(|_| TableLayoutHwpxError::GridLimit)?;
+            let column_count =
+                usize::try_from(cell.column_span).map_err(|_| TableLayoutHwpxError::GridLimit)?;
+            let row_start =
+                usize::try_from(cell.row).map_err(|_| TableLayoutHwpxError::GridLimit)?;
+            let row_count =
+                usize::try_from(cell.row_span).map_err(|_| TableLayoutHwpxError::GridLimit)?;
+            let width_hwpunit =
+                checked_range_sum(&columns_hwpunit, column_start, column_count, limits)?;
+            let height_hwpunit = checked_range_sum(&rows_hwpunit, row_start, row_count, limits)?;
+            cells.push(TableCellSizeReadback {
+                row: cell.row,
+                column: cell.column,
+                row_span: cell.row_span,
+                column_span: cell.column_span,
+                width_hwpunit,
+                height_hwpunit,
+            });
+        }
+        cells.sort_unstable();
+        let semantic_state_sha256 = state.canonical_sha256(TableGeometryLimits::default())?;
+        Ok(Self {
+            rows: grid.rows(),
+            columns: grid.columns(),
+            table_width,
+            table_height,
+            cells,
+            grid_sha256,
+            semantic_state_sha256,
         })
     }
 

@@ -134,7 +134,8 @@ pub use table_formula::{
     TableFormulaHwpxReadback, TableFormulaHwpxReader,
 };
 pub use table_layout::{
-    TABLE_LAYOUT_HWPX_PROFILE_ID, TABLE_LAYOUT_HWPX_PROFILE_ID_V1, TableCellSizeReadback,
+    TABLE_GEOMETRY_HWPX_PROFILE_ID, TABLE_LAYOUT_HWPX_PROFILE_ID, TABLE_LAYOUT_HWPX_PROFILE_ID_V1,
+    TableCellSizeReadback, TableGeometryHwpxLowerer, TableGeometryHwpxLoweringReceipt,
     TableInnerMarginReadback, TableLayoutHwpxError, TableLayoutHwpxLimitConfig,
     TableLayoutHwpxLimits, TableLayoutHwpxLowerer, TableLayoutHwpxLoweringReceipt,
     TableLayoutHwpxReadback, TableLayoutHwpxReader,

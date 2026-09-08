@@ -51,9 +51,9 @@
     },
     {
       "feature_ids": ["TABLE-018", "TABLE-019", "TABLE-050"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["schema", "semantic_reopen"],
       "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
       "negative_passed": true,
       "rollback_or_retry_passed": false,
@@ -62,6 +62,10 @@
         {
           "path": "implementation/p06/P06-09_TABLE_GEOMETRY_REPORT.md",
           "sha256": "36fdd5a147e36c80462b56cb5028bd8b5e4108b01607418399d6d253cd7f1bcb"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_GEOMETRY_HWPX_REPORT.md",
+          "sha256": "f3f3a8b7d468adc7733b26f1bb630026a720e64e84bdbf20fc0e09caa0cd42a4"
         }
       ]
     },

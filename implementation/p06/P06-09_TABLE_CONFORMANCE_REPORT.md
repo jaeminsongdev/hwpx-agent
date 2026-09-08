@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 11 |
-| direct `integration_passed` | 4 |
-| direct `unit_passed` | 16 |
+| direct `integration_passed` | 7 |
+| direct `unit_passed` | 13 |
 | direct `cataloged` only | 30 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -41,8 +41,9 @@ The machine-readable authority is
 - P06-07 contributes static HWPX integration evidence for repeat header, page split, row policy and
   caption, but its corrected renderer target remains `NOT_RUN`.
 - P06-08 contributes bounded nested-table inspection evidence, not nested-table mutation/lowering.
-- The first P06-09 implementation slice contributes bounded pure unit evidence for equal row
-  height, equal column width and row minimum height. It does not yet include an HWPX adapter.
+- The first P06-09 implementation slice contributes bounded pure unit and static direct-HWPX
+  integration evidence for equal row height, equal column width and row minimum height. It does
+  not include a licensed Hangul 2020 target-build oracle.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 
@@ -72,7 +73,7 @@ P06-09's matrix engine and current snapshot are implemented, but the roadmap com
 
 1. complete P06-07 corrected-target renderer evidence;
 2. implement the 30 remaining catalog-only direct operations in bounded semantic groups;
-3. lower the 16 component-only rows and close the four static-only target oracles;
+3. lower the 13 component-only rows and close the seven static-only target oracles;
 4. qualify exact current-target automation bindings and run safe disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.
 

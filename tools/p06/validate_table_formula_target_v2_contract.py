@@ -7,6 +7,7 @@ import io
 import json
 from pathlib import Path, PurePosixPath
 import re
+import subprocess
 from typing import Any
 import xml.etree.ElementTree as ET
 import zipfile
@@ -35,6 +36,7 @@ TARGET_SHA256 = "6514a69b8c8c9d320bc19a032b16f2b71d59a38f164c690bc9e3d320a93320e
 OUTPUT_SHA256 = "8b33d2353ebec9eccbcbbde0c0b31eb440390ddf9c38bad7c064f179b1ab2325"
 PDF_SHA256 = "e09e5a0d8acef22b146bb393a49dccf88a74e61b969c38aa83c7d5d79b0149f0"
 TEXT_SHA256 = "91fd67b8cae0b9da6f05a8e960e061c239f58979cdfe19d4aabb40a445571644"
+SOURCE_LOCK_COMMIT = "103bbf5b0448076e3f95db939b4d186100b6a4f4"
 
 SOURCE_LOCKS = {
     "protocol/private/p06-table-formula-hwpx-v1.json":
@@ -501,13 +503,31 @@ def validate_source_locks(root: Path, contract: dict[str, Any], errors: list[str
             continue
         actual[path] = digest
         try:
-            if sha256(bounded_bytes(root, path, 8 * 1024 * 1024)) != digest:
+            if sha256(source_lock_bytes(root, path, 8 * 1024 * 1024)) != digest:
                 errors.append("source_lock_digest")
         except (OSError, ValueError):
             errors.append("source_lock_path_or_encoding")
     if actual != SOURCE_LOCKS:
         errors.append("source_locks_exact")
     return len(actual)
+
+
+def source_lock_bytes(root: Path, relative: str, maximum: int) -> bytes:
+    """Reads historical locks from their immutable qualification commit when Git is available."""
+    candidate = PurePosixPath(relative)
+    if candidate.is_absolute() or ".." in candidate.parts or "\\" in relative:
+        raise ValueError("unsafe source-lock path")
+    if not (root / ".git").exists():
+        return bounded_bytes(root, relative, maximum)
+    completed = subprocess.run(
+        ["git", "-C", str(root), "show", f"{SOURCE_LOCK_COMMIT}:{relative}"],
+        check=False,
+        capture_output=True,
+        timeout=15,
+    )
+    if completed.returncode != 0 or not completed.stdout or len(completed.stdout) > maximum:
+        raise ValueError("immutable source-lock blob unavailable")
+    return completed.stdout
 
 
 def validate_predecessor(root: Path, errors: list[str]) -> tuple[str, int]:

@@ -178,6 +178,11 @@ impl TableGeometryState {
     }
 
     #[must_use]
+    pub fn grid_sha256(&self) -> &str {
+        &self.grid_sha256
+    }
+
+    #[must_use]
     pub fn row_heights(&self) -> &[LengthMicrometers] {
         &self.row_heights
     }
