@@ -235,7 +235,10 @@
   clipping, a blank continuation page, no useful before/exact/after separation, and no avoid-row
   page crossing. It is retained as failed diagnostic evidence. V2 removes the artificial long-cell
   height, forces the avoid-row case across pages and recalibrates the boundary fillers; its first
-  launch timed out waiting for access before file open, so v2 renderer evidence remains `NOT_RUN`.
+  launch timed out waiting for access before file open. A later approved calibration measured exact
+  successor text SHA-256 `19e2e32f...b5a8855` and then failed closed before save as intended; the
+  following full save/reopen/PDF launch again timed out at its separate input-access prompt with no
+  outputs and zero process residue. V2 renderer evidence therefore remains `NOT_RUN`.
 
 ## Latest P06-08 evidence
 

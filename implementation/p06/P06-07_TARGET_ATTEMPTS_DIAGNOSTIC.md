@@ -38,3 +38,22 @@ new create-only evidence directory; the failed predecessor and its evidence rema
 The first successor calibration launch reached visible `open_input` but was not approved within
 the 600-second watchdog. It produced no HWPX or PDF and left zero `Hwp.exe` processes. This is an
 access-timeout diagnostic only; the successor renderer state remains `NOT_RUN`.
+
+## Successor attempt 02: text identity calibration only
+
+The next bounded launch was intentionally supplied a non-matching all-zero expected text digest so
+that the exact successor document text identity could be measured without publishing an output.
+The user approved the visible input-access prompt. Licensed Hangul 2020 build `11.0.0.9136`
+opened the exact successor target and observed canonical input-text SHA-256
+`19e2e32f32ce5238e72ffafdca368a7ebba92bb60b9ed514a40719305b5a8855`. The runner then failed
+closed with `TABLE_PAGINATION_READBACK_INPUT_TEXT_MISMATCH`, as designed, before save or PDF
+export. The input remained unchanged, no output was published, and zero `Hwp.exe` processes
+remained. This calibrates only the expected text identity; it is not renderer PASS evidence.
+
+## Successor attempt 03: full readback access timeout
+
+The full save/reopen/PDF launch used the calibrated exact text digest and a 900-second watchdog.
+It reached visible `open_input`, but the new access prompt was not approved within the watchdog.
+The runner recorded `TABLE_PAGINATION_READBACK_TIMEOUT`, published no output HWPX or PDF, verified
+the input remained unchanged, terminated only its exact automation-owned process, and reported
+zero remaining `Hwp.exe` processes. The successor renderer state therefore remains `NOT_RUN`.
