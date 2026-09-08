@@ -284,6 +284,13 @@
   output before publication. Adapter tests pass 8/8, the full locked `hwpx-package` suite and
   Clippy pass, P06 tests pass 93/93, and the matrix contract locks 45 sources. The rows are now
   `direct_hwpx / integration_passed` but remain below licensed Hangul target-build oracle.
+- Commit `3756cb0` adds a disposable closed-package HWPX fixture for all three geometry operations.
+  Reopened formula AST/cache and pagination policy stay exact, every non-section part keeps its
+  expanded-byte SHA-256, source bytes remain immutable and rebuilt packages are deterministic.
+  Adapter tests now pass 9/9, the full locked `hwpx-package` suite and Clippy pass, and all 93 P06
+  Python tests pass when invoked by module name (Python discovery cannot import the non-ASCII
+  `D:\개발` start path on this host). The matrix remains truthfully 0/61 green while aggregate
+  missing validation instances decrease from 241 to 235.
 - Current FULL lanes linux-core, windows-worker and widget pass; a separate security lane passes
   with zero failed checks and 1,057 SBOM components. Docs remains non-green only at the pre-existing
   R-0008 P14 historical source-lock forward-stability defect, so FULL 5/5 is not claimed.
@@ -318,8 +325,7 @@
    Hangul 2020 access prompts, then collect repeat-header/caption save/reopen/PDF evidence for
    one-line-before, exact-boundary, one-line-after, merged-cell, nested-table and long-equation
    cases. Keep renderer/page claims unverified until visual and structural evidence both pass.
-2. At `max`, add a disposable full-package formula/page preservation fixture for TABLE-018/019/050,
-   then use the remaining blocker rows to implement the 30 catalog-only direct operations in
+2. At `max`, use the remaining blocker rows to implement the 30 catalog-only direct operations in
    bounded semantic groups, lower the 13 component-only rows, close the seven static-only target
    oracles, then qualify exact current-target automation bindings and disposable differentials.
 3. At every card/phase closure run target tests, regressions, current and clean-checkout FULL plus
