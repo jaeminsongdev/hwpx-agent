@@ -42,6 +42,9 @@ SCHEMAS = (
     "protocol/json-schema/p06-table-conformance-report-v1.schema.json",
 )
 EXPECTED_SOURCE_PATHS = {
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/table_geometry.rs",
+    "crates/domain-ir/tests/table_geometry.rs",
     "docs/04_feature_catalog/07_table.md",
     "docs/04_feature_catalog/contracts/07_table_contracts.md",
     "docs/08_testing/03_feature_conformance.md",
@@ -50,6 +53,8 @@ EXPECTED_SOURCE_PATHS = {
     "specs/capability-contracts.generated.json",
     "implementation/p06/p06-09-current-2020-automation-projection.json",
     "implementation/p06/p06-09-current-2020-direct-evidence.json",
+    "implementation/p06/P06-09_TABLE_GEOMETRY_POLICY.md",
+    "implementation/p06/P06-09_TABLE_GEOMETRY_REPORT.md",
     REPORT,
     POLICY,
     HUMAN_REPORT,
@@ -57,6 +62,8 @@ EXPECTED_SOURCE_PATHS = {
     SCHEMA_CATALOG,
     CATALOG_MIGRATION,
     CATALOG_BASELINE,
+    "protocol/migrations/p06-table-geometry-v0-to-v1.md",
+    "protocol/private/p06-table-geometry-v1.json",
     *SCHEMAS,
     "protocol/generated/typescript/src/schema-models.ts",
     "protocol/generated/typescript/src/schema-models.test.ts",
@@ -66,6 +73,8 @@ EXPECTED_SOURCE_PATHS = {
     "tools/p06/project_table_automation_bindings.py",
     "tools/p06/tests/test_table_conformance.py",
     "tools/p06/tests/test_table_conformance_contract.py",
+    "tools/p06/tests/test_table_geometry_contract.py",
+    "tools/p06/validate_table_geometry_contract.py",
     "tools/p06/validate_table_conformance_contract.py",
 }
 
@@ -150,8 +159,8 @@ def validate_contract_shape(contract: dict[str, Any], errors: list[str]) -> None
         "green_rows": 0,
         "non_green_rows": 61,
         "direct_stage_counts": {
-            "cataloged": 33,
-            "unit_passed": 13,
+            "cataloged": 30,
+            "unit_passed": 16,
             "integration_passed": 4,
             "oracle_verified": 11,
         },

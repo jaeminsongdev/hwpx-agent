@@ -8,6 +8,7 @@ mod selector;
 mod semantic_diff;
 mod semantic_summary;
 mod table_formula;
+mod table_geometry;
 mod table_grid;
 mod table_inspector;
 mod table_layout;
@@ -65,6 +66,11 @@ pub use table_formula::{
     FormulaErrorValue, FormulaExpression, FormulaFunction, FormulaGridDimensions, FormulaGridEdit,
     FormulaLimitConfig, FormulaLimits, FormulaNumberFormat, FormulaRange, FormulaReferenceKind,
     FormulaUnaryOperator, FormulaValue, TABLE_FORMULA_SCHEMA_VERSION,
+};
+pub use table_geometry::{
+    TABLE_GEOMETRY_SCHEMA_VERSION, TableGeometryError, TableGeometryLimitConfig,
+    TableGeometryLimits, TableGeometryOperation, TableGeometryReceipt, TableGeometryResult,
+    TableGeometryState, TableGeometryStateDraft, TableTrackRange,
 };
 pub use table_grid::{
     CellCoordinate, TABLE_GRID_SCHEMA_VERSION, TableCellSpan, TableGrid, TableGridDraft,

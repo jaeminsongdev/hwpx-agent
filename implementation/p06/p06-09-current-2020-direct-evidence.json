@@ -50,6 +50,22 @@
       ]
     },
     {
+      "feature_ids": ["TABLE-018", "TABLE-019", "TABLE-050"],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": ["schema"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-09_TABLE_GEOMETRY_REPORT.md",
+          "sha256": "36fdd5a147e36c80462b56cb5028bd8b5e4108b01607418399d6d253cd7f1bcb"
+        }
+      ]
+    },
+    {
       "feature_ids": ["TABLE-039", "TABLE-040", "TABLE-041", "TABLE-045", "TABLE-046", "TABLE-048"],
       "backend": "direct_hwpx",
       "stage": "oracle_verified",

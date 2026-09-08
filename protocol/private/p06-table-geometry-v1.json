@@ -1,0 +1,92 @@
+{
+  "schema_version": "hwpx-agent.table-geometry-contract/v1",
+  "model_schema_version": "hwpx-agent.table-geometry/v1",
+  "scope": "p06_09_pure_bounded_table_geometry_current_pc_local_development",
+  "features": {
+    "TABLE-018": "table.equal_row_height",
+    "TABLE-019": "table.equal_column_width",
+    "TABLE-050": "table.row_min_height"
+  },
+  "prerequisites": [
+    "hwpx-agent.table-grid/v1",
+    "integer_micrometer_units",
+    "p06_09_fail_closed_conformance_matrix"
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    }
+  ],
+  "semantics": {
+    "equal_tracks": "ceiling_selected_total_divided_by_count_raised_to_maximum_selected_minimum",
+    "row_minimum": "set_selected_minimum_and_grow_below_minimum_without_shrinking",
+    "merged_extent": "checked_sum_of_all_tracks_covered_by_canonical_master_span",
+    "outside_selection": "preserved_exactly"
+  },
+  "state_binding": {
+    "grid": "canonical_table_grid_sha256_exact_match",
+    "counts": "exactly_one_value_and_minimum_per_logical_track",
+    "dimensions": "positive_integer_micrometers_not_above_configured_limit",
+    "minimums": "actual_track_dimension_greater_than_or_equal_to_content_minimum"
+  },
+  "receipt": {
+    "binding": "grid_source_state_output_state_operation",
+    "changed_tracks": "sorted_zero_based_logical_indexes",
+    "serialization": "deterministic_compact_bounded_json",
+    "debug": "hashes_and_dimensions_redacted"
+  },
+  "default_limits": {
+    "rows": 10000,
+    "columns": 1024,
+    "dimension_micrometers": 1000000000,
+    "serialized_bytes": 33554432
+  },
+  "failure_policy": [
+    "invalid_or_over_ceiling_limits",
+    "unsupported_version_or_invalid_json",
+    "grid_digest_or_track_count_mismatch",
+    "nonpositive_or_over_limit_dimension",
+    "actual_dimension_below_content_minimum",
+    "empty_overflowing_or_out_of_bounds_range",
+    "coordinate_or_arithmetic_overflow",
+    "allocation_or_serialization_failure"
+  ],
+  "migration": "protocol/migrations/p06-table-geometry-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_GEOMETRY_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_GEOMETRY_REPORT.md",
+  "expected_evidence": {
+    "rust_tests": 13,
+    "fixed_seed_cases": 256,
+    "contract_tests": 4,
+    "backend": "component_only",
+    "direct_stage": "unit_passed"
+  },
+  "not_claimed": {
+    "direct_hwpx_adapter": false,
+    "semantic_reopen": false,
+    "formula_preservation": false,
+    "page_split_or_render_diff": false,
+    "hangul_2020_target_oracle": false,
+    "automation_or_differential": false,
+    "release_enabled": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}
