@@ -20,6 +20,7 @@ use crate::{
 };
 
 mod aggregate_hwpx;
+mod create_hwpx;
 mod merge_split_hwpx;
 mod partition_hwpx;
 mod properties_hwpx;
@@ -33,6 +34,13 @@ pub use aggregate_hwpx::{
     TableAggregateHwpxLoweredParts, TableAggregateHwpxLowerer, TableAggregateHwpxLoweringReceipt,
     TableAggregateHwpxPlan, TableAggregateHwpxReadback, TableAggregateHwpxReader,
     TableAggregateHwpxRequest, TableAggregateHwpxRequestDraft,
+};
+pub use create_hwpx::{
+    TABLE_CREATE_HWPX_PROFILE_ID, TABLE_CREATE_HWPX_SCHEMA_VERSION, TableCreateHwpxBuilder,
+    TableCreateHwpxError, TableCreateHwpxLimits, TableCreateHwpxLoweredParts,
+    TableCreateHwpxLowerer, TableCreateHwpxLoweringReceipt, TableCreateHwpxPlan,
+    TableCreateHwpxReadback, TableCreateHwpxReader, TableCreateHwpxRequest,
+    TableCreateHwpxRequestDraft,
 };
 pub use merge_split_hwpx::{
     TABLE_MERGE_SPLIT_HWPX_PROFILE_ID, TABLE_MERGE_SPLIT_HWPX_SCHEMA_VERSION,
@@ -842,13 +850,16 @@ enum ExistingRenderProfile {
     Partition,
     Structure,
     Transpose,
+    Create,
 }
 
 impl ExistingRenderProfile {
     const fn topology_changed(self) -> bool {
         match self {
             Self::Existing { topology_changed } => topology_changed,
-            Self::Split | Self::Partition | Self::Structure | Self::Transpose => true,
+            Self::Split | Self::Partition | Self::Structure | Self::Transpose | Self::Create => {
+                true
+            }
         }
     }
 
@@ -870,6 +881,10 @@ impl ExistingRenderProfile {
 
     const fn permits_transposed_geometry(self) -> bool {
         matches!(self, Self::Transpose)
+    }
+
+    const fn permits_created_geometry(self) -> bool {
+        matches!(self, Self::Create)
     }
 }
 
@@ -995,6 +1010,30 @@ pub(super) fn render_transpose_existing(
 }
 
 #[allow(clippy::too_many_arguments)]
+pub(super) fn render_create_from_template(
+    header: &[u8],
+    template_section: &[u8],
+    template_table_ordinal: usize,
+    template_binding: &TableRulingHwpxBinding,
+    template_state: &TableRulingState,
+    target_state: &TableRulingState,
+    target_grid: &TableGrid,
+    limits: &TableRulingHwpxLimits,
+) -> Result<RenderedParts, TableRulingHwpxError> {
+    render_existing_profile(
+        header,
+        template_section,
+        template_table_ordinal,
+        template_binding,
+        template_state,
+        target_state,
+        target_grid,
+        ExistingRenderProfile::Create,
+        limits,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
 fn render_existing_profile(
     header: &[u8],
     section: &[u8],
@@ -1020,7 +1059,10 @@ fn render_existing_profile(
             && source_frame.left_hwpunit == target_frame.left_hwpunit
             && source_frame.top_hwpunit == target_frame.top_hwpunit
             && source_frame.width_hwpunit == target_frame.height_hwpunit
-            && source_frame.height_hwpunit == target_frame.width_hwpunit;
+            && source_frame.height_hwpunit == target_frame.width_hwpunit
+        || profile.permits_created_geometry()
+            && source_frame.left_hwpunit == target_frame.left_hwpunit
+            && source_frame.top_hwpunit == target_frame.top_hwpunit;
     if !frame_matches
         || source_state.table_properties_sha256() != target_state.table_properties_sha256()
     {

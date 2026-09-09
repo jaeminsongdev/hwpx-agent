@@ -43,9 +43,9 @@ class TableConformanceTests(unittest.TestCase):
             report["summary"]["direct_stage_counts"],
             {
                 "cataloged": 0,
-                "integration_passed": 34,
+                "integration_passed": 35,
                 "oracle_verified": 15,
-                "unit_passed": 12,
+                "unit_passed": 11,
             },
         )
         self.assertEqual(
@@ -178,7 +178,10 @@ class TableConformanceTests(unittest.TestCase):
             conformance.validate_evidence(ROOT, evidence)
 
         evidence = deepcopy(self.load(DEFAULT_EVIDENCE))
-        evidence["records"][0]["stage"] = "integration_passed"
+        component = next(
+            record for record in evidence["records"] if record["backend"] == "component_only"
+        )
+        component["stage"] = "integration_passed"
         with self.assertRaisesRegex(conformance.ConformanceError, "component_stage_overclaim"):
             conformance.validate_evidence(ROOT, evidence)
 

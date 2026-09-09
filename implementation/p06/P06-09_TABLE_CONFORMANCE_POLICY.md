@@ -65,13 +65,14 @@ input requires a new output path or an explicitly reviewed successor update.
 ## Current result
 
 - Required rows: 61; green: 0; non-green: 61.
-- Direct stages: 0 cataloged, 12 unit-passed, 34 integration-passed, 15 oracle-verified.
+- Direct stages: 0 cataloged, 11 unit-passed, 35 integration-passed, 15 oracle-verified.
 - Automation bindings: 6 candidate-unverified, 55 unavailable-with-reason.
 - Automation runtime support: 61 unverified.
 - Direct/automation differential: 61 not-run.
 
 The current matrix is a truthful implementation backlog, not a P06-09 PASS. P06-07 contributes
-four exact-target oracle rows. The fixed-column, fit-content and fit-page layout modes; the
+four exact-target oracle rows. Exact blank unmerged table creation; the fixed-column, fit-content
+  and fit-page layout modes; the
   position/attachment/wrap/outside-margin group; complete table styles; exact table transpose;
   exact cell merge/split;
   exact admitted whole-table split; the complete block/horizontal/vertical aggregate-formula group;

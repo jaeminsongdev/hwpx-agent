@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 15 |
-| direct `integration_passed` | 34 |
-| direct `unit_passed` | 12 |
+| direct `integration_passed` | 35 |
+| direct `unit_passed` | 11 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -30,8 +30,13 @@ The machine-readable authority is
 
 ## Existing evidence admitted conservatively
 
-- P06-02 contributes bounded pure unit evidence for create. Its row/column edits are now superseded
-  by the exact structure model's stronger static preserving HWPX integration. P06-03's exact
+- P06-02 contributes the exact blank unmerged grid creation contract. A template-based preserving
+  HWPX adapter now creates arbitrary bounded rectangular dimensions with caller-bound logical IDs
+  and explicit physical tracks at an exact empty paragraph. It inherits only a reviewed blank 2x2
+  template's table/cell/page-split and six uniform edge-band semantics, then reopens exact zero
+  payload/formula state in a closed package. This is static integration, not a licensed application
+  or renderer oracle. P06-02's row/column edits are now superseded by the exact structure model's
+  stronger static preserving HWPX integration. P06-03's exact
   merge/split model also has static preserving HWPX integration, but no licensed target oracle.
 - P06-04 contributes exact-target oracle evidence for cell margin, alignment, direction,
   protection, border and fill.
@@ -168,7 +173,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-104 missing validation instances, 61 unverified automation runtime rows and 61 missing
+101 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -176,8 +181,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the remaining 12 unit-only rows through preserving HWPX adapters;
-2. close the 34 integration-only target oracles;
+1. lower the remaining 11 unit-only rows through preserving HWPX adapters;
+2. close the 35 integration-only target oracles;
 3. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
 4. regenerate until all 61 rows are green, then run the P06 hard Gate.

@@ -80,6 +80,7 @@ EXPECTED_SOURCE_PATHS = {
     "crates/hwpx-package/src/table_placement.rs",
     "crates/hwpx-package/src/table_ruling_hwpx.rs",
     "crates/hwpx-package/src/table_ruling_hwpx/aggregate_hwpx.rs",
+    "crates/hwpx-package/src/table_ruling_hwpx/create_hwpx.rs",
     "crates/hwpx-package/src/table_ruling_hwpx/merge_split_hwpx.rs",
     "crates/hwpx-package/src/table_ruling_hwpx/partition_hwpx.rs",
     "crates/hwpx-package/src/table_ruling_hwpx/properties_hwpx.rs",
@@ -88,6 +89,7 @@ EXPECTED_SOURCE_PATHS = {
     "crates/hwpx-package/src/table_ruling_hwpx/transpose_hwpx.rs",
     "crates/hwpx-package/tests/table_geometry_hwpx.rs",
     "crates/hwpx-package/tests/table_aggregate_hwpx.rs",
+    "crates/hwpx-package/tests/table_create_hwpx.rs",
     "crates/hwpx-package/tests/table_layout_modes_hwpx.rs",
     "crates/hwpx-package/tests/table_placement_hwpx.rs",
     "crates/hwpx-package/tests/table_properties_hwpx.rs",
@@ -114,6 +116,8 @@ EXPECTED_SOURCE_PATHS = {
     "implementation/p06/P06-09_TABLE_AUTO_FILL_REPORT.md",
     "implementation/p06/P06-09_TABLE_CHART_POLICY.md",
     "implementation/p06/P06-09_TABLE_CHART_REPORT.md",
+    "implementation/p06/P06-09_TABLE_CREATE_HWPX_POLICY.md",
+    "implementation/p06/P06-09_TABLE_CREATE_HWPX_REPORT.md",
     "implementation/p06/P06-09_TABLE_GEOMETRY_POLICY.md",
     "implementation/p06/P06-09_TABLE_GEOMETRY_REPORT.md",
     "implementation/p06/P06-09_TABLE_GEOMETRY_HWPX_POLICY.md",
@@ -167,6 +171,7 @@ EXPECTED_SOURCE_PATHS = {
     "protocol/migrations/p06-table-aggregate-hwpx-v0-to-v1.md",
     "protocol/migrations/p06-table-auto-fill-v0-to-v1.md",
     "protocol/migrations/p06-table-chart-v0-to-v1.md",
+    "protocol/migrations/p06-table-create-hwpx-v0-to-v1.md",
     "protocol/migrations/p06-table-geometry-v0-to-v1.md",
     "protocol/migrations/p06-table-geometry-hwpx-v0-to-v1.md",
     "protocol/migrations/p06-table-layout-modes-hwpx-v0-to-v1.md",
@@ -197,6 +202,7 @@ EXPECTED_SOURCE_PATHS = {
     "protocol/private/p06-table-aggregate-hwpx-v1.json",
     "protocol/private/p06-table-auto-fill-v1.json",
     "protocol/private/p06-table-chart-v1.json",
+    "protocol/private/p06-table-create-hwpx-v1.json",
     "protocol/private/p06-table-placement-v1.json",
     "protocol/private/p06-table-placement-hwpx-v1.json",
     "protocol/private/p06-table-partition-v1.json",
@@ -226,6 +232,7 @@ EXPECTED_SOURCE_PATHS = {
     "tools/p06/tests/test_table_aggregate_hwpx_contract.py",
     "tools/p06/tests/test_table_auto_fill_contract.py",
     "tools/p06/tests/test_table_chart_contract.py",
+    "tools/p06/tests/test_table_create_hwpx_contract.py",
     "tools/p06/tests/test_table_geometry_contract.py",
     "tools/p06/tests/test_table_geometry_hwpx_contract.py",
     "tools/p06/tests/test_table_layout_modes_hwpx_contract.py",
@@ -273,6 +280,7 @@ EXPECTED_SOURCE_PATHS = {
     "tools/p06/validate_table_pagination_target_v2_contract.py",
     "tools/p06/validate_table_auto_fill_contract.py",
     "tools/p06/validate_table_chart_contract.py",
+    "tools/p06/validate_table_create_hwpx_contract.py",
 }
 
 
@@ -357,8 +365,8 @@ def validate_contract_shape(contract: dict[str, Any], errors: list[str]) -> None
         "non_green_rows": 61,
         "direct_stage_counts": {
             "cataloged": 0,
-            "unit_passed": 12,
-            "integration_passed": 34,
+            "unit_passed": 11,
+            "integration_passed": 35,
             "oracle_verified": 15,
         },
         "automation_binding_counts": {
