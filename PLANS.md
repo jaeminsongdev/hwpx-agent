@@ -89,7 +89,7 @@
   is static-ready, while the first TABLE-022 approval timeout remains failed evidence without promotion.
 - TABLE-021 transposes merged formula-free HWPX; TABLE-056 sorts complete plain/unmerged/formula-free
   cell payloads and properties; TABLE-001/004/005 create and convert their exact admitted profiles with static reopen and no Hangul/render claim.
-- TABLE-042/043/044/055 have direct P06-07 oracles. The remaining 8 unit rows need HWPX lowering; all 38 integration rows need target oracles and later automation evidence.
+- TABLE-042/043/044/055 have direct P06-07 oracles. The remaining 8 unit rows need HWPX lowering; TABLE-032/033 native-source tooling passes 20/20 static checks but baseline SaveAs still awaits user `허용` clicks, while all 38 integration rows need target oracles and later automation evidence.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`, current conformance JSON, and `protocol/private/p06-table-conformance-v1.json`.
 
 ## Open risks and holds
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. At `max`, lower the remaining 8 unit-only rows and close all 38 integration-only target oracles before automation/differentials; reuse the completed P06-07 target-v2 lifecycle evidence without relabeling it.
+1. At `max`, finish the TABLE-032/033 exact-source run with the user access click, then lower the remaining 8 unit-only rows and close all 38 integration-only target oracles before automation/differentials; reuse completed P06-07 evidence without relabeling it.
 2. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
 
 ## Context pack and archive pointers

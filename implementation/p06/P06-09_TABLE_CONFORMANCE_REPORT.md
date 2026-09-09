@@ -67,7 +67,8 @@ The machine-readable authority is
   verified cache, licensed Hangul execution or render result is inferred.
 - The thousands-format planner changes only the grouping flag on an exact selection of existing
   numeric formula-cell formats. TABLE-032/033 move to unit evidence while decimal places, formula
-  AST and cache remain exact; unsupported formats fail closed.
+  AST and cache remain exact; unsupported formats fail closed. Exact Hangul 2020 source tooling is
+  static-ready, but baseline SaveAs access was not approved, so no HWPX mapping or promotion exists.
 - The text conversion component adds bounded UTF-8 tab/comma/semicolon parsing and deterministic
   writing for TABLE-004/005. TABLE-004 converts a complete admitted plain-text paragraph to an exact
   template-derived table. TABLE-005 converts every cell of an arbitrary-size admitted plain unmerged

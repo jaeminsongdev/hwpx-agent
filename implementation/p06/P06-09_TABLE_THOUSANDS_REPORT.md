@@ -43,3 +43,22 @@ After hash admission, the strict matrix changes only as follows:
 This is unit-level evidence. No HWPX XML, user document or Hangul process was touched. Native
 number-format lowering/readback, pagination/rendering, target-build save/reopen, automation and
 differentials remain open. P06-09, P06, production and the product remain in progress.
+
+## Exact-source qualifier status — 2026-09-09
+
+The repository now contains a fail-closed Hangul 2020 source worker, watchdog and 20-case static
+test for the native thousands-separator transition. PowerShell parsing passes, PSScriptAnalyzer
+reports zero findings, and the static contract passes 20/20. The worker creates only a disposable
+1-by-3 table and never guesses or emits native field grammar itself.
+
+Runtime qualification is not complete. Attempt 01 was manually interrupted after no output or
+progress receipt and its exact owned Hwp process was identity-checked and cleaned. Attempt 02 found
+a preflight defect in the new progress-file extension check; its failed watchdog receipt remains.
+Attempts 03 and 04 reached the licensed target but timed out awaiting the baseline `SaveAs` access
+approval. Attempt 04's bounded journal ends at `baseline_save/running`; the watchdog cleaned one
+exact owned process and left zero Hwp processes. None of these failures is promoted.
+
+No baseline/removed/added HWPX source triple exists yet, so the exact `ResultFormat` mapping remains
+unknown and no direct adapter or conformance-row promotion is claimed. The next run requires the
+user to click only Hangul's access `허용` button on each access dialog while the watchdog is active,
+followed by offline structural comparison of the three outputs.

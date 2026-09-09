@@ -43,3 +43,25 @@ or product completion.
 
 The next boundary is a preserving HWPX number-format adapter based on exact native source evidence
 from the current licensed Hangul 2020 target. Recommended reasoning remains `max`.
+
+## Exact Hangul 2020 source qualification
+
+The adapter must not infer a native formula number-format string. The private source worker
+`tools/create-hancom-2020-table-thousands-source.ps1` creates only a new 1-by-3 table with fixed
+operands `1200` and `3400`, asks Hangul to author the horizontal sum, and then applies the installed
+`DeleteThousandsSeparator` and `InsertThousandsSeparator` actions. It saves separate baseline,
+removed and added HWPX artifacts and records only digests, booleans, process identity and phase
+status. It never opens a user document or writes a guessed `ResultFormat`, packed command or field
+identifier.
+
+The watchdog `tools/run-hancom-2020-table-thousands-source.ps1` pins the x86 COM target to build
+`11.0.0.9136` and the locked executable digest, rejects pre-existing Hwp processes and existing or
+colliding outputs, bounds runtime and artifacts, preserves the inner trace, and may stop only an
+exact same-session `-Automation -Embedding` process created by the run. UI input, module
+registration, network access and registry/system-setting writes are absent.
+
+Static preparation is not native evidence. A run becomes admissible only after all three HWPX files
+exist with matching digests, both native actions pass, the progress journal terminates at
+`terminal/pass`, cleanup is exact, and offline inspection proves the precise format grammar and
+formula/cache preservation. Every access approval remains a user click; Computer Use must not
+perform it.
