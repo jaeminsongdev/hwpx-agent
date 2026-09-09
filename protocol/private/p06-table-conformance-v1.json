@@ -32,8 +32,8 @@
     "non_green_rows": 61,
     "direct_stage_counts": {
       "cataloged": 0,
-      "unit_passed": 26,
-      "integration_passed": 20,
+      "unit_passed": 25,
+      "integration_passed": 21,
       "oracle_verified": 15
     },
     "automation_binding_counts": {
@@ -161,7 +161,7 @@
     },
     {
       "path": "crates/hwpx-package/src/lib.rs",
-      "sha256": "a3464e44f086419f370f54651be9a7022916b5703d831862df87a16e8e29a641"
+      "sha256": "b6a0805d9c5585949bdc4bb70b32f3c47977d734164ebc1c61b3ba53bd8a5053"
     },
     {
       "path": "crates/hwpx-package/src/table_layout.rs",
@@ -237,7 +237,7 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "09005eb2e2d29187f72219cd5574d86d15b8d765bd6d51b9e6b7deb689929ab8"
+      "sha256": "1d8692fd7272bfe43d90849e4323e149da2c6186afa6bd49ee1cfcb0850f91d2"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_GEOMETRY_HWPX_POLICY.md",
@@ -353,7 +353,7 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "6ed51078e92d2bfce4e1a4effc9e2ddc972ebecd7512c541c5dc44e0f5411040"
+      "sha256": "bd52ed3e9bce9aa96df0ec2386be77eebe0555a1998243d8015f3e6a72f5e6b6"
     },
     {
       "path": "implementation/p06/p06-09-current-2020-automation-projection.json",
@@ -361,7 +361,7 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "6f27a3e4a101f47e4c2572a1d9944e2869b95eb52f55d7024022bcbe16849c1c"
+      "sha256": "3f7573860c9768ed708d4c06b97b628df183438306f728ad9a666c8735cd794f"
     },
     {
       "path": "protocol/baseline/catalog-v5.lock.json",
@@ -569,11 +569,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "5f08396acb389333c203e1978aef30433d1d8b191d5c376ddb5ffafe397c0933"
+      "sha256": "18c126c6e6de6e672812ee371113b91d1ada85083d2868f5499e1df5876a2247"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "6071e50168069a4c55c074e929fb816d5e8d4a59a5da514a077792588e0f0e86"
+      "sha256": "e38df78a8e09bb4741971cc0cc274304b45f36bf67e1befd1fe15562ecce3d73"
     },
     {
       "path": "tools/p06/tests/test_table_geometry_contract.py",
@@ -645,7 +645,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "13bc68a1a940cbf8ce2b71739a52aa279e21b58a20d0d6d4fdda2c3ef34edfd0"
+      "sha256": "88f1493950bb491aa3ead6f04c203eb364a915b079d8bda4d51f7f79a45871f3"
     },
     {
       "path": "tools/p06/validate_table_geometry_contract.py",
@@ -705,7 +705,7 @@
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx.rs",
-      "sha256": "c1f244a0318a87084ff85fae6aceb6b3cfa3bceded0f1e6d85a6b949e7d3ea01"
+      "sha256": "df8e5c0209392863593ffe26a238688c7f899c7b794b436870f891d3708bf83b"
     },
     {
       "path": "crates/hwpx-package/tests/table_ruling_hwpx.rs",
@@ -817,7 +817,7 @@
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/partition_hwpx.rs",
-      "sha256": "70dc7a54d045bb1e75576480ef36ca6d7ce3ff2f91d276739101a5ad8db913e7"
+      "sha256": "9625518c2136db96b1fc2248441973c7ad39380b4a7abd1a76001e35e78c92c1"
     },
     {
       "path": "crates/hwpx-package/tests/table_split_hwpx.rs",
@@ -846,6 +846,34 @@
     {
       "path": "tools/p06/validate_table_split_hwpx_contract.py",
       "sha256": "1f999b19d9dfa15a37b400a07014369f66e77589e182bddbb0c8e201ac595b94"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_join_hwpx.rs",
+      "sha256": "28bfe71f8cd8215c9eacd6d0d1e95eac067e1bfd7688a75a4d595588c3a5d203"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_JOIN_HWPX_POLICY.md",
+      "sha256": "29aff1923259f469c0653d636f63b1ec51c1fd8577138b471a20d3e05f3d7ef9"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_JOIN_HWPX_REPORT.md",
+      "sha256": "502c4e5f4817c51688f7716f482fe160bc5aa399d4e08751e965ed6368016828"
+    },
+    {
+      "path": "protocol/migrations/p06-table-join-hwpx-v0-to-v1.md",
+      "sha256": "a032f5006d3a56d5db97f6922ab8c544fb6e56861ebe85ea0cad504a253330b9"
+    },
+    {
+      "path": "protocol/private/p06-table-join-hwpx-v1.json",
+      "sha256": "856a2c87f6fa8244ef4d1f436801926b685cef5fb1f2a9ebe00f29e7137520b8"
+    },
+    {
+      "path": "tools/p06/tests/test_table_join_hwpx_contract.py",
+      "sha256": "cc068d54af547dc5f879c174e5e41330b2eb8817ef8b32f04a61294654e3b958"
+    },
+    {
+      "path": "tools/p06/validate_table_join_hwpx_contract.py",
+      "sha256": "77c55992480592d8df735a44b5740041ca5c8343dd414d442b1f524eaba49715"
     }
   ],
   "schemas": [

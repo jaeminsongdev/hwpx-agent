@@ -33,10 +33,14 @@ pub use merge_split_hwpx::{
     TableMergeSplitHwpxReader, TableMergeSplitHwpxRequest, TableMergeSplitHwpxRequestDraft,
 };
 pub use partition_hwpx::{
-    TABLE_SPLIT_HWPX_PROFILE_ID, TABLE_SPLIT_HWPX_SCHEMA_VERSION, TableSplitHwpxBuilder,
-    TableSplitHwpxError, TableSplitHwpxLimits, TableSplitHwpxLoweredParts, TableSplitHwpxLowerer,
-    TableSplitHwpxLoweringReceipt, TableSplitHwpxPlan, TableSplitHwpxReadback,
-    TableSplitHwpxReader, TableSplitHwpxRequest, TableSplitHwpxRequestDraft,
+    TABLE_JOIN_HWPX_PROFILE_ID, TABLE_JOIN_HWPX_SCHEMA_VERSION, TABLE_SPLIT_HWPX_PROFILE_ID,
+    TABLE_SPLIT_HWPX_SCHEMA_VERSION, TableJoinHwpxBuilder, TableJoinHwpxError, TableJoinHwpxLimits,
+    TableJoinHwpxLoweredParts, TableJoinHwpxLowerer, TableJoinHwpxLoweringReceipt,
+    TableJoinHwpxPlan, TableJoinHwpxReadback, TableJoinHwpxReader, TableJoinHwpxRequest,
+    TableJoinHwpxRequestDraft, TableSplitHwpxBuilder, TableSplitHwpxError, TableSplitHwpxLimits,
+    TableSplitHwpxLoweredParts, TableSplitHwpxLowerer, TableSplitHwpxLoweringReceipt,
+    TableSplitHwpxPlan, TableSplitHwpxReadback, TableSplitHwpxReader, TableSplitHwpxRequest,
+    TableSplitHwpxRequestDraft,
 };
 pub use properties_hwpx::{
     TABLE_PROPERTIES_HWPX_PROFILE_ID, TablePropertiesHwpxBinding, TablePropertiesHwpxCellValue,
@@ -801,6 +805,7 @@ pub(super) fn render_existing(
         target_grid,
         topology_changed,
         false,
+        false,
         limits,
     )
 }
@@ -826,6 +831,33 @@ pub(super) fn render_split_existing(
         target_grid,
         true,
         true,
+        false,
+        limits,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(super) fn render_partition_existing(
+    header: &[u8],
+    section: &[u8],
+    table_ordinal: usize,
+    binding: &TableRulingHwpxBinding,
+    source_state: &TableRulingState,
+    target_state: &TableRulingState,
+    target_grid: &TableGrid,
+    limits: &TableRulingHwpxLimits,
+) -> Result<RenderedParts, TableRulingHwpxError> {
+    render_existing_profile(
+        header,
+        section,
+        table_ordinal,
+        binding,
+        source_state,
+        target_state,
+        target_grid,
+        true,
+        true,
+        true,
         limits,
     )
 }
@@ -841,11 +873,15 @@ fn render_existing_profile(
     target_grid: &TableGrid,
     topology_changed: bool,
     split_geometry: bool,
+    partition_geometry: bool,
     limits: &TableRulingHwpxLimits,
 ) -> Result<RenderedParts, TableRulingHwpxError> {
     let source_frame = source_state.frame();
     let target_frame = target_state.frame();
     let frame_matches = source_frame == target_frame
+        || partition_geometry
+            && source_frame.left_hwpunit == target_frame.left_hwpunit
+            && source_frame.top_hwpunit == target_frame.top_hwpunit
         || split_geometry
             && source_frame.left_hwpunit == target_frame.left_hwpunit
             && source_frame.top_hwpunit == target_frame.top_hwpunit
