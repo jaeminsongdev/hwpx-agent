@@ -258,7 +258,15 @@ impl TableAutoFillSeries {
         Ok(())
     }
 
-    fn value_at(&self, index: u64) -> Result<TableAutoFillValue, TableAutoFillError> {
+    /// Generates the exact typed value at one absolute series index.
+    ///
+    /// This is exposed for preserving backends that must derive source and target scalar
+    /// readback from the same validated series rather than duplicating generation rules.
+    ///
+    /// # Errors
+    ///
+    /// Rejects checked numeric, date, or index overflow.
+    pub fn value_at(&self, index: u64) -> Result<TableAutoFillValue, TableAutoFillError> {
         match &self.definition {
             TableAutoFillDefinition::ExplicitCycle { items } => {
                 let length = u64::try_from(items.len())

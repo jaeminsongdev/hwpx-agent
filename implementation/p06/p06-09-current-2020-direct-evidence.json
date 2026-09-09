@@ -463,9 +463,9 @@
     },
     {
       "feature_ids": ["TABLE-057", "TABLE-058"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
       "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
       "negative_passed": true,
       "rollback_or_retry_passed": false,
@@ -474,6 +474,10 @@
         {
           "path": "implementation/p06/P06-09_TABLE_AUTO_FILL_REPORT.md",
           "sha256": "3cd8641735e2afbe60f01983a5fe27139c0db7c05e45afc8a7d4e051465451da"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_AUTO_FILL_HWPX_REPORT.md",
+          "sha256": "ddcb7555a465091b9fd8526fcbbeb727d2d5d64c65a14ce868ceb54723183f8d"
         }
       ]
     }

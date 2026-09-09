@@ -1,0 +1,128 @@
+{
+  "schema_version": "hwpx-agent.table-auto-fill-hwpx-contract/v1",
+  "profile_id": "hwpx-agent.table-auto-fill-hwpx.hancom-2020-single-run/1",
+  "model_profile_id": "hwpx-agent.table-auto-fill/v1",
+  "scope": "p06_09_static_current_pc_hancom_2020_hwpx_complete_single_run_auto_fill_admission",
+  "features": {
+    "TABLE-057": "table.auto_fill",
+    "TABLE-058": "table.auto_fill_series"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "protocol/private/p06-table-auto-fill-v1.json",
+      "sha256": "9070715450f5d7d53e9697427bcd094ffd490a24a685c861105658ac540124e0"
+    }
+  ],
+  "input": {
+    "table": "one_exact_current_hangul_2020_table_with_complete_logical_physical_binding",
+    "source": "header_section_table_content_ruling_state_grid_scalar_state_pagination_table_count_and_document_flow_sha256",
+    "series": "validated_explicit_cycle_linear_number_or_linear_date_series_with_canonical_sha256",
+    "profile": "merge_free_rectangular_region_with_one_exact_plain_or_native_formula_run_per_cell"
+  },
+  "classification": {
+    "blank": "empty_text_only",
+    "boolean": "exact_lowercase_false_or_true_unless_target_series_requires_text",
+    "numeric": "canonical_i64_or_scale_18_fixed_decimal_with_i64_coefficient_unless_target_series_requires_text",
+    "date": "generated_series_dates_render_as_exact_proleptic_gregorian_iso_8601_without_source_date_inference",
+    "text": "all_other_admitted_nfc_text_and_exact_target_typed_collisions"
+  },
+  "transformation": {
+    "fill": "domain_authoritative_row_or_column_major_generation_with_exact_start_index",
+    "edit": "rewrite_only_selected_run_content_while_preserving_paragraph_run_and_cell_style_envelopes",
+    "formula": "reject_or_replace_selected_exact_native_formula_and_reject_stale_unselected_formula_dependencies",
+    "identity": "reuse_existing_nonempty_payload_ids_and_require_distinct_explicit_ids_for_blank_or_formula_to_nonempty",
+    "fixed": "preserve_grid_edges_master_cells_properties_unselected_payloads_pagination_caption_and_table_count"
+  },
+  "lowering": {
+    "precondition": "relift_source_reclassify_scalars_recompute_payload_formula_style_digests_rebuild_domain_plan_and_compare_parts_state_grid_pagination_series_flow",
+    "edit_scope": "selected_cell_run_content_spans_only_with_xml_escaped_canonical_text",
+    "binding": "regenerate_target_binding_from_exact_target_state_and_unchanged_grid",
+    "publication": "return_only_after_full_adapter_reparse_exact_target_state_grid_scalar_formula_pagination_and_table_count_readback"
+  },
+  "preservation": {
+    "payload": "exact_unselected_payload_bytes_and_selected_style_envelopes_with_bound_logical_ids",
+    "properties": "complete_cell_non_ruling_background_diagonal_edge_grid_and_table_properties",
+    "document": "section_context_table_count_caption_repeat_header_and_non_target_package_parts",
+    "noop": "original_header_section_bytes_payload_identity_and_document_flow",
+    "source": "never_mutated"
+  },
+  "receipt": {
+    "binding": "source_output_parts_source_target_state_grid_scalar_series_request_plan_pagination_and_before_after_flow_sha256",
+    "counts": "tables_dimensions_selected_changes_payload_formulas_repeat_header_and_caption",
+    "debug": "all_hashes_logical_ids_text_series_values_payloads_formulas_raw_xml_and_document_content_omitted"
+  },
+  "limits_profiles": [
+    "TableAutoFillLimits",
+    "TableRulingHwpxLimits",
+    "TableLayoutHwpxLimits",
+    "ParagraphStyleLimits",
+    "TableFormulaHwpxLimits",
+    "FormulaLimits",
+    "TableGridLimits",
+    "TableRulingLimits",
+    "TablePaginationHwpxLimits",
+    "TextFlowLimits"
+  ],
+  "failure_policy": [
+    "invalid_schema_digest_logical_physical_payload_scalar_formula_style_pagination_series_or_flow_binding",
+    "source_parts_table_content_state_grid_scalar_pagination_table_count_or_current_flow_drift",
+    "domain_request_plan_mutation_target_state_scalar_or_noop_flow_transition_drift",
+    "merged_multi_paragraph_multi_run_inline_style_opaque_or_ambiguous_selected_content",
+    "selected_formula_under_reject_or_inexact_formula_cache_and_native_envelope",
+    "unselected_formula_dependency_whose_cache_would_become_stale",
+    "missing_duplicate_conflicting_or_unnecessary_target_payload_identity",
+    "series_index_numeric_date_xml_output_or_serialization_overflow_and_finite_limit",
+    "semantic_reopen_table_count_formula_payload_style_caption_page_split_or_target_state_mismatch",
+    "no_partial_header_section_binding_or_receipt_returned"
+  ],
+  "migration": "protocol/migrations/p06-table-auto-fill-hwpx-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_AUTO_FILL_HWPX_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_AUTO_FILL_HWPX_REPORT.md",
+  "expected_evidence": {
+    "adapter_tests": 8,
+    "feature_count": 2,
+    "backend": "direct_hwpx",
+    "direct_stage": "integration_passed",
+    "validations": [
+      "formula_readback",
+      "page_split",
+      "schema",
+      "semantic_reopen"
+    ]
+  },
+  "not_claimed": {
+    "render_diff": false,
+    "hangul_2020_target_build": false,
+    "saved_real_hwpx": false,
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "rollback_or_retry": false,
+    "release_enabled": false,
+    "formula_recalculation": false,
+    "source_date_type_inference": false,
+    "rich_content_or_merged_fill": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

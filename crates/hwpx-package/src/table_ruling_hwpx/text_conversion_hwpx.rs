@@ -1207,7 +1207,7 @@ pub(super) fn standalone_paragraph(fragment: &[u8]) -> Result<Vec<u8>, TableText
     Ok(output)
 }
 
-fn canonical_text_paragraph(
+pub(super) fn canonical_text_paragraph(
     text: &str,
     limits: TextFlowLimits,
 ) -> Result<Vec<u8>, TableTextToTableHwpxError> {

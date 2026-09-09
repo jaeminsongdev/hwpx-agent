@@ -20,6 +20,7 @@ use crate::{
 };
 
 mod aggregate_hwpx;
+mod auto_fill_hwpx;
 mod create_hwpx;
 mod merge_split_hwpx;
 mod partition_hwpx;
@@ -37,6 +38,13 @@ pub use aggregate_hwpx::{
     TableAggregateHwpxLoweredParts, TableAggregateHwpxLowerer, TableAggregateHwpxLoweringReceipt,
     TableAggregateHwpxPlan, TableAggregateHwpxReadback, TableAggregateHwpxReader,
     TableAggregateHwpxRequest, TableAggregateHwpxRequestDraft,
+};
+pub use auto_fill_hwpx::{
+    TABLE_AUTO_FILL_HWPX_PROFILE_ID, TABLE_AUTO_FILL_HWPX_SCHEMA_VERSION, TableAutoFillHwpxBuilder,
+    TableAutoFillHwpxError, TableAutoFillHwpxLimits, TableAutoFillHwpxLoweredParts,
+    TableAutoFillHwpxLowerer, TableAutoFillHwpxLoweringReceipt, TableAutoFillHwpxPlan,
+    TableAutoFillHwpxReadback, TableAutoFillHwpxReader, TableAutoFillHwpxRequest,
+    TableAutoFillHwpxRequestDraft,
 };
 pub use create_hwpx::{
     TABLE_CREATE_HWPX_PROFILE_ID, TABLE_CREATE_HWPX_SCHEMA_VERSION, TableCreateHwpxBuilder,
