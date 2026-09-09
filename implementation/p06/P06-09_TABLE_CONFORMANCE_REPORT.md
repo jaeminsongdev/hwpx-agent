@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 15 |
-| direct `integration_passed` | 40 |
-| direct `unit_passed` | 6 |
+| direct `integration_passed` | 42 |
+| direct `unit_passed` | 4 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -49,7 +49,10 @@ The machine-readable authority is
   splitting, row-boundary splitting, before/exact/after whole-table boundaries and top/bottom
   captions. TABLE-042/043/044/055 are now `oracle_verified`; their automation and formula-readback
   requirements remain open, so none is release-green.
-- P06-08 contributes bounded nested-table inspection evidence, not nested-table mutation/lowering.
+- P06-08 contributes bounded nested-table inspection evidence. TABLE-054 now also has a separate
+  static direct-HWPX mutation adapter: it inserts one exact caption-free inline template at a bound
+  master-cell paragraph, reopens complete parent and child state, and isolates formula ownership by
+  nearest table. This is not licensed Hangul or render evidence.
 - The first P06-09 implementation slice contributes bounded pure unit and static direct-HWPX
   integration evidence for equal row height, equal column width and row minimum height. A closed
   disposable package now proves formula/cache and pagination-policy readback plus exact preservation

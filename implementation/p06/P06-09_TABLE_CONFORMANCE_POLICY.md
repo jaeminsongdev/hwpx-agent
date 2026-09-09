@@ -65,7 +65,7 @@ input requires a new output path or an explicitly reviewed successor update.
 ## Current result
 
 - Required rows: 61; green: 0; non-green: 61.
-- Direct stages: 0 cataloged, 5 unit-passed, 41 integration-passed, 15 oracle-verified.
+- Direct stages: 0 cataloged, 4 unit-passed, 42 integration-passed, 15 oracle-verified.
 - Automation bindings: 6 candidate-unverified, 55 unavailable-with-reason.
 - Automation runtime support: 61 unverified.
 - Direct/automation differential: 61 not-run.
@@ -83,6 +83,11 @@ four exact-target oracle rows. Exact blank unmerged table creation; the fixed-co
 TABLE-060 additionally has selected-cell canonical-formula integration: only relative reference
 axes may become absolute, other formula fields remain opaque unowned bytes, and preserve/update/
 clear cache policies reopen statically. No formula engine or target application result is inferred.
+
+TABLE-054 additionally has exact master-cell nested-table insertion integration. A caption-free
+inline template retains its complete typed child state, while the complete parent state reopens with
+only one ordered payload insertion. Nested formulas use nearest-table ownership and cannot leak into
+the parent formula state. No licensed application or renderer result is inferred.
 
 ## Not claimed
 

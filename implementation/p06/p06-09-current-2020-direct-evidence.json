@@ -301,7 +301,7 @@
       "evidence_files": [
         {
           "path": "implementation/p06/P06-09_TABLE_THOUSANDS_REPORT.md",
-          "sha256": "74f23ff4a6cc5ec1309ff3332c04f926c79aa9a87ca4892f2b5d8968dbfd9242"
+          "sha256": "326e1087b174f6081ccbd5b0a74badd6cf0356c122d2c0a1d9de00c345027d97"
         }
       ]
     },
@@ -447,9 +447,9 @@
     },
     {
       "feature_ids": ["TABLE-054"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
       "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
       "negative_passed": true,
       "rollback_or_retry_passed": false,
@@ -458,6 +458,10 @@
         {
           "path": "implementation/p06/P06-08_REPORT.md",
           "sha256": "67976729039bc5eaf22f6344f5a4292758c1fb340b2df93ab0a5d65b532bf921"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_NESTED_TABLE_HWPX_REPORT.md",
+          "sha256": "c05040d72728926109ebf9ccb002d4925f8b59df700285baea41ae27922e029c"
         }
       ]
     },

@@ -54,9 +54,11 @@ reports zero findings, and the static contract passes 20/20. The worker creates 
 Runtime qualification is not complete. Attempt 01 was manually interrupted after no output or
 progress receipt and its exact owned Hwp process was identity-checked and cleaned. Attempt 02 found
 a preflight defect in the new progress-file extension check; its failed watchdog receipt remains.
-Attempts 03 and 04 reached the licensed target but timed out awaiting the baseline `SaveAs` access
-approval. Attempt 04's bounded journal ends at `baseline_save/running`; the watchdog cleaned one
-exact owned process and left zero Hwp processes. None of these failures is promoted.
+Attempts 03 through 05 reached the licensed target but timed out awaiting the baseline `SaveAs`
+access approval. Attempt 05's bounded journal also ends at `baseline_save/running`; its watchdog
+cleaned one exact owned process, refused no cleanup target and left zero Hwp processes. The available
+Computer Use surface exposed browsers only, so it could not capture the Hangul dialog and no click
+or typing was automated. None of these failures is promoted.
 
 No baseline/removed/added HWPX source triple exists yet, so the exact `ResultFormat` mapping remains
 unknown and no direct adapter or conformance-row promotion is claimed. The next run requires the

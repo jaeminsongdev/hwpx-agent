@@ -1,0 +1,117 @@
+{
+  "schema_version": "hwpx-agent.table-nested-table-hwpx-contract/v1",
+  "profile_id": "hwpx-agent.table-nested-table-hwpx.hancom-2020-inline-template/1",
+  "model_profile_id": "hwpx-agent.table-ruling/v1",
+  "scope": "p06_09_static_current_pc_hancom_2020_hwpx_complete_nested_table_admission",
+  "features": {
+    "TABLE-054": "table.nested_table"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "protocol/private/p06-table-ruling-v1.json",
+      "sha256": "e40768374aa847a254b5c15671db67b0d08c109f05ac479c6dae3d16542ab6f6"
+    },
+    {
+      "path": "protocol/private/p06-table-inspection-v1.json",
+      "sha256": "ec323cb88147160b6c30356c2b95976f827da0578d1e7b1eeede3a3a506aeea9"
+    }
+  ],
+  "input": {
+    "selector": "exact_parent_table_ordinal_master_cell_coordinate_and_direct_empty_paragraph_ordinal",
+    "source": "header_section_complete_parent_state_grid_content_pagination_table_count_insertion_context_and_current_flow_sha256",
+    "template": "caption_free_inline_resource_free_wrapper_with_complete_grid_edges_cell_payload_properties_formula_cache_pagination_and_placement_state",
+    "target": "source_parent_with_one_ordered_nested_wrapper_payload_and_one_distinct_complete_nested_table"
+  },
+  "transformation": {
+    "insertion": "replace_only_the_bound_empty_direct_parent_cell_paragraph_with_the_exact_template_wrapper",
+    "parent": "preserve_grid_spans_edges_properties_formulas_cache_pagination_and_all_payload_order_while_inserting_one_typed_payload_identity",
+    "nested": "preserve_complete_template_grid_spans_edges_properties_text_payload_formula_cache_pagination_and_inline_placement",
+    "formula_scope": "nearest_table_ownership_excludes_nested_formula_fields_from_parent_formula_state",
+    "identities": "parent_nested_table_cell_payload_native_table_and_formula_identities_are_distinct"
+  },
+  "lowering": {
+    "precondition": "relift_source_and_template_recompute_every_digest_recheck_native_and_logical_identities_and_rebuild_plan",
+    "edit_scope": "one_exact_empty_direct_parent_cell_paragraph_span_only",
+    "fixed": "header_parent_grid_spans_edges_properties_formulas_cache_pagination_other_payloads_document_bytes_and_non_target_package_parts",
+    "publication": "return_only_after_parent_nested_formula_pagination_placement_table_count_package_and_non_target_part_reopen_exactly"
+  },
+  "preservation": {
+    "parent": "complete_typed_parent_state_except_one_inserted_payload_block",
+    "nested": "complete_typed_template_state_and_exact_wrapper_bytes",
+    "document": "header_package_graph_compression_classes_and_every_non_target_part",
+    "source": "never_mutated"
+  },
+  "receipt": {
+    "binding": "source_output_template_insertion_wrapper_parent_nested_request_plan_and_before_after_flow_sha256",
+    "counts": "source_target_tables_parent_nested_payload_blocks_and_nested_formulas",
+    "debug": "all_logical_ids_hashes_formula_cache_native_text_and_document_content_omitted"
+  },
+  "limits_profiles": [
+    "TableRulingHwpxLimits",
+    "TableGridLimits",
+    "FormulaLimits",
+    "TableFormulaHwpxLimits",
+    "TableLayoutHwpxLimits",
+    "TablePaginationHwpxLimits"
+  ],
+  "failure_policy": [
+    "invalid_schema_capability_digest_selector_resource_bearing_template_count_or_flow_binding",
+    "source_header_section_parent_state_grid_content_pagination_count_insertion_or_current_flow_drift",
+    "template_section_state_grid_content_wrapper_pagination_placement_or_inline_profile_drift",
+    "covered_non_master_cell_nonempty_missing_or_non_direct_paragraph_selector",
+    "logical_parent_nested_table_cell_payload_or_inserted_payload_identity_collision",
+    "native_table_formula_begin_or_field_identity_collision",
+    "nested_formula_leak_into_parent_formula_state",
+    "json_xml_grid_formula_table_serialization_allocation_or_output_finite_limit",
+    "target_parent_nested_formula_pagination_placement_count_package_or_preservation_readback_mismatch",
+    "no_partial_header_section_plan_receipt_or_package_returned"
+  ],
+  "migration": "protocol/migrations/p06-table-nested-table-hwpx-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_NESTED_TABLE_HWPX_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_NESTED_TABLE_HWPX_REPORT.md",
+  "expected_evidence": {
+    "adapter_tests": 7,
+    "feature_count": 1,
+    "backend": "direct_hwpx",
+    "direct_stage": "integration_passed",
+    "validations": [
+      "formula_readback",
+      "page_split",
+      "schema",
+      "semantic_reopen"
+    ]
+  },
+  "not_claimed": {
+    "render_diff": false,
+    "hangul_2020_target_build": false,
+    "saved_real_hwpx": false,
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "rollback_or_retry": false,
+    "release_enabled": false,
+    "arbitrary_external_resources": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

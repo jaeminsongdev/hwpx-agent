@@ -1451,7 +1451,10 @@ fn formula_fields(
 ) -> Result<Vec<usize>, TableFormulaHwpxError> {
     let mut formulas = Vec::new();
     for (index, value) in document.elements().iter().enumerate() {
-        if !is_descendant(document, index, table)? || !has_paragraph_name(value, "fieldBegin") {
+        if !is_descendant(document, index, table)?
+            || !has_paragraph_name(value, "fieldBegin")
+            || nearest_ancestor_table(document, index)? != Some(table)
+        {
             continue;
         }
         if required_attribute(value, "type")? != "FORMULA" {
@@ -1466,6 +1469,21 @@ fn formula_fields(
         formulas.push(index);
     }
     Ok(formulas)
+}
+
+fn nearest_ancestor_table(
+    document: &PreservingXmlDocument,
+    descendant: usize,
+) -> Result<Option<usize>, TableFormulaHwpxError> {
+    let mut current = element(document, descendant)?.parent();
+    while let Some(index) = current {
+        let value = element(document, index)?;
+        if has_paragraph_name(value, "tbl") {
+            return Ok(Some(index));
+        }
+        current = value.parent();
+    }
+    Ok(None)
 }
 
 fn owning_direct_cell(

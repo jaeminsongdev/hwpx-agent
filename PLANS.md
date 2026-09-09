@@ -1,6 +1,6 @@
 # HWPX Agent implementation ledger
 
-- Updated: 2026-09-09
+- Updated: 2026-09-10
 - Root: `D:\개발\hwpx-agent`
 - Objective: complete P00-P20 without weakening evidence Gates.
 - Current target: licensed Hangul 2020 `11.0.0.9136` x86 on this PC only.
@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 5 unit, 41 integration and 15 oracle rows but 0/61 release-green; row closures remain |
+| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 42 integration and 15 oracle rows but 0/61 release-green; row closures remain |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -71,8 +71,8 @@
 - Commit `97b3008` introduced the deterministic 61-row matrix. A row is green only when direct
   HWPX oracle, every required validation/fixture, negative and rollback evidence, current-target
   automation runtime and exact differential all pass.
-- Current authority reports 0/61 green with direct stages: 0 cataloged, 5 unit-passed,
-  41 integration-passed and 15 oracle-verified. Automation is six candidate-unverified plus
+- Current authority reports 0/61 green with direct stages: 0 cataloged, 4 unit-passed,
+  42 integration-passed and 15 oracle-verified. Automation is six candidate-unverified plus
   55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
 - TABLE-020 binds complete visual style; TABLE-016/017 bind full cell merge/split topology and content policies; TABLE-010/011 now split/join admitted formula-free/no-header/no-caption top-level wrappers with exact separator, common-lattice, state/flow/part binding and strict static reopen, without a Hangul/render claim.
 - TABLE-012/013/014/015 share an exact structure/HWPX model with full state/grid/flow binding, formula/cache rebase, edge collapse rules and pagination/caption reopen.
@@ -89,7 +89,7 @@
   is static-ready, while the first TABLE-022 approval timeout remains failed evidence without promotion.
 - TABLE-021 transposes merged formula-free HWPX; TABLE-056 sorts complete plain/unmerged/formula-free
   cells; TABLE-057/058 fill exact single-run regions and reject stale unselected formula caches; TABLE-060 upgrades only formula reference anchors while preserving other formula fields; TABLE-001/004/005 create and convert admitted profiles with static reopen and no Hangul/render claim.
-- TABLE-042/043/044/055 have direct P06-07 oracles. The remaining 5 unit rows need HWPX lowering; TABLE-032/033 native-source tooling passes 20/20 static checks but baseline SaveAs still awaits user `허용` clicks, while all 41 integration rows need target oracles and later automation evidence.
+- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 now inserts a complete inline template into an exact master-cell paragraph and reopens isolated parent/child formula state; the remaining 4 unit rows need HWPX lowering. TABLE-032/033 tooling passes 20/20 static checks, but attempts 03-05 still stop at baseline SaveAs awaiting user `허용`; all 42 integration rows need target oracles and later automation evidence.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`, current conformance JSON, and `protocol/private/p06-table-conformance-v1.json`.
 
 ## Open risks and holds
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. At `max`, finish the TABLE-032/033 exact-source run with the user access click, then lower the remaining 5 unit-only rows and close all 41 integration-only target oracles before automation/differentials; reuse completed P06-07 evidence without relabeling it.
+1. At `max`, finish the TABLE-032/033 exact-source run with the user access click, then lower the remaining 4 unit-only rows and close all 42 integration-only target oracles before automation/differentials; reuse completed P06-07 evidence without relabeling it.
 2. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
 
 ## Context pack and archive pointers

@@ -24,6 +24,7 @@ mod auto_fill_hwpx;
 mod create_hwpx;
 mod formula_reference_hwpx;
 mod merge_split_hwpx;
+mod nested_table_hwpx;
 mod partition_hwpx;
 mod properties_hwpx;
 mod sort_hwpx;
@@ -70,6 +71,13 @@ pub use merge_split_hwpx::{
     TableMergeSplitHwpxLoweringReceipt, TableMergeSplitHwpxOperation,
     TableMergeSplitHwpxPartBinding, TableMergeSplitHwpxPlan, TableMergeSplitHwpxReadback,
     TableMergeSplitHwpxReader, TableMergeSplitHwpxRequest, TableMergeSplitHwpxRequestDraft,
+};
+pub use nested_table_hwpx::{
+    TABLE_NESTED_TABLE_HWPX_PROFILE_ID, TABLE_NESTED_TABLE_HWPX_SCHEMA_VERSION,
+    TableNestedTableHwpxBuilder, TableNestedTableHwpxError, TableNestedTableHwpxLimits,
+    TableNestedTableHwpxLoweredParts, TableNestedTableHwpxLowerer,
+    TableNestedTableHwpxLoweringReceipt, TableNestedTableHwpxPlan, TableNestedTableHwpxReadback,
+    TableNestedTableHwpxReader, TableNestedTableHwpxRequest, TableNestedTableHwpxRequestDraft,
 };
 pub use partition_hwpx::{
     TABLE_JOIN_HWPX_PROFILE_ID, TABLE_JOIN_HWPX_SCHEMA_VERSION, TABLE_SPLIT_HWPX_PROFILE_ID,
@@ -1388,8 +1396,7 @@ fn payload_paragraphs(
         if !has_name(value, "p") {
             return Err(TableRulingHwpxError::UnsupportedCellShape);
         }
-        if !has_formula_descendant(document, index)? && !is_empty_scaffold(source, document, index)?
-        {
+        if is_payload_paragraph(source, document, index)? {
             let bytes = element_bytes(source, value)?.to_vec();
             output
                 .try_reserve(1)
@@ -1399,6 +1406,25 @@ fn payload_paragraphs(
         child = value.next_sibling();
     }
     Ok(output)
+}
+
+fn is_payload_paragraph(
+    source: &[u8],
+    document: &PreservingXmlDocument,
+    paragraph: usize,
+) -> Result<bool, TableRulingHwpxError> {
+    let contains_nested_table =
+        document
+            .elements()
+            .iter()
+            .enumerate()
+            .try_fold(false, |found, (index, value)| {
+                Ok::<_, TableRulingHwpxError>(
+                    found || has_name(value, "tbl") && is_descendant(document, index, paragraph)?,
+                )
+            })?;
+    Ok(!is_empty_scaffold(source, document, paragraph)?
+        && (!has_formula_descendant(document, paragraph)? || contains_nested_table))
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -2571,8 +2597,7 @@ fn payload_digests(
         if !has_name(value, "p") {
             return Err(TableRulingHwpxError::UnsupportedCellShape);
         }
-        if !has_formula_descendant(document, index)? && !is_empty_scaffold(source, document, index)?
-        {
+        if is_payload_paragraph(source, document, index)? {
             output
                 .try_reserve(1)
                 .map_err(|_| TableRulingHwpxError::AllocationFailed)?;
@@ -2636,6 +2661,7 @@ fn formula_field_count(
     for (index, value) in document.elements().iter().enumerate() {
         if has_name(value, "fieldBegin")
             && is_descendant(document, index, table)?
+            && nearest_ancestor_table(document, index)? == Some(table)
             && attribute(value, "type")? == "FORMULA"
         {
             count = count
@@ -2644,6 +2670,21 @@ fn formula_field_count(
         }
     }
     Ok(count)
+}
+
+fn nearest_ancestor_table(
+    document: &PreservingXmlDocument,
+    descendant: usize,
+) -> Result<Option<usize>, TableRulingHwpxError> {
+    let mut current = element(document, descendant)?.parent();
+    while let Some(index) = current {
+        let value = element(document, index)?;
+        if has_name(value, "tbl") {
+            return Ok(Some(index));
+        }
+        current = value.parent();
+    }
+    Ok(None)
 }
 
 fn cell_properties(
