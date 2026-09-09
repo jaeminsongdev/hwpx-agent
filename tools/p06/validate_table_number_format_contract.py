@@ -3,7 +3,11 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import sys
 from typing import Any
+
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from tools.p06.validate_table_geometry_contract import (
     add_error,
@@ -25,7 +29,19 @@ EXPECTED_SOURCE_PATHS = {
     "docs/09_roadmap/P06_table_engine.md",
     "protocol/private/p06-table-formula-v1.json",
     "implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json",
+    "implementation/p02/evidence/automation/automation-pdf.records.v1.json",
 }
+EXPECTED_FORMAT_CHOICES = [
+    "general",
+    "integer",
+    "decimal_1",
+    "decimal_2",
+    "decimal_3",
+    "decimal_4",
+]
+OFFICIAL_HELP_URL = (
+    "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/calculation/calculation.htm"
+)
 EXPECTED_LIMITS = {
     "input_bytes": 33_554_432,
     "cells": 1_000_000,
@@ -88,12 +104,42 @@ IMPLEMENTATION_MARKERS = {
         "complete ordered master-cell snapshot",
         "Both request admission",
         "does not lower or patch HWPX",
+        "exactly 12 source combinations",
+        "prepared_not_run",
     ),
     REPORT: (
         "12/12 PASS",
+        "24/24 PASS",
         "Direct stage: `unit_passed` (unchanged)",
         "No guessed HWPX lowering was added",
+        "This qualifier has not been run against Hangul",
         "green 0/61",
+    ),
+    "implementation/p06/tools/create-hancom-2020-table-number-format-source.ps1": (
+        "hwpx-agent.p06-09-hancom-2020-table-number-format-source/v1",
+        "$creation.Rows = $formatCases.Count",
+        "$creation.Cols = 3",
+        "TableFormulaSumHor",
+        "ModifyCtrl",
+        "DeleteThousandsSeparator",
+        "InsertThousandsSeparator",
+        "manual_ui_source_authoring_required = $true",
+        "computer_use_click_or_type_invoked = $false",
+    ),
+    "implementation/p06/tools/run-hancom-2020-table-number-format-source.ps1": (
+        "hwpx-agent.p06-09-hancom-2020-table-number-format-source-watchdog/v1",
+        "[ValidateRange(30, 900)][int]$TimeoutSeconds = 900",
+        "Stop-OwnedHancomProcess",
+        "manual_format_dialogs_passed -eq 6",
+        "insert_grouping_actions_passed -eq 6",
+        "TABLE_NUMBER_FORMAT_SOURCE_TIMEOUT",
+    ),
+    "implementation/p06/tests/Test-Hancom2020TableNumberFormatSource.ps1": (
+        "hwpx-agent.p06-09-table-number-format-source-static-tests/v1",
+        "exact_format_case_order",
+        "no_guessed_native_format",
+        "user_ui_not_computer_use",
+        "preflight_fails_before_com",
     ),
 }
 
@@ -111,6 +157,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     expected_keys = {
         "schema_version", "model_schema_version", "scope", "feature",
         "source_lock_canonicalization", "source_locks", "official_format_evidence",
+        "official_ui_reference", "target_direct_profile", "source_qualification",
         "migration", "policy", "report", "implementation_files", "state", "semantics",
         "binding", "preservation", "default_limits", "failure_policy", "not_claimed",
         "gate_decision",
@@ -147,6 +194,23 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
 
     expected_objects = {
         "official_format_evidence": {"source", "section", "proved_standard_tokens", "exact_hancom_2020_full_mapping"},
+        "official_ui_reference": {
+            "url", "scope", "observed_format_choices", "grouping_control",
+            "exact_installed_build_proof",
+        },
+        "target_direct_profile": {
+            "product", "target_build", "architecture", "locale", "format_choices",
+            "grouping_states", "combination_count", "percent", "scientific",
+            "native_result_format_mapping",
+        },
+        "source_qualification": {
+            "state", "worker", "watchdog", "static_test", "static_cases",
+            "powershell_7_static", "windows_powershell_5_1_x86_static",
+            "new_disposable_table", "formula_actions", "manual_format_dialogs",
+            "grouping_remove_actions", "grouping_add_actions", "outputs",
+            "native_format_strings_authored_by", "computer_use_click_or_type", "runtime",
+            "actual_hwpx", "actual_hangul",
+        },
         "state": {"table", "coverage", "cell", "formula", "merged_cell"},
         "semantics": {"selection", "formats", "mutation", "idempotence"},
         "binding": {"request", "build", "state_digest", "grid_digest", "document_flow"},
@@ -164,6 +228,56 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
             add_error(errors, "official_tokens")
         if evidence.get("exact_hancom_2020_full_mapping") != "not_proven":
             add_error(errors, "target_mapping_claim")
+    reference = contract.get("official_ui_reference")
+    if isinstance(reference, dict):
+        if reference != {
+            "url": OFFICIAL_HELP_URL,
+            "scope": "calculation_dialog_result_format_choices_and_grouping_checkbox_only",
+            "observed_format_choices": EXPECTED_FORMAT_CHOICES,
+            "grouping_control": "independent_checkbox",
+            "exact_installed_build_proof": False,
+        }:
+            add_error(errors, "official_ui_reference")
+    target_profile = contract.get("target_direct_profile")
+    if isinstance(target_profile, dict):
+        expected_profile = {
+            "product": "Hancom Hangul 2020",
+            "target_build": "11.0.0.9136",
+            "architecture": "x86",
+            "locale": "ko-KR",
+            "format_choices": EXPECTED_FORMAT_CHOICES,
+            "grouping_states": ["off", "on"],
+            "combination_count": 12,
+            "percent": "rejected_without_separate_exact_target_ui_evidence",
+            "scientific": "rejected_without_separate_exact_target_ui_evidence",
+            "native_result_format_mapping": "not_proven",
+        }
+        if target_profile != expected_profile:
+            add_error(errors, "target_direct_profile")
+    qualification = contract.get("source_qualification")
+    if isinstance(qualification, dict):
+        expected_qualification = {
+            "state": "prepared_not_run",
+            "worker": "implementation/p06/tools/create-hancom-2020-table-number-format-source.ps1",
+            "watchdog": "implementation/p06/tools/run-hancom-2020-table-number-format-source.ps1",
+            "static_test": "implementation/p06/tests/Test-Hancom2020TableNumberFormatSource.ps1",
+            "static_cases": 24,
+            "powershell_7_static": "pass",
+            "windows_powershell_5_1_x86_static": "pass",
+            "new_disposable_table": {"rows": 6, "columns": 3},
+            "formula_actions": 6,
+            "manual_format_dialogs": 6,
+            "grouping_remove_actions": 6,
+            "grouping_add_actions": 6,
+            "outputs": ["baseline", "ungrouped", "grouped"],
+            "native_format_strings_authored_by": "user_in_hancom_visible_dialog",
+            "computer_use_click_or_type": False,
+            "runtime": "not_run",
+            "actual_hwpx": False,
+            "actual_hangul": False,
+        }
+        if qualification != expected_qualification:
+            add_error(errors, "source_qualification")
     semantics = contract.get("semantics")
     if isinstance(semantics, dict):
         if semantics.get("formats") != ["general", "number", "percent", "scientific"]:

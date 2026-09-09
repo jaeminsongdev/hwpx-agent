@@ -13,8 +13,8 @@ class TableNumberFormatContractTests(unittest.TestCase):
     def test_repository_contract_passes_without_backend_promotion(self) -> None:
         report = validator.validate()
         self.assertEqual(report["state"], "pass", report)
-        self.assertEqual(report["source_locks"], 6)
-        self.assertEqual(report["implementation_files"], 5)
+        self.assertEqual(report["source_locks"], 7)
+        self.assertEqual(report["implementation_files"], 8)
         self.assertEqual(report["features"], 1)
         self.assertEqual(report["direct_stage"], "unit_passed")
         self.assertFalse(report["actual_hwpx"])
@@ -72,6 +72,9 @@ class TableNumberFormatContractTests(unittest.TestCase):
             contract_path = root / validator.CONTRACT
             contract = json.loads(contract_path.read_text(encoding="utf-8"))
             contract["official_format_evidence"]["exact_hancom_2020_full_mapping"] = "proven"
+            contract["official_ui_reference"]["exact_installed_build_proof"] = True
+            contract["target_direct_profile"]["combination_count"] = 10
+            contract["source_qualification"]["runtime"] = "pass"
             contract["gate_decision"]["direct_stage"] = "integration_passed"
             contract["not_claimed"]["hancom_2020_target_build"] = True
             contract_path.write_text(json.dumps(contract), encoding="utf-8")
@@ -84,6 +87,9 @@ class TableNumberFormatContractTests(unittest.TestCase):
             )
             errors = validator.validate(root)["errors"]
             self.assertIn("target_mapping_claim", errors)
+            self.assertIn("official_ui_reference", errors)
+            self.assertIn("target_direct_profile", errors)
+            self.assertIn("source_qualification", errors)
             self.assertIn("gate_decision", errors)
             self.assertIn("not_claimed", errors)
             self.assertIn("migration_marker", errors)

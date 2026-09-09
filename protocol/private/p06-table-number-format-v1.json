@@ -31,6 +31,10 @@
     {
       "path": "implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json",
       "sha256": "c4a8bdb082cf8610fa2b3f6e709ca9058ab256a2371e9a779b9b323ca82638e4"
+    },
+    {
+      "path": "implementation/p02/evidence/automation/automation-pdf.records.v1.json",
+      "sha256": "03db035d408d03ce3f78d4eca8ca76d7f9e8076ef8fadd49d8f3ed4b885317b5"
     }
   ],
   "official_format_evidence": {
@@ -38,6 +42,45 @@
     "section": "10.7.3.5.2",
     "proved_standard_tokens": ["%g", "%.0f", "%.1f", "%.2f", "%.3f", "%.4f"],
     "exact_hancom_2020_full_mapping": "not_proven"
+  },
+  "official_ui_reference": {
+    "url": "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/calculation/calculation.htm",
+    "scope": "calculation_dialog_result_format_choices_and_grouping_checkbox_only",
+    "observed_format_choices": ["general", "integer", "decimal_1", "decimal_2", "decimal_3", "decimal_4"],
+    "grouping_control": "independent_checkbox",
+    "exact_installed_build_proof": false
+  },
+  "target_direct_profile": {
+    "product": "Hancom Hangul 2020",
+    "target_build": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "format_choices": ["general", "integer", "decimal_1", "decimal_2", "decimal_3", "decimal_4"],
+    "grouping_states": ["off", "on"],
+    "combination_count": 12,
+    "percent": "rejected_without_separate_exact_target_ui_evidence",
+    "scientific": "rejected_without_separate_exact_target_ui_evidence",
+    "native_result_format_mapping": "not_proven"
+  },
+  "source_qualification": {
+    "state": "prepared_not_run",
+    "worker": "implementation/p06/tools/create-hancom-2020-table-number-format-source.ps1",
+    "watchdog": "implementation/p06/tools/run-hancom-2020-table-number-format-source.ps1",
+    "static_test": "implementation/p06/tests/Test-Hancom2020TableNumberFormatSource.ps1",
+    "static_cases": 24,
+    "powershell_7_static": "pass",
+    "windows_powershell_5_1_x86_static": "pass",
+    "new_disposable_table": {"rows": 6, "columns": 3},
+    "formula_actions": 6,
+    "manual_format_dialogs": 6,
+    "grouping_remove_actions": 6,
+    "grouping_add_actions": 6,
+    "outputs": ["baseline", "ungrouped", "grouped"],
+    "native_format_strings_authored_by": "user_in_hancom_visible_dialog",
+    "computer_use_click_or_type": false,
+    "runtime": "not_run",
+    "actual_hwpx": false,
+    "actual_hangul": false
   },
   "migration": "protocol/migrations/p06-table-number-format-v0-to-v1.md",
   "policy": "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_POLICY.md",
@@ -47,7 +90,10 @@
     "crates/domain-ir/src/table_number_format.rs",
     "crates/domain-ir/tests/table_number_format.rs",
     "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_POLICY.md",
-    "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_REPORT.md"
+    "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_REPORT.md",
+    "implementation/p06/tools/create-hancom-2020-table-number-format-source.ps1",
+    "implementation/p06/tools/run-hancom-2020-table-number-format-source.ps1",
+    "implementation/p06/tests/Test-Hancom2020TableNumberFormatSource.ps1"
   ],
   "state": {
     "table": "logical_id_grid_sha256_and_table_properties_sha256",
