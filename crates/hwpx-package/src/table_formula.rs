@@ -15,6 +15,8 @@ use crate::{
 };
 
 pub const TABLE_FORMULA_HWPX_PROFILE_ID: &str = "hwpx-agent.table-formula-hwpx.hancom-2020/1";
+pub const TABLE_CANONICAL_FORMULA_HWPX_PROFILE_ID: &str =
+    "hwpx-agent.table-canonical-formula-hwpx.hancom-2020/1";
 pub(crate) const TABLE_AGGREGATE_FORMULA_HWPX_PROFILE_ID: &str =
     "hwpx-agent.table-aggregate-formula-hwpx.hancom-2020/1";
 
@@ -213,7 +215,15 @@ impl TableFormulaHwpxReader {
         limits: TableFormulaHwpxLimits,
         formula_limits: FormulaLimits,
     ) -> Result<TableFormulaHwpxReadback, TableFormulaHwpxError> {
-        Ok(read_shape(bytes, table_ordinal, limits, formula_limits, false, false)?.readback)
+        Ok(read_shape(
+            bytes,
+            table_ordinal,
+            limits,
+            formula_limits,
+            false,
+            FormulaFieldProfile::LeftPrefix,
+        )?
+        .readback)
     }
 
     pub(crate) fn read_in_section_preserving_merged_topology(
@@ -222,7 +232,15 @@ impl TableFormulaHwpxReader {
         limits: TableFormulaHwpxLimits,
         formula_limits: FormulaLimits,
     ) -> Result<TableFormulaHwpxReadback, TableFormulaHwpxError> {
-        Ok(read_shape(bytes, table_ordinal, limits, formula_limits, true, false)?.readback)
+        Ok(read_shape(
+            bytes,
+            table_ordinal,
+            limits,
+            formula_limits,
+            true,
+            FormulaFieldProfile::LeftPrefix,
+        )?
+        .readback)
     }
 
     pub(crate) fn read_aggregate_in_section(
@@ -231,7 +249,40 @@ impl TableFormulaHwpxReader {
         limits: TableFormulaHwpxLimits,
         formula_limits: FormulaLimits,
     ) -> Result<TableFormulaHwpxReadback, TableFormulaHwpxError> {
-        Ok(read_shape(bytes, table_ordinal, limits, formula_limits, false, true)?.readback)
+        Ok(read_shape(
+            bytes,
+            table_ordinal,
+            limits,
+            formula_limits,
+            false,
+            FormulaFieldProfile::Aggregate,
+        )?
+        .readback)
+    }
+
+    /// Reads one selected canonical formula field while preserving every other formula as opaque
+    /// unowned bytes.
+    ///
+    /// The selected field may contain the complete bounded locale-neutral formula grammar,
+    /// including independently absolute row and column axes. Its native formula text must be the
+    /// exact `=`-prefixed canonical AST. A blank cache is lifted as [`FormulaCache::Absent`]; a
+    /// nonblank cache must be one canonical decimal mirrored by the visible result.
+    ///
+    /// # Errors
+    ///
+    /// Rejects an absent or ambiguous selected owner, noncanonical formula/cache text, malformed
+    /// field identity, grid drift, or any finite-limit failure.
+    pub fn read_canonical_cell_in_section(
+        bytes: &[u8],
+        table_ordinal: usize,
+        owner: CellCoordinate,
+        limits: TableFormulaHwpxLimits,
+        formula_limits: FormulaLimits,
+    ) -> Result<TableFormulaHwpxReadback, TableFormulaHwpxError> {
+        Ok(
+            read_canonical_cell_shape(bytes, table_ordinal, owner, limits, formula_limits)?
+                .readback,
+        )
     }
 
     /// Counts selected-profile formulas in one selected table after applying the same exact-shape
@@ -246,11 +297,16 @@ impl TableFormulaHwpxReader {
         limits: TableFormulaHwpxLimits,
         formula_limits: FormulaLimits,
     ) -> Result<usize, TableFormulaHwpxError> {
-        Ok(
-            read_shape(bytes, table_ordinal, limits, formula_limits, false, false)?
-                .readback
-                .formula_field_count,
-        )
+        Ok(read_shape(
+            bytes,
+            table_ordinal,
+            limits,
+            formula_limits,
+            false,
+            FormulaFieldProfile::LeftPrefix,
+        )?
+        .readback
+        .formula_field_count)
     }
 }
 
@@ -421,6 +477,83 @@ impl TableFormulaHwpxLowerer {
         };
         Ok((output, receipt))
     }
+
+    /// Rewrites one selected canonical formula field and its explicitly bound cache.
+    ///
+    /// Other formula fields and all bytes outside the selected field's formula, command, cache and
+    /// visible-result text spans are preserved exactly. The target must contain at least one
+    /// absolute reference axis and retain `General` number formatting.
+    ///
+    /// # Errors
+    ///
+    /// Rejects owner/dimension drift, a target without an absolute axis, unsupported cache or
+    /// format state, noncanonical native text, output-limit failure, semantic reopen mismatch, or
+    /// any unowned-byte change.
+    pub fn lower_canonical_cell_in_section_with_receipt(
+        source: &[u8],
+        table_ordinal: usize,
+        owner: CellCoordinate,
+        target: &FormulaCell,
+        dimensions: FormulaGridDimensions,
+        limits: TableFormulaHwpxLimits,
+        formula_limits: FormulaLimits,
+    ) -> Result<(Vec<u8>, TableFormulaHwpxLoweringReceipt), TableFormulaHwpxError> {
+        let source_shape =
+            read_canonical_cell_shape(source, table_ordinal, owner, limits, formula_limits)?;
+        if dimensions.rows != source_shape.readback.rows
+            || dimensions.columns != source_shape.readback.columns
+            || target.owner() != owner
+            || target.number_format() != FormulaNumberFormat::General
+            || !expression_has_absolute_axis(target.ast().expression())
+        {
+            return Err(TableFormulaHwpxError::UnsupportedFormula);
+        }
+        let native_formula = canonical_native_formula(target, formula_limits)?;
+        let result = canonical_cache_text(target.cache(), formula_limits)?;
+        if native_formula.len() > limits.0.text_bytes || result.len() > limits.0.text_bytes {
+            return Err(TableFormulaHwpxError::InvalidText);
+        }
+        let command = format!("{native_formula}??{NATIVE_GENERAL_FORMAT};;{result}");
+        if command.len() > limits.0.text_bytes {
+            return Err(TableFormulaHwpxError::InvalidText);
+        }
+        let mut edits = [
+            ByteEdit::new(source_shape.command_span, command.into_bytes()),
+            ByteEdit::new(source_shape.formula_span, native_formula.into_bytes()),
+            ByteEdit::new(source_shape.last_result_span, result.as_bytes().to_vec()),
+            ByteEdit::new(source_shape.visible_result_span, result.into_bytes()),
+        ];
+        let output = apply_edits(source, &mut edits, limits)?;
+        let output_shape =
+            read_canonical_cell_shape(&output, table_ordinal, owner, limits, formula_limits)?;
+        if output_shape.readback.formula != *target
+            || output_shape.readback.rows != dimensions.rows
+            || output_shape.readback.columns != dimensions.columns
+        {
+            return Err(TableFormulaHwpxError::ReadbackMismatch);
+        }
+        if output_shape.readback.unowned_sha256 != source_shape.readback.unowned_sha256 {
+            return Err(TableFormulaHwpxError::PreservationMismatch);
+        }
+        let receipt = TableFormulaHwpxLoweringReceipt {
+            profile_id: TABLE_CANONICAL_FORMULA_HWPX_PROFILE_ID,
+            source_sha256: Sha256::digest(source).into(),
+            output_sha256: Sha256::digest(&output).into(),
+            source_formula_sha256: source_shape
+                .readback
+                .formula
+                .canonical_sha256(formula_limits)?,
+            target_formula_sha256: target.canonical_sha256(formula_limits)?,
+            unowned_sha256: output_shape.readback.unowned_sha256,
+            source_bytes: source.len(),
+            output_bytes: output.len(),
+            rows: dimensions.rows,
+            columns: dimensions.columns,
+            owner,
+            modified_text_count: edits.len(),
+        };
+        Ok((output, receipt))
+    }
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -439,7 +572,7 @@ fn lower_in_section_profile(
         limits,
         formula_limits,
         allow_merged_cells,
-        false,
+        FormulaFieldProfile::LeftPrefix,
     )?;
     if dimensions.rows != source_shape.readback.rows
         || dimensions.columns != source_shape.readback.columns
@@ -463,7 +596,7 @@ fn lower_in_section_profile(
         limits,
         formula_limits,
         allow_merged_cells,
-        false,
+        FormulaFieldProfile::LeftPrefix,
     )?;
     if &output_shape.readback.formula != target
         || output_shape.readback.rows != dimensions.rows
@@ -498,6 +631,7 @@ fn lower_in_section_profile(
 struct FormulaShape {
     readback: TableFormulaHwpxReadback,
     command_span: XmlByteSpan,
+    formula_span: XmlByteSpan,
     last_result_span: XmlByteSpan,
     visible_result_span: XmlByteSpan,
 }
@@ -508,7 +642,7 @@ fn read_shape(
     limits: TableFormulaHwpxLimits,
     formula_limits: FormulaLimits,
     allow_merged_cells: bool,
-    aggregate_profile: bool,
+    profile: FormulaFieldProfile,
 ) -> Result<FormulaShape, TableFormulaHwpxError> {
     let document = parse_document(bytes, limits)?;
     validate_document_envelope(&document)?;
@@ -541,7 +675,7 @@ fn read_shape(
         dimensions,
         limits,
         formula_limits,
-        aggregate_profile,
+        profile,
     )?;
     let owned_spans = [
         field.command_span,
@@ -550,10 +684,10 @@ fn read_shape(
         field.last_result_span,
         field.visible_result_span,
     ];
-    let profile_id = if aggregate_profile {
-        TABLE_AGGREGATE_FORMULA_HWPX_PROFILE_ID
-    } else {
-        TABLE_FORMULA_HWPX_PROFILE_ID
+    let profile_id = match profile {
+        FormulaFieldProfile::LeftPrefix => TABLE_FORMULA_HWPX_PROFILE_ID,
+        FormulaFieldProfile::Aggregate => TABLE_AGGREGATE_FORMULA_HWPX_PROFILE_ID,
+        FormulaFieldProfile::Canonical => TABLE_CANONICAL_FORMULA_HWPX_PROFILE_ID,
     };
     let unowned_sha256 = digest_excluding(bytes, &owned_spans, profile_id)?;
     Ok(FormulaShape {
@@ -566,9 +700,83 @@ fn read_shape(
             unowned_sha256,
         },
         command_span: field.command_span,
+        formula_span: field.formula_span,
         last_result_span: field.last_result_span,
         visible_result_span: field.visible_result_span,
     })
+}
+
+fn read_canonical_cell_shape(
+    bytes: &[u8],
+    table_ordinal: usize,
+    owner: CellCoordinate,
+    limits: TableFormulaHwpxLimits,
+    formula_limits: FormulaLimits,
+) -> Result<FormulaShape, TableFormulaHwpxError> {
+    let document = parse_document(bytes, limits)?;
+    validate_document_envelope(&document)?;
+    validate_section_root(&document)?;
+    let table = table_indexes(&document, limits)?
+        .get(table_ordinal)
+        .copied()
+        .ok_or(TableFormulaHwpxError::UnsupportedShape)?;
+    let grid = read_cells(&document, table, limits, true)?;
+    let fields = formula_fields(&document, table, limits)?;
+    let mut selected = None;
+    for field_begin in &fields {
+        let cell = owning_direct_cell(&document, *field_begin, table)?;
+        let coordinate = grid
+            .cells
+            .iter()
+            .find_map(|(index, coordinate)| (*index == cell).then_some(*coordinate))
+            .ok_or(TableFormulaHwpxError::UnsupportedShape)?;
+        if coordinate == owner && selected.replace(*field_begin).is_some() {
+            return Err(TableFormulaHwpxError::UnsupportedShape);
+        }
+    }
+    let field_begin = selected.ok_or(TableFormulaHwpxError::UnsupportedShape)?;
+    let dimensions = FormulaGridDimensions {
+        rows: grid.rows,
+        columns: grid.columns,
+    };
+    let field = read_field(
+        &document,
+        field_begin,
+        owner,
+        dimensions,
+        limits,
+        formula_limits,
+        FormulaFieldProfile::Canonical,
+    )?;
+    let owned_spans = [
+        field.command_span,
+        field.formula_span,
+        field.last_result_span,
+        field.visible_result_span,
+    ];
+    let unowned_sha256 =
+        digest_excluding(bytes, &owned_spans, TABLE_CANONICAL_FORMULA_HWPX_PROFILE_ID)?;
+    Ok(FormulaShape {
+        readback: TableFormulaHwpxReadback {
+            profile_id: TABLE_CANONICAL_FORMULA_HWPX_PROFILE_ID,
+            rows: grid.rows,
+            columns: grid.columns,
+            formula: field.formula,
+            formula_field_count: fields.len(),
+            unowned_sha256,
+        },
+        command_span: field.command_span,
+        formula_span: field.formula_span,
+        last_result_span: field.last_result_span,
+        visible_result_span: field.visible_result_span,
+    })
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum FormulaFieldProfile {
+    LeftPrefix,
+    Aggregate,
+    Canonical,
 }
 
 #[derive(Debug)]
@@ -588,7 +796,7 @@ fn read_field(
     dimensions: FormulaGridDimensions,
     limits: TableFormulaHwpxLimits,
     formula_limits: FormulaLimits,
-    aggregate_profile: bool,
+    profile: FormulaFieldProfile,
 ) -> Result<FieldReadback, TableFormulaHwpxError> {
     let envelope = validate_field_envelope(document, field_begin, limits)?;
     let parameters = read_field_parameters(document, envelope.parameters, limits)?;
@@ -605,14 +813,29 @@ fn read_field(
     if visible.text != parameters.last_result.text {
         return Err(TableFormulaHwpxError::UnsupportedShape);
     }
-    let decimal = parse_canonical_decimal(parameters.last_result.text, formula_limits)?;
-    let ast = if aggregate_profile {
-        aggregate_ast(parameters.native_formula.text, formula_limits)?
-    } else {
-        if parameters.native_formula.text != NATIVE_LEFT_FORMULA {
-            return Err(TableFormulaHwpxError::UnsupportedShape);
+    let cache =
+        if parameters.last_result.text.is_empty() && profile == FormulaFieldProfile::Canonical {
+            FormulaCache::Absent
+        } else {
+            FormulaCache::Unverified {
+                value: FormulaValue::Decimal {
+                    value: parse_canonical_decimal(parameters.last_result.text, formula_limits)?,
+                },
+            }
+        };
+    let ast = match profile {
+        FormulaFieldProfile::LeftPrefix => {
+            if parameters.native_formula.text != NATIVE_LEFT_FORMULA {
+                return Err(TableFormulaHwpxError::UnsupportedShape);
+            }
+            left_prefix_ast(owner, formula_limits)?
         }
-        left_prefix_ast(owner, formula_limits)?
+        FormulaFieldProfile::Aggregate => {
+            aggregate_ast(parameters.native_formula.text, formula_limits)?
+        }
+        FormulaFieldProfile::Canonical => {
+            canonical_native_ast(parameters.native_formula.text, formula_limits)?
+        }
     };
     let formula = FormulaCell::from_draft(
         FormulaCellDraft {
@@ -622,9 +845,7 @@ fn read_field(
                 schema_version: TABLE_FORMULA_SCHEMA_VERSION.to_owned(),
                 expression: ast.expression().clone(),
             },
-            cache: FormulaCache::Unverified {
-                value: FormulaValue::Decimal { value: decimal },
-            },
+            cache,
             number_format: FormulaNumberFormat::General,
         },
         dimensions,
@@ -864,6 +1085,81 @@ fn aggregate_ast(
         return Err(TableFormulaHwpxError::UnsupportedFormula);
     }
     Ok(ast)
+}
+
+fn canonical_native_ast(
+    native_formula: &str,
+    formula_limits: FormulaLimits,
+) -> Result<FormulaAst, TableFormulaHwpxError> {
+    let source = native_formula
+        .strip_prefix('=')
+        .ok_or(TableFormulaHwpxError::UnsupportedFormula)?;
+    let ast = FormulaAst::parse(source, formula_limits)?;
+    if ast.canonical_formula(formula_limits)? != source {
+        return Err(TableFormulaHwpxError::UnsupportedFormula);
+    }
+    Ok(ast)
+}
+
+fn canonical_native_formula(
+    formula: &FormulaCell,
+    formula_limits: FormulaLimits,
+) -> Result<String, TableFormulaHwpxError> {
+    if formula.number_format() != FormulaNumberFormat::General {
+        return Err(TableFormulaHwpxError::UnsupportedFormula);
+    }
+    let canonical = formula.ast().canonical_formula(formula_limits)?;
+    let native = format!("={canonical}");
+    if native
+        .bytes()
+        .any(|byte| matches!(byte, b'&' | b'<' | b'>' | b'\'' | b'"'))
+        || canonical_native_ast(&native, formula_limits)? != *formula.ast()
+    {
+        return Err(TableFormulaHwpxError::UnsupportedFormula);
+    }
+    Ok(native)
+}
+
+fn canonical_cache_text(
+    cache: &FormulaCache,
+    formula_limits: FormulaLimits,
+) -> Result<String, TableFormulaHwpxError> {
+    match cache {
+        FormulaCache::Absent => Ok(String::new()),
+        FormulaCache::Unverified {
+            value: FormulaValue::Decimal { value },
+        } => {
+            let text = decimal_text(*value);
+            if parse_canonical_decimal(&text, formula_limits)? != *value {
+                return Err(TableFormulaHwpxError::UnsupportedCache);
+            }
+            Ok(text)
+        }
+        FormulaCache::Unverified { .. } => Err(TableFormulaHwpxError::UnsupportedCache),
+    }
+}
+
+fn expression_has_absolute_axis(expression: &FormulaExpression) -> bool {
+    match expression {
+        FormulaExpression::Decimal { .. } => false,
+        FormulaExpression::Cell { reference } => {
+            reference.row_kind == FormulaReferenceKind::Absolute
+                || reference.column_kind == FormulaReferenceKind::Absolute
+        }
+        FormulaExpression::Range { range } => {
+            [range.start, range.end].into_iter().any(|reference| {
+                reference.row_kind == FormulaReferenceKind::Absolute
+                    || reference.column_kind == FormulaReferenceKind::Absolute
+            })
+        }
+        FormulaExpression::Unary { operand, .. } => expression_has_absolute_axis(operand),
+        FormulaExpression::Binary { left, right, .. } => {
+            expression_has_absolute_axis(left) || expression_has_absolute_axis(right)
+        }
+        FormulaExpression::Function { arguments, .. } => {
+            arguments.iter().any(expression_has_absolute_axis)
+        }
+    }
 }
 
 fn require_left_prefix(formula: &FormulaCell) -> Result<(), TableFormulaHwpxError> {

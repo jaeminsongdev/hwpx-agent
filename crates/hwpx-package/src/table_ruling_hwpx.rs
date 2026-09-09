@@ -22,6 +22,7 @@ use crate::{
 mod aggregate_hwpx;
 mod auto_fill_hwpx;
 mod create_hwpx;
+mod formula_reference_hwpx;
 mod merge_split_hwpx;
 mod partition_hwpx;
 mod properties_hwpx;
@@ -52,6 +53,15 @@ pub use create_hwpx::{
     TableCreateHwpxLowerer, TableCreateHwpxLoweringReceipt, TableCreateHwpxPlan,
     TableCreateHwpxReadback, TableCreateHwpxReader, TableCreateHwpxRequest,
     TableCreateHwpxRequestDraft,
+};
+pub use formula_reference_hwpx::{
+    TABLE_ABSOLUTE_REFERENCE_CAPABILITY_ID, TABLE_ABSOLUTE_REFERENCE_HWPX_PROFILE_ID,
+    TABLE_ABSOLUTE_REFERENCE_HWPX_SCHEMA_VERSION, TableAbsoluteReferenceHwpxBuilder,
+    TableAbsoluteReferenceHwpxError, TableAbsoluteReferenceHwpxLimits,
+    TableAbsoluteReferenceHwpxLoweredParts, TableAbsoluteReferenceHwpxLowerer,
+    TableAbsoluteReferenceHwpxLoweringReceipt, TableAbsoluteReferenceHwpxPlan,
+    TableAbsoluteReferenceHwpxReadback, TableAbsoluteReferenceHwpxReader,
+    TableAbsoluteReferenceHwpxRequest, TableAbsoluteReferenceHwpxRequestDraft,
 };
 pub use merge_split_hwpx::{
     TABLE_MERGE_SPLIT_HWPX_PROFILE_ID, TABLE_MERGE_SPLIT_HWPX_SCHEMA_VERSION,

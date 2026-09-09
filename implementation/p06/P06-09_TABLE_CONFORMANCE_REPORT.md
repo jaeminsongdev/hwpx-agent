@@ -43,7 +43,8 @@ The machine-readable authority is
 - P06-05 contributes exact-target width/height evidence. That oracle still covers only its absolute
   automatic-column plan; it is not reused as a fixed-column or autofit application oracle.
 - P06-06 contributes exact-target formula, horizontal sum, relative-reference and cache evidence;
-  number-format and absolute-reference support remain component-only.
+  number-format support remains component-only. TABLE-060 now has separate static direct-HWPX
+  integration for complete canonical AST anchor upgrades, without a target-build claim.
 - P06-07 contributes exact current-PC Hangul 2020 target evidence for repeat header, cell-content
   splitting, row-boundary splitting, before/exact/after whole-table boundaries and top/bottom
   captions. TABLE-042/043/044/055 are now `oracle_verified`; their automation and formula-readback
@@ -94,6 +95,13 @@ The machine-readable authority is
   or explicitly replaced; a changed dependency of an unselected formula fails closed instead of
   preserving a stale cache. Rich/merged content, native UI series mapping, licensed Hangul and
   rendering remain unclaimed.
+- The absolute-reference adapter covers TABLE-060 across the complete bounded `FormulaAst` grammar.
+  It selects one owner among zero or more other formula fields, preserves formula meaning and
+  coordinates, and permits only independent relative-to-absolute row/column anchor upgrades.
+  Preserve, explicit unverified update and clear cache policies reopen exactly; recalculation and
+  non-General formats fail closed. Other formulas, table content outside the selected native text
+  slots, pagination, caption and package parts remain exact. This is synthetic static integration,
+  not licensed Hangul execution or verified cache evidence.
 - The table-style component and preserving HWPX adapter cover TABLE-020. Fixed-precedence,
   merged-cell-aware regions resolve to a complete typed visual identity spanning non-border cell
   properties, four borders, backgrounds and visible diagonals. The lowerer binds exact source,
@@ -184,7 +192,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-86 missing validation instances, 61 unverified automation runtime rows and 61 missing
+83 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -192,8 +200,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the remaining 6 unit-only rows through preserving HWPX adapters;
-2. close the 40 integration-only target oracles;
+1. lower the remaining 5 unit-only rows through preserving HWPX adapters;
+2. close the 41 integration-only target oracles;
 3. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
 4. regenerate until all 61 rows are green, then run the P06 hard Gate.
