@@ -44,7 +44,7 @@ This is unit-level evidence. No HWPX XML, user document or Hangul process was to
 number-format lowering/readback, pagination/rendering, target-build save/reopen, automation and
 differentials remain open. P06-09, P06, production and the product remain in progress.
 
-## Exact-source qualifier status — 2026-09-09
+## Exact-source qualifier status — 2026-09-10
 
 The repository now contains a fail-closed Hangul 2020 source worker, watchdog and 20-case static
 test for the native thousands-separator transition. PowerShell parsing passes, PSScriptAnalyzer
@@ -54,8 +54,8 @@ reports zero findings, and the static contract passes 20/20. The worker creates 
 Runtime qualification is not complete. Attempt 01 was manually interrupted after no output or
 progress receipt and its exact owned Hwp process was identity-checked and cleaned. Attempt 02 found
 a preflight defect in the new progress-file extension check; its failed watchdog receipt remains.
-Attempts 03 through 05 reached the licensed target but timed out awaiting the baseline `SaveAs`
-access approval. Attempt 05's bounded journal also ends at `baseline_save/running`; its watchdog
+Attempts 03 through 06 reached the licensed target but timed out awaiting the baseline `SaveAs`
+access approval. Attempt 06's bounded journal also ends at `baseline_save/running`; its watchdog
 cleaned one exact owned process, refused no cleanup target and left zero Hwp processes. The available
 Computer Use surface exposed browsers only, so it could not capture the Hangul dialog and no click
 or typing was automated. None of these failures is promoted.
