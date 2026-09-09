@@ -46,4 +46,6 @@ progress.
 
 TABLE-004 subsequently gained separate static direct-HWPX integration evidence under
 `P06-09_TABLE_TEXT_TO_TABLE_HWPX_REPORT.md`. That later result does not rewrite this component run;
-TABLE-005 remains unit-only and licensed Hangul/render evidence remains open.
+TABLE-005 subsequently gained its own static direct-HWPX integration evidence under
+`P06-09_TABLE_TABLE_TO_TEXT_HWPX_REPORT.md`. Neither later result rewrites this component run, and
+licensed Hangul/render evidence remains open.

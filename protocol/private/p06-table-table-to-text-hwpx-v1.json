@@ -1,0 +1,101 @@
+{
+  "schema_version": "hwpx-agent.table-table-to-text-hwpx-contract/v1",
+  "profile_id": "hwpx-agent.table-table-to-text-hwpx.hancom-2020-plain-grid/1",
+  "model_profile_id": "hwpx-agent.table-text-conversion/v1",
+  "scope": "p06_09_static_current_pc_hancom_2020_hwpx_complete_plain_unmerged_table_to_text_admission",
+  "features": {
+    "TABLE-005": "table.table_to_text"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path": "WORK_BREAKDOWN_STRUCTURE.csv", "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path": "docs/03_document_model/06_table_model.md", "sha256": "f4e209eaabf6ebdd240efb6ab05b35a4a6bf16e4212e60a99458af0342e6d1e7"},
+    {"path": "docs/04_feature_catalog/07_table.md", "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"},
+    {"path": "docs/04_feature_catalog/contracts/07_table_contracts.md", "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"},
+    {"path": "docs/09_roadmap/P06_table_engine.md", "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"}
+  ],
+  "input": {
+    "source_table": "one_exact_top_level_current_profile_plain_unmerged_rectangular_table_wrapper",
+    "text_semantics": "complete_nfc_cell_text_with_tab_line_break_empty_and_delimited_escaping",
+    "wrapper": "one_table_one_control_one_run_one_empty_text_current_profile_paragraph",
+    "binding": "header_section_wrapper_table_state_grid_text_pagination_ordinals_counts_and_document_flow_sha256",
+    "output_identity": "caller_supplied_text_block_id_distinct_from_table_master_and_payload_ids"
+  },
+  "transformation": {
+    "extract": "every_row_major_cell_exactly_one_plain_paragraph_or_empty_scaffold",
+    "serialize": "complete_bounded_tab_comma_or_semicolon_minimal_quote_writer_with_exact_lf_or_crlf_bytes",
+    "paragraph": "preserve_wrapper_paragraph_and_run_properties_replace_table_with_typed_text_tab_and_line_break_atoms",
+    "normalization": "nfc_visible_text_and_crlf_to_single_hwpx_line_break_without_changing_returned_bytes"
+  },
+  "lowering": {
+    "precondition": "relift_source_reparse_complete_grid_recheck_current_flow_and_rebuild_exact_plan",
+    "edit_scope": "replace_only_bound_top_level_table_wrapper_paragraph_header_and_all_other_bytes_unchanged",
+    "publication": "return_only_after_exact_paragraph_typed_flow_visible_text_and_one_table_count_decrement_reopen"
+  },
+  "preservation": {
+    "destination": "all_bytes_outside_selected_wrapper_and_every_unrelated_table_preserved",
+    "package": "header_opaque_non_target_parts_and_relationship_graph_preserved",
+    "source": "source_package_and_expanded_parts_never_mutated"
+  },
+  "receipt": {
+    "binding": "source_output_wrapper_context_state_grid_text_serialized_paragraph_request_plan_and_before_after_flow_sha256",
+    "counts": "source_target_tables_dimensions_masters_payloads_formulas_serialized_bytes_page_split_and_repeat_headers",
+    "debug": "all_text_hashes_logical_ids_raw_xml_and_document_content_omitted"
+  },
+  "limits_profiles": [
+    "TableTableToTextHwpxLimits",
+    "TableTextConversionLimits",
+    "TextFlowLimits",
+    "TableRulingHwpxLimits",
+    "TableLayoutHwpxLimits",
+    "ParagraphStyleLimits",
+    "TableFormulaHwpxLimits",
+    "FormulaLimits",
+    "TableGridLimits",
+    "TableRulingLimits",
+    "TablePaginationHwpxLimits"
+  ],
+  "failure_policy": [
+    "invalid_schema_digest_delimiter_line_ending_identity_count_or_flow_binding",
+    "header_section_wrapper_table_state_grid_text_pagination_ordinal_or_current_flow_drift",
+    "merged_formula_cache_caption_nested_or_ambiguous_table_shape",
+    "multi_paragraph_field_opaque_dynamic_or_unsupported_cell_content",
+    "duplicate_or_aliasing_table_master_payload_or_output_identity",
+    "invalid_utf8_control_nonrectangular_or_over_limit_text_grid",
+    "serialized_bytes_target_paragraph_source_state_grid_or_plan_drift",
+    "allocation_serialization_xml_text_flow_ruling_pagination_or_output_limit",
+    "noncanonical_top_level_paragraph_run_control_table_or_empty_text_wrapper",
+    "semantic_reopen_paragraph_flow_visible_text_or_table_count_mismatch_with_no_partial_output"
+  ],
+  "migration": "protocol/migrations/p06-table-table-to-text-hwpx-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_TABLE_TO_TEXT_HWPX_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_TABLE_TO_TEXT_HWPX_REPORT.md",
+  "expected_evidence": {
+    "adapter_tests": 7,
+    "feature_count": 1,
+    "backend": "direct_hwpx",
+    "direct_stage": "integration_passed",
+    "validations": ["formula_readback", "page_split", "schema", "semantic_reopen"]
+  },
+  "not_claimed": {
+    "merged_cell_expansion": false,
+    "formula_or_cache_flattening": false,
+    "multiple_paragraph_flattening": false,
+    "field_or_opaque_flattening": false,
+    "caption_or_nested_table_conversion": false,
+    "render_diff": false,
+    "hangul_2020_target_build": false,
+    "saved_real_hwpx": false,
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "rollback_or_retry": false,
+    "release_enabled": false,
+    "arbitrary_native_wrapper": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

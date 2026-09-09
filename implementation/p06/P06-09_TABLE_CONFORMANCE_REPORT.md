@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 15 |
-| direct `integration_passed` | 35 |
-| direct `unit_passed` | 11 |
+| direct `integration_passed` | 37 |
+| direct `unit_passed` | 9 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -69,10 +69,11 @@ The machine-readable authority is
   numeric formula-cell formats. TABLE-032/033 move to unit evidence while decimal places, formula
   AST and cache remain exact; unsupported formats fail closed.
 - The text conversion component adds bounded UTF-8 tab/comma/semicolon parsing and deterministic
-  writing for TABLE-004/005. TABLE-004 now has a preserving direct-HWPX adapter for the complete
-  admitted plain-text profile: arbitrary bounded rectangular quoting, Unicode, multiline and empty
-  cells become exact template-derived payload/grid/state with closed-package reopen. Fields and
-  opaque source elements fail closed; TABLE-005 remains unit-only and no Hangul/render result is inferred.
+  writing for TABLE-004/005. TABLE-004 converts a complete admitted plain-text paragraph to an exact
+  template-derived table. TABLE-005 converts every cell of an arbitrary-size admitted plain unmerged
+  table to exact LF/CRLF bytes and a typed HWPX paragraph while binding the removed state/grid,
+  properties, payloads and pagination. Both preserve closed-package non-target bytes. Fields, opaque
+  content, and unreviewed merged/formula flattening fail closed; no Hangul/render result is inferred.
 - The placement component and preserving HWPX adapter cover TABLE-034/036/037/038. Position tests
   span every reference and alignment value, signed offsets and the three flags; attachment changes
   preserve inactive native fields; all 16 table wrap/side-flow pairs and four margins read back

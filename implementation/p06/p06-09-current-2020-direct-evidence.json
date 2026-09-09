@@ -69,7 +69,7 @@
       "evidence_files": [
         {
           "path": "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_REPORT.md",
-          "sha256": "380143cff945feec7cd59cca2eb5a8e496e949b76e71619dbf2d98e7582588f2"
+          "sha256": "536c3edd3821f19ea4e3a62e5f76b9d6e098f1116bc265f2f44ff153dadffe91"
         },
         {
           "path": "implementation/p06/P06-09_TABLE_TEXT_TO_TABLE_HWPX_REPORT.md",
@@ -79,9 +79,9 @@
     },
     {
       "feature_ids": ["TABLE-005"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
       "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
       "negative_passed": true,
       "rollback_or_retry_passed": false,
@@ -89,7 +89,11 @@
       "evidence_files": [
         {
           "path": "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_REPORT.md",
-          "sha256": "380143cff945feec7cd59cca2eb5a8e496e949b76e71619dbf2d98e7582588f2"
+          "sha256": "536c3edd3821f19ea4e3a62e5f76b9d6e098f1116bc265f2f44ff153dadffe91"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_TABLE_TO_TEXT_HWPX_REPORT.md",
+          "sha256": "56fe71fe18b7f85feafd9b28d35c77b00e7d1fee0325a774dc600b6f84280c02"
         }
       ]
     },

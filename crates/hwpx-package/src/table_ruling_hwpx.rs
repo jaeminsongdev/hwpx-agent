@@ -26,6 +26,7 @@ mod partition_hwpx;
 mod properties_hwpx;
 mod structure_hwpx;
 mod style_hwpx;
+mod table_to_text_hwpx;
 mod text_conversion_hwpx;
 mod transpose_hwpx;
 
@@ -81,6 +82,13 @@ pub use style_hwpx::{
     TableStyleHwpxLimits, TableStyleHwpxLoweredParts, TableStyleHwpxLowerer,
     TableStyleHwpxLoweringReceipt, TableStyleHwpxPartBinding, TableStyleHwpxReadback,
     TableStyleHwpxReader, TableStyleHwpxValueCatalog,
+};
+pub use table_to_text_hwpx::{
+    TABLE_TABLE_TO_TEXT_HWPX_PROFILE_ID, TABLE_TABLE_TO_TEXT_HWPX_SCHEMA_VERSION,
+    TableTableToTextHwpxBuilder, TableTableToTextHwpxError, TableTableToTextHwpxLimits,
+    TableTableToTextHwpxLoweredParts, TableTableToTextHwpxLowerer,
+    TableTableToTextHwpxLoweringReceipt, TableTableToTextHwpxPlan, TableTableToTextHwpxReadback,
+    TableTableToTextHwpxReader, TableTableToTextHwpxRequest, TableTableToTextHwpxRequestDraft,
 };
 pub use text_conversion_hwpx::{
     TABLE_TEXT_TO_TABLE_HWPX_PROFILE_ID, TABLE_TEXT_TO_TABLE_HWPX_SCHEMA_VERSION,

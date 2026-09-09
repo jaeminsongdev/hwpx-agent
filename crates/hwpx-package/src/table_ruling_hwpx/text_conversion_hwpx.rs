@@ -1088,7 +1088,9 @@ pub(super) fn read_unmerged_text_grid(
         } else {
             let bytes = super::element_bytes(section, super::element(&document, paragraph)?)?;
             let standalone = standalone_paragraph(bytes)?;
-            TextFlowReader::read(&standalone, limits.flow)?.visible_text_nfc()?
+            let flow = TextFlowReader::read(&standalone, limits.flow)?;
+            require_plain_text_flow(&flow)?;
+            flow.visible_text_nfc()?
         };
         let row =
             usize::try_from(coordinate.row).map_err(|_| TableTextToTableHwpxError::Geometry)?;
@@ -1123,7 +1125,7 @@ fn selected_top_level_paragraph(
         .ok_or(TableTextToTableHwpxError::SourceBindingMismatch)
 }
 
-fn require_plain_text_flow(flow: &TextFlow) -> Result<(), TableTextToTableHwpxError> {
+pub(super) fn require_plain_text_flow(flow: &TextFlow) -> Result<(), TableTextToTableHwpxError> {
     if flow.children.iter().any(|child| match child {
         ParagraphChild::Run(run) => run
             .items
@@ -1172,7 +1174,7 @@ fn paragraph_context_digest(
     Ok(create_hwpx::hex(digest.finalize()))
 }
 
-fn standalone_paragraph(fragment: &[u8]) -> Result<Vec<u8>, TableTextToTableHwpxError> {
+pub(super) fn standalone_paragraph(fragment: &[u8]) -> Result<Vec<u8>, TableTextToTableHwpxError> {
     const PREFIX: &[u8] = b"<hp:p";
     if !fragment.starts_with(PREFIX) {
         return Err(TableTextToTableHwpxError::ReadbackMismatch);

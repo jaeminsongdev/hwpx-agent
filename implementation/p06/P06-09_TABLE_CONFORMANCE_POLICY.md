@@ -65,7 +65,7 @@ input requires a new output path or an explicitly reviewed successor update.
 ## Current result
 
 - Required rows: 61; green: 0; non-green: 61.
-- Direct stages: 0 cataloged, 10 unit-passed, 36 integration-passed, 15 oracle-verified.
+- Direct stages: 0 cataloged, 9 unit-passed, 37 integration-passed, 15 oracle-verified.
 - Automation bindings: 6 candidate-unverified, 55 unavailable-with-reason.
 - Automation runtime support: 61 unverified.
 - Direct/automation differential: 61 not-run.
@@ -75,7 +75,7 @@ four exact-target oracle rows. Exact blank unmerged table creation; the fixed-co
   and fit-page layout modes; the
   position/attachment/wrap/outside-margin group; complete table styles; exact table transpose;
   exact cell merge/split;
-  exact admitted whole-table split; the complete block/horizontal/vertical aggregate-formula group;
+  exact admitted whole-table split; exact admitted text-to-table/table-to-text conversion; the complete block/horizontal/vertical aggregate-formula group;
   and other admitted operations have operation-specific static direct-HWPX integration evidence,
   but no licensed application oracle. The remaining direct operations and exact automation
   bindings/probes have not been manufactured from menu names.

@@ -85,7 +85,7 @@ IMPLEMENTATION_MARKERS = {
         "public_error_codes_are_stable",
     ),
     POLICY: (
-        "pure bounded component implemented; no HWPX or Hangul 2020 oracle claim",
+        "pure bounded component implemented; TABLE-004/005 have separately governed static HWPX adapters; no Hangul 2020 oracle claim",
         "tab, comma and semicolon",
         "no partial grid or byte vector",
         "unit_passed",

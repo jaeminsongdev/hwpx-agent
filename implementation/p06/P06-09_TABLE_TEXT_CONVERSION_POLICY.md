@@ -1,6 +1,6 @@
 # P06-09 table text conversion policy v1
 
-Status: pure bounded component implemented; no HWPX or Hangul 2020 oracle claim
+Status: pure bounded component implemented; TABLE-004/005 have separately governed static HWPX adapters; no Hangul 2020 oracle claim
 
 ## Scope
 
@@ -43,7 +43,7 @@ HWPX integration, merged-cell/style/formula preservation, semantic reopen, formu
 split, render diff, licensed Hangul 2020 target-build, automation, differential exact match,
 release-enabled, P06-09/P06 PASS, production or product completion.
 
-TABLE-004 now has the separately governed preserving adapter at
-`P06-09_TABLE_TEXT_TO_TABLE_HWPX_POLICY.md`; this component report itself remains unit evidence and
-does not inherit that adapter's integration result. The next text-conversion boundary is the exact
-TABLE-005 table-to-text adapter. Recommended reasoning remains `max`.
+TABLE-004 and TABLE-005 now have separately governed preserving adapters at
+`P06-09_TABLE_TEXT_TO_TABLE_HWPX_POLICY.md` and `P06-09_TABLE_TABLE_TO_TEXT_HWPX_POLICY.md`.
+This component report itself remains unit evidence and does not inherit either adapter's integration
+result. Recommended reasoning remains `max` for the remaining P06-09 HWPX and target-oracle work.
