@@ -156,10 +156,10 @@ pub use table_placement::{
 };
 pub use table_ruling_hwpx::{
     TABLE_MERGE_SPLIT_HWPX_PROFILE_ID, TABLE_MERGE_SPLIT_HWPX_SCHEMA_VERSION,
-    TABLE_PROPERTIES_HWPX_PROFILE_ID, TABLE_RULING_HWPX_PROFILE_ID, TABLE_STYLE_HWPX_PROFILE_ID,
-    TableMergeSplitHwpxBuilder, TableMergeSplitHwpxError, TableMergeSplitHwpxLimits,
-    TableMergeSplitHwpxLoweredParts, TableMergeSplitHwpxLowerer,
-    TableMergeSplitHwpxLoweringReceipt, TableMergeSplitHwpxOperation,
+    TABLE_PROPERTIES_HWPX_PROFILE_ID, TABLE_RULING_HWPX_PROFILE_ID, TABLE_SPLIT_HWPX_PROFILE_ID,
+    TABLE_SPLIT_HWPX_SCHEMA_VERSION, TABLE_STYLE_HWPX_PROFILE_ID, TableMergeSplitHwpxBuilder,
+    TableMergeSplitHwpxError, TableMergeSplitHwpxLimits, TableMergeSplitHwpxLoweredParts,
+    TableMergeSplitHwpxLowerer, TableMergeSplitHwpxLoweringReceipt, TableMergeSplitHwpxOperation,
     TableMergeSplitHwpxPartBinding, TableMergeSplitHwpxPlan, TableMergeSplitHwpxReadback,
     TableMergeSplitHwpxReader, TableMergeSplitHwpxRequest, TableMergeSplitHwpxRequestDraft,
     TablePropertiesHwpxBinding, TablePropertiesHwpxCellValue, TablePropertiesHwpxDiagonalBinding,
@@ -169,10 +169,13 @@ pub use table_ruling_hwpx::{
     TablePropertiesHwpxValueCatalog, TableRulingHwpxBinding, TableRulingHwpxCellBinding,
     TableRulingHwpxError, TableRulingHwpxLimits, TableRulingHwpxLoweredParts,
     TableRulingHwpxLowerer, TableRulingHwpxLoweringReceipt, TableRulingHwpxReadback,
-    TableRulingHwpxReader, TableRulingHwpxStyleCatalog, TableStyleHwpxCellValue,
-    TableStyleHwpxError, TableStyleHwpxLimits, TableStyleHwpxLoweredParts, TableStyleHwpxLowerer,
-    TableStyleHwpxLoweringReceipt, TableStyleHwpxPartBinding, TableStyleHwpxReadback,
-    TableStyleHwpxReader, TableStyleHwpxValueCatalog,
+    TableRulingHwpxReader, TableRulingHwpxStyleCatalog, TableSplitHwpxBuilder, TableSplitHwpxError,
+    TableSplitHwpxLimits, TableSplitHwpxLoweredParts, TableSplitHwpxLowerer,
+    TableSplitHwpxLoweringReceipt, TableSplitHwpxPlan, TableSplitHwpxReadback,
+    TableSplitHwpxReader, TableSplitHwpxRequest, TableSplitHwpxRequestDraft,
+    TableStyleHwpxCellValue, TableStyleHwpxError, TableStyleHwpxLimits, TableStyleHwpxLoweredParts,
+    TableStyleHwpxLowerer, TableStyleHwpxLoweringReceipt, TableStyleHwpxPartBinding,
+    TableStyleHwpxReadback, TableStyleHwpxReader, TableStyleHwpxValueCatalog,
 };
 pub use text_flow::{
     FieldBegin, FieldEnd, FieldType, HANCOM_2020_PARAGRAPH_NAMESPACE, OpaqueTextElement,

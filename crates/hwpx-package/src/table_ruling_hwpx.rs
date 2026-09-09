@@ -20,6 +20,7 @@ use crate::{
 };
 
 mod merge_split_hwpx;
+mod partition_hwpx;
 mod properties_hwpx;
 mod style_hwpx;
 
@@ -30,6 +31,12 @@ pub use merge_split_hwpx::{
     TableMergeSplitHwpxLoweringReceipt, TableMergeSplitHwpxOperation,
     TableMergeSplitHwpxPartBinding, TableMergeSplitHwpxPlan, TableMergeSplitHwpxReadback,
     TableMergeSplitHwpxReader, TableMergeSplitHwpxRequest, TableMergeSplitHwpxRequestDraft,
+};
+pub use partition_hwpx::{
+    TABLE_SPLIT_HWPX_PROFILE_ID, TABLE_SPLIT_HWPX_SCHEMA_VERSION, TableSplitHwpxBuilder,
+    TableSplitHwpxError, TableSplitHwpxLimits, TableSplitHwpxLoweredParts, TableSplitHwpxLowerer,
+    TableSplitHwpxLoweringReceipt, TableSplitHwpxPlan, TableSplitHwpxReadback,
+    TableSplitHwpxReader, TableSplitHwpxRequest, TableSplitHwpxRequestDraft,
 };
 pub use properties_hwpx::{
     TABLE_PROPERTIES_HWPX_PROFILE_ID, TablePropertiesHwpxBinding, TablePropertiesHwpxCellValue,
@@ -784,7 +791,66 @@ pub(super) fn render_existing(
     topology_changed: bool,
     limits: &TableRulingHwpxLimits,
 ) -> Result<RenderedParts, TableRulingHwpxError> {
-    if source_state.frame() != target_state.frame()
+    render_existing_profile(
+        header,
+        section,
+        table_ordinal,
+        binding,
+        source_state,
+        target_state,
+        target_grid,
+        topology_changed,
+        false,
+        limits,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(super) fn render_split_existing(
+    header: &[u8],
+    section: &[u8],
+    table_ordinal: usize,
+    binding: &TableRulingHwpxBinding,
+    source_state: &TableRulingState,
+    target_state: &TableRulingState,
+    target_grid: &TableGrid,
+    limits: &TableRulingHwpxLimits,
+) -> Result<RenderedParts, TableRulingHwpxError> {
+    render_existing_profile(
+        header,
+        section,
+        table_ordinal,
+        binding,
+        source_state,
+        target_state,
+        target_grid,
+        true,
+        true,
+        limits,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn render_existing_profile(
+    header: &[u8],
+    section: &[u8],
+    table_ordinal: usize,
+    binding: &TableRulingHwpxBinding,
+    source_state: &TableRulingState,
+    target_state: &TableRulingState,
+    target_grid: &TableGrid,
+    topology_changed: bool,
+    split_geometry: bool,
+    limits: &TableRulingHwpxLimits,
+) -> Result<RenderedParts, TableRulingHwpxError> {
+    let source_frame = source_state.frame();
+    let target_frame = target_state.frame();
+    let frame_matches = source_frame == target_frame
+        || split_geometry
+            && source_frame.left_hwpunit == target_frame.left_hwpunit
+            && source_frame.top_hwpunit == target_frame.top_hwpunit
+            && source_frame.width_hwpunit == target_frame.width_hwpunit;
+    if !frame_matches
         || source_state.table_properties_sha256() != target_state.table_properties_sha256()
     {
         return Err(TableRulingHwpxError::PlanBindingMismatch);
@@ -2063,7 +2129,7 @@ fn insertion_context_digest(
     Ok(hex(digest.finalize()))
 }
 
-fn insertion_wrapper(
+pub(super) fn insertion_wrapper(
     template_section: &[u8],
     table_ordinal: usize,
 ) -> Result<Vec<u8>, TableRulingHwpxError> {
