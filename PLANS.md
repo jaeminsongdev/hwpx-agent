@@ -76,9 +76,9 @@
   55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
 - TABLE-020 binds complete visual style; TABLE-016/017 bind full cell merge/split topology and content policies; TABLE-010/011 now split/join admitted formula-free/no-header/no-caption top-level wrappers with exact separator, common-lattice, state/flow/part binding and strict static reopen, without a Hangul/render claim.
 - TABLE-012/013/014/015 share an exact structure/HWPX model with full state/grid/flow binding, formula/cache rebase, edge collapse rules and pagination/caption reopen.
-- The ruling slice adds TABLE-002/003 as one exact ruling/topology model: outer/local/full strokes,
-  directional diagonals, structural merge, transparent erase and exact relift/lower/readback; its
-  five-case target batch/oracle is static-ready without Hangul/render promotion, with formula fail-closed.
+- The ruling slice adds TABLE-002/003 as one exact ruling/topology model with formula fail-closed;
+  its five-case target batch/oracle is static-ready, while attempt 01 timed out at first open awaiting
+  user access and remains failed evidence; the PowerShell 5.1 null-progress defect is regression-fixed.
 - The property HWPX slice maps TABLE-007/008/009/047 through typed catalogs, exact diagonal intent,
   part/state/grid/flow checks and closed-package semantic reopen; no Hangul/render claim was added.
 - The layout-mode slice gives TABLE-051/052/053 distinct fixed/content/page allocation with closed
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. At `max`, finish the TABLE-032/033 exact-source run with the user access click, then lower the remaining 4 unit-only rows and close all 42 integration-only target oracles before automation/differentials; reuse completed P06-07 evidence without relabeling it.
+1. At `max`, finish TABLE-002/003 target and TABLE-032/033 exact-source runs with user access clicks, then lower the remaining 4 unit-only rows and close all 42 integration-only target oracles before automation/differentials; reuse completed P06-07 evidence without relabeling it.
 2. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
 
 ## Context pack and archive pointers

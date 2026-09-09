@@ -72,6 +72,123 @@ function Test-ManifestIdentityFailureBeforeCom {
     return $observed -ceq 'TABLE_RULING_TARGET_BATCH_READBACK_MANIFEST_IDENTITY_MISMATCH'
 }
 
+function Test-ProgressJournalRegression {
+    $tokens = $null
+    $errors = $null
+    $ast = [System.Management.Automation.Language.Parser]::ParseFile(
+        $parentPath, [ref]$tokens, [ref]$errors
+    )
+    if ($errors.Count -ne 0) {
+        return [ordered]@{ emits_null = $false; exact = $false; empty_string_rejected = $false }
+    }
+    $definition = $ast.Find({
+        param($node)
+        $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and
+            $node.Name -ceq 'Read-ProgressJournal'
+    }, $true)
+    if ($null -eq $definition) {
+        return [ordered]@{ emits_null = $false; exact = $false; empty_string_rejected = $false }
+    }
+    . ([scriptblock]::Create($definition.Extent.Text))
+
+    $engineAst = [System.Management.Automation.Language.Parser]::ParseFile(
+        $enginePath, [ref]$tokens, [ref]$errors
+    )
+    if ($errors.Count -ne 0) {
+        return [ordered]@{ emits_null = $false; exact = $false; empty_string_rejected = $false }
+    }
+    foreach ($functionName in @('Write-NewUtf8File', 'Write-ProgressEvent')) {
+        $engineDefinition = $engineAst.Find({
+            param($node)
+            $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and
+                $node.Name -ceq $functionName
+        }, $true)
+        if ($null -eq $engineDefinition) {
+            return [ordered]@{ emits_null = $false; exact = $false; empty_string_rejected = $false }
+        }
+        . ([scriptblock]::Create($engineDefinition.Extent.Text))
+    }
+
+    $temporaryRoot = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath()).TrimEnd('\')
+    $directory = Join-Path $temporaryRoot (
+        'hwpx-agent-p06-ruling-progress-' + [guid]::NewGuid().ToString('N')
+    )
+    [void][System.IO.Directory]::CreateDirectory($directory)
+    $validPath = Join-Path $directory 'valid.jsonl'
+    $invalidPath = Join-Path $directory 'invalid.jsonl'
+    $emittedPath = Join-Path $directory 'emitted.jsonl'
+    $script:progressFile = $emittedPath
+    $script:progressSequence = 0
+    Write-ProgressEvent -Phase 'preflight' -State 'pass'
+    $emitted = Get-Content -LiteralPath $emittedPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    $emitsNull = $null -eq $emitted.case_id -and $null -eq $emitted.feature_id -and
+        [long]$emitted.case_index -eq 0
+    $base = [ordered]@{
+        schema_version = 'hwpx-agent.p06-09-table-ruling-batch-progress/v1'
+        sequence = 1
+        recorded_at_utc = '2026-09-09T00:00:00.0000000Z'
+        worker_process_id = 41364
+        hwp_process_id = $null
+        case_index = 0
+        case_id = $null
+        feature_id = $null
+        phase = 'preflight'
+        state = 'pass'
+        raw_document_text_present = $false
+    }
+    $com = [ordered]@{}
+    $open = [ordered]@{}
+    foreach ($key in $base.Keys) {
+        $com[$key] = $base[$key]
+        $open[$key] = $base[$key]
+    }
+    $com.sequence = 2
+    $com.hwp_process_id = 24436
+    $com.phase = 'com_create'
+    $open.sequence = 3
+    $open.hwp_process_id = 24436
+    $open.case_index = 1
+    $open.case_id = 'table-002-draw-outer'
+    $open.feature_id = 'TABLE-002'
+    $open.phase = 'open_input'
+    $open.state = 'running'
+    $encoding = [System.Text.UTF8Encoding]::new($false)
+    $validJson = @($base, $com, $open) | ForEach-Object { $_ | ConvertTo-Json -Compress }
+    [System.IO.File]::WriteAllText($validPath, ($validJson -join "`n"), $encoding)
+
+    $valid = Read-ProgressJournal -Path $validPath
+    $exact = [bool]$valid.valid -and [int]$valid.event_count -eq 3 -and
+        [string]$valid.last_phase -ceq 'open_input' -and
+        [string]$valid.last_state -ceq 'running' -and
+        [string]$valid.observed_phase -ceq 'open_input' -and
+        [string]$valid.observed_case_id -ceq 'table-002-draw-outer' -and
+        [string]$valid.observed_feature_id -ceq 'TABLE-002' -and
+        [bool]$valid.window_visible_for_user_access
+
+    $base.case_id = ''
+    $base.feature_id = ''
+    $invalidJson = @($base, $com, $open) | ForEach-Object { $_ | ConvertTo-Json -Compress }
+    [System.IO.File]::WriteAllText($invalidPath, ($invalidJson -join "`n"), $encoding)
+    $invalid = Read-ProgressJournal -Path $invalidPath
+    $emptyStringRejected = -not [bool]$invalid.valid -and [int]$invalid.event_count -eq 0
+
+    foreach ($candidate in @($validPath, $invalidPath, $emittedPath)) {
+        if ([System.IO.File]::Exists($candidate)) { [System.IO.File]::Delete($candidate) }
+    }
+    if ([System.IO.Directory]::Exists($directory) -and
+        [System.IO.Path]::GetFullPath($directory).StartsWith(
+            $temporaryRoot + '\hwpx-agent-p06-ruling-progress-',
+            [System.StringComparison]::OrdinalIgnoreCase
+        )) {
+        [System.IO.Directory]::Delete($directory, $false)
+    }
+    return [ordered]@{
+        emits_null = $emitsNull
+        exact = $exact
+        empty_string_rejected = $emptyStringRejected
+    }
+}
+
 $caseBindings = @(
     @('table-002-draw-outer', 'TABLE-002', 'table.draw', 'table-002-draw-outer.hwpx'),
     @('table-002-draw-topology', 'TABLE-002', 'table.draw', 'table-002-draw-topology.hwpx'),
@@ -97,12 +214,16 @@ $rulingSemantics = @(
 $semanticsPresent = @($rulingSemantics | Where-Object {
     $all -notmatch [regex]::Escape($_)
 }).Count -eq 0
+$progressRegression = Test-ProgressJournalRegression
 
 $checks = [ordered]@{
     all_scripts_parse = @($sources.Values | Where-Object errors -ne 0).Count -eq 0
     exact_wrapper_schema = $parent -match 'hwpx-agent\.p06-09-hancom-2020-table-ruling-target-batch-readback/v1'
     exact_engine_schema = $engine -match 'hwpx-agent\.p06-09-hancom-2020-table-ruling-target-batch-engine/v1'
     exact_progress_schema = $all -match 'hwpx-agent\.p06-09-table-ruling-batch-progress/v1'
+    progress_null_fields_emit_json_null = [bool]$progressRegression.emits_null
+    timeout_progress_prefix_roundtrip = [bool]$progressRegression.exact
+    progress_empty_string_rejected = [bool]$progressRegression.empty_string_rejected
     exact_fixture_schema = $all -match 'hwpx-agent\.p06-09-table-ruling-target-fixture/v1'
     exact_fixture_manifest_digest = ([regex]::Matches(
         $all, '8296cf4057c1cb6b27c800c15694866008c31cfa290cd6863321179c1efda543'

@@ -1,6 +1,6 @@
 # P06-09 TABLE-002/003 table ruling HWPX adapter report
 
-- Generated: 2026-09-09
+- Generated: 2026-09-10
 - Evidence profile: `hwpx-agent.table-ruling-hwpx.hancom-2020/1`
 - Model profile: `hwpx-agent.table-ruling/v1`
 - Scope: current repository, synthetic static Hancom 2020 HWPX integration and target tooling
@@ -36,7 +36,7 @@ module or generating UI input.
 | Target oracle bounded/unit tests | 2/2 PASS |
 | Deterministic target generations | 5 files byte-identical across two create-only runs |
 | Synthetic target-oracle self-identity cases | 5/5 PASS; not licensed-Hangul evidence |
-| Batch wrapper static contract | 31/31 PASS in PowerShell 7 and Windows PowerShell x86 |
+| Batch wrapper static contract | 34/34 PASS in PowerShell 7 and Windows PowerShell x86 |
 | Complete reader: physical boundaries, grid, edges, payloads, properties | PASS |
 | Outer rectangle with exact insertion/template/native-ID binding | PASS |
 | Full row then column strokes and local split | exact static readback PASS |
@@ -59,9 +59,20 @@ module or generating UI input.
 | Strict matrix/ledger/nonclaim audit | PASS; 61 rows, green 0/61, 120-line ledger |
 
 The adapter fixtures and five generated candidates are bounded synthetic HWPX packages. Target
-manifest `8296cf40...da543` is deterministic, but the candidates have not been opened or saved by
-Hangul. No user document, Hangul process, UI input, COM/HAction execution, PDF renderer or
-automation differential was used for this report.
+manifest `8296cf40...da543` is deterministic. Licensed-target attempt 01 reached the exact current-PC
+binary and the first `TABLE-002` `open_input`, then timed out awaiting the user access approval. The
+watchdog cleaned exactly one owned process, all five inputs remained exact, and no HWPX or PDF output
+was created. The failed wrapper trace SHA-256 is
+`e2245f4a2b83da7fe9d13dc056601be1b83610e86c6cff5de21d205ab68ac295`; the preserved raw progress
+SHA-256 is `6405d82fa700ebd0ebcae97f8d6a03ae3ee7267605038c83b412772ab2be6ee4`.
+
+That attempt also exposed a fail-closed evidence defect: Windows PowerShell 5.1 coerced optional
+string parameters from null to empty strings, so the parent rejected the otherwise bounded progress
+journal and its final stub lost the observed case. The engine now writes explicit JSON nulls, and a
+dynamic PowerShell 7/x86 regression proves the exact three-event timeout prefix while continuing to
+reject empty-string substitution. The original failed trace and journal remain unchanged. This is
+diagnostic evidence only, not a Hangul save/reopen, render, automation or differential promotion.
+No user document was scanned or modified.
 
 ## Conformance impact
 

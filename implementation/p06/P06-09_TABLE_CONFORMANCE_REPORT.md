@@ -171,7 +171,9 @@ The machine-readable authority is
   1x1 native wrapper. Structural formula topology changes remain native fail-closed; no licensed
   Hangul execution or renderer result is claimed. A deterministic five-case target generator,
   one-session x86 STA batch wrapper and independent renderer-cache-stripping oracle are now
-  static-ready for all nine ruling actions; this tooling readiness does not promote either row.
+  static-ready for all nine ruling actions. Attempt 01 reached the exact licensed binary and first
+  input open, then timed out awaiting user access with no output; it remains failed evidence. The
+  exposed PowerShell 5.1 optional-progress null defect is regression-fixed without row promotion.
 - The merge/split preserving HWPX adapter covers TABLE-016/017 with the complete domain content
   policies. Merge preserves the top-left master and removes only newly internal edges; split uses
   exact row-major identities and a source-catalog-bound edge line. Paragraph blocks remain exact,
