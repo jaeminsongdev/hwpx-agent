@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 15 |
-| direct `integration_passed` | 25 |
-| direct `unit_passed` | 21 |
+| direct `integration_passed` | 33 |
+| direct `unit_passed` | 13 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -54,9 +54,12 @@ The machine-readable authority is
   preferred widths, and fit-page fills the exact body width. All three reopen through the closed
   package fixture with exact formula/cache, pagination-policy and non-section-part preservation;
   no licensed Hangul target-build or render result is inferred.
-- The aggregate planner adds bounded selection-to-formula unit evidence for block, horizontal and
-  vertical `SUM`/`AVG`/`PRODUCT`. Eight previously catalog-only rows move to unit evidence while
-  the already stronger horizontal-sum oracle remains unchanged.
+- The aggregate planner and preserving HWPX adapter cover all block, horizontal and vertical
+  `SUM`/`AVG`/`PRODUCT` combinations. Eight rows now have static integration evidence through one
+  exact formula-free/unmerged source profile and empty destination, with full state/grid/flow,
+  payload/property/edge, pagination/caption and closed-package preservation. TABLE-025 runs as a
+  regression while its already stronger target oracle remains unchanged. No formula evaluation,
+  verified cache, licensed Hangul execution or render result is inferred.
 - The thousands-format planner changes only the grouping flag on an exact selection of existing
   numeric formula-cell formats. TABLE-032/033 move to unit evidence while decimal places, formula
   AST and cache remain exact; unsupported formats fail closed.
@@ -162,7 +165,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-131 missing validation instances, 61 unverified automation runtime rows and 61 missing
+107 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -170,13 +173,11 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. run the requested P06-07 exact target-v2 save/reopen, page-count, PDF repeat-header and caption
-   oracle on this PC's licensed Hangul 2020 without silently interacting with permission/UI prompts;
-2. lower the remaining 21 unit-only rows through preserving HWPX adapters;
-3. close the 25 integration-only target oracles;
-4. supply remaining feature-specific validations, exact current-target automation bindings and safe
+1. lower the remaining 13 unit-only rows through preserving HWPX adapters;
+2. close the 33 integration-only target oracles;
+3. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
-5. regenerate until all 61 rows are green, then run the P06 hard Gate.
+4. regenerate until all 61 rows are green, then run the P06 hard Gate.
 
 P06-09 and P06 remain in progress. No production, other-PC/version or whole-product completion is
 claimed.

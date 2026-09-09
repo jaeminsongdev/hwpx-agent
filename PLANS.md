@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 21 unit, 25 integration and 15 oracle rows but 0/61 release-green; row closures remain |
+| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 13 unit, 33 integration and 15 oracle rows but 0/61 release-green; row closures remain |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -71,12 +71,11 @@
 - Commit `97b3008` introduced the deterministic 61-row matrix. A row is green only when direct
   HWPX oracle, every required validation/fixture, negative and rollback evidence, current-target
   automation runtime and exact differential all pass.
-- Current authority reports 0/61 green with direct stages: 0 cataloged, 21 unit-passed,
-  25 integration-passed and 15 oracle-verified. Automation is six candidate-unverified plus
+- Current authority reports 0/61 green with direct stages: 0 cataloged, 13 unit-passed,
+  33 integration-passed and 15 oracle-verified. Automation is six candidate-unverified plus
   55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
 - TABLE-020 binds complete visual style; TABLE-016/017 bind full cell merge/split topology and content policies; TABLE-010/011 now split/join admitted formula-free/no-header/no-caption top-level wrappers with exact separator, common-lattice, state/flow/part binding and strict static reopen, without a Hangul/render claim.
-- TABLE-012/013/014/015 share one exact row/column structure model and preserving HWPX adapter with
-  full state/grid/flow binding, formula/cache rebase, edge collapse rules and pagination/caption reopen.
+- TABLE-012/013/014/015 share an exact structure/HWPX model with full state/grid/flow binding, formula/cache rebase, edge collapse rules and pagination/caption reopen.
 - The ruling slice adds TABLE-002/003 as one exact ruling/topology model: outer rectangle, full and
   local strokes, directional diagonals, structural shared-edge merge, transparent nonstructural
   erase and exact closed-package relift/lower/readback; structural formula mutation stays fail-closed.
@@ -86,11 +85,12 @@
   package preservation: Rust 7/7, contract 4/4 and prior FULL checks PASS; no Hangul claim was added.
 - The placement HWPX slice maps TABLE-034/036/037/038 across all position, attachment, wrap/flow and
   margins while preserving inactive fields, merged siblings, formula/cache and pagination; Rust 7/7 and tamper 4/4 PASS without a Hangul claim.
-- TABLE-042/043/044/055 have the direct P06-07 oracle. The remaining 21 unit rows still need HWPX
-  lowering; all 25 integration rows still need exact target oracles and later automation evidence.
-- Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`,
-  `implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json`,
-  `protocol/private/p06-table-conformance-v1.json`.
+- TABLE-022/023/024/026/027/028/029/030 share an exact adapter across all nine axis/function mappings;
+  formula-free unmerged sources preserve complete state/grid/flow/package evidence without a Hangul claim.
+- TABLE-042/043/044/055 have the direct P06-07 oracle. The remaining 13 unit rows still need HWPX
+  lowering; all 33 integration rows still need exact target oracles and later automation evidence.
+- Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`, the current conformance JSON,
+  and `protocol/private/p06-table-conformance-v1.json`.
 
 ## Open risks and holds
 
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. At `max`, lower the remaining 21 unit-only rows and close all 25 integration-only target oracles before automation/differentials; reuse the completed P06-07 target-v2 lifecycle evidence without relabeling it.
+1. At `max`, lower the remaining 13 unit-only rows and close all 33 integration-only target oracles before automation/differentials; reuse the completed P06-07 target-v2 lifecycle evidence without relabeling it.
 2. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
 
 ## Context pack and archive pointers

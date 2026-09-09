@@ -19,12 +19,20 @@ use crate::{
     TableLayoutHwpxError, TableLayoutHwpxLimits, TableLayoutHwpxReader,
 };
 
+mod aggregate_hwpx;
 mod merge_split_hwpx;
 mod partition_hwpx;
 mod properties_hwpx;
 mod structure_hwpx;
 mod style_hwpx;
 
+pub use aggregate_hwpx::{
+    TABLE_AGGREGATE_HWPX_PROFILE_ID, TABLE_AGGREGATE_HWPX_SCHEMA_VERSION,
+    TableAggregateHwpxBuilder, TableAggregateHwpxError, TableAggregateHwpxLimits,
+    TableAggregateHwpxLoweredParts, TableAggregateHwpxLowerer, TableAggregateHwpxLoweringReceipt,
+    TableAggregateHwpxPlan, TableAggregateHwpxReadback, TableAggregateHwpxReader,
+    TableAggregateHwpxRequest, TableAggregateHwpxRequestDraft,
+};
 pub use merge_split_hwpx::{
     TABLE_MERGE_SPLIT_HWPX_PROFILE_ID, TABLE_MERGE_SPLIT_HWPX_SCHEMA_VERSION,
     TableMergeSplitHwpxBuilder, TableMergeSplitHwpxError, TableMergeSplitHwpxLimits,
@@ -338,7 +346,15 @@ impl TableRulingHwpxReader {
         binding: &TableRulingHwpxBinding,
         limits: TableRulingHwpxLimits,
     ) -> Result<TableRulingHwpxReadback, TableRulingHwpxError> {
-        read_existing(header, section, table_ordinal, binding, &limits, false)
+        read_existing(
+            header,
+            section,
+            table_ordinal,
+            binding,
+            &limits,
+            false,
+            false,
+        )
     }
 
     pub(crate) fn read_existing_preserving_caption(
@@ -348,7 +364,17 @@ impl TableRulingHwpxReader {
         binding: &TableRulingHwpxBinding,
         limits: &TableRulingHwpxLimits,
     ) -> Result<TableRulingHwpxReadback, TableRulingHwpxError> {
-        read_existing(header, section, table_ordinal, binding, limits, true)
+        read_existing(header, section, table_ordinal, binding, limits, true, false)
+    }
+
+    pub(crate) fn read_existing_aggregate_preserving_caption(
+        header: &[u8],
+        section: &[u8],
+        table_ordinal: usize,
+        binding: &TableRulingHwpxBinding,
+        limits: &TableRulingHwpxLimits,
+    ) -> Result<TableRulingHwpxReadback, TableRulingHwpxError> {
+        read_existing(header, section, table_ordinal, binding, limits, true, true)
     }
 }
 
@@ -1911,6 +1937,7 @@ fn read_existing(
     binding: &TableRulingHwpxBinding,
     limits: &TableRulingHwpxLimits,
     allow_caption: bool,
+    aggregate_formula: bool,
 ) -> Result<TableRulingHwpxReadback, TableRulingHwpxError> {
     let layout = if allow_caption {
         TableLayoutHwpxReader::read_in_section_preserving_caption(
@@ -1936,15 +1963,23 @@ fn read_existing(
     let formula_count = formula_field_count(&document, root)?;
     let formula = match formula_count {
         0 => None,
-        1 => Some(
+        1 => Some(if aggregate_formula {
+            TableFormulaHwpxReader::read_aggregate_in_section(
+                section,
+                table_ordinal,
+                limits.formula_hwpx,
+                limits.formula,
+            )?
+            .formula
+        } else {
             TableFormulaHwpxReader::read_in_section_preserving_merged_topology(
                 section,
                 table_ordinal,
                 limits.formula_hwpx,
                 limits.formula,
             )?
-            .formula,
-        ),
+            .formula
+        }),
         _ => return Err(TableRulingHwpxError::UnsupportedFormulaShape),
     };
 

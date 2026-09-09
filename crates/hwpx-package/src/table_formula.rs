@@ -15,6 +15,8 @@ use crate::{
 };
 
 pub const TABLE_FORMULA_HWPX_PROFILE_ID: &str = "hwpx-agent.table-formula-hwpx.hancom-2020/1";
+pub(crate) const TABLE_AGGREGATE_FORMULA_HWPX_PROFILE_ID: &str =
+    "hwpx-agent.table-aggregate-formula-hwpx.hancom-2020/1";
 
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const SECTION_NS: &str = "http://www.hancom.co.kr/hwpml/2011/section";
@@ -117,6 +119,15 @@ pub struct TableFormulaHwpxLoweringReceipt {
     pub modified_text_count: usize,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct TableAggregateFormulaHwpxInsertionReceipt {
+    pub source_sha256: [u8; 32],
+    pub output_sha256: [u8; 32],
+    pub target_formula_sha256: [u8; 32],
+    pub owner: CellCoordinate,
+    pub inserted_field_count: usize,
+}
+
 #[derive(Debug, Error)]
 pub enum TableFormulaHwpxError {
     #[error("table formula HWPX limit is invalid")]
@@ -202,7 +213,7 @@ impl TableFormulaHwpxReader {
         limits: TableFormulaHwpxLimits,
         formula_limits: FormulaLimits,
     ) -> Result<TableFormulaHwpxReadback, TableFormulaHwpxError> {
-        Ok(read_shape(bytes, table_ordinal, limits, formula_limits, false)?.readback)
+        Ok(read_shape(bytes, table_ordinal, limits, formula_limits, false, false)?.readback)
     }
 
     pub(crate) fn read_in_section_preserving_merged_topology(
@@ -211,7 +222,16 @@ impl TableFormulaHwpxReader {
         limits: TableFormulaHwpxLimits,
         formula_limits: FormulaLimits,
     ) -> Result<TableFormulaHwpxReadback, TableFormulaHwpxError> {
-        Ok(read_shape(bytes, table_ordinal, limits, formula_limits, true)?.readback)
+        Ok(read_shape(bytes, table_ordinal, limits, formula_limits, true, false)?.readback)
+    }
+
+    pub(crate) fn read_aggregate_in_section(
+        bytes: &[u8],
+        table_ordinal: usize,
+        limits: TableFormulaHwpxLimits,
+        formula_limits: FormulaLimits,
+    ) -> Result<TableFormulaHwpxReadback, TableFormulaHwpxError> {
+        Ok(read_shape(bytes, table_ordinal, limits, formula_limits, false, true)?.readback)
     }
 
     /// Counts selected-profile formulas in one selected table after applying the same exact-shape
@@ -227,7 +247,7 @@ impl TableFormulaHwpxReader {
         formula_limits: FormulaLimits,
     ) -> Result<usize, TableFormulaHwpxError> {
         Ok(
-            read_shape(bytes, table_ordinal, limits, formula_limits, false)?
+            read_shape(bytes, table_ordinal, limits, formula_limits, false, false)?
                 .readback
                 .formula_field_count,
         )
@@ -326,6 +346,81 @@ impl TableFormulaHwpxLowerer {
             true,
         )
     }
+
+    pub(crate) fn insert_aggregate_in_section(
+        source: &[u8],
+        table_ordinal: usize,
+        target: &FormulaCell,
+        dimensions: FormulaGridDimensions,
+        limits: TableFormulaHwpxLimits,
+        formula_limits: FormulaLimits,
+    ) -> Result<(Vec<u8>, TableAggregateFormulaHwpxInsertionReceipt), TableFormulaHwpxError> {
+        let native_formula = aggregate_native_formula(target, formula_limits)?;
+        let result = cache_decimal_text(target.cache())?;
+        if native_formula.len() > limits.0.text_bytes || result.len() > limits.0.text_bytes {
+            return Err(TableFormulaHwpxError::InvalidText);
+        }
+        let command = format!("{native_formula}??{NATIVE_GENERAL_FORMAT};;{result}");
+        if command.len() > limits.0.text_bytes {
+            return Err(TableFormulaHwpxError::InvalidText);
+        }
+
+        let document = parse_document(source, limits)?;
+        validate_document_envelope(&document)?;
+        validate_section_root(&document)?;
+        let table = table_indexes(&document, limits)?
+            .get(table_ordinal)
+            .copied()
+            .ok_or(TableFormulaHwpxError::UnsupportedShape)?;
+        let grid = read_cells(&document, table, limits, false)?;
+        if grid.rows != dimensions.rows || grid.columns != dimensions.columns {
+            return Err(TableFormulaHwpxError::UnsupportedShape);
+        }
+        if !formula_fields(&document, table, limits)?.is_empty() {
+            return Err(TableFormulaHwpxError::UnsupportedShape);
+        }
+        let cell = grid
+            .cells
+            .iter()
+            .find_map(|(index, coordinate)| (*coordinate == target.owner()).then_some(*index))
+            .ok_or(TableFormulaHwpxError::UnsupportedShape)?;
+        let run = empty_cell_run(&document, cell, limits)?;
+        let span = element(&document, run)?
+            .content_span()
+            .ok_or(TableFormulaHwpxError::UnsupportedShape)?;
+        let (begin_id, field_id) = reserve_field_ids(&document)?;
+        let prefix = element(&document, run)?.name().prefix();
+        let replacement = aggregate_field_xml(
+            prefix,
+            begin_id,
+            field_id,
+            &command,
+            &native_formula,
+            &result,
+        );
+        let output = apply_edits(source, &mut [ByteEdit::new(span, replacement)], limits)?;
+        let readback = TableFormulaHwpxReader::read_aggregate_in_section(
+            &output,
+            table_ordinal,
+            limits,
+            formula_limits,
+        )?;
+        if readback.rows != dimensions.rows
+            || readback.columns != dimensions.columns
+            || readback.formula != *target
+            || readback.formula_field_count != 1
+        {
+            return Err(TableFormulaHwpxError::ReadbackMismatch);
+        }
+        let receipt = TableAggregateFormulaHwpxInsertionReceipt {
+            source_sha256: Sha256::digest(source).into(),
+            output_sha256: Sha256::digest(&output).into(),
+            target_formula_sha256: target.canonical_sha256(formula_limits)?,
+            owner: target.owner(),
+            inserted_field_count: 1,
+        };
+        Ok((output, receipt))
+    }
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -344,6 +439,7 @@ fn lower_in_section_profile(
         limits,
         formula_limits,
         allow_merged_cells,
+        false,
     )?;
     if dimensions.rows != source_shape.readback.rows
         || dimensions.columns != source_shape.readback.columns
@@ -367,6 +463,7 @@ fn lower_in_section_profile(
         limits,
         formula_limits,
         allow_merged_cells,
+        false,
     )?;
     if &output_shape.readback.formula != target
         || output_shape.readback.rows != dimensions.rows
@@ -411,6 +508,7 @@ fn read_shape(
     limits: TableFormulaHwpxLimits,
     formula_limits: FormulaLimits,
     allow_merged_cells: bool,
+    aggregate_profile: bool,
 ) -> Result<FormulaShape, TableFormulaHwpxError> {
     let document = parse_document(bytes, limits)?;
     validate_document_envelope(&document)?;
@@ -443,6 +541,7 @@ fn read_shape(
         dimensions,
         limits,
         formula_limits,
+        aggregate_profile,
     )?;
     let owned_spans = [
         field.command_span,
@@ -451,10 +550,15 @@ fn read_shape(
         field.last_result_span,
         field.visible_result_span,
     ];
-    let unowned_sha256 = digest_excluding(bytes, &owned_spans)?;
+    let profile_id = if aggregate_profile {
+        TABLE_AGGREGATE_FORMULA_HWPX_PROFILE_ID
+    } else {
+        TABLE_FORMULA_HWPX_PROFILE_ID
+    };
+    let unowned_sha256 = digest_excluding(bytes, &owned_spans, profile_id)?;
     Ok(FormulaShape {
         readback: TableFormulaHwpxReadback {
-            profile_id: TABLE_FORMULA_HWPX_PROFILE_ID,
+            profile_id,
             rows: grid.rows,
             columns: grid.columns,
             formula: field.formula,
@@ -484,15 +588,15 @@ fn read_field(
     dimensions: FormulaGridDimensions,
     limits: TableFormulaHwpxLimits,
     formula_limits: FormulaLimits,
+    aggregate_profile: bool,
 ) -> Result<FieldReadback, TableFormulaHwpxError> {
     let envelope = validate_field_envelope(document, field_begin, limits)?;
     let parameters = read_field_parameters(document, envelope.parameters, limits)?;
-    if parameters.native_formula.text != NATIVE_LEFT_FORMULA
-        || parameters.result_format.text != NATIVE_GENERAL_FORMAT
+    if parameters.result_format.text != NATIVE_GENERAL_FORMAT
         || parameters.command.text
             != format!(
-                "{NATIVE_LEFT_FORMULA}??{NATIVE_GENERAL_FORMAT};;{}",
-                parameters.last_result.text
+                "{}??{NATIVE_GENERAL_FORMAT};;{}",
+                parameters.native_formula.text, parameters.last_result.text
             )
     {
         return Err(TableFormulaHwpxError::UnsupportedShape);
@@ -502,7 +606,14 @@ fn read_field(
         return Err(TableFormulaHwpxError::UnsupportedShape);
     }
     let decimal = parse_canonical_decimal(parameters.last_result.text, formula_limits)?;
-    let ast = left_prefix_ast(owner, formula_limits)?;
+    let ast = if aggregate_profile {
+        aggregate_ast(parameters.native_formula.text, formula_limits)?
+    } else {
+        if parameters.native_formula.text != NATIVE_LEFT_FORMULA {
+            return Err(TableFormulaHwpxError::UnsupportedShape);
+        }
+        left_prefix_ast(owner, formula_limits)?
+    };
     let formula = FormulaCell::from_draft(
         FormulaCellDraft {
             schema_version: TABLE_FORMULA_SCHEMA_VERSION.to_owned(),
@@ -713,6 +824,48 @@ fn left_prefix_ast(
     )?)
 }
 
+fn aggregate_ast(
+    native_formula: &str,
+    formula_limits: FormulaLimits,
+) -> Result<FormulaAst, TableFormulaHwpxError> {
+    let source = native_formula
+        .strip_prefix('=')
+        .ok_or(TableFormulaHwpxError::UnsupportedFormula)?;
+    let ast = FormulaAst::parse(source, formula_limits)?;
+    if ast.canonical_formula(formula_limits)? != source {
+        return Err(TableFormulaHwpxError::UnsupportedFormula);
+    }
+    let FormulaExpression::Function {
+        function,
+        arguments,
+    } = ast.expression()
+    else {
+        return Err(TableFormulaHwpxError::UnsupportedFormula);
+    };
+    if !matches!(
+        function,
+        FormulaFunction::Sum | FormulaFunction::Average | FormulaFunction::Product
+    ) || arguments.len() != 1
+    {
+        return Err(TableFormulaHwpxError::UnsupportedFormula);
+    }
+    let FormulaExpression::Range { range } = &arguments[0] else {
+        return Err(TableFormulaHwpxError::UnsupportedFormula);
+    };
+    if [
+        range.start.row_kind,
+        range.start.column_kind,
+        range.end.row_kind,
+        range.end.column_kind,
+    ]
+    .into_iter()
+    .any(|kind| kind != FormulaReferenceKind::Relative)
+    {
+        return Err(TableFormulaHwpxError::UnsupportedFormula);
+    }
+    Ok(ast)
+}
+
 fn require_left_prefix(formula: &FormulaCell) -> Result<(), TableFormulaHwpxError> {
     let owner = formula.owner();
     let FormulaExpression::Function {
@@ -741,6 +894,94 @@ fn require_left_prefix(formula: &FormulaCell) -> Result<(), TableFormulaHwpxErro
         return Err(TableFormulaHwpxError::UnsupportedFormula);
     }
     Ok(())
+}
+
+fn aggregate_native_formula(
+    formula: &FormulaCell,
+    formula_limits: FormulaLimits,
+) -> Result<String, TableFormulaHwpxError> {
+    if formula.number_format() != FormulaNumberFormat::General {
+        return Err(TableFormulaHwpxError::UnsupportedFormula);
+    }
+    let canonical = formula.ast().canonical_formula(formula_limits)?;
+    let native = format!("={canonical}");
+    if native
+        .bytes()
+        .any(|byte| matches!(byte, b'&' | b'<' | b'>' | b'\'' | b'"'))
+        || aggregate_ast(&native, formula_limits)? != *formula.ast()
+    {
+        return Err(TableFormulaHwpxError::UnsupportedFormula);
+    }
+    Ok(native)
+}
+
+fn empty_cell_run(
+    document: &PreservingXmlDocument,
+    cell: usize,
+    limits: TableFormulaHwpxLimits,
+) -> Result<usize, TableFormulaHwpxError> {
+    let sub_list = unique_named_child(document, &child_indexes(document, cell)?, "subList")?;
+    let paragraphs = child_indexes(document, sub_list)?;
+    if paragraphs.len() != 1 || !has_paragraph_name(element(document, paragraphs[0])?, "p") {
+        return Err(TableFormulaHwpxError::UnsupportedShape);
+    }
+    let runs = child_indexes(document, paragraphs[0])?;
+    if runs.len() != 1 || !has_paragraph_name(element(document, runs[0])?, "run") {
+        return Err(TableFormulaHwpxError::UnsupportedShape);
+    }
+    let texts = child_indexes(document, runs[0])?;
+    if texts.len() != 1
+        || !has_paragraph_name(element(document, texts[0])?, "t")
+        || !leaf_text(document, texts[0], limits)?.is_empty()
+    {
+        return Err(TableFormulaHwpxError::UnsupportedShape);
+    }
+    validate_attributes(element(document, texts[0])?, &[])?;
+    Ok(runs[0])
+}
+
+fn reserve_field_ids(
+    document: &PreservingXmlDocument,
+) -> Result<(u64, u64), TableFormulaHwpxError> {
+    let mut maximum = 0_u64;
+    for value in document.elements() {
+        if has_paragraph_name(value, "fieldBegin") {
+            maximum = maximum.max(required_positive_u64(value, "id")?);
+            maximum = maximum.max(required_positive_u64(value, "fieldid")?);
+        } else if has_paragraph_name(value, "fieldEnd") {
+            maximum = maximum.max(required_positive_u64(value, "beginIDRef")?);
+            maximum = maximum.max(required_positive_u64(value, "fieldid")?);
+        }
+    }
+    let begin_id = maximum
+        .checked_add(1)
+        .ok_or(TableFormulaHwpxError::InvalidNumber)?;
+    let field_id = begin_id
+        .checked_add(1)
+        .ok_or(TableFormulaHwpxError::InvalidNumber)?;
+    Ok((begin_id, field_id))
+}
+
+fn aggregate_field_xml(
+    prefix: Option<&str>,
+    begin_id: u64,
+    field_id: u64,
+    command: &str,
+    formula: &str,
+    result: &str,
+) -> Vec<u8> {
+    let qualified = |name: &str| prefix.map_or_else(|| name.to_owned(), |p| format!("{p}:{name}"));
+    let ctrl = qualified("ctrl");
+    let begin = qualified("fieldBegin");
+    let parameters = qualified("parameters");
+    let integer = qualified("integerParam");
+    let string = qualified("stringParam");
+    let text = qualified("t");
+    let end = qualified("fieldEnd");
+    format!(
+        "<{ctrl}><{begin} id=\"{begin_id}\" type=\"FORMULA\" name=\"\" editable=\"0\" dirty=\"0\" zorder=\"-1\" fieldid=\"{field_id}\"><{parameters} cnt=\"5\" name=\"\"><{integer} name=\"Prop\">8</{integer}><{string} name=\"Command\">{command}</{string}><{string} name=\"Formula\">{formula}</{string}><{string} name=\"ResultFormat\">{NATIVE_GENERAL_FORMAT}</{string}><{string} name=\"LastResult\">{result}</{string}></{parameters}></{begin}></{ctrl}><{text}>{result}</{text}><{ctrl}><{end} beginIDRef=\"{begin_id}\" fieldid=\"{field_id}\"/></{ctrl}><{text}/>"
+    )
+    .into_bytes()
 }
 
 fn cache_decimal_text(cache: &FormulaCache) -> Result<String, TableFormulaHwpxError> {
@@ -1257,11 +1498,12 @@ fn apply_edits(
 fn digest_excluding(
     source: &[u8],
     spans: &[XmlByteSpan],
+    profile_id: &str,
 ) -> Result<[u8; 32], TableFormulaHwpxError> {
     let mut sorted = spans.to_vec();
     sorted.sort_unstable_by_key(|span| span.start());
     let mut digest = Sha256::new();
-    digest.update(TABLE_FORMULA_HWPX_PROFILE_ID.as_bytes());
+    digest.update(profile_id.as_bytes());
     digest.update((sorted.len() as u64).to_be_bytes());
     let mut cursor = 0;
     for (ordinal, span) in sorted.iter().enumerate() {

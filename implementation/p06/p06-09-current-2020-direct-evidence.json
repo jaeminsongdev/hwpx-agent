@@ -239,10 +239,10 @@
     },
     {
       "feature_ids": ["TABLE-022", "TABLE-023", "TABLE-024", "TABLE-026", "TABLE-027", "TABLE-028", "TABLE-029", "TABLE-030"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "security"],
       "negative_passed": true,
       "rollback_or_retry_passed": false,
       "differential_state": "not_run",
@@ -250,6 +250,10 @@
         {
           "path": "implementation/p06/P06-09_TABLE_AGGREGATE_REPORT.md",
           "sha256": "a25a02b99c15b29c867d4ded9c9b0f24f74502914449035c076daea8c884e8b4"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_AGGREGATE_HWPX_REPORT.md",
+          "sha256": "86d779039ea5f9ffd97ab721df62a2c3815f31a7878672a151596e39e9267c90"
         }
       ]
     },
