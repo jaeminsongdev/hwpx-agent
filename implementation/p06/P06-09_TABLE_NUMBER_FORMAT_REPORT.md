@@ -60,8 +60,16 @@ document, guessed native format string, raw document/formula trace, UI click aut
 registration, network or registry/system-setting write is present. PowerShell parsing and the
 static contract pass under both PowerShell 7 and x86 Windows PowerShell 5.1.
 
-This qualifier has not been run against Hangul. It has no HWPX artifacts, native mapping or
-save/reopen proof. Running it requires the user to make the six visible format selections and click
+Attempt 01 reached the licensed target, authored the six formulas and saved a baseline HWPX before
+stopping at `manual_format_general`. The user then requested other work, so the watchdog invocation
+was interrupted without touching the dialog. The bounded progress journal ends at sequence 10 in
+that running phase; no ungrouped/grouped artifact or final watchdog receipt exists. The exact
+remaining automation Hwp process was independently matched by executable digest, session and
+`-Automation -Embedding` command line, then stopped; zero Hwp processes remained. The baseline and
+progress journal remain preserved as incomplete failed evidence and are not admitted as a native
+mapping, save/reopen proof or direct adapter source.
+
+A future complete run still requires the user to make the six visible format selections and click
 Hangul's access `허용` button whenever a save approval appears; Computer Use must not click or type.
 Only after a successful receipt and offline structural comparison may a preserving direct adapter
 be considered.

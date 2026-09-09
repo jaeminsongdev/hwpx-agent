@@ -105,14 +105,14 @@ IMPLEMENTATION_MARKERS = {
         "Both request admission",
         "does not lower or patch HWPX",
         "exactly 12 source combinations",
-        "prepared_not_run",
+        "partial run remains non-qualifying",
     ),
     REPORT: (
         "12/12 PASS",
         "24/24 PASS",
         "Direct stage: `unit_passed` (unchanged)",
         "No guessed HWPX lowering was added",
-        "This qualifier has not been run against Hangul",
+        "Attempt 01 reached the licensed target",
         "green 0/61",
     ),
     "implementation/p06/tools/create-hancom-2020-table-number-format-source.ps1": (
@@ -209,7 +209,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
             "new_disposable_table", "formula_actions", "manual_format_dialogs",
             "grouping_remove_actions", "grouping_add_actions", "outputs",
             "native_format_strings_authored_by", "computer_use_click_or_type", "runtime",
-            "actual_hwpx", "actual_hangul",
+            "attempts", "last_attempt", "qualifying_actual_hwpx", "qualifying_actual_hangul",
         },
         "state": {"table", "coverage", "cell", "formula", "merged_cell"},
         "semantics": {"selection", "formats", "mutation", "idempotence"},
@@ -257,7 +257,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     qualification = contract.get("source_qualification")
     if isinstance(qualification, dict):
         expected_qualification = {
-            "state": "prepared_not_run",
+            "state": "attempted_incomplete",
             "worker": "implementation/p06/tools/create-hancom-2020-table-number-format-source.ps1",
             "watchdog": "implementation/p06/tools/run-hancom-2020-table-number-format-source.ps1",
             "static_test": "implementation/p06/tests/Test-Hancom2020TableNumberFormatSource.ps1",
@@ -272,9 +272,22 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
             "outputs": ["baseline", "ungrouped", "grouped"],
             "native_format_strings_authored_by": "user_in_hancom_visible_dialog",
             "computer_use_click_or_type": False,
-            "runtime": "not_run",
-            "actual_hwpx": False,
-            "actual_hangul": False,
+            "runtime": "attempt_01_interrupted_at_manual_format_general",
+            "attempts": 1,
+            "last_attempt": {
+                "progress_events": 10,
+                "last_phase": "manual_format_general",
+                "last_state": "running",
+                "baseline_artifact_created": True,
+                "ungrouped_artifact_created": False,
+                "grouped_artifact_created": False,
+                "final_watchdog_receipt_created": False,
+                "exact_owned_hwp_process_cleaned": True,
+                "remaining_hwp_processes": 0,
+                "failure_evidence_preserved": True,
+            },
+            "qualifying_actual_hwpx": False,
+            "qualifying_actual_hangul": False,
         }
         if qualification != expected_qualification:
             add_error(errors, "source_qualification")

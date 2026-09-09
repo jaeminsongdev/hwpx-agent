@@ -64,11 +64,12 @@ user document, registers a module, invokes network access, changes registry/syst
 automates UI input. Computer Use may capture screens only; every format selection and access
 `허용` click belongs to the user.
 
-Static preparation is not native evidence. Admission requires all three HWPX files and their
+Static preparation and incomplete attempts are not native evidence. Admission requires all three HWPX files and their
 matching receipts, six formula actions, six user-authored format dialogs, six grouping removals and
 six grouping additions, terminal progress, exact cleanup, and offline package comparison that
-proves target-native format grammar plus formula/cache and package-state preservation. Until that
-run succeeds, its status is `prepared_not_run` and every actual-target field remains false.
+proves target-native format grammar plus formula/cache and package-state preservation. Before the
+first attempt its status is `prepared_not_run`; any partial run remains non-qualifying, and every
+actual-target Gate field stays false until the complete qualification succeeds.
 
 ## Gate boundary
 

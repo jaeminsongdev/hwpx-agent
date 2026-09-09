@@ -63,7 +63,7 @@
     "native_result_format_mapping": "not_proven"
   },
   "source_qualification": {
-    "state": "prepared_not_run",
+    "state": "attempted_incomplete",
     "worker": "implementation/p06/tools/create-hancom-2020-table-number-format-source.ps1",
     "watchdog": "implementation/p06/tools/run-hancom-2020-table-number-format-source.ps1",
     "static_test": "implementation/p06/tests/Test-Hancom2020TableNumberFormatSource.ps1",
@@ -78,9 +78,22 @@
     "outputs": ["baseline", "ungrouped", "grouped"],
     "native_format_strings_authored_by": "user_in_hancom_visible_dialog",
     "computer_use_click_or_type": false,
-    "runtime": "not_run",
-    "actual_hwpx": false,
-    "actual_hangul": false
+    "runtime": "attempt_01_interrupted_at_manual_format_general",
+    "attempts": 1,
+    "last_attempt": {
+      "progress_events": 10,
+      "last_phase": "manual_format_general",
+      "last_state": "running",
+      "baseline_artifact_created": true,
+      "ungrouped_artifact_created": false,
+      "grouped_artifact_created": false,
+      "final_watchdog_receipt_created": false,
+      "exact_owned_hwp_process_cleaned": true,
+      "remaining_hwp_processes": 0,
+      "failure_evidence_preserved": true
+    },
+    "qualifying_actual_hwpx": false,
+    "qualifying_actual_hangul": false
   },
   "migration": "protocol/migrations/p06-table-number-format-v0-to-v1.md",
   "policy": "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_POLICY.md",
