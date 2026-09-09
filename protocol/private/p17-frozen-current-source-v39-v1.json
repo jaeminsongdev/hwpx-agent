@@ -1,0 +1,90 @@
+{
+  "schema_version": "hwpx-agent.p17-frozen-current-source-v39/v1",
+  "contract_id": "p17.frozen-current-source.v39.v1",
+  "scope": "immutable_git_blob_historical_source_qualification_verification",
+  "qualification": {
+    "qualification_id": "p17.current-workspace-source.v39.20260908",
+    "qualification_commit": "ebece5eaea645e2de0f2ba50227995969969e623",
+    "base_commit": "103bbf5b0448076e3f95db939b4d186100b6a4f4",
+    "contract": {
+      "path": "implementation/p17/qualification/current-workspace-source-v39-20260908/contract.json",
+      "bytes": 4493,
+      "sha256": "544c68cdea536e234139bd492f7e2812fe1b7ab02826af580f307284835f287c"
+    },
+    "current": {
+      "path": "implementation/p17/qualification/current-workspace-source-v39-20260908/current-host.json",
+      "bytes": 13245,
+      "sha256": "cb0b4acdc16433d858047026587752bb563a763bcd4f8eec48437f74f8941927"
+    },
+    "predecessor": {
+      "path": "implementation/p17/qualification/current-workspace-source-v38-20260907/contract.json",
+      "sha256": "818e41c4e8ee46eea3b0f31b7d769eb56d19f9de46310ed73e37285cb237ebe0"
+    },
+    "receipt": {
+      "path": "artifacts/p17/current-workspace-source-runs/e159d3cf21df48b38bda3f9813d8a0d1/receipt.json",
+      "sha256": "b3d0349d0e0b84900f7200938d8687cbe3b636ffecd62d2670c7197da77815c3",
+      "git_blob_verified": false
+    },
+    "implementation_source_count": 7,
+    "source_successor_count": 26,
+    "guard_source_count": 3,
+    "claim_count": 45
+  },
+  "invariants": [
+    "bounded_git_blob_reads",
+    "exact_full_commit_ids",
+    "fail_closed_typed_errors",
+    "historical_files_from_git_only",
+    "legacy_mutable_validators_not_loaded",
+    "no_replace_refs_lazy_fetch_or_git_locks",
+    "repository_selection_environment_removed",
+    "receipt_digest_bound_without_receipt_blob_claim"
+  ],
+  "claims": {
+    "actual_hangul": false,
+    "historical_v39_committed_source_state_verified": true,
+    "mutable_worktree_files_authoritative": false,
+    "other_pc_or_version": false,
+    "p17_phase_complete": false,
+    "product_complete": false,
+    "production": false,
+    "receipt_blob_verified": false
+  },
+  "source_locks": [
+    {
+      "path": "implementation/p17/P17_FROZEN_CURRENT_WORKSPACE_SOURCE_V39.md",
+      "bytes": 2481,
+      "sha256": "bcdca1369b3112f944dddbc7c6fee7a9c7a2f31c1e3b708cb5f67a59f479563e"
+    },
+    {
+      "path": "protocol/migrations/p17-current-workspace-source-v39-to-frozen-v1.md",
+      "bytes": 1382,
+      "sha256": "f31b253849e476f0e0111c19bd3f2eb4012aad05eb200e344350baee015fe461"
+    },
+    {
+      "path": "tools/p17/frozen_current_source_v39.py",
+      "bytes": 16608,
+      "sha256": "aa4158914be392d29f43d05aad1bfc7695f33cf9deb1a1492a77ea99b1e0d576"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v39.py",
+      "bytes": 1229,
+      "sha256": "34c824df3f8bdeb92744b8a6aeb5d72f8dd8bee1f0ed40e0a279441105f8bc1b"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v39.py",
+      "bytes": 5969,
+      "sha256": "cad3d20736cf62ba4e12dced4fd59cdfbb20eb53862a7356438fbee26d3ed6af"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v39_contract.py",
+      "bytes": 2254,
+      "sha256": "ce825e679a42bad03cfd9e35760a71eb0cba27ad45824e06a853d1cc92985402"
+    },
+    {
+      "path": "tools/p17/validate_frozen_current_source_v39_contract.py",
+      "bytes": 8368,
+      "sha256": "964945edada0d6d6b524cea66869774dbd32d71eb2121adbf87bfb733ce0a6c9"
+    }
+  ]
+}

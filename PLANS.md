@@ -101,20 +101,20 @@
 - R-0006: P17 conflict resolver/widget are component evidence only.
 - R-0007: P06-09 remains 0/61 release-green until direct validations, fixtures, rollback/retry,
   current-target automation runtime and exact differential evidence close every row.
-- R-0008: historical source-qualification validators reread mutable successor files. Latest v39
-  verifies, but remaining legacy validators need immutable-commit reads before the final Gate.
+- R-0008: frozen v39 Git-blob verification and 16 focused checks pass without receipt/runtime
+  promotion; P17 full still has 31 legacy mutable-source errors, so migration remains open.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 
 ## Next actions
 
-1. At `max`, finish TABLE-002/003 target and TABLE-032/033 exact-source runs with user access clicks, then lower the remaining 4 unit-only rows and close all 42 integration-only target oracles before automation/differentials; reuse completed P06-07 evidence without relabeling it.
-2. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
+1. While user interaction is unavailable, close R-0008 by replacing all 31 legacy mutable-source failures with exact immutable-history verification; never skip or relabel them.
+2. At `max`, resume TABLE-002/003 and TABLE-032/033 target runs only when the user can perform access clicks, then close remaining P06-09 target oracles, automation and differentials.
+3. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
 
 ## Context pack and archive pointers
 
-- Read first: this file, active P06-07 policies/reports, P06-09 conformance authorities, and
-  `implementation/p05/P05_GATE_REPORT.md`.
+- Read first: this file, active P06-07 policies/reports, P06-09 conformance authorities, and `implementation/p05/P05_GATE_REPORT.md`.
 - P17 source authority: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V39.md`.
 - Detailed closed-card history is in the named reports and local Git history; no remote push is implied.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.
