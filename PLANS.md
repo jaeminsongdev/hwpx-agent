@@ -89,7 +89,7 @@
   is static-ready, while the first TABLE-022 approval timeout remains failed evidence without promotion.
 - TABLE-021 transposes merged formula-free HWPX; TABLE-056 sorts complete plain/unmerged/formula-free
   cells; TABLE-057/058 fill exact single-run regions and reject stale unselected formula caches; TABLE-060 upgrades only formula reference anchors while preserving other formula fields; TABLE-001/004/005 create and convert admitted profiles with static reopen and no Hangul/render claim.
-- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. The remaining unit rows are TABLE-006/032/033/049: TABLE-006 has a 24/24 static-checked exact 3x3 native-source harness with no guessed chart XML; TABLE-032/033 tooling passes 20/20, but licensed runs still await user `허용`. All 42 integration rows need target oracles and later automation evidence.
+- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. The remaining unit rows are TABLE-006/032/033/049: TABLE-006 has a 24/24 static-checked exact 3x3 native-source harness; TABLE-049 now has a complete exact-state FormulaAst/cache/grid/flow planner but no guessed ResultFormat lowering; TABLE-032/033 tooling passes 20/20, but licensed runs still await user `허용`. All 42 integration rows need target oracles and later automation evidence.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`, current conformance JSON, and `protocol/private/p06-table-conformance-v1.json`.
 
 ## Open risks and holds

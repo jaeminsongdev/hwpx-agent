@@ -1,0 +1,128 @@
+{
+  "schema_version": "hwpx-agent.table-number-format-contract/v1",
+  "model_schema_version": "hwpx-agent.table-number-format/v1",
+  "scope": "p06_09_pure_exact_state_formula_cell_number_format_component_current_pc_local_development",
+  "feature": {
+    "feature_id": "TABLE-049",
+    "capability_id": "table.number_format"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "protocol/private/p06-table-formula-v1.json",
+      "sha256": "5bec3721f4283549af8cd1e7c850600d56ddc4a02a329298cecfa5920d7db0f3"
+    },
+    {
+      "path": "implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json",
+      "sha256": "c4a8bdb082cf8610fa2b3f6e709ca9058ab256a2371e9a779b9b323ca82638e4"
+    }
+  ],
+  "official_format_evidence": {
+    "source": "KS_X_6101_MachineReadable_Content_20260901.json",
+    "section": "10.7.3.5.2",
+    "proved_standard_tokens": ["%g", "%.0f", "%.1f", "%.2f", "%.3f", "%.4f"],
+    "exact_hancom_2020_full_mapping": "not_proven"
+  },
+  "migration": "protocol/migrations/p06-table-number-format-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/table_number_format.rs",
+    "crates/domain-ir/tests/table_number_format.rs",
+    "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_POLICY.md",
+    "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_REPORT.md"
+  ],
+  "state": {
+    "table": "logical_id_grid_sha256_and_table_properties_sha256",
+    "coverage": "every_logical_master_cell_exactly_once_in_row_major_order",
+    "cell": "master_id_top_left_non_formula_payload_sha256_properties_sha256_and_optional_formula",
+    "formula": "owner_ast_absent_or_unverified_cache_and_current_number_format",
+    "merged_cell": "exact_master_top_left_admitted_covered_slot_rejected"
+  },
+  "semantics": {
+    "selection": "exact_nonempty_sorted_unique_formula_master_cell_coordinates",
+    "formats": ["general", "number", "percent", "scientific"],
+    "mutation": "selected_formula_number_format_only",
+    "idempotence": "same_state_selection_and_format_same_canonical_plan"
+  },
+  "binding": {
+    "request": "table_identity_grid_source_state_and_document_flow_checked",
+    "build": "table_identity_grid_source_state_and_document_flow_rechecked",
+    "state_digest": "sha256_over_complete_bounded_canonical_state_json",
+    "grid_digest": "sha256_over_canonical_table_grid_json",
+    "document_flow": "lowercase_hex_sha256_bound_without_mutation"
+  },
+  "preservation": {
+    "selected_formula": "owner_ast_and_cache_exact",
+    "unselected_formula": "complete_formula_cell_exact",
+    "cell": "identity_coordinate_non_formula_payload_and_properties_exact",
+    "table": "identity_grid_and_table_properties_exact",
+    "flow": "document_flow_sha256_exact"
+  },
+  "default_limits": {
+    "input_bytes": 33554432,
+    "cells": 1000000,
+    "selected_cells": 4096,
+    "identifier_bytes": 256,
+    "serialized_bytes": 134217728,
+    "formula_decimal_places": 12
+  },
+  "failure_policy": [
+    "unsupported_schema_rejected",
+    "empty_oversized_malformed_unknown_or_duplicate_json_rejected",
+    "invalid_limits_rejected",
+    "invalid_identifier_or_digest_rejected",
+    "grid_digest_drift_rejected",
+    "incomplete_duplicate_or_misaligned_master_cell_set_rejected",
+    "formula_owner_or_formula_state_drift_rejected",
+    "empty_duplicate_oversized_or_non_formula_selection_rejected",
+    "covered_nonmaster_slot_selection_rejected",
+    "over_precision_target_format_rejected",
+    "request_state_or_flow_drift_rejected",
+    "build_state_or_flow_drift_rejected",
+    "output_or_allocation_limit_rejected",
+    "no_partial_plan_returned"
+  ],
+  "not_claimed": {
+    "visible_text_number_parsing_or_rewrite": false,
+    "currency_date_or_custom_number_format": false,
+    "formula_evaluation_or_cache_oracle": false,
+    "full_target_result_format_mapping": false,
+    "hwpx_number_format_lowering_or_readback": false,
+    "hancom_2020_target_build": false,
+    "semantic_reopen_or_formula_readback": false,
+    "pagination_or_render": false,
+    "automation_or_differential": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "p06_09": "in_progress",
+    "product_complete": false
+  }
+}

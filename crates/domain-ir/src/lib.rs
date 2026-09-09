@@ -16,6 +16,7 @@ mod table_grid;
 mod table_inspector;
 mod table_layout;
 mod table_merge_split;
+mod table_number_format;
 mod table_operations;
 mod table_pagination;
 mod table_partition;
@@ -125,6 +126,13 @@ pub use table_merge_split::{
     ContentPreservationPolicy, TABLE_MERGE_SPLIT_SCHEMA_VERSION, TableCellContent,
     TableContentState, TableContentTransfer, TableMergeSplitError, TableMergeSplitKind,
     TableMergeSplitReceipt, TableMergeSplitResult, TableRegion, TableSplitRequest,
+};
+pub use table_number_format::{
+    TABLE_NUMBER_FORMAT_CAPABILITY_ID, TABLE_NUMBER_FORMAT_SCHEMA_VERSION,
+    TableNumberFormatBuilder, TableNumberFormatCell, TableNumberFormatCellDraft,
+    TableNumberFormatError, TableNumberFormatLimitConfig, TableNumberFormatLimits,
+    TableNumberFormatPlan, TableNumberFormatReceipt, TableNumberFormatRequest,
+    TableNumberFormatRequestDraft, TableNumberFormatState, TableNumberFormatStateDraft,
 };
 pub use table_operations::{
     TABLE_OPERATIONS_SCHEMA_VERSION, TableCellRemap, TableDimensions, TableOperationError,
