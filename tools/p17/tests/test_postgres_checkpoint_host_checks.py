@@ -10,9 +10,9 @@ ROOT = Path(__file__).resolve().parents[3]
 class PostgresCheckpointHostChecksTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.up = (ROOT / "migrations/postgres/0014_p17_history_checkpoint_note.up.sql").read_text(
-            encoding="utf-8"
-        )
+        cls.up = (
+            ROOT / "migrations/postgres/0014_p17_history_checkpoint_note.up.sql"
+        ).read_text(encoding="utf-8")
         cls.down = (
             ROOT / "migrations/postgres/0014_p17_history_checkpoint_note.down.sql"
         ).read_text(encoding="utf-8")
@@ -25,9 +25,9 @@ class PostgresCheckpointHostChecksTests(unittest.TestCase):
         cls.client = (
             ROOT / "crates/remote-sync-host/examples/postgres_checkpoint_client.rs"
         ).read_text(encoding="utf-8")
-        cls.harness = (ROOT / "tools/p17/run_postgres_checkpoint_host_checks.py").read_text(
-            encoding="utf-8"
-        )
+        cls.harness = (
+            ROOT / "tools/p17/run_postgres_checkpoint_host_checks.py"
+        ).read_text(encoding="utf-8")
 
     def test_migration_is_exactly_versioned_and_note_preserving(self) -> None:
         required = [
@@ -84,11 +84,13 @@ class PostgresCheckpointHostChecksTests(unittest.TestCase):
             "legacy_execute",
             "history_checkpoint_requests",
             "CheckpointDispatchError::Unavailable",
-            'Some("22023" | "23503" | "23505" | "23514" | "42501" | "P0002" | "P1701")',
+            'Some("22023" | "23503" | "23505" | "23514" | "42501" | "P0002" | "P1701" | "P1702")',
         ]
         for snippet in required:
             self.assertIn(snippet, self.adapter)
-        self.assertEqual(self.adapter.count("FROM hwpx_agent.create_history_checkpoint_v2("), 1)
+        self.assertEqual(
+            self.adapter.count("FROM hwpx_agent.create_history_checkpoint_v2("), 1
+        )
         self.assertNotIn("retry", self.adapter.lower().split("fn dispatch", 1)[1])
 
     def test_separate_process_probes_are_bounded_and_secret_redacted(self) -> None:
@@ -98,16 +100,19 @@ class PostgresCheckpointHostChecksTests(unittest.TestCase):
         self.assertIn("Ipv4Addr::LOCALHOST", self.host)
         self.assertIn("LoopbackCheckpointServer::bind", self.host)
         self.assertIn("LocalPostgresHistoryCheckpointDispatcher::connect", self.host)
-        self.assertIn("Zeroizing::new(setting(\"HWPX_P17_AUTH_HMAC_SECRET\")?)", self.host)
+        self.assertIn(
+            'Zeroizing::new(setting("HWPX_P17_AUTH_HMAC_SECRET")?)', self.host
+        )
         self.assertIn("SingleUseCredentialProvider::new", self.client)
         self.assertIn("LoopbackTcpTransport::new", self.client)
-        self.assertIn("Zeroizing::new(setting(\"HWPX_P17_AUTHORIZATION\")?)", self.client)
+        self.assertIn('Zeroizing::new(setting("HWPX_P17_AUTHORIZATION")?)', self.client)
         self.assertNotIn("HWPX_P17_AUTHORIZATION", self.host)
 
     def test_harness_pins_resources_and_never_persists_secrets(self) -> None:
         required = [
             'LABEL = "hwpx-agent.p17-postgres-checkpoint-host-test"',
-            "--pull", "never",
+            "--pull",
+            "never",
             '"--publish", "127.0.0.1::5432"',
             '"--memory", "512m"',
             '"--pids-limit", "128"',
@@ -126,11 +131,13 @@ class PostgresCheckpointHostChecksTests(unittest.TestCase):
         ]
         for snippet in required:
             self.assertIn(snippet, self.harness)
-        self.assertEqual(len(re.findall(r'\(14, "p17_history_checkpoint_note"\)', self.harness)), 1)
+        self.assertEqual(
+            len(re.findall(r'\(14, "p17_history_checkpoint_note"\)', self.harness)), 1
+        )
         self.assertNotIn('"password":', self.harness)
         self.assertNotIn('"authorization":', self.harness)
 
-    def test_every_live_postgres_adapter_accepts_migration_14(self) -> None:
+    def test_every_current_postgres_adapter_accepts_migration_15(self) -> None:
         paths = [
             ROOT / "crates/artifact-service/src/store/postgres_repository.rs",
             ROOT / "crates/mcp-control-plane/src/postgres_plan_source.rs",
@@ -139,14 +146,19 @@ class PostgresCheckpointHostChecksTests(unittest.TestCase):
         ]
         for path in paths:
             source = path.read_text(encoding="utf-8")
-            self.assertIn("const MIGRATIONS: [&[u8]; 14]", source, path.as_posix())
-            self.assertIn('migration!("0014_p17_history_checkpoint_note.up.sql")', source)
-            self.assertIn("LIMIT 15", source)
+            self.assertIn("const MIGRATIONS: [&[u8]; 15]", source, path.as_posix())
+            self.assertIn(
+                'migration!("0014_p17_history_checkpoint_note.up.sql")', source
+            )
+            self.assertIn(
+                'migration!("0015_p17_atomic_mirror_checkpoint.up.sql")', source
+            )
+            self.assertIn("LIMIT 16", source)
 
     def test_fixture_has_only_the_bounded_subject_placeholder(self) -> None:
-        fixture = (ROOT / "tools/p17/fixtures/p17_postgres_checkpoint_setup.sql").read_text(
-            encoding="utf-8"
-        )
+        fixture = (
+            ROOT / "tools/p17/fixtures/p17_postgres_checkpoint_setup.sql"
+        ).read_text(encoding="utf-8")
         self.assertEqual(fixture.count("__P17_SERVICE_SUBJECT_SHA256__"), 3)
         self.assertIn("'service_v1', 0, 1", fixture)
         self.assertIn("COMMIT;", fixture)

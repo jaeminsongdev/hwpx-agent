@@ -50,7 +50,7 @@ macro_rules! migration {
         .as_slice()
     };
 }
-const MIGRATIONS: [&[u8]; 14] = [
+const MIGRATIONS: [&[u8]; 15] = [
     migration!("0001_p14_metadata.up.sql"),
     migration!("0002_p14_artifact_service.up.sql"),
     migration!("0003_p14_revision_cas.up.sql"),
@@ -65,6 +65,7 @@ const MIGRATIONS: [&[u8]; 14] = [
     migration!("0012_p16_durable_plan_store.up.sql"),
     migration!("0013_p16_plan_review_evidence.up.sql"),
     migration!("0014_p17_history_checkpoint_note.up.sql"),
+    migration!("0015_p17_atomic_mirror_checkpoint.up.sql"),
 ];
 
 pub struct LocalPostgresConfig {
@@ -284,7 +285,7 @@ fn verify_role(client: &mut Client) -> Result<(), ArtifactError> {
 }
 
 fn verify_migrations(client: &mut Client) -> Result<(), ArtifactError> {
-    let rows = client.query("SELECT version, migration_sha256::text FROM hwpx_agent.schema_versions ORDER BY version LIMIT 15", &[]).map_err(db_error)?;
+    let rows = client.query("SELECT version, migration_sha256::text FROM hwpx_agent.schema_versions ORDER BY version LIMIT 16", &[]).map_err(db_error)?;
     if rows.len() != MIGRATIONS.len() {
         return Err(ArtifactError::InvalidState);
     }

@@ -32,8 +32,9 @@ mod postgres;
 mod socket;
 
 pub use postgres::{
-    LocalPostgresHistoryCheckpointConfig, LocalPostgresHistoryCheckpointDispatcher,
-    PostgresCheckpointConnectFailure, PostgresCheckpointConnectStage,
+    LocalPostgresAtomicMirrorCheckpointDispatcher, LocalPostgresHistoryCheckpointConfig,
+    LocalPostgresHistoryCheckpointDispatcher, PostgresCheckpointConnectFailure,
+    PostgresCheckpointConnectStage,
 };
 pub use socket::{CheckpointServeOutcome, CheckpointServerFailure, LoopbackCheckpointServer};
 
@@ -149,6 +150,21 @@ impl CheckpointDispatchRequest<'_> {
     #[must_use]
     pub const fn arguments(&self) -> &CheckpointServiceArguments {
         self.binding.arguments()
+    }
+
+    #[must_use]
+    pub fn branch_id(&self) -> &str {
+        self.binding.branch_id()
+    }
+
+    #[must_use]
+    pub fn mirror_id(&self) -> &str {
+        self.binding.mirror_id()
+    }
+
+    #[must_use]
+    pub const fn expected_generation(&self) -> u64 {
+        self.binding.expected_generation()
     }
 
     #[must_use]

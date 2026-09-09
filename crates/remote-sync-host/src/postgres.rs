@@ -11,6 +11,8 @@ use std::time::Duration;
 use artifact_service::{SubjectDigest, TenantId};
 use postgres::types::FromSqlOwned;
 use postgres::{Client, Config, IsolationLevel, NoTls, Row};
+use retention_sync_service::MirrorId;
+use revision_service::BranchId;
 use sha2::{Digest as _, Sha256};
 use zeroize::Zeroizing;
 
@@ -45,6 +47,24 @@ const MIGRATIONS: [&[u8]; 14] = [
     migration!("0012_p16_durable_plan_store.up.sql"),
     migration!("0013_p16_plan_review_evidence.up.sql"),
     migration!("0014_p17_history_checkpoint_note.up.sql"),
+];
+
+const ATOMIC_MIGRATIONS: [&[u8]; 15] = [
+    migration!("0001_p14_metadata.up.sql"),
+    migration!("0002_p14_artifact_service.up.sql"),
+    migration!("0003_p14_revision_cas.up.sql"),
+    migration!("0004_p14_history_checkpoints.up.sql"),
+    migration!("0005_p14_job_state_machine.up.sql"),
+    migration!("0006_p14_worker_lease_fencing.up.sql"),
+    migration!("0007_p14_idempotency_reconciliation.up.sql"),
+    migration!("0008_p14_cancel_cleanup.up.sql"),
+    migration!("0009_p14_retention_local_mirror.up.sql"),
+    migration!("0010_p16_artifact_repository.up.sql"),
+    migration!("0011_p16_plan_source.up.sql"),
+    migration!("0012_p16_durable_plan_store.up.sql"),
+    migration!("0013_p16_plan_review_evidence.up.sql"),
+    migration!("0014_p17_history_checkpoint_note.up.sql"),
+    migration!("0015_p17_atomic_mirror_checkpoint.up.sql"),
 ];
 
 /// Bounded local connection settings. The password is zeroized and never exposed by `Debug`.
@@ -229,6 +249,80 @@ impl LocalPostgresHistoryCheckpointDispatcher {
     }
 }
 
+/// `PostgreSQL` dispatcher whose role, mirror, branch-head and checkpoint decisions share one
+/// serializable database transaction.
+pub struct LocalPostgresAtomicMirrorCheckpointDispatcher {
+    tenant_id: TenantId,
+    subject: SubjectDigest,
+    client: Mutex<Client>,
+}
+
+impl fmt::Debug for LocalPostgresAtomicMirrorCheckpointDispatcher {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("LocalPostgresAtomicMirrorCheckpointDispatcher")
+            .field("tenant_id", &"<redacted>")
+            .field("subject", &"<redacted>")
+            .field("client", &"<redacted>")
+            .finish()
+    }
+}
+
+impl LocalPostgresAtomicMirrorCheckpointDispatcher {
+    /// Connects only when the exact v15 schema and v3-only least-privilege surface are present.
+    ///
+    /// # Errors
+    ///
+    /// Fails closed for transport, role, migration, RLS or privilege drift.
+    pub fn connect(
+        config: &LocalPostgresHistoryCheckpointConfig,
+        tenant_id: TenantId,
+        subject: SubjectDigest,
+    ) -> Result<Self, CheckpointDispatchError> {
+        Self::connect_diagnosed(config, tenant_id, subject)
+            .map_err(PostgresCheckpointConnectFailure::into_error)
+    }
+
+    /// Performs v15 admission while retaining only a closed stage and public error category.
+    ///
+    /// # Errors
+    ///
+    /// Returns the first failed admission stage without retaining backend diagnostics.
+    pub fn connect_diagnosed(
+        config: &LocalPostgresHistoryCheckpointConfig,
+        tenant_id: TenantId,
+        subject: SubjectDigest,
+    ) -> Result<Self, PostgresCheckpointConnectFailure> {
+        let mut settings = Config::new();
+        settings
+            .host("127.0.0.1")
+            .port(config.port)
+            .dbname(&config.database)
+            .user(&config.user)
+            .password(config.password.as_bytes())
+            .connect_timeout(Duration::from_secs(3))
+            .application_name("hwpx-agent-local-atomic-mirror-checkpoint")
+            .options(
+                "-c statement_timeout=5000 -c lock_timeout=1000 \
+                 -c idle_in_transaction_session_timeout=5000 \
+                 -c transaction_timeout=10000 -c search_path=pg_catalog",
+            );
+        let mut client =
+            settings
+                .connect(NoTls)
+                .map_err(|error| PostgresCheckpointConnectFailure {
+                    stage: PostgresCheckpointConnectStage::Transport,
+                    error: db_dispatch_error(error),
+                })?;
+        verify_atomic_database(&mut client)?;
+        Ok(Self {
+            tenant_id,
+            subject,
+            client: Mutex::new(client),
+        })
+    }
+}
+
 impl CheckpointDispatcher for LocalPostgresHistoryCheckpointDispatcher {
     fn dispatch(
         &self,
@@ -308,6 +402,95 @@ impl CheckpointDispatcher for LocalPostgresHistoryCheckpointDispatcher {
     }
 }
 
+impl CheckpointDispatcher for LocalPostgresAtomicMirrorCheckpointDispatcher {
+    fn dispatch(
+        &self,
+        request: &CheckpointDispatchRequest<'_>,
+    ) -> Result<CheckpointDispatchOutcome, CheckpointDispatchError> {
+        if request.tenant_id() != self.tenant_id || request.subject() != self.subject {
+            return Err(CheckpointDispatchError::Rejected);
+        }
+        let (context, checkpoint) = map_history_checkpoint_request(request)?;
+        let branch_id =
+            BranchId::parse(request.branch_id()).map_err(|_| CheckpointDispatchError::Rejected)?;
+        let mirror_id = MirrorId::parse_public(request.mirror_id())
+            .map_err(|_| CheckpointDispatchError::Rejected)?;
+        let expected_generation = i64::try_from(request.expected_generation())
+            .map_err(|_| CheckpointDispatchError::Rejected)?;
+        let request_sha256 = checkpoint
+            .canonical_sha256()
+            .map_err(|_| CheckpointDispatchError::Unavailable)?;
+        let tenant_id = context.tenant_id().as_uuid();
+        let subject = context.subject().hex();
+        let project_id = checkpoint.project_id().as_uuid();
+        let request_id = checkpoint.request_id().as_uuid();
+        let checkpoint_id = checkpoint.checkpoint_id().as_uuid();
+        let revision_id = checkpoint.revision_id().as_uuid();
+        let label = checkpoint.label().as_str().to_owned();
+        let note = checkpoint.note().map(|value| value.as_str().to_owned());
+        let request_sha256 = request_sha256.hex();
+
+        let mut client = self
+            .client
+            .try_lock()
+            .map_err(|_| CheckpointDispatchError::Unavailable)?;
+        let mut transaction = client
+            .build_transaction()
+            .isolation_level(IsolationLevel::Serializable)
+            .start()
+            .map_err(db_dispatch_error)?;
+        transaction
+            .query_one(
+                "SELECT set_config('hwpx_agent.tenant_id',$1,true), \
+                        set_config('hwpx_agent.subject_sha256',$2,true)",
+                &[&tenant_id.hyphenated().to_string(), &subject],
+            )
+            .map_err(db_dispatch_error)?;
+        let row = transaction
+            .query_one(
+                "SELECT outcome,checkpoint_id,revision_id,label,note,request_sha256::text \
+                 FROM hwpx_agent.create_mirror_history_checkpoint_v3( \
+                    $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)",
+                &[
+                    &tenant_id,
+                    &project_id,
+                    &subject,
+                    &branch_id.as_uuid(),
+                    &mirror_id.as_uuid(),
+                    &revision_id,
+                    &expected_generation,
+                    &request_id,
+                    &request_sha256,
+                    &checkpoint_id,
+                    &revision_id,
+                    &label,
+                    &note,
+                ],
+            )
+            .map_err(db_dispatch_error)?;
+        let outcome: String = value(&row, "outcome")?;
+        let replayed = match outcome.as_str() {
+            "created" => false,
+            "replayed" => true,
+            _ => return Err(CheckpointDispatchError::Unavailable),
+        };
+        if value::<uuid::Uuid>(&row, "checkpoint_id")? != checkpoint_id
+            || value::<uuid::Uuid>(&row, "revision_id")? != revision_id
+            || value::<String>(&row, "label")? != label
+            || value::<Option<String>>(&row, "note")? != note
+            || value::<String>(&row, "request_sha256")? != request_sha256
+        {
+            return Err(CheckpointDispatchError::Unavailable);
+        }
+        transaction.commit().map_err(db_dispatch_error)?;
+        Ok(CheckpointDispatchOutcome::new(
+            checkpoint.checkpoint_id().public_id(),
+            checkpoint.revision_id().public_id(),
+            replayed,
+        ))
+    }
+}
+
 fn verify_database(client: &mut Client) -> Result<(), PostgresCheckpointConnectFailure> {
     for (stage, check) in [
         (
@@ -322,6 +505,30 @@ fn verify_database(client: &mut Client) -> Result<(), PostgresCheckpointConnectF
         (
             PostgresCheckpointConnectStage::Privileges,
             verify_privileges,
+        ),
+    ] {
+        check(client).map_err(|error| PostgresCheckpointConnectFailure { stage, error })?;
+    }
+    Ok(())
+}
+
+fn verify_atomic_database(client: &mut Client) -> Result<(), PostgresCheckpointConnectFailure> {
+    for (stage, check) in [
+        (
+            PostgresCheckpointConnectStage::Role,
+            verify_role as fn(&mut Client) -> Result<(), CheckpointDispatchError>,
+        ),
+        (
+            PostgresCheckpointConnectStage::Migrations,
+            verify_atomic_migrations,
+        ),
+        (
+            PostgresCheckpointConnectStage::Policies,
+            verify_atomic_policies,
+        ),
+        (
+            PostgresCheckpointConnectStage::Privileges,
+            verify_atomic_privileges,
         ),
     ] {
         check(client).map_err(|error| PostgresCheckpointConnectFailure { stage, error })?;
@@ -352,21 +559,37 @@ fn verify_role(client: &mut Client) -> Result<(), CheckpointDispatchError> {
 }
 
 fn verify_migrations(client: &mut Client) -> Result<(), CheckpointDispatchError> {
-    let rows = client
-        .query(
-            "SELECT version,migration_sha256::text FROM hwpx_agent.schema_versions \
-             ORDER BY version LIMIT 15",
-            &[],
-        )
-        .map_err(db_dispatch_error)?;
-    if rows.len() != MIGRATIONS.len() {
+    verify_migration_set(
+        client,
+        &MIGRATIONS,
+        "SELECT version,migration_sha256::text FROM hwpx_agent.schema_versions \
+         ORDER BY version LIMIT 15",
+    )
+}
+
+fn verify_atomic_migrations(client: &mut Client) -> Result<(), CheckpointDispatchError> {
+    verify_migration_set(
+        client,
+        &ATOMIC_MIGRATIONS,
+        "SELECT version,migration_sha256::text FROM hwpx_agent.schema_versions \
+         ORDER BY version LIMIT 16",
+    )
+}
+
+fn verify_migration_set(
+    client: &mut Client,
+    migrations: &[&[u8]],
+    query: &str,
+) -> Result<(), CheckpointDispatchError> {
+    let rows = client.query(query, &[]).map_err(db_dispatch_error)?;
+    if rows.len() != migrations.len() {
         return Err(CheckpointDispatchError::Rejected);
     }
     for (index, row) in rows.iter().enumerate() {
         if value::<i64>(row, "version")?
             != i64::try_from(index + 1).map_err(|_| CheckpointDispatchError::Rejected)?
             || value::<String>(row, "migration_sha256")?
-                != hex::encode(Sha256::digest(MIGRATIONS[index]))
+                != hex::encode(Sha256::digest(migrations[index]))
         {
             return Err(CheckpointDispatchError::Rejected);
         }
@@ -396,6 +619,46 @@ fn verify_policies(client: &mut Client) -> Result<(), CheckpointDispatchError> {
         )
         .map_err(db_dispatch_error)?;
     if rows.len() != 2 {
+        return Err(CheckpointDispatchError::Rejected);
+    }
+    for row in rows {
+        if !value::<bool>(&row, "relrowsecurity")?
+            || !value::<bool>(&row, "relforcerowsecurity")?
+            || value::<bool>(&row, "owner_role")?
+            || value::<i64>(&row, "policy_count")? != 1
+            || value::<i64>(&row, "policy_match")? != 1
+        {
+            return Err(CheckpointDispatchError::Rejected);
+        }
+    }
+    Ok(())
+}
+
+fn verify_atomic_policies(client: &mut Client) -> Result<(), CheckpointDispatchError> {
+    let rows = client
+        .query(
+            "SELECT class.relname,class.relrowsecurity,class.relforcerowsecurity, \
+                (pg_has_role(class.relowner,'USAGE') OR pg_has_role(class.relowner,'SET')) \
+                    AS owner_role, \
+                (SELECT count(*) FROM pg_policy policy WHERE policy.polrelid=class.oid) \
+                    AS policy_count, \
+                (SELECT count(*) FROM pg_policy policy WHERE policy.polrelid=class.oid \
+                    AND policy.polname='tenant_isolation' AND policy.polcmd='*' \
+                    AND policy.polpermissive AND policy.polroles=ARRAY[0::oid] \
+                    AND pg_get_expr(policy.polqual,policy.polrelid)= \
+                        '(tenant_id = hwpx_agent.current_tenant_id())' \
+                    AND pg_get_expr(policy.polwithcheck,policy.polrelid)= \
+                        '(tenant_id = hwpx_agent.current_tenant_id())') AS policy_match \
+             FROM pg_class class JOIN pg_namespace namespace ON namespace.oid=class.relnamespace \
+             WHERE namespace.nspname='hwpx_agent' \
+               AND class.relname IN ( \
+                    'projects','project_acl','branches','project_local_mirrors','revisions', \
+                    'revision_graph_seals','checkpoints','history_checkpoint_requests', \
+                    'audit_events')",
+            &[],
+        )
+        .map_err(db_dispatch_error)?;
+    if rows.len() != 9 {
         return Err(CheckpointDispatchError::Rejected);
     }
     for row in rows {
@@ -450,9 +713,64 @@ fn verify_privileges(client: &mut Client) -> Result<(), CheckpointDispatchError>
     Ok(())
 }
 
+fn verify_atomic_privileges(client: &mut Client) -> Result<(), CheckpointDispatchError> {
+    let row = client
+        .query_one(
+            "SELECT \
+                has_function_privilege( \
+                    'hwpx_agent.create_mirror_history_checkpoint_v3(uuid,uuid,character,uuid,uuid,uuid,bigint,uuid,character,uuid,uuid,text,text)', \
+                    'EXECUTE') AS exact_execute, \
+                has_function_privilege( \
+                    'hwpx_agent.create_history_checkpoint_v2(uuid,uuid,character,uuid,character,uuid,uuid,text,text)', \
+                    'EXECUTE') AS v2_execute, \
+                has_function_privilege( \
+                    'hwpx_agent.create_history_checkpoint(uuid,uuid,character,uuid,character,uuid,uuid,text)', \
+                    'EXECUTE') AS legacy_execute, \
+                has_schema_privilege('hwpx_agent','CREATE') \
+                OR has_table_privilege('hwpx_agent.projects', \
+                    'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') \
+                OR has_table_privilege('hwpx_agent.project_acl', \
+                    'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') \
+                OR has_table_privilege('hwpx_agent.branches', \
+                    'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') \
+                OR has_table_privilege('hwpx_agent.project_local_mirrors', \
+                    'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') \
+                OR has_table_privilege('hwpx_agent.revisions', \
+                    'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') \
+                OR has_table_privilege('hwpx_agent.revision_graph_seals', \
+                    'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') \
+                OR has_table_privilege('hwpx_agent.history_checkpoint_requests', \
+                    'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') \
+                OR has_table_privilege('hwpx_agent.checkpoints', \
+                    'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') \
+                OR has_table_privilege('hwpx_agent.audit_events', \
+                    'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') \
+                OR has_table_privilege('hwpx_agent.schema_versions', \
+                    'INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER') AS excessive, \
+                (pg_has_role(procedure.proowner,'USAGE') \
+                    OR pg_has_role(procedure.proowner,'SET')) AS owner_role \
+             FROM pg_proc procedure \
+             JOIN pg_namespace namespace ON namespace.oid=procedure.pronamespace \
+             WHERE namespace.nspname='hwpx_agent' \
+               AND procedure.oid=to_regprocedure( \
+                    'hwpx_agent.create_mirror_history_checkpoint_v3(uuid,uuid,character,uuid,uuid,uuid,bigint,uuid,character,uuid,uuid,text,text)')",
+            &[],
+        )
+        .map_err(db_dispatch_error)?;
+    if !value::<bool>(&row, "exact_execute")?
+        || value::<bool>(&row, "v2_execute")?
+        || value::<bool>(&row, "legacy_execute")?
+        || value::<bool>(&row, "excessive")?
+        || value::<bool>(&row, "owner_role")?
+    {
+        return Err(CheckpointDispatchError::Rejected);
+    }
+    Ok(())
+}
+
 fn db_dispatch_error(error: postgres::Error) -> CheckpointDispatchError {
     let mapped = match error.code().map(postgres::error::SqlState::code) {
-        Some("22023" | "23503" | "23505" | "23514" | "42501" | "P0002" | "P1701") => {
+        Some("22023" | "23503" | "23505" | "23514" | "42501" | "P0002" | "P1701" | "P1702") => {
             CheckpointDispatchError::Rejected
         }
         _ => CheckpointDispatchError::Unavailable,
