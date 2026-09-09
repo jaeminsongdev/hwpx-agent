@@ -158,7 +158,9 @@ The machine-readable authority is
   documented top-left corner, maps first-row series labels and first-column category labels, keeps
   exact numeric/blank data points and formula-display-cache origins, and binds source state plus
   document flow. Cursor-only default-data creation, merged source cells and body text fail closed;
-  no chart XML, package mutation, linked save/reopen or licensed Hangul result is claimed.
+  no chart XML, package mutation, linked save/reopen or licensed Hangul result is claimed. A
+  target-pinned new-document worker/watchdog now prepares an exact 3x3 baseline/chart pair without
+  guessing native package structure; its 24 static checks pass, but it has not been run.
 - The table-ruling model and preserving HWPX adapter cover TABLE-002/003 as one exact
   physical-lattice and topology model.
   Drawing covers a new outer rectangle, full row/column strokes, rectangular local cell splits,

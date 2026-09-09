@@ -27,6 +27,8 @@ EXPECTED_FEATURES = [
 ]
 EXPECTED_REFERENCES = [
     "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/chart/chart(createchart).htm",
+    "https://github.com/hancom-io/devcenter-archive/raw/main/hwp-automation/ActionTable_2504.pdf",
+    "https://github.com/hancom-io/devcenter-archive/raw/main/hwp-automation/ParameterSetTable_2504.pdf",
 ]
 EXPECTED_SOURCE_PATHS = {
     "WORK_BREAKDOWN_STRUCTURE.csv",
@@ -123,18 +125,48 @@ IMPLEMENTATION_MARKERS = {
         "canonical_state_is_deterministic_and_json_is_strict",
         "finite_input_output_and_debug_redaction_are_enforced",
     ),
+    "implementation/p06/tools/create-hancom-2020-table-chart-source.ps1": (
+        "hwpx-agent.p06-09-hancom-2020-table-chart-source/v1",
+        "$creation.Rows = 3",
+        "$creation.Cols = 3",
+        "TableCellBlock",
+        "InsertChart",
+        "HWP_PROCESS_OWNERSHIP_MISMATCH",
+        "hwp_process_identity_bound",
+        "source_text_preserved",
+        "raw_chart_payload_present = $false",
+    ),
+    "implementation/p06/tools/run-hancom-2020-table-chart-source.ps1": (
+        "hwpx-agent.p06-09-hancom-2020-table-chart-source-watchdog/v1",
+        "Read-ProgressJournal",
+        "Stop-OwnedHancomProcess",
+        "TABLE_CHART_SOURCE_TIMEOUT",
+        "TABLE_CHART_SOURCE_ARTIFACT_INVALID",
+        "inner_trace_preserved",
+    ),
+    "implementation/p06/tests/Test-Hancom2020TableChartSource.ps1": (
+        "hwpx-agent.p06-09-table-chart-source-static-tests/v1",
+        "exact_full_cell_block",
+        "documented_chart_action",
+        "no_guessed_native_chart_xml",
+        "preflight_fails_before_com",
+    ),
     POLICY: (
         "component_only / unit_passed",
         "Cursor-only creation is also rejected",
         "three-dimensional",
+        "## Exact Hangul 2020 source qualification",
         "## Gate boundary",
         "Reasoning level: `max`",
     ),
     REPORT: (
         "Result: `component_pass`",
         "Focused Rust table-chart tests: 12/12 PASS.",
-        "`cataloged`: 3 to 2",
-        "`unit_passed`: 40 to 41",
+        "Source qualification harness static tests: 24/24 PASS",
+        "`cataloged`: remains 0",
+        "`unit_passed`: remains 4",
+        "`integration_passed`: remains 42",
+        "`oracle_verified`: remains 15",
         "Green rows: remains 0/61",
     ),
 }

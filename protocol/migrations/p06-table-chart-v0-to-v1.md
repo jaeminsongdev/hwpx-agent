@@ -20,3 +20,6 @@ partial plan or receipt.
 
 Direct HWPX lowering, package preservation, save/reopen linkage, licensed Hangul 2020 execution,
 automation and differential parity remain separate Gates and require independent migration evidence.
+The repository now also contains a target-pinned source-qualification worker, watchdog and static
+tests. They create only disposable baseline/chart candidates and deliberately do not define or
+promote a native HWPX chart profile before an admitted Hangul 2020 artifact is inspected.

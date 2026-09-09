@@ -14,7 +14,7 @@ class TableChartContractTests(unittest.TestCase):
         report = validator.validate()
         self.assertEqual(report["state"], "pass", report)
         self.assertEqual(report["source_locks"], 4)
-        self.assertEqual(report["implementation_files"], 5)
+        self.assertEqual(report["implementation_files"], 8)
         self.assertEqual(report["features"], 1)
         self.assertEqual(report["direct_stage"], "unit_passed")
         self.assertFalse(report["actual_hwpx"])

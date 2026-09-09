@@ -61,10 +61,32 @@ serialized output, and decimal scale 18. Hard ceilings are enforced. Canonical J
 row-major deterministic. Debug output redacts table/chart/resource IDs, labels, values, provenance,
 and content digests.
 
+## Exact Hangul 2020 source qualification
+
+Direct HWPX lowering is intentionally blocked on a native package profile instead of guessing an
+anchor, chart-part path, manifest rule or chart XML dialect. The private source worker creates only
+a new disposable 3-by-3 table. Its top-left cell stays blank; the first row carries two series
+labels, the first column carries two category labels, and the four body cells carry exact integers.
+It saves a baseline, returns to the first cell, invokes the documented whole-table cell-block
+sequence, asks Hangul to create the chart through the official action/ParameterSet pair, proves the
+visible source text did not change, and saves a distinct chart HWPX.
+
+The worker and watchdog pin x86 COM to build `11.0.0.9136`, the locked executable digest, creation
+time, session and automation command line; reject pre-existing Hwp processes and path collisions;
+bound runtime and artifact size; preserve the inner trace and progress journal; and may stop only an
+exact same-session automation process.
+Receipts contain hashes and finite counts, never document text or chart payload. There is no user
+document open, module registration, UI input, network access or registry/system-setting write.
+
+Static preparation is not native evidence. A run is admissible only when both HWPX artifacts,
+terminal progress, exact process cleanup and later offline package inspection all pass. Every access
+approval remains a user click; Computer Use does not perform it.
+
 ## Gate boundary
 
 TABLE-006 advances only from `cataloged` to `unit_passed`. This policy does not prove a direct HWPX
 adapter, chart XML, package mutation/preservation, linked-data save/reopen, formula-cache readback,
 rendering, licensed Hangul 2020 execution, automation, differential parity, arbitrary user documents,
 other PCs or versions, P06-09 completion, production readiness, or product completion. Each remains
-a separate evidence Gate.
+a separate evidence Gate. The source worker, watchdog and static tests merely prepare the next
+qualification run and do not change that decision.
