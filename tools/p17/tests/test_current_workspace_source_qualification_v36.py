@@ -4,11 +4,12 @@ import copy
 import unittest
 
 from tools.p17 import current_workspace_source_qualification_v36 as qualification
+from tools.p17 import frozen_current_source_history_v1 as history
 
 
 class CurrentWorkspaceSourceQualificationV36Tests(unittest.TestCase):
     def test_current_qualification_verifies(self) -> None:
-        contract = qualification.verify()
+        contract = history.verify_version(qualification.ROOT, 36)
         self.assertEqual(
             contract["qualification_id"], "p17.current-workspace-source.v36.20260907"
         )

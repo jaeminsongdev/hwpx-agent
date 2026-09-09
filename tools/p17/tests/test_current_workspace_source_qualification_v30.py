@@ -4,11 +4,12 @@ import copy
 import unittest
 
 from tools.p17 import current_workspace_source_qualification_v30 as qualification
+from tools.p17 import frozen_current_source_history_v1 as history
 
 
 class CurrentWorkspaceSourceQualificationV30Tests(unittest.TestCase):
     def test_current_qualification_verifies(self) -> None:
-        contract = qualification.verify()
+        contract = history.verify_version(qualification.ROOT, 30)
         self.assertEqual(
             contract["qualification_id"],
             "p17.current-workspace-source.v30.20260907",
@@ -23,8 +24,12 @@ class CurrentWorkspaceSourceQualificationV30Tests(unittest.TestCase):
         paths = [entry["path"] for entry in qualification.IMPLEMENTATION_SOURCES]
         self.assertEqual(len(paths), len(set(paths)))
         self.assertEqual(len(paths), 5)
-        self.assertIn("implementation/p06/tools/create-hancom-2020-table-source.ps1", paths)
-        self.assertIn("implementation/p06/tests/Test-Hancom2020CellStyleReadback.ps1", paths)
+        self.assertIn(
+            "implementation/p06/tools/create-hancom-2020-table-source.ps1", paths
+        )
+        self.assertIn(
+            "implementation/p06/tests/Test-Hancom2020CellStyleReadback.ps1", paths
+        )
         self.assertIn("protocol/private/p06-table-cell-style-v1.json", paths)
 
     def test_predecessor_is_exact_v29_contract(self) -> None:

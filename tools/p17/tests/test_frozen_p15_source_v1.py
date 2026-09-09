@@ -6,6 +6,7 @@ from pathlib import Path
 import unittest
 from unittest.mock import patch
 
+from tools.p17 import frozen_source_successor_pairs_v1 as pairs
 
 ROOT = Path(__file__).resolve().parents[3]
 PATH = ROOT / "tools/p17/frozen_p15_source_v1.py"
@@ -36,7 +37,7 @@ class FrozenP15SourceV1Tests(unittest.TestCase):
         )
 
     def test_handler_context_admits_exact_auth_validator_successor(self) -> None:
-        replacements = MODULE.verified_replacements(
+        replacements = pairs.p15_context_replacements(
             ROOT,
             locks("implementation/p15/p15-handler-contract-v1.json"),
             "p15_handler",

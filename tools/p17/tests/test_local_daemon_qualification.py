@@ -5,18 +5,16 @@ from pathlib import Path
 import sys
 import unittest
 
-
 TOOLS = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(TOOLS))
 import local_daemon_qualification as qualification  # noqa: E402
+from tools.p17 import frozen_local_qualifications_v1 as frozen_local  # noqa: E402
 
 
 class LocalDaemonQualificationTests(unittest.TestCase):
     def test_checked_in_qualification_is_exact_without_local_receipt(self) -> None:
-        contract = qualification.verify()
-        self.assertEqual(
-            contract["qualification_id"], "p17.local-daemon.v1.20260906"
-        )
+        contract = frozen_local.verify("local_daemon", qualification.ROOT)
+        self.assertEqual(contract["qualification_id"], "p17.local-daemon.v1.20260906")
         self.assertTrue(contract["claims"]["local_daemon"])
         for open_claim in (
             "actual_codex_plugin",
@@ -28,18 +26,13 @@ class LocalDaemonQualificationTests(unittest.TestCase):
         ):
             self.assertFalse(contract["claims"][open_claim])
 
-    def test_locked_sources_are_unique_and_current(self) -> None:
-        contract = qualification.verify()
-        paths: list[str] = []
-        for group in ("runtime_sources", "guard_sources"):
-            for entry in contract[group]:
-                path = qualification.ROOT / entry["path"]
-                self.assertTrue(path.is_file(), entry["path"])
-                self.assertEqual(path.stat().st_size, entry["bytes"], entry["path"])
-                self.assertEqual(
-                    qualification.digest(path), entry["sha256"], entry["path"]
-                )
-                paths.append(entry["path"])
+    def test_locked_sources_are_unique_and_historical(self) -> None:
+        contract = frozen_local.verify("local_daemon", qualification.ROOT)
+        paths = [
+            entry["path"]
+            for group in ("runtime_sources", "guard_sources")
+            for entry in contract[group]
+        ]
         self.assertEqual(len(paths), len(set(paths)))
 
     def test_receipt_claim_promotion_and_unknown_field_fail_closed(self) -> None:

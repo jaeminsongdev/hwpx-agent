@@ -1,0 +1,226 @@
+{
+  "schema_version": "hwpx-agent.p17-frozen-legacy-qualifications/v1",
+  "contract_id": "p17.frozen-legacy-qualifications.v1",
+  "scope": "immutable_historical_source_qualification_verification",
+  "coverage": {
+    "current_workspace_first_version": 20,
+    "current_workspace_last_version": 39,
+    "current_workspace_qualification_count": 20,
+    "local_qualification_count": 5,
+    "local_runtime_source_count": 86,
+    "local_guard_source_count": 18,
+    "v12_source_count": 121,
+    "p15_context_count": 10,
+    "initial_p17_test_count": 178,
+    "initial_error_count": 31,
+    "current_p17_test_count": 199,
+    "current_error_count": 0
+  },
+  "invariants": [
+    "bounded_git_reads",
+    "exact_contract_current_and_source_blobs",
+    "fixed_full_commit_ancestry",
+    "legacy_generators_preserved",
+    "no_current_worktree_source_authority",
+    "no_receipt_blob_promotion",
+    "no_skipped_or_weakened_tests"
+  ],
+  "claims": {
+    "actual_hangul": false,
+    "historical_source_state_verified": true,
+    "other_pc_or_version": false,
+    "p17_phase_complete": false,
+    "product_complete": false,
+    "production": false,
+    "receipt_blobs_verified": false,
+    "registered_host": false,
+    "remote_pull_or_push": false
+  },
+  "source_locks": [
+    {
+      "path": "implementation/p17/P17_FROZEN_LEGACY_SOURCE_QUALIFICATIONS.md",
+      "bytes": 2457,
+      "sha256": "9dca4c63c9ae4a968a311a52d70d3aa1092d9ad389b8a491c3366f509dcb3264"
+    },
+    {
+      "path": "protocol/migrations/p17-legacy-mutable-source-qualifications-to-frozen-v1.md",
+      "bytes": 1200,
+      "sha256": "a0c9ab6a56ff5207f918613d07bf615d321920d7028f99f1ca58847d9fbd8b85"
+    },
+    {
+      "path": "tools/p17/frozen_current_source_history_v1.py",
+      "bytes": 14522,
+      "sha256": "3b37ef32469dff103484553e0cf71cef8d161a978e9a5cffdadf9a413fbd491f"
+    },
+    {
+      "path": "tools/p17/frozen_local_qualifications_v1.py",
+      "bytes": 13024,
+      "sha256": "7db2e8c5a95ddb8bb31e6970ef0cdec209ae447056556b117e24070129ce0d59"
+    },
+    {
+      "path": "tools/p17/frozen_source_successor_pairs_v1.py",
+      "bytes": 13294,
+      "sha256": "3dcf8438e2d73ece1f10c95f0118754a7636d4af06fbc16827fbdcdac085bc70"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification.py",
+      "bytes": 4866,
+      "sha256": "e6af3cb5ee25791426690f8e23f5efa79abb79675ee5e03ff6e5fcacb75de33a"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v21.py",
+      "bytes": 1670,
+      "sha256": "10750952caf9504093a209caa9c51650f03fee501bfba1ad0730c9301ec84e28"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v22.py",
+      "bytes": 1987,
+      "sha256": "5d2ab0a5b7da3b1b2a20e283af664fc451ed0dc6ba6467690ecde61c0850f0dc"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v23.py",
+      "bytes": 1991,
+      "sha256": "491e76bc39c1211312b3f0b5023249cf779c2e66d1c382ccebb2cdd51972cd9d"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v24.py",
+      "bytes": 2226,
+      "sha256": "fa85f7f08485380fc14faabbaadc7ce57ccb61400b4bcfdb672bfd2040958f26"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v25.py",
+      "bytes": 2179,
+      "sha256": "e828adf1d80b682bd975588ec0570f9189992465a413e99a9a8715f7d52ee465"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v26.py",
+      "bytes": 2121,
+      "sha256": "cd979ca669c59c7f7975b5647114320c614c9b921da26eb02f2ce459df152b24"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v27.py",
+      "bytes": 2173,
+      "sha256": "02d8e323ffdfb46bc4c47edcf58030508a256f8045c11b56e2610110fc34bedc"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v28.py",
+      "bytes": 2812,
+      "sha256": "755f23409d149687c27987c37ac8af638eb0b596da1b19f4a1fae93350f4cdad"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v29.py",
+      "bytes": 2882,
+      "sha256": "d0fd5c4d15243e3a2179c73cd47a4b8d335b86e4ab1263eedde43a5415a36d7c"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v30.py",
+      "bytes": 2441,
+      "sha256": "b67175aeb377a25cc385f4e469e5ff99a3e38a747ae28fc17da9491a506e9ad2"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v31.py",
+      "bytes": 2649,
+      "sha256": "aae9a27621ba63e53b110382455b629972cbf652c82665b12fc61cd17e83babe"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v32.py",
+      "bytes": 2730,
+      "sha256": "26163e2d9977ad668e2198dbcf71ad734668fe71e9c966eae300b9d631d87a5e"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v33.py",
+      "bytes": 2683,
+      "sha256": "cc04d3b98c204128b1a2e40c42c120454abb55e11af8a8954fa2113059a2fb29"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v34.py",
+      "bytes": 2559,
+      "sha256": "fa403a507611a662ecbf18fbb671c0d77a6fb7cf0d7d69ac022b48c4c093c945"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v35.py",
+      "bytes": 2489,
+      "sha256": "8c70f878a40ef28877972c03be8b23711987d2e19a40f14728331f3ffdfb9e53"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v36.py",
+      "bytes": 2604,
+      "sha256": "e21b5684c3a234d36a08ad4aaba3735a1ec59b7a064ce263b8e4937faf1203d3"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v37.py",
+      "bytes": 2583,
+      "sha256": "e5bde1ef6bdf456e135cfbf7b2895c84a94f3e97d0f0abf85b48d2510e1f1f97"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v38.py",
+      "bytes": 2782,
+      "sha256": "e698c999a18e9035c63bda79b8178eddc7abda29bc1efc00c0ec04b9b252b599"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_history_v1.py",
+      "bytes": 3728,
+      "sha256": "eebae3d5cbed532cfdea23be6bfe7219080a9d097de98f79d8a54a76d52a7a43"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v12.py",
+      "bytes": 2279,
+      "sha256": "e35ae23d3ee60f6936bccd965c7aad8bb08d4c58a34c5270b179ba619166a722"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_legacy_qualifications_contract.py",
+      "bytes": 2209,
+      "sha256": "ca59896f4b48164c0db11ba07f3763ea66831d5f5ea47570e31cb3234e67b2f4"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_local_qualifications_v1.py",
+      "bytes": 4031,
+      "sha256": "3b734fabc3daa7ca5b8fa35f06ab0a2291f5ca38a5c25a16f0f1684ccf0ea363"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_p15_source_v1.py",
+      "bytes": 2541,
+      "sha256": "4229aa44e52ea17a2433c56af4b08a088fe593096913e3ebb91a6d54e229d5fb"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_source_successor_pairs_v1.py",
+      "bytes": 3172,
+      "sha256": "efd670a9bf21c4e199bea361e5cc7fced54579de4b24998c15029b6f37b58419"
+    },
+    {
+      "path": "tools/p17/tests/test_local_daemon_qualification.py",
+      "bytes": 1986,
+      "sha256": "5b68e4f38704b152f7cee72c70dcc9d48184644daa4ac2058c16de4043dc6d27"
+    },
+    {
+      "path": "tools/p17/tests/test_local_mcp_plugin_qualification.py",
+      "bytes": 2186,
+      "sha256": "b6fb8711c062693ef933d4557970cb0bda8e2b59a9f53d8331ae2700595de145"
+    },
+    {
+      "path": "tools/p17/tests/test_main_bound_plugin_qualification.py",
+      "bytes": 1927,
+      "sha256": "fef31620f8c374b49f5b4039e264a09385a0bd8dd57edcef97e8a244535c1d4f"
+    },
+    {
+      "path": "tools/p17/tests/test_postgres_checkpoint_host_qualification.py",
+      "bytes": 2752,
+      "sha256": "c665ef0ee9f7398a17a448a919070fe0428cf2f7d60d9eae4c6d0186df7cfb5c"
+    },
+    {
+      "path": "tools/p17/tests/test_telemetry_source_successor_bridge.py",
+      "bytes": 3151,
+      "sha256": "bb53d37ea2d942845b1b4460aa3fb65a5c5522e2d6792557e9ed70151ad40776"
+    },
+    {
+      "path": "tools/p17/tests/test_widget_plugin_prepare_qualification.py",
+      "bytes": 2041,
+      "sha256": "37449820c54a9f5b8ab3e830ebde998b747ab016b83943a7ee537bf74a834da9"
+    },
+    {
+      "path": "tools/p17/validate_frozen_legacy_qualifications_contract.py",
+      "bytes": 9661,
+      "sha256": "3df0d1efbdf470ab9b49041bf1f9f20103ec3879bc159729bb76e03f3e2e38c3"
+    }
+  ]
+}

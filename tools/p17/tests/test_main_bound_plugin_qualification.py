@@ -5,15 +5,15 @@ from pathlib import Path
 import sys
 import unittest
 
-
 TOOLS = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(TOOLS))
 import main_bound_plugin_qualification as qualification  # noqa: E402
+from tools.p17 import frozen_local_qualifications_v1 as frozen_local  # noqa: E402
 
 
 class MainBoundPluginQualificationTests(unittest.TestCase):
     def test_checked_in_qualification_is_exact_without_ignored_receipt(self) -> None:
-        contract = qualification.verify()
+        contract = frozen_local.verify("main_bound_plugin", qualification.ROOT)
         self.assertEqual(
             contract["qualification_id"], "p17.main-bound-plugin.v2.20260906"
         )
@@ -22,17 +22,13 @@ class MainBoundPluginQualificationTests(unittest.TestCase):
         self.assertFalse(contract["claims"]["actual_hangul"])
         self.assertFalse(contract["claims"]["phase_complete"])
 
-    def test_locked_sources_are_unique_and_current(self) -> None:
-        contract = qualification.verify()
-        paths: list[str] = []
-        for group in ("runtime_sources", "guard_sources"):
-            for entry in contract[group]:
-                path = qualification.ROOT / entry["path"]
-                self.assertEqual(path.stat().st_size, entry["bytes"], entry["path"])
-                self.assertEqual(
-                    qualification.digest(path), entry["sha256"], entry["path"]
-                )
-                paths.append(entry["path"])
+    def test_locked_sources_are_unique_and_historical(self) -> None:
+        contract = frozen_local.verify("main_bound_plugin", qualification.ROOT)
+        paths = [
+            entry["path"]
+            for group in ("runtime_sources", "guard_sources")
+            for entry in contract[group]
+        ]
         self.assertEqual(len(paths), len(set(paths)))
 
     def test_receipt_claim_promotion_and_unknown_field_fail_closed(self) -> None:

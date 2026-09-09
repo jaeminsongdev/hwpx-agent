@@ -5,6 +5,7 @@ from pathlib import Path
 import unittest
 from unittest.mock import patch
 
+from tools.p17 import frozen_source_successor_pairs_v1 as pairs
 
 ROOT = Path(__file__).resolve().parents[3]
 PATH = ROOT / "tools/p17/frozen_current_source_v12.py"
@@ -33,7 +34,7 @@ class FrozenCurrentSourceV12Tests(unittest.TestCase):
             "implementation/p15/p15-inspector-staging-contract-v1.json",
             "09335ea42021c782f75010d7e873de11c36c834bb33ba8cafde529f824e3b907",
         )
-        replacements = MODULE.verified_replacements(ROOT, contract["source_locks"])
+        replacements = pairs.v12_replacements(ROOT, contract["source_locks"])
         self.assertEqual(
             replacements["deny.toml"],
             (

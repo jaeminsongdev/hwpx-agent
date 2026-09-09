@@ -92,7 +92,7 @@
 - TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. The remaining unit rows are TABLE-006/032/033/049: TABLE-006 has a 24/24 static-checked exact 3x3 native-source harness; TABLE-049 has a complete exact-state planner plus a 24/24 static-ready six-format by two-grouping harness, while attempt 01 stopped at the first manual format dialog with baseline-only failed evidence and no ResultFormat mapping; TABLE-032/033 tooling passes 20/20, but licensed runs still await user `허용`. All 42 integration rows need target oracles and later automation evidence.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`, current conformance JSON, and `protocol/private/p06-table-conformance-v1.json`.
 
-## Open risks and holds
+## Risks, closures and holds
 
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence absent.
 - R-0003: one historical independent worker timeout root cause remains unproven; retries passed.
@@ -101,20 +101,20 @@
 - R-0006: P17 conflict resolver/widget are component evidence only.
 - R-0007: P06-09 remains 0/61 release-green until direct validations, fixtures, rollback/retry,
   current-target automation runtime and exact differential evidence close every row.
-- R-0008: frozen v39 Git-blob verification and 16 focused checks pass without receipt/runtime
-  promotion; P17 full still has 31 legacy mutable-source errors, so migration remains open.
+- R-0008 closed: all 31 legacy mutable-source errors now use exact immutable Git-history
+  verification; P17 Python passes 199/199 without receipt, runtime or production promotion.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 
 ## Next actions
 
-1. While user interaction is unavailable, close R-0008 by replacing all 31 legacy mutable-source failures with exact immutable-history verification; never skip or relabel them.
+1. While user interaction is unavailable, advance the next ledger-approved offline P17/P18 component without promoting remote, registered-host or production evidence.
 2. At `max`, resume TABLE-002/003 and TABLE-032/033 target runs only when the user can perform access clicks, then close remaining P06-09 target oracles, automation and differentials.
 3. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
 
 ## Context pack and archive pointers
 
 - Read first: this file, active P06-07 policies/reports, P06-09 conformance authorities, and `implementation/p05/P05_GATE_REPORT.md`.
-- P17 source authority: `implementation/p17/P17_CURRENT_WORKSPACE_SOURCE_V39.md`.
+- P17 source authority: `implementation/p17/P17_FROZEN_LEGACY_SOURCE_QUALIFICATIONS.md`.
 - Detailed closed-card history is in the named reports and local Git history; no remote push is implied.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.

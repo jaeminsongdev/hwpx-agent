@@ -6,6 +6,7 @@ from pathlib import Path
 import unittest
 from unittest.mock import patch
 
+from tools.p17 import frozen_source_successor_pairs_v1 as pairs
 
 ROOT = Path(__file__).resolve().parents[3]
 PATH = ROOT / "tools/p15/validate_telemetry_contract.py"
@@ -32,10 +33,10 @@ def source_locks() -> list[dict[str, str]]:
 
 
 class TelemetrySourceSuccessorBridgeTests(unittest.TestCase):
-    def test_frozen_current_source_admits_exact_dependency_policy_successor(self) -> None:
-        replacements = VALIDATOR.validate_current_source_qualification(
-            ROOT, source_locks()
-        )
+    def test_frozen_current_source_admits_exact_dependency_policy_successor(
+        self,
+    ) -> None:
+        replacements = pairs.v12_replacements(ROOT, source_locks())
         self.assertEqual(
             replacements["deny.toml"],
             (

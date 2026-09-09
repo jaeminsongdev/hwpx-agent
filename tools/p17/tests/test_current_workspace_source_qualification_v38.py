@@ -4,11 +4,12 @@ import copy
 import unittest
 
 from tools.p17 import current_workspace_source_qualification_v38 as qualification
+from tools.p17 import frozen_current_source_history_v1 as history
 
 
 class CurrentWorkspaceSourceQualificationV38Tests(unittest.TestCase):
     def test_current_qualification_verifies(self) -> None:
-        contract = qualification.verify()
+        contract = history.verify_version(qualification.ROOT, 38)
         self.assertEqual(
             contract["qualification_id"], "p17.current-workspace-source.v38.20260907"
         )
@@ -28,15 +29,14 @@ class CurrentWorkspaceSourceQualificationV38Tests(unittest.TestCase):
         self.assertEqual(len(paths), 9)
         self.assertIn("crates/hwpx-package/src/id_index.rs", paths)
         self.assertIn(
-            "crates/hwpx-package/examples/p06_06_table_formula_structural_target_fixture.rs",
+            "crates/hwpx-package/examples/"
+            "p06_06_table_formula_structural_target_fixture.rs",
             paths,
         )
         self.assertIn(
             "crates/hwpx-package/examples/p06_06_table_formula_target_oracle.rs", paths
         )
-        self.assertIn(
-            "implementation/p06/P06-06_TARGET_ATTEMPTS_DIAGNOSTIC.md", paths
-        )
+        self.assertIn("implementation/p06/P06-06_TARGET_ATTEMPTS_DIAGNOSTIC.md", paths)
 
     def test_predecessor_is_exact_v37_contract(self) -> None:
         qualification.validate_predecessor(qualification.ROOT)
