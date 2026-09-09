@@ -76,9 +76,9 @@
   55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
 - TABLE-020 binds complete visual style; TABLE-016/017 bind full cell merge/split topology and content policies; TABLE-010/011 now split/join admitted formula-free/no-header/no-caption top-level wrappers with exact separator, common-lattice, state/flow/part binding and strict static reopen, without a Hangul/render claim.
 - TABLE-012/013/014/015 share an exact structure/HWPX model with full state/grid/flow binding, formula/cache rebase, edge collapse rules and pagination/caption reopen.
-- The ruling slice adds TABLE-002/003 as one exact ruling/topology model: outer rectangle, full and
-  local strokes, directional diagonals, structural shared-edge merge, transparent nonstructural
-  erase and exact closed-package relift/lower/readback; structural formula mutation stays fail-closed.
+- The ruling slice adds TABLE-002/003 as one exact ruling/topology model: outer/local/full strokes,
+  directional diagonals, structural merge, transparent erase and exact relift/lower/readback; its
+  five-case target batch/oracle is static-ready without Hangul/render promotion, with formula fail-closed.
 - The property HWPX slice maps TABLE-007/008/009/047 through typed catalogs, exact diagonal intent,
   part/state/grid/flow checks and closed-package semantic reopen; no Hangul/render claim was added.
 - The layout-mode slice gives TABLE-051/052/053 distinct fixed/content/page allocation with closed

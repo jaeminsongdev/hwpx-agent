@@ -1,6 +1,6 @@
 # P06-09 TABLE-002/003 table ruling HWPX adapter policy v1
 
-Status: direct static HWPX integration implemented; no licensed Hangul 2020 oracle claim
+Status: direct static HWPX integration and target tooling implemented; no licensed Hangul 2020 oracle claim
 
 ## Scope
 
@@ -88,6 +88,30 @@ output growth use checked/fallible paths. Receipts bind source/output header and
 template/source state and grid, target state/grid, document flow and optional insertion context.
 Custom `Debug` omits all hashes, logical IDs, payloads, formulas, caches and raw XML.
 
+## Licensed-target candidate and oracle admission
+
+The target fixture generator pins the exact P06-06 licensed-Hangul ancestor and creates five
+separate TABLE-002/003 documents. Together they cover the outer rectangle, the full row and column
+strokes, a local split, an existing-boundary style change, both directional diagonals, structural
+shared-edge merge and nonstructural transparent erasure. Its create-only manifest binds every case
+and operation to the target package, header, section, state, grid, physical boundaries, logical
+cell/payload identities and request/plan receipts. Repeated generation must be byte-identical.
+
+The target batch wrapper admits only that exact manifest and current licensed Hangul 2020 binary.
+One x86 STA COM session opens each immutable candidate, records only canonical text SHA-256, saves a
+new HWPX, closes and reopens it, requires exact text-digest equality, exports a bounded signed PDF,
+and closes the document before continuing. It never registers a module or sends UI input; the
+visible window exists solely so the user can perform any required access approval. A finite parent
+watchdog records case-aware progress and may terminate only the exact owned automation process.
+Failed and partial outputs remain create-only evidence.
+
+After a successful batch, the independent target oracle reopens both the exact candidate and saved
+result through the bounded package graph and manifest-supplied complete binding. It removes only
+validated renderer `linesegarray` caches, requires the remaining complete section bytes to match,
+and then checks state/grid digests, complete topology, all ruling operations, payload/formula
+counts, document formula-field count and selected/unselected table cardinality. The renderer cache
+digest and count are evidence, never trusted input.
+
 ## Evidence promotion rule
 
 Passing the fifteen adapter tests and private tamper suite promotes only TABLE-002/003 from
@@ -96,3 +120,8 @@ Passing the fifteen adapter tests and private tamper suite promotes only TABLE-0
 licensed Hangul 2020 save/reopen or target-build behavior, general structural-formula native
 lowering, rollback/retry, automation runtime, differential exact match, arbitrary user documents,
 another PC/version, P06-09/P06 completion, production or product completion.
+
+Passing the target generator, synthetic self-identity oracle and batch static tests does not change
+that stage. Target-build, renderer and licensed-Hangul fields may change only after the exact
+current-PC batch outputs, PDFs and independent oracle receipts exist and are reviewed. Automation
+runtime and differential fields remain separate later gates.

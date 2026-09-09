@@ -72,6 +72,22 @@
     "counts": "added_border_fills_target_cells_payload_blocks_and_formulas",
     "debug": "all_hashes_logical_ids_payloads_formulas_cache_and_raw_xml_omitted"
   },
+  "target_tooling": {
+    "fixture_schema": "hwpx-agent.p06-09-table-ruling-target-fixture/v1",
+    "manifest_sha256": "8296cf4057c1cb6b27c800c15694866008c31cfa290cd6863321179c1efda543",
+    "case_ids": [
+      "table-002-draw-outer",
+      "table-002-draw-topology",
+      "table-002-draw-diagonals-formula",
+      "table-003-eraser-structural-merge",
+      "table-003-eraser-transparent-formula"
+    ],
+    "operation_count": 9,
+    "batch_engine_schema": "hwpx-agent.p06-09-hancom-2020-table-ruling-target-batch-engine/v1",
+    "batch_wrapper_schema": "hwpx-agent.p06-09-hancom-2020-table-ruling-target-batch-readback/v1",
+    "oracle_schema": "hwpx-agent.p06-09-table-ruling-target-oracle/v1",
+    "target": "licensed_hangul_2020_11_0_0_9136_x86_ko_kr_user_access_only"
+  },
   "limits_profiles": [
     "TableLayoutHwpxLimits",
     "ParagraphStyleLimits",
@@ -95,6 +111,10 @@
   "report": "implementation/p06/P06-09_TABLE_RULING_HWPX_REPORT.md",
   "expected_evidence": {
     "adapter_tests": 15,
+    "target_fixture_tests": 3,
+    "target_oracle_tests": 2,
+    "target_oracle_synthetic_cases": 5,
+    "batch_static_tests": 31,
     "feature_count": 2,
     "backend": "direct_hwpx",
     "direct_stage": "integration_passed",

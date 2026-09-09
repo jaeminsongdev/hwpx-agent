@@ -14,7 +14,7 @@ class TableRulingHwpxContractTests(unittest.TestCase):
         report = validator.validate()
         self.assertEqual(report["state"], "pass", report)
         self.assertEqual(report["source_locks"], 5)
-        self.assertEqual(report["implementation_files"], 6)
+        self.assertEqual(report["implementation_files"], 11)
         self.assertEqual(report["features"], 2)
         self.assertEqual(report["direct_stage"], "integration_passed")
         self.assertFalse(report["actual_hangul"])
@@ -82,6 +82,9 @@ class TableRulingHwpxContractTests(unittest.TestCase):
             contract_path = root / validator.CONTRACT
             contract = json.loads(contract_path.read_text(encoding="utf-8"))
             contract["expected_evidence"]["direct_stage"] = "oracle_verified"
+            contract["expected_evidence"]["batch_static_tests"] = 0
+            contract["target_tooling"]["manifest_sha256"] = "0" * 64
+            contract["target_tooling"]["case_ids"] = ["easy-subset"]
             contract["not_claimed"]["hangul_2020_target_build"] = True
             contract["not_claimed"]["structural_formula_native_lowering"] = True
             contract_path.write_text(json.dumps(contract), encoding="utf-8")
@@ -94,6 +97,7 @@ class TableRulingHwpxContractTests(unittest.TestCase):
             )
             errors = validator.validate(root)["errors"]
             self.assertIn("expected_evidence", errors)
+            self.assertIn("target_tooling", errors)
             self.assertIn("not_claimed", errors)
             self.assertIn("migration_marker", errors)
 

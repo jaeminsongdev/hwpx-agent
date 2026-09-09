@@ -169,7 +169,9 @@ The machine-readable authority is
   coordinated section/header XML, reopens exact semantics and preserves sibling formula/cache plus
   pagination in a closed package. Outer creation uses a digest-bound empty paragraph and reviewed
   1x1 native wrapper. Structural formula topology changes remain native fail-closed; no licensed
-  Hangul execution or renderer result is claimed.
+  Hangul execution or renderer result is claimed. A deterministic five-case target generator,
+  one-session x86 STA batch wrapper and independent renderer-cache-stripping oracle are now
+  static-ready for all nine ruling actions; this tooling readiness does not promote either row.
 - The merge/split preserving HWPX adapter covers TABLE-016/017 with the complete domain content
   policies. Merge preserves the top-left master and removes only newly internal edges; split uses
   exact row-major identities and a source-catalog-bound edge line. Paragraph blocks remain exact,
@@ -196,7 +198,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-83 missing validation instances, 61 unverified automation runtime rows and 61 missing
+80 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -204,8 +206,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the remaining 5 unit-only rows through preserving HWPX adapters;
-2. close the 41 integration-only target oracles;
+1. lower the remaining 4 unit-only rows through preserving HWPX adapters;
+2. close the 42 integration-only target oracles, starting with the static-ready TABLE-002/003 batch;
 3. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
 4. regenerate until all 61 rows are green, then run the P06 hard Gate.

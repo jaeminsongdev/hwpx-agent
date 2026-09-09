@@ -18,6 +18,17 @@ CONTRACT = "protocol/private/p06-table-ruling-hwpx-v1.json"
 MIGRATION = "protocol/migrations/p06-table-ruling-hwpx-v0-to-v1.md"
 POLICY = "implementation/p06/P06-09_TABLE_RULING_HWPX_POLICY.md"
 REPORT = "implementation/p06/P06-09_TABLE_RULING_HWPX_REPORT.md"
+TARGET_FIXTURE = "crates/hwpx-package/examples/p06_09_table_ruling_target_fixture.rs"
+TARGET_ORACLE = "crates/hwpx-package/examples/p06_09_table_ruling_target_oracle.rs"
+TARGET_ENGINE = (
+    "implementation/p06/tools/run-hancom-2020-table-ruling-target-batch-engine.ps1"
+)
+TARGET_WRAPPER = (
+    "implementation/p06/tools/run-hancom-2020-table-ruling-target-batch-readback.ps1"
+)
+TARGET_STATIC_TEST = (
+    "implementation/p06/tests/Test-Hancom2020TableRulingTargetBatchReadback.ps1"
+)
 EXPECTED_SOURCE_PATHS = {
     "WORK_BREAKDOWN_STRUCTURE.csv",
     "docs/04_feature_catalog/07_table.md",
@@ -31,10 +42,36 @@ EXPECTED_FEATURES = {
 }
 EXPECTED_EVIDENCE = {
     "adapter_tests": 15,
+    "target_fixture_tests": 3,
+    "target_oracle_tests": 2,
+    "target_oracle_synthetic_cases": 5,
+    "batch_static_tests": 31,
     "feature_count": 2,
     "backend": "direct_hwpx",
     "direct_stage": "integration_passed",
     "validations": ["formula_readback", "page_split", "schema", "semantic_reopen"],
+}
+EXPECTED_TARGET_TOOLING = {
+    "fixture_schema": "hwpx-agent.p06-09-table-ruling-target-fixture/v1",
+    "manifest_sha256": (
+        "8296cf4057c1cb6b27c800c15694866008c31cfa290cd6863321179c1efda543"
+    ),
+    "case_ids": [
+        "table-002-draw-outer",
+        "table-002-draw-topology",
+        "table-002-draw-diagonals-formula",
+        "table-003-eraser-structural-merge",
+        "table-003-eraser-transparent-formula",
+    ],
+    "operation_count": 9,
+    "batch_engine_schema": (
+        "hwpx-agent.p06-09-hancom-2020-table-ruling-target-batch-engine/v1"
+    ),
+    "batch_wrapper_schema": (
+        "hwpx-agent.p06-09-hancom-2020-table-ruling-target-batch-readback/v1"
+    ),
+    "oracle_schema": "hwpx-agent.p06-09-table-ruling-target-oracle/v1",
+    "target": "licensed_hangul_2020_11_0_0_9136_x86_ko_kr_user_access_only",
 }
 EXPECTED_NOT_CLAIMED = {
     "render_diff": False,
@@ -94,15 +131,58 @@ IMPLEMENTATION_MARKERS = {
         "line_only_edit_preserves_formula_and_structural_formula_change_fails_closed",
         "closed_package_reopen_preserves_formula_pagination_and_unselected_parts",
     ),
+    TARGET_FIXTURE: (
+        "hwpx-agent.p06-09-table-ruling-target-fixture/v1",
+        "EXPECTED_ANCESTOR_SHA256",
+        "BindingEvidence",
+        "draw_outer_rectangle",
+        "draw_local_cell_split",
+        "erase_shared_column_edge",
+        "erase_outer_edge_on_formula_cell",
+        "actual_hangul_2020: false",
+    ),
+    TARGET_ORACLE: (
+        "EXPECTED_MANIFEST_SHA256",
+        "hwpx-agent.p06-09-table-ruling-target-oracle/v1",
+        "strip_renderer_caches",
+        "require_case_semantics",
+        "section_equal_after_renderer_cache_strip=true",
+    ),
+    TARGET_ENGINE: (
+        "8296cf4057c1cb6b27c800c15694866008c31cfa290cd6863321179c1efda543",
+        "hwpx-agent.p06-09-hancom-2020-table-ruling-target-batch-engine/v1",
+        "TABLE_RULING_BATCH_TEXT_ROUNDTRIP_MISMATCH",
+        "CaseId",
+        "computer_use_click_or_type_invoked = $false",
+    ),
+    TARGET_WRAPPER: (
+        "8296cf4057c1cb6b27c800c15694866008c31cfa290cd6863321179c1efda543",
+        "hwpx-agent.p06-09-hancom-2020-table-ruling-target-batch-readback/v1",
+        "Test-ExactInnerTraceShape",
+        "Read-ProgressJournal",
+        "Stop-OwnedHancomProcesses",
+        "progress_observed_case_id",
+    ),
+    TARGET_STATIC_TEST: (
+        "hwpx-agent.p06-09-table-ruling-target-batch-readback-static-tests/v1",
+        "exact_five_bindings",
+        "complete_ruling_semantics",
+        "complete_binding_validated_twice",
+        "manifest_identity_fails_before_com",
+        "no_ui_input",
+    ),
     POLICY: (
-        "direct static HWPX integration implemented; no licensed Hangul 2020 oracle claim",
+        "direct static HWPX integration and target tooling implemented; no licensed Hangul 2020 oracle claim",
         "never treats an existing table as absent",
         "UnsupportedFormulaMutation",
         "direct_hwpx / integration_passed",
+        "Licensed-target candidate and oracle admission",
     ),
     REPORT: (
         "Result: `integration_pass`",
         "15/15 PASS",
+        "31/31 PASS",
+        "8296cf40...da543",
         "unit_passed`: 36 to 34",
         "integration_passed`: 10 to 12",
         "green rows: remains 0/61",
@@ -137,6 +217,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         "preservation",
         "representability",
         "receipt",
+        "target_tooling",
         "limits_profiles",
         "failure_policy",
         "migration",
@@ -165,6 +246,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         "migration": MIGRATION,
         "policy": POLICY,
         "report": REPORT,
+        "target_tooling": EXPECTED_TARGET_TOOLING,
         "expected_evidence": EXPECTED_EVIDENCE,
         "not_claimed": EXPECTED_NOT_CLAIMED,
     }
