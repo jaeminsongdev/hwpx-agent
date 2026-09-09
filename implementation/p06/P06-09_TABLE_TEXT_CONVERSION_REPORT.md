@@ -43,3 +43,7 @@ This is unit-level evidence. No HWPX XML, user document or Hangul process was to
 graph/HWPX lowering, preservation/readback, pagination/rendering, target-build save/reopen,
 automation and differentials remain open. P06-09, P06, production and the product remain in
 progress.
+
+TABLE-004 subsequently gained separate static direct-HWPX integration evidence under
+`P06-09_TABLE_TEXT_TO_TABLE_HWPX_REPORT.md`. That later result does not rewrite this component run;
+TABLE-005 remains unit-only and licensed Hangul/render evidence remains open.

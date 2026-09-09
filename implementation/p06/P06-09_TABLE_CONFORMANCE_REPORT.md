@@ -69,8 +69,10 @@ The machine-readable authority is
   numeric formula-cell formats. TABLE-032/033 move to unit evidence while decimal places, formula
   AST and cache remain exact; unsupported formats fail closed.
 - The text conversion component adds bounded UTF-8 tab/comma/semicolon parsing and deterministic
-  writing for TABLE-004/005. Quoting, Unicode, multiline and empty cells roundtrip semantically;
-  malformed or ragged input fails closed.
+  writing for TABLE-004/005. TABLE-004 now has a preserving direct-HWPX adapter for the complete
+  admitted plain-text profile: arbitrary bounded rectangular quoting, Unicode, multiline and empty
+  cells become exact template-derived payload/grid/state with closed-package reopen. Fields and
+  opaque source elements fail closed; TABLE-005 remains unit-only and no Hangul/render result is inferred.
 - The placement component and preserving HWPX adapter cover TABLE-034/036/037/038. Position tests
   span every reference and alignment value, signed offsets and the three flags; attachment changes
   preserve inactive native fields; all 16 table wrap/side-flow pairs and four margins read back
@@ -173,7 +175,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-101 missing validation instances, 61 unverified automation runtime rows and 61 missing
+98 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -181,8 +183,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the remaining 11 unit-only rows through preserving HWPX adapters;
-2. close the 35 integration-only target oracles;
+1. lower the remaining 10 unit-only rows through preserving HWPX adapters;
+2. close the 36 integration-only target oracles;
 3. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
 4. regenerate until all 61 rows are green, then run the P06 hard Gate.

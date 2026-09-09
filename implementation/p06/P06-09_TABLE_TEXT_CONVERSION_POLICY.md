@@ -43,5 +43,7 @@ HWPX integration, merged-cell/style/formula preservation, semantic reopen, formu
 split, render diff, licensed Hangul 2020 target-build, automation, differential exact match,
 release-enabled, P06-09/P06 PASS, production or product completion.
 
-The next boundary is a revision-bound adapter between `TableTextGrid`, document graph table nodes
-and preserving HWPX parts. Recommended reasoning remains `max`.
+TABLE-004 now has the separately governed preserving adapter at
+`P06-09_TABLE_TEXT_TO_TABLE_HWPX_POLICY.md`; this component report itself remains unit evidence and
+does not inherit that adapter's integration result. The next text-conversion boundary is the exact
+TABLE-005 table-to-text adapter. Recommended reasoning remains `max`.

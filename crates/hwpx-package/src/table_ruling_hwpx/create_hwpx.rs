@@ -811,7 +811,7 @@ fn validate_request_source(
     Ok(())
 }
 
-fn require_template_profile(
+pub(super) fn require_template_profile(
     template: &TableRulingHwpxReadback,
     pagination: &TablePaginationHwpxReadback,
 ) -> Result<(), TableCreateHwpxError> {
@@ -897,16 +897,33 @@ fn build_target_state(
     target_grid: &TableGrid,
     limits: &TableCreateHwpxLimits,
 ) -> Result<TableRulingState, TableCreateHwpxError> {
-    let row_boundaries = cumulative_boundaries(
+    build_created_state(
+        &request.table_id,
+        target_grid,
         &request.row_heights_hwpunit,
+        &request.column_widths_hwpunit,
+        &source.template,
+        limits,
+    )
+}
+
+pub(super) fn build_created_state(
+    table_id: &LogicalId,
+    target_grid: &TableGrid,
+    row_heights_hwpunit: &[u32],
+    column_widths_hwpunit: &[u32],
+    template: &TableRulingHwpxReadback,
+    limits: &TableCreateHwpxLimits,
+) -> Result<TableRulingState, TableCreateHwpxError> {
+    let row_boundaries = cumulative_boundaries(
+        row_heights_hwpunit,
         limits.ruling.ruling.config().dimension_hwpunit,
     )?;
     let column_boundaries = cumulative_boundaries(
-        &request.column_widths_hwpunit,
+        column_widths_hwpunit,
         limits.ruling.ruling.config().dimension_hwpunit,
     )?;
-    let properties = source
-        .template
+    let properties = template
         .state
         .cells()
         .first()
@@ -927,11 +944,11 @@ fn build_target_state(
             formula: None,
         })
         .collect();
-    let frame = source.template.state.frame();
+    let frame = template.state.frame();
     Ok(TableRulingState::from_draft(
         TableRulingStateDraft {
             schema_version: TABLE_RULING_SCHEMA_VERSION.to_owned(),
-            table_id: request.table_id.clone(),
+            table_id: table_id.clone(),
             frame: TableRulingFrame {
                 left_hwpunit: frame.left_hwpunit,
                 top_hwpunit: frame.top_hwpunit,
@@ -943,10 +960,10 @@ fn build_target_state(
                     .ok_or(TableCreateHwpxError::InvalidTracks)?,
             },
             grid_sha256: hex(target_grid.canonical_sha256()?),
-            table_properties_sha256: source.template.state.table_properties_sha256().to_owned(),
+            table_properties_sha256: template.state.table_properties_sha256().to_owned(),
             row_boundaries_hwpunit: row_boundaries,
             column_boundaries_hwpunit: column_boundaries,
-            edges: created_edges(&source.template.state, request.rows, request.columns)?,
+            edges: created_edges(&template.state, target_grid.rows(), target_grid.columns())?,
             cells,
         },
         target_grid,
@@ -1083,7 +1100,7 @@ fn serialize_bounded<T: Serialize + ?Sized>(
     Ok(bytes)
 }
 
-fn reject_duplicate_json_keys(bytes: &[u8]) -> Result<(), TableCreateHwpxError> {
+pub(super) fn reject_duplicate_json_keys(bytes: &[u8]) -> Result<(), TableCreateHwpxError> {
     struct Seed;
     struct Visitor;
 
@@ -1158,7 +1175,7 @@ fn reject_duplicate_json_keys(bytes: &[u8]) -> Result<(), TableCreateHwpxError> 
         .map_err(|_| TableCreateHwpxError::InvalidJson)
 }
 
-fn require_digest(value: &str) -> Result<(), TableCreateHwpxError> {
+pub(super) fn require_digest(value: &str) -> Result<(), TableCreateHwpxError> {
     if value.len() != 64
         || value
             .bytes()
@@ -1180,7 +1197,7 @@ fn parse_digest(value: &str) -> Result<[u8; 32], TableCreateHwpxError> {
     Ok(output)
 }
 
-fn hex(value: impl AsRef<[u8]>) -> String {
+pub(super) fn hex(value: impl AsRef<[u8]>) -> String {
     const DIGITS: &[u8; 16] = b"0123456789abcdef";
     let bytes = value.as_ref();
     let mut output = String::with_capacity(bytes.len().saturating_mul(2));
