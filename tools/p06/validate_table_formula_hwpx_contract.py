@@ -27,7 +27,7 @@ SOURCE_LOCKS = {
     "implementation/p06/tools/run-hancom-2020-formula-source.ps1":
         "8088beff9f4c9652cc54c765ceada439e6d09cabef4f8fc5d789dd5ee6f2889f",
     "crates/hwpx-package/src/table_formula.rs":
-        "1126f1778750efe58ddca61ea05b723f57e2c1bd9722c6cc8c8abacf2fde1ceb",
+        "8b5b4ff8a1c1a2c6a2644c173edf6059ef9c60f3e5ba5b8198a6e3b83dcd7ff8",
     "crates/hwpx-package/tests/table_formula.rs":
         "c279de8ab7e976071446d5fa74d7bb24fc5c39d6383f82aadf03b365eafef5f3",
     "crates/hwpx-package/examples/p06_06_table_formula_source_adapter.rs":

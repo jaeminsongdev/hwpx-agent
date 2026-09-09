@@ -23,6 +23,7 @@ mod table_placement;
 mod table_properties;
 mod table_ruling;
 mod table_sort;
+mod table_structure;
 mod table_style;
 mod table_text_conversion;
 mod table_thousands;
@@ -180,6 +181,13 @@ pub use table_sort::{
     TableSortKey, TableSortLimitConfig, TableSortLimits, TableSortPlan, TableSortReceipt,
     TableSortRegion, TableSortRelocation, TableSortRequest, TableSortRequestDraft, TableSortValue,
     TableTextCollation,
+};
+pub use table_structure::{
+    TABLE_DELETE_COLUMNS_CAPABILITY_ID, TABLE_DELETE_ROWS_CAPABILITY_ID,
+    TABLE_INSERT_COLUMNS_CAPABILITY_ID, TABLE_INSERT_ROWS_CAPABILITY_ID,
+    TABLE_STRUCTURE_SCHEMA_VERSION, TableStructureBuilder, TableStructureError,
+    TableStructureLimitConfig, TableStructureLimits, TableStructureOperation, TableStructurePlan,
+    TableStructureReceipt, TableStructureRequest, TableStructureRequestDraft,
 };
 pub use table_style::{
     TABLE_STYLE_CAPABILITY_ID, TABLE_STYLE_DEFINITION_SCHEMA_VERSION, TABLE_STYLE_SCHEMA_VERSION,

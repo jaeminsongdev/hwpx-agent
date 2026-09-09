@@ -238,6 +238,25 @@ impl TableFormulaHwpxReader {
 pub struct TableFormulaHwpxLowerer;
 
 impl TableFormulaHwpxLowerer {
+    pub(crate) fn validate_target(
+        target: &FormulaCell,
+        limits: TableFormulaHwpxLimits,
+    ) -> Result<(), TableFormulaHwpxError> {
+        require_left_prefix(target)?;
+        if target.number_format() != FormulaNumberFormat::General {
+            return Err(TableFormulaHwpxError::UnsupportedFormula);
+        }
+        let result = cache_decimal_text(target.cache())?;
+        if result.len() > limits.0.text_bytes {
+            return Err(TableFormulaHwpxError::InvalidText);
+        }
+        let command = format!("{NATIVE_LEFT_FORMULA}??{NATIVE_GENERAL_FORMAT};;{result}");
+        if command.len() > limits.0.text_bytes {
+            return Err(TableFormulaHwpxError::InvalidText);
+        }
+        Ok(())
+    }
+
     /// Lowers one exact left-prefix formula and unverified decimal cache into a selected section
     /// table without exposing native field commands through the public API.
     ///
@@ -278,61 +297,104 @@ impl TableFormulaHwpxLowerer {
         limits: TableFormulaHwpxLimits,
         formula_limits: FormulaLimits,
     ) -> Result<(Vec<u8>, TableFormulaHwpxLoweringReceipt), TableFormulaHwpxError> {
-        let source_shape = read_shape(source, table_ordinal, limits, formula_limits, false)?;
-        if dimensions.rows != source_shape.readback.rows
-            || dimensions.columns != source_shape.readback.columns
-            || target.owner() != source_shape.readback.formula.owner()
-        {
-            return Err(TableFormulaHwpxError::UnsupportedShape);
-        }
-        require_left_prefix(target)?;
-        if target.number_format() != FormulaNumberFormat::General {
-            return Err(TableFormulaHwpxError::UnsupportedFormula);
-        }
-        let result = cache_decimal_text(target.cache())?;
-        if result.len() > limits.0.text_bytes {
-            return Err(TableFormulaHwpxError::InvalidText);
-        }
-        let command = format!("{NATIVE_LEFT_FORMULA}??{NATIVE_GENERAL_FORMAT};;{result}");
-        if command.len() > limits.0.text_bytes {
-            return Err(TableFormulaHwpxError::InvalidText);
-        }
-
-        let mut edits = [
-            ByteEdit::new(source_shape.command_span, command.into_bytes()),
-            ByteEdit::new(source_shape.last_result_span, result.as_bytes().to_vec()),
-            ByteEdit::new(source_shape.visible_result_span, result.into_bytes()),
-        ];
-        let output = apply_edits(source, &mut edits, limits)?;
-        let output_shape = read_shape(&output, table_ordinal, limits, formula_limits, false)?;
-        if &output_shape.readback.formula != target
-            || output_shape.readback.rows != dimensions.rows
-            || output_shape.readback.columns != dimensions.columns
-        {
-            return Err(TableFormulaHwpxError::ReadbackMismatch);
-        }
-        if output_shape.readback.unowned_sha256 != source_shape.readback.unowned_sha256 {
-            return Err(TableFormulaHwpxError::PreservationMismatch);
-        }
-        let receipt = TableFormulaHwpxLoweringReceipt {
-            profile_id: TABLE_FORMULA_HWPX_PROFILE_ID,
-            source_sha256: Sha256::digest(source).into(),
-            output_sha256: Sha256::digest(&output).into(),
-            source_formula_sha256: source_shape
-                .readback
-                .formula
-                .canonical_sha256(formula_limits)?,
-            target_formula_sha256: target.canonical_sha256(formula_limits)?,
-            unowned_sha256: output_shape.readback.unowned_sha256,
-            source_bytes: source.len(),
-            output_bytes: output.len(),
-            rows: dimensions.rows,
-            columns: dimensions.columns,
-            owner: target.owner(),
-            modified_text_count: edits.len(),
-        };
-        Ok((output, receipt))
+        lower_in_section_profile(
+            source,
+            table_ordinal,
+            target,
+            dimensions,
+            limits,
+            formula_limits,
+            false,
+        )
     }
+
+    pub(crate) fn lower_in_section_preserving_merged_topology(
+        source: &[u8],
+        table_ordinal: usize,
+        target: &FormulaCell,
+        dimensions: FormulaGridDimensions,
+        limits: TableFormulaHwpxLimits,
+        formula_limits: FormulaLimits,
+    ) -> Result<(Vec<u8>, TableFormulaHwpxLoweringReceipt), TableFormulaHwpxError> {
+        lower_in_section_profile(
+            source,
+            table_ordinal,
+            target,
+            dimensions,
+            limits,
+            formula_limits,
+            true,
+        )
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn lower_in_section_profile(
+    source: &[u8],
+    table_ordinal: usize,
+    target: &FormulaCell,
+    dimensions: FormulaGridDimensions,
+    limits: TableFormulaHwpxLimits,
+    formula_limits: FormulaLimits,
+    allow_merged_cells: bool,
+) -> Result<(Vec<u8>, TableFormulaHwpxLoweringReceipt), TableFormulaHwpxError> {
+    let source_shape = read_shape(
+        source,
+        table_ordinal,
+        limits,
+        formula_limits,
+        allow_merged_cells,
+    )?;
+    if dimensions.rows != source_shape.readback.rows
+        || dimensions.columns != source_shape.readback.columns
+        || target.owner() != source_shape.readback.formula.owner()
+    {
+        return Err(TableFormulaHwpxError::UnsupportedShape);
+    }
+    TableFormulaHwpxLowerer::validate_target(target, limits)?;
+    let result = cache_decimal_text(target.cache())?;
+    let command = format!("{NATIVE_LEFT_FORMULA}??{NATIVE_GENERAL_FORMAT};;{result}");
+
+    let mut edits = [
+        ByteEdit::new(source_shape.command_span, command.into_bytes()),
+        ByteEdit::new(source_shape.last_result_span, result.as_bytes().to_vec()),
+        ByteEdit::new(source_shape.visible_result_span, result.into_bytes()),
+    ];
+    let output = apply_edits(source, &mut edits, limits)?;
+    let output_shape = read_shape(
+        &output,
+        table_ordinal,
+        limits,
+        formula_limits,
+        allow_merged_cells,
+    )?;
+    if &output_shape.readback.formula != target
+        || output_shape.readback.rows != dimensions.rows
+        || output_shape.readback.columns != dimensions.columns
+    {
+        return Err(TableFormulaHwpxError::ReadbackMismatch);
+    }
+    if output_shape.readback.unowned_sha256 != source_shape.readback.unowned_sha256 {
+        return Err(TableFormulaHwpxError::PreservationMismatch);
+    }
+    let receipt = TableFormulaHwpxLoweringReceipt {
+        profile_id: TABLE_FORMULA_HWPX_PROFILE_ID,
+        source_sha256: Sha256::digest(source).into(),
+        output_sha256: Sha256::digest(&output).into(),
+        source_formula_sha256: source_shape
+            .readback
+            .formula
+            .canonical_sha256(formula_limits)?,
+        target_formula_sha256: target.canonical_sha256(formula_limits)?,
+        unowned_sha256: output_shape.readback.unowned_sha256,
+        source_bytes: source.len(),
+        output_bytes: output.len(),
+        rows: dimensions.rows,
+        columns: dimensions.columns,
+        owner: target.owner(),
+        modified_text_count: edits.len(),
+    };
+    Ok((output, receipt))
 }
 
 #[derive(Debug)]

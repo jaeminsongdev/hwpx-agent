@@ -32,8 +32,8 @@
     "non_green_rows": 61,
     "direct_stage_counts": {
       "cataloged": 0,
-      "unit_passed": 25,
-      "integration_passed": 21,
+      "unit_passed": 21,
+      "integration_passed": 25,
       "oracle_verified": 15
     },
     "automation_binding_counts": {
@@ -49,7 +49,7 @@
   "source_locks": [
     {
       "path": "crates/domain-ir/src/lib.rs",
-      "sha256": "3bfd1c5d7f102bf42af35a0e1d7594dee612db4747e96063ac3e74591ba51c6d"
+      "sha256": "24310505972c92d9a07ba45b2624a72b1fe295cfc33a5fe56d404898136dd94e"
     },
     {
       "path": "crates/domain-ir/src/table_aggregate.rs",
@@ -72,6 +72,10 @@
       "sha256": "fc4a78856072be136fcc0e9e0ed5999753df228db051b55d060707af046b1914"
     },
     {
+      "path": "crates/domain-ir/src/table_merge_split.rs",
+      "sha256": "a465996e49d8d10f3c0e81292af74dfb496907b7caf292d0087c8591dd22a24f"
+    },
+    {
       "path": "crates/domain-ir/src/table_partition.rs",
       "sha256": "46ebf19cc9f0cae2595b8e72d624cbe9d10362f08cc6b3d25449def725518ff5"
     },
@@ -90,6 +94,10 @@
     {
       "path": "crates/domain-ir/src/table_sort.rs",
       "sha256": "ae2aa27faa76bfb1965e605338cc9446f89313a01c8bafb3b098dfea28b025cc"
+    },
+    {
+      "path": "crates/domain-ir/src/table_structure.rs",
+      "sha256": "2d118e6ddf6e73f9a67896a89353af9897cd757b0103a6c329553adfdf4b655c"
     },
     {
       "path": "crates/domain-ir/src/table_style.rs",
@@ -144,6 +152,10 @@
       "sha256": "624c6518ebe6cbe64dba5efc833d552c9dd6f1ab9fbad4993848b6ca57e06595"
     },
     {
+      "path": "crates/domain-ir/tests/table_structure.rs",
+      "sha256": "be1911c65c5ff2fac126ca5b52326f07e3bf9883ecd0cb3b82f9b21b53b70d78"
+    },
+    {
       "path": "crates/domain-ir/tests/table_style.rs",
       "sha256": "97d9bd02f7d7dc990245b146cfc46397ded230c96e22afb71bd90a6791502e89"
     },
@@ -160,20 +172,64 @@
       "sha256": "2915ad5e8c39826eab393611c8e45766297211daa517dad54137967d8fa57a2d"
     },
     {
+      "path": "crates/hwpx-package/examples/p06_07_table_pagination_target_fixture.rs",
+      "sha256": "2772ec0953b2fe188b3ef4f302522e9ffc0c3f33a769d90f67b8b1647fdfe2a0"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_07_table_pagination_target_oracle.rs",
+      "sha256": "9df4d0eaebe9f19d6e5a449a76ee498d359b8ada28a1ea9539428c8d6016cb5c"
+    },
+    {
       "path": "crates/hwpx-package/src/lib.rs",
-      "sha256": "b6a0805d9c5585949bdc4bb70b32f3c47977d734164ebc1c61b3ba53bd8a5053"
+      "sha256": "cdaba773f019ed3e412614ca5bf1d3fa1bf5b8e99c84a463d68796dc36cae038"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_cell_style.rs",
+      "sha256": "df040426be956d2a7cec68aec3d58ab9a6a6b26e401ab676cadeee7b32aef77c"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_formula.rs",
+      "sha256": "8b5b4ff8a1c1a2c6a2644c173edf6059ef9c60f3e5ba5b8198a6e3b83dcd7ff8"
     },
     {
       "path": "crates/hwpx-package/src/table_layout.rs",
-      "sha256": "67a79d14a16e1d1a90f94a20571b7651a07a7a4e070654f039283fa075297087"
+      "sha256": "6bb9841a20b95a638a73aed313f8a2a2ebe6c243ff2f60fddba328b847d14fe3"
     },
     {
       "path": "crates/hwpx-package/src/table_placement.rs",
       "sha256": "35005787f2a8681eeede158c93805625455bea83a47b13ed8d99330c0b588e97"
     },
     {
+      "path": "crates/hwpx-package/src/table_ruling_hwpx.rs",
+      "sha256": "a49e36a00a028a3c281045427706845b631ea11b6f680a9f5982bfad9833077f"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_ruling_hwpx/merge_split_hwpx.rs",
+      "sha256": "5492d20ceb53531357ad48805ccdaa2ff7320ea7fd2f1f8d3b287689a794ec15"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_ruling_hwpx/partition_hwpx.rs",
+      "sha256": "9625518c2136db96b1fc2248441973c7ad39380b4a7abd1a76001e35e78c92c1"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_ruling_hwpx/properties_hwpx.rs",
+      "sha256": "9d1ba6454817bb4cdb42779b15952b8bd5cbad5d8b3a4fb2ed34ec651620020c"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_ruling_hwpx/structure_hwpx.rs",
+      "sha256": "e239390a329dbc248c4c134417e8dab3532f4ec35efdd556be683988ec8408b9"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_ruling_hwpx/style_hwpx.rs",
+      "sha256": "97826503e6d449aa1545d91cad0a0df1b6377f9e905deeec53612e1bb61d6642"
+    },
+    {
       "path": "crates/hwpx-package/tests/table_geometry_hwpx.rs",
       "sha256": "c202af88090b63c4f7d04ad990b1f4fa051ff7b85ac3af6ba662fc939a5c18a4"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_join_hwpx.rs",
+      "sha256": "28bfe71f8cd8215c9eacd6d0d1e95eac067e1bfd7688a75a4d595588c3a5d203"
     },
     {
       "path": "crates/hwpx-package/tests/table_layout_modes_hwpx.rs",
@@ -184,12 +240,20 @@
       "sha256": "1f71ebcfc95554085c04cd94dc10116f59378b8e55db24e8c1ecd2ad29b10d84"
     },
     {
-      "path": "crates/hwpx-package/examples/p06_07_table_pagination_target_fixture.rs",
-      "sha256": "2772ec0953b2fe188b3ef4f302522e9ffc0c3f33a769d90f67b8b1647fdfe2a0"
+      "path": "crates/hwpx-package/tests/table_properties_hwpx.rs",
+      "sha256": "f6f8daf5dd6cae779f4e0f0f652a2cdf0c121136ea2ffab6b1e45489f2bedd45"
     },
     {
-      "path": "crates/hwpx-package/examples/p06_07_table_pagination_target_oracle.rs",
-      "sha256": "9df4d0eaebe9f19d6e5a449a76ee498d359b8ada28a1ea9539428c8d6016cb5c"
+      "path": "crates/hwpx-package/tests/table_ruling_hwpx.rs",
+      "sha256": "6ee321a8c82053158da1a9475f9b833383c7d132d1de2eb7a1f571647c0fbd6b"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_split_hwpx.rs",
+      "sha256": "47644c2a4456e258dc1fcf8582b04d717c5b8989c14044974148b078cb6aecbe"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_structure_hwpx.rs",
+      "sha256": "f8505687ecd7d0dfcb523ca95572fd4990ff86ca5d50ee97083666cb807c48bc"
     },
     {
       "path": "docs/04_feature_catalog/07_table.md",
@@ -206,6 +270,14 @@
     {
       "path": "docs/09_roadmap/P06_table_engine.md",
       "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "implementation/p06/P06-07_TARGET_ATTEMPTS_DIAGNOSTIC.md",
+      "sha256": "6e9d7c52321c127eb6f90e286e28a3ef7e860ae01617972eac3cd7353b543425"
+    },
+    {
+      "path": "implementation/p06/P06-07_TARGET_READBACK_REPORT.md",
+      "sha256": "75201108b7f0b362353b2d6bf60bf990df3380ccd685a956e9cfd0a3951e8e08"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_AGGREGATE_POLICY.md",
@@ -237,7 +309,7 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "1d8692fd7272bfe43d90849e4323e149da2c6186afa6bd49ee1cfcb0850f91d2"
+      "sha256": "705aa3d88ce24f9a893ac7438b27df373f3304291dcf8eb7ff2e8e1c466fe0fc"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_GEOMETRY_HWPX_POLICY.md",
@@ -248,6 +320,22 @@
       "sha256": "0d8d320fcdae7fb8d81f6f8b0a31aa0f51fd9e24b480b58308550b0b020fbdd7"
     },
     {
+      "path": "implementation/p06/P06-09_TABLE_GEOMETRY_POLICY.md",
+      "sha256": "7acb35f205f6583164d84110abf52f2e62e13fc712e4fb05b684e73068026a1d"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_GEOMETRY_REPORT.md",
+      "sha256": "36fdd5a147e36c80462b56cb5028bd8b5e4108b01607418399d6d253cd7f1bcb"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_JOIN_HWPX_POLICY.md",
+      "sha256": "29aff1923259f469c0653d636f63b1ec51c1fd8577138b471a20d3e05f3d7ef9"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_JOIN_HWPX_REPORT.md",
+      "sha256": "502c4e5f4817c51688f7716f482fe160bc5aa399d4e08751e965ed6368016828"
+    },
+    {
       "path": "implementation/p06/P06-09_TABLE_LAYOUT_MODES_HWPX_POLICY.md",
       "sha256": "2a7056bf7c29bdbf71b790d17e1d8a438da664802405160aac0558d8b7d9404e"
     },
@@ -256,12 +344,12 @@
       "sha256": "f24fcdf7bd23ffc244e5cab01bc165faeb716fdd7de54c6d9f06b4f6bd716a53"
     },
     {
-      "path": "implementation/p06/P06-09_TABLE_GEOMETRY_POLICY.md",
-      "sha256": "7acb35f205f6583164d84110abf52f2e62e13fc712e4fb05b684e73068026a1d"
+      "path": "implementation/p06/P06-09_TABLE_MERGE_SPLIT_HWPX_POLICY.md",
+      "sha256": "9b5dd120a070b57425dc7c0c2beb0a78fdc28ec49e5afd60c2cd80da43dd010b"
     },
     {
-      "path": "implementation/p06/P06-09_TABLE_GEOMETRY_REPORT.md",
-      "sha256": "36fdd5a147e36c80462b56cb5028bd8b5e4108b01607418399d6d253cd7f1bcb"
+      "path": "implementation/p06/P06-09_TABLE_MERGE_SPLIT_HWPX_REPORT.md",
+      "sha256": "e8badfe5609ada2c51b05e944b6d6c141ea832d93bdb474951ec4975c404c1e1"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_PARTITION_POLICY.md",
@@ -272,14 +360,6 @@
       "sha256": "d0c9304a4b9daf5fef2d061a0ff24cd23601677183be0b96b6ff99213604cb1e"
     },
     {
-      "path": "implementation/p06/P06-09_TABLE_PLACEMENT_POLICY.md",
-      "sha256": "1f1ecd80e28de47786a9d24dd4aa05e3e2589e584c5746db106f20fef8fc0d8f"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_PLACEMENT_REPORT.md",
-      "sha256": "d746919f35402fb81484267743c9fe27e8d43c0d8a26e52b1793bcdfd1454dd3"
-    },
-    {
       "path": "implementation/p06/P06-09_TABLE_PLACEMENT_HWPX_POLICY.md",
       "sha256": "bc128b0892b880e6386849c80d9376de702a8872216aad01f91c88a07299c122"
     },
@@ -288,12 +368,36 @@
       "sha256": "9ce8e69e81e6ef3665c44769d365f0cb95c7f3f4236cf70f4bfe5ffe23b7ef09"
     },
     {
+      "path": "implementation/p06/P06-09_TABLE_PLACEMENT_POLICY.md",
+      "sha256": "1f1ecd80e28de47786a9d24dd4aa05e3e2589e584c5746db106f20fef8fc0d8f"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_PLACEMENT_REPORT.md",
+      "sha256": "d746919f35402fb81484267743c9fe27e8d43c0d8a26e52b1793bcdfd1454dd3"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_PROPERTIES_HWPX_POLICY.md",
+      "sha256": "b4fcd3495b880b69a0faf1e8c28d3bf124bb52f501bd3775baa94c08267f78b3"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_PROPERTIES_HWPX_REPORT.md",
+      "sha256": "8f1d14f74030df62bfc99f6ec2628d4a75e8d5d29878b359f0a5cae770adcec4"
+    },
+    {
       "path": "implementation/p06/P06-09_TABLE_PROPERTIES_POLICY.md",
       "sha256": "627577a4c122b474f4a3c216cd0399080f5cd7beb81d54f115dd328d57e50c89"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_PROPERTIES_REPORT.md",
       "sha256": "a01da79f47f544ac034341261e14fb4a649a62d3bf02222628e57aefc36abab6"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_RULING_HWPX_POLICY.md",
+      "sha256": "b2f5978c323a5fa99043d4615b16773ed3dc2249e959bcc0cb6b686f1cdfef0d"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_RULING_HWPX_REPORT.md",
+      "sha256": "ce77915fbc3822fdfa7106f103d10e1ca850aab851eb896d7e61f7422c55d7f0"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_RULING_POLICY.md",
@@ -312,12 +416,20 @@
       "sha256": "a15547e745082a33877d9f7336b1440dcc27fb7d0dd9c6943543bd24c24bd4f3"
     },
     {
-      "path": "implementation/p06/P06-09_TABLE_STYLE_TRANSPOSE_POLICY.md",
-      "sha256": "fcf067868b7e91fe1caf0cfb805e17e9bff47749cf24a13135cf1d33947a59d5"
+      "path": "implementation/p06/P06-09_TABLE_SPLIT_HWPX_POLICY.md",
+      "sha256": "5efb71e55f7b8594db72e87be509ca8b86495d08ade46d404c29471c73e8fece"
     },
     {
-      "path": "implementation/p06/P06-09_TABLE_STYLE_TRANSPOSE_REPORT.md",
-      "sha256": "036bdafd0420a1030ad0499bba50a18133978e2aeae91c49eeab4ac6f7a91879"
+      "path": "implementation/p06/P06-09_TABLE_SPLIT_HWPX_REPORT.md",
+      "sha256": "627ac8e2a818c32647274af70a761f945be4ad82832ac57ba1188f34fd733c88"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_STRUCTURE_HWPX_POLICY.md",
+      "sha256": "b93a46b74fe021b739e9a76613a4c8e6e830c2e9ab3a5bc63548132e7e48d6be"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_STRUCTURE_HWPX_REPORT.md",
+      "sha256": "602e3887f76115d9d3df89b29cb30f70c0843d5c6d91b61f088ca43deae12605"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_STYLE_HWPX_POLICY.md",
@@ -326,6 +438,14 @@
     {
       "path": "implementation/p06/P06-09_TABLE_STYLE_HWPX_REPORT.md",
       "sha256": "8840b9079d29e29ae3b90e9ca775a26b1c245f76004ac8745addaf0173a79260"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_STYLE_TRANSPOSE_POLICY.md",
+      "sha256": "fcf067868b7e91fe1caf0cfb805e17e9bff47749cf24a13135cf1d33947a59d5"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_STYLE_TRANSPOSE_REPORT.md",
+      "sha256": "036bdafd0420a1030ad0499bba50a18133978e2aeae91c49eeab4ac6f7a91879"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_POLICY.md",
@@ -344,16 +464,8 @@
       "sha256": "1d14b56ea1919cc99d2a0f9ffa24a701b9d63e92a9992b9755c320a3d46fbe74"
     },
     {
-      "path": "implementation/p06/P06-07_TARGET_ATTEMPTS_DIAGNOSTIC.md",
-      "sha256": "6e9d7c52321c127eb6f90e286e28a3ef7e860ae01617972eac3cd7353b543425"
-    },
-    {
-      "path": "implementation/p06/P06-07_TARGET_READBACK_REPORT.md",
-      "sha256": "75201108b7f0b362353b2d6bf60bf990df3380ccd685a956e9cfd0a3951e8e08"
-    },
-    {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "bd52ed3e9bce9aa96df0ec2386be77eebe0555a1998243d8015f3e6a72f5e6b6"
+      "sha256": "806cbee1e831adddcb8d9eff4f3e28dec2008841e60401a46b18eb981b476554"
     },
     {
       "path": "implementation/p06/p06-09-current-2020-automation-projection.json",
@@ -361,7 +473,7 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "3f7573860c9768ed708d4c06b97b628df183438306f728ad9a666c8735cd794f"
+      "sha256": "c337139312acaf00a45d6541037dc343d8bf7c01a15dddcebce2da21efd376c2"
     },
     {
       "path": "protocol/baseline/catalog-v5.lock.json",
@@ -416,28 +528,48 @@
       "sha256": "f4cce219f539b3838f8391a5e7bff4107f34fb861734d826399b893cdaaa5e57"
     },
     {
+      "path": "protocol/migrations/p06-table-geometry-v0-to-v1.md",
+      "sha256": "2aa607d143e393731015189a2ef82b767411200ad9a66df18eb403f38451b669"
+    },
+    {
+      "path": "protocol/migrations/p06-table-join-hwpx-v0-to-v1.md",
+      "sha256": "a032f5006d3a56d5db97f6922ab8c544fb6e56861ebe85ea0cad504a253330b9"
+    },
+    {
       "path": "protocol/migrations/p06-table-layout-modes-hwpx-v0-to-v1.md",
       "sha256": "249287e231d783af0dafdca00387a1e160d4e0774ecc4c3cf6decbeef5ffb7b9"
     },
     {
-      "path": "protocol/migrations/p06-table-geometry-v0-to-v1.md",
-      "sha256": "2aa607d143e393731015189a2ef82b767411200ad9a66df18eb403f38451b669"
+      "path": "protocol/migrations/p06-table-merge-split-hwpx-v0-to-v1.md",
+      "sha256": "7cf5ce4b46f43015d5f07cd66b2952c11613717adf8639f9b1259f3b7091fc2c"
+    },
+    {
+      "path": "protocol/migrations/p06-table-pagination-hwpx-v1-to-target-v2.md",
+      "sha256": "b423aed8d140e99fb4ece8987bf219d79fe3e1503b27c8d1867082b14d3a0656"
     },
     {
       "path": "protocol/migrations/p06-table-partition-v0-to-v1.md",
       "sha256": "83edfc87a36b98f5acfc69cf2b15fe2c88d56f69f579723933cd52ee12f46a35"
     },
     {
-      "path": "protocol/migrations/p06-table-placement-v0-to-v1.md",
-      "sha256": "8840f9c1145d077870d6a065826bdd59a69f14585f8facfa988bb027bc4e40c5"
-    },
-    {
       "path": "protocol/migrations/p06-table-placement-hwpx-v0-to-v1.md",
       "sha256": "fca54fe5955e2459209c65b00c195d957b9fd808e583fe9444f5bb7e55c840dd"
     },
     {
+      "path": "protocol/migrations/p06-table-placement-v0-to-v1.md",
+      "sha256": "8840f9c1145d077870d6a065826bdd59a69f14585f8facfa988bb027bc4e40c5"
+    },
+    {
+      "path": "protocol/migrations/p06-table-properties-hwpx-v0-to-v1.md",
+      "sha256": "1c78f4466ff078087e1753d91c4aae501554056b7aded4aa0b76ce41ef9d96fa"
+    },
+    {
       "path": "protocol/migrations/p06-table-properties-v0-to-v1.md",
       "sha256": "b1933ec4a2851657c94864b24f1a747d51b06bd31e3060c157f76130102a37c4"
+    },
+    {
+      "path": "protocol/migrations/p06-table-ruling-hwpx-v0-to-v1.md",
+      "sha256": "4df85c8b7f590b046dcee3c4d2e3b0d7c7a9ec832e732a84313e35261cde0857"
     },
     {
       "path": "protocol/migrations/p06-table-ruling-v0-to-v1.md",
@@ -448,12 +580,20 @@
       "sha256": "22cc7ad76529c6845e5d85a465ed0682a41f082e5a7dae199256875c0d1c9aa8"
     },
     {
-      "path": "protocol/migrations/p06-table-style-transpose-v0-to-v1.md",
-      "sha256": "205fda055ec44c4ff02b783de88769ff5272579b61955a320e8dce503069ab6e"
+      "path": "protocol/migrations/p06-table-split-hwpx-v0-to-v1.md",
+      "sha256": "b78f076f10aa378ebcb6bb513d94bc81d7036b8806eac3f4512e986268866660"
+    },
+    {
+      "path": "protocol/migrations/p06-table-structure-hwpx-v0-to-v1.md",
+      "sha256": "2848e64ead8e54f9b1b972fbc6ba2492308054c985229a9f8847041a64136a90"
     },
     {
       "path": "protocol/migrations/p06-table-style-hwpx-v0-to-v1.md",
       "sha256": "3b03eda940509bdfdabae0783ea10fe06316f4b32f190af67348160e6ccd2ab3"
+    },
+    {
+      "path": "protocol/migrations/p06-table-style-transpose-v0-to-v1.md",
+      "sha256": "205fda055ec44c4ff02b783de88769ff5272579b61955a320e8dce503069ab6e"
     },
     {
       "path": "protocol/migrations/p06-table-text-conversion-v0-to-v1.md",
@@ -462,10 +602,6 @@
     {
       "path": "protocol/migrations/p06-table-thousands-v0-to-v1.md",
       "sha256": "d43c0559d2d28e002e3e79e68fcf524efc5c6f93f18408f2d2ed971c51219ebc"
-    },
-    {
-      "path": "protocol/migrations/p06-table-pagination-hwpx-v1-to-target-v2.md",
-      "sha256": "b423aed8d140e99fb4ece8987bf219d79fe3e1503b27c8d1867082b14d3a0656"
     },
     {
       "path": "protocol/private/p06-table-aggregate-v1.json",
@@ -484,28 +620,48 @@
       "sha256": "87bfdd79b7c7b5ceccbfcd6cd2137e2e0416ca4ac5e1ea61c68c256be834706d"
     },
     {
+      "path": "protocol/private/p06-table-geometry-v1.json",
+      "sha256": "8f6c38510ab73c0bd169d6432801c5328c7aa995fb73fc65b5beddcb5b29fe42"
+    },
+    {
+      "path": "protocol/private/p06-table-join-hwpx-v1.json",
+      "sha256": "856a2c87f6fa8244ef4d1f436801926b685cef5fb1f2a9ebe00f29e7137520b8"
+    },
+    {
       "path": "protocol/private/p06-table-layout-modes-hwpx-v1.json",
       "sha256": "ec9d02a142a395bf502a889c703090a5cf924ef7394c33ce5b313f437dc3f1b5"
     },
     {
-      "path": "protocol/private/p06-table-geometry-v1.json",
-      "sha256": "8f6c38510ab73c0bd169d6432801c5328c7aa995fb73fc65b5beddcb5b29fe42"
+      "path": "protocol/private/p06-table-merge-split-hwpx-v1.json",
+      "sha256": "5514dfebea0cf58dfca1cfe9bd509ab4ab7eb037f6edcf434bafc17af99c555c"
+    },
+    {
+      "path": "protocol/private/p06-table-pagination-target-v2.json",
+      "sha256": "caf963c3421522e57dcf3ddb0e3f190f7da38a7e32b2e1305486c300cb2b85ca"
     },
     {
       "path": "protocol/private/p06-table-partition-v1.json",
       "sha256": "871ef74f7c10cb34b805becda60f53f497a0e1cef2e7031cb647007561ae9334"
     },
     {
-      "path": "protocol/private/p06-table-placement-v1.json",
-      "sha256": "d3a3d498397cfee4c1277068e6668fa9a870e73c977f2914b61aca2520b81c04"
-    },
-    {
       "path": "protocol/private/p06-table-placement-hwpx-v1.json",
       "sha256": "38177c7a7b96b392b5adb6f81ebaa18f58e4e01db8060792474cd7733b759bbc"
     },
     {
+      "path": "protocol/private/p06-table-placement-v1.json",
+      "sha256": "d3a3d498397cfee4c1277068e6668fa9a870e73c977f2914b61aca2520b81c04"
+    },
+    {
+      "path": "protocol/private/p06-table-properties-hwpx-v1.json",
+      "sha256": "2a93f9f0e05d392d8c552f750468b72b366955b27ecc87473875dbb2cc669a6b"
+    },
+    {
       "path": "protocol/private/p06-table-properties-v1.json",
       "sha256": "39fd90b62365ffde2e109a9ffbfec742cb0dccd78f4f84a30744e8401d5cec7b"
+    },
+    {
+      "path": "protocol/private/p06-table-ruling-hwpx-v1.json",
+      "sha256": "912b56751606d69e2f300ad2600910e727d1f216e1409104bc3d3b6ea2801e2d"
     },
     {
       "path": "protocol/private/p06-table-ruling-v1.json",
@@ -516,12 +672,20 @@
       "sha256": "d972bbd90324d6e628fc4f8021f346f5e540f255fe2be64ad99b662e49951d21"
     },
     {
-      "path": "protocol/private/p06-table-style-transpose-v1.json",
-      "sha256": "206c89d7b82c2640489ab095703dc10b6c94232fe417973b161f32cd074f7a7e"
+      "path": "protocol/private/p06-table-split-hwpx-v1.json",
+      "sha256": "66d8f071ef9fced3c74475bd5f0646a864d616d210a749f38156bacde6a83e13"
+    },
+    {
+      "path": "protocol/private/p06-table-structure-hwpx-v1.json",
+      "sha256": "adc72910ad5766617b454cc8f8a2e96a154871131e745831ee04dbec082e448c"
     },
     {
       "path": "protocol/private/p06-table-style-hwpx-v1.json",
       "sha256": "627c730ba353bd4db0a5e9641cb2b56929f61b26f0e0b4aaaad13867a00f1f5b"
+    },
+    {
+      "path": "protocol/private/p06-table-style-transpose-v1.json",
+      "sha256": "206c89d7b82c2640489ab095703dc10b6c94232fe417973b161f32cd074f7a7e"
     },
     {
       "path": "protocol/private/p06-table-text-conversion-v1.json",
@@ -530,10 +694,6 @@
     {
       "path": "protocol/private/p06-table-thousands-v1.json",
       "sha256": "40962ec31a4079c38a9e979c32744bb0e171b1469ad09f5f8a13b7befe90896d"
-    },
-    {
-      "path": "protocol/private/p06-table-pagination-target-v2.json",
-      "sha256": "caf963c3421522e57dcf3ddb0e3f190f7da38a7e32b2e1305486c300cb2b85ca"
     },
     {
       "path": "specs/capability-contracts.generated.json",
@@ -569,11 +729,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "18c126c6e6de6e672812ee371113b91d1ada85083d2868f5499e1df5876a2247"
+      "sha256": "87d9b2ae3de0ec282ca09e88ba2888fbfbb205979f92bfc59167fa28c8613ea8"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "e38df78a8e09bb4741971cc0cc274304b45f36bf67e1befd1fe15562ecce3d73"
+      "sha256": "eddc0b8fc5add6e20e83482ec379857032de2d0edc118df877db742c0bc607d6"
     },
     {
       "path": "tools/p06/tests/test_table_geometry_contract.py",
@@ -584,8 +744,20 @@
       "sha256": "4da3b66b033a5eb81bf4e652bf7b44fc9aa0a97efe1329c22c56ed86db41fb24"
     },
     {
+      "path": "tools/p06/tests/test_table_join_hwpx_contract.py",
+      "sha256": "cc068d54af547dc5f879c174e5e41330b2eb8817ef8b32f04a61294654e3b958"
+    },
+    {
       "path": "tools/p06/tests/test_table_layout_modes_hwpx_contract.py",
       "sha256": "2cc22a27399ad17758d68f9f53fbc18ec492598161b70a05a7dcba74893996b4"
+    },
+    {
+      "path": "tools/p06/tests/test_table_merge_split_hwpx_contract.py",
+      "sha256": "59dd7ee65def76ccccaaeb41d41cd2742a20b4d2eb09092a41210eee30b7436a"
+    },
+    {
+      "path": "tools/p06/tests/test_table_pagination_target_v2_contract.py",
+      "sha256": "98d21d77ef6c154f55fb97ca4af68906d082960d6c7640621b0947f8e6800922"
     },
     {
       "path": "tools/p06/tests/test_table_partition_contract.py",
@@ -604,20 +776,36 @@
       "sha256": "4a124c18fe6e1e9199d68dee87e21100bc4bdcc30865a40fcfcc861a9e37313b"
     },
     {
+      "path": "tools/p06/tests/test_table_properties_hwpx_contract.py",
+      "sha256": "0200f3362eb4dc446a03e304c1c9c0dc0e582fe3ff72749e49bca29e2096298d"
+    },
+    {
       "path": "tools/p06/tests/test_table_ruling_contract.py",
       "sha256": "63df141b2dfebaf6636694a0e5bf5a484a7c96c1472eed08de970d365ca8334c"
+    },
+    {
+      "path": "tools/p06/tests/test_table_ruling_hwpx_contract.py",
+      "sha256": "4818cfec8749f40c624324b1c3a9ff1c092e5751d0342197b6281ac2c448fde3"
     },
     {
       "path": "tools/p06/tests/test_table_sort_contract.py",
       "sha256": "1194f087f360812cbfb4af56d815654b9326b3438a7d640228e71b6b2bda0d46"
     },
     {
-      "path": "tools/p06/tests/test_table_style_transpose_contract.py",
-      "sha256": "28b743574d03c2000d0ce7ff81603d16e2e0b47acf97f1920e6962c0eb6febcd"
+      "path": "tools/p06/tests/test_table_split_hwpx_contract.py",
+      "sha256": "c646c6b7e49a0fcf6850b0e2c398dd6493c4c75f12c86df8e976207d81c50a7f"
+    },
+    {
+      "path": "tools/p06/tests/test_table_structure_hwpx_contract.py",
+      "sha256": "afe6b48ba3932b91c4ecf07bec84cd8f77d42036ae0443cb22d8a0602c96cc09"
     },
     {
       "path": "tools/p06/tests/test_table_style_hwpx_contract.py",
       "sha256": "a581b61f6d1ec401f56bb04adb17f2377b7add9a1145957cae21cc2e5be668ae"
+    },
+    {
+      "path": "tools/p06/tests/test_table_style_transpose_contract.py",
+      "sha256": "28b743574d03c2000d0ce7ff81603d16e2e0b47acf97f1920e6962c0eb6febcd"
     },
     {
       "path": "tools/p06/tests/test_table_text_conversion_contract.py",
@@ -626,10 +814,6 @@
     {
       "path": "tools/p06/tests/test_table_thousands_contract.py",
       "sha256": "dd4b4461a1c76581dc9d835ebfb8641f5c018007fd5a574b8673aacdbdceecd6"
-    },
-    {
-      "path": "tools/p06/tests/test_table_pagination_target_v2_contract.py",
-      "sha256": "98d21d77ef6c154f55fb97ca4af68906d082960d6c7640621b0947f8e6800922"
     },
     {
       "path": "tools/p06/validate_table_aggregate_contract.py",
@@ -645,7 +829,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "88f1493950bb491aa3ead6f04c203eb364a915b079d8bda4d51f7f79a45871f3"
+      "sha256": "903c91e8c3ed377a5982781fa19501c8944ef90bfeaf1beb9c2471fe3b4ce4ab"
     },
     {
       "path": "tools/p06/validate_table_geometry_contract.py",
@@ -656,8 +840,20 @@
       "sha256": "1b8c71551c59951ffd769c87d3c706d519a87b70a6714668b88477031e0b4b88"
     },
     {
+      "path": "tools/p06/validate_table_join_hwpx_contract.py",
+      "sha256": "77c55992480592d8df735a44b5740041ca5c8343dd414d442b1f524eaba49715"
+    },
+    {
       "path": "tools/p06/validate_table_layout_modes_hwpx_contract.py",
       "sha256": "1124921c6a7e00b8b73cd937ce165bb615bbbae6dc41a816a0ca629592d6a794"
+    },
+    {
+      "path": "tools/p06/validate_table_merge_split_hwpx_contract.py",
+      "sha256": "de4498e6c709b4283fc52a64b5e7b7a1c299dea59dadee30ad92014460d5ebd8"
+    },
+    {
+      "path": "tools/p06/validate_table_pagination_target_v2_contract.py",
+      "sha256": "80a8c117e537fb3bb7bc31a110ed8f386c5b22dafcf89ffafe41f5308a9656d4"
     },
     {
       "path": "tools/p06/validate_table_partition_contract.py",
@@ -676,20 +872,36 @@
       "sha256": "d3d3bb5847e8efb54c54c8b9e8a759d2d822f603d4ab8ce2c77cf6d1173c0eb7"
     },
     {
+      "path": "tools/p06/validate_table_properties_hwpx_contract.py",
+      "sha256": "6da77705c4e319847bdc7c258394592dc8a45358a5028f504b733872e1904772"
+    },
+    {
       "path": "tools/p06/validate_table_ruling_contract.py",
       "sha256": "058c9c580d2c4848375510350e0ce5a9328c19e85302da8392b644bb3df4b6a2"
+    },
+    {
+      "path": "tools/p06/validate_table_ruling_hwpx_contract.py",
+      "sha256": "5e3f05f4e359bfb316dbd06a5c730c58c158bb8aa12f2040d8e9ac116b5092d7"
     },
     {
       "path": "tools/p06/validate_table_sort_contract.py",
       "sha256": "2887713f26e0ca78bf9d5410bb4600436acfddc8189fd6b655d1c05ee4806f46"
     },
     {
-      "path": "tools/p06/validate_table_style_transpose_contract.py",
-      "sha256": "d4f0043c681753759e109ca95b2b1a89b858501832ada9623fdce6a3a2574ba0"
+      "path": "tools/p06/validate_table_split_hwpx_contract.py",
+      "sha256": "1f999b19d9dfa15a37b400a07014369f66e77589e182bddbb0c8e201ac595b94"
+    },
+    {
+      "path": "tools/p06/validate_table_structure_hwpx_contract.py",
+      "sha256": "feed5563cc60c3a9dbeb218a30635d482403e9687ad13d768e105111ce27c3c4"
     },
     {
       "path": "tools/p06/validate_table_style_hwpx_contract.py",
       "sha256": "c89d5ccfd2d9a85445915254c7fe80c0e60762c4cc0a171cfd54bb099b01aceb"
+    },
+    {
+      "path": "tools/p06/validate_table_style_transpose_contract.py",
+      "sha256": "d4f0043c681753759e109ca95b2b1a89b858501832ada9623fdce6a3a2574ba0"
     },
     {
       "path": "tools/p06/validate_table_text_conversion_contract.py",
@@ -700,180 +912,8 @@
       "sha256": "7d39a217ced3db023cab5ba3d70234c26bbacc21a438825e2eb3af664492fa97"
     },
     {
-      "path": "tools/p06/validate_table_pagination_target_v2_contract.py",
-      "sha256": "80a8c117e537fb3bb7bc31a110ed8f386c5b22dafcf89ffafe41f5308a9656d4"
-    },
-    {
-      "path": "crates/hwpx-package/src/table_ruling_hwpx.rs",
-      "sha256": "df8e5c0209392863593ffe26a238688c7f899c7b794b436870f891d3708bf83b"
-    },
-    {
-      "path": "crates/hwpx-package/tests/table_ruling_hwpx.rs",
-      "sha256": "6ee321a8c82053158da1a9475f9b833383c7d132d1de2eb7a1f571647c0fbd6b"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_RULING_HWPX_POLICY.md",
-      "sha256": "b2f5978c323a5fa99043d4615b16773ed3dc2249e959bcc0cb6b686f1cdfef0d"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_RULING_HWPX_REPORT.md",
-      "sha256": "ce77915fbc3822fdfa7106f103d10e1ca850aab851eb896d7e61f7422c55d7f0"
-    },
-    {
-      "path": "protocol/migrations/p06-table-ruling-hwpx-v0-to-v1.md",
-      "sha256": "4df85c8b7f590b046dcee3c4d2e3b0d7c7a9ec832e732a84313e35261cde0857"
-    },
-    {
-      "path": "protocol/private/p06-table-ruling-hwpx-v1.json",
-      "sha256": "912b56751606d69e2f300ad2600910e727d1f216e1409104bc3d3b6ea2801e2d"
-    },
-    {
-      "path": "tools/p06/tests/test_table_ruling_hwpx_contract.py",
-      "sha256": "4818cfec8749f40c624324b1c3a9ff1c092e5751d0342197b6281ac2c448fde3"
-    },
-    {
-      "path": "tools/p06/validate_table_ruling_hwpx_contract.py",
-      "sha256": "5e3f05f4e359bfb316dbd06a5c730c58c158bb8aa12f2040d8e9ac116b5092d7"
-    },
-    {
       "path": "tools/xtask/src/main.rs",
       "sha256": "f8f9e74838f1901e89a3c265196098592c3c15dc594baf71cf11853adfbea931"
-    },
-    {
-      "path": "crates/hwpx-package/src/table_cell_style.rs",
-      "sha256": "df040426be956d2a7cec68aec3d58ab9a6a6b26e401ab676cadeee7b32aef77c"
-    },
-    {
-      "path": "crates/hwpx-package/src/table_ruling_hwpx/properties_hwpx.rs",
-      "sha256": "9d1ba6454817bb4cdb42779b15952b8bd5cbad5d8b3a4fb2ed34ec651620020c"
-    },
-    {
-      "path": "crates/hwpx-package/src/table_ruling_hwpx/style_hwpx.rs",
-      "sha256": "97826503e6d449aa1545d91cad0a0df1b6377f9e905deeec53612e1bb61d6642"
-    },
-    {
-      "path": "crates/hwpx-package/tests/table_properties_hwpx.rs",
-      "sha256": "f6f8daf5dd6cae779f4e0f0f652a2cdf0c121136ea2ffab6b1e45489f2bedd45"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_PROPERTIES_HWPX_POLICY.md",
-      "sha256": "b4fcd3495b880b69a0faf1e8c28d3bf124bb52f501bd3775baa94c08267f78b3"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_PROPERTIES_HWPX_REPORT.md",
-      "sha256": "8f1d14f74030df62bfc99f6ec2628d4a75e8d5d29878b359f0a5cae770adcec4"
-    },
-    {
-      "path": "protocol/migrations/p06-table-properties-hwpx-v0-to-v1.md",
-      "sha256": "1c78f4466ff078087e1753d91c4aae501554056b7aded4aa0b76ce41ef9d96fa"
-    },
-    {
-      "path": "protocol/private/p06-table-properties-hwpx-v1.json",
-      "sha256": "2a93f9f0e05d392d8c552f750468b72b366955b27ecc87473875dbb2cc669a6b"
-    },
-    {
-      "path": "tools/p06/tests/test_table_properties_hwpx_contract.py",
-      "sha256": "0200f3362eb4dc446a03e304c1c9c0dc0e582fe3ff72749e49bca29e2096298d"
-    },
-    {
-      "path": "tools/p06/validate_table_properties_hwpx_contract.py",
-      "sha256": "6da77705c4e319847bdc7c258394592dc8a45358a5028f504b733872e1904772"
-    },
-    {
-      "path": "crates/domain-ir/src/table_merge_split.rs",
-      "sha256": "a465996e49d8d10f3c0e81292af74dfb496907b7caf292d0087c8591dd22a24f"
-    },
-    {
-      "path": "crates/hwpx-package/src/table_formula.rs",
-      "sha256": "1126f1778750efe58ddca61ea05b723f57e2c1bd9722c6cc8c8abacf2fde1ceb"
-    },
-    {
-      "path": "crates/hwpx-package/src/table_ruling_hwpx/merge_split_hwpx.rs",
-      "sha256": "5492d20ceb53531357ad48805ccdaa2ff7320ea7fd2f1f8d3b287689a794ec15"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_MERGE_SPLIT_HWPX_POLICY.md",
-      "sha256": "9b5dd120a070b57425dc7c0c2beb0a78fdc28ec49e5afd60c2cd80da43dd010b"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_MERGE_SPLIT_HWPX_REPORT.md",
-      "sha256": "e8badfe5609ada2c51b05e944b6d6c141ea832d93bdb474951ec4975c404c1e1"
-    },
-    {
-      "path": "protocol/migrations/p06-table-merge-split-hwpx-v0-to-v1.md",
-      "sha256": "7cf5ce4b46f43015d5f07cd66b2952c11613717adf8639f9b1259f3b7091fc2c"
-    },
-    {
-      "path": "protocol/private/p06-table-merge-split-hwpx-v1.json",
-      "sha256": "5514dfebea0cf58dfca1cfe9bd509ab4ab7eb037f6edcf434bafc17af99c555c"
-    },
-    {
-      "path": "tools/p06/tests/test_table_merge_split_hwpx_contract.py",
-      "sha256": "59dd7ee65def76ccccaaeb41d41cd2742a20b4d2eb09092a41210eee30b7436a"
-    },
-    {
-      "path": "tools/p06/validate_table_merge_split_hwpx_contract.py",
-      "sha256": "de4498e6c709b4283fc52a64b5e7b7a1c299dea59dadee30ad92014460d5ebd8"
-    },
-    {
-      "path": "crates/hwpx-package/src/table_ruling_hwpx/partition_hwpx.rs",
-      "sha256": "9625518c2136db96b1fc2248441973c7ad39380b4a7abd1a76001e35e78c92c1"
-    },
-    {
-      "path": "crates/hwpx-package/tests/table_split_hwpx.rs",
-      "sha256": "47644c2a4456e258dc1fcf8582b04d717c5b8989c14044974148b078cb6aecbe"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_SPLIT_HWPX_POLICY.md",
-      "sha256": "5efb71e55f7b8594db72e87be509ca8b86495d08ade46d404c29471c73e8fece"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_SPLIT_HWPX_REPORT.md",
-      "sha256": "627ac8e2a818c32647274af70a761f945be4ad82832ac57ba1188f34fd733c88"
-    },
-    {
-      "path": "protocol/migrations/p06-table-split-hwpx-v0-to-v1.md",
-      "sha256": "b78f076f10aa378ebcb6bb513d94bc81d7036b8806eac3f4512e986268866660"
-    },
-    {
-      "path": "protocol/private/p06-table-split-hwpx-v1.json",
-      "sha256": "66d8f071ef9fced3c74475bd5f0646a864d616d210a749f38156bacde6a83e13"
-    },
-    {
-      "path": "tools/p06/tests/test_table_split_hwpx_contract.py",
-      "sha256": "c646c6b7e49a0fcf6850b0e2c398dd6493c4c75f12c86df8e976207d81c50a7f"
-    },
-    {
-      "path": "tools/p06/validate_table_split_hwpx_contract.py",
-      "sha256": "1f999b19d9dfa15a37b400a07014369f66e77589e182bddbb0c8e201ac595b94"
-    },
-    {
-      "path": "crates/hwpx-package/tests/table_join_hwpx.rs",
-      "sha256": "28bfe71f8cd8215c9eacd6d0d1e95eac067e1bfd7688a75a4d595588c3a5d203"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_JOIN_HWPX_POLICY.md",
-      "sha256": "29aff1923259f469c0653d636f63b1ec51c1fd8577138b471a20d3e05f3d7ef9"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_JOIN_HWPX_REPORT.md",
-      "sha256": "502c4e5f4817c51688f7716f482fe160bc5aa399d4e08751e965ed6368016828"
-    },
-    {
-      "path": "protocol/migrations/p06-table-join-hwpx-v0-to-v1.md",
-      "sha256": "a032f5006d3a56d5db97f6922ab8c544fb6e56861ebe85ea0cad504a253330b9"
-    },
-    {
-      "path": "protocol/private/p06-table-join-hwpx-v1.json",
-      "sha256": "856a2c87f6fa8244ef4d1f436801926b685cef5fb1f2a9ebe00f29e7137520b8"
-    },
-    {
-      "path": "tools/p06/tests/test_table_join_hwpx_contract.py",
-      "sha256": "cc068d54af547dc5f879c174e5e41330b2eb8817ef8b32f04a61294654e3b958"
-    },
-    {
-      "path": "tools/p06/validate_table_join_hwpx_contract.py",
-      "sha256": "77c55992480592d8df735a44b5740041ca5c8343dd414d442b1f524eaba49715"
     }
   ],
   "schemas": [

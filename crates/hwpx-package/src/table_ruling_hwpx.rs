@@ -22,6 +22,7 @@ use crate::{
 mod merge_split_hwpx;
 mod partition_hwpx;
 mod properties_hwpx;
+mod structure_hwpx;
 mod style_hwpx;
 
 pub use merge_split_hwpx::{
@@ -49,6 +50,13 @@ pub use properties_hwpx::{
     TablePropertiesHwpxLoweringReceipt, TablePropertiesHwpxPartBinding,
     TablePropertiesHwpxReadback, TablePropertiesHwpxReader, TablePropertiesHwpxTableValue,
     TablePropertiesHwpxValueCatalog,
+};
+pub use structure_hwpx::{
+    TABLE_STRUCTURE_HWPX_PROFILE_ID, TABLE_STRUCTURE_HWPX_SCHEMA_VERSION,
+    TableStructureHwpxBuilder, TableStructureHwpxError, TableStructureHwpxLimits,
+    TableStructureHwpxLoweredParts, TableStructureHwpxLowerer, TableStructureHwpxLoweringReceipt,
+    TableStructureHwpxPlan, TableStructureHwpxReadback, TableStructureHwpxReader,
+    TableStructureHwpxRequest, TableStructureHwpxRequestDraft,
 };
 pub use style_hwpx::{
     TABLE_STYLE_HWPX_PROFILE_ID, TableStyleHwpxCellValue, TableStyleHwpxError,
@@ -330,7 +338,17 @@ impl TableRulingHwpxReader {
         binding: &TableRulingHwpxBinding,
         limits: TableRulingHwpxLimits,
     ) -> Result<TableRulingHwpxReadback, TableRulingHwpxError> {
-        read_existing(header, section, table_ordinal, binding, &limits)
+        read_existing(header, section, table_ordinal, binding, &limits, false)
+    }
+
+    pub(crate) fn read_existing_preserving_caption(
+        header: &[u8],
+        section: &[u8],
+        table_ordinal: usize,
+        binding: &TableRulingHwpxBinding,
+        limits: &TableRulingHwpxLimits,
+    ) -> Result<TableRulingHwpxReadback, TableRulingHwpxError> {
+        read_existing(header, section, table_ordinal, binding, limits, true)
     }
 }
 
@@ -783,6 +801,35 @@ struct RawEdit {
     replacement: Vec<u8>,
 }
 
+#[derive(Clone, Copy, Debug)]
+enum ExistingRenderProfile {
+    Existing { topology_changed: bool },
+    Split,
+    Partition,
+    Structure,
+}
+
+impl ExistingRenderProfile {
+    const fn topology_changed(self) -> bool {
+        match self {
+            Self::Existing { topology_changed } => topology_changed,
+            Self::Split | Self::Partition | Self::Structure => true,
+        }
+    }
+
+    const fn permits_split_geometry(self) -> bool {
+        matches!(self, Self::Split | Self::Partition | Self::Structure)
+    }
+
+    const fn permits_partition_geometry(self) -> bool {
+        matches!(self, Self::Partition | Self::Structure)
+    }
+
+    const fn reuses_formula_content(self) -> bool {
+        matches!(self, Self::Structure)
+    }
+}
+
 #[allow(clippy::too_many_arguments)]
 pub(super) fn render_existing(
     header: &[u8],
@@ -803,9 +850,7 @@ pub(super) fn render_existing(
         source_state,
         target_state,
         target_grid,
-        topology_changed,
-        false,
-        false,
+        ExistingRenderProfile::Existing { topology_changed },
         limits,
     )
 }
@@ -829,9 +874,7 @@ pub(super) fn render_split_existing(
         source_state,
         target_state,
         target_grid,
-        true,
-        true,
-        false,
+        ExistingRenderProfile::Split,
         limits,
     )
 }
@@ -855,9 +898,31 @@ pub(super) fn render_partition_existing(
         source_state,
         target_state,
         target_grid,
-        true,
-        true,
-        true,
+        ExistingRenderProfile::Partition,
+        limits,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(super) fn render_structure_existing(
+    header: &[u8],
+    section: &[u8],
+    table_ordinal: usize,
+    binding: &TableRulingHwpxBinding,
+    source_state: &TableRulingState,
+    target_state: &TableRulingState,
+    target_grid: &TableGrid,
+    limits: &TableRulingHwpxLimits,
+) -> Result<RenderedParts, TableRulingHwpxError> {
+    render_existing_profile(
+        header,
+        section,
+        table_ordinal,
+        binding,
+        source_state,
+        target_state,
+        target_grid,
+        ExistingRenderProfile::Structure,
         limits,
     )
 }
@@ -871,18 +936,16 @@ fn render_existing_profile(
     source_state: &TableRulingState,
     target_state: &TableRulingState,
     target_grid: &TableGrid,
-    topology_changed: bool,
-    split_geometry: bool,
-    partition_geometry: bool,
+    profile: ExistingRenderProfile,
     limits: &TableRulingHwpxLimits,
 ) -> Result<RenderedParts, TableRulingHwpxError> {
     let source_frame = source_state.frame();
     let target_frame = target_state.frame();
     let frame_matches = source_frame == target_frame
-        || partition_geometry
+        || profile.permits_partition_geometry()
             && source_frame.left_hwpunit == target_frame.left_hwpunit
             && source_frame.top_hwpunit == target_frame.top_hwpunit
-        || split_geometry
+        || profile.permits_split_geometry()
             && source_frame.left_hwpunit == target_frame.left_hwpunit
             && source_frame.top_hwpunit == target_frame.top_hwpunit
             && source_frame.width_hwpunit == target_frame.width_hwpunit;
@@ -891,14 +954,25 @@ fn render_existing_profile(
     {
         return Err(TableRulingHwpxError::PlanBindingMismatch);
     }
-    if topology_changed && !topology_formulas_are_exactly_preserved(source_state, target_state) {
+    if profile.topology_changed()
+        && !profile.reuses_formula_content()
+        && !topology_formulas_are_exactly_preserved(source_state, target_state)
+    {
         return Err(TableRulingHwpxError::UnsupportedFormulaMutation);
     }
     let catalog = ParagraphStyleCatalogReader::read(header, limits.paragraph_style)?;
     let mut resolver = StyleResolver::new(catalog.border_fills)?;
     let document = PreservingXmlDocument::parse(section)?;
     let root = selected_table(&document, table_ordinal)?;
-    let layout = TableLayoutHwpxReader::read_in_section(section, table_ordinal, limits.layout)?;
+    let layout = if profile.reuses_formula_content() {
+        TableLayoutHwpxReader::read_in_section_preserving_caption(
+            section,
+            table_ordinal,
+            limits.layout,
+        )?
+    } else {
+        TableLayoutHwpxReader::read_in_section(section, table_ordinal, limits.layout)?
+    };
     let cells = selected_cells(&document, root, layout.cells.len())?;
     let (source_cells, payloads) =
         source_render_cells(section, &document, &cells, binding, source_state, &resolver)?;
@@ -910,7 +984,8 @@ fn render_existing_profile(
         source_state,
         target_state,
         target_grid,
-        topology_changed,
+        profile.topology_changed(),
+        profile.reuses_formula_content(),
         &mut resolver,
         limits.layout.config().output_bytes,
     )?;
@@ -1181,6 +1256,7 @@ fn render_rows(
     target_state: &TableRulingState,
     target_grid: &TableGrid,
     topology_changed: bool,
+    reuse_formula_content: bool,
     resolver: &mut StyleResolver,
     output_limit: usize,
 ) -> Result<Vec<u8>, TableRulingHwpxError> {
@@ -1203,6 +1279,7 @@ fn render_rows(
                 target_cell,
                 payloads,
                 topology_changed,
+                reuse_formula_content,
                 output_limit,
             )?;
             let desired_border = desired_border(
@@ -1260,6 +1337,7 @@ fn target_content(
     target_cell: &domain_ir::TableRulingCell,
     payloads: &BTreeMap<LogicalId, SourcePayload>,
     topology_changed: bool,
+    reuse_formula_content: bool,
     output_limit: usize,
 ) -> Result<Vec<u8>, TableRulingHwpxError> {
     if source_cell.is_some_and(|source_cell| {
@@ -1267,6 +1345,16 @@ fn target_content(
             && source_cell.formula() == target_cell.formula()
             && template.master_cell_id == *target_cell.master_cell_id()
     }) {
+        return Ok(template.content.clone());
+    }
+    if reuse_formula_content
+        && source_cell.is_some_and(|source_cell| {
+            source_cell.payload() == target_cell.payload()
+                && source_cell.formula().is_some()
+                && target_cell.formula().is_some()
+                && template.master_cell_id == *target_cell.master_cell_id()
+        })
+    {
         return Ok(template.content.clone());
     }
     if !topology_changed {
@@ -1822,8 +1910,17 @@ fn read_existing(
     table_ordinal: usize,
     binding: &TableRulingHwpxBinding,
     limits: &TableRulingHwpxLimits,
+    allow_caption: bool,
 ) -> Result<TableRulingHwpxReadback, TableRulingHwpxError> {
-    let layout = TableLayoutHwpxReader::read_in_section(section, table_ordinal, limits.layout)?;
+    let layout = if allow_caption {
+        TableLayoutHwpxReader::read_in_section_preserving_caption(
+            section,
+            table_ordinal,
+            limits.layout,
+        )?
+    } else {
+        TableLayoutHwpxReader::read_in_section(section, table_ordinal, limits.layout)?
+    };
     let grid = validated_grid(&layout, binding, limits.grid)?;
 
     let catalog = ParagraphStyleCatalogReader::read(header, limits.paragraph_style)?;

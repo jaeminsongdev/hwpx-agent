@@ -284,7 +284,7 @@ impl TableLayoutHwpxReader {
         if !has_name(element(&document, root)?, "tbl") {
             return Err(TableLayoutHwpxError::WrongRoot);
         }
-        TableShape::read(&document, root, limits).map(|shape| shape.readback)
+        TableShape::read(&document, root, limits, false).map(|shape| shape.readback)
     }
 
     /// Reads one table selected by zero-based document order from a full section part.
@@ -301,7 +301,19 @@ impl TableLayoutHwpxReader {
         validate_document_envelope(&document)?;
         validate_section_root(&document)?;
         let root = select_table(&document, table_ordinal, limits)?;
-        TableShape::read(&document, root, limits).map(|shape| shape.readback)
+        TableShape::read(&document, root, limits, false).map(|shape| shape.readback)
+    }
+
+    pub(crate) fn read_in_section_preserving_caption(
+        bytes: &[u8],
+        table_ordinal: usize,
+        limits: TableLayoutHwpxLimits,
+    ) -> Result<TableLayoutHwpxReadback, TableLayoutHwpxError> {
+        let document = parse_document(bytes, limits)?;
+        validate_document_envelope(&document)?;
+        validate_section_root(&document)?;
+        let root = select_table(&document, table_ordinal, limits)?;
+        TableShape::read(&document, root, limits, true).map(|shape| shape.readback)
     }
 
     /// Counts current-profile tables in one section under a separate finite table limit.
@@ -461,7 +473,7 @@ fn lower_geometry_selected(
     let document = parse_document(source, limits)?;
     validate_document_envelope(&document)?;
     let root = selected_root(&document, table_ordinal, limits)?;
-    let source_shape = TableShape::read(&document, root, limits)?;
+    let source_shape = TableShape::read(&document, root, limits, false)?;
     validate_source_grid(&source_shape.readback, &target)?;
 
     let mut edits = layout_edits(&document, &source_shape, &target)?;
@@ -471,7 +483,7 @@ fn lower_geometry_selected(
     let output_document = parse_document(&output, limits)?;
     validate_document_envelope(&output_document)?;
     let output_root = selected_root(&output_document, table_ordinal, limits)?;
-    let output_shape = TableShape::read(&output_document, output_root, limits)?;
+    let output_shape = TableShape::read(&output_document, output_root, limits, false)?;
     let expected = target.readback(
         source_shape.readback.inner_margin,
         source_shape.readback.content_sha256,
@@ -510,7 +522,7 @@ fn lower_selected(
     let document = parse_document(source, limits)?;
     validate_document_envelope(&document)?;
     let root = selected_root(&document, table_ordinal, limits)?;
-    let source_shape = TableShape::read(&document, root, limits)?;
+    let source_shape = TableShape::read(&document, root, limits, false)?;
     validate_source_grid(&source_shape.readback, &target)?;
 
     let mut edits = layout_edits(&document, &source_shape, &target)?;
@@ -520,7 +532,7 @@ fn lower_selected(
     let output_document = parse_document(&output, limits)?;
     validate_document_envelope(&output_document)?;
     let output_root = selected_root(&output_document, table_ordinal, limits)?;
-    let output_shape = TableShape::read(&output_document, output_root, limits)?;
+    let output_shape = TableShape::read(&output_document, output_root, limits, false)?;
     let expected = target.readback(
         source_shape.readback.inner_margin,
         source_shape.readback.content_sha256,
@@ -810,9 +822,11 @@ impl TableShape {
         document: &PreservingXmlDocument,
         root: usize,
         limits: TableLayoutHwpxLimits,
+        allow_caption: bool,
     ) -> Result<Self, TableLayoutHwpxError> {
         let dimensions = read_table_dimensions(document, root, limits)?;
-        let children = read_table_children(document, root, dimensions.row_count, limits)?;
+        let children =
+            read_table_children(document, root, dimensions.row_count, limits, allow_caption)?;
         let size_element = element(document, children.size)?;
         let table_width_hwpunit = bounded_positive_u32(size_element, "width", limits)?;
         let table_height_hwpunit = bounded_positive_u32(size_element, "height", limits)?;
@@ -923,11 +937,13 @@ fn read_table_children(
     root: usize,
     expected_rows: usize,
     limits: TableLayoutHwpxLimits,
+    allow_caption: bool,
 ) -> Result<TableChildren, TableLayoutHwpxError> {
     let children = child_indexes(document, root)?;
     let mut size = None;
     let mut position = None;
     let mut outer_margin = None;
+    let mut caption = None;
     let mut inner_margin = None;
     let mut rows = Vec::new();
     for child in children {
@@ -937,6 +953,10 @@ fn read_table_children(
             "pos" if has_name(value, "pos") && position.replace(child).is_none() => {}
             "outMargin"
                 if has_name(value, "outMargin") && outer_margin.replace(child).is_none() => {}
+            "caption"
+                if allow_caption
+                    && has_name(value, "caption")
+                    && caption.replace(child).is_none() => {}
             "inMargin" if has_name(value, "inMargin") && inner_margin.replace(child).is_none() => {}
             "tr" if has_name(value, "tr") => {
                 rows.try_reserve(1)

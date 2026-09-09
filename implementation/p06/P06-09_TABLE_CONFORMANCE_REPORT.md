@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 15 |
-| direct `integration_passed` | 21 |
-| direct `unit_passed` | 25 |
+| direct `integration_passed` | 25 |
+| direct `unit_passed` | 21 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -30,8 +30,9 @@ The machine-readable authority is
 
 ## Existing evidence admitted conservatively
 
-- P06-02 contributes bounded pure unit evidence for create/row-column edits. P06-03's exact
-  merge/split model now also has static preserving HWPX integration, but no licensed target oracle.
+- P06-02 contributes bounded pure unit evidence for create. Its row/column edits are now superseded
+  by the exact structure model's stronger static preserving HWPX integration. P06-03's exact
+  merge/split model also has static preserving HWPX integration, but no licensed target oracle.
 - P06-04 contributes exact-target oracle evidence for cell margin, alignment, direction,
   protection, border and fill.
 - P06-05 contributes exact-target width/height evidence. That oracle still covers only its absolute
@@ -109,6 +110,16 @@ The machine-readable authority is
   removes only the separator plus trailing wrapper. Both projected sources and the final joined
   table reopen exactly. A differing shared junction edge, selected formula, repeat header, caption
   or page-split policy fails closed; sibling formula/cache and non-target package parts remain exact.
+- The exact row/column structure model and preserving HWPX adapter move TABLE-012/013/014/015 to
+  static integration as one four-operation profile. Insertions create only explicit empty 1x1
+  masters at whole-grid boundaries and duplicate the source boundary around the new band. Deletions
+  remove only fully contained masters and collapse only identical survivor edges. Every surviving
+  identity, span, track geometry, payload, complete property, formula/cache and document-flow state
+  remains bound. Formula owners and references rebase through the same grid edit, including a merged
+  formula-span reopen regression; owner deletion is explicit. Page-split, caption, repeat-header
+  prefix and native wrapper/table IDs reopen exactly, while a repeat-header zero/nonzero transition,
+  insertion through a merged span and partial-span deletion fail closed. This is synthetic static
+  integration, not a saved HWPX, licensed Hangul target build or render oracle.
 - The table-chart component adds TABLE-006 exact rectangular cell-block projection. It ignores the
   documented top-left corner, maps first-row series labels and first-column category labels, keeps
   exact numeric/blank data points and formula-display-cache origins, and binds source state plus
@@ -151,7 +162,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-143 missing validation instances, 61 unverified automation runtime rows and 61 missing
+131 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -159,10 +170,12 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the 25 unit-only rows through preserving HWPX adapters;
-2. close the twenty-one integration-only target oracles;
-3. supply remaining feature-specific validations, including formula readback where required;
-4. qualify exact current-target automation bindings and run safe disposable differentials; and
+1. run the requested P06-07 exact target-v2 save/reopen, page-count, PDF repeat-header and caption
+   oracle on this PC's licensed Hangul 2020 without silently interacting with permission/UI prompts;
+2. lower the remaining 21 unit-only rows through preserving HWPX adapters;
+3. close the 25 integration-only target oracles;
+4. supply remaining feature-specific validations, exact current-target automation bindings and safe
+   disposable differentials; and
 5. regenerate until all 61 rows are green, then run the P06 hard Gate.
 
 P06-09 and P06 remain in progress. No production, other-PC/version or whole-product completion is
