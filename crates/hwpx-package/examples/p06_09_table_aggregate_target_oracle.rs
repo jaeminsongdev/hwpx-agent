@@ -292,8 +292,7 @@ fn require_renderer_profiles(
         || oracle.total_count != EXPECTED_SECTION_CACHE_COUNT
         || oracle.cell_count != EXPECTED_CELL_CACHE_COUNT
         || oracle.cell_widths != vec![EXPECTED_CELL_CACHE_WIDTH; EXPECTED_CELL_CACHE_COUNT]
-        || oracle.outside_positions_and_widths.len()
-            != EXPECTED_SECTION_CACHE_COUNT - EXPECTED_CELL_CACHE_COUNT
+        || oracle.outside_positions_and_widths != [(0, 0), (3_130, 42_520)]
     {
         return Err("aggregate renderer cache profile differs".into());
     }
@@ -764,5 +763,29 @@ mod tests {
         assert!(normalize_oracle_height(expected.as_bytes()).is_err());
         let duplicate = format!("{oracle}{oracle}");
         assert!(normalize_oracle_height(duplicate.as_bytes()).is_err());
+    }
+
+    #[test]
+    fn known_hancom_2020_formula_oracle_matches_the_renderer_cache_envelope() {
+        let path = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../fixtures/target-build/p06-06-formula-target-20260907-01/",
+            "target-readback-output-04.hwpx"
+        );
+        let Ok(bytes) = fs::read(path) else {
+            return;
+        };
+        let package = read_package(&bytes).unwrap();
+        let (_, evidence) = strip_renderer_caches(&package.section).unwrap();
+        assert_eq!(evidence.total_count, EXPECTED_SECTION_CACHE_COUNT);
+        assert_eq!(evidence.cell_count, EXPECTED_CELL_CACHE_COUNT);
+        assert_eq!(
+            evidence.cell_widths,
+            vec![EXPECTED_CELL_CACHE_WIDTH; EXPECTED_CELL_CACHE_COUNT]
+        );
+        assert_eq!(
+            evidence.outside_positions_and_widths,
+            [(0, 0), (3_130, 42_520)]
+        );
     }
 }
