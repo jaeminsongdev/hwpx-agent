@@ -3,7 +3,8 @@
 - Generated: 2026-09-09
 - Evidence profile: `hwpx-agent.table-aggregate-hwpx.hancom-2020-wrapper/1`
 - Model profile: `hwpx-agent.table-aggregate/v1`
-- Scope: current repository, synthetic static Hancom 2020 HWPX XML/package integration
+- Scope: current repository, synthetic static Hancom 2020 HWPX XML/package integration and an
+  unexecuted exact-target batch harness
 - Result: `integration_pass`
 - Recommended next-step reasoning: `max`
 
@@ -38,6 +39,8 @@ part and spine entry stays byte exact.
 | Closed package non-target parts and spine | exact preservation PASS |
 | Debug redaction, deterministic JSON and finite output | PASS |
 | Private contract/tamper tests | 4/4 PASS |
+| Exact eight-case batch runner static tests | 28/28 PASS in PowerShell 7 and Windows PowerShell 5.1 |
+| Final `-05` fixture manifest/input/collision preflight | PASS before COM creation |
 | P06 Python suite | 182/182 PASS |
 | Workspace all-target/all-feature locked offline tests | PASS; existing isolated P17 PostgreSQL qualification test is the sole ignored test |
 | Workspace Clippy `-D warnings`, `cargo fmt --check`, `git diff --check` | PASS |
@@ -45,8 +48,18 @@ part and spine entry stays byte exact.
 | STRICT preservation/privacy/non-promotion self-audit | PASS |
 
 The fixtures are bounded synthetic in-memory HWPX XML and ZIP packages. No user document, saved real
-HWPX, Hangul process, UI, COM/HAction call, PDF renderer, formula evaluator or automation route was
-used. The adapter's static success is not licensed target or renderer evidence.
+HWPX, UI input, HAction call, formula evaluator or automation route was used by the successful
+adapter and batch-harness checks. The earlier single-file TABLE-022 attempt reached the visible
+licensed Hangul window but timed out in `open_input` because access approval was not performed; its
+unchanged input, absent output/PDF and failed trace remain local failed evidence. No batch execution
+has run. Static success is not licensed target or renderer evidence.
+
+The batch harness binds the final eight-case fixture manifest in both parent and worker, uses one
+x86 STA `HWPFrame.HwpObject.2` session, and performs per-case save/reopen/text/PDF lifecycles in fixed
+feature order. It is create-only, fail-fast and redacted; the watchdog validates returned file hashes,
+PDF signatures, progress sequence, exact target identity and process cleanup. It sends no keyboard or
+mouse input, so the user must click Hangul's `모두 허용` or `허용` access control when the next run is
+explicitly started.
 
 ## Conformance impact
 

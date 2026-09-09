@@ -51,6 +51,20 @@ contract/tamper tests promote only TABLE-022/023/024/026/027/028/029/030 from
 `unit_passed` from 21 to 13 and `integration_passed` from 25 to 33; `cataloged` remains 0,
 `oracle_verified` remains 15 and green remains 0/61.
 
+The exact-target fixture may be exercised only through a bounded runner that validates the complete
+eight-case manifest and every input digest in both the watchdog parent and x86 STA worker. One
+licensed `HWPFrame.HwpObject.2` session processes the cases in fixed feature order; every case has an
+independent open, text-digest, create-only save, close, reopen, second text-digest, PDF export and
+close lifecycle. The first error stops later cases, while already-created outputs and the progress
+journal remain failed evidence. The parent has a finite timeout, validates every returned HWPX/PDF
+digest and PDF signature, cleans only a same-session, post-start, exact-executable automation process,
+and writes a bounded redacted trace. It never registers a module or sends UI input.
+
+Neither a successful lifecycle trace nor a PDF alone promotes a row. Each saved HWPX must pass the
+feature-specific aggregate oracle checker, and each render claim must receive bounded visual review.
+Any access-approval timeout or partial batch remains failed evidence and is not restarted merely
+because observation ended.
+
 This evidence does not prove formula evaluation, a verified cache, a saved real HWPX, licensed
 Hangul 2020 execution, render identity, target build, rollback/retry, automation runtime,
 differential exact match, arbitrary user documents, merged or pre-formula tables, another PC or

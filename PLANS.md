@@ -85,10 +85,10 @@
   package preservation: Rust 7/7, contract 4/4 and prior FULL checks PASS; no Hangul claim was added.
 - The placement HWPX slice maps TABLE-034/036/037/038 across all position, attachment, wrap/flow and
   margins while preserving inactive fields, merged siblings, formula/cache and pagination; Rust 7/7 and tamper 4/4 PASS without a Hangul claim.
-- TABLE-022/023/024/026/027/028/029/030 share an exact adapter across all nine axis/function mappings;
-  formula-free unmerged sources preserve complete state/grid/flow/package evidence without a Hangul claim.
-- TABLE-042/043/044/055 have the direct P06-07 oracle. The remaining 13 unit rows still need HWPX
-  lowering; all 33 integration rows still need exact target oracles and later automation evidence.
+- TABLE-022/023/024/026/027/028/029/030 share one exact adapter; a one-session target batch harness
+  is static-ready, while the first TABLE-022 approval timeout remains failed evidence without promotion.
+- TABLE-042/043/044/055 have the direct P06-07 oracle. The remaining 13 unit rows need HWPX lowering;
+  all 33 integration rows still need exact target oracles and later automation evidence.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`, the current conformance JSON,
   and `protocol/private/p06-table-conformance-v1.json`.
 
