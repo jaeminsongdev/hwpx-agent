@@ -1,0 +1,116 @@
+{
+  "schema_version": "hwpx-agent.table-transpose-hwpx-contract/v1",
+  "profile_id": "hwpx-agent.table-transpose-hwpx.hancom-2020-wrapper/1",
+  "model_profile_id": "hwpx-agent.table-transpose/v1",
+  "scope": "p06_09_static_current_pc_hancom_2020_hwpx_complete_formula_free_transpose_admission",
+  "features": {
+    "TABLE-021": "table.transpose"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/04_feature_catalog/07_table.md",
+      "sha256": "9a29f412467f43c1fc7e6e5e6ac314211c9d1a5937a0464311f5270f4efca84c"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/07_table_contracts.md",
+      "sha256": "ceaf6d671196283525fc072fafabb2b827131aceb82d950882f39585bfa96157"
+    },
+    {
+      "path": "docs/09_roadmap/P06_table_engine.md",
+      "sha256": "931b1d9458f5a044ff17cea1b6b7d1d354150a16a67c926f3c4f0c9c5adcf544"
+    },
+    {
+      "path": "protocol/private/p06-table-style-transpose-v1.json",
+      "sha256": "206c89d7b82c2640489ab095703dc10b6c94232fe417973b161f32cd074f7a7e"
+    }
+  ],
+  "input": {
+    "table": "one_exact_current_hangul_2020_table_with_complete_logical_physical_binding",
+    "source": "header_section_ruling_state_grid_pagination_and_document_flow_sha256",
+    "domain": "complete_table_transpose_request_and_rebuilt_plan",
+    "profile": "arbitrary_rectangular_merged_nonuniform_formula_free_zero_repeat_header"
+  },
+  "transformation": {
+    "grid": "swap_dimensions_master_coordinates_and_rectangular_span_axes",
+    "geometry": "swap_frame_width_height_and_physical_row_column_boundary_axes",
+    "edges": "map_every_horizontal_unit_edge_to_vertical_and_every_vertical_to_horizontal",
+    "cells": "preserve_master_id_ordered_payload_ids_bytes_complete_properties_and_both_diagonals",
+    "pagination": "preserve_page_split_zero_repeat_header_and_caption_while_swapping_grid_dimensions"
+  },
+  "lowering": {
+    "precondition": "relift_source_recompute_cell_digests_rebuild_domain_plan_and_compare_parts_state_grid_flow",
+    "edit_scope": "selected_table_dimensions_frame_rows_cells_extents_and_border_references_plus_append_only_header_catalog",
+    "binding": "regenerate_target_row_major_binding_from_exact_target_state_and_grid",
+    "publication": "return_only_after_header_section_reparse_exact_target_state_grid_pagination_payload_formula_free_and_table_count_readback"
+  },
+  "preservation": {
+    "payload": "exact_ordered_raw_paragraph_bytes_and_logical_block_ids_move_with_master",
+    "properties": "exact_non_ruling_background_slash_and_back_slash_identity_move_with_master",
+    "document": "unselected_section_bytes_table_count_and_non_target_package_parts_preserved",
+    "source": "never_mutated"
+  },
+  "receipt": {
+    "binding": "source_output_parts_source_target_state_grid_request_plan_and_before_after_flow_sha256",
+    "counts": "tables_dimensions_master_merged_payload_edge_property_and_added_border_fill_counts",
+    "debug": "all_hashes_logical_ids_payloads_formulas_raw_xml_and_document_content_omitted"
+  },
+  "limits_profiles": [
+    "TableTransposeLimits",
+    "TableRulingHwpxLimits",
+    "TableLayoutHwpxLimits",
+    "ParagraphStyleLimits",
+    "TableFormulaHwpxLimits",
+    "FormulaLimits",
+    "TableGridLimits",
+    "TableRulingLimits",
+    "TablePaginationHwpxLimits"
+  ],
+  "failure_policy": [
+    "invalid_schema_digest_logical_physical_or_payload_property_binding",
+    "source_parts_state_grid_pagination_current_flow_or_target_flow_transition_drift",
+    "domain_request_plan_relocation_or_complete_master_coverage_drift",
+    "formula_bearing_or_nonzero_repeat_header_source_profile",
+    "missing_ambiguous_or_nonuniform_transposed_edge_or_cell_template_identity",
+    "border_fill_catalog_exhaustion_or_output_growth_limit",
+    "input_output_allocation_serialization_xml_layout_grid_formula_ruling_or_pagination_limit",
+    "semantic_reopen_table_count_payload_caption_page_split_or_target_state_mismatch",
+    "no_partial_header_section_binding_or_receipt_returned"
+  ],
+  "migration": "protocol/migrations/p06-table-transpose-hwpx-v0-to-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_TRANSPOSE_HWPX_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_TRANSPOSE_HWPX_REPORT.md",
+  "expected_evidence": {
+    "adapter_tests": 7,
+    "feature_count": 1,
+    "backend": "direct_hwpx",
+    "direct_stage": "integration_passed",
+    "validations": [
+      "formula_readback",
+      "page_split",
+      "schema",
+      "semantic_reopen"
+    ]
+  },
+  "not_claimed": {
+    "render_diff": false,
+    "hangul_2020_target_build": false,
+    "saved_real_hwpx": false,
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "rollback_or_retry": false,
+    "release_enabled": false,
+    "formula_bearing_native_transpose": false,
+    "repeat_header_conversion": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

@@ -160,7 +160,8 @@ pub use table_ruling_hwpx::{
     TABLE_MERGE_SPLIT_HWPX_SCHEMA_VERSION, TABLE_PROPERTIES_HWPX_PROFILE_ID,
     TABLE_RULING_HWPX_PROFILE_ID, TABLE_SPLIT_HWPX_PROFILE_ID, TABLE_SPLIT_HWPX_SCHEMA_VERSION,
     TABLE_STRUCTURE_HWPX_PROFILE_ID, TABLE_STRUCTURE_HWPX_SCHEMA_VERSION,
-    TABLE_STYLE_HWPX_PROFILE_ID, TableAggregateHwpxBuilder, TableAggregateHwpxError,
+    TABLE_STYLE_HWPX_PROFILE_ID, TABLE_TRANSPOSE_HWPX_PROFILE_ID,
+    TABLE_TRANSPOSE_HWPX_SCHEMA_VERSION, TableAggregateHwpxBuilder, TableAggregateHwpxError,
     TableAggregateHwpxLimits, TableAggregateHwpxLoweredParts, TableAggregateHwpxLowerer,
     TableAggregateHwpxLoweringReceipt, TableAggregateHwpxPlan, TableAggregateHwpxReadback,
     TableAggregateHwpxReader, TableAggregateHwpxRequest, TableAggregateHwpxRequestDraft,
@@ -189,7 +190,11 @@ pub use table_ruling_hwpx::{
     TableStructureHwpxRequest, TableStructureHwpxRequestDraft, TableStyleHwpxCellValue,
     TableStyleHwpxError, TableStyleHwpxLimits, TableStyleHwpxLoweredParts, TableStyleHwpxLowerer,
     TableStyleHwpxLoweringReceipt, TableStyleHwpxPartBinding, TableStyleHwpxReadback,
-    TableStyleHwpxReader, TableStyleHwpxValueCatalog,
+    TableStyleHwpxReader, TableStyleHwpxValueCatalog, TableTransposeHwpxBuilder,
+    TableTransposeHwpxError, TableTransposeHwpxLimits, TableTransposeHwpxLoweredParts,
+    TableTransposeHwpxLowerer, TableTransposeHwpxLoweringReceipt, TableTransposeHwpxPlan,
+    TableTransposeHwpxReadback, TableTransposeHwpxReader, TableTransposeHwpxRequest,
+    TableTransposeHwpxRequestDraft,
 };
 pub use text_flow::{
     FieldBegin, FieldEnd, FieldType, HANCOM_2020_PARAGRAPH_NAMESPACE, OpaqueTextElement,

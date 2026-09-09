@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 15 |
-| direct `integration_passed` | 33 |
-| direct `unit_passed` | 13 |
+| direct `integration_passed` | 34 |
+| direct `unit_passed` | 12 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -84,9 +84,12 @@ The machine-readable authority is
   grid, flow, definition, request and plan state, preserves truthful unified diagonal provenance and
   normalizes a broken group to exact each-cell intent. Closed-package reopen preserves payload,
   formula/cache, pagination and unrelated parts; no licensed Hangul or renderer result is inferred.
-- The transpose component keeps TABLE-021 at pure-unit scope with complete grid/span/formula-axis
-  transposition. Payload/style or formula state outside the operation is digest-bound, but it is not
-  an HWPX adapter.
+- The transpose component keeps complete grid/span/formula-axis semantics, while the preserving
+  HWPX adapter moves TABLE-021 to static integration for its exact formula-free, zero-repeat-header
+  native profile. Arbitrary rectangular merged grids, nonuniform physical axes, complete edges,
+  payload/properties/diagonals, page-split policy and caption reopen exactly; double transpose
+  restores the source grid/state. Formula-bearing native transpose, licensed Hangul and rendering
+  remain unclaimed.
 - The table-properties model and preserving HWPX adapter cover TABLE-007/008/009/047. The strict
   reader binds complete grid/state, typed table and cell semantics, four independent border sides,
   backgrounds, payload/formula identities and explicit each-cell or unified diagonal intent.
@@ -165,7 +168,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-107 missing validation instances, 61 unverified automation runtime rows and 61 missing
+104 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -173,8 +176,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the remaining 13 unit-only rows through preserving HWPX adapters;
-2. close the 33 integration-only target oracles;
+1. lower the remaining 12 unit-only rows through preserving HWPX adapters;
+2. close the 34 integration-only target oracles;
 3. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
 4. regenerate until all 61 rows are green, then run the P06 hard Gate.

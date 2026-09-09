@@ -25,6 +25,7 @@ mod partition_hwpx;
 mod properties_hwpx;
 mod structure_hwpx;
 mod style_hwpx;
+mod transpose_hwpx;
 
 pub use aggregate_hwpx::{
     TABLE_AGGREGATE_HWPX_PROFILE_ID, TABLE_AGGREGATE_HWPX_SCHEMA_VERSION,
@@ -71,6 +72,13 @@ pub use style_hwpx::{
     TableStyleHwpxLimits, TableStyleHwpxLoweredParts, TableStyleHwpxLowerer,
     TableStyleHwpxLoweringReceipt, TableStyleHwpxPartBinding, TableStyleHwpxReadback,
     TableStyleHwpxReader, TableStyleHwpxValueCatalog,
+};
+pub use transpose_hwpx::{
+    TABLE_TRANSPOSE_HWPX_PROFILE_ID, TABLE_TRANSPOSE_HWPX_SCHEMA_VERSION,
+    TableTransposeHwpxBuilder, TableTransposeHwpxError, TableTransposeHwpxLimits,
+    TableTransposeHwpxLoweredParts, TableTransposeHwpxLowerer, TableTransposeHwpxLoweringReceipt,
+    TableTransposeHwpxPlan, TableTransposeHwpxReadback, TableTransposeHwpxReader,
+    TableTransposeHwpxRequest, TableTransposeHwpxRequestDraft,
 };
 
 pub const TABLE_RULING_HWPX_PROFILE_ID: &str = "hwpx-agent.table-ruling-hwpx.hancom-2020/1";
@@ -833,13 +841,14 @@ enum ExistingRenderProfile {
     Split,
     Partition,
     Structure,
+    Transpose,
 }
 
 impl ExistingRenderProfile {
     const fn topology_changed(self) -> bool {
         match self {
             Self::Existing { topology_changed } => topology_changed,
-            Self::Split | Self::Partition | Self::Structure => true,
+            Self::Split | Self::Partition | Self::Structure | Self::Transpose => true,
         }
     }
 
@@ -853,6 +862,14 @@ impl ExistingRenderProfile {
 
     const fn reuses_formula_content(self) -> bool {
         matches!(self, Self::Structure)
+    }
+
+    const fn preserves_caption(self) -> bool {
+        matches!(self, Self::Structure | Self::Transpose)
+    }
+
+    const fn permits_transposed_geometry(self) -> bool {
+        matches!(self, Self::Transpose)
     }
 }
 
@@ -954,6 +971,30 @@ pub(super) fn render_structure_existing(
 }
 
 #[allow(clippy::too_many_arguments)]
+pub(super) fn render_transpose_existing(
+    header: &[u8],
+    section: &[u8],
+    table_ordinal: usize,
+    binding: &TableRulingHwpxBinding,
+    source_state: &TableRulingState,
+    target_state: &TableRulingState,
+    target_grid: &TableGrid,
+    limits: &TableRulingHwpxLimits,
+) -> Result<RenderedParts, TableRulingHwpxError> {
+    render_existing_profile(
+        header,
+        section,
+        table_ordinal,
+        binding,
+        source_state,
+        target_state,
+        target_grid,
+        ExistingRenderProfile::Transpose,
+        limits,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
 fn render_existing_profile(
     header: &[u8],
     section: &[u8],
@@ -974,7 +1015,12 @@ fn render_existing_profile(
         || profile.permits_split_geometry()
             && source_frame.left_hwpunit == target_frame.left_hwpunit
             && source_frame.top_hwpunit == target_frame.top_hwpunit
-            && source_frame.width_hwpunit == target_frame.width_hwpunit;
+            && source_frame.width_hwpunit == target_frame.width_hwpunit
+        || profile.permits_transposed_geometry()
+            && source_frame.left_hwpunit == target_frame.left_hwpunit
+            && source_frame.top_hwpunit == target_frame.top_hwpunit
+            && source_frame.width_hwpunit == target_frame.height_hwpunit
+            && source_frame.height_hwpunit == target_frame.width_hwpunit;
     if !frame_matches
         || source_state.table_properties_sha256() != target_state.table_properties_sha256()
     {
@@ -990,7 +1036,7 @@ fn render_existing_profile(
     let mut resolver = StyleResolver::new(catalog.border_fills)?;
     let document = PreservingXmlDocument::parse(section)?;
     let root = selected_table(&document, table_ordinal)?;
-    let layout = if profile.reuses_formula_content() {
+    let layout = if profile.preserves_caption() {
         TableLayoutHwpxReader::read_in_section_preserving_caption(
             section,
             table_ordinal,
