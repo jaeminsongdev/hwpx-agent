@@ -24,6 +24,7 @@ mod create_hwpx;
 mod merge_split_hwpx;
 mod partition_hwpx;
 mod properties_hwpx;
+mod sort_hwpx;
 mod structure_hwpx;
 mod style_hwpx;
 mod table_to_text_hwpx;
@@ -69,6 +70,12 @@ pub use properties_hwpx::{
     TablePropertiesHwpxLoweringReceipt, TablePropertiesHwpxPartBinding,
     TablePropertiesHwpxReadback, TablePropertiesHwpxReader, TablePropertiesHwpxTableValue,
     TablePropertiesHwpxValueCatalog,
+};
+pub use sort_hwpx::{
+    TABLE_SORT_HWPX_PROFILE_ID, TABLE_SORT_HWPX_SCHEMA_VERSION, TableSortHwpxBuilder,
+    TableSortHwpxError, TableSortHwpxLimits, TableSortHwpxLoweredParts, TableSortHwpxLowerer,
+    TableSortHwpxLoweringReceipt, TableSortHwpxPlan, TableSortHwpxReadback, TableSortHwpxReader,
+    TableSortHwpxRequest, TableSortHwpxRequestDraft,
 };
 pub use structure_hwpx::{
     TABLE_STRUCTURE_HWPX_PROFILE_ID, TABLE_STRUCTURE_HWPX_SCHEMA_VERSION,

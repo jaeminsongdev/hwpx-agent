@@ -51,6 +51,8 @@ preservation fixtures. It cannot promote direct HWPX integration, semantic/formu
 render diff, licensed Hangul 2020 target-build, automation, differential exact match,
 release-enabled, P06-09/P06 PASS, production or product completion.
 
-The next boundary is a preserving HWPX adapter that lifts comparison values from exact cell
-content, verifies payload/formula hashes, applies the relocation atomically and reopens every
-formula and page policy. Recommended reasoning remains `max`.
+The separately versioned `hwpx-agent.table-sort-hwpx.hancom-2020-plain-unmerged/1` successor now
+implements that boundary for an exact formula-free, plain, unmerged native profile. It does not
+retroactively turn this component contract into HWPX evidence or claim formula-bearing sorting.
+Formula movement, licensed target execution, render, automation and differential evidence remain
+open. Recommended reasoning remains `max`.

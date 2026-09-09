@@ -48,3 +48,11 @@ This is unit-level evidence. No HWPX package, user document or Hangul process wa
 cell lifting/relocation, formula rebasing/readback, page preservation, rendering, target-build
 save/reopen, automation and differential evidence remain open. P06-09, P06, production and the
 product remain in progress.
+
+## Additive successor status
+
+On 2026-09-09 the separate `hwpx-agent.table-sort-hwpx.hancom-2020-plain-unmerged/1` adapter added
+static direct-HWPX integration for the exact formula-free plain/unmerged profile. Authority is
+`implementation/p06/P06-09_TABLE_SORT_HWPX_REPORT.md`. This historical component report and its
+14/14 unit evidence remain valid; no licensed Hangul, render, automation or differential claim is
+inferred from the successor.

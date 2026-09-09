@@ -443,9 +443,9 @@
     },
     {
       "feature_ids": ["TABLE-056"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
       "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
       "negative_passed": true,
       "rollback_or_retry_passed": false,
@@ -453,7 +453,11 @@
       "evidence_files": [
         {
           "path": "implementation/p06/P06-09_TABLE_SORT_REPORT.md",
-          "sha256": "a15547e745082a33877d9f7336b1440dcc27fb7d0dd9c6943543bd24c24bd4f3"
+          "sha256": "0d2b77007d001749a347e9fe18e89a4a12b293ec63f307f63fae6af7e1bc2cad"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_SORT_HWPX_REPORT.md",
+          "sha256": "621635da9e8d495859fe07fc3070b76e2b6d5691f95f5bf4bee96accc5f9e15f"
         }
       ]
     },

@@ -32,8 +32,8 @@
     "non_green_rows": 61,
     "direct_stage_counts": {
       "cataloged": 0,
-      "unit_passed": 9,
-      "integration_passed": 37,
+      "unit_passed": 8,
+      "integration_passed": 38,
       "oracle_verified": 15
     },
     "automation_binding_counts": {
@@ -181,7 +181,7 @@
     },
     {
       "path": "crates/hwpx-package/src/lib.rs",
-      "sha256": "98ec067313d6403fa06c7b9bd88129ba106f63c10f393e901ebe4bfe97f5d7d3"
+      "sha256": "8da3608d063883ae48ddac2d02d4f9e6cb473b1d0c541e6b5b885eb0bdda8bde"
     },
     {
       "path": "crates/hwpx-package/src/table_cell_style.rs",
@@ -201,7 +201,7 @@
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx.rs",
-      "sha256": "7055d77bd2c347f509a693abe9a052376b2ae4443a795dc5697da64d516ca171"
+      "sha256": "ad9d8891a82ee8c1b96e7b05e6df327adbb68168c843ac6eaed725d875e69ead"
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/aggregate_hwpx.rs",
@@ -222,6 +222,10 @@
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/properties_hwpx.rs",
       "sha256": "9d1ba6454817bb4cdb42779b15952b8bd5cbad5d8b3a4fb2ed34ec651620020c"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_ruling_hwpx/sort_hwpx.rs",
+      "sha256": "b2b4e8d849c28b9604075c2d9e0dacf1cb9b3dc67d9b71e188d2841f467c3803"
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/structure_hwpx.rs",
@@ -274,6 +278,10 @@
     {
       "path": "crates/hwpx-package/tests/table_ruling_hwpx.rs",
       "sha256": "6ee321a8c82053158da1a9475f9b833383c7d132d1de2eb7a1f571647c0fbd6b"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_sort_hwpx.rs",
+      "sha256": "d984222c1f0a98bc09e48bcebd08fdc272df551cf2799103af7befd080fb5164"
     },
     {
       "path": "crates/hwpx-package/tests/table_split_hwpx.rs",
@@ -357,7 +365,7 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "0e3c860fc318a877ce4b49c808e6405e1981d17f518b870b15a1b6a6ea6fde54"
+      "sha256": "55650b2bcce00379f138135824d7de2f3be60723fb9cdfc422a85a6cf9955fde"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CREATE_HWPX_POLICY.md",
@@ -464,12 +472,20 @@
       "sha256": "92f91b10fd1de874ff27b7acab6d59701995fe1eb77fcf9278a7c392bbbf4efa"
     },
     {
+      "path": "implementation/p06/P06-09_TABLE_SORT_HWPX_POLICY.md",
+      "sha256": "95bbfd161a8c0ccf7249f636da2566b045346f777f5c63cb0a1ae8b4757527ad"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_SORT_HWPX_REPORT.md",
+      "sha256": "621635da9e8d495859fe07fc3070b76e2b6d5691f95f5bf4bee96accc5f9e15f"
+    },
+    {
       "path": "implementation/p06/P06-09_TABLE_SORT_POLICY.md",
-      "sha256": "ed9ccca835dc667ca1ddcb8ab157dfc3525cc4b6e04373c150417338ef474a2b"
+      "sha256": "98a5377f15498066fe1c2e7e9fdc5a7354b477236a395e7a8933f5bf0ab67da9"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_SORT_REPORT.md",
-      "sha256": "a15547e745082a33877d9f7336b1440dcc27fb7d0dd9c6943543bd24c24bd4f3"
+      "sha256": "0d2b77007d001749a347e9fe18e89a4a12b293ec63f307f63fae6af7e1bc2cad"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_SPLIT_HWPX_POLICY.md",
@@ -545,7 +561,7 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "4e29feb7ed11aaf6b7f416bb2505f366e35dbffb597490c9434342a2b3381322"
+      "sha256": "633f405b8276f0fb0b7e3045c0a6ca3a66742a3371bda289963c371105daa97e"
     },
     {
       "path": "implementation/p06/p06-09-current-2020-automation-projection.json",
@@ -553,7 +569,7 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "a7af1e49b19b27787ffa54522302e220b67c79856b03ecc4a7434d30491b6f64"
+      "sha256": "5af05fecf6447092cc12679fb5f92def245ba180f1a0a684f95ee88104ffa7f0"
     },
     {
       "path": "protocol/baseline/catalog-v5.lock.json",
@@ -662,6 +678,10 @@
     {
       "path": "protocol/migrations/p06-table-ruling-v0-to-v1.md",
       "sha256": "d25d59c1a085bdf927a6cc2dfcf30b3b6657007c0a7c39a07105a5f1ba015c18"
+    },
+    {
+      "path": "protocol/migrations/p06-table-sort-hwpx-v0-to-v1.md",
+      "sha256": "8aee8b8f8fe7c5f14ed4a80954bcbc4003a1fa1e2d97415008f83a62ab7826c6"
     },
     {
       "path": "protocol/migrations/p06-table-sort-v0-to-v1.md",
@@ -776,6 +796,10 @@
       "sha256": "e40768374aa847a254b5c15671db67b0d08c109f05ac479c6dae3d16542ab6f6"
     },
     {
+      "path": "protocol/private/p06-table-sort-hwpx-v1.json",
+      "sha256": "de9ec64573700245527fcaf5b4a20bc0545c9956064ee0b12df57f1b8082c3f7"
+    },
+    {
       "path": "protocol/private/p06-table-sort-v1.json",
       "sha256": "d972bbd90324d6e628fc4f8021f346f5e540f255fe2be64ad99b662e49951d21"
     },
@@ -853,11 +877,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "591370010a1079b9ff5df671b47525230bb342506e9c2a03efb23c3eb057db9e"
+      "sha256": "36a566135005fb3fbd42d99681d4072e849e8017b871237a2059bdc1905a4050"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "7fd1550753c6b63c75e769f455dd127eb4a16f155d3c041482482fa12eb47d7d"
+      "sha256": "cf9a4a75c7fd2fb31edf1c22b9ed5528fb8c7f91eb888ece60f335125058144d"
     },
     {
       "path": "tools/p06/tests/test_table_create_hwpx_contract.py",
@@ -920,6 +944,10 @@
       "sha256": "1194f087f360812cbfb4af56d815654b9326b3438a7d640228e71b6b2bda0d46"
     },
     {
+      "path": "tools/p06/tests/test_table_sort_hwpx_contract.py",
+      "sha256": "126dff3d13cac494522e3e1a0b4d02e5918b8908bc093c03a28aa46a0cf4e657"
+    },
+    {
       "path": "tools/p06/tests/test_table_split_hwpx_contract.py",
       "sha256": "c646c6b7e49a0fcf6850b0e2c398dd6493c4c75f12c86df8e976207d81c50a7f"
     },
@@ -973,7 +1001,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "b126aacfc05811fa5bc0e43c7f67867b7ea1991689c771bdaf80245fcace475a"
+      "sha256": "03bf72f6be3f4a93230be5b71784a7184b14f238e2bc987ce597c5c728dfaa81"
     },
     {
       "path": "tools/p06/validate_table_create_hwpx_contract.py",
@@ -1034,6 +1062,10 @@
     {
       "path": "tools/p06/validate_table_sort_contract.py",
       "sha256": "2887713f26e0ca78bf9d5410bb4600436acfddc8189fd6b655d1c05ee4806f46"
+    },
+    {
+      "path": "tools/p06/validate_table_sort_hwpx_contract.py",
+      "sha256": "38ae5dd9c0e966cb420f584c3bfb7a55f2a6961aa3d1ad3d99e5093cd32957e1"
     },
     {
       "path": "tools/p06/validate_table_split_hwpx_contract.py",
