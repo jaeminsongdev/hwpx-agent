@@ -280,11 +280,11 @@
     {
       "feature_ids": ["TABLE-022", "TABLE-023", "TABLE-024", "TABLE-026", "TABLE-027", "TABLE-028", "TABLE-029", "TABLE-030"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "security"],
+      "stage": "oracle_verified",
+      "validations_passed": ["formula_readback", "page_split", "render_diff", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "security", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "differential_state": "not_run",
       "evidence_files": [
         {
@@ -294,6 +294,14 @@
         {
           "path": "implementation/p06/P06-09_TABLE_AGGREGATE_HWPX_REPORT.md",
           "sha256": "1da4500fd1803aa474cb724f32f7329c3ca47b975ac5ebbc7584aefdd2f4566e"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_AGGREGATE_TARGET_READBACK_REPORT.md",
+          "sha256": "840364bf3b7846ea2e58de159deaef02688a46a75205c586653fb71a16fde342"
+        },
+        {
+          "path": "implementation/p06/evidence/target/p06-table-aggregate.current-2020.attempt02.v2.json",
+          "sha256": "edc71d554e0975d511ffe6f0de1b140a30ca932d0bf2b9c7b70517c5e8674fc5"
         }
       ]
     },

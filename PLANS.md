@@ -1,6 +1,6 @@
 # HWPX Agent implementation ledger
 
-- Updated: 2026-09-10
+- Updated: 2026-09-11
 - Root: `D:\개발\hwpx-agent`
 - Objective: complete P00-P20 without weakening evidence Gates.
 - Current target: licensed Hangul 2020 `11.0.0.9136` x86 on this PC only.
@@ -23,7 +23,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 40 integration and 17 oracle rows but 0/61 release-green; row closures remain |
+| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
 | P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -72,7 +72,7 @@
   HWPX oracle, every required validation/fixture, negative and rollback evidence, current-target
   automation runtime and exact differential all pass.
 - Current authority reports 0/61 green with direct stages: 0 cataloged, 4 unit-passed,
-  40 integration-passed and 17 oracle-verified. Automation is six candidate-unverified plus
+  32 integration-passed and 25 oracle-verified. Automation is six candidate-unverified plus
   55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
 - TABLE-020 binds complete visual style; TABLE-016/017 bind full cell merge/split topology and content policies; TABLE-010/011 now split/join admitted formula-free/no-header/no-caption top-level wrappers with exact separator, common-lattice, state/flow/part binding and strict static reopen, without a Hangul/render claim.
 - TABLE-012/013/014/015 share an exact structure/HWPX model with full state/grid/flow binding, formula/cache rebase, edge collapse rules and pagination/caption reopen.
@@ -85,11 +85,11 @@
   package preservation: Rust 7/7, contract 4/4 and prior FULL checks PASS; no Hangul claim was added.
 - The placement HWPX slice maps TABLE-034/036/037/038 across all position, attachment, wrap/flow and
   margins while preserving inactive fields, merged siblings, formula/cache and pagination; Rust 7/7 and tamper 4/4 PASS without a Hangul claim.
-- TABLE-022/023/024/026/027/028/029/030 share one exact adapter; a one-session target batch harness
-  is static-ready, while the first TABLE-022 approval timeout remains failed evidence without promotion.
+- TABLE-022/023/024/026/027/028/029/030 passed one-session licensed save/reopen/PDF, independent
+  formula/cache/field oracle and original-detail render review; attempt 01 remains failed evidence.
 - TABLE-021 transposes merged formula-free HWPX; TABLE-056 sorts complete plain/unmerged/formula-free
   cells; TABLE-057/058 fill exact single-run regions and reject stale unselected formula caches; TABLE-060 upgrades only formula reference anchors while preserving other formula fields; TABLE-001/004/005 create and convert admitted profiles with static reopen and no Hangul/render claim.
-- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. The remaining unit rows are TABLE-006/032/033/049: TABLE-006 has a 24/24 static-checked exact 3x3 native-source harness; TABLE-049 has a complete exact-state planner plus a 24/24 static-ready six-format by two-grouping harness, while attempt 01 stopped at the first manual format dialog with baseline-only failed evidence and no ResultFormat mapping; TABLE-032/033 tooling passes 20/20, but licensed runs still await user `허용`. All 40 integration rows need target oracles and later automation evidence.
+- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. The remaining unit rows are TABLE-006/032/033/049: TABLE-006 has a 24/24 static-checked exact 3x3 native-source harness; TABLE-049 has a complete exact-state planner plus a 24/24 static-ready six-format by two-grouping harness, while attempt 01 stopped at the first manual format dialog with baseline-only failed evidence and no ResultFormat mapping; TABLE-032/033 tooling passes 20/20, but attempt 08 failed at `DeleteThousandsSeparator` action compatibility and remains failed evidence. All 32 integration rows need target oracles and later automation evidence.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`, current conformance JSON, and `protocol/private/p06-table-conformance-v1.json`.
 
 ## Risks, closures and holds
@@ -109,7 +109,7 @@
 ## Next actions
 
 1. At `max`, implement and qualify authenticated durable pull as the next P17-06 offline increment without promoting remote network, credential custody or production evidence.
-2. When the user can perform access clicks, resume TABLE-032/033 and the next exact P06-09 target oracles, then close automation and differentials separately.
+2. Fix TABLE-032/033 `DeleteThousandsSeparator` compatibility before an access-assisted rerun, then run the next exact P06-09 target oracles and close automation/differentials separately.
 3. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
 
 ## Context pack and archive pointers

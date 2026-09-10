@@ -1,6 +1,6 @@
 # P06-09 current-PC table conformance report
 
-- Generated: 2026-09-10
+- Generated: 2026-09-11
 - Target: licensed Hancom Hangul 2020 `11.0.0.9136`, `ko-KR`, x86 on this PC
 - Matrix schema: `hwpx-agent.table-conformance-report/v1`
 - Matrix state: `non_green`
@@ -15,8 +15,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 
 | Dimension | Current evidence |
 |---|---:|
-| direct `oracle_verified` | 17 |
-| direct `integration_passed` | 40 |
+| direct `oracle_verified` | 25 |
+| direct `integration_passed` | 32 |
 | direct `unit_passed` | 4 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
@@ -64,11 +64,14 @@ The machine-readable authority is
   package fixture with exact formula/cache, pagination-policy and non-section-part preservation;
   no licensed Hangul target-build or render result is inferred.
 - The aggregate planner and preserving HWPX adapter cover all block, horizontal and vertical
-  `SUM`/`AVG`/`PRODUCT` combinations. Eight rows now have static integration evidence through one
-  exact formula-free/unmerged source profile and empty destination, with full state/grid/flow,
-  payload/property/edge, pagination/caption and closed-package preservation. TABLE-025 runs as a
-  regression while its already stronger target oracle remains unchanged. No formula evaluation,
-  verified cache, licensed Hangul execution or render result is inferred.
+  `SUM`/`AVG`/`PRODUCT` combinations. TABLE-022/023/024/026/027/028/029/030 now pass one exact
+  licensed Hangul 2020 create-only batch: all eight save/reopen/text/PDF lifecycles, 133 progress
+  events, complete typed state/grid/formula/cache/layout/preview oracles and original-detail A4 PDF
+  review passed. After validating renderer caches, the exact 564-to-2564 table-height rewrite and
+  one positive matching field-identity pair, every normalized section is byte-identical. Attempt 01
+  remains failed timeout evidence. These rows are `oracle_verified`; formula evaluation, verified
+  cache refresh, automation and differential remain unclaimed. TABLE-025 retains its independent
+  stronger target oracle.
 - The thousands-format planner changes only the grouping flag on an exact selection of existing
   numeric formula-cell formats. TABLE-032/033 move to unit evidence while decimal places, formula
   AST and cache remain exact; unsupported formats fail closed. Exact Hangul 2020 source tooling is
@@ -205,8 +208,8 @@ ordering; duplicate JSON keys; finite files; path containment; privacy; and crea
 Protocol code generation publishes the three P06 schemas through additive catalog v5 while baseline
 locks prove catalogs v2 through v4 remain unchanged.
 
-Current aggregate blockers include 0 missing direct evidence rows, 44 rows below direct oracle,
-78 missing validation instances, 61 unverified automation runtime rows and 61 missing
+Current aggregate blockers include 0 missing direct evidence rows, 36 rows below direct oracle,
+70 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -215,7 +218,7 @@ P06-09's matrix engine and current snapshot are implemented, but the roadmap com
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
 1. lower the remaining 4 unit-only rows through preserving HWPX adapters;
-2. close the 40 remaining integration-only target oracles;
+2. close the 32 remaining integration-only target oracles;
 3. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
 4. regenerate until all 61 rows are green, then run the P06 hard Gate.

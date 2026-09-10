@@ -43,8 +43,8 @@ class TableConformanceTests(unittest.TestCase):
             report["summary"]["direct_stage_counts"],
             {
                 "cataloged": 0,
-                "integration_passed": 40,
-                "oracle_verified": 17,
+                "integration_passed": 32,
+                "oracle_verified": 25,
                 "unit_passed": 4,
             },
         )

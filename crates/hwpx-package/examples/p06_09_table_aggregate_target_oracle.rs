@@ -93,6 +93,10 @@ struct RendererCacheRecord {
     horzsize: u32,
 }
 
+struct RendererFieldIdentityEvidence {
+    sha256: [u8; 32],
+}
+
 fn main() -> Result<(), Box<dyn Error>> {
     run(&Arguments::parse()?)
 }
@@ -117,9 +121,13 @@ fn run(arguments: &Arguments) -> Result<(), Box<dyn Error>> {
     let (target_without_cache, target_cache) = strip_renderer_caches(&target.section)?;
     let (oracle_without_cache, oracle_cache) = strip_renderer_caches(&oracle.section)?;
     require_renderer_profiles(&target_cache, &oracle_cache)?;
-    let normalized_oracle = normalize_oracle_height(&oracle_without_cache)?;
+    let height_normalized_oracle = normalize_oracle_height(&oracle_without_cache)?;
+    let (normalized_oracle, field_identity) =
+        normalize_renderer_field_identity(&target_without_cache, &height_normalized_oracle)?;
     if target_without_cache != target.section || normalized_oracle != target.section {
-        return Err("oracle section differs beyond renderer cache and aggregate height".into());
+        return Err(
+            "oracle section differs beyond renderer cache, height and paired field identity".into(),
+        );
     }
 
     let binding = binding()?;
@@ -152,7 +160,8 @@ fn run(arguments: &Arguments) -> Result<(), Box<dyn Error>> {
             "oracle_table_height_hwpunit={} section_renderer_cache_count={} ",
             "cell_renderer_cache_count={} renderer_cache_sha256={} ",
             "outside_cache_positions_and_widths={} ",
-            "section_equal_after_renderer_cache_strip_and_height_normalization=true"
+            "renderer_field_identity_rewritten=true renderer_field_identity_sha256={} ",
+            "section_equal_after_exact_renderer_normalization=true"
         ),
         profile.feature_id,
         arguments.expected_target_sha256,
@@ -166,6 +175,7 @@ fn run(arguments: &Arguments) -> Result<(), Box<dyn Error>> {
         oracle_cache.cell_count,
         hex(oracle_cache.sha256),
         join_pairs(&oracle_cache.outside_positions_and_widths),
+        hex(field_identity.sha256),
     );
     Ok(())
 }
@@ -307,6 +317,95 @@ fn normalize_oracle_height(section: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
     Ok(text
         .replacen(ORACLE_HEIGHT_MARKER, TARGET_HEIGHT_MARKER, 1)
         .into_bytes())
+}
+
+fn normalize_renderer_field_identity(
+    target: &[u8],
+    oracle: &[u8],
+) -> Result<(Vec<u8>, RendererFieldIdentityEvidence), Box<dyn Error>> {
+    let target_fields = formula_field_identity_spans(target)?;
+    let oracle_fields = formula_field_identity_spans(oracle)?;
+    if target_fields.len() != 2
+        || oracle_fields.len() != 2
+        || target_fields[0].1 == 0
+        || oracle_fields[0].1 == 0
+        || target_fields[0].1 != target_fields[1].1
+        || oracle_fields[0].1 != oracle_fields[1].1
+        || target_fields[0].1 == oracle_fields[0].1
+    {
+        return Err("aggregate renderer field identity profile differs".into());
+    }
+    let target_text = target_fields[0].1.to_string();
+    let mut oracle_spans = oracle_fields
+        .iter()
+        .map(|record| record.0)
+        .collect::<Vec<_>>();
+    let normalized = replace_spans(oracle, &mut oracle_spans, target_text.as_bytes())?;
+    let mut digest = Sha256::new();
+    digest.update(b"hwpx-agent.p06-09-table-aggregate-renderer-field-identity/v1\0");
+    digest.update(target_fields[0].1.to_le_bytes());
+    digest.update(oracle_fields[0].1.to_le_bytes());
+    Ok((
+        normalized,
+        RendererFieldIdentityEvidence {
+            sha256: digest.finalize().into(),
+        },
+    ))
+}
+
+fn formula_field_identity_spans(section: &[u8]) -> Result<Vec<(XmlByteSpan, u32)>, Box<dyn Error>> {
+    let document = PreservingXmlDocument::parse(section)?;
+    let mut result = Vec::new();
+    for local_name in ["fieldBegin", "fieldEnd"] {
+        let mut elements = document
+            .elements()
+            .iter()
+            .filter(|element| has_name(element, local_name));
+        let element = elements
+            .next()
+            .ok_or("aggregate formula field identity is missing")?;
+        if elements.next().is_some() {
+            return Err("aggregate formula field identity is duplicated".into());
+        }
+        let mut attributes = element.attributes().iter().filter(|attribute| {
+            !attribute.is_namespace_declaration()
+                && attribute.name().namespace().is_none()
+                && attribute.name().local_name() == "fieldid"
+        });
+        let attribute = attributes
+            .next()
+            .ok_or("aggregate formula fieldid is missing")?;
+        if attributes.next().is_some() {
+            return Err("aggregate formula fieldid is duplicated".into());
+        }
+        let span = attribute.value_span();
+        let raw = section
+            .get(span.start()..span.end())
+            .ok_or("aggregate formula fieldid span is outside section")?;
+        result.push((span, std::str::from_utf8(raw)?.parse::<u32>()?));
+    }
+    Ok(result)
+}
+
+fn replace_spans(
+    source: &[u8],
+    spans: &mut [XmlByteSpan],
+    replacement: &[u8],
+) -> Result<Vec<u8>, Box<dyn Error>> {
+    spans.sort_by_key(|span| span.start());
+    let mut output = Vec::new();
+    output.try_reserve(source.len())?;
+    let mut cursor = 0usize;
+    for span in spans {
+        if span.start() < cursor || span.end() > source.len() {
+            return Err("renderer field identity spans overlap".into());
+        }
+        output.extend_from_slice(&source[cursor..span.start()]);
+        output.extend_from_slice(replacement);
+        cursor = span.end();
+    }
+    output.extend_from_slice(&source[cursor..]);
+    Ok(output)
 }
 
 fn strip_renderer_caches(
@@ -713,6 +812,17 @@ mod tests {
         .into_bytes()
     }
 
+    fn formula_section(begin_id: u32, end_id: u32, extra: &str) -> Vec<u8> {
+        format!(
+            concat!(
+                "{}<hp:p><hp:fieldBegin fieldid=\"{}\"/>",
+                "<hp:fieldEnd fieldid=\"{}\"/>{}</hp:p></hs:sec>"
+            ),
+            PREFIX, begin_id, end_id, extra
+        )
+        .into_bytes()
+    }
+
     #[test]
     fn exact_feature_target_formula_and_result_matrix_is_locked() {
         let observed: Vec<_> = cases()
@@ -763,6 +873,37 @@ mod tests {
         assert!(normalize_oracle_height(expected.as_bytes()).is_err());
         let duplicate = format!("{oracle}{oracle}");
         assert!(normalize_oracle_height(duplicate.as_bytes()).is_err());
+    }
+
+    #[test]
+    fn paired_renderer_field_identity_is_normalized_exactly() {
+        let target = formula_section(2, 2, "");
+        let oracle = formula_section(627_469_685, 627_469_685, "");
+        let (normalized, evidence) = normalize_renderer_field_identity(&target, &oracle).unwrap();
+        assert_eq!(normalized, target);
+        assert_eq!(hex(evidence.sha256).len(), 64);
+    }
+
+    #[test]
+    fn renderer_field_identity_pair_or_cardinality_drift_fails_closed() {
+        let target = formula_section(2, 2, "");
+        let mismatched = formula_section(627_469_685, 627_469_686, "");
+        assert!(normalize_renderer_field_identity(&target, &mismatched).is_err());
+
+        let duplicated = formula_section(
+            627_469_685,
+            627_469_685,
+            "<hp:fieldBegin fieldid=\"627469685\"/>",
+        );
+        assert!(normalize_renderer_field_identity(&target, &duplicated).is_err());
+        assert!(normalize_renderer_field_identity(&target, &target).is_err());
+        assert!(
+            normalize_renderer_field_identity(
+                &formula_section(0, 0, ""),
+                &formula_section(1, 1, ""),
+            )
+            .is_err()
+        );
     }
 
     #[test]

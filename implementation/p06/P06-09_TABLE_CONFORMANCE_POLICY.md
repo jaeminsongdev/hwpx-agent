@@ -65,7 +65,7 @@ input requires a new output path or an explicitly reviewed successor update.
 ## Current result
 
 - Required rows: 61; green: 0; non-green: 61.
-- Direct stages: 0 cataloged, 4 unit-passed, 40 integration-passed, 17 oracle-verified.
+- Direct stages: 0 cataloged, 4 unit-passed, 32 integration-passed, 25 oracle-verified.
 - Automation bindings: 6 candidate-unverified, 55 unavailable-with-reason.
 - Automation runtime support: 61 unverified.
 - Direct/automation differential: 61 not-run.
@@ -75,10 +75,16 @@ four exact-target oracle rows. Exact blank unmerged table creation; the fixed-co
   and fit-page layout modes; the
   position/attachment/wrap/outside-margin group; complete table styles; exact table transpose;
   exact cell merge/split;
-  exact admitted whole-table split; exact admitted text-to-table/table-to-text conversion; the complete block/horizontal/vertical aggregate-formula group;
+  exact admitted whole-table split; exact admitted text-to-table/table-to-text conversion;
   and other admitted operations have operation-specific static direct-HWPX integration evidence,
   but no licensed application oracle. The remaining direct operations and exact automation
   bindings/probes have not been manufactured from menu names.
+
+The complete TABLE-022/023/024/026/027/028/029/030 block/horizontal/vertical aggregate-formula
+group now has exact current-PC Hangul 2020 create-only save/reopen, typed whole-section oracle,
+one-page PDF visual review and retry evidence. Those eight rows are `oracle_verified`; their visible
+results remain explicit unverified caches, not proof of formula evaluation. Automation runtime and
+direct/automation differential remain `not_run`, so none is green.
 
 TABLE-060 additionally has selected-cell canonical-formula integration: only relative reference
 axes may become absolute, other formula fields remain opaque unowned bytes, and preserve/update/
