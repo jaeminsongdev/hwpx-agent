@@ -1,7 +1,7 @@
 # P17-06 exact Git mirror effect v13
 
-Date: 2026-09-10  
-Scope: current-PC disposable local bare Git repositories  
+Date: 2026-09-10
+Scope: current-PC disposable local bare Git repositories
 Decision: **exact Git effect and recovery observation component PASS; P17-06 remains in progress**
 
 `GitMirrorEffectHost` accepts only an explicit absolute plain local bare repository, an explicit
