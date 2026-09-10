@@ -28,6 +28,8 @@ const MAX_IDEMPOTENCY_BYTES: usize = 120;
 const MAX_CHECKPOINT_LABEL_CHARS: usize = 120;
 const MAX_CHECKPOINT_NOTE_CHARS: usize = 1_000;
 pub(crate) const REMOTE_SYNC_REQUEST_SCHEMA_VERSION: &str = "hwpx-agent.remote-sync-request/v3";
+pub(crate) const REMOTE_SYNC_PULL_REQUEST_SCHEMA_VERSION: &str =
+    "hwpx-agent.remote-sync-request/v4";
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -134,6 +136,7 @@ pub struct PullRequest {
     branch_id: String,
     mirror_id: String,
     observed_head: RemoteHead,
+    observed_snapshot_sha256: String,
 }
 
 impl fmt::Debug for PullRequest {
@@ -144,6 +147,7 @@ impl fmt::Debug for PullRequest {
             .field("branch_id", &"<redacted>")
             .field("mirror_id", &"<redacted>")
             .field("observed_generation", &self.observed_head.generation)
+            .field("observed_snapshot_sha256", &"<redacted>")
             .finish()
     }
 }
@@ -167,6 +171,11 @@ impl PullRequest {
     #[must_use]
     pub const fn observed_head(&self) -> &RemoteHead {
         &self.observed_head
+    }
+
+    #[must_use]
+    pub fn observed_snapshot_sha256(&self) -> &str {
+        &self.observed_snapshot_sha256
     }
 }
 
@@ -820,6 +829,7 @@ impl LocalMirror {
             branch_id: self.branch_id.clone(),
             mirror_id: self.mirror_id.clone(),
             observed_head: self.observed_head.clone(),
+            observed_snapshot_sha256: self.observed_snapshot_sha256.clone(),
         };
         let remote = match port.pull(&request) {
             Ok(remote) => remote,

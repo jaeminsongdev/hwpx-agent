@@ -76,9 +76,10 @@ class AtomicMirrorCheckpointChecksTests(unittest.TestCase):
     def test_current_dispatcher_is_exact_least_privilege_and_no_retry(self) -> None:
         for snippet in (
             "const ATOMIC_MIGRATIONS: [&[u8]; 15]",
-            "const CURRENT_ATOMIC_MIGRATIONS: [&[u8]; 16]",
+            "const CURRENT_ATOMIC_MIGRATIONS: [&[u8]; 17]",
             'migration!("0015_p17_atomic_mirror_checkpoint.up.sql")',
             'migration!("0016_p17_durable_git_mirror_push.up.sql")',
+            'migration!("0017_p17_durable_git_mirror_pull.up.sql")',
             "LocalPostgresAtomicMirrorCheckpointDispatcher",
             "IsolationLevel::Serializable",
             "create_mirror_history_checkpoint_v3",
@@ -98,7 +99,7 @@ class AtomicMirrorCheckpointChecksTests(unittest.TestCase):
         )
         self.assertNotIn("retry", dispatch.lower())
 
-    def test_all_current_consumers_fail_closed_after_version_16(self) -> None:
+    def test_all_current_consumers_fail_closed_after_version_17(self) -> None:
         paths = (
             "crates/artifact-service/src/store/postgres_repository.rs",
             "crates/mcp-control-plane/src/postgres_plan_source.rs",
@@ -107,7 +108,7 @@ class AtomicMirrorCheckpointChecksTests(unittest.TestCase):
         )
         for relative in paths:
             source = (ROOT / relative).read_text(encoding="utf-8")
-            self.assertIn("const MIGRATIONS: [&[u8]; 16]", source, relative)
+            self.assertIn("const MIGRATIONS: [&[u8]; 17]", source, relative)
             self.assertIn(
                 'migration!("0015_p17_atomic_mirror_checkpoint.up.sql")',
                 source,
@@ -115,6 +116,11 @@ class AtomicMirrorCheckpointChecksTests(unittest.TestCase):
             )
             self.assertIn(
                 'migration!("0016_p17_durable_git_mirror_push.up.sql")',
+                source,
+                relative,
+            )
+            self.assertIn(
+                'migration!("0017_p17_durable_git_mirror_pull.up.sql")',
                 source,
                 relative,
             )

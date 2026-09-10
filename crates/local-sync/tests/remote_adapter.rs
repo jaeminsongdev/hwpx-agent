@@ -247,6 +247,10 @@ fn authenticated_adapter_maps_exact_pull_push_and_checkpoint_exchanges() -> Test
             .collect::<Vec<_>>(),
         [Some("pull"), Some("push"), Some("checkpoint")]
     );
+    let pull = &transport.requests[0];
+    assert_eq!(pull["schema_version"], "hwpx-agent.remote-sync-request/v4");
+    assert_eq!(pull["observed_head"]["generation"], 1);
+    assert_eq!(pull["observed_snapshot_sha256"], digest('a'));
     let push = &transport.requests[1];
     assert_eq!(push["project_id"], "prj_project01");
     assert_eq!(push["branch_id"], "brn_branch001");
@@ -256,7 +260,7 @@ fn authenticated_adapter_maps_exact_pull_push_and_checkpoint_exchanges() -> Test
     assert_eq!(push["operation_plan_sha256"], digest('d'));
     let encoded = serde_json::to_string(&transport.requests)?;
     assert!(!encoded.contains("Bearer "));
-    for request in &transport.requests {
+    for request in &transport.requests[1..] {
         assert_eq!(
             request["schema_version"],
             "hwpx-agent.remote-sync-request/v3"

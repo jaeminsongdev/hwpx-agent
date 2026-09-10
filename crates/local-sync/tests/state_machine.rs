@@ -146,6 +146,7 @@ fn clean_online_pull_adopts_a_valid_remote_snapshot() -> TestResult {
     assert_eq!(snapshot.phase, MirrorPhase::Clean);
     let seen = port.seen_pull.as_ref().ok_or("missing pull request")?;
     assert_eq!(seen.observed_head().generation(), 1);
+    assert_eq!(seen.observed_snapshot_sha256(), digest('a'));
     Ok(())
 }
 

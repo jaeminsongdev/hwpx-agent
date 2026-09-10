@@ -5,9 +5,9 @@ use sha2::{Digest as _, Sha256};
 use zeroize::Zeroizing;
 
 use crate::{
-    CheckpointRequest, PullRequest, PushRequest, REMOTE_SYNC_REQUEST_SCHEMA_VERSION,
-    RemoteCheckpointReceipt, RemoteFailure, RemoteHead, RemotePushReceipt, RemoteSnapshot,
-    RemoteSyncPort,
+    CheckpointRequest, PullRequest, PushRequest, REMOTE_SYNC_PULL_REQUEST_SCHEMA_VERSION,
+    REMOTE_SYNC_REQUEST_SCHEMA_VERSION, RemoteCheckpointReceipt, RemoteFailure, RemoteHead,
+    RemotePushReceipt, RemoteSnapshot, RemoteSyncPort,
 };
 
 const RESPONSE_SCHEMA_VERSION: &str = "hwpx-agent.remote-sync-response/v1";
@@ -220,12 +220,13 @@ where
 {
     fn pull(&mut self, request: &PullRequest) -> Result<RemoteSnapshot, RemoteFailure> {
         let wire = PullWireRequest {
-            schema_version: REMOTE_SYNC_REQUEST_SCHEMA_VERSION,
+            schema_version: REMOTE_SYNC_PULL_REQUEST_SCHEMA_VERSION,
             operation: "pull",
             project_id: request.project_id(),
             branch_id: request.branch_id(),
             mirror_id: request.mirror_id(),
             observed_head: WireHead::from(request.observed_head()),
+            observed_snapshot_sha256: request.observed_snapshot_sha256(),
         };
         match self.exchange::<PullWireResult>(&wire)? {
             PullWireResult::Succeeded {
@@ -296,6 +297,7 @@ struct PullWireRequest<'a> {
     branch_id: &'a str,
     mirror_id: &'a str,
     observed_head: WireHead<'a>,
+    observed_snapshot_sha256: &'a str,
 }
 
 #[derive(Serialize)]

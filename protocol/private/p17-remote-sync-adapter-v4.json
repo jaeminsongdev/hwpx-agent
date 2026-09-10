@@ -1,0 +1,102 @@
+{
+  "schema_version": "hwpx-agent.remote-sync-adapter/v4",
+  "scope": "authenticated_private_adapter_with_snapshot_bound_durable_pull",
+  "request_schema_versions": {
+    "pull": "hwpx-agent.remote-sync-request/v4",
+    "push": "hwpx-agent.remote-sync-request/v3",
+    "checkpoint": "hwpx-agent.remote-sync-request/v3"
+  },
+  "response_schema_version": "hwpx-agent.remote-sync-response/v1",
+  "migration": {
+    "from": "hwpx-agent.remote-sync-adapter/v3",
+    "response_contract_unchanged": true,
+    "pull_new_required_fields": [
+      "observed_snapshot_sha256"
+    ],
+    "v3_pull_accepted_by_v4_host": false,
+    "push_and_checkpoint_request_contracts_unchanged": true
+  },
+  "operations": [
+    "pull",
+    "push",
+    "checkpoint"
+  ],
+  "identity_binding": {
+    "required_on_every_operation": [
+      "project_id",
+      "branch_id",
+      "mirror_id"
+    ],
+    "server_must_bind_mirror_to_project_and_branch": true,
+    "server_must_reject_cross_mirror_alias": true,
+    "mirror_id_model_visible": false
+  },
+  "pull": {
+    "required_fields": [
+      "observed_head",
+      "observed_snapshot_sha256"
+    ],
+    "snapshot_digest": "exact_nonzero_lowercase_sha256",
+    "head_and_snapshot_bound_in_request_sha256": true,
+    "same_head_different_snapshot": "definitive_rejection",
+    "response_outcomes": [
+      "unchanged",
+      "updated",
+      "conflict",
+      "rejected"
+    ]
+  },
+  "checkpoint": {
+    "required_fields": [
+      "expected_head",
+      "idempotency_key",
+      "label"
+    ],
+    "optional_fields": [
+      "note"
+    ],
+    "absent_note_encoding": "field_omitted",
+    "request_schema_version": "hwpx-agent.remote-sync-request/v3"
+  },
+  "authentication": {
+    "scheme": "Bearer",
+    "required_service_scope": "mirror.sync",
+    "fresh_credential_per_exchange": true,
+    "maximum_header_bytes": 8199,
+    "credential_storage_in_adapter": false,
+    "owned_header_zeroized_on_drop": true,
+    "provider_enforces_issuer_audience_expiry_scope_and_single_use": true
+  },
+  "binding": {
+    "algorithm": "sha256",
+    "field": "request_sha256",
+    "covers_exact_encoded_request": true,
+    "mismatch": "invalid_response"
+  },
+  "bounds": {
+    "maximum_request_bytes": 16384,
+    "maximum_response_bytes": 65536,
+    "unknown_request_or_response_fields": "rejected",
+    "malformed_head_or_snapshot": "rejected"
+  },
+  "transport": {
+    "implementation": "injected_RemoteTransport",
+    "unavailable": "uncertain_remote_outcome",
+    "rejected": "definitive_remote_denial",
+    "network_client_in_crate": false
+  },
+  "privacy": {
+    "authorization_in_debug": false,
+    "request_body_contains_authorization": false,
+    "adapter_debug_contains_provider_or_transport_state": false,
+    "request_debug_contains_private_ids_or_snapshot_digest": false
+  },
+  "not_claimed": {
+    "persistent_credential_custody": false,
+    "actual_remote_service": false,
+    "production_authentication": false,
+    "actual_hangul": false,
+    "p17_06_pass": false,
+    "product_complete": false
+  }
+}

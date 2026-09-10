@@ -67,7 +67,7 @@ const ATOMIC_MIGRATIONS: [&[u8]; 15] = [
     migration!("0015_p17_atomic_mirror_checkpoint.up.sql"),
 ];
 
-const CURRENT_ATOMIC_MIGRATIONS: [&[u8]; 16] = [
+const CURRENT_ATOMIC_MIGRATIONS: [&[u8]; 17] = [
     migration!("0001_p14_metadata.up.sql"),
     migration!("0002_p14_artifact_service.up.sql"),
     migration!("0003_p14_revision_cas.up.sql"),
@@ -84,6 +84,7 @@ const CURRENT_ATOMIC_MIGRATIONS: [&[u8]; 16] = [
     migration!("0014_p17_history_checkpoint_note.up.sql"),
     migration!("0015_p17_atomic_mirror_checkpoint.up.sql"),
     migration!("0016_p17_durable_git_mirror_push.up.sql"),
+    migration!("0017_p17_durable_git_mirror_pull.up.sql"),
 ];
 
 /// Bounded local connection settings. The password is zeroized and never exposed by `Debug`.
@@ -592,7 +593,9 @@ fn verify_atomic_migrations(client: &mut Client) -> Result<(), CheckpointDispatc
     let rows = client.query(query, &[]).map_err(db_dispatch_error)?;
     match rows.len() {
         15 => verify_migration_rows(&rows, &ATOMIC_MIGRATIONS),
-        16 => verify_migration_rows(&rows, &CURRENT_ATOMIC_MIGRATIONS),
+        required_version @ (16 | 17) => {
+            verify_migration_rows(&rows, &CURRENT_ATOMIC_MIGRATIONS[..required_version])
+        }
         _ => Err(CheckpointDispatchError::Rejected),
     }
 }

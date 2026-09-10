@@ -28,11 +28,17 @@ use serde::Serialize;
 use thiserror::Error;
 use uuid::Uuid;
 
+mod durable_git_pull;
 mod durable_git_push;
 mod git_mirror;
 mod postgres;
 mod socket;
 
+pub use durable_git_pull::{
+    GitPullCoordinator, GitPullDispatchError, GitPullDispatchOutcome, GitPullDispatchRequest,
+    GitPullHost, GitPullHostFailure, GitPullServeOutcome, GitPullServerFailure,
+    LocalPostgresGitMirrorPullCoordinator, LoopbackGitPullServer,
+};
 pub use durable_git_push::{
     GitPushCoordinator, GitPushDispatchError, GitPushDispatchOutcome, GitPushDispatchRequest,
     GitPushHost, GitPushHostFailure, GitPushServeOutcome, GitPushServerFailure,

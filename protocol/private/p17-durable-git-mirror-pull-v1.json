@@ -1,0 +1,90 @@
+{
+  "schema_version": "hwpx-agent.durable-git-mirror-pull/v1",
+  "scope": "current_pc_postgresql_local_bare_git_authenticated_loopback_component",
+  "request": {
+    "wire_schema": "hwpx-agent.remote-sync-request/v4",
+    "operation": "pull",
+    "canonical_json_required": true,
+    "maximum_bytes": 16384,
+    "authentication_scope": "mirror.sync",
+    "single_use_credential": true,
+    "request_sha256_bound": true,
+    "observed_head_bound": true,
+    "observed_snapshot_sha256_bound": true,
+    "observation_id_derived_from_authenticated_request": true
+  },
+  "database": {
+    "exact_schema_version": 17,
+    "observation_table": "hwpx_agent.git_mirror_pull_observations",
+    "outcomes": [
+      "unchanged",
+      "updated",
+      "conflict"
+    ],
+    "observed_snapshot_backfilled_and_required": true,
+    "remote_revision_artifact_verified_and_acl_checked": true,
+    "serializable_reconciliation": true,
+    "clean_advance_is_atomic": true,
+    "ahead_conflict_preserves_local_snapshot_and_plan": true,
+    "terminal_observation_is_immutable": true,
+    "exact_replay_creates_no_second_observation_or_conflict": true,
+    "tenant_rls_forced": true,
+    "security_definer_search_path_fixed": true,
+    "public_execute_revoked": true,
+    "application_role_has_table_mutation": false
+  },
+  "git": {
+    "repository": "explicit_absolute_plain_local_sha1_bare_git_directory",
+    "access": "read_only",
+    "reference_is_derived": true,
+    "accepts_caller_command_or_reference": false,
+    "observation_fields": [
+      "revision_id",
+      "generation",
+      "snapshot_sha256",
+      "commit_oid",
+      "git_state_sha256"
+    ],
+    "database_and_git_state_must_match": true,
+    "remote_network": false
+  },
+  "reconciliation": {
+    "same_head_same_snapshot": "unchanged",
+    "clean_strict_descendant": "updated",
+    "ahead_strict_descendant": "conflict",
+    "local_conflict_payload_preserved": true,
+    "rewritten_or_older_remote_head": "rejected",
+    "git_database_drift": "unavailable_without_database_mutation",
+    "blind_retry": false
+  },
+  "rollback": {
+    "explicit_gate_required": true,
+    "exact_version_required": 17,
+    "later_migrations_must_be_absent": true,
+    "retained_observations_refuse_rollback": true,
+    "empty_rollback_and_reapply_verified": true
+  },
+  "transport": {
+    "bind_address": "127.0.0.1",
+    "framed_and_bounded": true,
+    "arbitrary_host_configuration": false,
+    "persistent_credential_custody": false
+  },
+  "evidence": {
+    "actual_postgresql_18_4": true,
+    "actual_disposable_local_bare_git": true,
+    "actual_authenticated_loopback": true,
+    "actual_clean_advance": true,
+    "actual_conflict_preservation": true,
+    "actual_exact_replay": true,
+    "actual_git_database_drift_rejection": true,
+    "actual_owned_resource_cleanup": true,
+    "actual_remote_network": false,
+    "persistent_credential_custody": false,
+    "registered_host": false,
+    "production": false,
+    "actual_hangul": false,
+    "p17_06_complete": false,
+    "product_complete": false
+  }
+}
