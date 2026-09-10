@@ -1,0 +1,73 @@
+{
+  "schema_version": "hwpx-agent.p17-frozen-durable-git-mirror-pull-v17/v1",
+  "contract_id": "p17.frozen-durable-git-mirror-pull.v17.v1",
+  "scope": "immutable_current_pc_postgresql_local_bare_git_pull_qualification",
+  "claims": {
+    "actual_authenticated_loopback": true,
+    "actual_remote_network": false,
+    "durable_pull_current_pc_runtime_verified": true,
+    "historical_v17_committed_state_verified": true,
+    "mutable_worktree_sources_authoritative": false,
+    "p17_06_complete": false,
+    "persistent_credential_custody": false,
+    "production": false,
+    "product_complete": false,
+    "receipt_blob_verified": true
+  },
+  "qualification": {
+    "base_commit": "dbbdab7b7dae62790a96bbfa81b3ce3af33a21f6",
+    "qualification_commit": "f79ad78a1e984622582c620eb2f4f030fb6beeff",
+    "qualification_id": "p17.durable-git-mirror-pull.v1.20260911",
+    "contract_path": "implementation/p17/qualification/durable-git-mirror-pull-v1-20260911/contract.json",
+    "contract_sha256": "159018052ef5a1d8f01f1550fb44b006f9bb1de68fbdd8fd1ab7fdefeffe0900",
+    "current_path": "implementation/p17/qualification/durable-git-mirror-pull-v1-20260911/current-host.json",
+    "current_sha256": "d9d102803157e242af532f36d3eb53bbd9b439ace129de5b05f454c3686b3a36",
+    "receipt_path": "artifacts/p17/durable-git-mirror-pull/runs/4162580f49da402983be6a8527e9721e/receipt.json",
+    "receipt_sha256": "059ec3ebbf1f871af86b7df84fc38a878bb2ca52fb68f3074b6b419668f390a5",
+    "runtime_source_count": 48,
+    "guard_source_count": 3,
+    "check_count": 20
+  },
+  "invariants": [
+    "bounded_git_blob_reads",
+    "committed_qualification_contract_current_and_receipt",
+    "duplicate_json_keys_rejected",
+    "exact_commit_ids_and_ancestry",
+    "guard_blobs_from_qualification_commit",
+    "no_mutable_worktree_authority",
+    "runtime_blobs_from_implementation_commit",
+    "typed_bounded_fail_closed_errors"
+  ],
+  "source_locks": [
+    {
+      "path": "implementation/p17/P17_FROZEN_DURABLE_GIT_MIRROR_PULL_V17.md",
+      "bytes": 690,
+      "sha256": "a9df939c7496a1e337b8190750c8259d697ddb1057582d36c432cf5dfd053c62"
+    },
+    {
+      "path": "protocol/migrations/p17-durable-git-mirror-pull-v17-to-frozen-v1.md",
+      "bytes": 625,
+      "sha256": "6e72d3752fbceb3f43a86cc9b313f9a22309e9555907d3ae186c5ee214fe8a86"
+    },
+    {
+      "path": "tools/p17/frozen_durable_git_mirror_pull_v17.py",
+      "bytes": 11784,
+      "sha256": "d4d53b243741afcbb8962df0b1ebb1065223132a66c5aaaaaf26f30f6cbaf541"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_durable_git_mirror_pull_v17.py",
+      "bytes": 3414,
+      "sha256": "c07533b15fb4d3d7d43e5542ad5afd5d0ff8e50517ca45f0486c297ccd8a039d"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_durable_git_mirror_pull_v17_contract.py",
+      "bytes": 2106,
+      "sha256": "45f103632a64602c69cdefa1411070f3919b492ca58d40f8e5820b9f29ea7b3a"
+    },
+    {
+      "path": "tools/p17/validate_frozen_durable_git_mirror_pull_v17_contract.py",
+      "bytes": 5417,
+      "sha256": "be45328ce616c836f5d5d58708fb96188419c228ad966e3d84ada6018c4024fd"
+    }
+  ]
+}

@@ -29,7 +29,7 @@
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
 | P16 | partial | local source/plan/renderer/host pass; registered app/Hangul evidence open |
-| P17 | partial | durable PostgreSQL checkpoint, local bare-Git CAS/replay and authenticated current-PC durable push pass; durable pull, remote network, credential custody and UI closures remain |
+| P17 | partial | durable PostgreSQL checkpoint, local bare-Git CAS/replay and authenticated current-PC durable push/pull pass; remote network, credential custody and UI closures remain |
 | P18-P19 | open | quality/security/DR, production/license/submission and GA Gate |
 | P20 | post-GA | parity and Rust-native expansion |
 
@@ -40,7 +40,7 @@
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
 | P-0057 | P06-09 table conformance | fail-closed matrix plus bounded component/static-HWPX slices pass; TABLE-002/003 exact Hangul target v2 is oracle-verified; exact current-PC release matrix remains 0/61 green |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
-| P-0091 family | P17-06 remote sync | authenticated loopback, durable PostgreSQL checkpoint, local bare-Git CAS/replay and current-PC durable push pass; durable pull, real remote transport and credential custody remain |
+| P-0091 family | P17-06 remote sync | authenticated loopback, durable PostgreSQL checkpoint, local bare-Git CAS/replay and current-PC durable push/pull pass; real remote transport and credential custody remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
 | P-0093 | P17-08 trusted Git UI | local widget/MCP/disposable Git pass; one fresh GUI confirmation/effect/replay run remains |
 
@@ -97,24 +97,24 @@
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence absent.
 - R-0003: one historical independent worker timeout root cause remains unproven; retries passed.
 - R-0005: P17 durable checkpoint, local bare-Git old-OID CAS/replay and authenticated current-PC
-  durable push pass; durable pull, persistent credential custody, remote transport and production do not.
+  durable push/pull pass; persistent credential custody, remote transport and production do not.
 - R-0006: P17 conflict resolver/widget are component evidence only.
 - R-0007: P06-09 remains 0/61 release-green until direct validations, fixtures, rollback/retry,
   current-target automation runtime and exact differential evidence close every row.
-- R-0008 closed: legacy source history plus v40 Git-mirror sources use exact immutable Git-history
-  verification; P17 Python passes 242/242 and P14 cleanup 16/16, with no runtime/product promotion.
+- R-0008 closed: legacy source history plus durable push v15, durable pull v17 and current-source
+  v40/v41/v42 use exact immutable Git-history verification; P17 Python passes 296/296 without runtime/product promotion.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 
 ## Next actions
 
-1. At `max`, implement and qualify authenticated durable pull as the next P17-06 offline increment without promoting remote network, credential custody or production evidence.
+1. At `max`, implement the next P17-06 remote-transport/credential-custody security increment; keep actual remote network and production false until independently exercised.
 2. Fix TABLE-032/033 `DeleteThousandsSeparator` compatibility before an access-assisted rerun, then run the next exact P06-09 target oracles and close automation/differentials separately.
 3. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
 
 ## Context pack and archive pointers
 
 - Read first: this file, active P06-07 policies/reports, P06-09 conformance authorities, and `implementation/p05/P05_GATE_REPORT.md`.
-- P17 authorities: frozen legacy/v40/v41 reports, `P17-06_GIT_MIRROR_EFFECT_V13.md` and the frozen durable-push v15 qualification.
+- P17 authorities: frozen legacy/v40/v41/v42 reports, `P17-06_GIT_MIRROR_EFFECT_V13.md`, frozen durable-push v15 and durable-pull v17 qualifications.
 - Detailed closed-card history is in the named reports and local Git history; no remote push is implied.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.

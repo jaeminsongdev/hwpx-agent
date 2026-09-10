@@ -1,0 +1,84 @@
+{
+  "schema_version": "hwpx-agent.p17-frozen-current-source-v42/v1",
+  "contract_id": "p17.frozen-current-source.v42.v1",
+  "scope": "immutable_git_blob_durable_pull_source_and_runtime_qualification_verification",
+  "claims": {
+    "actual_hangul": false,
+    "actual_remote_network": false,
+    "durable_pull_current_pc_runtime_verified": true,
+    "historical_v42_committed_source_state_verified": true,
+    "mutable_worktree_product_sources_authoritative": false,
+    "p17_06_complete": false,
+    "persistent_credential_custody": false,
+    "production": false,
+    "product_complete": false,
+    "receipt_blob_verified": true
+  },
+  "qualification": {
+    "base_commit": "dbbdab7b7dae62790a96bbfa81b3ce3af33a21f6",
+    "qualification_commit": "f79ad78a1e984622582c620eb2f4f030fb6beeff",
+    "qualification_id": "p17.current-workspace-source.v42.20260911",
+    "contract_path": "implementation/p17/qualification/current-workspace-source-v42-20260911/contract.json",
+    "contract_sha256": "f8e72f7469daa514b2a3119ba32c74c5f99ee76c8fed468f6494bbd915aec052",
+    "current_path": "implementation/p17/qualification/current-workspace-source-v42-20260911/current-host.json",
+    "current_sha256": "3189b0add9703fac2c0fe993bb4f98ea3719d56bd7f978177a63e1523e7cc188",
+    "receipt_path": "artifacts/p17/current-workspace-source-runs/75c0595bbf5842d2b417927b96c319f8/receipt.json",
+    "receipt_sha256": "92fa78d9974df9159d3d4212d04e44688148a9ccb9cd32ad57f59620e4daa71c",
+    "implementation_source_count": 29,
+    "runtime_qualification_source_count": 6,
+    "source_successor_count": 28,
+    "guard_source_count": 3,
+    "claim_count": 62
+  },
+  "runtime_frozen_contract": {
+    "path": "protocol/private/p17-frozen-durable-git-mirror-pull-v17-v1.json",
+    "sha256": "e2a24fa46f51a92859c856d6051873f81d6eec95b12480831cbde5d1df2a4bdb"
+  },
+  "invariants": [
+    "bounded_git_blob_reads",
+    "committed_source_and_receipt_blobs_verified",
+    "duplicate_json_keys_rejected",
+    "exact_commit_ids_and_ancestry",
+    "frozen_durable_pull_v17_verified",
+    "frozen_v41_predecessor_verified",
+    "no_mutable_worktree_authority",
+    "typed_bounded_fail_closed_errors"
+  ],
+  "source_locks": [
+    {
+      "path": "implementation/p17/P17_FROZEN_CURRENT_WORKSPACE_SOURCE_V42.md",
+      "bytes": 657,
+      "sha256": "c3fcbc8d8a021e1ddc975c2079f69fa9b97d130a1c6edb81be6496091e41964f"
+    },
+    {
+      "path": "protocol/migrations/p17-current-workspace-source-v42-to-frozen-v1.md",
+      "bytes": 577,
+      "sha256": "3c32577aa8662cbb2be90001014aa4418615f7e1cf70a13809866d145fe4b199"
+    },
+    {
+      "path": "protocol/private/p17-frozen-durable-git-mirror-pull-v17-v1.json",
+      "bytes": 3106,
+      "sha256": "e2a24fa46f51a92859c856d6051873f81d6eec95b12480831cbde5d1df2a4bdb"
+    },
+    {
+      "path": "tools/p17/frozen_current_source_v42.py",
+      "bytes": 13551,
+      "sha256": "6368356a3c3e11c2733e66de5ab813cd638cb65c9a2d4648461ec9c12df87f7d"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v42.py",
+      "bytes": 3110,
+      "sha256": "26dd542fa5fac06b0d948f7021472c942c5b58cf523136e77ecd5368e1d73dee"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v42_contract.py",
+      "bytes": 2059,
+      "sha256": "a2f63d71831a3f4b827264197000798a8102f8bc9ba0a1f835f4b2660ced2b25"
+    },
+    {
+      "path": "tools/p17/validate_frozen_current_source_v42_contract.py",
+      "bytes": 5845,
+      "sha256": "c478cf1848437a2dc044abf0720c128d516042f4757450f35005249fccbd6efc"
+    }
+  ]
+}
