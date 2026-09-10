@@ -35,6 +35,9 @@ PINNED_AMBIGUOUS_BASELINES = {
     "tools/p14/validate_retention_local_mirror.py": (
         "11b87d37cfb76b523c29ee9dfb28500b4f57e2cb38d61f21e08f2fcc46b24676"
     ),
+    "tools/p14/validate_cancel_cleanup.py": (
+        "0e55cd4b00a1d670b1c31238fc69e9933db68e52c95a41ec18bb709c0be128c0"
+    ),
     "tools/p15/validate_auth_tenant.py": (
         "c805d097d92c6e41d8434de8d62aed3fd88bf95cfc81a2fab4cc3d389ccfb86a"
     ),
