@@ -13,8 +13,8 @@ class TableAggregateHwpxContractTests(unittest.TestCase):
     def test_repository_contract_passes_without_target_promotion(self) -> None:
         report = validator.validate()
         self.assertEqual(report["state"], "pass", report)
-        self.assertEqual(report["source_locks"], 7)
-        self.assertEqual(report["implementation_files"], 8)
+        self.assertEqual(report["source_locks"], 10)
+        self.assertEqual(report["implementation_files"], 11)
         self.assertEqual(report["features"], 8)
         self.assertEqual(report["direct_stage"], "integration_passed")
         self.assertFalse(report["actual_hangul"])

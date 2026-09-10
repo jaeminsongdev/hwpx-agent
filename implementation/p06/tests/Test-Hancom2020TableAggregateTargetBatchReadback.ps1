@@ -142,6 +142,9 @@ $checks = [ordered]@{
         $parent -notmatch '(?i)(Remove-Item|Delete\(\$casePaths\[.*\]\.(?:output|pdf))'
     bounded_progress_journal = $parent -match 'expectedSequence -gt 160' -and
         $parent -match '262144' -and $parent -match 'progress_observed_feature_id'
+    process_event_null_normalized = $engine -match 'normalizedFeatureId' -and
+        $engine -match '\[string\]::IsNullOrEmpty\(\$FeatureId\)' -and
+        $engine -match 'feature_id = \$normalizedFeatureId'
     owned_process_cleanup = $parent -match 'Stop-OwnedHancomProcesses' -and
         $parent -match 'remaining_hwp_process_count'
     manifest_identity_fails_before_com = Test-ManifestIdentityFailureBeforeCom

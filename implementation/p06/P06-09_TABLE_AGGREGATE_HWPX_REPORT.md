@@ -39,7 +39,7 @@ part and spine entry stays byte exact.
 | Closed package non-target parts and spine | exact preservation PASS |
 | Debug redaction, deterministic JSON and finite output | PASS |
 | Private contract/tamper tests | 4/4 PASS |
-| Exact eight-case batch runner static tests | 28/28 PASS in PowerShell 7 and Windows PowerShell 5.1 |
+| Exact eight-case batch runner static tests | 29/29 PASS in PowerShell 7 and Windows PowerShell 5.1 |
 | Final `-05` fixture manifest/input/collision preflight | PASS before COM creation |
 | P06 Python suite | 182/182 PASS |
 | Workspace all-target/all-feature locked offline tests | PASS; existing isolated P17 PostgreSQL qualification test is the sole ignored test |
@@ -51,8 +51,15 @@ The fixtures are bounded synthetic in-memory HWPX XML and ZIP packages. No user 
 HWPX, UI input, HAction call, formula evaluator or automation route was used by the successful
 adapter and batch-harness checks. The earlier single-file TABLE-022 attempt reached the visible
 licensed Hangul window but timed out in `open_input` because access approval was not performed; its
-unchanged input, absent output/PDF and failed trace remain local failed evidence. No batch execution
-has run. Static success is not licensed target or renderer evidence.
+unchanged input, absent output/PDF and failed trace remain local failed evidence. Batch attempt
+`20260910-01` under target `-05` likewise stopped at TABLE-022 `open_input` after 15 minutes without
+completed access approval. All eight inputs remained unchanged, no output HWPX or PDF was created,
+and the one owned Hangul process was removed with zero remaining. Its failed trace
+`6370f138...4bd31b` and three-event progress journal `8c9f5d7b...6d7ef` remain local evidence and are
+not promoted. That run also exposed a Windows PowerShell 5.1 null-to-empty-string progress defect;
+the engine now normalizes process-level `feature_id` back to JSON null and the dual-shell static
+regression passes. No successful batch execution has run. Static success is not licensed target or
+renderer evidence.
 
 The batch harness binds the final eight-case fixture manifest in both parent and worker, uses one
 x86 STA `HWPFrame.HwpObject.2` session, and performs per-case save/reopen/text/PDF lifecycles in fixed

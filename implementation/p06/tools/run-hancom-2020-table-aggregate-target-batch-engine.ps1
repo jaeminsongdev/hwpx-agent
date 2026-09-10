@@ -274,6 +274,10 @@ function Write-ProgressEvent {
     )
 
     $script:progressSequence += 1
+    # Windows PowerShell 5.1 coerces a null value bound to [string] into an empty string.
+    # Normalize the optional feature back to JSON null so the parent can distinguish
+    # process-level events from case-bound events without weakening its exact journal schema.
+    $normalizedFeatureId = if ([string]::IsNullOrEmpty($FeatureId)) { $null } else { [string]$FeatureId }
     $event = [ordered]@{
         schema_version = 'hwpx-agent.p06-09-table-aggregate-batch-progress/v1'
         sequence = $script:progressSequence
@@ -281,7 +285,7 @@ function Write-ProgressEvent {
         worker_process_id = $PID
         hwp_process_id = $HwpProcessId
         case_index = $CaseIndex
-        feature_id = $FeatureId
+        feature_id = $normalizedFeatureId
         phase = $Phase
         state = $State
         raw_document_text_present = $false
