@@ -59,7 +59,7 @@ module or generating UI input.
 | Strict matrix/ledger/nonclaim audit | PASS; 61 rows, green 0/61, 120-line ledger |
 
 The adapter fixtures and five generated candidates are bounded synthetic HWPX packages. Target
-manifest `8296cf40...da543` is deterministic. Licensed-target attempts 01, 02 and 04 reached the
+manifest `8296cf40...da543` is deterministic. Licensed-target attempts 01, 02, 04, 05 and 06 reached the
 exact current-PC binary and the first `TABLE-002` `open_input`, then hit their finite watchdogs.
 Attempt 03 reached the same three-event prefix but was interrupted before its watchdog terminal
 stub when a fresh access request was explicitly requested. It therefore has a progress journal
@@ -68,12 +68,14 @@ exact and the target directory contains no readback HWPX or rendered PDF.
 
 Attempt 01's failed wrapper trace SHA-256 is
 `e2245f4a2b83da7fe9d13dc056601be1b83610e86c6cff5de21d205ab68ac295`; its raw progress SHA-256 is
-`6405d82fa700ebd0ebcae97f8d6a03ae3ee7267605038c83b412772ab2be6ee4`. Attempts 02 and 04 produced
+`6405d82fa700ebd0ebcae97f8d6a03ae3ee7267605038c83b412772ab2be6ee4`. Attempts 02, 04, 05 and 06 produced
 the same canonical failed trace SHA-256
 `a235db11c484a4242cd6a80e646dc7db662bd58bf61a85c3eb9c7f8d8f538e33`; their timestamped progress
 journals are respectively
-`cfe18c6d31518bc57e3006ef684537bfa99066df4de2c3796ed527bf2d5058b0` and
-`b9136ac2ae1903e9816bc40d97aeb7452d13efe5d0d39b7f5c6ba20593efa48d`. Attempt 03's progress-only
+`cfe18c6d31518bc57e3006ef684537bfa99066df4de2c3796ed527bf2d5058b0`,
+`b9136ac2ae1903e9816bc40d97aeb7452d13efe5d0d39b7f5c6ba20593efa48d`,
+`36c7d260f9c55bdfb79f90fafaa4865fb45e9ccbb26edf8940a13079e2401696` and
+`0438a1a5f63c212ecf6026f15759e891f84641724b129763b40ad33b781ff01a`. Attempt 03's progress-only
 SHA-256 is `ed4516e1c1ab0e153ee174f46bb393b0064097f05a27218a3fbe55f9d42d9c6d`. Each completed watchdog
 cleaned exactly one owned automation process and reported zero remaining HWP processes; the
 interrupted process was separately identity-checked and stopped before attempt 04.
