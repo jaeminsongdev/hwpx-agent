@@ -65,10 +65,10 @@ function Test-PreflightFailure {
 $checks = [ordered]@{
     scripts_parse = @($sources.Values | Where-Object errors -ne 0).Count -eq 0
     exact_schema = $worker -match
-        'hwpx-agent\.p06-09-hancom-2020-table-thousands-source/v1' -and
+        'hwpx-agent\.p06-09-hancom-2020-table-thousands-source/v2' -and
         $worker -match 'hwpx-agent\.p06-09-hancom-2020-table-thousands-progress/v1' -and
         $wrapper -match
-            'hwpx-agent\.p06-09-hancom-2020-table-thousands-source-watchdog/v1'
+            'hwpx-agent\.p06-09-hancom-2020-table-thousands-source-watchdog/v2'
     exact_target = $all -match 'HWPFrame\.HwpObject\.2' -and
         $all -match '11\.0\.0\.9136' -and
         $all -match '7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce'
@@ -81,9 +81,23 @@ $checks = [ordered]@{
         $worker -match 'Write-ExactText -Hwp \$hwp -Text ''3400'''
     hancom_authors_formula = $worker -match
         'Invoke-ActionRun -Hwp \$hwp -Action ''TableFormulaSumHor'''
+    exact_formula_cell_selection = $worker -match
+        'Invoke-ActionRun -Hwp \$hwp -Action ''TableCellBlock''' -and
+        $worker -match '\$trace\.formula_cell_selection = ''pass''' -and
+        $wrapper -match '\$trace\.formula_cell_selection -ceq ''pass'''
     exact_thousands_actions = $worker -match
-        'Invoke-ActionRun -Hwp \$hwp -Action ''DeleteThousandsSeparator''' -and
-        $worker -match 'Invoke-ActionRun -Hwp \$hwp -Action ''InsertThousandsSeparator'''
+        'Invoke-ActionRun -Hwp \$hwp -Action ''TableDeleteComma''' -and
+        $worker -match 'Invoke-ActionRun -Hwp \$hwp -Action ''TableInsertComma''' -and
+        $worker -match 'Assert-ActionEnabled -Hwp \$hwp -Action ''TableDeleteComma''' -and
+        $worker -match 'Assert-ActionEnabled -Hwp \$hwp -Action ''TableInsertComma'''
+    ui_macro_aliases_rejected = $all -notmatch
+        '(?i)DeleteThousandsSeparator|InsertThousandsSeparator'
+    exact_visible_transitions = $worker -match
+        'Assert-VisibleOperandsAndResult -Text \$baselineText -Mode ''grouped''' -and
+        $worker -match
+            'Assert-VisibleOperandsAndResult -Text \$removedText -Mode ''plain''' -and
+        $worker -match
+            'Assert-VisibleOperandsAndResult -Text \$addedText -Mode ''grouped'''
     no_guessed_native_format = $all -notmatch '(?i)ResultFormat|\?\?|LastResult|HFieldCtrl'
     separate_immutable_outputs = $worker -match '\$document\.SaveAs\(\$baseline' -and
         $worker -match '\$document\.SaveAs\(\$removed' -and
@@ -102,6 +116,7 @@ $checks = [ordered]@{
         $wrapper -match '\$progress\.worker_process_id -eq \[long\]\$child\.Id'
     exact_success_receipt = $wrapper -match '\$successSemanticsValid' -and
         $wrapper -match '\[long\]\$trace\.operand_cells_written -eq 2' -and
+        $wrapper -match '\$trace\.formula_cell_selection -ceq ''pass''' -and
         $wrapper -match '\$trace\.delete_thousands_action -ceq ''pass''' -and
         $wrapper -match '\$trace\.insert_thousands_action -ceq ''pass'''
     progress_journal = $wrapper -match 'Read-ProgressJournal' -and

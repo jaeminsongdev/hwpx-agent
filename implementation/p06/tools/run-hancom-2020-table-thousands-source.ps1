@@ -305,7 +305,7 @@ if (Test-Path -LiteralPath $innerTrace -PathType Leaf) {
 }
 $traceValid = $null -ne $trace -and
     [string]$trace.schema_version -ceq
-        'hwpx-agent.p06-09-hancom-2020-table-thousands-source/v1' -and
+        'hwpx-agent.p06-09-hancom-2020-table-thousands-source/v2' -and
     [string]$trace.target_build -ceq $ExpectedBuild -and
     [string]$trace.state -in @('pass', 'failed') -and
     ($null -eq $trace.executable_sha256 -or
@@ -319,6 +319,7 @@ $successSemanticsValid = $null -ne $trace -and [string]$trace.state -ceq 'pass' 
     [string]$trace.table_create -ceq 'pass' -and
     [long]$trace.operand_cells_written -eq 2 -and
     [string]$trace.formula_action -ceq 'pass' -and
+    [string]$trace.formula_cell_selection -ceq 'pass' -and
     [string]$trace.delete_thousands_action -ceq 'pass' -and
     [string]$trace.insert_thousands_action -ceq 'pass' -and
     [string]$trace.baseline_visible_text_sha256 -match '^[0-9a-f]{64}$' -and
@@ -351,7 +352,7 @@ else { $null }
 
 if ($null -eq $trace) {
     $trace = [pscustomobject][ordered]@{
-        schema_version = 'hwpx-agent.p06-09-hancom-2020-table-thousands-source-watchdog/v1'
+        schema_version = 'hwpx-agent.p06-09-hancom-2020-table-thousands-source-watchdog/v2'
         delegated_worker_schema = $null
         target_build = $ExpectedBuild
         expected_executable_sha256 = $ExpectedExecutableSha256
@@ -369,7 +370,7 @@ if ($null -eq $trace) {
 }
 else {
     $workerSchema = [string]$trace.schema_version
-    $trace.schema_version = 'hwpx-agent.p06-09-hancom-2020-table-thousands-source-watchdog/v1'
+    $trace.schema_version = 'hwpx-agent.p06-09-hancom-2020-table-thousands-source-watchdog/v2'
     $trace | Add-Member -NotePropertyName delegated_worker_schema -NotePropertyValue $workerSchema -Force
     $trace | Add-Member -NotePropertyName expected_executable_sha256 `
         -NotePropertyValue $ExpectedExecutableSha256 -Force

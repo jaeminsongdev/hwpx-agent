@@ -111,6 +111,13 @@ function Invoke-ActionRun {
     }
 }
 
+function Assert-ActionEnabled {
+    param([Parameter(Mandatory)][object]$Hwp, [Parameter(Mandatory)][string]$Action)
+    if ($Hwp.IsActionEnable($Action) -eq $false) {
+        throw ('ACTION_DISABLED_' + $Action.ToUpperInvariant())
+    }
+}
+
 function Write-ExactText {
     param([Parameter(Mandatory)][object]$Hwp, [Parameter(Mandatory)][string]$Text)
     $parameter = $Hwp.HParameterSet.HInsertText
@@ -128,13 +135,21 @@ function Write-ExactText {
 }
 
 function Assert-VisibleOperandsAndResult {
-    param([Parameter(Mandatory)][AllowEmptyString()][string]$Text)
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string]$Text,
+        [Parameter(Mandatory)][ValidateSet('grouped', 'plain')][string]$Mode
+    )
     $first = $Text.IndexOf('1200', [System.StringComparison]::Ordinal)
     $second = $Text.IndexOf('3400', [System.StringComparison]::Ordinal)
     $plain = $Text.IndexOf('4600', [System.StringComparison]::Ordinal)
     $grouped = $Text.IndexOf('4,600', [System.StringComparison]::Ordinal)
-    if ($first -lt 0 -or $second -le $first -or
-        (($plain -le $second) -and ($grouped -le $second))) {
+    $resultValid = if ($Mode -ceq 'grouped') {
+        $grouped -gt $second -and $plain -lt 0
+    }
+    else {
+        $plain -gt $second -and $grouped -lt 0
+    }
+    if ($first -lt 0 -or $second -le $first -or -not $resultValid) {
         throw 'THOUSANDS_VISIBLE_TEXT_MISMATCH'
     }
 }
@@ -190,7 +205,7 @@ if (@(Get-CimInstance Win32_Process -Filter "Name='Hwp.exe'" -ErrorAction Silent
 }
 
 $trace = [ordered]@{
-    schema_version = 'hwpx-agent.p06-09-hancom-2020-table-thousands-source/v1'
+    schema_version = 'hwpx-agent.p06-09-hancom-2020-table-thousands-source/v2'
     target_build = $ExpectedBuild
     executable_sha256 = $null
     hwp_process_id = $null
@@ -198,6 +213,7 @@ $trace = [ordered]@{
     table_create = 'not_run'
     operand_cells_written = 0
     formula_action = 'not_run'
+    formula_cell_selection = 'not_run'
     baseline_visible_text_sha256 = $null
     delete_thousands_action = 'not_run'
     removed_visible_text_sha256 = $null
@@ -293,7 +309,7 @@ try {
     Invoke-ActionRun -Hwp $hwp -Action 'TableFormulaSumHor'
     $trace.formula_action = 'pass'
     $baselineText = [string]$hwp.GetTextFile('UNICODE', '')
-    Assert-VisibleOperandsAndResult -Text $baselineText
+    Assert-VisibleOperandsAndResult -Text $baselineText -Mode 'grouped'
     $trace.baseline_visible_text_sha256 = Get-Sha256String -Value $baselineText
     Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
@@ -306,12 +322,21 @@ try {
     $trace.baseline_hwpx_sha256 = Get-Sha256File -Path $baseline
     Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
+    $phase = 'formula_cell_select'
+    Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
+    Invoke-ActionRun -Hwp $hwp -Action 'TableCellBlock'
+    Assert-ActionEnabled -Hwp $hwp -Action 'TableDeleteComma'
+    Assert-ActionEnabled -Hwp $hwp -Action 'TableInsertComma'
+    $trace.formula_cell_selection = 'pass'
+    Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
+
     $phase = 'delete_thousands'
     Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
-    Invoke-ActionRun -Hwp $hwp -Action 'DeleteThousandsSeparator'
+    Assert-ActionEnabled -Hwp $hwp -Action 'TableDeleteComma'
+    Invoke-ActionRun -Hwp $hwp -Action 'TableDeleteComma'
     $trace.delete_thousands_action = 'pass'
     $removedText = [string]$hwp.GetTextFile('UNICODE', '')
-    Assert-VisibleOperandsAndResult -Text $removedText
+    Assert-VisibleOperandsAndResult -Text $removedText -Mode 'plain'
     $trace.removed_visible_text_sha256 = Get-Sha256String -Value $removedText
     Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
@@ -326,10 +351,11 @@ try {
 
     $phase = 'insert_thousands'
     Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
-    Invoke-ActionRun -Hwp $hwp -Action 'InsertThousandsSeparator'
+    Assert-ActionEnabled -Hwp $hwp -Action 'TableInsertComma'
+    Invoke-ActionRun -Hwp $hwp -Action 'TableInsertComma'
     $trace.insert_thousands_action = 'pass'
     $addedText = [string]$hwp.GetTextFile('UNICODE', '')
-    Assert-VisibleOperandsAndResult -Text $addedText
+    Assert-VisibleOperandsAndResult -Text $addedText -Mode 'grouped'
     $trace.added_visible_text_sha256 = Get-Sha256String -Value $addedText
     Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 

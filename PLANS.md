@@ -89,7 +89,7 @@
   formula/cache/field oracle and original-detail render review; attempt 01 remains failed evidence.
 - TABLE-021 transposes merged formula-free HWPX; TABLE-056 sorts complete plain/unmerged/formula-free
   cells; TABLE-057/058 fill exact single-run regions and reject stale unselected formula caches; TABLE-060 upgrades only formula reference anchors while preserving other formula fields; TABLE-001/004/005 create and convert admitted profiles with static reopen and no Hangul/render claim.
-- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. The remaining unit rows are TABLE-006/032/033/049: TABLE-006 has a 24/24 static-checked exact 3x3 native-source harness; TABLE-049 has a complete exact-state planner plus a 24/24 static-ready six-format by two-grouping harness, while attempt 01 stopped at the first manual format dialog with baseline-only failed evidence and no ResultFormat mapping; TABLE-032/033 tooling passes 20/20, but attempt 08 failed at `DeleteThousandsSeparator` action compatibility and remains failed evidence. All 32 integration rows need target oracles and later automation evidence.
+- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. The remaining unit rows are TABLE-006/032/033/049: TABLE-006 has a 24/24 static-checked exact 3x3 native-source harness; TABLE-049 has a complete exact-state planner plus a 24/24 static-ready six-format by two-grouping harness, while attempt 01 stopped at the first manual format dialog with baseline-only failed evidence and no ResultFormat mapping; TABLE-032/033 tooling passes 23/23 with the official `TableDeleteComma`/`TableInsertComma` actions and exact cell selection, but attempt 09 timed out at baseline-save access approval and remains failed evidence. All 32 integration rows need target oracles and later automation evidence.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`, current conformance JSON, and `protocol/private/p06-table-conformance-v1.json`.
 
 ## Risks, closures and holds
@@ -109,7 +109,7 @@
 ## Next actions
 
 1. At `max`, implement the next P17-06 remote-transport/credential-custody security increment; keep actual remote network and production false until independently exercised.
-2. Fix TABLE-032/033 `DeleteThousandsSeparator` compatibility before an access-assisted rerun, then run the next exact P06-09 target oracles and close automation/differentials separately.
+2. Rerun corrected TABLE-032/033 exact source qualification when the user can approve all three saves, then build the preserving HWPX adapter and run the next target oracles; automation/differentials remain separate.
 3. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
 
 ## Context pack and archive pointers

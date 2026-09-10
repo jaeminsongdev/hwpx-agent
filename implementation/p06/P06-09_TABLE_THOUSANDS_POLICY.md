@@ -48,11 +48,17 @@ from the current licensed Hangul 2020 target. Recommended reasoning remains `max
 
 The adapter must not infer a native formula number-format string. The private source worker
 `tools/create-hancom-2020-table-thousands-source.ps1` creates only a new 1-by-3 table with fixed
-operands `1200` and `3400`, asks Hangul to author the horizontal sum, and then applies the installed
-`DeleteThousandsSeparator` and `InsertThousandsSeparator` actions. It saves separate baseline,
-removed and added HWPX artifacts and records only digests, booleans, process identity and phase
-status. It never opens a user document or writes a guessed `ResultFormat`, packed command or field
-identifier.
+operands `1200` and `3400`, asks Hangul to author the horizontal sum, selects exactly that result
+cell with `TableCellBlock`, and then applies the automation Action IDs `TableDeleteComma` and
+`TableInsertComma`. Hancom's official `devcenter-archive` commit
+`213c7faad552b4853b525887e36accb6025e837b` lists those IDs on pages 43-44 of
+`ActionTable_2504.pdf` (SHA-256
+`bb876a95ea4e0f4b052c94188a1390b5f981161223759f59f52fc324c8130a87`). The installed UI macro
+aliases `DeleteThousandsSeparator` and `InsertThousandsSeparator` are deliberately rejected because
+they remained disabled and returned false through the automation surface on build `11.0.0.9136`.
+The worker saves separate baseline, removed and added HWPX artifacts and records only digests,
+booleans, process identity and phase status. It never opens a user document or writes a guessed
+`ResultFormat`, packed command or field identifier.
 
 The watchdog `tools/run-hancom-2020-table-thousands-source.ps1` pins the x86 COM target to build
 `11.0.0.9136` and the locked executable digest, rejects pre-existing Hwp processes and existing or

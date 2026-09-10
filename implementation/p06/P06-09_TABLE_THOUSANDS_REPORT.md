@@ -44,21 +44,37 @@ This is unit-level evidence. No HWPX XML, user document or Hangul process was to
 number-format lowering/readback, pagination/rendering, target-build save/reopen, automation and
 differentials remain open. P06-09, P06, production and the product remain in progress.
 
-## Exact-source qualifier status — 2026-09-10
+## Exact-source qualifier status — 2026-09-11
 
-The repository now contains a fail-closed Hangul 2020 source worker, watchdog and 20-case static
+The repository now contains a fail-closed Hangul 2020 source worker, watchdog and 23-case static
 test for the native thousands-separator transition. PowerShell parsing passes, PSScriptAnalyzer
-reports zero findings, and the static contract passes 20/20. The worker creates only a disposable
+reports zero findings, and the static contract passes 23/23. The worker creates only a disposable
 1-by-3 table and never guesses or emits native field grammar itself.
 
 Runtime qualification is not complete. Attempt 01 was manually interrupted after no output or
 progress receipt and its exact owned Hwp process was identity-checked and cleaned. Attempt 02 found
 a preflight defect in the new progress-file extension check; its failed watchdog receipt remains.
-Attempts 03 through 06 reached the licensed target but timed out awaiting the baseline `SaveAs`
-access approval. Attempt 06's bounded journal also ends at `baseline_save/running`; its watchdog
-cleaned one exact owned process, refused no cleanup target and left zero Hwp processes. The available
-Computer Use surface exposed browsers only, so it could not capture the Hangul dialog and no click
-or typing was automated. None of these failures is promoted.
+Attempts 03 through 07 reached the licensed target but timed out awaiting the baseline `SaveAs`
+access approval. Their bounded journals and watchdog receipts remain preserved. In attempt 08 the
+user approved the baseline save; the exact target produced the baseline HWPX, then failed because
+the worker used the installed UI macro alias `DeleteThousandsSeparator`, which is not an enabled
+automation Action ID in the formula-cell context. That baseline, inner trace, journal and failed
+watchdog receipt also remain preserved without promotion.
+
+The official Action Table identifies `TableDeleteComma` and `TableInsertComma` as the automation
+Action IDs. A bounded in-memory probe on the exact installed build proved that selecting the result
+cell with `TableCellBlock` enables both actions and performs the exact visible transition
+`4,600 -> 4600 -> 4,600`. The source worker and static guard now use that sequence, reject the UI
+macro aliases, require exact grouped/plain/grouped visible states and bind formula-cell selection in
+the v2 receipt. This probe does not create HWPX evidence and does not promote either row.
+
+Attempt 09 used that corrected worker and reached the exact licensed build, but no baseline-save
+access approval was received before the 900-second watchdog. Its 10-event journal terminates at
+`baseline_save/running`; the failed v2 watchdog receipt reports
+`TABLE_THOUSANDS_SOURCE_TIMEOUT`, cleaned exactly one owned `-Automation -Embedding` Hwp process,
+and left zero Hwp processes. The run directory
+`fixtures/target-build/p06-09-table-thousands-source-20260911-09` remains preserved as failed
+evidence. It is not relabeled or promoted.
 
 No baseline/removed/added HWPX source triple exists yet, so the exact `ResultFormat` mapping remains
 unknown and no direct adapter or conformance-row promotion is claimed. The next run requires the
