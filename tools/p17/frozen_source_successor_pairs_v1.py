@@ -1,4 +1,4 @@
-"""Verify historical P16/P17 source-successor pairs without current files."""
+"""Verify historical v12 and P15 source-successor pairs without current files."""
 
 from __future__ import annotations
 
@@ -57,27 +57,6 @@ P15_EXPECTED_CLAIMS = {
     "registered_host": False,
     "source_qualification_only": True,
 }
-P16_ARTIFACT_CONTRACT_RELATIVE = (
-    "implementation/p16/qualification/postgres-217ba56/contract.json"
-)
-P16_ARTIFACT_CONTRACT_BYTES = 6_289
-P16_ARTIFACT_CONTRACT_SHA256 = (
-    "c37e5b773a9117ffdb4af40c95d1263e08fdf7f6e25c69c6daa3108086497530"
-)
-P16_ARTIFACT_QUALIFICATION_COMMIT = "eb5674edbe2df7a0e239ca9d58f47715feb1796e"
-P16_ARTIFACT_SOURCE_COMMIT = "217ba56cd8a88e4d3560a5735052b18880481ff4"
-P16_ARTIFACT_QUALIFICATION_ID = "p16.local_postgres_artifact.217ba56"
-P16_ARTIFACT_RUNTIME_COUNT = 21
-P16_ARTIFACT_GUARD_COUNT = 4
-P16_ARTIFACT_CLAIMS = {
-    "actual_hangul": False,
-    "actual_local_artifact_acceptance": True,
-    "durable_plan_or_renderer": False,
-    "p15_source_qualification": False,
-    "phase_complete": False,
-    "production": False,
-    "registered_host": False,
-}
 HEX40 = re.compile(r"[0-9a-f]{40}\Z")
 HEX64 = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -98,25 +77,7 @@ def locked_json(
     expected_sha256: str,
     code: str,
 ) -> dict[str, Any]:
-    return locked_json_at(
-        root,
-        ANCHOR_COMMIT,
-        relative,
-        expected_bytes,
-        expected_sha256,
-        code,
-    )
-
-
-def locked_json_at(
-    root: Path,
-    revision: str,
-    relative: str,
-    expected_bytes: int,
-    expected_sha256: str,
-    code: str,
-) -> dict[str, Any]:
-    raw = frozen.git_blob(root, revision, relative, 512_000)
+    raw = frozen.git_blob(root, ANCHOR_COMMIT, relative, 512_000)
     require(len(raw) == expected_bytes, f"{code}.bytes")
     require(frozen.digest(raw) == expected_sha256, f"{code}.digest")
     try:
@@ -149,154 +110,6 @@ def lock_map(source_locks: Iterable[dict[str, Any]]) -> dict[str, str]:
         )
         result[relative] = expected
     require(len(result) > 0, "lock.empty")
-    return result
-
-
-def checked_path_digests(
-    root: Path,
-    revision: str,
-    entries: Any,
-    expected_count: int,
-    code: str,
-) -> dict[str, str]:
-    require(
-        isinstance(entries, list) and len(entries) == expected_count,
-        f"{code}.count",
-    )
-    if not isinstance(entries, list):
-        raise FrozenSuccessorPairError(f"{code}.entries")
-    result: dict[str, str] = {}
-    for entry in entries:
-        require(
-            isinstance(entry, dict) and set(entry) == {"path", "sha256"},
-            f"{code}.shape",
-        )
-        relative = entry.get("path")
-        expected = entry.get("sha256")
-        if not isinstance(relative, str) or not isinstance(expected, str):
-            raise FrozenSuccessorPairError(f"{code}.identity")
-        require(
-            relative not in result and HEX64.fullmatch(expected) is not None,
-            f"{code}.identity",
-        )
-        raw = frozen.git_blob(root, revision, relative)
-        require(frozen.digest(raw) == expected, f"{code}.digest")
-        result[relative] = expected
-    return result
-
-
-def p16_artifact_replacements(
-    root: Path, source_locks: Iterable[dict[str, Any]]
-) -> dict[str, tuple[str, str]]:
-    frozen.verify_commit(root, P16_ARTIFACT_SOURCE_COMMIT)
-    frozen.verify_commit(root, P16_ARTIFACT_QUALIFICATION_COMMIT)
-    frozen.require_ancestor(
-        root, P16_ARTIFACT_SOURCE_COMMIT, P16_ARTIFACT_QUALIFICATION_COMMIT
-    )
-    frozen.require_ancestor(root, P16_ARTIFACT_QUALIFICATION_COMMIT, ANCHOR_COMMIT)
-    contract = locked_json_at(
-        root,
-        P16_ARTIFACT_QUALIFICATION_COMMIT,
-        P16_ARTIFACT_CONTRACT_RELATIVE,
-        P16_ARTIFACT_CONTRACT_BYTES,
-        P16_ARTIFACT_CONTRACT_SHA256,
-        "p16.artifact.contract",
-    )
-    require(
-        contract.get("schema_version")
-        == "hwpx-agent.p16-postgres-source-qualification/v1"
-        and contract.get("qualification_id") == P16_ARTIFACT_QUALIFICATION_ID
-        and contract.get("scope") == "current_pc_source_binding_successor_only"
-        and contract.get("audited_source_commit") == P16_ARTIFACT_SOURCE_COMMIT
-        and contract.get("claims") == P16_ARTIFACT_CLAIMS,
-        "p16.artifact.identity",
-    )
-    predecessor = contract.get("predecessor")
-    require(
-        predecessor
-        == {
-            "path": "implementation/p14/postgres/p14-artifact-service-v1.json",
-            "sha256": (
-                "92c2cfc91ff9def57649124a196ffddac5d9b68e1899c544e2ebff0abec91c82"
-            ),
-        },
-        "p16.artifact.predecessor",
-    )
-    runtime = checked_path_digests(
-        root,
-        P16_ARTIFACT_SOURCE_COMMIT,
-        contract.get("runtime_sources"),
-        P16_ARTIFACT_RUNTIME_COUNT,
-        "p16.artifact.runtime",
-    )
-    checked_path_digests(
-        root,
-        P16_ARTIFACT_QUALIFICATION_COMMIT,
-        contract.get("guard_sources"),
-        P16_ARTIFACT_GUARD_COUNT,
-        "p16.artifact.guard",
-    )
-    evidence = contract.get("evidence")
-    require(isinstance(evidence, list) and len(evidence) == 2, "p16.artifact.evidence")
-    if not isinstance(evidence, list):
-        raise FrozenSuccessorPairError("p16.artifact.evidence")
-    for entry in evidence:
-        require(
-            isinstance(entry, dict)
-            and set(entry)
-            == {
-                "original_receipt_sha256",
-                "path",
-                "role",
-                "run_id",
-                "sha256",
-            },
-            "p16.artifact.evidence.shape",
-        )
-        relative = entry.get("path")
-        expected = entry.get("sha256")
-        if not isinstance(relative, str) or not isinstance(expected, str):
-            raise FrozenSuccessorPairError("p16.artifact.evidence.identity")
-        require(
-            HEX64.fullmatch(expected) is not None,
-            "p16.artifact.evidence.identity",
-        )
-        raw = frozen.git_blob(root, P16_ARTIFACT_QUALIFICATION_COMMIT, relative)
-        require(frozen.digest(raw) == expected, "p16.artifact.evidence.digest")
-    locks = lock_map(source_locks)
-    replacements = contract.get("replacements")
-    require(
-        isinstance(replacements, list) and len(replacements) == 3,
-        "p16.artifact.replacements",
-    )
-    if not isinstance(replacements, list):
-        raise FrozenSuccessorPairError("p16.artifact.replacements")
-    result: dict[str, tuple[str, str]] = {}
-    for entry in replacements:
-        require(
-            isinstance(entry, dict)
-            and set(entry) == {"path", "predecessor_sha256", "successor_sha256"},
-            "p16.artifact.replacement.shape",
-        )
-        relative = entry.get("path")
-        before = entry.get("predecessor_sha256")
-        after = entry.get("successor_sha256")
-        if (
-            not isinstance(relative, str)
-            or not isinstance(before, str)
-            or not isinstance(after, str)
-        ):
-            raise FrozenSuccessorPairError("p16.artifact.replacement.identity")
-        require(
-            HEX64.fullmatch(before) is not None
-            and HEX64.fullmatch(after) is not None
-            and before != after
-            and relative not in result
-            and locks.get(relative) == before
-            and runtime.get(relative) == after,
-            "p16.artifact.replacement.identity",
-        )
-        result[relative] = (before, after)
     return result
 
 

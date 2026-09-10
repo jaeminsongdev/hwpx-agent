@@ -102,7 +102,7 @@
 - R-0007: P06-09 remains 0/61 release-green until direct validations, fixtures, rollback/retry,
   current-target automation runtime and exact differential evidence close every row.
 - R-0008 closed: all 31 legacy mutable-source errors and the new atomic checkpoint evidence use exact
-  immutable Git-history verification; P17 Python passes 210/210 without product promotion.
+  immutable Git-history verification; P17 Python passes 211/211 without product promotion.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 

@@ -47,19 +47,6 @@ class FrozenSourceSuccessorPairsV1Tests(unittest.TestCase):
             ),
         )
 
-    def test_p16_artifact_pairs_are_verified_from_immutable_history(self) -> None:
-        replacements = pairs.p16_artifact_replacements(
-            ROOT,
-            locks("implementation/p14/postgres/p14-artifact-service-v1.json"),
-        )
-        self.assertEqual(
-            replacements["crates/artifact-service/Cargo.toml"],
-            (
-                "13e9eaf8ab4d754f91673190b7dbf53bb968b000c8d8d33ba5d915c4d9cf72d1",
-                "574c7dbfb13194183afe5664ff1bc43142e7730e0a0ce2086687d9bed981c69f",
-            ),
-        )
-
     def test_v12_successor_tamper_fails_closed(self) -> None:
         original = pairs.frozen.git_blob
 
@@ -89,35 +76,10 @@ class FrozenSourceSuccessorPairsV1Tests(unittest.TestCase):
                 ROOT, [{"path": "x", "sha256": "0" * 64}], "unknown"
             )
 
-    def test_p16_artifact_contract_tamper_fails_closed(self) -> None:
-        original = pairs.frozen.git_blob
-
-        def tampered(
-            root: Path,
-            revision: str,
-            relative: str,
-            maximum: int = pairs.frozen.MAX_BLOB_BYTES,
-        ) -> bytes:
-            raw = original(root, revision, relative, maximum)
-            if relative == pairs.P16_ARTIFACT_CONTRACT_RELATIVE:
-                return raw + b"\n"
-            return raw
-
-        with patch.object(pairs.frozen, "git_blob", side_effect=tampered):
-            with self.assertRaisesRegex(
-                pairs.FrozenSuccessorPairError,
-                "p16.artifact.contract.bytes",
-            ):
-                pairs.p16_artifact_replacements(
-                    ROOT,
-                    locks("implementation/p14/postgres/p14-artifact-service-v1.json"),
-                )
-
     def test_source_has_no_mutable_qualifier_or_worktree_reader(self) -> None:
         source = SOURCE.read_text(encoding="utf-8")
         self.assertNotIn("frozen_current_source_v12", source)
         self.assertNotIn("frozen_p15_source_v1", source)
-        self.assertNotIn("postgres_artifact_qualification", source)
         self.assertNotIn("read_bytes(", source)
         self.assertNotIn("read_text(", source)
 

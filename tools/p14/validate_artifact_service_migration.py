@@ -173,7 +173,7 @@ def qualified_source_replacements(
     # Execute the repository validator, never Python supplied by a candidate data root. It reads
     # the P16 qualification and its sources only from exact immutable Git objects.
     path = (
-        Path(__file__).resolve().parents[1] / "p17/frozen_source_successor_pairs_v1.py"
+        Path(__file__).resolve().parents[1] / "p17/frozen_p16_artifact_successor_v1.py"
     )
     try:
         spec = importlib.util.spec_from_file_location(
@@ -183,7 +183,7 @@ def qualified_source_replacements(
             return {}
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        return module.p16_artifact_replacements(root, source_locks)
+        return module.verified_replacements(root, source_locks)
     except (OSError, ImportError, ValueError):
         # An absent/invalid successor is not permission: the original digest check below fails.
         return {}
