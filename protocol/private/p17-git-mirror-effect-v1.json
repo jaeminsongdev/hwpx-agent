@@ -1,0 +1,80 @@
+{
+  "schema_version": "hwpx-agent.git-mirror-effect/v1",
+  "scope": "current_pc_local_bare_git_mirror_effect_component",
+  "input": {
+    "project_id": "canonical_prj_uuid",
+    "branch_id": "canonical_brn_uuid",
+    "empty_head": "revision_and_snapshot_absent_only_at_generation_zero",
+    "forward_head": "result_generation_equals_expected_generation_plus_one",
+    "digests": "exact_lowercase_sha256",
+    "accepts_command_or_ref": false
+  },
+  "repository_admission": {
+    "repository": "explicit_absolute_plain_local_bare_git_directory",
+    "git_program": "explicit_absolute_plain_regular_file",
+    "supported_object_formats": [
+      "sha1",
+      "sha256"
+    ],
+    "network_transport": false,
+    "interactive_prompt": false,
+    "replace_objects": false,
+    "repository_hooks": false,
+    "environment_cleared": true,
+    "git_output_max_bytes": 16384
+  },
+  "state": {
+    "schema_version": "hwpx-agent.git-mirror-state/v1",
+    "path": "mirror-state.json",
+    "tree_contains_only_state": true,
+    "canonical_json": true,
+    "binds_project_branch_revision_generation": true,
+    "binds_snapshot_operation_plan_request_sha256": true
+  },
+  "plan": {
+    "schema_version": "hwpx-agent.git-mirror-push-plan/v1",
+    "canonical_max_bytes": 4096,
+    "writes_only_unreachable_objects": true,
+    "binds_input_sha256": true,
+    "binds_derived_reference": true,
+    "binds_expected_and_result_oid": true,
+    "binds_state_sha256": true,
+    "unknown_or_noncanonical_fields_rejected": true
+  },
+  "publish": {
+    "single_reference_update": true,
+    "old_oid_compare_and_swap": true,
+    "blind_retry": false,
+    "exact_replay_returns_existing_receipt": true,
+    "concurrent_ref_never_overwritten": true
+  },
+  "recovery": {
+    "observations": [
+      "no_effect",
+      "committed",
+      "diverged"
+    ],
+    "committed_requires_exact_state_and_tree": true,
+    "stored_plan_survives_host_restart": true,
+    "diverged_requires_external_reconciliation": true
+  },
+  "receipt": {
+    "schema_version": "hwpx-agent.git-mirror-push-receipt/v1",
+    "contains_result_oid": true,
+    "contains_state_sha256": true,
+    "contains_replayed": true,
+    "contains_path_content_or_secret": false
+  },
+  "evidence": {
+    "actual_disposable_local_bare_git": true,
+    "actual_ref_cas": true,
+    "actual_restart_observation": true,
+    "actual_concurrent_ref_rejection": true,
+    "actual_remote_network": false,
+    "actual_postgresql_state_machine": false,
+    "authenticated_host_dispatch": false,
+    "persistent_credential_custody": false,
+    "production": false,
+    "p17_06_complete": false
+  }
+}

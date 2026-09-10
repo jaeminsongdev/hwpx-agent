@@ -28,9 +28,14 @@ use serde::Serialize;
 use thiserror::Error;
 use uuid::Uuid;
 
+mod git_mirror;
 mod postgres;
 mod socket;
 
+pub use git_mirror::{
+    GitMirrorEffectError, GitMirrorEffectHost, GitMirrorEffectObservation, GitMirrorPushInput,
+    GitMirrorPushPlan, GitMirrorPushReceipt, GitMirrorSnapshot,
+};
 pub use postgres::{
     LocalPostgresAtomicMirrorCheckpointDispatcher, LocalPostgresHistoryCheckpointConfig,
     LocalPostgresHistoryCheckpointDispatcher, PostgresCheckpointConnectFailure,
