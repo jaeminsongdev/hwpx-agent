@@ -8,7 +8,6 @@ import re
 from pathlib import Path
 from typing import Any
 
-
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONTRACT = (
     ROOT / "implementation" / "p14" / "postgres" / "p14-artifact-service-v1.json"
@@ -142,13 +141,17 @@ def resolve_bounded_file(root: Path, relative_path: Any, maximum_bytes: int) -> 
         if cursor.is_symlink() or (
             hasattr(cursor, "is_junction") and cursor.is_junction()
         ):
-            raise ValueError(f"contract path contains a link or junction: {relative_path}")
+            raise ValueError(
+                f"contract path contains a link or junction: {relative_path}"
+            )
     candidate = (root / relative).resolve(strict=True)
     resolved_root = root.resolve(strict=True)
     if candidate == resolved_root or resolved_root not in candidate.parents:
         raise ValueError(f"contract path escapes repository root: {relative_path}")
     if not candidate.is_file() or not (0 < candidate.stat().st_size <= maximum_bytes):
-        raise ValueError(f"contract file is outside its regular-file bound: {relative_path}")
+        raise ValueError(
+            f"contract file is outside its regular-file bound: {relative_path}"
+        )
     return candidate
 
 
@@ -164,16 +167,23 @@ def require_digest(path: Path, expected: Any, label: str) -> None:
         raise ValueError(f"{label} mismatch: expected {expected}, got {actual}")
 
 
-def qualified_source_replacements(root: Path) -> dict[str, tuple[str, str]]:
-    # Execute the validator's trusted sibling, never Python supplied by a candidate data root.
-    path = Path(__file__).resolve().parents[1] / "p16/postgres_artifact_qualification.py"
+def qualified_source_replacements(
+    root: Path, source_locks: list[dict[str, Any]]
+) -> dict[str, tuple[str, str]]:
+    # Execute the repository validator, never Python supplied by a candidate data root. It reads
+    # the P16 qualification and its sources only from exact immutable Git objects.
+    path = (
+        Path(__file__).resolve().parents[1] / "p17/frozen_source_successor_pairs_v1.py"
+    )
     try:
-        spec = importlib.util.spec_from_file_location("p14_p16_postgres_source_qualification", path)
+        spec = importlib.util.spec_from_file_location(
+            "p14_p16_postgres_source_qualification", path
+        )
         if spec is None or spec.loader is None:
             return {}
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        return module.verified_replacements(root)
+        return module.p16_artifact_replacements(root, source_locks)
     except (OSError, ImportError, ValueError):
         # An absent/invalid successor is not permission: the original digest check below fails.
         return {}
@@ -270,7 +280,10 @@ def validate_contract(
     require_exact_keys(
         database, {"engine", "tested_server_version", "container_image"}, "database"
     )
-    if database["engine"] != "postgresql" or database["tested_server_version"] != "18.4":
+    if (
+        database["engine"] != "postgresql"
+        or database["tested_server_version"] != "18.4"
+    ):
         raise ValueError("database engine/version differs")
     if database["container_image"] != EXPECTED_IMAGE:
         raise ValueError("PostgreSQL image is not the exact approved digest")
@@ -278,15 +291,27 @@ def validate_contract(
     prerequisite = require_object(contract["prerequisite"], "prerequisite")
     require_exact_keys(
         prerequisite,
-        {"version", "migration_name", "up_path", "up_sha256", "down_path", "down_sha256"},
+        {
+            "version",
+            "migration_name",
+            "up_path",
+            "up_sha256",
+            "down_path",
+            "down_sha256",
+        },
         "prerequisite",
     )
-    if prerequisite["version"] != 1 or prerequisite["migration_name"] != "p14.metadata_v1":
+    if (
+        prerequisite["version"] != 1
+        or prerequisite["migration_name"] != "p14.metadata_v1"
+    ):
         raise ValueError("version 1 prerequisite differs")
     prerequisite_up = resolve_bounded_file(root, prerequisite["up_path"], 256 * 1024)
     prerequisite_down = resolve_bounded_file(root, prerequisite["down_path"], 32 * 1024)
     require_digest(prerequisite_up, prerequisite["up_sha256"], "prerequisite up digest")
-    require_digest(prerequisite_down, prerequisite["down_sha256"], "prerequisite down digest")
+    require_digest(
+        prerequisite_down, prerequisite["down_sha256"], "prerequisite down digest"
+    )
 
     migration = require_object(contract["migration"], "migration")
     require_exact_keys(
@@ -302,7 +327,10 @@ def validate_contract(
         },
         "migration",
     )
-    if migration["version"] != 2 or migration["migration_name"] != "p14.artifact_service_v1":
+    if (
+        migration["version"] != 2
+        or migration["migration_name"] != "p14.artifact_service_v1"
+    ):
         raise ValueError("version 2 migration identity differs")
     if migration["rollback_gate_setting"] != "hwpx_agent.allow_destructive_rollback=on":
         raise ValueError("rollback gate setting differs")
@@ -329,7 +357,9 @@ def validate_contract(
         "nullif(current_setting('hwpx_agent.tenant_id', true), '') IS NOT NULL",
     ]:
         if snippet not in smoke_text:
-            raise ValueError(f"smoke fixture is missing transaction-local context proof: {snippet}")
+            raise ValueError(
+                f"smoke fixture is missing transaction-local context proof: {snippet}"
+            )
 
     if contract["required_artifact_columns"] != EXPECTED_COLUMNS:
         raise ValueError("required artifact column sequence differs")
@@ -351,7 +381,10 @@ def validate_contract(
     replacements = None
     successor_bound: list[str] = []
     sources = contract["source_locks"]
-    if not isinstance(sources, list) or [source.get("path") for source in sources] != EXPECTED_SOURCE_PATHS:
+    if (
+        not isinstance(sources, list)
+        or [source.get("path") for source in sources] != EXPECTED_SOURCE_PATHS
+    ):
         raise ValueError("source lock path sequence differs")
     for index, source in enumerate(sources):
         source_object = require_object(source, f"source_locks[{index}]")
@@ -359,9 +392,13 @@ def validate_contract(
         source_path = resolve_bounded_file(root, source_object["path"], 512 * 1024)
         expected = source_object["sha256"]
         observed = digest(source_path)
-        if isinstance(expected, str) and HEX_64.fullmatch(expected) and observed != expected:
+        if (
+            isinstance(expected, str)
+            and HEX_64.fullmatch(expected)
+            and observed != expected
+        ):
             if replacements is None:
-                replacements = qualified_source_replacements(root)
+                replacements = qualified_source_replacements(root, sources)
             if replacements.get(source_object["path"]) == (expected, observed):
                 successor_bound.append(source_object["path"])
                 continue
@@ -390,7 +427,9 @@ def validate_contract(
         "down_sha256": migration["down_sha256"],
         "smoke_fixture_sha256": smoke["sha256"],
         "source_qualification": {
-            "successor_id": "p16.local_postgres_artifact.217ba56" if successor_bound else None,
+            "successor_id": (
+                "p16.local_postgres_artifact.217ba56" if successor_bound else None
+            ),
             "successor_bound_paths": successor_bound,
             "phase_completion_claimed": False,
         },
