@@ -103,6 +103,8 @@ def digest(path: Path) -> str:
 def executable(name: str) -> str:
     value = shutil.which(name)
     require(value is not None and Path(value).is_file(), "executable.missing")
+    if value is None:
+        raise AcceptanceError("executable.missing")
     return value
 
 
@@ -209,6 +211,8 @@ def source_expectations(
             add_expectation(expectations, entry.get("path"), entry.get("sha256"))
     contexts = p15.get("contexts")
     require(isinstance(contexts, dict), "p15.contexts")
+    if not isinstance(contexts, dict):
+        raise AcceptanceError("p15.contexts")
     for entries in contexts.values():
         require(isinstance(entries, list), "p15.context")
         for entry in entries:
@@ -369,6 +373,8 @@ def cargo_projection(root: Path) -> tuple[str, int]:
     lock = tomllib.loads((root / "Cargo.lock").read_text(encoding="utf-8"))
     lock_packages = lock.get("package")
     require(isinstance(lock_packages, list), "cargo.lock_packages")
+    if not isinstance(lock_packages, list):
+        raise AcceptanceError("cargo.lock_packages")
     hwpx_locks = [item for item in lock_packages if isinstance(item, dict) and item.get("name") == "hwpx-package"]
     require(len(hwpx_locks) == 1, "cargo.lock_hwpx")
     lock_dependencies = hwpx_locks[0].get("dependencies")
@@ -394,7 +400,7 @@ def run() -> dict[str, Any]:
     commit, clean = tracked_identity(ROOT)
     require(clean, "git.dirty")
     entries = current_source_entries(ROOT, commit)
-    require(entries, "successor.empty")
+    require(bool(entries), "successor.empty")
     metadata_sha256, member_count = cargo_projection(ROOT)
     require(tracked_identity(ROOT) == (commit, True), "git.changed")
     run_id = uuid.uuid4().hex
