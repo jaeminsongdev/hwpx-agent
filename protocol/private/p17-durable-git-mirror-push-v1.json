@@ -1,0 +1,74 @@
+{
+  "schema_version": "hwpx-agent.durable-git-mirror-push/v1",
+  "scope": "current_pc_postgresql_local_bare_git_authenticated_loopback_component",
+  "request": {
+    "wire_schema": "hwpx-agent.remote-sync-request/v3",
+    "operation": "push",
+    "canonical_json_required": true,
+    "max_bytes": 16384,
+    "authentication_scope": "mirror.sync",
+    "single_use_credential": true,
+    "request_sha256_bound": true,
+    "idempotency_key_bound": true
+  },
+  "database": {
+    "exact_schema_version": 16,
+    "effect_table": "hwpx_agent.git_mirror_push_effects",
+    "states": [
+      "executing",
+      "finalized",
+      "diverged"
+    ],
+    "canonical_plan_max_bytes": 4096,
+    "plan_persisted_before_git_effect": true,
+    "monotonic_fencing_token": true,
+    "bounded_execution_lease": true,
+    "branch_head_reserved_while_executing": true,
+    "source_and_result_artifacts_verified": true,
+    "revision_mirror_effect_finalized_atomically": true,
+    "tenant_rls_forced": true,
+    "security_definer_search_path_fixed": true,
+    "public_execute_revoked": true,
+    "application_role_has_table_mutation": false
+  },
+  "git": {
+    "repository": "explicit_absolute_plain_local_bare_git_directory",
+    "reference_is_derived": true,
+    "accepts_caller_command_or_reference": false,
+    "old_oid_compare_and_swap": true,
+    "observations": [
+      "no_effect",
+      "committed",
+      "diverged"
+    ],
+    "competing_reference_never_overwritten": true,
+    "network_transport": false
+  },
+  "recovery": {
+    "fresh_execution_id_after_restart": true,
+    "expired_lease_reacquired_with_higher_fence": true,
+    "committed_git_finalizes_database_exactly_once": true,
+    "exact_replay_creates_no_revision_or_git_commit": true,
+    "divergence_enters_manual_merge_required": true,
+    "uncertain_post_git_database_failure_is_unavailable": true,
+    "blind_retry": false
+  },
+  "transport": {
+    "bind_address": "127.0.0.1",
+    "framed_and_bounded": true,
+    "arbitrary_host_configuration": false,
+    "persistent_credential_custody": false
+  },
+  "evidence": {
+    "actual_postgresql_18_4": true,
+    "actual_disposable_local_bare_git": true,
+    "actual_authenticated_loopback": true,
+    "actual_committed_effect_recovery": true,
+    "actual_divergence_preservation": true,
+    "actual_remote_network": false,
+    "durable_pull": false,
+    "production": false,
+    "actual_hangul": false,
+    "p17_06_complete": false
+  }
+}

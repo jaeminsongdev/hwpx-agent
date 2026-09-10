@@ -137,7 +137,7 @@ class PostgresCheckpointHostChecksTests(unittest.TestCase):
         self.assertNotIn('"password":', self.harness)
         self.assertNotIn('"authorization":', self.harness)
 
-    def test_every_current_postgres_adapter_accepts_migration_15(self) -> None:
+    def test_every_current_postgres_adapter_accepts_migration_16(self) -> None:
         paths = [
             ROOT / "crates/artifact-service/src/store/postgres_repository.rs",
             ROOT / "crates/mcp-control-plane/src/postgres_plan_source.rs",
@@ -146,14 +146,17 @@ class PostgresCheckpointHostChecksTests(unittest.TestCase):
         ]
         for path in paths:
             source = path.read_text(encoding="utf-8")
-            self.assertIn("const MIGRATIONS: [&[u8]; 15]", source, path.as_posix())
+            self.assertIn("const MIGRATIONS: [&[u8]; 16]", source, path.as_posix())
             self.assertIn(
                 'migration!("0014_p17_history_checkpoint_note.up.sql")', source
             )
             self.assertIn(
                 'migration!("0015_p17_atomic_mirror_checkpoint.up.sql")', source
             )
-            self.assertIn("LIMIT 16", source)
+            self.assertIn(
+                'migration!("0016_p17_durable_git_mirror_push.up.sql")', source
+            )
+            self.assertIn("LIMIT 17", source)
 
     def test_fixture_has_only_the_bounded_subject_placeholder(self) -> None:
         fixture = (

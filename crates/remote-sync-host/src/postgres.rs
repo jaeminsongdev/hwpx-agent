@@ -67,12 +67,31 @@ const ATOMIC_MIGRATIONS: [&[u8]; 15] = [
     migration!("0015_p17_atomic_mirror_checkpoint.up.sql"),
 ];
 
+const CURRENT_ATOMIC_MIGRATIONS: [&[u8]; 16] = [
+    migration!("0001_p14_metadata.up.sql"),
+    migration!("0002_p14_artifact_service.up.sql"),
+    migration!("0003_p14_revision_cas.up.sql"),
+    migration!("0004_p14_history_checkpoints.up.sql"),
+    migration!("0005_p14_job_state_machine.up.sql"),
+    migration!("0006_p14_worker_lease_fencing.up.sql"),
+    migration!("0007_p14_idempotency_reconciliation.up.sql"),
+    migration!("0008_p14_cancel_cleanup.up.sql"),
+    migration!("0009_p14_retention_local_mirror.up.sql"),
+    migration!("0010_p16_artifact_repository.up.sql"),
+    migration!("0011_p16_plan_source.up.sql"),
+    migration!("0012_p16_durable_plan_store.up.sql"),
+    migration!("0013_p16_plan_review_evidence.up.sql"),
+    migration!("0014_p17_history_checkpoint_note.up.sql"),
+    migration!("0015_p17_atomic_mirror_checkpoint.up.sql"),
+    migration!("0016_p17_durable_git_mirror_push.up.sql"),
+];
+
 /// Bounded local connection settings. The password is zeroized and never exposed by `Debug`.
 pub struct LocalPostgresHistoryCheckpointConfig {
-    port: u16,
-    database: String,
-    user: String,
-    password: Zeroizing<String>,
+    pub(crate) port: u16,
+    pub(crate) database: String,
+    pub(crate) user: String,
+    pub(crate) password: Zeroizing<String>,
 }
 
 impl LocalPostgresHistoryCheckpointConfig {
@@ -568,12 +587,14 @@ fn verify_migrations(client: &mut Client) -> Result<(), CheckpointDispatchError>
 }
 
 fn verify_atomic_migrations(client: &mut Client) -> Result<(), CheckpointDispatchError> {
-    verify_migration_set(
-        client,
-        &ATOMIC_MIGRATIONS,
-        "SELECT version,migration_sha256::text FROM hwpx_agent.schema_versions \
-         ORDER BY version LIMIT 16",
-    )
+    let query = "SELECT version,migration_sha256::text FROM hwpx_agent.schema_versions \
+                 ORDER BY version LIMIT 17";
+    let rows = client.query(query, &[]).map_err(db_dispatch_error)?;
+    match rows.len() {
+        15 => verify_migration_rows(&rows, &ATOMIC_MIGRATIONS),
+        16 => verify_migration_rows(&rows, &CURRENT_ATOMIC_MIGRATIONS),
+        _ => Err(CheckpointDispatchError::Rejected),
+    }
 }
 
 fn verify_migration_set(
@@ -582,6 +603,13 @@ fn verify_migration_set(
     query: &str,
 ) -> Result<(), CheckpointDispatchError> {
     let rows = client.query(query, &[]).map_err(db_dispatch_error)?;
+    verify_migration_rows(&rows, migrations)
+}
+
+fn verify_migration_rows(
+    rows: &[Row],
+    migrations: &[&[u8]],
+) -> Result<(), CheckpointDispatchError> {
     if rows.len() != migrations.len() {
         return Err(CheckpointDispatchError::Rejected);
     }

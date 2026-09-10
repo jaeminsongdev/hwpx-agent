@@ -39,7 +39,7 @@ macro_rules! migration {
     };
 }
 
-const MIGRATIONS: [&[u8]; 15] = [
+const MIGRATIONS: [&[u8]; 16] = [
     migration!("0001_p14_metadata.up.sql"),
     migration!("0002_p14_artifact_service.up.sql"),
     migration!("0003_p14_revision_cas.up.sql"),
@@ -55,6 +55,7 @@ const MIGRATIONS: [&[u8]; 15] = [
     migration!("0013_p16_plan_review_evidence.up.sql"),
     migration!("0014_p17_history_checkpoint_note.up.sql"),
     migration!("0015_p17_atomic_mirror_checkpoint.up.sql"),
+    migration!("0016_p17_durable_git_mirror_push.up.sql"),
 ];
 
 /// Bounded encryption keyring for persisted review evidence and key rotation.
@@ -641,7 +642,7 @@ fn verify_migrations(client: &mut Client) -> Result<(), PlanReviewError> {
     let rows = client
         .query(
             "SELECT version,migration_sha256::text FROM hwpx_agent.schema_versions
-             ORDER BY version LIMIT 16",
+             ORDER BY version LIMIT 17",
             &[],
         )
         .map_err(db_error)?;
