@@ -1,6 +1,6 @@
 # P06-09 TABLE-002/003 table ruling HWPX adapter policy v1
 
-Status: direct static HWPX integration and target tooling implemented; no licensed Hangul 2020 oracle claim
+Status: static HWPX adapter implemented; exact current-PC Hangul 2020 target v2 oracle passed
 
 ## Scope
 
@@ -106,15 +106,22 @@ watchdog records case-aware progress and may terminate only the exact owned auto
 Failed and partial outputs remain create-only evidence.
 
 After a successful batch, the independent target oracle reopens both the exact candidate and saved
-result through the bounded package graph and manifest-supplied complete binding. It removes only
-validated renderer `linesegarray` caches, requires the remaining complete section bytes to match,
-and then checks state/grid digests, complete topology, all ruling operations, payload/formula
-counts, document formula-field count and selected/unselected table cardinality. The renderer cache
-digest and count are evidence, never trusted input.
+result through the bounded package graph and manifest-supplied complete binding. It first requires
+the full selected table to relift to the manifest-bound state/grid, topology, ruling operations,
+payload/property/formula counts and selected/unselected table cardinality. It then removes only
+validated renderer `linesegarray` caches, replaces only the selected-table span with a marker and
+requires the remaining section exterior to match.
+
+The exact current renderer may serialize an empty `<hp:run><hp:t/></hp:run>` as `<hp:run/>` and may
+add the three zero-valued `pageBreak`, `columnBreak` and `merged` attributes to the bound outer-case
+anchor paragraph. The reader treats only a content-free self-closing run as an empty scaffold. The
+oracle normalizes the three attributes only at that exact anchor after typed table equivalence;
+unknown exterior or nested-control drift fails closed. Renderer cache digest and count remain
+evidence, never trusted input.
 
 ## Evidence promotion rule
 
-Passing the fifteen adapter tests and private tamper suite promotes only TABLE-002/003 from
+Passing the twenty-two adapter tests and private tamper suite promotes only TABLE-002/003 from
 `component_only / unit_passed` to `direct_hwpx / integration_passed`, with `schema`, static
 `semantic_reopen`, `formula_readback` and `page_split`. It does not prove renderer identity,
 licensed Hangul 2020 save/reopen or target-build behavior, general structural-formula native
@@ -125,3 +132,10 @@ Passing the target generator, synthetic self-identity oracle and batch static te
 that stage. Target-build, renderer and licensed-Hangul fields may change only after the exact
 current-PC batch outputs, PDFs and independent oracle receipts exist and are reviewed. Automation
 runtime and differential fields remain separate later gates.
+
+Exact-target contract v2 binds successful attempt 08, all five immutable inputs, create-only HWPX
+outputs, PDFs, trace/progress, typed oracle results and original-detail PDF review. It also preserves
+attempts 01-07 as failed/interrupted evidence. Passing v2 promotes only TABLE-002/003 to
+`direct_hwpx / oracle_verified` for Hangul 2020 `11.0.0.9136`, x86, `ko-KR`, with `target_build`,
+`render_diff` and a successful retry. It does not change automation or differential state and does
+not close P06-09, P06, production or product completion.

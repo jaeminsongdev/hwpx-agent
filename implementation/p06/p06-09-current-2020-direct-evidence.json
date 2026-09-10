@@ -40,11 +40,11 @@
     {
       "feature_ids": ["TABLE-002", "TABLE-003"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["formula_readback", "page_split", "render_diff", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "differential_state": "not_run",
       "evidence_files": [
         {
@@ -53,7 +53,15 @@
         },
         {
           "path": "implementation/p06/P06-09_TABLE_RULING_HWPX_REPORT.md",
-          "sha256": "9a5fabdba91a655d2eab188fcd18b36fb9cce1e037fe8ac46e11e58447b44e9c"
+          "sha256": "011d26a5ff8b7e55c4100b41d22a36fdcadcedf827929eb5bb98e1f2206a53bb"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_RULING_TARGET_READBACK_REPORT.md",
+          "sha256": "652ebe6efa29c8bed559c7683a819b9a121a689347a78d8e9fbf2c93ebcf02ca"
+        },
+        {
+          "path": "implementation/p06/evidence/target/p06-table-ruling.current-2020.attempt08.v2.json",
+          "sha256": "be368f7ed2a9b97390773e5cb84d0529ab85eacadeca216565a14abe035fc016"
         }
       ]
     },

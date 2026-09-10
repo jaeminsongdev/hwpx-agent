@@ -2613,15 +2613,15 @@ fn is_empty_scaffold(
     document: &PreservingXmlDocument,
     paragraph: usize,
 ) -> Result<bool, TableRulingHwpxError> {
-    let mut saw_text = false;
+    let mut saw_empty_content = false;
     for (index, value) in document.elements().iter().enumerate() {
         if index == paragraph || !is_descendant(document, index, paragraph)? {
             continue;
         }
         match value.name().local_name() {
-            "run" => {}
+            "run" => saw_empty_content = true,
             "t" if has_name(value, "t") => {
-                saw_text = true;
+                saw_empty_content = true;
                 let span = value
                     .content_span()
                     .ok_or(TableRulingHwpxError::UnsupportedCellShape)?;
@@ -2635,7 +2635,7 @@ fn is_empty_scaffold(
             _ => return Ok(false),
         }
     }
-    Ok(saw_text)
+    Ok(saw_empty_content)
 }
 
 fn has_formula_descendant(

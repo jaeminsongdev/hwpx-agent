@@ -1,0 +1,321 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-ruling-current-2020-evidence/v2",
+  "evidence_id": "p06.table-ruling.current-2020.attempt08.20260910",
+  "scope": "exact_current_pc_hancom_2020_table_002_003_save_reopen_pdf_and_independent_oracle",
+  "attempt": {
+    "id": "20260910-08",
+    "directory": "fixtures/target-build/p06-09-table-ruling-target-20260910-06",
+    "manifest": {
+      "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/fixture-manifest.json",
+      "sha256": "8296cf4057c1cb6b27c800c15694866008c31cfa290cd6863321179c1efda543",
+      "bytes": 19283
+    },
+    "trace": {
+      "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-08.json",
+      "sha256": "fdc0fc426575bf6bfdf604a8910c617403d19f3f5ef6994007533cedf0aa3b77",
+      "bytes": 7778,
+      "state": "pass"
+    },
+    "progress": {
+      "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-08.json.progress.jsonl",
+      "sha256": "af6487eac34ffe2c642c96e036ec183d1cbd7bdbf306da8fb98dcbec240afc67",
+      "bytes": 28432,
+      "events": 85,
+      "terminal": "pass"
+    },
+    "target": {
+      "product": "Hancom Hangul 2020",
+      "prog_id": "HWPFrame.HwpObject.2",
+      "registry_view": "Registry32",
+      "client": "windows_powershell_x86_sta",
+      "build": "11.0.0.9136",
+      "architecture": "x86",
+      "locale": "ko-KR",
+      "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+    },
+    "completed_cases": 5,
+    "failed_case_id": null,
+    "timed_out": false,
+    "remaining_hwp_process_count": 0
+  },
+  "cases": [
+    {
+      "case_id": "table-002-draw-outer",
+      "feature_id": "TABLE-002",
+      "capability_id": "table.draw",
+      "operations": ["draw_outer_rectangle"],
+      "input": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-002-draw-outer.hwpx",
+        "sha256": "ff83b76da99190205d07dd612b6a2c94f2947aea1071eb80453b6a0493844114",
+        "bytes": 13159,
+        "unchanged": true
+      },
+      "output": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-002-draw-outer.hancom-2020-readback.hwpx",
+        "sha256": "aee474cc7ad6a628ca2cdcad3ded5d9429292ce61122c94566b55482b84f7eb7",
+        "bytes": 15707,
+        "section_sha256": "c6acf9f1ffee8055570702b35bae119471e2e5bb55eecda7fad06f9350093903"
+      },
+      "pdf": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-002-draw-outer.hancom-2020-render.pdf",
+        "sha256": "1061666c4a23e62ad10725c19bb090c59f1ac7445c63405278947a20d35d8ff0",
+        "bytes": 10343,
+        "pages": 1
+      },
+      "oracle": {
+        "state": "pass",
+        "target_state_sha256": "b699efa43f7f864d015af00cbb095b820dde1c060d78f63d5736cb7da6d48ba7",
+        "target_grid_sha256": "d5dd345b4a53f008fb9445bbc9c122181781e31174bf603474e56e1bcff35f15",
+        "rows": 1,
+        "columns": 1,
+        "master_cells": 1,
+        "payload_blocks": 0,
+        "formulas": 0,
+        "document_formula_fields": 1,
+        "renderer_cache_count": 11,
+        "renderer_cache_sha256": "1d4d7403855b8e5baae440e1c5487d806f3bc43df54b85a8adae51922409d3de",
+        "typed_selected_table_and_section_exterior_equal_after_renderer_normalization": true
+      }
+    },
+    {
+      "case_id": "table-002-draw-topology",
+      "feature_id": "TABLE-002",
+      "capability_id": "table.draw",
+      "operations": ["draw_full_row", "draw_full_column", "draw_local_cell_split", "draw_existing_boundary_style"],
+      "input": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-002-draw-topology.hwpx",
+        "sha256": "1d5b4f344616195caf90394a1ef689987f2e8d71000853e81f049044b9fc22c1",
+        "bytes": 13098,
+        "unchanged": true
+      },
+      "output": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-002-draw-topology.hancom-2020-readback.hwpx",
+        "sha256": "db6512e8c3f73aa77b41ce63214018c3229ee5777f6429da2234d0a5d3b644ce",
+        "bytes": 15582,
+        "section_sha256": "80f5f8a347038b3f4b8611a9ab08668a99a088f7ec0c653b0d16771bfe80a42a"
+      },
+      "pdf": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-002-draw-topology.hancom-2020-render.pdf",
+        "sha256": "95f5daa50a95dc109d4c9cf2d295e65773f9e831ac55d3a45f25a2d7224e519c",
+        "bytes": 11820,
+        "pages": 1
+      },
+      "oracle": {
+        "state": "pass",
+        "target_state_sha256": "95775beb2c88b0e86678f79ff5a2480cd9a8821b33f3a55528ae515bc6126c3d",
+        "target_grid_sha256": "9920e9cc1fad918371bc27be1ba5064945249b13d56903e95932a373e0b57bef",
+        "rows": 3,
+        "columns": 6,
+        "master_cells": 16,
+        "payload_blocks": 8,
+        "formulas": 0,
+        "document_formula_fields": 0,
+        "renderer_cache_count": 18,
+        "renderer_cache_sha256": "b51a3c63a181c302a3099406e5687dbf99658bde282f3804634f0256d223ee91",
+        "typed_selected_table_and_section_exterior_equal_after_renderer_normalization": true
+      }
+    },
+    {
+      "case_id": "table-002-draw-diagonals-formula",
+      "feature_id": "TABLE-002",
+      "capability_id": "table.draw",
+      "operations": ["draw_slash_on_formula_cell", "draw_back_slash_on_formula_cell"],
+      "input": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-002-draw-diagonals-formula.hwpx",
+        "sha256": "165c3e047613d1436109b331dc8ad6c8510c86a06444fedaa6dbbec42db7dd41",
+        "bytes": 13163,
+        "unchanged": true
+      },
+      "output": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-002-draw-diagonals-formula.hancom-2020-readback.hwpx",
+        "sha256": "8e32478939af67bbbd423569c5d892f0f5ed2964a5bdbc04f740aac6b71dc080",
+        "bytes": 16397,
+        "section_sha256": "be41331b206e7b8d46e44336e2cfd5e48517158bbae7686985c45f72c2c3c3aa"
+      },
+      "pdf": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-002-draw-diagonals-formula.hancom-2020-render.pdf",
+        "sha256": "2e6344f68218572c56f457f819d2a374f5055aa895a29575dc0cb092ceb4deb3",
+        "bytes": 10301,
+        "pages": 1
+      },
+      "oracle": {
+        "state": "pass",
+        "target_state_sha256": "a750ae617e1cb614b0a1039827becef629d64369b95ca9932aae11e05c49bfd3",
+        "target_grid_sha256": "6446e6b076e686123a3abb4ab574326a95986aa35e84e95d68230fe38a11e305",
+        "rows": 2,
+        "columns": 4,
+        "master_cells": 8,
+        "payload_blocks": 7,
+        "formulas": 1,
+        "document_formula_fields": 1,
+        "renderer_cache_count": 10,
+        "renderer_cache_sha256": "d0188128d0edb1d326cb79f2a775d645315377c9ac57f07406a05c889e22e9d0",
+        "typed_selected_table_and_section_exterior_equal_after_renderer_normalization": true
+      }
+    },
+    {
+      "case_id": "table-003-eraser-structural-merge",
+      "feature_id": "TABLE-003",
+      "capability_id": "table.eraser",
+      "operations": ["erase_shared_column_edge"],
+      "input": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-003-eraser-structural-merge.hwpx",
+        "sha256": "995f8ec498c12bc8c3f43869f907c89722cf735496b54164812e307e8338d516",
+        "bytes": 12920,
+        "unchanged": true
+      },
+      "output": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-003-eraser-structural-merge.hancom-2020-readback.hwpx",
+        "sha256": "46506cc0b0aeb5190b2676f8e9fbc3b874ce33575d0157ea52800d9ab49dc6e9",
+        "bytes": 14875,
+        "section_sha256": "74813b3e33008d92e1ede51b592e42a3d9d1c2309bd7e0e1b936ceac94de1912"
+      },
+      "pdf": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-003-eraser-structural-merge.hancom-2020-render.pdf",
+        "sha256": "29d71fd623c884fdc05a214fd04f6cc802636bd1a0fd7ee6562073a32964508d",
+        "bytes": 10244,
+        "pages": 1
+      },
+      "oracle": {
+        "state": "pass",
+        "target_state_sha256": "0acc0b40bd725855a3c014f4553fd601d06eaef401a6e6d9a518e859ac4fb639",
+        "target_grid_sha256": "95ec59d2ad44c2a1a1e3bc5ba990d28cc4a3e9585bee9f88fb7d9ec4164bf37f",
+        "rows": 2,
+        "columns": 4,
+        "master_cells": 6,
+        "payload_blocks": 8,
+        "formulas": 0,
+        "document_formula_fields": 0,
+        "renderer_cache_count": 10,
+        "renderer_cache_sha256": "88469437b52c9d59b36ea2b3ec3bde586cdf260e83c8b162370a75bb7cddc9fe",
+        "typed_selected_table_and_section_exterior_equal_after_renderer_normalization": true
+      }
+    },
+    {
+      "case_id": "table-003-eraser-transparent-formula",
+      "feature_id": "TABLE-003",
+      "capability_id": "table.eraser",
+      "operations": ["erase_outer_edge_on_formula_cell"],
+      "input": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-003-eraser-transparent-formula.hwpx",
+        "sha256": "c2198bba2da81c2213967d817432782281bd464ec13e3b6bf9d2a449df9c0e1e",
+        "bytes": 13132,
+        "unchanged": true
+      },
+      "output": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-003-eraser-transparent-formula.hancom-2020-readback.hwpx",
+        "sha256": "a61f86e54430e028044441a92892a15b3cf17d3fc97b2628022aedadb8ee4e77",
+        "bytes": 15147,
+        "section_sha256": "be41331b206e7b8d46e44336e2cfd5e48517158bbae7686985c45f72c2c3c3aa"
+      },
+      "pdf": {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-003-eraser-transparent-formula.hancom-2020-render.pdf",
+        "sha256": "f3ee76ca0cec1ec5765a18cf0bb2b14cf3520ef5004d52d0e8678f0fc4a50d44",
+        "bytes": 10282,
+        "pages": 1
+      },
+      "oracle": {
+        "state": "pass",
+        "target_state_sha256": "ee7623487e0fedaa7ac3dc7cf2caedf2b918df6cb07b40a6e889083ae37443b5",
+        "target_grid_sha256": "f1a8fbc48bd5afb046de2de9343892f767a91ae8b4bf2037f1b0e39a537d78b9",
+        "rows": 2,
+        "columns": 4,
+        "master_cells": 8,
+        "payload_blocks": 7,
+        "formulas": 1,
+        "document_formula_fields": 1,
+        "renderer_cache_count": 10,
+        "renderer_cache_sha256": "d0188128d0edb1d326cb79f2a775d645315377c9ac57f07406a05c889e22e9d0",
+        "typed_selected_table_and_section_exterior_equal_after_renderer_normalization": true
+      }
+    }
+  ],
+  "render_review": {
+    "state": "pass",
+    "engine": "pdftoppm 26.07.0",
+    "dpi": 144,
+    "page_size_points": [595, 841],
+    "pixel_size": [1190, 1682],
+    "producer": "Hancom PDF 1.3.0.550",
+    "pdf_version": "1.4",
+    "all_pages_inspected": true,
+    "inspection_detail": "original",
+    "clipping": false,
+    "overlap": false,
+    "blank_pages": [],
+    "black_boxes": false,
+    "rendered_png_retention": "ephemeral_review_intermediate_not_product_input",
+    "pages": [
+      {
+        "case_id": "table-002-draw-outer",
+        "png_sha256": "7f3e8412d3edd2c82e59d3f080e028a23ac09f4b888c892a29ab1f508861edae",
+        "png_bytes": 11858,
+        "finding": "original_2x4_table_plus_separate_empty_outer_rectangle_visible"
+      },
+      {
+        "case_id": "table-002-draw-topology",
+        "png_sha256": "3df44988681517073c6671795268683aec78afd80ceb49d97e6ab2a2e5b822e4",
+        "png_bytes": 11892,
+        "finding": "3x6_lattice_full_row_and_column_strokes_local_split_and_style_change_visible"
+      },
+      {
+        "case_id": "table-002-draw-diagonals-formula",
+        "png_sha256": "c34bf319b6461e4229b4e20bc808c76246d1542cca3e9c505ed172f983d6d7fe",
+        "png_bytes": 14158,
+        "finding": "both_directional_diagonals_visible_in_formula_cell"
+      },
+      {
+        "case_id": "table-003-eraser-structural-merge",
+        "png_sha256": "6a68f0ae808653d72044d3fbae0c92737d6ac083bccb9b692c5b239d893578c5",
+        "png_bytes": 11992,
+        "finding": "shared_vertical_edge_removed_as_two_row_structural_merges_with_payload_order_visible"
+      },
+      {
+        "case_id": "table-003-eraser-transparent-formula",
+        "png_sha256": "e286abf50e79bd7be0c307736c4f748338774696aaec34616404b41787d826aa",
+        "png_bytes": 11812,
+        "finding": "formula_cell_outer_bottom_and_right_lines_render_transparent_without_topology_change"
+      }
+    ]
+  },
+  "retry_evidence": {
+    "state": "pass",
+    "failed_or_interrupted_attempts_preserved": 7,
+    "successful_create_only_attempt": "20260910-08",
+    "same_manifest_and_input_digests": true,
+    "partial_output_promoted": false,
+    "input_unchanged": true,
+    "owned_process_cleanup_bounded": true
+  },
+  "safety": {
+    "raw_document_text_retained": false,
+    "user_document_scanned": false,
+    "external_network_invoked": false,
+    "registry_or_system_setting_changed": false,
+    "computer_use_click_or_type_invoked": false,
+    "source_packages_modified": false
+  },
+  "gate_decision": {
+    "TABLE-002": "oracle_verified",
+    "TABLE-003": "oracle_verified",
+    "actual_hancom_2020_save_reopen": true,
+    "actual_hancom_2020_target_build": true,
+    "render_diff": true,
+    "rollback_or_retry": true,
+    "automation_runtime": "not_run",
+    "differential": "not_run",
+    "p06_09": "in_progress",
+    "p06": "in_progress"
+  },
+  "not_claimed": {
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "arbitrary_user_document_compatibility": false,
+    "structural_formula_native_lowering": false,
+    "other_pc_or_hancom_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

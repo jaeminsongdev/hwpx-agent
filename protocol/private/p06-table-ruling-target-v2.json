@@ -1,0 +1,305 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-ruling-target-contract/v2",
+  "scope": "p06_09_table_002_003_exact_current_pc_hancom_2020_save_reopen_pdf_typed_oracle",
+  "predecessor": {
+    "path": "protocol/private/p06-table-ruling-hwpx-v1.json",
+    "sha256": "e0fcf22c9435ef2341c1dda7a5f11d2e257cfc212646151981e4ee6a1df5861e",
+    "state": "immutable_static_direct_hwpx_integration_contract"
+  },
+  "source_lock_canonicalization": "exact_file_bytes_sha256",
+  "source_locks": [
+    {
+      "path": "protocol/private/p06-table-ruling-hwpx-v1.json",
+      "sha256": "e0fcf22c9435ef2341c1dda7a5f11d2e257cfc212646151981e4ee6a1df5861e"
+    },
+    {
+      "path": "tools/p06/validate_table_ruling_hwpx_contract.py",
+      "sha256": "a42bd226b1e8c3889c3a4741117d708585cb76d3a39a41e635b407a3e3a9251a"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_ruling_hwpx.rs",
+      "sha256": "3afdb73ba60a28a8b65e4367ef61dd9aa770a8ec2224e967d94ee42aa66f2dfc"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_09_table_ruling_target_fixture.rs",
+      "sha256": "152a0837a4491d5b7e0403436d8feaef99f88e6ab02824b23f55e98ab1fc776f"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_09_table_ruling_target_oracle.rs",
+      "sha256": "c14ba4a18ff01b0159452026a09db064b20574791d8fc2fc92c97b5d71f24585"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-ruling-target-batch-engine.ps1",
+      "sha256": "af38ada1940600846e832a4504fa959e0f8de60bb2d4b4b2a1461355ea8ddb9a"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-ruling-target-batch-readback.ps1",
+      "sha256": "2d619d02655ee9b5544d26d1d4d36286ca025a802801ef29b3940542788942da"
+    },
+    {
+      "path": "implementation/p06/tests/Test-Hancom2020TableRulingTargetBatchReadback.ps1",
+      "sha256": "c815df86e664c107d60ec572275f444d02012b9106bf5c6ded7a919f96d74507"
+    }
+  ],
+  "exact_target": {
+    "product": "Hancom Hangul 2020",
+    "prog_id": "HWPFrame.HwpObject.2",
+    "registry_view": "Registry32",
+    "client": "windows_powershell_x86_sta",
+    "build": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+  },
+  "successful_attempt": {
+    "id": "20260910-08",
+    "directory": "fixtures/target-build/p06-09-table-ruling-target-20260910-06",
+    "manifest": {
+      "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/fixture-manifest.json",
+      "sha256": "8296cf4057c1cb6b27c800c15694866008c31cfa290cd6863321179c1efda543",
+      "bytes": 19283
+    },
+    "trace": {
+      "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-08.json",
+      "sha256": "fdc0fc426575bf6bfdf604a8910c617403d19f3f5ef6994007533cedf0aa3b77",
+      "bytes": 7778
+    },
+    "progress": {
+      "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-08.json.progress.jsonl",
+      "sha256": "af6487eac34ffe2c642c96e036ec183d1cbd7bdbf306da8fb98dcbec240afc67",
+      "bytes": 28432,
+      "events": 85
+    },
+    "receipt": {
+      "path": "implementation/p06/evidence/target/p06-table-ruling.current-2020.attempt08.v2.json",
+      "sha256": "be368f7ed2a9b97390773e5cb84d0529ab85eacadeca216565a14abe035fc016",
+      "bytes": 13741
+    },
+    "case_count": 5,
+    "operation_count": 9,
+    "state": "pass"
+  },
+  "historical_attempts": {
+    "failed_or_interrupted_attempt_ids": [
+      "20260910-01",
+      "20260910-02",
+      "20260910-03",
+      "20260910-04",
+      "20260910-05",
+      "20260910-06",
+      "20260910-07"
+    ],
+    "evidence": [
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-05/table-ruling-target-batch-readback-20260910-01.json",
+        "sha256": "e2245f4a2b83da7fe9d13dc056601be1b83610e86c6cff5de21d205ab68ac295",
+        "bytes": 5083
+      },
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-05/table-ruling-target-batch-readback-20260910-01.json.progress.jsonl",
+        "sha256": "6405d82fa700ebd0ebcae97f8d6a03ae3ee7267605038c83b412772ab2be6ee4",
+        "bytes": 914
+      },
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-02.json",
+        "sha256": "a235db11c484a4242cd6a80e646dc7db662bd58bf61a85c3eb9c7f8d8f538e33",
+        "bytes": 5164
+      },
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-02.json.progress.jsonl",
+        "sha256": "cfe18c6d31518bc57e3006ef684537bfa99066df4de2c3796ed527bf2d5058b0",
+        "bytes": 920
+      },
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-03.json.progress.jsonl",
+        "sha256": "ed4516e1c1ab0e153ee174f46bb393b0064097f05a27218a3fbe55f9d42d9c6d",
+        "bytes": 922
+      },
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-04.json",
+        "sha256": "a235db11c484a4242cd6a80e646dc7db662bd58bf61a85c3eb9c7f8d8f538e33",
+        "bytes": 5164
+      },
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-04.json.progress.jsonl",
+        "sha256": "b9136ac2ae1903e9816bc40d97aeb7452d13efe5d0d39b7f5c6ba20593efa48d",
+        "bytes": 922
+      },
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-05.json",
+        "sha256": "a235db11c484a4242cd6a80e646dc7db662bd58bf61a85c3eb9c7f8d8f538e33",
+        "bytes": 5164
+      },
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-05.json.progress.jsonl",
+        "sha256": "36c7d260f9c55bdfb79f90fafaa4865fb45e9ccbb26edf8940a13079e2401696",
+        "bytes": 922
+      },
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-06.json",
+        "sha256": "a235db11c484a4242cd6a80e646dc7db662bd58bf61a85c3eb9c7f8d8f538e33",
+        "bytes": 5164
+      },
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-06.json.progress.jsonl",
+        "sha256": "0438a1a5f63c212ecf6026f15759e891f84641724b129763b40ad33b781ff01a",
+        "bytes": 917
+      },
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-07.json",
+        "sha256": "dc645587ab1064103aec2b60e19fb6b3e2f37f58f518bb4cd1597ee7fea6b1e0",
+        "bytes": 5163
+      },
+      {
+        "path": "fixtures/target-build/p06-09-table-ruling-target-20260910-06/table-ruling-target-batch-readback-20260910-07.json.progress.jsonl",
+        "sha256": "8c8fe908745c8e3bf90d4d9323993f5627c9f5b56e79a3aef4f0208b42f7f6e5",
+        "bytes": 919
+      }
+    ],
+    "promoted_to_pass": 0,
+    "decision": "immutable_failed_or_interrupted_evidence"
+  },
+  "cases": [
+    {
+      "case_id": "table-002-draw-outer",
+      "feature_id": "TABLE-002",
+      "capability_id": "table.draw",
+      "input_sha256": "ff83b76da99190205d07dd612b6a2c94f2947aea1071eb80453b6a0493844114",
+      "output_sha256": "aee474cc7ad6a628ca2cdcad3ded5d9429292ce61122c94566b55482b84f7eb7",
+      "pdf_sha256": "1061666c4a23e62ad10725c19bb090c59f1ac7445c63405278947a20d35d8ff0",
+      "target_state_sha256": "b699efa43f7f864d015af00cbb095b820dde1c060d78f63d5736cb7da6d48ba7",
+      "target_grid_sha256": "d5dd345b4a53f008fb9445bbc9c122181781e31174bf603474e56e1bcff35f15",
+      "rows": 1,
+      "columns": 1,
+      "master_cells": 1,
+      "payload_blocks": 0,
+      "formulas": 0,
+      "document_formula_fields": 1,
+      "renderer_cache_count": 11,
+      "renderer_cache_sha256": "1d4d7403855b8e5baae440e1c5487d806f3bc43df54b85a8adae51922409d3de"
+    },
+    {
+      "case_id": "table-002-draw-topology",
+      "feature_id": "TABLE-002",
+      "capability_id": "table.draw",
+      "input_sha256": "1d5b4f344616195caf90394a1ef689987f2e8d71000853e81f049044b9fc22c1",
+      "output_sha256": "db6512e8c3f73aa77b41ce63214018c3229ee5777f6429da2234d0a5d3b644ce",
+      "pdf_sha256": "95f5daa50a95dc109d4c9cf2d295e65773f9e831ac55d3a45f25a2d7224e519c",
+      "target_state_sha256": "95775beb2c88b0e86678f79ff5a2480cd9a8821b33f3a55528ae515bc6126c3d",
+      "target_grid_sha256": "9920e9cc1fad918371bc27be1ba5064945249b13d56903e95932a373e0b57bef",
+      "rows": 3,
+      "columns": 6,
+      "master_cells": 16,
+      "payload_blocks": 8,
+      "formulas": 0,
+      "document_formula_fields": 0,
+      "renderer_cache_count": 18,
+      "renderer_cache_sha256": "b51a3c63a181c302a3099406e5687dbf99658bde282f3804634f0256d223ee91"
+    },
+    {
+      "case_id": "table-002-draw-diagonals-formula",
+      "feature_id": "TABLE-002",
+      "capability_id": "table.draw",
+      "input_sha256": "165c3e047613d1436109b331dc8ad6c8510c86a06444fedaa6dbbec42db7dd41",
+      "output_sha256": "8e32478939af67bbbd423569c5d892f0f5ed2964a5bdbc04f740aac6b71dc080",
+      "pdf_sha256": "2e6344f68218572c56f457f819d2a374f5055aa895a29575dc0cb092ceb4deb3",
+      "target_state_sha256": "a750ae617e1cb614b0a1039827becef629d64369b95ca9932aae11e05c49bfd3",
+      "target_grid_sha256": "6446e6b076e686123a3abb4ab574326a95986aa35e84e95d68230fe38a11e305",
+      "rows": 2,
+      "columns": 4,
+      "master_cells": 8,
+      "payload_blocks": 7,
+      "formulas": 1,
+      "document_formula_fields": 1,
+      "renderer_cache_count": 10,
+      "renderer_cache_sha256": "d0188128d0edb1d326cb79f2a775d645315377c9ac57f07406a05c889e22e9d0"
+    },
+    {
+      "case_id": "table-003-eraser-structural-merge",
+      "feature_id": "TABLE-003",
+      "capability_id": "table.eraser",
+      "input_sha256": "995f8ec498c12bc8c3f43869f907c89722cf735496b54164812e307e8338d516",
+      "output_sha256": "46506cc0b0aeb5190b2676f8e9fbc3b874ce33575d0157ea52800d9ab49dc6e9",
+      "pdf_sha256": "29d71fd623c884fdc05a214fd04f6cc802636bd1a0fd7ee6562073a32964508d",
+      "target_state_sha256": "0acc0b40bd725855a3c014f4553fd601d06eaef401a6e6d9a518e859ac4fb639",
+      "target_grid_sha256": "95ec59d2ad44c2a1a1e3bc5ba990d28cc4a3e9585bee9f88fb7d9ec4164bf37f",
+      "rows": 2,
+      "columns": 4,
+      "master_cells": 6,
+      "payload_blocks": 8,
+      "formulas": 0,
+      "document_formula_fields": 0,
+      "renderer_cache_count": 10,
+      "renderer_cache_sha256": "88469437b52c9d59b36ea2b3ec3bde586cdf260e83c8b162370a75bb7cddc9fe"
+    },
+    {
+      "case_id": "table-003-eraser-transparent-formula",
+      "feature_id": "TABLE-003",
+      "capability_id": "table.eraser",
+      "input_sha256": "c2198bba2da81c2213967d817432782281bd464ec13e3b6bf9d2a449df9c0e1e",
+      "output_sha256": "a61f86e54430e028044441a92892a15b3cf17d3fc97b2628022aedadb8ee4e77",
+      "pdf_sha256": "f3ee76ca0cec1ec5765a18cf0bb2b14cf3520ef5004d52d0e8678f0fc4a50d44",
+      "target_state_sha256": "ee7623487e0fedaa7ac3dc7cf2caedf2b918df6cb07b40a6e889083ae37443b5",
+      "target_grid_sha256": "f1a8fbc48bd5afb046de2de9343892f767a91ae8b4bf2037f1b0e39a537d78b9",
+      "rows": 2,
+      "columns": 4,
+      "master_cells": 8,
+      "payload_blocks": 7,
+      "formulas": 1,
+      "document_formula_fields": 1,
+      "renderer_cache_count": 10,
+      "renderer_cache_sha256": "d0188128d0edb1d326cb79f2a775d645315377c9ac57f07406a05c889e22e9d0"
+    }
+  ],
+  "render_oracle": {
+    "state": "pass",
+    "pdf_count": 5,
+    "pages_each": 1,
+    "page_size_points": [595, 841],
+    "producer": "Hancom PDF 1.3.0.550",
+    "renderer": "pdftoppm 26.07.0",
+    "dpi": 144,
+    "pixel_size": [1190, 1682],
+    "inspection_detail": "original",
+    "clipping": false,
+    "overlap": false,
+    "blank_pages": [],
+    "black_boxes": false
+  },
+  "gate_decision": {
+    "TABLE-002": "oracle_verified",
+    "TABLE-003": "oracle_verified",
+    "actual_hancom_2020_save_reopen": "pass",
+    "actual_hancom_2020_target_build": "pass",
+    "render_diff": "pass",
+    "rollback_or_retry": "pass",
+    "automation_runtime": "not_run",
+    "differential": "not_run",
+    "p06_09": "in_progress",
+    "p06": "in_progress"
+  },
+  "failure_policy": [
+    "predecessor_or_source_lock_drift_rejects",
+    "manifest_input_output_pdf_trace_progress_or_receipt_drift_rejects",
+    "duplicate_json_key_path_escape_symlink_or_size_limit_rejects",
+    "target_binary_identity_or_case_order_drift_rejects",
+    "typed_state_grid_topology_payload_formula_or_cache_receipt_drift_rejects",
+    "unexpected_pdf_page_encryption_javascript_or_signature_drift_rejects",
+    "historical_failed_or_interrupted_evidence_is_never_promoted",
+    "automation_differential_other_version_p06_production_or_product_claim_rejects"
+  ],
+  "migration": "protocol/migrations/p06-table-ruling-hwpx-v1-to-target-v2.md",
+  "report": "implementation/p06/P06-09_TABLE_RULING_TARGET_READBACK_REPORT.md",
+  "evidence_receipt": "implementation/p06/evidence/target/p06-table-ruling.current-2020.attempt08.v2.json",
+  "not_claimed": {
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "arbitrary_user_document_compatibility": false,
+    "structural_formula_native_lowering": false,
+    "other_pc_or_hancom_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

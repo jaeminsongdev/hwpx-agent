@@ -288,8 +288,8 @@ fn run(arguments: &Arguments) -> Result<(), Box<dyn Error>> {
 
     let (target_section, target_cache) = strip_renderer_caches(&target.section)?;
     let (oracle_section, oracle_cache) = strip_renderer_caches(&oracle.section)?;
-    if target_cache.count != 0 || target_section != oracle_section {
-        return Err("ruling section differs beyond renderer caches".into());
+    if target_cache.count != 0 {
+        return Err("ruling target unexpectedly contains renderer caches".into());
     }
     let target_table_count = count_elements(&target_section, "tbl")?;
     let oracle_table_count = count_elements(&oracle_section, "tbl")?;
@@ -323,6 +323,7 @@ fn run(arguments: &Arguments) -> Result<(), Box<dyn Error>> {
     require_case_semantics(profile, case, &target_readback)?;
     require_equivalent_readback(&target_readback, &oracle_readback)?;
     require_case_semantics(profile, case, &oracle_readback)?;
+    require_selected_table_exterior_equal(profile, &target_section, &oracle_section)?;
 
     require_digest(
         &read_bounded_file(&target_path, MAX_FILE_BYTES)?,
@@ -358,7 +359,7 @@ fn print_receipt(
             "target_state_sha256={} target_grid_sha256={} rows={} columns={} ",
             "master_cells={} payload_blocks={} formulas={} document_formula_fields={} ",
             "renderer_cache_count={} renderer_cache_sha256={} ",
-            "section_equal_after_renderer_cache_strip=true"
+            "typed_selected_table_and_section_exterior_equal_after_renderer_normalization=true"
         ),
         profile.case_id,
         profile.feature_id,
@@ -670,6 +671,105 @@ fn require_equivalent_readback(
         return Err("ruling typed oracle readback differs".into());
     }
     Ok(())
+}
+
+fn require_selected_table_exterior_equal(
+    profile: CaseProfile,
+    target: &[u8],
+    oracle: &[u8],
+) -> Result<(), Box<dyn Error>> {
+    let target_exterior = selected_table_exterior(target, profile.selected_table_ordinal)?;
+    let oracle_exterior = selected_table_exterior(oracle, profile.selected_table_ordinal)?;
+    let target_exterior = normalize_outer_anchor(profile, target_exterior)?;
+    let oracle_exterior = normalize_outer_anchor(profile, oracle_exterior)?;
+    if target_exterior != oracle_exterior {
+        return Err("ruling section exterior differs beyond admitted normalization".into());
+    }
+    Ok(())
+}
+
+fn selected_table_exterior(section: &[u8], ordinal: usize) -> Result<Vec<u8>, Box<dyn Error>> {
+    const MARKER: &[u8] = b"<hwpx-agent-selected-table/>";
+    let document = PreservingXmlDocument::parse(section)?;
+    let table = document
+        .elements()
+        .iter()
+        .filter(|element| has_name(element, "tbl"))
+        .nth(ordinal)
+        .ok_or("selected ruling table is missing")?;
+    let span = table
+        .outer_span()
+        .ok_or("selected ruling table span is missing")?;
+    let prefix = section
+        .get(..span.start())
+        .ok_or("selected ruling table prefix is outside section")?;
+    let suffix = section
+        .get(span.end()..)
+        .ok_or("selected ruling table suffix is outside section")?;
+    let capacity = prefix
+        .len()
+        .checked_add(MARKER.len())
+        .and_then(|size| size.checked_add(suffix.len()))
+        .ok_or("selected ruling table exterior size overflow")?;
+    let mut output = Vec::new();
+    output.try_reserve_exact(capacity)?;
+    output.extend_from_slice(prefix);
+    output.extend_from_slice(MARKER);
+    output.extend_from_slice(suffix);
+    Ok(output)
+}
+
+fn normalize_outer_anchor(
+    profile: CaseProfile,
+    section: Vec<u8>,
+) -> Result<Vec<u8>, Box<dyn Error>> {
+    const CANONICAL: &[u8] = concat!(
+        r#"<hp:p id="700" paraPrIDRef="0" styleIDRef="0">"#,
+        r#"<hp:run charPrIDRef="0"><hwpx-agent-selected-table/>"#,
+    )
+    .as_bytes();
+    const HANCOM_2020: &[u8] = concat!(
+        r#"<hp:p id="700" paraPrIDRef="0" styleIDRef="0" "#,
+        r#"pageBreak="0" columnBreak="0" merged="0">"#,
+        r#"<hp:run charPrIDRef="0"><hwpx-agent-selected-table/>"#,
+    )
+    .as_bytes();
+    if profile.case_id != "table-002-draw-outer" {
+        return Ok(section);
+    }
+    let canonical_count = count_bytes(&section, CANONICAL);
+    let hancom_count = count_bytes(&section, HANCOM_2020);
+    if canonical_count == 1 && hancom_count == 0 {
+        return Ok(section);
+    }
+    if canonical_count != 0 || hancom_count != 1 {
+        return Err("outer ruling anchor normalization shape differs".into());
+    }
+    let start = section
+        .windows(HANCOM_2020.len())
+        .position(|window| window == HANCOM_2020)
+        .ok_or("outer ruling anchor normalization is missing")?;
+    let capacity = section
+        .len()
+        .checked_sub(HANCOM_2020.len())
+        .and_then(|size| size.checked_add(CANONICAL.len()))
+        .ok_or("outer ruling anchor normalization size overflow")?;
+    let mut output = Vec::new();
+    output.try_reserve_exact(capacity)?;
+    output.extend_from_slice(&section[..start]);
+    output.extend_from_slice(CANONICAL);
+    output.extend_from_slice(&section[start + HANCOM_2020.len()..]);
+    Ok(output)
+}
+
+fn count_bytes(source: &[u8], needle: &[u8]) -> usize {
+    if needle.is_empty() || needle.len() > source.len() {
+        return 0;
+    }
+    source
+        .windows(needle.len())
+        .filter(|window| *window == needle)
+        .count()
 }
 
 fn edge_visible(
@@ -1022,5 +1122,31 @@ mod tests {
         let (stripped, evidence) = strip_renderer_caches(source.as_bytes()).unwrap();
         assert_eq!(stripped, expected.as_bytes());
         assert_eq!(evidence.count, 1);
+    }
+
+    #[test]
+    fn selected_table_exterior_admits_only_exact_outer_anchor_defaults() {
+        let target = concat!(
+            r#"<hs:sec xmlns:hs="urn:s" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph">"#,
+            r#"<hp:p id="1"><hp:run><hp:t>KEEP</hp:t></hp:run></hp:p>"#,
+            r#"<hp:tbl id="1"/>"#,
+            r#"<hp:p id="700" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0">"#,
+            r#"<hp:tbl id="700"/><hp:t/></hp:run></hp:p></hs:sec>"#,
+        );
+        let oracle = concat!(
+            r#"<hs:sec xmlns:hs="urn:s" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph">"#,
+            r#"<hp:p id="1"><hp:run><hp:t>KEEP</hp:t></hp:run></hp:p>"#,
+            r#"<hp:tbl id="1"/>"#,
+            r#"<hp:p id="700" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0">"#,
+            r#"<hp:tbl id="700" changed="inside-selected-table"/><hp:t/></hp:run></hp:p></hs:sec>"#,
+        );
+        require_selected_table_exterior_equal(CASES[0], target.as_bytes(), oracle.as_bytes())
+            .unwrap();
+
+        let changed = oracle.replace(">KEEP<", ">CHANGED<");
+        assert!(
+            require_selected_table_exterior_equal(CASES[0], target.as_bytes(), changed.as_bytes(),)
+                .is_err()
+        );
     }
 }

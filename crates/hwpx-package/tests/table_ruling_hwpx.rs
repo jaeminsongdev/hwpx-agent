@@ -944,6 +944,36 @@ fn merged_cell_uses_bound_internal_lattice_and_formula_is_separate_from_payload(
 }
 
 #[test]
+fn hancom_self_closing_empty_run_is_scaffold_not_payload() -> TestResult {
+    let empty = r#"<hp:p id="0" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"/></hp:p>"#;
+    let section = table(&[vec![cell(0, 0, 1, 1, 2000, 1000, 3, empty)]], 1, 1);
+    let binding = binding_with_boundaries(&[0], vec![0, 1000], vec![0, 2000])?;
+    let readback = TableRulingHwpxReader::read_existing(
+        &header()?,
+        &section,
+        0,
+        &binding,
+        TableRulingHwpxLimits::default(),
+    )?;
+    assert_eq!(readback.payload_block_count, 0);
+    assert!(readback.state.cells()[0].payload().is_empty());
+
+    let control = empty.replace("/>", "><hp:ctrl/></hp:run>");
+    let nonempty_section = table(&[vec![cell(0, 0, 1, 1, 2000, 1000, 3, &control)]], 1, 1);
+    assert!(matches!(
+        TableRulingHwpxReader::read_existing(
+            &header()?,
+            &nonempty_section,
+            0,
+            &binding,
+            TableRulingHwpxLimits::default(),
+        ),
+        Err(TableRulingHwpxError::PayloadBindingMismatch)
+    ));
+    Ok(())
+}
+
+#[test]
 fn bindings_extents_payloads_and_shared_edges_fail_closed() -> TestResult {
     let header = header()?;
     let section = ordinary_section();

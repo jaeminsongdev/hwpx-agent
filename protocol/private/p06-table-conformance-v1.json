@@ -33,8 +33,8 @@
     "direct_stage_counts": {
       "cataloged": 0,
       "unit_passed": 4,
-      "integration_passed": 42,
-      "oracle_verified": 15
+      "integration_passed": 40,
+      "oracle_verified": 17
     },
     "automation_binding_counts": {
       "candidate_unverified": 6,
@@ -188,6 +188,14 @@
       "sha256": "9df4d0eaebe9f19d6e5a449a76ee498d359b8ada28a1ea9539428c8d6016cb5c"
     },
     {
+      "path": "crates/hwpx-package/examples/p06_09_table_ruling_target_fixture.rs",
+      "sha256": "152a0837a4491d5b7e0403436d8feaef99f88e6ab02824b23f55e98ab1fc776f"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_09_table_ruling_target_oracle.rs",
+      "sha256": "c14ba4a18ff01b0159452026a09db064b20574791d8fc2fc92c97b5d71f24585"
+    },
+    {
       "path": "crates/hwpx-package/src/lib.rs",
       "sha256": "db4ee0f909792130ce12ed39b7265a8178856a2a21c4c29714a178299f88dbe7"
     },
@@ -209,7 +217,7 @@
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx.rs",
-      "sha256": "83608de1395722c3cc87e92e31ffd08bd91cfee4f97d90cbbff3e590c16fac58"
+      "sha256": "3afdb73ba60a28a8b65e4367ef61dd9aa770a8ec2224e967d94ee42aa66f2dfc"
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/aggregate_hwpx.rs",
@@ -309,7 +317,7 @@
     },
     {
       "path": "crates/hwpx-package/tests/table_ruling_hwpx.rs",
-      "sha256": "6ee321a8c82053158da1a9475f9b833383c7d132d1de2eb7a1f571647c0fbd6b"
+      "sha256": "c9d777d158d8b904f4f21913ea9fcf2c7ec7fe2bc8646c949a1275183e07b548"
     },
     {
       "path": "crates/hwpx-package/tests/table_sort_hwpx.rs",
@@ -409,11 +417,11 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_POLICY.md",
-      "sha256": "d227f1c02c54470cbd3fcc650b0c09cc072e893ecb7a15a85fffe52200bf905a"
+      "sha256": "af8f7f6c110fd9fd62f3bcac35cc70b5524cbc6a78f1cf5ae6ea7de30cd27ada"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "575e393a5ee6a0d9e325011402c7687799bfdd1982554c8115ed641987caf3aa"
+      "sha256": "a97c1247517064a7c3f5df7bfe7744b6b300897cd23ccee614516fca8e7e4664"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CREATE_HWPX_POLICY.md",
@@ -472,6 +480,14 @@
       "sha256": "c05040d72728926109ebf9ccb002d4925f8b59df700285baea41ae27922e029c"
     },
     {
+      "path": "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_POLICY.md",
+      "sha256": "c38662185b62372e47d09d6e23585efb6ee03270d8352f1c7a09caad0d4262ac"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_REPORT.md",
+      "sha256": "e2dceaac4c66edd5f7479c8bc053e6cf0bdc2807612c22e6d81b5523a712720c"
+    },
+    {
       "path": "implementation/p06/P06-09_TABLE_PARTITION_POLICY.md",
       "sha256": "a887777a4f83a9ac8f0d49d482d583b57451c7f4cce7bff04e27bd0baef7a501"
     },
@@ -513,11 +529,11 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_RULING_HWPX_POLICY.md",
-      "sha256": "77e7be0d7da0fbd1b2b06f09e4d267a44cf3c1cc3f5c0db602b36f6ac1190bdc"
+      "sha256": "89a01251ebf0aa096f0e96f8ec030c1e5e0c51d728845ed3e70cfaabaaccd592"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_RULING_HWPX_REPORT.md",
-      "sha256": "9a5fabdba91a655d2eab188fcd18b36fb9cce1e037fe8ac46e11e58447b44e9c"
+      "sha256": "011d26a5ff8b7e55c4100b41d22a36fdcadcedf827929eb5bb98e1f2206a53bb"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_RULING_POLICY.md",
@@ -526,6 +542,10 @@
     {
       "path": "implementation/p06/P06-09_TABLE_RULING_REPORT.md",
       "sha256": "92f91b10fd1de874ff27b7acab6d59701995fe1eb77fcf9278a7c392bbbf4efa"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_RULING_TARGET_READBACK_REPORT.md",
+      "sha256": "652ebe6efa29c8bed559c7683a819b9a121a689347a78d8e9fbf2c93ebcf02ca"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_SORT_HWPX_POLICY.md",
@@ -600,26 +620,6 @@
       "sha256": "e788759fa29b8bfc3ba9b8b0a88b38fbc9803f61eb5ade6ccf47f1711f252c83"
     },
     {
-      "path": "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_POLICY.md",
-      "sha256": "c38662185b62372e47d09d6e23585efb6ee03270d8352f1c7a09caad0d4262ac"
-    },
-    {
-      "path": "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_REPORT.md",
-      "sha256": "e2dceaac4c66edd5f7479c8bc053e6cf0bdc2807612c22e6d81b5523a712720c"
-    },
-    {
-      "path": "implementation/p06/tests/Test-Hancom2020TableNumberFormatSource.ps1",
-      "sha256": "663cd0a5bdd94cb7e4f49682aff9771573d1b58a85772b06a46b57e2a16d9869"
-    },
-    {
-      "path": "implementation/p06/tools/create-hancom-2020-table-number-format-source.ps1",
-      "sha256": "fdf0b3c3b313a9610c55d2801617d02545a74a46654b9f6f42d24a9206c82815"
-    },
-    {
-      "path": "implementation/p06/tools/run-hancom-2020-table-number-format-source.ps1",
-      "sha256": "8b4c599498f583c92f1be87064551da5cb77cd9db134328aa2cd6e62f005396f"
-    },
-    {
       "path": "implementation/p06/P06-09_TABLE_THOUSANDS_POLICY.md",
       "sha256": "d3a4a7bace0eb2be402161af6d83b8ad40c303aa771aa54c8871cebda9dfa557"
     },
@@ -637,7 +637,11 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "f1ed4fbb135d8bf67d63c332ca73370fa97181a2483901a7db812989b9be4252"
+      "sha256": "6988aa1ad36b2be13cd1b000d6193aadea13f2cd098c72ad86c156fe941821e2"
+    },
+    {
+      "path": "implementation/p06/evidence/target/p06-table-ruling.current-2020.attempt08.v2.json",
+      "sha256": "be368f7ed2a9b97390773e5cb84d0529ab85eacadeca216565a14abe035fc016"
     },
     {
       "path": "implementation/p06/p06-09-current-2020-automation-projection.json",
@@ -645,7 +649,31 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "b8b8e6d292902e2076bc867038753035fb169898e8b71df2351b590d1cf991eb"
+      "sha256": "ccc61f4e039fa71c3815573ce4d76468e300286427c14841f2e089880529766a"
+    },
+    {
+      "path": "implementation/p06/tests/Test-Hancom2020TableNumberFormatSource.ps1",
+      "sha256": "663cd0a5bdd94cb7e4f49682aff9771573d1b58a85772b06a46b57e2a16d9869"
+    },
+    {
+      "path": "implementation/p06/tests/Test-Hancom2020TableRulingTargetBatchReadback.ps1",
+      "sha256": "c815df86e664c107d60ec572275f444d02012b9106bf5c6ded7a919f96d74507"
+    },
+    {
+      "path": "implementation/p06/tools/create-hancom-2020-table-number-format-source.ps1",
+      "sha256": "fdf0b3c3b313a9610c55d2801617d02545a74a46654b9f6f42d24a9206c82815"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-number-format-source.ps1",
+      "sha256": "8b4c599498f583c92f1be87064551da5cb77cd9db134328aa2cd6e62f005396f"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-ruling-target-batch-engine.ps1",
+      "sha256": "af38ada1940600846e832a4504fa959e0f8de60bb2d4b4b2a1461355ea8ddb9a"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-ruling-target-batch-readback.ps1",
+      "sha256": "2d619d02655ee9b5544d26d1d4d36286ca025a802801ef29b3940542788942da"
     },
     {
       "path": "protocol/baseline/catalog-v5.lock.json",
@@ -736,6 +764,10 @@
       "sha256": "039e18b2c5fb9cb35df3fdad2fac99b017b2dfd9b25e26c0dd5ac17168735cde"
     },
     {
+      "path": "protocol/migrations/p06-table-number-format-v0-to-v1.md",
+      "sha256": "408ad32e75a844560aafe96c18d1c60c6d943729a48b65d2132a24c219276881"
+    },
+    {
       "path": "protocol/migrations/p06-table-pagination-hwpx-v1-to-target-v2.md",
       "sha256": "b423aed8d140e99fb4ece8987bf219d79fe3e1503b27c8d1867082b14d3a0656"
     },
@@ -762,6 +794,10 @@
     {
       "path": "protocol/migrations/p06-table-ruling-hwpx-v0-to-v1.md",
       "sha256": "4df85c8b7f590b046dcee3c4d2e3b0d7c7a9ec832e732a84313e35261cde0857"
+    },
+    {
+      "path": "protocol/migrations/p06-table-ruling-hwpx-v1-to-target-v2.md",
+      "sha256": "d0a9c06c5c99b0dac98fade725c8b8d866e4dca5ffdb71cf631a54f1d5f1c6a2"
     },
     {
       "path": "protocol/migrations/p06-table-ruling-v0-to-v1.md",
@@ -802,10 +838,6 @@
     {
       "path": "protocol/migrations/p06-table-text-to-table-hwpx-v0-to-v1.md",
       "sha256": "3d5cdb6cc11aa0cd7f697d03f4fe8ea8e76252d8e2786068a5b18a0bdf8882bc"
-    },
-    {
-      "path": "protocol/migrations/p06-table-number-format-v0-to-v1.md",
-      "sha256": "408ad32e75a844560aafe96c18d1c60c6d943729a48b65d2132a24c219276881"
     },
     {
       "path": "protocol/migrations/p06-table-thousands-v0-to-v1.md",
@@ -868,6 +900,10 @@
       "sha256": "01c36673c1d06385f283b78b33d7ec1ba135d153b118991dedba52646b1e2429"
     },
     {
+      "path": "protocol/private/p06-table-number-format-v1.json",
+      "sha256": "92a14a276dada1ba9c7e9013d529e6e1af445ed5da017ae2c996af67f3f8c46a"
+    },
+    {
       "path": "protocol/private/p06-table-pagination-target-v2.json",
       "sha256": "caf963c3421522e57dcf3ddb0e3f190f7da38a7e32b2e1305486c300cb2b85ca"
     },
@@ -893,7 +929,11 @@
     },
     {
       "path": "protocol/private/p06-table-ruling-hwpx-v1.json",
-      "sha256": "c8ad0f3f61d05518bb3312e33b6858d6b4b8a392e44e53cfd592f78f111f6624"
+      "sha256": "e0fcf22c9435ef2341c1dda7a5f11d2e257cfc212646151981e4ee6a1df5861e"
+    },
+    {
+      "path": "protocol/private/p06-table-ruling-target-v2.json",
+      "sha256": "304f1eeb2e88b17426a5752b51a9d0ccfe8e749020e242ed4fdf3b126d8f2964"
     },
     {
       "path": "protocol/private/p06-table-ruling-v1.json",
@@ -934,10 +974,6 @@
     {
       "path": "protocol/private/p06-table-text-to-table-hwpx-v1.json",
       "sha256": "24fa6101e54c48cc0bf470c565b2c32c422182f62809d9a2c2846c0966429e55"
-    },
-    {
-      "path": "protocol/private/p06-table-number-format-v1.json",
-      "sha256": "92a14a276dada1ba9c7e9013d529e6e1af445ed5da017ae2c996af67f3f8c46a"
     },
     {
       "path": "protocol/private/p06-table-thousands-v1.json",
@@ -993,11 +1029,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "a6da5b11ae60178d43ea5cb5227c7648872e875588b2f95de73b75cbc2898deb"
+      "sha256": "72492178f4cc5bbb7ed8dba506f506024853c6583967c7cd38cec65a3537fe7d"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "619182345bda25293b8686816e5092031c8470337cdfb0440ef117d5cbc013cd"
+      "sha256": "7a4a66403ffa300762d5bcdf275077eb46f99b9251fe2599ed5548c7e4b43f1c"
     },
     {
       "path": "tools/p06/tests/test_table_create_hwpx_contract.py",
@@ -1062,6 +1098,10 @@
     {
       "path": "tools/p06/tests/test_table_ruling_hwpx_contract.py",
       "sha256": "0bfeacf2d6c479a694cf285f534a6d16230ce9f56b7312cf2ac14f512f38e2df"
+    },
+    {
+      "path": "tools/p06/tests/test_table_ruling_target_v2_contract.py",
+      "sha256": "b79afe619b6c7d3380d64bdbe8d866132f187c9fbee48e11418a5867bb991ebf"
     },
     {
       "path": "tools/p06/tests/test_table_sort_contract.py",
@@ -1133,7 +1173,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "5b8e1cda42553c22a594f321f2d1fb90c24d37a0097a9f20636acd29c2b57551"
+      "sha256": "5f18ee4c4b6c29fab024104cebfb8aec3ac341ebdd9b77d79402134cf43550f7"
     },
     {
       "path": "tools/p06/validate_table_create_hwpx_contract.py",
@@ -1197,7 +1237,11 @@
     },
     {
       "path": "tools/p06/validate_table_ruling_hwpx_contract.py",
-      "sha256": "547076a0c611fc7bb076f9fa2788056f21178f37429d071e0882b24b2840e0e3"
+      "sha256": "a42bd226b1e8c3889c3a4741117d708585cb76d3a39a41e635b407a3e3a9251a"
+    },
+    {
+      "path": "tools/p06/validate_table_ruling_target_v2_contract.py",
+      "sha256": "c370e31a1a2765987ab4c9d88519d1dd01ec13827f9afee9c1eb166bb4d8756a"
     },
     {
       "path": "tools/p06/validate_table_sort_contract.py",

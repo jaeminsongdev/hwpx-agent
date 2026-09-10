@@ -1,6 +1,6 @@
 # P06-09 current-PC table conformance report
 
-- Generated: 2026-09-09
+- Generated: 2026-09-10
 - Target: licensed Hancom Hangul 2020 `11.0.0.9136`, `ko-KR`, x86 on this PC
 - Matrix schema: `hwpx-agent.table-conformance-report/v1`
 - Matrix state: `non_green`
@@ -15,8 +15,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 
 | Dimension | Current evidence |
 |---|---:|
-| direct `oracle_verified` | 15 |
-| direct `integration_passed` | 42 |
+| direct `oracle_verified` | 17 |
+| direct `integration_passed` | 40 |
 | direct `unit_passed` | 4 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
@@ -170,14 +170,16 @@ The machine-readable authority is
   table state, grid and document flow are bound. Static lowering relifts source state/grid, updates
   coordinated section/header XML, reopens exact semantics and preserves sibling formula/cache plus
   pagination in a closed package. Outer creation uses a digest-bound empty paragraph and reviewed
-  1x1 native wrapper. Structural formula topology changes remain native fail-closed; no licensed
-  Hangul execution or renderer result is claimed. A deterministic five-case target generator,
-  one-session x86 STA batch wrapper and independent renderer-cache-stripping oracle are now
-  static-ready for all nine ruling actions. Attempts 01, 02 and 04 reached the exact licensed
-  binary and first input open, then timed out with no output; attempt 03 was intentionally stopped
-  before its watchdog terminal stub to resend the access request and retains only its exact progress
-  journal. All remain failed evidence. The exposed PowerShell 5.1 optional-progress null defect is
-  regression-fixed without row promotion.
+  1x1 native wrapper. Structural formula topology changes remain native fail-closed. Deterministic
+  manifest `8296cf40...da543` drives five candidates and all nine ruling actions. Exact
+  licensed-target attempt 08 completed 5/5 save-close/reopen/PDF cases and 85/85 progress events on
+  Hangul 2020 `11.0.0.9136`, x86, `ko-KR`. The independent oracle relifted the complete selected
+  table before admitting only renderer caches, empty-run serialization and the exact outer-anchor
+  zero-default paragraph attributes; unknown exterior drift still fails closed. All five one-page
+  A4 PDFs passed original-detail visual review. TABLE-002/003 are therefore `oracle_verified` with
+  target-build, render and retry evidence. Attempts 01-07 remain immutable failed/interrupted
+  evidence. Automation runtime and direct/automation differential are still `not_run`, so neither
+  row is green.
 - The merge/split preserving HWPX adapter covers TABLE-016/017 with the complete domain content
   policies. Merge preserves the top-left master and removes only newly internal edges; split uses
   exact row-major identities and a source-catalog-bound edge line. Paragraph blocks remain exact,
@@ -203,8 +205,8 @@ ordering; duplicate JSON keys; finite files; path containment; privacy; and crea
 Protocol code generation publishes the three P06 schemas through additive catalog v5 while baseline
 locks prove catalogs v2 through v4 remain unchanged.
 
-Current aggregate blockers include 0 missing direct evidence rows, 46 rows below direct oracle,
-80 missing validation instances, 61 unverified automation runtime rows and 61 missing
+Current aggregate blockers include 0 missing direct evidence rows, 44 rows below direct oracle,
+78 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -213,7 +215,7 @@ P06-09's matrix engine and current snapshot are implemented, but the roadmap com
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
 1. lower the remaining 4 unit-only rows through preserving HWPX adapters;
-2. close the 42 integration-only target oracles, starting with the static-ready TABLE-002/003 batch;
+2. close the 40 remaining integration-only target oracles;
 3. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
 4. regenerate until all 61 rows are green, then run the P06 hard Gate.
