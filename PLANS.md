@@ -102,7 +102,7 @@
 - R-0007: P06-09 remains 0/61 release-green until direct validations, fixtures, rollback/retry,
   current-target automation runtime and exact differential evidence close every row.
 - R-0008 closed: legacy source history plus durable push v15, durable pull v17 and current-source
-  v40-v43 use exact immutable Git-history verification; P17 Python passes 311/311 without runtime/product promotion.
+  v40-v44 use exact immutable Git-history verification; P17 Python passes 327/327 without runtime/product promotion.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 
@@ -115,6 +115,6 @@
 ## Context pack and archive pointers
 
 - Read first: this file, active P06-07 policies/reports, P06-09 conformance authorities, and `implementation/p05/P05_GATE_REPORT.md`.
-- P17 authorities: frozen legacy/v40-v43 reports, `P17-06_GIT_MIRROR_EFFECT_V13.md`, frozen durable-push v15/durable-pull v17 qualifications, Windows credential-custody v18 and remote TLS v19.
+- P17 authorities: frozen legacy/v40-v44 reports, `P17-06_GIT_MIRROR_EFFECT_V13.md`, frozen durable-push v15/durable-pull v17 qualifications, Windows credential-custody v18 and remote TLS v19.
 - Detailed closed-card history is in the named reports and local Git history; no remote push is implied.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.

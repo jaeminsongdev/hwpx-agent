@@ -1,0 +1,97 @@
+{
+  "schema_version": "hwpx-agent.p17-frozen-current-source-v44/v1",
+  "contract_id": "p17.frozen-current-source.v44.v1",
+  "scope": "immutable_git_blob_remote_tls_transport_source_and_evidence_verification",
+  "claims": {
+    "actual_external_remote_network": false,
+    "actual_hangul": false,
+    "credential_issuance_or_rotation_verified": false,
+    "historical_v44_committed_source_state_verified": true,
+    "loopback_tls13_component_current_pc_verified": true,
+    "mutable_worktree_product_sources_authoritative": false,
+    "p17_06_complete": false,
+    "production": false,
+    "product_complete": false,
+    "real_service_certificate_verified": false,
+    "real_service_credential_verified": false,
+    "receipt_blob_verified": true,
+    "synthetic_certificate_only": true
+  },
+  "qualification": {
+    "base_commit": "45426cac614a1da3fc3f69f10a49e7f7876d8c2f",
+    "qualification_commit": "ca8453d62e9a09d291a58754635a7e039ca425e0",
+    "qualification_id": "p17.current-workspace-source.v44.20260911",
+    "contract_path": "implementation/p17/qualification/current-workspace-source-v44-20260911/contract.json",
+    "contract_sha256": "8fb2f226a47db9dec5a5695a49c22d6ec86ae56297b5c6939033e488431ed62c",
+    "current_path": "implementation/p17/qualification/current-workspace-source-v44-20260911/current-host.json",
+    "current_sha256": "4918ee140ad47395d759c9d7f08133f081f37ebcefa598f47c9909b3010887b6",
+    "receipt_path": "artifacts/p17/current-workspace-source-runs/60508db167ec4d8ea8789a7daee4fe9c/receipt.json",
+    "receipt_sha256": "264784f7951fe4aa073f21e4428417aaf335826b25455e00963552ebe6e89be5",
+    "implementation_source_count": 10,
+    "runtime_qualification_source_count": 2,
+    "source_successor_count": 28,
+    "guard_source_count": 3,
+    "claim_count": 70
+  },
+  "component_contract": {
+    "path": "protocol/private/p17-remote-tls-transport-v1.json",
+    "sha256": "c1bcc6dc8515d75c4949d58d16cbfeecbc1914fcb3063771ff066c4cca95fb84"
+  },
+  "invariants": [
+    "bounded_git_blob_reads",
+    "committed_source_and_receipt_blobs_verified",
+    "duplicate_json_keys_rejected",
+    "exact_commit_ids_and_ancestry",
+    "frozen_v43_predecessor_verified",
+    "no_mutable_worktree_authority",
+    "remote_tls_component_contract_and_evidence_verified",
+    "typed_bounded_fail_closed_errors"
+  ],
+  "source_locks": [
+    {
+      "path": "implementation/p17/P17_FROZEN_CURRENT_WORKSPACE_SOURCE_V44.md",
+      "bytes": 716,
+      "sha256": "cbba5542079e00fd219bcfba8f9d95a8f6bd47bf0987c9f32ef688b171cfcde6"
+    },
+    {
+      "path": "protocol/migrations/p17-current-workspace-source-v44-to-frozen-v1.md",
+      "bytes": 640,
+      "sha256": "737ceec8f9fbf0d8177c6ff084f3fa3bebe14555634ae47e9e955e9d079b90d8"
+    },
+    {
+      "path": "protocol/private/p17-frozen-current-source-v43-v1.json",
+      "bytes": 3631,
+      "sha256": "af03c0679f8e8e1a1e28557f6cfc4baccba6696af131a95967c67bca626bfd29"
+    },
+    {
+      "path": "tools/p17/frozen_current_source_v44.py",
+      "bytes": 15094,
+      "sha256": "4bee1cfae68f66d3f72fe1deff0e811d1088b95030c6eac5cdd6f8318b4bd79b"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v43.py",
+      "bytes": 2364,
+      "sha256": "c860cbacf8ae2da446efbe1e92d9eb3ce97896dea84a8bb20faf15a271c07644"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v44.py",
+      "bytes": 2423,
+      "sha256": "d7240373d5c2751ab8e58b546e3ee4cd124b1e72bcaeaa58c2b917c21cf91d58"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v44.py",
+      "bytes": 3269,
+      "sha256": "ffb77286e9cc0a87fa0d71303f4f8651f34748287b7404f6410699f800424aa5"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v44_contract.py",
+      "bytes": 2351,
+      "sha256": "ab8d7a2198767a56fd3ab75b9f2381bcef92c6034097ff0141ef18db8b8f52b9"
+    },
+    {
+      "path": "tools/p17/validate_frozen_current_source_v44_contract.py",
+      "bytes": 6169,
+      "sha256": "b4b8001dfcfa6928d7cbad6be40d76d2fae1569009a2be322d36314feb5595b9"
+    }
+  ]
+}
