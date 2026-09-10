@@ -1028,6 +1028,27 @@ def verified_successors(
     root: Path = ROOT,
     history_digest: Callable[[str, str], str] | None = None,
 ) -> dict[str, dict[str, Any]]:
+    if history_digest is None:
+        from tools.p17 import frozen_current_source_history_v1 as frozen_history
+        from tools.p17 import frozen_source_successor_pairs_v1 as frozen_pairs
+
+        result = frozen_history.verified_successors(root, frozen_history.LAST_VERSION)
+        cancel_path = "tools/p14/validate_cancel_cleanup.py"
+        cancel_predecessor = (
+            "b1b6f3ae67d28ac42e5cdd18d7dcc787f8f7fcfd59dcdf9f441d095d5eaf10da"
+        )
+        cancel_pair = frozen_pairs.p15_context_replacements(
+            root,
+            [{"path": cancel_path, "sha256": cancel_predecessor}],
+            "p15_auth",
+        )[cancel_path]
+        result[cancel_path] = {
+            "path": cancel_path,
+            "accepted_predecessor_sha256s": [cancel_pair[0]],
+            "composition_predecessor_sha256": cancel_pair[0],
+            "current_sha256": cancel_pair[1],
+        }
+        return result
     verify(root)
     result: dict[str, dict[str, Any]] = {}
     for entry in SUCCESSORS:
@@ -1047,6 +1068,8 @@ def verified_successors(
             and composition in accepted,
             "successor.shape",
         )
+        if not isinstance(relative, str) or not isinstance(current, str):
+            raise QualificationError("successor.shape")
         path = acceptance.bounded_file(root, relative)
         require(digest(path) == current, "successor.current")
         historical = (
@@ -1056,7 +1079,7 @@ def verified_successors(
         )
         require(historical == current, "successor.history")
         result[relative] = dict(entry)
-    require(result, "successor.empty")
+    require(bool(result), "successor.empty")
     return result
 
 
@@ -1075,6 +1098,8 @@ def validate_implementation_sources(root: Path) -> dict[str, dict[str, Any]]:
             and HEX.fullmatch(expected_sha256) is not None,
             "implementation.shape",
         )
+        if not isinstance(relative, str) or not isinstance(expected_sha256, str):
+            raise QualificationError("implementation.shape")
         path = acceptance.bounded_file(root, relative)
         require(
             path.stat().st_size == expected_bytes
@@ -1083,7 +1108,7 @@ def validate_implementation_sources(root: Path) -> dict[str, dict[str, Any]]:
             "implementation.identity",
         )
         result[relative] = dict(entry)
-    require(result, "implementation.empty")
+    require(bool(result), "implementation.empty")
     return result
 
 

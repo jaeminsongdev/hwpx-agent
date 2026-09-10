@@ -1,4 +1,5 @@
-"""Read the immutable v12 source successor without loading its mutable validator."""
+"""Read and compose the immutable v12-through-v39 source successor chain."""
+
 from __future__ import annotations
 
 import hashlib
@@ -6,15 +7,22 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 from typing import Any, Iterable
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 
 CONTRACT_RELATIVE = (
-    "implementation/p17/qualification/current-workspace-source-v12-20260907/contract.json"
+    "implementation/p17/qualification/current-workspace-source-v12-20260907/"
+    "contract.json"
 )
 CONTRACT_SHA256 = "4a03e390c3973c0ec8f6d7b69c33f0d8961967135b40d217c725d38af6d6a027"
 CURRENT_RELATIVE = (
-    "implementation/p17/qualification/current-workspace-source-v12-20260907/current-host.json"
+    "implementation/p17/qualification/current-workspace-source-v12-20260907/"
+    "current-host.json"
 )
 CURRENT_SHA256 = "e2685452e8418e5b26b1788478d09eef516e73ada54ea092f925a5d390f63a2b"
 QUALIFICATION_ID = "p17.current-workspace-source.v12.20260907"
@@ -138,6 +146,8 @@ def verified_source_hashes(root: Path) -> dict[str, str]:
         and len(successors) == 14,
         "qualification.sources",
     )
+    if not isinstance(implementation, list) or not isinstance(successors, list):
+        raise FrozenSourceError("qualification.sources")
     result: dict[str, str] = {}
     for entry in implementation:
         require(
@@ -156,6 +166,8 @@ def verified_source_hashes(root: Path) -> dict[str, str]:
             and HEX.fullmatch(expected) is not None,
             "implementation.identity",
         )
+        if not isinstance(relative, str) or not isinstance(expected, str):
+            raise FrozenSourceError("implementation.identity")
         result[relative] = expected
     for entry in successors:
         require(
@@ -180,11 +192,15 @@ def verified_source_hashes(root: Path) -> dict[str, str]:
             and HEX.fullmatch(expected) is not None
             and isinstance(accepted, list)
             and accepted == sorted(set(accepted))
-            and all(isinstance(value, str) and HEX.fullmatch(value) for value in accepted)
+            and all(
+                isinstance(value, str) and HEX.fullmatch(value) for value in accepted
+            )
             and isinstance(composition, str)
             and composition in accepted,
             "successor.identity",
         )
+        if not isinstance(relative, str) or not isinstance(expected, str):
+            raise FrozenSourceError("successor.identity")
         result[relative] = expected
     return result
 
@@ -193,10 +209,14 @@ def verified_replacements(
     root: Path, source_locks: Iterable[dict[str, Any]]
 ) -> dict[str, tuple[str, str]]:
     qualified = verified_source_hashes(root)
+    from tools.p17 import frozen_composed_source_v39 as chain
+
     result: dict[str, tuple[str, str]] = {}
     seen: set[str] = set()
     for entry in source_locks:
-        require(isinstance(entry, dict) and set(entry) == {"path", "sha256"}, "lock.shape")
+        require(
+            isinstance(entry, dict) and set(entry) == {"path", "sha256"}, "lock.shape"
+        )
         relative = entry.get("path")
         predecessor = entry.get("sha256")
         require(
@@ -206,17 +226,20 @@ def verified_replacements(
             and HEX.fullmatch(predecessor) is not None,
             "lock.identity",
         )
+        if not isinstance(relative, str) or not isinstance(predecessor, str):
+            raise FrozenSourceError("lock.identity")
         seen.add(relative)
         source = bounded_file(root, relative)
         observed = digest(source.read_bytes())
         if observed == predecessor:
             continue
-        expected = qualified.get(relative)
-        if expected is None:
-            continue
-        require(
-            observed == expected and git_blob_digest(root, relative) == expected,
-            "source.current",
-        )
-        result[relative] = (predecessor, expected)
+        v12_successor = qualified.get(relative)
+        if v12_successor is not None and v12_successor != predecessor:
+            require(
+                git_blob_digest(root, relative) == v12_successor,
+                "source.current",
+            )
+        target = chain.verified_target(root, relative, predecessor)
+        if observed == target:
+            result[relative] = (predecessor, target)
     return result
