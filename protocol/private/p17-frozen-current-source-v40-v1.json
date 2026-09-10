@@ -1,0 +1,104 @@
+{
+  "schema_version": "hwpx-agent.p17-frozen-current-source-v40/v1",
+  "contract_id": "p17.frozen-current-source.v40.v1",
+  "scope": "immutable_git_blob_historical_source_qualification_verification",
+  "qualification": {
+    "qualification_id": "p17.current-workspace-source.v40.20260910",
+    "qualification_commit": "7167e0e1a14c6075f57608acd7ff89bd3d14a060",
+    "base_commit": "131ce732e59f2360a713a14391bbff45d1dbde73",
+    "contract": {
+      "path": "implementation/p17/qualification/current-workspace-source-v40-20260910/contract.json",
+      "bytes": 5064,
+      "sha256": "9b7cd7d3d2eda9cf3cd8bff2e9bc67f94a8a62f60a3701bfcdc53b0cd1f08c3d"
+    },
+    "current": {
+      "path": "implementation/p17/qualification/current-workspace-source-v40-20260910/current-host.json",
+      "bytes": 14559,
+      "sha256": "ec98c23d9a819752631dcb0e56fcd5bf45ff6e9586dce993d7dbaba3f92e847a"
+    },
+    "predecessor": {
+      "path": "implementation/p17/qualification/current-workspace-source-v39-20260908/contract.json",
+      "sha256": "544c68cdea536e234139bd492f7e2812fe1b7ab02826af580f307284835f287c"
+    },
+    "receipt": {
+      "path": "artifacts/p17/current-workspace-source-runs/2fc12885ddb14122a677a65db9f4c098/receipt.json",
+      "sha256": "a477de4698193379a3c4101d1ddf182c08353be6afade4c51e1bcebba7602151",
+      "git_blob_verified": false
+    },
+    "implementation_source_count": 9,
+    "source_successor_count": 28,
+    "guard_source_count": 3,
+    "claim_count": 53,
+    "intentional_overlap": [
+      "Cargo.lock"
+    ]
+  },
+  "invariants": [
+    "bounded_git_blob_reads",
+    "exact_full_commit_ids",
+    "exact_intentional_cargo_lock_overlap",
+    "fail_closed_typed_errors",
+    "frozen_v39_predecessor_verified",
+    "historical_files_from_git_only",
+    "legacy_mutable_validators_not_loaded",
+    "no_replace_refs_lazy_fetch_or_git_locks",
+    "repository_selection_environment_removed",
+    "receipt_digest_bound_without_receipt_blob_claim"
+  ],
+  "claims": {
+    "actual_hangul": false,
+    "historical_v40_committed_source_state_verified": true,
+    "mutable_worktree_product_sources_authoritative": false,
+    "other_pc_or_version": false,
+    "p17_06_complete": false,
+    "p17_authenticated_dispatch_verified": false,
+    "p17_phase_complete": false,
+    "p17_postgresql_sync_state_machine_verified": false,
+    "p17_remote_network_sync_verified": false,
+    "product_complete": false,
+    "production": false,
+    "receipt_blob_verified": false
+  },
+  "source_locks": [
+    {
+      "path": "implementation/p17/P17_FROZEN_CURRENT_WORKSPACE_SOURCE_V40.md",
+      "bytes": 2126,
+      "sha256": "d88fb144dddad70b1b87fb6028435d6d88a8f436abbd7adaf3f638c3e0ee94e5"
+    },
+    {
+      "path": "protocol/migrations/p17-current-workspace-source-v40-to-frozen-v1.md",
+      "bytes": 1672,
+      "sha256": "7c8492d39b39898ce430c3c174c7fa5d18452416e4e99668fe2840aae34ecf38"
+    },
+    {
+      "path": "tools/p17/frozen_current_source_v39.py",
+      "bytes": 16608,
+      "sha256": "aa4158914be392d29f43d05aad1bfc7695f33cf9deb1a1492a77ea99b1e0d576"
+    },
+    {
+      "path": "tools/p17/frozen_current_source_v40.py",
+      "bytes": 14428,
+      "sha256": "2c7318bf68889d5cd8b51e2ce8d582c89206ceca7582ceabb1ee0300068ef458"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v40.py",
+      "bytes": 1313,
+      "sha256": "ad44983b146dd2bce8e04ecf37ffa4c7773a45b7137e4dcc1afab48bf3f7b3b5"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v40.py",
+      "bytes": 5154,
+      "sha256": "055c83ce37d8d14672ed5fc27f692bafc066fecc410ba91229c8f53255334bc8"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v40_contract.py",
+      "bytes": 2651,
+      "sha256": "6f483ba396afe5bad972355646dda63258a506411f2259fad316c738a7dc3543"
+    },
+    {
+      "path": "tools/p17/validate_frozen_current_source_v40_contract.py",
+      "bytes": 8841,
+      "sha256": "c6d4c5919619b7eb08fd863fc089f08a57ae86379f58f86fa5dcae1dc805a5eb"
+    }
+  ]
+}
