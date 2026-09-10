@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -56,29 +57,51 @@ class FrozenComposedSourceV39Tests(unittest.TestCase):
             chain.verified_target(ROOT, "Cargo.toml", "0" * 64)
 
     def test_unreachable_path_does_not_discard_verified_replacements(self) -> None:
-        replacements = v12.verified_replacements(
-            ROOT,
-            [
-                {
-                    "path": "deny.toml",
-                    "sha256": (
-                        "1b7f0c7a65ba80242847fbb24483fa82708f28b361e425c76c48233d52073ef3"
-                    ),
-                },
-                {
-                    "path": "docs/09_roadmap/P15_remote_mcp_control_plane.md",
-                    "sha256": (
-                        "a77298e3eaafc3c6a544e53ef3e79c90f6ecb984b01128a174d96ad3bcaa2b5b"
-                    ),
-                },
-            ],
+        expected_target = (
+            "a939acc670946e472480d5dde52b0bc19caa326abd14418e90b522deb03025bd"
         )
+        frozen_deny = chain.anchor.git_blob(
+            ROOT,
+            chain.anchor.QUALIFICATION_COMMIT,
+            "deny.toml",
+        )
+        self.assertEqual(chain.anchor.digest(frozen_deny), expected_target)
+        original_bounded_file = v12.bounded_file
+        with tempfile.TemporaryDirectory() as directory:
+            historical_path = Path(directory) / "deny.toml"
+            historical_path.write_bytes(frozen_deny)
+
+            def historical_source(
+                root: Path, relative: str, maximum: int = 4_000_000
+            ) -> Path:
+                if relative == "deny.toml":
+                    return historical_path
+                return original_bounded_file(root, relative, maximum)
+
+            with patch.object(v12, "bounded_file", side_effect=historical_source):
+                replacements = v12.verified_replacements(
+                    ROOT,
+                    [
+                        {
+                            "path": "deny.toml",
+                            "sha256": (
+                                "1b7f0c7a65ba80242847fbb24483fa82708f28b361e425c76c48233d52073ef3"
+                            ),
+                        },
+                        {
+                            "path": "docs/09_roadmap/P15_remote_mcp_control_plane.md",
+                            "sha256": (
+                                "a77298e3eaafc3c6a544e53ef3e79c90f6ecb984b01128a174d96ad3bcaa2b5b"
+                            ),
+                        },
+                    ],
+                )
         self.assertEqual(
             replacements,
             {
                 "deny.toml": (
                     "1b7f0c7a65ba80242847fbb24483fa82708f28b361e425c76c48233d52073ef3",
-                    "a939acc670946e472480d5dde52b0bc19caa326abd14418e90b522deb03025bd",
+                    expected_target,
                 )
             },
         )
