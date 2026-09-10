@@ -211,10 +211,14 @@ def _frozen_edges(root_text: str) -> dict[str, frozenset[tuple[str, str]]]:
 
     anchor.verify_commit(root, pairs.V12_BASE_COMMIT)
     anchor.require_ancestor(root, pairs.V12_BASE_COMMIT, anchor.QUALIFICATION_COMMIT)
-    legacy_predecessors: dict[str, set[str]] = {}
+    legacy_states: dict[str, list[tuple[str, str]]] = {}
+    previous_contract_commit: str | None = None
     for relative, commit, expected_bytes, expected_sha256 in LEGACY_LOCK_CONTRACTS:
         anchor.verify_commit(root, commit)
         anchor.require_ancestor(root, commit, pairs.V12_BASE_COMMIT)
+        if previous_contract_commit is not None:
+            anchor.require_ancestor(root, previous_contract_commit, commit)
+        previous_contract_commit = commit
         raw = anchor.git_blob(root, commit, relative, 512_000)
         require(len(raw) == expected_bytes, "legacy.contract.bytes")
         require(anchor.digest(raw) == expected_sha256, "legacy.contract.digest")
@@ -254,23 +258,61 @@ def _frozen_edges(root_text: str) -> dict[str, frozenset[tuple[str, str]]]:
                 == predecessor,
                 "legacy.source_lock.history",
             )
-            legacy_predecessors.setdefault(source_relative, set()).add(predecessor)
+            legacy_states.setdefault(source_relative, []).append((commit, predecessor))
 
-    for relative, predecessors in legacy_predecessors.items():
-        target = v12_targets.get(relative)
-        if target is None:
-            continue
-        require(
-            anchor.digest(anchor.git_blob(root, pairs.V12_BASE_COMMIT, relative))
-            == target,
-            "v12.legacy_target.history",
-        )
-        for predecessor in predecessors:
-            if predecessor != target:
-                edges.setdefault(relative, set()).add((predecessor, target))
+    last_qualified: dict[str, str] = {}
+    for relative, states in legacy_states.items():
+        previous: str | None = None
+        for _, current in states:
+            if previous is not None and previous != current:
+                edges.setdefault(relative, set()).add((previous, current))
+            previous = current
+        if previous is not None:
+            last_qualified[relative] = previous
+
+    for relative, target in v12_targets.items():
+        predecessor = last_qualified.get(relative)
+        if predecessor is not None and predecessor != target:
+            require(
+                anchor.digest(anchor.git_blob(root, pairs.V12_BASE_COMMIT, relative))
+                == target,
+                "v12.legacy_target.history",
+            )
+            edges.setdefault(relative, set()).add((predecessor, target))
+        last_qualified[relative] = target
 
     for version in range(history.FIRST_VERSION, history.LAST_VERSION + 1):
-        for relative, entry in history.verified_successors(root, version).items():
+        state: dict[str, str] = {}
+        for relative, entry in history.verified_implementation_sources(
+            root, version
+        ).items():
+            current = entry.get("sha256")
+            require(
+                isinstance(current, str) and HEX64.fullmatch(current) is not None,
+                "history.implementation",
+            )
+            if not isinstance(current, str):
+                raise FrozenComposedSourceError("history.implementation")
+            state[relative] = current
+        successors_by_path = history.verified_successors(root, version)
+        for relative, entry in successors_by_path.items():
+            current = entry.get("current_sha256")
+            require(
+                isinstance(current, str)
+                and HEX64.fullmatch(current) is not None
+                and (relative not in state or state[relative] == current),
+                "history.successor",
+            )
+            if not isinstance(current, str):
+                raise FrozenComposedSourceError("history.successor")
+            state[relative] = current
+        for relative, current in state.items():
+            predecessor = last_qualified.get(relative)
+            if predecessor is not None and predecessor != current:
+                edges.setdefault(relative, set()).add((predecessor, current))
+            last_qualified[relative] = current
+
+        for relative, entry in successors_by_path.items():
             current = entry.get("current_sha256")
             accepted = entry.get("accepted_predecessor_sha256s")
             require(
@@ -284,6 +326,7 @@ def _frozen_edges(root_text: str) -> dict[str, frozenset[tuple[str, str]]]:
                 if not isinstance(predecessor, str):
                     raise FrozenComposedSourceError("history.predecessor")
                 edges.setdefault(relative, set()).add((predecessor, current))
+
     return {relative: frozenset(values) for relative, values in edges.items()}
 
 

@@ -239,7 +239,12 @@ def verified_replacements(
                 git_blob_digest(root, relative) == v12_successor,
                 "source.current",
             )
-        target = chain.verified_target(root, relative, predecessor)
+        try:
+            target = chain.verified_target(root, relative, predecessor)
+        except chain.FrozenComposedSourceError as error:
+            if str(error) == "chain.unreachable":
+                continue
+            raise
         if observed == target:
             result[relative] = (predecessor, target)
     return result
