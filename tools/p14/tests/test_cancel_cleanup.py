@@ -95,6 +95,26 @@ class CancelCleanupContractTests(unittest.TestCase):
         with self.assertRaises(MODULE.ContractError):
             self.validate_tampered(contract)
 
+    def test_frozen_artifact_successor_is_exact(self) -> None:
+        replacements = MODULE.validate_frozen_artifact_qualification()
+        self.assertEqual(
+            replacements["crates/artifact-service/src/store.rs"],
+            (
+                "72d4a74d318743494cefb842554a671ae212f56133d0f9987395c2f3dcb2c4e2",
+                "ff803fce425c82cf19ed10b0aaa8b6b377c6bc9525f77ec8d70fa2168509f672",
+            ),
+        )
+
+    def test_unqualified_artifact_predecessor_is_rejected(self) -> None:
+        with self.assertRaises(MODULE.ContractError):
+            MODULE.require_source_digest_with_supersession(
+                {
+                    "path": "crates/artifact-service/src/store.rs",
+                    "sha256": "0" * 64,
+                },
+                256 * 1024,
+            )
+
     def test_required_sql_tokens_are_fail_closed(self) -> None:
         up_sql = (ROOT / "migrations/postgres/0008_p14_cancel_cleanup.up.sql").read_text(
             encoding="utf-8"

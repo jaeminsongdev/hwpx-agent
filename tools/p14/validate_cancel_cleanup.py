@@ -108,6 +108,28 @@ def validate_p16_source_qualification() -> dict[str, tuple[str, str]]:
         return {}
 
 
+def validate_frozen_artifact_qualification() -> dict[str, tuple[str, str]]:
+    validator_path = (
+        Path(__file__).resolve().parents[1]
+        / "p17/frozen_p16_artifact_successor_v1.py"
+    ).resolve()
+    specification = importlib.util.spec_from_file_location(
+        "_hwpx_agent_frozen_p16_artifact_for_p14_cancel", validator_path
+    )
+    if specification is None or specification.loader is None:
+        return {}
+    module = importlib.util.module_from_spec(specification)
+    try:
+        specification.loader.exec_module(module)
+        source_locks = [
+            {"path": relative, "sha256": pair[0]}
+            for relative, pair in module.EXPECTED_REPLACEMENTS.items()
+        ]
+        return module.verified_replacements(ROOT, source_locks)
+    except (OSError, ImportError, ValueError):
+        return {}
+
+
 def require_source_digest_with_supersession(
     entry: dict[str, Any], maximum_bytes: int
 ) -> Path:
@@ -120,6 +142,11 @@ def require_source_digest_with_supersession(
         fail(f"invalid digest for {relative}")
     observed = sha256(path)
     if observed == expected:
+        return path
+    if validate_frozen_artifact_qualification().get(relative) == (
+        expected,
+        observed,
+    ):
         return path
     if validate_p16_source_qualification().get(relative) == (expected, observed):
         return path
