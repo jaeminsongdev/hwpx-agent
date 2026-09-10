@@ -15,6 +15,11 @@ allow = [
     "Unicode-3.0",
     "Zlib",
 ]
+exceptions = [
+    { allow = ["ISC"], crate = "ring@0.17.14" },
+    { allow = ["ISC"], crate = "rustls-webpki@0.103.15" },
+    { allow = ["ISC"], crate = "untrusted@0.9.0" },
+]
 
 [licenses.private]
 ignore = true

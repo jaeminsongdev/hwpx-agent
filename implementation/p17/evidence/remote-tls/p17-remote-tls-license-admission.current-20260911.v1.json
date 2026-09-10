@@ -1,0 +1,60 @@
+{
+  "schema_version": "hwpx-agent.remote-tls-license-admission-evidence/v1",
+  "scope": "current_pc_exact_locked_tls_dependency_license_policy",
+  "target": {
+    "operating_system": "Windows",
+    "dependency_resolution": "Cargo.lock",
+    "network": "offline",
+    "cargo_deny_mode": "frozen"
+  },
+  "command": "cargo deny --frozen check all",
+  "result": {
+    "state": "pass",
+    "advisories": "pass",
+    "bans": "pass",
+    "licenses": "pass",
+    "sources": "pass"
+  },
+  "packages": [
+    {
+      "crate": "ring@0.17.14",
+      "license_expression": "Apache-2.0 AND ISC",
+      "license_file": "LICENSE",
+      "license_file_bytes": 499,
+      "license_file_sha256": "b3d734001a94efff3579978d953391aa7115f877657d25eb54037a43875d078a"
+    },
+    {
+      "crate": "rustls-webpki@0.103.15",
+      "license_expression": "ISC",
+      "license_file": "LICENSE",
+      "license_file_bytes": 916,
+      "license_file_sha256": "5b698ca13897be3afdb7174256fa1574f8c6892b8bea1a66dd6469d3fe27885a"
+    },
+    {
+      "crate": "untrusted@0.9.0",
+      "license_expression": "ISC",
+      "license_file": "LICENSE.txt",
+      "license_file_bytes": 769,
+      "license_file_sha256": "7abd9b6960dcf7d4d0a48606a5b71bfe37d472db68d70637f3a58a56785f1621"
+    }
+  ],
+  "privacy": {
+    "absolute_registry_path_recorded": false,
+    "license_file_content_copied": false,
+    "credential_recorded": false,
+    "remote_endpoint_recorded": false,
+    "secret_recorded": false
+  },
+  "claims": {
+    "current_locked_dependency_license_policy": true,
+    "exact_version_exceptions_only": true,
+    "global_isc_allowance": false,
+    "actual_external_remote_network": false,
+    "real_service_certificate": false,
+    "real_service_credential": false,
+    "credential_issuance_or_rotation": false,
+    "production": false,
+    "p17_06_complete": false,
+    "product_complete": false
+  }
+}

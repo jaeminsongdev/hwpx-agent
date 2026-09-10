@@ -1,0 +1,83 @@
+{
+  "schema_version": "hwpx-agent.remote-tls-license-admission-contract/v1",
+  "contract_id": "p17.remote-tls-license-admission.v1",
+  "scope": "exact_version_isc_admission_for_certificate_pinned_tls_dependency_chain",
+  "policy": {
+    "confidence_threshold": 0.93,
+    "global_allowlist_contains_isc": false,
+    "exception_matching": "exact_crate_name_and_version",
+    "wildcard_dependencies": "deny",
+    "unknown_registry": "deny",
+    "unknown_git": "deny",
+    "allowed_registry": "https://github.com/rust-lang/crates.io-index"
+  },
+  "exceptions": [
+    {
+      "crate": "ring@0.17.14",
+      "allow": [
+        "ISC"
+      ],
+      "package_license_expression": "Apache-2.0 AND ISC",
+      "cargo_lock_checksum": "a4689e6c2294d81e88dc6261c768b63bc4fcdb852be6d1352498b114f61383b7",
+      "license_file": "LICENSE",
+      "license_file_bytes": 499,
+      "license_file_sha256": "b3d734001a94efff3579978d953391aa7115f877657d25eb54037a43875d078a"
+    },
+    {
+      "crate": "rustls-webpki@0.103.15",
+      "allow": [
+        "ISC"
+      ],
+      "package_license_expression": "ISC",
+      "cargo_lock_checksum": "f3c3cf1d8b1e7d4927e2d154c3fcb02979afb9939629c62cd9048d4f07b60ac2",
+      "license_file": "LICENSE",
+      "license_file_bytes": 916,
+      "license_file_sha256": "5b698ca13897be3afdb7174256fa1574f8c6892b8bea1a66dd6469d3fe27885a"
+    },
+    {
+      "crate": "untrusted@0.9.0",
+      "allow": [
+        "ISC"
+      ],
+      "package_license_expression": "ISC",
+      "cargo_lock_checksum": "8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1",
+      "license_file": "LICENSE.txt",
+      "license_file_bytes": 769,
+      "license_file_sha256": "7abd9b6960dcf7d4d0a48606a5b71bfe37d472db68d70637f3a58a56785f1621"
+    }
+  ],
+  "implementation_files": [
+    "Cargo.lock",
+    "Cargo.toml",
+    "deny.toml",
+    "implementation/p17/P17-06_REMOTE_TLS_LICENSE_ADMISSION_V20.md",
+    "implementation/p17/evidence/remote-tls/p17-remote-tls-license-admission.current-20260911.v1.json",
+    "protocol/migrations/p17-remote-tls-license-admission-v1.md",
+    "protocol/private/p17-remote-tls-license-admission-v1.json",
+    "tools/p17/tests/test_remote_tls_license_admission.py",
+    "tools/p17/validate_remote_tls_license_admission.py"
+  ],
+  "external_authorities": [
+    {
+      "subject": "cargo-deny per-crate license exceptions",
+      "url": "https://embarkstudios.github.io/cargo-deny/checks/licenses/cfg.html"
+    },
+    {
+      "subject": "cargo-deny official configuration template",
+      "url": "https://github.com/EmbarkStudios/cargo-deny/blob/main/deny.template.toml"
+    }
+  ],
+  "gate_decision": {
+    "license_policy_component": "pass",
+    "cargo_deny_all_current_locked_graph": true,
+    "exact_package_license_files_current_pc": true,
+    "global_isc_allowance": false,
+    "actual_external_remote_network": false,
+    "real_service_certificate": false,
+    "real_service_credential": false,
+    "credential_issuance_or_rotation": false,
+    "production": false,
+    "p17_06_complete": false,
+    "product_complete": false
+  }
+}

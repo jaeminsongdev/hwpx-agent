@@ -96,8 +96,8 @@
 
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence absent.
 - R-0003: one historical independent worker timeout root cause remains unproven; retries passed.
-- R-0005: P17 durable checkpoint, local bare-Git old-OID CAS/replay, authenticated current-PC
-  durable push/pull, synthetic Windows credential custody and pinned loopback TLS pass; real credential issuance/rotation, external remote service and production do not.
+- R-0005: P17 durable checkpoint, local bare-Git old-OID CAS/replay, authenticated current-PC durable
+  push/pull, synthetic credential custody, pinned TLS and exact-version dependency license admission pass; real credential issuance/rotation, external remote service and production do not.
 - R-0006: P17 conflict resolver/widget are component evidence only.
 - R-0007: P06-09 remains 0/61 release-green until direct validations, fixtures, rollback/retry,
   current-target automation runtime and exact differential evidence close every row.
