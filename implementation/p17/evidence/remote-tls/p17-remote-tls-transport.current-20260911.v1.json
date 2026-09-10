@@ -1,0 +1,61 @@
+{
+  "schema_version": "hwpx-agent.remote-tls-transport-evidence/v1",
+  "scope": "current_pc_ephemeral_loopback_tls13_component",
+  "target": {
+    "operating_system": "Windows",
+    "rust_version": "1.96.0",
+    "rustls_version": "0.23.43",
+    "crypto_provider": "ring",
+    "tls_versions": [
+      "TLS1.3"
+    ],
+    "network": "ephemeral_ipv4_loopback_only",
+    "certificate": "per_test_synthetic_self_signed"
+  },
+  "command": "cargo test -p remote-tls-transport --all-targets --locked --offline",
+  "result": {
+    "state": "pass",
+    "passed": 6,
+    "failed": 0,
+    "ignored": 0
+  },
+  "checks": {
+    "exact_pin_name_tls13_exchange": true,
+    "normal_webpki_verification": true,
+    "post_handshake_exact_leaf_sha256": true,
+    "request_not_dispatched_on_wrong_pin_or_name": true,
+    "remote_statuses_preserved": true,
+    "trailing_plaintext_rejected": true,
+    "ordinary_unavailable_endpoint_typed": true,
+    "configuration_and_debug_bounded": true,
+    "public_and_loopback_scopes_separated": true,
+    "ip_literal_server_name_rejected": true,
+    "malformed_certificate_and_frames_fail_closed": true
+  },
+  "cleanup": {
+    "persistent_listener_created": false,
+    "certificate_installed": false,
+    "credential_created": false,
+    "user_document_accessed": false
+  },
+  "privacy": {
+    "raw_certificate_der_recorded": false,
+    "certificate_pin_recorded": false,
+    "authorization_header_recorded": false,
+    "remote_endpoint_recorded": false,
+    "secret_recorded": false
+  },
+  "claims": {
+    "current_pc_loopback_tls13_component": true,
+    "synthetic_certificate_only": true,
+    "actual_external_remote_network": false,
+    "real_service_certificate": false,
+    "real_service_credential": false,
+    "credential_issuance_or_rotation": false,
+    "registered_host": false,
+    "production": false,
+    "actual_hangul": false,
+    "p17_06_complete": false,
+    "product_complete": false
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "schema_version": "hwpx-agent.remote-tls-transport-contract/v1",
+  "scope": "current_pc_loopback_tls13_transport_component",
+  "dependencies": {
+    "rustls": "0.23.43",
+    "rustls_default_features": false,
+    "rustls_features": [
+      "ring",
+      "std"
+    ],
+    "rcgen_dev_only": "0.14.10",
+    "rcgen_default_features": false,
+    "rcgen_features": [
+      "crypto",
+      "ring"
+    ]
+  },
+  "configuration": {
+    "endpoint_is_exact_socket_address": true,
+    "dns_resolution": false,
+    "server_name_is_canonical_lowercase_dns_only": true,
+    "ip_literal_server_name": false,
+    "endpoint_scopes": [
+      "public_remote",
+      "loopback_qualification"
+    ],
+    "public_remote_rejects_special_use_addresses": true,
+    "loopback_qualification_requires_loopback_address": true,
+    "timeout_milliseconds_minimum": 1,
+    "timeout_milliseconds_maximum": 60000,
+    "certificate_der_bytes_maximum": 32768,
+    "debug_discloses_endpoint_name_or_pin": false
+  },
+  "tls": {
+    "protocol_versions": [
+      "TLS1.3"
+    ],
+    "crypto_provider": "ring",
+    "ambient_system_or_bundled_roots": false,
+    "pinned_der_is_only_root": true,
+    "normal_webpki_name_validity_signature_verification": true,
+    "post_handshake_exact_leaf_sha256_match": true,
+    "custom_accept_all_verifier": false,
+    "request_written_before_handshake_and_leaf_pin": false
+  },
+  "wire": {
+    "trait": "local_sync::RemoteTransport",
+    "framing": "remote-sync-wire/v1",
+    "bounded_authorization_request_and_response": true,
+    "unexpected_trailing_plaintext": "rejected",
+    "tls_or_certificate_failure": "rejected",
+    "ordinary_connect_or_io_failure": "unavailable",
+    "remote_statuses_preserved": true
+  },
+  "implementation_files": [
+    "Cargo.toml",
+    "Cargo.lock",
+    "crates/remote-tls-transport/Cargo.toml",
+    "crates/remote-tls-transport/src/lib.rs",
+    "crates/remote-tls-transport/tests/pinned_tls.rs",
+    "implementation/p17/P17-06_REMOTE_TLS_TRANSPORT_V19.md",
+    "implementation/p17/evidence/remote-tls/p17-remote-tls-transport.current-20260911.v1.json",
+    "protocol/migrations/p17-remote-tls-transport-v1.md",
+    "tools/p17/tests/test_remote_tls_transport_contract.py",
+    "tools/p17/validate_remote_tls_transport_contract.py"
+  ],
+  "external_authorities": [
+    {
+      "authority": "rustls 0.23.43 ConfigBuilder",
+      "url": "https://docs.rs/rustls/0.23.43/rustls/struct.ConfigBuilder.html",
+      "facts": [
+        "safe_defaults_are_selected_by_builder_state",
+        "protocol_versions_can_be_explicitly_restricted"
+      ]
+    },
+    {
+      "authority": "rustls 0.23.43 RootCertStore",
+      "url": "https://docs.rs/rustls/0.23.43/rustls/struct.RootCertStore.html",
+      "facts": [
+        "trust_anchors_are_explicitly_added",
+        "empty_store_has_no_ambient_roots"
+      ]
+    }
+  ],
+  "gate_decision": {
+    "component": "pass",
+    "current_pc_loopback_tls13": true,
+    "actual_external_remote_network": false,
+    "real_service_certificate": false,
+    "real_service_credential": false,
+    "credential_issuance_or_rotation": false,
+    "registered_host": false,
+    "production": false,
+    "p17_06_complete": false,
+    "product_complete": false
+  }
+}
