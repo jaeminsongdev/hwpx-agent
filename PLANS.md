@@ -29,7 +29,7 @@
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
 | P16 | partial | local source/plan/renderer/host pass; registered app/Hangul evidence open |
-| P17 | partial | package/bridge/sync/widget components exist; actual remote/UI closures remain |
+| P17 | partial | atomic durable mirror checkpoint passes; actual pull/push and UI closures remain |
 | P18-P19 | open | quality/security/DR, production/license/submission and GA Gate |
 | P20 | post-GA | parity and Rust-native expansion |
 
@@ -40,7 +40,7 @@
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
 | P-0057 | P06-09 table conformance | fail-closed matrix plus bounded component/static-HWPX slices pass; ruling, row/column structure, properties, placement, layout-mode and admitted whole-table split/join have preserving integration evidence; exact current-PC release matrix remains 0/61 green |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
-| P-0091 family | P17-06 remote sync | authenticated loopback and durable PostgreSQL checkpoint pass; atomic durable mirror admission and real pull/push remain |
+| P-0091 family | P17-06 remote sync | authenticated loopback plus atomic durable PostgreSQL mirror/checkpoint admission pass; real pull/push remains |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
 | P-0093 | P17-08 trusted Git UI | local widget/MCP/disposable Git pass; one fresh GUI confirmation/effect/replay run remains |
 
@@ -96,13 +96,13 @@
 
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence absent.
 - R-0003: one historical independent worker timeout root cause remains unproven; retries passed.
-- R-0005: P17 durable checkpoint exists, but atomic durable mirror role/head admission, persistent
-  credential custody, production lifecycle and real pull/push do not.
+- R-0005: P17 atomic durable mirror role/head/checkpoint admission passes; persistent credential
+  custody, production lifecycle and real pull/push do not.
 - R-0006: P17 conflict resolver/widget are component evidence only.
 - R-0007: P06-09 remains 0/61 release-green until direct validations, fixtures, rollback/retry,
   current-target automation runtime and exact differential evidence close every row.
-- R-0008 closed: all 31 legacy mutable-source errors now use exact immutable Git-history
-  verification; P17 Python passes 199/199 without receipt, runtime or production promotion.
+- R-0008 closed: all 31 legacy mutable-source errors and the new atomic checkpoint evidence use exact
+  immutable Git-history verification; P17 Python passes 208/208 without product promotion.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 
@@ -115,6 +115,6 @@
 ## Context pack and archive pointers
 
 - Read first: this file, active P06-07 policies/reports, P06-09 conformance authorities, and `implementation/p05/P05_GATE_REPORT.md`.
-- P17 source authority: `implementation/p17/P17_FROZEN_LEGACY_SOURCE_QUALIFICATIONS.md`.
+- P17 authorities: frozen legacy report plus `implementation/p17/P17-06_ATOMIC_MIRROR_CHECKPOINT_V12.md`.
 - Detailed closed-card history is in the named reports and local Git history; no remote push is implied.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.

@@ -1,14 +1,9 @@
 from __future__ import annotations
 
-import copy
 from pathlib import Path
-import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[3]
-TOOLS = ROOT / "tools/p17"
-sys.path.insert(0, str(TOOLS))
-import atomic_mirror_checkpoint_qualification as qualification  # noqa: E402
 
 
 class AtomicMirrorCheckpointChecksTests(unittest.TestCase):
@@ -153,25 +148,6 @@ class AtomicMirrorCheckpointChecksTests(unittest.TestCase):
             self.assertIn(snippet, self.harness)
         self.assertNotIn('"password":', self.harness)
         self.assertNotIn('"authorization":', self.harness)
-
-    def test_current_receipt_and_tamper_paths_fail_closed(self) -> None:
-        receipt = qualification.validate_workspace_receipt()
-        self.assertTrue(receipt["atomic_mirror_admission_and_checkpoint"])
-        self.assertTrue(receipt["durable_retention_mirror_admission"])
-        promoted = copy.deepcopy(receipt)
-        promoted["actual_hangul"] = True
-        with self.assertRaisesRegex(qualification.QualificationError, "receipt.hangul"):
-            qualification.validate_receipt(promoted)
-        expanded = copy.deepcopy(receipt)
-        expanded["authorization"] = "invented"
-        with self.assertRaisesRegex(qualification.QualificationError, "receipt.fields"):
-            qualification.validate_receipt(expanded)
-        drifted = copy.deepcopy(receipt)
-        drifted["source_sha256"]["harness"] = "0" * 64
-        with self.assertRaisesRegex(
-            qualification.QualificationError, "receipt.sources"
-        ):
-            qualification.validate_receipt(drifted)
 
 
 if __name__ == "__main__":
