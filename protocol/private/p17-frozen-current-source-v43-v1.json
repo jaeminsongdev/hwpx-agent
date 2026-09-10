@@ -1,0 +1,86 @@
+{
+  "schema_version": "hwpx-agent.p17-frozen-current-source-v43/v1",
+  "contract_id": "p17.frozen-current-source.v43.v1",
+  "scope": "immutable_git_blob_windows_credential_custody_source_and_evidence_verification",
+  "claims": {
+    "actual_hangul": false,
+    "actual_remote_network": false,
+    "credential_issuance_or_rotation_verified": false,
+    "credential_store_mechanism_current_pc_verified": true,
+    "historical_v43_committed_source_state_verified": true,
+    "mutable_worktree_product_sources_authoritative": false,
+    "p17_06_complete": false,
+    "production": false,
+    "product_complete": false,
+    "real_service_credential_verified": false,
+    "receipt_blob_verified": true,
+    "synthetic_credential_only": true
+  },
+  "qualification": {
+    "base_commit": "69e5212fd26b6ed18077c33edab80c10408758e5",
+    "qualification_commit": "33806b7e1d4715d07d8528f5e57ab7d6b83ca930",
+    "qualification_id": "p17.current-workspace-source.v43.20260911",
+    "contract_path": "implementation/p17/qualification/current-workspace-source-v43-20260911/contract.json",
+    "contract_sha256": "865a6c9d7793a38bec7c15e122ce6f8c2a8a15154c00693fcc438ecce0a22f7e",
+    "current_path": "implementation/p17/qualification/current-workspace-source-v43-20260911/current-host.json",
+    "current_sha256": "c79328460dc260fff928c1c5e6c43027661dcd606f8f9d3d13844cde92a065d0",
+    "receipt_path": "artifacts/p17/current-workspace-source-runs/186b432a11464cd0a065b1b30dddb9fc/receipt.json",
+    "receipt_sha256": "cfacbd95bce4c2200f60c2d116615bccf0fd2e31efdfa6fded3bae57a3539ad7",
+    "implementation_source_count": 10,
+    "runtime_qualification_source_count": 2,
+    "source_successor_count": 28,
+    "guard_source_count": 3,
+    "claim_count": 66
+  },
+  "component_contract": {
+    "path": "protocol/private/p17-windows-credential-custody-v1.json",
+    "sha256": "ef4adbe9259c983e506ec29ebeee935097a65a07b5fb552dd6303b5b344aa3de"
+  },
+  "invariants": [
+    "bounded_git_blob_reads",
+    "committed_source_and_receipt_blobs_verified",
+    "credential_component_contract_and_evidence_verified",
+    "duplicate_json_keys_rejected",
+    "exact_commit_ids_and_ancestry",
+    "frozen_v42_predecessor_verified",
+    "no_mutable_worktree_authority",
+    "typed_bounded_fail_closed_errors"
+  ],
+  "source_locks": [
+    {
+      "path": "implementation/p17/P17_FROZEN_CURRENT_WORKSPACE_SOURCE_V43.md",
+      "bytes": 683,
+      "sha256": "a27ff42a2ae77d500ffb8e101ff868e02b7e48be5ab4e52e94c7c7b522612a3e"
+    },
+    {
+      "path": "protocol/migrations/p17-current-workspace-source-v43-to-frozen-v1.md",
+      "bytes": 615,
+      "sha256": "e286f1612a8e09b7441a87e0c1f15b3259ddc56da43b5d055fb11f4ff2fb316f"
+    },
+    {
+      "path": "protocol/private/p17-frozen-current-source-v42-v1.json",
+      "bytes": 3530,
+      "sha256": "45be3dad99795b67c63ecebd6091fb2747c6170a11504c0ec658c43bd7dc1798"
+    },
+    {
+      "path": "tools/p17/frozen_current_source_v43.py",
+      "bytes": 15142,
+      "sha256": "57778bdb11dc7e42bc587b07d8895b20457a5f0894d48c02813498c96705fc5f"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v43.py",
+      "bytes": 3212,
+      "sha256": "4bb6ca7fde99cf2ea6e5d9e92e7aa61e85f40f2cbcac1d98a778c8360e7e3898"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v43_contract.py",
+      "bytes": 2260,
+      "sha256": "f8991a0076fd657c6caae29493d50881e941d80485d46a14eb0b9e83d2c47a81"
+    },
+    {
+      "path": "tools/p17/validate_frozen_current_source_v43_contract.py",
+      "bytes": 5977,
+      "sha256": "cae21e98f0ef125e3500953a5b51b320c02912398975e6d9d035a5e0f91f299e"
+    }
+  ]
+}
