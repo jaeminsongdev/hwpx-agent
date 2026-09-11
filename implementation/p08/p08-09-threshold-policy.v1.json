@@ -1,0 +1,49 @@
+{
+  "schema_version": "hwpx-agent.p08-object-threshold-policy/v1",
+  "target_profile_id": "hancom-hangul-2020-secondary",
+  "asset_profiles": {
+    "relationship-exact-v1": {
+      "applies_when_required_validation": "resource_integrity",
+      "package_path_exact": true,
+      "relationship_target_exact": true,
+      "media_type_exact": true,
+      "expanded_length_exact": true,
+      "payload_sha256_exact": true,
+      "dangling_or_ambiguous_references_max": 0
+    },
+    "opaque-binary-exact-v1": {
+      "applies_when_required_validation": "binary_preservation",
+      "package_path_exact": true,
+      "relationship_target_exact": true,
+      "media_type_exact": true,
+      "expanded_length_exact": true,
+      "payload_sha256_exact": true,
+      "activation_allowed": false,
+      "payload_mutations_max": 0
+    },
+    "not-applicable": {}
+  },
+  "render_profiles": {
+    "object-affected-region-strict-v1": {
+      "applies_when_required_validation": "render_diff",
+      "same_target_build_required": true,
+      "same_font_inventory_required": true,
+      "same_dpi_required": true,
+      "affected_region_required": true,
+      "unchanged_region_changed_pixels_max": 0,
+      "structural_mismatches_max": 0,
+      "missing_glyphs_max": 0,
+      "object_placement_and_size": "strict",
+      "antialias_color_tolerance": "fixture_bound_narrow_required",
+      "calibration_state": "not_run"
+    },
+    "not-applicable": {}
+  },
+  "green_rule": {
+    "asset_profile_definition_required": true,
+    "render_profile_definition_required": true,
+    "render_fixture_calibration_required_when_render_diff_required": true,
+    "unbound_global_pixel_tolerance_forbidden": true,
+    "synthetic_render_cannot_substitute_for_target_hancom": true
+  }
+}

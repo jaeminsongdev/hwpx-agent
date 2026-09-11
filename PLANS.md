@@ -24,7 +24,7 @@
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | P07/P08 in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-01~08 implementation is component/synthetic-passed, including exact canvas/clip/effects and package-level active-content inventory/denial. Actual-target/visual evidence, image-fill integrity, P08-09 and P09 remain |
+| P07-P09 | P07/P08 in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-01~08 are component/synthetic-passed. P08-09 now binds all 58 rows: 19 cataloged, 17 unit, 22 integration, 0 oracle/green; 14 P08 direct capabilities, 8 P08 HWPX adapters, target/visual evidence and P09 remain |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. Implement P08-09 at `max` as a complete 58-row object conformance matrix; keep actual HWPX, installed-Hangul, render, automation and differential stages not-run until direct evidence exists.
+1. Continue P08-09 at `max`: implement the 14 cataloged P08-owned capabilities, then direct HWPX lowering for the 8 P08-owned unit rows; preserve the 16 P11-owned rows and every target/render/automation/differential blocker.
 2. When the user can capture screens/approve saves, run one combined exact-target campaign: P07-07/08/09 plus remaining P06 target/render/differentials including corrected TABLE-032/033.
 3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
 

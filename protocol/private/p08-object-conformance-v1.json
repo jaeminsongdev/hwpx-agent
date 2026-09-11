@@ -1,0 +1,122 @@
+{
+  "schema_version": "hwpx-agent.p08-object-conformance-contract/v1",
+  "scope": "p08_09_current_pc_hancom_2020_fail_closed_matrix",
+  "target": {
+    "profile_id": "hancom-hangul-2020-secondary",
+    "product": "Hancom Hangul 2020",
+    "build": "11.0.0.9136",
+    "locale": "ko-KR",
+    "architecture": "x86",
+    "scope": "current_pc_personal_local_development"
+  },
+  "row_policy": {
+    "feature_ids": "exactly_OBJ_001_through_OBJ_058_once_in_order",
+    "all_rows_required": 58,
+    "p08_rows": 42,
+    "p11_deferred_rows": 16,
+    "missing_direct_evidence": "cataloged_non_green",
+    "missing_automation_binding": "non_green",
+    "missing_differential": "non_green",
+    "synthetic_or_component_evidence": "never_actual_target_or_release_green"
+  },
+  "green_rule": [
+    "support_level_specific_oracle_verified",
+    "all_contract_validations_passed",
+    "all_required_fixture_classes_passed",
+    "negative_passed",
+    "rollback_or_retry_passed",
+    "current_target_binding_and_runtime_verified_when_executable",
+    "direct_automation_or_provider_differential_passed",
+    "asset_threshold_passed_when_required",
+    "target_render_threshold_calibrated_and_passed_when_required"
+  ],
+  "threshold_policy": {
+    "path": "implementation/p08/p08-09-threshold-policy.v1.json",
+    "asset_required_rows": 44,
+    "render_required_rows": 53,
+    "render_calibrated_rows": 0,
+    "unchanged_region_changed_pixels_max": 0,
+    "structural_mismatches_max": 0,
+    "missing_glyphs_max": 0,
+    "global_unbound_pixel_tolerance": "forbidden"
+  },
+  "expected_current_summary": {
+    "required_rows": 58,
+    "implementation_covered_rows": 39,
+    "green_rows": 0,
+    "non_green_rows": 58,
+    "direct_stage_counts": {
+      "cataloged": 19,
+      "unit_passed": 17,
+      "integration_passed": 22,
+      "oracle_verified": 0
+    },
+    "automation_binding_counts": {
+      "candidate_unverified": 9,
+      "denied_by_policy": 2,
+      "unavailable_with_reason": 47
+    },
+    "phase_counts": {"P08": 42, "P11": 16},
+    "support_level_counts": {
+      "HYBRID": 42,
+      "AUTOMATION_FULL": 11,
+      "OPTIONAL_EXTERNAL": 3,
+      "PRESERVE_ONLY": 2
+    },
+    "asset_threshold_required_rows": 44,
+    "render_threshold_required_rows": 53,
+    "render_threshold_calibrated_rows": 0,
+    "differential_counts": {"not_run": 58},
+    "required_matrix": "non_green"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path": "docs/04_feature_catalog/09_obj.md", "sha256": "e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8"},
+    {"path": "docs/04_feature_catalog/contracts/09_obj_contracts.md", "sha256": "e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2"},
+    {"path": "docs/08_testing/03_feature_conformance.md", "sha256": "5ec281c468d266038ddbd6a8247ee092fadea7d0b5bd0fae966ebc53d243f24b"},
+    {"path": "docs/08_testing/05_layout_table_visual.md", "sha256": "6534f39de2c37d95f0926aa74a61431be9a09813ff4b19fe84569979ab558740"},
+    {"path": "docs/12_implementation_guides/08_validation_oracle_visual_diff.md", "sha256": "13bd9b84ddf0684fbb8892a6eaa14957af85e2d218c0f5cd438d57e71acdb426"},
+    {"path": "docs/09_roadmap/P08_images_shapes_drawing_charts.md", "sha256": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path": "specs/feature-coverage-matrix.json", "sha256": "a3fa1cd5c5b0b0e09bc93354f724ed3516bdb987f1c171cc27d7564dc6390950"},
+    {"path": "specs/capability-contracts.generated.json", "sha256": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306"},
+    {"path": "specs/work-breakdown-structure.json", "sha256": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2"},
+    {"path": "implementation/p08/p08-09-current-2020-direct-evidence.json", "sha256": "301248925552fc4a937eedb5430ed1e11b4d730201d702a2653aadf22a4243d9"},
+    {"path": "implementation/p08/p08-09-current-2020-automation-projection.json", "sha256": "f8c06f206c29eb7aa77b845fd1afa1ff09535145584f5f9fff83fdc679f1cd12"},
+    {"path": "implementation/p08/p08-09-threshold-policy.v1.json", "sha256": "0f4856e81edc012ed80608fddea6a2be98286ca772127c5b1316f3e2ed890d0c"},
+    {"path": "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json", "sha256": "5805bce240530ccee23a429463fccfcf6edefe788e0b96d7e20f055707cf239c"},
+    {"path": "tools/p08/object_conformance.py", "sha256": "34eae06621b623b7a4d5dd46f067ba6cf3103c2bffb22316b46d3395e3088092"}
+  ],
+  "upstream_contract_validators": [
+    "tools/p08/validate_asset_pipeline_contract.py",
+    "tools/p08/validate_image_hwpx_contract.py",
+    "tools/p08/validate_object_geometry_contract.py",
+    "tools/p08/validate_basic_shape_contract.py",
+    "tools/p08/validate_object_appearance_contract.py",
+    "tools/p08/validate_object_composition_contract.py",
+    "tools/p08/validate_chart_automation_contract.py",
+    "tools/p08/validate_drawing_canvas_contract.py",
+    "tools/p08/validate_active_content_contract.py"
+  ],
+  "claims": {
+    "matrix_implemented": true,
+    "threshold_definitions_complete": true,
+    "component_or_synthetic_rows": 39,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p08_09_green": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "privacy": {
+    "absolute_private_paths": false,
+    "document_content": false,
+    "raw_action_identifiers": false,
+    "raw_parameter_identifiers": false,
+    "raw_probe_values": false
+  }
+}

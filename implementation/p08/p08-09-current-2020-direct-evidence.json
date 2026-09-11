@@ -1,0 +1,126 @@
+{
+  "schema_version": "hwpx-agent.p08-object-direct-evidence/v1",
+  "target_profile_id": "hancom-hangul-2020-secondary",
+  "profiles": [
+    {
+      "profile_id": "image-full-package-v1",
+      "feature_ids": ["OBJ-002"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["resource_integrity", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "evidence_files": [
+        "implementation/p08/P08-01_ASSET_PIPELINE_REPORT.md",
+        "implementation/p08/P08-02_IMAGE_HWPX_REPORT.md",
+        "implementation/p08/evidence/p08-01-asset-pipeline-source-qualification.v1.json",
+        "implementation/p08/evidence/p08-02-image-hwpx-source-qualification.v1.json"
+      ]
+    },
+    {
+      "profile_id": "geometry-section-v1",
+      "feature_ids": ["OBJ-015", "OBJ-016", "OBJ-017", "OBJ-018", "OBJ-032", "OBJ-033"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "evidence_files": [
+        "implementation/p08/P08-03_OBJECT_GEOMETRY_REPORT.md",
+        "implementation/p08/evidence/p08-03-object-geometry-source-qualification.v1.json"
+      ]
+    },
+    {
+      "profile_id": "basic-shape-package-v1",
+      "feature_ids": ["OBJ-001", "OBJ-007"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["resource_integrity", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "evidence_files": [
+        "implementation/p08/P08-04_BASIC_SHAPE_REPORT.md",
+        "implementation/p08/evidence/p08-04-basic-shape-source-qualification.v1.json"
+      ]
+    },
+    {
+      "profile_id": "appearance-section-v1",
+      "feature_ids": [
+        "OBJ-020", "OBJ-021", "OBJ-022", "OBJ-023", "OBJ-024", "OBJ-026",
+        "OBJ-027", "OBJ-028", "OBJ-029", "OBJ-034", "OBJ-035"
+      ],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "evidence_files": [
+        "implementation/p08/P08-05_OBJECT_APPEARANCE_REPORT.md",
+        "implementation/p08/evidence/p08-05-object-appearance-source-qualification.v1.json"
+      ]
+    },
+    {
+      "profile_id": "composition-component-v1",
+      "feature_ids": ["OBJ-036", "OBJ-037", "OBJ-038", "OBJ-039", "OBJ-040", "OBJ-041"],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": ["schema"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "evidence_files": [
+        "implementation/p08/P08-06_OBJECT_COMPOSITION_REPORT.md",
+        "implementation/p08/evidence/p08-06-object-composition-source-qualification.v1.json"
+      ]
+    },
+    {
+      "profile_id": "chart-component-v1",
+      "feature_ids": [
+        "OBJ-006", "OBJ-049", "OBJ-050", "OBJ-051", "OBJ-052",
+        "OBJ-053", "OBJ-054", "OBJ-055", "OBJ-056"
+      ],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": [],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "evidence_files": [
+        "implementation/p08/P08-07_CHART_AUTOMATION_REPORT.md",
+        "implementation/p08/evidence/p08-07-chart-automation-source-qualification.v1.json"
+      ]
+    },
+    {
+      "profile_id": "drawing-canvas-component-v1",
+      "feature_ids": ["OBJ-010", "OBJ-031"],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": ["schema"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "evidence_files": [
+        "implementation/p08/P08-08_DRAWING_CANVAS_REPORT.md",
+        "implementation/p08/evidence/p08-08-drawing-canvas-source-qualification.v1.json"
+      ]
+    },
+    {
+      "profile_id": "ole-passive-preservation-v1",
+      "feature_ids": ["OBJ-011", "OBJ-057"],
+      "backend": "preserve_only",
+      "stage": "integration_passed",
+      "validations_passed": ["binary_preservation", "security_scan"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "security"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "evidence_files": [
+        "implementation/p08/P08-08_ACTIVE_CONTENT_REPORT.md",
+        "implementation/p08/evidence/p08-08-active-content-source-qualification.v1.json"
+      ]
+    }
+  ]
+}
