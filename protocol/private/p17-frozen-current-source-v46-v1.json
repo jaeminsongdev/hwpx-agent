@@ -1,0 +1,96 @@
+{
+  "schema_version": "hwpx-agent.p17-frozen-current-source-v46/v1",
+  "contract_id": "p17.frozen-current-source.v46.v1",
+  "scope": "immutable_git_blob_remote_credential_lifecycle_source_and_evidence_verification",
+  "claims": {
+    "actual_external_credential_issuer": false,
+    "actual_external_remote_network": false,
+    "actual_hangul": false,
+    "credential_issuance_or_rotation_verified": false,
+    "credential_lifecycle_component_verified": true,
+    "complete_policy_and_state_binding_verified": true,
+    "historical_v46_committed_source_state_verified": true,
+    "mutable_worktree_product_sources_authoritative": false,
+    "p17_06_complete": false,
+    "production": false,
+    "product_complete": false,
+    "real_service_credential_verified": false,
+    "receipt_blob_verified": true,
+    "synthetic_ephemeral_issuer_only": true,
+    "windows_atomic_vault_state_integration_verified": false
+  },
+  "qualification": {
+    "base_commit": "a13ec5ca0e21c64f4d84ac734ad601252fb21074",
+    "qualification_commit": "b20874ab16f605f126047a58f8b65d35202dc4e6",
+    "qualification_id": "p17.current-workspace-source.v46.20260911",
+    "contract_path": "implementation/p17/qualification/current-workspace-source-v46-20260911/contract.json",
+    "contract_sha256": "191ace02e3effd4af3b526b0963abb7f7f82b26aa45037d3e5ed23ce326447b3",
+    "current_path": "implementation/p17/qualification/current-workspace-source-v46-20260911/current-host.json",
+    "current_sha256": "f5041d64d2285b3c84e43e6f7b55d8df21d66c3b84f351770e47105e485787fc",
+    "receipt_path": "artifacts/p17/current-workspace-source-runs/bc1bdc271d4b464db1c9cbc0a1da0d46/receipt.json",
+    "receipt_sha256": "385b1d07a43a883e1786585f13f84dee70d4503b750826e4ca2e14958239a861",
+    "implementation_source_count": 10,
+    "runtime_qualification_source_count": 2,
+    "source_successor_count": 28,
+    "guard_source_count": 3,
+    "claim_count": 79
+  },
+  "component_contract": {
+    "path": "protocol/private/p17-remote-credential-lifecycle-v1.json",
+    "sha256": "2f8ad8175baaec7a52aa7490030ae63d892ba81473f0d51e5c20ab455c2559a2"
+  },
+  "invariants": [
+    "bounded_git_blob_reads",
+    "committed_source_and_receipt_blobs_verified",
+    "complete_policy_and_state_binding_verified",
+    "duplicate_json_keys_rejected",
+    "exact_commit_ids_and_ancestry",
+    "frozen_v45_predecessor_verified",
+    "no_mutable_worktree_authority",
+    "remote_credential_lifecycle_contract_and_evidence_verified",
+    "synthetic_ephemeral_issuer_only",
+    "typed_bounded_fail_closed_errors"
+  ],
+  "source_locks": [
+    {
+      "path": "implementation/p17/P17_FROZEN_CURRENT_WORKSPACE_SOURCE_V46.md",
+      "bytes": 803,
+      "sha256": "59f950ad69babbc0365a5dbbbe4c4cb0067f7fa683e8a2d3b373e06d31147a89"
+    },
+    {
+      "path": "protocol/migrations/p17-current-workspace-source-v46-to-frozen-v1.md",
+      "bytes": 673,
+      "sha256": "58449a49e6b3859902c4c48de6836c56146f9100429ab6e2852947df974b9de9"
+    },
+    {
+      "path": "protocol/private/p17-frozen-current-source-v45-v1.json",
+      "bytes": 3907,
+      "sha256": "45fddeb30186f254ca0570e6e9d456e7409312320fdcc47188cddc97a032a818"
+    },
+    {
+      "path": "tools/p17/frozen_current_source_v46.py",
+      "bytes": 15611,
+      "sha256": "fb641aa2224363de9a953698a04949d7f3737e5ff5928e0b79dbefa9d1ca0c1c"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v46.py",
+      "bytes": 2519,
+      "sha256": "0e84cf418a4de47f8ad362524b2c5dd408e2d49255a9e8ca41a31f29423e39a6"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v46.py",
+      "bytes": 3439,
+      "sha256": "7c7129a02bf96a139892caba65d6c17a11583e1ed6d9347160fc8ac69f7b26e4"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v46_contract.py",
+      "bytes": 2761,
+      "sha256": "e36ae4afffc1a64f5641b78c11ea5ef9d162ce28c6704865273e4e41dfdb649d"
+    },
+    {
+      "path": "tools/p17/validate_frozen_current_source_v46_contract.py",
+      "bytes": 6323,
+      "sha256": "d51c7077617fac8fa247f535cfae60213f6f99e2b340a0a06358139accb67624"
+    }
+  ]
+}
