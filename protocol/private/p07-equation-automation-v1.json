@@ -1,0 +1,119 @@
+{
+  "schema_version": "hwpx-agent.equation-automation-contract/v1",
+  "request_schema_version": "hwpx-agent.equation-automation/v1",
+  "receipt_schema_version": "hwpx-agent.equation-automation-receipt/v1",
+  "profile_id": "hwpx-agent.equation-automation.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
+  "task": "P07-06",
+  "scope": "typed_native_equation_insert_edit_readback_with_exact_current_target_probe",
+  "capabilities": [
+    "eq.edit_native",
+    "eq.insert_native",
+    "eq.roundtrip_readback"
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path": "WORK_BREAKDOWN_STRUCTURE.csv", "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path": "README.md", "sha256": "9811580c0c6c2d780d6b5d437318efc66a55e7081b04af7924c691e4bb214459"},
+    {"path": "docs/04_feature_catalog/08_eq.md", "sha256": "d515b2c63feb7797c55a2634fad6faf1b20c4644f16c42b26288551869e7975b"},
+    {"path": "docs/04_feature_catalog/contracts/08_eq_contracts.md", "sha256": "dfd3a1615ddb7f61cae87308deb0bc8237f03f194a63f1bff9304919fa88119b"},
+    {"path": "docs/09_roadmap/P07_native_equation_engine.md", "sha256": "b8e7632e256a7112221812643f3dd24833e0d9bd59568cbdf23ec292a298bf9d"},
+    {"path": "docs/12_implementation_guides/06_native_equation_pipeline.md", "sha256": "fca1909edfd0a7078bf3656d583578df15ab5bde56161a963984d6784e1fcb5b"},
+    {"path": "implementation/p02/P02-07_REPORT.md", "sha256": "6b04508860ad28eb4471d2866a0fe745721781bbc37755e88f520bcac74c91eb"},
+    {"path": "implementation/p02/evidence/bindings/automation-bindings.2020.v1.final.json", "sha256": "986953421c74d033bcb17dbd763eb6daa0b06c1a5a8b9e3720951fc674d6fd48"},
+    {"path": "implementation/p07/P07-05_NATIVE_EQUATION_HWPX_REPORT.md", "sha256": "7636f9842f7d9522255c0bacd00b1c5c42e039ccab8a93fe29e84c2c1867f57b"}
+  ],
+  "source_qualification": "implementation/p07/evidence/p07-06-equation-automation-source-qualification.current-2020.v1.json",
+  "target_evidence": "implementation/p07/evidence/target/p07-06-equation-automation.current-2020.attempt03.v1.json",
+  "migration": "protocol/migrations/p07-equation-automation-v0-to-v1.md",
+  "policy": "implementation/p07/P07-06_EQUATION_AUTOMATION_POLICY.md",
+  "report": "implementation/p07/P07-06_EQUATION_AUTOMATION_REPORT.md",
+  "implementation_files": [
+    ".gitignore",
+    "crates/equation-engine/src/lib.rs",
+    "crates/equation-engine/src/automation.rs",
+    "crates/equation-engine/tests/equation_automation.rs",
+    "crates/equation-engine/examples/p07_06_equation_automation_program.rs",
+    "crates/hwpx-package/src/lib.rs",
+    "crates/hwpx-package/src/equation.rs",
+    "crates/hwpx-package/tests/equation_hwpx.rs",
+    "crates/hwpx-package/examples/p07_06_equation_automation_oracle.rs",
+    "tools/p07/build_equation_automation_probe.py",
+    "implementation/p07/tools/run-hancom-2020-equation-automation-probe.ps1",
+    "implementation/p07/tools/run-hancom-2020-equation-automation-probe-child.ps1"
+  ],
+  "binding": {
+    "source_state": "revision_package_graph_document_flow_anchor_selected_native_equation_semantic",
+    "drift_checks": "request_and_build_repeat_exact_complete_state_comparison",
+    "semantic": "normalized_math_ast_eqedit_compile_parse_equality",
+    "installed_binding": "hash_pinned_private_source_shape_types_and_opaque_binding_set_sha",
+    "raw_identifiers": "private_probe_only_never_public_plan_receipt_or_evidence"
+  },
+  "operations": {
+    "insert": "requires_no_selected_equation_and_mutates_graph_and_flow",
+    "edit": "requires_exact_selected_object_and_semantic_and_mutates_graph_and_flow",
+    "readback": "requires_exact_selected_object_and_semantic_and_preserves_graph_and_flow"
+  },
+  "target_probe": {
+    "document": "disposable_blank_only",
+    "runtime": "registry32_x86_sta_exact_build_executable_and_harness_hashes",
+    "selection": "exact_source_derived_reverse_control_selection",
+    "readback": "edit_default_without_execute_exact_script_hash",
+    "lifecycle": "insert_readback_save_edit_readback_save_close_reopen_quit",
+    "oracle": "strict_automation_native_profile_on_both_immutable_saved_hwpx"
+  },
+  "p02_boundary": {
+    "frozen_registry_status": "unavailable_with_reason",
+    "reason": "no_reviewed_action_mapping",
+    "routing_enabled": false,
+    "runtime_support_state": "unverified",
+    "mutated_or_promoted_by_p07": false
+  },
+  "default_limits": {
+    "request_bytes": 8388608,
+    "revision_bytes": 512,
+    "serialized_bytes": 16777216,
+    "probe_source_bytes": 16777216,
+    "probe_script_bytes": 1048576,
+    "probe_output_bytes": 4194304,
+    "target_timeout_seconds": 180
+  },
+  "failure_policy": [
+    "zero_or_hard_ceiling_exceeding_limits_rejected",
+    "unknown_duplicate_malformed_or_oversized_json_rejected",
+    "schema_profile_identity_binding_or_complete_source_state_drift_rejected",
+    "insert_selection_or_edit_readback_object_semantic_mismatch_rejected",
+    "math_ast_eqedit_compile_parse_or_semantic_mismatch_rejected",
+    "failed_before_effect_or_effect_unknown_receipt_rejected",
+    "operation_specific_graph_or_flow_mutation_mismatch_rejected",
+    "private_source_hash_record_shape_type_set_or_output_boundary_drift_rejected",
+    "target_identity_harness_request_readback_save_reopen_or_native_oracle_failure_rejected",
+    "debug_and_public_evidence_redact_raw_identifiers_private_paths_scripts_and_bound_state",
+    "no_failed_partial_p02_registry_production_render_differential_or_product_promotion"
+  ],
+  "not_claimed": {
+    "layout_estimator_visual": false,
+    "editor_double_click_smoke": false,
+    "render": false,
+    "differential": false,
+    "p02_registry_promoted": false,
+    "p10_05_security_module": false,
+    "p10_06_production_executor": false,
+    "other_hangul_versions": false,
+    "p07_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "oracle_verified",
+    "actual_hangul": true,
+    "native_insert": true,
+    "native_edit": true,
+    "in_session_script_readback": true,
+    "save_reopen": true,
+    "native_hwpx_oracle": true,
+    "render": false,
+    "p07": "in_progress",
+    "product_complete": false
+  }
+}

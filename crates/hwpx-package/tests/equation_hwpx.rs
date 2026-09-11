@@ -170,6 +170,49 @@ fn saved_target_line_cache_is_admitted_without_weakening_equation_shape() -> Tes
 }
 
 #[test]
+fn automation_native_profile_is_distinct_strict_and_semantically_read_back() -> TestResult {
+    let section = format!(
+        concat!(
+            "<hs:sec xmlns:hs=\"{section_ns}\" xmlns:q=\"{ns}\"><q:p id=\"1\" paraPrIDRef=\"1\" styleIDRef=\"1\">",
+            "<q:run charPrIDRef=\"1\"><q:secPr id=\"\"/><q:ctrl/></q:run>",
+            "<q:run charPrIDRef=\"1\"><q:equation id=\"55\" zOrder=\"0\" numberingType=\"EQUATION\" ",
+            "textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" ",
+            "version=\"Equation Version 60\" baseLine=\"86\" textColor=\"#000000\" baseUnit=\"1000\" lineMode=\"CHAR\" font=\"HancomEQN\">",
+            "<q:sz width=\"2230\" widthRelTo=\"ABSOLUTE\" height=\"975\" heightRelTo=\"ABSOLUTE\" protect=\"0\"/>",
+            "<q:pos treatAsChar=\"1\" affectLSpacing=\"0\" flowWithText=\"1\" allowOverlap=\"0\" holdAnchorAndSO=\"0\" ",
+            "vertRelTo=\"PARA\" horzRelTo=\"PARA\" vertAlign=\"TOP\" horzAlign=\"LEFT\" vertOffset=\"0\" horzOffset=\"0\"/>",
+            "<q:outMargin left=\"56\" right=\"56\" top=\"0\" bottom=\"0\"/>",
+            "<q:shapeComment>수식입니다.</q:shapeComment><q:script>{{x}} + {{1}}</q:script>",
+            "</q:equation><q:t/></q:run><q:linesegarray/></q:p></hs:sec>"
+        ),
+        section_ns = SECTION_NS,
+        ns = PARAGRAPH_NS,
+    );
+    let limits = EquationHwpxLimits::default();
+    let readback = EquationHwpxReader::read_automation_in_section(section.as_bytes(), 0, limits)?;
+    assert_eq!(readback.object_id(), 55);
+    assert_eq!(readback.layout(), EquationLayout::Display);
+    assert_eq!(readback.style().baseline_percent, 86);
+    assert_eq!(readback.extent().width_hwpunit, 2_230);
+    assert_code(
+        EquationHwpxReader::read_in_section(section.as_bytes(), 0, limits),
+        "equation_hwpx_readback_mismatch",
+    );
+    for drifted in [
+        section.replace("affectLSpacing=\"0\"", "affectLSpacing=\"1\""),
+        section.replace("left=\"56\"", "left=\"0\""),
+        section.replace("수식입니다.", "tampered"),
+        section.replace("q:shapeComment", "q:unknown"),
+    ] {
+        assert_code(
+            EquationHwpxReader::read_automation_in_section(drifted.as_bytes(), 0, limits),
+            "equation_hwpx_readback_mismatch",
+        );
+    }
+    Ok(())
+}
+
+#[test]
 fn request_rejects_source_and_flow_drift_at_admission() -> TestResult {
     let bytes = valid_archive(&display_section())?;
     let (mut reader, graph) = open_graph(bytes)?;

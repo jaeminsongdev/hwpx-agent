@@ -1,9 +1,17 @@
 #![forbid(unsafe_code)]
 
+mod automation;
 mod eqedit;
 mod latex;
 mod mathml;
 
+pub use automation::{
+    EQUATION_AUTOMATION_PROFILE_VERSION, EQUATION_AUTOMATION_RECEIPT_SCHEMA_VERSION,
+    EQUATION_AUTOMATION_SCHEMA_VERSION, EquationAutomationError, EquationAutomationLimitConfig,
+    EquationAutomationLimits, EquationAutomationOperationDraft, EquationAutomationPlan,
+    EquationAutomationPlanner, EquationAutomationReceiptDraft, EquationAutomationReceiptState,
+    EquationAutomationSelection, EquationAutomationSourceState, EquationAutomationTarget,
+};
 pub use eqedit::{
     EQEDIT_ADAPTER_SCHEMA_VERSION, EQEDIT_COMPILER_VERSION, EQEDIT_PARSER_VERSION,
     EQEDIT_PROFILE_VERSION, EqEditCompileResult, EqEditEngine, EqEditError, EqEditLimitConfig,

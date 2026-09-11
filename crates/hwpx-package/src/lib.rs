@@ -46,11 +46,11 @@ pub use character_style::{
     UnderlinePosition,
 };
 pub use equation::{
-    EQUATION_HWPX_PROFILE_ID, EQUATION_HWPX_SCHEMA_VERSION, EquationColor, EquationExtent,
-    EquationExtentSource, EquationHwpxBuilder, EquationHwpxError, EquationHwpxLimitConfig,
-    EquationHwpxLimits, EquationHwpxLowered, EquationHwpxLowerer, EquationHwpxLoweringReceipt,
-    EquationHwpxReadback, EquationHwpxReader, EquationHwpxRequest, EquationHwpxRequestDraft,
-    EquationHwpxSource, EquationLayout, EquationStyle,
+    EQUATION_AUTOMATION_HWPX_PROFILE_ID, EQUATION_HWPX_PROFILE_ID, EQUATION_HWPX_SCHEMA_VERSION,
+    EquationColor, EquationExtent, EquationExtentSource, EquationHwpxBuilder, EquationHwpxError,
+    EquationHwpxLimitConfig, EquationHwpxLimits, EquationHwpxLowered, EquationHwpxLowerer,
+    EquationHwpxLoweringReceipt, EquationHwpxReadback, EquationHwpxReader, EquationHwpxRequest,
+    EquationHwpxRequestDraft, EquationHwpxSource, EquationLayout, EquationStyle,
 };
 pub use font_metric_receipt::{
     CURRENT_FONT_METRIC_PROFILE_ID, CurrentFontMetricCell, CurrentFontMetricLimits,

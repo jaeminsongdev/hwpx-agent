@@ -20,11 +20,15 @@ use crate::{
 pub const EQUATION_HWPX_SCHEMA_VERSION: &str = "hwpx-agent.equation-hwpx/v1";
 pub const EQUATION_HWPX_PROFILE_ID: &str =
     "hwpx-agent.equation-hwpx.hangul-2020-11.0.0.9136-x86-ko-KR/v1";
+pub const EQUATION_AUTOMATION_HWPX_PROFILE_ID: &str =
+    "hwpx-agent.equation-automation-hwpx.hangul-2020-11.0.0.9136-x86-ko-KR/v1";
 
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const SECTION_NS: &str = "http://www.hancom.co.kr/hwpml/2011/section";
 const EQUATION_VERSION: &str = "Equation Version 60";
 const EQUATION_FONT: &str = "HancomEQN";
+const AUTOMATION_SHAPE_COMMENT_SHA256: &str =
+    "081b13b9a569cb38e32575a91676f49659500592a8e6afcc77a5a952fc512307";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct EquationHwpxLimitConfig {
@@ -124,6 +128,12 @@ impl EquationHwpxLimits {
 pub enum EquationLayout {
     Inline,
     Display,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum EquationHwpxReadProfile {
+    DirectLowerer,
+    AutomationCurrent2020,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -702,7 +712,13 @@ impl EquationHwpxReader {
         equation_ordinal: usize,
         limits: EquationHwpxLimits,
     ) -> Result<EquationHwpxReadback, EquationHwpxError> {
-        read_equation_shape(bytes, equation_ordinal, &limits).map(|shape| shape.readback)
+        read_equation_shape(
+            bytes,
+            equation_ordinal,
+            EquationHwpxReadProfile::DirectLowerer,
+            &limits,
+        )
+        .map(|shape| shape.readback)
     }
 
     /// Reads one native equation through the closed package graph and verifies the graph hash.
@@ -719,6 +735,42 @@ impl EquationHwpxReader {
     ) -> Result<EquationHwpxReadback, EquationHwpxError> {
         let (_, bytes) = read_spine_part(reader, graph, section_part, &limits)?;
         Self::read_in_section(&bytes, equation_ordinal, limits)
+    }
+
+    /// Strictly inspects the separately qualified current-2020 automation-native shape.
+    ///
+    /// # Errors
+    ///
+    /// Rejects direct-lowerer shapes, any unqualified automation normalization, invalid native
+    /// state, malformed `EqEdit`, duplicate IDs, or finite-limit failure.
+    pub fn read_automation_in_section(
+        bytes: &[u8],
+        equation_ordinal: usize,
+        limits: EquationHwpxLimits,
+    ) -> Result<EquationHwpxReadback, EquationHwpxError> {
+        read_equation_shape(
+            bytes,
+            equation_ordinal,
+            EquationHwpxReadProfile::AutomationCurrent2020,
+            &limits,
+        )
+        .map(|shape| shape.readback)
+    }
+
+    /// Reads one automation-created native equation through the closed package graph.
+    ///
+    /// # Errors
+    ///
+    /// Applies the exact automation-native inspection and package part checks.
+    pub fn read_automation_in_package<R: Read + Seek>(
+        reader: &mut BoundedZipReader<R>,
+        graph: &PackageGraph,
+        section_part: &str,
+        equation_ordinal: usize,
+        limits: EquationHwpxLimits,
+    ) -> Result<EquationHwpxReadback, EquationHwpxError> {
+        let (_, bytes) = read_spine_part(reader, graph, section_part, &limits)?;
+        Self::read_automation_in_section(&bytes, equation_ordinal, limits)
     }
 }
 
@@ -794,6 +846,7 @@ impl EquationHwpxLowerer {
         let output_shape = read_equation_shape(
             &output_part.bytes,
             bound.insertion_equation_ordinal,
+            EquationHwpxReadProfile::DirectLowerer,
             &limits,
         )?;
         if output_shape.readback.object_id != request.object_id
@@ -1193,6 +1246,7 @@ fn equation_fragment(
 fn read_equation_shape(
     bytes: &[u8],
     equation_ordinal: usize,
+    profile: EquationHwpxReadProfile,
     limits: &EquationHwpxLimits,
 ) -> Result<EquationShape, EquationHwpxError> {
     let document = parse_section(bytes, limits)?;
@@ -1245,13 +1299,19 @@ fn read_equation_shape(
     let baseline_percent = parse_u8(attr(equation, "baseLine")?)?;
     let base_unit = parse_u32(attr(equation, "baseUnit")?)?;
     let text_color = parse_color(attr(equation, "textColor")?)?;
-    let layout = infer_layout_context(&document, equation_index)?;
+    let layout = infer_layout_context(&document, equation_index, profile)?;
     let children = child_indexes(&document, equation_index)?;
-    if children.len() != 4
+    let script_offset = match profile {
+        EquationHwpxReadProfile::DirectLowerer => 3,
+        EquationHwpxReadProfile::AutomationCurrent2020 => 4,
+    };
+    if children.len() != script_offset + 1
         || !has_name(element(&document, children[0])?, "sz")
         || !has_name(element(&document, children[1])?, "pos")
         || !has_name(element(&document, children[2])?, "outMargin")
-        || !has_name(element(&document, children[3])?, "script")
+        || (profile == EquationHwpxReadProfile::AutomationCurrent2020
+            && !has_name(element(&document, children[3])?, "shapeComment"))
+        || !has_name(element(&document, children[script_offset])?, "script")
     {
         return Err(EquationHwpxError::ReadbackMismatch);
     }
@@ -1280,14 +1340,18 @@ fn read_equation_shape(
             "horzOffset",
         ],
     )?;
+    let (affect_line_spacing, horizontal_relation) = match profile {
+        EquationHwpxReadProfile::DirectLowerer => ("1", "COLUMN"),
+        EquationHwpxReadProfile::AutomationCurrent2020 => ("0", "PARA"),
+    };
     for (name, value) in [
         ("treatAsChar", "1"),
-        ("affectLSpacing", "1"),
+        ("affectLSpacing", affect_line_spacing),
         ("flowWithText", "1"),
         ("allowOverlap", "0"),
         ("holdAnchorAndSO", "0"),
         ("vertRelTo", "PARA"),
-        ("horzRelTo", "COLUMN"),
+        ("horzRelTo", horizontal_relation),
         ("vertAlign", "TOP"),
         ("horzAlign", "LEFT"),
         ("vertOffset", "0"),
@@ -1297,15 +1361,41 @@ fn read_equation_shape(
     }
     let margin = element(&document, children[2])?;
     validate_attributes(margin, &["left", "right", "top", "bottom"])?;
-    for name in ["left", "right", "top", "bottom"] {
-        require_attr(margin, name, "0")?;
+    let expected_margins = match profile {
+        EquationHwpxReadProfile::DirectLowerer => {
+            [("left", "0"), ("right", "0"), ("top", "0"), ("bottom", "0")]
+        }
+        EquationHwpxReadProfile::AutomationCurrent2020 => [
+            ("left", "56"),
+            ("right", "56"),
+            ("top", "0"),
+            ("bottom", "0"),
+        ],
+    };
+    for (name, value) in expected_margins {
+        require_attr(margin, name, value)?;
     }
-    let script_element = element(&document, children[3])?;
+    if profile == EquationHwpxReadProfile::AutomationCurrent2020 {
+        let shape_comment = element(&document, children[3])?;
+        validate_attributes(shape_comment, &[])?;
+        if shape_comment.first_child().is_some() {
+            return Err(EquationHwpxError::ReadbackMismatch);
+        }
+        let comment = element_text(&document, children[3], 64)?;
+        if hex(Sha256::digest(comment.as_bytes()).into()) != AUTOMATION_SHAPE_COMMENT_SHA256 {
+            return Err(EquationHwpxError::ReadbackMismatch);
+        }
+    }
+    let script_element = element(&document, children[script_offset])?;
     validate_attributes(script_element, &[])?;
     if script_element.first_child().is_some() || script_element.is_empty() {
         return Err(EquationHwpxError::ReadbackMismatch);
     }
-    let script = element_text(&document, children[3], limits.native.script_bytes)?;
+    let script = element_text(
+        &document,
+        children[script_offset],
+        limits.native.script_bytes,
+    )?;
     if script.is_empty() {
         return Err(EquationHwpxError::ReadbackMismatch);
     }
@@ -1342,7 +1432,12 @@ fn read_equation_shape(
         .ok_or(EquationHwpxError::ReadbackMismatch)?;
     Ok(EquationShape {
         readback: EquationHwpxReadback {
-            profile_id: EQUATION_HWPX_PROFILE_ID,
+            profile_id: match profile {
+                EquationHwpxReadProfile::DirectLowerer => EQUATION_HWPX_PROFILE_ID,
+                EquationHwpxReadProfile::AutomationCurrent2020 => {
+                    EQUATION_AUTOMATION_HWPX_PROFILE_ID
+                }
+            },
             object_id,
             layout,
             style,
@@ -1366,6 +1461,7 @@ fn read_equation_shape(
 fn infer_layout_context(
     document: &PreservingXmlDocument,
     equation: usize,
+    profile: EquationHwpxReadProfile,
 ) -> Result<EquationLayout, EquationHwpxError> {
     let run = element(document, equation)?
         .parent()
@@ -1405,6 +1501,8 @@ fn infer_layout_context(
         Ok(EquationLayout::Display)
     } else if paragraph_has_other_visible_content(document, paragraph, run)? {
         Ok(EquationLayout::Inline)
+    } else if profile == EquationHwpxReadProfile::AutomationCurrent2020 {
+        Ok(EquationLayout::Display)
     } else {
         Err(EquationHwpxError::ReadbackMismatch)
     }
