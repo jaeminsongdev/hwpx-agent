@@ -1,0 +1,90 @@
+{
+  "schema_version": "hwpx-agent.asset-pipeline-contract/v1",
+  "plan_schema_version": "hwpx-agent.asset-pipeline/v1",
+  "profile_id": "hwpx-agent.asset-pipeline.hwp-image-v1",
+  "task": "P08-01",
+  "scope": "bounded_embedded_image_asset_sniff_hash_dedup_relationship_and_atomic_part_planning",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path":"WORK_BREAKDOWN_STRUCTURE.csv","sha256":"3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path":"README.md","sha256":"9811580c0c6c2d780d6b5d437318efc66a55e7081b04af7924c691e4bb214459"},
+    {"path":"docs/03_document_model/08_drawing_image_chart.md","sha256":"ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b"},
+    {"path":"docs/04_feature_catalog/09_obj.md","sha256":"e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8"},
+    {"path":"docs/04_feature_catalog/contracts/09_obj_contracts.md","sha256":"e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2"},
+    {"path":"docs/09_roadmap/P08_images_shapes_drawing_charts.md","sha256":"f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path":"docs/12_implementation_guides/08_validation_oracle_visual_diff.md","sha256":"13bd9b84ddf0684fbb8892a6eaa14957af85e2d218c0f5cd438d57e71acdb426"},
+    {"path":"implementation/p05/P05_GATE_REPORT.md","sha256":"69ec9b6737f9453769851896177b840cc5fbf51043c8231e1af25f1a6ccd8297"}
+  ],
+  "source_qualification": "implementation/p08/evidence/p08-01-asset-pipeline-source-qualification.v1.json",
+  "migration": "protocol/migrations/p08-asset-pipeline-v0-to-v1.md",
+  "policy": "implementation/p08/P08-01_ASSET_PIPELINE_POLICY.md",
+  "report": "implementation/p08/P08-01_ASSET_PIPELINE_REPORT.md",
+  "implementation_files": [
+    "crates/hwpx-package/src/lib.rs",
+    "crates/hwpx-package/src/asset.rs",
+    "crates/hwpx-package/tests/asset_pipeline.rs",
+    "crates/hwpx-package/src/patch.rs",
+    "crates/hwpx-package/src/graph.rs",
+    "crates/hwpx-package/src/preservation.rs"
+  ],
+  "media_profile": {
+    "image/png": "signature_chunks_ihdr_idat_iend_crc_dimensions",
+    "image/jpeg": "soi_segments_frame_scan_eoi_dimensions",
+    "image/gif": "header_logical_screen_color_tables_extensions_image_blocks_trailer",
+    "image/webp": "exact_riff_size_chunks_padding_vp8_or_vp8l_dimensions",
+    "image/bmp": "file_and_dib_headers_encoding_pixel_offset_and_uncompressed_extent"
+  },
+  "workflow": {
+    "plan": "sniff_and_validate_payload_bind_complete_ordered_package_graph_and_select_exact_reuse_or_content_addressed_add",
+    "reload": "strict_private_json_raw_digest_plus_full_graph_payload_media_dimension_dedup_path_relationship_and_plan_recompute",
+    "lower": "recheck_graph_and_plan_then_emit_zero_reuse_intents_or_exactly_one_part_plus_one_manifest_relationship",
+    "transaction": "existing_preserving_patch_engine_rebuilds_graph_and_requires_atomic_relationship_part_closure"
+  },
+  "default_limits": {
+    "max_asset_bytes": 67108864,
+    "max_existing_assets": 4096,
+    "max_plan_json_bytes": 16384,
+    "max_dimension_px": 100000,
+    "max_pixels": 1000000000
+  },
+  "failure_policy": [
+    "zero_or_over_ceiling_limits_rejected",
+    "empty_oversized_unsupported_truncated_or_structurally_malformed_payload_rejected",
+    "declared_media_must_equal_sniffed_media",
+    "dimension_and_pixel_limits_checked_before_plan",
+    "complete_ordered_package_graph_bound_at_plan_and_lowering",
+    "supported_bindata_parts_require_one_consistent_package_document_manifest_relationship",
+    "same_digest_and_size_with_different_media_rejected",
+    "deterministic_relationship_id_or_part_path_collision_rejected",
+    "reuse_emits_no_duplicate_part_or_relationship",
+    "new_asset_emits_one_part_and_one_non_spine_manifest_relationship",
+    "private_plan_excludes_payload_and_requires_pinned_raw_sha256",
+    "missing_duplicate_unknown_relabelled_oversized_or_tampered_plan_json_rejected",
+    "payload_relationship_path_and_digest_redacted_from_debug",
+    "no_partial_result_or_fallback_after_failure"
+  ],
+  "not_claimed": {
+    "tiff_svg_or_other_media": false,
+    "linked_fetch": false,
+    "pixel_decode": false,
+    "image_control_lowering": false,
+    "actual_hwpx_image": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "render": false,
+    "direct_automation_differential": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "asset_target": "not_run",
+    "actual_hangul": false,
+    "render": false,
+    "p08_01": "component_pass",
+    "p08": "in_progress",
+    "product_complete": false
+  }
+}

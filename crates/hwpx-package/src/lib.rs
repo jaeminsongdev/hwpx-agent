@@ -6,6 +6,7 @@
 //! fully verified in-memory value only after metadata, streaming size, CRC and
 //! nested-package checks have succeeded.
 
+mod asset;
 mod character_style;
 mod equation;
 mod font_metric_receipt;
@@ -36,6 +37,10 @@ mod vs0;
 mod vs1_layout;
 mod writer;
 
+pub use asset::{
+    ASSET_PIPELINE_PROFILE_ID, ASSET_PIPELINE_SCHEMA_VERSION, AssetDisposition, AssetError,
+    AssetLimitConfig, AssetLimits, AssetMedia, AssetPlan, AssetStoreAdapter,
+};
 pub use character_style::{
     BinaryProperty, CHARACTER_STYLE_PROFILE_ID, CharacterEffects, CharacterStyle,
     CharacterStyleCatalog, CharacterStyleCatalogReader, CharacterStyleCatalogWriter,
