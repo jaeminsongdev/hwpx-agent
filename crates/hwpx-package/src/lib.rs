@@ -16,6 +16,7 @@ mod id_index;
 mod image_hwpx;
 mod limits;
 mod list_definition;
+mod object_geometry_hwpx;
 mod page_setup;
 mod paragraph_style;
 mod patch;
@@ -93,6 +94,12 @@ pub use list_definition::{
     ListDefinitionLoweringReceipt, ListSequenceEngine, ListSequenceItem, ListSequenceKind,
     ListSequenceResult, NumberFormat, NumberingDefinition, NumberingLevel,
     OutlineDefinitionBinding, OutlineDefinitionBindingReader, ParagraphHeadStyle, TextOffsetUnit,
+};
+pub use object_geometry_hwpx::{
+    OBJECT_GEOMETRY_HWPX_PROFILE_ID, ObjectGeometryHwpxBuilder, ObjectGeometryHwpxError,
+    ObjectGeometryHwpxLimitConfig, ObjectGeometryHwpxLimits, ObjectGeometryHwpxLowerer,
+    ObjectGeometryHwpxLoweringReceipt, ObjectGeometryHwpxPlan, ObjectGeometryHwpxReadback,
+    ObjectGeometryHwpxReader,
 };
 pub use page_setup::{
     PAGE_SETUP_PROFILE_ID, PageDimensions, PageGutterType, PageMargins, PageOrientation,

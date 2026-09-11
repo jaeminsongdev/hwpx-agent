@@ -1,0 +1,70 @@
+{
+  "schema_version": "hwpx-agent.object-geometry-source-qualification/v1",
+  "task": "P08-03",
+  "recorded_date": "2026-09-12",
+  "profile_id": "hwpx-agent.object-geometry-hwpx.hwpml-2011-common-component/v1",
+  "official_sources": {
+    "local_ks_x_6101_archive": "implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json",
+    "qualified_scope": "HWPML_2011_common_shape_object_and_component_geometry_vocabulary",
+    "hancom_owpml_repository": "https://github.com/hancom-io/owpml-model",
+    "hancom_owpml_commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "model_files": [
+      "OWPML/Class/Para/AbstractShapeObjectType.cpp",
+      "OWPML/Class/Para/AbstractShapeComponentType.cpp",
+      "OWPML/Class/Para/AbstractDrawingObjectType.h",
+      "OWPML/Class/Para/pos.cpp",
+      "OWPML/Class/Para/sz.cpp",
+      "OWPML/Class/Para/flip.cpp",
+      "OWPML/Class/Para/rotationInfo.cpp",
+      "OWPML/Class/Para/renderingInfo.cpp",
+      "OWPML/Class/Core/MatrixType.cpp",
+      "OWPML/Class/Para/RunType.cpp"
+    ],
+    "evidence_scope": "static_vocabulary_inheritance_and_type_model_only"
+  },
+  "implementation_sources": {
+    "crates/domain-ir/src/lib.rs": "64d0d208da96a1794e917eecc1d3dda593f46d85e9aa62475ff175d94685d36e",
+    "crates/domain-ir/src/object_geometry.rs": "61a285a2d892cfd62346a0a16580f54420339da490793c8aebd4cf1522c97a5e",
+    "crates/domain-ir/tests/object_geometry.rs": "74b010ea18717b3403b53c62fc16b28977a35229c9b1b452373e98b744b07531",
+    "crates/hwpx-package/src/lib.rs": "20274fe4624c17d3e39a8fe6409d80ecb18321118402752e174cf8cfcc0c5f9f",
+    "crates/hwpx-package/src/object_geometry_hwpx.rs": "51ae36894264efe1ac4327246cfcd546547e52268f34602fecf4943d9d9845ac",
+    "crates/hwpx-package/tests/object_geometry_hwpx.rs": "e16c857bfb7e7221fbad6cf08996f29a6c2666d92cc46c4dc0bee91f62c43edc"
+  },
+  "component_execution": {
+    "state": "pass",
+    "rust_tests_passed": 17,
+    "domain_tests_passed": 6,
+    "hwpx_section_tests_passed": 11,
+    "six_catalog_operations": "pass",
+    "twelve_common_component_kinds": "pass",
+    "complete_geometry_and_transform_state": "pass",
+    "request_and_build_state_flow_binding": "pass",
+    "section_and_object_byte_binding": "pass",
+    "changed_attribute_only_lowering": "pass",
+    "opaque_payload_and_sibling_preservation": "pass",
+    "fixed_millionth_matrix_exactness": "pass",
+    "tamper_drift_and_malformed_rejection": "pass",
+    "bounded_json_and_redacted_debug": "pass"
+  },
+  "target_execution": {
+    "state": "not_run",
+    "full_package_hwpx": null,
+    "hangul_open": null,
+    "save_reopen": null,
+    "render": null,
+    "direct_automation_differential": null
+  },
+  "claims": {
+    "common_component_pass": true,
+    "six_geometry_operations": true,
+    "full_package_hwpx": false,
+    "exact_current_2020_serialization": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "render": false,
+    "p08_03_complete": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

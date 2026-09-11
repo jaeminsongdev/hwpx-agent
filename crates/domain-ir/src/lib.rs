@@ -4,6 +4,7 @@ mod capability_router;
 mod document_graph;
 mod identity;
 mod math_ast;
+mod object_geometry;
 mod operation_plan;
 mod selector;
 mod semantic_diff;
@@ -60,6 +61,17 @@ pub use math_ast::{
     MathDerivativeVariable, MathExpression, MathFunction, MathGreekLetter, MathLargeOperator,
     MathLetterCase, MathMatrixKind, MathNode, MathOperator, MathSourceSpan, MathStyleHint,
     MathSymbol, MathVariant,
+};
+pub use object_geometry::{
+    OBJECT_GEOMETRY_SCHEMA_VERSION, ObjectAffineMatrix, ObjectAnchor, ObjectComponentGeometry,
+    ObjectExtent, ObjectFlip, ObjectGeometryBuilder, ObjectGeometryError,
+    ObjectGeometryLimitConfig, ObjectGeometryLimits, ObjectGeometryOperation, ObjectGeometryPlan,
+    ObjectGeometryReceipt, ObjectGeometryRequest, ObjectGeometryRequestDraft, ObjectGeometryResult,
+    ObjectGeometryState, ObjectGeometryStateDraft, ObjectHeightReference,
+    ObjectHorizontalAlignment, ObjectHorizontalReference, ObjectKind, ObjectNumberingType,
+    ObjectOuterMargins, ObjectPoint, ObjectPosition, ObjectRotation, ObjectSize, ObjectTextFlow,
+    ObjectTextWrap, ObjectTransform, ObjectVerticalAlignment, ObjectVerticalReference,
+    ObjectWidthReference, ObjectWrap,
 };
 pub use operation_plan::{
     ArgumentDraft, ArgumentKind, ArgumentSource, ArgumentSpec,

@@ -1,0 +1,106 @@
+{
+  "schema_version": "hwpx-agent.object-geometry-contract/v1",
+  "state_schema_version": "hwpx-agent.object-geometry/v1",
+  "profile_id": "hwpx-agent.object-geometry-hwpx.hwpml-2011-common-component/v1",
+  "task": "P08-03",
+  "scope": "bounded_complete_common_geometry_and_transform_state_with_exact_section_object_state_and_flow_bound_preserving_lowering",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path":"WORK_BREAKDOWN_STRUCTURE.csv","sha256":"3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path":"docs/03_document_model/08_drawing_image_chart.md","sha256":"ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b"},
+    {"path":"docs/04_feature_catalog/09_obj.md","sha256":"e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8"},
+    {"path":"docs/04_feature_catalog/contracts/09_obj_contracts.md","sha256":"e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2"},
+    {"path":"docs/09_roadmap/P08_images_shapes_drawing_charts.md","sha256":"f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path":"implementation/p08/P08-02_IMAGE_HWPX_POLICY.md","sha256":"c9345870334411122e8ebd9391acd1e6ef6886d3c432ef9d8afc266bd1a7a21f"},
+    {"path":"implementation/p08/P08-02_IMAGE_HWPX_REPORT.md","sha256":"72f507f6a4510b176ca97a645824cad0d456e858133caa40fb28f0e86d21e590"},
+    {"path":"protocol/private/p08-image-hwpx-v1.json","sha256":"22a5c440bd58599201c668df6f5040c5ad6a62ab7517b1523d128586467a6796"},
+    {"path":"implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json","sha256":"c4a8bdb082cf8610fa2b3f6e709ca9058ab256a2371e9a779b9b323ca82638e4"}
+  ],
+  "source_qualification": "implementation/p08/evidence/p08-03-object-geometry-source-qualification.v1.json",
+  "migration": "protocol/migrations/p08-object-geometry-v0-to-v1.md",
+  "policy": "implementation/p08/P08-03_OBJECT_GEOMETRY_POLICY.md",
+  "report": "implementation/p08/P08-03_OBJECT_GEOMETRY_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/object_geometry.rs",
+    "crates/domain-ir/tests/object_geometry.rs",
+    "crates/hwpx-package/src/lib.rs",
+    "crates/hwpx-package/src/object_geometry_hwpx.rs",
+    "crates/hwpx-package/tests/object_geometry_hwpx.rs"
+  ],
+  "official_model_source": {
+    "repository": "https://github.com/hancom-io/owpml-model",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "scope": "static_common_shape_vocabulary_inheritance_and_types_not_runtime_oracle"
+  },
+  "admitted_profile": {
+    "object_selection": "one_existing_direct_run_child_by_bounded_document_order",
+    "object_kinds": ["pic", "rect", "ellipse", "line", "arc", "polygon", "curve", "connectLine", "container", "ole", "video", "textart"],
+    "operations": ["obj.position", "obj.size", "obj.anchor", "obj.wrap", "obj.rotate", "obj.flip"],
+    "state": "complete_reviewed_common_object_and_component_geometry_fields",
+    "matrix": "all_three_six_coefficient_matrices_as_signed_fixed_millionths",
+    "binding": "canonical_state_and_flow_then_exact_section_and_object_sha256_at_request_and_build",
+    "preservation": "changed_common_attribute_value_spans_only_with_semantic_readback"
+  },
+  "workflow": {
+    "inspect": "strictly_read_one_run_level_common_component_and_exact_section_object_digests",
+    "admit": "bind_complete_state_operation_and_before_after_document_flow",
+    "plan": "recheck_domain_state_flow_then_bind_section_object_and_domain_plan",
+    "lower": "recheck_plan_section_object_state_flow_and_replace_changed_common_attribute_values",
+    "verify": "strict_target_state_readback_noop_identity_and_opaque_sibling_byte_preservation"
+  },
+  "default_limits": {
+    "json_input_bytes": 262144,
+    "json_serialized_bytes": 262144,
+    "extent_hwpunit": 100000000,
+    "matrix_coefficient_millionths": 1000000000000,
+    "section_bytes": 33554432,
+    "elements": 1000000,
+    "objects": 65536,
+    "output_bytes": 33554432,
+    "matrix_text_bytes": 64
+  },
+  "failure_policy": [
+    "zero_negative_over_ceiling_or_inconsistent_limits_rejected",
+    "duplicate_unknown_missing_malformed_or_oversized_state_and_request_json_rejected",
+    "zero_native_identity_zero_extent_or_out_of_bound_transform_rejected",
+    "source_state_and_document_flow_drift_rejected_at_request_plan_and_build",
+    "section_and_selected_object_byte_drift_rejected_at_final_build",
+    "nested_only_unknown_missing_or_duplicate_common_component_structure_rejected",
+    "noncanonical_boolean_integer_enum_and_more_than_six_decimal_matrix_rejected",
+    "rotation_and_flip_require_complete_caller_supplied_target_transform",
+    "object_identity_kind_zorder_numbering_and_lock_cannot_change_in_geometry_plan",
+    "only_changed_common_attribute_value_spans_may_change",
+    "semantic_target_readback_must_equal_planned_complete_state",
+    "unchanged_lexemes_opaque_payload_siblings_text_namespaces_and_formatting_preserved",
+    "identity_geometry_paths_and_digests_redacted_from_debug",
+    "no_partial_result_or_fallback_after_failure"
+  ],
+  "not_claimed": {
+    "nested_group_member_addressing": false,
+    "graph_or_chart_geometry": false,
+    "aspect_lock_semantics": false,
+    "full_package_hwpx": false,
+    "exact_current_2020_serialization": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "render": false,
+    "direct_automation_differential": false,
+    "p08_03_complete": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "common_geometry": "pass",
+    "full_package_hwpx": "not_run",
+    "actual_hangul": false,
+    "render": false,
+    "p08_03": "common_component_pass_target_not_run_task_incomplete",
+    "p08_03_complete": false,
+    "p08": "in_progress",
+    "product_complete": false
+  }
+}
