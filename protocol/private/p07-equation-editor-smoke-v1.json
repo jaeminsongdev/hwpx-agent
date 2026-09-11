@@ -1,0 +1,102 @@
+{
+  "schema_version": "hwpx-agent.equation-editor-smoke-contract/v1",
+  "request_schema_version": "hwpx-agent.equation-editor-smoke/v1",
+  "evidence_schema_version": "hwpx-agent.equation-editor-smoke-evidence/v1",
+  "receipt_schema_version": "hwpx-agent.equation-editor-smoke-receipt/v1",
+  "profile_id": "hwpx-agent.equation-editor-smoke.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
+  "task": "P07-09",
+  "scope": "one_token_double_click_native_equation_edit_with_manual_and_automated_save_reopen_evidence",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path":"WORK_BREAKDOWN_STRUCTURE.csv","sha256":"3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path":"README.md","sha256":"9811580c0c6c2d780d6b5d437318efc66a55e7081b04af7924c691e4bb214459"},
+    {"path":"docs/03_document_model/07_equation_model.md","sha256":"939e6973fcb7af1119ac496801af0e3848cc39021224b2f760113991ade0c43e"},
+    {"path":"docs/04_feature_catalog/08_eq.md","sha256":"d515b2c63feb7797c55a2634fad6faf1b20c4644f16c42b26288551869e7975b"},
+    {"path":"docs/04_feature_catalog/contracts/08_eq_contracts.md","sha256":"dfd3a1615ddb7f61cae87308deb0bc8237f03f194a63f1bff9304919fa88119b"},
+    {"path":"docs/09_roadmap/P07_native_equation_engine.md","sha256":"b8e7632e256a7112221812643f3dd24833e0d9bd59568cbdf23ec292a298bf9d"},
+    {"path":"docs/12_implementation_guides/06_native_equation_pipeline.md","sha256":"fca1909edfd0a7078bf3656d583578df15ab5bde56161a963984d6784e1fcb5b"},
+    {"path":"implementation/p07/P07-06_EQUATION_AUTOMATION_REPORT.md","sha256":"85d8718ac4cd39b8957a3f08d5ecc6cb841c4873d65eceda090bbd3ac6725ba3"},
+    {"path":"implementation/p07/P07-08_EQUATION_CORPUS_REPORT.md","sha256":"f6d6ef44c344ab8097833c3f6552351b3b94c376e676c29445f25e1763ae4272"}
+  ],
+  "source_qualification": "implementation/p07/evidence/p07-09-equation-editor-smoke-source-qualification.current-2020.v1.json",
+  "target_qualification": null,
+  "migration": "protocol/migrations/p07-equation-editor-smoke-v0-to-v1.md",
+  "policy": "implementation/p07/P07-09_EQUATION_EDITOR_SMOKE_POLICY.md",
+  "report": "implementation/p07/P07-09_EQUATION_EDITOR_SMOKE_REPORT.md",
+  "harness_sources": {
+    "parent_path": "implementation/p07/tools/run-hancom-2020-equation-editor-smoke.ps1",
+    "parent_raw_sha256": "47d27c123d4a2c0a0f830f263fd31e52db9bdeac4c160e578e0cbc1c9d3af2c1",
+    "child_path": "implementation/p07/tools/run-hancom-2020-equation-editor-smoke-child.ps1",
+    "child_raw_sha256": "5950ea9a047b593f0a1216551de2de222379a7296a558957f233d093362d9569",
+    "bundle_sha256": "5d9f7502e821046c193f0d738469cb9a13e613e16f1b056dfc9ed58b16360068",
+    "target_oracle_path": "crates/hwpx-package/examples/p07_09_equation_editor_oracle.rs",
+    "target_oracle_raw_sha256": "3374c47a1fd18cb0929a2ef32abd984ab13babfb6ee26e6fc509fcdcd28f7cb8",
+    "plan_builder_path": "crates/equation-engine/examples/p07_09_equation_editor_plan.rs",
+    "plan_builder_raw_sha256": "2ed5abeca9e91bccb259cccdda9ed10cf3cb941f8266611535111818a043d753",
+    "evidence_oracle_path": "crates/equation-engine/examples/p07_09_equation_editor_evidence_oracle.rs",
+    "evidence_oracle_raw_sha256": "7f232afc22e63ab04378162eed6e3e0c61efeb7b40e18a08264856d0922274c0"
+  },
+  "implementation_files": [
+    "crates/equation-engine/src/lib.rs",
+    "crates/equation-engine/src/eqedit.rs",
+    "crates/equation-engine/src/editor_smoke.rs",
+    "crates/equation-engine/tests/equation_editor_smoke.rs",
+    "crates/equation-engine/examples/p07_09_equation_editor_plan.rs",
+    "crates/equation-engine/examples/p07_09_equation_editor_evidence_oracle.rs",
+    "crates/hwpx-package/examples/p07_09_equation_editor_oracle.rs",
+    "implementation/p07/tools/run-hancom-2020-equation-editor-smoke.ps1",
+    "implementation/p07/tools/run-hancom-2020-equation-editor-smoke-child.ps1"
+  ],
+  "workflow": {
+    "plan": "complete_source_state_plus_two_roundtripping_math_ast_values_and_exactly_one_canonical_token_change",
+    "manual": "user_double_click_editor_visibility_planned_token_commit_editor_close_and_four_distinct_screenshots",
+    "automation": "exact_target_preflight_immutable_input_native_before_after_reopen_readback_save_close_reopen",
+    "oracle": "strict_automation_native_hwpx_reader_id_index_package_state_equation_flow_and_plan_evidence_recheck",
+    "computer_use": "screenshot_only_user_performs_all_clicks_and_typing"
+  },
+  "default_limits": {
+    "request_bytes": 8388608,
+    "evidence_bytes": 8388608,
+    "revision_bytes": 512,
+    "serialized_bytes": 16777216,
+    "manual_timeout_seconds": 900
+  },
+  "failure_policy": [
+    "zero_hard_ceiling_or_inconsistent_limits_rejected",
+    "malformed_duplicate_unknown_oversized_or_untrusted_request_plan_evidence_rejected",
+    "source_artifact_graph_flow_anchor_object_semantic_script_or_count_drift_rejected",
+    "before_after_ast_must_compile_and_reparse_semantically",
+    "no_op_whitespace_only_multi_token_and_token_cardinality_changes_rejected",
+    "private_plan_file_source_semantic_token_and_plan_hashes_recomputed",
+    "failed_before_effect_and_effect_unknown_never_pass",
+    "manual_double_click_editor_change_close_attestation_and_four_distinct_screenshots_required",
+    "computer_use_click_or_typing_rejected",
+    "exact_target_native_before_saved_reopen_and_all_automation_phases_required",
+    "native_object_replacement_semantic_graph_flow_or_reopen_drift_rejected",
+    "silent_text_image_fallback_and_component_to_target_promotion_rejected"
+  ],
+  "not_claimed": {
+    "target_editor_smoke": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "render": false,
+    "direct_automation_differential": false,
+    "p07_07_target_layout": false,
+    "p07_08_tier_b_target": false,
+    "other_hangul_versions": false,
+    "p07_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "editor_target": "not_run",
+    "actual_hangul": false,
+    "save_reopen": false,
+    "render": false,
+    "p07_09": "in_progress",
+    "p07": "in_progress",
+    "product_complete": false
+  }
+}

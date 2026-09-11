@@ -613,6 +613,25 @@ fn tokenize(source: &str, limits: EqEditLimits) -> Result<Vec<Token>, EqEditErro
     Ok(tokens)
 }
 
+pub(crate) fn token_fingerprints(
+    source: &str,
+    limits: EqEditLimits,
+) -> Result<Vec<[u8; 32]>, EqEditError> {
+    tokenize(source, limits)?
+        .into_iter()
+        .map(|token| {
+            let start =
+                usize::try_from(token.span.start_byte).map_err(|_| EqEditError::InputLimit)?;
+            let end = usize::try_from(token.span.end_byte).map_err(|_| EqEditError::InputLimit)?;
+            let bytes = source
+                .as_bytes()
+                .get(start..end)
+                .ok_or(EqEditError::InvalidSyntax)?;
+            Ok(<[u8; 32]>::from(Sha256::digest(bytes)))
+        })
+        .collect()
+}
+
 fn is_word_character(character: char) -> bool {
     character.is_alphanumeric() || (!character.is_ascii() && !character.is_whitespace())
 }
