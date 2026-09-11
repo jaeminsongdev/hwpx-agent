@@ -2,9 +2,10 @@
 
 ## Decision
 
-This checkpoint is `exact_canvas_transition_component_pass / direct_hwpx_not_run /
-security_corpus_not_run / task_incomplete`. It implements the current ledger's drawing-canvas,
-image-clip and effects prerequisite as one complete state transition. It does not close the older
+This checkpoint is `exact_canvas_transition_component_pass / successor_static_hwpx_integration_pass /
+security_corpus_not_run / target_not_run / task_incomplete`. It implements the current ledger's
+drawing-canvas, image-clip and effects prerequisite as one complete state transition. P08-11 adds
+static section HWPX lowering for canvas insert and crop only. It does not close the older
 P08-08 WBS requirement for the full OLE/media active-content policy and security corpus.
 
 ## Complete state
@@ -65,7 +66,8 @@ binary content. These files establish static structure only and do not prove ins
 serialization, preservation, activation behavior or rendering.
 
 `exact_canvas_state_component_pass=true`, `insert_clip_effect_transitions=true`,
-`opaque_ole_activation_blocked_by_model=true`. `direct_hwpx=false`, `synthetic_package=false`,
+`opaque_ole_activation_blocked_by_model=true`, `static_section_hwpx=true` and
+`semantic_reopen=true` for insert/crop through P08-11. `synthetic_package=false`,
 `security_corpus=false`, `actual_hangul=false`, `save_reopen=false`, `property_readback=false`,
 `render=false`, `automation=false`, `differential=false`, `p08_08_complete=false`,
 `p08_complete=false`, `production_ready=false` and `product_complete=false`.

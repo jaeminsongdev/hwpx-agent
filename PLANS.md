@@ -24,7 +24,7 @@
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | P07/P08 in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-01~08 are component/synthetic-passed; P08-10 adds all 14 formerly cataloged P08-owned typed models. P08-09 now binds all 58 rows: 5 cataloged, 31 unit, 22 integration, 0 oracle/green; HWPX adapters, target/visual evidence and P09 remain |
+| P07-P09 | P07/P08 in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-10 models all 14 formerly cataloged P08-owned rows; P08-11 adds preserving static-section HWPX lowering for OBJ-010/031/036-041. P08-09 now binds all 58 rows: 5 cataloged, 23 unit, 30 integration, 0 oracle/green; remaining HWPX adapters, target/visual evidence and P09 remain |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -39,6 +39,7 @@
 |---|---|---|
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
 | P-0057 | P06-09 table conformance | fail-closed matrix plus bounded component/static-HWPX slices pass; TABLE-002/003 exact Hangul target v2 is oracle-verified; exact current-PC release matrix remains 0/61 green |
+| P-0095 | P08 object HWPX integration | P08-11 lowers eight rows into preserving static HWPML sections; extend the same exact-state boundary to the 14 P08-10 typed models before target evidence |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | all-operation issuer and fixed-sequence-slot broker plus independently bound TLS service components pass; external operation, real assertion/credential/network, cross-system atomicity, power-loss and registered-host evidence remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -96,8 +97,7 @@
 
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence absent.
 - R-0003: one historical independent worker timeout root cause remains unproven; retries passed.
-- R-0005: P17 durable Git sync, fixed-slot recoverable broker and independently bound issuer pass on loopback/current PC;
-  external operation/network, real assertion/credential, cross-system atomicity, power-loss and production do not.
+- R-0005: P17 durable Git sync, fixed-slot recoverable broker and independently bound issuer pass on loopback/current PC; external operation/network, real assertion/credential, cross-system atomicity, power-loss and production do not.
 - R-0006: P17 conflict resolver/widget are component evidence only.
 - R-0007: P06-09 remains 0/61 release-green until direct validations, fixtures, rollback/retry,
   current-target automation runtime and exact differential evidence close every row.
@@ -108,13 +108,13 @@
 
 ## Next actions
 
-1. Continue P08 at `max`: add direct HWPX lowering for the 8 previously identified P08-owned unit rows, then the remaining P08-10 typed models; preserve the 5 cataloged P11 rows, P11 runtime ownership and every target/render/automation/differential blocker.
+1. Continue P08 at `max`: extend direct HWPX lowering to the 14 P08-10 typed models; preserve the 5 cataloged P11 rows, P11 runtime ownership and every target/render/automation/differential blocker.
 2. When the user can capture screens/approve saves, run one combined exact-target campaign: P07-07/08/09 plus remaining P06 target/render/differentials including corrected TABLE-032/033.
 3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
 
 ## Context pack and archive pointers
 
-- Read first: this file, active P06/P07 authorities, P08-01~07 policy/report and `implementation/p05/P05_GATE_REPORT.md`.
+- Read first: this file, active P06/P07 authorities, P08-09/P08-11 policy/report, P08-10 typed models and `implementation/p05/P05_GATE_REPORT.md`.
 - P17 authorities: frozen legacy/v40-v47 reports, `P17-06_GIT_MIRROR_EFFECT_V13.md`, frozen durable-push v15/durable-pull v17 qualifications, Windows custody v18, remote TLS v19, lifecycle v21, broker v22/v24 and issuer v23.
 - Detailed closed-card history is in the named reports and local Git history; no remote push is implied.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.

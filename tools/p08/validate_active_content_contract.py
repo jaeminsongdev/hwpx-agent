@@ -22,8 +22,8 @@ SOURCE_SHA256 = {
     "docs/09_roadmap/P08_images_shapes_drawing_charts.md": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3",
     "docs/12_implementation_guides/11_security_privacy_license.md": "0be76f7e2c6c7a77a2031b10322839bf8693914f2ad7740de44646ea7f6d7b75",
     "docs/12_implementation_guides/07_windows_automation_worker.md": "76e5cfb985f77b55347714f3d3d3b97c527c18d0d8238a4c0e79b3f680b44168",
-    "implementation/p08/P08-08_DRAWING_CANVAS_POLICY.md": "0be864917893bb320e263e8f91a6a64fe0ff028166b3628140d409732219d0cd",
-    "protocol/private/p08-drawing-canvas-v1.json": "df410e243cfc49b00e30d6313f41fa4a65c3cbc2049bb5c4ebbcea62cb531838",
+    "implementation/p08/P08-08_DRAWING_CANVAS_POLICY.md": "b199ffed1828bf83e3c581ed02251f2dd1514b5d236e4bd4455cd0d08b5e11b4",
+    "protocol/private/p08-drawing-canvas-v1.json": "1f02ec35a5a5a19155110b0f5b1e59c93311086c0984397771758598620e30b1",
 }
 OFFICIAL_SHA256 = {
     "OWPML/Class/Para/OLEType.h": "fa52c5168c6723f79e3bd074fb735d7101c18ac8e1f676b914e2d2c457a122b1",
@@ -38,7 +38,7 @@ OFFICIAL_SHA256 = {
 IMPLEMENTATION_SHA256 = {
     "crates/hwpx-package/src/active_content.rs": "d9c095d7c58fcdc0c375dc754d6c059e7159e60a4d16ebd825262f6ea2f3d017",
     "crates/hwpx-package/src/reader.rs": "e40d1da01f1aa52b2d1453fe8165d862e6c3a284c7dfaaa10eed1b7850d3e115",
-    "crates/hwpx-package/src/lib.rs": "9d19a032fcfad9730911163afc53dd90335f34976d8a672cf4264472ff2d9aa3",
+    "crates/hwpx-package/src/lib.rs": "808cac8fb5e0b7483071844d8dfa8d06d30be5cfe04f4503abe122faabb6c04d",
     "crates/hwpx-package/tests/active_content.rs": "af64cbf35f648d15dfe4f20205c87f56ea47d74d81ae4814167fdd22e2f359ae",
 }
 MARKERS = {

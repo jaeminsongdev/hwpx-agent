@@ -1,0 +1,82 @@
+{
+  "schema_version": "hwpx-agent.p08-object-hwpx-integration-contract/v1",
+  "task": "P08-11",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_qualification": "implementation/p08/evidence/p08-11-object-hwpx-integration-source-qualification.v1.json",
+  "migration": "protocol/migrations/p08-object-hwpx-integration-v0-to-v1.md",
+  "policy": "implementation/p08/P08-11_OBJECT_HWPX_INTEGRATION_POLICY.md",
+  "report": "implementation/p08/P08-11_OBJECT_HWPX_INTEGRATION_REPORT.md",
+  "source_locks": [
+    {"path": "docs/03_document_model/08_drawing_image_chart.md", "sha256": "ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b"},
+    {"path": "docs/04_feature_catalog/09_obj.md", "sha256": "e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8"},
+    {"path": "docs/04_feature_catalog/contracts/09_obj_contracts.md", "sha256": "e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2"},
+    {"path": "docs/09_roadmap/P08_images_shapes_drawing_charts.md", "sha256": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path": "specs/work-breakdown-structure.json", "sha256": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2"}
+  ],
+  "implementation_files": [
+    "crates/domain-ir/src/object_composition.rs",
+    "crates/domain-ir/src/drawing_canvas.rs",
+    "crates/hwpx-package/src/lib.rs",
+    "crates/hwpx-package/src/object_composition_hwpx.rs",
+    "crates/hwpx-package/src/drawing_canvas_hwpx.rs",
+    "crates/hwpx-package/tests/object_composition_hwpx.rs",
+    "crates/hwpx-package/tests/drawing_canvas_hwpx.rs"
+  ],
+  "profiles": {
+    "composition": "hwpx-agent.object-composition-hwpx.hwpml-2011-static/v1",
+    "drawing_canvas": "hwpx-agent.drawing-canvas-hwpx.hwpml-2011-static/v1"
+  },
+  "feature_ids": ["OBJ-010", "OBJ-031", "OBJ-036", "OBJ-037", "OBJ-038", "OBJ-039", "OBJ-040", "OBJ-041"],
+  "capabilities": ["obj.drawing_object_insert", "obj.crop", "obj.group", "obj.ungroup", "obj.z_order", "obj.align", "obj.distribute", "obj.connector"],
+  "admitted_profile": {
+    "source": "one_nonempty_closed_run_contained_native_object_island",
+    "composition_generated": "empty_binding_group_or_connector_only",
+    "canvas_generated": "empty_binding_container_rectangle_tree_only",
+    "crop": "embedded_picture_without_effects_exact_imgClip_only",
+    "visibility_and_printability": "true_only",
+    "existing_opaque_fragments": "preserved_except_exact_planned_native_delta"
+  },
+  "planning": {
+    "request_source_state_and_flow_rechecked": true,
+    "lower_source_state_section_and_flow_rechecked": true,
+    "source_target_state_section_flow_and_plan_sha256": true,
+    "strict_target_semantic_reopen": true,
+    "outside_island_byte_preservation": true,
+    "bounded_json_and_redacted_debug": true
+  },
+  "failure_policy": [
+    "malformed_missing_duplicate_or_ambiguous_native_structure_rejected",
+    "identity_parent_order_group_level_geometry_clip_or_resource_reference_drift_rejected",
+    "unsupported_kind_effect_ole_linked_or_generated_payload_rejected",
+    "visibility_or_printability_outside_admitted_true_profile_rejected",
+    "state_flow_section_or_plan_drift_rejected_at_request_and_lowering",
+    "output_limit_reopen_or_outside_island_preservation_failure_rejected",
+    "no_partial_output_or_fallback_after_failure"
+  ],
+  "evidence_boundary": {
+    "direct_stage": "integration_passed",
+    "static_section_hwpx": true,
+    "semantic_reopen": true,
+    "outside_island_preserved": true,
+    "full_package": false,
+    "resource_integrity": false,
+    "actual_target_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "object_bounds": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "static_section_integration": "pass",
+    "current_target": "not_run",
+    "release_green_rows": 0,
+    "p08": "in_progress",
+    "product_complete": false
+  }
+}

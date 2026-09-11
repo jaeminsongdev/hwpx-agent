@@ -28,7 +28,7 @@ SOURCES = {
 }
 IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/lib.rs": "7b5bedf1434e2ecac621cff7f692fb120d54249174eb6b681614c23d1d740213",
-    "crates/domain-ir/src/object_composition.rs": "1695927560ea83bf01d589160459b20f9c74d7a2bc7bd8de8d218d958bd11b40",
+    "crates/domain-ir/src/object_composition.rs": "d3389af14835039ca9c39dc65f453906704ae456d67720772db810b2f8ca8045",
     "crates/domain-ir/tests/object_composition.rs": "5ed744a6bc3c330765aa18d6fcddf1a99d5773b909a64f4d1c1c1e67db5322ab",
 }
 MARKERS = {
@@ -291,11 +291,11 @@ def validate_documents(root: Path, errors: list[str]) -> None:
     expected = {
         MIGRATION: ("There is no stored v0", "MUST NOT be relabeled", "no defaultable"),
         POLICY: (
-            "pure_object_graph_component_pass / direct_hwpx_not_run / task_incomplete",
+            "pure_object_graph_component_pass / successor_static_hwpx_integration_pass",
             "Half-HWPUNIT centers",
             "p08_06_complete=false",
         ),
-        REPORT: ("10/10 PASS", "No HWPX lowerer", "P08-07"),
+        REPORT: ("10/10 PASS", "P08-11", "No full-package output"),
     }
     for relative, markers in expected.items():
         try:

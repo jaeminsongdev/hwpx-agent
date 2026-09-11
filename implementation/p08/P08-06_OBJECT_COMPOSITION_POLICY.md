@@ -2,9 +2,10 @@
 
 ## Decision
 
-P08-06 is `pure_object_graph_component_pass / direct_hwpx_not_run / task_incomplete`. The v1
-checkpoint implements all six requested composition capabilities as one exact, bounded graph
-transition model. It does not lower a graph into HWPX and has not been opened, saved, reopened or
+P08-06 is `pure_object_graph_component_pass / successor_static_hwpx_integration_pass /
+target_not_run / task_incomplete`. The v1 checkpoint implements all six requested composition
+capabilities as one exact, bounded graph transition model. P08-11 now lowers its admitted static
+section profile into HWPX and reopens it semantically; no result has been opened, saved, reopened or
 rendered by licensed Hangul 2020, so neither P08-06 nor P08 is complete.
 
 ## Complete graph state
@@ -64,11 +65,12 @@ pinned commit `1453388472c703a4b299a0834f425cdac16644b9`, specifically `Containe
 `ConnectPointType`. Those sources establish names and field types only, not installed-target
 serialization, action behavior or rendering.
 
-`pure_object_graph_component_pass=true`, `graph_invariant_tests=true` and
-`complete_noncomposition_state_binding=true`. `direct_hwpx=false`, `resource_integrity=false`,
-`semantic_reopen=false`, `actual_target_hwpx=false`, `actual_hangul=false`, `save_reopen=false`,
+`pure_object_graph_component_pass=true`, `graph_invariant_tests=true`,
+`complete_noncomposition_state_binding=true`, `static_section_hwpx=true` and
+`semantic_reopen=true` through P08-11. `resource_integrity=false`, `actual_target_hwpx=false`,
+`actual_hangul=false`, `save_reopen=false`,
 `object_bounds=false`, `render_diff=false`, `automation=false`, `differential=false`,
 `p08_06_complete=false`, `p08_complete=false`, `production_ready=false` and
 `product_complete=false` remain explicit.
 
-Reasoning level: `max`; P08-07 charts and the later combined target campaign also remain `max`.
+Reasoning level: `max`; remaining P08 lowering and the later combined target campaign remain `max`.

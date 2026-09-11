@@ -31,11 +31,11 @@ EXPECTED_SOURCE_LOCKS = {
     "specs/feature-coverage-matrix.json": "a3fa1cd5c5b0b0e09bc93354f724ed3516bdb987f1c171cc27d7564dc6390950",
     "specs/capability-contracts.generated.json": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306",
     "specs/work-breakdown-structure.json": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2",
-    "implementation/p08/p08-09-current-2020-direct-evidence.json": "1de5462676c46e39a50b18a913a8e7cb602b68a26659aa38e873ab047f27db61",
+    "implementation/p08/p08-09-current-2020-direct-evidence.json": "f082f8b55045f86ac8c562f2cae9ed3b44f8d26a4385faf39e75085cb69cfe95",
     "implementation/p08/p08-09-current-2020-automation-projection.json": "f8c06f206c29eb7aa77b845fd1afa1ff09535145584f5f9fff83fdc679f1cd12",
     "implementation/p08/p08-09-threshold-policy.v1.json": "0f4856e81edc012ed80608fddea6a2be98286ca772127c5b1316f3e2ed890d0c",
-    "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json": "cf2243024700da2331f4a709309326ccca8216d7f80267fded0b0a21381a2998",
-    "tools/p08/object_conformance.py": "a020d5c046983bb5c15394810347121f3ad2a6e64a31e893d65ac45599da098f",
+    "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json": "4bbebe09c616ffc1853ac70893172ea676bd555f3eff2da17cfdc8c9bc3e283f",
+    "tools/p08/object_conformance.py": "b70ddc84126c321e7a8fc0a8e52ad91c6d70ac3e8898edd4826684b871d311af",
 }
 
 EXPECTED_SUMMARY = {
@@ -45,8 +45,8 @@ EXPECTED_SUMMARY = {
     "non_green_rows": 58,
     "direct_stage_counts": {
         "cataloged": 5,
-        "unit_passed": 31,
-        "integration_passed": 22,
+        "unit_passed": 23,
+        "integration_passed": 30,
         "oracle_verified": 0,
     },
     "automation_binding_counts": {
@@ -72,6 +72,7 @@ EXPECTED_CLAIMS = {
     "matrix_implemented": True,
     "threshold_definitions_complete": True,
     "component_or_synthetic_rows": 53,
+    "static_section_hwpx": True,
     "actual_hwpx": False,
     "actual_hangul": False,
     "save_reopen": False,
@@ -103,6 +104,7 @@ EXPECTED_UPSTREAM = [
     "tools/p08/validate_drawing_canvas_contract.py",
     "tools/p08/validate_active_content_contract.py",
     "tools/p08/validate_object_remainder_contract.py",
+    "tools/p08/validate_object_hwpx_integration_contract.py",
 ]
 
 
@@ -216,7 +218,7 @@ def _validate_qualification(qualification: dict[str, Any]) -> None:
     )
     if qualification["schema_version"] != "hwpx-agent.p08-object-conformance-source-qualification/v1" or qualification["task"] != "P08-09":
         raise ConformanceError("qualification_identity")
-    if qualification["base_commit"] != "9c06106ee26d84ebb4a0c877b1d4cddec8b08c31" or qualification["scope"] != "current_pc_source_and_component_evidence_only":
+    if qualification["base_commit"] != "4bb130b" or qualification["scope"] != "current_pc_source_component_and_static_section_integration_evidence_only":
         raise ConformanceError("qualification_scope")
     expected_source_paths = list(EXPECTED_SOURCE_LOCKS)[:9]
     expected_source = {path: EXPECTED_SOURCE_LOCKS[path] for path in expected_source_paths}
@@ -246,6 +248,7 @@ def _validate_qualification(qualification: dict[str, Any]) -> None:
         "matrix_implemented": True,
         "required_rows": 58,
         "implementation_covered_rows": 53,
+        "static_section_hwpx": True,
         "green_rows": 0,
         "actual_hwpx": False,
         "actual_hangul": False,

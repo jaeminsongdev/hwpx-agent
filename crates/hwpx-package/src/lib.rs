@@ -10,6 +10,7 @@ mod active_content;
 mod asset;
 mod basic_shape_hwpx;
 mod character_style;
+mod drawing_canvas_hwpx;
 mod equation;
 mod font_metric_receipt;
 mod graph;
@@ -19,6 +20,7 @@ mod image_hwpx;
 mod limits;
 mod list_definition;
 mod object_appearance_hwpx;
+mod object_composition_hwpx;
 mod object_geometry_hwpx;
 mod page_setup;
 mod paragraph_style;
@@ -66,6 +68,12 @@ pub use character_style::{
     FontFaceGroup, FontFamily, FontType, FontTypeInfo, HANCOM_2020_HEAD_NAMESPACE, LanguageSlot,
     LanguageValues, LineType1, LineType2, Shadow, ShadowType, Strikeout, SubstituteFont, Underline,
     UnderlinePosition,
+};
+pub use drawing_canvas_hwpx::{
+    DRAWING_CANVAS_HWPX_PROFILE_ID, DrawingCanvasHwpxBuilder, DrawingCanvasHwpxError,
+    DrawingCanvasHwpxLimitConfig, DrawingCanvasHwpxLimits, DrawingCanvasHwpxLowered,
+    DrawingCanvasHwpxLowerer, DrawingCanvasHwpxLoweringReceipt, DrawingCanvasHwpxPlan,
+    DrawingCanvasHwpxReadback, DrawingCanvasHwpxReader,
 };
 pub use equation::{
     EQUATION_AUTOMATION_HWPX_PROFILE_ID, EQUATION_HWPX_PROFILE_ID, EQUATION_HWPX_SCHEMA_VERSION,
@@ -115,6 +123,12 @@ pub use object_appearance_hwpx::{
     ObjectAppearanceHwpxLimitConfig, ObjectAppearanceHwpxLimits, ObjectAppearanceHwpxLowerer,
     ObjectAppearanceHwpxLoweringReceipt, ObjectAppearanceHwpxPlan, ObjectAppearanceHwpxReadback,
     ObjectAppearanceHwpxReader,
+};
+pub use object_composition_hwpx::{
+    OBJECT_COMPOSITION_HWPX_PROFILE_ID, ObjectCompositionHwpxBuilder, ObjectCompositionHwpxError,
+    ObjectCompositionHwpxLimitConfig, ObjectCompositionHwpxLimits, ObjectCompositionHwpxLowered,
+    ObjectCompositionHwpxLowerer, ObjectCompositionHwpxLoweringReceipt, ObjectCompositionHwpxPlan,
+    ObjectCompositionHwpxReadback, ObjectCompositionHwpxReader,
 };
 pub use object_geometry_hwpx::{
     OBJECT_GEOMETRY_HWPX_PROFILE_ID, ObjectGeometryHwpxBuilder, ObjectGeometryHwpxError,

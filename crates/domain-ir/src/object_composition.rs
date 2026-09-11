@@ -1056,6 +1056,21 @@ impl ObjectCompositionRequest {
         &self.operation
     }
 
+    #[must_use]
+    pub fn expected_source_state_sha256(&self) -> &str {
+        &self.expected_source_state_sha256
+    }
+
+    #[must_use]
+    pub fn expected_document_flow_sha256(&self) -> &str {
+        &self.expected_document_flow_sha256
+    }
+
+    #[must_use]
+    pub fn target_document_flow_sha256(&self) -> &str {
+        &self.target_document_flow_sha256
+    }
+
     /// Emits the complete request as bounded compact deterministic JSON.
     ///
     /// # Errors

@@ -27,10 +27,10 @@ SOURCE_SHA256 = {
     "implementation/p08/P08-05_OBJECT_APPEARANCE_POLICY.md": "1d05d280c00b8e61f216ed44fcfe4ed7ea4fcbb4ba86ac72be7fcf806b3da68a",
     "implementation/p08/P08-05_OBJECT_APPEARANCE_REPORT.md": "e7da98298637eaae4083318cb6d496c6bbb193533e580d466b63d0a663a7f090",
     "protocol/private/p08-object-appearance-v1.json": "d2f8a5b0d02a0a00b998c2db47a9607aa02a0e53da18c2df1450d787a089aef1",
-    "implementation/p08/P08-06_OBJECT_COMPOSITION_POLICY.md": "e6a2a3a9eeabd182554ec6db60397d5f0b1bcf060beb2d2e2415b376b5e74441",
+    "implementation/p08/P08-06_OBJECT_COMPOSITION_POLICY.md": "5b42d86e2dd6a9a26706f96473798516ae6a34d0bda0888fab65ea22e5eae8be",
     "protocol/private/p08-object-composition-v1.json": "5f9d1050a26cba6c93e2b62e7ad4be9b34ad6751ac2afd28386316fe849be3b7",
     "implementation/p08/P08-07_CHART_AUTOMATION_POLICY.md": "71d35105551af3bd0ccaca52c7dba4c68cfe97a7496c7c10205ee36bcaca7bda",
-    "protocol/private/p08-chart-automation-v1.json": "ceb92e8db748de24e883fab993104ce523d5da6a9eef57d89a8dbf8d194f2ccb",
+    "protocol/private/p08-chart-automation-v1.json": "f41b4670775b1a30d3233c1621e23d0ee712eae4e1d69b367898256fdb7b7fba",
 }
 OFFICIAL_SHA256 = {
     "OWPML/Class/Para/ContainerType.h": "09e1a6aab9f867c3e1ff2d1ae80953244d46d47b127b6e6d5d0478c3a74cf22c",
@@ -45,7 +45,7 @@ OFFICIAL_SHA256 = {
     "OWPML/Class/Para/OLEType.cpp": "ca455aaac391862a420574aa623274619dc29fc7b23332b48d5c25a6b9516fc8",
 }
 IMPLEMENTATION_SHA256 = {
-    "crates/domain-ir/src/drawing_canvas.rs": "bc0ac8f666cf1c5be5963ec5c1e0cfea9a59631f202b04026aac5069a1fc18bf",
+    "crates/domain-ir/src/drawing_canvas.rs": "e0fc9e25852f19ab70ad6fdfd3680f1d8dd5a07e7d184cb2d02d5103533de118",
     "crates/domain-ir/src/lib.rs": "7b5bedf1434e2ecac621cff7f692fb120d54249174eb6b681614c23d1d740213",
     "crates/domain-ir/tests/drawing_canvas.rs": "c96670bda68975e02c9ce1d90c33797290581055d21dde02faa964ce0f3e96b9",
 }
@@ -296,11 +296,11 @@ def validate_documents(root: Path, errors: list[str]) -> None:
     expected = {
         MIGRATION: ("There is no accepted v0", "blocked", "fail closed"),
         POLICY: (
-            "exact_canvas_transition_component_pass",
+            "exact_canvas_transition_component_pass / successor_static_hwpx_integration_pass",
             "P08-05 `PictureEffects`",
             "p08_08_complete=false",
         ),
-        REPORT: ("10/10 PASS", "No HWPX section or package", "active-content policy"),
+        REPORT: ("10/10 PASS", "P08-11", "no complete package"),
     }
     for relative, markers in expected.items():
         try:

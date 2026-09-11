@@ -41,8 +41,8 @@ class ObjectConformanceContractTests(unittest.TestCase):
         )
         self.assertEqual(matrix["summary"]["direct_stage_counts"], {
             "cataloged": 5,
-            "unit_passed": 31,
-            "integration_passed": 22,
+            "unit_passed": 23,
+            "integration_passed": 30,
             "oracle_verified": 0,
         })
         self.assertTrue(all(row["gate_state"] == "non_green" for row in matrix["rows"]))

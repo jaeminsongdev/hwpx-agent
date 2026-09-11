@@ -26,8 +26,8 @@ a blocker; it is never treated as skipped success.
 
 - Static image insertion, six geometry operations, two basic-shape operations and eleven
   appearance operations have synthetic HWPX/XML integration evidence.
-- Six composition operations, nine chart operations, drawing-canvas insertion and crop have exact
-  component evidence without direct HWPX execution.
+- Six composition operations plus drawing-canvas insertion and crop now have preserving static
+  section HWPX integration evidence. Nine chart operations remain component-only.
 - Fourteen formerly cataloged P08-owned operations now have complete typed unit models: drawing
   gallery, inert form, caption and paragraph-band insertion; margin/caption, text-box and image
   properties; freeform insertion and point editing; aspect lock, protection, printability,
@@ -59,7 +59,8 @@ contains no document content, raw action/parameter identifiers, private absolute
 values. Existing failed attempts and user documents remain immutable.
 
 Current claims: `matrix_implemented=true`, `threshold_definitions_complete=true`,
-`implementation_covered_rows=53`, `actual_hwpx=false`, `actual_hangul=false`, `render=false`,
+`implementation_covered_rows=53`, `static_section_hwpx=true`, `actual_hwpx=false`,
+`actual_hangul=false`, `render=false`,
 `automation=false`, `differential=false`, `green_rows=0`, `p08_complete=false`,
 `production_ready=false`, and `product_complete=false`.
 

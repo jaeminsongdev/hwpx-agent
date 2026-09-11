@@ -2,8 +2,8 @@
 
 ## Result
 
-Result: `exact_canvas_transition_component_pass / direct_hwpx_not_run /
-security_corpus_not_run / task_incomplete`.
+Result: `exact_canvas_transition_component_pass / successor_static_hwpx_integration_pass /
+security_corpus_not_run / target_not_run / task_incomplete`.
 
 The current-ledger prerequisite now has one exact model for container topology, picture clip,
 picture effects and closed resource preservation. The historical WBS active-content/security scope
@@ -36,21 +36,27 @@ The private contract tamper suite passed 4/4 and all P08 Python contract tests p
 workspace all-target/all-feature locked offline suite and Clippy with `-D warnings` passed; its three
 pre-existing isolated qualification tests remained ignored. Format and diff checks passed.
 
+P08-11 adds a separate static-section HWPX adapter for `obj.drawing_object_insert` and `obj.crop`.
+Its focused tests pass 7/7 with strict semantic reopen, native identity/geometry/resource-reference
+checks, source/flow drift rejection and outside-island preservation. Picture effects and active
+content remain deliberately unsupported by that adapter.
+
 ## Evidence boundary
 
-No HWPX section or package was generated or modified. No real OLE/media corpus was opened or
+Synthetic HWPX section XML was generated and modified; no complete package was built. No real OLE/media corpus was opened or
 activated, and no security scanner ran. No document was opened, saved, reopened, property-read or
 rendered by licensed Hangul 2020. The pinned Hancom source qualifies field ownership and tree shape
 only.
 
-`exact_canvas_state_component_pass=true`, `insert_clip_effect_transitions=true` and
-`opaque_ole_activation_blocked_by_model=true`; `direct_hwpx=false`, `synthetic_package=false`,
+`exact_canvas_state_component_pass=true`, `insert_clip_effect_transitions=true`,
+`opaque_ole_activation_blocked_by_model=true`, `static_section_hwpx=true` and
+`semantic_reopen=true` for insert/crop; `synthetic_package=false`,
 `security_corpus=false`, `actual_hangul=false`, `save_reopen=false`, `property_readback=false`,
 `render=false`, `automation=false`, `differential=false`, `p08_08_complete=false`,
 `p08_complete=false`, `production_ready=false` and `product_complete=false`.
 
 ## Next exact task
 
-Finish the remaining P08-08 active-content policy: package-level opaque OLE/multimedia inventory,
-binary-preservation scan, activation denial and tamper/security corpus. Only then start P08-09's
-58-row object conformance matrix and the combined licensed-target campaign.
+Continue lowering the remaining P08-10 typed models. The existing package-level opaque
+OLE/multimedia preservation and security evidence remains separate, and the licensed-target
+campaign must still close package/readback/render requirements.

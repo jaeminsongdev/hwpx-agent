@@ -730,6 +730,16 @@ impl DrawingCanvasRequest {
         &self.operation
     }
 
+    #[must_use]
+    pub fn before_document_flow_sha256(&self) -> &str {
+        &self.before_document_flow_sha256
+    }
+
+    #[must_use]
+    pub fn after_document_flow_sha256(&self) -> &str {
+        &self.after_document_flow_sha256
+    }
+
     /// Returns deterministic bounded request JSON.
     ///
     /// # Errors

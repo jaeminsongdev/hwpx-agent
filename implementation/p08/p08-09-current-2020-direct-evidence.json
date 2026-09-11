@@ -64,17 +64,18 @@
       ]
     },
     {
-      "profile_id": "composition-component-v1",
+      "profile_id": "composition-section-v1",
       "feature_ids": ["OBJ-036", "OBJ-037", "OBJ-038", "OBJ-039", "OBJ-040", "OBJ-041"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["schema", "semantic_reopen"],
       "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
       "negative_passed": true,
       "rollback_or_retry_passed": false,
       "evidence_files": [
         "implementation/p08/P08-06_OBJECT_COMPOSITION_REPORT.md",
-        "implementation/p08/evidence/p08-06-object-composition-source-qualification.v1.json"
+        "implementation/p08/P08-11_OBJECT_HWPX_INTEGRATION_REPORT.md",
+        "implementation/p08/evidence/p08-11-object-hwpx-integration-source-qualification.v1.json"
       ]
     },
     {
@@ -95,17 +96,18 @@
       ]
     },
     {
-      "profile_id": "drawing-canvas-component-v1",
+      "profile_id": "drawing-canvas-section-v1",
       "feature_ids": ["OBJ-010", "OBJ-031"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["schema", "semantic_reopen"],
       "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
       "negative_passed": true,
       "rollback_or_retry_passed": false,
       "evidence_files": [
         "implementation/p08/P08-08_DRAWING_CANVAS_REPORT.md",
-        "implementation/p08/evidence/p08-08-drawing-canvas-source-qualification.v1.json"
+        "implementation/p08/P08-11_OBJECT_HWPX_INTEGRATION_REPORT.md",
+        "implementation/p08/evidence/p08-11-object-hwpx-integration-source-qualification.v1.json"
       ]
     },
     {

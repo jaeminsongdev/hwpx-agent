@@ -2,7 +2,8 @@
 
 ## Result
 
-Result: `pure_object_graph_component_pass / direct_hwpx_not_run / task_incomplete`.
+Result: `pure_object_graph_component_pass / successor_static_hwpx_integration_pass /
+target_not_run / task_incomplete`.
 
 This checkpoint implements all six P08-06 composition rows in one shared exact graph model rather
 than closing a group-only or z-order-only subset.
@@ -27,20 +28,24 @@ distribution, connector create/update and closed grouping, invalid z-order/selec
 edges, strict/duplicate/unknown/limited JSON, geometry/content boundaries, source drift, flow drift,
 non-composition preservation and redacted Debug.
 
+P08-11 adds a separate preserving static-section HWPX adapter: focused lowering tests pass 6/6 for
+all six rows, strict semantic reopen and outside-island preservation. That successor evidence moves
+the rows to `integration_passed`; it does not alter this domain contract or prove a full package.
+
 ## Evidence boundary
 
-No HWPX lowerer or full-package output exists for this graph model. No output was created, opened,
-saved, reopened, bounds-read or rendered by licensed Hangul 2020. The pinned Hancom model is static
-source qualification, not a runtime oracle.
+No full-package output or licensed-target execution exists for this graph model. No output was
+opened, saved, reopened, bounds-read or rendered by licensed Hangul 2020. The P08-11 synthetic
+section reopen and pinned Hancom model are not runtime oracles.
 
-`pure_object_graph_component_pass=true`, `graph_invariant_tests=true`, while
-`direct_hwpx=false`, `resource_integrity=false`, `semantic_reopen=false`,
+`pure_object_graph_component_pass=true`, `graph_invariant_tests=true`,
+`static_section_hwpx=true`, `semantic_reopen=true`, while `resource_integrity=false`,
 `actual_target_hwpx=false`, `actual_hangul=false`, `save_reopen=false`, `object_bounds=false`,
 `render_diff=false`, `direct_automation_differential=false`, `p08_06_complete=false`,
 `p08_complete=false`, `production_ready=false` and `product_complete=false`.
 
 ## Next exact task
 
-Continue P08-07 chart creation/data/editing at `max`, while retaining P08-06's HWPX and target
-evidence as not run. The later P08 target campaign must add direct lowering, semantic reopen,
-installed-target bounds and render-diff evidence before any registry row becomes green.
+Continue lowering the remaining P08 typed models at `max`. The later P08 target campaign must add
+full-package integrity, installed-target bounds and render-diff evidence before any registry row
+becomes green.
