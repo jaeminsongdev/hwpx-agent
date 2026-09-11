@@ -51,6 +51,15 @@ PROFILES = {
                 "--offline",
             ),
             (
+                "cargo",
+                "test",
+                "-p",
+                "equation-engine",
+                "--all-targets",
+                "--locked",
+                "--offline",
+            ),
+            (
                 "python",
                 "-m",
                 "unittest",

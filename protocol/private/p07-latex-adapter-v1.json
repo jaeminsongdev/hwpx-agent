@@ -1,0 +1,160 @@
+{
+  "schema_version": "hwpx-agent.latex-adapter-contract/v1",
+  "adapter_schema_version": "hwpx-agent.latex-adapter/v1",
+  "parser_version": "hwpx-agent.latex-parser/tier-a-v1",
+  "model_schema_version": "hwpx-agent.math-ast/v1",
+  "normalization_version": "hwpx-agent.math-ast-normalization/v1",
+  "scope": "p07_02_finite_latex_to_math_ast_local_component",
+  "task": "P07-02",
+  "feature_boundary": [
+    "EQ-003",
+    "EQ-009",
+    "EQ-010",
+    "EQ-011",
+    "EQ-012",
+    "EQ-013",
+    "EQ-014",
+    "EQ-015",
+    "EQ-016",
+    "EQ-017",
+    "EQ-018",
+    "EQ-019",
+    "EQ-020",
+    "EQ-024",
+    "EQ-025",
+    "EQ-026"
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/03_document_model/07_equation_model.md",
+      "sha256": "939e6973fcb7af1119ac496801af0e3848cc39021224b2f760113991ade0c43e"
+    },
+    {
+      "path": "docs/04_feature_catalog/08_eq.md",
+      "sha256": "d515b2c63feb7797c55a2634fad6faf1b20c4644f16c42b26288551869e7975b"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/08_eq_contracts.md",
+      "sha256": "dfd3a1615ddb7f61cae87308deb0bc8237f03f194a63f1bff9304919fa88119b"
+    },
+    {
+      "path": "docs/09_roadmap/P07_native_equation_engine.md",
+      "sha256": "b8e7632e256a7112221812643f3dd24833e0d9bd59568cbdf23ec292a298bf9d"
+    },
+    {
+      "path": "docs/12_implementation_guides/06_native_equation_pipeline.md",
+      "sha256": "fca1909edfd0a7078bf3656d583578df15ab5bde56161a963984d6784e1fcb5b"
+    }
+  ],
+  "migration": "protocol/migrations/p07-latex-adapter-v0-to-v1.md",
+  "policy": "implementation/p07/P07-02_LATEX_ADAPTER_POLICY.md",
+  "report": "implementation/p07/P07-02_LATEX_ADAPTER_REPORT.md",
+  "implementation_files": [
+    "Cargo.toml",
+    "Cargo.lock",
+    "crates/equation-engine/Cargo.toml",
+    "crates/equation-engine/src/lib.rs",
+    "crates/equation-engine/src/latex.rs",
+    "crates/equation-engine/tests/latex_adapter.rs",
+    "implementation/p07/P07-02_LATEX_ADAPTER_POLICY.md",
+    "implementation/p07/P07-02_LATEX_ADAPTER_REPORT.md"
+  ],
+  "admitted_profile": {
+    "literals": "exact_decimal_unicode_alphabetic_identifier_non_nested_text",
+    "operators": "explicit_arithmetic_relation_logic_set_factorial_subscript_superscript",
+    "structures": "fraction_root_function_delimiter_accent_large_operator_derivative_binomial_set_builder",
+    "symbols": "p07_01_greek_and_fixed_symbol_set",
+    "styles": "semantic_safe_math_variant_hints_only",
+    "derivative_source": "adapter_versioned_dv_or_pdv_optional_positive_order_expression_variable",
+    "tier_b_c": "unsupported_until_separate_corpus_and_adapter_evidence"
+  },
+  "ambiguity": {
+    "kinds": [
+      "implicit_multiplication",
+      "bare_multi_letter_identifier",
+      "function_application",
+      "unary_minus_power"
+    ],
+    "site_identity": "kind_start_byte_end_byte",
+    "candidate_strategy": [
+      "conventional_latex",
+      "literal_adjacency"
+    ],
+    "confidence_millionths": [
+      600000,
+      400000
+    ],
+    "confidence_basis": "deterministic_syntax_preference_not_empirical_probability",
+    "automatic_selection": false
+  },
+  "macro_sandbox": {
+    "name": "one_to_thirty_two_ascii_letters_non_reserved",
+    "parameters": "zero_to_four_grouped_arguments_with_hash_one_to_hash_four",
+    "span_binding": "replacement_tokens_bind_to_exact_invocation_span",
+    "recursion": "direct_and_indirect_rejected",
+    "limits": "definition_parameter_replacement_aggregate_depth_expansion_and_token_bounds"
+  },
+  "default_limits": {
+    "source_bytes": 1048576,
+    "input_tokens": 16384,
+    "expanded_tokens": 32768,
+    "parse_depth": 128,
+    "macro_definitions": 64,
+    "macro_parameters": 4,
+    "macro_expansion_depth": 16,
+    "macro_expansions": 4096,
+    "macro_replacement_bytes": 65536,
+    "total_macro_bytes": 1048576,
+    "ambiguity_sites": 64,
+    "ambiguity_candidates": 4,
+    "serialized_bytes": 8388608
+  },
+  "failure_policy": [
+    "empty_oversized_or_non_u32_source_rejected",
+    "empty_oversized_malformed_unknown_or_duplicate_json_rejected",
+    "unsupported_schema_version_rejected",
+    "invalid_duplicate_or_reserved_macro_rejected",
+    "missing_macro_argument_or_invalid_parameter_rejected",
+    "direct_or_indirect_macro_recursion_rejected",
+    "macro_depth_expansion_replacement_aggregate_or_token_limit_rejected",
+    "parser_recursion_depth_limit_rejected",
+    "malformed_group_delimiter_script_or_function_rejected",
+    "unsupported_command_comment_wrapper_environment_or_character_rejected",
+    "chained_relation_or_unsupported_approach_arrow_rejected",
+    "ambiguity_site_or_candidate_limit_rejected",
+    "math_ast_admission_failure_rejected",
+    "serialized_output_limit_or_failure_rejected",
+    "source_macro_span_hash_and_ast_payload_omitted_from_debug",
+    "no_partial_ast_or_silent_candidate_selection"
+  ],
+  "not_claimed": {
+    "full_latex": false,
+    "full_tier_a_b_c_corpus": false,
+    "mathml_adapter": false,
+    "eqedit_parser_or_compiler": false,
+    "equation_node_integration": false,
+    "direct_hwpx_adapter": false,
+    "package_mutation_or_preservation": false,
+    "native_object_or_semantic_readback": false,
+    "hancom_2020_target_build": false,
+    "save_reopen_or_editor_smoke": false,
+    "page_layout_or_render": false,
+    "automation_or_differential": false,
+    "p07_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "p07": "in_progress",
+    "product_complete": false
+  }
+}
