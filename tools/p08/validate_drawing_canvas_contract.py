@@ -26,11 +26,11 @@ SOURCE_SHA256 = {
     "docs/09_roadmap/P08_images_shapes_drawing_charts.md": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3",
     "implementation/p08/P08-05_OBJECT_APPEARANCE_POLICY.md": "1d05d280c00b8e61f216ed44fcfe4ed7ea4fcbb4ba86ac72be7fcf806b3da68a",
     "implementation/p08/P08-05_OBJECT_APPEARANCE_REPORT.md": "e7da98298637eaae4083318cb6d496c6bbb193533e580d466b63d0a663a7f090",
-    "protocol/private/p08-object-appearance-v1.json": "1221f7689deedcc6ddbb309433ee8e84065b003e6a7dd80be5adee76b1a43939",
+    "protocol/private/p08-object-appearance-v1.json": "d2f8a5b0d02a0a00b998c2db47a9607aa02a0e53da18c2df1450d787a089aef1",
     "implementation/p08/P08-06_OBJECT_COMPOSITION_POLICY.md": "e6a2a3a9eeabd182554ec6db60397d5f0b1bcf060beb2d2e2415b376b5e74441",
-    "protocol/private/p08-object-composition-v1.json": "f7e8a10f6cb82b327bb6135c14d7f68dfd0acd226228360d0d75eac8e6de386b",
+    "protocol/private/p08-object-composition-v1.json": "5f9d1050a26cba6c93e2b62e7ad4be9b34ad6751ac2afd28386316fe849be3b7",
     "implementation/p08/P08-07_CHART_AUTOMATION_POLICY.md": "71d35105551af3bd0ccaca52c7dba4c68cfe97a7496c7c10205ee36bcaca7bda",
-    "protocol/private/p08-chart-automation-v1.json": "9628cdcea4d84f3bb7cc4622fca0588713054967e5ca8da1388cd6dd780f23f0",
+    "protocol/private/p08-chart-automation-v1.json": "ceb92e8db748de24e883fab993104ce523d5da6a9eef57d89a8dbf8d194f2ccb",
 }
 OFFICIAL_SHA256 = {
     "OWPML/Class/Para/ContainerType.h": "09e1a6aab9f867c3e1ff2d1ae80953244d46d47b127b6e6d5d0478c3a74cf22c",
@@ -46,7 +46,7 @@ OFFICIAL_SHA256 = {
 }
 IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/drawing_canvas.rs": "bc0ac8f666cf1c5be5963ec5c1e0cfea9a59631f202b04026aac5069a1fc18bf",
-    "crates/domain-ir/src/lib.rs": "d7571a306e93f96a3e5b0795d6c4d1029e2797de97e50168b42c6a2dfef4652f",
+    "crates/domain-ir/src/lib.rs": "7b5bedf1434e2ecac621cff7f692fb120d54249174eb6b681614c23d1d740213",
     "crates/domain-ir/tests/drawing_canvas.rs": "c96670bda68975e02c9ce1d90c33797290581055d21dde02faa964ce0f3e96b9",
 }
 MARKERS = {

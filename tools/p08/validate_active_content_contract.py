@@ -23,7 +23,7 @@ SOURCE_SHA256 = {
     "docs/12_implementation_guides/11_security_privacy_license.md": "0be76f7e2c6c7a77a2031b10322839bf8693914f2ad7740de44646ea7f6d7b75",
     "docs/12_implementation_guides/07_windows_automation_worker.md": "76e5cfb985f77b55347714f3d3d3b97c527c18d0d8238a4c0e79b3f680b44168",
     "implementation/p08/P08-08_DRAWING_CANVAS_POLICY.md": "0be864917893bb320e263e8f91a6a64fe0ff028166b3628140d409732219d0cd",
-    "protocol/private/p08-drawing-canvas-v1.json": "11df1662ed25c7a3d1cba83b78e66a83e2263bacb14a238dca8efd2770e867b9",
+    "protocol/private/p08-drawing-canvas-v1.json": "df410e243cfc49b00e30d6313f41fa4a65c3cbc2049bb5c4ebbcea62cb531838",
 }
 OFFICIAL_SHA256 = {
     "OWPML/Class/Para/OLEType.h": "fa52c5168c6723f79e3bd074fb735d7101c18ac8e1f676b914e2d2c457a122b1",
@@ -380,4 +380,3 @@ if __name__ == "__main__":
     value = validate()
     print(json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
     sys.exit(0 if value["state"] == "pass" else 1)
-

@@ -64,6 +64,24 @@ EXPECTED_DIRECT_PROFILES = {
         "stage": "unit_passed",
         "validations": ("schema",),
     },
+    "object-properties-component-v1": {
+        "features": ("OBJ-019", "OBJ-025", "OBJ-030", "OBJ-044", "OBJ-045", "OBJ-046", "OBJ-047", "OBJ-048"),
+        "backend": "component_only",
+        "stage": "unit_passed",
+        "validations": ("schema",),
+    },
+    "freeform-component-v1": {
+        "features": ("OBJ-042", "OBJ-043"),
+        "backend": "component_only",
+        "stage": "unit_passed",
+        "validations": ("schema",),
+    },
+    "special-object-component-v1": {
+        "features": ("OBJ-003", "OBJ-012", "OBJ-013", "OBJ-014"),
+        "backend": "component_only",
+        "stage": "unit_passed",
+        "validations": ("schema",),
+    },
     "ole-passive-preservation-v1": {
         "features": ("OBJ-011", "OBJ-057"),
         "backend": "preserve_only",
@@ -434,10 +452,10 @@ def build_matrix(
     }
     expected_summary = {
         "required_rows": 58,
-        "implementation_covered_rows": 39,
+        "implementation_covered_rows": 53,
         "green_rows": 0,
         "non_green_rows": 58,
-        "direct_stage_counts": {"cataloged": 19, "unit_passed": 17, "integration_passed": 22, "oracle_verified": 0},
+        "direct_stage_counts": {"cataloged": 5, "unit_passed": 31, "integration_passed": 22, "oracle_verified": 0},
         "automation_binding_counts": {"candidate_unverified": 9, "denied_by_policy": 2, "unavailable_with_reason": 47},
         "phase_counts": {"P08": 42, "P11": 16},
         "support_level_counts": {"HYBRID": 42, "AUTOMATION_FULL": 11, "OPTIONAL_EXTERNAL": 3, "PRESERVE_ONLY": 2},

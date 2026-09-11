@@ -1,0 +1,52 @@
+{
+  "schema_version": "hwpx-agent.p08-object-remainder-source-qualification/v1",
+  "task": "P08-10",
+  "base_commit": "9c06106ee26d84ebb4a0c877b1d4cddec8b08c31",
+  "scope": "fourteen_p08_owned_capability_unit_models_only",
+  "source_sha256": {
+    "docs/04_feature_catalog/09_obj.md": "e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8",
+    "docs/04_feature_catalog/contracts/09_obj_contracts.md": "e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2",
+    "docs/09_roadmap/P08_images_shapes_drawing_charts.md": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3",
+    "implementation/p08/P08-03_OBJECT_GEOMETRY_POLICY.md": "0f58bf7467146ba2adae1690c09707ad8f8e5001fbcfe9cee27e35775010d929",
+    "implementation/p08/P08-04_BASIC_SHAPE_POLICY.md": "8cacd71f5debc14508e95b2645b91dfe4b625ccc2f71fcf105bbd5932b8ab1ad",
+    "implementation/p08/P08-05_OBJECT_APPEARANCE_POLICY.md": "1d05d280c00b8e61f216ed44fcfe4ed7ea4fcbb4ba86ac72be7fcf806b3da68a"
+  },
+  "implementation_sha256": {
+    "crates/domain-ir/src/lib.rs": "7b5bedf1434e2ecac621cff7f692fb120d54249174eb6b681614c23d1d740213",
+    "crates/domain-ir/src/basic_shape.rs": "6eebfbe838b9f76530a2f3cddc414d146df2f97384305232db8f3e7b02acb3c6",
+    "crates/domain-ir/src/object_properties.rs": "1275284028df525132ac5e60443e4a993a40070f295c41834a49e1f398c73c61",
+    "crates/domain-ir/src/shape_points.rs": "aacdea408d5717e53ca71ad58212fd5f393ff7aab9a3b4a9a49bab7b04eb2940",
+    "crates/domain-ir/src/object_special.rs": "d608b15109c0a3168fec0b8b0d70b0709759a6e533e44e5fd87ae65ccddbcabc",
+    "crates/domain-ir/tests/basic_shape.rs": "40a582bcbae8939a46ce1cc661aaa46174e04bec814ced94b1aebb8775ec55a1",
+    "crates/domain-ir/tests/object_properties.rs": "256bb9d3b6f05215b31e0a8c6cb8af9bf94f6a9da19d1c8fb660edc44b0120ac",
+    "crates/domain-ir/tests/shape_points.rs": "415465edd2a14b60264711db2abdee2b48a7ea260fe16fc4b164a40388b16c0e",
+    "crates/domain-ir/tests/object_special.rs": "49a7d3ac95312701d9ca4951c83127280682f8b9f54a92cbbec555b6b14d45bd"
+  },
+  "tests": {
+    "basic_shape_regression": "6/6 PASS",
+    "object_properties": "8/8 PASS",
+    "shape_points": "6/6 PASS",
+    "object_special": "7/7 PASS",
+    "test_kind": "typed_component_state",
+    "network_used": false,
+    "licensed_application_used": false
+  },
+  "claims": {
+    "unit_model_implemented": true,
+    "fourteen_capabilities_unit_passed": true,
+    "complete_bound_state_preserved": true,
+    "request_and_build_drift_rejected": true,
+    "direct_hwpx": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "property_readback": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p08_10_green": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

@@ -3,7 +3,7 @@
   "state_schema_version": "hwpx-agent.basic-shape/v1",
   "profile_id": "hwpx-agent.basic-shape-hwpx.hwpml-2011-static/v1",
   "task": "P08-04",
-  "scope": "bounded_complete_basic_shape_and_textbox_state_with_exact_package_anchor_id_sets_and_flow_bound_preserving_lowering",
+  "scope": "bounded_complete_basic_shape_textbox_and_freeform_state_with_exact_package_anchor_id_sets_and_flow_bound_preserving_lowering",
   "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
   "source_locks": [
     {"path":"WORK_BREAKDOWN_STRUCTURE.csv","sha256":"3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
@@ -35,7 +35,7 @@
     "scope": "static_basic_shape_drawing_text_vocabulary_and_types_not_runtime_oracle"
   },
   "admitted_profile": {
-    "capabilities": ["obj.shape_insert", "obj.textbox_insert"],
+    "capabilities": ["obj.shape_insert", "obj.textbox_insert", "obj.freeform"],
     "shape_families": ["line", "rectangle", "ellipse", "text_box", "freeform"],
     "serialized_forms": ["line", "rect", "ellipse", "rect_draw_text", "polygon", "curve"],
     "geometry": "complete_p08_03_common_geometry_state",

@@ -10,9 +10,9 @@ P08-04 and P08 therefore remain incomplete.
 
 ## Admitted shape model
 
-The domain schema is `hwpx-agent.basic-shape/v1`. `obj.shape_insert` admits line, rectangle,
-ellipse, polygon and curve payloads; `obj.textbox_insert` admits a rectangle plus drawing-text
-state. Every operation carries the complete P08-03 common geometry state, distinct nonzero native
+The domain schema is `hwpx-agent.basic-shape/v1`. `obj.shape_insert` admits line, rectangle and
+ellipse payloads; `obj.textbox_insert` admits a rectangle plus drawing-text state; and
+`obj.freeform` admits polygon and curve payloads. Every operation carries the complete P08-03 common geometry state, distinct nonzero native
 object and instance IDs, and exact before/after document-flow SHA-256 bindings.
 
 Line state includes reversal and two distinct signed points. Rectangle and text-box state includes

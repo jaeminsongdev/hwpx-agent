@@ -109,6 +109,51 @@
       ]
     },
     {
+      "profile_id": "object-properties-component-v1",
+      "feature_ids": [
+        "OBJ-019", "OBJ-025", "OBJ-030", "OBJ-044",
+        "OBJ-045", "OBJ-046", "OBJ-047", "OBJ-048"
+      ],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": ["schema"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "evidence_files": [
+        "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
+        "implementation/p08/evidence/p08-10-object-remainder-source-qualification.v1.json"
+      ]
+    },
+    {
+      "profile_id": "freeform-component-v1",
+      "feature_ids": ["OBJ-042", "OBJ-043"],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": ["schema"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "evidence_files": [
+        "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
+        "implementation/p08/evidence/p08-10-object-remainder-source-qualification.v1.json"
+      ]
+    },
+    {
+      "profile_id": "special-object-component-v1",
+      "feature_ids": ["OBJ-003", "OBJ-012", "OBJ-013", "OBJ-014"],
+      "backend": "component_only",
+      "stage": "unit_passed",
+      "validations_passed": ["schema"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": false,
+      "evidence_files": [
+        "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
+        "implementation/p08/evidence/p08-10-object-remainder-source-qualification.v1.json"
+      ]
+    },
+    {
       "profile_id": "ole-passive-preservation-v1",
       "feature_ids": ["OBJ-011", "OBJ-057"],
       "backend": "preserve_only",

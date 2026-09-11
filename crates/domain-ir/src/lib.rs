@@ -10,10 +10,13 @@ mod math_ast;
 mod object_appearance;
 mod object_composition;
 mod object_geometry;
+mod object_properties;
+mod object_special;
 mod operation_plan;
 mod selector;
 mod semantic_diff;
 mod semantic_summary;
+mod shape_points;
 mod table_aggregate;
 mod table_auto_fill;
 mod table_chart;
@@ -127,6 +130,24 @@ pub use object_geometry::{
     ObjectTextWrap, ObjectTransform, ObjectVerticalAlignment, ObjectVerticalReference,
     ObjectWidthReference, ObjectWrap,
 };
+pub use object_properties::{
+    ImageProperties, OBJECT_PROPERTIES_SCHEMA_VERSION, ObjectAltText, ObjectCaption,
+    ObjectCaptionNumbering, ObjectCaptionSide, ObjectHyperlink, ObjectPropertiesBuilder,
+    ObjectPropertiesError, ObjectPropertiesLimitConfig, ObjectPropertiesLimits,
+    ObjectPropertiesOperation, ObjectPropertiesPlan, ObjectPropertiesReceipt,
+    ObjectPropertiesRequest, ObjectPropertiesRequestDraft, ObjectPropertiesResult,
+    ObjectPropertiesState, ObjectPropertiesStateDraft, ObjectPropertyKind, ObjectPropertyMargins,
+    ObjectTextBoxVerticalAlignment, OpaqueObjectProperty, TextBoxDirection, TextBoxProperties,
+};
+pub use object_special::{
+    DrawingGalleryPayload, GalleryAssetKind, OBJECT_SPECIAL_SCHEMA_VERSION, ObjectCaptionBinding,
+    ObjectIdentity, ObjectSpecialBuilder, ObjectSpecialDocumentState,
+    ObjectSpecialDocumentStateDraft, ObjectSpecialError, ObjectSpecialLimitConfig,
+    ObjectSpecialLimits, ObjectSpecialOperation, ObjectSpecialPlan, ObjectSpecialReceipt,
+    ObjectSpecialRequest, ObjectSpecialRequestDraft, ObjectSpecialResult, ParagraphBandPayload,
+    ParagraphBandPlacement, SpecialObjectKind, SpecialObjectPayload, SpecialObjectState,
+    StaticFormControlKind, StaticFormPayload,
+};
 pub use operation_plan::{
     ArgumentDraft, ArgumentKind, ArgumentSource, ArgumentSpec,
     CAPABILITY_DEFINITION_SCHEMA_VERSION, CanonicalArgumentValue, CapabilityCatalog,
@@ -148,6 +169,11 @@ pub use semantic_diff::{
 pub use semantic_summary::{
     SemanticDiffSummary, SemanticSummaryCategory, SemanticSummaryError, SemanticSummaryKind,
     SemanticSummaryLimits,
+};
+pub use shape_points::{
+    SHAPE_POINTS_SCHEMA_VERSION, ShapePointsBuilder, ShapePointsError, ShapePointsLimitConfig,
+    ShapePointsLimits, ShapePointsPlan, ShapePointsReceipt, ShapePointsRequest,
+    ShapePointsRequestDraft, ShapePointsResult, ShapePointsState, ShapePointsStateDraft,
 };
 pub use table_aggregate::{
     TABLE_AGGREGATE_SCHEMA_VERSION, TableAggregateAxis, TableAggregateBuilder, TableAggregateError,

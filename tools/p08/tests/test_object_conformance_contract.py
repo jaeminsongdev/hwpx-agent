@@ -28,7 +28,7 @@ class ObjectConformanceContractTests(unittest.TestCase):
         result = validate(run_upstream=False)
         self.assertEqual(result["state"], "pass")
         self.assertEqual(result["required_rows"], 58)
-        self.assertEqual(result["implementation_covered_rows"], 39)
+        self.assertEqual(result["implementation_covered_rows"], 53)
         self.assertEqual(result["green_rows"], 0)
         self.assertEqual(result["actual_hangul"], "not_run")
         self.assertEqual(result["render"], "not_run")
@@ -40,8 +40,8 @@ class ObjectConformanceContractTests(unittest.TestCase):
             [f"OBJ-{number:03d}" for number in range(1, 59)],
         )
         self.assertEqual(matrix["summary"]["direct_stage_counts"], {
-            "cataloged": 19,
-            "unit_passed": 17,
+            "cataloged": 5,
+            "unit_passed": 31,
             "integration_passed": 22,
             "oracle_verified": 0,
         })

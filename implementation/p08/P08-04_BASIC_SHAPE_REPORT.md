@@ -5,8 +5,9 @@
 Result: `static_shape_component_pass / target_not_run / task_incomplete`.
 
 This checkpoint adds exact domain planning and preserving static HWPX lowering for
-`obj.shape_insert` and `obj.textbox_insert`. The implementation covers every P08-04 shape family,
-including both freeform encodings, rather than promoting an easier subset.
+`obj.shape_insert`, `obj.textbox_insert`, and the separately routed `obj.freeform`. The
+implementation covers every P08-04 shape family, including both freeform encodings, rather than
+promoting an easier subset.
 
 ## Implemented evidence
 

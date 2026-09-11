@@ -223,6 +223,7 @@ impl BasicShape {
     pub const fn capability_id(&self) -> &'static str {
         match self {
             Self::TextBox { .. } => "obj.textbox_insert",
+            Self::Freeform { .. } => "obj.freeform",
             _ => "obj.shape_insert",
         }
     }

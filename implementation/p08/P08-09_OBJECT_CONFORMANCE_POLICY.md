@@ -28,10 +28,14 @@ a blocker; it is never treated as skipped success.
   appearance operations have synthetic HWPX/XML integration evidence.
 - Six composition operations, nine chart operations, drawing-canvas insertion and crop have exact
   component evidence without direct HWPX execution.
+- Fourteen formerly cataloged P08-owned operations now have complete typed unit models: drawing
+  gallery, inert form, caption and paragraph-band insertion; margin/caption, text-box and image
+  properties; freeform insertion and point editing; aspect lock, protection, printability,
+  alternative text and safe hyperlinks.
 - Both preserve-only OLE rows have synthetic package inventory, activation denial, security and
   byte-preservation evidence. This does not claim OLE creation or semantic editing.
-- Every other row remains `cataloged`. In particular, insertion-time fields do not prove separate
-  edit capabilities such as alternate text, image properties or text-box properties.
+- The five remaining `cataloged` rows are P11-owned. P08 unit models still do not prove direct
+  HWPX lowering, installed-target behavior or automation routing.
 
 ## Asset thresholds
 
@@ -55,7 +59,7 @@ contains no document content, raw action/parameter identifiers, private absolute
 values. Existing failed attempts and user documents remain immutable.
 
 Current claims: `matrix_implemented=true`, `threshold_definitions_complete=true`,
-`implementation_covered_rows=39`, `actual_hwpx=false`, `actual_hangul=false`, `render=false`,
+`implementation_covered_rows=53`, `actual_hwpx=false`, `actual_hangul=false`, `render=false`,
 `automation=false`, `differential=false`, `green_rows=0`, `p08_complete=false`,
 `production_ready=false`, and `product_complete=false`.
 

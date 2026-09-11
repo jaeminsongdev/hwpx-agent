@@ -27,8 +27,8 @@ SOURCES = {
     "implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json",
 }
 IMPLEMENTATION_SHA256 = {
-    "crates/domain-ir/src/lib.rs": "d7571a306e93f96a3e5b0795d6c4d1029e2797de97e50168b42c6a2dfef4652f",
-    "crates/domain-ir/src/basic_shape.rs": "59414d6a3b20f105239e2b497d370e00385254a6775e0b9c37141ff36de65288",
+    "crates/domain-ir/src/lib.rs": "7b5bedf1434e2ecac621cff7f692fb120d54249174eb6b681614c23d1d740213",
+    "crates/domain-ir/src/basic_shape.rs": "6eebfbe838b9f76530a2f3cddc414d146df2f97384305232db8f3e7b02acb3c6",
     "crates/domain-ir/tests/basic_shape.rs": "40a582bcbae8939a46ce1cc661aaa46174e04bec814ced94b1aebb8775ec55a1",
     "crates/hwpx-package/src/lib.rs": "9d19a032fcfad9730911163afc53dd90335f34976d8a672cf4264472ff2d9aa3",
     "crates/hwpx-package/src/id_index.rs": "5ec151bb7ea37af66a67608f01ab3676eac9a0b23e2d8c3870aa97c1b53adbb0",
@@ -81,7 +81,7 @@ OFFICIAL = {
     "scope": "static_basic_shape_drawing_text_vocabulary_and_types_not_runtime_oracle",
 }
 ADMITTED = {
-    "capabilities": ["obj.shape_insert", "obj.textbox_insert"],
+    "capabilities": ["obj.shape_insert", "obj.textbox_insert", "obj.freeform"],
     "shape_families": ["line", "rectangle", "ellipse", "text_box", "freeform"],
     "serialized_forms": ["line", "rect", "ellipse", "rect_draw_text", "polygon", "curve"],
     "geometry": "complete_p08_03_common_geometry_state",
@@ -203,7 +203,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         "state_schema_version": "hwpx-agent.basic-shape/v1",
         "profile_id": "hwpx-agent.basic-shape-hwpx.hwpml-2011-static/v1",
         "task": "P08-04",
-        "scope": "bounded_complete_basic_shape_and_textbox_state_with_exact_package_anchor_id_sets_and_flow_bound_preserving_lowering",
+        "scope": "bounded_complete_basic_shape_textbox_and_freeform_state_with_exact_package_anchor_id_sets_and_flow_bound_preserving_lowering",
         "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
         "source_qualification": QUALIFICATION,
         "migration": MIGRATION,
@@ -320,7 +320,7 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
     }:
         errors.append("qualification_target")
     if value.get("claims") != {
-        "static_shape_component_pass": True, "shape_insert_and_textbox_insert": True,
+        "static_shape_component_pass": True, "shape_textbox_and_freeform_capabilities": True,
         "synthetic_full_package_reopen": True, "actual_target_hwpx": False,
         "exact_current_2020_serialization": False, "actual_hangul": False,
         "save_reopen": False, "render": False, "p08_04_complete": False,
