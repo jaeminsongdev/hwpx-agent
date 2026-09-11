@@ -101,6 +101,7 @@ enum ProfileKind {
     CurrentHancom2020CoreV1,
     CurrentHancom2020TableV2,
     CurrentHancom2020FormulaV3,
+    CurrentHancom2020EquationV4,
 }
 
 impl IdRuleProfile {
@@ -123,30 +124,49 @@ impl IdRuleProfile {
         Self(ProfileKind::CurrentHancom2020FormulaV3)
     }
 
+    /// Extends the immutable formula profile with native equation object identifiers observed in
+    /// exact-build Hangul 2020 HWPX output.
+    #[must_use]
+    pub const fn current_hancom_2020_equation_v4() -> Self {
+        Self(ProfileKind::CurrentHancom2020EquationV4)
+    }
+
     #[must_use]
     pub const fn version(self) -> &'static str {
         match self.0 {
             ProfileKind::CurrentHancom2020CoreV1 => "hancom-2020-hwpml-2011-core/v1",
             ProfileKind::CurrentHancom2020TableV2 => "hancom-2020-hwpml-2011-table/v2",
             ProfileKind::CurrentHancom2020FormulaV3 => "hancom-2020-hwpml-2011-formula/v3",
+            ProfileKind::CurrentHancom2020EquationV4 => "hancom-2020-hwpml-2011-equation/v4",
         }
     }
 
     const fn includes_table_rules(self) -> bool {
         matches!(
             self.0,
-            ProfileKind::CurrentHancom2020TableV2 | ProfileKind::CurrentHancom2020FormulaV3
+            ProfileKind::CurrentHancom2020TableV2
+                | ProfileKind::CurrentHancom2020FormulaV3
+                | ProfileKind::CurrentHancom2020EquationV4
         )
     }
 
     const fn includes_formula_rules(self) -> bool {
-        matches!(self.0, ProfileKind::CurrentHancom2020FormulaV3)
+        matches!(
+            self.0,
+            ProfileKind::CurrentHancom2020FormulaV3 | ProfileKind::CurrentHancom2020EquationV4
+        )
+    }
+
+    const fn includes_equation_rules(self) -> bool {
+        matches!(self.0, ProfileKind::CurrentHancom2020EquationV4)
     }
 
     const fn preservation_profile(self) -> PreservationRuleProfile {
         match self.0 {
             ProfileKind::CurrentHancom2020CoreV1 => PreservationRuleProfile::CoreV1,
-            ProfileKind::CurrentHancom2020TableV2 | ProfileKind::CurrentHancom2020FormulaV3 => {
+            ProfileKind::CurrentHancom2020TableV2
+            | ProfileKind::CurrentHancom2020FormulaV3
+            | ProfileKind::CurrentHancom2020EquationV4 => {
                 PreservationRuleProfile::Hangul2020PreviewTextV2
             }
         }
@@ -179,6 +199,7 @@ pub enum IdKind {
     SubList,
     FieldBegin,
     FieldInstance,
+    Equation,
 }
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
@@ -765,6 +786,15 @@ const FORMULA_DECLARATION_RULES: &[DeclarationRule] = &[
         ValueSyntax::Decimal,
     ),
 ];
+
+const EQUATION_DECLARATION_RULES: &[DeclarationRule] = &[declaration(
+    PartSelector::SpineDocument,
+    HWPML_2011_PARAGRAPH_NAMESPACE,
+    "equation",
+    "id",
+    IdKind::Equation,
+    ValueSyntax::Decimal,
+)];
 
 const REFERENCE_RULES: &[ReferenceRule] = &[
     reference(
@@ -1570,7 +1600,17 @@ fn matching_declaration_rule(
     } else {
         &[]
     };
-    for rule in DECLARATION_RULES.iter().chain(table).chain(formula) {
+    let equation = if profile.includes_equation_rules() {
+        EQUATION_DECLARATION_RULES
+    } else {
+        &[]
+    };
+    for rule in DECLARATION_RULES
+        .iter()
+        .chain(table)
+        .chain(formula)
+        .chain(equation)
+    {
         if part_matches(rule.part, graph, part)
             && rule_namespace_matches(element_namespace, rule.namespace)
             && element_local == rule.element

@@ -1,0 +1,59 @@
+{
+  "schema_version": "hwpx-agent.native-equation-hwpx-source-qualification/v1",
+  "task": "P07-05",
+  "recorded_date": "2026-09-11",
+  "target": {
+    "product": "Hangul 2020",
+    "version": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "other_versions": "not_qualified"
+  },
+  "qualified_sources": [
+    {
+      "path": "implementation/p07/evidence/p07-04-eqedit-source-qualification.current-2020.v1.json",
+      "role": "installed_binary_help_and_eqedit_profile"
+    },
+    {
+      "path": "implementation/p06/P06-07_TARGET_READBACK_REPORT.md",
+      "role": "licensed_predecessor_save_reopen_boundary"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_07_table_pagination_target_fixture.rs",
+      "role": "exact_predecessor_native_equation_shape"
+    }
+  ],
+  "native_profile": {
+    "namespace": "http://www.hancom.co.kr/hwpml/2011/paragraph",
+    "object": "equation",
+    "version": "Equation Version 60",
+    "font": "HancomEQN",
+    "owned_children_in_order": ["sz", "pos", "outMargin", "script"],
+    "anchor": "treatAsChar_1_para_column_top_left_zero_offset",
+    "outer_margin": "all_zero",
+    "layout_classification": "dedicated_paragraph_display_other_visible_run_inline"
+  },
+  "component_evidence": {
+    "synthetic_closed_hwpx": true,
+    "preserving_patch": true,
+    "writer_reopen": true,
+    "native_object_readback": true,
+    "eqedit_to_math_ast_semantic_compare": true,
+    "package_wide_object_id_binding": true,
+    "provisional_extent_requires_render": true
+  },
+  "claims": {
+    "installed_source_qualified": true,
+    "predecessor_actual_hangul_save_reopen": true,
+    "new_lowerer_actual_hangul_execution": false,
+    "new_lowerer_save_reopen": false,
+    "editor_smoke": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "other_hangul_versions": false,
+    "p07_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

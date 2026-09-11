@@ -654,6 +654,7 @@ impl PatchPartRecord {
 }
 
 pub struct PatchResult {
+    pub(crate) profile: IdRuleProfile,
     profile_version: &'static str,
     intent_count: usize,
     records: Vec<PatchPartRecord>,
@@ -1541,6 +1542,7 @@ impl<'a> Transaction<'a> {
             .filter(|intent| matches!(intent, PatchIntent::AddRelationship { .. }))
             .count();
         Ok(PatchResult {
+            profile: self.id_profile,
             profile_version: id_index.profile_version(),
             intent_count: self.intents.len(),
             records,

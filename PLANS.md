@@ -24,7 +24,7 @@
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | P07 in progress | P07-01 MathAst plus finite LaTeX, MathML and current-PC Hangul 2020 EqEdit adapters pass as components; native target evidence, graphics and fields remain |
+| P07-P09 | P07 in progress | P07-01~05 MathAst, finite adapters and typed native-equation HWPX lowerer pass as components; new-lowerer target evidence, automation, layout, corpus, graphics and fields remain |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. Implement P07-05 typed native equation lowerer/readback at `max`; close bounded HWPX/package preservation, then licensed Hangul 2020 save/reopen evidence.
+1. Run the P07-05 lowerer on one disposable exact-target fixture at `max`; obtain licensed Hangul 2020 save/reopen plus native semantic readback, then implement P07-06.
 2. Run corrected TABLE-032/033 only when the user can approve all saves; target automation/differentials remain separate.
 3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
 

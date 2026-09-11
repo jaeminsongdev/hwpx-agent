@@ -7,6 +7,7 @@
 //! nested-package checks have succeeded.
 
 mod character_style;
+mod equation;
 mod font_metric_receipt;
 mod graph;
 mod header_footer;
@@ -43,6 +44,13 @@ pub use character_style::{
     FontFaceGroup, FontFamily, FontType, FontTypeInfo, HANCOM_2020_HEAD_NAMESPACE, LanguageSlot,
     LanguageValues, LineType1, LineType2, Shadow, ShadowType, Strikeout, SubstituteFont, Underline,
     UnderlinePosition,
+};
+pub use equation::{
+    EQUATION_HWPX_PROFILE_ID, EQUATION_HWPX_SCHEMA_VERSION, EquationColor, EquationExtent,
+    EquationExtentSource, EquationHwpxBuilder, EquationHwpxError, EquationHwpxLimitConfig,
+    EquationHwpxLimits, EquationHwpxLowered, EquationHwpxLowerer, EquationHwpxLoweringReceipt,
+    EquationHwpxReadback, EquationHwpxReader, EquationHwpxRequest, EquationHwpxRequestDraft,
+    EquationHwpxSource, EquationLayout, EquationStyle,
 };
 pub use font_metric_receipt::{
     CURRENT_FONT_METRIC_PROFILE_ID, CurrentFontMetricCell, CurrentFontMetricLimits,

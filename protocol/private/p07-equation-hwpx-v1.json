@@ -1,0 +1,104 @@
+{
+  "schema_version": "hwpx-agent.equation-hwpx-contract/v1",
+  "request_schema_version": "hwpx-agent.equation-hwpx/v1",
+  "profile_id": "hwpx-agent.equation-hwpx.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
+  "id_profile": "hancom-2020-hwpml-2011-equation/v4",
+  "task": "P07-05",
+  "scope": "typed_math_ast_to_synthetic_closed_hwpx_native_equation_component",
+  "feature_boundary": [
+    "EQ-001", "EQ-006", "EQ-007", "EQ-008", "EQ-009", "EQ-010", "EQ-011",
+    "EQ-012", "EQ-013", "EQ-014", "EQ-015", "EQ-016", "EQ-017", "EQ-018",
+    "EQ-019", "EQ-020", "EQ-021", "EQ-022", "EQ-023", "EQ-024", "EQ-025",
+    "EQ-026", "EQ-027", "EQ-028", "EQ-029", "EQ-030", "EQ-032"
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path": "WORK_BREAKDOWN_STRUCTURE.csv", "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path": "README.md", "sha256": "9811580c0c6c2d780d6b5d437318efc66a55e7081b04af7924c691e4bb214459"},
+    {"path": "docs/03_document_model/07_equation_model.md", "sha256": "939e6973fcb7af1119ac496801af0e3848cc39021224b2f760113991ade0c43e"},
+    {"path": "docs/04_feature_catalog/08_eq.md", "sha256": "d515b2c63feb7797c55a2634fad6faf1b20c4644f16c42b26288551869e7975b"},
+    {"path": "docs/04_feature_catalog/contracts/08_eq_contracts.md", "sha256": "dfd3a1615ddb7f61cae87308deb0bc8237f03f194a63f1bff9304919fa88119b"},
+    {"path": "docs/09_roadmap/P07_native_equation_engine.md", "sha256": "b8e7632e256a7112221812643f3dd24833e0d9bd59568cbdf23ec292a298bf9d"},
+    {"path": "docs/12_implementation_guides/06_native_equation_pipeline.md", "sha256": "fca1909edfd0a7078bf3656d583578df15ab5bde56161a963984d6784e1fcb5b"},
+    {"path": "implementation/p06/P06-07_TARGET_READBACK_REPORT.md", "sha256": "75201108b7f0b362353b2d6bf60bf990df3380ccd685a956e9cfd0a3951e8e08"},
+    {"path": "crates/hwpx-package/examples/p06_07_table_pagination_target_fixture.rs", "sha256": "2772ec0953b2fe188b3ef4f302522e9ffc0c3f33a769d90f67b8b1647fdfe2a0"},
+    {"path": "implementation/p07/P07-04_EQEDIT_REPORT.md", "sha256": "5ced61f290f45652f1acf3157e1ece52f4619ad2ef417df3a49a20e6455697ae"}
+  ],
+  "source_qualification": "implementation/p07/evidence/p07-05-native-equation-hwpx-source-qualification.current-2020.v1.json",
+  "migration": "protocol/migrations/p07-equation-hwpx-v0-to-v1.md",
+  "policy": "implementation/p07/P07-05_NATIVE_EQUATION_HWPX_POLICY.md",
+  "report": "implementation/p07/P07-05_NATIVE_EQUATION_HWPX_REPORT.md",
+  "implementation_files": [
+    "Cargo.lock",
+    "crates/hwpx-package/Cargo.toml",
+    "crates/hwpx-package/src/lib.rs",
+    "crates/hwpx-package/src/equation.rs",
+    "crates/hwpx-package/src/id_index.rs",
+    "crates/hwpx-package/src/patch.rs",
+    "crates/hwpx-package/src/writer.rs",
+    "crates/hwpx-package/tests/equation_hwpx.rs",
+    "crates/hwpx-package/tests/id_index.rs"
+  ],
+  "binding": {
+    "source": "complete_expanded_package_graph_section_top_level_paragraph_direct_empty_run_package_object_ids",
+    "flow": "distinct_exact_before_and_after_document_flow_sha256_checked_at_request_and_lower",
+    "identity": "nonzero_bounded_package_wide_native_object_id_no_collision",
+    "semantic": "normalized_math_ast_sha_eqedit_sha_and_compile_parse_semantic_equality"
+  },
+  "native_profile": {
+    "object": "equation_version60_hancomeqn",
+    "owned_state": "id_style_baseline_color_absolute_extent_character_anchor_zero_margin_script",
+    "layout": "inline_has_other_visible_run_display_has_dedicated_run",
+    "extent": "provisional_only_without_evidence_digest_and_render_required_true",
+    "fallback": "no_raw_xml_plain_text_image_or_partial_object"
+  },
+  "preservation": {
+    "mutation": "one_validated_fragment_before_exact_empty_text_node",
+    "native_readback": "strict_attributes_ordered_children_eqedit_parse_math_ast_compare",
+    "byte_proof": "remove_inserted_exact_span_equals_source_section",
+    "package": "exactly_one_changed_part_all_other_expanded_sha_equal_writer_reopens_with_patch_id_profile"
+  },
+  "default_limits": {
+    "section_bytes": 33554432,
+    "elements": 1000000,
+    "equations": 65536,
+    "script_bytes": 4194304,
+    "serialized_bytes": 16777216,
+    "extent_hwpunit": 10000000,
+    "object_id": 4294967294
+  },
+  "failure_policy": [
+    "zero_or_hard_ceiling_exceeding_limits_rejected",
+    "unknown_duplicate_malformed_or_oversized_json_rejected",
+    "schema_profile_package_section_paragraph_run_object_set_or_flow_drift_rejected",
+    "nonspine_nested_nonempty_ambiguous_or_wrong_layout_target_rejected",
+    "invalid_style_extent_or_object_identity_rejected",
+    "unrepresentable_ast_or_eqedit_compile_parse_mismatch_rejected",
+    "package_wide_object_id_collision_rejected",
+    "patch_writer_native_readback_or_unowned_byte_mismatch_rejected",
+    "debug_redacts_paths_ids_digests_script_ast_style_and_extent",
+    "no_partial_package_raw_xml_text_image_or_layout_verification_promotion"
+  ],
+  "not_claimed": {
+    "arbitrary_existing_document_profile": false,
+    "verified_layout_extent": false,
+    "new_lowerer_actual_hangul_execution": false,
+    "new_lowerer_save_reopen": false,
+    "editor_smoke": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "other_hangul_versions": false,
+    "p07_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "integration_passed",
+    "synthetic_closed_hwpx": true,
+    "actual_hangul": false,
+    "p07": "in_progress",
+    "product_complete": false
+  }
+}

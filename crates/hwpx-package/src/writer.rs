@@ -469,7 +469,7 @@ fn build_artifact(
         Cursor::new(bytes.as_slice()),
         package_limits,
         graph_limits,
-        IdRuleProfile::current_hancom_2020_core_v1(),
+        patch.profile,
         id_limits,
     )?;
     if validation.parts != ordered.len()
@@ -487,7 +487,7 @@ fn build_artifact(
         package_limits,
         graph_limits,
         id_limits,
-        profile: IdRuleProfile::current_hancom_2020_core_v1(),
+        profile: patch.profile,
     })
 }
 

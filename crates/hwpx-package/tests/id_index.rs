@@ -71,6 +71,12 @@ const FORMULA_SECTION: &str = r#"<q:section xmlns:q="http://www.hancom.co.kr/hwp
   </q:run></q:p>
 </q:section>"#;
 
+const EQUATION_SECTION: &str = r#"<q:section xmlns:q="http://www.hancom.co.kr/hwpml/2011/paragraph">
+  <q:p id="1" paraPrIDRef="1" styleIDRef="1"><q:run charPrIDRef="1">
+    <q:equation id="77"><q:script>x + 1</q:script></q:equation>
+  </q:run></q:p>
+</q:section>"#;
+
 #[test]
 fn current_2020_core_profile_indexes_typed_cross_part_references_without_value_leak() -> TestResult
 {
@@ -292,6 +298,57 @@ fn formula_v3_adds_typed_field_domains_without_weakening_table_v2() -> TestResul
         };
         assert!(validation_codes(&error).contains(&"id_index_dangling_reference"));
     }
+    Ok(())
+}
+
+#[test]
+fn equation_v4_adds_native_equation_ids_without_weakening_formula_v3() -> TestResult {
+    let bytes = valid_archive(Some(HEADER), EQUATION_SECTION, "pkg")?;
+    let (mut formula_reader, formula_graph) = open_graph(bytes.clone())?;
+    let Err(formula_error) = IdIndex::build(
+        &mut formula_reader,
+        &formula_graph,
+        IdRuleProfile::current_hancom_2020_formula_v3(),
+        IdIndexLimits::default(),
+    ) else {
+        return Err("formula v3 silently accepted equation ID domains".into());
+    };
+    assert!(validation_codes(&formula_error).contains(&"id_index_unknown_id_like_attribute"));
+
+    let (mut equation_reader, equation_graph) = open_graph(bytes)?;
+    let index = IdIndex::build(
+        &mut equation_reader,
+        &equation_graph,
+        IdRuleProfile::current_hancom_2020_equation_v4(),
+        IdIndexLimits::default(),
+    )?;
+    assert_eq!(
+        index.profile_version(),
+        "hancom-2020-hwpml-2011-equation/v4"
+    );
+    assert_eq!(
+        index
+            .declarations()
+            .iter()
+            .filter(|declaration| declaration.kind() == IdKind::Equation)
+            .count(),
+        1
+    );
+
+    let duplicate = EQUATION_SECTION.replace(
+        "</q:run>",
+        "<q:equation id=\"77\"><q:script>y</q:script></q:equation></q:run>",
+    );
+    let (mut reader, graph) = open_graph(valid_archive(Some(HEADER), &duplicate, "pkg")?)?;
+    let Err(error) = IdIndex::build(
+        &mut reader,
+        &graph,
+        IdRuleProfile::current_hancom_2020_equation_v4(),
+        IdIndexLimits::default(),
+    ) else {
+        return Err("duplicate equation object ID was accepted".into());
+    };
+    assert!(validation_codes(&error).contains(&"id_index_duplicate_declaration"));
     Ok(())
 }
 
