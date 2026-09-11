@@ -2,6 +2,7 @@
 
 mod basic_shape;
 mod capability_router;
+mod chart_automation;
 mod document_graph;
 mod identity;
 mod math_ast;
@@ -49,6 +50,19 @@ pub use capability_router::{
     CapabilityRouterError, CapabilityRouterLimits, ExactTargetProfile, PolicyScope,
     PreservationImpact, PreservationRequirement, ProtectionState, RegistryTrustState, RouteBinding,
     RouteContext, RouteDecision, RouteRestriction, SignatureImpact, SupportState,
+};
+pub use chart_automation::{
+    CHART_AUTOMATION_SCHEMA_VERSION, ChartAutomationBinding, ChartAutomationBuilder,
+    ChartAutomationError, ChartAutomationLimitConfig, ChartAutomationLimits,
+    ChartAutomationObservation, ChartAutomationObservationDraft, ChartAutomationPlan,
+    ChartAutomationProfile, ChartAutomationProfileDraft, ChartAutomationReceipt,
+    ChartAutomationRequest, ChartAutomationRequestDraft, ChartAutomationResult, ChartAxisKind,
+    ChartAxisScale, ChartAxisState, ChartDataOrientation, ChartDataProvenance, ChartDataState,
+    ChartDimension, ChartDocumentState, ChartDocumentStateDraft, ChartFamily, ChartIdentity,
+    ChartIdentityReservation, ChartLabelPosition, ChartLabelsState, ChartLegendPosition,
+    ChartLegendState, ChartMarkerKind, ChartOperation, ChartSeriesAxis, ChartSeriesState,
+    ChartStacking, ChartState, ChartStyleBinding, ChartTitlePosition, ChartTitleState,
+    ChartTypeBinding, ChartTypeSelection, ChartValue,
 };
 pub use document_graph::{
     AccessibilityState, ArtifactRef, BreakKind, BreakNode, ChartNode,

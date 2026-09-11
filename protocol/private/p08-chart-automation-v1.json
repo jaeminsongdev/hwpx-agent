@@ -1,0 +1,121 @@
+{
+  "schema_version": "hwpx-agent.chart-automation-contract/v1",
+  "state_schema_version": "hwpx-agent.chart-automation/v1",
+  "profile_id": "hwpx-agent.chart-automation.target-bound/v1",
+  "task": "P08-07",
+  "scope": "all_nine_chart_capabilities_as_exact_bounded_complete_state_target_automation_transitions",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path":"WORK_BREAKDOWN_STRUCTURE.csv","sha256":"3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path":"docs/03_document_model/08_drawing_image_chart.md","sha256":"ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b"},
+    {"path":"docs/04_feature_catalog/09_obj.md","sha256":"e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8"},
+    {"path":"docs/04_feature_catalog/contracts/09_obj_contracts.md","sha256":"e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2"},
+    {"path":"docs/09_roadmap/P08_images_shapes_drawing_charts.md","sha256":"f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path":"implementation/p08/P08-06_OBJECT_COMPOSITION_POLICY.md","sha256":"e6a2a3a9eeabd182554ec6db60397d5f0b1bcf060beb2d2e2415b376b5e74441"},
+    {"path":"implementation/p08/P08-06_OBJECT_COMPOSITION_REPORT.md","sha256":"8f7f54354db7dcf0d5b7371166aca8b3bac529e0e24818e0f1cb984b1f792775"},
+    {"path":"protocol/private/p08-object-composition-v1.json","sha256":"f7e8a10f6cb82b327bb6135c14d7f68dfd0acd226228360d0d75eac8e6de386b"},
+    {"path":"implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json","sha256":"c4a8bdb082cf8610fa2b3f6e709ca9058ab256a2371e9a779b9b323ca82638e4"}
+  ],
+  "source_qualification": "implementation/p08/evidence/p08-07-chart-automation-source-qualification.v1.json",
+  "migration": "protocol/migrations/p08-chart-automation-v0-to-v1.md",
+  "policy": "implementation/p08/P08-07_CHART_AUTOMATION_POLICY.md",
+  "report": "implementation/p08/P08-07_CHART_AUTOMATION_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/chart_automation.rs",
+    "crates/domain-ir/tests/chart_automation.rs"
+  ],
+  "official_sources": {
+    "owpml_repository": "https://github.com/hancom-io/owpml-model",
+    "owpml_commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "owpml_files": ["OWPML/Class/Para/ChartType.h","OWPML/Class/Para/ChartType.cpp","OWPMLApi/OWPMLSerialize.cpp"],
+    "hancom_help": [
+      "https://help.hancom.com/hoffice/multi/ko_kr/hwp/toolbox/object_chart.htm",
+      "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/chart/chart(createchart).htm",
+      "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/chart/chart(inputdata).htm",
+      "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/chart/chart(plot).htm",
+      "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/chart/chart(group).htm",
+      "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/chart/chart(title).htm",
+      "https://help.hancom.com/hoffice/multi/ko_kr/hwp/table/chart/chart(style).htm"
+    ],
+    "scope": "static_chart_vocabulary_and_opaque_reference_architecture_not_runtime_or_render_oracle"
+  },
+  "admitted_profile": {
+    "capabilities": ["obj.chart_axis","obj.chart_data","obj.chart_insert","obj.chart_labels","obj.chart_legend","obj.chart_series","obj.chart_style","obj.chart_title","obj.chart_type"],
+    "chart_families": ["horizontal_bar","vertical_bar","line","area","pie","doughnut","scatter","bubble","stock","radar","surface"],
+    "data_values": ["exact_decimal","blank"],
+    "binding": "exact_target_profile_plus_complete_source_and_target_chart_state_and_before_after_document_flow",
+    "preservation": "all_untargeted_charts_components_external_object_inventory_and_opaque_semantics_preserved_except_explicit_operation"
+  },
+  "workflow": {
+    "admit": "validate_complete_profile_state_exact_profile_source_flow_digests_and_one_non_noop_operation",
+    "plan": "resolve_opaque_capability_mapping_and_bind_parameter_readback_request_source_target_and_flow_digests",
+    "build": "revalidate_profile_current_state_and_flow_then_recompute_exact_target_and_private_plan_seal",
+    "observe": "require_one_open_save_reopen_full_readback_exact_target_state_and_nonempty_export",
+    "verify": "installed_target_provenance_is_a_separate_required_gate"
+  },
+  "default_limits": {
+    "input_bytes": 4194304,
+    "serialized_bytes": 33554432,
+    "charts": 16384,
+    "rows": 65536,
+    "columns": 16384,
+    "series": 16384,
+    "axes": 4,
+    "type_bindings": 512,
+    "style_bindings": 4096,
+    "identifier_bytes": 512,
+    "text_bytes": 65536,
+    "opaque_bytes": 268435456,
+    "export_bytes": 268435456,
+    "decimal_scale": 18
+  },
+  "failure_policy": [
+    "zero_inconsistent_or_over_ceiling_limits_rejected",
+    "duplicate_unknown_missing_malformed_non_nfc_or_oversized_json_rejected",
+    "target_profile_requires_exact_nine_sorted_capabilities_and_unique_opaque_bindings",
+    "raw_action_names_and_unchecked_parameter_bags_are_not_public_contract_fields",
+    "chart_logical_native_instance_data_resource_and_chart_part_identity_must_be_distinct",
+    "insert_requires_fresh_identity_before_after_inventory_and_allocator_proof_binding",
+    "data_grid_dimensions_labels_orientation_values_and_provenance_must_be_complete",
+    "series_order_labels_axis_stack_line_marker_visibility_exclusion_and_style_must_be_complete",
+    "category_and_primary_value_axes_are_mandatory_and_secondary_series_requires_secondary_axis",
+    "legend_labels_title_type_style_geometry_composition_appearance_and_opaque_state_must_be_complete",
+    "unsupported_target_type_or_style_and_every_noop_rejected",
+    "profile_source_state_and_document_flow_drift_rejected_at_request_plan_and_build",
+    "target_state_binding_schema_and_private_plan_tampering_rejected_by_exact_recomputation",
+    "execution_observation_requires_exactly_one_complete_open_save_reopen_readback_export_attempt",
+    "synthetic_observation_never_proves_installed_target_provenance",
+    "identity_text_values_bindings_and_digests_redacted_from_debug",
+    "no_partial_result_or_fallback_after_failure"
+  ],
+  "not_claimed": {
+    "actual_target_profile": false,
+    "direct_hwpx": false,
+    "resource_integrity": false,
+    "semantic_reopen": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "full_property_readback": false,
+    "export": false,
+    "render_diff": false,
+    "direct_automation_differential": false,
+    "p08_07_complete": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "exact_chart_state": "pass",
+    "automation_contract": "pass",
+    "actual_target_profile": "not_run",
+    "actual_hangul": false,
+    "render_diff": false,
+    "p08_07": "exact_chart_automation_component_pass_installed_target_not_run_task_incomplete",
+    "p08_07_complete": false,
+    "p08": "in_progress",
+    "product_complete": false
+  }
+}

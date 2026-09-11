@@ -27,7 +27,7 @@ SOURCES = {
     "implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json",
 }
 IMPLEMENTATION_SHA256 = {
-    "crates/domain-ir/src/lib.rs": "11fd80ab26b796f5f4fa7f255e82f40af7638ffbaea74e043db4e6627e192883",
+    "crates/domain-ir/src/lib.rs": "2fa923b282022ede228749723eb65a9e5e427396741e1d720e94f14cb9ba125e",
     "crates/domain-ir/src/object_geometry.rs": "61a285a2d892cfd62346a0a16580f54420339da490793c8aebd4cf1522c97a5e",
     "crates/domain-ir/tests/object_geometry.rs": "74b010ea18717b3403b53c62fc16b28977a35229c9b1b452373e98b744b07531",
     "crates/hwpx-package/src/lib.rs": "7041f5a9443ec4a473112b2ff3b22fa474bbfe0efe78f2b59a1bd6ac3090bc90",
