@@ -27,10 +27,10 @@ SOURCES = {
     "implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json",
 }
 IMPLEMENTATION_SHA256 = {
-    "crates/hwpx-package/src/lib.rs": "20274fe4624c17d3e39a8fe6409d80ecb18321118402752e174cf8cfcc0c5f9f",
+    "crates/hwpx-package/src/lib.rs": "a2fe04b15c2da36f22a4357b44e8e012a8985bb59e5f2cd590b687ff44dc578b",
     "crates/hwpx-package/src/image_hwpx.rs": "12bc3bc3419163dda1c9d1211757d8b414ef37b165f3e053a4893d0021ae6e49",
     "crates/hwpx-package/src/asset.rs": "2a7aa557159e6c68fe1ed05111f44a846b9d174a9382c7f42d4295f7cdc72f9e",
-    "crates/hwpx-package/src/id_index.rs": "07543144800900e376a502004c0d293187e8597f712ea924151e7fd61f6d9830",
+    "crates/hwpx-package/src/id_index.rs": "5ec151bb7ea37af66a67608f01ab3676eac9a0b23e2d8c3870aa97c1b53adbb0",
     "crates/hwpx-package/src/patch.rs": "370e0547f12b69042a493d6db67d9d08176ee737abd49ef365d160bd788aee67",
     "crates/hwpx-package/src/graph.rs": "8a3f32bb1e849150139d26eca4ed02c829e940c329b9a6233168c2078da960ba",
     "crates/hwpx-package/tests/image_hwpx.rs": "7c1d6aebf69808f892ee031f8c7dfcc71860cd105167af9353f61cc3d1eaa1f3",

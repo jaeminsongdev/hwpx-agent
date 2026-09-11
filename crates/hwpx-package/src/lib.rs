@@ -7,6 +7,7 @@
 //! nested-package checks have succeeded.
 
 mod asset;
+mod basic_shape_hwpx;
 mod character_style;
 mod equation;
 mod font_metric_receipt;
@@ -42,6 +43,12 @@ mod writer;
 pub use asset::{
     ASSET_PIPELINE_PROFILE_ID, ASSET_PIPELINE_SCHEMA_VERSION, AssetDisposition, AssetError,
     AssetLimitConfig, AssetLimits, AssetMedia, AssetPlan, AssetStoreAdapter,
+};
+pub use basic_shape_hwpx::{
+    BASIC_SHAPE_HWPX_PROFILE_ID, BasicShapeHwpxBuilder, BasicShapeHwpxError,
+    BasicShapeHwpxLimitConfig, BasicShapeHwpxLimits, BasicShapeHwpxLowered, BasicShapeHwpxLowerer,
+    BasicShapeHwpxLoweringReceipt, BasicShapeHwpxPlan, BasicShapeHwpxReadback,
+    BasicShapeHwpxReader, BasicShapeHwpxSource,
 };
 pub use character_style::{
     BinaryProperty, CHARACTER_STYLE_PROFILE_ID, CharacterEffects, CharacterStyle,

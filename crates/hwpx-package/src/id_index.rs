@@ -103,6 +103,7 @@ enum ProfileKind {
     CurrentHancom2020FormulaV3,
     CurrentHancom2020EquationV4,
     Hwpml2011PictureV5,
+    Hwpml2011ShapeV6,
 }
 
 impl IdRuleProfile {
@@ -140,6 +141,14 @@ impl IdRuleProfile {
         Self(ProfileKind::Hwpml2011PictureV5)
     }
 
+    /// Extends the static picture profile with the line, rectangle, ellipse, polygon and curve
+    /// object and instance domains documented by the HWPML 2011 drawing vocabulary.
+    /// Licensed-target behavior still requires a separate P08 target qualification.
+    #[must_use]
+    pub const fn hwpml_2011_shape_v6() -> Self {
+        Self(ProfileKind::Hwpml2011ShapeV6)
+    }
+
     #[must_use]
     pub const fn version(self) -> &'static str {
         match self.0 {
@@ -148,6 +157,7 @@ impl IdRuleProfile {
             ProfileKind::CurrentHancom2020FormulaV3 => "hancom-2020-hwpml-2011-formula/v3",
             ProfileKind::CurrentHancom2020EquationV4 => "hancom-2020-hwpml-2011-equation/v4",
             ProfileKind::Hwpml2011PictureV5 => "hwpml-2011-picture-static/v5",
+            ProfileKind::Hwpml2011ShapeV6 => "hwpml-2011-shape-static/v6",
         }
     }
 
@@ -158,6 +168,7 @@ impl IdRuleProfile {
                 | ProfileKind::CurrentHancom2020FormulaV3
                 | ProfileKind::CurrentHancom2020EquationV4
                 | ProfileKind::Hwpml2011PictureV5
+                | ProfileKind::Hwpml2011ShapeV6
         )
     }
 
@@ -167,18 +178,28 @@ impl IdRuleProfile {
             ProfileKind::CurrentHancom2020FormulaV3
                 | ProfileKind::CurrentHancom2020EquationV4
                 | ProfileKind::Hwpml2011PictureV5
+                | ProfileKind::Hwpml2011ShapeV6
         )
     }
 
     const fn includes_equation_rules(self) -> bool {
         matches!(
             self.0,
-            ProfileKind::CurrentHancom2020EquationV4 | ProfileKind::Hwpml2011PictureV5
+            ProfileKind::CurrentHancom2020EquationV4
+                | ProfileKind::Hwpml2011PictureV5
+                | ProfileKind::Hwpml2011ShapeV6
         )
     }
 
     const fn includes_picture_rules(self) -> bool {
-        matches!(self.0, ProfileKind::Hwpml2011PictureV5)
+        matches!(
+            self.0,
+            ProfileKind::Hwpml2011PictureV5 | ProfileKind::Hwpml2011ShapeV6
+        )
+    }
+
+    const fn includes_shape_rules(self) -> bool {
+        matches!(self.0, ProfileKind::Hwpml2011ShapeV6)
     }
 
     const fn preservation_profile(self) -> PreservationRuleProfile {
@@ -187,7 +208,8 @@ impl IdRuleProfile {
             ProfileKind::CurrentHancom2020TableV2
             | ProfileKind::CurrentHancom2020FormulaV3
             | ProfileKind::CurrentHancom2020EquationV4
-            | ProfileKind::Hwpml2011PictureV5 => PreservationRuleProfile::Hangul2020PreviewTextV2,
+            | ProfileKind::Hwpml2011PictureV5
+            | ProfileKind::Hwpml2011ShapeV6 => PreservationRuleProfile::Hangul2020PreviewTextV2,
         }
     }
 }
@@ -221,6 +243,8 @@ pub enum IdKind {
     Equation,
     Picture,
     PictureInstance,
+    Shape,
+    ShapeInstance,
 }
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
@@ -836,6 +860,34 @@ const PICTURE_DECLARATION_RULES: &[DeclarationRule] = &[
         ValueSyntax::Decimal,
     ),
 ];
+
+const SHAPE_DECLARATION_RULES: &[DeclarationRule] = &[
+    shape_declaration("line", "id", IdKind::Shape),
+    shape_declaration("line", "instid", IdKind::ShapeInstance),
+    shape_declaration("rect", "id", IdKind::Shape),
+    shape_declaration("rect", "instid", IdKind::ShapeInstance),
+    shape_declaration("ellipse", "id", IdKind::Shape),
+    shape_declaration("ellipse", "instid", IdKind::ShapeInstance),
+    shape_declaration("polygon", "id", IdKind::Shape),
+    shape_declaration("polygon", "instid", IdKind::ShapeInstance),
+    shape_declaration("curve", "id", IdKind::Shape),
+    shape_declaration("curve", "instid", IdKind::ShapeInstance),
+];
+
+const fn shape_declaration(
+    element: &'static str,
+    attribute: &'static str,
+    kind: IdKind,
+) -> DeclarationRule {
+    declaration(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        element,
+        attribute,
+        kind,
+        ValueSyntax::Decimal,
+    )
+}
 
 const REFERENCE_RULES: &[ReferenceRule] = &[
     reference(
@@ -1662,12 +1714,18 @@ fn matching_declaration_rule(
     } else {
         &[]
     };
+    let shape = if profile.includes_shape_rules() {
+        SHAPE_DECLARATION_RULES
+    } else {
+        &[]
+    };
     for rule in DECLARATION_RULES
         .iter()
         .chain(table)
         .chain(formula)
         .chain(equation)
         .chain(picture)
+        .chain(shape)
     {
         if part_matches(rule.part, graph, part)
             && rule_namespace_matches(element_namespace, rule.namespace)

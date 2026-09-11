@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 
+mod basic_shape;
 mod capability_router;
 mod document_graph;
 mod identity;
@@ -33,6 +34,13 @@ mod table_thousands;
 mod table_transpose;
 mod units;
 
+pub use basic_shape::{
+    BASIC_SHAPE_SCHEMA_VERSION, BasicShape, BasicShapeBuilder, BasicShapeError,
+    BasicShapeLimitConfig, BasicShapeLimits, BasicShapePlan, BasicShapeReceipt, BasicShapeRequest,
+    BasicShapeRequestDraft, BasicShapeResult, CurveSegment, CurveSegmentType, EllipseArcType,
+    EllipseShape, FreeformShape, LineShape, RectangleShape, ShapePoint, TextBoxContent,
+    TextBoxMargins, TextBoxVerticalAlignment,
+};
 pub use capability_router::{
     Architecture, BackendHealth, BackendHealthState, BackendKind,
     CAPABILITY_ROUTE_DECISION_SCHEMA_VERSION, CapabilityRouteCatalog, CapabilityRouter,

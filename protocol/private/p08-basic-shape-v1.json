@@ -1,0 +1,112 @@
+{
+  "schema_version": "hwpx-agent.basic-shape-contract/v1",
+  "state_schema_version": "hwpx-agent.basic-shape/v1",
+  "profile_id": "hwpx-agent.basic-shape-hwpx.hwpml-2011-static/v1",
+  "task": "P08-04",
+  "scope": "bounded_complete_basic_shape_and_textbox_state_with_exact_package_anchor_id_sets_and_flow_bound_preserving_lowering",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path":"WORK_BREAKDOWN_STRUCTURE.csv","sha256":"3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path":"docs/03_document_model/08_drawing_image_chart.md","sha256":"ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b"},
+    {"path":"docs/04_feature_catalog/09_obj.md","sha256":"e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8"},
+    {"path":"docs/04_feature_catalog/contracts/09_obj_contracts.md","sha256":"e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2"},
+    {"path":"docs/09_roadmap/P08_images_shapes_drawing_charts.md","sha256":"f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path":"implementation/p08/P08-03_OBJECT_GEOMETRY_POLICY.md","sha256":"0f58bf7467146ba2adae1690c09707ad8f8e5001fbcfe9cee27e35775010d929"},
+    {"path":"implementation/p08/P08-03_OBJECT_GEOMETRY_REPORT.md","sha256":"98e60e1299f5231b6af883af762a2393ccce2029058ae3ed877d573b8fecab54"},
+    {"path":"protocol/private/p08-object-geometry-v1.json","sha256":"bb5e043aad884b0055cfdbff7e338d0114568be770f3f24c116079755009f7bf"},
+    {"path":"implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json","sha256":"c4a8bdb082cf8610fa2b3f6e709ca9058ab256a2371e9a779b9b323ca82638e4"}
+  ],
+  "source_qualification": "implementation/p08/evidence/p08-04-basic-shape-source-qualification.v1.json",
+  "migration": "protocol/migrations/p08-basic-shape-v0-to-v1.md",
+  "policy": "implementation/p08/P08-04_BASIC_SHAPE_POLICY.md",
+  "report": "implementation/p08/P08-04_BASIC_SHAPE_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/basic_shape.rs",
+    "crates/domain-ir/tests/basic_shape.rs",
+    "crates/hwpx-package/src/lib.rs",
+    "crates/hwpx-package/src/id_index.rs",
+    "crates/hwpx-package/src/basic_shape_hwpx.rs",
+    "crates/hwpx-package/tests/basic_shape_hwpx.rs"
+  ],
+  "official_model_source": {
+    "repository": "https://github.com/hancom-io/owpml-model",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "scope": "static_basic_shape_drawing_text_vocabulary_and_types_not_runtime_oracle"
+  },
+  "admitted_profile": {
+    "capabilities": ["obj.shape_insert", "obj.textbox_insert"],
+    "shape_families": ["line", "rectangle", "ellipse", "text_box", "freeform"],
+    "serialized_forms": ["line", "rect", "ellipse", "rect_draw_text", "polygon", "curve"],
+    "geometry": "complete_p08_03_common_geometry_state",
+    "shape_payload": "complete_reviewed_static_shape_specific_state",
+    "text_box": "complete_draw_text_margin_sublist_paragraph_run_text_state",
+    "binding": "domain_state_and_flow_then_exact_package_anchor_and_all_native_id_sets_at_plan_and_build",
+    "preservation": "one_inserted_run_level_object_with_byte_exact_source_restoration_and_strict_readback"
+  },
+  "workflow": {
+    "admit": "validate_complete_geometry_shape_topology_text_ids_and_before_after_document_flow",
+    "inspect": "bind_package_section_paragraph_empty_run_and_package_wide_object_instance_paragraph_sublist_id_sets",
+    "plan": "rebuild_domain_result_and bind_exact_source_and_domain_plan_digests",
+    "lower": "reinspect_every_binding_insert_one_native_static_shape_and_add_no_resource",
+    "verify": "strict_common_and_specific_readback_count_deltas_byte_restoration_and_synthetic_package_reopen"
+  },
+  "default_limits": {
+    "json_input_bytes": 524288,
+    "json_serialized_bytes": 524288,
+    "points": 16384,
+    "segments": 16384,
+    "text_bytes": 262144,
+    "name_bytes": 4096,
+    "coordinate_magnitude_hwpunit": 1000000000,
+    "section_bytes": 33554432,
+    "elements": 1000000,
+    "objects": 65536,
+    "fragment_bytes": 4194304
+  },
+  "failure_policy": [
+    "zero_or_over_ceiling_limits_rejected",
+    "duplicate_unknown_missing_malformed_or_oversized_json_rejected",
+    "geometry_kind_and_distinct_nonzero_native_identity_required",
+    "line_endpoints_rectangle_area_ellipse_axes_polygon_area_and_curve_segments_validated",
+    "textbox_xml_text_name_sublist_paragraph_and_reference_state_validated",
+    "source_state_and_document_flow_drift_rejected_at_request_plan_and_build",
+    "package_section_paragraph_run_and_all_native_id_set_drift_rejected_at_final_build",
+    "package_wide_object_instance_paragraph_and_sublist_collisions_rejected",
+    "only_one_exact_empty_run_anchor_is_admitted",
+    "native_namespaces_attribute_sets_child_order_boolean_integer_and_enum_lexemes_are_exact",
+    "full_common_geometry_and_shape_payload_readback_must_equal_plan",
+    "inserted_span_removal_must_reconstruct_exact_source_section",
+    "no_relationship_resource_or_second_part_may_be_added_or_changed",
+    "request_native_identity_path_digest_text_name_and_payload_redacted_from_debug",
+    "no_partial_result_or_fallback_after_failure"
+  ],
+  "not_claimed": {
+    "appearance_line_fill_shadow": false,
+    "grouped_or_nested_shapes": false,
+    "connector_arc_container_ole_video_textart": false,
+    "actual_target_hwpx": false,
+    "exact_current_2020_serialization": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "render": false,
+    "direct_automation_differential": false,
+    "p08_04_complete": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "static_shape": "pass",
+    "synthetic_full_package_reopen": "pass",
+    "actual_target_hwpx": "not_run",
+    "actual_hangul": false,
+    "render": false,
+    "p08_04": "static_shape_component_pass_target_not_run_task_incomplete",
+    "p08_04_complete": false,
+    "p08": "in_progress",
+    "product_complete": false
+  }
+}
