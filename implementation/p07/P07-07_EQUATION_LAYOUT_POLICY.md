@@ -7,6 +7,13 @@ structural metric model, conservative fallback and HWPX binding are implemented.
 is active until the exact current target supplies the required inline/display native readback and
 baseline/ink-box visual evidence.
 
+The target toolchain is also implementation-complete. A hash-pinned plan selects exactly four
+Tier B semantics in both inline and display contexts. One bounded x86 STA session creates, reads,
+saves, reopens and reads all eight native objects, exports one PDF per sample, and then a separate
+Rust oracle reopens each HWPX through the closed package graph. Inline admission requires both the
+documented `LineMode` request and an adjacent visible run; `LineMode` alone cannot relabel a
+single-run display paragraph as inline.
+
 ## Estimation order
 
 1. An exact semantic/layout/base-unit sample in a trusted qualification returns its recorded target
@@ -41,6 +48,13 @@ and strictly inside its rendered page.
 The two P07-06 display readbacks are useful candidates but have no inline or ink-box evidence, so
 they do not qualify this model. The dedicated current-target calibration remains `not_run`.
 
+PDF export is not visual PASS. A separately hash-pinned `pdftoppm` pass rasterizes every one-page
+PDF and measures only bounded, non-edge-touching ink boxes. Its result stays
+`structural_pass_manual_not_run`. Qualification construction additionally requires a strict manual
+review record for all eight original-detail PNGs with zero clipping, overlap and silent fallback,
+then deterministically fits the fixed-point width, height and mode-specific baseline coefficients.
+If the recomputed 150/50 HWPUNIT thresholds are not met, no qualification is emitted.
+
 The estimator exposes the same bounded typed structural metrics used internally by provisional and
 qualified models. Calibration tooling therefore cannot substitute a second metric implementation
 or silently diverge on advance, vertical levels, node/depth or matrix envelope accounting.
@@ -59,8 +73,8 @@ receipts are deterministic and bounded. No font file, document text, private pat
 automation identifier is recorded.
 
 Actual target calibration, baseline/ink-box visual PASS, active verified-estimator coverage, P07-08
-corpus, P07-09 editor smoke, other Hangul versions, P07 completion, production and product
+target corpus, P07-09 editor smoke, other Hangul versions, P07 completion, production and product
 completion remain `false` / `not_run`.
 
-Reasoning level: `max`. P07-08 remains `max` because corpus completeness and legacy preservation
-must be evidence-bound without silent approximation.
+Reasoning level: `max`. The combined P06/P07 current-target run remains `max` because native
+readback, raster identity, original-detail review and model admission must remain one exact chain.

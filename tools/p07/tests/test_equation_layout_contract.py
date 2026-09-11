@@ -11,7 +11,8 @@ from tools.p07 import validate_equation_layout_contract as validator
 def copy_tree(root: Path) -> None:
     for relative in {
         validator.CONTRACT, validator.MIGRATION, validator.POLICY, validator.REPORT,
-        validator.QUALIFICATION, *validator.SOURCES, *validator.MARKERS,
+        validator.QUALIFICATION, validator.CALIBRATION_MANIFEST,
+        *validator.SOURCES, *validator.MARKERS,
     }:
         source = validator.ROOT / relative
         target = root / relative
@@ -24,7 +25,9 @@ class EquationLayoutContractTests(unittest.TestCase):
         value = validator.validate()
         self.assertEqual(value["state"], "pass", value)
         self.assertEqual(value["source_locks"], 9)
-        self.assertEqual(value["implementation_files"], 5)
+        self.assertEqual(value["implementation_files"], 12)
+        self.assertTrue(value["calibration_manifest_verified"])
+        self.assertTrue(value["target_toolchain_verified"])
         self.assertEqual(value["direct_stage"], "unit_passed")
         self.assertEqual(value["target_qualification"], "not_run")
         self.assertFalse(value["actual_hangul"])
@@ -35,6 +38,7 @@ class EquationLayoutContractTests(unittest.TestCase):
         for relative, path, replacement in [
             (validator.CONTRACT, ["gate_decision", "render"], True),
             (validator.CONTRACT, ["qualification", "minimum_inline_samples"], 1),
+            (validator.CONTRACT, ["target_toolchain", "manual_review_schema_version"], "forged"),
             (validator.QUALIFICATION, ["claims", "verified_estimator_active"], True),
             (validator.QUALIFICATION, ["dedicated_target_calibration", "state"], "pass"),
         ]:
@@ -75,6 +79,21 @@ class EquationLayoutContractTests(unittest.TestCase):
             target = root / next(iter(validator.MARKERS))
             target.write_text("drift", encoding="utf-8")
             self.assertIn("implementation_marker", validator.validate(root)["errors"])
+
+    def test_manifest_and_target_toolchain_raw_tamper_fail(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            copy_tree(root)
+            target = root / validator.CALIBRATION_MANIFEST
+            target.write_bytes(target.read_bytes() + b" ")
+            self.assertIn("calibration_manifest_digest", validator.validate(root)["errors"])
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            copy_tree(root)
+            target = root / validator.PARENT
+            target.write_bytes(target.read_bytes() + b"\n# drift\n")
+            self.assertIn("target_toolchain_digest", validator.validate(root)["errors"])
 
     def test_visual_nonclaim_cannot_be_promoted_by_filling_hashes(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
