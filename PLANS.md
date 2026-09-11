@@ -29,7 +29,7 @@
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
 | P16 | partial | local source/plan/renderer/host pass; registered app/Hangul evidence open |
-| P17 | partial | durable PostgreSQL checkpoint, local bare-Git CAS/replay, authenticated current-PC durable push/pull, synthetic Windows credential custody and certificate-pinned loopback TLS pass; real credentials, external network and UI remain |
+| P17 | partial | durable PostgreSQL/Git sync, synthetic Windows custody, pinned loopback TLS and exact credential lifecycle components pass; real credentials, external network and UI remain |
 | P18-P19 | open | quality/security/DR, production/license/submission and GA Gate |
 | P20 | post-GA | parity and Rust-native expansion |
 
@@ -40,7 +40,7 @@
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
 | P-0057 | P06-09 table conformance | fail-closed matrix plus bounded component/static-HWPX slices pass; TABLE-002/003 exact Hangul target v2 is oracle-verified; exact current-PC release matrix remains 0/61 green |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
-| P-0091 family | P17-06 remote sync | authenticated loopback, durable PostgreSQL checkpoint, local bare-Git CAS/replay, current-PC durable push/pull, synthetic Windows credential custody and pinned TLS 1.3 component pass; issuer/rotation and external service remain |
+| P-0091 family | P17-06 remote sync | authenticated durable Git sync, synthetic Windows custody, pinned TLS 1.3 and issue/refresh/rotate/revoke lifecycle components pass; issuer transport, atomic vault/state broker and external service remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
 | P-0093 | P17-08 trusted Git UI | local widget/MCP/disposable Git pass; one fresh GUI confirmation/effect/replay run remains |
 
@@ -96,8 +96,8 @@
 
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence absent.
 - R-0003: one historical independent worker timeout root cause remains unproven; retries passed.
-- R-0005: P17 durable checkpoint, local bare-Git old-OID CAS/replay, authenticated current-PC durable
-  push/pull, synthetic credential custody, pinned TLS and exact-version dependency license admission pass; real credential issuance/rotation, external remote service and production do not.
+- R-0005: P17 durable Git sync, synthetic credential custody, pinned TLS, exact license admission and
+  pure credential lifecycle pass; external issuer, atomic Windows vault/state integration, real credential, remote service and production do not.
 - R-0006: P17 conflict resolver/widget are component evidence only.
 - R-0007: P06-09 remains 0/61 release-green until direct validations, fixtures, rollback/retry,
   current-target automation runtime and exact differential evidence close every row.
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. At `max`, implement the external P17-06 credential issuance/refresh/rotation lifecycle, then qualify one independently controlled pinned remote service; keep remote and production false until exercised.
+1. At `max`, implement the pinned issuer transport and atomic Windows pending/vault/state broker, then qualify one independently controlled remote service; keep remote and production false until exercised.
 2. Rerun corrected TABLE-032/033 exact source qualification when the user can approve all three saves, then build the preserving HWPX adapter and run the next target oracles; automation/differentials remain separate.
 3. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
 
