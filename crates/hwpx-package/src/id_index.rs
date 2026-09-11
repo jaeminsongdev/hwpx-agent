@@ -102,6 +102,7 @@ enum ProfileKind {
     CurrentHancom2020TableV2,
     CurrentHancom2020FormulaV3,
     CurrentHancom2020EquationV4,
+    Hwpml2011PictureV5,
 }
 
 impl IdRuleProfile {
@@ -131,6 +132,14 @@ impl IdRuleProfile {
         Self(ProfileKind::CurrentHancom2020EquationV4)
     }
 
+    /// Extends the exact current-2020 equation profile with the picture object, instance and
+    /// package-manifest reference domains documented by the HWPML 2011 picture vocabulary.
+    /// Licensed-target behavior still requires a separate P08 target qualification.
+    #[must_use]
+    pub const fn hwpml_2011_picture_v5() -> Self {
+        Self(ProfileKind::Hwpml2011PictureV5)
+    }
+
     #[must_use]
     pub const fn version(self) -> &'static str {
         match self.0 {
@@ -138,6 +147,7 @@ impl IdRuleProfile {
             ProfileKind::CurrentHancom2020TableV2 => "hancom-2020-hwpml-2011-table/v2",
             ProfileKind::CurrentHancom2020FormulaV3 => "hancom-2020-hwpml-2011-formula/v3",
             ProfileKind::CurrentHancom2020EquationV4 => "hancom-2020-hwpml-2011-equation/v4",
+            ProfileKind::Hwpml2011PictureV5 => "hwpml-2011-picture-static/v5",
         }
     }
 
@@ -147,18 +157,28 @@ impl IdRuleProfile {
             ProfileKind::CurrentHancom2020TableV2
                 | ProfileKind::CurrentHancom2020FormulaV3
                 | ProfileKind::CurrentHancom2020EquationV4
+                | ProfileKind::Hwpml2011PictureV5
         )
     }
 
     const fn includes_formula_rules(self) -> bool {
         matches!(
             self.0,
-            ProfileKind::CurrentHancom2020FormulaV3 | ProfileKind::CurrentHancom2020EquationV4
+            ProfileKind::CurrentHancom2020FormulaV3
+                | ProfileKind::CurrentHancom2020EquationV4
+                | ProfileKind::Hwpml2011PictureV5
         )
     }
 
     const fn includes_equation_rules(self) -> bool {
-        matches!(self.0, ProfileKind::CurrentHancom2020EquationV4)
+        matches!(
+            self.0,
+            ProfileKind::CurrentHancom2020EquationV4 | ProfileKind::Hwpml2011PictureV5
+        )
+    }
+
+    const fn includes_picture_rules(self) -> bool {
+        matches!(self.0, ProfileKind::Hwpml2011PictureV5)
     }
 
     const fn preservation_profile(self) -> PreservationRuleProfile {
@@ -166,9 +186,8 @@ impl IdRuleProfile {
             ProfileKind::CurrentHancom2020CoreV1 => PreservationRuleProfile::CoreV1,
             ProfileKind::CurrentHancom2020TableV2
             | ProfileKind::CurrentHancom2020FormulaV3
-            | ProfileKind::CurrentHancom2020EquationV4 => {
-                PreservationRuleProfile::Hangul2020PreviewTextV2
-            }
+            | ProfileKind::CurrentHancom2020EquationV4
+            | ProfileKind::Hwpml2011PictureV5 => PreservationRuleProfile::Hangul2020PreviewTextV2,
         }
     }
 }
@@ -200,6 +219,8 @@ pub enum IdKind {
     FieldBegin,
     FieldInstance,
     Equation,
+    Picture,
+    PictureInstance,
 }
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
@@ -598,6 +619,7 @@ enum PartSelector {
 #[derive(Clone, Copy)]
 enum TargetSelector {
     SamePart,
+    PackageDocument,
     Exact(&'static str),
 }
 
@@ -795,6 +817,25 @@ const EQUATION_DECLARATION_RULES: &[DeclarationRule] = &[declaration(
     IdKind::Equation,
     ValueSyntax::Decimal,
 )];
+
+const PICTURE_DECLARATION_RULES: &[DeclarationRule] = &[
+    declaration(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "pic",
+        "id",
+        IdKind::Picture,
+        ValueSyntax::Decimal,
+    ),
+    declaration(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "pic",
+        "instid",
+        IdKind::PictureInstance,
+        ValueSyntax::Decimal,
+    ),
+];
 
 const REFERENCE_RULES: &[ReferenceRule] = &[
     reference(
@@ -1047,6 +1088,16 @@ const FORMULA_REFERENCE_RULES: &[ReferenceRule] = &[
         ValueSyntax::Decimal,
     ),
 ];
+
+const PICTURE_REFERENCE_RULES: &[ReferenceRule] = &[reference(
+    PartSelector::SpineDocument,
+    HWPML_2011_PARAGRAPH_NAMESPACE,
+    "img",
+    "binaryItemIDRef",
+    TargetSelector::PackageDocument,
+    IdKind::ManifestItem,
+    ValueSyntax::Text,
+)];
 
 const fn declaration(
     part: PartSelector,
@@ -1565,6 +1616,7 @@ impl<'a> IndexBuilder<'a> {
     fn target_part(&self, reference: &PendingReference) -> Result<PackagePath, IdIssueKind> {
         let path = match reference.target {
             TargetSelector::SamePart => reference.location.part.clone(),
+            TargetSelector::PackageDocument => self.graph.package_document.clone(),
             TargetSelector::Exact(expected) => self
                 .graph
                 .parts
@@ -1605,11 +1657,17 @@ fn matching_declaration_rule(
     } else {
         &[]
     };
+    let picture = if profile.includes_picture_rules() {
+        PICTURE_DECLARATION_RULES
+    } else {
+        &[]
+    };
     for rule in DECLARATION_RULES
         .iter()
         .chain(table)
         .chain(formula)
         .chain(equation)
+        .chain(picture)
     {
         if part_matches(rule.part, graph, part)
             && rule_namespace_matches(element_namespace, rule.namespace)
@@ -1644,7 +1702,17 @@ fn matching_reference_rule(
     } else {
         &[]
     };
-    for rule in REFERENCE_RULES.iter().chain(table).chain(formula) {
+    let picture = if profile.includes_picture_rules() {
+        PICTURE_REFERENCE_RULES
+    } else {
+        &[]
+    };
+    for rule in REFERENCE_RULES
+        .iter()
+        .chain(table)
+        .chain(formula)
+        .chain(picture)
+    {
         if part_matches(rule.part, graph, part)
             && rule_namespace_matches(element_namespace, rule.namespace)
             && element_local == rule.element

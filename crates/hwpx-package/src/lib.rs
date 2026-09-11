@@ -13,6 +13,7 @@ mod font_metric_receipt;
 mod graph;
 mod header_footer;
 mod id_index;
+mod image_hwpx;
 mod limits;
 mod list_definition;
 mod page_setup;
@@ -77,6 +78,12 @@ pub use header_footer::{
 pub use id_index::{
     IdDeclaration, IdIndex, IdIndexError, IdIndexLimitConfig, IdIndexLimits, IdIssueKind, IdKind,
     IdLocation, IdReference, IdRuleProfile, IdValidationIssue, IdValidationReport,
+};
+pub use image_hwpx::{
+    IMAGE_HWPX_PROFILE_ID, IMAGE_HWPX_SCHEMA_VERSION, ImageAssetBinding, ImageCrop, ImageGeometry,
+    ImageHwpxBuilder, ImageHwpxError, ImageHwpxLimitConfig, ImageHwpxLimits, ImageHwpxLowered,
+    ImageHwpxLowerer, ImageHwpxLoweringReceipt, ImageHwpxReadback, ImageHwpxReader,
+    ImageHwpxRequest, ImageHwpxRequestDraft, ImageHwpxSource, ImageLinkMode,
 };
 pub use limits::{PackageLimitConfig, PackageLimits};
 pub use list_definition::{

@@ -1,0 +1,61 @@
+{
+  "schema_version": "hwpx-agent.image-hwpx-source-qualification/v1",
+  "task": "P08-02",
+  "recorded_date": "2026-09-12",
+  "profile_id": "hwpx-agent.image-hwpx.hwpml-2011-static-embed/v1",
+  "official_sources": {
+    "local_ks_x_6101_archive": "implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json",
+    "qualified_sections": ["10.9.6.1", "10.9.6.4", "10.9.6.5", "10.9.6.6"],
+    "hancom_owpml_repository": "https://github.com/hancom-io/owpml-model",
+    "hancom_owpml_commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "model_files": [
+      "OWPML/Class/Para/PictureType.cpp",
+      "OWPML/Class/Para/AbstractShapeComponentType.cpp",
+      "OWPML/Class/Core/ImageType.cpp"
+    ],
+    "evidence_scope": "static_vocabulary_and_type_model_only"
+  },
+  "implementation_sources": {
+    "crates/hwpx-package/src/lib.rs": "7306c5b2c26d01d3cd523a8525c678113055d476af34ee24deb32693b673f290",
+    "crates/hwpx-package/src/image_hwpx.rs": "12bc3bc3419163dda1c9d1211757d8b414ef37b165f3e053a4893d0021ae6e49",
+    "crates/hwpx-package/src/asset.rs": "2a7aa557159e6c68fe1ed05111f44a846b9d174a9382c7f42d4295f7cdc72f9e",
+    "crates/hwpx-package/src/id_index.rs": "07543144800900e376a502004c0d293187e8597f712ea924151e7fd61f6d9830",
+    "crates/hwpx-package/src/patch.rs": "370e0547f12b69042a493d6db67d9d08176ee737abd49ef365d160bd788aee67",
+    "crates/hwpx-package/src/graph.rs": "8a3f32bb1e849150139d26eca4ed02c829e940c329b9a6233168c2078da960ba",
+    "crates/hwpx-package/tests/image_hwpx.rs": "7c1d6aebf69808f892ee031f8c7dfcc71860cd105167af9353f61cc3d1eaa1f3"
+  },
+  "component_execution": {
+    "state": "pass",
+    "rust_tests_passed": 9,
+    "embed_only_request": "pass",
+    "complete_source_asset_and_flow_binding": "pass",
+    "static_hwpml_picture_readback": "pass",
+    "picture_manifest_id_closure": "pass",
+    "atomic_new_and_reuse_lowering": "pass",
+    "synthetic_package_writer_reopen": "pass",
+    "crop_dpi_alt_text": "pass",
+    "tamper_and_drift_rejection": "pass",
+    "bounded_json_and_redacted_debug": "pass"
+  },
+  "target_execution": {
+    "state": "not_run",
+    "actual_hwpx_image": null,
+    "hangul_open": null,
+    "save_reopen": null,
+    "render": null,
+    "direct_automation_differential": null
+  },
+  "claims": {
+    "static_component_pass": true,
+    "embedded_image_lowering": true,
+    "linked_image": false,
+    "actual_hwpx_image": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "render": false,
+    "p08_02_complete": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}
