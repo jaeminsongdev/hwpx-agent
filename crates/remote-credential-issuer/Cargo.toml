@@ -1,0 +1,29 @@
+[package]
+name = "remote-credential-issuer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+base64.workspace = true
+getrandom.workspace = true
+hex.workspace = true
+remote-credential-wire = { version = "0.1.0", path = "../remote-credential-wire" }
+ring.workspace = true
+rustls.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+rcgen.workspace = true
+remote-credential-broker = { version = "0.1.0", path = "../remote-credential-broker" }
+remote-credential-lifecycle = { version = "0.1.0", path = "../remote-credential-lifecycle" }
+remote-tls-transport = { version = "0.1.0", path = "../remote-tls-transport" }
+tempfile.workspace = true
+
+[lints]
+workspace = true

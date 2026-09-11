@@ -1637,6 +1637,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "remote-credential-issuer"
+version = "0.1.0"
+dependencies = [
+ "base64 0.23.1",
+ "getrandom 0.4.3",
+ "hex",
+ "rcgen",
+ "remote-credential-broker",
+ "remote-credential-lifecycle",
+ "remote-credential-wire",
+ "remote-tls-transport",
+ "ring",
+ "rustls",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tempfile",
+ "thiserror",
+ "zeroize",
+]
+
+[[package]]
 name = "remote-credential-lifecycle"
 version = "0.1.0"
 dependencies = [
