@@ -4,7 +4,7 @@
   "profile_id": "hwpx-agent.equation-hwpx.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
   "id_profile": "hancom-2020-hwpml-2011-equation/v4",
   "task": "P07-05",
-  "scope": "typed_math_ast_to_synthetic_closed_hwpx_native_equation_component",
+  "scope": "typed_math_ast_to_native_equation_hwpx_exact_current_target",
   "feature_boundary": [
     "EQ-001", "EQ-006", "EQ-007", "EQ-008", "EQ-009", "EQ-010", "EQ-011",
     "EQ-012", "EQ-013", "EQ-014", "EQ-015", "EQ-016", "EQ-017", "EQ-018",
@@ -25,6 +25,7 @@
     {"path": "implementation/p07/P07-04_EQEDIT_REPORT.md", "sha256": "5ced61f290f45652f1acf3157e1ece52f4619ad2ef417df3a49a20e6455697ae"}
   ],
   "source_qualification": "implementation/p07/evidence/p07-05-native-equation-hwpx-source-qualification.current-2020.v1.json",
+  "target_evidence": "implementation/p07/evidence/target/p07-05-native-equation.current-2020.attempt01.v1.json",
   "migration": "protocol/migrations/p07-equation-hwpx-v0-to-v1.md",
   "policy": "implementation/p07/P07-05_NATIVE_EQUATION_HWPX_POLICY.md",
   "report": "implementation/p07/P07-05_NATIVE_EQUATION_HWPX_REPORT.md",
@@ -37,7 +38,10 @@
     "crates/hwpx-package/src/patch.rs",
     "crates/hwpx-package/src/writer.rs",
     "crates/hwpx-package/tests/equation_hwpx.rs",
-    "crates/hwpx-package/tests/id_index.rs"
+    "crates/hwpx-package/tests/id_index.rs",
+    "crates/hwpx-package/examples/p07_05_equation_target_fixture.rs",
+    "crates/hwpx-package/examples/p07_05_equation_target_oracle.rs",
+    "implementation/p07/tools/run-hancom-2020-equation-target-readback.ps1"
   ],
   "binding": {
     "source": "complete_expanded_package_graph_section_top_level_paragraph_direct_empty_run_package_object_ids",
@@ -48,7 +52,7 @@
   "native_profile": {
     "object": "equation_version60_hancomeqn",
     "owned_state": "id_style_baseline_color_absolute_extent_character_anchor_zero_margin_script",
-    "layout": "inline_has_other_visible_run_display_has_dedicated_run",
+    "layout": "inline_has_other_visible_run_display_has_dedicated_run_saved_line_cache_separate",
     "extent": "provisional_only_without_evidence_digest_and_render_required_true",
     "fallback": "no_raw_xml_plain_text_image_or_partial_object"
   },
@@ -57,6 +61,13 @@
     "native_readback": "strict_attributes_ordered_children_eqedit_parse_math_ast_compare",
     "byte_proof": "remove_inserted_exact_span_equals_source_section",
     "package": "exactly_one_changed_part_all_other_expanded_sha_equal_writer_reopens_with_patch_id_profile"
+  },
+  "target_readback": {
+    "lifecycle": "licensed_open_read_save_close_reopen_read_pdf_close_quit_all_pass",
+    "identity": "trace_bound_output_sha_package_equation_v4_unique_nonzero_saved_object_id",
+    "semantic": "exact_eqedit_script_sha_and_math_ast_semantic_sha_preserved",
+    "normalization": "hangul_object_id_remap_and_paragraph_line_cache_recorded_not_source_identity",
+    "render": "one_a4_page_original_detail_legible_no_clip_overlap_blank_or_black_box"
   },
   "default_limits": {
     "section_bytes": 33554432,
@@ -82,11 +93,8 @@
   "not_claimed": {
     "arbitrary_existing_document_profile": false,
     "verified_layout_extent": false,
-    "new_lowerer_actual_hangul_execution": false,
-    "new_lowerer_save_reopen": false,
     "editor_smoke": false,
-    "render": false,
-    "automation": false,
+    "native_equation_automation_binding": false,
     "differential": false,
     "other_hangul_versions": false,
     "p07_complete": false,
@@ -95,9 +103,12 @@
   },
   "gate_decision": {
     "component": "pass",
-    "direct_stage": "integration_passed",
+    "direct_stage": "oracle_verified",
     "synthetic_closed_hwpx": true,
-    "actual_hangul": false,
+    "actual_hangul": true,
+    "save_reopen": true,
+    "native_semantic_readback": true,
+    "render": true,
     "p07": "in_progress",
     "product_complete": false
   }

@@ -1382,7 +1382,18 @@ fn infer_layout_context(
     let runs = direct_children_named(document, paragraph, "run")?;
     let paragraph_children = child_indexes(document, paragraph)?;
     let run_children = child_indexes(document, run)?;
-    if paragraph_children.len() != runs.len()
+    let line_segments = paragraph_children
+        .iter()
+        .copied()
+        .filter(|index| {
+            element(document, *index).is_ok_and(|value| has_name(value, "linesegarray"))
+        })
+        .collect::<Vec<_>>();
+    if paragraph_children.len() != runs.len() + line_segments.len()
+        || line_segments.len() > 1
+        || line_segments
+            .first()
+            .is_some_and(|index| Some(index) != paragraph_children.last())
         || run_children.len() != 2
         || run_children[0] != equation
         || !has_name(element(document, run_children[1])?, "t")

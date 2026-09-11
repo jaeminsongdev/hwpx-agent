@@ -143,6 +143,33 @@ fn exact_current_profile_native_reader_inspects_script_style_extent_and_layout()
 }
 
 #[test]
+fn saved_target_line_cache_is_admitted_without_weakening_equation_shape() -> TestResult {
+    let base = native_section("x + 1", 8);
+    let with_line_cache = base.replace(
+        "</q:run></q:p>",
+        concat!(
+            "</q:run><q:linesegarray><q:lineseg textpos=\"0\" vertpos=\"1600\" ",
+            "vertsize=\"6000\" textheight=\"6000\" baseline=\"5100\" spacing=\"3600\" ",
+            "horzpos=\"0\" horzsize=\"42520\" flags=\"393216\"/>",
+            "</q:linesegarray></q:p>"
+        ),
+    );
+    let readback = EquationHwpxReader::read_in_section(
+        with_line_cache.as_bytes(),
+        0,
+        EquationHwpxLimits::default(),
+    )?;
+    assert_eq!(readback.object_id(), 8);
+
+    let unknown = with_line_cache.replace("</q:p>", "<q:unknown/></q:p>");
+    assert_code(
+        EquationHwpxReader::read_in_section(unknown.as_bytes(), 0, EquationHwpxLimits::default()),
+        "equation_hwpx_readback_mismatch",
+    );
+    Ok(())
+}
+
+#[test]
 fn request_rejects_source_and_flow_drift_at_admission() -> TestResult {
     let bytes = valid_archive(&display_section())?;
     let (mut reader, graph) = open_graph(bytes)?;

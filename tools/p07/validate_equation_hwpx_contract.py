@@ -17,6 +17,10 @@ QUALIFICATION = (
     "implementation/p07/evidence/"
     "p07-05-native-equation-hwpx-source-qualification.current-2020.v1.json"
 )
+TARGET_EVIDENCE = (
+    "implementation/p07/evidence/target/"
+    "p07-05-native-equation.current-2020.attempt01.v1.json"
+)
 EXPECTED_SOURCE_PATHS = {
     "WORK_BREAKDOWN_STRUCTURE.csv",
     "README.md",
@@ -42,11 +46,8 @@ EXPECTED_LIMITS = {
 EXPECTED_NOT_CLAIMED = {
     "arbitrary_existing_document_profile": False,
     "verified_layout_extent": False,
-    "new_lowerer_actual_hangul_execution": False,
-    "new_lowerer_save_reopen": False,
     "editor_smoke": False,
-    "render": False,
-    "automation": False,
+    "native_equation_automation_binding": False,
     "differential": False,
     "other_hangul_versions": False,
     "p07_complete": False,
@@ -55,9 +56,12 @@ EXPECTED_NOT_CLAIMED = {
 }
 EXPECTED_GATE = {
     "component": "pass",
-    "direct_stage": "integration_passed",
+    "direct_stage": "oracle_verified",
     "synthetic_closed_hwpx": True,
-    "actual_hangul": False,
+    "actual_hangul": True,
+    "save_reopen": True,
+    "native_semantic_readback": True,
+    "render": True,
     "p07": "in_progress",
     "product_complete": False,
 }
@@ -87,16 +91,33 @@ IMPLEMENTATION_MARKERS = {
         "inline_layout_is_structurally_distinct_and_semantically_read_back",
         "lowerer_rechecks_package_and_document_flow_drift",
         "tampered_native_shape_script_and_duplicate_ids_are_rejected",
+        "saved_target_line_cache_is_admitted_without_weakening_equation_shape",
     ),
     "crates/hwpx-package/tests/id_index.rs": (
         "equation_v4_adds_native_equation_ids_without_weakening_formula_v3",
+    ),
+    "crates/hwpx-package/examples/p07_05_equation_target_fixture.rs": (
+        "EquationHwpxLowerer::lower",
+        "AtomicPackagePublisher::publish",
+        '"actual_hangul_2020": false',
+    ),
+    "crates/hwpx-package/examples/p07_05_equation_target_oracle.rs": (
+        "EquationHwpxReader::read_in_package",
+        "current_hancom_2020_equation_v4",
+        '"object_id_remapped"',
+    ),
+    "implementation/p07/tools/run-hancom-2020-equation-target-readback.ps1": (
+        "invoke-hancom-2020-bounded-readback.ps1",
+        "EQUATION_TARGET_READBACK",
     ),
 }
 EXPECTED_KEYS = {
     "schema_version", "request_schema_version", "profile_id", "id_profile", "task", "scope",
     "feature_boundary", "source_lock_canonicalization", "source_locks", "source_qualification",
+    "target_evidence",
     "migration", "policy", "report", "implementation_files", "binding", "native_profile",
-    "preservation", "default_limits", "failure_policy", "not_claimed", "gate_decision",
+    "preservation", "target_readback", "default_limits", "failure_policy", "not_claimed",
+    "gate_decision",
 }
 
 
@@ -155,10 +176,11 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         "profile_id": "hwpx-agent.equation-hwpx.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
         "id_profile": "hancom-2020-hwpml-2011-equation/v4",
         "task": "P07-05",
-        "scope": "typed_math_ast_to_synthetic_closed_hwpx_native_equation_component",
+        "scope": "typed_math_ast_to_native_equation_hwpx_exact_current_target",
         "feature_boundary": EXPECTED_FEATURES,
         "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
         "source_qualification": QUALIFICATION,
+        "target_evidence": TARGET_EVIDENCE,
         "migration": MIGRATION,
         "policy": POLICY,
         "report": REPORT,
@@ -179,7 +201,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         "native_profile": {
             "object": "equation_version60_hancomeqn",
             "owned_state": "id_style_baseline_color_absolute_extent_character_anchor_zero_margin_script",
-            "layout": "inline_has_other_visible_run_display_has_dedicated_run",
+            "layout": "inline_has_other_visible_run_display_has_dedicated_run_saved_line_cache_separate",
             "extent": "provisional_only_without_evidence_digest_and_render_required_true",
             "fallback": "no_raw_xml_plain_text_image_or_partial_object",
         },
@@ -188,6 +210,13 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
             "native_readback": "strict_attributes_ordered_children_eqedit_parse_math_ast_compare",
             "byte_proof": "remove_inserted_exact_span_equals_source_section",
             "package": "exactly_one_changed_part_all_other_expanded_sha_equal_writer_reopens_with_patch_id_profile",
+        },
+        "target_readback": {
+            "lifecycle": "licensed_open_read_save_close_reopen_read_pdf_close_quit_all_pass",
+            "identity": "trace_bound_output_sha_package_equation_v4_unique_nonzero_saved_object_id",
+            "semantic": "exact_eqedit_script_sha_and_math_ast_semantic_sha_preserved",
+            "normalization": "hangul_object_id_remap_and_paragraph_line_cache_recorded_not_source_identity",
+            "render": "one_a4_page_original_detail_legible_no_clip_overlap_blank_or_black_box",
         },
     }.items():
         if contract.get(key) != expected:
@@ -200,8 +229,9 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     source_count = validate_sources(root, contract.get("source_locks"), errors)
     implementation_count = validate_implementation(root, errors)
     qualification_ok = validate_qualification(root, errors)
+    target_ok = validate_target_evidence(root, errors)
     validate_documents(root, errors)
-    return result(errors, source_count, implementation_count, qualification_ok)
+    return result(errors, source_count, implementation_count, qualification_ok, target_ok)
 
 
 def validate_sources(root: Path, value: Any, errors: list[str]) -> int:
@@ -264,11 +294,170 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
     return not any(error.startswith("qualification_") for error in errors)
 
 
+def validate_target_evidence(root: Path, errors: list[str]) -> bool:
+    try:
+        value = load_json(root, TARGET_EVIDENCE)
+    except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
+        add(errors, "target_evidence_json_or_path")
+        return False
+    if set(value) != {
+        "schema_version", "evidence_id", "scope", "target", "fixture", "lifecycle",
+        "saved_hwpx", "native_oracle", "render_review", "diagnostic_history", "claims",
+    }:
+        add(errors, "target_evidence_keys")
+    if (
+        value.get("schema_version")
+        != "hwpx-agent.p07-05-native-equation-current-2020-evidence/v1"
+        or value.get("evidence_id")
+        != "p07.native-equation.current-2020.attempt01.20260911"
+        or value.get("scope")
+        != "exact_current_pc_lowerer_output_save_reopen_pdf_and_native_semantic_oracle"
+    ):
+        add(errors, "target_evidence_identity")
+    target = value.get("target")
+    if target != {
+        "product": "Hancom Hangul 2020",
+        "prog_id": "HWPFrame.HwpObject.2",
+        "registry_view": "Registry32",
+        "client": "windows_powershell_x86_sta",
+        "build": "11.0.0.9136",
+        "architecture": "x86",
+        "locale": "ko-KR",
+        "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    }:
+        add(errors, "target_evidence_target")
+    fixture = value.get("fixture")
+    if not isinstance(fixture, dict) or any(
+        fixture.get(key) != expected
+        for key, expected in {
+            "input_sha256": "a420d8a0078b4f83f16512ed030cfafbffd81ea96f1a9e4c497ffbd35de41e18",
+            "input_bytes": 7730,
+            "input_section_sha256": "8fd307055568c2a6e10642f48fcb7a95cbf6729f1bfbc2680e42b611b3f5150e",
+            "input_unchanged": True,
+            "source_object_id": 2_200_000_001,
+            "semantic_sha256": "959ece9e281c2f318903a441ba2732c1ff9ee27a26ec0567465278e2d1533986",
+            "script_sha256": "d6e25c88dbf7c63ae2b16142fa8cabf70968b2772ff03d685fc4f09cfb681596",
+            "preservation_verified": True,
+            "native_readback_verified": True,
+            "render_required": True,
+        }.items()
+    ):
+        add(errors, "target_evidence_fixture")
+    lifecycle = value.get("lifecycle")
+    phases = lifecycle.get("phases") if isinstance(lifecycle, dict) else None
+    expected_phases = {
+        "com_create", "open_input", "read_input", "save_as_hwpx", "close_input",
+        "reopen_output", "read_output", "export_pdf", "close_output", "quit",
+    }
+    if (
+        not isinstance(lifecycle, dict)
+        or not isinstance(phases, dict)
+        or set(phases) != expected_phases
+        or set(phases.values()) != {"pass"}
+    ):
+        add(errors, "target_evidence_lifecycle")
+    elif any(
+        lifecycle.get(key) != expected
+        for key, expected in {
+            "trace_sha256": "f040c3842501328be5a906a5ecbcda4e85cb7c305a8245d90af30651beb0dd6a",
+            "progress_sha256": "43cfa1de90186e6eae6dae0c07864f59519c855ab2a661edc9b95f77de8598de",
+            "progress_events": 21,
+            "progress_terminal": "pass",
+            "input_text_sha256": "04249e6765e5a09e85ae897e652b65d77f86ce464e012c1d6d3c420eb0526cd3",
+            "output_text_sha256": "04249e6765e5a09e85ae897e652b65d77f86ce464e012c1d6d3c420eb0526cd3",
+            "timed_out": False,
+            "remaining_hwp_process_count": 0,
+            "computer_use_click_or_type_invoked": False,
+        }.items()
+    ):
+        add(errors, "target_evidence_lifecycle")
+    saved = value.get("saved_hwpx")
+    if not isinstance(saved, dict) or any(
+        saved.get(key) != expected
+        for key, expected in {
+            "sha256": "f4aa7a95fb5cc4cc21062f0a6d8dbaa50de404936c6746c34b21e0c6cf8b5263",
+            "bytes": 14744,
+            "section_sha256": "debd4db3f935d0b4bd1259dffa67ff1bccd32313d4ac35c031da09a33adaad41",
+            "package_parts": 11,
+            "id_declarations": 75,
+            "id_references": 175,
+        }.items()
+    ):
+        add(errors, "target_evidence_saved_hwpx")
+    oracle = value.get("native_oracle")
+    if not isinstance(oracle, dict) or any(
+        oracle.get(key) != expected
+        for key, expected in {
+            "state": "pass",
+            "native_object_count": 1,
+            "layout": "display",
+            "source_object_id": 2_200_000_001,
+            "saved_object_id": 1_192_003_081,
+            "object_id_remapped_by_hangul": True,
+            "semantic_sha256": "959ece9e281c2f318903a441ba2732c1ff9ee27a26ec0567465278e2d1533986",
+            "script_sha256": "d6e25c88dbf7c63ae2b16142fa8cabf70968b2772ff03d685fc4f09cfb681596",
+            "base_unit": 1000,
+            "baseline_percent": 85,
+            "text_color": "#000000",
+            "width_hwpunit": 17000,
+            "height_hwpunit": 6000,
+            "character_anchor_and_zero_margins": True,
+            "saved_line_cache_admitted_separately": True,
+            "input_unchanged_during_oracle": True,
+        }.items()
+    ):
+        add(errors, "target_evidence_oracle")
+    render = value.get("render_review")
+    if not isinstance(render, dict) or any(
+        render.get(key) != expected
+        for key, expected in {
+            "state": "pass",
+            "pdf_sha256": "4a08c5dae29bae792b3868e55eaf726b148007e786c328173b45f2f8bec4a851",
+            "pages": 1,
+            "pixel_size": [1488, 2103],
+            "all_pages_inspected": True,
+            "equation_legible": True,
+            "clipping": False,
+            "overlap": False,
+            "blank_pages": [],
+            "black_boxes": False,
+        }.items()
+    ):
+        add(errors, "target_evidence_render")
+    diagnostic = value.get("diagnostic_history")
+    if not isinstance(diagnostic, dict) or any(
+        diagnostic.get(key) != expected
+        for key, expected in {
+            "initial_oracle_state": "failed",
+            "initial_oracle_error": "equation_hwpx_readback_mismatch",
+            "same_saved_hwpx_reused_after_correction": True,
+            "failed_result_not_promoted": True,
+        }.items()
+    ):
+        add(errors, "target_evidence_diagnostic")
+    claims = value.get("claims")
+    if claims != {
+        "new_lowerer_actual_hangul_execution": True,
+        "new_lowerer_save_reopen": True,
+        "native_semantic_readback": True,
+        "render": True,
+        "editor_smoke": False,
+        "native_equation_automation_binding": False,
+        "differential": False,
+        "other_hangul_versions": False,
+        "p07_complete": False,
+        "production_ready": False,
+        "product_complete": False,
+    }:
+        add(errors, "target_evidence_claims")
+    return not any(error.startswith("target_evidence_") for error in errors)
+
+
 def validate_documents(root: Path, errors: list[str]) -> None:
     for relative, markers in {
         MIGRATION: ("There is no stored v0", "MUST NOT import raw XML", "separate P07 Gates"),
-        POLICY: ("component_pass / integration_passed", "provisional", "false` / `not_run"),
-        REPORT: ("10/10 PASS", "8/8 PASS", "Actual new-lowerer Hangul execution"),
+        POLICY: ("pass / oracle_verified", "provisional", "failed diagnostic history"),
+        REPORT: ("11/11 PASS", "8/8 PASS", "Licensed Hangul 2020 target evidence"),
     }.items():
         try:
             text = bounded_file(root, relative).read_text(encoding="utf-8")
@@ -279,7 +468,13 @@ def validate_documents(root: Path, errors: list[str]) -> None:
             add(errors, "document_marker")
 
 
-def result(errors: list[str], source_locks: int, implementation_files: int, qualification: bool) -> dict[str, Any]:
+def result(
+    errors: list[str],
+    source_locks: int,
+    implementation_files: int,
+    qualification: bool,
+    target_evidence: bool = False,
+) -> dict[str, Any]:
     unique = sorted(set(errors))
     return {
         "schema_version": "hwpx-agent.p07-equation-hwpx-validation/v1",
@@ -288,10 +483,11 @@ def result(errors: list[str], source_locks: int, implementation_files: int, qual
         "source_locks": source_locks,
         "implementation_files": implementation_files,
         "installed_source_qualified": qualification,
+        "target_evidence_verified": target_evidence,
         "task": "P07-05",
-        "direct_stage": "integration_passed" if not unique else "not_proven",
+        "direct_stage": "oracle_verified" if not unique and target_evidence else "not_proven",
         "synthetic_closed_hwpx": not unique,
-        "actual_hangul": False,
+        "actual_hangul": not unique and target_evidence,
         "p07": "in_progress",
         "product_complete": False,
     }
@@ -306,5 +502,6 @@ if __name__ == "__main__":
         "P07_EQUATION_HWPX_CONTRACT_PASS "
         f"source_locks={validation['source_locks']} "
         f"implementation_files={validation['implementation_files']} "
-        f"installed_source_qualified={str(validation['installed_source_qualified']).lower()}"
+        f"installed_source_qualified={str(validation['installed_source_qualified']).lower()} "
+        f"target_evidence_verified={str(validation['target_evidence_verified']).lower()}"
     )

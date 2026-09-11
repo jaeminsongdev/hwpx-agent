@@ -2,10 +2,10 @@
 
 ## Decision
 
-P07-05 is admitted as `component_pass / integration_passed` only. It proves a bounded typed
-`MathAst -> EqEdit -> native equation object` path and closed in-memory HWPX package preservation.
-It does not prove that a package emitted by this new lowerer has been opened, saved, edited or
-rendered by licensed Hangul 2020.
+P07-05 is admitted as exact-current-PC `pass / oracle_verified`. The component layer proves a
+bounded typed `MathAst -> EqEdit -> native equation object` path and closed HWPX preservation. A
+separate disposable fixture emitted through that lowerer then passed licensed Hangul 2020
+open/save/reopen, exact semantic native readback and one-page PDF visual review.
 
 The only target profile is licensed Hangul 2020 `11.0.0.9136`, x86, ko-KR on this PC. Other
 versions require independent qualification.
@@ -31,7 +31,8 @@ EqEdit `script`. It emits no image or plain-text fallback.
 `inline` means an empty bound run in a paragraph with other visible run content. `display` means a
 dedicated one-run paragraph. Both use the exact source-qualified as-character native object shape;
 the reader infers the distinction from paragraph structure rather than writing private attributes
-into HWPX.
+into HWPX. Hangul may add one paragraph `linesegarray` renderer cache without changing that
+classification. No other direct paragraph child is admitted.
 
 P07-07 has not qualified an estimator. P07-05 therefore admits only a positive bounded
 `provisional` extent with no evidence digest and `render_required=true`. Target-readback and
@@ -55,13 +56,19 @@ Section bytes, element/equation counts, script/result bytes, extent and object I
 ceilings. Strict JSON rejects duplicate and unknown keys. Receipts serialize deterministically.
 Debug output redacts package paths, IDs, digests, style/extent values, scripts and AST payloads.
 
-## Evidence boundary
+## Target normalization and evidence boundary
 
-The direct tests use synthetic closed HWPX packages. The exact installed target and prior P06-07
-save/reopen qualify the vocabulary and predecessor shape only. Until a separately recorded run of
-this new lowerer passes licensed Hangul 2020 open/save/reopen, fields for actual target execution,
-save/reopen, editor smoke, render, automation, differential, P07 completion, production readiness
-and product completion remain `false` / `not_run`.
+The target run is bound to the exact fixture/output/trace/PDF SHA values. Hangul preserved the
+EqEdit script SHA, MathAst semantic SHA, style, baseline, color, extent, anchor, margins and one
+native object, while reassigning the native object ID and adding a renderer line cache. The oracle
+records that remap instead of treating a caller-selected source ID as stable across native save.
 
-Reasoning level: `max`. P07-05 licensed target execution and P07-06 automation binding remain at
-`max`.
+The initial oracle rejected that normalization and remains failed diagnostic history. The reader
+was corrected and rerun against the same immutable saved HWPX; only that later result is PASS.
+
+This evidence does not prove arbitrary existing documents, verified layout estimation, editor
+double-click/change/save, native equation insertion automation, differential parity, other Hangul
+versions, P07 completion, production readiness or product completion. Those fields remain
+`false` / `not_run`.
+
+Reasoning level: `max`. P07-06 automation binding remains at `max`.

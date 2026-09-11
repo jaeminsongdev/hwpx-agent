@@ -10,15 +10,16 @@ from tools.p07 import validate_equation_hwpx_contract as validator
 
 
 class EquationHwpxContractTests(unittest.TestCase):
-    def test_repository_contract_passes_without_target_promotion(self) -> None:
+    def test_repository_contract_passes_with_exact_target_evidence(self) -> None:
         report = validator.validate()
         self.assertEqual(report["state"], "pass", report)
         self.assertEqual(report["source_locks"], 10)
-        self.assertEqual(report["implementation_files"], 9)
+        self.assertEqual(report["implementation_files"], 12)
         self.assertTrue(report["installed_source_qualified"])
-        self.assertEqual(report["direct_stage"], "integration_passed")
+        self.assertTrue(report["target_evidence_verified"])
+        self.assertEqual(report["direct_stage"], "oracle_verified")
         self.assertTrue(report["synthetic_closed_hwpx"])
-        self.assertFalse(report["actual_hangul"])
+        self.assertTrue(report["actual_hangul"])
         self.assertFalse(report["product_complete"])
 
     def test_source_implementation_migration_and_evidence_tamper_fail(self) -> None:
@@ -40,6 +41,13 @@ class EquationHwpxContractTests(unittest.TestCase):
             value["claims"]["new_lowerer_actual_hangul_execution"] = True
             path.write_text(json.dumps(value), encoding="utf-8")
             self.assertIn("qualification_claims", validator.validate(root)["errors"])
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_tree(Path(directory))
+            path = root / validator.TARGET_EVIDENCE
+            value = json.loads(path.read_text(encoding="utf-8"))
+            value["native_oracle"]["semantic_sha256"] = "0" * 64
+            path.write_text(json.dumps(value), encoding="utf-8")
+            self.assertIn("target_evidence_oracle", validator.validate(root)["errors"])
 
     def test_duplicate_key_path_escape_and_binding_weakening_fail(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -69,8 +77,8 @@ class EquationHwpxContractTests(unittest.TestCase):
             value = json.loads(path.read_text(encoding="utf-8"))
             value["default_limits"]["section_bytes"] = 0
             value["native_profile"]["extent"] = "trusted_constant"
-            value["not_claimed"]["new_lowerer_actual_hangul_execution"] = True
-            value["gate_decision"]["actual_hangul"] = True
+            value["not_claimed"]["native_equation_automation_binding"] = True
+            value["gate_decision"]["actual_hangul"] = False
             value["failure_policy"].pop()
             path.write_text(json.dumps(value), encoding="utf-8")
             errors = validator.validate(root)["errors"]
@@ -86,6 +94,7 @@ class EquationHwpxContractTests(unittest.TestCase):
             validator.POLICY,
             validator.REPORT,
             validator.QUALIFICATION,
+            validator.TARGET_EVIDENCE,
             *validator.EXPECTED_SOURCE_PATHS,
             *validator.IMPLEMENTATION_MARKERS,
         }
