@@ -6,6 +6,7 @@ mod document_graph;
 mod identity;
 mod math_ast;
 mod object_appearance;
+mod object_composition;
 mod object_geometry;
 mod operation_plan;
 mod selector;
@@ -82,6 +83,15 @@ pub use object_appearance::{
     ObjectAppearanceRequestDraft, ObjectAppearanceResult, OutlineStyle, PictureEffects,
     PictureShadow, PictureShadowStyle, ReflectionEffect, RgbColor, ScalarPair, SoftEdgeEffect,
     TransparencyChannel, UnitFraction, UnitRange,
+};
+pub use object_composition::{
+    CompositionAxis, CompositionBounds, CompositionObject, CompositionObjectContent,
+    CompositionObjectKind, ConnectorControlPoint, ConnectorEndpoint, ConnectorKind,
+    ConnectorSubject, ConnectorTopology, NewConnector, NewGroup, OBJECT_COMPOSITION_SCHEMA_VERSION,
+    ObjectAlignMode, ObjectCompositionBuilder, ObjectCompositionError, ObjectCompositionGraph,
+    ObjectCompositionGraphDraft, ObjectCompositionLimitConfig, ObjectCompositionLimits,
+    ObjectCompositionOperation, ObjectCompositionPlan, ObjectCompositionReceipt,
+    ObjectCompositionRequest, ObjectCompositionRequestDraft, ObjectCompositionResult, ZOrderMove,
 };
 pub use object_geometry::{
     OBJECT_GEOMETRY_SCHEMA_VERSION, ObjectAffineMatrix, ObjectAnchor, ObjectComponentGeometry,

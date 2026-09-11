@@ -1,0 +1,108 @@
+{
+  "schema_version": "hwpx-agent.object-composition-contract/v1",
+  "state_schema_version": "hwpx-agent.object-composition/v1",
+  "profile_id": "hwpx-agent.object-composition.pure-graph/v1",
+  "task": "P08-06",
+  "scope": "all_six_composition_capabilities_as_exact_bounded_complete_state_object_graph_transitions",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path":"WORK_BREAKDOWN_STRUCTURE.csv","sha256":"3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path":"docs/03_document_model/08_drawing_image_chart.md","sha256":"ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b"},
+    {"path":"docs/04_feature_catalog/09_obj.md","sha256":"e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8"},
+    {"path":"docs/04_feature_catalog/contracts/09_obj_contracts.md","sha256":"e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2"},
+    {"path":"docs/09_roadmap/P08_images_shapes_drawing_charts.md","sha256":"f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path":"implementation/p08/P08-05_OBJECT_APPEARANCE_POLICY.md","sha256":"1d05d280c00b8e61f216ed44fcfe4ed7ea4fcbb4ba86ac72be7fcf806b3da68a"},
+    {"path":"implementation/p08/P08-05_OBJECT_APPEARANCE_REPORT.md","sha256":"e7da98298637eaae4083318cb6d496c6bbb193533e580d466b63d0a663a7f090"},
+    {"path":"protocol/private/p08-object-appearance-v1.json","sha256":"1221f7689deedcc6ddbb309433ee8e84065b003e6a7dd80be5adee76b1a43939"},
+    {"path":"implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json","sha256":"c4a8bdb082cf8610fa2b3f6e709ca9058ab256a2371e9a779b9b323ca82638e4"}
+  ],
+  "source_qualification": "implementation/p08/evidence/p08-06-object-composition-source-qualification.v1.json",
+  "migration": "protocol/migrations/p08-object-composition-v0-to-v1.md",
+  "policy": "implementation/p08/P08-06_OBJECT_COMPOSITION_POLICY.md",
+  "report": "implementation/p08/P08-06_OBJECT_COMPOSITION_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/object_composition.rs",
+    "crates/domain-ir/tests/object_composition.rs"
+  ],
+  "official_model_source": {
+    "repository": "https://github.com/hancom-io/owpml-model",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "scope": "static_composition_vocabulary_and_types_not_runtime_or_render_oracle"
+  },
+  "admitted_profile": {
+    "capabilities": ["obj.group","obj.ungroup","obj.z_order","obj.align","obj.distribute","obj.connector"],
+    "connector_kinds": ["straight_no_arrow","straight_one_way","straight_both","stroke_no_arrow","stroke_one_way","stroke_both","arc_no_arrow","arc_one_way","arc_both"],
+    "alignment_modes": ["left","horizontal_center","right","top","vertical_middle","bottom"],
+    "distribution_axes": ["horizontal","vertical"],
+    "z_order_moves": ["bring_to_front","send_to_back","forward_one","backward_one"],
+    "binding": "complete_source_graph_and_noncomposition_content_hashes_plus_before_after_document_flow",
+    "preservation": "all_existing_identity_visibility_printability_content_and_resources_preserved_except_explicit_composition_geometry_topology"
+  },
+  "workflow": {
+    "admit": "validate_complete_graph_exact_source_sha_flow_sha_and_one_non_noop_operation",
+    "plan": "recompute_target_graph_and_bind_request_source_target_and_flow_digests",
+    "build": "revalidate_current_graph_and_flow_then_recompute_exact_target_and_plan_digest",
+    "verify": "all_graph_invariants_and_complete_target_digest_must_match"
+  },
+  "default_limits": {
+    "input_bytes": 4194304,
+    "serialized_bytes": 16777216,
+    "objects": 65536,
+    "selection": 65536,
+    "resources_per_object": 4096,
+    "control_points": 4096,
+    "depth": 64,
+    "identifier_bytes": 512,
+    "coordinate_magnitude_hwpunit": 1000000000,
+    "content_bytes": 268435456,
+    "connection_index": 65535
+  },
+  "failure_policy": [
+    "zero_inconsistent_or_over_ceiling_limits_rejected",
+    "duplicate_unknown_missing_malformed_or_oversized_json_rejected",
+    "duplicate_zero_or_colliding_logical_native_and_instance_identity_rejected",
+    "dangling_cyclic_excess_depth_or_non_group_parent_rejected",
+    "sibling_z_order_must_be_unique_contiguous_and_zero_based",
+    "group_requires_two_children_and_exact_direct_child_union_bounds",
+    "group_selection_must_be_distinct_existing_siblings_with_fresh_group_identity",
+    "ungroup_splices_children_into_exact_group_slot_and_rejects_dangling_edges",
+    "z_order_edge_noop_rejected",
+    "align_and_distribute_require_distinct_movable_siblings",
+    "distribution_keeps_first_last_and_balances_integer_remainder_deterministically",
+    "connector_bounds_are_derived_from_all_points",
+    "attached_connector_subject_must_exist_be_nonconnector_share_parent_and_contain_endpoint",
+    "source_state_and_document_flow_drift_rejected_at_request_plan_and_build",
+    "target_state_and_plan_tampering_rejected_by_exact_recomputation",
+    "identity_content_resource_coordinates_and_digests_redacted_from_debug",
+    "no_partial_result_or_fallback_after_failure"
+  ],
+  "not_claimed": {
+    "direct_hwpx": false,
+    "resource_integrity": false,
+    "semantic_reopen": false,
+    "actual_target_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "object_bounds": false,
+    "render_diff": false,
+    "direct_automation_differential": false,
+    "p08_06_complete": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "pure_object_graph": "pass",
+    "graph_invariant_tests": "pass",
+    "direct_hwpx": "not_run",
+    "actual_hangul": false,
+    "render_diff": false,
+    "p08_06": "pure_object_graph_component_pass_direct_hwpx_not_run_task_incomplete",
+    "p08_06_complete": false,
+    "p08": "in_progress",
+    "product_complete": false
+  }
+}

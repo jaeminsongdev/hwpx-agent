@@ -1,0 +1,69 @@
+{
+  "schema_version": "hwpx-agent.object-composition-source-qualification/v1",
+  "task": "P08-06",
+  "recorded_date": "2026-09-12",
+  "profile_id": "hwpx-agent.object-composition.pure-graph/v1",
+  "official_sources": {
+    "local_ks_x_6101_archive": "implementation/p00/source-archive/original/web/KS_X_6101_MachineReadable_Content_20260901.json",
+    "hancom_owpml_repository": "https://github.com/hancom-io/owpml-model",
+    "hancom_owpml_commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "model_files": [
+      "OWPML/Class/Para/ContainerType.cpp",
+      "OWPML/Class/Para/AbstractShapeObjectType.cpp",
+      "OWPML/Class/Para/AbstractShapeComponentType.cpp",
+      "OWPML/Class/Para/ConnectLineType.cpp",
+      "OWPML/Class/Para/ConnectPointType.cpp",
+      "OWPML/Class/enumdef.h"
+    ],
+    "qualified_scope": "container_zOrder_groupLevel_connectLine_endpoint_control_point_and_nine_connector_kind_static_vocabulary",
+    "evidence_scope": "static_vocabulary_and_field_types_only"
+  },
+  "implementation_sources": {
+    "crates/domain-ir/src/lib.rs": "11fd80ab26b796f5f4fa7f255e82f40af7638ffbaea74e043db4e6627e192883",
+    "crates/domain-ir/src/object_composition.rs": "1695927560ea83bf01d589160459b20f9c74d7a2bc7bd8de8d218d958bd11b40",
+    "crates/domain-ir/tests/object_composition.rs": "5ed744a6bc3c330765aa18d6fcddf1a99d5773b909a64f4d1c1c1e67db5322ab"
+  },
+  "component_execution": {
+    "state": "pass",
+    "rust_tests_passed": 10,
+    "graph_invariant_tests_passed": 9,
+    "private_plan_tamper_tests_passed": 1,
+    "six_capability_rows_modelled": "pass",
+    "exact_group_ungroup_and_z_order": "pass",
+    "exact_align_and_balanced_distribution": "pass",
+    "connector_create_update_and_closure": "pass",
+    "complete_noncomposition_state_binding": "pass",
+    "request_plan_build_state_and_flow_binding": "pass",
+    "bounded_json_and_redacted_debug": "pass"
+  },
+  "target_execution": {
+    "state": "not_run",
+    "direct_hwpx": null,
+    "resource_integrity": null,
+    "semantic_reopen": null,
+    "actual_target_hwpx": null,
+    "hangul_open": null,
+    "save_reopen": null,
+    "object_bounds": null,
+    "render_diff": null,
+    "direct_automation_differential": null
+  },
+  "claims": {
+    "pure_object_graph_component_pass": true,
+    "graph_invariant_tests": true,
+    "complete_noncomposition_state_binding": true,
+    "direct_hwpx": false,
+    "resource_integrity": false,
+    "semantic_reopen": false,
+    "actual_target_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "object_bounds": false,
+    "render_diff": false,
+    "direct_automation_differential": false,
+    "p08_06_complete": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

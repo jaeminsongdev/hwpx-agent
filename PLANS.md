@@ -24,7 +24,7 @@
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | P07/P08 in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-01~05 asset, picture, geometry, six shape/text-box forms and all 11 static appearance rows are component-pass; P08-05 is 13/13 focused-passed. Actual-target/visual evidence, package image-fill integrity and P08-06~09/P09 remain |
+| P07-P09 | P07/P08 in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-01~06 asset, picture, geometry, six shape/text-box forms, all 11 static appearance rows and all six exact composition operations are component-pass; P08-06 is 10/10 focused-passed. Actual-target/visual evidence, package image-fill integrity and P08-07~09/P09 remain |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -108,13 +108,13 @@
 
 ## Next actions
 
-1. Implement P08-06 at `max`: exact group/ungroup, z-order, align/distribute and connector object-graph operations while preserving identity, geometry, appearance and payload state.
+1. Implement P08-07 at `max`: exact chart creation/data/editing with complete chart/object/resource identity, dataset binding, subtype semantics and state/flow drift rejection.
 2. When the user can capture screens/approve saves, run one combined exact-target campaign: P07-07/08/09 plus remaining P06 target/render/differentials including corrected TABLE-032/033.
 3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
 
 ## Context pack and archive pointers
 
-- Read first: this file, active P06/P07 authorities, P08-01~05 policy/report and `implementation/p05/P05_GATE_REPORT.md`.
+- Read first: this file, active P06/P07 authorities, P08-01~06 policy/report and `implementation/p05/P05_GATE_REPORT.md`.
 - P17 authorities: frozen legacy/v40-v47 reports, `P17-06_GIT_MIRROR_EFFECT_V13.md`, frozen durable-push v15/durable-pull v17 qualifications, Windows custody v18, remote TLS v19, lifecycle v21, broker v22/v24 and issuer v23.
 - Detailed closed-card history is in the named reports and local Git history; no remote push is implied.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.
