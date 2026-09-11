@@ -17,6 +17,23 @@ REPORT = "implementation/p07/P07-08_EQUATION_CORPUS_REPORT.md"
 QUALIFICATION = "implementation/p07/evidence/p07-08-equation-corpus-source-qualification.current-2020.v1.json"
 MANIFEST = "implementation/p07/fixtures/p07-08-equation-corpus.current-2020.v1.json"
 MANIFEST_SHA256 = "8893bd3169f40a5b49472cbb6c2dd4a578202b338d47d49270d237084ad6bd3f"
+PLAN_BUILDER = "crates/equation-engine/examples/p07_08_tier_b_target_plan.rs"
+PARENT = "implementation/p07/tools/run-hancom-2020-equation-tier-b.ps1"
+CHILD = "implementation/p07/tools/run-hancom-2020-equation-tier-b-child.ps1"
+ORACLE = "crates/hwpx-package/examples/p07_09_equation_editor_oracle.rs"
+TARGET_HARNESS = {
+    "plan_schema_version": "hwpx-agent.p07-08-tier-b-target-plan/v1",
+    "evidence_schema_version": "hwpx-agent.p07-08-tier-b-target-evidence/v1",
+    "plan_builder_path": PLAN_BUILDER,
+    "plan_builder_raw_sha256": "98bcb2cc15af5d7a6d1cf45d5469284e09c799d5774fae706a99dd0b97c8018f",
+    "parent_path": PARENT,
+    "parent_raw_sha256": "49f54c859e191133569e7563985fa3855b1d943e9b483829e5e7c4418501dd78",
+    "child_path": CHILD,
+    "child_raw_sha256": "feca3d29bc48366d8ccdfe2aad6863aeb39062eadf24cf375af7be67fb684edb",
+    "bundle_sha256": "558e36915d7fd380f1b146fbd60b484a586a6b14a19a6f6e28dd041090e0565d",
+    "oracle_path": ORACLE,
+    "oracle_raw_sha256": "3374c47a1fd18cb0929a2ef32abd984ab13babfb6ee26e6fc509fcdcd28f7cb8",
+}
 SOURCES = {
     "WORK_BREAKDOWN_STRUCTURE.csv", "README.md", "docs/03_document_model/07_equation_model.md",
     "docs/04_feature_catalog/08_eq.md", "docs/04_feature_catalog/contracts/08_eq_contracts.md",
@@ -59,6 +76,9 @@ MARKERS = {
         "unrelated_same_part_edit_preserves_unsupported_legacy_script_byte_exactly",
         "record.output_sha256()",
     ),
+    PLAN_BUILDER: ("validate_component_manifest", "cases.len() != 14", "canonical Tier B EqEdit"),
+    PARENT: ("TIER_B_PREEXISTING_HWP_PROCESS", "Invoke-Oracle", "render_state = 'not_run'"),
+    CHILD: ("P07_TIER_B_ACCESS_APPROVAL_MAY_BE_REQUIRED", "TIER_B_REOPEN_READBACK_MISMATCH", "computer_use_click_or_type_invoked = $false"),
 }
 DIGEST = re.compile(r"^[0-9a-f]{64}$")
 CASE_ID = re.compile(r"^[a-z0-9-]+$")
@@ -94,12 +114,16 @@ def digest(path: Path) -> str:
     return hashlib.sha256(text.encode()).hexdigest()
 
 
+def raw_digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def validate(root: Path = ROOT) -> dict[str, Any]:
     errors: list[str] = []
     try:
         contract = load(root, CONTRACT)
     except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
-        return result(["contract_json_or_path"], 0, 0, False, False)
+        return result(["contract_json_or_path"], 0, 0, False, False, False)
     exact = {
         "schema_version": "hwpx-agent.equation-corpus-contract/v1",
         "manifest_schema_version": "hwpx-agent.equation-corpus/v1",
@@ -109,6 +133,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         "scope": "hash_pinned_tier_a_b_c_semantic_negative_and_legacy_preservation_corpus",
         "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
         "source_qualification": QUALIFICATION, "target_qualification": None,
+        "target_harness": TARGET_HARNESS,
         "migration": MIGRATION, "policy": POLICY, "report": REPORT,
         "implementation_files": list(MARKERS), "default_limits": LIMITS,
         "not_claimed": NOT_CLAIMED, "gate_decision": GATE,
@@ -139,9 +164,13 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     source_count = validate_sources(root, contract.get("source_locks"), errors)
     implementation_count = validate_markers(root, errors)
     manifest_ok = validate_manifest(root, errors)
+    target_harness_ok = validate_target_harness(root, errors)
     qualification_ok = validate_qualification(root, errors)
     validate_documents(root, errors)
-    return result(errors, source_count, implementation_count, manifest_ok, qualification_ok)
+    return result(
+        errors, source_count, implementation_count, manifest_ok, qualification_ok,
+        target_harness_ok,
+    )
 
 
 def validate_sources(root: Path, value: Any, errors: list[str]) -> int:
@@ -230,6 +259,27 @@ def validate_manifest(root: Path, errors: list[str]) -> bool:
     return not any(error.startswith("manifest_") for error in errors)
 
 
+def validate_target_harness(root: Path, errors: list[str]) -> bool:
+    expected = {
+        PLAN_BUILDER: TARGET_HARNESS["plan_builder_raw_sha256"],
+        PARENT: TARGET_HARNESS["parent_raw_sha256"],
+        CHILD: TARGET_HARNESS["child_raw_sha256"],
+        ORACLE: TARGET_HARNESS["oracle_raw_sha256"],
+    }
+    try:
+        for relative, expected_sha256 in expected.items():
+            if raw_digest(file(root, relative)) != expected_sha256:
+                errors.append("target_harness_digest")
+        bundle = hashlib.sha256(
+            f"{TARGET_HARNESS['parent_raw_sha256']}:{TARGET_HARNESS['child_raw_sha256']}".encode()
+        ).hexdigest()
+        if bundle != TARGET_HARNESS["bundle_sha256"]:
+            errors.append("target_harness_bundle")
+    except (OSError, ValueError):
+        errors.append("target_harness_path")
+    return not any(error.startswith("target_harness_") for error in errors)
+
+
 def validate_qualification(root: Path, errors: list[str]) -> bool:
     try:
         value = load(root, QUALIFICATION)
@@ -256,6 +306,17 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
     target_run = value.get("tier_b_target_execution")
     if not isinstance(target_run, dict) or target_run.get("state") != "not_run" or any(item is not None for key, item in target_run.items() if key != "state"):
         errors.append("qualification_target_run")
+    if value.get("target_harness") != {
+        "state": "implementation_ready",
+        "plan_builder_raw_sha256": TARGET_HARNESS["plan_builder_raw_sha256"],
+        "parent_raw_sha256": TARGET_HARNESS["parent_raw_sha256"],
+        "child_raw_sha256": TARGET_HARNESS["child_raw_sha256"],
+        "bundle_sha256": TARGET_HARNESS["bundle_sha256"],
+        "oracle_raw_sha256": TARGET_HARNESS["oracle_raw_sha256"],
+        "single_session_case_count": 14,
+        "target_run": "not_run",
+    }:
+        errors.append("qualification_target_harness")
     claims = value.get("claims")
     if claims != {"tier_a_component_complete": True, "tier_b_component_complete": True,
                    "tier_c_component_complete": True, "legacy_synthetic_preservation": True,
@@ -268,8 +329,8 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
 def validate_documents(root: Path, errors: list[str]) -> None:
     for relative, markers in {
         MIGRATION: ("There is no stored v0", "MUST NOT be relabeled", "never count as semantic success"),
-        POLICY: ("unit_passed / tier_b_target_not_run", "64 cases", "component evidence only"),
-        REPORT: ("10/10 PASS", "44/44", "14/14", "actual_hangul=false"),
+        POLICY: ("unit_passed / tier_b_target_not_run", "64 cases", "exact-target harness"),
+        REPORT: ("10/10 PASS", "44/44", "14/14", "one-session x86 STA harness"),
     }.items():
         try:
             text = file(root, relative).read_text(encoding="utf-8")
@@ -279,13 +340,17 @@ def validate_documents(root: Path, errors: list[str]) -> None:
             errors.append("document_path")
 
 
-def result(errors: list[str], sources: int, implementation: int, manifest: bool, qualification: bool) -> dict[str, Any]:
+def result(
+    errors: list[str], sources: int, implementation: int, manifest: bool,
+    qualification: bool, target_harness: bool,
+) -> dict[str, Any]:
     unique = sorted(set(errors))
     return {
         "schema_version": "hwpx-agent.p07-equation-corpus-validation/v1",
         "state": "pass" if not unique else "fail", "errors": unique,
         "source_locks": sources, "implementation_files": implementation,
         "manifest_verified": manifest, "source_qualification_verified": qualification,
+        "target_harness_verified": target_harness,
         "task": "P07-08", "direct_stage": "unit_passed" if not unique else "not_proven",
         "tier_b_target": "not_run", "actual_hangul": False, "render": False,
         "p07": "in_progress", "product_complete": False,

@@ -24,8 +24,9 @@ class EquationCorpusContractTests(unittest.TestCase):
         value = validator.validate()
         self.assertEqual(value["state"], "pass", value)
         self.assertEqual(value["source_locks"], 9)
-        self.assertEqual(value["implementation_files"], 4)
+        self.assertEqual(value["implementation_files"], 7)
         self.assertTrue(value["manifest_verified"])
+        self.assertTrue(value["target_harness_verified"])
         self.assertEqual(value["tier_b_target"], "not_run")
         self.assertFalse(value["actual_hangul"])
         self.assertFalse(value["render"])
@@ -103,6 +104,15 @@ class EquationCorpusContractTests(unittest.TestCase):
             target = root / next(iter(validator.MARKERS))
             target.write_text("drift", encoding="utf-8")
             self.assertIn("implementation_marker", validator.validate(root)["errors"])
+
+    def test_target_harness_raw_source_tamper_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            copy_tree(root)
+            target = root / validator.PARENT
+            target.write_bytes(target.read_bytes() + b"\n# drift\n")
+            result = validator.validate(root)
+            self.assertIn("target_harness_digest", result["errors"])
 
 
 if __name__ == "__main__":

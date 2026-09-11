@@ -26,6 +26,11 @@ No Tier B case has been executed in Hangul in this card. Therefore `tier_b_targe
 `not_run`, `actual_hangul=false` and `product_complete=false`. The HWPX preservation fixture is
 synthetic and cannot be promoted to real HWPX or target evidence.
 
+The follow-up exact-target plan builder and one-session x86 STA harness are now implemented and
+source-hash locked. They require all 14 cases to pass insert/readback/save/close/reopen/readback and
+independent native HWPX oracle checks. Their target and visual states remain `not_run` until the
+combined campaign actually executes.
+
 ## Next exact task
 
 Implement P07-09's editor-smoke protocol, request/receipt binding and fail-closed evidence loader at

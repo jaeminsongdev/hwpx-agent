@@ -47,5 +47,11 @@ Actual Hangul Tier B execution, render quality, editor double-click flow, save/r
 parity, differential evidence, P07 completion, other Hangul versions, production and product
 completion remain `false` / `not_run`.
 
+The exact-target harness is implementation-ready. Its hash-pinned plan builder revalidates the full
+64-case manifest and emits all 14 canonical Tier B scripts with semantic hashes. One bounded x86
+STA session inserts, reads, saves, closes, reopens and reads every case; a separate strict native
+HWPX oracle then checks each artifact and records layout extents. This tooling does not itself
+promote the still-unrun target or visual fields.
+
 Reasoning level: `max`. P07-09 remains `max` because editor mutation, native readback and
 save/reopen evidence must be bound without confusing UI success with semantic success.

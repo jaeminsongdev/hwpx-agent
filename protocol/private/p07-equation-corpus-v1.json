@@ -28,6 +28,19 @@
   },
   "source_qualification": "implementation/p07/evidence/p07-08-equation-corpus-source-qualification.current-2020.v1.json",
   "target_qualification": null,
+  "target_harness": {
+    "plan_schema_version": "hwpx-agent.p07-08-tier-b-target-plan/v1",
+    "evidence_schema_version": "hwpx-agent.p07-08-tier-b-target-evidence/v1",
+    "plan_builder_path": "crates/equation-engine/examples/p07_08_tier_b_target_plan.rs",
+    "plan_builder_raw_sha256": "98bcb2cc15af5d7a6d1cf45d5469284e09c799d5774fae706a99dd0b97c8018f",
+    "parent_path": "implementation/p07/tools/run-hancom-2020-equation-tier-b.ps1",
+    "parent_raw_sha256": "49f54c859e191133569e7563985fa3855b1d943e9b483829e5e7c4418501dd78",
+    "child_path": "implementation/p07/tools/run-hancom-2020-equation-tier-b-child.ps1",
+    "child_raw_sha256": "feca3d29bc48366d8ccdfe2aad6863aeb39062eadf24cf375af7be67fb684edb",
+    "bundle_sha256": "558e36915d7fd380f1b146fbd60b484a586a6b14a19a6f6e28dd041090e0565d",
+    "oracle_path": "crates/hwpx-package/examples/p07_09_equation_editor_oracle.rs",
+    "oracle_raw_sha256": "3374c47a1fd18cb0929a2ef32abd984ab13babfb6ee26e6fc509fcdcd28f7cb8"
+  },
   "migration": "protocol/migrations/p07-equation-corpus-v0-to-v1.md",
   "policy": "implementation/p07/P07-08_EQUATION_CORPUS_POLICY.md",
   "report": "implementation/p07/P07-08_EQUATION_CORPUS_REPORT.md",
@@ -35,7 +48,10 @@
     "crates/equation-engine/src/lib.rs",
     "crates/equation-engine/src/corpus.rs",
     "crates/equation-engine/tests/equation_corpus.rs",
-    "crates/hwpx-package/tests/equation_hwpx.rs"
+    "crates/hwpx-package/tests/equation_hwpx.rs",
+    "crates/equation-engine/examples/p07_08_tier_b_target_plan.rs",
+    "implementation/p07/tools/run-hancom-2020-equation-tier-b.ps1",
+    "implementation/p07/tools/run-hancom-2020-equation-tier-b-child.ps1"
   ],
   "tier_policy": {
     "minimum_tier_a_semantic": 40,
