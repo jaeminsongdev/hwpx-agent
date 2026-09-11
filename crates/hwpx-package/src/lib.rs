@@ -6,6 +6,7 @@
 //! fully verified in-memory value only after metadata, streaming size, CRC and
 //! nested-package checks have succeeded.
 
+mod active_content;
 mod asset;
 mod basic_shape_hwpx;
 mod character_style;
@@ -41,6 +42,12 @@ mod vs0;
 mod vs1_layout;
 mod writer;
 
+pub use active_content::{
+    ACTIVE_CONTENT_PROFILE_ID, ACTIVE_CONTENT_SCHEMA_VERSION, ActivationKind, ActiveContentControl,
+    ActiveContentControlKind, ActiveContentDisposition, ActiveContentError, ActiveContentInventory,
+    ActiveContentLimitConfig, ActiveContentLimits, ActiveContentPreservationReceipt,
+    ActiveContentResource, ActiveContentResourceKind, ActiveContentSignature,
+};
 pub use asset::{
     ASSET_PIPELINE_PROFILE_ID, ASSET_PIPELINE_SCHEMA_VERSION, AssetDisposition, AssetError,
     AssetLimitConfig, AssetLimits, AssetMedia, AssetPlan, AssetStoreAdapter,

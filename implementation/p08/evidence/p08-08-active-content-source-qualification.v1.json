@@ -1,0 +1,52 @@
+{
+  "schema_version": "hwpx-agent.p08-active-content-source-qualification/v1",
+  "task": "P08-08",
+  "scope": "package_level_active_content_implementation_and_synthetic_security_corpus_only",
+  "public_model": {
+    "repository": "hancom-io/owpml-model",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "source_locks": {
+      "OWPML/Class/Para/OLEType.h": "fa52c5168c6723f79e3bd074fb735d7101c18ac8e1f676b914e2d2c457a122b1",
+      "OWPML/Class/Para/OLEType.cpp": "ca455aaac391862a420574aa623274619dc29fc7b23332b48d5c25a6b9516fc8",
+      "OWPML/Class/Para/VideoType.h": "ec00541d4ab1e51c81b2efe5cfefb64fda6a108bc396969afa12497a1aa85e63",
+      "OWPML/Class/Para/VideoType.cpp": "fc8cd8ca3eac3f99255146234012920b08004d0f5e6cf5ac4a601b8ad764008c",
+      "OWPML/Class/Para/AbstractFormObjectType.h": "949c9d96ece2cbd7a23779dd310471318d74fc91235f236d1a47247de138625b",
+      "OWPML/Class/Para/AbstractFormObjectType.cpp": "f516fbeef26442f06d3e9e12d580a391c9323313a956509cfcaf88bf2c727e4a",
+      "OWPML/Class/Para/RunType.cpp": "dbaa0fe2b553dccc13381c856fd9c188185a16bf63685f575acf6bf2c9b88dee",
+      "OWPML/Class/enumdef.h": "1c86392c934ac85f7ddd85c710b76be7649403a8404bce146db52558a0b95457"
+    },
+    "qualification_boundary": "static_names_attributes_and_enums_only"
+  },
+  "implementation_sha256": {
+    "crates/hwpx-package/src/active_content.rs": "d9c095d7c58fcdc0c375dc754d6c059e7159e60a4d16ebd825262f6ea2f3d017",
+    "crates/hwpx-package/src/reader.rs": "e40d1da01f1aa52b2d1453fe8165d862e6c3a284c7dfaaa10eed1b7850d3e115",
+    "crates/hwpx-package/src/lib.rs": "9d19a032fcfad9730911163afc53dd90335f34976d8a672cf4264472ff2d9aa3",
+    "crates/hwpx-package/tests/active_content.rs": "af64cbf35f648d15dfe4f20205c87f56ea47d74d81ae4814167fdd22e2f359ae"
+  },
+  "tests": {
+    "focused_rust_security": "10/10 PASS",
+    "malicious_zip_regression": "8/8 PASS",
+    "package_kind": "in_memory_synthetic_hwpx",
+    "network_used": false,
+    "licensed_application_used": false
+  },
+  "claims": {
+    "package_inventory_implemented": true,
+    "activation_denial_implemented": true,
+    "opaque_binary_preservation_check": true,
+    "synthetic_security_corpus_pass": true,
+    "actual_security_corpus": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "property_readback": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p08_08_implementation_complete": true,
+    "p08_08_green": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

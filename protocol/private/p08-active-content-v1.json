@@ -1,0 +1,120 @@
+{
+  "schema_version": "hwpx-agent.active-content-contract/v1",
+  "inventory_schema_version": "hwpx-agent.active-content-inventory/v1",
+  "profile_id": "hwpx-agent.active-content.hwpml-2011-opaque-preserve-blocked/v1",
+  "task": "P08-08",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_qualification": "implementation/p08/evidence/p08-08-active-content-source-qualification.v1.json",
+  "migration": "protocol/migrations/p08-active-content-v0-to-v1.md",
+  "policy": "implementation/p08/P08-08_ACTIVE_CONTENT_POLICY.md",
+  "report": "implementation/p08/P08-08_ACTIVE_CONTENT_REPORT.md",
+  "source_locks": [
+    {"path": "docs/09_roadmap/P08_images_shapes_drawing_charts.md", "sha256": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path": "docs/12_implementation_guides/11_security_privacy_license.md", "sha256": "0be76f7e2c6c7a77a2031b10322839bf8693914f2ad7740de44646ea7f6d7b75"},
+    {"path": "docs/12_implementation_guides/07_windows_automation_worker.md", "sha256": "76e5cfb985f77b55347714f3d3d3b97c527c18d0d8238a4c0e79b3f680b44168"},
+    {"path": "implementation/p08/P08-08_DRAWING_CANVAS_POLICY.md", "sha256": "0be864917893bb320e263e8f91a6a64fe0ff028166b3628140d409732219d0cd"},
+    {"path": "protocol/private/p08-drawing-canvas-v1.json", "sha256": "11df1662ed25c7a3d1cba83b78e66a83e2263bacb14a238dca8efd2770e867b9"}
+  ],
+  "scope": "package_level_opaque_ole_multimedia_inventory_preservation_and_activation_denial",
+  "inventory": {
+    "authoritative_package_graph_rebuilt": true,
+    "supplied_graph_drift_rejected": true,
+    "all_xml_parts_integrity_read": true,
+    "reviewed_controls": ["ole", "video", "btn", "comboBox", "listBox", "edit", "script_outside_equation"],
+    "relationship_resolution": "opf_manifest_id_to_exact_non_xml_part",
+    "resource_kinds": ["opaque_ole", "audio", "video", "executable", "script_macro", "opaque_binary"],
+    "resource_identity": ["all_relationship_ids", "package_path", "media_type", "expanded_size", "raw_sha256"],
+    "control_identity": ["document_part", "kind", "reference", "external", "command_present", "element_sha256"],
+    "state_sha256_excludes_diagnostic_ordinal": true
+  },
+  "activation": {
+    "allowed": false,
+    "always_denied": ["ole", "multimedia", "embedded_executable", "script_macro", "form_command", "external_link"],
+    "creation_api": false,
+    "dispatch_api": false,
+    "fetch_api": false,
+    "playback_api": false,
+    "execution_api": false
+  },
+  "resource_policy": {
+    "compound_file_binary": "opaque_preserve_blocked_never_unpacked",
+    "known_multimedia_signatures": ["mp4", "mpeg_audio", "wav", "avi", "ogg", "webm"],
+    "known_signature_mismatch": "reject",
+    "executable_or_script": "quarantine",
+    "external_or_command_control": "quarantine",
+    "unknown_octet_stream": "review_required",
+    "preserve_passive_does_not_authorize_playback": true
+  },
+  "preservation": {
+    "resource_bytes_exact": true,
+    "active_element_bytes_exact": true,
+    "unrelated_package_changes_allowed": true,
+    "diagnostic_ordinal_shift_allowed": true,
+    "addition_removal_retarget_or_mutation_rejected": true,
+    "receipt_activation_allowed": false
+  },
+  "input_hardening": {
+    "finite_inventory_identifier_and_json_limits": true,
+    "total_control_plus_resource_limit": true,
+    "preserving_xml_dtd_entity_and_encoding_policy": true,
+    "namespace_spoof_rejected": true,
+    "duplicate_or_oversized_attribute_rejected": true,
+    "dangling_or_xml_resource_rejected": true,
+    "conflicting_resource_role_rejected": true,
+    "bounded_deterministic_json_without_payload_or_xml_text": true,
+    "redacted_debug": true
+  },
+  "failure_policy": [
+    "invalid_or_hostile_limits_rejected",
+    "authoritative_graph_or_part_identity_drift_rejected",
+    "unsafe_xml_or_namespace_spoof_rejected",
+    "missing_duplicate_empty_or_oversized_active_attribute_rejected",
+    "invalid_ole_video_boolean_or_enum_rejected",
+    "dangling_or_xml_resource_reference_rejected",
+    "conflicting_active_resource_role_rejected",
+    "known_multimedia_signature_mismatch_rejected",
+    "executable_script_external_and_command_content_quarantined",
+    "active_add_remove_retarget_or_byte_mutation_rejected",
+    "activation_always_denied",
+    "no_partial_inventory_or_execution_fallback_after_failure"
+  ],
+  "implementation_files": [
+    "crates/hwpx-package/src/active_content.rs",
+    "crates/hwpx-package/src/reader.rs",
+    "crates/hwpx-package/src/lib.rs",
+    "crates/hwpx-package/tests/active_content.rs"
+  ],
+  "evidence_boundary": {
+    "package_inventory_implemented": true,
+    "activation_denial_implemented": true,
+    "opaque_binary_preservation_check": true,
+    "focused_rust_security_tests": "10/10 PASS",
+    "malicious_zip_regression_tests": "8/8 PASS",
+    "synthetic_security_corpus_pass": true,
+    "actual_security_corpus": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "property_readback": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p08_08_implementation_complete": true,
+    "p08_08_green": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "synthetic_integration_passed",
+    "drawing_canvas_prerequisite": "component_pass",
+    "active_content_implementation": "pass",
+    "synthetic_security_corpus": "pass",
+    "actual_target": "not_run",
+    "p08_08": "implementation_complete_evidence_not_green",
+    "p08_08_green": false,
+    "p08": "in_progress",
+    "product_complete": false
+  }
+}
