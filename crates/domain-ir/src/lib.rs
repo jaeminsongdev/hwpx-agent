@@ -5,6 +5,7 @@ mod capability_router;
 mod document_graph;
 mod identity;
 mod math_ast;
+mod object_appearance;
 mod object_geometry;
 mod operation_plan;
 mod selector;
@@ -69,6 +70,18 @@ pub use math_ast::{
     MathDerivativeVariable, MathExpression, MathFunction, MathGreekLetter, MathLargeOperator,
     MathLetterCase, MathMatrixKind, MathNode, MathOperator, MathSourceSpan, MathStyleHint,
     MathSymbol, MathVariant,
+};
+pub use object_appearance::{
+    AlignStyle, AppearanceOperation, AppearanceTargetKind, ArrowSize, ArrowStyle, ClassicShadow,
+    ClassicShadowType, ColorTransform, ColorTransformKind, EffectColor, EffectScalar,
+    FillAppearance, GlowEffect, GradientFill, GradientType, HatchStyle as ObjectHatchStyle,
+    ImageAdjustment, ImageEffect, ImageFill, ImageFillMode, LineAppearance, LineEndCap,
+    LinePattern, OBJECT_APPEARANCE_SCHEMA_VERSION, ObjectAppearance, ObjectAppearanceBuilder,
+    ObjectAppearanceError, ObjectAppearanceLimitConfig, ObjectAppearanceLimits,
+    ObjectAppearancePlan, ObjectAppearanceReceipt, ObjectAppearanceRequest,
+    ObjectAppearanceRequestDraft, ObjectAppearanceResult, OutlineStyle, PictureEffects,
+    PictureShadow, PictureShadowStyle, ReflectionEffect, RgbColor, ScalarPair, SoftEdgeEffect,
+    TransparencyChannel, UnitFraction, UnitRange,
 };
 pub use object_geometry::{
     OBJECT_GEOMETRY_SCHEMA_VERSION, ObjectAffineMatrix, ObjectAnchor, ObjectComponentGeometry,
