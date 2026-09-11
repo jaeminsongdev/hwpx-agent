@@ -24,7 +24,7 @@
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | P07/P08 in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-01~07 asset, picture, geometry, six shape/text-box forms, 11 appearance rows, six composition operations and nine chart operations are component-pass; P08-07 is 10/10 focused-passed. Actual-target/visual evidence, package image-fill integrity and P08-08~09/P09 remain |
+| P07-P09 | P07/P08 in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-01~07 are component-pass; P08-08 exact canvas/clip/effects prerequisite is 10/10 focused-passed, while package active-content/security closure remains. Actual-target/visual evidence, image-fill integrity, P08-08~09 and P09 remain |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. Implement P08-08 at `max`: exact drawing-canvas, clip and effects transitions with complete object/resource preservation and state/flow drift rejection.
+1. Finish P08-08 at `max`: package-level opaque OLE/multimedia inventory, binary preservation, activation denial and tamper/security corpus; then implement P08-09's 58-row object conformance matrix.
 2. When the user can capture screens/approve saves, run one combined exact-target campaign: P07-07/08/09 plus remaining P06 target/render/differentials including corrected TABLE-032/033.
 3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
 

@@ -4,6 +4,7 @@ mod basic_shape;
 mod capability_router;
 mod chart_automation;
 mod document_graph;
+mod drawing_canvas;
 mod identity;
 mod math_ast;
 mod object_appearance;
@@ -72,6 +73,14 @@ pub use document_graph::{
     NodeCommon, Note, OpaqueExtension, OpaquePreservation, ParagraphNode, Properties,
     PropertyValue, Provenance, Reference, Resource, ResourceKind, ReviewEntry, Section,
     SecurityState, SourceAnchorHandle, Style, TableCell, TableNode,
+};
+pub use drawing_canvas::{
+    ActiveContentPolicy, CanvasBindings, CanvasBounds, CanvasIdentityReservation, CanvasNode,
+    CanvasNodeKind, CanvasPictureState, CanvasResource, CanvasResourceKind,
+    DRAWING_CANVAS_SCHEMA_VERSION, DrawingCanvasBuilder, DrawingCanvasError,
+    DrawingCanvasLimitConfig, DrawingCanvasLimits, DrawingCanvasOperation, DrawingCanvasPlan,
+    DrawingCanvasReceipt, DrawingCanvasRequest, DrawingCanvasRequestDraft, DrawingCanvasResult,
+    DrawingCanvasState, DrawingCanvasStateDraft, ImageClip,
 };
 pub use identity::{
     ArtifactId, BackendId, BackendOpaqueId, BookmarkId, CapabilityId, ChangeId, FieldId,

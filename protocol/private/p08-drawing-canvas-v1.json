@@ -1,0 +1,134 @@
+{
+  "schema_version": "hwpx-agent.drawing-canvas-contract/v1",
+  "state_schema_version": "hwpx-agent.drawing-canvas/v1",
+  "task": "P08-08",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_qualification": "implementation/p08/evidence/p08-08-drawing-canvas-source-qualification.v1.json",
+  "migration": "protocol/migrations/p08-drawing-canvas-v0-to-v1.md",
+  "policy": "implementation/p08/P08-08_DRAWING_CANVAS_POLICY.md",
+  "report": "implementation/p08/P08-08_DRAWING_CANVAS_REPORT.md",
+  "source_locks": [
+    {"path": "specs/work-breakdown-structure.json", "sha256": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2"},
+    {"path": "docs/03_document_model/08_drawing_image_chart.md", "sha256": "ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b"},
+    {"path": "docs/04_feature_catalog/09_obj.md", "sha256": "e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8"},
+    {"path": "docs/04_feature_catalog/contracts/09_obj_contracts.md", "sha256": "e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2"},
+    {"path": "docs/09_roadmap/P08_images_shapes_drawing_charts.md", "sha256": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path": "implementation/p08/P08-05_OBJECT_APPEARANCE_POLICY.md", "sha256": "1d05d280c00b8e61f216ed44fcfe4ed7ea4fcbb4ba86ac72be7fcf806b3da68a"},
+    {"path": "implementation/p08/P08-05_OBJECT_APPEARANCE_REPORT.md", "sha256": "e7da98298637eaae4083318cb6d496c6bbb193533e580d466b63d0a663a7f090"},
+    {"path": "protocol/private/p08-object-appearance-v1.json", "sha256": "1221f7689deedcc6ddbb309433ee8e84065b003e6a7dd80be5adee76b1a43939"},
+    {"path": "implementation/p08/P08-06_OBJECT_COMPOSITION_POLICY.md", "sha256": "e6a2a3a9eeabd182554ec6db60397d5f0b1bcf060beb2d2e2415b376b5e74441"},
+    {"path": "protocol/private/p08-object-composition-v1.json", "sha256": "f7e8a10f6cb82b327bb6135c14d7f68dfd0acd226228360d0d75eac8e6de386b"},
+    {"path": "implementation/p08/P08-07_CHART_AUTOMATION_POLICY.md", "sha256": "71d35105551af3bd0ccaca52c7dba4c68cfe97a7496c7c10205ee36bcaca7bda"},
+    {"path": "protocol/private/p08-chart-automation-v1.json", "sha256": "9628cdcea4d84f3bb7cc4622fca0588713054967e5ca8da1388cd6dd780f23f0"}
+  ],
+  "scope": "exact_canvas_clip_effect_component",
+  "operations": {
+    "obj.drawing_object_insert": "append_one_complete_reserved_root_canvas_subtree",
+    "obj.crop": "replace_one_picture_clip_and_payload_binding_only",
+    "obj.picture_effects": "internal_checkpoint_replace_one_picture_effects_and_appearance_binding_only"
+  },
+  "complete_state": {
+    "document_identity": true,
+    "ordered_container_tree": true,
+    "distinct_logical_native_object_native_instance_ids": true,
+    "parent_ordinal_group_level": true,
+    "bounds_visibility_printability_protection": true,
+    "geometry_payload_appearance_composition_opaque_bindings": true,
+    "closed_resource_inventory": true,
+    "opaque_document_state_binding": true
+  },
+  "picture": {
+    "exact_image_resource": true,
+    "original_pixel_dimensions": true,
+    "clip": "nonempty_ordered_rectangle_inside_original_dimensions",
+    "effects": ["shadow", "glow", "soft_edge", "reflection"],
+    "effect_model_reused_from": "hwpx-agent.object-appearance/v1"
+  },
+  "resources": {
+    "kinds": ["embedded_image", "linked_image", "image_fill", "opaque_ole", "preview"],
+    "relationship_ids_distinct": true,
+    "content_sha256_and_byte_length": true,
+    "linked_target_digest_without_fetch": true,
+    "every_reference_resolves": true,
+    "every_inventory_entry_referenced": true
+  },
+  "active_content": {
+    "opaque_ole_exactly_one_per_ole_node": true,
+    "activation_policy": "blocked_only",
+    "creation": false,
+    "activation": false,
+    "semantic_property_edit": false
+  },
+  "preservation": {
+    "insert_preserves_all_existing_nodes_and_resources": true,
+    "clip_changes_only_clip_and_payload_sha": true,
+    "effects_changes_only_effects_and_appearance_sha": true,
+    "clip_and_effects_preserve_document_flow": true,
+    "no_op_rejected": true,
+    "coupled_or_untargeted_mutation_rejected": true
+  },
+  "planning": {
+    "request_rechecks_source_target_and_named_delta": true,
+    "plan_rechecks_current_state_and_flow": true,
+    "build_rechecks_current_state_flow_target_and_seal": true,
+    "source_state_sha256": true,
+    "before_after_document_flow_sha256": true,
+    "private_plan_tamper_rejected": true
+  },
+  "input_hardening": {
+    "bounded_json": true,
+    "duplicate_keys_rejected": true,
+    "unknown_fields_rejected": true,
+    "nfc_identifiers": true,
+    "finite_counts_depth_coordinates_dimensions_and_bytes": true,
+    "redacted_debug": true
+  },
+  "failure_policy": [
+    "invalid_or_hostile_limits_rejected",
+    "duplicate_unknown_malformed_non_nfc_or_oversized_json_rejected",
+    "duplicate_zero_or_colliding_logical_native_and_relationship_identity_rejected",
+    "noncontainer_root_parent_cycle_depth_gap_or_empty_container_rejected",
+    "dangling_or_unreferenced_resource_and_invalid_media_binding_rejected",
+    "empty_reversed_or_out_of_original_bounds_clip_rejected",
+    "invalid_or_empty_picture_effect_set_rejected",
+    "ole_without_exact_opaque_binary_or_blocked_activation_rejected",
+    "insert_without_exact_complete_fresh_reservation_and_connected_root_rejected",
+    "noop_coupled_or_untargeted_mutation_rejected",
+    "source_state_or_document_flow_drift_rejected_at_request_plan_and_build",
+    "private_plan_tampering_rejected_by_exact_recomputation",
+    "no_partial_result_or_activation_fallback_after_failure"
+  ],
+  "implementation_files": [
+    "crates/domain-ir/src/drawing_canvas.rs",
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/tests/drawing_canvas.rs"
+  ],
+  "evidence_boundary": {
+    "exact_canvas_state_component_pass": true,
+    "focused_rust_tests": "10/10 PASS",
+    "direct_hwpx": false,
+    "synthetic_package": false,
+    "security_corpus": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "property_readback": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p08_08_complete": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "exact_canvas_state": "pass",
+    "direct_hwpx": "not_run",
+    "security_corpus": "not_run",
+    "p08_08": "checkpoint_component_pass_task_incomplete",
+    "p08_08_complete": false,
+    "p08": "in_progress",
+    "product_complete": false
+  }
+}

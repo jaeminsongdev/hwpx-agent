@@ -1,0 +1,59 @@
+{
+  "schema_version": "hwpx-agent.p08-drawing-canvas-source-qualification/v1",
+  "captured_at": "2026-09-12",
+  "public_model": {
+    "repository": "hancom-io/owpml-model",
+    "local_probe_root": "D:/개발데이터/Temp/hwpx-owpml-model-probe-20260912",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "source_locks": {
+      "OWPML/Class/Para/ContainerType.h": "09e1a6aab9f867c3e1ff2d1ae80953244d46d47b127b6e6d5d0478c3a74cf22c",
+      "OWPML/Class/Para/ContainerType.cpp": "7a37dd1a45bc0b15af58a153eae92b4fe9d894df379993fd1af72bbbf16e8055",
+      "OWPML/Class/Para/PictureType.h": "d483022e95171dfa3ad5af0e27d99029f188a4c7e834deed0e2ca89fa88f193c",
+      "OWPML/Class/Para/PictureType.cpp": "07475a21f4895f9f6f6d3c566155aedf494a3782976a6ce399bcc4e056b8babe",
+      "OWPML/Class/Para/imgClip.h": "89dd01b9ad6cae689c5de0aa6f208ba013a68be28badce806bdb804c5c26b278",
+      "OWPML/Class/Para/imgClip.cpp": "46741f03adbe4bfbfec409348ebdbf7f26e9c7de974cad51de620e6a4a2aeb9f",
+      "OWPML/Class/Para/EffectsType.h": "6e80f6cd736daad5c7b499e1b9f756c434bfb5e755c53a2be2d95a996e8c5958",
+      "OWPML/Class/Para/EffectsType.cpp": "17f00e7b2557fbb068575e147ffa7c5a07c5eede80160f59661f896d25f14bd5",
+      "OWPML/Class/Para/OLEType.h": "fa52c5168c6723f79e3bd074fb735d7101c18ac8e1f676b914e2d2c457a122b1",
+      "OWPML/Class/Para/OLEType.cpp": "ca455aaac391862a420574aa623274619dc29fc7b23332b48d5c25a6b9516fc8"
+    }
+  },
+  "qualified_facts": [
+    "ContainerType recursively owns containers and admitted drawing, picture and OLE children",
+    "PictureType owns imgClip and effects children",
+    "imgClip serializes left right top and bottom integer attributes",
+    "EffectsType owns shadow glow softEdge and reflection children",
+    "OLEType binds binaryItemIDRef and object metadata"
+  ],
+  "implementation_sha256": {
+    "crates/domain-ir/src/drawing_canvas.rs": "bc0ac8f666cf1c5be5963ec5c1e0cfea9a59631f202b04026aac5069a1fc18bf",
+    "crates/domain-ir/src/lib.rs": "d7571a306e93f96a3e5b0795d6c4d1029e2797de97e50168b42c6a2dfef4652f",
+    "crates/domain-ir/tests/drawing_canvas.rs": "c96670bda68975e02c9ce1d90c33797290581055d21dde02faa964ce0f3e96b9"
+  },
+  "tests": {
+    "focused_rust": "10/10 PASS",
+    "private_contract": "4/4 PASS",
+    "p08_python": "32/32 PASS",
+    "workspace_full": "PASS (3 existing isolated qualification tests ignored)",
+    "clippy": "PASS (-D warnings)",
+    "fmt_diff": "PASS"
+  },
+  "claims": {
+    "exact_canvas_state_component_pass": true,
+    "insert_clip_effect_transitions": true,
+    "opaque_ole_activation_blocked_by_model": true,
+    "direct_hwpx": false,
+    "synthetic_package": false,
+    "security_corpus": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "property_readback": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p08_08_complete": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}
