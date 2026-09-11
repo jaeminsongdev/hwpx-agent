@@ -1,0 +1,105 @@
+{
+  "schema_version": "hwpx-agent.math-ast-contract/v1",
+  "model_schema_version": "hwpx-agent.math-ast/v1",
+  "normalization_version": "hwpx-agent.math-ast-normalization/v1",
+  "scope": "p07_01_pure_bounded_semantic_math_ast_local_component",
+  "task": "P07-01",
+  "feature_boundary": [
+    "EQ-006"
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/03_document_model/07_equation_model.md",
+      "sha256": "939e6973fcb7af1119ac496801af0e3848cc39021224b2f760113991ade0c43e"
+    },
+    {
+      "path": "docs/04_feature_catalog/08_eq.md",
+      "sha256": "d515b2c63feb7797c55a2634fad6faf1b20c4644f16c42b26288551869e7975b"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/08_eq_contracts.md",
+      "sha256": "dfd3a1615ddb7f61cae87308deb0bc8237f03f194a63f1bff9304919fa88119b"
+    },
+    {
+      "path": "docs/09_roadmap/P07_native_equation_engine.md",
+      "sha256": "b8e7632e256a7112221812643f3dd24833e0d9bd59568cbdf23ec292a298bf9d"
+    },
+    {
+      "path": "docs/12_implementation_guides/06_native_equation_pipeline.md",
+      "sha256": "fca1909edfd0a7078bf3656d583578df15ab5bde56161a963984d6784e1fcb5b"
+    }
+  ],
+  "migration": "protocol/migrations/p07-math-ast-v0-to-v1.md",
+  "policy": "implementation/p07/P07-01_MATH_AST_POLICY.md",
+  "report": "implementation/p07/P07-01_MATH_AST_REPORT.md",
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/math_ast.rs",
+    "crates/domain-ir/tests/math_ast.rs",
+    "implementation/p07/P07-01_MATH_AST_POLICY.md",
+    "implementation/p07/P07-01_MATH_AST_REPORT.md"
+  ],
+  "semantics": {
+    "nodes": "typed_literals_operators_functions_fraction_script_root_accent_annotation_large_operator_derivative_delimiter_matrix_cases_aligned_combinatorial_set_builder",
+    "source_spans": "nonempty_end_exclusive_within_exact_source_length_and_parent_contained",
+    "normalization": "exact_decimal_unicode_nfc_empty_style_elision_positive_elision_row_and_associative_flattening_no_operand_reorder_degree_two_root_equivalence",
+    "semantic_identity": "version_bound_projection_excludes_source_length_spans_and_visual_style_but_preserves_operator_order_content_and_structure",
+    "serialization": "deterministic_complete_normalized_bounded_json_and_sha256",
+    "ambiguity": "source_adapters_must_return_candidates_and_confidence_before_ast_admission"
+  },
+  "default_limits": {
+    "source_bytes": 1048576,
+    "nodes": 8192,
+    "depth": 128,
+    "children_per_node": 512,
+    "matrix_rows": 256,
+    "matrix_columns": 256,
+    "string_bytes": 65536,
+    "total_string_bytes": 1048576,
+    "serialized_bytes": 4194304
+  },
+  "failure_policy": [
+    "invalid_or_over_ceiling_limits_rejected",
+    "empty_oversized_malformed_unknown_or_duplicate_json_rejected",
+    "unsupported_schema_or_normalization_version_rejected",
+    "zero_oversized_or_inconsistent_source_length_rejected",
+    "empty_reversed_out_of_source_or_noncontained_span_rejected",
+    "malformed_number_identifier_text_or_named_function_rejected",
+    "wrong_operator_function_or_collection_arity_rejected",
+    "empty_script_delimiter_limit_derivative_matrix_cases_or_aligned_shape_rejected",
+    "nonrectangular_or_nonsquare_determinant_matrix_rejected",
+    "nonleaf_derivative_variable_or_zero_order_rejected",
+    "node_depth_child_matrix_string_total_string_or_serialized_limit_rejected",
+    "allocation_arithmetic_or_serialization_failure_rejected",
+    "no_partial_ast_returned"
+  ],
+  "not_claimed": {
+    "latex_adapter": false,
+    "mathml_adapter": false,
+    "eqedit_parser_or_compiler": false,
+    "equation_node_integration": false,
+    "direct_hwpx_adapter": false,
+    "package_mutation_or_preservation": false,
+    "native_object_or_semantic_readback": false,
+    "hancom_2020_target_build": false,
+    "save_reopen_or_editor_smoke": false,
+    "page_layout_or_render": false,
+    "automation_or_differential": false,
+    "p07_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "p07": "in_progress",
+    "product_complete": false
+  }
+}

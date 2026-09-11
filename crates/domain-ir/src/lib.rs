@@ -3,6 +3,7 @@
 mod capability_router;
 mod document_graph;
 mod identity;
+mod math_ast;
 mod operation_plan;
 mod selector;
 mod semantic_diff;
@@ -51,6 +52,14 @@ pub use identity::{
     ArtifactId, BackendId, BackendOpaqueId, BookmarkId, CapabilityId, ChangeId, FieldId,
     IdempotencyKey, IdentityError, LogicalNodeId, MAX_TYPED_ID_BYTES, OperationId, PlanId,
     ProjectId, ResourceId, RevisionId, StyleId, TargetProfileId, TransactionId,
+};
+pub use math_ast::{
+    MATH_AST_NORMALIZATION_VERSION, MATH_AST_SCHEMA_VERSION, MathAccent, MathAlignedLine,
+    MathAnnotationKind, MathAst, MathAstDraft, MathAstError, MathAstLimitConfig, MathAstLimits,
+    MathCase, MathColor, MathCombinatorialKind, MathDelimiter, MathDerivativeKind,
+    MathDerivativeVariable, MathExpression, MathFunction, MathGreekLetter, MathLargeOperator,
+    MathLetterCase, MathMatrixKind, MathNode, MathOperator, MathSourceSpan, MathStyleHint,
+    MathSymbol, MathVariant,
 };
 pub use operation_plan::{
     ArgumentDraft, ArgumentKind, ArgumentSource, ArgumentSpec,

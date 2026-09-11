@@ -24,7 +24,7 @@
 | P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | sequentially open | equation, graphics and fields follow P06 dependencies |
+| P07-P09 | P07 in progress | P07-01 bounded MathAst component passes locally; source adapters, native equation target evidence, graphics and fields remain |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -114,7 +114,7 @@
 
 ## Context pack and archive pointers
 
-- Read first: this file, active P06-07 policies/reports, P06-09 conformance authorities, and `implementation/p05/P05_GATE_REPORT.md`.
+- Read first: this file, active P06 authorities, P07-01 MathAst policy/report, and `implementation/p05/P05_GATE_REPORT.md`.
 - P17 authorities: frozen legacy/v40-v47 reports, `P17-06_GIT_MIRROR_EFFECT_V13.md`, frozen durable-push v15/durable-pull v17 qualifications, Windows custody v18, remote TLS v19, lifecycle v21, broker v22/v24 and issuer v23.
 - Detailed closed-card history is in the named reports and local Git history; no remote push is implied.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.
