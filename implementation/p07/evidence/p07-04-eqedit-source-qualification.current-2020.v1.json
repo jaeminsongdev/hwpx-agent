@@ -1,0 +1,130 @@
+{
+  "schema_version": "hwpx-agent.eqedit-source-qualification/v1",
+  "task": "P07-04",
+  "scope": "current_pc_installed_hangul_2020_eqedit_vocabulary_source_qualification_only",
+  "recorded_date": "2026-09-11",
+  "target": {
+    "product": "Hangul 2020",
+    "version": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "other_versions": "not_qualified"
+  },
+  "collection": {
+    "installation_modified": false,
+    "help_extraction": "hh.exe_-decompile_to_disposable_temporary_directory",
+    "temporary_output_is_contract_input": false,
+    "user_document_opened_or_modified": false,
+    "network_or_application_resolver": false
+  },
+  "installed_artifacts": [
+    {
+      "name": "Hwp.exe",
+      "bytes": 2321432,
+      "sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+      "file_version": "11.0.0.9136"
+    },
+    {
+      "name": "Hwp.chm (ko-KR resource)",
+      "bytes": 9628648,
+      "sha256": "a38290fe91bfe4888f503f8fb906ce563241479a722162aa2ea571eed03afbc1",
+      "file_version": "not_applicable"
+    },
+    {
+      "name": "EqEditor.dll",
+      "bytes": 71192,
+      "sha256": "146de2f857e3496ef9fc9d94eacb7b28a6f12985159650d4edba4771587385d9",
+      "file_version": "1.0.0.0"
+    },
+    {
+      "name": "eqeditor_commands.xml",
+      "bytes": 10594,
+      "sha256": "04161f3919f1c71a4bf8bfc1fb34f95d488ee2c11f8c6a659510b018181fd183",
+      "file_version": "not_applicable"
+    },
+    {
+      "name": "eqeditor_data_sources.xml",
+      "bytes": 16496,
+      "sha256": "776f261182125b2a11a22cdedd6c6bcc1ae2d10c133dd4cd06699d808db6564a",
+      "file_version": "not_applicable"
+    }
+  ],
+  "extracted_help_members": [
+    {
+      "name": "equation(script).htm",
+      "bytes": 3024,
+      "sha256": "2a2e3da93959f70e4778f73088d14c0de10a855048aa5c3f83a26755f3b69554"
+    },
+    {
+      "name": "equation(explanation).htm",
+      "bytes": 9423,
+      "sha256": "ba00f92916494f8c42f69291d7111a6af0d2217a48238e9e352c3c5f6c57e242"
+    },
+    {
+      "name": "equation(rule).htm",
+      "bytes": 3346,
+      "sha256": "c7bc18ce1b63049c838c4bc39e7f980278f73498e65f259a7c678d7ee1d9cb92"
+    },
+    {
+      "name": "equation(font).htm",
+      "bytes": 2659,
+      "sha256": "2c473b347f8b16db8b6af0ef689b4ff841d0f04c2b58e3b4a5ecd0b6e2249261"
+    }
+  ],
+  "official_public_sources": [
+    {
+      "kind": "help",
+      "url": "https://help.hancom.com/hoffice/multi/ko_kr/hwp/insert/equation/equation(explanation).htm"
+    },
+    {
+      "kind": "equation_format_revision_1_2",
+      "url": "https://cdn.hancom.com/link/docs/%ED%95%9C%EA%B8%80%EB%AC%B8%EC%84%9C%ED%8C%8C%EC%9D%BC%ED%98%95%EC%8B%9D_%EC%88%98%EC%8B%9D_revision1.2.pdf"
+    },
+    {
+      "kind": "open_format_download_page",
+      "url": "https://swlab.hancom.com/support/downloadCenter/hwpOwpml"
+    }
+  ],
+  "observations": {
+    "grouping": "braces_group_quote_groups_long_text_hash_rows_ampersand_columns",
+    "visual_spacing": "tilde_and_backtick_are_unmodeled_and_rejected",
+    "font_switch": "backslash_is_unmodeled_and_rejected",
+    "current_command_families": "fraction_root_script_function_symbol_accent_large_operator_matrix_cases_pile_binomial_delimiter",
+    "integral_tokens": [
+      "INT",
+      "DINT",
+      "TINT",
+      "OINT",
+      "ODINT",
+      "OTINT"
+    ],
+    "removed_legacy_commands": [
+      "FROM",
+      "TO",
+      "SCALE",
+      "PHANTOM"
+    ]
+  },
+  "predecessor_fixture": {
+    "fixture_path": "crates/hwpx-package/examples/p06_07_table_pagination_target_fixture.rs",
+    "report_path": "implementation/p06/P06-07_TARGET_READBACK_REPORT.md",
+    "script_sha256": "a25940543dddf8e6a34d6dd80b1f03aea0821e44ea668514bafc8f02f8167dcf",
+    "licensed_hangul_2020_save_reopen_predecessor": true,
+    "new_engine_executed_in_predecessor": false
+  },
+  "claims": {
+    "installed_source_qualification": true,
+    "finite_profile_only": true,
+    "full_eqedit": false,
+    "actual_hwpx": false,
+    "actual_hangul_engine_execution": false,
+    "native_equation_readback": false,
+    "save_reopen": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p07_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}
