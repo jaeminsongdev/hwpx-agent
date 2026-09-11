@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 import sys
@@ -18,6 +17,7 @@ from tools.p17 import frozen_current_source_v47 as frozen  # noqa: E402
 
 CONTRACT_RELATIVE = "protocol/private/p17-frozen-current-source-v47-v1.json"
 COMPONENT_CONTRACT_RELATIVE = "protocol/private/p17-remote-credential-broker-v1.json"
+FROZEN_AUTHORITY_COMMIT = "305a3130dcfeefa7858be78456b09a092ca73209"
 SOURCE_PATHS = (
     "implementation/p17/P17_FROZEN_CURRENT_WORKSPACE_SOURCE_V47.md",
     "protocol/migrations/p17-current-workspace-source-v47-to-frozen-v1.md",
@@ -76,21 +76,21 @@ def require(condition: bool, code: str) -> None:
         raise ContractError(code)
 
 
-def digest(path: Path) -> str:
-    require(path.is_file() and 0 < path.stat().st_size <= 4_000_000, "source.file")
-    with path.open("rb") as stream:
-        return hashlib.file_digest(stream, "sha256").hexdigest()
-
-
 def source_locks(root: Path) -> list[dict[str, Any]]:
-    return [
-        {
-            "path": relative,
-            "bytes": (root / relative).stat().st_size,
-            "sha256": digest(root / relative),
-        }
-        for relative in SOURCE_PATHS
-    ]
+    locks: list[dict[str, Any]] = []
+    for relative in SOURCE_PATHS:
+        try:
+            raw = frozen.git_blob(root, FROZEN_AUTHORITY_COMMIT, relative)
+        except frozen.FrozenSourceV47Error as error:
+            raise ContractError(f"source.{error}") from error
+        locks.append(
+            {
+                "path": relative,
+                "bytes": len(raw),
+                "sha256": frozen.digest(raw),
+            }
+        )
+    return locks
 
 
 def load_unique(path: Path) -> dict[str, Any]:
@@ -155,12 +155,11 @@ def validate_document(contract: dict[str, Any], root: Path = ROOT) -> None:
         },
         "contract.qualification",
     )
-    component = root / COMPONENT_CONTRACT_RELATIVE
     require(
         contract.get("component_contract")
         == {
             "path": COMPONENT_CONTRACT_RELATIVE,
-            "sha256": digest(component),
+            "sha256": frozen.COMPONENT_CONTRACT_SHA256,
         },
         "contract.component",
     )
@@ -169,6 +168,13 @@ def validate_document(contract: dict[str, Any], root: Path = ROOT) -> None:
 
 
 def verify(root: Path = ROOT) -> dict[str, Any]:
+    try:
+        frozen.verify_commit(root, FROZEN_AUTHORITY_COMMIT)
+        frozen.require_ancestor(
+            root, frozen.QUALIFICATION_COMMIT, FROZEN_AUTHORITY_COMMIT
+        )
+    except frozen.FrozenSourceV47Error as error:
+        raise ContractError(f"authority.{error}") from error
     contract = load_unique(root / CONTRACT_RELATIVE)
     validate_document(contract, root)
     try:
