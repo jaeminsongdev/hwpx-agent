@@ -4,7 +4,10 @@ use std::fmt::{self, Debug};
 use std::io::{Read, Seek};
 
 use domain_ir::{MathAst, MathAstDraft, MathAstLimits};
-use equation_engine::{EQEDIT_PROFILE_VERSION, EqEditEngine, EqEditLimits};
+use equation_engine::{
+    EQEDIT_PROFILE_VERSION, EQUATION_LAYOUT_PROFILE_VERSION, EqEditEngine, EqEditLimits,
+    EquationLayoutEstimate, EquationLayoutMode, EquationLayoutSource,
+};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest as _, Sha256};
 use thiserror::Error;
@@ -152,6 +155,24 @@ pub struct EquationExtent {
     pub source: EquationExtentSource,
     pub source_evidence_sha256: Option<String>,
     pub render_required: bool,
+}
+
+impl EquationExtent {
+    /// Converts one opaque P07-07 layout result into the HWPX extent wire shape.
+    #[must_use]
+    pub fn from_layout_estimate(estimate: &EquationLayoutEstimate) -> Self {
+        Self {
+            width_hwpunit: estimate.width_hwpunit(),
+            height_hwpunit: estimate.height_hwpunit(),
+            source: match estimate.source() {
+                EquationLayoutSource::TargetReadback => EquationExtentSource::TargetReadback,
+                EquationLayoutSource::VerifiedEstimator => EquationExtentSource::ValidatedEstimator,
+                EquationLayoutSource::Provisional => EquationExtentSource::Provisional,
+            },
+            source_evidence_sha256: estimate.source_evidence_sha256().map(str::to_owned),
+            render_required: estimate.render_required(),
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -343,6 +364,38 @@ impl EquationHwpxRequest {
         current_document_flow_sha256: &str,
         limits: EquationHwpxLimits,
     ) -> Result<Self, EquationHwpxError> {
+        Self::from_draft_internal(draft, source, current_document_flow_sha256, None, &limits)
+    }
+
+    /// Validates a draft while binding its extent to one opaque P07-07 estimate.
+    ///
+    /// # Errors
+    ///
+    /// Applies [`Self::from_draft`] checks and additionally rejects semantic, layout, base-unit,
+    /// baseline, source, evidence, or extent drift from the supplied estimate.
+    pub fn from_draft_with_layout_estimate(
+        draft: EquationHwpxRequestDraft,
+        source: &EquationHwpxSource,
+        current_document_flow_sha256: &str,
+        estimate: &EquationLayoutEstimate,
+        limits: EquationHwpxLimits,
+    ) -> Result<Self, EquationHwpxError> {
+        Self::from_draft_internal(
+            draft,
+            source,
+            current_document_flow_sha256,
+            Some(estimate),
+            &limits,
+        )
+    }
+
+    fn from_draft_internal(
+        draft: EquationHwpxRequestDraft,
+        source: &EquationHwpxSource,
+        current_document_flow_sha256: &str,
+        estimate: Option<&EquationLayoutEstimate>,
+        limits: &EquationHwpxLimits,
+    ) -> Result<Self, EquationHwpxError> {
         if draft.schema_version != EQUATION_HWPX_SCHEMA_VERSION {
             return Err(EquationHwpxError::UnsupportedVersion);
         }
@@ -362,7 +415,6 @@ impl EquationHwpxRequest {
             require_digest(digest)?;
         }
         validate_style(&draft.style)?;
-        validate_extent(&draft.extent, &limits)?;
         if draft.object_id == 0 || draft.object_id > limits.native.object_id {
             return Err(EquationHwpxError::InvalidObjectId);
         }
@@ -375,6 +427,14 @@ impl EquationHwpxRequest {
         if compiled.script_length_bytes() as usize > limits.native.script_bytes {
             return Err(EquationHwpxError::ScriptLimit);
         }
+        validate_extent(
+            &draft.extent,
+            draft.layout,
+            &draft.style,
+            compiled.semantic_sha256(),
+            estimate,
+            limits,
+        )?;
         let request = Self {
             schema_version: EQUATION_HWPX_SCHEMA_VERSION,
             profile_id: EQUATION_HWPX_PROFILE_ID,
@@ -397,7 +457,7 @@ impl EquationHwpxRequest {
             math_ast,
         };
         validate_request_source(&request, source, current_document_flow_sha256)?;
-        let _ = request.canonical_json(limits)?;
+        let _ = request.canonical_json(*limits)?;
         Ok(request)
     }
 
@@ -1185,21 +1245,57 @@ fn validate_style(style: &EquationStyle) -> Result<(), EquationHwpxError> {
 
 fn validate_extent(
     extent: &EquationExtent,
+    layout: EquationLayout,
+    style: &EquationStyle,
+    semantic_sha256: &str,
+    estimate: Option<&EquationLayoutEstimate>,
+    limits: &EquationHwpxLimits,
+) -> Result<(), EquationHwpxError> {
+    validate_extent_bounds(extent, limits)?;
+    let Some(estimate) = estimate else {
+        // The legacy JSON and P07-05 constructor remains provisional-only. Verified layout can
+        // enter the lowerer only through the opaque P07-07 estimate boundary below.
+        if extent.source != EquationExtentSource::Provisional
+            || extent.source_evidence_sha256.is_some()
+            || !extent.render_required
+        {
+            return Err(EquationHwpxError::InvalidExtent);
+        }
+        return Ok(());
+    };
+    let expected_layout = match layout {
+        EquationLayout::Inline => EquationLayoutMode::Inline,
+        EquationLayout::Display => EquationLayoutMode::Display,
+    };
+    let expected_source = match estimate.source() {
+        EquationLayoutSource::TargetReadback => EquationExtentSource::TargetReadback,
+        EquationLayoutSource::VerifiedEstimator => EquationExtentSource::ValidatedEstimator,
+        EquationLayoutSource::Provisional => EquationExtentSource::Provisional,
+    };
+    if estimate.profile_version() != EQUATION_LAYOUT_PROFILE_VERSION
+        || estimate.semantic_sha256() != semantic_sha256
+        || estimate.layout() != expected_layout
+        || estimate.base_unit() != style.base_unit
+        || estimate.baseline_percent() != style.baseline_percent
+        || estimate.width_hwpunit() != extent.width_hwpunit
+        || estimate.height_hwpunit() != extent.height_hwpunit
+        || expected_source != extent.source
+        || estimate.source_evidence_sha256() != extent.source_evidence_sha256.as_deref()
+        || estimate.render_required() != extent.render_required
+    {
+        return Err(EquationHwpxError::InvalidExtent);
+    }
+    Ok(())
+}
+
+fn validate_extent_bounds(
+    extent: &EquationExtent,
     limits: &EquationHwpxLimits,
 ) -> Result<(), EquationHwpxError> {
     if extent.width_hwpunit == 0
         || extent.height_hwpunit == 0
         || extent.width_hwpunit > limits.native.extent_hwpunit
         || extent.height_hwpunit > limits.native.extent_hwpunit
-    {
-        return Err(EquationHwpxError::InvalidExtent);
-    }
-    // P07-07 owns estimator qualification. P07-05 may carry the future enum in its versioned
-    // protocol, but it only admits an explicitly provisional extent and therefore cannot silently
-    // turn an arbitrary constant or caller assertion into verified layout evidence.
-    if extent.source != EquationExtentSource::Provisional
-        || extent.source_evidence_sha256.is_some()
-        || !extent.render_required
     {
         return Err(EquationHwpxError::InvalidExtent);
     }
@@ -1422,7 +1518,7 @@ fn read_equation_shape(
     };
     // Evidence digests are protocol bindings and are intentionally not written into HWPX. A
     // readback can prove native values but not reconstruct the external receipt.
-    validate_extent(&extent, limits)?;
+    validate_extent_bounds(&extent, limits)?;
     let ids = equation_ids(&document, limits)?;
     if ids.len() != equations.len() || !ids.contains(&object_id) {
         return Err(EquationHwpxError::ObjectIdCollision);

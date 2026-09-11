@@ -4,7 +4,7 @@ use std::io::{Cursor, Write};
 use domain_ir::{MathAstDraft, MathAstLimits};
 use equation_engine::{
     EQEDIT_ADAPTER_SCHEMA_VERSION, EQEDIT_PROFILE_VERSION, EqEditEngine, EqEditLimits,
-    EqEditParseRequestDraft,
+    EqEditParseRequestDraft, EquationLayoutEstimator, EquationLayoutLimits, EquationLayoutMode,
 };
 use hwpx_package::{
     BoundedZipReader, EQUATION_HWPX_PROFILE_ID, EQUATION_HWPX_SCHEMA_VERSION, EquationColor,
@@ -348,6 +348,57 @@ fn provisional_extent_is_mandatory_until_estimator_gate() -> TestResult {
     draft.extent.source_evidence_sha256 = Some("d".repeat(64));
     assert_code(
         EquationHwpxRequest::from_draft(draft, &source, FLOW_BEFORE, limits),
+        "equation_hwpx_invalid_extent",
+    );
+    Ok(())
+}
+
+#[test]
+fn opaque_layout_estimate_is_bound_to_semantic_layout_style_and_extent() -> TestResult {
+    let bytes = valid_archive(&display_section())?;
+    let (mut reader, graph) = open_graph(bytes)?;
+    let limits = EquationHwpxLimits::default();
+    let source = EquationHwpxBuilder::inspect_source(
+        &mut reader,
+        &graph,
+        SECTION_PATH,
+        0,
+        0,
+        EquationLayout::Display,
+        limits,
+    )?;
+    let mut draft = request_draft(&source, EquationLayout::Display, 9, &limits)?;
+    let estimator = EquationLayoutEstimator::provisional(
+        EquationLayoutLimits::default(),
+        MathAstLimits::default(),
+    );
+    let estimate = estimator.estimate(
+        draft.math_ast.clone(),
+        EquationLayoutMode::Display,
+        draft.style.base_unit,
+    )?;
+    draft.style.baseline_percent = estimate.baseline_percent();
+    draft.extent = EquationExtent::from_layout_estimate(&estimate);
+    assert!(
+        EquationHwpxRequest::from_draft_with_layout_estimate(
+            draft.clone(),
+            &source,
+            FLOW_BEFORE,
+            &estimate,
+            limits,
+        )
+        .is_ok()
+    );
+
+    draft.extent.width_hwpunit += 1;
+    assert_code(
+        EquationHwpxRequest::from_draft_with_layout_estimate(
+            draft,
+            &source,
+            FLOW_BEFORE,
+            &estimate,
+            limits,
+        ),
         "equation_hwpx_invalid_extent",
     );
     Ok(())

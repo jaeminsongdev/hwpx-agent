@@ -1,0 +1,101 @@
+{
+  "schema_version": "hwpx-agent.equation-layout-contract/v1",
+  "estimate_schema_version": "hwpx-agent.equation-layout/v1",
+  "qualification_schema_version": "hwpx-agent.equation-layout-qualification/v1",
+  "profile_id": "hwpx-agent.equation-layout.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
+  "task": "P07-07",
+  "scope": "typed_structural_equation_extent_baseline_estimator_and_hwpx_binding",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path": "WORK_BREAKDOWN_STRUCTURE.csv", "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path": "README.md", "sha256": "9811580c0c6c2d780d6b5d437318efc66a55e7081b04af7924c691e4bb214459"},
+    {"path": "docs/03_document_model/07_equation_model.md", "sha256": "939e6973fcb7af1119ac496801af0e3848cc39021224b2f760113991ade0c43e"},
+    {"path": "docs/04_feature_catalog/08_eq.md", "sha256": "d515b2c63feb7797c55a2634fad6faf1b20c4644f16c42b26288551869e7975b"},
+    {"path": "docs/04_feature_catalog/contracts/08_eq_contracts.md", "sha256": "dfd3a1615ddb7f61cae87308deb0bc8237f03f194a63f1bff9304919fa88119b"},
+    {"path": "docs/09_roadmap/P07_native_equation_engine.md", "sha256": "b8e7632e256a7112221812643f3dd24833e0d9bd59568cbdf23ec292a298bf9d"},
+    {"path": "docs/12_implementation_guides/06_native_equation_pipeline.md", "sha256": "fca1909edfd0a7078bf3656d583578df15ab5bde56161a963984d6784e1fcb5b"},
+    {"path": "implementation/p07/P07-05_NATIVE_EQUATION_HWPX_POLICY.md", "sha256": "cfcfb1ed2af559a60ed08038431d850a90e5b954011efb75fd32f245a5989478"},
+    {"path": "implementation/p07/P07-06_EQUATION_AUTOMATION_REPORT.md", "sha256": "85d8718ac4cd39b8957a3f08d5ecc6cb841c4873d65eceda090bbd3ac6725ba3"}
+  ],
+  "source_qualification": "implementation/p07/evidence/p07-07-equation-layout-source-qualification.current-2020.v1.json",
+  "target_qualification": null,
+  "migration": "protocol/migrations/p07-equation-layout-v0-to-v1.md",
+  "policy": "implementation/p07/P07-07_EQUATION_LAYOUT_POLICY.md",
+  "report": "implementation/p07/P07-07_EQUATION_LAYOUT_REPORT.md",
+  "implementation_files": [
+    "crates/equation-engine/src/lib.rs",
+    "crates/equation-engine/src/layout.rs",
+    "crates/equation-engine/tests/equation_layout.rs",
+    "crates/hwpx-package/src/equation.rs",
+    "crates/hwpx-package/tests/equation_hwpx.rs"
+  ],
+  "estimation_order": {
+    "exact": "trusted_semantic_layout_base_unit_target_readback_sample",
+    "model": "trusted_fixed_point_font_model_inside_complete_structural_envelope",
+    "fallback": "conservative_provisional_without_evidence_and_render_required"
+  },
+  "qualification": {
+    "minimum_inline_samples": 4,
+    "minimum_display_samples": 4,
+    "maximum_extent_error_hwpunit": 150,
+    "maximum_baseline_error_hwpunit": 50,
+    "maximum_ink_overflow_count": 0,
+    "maximum_clipping_count": 0,
+    "maximum_overlap_count": 0,
+    "maximum_silent_fallback_count": 0,
+    "all_pages_inspected": true,
+    "trusted_exact_byte_sha_required": true
+  },
+  "binding": {
+    "semantic": "normalized_math_ast_semantic_sha",
+    "layout": "inline_or_display",
+    "style": "base_unit_and_baseline_percent",
+    "extent": "width_height_source_evidence_and_render_required",
+    "hwpx": "opaque_estimate_required_for_target_readback_or_validated_estimator"
+  },
+  "default_limits": {
+    "qualification_bytes": 4194304,
+    "samples": 4096,
+    "base_unit": 100000,
+    "extent_hwpunit": 10000000,
+    "metric_units": 1000000,
+    "page_pixels": 100000,
+    "serialized_bytes": 4194304
+  },
+  "failure_policy": [
+    "zero_hard_ceiling_or_internally_inconsistent_limits_rejected",
+    "malformed_duplicate_unknown_oversized_or_untrusted_qualification_rejected",
+    "wrong_target_font_profile_evidence_or_corpus_identity_rejected",
+    "insufficient_inline_display_or_inconsistent_sample_accounting_rejected",
+    "baseline_error_overflow_clip_overlap_silent_fallback_or_partial_page_review_rejected",
+    "duplicate_sample_invalid_ink_box_extent_baseline_or_digest_rejected",
+    "math_ast_metric_limit_or_checked_arithmetic_overflow_rejected",
+    "outside_envelope_never_promoted_and_remains_render_required",
+    "raw_hwpx_extent_cannot_forge_verified_estimator_or_target_readback",
+    "debug_redacts_semantic_metrics_evidence_and_qualification_values",
+    "no_target_render_other_version_p07_production_or_product_promotion"
+  ],
+  "not_claimed": {
+    "actual_target_layout_calibration": false,
+    "verified_estimator_active": false,
+    "baseline_visual": false,
+    "ink_box_visual": false,
+    "render": false,
+    "p07_08_corpus": false,
+    "p07_09_editor_smoke": false,
+    "other_hangul_versions": false,
+    "p07_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "target_qualification": "not_run",
+    "actual_hangul": false,
+    "render": false,
+    "p07_07": "in_progress",
+    "p07": "in_progress",
+    "product_complete": false
+  }
+}

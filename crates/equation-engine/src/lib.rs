@@ -3,6 +3,7 @@
 mod automation;
 mod eqedit;
 mod latex;
+mod layout;
 mod mathml;
 
 pub use automation::{
@@ -22,6 +23,12 @@ pub use latex::{
     LatexAdapterLimitConfig, LatexAdapterLimits, LatexAmbiguity, LatexAmbiguityKind,
     LatexCandidate, LatexCandidateChoice, LatexMacroDefinition, LatexParseOutcome,
     LatexParseRequestDraft, LatexParseResult,
+};
+pub use layout::{
+    EQUATION_LAYOUT_PROFILE_VERSION, EQUATION_LAYOUT_QUALIFICATION_SCHEMA_VERSION,
+    EQUATION_LAYOUT_SCHEMA_VERSION, EquationLayoutError, EquationLayoutEstimate,
+    EquationLayoutEstimator, EquationLayoutLimitConfig, EquationLayoutLimits, EquationLayoutMode,
+    EquationLayoutSource,
 };
 pub use mathml::{
     MATHML_ADAPTER_SCHEMA_VERSION, MATHML_NAMESPACE, MATHML_PROFILE_VERSION, MathMlAdapter,
