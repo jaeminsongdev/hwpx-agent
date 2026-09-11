@@ -301,7 +301,7 @@ struct SampleMetrics {
     matrix_columns: u32,
 }
 
-impl From<SampleMetrics> for LayoutMetrics {
+impl From<SampleMetrics> for EquationLayoutMetrics {
     fn from(value: SampleMetrics) -> Self {
         Self {
             advance_units: value.advance_units,
@@ -357,6 +357,20 @@ impl EquationLayoutEstimator {
             math_limits,
             qualification: None,
         }
+    }
+
+    /// Measures the exact structural inputs used by provisional and qualified models.
+    ///
+    /// # Errors
+    ///
+    /// Rejects invalid ASTs, depth/node/unit overflows, and metric-limit violations.
+    pub fn measure(
+        &self,
+        draft: MathAstDraft,
+    ) -> Result<EquationLayoutMetrics, EquationLayoutError> {
+        let ast = MathAst::from_draft(draft, self.math_limits)
+            .map_err(|_| EquationLayoutError::MathAst)?;
+        measure_node(ast.root(), self.limits, 1)
     }
 
     /// Creates an estimator from an exact hash-pinned target qualification.
@@ -504,8 +518,8 @@ impl EquationLayoutEstimator {
     }
 }
 
-#[derive(Clone, Copy)]
-struct LayoutMetrics {
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+pub struct EquationLayoutMetrics {
     advance_units: u32,
     above_levels: u32,
     below_levels: u32,
@@ -515,7 +529,42 @@ struct LayoutMetrics {
     matrix_columns: u32,
 }
 
-impl LayoutMetrics {
+impl EquationLayoutMetrics {
+    #[must_use]
+    pub const fn advance_units(self) -> u32 {
+        self.advance_units
+    }
+
+    #[must_use]
+    pub const fn above_levels(self) -> u32 {
+        self.above_levels
+    }
+
+    #[must_use]
+    pub const fn below_levels(self) -> u32 {
+        self.below_levels
+    }
+
+    #[must_use]
+    pub const fn nodes(self) -> u32 {
+        self.nodes
+    }
+
+    #[must_use]
+    pub const fn depth(self) -> u32 {
+        self.depth
+    }
+
+    #[must_use]
+    pub const fn matrix_rows(self) -> u32 {
+        self.matrix_rows
+    }
+
+    #[must_use]
+    pub const fn matrix_columns(self) -> u32 {
+        self.matrix_columns
+    }
+
     fn leaf(advance_units: u32) -> Self {
         Self {
             advance_units: cmp::max(1, advance_units),
@@ -534,7 +583,7 @@ impl LayoutMetrics {
 }
 
 impl LayoutEnvelope {
-    fn admits(self, metrics: LayoutMetrics) -> bool {
+    fn admits(self, metrics: EquationLayoutMetrics) -> bool {
         metrics.nodes <= self.maximum_nodes
             && metrics.depth <= self.maximum_depth
             && metrics.advance_units <= self.maximum_advance_units
@@ -595,7 +644,7 @@ fn validate_qualification(
         require_digest(&sample.native_readback_sha256)?;
         require_digest(&sample.render_evidence_sha256)?;
         validate_sample(sample, limits)?;
-        let metrics = LayoutMetrics::from(sample.metrics);
+        let metrics = EquationLayoutMetrics::from(sample.metrics);
         if !draft.envelope.admits(metrics) {
             return Err(EquationLayoutError::InvalidQualification);
         }
@@ -710,7 +759,7 @@ fn validate_sample(
 }
 
 fn estimate_from_model(
-    metrics: LayoutMetrics,
+    metrics: EquationLayoutMetrics,
     base_unit: u32,
     layout: EquationLayoutMode,
     model: LayoutModel,
@@ -755,7 +804,7 @@ fn measure_node(
     node: &MathNode,
     limits: EquationLayoutLimits,
     depth: u32,
-) -> Result<LayoutMetrics, EquationLayoutError> {
+) -> Result<EquationLayoutMetrics, EquationLayoutError> {
     if depth > limits.0.metric_units {
         return Err(EquationLayoutError::MetricLimit);
     }
@@ -768,10 +817,10 @@ fn measure_node(
     );
     let mut metrics = match &node.expression {
         MathExpression::Number { value } | MathExpression::Text { value } => {
-            LayoutMetrics::leaf(character_units(value)?)
+            EquationLayoutMetrics::leaf(character_units(value)?)
         }
-        MathExpression::Identifier { name } => LayoutMetrics::leaf(character_units(name)?),
-        MathExpression::Symbol { .. } => LayoutMetrics::leaf(1),
+        MathExpression::Identifier { name } => EquationLayoutMetrics::leaf(character_units(name)?),
+        MathExpression::Symbol { .. } => EquationLayoutMetrics::leaf(1),
         MathExpression::Row { items } => combine_horizontal(items.iter(), limits, depth, 0)?,
         MathExpression::Apply { arguments, .. } => {
             combine_horizontal(arguments.iter(), limits, depth, 1)?
@@ -924,10 +973,10 @@ fn optional_metrics(
     node: Option<&MathNode>,
     limits: EquationLayoutLimits,
     depth: u32,
-) -> Result<LayoutMetrics, EquationLayoutError> {
+) -> Result<EquationLayoutMetrics, EquationLayoutError> {
     node.map_or_else(
         || {
-            Ok(LayoutMetrics {
+            Ok(EquationLayoutMetrics {
                 advance_units: 0,
                 above_levels: 0,
                 below_levels: 0,
@@ -946,7 +995,7 @@ fn combine_horizontal<'a>(
     limits: EquationLayoutLimits,
     depth: u32,
     extra_advance: u32,
-) -> Result<LayoutMetrics, EquationLayoutError> {
+) -> Result<EquationLayoutMetrics, EquationLayoutError> {
     let mut result = zero_metrics();
     result.advance_units = extra_advance;
     for node in nodes {
@@ -963,7 +1012,7 @@ fn combine_derivatives(
     variables: &[MathDerivativeVariable],
     limits: EquationLayoutLimits,
     depth: u32,
-) -> Result<LayoutMetrics, EquationLayoutError> {
+) -> Result<EquationLayoutMetrics, EquationLayoutError> {
     combine_horizontal(
         variables.iter().map(|value| value.variable.as_ref()),
         limits,
@@ -977,7 +1026,7 @@ fn measure_matrix(
     limits: EquationLayoutLimits,
     depth: u32,
     delimiter_advance: u32,
-) -> Result<LayoutMetrics, EquationLayoutError> {
+) -> Result<EquationLayoutMetrics, EquationLayoutError> {
     let mut result = zero_metrics();
     result.advance_units = delimiter_advance;
     let mut maximum_row = 0;
@@ -1006,8 +1055,8 @@ fn measure_matrix(
     Ok(result)
 }
 
-const fn zero_metrics() -> LayoutMetrics {
-    LayoutMetrics {
+const fn zero_metrics() -> EquationLayoutMetrics {
+    EquationLayoutMetrics {
         advance_units: 0,
         above_levels: 0,
         below_levels: 0,
@@ -1022,7 +1071,7 @@ fn measure_cases(
     cases: &[MathCase],
     limits: EquationLayoutLimits,
     depth: u32,
-) -> Result<LayoutMetrics, EquationLayoutError> {
+) -> Result<EquationLayoutMetrics, EquationLayoutError> {
     let rows = cases
         .iter()
         .map(|case| {
@@ -1040,7 +1089,7 @@ fn measure_aligned(
     lines: &[MathAlignedLine],
     limits: EquationLayoutLimits,
     depth: u32,
-) -> Result<LayoutMetrics, EquationLayoutError> {
+) -> Result<EquationLayoutMetrics, EquationLayoutError> {
     let rows = lines
         .iter()
         .map(|line| line.cells.clone())
@@ -1049,10 +1098,10 @@ fn measure_aligned(
 }
 
 fn merge_metrics(
-    left: LayoutMetrics,
-    right: LayoutMetrics,
-) -> Result<LayoutMetrics, EquationLayoutError> {
-    Ok(LayoutMetrics {
+    left: EquationLayoutMetrics,
+    right: EquationLayoutMetrics,
+) -> Result<EquationLayoutMetrics, EquationLayoutError> {
+    Ok(EquationLayoutMetrics {
         advance_units: cmp::max(left.advance_units, right.advance_units),
         above_levels: cmp::max(left.above_levels, right.above_levels),
         below_levels: cmp::max(left.below_levels, right.below_levels),

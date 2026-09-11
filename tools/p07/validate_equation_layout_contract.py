@@ -40,10 +40,10 @@ GATE = {
     "p07": "in_progress", "product_complete": False,
 }
 MARKERS = {
-    "crates/equation-engine/src/lib.rs": ("mod layout;", "EquationLayoutEstimator"),
+    "crates/equation-engine/src/lib.rs": ("mod layout;", "EquationLayoutEstimator", "EquationLayoutMetrics"),
     "crates/equation-engine/src/layout.rs": (
         'EQUATION_LAYOUT_SCHEMA_VERSION: &str = "hwpx-agent.equation-layout/v1"',
-        "EquationLayoutSource", "from_qualification_json", "measure_node",
+        "EquationLayoutSource", "from_qualification_json", "pub fn measure", "measure_node",
         "FailedVisualQualification", "finish_non_exhaustive",
     ),
     "crates/equation-engine/tests/equation_layout.rs": (
@@ -213,7 +213,7 @@ def validate_documents(root: Path, errors: list[str]) -> None:
     for relative, markers in {
         MIGRATION: ("There is no stored v0", "MUST NOT be relabeled", "opaque estimator result"),
         POLICY: ("unit_passed / target_not_run", "at least four inline", "Raw extent JSON cannot promote"),
-        REPORT: ("8/8 PASS", "13/13 PASS", "zero inline ink-box measurements"),
+        REPORT: ("9/9 PASS", "13/13 PASS", "zero inline ink-box measurements"),
     }.items():
         try:
             text = file(root, relative).read_text(encoding="utf-8")

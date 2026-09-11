@@ -44,8 +44,8 @@ pub use latex::{
 pub use layout::{
     EQUATION_LAYOUT_PROFILE_VERSION, EQUATION_LAYOUT_QUALIFICATION_SCHEMA_VERSION,
     EQUATION_LAYOUT_SCHEMA_VERSION, EquationLayoutError, EquationLayoutEstimate,
-    EquationLayoutEstimator, EquationLayoutLimitConfig, EquationLayoutLimits, EquationLayoutMode,
-    EquationLayoutSource,
+    EquationLayoutEstimator, EquationLayoutLimitConfig, EquationLayoutLimits,
+    EquationLayoutMetrics, EquationLayoutMode, EquationLayoutSource,
 };
 pub use mathml::{
     MATHML_ADAPTER_SCHEMA_VERSION, MATHML_NAMESPACE, MATHML_PROFILE_VERSION, MathMlAdapter,

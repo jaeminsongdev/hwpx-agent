@@ -191,6 +191,35 @@ fn unqualified_estimates_are_conservative_provisional_and_render_required() -> T
 }
 
 #[test]
+fn structural_metrics_are_exposed_without_reimplementing_the_model() -> TestResult {
+    let estimator = EquationLayoutEstimator::provisional(
+        EquationLayoutLimits::default(),
+        MathAstLimits::default(),
+    );
+    let metrics = estimator.measure(ast("abc"))?;
+    assert_eq!(metrics.advance_units(), 3);
+    assert_eq!(metrics.above_levels(), 0);
+    assert_eq!(metrics.below_levels(), 0);
+    assert_eq!(metrics.nodes(), 1);
+    assert_eq!(metrics.depth(), 1);
+    assert_eq!(metrics.matrix_rows(), 0);
+    assert_eq!(metrics.matrix_columns(), 0);
+    assert_eq!(
+        serde_json::to_value(metrics)?,
+        json!({
+            "advance_units": 3,
+            "above_levels": 0,
+            "below_levels": 0,
+            "nodes": 1,
+            "depth": 1,
+            "matrix_rows": 0,
+            "matrix_columns": 0
+        })
+    );
+    Ok(())
+}
+
+#[test]
 fn exact_sample_uses_target_readback_without_recomputing_extent() -> TestResult {
     let estimator = qualified(&qualification_value())?;
     let result = estimator.estimate(ast("x0"), EquationLayoutMode::Inline, 1000)?;

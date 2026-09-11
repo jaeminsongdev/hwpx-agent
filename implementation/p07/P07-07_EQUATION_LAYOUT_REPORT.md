@@ -11,7 +11,7 @@ combined P06/P07 current-target visual run requested by the user.
 
 ## Evidence
 
-- Layout Rust tests: 8/8 PASS. They cover provisional simple/fraction estimates, exact target sample
+- Layout Rust tests: 9/9 PASS. They cover typed structural metrics, provisional simple/fraction estimates, exact target sample
   reuse, in/out envelope behavior, trusted SHA, target/profile/visual/sample/ink-box tampering,
   malformed/duplicate/unknown/oversized qualification, limits, AST/base-unit errors, deterministic
   receipts, stable error codes and redacted Debug.

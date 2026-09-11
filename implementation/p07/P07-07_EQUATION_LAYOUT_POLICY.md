@@ -41,6 +41,10 @@ and strictly inside its rendered page.
 The two P07-06 display readbacks are useful candidates but have no inline or ink-box evidence, so
 they do not qualify this model. The dedicated current-target calibration remains `not_run`.
 
+The estimator exposes the same bounded typed structural metrics used internally by provisional and
+qualified models. Calibration tooling therefore cannot substitute a second metric implementation
+or silently diverge on advance, vertical levels, node/depth or matrix envelope accounting.
+
 ## HWPX binding
 
 Legacy P07-05 JSON construction remains provisional-only. A verified or target-readback extent can
