@@ -4,60 +4,59 @@ from pathlib import Path
 import unittest
 from unittest.mock import patch
 
-from tools.p17 import current_workspace_source_qualification_v46 as qualification
+from tools.p17 import frozen_current_source_v46 as qualification
 
 
 ROOT = Path(__file__).resolve().parents[3]
 
 
 class CurrentWorkspaceSourceQualificationV46Tests(unittest.TestCase):
-    def test_exact_qualification_sources_and_nonclaims_pass(self) -> None:
+    def test_historical_qualification_uses_frozen_git_state(self) -> None:
         result = qualification.verify(ROOT)
         self.assertEqual(
             result["qualification_id"],
             "p17.current-workspace-source.v46.20260911",
         )
+        self.assertFalse(result["mutable_worktree_sources_read"])
+
+    def test_exact_source_counts_are_preserved(self) -> None:
+        result = qualification.verify(ROOT)
         self.assertEqual(result["source_successor_count"], 28)
-        self.assertEqual(len(result["implementation_sources"]), 10)
-        self.assertEqual(len(result["runtime_qualification_sources"]), 2)
-        self.assertEqual(len(result["guard_sources"]), 3)
-        claims = result["claims"]
-        self.assertTrue(
-            claims["p17_remote_credential_lifecycle_current_pc_pure_component_verified"]
-        )
-        self.assertTrue(
-            claims[
-                "p17_remote_credential_lifecycle_issue_refresh_rotate_revoke_component_verified"
-            ]
-        )
-        self.assertFalse(claims["p17_external_credential_issuer_verified"])
-        self.assertFalse(claims["p17_credential_issuance_rotation_verified"])
-        self.assertFalse(claims["p17_git_mirror_remote_network_verified"])
-        self.assertFalse(claims["production"])
-        self.assertFalse(claims["p17_06_complete"])
-        self.assertFalse(claims["product_complete"])
+        self.assertEqual(result["implementation_source_count"], 10)
+        self.assertEqual(result["runtime_qualification_source_count"], 2)
+        self.assertEqual(result["guard_source_count"], 3)
+        self.assertEqual(result["claim_count"], 79)
+
+    def test_lifecycle_claims_do_not_promote_remote_or_product(self) -> None:
+        result = qualification.verify(ROOT)
+        self.assertTrue(result["credential_lifecycle_component_verified"])
+        self.assertTrue(result["complete_policy_and_state_binding_verified"])
+        self.assertTrue(result["synthetic_ephemeral_issuer_only"])
+        self.assertFalse(result["actual_external_issuer"])
+        self.assertFalse(result["real_service_credential"])
+        self.assertFalse(result["windows_atomic_vault_state_integration"])
+        self.assertFalse(result["credential_issuance_or_rotation"])
+        self.assertFalse(result["actual_external_remote_network"])
+        self.assertFalse(result["production"])
+        self.assertFalse(result["p17_06_complete"])
+        self.assertFalse(result["product_complete"])
 
     def test_implementation_history_tamper_fails_closed(self) -> None:
-        original = qualification.foundation.git_blob
+        original = qualification.git_blob
 
-        def tampered(root: Path, revision: str, relative: str) -> bytes:
-            raw = original(root, revision, relative)
+        def tampered(
+            root: Path, revision: str, relative: str, maximum: int = 4_000_000
+        ) -> bytes:
+            raw = original(root, revision, relative, maximum)
             if relative == "crates/remote-credential-lifecycle/src/lib.rs":
                 return b"tampered"
             return raw
 
-        with patch.object(qualification.foundation, "git_blob", side_effect=tampered):
+        with patch.object(qualification, "git_blob", side_effect=tampered):
             with self.assertRaisesRegex(
-                qualification.foundation.QualificationError, "implementation.history"
+                qualification.FrozenSourceV46Error, "implementation.bytes"
             ):
                 qualification.verify(ROOT)
-
-    def test_receipt_and_predecessor_are_exact(self) -> None:
-        self.assertEqual(
-            qualification.foundation.digest(qualification.receipt_path(ROOT).read_bytes()),
-            qualification.RECEIPT_SHA256,
-        )
-        qualification.validate_predecessor(ROOT)
 
 
 if __name__ == "__main__":

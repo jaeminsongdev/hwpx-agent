@@ -350,9 +350,32 @@ def validate_manifests(root: Path) -> None:
     crate = tomllib.loads(
         bounded_file(root, "crates/remote-tls-transport/Cargo.toml").read_text("utf-8")
     )
-    require(crate["dependencies"].get("rustls") == {"workspace": True}, "crate.rustls")
-    require(crate["dependencies"].get("sha2") == {"workspace": True}, "crate.sha2")
-    require(crate["dev-dependencies"] == {"rcgen": {"workspace": True}}, "crate.dev")
+    require(
+        crate["dependencies"]
+        == {
+            "local-sync": {"version": "0.1.0", "path": "../local-sync"},
+            "remote-credential-broker": {
+                "version": "0.1.0",
+                "path": "../remote-credential-broker",
+            },
+            "remote-credential-wire": {
+                "version": "0.1.0",
+                "path": "../remote-credential-wire",
+            },
+            "remote-sync-wire": {
+                "version": "0.1.0",
+                "path": "../remote-sync-wire",
+            },
+            "rustls": {"workspace": True},
+            "sha2": {"workspace": True},
+        },
+        "crate.dependencies",
+    )
+    require(
+        crate["dev-dependencies"]
+        == {"hex": {"workspace": True}, "rcgen": {"workspace": True}},
+        "crate.dev",
+    )
 
     lock = tomllib.loads(bounded_file(root, "Cargo.lock").read_text("utf-8"))
     versions = {
