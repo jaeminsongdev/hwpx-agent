@@ -168,7 +168,13 @@ $beforeOracle = Invoke-Oracle -Executable $oracleExecutable -InputPath $inputPat
     -InputSha256 ([string]$plan.source.artifact_sha256) `
     -ScriptSha256 ([string]$plan.before_script_sha256) `
     -SemanticSha256 ([string]$plan.before_semantic_sha256) -OutputPath $beforeOraclePath
-if (($beforeOracle.snapshot | ConvertTo-Json -Compress) -cne ($plan.source | Select-Object -Property artifact_sha256,package_graph_sha256,document_flow_sha256,object_id,semantic_sha256,script_sha256,native_object_count | ConvertTo-Json -Compress) -or
+if ([string]$beforeOracle.snapshot.artifact_sha256 -cne [string]$plan.source.artifact_sha256 -or
+    [string]$beforeOracle.snapshot.package_graph_sha256 -cne [string]$plan.source.package_graph_sha256 -or
+    [string]$beforeOracle.snapshot.document_flow_sha256 -cne [string]$plan.source.document_flow_sha256 -or
+    [int64]$beforeOracle.snapshot.object_id -ne [int64]$plan.source.object_id -or
+    [string]$beforeOracle.snapshot.semantic_sha256 -cne [string]$plan.source.semantic_sha256 -or
+    [string]$beforeOracle.snapshot.script_sha256 -cne [string]$plan.source.script_sha256 -or
+    [int64]$beforeOracle.snapshot.native_object_count -ne [int64]$plan.source.native_object_count -or
     [string]$beforeOracle.anchor_fingerprint_sha256 -cne [string]$plan.source.anchor_fingerprint_sha256) {
     throw 'EDITOR_SMOKE_SOURCE_ORACLE_MISMATCH'
 }
