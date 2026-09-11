@@ -1,0 +1,164 @@
+{
+  "schema_version": "hwpx-agent.mathml-adapter-contract/v1",
+  "adapter_schema_version": "hwpx-agent.mathml-adapter/v1",
+  "profile_version": "hwpx-agent.mathml-profile/finite-v1",
+  "model_schema_version": "hwpx-agent.math-ast/v1",
+  "normalization_version": "hwpx-agent.math-ast-normalization/v1",
+  "scope": "p07_03_finite_namespace_strict_mathml_to_math_ast_component",
+  "task": "P07-03",
+  "feature_boundary": [
+    "EQ-004",
+    "EQ-009",
+    "EQ-010",
+    "EQ-011",
+    "EQ-012",
+    "EQ-013",
+    "EQ-014",
+    "EQ-015",
+    "EQ-016",
+    "EQ-017",
+    "EQ-018",
+    "EQ-019",
+    "EQ-020",
+    "EQ-021",
+    "EQ-025",
+    "EQ-026"
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "WORK_BREAKDOWN_STRUCTURE.csv",
+      "sha256": "3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"
+    },
+    {
+      "path": "docs/03_document_model/07_equation_model.md",
+      "sha256": "939e6973fcb7af1119ac496801af0e3848cc39021224b2f760113991ade0c43e"
+    },
+    {
+      "path": "docs/04_feature_catalog/08_eq.md",
+      "sha256": "d515b2c63feb7797c55a2634fad6faf1b20c4644f16c42b26288551869e7975b"
+    },
+    {
+      "path": "docs/04_feature_catalog/contracts/08_eq_contracts.md",
+      "sha256": "dfd3a1615ddb7f61cae87308deb0bc8237f03f194a63f1bff9304919fa88119b"
+    },
+    {
+      "path": "docs/09_roadmap/P07_native_equation_engine.md",
+      "sha256": "b8e7632e256a7112221812643f3dd24833e0d9bd59568cbdf23ec292a298bf9d"
+    },
+    {
+      "path": "docs/12_implementation_guides/06_native_equation_pipeline.md",
+      "sha256": "fca1909edfd0a7078bf3656d583578df15ab5bde56161a963984d6784e1fcb5b"
+    },
+    {
+      "path": "implementation/p03/P03-03_SAFE_XML_POLICY.md",
+      "sha256": "81854e6313b67ef9a647fa3df2745b26fd3ae9bc1ab432304225ca832bd3ce1e"
+    }
+  ],
+  "migration": "protocol/migrations/p07-mathml-adapter-v0-to-v1.md",
+  "policy": "implementation/p07/P07-03_MATHML_ADAPTER_POLICY.md",
+  "report": "implementation/p07/P07-03_MATHML_ADAPTER_REPORT.md",
+  "implementation_files": [
+    "Cargo.toml",
+    "Cargo.lock",
+    "crates/equation-engine/Cargo.toml",
+    "crates/equation-engine/src/lib.rs",
+    "crates/equation-engine/src/mathml.rs",
+    "crates/equation-engine/tests/mathml_adapter.rs",
+    "implementation/p07/P07-03_MATHML_ADAPTER_POLICY.md",
+    "implementation/p07/P07-03_MATHML_ADAPTER_REPORT.md"
+  ],
+  "xml_policy": {
+    "encoding": "utf8_xml_1_0_only",
+    "namespace": "every_element_exact_mathml_uri_prefix_independent",
+    "entities": "five_predefined_and_valid_numeric_xml_scalar_only",
+    "forbidden": "dtd_custom_entity_pi_cdata_comment_foreign_namespace_or_attribute",
+    "resolver": "no_filesystem_network_process_or_application_resolver"
+  },
+  "presentation_profile": {
+    "tokens": "mn_mi_mo_mtext_with_exact_unicode_operator_and_symbol_allowlists",
+    "structures": "row_fraction_root_script_fenced_accent_annotation_style_matrix_large_operator",
+    "multiplication": "explicit_operator_or_u2062_required",
+    "function_application": "u2061_required",
+    "ambiguity": "adjacency_ordinary_function_form_relation_chain_rejected",
+    "styles": "typed_mathvariant_and_hex_rgb_only"
+  },
+  "content_profile": {
+    "literals": "cn_exact_decimal_ci_identifier_cs_text_and_fixed_constants",
+    "apply": "bounded_exact_operator_function_arity",
+    "structures": "fraction_script_root_large_operator_derivative_matrix_set_builder",
+    "qualifiers": "exact_degree_lowlimit_uplimit_bvar_condition_cardinality",
+    "extensions": "unknown_csymbol_semantics_units_interval_vector_piecewise_aligned_unsupported"
+  },
+  "profile_selection": {
+    "basis": "direct_root_child_element_family",
+    "mixed_profiles": "rejected",
+    "content_root_count": 1,
+    "silent_inference": false
+  },
+  "roundtrip_corpus": {
+    "pair_count": 17,
+    "comparison": "normalized_math_ast_semantic_equality",
+    "mathml_serialization": false,
+    "native_roundtrip": false
+  },
+  "default_limits": {
+    "source_bytes": 1048576,
+    "events": 65536,
+    "elements": 8192,
+    "depth": 128,
+    "text_bytes": 65536,
+    "total_text_bytes": 1048576,
+    "attributes_per_element": 8,
+    "attribute_bytes": 65536,
+    "namespace_bindings": 2048,
+    "children_per_element": 512,
+    "parser_depth": 128,
+    "serialized_bytes": 8388608
+  },
+  "failure_policy": [
+    "empty_oversized_non_utf8_or_non_u32_source_rejected",
+    "empty_oversized_malformed_unknown_or_duplicate_json_rejected",
+    "unsupported_schema_version_rejected",
+    "xml_1_1_or_legacy_encoding_rejected",
+    "dtd_custom_entity_pi_cdata_or_comment_rejected",
+    "unbound_wrong_foreign_or_unused_namespace_binding_rejected",
+    "foreign_duplicate_unknown_or_ignored_attribute_rejected",
+    "event_element_depth_text_attribute_namespace_child_or_parser_limit_rejected",
+    "multiple_root_wrong_root_empty_root_or_mixed_profile_rejected",
+    "unsupported_element_operator_constant_qualifier_or_extension_rejected",
+    "ambiguous_adjacency_function_application_or_relation_chain_rejected",
+    "invalid_number_identifier_text_color_boolean_or_delimiter_rejected",
+    "invalid_arity_cardinality_order_or_ragged_matrix_rejected",
+    "math_ast_admission_failure_rejected",
+    "serialized_output_limit_or_failure_rejected",
+    "source_value_span_hash_and_ast_payload_omitted_from_debug",
+    "no_partial_ast_silent_inference_or_fallback"
+  ],
+  "not_claimed": {
+    "full_mathml_3_or_4": false,
+    "full_content_or_presentation_mathml": false,
+    "full_tier_a_b_c_corpus": false,
+    "mathml_serializer": false,
+    "eqedit_parser_or_compiler": false,
+    "equation_node_integration": false,
+    "direct_hwpx_adapter": false,
+    "package_mutation_or_preservation": false,
+    "native_object_or_semantic_readback": false,
+    "hancom_2020_target_build": false,
+    "save_reopen_or_editor_smoke": false,
+    "page_layout_or_render": false,
+    "automation_or_differential": false,
+    "p07_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "p07": "in_progress",
+    "product_complete": false
+  }
+}
