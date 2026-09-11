@@ -1620,6 +1620,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
 
 [[package]]
+name = "remote-credential-broker"
+version = "0.1.0"
+dependencies = [
+ "base64 0.23.1",
+ "getrandom 0.4.3",
+ "hex",
+ "remote-credential-lifecycle",
+ "ring",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tempfile",
+ "thiserror",
+ "zeroize",
+]
+
+[[package]]
 name = "remote-credential-lifecycle"
 version = "0.1.0"
 dependencies = [
@@ -1630,6 +1647,14 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+ "thiserror",
+ "zeroize",
+]
+
+[[package]]
+name = "remote-credential-wire"
+version = "0.1.0"
+dependencies = [
  "thiserror",
  "zeroize",
 ]
@@ -1670,8 +1695,11 @@ dependencies = [
 name = "remote-tls-transport"
 version = "0.1.0"
 dependencies = [
+ "hex",
  "local-sync",
  "rcgen",
+ "remote-credential-broker",
+ "remote-credential-wire",
  "remote-sync-wire",
  "rustls",
  "sha2",
@@ -2297,11 +2325,21 @@ dependencies = [
 name = "windows-credential-custody"
 version = "0.1.0"
 dependencies = [
+ "base64 0.23.1",
  "hex",
  "keyring-core",
  "local-sync",
+ "rcgen",
+ "remote-credential-broker",
+ "remote-credential-lifecycle",
+ "remote-credential-wire",
+ "remote-tls-transport",
+ "ring",
+ "rustls",
+ "serde",
  "serde_json",
  "sha2",
+ "tempfile",
  "uuid",
  "windows-native-keyring-store",
  "zeroize",

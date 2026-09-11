@@ -6,7 +6,10 @@ license.workspace = true
 rust-version.workspace = true
 
 [dependencies]
+hex.workspace = true
 local-sync = { version = "0.1.0", path = "../local-sync" }
+remote-credential-broker = { version = "0.1.0", path = "../remote-credential-broker" }
+sha2.workspace = true
 zeroize.workspace = true
 
 [target.'cfg(windows)'.dependencies]
@@ -14,9 +17,18 @@ keyring-core.workspace = true
 windows-native-keyring-store.workspace = true
 
 [dev-dependencies]
+base64.workspace = true
 hex.workspace = true
+rcgen.workspace = true
+remote-credential-lifecycle = { version = "0.1.0", path = "../remote-credential-lifecycle" }
+remote-credential-wire = { version = "0.1.0", path = "../remote-credential-wire" }
+remote-tls-transport = { version = "0.1.0", path = "../remote-tls-transport" }
+ring.workspace = true
+rustls.workspace = true
+serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true
+tempfile.workspace = true
 uuid.workspace = true
 
 [lints]

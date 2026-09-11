@@ -7,11 +7,14 @@ rust-version.workspace = true
 
 [dependencies]
 local-sync = { version = "0.1.0", path = "../local-sync" }
+remote-credential-broker = { version = "0.1.0", path = "../remote-credential-broker" }
+remote-credential-wire = { version = "0.1.0", path = "../remote-credential-wire" }
 remote-sync-wire = { version = "0.1.0", path = "../remote-sync-wire" }
 rustls.workspace = true
 sha2.workspace = true
 
 [dev-dependencies]
+hex.workspace = true
 rcgen.workspace = true
 
 [lints]

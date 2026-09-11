@@ -1,0 +1,24 @@
+[package]
+name = "remote-credential-broker"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+getrandom.workspace = true
+hex.workspace = true
+remote-credential-lifecycle = { version = "0.1.0", path = "../remote-credential-lifecycle" }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+base64.workspace = true
+ring.workspace = true
+tempfile.workspace = true
+
+[lints]
+workspace = true

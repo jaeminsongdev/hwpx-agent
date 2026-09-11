@@ -171,7 +171,12 @@ impl LifecyclePolicy {
         })
     }
 
-    fn binding_sha256(&self) -> Result<String, LifecycleError> {
+    /// Returns the canonical digest that binds identity, scope, verification keys and time limits.
+    ///
+    /// # Errors
+    ///
+    /// Returns serialization failure if the bounded binding cannot be encoded.
+    pub fn binding_sha256(&self) -> Result<String, LifecycleError> {
         #[derive(Serialize)]
         struct KeyBinding<'a> {
             key_id: &'a str,
@@ -324,6 +329,15 @@ impl CredentialState {
             Self::Absent | Self::Revoked { .. } => None,
         }
     }
+
+    /// Validates this stable state against the complete current lifecycle policy.
+    ///
+    /// # Errors
+    ///
+    /// Rejects malformed, inconsistent or policy-drifted persisted state.
+    pub fn validate(&self, policy: &LifecyclePolicy) -> Result<(), LifecycleError> {
+        validate_state(policy, self)
+    }
 }
 
 /// Persisted non-secret pending transition. Its canonical request is replayable byte-for-byte.
@@ -363,6 +377,17 @@ impl PendingTransition {
     #[must_use]
     pub fn request_sha256(&self) -> &str {
         &self.request_sha256
+    }
+
+    #[must_use]
+    pub const fn deadline(&self) -> u64 {
+        self.deadline
+    }
+
+    /// Returns the complete prior non-secret state for vault reconciliation.
+    #[must_use]
+    pub const fn previous_state(&self) -> &CredentialState {
+        &self.before
     }
 
     /// Returns the exact issuer request bytes for first dispatch or retry.
@@ -809,6 +834,83 @@ pub fn apply_definitive_rejection(
         return Err(LifecycleError::PendingExpired);
     }
     Ok(pending.before)
+}
+
+/// Revalidates access metadata persisted between token verification and vault publication.
+///
+/// # Errors
+///
+/// Rejects policy drift, a wrong transition, generation or operation binding, replayed identity,
+/// or issuance times that could not have been accepted for this pending request.
+pub fn validate_prepared_access(
+    policy: &LifecyclePolicy,
+    pending: &PendingTransition,
+    metadata: &ActiveCredential,
+) -> Result<(), LifecycleError> {
+    pending.validate(policy)?;
+    if pending.operation == LifecycleOperation::Revoke {
+        return Err(LifecycleError::InvalidOperation);
+    }
+    validate_active(policy, metadata)?;
+    let latest_allowed = pending
+        .requested_at
+        .checked_add(policy.clock_skew_seconds)
+        .ok_or(LifecycleError::Overflow)?;
+    let issued_with_skew = metadata
+        .issued_at
+        .checked_add(policy.clock_skew_seconds)
+        .ok_or(LifecycleError::Overflow)?;
+    if metadata.generation != pending.expected_generation
+        || metadata.key_generation != pending.expected_key_generation
+        || pending.prior_credential_sha256.as_deref() == Some(&metadata.credential_sha256)
+        || metadata.last_operation_id_sha256 != digest_bytes(pending.operation_id.as_bytes())
+        || metadata.issued_at > latest_allowed
+        || issued_with_skew < pending.requested_at
+        || pending
+            .before
+            .active()
+            .is_some_and(|prior| prior.credential_id_sha256 == metadata.credential_id_sha256)
+    {
+        return Err(LifecycleError::InvalidState);
+    }
+    Ok(())
+}
+
+/// Revalidates revocation metadata persisted before deletion from the credential vault.
+///
+/// # Errors
+///
+/// Rejects policy drift, a wrong transition, generation, credential or operation binding, or a
+/// revocation time that could not have been accepted for this pending request.
+pub fn validate_prepared_revocation(
+    policy: &LifecyclePolicy,
+    pending: &PendingTransition,
+    metadata: &RevokedCredential,
+) -> Result<(), LifecycleError> {
+    pending.validate(policy)?;
+    if pending.operation != LifecycleOperation::Revoke {
+        return Err(LifecycleError::InvalidOperation);
+    }
+    validate_revoked(metadata)?;
+    let latest_allowed = pending
+        .requested_at
+        .checked_add(policy.clock_skew_seconds)
+        .ok_or(LifecycleError::Overflow)?;
+    let revoked_with_skew = metadata
+        .revoked_at
+        .checked_add(policy.clock_skew_seconds)
+        .ok_or(LifecycleError::Overflow)?;
+    if metadata.generation != pending.expected_generation
+        || metadata.key_generation != pending.expected_key_generation
+        || pending.prior_credential_sha256.as_deref()
+            != Some(metadata.prior_credential_sha256.as_str())
+        || metadata.operation_id_sha256 != digest_bytes(pending.operation_id.as_bytes())
+        || metadata.revoked_at > latest_allowed
+        || revoked_with_skew < pending.requested_at
+    {
+        return Err(LifecycleError::InvalidState);
+    }
+    Ok(())
 }
 
 fn validate_access_times(

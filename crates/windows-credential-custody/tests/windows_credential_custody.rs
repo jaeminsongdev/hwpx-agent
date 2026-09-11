@@ -5,10 +5,11 @@ use std::error::Error;
 
 use keyring_core::api::CredentialStoreApi;
 use local_sync::{CredentialFailure, RemoteCredentialProvider};
+use remote_credential_broker::{CredentialVault, VaultObservation};
 use serde_json::json;
 use sha2::{Digest as _, Sha256};
 use uuid::Uuid;
-use windows_credential_custody::WindowsCredentialManagerProvider;
+use windows_credential_custody::{WindowsCredentialManagerProvider, WindowsCredentialManagerVault};
 use zeroize::Zeroizing;
 
 type TestResult = Result<(), Box<dyn Error>>;
@@ -34,7 +35,9 @@ fn current_user_store_is_persistent_redacted_and_single_attempt() -> TestResult 
     let service = format!("qualification.{nonce}");
     let account = format!("synthetic.{nonce}");
     let mut provider = WindowsCredentialManagerProvider::new(&service, &account)?;
+    let mut vault = WindowsCredentialManagerVault::new(&service, &account)?;
     let target = provider.target_name().to_owned();
+    assert_eq!(vault.target_name(), target);
     let store = windows_native_keyring_store::Store::new()?;
     let modifiers = HashMap::from([("target", target.as_str()), ("persistence", "Local")]);
     let entry = store.build(
@@ -42,11 +45,13 @@ fn current_user_store_is_persistent_redacted_and_single_attempt() -> TestResult 
         "brokered-service-bearer",
         Some(&modifiers),
     )?;
-    if !matches!(entry.get_secret(), Err(keyring_core::Error::NoEntry)) {
+    if vault.observe()? != VaultObservation::Absent
+        || !matches!(entry.get_secret(), Err(keyring_core::Error::NoEntry))
+    {
         return Err("unique preflight credential is not exactly absent".into());
     }
 
-    entry.set_secret(SYNTHETIC_TOKEN)?;
+    vault.store(std::str::from_utf8(SYNTHETIC_TOKEN)?)?;
     let mut cleanup = CredentialCleanup { entry, armed: true };
 
     let authorization = provider.authorization_header()?;
@@ -64,12 +69,19 @@ fn current_user_store_is_persistent_redacted_and_single_attempt() -> TestResult 
     let persisted = Zeroizing::new(cleanup.entry.get_secret()?);
     assert_eq!(persisted.as_slice(), SYNTHETIC_TOKEN);
     assert_eq!(
+        vault.observe()?,
+        VaultObservation::Present {
+            credential_sha256: hex::encode(Sha256::digest(SYNTHETIC_TOKEN))
+        }
+    );
+    assert_eq!(
         cleanup.entry.get_attributes()?.get("persistence"),
         Some(&"Local".to_owned())
     );
 
-    cleanup.entry.delete_credential()?;
+    vault.delete()?;
     cleanup.armed = false;
+    assert_eq!(vault.observe()?, VaultObservation::Absent);
     assert!(matches!(
         cleanup.entry.get_secret(),
         Err(keyring_core::Error::NoEntry)
@@ -81,13 +93,14 @@ fn current_user_store_is_persistent_redacted_and_single_attempt() -> TestResult 
         "credential_target_sha256": hex::encode(Sha256::digest(target.as_bytes())),
         "checks": {
             "unique_target_preflight_absent": true,
-            "synthetic_secret_written": true,
+            "product_vault_secret_written": true,
+            "product_vault_digest_observed": true,
             "product_provider_read": true,
             "authorization_shape_accepted": true,
             "provider_single_attempt": true,
             "secret_persisted_after_read": true,
             "debug_redacted": true,
-            "credential_deleted": true,
+            "product_vault_credential_deleted": true,
             "post_cleanup_absent": true
         },
         "claims": {

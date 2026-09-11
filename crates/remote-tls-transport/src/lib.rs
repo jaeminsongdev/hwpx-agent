@@ -9,6 +9,14 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use local_sync::{RemoteTransport, TransportFailure};
+use remote_credential_broker::{
+    CredentialIssuerTransport, IssuerAuthorization, IssuerReply, IssuerTransportFailure,
+    parse_issuer_response,
+};
+use remote_credential_wire::{
+    FrameError as CredentialFrameError, ResponseStatus as CredentialResponseStatus,
+    read_response as read_credential_response, write_request as write_credential_request,
+};
 use remote_sync_wire::{FrameError, ResponseStatus, read_response, write_request};
 use rustls::pki_types::{CertificateDer, ServerName};
 use rustls::{ClientConfig, ClientConnection, RootCertStore, StreamOwned, version};
@@ -152,6 +160,133 @@ impl RemoteTransport for PinnedTlsTcpTransport {
     }
 }
 
+/// TLS 1.3 client for the distinct credential-issuer protocol and exact leaf certificate.
+pub struct PinnedCredentialIssuerTlsTransport {
+    endpoint: SocketAddr,
+    endpoint_scope: EndpointScope,
+    server_name: ServerName<'static>,
+    expected_leaf_sha256: [u8; 32],
+    config: Arc<ClientConfig>,
+    timeout: Duration,
+}
+
+impl fmt::Debug for PinnedCredentialIssuerTlsTransport {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("PinnedCredentialIssuerTlsTransport")
+            .field("endpoint", &"<redacted>")
+            .field("endpoint_scope", &self.endpoint_scope)
+            .field("server_name", &"<redacted>")
+            .field("expected_leaf_sha256", &"<redacted>")
+            .field("config", &"<redacted>")
+            .field("protocol", &"credential-issuer/v1")
+            .field("tls_version", &"TLS1.3")
+            .field("timeout", &self.timeout)
+            .finish_non_exhaustive()
+    }
+}
+
+impl PinnedCredentialIssuerTlsTransport {
+    /// Constructs a bounded issuer transport without DNS resolution or ambient trust roots.
+    ///
+    /// # Errors
+    ///
+    /// Rejects unsafe endpoints, non-canonical DNS names, invalid/oversized certificates and
+    /// timeouts outside 1 ms..=60 s.
+    pub fn new(
+        endpoint: SocketAddr,
+        endpoint_scope: EndpointScope,
+        server_name: &str,
+        pinned_certificate_der: Vec<u8>,
+        timeout: Duration,
+    ) -> Result<Self, IssuerTransportFailure> {
+        validate_endpoint(endpoint, endpoint_scope)
+            .map_err(|_| IssuerTransportFailure::ConfigurationRejected)?;
+        validate_server_name(server_name)
+            .map_err(|_| IssuerTransportFailure::ConfigurationRejected)?;
+        if pinned_certificate_der.is_empty() || pinned_certificate_der.len() > MAX_CERTIFICATE_BYTES
+        {
+            return Err(IssuerTransportFailure::ConfigurationRejected);
+        }
+        if timeout < Duration::from_millis(1) || timeout > MAX_TIMEOUT {
+            return Err(IssuerTransportFailure::ConfigurationRejected);
+        }
+
+        let certificate = CertificateDer::from(pinned_certificate_der);
+        let expected_leaf_sha256 = Sha256::digest(certificate.as_ref()).into();
+        let mut roots = RootCertStore::empty();
+        roots
+            .add(certificate)
+            .map_err(|_| IssuerTransportFailure::ConfigurationRejected)?;
+        let provider = Arc::new(rustls::crypto::ring::default_provider());
+        let config = ClientConfig::builder_with_provider(Arc::clone(&provider))
+            .with_protocol_versions(&[&version::TLS13])
+            .map_err(|_| IssuerTransportFailure::ConfigurationRejected)?
+            .with_root_certificates(roots)
+            .with_no_client_auth();
+        let server_name = ServerName::try_from(server_name.to_owned())
+            .map_err(|_| IssuerTransportFailure::ConfigurationRejected)?;
+        if !matches!(server_name, ServerName::DnsName(_)) {
+            return Err(IssuerTransportFailure::ConfigurationRejected);
+        }
+        Ok(Self {
+            endpoint,
+            endpoint_scope,
+            server_name,
+            expected_leaf_sha256,
+            config: Arc::new(config),
+            timeout,
+        })
+    }
+}
+
+impl CredentialIssuerTransport for PinnedCredentialIssuerTlsTransport {
+    fn exchange(
+        &mut self,
+        authorization: &IssuerAuthorization,
+        request: &[u8],
+    ) -> Result<IssuerReply, IssuerTransportFailure> {
+        let mut socket = TcpStream::connect_timeout(&self.endpoint, self.timeout)
+            .map_err(|_| IssuerTransportFailure::Unavailable)?;
+        socket
+            .set_read_timeout(Some(self.timeout))
+            .and_then(|()| socket.set_write_timeout(Some(self.timeout)))
+            .map_err(|_| IssuerTransportFailure::Unavailable)?;
+        let mut connection =
+            ClientConnection::new(Arc::clone(&self.config), self.server_name.clone())
+                .map_err(|_| IssuerTransportFailure::ConfigurationRejected)?;
+        connection
+            .complete_io(&mut socket)
+            .map_err(|error| classify_issuer_tls_io_error(&error))?;
+        let peer = connection
+            .peer_certificates()
+            .and_then(|certificates| certificates.first())
+            .ok_or(IssuerTransportFailure::PeerRejected)?;
+        let actual_leaf_sha256: [u8; 32] = Sha256::digest(peer.as_ref()).into();
+        if actual_leaf_sha256 != self.expected_leaf_sha256 {
+            return Err(IssuerTransportFailure::PeerRejected);
+        }
+
+        let mut stream = StreamOwned::new(connection, socket);
+        authorization
+            .with_secret(|header| write_credential_request(&mut stream, header, request))
+            .map_err(map_credential_frame_error)?;
+        let response = read_credential_response(&mut stream).map_err(map_credential_frame_error)?;
+        let mut trailing = [0_u8; 1];
+        match stream.read(&mut trailing) {
+            Ok(0) => {}
+            Ok(_) => return Err(IssuerTransportFailure::InvalidResponse),
+            Err(error) => return Err(classify_issuer_tls_io_error(&error)),
+        }
+        match response.status() {
+            CredentialResponseStatus::Completed => {
+                response.with_payload(|payload| parse_issuer_response(request, payload))
+            }
+            CredentialResponseStatus::Unavailable => Err(IssuerTransportFailure::Unavailable),
+        }
+    }
+}
+
 fn validate_endpoint(
     endpoint: SocketAddr,
     endpoint_scope: EndpointScope,
@@ -250,9 +385,28 @@ fn classify_tls_io_error(error: &std::io::Error) -> TransportFailure {
     }
 }
 
+fn classify_issuer_tls_io_error(error: &std::io::Error) -> IssuerTransportFailure {
+    if error
+        .get_ref()
+        .and_then(|inner| inner.downcast_ref::<rustls::Error>())
+        .is_some()
+    {
+        IssuerTransportFailure::PeerRejected
+    } else {
+        IssuerTransportFailure::Unavailable
+    }
+}
+
 const fn map_frame_error(error: FrameError) -> TransportFailure {
     match error {
         FrameError::Rejected => TransportFailure::Rejected,
         FrameError::Unavailable => TransportFailure::Unavailable,
+    }
+}
+
+const fn map_credential_frame_error(error: CredentialFrameError) -> IssuerTransportFailure {
+    match error {
+        CredentialFrameError::Rejected => IssuerTransportFailure::InvalidResponse,
+        CredentialFrameError::Unavailable => IssuerTransportFailure::Unavailable,
     }
 }
