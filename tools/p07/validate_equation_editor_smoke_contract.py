@@ -10,21 +10,21 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
-CONTRACT = "protocol/private/p07-equation-editor-smoke-v1.json"
-MIGRATION = "protocol/migrations/p07-equation-editor-smoke-v0-to-v1.md"
+CONTRACT = "protocol/private/p07-equation-editor-smoke-v2.json"
+MIGRATION = "protocol/migrations/p07-equation-editor-smoke-v1-to-v2.md"
 POLICY = "implementation/p07/P07-09_EQUATION_EDITOR_SMOKE_POLICY.md"
 REPORT = "implementation/p07/P07-09_EQUATION_EDITOR_SMOKE_REPORT.md"
-QUALIFICATION = "implementation/p07/evidence/p07-09-equation-editor-smoke-source-qualification.current-2020.v1.json"
+QUALIFICATION = "implementation/p07/evidence/p07-09-equation-editor-smoke-source-qualification.current-2020.v2.json"
 PARENT = "implementation/p07/tools/run-hancom-2020-equation-editor-smoke.ps1"
 CHILD = "implementation/p07/tools/run-hancom-2020-equation-editor-smoke-child.ps1"
 TARGET_ORACLE = "crates/hwpx-package/examples/p07_09_equation_editor_oracle.rs"
 PLAN_BUILDER = "crates/equation-engine/examples/p07_09_equation_editor_plan.rs"
 EVIDENCE_ORACLE = "crates/equation-engine/examples/p07_09_equation_editor_evidence_oracle.rs"
-PARENT_SHA256 = "3959638e983a7c549b5f14e1e44d80207af5beab7d752f27cb4c37f5819f7137"
-CHILD_SHA256 = "5950ea9a047b593f0a1216551de2de222379a7296a558957f233d093362d9569"
-BUNDLE_SHA256 = "a2045b3cc802c3c3142ed21d0a11dd1b6b15c1c5e51675473ce711f5d2f94414"
+PARENT_SHA256 = "4a1de0e3eb8d411ac1836ba9433d41e39490b9e71c134fa9df325cb2b33ca076"
+CHILD_SHA256 = "a2b085c39c3bc2baaf6a00eb612a509f4c84c54056ecbf9f681736e70fb14956"
+BUNDLE_SHA256 = "cae9ac27198b905ba12cc606f8b719cb27ee6940954de9648b71eb8bf71222a8"
 TARGET_ORACLE_SHA256 = "3374c47a1fd18cb0929a2ef32abd984ab13babfb6ee26e6fc509fcdcd28f7cb8"
-PLAN_BUILDER_SHA256 = "2ed5abeca9e91bccb259cccdda9ed10cf3cb941f8266611535111818a043d753"
+PLAN_BUILDER_SHA256 = "9e46c13276adb03c4fa09fd490bc6fb55617e6c02abd2f805460e7e3bd5fb008"
 EVIDENCE_ORACLE_SHA256 = "7f232afc22e63ab04378162eed6e3e0c61efeb7b40e18a08264856d0922274c0"
 EXECUTABLE_SHA256 = "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
 SOURCES = {
@@ -56,17 +56,33 @@ NOT_CLAIMED = {
     "production_ready": False, "product_complete": False,
 }
 GATE = {
-    "component": "pass", "direct_stage": "unit_passed", "editor_target": "not_run",
+    "component": "pass", "direct_stage": "unit_passed", "editor_target": "incomplete",
     "actual_hangul": False, "save_reopen": False, "render": False,
     "p07_09": "in_progress", "p07": "in_progress", "product_complete": False,
 }
+FAILURE_POLICY = [
+    "zero_hard_ceiling_or_inconsistent_limits_rejected",
+    "malformed_duplicate_unknown_oversized_or_untrusted_request_plan_evidence_rejected",
+    "source_artifact_graph_flow_anchor_object_semantic_script_or_count_drift_rejected",
+    "before_after_ast_must_compile_and_reparse_semantically",
+    "canonical_before_after_scripts_must_change_exactly_one_equal_cardinality_token",
+    "saved_native_after_script_must_parse_to_the_planned_after_semantics",
+    "raw_native_serialization_is_not_used_as_the_user_token_delta_boundary",
+    "private_plan_file_source_semantic_script_token_and_plan_hashes_recomputed",
+    "failed_before_effect_and_effect_unknown_never_pass",
+    "manual_double_click_editor_change_close_attestation_and_four_distinct_screenshots_required",
+    "computer_use_click_or_typing_rejected",
+    "exact_target_native_before_saved_reopen_and_all_automation_phases_required",
+    "native_object_replacement_semantic_graph_flow_reopen_or_fallback_drift_rejected",
+]
 MARKERS = {
     "crates/equation-engine/src/lib.rs": ("mod editor_smoke;", "EquationEditorSmokePlanner"),
     "crates/equation-engine/src/eqedit.rs": ("pub(crate) fn token_fingerprints",),
     "crates/equation-engine/src/editor_smoke.rs": (
-        'EQUATION_EDITOR_SMOKE_SCHEMA_VERSION: &str = "hwpx-agent.equation-editor-smoke/v1"',
+        'EQUATION_EDITOR_SMOKE_SCHEMA_VERSION: &str = "hwpx-agent.equation-editor-smoke/v2"',
         "pub fn load_plan_json", "single_token_change", "pub fn verify_evidence_json",
-        "computer_use_click_or_type_invoked", "FallbackDetected", "finish_non_exhaustive",
+        "saved_after_script", "computer_use_click_or_type_invoked", "FallbackDetected",
+        "finish_non_exhaustive",
     ),
     "crates/equation-engine/tests/equation_editor_smoke.rs": (
         "exact_one_token_plan_and_combined_evidence_pass_deterministically",
@@ -124,10 +140,10 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
         return result(["contract_json_or_path"], 0, 0, False, False)
     exact = {
-        "schema_version": "hwpx-agent.equation-editor-smoke-contract/v1",
-        "request_schema_version": "hwpx-agent.equation-editor-smoke/v1",
-        "evidence_schema_version": "hwpx-agent.equation-editor-smoke-evidence/v1",
-        "receipt_schema_version": "hwpx-agent.equation-editor-smoke-receipt/v1",
+        "schema_version": "hwpx-agent.equation-editor-smoke-contract/v2",
+        "request_schema_version": "hwpx-agent.equation-editor-smoke/v2",
+        "evidence_schema_version": "hwpx-agent.equation-editor-smoke-evidence/v2",
+        "receipt_schema_version": "hwpx-agent.equation-editor-smoke-receipt/v2",
         "profile_id": "hwpx-agent.equation-editor-smoke.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
         "task": "P07-09",
         "scope": "one_token_double_click_native_equation_edit_with_manual_and_automated_save_reopen_evidence",
@@ -143,15 +159,14 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     if set(contract) != {*exact, "source_locks", "workflow", "failure_policy"}:
         errors.append("contract_keys")
     if contract.get("workflow") != {
-        "plan": "complete_source_state_plus_two_roundtripping_math_ast_values_and_exactly_one_canonical_token_change",
+        "plan": "complete_source_state_plus_canonical_before_after_one_token_delta_plus_exact_saved_native_after_script",
         "manual": "user_double_click_editor_visibility_planned_token_commit_editor_close_and_four_distinct_screenshots",
         "automation": "exact_target_preflight_immutable_input_native_before_after_reopen_readback_save_close_reopen",
         "oracle": "strict_automation_native_hwpx_reader_id_index_package_state_equation_flow_and_plan_evidence_recheck",
         "computer_use": "screenshot_only_user_performs_all_clicks_and_typing",
     }:
         errors.append("workflow")
-    failure = contract.get("failure_policy")
-    if not isinstance(failure, list) or len(failure) != 12 or len(set(failure)) != 12:
+    if contract.get("failure_policy") != FAILURE_POLICY:
         errors.append("failure_policy")
     source_count = validate_sources(root, contract.get("source_locks"), errors)
     implementation_count = validate_markers(root, errors)
@@ -219,7 +234,10 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
     except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
         errors.append("qualification_json_or_path")
         return False
-    if value.get("schema_version") != "hwpx-agent.equation-editor-smoke-source-qualification/v1" or value.get("task") != "P07-09" or value.get("recorded_date") != "2026-09-11":
+    if set(value) != {"schema_version", "task", "recorded_date", "target", "harness_sources",
+                      "component_execution", "target_execution", "claims"}:
+        errors.append("qualification_keys")
+    if value.get("schema_version") != "hwpx-agent.equation-editor-smoke-source-qualification/v2" or value.get("task") != "P07-09" or value.get("recorded_date") != "2026-09-12":
         errors.append("qualification_identity")
     if value.get("target") != {"product": "Hangul 2020", "prog_id": "HWPFrame.HwpObject.2",
                                    "version": "11.0.0.9136", "executable_sha256": EXECUTABLE_SHA256,
@@ -228,21 +246,29 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
         errors.append("qualification_target")
     if value.get("harness_sources") != HARNESSES:
         errors.append("qualification_harness")
-    if value.get("component_execution") != {"state": "pass", "rust_tests_passed": 10,
+    if value.get("component_execution") != {"state": "pass", "rust_tests_passed": 11,
                                                 "powershell_scripts_parsed": 2,
                                                 "single_token_planner": "pass",
+                                                "saved_native_script_binding": "pass",
                                                 "private_plan_reload": "pass",
                                                 "combined_evidence_verifier": "pass",
                                                 "native_hwpx_oracle_build": "pass",
                                                 "silent_fallback_count": 0}:
         errors.append("qualification_component")
     target = value.get("target_execution")
-    if not isinstance(target, dict) or target.get("state") != "not_run" or any(item is not None for key, item in target.items() if key != "state"):
+    if target != {"state": "incomplete", "latest_attempt": "p07-09-20260912-attempt09",
+                  "exact_target_preflight_observed": True, "immutable_input_observed": True,
+                  "saved_native_readback_observed": True,
+                  "mandatory_screenshot_set_complete": False,
+                  "automated_save_reopen_complete": False,
+                  "verified_receipt_sha256": None}:
         errors.append("qualification_target_run")
-    if value.get("claims") != {"implementation_ready": True, "single_token_change_enforced": True,
+    if value.get("claims") != {"implementation_ready": True,
+                                    "canonical_single_token_change_enforced": True,
+                                    "saved_native_script_semantics_enforced": True,
                                     "manual_and_automation_required": True,
                                     "computer_use_screenshot_only_enforced": True,
-                                    "target_editor_smoke": False, "actual_hangul": False,
+                                    "target_editor_smoke": False, "actual_hangul_gate": False,
                                     "save_reopen": False, "render": False,
                                     "p07_09_complete": False, "p07_complete": False,
                                     "product_complete": False}:
@@ -252,9 +278,9 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
 
 def validate_documents(root: Path, errors: list[str]) -> None:
     for relative, markers in {
-        MIGRATION: ("There is no stored v0", "MUST NOT be relabeled", "Both are mandatory"),
-        POLICY: ("implementation_ready / target_not_run", "exactly one differing token", "screenshot-only"),
-        REPORT: ("10/10 PASS", "synthetic component evidence", "editor_target_state=not_run"),
+        MIGRATION: ("MUST NOT be collapsed", "saved_after_script", "do not migrate"),
+        POLICY: ("implementation_ready_v2 / target_incomplete", "exactly one differing", "screenshot-only"),
+        REPORT: ("11/11 PASS", "Attempt 09", "editor_target_state=incomplete"),
     }.items():
         try:
             text = file(root, relative).read_text(encoding="utf-8")
@@ -267,12 +293,12 @@ def validate_documents(root: Path, errors: list[str]) -> None:
 def result(errors: list[str], sources: int, implementation: int, harness: bool, qualification: bool) -> dict[str, Any]:
     unique = sorted(set(errors))
     return {
-        "schema_version": "hwpx-agent.p07-equation-editor-smoke-validation/v1",
+        "schema_version": "hwpx-agent.p07-equation-editor-smoke-validation/v2",
         "state": "pass" if not unique else "fail", "errors": unique,
         "source_locks": sources, "implementation_files": implementation,
         "harness_sources_verified": harness, "source_qualification_verified": qualification,
         "task": "P07-09", "direct_stage": "unit_passed" if not unique else "not_proven",
-        "editor_target": "not_run", "actual_hangul": False, "save_reopen": False,
+        "editor_target": "incomplete", "actual_hangul": False, "save_reopen": False,
         "render": False, "p07": "in_progress", "product_complete": False,
     }
 
@@ -282,4 +308,4 @@ if __name__ == "__main__":
     print(json.dumps(value, ensure_ascii=False, sort_keys=True))
     if value["state"] != "pass":
         sys.exit(1)
-    print(f"P07_EQUATION_EDITOR_SMOKE_CONTRACT_PASS source_locks={value['source_locks']} implementation_files={value['implementation_files']} editor_target=not_run")
+    print(f"P07_EQUATION_EDITOR_SMOKE_CONTRACT_PASS source_locks={value['source_locks']} implementation_files={value['implementation_files']} editor_target=incomplete")

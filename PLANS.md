@@ -1,6 +1,6 @@
 # HWPX Agent implementation ledger
 
-- Updated: 2026-09-11
+- Updated: 2026-09-12
 - Root: `D:\개발\hwpx-agent`
 - Objective: complete P00-P20 without weakening evidence Gates.
 - Current target: licensed Hangul 2020 `11.0.0.9136` x86 on this PC only.
@@ -24,7 +24,7 @@
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | P07 in progress | P07-01~09 implementation is complete/unit-passed, including the 8-sample layout/raster/qualification toolchain, 64-case corpus/one-session Tier B harness and editor smoke; combined current-target evidence remains; P08 graphics and P09 fields remain |
+| P07-P09 | P07 in progress | P07-01~09 implementation is complete/unit-passed; P07-09 v2 now separates canonical one-token intent from exact saved native serialization, but attempt09 lacked four screenshots and remains incomplete; combined P07 target evidence, P08 graphics and P09 fields remain |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. Run the combined exact-current-target campaign at `max`: batch P07-07/08/09 layout, Tier B and editor evidence with the remaining costly P06 target/render/differential work.
+1. Run the combined exact-current-target campaign at `max`: batch P07-07/08 plus one fresh P07-09 four-screen/manual-and-automated receipt with remaining costly P06 target/render/differential work.
 2. Run corrected TABLE-032/033 only when the user can approve all saves; target automation/differentials remain separate.
 3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
 

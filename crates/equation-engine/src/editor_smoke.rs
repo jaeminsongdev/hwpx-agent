@@ -11,11 +11,11 @@ use crate::{
     EqEditParseRequestDraft,
 };
 
-pub const EQUATION_EDITOR_SMOKE_SCHEMA_VERSION: &str = "hwpx-agent.equation-editor-smoke/v1";
+pub const EQUATION_EDITOR_SMOKE_SCHEMA_VERSION: &str = "hwpx-agent.equation-editor-smoke/v2";
 pub const EQUATION_EDITOR_SMOKE_EVIDENCE_SCHEMA_VERSION: &str =
-    "hwpx-agent.equation-editor-smoke-evidence/v1";
+    "hwpx-agent.equation-editor-smoke-evidence/v2";
 pub const EQUATION_EDITOR_SMOKE_RECEIPT_SCHEMA_VERSION: &str =
-    "hwpx-agent.equation-editor-smoke-receipt/v1";
+    "hwpx-agent.equation-editor-smoke-receipt/v2";
 pub const EQUATION_EDITOR_SMOKE_PROFILE_VERSION: &str =
     "hwpx-agent.equation-editor-smoke.hangul-2020-11.0.0.9136-x86-ko-KR/v1";
 pub const EQUATION_EDITOR_TARGET_EXECUTABLE_SHA256: &str =
@@ -124,6 +124,7 @@ pub struct EquationEditorSmokeRequestDraft {
     pub source: EquationEditorSmokeSourceState,
     pub before_math_ast: MathAstDraft,
     pub after_math_ast: MathAstDraft,
+    pub saved_after_script: String,
 }
 
 impl fmt::Debug for EquationEditorSmokeRequestDraft {
@@ -153,6 +154,8 @@ pub struct EquationEditorSmokePlan {
     after_semantic_sha256: String,
     after_script_sha256: String,
     after_script: String,
+    saved_after_script_sha256: String,
+    saved_after_script: String,
     changed_token_index: usize,
     before_token_sha256: String,
     after_token_sha256: String,
@@ -181,6 +184,11 @@ impl EquationEditorSmokePlan {
     }
 
     #[must_use]
+    pub fn saved_after_script(&self) -> &str {
+        &self.saved_after_script
+    }
+
+    #[must_use]
     pub fn before_semantic_sha256(&self) -> &str {
         &self.before_semantic_sha256
     }
@@ -198,6 +206,11 @@ impl EquationEditorSmokePlan {
     #[must_use]
     pub fn after_script_sha256(&self) -> &str {
         &self.after_script_sha256
+    }
+
+    #[must_use]
+    pub fn saved_after_script_sha256(&self) -> &str {
+        &self.saved_after_script_sha256
     }
 
     #[must_use]
@@ -247,6 +260,8 @@ struct EquationEditorSmokePlanSeed<'a> {
     after_semantic_sha256: &'a str,
     after_script_sha256: &'a str,
     after_script: &'a str,
+    saved_after_script_sha256: &'a str,
+    saved_after_script: &'a str,
     changed_token_index: usize,
     before_token_sha256: &'a str,
     after_token_sha256: &'a str,
@@ -267,6 +282,8 @@ struct EquationEditorSmokePlanDraft {
     after_semantic_sha256: String,
     after_script_sha256: String,
     after_script: String,
+    saved_after_script_sha256: String,
+    saved_after_script: String,
     changed_token_index: usize,
     before_token_sha256: String,
     after_token_sha256: String,
@@ -590,20 +607,7 @@ impl EquationEditorSmokePlanner {
         if &draft.source != observed_source {
             return Err(EquationEditorSmokeError::SourceStateDrift);
         }
-        for digest in [
-            &draft.harness_sha256,
-            &draft.oracle_contract_sha256,
-            &draft.source_state_sha256,
-            &draft.before_semantic_sha256,
-            &draft.before_script_sha256,
-            &draft.after_semantic_sha256,
-            &draft.after_script_sha256,
-            &draft.before_token_sha256,
-            &draft.after_token_sha256,
-            &draft.plan_sha256,
-        ] {
-            validate_digest(digest)?;
-        }
+        validate_plan_draft_digests(&draft)?;
         if hash_json(&draft.source)? != draft.source_state_sha256 {
             return Err(EquationEditorSmokeError::PlanMismatch);
         }
@@ -611,10 +615,14 @@ impl EquationEditorSmokePlanner {
             .map_err(|_| EquationEditorSmokeError::EqEdit)?;
         let before = compile_canonical_script(&engine, &draft.before_script)?;
         let after = compile_canonical_script(&engine, &draft.after_script)?;
+        let (saved_after_script_sha256, saved_after_semantic_sha256) =
+            parse_editor_script(&engine, &draft.saved_after_script)?;
         if before.semantic_sha256() != draft.before_semantic_sha256
             || before.script_sha256() != draft.before_script_sha256
             || after.semantic_sha256() != draft.after_semantic_sha256
             || after.script_sha256() != draft.after_script_sha256
+            || saved_after_semantic_sha256 != draft.after_semantic_sha256
+            || saved_after_script_sha256 != draft.saved_after_script_sha256
             || draft.source.semantic_sha256 != draft.before_semantic_sha256
             || draft.source.script_sha256 != draft.before_script_sha256
         {
@@ -644,6 +652,8 @@ impl EquationEditorSmokePlanner {
             after_semantic_sha256: &draft.after_semantic_sha256,
             after_script_sha256: &draft.after_script_sha256,
             after_script: &draft.after_script,
+            saved_after_script_sha256: &draft.saved_after_script_sha256,
+            saved_after_script: &draft.saved_after_script,
             changed_token_index,
             before_token_sha256: &before_token_sha256,
             after_token_sha256: &after_token_sha256,
@@ -664,6 +674,8 @@ impl EquationEditorSmokePlanner {
             after_semantic_sha256: draft.after_semantic_sha256,
             after_script_sha256: draft.after_script_sha256,
             after_script: draft.after_script,
+            saved_after_script_sha256,
+            saved_after_script: draft.saved_after_script,
             changed_token_index,
             before_token_sha256,
             after_token_sha256,
@@ -709,6 +721,11 @@ impl EquationEditorSmokePlanner {
         {
             return Err(EquationEditorSmokeError::NoSemanticChange);
         }
+        let (saved_after_script_sha256, saved_after_semantic_sha256) =
+            parse_editor_script(&engine, &draft.saved_after_script)?;
+        if saved_after_semantic_sha256 != after.semantic_sha256() {
+            return Err(EquationEditorSmokeError::EditorCanonicalizationMismatch);
+        }
         let (changed_token_index, before_token_sha256, after_token_sha256) =
             single_token_change(before.script(), after.script(), self.eqedit_limits)?;
         let source_state_sha256 = hash_json(&draft.source)?;
@@ -725,6 +742,8 @@ impl EquationEditorSmokePlanner {
             after_semantic_sha256: after.semantic_sha256(),
             after_script_sha256: after.script_sha256(),
             after_script: after.script(),
+            saved_after_script_sha256: &saved_after_script_sha256,
+            saved_after_script: &draft.saved_after_script,
             changed_token_index,
             before_token_sha256: &before_token_sha256,
             after_token_sha256: &after_token_sha256,
@@ -743,6 +762,8 @@ impl EquationEditorSmokePlanner {
             after_semantic_sha256: after.semantic_sha256().to_owned(),
             after_script_sha256: after.script_sha256().to_owned(),
             after_script: after.script().to_owned(),
+            saved_after_script_sha256,
+            saved_after_script: draft.saved_after_script,
             changed_token_index,
             before_token_sha256,
             after_token_sha256,
@@ -819,7 +840,7 @@ impl EquationEditorSmokePlanner {
         if after.object_id != before.object_id
             || after.native_object_count != before.native_object_count
             || after.semantic_sha256 != plan.after_semantic_sha256
-            || after.script_sha256 != plan.after_script_sha256
+            || after.script_sha256 != plan.saved_after_script_sha256
             || after.artifact_sha256 == before.artifact_sha256
             || after.package_graph_sha256 == before.package_graph_sha256
             || after.document_flow_sha256 == before.document_flow_sha256
@@ -901,6 +922,24 @@ fn compile_canonical_script(
     Ok(compiled)
 }
 
+fn parse_editor_script(
+    engine: &EqEditEngine,
+    source: &str,
+) -> Result<(String, String), EquationEditorSmokeError> {
+    let parsed = engine
+        .parse(EqEditParseRequestDraft {
+            schema_version: EQEDIT_ADAPTER_SCHEMA_VERSION.to_owned(),
+            profile_version: EQEDIT_PROFILE_VERSION.to_owned(),
+            source: source.to_owned(),
+        })
+        .map_err(|_| EquationEditorSmokeError::EqEdit)?;
+    let source_sha256 = parsed.source_sha256().to_owned();
+    let compiled = engine
+        .compile(parsed.ast())
+        .map_err(|_| EquationEditorSmokeError::EqEdit)?;
+    Ok((source_sha256, compiled.semantic_sha256().to_owned()))
+}
+
 fn single_token_change(
     before_script: &str,
     after_script: &str,
@@ -949,6 +988,27 @@ fn validate_source(
         &source.anchor_fingerprint_sha256,
         &source.semantic_sha256,
         &source.script_sha256,
+    ] {
+        validate_digest(digest)?;
+    }
+    Ok(())
+}
+
+fn validate_plan_draft_digests(
+    draft: &EquationEditorSmokePlanDraft,
+) -> Result<(), EquationEditorSmokeError> {
+    for digest in [
+        &draft.harness_sha256,
+        &draft.oracle_contract_sha256,
+        &draft.source_state_sha256,
+        &draft.before_semantic_sha256,
+        &draft.before_script_sha256,
+        &draft.after_semantic_sha256,
+        &draft.after_script_sha256,
+        &draft.saved_after_script_sha256,
+        &draft.before_token_sha256,
+        &draft.after_token_sha256,
+        &draft.plan_sha256,
     ] {
         validate_digest(digest)?;
     }
@@ -1086,6 +1146,8 @@ pub enum EquationEditorSmokeError {
     SemanticRoundtrip,
     #[error("equation editor smoke requested no semantic change")]
     NoSemanticChange,
+    #[error("equation editor smoke native editor canonicalization mismatched the requested math")]
+    EditorCanonicalizationMismatch,
     #[error("equation editor smoke must change exactly one canonical token")]
     TokenChangeMismatch,
     #[error("equation editor smoke evidence digest is untrusted")]
@@ -1129,6 +1191,9 @@ impl EquationEditorSmokeError {
             Self::EqEdit => "equation_editor_smoke_eqedit",
             Self::SemanticRoundtrip => "equation_editor_smoke_semantic_roundtrip",
             Self::NoSemanticChange => "equation_editor_smoke_no_semantic_change",
+            Self::EditorCanonicalizationMismatch => {
+                "equation_editor_smoke_editor_canonicalization_mismatch"
+            }
             Self::TokenChangeMismatch => "equation_editor_smoke_token_change_mismatch",
             Self::UntrustedEvidence => "equation_editor_smoke_untrusted_evidence",
             Self::UntrustedPlan => "equation_editor_smoke_untrusted_plan",

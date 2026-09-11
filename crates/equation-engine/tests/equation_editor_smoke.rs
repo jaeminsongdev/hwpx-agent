@@ -65,6 +65,14 @@ fn source() -> TestResult<EquationEditorSmokeSourceState> {
 }
 
 fn request(before: &str, after: &str) -> TestResult<EquationEditorSmokeRequestDraft> {
+    request_with_saved_script(before, after, &after.replace(' ', ""))
+}
+
+fn request_with_saved_script(
+    before: &str,
+    after: &str,
+    saved_after_script: &str,
+) -> TestResult<EquationEditorSmokeRequestDraft> {
     Ok(EquationEditorSmokeRequestDraft {
         schema_version: EQUATION_EDITOR_SMOKE_SCHEMA_VERSION.to_owned(),
         profile_version: EQUATION_EDITOR_SMOKE_PROFILE_VERSION.to_owned(),
@@ -73,6 +81,7 @@ fn request(before: &str, after: &str) -> TestResult<EquationEditorSmokeRequestDr
         source: source()?,
         before_math_ast: ast(before)?,
         after_math_ast: ast(after)?,
+        saved_after_script: saved_after_script.to_owned(),
     })
 }
 
@@ -104,7 +113,7 @@ fn evidence(
         document_flow_sha256: "7".repeat(64),
         object_id: source.object_id,
         semantic_sha256: plan.after_semantic_sha256().to_owned(),
-        script_sha256: plan.after_script_sha256().to_owned(),
+        script_sha256: plan.saved_after_script_sha256().to_owned(),
         native_object_count: source.native_object_count,
     };
     EquationEditorSmokeEvidenceDraft {
@@ -179,11 +188,17 @@ fn exact_one_token_plan_and_combined_evidence_pass_deterministically() -> TestRe
     assert_eq!(first.changed_token_index(), second.changed_token_index());
     assert_eq!(first.before_script(), "{x} + {1}");
     assert_eq!(first.after_script(), "{x} + {2}");
+    assert_eq!(first.saved_after_script(), "x+2");
+    assert_eq!(first.changed_token_index(), 5);
     assert_ne!(
         first.before_semantic_sha256(),
         first.after_semantic_sha256()
     );
     assert_ne!(first.before_script_sha256(), first.after_script_sha256());
+    assert_ne!(
+        first.after_script_sha256(),
+        first.saved_after_script_sha256()
+    );
 
     let receipt = verify(&first, &evidence(&first, &source))?;
     assert!(receipt.manual_double_click_verified());
@@ -222,6 +237,27 @@ fn private_plan_loader_recomputes_file_source_semantic_token_and_plan_hashes() -
         Err(EquationEditorSmokeError::PlanMismatch)
     );
 
+    let mut legacy: Value = serde_json::from_slice(&bytes)?;
+    legacy["schema_version"] = Value::String("hwpx-agent.equation-editor-smoke/v1".to_owned());
+    let legacy_object = legacy.as_object_mut().ok_or("plan must be an object")?;
+    legacy_object.remove("saved_after_script");
+    legacy_object.remove("saved_after_script_sha256");
+    let legacy_bytes = serde_json::to_vec(&legacy)?;
+    let legacy_digest = hex::encode(Sha256::digest(&legacy_bytes));
+    assert_eq!(
+        planner()?.load_plan_json(&legacy_bytes, &legacy_digest, &source),
+        Err(EquationEditorSmokeError::InvalidJson)
+    );
+
+    let mut relabeled: Value = serde_json::from_slice(&bytes)?;
+    relabeled["schema_version"] = Value::String("hwpx-agent.equation-editor-smoke/v1".to_owned());
+    let relabeled_bytes = serde_json::to_vec(&relabeled)?;
+    let relabeled_digest = hex::encode(Sha256::digest(&relabeled_bytes));
+    assert_eq!(
+        planner()?.load_plan_json(&relabeled_bytes, &relabeled_digest, &source),
+        Err(EquationEditorSmokeError::UnsupportedVersion)
+    );
+
     let mut stale = source.clone();
     stale.artifact_sha256 = "f".repeat(64);
     assert_eq!(
@@ -245,6 +281,20 @@ fn no_op_multi_token_and_token_cardinality_changes_fail_closed() -> TestResult {
     assert_eq!(
         planner()?.build(request("x + 1", "x + 1 + 2")?, &source),
         Err(EquationEditorSmokeError::TokenChangeMismatch)
+    );
+    Ok(())
+}
+
+#[test]
+fn saved_native_script_must_match_the_planned_after_math() -> TestResult {
+    let source = source()?;
+    assert_eq!(
+        planner()?.build(request_with_saved_script("x + 1", "x + 2", "y+2")?, &source,),
+        Err(EquationEditorSmokeError::EditorCanonicalizationMismatch)
+    );
+    assert_eq!(
+        planner()?.build(request_with_saved_script("x + 1", "x + 2", "x+3")?, &source,),
+        Err(EquationEditorSmokeError::EditorCanonicalizationMismatch)
     );
     Ok(())
 }
@@ -411,6 +461,8 @@ fn debug_surfaces_redact_scripts_objects_and_digests() -> TestResult {
         "revision-1",
         "x + 1",
         "x + 2",
+        "x+1",
+        "x+2",
         plan.plan_sha256(),
         receipt.evidence_sha256(),
         &source.object_id.to_string(),
@@ -434,6 +486,7 @@ fn all_public_error_codes_are_stable() {
         EquationEditorSmokeError::EqEdit,
         EquationEditorSmokeError::SemanticRoundtrip,
         EquationEditorSmokeError::NoSemanticChange,
+        EquationEditorSmokeError::EditorCanonicalizationMismatch,
         EquationEditorSmokeError::TokenChangeMismatch,
         EquationEditorSmokeError::UntrustedEvidence,
         EquationEditorSmokeError::UntrustedPlan,

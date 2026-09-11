@@ -26,7 +26,7 @@ class EquationEditorSmokeContractTests(unittest.TestCase):
         self.assertEqual(value["source_locks"], 9)
         self.assertEqual(value["implementation_files"], 9)
         self.assertTrue(value["harness_sources_verified"])
-        self.assertEqual(value["editor_target"], "not_run")
+        self.assertEqual(value["editor_target"], "incomplete")
         self.assertFalse(value["actual_hangul"])
         self.assertFalse(value["save_reopen"])
         self.assertFalse(value["render"])
@@ -36,6 +36,7 @@ class EquationEditorSmokeContractTests(unittest.TestCase):
         for relative, path, replacement in [
             (validator.CONTRACT, ["gate_decision", "actual_hangul"], True),
             (validator.CONTRACT, ["workflow", "computer_use"], "automatic_clicks"),
+            (validator.CONTRACT, ["failure_policy", 5], "saved_script_semantics_optional"),
             (validator.QUALIFICATION, ["claims", "target_editor_smoke"], True),
             (validator.QUALIFICATION, ["target_execution", "state"], "pass"),
         ]:

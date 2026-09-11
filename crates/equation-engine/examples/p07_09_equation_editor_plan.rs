@@ -42,6 +42,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let revision = argument(&mut arguments, "revision")?;
     let before_source = argument(&mut arguments, "before EqEdit")?;
     let after_source = argument(&mut arguments, "after EqEdit")?;
+    let saved_after_script = argument(&mut arguments, "saved native after EqEdit")?;
     let harness_sha256 = argument(&mut arguments, "harness SHA-256")?;
     let oracle_contract_sha256 = argument(&mut arguments, "oracle contract SHA-256")?;
     if arguments.next().is_some()
@@ -102,6 +103,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         source: source.clone(),
         before_math_ast: ast(&engine, &before_source, math_limits)?,
         after_math_ast: ast(&engine, &after_source, math_limits)?,
+        saved_after_script,
     };
     let plan = EquationEditorSmokePlanner::new(
         EquationEditorSmokeLimits::default(),

@@ -65,17 +65,20 @@ if (-not $planFile.StartsWith($run + '\', [StringComparison]::OrdinalIgnoreCase)
     throw 'EDITOR_CHILD_PLAN_IDENTITY_MISMATCH'
 }
 $plan = Get-Content -Raw -Encoding UTF8 -LiteralPath $planFile | ConvertFrom-Json
-if ([string]$plan.schema_version -cne 'hwpx-agent.equation-editor-smoke/v1' -or
+if ([string]$plan.schema_version -cne 'hwpx-agent.equation-editor-smoke/v2' -or
     [string]$plan.profile_version -cne 'hwpx-agent.equation-editor-smoke.hangul-2020-11.0.0.9136-x86-ko-KR/v1' -or
     [string]$plan.plan_sha256 -cnotmatch '^[0-9a-f]{64}$' -or
     [int]$plan.changed_token_index -lt 0 -or
-    [string]$plan.before_script -ceq [string]$plan.after_script) {
+    [string]$plan.before_script -ceq [string]$plan.after_script -or
+    [string]$plan.saved_after_script -ceq [string]$plan.before_script) {
     throw 'EDITOR_CHILD_PLAN_CONTRACT_MISMATCH'
 }
 foreach ($value in @(
     [string]$plan.harness_sha256, [string]$plan.oracle_contract_sha256,
     [string]$plan.before_semantic_sha256, [string]$plan.before_script_sha256,
     [string]$plan.after_semantic_sha256, [string]$plan.after_script_sha256,
+    [string]$plan.saved_after_script_sha256,
+    [string]$plan.before_token_sha256, [string]$plan.after_token_sha256,
     [string]$plan.source.artifact_sha256
 )) { Assert-Digest -Value $value -Code 'EDITOR_CHILD_PLAN_DIGEST_INVALID' }
 
@@ -92,14 +95,15 @@ if (-not (Test-Path -LiteralPath $inputPath -PathType Leaf) -or
     throw 'EDITOR_CHILD_INPUT_IDENTITY_MISMATCH'
 }
 $instruction = [ordered]@{
-    schema_version = 'hwpx-agent.p07-09-equation-editor-manual-instructions/v1'
+    schema_version = 'hwpx-agent.p07-09-equation-editor-manual-instructions/v2'
     plan_sha256 = [string]$plan.plan_sha256
-    before_script = [string]$plan.before_script
-    after_script = [string]$plan.after_script
+    planned_before_script = [string]$plan.before_script
+    planned_after_script = [string]$plan.after_script
+    expected_saved_after_script = [string]$plan.saved_after_script
     changed_token_index = [int]$plan.changed_token_index
     required_output_filename = 'after.hwpx'
     required_attestation_filename = 'manual-attestation.json'
-    instruction = 'User double-clicks the only native equation, changes exactly the planned token, closes the editor, saves as after.hwpx, supplies four screenshots, and confirms all clicks and typing were manual.'
+    instruction = 'User double-clicks the only native equation, changes exactly the planned semantic token, closes the editor, saves as after.hwpx, supplies four screenshots, and confirms all clicks and typing were manual. Native editor serialization may canonicalize independently and is verified from saved HWPX readback.'
     computer_use_policy = 'screenshot_only'
 }
 Write-JsonNoOverwrite -Path $instructionPath -Value $instruction
@@ -164,7 +168,7 @@ try {
         throw 'EDITOR_CHILD_ATTESTATION_LIMIT'
     }
     $attestation = [Text.Encoding]::UTF8.GetString($attestationBytes) | ConvertFrom-Json
-    if ([string]$attestation.schema_version -cne 'hwpx-agent.p07-09-equation-editor-manual-attestation/v1' -or
+    if ([string]$attestation.schema_version -cne 'hwpx-agent.p07-09-equation-editor-manual-attestation/v2' -or
         [string]$attestation.plan_sha256 -cne [string]$plan.plan_sha256 -or
         [string]$attestation.double_click -cne 'passed' -or
         [string]$attestation.editor_visible -cne 'passed' -or

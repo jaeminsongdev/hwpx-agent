@@ -1,0 +1,62 @@
+{
+  "schema_version": "hwpx-agent.equation-editor-smoke-source-qualification/v2",
+  "task": "P07-09",
+  "recorded_date": "2026-09-12",
+  "target": {
+    "product": "Hangul 2020",
+    "prog_id": "HWPFrame.HwpObject.2",
+    "version": "11.0.0.9136",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "other_versions": "not_qualified"
+  },
+  "harness_sources": {
+    "parent_path": "implementation/p07/tools/run-hancom-2020-equation-editor-smoke.ps1",
+    "parent_raw_sha256": "4a1de0e3eb8d411ac1836ba9433d41e39490b9e71c134fa9df325cb2b33ca076",
+    "child_path": "implementation/p07/tools/run-hancom-2020-equation-editor-smoke-child.ps1",
+    "child_raw_sha256": "a2b085c39c3bc2baaf6a00eb612a509f4c84c54056ecbf9f681736e70fb14956",
+    "bundle_sha256": "cae9ac27198b905ba12cc606f8b719cb27ee6940954de9648b71eb8bf71222a8",
+    "target_oracle_path": "crates/hwpx-package/examples/p07_09_equation_editor_oracle.rs",
+    "target_oracle_raw_sha256": "3374c47a1fd18cb0929a2ef32abd984ab13babfb6ee26e6fc509fcdcd28f7cb8",
+    "plan_builder_path": "crates/equation-engine/examples/p07_09_equation_editor_plan.rs",
+    "plan_builder_raw_sha256": "9e46c13276adb03c4fa09fd490bc6fb55617e6c02abd2f805460e7e3bd5fb008",
+    "evidence_oracle_path": "crates/equation-engine/examples/p07_09_equation_editor_evidence_oracle.rs",
+    "evidence_oracle_raw_sha256": "7f232afc22e63ab04378162eed6e3e0c61efeb7b40e18a08264856d0922274c0"
+  },
+  "component_execution": {
+    "state": "pass",
+    "rust_tests_passed": 11,
+    "powershell_scripts_parsed": 2,
+    "single_token_planner": "pass",
+    "saved_native_script_binding": "pass",
+    "private_plan_reload": "pass",
+    "combined_evidence_verifier": "pass",
+    "native_hwpx_oracle_build": "pass",
+    "silent_fallback_count": 0
+  },
+  "target_execution": {
+    "state": "incomplete",
+    "latest_attempt": "p07-09-20260912-attempt09",
+    "exact_target_preflight_observed": true,
+    "immutable_input_observed": true,
+    "saved_native_readback_observed": true,
+    "mandatory_screenshot_set_complete": false,
+    "automated_save_reopen_complete": false,
+    "verified_receipt_sha256": null
+  },
+  "claims": {
+    "implementation_ready": true,
+    "canonical_single_token_change_enforced": true,
+    "saved_native_script_semantics_enforced": true,
+    "manual_and_automation_required": true,
+    "computer_use_screenshot_only_enforced": true,
+    "target_editor_smoke": false,
+    "actual_hangul_gate": false,
+    "save_reopen": false,
+    "render": false,
+    "p07_09_complete": false,
+    "p07_complete": false,
+    "product_complete": false
+  }
+}

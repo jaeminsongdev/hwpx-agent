@@ -132,7 +132,7 @@ $childScript = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot 'run-hancom-2
 $parentSha256 = Get-Sha256File -Path $PSCommandPath
 $childSha256 = Get-Sha256File -Path $childScript
 $harnessBundleSha256 = Get-Sha256String -Value ($parentSha256 + ':' + $childSha256)
-if ([string]$plan.schema_version -cne 'hwpx-agent.equation-editor-smoke/v1' -or
+if ([string]$plan.schema_version -cne 'hwpx-agent.equation-editor-smoke/v2' -or
     [string]$plan.profile_version -cne 'hwpx-agent.equation-editor-smoke.hangul-2020-11.0.0.9136-x86-ko-KR/v1' -or
     [string]$plan.harness_sha256 -cne $harnessBundleSha256 -or
     [string]$plan.oracle_contract_sha256 -cne $ExpectedOracleExecutableSha256) {
@@ -195,7 +195,7 @@ if ($outputSha256 -cne [string]$childTrace.output_sha256 -or
     throw 'EDITOR_SMOKE_OUTPUT_OR_INPUT_DRIFT'
 }
 $afterOracle = Invoke-Oracle -Executable $oracleExecutable -InputPath $outputPath `
-    -InputSha256 $outputSha256 -ScriptSha256 ([string]$plan.after_script_sha256) `
+    -InputSha256 $outputSha256 -ScriptSha256 ([string]$plan.saved_after_script_sha256) `
     -SemanticSha256 ([string]$plan.after_semantic_sha256) -OutputPath $afterOraclePath
 if ([int]$afterOracle.snapshot.object_id -ne [int]$beforeOracle.snapshot.object_id -or
     [int]$afterOracle.snapshot.native_object_count -ne [int]$beforeOracle.snapshot.native_object_count) {
@@ -219,7 +219,7 @@ Write-JsonNoOverwrite -Path $oracleReceiptPath -Value $oracleReceipt
 $oracleReceiptSha256 = Get-Sha256File -Path $oracleReceiptPath
 $childTraceSha256 = Get-Sha256File -Path $childTracePath
 $evidence = [ordered]@{
-    schema_version = 'hwpx-agent.equation-editor-smoke-evidence/v1'
+    schema_version = 'hwpx-agent.equation-editor-smoke-evidence/v2'
     profile_version = 'hwpx-agent.equation-editor-smoke.hangul-2020-11.0.0.9136-x86-ko-KR/v1'
     plan_sha256 = [string]$plan.plan_sha256
     source_state_sha256 = [string]$plan.source_state_sha256
