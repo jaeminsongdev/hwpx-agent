@@ -432,7 +432,7 @@ impl AppendOnlyCredentialStateStore {
             if !file_type.is_file() {
                 return Err(StoreFailure::Rejected);
             }
-            let (sequence, expected_sha256) = parse_record_name(&name)?;
+            let sequence = parse_record_name(&name)?;
             if sequence == 0 || sequence > MAX_LOG_RECORDS {
                 return Err(StoreFailure::Rejected);
             }
@@ -449,9 +449,6 @@ impl AppendOnlyCredentialStateStore {
             file.read_to_end(&mut bytes)
                 .map_err(|_| StoreFailure::Unavailable)?;
             let actual_sha256 = digest_bytes(&bytes);
-            if actual_sha256 != expected_sha256 {
-                return Err(StoreFailure::Rejected);
-            }
             records.push(StoredRecord {
                 revision: StoredRevision {
                     sequence,
@@ -509,8 +506,10 @@ impl CredentialStateStore for AppendOnlyCredentialStateStore {
             return Err(StoreFailure::Rejected);
         }
         let record_sha256 = digest_bytes(bytes);
-        let final_name = format!("{sequence:020}-{record_sha256}.json");
-        let final_path = self.root.join(final_name);
+        // The sequence-only publication path is the compare-and-swap slot. Including the
+        // content digest in this name would let concurrent writers publish two distinct files
+        // for the same sequence after both observed the same predecessor.
+        let final_path = self.root.join(format!("{sequence:020}.json"));
         let mut nonce = [0_u8; 16];
         getrandom::fill(&mut nonce).map_err(|_| StoreFailure::Unavailable)?;
         let temporary_path = self.root.join(format!(
@@ -1056,27 +1055,14 @@ fn valid_compact_jws(value: &str) -> bool {
     ) && segments.next().is_none()
 }
 
-fn parse_record_name(value: &str) -> Result<(u64, String), StoreFailure> {
-    if value.len() != 20 + 1 + 64 + 5
-        || Path::new(value)
-            .extension()
-            .is_none_or(|extension| extension != "json")
-    {
+fn parse_record_name(value: &str) -> Result<u64, StoreFailure> {
+    let Some(sequence) = value.strip_suffix(".json") else {
+        return Err(StoreFailure::Rejected);
+    };
+    if sequence.len() != 20 || !sequence.bytes().all(|byte| byte.is_ascii_digit()) {
         return Err(StoreFailure::Rejected);
     }
-    let sequence = &value[..20];
-    let separator = value.as_bytes().get(20).copied();
-    let sha256 = &value[21..85];
-    if separator != Some(b'-')
-        || !sequence.bytes().all(|byte| byte.is_ascii_digit())
-        || !is_hex64(sha256)
-    {
-        return Err(StoreFailure::Rejected);
-    }
-    Ok((
-        sequence.parse().map_err(|_| StoreFailure::Rejected)?,
-        sha256.to_owned(),
-    ))
+    sequence.parse().map_err(|_| StoreFailure::Rejected)
 }
 
 fn valid_temporary_name(value: &str) -> bool {
@@ -1224,6 +1210,7 @@ enum WireResponse {
 #[cfg(test)]
 mod tests {
     use std::collections::VecDeque;
+    use std::sync::{Arc, Barrier};
 
     use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
     use remote_credential_lifecycle::IssuerKey;
@@ -1874,19 +1861,14 @@ mod tests {
         let first = records
             .first()
             .unwrap_or_else(|| panic!("first record missing"));
-        let first_name = first
-            .file_name()
-            .unwrap_or_else(|| panic!("first record file name missing"));
-        let copied_first = history_directory.path().join(first_name);
+        let copied_first = history_directory.path().join(
+            first
+                .file_name()
+                .unwrap_or_else(|| panic!("first record file name missing")),
+        );
         let mut earlier_tamper = vec![b' '];
         earlier_tamper.extend(must_ok(fs::read(&copied_first)));
-        let tampered_first = history_directory.path().join(format!(
-            "{:020}-{}.json",
-            1,
-            digest_bytes(&earlier_tamper)
-        ));
-        must_ok(fs::rename(&copied_first, &tampered_first));
-        must_ok(fs::write(&tampered_first, earlier_tamper));
+        must_ok(fs::write(&copied_first, earlier_tamper));
         let mut history_store = must_ok(AppendOnlyCredentialStateStore::new(
             history_directory.path(),
         ));
@@ -1903,6 +1885,55 @@ mod tests {
         must_ok(fs::write(latest, tampered));
         let mut store = must_ok(AppendOnlyCredentialStateStore::new(directory.path()));
         assert_eq!(store.load_latest().err(), Some(StoreFailure::Rejected));
+    }
+
+    #[test]
+    fn append_only_file_store_allows_only_one_writer_per_sequence_slot() {
+        const WRITERS: usize = 32;
+
+        let directory = must_ok(tempdir());
+        let root = directory.path().to_path_buf();
+        let barrier = Arc::new(Barrier::new(WRITERS + 1));
+        let mut handles = Vec::with_capacity(WRITERS);
+        for writer in 0..WRITERS {
+            let root = root.clone();
+            let barrier = Arc::clone(&barrier);
+            handles.push(std::thread::spawn(move || {
+                let mut store = AppendOnlyCredentialStateStore::new(root)?;
+                let record = DurableRecord {
+                    schema_version: RECORD_SCHEMA_VERSION.to_owned(),
+                    sequence: 1,
+                    previous_record_sha256: None,
+                    policy_binding_sha256: format!("{writer:064x}"),
+                    state: DurablePhase::Stable {
+                        credential: CredentialState::Absent,
+                    },
+                };
+                let bytes = serde_json::to_vec(&record).map_err(|_| StoreFailure::Rejected)?;
+                barrier.wait();
+                store.append(None, &bytes)
+            }));
+        }
+        barrier.wait();
+
+        let mut completed = 0_usize;
+        let mut conflicts = 0_usize;
+        for handle in handles {
+            match must_ok(handle.join()) {
+                Ok(_) => completed += 1,
+                Err(StoreFailure::Conflict) => conflicts += 1,
+                Err(error) => panic!("unexpected store failure: {error:?}"),
+            }
+        }
+        assert_eq!(completed, 1);
+        assert_eq!(conflicts, WRITERS - 1);
+
+        let mut reopened = must_ok(AppendOnlyCredentialStateStore::new(&root));
+        assert!(must_ok(reopened.load_latest()).is_some());
+        let names = must_ok(fs::read_dir(&root))
+            .map(|entry| must_ok(entry).file_name().to_string_lossy().into_owned())
+            .collect::<Vec<_>>();
+        assert_eq!(names, ["00000000000000000001.json"]);
     }
 
     #[test]
