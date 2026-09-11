@@ -1,0 +1,104 @@
+{
+  "schema_version": "hwpx-agent.p17-frozen-current-source-v47/v1",
+  "contract_id": "p17.frozen-current-source.v47.v1",
+  "scope": "immutable_git_blob_credential_broker_source_and_current_pc_evidence_verification",
+  "claims": {
+    "actual_external_credential_issuer": false,
+    "actual_external_remote_network": false,
+    "actual_hangul": false,
+    "actual_windows_refresh_or_rotate_verified": false,
+    "all_lifecycle_operations_pure_model_verified": true,
+    "append_only_reconciliation_model_verified": true,
+    "credential_issuance_or_rotation_verified": false,
+    "credential_broker_component_verified": true,
+    "current_pc_windows_issue_revoke_verified": true,
+    "historical_v47_committed_source_state_verified": true,
+    "mutable_worktree_product_sources_authoritative": false,
+    "p17_06_complete": false,
+    "pinned_loopback_tls_current_pc_verified": true,
+    "production": false,
+    "product_complete": false,
+    "real_client_assertion_verified": false,
+    "real_service_credential_verified": false,
+    "receipt_blob_verified": true,
+    "synthetic_ephemeral_issuer_only": true,
+    "windows_atomic_vault_state_integration_verified": false,
+    "windows_power_loss_durability_verified": false
+  },
+  "qualification": {
+    "base_commit": "27406fa409c99ecb5435d4373ae49ee4bae7d5ae",
+    "qualification_commit": "e736c62f309f77b77680e71c9ad334dda047e372",
+    "qualification_id": "p17.current-workspace-source.v47.20260911",
+    "contract_path": "implementation/p17/qualification/current-workspace-source-v47-20260911/contract.json",
+    "contract_sha256": "be2c4d63ef4ea843bde8df7c0ce57cb479dc0270a32217d55c708d4d7800246d",
+    "current_path": "implementation/p17/qualification/current-workspace-source-v47-20260911/current-host.json",
+    "current_sha256": "792364fcce59f0ceb1b027bc48ac657f081298246275482782e938c3000db613",
+    "receipt_path": "artifacts/p17/current-workspace-source-runs/c5cf7a8fe7414221a625c79e50cb0228/receipt.json",
+    "receipt_sha256": "a879ddf0753dcd3d6b2484c794860f94de3aaa177e864e85f05f016f4c60fbd9",
+    "implementation_source_count": 22,
+    "runtime_qualification_source_count": 5,
+    "source_successor_count": 28,
+    "guard_source_count": 3,
+    "claim_count": 86
+  },
+  "component_contract": {
+    "path": "protocol/private/p17-remote-credential-broker-v1.json",
+    "sha256": "67556534c456459ebc494f38577750ef96788f0d67bc4738535781682cfb3a79"
+  },
+  "invariants": [
+    "append_only_reconciliation_model_verified",
+    "bounded_git_blob_reads",
+    "committed_source_and_receipt_blobs_verified",
+    "current_pc_windows_vault_issue_revoke_evidence_verified",
+    "duplicate_json_keys_rejected",
+    "exact_commit_ids_and_ancestry",
+    "frozen_v46_predecessor_verified",
+    "no_mutable_worktree_authority",
+    "pinned_loopback_tls_issuer_evidence_verified",
+    "remote_credential_broker_contract_and_evidence_verified",
+    "synthetic_ephemeral_issuer_only",
+    "typed_bounded_fail_closed_errors"
+  ],
+  "source_locks": [
+    {
+      "path": "implementation/p17/P17_FROZEN_CURRENT_WORKSPACE_SOURCE_V47.md",
+      "bytes": 930,
+      "sha256": "dfd379f5c09c8e23c50d67d5250ce77ff1aba205cb3a3aa8fa584259948fbcf1"
+    },
+    {
+      "path": "protocol/migrations/p17-current-workspace-source-v47-to-frozen-v1.md",
+      "bytes": 786,
+      "sha256": "6c9cafd1f2e15092e643e3e8f8f2e5f7b9d59eb901a1ea25410bb37d3beddcec"
+    },
+    {
+      "path": "protocol/private/p17-frozen-current-source-v46-v1.json",
+      "bytes": 4104,
+      "sha256": "f6a562a9c215a64e8abaf662fe7e1f1ed3ad59abf847320933f6e13e9c2313dd"
+    },
+    {
+      "path": "tools/p17/frozen_current_source_v47.py",
+      "bytes": 16982,
+      "sha256": "558fae895f19e86e7a3083bfacb1e3b0477258b8488d9692a2f8d2a824bddd1b"
+    },
+    {
+      "path": "tools/p17/tests/test_current_workspace_source_qualification_v47.py",
+      "bytes": 3318,
+      "sha256": "34173bc9ade314ac8c9492ab965fe37edcfcf3bcebabc0f7bb0c8aa0d61f2f2e"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v47.py",
+      "bytes": 3787,
+      "sha256": "bdc329f3d01660eb0d8dfe1dedbef321bc1f343cb25c0726405dfd2b1c63bec6"
+    },
+    {
+      "path": "tools/p17/tests/test_frozen_current_source_v47_contract.py",
+      "bytes": 3087,
+      "sha256": "ed7aa4c7f54ba62f0ed0fd89e946ec797bbb4f15ff35c921246d455aa4616e8e"
+    },
+    {
+      "path": "tools/p17/validate_frozen_current_source_v47_contract.py",
+      "bytes": 6747,
+      "sha256": "ecd0fdcedce7c9ee0a3456d6d07592f3f9c88874407b98d2fb154662ddaffca9"
+    }
+  ]
+}
