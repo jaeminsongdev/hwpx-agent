@@ -4,15 +4,19 @@ use std::io::{Cursor, Write};
 use domain_ir::{MathAstDraft, MathAstLimits};
 use equation_engine::{
     EQEDIT_ADAPTER_SCHEMA_VERSION, EQEDIT_PROFILE_VERSION, EqEditEngine, EqEditLimits,
-    EqEditParseRequestDraft, EquationLayoutEstimator, EquationLayoutLimits, EquationLayoutMode,
+    EqEditParseRequestDraft, EquationCorpusLimits, EquationLayoutEstimator, EquationLayoutLimits,
+    EquationLayoutMode, LegacyEquationScript,
 };
 use hwpx_package::{
     BoundedZipReader, EQUATION_HWPX_PROFILE_ID, EQUATION_HWPX_SCHEMA_VERSION, EquationColor,
     EquationExtent, EquationExtentSource, EquationHwpxBuilder, EquationHwpxError,
     EquationHwpxLimitConfig, EquationHwpxLimits, EquationHwpxLowerer, EquationHwpxReader,
     EquationHwpxRequest, EquationHwpxRequestDraft, EquationLayout, EquationStyle, IdIndexLimits,
-    PackageGraph, PackageGraphLimits, PackageLimits, PreservingWriter, WriterLimits,
+    IdRuleProfile, PackageGraph, PackageGraphLimits, PackageLimits, PatchIntent, PatchLimits,
+    PatchText, PreservingPatchEngine, PreservingWriter, PreservingXmlDocument, WriterLimits,
+    XmlTextSelector, XmlTokenKind,
 };
+use sha2::{Digest as _, Sha256};
 use zip::write::SimpleFileOptions;
 use zip::{CompressionMethod, ZipWriter};
 
@@ -484,6 +488,80 @@ fn tampered_native_shape_script_and_duplicate_ids_are_rejected() {
         EquationHwpxReader::read_in_section(duplicate.as_bytes(), 0, limits),
         "equation_hwpx_object_id_collision",
     );
+}
+
+#[test]
+fn unrelated_same_part_edit_preserves_unsupported_legacy_script_byte_exactly() -> TestResult {
+    let legacy = "int FROM 0 TO 1 {한글 x}";
+    let section = native_section(legacy, 8).replacen(
+        "<q:run charPrIDRef=\"1\"><q:equation",
+        "<q:run charPrIDRef=\"1\"><q:t>BEFORE</q:t><q:equation",
+        1,
+    );
+    let legacy_sha = hex::encode(Sha256::digest(legacy.as_bytes()));
+    let admitted = LegacyEquationScript::new(
+        legacy.as_bytes().to_vec(),
+        &legacy_sha,
+        EquationCorpusLimits::default(),
+    )?;
+    assert_eq!(admitted.preserved_bytes(), legacy.as_bytes());
+
+    let (mut reader, graph) = open_graph(valid_archive(&section)?)?;
+    let section_path = graph
+        .parts
+        .iter()
+        .find(|part| part.path.as_str() == SECTION_PATH)
+        .ok_or_else(|| std::io::Error::other("section graph part missing"))?
+        .path
+        .clone();
+    let entry_index = reader
+        .entries()
+        .iter()
+        .find(|entry| entry.path.as_str() == SECTION_PATH)
+        .ok_or_else(|| std::io::Error::other("section archive entry missing"))?
+        .index;
+    let document = PreservingXmlDocument::parse(&reader.read_entry(entry_index)?)?;
+    let text_element = document
+        .elements()
+        .iter()
+        .enumerate()
+        .find(|(_, element)| element.name().local_name() == "t")
+        .map(|(index, _)| index)
+        .ok_or_else(|| std::io::Error::other("text element missing"))?;
+    let text_token = document
+        .tokens()
+        .iter()
+        .position(|token| {
+            token.element_index() == Some(text_element) && token.kind() == XmlTokenKind::Text
+        })
+        .ok_or_else(|| std::io::Error::other("text token missing"))?;
+    let patch_result = PreservingPatchEngine::apply_with_limits(
+        &mut reader,
+        &graph,
+        PackageGraphLimits::default(),
+        IdRuleProfile::current_hancom_2020_equation_v4(),
+        IdIndexLimits::default(),
+        PatchLimits::default(),
+        &[PatchIntent::ReplaceText {
+            target: XmlTextSelector::bind(&section_path, &document, text_token)?,
+            value: PatchText::new("AFTER")?,
+        }],
+    )?;
+    patch_result.verify_artifact_integrity()?;
+    let expected = section.replacen("BEFORE", "AFTER", 1);
+    let record = patch_result
+        .parts()
+        .iter()
+        .find(|record| record.path().as_str() == SECTION_PATH)
+        .ok_or_else(|| std::io::Error::other("section patch record missing"))?;
+    assert_eq!(
+        record.output_sha256(),
+        <[u8; 32]>::from(Sha256::digest(expected.as_bytes()))
+    );
+    assert_eq!(patch_result.changed_parts(), 1);
+    assert_eq!(expected.matches(legacy).count(), 1);
+    assert_eq!(hex::encode(Sha256::digest(legacy.as_bytes())), legacy_sha);
+    Ok(())
 }
 
 #[test]

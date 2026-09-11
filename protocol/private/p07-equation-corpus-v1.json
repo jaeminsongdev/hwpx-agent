@@ -1,0 +1,95 @@
+{
+  "schema_version": "hwpx-agent.equation-corpus-contract/v1",
+  "manifest_schema_version": "hwpx-agent.equation-corpus/v1",
+  "receipt_schema_version": "hwpx-agent.equation-corpus-receipt/v1",
+  "profile_id": "hwpx-agent.equation-corpus.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
+  "task": "P07-08",
+  "scope": "hash_pinned_tier_a_b_c_semantic_negative_and_legacy_preservation_corpus",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path":"WORK_BREAKDOWN_STRUCTURE.csv","sha256":"3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path":"README.md","sha256":"9811580c0c6c2d780d6b5d437318efc66a55e7081b04af7924c691e4bb214459"},
+    {"path":"docs/03_document_model/07_equation_model.md","sha256":"939e6973fcb7af1119ac496801af0e3848cc39021224b2f760113991ade0c43e"},
+    {"path":"docs/04_feature_catalog/08_eq.md","sha256":"d515b2c63feb7797c55a2634fad6faf1b20c4644f16c42b26288551869e7975b"},
+    {"path":"docs/04_feature_catalog/contracts/08_eq_contracts.md","sha256":"dfd3a1615ddb7f61cae87308deb0bc8237f03f194a63f1bff9304919fa88119b"},
+    {"path":"docs/09_roadmap/P07_native_equation_engine.md","sha256":"b8e7632e256a7112221812643f3dd24833e0d9bd59568cbdf23ec292a298bf9d"},
+    {"path":"docs/12_implementation_guides/06_native_equation_pipeline.md","sha256":"fca1909edfd0a7078bf3656d583578df15ab5bde56161a963984d6784e1fcb5b"},
+    {"path":"implementation/p07/P07-04_EQEDIT_POLICY.md","sha256":"2d0d89a8e612929b1e12d3b3ead357c808863ffbd6a82abe577681b30927de46"},
+    {"path":"implementation/p07/P07-07_EQUATION_LAYOUT_REPORT.md","sha256":"da76274c13f0cf5727ae15fc7375af042a7f3e4e1b20107fb5be6243d71b88f0"}
+  ],
+  "manifest": {
+    "path": "implementation/p07/fixtures/p07-08-equation-corpus.current-2020.v1.json",
+    "raw_sha256": "8893bd3169f40a5b49472cbb6c2dd4a578202b338d47d49270d237084ad6bd3f",
+    "total_cases": 64,
+    "tier_a_semantic": 44,
+    "tier_b_semantic": 14,
+    "tier_c_preserve": 2,
+    "tier_c_reject": 4
+  },
+  "source_qualification": "implementation/p07/evidence/p07-08-equation-corpus-source-qualification.current-2020.v1.json",
+  "target_qualification": null,
+  "migration": "protocol/migrations/p07-equation-corpus-v0-to-v1.md",
+  "policy": "implementation/p07/P07-08_EQUATION_CORPUS_POLICY.md",
+  "report": "implementation/p07/P07-08_EQUATION_CORPUS_REPORT.md",
+  "implementation_files": [
+    "crates/equation-engine/src/lib.rs",
+    "crates/equation-engine/src/corpus.rs",
+    "crates/equation-engine/tests/equation_corpus.rs",
+    "crates/hwpx-package/tests/equation_hwpx.rs"
+  ],
+  "tier_policy": {
+    "minimum_tier_a_semantic": 40,
+    "minimum_tier_b_semantic": 10,
+    "minimum_tier_c_preserve": 2,
+    "minimum_tier_c_reject": 2,
+    "positive_check": "declared_adapter_to_math_ast_to_eqedit_to_math_ast_semantic_equality",
+    "legacy_check": "opaque_utf8_bytes_and_sha256_preserved_exactly",
+    "negative_check": "exact_stable_error_and_success_is_silent_approximation"
+  },
+  "default_limits": {
+    "manifest_bytes": 8388608,
+    "cases": 8192,
+    "case_id_bytes": 128,
+    "source_bytes": 1048576,
+    "legacy_bytes": 4194304,
+    "serialized_bytes": 4194304
+  },
+  "failure_policy": [
+    "zero_hard_ceiling_incomplete_or_subordinate_limit_mismatch_rejected",
+    "malformed_duplicate_unknown_oversized_or_untrusted_manifest_rejected",
+    "wrong_schema_profile_duplicate_case_or_invalid_source_rejected",
+    "positive_adapter_ambiguity_unsupported_input_or_semantic_drift_rejected",
+    "legacy_input_is_never_parsed_normalized_or_promoted",
+    "legacy_digest_utf8_nul_size_or_byte_preservation_drift_rejected",
+    "negative_case_must_match_exact_error_and_success_is_silent_approximation",
+    "checked_count_arithmetic_and_bounded_deterministic_receipt_required",
+    "debug_redacts_source_legacy_bytes_and_digests",
+    "component_or_synthetic_results_never_promote_target_render_or_product"
+  ],
+  "not_claimed": {
+    "tier_b_target_execution": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "render": false,
+    "editor_smoke": false,
+    "automation_parity": false,
+    "differential": false,
+    "other_hangul_versions": false,
+    "p07_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_stage": "unit_passed",
+    "tier_a_component": "pass",
+    "tier_b_component": "pass",
+    "tier_b_target": "not_run",
+    "tier_c_component": "pass",
+    "actual_hangul": false,
+    "render": false,
+    "p07_08": "in_progress",
+    "p07": "in_progress",
+    "product_complete": false
+  }
+}

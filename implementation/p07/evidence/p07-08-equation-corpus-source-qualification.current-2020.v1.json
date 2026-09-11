@@ -1,0 +1,54 @@
+{
+  "schema_version": "hwpx-agent.equation-corpus-source-qualification/v1",
+  "task": "P07-08",
+  "recorded_date": "2026-09-11",
+  "target": {
+    "product": "Hangul 2020",
+    "version": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "other_versions": "not_qualified"
+  },
+  "manifest": {
+    "path": "implementation/p07/fixtures/p07-08-equation-corpus.current-2020.v1.json",
+    "raw_sha256": "8893bd3169f40a5b49472cbb6c2dd4a578202b338d47d49270d237084ad6bd3f",
+    "total_cases": 64,
+    "tier_a_semantic": 44,
+    "tier_b_semantic": 14,
+    "tier_c_preserve": 2,
+    "tier_c_reject": 4
+  },
+  "component_execution": {
+    "state": "pass",
+    "tier_a_passed": 44,
+    "tier_b_passed": 14,
+    "tier_c_preserve_passed": 2,
+    "tier_c_negative_passed": 4,
+    "semantic_roundtrip_failures": 0,
+    "legacy_preservation_failures": 0,
+    "negative_failures": 0,
+    "silent_approximation_count": 0,
+    "synthetic_hwpx_same_part_preserve": "pass"
+  },
+  "tier_b_target_execution": {
+    "state": "not_run",
+    "request_sha256": null,
+    "output_hwpx_sha256": null,
+    "save_reopen_sha256": null,
+    "render_evidence_sha256": null,
+    "case_count": null,
+    "silent_approximation_count": null
+  },
+  "claims": {
+    "tier_a_component_complete": true,
+    "tier_b_component_complete": true,
+    "tier_c_component_complete": true,
+    "legacy_synthetic_preservation": true,
+    "tier_b_target_complete": false,
+    "actual_hangul": false,
+    "render": false,
+    "p07_08_complete": false,
+    "p07_complete": false,
+    "product_complete": false
+  }
+}
