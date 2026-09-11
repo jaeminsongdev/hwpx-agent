@@ -21,10 +21,10 @@
 
 | Phase | State | Authoritative summary |
 |---|---|---|
-| P00-P04 | scoped current-PC PASS | reports under `implementation/p00/` to `implementation/p04/` |
+| P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | P07 in progress | P07-01 bounded MathAst component passes locally; source adapters, native equation target evidence, graphics and fields remain |
+| P07-P09 | P07 in progress | P07-01 MathAst passes; DEV-01 optimization precedes source adapters, native equation target evidence, graphics and fields |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -101,20 +101,20 @@
 - R-0006: P17 conflict resolver/widget are component evidence only.
 - R-0007: P06-09 remains 0/61 release-green until direct validations, fixtures, rollback/retry,
   current-target automation runtime and exact differential evidence close every row.
-- R-0008 closed: legacy source history plus durable push v15, durable pull v17 and current-source
-  v40-v47 use immutable Git verification; P17 Python 376/376 and workspace FULL pass without runtime/product promotion.
+- R-0008: legacy source history plus current-source v40-v47 remain immutable and 376/376 passed; v48
+  focused checks passed but its 397-test full run was interrupted, so that successor closure remains open.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 
 ## Next actions
 
-1. At `max`, freeze the issuer plus fixed-slot broker as exact current-source successor v48; exercise an external issuer only when exact host credentials exist and keep remote/production false until then.
-2. Rerun corrected TABLE-032/033 exact source qualification when the user can approve all three saves, then build the preserving HWPX adapter and run the next target oracles; automation/differentials remain separate.
-3. At every closure run target, regression, current and clean-checkout FULL plus applicable offline Linux/security/STRICT checks without weakening evidence Gates.
+1. Resume P07-02 equation source adapters at `max`; DEV-01 feedback is 101 tests in 4.461 s, repeat Git reads are 110.195x faster, and patch conflict validation is no longer quadratic.
+2. Run corrected TABLE-032/033 only when the user can approve all saves; target automation/differentials remain separate and DEV-01 is never a product Gate.
+3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
 
 ## Context pack and archive pointers
 
-- Read first: this file, active P06 authorities, P07-01 MathAst policy/report, and `implementation/p05/P05_GATE_REPORT.md`.
+- Read first: this file, DEV-01 policy/report, active P06 authorities, P07-01 MathAst policy/report, and `implementation/p05/P05_GATE_REPORT.md`.
 - P17 authorities: frozen legacy/v40-v47 reports, `P17-06_GIT_MIRROR_EFFECT_V13.md`, frozen durable-push v15/durable-pull v17 qualifications, Windows custody v18, remote TLS v19, lifecycle v21, broker v22/v24 and issuer v23.
 - Detailed closed-card history is in the named reports and local Git history; no remote push is implied.
 - Do not touch user originals, failed evidence, immutable predecessor locks or unrelated processes.

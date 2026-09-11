@@ -1664,6 +1664,7 @@ pub(crate) struct VirtualPart {
     pub(crate) bytes: Vec<u8>,
 }
 
+#[cfg_attr(test, derive(Clone))]
 struct ByteEdit {
     part_key: String,
     start: usize,
@@ -1693,23 +1694,37 @@ fn validate_conflicts(edits: &mut [ByteEdit]) -> Result<(), PatchError> {
             right.origin,
         ))
     });
-    for left_index in 0..edits.len() {
-        for right in &edits[left_index + 1..] {
-            let left = &edits[left_index];
-            if left.part_key != right.part_key {
-                break;
+    let mut part_key: Option<&str> = None;
+    let mut active_replacement_end: Option<usize> = None;
+    let mut last_insert_position: Option<usize> = None;
+    for edit in edits {
+        if part_key != Some(edit.part_key.as_str()) {
+            part_key = Some(edit.part_key.as_str());
+            active_replacement_end = None;
+            last_insert_position = None;
+        }
+        let is_insert = edit.start == edit.end;
+        let replacement_conflict = active_replacement_end.is_some_and(|end| {
+            if is_insert {
+                end >= edit.start
+            } else {
+                end > edit.start
             }
-            if ranges_conflict(left.start, left.end, right.start, right.end) {
-                return Err(PatchError::Conflict);
-            }
-            if left.end < right.start && left.start != left.end {
-                break;
-            }
+        });
+        if replacement_conflict || last_insert_position == Some(edit.start) {
+            return Err(PatchError::Conflict);
+        }
+        if is_insert {
+            last_insert_position = Some(edit.start);
+        } else {
+            active_replacement_end =
+                Some(active_replacement_end.map_or(edit.end, |end| end.max(edit.end)));
         }
     }
     Ok(())
 }
 
+#[cfg(test)]
 fn ranges_conflict(
     left_start: usize,
     left_end: usize,
@@ -1896,5 +1911,89 @@ fn binary_signature_matches(media_type: &str, bytes: &[u8]) -> Option<bool> {
         }
         "font/otf" | "application/vnd.ms-opentype" => Some(bytes.starts_with(b"OTTO")),
         _ => None,
+    }
+}
+
+#[cfg(test)]
+mod conflict_validation_tests {
+    use super::{ByteEdit, PatchError, ranges_conflict, validate_conflicts};
+
+    fn edit(part: &str, start: usize, end: usize, origin: usize) -> ByteEdit {
+        ByteEdit::new(part, start, end, Vec::new(), origin)
+    }
+
+    fn quadratic_conflict(mut edits: Vec<ByteEdit>) -> bool {
+        edits.sort_by(|left, right| {
+            (&left.part_key, left.start, left.end, left.origin).cmp(&(
+                &right.part_key,
+                right.start,
+                right.end,
+                right.origin,
+            ))
+        });
+        for (index, left) in edits.iter().enumerate() {
+            for right in &edits[index + 1..] {
+                if left.part_key != right.part_key {
+                    break;
+                }
+                if ranges_conflict(left.start, left.end, right.start, right.end) {
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
+    #[test]
+    fn sweep_matches_quadratic_reference_for_small_exhaustive_ranges() {
+        let mut candidates = Vec::new();
+        for part in ["a", "b"] {
+            for start in 0..=3 {
+                for end in start..=3 {
+                    candidates.push((part, start, end));
+                }
+            }
+        }
+        for left in &candidates {
+            for middle in &candidates {
+                for right in &candidates {
+                    let edits = vec![
+                        edit(left.0, left.1, left.2, 0),
+                        edit(middle.0, middle.1, middle.2, 1),
+                        edit(right.0, right.1, right.2, 2),
+                    ];
+                    let expected = quadratic_conflict(edits.clone());
+                    let mut observed = edits;
+                    assert_eq!(validate_conflicts(&mut observed).is_err(), expected);
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn fifty_thousand_distinct_insertions_are_admitted_without_quadratic_scan() {
+        let mut edits = (0..50_000)
+            .map(|position| edit("part", position * 2, position * 2, position))
+            .rev()
+            .collect::<Vec<_>>();
+        assert!(validate_conflicts(&mut edits).is_ok());
+        edits.push(edit("part", 99_998, 99_998, 50_000));
+        assert!(matches!(
+            validate_conflicts(&mut edits),
+            Err(PatchError::Conflict)
+        ));
+    }
+
+    #[test]
+    fn insertion_boundaries_conflict_but_adjacent_replacements_do_not() {
+        for position in [2, 5] {
+            let mut edits = vec![edit("part", 2, 5, 0), edit("part", position, position, 1)];
+            assert!(matches!(
+                validate_conflicts(&mut edits),
+                Err(PatchError::Conflict)
+            ));
+        }
+        let mut adjacent = vec![edit("part", 2, 5, 0), edit("part", 5, 8, 1)];
+        assert!(validate_conflicts(&mut adjacent).is_ok());
     }
 }
