@@ -1,0 +1,55 @@
+{
+  "schema_version": "hwpx-agent.p09-note-hwpx-source-qualification/v1",
+  "task": "P09-15",
+  "base_commit": "fd6274c",
+  "profile": "hwpx-agent.note-hwpx.hwpml-2011-inline-note-payload/v1",
+  "official_source": {
+    "repository": "https://github.com/hancom-io/hwpx-owpml-model.git",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "scope": "HWPML_2011_NoteType_ParaListType_PType_RunType_and_plain_T_shape_only",
+    "reviewed_sha256": {
+      "OWPML/Class/Para/NoteType.h": "3ff35f5926ecdbd08d144dc52165d31ecc25e9d99929dae6d3da1ae3fcdd03b8",
+      "OWPML/Class/Para/NoteType.cpp": "df20a88cafb301c4b7b8ece5fbcb20a9cb69cfea6ffcb48a37751d0b16336b15",
+      "OWPML/Class/Para/ParaListType.h": "e25e4eb302e770fa913355aa04e30355d6523313a945f1033e6e092c7a937c91",
+      "OWPML/Class/Para/ParaListType.cpp": "64dc1b0276f857d25fe3db1d89786020aeb426a7cb920696becad26e8a88c6f0",
+      "OWPML/Class/Para/PType.h": "9443763a3b463447479dd26c0f8781fcd7b25f536d8f362832855247a773011b",
+      "OWPML/Class/Para/PType.cpp": "acf53f6ce80d7e043e541ddc5a5beb8b5d9e2e7971720fc088b895bfc10a41d4",
+      "OWPML/Class/Para/RunType.h": "d794636b3c03756f464b13629156f2258e818f3f67f9f9dd41f38cb6a5a2a432",
+      "OWPML/Class/Para/RunType.cpp": "dbaa0fe2b553dccc13381c856fd9c188185a16bf63685f575acf6bf2c9b88dee",
+      "OWPML/Class/Para/t.h": "e3ee45308a16a0b006ae57750a94d3019a4f220f3c6c20bd04a0deb0cd22c1bc",
+      "OWPML/Class/Para/t.cpp": "c368eafe7af47555dd9e7c6b8ea1695c564854313a280c1e51099e80224d8e1e"
+    }
+  },
+  "implementation_sha256": {
+    "crates/domain-ir/src/note_engine.rs": "f31db3149e58e161af396e0611b9a3f85a36bf9c68de39e776ea0b2b9fee469f",
+    "crates/domain-ir/tests/note_engine.rs": "a5a0ec5057e63688d8775e9bbfee1dd81ce0041267aefef8b05bb3e69d9bccc4",
+    "crates/hwpx-package/src/note_hwpx.rs": "4be3f345b92e8f17a7e41e2c1e360e9a12a251ff8c14ae7fceb56a4247ff41ad",
+    "crates/hwpx-package/tests/note_hwpx.rs": "2a653139d6cd77a1b5b79121696ab7ffc4caadf4a003fcde2f2cae09b8fd7f71"
+  },
+  "tests": {
+    "note_engine_domain": "9/9 PASS",
+    "note_hwpx_public": "7/7 PASS",
+    "note_hwpx_private_tamper": "1/1 PASS",
+    "fixture_classes": ["boundary", "happy_path", "negative", "preservation"],
+    "focused_clippy": "PASS"
+  },
+  "claims": {
+    "two_row_closed_plain_text_static_section_integration": true,
+    "typed_target_projection_readback": true,
+    "outside_delta_byte_preserved": true,
+    "complete_state_flow_map_and_payload_bound": true,
+    "arbitrary_rich_note_body": false,
+    "complete_package_hwpx": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "semantic_reopen": false,
+    "save_reopen": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "green_rows": 0,
+    "p09_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

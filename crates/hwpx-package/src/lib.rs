@@ -21,6 +21,7 @@ mod id_index;
 mod image_hwpx;
 mod limits;
 mod list_definition;
+mod note_hwpx;
 mod object_appearance_hwpx;
 mod object_composition_hwpx;
 mod object_geometry_hwpx;
@@ -133,6 +134,11 @@ pub use list_definition::{
     ListDefinitionLoweringReceipt, ListSequenceEngine, ListSequenceItem, ListSequenceKind,
     ListSequenceResult, NumberFormat, NumberingDefinition, NumberingLevel,
     OutlineDefinitionBinding, OutlineDefinitionBindingReader, ParagraphHeadStyle, TextOffsetUnit,
+};
+pub use note_hwpx::{
+    NOTE_HWPX_PROFILE_ID, NoteHwpxBuilder, NoteHwpxError, NoteHwpxLimitConfig, NoteHwpxLimits,
+    NoteHwpxLowerer, NoteHwpxLoweringReceipt, NoteHwpxPayloadDigests, NoteHwpxPlan,
+    NoteHwpxReadback, NoteHwpxReader,
 };
 pub use object_appearance_hwpx::{
     OBJECT_APPEARANCE_HWPX_PROFILE_ID, ObjectAppearanceHwpxBuilder, ObjectAppearanceHwpxError,
