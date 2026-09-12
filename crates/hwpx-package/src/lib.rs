@@ -41,6 +41,7 @@ mod table_pagination;
 mod table_placement;
 mod table_ruling_hwpx;
 mod text_flow;
+mod textbox_properties_hwpx;
 mod vs0;
 mod vs1_layout;
 mod writer;
@@ -303,6 +304,12 @@ pub use text_flow::{
     FieldBegin, FieldEnd, FieldType, HANCOM_2020_PARAGRAPH_NAMESPACE, OpaqueTextElement,
     ParagraphChild, TextAtom, TextFlow, TextFlowError, TextFlowLimitConfig, TextFlowLimits,
     TextFlowReader, TextFlowWriter, TextParagraphProperties, TextRun, TextRunItem, TextSpan,
+};
+pub use textbox_properties_hwpx::{
+    TEXTBOX_PROPERTIES_HWPX_PROFILE_ID, TextBoxPropertiesHwpxBuilder, TextBoxPropertiesHwpxError,
+    TextBoxPropertiesHwpxLimitConfig, TextBoxPropertiesHwpxLimits, TextBoxPropertiesHwpxLowerer,
+    TextBoxPropertiesHwpxLoweringReceipt, TextBoxPropertiesHwpxPlan, TextBoxPropertiesHwpxReadback,
+    TextBoxPropertiesHwpxReader,
 };
 pub use vs0::{
     HANCOM_2020_VS0_MAX_TEXT_BYTES, Hancom2020Vs0Artifact, Hancom2020Vs0Builder, Hancom2020Vs0Error,

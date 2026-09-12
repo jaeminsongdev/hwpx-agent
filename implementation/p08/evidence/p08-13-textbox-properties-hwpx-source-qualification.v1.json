@@ -1,0 +1,50 @@
+{
+  "schema_version": "hwpx-agent.p08-textbox-properties-hwpx-source-qualification/v1",
+  "task": "P08-13",
+  "recorded_date": "2026-09-12",
+  "profile": "hwpx-agent.textbox-properties-hwpx.hwpml-2011-attribute-spans/v1",
+  "official_source": {
+    "repository": "https://github.com/hancom-io/owpml-model",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "reviewed_files": [
+      "OWPML/Class/Para/RectangleType.cpp",
+      "OWPML/Class/Para/drawText.cpp",
+      "OWPML/Class/Para/drawText.h",
+      "OWPML/Class/Para/textMargin.cpp",
+      "OWPML/Class/Para/textMargin.h",
+      "OWPML/Class/Para/ParaListType.cpp",
+      "OWPML/Class/Para/ParaListType.h",
+      "OWPML/Class/enumdef.h"
+    ],
+    "scope": "HWPML_2011_rectangle_drawText_textMargin_and_subList_direction_alignment_static_vocabulary_only"
+  },
+  "implementation_sha256": {
+    "crates/domain-ir/src/object_properties.rs": "f0bed7df4dc15092f764edd18f10351de2420b9f90dbd0e3909cdda6c3415695",
+    "crates/hwpx-package/src/lib.rs": "3c007f255931473477ed07d3403bcb94288e6e26152b6ef47c6cae6828118944",
+    "crates/hwpx-package/src/textbox_properties_hwpx.rs": "bf5638328a5f57664defdc494a95c79f386847f08eed6134b5a6f8d7f246f1b5",
+    "crates/hwpx-package/tests/textbox_properties_hwpx.rs": "971e0c186caef9ba0e8bb939f3faf1017c46bddc88eca61eebc4644597fb59a6"
+  },
+  "tests": {
+    "textbox_properties_hwpx": "7/7 PASS",
+    "fixture_classes": ["boundary", "happy_path", "negative", "preservation"],
+    "all_direction_alignment_variants": "3x3 PASS",
+    "focused_clippy": "PASS"
+  },
+  "claims": {
+    "one_row_direct_hwpx_integration": true,
+    "obj_025_static_section_hwpx": true,
+    "typed_semantic_reopen": true,
+    "outside_attribute_spans_preserved": true,
+    "complete_state_and_flow_bound": true,
+    "actual_target_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "object_bounds": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

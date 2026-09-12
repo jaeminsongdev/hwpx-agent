@@ -65,10 +65,16 @@ EXPECTED_DIRECT_PROFILES = {
         "validations": ("schema", "semantic_reopen"),
     },
     "object-properties-component-v1": {
-        "features": ("OBJ-019", "OBJ-025", "OBJ-030", "OBJ-044", "OBJ-045", "OBJ-046", "OBJ-047", "OBJ-048"),
+        "features": ("OBJ-019", "OBJ-030", "OBJ-044", "OBJ-045", "OBJ-046", "OBJ-047", "OBJ-048"),
         "backend": "component_only",
         "stage": "unit_passed",
         "validations": ("schema",),
+    },
+    "textbox-properties-section-v1": {
+        "features": ("OBJ-025",),
+        "backend": "direct_hwpx",
+        "stage": "integration_passed",
+        "validations": ("schema", "semantic_reopen"),
     },
     "shape-points-section-v1": {
         "features": ("OBJ-043",),
@@ -455,7 +461,7 @@ def build_matrix(
         "implementation_covered_rows": 53,
         "green_rows": 0,
         "non_green_rows": 58,
-        "direct_stage_counts": {"cataloged": 5, "unit_passed": 21, "integration_passed": 32, "oracle_verified": 0},
+        "direct_stage_counts": {"cataloged": 5, "unit_passed": 20, "integration_passed": 33, "oracle_verified": 0},
         "automation_binding_counts": {"candidate_unverified": 9, "denied_by_policy": 2, "unavailable_with_reason": 47},
         "phase_counts": {"P08": 42, "P11": 16},
         "support_level_counts": {"HYBRID": 42, "AUTOMATION_FULL": 11, "OPTIONAL_EXTERNAL": 3, "PRESERVE_ONLY": 2},

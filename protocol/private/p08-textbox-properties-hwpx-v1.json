@@ -1,0 +1,74 @@
+{
+  "schema_version": "hwpx-agent.p08-textbox-properties-hwpx-contract/v1",
+  "task": "P08-13",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_qualification": "implementation/p08/evidence/p08-13-textbox-properties-hwpx-source-qualification.v1.json",
+  "migration": "protocol/migrations/p08-textbox-properties-hwpx-v0-to-v1.md",
+  "policy": "implementation/p08/P08-13_TEXTBOX_PROPERTIES_HWPX_POLICY.md",
+  "report": "implementation/p08/P08-13_TEXTBOX_PROPERTIES_HWPX_REPORT.md",
+  "source_locks": [
+    {"path": "docs/03_document_model/08_drawing_image_chart.md", "sha256": "ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b"},
+    {"path": "docs/04_feature_catalog/09_obj.md", "sha256": "e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8"},
+    {"path": "docs/04_feature_catalog/contracts/09_obj_contracts.md", "sha256": "e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2"},
+    {"path": "docs/09_roadmap/P08_images_shapes_drawing_charts.md", "sha256": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path": "specs/work-breakdown-structure.json", "sha256": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2"}
+  ],
+  "implementation_files": [
+    "crates/domain-ir/src/object_properties.rs",
+    "crates/hwpx-package/src/lib.rs",
+    "crates/hwpx-package/src/textbox_properties_hwpx.rs",
+    "crates/hwpx-package/tests/textbox_properties_hwpx.rs"
+  ],
+  "profile": "hwpx-agent.textbox-properties-hwpx.hwpml-2011-attribute-spans/v1",
+  "feature_ids": ["OBJ-025"],
+  "capabilities": ["obj.textbox_properties"],
+  "admitted_profile": {
+    "source": "exactly_one_requested_run_level_hp_rect_text_box",
+    "topology": "one_direct_drawText_with_exact_textMargin_then_subList_children",
+    "identity": "canonical_nonzero_root_id_and_instid_equal_complete_source_state",
+    "fields": "four_canonical_hwpunit_margins_three_directions_and_three_vertical_alignments",
+    "delta": "changed_values_only_across_at_most_six_reviewed_attribute_spans",
+    "outside_delta": "byte_exact"
+  },
+  "planning": {
+    "request_and_lower_domain_build_rechecked": true,
+    "complete_source_target_state_and_flow_bound": true,
+    "section_object_drawText_margin_sublist_domain_plan_and_plan_sha256": true,
+    "typed_target_semantic_reopen": true,
+    "outside_attribute_span_byte_preservation": true,
+    "bounded_json_and_redacted_debug": true
+  },
+  "failure_policy": [
+    "wrong_object_kind_ordinal_identity_or_complete_state_rejected",
+    "missing_duplicate_nested_wrong_order_or_ambiguous_topology_rejected",
+    "qualified_duplicate_noncanonical_or_unsupported_target_attributes_rejected",
+    "state_flow_section_object_drawText_margin_sublist_or_plan_drift_rejected",
+    "output_limit_readback_or_outside_span_preservation_failure_rejected",
+    "no_partial_output_or_fallback_after_failure"
+  ],
+  "evidence_boundary": {
+    "direct_stage": "integration_passed",
+    "obj_025_static_section_hwpx": true,
+    "typed_semantic_reopen": true,
+    "outside_attribute_spans_preserved": true,
+    "complete_state_and_flow_bound": true,
+    "actual_target_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "object_bounds": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_hwpx_integration": "pass",
+    "current_target": "not_run",
+    "release_green_rows": 0,
+    "p08": "in_progress",
+    "product_complete": false
+  }
+}

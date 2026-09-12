@@ -28,7 +28,7 @@ SOURCE_SHA256 = {
 IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/lib.rs": "7b5bedf1434e2ecac621cff7f692fb120d54249174eb6b681614c23d1d740213",
     "crates/domain-ir/src/basic_shape.rs": "6eebfbe838b9f76530a2f3cddc414d146df2f97384305232db8f3e7b02acb3c6",
-    "crates/domain-ir/src/object_properties.rs": "1275284028df525132ac5e60443e4a993a40070f295c41834a49e1f398c73c61",
+    "crates/domain-ir/src/object_properties.rs": "f0bed7df4dc15092f764edd18f10351de2420b9f90dbd0e3909cdda6c3415695",
     "crates/domain-ir/src/shape_points.rs": "e64750c645c00fcd4c40543dde7c8f6736e699e0b7781044458fc2b2f60909af",
     "crates/domain-ir/src/object_special.rs": "d608b15109c0a3168fec0b8b0d70b0709759a6e533e44e5fd87ae65ccddbcabc",
     "crates/domain-ir/tests/basic_shape.rs": "40a582bcbae8939a46ce1cc661aaa46174e04bec814ced94b1aebb8775ec55a1",

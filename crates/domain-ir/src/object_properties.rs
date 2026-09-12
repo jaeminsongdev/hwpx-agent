@@ -344,6 +344,16 @@ impl ObjectPropertiesState {
     }
 
     #[must_use]
+    pub const fn native_object_id(&self) -> u32 {
+        self.native_object_id
+    }
+
+    #[must_use]
+    pub const fn native_instance_id(&self) -> u32 {
+        self.native_instance_id
+    }
+
+    #[must_use]
     pub const fn outer_margins(&self) -> ObjectPropertyMargins {
         self.outer_margins
     }
@@ -609,8 +619,23 @@ impl ObjectPropertiesPlan {
     }
 
     #[must_use]
+    pub const fn source_state(&self) -> &ObjectPropertiesState {
+        &self.source_state
+    }
+
+    #[must_use]
     pub const fn target_state(&self) -> &ObjectPropertiesState {
         &self.target_state
+    }
+
+    #[must_use]
+    pub fn source_document_flow_sha256(&self) -> &str {
+        &self.source_document_flow_sha256
+    }
+
+    #[must_use]
+    pub fn target_document_flow_sha256(&self) -> &str {
+        &self.target_document_flow_sha256
     }
 
     #[must_use]
