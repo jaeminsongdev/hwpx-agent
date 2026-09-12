@@ -40,7 +40,7 @@ OFFICIAL_SOURCE_SHA256 = {
     "OWPML/Class/Para/t.h": "e3ee45308a16a0b006ae57750a94d3019a4f220f3c6c20bd04a0deb0cd22c1bc",
 }
 IMPLEMENTATION_SHA256 = {
-    "crates/domain-ir/src/lib.rs": "b13dcc56b5938d524084179b6c31e1c51bbc0fbd716146f47fcb89fa73cdb8d0",
+    "crates/domain-ir/src/lib.rs": "b4726732a47175205a7e35f3aa8e018e66b2a0fbada144bebeac3f395540c058",
     "crates/domain-ir/src/toc_index.rs": "f7fe0a171b51cb508f7d0445614f20fc40b5036fc2ac1e92110af0b8166fe718",
     "crates/domain-ir/tests/toc_index.rs": "83ca0c65d6186eaa1048a9f87af6d420eac82a3e0dec54626649d59469ef2008",
 }

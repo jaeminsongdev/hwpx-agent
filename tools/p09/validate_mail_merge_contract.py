@@ -32,7 +32,7 @@ OFFICIAL_SOURCE_SHA256 = {
     "OWPML/Class/Para/fieldEnd.cpp": "2937fbca1ff5b99bb05672544dd079c4165c7ada174edbb654873aecb7f8018d",
 }
 IMPLEMENTATION_SHA256 = {
-    "crates/domain-ir/src/lib.rs": "b13dcc56b5938d524084179b6c31e1c51bbc0fbd716146f47fcb89fa73cdb8d0",
+    "crates/domain-ir/src/lib.rs": "b4726732a47175205a7e35f3aa8e018e66b2a0fbada144bebeac3f395540c058",
     "crates/domain-ir/src/mail_merge.rs": "54a55e4c32adf3905c76c20790b84117b8943442667e8bfd92cf67f717859581",
     "crates/domain-ir/tests/mail_merge.rs": "0d24c59a611cb73950a1b5bdca4a58932c2e3f85e3d87bec5885832b1a05df3d",
 }

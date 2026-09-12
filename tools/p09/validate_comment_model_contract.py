@@ -45,7 +45,7 @@ OFFICIAL_SOURCE_SHA256 = {
     "OWPML/Class/Para/SectionDefinitionType.cpp": "4cfcca9bee299c3fbfe2cf2e2e3ec09027a4fa8c404cbb68f141cb584058c7e4",
 }
 IMPLEMENTATION_SHA256 = {
-    "crates/domain-ir/src/lib.rs": "b13dcc56b5938d524084179b6c31e1c51bbc0fbd716146f47fcb89fa73cdb8d0",
+    "crates/domain-ir/src/lib.rs": "b4726732a47175205a7e35f3aa8e018e66b2a0fbada144bebeac3f395540c058",
     "crates/domain-ir/src/comment_model.rs": "aa332c72c54480442cf64bf540ce8e75d89817c6620c3fc0b4141bc299956e1b",
     "crates/domain-ir/tests/comment_model.rs": "70de531cc94ff4f0613129de589291b9fd8cb7de7414aa0a6c63d22d73b1b5b6",
 }

@@ -21,6 +21,7 @@ mod object_geometry;
 mod object_properties;
 mod object_special;
 mod operation_plan;
+mod reference_auxiliary;
 mod selector;
 mod semantic_diff;
 mod semantic_summary;
@@ -240,6 +241,20 @@ pub use operation_plan::{
     DefaultPolicy, FailurePolicy, NumericArgumentDraft, NumericUnit, OPERATION_PLAN_SCHEMA_VERSION,
     OperationDraft, OperationPlanCompiler, OperationPlanDraft, OperationPlanError,
     OperationPlanLimits, SelectorDraft, UnsupportedSelectorKind,
+};
+pub use reference_auxiliary::{
+    AuxiliaryCacheStatus, AuxiliarySectionState, BrokenReferenceIssue, BrokenReferenceKind,
+    CaptionBinding, CaptionNativeEnvelope, CaptionNativeSemanticBinding, CaptionNumberFormat,
+    CaptionObjectKind, CaptionObjectTarget, CaptionRestartPolicy, CaptionSequenceCache,
+    CaptionSequenceDefinition, CorrectionMarkKind, CorrectionMarkNode, DataLinkArtifactProtection,
+    DataLinkAvailability, DataLinkInheritance, DataLinkState, DateTimeCalendar, DateTimeFieldCache,
+    DateTimeFieldNode, DateTimeFormatDefinition, FileNameLiteralNode, NativeCaptionSide,
+    NativeDateFieldType, REFERENCE_AUXILIARY_SCHEMA_VERSION, ReferenceAuxiliaryBuilder,
+    ReferenceAuxiliaryDocumentState, ReferenceAuxiliaryDocumentStateDraft, ReferenceAuxiliaryError,
+    ReferenceAuxiliaryLimitConfig, ReferenceAuxiliaryLimits, ReferenceAuxiliaryOperation,
+    ReferenceAuxiliaryPlan, ReferenceAuxiliaryReceipt, ReferenceAuxiliaryRequest,
+    ReferenceAuxiliaryRequestDraft, ReferenceAuxiliaryResult, ReferenceTargetKind,
+    ReferenceValidationReport, ValidationReferenceEdge, ValidationTarget,
 };
 pub use selector::{
     NamedSelectorKind, NodeKind, ResolvedTarget, Selector, SelectorError, SelectorExpectation,

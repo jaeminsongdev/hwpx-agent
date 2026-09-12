@@ -34,7 +34,7 @@ EXPECTED_SOURCE_LOCKS = {
     "implementation/p08/p08-09-current-2020-direct-evidence.json": "3a8a0f3cd0fb96001aceaecbd5567d3c40369e348a1db14535727cfd2a7d0026",
     "implementation/p08/p08-09-current-2020-automation-projection.json": "f8c06f206c29eb7aa77b845fd1afa1ff09535145584f5f9fff83fdc679f1cd12",
     "implementation/p08/p08-09-threshold-policy.v1.json": "0f4856e81edc012ed80608fddea6a2be98286ca772127c5b1316f3e2ed890d0c",
-    "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json": "d922c24d4f7c73a779405958d482a644b052d5a9e9002ab193b304a427f2b0e3",
+    "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json": "b467d8e87cd6455f57ddf1cb45ff645a8f6ec4c4cad49aa1931257d07b979e65",
     "tools/p08/object_conformance.py": "852c8f7ba1d34606de8cbaeb47062dd13a1085e3ca58cc0219f9856a410aded4",
 }
 
