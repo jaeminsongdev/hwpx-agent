@@ -717,6 +717,21 @@ impl LinkReferencePlan {
     pub fn target_state_sha256(&self) -> &str {
         &self.target_state_sha256
     }
+
+    #[must_use]
+    pub fn source_state_sha256(&self) -> &str {
+        &self.source_state_sha256
+    }
+
+    #[must_use]
+    pub fn source_document_flow_sha256(&self) -> &str {
+        &self.source_document_flow_sha256
+    }
+
+    #[must_use]
+    pub fn target_document_flow_sha256(&self) -> &str {
+        &self.target_document_flow_sha256
+    }
 }
 
 impl fmt::Debug for LinkReferencePlan {

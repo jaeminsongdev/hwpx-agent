@@ -26,7 +26,7 @@ SOURCE_SHA256 = {
 IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/object_composition.rs": "d3389af14835039ca9c39dc65f453906704ae456d67720772db810b2f8ca8045",
     "crates/domain-ir/src/drawing_canvas.rs": "e0fc9e25852f19ab70ad6fdfd3680f1d8dd5a07e7d184cb2d02d5103533de118",
-    "crates/hwpx-package/src/lib.rs": "3db5c7868d36516048967e1b3281714b6fc566a571098207b01688237579f55d",
+    "crates/hwpx-package/src/lib.rs": "f57b0278eb627ac95f84a1aab4e33d2836979b05e69fd16eefe2c99706d6163c",
     "crates/hwpx-package/src/object_composition_hwpx.rs": "2e9f4737fd22e58ed59ebff53ac94964cb89e8fb3eddce83a088eeec265bffe6",
     "crates/hwpx-package/src/drawing_canvas_hwpx.rs": "0f0ef83c164c63ba013e0ebd19d857aa15f42ad4df3e4d4854acc182285e312d",
     "crates/hwpx-package/tests/object_composition_hwpx.rs": "79554bce44dc1f0f12c838c43d94854e4bcd5248c64c03a3b58d1acea53598ed",

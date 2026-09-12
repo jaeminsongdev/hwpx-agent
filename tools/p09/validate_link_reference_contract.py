@@ -40,7 +40,7 @@ OFFICIAL_SOURCE_SHA256 = {
 }
 IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/lib.rs": "b4726732a47175205a7e35f3aa8e018e66b2a0fbada144bebeac3f395540c058",
-    "crates/domain-ir/src/link_reference.rs": "db6178b4c399a9c58773d39ed3609a8878aeeb1873b30c64fd248129e00c900f",
+    "crates/domain-ir/src/link_reference.rs": "21f39a72c3a115d286e296d8fffc92e93c0c39d0a21b05b9763aaae8213b9a77",
     "crates/domain-ir/tests/link_reference.rs": "c3fc396288a57b5e25d0bab0a7f05748b9a2c55450698ddfa88421da0c28ad46",
 }
 CAPABILITIES = {

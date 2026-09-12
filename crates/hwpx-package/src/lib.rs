@@ -9,6 +9,7 @@
 mod active_content;
 mod asset;
 mod basic_shape_hwpx;
+mod bookmark_hwpx;
 mod character_style;
 mod drawing_canvas_hwpx;
 mod equation;
@@ -63,6 +64,11 @@ pub use basic_shape_hwpx::{
     BasicShapeHwpxLimitConfig, BasicShapeHwpxLimits, BasicShapeHwpxLowered, BasicShapeHwpxLowerer,
     BasicShapeHwpxLoweringReceipt, BasicShapeHwpxPlan, BasicShapeHwpxReadback,
     BasicShapeHwpxReader, BasicShapeHwpxSource,
+};
+pub use bookmark_hwpx::{
+    BOOKMARK_HWPX_PROFILE_ID, BookmarkHwpxBuilder, BookmarkHwpxError, BookmarkHwpxLimitConfig,
+    BookmarkHwpxLimits, BookmarkHwpxLowerer, BookmarkHwpxLoweringReceipt, BookmarkHwpxPlan,
+    BookmarkHwpxReadback, BookmarkHwpxReader,
 };
 pub use character_style::{
     BinaryProperty, CHARACTER_STYLE_PROFILE_ID, CharacterEffects, CharacterStyle,
