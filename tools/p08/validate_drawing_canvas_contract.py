@@ -46,7 +46,7 @@ OFFICIAL_SHA256 = {
 }
 IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/drawing_canvas.rs": "e0fc9e25852f19ab70ad6fdfd3680f1d8dd5a07e7d184cb2d02d5103533de118",
-    "crates/domain-ir/src/lib.rs": "21102ca867ace70a0e1f5f4db6142dacdc7f9448233ff61102ac00070aba9ed6",
+    "crates/domain-ir/src/lib.rs": "be503f5016bcabda7a9d262ae5b52bcf47fdd6d36033c825dfbd32bc11478cd7",
     "crates/domain-ir/tests/drawing_canvas.rs": "c96670bda68975e02c9ce1d90c33797290581055d21dde02faa964ce0f3e96b9",
 }
 MARKERS = {

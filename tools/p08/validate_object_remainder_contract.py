@@ -26,7 +26,7 @@ SOURCE_SHA256 = {
     "implementation/p08/P08-05_OBJECT_APPEARANCE_POLICY.md": "1d05d280c00b8e61f216ed44fcfe4ed7ea4fcbb4ba86ac72be7fcf806b3da68a",
 }
 IMPLEMENTATION_SHA256 = {
-    "crates/domain-ir/src/lib.rs": "21102ca867ace70a0e1f5f4db6142dacdc7f9448233ff61102ac00070aba9ed6",
+    "crates/domain-ir/src/lib.rs": "be503f5016bcabda7a9d262ae5b52bcf47fdd6d36033c825dfbd32bc11478cd7",
     "crates/domain-ir/src/basic_shape.rs": "6eebfbe838b9f76530a2f3cddc414d146df2f97384305232db8f3e7b02acb3c6",
     "crates/domain-ir/src/object_properties.rs": "f0bed7df4dc15092f764edd18f10351de2420b9f90dbd0e3909cdda6c3415695",
     "crates/domain-ir/src/shape_points.rs": "e64750c645c00fcd4c40543dde7c8f6736e699e0b7781044458fc2b2f60909af",

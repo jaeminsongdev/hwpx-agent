@@ -1,0 +1,109 @@
+{
+  "schema_version": "hwpx-agent.comment-model-contract/v1",
+  "task": "P09-04",
+  "scope": "complete_typed_component_models_for_ref_026_through_ref_030_without_p11_delete",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_qualification": "implementation/p09/evidence/p09-04-comment-model-source-qualification.v1.json",
+  "migration": "protocol/migrations/p09-comment-model-v0-to-v1.md",
+  "policy": "implementation/p09/P09-04_COMMENT_MODEL_POLICY.md",
+  "report": "implementation/p09/P09-04_COMMENT_MODEL_REPORT.md",
+  "source_locks": [
+    {"path": "docs/04_feature_catalog/10_ref.md", "sha256": "34cfc9283d16b96bdb16d0ffec7a485f4b72548a49ec70fec2968b3c657743e4"},
+    {"path": "docs/04_feature_catalog/contracts/10_ref_contracts.md", "sha256": "7062034902932355ac8e6c38a4798dd314f39c44518b7e85c26fe71a7a72cc29"},
+    {"path": "docs/09_roadmap/P09_fields_forms_notes_references.md", "sha256": "0f4068c4dc5484cc348a145c892a2e1d2d3896d421b77c2fa23bb123956f4b55"},
+    {"path": "docs/03_document_model/09_fields_controls_references.md", "sha256": "3068742808467f298d289c7401980c617981d748dfa73422bab8f7174ef10a20"}
+  ],
+  "capability_features": {
+    "REF-026": "ref.hidden_explanation",
+    "REF-027": "ref.comment_insert",
+    "REF-028": "ref.comment_style",
+    "REF-029": "ref.comment_show_hide",
+    "REF-030": "ref.comment_resolve"
+  },
+  "excluded_capabilities": {
+    "review.comment_delete": "P11"
+  },
+  "model": "hwpx-agent.comment-model/v1",
+  "official_model": {
+    "repository": "https://github.com/hancom-io/hwpx-owpml-model.git",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "exact_native_structures": ["hiddenComment/subList", "fieldBegin/MEMO", "fieldEnd", "memoProperties/memoPr", "memoShapeIDRef"],
+    "line_type_count": 18,
+    "line_width_count": 16,
+    "memo_type_count": 4,
+    "semantic_binding": "unverified_memo_parameters"
+  },
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/comment_model.rs",
+    "crates/domain-ir/tests/comment_model.rs"
+  ],
+  "state_binding": {
+    "inventory": "ordered_complete_sections_authors_styles_hidden_explanations_and_comments",
+    "identity_anchor": "logical_begin_control_field_pair_and_exact_ordered_section_points",
+    "payload": "body_plain_text_parameters_sublist_native_opaque_and_ordered_property_digests",
+    "metadata": "typed_author_original_offset_timestamps_visibility_and_resolution_under_unverified_native_binding",
+    "style": "memo_shape_id_width_line_width_line_type_colors_memo_type_section_reference_opaque_and_lock",
+    "document": "non_comment_content_field_style_reference_resource_protection_and_opaque_document_digests",
+    "request_and_build": "exact_source_state_and_document_flow_rechecked_and_plan_binding_sealed",
+    "preservation": "only_named_hidden_insert_style_visibility_or_resolution_transition_may_change_state"
+  },
+  "failure_policy": [
+    "zero_inconsistent_or_over_ceiling_limits_rejected",
+    "duplicate_unknown_missing_malformed_or_oversized_json_rejected",
+    "empty_section_or_style_inventory_and_invalid_or_colliding_identity_rejected",
+    "invalid_ordered_anchor_section_author_style_or_native_pair_rejected",
+    "invalid_digest_color_timestamp_resolution_or_opaque_state_rejected",
+    "insert_requires_fresh_shown_unresolved_comment_and_exact_insertion_index",
+    "document_section_style_explanation_and_comment_protection_rejected",
+    "missing_ambiguous_and_noop_targets_rejected",
+    "source_state_and_document_flow_drift_rejected_at_request_and_build",
+    "sealed_plan_tamper_and_recomputed_target_mismatch_rejected",
+    "unrelated_inventory_payload_reference_and_document_state_change_rejected",
+    "identity_anchor_author_time_body_opaque_and_digest_values_redacted_from_debug",
+    "no_raw_xml_partial_result_implicit_native_mapping_or_p11_delete_operation"
+  ],
+  "evidence_boundary": {
+    "unit_model_implemented": true,
+    "five_capabilities_unit_passed": true,
+    "official_structure_source_qualified": true,
+    "complete_bound_state_preserved": true,
+    "author_time_component_fixtures": true,
+    "style_visibility_resolution_fixtures": true,
+    "protection_fixtures": true,
+    "request_and_build_drift_rejected": true,
+    "p11_comment_delete_excluded": true,
+    "native_author_time_binding_verified": false,
+    "native_visibility_binding_verified": false,
+    "native_resolution_binding_verified": false,
+    "direct_hwpx": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "semantic_reopen": false,
+    "field_readback": false,
+    "reference_update": false,
+    "hancom_open": false,
+    "save_reopen": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p09_04_green": false,
+    "p09_complete": false,
+    "production_ready": false,
+    "product_complete": false,
+    "focused_rust_tests": "11/11 PASS",
+    "private_contract_tests": "5/5 PASS",
+    "direct_stage": "unit_passed"
+  },
+  "gate_decision": {
+    "component": "pass",
+    "official_structure": "partially_qualified",
+    "native_semantic_bindings": "unverified",
+    "direct_stage": "unit_passed",
+    "actual_target": "not_run",
+    "p09_04": "typed_component_pass_native_semantic_binding_direct_hwpx_and_target_not_run",
+    "p09_04_green": false,
+    "p09": "in_progress",
+    "product_complete": false
+  }
+}

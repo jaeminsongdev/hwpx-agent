@@ -3,6 +3,7 @@
 mod basic_shape;
 mod capability_router;
 mod chart_automation;
+mod comment_model;
 mod document_graph;
 mod drawing_canvas;
 mod field_engine;
@@ -70,6 +71,16 @@ pub use chart_automation::{
     ChartLegendState, ChartMarkerKind, ChartOperation, ChartSeriesAxis, ChartSeriesState,
     ChartStacking, ChartState, ChartStyleBinding, ChartTitlePosition, ChartTitleState,
     ChartTypeBinding, ChartTypeSelection, ChartValue,
+};
+pub use comment_model::{
+    COMMENT_MODEL_SCHEMA_VERSION, CommentAnchor, CommentAuthor, CommentBuilder,
+    CommentDocumentState, CommentDocumentStateDraft, CommentEntry, CommentError, CommentFieldType,
+    CommentIdentity, CommentLimitConfig, CommentLimits, CommentLineType, CommentLineWidth,
+    CommentMemoType, CommentNativeBeginTag, CommentNativeEndTag, CommentOperation, CommentPlan,
+    CommentPoint, CommentReceipt, CommentRequest, CommentRequestDraft, CommentResolution,
+    CommentResult, CommentSectionState, CommentSemanticBinding, CommentStyle, CommentTimestamp,
+    CommentVisibility, HiddenExplanationEntry, HiddenExplanationIdentity,
+    HiddenExplanationNativeTag, OpaqueCommentProperty,
 };
 pub use document_graph::{
     AccessibilityState, ArtifactRef, BreakKind, BreakNode, ChartNode,
