@@ -9,6 +9,7 @@ mod drawing_canvas;
 mod field_engine;
 mod form_control;
 mod identity;
+mod link_reference;
 mod math_ast;
 mod note_engine;
 mod object_appearance;
@@ -120,6 +121,16 @@ pub use identity::{
     ArtifactId, BackendId, BackendOpaqueId, BookmarkId, CapabilityId, ChangeId, FieldId,
     IdempotencyKey, IdentityError, LogicalNodeId, MAX_TYPED_ID_BYTES, OperationId, PlanId,
     ProjectId, ResourceId, RevisionId, StyleId, TargetProfileId, TransactionId,
+};
+pub use link_reference::{
+    BookmarkEntry, BookmarkIdentity, BookmarkNativeTag, ExternalLinkPolicy, ExternalTargetApproval,
+    ExternalTargetKind, HyperlinkEntry, HyperlinkFieldType, HyperlinkIdentity,
+    HyperlinkNativeBeginTag, HyperlinkNativeEndTag, HyperlinkNativePair, HyperlinkSemanticBinding,
+    HyperlinkTarget, LINK_REFERENCE_SCHEMA_VERSION, LinkAnchor, LinkPoint, LinkReferenceBuilder,
+    LinkReferenceDocumentState, LinkReferenceDocumentStateDraft, LinkReferenceError,
+    LinkReferenceLimitConfig, LinkReferenceLimits, LinkReferenceOperation, LinkReferencePlan,
+    LinkReferenceReceipt, LinkReferenceRequest, LinkReferenceRequestDraft, LinkReferenceResult,
+    LinkReferenceSectionState, OpaqueLinkProperty,
 };
 pub use math_ast::{
     MATH_AST_NORMALIZATION_VERSION, MATH_AST_SCHEMA_VERSION, MathAccent, MathAlignedLine,

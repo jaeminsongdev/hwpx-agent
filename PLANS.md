@@ -23,7 +23,7 @@
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-15 keeps OBJ-048 unit-only because chart lacks common `href`; matrix remains 5 cataloged, 19 unit, 34 integration, 0 oracle/green. P09-01~04 add typed unit components through REF-030 excluding P11-owned 016/020 and comment delete; all direct HWPX/Hangul/readback fields remain not-run |
+| P07-P09 | in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-15 keeps OBJ-048 unit-only because chart lacks common `href`; matrix remains 5 cataloged, 19 unit, 34 integration, 0 oracle/green. P09-01~05 add typed unit components through REF-034 excluding P11-owned 016/020 and comment delete; all direct HWPX/Hangul/readback fields remain not-run |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -39,7 +39,7 @@
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
 | P-0057 | P06-09 table conformance | fail-closed matrix plus bounded component/static-HWPX slices pass; TABLE-002/003 exact Hangul target v2 is oracle-verified; exact current-PC release matrix remains 0/61 green |
 | P-0095 | P08 object HWPX integration | P08-15 proves an exact common-root `href` partial profile for 11 shape-component tags but does not advance OBJ-048; close chart semantics or an exact fallback before row promotion, then map the remaining nine P08-10 models |
-| P-0096 | P09 field/forms/notes/comments | P09-01~04 component checks pass; P09-04 adds REF-026~030 with 11/11 Rust and 5/5 contract. Official comment structure is partially qualified, native author/time/visibility/resolution remains unverified, and P11 owns deletion; proceed to P09-05 references |
+| P-0096 | P09 fields/forms/notes/comments/links | P09-01~05 component checks pass; P09-05 adds REF-031~034 with 11/11 Rust and 5/5 contract. Exact external approvals and dangling prevention pass, while native hyperlink parameters remain unverified; proceed to P09-06 cross references |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | all-operation issuer and fixed-sequence-slot broker plus independently bound TLS service components pass; external operation, real assertion/credential/network, cross-system atomicity, power-loss and registered-host evidence remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. Continue P09-05 bookmark/hyperlink/reference operations at `max`; P09-01 lowering first needs a variant identity for `fieldBegin/fieldEnd` versus `autoNum`, P09-02 date remains unrouteable, P09-03 real lowering/export remains open, and P09-04 native semantic bindings remain unverified. P08 lossy mappings remain blocked.
+1. Continue P09-06 cross-reference operations at `max`; REF-036 update remains P11-owned unless an exact direct identity and oracle are qualified. P09-01~05 lowering/readback gaps and P08 lossy mappings remain blocked.
 2. When the user can capture screens/approve saves, run one combined exact-target campaign: P07-07/08/09 plus remaining P06 target/render/differentials including corrected TABLE-032/033.
 3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
 

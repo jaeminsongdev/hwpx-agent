@@ -1,0 +1,107 @@
+{
+  "schema_version": "hwpx-agent.link-reference-contract/v1",
+  "task": "P09-05",
+  "scope": "complete_typed_component_models_for_ref_031_through_ref_034",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_qualification": "implementation/p09/evidence/p09-05-link-reference-source-qualification.v1.json",
+  "migration": "protocol/migrations/p09-link-reference-v0-to-v1.md",
+  "policy": "implementation/p09/P09-05_LINK_REFERENCE_POLICY.md",
+  "report": "implementation/p09/P09-05_LINK_REFERENCE_REPORT.md",
+  "source_locks": [
+    {"path": "docs/04_feature_catalog/10_ref.md", "sha256": "34cfc9283d16b96bdb16d0ffec7a485f4b72548a49ec70fec2968b3c657743e4"},
+    {"path": "docs/04_feature_catalog/contracts/10_ref_contracts.md", "sha256": "7062034902932355ac8e6c38a4798dd314f39c44518b7e85c26fe71a7a72cc29"},
+    {"path": "docs/09_roadmap/P09_fields_forms_notes_references.md", "sha256": "0f4068c4dc5484cc348a145c892a2e1d2d3896d421b77c2fa23bb123956f4b55"},
+    {"path": "docs/03_document_model/09_fields_controls_references.md", "sha256": "3068742808467f298d289c7401980c617981d748dfa73422bab8f7174ef10a20"}
+  ],
+  "capability_features": {
+    "REF-031": "ref.bookmark_insert",
+    "REF-032": "ref.bookmark_delete",
+    "REF-033": "ref.hyperlink_insert",
+    "REF-034": "ref.hyperlink_edit"
+  },
+  "excluded_capabilities": {
+    "REF-035": "P09-06",
+    "REF-036": "P11"
+  },
+  "model": "hwpx-agent.link-reference/v1",
+  "official_model": {
+    "repository": "https://github.com/hancom-io/hwpx-owpml-model.git",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "exact_native_structures": ["bookmark/name", "fieldBegin/HYPERLINK", "fieldEnd"],
+    "field_begin_attributes": ["id", "type", "name", "editable", "dirty", "zorder", "fieldid"],
+    "field_begin_children": ["parameters", "subList", "metaTag"],
+    "field_end_attributes": ["beginIDRef", "fieldid"],
+    "semantic_binding": "unverified_field_parameters"
+  },
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/link_reference.rs",
+    "crates/domain-ir/tests/link_reference.rs"
+  ],
+  "state_binding": {
+    "inventory": "ordered_complete_sections_bookmarks_hyperlinks_and_external_policy",
+    "section": "identity_paragraph_count_run_inline_topology_opaque_state_and_lock",
+    "bookmark": "logical_identity_exact_nfc_name_ordered_anchor_native_tag_opaque_state_and_lock",
+    "hyperlink": "logical_begin_control_field_identity_anchor_target_display_native_pair_opaque_state_and_lock",
+    "occupied_native_ids": "sorted_complete_non_hyperlink_begin_control_and_field_id_inventories",
+    "target": "live_internal_bookmark_or_exactly_approved_safe_https_mailto_or_path_free_managed_document",
+    "document": "non_reference_content_unrelated_field_style_object_relationship_resource_protection_and_opaque_digests",
+    "request_and_build": "exact_source_state_and_document_flow_rechecked_and_plan_binding_sealed",
+    "preservation": "only_named_insert_delete_or_target_display_transition_may_change_state"
+  },
+  "failure_policy": [
+    "zero_inconsistent_or_over_ceiling_limits_rejected",
+    "duplicate_unknown_missing_malformed_or_oversized_json_rejected",
+    "empty_section_inventory_and_invalid_or_colliding_identity_anchor_or_name_rejected",
+    "invalid_native_field_pair_occupied_id_collision_digest_or_opaque_state_rejected",
+    "dangling_internal_target_and_referenced_bookmark_delete_rejected",
+    "http_file_path_credentials_whitespace_backslash_and_malformed_email_rejected",
+    "external_target_requires_enabled_kind_and_exact_target_digest_approval",
+    "document_section_bookmark_and_hyperlink_protection_rejected",
+    "missing_ambiguous_invalid_insertion_and_noop_targets_rejected",
+    "source_state_and_document_flow_drift_rejected_at_request_and_build",
+    "sealed_plan_tamper_and_recomputed_target_mismatch_rejected",
+    "unrelated_inventory_identity_anchor_native_opaque_policy_and_document_state_change_rejected",
+    "names_targets_artifacts_anchors_digests_and_payloads_redacted_from_debug",
+    "no_raw_xml_action_path_partial_result_or_implicit_native_parameter_mapping"
+  ],
+  "evidence_boundary": {
+    "unit_model_implemented": true,
+    "four_capabilities_unit_passed": true,
+    "official_structure_source_qualified": true,
+    "external_policy_fixtures": true,
+    "dangling_reference_fixtures": true,
+    "complete_bound_state_preserved": true,
+    "request_and_build_drift_rejected": true,
+    "native_hyperlink_parameters_verified": false,
+    "direct_hwpx": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "semantic_reopen": false,
+    "field_readback": false,
+    "reference_update": false,
+    "hancom_open": false,
+    "save_reopen": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p09_05_green": false,
+    "p09_complete": false,
+    "production_ready": false,
+    "product_complete": false,
+    "focused_rust_tests": "11/11 PASS",
+    "private_contract_tests": "5/5 PASS",
+    "direct_stage": "unit_passed"
+  },
+  "gate_decision": {
+    "component": "pass",
+    "official_structure": "partially_qualified",
+    "native_hyperlink_parameters": "unverified",
+    "direct_stage": "unit_passed",
+    "actual_target": "not_run",
+    "p09_05": "typed_component_pass_native_parameter_lowering_direct_hwpx_and_target_not_run",
+    "p09_05_green": false,
+    "p09": "in_progress",
+    "product_complete": false
+  }
+}
