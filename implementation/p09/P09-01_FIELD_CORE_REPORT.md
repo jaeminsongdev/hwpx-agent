@@ -14,7 +14,7 @@ production, P09, or product PASS.
 
 - `field_engine.rs` models named, user, click-here, date/time, filename, page, section and object
   number definitions plus update and lock as ten distinct capability IDs.
-- State includes complete field order, identity pairs, anchors, typed definition/result, update and
+- State includes complete field order, component reservation pairs, anchors, typed definition/result, update and
   cache policy, lock, explicit evaluation context, style/payload bindings, opaque properties, and
   all unrelated document-state digests.
 - Insertion rejects field/native-ID/anchor collisions. Result update rejects missing, locked,
@@ -31,6 +31,10 @@ Focused Rust: public field tests 8/8 PASS; private sealed-plan tamper test 1/1 P
 The tests construct field state in memory. No section XML or HWPX package was mutated or reopened,
 no licensed Hangul process was used, and no current-target field result, pagination, object
 sequence, reference update, save/reopen, or visual behavior was observed.
+
+Later official-source qualification found that page and object numbering use separate `autoNum`
+controls. The v1 pair-shaped reservation is therefore not a universal native identity; exact lowering
+must migrate to a representation variant rather than interpreting the component IDs as HWPX proof.
 
 `unit_model_implemented=true`, `ten_capabilities_unit_passed=true`,
 `complete_bound_state_preserved=true`, and `request_and_build_drift_rejected=true`.

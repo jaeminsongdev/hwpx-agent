@@ -11,11 +11,16 @@ or product completion.
 ## Complete field state
 
 `hwpx-agent.field-engine/v1` binds the complete ordered field inventory. Every field contains a
-logical identity, distinct nonzero native begin/end IDs, exact paragraph/run/inline anchor, typed
+logical identity, distinct nonzero begin/end-shaped reservation IDs, exact paragraph/run/inline anchor, typed
 definition, typed cached result, update policy, cache status, lock state, optional evaluation
 context digest, character/paragraph style digests, native field-payload digest, and a unique set of
 opaque-property digests. The document state separately binds non-field content, style catalog,
 reference inventory, resource inventory, and opaque document state.
+
+The reservation pair is component identity only, not proof that every definition lowers to native
+`fieldBegin`/`fieldEnd`. P09-02 source qualification found separate `autoNum` controls for page and
+object numbering and no single field-pair representation for the full set. Native lowering therefore
+requires a future variant identity and must not reuse the v1 pair as target evidence.
 
 The eight insertion definitions are named, user-defined, click-here, date/time, file name, page
 number, section number, and picture/table/equation object number. Their capability IDs are exactly

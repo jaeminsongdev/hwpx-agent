@@ -6,6 +6,7 @@ mod chart_automation;
 mod document_graph;
 mod drawing_canvas;
 mod field_engine;
+mod form_control;
 mod identity;
 mod math_ast;
 mod object_appearance;
@@ -92,6 +93,16 @@ pub use field_engine::{
     FieldEngineLimitConfig, FieldEngineLimits, FieldIdentity, FieldNumberFormat, FieldOperation,
     FieldPlan, FieldReceipt, FieldRequest, FieldRequestDraft, FieldResult, FieldState,
     FieldUpdatePolicy, ObjectNumberKind, OpaqueFieldProperty,
+};
+pub use form_control::{
+    FORM_CONTROL_SCHEMA_VERSION, FormButtonBackStyle, FormButtonValue, FormCharacterProperties,
+    FormCommonProperties, FormControlAnchor, FormControlBuilder, FormControlError,
+    FormControlIdentity, FormControlLimitConfig, FormControlLimits, FormControlOperation,
+    FormControlPayload, FormControlPlan, FormControlReceipt, FormControlRequest,
+    FormControlRequestDraft, FormControlResult, FormControlState, FormDateValidation,
+    FormDocumentState, FormDocumentStateDraft, FormListItem, FormNativeBinding, FormScrollBars,
+    FormSelectionValidation, FormTabAssignment, FormTabKeyBehavior, FormTextAlignment,
+    FormTextValidation, NativeFormTag, OpaqueFormProperty,
 };
 pub use identity::{
     ArtifactId, BackendId, BackendOpaqueId, BookmarkId, CapabilityId, ChangeId, FieldId,
