@@ -5,6 +5,7 @@ mod capability_router;
 mod chart_automation;
 mod document_graph;
 mod drawing_canvas;
+mod field_engine;
 mod identity;
 mod math_ast;
 mod object_appearance;
@@ -84,6 +85,13 @@ pub use drawing_canvas::{
     DrawingCanvasLimitConfig, DrawingCanvasLimits, DrawingCanvasOperation, DrawingCanvasPlan,
     DrawingCanvasReceipt, DrawingCanvasRequest, DrawingCanvasRequestDraft, DrawingCanvasResult,
     DrawingCanvasState, DrawingCanvasStateDraft, ImageClip,
+};
+pub use field_engine::{
+    FIELD_ENGINE_SCHEMA_VERSION, FieldAnchor, FieldCacheStatus, FieldCachedResult, FieldDefinition,
+    FieldDocumentState, FieldDocumentStateDraft, FieldEngineBuilder, FieldEngineError,
+    FieldEngineLimitConfig, FieldEngineLimits, FieldIdentity, FieldNumberFormat, FieldOperation,
+    FieldPlan, FieldReceipt, FieldRequest, FieldRequestDraft, FieldResult, FieldState,
+    FieldUpdatePolicy, ObjectNumberKind, OpaqueFieldProperty,
 };
 pub use identity::{
     ArtifactId, BackendId, BackendOpaqueId, BookmarkId, CapabilityId, ChangeId, FieldId,
