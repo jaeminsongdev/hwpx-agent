@@ -13,6 +13,7 @@ mod character_style;
 mod drawing_canvas_hwpx;
 mod equation;
 mod font_metric_receipt;
+mod form_control_hwpx;
 mod graph;
 mod header_footer;
 mod id_index;
@@ -88,6 +89,12 @@ pub use equation::{
 pub use font_metric_receipt::{
     CURRENT_FONT_METRIC_PROFILE_ID, CurrentFontMetricCell, CurrentFontMetricLimits,
     CurrentFontMetricReceipt, FontMetricReceiptError,
+};
+pub use form_control_hwpx::{
+    FORM_CONTROL_HWPX_PROFILE_ID, FormControlHwpxBuilder, FormControlHwpxError,
+    FormControlHwpxLimitConfig, FormControlHwpxLimits, FormControlHwpxLowerer,
+    FormControlHwpxLoweringReceipt, FormControlHwpxPlan, FormControlHwpxReadback,
+    FormControlHwpxReader,
 };
 pub use graph::{
     GraphError, MediaType, PackageGraph, PackageGraphLimitConfig, PackageGraphLimits, PartRecord,

@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT / "tools/p09"))
 from reference_conformance import (  # noqa: E402
     COMPONENT_PROFILES,
     MATRIX,
+    STATIC_SECTION_INTEGRATION,
     ConformanceError,
     build_matrix,
     load_json,
@@ -26,6 +27,7 @@ class ReferenceConformanceContractTests(unittest.TestCase):
         self.assertEqual(result["state"], "pass")
         self.assertEqual(result["required_rows"], 53)
         self.assertEqual(result["component_covered_rows"], 46)
+        self.assertEqual(result["component_stage_counts"]["integration_passed"], 2)
         self.assertEqual(result["green_rows"], 0)
         self.assertEqual(result["actual_hangul"], "not_run")
 
@@ -49,7 +51,12 @@ class ReferenceConformanceContractTests(unittest.TestCase):
         self.assertFalse(matrix["claims"]["automation"])
         self.assertFalse(matrix["claims"]["differential"])
         for row in matrix["rows"]:
-            self.assertEqual(row["direct_hwpx"]["implementation_state"], "not_run")
+            expected = (
+                "static_section_integration_passed"
+                if row["feature_id"] in STATIC_SECTION_INTEGRATION
+                else "not_run"
+            )
+            self.assertEqual(row["direct_hwpx"]["implementation_state"], expected)
             self.assertEqual(row["differential_state"], "not_run")
 
     def test_component_collision_fails_closed(self) -> None:

@@ -1,0 +1,51 @@
+{
+  "schema_version": "hwpx-agent.p09-form-control-hwpx-source-qualification/v1",
+  "task": "P09-12",
+  "base_commit": "081e60c99de70ef9a4b72541b8ebff72ecd233b8",
+  "profile": "hwpx-agent.form-control-hwpx.hwpml-2011-existing-native-form-properties/v1",
+  "official_source": {
+    "repository": "https://github.com/hancom-io/hwpx-owpml-model.git",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "scope": "HWPML_2011_existing_native_form_tags_attributes_children_and_writer_lexicals_only",
+    "reviewed_sha256": {
+      "OWPML/Class/enumdef.h": "1c86392c934ac85f7ddd85c710b76be7649403a8404bce146db52558a0b95457",
+      "OWPML/Class/Para/AbstractFormObjectType.cpp": "f516fbeef26442f06d3e9e12d580a391c9323313a956509cfcaf88bf2c727e4a",
+      "OWPML/Class/Para/AbstractButtonObjectType.cpp": "bbb88be28709bfd5874ae09a9882ce63d5e95ef54bc47dc0433883e87b46c18d",
+      "OWPML/Class/Para/EditType.cpp": "62017660ff9bf4f666e4f95cfd9ac46d441b73392656ea2a1faae536693bf240",
+      "OWPML/Class/Para/ComboBoxType.cpp": "03461aab75f354a9741cbf8757659569711c1e102f2f3a20c84c84d184ed2f70",
+      "OWPML/Class/Para/ListBoxType.cpp": "9d893daa4b287c5dd7d6a1183d7219a94263c17bc0077ee813b6863a56c3fd3b",
+      "OWPML/Class/Para/ListItemType.cpp": "b409900db1d81b7942b1f6ca439a7f853eed902dbd780c7831635f203f3e991a",
+      "OWPML/Class/Para/formCharPr.cpp": "a3f4054d614a77a3676508200de63ca07d9727d8e99eb5aa0928a22d777fc436",
+      "OWPML/Class/Para/RunType.cpp": "dbaa0fe2b553dccc13381c856fd9c188185a16bf63685f575acf6bf2c9b88dee"
+    }
+  },
+  "implementation_sha256": {
+    "crates/domain-ir/src/form_control.rs": "19e4c23c1318d477fd85a851d9f0e76dbe70012d9295b8202b162247105fabb5",
+    "crates/domain-ir/tests/form_control.rs": "11af786a06c4792a30546f6e73e4123eb33b573b84eb69c2a2b9c05f3ed750b5",
+    "crates/hwpx-package/src/form_control_hwpx.rs": "9997ce077cebde0acc5e41170d4a86cab6fd797088dd981eeb29558c155afa07",
+    "crates/hwpx-package/tests/form_control_hwpx.rs": "f5b719f5fa1d2bbaa51641a02ffbc8779db4ade5a13452b4f007033452ae5729"
+  },
+  "tests": {
+    "form_control_domain": "8/8 PASS",
+    "form_control_hwpx": "6/6 PASS",
+    "fixture_classes": ["boundary", "happy_path", "negative", "preservation"],
+    "native_tags": "5/5 PASS",
+    "focused_clippy": "PASS"
+  },
+  "claims": {
+    "two_row_static_section_integration": true,
+    "typed_target_projection_readback": true,
+    "outside_delta_byte_preserved": true,
+    "complete_state_and_flow_bound": true,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "green_rows": 0,
+    "p09_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

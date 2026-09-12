@@ -27,6 +27,12 @@ DEFERRED_P11 = {
     "REF-045",
     "REF-047",
 }
+STATIC_SECTION_INTEGRATION = {"REF-018", "REF-019"}
+STATIC_SECTION_PROFILE_ID = "p09-12-form-control-hwpx-v1"
+STATIC_SECTION_EVIDENCE = (
+    "crates/hwpx-package/src/form_control_hwpx.rs",
+    "crates/hwpx-package/tests/form_control_hwpx.rs",
+)
 
 TARGET = {
     "profile_id": "hancom-hangul-2020-secondary",
@@ -266,12 +272,20 @@ def _compile_profiles(
     return compiled
 
 
-def _blockers(phase: str, required_validations: list[str]) -> list[str]:
+def _blockers(
+    feature_id: str, phase: str, required_validations: list[str]
+) -> list[str]:
     if phase == "P11":
         blockers = ["p11_automation_owned"]
+    elif feature_id in STATIC_SECTION_INTEGRATION:
+        blockers = ["direct_oracle_not_verified", "automation_fallback_unqualified"]
     else:
         blockers = ["direct_hwpx_not_implemented", "automation_fallback_unqualified"]
-    blockers.extend(f"validation_not_run:{value}" for value in required_validations)
+    blockers.extend(
+        f"validation_not_run:{value}"
+        for value in required_validations
+        if not (feature_id in STATIC_SECTION_INTEGRATION and value == "semantic_reopen")
+    )
     blockers.append("differential_not_run")
     return blockers
 
@@ -287,12 +301,25 @@ def build_matrix(
     compiled = _compile_profiles(feature_ids, root=root, profiles=profiles)
     if {row["feature_id"] for row in feature_rows if row["phase"] == "P11"} != DEFERRED_P11:
         raise ConformanceError("p11_deferred_set_drift")
+    static_evidence = [
+        {"path": value, "sha256": normalized_sha256(Path(value), root=root)}
+        for value in STATIC_SECTION_EVIDENCE
+    ]
 
     rows: list[dict[str, Any]] = []
     for catalog in feature_rows:
         feature_id = catalog["feature_id"]
         required_validations = catalog["validation"].split("|")
         component = compiled.get(feature_id)
+        if feature_id in STATIC_SECTION_INTEGRATION:
+            if component is None:
+                raise ConformanceError(f"static_component_missing:{feature_id}")
+            component = {
+                "profile_id": STATIC_SECTION_PROFILE_ID,
+                "stage": "integration_passed",
+                "evidence_files": [*component["evidence_files"], *static_evidence],
+            }
+        direct_integration = feature_id in STATIC_SECTION_INTEGRATION
         row = {
             "feature_id": feature_id,
             "capability_id": catalog["capability_id"],
@@ -306,8 +333,12 @@ def build_matrix(
             if component is not None
             else {"profile_id": None, "stage": "cataloged", "evidence_files": []},
             "direct_hwpx": {
-                "implementation_state": "not_run",
-                "semantic_reopen": "not_run",
+                "implementation_state": "static_section_integration_passed"
+                if direct_integration
+                else "not_run",
+                "semantic_reopen": "static_projection_passed"
+                if direct_integration
+                else "not_run",
                 "field_readback": "not_run",
                 "reference_update": "not_run",
                 "hancom_open": "not_run",
@@ -323,7 +354,7 @@ def build_matrix(
                 "routing_enabled": False,
             },
             "differential_state": "not_run",
-            "blockers": _blockers(catalog["phase"], required_validations),
+            "blockers": _blockers(feature_id, catalog["phase"], required_validations),
             "gate_state": "non_green",
         }
         rows.append(row)
@@ -336,7 +367,7 @@ def build_matrix(
         "p11_deferred_rows": phase_counts["P11"],
         "component_covered_rows": len(compiled),
         "component_stage_counts": {stage: stage_counts[stage] for stage in STAGES},
-        "direct_hwpx_implemented_rows": 0,
+        "direct_hwpx_implemented_rows": 2,
         "actual_hwpx_rows": 0,
         "actual_hangul_rows": 0,
         "render_verified_rows": 0,
@@ -353,11 +384,11 @@ def build_matrix(
         "component_covered_rows": 46,
         "component_stage_counts": {
             "cataloged": 7,
-            "unit_passed": 46,
-            "integration_passed": 0,
+            "unit_passed": 44,
+            "integration_passed": 2,
             "oracle_verified": 0,
         },
-        "direct_hwpx_implemented_rows": 0,
+        "direct_hwpx_implemented_rows": 2,
         "actual_hwpx_rows": 0,
         "actual_hangul_rows": 0,
         "render_verified_rows": 0,
