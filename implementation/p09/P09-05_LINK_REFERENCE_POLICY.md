@@ -17,11 +17,12 @@ defines `bookmark` with the exact `name` attribute. It also defines `fieldBegin`
 `HYPERLINK` field-type token, begin attributes `id/type/name/editable/dirty/zorder/fieldid`, begin
 children `parameters/subList/metaTag`, and end attributes `beginIDRef/fieldid`. The generic model
 does not define the semantic keys or serialization rules inside hyperlink parameters. Therefore
-`UnverifiedFieldParameters` is the only admitted semantic binding and no lowering claim is made.
+`UnverifiedFieldParameters` remains the general binding and no broad lowering claim is made. The
+separate P09-14 adapter admits only the target-discovered Hangul 2020 HTTPS/current-tab binding.
 
 ## Complete typed state
 
-`hwpx-agent.link-reference/v1` binds ordered section, bookmark and hyperlink inventories. Sections
+`hwpx-agent.link-reference/v2` binds ordered section, bookmark and hyperlink inventories. Sections
 bind paragraph count plus run/inline topology digests. Bookmarks bind logical identity, NFC exact
 name, ordered anchor, native tag, opaque payload/properties and protection. Hyperlinks bind logical,
 begin-control and field identity; ordered anchor; target; display digest; the complete native pair;
@@ -43,7 +44,8 @@ never exposes names, URIs, email addresses, artifact IDs, anchors, digests or op
 Bookmark insertion requires one fresh logical ID, exact name and valid insertion index. Deletion
 rejects protected bookmarks and any live internal hyperlink instead of creating a dangling target.
 Hyperlink insertion requires fresh logical/native identities and a unique exact anchor. Editing may
-change only target and display-text digest; identity, anchor, native pair, opaque state and every
+change only target, display-text digest and the bound native-parameter digest; identity, anchor,
+native pair, opaque state and every
 unrelated inventory remain byte-for-byte equal. Document/section/entry locks and no-ops fail before
 returning any output.
 
@@ -63,5 +65,7 @@ are bounded without truncation.
 `render=false`, `automation=false`, `differential=false`, `p09_05_green=false`,
 `p09_complete=false`, `production_ready=false`, and `product_complete=false`.
 
-Authority: `protocol/private/p09-link-reference-v1.json` and
-`implementation/p09/evidence/p09-05-link-reference-source-qualification.v1.json`.
+Authority: `protocol/private/p09-link-reference-v2.json` and
+`implementation/p09/evidence/p09-05-link-reference-source-qualification.v2.json`. P09-14 separately
+qualifies the exact Hangul 2020 HTTPS/current-tab parameter subset without promoting the wider
+P09-05 target union.

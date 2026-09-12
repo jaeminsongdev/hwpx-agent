@@ -17,6 +17,7 @@ mod font_metric_receipt;
 mod form_control_hwpx;
 mod graph;
 mod header_footer;
+mod hyperlink_hwpx;
 mod id_index;
 mod image_hwpx;
 mod limits;
@@ -115,6 +116,11 @@ pub use header_footer::{
     MasterPageDefinition, MasterPageVariant, PageField, PageFieldKind, PageNumberPlacement,
     PageNumberPosition, PageNumberRestart, PageVariant, SectionPagePolicy,
     TextDirection as HeaderFooterTextDirection, VerticalAlignment as HeaderFooterVerticalAlignment,
+};
+pub use hyperlink_hwpx::{
+    HYPERLINK_HWPX_PROFILE_ID, HyperlinkHwpxBuilder, HyperlinkHwpxError, HyperlinkHwpxLimitConfig,
+    HyperlinkHwpxLimits, HyperlinkHwpxLowerer, HyperlinkHwpxLoweringReceipt, HyperlinkHwpxPlan,
+    HyperlinkHwpxReadback, HyperlinkHwpxReader,
 };
 pub use id_index::{
     IdDeclaration, IdIndex, IdIndexError, IdIndexLimitConfig, IdIndexLimits, IdIssueKind, IdKind,

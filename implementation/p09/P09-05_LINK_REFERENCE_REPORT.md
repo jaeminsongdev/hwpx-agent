@@ -5,7 +5,8 @@ UNVERIFIED NATIVE HYPERLINK PARAMETERS / DIRECT AND TARGET NOT RUN / NON-GREEN`.
 
 ## Delivered
 
-- Added `hwpx-agent.link-reference/v1` for REF-031 through REF-034.
+- Added `hwpx-agent.link-reference/v2` for REF-031 through REF-034, including a required native
+  parameter-state digest on hyperlink edits.
 - Added exact bookmark insert/delete and hyperlink insert/edit transitions.
 - Added internal-bookmark, HTTPS, email and path-free managed-document targets.
 - Added a bound policy revision with exact external target approval digests.
@@ -19,7 +20,8 @@ UNVERIFIED NATIVE HYPERLINK PARAMETERS / DIRECT AND TARGET NOT RUN / NON-GREEN`.
 The clean pinned Hancom OWPML checkout proves the standalone `bookmark/name` structure and the
 generic `fieldBegin`/`fieldEnd` HYPERLINK envelope. It does not prove the meanings of the generic
 parameter list entries. The component therefore keeps all hyperlink parameter semantics opaque and
-labels the binding `UnverifiedFieldParameters`.
+labels the general binding `UnverifiedFieldParameters`; P09-14 separately qualifies only the exact
+Hangul 2020 HTTPS/current-tab subset.
 
 ## Validation
 

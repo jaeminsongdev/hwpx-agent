@@ -1,0 +1,81 @@
+{
+  "schema_version": "hwpx-agent.p09-hyperlink-hwpx-source-qualification/v1",
+  "task": "P09-14",
+  "base_commit": "994403f",
+  "scope": "ref_033_ref_034_exact_hangul_2020_https_current_tab_static_section_adapter",
+  "target": {
+    "product": "Hancom Hangul 2020",
+    "build": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR"
+  },
+  "discovery": {
+    "interaction_owner": "user",
+    "private_before_after_present": true,
+    "private_artifacts_committed": false,
+    "observed_field_type": "HYPERLINK",
+    "observed_run_shape": ["begin_control", "display", "end_control"],
+    "observed_parameter_order": ["Prop", "Command", "Path", "Category", "TargetType", "DocOpenType"],
+    "observed_parameter_constants": ["0", "semicolon_tuple_1_0_0", "HWPHYPERLINK_TYPE_URL", "HWPHYPERLINK_TARGET_BOOKMARK", "HWPHYPERLINK_JUMP_CURRENTTAB"],
+    "generated_adapter_output_executed": false
+  },
+  "official_model": {
+    "repository": "https://github.com/hancom-io/hwpx-owpml-model.git",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "canonicalization": "utf8_text_crlf_to_lf_sha256",
+    "source_sha256": {
+      "OWPML/Class/enumdef.h": "1c86392c934ac85f7ddd85c710b76be7649403a8404bce146db52558a0b95457",
+      "OWPML/Class/Para/bookmark.h": "b3aa6c83671e924e09dffb8206c67ab0b48102927888393e33d4f358d0e940e0",
+      "OWPML/Class/Para/bookmark.cpp": "c3a3d60c5bd7350e2700fae76686e4e555fddb125b9402844c711b8449268807",
+      "OWPML/Class/Para/fieldBegin.h": "b216be07244a7a0c50f7dd2f40140d9ff202fefbb9b1b6092559dcd1aa08ad4f",
+      "OWPML/Class/Para/fieldBegin.cpp": "22e5f613788a88ca003b5f0c23fe1d4333eadd21e9a3ca18d426d262a9e79450",
+      "OWPML/Class/Para/fieldEnd.h": "88dd97103c537674dba0b3ac917b81ec5223fd3a518652330decb233b556791c",
+      "OWPML/Class/Para/fieldEnd.cpp": "2937fbca1ff5b99bb05672544dd079c4165c7ada174edbb654873aecb7f8018d",
+      "OWPML/Class/Para/ParameterList.h": "e06d765a4d435efc10404a56c58d2894e4fb5830e3128fef316b176768543807",
+      "OWPML/Class/Para/ParameterList.cpp": "a8d68844c27deb9bd150f9f8fd4ed4450a6b8d3b5a026e35004c200f3fde6d21",
+      "OWPML/Class/Para/ctrl.h": "e043d1b8a570724179ba7f57f1521dbb65a2c393ba116dbb0d2c3bae2277cc7e",
+      "OWPML/Class/Para/ctrl.cpp": "a928569df0b890d8a58470a70a1501520bfb4d8af121df58eeb1fd8b9e0eed1d"
+    }
+  },
+  "source_sha256": {
+    "docs/04_feature_catalog/10_ref.md": "34cfc9283d16b96bdb16d0ffec7a485f4b72548a49ec70fec2968b3c657743e4",
+    "docs/04_feature_catalog/contracts/10_ref_contracts.md": "7062034902932355ac8e6c38a4798dd314f39c44518b7e85c26fe71a7a72cc29",
+    "docs/09_roadmap/P09_fields_forms_notes_references.md": "0f4068c4dc5484cc348a145c892a2e1d2d3896d421b77c2fa23bb123956f4b55",
+    "docs/03_document_model/09_fields_controls_references.md": "3068742808467f298d289c7401980c617981d748dfa73422bab8f7174ef10a20"
+  },
+  "implementation_sha256": {
+    "crates/domain-ir/src/link_reference.rs": "fd2e80c05810eea21b085499bab4f9bf95b8329287adc55fd46e240eb113766f",
+    "crates/domain-ir/tests/link_reference.rs": "1514ff19e9c2041335ad62033767c2042056e0a1d3de3c1e69b6a2029107d252",
+    "crates/hwpx-package/src/lib.rs": "f97fe8a7fcd972280a0e3306953347c5663a84d592045f799edc0e6e12656f12",
+    "crates/hwpx-package/src/hyperlink_hwpx.rs": "416572db4e7f37bcfb4a6dfb4976489099d0087b21e36109ebd967649146a1e3",
+    "crates/hwpx-package/tests/hyperlink_hwpx.rs": "3b36d7ff7b920c28d0cc290f82548acbad9df00a62882adab8b273c2a5b8b518"
+  },
+  "tests": {
+    "public_link_reference": "10/10 PASS",
+    "public_hyperlink_hwpx": "8/8 PASS",
+    "private_plan_tamper": "1/1 PASS",
+    "focused_total": "19/19 PASS",
+    "private_contract": "4/4 PASS",
+    "network_used": false,
+    "licensed_application_used_for_discovery": true,
+    "licensed_application_used_for_generated_output": false
+  },
+  "claims": {
+    "source_qualification_only": true,
+    "link_reference_v2": true,
+    "direct_hwpx_implemented": true,
+    "static_section_readback": true,
+    "exact_outside_delta_preservation": true,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "generated_output_hancom_open": false,
+    "save_reopen": false,
+    "field_readback": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p09_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "schema_version": "hwpx-agent.p09-hyperlink-hwpx-contract/v1",
+  "task": "P09-14",
+  "scope": "ref_033_ref_034_exact_hangul_2020_https_current_tab_static_section_adapter",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_qualification": "implementation/p09/evidence/p09-14-hyperlink-hwpx-source-qualification.v1.json",
+  "migration": "protocol/migrations/p09-link-reference-v1-to-v2.md",
+  "policy": "implementation/p09/P09-14_HYPERLINK_HWPX_POLICY.md",
+  "report": "implementation/p09/P09-14_HYPERLINK_HWPX_REPORT.md",
+  "source_locks": [
+    {"path": "docs/04_feature_catalog/10_ref.md", "sha256": "34cfc9283d16b96bdb16d0ffec7a485f4b72548a49ec70fec2968b3c657743e4"},
+    {"path": "docs/04_feature_catalog/contracts/10_ref_contracts.md", "sha256": "7062034902932355ac8e6c38a4798dd314f39c44518b7e85c26fe71a7a72cc29"},
+    {"path": "docs/09_roadmap/P09_fields_forms_notes_references.md", "sha256": "0f4068c4dc5484cc348a145c892a2e1d2d3896d421b77c2fa23bb123956f4b55"},
+    {"path": "docs/03_document_model/09_fields_controls_references.md", "sha256": "3068742808467f298d289c7401980c617981d748dfa73422bab8f7174ef10a20"}
+  ],
+  "capability_features": {
+    "REF-033": "ref.hyperlink_insert",
+    "REF-034": "ref.hyperlink_edit"
+  },
+  "domain_model": "hwpx-agent.link-reference/v2",
+  "adapter_profile": "hwpx-agent.hyperlink-hwpx.hangul-2020-https-current-tab/v1",
+  "implementation_files": [
+    "crates/domain-ir/src/link_reference.rs",
+    "crates/domain-ir/tests/link_reference.rs",
+    "crates/hwpx-package/src/lib.rs",
+    "crates/hwpx-package/src/hyperlink_hwpx.rs",
+    "crates/hwpx-package/tests/hyperlink_hwpx.rs"
+  ],
+  "native_profile": {
+    "field_runs": ["begin_control_run", "existing_plain_text_display_run", "end_control_run"],
+    "begin_attributes": {"type": "HYPERLINK", "name": "", "editable": "0", "dirty": "1", "zorder": "-1"},
+    "parameters": [
+      ["integerParam", "Prop", "0"],
+      ["stringParam", "Command", "https\\://target;1;0;0;"],
+      ["stringParam", "Path", "approved_https_uri"],
+      ["stringParam", "Category", "HWPHYPERLINK_TYPE_URL"],
+      ["stringParam", "TargetType", "HWPHYPERLINK_TARGET_BOOKMARK"],
+      ["stringParam", "DocOpenType", "HWPHYPERLINK_JUMP_CURRENTTAB"]
+    ],
+    "identity": "begin_id_fieldid_equal_end_beginIDRef_fieldid",
+    "range": "one_existing_nonempty_plain_text_run_normalized_inline_0_to_1",
+    "edit": "approved_https_target_and_semantic_parameter_digest_only"
+  },
+  "state_binding": {
+    "domain": "complete_link_reference_state_and_source_target_state_sha256",
+    "flow": "source_and_target_document_flow_sha256",
+    "section": "complete_source_section_sha256",
+    "projection": "ordered_complete_native_hyperlink_wrapper_sha256",
+    "plan": "bounded_deterministic_json_and_recomputed_seal",
+    "preservation": "one_declared_byte_edit_with_exact_outside_bytes_and_source_display_run_preserved"
+  },
+  "failure_policy": [
+    "non_https_unapproved_or_unverified_semantic_binding_rejected",
+    "multi_run_nested_empty_or_display_mutating_range_rejected",
+    "missing_extra_reordered_or_wrong_six_parameter_tuple_rejected",
+    "comments_stray_text_local_namespace_payload_and_opaque_state_rejected",
+    "zero_mismatched_or_colliding_native_identity_rejected",
+    "source_section_state_flow_projection_and_plan_drift_rejected",
+    "bounded_input_elements_paragraphs_runs_links_text_plan_and_output",
+    "no_partial_output_and_redacted_debug"
+  ],
+  "evidence_boundary": {
+    "link_reference_v2": true,
+    "direct_hwpx_implemented": true,
+    "static_section_readback": true,
+    "exact_outside_delta_preservation": true,
+    "licensed_hangul_discovery_source_qualified": true,
+    "private_discovery_committed": false,
+    "generated_output_hancom_open": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "field_readback": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p09_14_green": false,
+    "p09_complete": false,
+    "production_ready": false,
+    "product_complete": false,
+    "focused_rust_tests": "19/19 PASS",
+    "private_contract_tests": "4/4 PASS",
+    "direct_stage": "integration_passed"
+  },
+  "gate_decision": {
+    "component": "pass",
+    "licensed_discovery": "source_qualified",
+    "direct_stage": "integration_passed",
+    "actual_target": "not_run",
+    "p09_14": "static_section_integration_pass_generated_target_not_run",
+    "p09_14_green": false,
+    "p09": "in_progress",
+    "product_complete": false
+  }
+}

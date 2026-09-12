@@ -28,7 +28,7 @@ SOURCE_SHA256 = {
 }
 IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/object_properties.rs": "f0bed7df4dc15092f764edd18f10351de2420b9f90dbd0e3909cdda6c3415695",
-    "crates/hwpx-package/src/lib.rs": "7acbf7cfee7dc9f4eebae1017189356bb955a24ec9ca8c63189933af12fc005f",
+    "crates/hwpx-package/src/lib.rs": "f97fe8a7fcd972280a0e3306953347c5663a84d592045f799edc0e6e12656f12",
     "crates/hwpx-package/src/textbox_properties_hwpx.rs": "bf5638328a5f57664defdc494a95c79f386847f08eed6134b5a6f8d7f246f1b5",
     "crates/hwpx-package/tests/textbox_properties_hwpx.rs": "971e0c186caef9ba0e8bb939f3faf1017c46bddc88eca61eebc4644597fb59a6",
 }

@@ -1,6 +1,6 @@
 # P09-11 reference conformance policy
 
-Decision: `MACHINE INVENTORY PASS / 40 P09 UNIT ROWS / 6 STATIC-SECTION INTEGRATION ROWS /
+Decision: `MACHINE INVENTORY PASS / 38 P09 UNIT ROWS / 8 STATIC-SECTION INTEGRATION ROWS /
 7 P11-DEFERRED ROWS / 0 TARGET / 0 GREEN / P09 INCOMPLETE`.
 
 ## Scope
@@ -11,8 +11,9 @@ the phase ownership recorded in the catalog.
 
 - P09 owns 46 rows. All have typed component coverage; REF-018/019 additionally have the exact
   P09-12 static-section form-control adapter, REF-031/032 have the exact P09-13 point-bookmark
-  adapter, and REF-021/022 have the exact P09-15 inline-note-payload adapter. Those six are
-  `integration_passed`, while 40 remain `unit_passed`.
+  adapter, REF-021/022 have the exact P09-15 inline-note-payload adapter, and REF-033/034 have the
+  exact P09-14 HTTPS/current-tab hyperlink adapter. Those eight are `integration_passed`, while 38
+  remain `unit_passed`.
 - P11 owns REF-016/020/036/040/043/045/047. They remain `cataloged` and are never counted as P09
   implementation gaps.
 - The roadmap's broad wording for delete/update/generate actions does not override the generated
@@ -25,10 +26,11 @@ preferred/fallback backend, validations, permission and fixture classes from the
 Each P09 component binding is collision-free and carries normalized SHA-256 locks for its Rust source
 and public tests. Absolute/private paths are rejected.
 
-`unit_passed` proves only the bounded typed component. P09-12/P09-13/P09-15
+`unit_passed` proves only the bounded typed component. P09-12/P09-13/P09-14/P09-15
 `integration_passed` proves only preserving generated section XML and typed target projection
-readback for existing native form properties/tab order, point-bookmark insert/delete, or closed
-plain-text footnote/endnote insertion. Neither stage proves a complete package, licensed Hangul
+readback for existing native form properties/tab order, point-bookmark insert/delete, exact
+HTTPS/current-tab hyperlink insert/edit, or closed plain-text footnote/endnote insertion. Neither
+stage proves a complete package, licensed Hangul
 execution, field/reference update, rendering, automation, differential behavior, production
 readiness or phase completion.
 

@@ -27,7 +27,7 @@ class ReferenceConformanceContractTests(unittest.TestCase):
         self.assertEqual(result["state"], "pass")
         self.assertEqual(result["required_rows"], 53)
         self.assertEqual(result["component_covered_rows"], 46)
-        self.assertEqual(result["component_stage_counts"]["integration_passed"], 6)
+        self.assertEqual(result["component_stage_counts"]["integration_passed"], 8)
         self.assertEqual(result["green_rows"], 0)
         self.assertEqual(result["actual_hangul"], "not_run")
 

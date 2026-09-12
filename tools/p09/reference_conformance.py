@@ -42,6 +42,13 @@ STATIC_SECTION_PROFILES: dict[str, dict[str, tuple[str, ...]]] = {
             "crates/hwpx-package/tests/bookmark_hwpx.rs",
         ),
     },
+    "p09-14-hyperlink-hwpx-v1": {
+        "features": ("REF-033", "REF-034"),
+        "evidence": (
+            "crates/hwpx-package/src/hyperlink_hwpx.rs",
+            "crates/hwpx-package/tests/hyperlink_hwpx.rs",
+        ),
+    },
     "p09-15-note-hwpx-v1": {
         "features": ("REF-021", "REF-022"),
         "evidence": (
@@ -103,7 +110,7 @@ COMPONENT_PROFILES: dict[str, dict[str, tuple[str, ...]]] = {
             "crates/domain-ir/tests/comment_model.rs",
         ),
     },
-    "p09-05-link-reference-v1": {
+    "p09-05-link-reference-v2": {
         "features": tuple(f"REF-{number:03d}" for number in range(31, 35)),
         "evidence": (
             "crates/domain-ir/src/link_reference.rs",
@@ -402,7 +409,7 @@ def build_matrix(
         "p11_deferred_rows": phase_counts["P11"],
         "component_covered_rows": len(compiled),
         "component_stage_counts": {stage: stage_counts[stage] for stage in STAGES},
-        "direct_hwpx_implemented_rows": 6,
+        "direct_hwpx_implemented_rows": 8,
         "actual_hwpx_rows": 0,
         "actual_hangul_rows": 0,
         "render_verified_rows": 0,
@@ -419,11 +426,11 @@ def build_matrix(
         "component_covered_rows": 46,
         "component_stage_counts": {
             "cataloged": 7,
-            "unit_passed": 40,
-            "integration_passed": 6,
+            "unit_passed": 38,
+            "integration_passed": 8,
             "oracle_verified": 0,
         },
-        "direct_hwpx_implemented_rows": 6,
+        "direct_hwpx_implemented_rows": 8,
         "actual_hwpx_rows": 0,
         "actual_hangul_rows": 0,
         "render_verified_rows": 0,

@@ -32,8 +32,8 @@ EXPECTED_SOURCE_LOCKS = {
     "specs/feature-coverage-matrix.json": "a3fa1cd5c5b0b0e09bc93354f724ed3516bdb987f1c171cc27d7564dc6390950",
     "specs/capability-contracts.generated.json": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306",
     "specs/work-breakdown-structure.json": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2",
-    "tools/p09/reference_conformance.py": "3fb0e1d10633da2c3c0fedfaa3c72cc1f8e272ffc003c33c3359068cf1fec05a",
-    "implementation/p09/evidence/conformance/p09-reference-conformance.current-2020.v1.json": "64d08171a1eed4d7f949e0940fce3b2523de4cefed93ec0bb541211fa0d2ab64",
+    "tools/p09/reference_conformance.py": "caba9ebeedf7ed15afb9ef79ed65b8ad3ba5a966938365b3247e767876278fe0",
+    "implementation/p09/evidence/conformance/p09-reference-conformance.current-2020.v1.json": "15d53966b6aac005556e9c1f72fa20696846aae7d9847c0658acd45c35596cd8",
 }
 
 EXPECTED_SUMMARY = {
@@ -43,11 +43,11 @@ EXPECTED_SUMMARY = {
     "component_covered_rows": 46,
     "component_stage_counts": {
         "cataloged": 7,
-        "unit_passed": 40,
-        "integration_passed": 6,
+        "unit_passed": 38,
+        "integration_passed": 8,
         "oracle_verified": 0,
     },
-    "direct_hwpx_implemented_rows": 6,
+    "direct_hwpx_implemented_rows": 8,
     "actual_hwpx_rows": 0,
     "actual_hangul_rows": 0,
     "render_verified_rows": 0,
@@ -99,6 +99,7 @@ EXPECTED_UPSTREAM = [
     "tools/p09/validate_form_control_hwpx_contract.py",
     "tools/p09/validate_bookmark_hwpx_contract.py",
     "tools/p09/validate_note_hwpx_contract.py",
+    "tools/p09/validate_hyperlink_hwpx_contract.py",
 ]
 
 
@@ -204,6 +205,8 @@ def _validate_matrix(matrix: dict[str, Any]) -> None:
         "REF-022",
         "REF-031",
         "REF-032",
+        "REF-033",
+        "REF-034",
     }
     if any(
         row["direct_hwpx"]["implementation_state"]

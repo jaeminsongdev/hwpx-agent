@@ -10,12 +10,12 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
-CONTRACT = "protocol/private/p09-link-reference-v1.json"
-MIGRATION = "protocol/migrations/p09-link-reference-v0-to-v1.md"
+CONTRACT = "protocol/private/p09-link-reference-v2.json"
+MIGRATION = "protocol/migrations/p09-link-reference-v1-to-v2.md"
 POLICY = "implementation/p09/P09-05_LINK_REFERENCE_POLICY.md"
 REPORT = "implementation/p09/P09-05_LINK_REFERENCE_REPORT.md"
-QUALIFICATION = "implementation/p09/evidence/p09-05-link-reference-source-qualification.v1.json"
-BASE_COMMIT = "bd168dd"
+QUALIFICATION = "implementation/p09/evidence/p09-05-link-reference-source-qualification.v2.json"
+BASE_COMMIT = "994403f"
 OFFICIAL_REPOSITORY = "https://github.com/hancom-io/hwpx-owpml-model.git"
 OFFICIAL_COMMIT = "1453388472c703a4b299a0834f425cdac16644b9"
 
@@ -40,8 +40,8 @@ OFFICIAL_SOURCE_SHA256 = {
 }
 IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/lib.rs": "b4726732a47175205a7e35f3aa8e018e66b2a0fbada144bebeac3f395540c058",
-    "crates/domain-ir/src/link_reference.rs": "21f39a72c3a115d286e296d8fffc92e93c0c39d0a21b05b9763aaae8213b9a77",
-    "crates/domain-ir/tests/link_reference.rs": "c3fc396288a57b5e25d0bab0a7f05748b9a2c55450698ddfa88421da0c28ad46",
+    "crates/domain-ir/src/link_reference.rs": "fd2e80c05810eea21b085499bab4f9bf95b8329287adc55fd46e240eb113766f",
+    "crates/domain-ir/tests/link_reference.rs": "1514ff19e9c2041335ad62033767c2042056e0a1d3de3c1e69b6a2029107d252",
 }
 CAPABILITIES = {
     "REF-031": "ref.bookmark_insert",
@@ -119,8 +119,9 @@ CLAIMS = {
 MARKERS = {
     "crates/domain-ir/src/lib.rs": ("mod link_reference;", "LinkReferenceBuilder", "HyperlinkTarget"),
     "crates/domain-ir/src/link_reference.rs": (
-        'LINK_REFERENCE_SCHEMA_VERSION: &str = "hwpx-agent.link-reference/v1"',
+        'LINK_REFERENCE_SCHEMA_VERSION: &str = "hwpx-agent.link-reference/v2"',
         "pub enum LinkReferenceOperation", "UnverifiedFieldParameters",
+        "Hangul2020HttpsCurrentTabV1", "new_parameters_sha256",
         "external_approval_sha256", "occupied_non_hyperlink_begin_control_ids",
         "pub struct LinkReferenceBuilder",
         "fn reject_duplicate_json_keys(", "<redacted>",
@@ -181,7 +182,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     }
     if not isinstance(contract, dict) or set(contract) != expected_root:
         errors.append("contract_shape")
-    if contract.get("schema_version") != "hwpx-agent.link-reference-contract/v1":
+    if contract.get("schema_version") != "hwpx-agent.link-reference-contract/v2":
         errors.append("schema_version")
     if contract.get("task") != "P09-05" or contract.get("scope") != (
         "complete_typed_component_models_for_ref_031_through_ref_034"
@@ -217,7 +218,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         errors.append("capabilities")
     if contract.get("excluded_capabilities") != EXCLUDED:
         errors.append("exclusions")
-    if contract.get("model") != "hwpx-agent.link-reference/v1":
+    if contract.get("model") != "hwpx-agent.link-reference/v2":
         errors.append("model")
     official = contract.get("official_model")
     expected_official = {
@@ -289,7 +290,7 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
     }
     if not isinstance(value, dict) or set(value) != expected_keys:
         errors.append("qualification_shape")
-    if value.get("schema_version") != "hwpx-agent.p09-link-reference-source-qualification/v1":
+    if value.get("schema_version") != "hwpx-agent.p09-link-reference-source-qualification/v2":
         errors.append("qualification_schema")
     if value.get("task") != "P09-05" or value.get("base_commit") != BASE_COMMIT:
         errors.append("qualification_identity")
@@ -324,7 +325,7 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
 
 def validate_text_artifacts(root: Path, errors: list[str]) -> None:
     expected = {
-        MIGRATION: ("no accepted v0", "unverified_field_parameters", "No defaults"),
+        MIGRATION: ("link-reference/v2", "new_parameters_sha256", "fail closed"),
         POLICY: ("REF-031", "REF-034", "UnverifiedFieldParameters", "product_complete=false"),
         REPORT: ("10/10 PASS", "5/5 PASS", "actual_hangul=false", "P09-06"),
     }

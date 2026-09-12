@@ -9,7 +9,7 @@ use unicode_normalization::UnicodeNormalization as _;
 
 use crate::LogicalId;
 
-pub const LINK_REFERENCE_SCHEMA_VERSION: &str = "hwpx-agent.link-reference/v1";
+pub const LINK_REFERENCE_SCHEMA_VERSION: &str = "hwpx-agent.link-reference/v2";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct LinkReferenceLimitConfig {
@@ -193,6 +193,7 @@ pub enum HyperlinkFieldType {
 #[serde(rename_all = "snake_case")]
 pub enum HyperlinkSemanticBinding {
     UnverifiedFieldParameters,
+    Hangul2020HttpsCurrentTabV1,
 }
 
 #[derive(Clone, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
@@ -564,6 +565,7 @@ pub enum LinkReferenceOperation {
         target: HyperlinkIdentity,
         new_target: HyperlinkTarget,
         new_display_text_sha256: String,
+        new_parameters_sha256: String,
     },
 }
 
@@ -964,11 +966,13 @@ fn apply_operation(
             target: identity,
             new_target,
             new_display_text_sha256,
+            new_parameters_sha256,
         } => apply_edit_hyperlink(
             &mut target,
             identity,
             new_target,
             new_display_text_sha256,
+            new_parameters_sha256,
             limits,
         )?,
     }
@@ -1071,6 +1075,7 @@ fn apply_edit_hyperlink(
     identity: &HyperlinkIdentity,
     new_target: &HyperlinkTarget,
     new_display_text_sha256: &str,
+    new_parameters_sha256: &str,
     limits: LinkReferenceLimits,
 ) -> Result<(), LinkReferenceError> {
     let index = exact_hyperlink_index(&target.hyperlinks, identity)?;
@@ -1082,6 +1087,7 @@ fn apply_edit_hyperlink(
         return Err(LinkReferenceError::Protected);
     }
     require_digest(new_display_text_sha256)?;
+    require_digest(new_parameters_sha256)?;
     validate_target(
         new_target,
         &target.bookmarks,
@@ -1090,6 +1096,7 @@ fn apply_edit_hyperlink(
     )?;
     if target.hyperlinks[index].target == *new_target
         && target.hyperlinks[index].display_text_sha256 == new_display_text_sha256
+        && target.hyperlinks[index].native_pair.parameters_sha256 == new_parameters_sha256
     {
         return Err(LinkReferenceError::Noop);
     }
@@ -1097,6 +1104,10 @@ fn apply_edit_hyperlink(
     target.hyperlinks[index]
         .display_text_sha256
         .clone_from(&new_display_text_sha256.to_owned());
+    target.hyperlinks[index]
+        .native_pair
+        .parameters_sha256
+        .clone_from(&new_parameters_sha256.to_owned());
     Ok(())
 }
 
@@ -1283,11 +1294,20 @@ fn validate_hyperlink(
         || hyperlink.native_pair.begin_tag != HyperlinkNativeBeginTag::FieldBegin
         || hyperlink.native_pair.end_tag != HyperlinkNativeEndTag::FieldEnd
         || hyperlink.native_pair.field_type != HyperlinkFieldType::Hyperlink
-        || hyperlink.native_pair.semantic_binding
-            != HyperlinkSemanticBinding::UnverifiedFieldParameters
+        || !matches!(
+            hyperlink.native_pair.semantic_binding,
+            HyperlinkSemanticBinding::UnverifiedFieldParameters
+                | HyperlinkSemanticBinding::Hangul2020HttpsCurrentTabV1
+        )
         || hyperlink.native_pair.end_begin_control_id_ref != hyperlink.identity.begin_control_id
         || hyperlink.native_pair.end_field_id != hyperlink.identity.field_id
         || hyperlink.native_pair.z_order < -1
+    {
+        return Err(LinkReferenceError::InvalidNativeBinding);
+    }
+    if hyperlink.native_pair.semantic_binding
+        == HyperlinkSemanticBinding::Hangul2020HttpsCurrentTabV1
+        && !matches!(hyperlink.target, HyperlinkTarget::Https { .. })
     {
         return Err(LinkReferenceError::InvalidNativeBinding);
     }

@@ -23,7 +23,7 @@
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt08 has plan drift and attempt09 lacks four screenshots. P08-15 keeps OBJ-048 unit-only because chart lacks common `href`; matrix remains 5 cataloged, 19 unit, 34 integration, 0 oracle/green. P09-12/13/15 advance REF-018/019/021/022/031/032 to static-section integration; matrix is 7 cataloged, 40 unit, 6 integration and 0 oracle/green, with target evidence not run |
+| P07-P09 | in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt08 has plan drift and attempt09 lacks four screenshots. P08-15 keeps OBJ-048 unit-only because chart lacks common `href`; matrix remains 5 cataloged, 19 unit, 34 integration, 0 oracle/green. P09-12/13/14/15 advance REF-018/019/021/022/031/032/033/034 to static-section integration; matrix is 7 cataloged, 38 unit, 8 integration and 0 oracle/green, with target evidence not run |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -39,7 +39,7 @@
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
 | P-0057 | P06-09 table conformance | fail-closed matrix plus bounded component/static-HWPX slices pass; TABLE-002/003 exact Hangul target v2 is oracle-verified; exact current-PC release matrix remains 0/61 green |
 | P-0095 | P08 object HWPX integration | P08-15 proves an exact common-root `href` partial profile for 11 shape-component tags but does not advance OBJ-048; close chart semantics or an exact fallback before row promotion, then map the remaining nine P08-10 models |
-| P-0096 | P09 fields/forms/notes/comments/links | P09-01~10 typed components cover 46/46 P09-owned rows; P09-12/13/15 add exact existing-form REF-018/019, point-bookmark REF-031/032 and closed plain-text footnote/endnote REF-021/022 static-section lowering/readback. Matrix stages are 7 cataloged, 40 unit, 6 integration, 0 oracle/green; actual package/Hangul/render/automation/differential remain not run. Attempt02 captured private licensed-Hangul hyperlink representation for the next fail-closed adapter |
+| P-0096 | P09 fields/forms/notes/comments/links | P09-01~10 typed components cover 46/46 P09-owned rows; P09-12/13/14/15 add exact existing-form REF-018/019, point-bookmark REF-031/032, HTTPS/current-tab hyperlink REF-033/034 and closed plain-text footnote/endnote REF-021/022 static-section lowering/readback. Matrix stages are 7 cataloged, 38 unit, 8 integration, 0 oracle/green; actual generated-package/Hangul/render/automation/differential remain not run |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | all-operation issuer and fixed-sequence-slot broker plus independently bound TLS service components pass; external operation, real assertion/credential/network, cross-system atomicity, power-loss and registered-host evidence remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -108,8 +108,8 @@
 
 ## Next actions
 
-1. Use the preserved attempt02 discovery to qualify and implement an exact fail-closed static-section hyperlink field subset for P09-14; keep all unrelated rows at their current stage and REF-016/020/036/040/043/045/047 P11-owned.
-2. When the user can capture screens/approve saves, run one combined exact-target campaign: P07-07/08/09 plus remaining P06 target/render/differentials including corrected TABLE-032/033.
+1. Run a fresh corrected P07-09 v2 attempt with four plan-bound screenshots, immutable input, saved/reopened native readback and final evidence oracle; attempts 06-09 remain failed/discovery evidence.
+2. Continue the combined exact-target campaign with P07-07/08 plus remaining P06 target/render/differentials including corrected TABLE-032/033, then resume the next exact P09 field-family HWPX subset.
 3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
 
 ## Context pack and archive pointers

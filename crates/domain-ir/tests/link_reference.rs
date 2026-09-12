@@ -246,6 +246,7 @@ fn schema_capabilities_native_shapes_and_external_digest_are_exact() {
                 uri: "https://example.test/reference".to_owned(),
             },
             new_display_text_sha256: A.to_owned(),
+            new_parameters_sha256: C.to_owned(),
         },
     ];
     assert_eq!(
@@ -387,7 +388,7 @@ fn inserts_internal_https_mailto_and_managed_document_targets() {
 }
 
 #[test]
-fn edit_changes_only_target_and_display_digest() {
+fn edit_changes_only_target_display_and_native_parameter_digest() {
     let old_target = HyperlinkTarget::InternalBookmark {
         bookmark_id: id("bookmark-1"),
     };
@@ -407,15 +408,19 @@ fn edit_changes_only_target_and_display_digest() {
             target: before.identity.clone(),
             new_target: new_target.clone(),
             new_display_text_sha256: A.to_owned(),
+            new_parameters_sha256: C.to_owned(),
         },
     )
     .expect("edit");
     let changed = &after.hyperlinks()[0];
     assert_eq!(changed.target, new_target);
     assert_eq!(changed.display_text_sha256, A);
+    assert_eq!(changed.native_pair.parameters_sha256, C);
     assert_eq!(changed.identity, before.identity);
     assert_eq!(changed.anchor, before.anchor);
-    assert_eq!(changed.native_pair, before.native_pair);
+    let mut preserved_native = before.native_pair;
+    preserved_native.parameters_sha256 = C.to_owned();
+    assert_eq!(changed.native_pair, preserved_native);
     assert_eq!(changed.opaque_properties, before.opaque_properties);
     assert_eq!(after.bookmarks(), source.bookmarks());
     assert_eq!(after.sections(), source.sections());
@@ -565,6 +570,24 @@ fn duplicate_dangling_anchor_native_and_name_states_are_rejected() {
         state(vec![bad_anchor], Vec::new(), policy(&[])),
         Err(LinkReferenceError::InvalidIdentity)
     );
+
+    let mut wrongly_qualified = hyperlink(
+        1,
+        HyperlinkTarget::InternalBookmark {
+            bookmark_id: id("bookmark-1"),
+        },
+        false,
+    );
+    wrongly_qualified.native_pair.semantic_binding =
+        HyperlinkSemanticBinding::Hangul2020HttpsCurrentTabV1;
+    assert_eq!(
+        state(
+            vec![bookmark(1, "chapter-one", false)],
+            vec![wrongly_qualified],
+            policy(&[]),
+        ),
+        Err(LinkReferenceError::InvalidNativeBinding)
+    );
 }
 
 #[test]
@@ -607,6 +630,7 @@ fn protection_index_and_noop_rules_have_no_partial_output() {
                 target: link_source.hyperlinks()[0].identity.clone(),
                 new_target: target,
                 new_display_text_sha256: C.to_owned(),
+                new_parameters_sha256: B.to_owned(),
             }
         ),
         Err(LinkReferenceError::Noop)

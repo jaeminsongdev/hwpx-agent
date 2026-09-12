@@ -30,7 +30,7 @@ IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/lib.rs": "b4726732a47175205a7e35f3aa8e018e66b2a0fbada144bebeac3f395540c058",
     "crates/domain-ir/src/object_geometry.rs": "b8d42a0fd02c6a831d1e675761556192b713c59d90fae59e95a367cf3a1b12e1",
     "crates/domain-ir/tests/object_geometry.rs": "5a88b76187bedf9939193de2db85dd105c6924d2946008c4a2d2fcbebf6f1f10",
-    "crates/hwpx-package/src/lib.rs": "7acbf7cfee7dc9f4eebae1017189356bb955a24ec9ca8c63189933af12fc005f",
+    "crates/hwpx-package/src/lib.rs": "f97fe8a7fcd972280a0e3306953347c5663a84d592045f799edc0e6e12656f12",
     "crates/hwpx-package/src/object_geometry_hwpx.rs": "88bbd23bb63cd95e18fdc96c06d9c7029c6cae89ae5917233801036a57fc4a69",
     "crates/hwpx-package/tests/object_geometry_hwpx.rs": "9a72cd328b5923d36f7d8d73ce089a94463899ba4a9fbc5b0340ea4aa3d3980e",
 }
