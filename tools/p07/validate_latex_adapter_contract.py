@@ -136,7 +136,7 @@ IMPLEMENTATION_MARKERS = {
     "Cargo.lock": ('name = "equation-engine"',),
     "crates/equation-engine/Cargo.toml": (
         'name = "equation-engine"',
-        'domain-ir = { path = "../domain-ir" }',
+        'domain-ir = { version = "0.1.0", path = "../domain-ir" }',
     ),
     "crates/equation-engine/src/lib.rs": (
         "mod latex;",

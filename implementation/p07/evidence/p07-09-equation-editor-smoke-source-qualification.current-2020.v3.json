@@ -1,0 +1,69 @@
+{
+  "schema_version": "hwpx-agent.equation-editor-smoke-source-qualification/v3",
+  "task": "P07-09",
+  "recorded_date": "2026-09-12",
+  "target": {
+    "product": "Hangul 2020",
+    "prog_id": "HWPFrame.HwpObject.2",
+    "version": "11.0.0.9136",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "other_versions": "not_qualified"
+  },
+  "harness_sources": {
+    "parent_path": "implementation/p07/tools/run-hancom-2020-equation-editor-smoke.ps1",
+    "parent_raw_sha256": "7a88b709047435a9bb91f317fde71befa2e29841449bf30f9dfbabb045e87b4e",
+    "child_path": "implementation/p07/tools/run-hancom-2020-equation-editor-smoke-child.ps1",
+    "child_raw_sha256": "9697d122425bc003bd45807ba1cabfa5137f957ab3dbb8772dc6a36fd6fb2992",
+    "bundle_sha256": "33e66a4a11ea762abddbe2fbaf7f1dc6e65fce9ca7b6a56d10ffd347e8825d50",
+    "finalizer_path": "implementation/p07/tools/finalize-hancom-2020-equation-editor-smoke.ps1",
+    "finalizer_raw_sha256": "1db727324c010031cfb87ef0cc74c894f634c225dc1d71d9bc6304abffd1aec5",
+    "target_oracle_path": "crates/hwpx-package/examples/p07_09_equation_editor_oracle.rs",
+    "target_oracle_raw_sha256": "3374c47a1fd18cb0929a2ef32abd984ab13babfb6ee26e6fc509fcdcd28f7cb8",
+    "plan_builder_path": "crates/equation-engine/examples/p07_09_equation_editor_plan.rs",
+    "plan_builder_raw_sha256": "9e46c13276adb03c4fa09fd490bc6fb55617e6c02abd2f805460e7e3bd5fb008",
+    "evidence_oracle_path": "crates/equation-engine/examples/p07_09_equation_editor_evidence_oracle.rs",
+    "evidence_oracle_raw_sha256": "7f232afc22e63ab04378162eed6e3e0c61efeb7b40e18a08264856d0922274c0"
+  },
+  "component_execution": {
+    "state": "pass",
+    "rust_tests_passed": 12,
+    "powershell_scripts_parsed": 3,
+    "single_token_planner": "pass",
+    "saved_native_script_binding": "pass",
+    "private_plan_reload": "pass",
+    "combined_evidence_verifier": "pass",
+    "native_hwpx_oracle_build": "pass",
+    "silent_fallback_count": 0
+  },
+  "target_execution": {
+    "state": "pass",
+    "latest_attempt": "p07-09-20260912-attempt14",
+    "exact_target_preflight_observed": true,
+    "immutable_input_observed": true,
+    "saved_native_readback_observed": true,
+    "user_checklist_state": "user_attested",
+    "photo_evidence_requirement": "not_required",
+    "automated_save_reopen_complete": true,
+    "native_object_identity_preserved": true,
+    "silent_fallback_count": 0,
+    "target_qualification_sha256": "720139b1608dfb0fa1ca4a32504fa9b465a88471dc4aaf789fae6d0b63ac3086"
+  },
+  "claims": {
+    "implementation_ready": true,
+    "canonical_single_token_change_enforced": true,
+    "saved_native_script_semantics_enforced": true,
+    "manual_and_automation_required": true,
+    "computer_use_no_click_or_typing_enforced": true,
+    "photo_evidence_required": false,
+    "visual_oracle": false,
+    "target_editor_smoke": true,
+    "actual_hangul_gate": true,
+    "save_reopen": true,
+    "render": false,
+    "p07_09_complete": true,
+    "p07_complete": false,
+    "product_complete": false
+  }
+}

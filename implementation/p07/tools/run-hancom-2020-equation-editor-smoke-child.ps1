@@ -29,8 +29,20 @@ function Write-JsonNoOverwrite {
 function Clear-ComObject {
     param([AllowNull()]$Value)
     if ($null -ne $Value -and [Runtime.InteropServices.Marshal]::IsComObject($Value)) {
-        [void][Runtime.InteropServices.Marshal]::FinalReleaseComObject($Value)
+        try { [void][Runtime.InteropServices.Marshal]::FinalReleaseComObject($Value) } catch { }
     }
+}
+
+function Wait-HwpProcessExit {
+    param([ValidateRange(1, 60)][int]$TimeoutSeconds = 15)
+    $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
+    while ((Get-Date) -lt $deadline) {
+        if (@(Get-CimInstance Win32_Process -Filter "Name='Hwp.exe'" -ErrorAction SilentlyContinue).Count -eq 0) {
+            return $true
+        }
+        Start-Sleep -Milliseconds 250
+    }
+    return $false
 }
 
 function Assert-Digest {
@@ -65,7 +77,7 @@ if (-not $planFile.StartsWith($run + '\', [StringComparison]::OrdinalIgnoreCase)
     throw 'EDITOR_CHILD_PLAN_IDENTITY_MISMATCH'
 }
 $plan = Get-Content -Raw -Encoding UTF8 -LiteralPath $planFile | ConvertFrom-Json
-if ([string]$plan.schema_version -cne 'hwpx-agent.equation-editor-smoke/v2' -or
+if ([string]$plan.schema_version -cne 'hwpx-agent.equation-editor-smoke/v3' -or
     [string]$plan.profile_version -cne 'hwpx-agent.equation-editor-smoke.hangul-2020-11.0.0.9136-x86-ko-KR/v1' -or
     [string]$plan.plan_sha256 -cnotmatch '^[0-9a-f]{64}$' -or
     [int]$plan.changed_token_index -lt 0 -or
@@ -84,7 +96,7 @@ foreach ($value in @(
 
 $inputPath = Join-Path $run 'before.hwpx'
 $outputPath = Join-Path $run 'after.hwpx'
-$attestationPath = Join-Path $run 'manual-attestation.json'
+$attestationPath = Join-Path $run 'manual-checklist.json'
 $instructionPath = Join-Path $run 'manual-instructions.json'
 $tracePath = Join-Path $run 'child-trace.json'
 foreach ($path in @($outputPath, $attestationPath, $instructionPath, $tracePath)) {
@@ -95,31 +107,45 @@ if (-not (Test-Path -LiteralPath $inputPath -PathType Leaf) -or
     throw 'EDITOR_CHILD_INPUT_IDENTITY_MISMATCH'
 }
 $instruction = [ordered]@{
-    schema_version = 'hwpx-agent.p07-09-equation-editor-manual-instructions/v2'
+    schema_version = 'hwpx-agent.p07-09-equation-editor-manual-instructions/v3'
     plan_sha256 = [string]$plan.plan_sha256
     planned_before_script = [string]$plan.before_script
     planned_after_script = [string]$plan.after_script
     expected_saved_after_script = [string]$plan.saved_after_script
     changed_token_index = [int]$plan.changed_token_index
     required_output_filename = 'after.hwpx'
-    required_attestation_filename = 'manual-attestation.json'
-    instruction = 'User double-clicks the only native equation, changes exactly the planned semantic token, closes the editor, saves as after.hwpx, supplies four screenshots, and confirms all clicks and typing were manual. Native editor serialization may canonicalize independently and is verified from saved HWPX readback.'
-    computer_use_policy = 'screenshot_only'
+    required_checklist_filename = 'manual-checklist.json'
+    checklist = @(
+        'before_equation_matches_plan',
+        'double_click',
+        'editor_visible',
+        'one_token_change',
+        'editor_closed_after_commit',
+        'post_commit_equation_matches_plan',
+        'saved_as_after_hwpx',
+        'user_performed_all_clicks_and_typing',
+        'anomaly_reported'
+    )
+    instruction = 'User checks the planned before equation, double-clicks the only native equation, changes exactly the planned token, closes the editor, confirms the planned result, saves as after.hwpx, and reports any anomaly. Screenshots are neither requested nor accepted as an automatic or visual oracle. Native saved HWPX semantics and save/reopen state remain machine-verified.'
+    computer_use_policy = 'capture_optional_no_click_or_typing'
+    visual_evidence_requirement = 'not_required'
 }
 Write-JsonNoOverwrite -Path $instructionPath -Value $instruction
 
 $trace = [ordered]@{
-    schema_version = 'hwpx-agent.p07-09-equation-editor-child-trace/v1'
+    schema_version = 'hwpx-agent.p07-09-equation-editor-child-trace/v3'
     plan_sha256 = [string]$plan.plan_sha256
     state = 'effect_unknown'
     phases = [ordered]@{
         com_create = 'not_run'; version_check = 'not_run'; open_input = 'not_run'
-        window_visible = 'not_run'; manual_attestation = 'not_run'; output_stable = 'not_run'
+        window_visible = 'not_run'; manual_checklist = 'not_run'; output_stable = 'not_run'
         input_immutable = 'not_run'; close_after_save = 'not_run'; reopen = 'not_run'
         reopen_close = 'not_run'; quit = 'not_run'
     }
     output_sha256 = $null
-    manual_attestation_sha256 = $null
+    manual_checklist_sha256 = $null
+    close_strategy = $null
+    close_error_hresult = $null
     failed_phase = $null
     error_code = $null
     computer_use_click_or_type_invoked = $false
@@ -154,9 +180,10 @@ try {
     if ($opened -eq $false) { throw 'EDITOR_CHILD_OPEN_FAILED' }
     [void]$document.SetActive_XHwpDocument()
     $trace.phases.open_input = 'pass'
+    $trace.user_document_opened = $true
 
     $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
-    $phase = 'manual_attestation'; $trace.phases.manual_attestation = 'running'
+    $phase = 'manual_checklist'; $trace.phases.manual_checklist = 'running'
     while ((Get-Date) -lt $deadline -and -not (Test-Path -LiteralPath $attestationPath -PathType Leaf)) {
         Start-Sleep -Milliseconds 500
     }
@@ -168,26 +195,31 @@ try {
         throw 'EDITOR_CHILD_ATTESTATION_LIMIT'
     }
     $attestation = [Text.Encoding]::UTF8.GetString($attestationBytes) | ConvertFrom-Json
-    if ([string]$attestation.schema_version -cne 'hwpx-agent.p07-09-equation-editor-manual-attestation/v2' -or
+    $expectedKeys = @(
+        'schema_version', 'plan_sha256', 'before_equation_matches_plan', 'double_click',
+        'editor_visible', 'one_token_change', 'editor_closed_after_commit',
+        'post_commit_equation_matches_plan', 'saved_as_after_hwpx',
+        'user_performed_all_clicks_and_typing', 'anomaly_reported',
+        'computer_use_click_or_type_invoked'
+    )
+    $actualKeys = @($attestation.PSObject.Properties.Name)
+    if (@(Compare-Object -ReferenceObject $expectedKeys -DifferenceObject $actualKeys -CaseSensitive).Count -ne 0 -or
+        [string]$attestation.schema_version -cne 'hwpx-agent.p07-09-equation-editor-manual-checklist/v1' -or
         [string]$attestation.plan_sha256 -cne [string]$plan.plan_sha256 -or
-        [string]$attestation.double_click -cne 'passed' -or
-        [string]$attestation.editor_visible -cne 'passed' -or
-        [string]$attestation.one_token_change -cne 'passed' -or
-        [string]$attestation.editor_closed_after_commit -cne 'passed' -or
-        [string]$attestation.user_performed_all_clicks_and_typing -cne 'passed' -or
+        [string]$attestation.before_equation_matches_plan -cne 'user_attested' -or
+        [string]$attestation.double_click -cne 'user_attested' -or
+        [string]$attestation.editor_visible -cne 'user_attested' -or
+        [string]$attestation.one_token_change -cne 'user_attested' -or
+        [string]$attestation.editor_closed_after_commit -cne 'user_attested' -or
+        [string]$attestation.post_commit_equation_matches_plan -cne 'user_attested' -or
+        [string]$attestation.saved_as_after_hwpx -cne 'user_attested' -or
+        [string]$attestation.user_performed_all_clicks_and_typing -cne 'user_attested' -or
+        [bool]$attestation.anomaly_reported -or
         [bool]$attestation.computer_use_click_or_type_invoked) {
         throw 'EDITOR_CHILD_ATTESTATION_MISMATCH'
     }
-    $screenshots = @(
-        [string]$attestation.before_screenshot_sha256,
-        [string]$attestation.editor_open_screenshot_sha256,
-        [string]$attestation.changed_editor_screenshot_sha256,
-        [string]$attestation.saved_document_screenshot_sha256
-    )
-    foreach ($digest in $screenshots) { Assert-Digest -Value $digest -Code 'EDITOR_CHILD_SCREENSHOT_DIGEST_INVALID' }
-    if (@($screenshots | Select-Object -Unique).Count -ne 4) { throw 'EDITOR_CHILD_SCREENSHOT_EVIDENCE_REUSED' }
-    $trace.manual_attestation_sha256 = Get-Sha256File -Path $attestationPath
-    $trace.phases.manual_attestation = 'pass'
+    $trace.manual_checklist_sha256 = Get-Sha256File -Path $attestationPath
+    $trace.phases.manual_checklist = 'pass'
 
     $phase = 'output_stable'; $trace.phases.output_stable = 'running'
     $trace.output_sha256 = Wait-StableFile -Path $outputPath -Deadline $deadline
@@ -204,11 +236,30 @@ try {
     $safeToQuit = $true
 
     $phase = 'close_after_save'; $trace.phases.close_after_save = 'running'
-    [void]$document.Close($false)
+    $quitSucceeded = $false
+    try {
+        $hwp.Quit()
+        $quitSucceeded = $true
+    }
+    catch {
+        $trace.close_error_hresult = [int64]$_.Exception.HResult
+    }
     Clear-ComObject -Value $document; $document = $null
+    Clear-ComObject -Value $window; $window = $null
+    Clear-ComObject -Value $documents; $documents = $null
+    Clear-ComObject -Value $hwp; $hwp = $null
+    [GC]::Collect(); [GC]::WaitForPendingFinalizers(); [GC]::Collect(); [GC]::WaitForPendingFinalizers()
+    if (-not (Wait-HwpProcessExit -TimeoutSeconds 15)) {
+        throw 'EDITOR_CHILD_CLOSE_PROCESS_STILL_RUNNING'
+    }
+    $trace.close_strategy = if ($quitSucceeded) { 'application_quit' } else { 'com_release_confirmed_process_exit' }
     $trace.phases.close_after_save = 'pass'
 
     $phase = 'reopen'; $trace.phases.reopen = 'running'
+    $hwp = New-Object -ComObject 'HWPFrame.HwpObject.2'
+    $version = ([string]$hwp.Version).Replace(',', '.').Replace(' ', '')
+    if ($version -cne '11.0.0.9136') { throw 'EDITOR_CHILD_REOPEN_VERSION_MISMATCH' }
+    $documents = $hwp.XHwpDocuments
     $document = $documents.Add($false)
     if ($null -eq $document -or $document.Open($outputPath, 'HWPX', 'lock:false;setcurdir:false') -eq $false) {
         throw 'EDITOR_CHILD_REOPEN_FAILED'

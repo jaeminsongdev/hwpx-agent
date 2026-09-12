@@ -4,11 +4,11 @@ use equation_engine::{
     EQUATION_EDITOR_SMOKE_EVIDENCE_SCHEMA_VERSION, EQUATION_EDITOR_SMOKE_PROFILE_VERSION,
     EQUATION_EDITOR_SMOKE_SCHEMA_VERSION, EQUATION_EDITOR_TARGET_EXECUTABLE_SHA256, EqEditEngine,
     EqEditLimits, EqEditParseRequestDraft, EquationEditorAutomationProof,
-    EquationEditorManualProof, EquationEditorSmokeError, EquationEditorSmokeEvidenceDraft,
-    EquationEditorSmokeEvidenceState, EquationEditorSmokeLimitConfig, EquationEditorSmokeLimits,
-    EquationEditorSmokePlan, EquationEditorSmokePlanner, EquationEditorSmokeRequestDraft,
-    EquationEditorSmokeSnapshot, EquationEditorSmokeSourceState, EquationEditorTargetIdentity,
-    EquationEditorVerificationState,
+    EquationEditorManualAttestationState, EquationEditorManualProof, EquationEditorSmokeError,
+    EquationEditorSmokeEvidenceDraft, EquationEditorSmokeEvidenceState,
+    EquationEditorSmokeLimitConfig, EquationEditorSmokeLimits, EquationEditorSmokePlan,
+    EquationEditorSmokePlanner, EquationEditorSmokeRequestDraft, EquationEditorSmokeSnapshot,
+    EquationEditorSmokeSourceState, EquationEditorTargetIdentity, EquationEditorVerificationState,
 };
 use serde_json::Value;
 use sha2::{Digest as _, Sha256};
@@ -133,17 +133,18 @@ fn evidence(
         },
         state: EquationEditorSmokeEvidenceState::Succeeded,
         manual: EquationEditorManualProof {
-            double_click: EquationEditorVerificationState::Passed,
-            editor_visible: EquationEditorVerificationState::Passed,
-            one_token_change: EquationEditorVerificationState::Passed,
-            editor_closed_after_commit: EquationEditorVerificationState::Passed,
-            user_performed_all_clicks_and_typing: EquationEditorVerificationState::Passed,
+            before_equation_matches_plan: EquationEditorManualAttestationState::UserAttested,
+            double_click: EquationEditorManualAttestationState::UserAttested,
+            editor_visible: EquationEditorManualAttestationState::UserAttested,
+            one_token_change: EquationEditorManualAttestationState::UserAttested,
+            editor_closed_after_commit: EquationEditorManualAttestationState::UserAttested,
+            post_commit_equation_matches_plan: EquationEditorManualAttestationState::UserAttested,
+            saved_as_after_hwpx: EquationEditorManualAttestationState::UserAttested,
+            user_performed_all_clicks_and_typing:
+                EquationEditorManualAttestationState::UserAttested,
+            anomaly_reported: false,
             computer_use_click_or_type_invoked: false,
-            before_screenshot_sha256: "8".repeat(64),
-            editor_open_screenshot_sha256: "9".repeat(64),
-            changed_editor_screenshot_sha256: "c".repeat(64),
-            saved_document_screenshot_sha256: "d".repeat(64),
-            operator_attestation_sha256: "e".repeat(64),
+            operator_checklist_sha256: "e".repeat(64),
         },
         automation: EquationEditorAutomationProof {
             exact_target_preflight: EquationEditorVerificationState::Passed,
@@ -201,7 +202,11 @@ fn exact_one_token_plan_and_combined_evidence_pass_deterministically() -> TestRe
     );
 
     let receipt = verify(&first, &evidence(&first, &source))?;
-    assert!(receipt.manual_double_click_verified());
+    assert!(receipt.manual_double_click_user_attested());
+    let receipt_json =
+        String::from_utf8(receipt.canonical_json(EquationEditorSmokeLimits::default())?)?;
+    assert!(receipt_json.contains("\"manual_double_click_state\":\"user_attested\""));
+    assert!(!receipt_json.contains("screenshot"));
     assert!(receipt.automated_save_reopen_verified());
     assert!(receipt.actual_hangul());
     let json = String::from_utf8(receipt.canonical_json(EquationEditorSmokeLimits::default())?)?;
@@ -238,7 +243,7 @@ fn private_plan_loader_recomputes_file_source_semantic_token_and_plan_hashes() -
     );
 
     let mut legacy: Value = serde_json::from_slice(&bytes)?;
-    legacy["schema_version"] = Value::String("hwpx-agent.equation-editor-smoke/v1".to_owned());
+    legacy["schema_version"] = Value::String("hwpx-agent.equation-editor-smoke/v2".to_owned());
     let legacy_object = legacy.as_object_mut().ok_or("plan must be an object")?;
     legacy_object.remove("saved_after_script");
     legacy_object.remove("saved_after_script_sha256");
@@ -250,7 +255,7 @@ fn private_plan_loader_recomputes_file_source_semantic_token_and_plan_hashes() -
     );
 
     let mut relabeled: Value = serde_json::from_slice(&bytes)?;
-    relabeled["schema_version"] = Value::String("hwpx-agent.equation-editor-smoke/v1".to_owned());
+    relabeled["schema_version"] = Value::String("hwpx-agent.equation-editor-smoke/v2".to_owned());
     let relabeled_bytes = serde_json::to_vec(&relabeled)?;
     let relabeled_digest = hex::encode(Sha256::digest(&relabeled_bytes));
     assert_eq!(
@@ -399,7 +404,7 @@ fn manual_automation_and_effect_proofs_are_all_mandatory() -> TestResult {
         Err(EquationEditorSmokeError::EffectNotProven)
     );
     let mut manual = evidence(&plan, &source);
-    manual.manual.double_click = EquationEditorVerificationState::Failed;
+    manual.manual.double_click = EquationEditorManualAttestationState::Failed;
     assert_eq!(
         verify(&plan, &manual),
         Err(EquationEditorSmokeError::ManualEvidenceIncomplete)
@@ -410,11 +415,49 @@ fn manual_automation_and_effect_proofs_are_all_mandatory() -> TestResult {
         verify(&plan, &computer_use),
         Err(EquationEditorSmokeError::ManualEvidenceIncomplete)
     );
+    let mut anomaly = evidence(&plan, &source);
+    anomaly.manual.anomaly_reported = true;
+    assert_eq!(
+        verify(&plan, &anomaly),
+        Err(EquationEditorSmokeError::ManualEvidenceIncomplete)
+    );
+    let mut not_attested = evidence(&plan, &source);
+    not_attested.manual.saved_as_after_hwpx = EquationEditorManualAttestationState::NotRun;
+    assert_eq!(
+        verify(&plan, &not_attested),
+        Err(EquationEditorSmokeError::ManualEvidenceIncomplete)
+    );
+    let mut invalid_checklist = evidence(&plan, &source);
+    invalid_checklist.manual.operator_checklist_sha256 = "not-a-digest".to_owned();
+    assert_eq!(
+        verify(&plan, &invalid_checklist),
+        Err(EquationEditorSmokeError::InvalidIdentity)
+    );
     let mut automated = evidence(&plan, &source);
     automated.automation.reopen_native_readback = EquationEditorVerificationState::NotRun;
     assert_eq!(
         verify(&plan, &automated),
         Err(EquationEditorSmokeError::AutomationEvidenceIncomplete)
+    );
+    Ok(())
+}
+
+#[test]
+fn v2_screenshot_evidence_cannot_be_relabeled_as_v3() -> TestResult {
+    let (plan, source) = plan()?;
+    let mut value = serde_json::to_value(evidence(&plan, &source))?;
+    let manual = value["manual"]
+        .as_object_mut()
+        .ok_or("manual proof must be an object")?;
+    manual.insert(
+        "before_screenshot_sha256".to_owned(),
+        Value::String("8".repeat(64)),
+    );
+    let bytes = serde_json::to_vec(&value)?;
+    let digest = hex::encode(Sha256::digest(&bytes));
+    assert_eq!(
+        planner()?.verify_evidence_json(&plan, &bytes, &digest),
+        Err(EquationEditorSmokeError::InvalidJson)
     );
     Ok(())
 }

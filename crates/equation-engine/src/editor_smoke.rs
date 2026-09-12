@@ -1,4 +1,3 @@
-use std::collections::HashSet;
 use std::fmt;
 
 use domain_ir::{MathAst, MathAstDraft, MathAstLimits};
@@ -11,11 +10,11 @@ use crate::{
     EqEditParseRequestDraft,
 };
 
-pub const EQUATION_EDITOR_SMOKE_SCHEMA_VERSION: &str = "hwpx-agent.equation-editor-smoke/v2";
+pub const EQUATION_EDITOR_SMOKE_SCHEMA_VERSION: &str = "hwpx-agent.equation-editor-smoke/v3";
 pub const EQUATION_EDITOR_SMOKE_EVIDENCE_SCHEMA_VERSION: &str =
-    "hwpx-agent.equation-editor-smoke-evidence/v2";
+    "hwpx-agent.equation-editor-smoke-evidence/v3";
 pub const EQUATION_EDITOR_SMOKE_RECEIPT_SCHEMA_VERSION: &str =
-    "hwpx-agent.equation-editor-smoke-receipt/v2";
+    "hwpx-agent.equation-editor-smoke-receipt/v3";
 pub const EQUATION_EDITOR_SMOKE_PROFILE_VERSION: &str =
     "hwpx-agent.equation-editor-smoke.hangul-2020-11.0.0.9136-x86-ko-KR/v1";
 pub const EQUATION_EDITOR_TARGET_EXECUTABLE_SHA256: &str =
@@ -345,20 +344,28 @@ pub enum EquationEditorVerificationState {
     NotRun,
 }
 
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum EquationEditorManualAttestationState {
+    UserAttested,
+    Failed,
+    NotRun,
+}
+
 #[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct EquationEditorManualProof {
-    pub double_click: EquationEditorVerificationState,
-    pub editor_visible: EquationEditorVerificationState,
-    pub one_token_change: EquationEditorVerificationState,
-    pub editor_closed_after_commit: EquationEditorVerificationState,
-    pub user_performed_all_clicks_and_typing: EquationEditorVerificationState,
+    pub before_equation_matches_plan: EquationEditorManualAttestationState,
+    pub double_click: EquationEditorManualAttestationState,
+    pub editor_visible: EquationEditorManualAttestationState,
+    pub one_token_change: EquationEditorManualAttestationState,
+    pub editor_closed_after_commit: EquationEditorManualAttestationState,
+    pub post_commit_equation_matches_plan: EquationEditorManualAttestationState,
+    pub saved_as_after_hwpx: EquationEditorManualAttestationState,
+    pub user_performed_all_clicks_and_typing: EquationEditorManualAttestationState,
+    pub anomaly_reported: bool,
     pub computer_use_click_or_type_invoked: bool,
-    pub before_screenshot_sha256: String,
-    pub editor_open_screenshot_sha256: String,
-    pub changed_editor_screenshot_sha256: String,
-    pub saved_document_screenshot_sha256: String,
-    pub operator_attestation_sha256: String,
+    pub operator_checklist_sha256: String,
 }
 
 impl fmt::Debug for EquationEditorManualProof {
@@ -482,8 +489,8 @@ impl EquationEditorSmokeReceipt {
     }
 
     #[must_use]
-    pub const fn manual_double_click_verified(&self) -> bool {
-        matches!(self.manual_double_click_state.as_bytes(), b"verified")
+    pub const fn manual_double_click_user_attested(&self) -> bool {
+        matches!(self.manual_double_click_state.as_bytes(), b"user_attested")
     }
 
     #[must_use]
@@ -866,7 +873,7 @@ impl EquationEditorSmokePlanner {
             changed_token_count: 1,
             native_object_count: after.native_object_count,
             silent_fallback_count: 0,
-            manual_double_click_state: "verified",
+            manual_double_click_state: "user_attested",
             automated_save_reopen_state: "verified",
             semantic_change_state: "verified",
             object_identity_state: "preserved",
@@ -1029,28 +1036,22 @@ fn validate_target(target: &EquationEditorTargetIdentity) -> Result<(), Equation
 }
 
 fn validate_manual(proof: &EquationEditorManualProof) -> Result<(), EquationEditorSmokeError> {
-    if proof.double_click != EquationEditorVerificationState::Passed
-        || proof.editor_visible != EquationEditorVerificationState::Passed
-        || proof.one_token_change != EquationEditorVerificationState::Passed
-        || proof.editor_closed_after_commit != EquationEditorVerificationState::Passed
-        || proof.user_performed_all_clicks_and_typing != EquationEditorVerificationState::Passed
+    if proof.before_equation_matches_plan != EquationEditorManualAttestationState::UserAttested
+        || proof.double_click != EquationEditorManualAttestationState::UserAttested
+        || proof.editor_visible != EquationEditorManualAttestationState::UserAttested
+        || proof.one_token_change != EquationEditorManualAttestationState::UserAttested
+        || proof.editor_closed_after_commit != EquationEditorManualAttestationState::UserAttested
+        || proof.post_commit_equation_matches_plan
+            != EquationEditorManualAttestationState::UserAttested
+        || proof.saved_as_after_hwpx != EquationEditorManualAttestationState::UserAttested
+        || proof.user_performed_all_clicks_and_typing
+            != EquationEditorManualAttestationState::UserAttested
+        || proof.anomaly_reported
         || proof.computer_use_click_or_type_invoked
     {
         return Err(EquationEditorSmokeError::ManualEvidenceIncomplete);
     }
-    let digests = [
-        &proof.before_screenshot_sha256,
-        &proof.editor_open_screenshot_sha256,
-        &proof.changed_editor_screenshot_sha256,
-        &proof.saved_document_screenshot_sha256,
-        &proof.operator_attestation_sha256,
-    ];
-    for digest in digests {
-        validate_digest(digest)?;
-    }
-    if digests.into_iter().collect::<HashSet<_>>().len() != digests.len() {
-        return Err(EquationEditorSmokeError::ManualEvidenceIncomplete);
-    }
+    validate_digest(&proof.operator_checklist_sha256)?;
     Ok(())
 }
 

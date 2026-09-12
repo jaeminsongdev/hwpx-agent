@@ -11,7 +11,7 @@
 
 - Preserve user documents, the original design ZIP, private evidence and secrets.
 - Use only named disposable fixtures; never edit source artifacts in place.
-- Computer Use is screenshot-only. The user performs every Hangul click and access approval.
+- Hangul UI clicks/typing remain user-owned; photos are optional and never machine/visual proof. User checks use `user_attested`, while native HWPX/save/reopen claims require independent automation readback.
 - Component/synthetic evidence never proves actual Hangul, render, production or full-product PASS.
 - Raw XML, COM/HAction identifiers, arbitrary paths and unverified routes stay out of public actions.
 - Failed attempts remain failed evidence and are never relabeled.
@@ -23,7 +23,7 @@
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt08 has plan drift and attempt09 lacks four screenshots. P08-15 keeps OBJ-048 unit-only because chart lacks common `href`; matrix remains 5 cataloged, 19 unit, 34 integration, 0 oracle/green. P09-12/13/14/15 advance REF-018/019/021/022/031/032/033/034 to static-section integration; matrix is 7 cataloged, 38 unit, 8 integration and 0 oracle/green, with target evidence not run |
+| P07-P09 | in progress | P07-01~09 implementation/unit checks pass; P07-09 exact current-target v3 passes user-attested edit plus native HWPX/save/reopen readback, without photo/render/P07/product promotion. P08 remains 5 cataloged, 19 unit, 34 integration, 0 oracle/green. P09 remains 7 cataloged, 38 unit, 8 integration, 0 oracle/green with target evidence not run |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -38,6 +38,7 @@
 |---|---|---|
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
 | P-0057 | P06-09 table conformance | fail-closed matrix plus bounded component/static-HWPX slices pass; TABLE-002/003 exact Hangul target v2 is oracle-verified; exact current-PC release matrix remains 0/61 green |
+| P-0097 | P07 native equation target | P07-09 exact Hangul 2020 target v3 is closed: eight UI checks are `user_attested`, native object identity/semantics and two fresh save/reopen cycles are verified; P07-07/08 target, render and differential Gates remain |
 | P-0095 | P08 object HWPX integration | P08-15 proves an exact common-root `href` partial profile for 11 shape-component tags but does not advance OBJ-048; close chart semantics or an exact fallback before row promotion, then map the remaining nine P08-10 models |
 | P-0096 | P09 fields/forms/notes/comments/links | P09-01~10 typed components cover 46/46 P09-owned rows; P09-12/13/14/15 add exact existing-form REF-018/019, point-bookmark REF-031/032, HTTPS/current-tab hyperlink REF-033/034 and closed plain-text footnote/endnote REF-021/022 static-section lowering/readback. Matrix stages are 7 cataloged, 38 unit, 8 integration, 0 oracle/green; actual generated-package/Hangul/render/automation/differential remain not run |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
@@ -96,21 +97,19 @@
 ## Risks, closures and holds
 
 - R-0002: P16 actual registered-app and Hangul end-to-end evidence absent.
-- R-0003: one historical independent worker timeout root cause remains unproven; retries passed.
 - R-0005: P17 durable Git sync, fixed-slot recoverable broker and independently bound issuer pass on loopback/current PC; external operation/network, real assertion/credential, cross-system atomicity, power-loss and production do not.
 - R-0006: P17 conflict resolver/widget are component evidence only.
 - R-0007: P06-09 remains 0/61 release-green until direct validations, fixtures, rollback/retry,
   current-target automation runtime and exact differential evidence close every row.
-- R-0008: legacy source history plus current-source v40-v47 remain immutable and 376/376 passed; v48
-  focused checks passed but its 397-test full run was interrupted, so that successor closure remains open.
+- R-0008: legacy source history plus current-source v40-v47 remain immutable; the P17 v48 checkpoint now passes Cargo deny and the complete 397/397 regression at commit `73e2828`. User-owned successor files remain outside that commit.
 - HOLD-0002: P10-05 path-security registration and P10-06 production COM execution.
 - HOLD-0003: P10-08 production isolation and later-version PCs.
 
 ## Next actions
 
-1. Run a fresh corrected P07-09 v2 attempt with four plan-bound screenshots, immutable input, saved/reopened native readback and final evidence oracle; attempts 06-09 remain failed/discovery evidence.
-2. Continue the combined exact-target campaign with P07-07/08 plus remaining P06 target/render/differentials including corrected TABLE-032/033, then resume the next exact P09 field-family HWPX subset.
-3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
+1. Goal pursuit is paused at the user's requested checkpoint after P07-09 v3 and P17 v48; no remote push is implied.
+2. On resume at `max`, continue P07-07/08 target, render and direct/automation differential Gates, then the remaining P06 target/render/differentials including corrected TABLE-032/033.
+3. Resume P08/P09 exact HWPX/target rows and P17 external/network/registered-host work only after the combined P06/P07 campaign boundary.
 
 ## Context pack and archive pointers
 

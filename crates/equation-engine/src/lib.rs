@@ -24,11 +24,12 @@ pub use editor_smoke::{
     EQUATION_EDITOR_SMOKE_EVIDENCE_SCHEMA_VERSION, EQUATION_EDITOR_SMOKE_PROFILE_VERSION,
     EQUATION_EDITOR_SMOKE_RECEIPT_SCHEMA_VERSION, EQUATION_EDITOR_SMOKE_SCHEMA_VERSION,
     EQUATION_EDITOR_TARGET_EXECUTABLE_SHA256, EquationEditorAutomationProof,
-    EquationEditorManualProof, EquationEditorSmokeError, EquationEditorSmokeEvidenceDraft,
-    EquationEditorSmokeEvidenceState, EquationEditorSmokeLimitConfig, EquationEditorSmokeLimits,
-    EquationEditorSmokePlan, EquationEditorSmokePlanner, EquationEditorSmokeReceipt,
-    EquationEditorSmokeRequestDraft, EquationEditorSmokeSnapshot, EquationEditorSmokeSourceState,
-    EquationEditorTargetIdentity, EquationEditorVerificationState,
+    EquationEditorManualAttestationState, EquationEditorManualProof, EquationEditorSmokeError,
+    EquationEditorSmokeEvidenceDraft, EquationEditorSmokeEvidenceState,
+    EquationEditorSmokeLimitConfig, EquationEditorSmokeLimits, EquationEditorSmokePlan,
+    EquationEditorSmokePlanner, EquationEditorSmokeReceipt, EquationEditorSmokeRequestDraft,
+    EquationEditorSmokeSnapshot, EquationEditorSmokeSourceState, EquationEditorTargetIdentity,
+    EquationEditorVerificationState,
 };
 pub use eqedit::{
     EQEDIT_ADAPTER_SCHEMA_VERSION, EQEDIT_COMPILER_VERSION, EQEDIT_PARSER_VERSION,

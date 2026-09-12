@@ -132,7 +132,7 @@ $childScript = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot 'run-hancom-2
 $parentSha256 = Get-Sha256File -Path $PSCommandPath
 $childSha256 = Get-Sha256File -Path $childScript
 $harnessBundleSha256 = Get-Sha256String -Value ($parentSha256 + ':' + $childSha256)
-if ([string]$plan.schema_version -cne 'hwpx-agent.equation-editor-smoke/v2' -or
+if ([string]$plan.schema_version -cne 'hwpx-agent.equation-editor-smoke/v3' -or
     [string]$plan.profile_version -cne 'hwpx-agent.equation-editor-smoke.hangul-2020-11.0.0.9136-x86-ko-KR/v1' -or
     [string]$plan.harness_sha256 -cne $harnessBundleSha256 -or
     [string]$plan.oracle_contract_sha256 -cne $ExpectedOracleExecutableSha256) {
@@ -150,7 +150,7 @@ if (@(Get-CimInstance Win32_Process -Filter "Name='Hwp.exe'" -ErrorAction Silent
 
 $inputPath = Join-Path $run 'before.hwpx'
 $outputPath = Join-Path $run 'after.hwpx'
-$attestationPath = Join-Path $run 'manual-attestation.json'
+$attestationPath = Join-Path $run 'manual-checklist.json'
 $childTracePath = Join-Path $run 'child-trace.json'
 $beforeOraclePath = Join-Path $run 'before-oracle-runtime.json'
 $afterOraclePath = Join-Path $run 'after-oracle-runtime.json'
@@ -219,7 +219,7 @@ Write-JsonNoOverwrite -Path $oracleReceiptPath -Value $oracleReceipt
 $oracleReceiptSha256 = Get-Sha256File -Path $oracleReceiptPath
 $childTraceSha256 = Get-Sha256File -Path $childTracePath
 $evidence = [ordered]@{
-    schema_version = 'hwpx-agent.equation-editor-smoke-evidence/v2'
+    schema_version = 'hwpx-agent.equation-editor-smoke-evidence/v3'
     profile_version = 'hwpx-agent.equation-editor-smoke.hangul-2020-11.0.0.9136-x86-ko-KR/v1'
     plan_sha256 = [string]$plan.plan_sha256
     source_state_sha256 = [string]$plan.source_state_sha256
@@ -231,17 +231,17 @@ $evidence = [ordered]@{
     }
     state = 'succeeded'
     manual = [ordered]@{
+        before_equation_matches_plan = [string]$attestation.before_equation_matches_plan
         double_click = [string]$attestation.double_click
         editor_visible = [string]$attestation.editor_visible
         one_token_change = [string]$attestation.one_token_change
         editor_closed_after_commit = [string]$attestation.editor_closed_after_commit
+        post_commit_equation_matches_plan = [string]$attestation.post_commit_equation_matches_plan
+        saved_as_after_hwpx = [string]$attestation.saved_as_after_hwpx
         user_performed_all_clicks_and_typing = [string]$attestation.user_performed_all_clicks_and_typing
+        anomaly_reported = [bool]$attestation.anomaly_reported
         computer_use_click_or_type_invoked = [bool]$attestation.computer_use_click_or_type_invoked
-        before_screenshot_sha256 = [string]$attestation.before_screenshot_sha256
-        editor_open_screenshot_sha256 = [string]$attestation.editor_open_screenshot_sha256
-        changed_editor_screenshot_sha256 = [string]$attestation.changed_editor_screenshot_sha256
-        saved_document_screenshot_sha256 = [string]$attestation.saved_document_screenshot_sha256
-        operator_attestation_sha256 = $attestationSha256
+        operator_checklist_sha256 = $attestationSha256
     }
     automation = [ordered]@{
         exact_target_preflight = 'passed'; immutable_input = 'passed'
@@ -259,14 +259,15 @@ $evidence = [ordered]@{
 Write-JsonNoOverwrite -Path $evidencePath -Value $evidence
 $evidenceSha256 = Get-Sha256File -Path $evidencePath
 $receipt = [ordered]@{
-    schema_version = 'hwpx-agent.p07-09-equation-editor-runtime-receipt/v1'
+    schema_version = 'hwpx-agent.p07-09-equation-editor-runtime-receipt/v2'
     state = 'pass'; plan_sha256 = [string]$plan.plan_sha256
     evidence_sha256 = $evidenceSha256; child_trace_sha256 = $childTraceSha256
     oracle_receipt_sha256 = $oracleReceiptSha256
     target = [ordered]@{ build = $ExpectedBuild; executable_sha256 = $ExpectedExecutableSha256; architecture = 'x86'; locale = 'ko-KR' }
-    manual_double_click = 'passed'; automated_save_reopen = 'passed'
+    manual_double_click = 'user_attested'; automated_save_reopen = 'passed'
     object_identity = 'preserved'; silent_fallback_count = 0
-    computer_use_click_or_type_invoked = $false; user_document_opened = $false
+    visual_evidence = 'not_required'
+    computer_use_click_or_type_invoked = $false; user_document_opened = $true
     external_network_invoked = $false; registry_or_system_setting_changed = $false
 }
 Write-JsonNoOverwrite -Path $receiptPath -Value $receipt

@@ -2,11 +2,11 @@
 
 ## Decision
 
-P07-09 is `implementation_ready_v2 / target_incomplete`. Licensed-target attempts demonstrated
-that the native editor may retain the stored compiler spelling when first opened and canonicalize
-it while the operator edits. V2 therefore models planned semantic token change and saved native
-serialization as independent boundaries. Predecessor attempts remain failed or discovery
-evidence, so P07-09 and P07 remain in progress until a fresh complete v2 run passes.
+P07-09 is `target_pass_v3 / p07_in_progress` for the exact current Hangul 2020 target. V3 keeps
+the semantic edit and saved native serialization as independent boundaries, replaces unverified
+photo collection with a plan-bound `user_attested` checklist, and preserves all automatic native
+save/reopen and structural readback Gates. P07-09 is closed; P07 remains in progress because its
+layout/corpus/render/differential Gates are separate.
 
 ## Planned edit boundary
 
@@ -24,17 +24,18 @@ token digests without exposing them in Debug.
 
 The private plan loader checks its trusted file SHA and then recomputes source-state, both
 canonical compiler programs, saved-script parsing, semantic/raw-script digests, canonical token
-difference and plan SHA. V1 plans do not migrate or relabel. A JSON plan cannot promote itself by
-editing a receipt field.
+difference and plan SHA. V1/V2 plans do not migrate or relabel. A JSON plan cannot promote itself
+by editing a receipt field.
 
 ## Combined target evidence
 
 A passing evidence document requires both sides:
 
-- Manual: the user double-clicked the only native equation, observed the equation editor, committed
-  the planned one-token change, closed the editor and performed all clicks/typing. Four distinct
-  screenshot digests and the complete operator-attestation digest are mandatory. Computer Use is
-  screenshot-only; any Computer Use click or typing flag fails.
+- Manual: the user attests the planned before equation, double-click, native editor visibility,
+  planned one-token change, editor close/commit, planned post-commit equation, Save As, and user
+  ownership of all clicks/typing. Every item is `user_attested`; no UI item is called verified.
+  Any reported anomaly or Computer Use click/typing fails. Photos are not required and do not form
+  a visual oracle.
 - Automated: exact target preflight, immutable input, initial/saved/reopened native readback,
   save, close and reopen must all be `passed`, with distinct trace and oracle-receipt digests.
 
@@ -47,28 +48,32 @@ and object replacement counts must all be zero. Failed-before-effect and effect-
 
 The harness accepts only a hash-pinned private plan and fixed `before.hwpx`/`after.hwpx` files below
 the ignored P07 private-evidence boundary. It rejects reparse-point traversal, preexisting HWP
-processes, wrong Registry32 COM identity/build/executable, changed scripts and reused screenshots.
-It starts x86 STA Hangul visibly, but never clicks or types. On timeout before a stable manual save,
-it leaves the visible process for the user instead of force-closing possible unsaved work.
+processes, wrong Registry32 COM identity/build/executable, changed scripts, missing checklist
+items and reported anomalies. It starts x86 STA Hangul visibly, but never clicks or types. On
+timeout before a stable manual save, it leaves the visible process for the user instead of
+force-closing possible unsaved work.
 
-After the user supplies the exact attestation and save, the harness closes/reopens the same saved
-file and invokes a hash-pinned Rust oracle. The oracle uses the strict automation-native HWPX reader,
-ID index and complete package-state/equation-flow hashes. A separate Rust evidence oracle reloads
-the plan and verifies the final evidence.
+After the user supplies the exact checklist and save, the interactive child confirms a stable
+output, immutable input and actual HWP process exit. If Hangul 2020 invalidates the interactive
+COM reference during UI Save As, a source-pinned finalizer binds that failed trace and performs two
+fresh x86 STA open/close cycles. Hash checks occur only before open and after close because Hangul
+holds an exclusive file lock while open. The hash-pinned Rust oracle then checks the strict native
+HWPX reader, ID index and complete package-state/equation-flow hashes, and a separate Rust evidence
+oracle reloads the plan and verifies the combined evidence.
 
 ## Privacy and non-claims
 
-Raw plans, scripts, screenshots and target outputs remain under ignored private evidence. Public
-receipts carry only hashes, counts and states. Debug redacts revisions, object IDs, all script
-states, semantics, artifacts and evidence digests.
+Raw plans, scripts, predecessor traces and target outputs remain under ignored private evidence.
+Public receipts carry only hashes, counts and states. Debug redacts revisions, object IDs, all
+script states, semantics, artifacts and evidence digests. Existing private photos remain preserved
+but are neither required nor used by v3.
 
-Attempts 06 through 09 prove failure/discovery facts only. Attempt 06 overwrote its disposable
-input; 07 preserved input and exposed saved native canonicalization; 08 showed the editor-open raw
-spelling is not deterministic; 09 used the corrected plan and produced a conforming saved HWPX but
-captured none of the four mandatory screenshots, so automated close/reopen was not admitted.
-User permission does not replace missing evidence. A fresh v2 target receipt, render, P07
-differential, P07 completion, other-version, production and product claims remain absent until
-their respective Gates complete.
+Attempts 06 through 13 and the failed child/finalizer traces in 14 remain failure/discovery facts.
+They are not rewritten or promoted. Attempt 14's separately hash-bound v4 finalizer passed two
+fresh reopen/close cycles, while the Rust target and evidence oracles proved the requested `x+2`
+semantics, preserved native object identity, changed package graph/document flow and zero fallback.
+This closes only the exact-current-target editor-smoke and save/reopen Gate. Visual oracle, render,
+P07 differential, P07 completion, other-version, production and product claims remain absent.
 
 Reasoning level: `max`. The combined target campaign also remains `max` because manual UI,
 immutable artifacts, structural readback, render and differential evidence must agree.
