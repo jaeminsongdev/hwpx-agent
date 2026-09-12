@@ -45,5 +45,5 @@ opaque, labels the binding `UnverifiedFieldParameters`, and exposes no direct lo
 
 ## Next exact task
 
-Implement P09-07 REF-037 through REF-040 TOC/index insertion, update, style and leader behavior with
-an exact target graph and cached generated-body model. REF-036 remains P11-owned automation.
+Implement P09-07 P09-owned REF-037/038/039/041/042 TOC/index marking, hide, generation settings,
+and cached generated-body state. REF-036 and REF-040 remain P11-owned automation.

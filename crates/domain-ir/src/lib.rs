@@ -45,6 +45,7 @@ mod table_style;
 mod table_text_conversion;
 mod table_thousands;
 mod table_transpose;
+mod toc_index;
 mod units;
 
 pub use basic_shape::{
@@ -383,6 +384,15 @@ pub use table_transpose::{
     TableTransposeCell, TableTransposeCellDraft, TableTransposeError, TableTransposeFormulaPolicy,
     TableTransposeLimitConfig, TableTransposeLimits, TableTransposePlan, TableTransposeReceipt,
     TableTransposeRelocation, TableTransposeRequest, TableTransposeRequestDraft,
+};
+pub use toc_index::{
+    GeneratedCache, GeneratedCacheStatus, IndexGeneratedBinding, IndexGeneratedBlock, IndexMark,
+    IndexMarkNativeTag, IndexSettings, TOC_INDEX_SCHEMA_VERSION, TocFieldType, TocGeneratedBlock,
+    TocIndexBuilder, TocIndexDocumentState, TocIndexDocumentStateDraft, TocIndexError,
+    TocIndexLimitConfig, TocIndexLimits, TocIndexOperation, TocIndexPlan, TocIndexReceipt,
+    TocIndexRequest, TocIndexRequestDraft, TocIndexResult, TocIndexSectionState, TocLeaderKind,
+    TocMark, TocMarkNativeTag, TocNativeBeginTag, TocNativeEndTag, TocNativePair,
+    TocSemanticBinding, TocSettings, TocSource,
 };
 pub use units::{
     AngleMicrodegrees, Conversion, ConversionReceipt, CoordinateAnchor, CoordinateSpace, HwpUnit,

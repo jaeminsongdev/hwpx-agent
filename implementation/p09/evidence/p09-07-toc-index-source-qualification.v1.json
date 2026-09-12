@@ -1,0 +1,84 @@
+{
+  "schema_version": "hwpx-agent.p09-toc-index-source-qualification/v1",
+  "task": "P09-07",
+  "base_commit": "3da904c",
+  "scope": "ref_037_038_039_041_042_typed_toc_index_component_with_complete_projections_and_unverified_generation_semantics",
+  "official_model": {
+    "repository": "https://github.com/hancom-io/hwpx-owpml-model.git",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "canonicalization": "utf8_text_crlf_to_lf_sha256",
+    "source_sha256": {
+      "OWPML/Class/enumdef.h": "1c86392c934ac85f7ddd85c710b76be7649403a8404bce146db52558a0b95457",
+      "OWPML/Class/Para/titleMark.h": "96e93397d4bc5d7378e495c2901a2304a93cb3338fc91bfd0ecf4843992f82c9",
+      "OWPML/Class/Para/titleMark.cpp": "c365e996a0591f5827d043ba634c9f20761ba5a0a6f530211d61f32d16839e45",
+      "OWPML/Class/Para/indexmark.h": "f30aee048c18371642b290eae8e2ba4bf93baa31db138e71c8d2e6e0b5613118",
+      "OWPML/Class/Para/indexmark.cpp": "8d2c6aa819ffbf2b19fd4f6e3aadd773f49d868959f47bdf244b35d4a723fd89",
+      "OWPML/Class/Para/firstKey.h": "fe5c598514352fd986f0fa66854e272dff0cb16734eb29e6670db6c70043b584",
+      "OWPML/Class/Para/firstKey.cpp": "a17b5e06a5eeaac61e690d7410fb79a36abfa7389585eeed846bf6bfa8c4d0a7",
+      "OWPML/Class/Para/secondKey.h": "40fa0ff955661b4aec5c69ca664547eaa47633bf3df17ecd25cc7975fdaa8f0b",
+      "OWPML/Class/Para/secondKey.cpp": "a5c4bceb31943ebab36968d0f3addf23d5aebb50eaf4b06f6db03289e913a974",
+      "OWPML/Class/Para/fieldBegin.h": "b216be07244a7a0c50f7dd2f40140d9ff202fefbb9b1b6092559dcd1aa08ad4f",
+      "OWPML/Class/Para/fieldEnd.h": "88dd97103c537674dba0b3ac917b81ec5223fd3a518652330decb233b556791c",
+      "OWPML/Class/Para/ctrl.h": "e043d1b8a570724179ba7f57f1521dbb65a2c393ba116dbb0d2c3bae2277cc7e",
+      "OWPML/Class/Para/t.h": "e3ee45308a16a0b006ae57750a94d3019a4f220f3c6c20bd04a0deb0cd22c1bc"
+    },
+    "qualified_facts": {
+      "toc_mark": {"tag": "titleMark", "attribute": "ignore", "default": false},
+      "index_mark": {"tag": "indexmark", "children": ["firstKey", "secondKey"], "key_payload": "string_value"},
+      "toc_generated_field": {"begin": "fieldBegin", "type": "TABLEOFCONTENTS", "end": "fieldEnd"},
+      "unverified_native_bindings": ["toc_parameter_keys", "toc_source_selection", "level_and_style_encoding", "leader_and_numbering_encoding", "generated_body_layout", "index_collation", "index_duplicate_page_policy", "index_generated_range", "update_semantics"]
+    }
+  },
+  "source_sha256": {
+    "docs/04_feature_catalog/10_ref.md": "34cfc9283d16b96bdb16d0ffec7a485f4b72548a49ec70fec2968b3c657743e4",
+    "docs/04_feature_catalog/contracts/10_ref_contracts.md": "7062034902932355ac8e6c38a4798dd314f39c44518b7e85c26fe71a7a72cc29",
+    "docs/09_roadmap/P09_fields_forms_notes_references.md": "0f4068c4dc5484cc348a145c892a2e1d2d3896d421b77c2fa23bb123956f4b55",
+    "docs/03_document_model/09_fields_controls_references.md": "3068742808467f298d289c7401980c617981d748dfa73422bab8f7174ef10a20"
+  },
+  "implementation_sha256": {
+    "crates/domain-ir/src/lib.rs": "223c597e4c067566417237a852bed55d6f3893ac36418256c7943c0163724433",
+    "crates/domain-ir/src/toc_index.rs": "f7fe0a171b51cb508f7d0445614f20fc40b5036fc2ac1e92110af0b8166fe718",
+    "crates/domain-ir/tests/toc_index.rs": "83ca0c65d6186eaa1048a9f87af6d420eac82a3e0dec54626649d59469ef2008"
+  },
+  "tests": {
+    "public_toc_index": "13/13 PASS",
+    "private_plan_tamper": "1/1 PASS",
+    "focused_total": "14/14 PASS",
+    "private_contract": "5/5 PASS",
+    "test_kind": "typed_component_multilevel_toc_index_projection_preservation_and_pinned_source_metadata",
+    "network_used": false,
+    "licensed_application_used": false,
+    "hwpx_written": false
+  },
+  "claims": {
+    "unit_model_implemented": true,
+    "ref_037_unit_passed": true,
+    "ref_038_unit_passed": true,
+    "ref_039_unit_passed": true,
+    "ref_041_unit_passed": true,
+    "ref_042_unit_passed": true,
+    "official_structure_source_qualified": true,
+    "multilevel_toc_fixtures": true,
+    "index_subentry_fixtures": true,
+    "cache_projection_fixtures": true,
+    "complete_bound_state_preserved": true,
+    "request_and_build_drift_rejected": true,
+    "native_generation_semantics_verified": false,
+    "ref_040_update_implemented": false,
+    "direct_hwpx": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "semantic_reopen": false,
+    "field_readback": false,
+    "reference_update": false,
+    "hancom_open": false,
+    "save_reopen": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p09_07_green": false,
+    "p09_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}
