@@ -35,7 +35,7 @@ EXPECTED_DIRECT_PROFILES = {
         "validations": ("schema", "semantic_reopen"),
     },
     "basic-shape-package-v1": {
-        "features": ("OBJ-001", "OBJ-007"),
+        "features": ("OBJ-001", "OBJ-007", "OBJ-042"),
         "backend": "direct_hwpx",
         "stage": "integration_passed",
         "validations": ("resource_integrity", "semantic_reopen"),
@@ -70,11 +70,11 @@ EXPECTED_DIRECT_PROFILES = {
         "stage": "unit_passed",
         "validations": ("schema",),
     },
-    "freeform-component-v1": {
-        "features": ("OBJ-042", "OBJ-043"),
-        "backend": "component_only",
-        "stage": "unit_passed",
-        "validations": ("schema",),
+    "shape-points-section-v1": {
+        "features": ("OBJ-043",),
+        "backend": "direct_hwpx",
+        "stage": "integration_passed",
+        "validations": ("schema", "semantic_reopen"),
     },
     "special-object-component-v1": {
         "features": ("OBJ-003", "OBJ-012", "OBJ-013", "OBJ-014"),
@@ -455,7 +455,7 @@ def build_matrix(
         "implementation_covered_rows": 53,
         "green_rows": 0,
         "non_green_rows": 58,
-        "direct_stage_counts": {"cataloged": 5, "unit_passed": 23, "integration_passed": 30, "oracle_verified": 0},
+        "direct_stage_counts": {"cataloged": 5, "unit_passed": 21, "integration_passed": 32, "oracle_verified": 0},
         "automation_binding_counts": {"candidate_unverified": 9, "denied_by_policy": 2, "unavailable_with_reason": 47},
         "phase_counts": {"P08": 42, "P11": 16},
         "support_level_counts": {"HYBRID": 42, "AUTOMATION_FULL": 11, "OPTIONAL_EXTERNAL": 3, "PRESERVE_ONLY": 2},

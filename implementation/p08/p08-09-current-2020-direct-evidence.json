@@ -34,7 +34,7 @@
     },
     {
       "profile_id": "basic-shape-package-v1",
-      "feature_ids": ["OBJ-001", "OBJ-007"],
+      "feature_ids": ["OBJ-001", "OBJ-007", "OBJ-042"],
       "backend": "direct_hwpx",
       "stage": "integration_passed",
       "validations_passed": ["resource_integrity", "semantic_reopen"],
@@ -43,7 +43,9 @@
       "rollback_or_retry_passed": false,
       "evidence_files": [
         "implementation/p08/P08-04_BASIC_SHAPE_REPORT.md",
-        "implementation/p08/evidence/p08-04-basic-shape-source-qualification.v1.json"
+        "implementation/p08/P08-12_FREEFORM_HWPX_INTEGRATION_REPORT.md",
+        "implementation/p08/evidence/p08-04-basic-shape-source-qualification.v1.json",
+        "implementation/p08/evidence/p08-12-freeform-hwpx-integration-source-qualification.v1.json"
       ]
     },
     {
@@ -128,17 +130,19 @@
       ]
     },
     {
-      "profile_id": "freeform-component-v1",
-      "feature_ids": ["OBJ-042", "OBJ-043"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
+      "profile_id": "shape-points-section-v1",
+      "feature_ids": ["OBJ-043"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["schema", "semantic_reopen"],
       "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
       "negative_passed": true,
       "rollback_or_retry_passed": false,
       "evidence_files": [
         "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
-        "implementation/p08/evidence/p08-10-object-remainder-source-qualification.v1.json"
+        "implementation/p08/P08-12_FREEFORM_HWPX_INTEGRATION_REPORT.md",
+        "implementation/p08/evidence/p08-10-object-remainder-source-qualification.v1.json",
+        "implementation/p08/evidence/p08-12-freeform-hwpx-integration-source-qualification.v1.json"
       ]
     },
     {

@@ -32,6 +32,7 @@ mod reader;
 mod roundtrip;
 mod safe_xml;
 mod section_columns;
+mod shape_points_hwpx;
 mod tab_definition;
 mod table_cell_style;
 mod table_formula;
@@ -178,6 +179,12 @@ pub use section_columns::{
     SectionColumnError, SectionColumnLimitConfig, SectionColumnLimits, SectionColumnLowerer,
     SectionColumnLoweringReceipt, SectionColumnPatchReceipt, SectionColumnReader,
     SectionColumnSequence, SectionColumns, SectionCountPatchReceipt,
+};
+pub use shape_points_hwpx::{
+    SHAPE_POINTS_HWPX_PROFILE_ID, ShapePointsHwpxBuilder, ShapePointsHwpxError,
+    ShapePointsHwpxLimitConfig, ShapePointsHwpxLimits, ShapePointsHwpxLowerer,
+    ShapePointsHwpxLoweringReceipt, ShapePointsHwpxPlan, ShapePointsHwpxReadback,
+    ShapePointsHwpxReader,
 };
 pub use tab_definition::{
     DeduplicatedTabDefinitions, TAB_DEFINITION_PROFILE_ID, TabDefinition, TabDefinitionCatalog,

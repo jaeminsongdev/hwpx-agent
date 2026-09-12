@@ -1,0 +1,79 @@
+{
+  "schema_version": "hwpx-agent.p08-freeform-hwpx-integration-contract/v1",
+  "task": "P08-12",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_qualification": "implementation/p08/evidence/p08-12-freeform-hwpx-integration-source-qualification.v1.json",
+  "migration": "protocol/migrations/p08-freeform-hwpx-integration-v0-to-v1.md",
+  "policy": "implementation/p08/P08-12_FREEFORM_HWPX_INTEGRATION_POLICY.md",
+  "report": "implementation/p08/P08-12_FREEFORM_HWPX_INTEGRATION_REPORT.md",
+  "source_locks": [
+    {"path": "docs/03_document_model/08_drawing_image_chart.md", "sha256": "ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b"},
+    {"path": "docs/04_feature_catalog/09_obj.md", "sha256": "e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8"},
+    {"path": "docs/04_feature_catalog/contracts/09_obj_contracts.md", "sha256": "e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2"},
+    {"path": "docs/09_roadmap/P08_images_shapes_drawing_charts.md", "sha256": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path": "specs/work-breakdown-structure.json", "sha256": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2"}
+  ],
+  "implementation_files": [
+    "crates/domain-ir/src/shape_points.rs",
+    "crates/hwpx-package/src/lib.rs",
+    "crates/hwpx-package/src/basic_shape_hwpx.rs",
+    "crates/hwpx-package/src/shape_points_hwpx.rs",
+    "crates/hwpx-package/tests/basic_shape_hwpx.rs",
+    "crates/hwpx-package/tests/shape_points_hwpx.rs"
+  ],
+  "profiles": {
+    "freeform_insert": "hwpx-agent.basic-shape-hwpx.hwpml-2011-static/v1",
+    "shape_points": "hwpx-agent.shape-points-hwpx.hwpml-2011-payload-island/v1"
+  },
+  "feature_ids": ["OBJ-042", "OBJ-043"],
+  "capabilities": ["obj.freeform", "obj.shape_edit_points"],
+  "admitted_profile": {
+    "freeform_insert": "complete_generated_polygon_or_curve_synthetic_package",
+    "shape_points_source": "exactly_one_run_level_polygon_or_curve",
+    "shape_points_payload": "one_contiguous_native_pt_or_seg_island_without_local_namespace_declarations",
+    "shape_points_delta": "complete_polygon_points_or_curve_start_and_segments_only",
+    "outside_payload": "byte_exact_and_complete_state_bound"
+  },
+  "planning": {
+    "request_source_state_and_flow_rechecked": true,
+    "lower_source_state_section_object_payload_and_flow_rechecked": true,
+    "source_target_state_section_payload_flow_and_plan_sha256": true,
+    "strict_target_semantic_reopen": true,
+    "outside_island_byte_preservation": true,
+    "bounded_json_and_redacted_debug": true
+  },
+  "failure_policy": [
+    "malformed_missing_duplicate_noncontiguous_or_ambiguous_native_payload_rejected",
+    "wrong_object_kind_ordinal_geometry_or_complete_state_rejected",
+    "nested_extra_attribute_namespace_or_noncanonical_payload_rejected",
+    "state_flow_section_object_payload_or_plan_drift_rejected_at_request_and_lowering",
+    "output_limit_reopen_or_outside_island_preservation_failure_rejected",
+    "no_partial_output_or_fallback_after_failure"
+  ],
+  "evidence_boundary": {
+    "direct_stage": "integration_passed",
+    "obj_042_synthetic_full_package": true,
+    "obj_042_resource_integrity": true,
+    "obj_043_static_section_hwpx": true,
+    "semantic_reopen": true,
+    "outside_island_preserved": true,
+    "actual_target_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "object_bounds": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_hwpx_integration": "pass",
+    "current_target": "not_run",
+    "release_green_rows": 0,
+    "p08": "in_progress",
+    "product_complete": false
+  }
+}

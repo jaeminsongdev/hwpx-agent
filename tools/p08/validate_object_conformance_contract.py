@@ -31,11 +31,11 @@ EXPECTED_SOURCE_LOCKS = {
     "specs/feature-coverage-matrix.json": "a3fa1cd5c5b0b0e09bc93354f724ed3516bdb987f1c171cc27d7564dc6390950",
     "specs/capability-contracts.generated.json": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306",
     "specs/work-breakdown-structure.json": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2",
-    "implementation/p08/p08-09-current-2020-direct-evidence.json": "f082f8b55045f86ac8c562f2cae9ed3b44f8d26a4385faf39e75085cb69cfe95",
+    "implementation/p08/p08-09-current-2020-direct-evidence.json": "5a508139de0eb99f2ec2113a74f9cb0330ebd39a3d740dbbf917fba9fef96425",
     "implementation/p08/p08-09-current-2020-automation-projection.json": "f8c06f206c29eb7aa77b845fd1afa1ff09535145584f5f9fff83fdc679f1cd12",
     "implementation/p08/p08-09-threshold-policy.v1.json": "0f4856e81edc012ed80608fddea6a2be98286ca772127c5b1316f3e2ed890d0c",
-    "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json": "4bbebe09c616ffc1853ac70893172ea676bd555f3eff2da17cfdc8c9bc3e283f",
-    "tools/p08/object_conformance.py": "b70ddc84126c321e7a8fc0a8e52ad91c6d70ac3e8898edd4826684b871d311af",
+    "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json": "1d266c5b814c90f311f99e59b5684ec6847db142092371a1a1e2a0dec0edb2b8",
+    "tools/p08/object_conformance.py": "380753e5d7128e6508c4a8cff5836efdd530a5c02a9654b98ca116c9303efb6f",
 }
 
 EXPECTED_SUMMARY = {
@@ -45,8 +45,8 @@ EXPECTED_SUMMARY = {
     "non_green_rows": 58,
     "direct_stage_counts": {
         "cataloged": 5,
-        "unit_passed": 23,
-        "integration_passed": 30,
+        "unit_passed": 21,
+        "integration_passed": 32,
         "oracle_verified": 0,
     },
     "automation_binding_counts": {
@@ -105,6 +105,7 @@ EXPECTED_UPSTREAM = [
     "tools/p08/validate_active_content_contract.py",
     "tools/p08/validate_object_remainder_contract.py",
     "tools/p08/validate_object_hwpx_integration_contract.py",
+    "tools/p08/validate_freeform_hwpx_integration_contract.py",
 ]
 
 

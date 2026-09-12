@@ -312,8 +312,23 @@ pub struct ShapePointsPlan {
 
 impl ShapePointsPlan {
     #[must_use]
+    pub const fn source_state(&self) -> &ShapePointsState {
+        &self.source_state
+    }
+
+    #[must_use]
     pub const fn target_state(&self) -> &ShapePointsState {
         &self.target_state
+    }
+
+    #[must_use]
+    pub fn source_document_flow_sha256(&self) -> &str {
+        &self.source_document_flow_sha256
+    }
+
+    #[must_use]
+    pub fn target_document_flow_sha256(&self) -> &str {
+        &self.target_document_flow_sha256
     }
 
     #[must_use]
