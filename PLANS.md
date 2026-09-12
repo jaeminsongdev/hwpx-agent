@@ -23,7 +23,7 @@
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-15 keeps OBJ-048 unit-only because chart lacks common `href`; matrix remains 5 cataloged, 19 unit, 34 integration, 0 oracle/green. P09-01~10 now cover every P09-owned catalog row as typed unit components, including REF-048~053; direct HWPX/Hangul/native-parameter/readback fields remain not-run and P11-owned automation rows remain separate |
+| P07-P09 | in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-15 keeps OBJ-048 unit-only because chart lacks common `href`; matrix remains 5 cataloged, 19 unit, 34 integration, 0 oracle/green. P09-11 reconciles all 53 rows: all 46 P09-owned rows are unit-passed, 7 P11-owned rows remain cataloged, and direct HWPX/Hangul/render/automation/differential/green remain 0 |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -39,7 +39,7 @@
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
 | P-0057 | P06-09 table conformance | fail-closed matrix plus bounded component/static-HWPX slices pass; TABLE-002/003 exact Hangul target v2 is oracle-verified; exact current-PC release matrix remains 0/61 green |
 | P-0095 | P08 object HWPX integration | P08-15 proves an exact common-root `href` partial profile for 11 shape-component tags but does not advance OBJ-048; close chart semantics or an exact fallback before row promotion, then map the remaining nine P08-10 models |
-| P-0096 | P09 fields/forms/notes/comments/links | P09-01~10 component checks pass; P09-10 adds REF-048~053 with 15/15 Rust and 5/5 contract across caption sequence, date format, frozen file-name literal, 19 correction marks, encrypted data-link metadata and read-only reference validation. Native parameters, direct lowering/readback and licensed-target evidence remain unverified/not-run; reconcile the phase inventory and direct gaps next |
+| P-0096 | P09 fields/forms/notes/comments/links | P09-01~10 typed components cover 46/46 P09-owned rows; P09-11 machine matrix passes 9/9 focused and 59/59 P09 checks with stages 7 cataloged, 46 unit, 0 integration/oracle/green. Native parameters, direct lowering/readback and licensed-target evidence remain unverified/not-run; qualify the exact field/form HWPX subset next |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | all-operation issuer and fixed-sequence-slot broker plus independently bound TLS service components pass; external operation, real assertion/credential/network, cross-system atomicity, power-loss and registered-host evidence remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. Reconcile the P09 catalog/phase inventory against P09-01~10, then qualify exact HWPX lowering and native readback gaps without promoting the six unit-only REF-048~053 rows; REF-036/040/043/045/047 automation remains P11-owned unless exact identities and oracles are qualified.
+1. Qualify exact native HWPX identities for the P09-owned field/form families, implement only the closed representable subset with semantic reopen, and leave every other row unit-only; REF-016/020/036/040/043/045/047 remain P11-owned unless exact automation identities and oracles are qualified.
 2. When the user can capture screens/approve saves, run one combined exact-target campaign: P07-07/08/09 plus remaining P06 target/render/differentials including corrected TABLE-032/033.
 3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
 
