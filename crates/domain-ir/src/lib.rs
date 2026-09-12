@@ -4,6 +4,7 @@ mod basic_shape;
 mod capability_router;
 mod chart_automation;
 mod comment_model;
+mod cross_reference;
 mod document_graph;
 mod drawing_canvas;
 mod field_engine;
@@ -82,6 +83,17 @@ pub use comment_model::{
     CommentResult, CommentSectionState, CommentSemanticBinding, CommentStyle, CommentTimestamp,
     CommentVisibility, HiddenExplanationEntry, HiddenExplanationIdentity,
     HiddenExplanationNativeTag, OpaqueCommentProperty,
+};
+pub use cross_reference::{
+    CROSS_REFERENCE_SCHEMA_VERSION, CrossReferenceBuilder, CrossReferenceCache,
+    CrossReferenceCacheStatus, CrossReferenceDisplayKind, CrossReferenceDocumentState,
+    CrossReferenceDocumentStateDraft, CrossReferenceEntry, CrossReferenceError,
+    CrossReferenceFieldType, CrossReferenceIdentity, CrossReferenceLimitConfig,
+    CrossReferenceLimits, CrossReferenceNativeBeginTag, CrossReferenceNativeEndTag,
+    CrossReferenceNativePair, CrossReferenceOperation, CrossReferencePlan, CrossReferenceReceipt,
+    CrossReferenceRequest, CrossReferenceRequestDraft, CrossReferenceResult,
+    CrossReferenceSectionState, CrossReferenceSemanticBinding, CrossReferenceTarget,
+    CrossReferenceTargetIdentity, CrossReferenceTargetKind, CrossReferenceUpdatePolicy,
 };
 pub use document_graph::{
     AccessibilityState, ArtifactRef, BreakKind, BreakNode, ChartNode,

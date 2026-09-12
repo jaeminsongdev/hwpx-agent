@@ -1,0 +1,78 @@
+{
+  "schema_version": "hwpx-agent.p09-cross-reference-source-qualification/v1",
+  "task": "P09-06",
+  "base_commit": "e398a19",
+  "scope": "ref_035_typed_cross_reference_component_with_target_dag_cache_projection_and_unverified_native_parameters",
+  "official_model": {
+    "repository": "https://github.com/hancom-io/hwpx-owpml-model.git",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "canonicalization": "utf8_text_crlf_to_lf_sha256",
+    "source_sha256": {
+      "OWPML/Class/enumdef.h": "1c86392c934ac85f7ddd85c710b76be7649403a8404bce146db52558a0b95457",
+      "OWPML/Class/Para/fieldBegin.h": "b216be07244a7a0c50f7dd2f40140d9ff202fefbb9b1b6092559dcd1aa08ad4f",
+      "OWPML/Class/Para/fieldBegin.cpp": "22e5f613788a88ca003b5f0c23fe1d4333eadd21e9a3ca18d426d262a9e79450",
+      "OWPML/Class/Para/fieldEnd.h": "88dd97103c537674dba0b3ac917b81ec5223fd3a518652330decb233b556791c",
+      "OWPML/Class/Para/fieldEnd.cpp": "2937fbca1ff5b99bb05672544dd079c4165c7ada174edbb654873aecb7f8018d",
+      "OWPML/Class/Para/ParameterList.h": "e06d765a4d435efc10404a56c58d2894e4fb5830e3128fef316b176768543807",
+      "OWPML/Class/Para/ParameterList.cpp": "a8d68844c27deb9bd150f9f8fd4ed4450a6b8d3b5a026e35004c200f3fde6d21",
+      "OWPML/Class/Para/ctrl.h": "e043d1b8a570724179ba7f57f1521dbb65a2c393ba116dbb0d2c3bae2277cc7e",
+      "OWPML/Class/Para/ctrl.cpp": "a928569df0b890d8a58470a70a1501520bfb4d8af121df58eeb1fd8b9e0eed1d"
+    },
+    "qualified_facts": {
+      "cross_reference_control_tags": ["fieldBegin", "fieldEnd"],
+      "cross_reference_field_type": "CROSSREF",
+      "field_begin_attributes": ["id", "type", "name", "editable", "dirty", "zorder", "fieldid"],
+      "field_begin_children": ["parameters", "subList", "metaTag"],
+      "field_end_attributes": ["beginIDRef", "fieldid"],
+      "unverified_native_bindings": ["crossref_parameter_keys", "target_kind_encoding", "display_kind_encoding", "anchor_binding", "cached_value_encoding", "update_semantics"]
+    }
+  },
+  "source_sha256": {
+    "docs/04_feature_catalog/10_ref.md": "34cfc9283d16b96bdb16d0ffec7a485f4b72548a49ec70fec2968b3c657743e4",
+    "docs/04_feature_catalog/contracts/10_ref_contracts.md": "7062034902932355ac8e6c38a4798dd314f39c44518b7e85c26fe71a7a72cc29",
+    "docs/09_roadmap/P09_fields_forms_notes_references.md": "0f4068c4dc5484cc348a145c892a2e1d2d3896d421b77c2fa23bb123956f4b55",
+    "docs/03_document_model/09_fields_controls_references.md": "3068742808467f298d289c7401980c617981d748dfa73422bab8f7174ef10a20"
+  },
+  "implementation_sha256": {
+    "crates/domain-ir/src/lib.rs": "8f6953c06520772c50032e135738e15582e11d1aa8a28977ec06d10ca2084f23",
+    "crates/domain-ir/src/cross_reference.rs": "90f2dfb5efed392b6083b5f7fe67dc812fb96dc1866c7015c0e8cd885de05059",
+    "crates/domain-ir/tests/cross_reference.rs": "5355358f79cd92c8f77a4b109414bc9dadb6a214b12622883d84625ee0884bde"
+  },
+  "tests": {
+    "public_cross_reference": "10/10 PASS",
+    "private_plan_tamper": "1/1 PASS",
+    "focused_total": "11/11 PASS",
+    "private_contract": "5/5 PASS",
+    "test_kind": "typed_component_target_dag_cache_projection_and_pinned_source_metadata",
+    "network_used": false,
+    "licensed_application_used": false,
+    "hwpx_written": false
+  },
+  "claims": {
+    "unit_model_implemented": true,
+    "ref_035_unit_passed": true,
+    "official_structure_source_qualified": true,
+    "target_graph_fixtures": true,
+    "cache_projection_fixtures": true,
+    "cycle_and_dangling_fixtures": true,
+    "complete_bound_state_preserved": true,
+    "request_and_build_drift_rejected": true,
+    "native_crossref_parameters_verified": false,
+    "ref_036_update_implemented": false,
+    "direct_hwpx": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "semantic_reopen": false,
+    "field_readback": false,
+    "reference_update": false,
+    "hancom_open": false,
+    "save_reopen": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p09_06_green": false,
+    "p09_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}
