@@ -3,6 +3,7 @@
 mod basic_shape;
 mod capability_router;
 mod chart_automation;
+mod citation;
 mod comment_model;
 mod cross_reference;
 mod document_graph;
@@ -74,6 +75,16 @@ pub use chart_automation::{
     ChartLegendState, ChartMarkerKind, ChartOperation, ChartSeriesAxis, ChartSeriesState,
     ChartStacking, ChartState, ChartStyleBinding, ChartTitlePosition, ChartTitleState,
     ChartTypeBinding, ChartTypeSelection, ChartValue,
+};
+pub use citation::{
+    BibliographyCatalogState, BibliographyFormatBinding, BibliographyManifestId,
+    BibliographyMediaType, BibliographyPartPath, CITATION_SCHEMA_VERSION, CitationBuilder,
+    CitationCache, CitationCacheStatus, CitationDisplayOptions, CitationDocumentState,
+    CitationDocumentStateDraft, CitationError, CitationFieldType, CitationLimitConfig,
+    CitationLimits, CitationLocator, CitationLocatorKind, CitationNativeBeginTag,
+    CitationNativeEndTag, CitationNativePair, CitationNode, CitationOperation, CitationPlan,
+    CitationReceipt, CitationRequest, CitationRequestDraft, CitationResult, CitationSectionState,
+    CitationSemanticBinding, CitationSource,
 };
 pub use comment_model::{
     COMMENT_MODEL_SCHEMA_VERSION, CommentAnchor, CommentAuthor, CommentBuilder,

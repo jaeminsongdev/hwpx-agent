@@ -39,7 +39,7 @@
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
 | P-0057 | P06-09 table conformance | fail-closed matrix plus bounded component/static-HWPX slices pass; TABLE-002/003 exact Hangul target v2 is oracle-verified; exact current-PC release matrix remains 0/61 green |
 | P-0095 | P08 object HWPX integration | P08-15 proves an exact common-root `href` partial profile for 11 shape-component tags but does not advance OBJ-048; close chart semantics or an exact fallback before row promotion, then map the remaining nine P08-10 models |
-| P-0096 | P09 fields/forms/notes/comments/links | P09-01~07 component checks pass; P09-07 adds REF-037/038/039/041/042 with 14/14 Rust and 5/5 contract. Complete multilevel TOC/index projections and exact hide/cache rules pass, while generation semantics and P11-owned REF-040 update remain unverified/not implemented; proceed to P09-08 citation/bibliography |
+| P-0096 | P09 fields/forms/notes/comments/links | P09-01~08 component checks pass; P09-08 adds P09-owned REF-044 with 12/12 Rust and 5/5 contract, complete opaque bibliography/provider/source preservation and selected-source cache projection. Native bibliography/field parameters, direct lowering and P11-owned REF-043/045 remain unverified/not implemented; proceed to P09-09 mail merge |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | all-operation issuer and fixed-sequence-slot broker plus independently bound TLS service components pass; external operation, real assertion/credential/network, cross-system atomicity, power-loss and registered-host evidence remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. Continue P09-08 citation/bibliography at `max`; REF-036/040 updates remain P11-owned unless exact direct identities and oracles are qualified. P09-01~07 lowering/readback gaps and P08 lossy mappings remain blocked.
+1. Continue P09-09 mail-merge field insertion at `max`; REF-036/040/043/045/047 automation remains P11-owned unless exact direct identities and oracles are qualified. P09-01~08 lowering/readback gaps and P08 lossy mappings remain blocked.
 2. When the user can capture screens/approve saves, run one combined exact-target campaign: P07-07/08/09 plus remaining P06 target/render/differentials including corrected TABLE-032/033.
 3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
 
