@@ -9,6 +9,7 @@ mod field_engine;
 mod form_control;
 mod identity;
 mod math_ast;
+mod note_engine;
 mod object_appearance;
 mod object_composition;
 mod object_geometry;
@@ -116,6 +117,15 @@ pub use math_ast::{
     MathDerivativeVariable, MathExpression, MathFunction, MathGreekLetter, MathLargeOperator,
     MathLetterCase, MathMatrixKind, MathNode, MathOperator, MathSourceSpan, MathStyleHint,
     MathSymbol, MathVariant,
+};
+pub use note_engine::{
+    NOTE_ENGINE_SCHEMA_VERSION, NoteAnchor, NoteAutoNumberFormat, NoteBuilder, NoteDocumentState,
+    NoteDocumentStateDraft, NoteEntry, NoteError, NoteExportEntry, NoteExportFormat,
+    NoteExportManifest, NoteExportSelection, NoteIdentity, NoteKind, NoteLimitConfig, NoteLimits,
+    NoteLineStyle, NoteLineType, NoteLineWidth, NoteMarkerProperties, NoteNativeTag,
+    NoteNumberFormat, NoteNumberingRestart, NoteOperation, NotePlacement, NotePlan, NoteReceipt,
+    NoteRequest, NoteRequestDraft, NoteResult, NoteSectionState, NoteSpacing, NoteStyle,
+    OpaqueNoteProperty,
 };
 pub use object_appearance::{
     AlignStyle, AppearanceOperation, AppearanceTargetKind, ArrowSize, ArrowStyle, ClassicShadow,

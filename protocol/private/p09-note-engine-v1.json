@@ -1,0 +1,100 @@
+{
+  "schema_version": "hwpx-agent.note-engine-contract/v1",
+  "task": "P09-03",
+  "scope": "complete_typed_component_models_for_ref_021_through_ref_025",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_qualification": "implementation/p09/evidence/p09-03-note-engine-source-qualification.v1.json",
+  "migration": "protocol/migrations/p09-note-engine-v0-to-v1.md",
+  "policy": "implementation/p09/P09-03_NOTE_ENGINE_POLICY.md",
+  "report": "implementation/p09/P09-03_NOTE_ENGINE_REPORT.md",
+  "source_locks": [
+    {"path": "docs/04_feature_catalog/10_ref.md", "sha256": "34cfc9283d16b96bdb16d0ffec7a485f4b72548a49ec70fec2968b3c657743e4"},
+    {"path": "docs/04_feature_catalog/contracts/10_ref_contracts.md", "sha256": "7062034902932355ac8e6c38a4798dd314f39c44518b7e85c26fe71a7a72cc29"},
+    {"path": "docs/09_roadmap/P09_fields_forms_notes_references.md", "sha256": "0f4068c4dc5484cc348a145c892a2e1d2d3896d421b77c2fa23bb123956f4b55"},
+    {"path": "docs/03_document_model/09_fields_controls_references.md", "sha256": "3068742808467f298d289c7401980c617981d748dfa73422bab8f7174ef10a20"}
+  ],
+  "capability_features": {
+    "REF-021": "ref.footnote_insert",
+    "REF-022": "ref.endnote_insert",
+    "REF-023": "ref.note_style",
+    "REF-024": "ref.note_convert",
+    "REF-025": "ref.note_export"
+  },
+  "model": "hwpx-agent.note-engine/v1",
+  "official_model": {
+    "repository": "https://github.com/hancom-io/hwpx-owpml-model.git",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "exact_native_tags": ["footNote", "endNote"],
+    "number_format_count": 22,
+    "line_type_count": 18,
+    "line_width_count": 16,
+    "note_export_binding": "digest_manifest_only"
+  },
+  "implementation_files": [
+    "crates/domain-ir/src/lib.rs",
+    "crates/domain-ir/src/note_engine.rs",
+    "crates/domain-ir/tests/note_engine.rs"
+  ],
+  "state_binding": {
+    "note_inventory": "ordered_complete_logical_native_anchor_kind_tag_marker_body_style_opaque_and_lock_state",
+    "section_state": "ordered_complete_footnote_and_endnote_style_opaque_and_lock_state",
+    "document_state": "non_note_content_style_numbering_reference_resource_protection_and_opaque_document_digests",
+    "export": "read_only_document_ordered_identity_kind_and_digest_manifest_without_raw_content_or_file_write",
+    "request_and_build": "exact_source_state_and_document_flow_rechecked_and_plan_plus_export_binding_sealed",
+    "preservation": "only_named_insert_style_or_conversion_transition_may_change_state"
+  },
+  "failure_policy": [
+    "zero_inconsistent_or_over_ceiling_limits_rejected",
+    "duplicate_unknown_missing_malformed_or_oversized_json_rejected",
+    "empty_sections_or_invalid_colliding_identity_anchor_native_id_or_tag_rejected",
+    "invalid_marker_character_digest_body_style_or_opaque_state_rejected",
+    "family_incompatible_numbering_placement_or_note_style_rejected_without_coercion",
+    "invalid_insertion_index_missing_target_and_noop_rejected",
+    "document_section_note_and_style_protection_rejected",
+    "empty_duplicate_missing_or_over_ceiling_export_selection_rejected",
+    "source_state_and_document_flow_drift_rejected_at_request_and_build",
+    "plan_and_export_manifest_binding_tamper_rejected",
+    "unrelated_note_section_and_document_state_change_rejected",
+    "identities_anchors_markers_bodies_styles_selections_and_digests_redacted_from_debug",
+    "no_raw_xml_body_export_file_write_partial_result_or_implicit_family_fallback"
+  ],
+  "evidence_boundary": {
+    "unit_model_implemented": true,
+    "five_capabilities_unit_passed": true,
+    "official_model_source_qualified": true,
+    "complete_bound_state_preserved": true,
+    "note_style_and_protection_fixtures": true,
+    "request_and_build_drift_rejected": true,
+    "digest_manifest_export": true,
+    "focused_rust_tests": "9/9 PASS",
+    "private_contract_tests": "5/5 PASS",
+    "direct_stage": "unit_passed",
+    "actual_note_export": false,
+    "direct_hwpx": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "semantic_reopen": false,
+    "field_readback": false,
+    "reference_update": false,
+    "hancom_open": false,
+    "save_reopen": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p09_03_green": false,
+    "p09_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "official_model": "qualified",
+    "direct_stage": "unit_passed",
+    "note_export": "digest_manifest_only",
+    "actual_target": "not_run",
+    "p09_03": "typed_component_pass_direct_hwpx_real_export_and_target_evidence_not_run",
+    "p09_03_green": false,
+    "p09": "in_progress",
+    "product_complete": false
+  }
+}
