@@ -26,11 +26,11 @@ SOURCE_SHA256 = {
     "docs/09_roadmap/P08_images_shapes_drawing_charts.md": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3",
     "implementation/p08/P08-05_OBJECT_APPEARANCE_POLICY.md": "1d05d280c00b8e61f216ed44fcfe4ed7ea4fcbb4ba86ac72be7fcf806b3da68a",
     "implementation/p08/P08-05_OBJECT_APPEARANCE_REPORT.md": "e7da98298637eaae4083318cb6d496c6bbb193533e580d466b63d0a663a7f090",
-    "protocol/private/p08-object-appearance-v1.json": "d2f8a5b0d02a0a00b998c2db47a9607aa02a0e53da18c2df1450d787a089aef1",
+    "protocol/private/p08-object-appearance-v1.json": "94e3e7ef6298773f80cc4eb43bd518568a0b2f86715ecbb87448525c91ab073c",
     "implementation/p08/P08-06_OBJECT_COMPOSITION_POLICY.md": "5b42d86e2dd6a9a26706f96473798516ae6a34d0bda0888fab65ea22e5eae8be",
-    "protocol/private/p08-object-composition-v1.json": "5f9d1050a26cba6c93e2b62e7ad4be9b34ad6751ac2afd28386316fe849be3b7",
+    "protocol/private/p08-object-composition-v1.json": "466fe49261b90ffb046ff7fb8e88ac5ab9aeacb7b0af9cf12c4a0ac30c46c0ab",
     "implementation/p08/P08-07_CHART_AUTOMATION_POLICY.md": "71d35105551af3bd0ccaca52c7dba4c68cfe97a7496c7c10205ee36bcaca7bda",
-    "protocol/private/p08-chart-automation-v1.json": "f41b4670775b1a30d3233c1621e23d0ee712eae4e1d69b367898256fdb7b7fba",
+    "protocol/private/p08-chart-automation-v1.json": "3374cb3cfd16bffc8ed3b203887476c1d95828a5374417a7f5dd614199ebf355",
 }
 OFFICIAL_SHA256 = {
     "OWPML/Class/Para/ContainerType.h": "09e1a6aab9f867c3e1ff2d1ae80953244d46d47b127b6e6d5d0478c3a74cf22c",

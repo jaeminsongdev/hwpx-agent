@@ -701,7 +701,6 @@ fn geometry_edits(
         || source.native_instance_id() != target.native_instance_id()
         || source.z_order() != target.z_order()
         || source.numbering_type() != target.numbering_type()
-        || source.locked() != target.locked()
     {
         return Err(ObjectGeometryHwpxError::SourceDrift);
     }
@@ -709,6 +708,14 @@ fn geometry_edits(
     edits
         .try_reserve_exact(64)
         .map_err(|_| ObjectGeometryHwpxError::AllocationFailed)?;
+    push_bool_change(
+        &parsed.document,
+        parsed.root,
+        "lock",
+        source.locked(),
+        target.locked(),
+        &mut edits,
+    )?;
     size_edits(parsed, source.size(), target.size(), &mut edits)?;
     anchor_edits(parsed, source.anchor(), target.anchor(), &mut edits)?;
     position_edits(parsed, source.position(), target.position(), &mut edits)?;

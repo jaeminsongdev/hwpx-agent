@@ -1,0 +1,46 @@
+{
+  "schema_version": "hwpx-agent.p08-object-protect-hwpx-source-qualification/v1",
+  "task": "P08-14",
+  "recorded_date": "2026-09-12",
+  "profile": "hwpx-agent.object-protect-hwpx.hwpml-2011-root-lock/v1",
+  "official_source": {
+    "repository": "https://github.com/hancom-io/owpml-model",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "reviewed_files": [
+      "OWPML/Class/Para/AbstractShapeObjectType.cpp",
+      "OWPML/Class/Para/AbstractShapeObjectType.h"
+    ],
+    "scope": "HWPML_2011_common_shape_root_lock_static_vocabulary_and_inheritance_only"
+  },
+  "implementation_sha256": {
+    "crates/domain-ir/src/object_geometry.rs": "b8d42a0fd02c6a831d1e675761556192b713c59d90fae59e95a367cf3a1b12e1",
+    "crates/domain-ir/tests/object_geometry.rs": "5a88b76187bedf9939193de2db85dd105c6924d2946008c4a2d2fcbebf6f1f10",
+    "crates/hwpx-package/src/object_geometry_hwpx.rs": "88bbd23bb63cd95e18fdc96c06d9c7029c6cae89ae5917233801036a57fc4a69",
+    "crates/hwpx-package/tests/object_geometry_hwpx.rs": "9a72cd328b5923d36f7d8d73ce089a94463899ba4a9fbc5b0340ea4aa3d3980e"
+  },
+  "tests": {
+    "object_geometry_domain": "7/7 PASS",
+    "object_geometry_hwpx": "12/12 PASS",
+    "fixture_classes": ["boundary", "happy_path", "negative", "preservation"],
+    "all_common_object_kinds": "12/12 PASS",
+    "focused_clippy": "PASS"
+  },
+  "claims": {
+    "one_row_direct_hwpx_integration": true,
+    "obj_045_static_section_hwpx": true,
+    "typed_semantic_reopen": true,
+    "outside_attribute_span_preserved": true,
+    "complete_state_and_flow_bound": true,
+    "all_twelve_common_kinds": true,
+    "actual_target_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "object_bounds": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

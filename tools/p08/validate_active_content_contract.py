@@ -23,7 +23,7 @@ SOURCE_SHA256 = {
     "docs/12_implementation_guides/11_security_privacy_license.md": "0be76f7e2c6c7a77a2031b10322839bf8693914f2ad7740de44646ea7f6d7b75",
     "docs/12_implementation_guides/07_windows_automation_worker.md": "76e5cfb985f77b55347714f3d3d3b97c527c18d0d8238a4c0e79b3f680b44168",
     "implementation/p08/P08-08_DRAWING_CANVAS_POLICY.md": "b199ffed1828bf83e3c581ed02251f2dd1514b5d236e4bd4455cd0d08b5e11b4",
-    "protocol/private/p08-drawing-canvas-v1.json": "1f02ec35a5a5a19155110b0f5b1e59c93311086c0984397771758598620e30b1",
+    "protocol/private/p08-drawing-canvas-v1.json": "688bde7c0f889885bf06defa1bf7bd654cc038f88bf850d52a21bf4dbe9ef074",
 }
 OFFICIAL_SHA256 = {
     "OWPML/Class/Para/OLEType.h": "fa52c5168c6723f79e3bd074fb735d7101c18ac8e1f676b914e2d2c457a122b1",

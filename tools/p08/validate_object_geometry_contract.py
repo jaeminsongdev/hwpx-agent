@@ -28,11 +28,11 @@ SOURCES = {
 }
 IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/lib.rs": "7b5bedf1434e2ecac621cff7f692fb120d54249174eb6b681614c23d1d740213",
-    "crates/domain-ir/src/object_geometry.rs": "61a285a2d892cfd62346a0a16580f54420339da490793c8aebd4cf1522c97a5e",
-    "crates/domain-ir/tests/object_geometry.rs": "74b010ea18717b3403b53c62fc16b28977a35229c9b1b452373e98b744b07531",
+    "crates/domain-ir/src/object_geometry.rs": "b8d42a0fd02c6a831d1e675761556192b713c59d90fae59e95a367cf3a1b12e1",
+    "crates/domain-ir/tests/object_geometry.rs": "5a88b76187bedf9939193de2db85dd105c6924d2946008c4a2d2fcbebf6f1f10",
     "crates/hwpx-package/src/lib.rs": "3c007f255931473477ed07d3403bcb94288e6e26152b6ef47c6cae6828118944",
-    "crates/hwpx-package/src/object_geometry_hwpx.rs": "51ae36894264efe1ac4327246cfcd546547e52268f34602fecf4943d9d9845ac",
-    "crates/hwpx-package/tests/object_geometry_hwpx.rs": "e16c857bfb7e7221fbad6cf08996f29a6c2666d92cc46c4dc0bee91f62c43edc",
+    "crates/hwpx-package/src/object_geometry_hwpx.rs": "88bbd23bb63cd95e18fdc96c06d9c7029c6cae89ae5917233801036a57fc4a69",
+    "crates/hwpx-package/tests/object_geometry_hwpx.rs": "9a72cd328b5923d36f7d8d73ce089a94463899ba4a9fbc5b0340ea4aa3d3980e",
 }
 MARKERS = {
     "crates/domain-ir/src/lib.rs": ("mod object_geometry;", "ObjectGeometryBuilder"),
@@ -45,11 +45,14 @@ MARKERS = {
         "SourceStateDrift",
         "DocumentFlowDrift",
         "PlanTampered",
+        'Self::SetLocked { .. } => "obj.object_protect"',
+        "NoOp",
         "reject_duplicate_json_keys",
         "finish_non_exhaustive",
     ),
     "crates/domain-ir/tests/object_geometry.rs": (
-        "plans_and_builds_all_six_exact_geometry_capabilities",
+        "plans_and_builds_all_seven_exact_geometry_capabilities",
+        "object_protect_rejects_noop_without_building_a_plan",
         "request_and_build_both_reject_state_and_flow_drift",
         "round_trips_all_admitted_object_kinds_and_preserves_complete_state",
     ),
@@ -66,6 +69,7 @@ MARKERS = {
     ),
     "crates/hwpx-package/tests/object_geometry_hwpx.rs": (
         "reads_all_reviewed_run_level_common_component_kinds",
+        "lowers_object_protect_for_all_common_kinds_with_one_exact_attribute_edit",
         "lowers_page_position_and_preserves_other_object_and_opaque_payload",
         "lowers_size_with_complete_component_and_exact_fixed_point_transform",
         "request_and_build_reject_section_object_state_and_flow_drift",
@@ -83,7 +87,7 @@ ADMITTED = {
         "pic", "rect", "ellipse", "line", "arc", "polygon", "curve", "connectLine",
         "container", "ole", "video", "textart",
     ],
-    "operations": ["obj.position", "obj.size", "obj.anchor", "obj.wrap", "obj.rotate", "obj.flip"],
+    "operations": ["obj.object_protect", "obj.position", "obj.size", "obj.anchor", "obj.wrap", "obj.rotate", "obj.flip"],
     "state": "complete_reviewed_common_object_and_component_geometry_fields",
     "matrix": "all_three_six_coefficient_matrices_as_signed_fixed_millionths",
     "binding": "canonical_state_and_flow_then_exact_section_and_object_sha256_at_request_and_build",
@@ -116,7 +120,7 @@ FAILURE_POLICY = [
     "nested_only_unknown_missing_or_duplicate_common_component_structure_rejected",
     "noncanonical_boolean_integer_enum_and_more_than_six_decimal_matrix_rejected",
     "rotation_and_flip_require_complete_caller_supplied_target_transform",
-    "object_identity_kind_zorder_numbering_and_lock_cannot_change_in_geometry_plan",
+    "object_identity_kind_zorder_and_numbering_cannot_change_and_lock_changes_only_for_obj_object_protect",
     "only_changed_common_attribute_value_spans_may_change",
     "semantic_target_readback_must_equal_planned_complete_state",
     "unchanged_lexemes_opaque_payload_siblings_text_namespaces_and_formatting_preserved",
@@ -298,8 +302,8 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
     ):
         errors.append("qualification_official_sources")
     expected_component = {
-        "state": "pass", "rust_tests_passed": 17, "domain_tests_passed": 6,
-        "hwpx_section_tests_passed": 11, "six_catalog_operations": "pass",
+        "state": "pass", "rust_tests_passed": 19, "domain_tests_passed": 7,
+        "hwpx_section_tests_passed": 12, "seven_catalog_operations": "pass",
         "twelve_common_component_kinds": "pass", "complete_geometry_and_transform_state": "pass",
         "request_and_build_state_flow_binding": "pass", "section_and_object_byte_binding": "pass",
         "changed_attribute_only_lowering": "pass", "opaque_payload_and_sibling_preservation": "pass",
@@ -314,7 +318,7 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
     }:
         errors.append("qualification_target")
     if value.get("claims") != {
-        "common_component_pass": True, "six_geometry_operations": True,
+        "common_component_pass": True, "seven_geometry_operations": True,
         "full_package_hwpx": False, "exact_current_2020_serialization": False,
         "actual_hangul": False, "save_reopen": False, "render": False,
         "p08_03_complete": False, "p08_complete": False, "production_ready": False,
@@ -332,7 +336,7 @@ def validate_documents(root: Path, errors: list[str]) -> None:
             "all 18 coefficients",
             "p08_03_complete=false",
         ),
-        REPORT: ("17/17 PASS", "synthetic section XML", "P08-04"),
+        REPORT: ("19/19 PASS", "synthetic section XML", "P08-14"),
     }
     for relative, markers in expected.items():
         try:

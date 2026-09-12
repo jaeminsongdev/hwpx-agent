@@ -140,7 +140,7 @@ fn request(
 }
 
 #[test]
-fn plans_and_builds_all_six_exact_geometry_capabilities() {
+fn plans_and_builds_all_seven_exact_geometry_capabilities() {
     let source = state(ObjectKind::Rectangle);
     let target_position = ObjectPosition {
         horizontal_alignment: ObjectHorizontalAlignment::Outside,
@@ -188,6 +188,7 @@ fn plans_and_builds_all_six_exact_geometry_capabilities() {
         vertical: true,
     };
     let operations = [
+        ObjectGeometryOperation::SetLocked { enabled: true },
         ObjectGeometryOperation::SetPosition {
             position: target_position,
         },
@@ -212,6 +213,7 @@ fn plans_and_builds_all_six_exact_geometry_capabilities() {
         },
     ];
     let expected_capabilities = [
+        "obj.object_protect",
         "obj.position",
         "obj.size",
         "obj.anchor",
@@ -238,6 +240,21 @@ fn plans_and_builds_all_six_exact_geometry_capabilities() {
             source.native_instance_id()
         );
     }
+}
+
+#[test]
+fn object_protect_rejects_noop_without_building_a_plan() {
+    let source = state(ObjectKind::Rectangle);
+    let request = request(
+        &source,
+        ObjectGeometryOperation::SetLocked {
+            enabled: source.locked(),
+        },
+    );
+    assert_eq!(
+        ObjectGeometryBuilder::plan(&source, &request, FLOW_A, limits()),
+        Err(ObjectGeometryError::NoOp)
+    );
 }
 
 #[test]

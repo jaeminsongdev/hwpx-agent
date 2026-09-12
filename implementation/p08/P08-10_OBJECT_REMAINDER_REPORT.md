@@ -47,6 +47,7 @@ automation or differential comparison ran.
 
 ## Next exact task
 
-Implement direct HWPX lowering and strict readback for the eight P08-owned unit rows identified in
-the current ledger. The P11-owned cataloged rows stay unimplemented until P11, and all actual
-target fields remain false/not_run until the combined licensed Hangul 2020 campaign.
+After the P08-13 and P08-14 exact adapters, implement direct HWPX lowering and strict readback for
+the remaining ten P08-owned unit rows identified in the current ledger. The P11-owned cataloged
+rows stay unimplemented until P11, and all actual target fields remain false/not_run until the
+combined licensed Hangul 2020 campaign.

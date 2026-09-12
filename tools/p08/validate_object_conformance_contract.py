@@ -31,11 +31,11 @@ EXPECTED_SOURCE_LOCKS = {
     "specs/feature-coverage-matrix.json": "a3fa1cd5c5b0b0e09bc93354f724ed3516bdb987f1c171cc27d7564dc6390950",
     "specs/capability-contracts.generated.json": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306",
     "specs/work-breakdown-structure.json": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2",
-    "implementation/p08/p08-09-current-2020-direct-evidence.json": "ce99503851b49a1193d07302e9be6fa476002458c2728b864af0b0a99a7eef6e",
+    "implementation/p08/p08-09-current-2020-direct-evidence.json": "3a8a0f3cd0fb96001aceaecbd5567d3c40369e348a1db14535727cfd2a7d0026",
     "implementation/p08/p08-09-current-2020-automation-projection.json": "f8c06f206c29eb7aa77b845fd1afa1ff09535145584f5f9fff83fdc679f1cd12",
     "implementation/p08/p08-09-threshold-policy.v1.json": "0f4856e81edc012ed80608fddea6a2be98286ca772127c5b1316f3e2ed890d0c",
-    "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json": "517193f9fd5912079cb37c9c4915ec91d76d63f2f4c81aa30e262964214c73db",
-    "tools/p08/object_conformance.py": "f244b6119fc52ed47696b6da40af83985bb70677f113c38e39c65142ffabb9b3",
+    "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json": "01d6744ed0a42540b8e7da277559fbc1319920b91e6cb7fe34b8bb4fc78b9c51",
+    "tools/p08/object_conformance.py": "852c8f7ba1d34606de8cbaeb47062dd13a1085e3ca58cc0219f9856a410aded4",
 }
 
 EXPECTED_SUMMARY = {
@@ -45,8 +45,8 @@ EXPECTED_SUMMARY = {
     "non_green_rows": 58,
     "direct_stage_counts": {
         "cataloged": 5,
-        "unit_passed": 20,
-        "integration_passed": 33,
+        "unit_passed": 19,
+        "integration_passed": 34,
         "oracle_verified": 0,
     },
     "automation_binding_counts": {
@@ -107,6 +107,7 @@ EXPECTED_UPSTREAM = [
     "tools/p08/validate_object_hwpx_integration_contract.py",
     "tools/p08/validate_freeform_hwpx_integration_contract.py",
     "tools/p08/validate_textbox_properties_hwpx_contract.py",
+    "tools/p08/validate_object_protect_hwpx_contract.py",
 ]
 
 

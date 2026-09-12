@@ -24,15 +24,15 @@ a blocker; it is never treated as skipped success.
 
 ## Current evidence projection
 
-- Static image insertion, six geometry operations, three basic-shape operations and eleven
+- Static image insertion, seven common geometry/protection operations, three basic-shape operations and eleven
   appearance operations have synthetic HWPX/XML integration evidence.
 - Six composition operations plus drawing-canvas insertion and crop now have preserving static
   section HWPX integration evidence. Freeform point editing has an exact preserving payload-island
-  integration. Text-box properties have an exact six-attribute preserving integration. Nine chart
-  operations remain component-only.
-- Eleven formerly cataloged P08-owned operations remain at complete typed unit models: drawing
+  integration. Text-box properties have an exact six-attribute preserving integration, and object
+  protection has an exact root-lock integration. Nine chart operations remain component-only.
+- Ten formerly cataloged P08-owned operations remain at complete typed unit models: drawing
   gallery, inert form, caption and paragraph-band insertion; margin/caption and image properties;
-  aspect lock, protection, printability, alternative text and safe hyperlinks.
+  aspect lock, printability, alternative text and safe hyperlinks.
 - Both preserve-only OLE rows have synthetic package inventory, activation denial, security and
   byte-preservation evidence. This does not claim OLE creation or semantic editing.
 - The five remaining `cataloged` rows are P11-owned. P08 unit models still do not prove direct

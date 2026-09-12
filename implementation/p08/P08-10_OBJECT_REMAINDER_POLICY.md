@@ -62,6 +62,6 @@ tests, six shape-point tests and seven special-object tests. These are component
 `p08_10_green=false`, `p08_complete=false`, `production_ready=false`, and
 `product_complete=false`.
 
-Reasoning level: max. The next exact task is direct HWPX lowering for the eight P08-owned
-component rows already identified by the authoritative ledger, followed by the combined licensed
-Hangul 2020 validation campaign.
+Reasoning level: max. After the P08-13 and P08-14 exact adapters, the next task is direct HWPX
+lowering for the remaining ten P08-owned unit rows identified by the authoritative ledger,
+followed by the combined licensed Hangul 2020 validation campaign.

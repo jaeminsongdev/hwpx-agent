@@ -13,4 +13,5 @@ V1 has no defaultable fields. Missing, duplicate, unknown, malformed or extra JS
 Matrices require all 18 signed fixed-millionth coefficients; a rotation or flip request without the
 complete target transform is not migratable. Nested group-member addressing, graphs/charts,
 aspect-lock semantics, full-package publication and installed-target qualification require a new
-profile/schema and explicit migration policy.
+profile/schema and explicit migration policy. Object protection is admitted only as the canonical
+common root `lock` transition; it does not reinterpret `hp:sz@protect` as aspect locking.

@@ -24,7 +24,7 @@
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 4 unit, 32 integration and 25 oracle rows but 0/61 release-green; row closures remain |
-| P07-P09 | P07/P08 in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-13 adds exact synthetic section-HWPX text-box-property integration after P08-12 lowered OBJ-042/043. P08-09 binds all 58 rows: 5 cataloged, 20 unit, 33 integration, 0 oracle/green; eleven P08-10 HWPX adapters, target/visual evidence and P09 remain |
+| P07-P09 | P07/P08 in progress | P07-01~09 implementation is complete/unit-passed; P07-09 attempt09 remains incomplete without four screenshots. P08-14 adds exact synthetic section-HWPX object protection after P08-13 text-box properties and P08-12 OBJ-042/043. P08-09 binds all 58 rows: 5 cataloged, 19 unit, 34 integration, 0 oracle/green; ten P08-10 HWPX adapters, target/visual evidence and P09 remain |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -39,7 +39,7 @@
 |---|---|---|
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
 | P-0057 | P06-09 table conformance | fail-closed matrix plus bounded component/static-HWPX slices pass; TABLE-002/003 exact Hangul target v2 is oracle-verified; exact current-PC release matrix remains 0/61 green |
-| P-0095 | P08 object HWPX integration | P08-13 moves text-box properties to exact six-attribute synthetic HWPX integration; map only proven native fields for the remaining eleven P08-10 models before target evidence |
+| P-0095 | P08 object HWPX integration | P08-14 moves OBJ-045 protection to exact common-root `lock` synthetic HWPX integration while explicitly deferring unproven OBJ-044 aspect-lock semantics; map only proven native fields for the remaining ten P08-10 models before target evidence |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
 | P-0091 family | P17-06 remote sync | all-operation issuer and fixed-sequence-slot broker plus independently bound TLS service components pass; external operation, real assertion/credential/network, cross-system atomicity, power-loss and registered-host evidence remain |
 | P-0094 family | P17-07 conflicts | local resolver and graphical component pass; registered host and concurrent Web/Codex evidence remain |
@@ -108,7 +108,7 @@
 
 ## Next actions
 
-1. Continue P08 at `max`: lower the remaining 11 P08-10 typed models only where native fields are proven; preserve the 5 cataloged P11 rows, P11 runtime ownership and every target/render/automation/differential blocker.
+1. Continue P08 at `max`: lower the remaining 10 P08-10 typed models only where native fields are proven; preserve the 5 cataloged P11 rows, P11 runtime ownership and every target/render/automation/differential blocker.
 2. When the user can capture screens/approve saves, run one combined exact-target campaign: P07-07/08/09 plus remaining P06 target/render/differentials including corrected TABLE-032/033.
 3. Close P17 v48 only after the complete 397-test run; fast profiles never substitute for target, regression, current, clean-checkout FULL or applicable security/STRICT Gates.
 

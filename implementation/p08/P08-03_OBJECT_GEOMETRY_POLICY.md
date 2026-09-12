@@ -4,9 +4,9 @@
 
 P08-03 is `common_component_pass / target_not_run / task_incomplete`. The v1 checkpoint admits the
 complete HWPML 2011 common geometry state for one existing run-level picture or drawing component
-and lowers exact position, size, anchor, wrap, rotation and flip transitions into preserving section
-bytes. Licensed-Hangul serialization, full-package reopen and rendering have not run, so P08-03 and
-P08 remain incomplete.
+and lowers exact protection, position, size, anchor, wrap, rotation and flip transitions into
+preserving section bytes. Licensed-Hangul serialization, full-package reopen and rendering have not
+run, so P08-03 and P08 remain incomplete.
 
 ## Admitted object and state model
 
@@ -35,8 +35,9 @@ object, state and flow before returning output.
 
 The lowerer edits only value spans for common attributes whose typed value changed. Unchanged
 lexemes, namespaces, whitespace, sibling objects and every object-specific child remain byte-exact.
-Semantic readback must equal the planned target state. A no-op operation returns the original bytes
-unchanged. No failure returns partial bytes.
+Semantic readback must equal the planned target state. The six original geometry/transform
+operations retain byte-identical no-op lowering; `obj.object_protect` rejects a no-op before plan
+construction. No failure returns partial bytes.
 
 ## Limits and diagnostics
 

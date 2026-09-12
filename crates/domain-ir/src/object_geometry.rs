@@ -472,6 +472,12 @@ impl ObjectGeometryState {
         validate_state(self, limits)?;
         let mut target = self.clone();
         match operation {
+            ObjectGeometryOperation::SetLocked { enabled } => {
+                if target.locked == enabled {
+                    return Err(ObjectGeometryError::NoOp);
+                }
+                target.locked = enabled;
+            }
             ObjectGeometryOperation::SetPosition { position } => target.position = position,
             ObjectGeometryOperation::SetSize { size, component } => {
                 target.size = size;
@@ -517,6 +523,9 @@ impl fmt::Debug for ObjectGeometryState {
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum ObjectGeometryOperation {
+    SetLocked {
+        enabled: bool,
+    },
     SetPosition {
         position: ObjectPosition,
     },
@@ -545,6 +554,7 @@ impl ObjectGeometryOperation {
     #[must_use]
     pub const fn capability_id(self) -> &'static str {
         match self {
+            Self::SetLocked { .. } => "obj.object_protect",
             Self::SetPosition { .. } => "obj.position",
             Self::SetSize { .. } => "obj.size",
             Self::SetAnchor { .. } => "obj.anchor",
@@ -836,6 +846,8 @@ pub enum ObjectGeometryError {
     DocumentFlowDrift,
     #[error("object geometry plan was tampered with")]
     PlanTampered,
+    #[error("object geometry operation would not change state")]
+    NoOp,
     #[error("object geometry serialization failed")]
     Serialization,
     #[error("object geometry serialized output exceeds a finite limit")]
@@ -857,6 +869,7 @@ impl ObjectGeometryError {
             Self::SourceStateDrift => "object_geometry_source_state_drift",
             Self::DocumentFlowDrift => "object_geometry_document_flow_drift",
             Self::PlanTampered => "object_geometry_plan_tampered",
+            Self::NoOp => "object_geometry_no_op",
             Self::Serialization => "object_geometry_serialization",
             Self::OutputLimit => "object_geometry_output_limit",
         }

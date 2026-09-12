@@ -162,6 +162,48 @@ fn reads_all_reviewed_run_level_common_component_kinds() {
 }
 
 #[test]
+fn lowers_object_protect_for_all_common_kinds_with_one_exact_attribute_edit() {
+    let tags = [
+        "pic",
+        "rect",
+        "ellipse",
+        "line",
+        "arc",
+        "polygon",
+        "curve",
+        "connectLine",
+        "container",
+        "ole",
+        "video",
+        "textart",
+    ];
+    for tag in tags {
+        let source = section_with(&[common_object(tag, 41, 99, "PRESERVE-OPAQUE-PAYLOAD")]);
+        let expected = String::from_utf8(source.clone())
+            .expect("UTF-8")
+            .replacen("lock=\"0\"", "lock=\"1\"", 1)
+            .into_bytes();
+        let (output, receipt) = lower(
+            &source,
+            0,
+            ObjectGeometryOperation::SetLocked { enabled: true },
+        );
+        assert_eq!(output, expected, "unexpected bytes for {tag}");
+        assert_eq!(receipt.capability_id, "obj.object_protect");
+        assert_eq!(receipt.modified_attribute_count, 1);
+        let reopened = ObjectGeometryHwpxReader::read_in_section(
+            &output,
+            0,
+            logical_id(),
+            state_limits(),
+            hwpx_limits(),
+        )
+        .expect("protected readback");
+        assert!(reopened.state.locked());
+    }
+}
+
+#[test]
 fn lowers_page_position_and_preserves_other_object_and_opaque_payload() {
     let source = section();
     let second_before = common_object("rect", 42, 100, "PRESERVE-RECTANGLE-PAYLOAD");
@@ -482,6 +524,20 @@ fn request_and_build_reject_section_object_state_and_flow_drift() {
 #[test]
 fn malformed_missing_duplicate_nested_and_inexact_matrix_inputs_fail_closed() {
     let source = section();
+    let noncanonical_lock = String::from_utf8(source.clone())
+        .expect("UTF-8")
+        .replacen("lock=\"0\"", "lock=\"true\"", 1)
+        .into_bytes();
+    assert!(matches!(
+        ObjectGeometryHwpxReader::read_in_section(
+            &noncanonical_lock,
+            0,
+            logical_id(),
+            state_limits(),
+            hwpx_limits(),
+        ),
+        Err(ObjectGeometryHwpxError::InvalidBoolean)
+    ));
     let missing = String::from_utf8(source.clone())
         .expect("UTF-8")
         .replacen(

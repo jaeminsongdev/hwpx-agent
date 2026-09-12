@@ -4,9 +4,10 @@
 
 Result: `common_component_pass / target_not_run / task_incomplete`.
 
-This checkpoint adds a deterministic domain planner and preserving HWPX section lowerer for the six
-catalog operations `obj.position`, `obj.size`, `obj.anchor`, `obj.wrap`, `obj.rotate` and `obj.flip`.
-It models every reviewed common geometry field instead of implementing an easier partial subset.
+This checkpoint provides a deterministic domain planner and preserving HWPX section lowerer for
+seven catalog operations: `obj.object_protect`, `obj.position`, `obj.size`, `obj.anchor`,
+`obj.wrap`, `obj.rotate` and `obj.flip`. It models every reviewed common geometry field instead of
+implementing an easier partial subset.
 
 ## Implemented evidence
 
@@ -24,8 +25,9 @@ It models every reviewed common geometry field instead of implementing an easier
   lexemes, sibling objects, text, XML formatting and namespaces remain byte-preserved.
 - Canonical JSON is bounded and duplicate/unknown-field strict; public debug output is redacted.
 
-Focused Rust tests: 17/17 PASS (domain 6/6, preserving HWPX 11/11). They cover all six operations,
-all twelve object kinds, deterministic plan/build, source/state/flow drift at both boundaries,
+Focused Rust tests: 19/19 PASS (domain 7/7, preserving HWPX 12/12). They cover all seven operations,
+all twelve object kinds, exact root-lock lowering and no-op rejection for protection,
+deterministic plan/build, source/state/flow drift at both boundaries,
 page/paragraph anchor fixtures, inline flags, wrap/margins, complete size/component transitions,
 rotation/flip with caller-supplied matrices, no-op byte identity, sibling and opaque-payload
 preservation, matrix exactness, finite limits, malformed/missing/duplicate/nested rejection and
@@ -43,6 +45,7 @@ Hancom model establishes static field vocabulary and inheritance only.
 
 ## Next exact task
 
-Continue P08-04 basic-shape semantic construction at `max`, reusing this common geometry lowerer.
-Keep the combined P06/P07 licensed-target campaign deferred until a complete attempt-specific
-capture set can be collected without combining failed or incomplete attempts.
+Use P08-14 as the row-specific exact contract for `OBJ-045 obj.object_protect`. Continue only with
+remaining P08 typed operations whose complete native field mapping is proven. Keep the combined
+licensed-target campaign deferred until an attempt-specific capture set can be collected without
+combining failed or incomplete attempts.
