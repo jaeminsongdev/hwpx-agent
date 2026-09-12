@@ -26,8 +26,8 @@ before a passing validation result.
 
 ## Verified implementation evidence
 
-The matrix records only the stages already proven by P08-01 through P08-14 reports and contracts.
-The fourteen upstream private-contract validators are executed as prerequisites. The dedicated tamper
+The matrix records only the stages already proven by P08-01 through P08-15 reports and contracts.
+The fifteen upstream private-contract validators are executed as prerequisites. The dedicated tamper
 suite covers duplicate JSON, direct-row collision, false oracle promotion, target-profile claim
 promotion, threshold weakening, contract claim promotion and false-green matrix mutation.
 
@@ -37,6 +37,8 @@ No actual-target HWPX document, licensed Hangul process, save/reopen, property r
 render, automation runtime or differential was executed for P08-09. Twenty-eight rows now have
 preserving static-section semantic reopen, and `OBJ-042` has synthetic full-package reopen; all 53 covered rows
 remain component or synthetic evidence only.
+P08-15's eleven-tag shape-component hyperlink adapter is a partial profile and does not advance the
+complete `OBJ-048` row because chart has no reviewed common root `href`.
 Their current stage cannot satisfy target-build fixture, package integrity, render
 calibration, automation runtime or release-green requirements.
 

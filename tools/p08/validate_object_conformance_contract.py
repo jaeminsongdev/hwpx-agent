@@ -34,7 +34,7 @@ EXPECTED_SOURCE_LOCKS = {
     "implementation/p08/p08-09-current-2020-direct-evidence.json": "3a8a0f3cd0fb96001aceaecbd5567d3c40369e348a1db14535727cfd2a7d0026",
     "implementation/p08/p08-09-current-2020-automation-projection.json": "f8c06f206c29eb7aa77b845fd1afa1ff09535145584f5f9fff83fdc679f1cd12",
     "implementation/p08/p08-09-threshold-policy.v1.json": "0f4856e81edc012ed80608fddea6a2be98286ca772127c5b1316f3e2ed890d0c",
-    "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json": "01d6744ed0a42540b8e7da277559fbc1319920b91e6cb7fe34b8bb4fc78b9c51",
+    "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json": "6afb63cb86d394a3ecc7d28aefb6a3532e96886e45949c7ea278e37b28729485",
     "tools/p08/object_conformance.py": "852c8f7ba1d34606de8cbaeb47062dd13a1085e3ca58cc0219f9856a410aded4",
 }
 
@@ -108,6 +108,7 @@ EXPECTED_UPSTREAM = [
     "tools/p08/validate_freeform_hwpx_integration_contract.py",
     "tools/p08/validate_textbox_properties_hwpx_contract.py",
     "tools/p08/validate_object_protect_hwpx_contract.py",
+    "tools/p08/validate_object_hyperlink_hwpx_contract.py",
 ]
 
 

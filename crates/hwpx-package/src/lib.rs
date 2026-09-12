@@ -22,6 +22,7 @@ mod list_definition;
 mod object_appearance_hwpx;
 mod object_composition_hwpx;
 mod object_geometry_hwpx;
+mod object_hyperlink_hwpx;
 mod page_setup;
 mod paragraph_style;
 mod patch;
@@ -137,6 +138,12 @@ pub use object_geometry_hwpx::{
     ObjectGeometryHwpxLimitConfig, ObjectGeometryHwpxLimits, ObjectGeometryHwpxLowerer,
     ObjectGeometryHwpxLoweringReceipt, ObjectGeometryHwpxPlan, ObjectGeometryHwpxReadback,
     ObjectGeometryHwpxReader,
+};
+pub use object_hyperlink_hwpx::{
+    OBJECT_HYPERLINK_HWPX_PROFILE_ID, ObjectHyperlinkHwpxBuilder, ObjectHyperlinkHwpxError,
+    ObjectHyperlinkHwpxLimitConfig, ObjectHyperlinkHwpxLimits, ObjectHyperlinkHwpxLowerer,
+    ObjectHyperlinkHwpxLoweringReceipt, ObjectHyperlinkHwpxPlan, ObjectHyperlinkHwpxReadback,
+    ObjectHyperlinkHwpxReader,
 };
 pub use page_setup::{
     PAGE_SETUP_PROFILE_ID, PageDimensions, PageGutterType, PageMargins, PageOrientation,

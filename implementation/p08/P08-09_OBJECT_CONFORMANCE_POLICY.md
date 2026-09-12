@@ -29,7 +29,9 @@ a blocker; it is never treated as skipped success.
 - Six composition operations plus drawing-canvas insertion and crop now have preserving static
   section HWPX integration evidence. Freeform point editing has an exact preserving payload-island
   integration. Text-box properties have an exact six-attribute preserving integration, and object
-  protection has an exact root-lock integration. Nine chart operations remain component-only.
+  protection has an exact root-lock integration. Eleven shape-component tags have a partial exact
+  root-href profile, but `OBJ-048` remains unit-only because chart lacks that field. Nine chart
+  operations remain component-only.
 - Ten formerly cataloged P08-owned operations remain at complete typed unit models: drawing
   gallery, inert form, caption and paragraph-band insertion; margin/caption and image properties;
   aspect lock, printability, alternative text and safe hyperlinks.

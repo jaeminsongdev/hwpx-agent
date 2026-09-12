@@ -26,7 +26,7 @@ SOURCES = {
     "implementation/p05/P05_GATE_REPORT.md",
 }
 IMPLEMENTATION_SHA256 = {
-    "crates/hwpx-package/src/lib.rs": "3c007f255931473477ed07d3403bcb94288e6e26152b6ef47c6cae6828118944",
+    "crates/hwpx-package/src/lib.rs": "593bed705c2686f1da8e4143fb797fac63e3017437d5ac0ce36fdbf809906244",
     "crates/hwpx-package/src/asset.rs": "2a7aa557159e6c68fe1ed05111f44a846b9d174a9382c7f42d4295f7cdc72f9e",
     "crates/hwpx-package/tests/asset_pipeline.rs": "1310a39646ff821c9a8549502ef6ce0d8c70b371eef7f89df21ff7e3482720df",
     "crates/hwpx-package/src/patch.rs": "370e0547f12b69042a493d6db67d9d08176ee737abd49ef365d160bd788aee67",

@@ -1,0 +1,66 @@
+{
+  "schema_version": "hwpx-agent.p08-object-hyperlink-hwpx-source-qualification/v1",
+  "task": "P08-15",
+  "recorded_date": "2026-09-12",
+  "profile": "hwpx-agent.object-hyperlink-hwpx.hwpml-2011-shape-component-root-href/v1",
+  "official_source": {
+    "repository": "https://github.com/hancom-io/hwpx-owpml-model",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "reviewed_files": [
+      "OWPML/Class/Para/AbstractShapeComponentType.cpp",
+      "OWPML/Class/Para/AbstractShapeComponentType.h",
+      "OWPML/Class/Para/AbstractDrawingObjectType.h",
+      "OWPML/Class/Para/PictureType.h",
+      "OWPML/Class/Para/RectangleType.h",
+      "OWPML/Class/Para/EllipseType.h",
+      "OWPML/Class/Para/LineType.h",
+      "OWPML/Class/Para/ArcType.h",
+      "OWPML/Class/Para/PolygonType.h",
+      "OWPML/Class/Para/CurveType.h",
+      "OWPML/Class/Para/ConnectLineType.h",
+      "OWPML/Class/Para/ContainerType.h",
+      "OWPML/Class/Para/OLEType.h",
+      "OWPML/Class/Para/VideoType.h",
+      "OWPML/Class/Para/ChartType.h"
+    ],
+    "scope": "HWPML_2011_shape_component_root_href_static_vocabulary_inheritance_and_chart_exclusion_only"
+  },
+  "implementation_sha256": {
+    "crates/domain-ir/src/object_properties.rs": "f0bed7df4dc15092f764edd18f10351de2420b9f90dbd0e3909cdda6c3415695",
+    "crates/domain-ir/tests/object_properties.rs": "256bb9d3b6f05215b31e0a8c6cb8af9bf94f6a9da19d1c8fb660edc44b0120ac",
+    "crates/hwpx-package/src/object_hyperlink_hwpx.rs": "de52deaea479842974d54b8e17a31a81a2f54f293d3211165863f729ada29346",
+    "crates/hwpx-package/tests/object_hyperlink_hwpx.rs": "5f6e9d561c02bc052f9aa8689c53a8e33907df87677b7dc8fff1937d49dc3368"
+  },
+  "tests": {
+    "object_properties_domain": "8/8 PASS",
+    "object_hyperlink_hwpx": "7/7 PASS",
+    "fixture_classes": ["boundary", "happy_path", "negative", "preservation"],
+    "native_tags": "11/11 PASS",
+    "ir_kinds": "5/5 PASS",
+    "focused_clippy": "PASS"
+  },
+  "claims": {
+    "partial_direct_hwpx_profile": true,
+    "one_row_direct_hwpx_integration": false,
+    "obj_048_row_stage": "unit_passed",
+    "obj_048_complete": false,
+    "shape_component_static_section_hwpx": true,
+    "typed_semantic_reopen": true,
+    "outside_attribute_span_preserved": true,
+    "complete_state_and_flow_bound": true,
+    "all_eleven_native_tags": true,
+    "all_five_ir_kinds": true,
+    "chart_direct_hwpx": false,
+    "resource_integrity": false,
+    "actual_target_hwpx": false,
+    "actual_hangul": false,
+    "save_reopen": false,
+    "object_bounds": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}
