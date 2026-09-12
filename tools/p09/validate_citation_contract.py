@@ -35,7 +35,7 @@ OFFICIAL_SOURCE_SHA256 = {
     "OWPMLApi/OWPMLSerialize.cpp": "f5845f9f74f632b04d637f9f4a14a333bc30fbac9e675f7cbe0664df4c2515c3",
 }
 IMPLEMENTATION_SHA256 = {
-    "crates/domain-ir/src/lib.rs": "4e7d789eab302fd2e17d0c95538a0b9a33e5b824bc30188b0793a757dac56fdc",
+    "crates/domain-ir/src/lib.rs": "b13dcc56b5938d524084179b6c31e1c51bbc0fbd716146f47fcb89fa73cdb8d0",
     "crates/domain-ir/src/citation.rs": "50fb5bdc5376eb639c24aa0f9a3811e4aeee2b84ca1470a0e7dc0d5f7c523e13",
     "crates/domain-ir/tests/citation.rs": "54b4c44ea134612a7f44c465a97eac2da1d49ab91eaad1ae86bf849549a8c195",
 }

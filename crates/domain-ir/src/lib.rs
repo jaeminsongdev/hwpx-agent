@@ -12,6 +12,7 @@ mod field_engine;
 mod form_control;
 mod identity;
 mod link_reference;
+mod mail_merge;
 mod math_ast;
 mod note_engine;
 mod object_appearance;
@@ -155,6 +156,15 @@ pub use link_reference::{
     LinkReferenceLimitConfig, LinkReferenceLimits, LinkReferenceOperation, LinkReferencePlan,
     LinkReferenceReceipt, LinkReferenceRequest, LinkReferenceRequestDraft, LinkReferenceResult,
     LinkReferenceSectionState, OpaqueLinkProperty,
+};
+pub use mail_merge::{
+    MAIL_MERGE_SCHEMA_VERSION, MailMergeBuilder, MailMergeCacheStatus, MailMergeColumn,
+    MailMergeColumnType, MailMergeDataSource, MailMergeDocumentState, MailMergeDocumentStateDraft,
+    MailMergeError, MailMergeFieldCache, MailMergeFieldNode, MailMergeFieldType,
+    MailMergeLimitConfig, MailMergeLimits, MailMergeNativeBeginTag, MailMergeNativeEndTag,
+    MailMergeNativePair, MailMergeOperation, MailMergePlan, MailMergeReceipt, MailMergeRequest,
+    MailMergeRequestDraft, MailMergeResult, MailMergeSectionState, MailMergeSemanticBinding,
+    MailMergeSensitivity,
 };
 pub use math_ast::{
     MATH_AST_NORMALIZATION_VERSION, MATH_AST_SCHEMA_VERSION, MathAccent, MathAlignedLine,
