@@ -380,6 +380,40 @@ fn run(arguments: &Arguments) -> Result<(), AnyError> {
     Ok(())
 }
 
+#[allow(dead_code)]
+pub(crate) fn validate_pending_22_case(
+    manifest_bytes: &[u8],
+    feature_id: &str,
+    target_bytes: &[u8],
+    actual_bytes: &[u8],
+) -> Result<(), Box<dyn Error>> {
+    let fixture: FixtureManifest = serde_json::from_slice(manifest_bytes)?;
+    require_fixture_manifest(&fixture)?;
+    let fixture_case = fixture
+        .cases
+        .iter()
+        .find(|case| case.feature_id == feature_id)
+        .ok_or("pending-22 remaining feature is absent from fixture manifest")?;
+    require_digest(
+        target_bytes,
+        &fixture_case.sha256,
+        "pending-22 target input",
+    )?;
+    let target = read_package_parts(target_bytes)?;
+    let actual = read_package_parts(actual_bytes)?;
+    require_digest(
+        &target.header,
+        &fixture_case.target_header_sha256,
+        "pending-22 target header",
+    )?;
+    require_digest(
+        &target.section,
+        &fixture_case.target_section_sha256,
+        "pending-22 target section",
+    )?;
+    require_typed_oracle(fixture_case, &target, &actual)
+}
+
 fn require_fixture_manifest(value: &FixtureManifest) -> Result<(), AnyError> {
     let expected = expected_cases();
     if value.schema_version != EXPECTED_FIXTURE_SCHEMA

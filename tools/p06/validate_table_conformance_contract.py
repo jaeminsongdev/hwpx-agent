@@ -132,6 +132,7 @@ EXPECTED_SOURCE_PATHS = {
     "crates/hwpx-package/examples/p06_09_table_layout_placement_target_oracle.rs",
     "crates/hwpx-package/examples/p06_09_table_merge_split_target_fixture.rs",
     "crates/hwpx-package/examples/p06_09_table_merge_split_target_oracle.rs",
+    "crates/hwpx-package/examples/p06_09_table_pending_22_target_oracle.rs",
     "crates/hwpx-package/examples/p06_09_table_remaining_target_fixture.rs",
     "crates/hwpx-package/examples/p06_09_table_remaining_target_oracle.rs",
     "crates/hwpx-package/examples/p06_09_table_text_conversion_target_fixture.rs",

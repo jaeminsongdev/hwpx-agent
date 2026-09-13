@@ -215,6 +215,12 @@ The machine-readable authority is
   content and flow. Selected formulas, diagonals or unequal complete merge-cell properties fail
   closed, while an unselected same-table formula/cache survives topology change and strict reopen.
   This is static integration evidence, not licensed Hangul or render evidence.
+- The remaining 22 target candidates now share one exact single-HWP-session lifecycle runner, so one
+  user-owned `allow all` decision can cover the 2/10/10 prepared groups without 22 separate prompts.
+  Attempt 01 timed out at TABLE-016 `open_input`; all 22 inputs remained exact, no HWPX/PDF output
+  was published and the owned HWP process was cleaned. A combined offline oracle now admits only a
+  complete 22-case success trace, then reuses all three existing typed semantic readers directly;
+  the failed attempt is rejected before any oracle receipt is created. This preparation promotes no row.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 

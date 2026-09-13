@@ -336,6 +336,33 @@ fn run(arguments: &Arguments) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+#[allow(dead_code)]
+pub(crate) fn validate_pending_22_case(
+    manifest_bytes: &[u8],
+    feature_id: &str,
+    target_bytes: &[u8],
+    actual_bytes: &[u8],
+) -> Result<(), Box<dyn Error>> {
+    let fixture: FixtureManifest = serde_json::from_slice(manifest_bytes)?;
+    require_fixture_manifest(&fixture)?;
+    let fixture_case = fixture
+        .cases
+        .iter()
+        .find(|case| case.feature_id == feature_id)
+        .ok_or("pending-22 layout/placement feature is absent from fixture manifest")?;
+    require_digest(
+        target_bytes,
+        &fixture_case.sha256,
+        "pending-22 target input",
+    )?;
+    let target_section = read_section(target_bytes)?;
+    let actual_section = read_section(actual_bytes)?;
+    require_fixture_target(fixture_case, &target_section)?;
+    require_typed_actual(fixture_case, &actual_section)?;
+    require_properties_oracle(fixture_case, target_bytes, actual_bytes)?;
+    require_payload_oracle(&target_section, &actual_section)
+}
+
 #[allow(clippy::too_many_lines)]
 fn require_fixture_manifest(value: &FixtureManifest) -> Result<(), Box<dyn Error>> {
     let expected_cases = [

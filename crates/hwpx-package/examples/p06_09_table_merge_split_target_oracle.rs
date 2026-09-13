@@ -219,6 +219,31 @@ fn run(arguments: &Arguments) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+#[allow(dead_code)]
+pub(crate) fn validate_pending_22_case(
+    manifest_bytes: &[u8],
+    feature_id: &str,
+    target_bytes: &[u8],
+    actual_bytes: &[u8],
+) -> Result<(), Box<dyn Error>> {
+    let manifest: Manifest = serde_json::from_slice(manifest_bytes)?;
+    validate_manifest(&manifest)?;
+    let case = manifest
+        .cases
+        .iter()
+        .find(|case| case.feature_id == feature_id)
+        .ok_or("pending-22 merge/split feature is absent from fixture manifest")?;
+    require_digest(target_bytes, &case.sha256, "pending-22 target")?;
+    let target = inspect_package(target_bytes)?;
+    let actual = inspect_package(actual_bytes)?;
+    require_package_boundary(&target, &actual)?;
+    let stripped = strip_renderer_caches(&actual.section)?;
+    if stripped.count == 0 || stripped.section != target.section {
+        return Err(format!("{feature_id} pending-22 renderer-cache boundary differs").into());
+    }
+    validate_case_readback(case, &target, &actual.header, &stripped.section)
+}
+
 fn validate_manifest(manifest: &Manifest) -> Result<(), Box<dyn Error>> {
     if manifest.schema_version != "hwpx-agent.p06-09-table-merge-split-target-fixture/v1"
         || manifest.source_ancestor_sha256 != EXPECTED_ANCESTOR_SHA256
