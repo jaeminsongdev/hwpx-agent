@@ -6,6 +6,8 @@ param(
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{64}$')][string]$ExpectedLayoutPlacementManifestSha256,
     [Parameter(Mandatory)][string]$RemainingManifestPath,
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{64}$')][string]$ExpectedRemainingManifestSha256,
+    [Parameter(Mandatory)][string]$AccessControlPath,
+    [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{64}$')][string]$ExpectedAccessControlSha256,
     [Parameter(Mandatory)][string]$TracePath,
     [Parameter(Mandatory)][string]$ProgressPath,
     [string]$ProgId = 'HWPFrame.HwpObject.2',
@@ -27,6 +29,8 @@ $expectedManifestSchema = [ordered]@{
     remaining = 'hwpx-agent.p06-09-table-remaining-target-fixture/v1'
 }
 $layoutTextSha256 = 'e90f2af9593f587921c00b8c9a4d1c3fed8ed2284bc5463a17d7f259478cdb91'
+$pinnedAccessControlSha256 =
+    '04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c'
 $expectedCases = [ordered]@{
     merge_split = @(
         @('table-016-split-cells-4x3', 'TABLE-016', 'table.split_cell',
@@ -338,6 +342,33 @@ function Read-ExactManifest {
     return $prepared
 }
 
+function Resolve-ExactAccessControl {
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory)][string]$ExpectedSha256,
+        [Parameter(Mandatory)][string]$TargetRoot
+    )
+
+    if ($ExpectedSha256 -cne $pinnedAccessControlSha256) {
+        throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_IDENTITY_MISMATCH'
+    }
+    $fullPath = Assert-UnderTargetRoot -Path $Path -TargetRoot $TargetRoot
+    $item = Get-Item -LiteralPath $fullPath -Force
+    if ($item.PSIsContainer -or
+        ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0 -or
+        $item.Length -le 0 -or
+        $item.Length -gt 8388608 -or
+        [System.IO.Path]::GetExtension($item.FullName) -cne '.hwpx' -or
+        (Get-Sha256File -Path $item.FullName) -cne $ExpectedSha256) {
+        throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_INVALID'
+    }
+    return [ordered]@{
+        path = $item.FullName
+        file = $item.Name
+        sha256 = $ExpectedSha256
+    }
+}
+
 function Write-ProgressEvent {
     param(
         [Parameter(Mandatory)][string]$Phase,
@@ -452,6 +483,8 @@ $allCases += @(Read-ExactManifest -GroupId 'layout_placement' -Path (
 $allCases += @(Read-ExactManifest -GroupId 'remaining' -Path (
     $RemainingManifestPath
 ) -ExpectedSha256 $ExpectedRemainingManifestSha256 -TargetRoot $targetRoot)
+$accessControl = Resolve-ExactAccessControl -Path $AccessControlPath `
+    -ExpectedSha256 $ExpectedAccessControlSha256 -TargetRoot $targetRoot
 if ($allCases.Count -ne 22) {
     throw 'TABLE_PENDING_22_BATCH_TOTAL_CASE_COUNT_INVALID'
 }
@@ -476,6 +509,14 @@ $result = [ordered]@{
     }
     session_strategy = 'single_hwp_process_for_22_cases'
     access_approval_strategy = 'user_selects_allow_all_once'
+    access_control = [ordered]@{
+        source = 'verified_hancom_saved_table_012_control'
+        input_file = [string]$accessControl.file
+        input_sha256 = [string]$accessControl.sha256
+        input_unchanged = $false
+        open_state = 'not_run'
+        close_state = 'not_run'
+    }
     manifest_sha256 = [ordered]@{
         merge_split = $ExpectedMergeSplitManifestSha256
         layout_placement = $ExpectedLayoutPlacementManifestSha256
@@ -528,6 +569,39 @@ try {
     $window = $hwp.XHwpWindows.Item(0)
     $window.Visible = $true
     $result.window_visible_for_user_access = $true
+
+    $phase = 'access_control_open'
+    $document = $documents.Add($false)
+    if ($null -eq $document) {
+        throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_DOCUMENT_ADD_FAILED'
+    }
+    $result.access_control.open_state = 'running'
+    Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
+    if ($document.Open(
+        [string]$accessControl.path,
+        'HWPX',
+        'lock:false;setcurdir:false'
+    ) -eq $false) {
+        throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_OPEN_RETURNED_FALSE'
+    }
+    [void]$document.SetActive_XHwpDocument()
+    $result.access_control.open_state = 'pass'
+    Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
+
+    $phase = 'access_control_close'
+    $result.access_control.close_state = 'running'
+    Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
+    [void]$document.Close($false)
+    Clear-ComObject -Value $document
+    $document = $null
+    $result.access_control.close_state = 'pass'
+    $result.access_control.input_unchanged = (
+        Get-Sha256File -Path ([string]$accessControl.path)
+    ) -ceq [string]$accessControl.sha256
+    if (-not $result.access_control.input_unchanged) {
+        throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_CHANGED'
+    }
+    Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
     for ($index = 0; $index -lt $allCases.Count; $index += 1) {
         $activeEntry = $allCases[$index]
@@ -701,6 +775,12 @@ catch {
         $activeResult.error_code = $result.error_code
         $activeResult.failed_phase = $phase
     }
+    if ($phase -ceq 'access_control_open') {
+        $result.access_control.open_state = 'failed'
+    }
+    elseif ($phase -ceq 'access_control_close') {
+        $result.access_control.close_state = 'failed'
+    }
     Write-ProgressEvent -Phase $phase -State 'failed' -HwpProcessId $hwpProcessId -GlobalCaseIndex $activeIndex -GroupCaseIndex $(if ($null -eq $activeEntry) { 0 } else { [int]$activeEntry.group_case_index }) -GroupId $(if ($null -eq $activeEntry) { $null } else { [string]$activeEntry.group_id }) -FeatureId $(if ($null -eq $activeEntry) { $null } else { [string]$activeEntry.feature_id })
 }
 finally {
@@ -725,6 +805,12 @@ finally {
         }
         catch { $result.cases[$index].input_unchanged = $false }
     }
+    try {
+        $result.access_control.input_unchanged = (
+            Get-Sha256File -Path ([string]$accessControl.path)
+        ) -ceq [string]$accessControl.sha256
+    }
+    catch { $result.access_control.input_unchanged = $false }
 }
 
 Write-ProgressEvent -Phase 'terminal' -State $(if (

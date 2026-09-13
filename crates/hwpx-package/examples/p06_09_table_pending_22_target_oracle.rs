@@ -25,7 +25,7 @@ const MAX_MANIFEST_BYTES: u64 = 1024 * 1024;
 const MAX_HWPX_BYTES: u64 = 8 * 1024 * 1024;
 const MAX_PDF_BYTES: u64 = 32 * 1024 * 1024;
 const EXPECTED_CASE_COUNT: usize = 22;
-const EXPECTED_PROGRESS_EVENT_COUNT: u32 = 357;
+const EXPECTED_PROGRESS_EVENT_COUNT: u32 = 361;
 const EXPECTED_MERGE_SPLIT_SHA256: &str =
     "682635284ae5686832dfd89598ea6c106c6b110119e0d54a8e8a24b63e9f3f97";
 const EXPECTED_LAYOUT_PLACEMENT_SHA256: &str =
@@ -36,6 +36,10 @@ const EXPECTED_LAYOUT_TEXT_SHA256: &str =
     "e90f2af9593f587921c00b8c9a4d1c3fed8ed2284bc5463a17d7f259478cdb91";
 const EXPECTED_HANCOM_SHA256: &str =
     "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce";
+const EXPECTED_ACCESS_CONTROL_SHA256: &str =
+    "04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c";
+const EXPECTED_ACCESS_CONTROL_DIRECTORY: &str = "p06-09-table-structure-target-20260913-05";
+const EXPECTED_ACCESS_CONTROL_FILE: &str = "table-012-insert-row-3x3.hancom-2020-readback.hwpx";
 
 struct Arguments {
     merge_split_manifest: PathBuf,
@@ -113,6 +117,7 @@ struct RuntimeTrace {
     target: RuntimeTarget,
     session_strategy: String,
     access_approval_strategy: String,
+    access_control: RuntimeAccessControl,
     manifest_sha256: RuntimeManifestDigests,
     case_count: usize,
     completed_case_count: usize,
@@ -131,6 +136,17 @@ struct RuntimeTrace {
     delegated_engine_schema: String,
     access_approval_user_owned: bool,
     watchdog: RuntimeWatchdog,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct RuntimeAccessControl {
+    source: String,
+    input_file: String,
+    input_sha256: String,
+    input_unchanged: bool,
+    open_state: String,
+    close_state: String,
 }
 
 #[derive(Deserialize)]
@@ -261,6 +277,18 @@ fn run(arguments: &Arguments) -> Result<(), AnyError> {
     require_lower_sha256(&arguments.runtime_trace_sha256)?;
 
     let target_root = target_root()?;
+    let access_control_path = canonical_existing_under(
+        &target_root
+            .join(EXPECTED_ACCESS_CONTROL_DIRECTORY)
+            .join(EXPECTED_ACCESS_CONTROL_FILE),
+        &target_root,
+    )?;
+    let access_control = read_bounded_file(&access_control_path, MAX_HWPX_BYTES)?;
+    require_digest(
+        &access_control,
+        EXPECTED_ACCESS_CONTROL_SHA256,
+        "pending-22 access control",
+    )?;
     let groups = vec![
         read_fixture_group(
             "merge_split",
@@ -468,6 +496,12 @@ fn require_runtime_boundary(value: &RuntimeTrace) -> Result<(), AnyError> {
         || value.target.executable_sha256 != EXPECTED_HANCOM_SHA256
         || value.session_strategy != "single_hwp_process_for_22_cases"
         || value.access_approval_strategy != "user_selects_allow_all_once"
+        || value.access_control.source != "verified_hancom_saved_table_012_control"
+        || value.access_control.input_file != EXPECTED_ACCESS_CONTROL_FILE
+        || value.access_control.input_sha256 != EXPECTED_ACCESS_CONTROL_SHA256
+        || !value.access_control.input_unchanged
+        || value.access_control.open_state != "pass"
+        || value.access_control.close_state != "pass"
         || value.manifest_sha256.merge_split != EXPECTED_MERGE_SPLIT_SHA256
         || value.manifest_sha256.layout_placement != EXPECTED_LAYOUT_PLACEMENT_SHA256
         || value.manifest_sha256.remaining != EXPECTED_REMAINING_SHA256

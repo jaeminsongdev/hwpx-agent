@@ -54,6 +54,7 @@ def success_inputs() -> tuple[dict[str, object], dict[str, object]]:
         "schema_version": render.TRACE_SCHEMA,
         "state": "pass",
         "target": render.EXPECTED_TRACE_TARGET,
+        "access_control": dict(render.EXPECTED_ACCESS_CONTROL),
         "case_count": 22,
         "completed_case_count": 22,
         "cases": cases,
@@ -132,6 +133,12 @@ class Pending22RenderTests(unittest.TestCase):
         trace, oracle = success_inputs()
         oracle["input_immutability_passed"] = 21
         with self.assertRaisesRegex(render.RenderPreparationError, "oracle_boundary_mismatch"):
+            render.validate_inputs(trace, "b" * 64, oracle, "c" * 64)
+
+    def test_success_inputs_reject_access_control_drift(self) -> None:
+        trace, oracle = success_inputs()
+        trace["access_control"]["open_state"] = "failed"  # type: ignore[index]
+        with self.assertRaisesRegex(render.RenderPreparationError, "trace_boundary_mismatch"):
             render.validate_inputs(trace, "b" * 64, oracle, "c" * 64)
 
     def test_group_roots_are_exact_and_unknown_group_fails(self) -> None:

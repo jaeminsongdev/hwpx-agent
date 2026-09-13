@@ -216,13 +216,19 @@ The machine-readable authority is
   closed, while an unselected same-table formula/cache survives topology change and strict reopen.
   This is static integration evidence, not licensed Hangul or render evidence.
 - The remaining 22 target candidates now share one exact single-HWP-session lifecycle runner, so one
-  user-owned `allow all` decision can cover the 2/10/10 prepared groups without 22 separate prompts.
-  Attempts 01 through 03 timed out at TABLE-016 `open_input` before the user-owned approval; every
-  run kept all 22 inputs exact, published no HWPX/PDF output and cleaned its owned HWP process.
+  user-owned `allow all` decision can cover one access control plus the 2/10/10 prepared groups
+  without 22 separate prompts. Attempts 01 through 04 timed out at TABLE-016 `open_input`; attempts
+  05 and 06 returned `Open=false` after prompt resolution. A same-session diagnostic then returned
+  `Open=false` for a previously verified Hangul-saved TABLE-012 control before testing TABLE-016,
+  isolating the current failure to file-access admission. Every run kept all inputs exact, published
+  no HWPX/PDF output and left zero HWP processes. The runner now hash-binds and opens that exact
+  TABLE-012 control before any pending case; the Rust oracle and renderer require its open, close and
+  immutability states to pass. Configuration-only validation, 28/28 readback checks, 28/28 wrapper
+  checks and 9/9 renderer tests pass without invoking HWP.
   Attempt 03 trace SHA-256 is
   `577771fdbde65e572b0bfc59697d1a5334101927764b5afaeba6f8f721071356`. A combined offline oracle now admits only a
   complete 22-case success trace, then reuses all three existing typed semantic readers directly;
-  the failed attempt is rejected before any oracle receipt is created. A single end-to-end wrapper
+  every failed attempt is rejected before any oracle receipt is created. A single end-to-end wrapper
   now creates a new attempt directory, runs that one HWP session, hashes the resulting trace and
   invokes the combined oracle automatically; configuration-only and pre-existing-attempt paths are
   proven side-effect free. After the oracle passes, the same command uses pinned Poppler 26.07.0

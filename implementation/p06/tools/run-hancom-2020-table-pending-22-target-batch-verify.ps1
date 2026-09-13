@@ -18,6 +18,8 @@ $expectedManifestSha256 = [ordered]@{
     layout_placement = '33c391ff2b151f815c4e2e79c9144c53547fe87d5e35d1e856e4e796b3978faf'
     remaining = '1aeddc699c91c4878242a64e7674d1689a86b8abeda704370eeaac337bf95a8e'
 }
+$expectedAccessControlSha256 =
+    '04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c'
 
 function Get-Sha256File {
     param([Parameter(Mandatory)][string]$Path)
@@ -91,11 +93,18 @@ $manifestPaths = [ordered]@{
         Join-Path $targetRoot 'p06-09-table-remaining-target-20260913-10\fixture-manifest.json'
     ) -Boundary $targetRoot -MaximumBytes 1048576
 }
+$accessControlPath = Resolve-BoundedRegularFile -Path (
+    Join-Path $targetRoot 'p06-09-table-structure-target-20260913-05\table-012-insert-row-3x3.hancom-2020-readback.hwpx'
+) -Boundary $targetRoot -MaximumBytes 8388608
 foreach ($group in @('merge_split', 'layout_placement', 'remaining')) {
     if ((Get-Sha256File -Path ([string]$manifestPaths[$group])) -cne
         [string]$expectedManifestSha256[$group]) {
         throw 'TABLE_PENDING_22_VERIFY_MANIFEST_IDENTITY_MISMATCH'
     }
+}
+if ((Get-Sha256File -Path $accessControlPath) -cne
+    $expectedAccessControlSha256) {
+    throw 'TABLE_PENDING_22_VERIFY_ACCESS_CONTROL_IDENTITY_MISMATCH'
 }
 
 $cargo = Get-Command 'cargo.exe' -CommandType Application -ErrorAction Stop
@@ -114,6 +123,11 @@ if ($ValidateConfigurationOnly) {
         state = 'pass'
         attempt_name = $AttemptName
         case_count = 22
+        access_control = [ordered]@{
+            source = 'verified_hancom_saved_table_012_control'
+            input_file = [System.IO.Path]::GetFileName($accessControlPath)
+            input_sha256 = $expectedAccessControlSha256
+        }
         manifest_sha256 = $expectedManifestSha256
         readback_sha256 = Get-Sha256File -Path $readback
         oracle_source_sha256 = Get-Sha256File -Path $oracleSource
@@ -144,6 +158,8 @@ $readbackArguments = @{
     ExpectedLayoutPlacementManifestSha256 = [string]$expectedManifestSha256.layout_placement
     RemainingManifestPath = [string]$manifestPaths.remaining
     ExpectedRemainingManifestSha256 = [string]$expectedManifestSha256.remaining
+    AccessControlPath = $accessControlPath
+    ExpectedAccessControlSha256 = $expectedAccessControlSha256
     TracePath = $tracePath
     TimeoutSeconds = $TimeoutSeconds
 }
@@ -224,6 +240,7 @@ $renderManifestSha256 = Get-Sha256File -Path $resolvedRenderManifest
     state = 'pass'
     attempt_name = $AttemptName
     case_count = 22
+    access_control_input_sha256 = $expectedAccessControlSha256
     trace_file = [System.IO.Path]::GetFileName($resolvedTrace)
     trace_sha256 = $traceSha256
     oracle_receipt_file = [System.IO.Path]::GetFileName($resolvedReceipt)

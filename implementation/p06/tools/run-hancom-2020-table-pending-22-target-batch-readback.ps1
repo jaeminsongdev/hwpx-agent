@@ -6,6 +6,8 @@ param(
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{64}$')][string]$ExpectedLayoutPlacementManifestSha256,
     [Parameter(Mandatory)][string]$RemainingManifestPath,
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{64}$')][string]$ExpectedRemainingManifestSha256,
+    [Parameter(Mandatory)][string]$AccessControlPath,
+    [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{64}$')][string]$ExpectedAccessControlSha256,
     [Parameter(Mandatory)][string]$TracePath,
     [string]$ProgId = 'HWPFrame.HwpObject.2',
     [string]$ExpectedBuild = '11.0.0.9136',
@@ -32,6 +34,8 @@ $expectedCaseOrder = [ordered]@{
         'TABLE-054', 'TABLE-056', 'TABLE-057', 'TABLE-058', 'TABLE-060'
     )
 }
+$pinnedAccessControlSha256 =
+    '04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c'
 $engine = (Resolve-Path -LiteralPath (
     Join-Path $PSScriptRoot 'run-hancom-2020-table-pending-22-target-batch-engine.ps1'
 )).Path
@@ -191,6 +195,39 @@ function Resolve-ExactManifest {
     }
 }
 
+function Resolve-ExactAccessControl {
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory)][string]$ExpectedSha256,
+        [Parameter(Mandatory)][string]$TargetRoot
+    )
+
+    if ($ExpectedSha256 -cne $pinnedAccessControlSha256) {
+        throw 'TABLE_PENDING_22_TARGET_ACCESS_CONTROL_IDENTITY_MISMATCH'
+    }
+    $fullPath = [System.IO.Path]::GetFullPath($Path)
+    if (-not $fullPath.StartsWith(
+        $TargetRoot + '\',
+        [System.StringComparison]::OrdinalIgnoreCase
+    )) {
+        throw 'TABLE_PENDING_22_TARGET_ACCESS_CONTROL_OUTSIDE_TARGET_ROOT'
+    }
+    $item = Get-Item -LiteralPath $fullPath -Force
+    if ($item.PSIsContainer -or
+        ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0 -or
+        $item.Length -le 0 -or
+        $item.Length -gt 8388608 -or
+        [System.IO.Path]::GetExtension($item.FullName) -cne '.hwpx' -or
+        (Get-Sha256File -Path $item.FullName) -cne $ExpectedSha256) {
+        throw 'TABLE_PENDING_22_TARGET_ACCESS_CONTROL_INVALID'
+    }
+    return [ordered]@{
+        path = $item.FullName
+        file = $item.Name
+        sha256 = $ExpectedSha256
+    }
+}
+
 function Read-ProgressJournal {
     param(
         [Parameter(Mandatory)][string]$Path,
@@ -265,7 +302,7 @@ function Read-ProgressJournal {
             return $summary
         }
         if ($expectedSequence -eq 3 -and
-            [string]$event.phase -ceq 'open_input' -and
+            [string]$event.phase -ceq 'access_control_open' -and
             [string]$event.state -ceq 'running') {
             $summary.window_visible_for_user_access = $true
         }
@@ -383,7 +420,18 @@ function Test-SuccessEvidence {
         @($Trace.cases).Count -ne 22 -or
         $null -ne $Trace.failed_feature_id -or
         $null -ne $Trace.error_code -or
-        $null -ne $Trace.failed_phase) {
+        $null -ne $Trace.failed_phase -or
+        [string]$Trace.access_control.source -cne
+            'verified_hancom_saved_table_012_control' -or
+        [string]$Trace.access_control.input_file -cne
+            [string]$script:accessControl.file -or
+        [string]$Trace.access_control.input_sha256 -cne
+            [string]$script:accessControl.sha256 -or
+        (Get-Sha256File -Path ([string]$script:accessControl.path)) -cne
+            [string]$script:accessControl.sha256 -or
+        -not [bool]$Trace.access_control.input_unchanged -or
+        [string]$Trace.access_control.open_state -cne 'pass' -or
+        [string]$Trace.access_control.close_state -cne 'pass') {
         return $false
     }
     $traceCases = @($Trace.cases)
@@ -464,6 +512,8 @@ $layoutRecord = Resolve-ExactManifest -GroupId 'layout_placement' -Path (
 $remainingRecord = Resolve-ExactManifest -GroupId 'remaining' -Path (
     $RemainingManifestPath
 ) -ExpectedSha256 $ExpectedRemainingManifestSha256 -TargetRoot $targetRoot
+$script:accessControl = Resolve-ExactAccessControl -Path $AccessControlPath `
+    -ExpectedSha256 $ExpectedAccessControlSha256 -TargetRoot $targetRoot
 $allCases = @($mergeRecord.cases) + @($layoutRecord.cases) + @($remainingRecord.cases)
 if ($allCases.Count -ne 22) {
     throw 'TABLE_PENDING_22_TARGET_TOTAL_CASE_COUNT_INVALID'
@@ -498,6 +548,8 @@ $arguments = @(
     '-ExpectedLayoutPlacementManifestSha256', $ExpectedLayoutPlacementManifestSha256,
     '-RemainingManifestPath', $remainingRecord.path,
     '-ExpectedRemainingManifestSha256', $ExpectedRemainingManifestSha256,
+    '-AccessControlPath', $script:accessControl.path,
+    '-ExpectedAccessControlSha256', $ExpectedAccessControlSha256,
     '-TracePath', $innerTrace,
     '-ProgressPath', $progressFile,
     '-ProgId', $ProgId,
@@ -568,6 +620,17 @@ $innerValid = $null -ne $inner -and
     [string]$inner.session_strategy -ceq 'single_hwp_process_for_22_cases' -and
     [string]$inner.access_approval_strategy -ceq
         'user_selects_allow_all_once' -and
+    [string]$inner.access_control.source -ceq
+        'verified_hancom_saved_table_012_control' -and
+    [string]$inner.access_control.input_file -ceq
+        [string]$script:accessControl.file -and
+    [string]$inner.access_control.input_sha256 -ceq
+        [string]$script:accessControl.sha256 -and
+    ($inner.access_control.input_unchanged -is [bool]) -and
+    [string]$inner.access_control.open_state -match
+        '^(not_run|running|pass|failed)$' -and
+    [string]$inner.access_control.close_state -match
+        '^(not_run|running|pass|failed)$' -and
     [long]$inner.case_count -eq 22 -and
     -not [bool]$inner.raw_document_text_present -and
     -not [bool]$inner.user_document_scanned -and
@@ -656,6 +719,16 @@ if ($null -eq $inner) {
         session_strategy = 'single_hwp_process_for_22_cases'
         access_approval_strategy = 'user_selects_allow_all_once'
         access_approval_user_owned = $true
+        access_control = [ordered]@{
+            source = 'verified_hancom_saved_table_012_control'
+            input_file = [string]$script:accessControl.file
+            input_sha256 = [string]$script:accessControl.sha256
+            input_unchanged = (
+                Get-Sha256File -Path ([string]$script:accessControl.path)
+            ) -ceq [string]$script:accessControl.sha256
+            open_state = 'not_run'
+            close_state = 'not_run'
+        }
         manifest_sha256 = [ordered]@{
             merge_split = $ExpectedMergeSplitManifestSha256
             layout_placement = $ExpectedLayoutPlacementManifestSha256

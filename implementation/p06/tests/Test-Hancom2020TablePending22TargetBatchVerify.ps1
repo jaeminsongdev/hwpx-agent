@@ -32,6 +32,10 @@ $configurationIsSideEffectFree =
         'hwpx-agent.p06-09-table-pending-22-target-batch-verify-config/v1' -and
     [string]$configuration.state -ceq 'pass' -and
     [int]$configuration.case_count -eq 22 -and
+    [string]$configuration.access_control.source -ceq
+        'verified_hancom_saved_table_012_control' -and
+    [string]$configuration.access_control.input_sha256 -ceq
+        '04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c' -and
     -not [bool]$configuration.hwp_invoked -and
     -not [bool]$configuration.receipt_created -and
     -not [bool]$configuration.render_invoked -and
@@ -66,6 +70,13 @@ $checks = [ordered]@{
         'p06-09-table-layout-placement-target-20260913-04' -and
         $wrapper -match
         'p06-09-table-remaining-target-20260913-10'
+    exact_access_control = $wrapper -match
+        'p06-09-table-structure-target-20260913-05' -and
+        $wrapper -match
+        'table-012-insert-row-3x3\.hancom-2020-readback\.hwpx' -and
+        $wrapper -match
+        '04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c' -and
+        $wrapper -match 'ExpectedAccessControlSha256'
     bounded_files = $wrapper -match 'Resolve-BoundedRegularFile' -and
         $wrapper -match 'FileAttributes\]::ReparsePoint'
     create_new_attempt = $wrapper -match

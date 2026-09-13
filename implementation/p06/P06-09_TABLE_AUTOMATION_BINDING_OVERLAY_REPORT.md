@@ -50,16 +50,20 @@ runtime state and routing Boolean.
   disposable table contexts and 176 fixture-control executions are recorded separately; none can
   qualify runtime support. Redacted evidence is stored at
   `implementation/p06/evidence/target/p06-table-automation-candidate-32-surface.current-2020.attempt01.v1.json`.
-- The 22-case direct Hangul attempt 04 timed out at the first `open_input` while waiting for the
-  user-owned access approval. It completed 0/22, preserved unchanged inputs and cleaned its owned HWP
-  process with 0 remaining. This failure is not replaced by the successful surface inventory.
+- The 22-case direct Hangul attempts 01 through 04 timed out at the first `open_input`; attempts 05
+  and 06 returned `Open=false` after prompt resolution. A same-session diagnostic then returned
+  `Open=false` for a previously verified Hangul-saved TABLE-012 control before testing TABLE-016,
+  isolating the live failure to current file-access admission rather than the candidate package. All
+  runs completed 0/22, preserved unchanged inputs and left zero HWP processes. The production runner
+  now binds that exact control before all 22 rows; this implementation does not replace any failure
+  or promote runtime support.
 - Runtime states remain 61 `unverified`; routing remains disabled for 61/61.
 - Differentials remain 61 `not_run`.
 
 ## Next boundary
 
-Rerun the 22-case direct Hangul lifecycle/render batch when the user can approve access once, then
-perform original-detail render review. The 32-case surface inventory remains non-promoting;
+Rerun the control-first 22-case direct Hangul lifecycle/render batch when the user can approve
+access once, then perform original-detail render review. The 32-case surface inventory remains non-promoting;
 target-bound disposable runtime qualification, the remaining 29 unavailable rows and
 direct/automation differentials still follow. No row is release-green until its own direct oracle,
 runtime binding and exact differential all pass.

@@ -53,6 +53,8 @@ function Test-ManifestIdentityFailsBeforeCom {
         ExpectedLayoutPlacementManifestSha256 = ('0' * 64)
         RemainingManifestPath = $manifest
         ExpectedRemainingManifestSha256 = ('0' * 64)
+        AccessControlPath = $manifest
+        ExpectedAccessControlSha256 = ('0' * 64)
         TracePath = $trace
     }
     try {
@@ -75,6 +77,45 @@ function Test-ManifestIdentityFailsBeforeCom {
     }
     return $observed -ceq
         'TABLE_PENDING_22_TARGET_MANIFEST_IDENTITY_MISMATCH' -and
+        -not [System.IO.File]::Exists($trace)
+}
+
+function Test-AccessControlIdentityFailsBeforeCom {
+    $targetRoot = (Resolve-Path -LiteralPath (
+        Join-Path $PSScriptRoot '..\..\..\fixtures\target-build'
+    )).Path.TrimEnd('\')
+    $trace = Join-Path $targetRoot (
+        'hwpx-agent-p06-pending-22-access-control-' +
+        [guid]::NewGuid().ToString('N') + '.json'
+    )
+    $invoke = @{
+        MergeSplitManifestPath = Join-Path $targetRoot `
+            'p06-09-table-merge-split-target-20260913-06\fixture-manifest.json'
+        ExpectedMergeSplitManifestSha256 =
+            '682635284ae5686832dfd89598ea6c106c6b110119e0d54a8e8a24b63e9f3f97'
+        LayoutPlacementManifestPath = Join-Path $targetRoot `
+            'p06-09-table-layout-placement-target-20260913-04\fixture-manifest.json'
+        ExpectedLayoutPlacementManifestSha256 =
+            '33c391ff2b151f815c4e2e79c9144c53547fe87d5e35d1e856e4e796b3978faf'
+        RemainingManifestPath = Join-Path $targetRoot `
+            'p06-09-table-remaining-target-20260913-10\fixture-manifest.json'
+        ExpectedRemainingManifestSha256 =
+            '1aeddc699c91c4878242a64e7674d1689a86b8abeda704370eeaac337bf95a8e'
+        AccessControlPath = Join-Path $targetRoot `
+            'p06-09-table-structure-target-20260913-05\table-012-insert-row-3x3.hancom-2020-readback.hwpx'
+        ExpectedAccessControlSha256 = ('0' * 64)
+        TracePath = $trace
+    }
+    $observed = $null
+    try { & $parentPath @invoke | Out-Null }
+    catch { $observed = [string]$_.Exception.Message }
+    finally {
+        if ([System.IO.File]::Exists($trace)) {
+            [System.IO.File]::Delete($trace)
+        }
+    }
+    return $observed -ceq
+        'TABLE_PENDING_22_TARGET_ACCESS_CONTROL_IDENTITY_MISMATCH' -and
         -not [System.IO.File]::Exists($trace)
 }
 
@@ -102,6 +143,14 @@ $childStartPosition = $parent.IndexOf(
 )
 $outputPreflightPosition = $parent.IndexOf(
     "throw 'TABLE_PENDING_22_TARGET_OUTPUT_ALREADY_EXISTS'",
+    [System.StringComparison]::Ordinal
+)
+$accessControlPosition = $engine.IndexOf(
+    '$phase = ''access_control_open''',
+    [System.StringComparison]::Ordinal
+)
+$caseLoopPosition = $engine.IndexOf(
+    'for ($index = 0; $index -lt $allCases.Count; $index += 1)',
     [System.StringComparison]::Ordinal
 )
 
@@ -135,6 +184,13 @@ $checks = [ordered]@{
     user_allow_all_once = $all -match
         'user_selects_allow_all_once' -and
         $parent -match 'access_approval_user_owned'
+    exact_access_control = $all -match
+        '04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c' -and
+        $all -match 'verified_hancom_saved_table_012_control' -and
+        $engine -match 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_OPEN_RETURNED_FALSE' -and
+        $engine -match 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_CHANGED'
+    access_control_before_cases = $accessControlPosition -ge 0 -and
+        $caseLoopPosition -gt $accessControlPosition
     exact_target = $all -match 'HWPFrame\.HwpObject\.2' -and
         $all -match '11\.0\.0\.9136' -and
         $all -match
@@ -173,6 +229,8 @@ $checks = [ordered]@{
         'Stop-OwnedHancomProcesses' -and
         $parent -match "-Automation\\s\+\-Embedding"
     manifest_identity_fails_before_com = Test-ManifestIdentityFailsBeforeCom
+    access_control_identity_fails_before_com =
+        Test-AccessControlIdentityFailsBeforeCom
     no_single_case_delegate = $all -notmatch
         'run-hancom-2020-table-properties-target-readback'
     no_register_module = $all -notmatch '(?i)\.RegisterModule\s*\('

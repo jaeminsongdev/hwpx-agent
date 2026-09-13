@@ -26,6 +26,14 @@ EXPECTED_TRACE_TARGET = {
         "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
     ),
 }
+EXPECTED_ACCESS_CONTROL = {
+    "source": "verified_hancom_saved_table_012_control",
+    "input_file": "table-012-insert-row-3x3.hancom-2020-readback.hwpx",
+    "input_sha256": "04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c",
+    "input_unchanged": True,
+    "open_state": "pass",
+    "close_state": "pass",
+}
 GROUP_DIRECTORIES = {
     "merge_split": "p06-09-table-merge-split-target-20260913-06",
     "layout_placement": "p06-09-table-layout-placement-target-20260913-04",
@@ -310,6 +318,7 @@ def validate_inputs(
         trace.get("schema_version") != TRACE_SCHEMA
         or trace.get("state") != "pass"
         or trace.get("target") != EXPECTED_TRACE_TARGET
+        or trace.get("access_control") != EXPECTED_ACCESS_CONTROL
         or trace.get("case_count") != 22
         or trace.get("completed_case_count") != 22
     ):
