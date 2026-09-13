@@ -273,6 +273,14 @@ the HWP remainder was zero. This advances only an exact-target disposable compon
 not qualify the production automation binding, enable routing, run an exact product differential or
 change the 0/61 release-green matrix.
 
+The canary wire chain now also has a tracked independent verifier. It rehashes the private request
+and trace, rejects duplicate keys and boundary escapes, recomputes every composite scan/style
+snapshot, requires channel-specific change plus exact Undo restoration, checks the redacted public
+projection, and rejects raw private Action identifiers. Its seven tamper/non-promotion tests pass,
+and the actual attempt-03 request/trace/public-evidence chain passes with 6 cases, 4 scan effects,
+2 style effects, 6 exact Undo results and zero Action-identifier leaks. The verifier deliberately
+returns runtime support `unverified` and differential `not_run`.
+
 ## Validation and blockers
 
 The generator verifies 61-row identity across catalog, contract and projection; exact target;
