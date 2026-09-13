@@ -88,6 +88,9 @@ $checks = [ordered]@{
     exact_renderer = $wrapper -match
         "'tools\\p06\\render_table_pending_22_target_batch\.py'" -and
         [regex]::Matches($wrapper, '& \$python\.Source @renderArguments').Count -eq 1
+    exact_visual_review_finalizer = $wrapper -match
+        "'tools\\p06\\finalize_table_pending_22_visual_review\.py'" -and
+        $wrapper -match 'visual_review_finalizer_source_sha256'
     exact_pdf_tools = $wrapper -match "Get-Command 'pdfinfo\.exe'" -and
         $wrapper -match "Get-Command 'pdftoppm\.exe'" -and
         $wrapper -match "'--pdfinfo'" -and

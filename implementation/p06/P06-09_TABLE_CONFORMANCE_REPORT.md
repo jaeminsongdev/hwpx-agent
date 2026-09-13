@@ -225,7 +225,11 @@ The machine-readable authority is
   invokes the combined oracle automatically; configuration-only and pre-existing-attempt paths are
   proven side-effect free. After the oracle passes, the same command uses pinned Poppler 26.07.0
   tools to render all 22 one-page A4 PDFs at 144 DPI into bounded PNG review candidates and writes a
-  hash-bound manifest whose visual-review state remains `not_run`. This preparation promotes no row.
+  hash-bound manifest whose visual-review state remains `not_run`. A separate fail-closed finalizer
+  accepts only all 22 original-detail assistant findings in exact feature order, rehashes every PNG
+  and PDF plus the source manifest/observation files, and creates one promotion-ready receipt while
+  keeping automation, differential, P06-09 and P06 completion unclaimed. Unreviewed preparation
+  still promotes no row.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 

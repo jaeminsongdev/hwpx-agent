@@ -73,6 +73,9 @@ $oracleSource = Resolve-BoundedRegularFile -Path (
 $rendererSource = Resolve-BoundedRegularFile -Path (
     Join-Path $repoRoot 'tools\p06\render_table_pending_22_target_batch.py'
 ) -Boundary $repoRoot -MaximumBytes 1048576
+$visualReviewFinalizerSource = Resolve-BoundedRegularFile -Path (
+    Join-Path $repoRoot 'tools\p06\finalize_table_pending_22_visual_review.py'
+) -Boundary $repoRoot -MaximumBytes 1048576
 $cargoManifest = Resolve-BoundedRegularFile -Path (
     Join-Path $repoRoot 'Cargo.toml'
 ) -Boundary $repoRoot -MaximumBytes 1048576
@@ -115,6 +118,8 @@ if ($ValidateConfigurationOnly) {
         readback_sha256 = Get-Sha256File -Path $readback
         oracle_source_sha256 = Get-Sha256File -Path $oracleSource
         renderer_source_sha256 = Get-Sha256File -Path $rendererSource
+        visual_review_finalizer_source_sha256 =
+            Get-Sha256File -Path $visualReviewFinalizerSource
         cargo_manifest_sha256 = Get-Sha256File -Path $cargoManifest
         hwp_invoked = $false
         receipt_created = $false
