@@ -1,0 +1,342 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-automation-candidate-32-surface-evidence/v1",
+  "state": "component_pass",
+  "scope": "exact_target_read_only_candidate_surface_inventory_not_runtime_support",
+  "target": {
+    "profile_id": "hancom-hangul-2020-secondary",
+    "product": "Hancom Hangul 2020",
+    "build": "11.0.0.9136",
+    "locale": "ko-KR",
+    "architecture": "x86",
+    "client": "windows_powershell_x86_sta",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+  },
+  "evidence": {
+    "request_sha256": "8ad49a2a9f1057fd3e474fd5a56b4ff838e383f821a09f525ce9d9d72a2cbfd4",
+    "fixture_controls_sha256": "f491e8651ffc84c215b929779afaffa0dd99a4cfa3171f6a8e55928412af7e8a",
+    "child_source_sha256": "4c6ecb8e422b88ce44e43c03403afa438c29d8fe0c7f0973d01658e524cdfb30",
+    "trace_sha256": "2b6a81b35831972218f7d40d281421539efb21d3d94c760c0fe3508c8a02fda5",
+    "progress_sha256": "5c0b246d84644b19406b75b66925d7403e85c6ace31fa2eddd8d40d06d503f57",
+    "receipt_sha256": "8cc86420e8820d030d5081dad5c2e22e3790fe4ed11b889a227d06c3dda0be40"
+  },
+  "summary": {
+    "case_count": 32,
+    "completed_case_count": 32,
+    "enabled_in_context_count": 22,
+    "disabled_in_context_count": 10,
+    "default_read_passed_count": 14,
+    "table_create_fixture_action_execute_count": 30,
+    "fixture_control_action_execute_count": 176,
+    "candidate_under_probe_execute_count": 0,
+    "progress_event_count": 164
+  },
+  "cases": [
+    {
+      "index": 1,
+      "feature_id": "TABLE-001",
+      "capability_id": "table.create",
+      "selection_context": "blank_document",
+      "is_action_enable": true,
+      "get_default_state": "pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 2,
+      "feature_id": "TABLE-002",
+      "capability_id": "table.draw",
+      "selection_context": "current_table",
+      "is_action_enable": true,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 3,
+      "feature_id": "TABLE-003",
+      "capability_id": "table.eraser",
+      "selection_context": "current_table",
+      "is_action_enable": true,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 4,
+      "feature_id": "TABLE-004",
+      "capability_id": "table.text_to_table",
+      "selection_context": "selected_text",
+      "is_action_enable": true,
+      "get_default_state": "pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 5,
+      "feature_id": "TABLE-005",
+      "capability_id": "table.table_to_text",
+      "selection_context": "current_table",
+      "is_action_enable": true,
+      "get_default_state": "pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 6,
+      "feature_id": "TABLE-007",
+      "capability_id": "table.properties",
+      "selection_context": "current_table",
+      "is_action_enable": true,
+      "get_default_state": "pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 7,
+      "feature_id": "TABLE-010",
+      "capability_id": "table.split_table",
+      "selection_context": "current_row_boundary",
+      "is_action_enable": true,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 8,
+      "feature_id": "TABLE-011",
+      "capability_id": "table.join_table",
+      "selection_context": "current_table",
+      "is_action_enable": true,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 9,
+      "feature_id": "TABLE-014",
+      "capability_id": "table.delete_rows",
+      "selection_context": "current_row_block",
+      "is_action_enable": false,
+      "get_default_state": "pass",
+      "state": "surface_present_disabled_in_context"
+    },
+    {
+      "index": 10,
+      "feature_id": "TABLE-015",
+      "capability_id": "table.delete_columns",
+      "selection_context": "current_column_block",
+      "is_action_enable": false,
+      "get_default_state": "pass",
+      "state": "surface_present_disabled_in_context"
+    },
+    {
+      "index": 11,
+      "feature_id": "TABLE-016",
+      "capability_id": "table.split_cell",
+      "selection_context": "single_cell_block",
+      "is_action_enable": true,
+      "get_default_state": "pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 12,
+      "feature_id": "TABLE-017",
+      "capability_id": "table.merge_cells",
+      "selection_context": "adjacent_two_cell_block",
+      "is_action_enable": false,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_disabled_in_context"
+    },
+    {
+      "index": 13,
+      "feature_id": "TABLE-018",
+      "capability_id": "table.equal_row_height",
+      "selection_context": "rectangular_cell_block",
+      "is_action_enable": true,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 14,
+      "feature_id": "TABLE-019",
+      "capability_id": "table.equal_column_width",
+      "selection_context": "rectangular_cell_block",
+      "is_action_enable": true,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 15,
+      "feature_id": "TABLE-020",
+      "capability_id": "table.table_style",
+      "selection_context": "current_table",
+      "is_action_enable": true,
+      "get_default_state": "pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 16,
+      "feature_id": "TABLE-021",
+      "capability_id": "table.transpose",
+      "selection_context": "current_table",
+      "is_action_enable": true,
+      "get_default_state": "pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 17,
+      "feature_id": "TABLE-022",
+      "capability_id": "table.block_sum",
+      "selection_context": "numeric_cell_block",
+      "is_action_enable": true,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 18,
+      "feature_id": "TABLE-023",
+      "capability_id": "table.block_average",
+      "selection_context": "numeric_cell_block",
+      "is_action_enable": true,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 19,
+      "feature_id": "TABLE-024",
+      "capability_id": "table.block_product",
+      "selection_context": "numeric_cell_block",
+      "is_action_enable": true,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 20,
+      "feature_id": "TABLE-025",
+      "capability_id": "table.horizontal_sum",
+      "selection_context": "numeric_cell_block",
+      "is_action_enable": false,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_disabled_in_context"
+    },
+    {
+      "index": 21,
+      "feature_id": "TABLE-026",
+      "capability_id": "table.vertical_sum",
+      "selection_context": "numeric_cell_block",
+      "is_action_enable": false,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_disabled_in_context"
+    },
+    {
+      "index": 22,
+      "feature_id": "TABLE-027",
+      "capability_id": "table.horizontal_average",
+      "selection_context": "numeric_cell_block",
+      "is_action_enable": false,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_disabled_in_context"
+    },
+    {
+      "index": 23,
+      "feature_id": "TABLE-028",
+      "capability_id": "table.vertical_average",
+      "selection_context": "numeric_cell_block",
+      "is_action_enable": false,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_disabled_in_context"
+    },
+    {
+      "index": 24,
+      "feature_id": "TABLE-029",
+      "capability_id": "table.horizontal_product",
+      "selection_context": "numeric_cell_block",
+      "is_action_enable": false,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_disabled_in_context"
+    },
+    {
+      "index": 25,
+      "feature_id": "TABLE-030",
+      "capability_id": "table.vertical_product",
+      "selection_context": "numeric_cell_block",
+      "is_action_enable": false,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_disabled_in_context"
+    },
+    {
+      "index": 26,
+      "feature_id": "TABLE-031",
+      "capability_id": "table.formula",
+      "selection_context": "single_cell_block",
+      "is_action_enable": false,
+      "get_default_state": "pass",
+      "state": "surface_present_disabled_in_context"
+    },
+    {
+      "index": 27,
+      "feature_id": "TABLE-032",
+      "capability_id": "table.thousands_add",
+      "selection_context": "numeric_cell_block",
+      "is_action_enable": true,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 28,
+      "feature_id": "TABLE-033",
+      "capability_id": "table.thousands_remove",
+      "selection_context": "numeric_cell_block",
+      "is_action_enable": true,
+      "get_default_state": "not_applicable",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 29,
+      "feature_id": "TABLE-036",
+      "capability_id": "table.inline_floating",
+      "selection_context": "current_table",
+      "is_action_enable": true,
+      "get_default_state": "pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 30,
+      "feature_id": "TABLE-046",
+      "capability_id": "table.cell_border",
+      "selection_context": "single_cell_block",
+      "is_action_enable": true,
+      "get_default_state": "pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 31,
+      "feature_id": "TABLE-048",
+      "capability_id": "table.cell_fill",
+      "selection_context": "single_cell_block",
+      "is_action_enable": true,
+      "get_default_state": "pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 32,
+      "feature_id": "TABLE-057",
+      "capability_id": "table.auto_fill",
+      "selection_context": "numeric_cell_block",
+      "is_action_enable": true,
+      "get_default_state": "pass",
+      "state": "surface_present_enabled"
+    }
+  ],
+  "safety": {
+    "user_document_opened": false,
+    "file_open_or_save_invoked": false,
+    "external_network_invoked": false,
+    "registry_or_system_setting_changed": false,
+    "computer_use_click_or_type_invoked": false,
+    "raw_action_identifiers_present": false,
+    "raw_parameter_set_identifiers_present": false,
+    "remaining_hwp_process_count": 0
+  },
+  "promotion": {
+    "surface_inventory": "component_pass",
+    "runtime_support_state": "unverified",
+    "routing_enabled": false,
+    "differential_state": "not_run",
+    "p06_09": "in_progress",
+    "p06": "in_progress",
+    "product_complete": false
+  }
+}

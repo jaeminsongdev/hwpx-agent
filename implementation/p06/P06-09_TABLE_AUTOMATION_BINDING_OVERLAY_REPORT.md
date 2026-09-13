@@ -42,12 +42,24 @@ runtime state and routing Boolean.
 - Actual private-source reconstruction: PASS, 32 candidate / 29 unavailable.
 - Public conformance matrix regeneration: PASS, 61 rows, 0 green.
 - Private overlay/contract/projection cross-check: PASS.
+- A create-new, hash-bound 32-case request and one-session surface inventory runner pass exact-target
+  execution: 32/32 completed, 22 enabled in the prepared context, 10 disabled in context and 14/14
+  documented default reads passed. Configuration-only validation and 25 planner/runner/evidence tests
+  pass. The runner probes `IsActionEnable`, `CreateAction` and read-only defaults without executing
+  the candidate under probe. The table-create candidate is used 30 times only to construct
+  disposable table contexts and 176 fixture-control executions are recorded separately; none can
+  qualify runtime support. Redacted evidence is stored at
+  `implementation/p06/evidence/target/p06-table-automation-candidate-32-surface.current-2020.attempt01.v1.json`.
+- The 22-case direct Hangul attempt 04 timed out at the first `open_input` while waiting for the
+  user-owned access approval. It completed 0/22, preserved unchanged inputs and cleaned its owned HWP
+  process with 0 remaining. This failure is not replaced by the successful surface inventory.
 - Runtime states remain 61 `unverified`; routing remains disabled for 61/61.
 - Differentials remain 61 `not_run`.
 
 ## Next boundary
 
-First complete the already prepared 22-case direct Hangul lifecycle/render batch. Then execute
-target-bound disposable runtime qualification for the 32 candidates, continue exact review or
-explicit unavailable evidence for the remaining 29, and run direct/automation differentials. No row
-is release-green until its own direct oracle, runtime binding and exact differential all pass.
+Rerun the 22-case direct Hangul lifecycle/render batch when the user can approve access once, then
+perform original-detail render review. The 32-case surface inventory remains non-promoting;
+target-bound disposable runtime qualification, the remaining 29 unavailable rows and
+direct/automation differentials still follow. No row is release-green until its own direct oracle,
+runtime binding and exact differential all pass.

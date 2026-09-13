@@ -109,7 +109,7 @@
 
 1. Goal pursuit is active at `max`; finish P06 in order before resuming P07 and later phases. No remote push is implied.
 2. Attempts 01 through 03 of the 22-case wrapper are preserved failed evidence. On a fresh create-new attempt, accept the Hangul file-access prompt with `모두 허용` once before the watchdog expires. The wrapper then runs all 22 lifecycles, the combined typed/cache oracle and 144-DPI render preparation; inspect every generated PNG at original detail before one matrix promotion.
-3. The six-candidate disposable execution/Undo canary and 32/29 exact-source binding review are complete. Next runtime-qualify the 32 candidates, resolve the 29 unavailable rows and run exact product differentials under separately locked batches; do not promote runtime support or routing from source mapping or component canaries.
+3. The six-candidate execution/Undo canary, 32/29 exact-source review and 32/32 one-session surface inventory are component-complete without runtime/routing promotion. Direct 22-case attempt 04 timed out at user-owned access approval with 0/22 and clean process recovery; rerun it with one approval, perform original-detail render review, then runtime-qualify 32 candidates, resolve 29 unavailable rows and execute exact product differentials under locked batches.
 4. Resume P07 target/render/differential Gates only after P06, then continue P08 onward in ledger order.
 
 ## Context pack and archive pointers
