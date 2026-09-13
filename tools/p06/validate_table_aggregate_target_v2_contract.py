@@ -43,7 +43,7 @@ EXPECTED_TARGET = {
 
 SOURCE_LOCKS = {
     "protocol/private/p06-table-aggregate-hwpx-v1.json":
-        "ef4252c965947f0ba5611f9c9f0cee0f3b39e7fcc92abf0176e50264c6c9dd1e",
+        "48ef162f3d52231b92946240323283a8d6a4320715efc84e9ef243fb8cb35f87",
     "tools/p06/validate_table_aggregate_hwpx_contract.py":
         "2093c62cb0f8d5435a3c0ca2e66758d7e36cd8a13600fff48f465187ea40b230",
     "crates/hwpx-package/src/table_ruling_hwpx/aggregate_hwpx.rs":

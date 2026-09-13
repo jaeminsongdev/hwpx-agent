@@ -10,7 +10,7 @@ use hwpx_package::{
     TABLE_NUMBER_FORMAT_HWPX_PROFILE_ID, TABLE_NUMBER_FORMAT_HWPX_SCHEMA_VERSION,
     TableFormulaHwpxLimits, TableNumberFormatHwpxError, TableNumberFormatHwpxLowerer,
     TableNumberFormatHwpxReadback, TableNumberFormatHwpxReader, TableNumberFormatHwpxRequest,
-    TableNumberFormatHwpxRequestDraft,
+    TableNumberFormatHwpxRequestDraft, TablePaginationHwpxLimits, TablePaginationHwpxReader,
 };
 
 type TestResult = Result<(), Box<dyn std::error::Error>>;
@@ -31,6 +31,26 @@ fn section(visible: &str, last_result: &str, result_format: &str) -> Vec<u8> {
         r#"<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><hs:sec xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph"><hp:tbl rowCnt="1" colCnt="3"><hp:tr><hp:tc><hp:subList><hp:p><hp:run><hp:t>1200</hp:t></hp:run></hp:p></hp:subList><hp:cellAddr colAddr="0" rowAddr="0"/><hp:cellSpan colSpan="1" rowSpan="1"/></hp:tc><hp:tc><hp:subList><hp:p><hp:run><hp:t>3400</hp:t></hp:run></hp:p></hp:subList><hp:cellAddr colAddr="1" rowAddr="0"/><hp:cellSpan colSpan="1" rowSpan="1"/></hp:tc><hp:tc><hp:subList><hp:p><hp:run><hp:ctrl><hp:fieldBegin id="100" type="FORMULA" name="" editable="0" dirty="0" zorder="-1" fieldid="101"><hp:parameters cnt="5" name=""><hp:integerParam name="Prop">8</hp:integerParam><hp:stringParam name="Command">=SUM(LEFT)??{result_format};;{last_result}</hp:stringParam><hp:stringParam name="Formula">=SUM(LEFT)</hp:stringParam><hp:stringParam name="ResultFormat">{result_format}</hp:stringParam><hp:stringParam name="LastResult">{last_result}</hp:stringParam></hp:parameters></hp:fieldBegin></hp:ctrl><hp:t>{visible}</hp:t><hp:ctrl><hp:fieldEnd beginIDRef="100" fieldid="101"/></hp:ctrl><hp:t/></hp:run></hp:p></hp:subList><hp:cellAddr colAddr="2" rowAddr="0"/><hp:cellSpan colSpan="1" rowSpan="1"/></hp:tc></hp:tr></hp:tbl></hs:sec>"#
     )
     .into_bytes()
+}
+
+fn paginated_section(
+    visible: &str,
+    last_result: &str,
+    result_format: &str,
+) -> Result<Vec<u8>, std::string::FromUtf8Error> {
+    Ok(
+        String::from_utf8(section(visible, last_result, result_format))?
+            .replace(
+                "<hp:tbl rowCnt=\"1\" colCnt=\"3\">",
+                concat!(
+                    "<hp:tbl lock=\"0\" pageBreak=\"CELL\" repeatHeader=\"0\" rowCnt=\"1\" ",
+                    "colCnt=\"3\" cellSpacing=\"0\" noAdjust=\"0\">",
+                    "<hp:sz/><hp:pos/><hp:outMargin/><hp:inMargin/>"
+                ),
+            )
+            .replace("<hp:tc>", "<hp:tc header=\"0\">")
+            .into_bytes(),
+    )
 }
 
 fn digest(character: char) -> String {
@@ -256,6 +276,47 @@ fn integer_format_changes_exact_native_fields_and_preserves_everything_else() ->
         after.selected_formulas()[0].cache(),
         source.selected_formulas()[0].cache()
     );
+    Ok(())
+}
+
+#[test]
+fn every_number_format_preserves_page_split_semantics() -> TestResult {
+    let source_bytes = paginated_section("4,600", "4,600", "%g,")?;
+    let source = read(&source_bytes)?;
+    let source_pagination = TablePaginationHwpxReader::read_in_section(
+        &source_bytes,
+        0,
+        TablePaginationHwpxLimits::default(),
+    )?;
+
+    let mut target_formats = vec![FormulaNumberFormat::General];
+    for decimal_places in 0..=4 {
+        for use_grouping in [false, true] {
+            target_formats.push(FormulaNumberFormat::Number {
+                decimal_places,
+                use_grouping,
+            });
+        }
+    }
+    for target_format in target_formats {
+        let format_plan = plan(&source, target_format)?;
+        let (output, _) = lower(&source_bytes, &source, &format_plan)?;
+        let target_pagination = TablePaginationHwpxReader::read_in_section(
+            &output,
+            0,
+            TablePaginationHwpxLimits::default(),
+        )?;
+        assert_eq!(source_pagination.page_split, target_pagination.page_split);
+        assert_eq!(
+            source_pagination.repeat_header_rows,
+            target_pagination.repeat_header_rows
+        );
+        assert_eq!(source_pagination.caption, target_pagination.caption);
+        assert_eq!(
+            (source_pagination.row_count, source_pagination.column_count),
+            (target_pagination.row_count, target_pagination.column_count)
+        );
+    }
     Ok(())
 }
 

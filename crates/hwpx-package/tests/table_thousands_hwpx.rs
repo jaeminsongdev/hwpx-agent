@@ -5,8 +5,9 @@ use domain_ir::{
 };
 use hwpx_package::{
     TABLE_THOUSANDS_HWPX_PROFILE_ID, TABLE_THOUSANDS_HWPX_SCHEMA_VERSION, TableFormulaHwpxLimits,
-    TableThousandsHwpxError, TableThousandsHwpxLowerer, TableThousandsHwpxReadback,
-    TableThousandsHwpxReader, TableThousandsHwpxRequest, TableThousandsHwpxRequestDraft,
+    TablePaginationHwpxLimits, TablePaginationHwpxReader, TableThousandsHwpxError,
+    TableThousandsHwpxLowerer, TableThousandsHwpxReadback, TableThousandsHwpxReader,
+    TableThousandsHwpxRequest, TableThousandsHwpxRequestDraft,
 };
 
 type TestResult = Result<(), Box<dyn std::error::Error>>;
@@ -27,6 +28,26 @@ fn section(visible: &str, last_result: &str, result_format: &str) -> Vec<u8> {
         r#"<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><hs:sec xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph"><hp:tbl rowCnt="1" colCnt="3"><hp:tr><hp:tc><hp:subList><hp:p><hp:run><hp:t>1200</hp:t></hp:run></hp:p></hp:subList><hp:cellAddr colAddr="0" rowAddr="0"/><hp:cellSpan colSpan="1" rowSpan="1"/></hp:tc><hp:tc><hp:subList><hp:p><hp:run><hp:t>3400</hp:t></hp:run></hp:p></hp:subList><hp:cellAddr colAddr="1" rowAddr="0"/><hp:cellSpan colSpan="1" rowSpan="1"/></hp:tc><hp:tc><hp:subList><hp:p><hp:run><hp:ctrl><hp:fieldBegin id="100" type="FORMULA" name="" editable="0" dirty="0" zorder="-1" fieldid="101"><hp:parameters cnt="5" name=""><hp:integerParam name="Prop">8</hp:integerParam><hp:stringParam name="Command">=SUM(LEFT)??{result_format};;{last_result}</hp:stringParam><hp:stringParam name="Formula">=SUM(LEFT)</hp:stringParam><hp:stringParam name="ResultFormat">{result_format}</hp:stringParam><hp:stringParam name="LastResult">{last_result}</hp:stringParam></hp:parameters></hp:fieldBegin></hp:ctrl><hp:t>{visible}</hp:t><hp:ctrl><hp:fieldEnd beginIDRef="100" fieldid="101"/></hp:ctrl><hp:t/></hp:run></hp:p></hp:subList><hp:cellAddr colAddr="2" rowAddr="0"/><hp:cellSpan colSpan="1" rowSpan="1"/></hp:tc></hp:tr></hp:tbl></hs:sec>"#
     )
     .into_bytes()
+}
+
+fn paginated_section(
+    visible: &str,
+    last_result: &str,
+    result_format: &str,
+) -> Result<Vec<u8>, std::string::FromUtf8Error> {
+    Ok(
+        String::from_utf8(section(visible, last_result, result_format))?
+            .replace(
+                "<hp:tbl rowCnt=\"1\" colCnt=\"3\">",
+                concat!(
+                    "<hp:tbl lock=\"0\" pageBreak=\"CELL\" repeatHeader=\"0\" rowCnt=\"1\" ",
+                    "colCnt=\"3\" cellSpacing=\"0\" noAdjust=\"0\">",
+                    "<hp:sz/><hp:pos/><hp:outMargin/><hp:inMargin/>"
+                ),
+            )
+            .replace("<hp:tc>", "<hp:tc header=\"0\">")
+            .into_bytes(),
+    )
 }
 
 fn read(section: &[u8]) -> Result<TableThousandsHwpxReadback, TableThousandsHwpxError> {
@@ -158,6 +179,49 @@ fn remove_changes_only_visible_result_and_preserves_native_metadata() -> TestRes
     );
     assert!(draft_debug.contains("<redacted>"));
     assert!(!draft_debug.contains(FLOW));
+    Ok(())
+}
+
+#[test]
+fn add_and_remove_preserve_page_split_semantics() -> TestResult {
+    for (mode, visible, last_result, result_format) in [
+        (TableThousandsMode::Remove, "4,600", "4,600", "%g,"),
+        (TableThousandsMode::Add, "4600", "4,600", "%g,"),
+    ] {
+        let source_bytes = paginated_section(visible, last_result, result_format)?;
+        let source = read(&source_bytes)?;
+        let source_pagination = TablePaginationHwpxReader::read_in_section(
+            &source_bytes,
+            0,
+            TablePaginationHwpxLimits::default(),
+        )?;
+        let plan = plan(&source, mode)?;
+        let request = request(&source_bytes, &source, &plan)?;
+        let (output, _) = TableThousandsHwpxLowerer::lower_in_section_with_receipt(
+            &request,
+            &source_bytes,
+            &plan,
+            FLOW,
+            TableFormulaHwpxLimits::default(),
+            formula_limits()?,
+        )?;
+        let target_pagination = TablePaginationHwpxReader::read_in_section(
+            &output,
+            0,
+            TablePaginationHwpxLimits::default(),
+        )?;
+
+        assert_eq!(source_pagination.page_split, target_pagination.page_split);
+        assert_eq!(
+            source_pagination.repeat_header_rows,
+            target_pagination.repeat_header_rows
+        );
+        assert_eq!(source_pagination.caption, target_pagination.caption);
+        assert_eq!(
+            (source_pagination.row_count, source_pagination.column_count),
+            (target_pagination.row_count, target_pagination.column_count)
+        );
+    }
     Ok(())
 }
 

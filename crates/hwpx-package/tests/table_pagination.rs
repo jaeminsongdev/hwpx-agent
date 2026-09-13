@@ -1,8 +1,9 @@
-use domain_ir::{CaptionSide, TablePageSplitPolicy};
+use domain_ir::{CaptionSide, FormulaLimitConfig, FormulaLimits, TablePageSplitPolicy};
 use hwpx_package::{
-    TABLE_PAGINATION_HWPX_PROFILE_ID, TableCaptionHwpxTarget, TablePaginationHwpxError,
-    TablePaginationHwpxLimitConfig, TablePaginationHwpxLimits, TablePaginationHwpxLowerer,
-    TablePaginationHwpxReader, TablePaginationHwpxTarget,
+    TABLE_PAGINATION_HWPX_PROFILE_ID, TableCaptionHwpxTarget, TableFormulaHwpxLimits,
+    TableFormulaHwpxReader, TablePaginationHwpxError, TablePaginationHwpxLimitConfig,
+    TablePaginationHwpxLimits, TablePaginationHwpxLowerer, TablePaginationHwpxReader,
+    TablePaginationHwpxTarget,
 };
 use sha2::{Digest as _, Sha256};
 
@@ -82,6 +83,48 @@ fn section(tables: &[String]) -> Vec<u8> {
         tables.join("")
     )
     .into_bytes()
+}
+
+fn formula_limits() -> FormulaLimits {
+    FormulaLimits::new(FormulaLimitConfig {
+        rows: 8,
+        columns: 8,
+        ..FormulaLimitConfig::default()
+    })
+    .must("formula limits")
+}
+
+fn formula_table_body(page_break: &str, repeat_header: &str, caption: bool) -> String {
+    let row = format!(
+        concat!(
+            "<hp:tr>",
+            "<hp:tc header=\"{0}\"><hp:subList><hp:p><hp:run><hp:t>17</hp:t>",
+            "</hp:run></hp:p></hp:subList><hp:cellAddr colAddr=\"0\" rowAddr=\"0\"/>",
+            "<hp:cellSpan colSpan=\"1\" rowSpan=\"1\"/></hp:tc>",
+            "<hp:tc header=\"{0}\"><hp:subList><hp:p><hp:run><hp:t>25</hp:t>",
+            "</hp:run></hp:p></hp:subList><hp:cellAddr colAddr=\"1\" rowAddr=\"0\"/>",
+            "<hp:cellSpan colSpan=\"1\" rowSpan=\"1\"/></hp:tc>",
+            "<hp:tc header=\"{0}\"><hp:subList><hp:p><hp:run charPrIDRef=\"0\"><hp:ctrl>",
+            "<hp:fieldBegin id=\"101\" type=\"FORMULA\" name=\"\" editable=\"0\" dirty=\"0\" ",
+            "zorder=\"-1\" fieldid=\"202\"><hp:parameters cnt=\"5\" name=\"\">",
+            "<hp:integerParam name=\"Prop\">8</hp:integerParam>",
+            "<hp:stringParam name=\"Command\">=SUM(LEFT)??%g,;;42</hp:stringParam>",
+            "<hp:stringParam name=\"Formula\">=SUM(LEFT)</hp:stringParam>",
+            "<hp:stringParam name=\"ResultFormat\">%g,</hp:stringParam>",
+            "<hp:stringParam name=\"LastResult\">42</hp:stringParam>",
+            "</hp:parameters></hp:fieldBegin></hp:ctrl><hp:t>42</hp:t><hp:ctrl>",
+            "<hp:fieldEnd beginIDRef=\"101\" fieldid=\"202\"/></hp:ctrl><hp:t/></hp:run>",
+            "</hp:p></hp:subList><hp:cellAddr colAddr=\"2\" rowAddr=\"0\"/>",
+            "<hp:cellSpan colSpan=\"1\" rowSpan=\"1\"/></hp:tc></hp:tr>"
+        ),
+        repeat_header
+    );
+    table_body(page_break, repeat_header, caption)
+        .replace("colCnt=\"1\"", "colCnt=\"3\"")
+        .replace(
+            &format!("<hp:tr><hp:tc header=\"{repeat_header}\"/></hp:tr>"),
+            &row,
+        )
 }
 
 fn target(
@@ -234,6 +277,79 @@ fn updates_existing_caption_without_changing_its_content() {
             .content_sha256,
         content_sha256
     );
+}
+
+#[test]
+fn pagination_family_preserves_formula_semantics_in_one_batch() {
+    let source = section(&[formula_table_body("CELL", "0", true)]);
+    let source_formula = TableFormulaHwpxReader::read_in_section(
+        &source,
+        0,
+        TableFormulaHwpxLimits::default(),
+        formula_limits(),
+    )
+    .must("formula source should read");
+    let source_pagination = TablePaginationHwpxReader::read_in_section(
+        &source,
+        0,
+        TablePaginationHwpxLimits::default(),
+    )
+    .must("pagination source should read");
+    let mut caption = source_pagination
+        .caption
+        .clone()
+        .must("caption should exist");
+    caption.side = CaptionSide::Bottom;
+    caption.gap_hwpunit = 1000;
+
+    let transitions = [
+        target(
+            TablePageSplitPolicy::AvoidRow,
+            1,
+            TableCaptionHwpxTarget::Existing(caption.clone()),
+        ),
+        target(
+            TablePageSplitPolicy::AvoidTable,
+            0,
+            TableCaptionHwpxTarget::Existing(caption.clone()),
+        ),
+        target(
+            TablePageSplitPolicy::Allow,
+            0,
+            TableCaptionHwpxTarget::Existing(caption),
+        ),
+    ];
+    let mut current = source;
+    for wanted in transitions {
+        current = TablePaginationHwpxLowerer::lower_in_section(
+            &current,
+            0,
+            &wanted,
+            TablePaginationHwpxLimits::default(),
+        )
+        .must("pagination transition should lower");
+        let formula = TableFormulaHwpxReader::read_in_section(
+            &current,
+            0,
+            TableFormulaHwpxLimits::default(),
+            formula_limits(),
+        )
+        .must("formula should survive pagination transition");
+        let pagination = TablePaginationHwpxReader::read_in_section(
+            &current,
+            0,
+            TablePaginationHwpxLimits::default(),
+        )
+        .must("pagination transition should reopen");
+
+        assert_eq!(formula.formula, source_formula.formula);
+        assert_eq!(
+            formula.formula_field_count,
+            source_formula.formula_field_count
+        );
+        assert_eq!(pagination.page_split, wanted.page_split);
+        assert_eq!(pagination.repeat_header_rows, wanted.repeat_header_rows);
+    }
 }
 
 #[test]

@@ -97,7 +97,7 @@ SOURCE_LOCKS = {
         "5c7d538880cc26259c8981a69df51fce54b795f1bd1b0204717fc860718fc37b"
     ),
     "crates/hwpx-package/tests/table_number_format_hwpx.rs": (
-        "3706b38080a4df8775b0252295d147d4af947092217224c0bb80f6d261994084"
+        "964784adb96c11b7317027677bfa3606b0224f31e214e3cfcb3b472ae3d2fdcf"
     ),
     "crates/hwpx-package/examples/p06_09_table_number_format_source_oracle.rs": (
         "e42a24aa8bb4cdaf03e8115da1785bc18f7b3933f063ec466e3555d9c324977c"
@@ -281,6 +281,7 @@ IMPLEMENTATION_MARKERS = {
     ),
     "crates/hwpx-package/tests/table_number_format_hwpx.rs": (
         "integer_format_changes_exact_native_fields_and_preserves_everything_else",
+        "every_number_format_preserves_page_split_semantics",
         "general_preserves_native_grouping_and_same_format_is_idempotent",
         "all_exact_number_tokens_and_negative_integer_are_supported",
         "request_and_build_reject_section_state_grid_flow_and_plan_drift",

@@ -6,6 +6,7 @@ use domain_ir::{
 use hwpx_package::{
     TABLE_FORMULA_HWPX_PROFILE_ID, TableFormulaHwpxError, TableFormulaHwpxLimitConfig,
     TableFormulaHwpxLimits, TableFormulaHwpxLowerer, TableFormulaHwpxReader,
+    TablePaginationHwpxLimits, TablePaginationHwpxReader,
 };
 
 type TestResult = Result<(), Box<dyn std::error::Error>>;
@@ -39,6 +40,19 @@ fn section() -> String {
   </hp:tbl></hp:run></hp:p>
 </hs:sec>"#
         .to_owned()
+}
+
+fn paginated_section() -> String {
+    section()
+        .replace(
+            "<hp:tbl id=\"100\" rowCnt=\"1\" colCnt=\"3\">",
+            concat!(
+                "<hp:tbl id=\"100\" lock=\"0\" pageBreak=\"CELL\" repeatHeader=\"0\" ",
+                "rowCnt=\"1\" colCnt=\"3\" cellSpacing=\"0\" noAdjust=\"0\">",
+                "<hp:sz/><hp:pos/><hp:outMargin/><hp:inMargin/>"
+            ),
+        )
+        .replace("<hp:tc>", "<hp:tc header=\"0\">")
 }
 
 fn target(source: &str, cache: FormulaCache) -> Result<FormulaCell, Box<dyn std::error::Error>> {
@@ -136,6 +150,46 @@ fn lowering_updates_only_command_cache_and_visible_result() -> TestResult {
         receipt.target_formula_sha256,
         wanted.canonical_sha256(formula_limits()?)?
     );
+    Ok(())
+}
+
+#[test]
+fn formula_and_cache_lowering_preserves_page_split_semantics() -> TestResult {
+    let source = paginated_section();
+    let source_pagination = TablePaginationHwpxReader::read_in_section(
+        source.as_bytes(),
+        0,
+        TablePaginationHwpxLimits::default(),
+    )?;
+    let wanted = target("SUM(A1:B1)", decimal_cache(435, 1))?;
+    let output = TableFormulaHwpxLowerer::lower_in_section(
+        source.as_bytes(),
+        0,
+        &wanted,
+        DIMENSIONS,
+        limits(),
+        formula_limits()?,
+    )?;
+    let target_pagination = TablePaginationHwpxReader::read_in_section(
+        &output,
+        0,
+        TablePaginationHwpxLimits::default(),
+    )?;
+    let target_formula =
+        TableFormulaHwpxReader::read_in_section(&output, 0, limits(), formula_limits()?)?;
+
+    assert_eq!(source_pagination.page_split, target_pagination.page_split);
+    assert_eq!(
+        source_pagination.repeat_header_rows,
+        target_pagination.repeat_header_rows
+    );
+    assert_eq!(source_pagination.caption, target_pagination.caption);
+    assert_eq!(
+        (source_pagination.row_count, source_pagination.column_count),
+        (target_pagination.row_count, target_pagination.column_count)
+    );
+    assert_eq!(target_formula.formula, wanted);
+    assert_eq!(target_formula.formula_field_count, 1);
     Ok(())
 }
 

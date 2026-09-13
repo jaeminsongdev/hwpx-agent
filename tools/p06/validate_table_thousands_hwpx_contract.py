@@ -99,7 +99,7 @@ SOURCE_LOCKS = {
         "5c7d538880cc26259c8981a69df51fce54b795f1bd1b0204717fc860718fc37b"
     ),
     "crates/hwpx-package/tests/table_thousands_hwpx.rs": (
-        "d16dd36791f66b51f63058c27db21099cc875d851d29413b63f569457d8d691e"
+        "d2510f9bd2ec45ed37f0d6db1b829dfcc4261000bc55eb4cd541ec7d28be39c8"
     ),
     "crates/hwpx-package/examples/p06_09_table_thousands_source_oracle.rs": (
         "5b9a802cb97a42e26fe4f59404a5783d8216f93bc4aee5cfd3d2000d05f015d5"
@@ -213,6 +213,7 @@ IMPLEMENTATION_MARKERS = {
     "crates/hwpx-package/tests/table_thousands_hwpx.rs": (
         "remove_changes_only_visible_result_and_preserves_native_metadata",
         "add_restores_exact_grouped_bytes_and_same_mode_is_idempotent",
+        "add_and_remove_preserve_page_split_semantics",
         "negative_decimal_grouping_is_exact_and_non_format_state_is_preserved",
         "request_and_build_both_reject_section_flow_and_plan_drift",
         "malformed_or_ambiguous_native_profiles_fail_closed",

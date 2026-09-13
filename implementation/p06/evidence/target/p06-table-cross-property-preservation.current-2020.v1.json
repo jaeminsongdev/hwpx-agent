@@ -1,0 +1,86 @@
+{
+  "schema_version": "hwpx-agent.p06-table-cross-property-preservation/v1",
+  "scope": "p06_09_static_hancom_2020_hwpx_cross_property_preservation",
+  "result": "pass",
+  "test_run": {
+    "command": "cargo test -p hwpx-package --test table_cell_style --test table_formula --test table_thousands_hwpx --test table_number_format_hwpx --test table_pagination --test table_aggregate_hwpx --test table_layout_modes_hwpx --test table_properties_hwpx",
+    "binary_count": 8,
+    "passed": 77,
+    "failed": 0,
+    "ignored": 0
+  },
+  "validation_closures": [
+    {
+      "feature_ids": ["TABLE-039", "TABLE-040", "TABLE-041", "TABLE-045", "TABLE-046", "TABLE-048"],
+      "validations": ["formula_readback", "page_split"]
+    },
+    {
+      "feature_ids": ["TABLE-035"],
+      "validations": ["formula_readback", "page_split"]
+    },
+    {
+      "feature_ids": ["TABLE-025", "TABLE-031", "TABLE-059", "TABLE-061"],
+      "validations": ["page_split"]
+    },
+    {
+      "feature_ids": ["TABLE-032", "TABLE-033"],
+      "validations": ["page_split"]
+    },
+    {
+      "feature_ids": ["TABLE-049"],
+      "validations": ["page_split"]
+    },
+    {
+      "feature_ids": ["TABLE-042", "TABLE-043", "TABLE-044", "TABLE-055"],
+      "validations": ["formula_readback"]
+    }
+  ],
+  "source_locks": [
+    {
+      "path": "crates/hwpx-package/tests/table_cell_style.rs",
+      "sha256": "73496e6482f38bc8f2f97c969f3c722c976cc29eb1ba97d6aa1c7b421f1fb9a5"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_formula.rs",
+      "sha256": "2a212bfc6b602100cc4d83701e5e5f772738f4d39d5f5c059c0cd2170e46c6f4"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_thousands_hwpx.rs",
+      "sha256": "d2510f9bd2ec45ed37f0d6db1b829dfcc4261000bc55eb4cd541ec7d28be39c8"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_number_format_hwpx.rs",
+      "sha256": "964784adb96c11b7317027677bfa3606b0224f31e214e3cfcb3b472ae3d2fdcf"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_pagination.rs",
+      "sha256": "72e545d1f346e5edf7637f276e702bf9c113610a4ce3167db2ca185d2fe8b0a6"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_aggregate_hwpx.rs",
+      "sha256": "040eca84d240a1e9ace4e2a0bee60d61ee9315ad3b8a709e81a5c525052e6533"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_layout_modes_hwpx.rs",
+      "sha256": "eb8658285b65df941c3bebe4ae81b129b33ee92a6741dfe1ec901384de07fc7e"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_properties_hwpx.rs",
+      "sha256": "637991f05ff6f9952309f9445c61f5b83668a714008b50d0ef69d1386244f19b"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_CROSS_PROPERTY_BATCH_REPORT.md",
+      "sha256": "d910f96b5e4c4bd23b056f73fbf470f4f6c0b25b7256e2e90472115db17434a1"
+    }
+  ],
+  "claims": {
+    "static_hwpx_validation": true,
+    "licensed_target_runtime": false,
+    "automation_binding_qualified": false,
+    "routing_enabled": false,
+    "differential_state": "not_run",
+    "p06_09_complete": false,
+    "p06_complete": false,
+    "product_complete": false
+  }
+}

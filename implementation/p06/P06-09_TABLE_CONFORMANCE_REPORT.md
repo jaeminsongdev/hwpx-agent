@@ -217,8 +217,10 @@ The machine-readable authority is
   This is static integration evidence, not licensed Hangul or render evidence.
 - The remaining 22 target candidates now share one exact single-HWP-session lifecycle runner, so one
   user-owned `allow all` decision can cover the 2/10/10 prepared groups without 22 separate prompts.
-  Attempt 01 timed out at TABLE-016 `open_input`; all 22 inputs remained exact, no HWPX/PDF output
-  was published and the owned HWP process was cleaned. A combined offline oracle now admits only a
+  Attempts 01 through 03 timed out at TABLE-016 `open_input` before the user-owned approval; every
+  run kept all 22 inputs exact, published no HWPX/PDF output and cleaned its owned HWP process.
+  Attempt 03 trace SHA-256 is
+  `577771fdbde65e572b0bfc59697d1a5334101927764b5afaeba6f8f721071356`. A combined offline oracle now admits only a
   complete 22-case success trace, then reuses all three existing typed semantic readers directly;
   the failed attempt is rejected before any oracle receipt is created. A single end-to-end wrapper
   now creates a new attempt directory, runs that one HWP session, hashes the resulting trace and
@@ -281,6 +283,16 @@ and the actual attempt-03 request/trace/public-evidence chain passes with 6 case
 2 style effects, 6 exact Undo results and zero Action-identifier leaks. The verifier deliberately
 returns runtime support `unverified` and differential `not_run`.
 
+The cross-property preservation batch now closes the previously missing formula/pagination
+validation combinations for 18 rows. One Cargo invocation passed eight integration binaries and
+77/77 tests. Five new checks exercise a formula-bearing paginated table through cell-style,
+formula/cache, thousands, number-format and pagination lowerers; existing aggregate, layout-mode
+and property package tests supply the other operation-bound preservation paths. This reduces
+missing validation instances from 47 to 22 without changing any direct stage, automation binding,
+runtime state, differential state or release decision. Authority:
+`implementation/p06/P06-09_TABLE_CROSS_PROPERTY_BATCH_REPORT.md` and
+`implementation/p06/evidence/target/p06-table-cross-property-preservation.current-2020.v1.json`.
+
 ## Validation and blockers
 
 The generator verifies 61-row identity across catalog, contract and projection; exact target;
@@ -290,7 +302,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 22 rows below direct oracle,
-47 rows with at least one missing validation, 61 unverified automation runtime rows and 61 missing
+22 rows with one missing render validation, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -299,8 +311,7 @@ P06-09's matrix engine and current snapshot are implemented, but the roadmap com
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
 1. close the remaining 22 integration-only target oracles in the existing one-session batch;
-2. supply remaining feature-specific validations, exact current-target automation bindings and safe
-   disposable differentials; and
+2. supply exact current-target automation bindings and safe disposable differentials; and
 3. regenerate until all 61 rows are green, then run the P06 hard Gate.
 
 P06-09 and P06 remain in progress. No production, other-PC/version or whole-product completion is

@@ -1,8 +1,10 @@
+use domain_ir::{FormulaLimitConfig, FormulaLimits};
 use hwpx_package::{
     CellMargins, CellProtection, CellTextDirection, CellVerticalAlignment, HorizontalAlignment,
     ParagraphStyleCatalog, ParagraphStyleCatalogReader, ParagraphStyleLimits, TableCellStyle,
     TableCellStyleError, TableCellStyleLimitConfig, TableCellStyleLimits, TableCellStyleLowerer,
-    TableCellStyleProfile, TableCellStyleReader,
+    TableCellStyleProfile, TableCellStyleReader, TableFormulaHwpxLimits, TableFormulaHwpxReader,
+    TablePaginationHwpxLimits, TablePaginationHwpxReader,
 };
 use sha2::{Digest as _, Sha256};
 
@@ -48,6 +50,67 @@ fn hangul_2020_fragment() -> Result<Vec<u8>, Box<dyn std::error::Error>> {
     let address_through_margin = &source[start..split];
     let sub_list = &source[split..end];
     Ok(format!("{prefix}{sub_list}{address_through_margin}</hp:tc>").into_bytes())
+}
+
+fn styled_cell(name: &str, column: u32, paragraph: &str) -> String {
+    format!(
+        concat!(
+            "<hp:tc name=\"{name}\" header=\"0\" hasMargin=\"1\" protect=\"0\" ",
+            "editable=\"0\" dirty=\"0\" borderFillIDRef=\"1\">",
+            "<hp:subList id=\"cell-{column}\" textDirection=\"HORIZONTAL\" lineWrap=\"BREAK\" ",
+            "vertAlign=\"TOP\" linkListIDRef=\"0\" linkListNextIDRef=\"0\" textWidth=\"0\" ",
+            "textHeight=\"0\" hasTextRef=\"0\" hasNumRef=\"0\">{paragraph}</hp:subList>",
+            "<hp:cellAddr colAddr=\"{column}\" rowAddr=\"0\"/>",
+            "<hp:cellSpan colSpan=\"1\" rowSpan=\"1\"/>",
+            "<hp:cellSz width=\"10000\" height=\"5000\"/>",
+            "<hp:cellMargin left=\"141\" right=\"141\" top=\"141\" bottom=\"141\"/>",
+            "</hp:tc>"
+        ),
+        name = name,
+        column = column,
+        paragraph = paragraph
+    )
+}
+
+fn formula_style_section() -> Vec<u8> {
+    let plain_a = r#"<hp:p id="11" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"><hp:t>17</hp:t></hp:run></hp:p>"#;
+    let plain_b = r#"<hp:p id="12" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"><hp:t>25</hp:t></hp:run></hp:p>"#;
+    let formula = concat!(
+        "<hp:p id=\"13\" paraPrIDRef=\"0\" styleIDRef=\"0\"><hp:run charPrIDRef=\"0\">",
+        "<hp:ctrl><hp:fieldBegin id=\"101\" type=\"FORMULA\" name=\"\" editable=\"0\" ",
+        "dirty=\"0\" zorder=\"-1\" fieldid=\"202\"><hp:parameters cnt=\"5\" name=\"\">",
+        "<hp:integerParam name=\"Prop\">8</hp:integerParam>",
+        "<hp:stringParam name=\"Command\">=SUM(LEFT)??%g,;;42</hp:stringParam>",
+        "<hp:stringParam name=\"Formula\">=SUM(LEFT)</hp:stringParam>",
+        "<hp:stringParam name=\"ResultFormat\">%g,</hp:stringParam>",
+        "<hp:stringParam name=\"LastResult\">42</hp:stringParam>",
+        "</hp:parameters></hp:fieldBegin></hp:ctrl><hp:t>42</hp:t><hp:ctrl>",
+        "<hp:fieldEnd beginIDRef=\"101\" fieldid=\"202\"/></hp:ctrl><hp:t/></hp:run></hp:p>"
+    );
+    format!(
+        concat!(
+            "<hs:sec xmlns:hs=\"http://www.hancom.co.kr/hwpml/2011/section\" ",
+            "xmlns:hp=\"{ns}\"><hp:tbl id=\"100\" lock=\"0\" pageBreak=\"CELL\" ",
+            "repeatHeader=\"0\" rowCnt=\"1\" colCnt=\"3\" cellSpacing=\"0\" noAdjust=\"0\">",
+            "<hp:sz/><hp:pos/><hp:outMargin/><hp:inMargin/><hp:tr>{cells}</hp:tr></hp:tbl></hs:sec>"
+        ),
+        ns = NS,
+        cells = [
+            styled_cell("A1", 0, plain_a),
+            styled_cell("B1", 1, plain_b),
+            styled_cell("C1", 2, formula),
+        ]
+        .join("")
+    )
+    .into_bytes()
+}
+
+fn formula_limits() -> Result<FormulaLimits, Box<dyn std::error::Error>> {
+    Ok(FormulaLimits::new(FormulaLimitConfig {
+        rows: 8,
+        columns: 8,
+        ..FormulaLimitConfig::default()
+    })?)
 }
 
 fn target(alignment: HorizontalAlignment) -> TableCellStyle {
@@ -106,6 +169,63 @@ fn lowers_every_style_dimension_and_preserves_content() -> TestResult {
     assert!(text.contains("A &amp; B"));
     assert!(text.contains("둘째 줄"));
     assert_eq!(text.matches("paraPrIDRef=\"0\"").count(), 2);
+    Ok(())
+}
+
+#[test]
+fn complete_cell_style_batch_preserves_formula_and_page_split() -> TestResult {
+    let source = formula_style_section();
+    let source_formula = TableFormulaHwpxReader::read_in_section(
+        &source,
+        0,
+        TableFormulaHwpxLimits::default(),
+        formula_limits()?,
+    )?;
+    let source_pagination = TablePaginationHwpxReader::read_in_section(
+        &source,
+        0,
+        TablePaginationHwpxLimits::default(),
+    )?;
+    let catalog = sample_catalog(HorizontalAlignment::Center)?;
+    let output = TableCellStyleLowerer::lower_in_section_with_profile(
+        &source,
+        2,
+        TableCellStyleProfile::Hangul2020V2,
+        &target(HorizontalAlignment::Center),
+        &catalog,
+        TableCellStyleLimits::default(),
+    )?;
+    let target_formula = TableFormulaHwpxReader::read_in_section(
+        &output,
+        0,
+        TableFormulaHwpxLimits::default(),
+        formula_limits()?,
+    )?;
+    let target_pagination = TablePaginationHwpxReader::read_in_section(
+        &output,
+        0,
+        TablePaginationHwpxLimits::default(),
+    )?;
+    let style = TableCellStyleReader::read_in_section_with_profile(
+        &output,
+        2,
+        TableCellStyleProfile::Hangul2020V2,
+        &catalog,
+        TableCellStyleLimits::default(),
+    )?;
+
+    assert_eq!(style.style, target(HorizontalAlignment::Center));
+    assert_eq!(source_formula.formula, target_formula.formula);
+    assert_eq!(
+        source_formula.formula_field_count,
+        target_formula.formula_field_count
+    );
+    assert_eq!(source_pagination.page_split, target_pagination.page_split);
+    assert_eq!(
+        source_pagination.repeat_header_rows,
+        target_pagination.repeat_header_rows
+    );
+    assert_eq!(source_pagination.caption, target_pagination.caption);
     Ok(())
 }
 

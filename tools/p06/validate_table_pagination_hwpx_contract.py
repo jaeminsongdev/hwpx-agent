@@ -20,7 +20,7 @@ SOURCE_LOCKS = {
     "crates/hwpx-package/src/table_pagination.rs":
         "d667a4e34248379c6139ac62d1e0b385541d6dd959aeb8444b143077c6578e04",
     "crates/hwpx-package/tests/table_pagination.rs":
-        "7485a352eef9f75aa1abb0016eb114cb227f13a49b7e0fbd178e648c6d01daf1",
+        "72e545d1f346e5edf7637f276e702bf9c113610a4ce3167db2ca185d2fe8b0a6",
 }
 
 IMPLEMENTATION_MARKERS = {
@@ -35,6 +35,7 @@ IMPLEMENTATION_MARKERS = {
         "reads_all_native_page_break_mappings",
         "lowers_a_contiguous_multirow_header_prefix",
         "updates_existing_caption_without_changing_its_content",
+        "pagination_family_preserves_formula_semantics_in_one_batch",
         "enforces_finite_input_table_grid_and_dimension_limits",
     ),
     REPORT: (

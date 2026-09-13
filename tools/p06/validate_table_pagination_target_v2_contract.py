@@ -44,9 +44,9 @@ OUTPUT_SECTION_SHA256 = (
 
 SOURCE_LOCKS = {
     "protocol/private/p06-table-pagination-hwpx-v1.json":
-        "51166139847b2050f560d09e516aa756ed03e5f5ca5012087d3e739f2adaec8c",
+        "2120fd97b4cf969d1c9fb2ce0be349ddc45eb27aac2c278e7d7b4b7c95f3c603",
     "tools/p06/validate_table_pagination_hwpx_contract.py":
-        "3290b5ef8944406cfaec0440286b81e60b50a3ada99beacb167e82d99f4c0c69",
+        "0c930dcf7df061d944d614d623a7be3f2831d612b53588a79c8b08155fddd12a",
     "crates/hwpx-package/src/table_pagination.rs":
         "d667a4e34248379c6139ac62d1e0b385541d6dd959aeb8444b143077c6578e04",
     "crates/hwpx-package/examples/p06_07_table_pagination_target_fixture.rs":

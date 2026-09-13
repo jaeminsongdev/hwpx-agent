@@ -29,7 +29,7 @@ SOURCE_LOCKS = {
     "crates/hwpx-package/src/table_formula.rs":
         "bc500aa8da4bea9e31f633e820164f41be7635a324f7378f6ce352e024a5d803",
     "crates/hwpx-package/tests/table_formula.rs":
-        "c279de8ab7e976071446d5fa74d7bb24fc5c39d6383f82aadf03b365eafef5f3",
+        "2a212bfc6b602100cc4d83701e5e5f772738f4d39d5f5c059c0cd2170e46c6f4",
     "crates/hwpx-package/examples/p06_06_table_formula_source_adapter.rs":
         "630d7efe3dbd4409378d5eea0519ba4f5131e9bcea7d8e7996f8249ccabc51ce",
 }
@@ -52,6 +52,7 @@ IMPLEMENTATION_MARKERS = {
     "crates/hwpx-package/tests/table_formula.rs": (
         "reads_exact_hancom_2020_left_formula_as_locale_neutral_ast",
         "lowering_updates_only_command_cache_and_visible_result",
+        "formula_and_cache_lowering_preserves_page_split_semantics",
         "source_field_shape_and_identity_drift_fail_closed",
         "finite_limits_are_enforced_before_publication",
     ),
