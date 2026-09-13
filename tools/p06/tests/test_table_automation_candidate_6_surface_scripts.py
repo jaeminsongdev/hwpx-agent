@@ -13,6 +13,9 @@ PLANNER = ROOT / "tools/p06/plan_table_automation_candidate_6_batch.py"
 EXPECTED_REQUEST_SHA256 = (
     "d9588469b901ec31136e15f657b772f93872943c0411ac7b4794ba4feca31355"
 )
+EXPECTED_CHILD_SOURCE_SHA256 = (
+    "bc26252065a2f060b9cd718e3876600ee098a9b9ea28562268a912ace77f0eab"
+)
 EXPECTED_FEATURES = (
     "TABLE-010",
     "TABLE-015",
@@ -33,6 +36,8 @@ class CandidateSixSurfaceScriptTests(unittest.TestCase):
     def test_exact_create_new_request_identity_is_locked(self) -> None:
         self.assertIn(EXPECTED_REQUEST_SHA256, self.parent)
         self.assertIn(EXPECTED_REQUEST_SHA256, self.child)
+        self.assertIn(EXPECTED_CHILD_SOURCE_SHA256, self.parent)
+        self.assertIn("Get-NormalizedTextSha256 -Path $childPath", self.parent)
         self.assertIn(
             "p06-09-table-automation-candidate-6-20260914-02", self.parent
         )

@@ -9,6 +9,7 @@ $ErrorActionPreference = 'Stop'
 
 $expectedRequestSha256 = 'd9588469b901ec31136e15f657b772f93872943c0411ac7b4794ba4feca31355'
 $expectedExecutableSha256 = '7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce'
+$expectedChildSourceSha256 = 'bc26252065a2f060b9cd718e3876600ee098a9b9ea28562268a912ace77f0eab'
 $expectedProgId = 'HWPFrame.HwpObject.2'
 $expectedBuild = '11.0.0.9136'
 
@@ -37,6 +38,15 @@ function Get-Sha256String {
         }) -join '')
     }
     finally { $algorithm.Dispose() }
+}
+
+function Get-NormalizedTextSha256 {
+    param([Parameter(Mandatory)][string]$Path)
+    $text = [IO.File]::ReadAllText($Path, [Text.UTF8Encoding]::new($false, $true))
+    if ($text.Replace("`r`n", '').Contains("`r")) {
+        throw 'CANDIDATE_SURFACE_CHILD_SOURCE_BARE_CR'
+    }
+    return Get-Sha256String -Value $text.Replace("`r`n", "`n")
 }
 
 function Resolve-BoundedRegularFile {
@@ -159,6 +169,9 @@ $requestPath = Resolve-BoundedRegularFile -Path (Join-Path $attemptDirectory 're
 $childPath = Resolve-BoundedRegularFile -Path (
     Join-Path $PSScriptRoot 'run-hancom-2020-table-automation-candidate-6-surface-child.ps1'
 ) -Boundary $repoRoot -MaximumBytes 1048576
+if ((Get-NormalizedTextSha256 -Path $childPath) -cne $expectedChildSourceSha256) {
+    throw 'CANDIDATE_SURFACE_CHILD_SOURCE_IDENTITY_MISMATCH'
+}
 if ((Get-Sha256File -Path $requestPath) -cne $expectedRequestSha256) {
     throw 'CANDIDATE_SURFACE_REQUEST_IDENTITY_MISMATCH'
 }
@@ -196,7 +209,7 @@ if ($ValidateConfigurationOnly) {
         state = 'pass'
         case_count = 6
         request_sha256 = $expectedRequestSha256
-        child_sha256 = Get-Sha256File -Path $childPath
+        child_source_sha256 = $expectedChildSourceSha256
         target_build = $expectedBuild
         target_executable_sha256 = $expectedExecutableSha256
         client = 'windows_powershell_x86_sta'
