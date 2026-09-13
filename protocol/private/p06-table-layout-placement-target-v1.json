@@ -1,0 +1,207 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-layout-placement-target-contract/v1",
+  "scope": "p06_09_exact_current_pc_hancom_2020_geometry_layout_placement_target_batch_preparation",
+  "features": {
+    "TABLE-018": "table.equal_row_height",
+    "TABLE-019": "table.equal_column_width",
+    "TABLE-034": "table.position",
+    "TABLE-036": "table.inline_floating",
+    "TABLE-037": "table.wrap",
+    "TABLE-038": "table.outer_margin",
+    "TABLE-050": "table.row_min_height",
+    "TABLE-051": "table.column_fixed_width",
+    "TABLE-052": "table.autofit_content",
+    "TABLE-053": "table.autofit_page"
+  },
+  "predecessors": [
+    "hwpx-agent.table-geometry-hwpx.hancom-2020/1",
+    "hwpx-agent.table-layout-modes-hwpx.hancom-2020/1",
+    "hwpx-agent.table-placement-hwpx.hancom-2020/1",
+    "hwpx-agent.p06-09-table-structure-target-contract/v2"
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "crates/hwpx-package/examples/p06_09_table_layout_placement_target_fixture.rs",
+      "sha256": "6f7e0474c1bf6a678618fec4b59a09d18d22e89fbb2a22ece6a65719f81b5442"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_09_table_layout_placement_target_oracle.rs",
+      "sha256": "a4d271d2f8df041fdac6df3d226658383b6561656f9b2eaa39944d198cbc9d76"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-layout-placement-target-batch-readback.ps1",
+      "sha256": "3281a404adafb6fa84b944a58541ecf20db0ef74edc5d54f43dcf15768bdd61b"
+    },
+    {
+      "path": "implementation/p06/tests/Test-Hancom2020TableLayoutPlacementTargetBatchReadback.ps1",
+      "sha256": "7a444c1cbded1250ab7e4833314cfb52fe42ee1d719d70e129b2fe5c3f516085"
+    },
+    {
+      "path": "tools/p06/validate_table_layout_placement_target_v1_contract.py",
+      "sha256": "3e2382c650bde1056450ed8ebdf1dc64bcce235ed975cf6aec106c6cfe227f59"
+    },
+    {
+      "path": "tools/p06/tests/test_table_layout_placement_target_v1_contract.py",
+      "sha256": "158cff159b241f244a95cae115893fae3559afc66623358d2c7080fdd5687af5"
+    },
+    {
+      "path": "protocol/private/p06-table-geometry-hwpx-v1.json",
+      "sha256": "87bfdd79b7c7b5ceccbfcd6cd2137e2e0416ca4ac5e1ea61c68c256be834706d"
+    },
+    {
+      "path": "protocol/private/p06-table-layout-modes-hwpx-v1.json",
+      "sha256": "ec9d02a142a395bf502a889c703090a5cf924ef7394c33ce5b313f437dc3f1b5"
+    },
+    {
+      "path": "protocol/private/p06-table-placement-hwpx-v1.json",
+      "sha256": "38177c7a7b96b392b5adb6f81ebaa18f58e4e01db8060792474cd7733b759bbc"
+    },
+    {
+      "path": "protocol/private/p06-table-structure-target-v2.json",
+      "sha256": "f7bfcf108c53e37408c0bbe20faa720a0330fdbe9ad21b211e2c60849522642b"
+    }
+  ],
+  "exact_input": {
+    "path": "fixtures/target-build/p06-09-table-structure-target-20260913-05/table-012-insert-row-3x3.hwpx",
+    "sha256": "0459a05b8543edb2e05c9c0117f76df999c8543bad255d06d26d4b3b57388252",
+    "origin_feature_id": "TABLE-012",
+    "origin_state": "oracle_verified",
+    "rows": 4,
+    "columns": 3,
+    "master_cell_count": 12,
+    "payload_block_count": 9,
+    "formula_count": 0,
+    "page_split": "cell"
+  },
+  "fixture_publication": {
+    "directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-01",
+    "independent_retry_directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-02",
+    "current_source_rebuild_directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-03",
+    "manifest_file": "fixture-manifest.json",
+    "manifest_sha256": "33c391ff2b151f815c4e2e79c9144c53547fe87d5e35d1e856e4e796b3978faf",
+    "case_count": 10,
+    "build_count": 3,
+    "write_mode": "independent_create_new",
+    "byte_deterministic": true,
+    "all_cases_content_preserved": true
+  },
+  "cases": [
+    {
+      "feature_id": "TABLE-018",
+      "capability_id": "table.equal_row_height",
+      "file": "table-018-equal-row-height-4x3.hwpx",
+      "sha256": "1a951a8be87a04cef9b0f1a0a60c1beefa31f96e563603a1c5bf0ddb6302a3ed",
+      "semantic_sha256": "1db24b2670a752ffbbe884a191ebc1bbd69fd81318318dc6c087b6d5d70dd839"
+    },
+    {
+      "feature_id": "TABLE-019",
+      "capability_id": "table.equal_column_width",
+      "file": "table-019-equal-column-width-4x3.hwpx",
+      "sha256": "e663be87dfc3fa1f8f5ff2731d03e9fd511d53d2cd085a95aae1756053d9a964",
+      "semantic_sha256": "760d8b52ce811b1a6f83aaa7acc388434f9c197ae04abcadd4ea08e610a878fa"
+    },
+    {
+      "feature_id": "TABLE-034",
+      "capability_id": "table.position",
+      "file": "table-034-position-4x3.hwpx",
+      "sha256": "aaea19a5caede76a402fe1fb83a5390a3d0033900b7d790c8ad7adf7dd754ef7",
+      "semantic_sha256": "75c1852d9c5bf4bdd07a1092e3cf94e25cef7b4d9ba0014ec763908924718d61"
+    },
+    {
+      "feature_id": "TABLE-036",
+      "capability_id": "table.inline_floating",
+      "file": "table-036-inline-floating-4x3.hwpx",
+      "sha256": "822cd753a19d7025f6709b050bc81585085674ec2c326663d8d876ee07c23222",
+      "semantic_sha256": "accccdb9ad5911f87830feed391d29bb62b94cddc67367c9acf0fe600d74414b"
+    },
+    {
+      "feature_id": "TABLE-037",
+      "capability_id": "table.wrap",
+      "file": "table-037-wrap-4x3.hwpx",
+      "sha256": "e3473f4f596a3444c12029283eb028313f5503fb6cd751bc65e1edbe0be64e86",
+      "semantic_sha256": "478315fbdf461265a53874d7d5b033a3be21c357946ee29c011f6da89fbc80ee"
+    },
+    {
+      "feature_id": "TABLE-038",
+      "capability_id": "table.outer_margin",
+      "file": "table-038-outer-margin-4x3.hwpx",
+      "sha256": "50aa9822af0093f9078069d8b0ba93a9f2132ae590f35d0b401a8a2b398148f2",
+      "semantic_sha256": "c6ad3ac0ec6fae1d36a838218e762b5825414c5ad78707a68c9f0d71697bdcc1"
+    },
+    {
+      "feature_id": "TABLE-050",
+      "capability_id": "table.row_min_height",
+      "file": "table-050-row-min-height-4x3.hwpx",
+      "sha256": "01d404a40ab9b0b921aef5b52ee9945362dd0c11034c89016e9b95ce6d37da07",
+      "semantic_sha256": "63de3c271ae92d57288499fc921fab6a5027cb3873aef0ba3d4be6943fec6f18"
+    },
+    {
+      "feature_id": "TABLE-051",
+      "capability_id": "table.column_fixed_width",
+      "file": "table-051-column-fixed-width-4x3.hwpx",
+      "sha256": "7642ce266ff206d680319e709323d85bf60f43c25c7d5c12f42a59a801d0c2c1",
+      "semantic_sha256": "19d7dee955d19b13439b14ccd8b9c1cead5347d16181657c49dd92869a5c60c1"
+    },
+    {
+      "feature_id": "TABLE-052",
+      "capability_id": "table.autofit_content",
+      "file": "table-052-autofit-content-4x3.hwpx",
+      "sha256": "32e477fa28319808eb767f3c7dd36cdbe4a9030390a870e94d0756355c7b7e8c",
+      "semantic_sha256": "22874f868b89c3427738cfad51ab5fe35580d915f3f9d4a999fba517f66568e1"
+    },
+    {
+      "feature_id": "TABLE-053",
+      "capability_id": "table.autofit_page",
+      "file": "table-053-autofit-page-4x3.hwpx",
+      "sha256": "d37a769e3884c12ecd09335e4ccd4f666ddd8e4eae51836a7369424d2c3cd2b2",
+      "semantic_sha256": "86321461f43bed76a154474e0d9aecb7ae93cb88db4bd7a68b7e09c2ca6ecceb"
+    }
+  ],
+  "batch_runtime": {
+    "runner": "implementation/p06/tools/run-hancom-2020-table-layout-placement-target-batch-readback.ps1",
+    "oracle": "crates/hwpx-package/examples/p06_09_table_layout_placement_target_oracle.rs",
+    "target": "HWPFrame.HwpObject.2 / Hangul 2020 11.0.0.9136",
+    "case_count": 10,
+    "state": "failed_open_input",
+    "attempt_directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-01",
+    "batch_trace_sha256": "2882e3e6864db6ce666130d2d589416064a4d5f2edbe197e1e94823f03e0704f",
+    "case_trace_sha256": "ce0702436d050ce119f561d06733e4b200b335de3430fa2eacb08f0474f9a117",
+    "failed_feature_id": "TABLE-018",
+    "failed_phase": "open_input",
+    "error_code": "TABLE_PROPERTIES_TARGET_READBACK_INPUT_OPEN_RETURNED_FALSE",
+    "input_unchanged": true,
+    "output_absent": true,
+    "remaining_hwp_process_count": 0,
+    "clean_retry_directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-02"
+  },
+  "gate_decision": {
+    "fixture_preparation": "pass",
+    "actual_target_lifecycle": "failed",
+    "direct_stage_change": "none",
+    "reason": "three independent exact builds are byte-identical, but the licensed attempt failed because HwpObject.Open returned false before document read; no output was published and the clean retry batch remains unused"
+  },
+  "failure_policy": [
+    "wrong_ancestor_manifest_or_case_digest_rejects_before_output",
+    "existing_output_path_rejects_before_first_case",
+    "source_input_is_rehashed_after_fixture_build",
+    "each_case_runs_bounded_exact_target_save_reopen_pdf_lifecycle",
+    "failed_case_trace_is_preserved_and_never_promoted",
+    "typed_geometry_layout_placement_and_payload_oracle_must_all_pass",
+    "actual_pdf_requires_original_detail_visual_review_before_promotion"
+  ],
+  "not_claimed": {
+    "render_diff": false,
+    "hangul_2020_target_build": false,
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "rollback_or_retry": false,
+    "release_enabled": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}
