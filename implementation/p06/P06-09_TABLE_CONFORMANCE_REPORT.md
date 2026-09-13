@@ -220,7 +220,10 @@ The machine-readable authority is
   Attempt 01 timed out at TABLE-016 `open_input`; all 22 inputs remained exact, no HWPX/PDF output
   was published and the owned HWP process was cleaned. A combined offline oracle now admits only a
   complete 22-case success trace, then reuses all three existing typed semantic readers directly;
-  the failed attempt is rejected before any oracle receipt is created. This preparation promotes no row.
+  the failed attempt is rejected before any oracle receipt is created. A single end-to-end wrapper
+  now creates a new attempt directory, runs that one HWP session, hashes the resulting trace and
+  invokes the combined oracle automatically; configuration-only and pre-existing-attempt paths are
+  proven side-effect free. This preparation promotes no row.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 
