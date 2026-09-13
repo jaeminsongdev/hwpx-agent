@@ -1,0 +1,140 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-merge-split-target-runtime-contract/v1",
+  "scope": "p06_09_exact_current_pc_hancom_2020_merge_split_two_case_batch",
+  "features": {
+    "TABLE-016": "table.split_cell",
+    "TABLE-017": "table.merge_cells"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "crates/hwpx-package/examples/p06_09_table_merge_split_target_fixture.rs",
+      "sha256": "9f786d526f985bd3c29ae1cd94018dbb523b766fc4b784caab332393e16a970e"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_09_table_merge_split_target_oracle.rs",
+      "sha256": "09fc1ad19dfda27a7c53b73dac64a963d3f4ed488c9238339fcfad62bead9525"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-merge-split-target-batch-readback.ps1",
+      "sha256": "b395a32bbf38edd1430f03774fd6924755d4de87bb3cb1109ae543997a0bc861"
+    },
+    {
+      "path": "implementation/p06/tests/Test-Hancom2020TableMergeSplitTargetBatchReadback.ps1",
+      "sha256": "f8b01a8ecde21468fcd9965c694ce18666e6487dac33399af9a42ef68fd54f56"
+    },
+    {
+      "path": "tools/p06/validate_table_merge_split_target_runtime_v1_contract.py",
+      "sha256": "ff8717fe214ed0e6dceeaf97cc113ee0c176cc5f165de08cd4312a3f6156c9fd"
+    },
+    {
+      "path": "tools/p06/tests/test_table_merge_split_target_runtime_v1_contract.py",
+      "sha256": "eb073c13e57d095ed620c0c6b7d3e303c8dc70f48d05d4d87343b7bc8adf15e6"
+    }
+  ],
+  "exact_input": {
+    "path": "fixtures/target-build/p06-06-formula-target-20260907-01/target.hwpx",
+    "sha256": "6514a69b8c8c9d320bc19a032b16f2b71d59a38f164c690bc9e3d320a93320e5"
+  },
+  "fixture_publication": {
+    "directory": "fixtures/target-build/p06-09-table-merge-split-target-20260913-04",
+    "independent_retry_directory": "fixtures/target-build/p06-09-table-merge-split-target-20260913-05",
+    "current_source_rebuild_directory": "fixtures/target-build/p06-09-table-merge-split-target-20260913-06",
+    "manifest_file": "fixture-manifest.json",
+    "manifest_sha256": "682635284ae5686832dfd89598ea6c106c6b110119e0d54a8e8a24b63e9f3f97",
+    "case_count": 2,
+    "build_count": 3,
+    "write_mode": "independent_create_new",
+    "byte_deterministic": true,
+    "inverse_roundtrip_exact": true
+  },
+  "cases": [
+    {
+      "feature_id": "TABLE-016",
+      "capability_id": "table.split_cell",
+      "operation": "split",
+      "file": "table-016-split-cells-4x3.hwpx",
+      "sha256": "0459a05b8543edb2e05c9c0117f76df999c8543bad255d06d26d4b3b57388252",
+      "target_state_sha256": "04ea0f0e7a1a07295d1b900a4b037649d97b50da6018cf2363e01e4521dbb6f9",
+      "target_grid_sha256": "1e47eec0c3f70af39b3da30c489324fc7dbd84dba9473700468766e6bb19eb3e",
+      "target_content_sha256": "71d3739266e833b728a82deae3c958c68b02dbac5db51d0486185d3afa10e372",
+      "source_master_cell_count": 9,
+      "target_master_cell_count": 12,
+      "payload_block_count": 9
+    },
+    {
+      "feature_id": "TABLE-017",
+      "capability_id": "table.merge_cells",
+      "operation": "merge",
+      "file": "table-017-merge-cells-4x3.hwpx",
+      "sha256": "0b5e3a68d2525fffa5aba7c728849c8ace604b54eb115fe5fddf808037316884",
+      "target_state_sha256": "2d666ae3ff68413a2bc9638e71ebd7539592f0e27bdc4fcdbc5f95f435cbf683",
+      "target_grid_sha256": "0a8705cbd849dfe47913f5e390cff80a595f79e199f80b74744029fa75665dfe",
+      "target_content_sha256": "61cc35692b99a60e98ae6234483a2708b4a66b6f938e086aed5a3a61163ffba0",
+      "source_master_cell_count": 12,
+      "target_master_cell_count": 9,
+      "payload_block_count": 9
+    }
+  ],
+  "batch_runtime": {
+    "runner": "implementation/p06/tools/run-hancom-2020-table-merge-split-target-batch-readback.ps1",
+    "oracle": "crates/hwpx-package/examples/p06_09_table_merge_split_target_oracle.rs",
+    "target": "HWPFrame.HwpObject.2 / Hangul 2020 11.0.0.9136",
+    "state": "failed_open_input_timeout",
+    "attempt_directory": "fixtures/target-build/p06-09-table-merge-split-target-20260913-05",
+    "batch_trace_file": "batch-readback-trace.attempt01.json",
+    "batch_trace_sha256": "541b699cbb9b36c2088d9acb1d88716d0f6cb89d0665066c8dc2fb5af9c90ff9",
+    "attempted_case_count": 2,
+    "probed_case_count": 0,
+    "completed_case_count": 0,
+    "failed_case_count": 2,
+    "failed_feature_ids": [
+      "TABLE-016",
+      "TABLE-017"
+    ],
+    "failed_phase": "open_input",
+    "error_code": "TABLE_PROPERTIES_TARGET_READBACK_TIMEOUT",
+    "timeout_seconds_per_invocation": 30,
+    "input_unchanged_count": 2,
+    "output_absent_count": 2,
+    "cleaned_process_count": 2,
+    "remaining_hwp_process_count": 0,
+    "failure_traces": [
+      {
+        "feature_id": "TABLE-016",
+        "case_id": "table-016-split-cells-4x3",
+        "trace_file": "table-016-split-cells-4x3.hancom-2020-text-probe-trace.json",
+        "trace_sha256": "4cbe62de5a6a102ecd8af57aee5c0546e2e8bc354342c25e4fc0081ae934e88c",
+        "progress_file": "table-016-split-cells-4x3.hancom-2020-text-probe-trace.json.progress.jsonl",
+        "progress_sha256": "81595939ae1b8bc30220e11f6a4643d032a7cf8b30e821c977a41c193539291d"
+      },
+      {
+        "feature_id": "TABLE-017",
+        "case_id": "table-017-merge-cells-4x3",
+        "trace_file": "table-017-merge-cells-4x3.hancom-2020-text-probe-trace.json",
+        "trace_sha256": "b0b9a88777c2870cd622d5b9bd29571fb6907af4c9da2e92217ee937c123b4d5",
+        "progress_file": "table-017-merge-cells-4x3.hancom-2020-text-probe-trace.json.progress.jsonl",
+        "progress_sha256": "ffdc9fc2a5baf91fa48046c8080857867033b8baf4460c3075c0b504241f451c"
+      }
+    ],
+    "clean_retry_directory": "fixtures/target-build/p06-09-table-merge-split-target-20260913-06"
+  },
+  "gate_decision": {
+    "fixture_preparation": "pass",
+    "actual_target_lifecycle": "failed",
+    "direct_stage_change": "none",
+    "reason": "both independent cases timed out in open_input before text probing; both inputs remained unchanged, no output was published, both owned HWP processes were cleaned, and the clean retry batch remains unused"
+  },
+  "not_claimed": {
+    "text_probe_completed": false,
+    "save_reopen_pdf": false,
+    "typed_oracle": false,
+    "render_review": false,
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

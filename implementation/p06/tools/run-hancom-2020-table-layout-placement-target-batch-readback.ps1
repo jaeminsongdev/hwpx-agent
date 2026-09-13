@@ -142,11 +142,12 @@ foreach ($case in $cases) {
     $outputPath = Join-Path $fixtureDirectory ($baseName + '.hancom-2020-readback.hwpx')
     $pdfPath = Join-Path $fixtureDirectory ($baseName + '.hancom-2020-render.pdf')
     $caseTracePath = Join-Path $fixtureDirectory ($baseName + '.hancom-2020-trace.json')
+    $caseProgressPath = $caseTracePath + '.progress.jsonl'
     if (-not [System.IO.File]::Exists($inputPath) -or
         (Get-Sha256File -Path $inputPath) -cne [string]$case.sha256) {
         throw 'TABLE_LAYOUT_PLACEMENT_TARGET_BATCH_INPUT_IDENTITY_MISMATCH'
     }
-    foreach ($output in @($outputPath, $pdfPath, $caseTracePath)) {
+    foreach ($output in @($outputPath, $pdfPath, $caseTracePath, $caseProgressPath)) {
         if ([System.IO.File]::Exists($output)) {
             throw 'TABLE_LAYOUT_PLACEMENT_TARGET_BATCH_OUTPUT_ALREADY_EXISTS'
         }
@@ -157,10 +158,12 @@ foreach ($case in $cases) {
         output_path = $outputPath
         pdf_path = $pdfPath
         trace_path = $caseTracePath
+        progress_path = $caseProgressPath
     }
 }
 
 $results = @()
+$failures = @()
 $target = $null
 try {
     foreach ($entry in $prepared) {
@@ -175,36 +178,48 @@ try {
             -ExpectedBuild $ExpectedBuild `
             -ExpectedExecutableSha256 $ExpectedExecutableSha256 `
             -TimeoutSeconds $TimeoutSecondsPerCase | Out-Null
-        if ($LASTEXITCODE -ne 0) {
-            if ([System.IO.File]::Exists([string]$entry.trace_path)) {
-                $failedCaseTrace = Read-BoundedJson `
-                    -Path ([string]$entry.trace_path) `
-                    -MaximumBytes 262144 `
-                    -ErrorPrefix 'TABLE_LAYOUT_PLACEMENT_TARGET_BATCH_CASE_TRACE'
-                if ([string]$failedCaseTrace.error_code -match
-                    '^TABLE_PROPERTIES_TARGET_READBACK_[A-Z0-9_]+$') {
-                    throw ([string]$failedCaseTrace.error_code)
-                }
-            }
-            throw 'TABLE_LAYOUT_PLACEMENT_TARGET_BATCH_CASE_FAILED'
-        }
+        $caseExitCode = $LASTEXITCODE
         $caseTrace = Read-BoundedJson -Path ([string]$entry.trace_path) -MaximumBytes 262144 `
             -ErrorPrefix 'TABLE_LAYOUT_PLACEMENT_TARGET_BATCH_CASE_TRACE'
-        if ([string]$caseTrace.state -cne 'pass' -or
+        $caseTargetProperty = $caseTrace.PSObject.Properties['target']
+        if ($null -eq $target -and $null -ne $caseTargetProperty -and
+            $null -ne $caseTargetProperty.Value) {
+            $caseTarget = $caseTargetProperty.Value
+            $target = [ordered]@{
+                prog_id = [string]$caseTarget.prog_id
+                file_version = [string]$caseTarget.file_version
+                executable_sha256 = [string]$caseTarget.executable_sha256
+            }
+        }
+        if ($caseExitCode -ne 0 -or
+            [string]$caseTrace.state -cne 'pass' -or
             [string]$caseTrace.input_sha256 -cne [string]$entry.case.sha256 -or
             -not [bool]$caseTrace.input_unchanged -or
             [string]$caseTrace.input_text_sha256 -cne $expectedTextSha256 -or
             [string]$caseTrace.output_text_sha256 -cne $expectedTextSha256 -or
             -not [bool]$caseTrace.render_pdf_signature_valid -or
             [long]$caseTrace.watchdog.remaining_hwp_process_count -ne 0) {
-            throw 'TABLE_LAYOUT_PLACEMENT_TARGET_BATCH_CASE_TRACE_INVALID'
-        }
-        if ($null -eq $target) {
-            $target = [ordered]@{
-                prog_id = [string]$caseTrace.target.prog_id
-                file_version = [string]$caseTrace.target.file_version
-                executable_sha256 = [string]$caseTrace.target.executable_sha256
+            $caseErrorCode = 'TABLE_LAYOUT_PLACEMENT_TARGET_BATCH_CASE_TRACE_INVALID'
+            if ([string]$caseTrace.error_code -match '^TABLE_PROPERTIES_TARGET_READBACK_[A-Z0-9_]+$') {
+                $caseErrorCode = [string]$caseTrace.error_code
             }
+            $failures += [ordered]@{
+                case_id = [string]$entry.case.case_id
+                feature_id = [string]$entry.case.feature_id
+                child_exit_code = $caseExitCode
+                error_code = $caseErrorCode
+                failed_phase = [string]$caseTrace.failed_phase
+                input_sha256 = [string]$entry.case.sha256
+                input_unchanged = [bool]$caseTrace.input_unchanged
+                output_hwpx_present = [System.IO.File]::Exists([string]$entry.output_path)
+                output_pdf_present = [System.IO.File]::Exists([string]$entry.pdf_path)
+                trace_path = [System.IO.Path]::GetFileName([string]$entry.trace_path)
+                trace_sha256 = Get-Sha256File -Path ([string]$entry.trace_path)
+                progress_path = [System.IO.Path]::GetFileName([string]$entry.progress_path)
+                progress_sha256 = Get-Sha256File -Path ([string]$entry.progress_path)
+                remaining_hwp_process_count = [long]$caseTrace.watchdog.remaining_hwp_process_count
+            }
+            continue
         }
         $results += [ordered]@{
             case_id = [string]$entry.case.case_id
@@ -227,12 +242,40 @@ catch {
         schema_version = 'hwpx-agent.p06-09-table-layout-placement-target-batch-readback-failure/v1'
         state = 'failed'
         fixture_manifest_sha256 = $ExpectedFixtureManifestSha256
+        target = $target
+        attempted_case_count = $results.Count + $failures.Count
         completed_case_count = $results.Count
+        failed_case_count = $failures.Count
         error_code = [string]$_.Exception.Message
+        failures = $failures
+        cases = $results
         actual_hangul_2020 = $true
     }
-    Write-NewUtf8File -Path $traceFullPath -Content ($failure | ConvertTo-Json -Depth 5)
+    Write-NewUtf8File -Path $traceFullPath -Content ($failure | ConvertTo-Json -Depth 8)
     throw
+}
+
+if ($failures.Count -gt 0) {
+    [long]$remainingProcessCount = 0
+    foreach ($caseFailure in $failures) {
+        $remainingProcessCount += [long]$caseFailure['remaining_hwp_process_count']
+    }
+    $failure = [ordered]@{
+        schema_version = 'hwpx-agent.p06-09-table-layout-placement-target-batch-readback-failure/v1'
+        state = 'failed'
+        fixture_manifest_sha256 = $ExpectedFixtureManifestSha256
+        target = $target
+        attempted_case_count = $prepared.Count
+        completed_case_count = $results.Count
+        failed_case_count = $failures.Count
+        failures = $failures
+        cases = $results
+        remaining_hwp_process_count = $remainingProcessCount
+        actual_hangul_2020 = $true
+    }
+    Write-NewUtf8File -Path $traceFullPath -Content ($failure | ConvertTo-Json -Depth 8)
+    $failure | ConvertTo-Json -Depth 8
+    exit 2
 }
 
 $receipt = [ordered]@{

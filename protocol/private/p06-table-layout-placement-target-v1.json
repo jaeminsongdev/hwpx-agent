@@ -31,19 +31,19 @@
     },
     {
       "path": "implementation/p06/tools/run-hancom-2020-table-layout-placement-target-batch-readback.ps1",
-      "sha256": "3281a404adafb6fa84b944a58541ecf20db0ef74edc5d54f43dcf15768bdd61b"
+      "sha256": "7fdc4b8be70ec9b9bdf19ca40e87bbfec735e728e2e26577ed3b267263d44561"
     },
     {
       "path": "implementation/p06/tests/Test-Hancom2020TableLayoutPlacementTargetBatchReadback.ps1",
-      "sha256": "7a444c1cbded1250ab7e4833314cfb52fe42ee1d719d70e129b2fe5c3f516085"
+      "sha256": "615448c94bfa3fb5f5833ebb4fa8a639231237c0c32c9630e7f199e51f0e929a"
     },
     {
       "path": "tools/p06/validate_table_layout_placement_target_v1_contract.py",
-      "sha256": "3e2382c650bde1056450ed8ebdf1dc64bcce235ed975cf6aec106c6cfe227f59"
+      "sha256": "0d934238d11c90e0bc8868d71fea99594eac5cf9a7760d32f104095de5c86a44"
     },
     {
       "path": "tools/p06/tests/test_table_layout_placement_target_v1_contract.py",
-      "sha256": "158cff159b241f244a95cae115893fae3559afc66623358d2c7080fdd5687af5"
+      "sha256": "fe771cd6ea9eb183b72d38954563cb8267f5f0560820dffe1b3c62bea4aa4b28"
     },
     {
       "path": "protocol/private/p06-table-geometry-hwpx-v1.json",
@@ -77,7 +77,7 @@
   "fixture_publication": {
     "directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-01",
     "independent_retry_directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-02",
-    "current_source_rebuild_directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-03",
+    "current_source_rebuild_directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-04",
     "manifest_file": "fixture-manifest.json",
     "manifest_sha256": "33c391ff2b151f815c4e2e79c9144c53547fe87d5e35d1e856e4e796b3978faf",
     "case_count": 10,
@@ -163,27 +163,126 @@
     "oracle": "crates/hwpx-package/examples/p06_09_table_layout_placement_target_oracle.rs",
     "target": "HWPFrame.HwpObject.2 / Hangul 2020 11.0.0.9136",
     "case_count": 10,
-    "state": "failed_open_input",
-    "attempt_directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-01",
-    "batch_trace_sha256": "2882e3e6864db6ce666130d2d589416064a4d5f2edbe197e1e94823f03e0704f",
-    "case_trace_sha256": "ce0702436d050ce119f561d06733e4b200b335de3430fa2eacb08f0474f9a117",
-    "failed_feature_id": "TABLE-018",
+    "state": "failed_open_input_timeout",
+    "attempt_directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-03",
+    "batch_trace_file": "batch-readback-trace.attempt02.json",
+    "batch_trace_sha256": "24010ea6a6e7227164e28fc0c0fe298d8df000754423e9004ff04ac00c9b59b0",
+    "attempted_case_count": 10,
+    "completed_case_count": 0,
+    "failed_case_count": 10,
+    "failed_feature_ids": [
+      "TABLE-018",
+      "TABLE-019",
+      "TABLE-050",
+      "TABLE-051",
+      "TABLE-052",
+      "TABLE-053",
+      "TABLE-034",
+      "TABLE-036",
+      "TABLE-037",
+      "TABLE-038"
+    ],
     "failed_phase": "open_input",
-    "error_code": "TABLE_PROPERTIES_TARGET_READBACK_INPUT_OPEN_RETURNED_FALSE",
-    "input_unchanged": true,
-    "output_absent": true,
+    "error_code": "TABLE_PROPERTIES_TARGET_READBACK_TIMEOUT",
+    "timeout_seconds_per_case": 30,
+    "input_unchanged_count": 10,
+    "output_absent_count": 10,
+    "cleaned_process_count": 10,
     "remaining_hwp_process_count": 0,
-    "clean_retry_directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-02"
+    "failure_traces": [
+      {
+        "feature_id": "TABLE-018",
+        "case_id": "table-018-equal-row-height-4x3",
+        "trace_file": "table-018-equal-row-height-4x3.hancom-2020-trace.json",
+        "trace_sha256": "e5cc674c69e38d1fac4cbed5724917954b78e201a559a313bd1258bed9518625",
+        "progress_file": "table-018-equal-row-height-4x3.hancom-2020-trace.json.progress.jsonl",
+        "progress_sha256": "c039b5bbc40b48364231ca09ed8a3241beb016d30b5a96e627d4d0718299a476"
+      },
+      {
+        "feature_id": "TABLE-019",
+        "case_id": "table-019-equal-column-width-4x3",
+        "trace_file": "table-019-equal-column-width-4x3.hancom-2020-trace.json",
+        "trace_sha256": "c3a667d2644adb949d1db5f9cdce4dba89259cbc3a2c359eb6d655ab7bab6bbf",
+        "progress_file": "table-019-equal-column-width-4x3.hancom-2020-trace.json.progress.jsonl",
+        "progress_sha256": "e17238e5090e4a414dd318c9787ef4bac8e5580e3fcefe433687eb4e77758866"
+      },
+      {
+        "feature_id": "TABLE-050",
+        "case_id": "table-050-row-min-height-4x3",
+        "trace_file": "table-050-row-min-height-4x3.hancom-2020-trace.json",
+        "trace_sha256": "6dc50d545794a6ec46543b15585400161bcb4b2ffb9d2193c74447a7b9a1fa71",
+        "progress_file": "table-050-row-min-height-4x3.hancom-2020-trace.json.progress.jsonl",
+        "progress_sha256": "2d3353d909e2df5af507b9ab9bf535eb6ee592d17e7f2e9bf1729e1738f42c2d"
+      },
+      {
+        "feature_id": "TABLE-051",
+        "case_id": "table-051-column-fixed-width-4x3",
+        "trace_file": "table-051-column-fixed-width-4x3.hancom-2020-trace.json",
+        "trace_sha256": "8d3ff956de2c60f76852ac01ca5096b2e68abbddf3556f843ecfb5a23562d472",
+        "progress_file": "table-051-column-fixed-width-4x3.hancom-2020-trace.json.progress.jsonl",
+        "progress_sha256": "9eed527e6538f6010e69df16b08d60f5b03fefc7afce26ee8db135317ac9274d"
+      },
+      {
+        "feature_id": "TABLE-052",
+        "case_id": "table-052-autofit-content-4x3",
+        "trace_file": "table-052-autofit-content-4x3.hancom-2020-trace.json",
+        "trace_sha256": "f0f567567757aa1c2ad3a87c9140fbdcfdf8f207dc6c26652bd5bab7eccf7f0c",
+        "progress_file": "table-052-autofit-content-4x3.hancom-2020-trace.json.progress.jsonl",
+        "progress_sha256": "03847f7ade357a502d9142b6948efa702708dbdc68d2a7e27955fbe63fc346fe"
+      },
+      {
+        "feature_id": "TABLE-053",
+        "case_id": "table-053-autofit-page-4x3",
+        "trace_file": "table-053-autofit-page-4x3.hancom-2020-trace.json",
+        "trace_sha256": "63437b7012acc576ede302dd32b2a062a5886673632c70350e54ddc671c45845",
+        "progress_file": "table-053-autofit-page-4x3.hancom-2020-trace.json.progress.jsonl",
+        "progress_sha256": "4c325958e8fb0aeea2abeeb3d46ee478aa065627697aa66218d902ea438f192f"
+      },
+      {
+        "feature_id": "TABLE-034",
+        "case_id": "table-034-position-4x3",
+        "trace_file": "table-034-position-4x3.hancom-2020-trace.json",
+        "trace_sha256": "87c77fdadca4a8fd80e4006f6d20a204decb38faab38658b6e877e2c3c62ca8e",
+        "progress_file": "table-034-position-4x3.hancom-2020-trace.json.progress.jsonl",
+        "progress_sha256": "b99945463dd7981ffee4314b1f89aa2e4c8b8bbafc2c91a22b848440a8947b64"
+      },
+      {
+        "feature_id": "TABLE-036",
+        "case_id": "table-036-inline-floating-4x3",
+        "trace_file": "table-036-inline-floating-4x3.hancom-2020-trace.json",
+        "trace_sha256": "2a39db19045fd6bef3391fbad7cf56c3e2d999faaf198a5cb76eae89cb86f556",
+        "progress_file": "table-036-inline-floating-4x3.hancom-2020-trace.json.progress.jsonl",
+        "progress_sha256": "ddd9296792f97785c020d00d7aee84f4e9f7585251db90cc3da8ae3229283f78"
+      },
+      {
+        "feature_id": "TABLE-037",
+        "case_id": "table-037-wrap-4x3",
+        "trace_file": "table-037-wrap-4x3.hancom-2020-trace.json",
+        "trace_sha256": "070ebe3299f4a9773bcfb840104c8f63d47e777dda385e9c58cb9bc35eb176c0",
+        "progress_file": "table-037-wrap-4x3.hancom-2020-trace.json.progress.jsonl",
+        "progress_sha256": "34bfbe86e3559d57ab81104186d63a59ab0daa79155e97e011e9c0b06943b05f"
+      },
+      {
+        "feature_id": "TABLE-038",
+        "case_id": "table-038-outer-margin-4x3",
+        "trace_file": "table-038-outer-margin-4x3.hancom-2020-trace.json",
+        "trace_sha256": "f30b70c104af8ffa890fa0da93810a7c83496553b7108c4b815223f2adec0845",
+        "progress_file": "table-038-outer-margin-4x3.hancom-2020-trace.json.progress.jsonl",
+        "progress_sha256": "9eabba3f19ed9ab482abb3a10547201cda7e8677e5f266ab4cc3906709f653c5"
+      }
+    ],
+    "clean_retry_directory": "fixtures/target-build/p06-09-table-layout-placement-target-20260913-04"
   },
   "gate_decision": {
     "fixture_preparation": "pass",
     "actual_target_lifecycle": "failed",
     "direct_stage_change": "none",
-    "reason": "three independent exact builds are byte-identical, but the licensed attempt failed because HwpObject.Open returned false before document read; no output was published and the clean retry batch remains unused"
+    "reason": "three designated independent exact builds are byte-identical, but all ten licensed cases timed out independently in open_input before document read; every input remained unchanged, no output was published, all ten owned HWP processes were cleaned, and the clean retry batch remains unused"
   },
   "failure_policy": [
     "wrong_ancestor_manifest_or_case_digest_rejects_before_output",
     "existing_output_path_rejects_before_first_case",
+    "one_case_failure_is_recorded_then_the_remaining_independent_cases_continue",
     "source_input_is_rehashed_after_fixture_build",
     "each_case_runs_bounded_exact_target_save_reopen_pdf_lifecycle",
     "failed_case_trace_is_preserved_and_never_promoted",

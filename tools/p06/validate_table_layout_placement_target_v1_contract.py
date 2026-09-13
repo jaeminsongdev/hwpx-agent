@@ -40,6 +40,18 @@ EXPECTED_CASE_FILES = {
     "TABLE-052": "table-052-autofit-content-4x3.hwpx",
     "TABLE-053": "table-053-autofit-page-4x3.hwpx",
 }
+EXPECTED_RUNTIME_ORDER = (
+    "TABLE-018",
+    "TABLE-019",
+    "TABLE-050",
+    "TABLE-051",
+    "TABLE-052",
+    "TABLE-053",
+    "TABLE-034",
+    "TABLE-036",
+    "TABLE-037",
+    "TABLE-038",
+)
 
 
 class ContractError(RuntimeError):
@@ -155,18 +167,24 @@ def validate_contract_shape(contract: dict[str, Any]) -> None:
     runtime = contract["batch_runtime"]
     if (
         runtime.get("case_count") != 10
-        or runtime.get("state") != "failed_open_input"
-        or runtime.get("failed_feature_id") != "TABLE-018"
+        or runtime.get("state") != "failed_open_input_timeout"
+        or runtime.get("attempted_case_count") != 10
+        or runtime.get("completed_case_count") != 0
+        or runtime.get("failed_case_count") != 10
+        or runtime.get("failed_feature_ids") != list(EXPECTED_RUNTIME_ORDER)
         or runtime.get("failed_phase") != "open_input"
-        or runtime.get("error_code")
-        != "TABLE_PROPERTIES_TARGET_READBACK_INPUT_OPEN_RETURNED_FALSE"
-        or runtime.get("input_unchanged") is not True
-        or runtime.get("output_absent") is not True
+        or runtime.get("error_code") != "TABLE_PROPERTIES_TARGET_READBACK_TIMEOUT"
+        or runtime.get("timeout_seconds_per_case") != 30
+        or runtime.get("input_unchanged_count") != 10
+        or runtime.get("output_absent_count") != 10
+        or runtime.get("cleaned_process_count") != 10
         or runtime.get("remaining_hwp_process_count") != 0
     ):
         raise ContractError("batch runtime state differs")
-    for field in ("batch_trace_sha256", "case_trace_sha256"):
-        require_sha256(runtime.get(field), f"batch runtime {field}")
+    require_sha256(runtime.get("batch_trace_sha256"), "batch runtime batch trace")
+    failure_traces = runtime.get("failure_traces")
+    if not isinstance(failure_traces, list) or len(failure_traces) != 10:
+        raise ContractError("batch runtime failure trace set differs")
     gate = contract["gate_decision"]
     if (
         gate.get("fixture_preparation") != "pass"
@@ -259,34 +277,149 @@ def validate_publications(contract: dict[str, Any], cases: dict[str, dict[str, A
             raise ContractError(f"independent fixture packages differ: {feature}")
 
 
-def validate_failed_runtime(contract: dict[str, Any]) -> None:
+def validate_failed_runtime(
+    contract: dict[str, Any], cases: dict[str, dict[str, Any]]
+) -> None:
     runtime = contract["batch_runtime"]
     attempt = ROOT / runtime["attempt_directory"]
-    batch_trace_path = attempt / "batch-readback-trace.json"
-    case_trace_path = attempt / "table-018-equal-row-height-4x3.hancom-2020-trace.json"
+    batch_trace_path = attempt / runtime["batch_trace_file"]
     if sha256_file(batch_trace_path) != runtime["batch_trace_sha256"]:
         raise ContractError("failed batch trace digest differs")
-    if sha256_file(case_trace_path) != runtime["case_trace_sha256"]:
-        raise ContractError("failed case trace digest differs")
     batch_trace = load_json(batch_trace_path)
-    case_trace = load_json(case_trace_path)
+    require_exact_keys(
+        batch_trace,
+        {
+            "schema_version",
+            "state",
+            "fixture_manifest_sha256",
+            "target",
+            "attempted_case_count",
+            "completed_case_count",
+            "failed_case_count",
+            "failures",
+            "cases",
+            "remaining_hwp_process_count",
+            "actual_hangul_2020",
+        },
+        "failed batch trace",
+    )
     if (
-        batch_trace.get("state") != "failed"
+        batch_trace.get("schema_version")
+        != "hwpx-agent.p06-09-table-layout-placement-target-batch-readback-failure/v1"
+        or batch_trace.get("state") != "failed"
+        or batch_trace.get("fixture_manifest_sha256") != EXPECTED_MANIFEST_SHA256
+        or batch_trace.get("target") is not None
+        or batch_trace.get("attempted_case_count") != 10
         or batch_trace.get("completed_case_count") != 0
-        or case_trace.get("state") != "failed"
-        or case_trace.get("failed_phase") != "open_input"
-        or case_trace.get("error_code")
-        != "TABLE_PROPERTIES_TARGET_READBACK_INPUT_OPEN_RETURNED_FALSE"
-        or case_trace.get("input_unchanged") is not True
-        or case_trace.get("output_saved") is not False
-        or case_trace.get("render_pdf_saved") is not False
-        or case_trace.get("watchdog", {}).get("remaining_hwp_process_count") != 0
+        or batch_trace.get("failed_case_count") != 10
+        or batch_trace.get("cases") != []
+        or batch_trace.get("remaining_hwp_process_count") != 0
+        or batch_trace.get("actual_hangul_2020") is not True
     ):
         raise ContractError("failed runtime trace boundary differs")
-    if (attempt / "table-018-equal-row-height-4x3.hancom-2020-readback.hwpx").exists():
-        raise ContractError("failed runtime unexpectedly published HWPX output")
+
+    failures = batch_trace.get("failures")
+    trace_contracts = runtime["failure_traces"]
+    if not isinstance(failures, list) or len(failures) != 10:
+        raise ContractError("failed runtime result set differs")
+    for feature, failure, trace_contract in zip(
+        EXPECTED_RUNTIME_ORDER, failures, trace_contracts, strict=True
+    ):
+        contract_case = cases[feature]
+        expected_case_id = Path(contract_case["file"]).stem
+        require_exact_keys(
+            trace_contract,
+            {
+                "feature_id",
+                "case_id",
+                "trace_file",
+                "trace_sha256",
+                "progress_file",
+                "progress_sha256",
+            },
+            f"{feature} failure trace contract",
+        )
+        require_exact_keys(
+            failure,
+            {
+                "case_id",
+                "feature_id",
+                "child_exit_code",
+                "error_code",
+                "failed_phase",
+                "input_sha256",
+                "input_unchanged",
+                "output_hwpx_present",
+                "output_pdf_present",
+                "trace_path",
+                "trace_sha256",
+                "progress_path",
+                "progress_sha256",
+                "remaining_hwp_process_count",
+            },
+            f"{feature} batch failure entry",
+        )
+        if (
+            trace_contract["feature_id"] != feature
+            or trace_contract["case_id"] != expected_case_id
+        ):
+            raise ContractError(f"failure trace identity differs: {feature}")
+        trace_path = attempt / trace_contract["trace_file"]
+        progress_path = attempt / trace_contract["progress_file"]
+        if sha256_file(trace_path) != require_sha256(
+            trace_contract["trace_sha256"], f"{feature} trace"
+        ):
+            raise ContractError(f"failed case trace digest differs: {feature}")
+        if sha256_file(progress_path) != require_sha256(
+            trace_contract["progress_sha256"], f"{feature} progress"
+        ):
+            raise ContractError(f"failed case progress digest differs: {feature}")
+        if (
+            failure.get("case_id") != expected_case_id
+            or failure.get("feature_id") != feature
+            or failure.get("child_exit_code") != 2
+            or failure.get("error_code") != "TABLE_PROPERTIES_TARGET_READBACK_TIMEOUT"
+            or failure.get("failed_phase") != "open_input"
+            or failure.get("input_sha256") != contract_case["sha256"]
+            or failure.get("input_unchanged") is not True
+            or failure.get("output_hwpx_present") is not False
+            or failure.get("output_pdf_present") is not False
+            or failure.get("trace_path") != trace_contract["trace_file"]
+            or failure.get("trace_sha256") != trace_contract["trace_sha256"]
+            or failure.get("progress_path") != trace_contract["progress_file"]
+            or failure.get("progress_sha256") != trace_contract["progress_sha256"]
+            or failure.get("remaining_hwp_process_count") != 0
+        ):
+            raise ContractError(f"batch failure entry differs: {feature}")
+        case_trace = load_json(trace_path)
+        watchdog = case_trace.get("watchdog", {})
+        if (
+            case_trace.get("state") != "failed"
+            or case_trace.get("input_sha256") != contract_case["sha256"]
+            or case_trace.get("failed_phase") != "open_input"
+            or case_trace.get("error_code") != "TABLE_PROPERTIES_TARGET_READBACK_TIMEOUT"
+            or case_trace.get("input_unchanged") is not True
+            or case_trace.get("output_saved") is not False
+            or case_trace.get("render_pdf_saved") is not False
+            or watchdog.get("timeout_seconds") != 30
+            or watchdog.get("timed_out") is not True
+            or watchdog.get("cleaned_process_count") != 1
+            or watchdog.get("cleanup_error_count") != 0
+            or watchdog.get("remaining_hwp_process_count") != 0
+            or watchdog.get("progress_valid") is not True
+            or watchdog.get("progress_observed_phase") != "open_input"
+        ):
+            raise ContractError(f"failed case runtime boundary differs: {feature}")
+        for suffix in (
+            ".hancom-2020-readback.hwpx",
+            ".hancom-2020-render.pdf",
+        ):
+            if (attempt / f"{expected_case_id}{suffix}").exists():
+                raise ContractError(
+                    f"failed runtime unexpectedly published output: {feature}"
+                )
     retry = ROOT / runtime["clean_retry_directory"]
-    if any(retry.glob("*.hancom-2020-*")) or (retry / "batch-readback-trace.json").exists():
+    if any(retry.glob("*.hancom-2020-*")) or any(retry.glob("batch-readback-trace*.json")):
         raise ContractError("clean retry directory is not clean")
 
 
@@ -296,11 +429,11 @@ def validate(contract_path: Path) -> None:
     source_lock_count = validate_source_locks(contract)
     cases = validate_cases(contract)
     validate_publications(contract, cases)
-    validate_failed_runtime(contract)
+    validate_failed_runtime(contract, cases)
     print(
         "schema=hwpx-agent.p06-09-table-layout-placement-target-contract-validation/v1 "
         f"state=pass features={len(cases)} source_locks={source_lock_count} "
-        "fixture_builds=3 actual_hangul_2020=failed_open_input"
+        "fixture_builds=3 actual_hangul_2020=failed_open_input_timeout"
     )
 
 

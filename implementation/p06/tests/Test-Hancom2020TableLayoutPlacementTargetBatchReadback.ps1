@@ -117,6 +117,15 @@ $checks = [ordered]@{
         $batch -match 'remaining_hwp_process_count'
     failed_trace_preserved = $batch -match
         'hwpx-agent\.p06-09-table-layout-placement-target-batch-readback-failure/v1'
+    independent_failures_continue = $batch -match '\$failures \+= \[ordered\]@\{' -and
+        $batch -match 'attempted_case_count = \$prepared\.Count' -and
+        $batch -match 'failed_case_count = \$failures\.Count' -and
+        $batch -match '(?m)^\s+continue\s*$'
+    timeout_trace_without_target_supported = $batch -match
+        "PSObject\.Properties\['target'\]"
+    progress_paths_preflighted = $batch -match
+        '\$caseProgressPath = \$caseTracePath \+ ''\.progress\.jsonl''' -and
+        $batch -match '\$caseProgressPath\)\)'
     manifest_failure_before_case_run = Test-ManifestIdentityFailureBeforeCaseRun
     no_register_module = $all -notmatch '(?i)\.RegisterModule\s*\('
     no_ui_input = $all -notmatch

@@ -24,13 +24,15 @@ class TableLayoutPlacementTargetV1ContractTests(unittest.TestCase):
             encoding="utf-8",
         )
 
-    def test_current_contract_and_two_publications_pass(self) -> None:
+    def test_current_contract_and_three_publications_pass(self) -> None:
         result = self.run_validator()
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("state=pass", result.stdout)
         self.assertIn("features=10", result.stdout)
         self.assertIn("fixture_builds=3", result.stdout)
-        self.assertIn("actual_hangul_2020=failed_open_input", result.stdout)
+        self.assertIn(
+            "actual_hangul_2020=failed_open_input_timeout", result.stdout
+        )
 
     def test_tampered_case_digest_fails_closed(self) -> None:
         value = json.loads(CONTRACT.read_text(encoding="utf-8"))
@@ -44,6 +46,19 @@ class TableLayoutPlacementTargetV1ContractTests(unittest.TestCase):
             result = self.run_validator(path)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("fixture case differs", result.stderr)
+
+    def test_missing_failure_trace_fails_closed(self) -> None:
+        value = json.loads(CONTRACT.read_text(encoding="utf-8"))
+        value["batch_runtime"]["failure_traces"].pop()
+        target_root = ROOT / "target"
+        with tempfile.TemporaryDirectory(
+            prefix="p06-layout-placement-runtime-", dir=target_root
+        ) as directory:
+            path = Path(directory) / "contract.json"
+            path.write_text(json.dumps(value), encoding="utf-8")
+            result = self.run_validator(path)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("failure trace set differs", result.stderr)
 
 
 if __name__ == "__main__":
