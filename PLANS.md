@@ -37,7 +37,7 @@
 | ID | Task | Current state and exact next evidence |
 |---|---|---|
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
-| P-0057 | P06-09 table conformance | TABLE-007, batched TABLE-008/009/047, TABLE-010/011 and TABLE-012/013/014/015 exact target lifecycle/typed oracle/render/retry are complete; continue the remaining 22 integration rows with TABLE-016/017; release matrix remains 0/61 green |
+| P-0057 | P06-09 table conformance | TABLE-007, batched TABLE-008/009/047, TABLE-010/011 and TABLE-012/013/014/015 exact target lifecycle/typed oracle/render/retry are complete. TABLE-016/017 now have one chained 4x3 split/merge fixture, exact inverse state, native empty-cell rendering and full Rust regression PASS; licensed readback remains pending because the current COM session rejects `Open` even for a previously passing byte-exact control. Release matrix remains 0/61 green |
 | P-0097 | P07 native equation target | P07-09 exact Hangul 2020 target v3 is closed: eight UI checks are `user_attested`, native object identity/semantics and two fresh save/reopen cycles are verified; P07-07/08 target, render and differential Gates remain |
 | P-0095 | P08 object HWPX integration | P08-15 proves an exact common-root `href` partial profile for 11 shape-component tags but does not advance OBJ-048; close chart semantics or an exact fallback before row promotion, then map the remaining nine P08-10 models |
 | P-0096 | P09 fields/forms/notes/comments/links | P09-01~10 typed components cover 46/46 P09-owned rows; P09-12/13/14/15 add exact existing-form REF-018/019, point-bookmark REF-031/032, HTTPS/current-tab hyperlink REF-033/034 and closed plain-text footnote/endnote REF-021/022 static-section lowering/readback. Matrix stages are 7 cataloged, 38 unit, 8 integration, 0 oracle/green; actual generated-package/Hangul/render/automation/differential remain not run |
@@ -73,6 +73,7 @@
   55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
 - TABLE-020 binds complete visual style; TABLE-016/017 bind full cell merge/split topology and content policies. TABLE-010/011 now additionally pass one deterministic chained 4x2 exact-target batch: split to two 2x2 tables, join back to one 4x2 table, licensed save/reopen/PDF, independent typed/cache oracle, original-detail render review and byte-identical retry. Formula/header/caption partition profiles remain unclaimed.
 - TABLE-012/013/014/015 now pass one formula-free 3x3-derived exact-target batch covering row/column insertion and deletion: four licensed save/reopen/PDF lifecycles, independent typed/cache readback, native empty-cell normalization, original-detail visual review and byte-identical retry. The target pass also corrected preserved-payload receipts to 9/9/6/6. Formula/header/caption structure profiles remain unclaimed.
+- TABLE-016/017 target preparation now chains one exact 4x3 split and merge: TABLE-016 restores 9 to 12 masters and TABLE-017 returns 12 to 9 while all nine payloads and the complete inverse grid/state/content bindings remain exact. Independent builds are byte-identical and an existing destination is rejected. The merge/split renderer now uses the target-qualified native empty-cell scaffold, with dedicated regression coverage. Actual Hangul promotion remains unclaimed: six current-session probes, including a previously passing generated target and its Hangul-saved output, all failed at `Open` before read/save; inputs remained exact and no Hwp process remained.
 - TABLE-002/003 use one exact ruling/topology model with formula fail-closed. Attempt 08 passed all
   five licensed Hangul save/reopen/PDF cases, independent full typed readback and original-detail
   render review; attempts 01-07 remain failed/interrupted evidence and are not promoted.
@@ -107,7 +108,7 @@
 ## Next actions
 
 1. Goal pursuit is active at `max`; finish P06 in order before resuming P07 and later phases. No remote push is implied.
-2. Continue target qualification with TABLE-016/017 merge/split across the remaining 22 integration rows; only afterward run current-target automation runtime and all release differentials.
+2. Retry the prepared TABLE-016/017 batch after the Hangul file-access `Open` state is restored, then run both save/reopen/PDF lifecycles, typed/cache oracle, render review, one combined source-lock/matrix promotion and commit; only afterward continue the remaining 20 integration rows.
 3. Resume P07 target/render/differential Gates only after P06, then continue P08 onward in ledger order.
 
 ## Context pack and archive pointers

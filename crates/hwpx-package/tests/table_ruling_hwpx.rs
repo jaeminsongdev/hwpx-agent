@@ -1816,6 +1816,59 @@ fn merge_split_hwpx_split_distributes_payload_and_reopens_exactly() -> TestResul
 }
 
 #[test]
+fn merge_split_hwpx_split_writes_native_empty_cell_scaffold() -> TestResult {
+    let header = header()?;
+    let payload = ["A", "B"]
+        .into_iter()
+        .map(text_paragraph)
+        .collect::<String>();
+    let section = table(
+        &[vec![cell(0, 0, 2, 2, 2000, 1000, 3, &payload)], vec![]],
+        2,
+        2,
+    );
+    let source_binding = binding(&[2])?;
+    let limits = TableMergeSplitHwpxLimits::default();
+    let source =
+        TableMergeSplitHwpxReader::read_existing(&header, &section, 0, &source_binding, limits)?;
+    let split_line_sha256 = source
+        .ruling
+        .state
+        .edge(TableRulingAxis::Horizontal, 0, 0)
+        .and_then(|edge| edge.line_sha256.clone())
+        .ok_or("source line identity missing")?;
+    let (request, plan, part_binding) = build_merge_split_plan(
+        &source,
+        TableMergeSplitHwpxOperation::Split {
+            master_cell_id: id("cell-0")?,
+            rows: 2,
+            columns: 2,
+            new_master_cell_ids: vec![id("cell-1")?, id("cell-2")?, id("cell-3")?],
+            content_policy: ContentPreservationPolicy::Distribute,
+            split_line_sha256,
+        },
+    )?;
+    let output = TableMergeSplitHwpxLowerer::lower_existing(
+        &header,
+        &section,
+        0,
+        &source_binding,
+        &part_binding,
+        &digest('f'),
+        &request,
+        &plan,
+        limits,
+    )?;
+    let xml = String::from_utf8(output.section)?;
+    let native_empty = r#"<hp:p id="0" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"/></hp:p>"#;
+    assert_eq!(xml.matches(native_empty).count(), 2);
+    assert_eq!(output.receipt.source_payload_block_count, 2);
+    assert_eq!(output.receipt.target_payload_block_count, 2);
+    assert_eq!(output.binding.cells.len(), 4);
+    Ok(())
+}
+
+#[test]
 fn merge_split_hwpx_merge_supports_every_content_policy() -> TestResult {
     let header = header()?;
     let section = ordinary_section();

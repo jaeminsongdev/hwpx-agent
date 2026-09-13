@@ -895,6 +895,7 @@ struct RawEdit {
 #[derive(Clone, Copy, Debug)]
 enum ExistingRenderProfile {
     Existing { topology_changed: bool },
+    MergeSplit,
     Split,
     Partition,
     Structure,
@@ -906,9 +907,12 @@ impl ExistingRenderProfile {
     const fn topology_changed(self) -> bool {
         match self {
             Self::Existing { topology_changed } => topology_changed,
-            Self::Split | Self::Partition | Self::Structure | Self::Transpose | Self::Create => {
-                true
-            }
+            Self::MergeSplit
+            | Self::Split
+            | Self::Partition
+            | Self::Structure
+            | Self::Transpose
+            | Self::Create => true,
         }
     }
 
@@ -925,7 +929,7 @@ impl ExistingRenderProfile {
     }
 
     const fn uses_native_empty_cell_run(self) -> bool {
-        matches!(self, Self::Structure)
+        matches!(self, Self::MergeSplit | Self::Structure)
     }
 
     const fn preserves_caption(self) -> bool {
@@ -962,6 +966,30 @@ pub(super) fn render_existing(
         target_state,
         target_grid,
         ExistingRenderProfile::Existing { topology_changed },
+        limits,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(super) fn render_merge_split_existing(
+    header: &[u8],
+    section: &[u8],
+    table_ordinal: usize,
+    binding: &TableRulingHwpxBinding,
+    source_state: &TableRulingState,
+    target_state: &TableRulingState,
+    target_grid: &TableGrid,
+    limits: &TableRulingHwpxLimits,
+) -> Result<RenderedParts, TableRulingHwpxError> {
+    render_existing_profile(
+        header,
+        section,
+        table_ordinal,
+        binding,
+        source_state,
+        target_state,
+        target_grid,
+        ExistingRenderProfile::MergeSplit,
         limits,
     )
 }

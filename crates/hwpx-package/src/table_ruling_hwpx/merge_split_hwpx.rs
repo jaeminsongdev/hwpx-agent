@@ -597,7 +597,7 @@ impl TableMergeSplitHwpxLowerer {
         if rebuilt != *plan {
             return Err(TableMergeSplitHwpxError::PlanBindingMismatch);
         }
-        let rendered = super::render_existing(
+        let rendered = super::render_merge_split_existing(
             header,
             section,
             table_ordinal,
@@ -605,7 +605,6 @@ impl TableMergeSplitHwpxLowerer {
             &source.ruling.state,
             plan.target_state(),
             plan.target_grid(),
-            true,
             &limits.ruling,
         )?;
         let target_binding = super::binding_from_state(plan.target_state(), plan.target_grid())?;
