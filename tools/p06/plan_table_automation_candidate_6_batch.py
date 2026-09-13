@@ -280,7 +280,7 @@ def build_request(
             "private_registry_sha256": registry_sha256,
             "public_projection_sha256": projection_sha256,
         },
-        "session_strategy": "one_hwp_session_one_generated_3x3_table",
+        "session_strategy": "one_hwp_session_six_generated_3x3_documents",
         "case_count": 6,
         "cases": cases,
         "policy": {
