@@ -325,6 +325,7 @@ fn converts_complete_grid_to_crlf_text_and_reopens_exact_paragraph() -> TestResu
     assert!(xml.contains("id=\"701\""));
     assert!(!xml.contains("id=\"700\""));
     assert!(xml.contains("<hp:lineBreak"));
+    assert!(!xml.contains("<hp:p xmlns:hp="));
     Ok(())
 }
 
@@ -362,6 +363,42 @@ fn empty_one_cell_tab_lf_boundary_is_exact() -> TestResult {
     assert_eq!(lowered.receipt.target_table_count, 0);
     assert_eq!(lowered.receipt.payload_block_count, 0);
     assert!(String::from_utf8(lowered.section)?.contains("<hp:t/>"));
+    Ok(())
+}
+
+#[test]
+fn native_run_direct_table_wrapper_is_admitted_and_lowered() -> TestResult {
+    let header = header()?;
+    let values = ["native"];
+    let wrapper = table_wrapper(700, 11, 1, 1, &values)
+        .replacen("<hp:ctrl>", "", 1)
+        .replacen("</hp:ctrl>", "", 1);
+    let section =
+        format!(r#"<hs:sec xmlns:hs="{SECTION_NS}" xmlns:hp="{PARAGRAPH_NS}">{wrapper}</hs:sec>"#)
+            .into_bytes();
+    let source = read_context(
+        &header,
+        &section,
+        1,
+        1,
+        &values,
+        TableDelimiter::Comma,
+        TableLineEnding::Lf,
+    )?;
+    let (request, plan) = admitted(&source, draft(&source, 'a', 'b')?, 'a')?;
+    let lowered = TableTableToTextHwpxLowerer::lower(
+        &header,
+        &section,
+        &binding(1, 1, &values)?,
+        TableDelimiter::Comma,
+        TableLineEnding::Lf,
+        &flow('a'),
+        &request,
+        &plan,
+        TableTableToTextHwpxLimits::default(),
+    )?;
+    assert_eq!(lowered.text, b"native");
+    assert_eq!(lowered.receipt.target_table_count, 0);
     Ok(())
 }
 

@@ -15,8 +15,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 
 | Dimension | Current evidence |
 |---|---:|
-| direct `oracle_verified` | 27 |
-| direct `integration_passed` | 34 |
+| direct `oracle_verified` | 29 |
+| direct `integration_passed` | 32 |
 | direct `unit_passed` | 0 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
@@ -95,11 +95,12 @@ The machine-readable authority is
   AST/cache, grid, semantic document flow and unowned bytes remain exact. Direct-output package
   save/reopen, PDF/render, rollback/retry and automation runtime remain not run.
 - The text conversion component adds bounded UTF-8 tab/comma/semicolon parsing and deterministic
-  writing for TABLE-004/005. TABLE-004 converts a complete admitted plain-text paragraph to an exact
-  template-derived table. TABLE-005 converts every cell of an arbitrary-size admitted plain unmerged
-  table to exact LF/CRLF bytes and a typed HWPX paragraph while binding the removed state/grid,
-  properties, payloads and pagination. Both preserve closed-package non-target bytes. Fields, opaque
-  content, and unreviewed merged/formula flattening fail closed; no Hangul/render result is inferred.
+  writing for TABLE-004/005. The exact current-PC target batch covers quoted delimiters, Korean,
+  multiline content, empty cells and the 1x1 boundary in both directions. All four Hangul 2020
+  save/close/reopen/read/PDF lifecycles, 69 progress events, independent typed state/grid/text-flow
+  oracles and original-detail A4 render reviews passed. Attempts 01-05 remain failed or superseded
+  evidence and are not promoted. TABLE-004/005 are therefore `oracle_verified`; fields, opaque
+  content, unreviewed merged/formula flattening, automation and differential remain unclaimed.
 - The placement component and preserving HWPX adapter cover TABLE-034/036/037/038. Position tests
   span every reference and alignment value, signed offsets and the three flags; attachment changes
   preserve inactive native fields; all 16 table wrap/side-flow pairs and four margins read back
@@ -232,8 +233,8 @@ ordering; duplicate JSON keys; finite files; path containment; privacy; and crea
 Protocol code generation publishes the three P06 schemas through additive catalog v5 while baseline
 locks prove catalogs v2 through v4 remain unchanged.
 
-Current aggregate blockers include 0 missing direct evidence rows, 34 rows below direct oracle,
-59 rows with at least one missing validation, 61 unverified automation runtime rows and 61 missing
+Current aggregate blockers include 0 missing direct evidence rows, 32 rows below direct oracle,
+57 rows with at least one missing validation, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -241,7 +242,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. close the remaining 34 integration-only target oracles, beginning with TABLE-004;
+1. close the remaining 32 integration-only target oracles, beginning with the next unqualified row,
+   TABLE-007;
 2. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
 3. regenerate until all 61 rows are green, then run the P06 hard Gate.

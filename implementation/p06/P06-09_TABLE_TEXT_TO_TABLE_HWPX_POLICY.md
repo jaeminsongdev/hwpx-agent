@@ -15,8 +15,9 @@ Every nonzero bounded rectangular result is admitted. The caller supplies a dist
 row-major 1x1 master ID, one payload ID for each nonempty cell, `None` for every empty cell, and every
 nonzero physical row/column track. Cursor defaults, inferred IDs and guessed dimensions are forbidden.
 
-Native table structure comes from the separately bound exact blank unmerged 2x2 template defined by
-the TABLE-001 profile. It has four empty formula-free masters, identical complete non-ruling cell
+Native table structure comes from the separately bound exact blank unmerged 2x2 native run-direct
+template defined by the TABLE-001 profile. A legacy `hp:ctrl`-wrapped table is rejected. The template
+has four empty formula-free masters, identical complete non-ruling cell
 properties, no diagonal, caption or repeat header, and six uniform outer/inner edge bands. Generated
 cell paragraphs use the deterministic current-2020 paragraph/run/text profile and represent tabs and
 line breaks as typed `hp:tab` and `hp:lineBreak` atoms.
@@ -43,7 +44,7 @@ work is finite. Duplicate/unknown JSON fails closed. Debug omits text, hashes, I
 
 ## Evidence promotion rule
 
-Passing the seven adapter tests and private contract tamper suite promotes only TABLE-004 from
+Passing the eight adapter tests and private contract tamper suite promotes only TABLE-004 from
 `component_only / unit_passed` to `direct_hwpx / integration_passed` with `schema`, static
 `semantic_reopen`, formula-free `formula_readback` and `page_split` preservation.
 

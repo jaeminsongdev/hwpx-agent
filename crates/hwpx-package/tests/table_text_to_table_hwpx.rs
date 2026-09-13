@@ -123,13 +123,13 @@ fn template_wrapper(native_id: u32, nonempty: bool) -> String {
     };
     format!(
         concat!(
-            r#"<hp:p id="900" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"><hp:ctrl>"#,
+            r#"<hp:p id="900" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0">"#,
             r#"<hp:tbl id="{native_id}" zOrder="0" numberingType="TABLE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" pageBreak="CELL" repeatHeader="0" rowCnt="2" colCnt="2" cellSpacing="0" borderFillIDRef="1" noAdjust="0">"#,
             r#"<hp:sz width="2000" widthRelTo="ABSOLUTE" height="1100" heightRelTo="ABSOLUTE" protect="0"/>"#,
             r#"<hp:pos treatAsChar="0" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="2000" horzOffset="1000"/>"#,
             r#"<hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:inMargin left="0" right="0" top="0" bottom="0"/>"#,
             "<hp:tr>{first}{top_right}</hp:tr><hp:tr>{bottom_left}{bottom_right}</hp:tr>",
-            r#"</hp:tbl></hp:ctrl><hp:t/></hp:run></hp:p>"#
+            r#"</hp:tbl><hp:t/></hp:run></hp:p>"#
         ),
         native_id = native_id,
         first = first,
@@ -320,6 +320,7 @@ fn converts_complete_quoted_multiline_grid_and_reopens_exactly() -> TestResult {
     assert!(xml.contains("BEFORE"));
     assert!(xml.contains("AFTER"));
     assert!(!xml.contains("name,amount"));
+    assert!(!xml.contains("<hp:p xmlns:hp="));
     Ok(())
 }
 
@@ -510,6 +511,23 @@ fn malformed_or_opaque_text_and_nonblank_template_fail_closed() -> TestResult {
         )
         .is_err()
     );
+    Ok(())
+}
+
+#[test]
+fn control_wrapped_table_template_fails_closed() -> TestResult {
+    let header = header()?;
+    let template = String::from_utf8(template_section(false))?
+        .replace(
+            "<hp:run charPrIDRef=\"0\"><hp:tbl",
+            "<hp:run charPrIDRef=\"0\"><hp:ctrl><hp:tbl",
+        )
+        .replace(
+            "</hp:tbl><hp:t/></hp:run>",
+            "</hp:tbl></hp:ctrl><hp:t/></hp:run>",
+        )
+        .into_bytes();
+    assert!(read_context(&header, &complex_source(), &template, TableDelimiter::Comma,).is_err());
     Ok(())
 }
 

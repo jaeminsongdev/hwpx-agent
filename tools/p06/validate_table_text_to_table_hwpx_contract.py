@@ -35,7 +35,7 @@ EXPECTED_SOURCE_PATHS = {
 }
 EXPECTED_FEATURES = {"TABLE-004": "table.text_to_table"}
 EXPECTED_EVIDENCE = {
-    "adapter_tests": 7,
+    "adapter_tests": 8,
     "feature_count": 1,
     "backend": "direct_hwpx",
     "direct_stage": "integration_passed",
@@ -105,6 +105,7 @@ IMPLEMENTATION_MARKERS = {
         "malformed_or_opaque_text_and_nonblank_template_fail_closed",
         "bounds_and_debug_redact_hashes_ids_and_text",
         "closed_package_preserves_every_nontarget_part_and_graph",
+        "control_wrapped_table_template_fails_closed",
     ),
     POLICY: (
         "direct static HWPX integration implemented; no licensed Hangul 2020 oracle claim",
@@ -114,7 +115,7 @@ IMPLEMENTATION_MARKERS = {
     ),
     REPORT: (
         "Result: `integration_pass`",
-        "7/7 PASS",
+        "8/8 PASS",
         "unit_passed`: 11 to 10",
         "integration_passed`: 35 to 36",
         "green rows: remains 0/61",

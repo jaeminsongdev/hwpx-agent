@@ -35,7 +35,7 @@ EXPECTED_SOURCE_PATHS = {
 }
 EXPECTED_FEATURES = {"TABLE-005": "table.table_to_text"}
 EXPECTED_EVIDENCE = {
-    "adapter_tests": 7,
+    "adapter_tests": 8,
     "feature_count": 1,
     "backend": "direct_hwpx",
     "direct_stage": "integration_passed",
@@ -92,6 +92,7 @@ IMPLEMENTATION_MARKERS = {
         "pub(super) fn read_unmerged_text_grid",
         "require_plain_text_flow(&flow)?;",
         "pub(super) fn standalone_paragraph",
+        "pub(super) fn native_paragraph_fragment",
     ),
     "crates/hwpx-package/src/table_ruling_hwpx.rs": (
         "mod table_to_text_hwpx;",
@@ -110,6 +111,7 @@ IMPLEMENTATION_MARKERS = {
         "merged_formula_multi_paragraph_opaque_and_nonempty_wrapper_fail_closed",
         "bounds_and_debug_redact_content_hashes_and_ids",
         "closed_package_preserves_every_nontarget_part_and_relationship",
+        "native_run_direct_table_wrapper_is_admitted_and_lowered",
     ),
     POLICY: (
         "direct static HWPX integration implemented; no licensed Hangul 2020 oracle claim",
@@ -119,7 +121,7 @@ IMPLEMENTATION_MARKERS = {
     ),
     REPORT: (
         "Result: `integration_pass`",
-        "7/7 PASS",
+        "8/8 PASS",
         "unit_passed`: 10 to 9",
         "integration_passed`: 36 to 37",
         "green rows: remains 0/61",

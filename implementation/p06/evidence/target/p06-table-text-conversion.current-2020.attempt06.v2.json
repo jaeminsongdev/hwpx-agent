@@ -1,0 +1,273 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-text-conversion-current-2020-evidence/v2",
+  "evidence_id": "p06.table-text-conversion.current-2020.attempt06.20260913",
+  "scope": "exact_current_pc_hancom_2020_table_004_005_save_reopen_pdf_and_independent_typed_oracle",
+  "attempt": {
+    "id": "20260913-06",
+    "directory": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06",
+    "manifest": {
+      "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/fixture-manifest.json",
+      "sha256": "6c32f7ccdaad74ad62a2e32257e203ce2c61dc74dafc11026d9ddfe0f045220a",
+      "bytes": 10176
+    },
+    "trace": {
+      "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/target-batch-readback-20260913-01.json",
+      "sha256": "eb01b39ffc8fe951ff2bd865957ed173a82c2d3a0b989f5938429a254efbfa37",
+      "bytes": 9141,
+      "state": "pass"
+    },
+    "progress": {
+      "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/target-batch-readback-20260913-01.json.progress.jsonl",
+      "sha256": "eee6cb1b0284b76bcff71cdc4d2acaaaed6104921a046c1619fe5ba848582822",
+      "bytes": 20886,
+      "events": 69,
+      "terminal": "pass"
+    },
+    "target": {
+      "product": "Hancom Hangul 2020",
+      "prog_id": "HWPFrame.HwpObject.2",
+      "registry_view": "Registry32",
+      "client": "windows_powershell_x86_sta",
+      "build": "11.0.0.9136",
+      "architecture": "x86",
+      "locale": "ko-KR",
+      "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+    },
+    "completed_cases": 4,
+    "failed_feature_id": null,
+    "timed_out": false,
+    "remaining_hwp_process_count": 0,
+    "user_access_prompt_action": "not_recorded"
+  },
+  "cases": [
+    {
+      "case_id": "table-004-quoted-multiline-3x2",
+      "feature_id": "TABLE-004",
+      "capability_id": "table.text_to_table",
+      "input": {
+        "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/table-004-text-to-table-quoted-multiline-3x2.hwpx",
+        "sha256": "deea6a65f7d379a388f9c9687f1e1ec03ccec9b7a71c8cd9fa4c651e8112058e",
+        "bytes": 13280,
+        "unchanged": true
+      },
+      "output": {
+        "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/table-004-text-to-table-quoted-multiline-3x2.hancom-2020-readback.hwpx",
+        "sha256": "06943bbd7cfa3b9d074272069771977eb188b74e75f0028155f43c88b8e530fb",
+        "bytes": 17042,
+        "section_sha256": "98efe78dd2b3419d836c6582c4e3ca1e9e269da7e803579f6c9f451b204d60d4"
+      },
+      "pdf": {
+        "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/table-004-text-to-table-quoted-multiline-3x2.hancom-2020-render.pdf",
+        "sha256": "ee5b9438709a421942e1d0ce59cabeed2be1511b6d7f887e3c70f2683a03b27a",
+        "bytes": 12753,
+        "pages": 1
+      },
+      "oracle": {
+        "state": "pass",
+        "target_state_sha256": "9dc54871c6f686f47c136c1c89d7ac0e62a38c1ce69aeee91b65c450f554fe9b",
+        "target_grid_sha256": "69fa2b24266bd3e1466b2bfd3d8ecb55a58a76fc3aa355d183b24ff6d36beacc",
+        "target_text_grid_sha256": "3e3c169b265ad05c7cecdd779a38dfd8e3234053db3f1d2428c0a099be7624eb",
+        "rows": 3,
+        "columns": 2,
+        "master_cells": 6,
+        "payload_blocks": 5,
+        "formulas": 0,
+        "preexisting_formula_fields": 1,
+        "renderer_cache_count": 16,
+        "renderer_cache_sha256": "7a6110d20a9fafd6a42a5c6f849b76c450c2af67b2a6a512c4693f35dcc1cd9d"
+      }
+    },
+    {
+      "case_id": "table-005-quoted-multiline-3x2",
+      "feature_id": "TABLE-005",
+      "capability_id": "table.table_to_text",
+      "input": {
+        "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/table-005-table-to-text-quoted-multiline-3x2.hwpx",
+        "sha256": "6ac06c31dfe34bff7f6541757d321833fe281d73740f3ed7ba5c1d3a9f70d752",
+        "bytes": 13170,
+        "unchanged": true
+      },
+      "output": {
+        "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/table-005-table-to-text-quoted-multiline-3x2.hancom-2020-readback.hwpx",
+        "sha256": "9a9350e3fa7bff3844b540257ffadba7064ddb340f3ccbf0b5325be49ba20900",
+        "bytes": 15342,
+        "section_sha256": "3778a733603a350eb9c3974ec7fde9e6f8feedc8399b6f44193b6285e8bed1be"
+      },
+      "pdf": {
+        "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/table-005-table-to-text-quoted-multiline-3x2.hancom-2020-render.pdf",
+        "sha256": "ab4e6838e30d1a088c45e51f542b5bbc5236be1301e4bd809b25fe903944fa22",
+        "bytes": 12658,
+        "pages": 1
+      },
+      "oracle": {
+        "state": "pass",
+        "target_state_sha256": "9dc54871c6f686f47c136c1c89d7ac0e62a38c1ce69aeee91b65c450f554fe9b",
+        "target_grid_sha256": "69fa2b24266bd3e1466b2bfd3d8ecb55a58a76fc3aa355d183b24ff6d36beacc",
+        "target_text_grid_sha256": "3e3c169b265ad05c7cecdd779a38dfd8e3234053db3f1d2428c0a099be7624eb",
+        "rows": 3,
+        "columns": 2,
+        "master_cells": 6,
+        "payload_blocks": 5,
+        "formulas": 0,
+        "preexisting_formula_fields": 1,
+        "renderer_cache_count": 10,
+        "renderer_cache_sha256": "e71e89cd24fee40f0b9c21b447dcec1cb702baf337c262cda4cd04b6a32b8d44"
+      }
+    },
+    {
+      "case_id": "table-004-boundary-1x1",
+      "feature_id": "TABLE-004",
+      "capability_id": "table.text_to_table",
+      "input": {
+        "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/table-004-text-to-table-boundary-1x1.hwpx",
+        "sha256": "f5e2aae18e6bf31b7f60eed688b3dc26f6ad99e7744faba9420cf352db51cc84",
+        "bytes": 13162,
+        "unchanged": true
+      },
+      "output": {
+        "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/table-004-text-to-table-boundary-1x1.hancom-2020-readback.hwpx",
+        "sha256": "3a087f02b23a65c777c61da8737fd0fd1ae07ad03f516ba1e8f79b62be51d641",
+        "bytes": 14960,
+        "section_sha256": "b6fff79d8c2f215edb33b0ef1d1d58b760a870bc893260a60c46b6977a6e040e"
+      },
+      "pdf": {
+        "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/table-004-text-to-table-boundary-1x1.hancom-2020-render.pdf",
+        "sha256": "3cd4b9d50273fdeac8ac274fb1bfb6e62176b0843b30637a5c0fd766151f26fe",
+        "bytes": 10560,
+        "pages": 1
+      },
+      "oracle": {
+        "state": "pass",
+        "target_state_sha256": "9c10cca05be8e9ae31fb8b8423636465900301337c002d010477f7f4446394f1",
+        "target_grid_sha256": "e6f177fd2d4d7d38e326fda013d9b156297b6db67ce1ba66b88f6370c80af82a",
+        "target_text_grid_sha256": "0f0a5541d5ec01973a5fad8e9690708e405331d1550391255df45505871e7fe6",
+        "rows": 1,
+        "columns": 1,
+        "master_cells": 1,
+        "payload_blocks": 1,
+        "formulas": 0,
+        "preexisting_formula_fields": 1,
+        "renderer_cache_count": 11,
+        "renderer_cache_sha256": "5f27694ccd7d258c83e5a9f2c4b62c55e6a848f6002d80913c729f0f69007c69"
+      }
+    },
+    {
+      "case_id": "table-005-boundary-1x1",
+      "feature_id": "TABLE-005",
+      "capability_id": "table.table_to_text",
+      "input": {
+        "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/table-005-table-to-text-boundary-1x1.hwpx",
+        "sha256": "267a9b326f87c92142a235369ae0638844b9b9245cfdc11df64db651c82eba72",
+        "bytes": 13111,
+        "unchanged": true
+      },
+      "output": {
+        "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/table-005-table-to-text-boundary-1x1.hancom-2020-readback.hwpx",
+        "sha256": "881ed36689fce30637c87619407c7be9719317937f7cddedb79d628e3bb41f8a",
+        "bytes": 14375,
+        "section_sha256": "2676972863fa263dbe759a752fe99060f303e91d16ddd057f97fbf7ffe5e776b"
+      },
+      "pdf": {
+        "path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/table-005-table-to-text-boundary-1x1.hancom-2020-render.pdf",
+        "sha256": "966b706751d8d5e620144b704209f12a0ddf6b5f5ed4b1ee87a9c5f59cc2c8ac",
+        "bytes": 10486,
+        "pages": 1
+      },
+      "oracle": {
+        "state": "pass",
+        "target_state_sha256": "9c10cca05be8e9ae31fb8b8423636465900301337c002d010477f7f4446394f1",
+        "target_grid_sha256": "e6f177fd2d4d7d38e326fda013d9b156297b6db67ce1ba66b88f6370c80af82a",
+        "target_text_grid_sha256": "0f0a5541d5ec01973a5fad8e9690708e405331d1550391255df45505871e7fe6",
+        "rows": 1,
+        "columns": 1,
+        "master_cells": 1,
+        "payload_blocks": 1,
+        "formulas": 0,
+        "preexisting_formula_fields": 1,
+        "renderer_cache_count": 10,
+        "renderer_cache_sha256": "4d689bc912eb2385bc8a0a10d46f1076436ba2ed07c0466dabab792213a3064f"
+      }
+    }
+  ],
+  "render_review": {
+    "state": "pass",
+    "engine": "pdftoppm 26.07.0",
+    "dpi": 144,
+    "page_size_points": [595, 841],
+    "pixel_size": [1190, 1682],
+    "producer": "Hancom PDF 1.3.0.550",
+    "creator": "Hwp 2020 11.0.0.9136",
+    "pdf_version": "1.4",
+    "encrypted": false,
+    "javascript": false,
+    "all_pages_inspected": true,
+    "inspection_detail": "original",
+    "review_actor": "assistant_visual_review",
+    "clipping": false,
+    "overlap": false,
+    "blank_pages": [],
+    "black_boxes": false,
+    "rendered_png_retention": "external_temporary_review_intermediate_not_product_input",
+    "pages": [
+      {
+        "case_id": "table-004-quoted-multiline-3x2",
+        "png_sha256": "e5fc89880f3f7e18d566a877dcda1940931dcaf51ea3edbf026693612390117e",
+        "png_bytes": 17263,
+        "finding": "original_formula_table_plus_separate_3x2_table_with_korean_delimiter_multiline_and_empty_cell_visible"
+      },
+      {
+        "case_id": "table-005-quoted-multiline-3x2",
+        "png_sha256": "2700de70a2fe6ae7380910eea4dcc5465470d3d87bbdbdad567db8055d50e4cd",
+        "png_bytes": 17611,
+        "finding": "original_formula_table_plus_quoted_multiline_csv_text_visible"
+      },
+      {
+        "case_id": "table-004-boundary-1x1",
+        "png_sha256": "99f8cf6295ed805bc27fe23980286ad98fb38042b4eb8a5c00edc017725092e5",
+        "png_bytes": 12543,
+        "finding": "original_formula_table_plus_separate_one_cell_table_with_only_visible"
+      },
+      {
+        "case_id": "table-005-boundary-1x1",
+        "png_sha256": "b6c85154af5b24f0c1fc7c8b7ced4d0bf6aa47bb372adf8b0592286f71d4f98e",
+        "png_bytes": 12496,
+        "finding": "original_formula_table_plus_plain_only_text_visible"
+      }
+    ]
+  },
+  "historical_attempts": {
+    "attempt_ids": ["20260913-01", "20260913-02", "20260913-03", "20260913-04", "20260913-05"],
+    "decision": "immutable_failed_or_superseded_evidence_not_promoted",
+    "attempt_01_generation_incomplete": true,
+    "attempt_02_lifecycle_failed_on_stale_two_case_harness_bound": true,
+    "attempt_03_direct_engine_stopped_after_two_cases": true,
+    "attempt_04_lifecycle_pass_but_table_004_typed_oracle_failed_namespace_stability": true,
+    "attempt_05_lifecycle_pass_but_table_005_typed_oracle_failed_native_paragraph_stability": true,
+    "successful_attempt_rebuilt_all_inputs_after_product_fixes": true
+  },
+  "gate_decision": {
+    "TABLE-004": "oracle_verified",
+    "TABLE-005": "oracle_verified",
+    "actual_hancom_2020_save_reopen": "pass",
+    "actual_hancom_2020_target_build": "pass",
+    "render_diff": "pass",
+    "rollback_or_retry": "pass",
+    "automation_runtime": "not_run",
+    "differential": "not_run",
+    "p06_09": "in_progress",
+    "p06": "in_progress"
+  },
+  "not_claimed": {
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "merged_or_formula_source_conversion": false,
+    "field_or_opaque_content_flattening": false,
+    "arbitrary_native_template_or_wrapper": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_hancom_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

@@ -127,7 +127,7 @@ impl TableCreateHwpxReader {
     }
 }
 
-fn require_native_template_wrapper(
+pub(super) fn require_native_template_wrapper(
     template_section: &[u8],
     template_table_ordinal: usize,
 ) -> Result<(), TableCreateHwpxError> {
@@ -707,7 +707,7 @@ fn native_created_table_wrapper(
     Ok(wrapper)
 }
 
-fn require_native_created_cell_scaffolds(
+pub(super) fn require_native_created_cell_scaffolds(
     section: &[u8],
     table_ordinal: usize,
     expected_count: usize,

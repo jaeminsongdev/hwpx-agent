@@ -25,7 +25,7 @@ only after exact paragraph bytes, typed flow, visible NFC text and one-table dec
 
 | Check | Result |
 |---|---:|
-| Dedicated TABLE-005 adapter tests | 7/7 PASS |
+| Dedicated TABLE-005 adapter tests | 8/8 PASS |
 | Comma, Korean, CRLF, multiline and embedded quote | exact static readback PASS |
 | Empty 1x1 tab/LF boundary | exact static readback PASS |
 | Source/state/grid/text/wrapper/count/flow/identity/plan drift | fail closed |
@@ -46,9 +46,13 @@ After source-lock admission, the strict matrix changes only as follows:
 - direct `oracle_verified`: remains 15
 - green rows: remains 0/61
 
-TABLE-005 gains static `semantic_reopen`, formula-free `formula_readback` and source `page_split`
-classification evidence. It still lacks render-diff, target-build, rollback/retry, automation runtime
-and exact differential evidence.
+This section records the original static transition. The later exact-target qualification is recorded
+in `P06-09_TABLE_TEXT_CONVERSION_TARGET_READBACK_REPORT.md`; the current matrix must be read from
+`P06-09_TABLE_CONFORMANCE_REPORT.md`.
+
+TABLE-005 initially gained static `semantic_reopen`, formula-free `formula_readback` and source
+`page_split` classification evidence. The exact-target qualification later adds render, target-build,
+and retry evidence without claiming automation runtime or differential equality.
 
 ## Preserved boundaries
 

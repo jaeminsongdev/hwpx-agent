@@ -110,6 +110,7 @@ impl TableTextToTableHwpxReader {
             limits.create.pagination,
         )?;
         create_hwpx::require_template_profile(&template, &template_pagination)?;
+        create_hwpx::require_native_template_wrapper(template_section, template_table_ordinal)?;
         require_canonical_blank_template(
             template_section,
             template_table_ordinal,
@@ -684,8 +685,14 @@ fn execute_and_verify_text_to_table(
         plan.target_grid(),
         &limits.create.ruling,
     )?;
-    let payload_section = patch_target_cell_text(
+    let native_section = create_hwpx::require_native_created_cell_scaffolds(
         &rendered.section,
+        request.template_table_ordinal,
+        plan.target_grid().master_cell_count(),
+        limits.create.ruling.layout.config().output_bytes,
+    )?;
+    let payload_section = patch_target_cell_text(
+        &native_section,
         request.template_table_ordinal,
         plan.target_grid(),
         &source.text_grid,
@@ -949,7 +956,7 @@ fn state_with_text_payloads(
         {
             Some(id) => vec![TableRulingPayloadBlock {
                 block_id: id.clone(),
-                payload_sha256: create_hwpx::hex(Sha256::digest(canonical_text_paragraph(
+                payload_sha256: create_hwpx::hex(Sha256::digest(native_text_paragraph(
                     text,
                     limits.flow,
                 )?)),
@@ -1046,7 +1053,7 @@ fn patch_target_cell_text(
         edits.push(RawEdit {
             start: span.start(),
             end: span.end(),
-            replacement: canonical_text_paragraph(text, limits.flow)?,
+            replacement: native_text_paragraph(text, limits.flow)?,
         });
     }
     Ok(super::apply_edits(
@@ -1261,6 +1268,43 @@ pub(super) fn canonical_text_paragraph(
         .strip_prefix(XML_DECLARATION)
         .map(ToOwned::to_owned)
         .ok_or(TableTextToTableHwpxError::ReadbackMismatch)
+}
+
+fn native_text_paragraph(
+    text: &str,
+    limits: TextFlowLimits,
+) -> Result<Vec<u8>, TableTextToTableHwpxError> {
+    let standalone = canonical_text_paragraph(text, limits)?;
+    native_paragraph_fragment(&standalone)
+}
+
+pub(super) fn native_paragraph_fragment(
+    standalone: &[u8],
+) -> Result<Vec<u8>, TableTextToTableHwpxError> {
+    const PREFIX: &[u8] = b"<hp:p";
+    let namespace = format!(r#" xmlns:hp="{HANCOM_2020_PARAGRAPH_NAMESPACE}""#);
+    let namespace = namespace.as_bytes();
+    if !standalone.starts_with(PREFIX)
+        || standalone.get(PREFIX.len()..PREFIX.len() + namespace.len()) != Some(namespace)
+    {
+        return Err(TableTextToTableHwpxError::ReadbackMismatch);
+    }
+    let mut fragment = Vec::new();
+    fragment
+        .try_reserve_exact(
+            standalone
+                .len()
+                .checked_sub(namespace.len())
+                .ok_or(TableTextToTableHwpxError::OutputLimit)?,
+        )
+        .map_err(|_| TableTextToTableHwpxError::OutputLimit)?;
+    fragment.extend_from_slice(PREFIX);
+    fragment.extend_from_slice(
+        standalone
+            .get(PREFIX.len() + namespace.len()..)
+            .ok_or(TableTextToTableHwpxError::ReadbackMismatch)?,
+    );
+    Ok(fragment)
 }
 
 fn nonempty_cell_count(grid: &TableTextGrid) -> usize {

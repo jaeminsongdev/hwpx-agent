@@ -1,0 +1,132 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-text-conversion-target-contract/v2",
+  "scope": "p06_09_table_004_005_exact_current_pc_hancom_2020_save_reopen_pdf_typed_oracle",
+  "predecessors": [
+    {
+      "path": "protocol/private/p06-table-text-to-table-hwpx-v1.json",
+      "sha256": "ef4a67621d327d2e9fd49729a24ef23e937821bff5fcd4f498f856302e1cc3b2",
+      "state": "static_direct_hwpx_integration_contract"
+    },
+    {
+      "path": "protocol/private/p06-table-table-to-text-hwpx-v1.json",
+      "sha256": "789bbf9c59c36c2ad1eb6046dff959130d19e4ba1824c06a8412adc0eaae1809",
+      "state": "static_direct_hwpx_integration_contract"
+    }
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path": "protocol/private/p06-table-text-to-table-hwpx-v1.json", "sha256": "ef4a67621d327d2e9fd49729a24ef23e937821bff5fcd4f498f856302e1cc3b2"},
+    {"path": "tools/p06/validate_table_text_to_table_hwpx_contract.py", "sha256": "c47c4377c46a5589b4358fa2d33286e57cd80253924c8bebe0bc04b697f1252e"},
+    {"path": "protocol/private/p06-table-table-to-text-hwpx-v1.json", "sha256": "789bbf9c59c36c2ad1eb6046dff959130d19e4ba1824c06a8412adc0eaae1809"},
+    {"path": "tools/p06/validate_table_table_to_text_hwpx_contract.py", "sha256": "9ced2316a04928966db941441eb74032d5c37f02a8f7b06aba989f87aa8a2fe0"},
+    {"path": "crates/hwpx-package/src/table_ruling_hwpx/create_hwpx.rs", "sha256": "ebd710a2409612eebbe30951f8e738a71b4ab615be8eba1a0579a08ad2b718f3"},
+    {"path": "crates/hwpx-package/src/table_ruling_hwpx/text_conversion_hwpx.rs", "sha256": "96417983c223fe20e844fc904d2202bdf8502f0a54c76ee44ca2f5b5384e3c8d"},
+    {"path": "crates/hwpx-package/src/table_ruling_hwpx/table_to_text_hwpx.rs", "sha256": "8b1e7976185ed839e2bee62ce6cc51d750d515a866de2783e5785fb3e89f71a2"},
+    {"path": "crates/hwpx-package/examples/p06_09_table_text_conversion_target_fixture.rs", "sha256": "ab4b6ec9657698cb8ef1dfb8bb35b65c79864ef0910e98501a00c878c6919335"},
+    {"path": "crates/hwpx-package/examples/p06_09_table_text_conversion_target_oracle.rs", "sha256": "01230724b2a6fd0f064aefdccd5e1f6f574b0a9c6ade672b6c1fd143e5f5d09b"},
+    {"path": "implementation/p06/tools/run-hancom-2020-table-text-conversion-target-batch-engine.ps1", "sha256": "29fc0add143a797d18c3f27d108dd15ddf55a2ed4c3ba650d85b96743152d3d4"},
+    {"path": "implementation/p06/tools/run-hancom-2020-table-text-conversion-target-batch-readback.ps1", "sha256": "2c874a63112616dafc7190e5f723a513f992d167afa9158c14b2d2d152d04020"},
+    {"path": "implementation/p06/tests/Test-Hancom2020TableTextConversionTargetBatchReadback.ps1", "sha256": "80759c8c51b7161533f0d6dc4558a1ca1d8e3550d6dbcb0654c044dd442ffe6c"}
+  ],
+  "exact_target": {
+    "product": "Hancom Hangul 2020",
+    "prog_id": "HWPFrame.HwpObject.2",
+    "registry_view": "Registry32",
+    "client": "windows_powershell_x86_sta",
+    "build": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+  },
+  "successful_attempt": {
+    "id": "20260913-06",
+    "directory": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06",
+    "manifest": {"path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/fixture-manifest.json", "sha256": "6c32f7ccdaad74ad62a2e32257e203ce2c61dc74dafc11026d9ddfe0f045220a", "bytes": 10176},
+    "trace": {"path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/target-batch-readback-20260913-01.json", "sha256": "eb01b39ffc8fe951ff2bd865957ed173a82c2d3a0b989f5938429a254efbfa37", "bytes": 9141},
+    "progress": {"path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-06/target-batch-readback-20260913-01.json.progress.jsonl", "sha256": "eee6cb1b0284b76bcff71cdc4d2acaaaed6104921a046c1619fe5ba848582822", "bytes": 20886, "events": 69},
+    "receipt": {"path": "implementation/p06/evidence/target/p06-table-text-conversion.current-2020.attempt06.v2.json", "sha256": "b494039e0c2f7617854d50a008a69963667c2581318d138fe8b4ac94b093f36e", "bytes": 12109},
+    "case_count": 4,
+    "state": "pass"
+  },
+  "historical_attempts": {
+    "attempt_ids": ["20260913-01", "20260913-02", "20260913-03", "20260913-04", "20260913-05"],
+    "evidence": [
+      {"path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-02/target-batch-readback-20260913-01.json", "sha256": "35468b344db4164ade71d23c1695b61ba56a8718d08ee416620eb423478a2380", "bytes": 5970},
+      {"path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-02/target-batch-readback-20260913-01.json.progress.jsonl", "sha256": "bdcf92b73554dcf2489fd37440deb1e6057300caf47aa340ad25242eac85aa51", "bytes": 10292},
+      {"path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-03/engine-direct-20260913-01.progress.jsonl", "sha256": "582b76ceb77a4d2fc368eacf8d52a9d3cb51e5d80219407660c0928b7b4080a5", "bytes": 10292},
+      {"path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-04/target-batch-readback-20260913-01.json", "sha256": "033e4a9b49bcfa4f6b95ce212c088a4b6cbf6e881cdef499757a3f9cb9b1ca7b", "bytes": 9141},
+      {"path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-04/target-batch-readback-20260913-01.json.progress.jsonl", "sha256": "8c10b9d9997399184a200a07c9e6cd1c23569557c5c0ab8ab1fb1c820978574d", "bytes": 20886},
+      {"path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-05/target-batch-readback-20260913-01.json", "sha256": "b9fc44ea1795b644080d2e9befa69fd4ec620c932b1a70bbe611bdbe21e4d8e3", "bytes": 9141},
+      {"path": "fixtures/target-build/p06-09-table-text-conversion-target-20260913-05/target-batch-readback-20260913-01.json.progress.jsonl", "sha256": "48bbe67a710c1c52c5754f7807a6163ba8e6a9b60799f6f04694832512e8435e", "bytes": 20886}
+    ],
+    "promoted_to_pass": 0,
+    "decision": "immutable_failed_or_superseded_evidence_not_promoted"
+  },
+  "cases": [
+    {
+      "case_id": "table-004-quoted-multiline-3x2", "feature_id": "TABLE-004", "capability_id": "table.text_to_table", "stem": "table-004-text-to-table-quoted-multiline-3x2",
+      "input_sha256": "deea6a65f7d379a388f9c9687f1e1ec03ccec9b7a71c8cd9fa4c651e8112058e", "input_bytes": 13280,
+      "output_sha256": "06943bbd7cfa3b9d074272069771977eb188b74e75f0028155f43c88b8e530fb", "output_bytes": 17042, "output_section_sha256": "98efe78dd2b3419d836c6582c4e3ca1e9e269da7e803579f6c9f451b204d60d4",
+      "pdf_sha256": "ee5b9438709a421942e1d0ce59cabeed2be1511b6d7f887e3c70f2683a03b27a", "pdf_bytes": 12753,
+      "state_sha256": "9dc54871c6f686f47c136c1c89d7ac0e62a38c1ce69aeee91b65c450f554fe9b", "grid_sha256": "69fa2b24266bd3e1466b2bfd3d8ecb55a58a76fc3aa355d183b24ff6d36beacc", "text_grid_sha256": "3e3c169b265ad05c7cecdd779a38dfd8e3234053db3f1d2428c0a099be7624eb",
+      "rows": 3, "columns": 2, "master_cells": 6, "payload_blocks": 5, "cache_count": 16, "cache_sha256": "7a6110d20a9fafd6a42a5c6f849b76c450c2af67b2a6a512c4693f35dcc1cd9d"
+    },
+    {
+      "case_id": "table-005-quoted-multiline-3x2", "feature_id": "TABLE-005", "capability_id": "table.table_to_text", "stem": "table-005-table-to-text-quoted-multiline-3x2",
+      "input_sha256": "6ac06c31dfe34bff7f6541757d321833fe281d73740f3ed7ba5c1d3a9f70d752", "input_bytes": 13170,
+      "output_sha256": "9a9350e3fa7bff3844b540257ffadba7064ddb340f3ccbf0b5325be49ba20900", "output_bytes": 15342, "output_section_sha256": "3778a733603a350eb9c3974ec7fde9e6f8feedc8399b6f44193b6285e8bed1be",
+      "pdf_sha256": "ab4e6838e30d1a088c45e51f542b5bbc5236be1301e4bd809b25fe903944fa22", "pdf_bytes": 12658,
+      "state_sha256": "9dc54871c6f686f47c136c1c89d7ac0e62a38c1ce69aeee91b65c450f554fe9b", "grid_sha256": "69fa2b24266bd3e1466b2bfd3d8ecb55a58a76fc3aa355d183b24ff6d36beacc", "text_grid_sha256": "3e3c169b265ad05c7cecdd779a38dfd8e3234053db3f1d2428c0a099be7624eb",
+      "rows": 3, "columns": 2, "master_cells": 6, "payload_blocks": 5, "cache_count": 10, "cache_sha256": "e71e89cd24fee40f0b9c21b447dcec1cb702baf337c262cda4cd04b6a32b8d44"
+    },
+    {
+      "case_id": "table-004-boundary-1x1", "feature_id": "TABLE-004", "capability_id": "table.text_to_table", "stem": "table-004-text-to-table-boundary-1x1",
+      "input_sha256": "f5e2aae18e6bf31b7f60eed688b3dc26f6ad99e7744faba9420cf352db51cc84", "input_bytes": 13162,
+      "output_sha256": "3a087f02b23a65c777c61da8737fd0fd1ae07ad03f516ba1e8f79b62be51d641", "output_bytes": 14960, "output_section_sha256": "b6fff79d8c2f215edb33b0ef1d1d58b760a870bc893260a60c46b6977a6e040e",
+      "pdf_sha256": "3cd4b9d50273fdeac8ac274fb1bfb6e62176b0843b30637a5c0fd766151f26fe", "pdf_bytes": 10560,
+      "state_sha256": "9c10cca05be8e9ae31fb8b8423636465900301337c002d010477f7f4446394f1", "grid_sha256": "e6f177fd2d4d7d38e326fda013d9b156297b6db67ce1ba66b88f6370c80af82a", "text_grid_sha256": "0f0a5541d5ec01973a5fad8e9690708e405331d1550391255df45505871e7fe6",
+      "rows": 1, "columns": 1, "master_cells": 1, "payload_blocks": 1, "cache_count": 11, "cache_sha256": "5f27694ccd7d258c83e5a9f2c4b62c55e6a848f6002d80913c729f0f69007c69"
+    },
+    {
+      "case_id": "table-005-boundary-1x1", "feature_id": "TABLE-005", "capability_id": "table.table_to_text", "stem": "table-005-table-to-text-boundary-1x1",
+      "input_sha256": "267a9b326f87c92142a235369ae0638844b9b9245cfdc11df64db651c82eba72", "input_bytes": 13111,
+      "output_sha256": "881ed36689fce30637c87619407c7be9719317937f7cddedb79d628e3bb41f8a", "output_bytes": 14375, "output_section_sha256": "2676972863fa263dbe759a752fe99060f303e91d16ddd057f97fbf7ffe5e776b",
+      "pdf_sha256": "966b706751d8d5e620144b704209f12a0ddf6b5f5ed4b1ee87a9c5f59cc2c8ac", "pdf_bytes": 10486,
+      "state_sha256": "9c10cca05be8e9ae31fb8b8423636465900301337c002d010477f7f4446394f1", "grid_sha256": "e6f177fd2d4d7d38e326fda013d9b156297b6db67ce1ba66b88f6370c80af82a", "text_grid_sha256": "0f0a5541d5ec01973a5fad8e9690708e405331d1550391255df45505871e7fe6",
+      "rows": 1, "columns": 1, "master_cells": 1, "payload_blocks": 1, "cache_count": 10, "cache_sha256": "4d689bc912eb2385bc8a0a10d46f1076436ba2ed07c0466dabab792213a3064f"
+    }
+  ],
+  "render_oracle": {
+    "state": "pass", "pdf_count": 4, "pages_each": 1, "page_size_points": [595, 841],
+    "producer": "Hancom PDF 1.3.0.550", "renderer": "pdftoppm 26.07.0", "dpi": 144,
+    "pixel_size": [1190, 1682], "inspection_detail": "original",
+    "review_actor": "assistant_visual_review", "clipping": false, "overlap": false,
+    "blank_pages": [], "black_boxes": false
+  },
+  "gate_decision": {
+    "TABLE-004": "oracle_verified", "TABLE-005": "oracle_verified",
+    "actual_hancom_2020_save_reopen": "pass", "actual_hancom_2020_target_build": "pass",
+    "render_diff": "pass", "rollback_or_retry": "pass", "automation_runtime": "not_run",
+    "differential": "not_run", "p06_09": "in_progress", "p06": "in_progress"
+  },
+  "failure_policy": [
+    "predecessor_or_source_lock_drift_rejects",
+    "manifest_input_output_pdf_trace_progress_or_receipt_drift_rejects",
+    "duplicate_json_key_path_escape_symlink_or_size_limit_rejects",
+    "target_binary_identity_case_order_or_lifecycle_drift_rejects",
+    "typed_state_grid_text_pagination_formula_or_cache_receipt_drift_rejects",
+    "unexpected_pdf_page_encryption_javascript_or_signature_drift_rejects",
+    "historical_failed_or_superseded_evidence_is_never_promoted",
+    "automation_differential_other_version_p06_production_or_product_claim_rejects"
+  ],
+  "migration": "protocol/migrations/p06-table-text-conversion-hwpx-v1-to-target-v2.md",
+  "report": "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_TARGET_READBACK_REPORT.md",
+  "evidence_receipt": "implementation/p06/evidence/target/p06-table-text-conversion.current-2020.attempt06.v2.json",
+  "not_claimed": {
+    "automation_runtime": false, "differential_exact_match": false,
+    "merged_or_formula_source_conversion": false, "field_or_opaque_content_flattening": false,
+    "arbitrary_native_template_or_wrapper": false, "arbitrary_user_document_compatibility": false,
+    "other_pc_or_hancom_version": false, "p06_09_complete": false,
+    "p06_phase_complete": false, "production": false, "product_complete": false
+  }
+}

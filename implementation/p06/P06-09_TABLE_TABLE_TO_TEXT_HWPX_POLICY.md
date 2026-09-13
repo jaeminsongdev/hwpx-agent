@@ -11,7 +11,9 @@ completely and normalized to NFC. Multiple paragraphs, fields, opaque controls, 
 captions, merged cells and formulas/caches fail closed because V1 has no reviewed lossless flattening
 semantics for them.
 
-The source table may carry arbitrary admitted ruling edges, cell properties, payload identities,
+The source table wrapper must match either the exact current-target native run-direct paragraph or
+the already admitted single-`hp:ctrl` legacy current profile; mixed, repeated, or ambiguous wrapper
+children fail closed. The source table may carry arbitrary admitted ruling edges, cell properties, payload identities,
 physical tracks, page-split policy and a valid contiguous repeat-header prefix. Those values are not
 silently ignored: the complete typed source state/grid, exact table bytes and pagination readback are
 bound before the intentionally destructive table removal. The caller supplies one output text-block
@@ -44,7 +46,7 @@ unknown JSON fails closed. Debug omits text, hashes, logical IDs, raw XML and do
 
 ## Evidence promotion rule
 
-Passing the seven adapter tests and private contract tamper suite promotes only TABLE-005 from
+Passing the eight adapter tests and private contract tamper suite promotes only TABLE-005 from
 `component_only / unit_passed` to `direct_hwpx / integration_passed` with `schema`, static
 `semantic_reopen`, formula-free `formula_readback` and source-pagination classification.
 

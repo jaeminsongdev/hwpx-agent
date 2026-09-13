@@ -863,24 +863,40 @@ fn exact_table_wrapper(
     let bytes = super::insertion_wrapper(section, table_ordinal)?;
     let document = PreservingXmlDocument::parse(section)?;
     let table = super::selected_table(&document, table_ordinal)?;
-    let control = super::element(&document, table)?
+    let table_parent = super::element(&document, table)?
         .parent()
         .ok_or(TableTableToTextHwpxError::UnsupportedWrapper)?;
-    let run = super::element(&document, control)?
-        .parent()
-        .ok_or(TableTableToTextHwpxError::UnsupportedWrapper)?;
+    let (run, control) = if super::has_name(super::element(&document, table_parent)?, "ctrl") {
+        (
+            super::element(&document, table_parent)?
+                .parent()
+                .ok_or(TableTableToTextHwpxError::UnsupportedWrapper)?,
+            Some(table_parent),
+        )
+    } else if super::has_name(super::element(&document, table_parent)?, "run") {
+        (table_parent, None)
+    } else {
+        return Err(TableTableToTextHwpxError::UnsupportedWrapper);
+    };
     let paragraph = super::element(&document, run)?
         .parent()
         .ok_or(TableTableToTextHwpxError::UnsupportedWrapper)?;
     let text = super::direct_children_named(&document, run, "t")?;
-    if !super::has_name(super::element(&document, control)?, "ctrl")
-        || !super::has_name(super::element(&document, run)?, "run")
+    if text.len() != 1 {
+        return Err(TableTableToTextHwpxError::UnsupportedWrapper);
+    }
+    let wrapper_children_are_exact = match control {
+        Some(control) => {
+            has_exact_direct_children(&document, run, &[control, text[0]])
+                && has_exact_direct_children(&document, control, &[table])
+        }
+        None => has_exact_direct_children(&document, run, &[table, text[0]]),
+    };
+    if !super::has_name(super::element(&document, run)?, "run")
         || !super::has_name(super::element(&document, paragraph)?, "p")
         || super::element(&document, paragraph)?.parent() != Some(document.root_element())
-        || text.len() != 1
         || !has_exact_direct_children(&document, paragraph, &[run])
-        || !has_exact_direct_children(&document, run, &[control, text[0]])
-        || !has_exact_direct_children(&document, control, &[table])
+        || !wrapper_children_are_exact
     {
         return Err(TableTableToTextHwpxError::UnsupportedWrapper);
     }
@@ -991,10 +1007,10 @@ fn lower_flow(
     limits: TextFlowLimits,
 ) -> Result<Vec<u8>, TableTableToTextHwpxError> {
     let lowered = TextFlowWriter::lower(flow, limits)?;
-    lowered
+    let standalone = lowered
         .strip_prefix(XML_DECLARATION)
-        .map(ToOwned::to_owned)
-        .ok_or(TableTableToTextHwpxError::ReadbackMismatch)
+        .ok_or(TableTableToTextHwpxError::ReadbackMismatch)?;
+    super::text_conversion_hwpx::native_paragraph_fragment(standalone).map_err(Into::into)
 }
 
 fn semantic_document_text(

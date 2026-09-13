@@ -76,11 +76,11 @@
     {
       "feature_ids": ["TABLE-004"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["formula_readback", "page_split", "render_diff", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "differential_state": "not_run",
       "evidence_files": [
         {
@@ -89,18 +89,26 @@
         },
         {
           "path": "implementation/p06/P06-09_TABLE_TEXT_TO_TABLE_HWPX_REPORT.md",
-          "sha256": "e788759fa29b8bfc3ba9b8b0a88b38fbc9803f61eb5ade6ccf47f1711f252c83"
+          "sha256": "3c17c4ac881b666327fd0505a62f1c60ad301f45a1184e1b541112a043f79971"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_TARGET_READBACK_REPORT.md",
+          "sha256": "ce6db0ba7acae55f87a90e9d01908958de9b51a5973c067d2970538c6801ca45"
+        },
+        {
+          "path": "implementation/p06/evidence/target/p06-table-text-conversion.current-2020.attempt06.v2.json",
+          "sha256": "b494039e0c2f7617854d50a008a69963667c2581318d138fe8b4ac94b093f36e"
         }
       ]
     },
     {
       "feature_ids": ["TABLE-005"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["formula_readback", "page_split", "render_diff", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "differential_state": "not_run",
       "evidence_files": [
         {
@@ -109,7 +117,15 @@
         },
         {
           "path": "implementation/p06/P06-09_TABLE_TABLE_TO_TEXT_HWPX_REPORT.md",
-          "sha256": "56fe71fe18b7f85feafd9b28d35c77b00e7d1fee0325a774dc600b6f84280c02"
+          "sha256": "5237c63ccf53c1ec7cfda37891000801a2af2b93fae04a9ef9b4d149c2cb1a57"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_TEXT_CONVERSION_TARGET_READBACK_REPORT.md",
+          "sha256": "ce6db0ba7acae55f87a90e9d01908958de9b51a5973c067d2970538c6801ca45"
+        },
+        {
+          "path": "implementation/p06/evidence/target/p06-table-text-conversion.current-2020.attempt06.v2.json",
+          "sha256": "b494039e0c2f7617854d50a008a69963667c2581318d138fe8b4ac94b093f36e"
         }
       ]
     },
