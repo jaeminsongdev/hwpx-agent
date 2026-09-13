@@ -2997,12 +2997,19 @@ fn background_digest(fill: &FillBrush) -> String {
     let mut digest = Sha256::new();
     digest.update(b"hwpx-agent.table-ruling-background/v1\0");
     hash_part(&mut digest, color(fill.window.face_color).as_str());
+    // Hangul 2020 materializes hatchColor="#000000" when a solid window brush has no
+    // hatchStyle. That color cannot affect rendering without a hatch style, so bind the
+    // semantic identity to it only when the hatch is active.
     hash_part(
         &mut digest,
-        fill.window
-            .hatch_color
-            .map_or_else(|| "none".to_owned(), color)
-            .as_str(),
+        if fill.window.hatch_style.is_some() {
+            fill.window
+                .hatch_color
+                .map_or_else(|| "none".to_owned(), color)
+        } else {
+            "none".to_owned()
+        }
+        .as_str(),
     );
     hash_part(
         &mut digest,

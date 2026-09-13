@@ -1,0 +1,69 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-properties-target-contract/v3",
+  "scope": "TABLE-008 TABLE-009 TABLE-047 exact current-PC Hangul 2020 border-fill-diagonal batch oracle",
+  "predecessor": {
+    "path": "protocol/private/p06-table-properties-target-v2.json",
+    "sha256": "c2cbf10a9b434f715b5f5ba53b7ef947c6b1213f87c8c614e7486ba5bd884692",
+    "state": "TABLE-007 oracle_verified exact current-PC target contract"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path": "protocol/private/p06-table-properties-target-v2.json", "sha256": "c2cbf10a9b434f715b5f5ba53b7ef947c6b1213f87c8c614e7486ba5bd884692"},
+    {"path": "tools/p06/validate_table_properties_target_v2_contract.py", "sha256": "042ecc8c4d37da5698e5022206aebb714904331780944f8806a88d4e9a0db9c6"},
+    {"path": "crates/hwpx-package/src/table_ruling_hwpx.rs", "sha256": "48493926f7747333cb6390ed79e78a7e172ea591313d2391e2be3c74e7da2683"},
+    {"path": "crates/hwpx-package/src/table_ruling_hwpx/properties_hwpx.rs", "sha256": "9d1ba6454817bb4cdb42779b15952b8bd5cbad5d8b3a4fb2ed34ec651620020c"},
+    {"path": "crates/hwpx-package/tests/table_properties_hwpx.rs", "sha256": "637991f05ff6f9952309f9445c61f5b83668a714008b50d0ef69d1386244f19b"},
+    {"path": "crates/hwpx-package/examples/p06_09_table_properties_target_fixture.rs", "sha256": "87739dc63593a94a7df4adb8d4327fcbc85ddfa1b77d2c119e75f98efa0fa19c"},
+    {"path": "crates/hwpx-package/examples/p06_09_table_borders_diagonal_target_fixture.rs", "sha256": "7558394caba7016bba612a4f8df0ff9c43345d6d2ce74852145b02a3092fe666"},
+    {"path": "crates/hwpx-package/examples/p06_09_table_properties_target_oracle.rs", "sha256": "b8107333e6d5db50e8e9dcd01141a565f5bbfe247409c8fb8b9007fb230890f9"},
+    {"path": "crates/hwpx-package/examples/p06_09_table_borders_diagonal_target_oracle.rs", "sha256": "056146c16a78a727633b90bb8742924c2b49a78b016087b329dc98f53959e8ae"},
+    {"path": "implementation/p06/tools/run-hancom-2020-table-properties-target-readback.ps1", "sha256": "3da056958e4dac341700278a158d174bbe5eb1ceff3f39dd637939264d93b6a8"},
+    {"path": "implementation/p06/tests/Test-Hancom2020TablePropertiesTargetReadback.ps1", "sha256": "82ed78af052dab81a8963411e04b0bed447aa3547128aee253c7efd81afacf96"}
+  ],
+  "exact_target": {"product": "Hancom Hangul 2020", "prog_id": "HWPFrame.HwpObject.2", "registry_view": "Registry32", "client": "windows_powershell_x86_sta", "build": "11.0.0.9136", "architecture": "x86", "locale": "ko-KR", "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"},
+  "successful_attempt": {
+    "id": "20260913-08",
+    "directory": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08",
+    "manifest": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/fixture-manifest.json", "sha256": "05387606ca02cd9e06d44556d8ea50aaf5d80d238dbdc41f68b9c9551026bab0", "bytes": 13815},
+    "receipt": {"path": "implementation/p06/evidence/target/p06-table-borders-diagonal.current-2020.attempt01.v3.json", "sha256": "d67da12b1d3470ee3db1d762e34c9a8e31b17f212264f9d21182a86b21ee5d8a", "bytes": 10466},
+    "cases": [
+      {
+        "feature_id": "TABLE-008",
+        "input": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-008-cell-border-each-formula-2x4.hwpx", "sha256": "5ec86c45cbb1df724827b5126220643bf37a647d58307bbb8f4840bfe89acc30", "bytes": 13188},
+        "output": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-008-cell-border-each-formula-2x4.hancom-2020-readback.hwpx", "sha256": "d97d7c1faafc2973484fbc379db8ade16267f46f3ed6ec4b66394e94284254b9", "bytes": 15281},
+        "pdf": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-008-cell-border-each-formula-2x4.hancom-2020-render.pdf", "sha256": "d089a42dfc34c5006da22b4dc011eb195f6830f9f332b20c18006fe06f1c3b3e", "bytes": 11183, "pages": 1},
+        "trace": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-008-cell-border-each-formula-2x4.trace.json", "sha256": "69a163281a492c906084ec11072e23a17ec9e24db25e8a3683490138b107fc7e", "bytes": 2329},
+        "progress": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-008-cell-border-each-formula-2x4.trace.json.progress.jsonl", "sha256": "299c428b81f91e5a47fc05f5381cb8da535a8169bddf831ea74ac51455a0dd28", "bytes": 5185, "events": 21},
+        "render_png": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-008-cell-border-each-formula-2x4.hancom-2020-render-page-1.png", "sha256": "6f569a823bcb02b1544263d7a17e540ef75ea940b725e411e61f3167eab67acf", "bytes": 12763}
+      },
+      {
+        "feature_id": "TABLE-009",
+        "input": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-009-cell-border-unified-formula-2x4.hwpx", "sha256": "c83d13e508fd78cbaa3e65a01ea2d5b7b668a4dce87188c972484c2e8223b0d8", "bytes": 13262},
+        "output": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-009-cell-border-unified-formula-2x4.hancom-2020-readback.hwpx", "sha256": "546560ec33d7ab2a1a28057f377ee747ca6aa6d17491cf531e2e192a2ed42e83", "bytes": 15333},
+        "pdf": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-009-cell-border-unified-formula-2x4.hancom-2020-render.pdf", "sha256": "91bef76c46e8aa06ce810da465d72b1a5f820e8a492a319c23b0d37b0988ea59", "bytes": 11137, "pages": 1},
+        "trace": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-009-cell-border-unified-formula-2x4.trace.json", "sha256": "725fe3485df20c6871d7f5ddf9df5a250e71ef72c5e4df9a71237da41c2b64ca", "bytes": 2329},
+        "progress": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-009-cell-border-unified-formula-2x4.trace.json.progress.jsonl", "sha256": "58eedf3daa3384694d77df6f18742f3284f31609282a4ff0b658bb4dfc4b8bd6", "bytes": 5185, "events": 21},
+        "render_png": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-009-cell-border-unified-formula-2x4.hancom-2020-render-page-1.png", "sha256": "01cb447d523e742d8d54d5e6d22d30661fc38ff0181c457384b09f8f85c76cdb", "bytes": 12453}
+      },
+      {
+        "feature_id": "TABLE-047",
+        "input": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-047-cell-diagonal-formula-2x4.hwpx", "sha256": "26ab01ea8ba2b02430afbe2173af52bf106dbb251b23ab3a320a3d78361f36ea", "bytes": 13150},
+        "output": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-047-cell-diagonal-formula-2x4.hancom-2020-readback.hwpx", "sha256": "ff831710d4a0823105578596a96e46c3a81c0040ea8d34a9e91bf269c0163262", "bytes": 16412},
+        "pdf": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-047-cell-diagonal-formula-2x4.hancom-2020-render.pdf", "sha256": "df6cb08c913bad949b4276b4c08588df4d610a96ae4dfe5f491fc14ac262b112", "bytes": 10321, "pages": 1},
+        "trace": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-047-cell-diagonal-formula-2x4.trace.json", "sha256": "d1ce28dbcdcf6c0eedb90d3624fb73b37bc1f73a8a04b0e049de7efe9d9571db", "bytes": 2329},
+        "progress": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-047-cell-diagonal-formula-2x4.trace.json.progress.jsonl", "sha256": "b669d250dccadffc46cd0e1e7d90c55576365765d5dc2fe47eda2bd8c0ca6697", "bytes": 5185, "events": 21},
+        "render_png": {"path": "fixtures/target-build/p06-09-table-borders-diagonal-target-20260913-08/table-047-cell-diagonal-formula-2x4.hancom-2020-render-page-1.png", "sha256": "79bf3b100ee604fdff641d171756606676603ba243a33a2bae8f655caa00c405", "bytes": 13783}
+      }
+    ],
+    "state": "pass"
+  },
+  "typed_oracle": {"rows": 2, "columns": 4, "master_cells": 8, "payload_blocks": 7, "formula_count_each": 1, "formula_owner": {"row": 1, "column": 3}, "formula": "SUM(A2:C2)", "page_split": "cell", "renderer_cache_count_each": 10, "renderer_cache_sha256_each": "72864168e174956d51a0f33d9e4be3226215c2993a5216644671b81e12ccecd2", "section_equal_after_exact_renderer_cache_strip": true, "native_inert_hatch_color_normalized": true},
+  "render_oracle": {"state": "pass", "pages_each": 1, "page_size_points": [595, 841], "dpi": 144, "pixel_size": [1190, 1682], "individual_edges_visible": true, "unified_outer_inner_edges_visible": true, "diagonal_x_visible": true, "all_values_visible": true, "clipping": false, "overlap": false, "blank_pages": false, "black_boxes": false},
+  "retry_oracle": {"state": "pass", "independent_builds": 2, "byte_deterministic": true, "existing_destination_rejected_without_overwrite": true},
+  "gate_decision": {"TABLE-007": "oracle_verified", "TABLE-008": "oracle_verified", "TABLE-009": "oracle_verified", "TABLE-047": "oracle_verified", "actual_hancom_2020_save_reopen": "pass", "target_build": "pass", "render_diff": "pass", "rollback_or_retry": "pass", "automation_runtime": "not_run", "differential": "not_run", "p06_09": "in_progress", "p06": "in_progress"},
+  "not_claimed": {"automation_runtime": false, "differential_exact_match": false, "arbitrary_user_document_compatibility": false, "other_pc_or_hancom_version": false, "p06_09_complete": false, "p06_phase_complete": false, "production": false, "product_complete": false},
+  "failure_policy": ["predecessor_or_source_lock_drift_rejects", "manifest_target_output_pdf_trace_progress_png_or_receipt_drift_rejects", "duplicate_json_key_path_escape_symlink_or_size_limit_rejects", "typed_border_fill_diagonal_formula_pagination_or_renderer_cache_drift_rejects", "active_hatch_color_mismatch_rejects", "automation_or_differential_not_promoted"],
+  "migration": "protocol/migrations/p06-table-properties-target-v2-to-v3.md",
+  "report": "implementation/p06/P06-09_TABLE_BORDERS_DIAGONAL_TARGET_READBACK_REPORT.md",
+  "evidence_receipt": "implementation/p06/evidence/target/p06-table-borders-diagonal.current-2020.attempt01.v3.json"
+}

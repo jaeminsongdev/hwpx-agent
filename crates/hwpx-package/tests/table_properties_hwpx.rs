@@ -590,6 +590,38 @@ fn part_hashes(graph: &PackageGraph) -> BTreeMap<String, [u8; 32]> {
 }
 
 #[test]
+fn solid_background_identity_ignores_inert_native_hatch_color() {
+    let without_hatch_color = FillBrush {
+        window: WindowBrush {
+            face_color: Color::Rgb(0xff, 0xf2, 0xcc),
+            hatch_color: None,
+            hatch_style: None,
+            alpha: 255,
+        },
+    };
+    let native_normalized = FillBrush {
+        window: WindowBrush {
+            hatch_color: Some(Color::Rgb(0, 0, 0)),
+            ..without_hatch_color.window
+        },
+    };
+    assert_eq!(
+        TablePropertiesHwpxValueCatalog::background_sha256(&without_hatch_color),
+        TablePropertiesHwpxValueCatalog::background_sha256(&native_normalized)
+    );
+    let active_hatch = FillBrush {
+        window: WindowBrush {
+            hatch_style: Some(hwpx_package::HatchStyle::Cross),
+            ..native_normalized.window
+        },
+    };
+    assert_ne!(
+        TablePropertiesHwpxValueCatalog::background_sha256(&without_hatch_color),
+        TablePropertiesHwpxValueCatalog::background_sha256(&active_hatch)
+    );
+}
+
+#[test]
 fn reader_lifts_complete_typed_state_and_redacts_debug() -> TestResult {
     let header = header()?;
     let section = ordinary_section();
