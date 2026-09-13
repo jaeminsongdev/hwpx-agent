@@ -298,7 +298,35 @@
       ]
     },
     {
-      "feature_ids": ["TABLE-007", "TABLE-008", "TABLE-009", "TABLE-047"],
+      "feature_ids": ["TABLE-007"],
+      "backend": "direct_hwpx",
+      "stage": "oracle_verified",
+      "validations_passed": ["formula_readback", "page_split", "render_diff", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": true,
+      "differential_state": "not_run",
+      "evidence_files": [
+        {
+          "path": "implementation/p06/P06-09_TABLE_PROPERTIES_REPORT.md",
+          "sha256": "a01da79f47f544ac034341261e14fb4a649a62d3bf02222628e57aefc36abab6"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_PROPERTIES_HWPX_REPORT.md",
+          "sha256": "8f1d14f74030df62bfc99f6ec2628d4a75e8d5d29878b359f0a5cae770adcec4"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_PROPERTIES_TARGET_READBACK_REPORT.md",
+          "sha256": "44086b1af7ca2fe340a194b7ae1591176682140873ae7296e34993a8e6e6ae7b"
+        },
+        {
+          "path": "implementation/p06/evidence/target/p06-table-properties.current-2020.attempt01.v2.json",
+          "sha256": "f71d95ee607c17f4b4960e1feab2926497e3b0cd9fc12e896b36b0021666895a"
+        }
+      ]
+    },
+    {
+      "feature_ids": ["TABLE-008", "TABLE-009", "TABLE-047"],
       "backend": "direct_hwpx",
       "stage": "integration_passed",
       "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
