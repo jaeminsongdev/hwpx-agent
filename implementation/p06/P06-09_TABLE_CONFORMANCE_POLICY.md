@@ -65,7 +65,7 @@ input requires a new output path or an explicitly reviewed successor update.
 ## Current result
 
 - Required rows: 61; green: 0; non-green: 61.
-- Direct stages: 0 cataloged, 1 unit-passed, 35 integration-passed, 25 oracle-verified.
+- Direct stages: 0 cataloged, 0 unit-passed, 36 integration-passed, 25 oracle-verified.
 - Automation bindings: 6 candidate-unverified, 55 unavailable-with-reason.
 - Automation runtime support: 61 unverified.
 - Direct/automation differential: 61 not-run.
@@ -107,6 +107,13 @@ five grouped and five ungrouped plans match the native sections byte-for-byte. F
 grid, semantic document flow and every unowned section byte remain exact. Direct-output package
 save/reopen, render, rollback/retry and automation runtime remain not run, so the row is
 `integration_passed`, not oracle-verified.
+
+TABLE-006 additionally has a current-target native-source-backed linked-chart HWPX integration.
+The exact 3x3 rectangular source lowers to a closed chart relationship/resource, preserves the
+source table and unrelated package bytes, and passes product HWPX open/save/reopen plus one-page PDF
+export and render review on Hangul 2020. Native-reference PDF `render_diff`, rollback/retry, product
+automation runtime and release differential remain not run, so the row is `integration_passed`, not
+oracle-verified.
 
 ## Not claimed
 

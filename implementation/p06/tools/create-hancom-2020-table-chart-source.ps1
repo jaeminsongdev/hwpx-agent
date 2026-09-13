@@ -199,6 +199,8 @@ $trace = [ordered]@{
     baseline_hwpx_sha256 = $null
     cell_block_action_count = 0
     chart_action = 'not_run'
+    chart_group = 1
+    chart_index = 3
     chart_visible_text_sha256 = $null
     chart_hwpx_sha256 = $null
     source_text_preserved = $false
@@ -226,8 +228,8 @@ $document = $null
 $window = $null
 $creation = $null
 $creationHSet = $null
-$chartCreation = $null
-$chartCreationHSet = $null
+$chartAction = $null
+$chartSet = $null
 $hwpProcessId = $null
 $phase = 'com_create'
 Write-ProgressEvent -Phase 'preflight' -State 'pass'
@@ -316,20 +318,26 @@ try {
     $phase = 'cell_block'
     Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
     1..8 | ForEach-Object { Invoke-ActionRun -Hwp $hwp -Action 'TableLeftCell' }
-    1..3 | ForEach-Object {
-        Invoke-ActionRun -Hwp $hwp -Action 'TableCellBlock'
+    Invoke-ActionRun -Hwp $hwp -Action 'TableCellBlock'
+    $trace.cell_block_action_count += 1
+    1..2 | ForEach-Object {
+        Invoke-ActionRun -Hwp $hwp -Action 'TableCellBlockExtend'
         $trace.cell_block_action_count += 1
     }
     Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
     $phase = 'chart_create'
     Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
-    $chartCreation = $hwp.HParameterSet.HOleCreation
-    $chartCreationHSet = $chartCreation.HSet
-    if ($hwp.HAction.GetDefault('InsertChart', $chartCreationHSet) -eq $false) {
+    $chartAction = $hwp.CreateAction('InsertChart')
+    if ($null -eq $chartAction) { throw 'CHART_ACTION_CREATE_FAILED' }
+    $chartSet = $chartAction.CreateSet()
+    if ($null -eq $chartSet) { throw 'CHART_SET_CREATE_FAILED' }
+    if ($chartAction.GetDefault($chartSet) -eq $false) {
         throw 'CHART_GET_DEFAULT_FAILED'
     }
-    if ($hwp.HAction.Execute('InsertChart', $chartCreationHSet) -eq $false) {
+    [void]$chartSet.SetItem('ChartGroup', $trace.chart_group)
+    [void]$chartSet.SetItem('ChartIndex', $trace.chart_index)
+    if ($chartAction.Execute($chartSet) -eq $false) {
         throw 'CHART_EXECUTE_FAILED'
     }
     $trace.chart_action = 'pass'
@@ -371,8 +379,8 @@ catch {
     catch { $trace.progress_write_failed = $true }
 }
 finally {
-    Clear-ComObject $chartCreationHSet
-    Clear-ComObject $chartCreation
+    Clear-ComObject $chartSet
+    Clear-ComObject $chartAction
     Clear-ComObject $creationHSet
     Clear-ComObject $creation
     if ($null -ne $document) {

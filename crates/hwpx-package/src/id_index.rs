@@ -104,6 +104,7 @@ enum ProfileKind {
     CurrentHancom2020EquationV4,
     Hwpml2011PictureV5,
     Hwpml2011ShapeV6,
+    Hwpml2016OoxmlChartV7,
 }
 
 impl IdRuleProfile {
@@ -149,6 +150,14 @@ impl IdRuleProfile {
         Self(ProfileKind::Hwpml2011ShapeV6)
     }
 
+    /// Extends the static shape profile with OOXML chart object identifiers. The
+    /// `chartIDRef` attribute is a package path, not a decimal identifier; the chart
+    /// adapter validates that path against the closed package graph separately.
+    #[must_use]
+    pub const fn hwpml_2016_ooxml_chart_v7() -> Self {
+        Self(ProfileKind::Hwpml2016OoxmlChartV7)
+    }
+
     #[must_use]
     pub const fn version(self) -> &'static str {
         match self.0 {
@@ -158,6 +167,7 @@ impl IdRuleProfile {
             ProfileKind::CurrentHancom2020EquationV4 => "hancom-2020-hwpml-2011-equation/v4",
             ProfileKind::Hwpml2011PictureV5 => "hwpml-2011-picture-static/v5",
             ProfileKind::Hwpml2011ShapeV6 => "hwpml-2011-shape-static/v6",
+            ProfileKind::Hwpml2016OoxmlChartV7 => "hwpml-2016-ooxml-chart/v7",
         }
     }
 
@@ -169,6 +179,7 @@ impl IdRuleProfile {
                 | ProfileKind::CurrentHancom2020EquationV4
                 | ProfileKind::Hwpml2011PictureV5
                 | ProfileKind::Hwpml2011ShapeV6
+                | ProfileKind::Hwpml2016OoxmlChartV7
         )
     }
 
@@ -179,6 +190,7 @@ impl IdRuleProfile {
                 | ProfileKind::CurrentHancom2020EquationV4
                 | ProfileKind::Hwpml2011PictureV5
                 | ProfileKind::Hwpml2011ShapeV6
+                | ProfileKind::Hwpml2016OoxmlChartV7
         )
     }
 
@@ -188,18 +200,28 @@ impl IdRuleProfile {
             ProfileKind::CurrentHancom2020EquationV4
                 | ProfileKind::Hwpml2011PictureV5
                 | ProfileKind::Hwpml2011ShapeV6
+                | ProfileKind::Hwpml2016OoxmlChartV7
         )
     }
 
     const fn includes_picture_rules(self) -> bool {
         matches!(
             self.0,
-            ProfileKind::Hwpml2011PictureV5 | ProfileKind::Hwpml2011ShapeV6
+            ProfileKind::Hwpml2011PictureV5
+                | ProfileKind::Hwpml2011ShapeV6
+                | ProfileKind::Hwpml2016OoxmlChartV7
         )
     }
 
     const fn includes_shape_rules(self) -> bool {
-        matches!(self.0, ProfileKind::Hwpml2011ShapeV6)
+        matches!(
+            self.0,
+            ProfileKind::Hwpml2011ShapeV6 | ProfileKind::Hwpml2016OoxmlChartV7
+        )
+    }
+
+    const fn includes_chart_rules(self) -> bool {
+        matches!(self.0, ProfileKind::Hwpml2016OoxmlChartV7)
     }
 
     const fn preservation_profile(self) -> PreservationRuleProfile {
@@ -209,7 +231,10 @@ impl IdRuleProfile {
             | ProfileKind::CurrentHancom2020FormulaV3
             | ProfileKind::CurrentHancom2020EquationV4
             | ProfileKind::Hwpml2011PictureV5
-            | ProfileKind::Hwpml2011ShapeV6 => PreservationRuleProfile::Hangul2020PreviewTextV2,
+            | ProfileKind::Hwpml2011ShapeV6
+            | ProfileKind::Hwpml2016OoxmlChartV7 => {
+                PreservationRuleProfile::Hangul2020PreviewTextV2
+            }
         }
     }
 }
@@ -245,6 +270,7 @@ pub enum IdKind {
     PictureInstance,
     Shape,
     ShapeInstance,
+    Chart,
 }
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
@@ -874,6 +900,15 @@ const SHAPE_DECLARATION_RULES: &[DeclarationRule] = &[
     shape_declaration("curve", "instid", IdKind::ShapeInstance),
 ];
 
+const CHART_DECLARATION_RULES: &[DeclarationRule] = &[declaration(
+    PartSelector::SpineDocument,
+    HWPML_2011_PARAGRAPH_NAMESPACE,
+    "chart",
+    "id",
+    IdKind::Chart,
+    ValueSyntax::Decimal,
+)];
+
 const fn shape_declaration(
     element: &'static str,
     attribute: &'static str,
@@ -1387,6 +1422,15 @@ impl<'a> IndexBuilder<'a> {
             self.scan_declaration(part, document, element_index, attribute, location, rule)
         } else if let Some(rule) = reference_rule {
             self.scan_reference(attribute.semantic_value(), location, rule)
+        } else if known_non_identifier_reference(
+            self.profile,
+            part,
+            element.name().namespace(),
+            element.name().local_name(),
+            attribute.name().namespace(),
+            attribute.name().local_name(),
+        ) {
+            Ok(())
         } else if !known_zero_sentinel(
             part,
             element.name().namespace(),
@@ -1719,6 +1763,11 @@ fn matching_declaration_rule(
     } else {
         &[]
     };
+    let chart = if profile.includes_chart_rules() {
+        CHART_DECLARATION_RULES
+    } else {
+        &[]
+    };
     for rule in DECLARATION_RULES
         .iter()
         .chain(table)
@@ -1726,6 +1775,7 @@ fn matching_declaration_rule(
         .chain(equation)
         .chain(picture)
         .chain(shape)
+        .chain(chart)
     {
         if part_matches(rule.part, graph, part)
             && rule_namespace_matches(element_namespace, rule.namespace)
@@ -1819,6 +1869,22 @@ fn is_id_like(local_name: &str) -> bool {
         || local_name == "idref"
         || local_name == "idRef"
         || local_name.ends_with("IDRef")
+}
+
+fn known_non_identifier_reference(
+    profile: IdRuleProfile,
+    part: &PartPreservationRecord,
+    element_namespace: Option<&str>,
+    element_local: &str,
+    attribute_namespace: Option<&str>,
+    attribute_local: &str,
+) -> bool {
+    profile.includes_chart_rules()
+        && part.role() == PartRole::SpineDocument
+        && element_namespace == Some(HWPML_2011_PARAGRAPH_NAMESPACE)
+        && element_local == "chart"
+        && attribute_namespace.is_none()
+        && attribute_local == "chartIDRef"
 }
 
 fn known_zero_sentinel(

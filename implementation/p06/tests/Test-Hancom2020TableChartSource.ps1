@@ -119,12 +119,19 @@ $checks = [ordered]@{
     exact_full_cell_block = [regex]::Matches(
         $worker,
         'Invoke-ActionRun -Hwp \$hwp -Action ''TableCellBlock'''
-    ).Count -eq 1 -and $worker -match '1\.\.3 \| ForEach-Object' -and
+    ).Count -eq 1 -and [regex]::Matches(
+        $worker,
+        'Invoke-ActionRun -Hwp \$hwp -Action ''TableCellBlockExtend'''
+    ).Count -eq 1 -and $worker -match '1\.\.2 \| ForEach-Object' -and
         $worker -match '\$trace\.cell_block_action_count \+= 1'
     documented_chart_action = $worker -match
-        '\$chartCreation = \$hwp\.HParameterSet\.HOleCreation' -and
-        $worker -match '\.GetDefault\(''InsertChart'', \$chartCreationHSet\)' -and
-        $worker -match '\.Execute\(''InsertChart'', \$chartCreationHSet\)'
+        '\$chartAction = \$hwp\.CreateAction\(''InsertChart''\)' -and
+        $worker -match '\$chartSet = \$chartAction\.CreateSet\(\)' -and
+        $worker -match '\$chartAction\.GetDefault\(\$chartSet\)' -and
+        $worker -match '\$chartAction\.Execute\(\$chartSet\)' -and
+        $worker -match '\.SetItem\(''ChartGroup'', \$trace\.chart_group\)' -and
+        $worker -match '\.SetItem\(''ChartIndex'', \$trace\.chart_index\)' -and
+        $worker -match 'chart_group = 1' -and $worker -match 'chart_index = 3'
     no_guessed_native_chart_xml = $all -notmatch
         '(?i)chartIDRef|chartSpace|content\.hpf|Contents[\\/]chart|OOXMLChartContents'
     source_text_preservation = $worker -match
@@ -147,6 +154,8 @@ $checks = [ordered]@{
     exact_success_receipt = $wrapper -match '\$successSemanticsValid' -and
         $wrapper -match '\[long\]\$trace\.source_cells_written -eq 8' -and
         $wrapper -match '\[long\]\$trace\.cell_block_action_count -eq 3' -and
+        $wrapper -match '\[long\]\$trace\.chart_group -eq 1' -and
+        $wrapper -match '\[long\]\$trace\.chart_index -eq 3' -and
         $wrapper -match '\$trace\.chart_action -ceq ''pass'''
     progress_journal = $wrapper -match 'Read-ProgressJournal' -and
         $wrapper -match 'progress_last_phase = \$progress\.last_phase' -and

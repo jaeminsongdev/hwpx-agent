@@ -1,0 +1,198 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-chart-current-2020-evidence/v1",
+  "evidence_id": "p06.table-chart.current-2020.attempt01.20260913",
+  "scope": "exact_current_pc_direct_chart_product_open_save_reopen_and_pdf_render",
+  "feature": {
+    "feature_id": "TABLE-006",
+    "capability_id": "table.chart_from_table"
+  },
+  "target": {
+    "product": "Hancom Hangul 2020",
+    "prog_id": "HWPFrame.HwpObject.2",
+    "registry_view": "Registry32",
+    "client": "windows_powershell_x86_sta",
+    "build": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+  },
+  "artifacts": {
+    "native_before": {
+      "path": "fixtures/target-build/p06-09-table-chart-source-20260913-04/before.hwpx",
+      "sha256": "7ed2006c862be671eba82c1a3648c2a30ce7176fef8a6ceb58469b167a5e4929",
+      "bytes": 15140
+    },
+    "native_after": {
+      "path": "fixtures/target-build/p06-09-table-chart-source-20260913-04/after.hwpx",
+      "sha256": "454901d38967f3b2a92b407fd09c0ad9f0a3a12d291c8849dfc02257db8bf40a",
+      "bytes": 49614
+    },
+    "native_watchdog": {
+      "path": "fixtures/target-build/p06-09-table-chart-source-20260913-04/trace.json",
+      "sha256": "c167be699dbeb7053be56e274d62b4bb4e73fd951de1aa88f5d7b2a397da457f",
+      "bytes": 2107
+    },
+    "native_inner_trace": {
+      "path": "fixtures/target-build/p06-09-table-chart-source-20260913-04/trace.json.inner.21984.json",
+      "sha256": "b1a7a9d6f8dfa5ba4b908cb9d6d15d1e48168df1cddfccaf70f116d43c636a6d",
+      "bytes": 1538
+    },
+    "native_progress": {
+      "path": "fixtures/target-build/p06-09-table-chart-source-20260913-04/trace.json.progress.jsonl",
+      "sha256": "2718aecc94409ad699fdec5baac44f10435d2c8b55088002b3c192a3ce498133",
+      "bytes": 5298,
+      "events": 18
+    },
+    "normalized_source": {
+      "path": "fixtures/target-build/p06-09-table-chart-product-20260913-01/output/p06-09-table-chart-source-normalized.hwpx",
+      "sha256": "f0a4015b621bd956b40fe5787d573bb9da6578bc26c6e3d31a7818f74f46449c",
+      "bytes": 14294
+    },
+    "direct_product": {
+      "path": "fixtures/target-build/p06-09-table-chart-product-20260913-01/output/p06-09-table-chart-product.hwpx",
+      "sha256": "f9f7baa1f2aa975bd2d7fd63f268176e4cfa6121772e95b1893b9873b05bcf12",
+      "bytes": 15327
+    },
+    "saved_product": {
+      "path": "fixtures/target-build/p06-09-table-chart-product-hancom-20260913-01/saved.hwpx",
+      "sha256": "28faf18103332b617cc9f3706b003bd0d927e5ac67cf91fde776130cf8c31af4",
+      "bytes": 49750
+    },
+    "render_pdf": {
+      "path": "fixtures/target-build/p06-09-table-chart-product-hancom-20260913-01/render.pdf",
+      "sha256": "3ce33525182f07417d0aa1126e5d96feddab1cde8713b3da7c80eabec3a7a7fe",
+      "bytes": 98655
+    },
+    "product_watchdog": {
+      "path": "fixtures/target-build/p06-09-table-chart-product-hancom-20260913-01/trace.json",
+      "sha256": "0d2509bc10817d5f24d5e08280a431980d4437775ffbf5be09875f7ead5c63e5",
+      "bytes": 2867
+    },
+    "product_inner_trace": {
+      "path": "fixtures/target-build/p06-09-table-chart-product-hancom-20260913-01/trace.json.inner.44824.json",
+      "sha256": "73ad8ab7b67f612973667731125655bf3be6453f8f638031962a7a06d1759550",
+      "bytes": 1922
+    },
+    "product_progress": {
+      "path": "fixtures/target-build/p06-09-table-chart-product-hancom-20260913-01/trace.json.progress.jsonl",
+      "sha256": "1a30b23715177302a05669682770e4c970e2d7ebbc043e228d6f7b92ec38f254",
+      "bytes": 3597,
+      "events": 12
+    }
+  },
+  "direct_readback": {
+    "profile_id": "hwpx-agent.table-chart-hwpx.hancom-2020/1",
+    "direct_product_entries": 12,
+    "saved_product_entries": 13,
+    "table_count": 1,
+    "cell_count": 9,
+    "chart_anchor_count": 1,
+    "chart_part_count": 1,
+    "chart_type": "three_dimensional_vertical_bar",
+    "bar_direction": "column",
+    "source_labels_present": true,
+    "source_table_preserved": true,
+    "native_and_saved_chart_cache_values_exact_match": true,
+    "ordered_chart_cache_values": [
+      "Series-A",
+      "Category-A",
+      "Category-B",
+      "1",
+      "3",
+      "Series-B",
+      "Category-A",
+      "Category-B",
+      "2",
+      "4"
+    ]
+  },
+  "target_lifecycle": {
+    "state": "pass",
+    "native_source_state": "pass",
+    "product_input_open": "pass",
+    "product_save_as": "pass",
+    "saved_product_reopen": "pass",
+    "visible_source_text_sha256_equal": true,
+    "pdf_export": "pass",
+    "product_progress_events": 12,
+    "timed_out": false,
+    "remaining_hwp_process_count": 0
+  },
+  "render_review": {
+    "method": "poppler_pdftoppm_150dpi_and_model_visual_review",
+    "pdf_pages": 1,
+    "page_size": "A4",
+    "creator": "Hwp 2020 11.0.0.9136",
+    "producer": "Hancom PDF 1.3.0.550",
+    "source_table_visible": true,
+    "series_labels_visible": true,
+    "category_labels_visible": true,
+    "four_numeric_values_visible": true,
+    "three_dimensional_vertical_bars_visible": true,
+    "clipping_or_overlap_observed": false,
+    "photo_or_user_screenshot_required": false,
+    "native_reference_render_comparison": "not_run"
+  },
+  "verification": {
+    "domain_tests": 12,
+    "adapter_tests": 6,
+    "native_source_static_tests": 24,
+    "product_lifecycle_static_tests": 19,
+    "contract_tests": 4,
+    "fixture_classes": [
+      "boundary",
+      "happy_path",
+      "negative",
+      "preservation",
+      "target_build"
+    ],
+    "validations": [
+      "formula_readback",
+      "page_split",
+      "schema",
+      "semantic_reopen"
+    ]
+  },
+  "historical_attempts": {
+    "native_source_failed_or_interrupted_ids": ["01", "02", "03"],
+    "product_lifecycle_failed_or_interrupted_ids": [],
+    "promoted_to_pass": 0
+  },
+  "privacy": {
+    "absolute_private_paths": false,
+    "raw_document_text": false,
+    "raw_chart_payload": false,
+    "secrets": false,
+    "computer_use_click_or_type_invoked": false,
+    "user_document_opened": false,
+    "external_network_invoked": false,
+    "registry_or_system_setting_changed": false
+  },
+  "gate_decision": {
+    "TABLE-006": "integration_passed",
+    "actual_hancom_2020_native_source": "pass",
+    "direct_hwpx_build": "pass",
+    "direct_output_package_save_reopen": "pass",
+    "direct_output_pdf_export": "pass",
+    "direct_output_render_review": "pass",
+    "required_render_diff": "not_run",
+    "rollback_or_retry": "not_run",
+    "automation_runtime": "not_run",
+    "release_differential": "not_run",
+    "p06_09": "in_progress",
+    "p06": "in_progress"
+  },
+  "not_claimed": {
+    "required_render_diff": false,
+    "rollback_or_retry": false,
+    "product_automation_route_runtime": false,
+    "release_differential": false,
+    "merged_cell_chart_semantics": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_hancom_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

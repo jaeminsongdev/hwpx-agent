@@ -40,6 +40,7 @@ mod section_columns;
 mod shape_points_hwpx;
 mod tab_definition;
 mod table_cell_style;
+mod table_chart_hwpx;
 mod table_formula;
 mod table_layout;
 mod table_pagination;
@@ -231,6 +232,12 @@ pub use table_cell_style::{
     TableCellStyleError, TableCellStyleLimitConfig, TableCellStyleLimits, TableCellStyleLowerer,
     TableCellStyleLoweringReceipt, TableCellStyleProfile, TableCellStyleReadback,
     TableCellStyleReader,
+};
+pub use table_chart_hwpx::{
+    TABLE_CHART_HWPX_PROFILE_ID, TABLE_CHART_HWPX_SCHEMA_VERSION, TableChartHwpxBuilder,
+    TableChartHwpxError, TableChartHwpxLimitConfig, TableChartHwpxLimits, TableChartHwpxLowered,
+    TableChartHwpxLowerer, TableChartHwpxLoweringReceipt, TableChartHwpxReadback,
+    TableChartHwpxReader, TableChartHwpxRequest, TableChartHwpxRequestDraft, TableChartHwpxSource,
 };
 pub use table_formula::{
     TABLE_CANONICAL_FORMULA_HWPX_PROFILE_ID, TABLE_FORMULA_HWPX_PROFILE_ID,

@@ -14,6 +14,7 @@ use crate::{
     BoundedZipReader, Compression, GraphError, IdIndex, IdIndexError, IdIndexLimits, IdRuleProfile,
     PackageError, PackageGraph, PackageGraphLimits, PackageLimits, PackagePath, PatchError,
     PatchPartDisposition, PatchResult, PreservationError, PreservationReport,
+    PreservationRuleProfile,
 };
 
 const NORMALIZED_DEFLATE_LEVEL: i64 = 6;
@@ -178,6 +179,7 @@ pub struct PackageArtifact {
     graph_limits: PackageGraphLimits,
     id_limits: IdIndexLimits,
     profile: IdRuleProfile,
+    preservation_profile: PreservationRuleProfile,
 }
 
 impl Debug for PackageArtifact {
@@ -226,6 +228,7 @@ impl PackageArtifact {
             Cursor::new(self.bytes.as_ref()),
             self.package_limits,
             self.graph_limits,
+            self.preservation_profile,
             self.profile,
             self.id_limits,
         )?;
@@ -469,6 +472,7 @@ fn build_artifact(
         Cursor::new(bytes.as_slice()),
         package_limits,
         graph_limits,
+        patch.preservation_profile,
         patch.profile,
         id_limits,
     )?;
@@ -488,6 +492,7 @@ fn build_artifact(
         graph_limits,
         id_limits,
         profile: patch.profile,
+        preservation_profile: patch.preservation_profile,
     })
 }
 
@@ -727,13 +732,18 @@ fn validate_archive<R: Read + Seek>(
     source: R,
     package_limits: PackageLimits,
     graph_limits: PackageGraphLimits,
+    preservation_profile: PreservationRuleProfile,
     profile: IdRuleProfile,
     id_limits: IdIndexLimits,
 ) -> Result<ValidationCounts, WriterError> {
     let mut reader = BoundedZipReader::open(source, package_limits)?;
     let graph = PackageGraph::build(&mut reader, graph_limits)?;
-    let preservation =
-        PreservationReport::build_with_graph_limits(&mut reader, &graph, graph_limits)?;
+    let preservation = PreservationReport::build_with_graph_limits_and_profile(
+        &mut reader,
+        &graph,
+        graph_limits,
+        preservation_profile,
+    )?;
     if !preservation.direct_preserve_ready() {
         return Err(WriterError::ArtifactMismatch);
     }
@@ -815,6 +825,7 @@ fn validate_staged(
         source,
         artifact.package_limits,
         artifact.graph_limits,
+        artifact.preservation_profile,
         artifact.profile,
         artifact.id_limits,
     )?;
@@ -833,6 +844,7 @@ fn validate_published(artifact: &PackageArtifact, published: &Path) -> Result<()
         source,
         artifact.package_limits,
         artifact.graph_limits,
+        artifact.preservation_profile,
         artifact.profile,
         artifact.id_limits,
     )
@@ -959,6 +971,7 @@ mod tests {
                 Cursor::new(bytes),
                 PackageLimits::default(),
                 PackageGraphLimits::default(),
+                PreservationRuleProfile::CoreV1,
                 IdRuleProfile::current_hancom_2020_core_v1(),
                 IdIndexLimits::default(),
             )
@@ -972,6 +985,7 @@ mod tests {
             Cursor::new(bytes.as_slice()),
             PackageLimits::default(),
             PackageGraphLimits::default(),
+            PreservationRuleProfile::CoreV1,
             IdRuleProfile::current_hancom_2020_core_v1(),
             IdIndexLimits::default(),
         )?;
@@ -993,6 +1007,7 @@ mod tests {
             graph_limits: PackageGraphLimits::default(),
             id_limits: IdIndexLimits::default(),
             profile: IdRuleProfile::current_hancom_2020_core_v1(),
+            preservation_profile: PreservationRuleProfile::CoreV1,
         })
     }
 

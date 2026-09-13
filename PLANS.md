@@ -22,7 +22,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 1 unit, 35 integration and 25 oracle rows but 0/61 release-green; row closures remain |
+| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged/unit, 36 integration and 25 oracle rows but 0/61 release-green; row closures remain |
 | P07-P09 | in progress | P07-01~09 implementation/unit checks pass; P07-09 exact current-target v3 passes user-attested edit plus native HWPX/save/reopen readback, without photo/render/P07/product promotion. P08 remains 5 cataloged, 19 unit, 34 integration, 0 oracle/green. P09 remains 7 cataloged, 38 unit, 8 integration, 0 oracle/green with target evidence not run |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -73,8 +73,8 @@
 - Commit `97b3008` introduced the deterministic 61-row matrix. A row is green only when direct
   HWPX oracle, every required validation/fixture, negative and rollback evidence, current-target
   automation runtime and exact differential all pass.
-- Current authority reports 0/61 green with direct stages: 0 cataloged, 1 unit-passed,
-  35 integration-passed and 25 oracle-verified. Automation is six candidate-unverified plus
+- Current authority reports 0/61 green with direct stages: 0 cataloged/unit-passed,
+  36 integration-passed and 25 oracle-verified. Automation is six candidate-unverified plus
   55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
 - TABLE-020 binds complete visual style; TABLE-016/017 bind full cell merge/split topology and content policies; TABLE-010/011 now split/join admitted formula-free/no-header/no-caption top-level wrappers with exact separator, common-lattice, state/flow/part binding and strict static reopen, without a Hangul/render claim.
 - TABLE-012/013/014/015 share an exact structure/HWPX model with full state/grid/flow binding, formula/cache rebase, edge collapse rules and pagination/caption reopen.
@@ -91,7 +91,7 @@
   formula/cache/field oracle and original-detail render review; attempt 01 remains failed evidence.
 - TABLE-021 transposes merged formula-free HWPX; TABLE-056 sorts complete plain/unmerged/formula-free
   cells; TABLE-057/058 fill exact single-run regions and reject stale unselected formula caches; TABLE-060 upgrades only formula reference anchors while preserving other formula fields; TABLE-001/004/005 create and convert admitted profiles with static reopen and no Hangul/render claim.
-- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. The only unit row is TABLE-006 with a 24/24 static-checked exact 3x3 native-source harness. TABLE-032/033 attempt 11 and TABLE-049 attempt 05 passed exact licensed target source runs; their preserving adapters match the corresponding native output sections byte-for-byte. Direct package save/reopen/render remain open. All 35 integration rows need target oracles and later automation evidence.
+- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. TABLE-006 now lowers its exact 3x3 source to a linked chart and passes licensed Hangul product open/save/reopen/PDF plus render review; native-reference render differential and retry remain open. TABLE-032/033 attempt 11 and TABLE-049 attempt 05 passed exact licensed target source runs; their preserving adapters match the corresponding native output sections byte-for-byte. All 36 integration rows need target oracles and later automation evidence.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`, current conformance JSON, and `protocol/private/p06-table-conformance-v1.json`.
 
 ## Risks, closures and holds
@@ -108,7 +108,7 @@
 ## Next actions
 
 1. Goal pursuit is active at `max`; finish P06 in order before resuming P07 and later phases. No remote push is implied.
-2. Next close TABLE-006 linked-chart HWPX; afterward run the 35 integration-row target/render campaign and all release differentials.
+2. Next close TABLE-006 native-reference render differential and retry, then run the 35 other integration-row target/render campaign and all release differentials.
 3. Resume P07 target/render/differential Gates only after P06, then continue P08 onward in ledger order.
 
 ## Context pack and archive pointers

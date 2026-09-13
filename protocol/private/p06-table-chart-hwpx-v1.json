@@ -1,0 +1,205 @@
+{
+  "schema_version": "hwpx-agent.table-chart-hwpx-contract/v1",
+  "profile_id": "hwpx-agent.table-chart-hwpx.hancom-2020/1",
+  "predecessor": {
+    "path": "protocol/private/p06-table-chart-v1.json",
+    "sha256": "25ff72a14743f4a98c88f2281abe08fcc122d73cf6db31b2dc4600e0e2d1bf43",
+    "state": "immutable_pure_planner_contract"
+  },
+  "scope": "p06_09_exact_current_pc_direct_chart_product_integration_and_hancom_lifecycle",
+  "feature": {
+    "feature_id": "TABLE-006",
+    "capability_id": "table.chart_from_table"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {
+      "path": "protocol/private/p06-table-chart-v1.json",
+      "sha256": "25ff72a14743f4a98c88f2281abe08fcc122d73cf6db31b2dc4600e0e2d1bf43"
+    },
+    {
+      "path": "crates/domain-ir/src/table_chart.rs",
+      "sha256": "e951f0f3c705246233991ca490c244c2b8ab0ccf9b9b15e8e6836c5decce70d2"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_chart_hwpx.rs",
+      "sha256": "9a713ded59ccf6848b11ccf632310350e9bff56a6025feb6aeaa58d7f46d9d70"
+    },
+    {
+      "path": "crates/hwpx-package/src/patch.rs",
+      "sha256": "95b261f8376a39be9827a4a33f51ebc4bf3cbe2f8a7e26e5c37d71583711c9ad"
+    },
+    {
+      "path": "crates/hwpx-package/src/writer.rs",
+      "sha256": "d4fb6e247e411d6100fd54da52d73221d13bc7df1c3e9f1f789115b9cf44f765"
+    },
+    {
+      "path": "crates/hwpx-package/src/id_index.rs",
+      "sha256": "207c2302c6be7828d1ea8a5cacb668e590d493375681c1f1780361e1b2638ac9"
+    },
+    {
+      "path": "crates/hwpx-package/src/lib.rs",
+      "sha256": "5c7d538880cc26259c8981a69df51fce54b795f1bd1b0204717fc860718fc37b"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_chart_hwpx.rs",
+      "sha256": "85f82d195e6aa98822aab800c3ca1c25d1b67c5c7b01ae318c4945d600e42b77"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_09_table_chart_target_fixture.rs",
+      "sha256": "a0dff592f182525ba658a42048f960911521b96238de0fc6139a7874a3fdb7ba"
+    },
+    {
+      "path": "implementation/p06/tools/create-hancom-2020-table-chart-source.ps1",
+      "sha256": "d0ceeacc267a23ef7105653790a13e7d5b14fba90da2df4cdea16dc4b41a5ec5"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-chart-source.ps1",
+      "sha256": "b9d747ef62ce83634aeaf249e84eeffeff8fbbb54e3b21d9805e3bc8a01a17fc"
+    },
+    {
+      "path": "implementation/p06/tests/Test-Hancom2020TableChartSource.ps1",
+      "sha256": "f8b7c7b5395b8ae70a03344c3cba5e7784de2e4215f7a05e5afc08de9ebd0b58"
+    },
+    {
+      "path": "implementation/p06/tools/validate-hancom-2020-table-chart-product.ps1",
+      "sha256": "af73cb83c2badc261760f3572e0b971abf30750ae4f1fa260f185291a820ed8a"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-chart-product.ps1",
+      "sha256": "6434b431a2e4ad52aa42d7c0f21600f5e389ca52a1c54456d29a7d5ce03142ba"
+    },
+    {
+      "path": "implementation/p06/tests/Test-Hancom2020TableChartProduct.ps1",
+      "sha256": "60a1a883746d42a91d9057ce22070caecaed4a22044b48d11ed5842fa5e1b8dc"
+    }
+  ],
+  "exact_target": {
+    "product": "Hancom Hangul 2020",
+    "prog_id": "HWPFrame.HwpObject.2",
+    "registry_view": "Registry32",
+    "client": "windows_powershell_x86_sta",
+    "build": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+  },
+  "successful_attempts": {
+    "native_source": {
+      "id": "20260913-04",
+      "directory": "fixtures/target-build/p06-09-table-chart-source-20260913-04",
+      "state": "pass",
+      "progress_events": 18
+    },
+    "direct_product": {
+      "id": "20260913-01",
+      "directory": "fixtures/target-build/p06-09-table-chart-product-20260913-01",
+      "state": "pass"
+    },
+    "target_lifecycle": {
+      "id": "20260913-01",
+      "directory": "fixtures/target-build/p06-09-table-chart-product-hancom-20260913-01",
+      "state": "pass",
+      "progress_events": 12
+    }
+  },
+  "native_profile": {
+    "table": "one_complete_unmerged_three_by_three_native_table_inside_one_hp_run",
+    "roles": "blank_corner_two_series_two_categories_four_decimal_body_values",
+    "chart": "one_three_dimensional_vertical_bar_with_column_direction",
+    "source_normalization": "separate_derived_fixture_equal_1282_row_heights_and_stale_linesegarray_removal_only",
+    "source_mutation": "forbidden"
+  },
+  "binding": {
+    "request": "exact_section_table_run_cell_spans_grid_state_flow_plan_ids_and_chart_part",
+    "build": "recheck_all_request_source_grid_flow_plan_and_allocation_bindings_before_edit",
+    "readback": "reopen_chart_anchor_manifest_relationship_chart_cache_and_preserved_source_table",
+    "serialization": "bounded_deterministic_strict_json_with_duplicate_and_unknown_key_rejection"
+  },
+  "lowering": {
+    "section": "add_exactly_one_hp_chart_anchor_after_the_bound_source_table_run",
+    "manifest": "add_exactly_one_closed_chart_part_declaration",
+    "chart_part": "bounded_ooxml_chartspace_bar3dchart_column_two_series_two_categories_four_values",
+    "identities": "table_chart_resource_zorder_and_package_part_allocations_are_distinct_and_rechecked"
+  },
+  "preservation": {
+    "source_table": "complete_table_and_nine_cells_remain_present_with_exact_typed_source_values",
+    "formula": "literal_or_formula_display_cache_origin_bound_and_rechecked_without_origin_collapse",
+    "package": "all_unowned_parts_preserved_with_hancom_2020_preview_text_v2_profile",
+    "writer": "profile_retained_through_build_stage_publish_and_full_reopen",
+    "flow": "semantic_spine_manifest_document_flow_sha256_rechecked_before_emission"
+  },
+  "target_oracle": {
+    "open_save_reopen": "exact_product_digest_opened_saved_to_new_hwpx_closed_reopened_and_text_hash_matched",
+    "package_readback": "product_and_saved_output_each_have_one_table_nine_cells_one_chart_anchor_and_one_chart_part",
+    "native_semantic_match": "native_after_and_saved_product_have_identical_ordered_chart_cache_values",
+    "pdf": "one_a4_page_exported_by_exact_hwp_build_and_visually_reviewed_at_150_dpi",
+    "required_render_diff": "not_run_until_native_reference_pdf_is_exported_and_compared"
+  },
+  "expected_evidence": {
+    "domain_tests": 12,
+    "adapter_tests": 6,
+    "native_source_static_tests": 24,
+    "product_lifecycle_static_tests": 19,
+    "contract_tests": 4,
+    "feature_count": 1,
+    "backend": "direct_hwpx",
+    "direct_stage": "integration_passed",
+    "fixture_classes": [
+      "boundary",
+      "happy_path",
+      "negative",
+      "preservation",
+      "target_build"
+    ],
+    "validations": [
+      "formula_readback",
+      "page_split",
+      "schema",
+      "semantic_reopen"
+    ]
+  },
+  "failure_policy": [
+    "invalid_duplicate_unknown_empty_or_oversized_json_rejected",
+    "invalid_or_stale_section_table_run_cell_state_grid_flow_or_plan_binding_rejected",
+    "missing_extra_duplicate_merged_or_ambiguous_native_cell_rejected",
+    "unsupported_text_number_formula_cache_or_provenance_rejected",
+    "colliding_or_stale_chart_resource_zorder_or_part_allocation_rejected",
+    "missing_duplicate_or_unclosed_manifest_relationship_or_chart_part_rejected",
+    "writer_preview_profile_or_unowned_part_drift_rejected",
+    "target_input_digest_output_collision_wrong_build_or_process_ownership_rejected",
+    "target_timeout_may_stop_only_the_exact_owned_automation_process",
+    "no_partial_patch_artifact_receipt_or_target_pass_returned"
+  ],
+  "receipt": "implementation/p06/evidence/target/p06-table-chart.current-2020.attempt01.v1.json",
+  "migration": "protocol/migrations/p06-table-chart-v1-to-hwpx-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_CHART_HWPX_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_CHART_HWPX_REPORT.md",
+  "gate_decision": {
+    "TABLE-006": "integration_passed",
+    "actual_hancom_2020_native_source": "pass",
+    "direct_hwpx_build": "pass",
+    "direct_output_package_save_reopen": "pass",
+    "direct_output_pdf_export": "pass",
+    "direct_output_render_review": "pass",
+    "required_render_diff": "not_run",
+    "rollback_or_retry": "not_run",
+    "automation_runtime": "not_run",
+    "release_differential": "not_run",
+    "p06_09": "in_progress",
+    "p06": "in_progress"
+  },
+  "not_claimed": {
+    "required_render_diff": false,
+    "rollback_or_retry": false,
+    "product_automation_route_runtime": false,
+    "release_differential": false,
+    "merged_cell_chart_semantics": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_hancom_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

@@ -94,7 +94,7 @@ SOURCE_LOCKS = {
         "bc500aa8da4bea9e31f633e820164f41be7635a324f7378f6ce352e024a5d803"
     ),
     "crates/hwpx-package/src/lib.rs": (
-        "1745b58853e0dbee8c7361fb691e3e59c70b2f7883e42ade0316242533ee9f22"
+        "5c7d538880cc26259c8981a69df51fce54b795f1bd1b0204717fc860718fc37b"
     ),
     "crates/hwpx-package/tests/table_number_format_hwpx.rs": (
         "3706b38080a4df8775b0252295d147d4af947092217224c0bb80f6d261994084"

@@ -323,6 +323,8 @@ $successSemanticsValid = $null -ne $trace -and [string]$trace.state -ceq 'pass' 
     [long]$trace.source_cells_written -eq 8 -and
     [long]$trace.cell_block_action_count -eq 3 -and
     [string]$trace.chart_action -ceq 'pass' -and
+    [long]$trace.chart_group -eq 1 -and
+    [long]$trace.chart_index -eq 3 -and
     [bool]$trace.source_text_preserved -and
     [string]$trace.baseline_visible_text_sha256 -match '^[0-9a-f]{64}$' -and
     [string]$trace.chart_visible_text_sha256 -match '^[0-9a-f]{64}$'

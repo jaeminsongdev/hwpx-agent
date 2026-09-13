@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 25 |
-| direct `integration_passed` | 35 |
-| direct `unit_passed` | 1 |
+| direct `integration_passed` | 36 |
+| direct `unit_passed` | 0 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -172,9 +172,13 @@ The machine-readable authority is
   documented top-left corner, maps first-row series labels and first-column category labels, keeps
   exact numeric/blank data points and formula-display-cache origins, and binds source state plus
   document flow. Cursor-only default-data creation, merged source cells and body text fail closed;
-  no chart XML, package mutation, linked save/reopen or licensed Hangul result is claimed. A
-  target-pinned new-document worker/watchdog now prepares an exact 3x3 baseline/chart pair without
-  guessing native package structure; its 24 static checks pass, but it has not been run.
+  no default chart is synthesized. The direct HWPX adapter inserts one closed chart relationship and
+  OOXML resource while preserving the complete source table and unrelated package bytes. Its exact
+  product opens, saves, reopens and exports a one-page A4 PDF on licensed Hangul 2020; independent
+  readback confirms the 3D vertical-bar type, two series, two categories and four values, and render
+  review finds no clipping or overlap. Native-reference PDF `render_diff`, rollback/retry, product
+  automation runtime and release differential remain not run, so TABLE-006 is
+  `integration_passed`, not oracle-verified.
 - The table-ruling model and preserving HWPX adapter cover TABLE-002/003 as one exact
   physical-lattice and topology model.
   Drawing covers a new outer rectangle, full row/column strokes, rectangular local cell splits,
@@ -220,7 +224,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 36 rows below direct oracle,
-64 missing validation instances, 61 unverified automation runtime rows and 61 missing
+61 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -228,11 +232,11 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the remaining unit-only row through a preserving HWPX adapter;
-2. close the 35 remaining integration-only target oracles;
-3. supply remaining feature-specific validations, exact current-target automation bindings and safe
+1. close the 36 integration-only target oracles, beginning with TABLE-006 native-reference render
+   differential and rollback/retry;
+2. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
-4. regenerate until all 61 rows are green, then run the P06 hard Gate.
+3. regenerate until all 61 rows are green, then run the P06 hard Gate.
 
 P06-09 and P06 remain in progress. No production, other-PC/version or whole-product completion is
 claimed.

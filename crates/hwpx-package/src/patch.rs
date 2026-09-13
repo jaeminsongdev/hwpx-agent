@@ -12,7 +12,8 @@ use crate::{
     BoundedZipReader, Compression, GraphError, IdIndex, IdIndexError, IdIndexLimits, IdKind,
     IdRuleProfile, MediaType, PackageError, PackageGraph, PackageGraphLimits, PackageLimits,
     PackagePath, PartPreservationRecord, PreservationClass, PreservationError, PreservationReport,
-    PreservingXmlDocument, PreservingXmlError, XmlName, XmlQuoteStyle, XmlTokenKind,
+    PreservationRuleProfile, PreservingXmlDocument, PreservingXmlError, XmlName, XmlQuoteStyle,
+    XmlTokenKind,
 };
 
 const OPF_NAMESPACE: &str = "http://www.idpf.org/2007/opf";
@@ -655,6 +656,7 @@ impl PatchPartRecord {
 
 pub struct PatchResult {
     pub(crate) profile: IdRuleProfile,
+    pub(crate) preservation_profile: PreservationRuleProfile,
     profile_version: &'static str,
     intent_count: usize,
     records: Vec<PatchPartRecord>,
@@ -673,6 +675,7 @@ impl Debug for PatchResult {
         formatter
             .debug_struct("PatchResult")
             .field("profile_version", &self.profile_version)
+            .field("preservation_profile", &self.preservation_profile)
             .field("intent_count", &self.intent_count)
             .field("records", &self.records)
             .field("untouched_parts", &self.untouched_parts)
@@ -799,12 +802,44 @@ impl PreservingPatchEngine {
         patch_limits: PatchLimits,
         intents: &[PatchIntent],
     ) -> Result<PatchResult, PatchError> {
+        Self::apply_with_limits_and_preservation_profile(
+            reader,
+            graph,
+            graph_limits,
+            id_profile,
+            id_limits,
+            patch_limits,
+            PreservationRuleProfile::CoreV1,
+            intents,
+        )
+    }
+
+    /// Applies a pure in-memory transaction under an explicit source-preservation profile.
+    ///
+    /// # Errors
+    ///
+    /// Returns the same fail-closed errors as [`Self::apply`].
+    #[allow(clippy::too_many_arguments)]
+    pub fn apply_with_limits_and_preservation_profile<R: Read + Seek>(
+        reader: &mut BoundedZipReader<R>,
+        graph: &PackageGraph,
+        graph_limits: PackageGraphLimits,
+        id_profile: IdRuleProfile,
+        id_limits: IdIndexLimits,
+        patch_limits: PatchLimits,
+        preservation_profile: PreservationRuleProfile,
+        intents: &[PatchIntent],
+    ) -> Result<PatchResult, PatchError> {
         if intents.len() > patch_limits.config().max_intents {
             return Err(PatchError::LimitExceeded { limit: "intents" });
         }
         let package_limits = reader.package_limits();
-        let preservation =
-            PreservationReport::build_with_graph_limits(reader, graph, graph_limits)?;
+        let preservation = PreservationReport::build_with_graph_limits_and_profile(
+            reader,
+            graph,
+            graph_limits,
+            preservation_profile,
+        )?;
         if !preservation.direct_preserve_ready() {
             return Err(PatchError::PreservationRejected);
         }
@@ -819,6 +854,7 @@ impl PreservingPatchEngine {
             id_profile,
             id_limits,
             patch_limits,
+            preservation_profile,
             package_limits,
             intents,
         )?
@@ -937,6 +973,7 @@ struct Transaction<'a> {
     id_profile: IdRuleProfile,
     id_limits: IdIndexLimits,
     patch_limits: PatchLimits,
+    preservation_profile: PreservationRuleProfile,
     package_limits: PackageLimits,
     intents: &'a [PatchIntent],
     parts: BTreeMap<String, VirtualPart>,
@@ -955,6 +992,7 @@ impl<'a> Transaction<'a> {
         id_profile: IdRuleProfile,
         id_limits: IdIndexLimits,
         patch_limits: PatchLimits,
+        preservation_profile: PreservationRuleProfile,
         package_limits: PackageLimits,
         intents: &'a [PatchIntent],
     ) -> Result<Self, PatchError> {
@@ -1002,6 +1040,7 @@ impl<'a> Transaction<'a> {
             id_profile,
             id_limits,
             patch_limits,
+            preservation_profile,
             package_limits,
             intents,
             parts,
@@ -1490,8 +1529,12 @@ impl<'a> Transaction<'a> {
         let archive = validation_archive(self.parts.values())?;
         let mut reader = BoundedZipReader::open(Cursor::new(archive), self.package_limits)?;
         let graph = PackageGraph::build(&mut reader, self.graph_limits)?;
-        let preservation =
-            PreservationReport::build_with_graph_limits(&mut reader, &graph, self.graph_limits)?;
+        let preservation = PreservationReport::build_with_graph_limits_and_profile(
+            &mut reader,
+            &graph,
+            self.graph_limits,
+            self.preservation_profile,
+        )?;
         if !preservation.direct_preserve_ready() || preservation.parts().len() != self.parts.len() {
             return Err(PatchError::ValidationMismatch);
         }
@@ -1543,6 +1586,7 @@ impl<'a> Transaction<'a> {
             .count();
         Ok(PatchResult {
             profile: self.id_profile,
+            preservation_profile: self.preservation_profile,
             profile_version: id_index.profile_version(),
             intent_count: self.intents.len(),
             records,
