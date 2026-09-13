@@ -1,0 +1,124 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-partition-target-evidence/v2",
+  "attempt_id": "p06.table-partition.current-2020.attempt01.20260913",
+  "scope": "TABLE-010 TABLE-011 exact current-PC Hangul 2020 chained split-join target oracle",
+  "target": {
+    "product": "Hancom Hangul 2020",
+    "prog_id": "HWPFrame.HwpObject.2",
+    "registry_view": "Registry32",
+    "client": "windows_powershell_x86_sta",
+    "build": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+  },
+  "source": {
+    "ancestor_sha256": "6514a69b8c8c9d320bc19a032b16f2b71d59a38f164c690bc9e3d320a93320e5",
+    "prepared_source_section_sha256": "ca1bcc0827d950a2d6517e1229b7c83f3dc3267fb44386295d98a4cb497b70cd",
+    "formula_count": 0,
+    "rows": 4,
+    "columns": 2,
+    "master_cells": 8,
+    "payload_blocks": 8,
+    "page_split": "cell"
+  },
+  "batch": {
+    "directory": "fixtures/target-build/p06-09-table-partition-target-20260913-15",
+    "manifest": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/fixture-manifest.json", "sha256": "f7c25806e82e2f809d6d6dfde0fc2620493a5cf237fbb9913c9782713db33c25", "bytes": 7018},
+    "independent_builds": 2,
+    "byte_deterministic": true,
+    "existing_destination_rejected_without_overwrite": true
+  },
+  "cases": [
+    {
+      "feature_id": "TABLE-010",
+      "capability_id": "table.split_table",
+      "input": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/table-010-split-table-4x2.hwpx", "sha256": "8bab0736c9deb47fa577a68b40223087efcbee3560c700dc97456f777c83e9c3", "bytes": 12915},
+      "output": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/table-010-split-table-4x2.hancom-2020-readback.hwpx", "sha256": "7229ccccd1bfb98dfa3d6a57f4575033718d3644c785103407d8e17795d8db67", "bytes": 15908},
+      "pdf": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/table-010-split-table-4x2.hancom-2020-render.pdf", "sha256": "ec966fa38585ccdeeb23733f7f6e7c15348c7a0f9cc432e78fcedeabbab75c05", "bytes": 10318, "pages": 1},
+      "render_png": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/table-010-split-table-4x2.hancom-2020-render.png", "sha256": "0580fb50f77521dedd2078806f5bcf8db5a948cf216db65be1706ec6309acd1b", "bytes": 17137},
+      "trace": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/table-010-split-table-4x2.hancom-2020-trace.json", "sha256": "b04163b74f4252f79a7eaeea3263e5d47b24f97779d963ea671bb6a565b728d4", "bytes": 2329},
+      "progress": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/table-010-split-table-4x2.hancom-2020-trace.json.progress.jsonl", "sha256": "ae25f39feb7f3b2a22006ae3134622e5b54b3a4a5d9cd0a2fe5d99308ef303e7", "bytes": 5185, "events": 21},
+      "input_text_sha256": "deebb8102dbd1f48f6dce43d221218870043e599803f3555a8ef888432420cc3",
+      "output_text_sha256": "deebb8102dbd1f48f6dce43d221218870043e599803f3555a8ef888432420cc3",
+      "tables": 2,
+      "rows_per_table": [2, 2],
+      "columns_per_table": [2, 2],
+      "renderer_cache_count": 13,
+      "renderer_cache_sha256": "6c2aed93776177cfcd1b8935b2417f84c51bce0088d0ebcc8be24171759bbcc2"
+    },
+    {
+      "feature_id": "TABLE-011",
+      "capability_id": "table.join_table",
+      "input": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/table-011-join-table-4x2.hwpx", "sha256": "a5a7a475d33fc82c729c2a39b028925a4bb4d528161f36c040d4d3c6204eeecb", "bytes": 12914},
+      "output": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/table-011-join-table-4x2.hancom-2020-readback.hwpx", "sha256": "28fddc01a7d224f4d79b15e960483a7c754c2acbde518505148364b75c086c95", "bytes": 15839},
+      "pdf": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/table-011-join-table-4x2.hancom-2020-render.pdf", "sha256": "5bd2fc0127cdb3f0da3530f0851410d62f7ecd640daee136d8264843f3ff4c0a", "bytes": 10268, "pages": 1},
+      "render_png": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/table-011-join-table-4x2.hancom-2020-render.png", "sha256": "5cfcd16d55baae0b0e42a496f5ba8da55407041003fa05689d16f38561120152", "bytes": 17098},
+      "trace": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/table-011-join-table-4x2.hancom-2020-trace.json", "sha256": "c7cf72a03c2c806b17a937181a72d3e2b3647692536118aa9f5082a441bc53d6", "bytes": 2329},
+      "progress": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/table-011-join-table-4x2.hancom-2020-trace.json.progress.jsonl", "sha256": "fe30c7efc8b8aa878ec50728236682dea5600264aaa423e2d24ff9fe47971ea3", "bytes": 5185, "events": 21},
+      "input_text_sha256": "b5ba4ed86fee97bc455cc50a5485937c7dbc6e7a1eb9bdb22c6078cedf7ab17c",
+      "output_text_sha256": "b5ba4ed86fee97bc455cc50a5485937c7dbc6e7a1eb9bdb22c6078cedf7ab17c",
+      "tables": 1,
+      "rows_per_table": [4],
+      "columns_per_table": [2],
+      "renderer_cache_count": 11,
+      "renderer_cache_sha256": "683f76ab4736256762f04ca371ac0206431d3f496e17b607b2daefa20358d516"
+    }
+  ],
+  "typed_oracle": {
+    "state": "pass",
+    "master_cells_each": 8,
+    "payload_blocks_each": 8,
+    "formula_count_each": 0,
+    "page_split": "cell",
+    "section_equal_after_exact_renderer_cache_strip": true,
+    "split_join_state_chain_exact": true,
+    "native_empty_separator_run_admitted": true
+  },
+  "render_oracle": {
+    "state": "pass",
+    "pages_each": 1,
+    "page_size_points": [595, 841],
+    "dpi": 144,
+    "pixel_size": [1190, 1682],
+    "split_tables_visible": 2,
+    "joined_tables_visible": 1,
+    "all_values_visible": true,
+    "clipping": false,
+    "overlap": false,
+    "blank_pages": false,
+    "black_boxes": false
+  },
+  "gate_decision": {
+    "TABLE-010": "oracle_verified",
+    "TABLE-011": "oracle_verified",
+    "actual_hancom_2020_save_reopen": "pass",
+    "target_build": "pass",
+    "render_diff": "pass",
+    "rollback_or_retry": "pass",
+    "automation_runtime": "not_run",
+    "differential": "not_run",
+    "p06_09": "in_progress",
+    "p06": "in_progress"
+  },
+  "privacy": {
+    "raw_document_text_present": false,
+    "user_document_scanned": false,
+    "external_network_invoked": false,
+    "registry_or_system_setting_changed": false,
+    "computer_use_click_or_type_invoked": false
+  },
+  "not_claimed": {
+    "formula_partition": false,
+    "repeat_header_partition": false,
+    "caption_partition": false,
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_hancom_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

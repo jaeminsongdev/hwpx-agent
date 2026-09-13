@@ -33,8 +33,8 @@
     "direct_stage_counts": {
       "cataloged": 0,
       "unit_passed": 0,
-      "integration_passed": 28,
-      "oracle_verified": 33
+      "integration_passed": 26,
+      "oracle_verified": 35
     },
     "automation_binding_counts": {
       "candidate_unverified": 6,
@@ -220,6 +220,14 @@
       "sha256": "e42a24aa8bb4cdaf03e8115da1785bc18f7b3933f063ec466e3555d9c324977c"
     },
     {
+      "path": "crates/hwpx-package/examples/p06_09_table_partition_target_fixture.rs",
+      "sha256": "781a8b4c562a1b8c328533ccd4d9c1e29dabb01c521628fb7f2cfb817c3a18a3"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_09_table_partition_target_oracle.rs",
+      "sha256": "e1929ff23ce80a426702df9d1f62d7a9401a71f04ed07d8a1064e77ce54828bd"
+    },
+    {
       "path": "crates/hwpx-package/examples/p06_09_table_properties_target_fixture.rs",
       "sha256": "87739dc63593a94a7df4adb8d4327fcbc85ddfa1b77d2c119e75f98efa0fa19c"
     },
@@ -317,7 +325,7 @@
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/partition_hwpx.rs",
-      "sha256": "9625518c2136db96b1fc2248441973c7ad39380b4a7abd1a76001e35e78c92c1"
+      "sha256": "549299909e171f00879192dbe8efbc04bdd42aa28ba7626c88f0dc81541e9bc3"
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/properties_hwpx.rs",
@@ -377,7 +385,7 @@
     },
     {
       "path": "crates/hwpx-package/tests/table_join_hwpx.rs",
-      "sha256": "28bfe71f8cd8215c9eacd6d0d1e95eac067e1bfd7688a75a4d595588c3a5d203"
+      "sha256": "14f98e2f382329495640b8072f67bb80e7d26e750f002bc4865cd1e20283c93c"
     },
     {
       "path": "crates/hwpx-package/tests/table_layout_modes_hwpx.rs",
@@ -409,7 +417,7 @@
     },
     {
       "path": "crates/hwpx-package/tests/table_split_hwpx.rs",
-      "sha256": "47644c2a4456e258dc1fcf8582b04d717c5b8989c14044974148b078cb6aecbe"
+      "sha256": "46e05d432f3ed04335b3307334f7809d7177fc7578fce9c666741fef8a294346"
     },
     {
       "path": "crates/hwpx-package/tests/table_structure_hwpx.rs",
@@ -541,7 +549,7 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "b659c1a9e35ffad16bece75a77622be9dfe6a0d6f4103dc699fed22730c323e9"
+      "sha256": "c55869add31052007e38b95793dff14e434b96911de0d468ac4d9d8a9fe4310e"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CREATE_HWPX_POLICY.md",
@@ -626,6 +634,10 @@
     {
       "path": "implementation/p06/P06-09_TABLE_PARTITION_REPORT.md",
       "sha256": "d0c9304a4b9daf5fef2d061a0ff24cd23601677183be0b96b6ff99213604cb1e"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_PARTITION_TARGET_READBACK_REPORT.md",
+      "sha256": "fc504f0b34e3c3447c37894c5b2c7918f2e77769564b00948bff430b0061c18d"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_PLACEMENT_HWPX_POLICY.md",
@@ -785,7 +797,7 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "651c372dcd8dac0462f816cdbf4c14bc1b00e4bd7073799c3b11cd2e49fb2ac1"
+      "sha256": "a1367b2fda47040a10551ad01caf5d7278a0b4a7fdf310583f21fd1866446c8a"
     },
     {
       "path": "implementation/p06/evidence/target/p06-table-aggregate.current-2020.attempt02.v2.json",
@@ -816,6 +828,10 @@
       "sha256": "0a1ad707ae9f55b064f94a2f7aea8182c27901691e3250d38df090103363a1cc"
     },
     {
+      "path": "implementation/p06/evidence/target/p06-table-partition.current-2020.attempt01.v2.json",
+      "sha256": "3046dd4255c7ad4759bbd510d3661d3a6839a54bdb0322b8976671d546468bb1"
+    },
+    {
       "path": "implementation/p06/evidence/target/p06-table-properties.current-2020.attempt01.v2.json",
       "sha256": "f71d95ee607c17f4b4960e1feab2926497e3b0cd9fc12e896b36b0021666895a"
     },
@@ -837,7 +853,7 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "debf802b0ee6a3ef3f5ec92ebcf45fd85933878f98ddbc910080818ba57fcecc"
+      "sha256": "84c2e23408e3b1180deb4f7c744db11820b29c017578df20363d6bffbcc9fc04"
     },
     {
       "path": "implementation/p06/tests/Test-Hancom2020TableAggregateTargetBatchReadback.ps1",
@@ -1068,6 +1084,10 @@
       "sha256": "83edfc87a36b98f5acfc69cf2b15fe2c88d56f69f579723933cd52ee12f46a35"
     },
     {
+      "path": "protocol/migrations/p06-table-partition-v1-to-target-v2.md",
+      "sha256": "a816495afeef513cf54dfcc2dbc88a3ea4fcea611d4fd67defbb31f5417b3e49"
+    },
+    {
       "path": "protocol/migrations/p06-table-placement-hwpx-v0-to-v1.md",
       "sha256": "fca54fe5955e2459209c65b00c195d957b9fd808e583fe9444f5bb7e55c840dd"
     },
@@ -1240,6 +1260,10 @@
       "sha256": "caf963c3421522e57dcf3ddb0e3f190f7da38a7e32b2e1305486c300cb2b85ca"
     },
     {
+      "path": "protocol/private/p06-table-partition-target-v2.json",
+      "sha256": "b2db1233f3bf8a718ad18f7c5d3ae936dab9b90ecc6f0d040af978495d8534c8"
+    },
+    {
       "path": "protocol/private/p06-table-partition-v1.json",
       "sha256": "871ef74f7c10cb34b805becda60f53f497a0e1cef2e7031cb647007561ae9334"
     },
@@ -1397,11 +1421,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "51b1be559ea51e4db629d7f74055bd3f640fcb906b418961387075e032fc0d89"
+      "sha256": "a90d3f3c98e7ec1003a20317f84eefa11e67ced170b7c14991399250a8a24b80"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "5858daf0b1f47e541738270311302c6f35c2e73b7569ec4f472ebc01f2a7e556"
+      "sha256": "7591f84321173c73f2a3ad4d81b3b4a3c40489a27efdc5f86eb6700bfafb70d6"
     },
     {
       "path": "tools/p06/tests/test_table_create_hwpx_contract.py",
@@ -1450,6 +1474,10 @@
     {
       "path": "tools/p06/tests/test_table_partition_contract.py",
       "sha256": "f8580d62c65298b8584e10534df0701fa13336a725b4e4379764c992f31bf57e"
+    },
+    {
+      "path": "tools/p06/tests/test_table_partition_target_v2_contract.py",
+      "sha256": "67f823312ffc0bc1077e0e91663b860f797da2f8534618c954dfb210ceaa519b"
     },
     {
       "path": "tools/p06/tests/test_table_placement_contract.py",
@@ -1581,7 +1609,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "2c01e0a47fdbf24e4a475e236701f9b754b85cef9536da65bcfc4f99bb845a0a"
+      "sha256": "909adc2d01e9129a41263908a4ea53b2653191373137b9475130d14bb2810965"
     },
     {
       "path": "tools/p06/validate_table_create_hwpx_contract.py",
@@ -1630,6 +1658,10 @@
     {
       "path": "tools/p06/validate_table_partition_contract.py",
       "sha256": "d14459201ed9ceb7d986fb9a70d10cb1e12a6b74a453655d8242c5cabc950b7a"
+    },
+    {
+      "path": "tools/p06/validate_table_partition_target_v2_contract.py",
+      "sha256": "bb9ff77219c60dafa45e96c283ed387acf08c7037a9f25f42983f77c60eeb152"
     },
     {
       "path": "tools/p06/validate_table_placement_contract.py",

@@ -1,0 +1,46 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-partition-target-contract/v2",
+  "scope": "TABLE-010 TABLE-011 exact current-PC Hangul 2020 chained split-join batch oracle",
+  "predecessors": [
+    {"path": "protocol/private/p06-table-partition-v1.json", "sha256": "871ef74f7c10cb34b805becda60f53f497a0e1cef2e7031cb647007561ae9334", "state": "TABLE-010 TABLE-011 component unit_passed"},
+    {"path": "protocol/private/p06-table-split-hwpx-v1.json", "sha256": "66d8f071ef9fced3c74475bd5f0646a864d616d210a749f38156bacde6a83e13", "state": "TABLE-010 direct_hwpx integration_passed"},
+    {"path": "protocol/private/p06-table-join-hwpx-v1.json", "sha256": "856a2c87f6fa8244ef4d1f436801926b685cef5fb1f2a9ebe00f29e7137520b8", "state": "TABLE-011 direct_hwpx integration_passed"}
+  ],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path": "protocol/private/p06-table-partition-v1.json", "sha256": "871ef74f7c10cb34b805becda60f53f497a0e1cef2e7031cb647007561ae9334"},
+    {"path": "tools/p06/validate_table_partition_contract.py", "sha256": "d14459201ed9ceb7d986fb9a70d10cb1e12a6b74a453655d8242c5cabc950b7a"},
+    {"path": "protocol/private/p06-table-split-hwpx-v1.json", "sha256": "66d8f071ef9fced3c74475bd5f0646a864d616d210a749f38156bacde6a83e13"},
+    {"path": "tools/p06/validate_table_split_hwpx_contract.py", "sha256": "1f999b19d9dfa15a37b400a07014369f66e77589e182bddbb0c8e201ac595b94"},
+    {"path": "protocol/private/p06-table-join-hwpx-v1.json", "sha256": "856a2c87f6fa8244ef4d1f436801926b685cef5fb1f2a9ebe00f29e7137520b8"},
+    {"path": "tools/p06/validate_table_join_hwpx_contract.py", "sha256": "77c55992480592d8df735a44b5740041ca5c8343dd414d442b1f524eaba49715"},
+    {"path": "crates/hwpx-package/src/table_ruling_hwpx/partition_hwpx.rs", "sha256": "549299909e171f00879192dbe8efbc04bdd42aa28ba7626c88f0dc81541e9bc3"},
+    {"path": "crates/hwpx-package/tests/table_split_hwpx.rs", "sha256": "46e05d432f3ed04335b3307334f7809d7177fc7578fce9c666741fef8a294346"},
+    {"path": "crates/hwpx-package/tests/table_join_hwpx.rs", "sha256": "14f98e2f382329495640b8072f67bb80e7d26e750f002bc4865cd1e20283c93c"},
+    {"path": "crates/hwpx-package/examples/p06_09_table_partition_target_fixture.rs", "sha256": "781a8b4c562a1b8c328533ccd4d9c1e29dabb01c521628fb7f2cfb817c3a18a3"},
+    {"path": "crates/hwpx-package/examples/p06_09_table_partition_target_oracle.rs", "sha256": "e1929ff23ce80a426702df9d1f62d7a9401a71f04ed07d8a1064e77ce54828bd"},
+    {"path": "implementation/p06/tools/run-hancom-2020-table-properties-target-readback.ps1", "sha256": "3da056958e4dac341700278a158d174bbe5eb1ceff3f39dd637939264d93b6a8"},
+    {"path": "implementation/p06/tests/Test-Hancom2020TablePropertiesTargetReadback.ps1", "sha256": "82ed78af052dab81a8963411e04b0bed447aa3547128aee253c7efd81afacf96"}
+  ],
+  "features": {
+    "TABLE-010": "table.split_table",
+    "TABLE-011": "table.join_table"
+  },
+  "exact_target": {"product": "Hancom Hangul 2020", "prog_id": "HWPFrame.HwpObject.2", "registry_view": "Registry32", "client": "windows_powershell_x86_sta", "build": "11.0.0.9136", "architecture": "x86", "locale": "ko-KR", "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"},
+  "successful_attempt": {
+    "id": "20260913-15",
+    "directory": "fixtures/target-build/p06-09-table-partition-target-20260913-15",
+    "manifest": {"path": "fixtures/target-build/p06-09-table-partition-target-20260913-15/fixture-manifest.json", "sha256": "f7c25806e82e2f809d6d6dfde0fc2620493a5cf237fbb9913c9782713db33c25", "bytes": 7018},
+    "receipt": {"path": "implementation/p06/evidence/target/p06-table-partition.current-2020.attempt01.v2.json", "sha256": "3046dd4255c7ad4759bbd510d3661d3a6839a54bdb0322b8976671d546468bb1", "bytes": 6898},
+    "state": "pass"
+  },
+  "typed_oracle": {"state": "pass", "split_tables": 2, "join_tables": 1, "master_cells_each": 8, "payload_blocks_each": 8, "formula_count_each": 0, "page_split": "cell", "section_equal_after_exact_renderer_cache_strip": true, "split_join_state_chain_exact": true, "native_empty_separator_run_admitted": true},
+  "render_oracle": {"state": "pass", "pages_each": 1, "page_size_points": [595, 841], "dpi": 144, "pixel_size": [1190, 1682], "split_tables_visible": 2, "joined_tables_visible": 1, "all_values_visible": true, "clipping": false, "overlap": false, "blank_pages": false, "black_boxes": false},
+  "retry_oracle": {"state": "pass", "independent_builds": 2, "byte_deterministic": true, "existing_destination_rejected_without_overwrite": true},
+  "gate_decision": {"TABLE-010": "oracle_verified", "TABLE-011": "oracle_verified", "actual_hancom_2020_save_reopen": "pass", "target_build": "pass", "render_diff": "pass", "rollback_or_retry": "pass", "automation_runtime": "not_run", "differential": "not_run", "p06_09": "in_progress", "p06": "in_progress"},
+  "not_claimed": {"formula_partition": false, "repeat_header_partition": false, "caption_partition": false, "automation_runtime": false, "differential_exact_match": false, "arbitrary_user_document_compatibility": false, "other_pc_or_hancom_version": false, "p06_09_complete": false, "p06_phase_complete": false, "production": false, "product_complete": false},
+  "failure_policy": ["predecessor_or_source_lock_drift_rejects", "manifest_target_output_pdf_trace_progress_png_or_receipt_drift_rejects", "duplicate_json_key_path_escape_symlink_or_size_limit_rejects", "typed_partition_pagination_native_wrapper_or_renderer_cache_drift_rejects", "formula_repeat_header_caption_automation_or_differential_not_promoted"],
+  "migration": "protocol/migrations/p06-table-partition-v1-to-target-v2.md",
+  "report": "implementation/p06/P06-09_TABLE_PARTITION_TARGET_READBACK_REPORT.md",
+  "evidence_receipt": "implementation/p06/evidence/target/p06-table-partition.current-2020.attempt01.v2.json"
+}

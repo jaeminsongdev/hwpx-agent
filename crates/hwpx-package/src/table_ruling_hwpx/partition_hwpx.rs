@@ -1080,14 +1080,37 @@ fn patched_wrapper(
         super::push_attribute_edit(&document, shape.table, "id", value, &mut edits)?;
     }
     if replace_table {
-        let span = super::element(&document, shape.table)?
+        let run = super::element(&document, shape.table)?
+            .parent()
+            .ok_or(TableSplitHwpxError::UnsupportedWrapper)?;
+        let run = super::element(&document, run)?;
+        let span = run
             .outer_span()
             .ok_or(TableSplitHwpxError::UnsupportedWrapper)?;
+        let character_property_id = super::required_u32(run, "charPrIDRef")?;
         edits.push(super::RawEdit {
             start: span.start(),
             end: span.end(),
-            replacement: b"<hp:t/>".to_vec(),
+            replacement: format!(r#"<hp:run charPrIDRef="{character_property_id}"/>"#).into_bytes(),
         });
+    } else {
+        let table = super::element(&document, shape.table)?;
+        match table.next_sibling() {
+            None => {
+                let span = table
+                    .outer_span()
+                    .ok_or(TableSplitHwpxError::UnsupportedWrapper)?;
+                edits.push(super::RawEdit {
+                    start: span.end(),
+                    end: span.end(),
+                    replacement: b"<hp:t/>".to_vec(),
+                });
+            }
+            Some(sibling)
+                if super::has_name(super::element(&document, sibling)?, "t")
+                    && super::element(&document, sibling)?.next_sibling().is_none() => {}
+            Some(_) => return Err(TableSplitHwpxError::UnsupportedWrapper),
+        }
     }
     Ok(super::apply_range_edits(
         section,
@@ -2118,7 +2141,14 @@ fn separator_paragraph_spaces(
     paragraph: usize,
 ) -> Result<u32, TableJoinHwpxError> {
     let run = only_child_named(document, paragraph, "run")?;
-    let text = only_child_named(document, run, "t")?;
+    let Some(text) = super::element(document, run)?.first_child() else {
+        return Ok(0);
+    };
+    if super::element(document, text)?.next_sibling().is_some()
+        || !super::has_name(super::element(document, text)?, "t")
+    {
+        return Err(TableJoinHwpxError::UnsupportedSeparator);
+    }
     if super::element(document, text)?.first_child().is_some() {
         return Err(TableJoinHwpxError::UnsupportedSeparator);
     }

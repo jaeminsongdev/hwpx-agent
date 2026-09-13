@@ -15,8 +15,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 
 | Dimension | Current evidence |
 |---|---:|
-| direct `oracle_verified` | 33 |
-| direct `integration_passed` | 28 |
+| direct `oracle_verified` | 35 |
+| direct `integration_passed` | 26 |
 | direct `unit_passed` | 0 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
@@ -153,24 +153,17 @@ The machine-readable authority is
   Hangul 2020 save/reopen/PDF lifecycles, independent per-cell/unified-border/fill/diagonal typed
   oracles, exact native inert-hatch normalization, original-detail render review and create-new
   retry. Automation runtime and differential evidence remain `not_run`.
-- The whole-table partition component adds TABLE-010/011 cursor-row split and whitespace-only join
-  plans. Split inherits exact table width, column tracks and table properties while rebasing rows;
-  join retains the leading table identity/properties, chooses the larger source width and maps both
-  source grids onto a reduced-rational common lattice. Cross-boundary merges, unsupported separators,
-  collapsed tracks and unsafe formula crossings fail closed. Formula moves use the shared AST rebase
-  engine and clear caches, but no HWPX lowering or licensed Hangul result is claimed.
-- The preserving whole-table split HWPX adapter moves only TABLE-010 to static integration. Its
-  exact top-level wrapper profile slices and rebases row geometry, carries every complete cell,
-  payload, property and edge to one of two authoritative grids, inserts a distinct empty paragraph,
-  and reopens both results. Selected-table formulas, repeat-header rows and captions fail closed;
-  sibling formula/cache, supported page-split state and non-target package parts remain exact.
-  No saved real HWPX, licensed Hangul or render result is inferred.
-- The preserving whole-table join HWPX adapter moves TABLE-011 to static integration. It binds both
-  top-level wrappers and the exact whitespace-only paragraph sequence, projects unequal widths and
-  column counts onto the reduced-rational common lattice, retains the leading table identity and
-  removes only the separator plus trailing wrapper. Both projected sources and the final joined
-  table reopen exactly. A differing shared junction edge, selected formula, repeat header, caption
-  or page-split policy fails closed; sibling formula/cache and non-target package parts remain exact.
+- The whole-table partition component and preserving HWPX adapters cover TABLE-010/011 cursor-row
+  split and whitespace-only join. Split carries every complete cell into two authoritative grids;
+  join projects both source grids onto a reduced-rational common lattice and keeps the leading
+  identity. Cross-boundary merges, unsupported separators, collapsed tracks and unsafe formula
+  crossings fail closed. One deterministic formula-free 4x2 state chain now passes both exact
+  target operations: TABLE-010 visibly reopens as two 2x2 tables and TABLE-011 rejoins them to one
+  4x2 table. Both licensed Hangul 2020 save/reopen/PDF lifecycles, independent typed/cache oracles,
+  original-detail render reviews and a byte-identical retry pass. The target's native canonical
+  serialization additionally qualified trailing empty table text and its self-closing empty-run
+  separator. Formula, repeat-header and caption split/join profiles, automation runtime and the
+  direct/automation differential remain unclaimed.
 - The exact row/column structure model and preserving HWPX adapter move TABLE-012/013/014/015 to
   static integration as one four-operation profile. Insertions create only explicit empty 1x1
   masters at whole-grid boundaries and duplicate the source boundary around the new band. Deletions
@@ -239,8 +232,8 @@ ordering; duplicate JSON keys; finite files; path containment; privacy; and crea
 Protocol code generation publishes the three P06 schemas through additive catalog v5 while baseline
 locks prove catalogs v2 through v4 remain unchanged.
 
-Current aggregate blockers include 0 missing direct evidence rows, 28 rows below direct oracle,
-53 rows with at least one missing validation, 61 unverified automation runtime rows and 61 missing
+Current aggregate blockers include 0 missing direct evidence rows, 26 rows below direct oracle,
+51 rows with at least one missing validation, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -248,8 +241,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. close the remaining 28 integration-only target oracles, beginning with the next unqualified row,
-   TABLE-010;
+1. close the remaining 26 integration-only target oracles, beginning with the next structural batch,
+   TABLE-012/013/014/015;
 2. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
 3. regenerate until all 61 rows are green, then run the P06 hard Gate.

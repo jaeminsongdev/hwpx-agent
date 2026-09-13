@@ -301,7 +301,10 @@ fn split_table_hwpx_creates_two_exact_tables_and_separator() -> TestResult {
     assert!(text.contains(r#"<hp:p id="701""#));
     assert!(text.contains(r#"<hp:p id="702""#));
     assert!(text.contains(r#"<hp:tbl id="703""#));
-    assert!(text.contains(r#"<hp:p id="701" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"><hp:t/></hp:run></hp:p>"#));
+    assert!(text.contains(
+        r#"<hp:p id="701" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"/></hp:p>"#
+    ));
+    assert_eq!(text.matches("</hp:tbl><hp:t/></hp:run></hp:p>").count(), 2);
     assert!(text.ends_with(&(text_wrapper(90, "TAIL") + "</hs:sec>")));
     assert_eq!(output.receipt.source_table_count, 1);
     assert_eq!(output.receipt.target_table_count, 2);

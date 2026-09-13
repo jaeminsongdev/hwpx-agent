@@ -277,7 +277,23 @@ fn join_projects_unequal_tables_and_reopens_complete_state() -> TestResult {
 }
 
 #[test]
-fn join_rejects_non_whitespace_or_missing_separator() {
+fn join_rejects_non_whitespace_or_missing_separator() -> TestResult {
+    let source = section("   ", false, 1);
+    let needle = b"<hp:t>   </hp:t>";
+    let start = source
+        .windows(needle.len())
+        .position(|window| window == needle)
+        .ok_or("separator text is missing")?;
+    let native_empty_run = [
+        source[..start].to_vec(),
+        source[start + needle.len()..].to_vec(),
+    ]
+    .concat();
+    let native = read(&native_empty_run)?;
+    assert_eq!(
+        native.separator_tokens,
+        vec![TableJoinSeparatorToken::ParagraphBreak]
+    );
     assert!(matches!(read(&section("X", false, 1)), Err(error) if error
             .downcast_ref::<TableJoinHwpxError>()
             .is_some_and(|value| matches!(value, TableJoinHwpxError::UnsupportedSeparator))));
@@ -310,6 +326,7 @@ fn join_rejects_non_whitespace_or_missing_separator() {
     assert!(matches!(read(&interstitial_comment), Err(error) if error
             .downcast_ref::<TableJoinHwpxError>()
             .is_some_and(|value| matches!(value, TableJoinHwpxError::UnsupportedSeparator))));
+    Ok(())
 }
 
 #[test]
