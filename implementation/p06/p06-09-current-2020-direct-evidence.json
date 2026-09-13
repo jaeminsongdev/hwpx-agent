@@ -20,11 +20,11 @@
     {
       "feature_ids": ["TABLE-001"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["formula_readback", "page_split", "render_diff", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "differential_state": "not_run",
       "evidence_files": [
         {
@@ -33,7 +33,15 @@
         },
         {
           "path": "implementation/p06/P06-09_TABLE_CREATE_HWPX_REPORT.md",
-          "sha256": "ed1ebbdd8fa8ff49fd69af01e9600d9edfe93ede23eec409de95dc10af226010"
+          "sha256": "cca8120f57290c391aa539a892d4a2dd7d9aeb05122e7ffdcdb9f1ce1e6b772e"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_CREATE_TARGET_READBACK_REPORT.md",
+          "sha256": "87a0fcace41fb26d222eee274e05c1c2c924bb9ca2dae644969f85ef7efe042f"
+        },
+        {
+          "path": "implementation/p06/evidence/target/p06-table-create.current-2020.attempt05.v2.json",
+          "sha256": "ed30dd347471c184dd9efc8292fbfa974a08d40209aa1d48c195adab4878d1dc"
         }
       ]
     },

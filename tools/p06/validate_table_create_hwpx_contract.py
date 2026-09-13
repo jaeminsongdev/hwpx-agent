@@ -35,7 +35,7 @@ EXPECTED_SOURCE_PATHS = {
 }
 EXPECTED_FEATURES = {"TABLE-001": "table.create"}
 EXPECTED_EVIDENCE = {
-    "adapter_tests": 7,
+    "adapter_tests": 8,
     "feature_count": 1,
     "backend": "direct_hwpx",
     "direct_stage": "integration_passed",
@@ -76,6 +76,8 @@ IMPLEMENTATION_MARKERS = {
         "expected_template_grid_sha256",
         "fn validate_request_source",
         "fn require_template_profile",
+        "fn require_native_template_wrapper",
+        "fn require_native_created_cell_scaffolds",
         "fn created_edges",
         "ReadbackMismatch",
     ),
@@ -99,6 +101,7 @@ IMPLEMENTATION_MARKERS = {
         "nonblank_template_and_native_identifier_collision_fail_closed",
         "input_is_bounded_and_debug_omits_ids_hashes_and_content",
         "closed_package_replacement_preserves_every_nontarget_part_and_graph",
+        "rejects_control_wrapped_table_template_as_non_native_profile",
     ),
     POLICY: (
         "direct static HWPX integration implemented; no licensed Hangul 2020 oracle claim",
@@ -108,7 +111,7 @@ IMPLEMENTATION_MARKERS = {
     ),
     REPORT: (
         "Result: `integration_pass`",
-        "7/7 PASS",
+        "8/8 PASS",
         "unit_passed`: 12 to 11",
         "integration_passed`: 34 to 35",
         "green rows: remains 0/61",

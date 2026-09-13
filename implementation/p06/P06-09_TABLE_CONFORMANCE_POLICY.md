@@ -71,8 +71,10 @@ input requires a new output path or an explicitly reviewed successor update.
 - Direct/automation differential: 61 not-run.
 
 The current matrix is a truthful implementation backlog, not a P06-09 PASS. P06-07 contributes
-four exact-target oracle rows. Exact blank unmerged table creation; the fixed-column, fit-content
-  and fit-page layout modes; the
+four exact-target oracle rows. TABLE-001 also has exact current-PC target-build, typed save/reopen,
+PDF render-review and retry evidence for its deterministic blank unmerged 3x4 nonuniform and 1x1
+profiles, so only that direct row is `oracle_verified`. The fixed-column, fit-content and fit-page
+layout modes; the
   position/attachment/wrap/outside-margin group; complete table styles; exact table transpose;
   exact cell merge/split;
   exact admitted whole-table split; exact admitted text-to-table/table-to-text conversion;

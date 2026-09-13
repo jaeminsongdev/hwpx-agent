@@ -26,13 +26,13 @@ grid, state, pagination, zero-payload and zero-formula verification.
 
 | Check | Result |
 |---|---:|
-| Dedicated TABLE-001 adapter tests | 7/7 PASS |
+| Dedicated TABLE-001 adapter tests | 8/8 PASS |
 | Arbitrary 3x4 dimensions, tracks and row-major identities | exact static readback PASS |
 | 1x1 boundary | outer edges only PASS |
 | Blank payload and formula state | exact zero readback |
 | Table and complete cell properties | template identity preserved |
 | Header/section/template/context/flow/identity/track/plan drift | fail closed |
-| Nonblank or nonconforming template and native table-ID collision | fail closed |
+| Nonblank, `hp:ctrl`-wrapped or nonconforming template and native table-ID collision | fail closed |
 | Duplicate/unknown/oversized JSON and Debug privacy | fail closed / redacted |
 | Closed package graph and opaque non-target part | exact preservation PASS |
 

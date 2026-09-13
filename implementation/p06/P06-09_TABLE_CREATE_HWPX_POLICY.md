@@ -11,6 +11,7 @@ explicit nonzero row-height and column-width tracks. The result is a blank, form
 table; cursor-only default dimensions, implicit identities and guessed physical sizes are forbidden.
 
 Native structure and style come from one separately bound blank Hancom-2020-shaped 2x2 template.
+The table must be the direct child of its `hp:run`; a synthetic `hp:ctrl` wrapper is rejected.
 That template must contain exactly four unmerged masters, no payload or formulas, no caption or
 repeat-header rows, identical complete non-ruling cell properties, no diagonals, and uniform top,
 bottom, left, right, inner-horizontal and inner-vertical edge bands. The target inherits the exact
@@ -24,7 +25,7 @@ append-only border-fill catalog entries change.
 state and grid, empty insertion context, placeholder and template ordinals, current and target
 document-flow SHA-256, table ID,
 dimensions, every row-major master ID and every physical track. The reader proves the destination
-paragraph is empty and top-level, the template wrapper contains exactly one table, and the
+paragraph is empty and top-level, the native run-direct template wrapper contains exactly one table, and the
 template satisfies the full profile.
 
 Request admission and build independently validate exact source/template/context/current-flow

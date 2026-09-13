@@ -1,0 +1,188 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-create-current-2020-evidence/v2",
+  "evidence_id": "p06.table-create.current-2020.attempt05.20260913",
+  "scope": "exact_current_pc_hancom_2020_table_001_save_reopen_pdf_and_independent_typed_oracle",
+  "attempt": {
+    "id": "20260913-05",
+    "directory": "fixtures/target-build/p06-09-table-create-target-20260913-06",
+    "manifest": {
+      "path": "fixtures/target-build/p06-09-table-create-target-20260913-06/fixture-manifest.json",
+      "sha256": "6595f8fa69798459f58aea01a18c954f8c39852be5c5b310aef4f5efa3c61263",
+      "bytes": 5261
+    },
+    "trace": {
+      "path": "fixtures/target-build/p06-09-table-create-target-20260913-06/target-batch-readback-20260913-05.json",
+      "sha256": "4bdefce382bf859cb01214606c5ca8fc15966333c884b21fa25dc3f2298b1da3",
+      "bytes": 5582,
+      "state": "pass"
+    },
+    "progress": {
+      "path": "fixtures/target-build/p06-09-table-create-target-20260913-06/target-batch-readback-20260913-05.json.progress.jsonl",
+      "sha256": "df75d4207e88301750f98220d192b18b94d228fbe6e6a80e8a2c102e52562494",
+      "bytes": 10837,
+      "events": 37,
+      "terminal": "pass"
+    },
+    "target": {
+      "product": "Hancom Hangul 2020",
+      "prog_id": "HWPFrame.HwpObject.2",
+      "registry_view": "Registry32",
+      "client": "windows_powershell_x86_sta",
+      "build": "11.0.0.9136",
+      "architecture": "x86",
+      "locale": "ko-KR",
+      "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+    },
+    "completed_cases": 2,
+    "failed_case_id": null,
+    "timed_out": false,
+    "remaining_hwp_process_count": 0,
+    "user_access_prompt_action": "not_recorded"
+  },
+  "cases": [
+    {
+      "case_id": "arbitrary-3x4-nonuniform",
+      "feature_id": "TABLE-001",
+      "capability_id": "table.create",
+      "input": {
+        "path": "fixtures/target-build/p06-09-table-create-target-20260913-06/table-001-create-3x4-nonuniform.hwpx",
+        "sha256": "b6d000efb0076f3b63ea7247601e8efc366f215f91c5d35927ca92de5c7b8021",
+        "bytes": 13287,
+        "unchanged": true
+      },
+      "output": {
+        "path": "fixtures/target-build/p06-09-table-create-target-20260913-06/table-001-create-3x4-nonuniform.hancom-2020-readback.hwpx",
+        "sha256": "95dbabfa7035073141d185df709b0900b24a1f139ad21a08926fcf2c8bca743e",
+        "bytes": 17013,
+        "section_sha256": "14b04e84bfe85210ac193d5d079667d250552fcd4e9adf824830930ed302cfa2"
+      },
+      "pdf": {
+        "path": "fixtures/target-build/p06-09-table-create-target-20260913-06/table-001-create-3x4-nonuniform.hancom-2020-render.pdf",
+        "sha256": "8f4dac281bed163fed66399744c52bca601316caaf9f9ef2aeaaeedf7d3f8d6a",
+        "bytes": 10210,
+        "pages": 1
+      },
+      "oracle": {
+        "state": "pass",
+        "target_state_sha256": "68b06e75f952731c9d466e403adbfbbce7a879d98459308b1311171df481fb4f",
+        "target_grid_sha256": "5855c019ffe32cc9d0b63ceef7d575a19e659e1f97bc0927b310ea13248cdd28",
+        "rows": 3,
+        "columns": 4,
+        "master_cells": 12,
+        "payload_blocks": 0,
+        "formulas": 0,
+        "preexisting_formula_fields": 1,
+        "renderer_cache_count": 22,
+        "renderer_cache_sha256": "ec530ea7db51254826f4c8f0873ce944f3c9e683e20aa7f9fa2de60d5a6d336d",
+        "typed_selected_table_pagination_and_exterior_preserved": true
+      }
+    },
+    {
+      "case_id": "boundary-1x1",
+      "feature_id": "TABLE-001",
+      "capability_id": "table.create",
+      "input": {
+        "path": "fixtures/target-build/p06-09-table-create-target-20260913-06/table-001-create-1x1.hwpx",
+        "sha256": "2347898eef3bb0e2c0d17d58adcb93a4c0e1591138def2171772962553632cf2",
+        "bytes": 13160,
+        "unchanged": true
+      },
+      "output": {
+        "path": "fixtures/target-build/p06-09-table-create-target-20260913-06/table-001-create-1x1.hancom-2020-readback.hwpx",
+        "sha256": "6d37e47b31aaa7e02bb45b96860e480083b3b5604f95378e88ef7ab0ce879d06",
+        "bytes": 14746,
+        "section_sha256": "8e25af52ccf2b2118cd0ba9bb58ce2098defef361f7b45e73b30f3ea2396f3ed"
+      },
+      "pdf": {
+        "path": "fixtures/target-build/p06-09-table-create-target-20260913-06/table-001-create-1x1.hancom-2020-render.pdf",
+        "sha256": "f860b1f7fd0e60610695fe1a5032ca91cee3c79007e8f83d8228e3927c6e7e06",
+        "bytes": 9998,
+        "pages": 1
+      },
+      "oracle": {
+        "state": "pass",
+        "target_state_sha256": "8065ba312660dfab51158fdf8ac1474d433499bdebcb2f197c35e50e0f602a8f",
+        "target_grid_sha256": "e6f177fd2d4d7d38e326fda013d9b156297b6db67ce1ba66b88f6370c80af82a",
+        "rows": 1,
+        "columns": 1,
+        "master_cells": 1,
+        "payload_blocks": 0,
+        "formulas": 0,
+        "preexisting_formula_fields": 1,
+        "renderer_cache_count": 11,
+        "renderer_cache_sha256": "39be4fbba289d41cb9f088c90cb3b857025eb2cf7ae9416efc1348af5d696f59",
+        "typed_selected_table_pagination_and_exterior_preserved": true
+      }
+    }
+  ],
+  "render_review": {
+    "state": "pass",
+    "engine": "pdftoppm 26.07.0",
+    "dpi": 144,
+    "page_size_points": [595, 841],
+    "pixel_size": [1190, 1682],
+    "producer": "Hancom PDF 1.3.0.550",
+    "creator": "Hwp 2020 11.0.0.9136",
+    "pdf_version": "1.4",
+    "encrypted": false,
+    "javascript": false,
+    "all_pages_inspected": true,
+    "inspection_detail": "original",
+    "review_actor": "assistant_visual_review",
+    "clipping": false,
+    "overlap": false,
+    "blank_pages": [],
+    "black_boxes": false,
+    "rendered_png_retention": "external_temporary_review_intermediate_not_product_input",
+    "pages": [
+      {
+        "case_id": "arbitrary-3x4-nonuniform",
+        "png_sha256": "3f1e12ad3563928b62e620d5de4fce3b9f0b6bcdc68903bf8e3a85bf7972b242",
+        "png_bytes": 11687,
+        "finding": "original_2x4_formula_table_plus_separate_empty_3x4_nonuniform_grid_visible"
+      },
+      {
+        "case_id": "boundary-1x1",
+        "png_sha256": "23528890bc49e169a98fed1b73de7c28a2adbe44eeb1bcf4ed7c3a11dfe1fcca",
+        "png_bytes": 11600,
+        "finding": "original_2x4_formula_table_plus_separate_empty_1x1_boundary_table_visible"
+      }
+    ]
+  },
+  "historical_attempts": {
+    "failed_attempt_ids": [
+      "20260913-01",
+      "20260913-02",
+      "20260913-03",
+      "20260913-04"
+    ],
+    "decision": "immutable_failed_evidence_not_promoted",
+    "attempt_03_inner_lifecycle_complete_but_wrapper_invalid": true,
+    "attempt_04_saved_outputs_typed_oracle_pass_but_reopen_lifecycle_incomplete": true,
+    "successful_retry_reused_exact_manifest_and_inputs": true
+  },
+  "gate_decision": {
+    "TABLE-001": "oracle_verified",
+    "actual_hancom_2020_save_reopen": "pass",
+    "actual_hancom_2020_target_build": "pass",
+    "render_diff": "pass",
+    "rollback_or_retry": "pass",
+    "automation_runtime": "not_run",
+    "differential": "not_run",
+    "p06_09": "in_progress",
+    "p06": "in_progress"
+  },
+  "not_claimed": {
+    "automation_runtime": false,
+    "differential_exact_match": false,
+    "nonblank_or_merged_initial_table": false,
+    "repeat_header_or_caption_creation": false,
+    "arbitrary_native_template": false,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_hancom_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

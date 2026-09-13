@@ -126,6 +126,8 @@ EXPECTED_SOURCE_PATHS = {
     "crates/hwpx-package/examples/p06_09_table_aggregate_target_fixture.rs",
     "crates/hwpx-package/examples/p06_09_table_aggregate_target_oracle.rs",
     "crates/hwpx-package/examples/p06_09_table_chart_target_fixture.rs",
+    "crates/hwpx-package/examples/p06_09_table_create_target_fixture.rs",
+    "crates/hwpx-package/examples/p06_09_table_create_target_oracle.rs",
     "crates/hwpx-package/examples/p06_09_table_number_format_source_oracle.rs",
     "crates/hwpx-package/examples/p06_09_table_thousands_source_oracle.rs",
     "crates/hwpx-package/examples/p06_09_table_ruling_target_fixture.rs",
@@ -172,6 +174,11 @@ EXPECTED_SOURCE_PATHS = {
     "implementation/p06/tools/validate-hancom-2020-table-chart-product.ps1",
     "implementation/p06/P06-09_TABLE_CREATE_HWPX_POLICY.md",
     "implementation/p06/P06-09_TABLE_CREATE_HWPX_REPORT.md",
+    "implementation/p06/P06-09_TABLE_CREATE_TARGET_READBACK_REPORT.md",
+    "implementation/p06/evidence/target/p06-table-create.current-2020.attempt05.v2.json",
+    "implementation/p06/tools/run-hancom-2020-table-create-target-batch-engine.ps1",
+    "implementation/p06/tools/run-hancom-2020-table-create-target-batch-readback.ps1",
+    "implementation/p06/tests/Test-Hancom2020TableCreateTargetBatchReadback.ps1",
     "implementation/p06/P06-09_TABLE_GEOMETRY_POLICY.md",
     "implementation/p06/P06-09_TABLE_GEOMETRY_REPORT.md",
     "implementation/p06/P06-09_TABLE_GEOMETRY_HWPX_POLICY.md",
@@ -259,6 +266,7 @@ EXPECTED_SOURCE_PATHS = {
     "protocol/migrations/p06-table-chart-hwpx-v1-to-render-diff-v1.md",
     "protocol/migrations/p06-table-chart-render-diff-v1-to-v2.md",
     "protocol/migrations/p06-table-create-hwpx-v0-to-v1.md",
+    "protocol/migrations/p06-table-create-hwpx-v1-to-target-v2.md",
     "protocol/migrations/p06-table-geometry-v0-to-v1.md",
     "protocol/migrations/p06-table-geometry-hwpx-v0-to-v1.md",
     "protocol/migrations/p06-table-layout-modes-hwpx-v0-to-v1.md",
@@ -305,6 +313,7 @@ EXPECTED_SOURCE_PATHS = {
     "protocol/private/p06-table-chart-render-diff-v1.json",
     "protocol/private/p06-table-chart-render-diff-v2.json",
     "protocol/private/p06-table-create-hwpx-v1.json",
+    "protocol/private/p06-table-create-target-v2.json",
     "protocol/private/p06-table-placement-v1.json",
     "protocol/private/p06-table-placement-hwpx-v1.json",
     "protocol/private/p06-table-partition-v1.json",
@@ -346,6 +355,7 @@ EXPECTED_SOURCE_PATHS = {
     "tools/p06/tests/test_table_chart_contract.py",
     "tools/p06/tests/test_table_chart_hwpx_contract.py",
     "tools/p06/tests/test_table_create_hwpx_contract.py",
+    "tools/p06/tests/test_table_create_target_v2_contract.py",
     "tools/p06/tests/test_table_geometry_contract.py",
     "tools/p06/tests/test_table_geometry_hwpx_contract.py",
     "tools/p06/tests/test_table_layout_modes_hwpx_contract.py",
@@ -419,6 +429,7 @@ EXPECTED_SOURCE_PATHS = {
     "tools/p06/tests/test_table_chart_render_diff_contract.py",
     "tools/p06/tests/test_table_chart_render_diff_v2_contract.py",
     "tools/p06/validate_table_create_hwpx_contract.py",
+    "tools/p06/validate_table_create_target_v2_contract.py",
 }
 
 
@@ -504,8 +515,8 @@ def validate_contract_shape(contract: dict[str, Any], errors: list[str]) -> None
         "direct_stage_counts": {
             "cataloged": 0,
             "unit_passed": 0,
-            "integration_passed": 35,
-            "oracle_verified": 26,
+            "integration_passed": 34,
+            "oracle_verified": 27,
         },
         "automation_binding_counts": {
             "candidate_unverified": 6,

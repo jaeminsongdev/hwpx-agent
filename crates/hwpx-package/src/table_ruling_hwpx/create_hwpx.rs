@@ -107,6 +107,7 @@ impl TableCreateHwpxReader {
             limits.pagination,
         )?;
         require_template_profile(&template, &template_pagination)?;
+        require_native_template_wrapper(template_section, template_table_ordinal)?;
         let _ = super::insertion_wrapper(template_section, template_table_ordinal)?;
         Ok(TableCreateHwpxReadback {
             profile_id: TABLE_CREATE_HWPX_PROFILE_ID,
@@ -124,6 +125,27 @@ impl TableCreateHwpxReader {
             template_pagination,
         })
     }
+}
+
+fn require_native_template_wrapper(
+    template_section: &[u8],
+    template_table_ordinal: usize,
+) -> Result<(), TableCreateHwpxError> {
+    let document = PreservingXmlDocument::parse(template_section)?;
+    let table = super::selected_table(&document, template_table_ordinal)?;
+    let run = super::element(&document, table)?
+        .parent()
+        .ok_or(TableCreateHwpxError::UnsupportedTemplateProfile)?;
+    let paragraph = super::element(&document, run)?
+        .parent()
+        .ok_or(TableCreateHwpxError::UnsupportedTemplateProfile)?;
+    if !super::has_name(super::element(&document, run)?, "run")
+        || !super::has_name(super::element(&document, paragraph)?, "p")
+        || super::element(&document, paragraph)?.parent() != Some(document.root_element())
+    {
+        return Err(TableCreateHwpxError::UnsupportedTemplateProfile);
+    }
+    Ok(())
 }
 
 #[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
@@ -593,11 +615,12 @@ impl TableCreateHwpxLowerer {
             plan.target_grid(),
             &limits.ruling,
         )?;
-        let wrapper = super::insertion_wrapper(&rendered.section, request.template_table_ordinal)?;
-        super::ensure_native_table_id_available(
+        let wrapper = native_created_table_wrapper(
             section,
             &rendered.section,
             request.template_table_ordinal,
+            plan.target_grid().master_cell_count(),
+            limits.ruling.layout.config().output_bytes,
         )?;
         let document = PreservingXmlDocument::parse(section)?;
         let placeholder = super::selected_empty_top_level_paragraph(
@@ -664,6 +687,57 @@ impl TableCreateHwpxLowerer {
             receipt,
         })
     }
+}
+
+fn native_created_table_wrapper(
+    destination_section: &[u8],
+    rendered_section: &[u8],
+    table_ordinal: usize,
+    expected_count: usize,
+    output_limit: usize,
+) -> Result<Vec<u8>, TableCreateHwpxError> {
+    let rendered_section = require_native_created_cell_scaffolds(
+        rendered_section,
+        table_ordinal,
+        expected_count,
+        output_limit,
+    )?;
+    let wrapper = super::insertion_wrapper(&rendered_section, table_ordinal)?;
+    super::ensure_native_table_id_available(destination_section, &rendered_section, table_ordinal)?;
+    Ok(wrapper)
+}
+
+fn require_native_created_cell_scaffolds(
+    section: &[u8],
+    table_ordinal: usize,
+    expected_count: usize,
+    output_limit: usize,
+) -> Result<Vec<u8>, TableCreateHwpxError> {
+    const CANONICAL_EMPTY: &[u8] =
+        br#"<hp:p id="0" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"><hp:t/></hp:run></hp:p>"#;
+    const NATIVE_EMPTY: &[u8] = br#"<hp:p id="0" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:t/></hp:run></hp:p>"#;
+    let document = PreservingXmlDocument::parse(section)?;
+    let table = super::selected_table(&document, table_ordinal)?;
+    let mut edits = Vec::new();
+    for (index, value) in document.elements().iter().enumerate() {
+        if super::has_name(value, "p")
+            && super::is_descendant(&document, index, table)?
+            && super::element_bytes(section, value)? == CANONICAL_EMPTY
+        {
+            let span = value
+                .outer_span()
+                .ok_or(TableCreateHwpxError::ReadbackMismatch)?;
+            edits.push(RawEdit {
+                start: span.start(),
+                end: span.end(),
+                replacement: NATIVE_EMPTY.to_vec(),
+            });
+        }
+    }
+    if edits.len() != expected_count {
+        return Err(TableCreateHwpxError::ReadbackMismatch);
+    }
+    Ok(super::apply_edits(section, &mut edits, output_limit)?)
 }
 
 struct CreateOutputExpectation<'a> {
