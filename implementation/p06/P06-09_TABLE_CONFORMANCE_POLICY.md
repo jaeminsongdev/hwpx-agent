@@ -70,7 +70,7 @@ input requires a new output path or an explicitly reviewed successor update.
 - Direct stages: 0 cataloged, 0 unit-passed, 22 integration-passed, 39 oracle-verified.
 - The 22 integration rows have deterministic exact-target inputs and typed oracles. Their remaining
   direct validation is the successful licensed lifecycle and original-detail `render_diff` from the
-  single-session pending-22 batch; failed attempts 01 through 06 and the control diagnostic remain
+  single-session pending-22 batch; failed attempts 01 through 07 and the control diagnostic remain
   failed evidence. The runner now opens an exact previously verified Hangul-saved TABLE-012 control
   before any pending row, so access-admission failure cannot be attributed to TABLE-016.
 - The other 39 rows retain their exact current-target direct oracles. This includes TABLE-006's

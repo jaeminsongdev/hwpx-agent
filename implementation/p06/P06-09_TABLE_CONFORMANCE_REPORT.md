@@ -223,8 +223,11 @@ The machine-readable authority is
   isolating the current failure to file-access admission. Every run kept all inputs exact, published
   no HWPX/PDF output and left zero HWP processes. The runner now hash-binds and opens that exact
   TABLE-012 control before any pending case; the Rust oracle and renderer require its open, close and
-  immutability states to pass. Configuration-only validation, 28/28 readback checks, 28/28 wrapper
-  checks and 9/9 renderer tests pass without invoking HWP.
+  immutability states to pass. Integrated attempt 07 returned `Open=false` on that control with 0/22
+  cases, unchanged control bytes, no HWPX/PDF output and zero remaining HWP processes. Its trace
+  SHA-256 is `c4e0dae6796bdb3dd563876ffea0d89a01289d1e2e5632cbe85e72b42ad993f5`.
+  Configuration-only validation, 28/28 readback checks, 28/28 wrapper checks and 9/9 renderer tests
+  pass without invoking HWP.
   Attempt 03 trace SHA-256 is
   `577771fdbde65e572b0bfc59697d1a5334101927764b5afaeba6f8f721071356`. A combined offline oracle now admits only a
   complete 22-case success trace, then reuses all three existing typed semantic readers directly;
