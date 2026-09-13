@@ -1,0 +1,102 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-chart-render-diff-calibration/v1",
+  "evidence_id": "p06-table-chart-render-diff-current-2020-calibration01",
+  "scope": "exact_target_native_reference_product_render_diff_profile_calibration_only",
+  "feature": {
+    "feature_id": "TABLE-006",
+    "capability_id": "table.chart_from_table"
+  },
+  "target": {
+    "product": "Hancom Hangul 2020",
+    "build": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR"
+  },
+  "profile_sha256": "701248eec6ef0b5fd1524a718d7b18dd2e2077009e74cdacb0fdba34c2a5ba0b",
+  "artifacts": {
+    "native_hwpx": {
+      "bytes": 49525,
+      "sha256": "985416a6858f2f56c38ac5a8ec85d534d7c948ac0bd6484e96f6b8c11d1b7913"
+    },
+    "native_pdf": {
+      "bytes": 98163,
+      "sha256": "99409fe6753825ad7b8ad355642a67a59ee5cad00f17546b9a1cad381219f5ad"
+    },
+    "product_hwpx": {
+      "bytes": 49676,
+      "sha256": "1647f725469b0501c30b9c856c0c530d98ccf12d0f981b5a7333a7ea3dbdd230"
+    },
+    "product_pdf": {
+      "bytes": 98655,
+      "sha256": "9a6c3ecbf2c392416b317afebaecadca32773ce6ea29f6f1bbc1f2e966f9f0ea"
+    }
+  },
+  "observation": {
+    "state": "pass",
+    "pdf_identity_exact": true,
+    "pdf_pages": 1,
+    "pdf_page_size": "A4",
+    "word_text_exact": true,
+    "word_count": 8,
+    "maximum_word_bbox_delta_points": 0.0,
+    "raster": {
+      "render_dpi": 150,
+      "render_size": [1240, 1753],
+      "diff_bbox": [450, 324, 575, 355],
+      "differing_pixels": 1980,
+      "differing_pixel_ratio": 0.0009108808862226966,
+      "mean_absolute_channel_delta": 0.04153708849345822,
+      "maximum_channel_delta": 193,
+      "outside_allowed_diff_box_pixels": 0,
+      "native_ink_bbox": [176, 212, 1057, 690],
+      "product_ink_bbox": [176, 212, 1057, 690],
+      "native_ink_pixels": 53402,
+      "product_ink_pixels": 53845,
+      "ink_pixel_delta": 443
+    },
+    "hwpx_semantics_exact": true,
+    "table_count": 1,
+    "cell_count": 9,
+    "chart_anchor_count": 1,
+    "chart_part_count": 1,
+    "bar_3d_count": 1,
+    "series_count": 2,
+    "ordered_cache_value_count": 10,
+    "explicit_title_text_count": 0,
+    "anchor_semantics_exact": true
+  },
+  "qualification": {
+    "profile_frozen": true,
+    "calibration_pair": true,
+    "calibration_pair_reusable_for_gate": false,
+    "fresh_independent_pair_required": true,
+    "photo_or_user_screenshot_required": false
+  },
+  "privacy": {
+    "absolute_paths": false,
+    "document_payload": false,
+    "chart_xml_payload": false,
+    "user_identity": false,
+    "secret_material": false
+  },
+  "gate_decision": {
+    "calibration_fit": "pass",
+    "required_render_diff": "not_run",
+    "rollback_or_retry": "not_run",
+    "TABLE-006": "integration_passed",
+    "p06_09": "in_progress",
+    "p06": "in_progress",
+    "product_complete": false
+  },
+  "not_claimed": {
+    "calibration_as_oracle": false,
+    "required_render_diff": false,
+    "rollback_or_retry": false,
+    "automation_runtime": false,
+    "release_differential": false,
+    "p06_09_complete": false,
+    "p06_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

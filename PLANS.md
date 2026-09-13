@@ -91,7 +91,7 @@
   formula/cache/field oracle and original-detail render review; attempt 01 remains failed evidence.
 - TABLE-021 transposes merged formula-free HWPX; TABLE-056 sorts complete plain/unmerged/formula-free
   cells; TABLE-057/058 fill exact single-run regions and reject stale unselected formula caches; TABLE-060 upgrades only formula reference anchors while preserving other formula fields; TABLE-001/004/005 create and convert admitted profiles with static reopen and no Hangul/render claim.
-- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. TABLE-006 now lowers its exact 3x3 source to a linked chart and passes licensed Hangul product open/save/reopen/PDF plus render review; native-reference render differential and retry remain open. TABLE-032/033 attempt 11 and TABLE-049 attempt 05 passed exact licensed target source runs; their preserving adapters match the corresponding native output sections byte-for-byte. All 36 integration rows need target oracles and later automation evidence.
+- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. TABLE-006 lowers its exact 3x3 source to a linked chart and passes licensed Hangul product open/save/reopen/PDF; native/product attempt 01 only calibrated and froze the exact render-diff profile, so a fresh post-freeze pair and retry remain open. TABLE-032/033 attempt 11 and TABLE-049 attempt 05 passed exact licensed target source runs; their preserving adapters match the corresponding native output sections byte-for-byte. All 36 integration rows need target oracles and later automation evidence.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`, current conformance JSON, and `protocol/private/p06-table-conformance-v1.json`.
 
 ## Risks, closures and holds
@@ -108,7 +108,7 @@
 ## Next actions
 
 1. Goal pursuit is active at `max`; finish P06 in order before resuming P07 and later phases. No remote push is implied.
-2. Next close TABLE-006 native-reference render differential and retry, then run the 35 other integration-row target/render campaign and all release differentials.
+2. Next run TABLE-006 fresh native/product render differential and retry against the frozen profile, then run the 35 other integration-row target/render campaign and all release differentials.
 3. Resume P07 target/render/differential Gates only after P06, then continue P08 onward in ledger order.
 
 ## Context pack and archive pointers

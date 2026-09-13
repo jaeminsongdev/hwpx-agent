@@ -1,0 +1,187 @@
+{
+  "schema_version": "hwpx-agent.table-chart-render-diff-contract/v1",
+  "predecessor": {
+    "path": "protocol/private/p06-table-chart-hwpx-v1.json",
+    "sha256": "d3074291e72a2e14fea28e873e752ea77a989386641439b6c88e3f1a8adb27cb",
+    "state": "immutable_integration_contract"
+  },
+  "scope": "p06_09_table_006_exact_target_native_reference_product_render_diff_calibration",
+  "feature": {
+    "feature_id": "TABLE-006",
+    "capability_id": "table.chart_from_table"
+  },
+  "target": {
+    "product": "Hancom Hangul 2020",
+    "build": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR"
+  },
+  "calibration_pair": {
+    "native_hwpx": {
+      "sha256": "985416a6858f2f56c38ac5a8ec85d534d7c948ac0bd6484e96f6b8c11d1b7913",
+      "bytes": 49525
+    },
+    "native_pdf": {
+      "sha256": "99409fe6753825ad7b8ad355642a67a59ee5cad00f17546b9a1cad381219f5ad",
+      "bytes": 98163
+    },
+    "product_hwpx": {
+      "sha256": "1647f725469b0501c30b9c856c0c530d98ccf12d0f981b5a7333a7ea3dbdd230",
+      "bytes": 49676
+    },
+    "product_pdf": {
+      "sha256": "9a6c3ecbf2c392416b317afebaecadca32773ce6ea29f6f1bbc1f2e966f9f0ea",
+      "bytes": 98655
+    }
+  },
+  "frozen_profile": {
+    "render_dpi": 150,
+    "render_size": [1240, 1753],
+    "ink_threshold": 250,
+    "allowed_default_title_diff_box": [430, 310, 600, 370],
+    "maximum_differing_pixel_ratio": 0.001,
+    "maximum_mean_absolute_channel_delta": 0.05,
+    "maximum_channel_delta": 255,
+    "expected_ink_bbox": [176, 212, 1057, 690],
+    "maximum_ink_pixel_delta": 500,
+    "word_bbox_tolerance_points": 0.001,
+    "pdf_identity": {
+      "creator": "Hwp 2020 11.0.0.9136",
+      "producer": "Hancom PDF 1.3.0.550",
+      "pages": 1,
+      "page_size": "595 x 841 pts (A4)",
+      "page_rotation": 0,
+      "encrypted": "no"
+    },
+    "expected_words": [
+      "Series-A",
+      "Series-B",
+      "Category-A",
+      "1",
+      "2",
+      "Category-B",
+      "3",
+      "4"
+    ],
+    "expected_word_boxes": [
+      [232.6739, 103.580002, 274.842602, 113.529129],
+      [372.51811, 103.580002, 413.681397, 113.529129],
+      [92.949625, 116.405985, 148.671522, 126.355112],
+      [232.6739, 116.405985, 238.148933, 126.355112],
+      [372.51811, 116.405985, 377.993143, 126.355112],
+      [92.949625, 129.231968, 147.666107, 139.181095],
+      [232.6739, 129.231968, 238.148933, 139.181095],
+      [372.51811, 129.231968, 377.993143, 139.181095]
+    ],
+    "hwpx_semantics": {
+      "table_count": 1,
+      "cell_count": 9,
+      "chart_anchor_count": 1,
+      "chart_part_count": 1,
+      "bar_3d_count": 1,
+      "bar_directions": ["col"],
+      "series_count": 2,
+      "ordered_cache_values": [
+        "Series-A",
+        "Category-A",
+        "Category-B",
+        "1",
+        "3",
+        "Series-B",
+        "Category-A",
+        "Category-B",
+        "2",
+        "4"
+      ],
+      "explicit_title_text": [],
+      "anchor": {
+        "root": {
+          "zOrder": "1",
+          "numberingType": "PICTURE",
+          "textWrap": "SQUARE",
+          "textFlow": "BOTH_SIDES",
+          "lock": "0",
+          "dropcapstyle": "None",
+          "chartIDRef": "chart1.xml"
+        },
+        "size": {
+          "width": "32250",
+          "widthRelTo": "ABSOLUTE",
+          "height": "18750",
+          "heightRelTo": "ABSOLUTE",
+          "protect": "0"
+        },
+        "position": {
+          "treatAsChar": "0",
+          "affectLSpacing": "0",
+          "flowWithText": "1",
+          "allowOverlap": "0",
+          "holdAnchorAndSO": "0",
+          "vertRelTo": "PARA",
+          "horzRelTo": "COLUMN",
+          "vertAlign": "TOP",
+          "horzAlign": "LEFT",
+          "vertOffset": "0",
+          "horzOffset": "0"
+        },
+        "margin": {
+          "left": "0",
+          "right": "0",
+          "top": "0",
+          "bottom": "0"
+        }
+      }
+    }
+  },
+  "qualification_rule": {
+    "calibration_pair_may_pass_profile_fit": true,
+    "calibration_pair_may_satisfy_required_render_diff": false,
+    "fresh_independent_pair_required_after_profile_freeze": true,
+    "outside_default_title_region_difference_allowed": false,
+    "photo_or_user_screenshot_required": false
+  },
+  "source_locks": [
+    {
+      "path": "protocol/private/p06-table-chart-hwpx-v1.json",
+      "sha256": "d3074291e72a2e14fea28e873e752ea77a989386641439b6c88e3f1a8adb27cb"
+    },
+    {
+      "path": "tools/p06/table_chart_render_diff.py",
+      "sha256": "ded4e1c65f2a6185bc18cffb739dcca8a748fc94a461ce261b72f1fbbefb4091"
+    }
+  ],
+  "failure_policy": [
+    "missing_oversized_or_hash_drifted_artifact_rejected",
+    "wrong_pdf_identity_page_size_rotation_or_page_count_rejected",
+    "word_text_or_bbox_drift_rejected",
+    "render_dimension_ink_bbox_or_pixel_budget_drift_rejected",
+    "any_raster_difference_outside_frozen_default_title_box_rejected",
+    "chart_type_series_cache_anchor_or_explicit_title_semantic_drift_rejected",
+    "calibration_pair_cannot_be_reused_as_qualification_pair",
+    "no_partial_oracle_receipt_returned"
+  ],
+  "migration": "protocol/migrations/p06-table-chart-hwpx-v1-to-render-diff-v1.md",
+  "policy": "implementation/p06/P06-09_TABLE_CHART_RENDER_DIFF_POLICY.md",
+  "report": "implementation/p06/P06-09_TABLE_CHART_RENDER_DIFF_REPORT.md",
+  "receipt": "implementation/p06/evidence/target/p06-table-chart-render-diff.current-2020.calibration01.v1.json",
+  "gate_decision": {
+    "profile": "frozen_after_calibration",
+    "calibration_fit": "pass",
+    "required_render_diff": "not_run",
+    "rollback_or_retry": "not_run",
+    "TABLE-006": "integration_passed",
+    "p06_09": "in_progress",
+    "p06": "in_progress"
+  },
+  "not_claimed": {
+    "calibration_as_oracle": false,
+    "required_render_diff": false,
+    "rollback_or_retry": false,
+    "automation_runtime": false,
+    "release_differential": false,
+    "p06_09_complete": false,
+    "p06_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}
