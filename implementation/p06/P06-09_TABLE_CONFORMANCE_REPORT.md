@@ -238,7 +238,13 @@ No evidence is promoted merely because a neighboring feature used the same table
 The exact P02 registry contains only six table candidates and 55 rows with
 `no_reviewed_action_mapping`; all 61 table runtime states are unverified and routing-disabled. The
 redacted projection does not disclose the six private Action/ParameterSet identifiers. P02's two
-verified undo/redo canaries are unrelated to the table domain and are not reused here.
+verified undo/redo canaries are unrelated to the table domain and are not reused here. A bounded
+planner now binds TABLE-010/015/016/017/046/048 to the exact private registry and redacted P06
+projection, preserving the order in one create-new request. Planned attempt 01 has request digest
+`a11229c53370e5eb24e938f0aa4dbebc790229e1fff4674d0866d884b64f5575`. It allows only
+`IsActionEnable` and documented default-ParameterSet surface reads on one generated disposable 3x3
+table; candidate Action execution, user-document access, runtime qualification, routing and
+differential promotion remain forbidden and not run.
 
 ## Validation and blockers
 
