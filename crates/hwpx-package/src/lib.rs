@@ -233,9 +233,13 @@ pub use table_cell_style::{
     TableCellStyleReader,
 };
 pub use table_formula::{
-    TABLE_CANONICAL_FORMULA_HWPX_PROFILE_ID, TABLE_FORMULA_HWPX_PROFILE_ID, TableFormulaHwpxError,
+    TABLE_CANONICAL_FORMULA_HWPX_PROFILE_ID, TABLE_FORMULA_HWPX_PROFILE_ID,
+    TABLE_THOUSANDS_HWPX_PROFILE_ID, TABLE_THOUSANDS_HWPX_SCHEMA_VERSION, TableFormulaHwpxError,
     TableFormulaHwpxLimitConfig, TableFormulaHwpxLimits, TableFormulaHwpxLowerer,
     TableFormulaHwpxLoweringReceipt, TableFormulaHwpxReadback, TableFormulaHwpxReader,
+    TableThousandsHwpxError, TableThousandsHwpxLowerer, TableThousandsHwpxLoweringReceipt,
+    TableThousandsHwpxReadback, TableThousandsHwpxReader, TableThousandsHwpxRequest,
+    TableThousandsHwpxRequestDraft,
 };
 pub use table_layout::{
     TABLE_GEOMETRY_HWPX_PROFILE_ID, TABLE_LAYOUT_HWPX_PROFILE_ID, TABLE_LAYOUT_HWPX_PROFILE_ID_V1,

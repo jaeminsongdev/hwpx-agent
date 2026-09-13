@@ -65,7 +65,7 @@ input requires a new output path or an explicitly reviewed successor update.
 ## Current result
 
 - Required rows: 61; green: 0; non-green: 61.
-- Direct stages: 0 cataloged, 4 unit-passed, 32 integration-passed, 25 oracle-verified.
+- Direct stages: 0 cataloged, 2 unit-passed, 34 integration-passed, 25 oracle-verified.
 - Automation bindings: 6 candidate-unverified, 55 unavailable-with-reason.
 - Automation runtime support: 61 unverified.
 - Direct/automation differential: 61 not-run.
@@ -94,6 +94,12 @@ TABLE-054 additionally has exact master-cell nested-table insertion integration.
 inline template retains its complete typed child state, while the complete parent state reopens with
 only one ordered payload insertion. Nested formulas use nearest-table ownership and cannot leak into
 the parent formula state. No licensed application or renderer result is inferred.
+
+TABLE-032/033 additionally have a current-target native-source-backed HWPX integration. The exact
+Hangul 2020 actions change only the selected formula field's visible result; formula metadata, AST,
+numeric cache, grid and document flow remain exact. Direct remove/add sections match the native
+sections byte-for-byte. Direct-output package save/reopen, render, rollback/retry and product
+automation runtime remain not run, so the rows are `integration_passed`, not oracle-verified.
 
 ## Not claimed
 

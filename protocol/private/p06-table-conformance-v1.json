@@ -32,8 +32,8 @@
     "non_green_rows": 61,
     "direct_stage_counts": {
       "cataloged": 0,
-      "unit_passed": 4,
-      "integration_passed": 32,
+      "unit_passed": 2,
+      "integration_passed": 34,
       "oracle_verified": 25
     },
     "automation_binding_counts": {
@@ -205,7 +205,7 @@
     },
     {
       "path": "crates/hwpx-package/src/lib.rs",
-      "sha256": "f97fe8a7fcd972280a0e3306953347c5663a84d592045f799edc0e6e12656f12"
+      "sha256": "dfe19ae6b2fb7b044c831ddcafbeba7cb5f4a30e9c2b69508ad81f5fd05395cc"
     },
     {
       "path": "crates/hwpx-package/src/table_cell_style.rs",
@@ -213,7 +213,7 @@
     },
     {
       "path": "crates/hwpx-package/src/table_formula.rs",
-      "sha256": "faf2c694780a2f14fbd4f0443fd2fe2ee24be673836f935ec0e72081144332dc"
+      "sha256": "a9713fcf485797b979f77f0748be11c2c47375a6426e89002cfc504c7db5cbe0"
     },
     {
       "path": "crates/hwpx-package/src/table_layout.rs",
@@ -429,11 +429,11 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_POLICY.md",
-      "sha256": "8cb8195e046a2502aaaa4aab621b15a3b0f7e805849589e25b34803d2820bdbb"
+      "sha256": "e11aa7e6bfe717adc1a26d5283a9bed06ec17b45c311063f1112eb7a11c12c21"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "b7734a75f7e36fafe1b59ef006e5a021b3dc5eec71fee5ee1fcd3b31d2884718"
+      "sha256": "a98f163fa914d2051b22b667b861b126e4b9b25c8b65aeb4dd37a6eca191e86d"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CREATE_HWPX_POLICY.md",
@@ -649,7 +649,7 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "8857cfc417608d4aee08acf0ee5d6b2595dd5900528b08f7c48c31b6510c7f3d"
+      "sha256": "4e5c9383601da33d9669cc6609430f3121c09daecfb193b50db204f6c50e0d39"
     },
     {
       "path": "implementation/p06/evidence/target/p06-table-aggregate.current-2020.attempt02.v2.json",
@@ -665,7 +665,7 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "04594c7a4efac21bed3d0989c1e6803d13821a1d5a5aa611bd526a536643c0a5"
+      "sha256": "a54897d829375a4edcddc9ec8b9448b3a00ce1abf624856ef3561121c87b1a1f"
     },
     {
       "path": "implementation/p06/tests/Test-Hancom2020TableAggregateTargetBatchReadback.ps1",
@@ -1069,11 +1069,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "a13487cfbd8e9e550fe15f4e83f30a8de99ad9eb10cdbebace0687a554e449f9"
+      "sha256": "d5537c4f38a8abb39681dc144583efaeb691281f6bcb2c4e42309012b464be45"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "37eae770ff406ab66982c8174482d35a94a6964060d36c42a149c9777a4278e3"
+      "sha256": "a2145ac56ca136139e1750002f8bd31e7800103c807b8925941d50c96633ec64"
     },
     {
       "path": "tools/p06/tests/test_table_create_hwpx_contract.py",
@@ -1217,7 +1217,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "a3cf70f5da5d971ff4b7e845f976e821acd4832f4159735e12fa80a0649d8852"
+      "sha256": "bb94e53b0c5a5d233b2a6b5bbb892efba4403695c73dfeaa14b5d8d26cbeb001"
     },
     {
       "path": "tools/p06/validate_table_create_hwpx_contract.py",
@@ -1334,6 +1334,58 @@
     {
       "path": "tools/xtask/src/main.rs",
       "sha256": "f8f9e74838f1901e89a3c265196098592c3c15dc594baf71cf11853adfbea931"
+    },
+    {
+      "path": "crates/hwpx-package/examples/p06_09_table_thousands_source_oracle.rs",
+      "sha256": "5b9a802cb97a42e26fe4f59404a5783d8216f93bc4aee5cfd3d2000d05f015d5"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_formula/thousands_hwpx.rs",
+      "sha256": "f89da32df37600cd9b567984f278a9bf3af58fc35c3555fb0107f4e85bb6fc72"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_thousands_hwpx.rs",
+      "sha256": "d16dd36791f66b51f63058c27db21099cc875d851d29413b63f569457d8d691e"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_THOUSANDS_HWPX_POLICY.md",
+      "sha256": "0f4ee2a093893323d28700581da27b64236a0b2aa0a7a8a77b9c0a86db2102b5"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_THOUSANDS_HWPX_REPORT.md",
+      "sha256": "9c294d0792b0d3ba44dd1c1dd479dc5a9c8336b499764eaa4f2a95118dfed3b1"
+    },
+    {
+      "path": "implementation/p06/evidence/target/p06-table-thousands.current-2020.attempt11.v1.json",
+      "sha256": "4e124b376195a58ebd47ac20fd05bfe768f218cdab9ace92cb7564122ed8357d"
+    },
+    {
+      "path": "implementation/p06/tests/Test-Hancom2020TableThousandsSource.ps1",
+      "sha256": "9aeaff93619ed22610b64675287d31da10b63d513ac61ddea4d28f58c4c0300c"
+    },
+    {
+      "path": "implementation/p06/tools/create-hancom-2020-table-thousands-source.ps1",
+      "sha256": "918fda61a1786c9c0fa9c4419e639ab7a91f2616833e31527081d9a563a291a2"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-thousands-source.ps1",
+      "sha256": "9e5544f3d3bee530119e2f3a0cc590ddf4646028efb2de23454b1861d177394b"
+    },
+    {
+      "path": "protocol/migrations/p06-table-thousands-v1-to-hwpx-v1.md",
+      "sha256": "c462607862f14fe296f90e86572f5a0a66e2c864b7eda0aea6c90425ae6d1751"
+    },
+    {
+      "path": "protocol/private/p06-table-thousands-hwpx-v1.json",
+      "sha256": "6ce4260448a978f0b79a8b05131976afd2f72eb517abb3225b0b3f3cae71cfd8"
+    },
+    {
+      "path": "tools/p06/tests/test_table_thousands_hwpx_contract.py",
+      "sha256": "6a0fd0daddd30809e4865b51f59efff102fdaf9d04bac95fb03373d840255111"
+    },
+    {
+      "path": "tools/p06/validate_table_thousands_hwpx_contract.py",
+      "sha256": "28b684d9dfc16e2a33e19adc08c98befcc1a2c52b4229fa25eab1fb96cb3fd9a"
     }
   ],
   "schemas": [

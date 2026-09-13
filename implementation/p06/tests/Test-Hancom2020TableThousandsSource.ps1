@@ -120,6 +120,7 @@ $checks = [ordered]@{
         $wrapper -match '\$trace\.delete_thousands_action -ceq ''pass''' -and
         $wrapper -match '\$trace\.insert_thousands_action -ceq ''pass'''
     progress_journal = $wrapper -match 'Read-ProgressJournal' -and
+        $wrapper -match "'baseline_save', 'formula_cell_select', 'delete_thousands'" -and
         $wrapper -match 'progress_last_phase = \$progress\.last_phase' -and
         $wrapper -match 'inner_trace_preserved = Test-Path'
     preexisting_hwp_rejected = $all -match 'PREEXISTING_HWP_PROCESS'

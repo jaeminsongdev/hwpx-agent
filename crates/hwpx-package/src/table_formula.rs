@@ -14,6 +14,14 @@ use crate::{
     XmlTokenKind,
 };
 
+mod thousands_hwpx;
+
+pub use thousands_hwpx::{
+    TABLE_THOUSANDS_HWPX_PROFILE_ID, TABLE_THOUSANDS_HWPX_SCHEMA_VERSION, TableThousandsHwpxError,
+    TableThousandsHwpxLowerer, TableThousandsHwpxLoweringReceipt, TableThousandsHwpxReadback,
+    TableThousandsHwpxReader, TableThousandsHwpxRequest, TableThousandsHwpxRequestDraft,
+};
+
 pub const TABLE_FORMULA_HWPX_PROFILE_ID: &str = "hwpx-agent.table-formula-hwpx.hancom-2020/1";
 pub const TABLE_CANONICAL_FORMULA_HWPX_PROFILE_ID: &str =
     "hwpx-agent.table-canonical-formula-hwpx.hancom-2020/1";

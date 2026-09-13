@@ -1,6 +1,6 @@
 # P06-09 current-PC table conformance report
 
-- Generated: 2026-09-11
+- Generated: 2026-09-13
 - Target: licensed Hancom Hangul 2020 `11.0.0.9136`, `ko-KR`, x86 on this PC
 - Matrix schema: `hwpx-agent.table-conformance-report/v1`
 - Matrix state: `non_green`
@@ -16,8 +16,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 | Dimension | Current evidence |
 |---|---:|
 | direct `oracle_verified` | 25 |
-| direct `integration_passed` | 32 |
-| direct `unit_passed` | 4 |
+| direct `integration_passed` | 34 |
+| direct `unit_passed` | 2 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
 | automation `unavailable_with_reason` | 55 |
@@ -72,11 +72,15 @@ The machine-readable authority is
   remains failed timeout evidence. These rows are `oracle_verified`; formula evaluation, verified
   cache refresh, automation and differential remain unclaimed. TABLE-025 retains its independent
   stronger target oracle.
-- The thousands-format planner changes only the grouping flag on an exact selection of existing
-  numeric formula-cell formats. TABLE-032/033 move to unit evidence while decimal places, formula
-  AST and cache remain exact; unsupported formats fail closed. Exact Hangul 2020 source tooling is
-  static-ready, but attempts 03-06 stopped at baseline SaveAs without user access approval, so no
-  HWPX mapping or promotion exists. Every failed attempt remains preserved and unpromoted.
+- The thousands-format planner and preserving HWPX adapter cover TABLE-032/033. Exact licensed
+  Hangul 2020 attempt 11 passed all three native saves and 22 ordered progress events. Offline
+  comparison proves `TableDeleteComma` and `TableInsertComma` change only the selected formula
+  field's visible result text; native formula metadata, AST, numeric cache, complete grid and
+  document flow remain exact. Direct remove/add output sections are byte-identical to the
+  corresponding native sections, so both rows are now `integration_passed`. Attempts 01-10 remain
+  failed or interrupted evidence; attempt 10 specifically remains failed because the old watchdog
+  omitted a valid phase from its allowlist. Direct-output package save/reopen, PDF/render,
+  rollback/retry and product automation-route runtime remain not run.
 - The text conversion component adds bounded UTF-8 tab/comma/semicolon parsing and deterministic
   writing for TABLE-004/005. TABLE-004 converts a complete admitted plain-text paragraph to an exact
   template-derived table. TABLE-005 converts every cell of an arbitrary-size admitted plain unmerged
@@ -209,7 +213,7 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 36 rows below direct oracle,
-70 missing validation instances, 61 unverified automation runtime rows and 61 missing
+66 missing validation instances, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -217,8 +221,8 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. lower the remaining 4 unit-only rows through preserving HWPX adapters;
-2. close the 32 remaining integration-only target oracles;
+1. lower the remaining 2 unit-only rows through preserving HWPX adapters;
+2. close the 34 remaining integration-only target oracles;
 3. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
 4. regenerate until all 61 rows are green, then run the P06 hard Gate.

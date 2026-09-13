@@ -62,8 +62,8 @@ function Read-ProgressJournal {
     }
     $allowedPhases = @(
         'preflight', 'com_create', 'table_create', 'formula_operands', 'formula_author',
-        'baseline_save', 'delete_thousands', 'removed_save', 'insert_thousands',
-        'added_save', 'terminal'
+        'baseline_save', 'formula_cell_select', 'delete_thousands', 'removed_save',
+        'insert_thousands', 'added_save', 'terminal'
     )
     $expectedSequence = 1
     $workerProcessId = $null
