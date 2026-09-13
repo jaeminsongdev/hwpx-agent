@@ -1,0 +1,115 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-automation-candidate-6-surface-public-evidence/v1",
+  "state": "component_pass",
+  "scope": "exact_current_pc_read_only_action_surface_batch_not_runtime_support",
+  "recorded_at_utc": "2026-09-13T15:23:09.0414500Z",
+  "target": {
+    "profile_id": "hancom-hangul-2020-secondary",
+    "product": "Hancom Hangul 2020",
+    "build": "11.0.0.9136",
+    "locale": "ko-KR",
+    "architecture": "x86",
+    "client": "windows_powershell_x86_sta",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+  },
+  "evidence": {
+    "request_sha256": "d9588469b901ec31136e15f657b772f93872943c0411ac7b4794ba4feca31355",
+    "trace_sha256": "46b1a638a7b7f9d9cbe9ec76f1b27897e4cbb41dd1c8fd57cd80a0137311e2db",
+    "receipt_sha256": "344559414ad013cf36f4e1aa5f03cf8d43fa8cd276eb61dfb1daf9e5c43f4164",
+    "receipt_trace_sha_matches": true
+  },
+  "session": {
+    "strategy": "one_hwp_session_six_generated_3x3_documents",
+    "exited_within_timeout": true,
+    "timeout_seconds": 600,
+    "remaining_hwp_process_count": 0
+  },
+  "summary": {
+    "case_count": 6,
+    "completed_case_count": 6,
+    "enabled_in_context_count": 5,
+    "disabled_in_context_count": 1,
+    "action_created_count": 6,
+    "documented_parameter_set_count": 4,
+    "default_read_passed_count": 4,
+    "candidate_action_execute_count": 0
+  },
+  "cases": [
+    {
+      "index": 1,
+      "feature_id": "TABLE-010",
+      "capability_id": "table.split_table",
+      "selection_context": "current_row_boundary",
+      "is_action_enable": true,
+      "action_created": true,
+      "parameter_set_surface": "not_applicable",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 2,
+      "feature_id": "TABLE-015",
+      "capability_id": "table.delete_columns",
+      "selection_context": "current_column_block",
+      "is_action_enable": true,
+      "action_created": true,
+      "parameter_set_surface": "default_read_pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 3,
+      "feature_id": "TABLE-016",
+      "capability_id": "table.split_cell",
+      "selection_context": "single_cell",
+      "is_action_enable": true,
+      "action_created": true,
+      "parameter_set_surface": "default_read_pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 4,
+      "feature_id": "TABLE-017",
+      "capability_id": "table.merge_cells",
+      "selection_context": "adjacent_two_cell_block",
+      "is_action_enable": false,
+      "action_created": true,
+      "parameter_set_surface": "not_applicable",
+      "state": "surface_present_disabled_in_context"
+    },
+    {
+      "index": 5,
+      "feature_id": "TABLE-046",
+      "capability_id": "table.cell_border",
+      "selection_context": "single_cell",
+      "is_action_enable": true,
+      "action_created": true,
+      "parameter_set_surface": "default_read_pass",
+      "state": "surface_present_enabled"
+    },
+    {
+      "index": 6,
+      "feature_id": "TABLE-048",
+      "capability_id": "table.cell_fill",
+      "selection_context": "single_cell",
+      "is_action_enable": true,
+      "action_created": true,
+      "parameter_set_surface": "default_read_pass",
+      "state": "surface_present_enabled"
+    }
+  ],
+  "safety": {
+    "raw_action_identifiers_present": false,
+    "raw_parameter_set_identifiers_present": false,
+    "user_document_opened": false,
+    "external_network_invoked": false,
+    "registry_or_system_setting_changed": false,
+    "computer_use_click_or_type_invoked": false
+  },
+  "promotion": {
+    "runtime_support_state": "unverified",
+    "routing_enabled": false,
+    "differential_state": "not_run",
+    "p06_09": "in_progress",
+    "p06": "in_progress",
+    "product_complete": false
+  }
+}

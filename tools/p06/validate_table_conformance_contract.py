@@ -157,6 +157,7 @@ EXPECTED_SOURCE_PATHS = {
     "specs/capability-contracts.generated.json",
     "implementation/p06/p06-09-current-2020-automation-projection.json",
     "implementation/p06/p06-09-current-2020-direct-evidence.json",
+    "implementation/p06/evidence/target/p06-table-automation-candidate-6-surface.current-2020.attempt02.v1.json",
     "implementation/p06/tests/Test-Hancom2020TableLayoutPlacementTargetBatchReadback.ps1",
     "implementation/p06/tests/Test-Hancom2020TableMergeSplitTargetBatchReadback.ps1",
     "implementation/p06/tests/Test-Hancom2020TablePending22TargetBatchReadback.ps1",

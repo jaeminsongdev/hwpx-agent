@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 from pathlib import Path
 import unittest
@@ -10,6 +11,10 @@ ROOT = Path(__file__).resolve().parents[3]
 PARENT = ROOT / "implementation/p06/tools/run-hancom-2020-table-automation-candidate-6-surface.ps1"
 CHILD = ROOT / "implementation/p06/tools/run-hancom-2020-table-automation-candidate-6-surface-child.ps1"
 PLANNER = ROOT / "tools/p06/plan_table_automation_candidate_6_batch.py"
+PUBLIC_EVIDENCE = ROOT / (
+    "implementation/p06/evidence/target/"
+    "p06-table-automation-candidate-6-surface.current-2020.attempt02.v1.json"
+)
 EXPECTED_REQUEST_SHA256 = (
     "d9588469b901ec31136e15f657b772f93872943c0411ac7b4794ba4feca31355"
 )
@@ -32,6 +37,8 @@ class CandidateSixSurfaceScriptTests(unittest.TestCase):
         cls.parent = PARENT.read_text(encoding="utf-8")
         cls.child = CHILD.read_text(encoding="utf-8")
         cls.planner = PLANNER.read_text(encoding="utf-8")
+        cls.evidence_text = PUBLIC_EVIDENCE.read_text(encoding="utf-8")
+        cls.evidence = json.loads(cls.evidence_text)
 
     def test_exact_create_new_request_identity_is_locked(self) -> None:
         self.assertIn(EXPECTED_REQUEST_SHA256, self.parent)
@@ -119,6 +126,33 @@ class CandidateSixSurfaceScriptTests(unittest.TestCase):
         self.assertIn("runtime_support_state = 'not_eligible'", self.parent)
         self.assertIn("routing_enabled = $false", self.parent)
         self.assertIn("candidate_action_execute_count -eq 0", self.parent)
+
+    def test_public_evidence_is_exact_and_non_promoting(self) -> None:
+        evidence = self.evidence
+        self.assertEqual(evidence["state"], "component_pass")
+        self.assertEqual(evidence["evidence"]["request_sha256"], EXPECTED_REQUEST_SHA256)
+        self.assertEqual(evidence["summary"]["case_count"], 6)
+        self.assertEqual(evidence["summary"]["completed_case_count"], 6)
+        self.assertEqual(evidence["summary"]["enabled_in_context_count"], 5)
+        self.assertEqual(evidence["summary"]["disabled_in_context_count"], 1)
+        self.assertEqual(evidence["summary"]["default_read_passed_count"], 4)
+        self.assertEqual(evidence["summary"]["candidate_action_execute_count"], 0)
+        self.assertEqual(
+            tuple(case["feature_id"] for case in evidence["cases"]),
+            EXPECTED_FEATURES,
+        )
+        self.assertEqual(
+            [case["feature_id"] for case in evidence["cases"] if not case["is_action_enable"]],
+            ["TABLE-017"],
+        )
+        self.assertNotIn('"action_id"', self.evidence_text)
+        self.assertNotIn('"parameter_set_id"', self.evidence_text)
+        self.assertFalse(evidence["safety"]["raw_action_identifiers_present"])
+        self.assertFalse(evidence["safety"]["raw_parameter_set_identifiers_present"])
+        self.assertEqual(evidence["promotion"]["runtime_support_state"], "unverified")
+        self.assertFalse(evidence["promotion"]["routing_enabled"])
+        self.assertEqual(evidence["promotion"]["differential_state"], "not_run")
+        self.assertFalse(evidence["promotion"]["product_complete"])
 
     def test_tracked_script_hashes_are_stable_values(self) -> None:
         for path in (PARENT, CHILD):

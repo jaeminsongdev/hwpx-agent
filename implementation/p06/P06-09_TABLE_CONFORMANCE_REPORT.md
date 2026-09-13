@@ -248,6 +248,13 @@ It allows only `IsActionEnable` and documented default-ParameterSet surface read
 execution, user-document access, runtime qualification, routing and differential promotion remain
 forbidden and not run. The create-new attempt-02 request digest is
 `d9588469b901ec31136e15f657b772f93872943c0411ac7b4794ba4feca31355`.
+The exact current-PC attempt completed all six isolated documents in one HWP session: all six
+Action surfaces were created, TABLE-010/015/016/046/048 were enabled in their bounded contexts,
+TABLE-017 was present but disabled in the attempted adjacent-cell context, and all four documented
+default ParameterSet reads passed. Candidate execution remained 0, no user document was opened,
+no raw Action/ParameterSet identifier entered public evidence, and the HWP process exited cleanly.
+This is a component-level non-executing surface result only: runtime support remains unverified,
+routing stays disabled, and differential/P06 promotion remains not run.
 
 ## Validation and blockers
 
