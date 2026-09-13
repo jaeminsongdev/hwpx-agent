@@ -23,7 +23,7 @@ MANIFEST_PATH = f"{TARGET_DIRECTORY}/fixture-manifest.json"
 SOURCE_LOCKS = {
     "protocol/private/p06-table-properties-target-v2.json": "c2cbf10a9b434f715b5f5ba53b7ef947c6b1213f87c8c614e7486ba5bd884692",
     "tools/p06/validate_table_properties_target_v2_contract.py": "042ecc8c4d37da5698e5022206aebb714904331780944f8806a88d4e9a0db9c6",
-    "crates/hwpx-package/src/table_ruling_hwpx.rs": "48493926f7747333cb6390ed79e78a7e172ea591313d2391e2be3c74e7da2683",
+    "crates/hwpx-package/src/table_ruling_hwpx.rs": "5b37569e339dac33f7f6f1ef1c45e9deefcbc47a5a44de4a10449b628c015946",
     "crates/hwpx-package/src/table_ruling_hwpx/properties_hwpx.rs": "9d1ba6454817bb4cdb42779b15952b8bd5cbad5d8b3a4fb2ed34ec651620020c",
     "crates/hwpx-package/tests/table_properties_hwpx.rs": "637991f05ff6f9952309f9445c61f5b83668a714008b50d0ef69d1386244f19b",
     "crates/hwpx-package/examples/p06_09_table_properties_target_fixture.rs": "87739dc63593a94a7df4adb8d4327fcbc85ddfa1b77d2c119e75f98efa0fa19c",

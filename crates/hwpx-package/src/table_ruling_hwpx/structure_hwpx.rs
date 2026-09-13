@@ -559,7 +559,14 @@ impl TableStructureHwpxLowerer {
             preserved_master_cell_count: domain_receipt.preserved_master_cell_count(),
             inserted_master_cell_count: domain_receipt.inserted_master_cell_count(),
             deleted_master_cell_count: domain_receipt.deleted_master_cell_count(),
-            preserved_payload_block_count: source.ruling.payload_block_count,
+            preserved_payload_block_count: plan.domain.after_state().cells().iter().try_fold(
+                0_usize,
+                |total, cell| {
+                    total
+                        .checked_add(cell.payload().len())
+                        .ok_or(TableStructureHwpxError::OutputLimit)
+                },
+            )?,
             formula_rebased_count: domain_receipt.formula_rebased_count(),
             formula_deleted_count: domain_receipt.formula_deleted_count(),
             pagination_modified_attribute_count: native.pagination_modified_attribute_count,

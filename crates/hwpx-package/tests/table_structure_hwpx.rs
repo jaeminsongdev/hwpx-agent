@@ -637,6 +637,17 @@ fn all_four_structural_operations_lower_and_reopen_exactly() -> TestResult {
         assert_eq!(reopened.ruling.state, *plan.domain().after_state());
         assert_eq!(lowered.receipt.source_table_count, 1);
         assert_eq!(lowered.receipt.target_table_count, 1);
+        assert_eq!(
+            lowered.receipt.preserved_payload_block_count,
+            if matches!(
+                operation,
+                TableStructureOperation::InsertRows | TableStructureOperation::InsertColumns
+            ) {
+                9
+            } else {
+                6
+            }
+        );
         assert!(
             String::from_utf8(lowered.section)?
                 .ends_with(&(text_wrapper(90, "TAIL") + "</hs:sec>"))

@@ -109,7 +109,7 @@ IMPLEMENTATION_MARKERS = {
         "TableStructureHwpxBuilder",
         "pub(super) fn render_structure_existing(",
         "pub(crate) fn read_existing_preserving_caption(",
-        "reuse_formula_content",
+        "reuses_formula_content",
     ),
     "crates/hwpx-package/src/table_formula.rs": (
         "pub(crate) fn validate_target(",

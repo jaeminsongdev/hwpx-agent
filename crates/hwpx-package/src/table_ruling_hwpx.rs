@@ -924,6 +924,10 @@ impl ExistingRenderProfile {
         matches!(self, Self::Structure)
     }
 
+    const fn uses_native_empty_cell_run(self) -> bool {
+        matches!(self, Self::Structure)
+    }
+
     const fn preserves_caption(self) -> bool {
         matches!(self, Self::Structure | Self::Transpose)
     }
@@ -1147,8 +1151,7 @@ fn render_existing_profile(
         source_state,
         target_state,
         target_grid,
-        profile.topology_changed(),
-        profile.reuses_formula_content(),
+        profile,
         &mut resolver,
         limits.layout.config().output_bytes,
     )?;
@@ -1436,8 +1439,7 @@ fn render_rows(
     source_state: &TableRulingState,
     target_state: &TableRulingState,
     target_grid: &TableGrid,
-    topology_changed: bool,
-    reuse_formula_content: bool,
+    profile: ExistingRenderProfile,
     resolver: &mut StyleResolver,
     output_limit: usize,
 ) -> Result<Vec<u8>, TableRulingHwpxError> {
@@ -1459,8 +1461,7 @@ fn render_rows(
                 source_cell,
                 target_cell,
                 payloads,
-                topology_changed,
-                reuse_formula_content,
+                profile,
                 output_limit,
             )?;
             let desired_border = desired_border(
@@ -1517,8 +1518,7 @@ fn target_content(
     source_cell: Option<&domain_ir::TableRulingCell>,
     target_cell: &domain_ir::TableRulingCell,
     payloads: &BTreeMap<LogicalId, SourcePayload>,
-    topology_changed: bool,
-    reuse_formula_content: bool,
+    profile: ExistingRenderProfile,
     output_limit: usize,
 ) -> Result<Vec<u8>, TableRulingHwpxError> {
     if source_cell.is_some_and(|source_cell| {
@@ -1528,7 +1528,7 @@ fn target_content(
     }) {
         return Ok(template.content.clone());
     }
-    if reuse_formula_content
+    if profile.reuses_formula_content()
         && source_cell.is_some_and(|source_cell| {
             source_cell.payload() == target_cell.payload()
                 && source_cell.formula().is_some()
@@ -1538,7 +1538,7 @@ fn target_content(
     {
         return Ok(template.content.clone());
     }
-    if !topology_changed {
+    if !profile.topology_changed() {
         return Err(TableRulingHwpxError::PlanBindingMismatch);
     }
     if target_cell.formula().is_some() {
@@ -1555,7 +1555,12 @@ fn target_content(
         extend_bounded(&mut output, &source.bytes, output_limit)?;
     }
     if output.is_empty() {
-        extend_bounded(&mut output, empty_cell_paragraph(), output_limit)?;
+        let paragraph = if profile.uses_native_empty_cell_run() {
+            native_empty_cell_paragraph()
+        } else {
+            empty_cell_paragraph()
+        };
+        extend_bounded(&mut output, paragraph, output_limit)?;
     }
     Ok(output)
 }
@@ -1725,6 +1730,10 @@ fn apply_diagonals(
 
 fn empty_cell_paragraph() -> &'static [u8] {
     br#"<hp:p id="0" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"><hp:t/></hp:run></hp:p>"#
+}
+
+fn native_empty_cell_paragraph() -> &'static [u8] {
+    br#"<hp:p id="0" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"/></hp:p>"#
 }
 
 fn extend_bounded(

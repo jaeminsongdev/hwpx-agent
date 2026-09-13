@@ -15,8 +15,8 @@ the roadmap's release row requires more than component or one-fixture evidence.
 
 | Dimension | Current evidence |
 |---|---:|
-| direct `oracle_verified` | 35 |
-| direct `integration_passed` | 26 |
+| direct `oracle_verified` | 39 |
+| direct `integration_passed` | 22 |
 | direct `unit_passed` | 0 |
 | direct `cataloged` only | 0 |
 | automation `candidate_unverified` | 6 |
@@ -164,16 +164,17 @@ The machine-readable authority is
   serialization additionally qualified trailing empty table text and its self-closing empty-run
   separator. Formula, repeat-header and caption split/join profiles, automation runtime and the
   direct/automation differential remain unclaimed.
-- The exact row/column structure model and preserving HWPX adapter move TABLE-012/013/014/015 to
-  static integration as one four-operation profile. Insertions create only explicit empty 1x1
+- The exact row/column structure model and preserving HWPX adapter now move TABLE-012/013/014/015
+  to `oracle_verified` as one four-operation target batch. Insertions create only explicit empty 1x1
   masters at whole-grid boundaries and duplicate the source boundary around the new band. Deletions
-  remove only fully contained masters and collapse only identical survivor edges. Every surviving
-  identity, span, track geometry, payload, complete property, formula/cache and document-flow state
-  remains bound. Formula owners and references rebase through the same grid edit, including a merged
-  formula-span reopen regression; owner deletion is explicit. Page-split, caption, repeat-header
-  prefix and native wrapper/table IDs reopen exactly, while a repeat-header zero/nonzero transition,
-  insertion through a merged span and partial-span deletion fail closed. This is synthetic static
-  integration, not a saved HWPX, licensed Hangul target build or render oracle.
+  remove only fully contained masters and collapse only identical survivor edges. All four licensed
+  save/reopen/PDF lifecycles, independent typed/cache oracle, original-detail render review and a
+  byte-identical retry passed. The target probe fixed Hangul's native empty-cell scaffold and a
+  deletion-receipt payload overcount. Every surviving identity, span, track geometry, payload,
+  complete property and document-flow state remains bound. Existing static tests retain formula,
+  page-split, caption, repeat-header-prefix and native-wrapper failure boundaries, while the promoted
+  target batch is deliberately formula-free with no repeat header or caption; those broader target
+  profiles remain unclaimed.
 - The table-chart component adds TABLE-006 exact rectangular cell-block projection. It ignores the
   documented top-left corner, maps first-row series labels and first-column category labels, keeps
   exact numeric/blank data points and formula-display-cache origins, and binds source state plus
@@ -232,8 +233,8 @@ ordering; duplicate JSON keys; finite files; path containment; privacy; and crea
 Protocol code generation publishes the three P06 schemas through additive catalog v5 while baseline
 locks prove catalogs v2 through v4 remain unchanged.
 
-Current aggregate blockers include 0 missing direct evidence rows, 26 rows below direct oracle,
-51 rows with at least one missing validation, 61 unverified automation runtime rows and 61 missing
+Current aggregate blockers include 0 missing direct evidence rows, 22 rows below direct oracle,
+47 rows with at least one missing validation, 61 unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -241,8 +242,7 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. close the remaining 26 integration-only target oracles, beginning with the next structural batch,
-   TABLE-012/013/014/015;
+1. close the remaining 22 integration-only target oracles, beginning with TABLE-016/017 merge/split;
 2. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
 3. regenerate until all 61 rows are green, then run the P06 hard Gate.

@@ -41,7 +41,7 @@ SOURCE_LOCKS = {
     "tools/p06/validate_table_ruling_hwpx_contract.py":
         "a42bd226b1e8c3889c3a4741117d708585cb76d3a39a41e635b407a3e3a9251a",
     "crates/hwpx-package/src/table_ruling_hwpx.rs":
-        "48493926f7747333cb6390ed79e78a7e172ea591313d2391e2be3c74e7da2683",
+        "5b37569e339dac33f7f6f1ef1c45e9deefcbc47a5a44de4a10449b628c015946",
     "crates/hwpx-package/examples/p06_09_table_ruling_target_fixture.rs":
         "152a0837a4491d5b7e0403436d8feaef99f88e6ab02824b23f55e98ab1fc776f",
     "crates/hwpx-package/examples/p06_09_table_ruling_target_oracle.rs":
