@@ -631,35 +631,51 @@ def validate_direct_evidence(root: Path, errors: list[str]) -> None:
         records = evidence.get("records") if isinstance(evidence, dict) else None
         if not isinstance(records, list):
             raise ValueError("records")
-        matches = [record for record in records if record.get("feature_ids") == ["TABLE-006"]]
+        matches = [
+            record
+            for record in records
+            if isinstance(record, dict) and record.get("feature_ids") == ["TABLE-006"]
+        ]
         if len(matches) != 1:
             raise ValueError("feature record")
         record = matches[0]
-        paths = [item.get("path") for item in record.get("evidence_files", [])]
+        evidence_files = record.get("evidence_files")
+        if not isinstance(evidence_files, list) or any(
+            not isinstance(item, dict) for item in evidence_files
+        ):
+            raise ValueError("evidence files")
+        paths = [item.get("path") for item in evidence_files]
+        validations = record.get("validations_passed")
+        fixtures = record.get("fixture_classes_passed")
+        required_paths = [
+            "implementation/p06/P06-09_TABLE_CHART_REPORT.md",
+            REPORT,
+            RECEIPT,
+        ]
         if (
             record.get("backend") != "direct_hwpx"
-            or record.get("stage") != "integration_passed"
-            or record.get("validations_passed")
-            != ["formula_readback", "page_split", "schema", "semantic_reopen"]
-            or record.get("fixture_classes_passed")
-            != ["boundary", "happy_path", "negative", "preservation", "target_build"]
+            or record.get("stage") not in {"integration_passed", "oracle_verified"}
+            or not isinstance(validations, list)
+            or not {
+                "formula_readback", "page_split", "schema", "semantic_reopen"
+            }.issubset(validations)
+            or not isinstance(fixtures, list)
+            or not {
+                "boundary", "happy_path", "negative", "preservation", "target_build"
+            }.issubset(fixtures)
             or record.get("negative_passed") is not True
-            or record.get("rollback_or_retry_passed") is not False
-            or record.get("differential_state") != "not_run"
-            or paths != [
-                "implementation/p06/P06-09_TABLE_CHART_REPORT.md",
-                REPORT,
-                RECEIPT,
-            ]
+            or record.get("differential_state") not in {"not_run", "exact_match"}
+            or paths[: len(required_paths)] != required_paths
+            or len(paths) != len(set(paths))
         ):
             add_error(errors, "direct_evidence")
-        for item in record.get("evidence_files", []):
+        for item in evidence_files[: len(required_paths)]:
             path = item.get("path")
             if not isinstance(path, str) or item.get("sha256") != canonical_sha256(
                 bounded_file(root, path, 1_000_000)
             ):
                 add_error(errors, "direct_evidence_digest")
-    except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
+    except (OSError, UnicodeDecodeError, TypeError, ValueError, json.JSONDecodeError):
         add_error(errors, "direct_evidence")
 
 

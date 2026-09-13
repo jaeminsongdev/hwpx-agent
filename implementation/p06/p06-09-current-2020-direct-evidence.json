@@ -108,11 +108,11 @@
     {
       "feature_ids": ["TABLE-006"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["formula_readback", "page_split", "schema", "semantic_reopen"],
+      "stage": "oracle_verified",
+      "validations_passed": ["formula_readback", "page_split", "render_diff", "schema", "semantic_reopen"],
       "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "differential_state": "not_run",
       "evidence_files": [
         {
@@ -126,6 +126,14 @@
         {
           "path": "implementation/p06/evidence/target/p06-table-chart.current-2020.attempt01.v1.json",
           "sha256": "db16708c5047dda5123746dade9190a00dd1afd2ef8f51fa13e6fd838581c521"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_CHART_RENDER_DIFF_QUALIFICATION_REPORT.md",
+          "sha256": "b943ed55587b17bd05d9681f7c4b8373dff694a83518aeba78bf4e7c829cb264"
+        },
+        {
+          "path": "implementation/p06/evidence/target/p06-table-chart-render-diff.current-2020.qualification02.v2.json",
+          "sha256": "e282dff6da8ba6c9d91cd02d6371de0652018271f00e9c5ee722a16d4221c0b4"
         }
       ]
     },
