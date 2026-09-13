@@ -10,7 +10,7 @@ from tools.p06 import validate_table_number_format_contract as validator
 
 
 class TableNumberFormatContractTests(unittest.TestCase):
-    def test_repository_contract_passes_without_backend_promotion(self) -> None:
+    def test_repository_component_contract_remains_unit_bounded(self) -> None:
         report = validator.validate()
         self.assertEqual(report["state"], "pass", report)
         self.assertEqual(report["source_locks"], 7)

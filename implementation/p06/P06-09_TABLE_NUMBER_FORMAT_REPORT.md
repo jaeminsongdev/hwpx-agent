@@ -3,8 +3,8 @@
 - Generated: 2026-09-10
 - Model schema: `hwpx-agent.table-number-format/v1`
 - Scope: current repository, pure exact-state formula-cell number-format planner
-- Result: `component_pass`
-- Direct stage: `unit_passed` (unchanged)
+- Result: `integration_pass`
+- Direct stage: `integration_passed`
 - Recommended next-step reasoning: `max`
 
 ## Result
@@ -38,45 +38,38 @@ are rejected.
 | Source-qualifier static tests, x86 Windows PowerShell 5.1 | 24/24 PASS |
 | Source-qualifier PSScriptAnalyzer | 0 findings |
 
-## Source decision
+## Source and adapter decision
 
-The archived official KS X 6101 machine-readable source was inspected without modification.
-Section `10.7.3.5.2` supplies standard tokens for general, integer, and one through four decimals.
-It does not close the exact Hangul 2020 mapping for the full typed model, including grouping,
-percent and scientific formats. No guessed HWPX lowering was added.
+The archived official KS X 6101 source and Hancom help bounded the exact-target probe. Completed
+attempt `20260913-05` then established the installed native tokens `%g,` and `%.0f,` through
+`%.4f,`, including grouped `LastResult`, matching `Command` grammar and independent visible
+grouping state. Percent, scientific and non-integer mappings remain excluded.
 
-Hancom's official calculation-dialog help was also used only to bound the next current-target
-source run: six visible format choices crossed with grouping off/on, or 12 combinations. Percent
-and scientific are deliberately excluded from that direct profile until separate exact-target UI
-evidence exists.
+The new HWPX adapter binds section, selected formula/native-grouping state, grid, semantic flow and
+domain plan at both request and build time. It owns only `Command`, `ResultFormat`, `LastResult` and
+visible result, then requires typed reopen and unowned-byte equality before returning output.
 
-## Exact-source qualifier status — 2026-09-10
+## Exact-source qualifier status — 2026-09-13
 
-A fail-closed source worker, watchdog and 24-case static test now prepare that 6-by-2 target
-profile. The worker makes a new 6-by-3 disposable table, asks Hangul to author all six formulas,
-and opens six format dialogs for the user to select the six documented choices in order. It then
-saves baseline, ungrouped and grouped HWPX files around the installed grouping actions. No user
-document, guessed native format string, raw document/formula trace, UI click automation, module
-registration, network or registry/system-setting write is present. PowerShell parsing and the
-static contract pass under both PowerShell 7 and x86 Windows PowerShell 5.1.
+A fail-closed worker created one 6-by-3 disposable table and Hangul-authored six formulas. The user
+selected the six documented dialog choices; exact cell-block `TableDeleteComma` and
+`TableInsertComma` actions produced ungrouped and grouped outputs. No user document, guessed token,
+raw document/formula trace, Computer Use click/type, module registration, network or
+registry/system-setting write was present.
 
-Attempt 01 reached the licensed target, authored the six formulas and saved a baseline HWPX before
-stopping at `manual_format_general`. The user then requested other work, so the watchdog invocation
-was interrupted without touching the dialog. The bounded progress journal ends at sequence 10 in
-that running phase; no ungrouped/grouped artifact or final watchdog receipt exists. The exact
-remaining automation Hwp process was independently matched by executable digest, session and
-`-Automation -Embedding` command line, then stopped; zero Hwp processes remained. The baseline and
-progress journal remain preserved as incomplete failed evidence and are not admitted as a native
-mapping, save/reopen proof or direct adapter source.
+Attempt 05 passed with 50 ordered progress events, six formula actions, six user-authored dialogs,
+six grouping removals, six grouping additions, all three artifacts and zero remaining Hwp
+processes. Attempts 01-04 remain failed/interrupted evidence and are not promoted.
 
-A future complete run still requires the user to make the six visible format selections and click
-Hangul's access `허용` button whenever a save approval appears; Computer Use must not click or type.
-Only after a successful receipt and offline structural comparison may a preserving direct adapter
-be considered.
+Offline structural readback proves formula AST/cache and grid preservation. Five direct operations
+produce the grouped native section exactly with 18 owned-text edits. With one independently counted
+TABLE-033 general-grouping edit, five operations produce the ungrouped native section exactly with
+19 owned-text edits. Raw `content.hpf` hashes remain distinct because Hangul updated save metadata
+and one explicit/default spine attribute; their normalized semantic flow is equal.
 
 ## Conformance impact
 
-The direct matrix remains cataloged 0, unit 4, integration 42, oracle 15, green 0/61. This
-checkpoint strengthens the existing TABLE-049 unit evidence but does not change its stage.
-`actual_hwpx`, `actual_hangul`, save/reopen, formula readback, page split, render, automation and
-differential remain false or `not_run`. P06-09, P06, production and product completion remain open.
+The direct matrix is cataloged 0, unit 1, integration 35, oracle 25, green 0/61. TABLE-049 advances
+only to `integration_passed`. Native source and direct section differential pass; direct-output
+package save/reopen, render, rollback/retry, automation and release differential remain false or
+`not_run`. P06-09, P06, production and product completion remain open.

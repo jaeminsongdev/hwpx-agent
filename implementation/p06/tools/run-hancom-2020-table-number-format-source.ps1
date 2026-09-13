@@ -64,6 +64,9 @@ function Read-ProgressJournal {
         'preflight', 'com_create', 'table_create', 'formula_author', 'baseline_save',
         'manual_format_general', 'manual_format_integer', 'manual_format_decimal_1',
         'manual_format_decimal_2', 'manual_format_decimal_3', 'manual_format_decimal_4',
+        'grouping_remove_general', 'grouping_remove_integer',
+        'grouping_remove_decimal_1', 'grouping_remove_decimal_2',
+        'grouping_remove_decimal_3', 'grouping_remove_decimal_4',
         'ungrouped_save', 'grouping_add_general', 'grouping_add_integer',
         'grouping_add_decimal_1', 'grouping_add_decimal_2', 'grouping_add_decimal_3',
         'grouping_add_decimal_4', 'grouped_save', 'terminal'

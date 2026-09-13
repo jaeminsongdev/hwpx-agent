@@ -415,10 +415,10 @@
     },
     {
       "feature_ids": ["TABLE-049"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "backend": "direct_hwpx",
+      "stage": "integration_passed",
+      "validations_passed": ["formula_readback", "schema", "semantic_reopen"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "security"],
       "negative_passed": true,
       "rollback_or_retry_passed": false,
       "differential_state": "not_run",
@@ -429,7 +429,15 @@
         },
         {
           "path": "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_REPORT.md",
-          "sha256": "e2dceaac4c66edd5f7479c8bc053e6cf0bdc2807612c22e6d81b5523a712720c"
+          "sha256": "68aa657ef03e8b56831bba8da0f24ec2dbd90a51e569bcc0c751bd885c3b12e8"
+        },
+        {
+          "path": "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_HWPX_REPORT.md",
+          "sha256": "d33b2e9bdf5c85752814917392cdcb490f7610f52f02f15f9401089ccabe8e0c"
+        },
+        {
+          "path": "implementation/p06/evidence/target/p06-table-number-format.current-2020.attempt05.v1.json",
+          "sha256": "0a1ad707ae9f55b064f94a2f7aea8182c27901691e3250d38df090103363a1cc"
         }
       ]
     },

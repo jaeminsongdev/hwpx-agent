@@ -108,8 +108,14 @@ $checks = [ordered]@{
         $worker -match 'manual_ui_source_authoring_required = \$true' -and
         $worker -match 'manual_format_dialogs_passed \+= 1'
     exact_grouping_actions = $worker -match
-        'Invoke-ActionRun -Hwp \$hwp -Action ''DeleteThousandsSeparator''' -and
-        $worker -match 'Invoke-ActionRun -Hwp \$hwp -Action ''InsertThousandsSeparator'''
+        'Invoke-ActionRun -Hwp \$hwp -Action ''TableCellBlock''' -and
+        $worker -match 'Assert-ActionEnabled -Hwp \$hwp -Action ''TableDeleteComma''' -and
+        $worker -match 'Invoke-ActionRun -Hwp \$hwp -Action ''TableDeleteComma''' -and
+        $worker -match 'Assert-ActionEnabled -Hwp \$hwp -Action ''TableInsertComma''' -and
+        $worker -match 'Invoke-ActionRun -Hwp \$hwp -Action ''TableInsertComma''' -and
+        $worker -match '\$phase = ''grouping_remove_''' -and
+        $worker -match 'Invoke-ActionRun -Hwp \$hwp -Action ''Cancel''' -and
+        $worker -notmatch 'DeleteThousandsSeparator|InsertThousandsSeparator'
     no_guessed_native_format = $all -notmatch '(?i)ResultFormat|\?\?|LastResult|HFieldCtrl'
     separate_immutable_outputs = $worker -match '\$document\.SaveAs\(\$baseline' -and
         $worker -match '\$document\.SaveAs\(\$ungrouped' -and
@@ -135,6 +141,8 @@ $checks = [ordered]@{
         $wrapper -match '\[long\]\$trace\.insert_grouping_actions_passed -eq 6'
     exact_progress_cases = $wrapper -match "'manual_format_general'" -and
         $wrapper -match "'manual_format_decimal_4'" -and
+        $wrapper -match "'grouping_remove_general'" -and
+        $wrapper -match "'grouping_remove_decimal_4'" -and
         $wrapper -match "'grouping_add_general'" -and
         $wrapper -match "'grouping_add_decimal_4'"
     progress_journal = $wrapper -match 'Read-ProgressJournal' -and

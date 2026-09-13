@@ -93,10 +93,10 @@ SOURCE_LOCKS = {
         "f89da32df37600cd9b567984f278a9bf3af58fc35c3555fb0107f4e85bb6fc72"
     ),
     "crates/hwpx-package/src/table_formula.rs": (
-        "a9713fcf485797b979f77f0748be11c2c47375a6426e89002cfc504c7db5cbe0"
+        "bc500aa8da4bea9e31f633e820164f41be7635a324f7378f6ce352e024a5d803"
     ),
     "crates/hwpx-package/src/lib.rs": (
-        "dfe19ae6b2fb7b044c831ddcafbeba7cb5f4a30e9c2b69508ad81f5fd05395cc"
+        "1745b58853e0dbee8c7361fb691e3e59c70b2f7883e42ade0316242533ee9f22"
     ),
     "crates/hwpx-package/tests/table_thousands_hwpx.rs": (
         "d16dd36791f66b51f63058c27db21099cc875d851d29413b63f569457d8d691e"

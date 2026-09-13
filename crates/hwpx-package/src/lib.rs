@@ -234,12 +234,15 @@ pub use table_cell_style::{
 };
 pub use table_formula::{
     TABLE_CANONICAL_FORMULA_HWPX_PROFILE_ID, TABLE_FORMULA_HWPX_PROFILE_ID,
+    TABLE_NUMBER_FORMAT_HWPX_PROFILE_ID, TABLE_NUMBER_FORMAT_HWPX_SCHEMA_VERSION,
     TABLE_THOUSANDS_HWPX_PROFILE_ID, TABLE_THOUSANDS_HWPX_SCHEMA_VERSION, TableFormulaHwpxError,
     TableFormulaHwpxLimitConfig, TableFormulaHwpxLimits, TableFormulaHwpxLowerer,
     TableFormulaHwpxLoweringReceipt, TableFormulaHwpxReadback, TableFormulaHwpxReader,
-    TableThousandsHwpxError, TableThousandsHwpxLowerer, TableThousandsHwpxLoweringReceipt,
-    TableThousandsHwpxReadback, TableThousandsHwpxReader, TableThousandsHwpxRequest,
-    TableThousandsHwpxRequestDraft,
+    TableNumberFormatHwpxError, TableNumberFormatHwpxLowerer, TableNumberFormatHwpxLoweringReceipt,
+    TableNumberFormatHwpxReadback, TableNumberFormatHwpxReader, TableNumberFormatHwpxRequest,
+    TableNumberFormatHwpxRequestDraft, TableThousandsHwpxError, TableThousandsHwpxLowerer,
+    TableThousandsHwpxLoweringReceipt, TableThousandsHwpxReadback, TableThousandsHwpxReader,
+    TableThousandsHwpxRequest, TableThousandsHwpxRequestDraft,
 };
 pub use table_layout::{
     TABLE_GEOMETRY_HWPX_PROFILE_ID, TABLE_LAYOUT_HWPX_PROFILE_ID, TABLE_LAYOUT_HWPX_PROFILE_ID_V1,

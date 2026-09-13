@@ -111,6 +111,13 @@ function Invoke-ActionRun {
     }
 }
 
+function Assert-ActionEnabled {
+    param([Parameter(Mandatory)][object]$Hwp, [Parameter(Mandatory)][string]$Action)
+    if ($Hwp.IsActionEnable($Action) -eq $false) {
+        throw ('ACTION_DISABLED_' + $Action.ToUpperInvariant())
+    }
+}
+
 function Write-ExactText {
     param([Parameter(Mandatory)][object]$Hwp, [Parameter(Mandatory)][string]$Text)
     $parameter = $Hwp.HParameterSet.HInsertText
@@ -364,8 +371,26 @@ try {
         Invoke-ActionRun -Hwp $hwp -Action 'MoveLineBegin'
         Invoke-ActionRun -Hwp $hwp -Action 'ModifyCtrl'
         $trace.manual_format_dialogs_passed += 1
-        Invoke-ActionRun -Hwp $hwp -Action 'DeleteThousandsSeparator'
+        Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
+        if ($index -lt ($formatCases.Count - 1)) {
+            1..3 | ForEach-Object {
+                Invoke-ActionRun -Hwp $hwp -Action 'TableRightCell'
+            }
+        }
+    }
+
+    1..$rewindSteps | ForEach-Object {
+        Invoke-ActionRun -Hwp $hwp -Action 'TableLeftCell'
+    }
+    for ($index = 0; $index -lt $formatCases.Count; $index += 1) {
+        $case = $formatCases[$index]
+        $phase = 'grouping_remove_' + [string]$case.id
+        Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
+        Invoke-ActionRun -Hwp $hwp -Action 'TableCellBlock'
+        Assert-ActionEnabled -Hwp $hwp -Action 'TableDeleteComma'
+        Invoke-ActionRun -Hwp $hwp -Action 'TableDeleteComma'
         $trace.delete_grouping_actions_passed += 1
+        Invoke-ActionRun -Hwp $hwp -Action 'Cancel'
         Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
         if ($index -lt ($formatCases.Count - 1)) {
             1..3 | ForEach-Object {
@@ -393,9 +418,11 @@ try {
         $case = $formatCases[$index]
         $phase = 'grouping_add_' + [string]$case.id
         Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
-        Invoke-ActionRun -Hwp $hwp -Action 'MoveLineBegin'
-        Invoke-ActionRun -Hwp $hwp -Action 'InsertThousandsSeparator'
+        Invoke-ActionRun -Hwp $hwp -Action 'TableCellBlock'
+        Assert-ActionEnabled -Hwp $hwp -Action 'TableInsertComma'
+        Invoke-ActionRun -Hwp $hwp -Action 'TableInsertComma'
         $trace.insert_grouping_actions_passed += 1
+        Invoke-ActionRun -Hwp $hwp -Action 'Cancel'
         Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
         if ($index -lt ($formatCases.Count - 1)) {
             1..3 | ForEach-Object {

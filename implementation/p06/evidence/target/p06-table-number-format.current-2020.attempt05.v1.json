@@ -1,0 +1,121 @@
+{
+  "schema_version": "hwpx-agent.p06-09-table-number-format-current-2020-evidence/v1",
+  "evidence_id": "p06.table-number-format.current-2020.attempt05.20260913",
+  "scope": "exact_current_pc_hancom_2020_native_source_and_direct_section_differential",
+  "feature": {"feature_id": "TABLE-049", "capability_id": "table.number_format"},
+  "attempt": {
+    "id": "20260913-05",
+    "directory": "fixtures/target-build/p06-09-table-number-format-source-20260913-05",
+    "target": {
+      "product": "Hancom Hangul 2020",
+      "prog_id": "HWPFrame.HwpObject.2",
+      "registry_view": "Registry32",
+      "client": "windows_powershell_x86_sta",
+      "build": "11.0.0.9136",
+      "architecture": "x86",
+      "locale": "ko-KR",
+      "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+    },
+    "artifacts": {
+      "baseline": {"path": "fixtures/target-build/p06-09-table-number-format-source-20260913-05/baseline.hwpx", "sha256": "9f862bb2772c95271d3e97089c3ca29b88aa138e7fae524e8461bcf77ddac042", "bytes": 16437},
+      "ungrouped": {"path": "fixtures/target-build/p06-09-table-number-format-source-20260913-05/ungrouped.hwpx", "sha256": "fa859aaff54cdc7faa8c5d55639040f0e6cc450691d61889356a59db4abbced9", "bytes": 16581},
+      "grouped": {"path": "fixtures/target-build/p06-09-table-number-format-source-20260913-05/grouped.hwpx", "sha256": "c5f0a1881f0c7d4b4fc0105bd76f3929a3f0b4d64da756dd124a4cd66d122027", "bytes": 16753},
+      "watchdog": {"path": "fixtures/target-build/p06-09-table-number-format-source-20260913-05/watchdog.json", "sha256": "0eb1512c809198b90a38bae938746cecde8a212e279abd1ee6303691f8b397f5", "bytes": 2384},
+      "inner_trace": {"path": "fixtures/target-build/p06-09-table-number-format-source-20260913-05/watchdog.json.inner.29128.json", "sha256": "601336498a9303b21d42def380a5a93596820fec72938eb2301bf9014101835f", "bytes": 1813},
+      "progress": {"path": "fixtures/target-build/p06-09-table-number-format-source-20260913-05/watchdog.json.progress.jsonl", "sha256": "02f9a6be1870015a8e8d140487498abf052b5eb3d55f9e4e84af2d39cdf53a17", "bytes": 15743, "events": 50}
+    },
+    "worker": {
+      "state": "pass",
+      "table_create": "pass",
+      "operand_cells_written": 12,
+      "formula_actions_passed": 6,
+      "manual_format_dialogs_passed": 6,
+      "delete_grouping_actions_passed": 6,
+      "insert_grouping_actions_passed": 6,
+      "format_case_count": 6,
+      "terminal_progress": "pass",
+      "timed_out": false,
+      "remaining_hwp_process_count": 0
+    }
+  },
+  "native_readback": {
+    "profile_id": "hwpx-agent.table-number-format-hwpx.hancom-2020/1",
+    "entry_count": 11,
+    "formula_fields": 6,
+    "dimensions": [6, 3],
+    "result_formats": ["%g,", "%.0f,", "%.1f,", "%.2f,", "%.3f,", "%.4f,"],
+    "baseline_section_sha256": "9d63efc4bde39bd018199a626cdfdd59f9679959464bf5bd026c951492882675",
+    "ungrouped_section_sha256": "a06bdfd184a1b79c3a9f55ef7c6f72e706d52ba0d379586e14b483dc497e435e",
+    "grouped_section_sha256": "da87209c4f0e0c5af19ccbed42e3f63da2ee9f73c7915361a1748c616dc5317b",
+    "baseline_state_sha256": "90370c286e2162b247b5fa0dc9f931c8f8fca0dde5413c781570441dd9381c06",
+    "ungrouped_state_sha256": "f60dfccc58d1561afb8a7f562b42446a9a4d64412470eaa6d8c53dd8d7a03fdf",
+    "grouped_state_sha256": "0bbfd7f98cb3332fecf4b50cb6da0f76467bfcab331a5ad16e3c7594cce95328",
+    "grid_sha256": "a304515706a9ae0e7bcec9584488dc7ca4854f808ada02494be5d0e865070ba4",
+    "semantic_document_flow_sha256": "8fe776ef1af4600c8cbad0d53f5315c2c440c044e51f39b6acd1cbe72262ad3c",
+    "baseline_raw_flow_sha256": "65156375b5fa6d997831d33c9ae7f1076e4fb9526affa9fe3239a921233be219",
+    "ungrouped_raw_flow_sha256": "ce467bd2a29b5a72d2253a669977a6d6ca3a29c170504f35b2eae7952b47d395",
+    "grouped_raw_flow_sha256": "59930650ad42f21b7d1baa68b9485299e440c55a8499091b230acbf39c0fbb6b",
+    "formula_ast_preserved": true,
+    "numeric_cache_preserved": true,
+    "grid_preserved": true,
+    "outside_owned_bytes_preserved": true
+  },
+  "direct_differential": {
+    "grouped_section_exact_match": true,
+    "ungrouped_section_exact_match": true,
+    "grouped_number_format_modified_text_count": 18,
+    "ungrouped_number_format_modified_text_count": 19,
+    "auxiliary_general_grouping_modified_text_count": 1,
+    "unowned_bytes_preserved": true,
+    "document_flow_preserved": true
+  },
+  "verification": {
+    "domain_tests": 12,
+    "adapter_tests": 6,
+    "source_static_tests": 24,
+    "contract_tests": 4,
+    "fixture_classes": ["boundary", "happy_path", "negative", "preservation", "security"],
+    "validations": ["formula_readback", "schema", "semantic_reopen"]
+  },
+  "historical_attempts": {
+    "failed_or_interrupted_ids": ["01", "02", "03", "04"],
+    "promoted_to_pass": 0
+  },
+  "privacy": {
+    "absolute_private_paths": false,
+    "raw_document_text": false,
+    "raw_formula_or_command": false,
+    "secrets": false,
+    "computer_use_click_or_type_invoked": false,
+    "user_document_opened": false,
+    "external_network_invoked": false,
+    "registry_or_system_setting_changed": false
+  },
+  "gate_decision": {
+    "TABLE-049": "integration_passed",
+    "actual_hancom_2020_native_source": "pass",
+    "direct_section_differential": "pass",
+    "direct_output_package_save_reopen": "not_run",
+    "direct_output_render": "not_run",
+    "rollback_or_retry": "not_run",
+    "automation_runtime": "not_run",
+    "release_differential": "not_run",
+    "p06_09": "in_progress",
+    "p06": "in_progress"
+  },
+  "not_claimed": {
+    "direct_output_package_save_reopen": false,
+    "direct_output_render": false,
+    "rollback_or_retry": false,
+    "product_automation_route_runtime": false,
+    "release_differential": false,
+    "arbitrary_user_document_compatibility": false,
+    "percent_or_scientific_native_mapping": false,
+    "non_integer_native_mapping": false,
+    "other_pc_or_hancom_version": false,
+    "p06_09_complete": false,
+    "p06_phase_complete": false,
+    "production": false,
+    "product_complete": false
+  }
+}

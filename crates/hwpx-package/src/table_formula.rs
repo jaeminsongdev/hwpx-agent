@@ -14,7 +14,15 @@ use crate::{
     XmlTokenKind,
 };
 
+mod number_format_hwpx;
 mod thousands_hwpx;
+
+pub use number_format_hwpx::{
+    TABLE_NUMBER_FORMAT_HWPX_PROFILE_ID, TABLE_NUMBER_FORMAT_HWPX_SCHEMA_VERSION,
+    TableNumberFormatHwpxError, TableNumberFormatHwpxLowerer, TableNumberFormatHwpxLoweringReceipt,
+    TableNumberFormatHwpxReadback, TableNumberFormatHwpxReader, TableNumberFormatHwpxRequest,
+    TableNumberFormatHwpxRequestDraft,
+};
 
 pub use thousands_hwpx::{
     TABLE_THOUSANDS_HWPX_PROFILE_ID, TABLE_THOUSANDS_HWPX_SCHEMA_VERSION, TableThousandsHwpxError,

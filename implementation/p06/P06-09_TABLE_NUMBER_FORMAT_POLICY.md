@@ -31,20 +31,17 @@ digest and document-flow digest. Any intervening change fails before a plan is r
 deterministic bounded JSON with SHA-256; Debug output redacts identities, digests, formulas, caches
 and the complete post-state.
 
-## Official format evidence boundary
+## Official and exact-target format evidence
 
-The archived machine-readable KS X 6101 source, section `10.7.3.5.2`, defines formula
-`ResultFormat` values `%g`, `%.0f`, and `%.1f` through `%.4f`. This source proves only those standard
-tokens. It does not prove this PC's Hangul 2020 spelling, the observed trailing comma, grouping,
-percent, scientific, rounding, visible cache refresh, or save/reopen behavior. Consequently this
-component does not lower or patch HWPX and the conformance row remains `unit_passed`.
+The archived machine-readable KS X 6101 source, section `10.7.3.5.2`, defines standard formula
+`ResultFormat` values `%g`, `%.0f`, and `%.1f` through `%.4f`. Hancom's calculation-dialog help
+exposes the corresponding six choices plus an independent thousands-grouping checkbox. Neither
+source alone proves this installed build.
 
-Hancom's official calculation-dialog help exposes six result-format choices: general, integer and
-one through four decimal places, plus an independent thousands-grouping checkbox. It is a UI-scope
-reference, not proof of this exact installed build. The current-target direct profile is therefore
-bounded to those six choices crossed with grouping off/on, for exactly 12 source combinations.
-Percent and scientific remain in the pure typed model but are not admitted to this target profile
-without separate exact-target UI evidence.
+Completed attempt `20260913-05` now supplies exact Hangul 2020 source evidence. Its native fields use
+`%g,`, `%.0f,`, `%.1f,`, `%.2f,`, `%.3f,` and `%.4f,`; `Command` repeats that token and grouped
+`LastResult`, while the visible text independently records grouping off/on. Percent, scientific and
+non-integer behavior remain outside the admitted native profile.
 
 ## Exact Hangul 2020 source qualification
 
@@ -64,16 +61,20 @@ user document, registers a module, invokes network access, changes registry/syst
 automates UI input. Computer Use may capture screens only; every format selection and access
 `허용` click belongs to the user.
 
-Static preparation and incomplete attempts are not native evidence. Admission requires all three HWPX files and their
-matching receipts, six formula actions, six user-authored format dialogs, six grouping removals and
-six grouping additions, terminal progress, exact cleanup, and offline package comparison that
-proves target-native format grammar plus formula/cache and package-state preservation. Before the
-first attempt its status is `prepared_not_run`; any partial run remains non-qualifying, and every
-actual-target Gate field stays false until the complete qualification succeeds.
+Attempt `20260913-05` satisfies admission: all three HWPX files and matching receipts exist; six
+formula actions, six user-authored dialogs, six grouping removals and six grouping additions passed;
+the 50-event journal ends in terminal `pass`; and zero Hwp processes remain. Attempts 01-04 remain
+failed or interrupted evidence and are not relabeled.
+
+The preserving adapter owns only selected `Command`, `ResultFormat`, `LastResult` and visible-result
+text. It binds section, selected native/typed state, complete grid, semantic document flow and domain
+plan at request and build time, then requires exact typed reopen plus equality of all unowned section
+bytes. Direct grouped and ungrouped results match the corresponding native sections byte-for-byte.
 
 ## Gate boundary
 
-No actual HWPX was created or changed, and no Hangul process, automation binding, save/reopen,
-formula readback, pagination, PDF/render or differential ran. A later direct adapter requires exact
-target-native source evidence for every admitted target format and must preserve full package state.
-`TABLE-049`, P06-09, P06, production and product completion remain open.
+`TABLE-049` advances to `direct_hwpx / integration_passed` for the bounded current-target profile.
+The native source packages were created and the direct section differential passed. The direct
+output was not repackaged or opened in Hangul; package save/reopen, PDF/render, rollback/retry,
+product automation and release differential remain `not_run`. P06-09, P06, production and product
+completion remain open.

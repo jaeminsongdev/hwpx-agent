@@ -65,7 +65,7 @@ input requires a new output path or an explicitly reviewed successor update.
 ## Current result
 
 - Required rows: 61; green: 0; non-green: 61.
-- Direct stages: 0 cataloged, 2 unit-passed, 34 integration-passed, 25 oracle-verified.
+- Direct stages: 0 cataloged, 1 unit-passed, 35 integration-passed, 25 oracle-verified.
 - Automation bindings: 6 candidate-unverified, 55 unavailable-with-reason.
 - Automation runtime support: 61 unverified.
 - Direct/automation differential: 61 not-run.
@@ -100,6 +100,13 @@ Hangul 2020 actions change only the selected formula field's visible result; for
 numeric cache, grid and document flow remain exact. Direct remove/add sections match the native
 sections byte-for-byte. Direct-output package save/reopen, render, rollback/retry and product
 automation runtime remain not run, so the rows are `integration_passed`, not oracle-verified.
+
+TABLE-049 additionally has a current-target native-source-backed HWPX integration. The exact six
+Hangul 2020 result-format tokens and independent grouping states lower through a preserving adapter;
+five grouped and five ungrouped plans match the native sections byte-for-byte. Formula AST/cache,
+grid, semantic document flow and every unowned section byte remain exact. Direct-output package
+save/reopen, render, rollback/retry and automation runtime remain not run, so the row is
+`integration_passed`, not oracle-verified.
 
 ## Not claimed
 

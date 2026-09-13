@@ -22,7 +22,7 @@
 |---|---|---|
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
-| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 2 unit, 34 integration and 25 oracle rows but 0/61 release-green; row closures remain |
+| P06 | in progress | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 has 0 cataloged, 1 unit, 35 integration and 25 oracle rows but 0/61 release-green; row closures remain |
 | P07-P09 | in progress | P07-01~09 implementation/unit checks pass; P07-09 exact current-target v3 passes user-attested edit plus native HWPX/save/reopen readback, without photo/render/P07/product promotion. P08 remains 5 cataloged, 19 unit, 34 integration, 0 oracle/green. P09 remains 7 cataloged, 38 unit, 8 integration, 0 oracle/green with target evidence not run |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
@@ -37,7 +37,7 @@
 | ID | Task | Current state and exact next evidence |
 |---|---|---|
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
-| P-0057 | P06-09 table conformance | fail-closed matrix plus bounded direct-HWPX slices pass; TABLE-002/003 is exact-target oracle and TABLE-032/033 has native-source exact section differential; release matrix remains 0/61 green |
+| P-0057 | P06-09 table conformance | fail-closed matrix plus bounded direct-HWPX slices pass; TABLE-002/003 is exact-target oracle and TABLE-032/033/049 have native-source exact section differentials; release matrix remains 0/61 green |
 | P-0097 | P07 native equation target | P07-09 exact Hangul 2020 target v3 is closed: eight UI checks are `user_attested`, native object identity/semantics and two fresh save/reopen cycles are verified; P07-07/08 target, render and differential Gates remain |
 | P-0095 | P08 object HWPX integration | P08-15 proves an exact common-root `href` partial profile for 11 shape-component tags but does not advance OBJ-048; close chart semantics or an exact fallback before row promotion, then map the remaining nine P08-10 models |
 | P-0096 | P09 fields/forms/notes/comments/links | P09-01~10 typed components cover 46/46 P09-owned rows; P09-12/13/14/15 add exact existing-form REF-018/019, point-bookmark REF-031/032, HTTPS/current-tab hyperlink REF-033/034 and closed plain-text footnote/endnote REF-021/022 static-section lowering/readback. Matrix stages are 7 cataloged, 38 unit, 8 integration, 0 oracle/green; actual generated-package/Hangul/render/automation/differential remain not run |
@@ -73,8 +73,8 @@
 - Commit `97b3008` introduced the deterministic 61-row matrix. A row is green only when direct
   HWPX oracle, every required validation/fixture, negative and rollback evidence, current-target
   automation runtime and exact differential all pass.
-- Current authority reports 0/61 green with direct stages: 0 cataloged, 2 unit-passed,
-  34 integration-passed and 25 oracle-verified. Automation is six candidate-unverified plus
+- Current authority reports 0/61 green with direct stages: 0 cataloged, 1 unit-passed,
+  35 integration-passed and 25 oracle-verified. Automation is six candidate-unverified plus
   55 unavailable; all 61 runtime states and differentials remain unverified/not-run.
 - TABLE-020 binds complete visual style; TABLE-016/017 bind full cell merge/split topology and content policies; TABLE-010/011 now split/join admitted formula-free/no-header/no-caption top-level wrappers with exact separator, common-lattice, state/flow/part binding and strict static reopen, without a Hangul/render claim.
 - TABLE-012/013/014/015 share an exact structure/HWPX model with full state/grid/flow binding, formula/cache rebase, edge collapse rules and pagination/caption reopen.
@@ -91,7 +91,7 @@
   formula/cache/field oracle and original-detail render review; attempt 01 remains failed evidence.
 - TABLE-021 transposes merged formula-free HWPX; TABLE-056 sorts complete plain/unmerged/formula-free
   cells; TABLE-057/058 fill exact single-run regions and reject stale unselected formula caches; TABLE-060 upgrades only formula reference anchors while preserving other formula fields; TABLE-001/004/005 create and convert admitted profiles with static reopen and no Hangul/render claim.
-- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. The remaining unit rows are TABLE-006/049: TABLE-006 has a 24/24 static-checked exact 3x3 native-source harness; TABLE-049 has a complete exact-state planner plus a 24/24 static-ready six-format by two-grouping harness, while attempt 01 stopped at the first manual format dialog with baseline-only failed evidence and no ResultFormat mapping. TABLE-032/033 attempt 11 passed the exact licensed target source run and its preserving adapter matches both native output sections byte-for-byte; direct package save/reopen/render remain open. All 34 integration rows need target oracles and later automation evidence.
+- TABLE-042/043/044/055 have direct P06-07 oracles. TABLE-054 reopens isolated parent/child state. The only unit row is TABLE-006 with a 24/24 static-checked exact 3x3 native-source harness. TABLE-032/033 attempt 11 and TABLE-049 attempt 05 passed exact licensed target source runs; their preserving adapters match the corresponding native output sections byte-for-byte. Direct package save/reopen/render remain open. All 35 integration rows need target oracles and later automation evidence.
 - Authorities: `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`, current conformance JSON, and `protocol/private/p06-table-conformance-v1.json`.
 
 ## Risks, closures and holds
@@ -108,7 +108,7 @@
 ## Next actions
 
 1. Goal pursuit is active at `max`; finish P06 in order before resuming P07 and later phases. No remote push is implied.
-2. Next close TABLE-049 exact native number-format mapping, then TABLE-006 linked-chart HWPX; afterward run the 34 integration-row target/render campaign and all release differentials.
+2. Next close TABLE-006 linked-chart HWPX; afterward run the 35 integration-row target/render campaign and all release differentials.
 3. Resume P07 target/render/differential Gates only after P06, then continue P08 onward in ledger order.
 
 ## Context pack and archive pointers
