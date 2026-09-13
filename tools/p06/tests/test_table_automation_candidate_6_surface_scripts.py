@@ -15,11 +15,21 @@ PUBLIC_EVIDENCE = ROOT / (
     "implementation/p06/evidence/target/"
     "p06-table-automation-candidate-6-surface.current-2020.attempt02.v1.json"
 )
+CANARY_PUBLIC_EVIDENCE = ROOT / (
+    "implementation/p06/evidence/target/"
+    "p06-table-automation-candidate-6-canary.current-2020.attempt03.v1.json"
+)
 EXPECTED_REQUEST_SHA256 = (
     "d9588469b901ec31136e15f657b772f93872943c0411ac7b4794ba4feca31355"
 )
 EXPECTED_CHILD_SOURCE_SHA256 = (
     "bc26252065a2f060b9cd718e3876600ee098a9b9ea28562268a912ace77f0eab"
+)
+EXPECTED_CANARY_REQUEST_SHA256 = (
+    "8dcf8c678c68f5a001609502694c74bf5dd2b255e8d93c6a5bda2408cc5d9df2"
+)
+EXPECTED_CANARY_TRACE_SHA256 = (
+    "614a3ba3768a36864e3136b12723638b7e3cc8334b537f5adc3de3f894319f51"
 )
 EXPECTED_FEATURES = (
     "TABLE-010",
@@ -39,6 +49,8 @@ class CandidateSixSurfaceScriptTests(unittest.TestCase):
         cls.planner = PLANNER.read_text(encoding="utf-8")
         cls.evidence_text = PUBLIC_EVIDENCE.read_text(encoding="utf-8")
         cls.evidence = json.loads(cls.evidence_text)
+        cls.canary_evidence_text = CANARY_PUBLIC_EVIDENCE.read_text(encoding="utf-8")
+        cls.canary_evidence = json.loads(cls.canary_evidence_text)
 
     def test_exact_create_new_request_identity_is_locked(self) -> None:
         self.assertIn(EXPECTED_REQUEST_SHA256, self.parent)
@@ -158,6 +170,54 @@ class CandidateSixSurfaceScriptTests(unittest.TestCase):
         for path in (PARENT, CHILD):
             digest = hashlib.sha256(path.read_bytes()).hexdigest()
             self.assertRegex(digest, r"[0-9a-f]{64}\Z")
+
+    def test_actual_candidate_canary_is_exact_and_non_promoting(self) -> None:
+        evidence = self.canary_evidence
+        self.assertEqual(evidence["state"], "component_canary_pass")
+        self.assertEqual(
+            evidence["evidence"]["canary_request_sha256"],
+            EXPECTED_CANARY_REQUEST_SHA256,
+        )
+        self.assertEqual(
+            evidence["evidence"]["canary_trace_sha256"],
+            EXPECTED_CANARY_TRACE_SHA256,
+        )
+        self.assertEqual(evidence["summary"]["case_count"], 6)
+        self.assertEqual(evidence["summary"]["passed_case_count"], 6)
+        self.assertEqual(evidence["summary"]["candidate_action_execute_count"], 6)
+        self.assertEqual(evidence["summary"]["effect_observed_count"], 6)
+        self.assertEqual(evidence["summary"]["undo_exact_count"], 6)
+        self.assertEqual(
+            tuple(case["feature_id"] for case in evidence["cases"]),
+            EXPECTED_FEATURES,
+        )
+        self.assertEqual(
+            [case["effect_channel"] for case in evidence["cases"]],
+            ["document_scan"] * 4 + ["selected_style"] * 2,
+        )
+        for case in evidence["cases"]:
+            self.assertTrue(case["enabled_before"])
+            self.assertTrue(case["enabled_after_baseline_snapshot"])
+            self.assertTrue(case["candidate_executed"])
+            self.assertTrue(case["effect_observed"])
+            self.assertNotEqual(case["baseline_sha256"], case["post_sha256"])
+            self.assertEqual(case["baseline_sha256"], case["undo_sha256"])
+            self.assertTrue(case["undo_exact"])
+            self.assertEqual(case["state"], "pass")
+        self.assertNotIn('"action_id"', self.canary_evidence_text)
+        self.assertNotIn('"parameter_set_id"', self.canary_evidence_text)
+        self.assertFalse(evidence["safety"]["user_document_opened"])
+        self.assertFalse(evidence["safety"]["file_open_or_save_invoked"])
+        self.assertFalse(evidence["safety"]["external_network_invoked"])
+        self.assertFalse(evidence["safety"]["registry_or_system_setting_changed"])
+        self.assertFalse(evidence["safety"]["computer_use_click_or_type_invoked"])
+        self.assertEqual(evidence["promotion"]["component_canary"], "pass")
+        self.assertEqual(
+            evidence["promotion"]["product_runtime_support_state"], "unverified"
+        )
+        self.assertFalse(evidence["promotion"]["routing_enabled"])
+        self.assertEqual(evidence["promotion"]["differential_state"], "not_run")
+        self.assertFalse(evidence["promotion"]["product_complete"])
 
 
 if __name__ == "__main__":

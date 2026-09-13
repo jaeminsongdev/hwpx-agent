@@ -256,6 +256,23 @@ no raw Action/ParameterSet identifier entered public evidence, and the HWP proce
 This is a component-level non-executing surface result only: runtime support remains unverified,
 routing stays disabled, and differential/P06 promotion remains not run.
 
+A create-new attempt-03 disposable execution canary then reused the same six-case order in one HWP
+session with a fresh generated 3x3 document per case. A preceding format probe showed that
+`GetTextFile` returned `null` for every tested in-memory-document format on this exact target, while
+the documented `InitScan`/`GetText` by-reference path produced a bounded whole-document sequence.
+The canary therefore hashes scan status plus text per chunk for TABLE-010/015/016/017 and combines
+that scan with the selected style ParameterSet hash for TABLE-046/048. TABLE-017 required an initial
+cell block followed by two extension transitions; that corrected context remained enabled
+before and after the baseline snapshot. All six candidates executed exactly once, all six produced
+a channel-appropriate state change, and all six returned to their exact composite baseline after
+one Undo. Request SHA-256 is
+`8dcf8c678c68f5a001609502694c74bf5dd2b255e8d93c6a5bda2408cc5d9df2`; trace SHA-256 is
+`614a3ba3768a36864e3136b12723638b7e3cc8334b537f5adc3de3f894319f51`. No user document was
+opened, no file open/save, network, registry/system-setting or Computer Use input was invoked, and
+the HWP remainder was zero. This advances only an exact-target disposable component canary. It does
+not qualify the production automation binding, enable routing, run an exact product differential or
+change the 0/61 release-green matrix.
+
 ## Validation and blockers
 
 The generator verifies 61-row identity across catalog, contract and projection; exact target;
@@ -273,7 +290,7 @@ differentials. A row can carry multiple blockers, so blocker counts are not inte
 P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
-1. close the remaining 22 integration-only target oracles, beginning with TABLE-016/017 merge/split;
+1. close the remaining 22 integration-only target oracles in the existing one-session batch;
 2. supply remaining feature-specific validations, exact current-target automation bindings and safe
    disposable differentials; and
 3. regenerate until all 61 rows are green, then run the P06 hard Gate.
