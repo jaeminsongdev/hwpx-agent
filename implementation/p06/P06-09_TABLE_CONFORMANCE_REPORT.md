@@ -80,7 +80,7 @@ The machine-readable authority is
   stronger target oracle.
 - The thousands-format planner and preserving HWPX adapter cover TABLE-032/033. Exact licensed
   Hangul 2020 attempt 11 passed all three native saves and 22 ordered progress events. Offline
-  comparison proves `TableDeleteComma` and `TableInsertComma` change only the selected formula
+  comparison proves the add/remove thousands-separator actions change only the selected formula
   field's visible result text; native formula metadata, AST, numeric cache, complete grid and
   document flow remain exact. Direct remove/add output sections are byte-identical to the
   corresponding native sections, so both rows are now `integration_passed`. Attempts 01-10 remain
@@ -237,9 +237,12 @@ No evidence is promoted merely because a neighboring feature used the same table
 
 ## Automation boundary
 
-The exact P02 registry contains only six table candidates and 55 rows with
-`no_reviewed_action_mapping`; all 61 table runtime states are unverified and routing-disabled. The
-redacted projection does not disclose the six private Action/ParameterSet identifiers. P02's two
+The immutable P02 registry contains six table candidates. A P06-specific exact official ActionTable
+review preserves those six and admits 26 additional exact, unique, single-action mappings, producing
+32 candidate-unverified and 29 unavailable-with-reason rows. Ambiguous, partial, generic-dialog and
+composed behaviors remain unavailable; all 61 table runtime states are unverified and
+routing-disabled. The redacted projection discloses no private Action/ParameterSet identifiers.
+P02's two
 verified undo/redo canaries are unrelated to the table domain and are not reused here. A bounded
 planner now binds TABLE-010/015/016/017/046/048 to the exact private registry and redacted P06
 projection, preserving the order in one create-new request. Planned attempt 01 was not executed and
@@ -283,6 +286,17 @@ and the actual attempt-03 request/trace/public-evidence chain passes with 6 case
 2 style effects, 6 exact Undo results and zero Action-identifier leaks. The verifier deliberately
 returns runtime support `unverified` and differential `not_run`.
 
+The P06 binding overlay is a restricted derivative and does not mutate the P02 registry. Its tracked
+contract SHA-locks the parent registry, official ActionTable records, candidate graph, canonical
+matrix and private review, then stores only hashes for each admitted mapping. A fail-closed builder
+reconstructs the 61-row private overlay and public projection, rejecting duplicate source Actions,
+non-unique graph nodes, capability/source drift, existing-candidate demotion, runtime promotion or
+enabled routing. Four synthetic tamper/boundary tests, the actual 32/29 reconstruction and the
+private overlay/contract/projection cross-check pass. The 26 new candidates have source mapping
+evidence only; the six-case canary is not generalized to them. Authority:
+`P06-09_TABLE_AUTOMATION_BINDING_OVERLAY_REPORT.md` and
+`protocol/private/p06-table-automation-binding-overlay-v1.json`.
+
 The cross-property preservation batch now closes the previously missing formula/pagination
 validation combinations for 18 rows. One Cargo invocation passed eight integration binaries and
 77/77 tests. Five new checks exercise a formula-bearing paginated table through cell-style,
@@ -302,7 +316,8 @@ Protocol code generation publishes the three P06 schemas through additive catalo
 locks prove catalogs v2 through v4 remain unchanged.
 
 Current aggregate blockers include 0 missing direct evidence rows, 22 rows below direct oracle,
-22 rows with one missing render validation, 61 unverified automation runtime rows and 61 missing
+22 rows with one missing render validation, 29 rows without an admitted automation candidate, 61
+unverified automation runtime rows and 61 missing
 differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
 
 ## Decision and next implementation order
@@ -311,7 +326,8 @@ P06-09's matrix engine and current snapshot are implemented, but the roadmap com
 `required matrix green` is not satisfied. The next current-PC sequence is:
 
 1. close the remaining 22 integration-only target oracles in the existing one-session batch;
-2. supply exact current-target automation bindings and safe disposable differentials; and
+2. runtime-qualify the 32 exact-source candidates, resolve the other 29 bindings and run safe
+   disposable differentials; and
 3. regenerate until all 61 rows are green, then run the P06 hard Gate.
 
 P06-09 and P06 remain in progress. No production, other-PC/version or whole-product completion is

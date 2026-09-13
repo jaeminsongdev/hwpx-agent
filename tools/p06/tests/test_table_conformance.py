@@ -50,7 +50,7 @@ class TableConformanceTests(unittest.TestCase):
         )
         self.assertEqual(
             report["summary"]["automation_binding_counts"],
-            {"candidate_unverified": 6, "unavailable_with_reason": 55},
+            {"candidate_unverified": 32, "unavailable_with_reason": 29},
         )
         self.assertEqual(report["summary"]["differential_counts"], {"not_run": 61})
         self.assertEqual(report["summary"]["p06_09"], "in_progress")

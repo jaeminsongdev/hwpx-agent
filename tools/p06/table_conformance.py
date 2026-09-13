@@ -12,6 +12,10 @@ from typing import Any
 REPORT_SCHEMA_VERSION = "hwpx-agent.table-conformance-report/v1"
 EVIDENCE_SCHEMA_VERSION = "hwpx-agent.table-conformance-evidence/v1"
 PROJECTION_SCHEMA_VERSION = "hwpx-agent.table-automation-projection/v1"
+AUTOMATION_REGISTRY_SCHEMAS = {
+    "hwpx-agent.automation-binding-registry/v1",
+    "hwpx-agent.p06-table-automation-binding-overlay/v1",
+}
 TARGET_PROFILE_ID = "hancom-hangul-2020-secondary"
 TARGET_BUILD = "11.0.0.9136"
 TARGET_ARCHITECTURE = "x86"
@@ -139,7 +143,7 @@ def exact_target(value: Any) -> dict[str, str]:
 
 def build_automation_projection(registry: Any, registry_sha256: str) -> dict[str, Any]:
     if not isinstance(registry, dict) or registry.get("schema_version") \
-            != "hwpx-agent.automation-binding-registry/v1":
+            not in AUTOMATION_REGISTRY_SCHEMAS:
         raise ConformanceError("registry_schema")
     target = registry.get("target")
     if not isinstance(target, dict):

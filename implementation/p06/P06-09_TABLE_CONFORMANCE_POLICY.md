@@ -40,14 +40,16 @@ save/reopen by itself cannot promote a row. P06-09 passes only when all 61 rows 
 
 ## Redacted automation projection
 
-The private P02 registry contains restricted Action and ParameterSet identifiers. The projection
+The immutable private P02 registry and the P06 exact ActionTable overlay contain restricted Action
+and ParameterSet identifiers. The projection
 retains only feature ID, semantic capability ID, binding disposition, runtime support state and the
-routing Boolean. It binds the source registry SHA-256 and exact target but contains no raw action,
+routing Boolean. It binds the selected source registry/overlay SHA-256 and exact target but contains no raw action,
 ParameterSet, default, probe value, document content or absolute private path.
 
 Projection creation is create-only. The public report consumes the committed redacted projection,
-so clean-checkout validation does not require copying the Git-ignored private registry. When the
-private registry is present, validation may independently rebuild and byte-compare the projection.
+so clean-checkout validation does not require copying the Git-ignored private evidence. When the
+private evidence is present, validation reconstructs and byte-compares the review contract, overlay
+and projection.
 
 ## Evidence and deterministic report
 
@@ -73,10 +75,12 @@ input requires a new output path or an explicitly reviewed successor update.
   fresh native/product pair, semantic relift, frozen render differential and distinct retry.
 - Cross-property static integration closed 25 missing formula/page-split validation instances across
   18 rows. The only remaining validation-missing instances are the 22 render checks above.
-- Automation bindings remain 6 candidate-unverified and 55 unavailable-with-reason; all 61 runtime
+- Exact unique official ActionTable review yields 32 candidate-unverified and 29
+  unavailable-with-reason bindings; all 61 runtime
   states are unverified and all 61 direct/automation differentials are not-run.
-- The six candidate Actions have isolated exact-target effect plus Undo component canaries only.
-  They do not prove product runtime routing or a direct/automation differential.
+- Only the original six candidate Actions have isolated exact-target effect plus Undo component
+  canaries. The other 26 have exact-source mapping evidence only. Neither evidence class proves
+  product runtime routing or a direct/automation differential.
 
 The current matrix is a truthful implementation backlog, not a P06-09 PASS. Detailed current
 feature evidence and blocker counts are authoritative in `P06-09_TABLE_CONFORMANCE_REPORT.md` and

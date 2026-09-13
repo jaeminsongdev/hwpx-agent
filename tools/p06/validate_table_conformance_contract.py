@@ -10,6 +10,7 @@ from referencing import Registry, Resource
 
 try:
     from tools.p06 import table_conformance as conformance
+    from tools.p06 import build_table_automation_binding_overlay as binding_overlay
     from tools.p06.build_table_conformance_report import (
         DEFAULT_CATALOG,
         DEFAULT_CONTRACTS,
@@ -18,6 +19,7 @@ try:
     )
 except ModuleNotFoundError:
     import table_conformance as conformance  # type: ignore[no-redef]
+    import build_table_automation_binding_overlay as binding_overlay  # type: ignore[no-redef]
     from build_table_conformance_report import (  # type: ignore[no-redef]
         DEFAULT_CATALOG,
         DEFAULT_CONTRACTS,
@@ -35,7 +37,7 @@ MIGRATION = "protocol/migrations/p06-table-conformance-v0-to-v1.md"
 SCHEMA_CATALOG = "protocol/generated/typescript/schema-catalog-v5.json"
 CATALOG_MIGRATION = "protocol/migrations/catalog-v4-to-v5.md"
 CATALOG_BASELINE = "protocol/baseline/catalog-v5.lock.json"
-PRIVATE_REGISTRY = "implementation/p02/evidence/bindings/automation-bindings.2020.v1.final.json"
+PRIVATE_REGISTRY = binding_overlay.PRIVATE_OVERLAY
 SCHEMAS = (
     "protocol/json-schema/p06-table-automation-projection-v1.schema.json",
     "protocol/json-schema/p06-table-conformance-evidence-v1.schema.json",
@@ -161,6 +163,7 @@ EXPECTED_SOURCE_PATHS = {
     "implementation/p06/p06-09-current-2020-automation-projection.json",
     "implementation/p06/p06-09-current-2020-direct-evidence.json",
     "implementation/p06/P06-09_TABLE_CROSS_PROPERTY_BATCH_REPORT.md",
+    "implementation/p06/P06-09_TABLE_AUTOMATION_BINDING_OVERLAY_REPORT.md",
     "implementation/p06/evidence/target/p06-table-cross-property-preservation.current-2020.v1.json",
     "implementation/p06/evidence/target/p06-table-automation-candidate-6-canary.current-2020.attempt03.v1.json",
     "implementation/p06/evidence/target/p06-table-automation-candidate-6-surface.current-2020.attempt02.v1.json",
@@ -353,6 +356,7 @@ EXPECTED_SOURCE_PATHS = {
     "protocol/migrations/p06-table-thousands-v0-to-v1.md",
     "protocol/migrations/p06-table-thousands-v1-to-hwpx-v1.md",
     "protocol/migrations/p06-table-pagination-hwpx-v1-to-target-v2.md",
+    "protocol/migrations/p06-table-automation-binding-overlay-v0-to-v1.md",
     "protocol/private/p06-table-geometry-v1.json",
     "protocol/private/p06-table-geometry-hwpx-v1.json",
     "protocol/private/p06-table-layout-modes-hwpx-v1.json",
@@ -402,15 +406,18 @@ EXPECTED_SOURCE_PATHS = {
     "protocol/private/p06-table-thousands-v1.json",
     "protocol/private/p06-table-thousands-hwpx-v1.json",
     "protocol/private/p06-table-pagination-target-v2.json",
+    "protocol/private/p06-table-automation-binding-overlay-v1.json",
     *SCHEMAS,
     "protocol/generated/typescript/src/schema-models.ts",
     "protocol/generated/typescript/src/schema-models.test.ts",
     "tools/xtask/src/main.rs",
     "tools/p06/table_conformance.py",
     "tools/p06/build_table_conformance_report.py",
+    "tools/p06/build_table_automation_binding_overlay.py",
     "tools/p06/project_table_automation_bindings.py",
     "tools/p06/tests/test_table_conformance.py",
     "tools/p06/tests/test_table_conformance_contract.py",
+    "tools/p06/tests/test_table_automation_binding_overlay.py",
     "tools/p06/tests/test_table_pending_22_render.py",
     "tools/p06/tests/test_table_pending_22_visual_review_finalizer.py",
     "tools/p06/tests/test_table_automation_candidate_6_batch_plan.py",
@@ -609,8 +616,8 @@ def validate_contract_shape(contract: dict[str, Any], errors: list[str]) -> None
             "oracle_verified": 39,
         },
         "automation_binding_counts": {
-            "candidate_unverified": 6,
-            "unavailable_with_reason": 55,
+            "candidate_unverified": 32,
+            "unavailable_with_reason": 29,
         },
         "differential_counts": {"not_run": 61},
         "required_matrix": "non_green",
@@ -728,18 +735,31 @@ def validate_private_projection_if_available(
     except (OSError, conformance.ConformanceError):
         return "not_available"
     try:
-        registry_bytes = private_path.read_bytes()
-        registry = json.loads(
-            registry_bytes.decode("utf-8"),
+        overlay_bytes = private_path.read_bytes()
+        overlay = json.loads(
+            overlay_bytes.decode("utf-8"),
             object_pairs_hook=conformance.reject_duplicate_keys,
         )
-        rebuilt = conformance.build_automation_projection(
-            registry, conformance.sha256_bytes(registry_bytes)
+        contract, rebuilt_overlay, rebuilt_projection = binding_overlay.build_current_bundle(
+            root
         )
-        if conformance.canonical_json(rebuilt) != conformance.canonical_json(projection):
+        public_contract, _ = conformance.load_json_file(
+            root, binding_overlay.PUBLIC_CONTRACT, 2 * 1024 * 1024
+        )
+        binding_overlay.validate_public_contract(public_contract, contract)
+        if conformance.canonical_json(rebuilt_overlay) != conformance.canonical_json(overlay):
+            add_error(errors, "private_overlay_drift")
+            return "fail"
+        if conformance.canonical_json(rebuilt_projection) != conformance.canonical_json(projection):
             add_error(errors, "private_projection_drift")
             return "fail"
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError, conformance.ConformanceError):
+    except (
+        OSError,
+        UnicodeDecodeError,
+        json.JSONDecodeError,
+        conformance.ConformanceError,
+        binding_overlay.OverlayError,
+    ):
         add_error(errors, "private_projection_validation")
         return "fail"
     return "pass"
@@ -758,7 +778,18 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         projection, _ = conformance.load_json_file(root, DEFAULT_PROJECTION)
         evidence, _ = conformance.load_json_file(root, DEFAULT_EVIDENCE)
         committed_report, _ = conformance.load_json_file(root, REPORT)
-        conformance.validate_projection(projection)
+        projection_rows = conformance.validate_projection(projection)
+        binding_contract, _ = conformance.load_json_file(
+            root, binding_overlay.PUBLIC_CONTRACT, 2 * 1024 * 1024
+        )
+        contract_mappings = binding_overlay.validate_public_contract_shape(binding_contract)
+        projection_candidates = {
+            feature_id: row["capability_id"]
+            for feature_id, row in projection_rows.items()
+            if row["binding_status"] == "candidate_unverified"
+        }
+        if contract_mappings != projection_candidates:
+            add_error(errors, "binding_contract_projection_drift")
         conformance.validate_evidence(root, evidence)
         rebuilt_report = conformance.load_and_build(
             root,
@@ -780,7 +811,13 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
             if raw_marker in conformance.canonical_json(projection) \
                     or raw_marker in conformance.canonical_json(committed_report):
                 add_error(errors, "private_identifier_leak")
-    except (OSError, KeyError, TypeError, conformance.ConformanceError):
+    except (
+        OSError,
+        KeyError,
+        TypeError,
+        conformance.ConformanceError,
+        binding_overlay.OverlayError,
+    ):
         add_error(errors, "matrix_validation")
         private_projection = "not_checked"
     return result(errors, source_count, private_projection)
