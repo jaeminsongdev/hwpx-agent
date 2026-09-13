@@ -226,6 +226,15 @@ The machine-readable authority is
   immutability states to pass. Integrated attempt 07 returned `Open=false` on that control with 0/22
   cases, unchanged control bytes, no HWPX/PDF output and zero remaining HWP processes. Its trace
   SHA-256 is `c4e0dae6796bdb3dd563876ffea0d89a01289d1e2e5632cbe85e72b42ad993f5`.
+  The exact installed `Hnc.Office.String.ko-KR.dll` (`11.0.0.10677`, SHA-256
+  `528b0b7f881f3648fd9bc8be5722e5f275fd53809a3f93159005c77737ad0867`) binds the four
+  dialog choices in order as `접근 허용`, `모두 허용`, `허용 안 함`, and `모두 안 함`.
+  The current `HKCU\Software\HNC\HwpAutomation\Modules` key has no named module registration,
+  so the prompt is expected; no registry value or system setting was changed. Attempt 05 waited
+  about 509 seconds, attempt 06 about 13 seconds and attempt 07 about 5.8 seconds between
+  `open/running` and `open/failed`, which is consistent with prompt resolution rather than an
+  immediate file, ACL or package rejection. The next user-owned choice is therefore the exact
+  second button, `모두 허용`; the trace still cannot attest which button the user selected.
   Configuration-only validation, 28/28 readback checks, 28/28 wrapper checks and 9/9 renderer tests
   pass without invoking HWP.
   Attempt 03 trace SHA-256 is

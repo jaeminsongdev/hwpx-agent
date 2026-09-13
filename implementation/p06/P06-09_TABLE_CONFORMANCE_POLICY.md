@@ -73,6 +73,9 @@ input requires a new output path or an explicitly reviewed successor update.
   single-session pending-22 batch; failed attempts 01 through 07 and the control diagnostic remain
   failed evidence. The runner now opens an exact previously verified Hangul-saved TABLE-012 control
   before any pending row, so access-admission failure cannot be attributed to TABLE-016.
+- On the exact installed Korean resource, the four access choices are ordered `접근 허용`,
+  `모두 허용`, `허용 안 함`, and `모두 안 함`. A 22-case run requires the user-owned second
+  choice, `모두 허용`; automation and Computer Use must not select or attest that choice.
 - The other 39 rows retain their exact current-target direct oracles. This includes TABLE-006's
   fresh native/product pair, semantic relift, frozen render differential and distinct retry.
 - Cross-property static integration closed 25 missing formula/page-split validation instances across

@@ -108,7 +108,7 @@
 ## Next actions
 
 1. Goal pursuit is active at `max`; finish P06 in order before resuming P07 and later phases. No remote push is implied.
-2. Preserve direct attempts 01-07 and the control diagnostic as failed evidence. Before another create-new attempt, resolve why the exact Hangul file-access dialog still returns `Open=false` for the integrated verified control after prompt handling. Once the control opens and closes unchanged, the wrapper runs all 22 lifecycles, the combined typed/cache oracle and 144-DPI render preparation. Inspect every generated PNG at original detail before one matrix promotion.
+2. Preserve direct attempts 01-07 and the control diagnostic as failed evidence. The exact installed Korean resource orders the access choices as `접근 허용`, `모두 허용`, `허용 안 함`, `모두 안 함`; on the next create-new attempt the user must select the second button, `모두 허용`, while automation remains screenshot-only. Once the integrated control opens and closes unchanged, the wrapper runs all 22 lifecycles, the combined typed/cache oracle and 144-DPI render preparation. Inspect every generated PNG at original detail before one matrix promotion.
 3. The six-candidate execution/Undo canary, 32/29 exact-source review and 32/32 one-session surface inventory are component-complete without runtime/routing promotion. Once the direct 22-case batch and original-detail render review pass, runtime-qualify 32 candidates, resolve 29 unavailable rows and execute exact product differentials under locked batches.
 4. Resume P07 target/render/differential Gates only after P06, then continue P08 onward in ledger order.
 
