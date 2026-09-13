@@ -1,6 +1,6 @@
 # P06-09 current-PC table conformance policy v1
 
-Date: 2026-09-09
+Date: 2026-09-14
 
 Decision: **fail-closed 61-row matrix implemented; required matrix remains non-green**.
 
@@ -65,57 +65,22 @@ input requires a new output path or an explicitly reviewed successor update.
 ## Current result
 
 - Required rows: 61; green: 0; non-green: 61.
-- Direct stages: 0 cataloged, 0 unit-passed, 36 integration-passed, 25 oracle-verified.
-- Automation bindings: 6 candidate-unverified, 55 unavailable-with-reason.
-- Automation runtime support: 61 unverified.
-- Direct/automation differential: 61 not-run.
+- Direct stages: 0 cataloged, 0 unit-passed, 22 integration-passed, 39 oracle-verified.
+- The 22 integration rows have deterministic exact-target inputs and typed oracles. Their remaining
+  direct validation is the successful licensed lifecycle and original-detail `render_diff` from the
+  single-session pending-22 batch; failed attempts 01 through 03 remain failed evidence.
+- The other 39 rows retain their exact current-target direct oracles. This includes TABLE-006's
+  fresh native/product pair, semantic relift, frozen render differential and distinct retry.
+- Cross-property static integration closed 25 missing formula/page-split validation instances across
+  18 rows. The only remaining validation-missing instances are the 22 render checks above.
+- Automation bindings remain 6 candidate-unverified and 55 unavailable-with-reason; all 61 runtime
+  states are unverified and all 61 direct/automation differentials are not-run.
+- The six candidate Actions have isolated exact-target effect plus Undo component canaries only.
+  They do not prove product runtime routing or a direct/automation differential.
 
-The current matrix is a truthful implementation backlog, not a P06-09 PASS. P06-07 contributes
-four exact-target oracle rows. TABLE-001 also has exact current-PC target-build, typed save/reopen,
-PDF render-review and retry evidence for its deterministic blank unmerged 3x4 nonuniform and 1x1
-profiles, so only that direct row is `oracle_verified`. The fixed-column, fit-content and fit-page
-layout modes; the
-  position/attachment/wrap/outside-margin group; complete table styles; exact table transpose;
-  exact cell merge/split;
-  exact admitted whole-table split; exact admitted text-to-table/table-to-text conversion;
-  and other admitted operations have operation-specific static direct-HWPX integration evidence,
-  but no licensed application oracle. The remaining direct operations and exact automation
-  bindings/probes have not been manufactured from menu names.
-
-The complete TABLE-022/023/024/026/027/028/029/030 block/horizontal/vertical aggregate-formula
-group now has exact current-PC Hangul 2020 create-only save/reopen, typed whole-section oracle,
-one-page PDF visual review and retry evidence. Those eight rows are `oracle_verified`; their visible
-results remain explicit unverified caches, not proof of formula evaluation. Automation runtime and
-direct/automation differential remain `not_run`, so none is green.
-
-TABLE-060 additionally has selected-cell canonical-formula integration: only relative reference
-axes may become absolute, other formula fields remain opaque unowned bytes, and preserve/update/
-clear cache policies reopen statically. No formula engine or target application result is inferred.
-
-TABLE-054 additionally has exact master-cell nested-table insertion integration. A caption-free
-inline template retains its complete typed child state, while the complete parent state reopens with
-only one ordered payload insertion. Nested formulas use nearest-table ownership and cannot leak into
-the parent formula state. No licensed application or renderer result is inferred.
-
-TABLE-032/033 additionally have a current-target native-source-backed HWPX integration. The exact
-Hangul 2020 actions change only the selected formula field's visible result; formula metadata, AST,
-numeric cache, grid and document flow remain exact. Direct remove/add sections match the native
-sections byte-for-byte. Direct-output package save/reopen, render, rollback/retry and product
-automation runtime remain not run, so the rows are `integration_passed`, not oracle-verified.
-
-TABLE-049 additionally has a current-target native-source-backed HWPX integration. The exact six
-Hangul 2020 result-format tokens and independent grouping states lower through a preserving adapter;
-five grouped and five ungrouped plans match the native sections byte-for-byte. Formula AST/cache,
-grid, semantic document flow and every unowned section byte remain exact. Direct-output package
-save/reopen, render, rollback/retry and automation runtime remain not run, so the row is
-`integration_passed`, not oracle-verified.
-
-TABLE-006 additionally has a current-target native-source-backed linked-chart HWPX integration.
-The exact 3x3 rectangular source lowers to a closed chart relationship/resource, preserves the
-source table and unrelated package bytes, and passes product HWPX open/save/reopen plus one-page PDF
-export and render review on Hangul 2020. Native-reference PDF `render_diff`, rollback/retry, product
-automation runtime and release differential remain not run, so the row is `integration_passed`, not
-oracle-verified.
+The current matrix is a truthful implementation backlog, not a P06-09 PASS. Detailed current
+feature evidence and blocker counts are authoritative in `P06-09_TABLE_CONFORMANCE_REPORT.md` and
+the canonical machine report. No binding is manufactured from a menu label or binary string.
 
 ## Not claimed
 

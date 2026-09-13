@@ -48,20 +48,14 @@
 
 ## Closed current-PC P06 evidence
 
-- P06-04 cell formatting is exact-target current-PC PASS with save/reopen, style readback and PDF;
-  authority: `implementation/p06/P06-04_TARGET_READBACK_REPORT.md`.
-- P06-05 sizing/autofit is calibrated-fixture current-PC PASS, not arbitrary-document proof;
-  authority: `implementation/p06/P06-05_TARGET_READBACK_REPORT.md`.
-- P06-06 FormulaAst is exact 2x4 current-PC PASS with formula/cache/layout readback;
-  authority: `implementation/p06/P06-06_TARGET_READBACK_REPORT.md`.
-- P06-08 inspect/select is scoped pure-IR PASS at `293053e`; it makes no HWPX/Hangul cursor claim.
-  Authority: `implementation/p06/P06-08_REPORT.md`.
+- P06-04 cell formatting is exact-target current-PC PASS with save/reopen, style readback and PDF; authority: `implementation/p06/P06-04_TARGET_READBACK_REPORT.md`.
+- P06-05 sizing/autofit is calibrated-fixture current-PC PASS, not arbitrary-document proof; authority: `implementation/p06/P06-05_TARGET_READBACK_REPORT.md`.
+- P06-06 FormulaAst is exact 2x4 current-PC PASS with formula/cache/layout readback; authority: `implementation/p06/P06-06_TARGET_READBACK_REPORT.md`.
+- P06-08 inspect/select is scoped pure-IR PASS at `293053e`; it makes no HWPX/Hangul cursor claim. Authority: `implementation/p06/P06-08_REPORT.md`.
 
 ## Closed current-PC P06-07 evidence
 
-- Exact target v2 `44cfcd14...8316` passed licensed Hangul 2020 lifecycle, structural readback and
-  ten-page visual review; failed predecessor evidence remains immutable. Authority:
-  `implementation/p06/P06-07_TARGET_READBACK_REPORT.md`.
+- Exact target v2 `44cfcd14...8316` passed licensed Hangul 2020 lifecycle, structural readback and ten-page visual review; failed predecessor evidence remains immutable. Authority: `implementation/p06/P06-07_TARGET_READBACK_REPORT.md`.
 
 ## Active P06-09 evidence
 
