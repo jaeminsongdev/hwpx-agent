@@ -223,7 +223,9 @@ The machine-readable authority is
   the failed attempt is rejected before any oracle receipt is created. A single end-to-end wrapper
   now creates a new attempt directory, runs that one HWP session, hashes the resulting trace and
   invokes the combined oracle automatically; configuration-only and pre-existing-attempt paths are
-  proven side-effect free. This preparation promotes no row.
+  proven side-effect free. After the oracle passes, the same command uses pinned Poppler 26.07.0
+  tools to render all 22 one-page A4 PDFs at 144 DPI into bounded PNG review candidates and writes a
+  hash-bound manifest whose visual-review state remains `not_run`. This preparation promotes no row.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 

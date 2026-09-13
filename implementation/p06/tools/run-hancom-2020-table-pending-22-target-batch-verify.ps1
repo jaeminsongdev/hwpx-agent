@@ -70,6 +70,9 @@ $readback = Resolve-BoundedRegularFile -Path (
 $oracleSource = Resolve-BoundedRegularFile -Path (
     Join-Path $repoRoot 'crates\hwpx-package\examples\p06_09_table_pending_22_target_oracle.rs'
 ) -Boundary $repoRoot -MaximumBytes 1048576
+$rendererSource = Resolve-BoundedRegularFile -Path (
+    Join-Path $repoRoot 'tools\p06\render_table_pending_22_target_batch.py'
+) -Boundary $repoRoot -MaximumBytes 1048576
 $cargoManifest = Resolve-BoundedRegularFile -Path (
     Join-Path $repoRoot 'Cargo.toml'
 ) -Boundary $repoRoot -MaximumBytes 1048576
@@ -93,6 +96,9 @@ foreach ($group in @('merge_split', 'layout_placement', 'remaining')) {
 }
 
 $cargo = Get-Command 'cargo.exe' -CommandType Application -ErrorAction Stop
+$python = Get-Command 'python.exe' -CommandType Application -ErrorAction Stop
+$pdfinfo = Get-Command 'pdfinfo.exe' -CommandType Application -ErrorAction Stop
+$pdftoppm = Get-Command 'pdftoppm.exe' -CommandType Application -ErrorAction Stop
 $runDirectory = Join-Path $targetRoot $AttemptName
 if ([System.IO.Directory]::Exists($runDirectory) -or
     [System.IO.File]::Exists($runDirectory)) {
@@ -108,9 +114,11 @@ if ($ValidateConfigurationOnly) {
         manifest_sha256 = $expectedManifestSha256
         readback_sha256 = Get-Sha256File -Path $readback
         oracle_source_sha256 = Get-Sha256File -Path $oracleSource
+        renderer_source_sha256 = Get-Sha256File -Path $rendererSource
         cargo_manifest_sha256 = Get-Sha256File -Path $cargoManifest
         hwp_invoked = $false
         receipt_created = $false
+        render_invoked = $false
     } | ConvertTo-Json -Depth 6
     exit 0
 }
@@ -169,6 +177,43 @@ if ($oracleExit -ne 0) {
 
 $resolvedReceipt = Resolve-BoundedRegularFile -Path $receiptPath -Boundary $targetRoot -MaximumBytes 1048576
 $receiptSha256 = Get-Sha256File -Path $resolvedReceipt
+$renderDirectory = Join-Path $runDirectory 'rendered'
+$renderManifestPath = Join-Path $runDirectory 'pending-22-render-manifest.json'
+$renderArguments = @(
+    $rendererSource,
+    '--trace', $resolvedTrace,
+    '--trace-sha256', $traceSha256,
+    '--oracle-receipt', $resolvedReceipt,
+    '--oracle-receipt-sha256', $receiptSha256,
+    '--pdfinfo', $pdfinfo.Source,
+    '--pdftoppm', $pdftoppm.Source,
+    '--output-directory', $renderDirectory,
+    '--output-manifest', $renderManifestPath
+)
+& $python.Source @renderArguments | Out-Host
+$renderExit = $LASTEXITCODE
+if ($renderExit -ne 0) {
+    Write-Error "TABLE_PENDING_22_VERIFY_RENDER_PREPARATION_FAILED:$renderExit"
+    exit $renderExit
+}
+$resolvedRenderManifest = Resolve-BoundedRegularFile `
+    -Path $renderManifestPath `
+    -Boundary $targetRoot `
+    -MaximumBytes 1048576
+$renderManifest = Get-Content -LiteralPath $resolvedRenderManifest -Raw |
+    ConvertFrom-Json -Depth 12
+if ($renderManifest.schema_version -cne
+        'hwpx-agent.p06-09-table-pending-22-render-candidates/v1' -or
+    $renderManifest.state -cne 'rendered_not_reviewed' -or
+    [int]$renderManifest.case_count -ne 22 -or
+    @($renderManifest.cases).Count -ne 22 -or
+    $renderManifest.visual_review.state -cne 'not_run' -or
+    @($renderManifest.cases | Where-Object {
+        $_.visual_review_state -cne 'not_run'
+    }).Count -ne 0) {
+    throw 'TABLE_PENDING_22_VERIFY_RENDER_MANIFEST_INVALID'
+}
+$renderManifestSha256 = Get-Sha256File -Path $resolvedRenderManifest
 [ordered]@{
     schema_version = 'hwpx-agent.p06-09-table-pending-22-target-batch-verify/v1'
     state = 'pass'
@@ -178,6 +223,10 @@ $receiptSha256 = Get-Sha256File -Path $resolvedReceipt
     trace_sha256 = $traceSha256
     oracle_receipt_file = [System.IO.Path]::GetFileName($resolvedReceipt)
     oracle_receipt_sha256 = $receiptSha256
+    render_manifest_file = [System.IO.Path]::GetFileName($resolvedRenderManifest)
+    render_manifest_sha256 = $renderManifestSha256
+    rendered_png_count = @($renderManifest.cases).Count
+    visual_review_state = [string]$renderManifest.visual_review.state
     hwp_session_count = 1
     user_allow_all_decision_count = 1
 } | ConvertTo-Json -Depth 5

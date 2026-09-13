@@ -34,6 +34,7 @@ $configurationIsSideEffectFree =
     [int]$configuration.case_count -eq 22 -and
     -not [bool]$configuration.hwp_invoked -and
     -not [bool]$configuration.receipt_created -and
+    -not [bool]$configuration.render_invoked -and
     -not [System.IO.Directory]::Exists($configurationDirectory) -and
     -not [System.IO.File]::Exists($configurationDirectory)
 
@@ -84,6 +85,38 @@ $checks = [ordered]@{
     exact_oracle = $wrapper -match
         "'p06_09_table_pending_22_target_oracle'" -and
         [regex]::Matches($wrapper, '& \$cargo\.Source @cargoArguments').Count -eq 1
+    exact_renderer = $wrapper -match
+        "'tools\\p06\\render_table_pending_22_target_batch\.py'" -and
+        [regex]::Matches($wrapper, '& \$python\.Source @renderArguments').Count -eq 1
+    exact_pdf_tools = $wrapper -match "Get-Command 'pdfinfo\.exe'" -and
+        $wrapper -match "Get-Command 'pdftoppm\.exe'" -and
+        $wrapper -match "'--pdfinfo'" -and
+        $wrapper -match "'--pdftoppm'"
+    renderer_runs_after_oracle = $wrapper.IndexOf(
+        '& $python.Source @renderArguments',
+        [System.StringComparison]::Ordinal
+    ) -gt $wrapper.IndexOf(
+        'Resolve-BoundedRegularFile -Path $receiptPath',
+        [System.StringComparison]::Ordinal
+    )
+    render_failure_is_terminal = $wrapper -match
+        'TABLE_PENDING_22_VERIFY_RENDER_PREPARATION_FAILED' -and
+        $wrapper.IndexOf(
+            'if ($renderExit -ne 0)',
+            [System.StringComparison]::Ordinal
+        ) -lt $wrapper.IndexOf(
+            '$renderManifest = Get-Content',
+            [System.StringComparison]::Ordinal
+        )
+    visual_review_not_promoted = $wrapper -match
+        "renderManifest\.visual_review\.state -cne 'not_run'" -and
+        $wrapper -match 'visual_review_state = \[string\]\$renderManifest\.visual_review\.state'
+    render_manifest_revalidated = $wrapper -match
+        'TABLE_PENDING_22_VERIFY_RENDER_MANIFEST_INVALID' -and
+        $wrapper -match "renderManifest\.schema_version -cne" -and
+        $wrapper -match "renderManifest\.state -cne 'rendered_not_reviewed'" -and
+        $wrapper -match '@\(\$renderManifest\.cases\)\.Count -ne 22' -and
+        $wrapper -match "visual_review_state -cne 'not_run'"
     trace_digest_forwarded = $wrapper -match
         '\$traceSha256 = Get-Sha256File -Path \$resolvedTrace' -and
         $wrapper -match '\$resolvedTrace,\s*\r?\n\s*\$traceSha256,\s*\r?\n\s*\$receiptPath'
