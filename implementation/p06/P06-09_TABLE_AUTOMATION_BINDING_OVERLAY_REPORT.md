@@ -62,6 +62,10 @@ runtime state and routing Boolean.
   10-11 showed that a same-method retry still returned false on a same/new document. The bounded retry
   now uses `HwpObject.Open` on one new active document in the same session, requires exactly one
   document afterward and fails closed on drift; none of this promotes runtime support.
+- Attempt 12 showed that this alternate surface also returns false. The exact installation has no
+  official FilePathChecker Automation module and no named HKCU Automation Modules value. Hancom's
+  documented module installation, registry value and `RegisterModule` call are pending explicit
+  user authorization because they change local system state; runtime and routing stay unverified.
 - Runtime states remain 61 `unverified`; routing remains disabled for 61/61.
 - Differentials remain 61 `not_run`.
 

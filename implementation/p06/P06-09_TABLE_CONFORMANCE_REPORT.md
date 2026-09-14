@@ -243,6 +243,14 @@ The machine-readable authority is
   fails closed on any drift. It records the attempt count and first result; both the Rust oracle and
   renderer reject inconsistent values. Configuration-only validation, 29/29 readback checks, 28/28
   wrapper checks, 11/11 renderer tests and 4/4 Rust oracle unit tests pass without invoking HWP.
+  Attempt 12 then returned false through that alternate surface as well. Its trace SHA-256 is
+  `63874e1aa2b93240c37b3447644f48753a4ff76936ffc3dc68989ec7f8424015`; 0/22 completed, no output
+  was published and zero HWP processes remained. Read-only installation inspection found no
+  `FilePathCheckerModuleExample.dll` and no named value under
+  `HKCU\Software\HNC\HwpAutomation\Modules`. Hancom's official Automation guide requires that
+  module, a matching registry value and `RegisterModule("FilePathCheckDLL", value_name)` for
+  approval-free sequential file access. That installation/registration is not performed without
+  explicit user authorization, and the matrix remains 0/61.
   Attempt 03 trace SHA-256 is
   `577771fdbde65e572b0bfc59697d1a5334101927764b5afaeba6f8f721071356`. A combined offline oracle now admits only a
   complete 22-case success trace, then reuses all three existing typed semantic readers directly;

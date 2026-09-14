@@ -79,6 +79,10 @@ input requires a new output path or an explicitly reviewed successor update.
 - On the exact installed Korean resource, the four access choices are ordered `접근 허용`,
   `모두 허용`, `허용 안 함`, and `모두 안 함`. A 22-case run requires the user-owned second
   choice, `모두 허용`; automation and Computer Use must not select or attest that choice.
+- Attempt 12 also returned false through the alternate `HwpObject.Open` retry. The installation has
+  no official FilePathChecker module and the Automation Modules key has no named value. Installing
+  and registering Hancom's official module is a separate system-state change requiring explicit user
+  authorization; until then this direct target batch stays blocked and non-promoting.
 - The other 39 rows retain their exact current-target direct oracles. This includes TABLE-006's
   fresh native/product pair, semantic relift, frozen render differential and distinct retry.
 - Cross-property static integration closed 25 missing formula/page-split validation instances across
