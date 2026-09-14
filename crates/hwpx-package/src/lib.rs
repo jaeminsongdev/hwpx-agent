@@ -27,6 +27,7 @@ mod object_appearance_hwpx;
 mod object_composition_hwpx;
 mod object_geometry_hwpx;
 mod object_hyperlink_hwpx;
+mod object_hyperlink_target;
 mod page_setup;
 mod paragraph_style;
 mod patch;
@@ -170,6 +171,11 @@ pub use object_hyperlink_hwpx::{
     ObjectHyperlinkHwpxLimitConfig, ObjectHyperlinkHwpxLimits, ObjectHyperlinkHwpxLowerer,
     ObjectHyperlinkHwpxLoweringReceipt, ObjectHyperlinkHwpxPlan, ObjectHyperlinkHwpxReadback,
     ObjectHyperlinkHwpxReader,
+};
+pub use object_hyperlink_target::{
+    OBJECT_HYPERLINK_CURRENT_TARGET_EXECUTABLE_SHA256, OBJECT_HYPERLINK_CURRENT_TARGET_PROFILE_ID,
+    ObjectHyperlinkDirectAdmission, ObjectHyperlinkTargetRoute, ObjectHyperlinkTargetRouteError,
+    ObjectHyperlinkTargetRouter,
 };
 pub use page_setup::{
     PAGE_SETUP_PROFILE_ID, PageDimensions, PageGutterType, PageMargins, PageOrientation,

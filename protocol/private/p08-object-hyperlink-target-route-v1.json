@@ -1,0 +1,80 @@
+{
+  "schema_version": "hwpx-agent.p08-object-hyperlink-target-route-contract/v1",
+  "task": "P08-16",
+  "profile": "hwpx-agent.object-hyperlink-target.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
+  "feature_ids": ["OBJ-048"],
+  "capabilities": ["obj.object_hyperlink"],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_qualification": "implementation/p08/evidence/p08-16-object-hyperlink-target-route-source-qualification.current-2020.v1.json",
+  "migration": "protocol/migrations/p08-object-hyperlink-target-route-v0-to-v1.md",
+  "policy": "implementation/p08/P08-16_OBJECT_HYPERLINK_TARGET_ROUTE_POLICY.md",
+  "report": "implementation/p08/P08-16_OBJECT_HYPERLINK_TARGET_ROUTE_REPORT.md",
+  "source_locks": [
+    {"path": "docs/03_document_model/08_drawing_image_chart.md", "sha256": "ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b"},
+    {"path": "docs/04_feature_catalog/09_obj.md", "sha256": "e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8"},
+    {"path": "docs/04_feature_catalog/contracts/09_obj_contracts.md", "sha256": "e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2"},
+    {"path": "docs/09_roadmap/P08_images_shapes_drawing_charts.md", "sha256": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path": "specs/work-breakdown-structure.json", "sha256": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2"}
+  ],
+  "implementation_files": [
+    "crates/hwpx-package/src/lib.rs",
+    "crates/hwpx-package/src/object_hyperlink_target.rs",
+    "crates/hwpx-package/tests/object_hyperlink_target.rs"
+  ],
+  "route_policy": {
+    "direct_hwpx": ["picture", "basic_shape", "text_box", "drawing_canvas", "embedded_object"],
+    "chart": "CAPABILITY_UNAVAILABLE_FOR_TARGET",
+    "form_object_and_paragraph_band": "outside_catalogued_capability_ir",
+    "direct_preflight_rejected": "CAPABILITY_UNAVAILABLE_FOR_TARGET",
+    "desktop_automation_fallback": "unavailable_with_reason",
+    "fallback_after_partial_mutation": "forbidden"
+  },
+  "target_observation": {
+    "strength": "target_scope_only_without_persisted_raw_trace",
+    "generic_shape_semantic_action_available": true,
+    "generic_shape_invocation": "dialog_opened_user_attested_mutation_not_claimed",
+    "chart_selection_paths": 3,
+    "chart_selection_successes": 3,
+    "chart_semantic_action_available_count": 0,
+    "chart_command_executed": false,
+    "document_saved": false,
+    "external_file_opened": false,
+    "owned_hwp_processes_after": 0
+  },
+  "failure_policy": [
+    "target_identity_drift_rejected_before_route",
+    "chart_rejected_before_effect",
+    "out_of_scope_object_kind_rejected_before_effect",
+    "direct_preflight_rejection_never_widens_to_desktop_automation",
+    "no_action_identifier_or_parameter_payload_in_public_route",
+    "no_partial_output_or_fallback_after_failure"
+  ],
+  "evidence_boundary": {
+    "target_scope_qualified": true,
+    "fail_closed_route_pass": true,
+    "chart_unavailable_with_reason": true,
+    "route_unit_tests": true,
+    "raw_target_trace_persisted": false,
+    "object_hyperlink_mutation": false,
+    "actual_target_hwpx": false,
+    "save_reopen": false,
+    "resource_integrity": false,
+    "object_bounds": false,
+    "render": false,
+    "automation_runtime_binding": false,
+    "differential": false,
+    "obj_048_row_stage": "unit_passed",
+    "obj_048_complete": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "chart_fallback": "unavailable_with_reason",
+    "current_target_mutation": "not_run",
+    "release_green_rows": 0,
+    "p08": "in_progress",
+    "product_complete": false
+  }
+}

@@ -71,7 +71,13 @@ EXPECTED_DIRECT_PROFILES = {
         "validations": ("schema", "semantic_reopen"),
     },
     "object-properties-component-v1": {
-        "features": ("OBJ-019", "OBJ-030", "OBJ-044", "OBJ-046", "OBJ-047", "OBJ-048"),
+        "features": ("OBJ-019", "OBJ-030", "OBJ-044", "OBJ-046", "OBJ-047"),
+        "backend": "component_only",
+        "stage": "unit_passed",
+        "validations": ("schema",),
+    },
+    "object-hyperlink-target-route-v1": {
+        "features": ("OBJ-048",),
         "backend": "component_only",
         "stage": "unit_passed",
         "validations": ("schema",),

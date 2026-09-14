@@ -1,0 +1,90 @@
+{
+  "schema_version": "hwpx-agent.p08-object-hyperlink-target-route-source-qualification/v1",
+  "task": "P08-16",
+  "profile": "hwpx-agent.object-hyperlink-target.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
+  "source_sha256": {
+    "docs/03_document_model/08_drawing_image_chart.md": "ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b",
+    "docs/04_feature_catalog/09_obj.md": "e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8",
+    "docs/04_feature_catalog/contracts/09_obj_contracts.md": "e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2",
+    "docs/09_roadmap/P08_images_shapes_drawing_charts.md": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3",
+    "specs/work-breakdown-structure.json": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2"
+  },
+  "implementation_sha256": {
+    "crates/hwpx-package/src/object_hyperlink_target.rs": "8742b3cdf8ca2525cd998cfa067767eb620b4a2afc6beac231120bf68ff39a69",
+    "crates/hwpx-package/tests/object_hyperlink_target.rs": "2ac64cef4d59282d4dde06b665811384df1f6299febfb057d7a4f06b7f0f199a"
+  },
+  "official_sources": {
+    "owpml_model": {
+      "repository": "https://github.com/hancom-io/hwpx-owpml-model",
+      "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+      "scope": "shape_component_root_href_and_chart_inheritance_branch"
+    },
+    "automation_archive": {
+      "repository": "https://github.com/hancom-io/devcenter-archive",
+      "commit": "213c7faad552b4853b525887e36accb6025e837b",
+      "documents": [
+        {"path": "hwp-automation/ActionTable_2504.pdf", "sha256": "bb876a95ea4e0f4b052c94188a1390b5f981161223759f59f52fc324c8130a87"},
+        {"path": "hwp-automation/ParameterSetTable_2504.pdf", "sha256": "6fa10e0ae69711af99a03e54c321c6c922796bd943badf8c21b2c7dfb780ad6e"},
+        {"path": "hwp-automation/ParameterSetObject.pdf", "sha256": "7cbf536a8814cf8165a1614edfd9816173bb1bd7c9e585821d776563e2bdb674"},
+        {"path": "hwp-automation/HwpAutomation_2504.pdf", "sha256": "917142de2704ae037b0132f5a344ce5331b1fd96cc19dd574666aaacfbf0268c"}
+      ],
+      "scope": "general_hyperlink_parameter_surface_only_not_chart_runtime_support"
+    },
+    "help": {
+      "url": "https://help.hancom.com/hoffice_mac/2022/ko-KR/hwp/insert/hyperlink/hyperlink.htm",
+      "scope": "listed_object_hyperlink_categories_exclude_chart"
+    }
+  },
+  "target_observation": {
+    "evidence_strength": "single_session_transcribed_observation_without_persisted_raw_trace",
+    "target": {
+      "product": "Hancom Hangul 2020",
+      "version": "11.0.0.9136",
+      "architecture": "x86",
+      "locale": "ko-KR",
+      "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+    },
+    "generic_shape_positive_control": {
+      "semantic_action_available": true,
+      "invocation_result": "dialog_opened_user_attested",
+      "mutation_result": "not_claimed"
+    },
+    "chart_negative_control": {
+      "selection_paths": 3,
+      "selection_successes": 3,
+      "semantic_action_available_count": 0,
+      "command_executed": false
+    },
+    "safety": {
+      "external_file_opened": false,
+      "document_saved": false,
+      "raw_trace_persisted": false,
+      "owned_hwp_processes_after": 0
+    }
+  },
+  "tests": {
+    "object_hyperlink_target": "5/5 PASS",
+    "focused_clippy": "PASS",
+    "focused_fmt": "PASS"
+  },
+  "claims": {
+    "official_source_review": true,
+    "exact_target_surface_observed": true,
+    "chart_unavailable_with_reason": true,
+    "route_unit_tests": true,
+    "no_desktop_fallback": true,
+    "raw_target_trace_persisted": false,
+    "object_hyperlink_mutation": false,
+    "actual_target_hwpx": false,
+    "save_reopen": false,
+    "resource_integrity": false,
+    "object_bounds": false,
+    "render": false,
+    "automation_runtime_binding": false,
+    "differential": false,
+    "obj_048_complete": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

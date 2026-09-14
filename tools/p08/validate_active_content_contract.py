@@ -38,7 +38,7 @@ OFFICIAL_SHA256 = {
 IMPLEMENTATION_SHA256 = {
     "crates/hwpx-package/src/active_content.rs": "d9c095d7c58fcdc0c375dc754d6c059e7159e60a4d16ebd825262f6ea2f3d017",
     "crates/hwpx-package/src/reader.rs": "e40d1da01f1aa52b2d1453fe8165d862e6c3a284c7dfaaa10eed1b7850d3e115",
-    "crates/hwpx-package/src/lib.rs": "5c7d538880cc26259c8981a69df51fce54b795f1bd1b0204717fc860718fc37b",
+    "crates/hwpx-package/src/lib.rs": "2811740b761c6d150507ab4ba4349786d648906eba1504f2b11ef71a8b560484",
     "crates/hwpx-package/tests/active_content.rs": "af64cbf35f648d15dfe4f20205c87f56ea47d74d81ae4814167fdd22e2f359ae",
 }
 MARKERS = {
