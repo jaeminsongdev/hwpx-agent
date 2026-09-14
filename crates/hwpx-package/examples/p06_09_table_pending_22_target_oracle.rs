@@ -509,7 +509,8 @@ fn require_runtime_boundary(value: &RuntimeTrace) -> Result<(), AnyError> {
         || value.access_control.input_file != EXPECTED_ACCESS_CONTROL_FILE
         || value.access_control.input_sha256 != EXPECTED_ACCESS_CONTROL_SHA256
         || !value.access_control.input_unchanged
-        || value.access_control.retry_policy != "one_same_session_retry_after_first_false"
+        || value.access_control.retry_policy
+            != "one_same_session_hwp_object_retry_after_first_false"
         || value.access_control.open_state != "pass"
         || value.access_control.close_state != "pass"
         || value.manifest_sha256.merge_split != EXPECTED_MERGE_SPLIT_SHA256

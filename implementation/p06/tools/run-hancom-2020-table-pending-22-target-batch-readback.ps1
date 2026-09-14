@@ -419,7 +419,7 @@ function Test-BoundedAccessControlEvidence {
     try { $attemptCount = [long]$AccessControl.open_attempt_count }
     catch { return $false }
     return [string]$AccessControl.retry_policy -ceq
-        'one_same_session_retry_after_first_false' -and
+        'one_same_session_hwp_object_retry_after_first_false' -and
         $attemptCount -ge 0 -and $attemptCount -le 2 -and
         ($AccessControl.first_open_returned_false -is [bool])
 }
@@ -756,7 +756,7 @@ if ($null -eq $inner) {
             input_unchanged = (
                 Get-Sha256File -Path ([string]$script:accessControl.path)
             ) -ceq [string]$script:accessControl.sha256
-            retry_policy = 'one_same_session_retry_after_first_false'
+            retry_policy = 'one_same_session_hwp_object_retry_after_first_false'
             open_attempt_count = 0
             first_open_returned_false = $false
             open_state = 'not_run'

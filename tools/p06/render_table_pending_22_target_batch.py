@@ -31,7 +31,7 @@ EXPECTED_ACCESS_CONTROL = {
     "input_file": "table-012-insert-row-3x3.hancom-2020-readback.hwpx",
     "input_sha256": "04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c",
     "input_unchanged": True,
-    "retry_policy": "one_same_session_retry_after_first_false",
+    "retry_policy": "one_same_session_hwp_object_retry_after_first_false",
     "open_attempt_count": 2,
     "first_open_returned_false": True,
     "open_state": "pass",

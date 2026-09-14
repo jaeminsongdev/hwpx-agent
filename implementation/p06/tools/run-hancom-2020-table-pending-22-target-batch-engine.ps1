@@ -514,7 +514,7 @@ $result = [ordered]@{
         input_file = [string]$accessControl.file
         input_sha256 = [string]$accessControl.sha256
         input_unchanged = $false
-        retry_policy = 'one_same_session_retry_after_first_false'
+        retry_policy = 'one_same_session_hwp_object_retry_after_first_false'
         open_attempt_count = 0
         first_open_returned_false = $false
         open_state = 'not_run'
@@ -597,13 +597,22 @@ try {
         if ($null -eq $document) {
             throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_RETRY_DOCUMENT_ADD_FAILED'
         }
+        [void]$document.SetActive_XHwpDocument()
         $result.access_control.open_attempt_count = 2
-        if ($document.Open(
+        if ($hwp.Open(
             [string]$accessControl.path,
             'HWPX',
             'lock:false;setcurdir:false'
         ) -eq $false) {
             throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_RETRY_RETURNED_FALSE'
+        }
+        if ([int]$documents.Count -ne 1) {
+            throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_RETRY_DOCUMENT_COUNT_INVALID'
+        }
+        Clear-ComObject -Value $document
+        $document = $documents.Item(0)
+        if ($null -eq $document) {
+            throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_RETRY_DOCUMENT_MISSING'
         }
         Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
         $phase = 'access_control_open'

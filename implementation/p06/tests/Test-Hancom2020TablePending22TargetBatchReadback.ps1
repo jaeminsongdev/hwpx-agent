@@ -198,13 +198,15 @@ $checks = [ordered]@{
         $engine -match 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_RETRY_RETURNED_FALSE' -and
         $engine -match 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_CHANGED'
     bounded_access_control_retry = $all -match
-        'one_same_session_retry_after_first_false' -and
+        'one_same_session_hwp_object_retry_after_first_false' -and
         $engine -match '\$phase = ''access_control_open_retry''' -and
         $engine -match 'Start-Sleep -Milliseconds 250' -and
         $engine -match 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_RETRY_DOCUMENT_ADD_FAILED' -and
+        $engine -match 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_RETRY_DOCUMENT_COUNT_INVALID' -and
         $engine -match 'open_attempt_count = 2' -and
         $engine -match 'first_open_returned_false = \$true' -and
-        [regex]::Matches($accessControlBlock, '\$document\.Open\(').Count -eq 2 -and
+        [regex]::Matches($accessControlBlock, '\$document\.Open\(').Count -eq 1 -and
+        [regex]::Matches($accessControlBlock, '\$hwp\.Open\(').Count -eq 1 -and
         [regex]::Matches($accessControlBlock, '\$documents\.Add\(\$false\)').Count -eq 2 -and
         $engine -notmatch '(?i)while\s*\('
     access_control_before_cases = $accessControlPosition -ge 0 -and

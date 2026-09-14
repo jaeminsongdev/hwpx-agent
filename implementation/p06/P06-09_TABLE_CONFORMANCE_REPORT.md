@@ -236,9 +236,11 @@ The machine-readable authority is
   so the prompt is expected; no registry value or system setting was changed. Attempt 05 waited
   about 509 seconds, attempt 06 about 13 seconds and attempt 07 about 5.8 seconds between
   `open/running` and `open/failed`, which is consistent with prompt resolution rather than an
-  immediate file, ACL or package rejection. The runner now permits one bounded second `Open` of the
-  same control on the same document/session after the first false result, then fails closed if that
-  retry is also false. It records the attempt count and first result; both the Rust oracle and the
+  immediate file, ACL or package rejection. Attempt 09 later timed out waiting at the first control
+  open, while attempts 10 and 11 returned false for both the first call and a same-method retry on a
+  same/new document. The bounded retry therefore now uses `HwpObject.Open` on one new active document
+  in the same session after `XHwpDocument.Open=false`, requires exactly one document afterward and
+  fails closed on any drift. It records the attempt count and first result; both the Rust oracle and
   renderer reject inconsistent values. Configuration-only validation, 29/29 readback checks, 28/28
   wrapper checks, 11/11 renderer tests and 4/4 Rust oracle unit tests pass without invoking HWP.
   Attempt 03 trace SHA-256 is

@@ -58,9 +58,10 @@ runtime state and routing Boolean.
   now binds that exact control before all 22 rows. Integrated attempts 07-08 returned `Open=false`
   on the control itself with 0/22 cases, unchanged control bytes, no output and zero remaining HWP
   processes. Attempt 08 followed the user's attestation of the instructed second-button selection,
-  but the trace cannot attest UI input. The runner now permits exactly one same-session retry after a
-  first false result and fails closed on a second false; none of this replaces earlier evidence or
-  promotes runtime support.
+  but the trace cannot attest UI input. Attempt 09 timed out at the first control open and attempts
+  10-11 showed that a same-method retry still returned false on a same/new document. The bounded retry
+  now uses `HwpObject.Open` on one new active document in the same session, requires exactly one
+  document afterward and fails closed on drift; none of this promotes runtime support.
 - Runtime states remain 61 `unverified`; routing remains disabled for 61/61.
 - Differentials remain 61 `not_run`.
 
