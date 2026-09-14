@@ -141,6 +141,20 @@ class Pending22RenderTests(unittest.TestCase):
         with self.assertRaisesRegex(render.RenderPreparationError, "trace_boundary_mismatch"):
             render.validate_inputs(trace, "b" * 64, oracle, "c" * 64)
 
+    def test_success_inputs_accept_first_open_without_retry(self) -> None:
+        trace, oracle = success_inputs()
+        trace["access_control"]["open_attempt_count"] = 1  # type: ignore[index]
+        trace["access_control"]["first_open_returned_false"] = False  # type: ignore[index]
+        self.assertEqual(
+            len(render.validate_inputs(trace, "b" * 64, oracle, "c" * 64)), 22
+        )
+
+    def test_success_inputs_reject_inconsistent_access_control_retry(self) -> None:
+        trace, oracle = success_inputs()
+        trace["access_control"]["first_open_returned_false"] = False  # type: ignore[index]
+        with self.assertRaisesRegex(render.RenderPreparationError, "trace_boundary_mismatch"):
+            render.validate_inputs(trace, "b" * 64, oracle, "c" * 64)
+
     def test_group_roots_are_exact_and_unknown_group_fails(self) -> None:
         for group_id, directory in render.GROUP_DIRECTORIES.items():
             self.assertEqual(render.exact_group_root(group_id).name, directory)

@@ -514,6 +514,9 @@ $result = [ordered]@{
         input_file = [string]$accessControl.file
         input_sha256 = [string]$accessControl.sha256
         input_unchanged = $false
+        retry_policy = 'one_same_session_retry_after_first_false'
+        open_attempt_count = 0
+        first_open_returned_false = $false
         open_state = 'not_run'
         close_state = 'not_run'
     }
@@ -577,12 +580,27 @@ try {
     }
     $result.access_control.open_state = 'running'
     Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
-    if ($document.Open(
+    $result.access_control.open_attempt_count = 1
+    $accessControlOpened = $document.Open(
         [string]$accessControl.path,
         'HWPX',
         'lock:false;setcurdir:false'
-    ) -eq $false) {
-        throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_OPEN_RETURNED_FALSE'
+    )
+    if ($accessControlOpened -eq $false) {
+        $result.access_control.first_open_returned_false = $true
+        $phase = 'access_control_open_retry'
+        Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
+        Start-Sleep -Milliseconds 250
+        $result.access_control.open_attempt_count = 2
+        if ($document.Open(
+            [string]$accessControl.path,
+            'HWPX',
+            'lock:false;setcurdir:false'
+        ) -eq $false) {
+            throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_RETRY_RETURNED_FALSE'
+        }
+        Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
+        $phase = 'access_control_open'
     }
     [void]$document.SetActive_XHwpDocument()
     $result.access_control.open_state = 'pass'
@@ -775,7 +793,8 @@ catch {
         $activeResult.error_code = $result.error_code
         $activeResult.failed_phase = $phase
     }
-    if ($phase -ceq 'access_control_open') {
+    if ($phase -ceq 'access_control_open' -or
+        $phase -ceq 'access_control_open_retry') {
         $result.access_control.open_state = 'failed'
     }
     elseif ($phase -ceq 'access_control_close') {

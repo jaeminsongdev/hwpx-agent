@@ -223,9 +223,12 @@ The machine-readable authority is
   isolating the current failure to file-access admission. Every run kept all inputs exact, published
   no HWPX/PDF output and left zero HWP processes. The runner now hash-binds and opens that exact
   TABLE-012 control before any pending case; the Rust oracle and renderer require its open, close and
-  immutability states to pass. Integrated attempt 07 returned `Open=false` on that control with 0/22
-  cases, unchanged control bytes, no HWPX/PDF output and zero remaining HWP processes. Its trace
-  SHA-256 is `c4e0dae6796bdb3dd563876ffea0d89a01289d1e2e5632cbe85e72b42ad993f5`.
+  immutability states to pass. Integrated attempts 07 and 08 returned `Open=false` on that control
+  with 0/22 cases, unchanged control bytes, no HWPX/PDF output and zero remaining HWP processes.
+  Attempt 08 followed the user's attestation that the instructed second button was selected, while
+  the automation trace still cannot independently attest the click. Attempt 08 trace SHA-256 is
+  `ed27da43ad209485af8dfc8e85a943af8b0fd408c59ad3521c6162a271c7275c` and progress SHA-256 is
+  `4b0056befd11152226e7ee053eea4a1ba5caf6e472636378473c1881bfcb347a`.
   The exact installed `Hnc.Office.String.ko-KR.dll` (`11.0.0.10677`, SHA-256
   `528b0b7f881f3648fd9bc8be5722e5f275fd53809a3f93159005c77737ad0867`) binds the four
   dialog choices in order as `접근 허용`, `모두 허용`, `허용 안 함`, and `모두 안 함`.
@@ -233,10 +236,11 @@ The machine-readable authority is
   so the prompt is expected; no registry value or system setting was changed. Attempt 05 waited
   about 509 seconds, attempt 06 about 13 seconds and attempt 07 about 5.8 seconds between
   `open/running` and `open/failed`, which is consistent with prompt resolution rather than an
-  immediate file, ACL or package rejection. The next user-owned choice is therefore the exact
-  second button, `모두 허용`; the trace still cannot attest which button the user selected.
-  Configuration-only validation, 28/28 readback checks, 28/28 wrapper checks and 9/9 renderer tests
-  pass without invoking HWP.
+  immediate file, ACL or package rejection. The runner now permits one bounded second `Open` of the
+  same control on the same document/session after the first false result, then fails closed if that
+  retry is also false. It records the attempt count and first result; both the Rust oracle and the
+  renderer reject inconsistent values. Configuration-only validation, 29/29 readback checks, 28/28
+  wrapper checks, 11/11 renderer tests and 4/4 Rust oracle unit tests pass without invoking HWP.
   Attempt 03 trace SHA-256 is
   `577771fdbde65e572b0bfc59697d1a5334101927764b5afaeba6f8f721071356`. A combined offline oracle now admits only a
   complete 22-case success trace, then reuses all three existing typed semantic readers directly;

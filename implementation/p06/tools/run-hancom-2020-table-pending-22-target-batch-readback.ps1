@@ -408,6 +408,34 @@ function Test-PdfEvidence {
     finally { $stream.Dispose() }
 }
 
+function Test-BoundedAccessControlEvidence {
+    param([Parameter(Mandatory)][object]$AccessControl)
+
+    $attemptProperty = $AccessControl.PSObject.Properties['open_attempt_count']
+    $firstFalseProperty = $AccessControl.PSObject.Properties['first_open_returned_false']
+    if ($null -eq $attemptProperty -or $null -eq $firstFalseProperty) {
+        return $false
+    }
+    try { $attemptCount = [long]$AccessControl.open_attempt_count }
+    catch { return $false }
+    return [string]$AccessControl.retry_policy -ceq
+        'one_same_session_retry_after_first_false' -and
+        $attemptCount -ge 0 -and $attemptCount -le 2 -and
+        ($AccessControl.first_open_returned_false -is [bool])
+}
+
+function Test-SuccessAccessControlEvidence {
+    param([Parameter(Mandatory)][object]$AccessControl)
+
+    if (-not (Test-BoundedAccessControlEvidence -AccessControl $AccessControl)) {
+        return $false
+    }
+    $attemptCount = [long]$AccessControl.open_attempt_count
+    $firstOpenReturnedFalse = [bool]$AccessControl.first_open_returned_false
+    return ($attemptCount -eq 1 -and -not $firstOpenReturnedFalse) -or
+        ($attemptCount -eq 2 -and $firstOpenReturnedFalse)
+}
+
 function Test-SuccessEvidence {
     param(
         [Parameter(Mandatory)][object]$Trace,
@@ -430,6 +458,7 @@ function Test-SuccessEvidence {
         (Get-Sha256File -Path ([string]$script:accessControl.path)) -cne
             [string]$script:accessControl.sha256 -or
         -not [bool]$Trace.access_control.input_unchanged -or
+        -not (Test-SuccessAccessControlEvidence -AccessControl $Trace.access_control) -or
         [string]$Trace.access_control.open_state -cne 'pass' -or
         [string]$Trace.access_control.close_state -cne 'pass') {
         return $false
@@ -627,6 +656,7 @@ $innerValid = $null -ne $inner -and
     [string]$inner.access_control.input_sha256 -ceq
         [string]$script:accessControl.sha256 -and
     ($inner.access_control.input_unchanged -is [bool]) -and
+    (Test-BoundedAccessControlEvidence -AccessControl $inner.access_control) -and
     [string]$inner.access_control.open_state -match
         '^(not_run|running|pass|failed)$' -and
     [string]$inner.access_control.close_state -match
@@ -726,6 +756,9 @@ if ($null -eq $inner) {
             input_unchanged = (
                 Get-Sha256File -Path ([string]$script:accessControl.path)
             ) -ceq [string]$script:accessControl.sha256
+            retry_policy = 'one_same_session_retry_after_first_false'
+            open_attempt_count = 0
+            first_open_returned_false = $false
             open_state = 'not_run'
             close_state = 'not_run'
         }

@@ -31,6 +31,9 @@ EXPECTED_ACCESS_CONTROL = {
     "input_file": "table-012-insert-row-3x3.hancom-2020-readback.hwpx",
     "input_sha256": "04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c",
     "input_unchanged": True,
+    "retry_policy": "one_same_session_retry_after_first_false",
+    "open_attempt_count": 2,
+    "first_open_returned_false": True,
     "open_state": "pass",
     "close_state": "pass",
 }
@@ -306,6 +309,22 @@ def exact_group_root(group_id: str) -> Path:
     return resolved
 
 
+def valid_access_control(value: Any) -> bool:
+    if not isinstance(value, dict) or set(value) != set(EXPECTED_ACCESS_CONTROL):
+        return False
+    static_keys = set(EXPECTED_ACCESS_CONTROL) - {
+        "open_attempt_count",
+        "first_open_returned_false",
+    }
+    if any(value.get(key) != EXPECTED_ACCESS_CONTROL[key] for key in static_keys):
+        return False
+    attempt_count = value.get("open_attempt_count")
+    first_open_returned_false = value.get("first_open_returned_false")
+    if type(attempt_count) is not int or type(first_open_returned_false) is not bool:
+        return False
+    return (attempt_count, first_open_returned_false) in {(1, False), (2, True)}
+
+
 def validate_inputs(
     trace: dict[str, Any],
     trace_sha256: str,
@@ -318,7 +337,7 @@ def validate_inputs(
         trace.get("schema_version") != TRACE_SCHEMA
         or trace.get("state") != "pass"
         or trace.get("target") != EXPECTED_TRACE_TARGET
-        or trace.get("access_control") != EXPECTED_ACCESS_CONTROL
+        or not valid_access_control(trace.get("access_control"))
         or trace.get("case_count") != 22
         or trace.get("completed_case_count") != 22
     ):

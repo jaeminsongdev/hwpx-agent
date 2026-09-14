@@ -25,7 +25,8 @@ const MAX_MANIFEST_BYTES: u64 = 1024 * 1024;
 const MAX_HWPX_BYTES: u64 = 8 * 1024 * 1024;
 const MAX_PDF_BYTES: u64 = 32 * 1024 * 1024;
 const EXPECTED_CASE_COUNT: usize = 22;
-const EXPECTED_PROGRESS_EVENT_COUNT: u32 = 361;
+const EXPECTED_PROGRESS_EVENT_COUNT_FIRST_OPEN: u32 = 361;
+const EXPECTED_PROGRESS_EVENT_COUNT_RETRY: u32 = 363;
 const EXPECTED_MERGE_SPLIT_SHA256: &str =
     "682635284ae5686832dfd89598ea6c106c6b110119e0d54a8e8a24b63e9f3f97";
 const EXPECTED_LAYOUT_PLACEMENT_SHA256: &str =
@@ -145,6 +146,9 @@ struct RuntimeAccessControl {
     input_file: String,
     input_sha256: String,
     input_unchanged: bool,
+    retry_policy: String,
+    open_attempt_count: u32,
+    first_open_returned_false: bool,
     open_state: String,
     close_state: String,
 }
@@ -487,6 +491,11 @@ fn require_group_counts(groups: &[FixtureGroup]) -> Result<(), AnyError> {
 }
 
 fn require_runtime_boundary(value: &RuntimeTrace) -> Result<(), AnyError> {
+    let expected_progress_event_count = expected_progress_event_count(
+        value.access_control.open_attempt_count,
+        value.access_control.first_open_returned_false,
+    )
+    .ok_or("pending-22 access-control retry evidence is inconsistent")?;
     if value.schema_version != "hwpx-agent.p06-09-table-pending-22-target-batch-readback/v1"
         || value.state != "pass"
         || value.target.prog_id != "HWPFrame.HwpObject.2"
@@ -500,6 +509,7 @@ fn require_runtime_boundary(value: &RuntimeTrace) -> Result<(), AnyError> {
         || value.access_control.input_file != EXPECTED_ACCESS_CONTROL_FILE
         || value.access_control.input_sha256 != EXPECTED_ACCESS_CONTROL_SHA256
         || !value.access_control.input_unchanged
+        || value.access_control.retry_policy != "one_same_session_retry_after_first_false"
         || value.access_control.open_state != "pass"
         || value.access_control.close_state != "pass"
         || value.manifest_sha256.merge_split != EXPECTED_MERGE_SPLIT_SHA256
@@ -522,14 +532,25 @@ fn require_runtime_boundary(value: &RuntimeTrace) -> Result<(), AnyError> {
         || value.delegated_engine_schema
             != "hwpx-agent.p06-09-hancom-2020-table-pending-22-target-batch-engine/v1"
         || !value.access_approval_user_owned
-        || !watchdog_is_complete(&value.watchdog)
+        || !watchdog_is_complete(&value.watchdog, expected_progress_event_count)
     {
         return Err("pending-22 runtime trace is not a complete exact-target pass".into());
     }
     Ok(())
 }
 
-fn watchdog_is_complete(value: &RuntimeWatchdog) -> bool {
+fn expected_progress_event_count(
+    open_attempt_count: u32,
+    first_open_returned_false: bool,
+) -> Option<u32> {
+    match (open_attempt_count, first_open_returned_false) {
+        (1, false) => Some(EXPECTED_PROGRESS_EVENT_COUNT_FIRST_OPEN),
+        (2, true) => Some(EXPECTED_PROGRESS_EVENT_COUNT_RETRY),
+        _ => None,
+    }
+}
+
+fn watchdog_is_complete(value: &RuntimeWatchdog, expected_progress_event_count: u32) -> bool {
     (300..=7200).contains(&value.timeout_seconds)
         && !value.timed_out
         && value.child_exit_code == 0
@@ -540,7 +561,7 @@ fn watchdog_is_complete(value: &RuntimeWatchdog) -> bool {
         && value.remaining_hwp_process_count == 0
         && value.progress_present
         && value.progress_valid
-        && value.progress_event_count == EXPECTED_PROGRESS_EVENT_COUNT
+        && value.progress_event_count == expected_progress_event_count
         && value.progress_last_phase == "terminal"
         && value.progress_last_state == "pass"
         && value.progress_observed_phase == "close_output"
@@ -783,6 +804,14 @@ mod tests {
 
     #[test]
     fn progress_count_covers_one_session_and_all_cases() {
-        assert_eq!(EXPECTED_PROGRESS_EVENT_COUNT, 2 + 22 * 16 + 2 + 1);
+        assert_eq!(
+            EXPECTED_PROGRESS_EVENT_COUNT_FIRST_OPEN,
+            2 + 4 + 22 * 16 + 2 + 1
+        );
+        assert_eq!(EXPECTED_PROGRESS_EVENT_COUNT_RETRY, 2 + 6 + 22 * 16 + 2 + 1);
+        assert_eq!(expected_progress_event_count(1, false), Some(361));
+        assert_eq!(expected_progress_event_count(2, true), Some(363));
+        assert_eq!(expected_progress_event_count(1, true), None);
+        assert_eq!(expected_progress_event_count(2, false), None);
     }
 }

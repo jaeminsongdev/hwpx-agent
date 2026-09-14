@@ -55,9 +55,12 @@ runtime state and routing Boolean.
   `Open=false` for a previously verified Hangul-saved TABLE-012 control before testing TABLE-016,
   isolating the live failure to current file-access admission rather than the candidate package. All
   runs completed 0/22, preserved unchanged inputs and left zero HWP processes. The production runner
-  now binds that exact control before all 22 rows. Integrated attempt 07 returned `Open=false` on the
-  control itself with 0/22 cases, unchanged control bytes, no output and zero remaining HWP processes;
-  this implementation and failure do not replace earlier evidence or promote runtime support.
+  now binds that exact control before all 22 rows. Integrated attempts 07-08 returned `Open=false`
+  on the control itself with 0/22 cases, unchanged control bytes, no output and zero remaining HWP
+  processes. Attempt 08 followed the user's attestation of the instructed second-button selection,
+  but the trace cannot attest UI input. The runner now permits exactly one same-session retry after a
+  first false result and fails closed on a second false; none of this replaces earlier evidence or
+  promotes runtime support.
 - Runtime states remain 61 `unverified`; routing remains disabled for 61/61.
 - Differentials remain 61 `not_run`.
 
