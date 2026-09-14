@@ -54,6 +54,7 @@ def success_inputs() -> tuple[dict[str, object], dict[str, object]]:
         "schema_version": render.TRACE_SCHEMA,
         "state": "pass",
         "target": render.EXPECTED_TRACE_TARGET,
+        "security_module": dict(render.EXPECTED_SECURITY_MODULE),
         "access_control": dict(render.EXPECTED_ACCESS_CONTROL),
         "case_count": 22,
         "completed_case_count": 22,

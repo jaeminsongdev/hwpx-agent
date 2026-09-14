@@ -189,8 +189,13 @@ $checks = [ordered]@{
             '\[void\]\$child\.Start\(\)'
         ).Count -eq 1 -and
         $engine -match 'single_hwp_process_for_22_cases'
-    user_allow_all_once = $all -match
-        'user_selects_allow_all_once' -and
+    official_security_module = $all -match
+        'official_file_path_checker_module' -and
+        $all -match 'official_hancom_automation_security_module' -and
+        $all -match '9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6' -and
+        $engine -match '\$hwp\.RegisterModule\(' -and
+        $engine -match "'FilePathCheckDLL'" -and
+        $engine -match 'TABLE_PENDING_22_BATCH_SECURITY_MODULE_REGISTER_RETURNED_FALSE' -and
         $parent -match 'access_approval_user_owned'
     exact_access_control = $all -match
         '04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c' -and
@@ -253,7 +258,11 @@ $checks = [ordered]@{
         Test-AccessControlIdentityFailsBeforeCom
     no_single_case_delegate = $all -notmatch
         'run-hancom-2020-table-properties-target-readback'
-    no_register_module = $all -notmatch '(?i)\.RegisterModule\s*\('
+    exactly_one_register_module = [regex]::Matches(
+        $engine,
+        '(?i)\.RegisterModule\s*\('
+    ).Count -eq 1 -and
+        $parent -notmatch '(?i)\.RegisterModule\s*\('
     no_ui_input = $all -notmatch
         '(?i)(SendKeys|mouse_event|SetCursorPos|PostMessage|SendMessage)'
     no_network = $all -notmatch

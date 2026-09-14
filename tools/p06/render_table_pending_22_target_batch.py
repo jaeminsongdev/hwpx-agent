@@ -37,6 +37,15 @@ EXPECTED_ACCESS_CONTROL = {
     "open_state": "pass",
     "close_state": "pass",
 }
+EXPECTED_SECURITY_MODULE = {
+    "source": "official_hancom_automation_security_module",
+    "module_type": "FilePathCheckDLL",
+    "registry_value_name": "FilePathCheckerModuleExample",
+    "dll_sha256": "9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6",
+    "architecture": "x86",
+    "preflight_state": "pass",
+    "register_state": "pass",
+}
 GROUP_DIRECTORIES = {
     "merge_split": "p06-09-table-merge-split-target-20260913-06",
     "layout_placement": "p06-09-table-layout-placement-target-20260913-04",
@@ -337,6 +346,7 @@ def validate_inputs(
         trace.get("schema_version") != TRACE_SCHEMA
         or trace.get("state") != "pass"
         or trace.get("target") != EXPECTED_TRACE_TARGET
+        or trace.get("security_module") != EXPECTED_SECURITY_MODULE
         or not valid_access_control(trace.get("access_control"))
         or trace.get("case_count") != 22
         or trace.get("completed_case_count") != 22

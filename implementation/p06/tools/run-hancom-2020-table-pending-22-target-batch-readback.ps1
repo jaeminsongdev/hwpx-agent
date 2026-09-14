@@ -449,6 +449,18 @@ function Test-SuccessEvidence {
         $null -ne $Trace.failed_feature_id -or
         $null -ne $Trace.error_code -or
         $null -ne $Trace.failed_phase -or
+        [string]$Trace.access_approval_strategy -cne
+            'official_file_path_checker_module' -or
+        [string]$Trace.security_module.source -cne
+            'official_hancom_automation_security_module' -or
+        [string]$Trace.security_module.module_type -cne 'FilePathCheckDLL' -or
+        [string]$Trace.security_module.registry_value_name -cne
+            'FilePathCheckerModuleExample' -or
+        [string]$Trace.security_module.dll_sha256 -cne
+            '9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6' -or
+        [string]$Trace.security_module.architecture -cne 'x86' -or
+        [string]$Trace.security_module.preflight_state -cne 'pass' -or
+        [string]$Trace.security_module.register_state -cne 'pass' -or
         [string]$Trace.access_control.source -cne
             'verified_hancom_saved_table_012_control' -or
         [string]$Trace.access_control.input_file -cne
@@ -648,7 +660,18 @@ $innerValid = $null -ne $inner -and
     [string]$inner.target.executable_sha256 -ceq $ExpectedExecutableSha256 -and
     [string]$inner.session_strategy -ceq 'single_hwp_process_for_22_cases' -and
     [string]$inner.access_approval_strategy -ceq
-        'user_selects_allow_all_once' -and
+        'official_file_path_checker_module' -and
+    [string]$inner.security_module.source -ceq
+        'official_hancom_automation_security_module' -and
+    [string]$inner.security_module.module_type -ceq 'FilePathCheckDLL' -and
+    [string]$inner.security_module.registry_value_name -ceq
+        'FilePathCheckerModuleExample' -and
+    [string]$inner.security_module.dll_sha256 -ceq
+        '9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6' -and
+    [string]$inner.security_module.architecture -ceq 'x86' -and
+    [string]$inner.security_module.preflight_state -ceq 'pass' -and
+    [string]$inner.security_module.register_state -match
+        '^(not_run|running|pass|failed)$' -and
     [string]$inner.access_control.source -ceq
         'verified_hancom_saved_table_012_control' -and
     [string]$inner.access_control.input_file -ceq
@@ -747,8 +770,18 @@ if ($null -eq $inner) {
         delegated_engine_schema = $null
         target = $null
         session_strategy = 'single_hwp_process_for_22_cases'
-        access_approval_strategy = 'user_selects_allow_all_once'
+        access_approval_strategy = 'official_file_path_checker_module'
         access_approval_user_owned = $true
+        security_module = [ordered]@{
+            source = 'official_hancom_automation_security_module'
+            module_type = 'FilePathCheckDLL'
+            registry_value_name = 'FilePathCheckerModuleExample'
+            dll_sha256 =
+                '9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6'
+            architecture = 'x86'
+            preflight_state = 'not_run'
+            register_state = 'not_run'
+        }
         access_control = [ordered]@{
             source = 'verified_hancom_saved_table_012_control'
             input_file = [string]$script:accessControl.file

@@ -31,6 +31,14 @@ $expectedManifestSchema = [ordered]@{
 $layoutTextSha256 = 'e90f2af9593f587921c00b8c9a4d1c3fed8ed2284bc5463a17d7f259478cdb91'
 $pinnedAccessControlSha256 =
     '04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c'
+$securityModuleName = 'FilePathCheckerModuleExample'
+$securityModuleSha256 =
+    '9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6'
+$securityModulePath = Join-Path (
+    [System.Environment]::GetFolderPath('LocalApplicationData')
+) 'hwpx-agent\HancomAutomation\FilePathCheckerModuleExample.dll'
+$securityModuleRegistryPath =
+    'Registry::HKEY_CURRENT_USER\Software\HNC\HwpAutomation\Modules'
 $expectedCases = [ordered]@{
     merge_split = @(
         @('table-016-split-cells-4x3', 'TABLE-016', 'table.split_cell',
@@ -496,6 +504,22 @@ if ($identity.file_version -cne $ExpectedBuild -or
     $identity.sha256 -cne $ExpectedExecutableSha256) {
     throw 'TABLE_PENDING_22_BATCH_TARGET_IDENTITY_MISMATCH'
 }
+$securityModuleItem = Get-Item -LiteralPath $securityModulePath -Force
+if ($securityModuleItem.PSIsContainer -or
+    ($securityModuleItem.Attributes -band
+        [System.IO.FileAttributes]::ReparsePoint) -ne 0 -or
+    $securityModuleItem.Length -ne 217229 -or
+    (Get-Sha256File -Path $securityModuleItem.FullName) -cne
+        $securityModuleSha256) {
+    throw 'TABLE_PENDING_22_BATCH_SECURITY_MODULE_IDENTITY_MISMATCH'
+}
+$securityModuleRegistryKey = Get-Item -LiteralPath $securityModuleRegistryPath
+if ([string]$securityModuleRegistryKey.GetValueKind($securityModuleName) -cne
+        'String' -or
+    [string]$securityModuleRegistryKey.GetValue($securityModuleName) -cne
+        $securityModuleItem.FullName) {
+    throw 'TABLE_PENDING_22_BATCH_SECURITY_MODULE_REGISTRY_MISMATCH'
+}
 
 $result = [ordered]@{
     schema_version = 'hwpx-agent.p06-09-hancom-2020-table-pending-22-target-batch-engine/v1'
@@ -508,7 +532,16 @@ $result = [ordered]@{
         executable_sha256 = $identity.sha256
     }
     session_strategy = 'single_hwp_process_for_22_cases'
-    access_approval_strategy = 'user_selects_allow_all_once'
+    access_approval_strategy = 'official_file_path_checker_module'
+    security_module = [ordered]@{
+        source = 'official_hancom_automation_security_module'
+        module_type = 'FilePathCheckDLL'
+        registry_value_name = $securityModuleName
+        dll_sha256 = $securityModuleSha256
+        architecture = 'x86'
+        preflight_state = 'pass'
+        register_state = 'not_run'
+    }
     access_control = [ordered]@{
         source = 'verified_hancom_saved_table_012_control'
         input_file = [string]$accessControl.file
@@ -562,6 +595,16 @@ try {
         $ExpectedBuild) {
         throw 'TABLE_PENDING_22_BATCH_AUTOMATION_VERSION_MISMATCH'
     }
+    $phase = 'security_module_register'
+    $result.security_module.register_state = 'running'
+    if (-not [bool]$hwp.RegisterModule(
+        'FilePathCheckDLL',
+        $securityModuleName
+    )) {
+        throw 'TABLE_PENDING_22_BATCH_SECURITY_MODULE_REGISTER_RETURNED_FALSE'
+    }
+    $result.security_module.register_state = 'pass'
+    $phase = 'com_create'
     $hwpProcesses = @(Get-CimInstance Win32_Process -Filter "Name='Hwp.exe'" -ErrorAction SilentlyContinue)
     if ($hwpProcesses.Count -eq 1) {
         $hwpProcessId = [int]$hwpProcesses[0].ProcessId
@@ -811,6 +854,9 @@ catch {
     if ($phase -ceq 'access_control_open' -or
         $phase -ceq 'access_control_open_retry') {
         $result.access_control.open_state = 'failed'
+    }
+    elseif ($phase -ceq 'security_module_register') {
+        $result.security_module.register_state = 'failed'
     }
     elseif ($phase -ceq 'access_control_close') {
         $result.access_control.close_state = 'failed'

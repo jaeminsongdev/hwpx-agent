@@ -118,6 +118,7 @@ struct RuntimeTrace {
     target: RuntimeTarget,
     session_strategy: String,
     access_approval_strategy: String,
+    security_module: RuntimeSecurityModule,
     access_control: RuntimeAccessControl,
     manifest_sha256: RuntimeManifestDigests,
     case_count: usize,
@@ -151,6 +152,18 @@ struct RuntimeAccessControl {
     first_open_returned_false: bool,
     open_state: String,
     close_state: String,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct RuntimeSecurityModule {
+    source: String,
+    module_type: String,
+    registry_value_name: String,
+    dll_sha256: String,
+    architecture: String,
+    preflight_state: String,
+    register_state: String,
 }
 
 #[derive(Deserialize)]
@@ -504,7 +517,15 @@ fn require_runtime_boundary(value: &RuntimeTrace) -> Result<(), AnyError> {
         || value.target.file_version != "11.0.0.9136"
         || value.target.executable_sha256 != EXPECTED_HANCOM_SHA256
         || value.session_strategy != "single_hwp_process_for_22_cases"
-        || value.access_approval_strategy != "user_selects_allow_all_once"
+        || value.access_approval_strategy != "official_file_path_checker_module"
+        || value.security_module.source != "official_hancom_automation_security_module"
+        || value.security_module.module_type != "FilePathCheckDLL"
+        || value.security_module.registry_value_name != "FilePathCheckerModuleExample"
+        || value.security_module.dll_sha256
+            != "9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6"
+        || value.security_module.architecture != "x86"
+        || value.security_module.preflight_state != "pass"
+        || value.security_module.register_state != "pass"
         || value.access_control.source != "verified_hancom_saved_table_012_control"
         || value.access_control.input_file != EXPECTED_ACCESS_CONTROL_FILE
         || value.access_control.input_sha256 != EXPECTED_ACCESS_CONTROL_SHA256
