@@ -591,6 +591,12 @@ try {
         $phase = 'access_control_open_retry'
         Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId
         Start-Sleep -Milliseconds 250
+        [void]$document.Close($false)
+        Clear-ComObject -Value $document
+        $document = $documents.Add($false)
+        if ($null -eq $document) {
+            throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_RETRY_DOCUMENT_ADD_FAILED'
+        }
         $result.access_control.open_attempt_count = 2
         if ($document.Open(
             [string]$accessControl.path,
