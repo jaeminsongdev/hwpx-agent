@@ -31,11 +31,11 @@ EXPECTED_SOURCE_LOCKS = {
     "specs/feature-coverage-matrix.json": "a3fa1cd5c5b0b0e09bc93354f724ed3516bdb987f1c171cc27d7564dc6390950",
     "specs/capability-contracts.generated.json": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306",
     "specs/work-breakdown-structure.json": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2",
-    "implementation/p08/p08-09-current-2020-direct-evidence.json": "eb184c0f86899518778c1b35c0dfd6f92babc9a8286616fb7f64a116341c56d8",
+    "implementation/p08/p08-09-current-2020-direct-evidence.json": "3b00bbc8a73a78404f366c56a252676c2533dbdb991189a93caad141f24b1ce9",
     "implementation/p08/p08-09-current-2020-automation-projection.json": "f8c06f206c29eb7aa77b845fd1afa1ff09535145584f5f9fff83fdc679f1cd12",
     "implementation/p08/p08-09-threshold-policy.v1.json": "0f4856e81edc012ed80608fddea6a2be98286ca772127c5b1316f3e2ed890d0c",
-    "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json": "40cdd04da05ca70e3b40cb5253c24224c0d8e9271c8640386ad8808890c60953",
-    "tools/p08/object_conformance.py": "dde0526d14b6117b77878415090c3fdf7bebb430241f4cf5c2bb284401d7abac",
+    "implementation/p08/evidence/conformance/p08-object-conformance.current-2020.v1.json": "ba06346bb58b87eb1f4d4d23526036c530367afa04fd1d2818647715c9a8d7eb",
+    "tools/p08/object_conformance.py": "dd44a0bff71d35e51b7a60db6eb32818d1eb041a80013ce63951d6b869b7b896",
 }
 
 EXPECTED_SUMMARY = {
@@ -45,8 +45,8 @@ EXPECTED_SUMMARY = {
     "non_green_rows": 58,
     "direct_stage_counts": {
         "cataloged": 5,
-        "unit_passed": 19,
-        "integration_passed": 34,
+        "unit_passed": 15,
+        "integration_passed": 38,
         "oracle_verified": 0,
     },
     "automation_binding_counts": {
@@ -109,6 +109,8 @@ EXPECTED_UPSTREAM = [
     "tools/p08/validate_textbox_properties_hwpx_contract.py",
     "tools/p08/validate_object_protect_hwpx_contract.py",
     "tools/p08/validate_object_hyperlink_hwpx_contract.py",
+    "tools/p08/validate_object_hyperlink_target_route_contract.py",
+    "tools/p08/validate_object_remainder_hwpx_contract.py",
 ]
 
 

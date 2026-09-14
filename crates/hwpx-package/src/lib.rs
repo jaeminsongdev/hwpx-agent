@@ -24,10 +24,12 @@ mod limits;
 mod list_definition;
 mod note_hwpx;
 mod object_appearance_hwpx;
+mod object_common_properties_hwpx;
 mod object_composition_hwpx;
 mod object_geometry_hwpx;
 mod object_hyperlink_hwpx;
 mod object_hyperlink_target;
+mod object_remainder_target;
 mod page_setup;
 mod paragraph_style;
 mod patch;
@@ -154,6 +156,13 @@ pub use object_appearance_hwpx::{
     ObjectAppearanceHwpxLoweringReceipt, ObjectAppearanceHwpxPlan, ObjectAppearanceHwpxReadback,
     ObjectAppearanceHwpxReader,
 };
+pub use object_common_properties_hwpx::{
+    OBJECT_COMMON_PROPERTIES_HWPX_PROFILE_ID, ObjectCommonPropertiesHwpxBuilder,
+    ObjectCommonPropertiesHwpxError, ObjectCommonPropertiesHwpxLimitConfig,
+    ObjectCommonPropertiesHwpxLimits, ObjectCommonPropertiesHwpxLowerer,
+    ObjectCommonPropertiesHwpxLoweringReceipt, ObjectCommonPropertiesHwpxPlan,
+    ObjectCommonPropertiesHwpxReadback, ObjectCommonPropertiesHwpxReader,
+};
 pub use object_composition_hwpx::{
     OBJECT_COMPOSITION_HWPX_PROFILE_ID, ObjectCompositionHwpxBuilder, ObjectCompositionHwpxError,
     ObjectCompositionHwpxLimitConfig, ObjectCompositionHwpxLimits, ObjectCompositionHwpxLowered,
@@ -176,6 +185,11 @@ pub use object_hyperlink_target::{
     OBJECT_HYPERLINK_CURRENT_TARGET_EXECUTABLE_SHA256, OBJECT_HYPERLINK_CURRENT_TARGET_PROFILE_ID,
     ObjectHyperlinkDirectAdmission, ObjectHyperlinkTargetRoute, ObjectHyperlinkTargetRouteError,
     ObjectHyperlinkTargetRouter,
+};
+pub use object_remainder_target::{
+    OBJECT_REMAINDER_CURRENT_TARGET_EXECUTABLE_SHA256, OBJECT_REMAINDER_CURRENT_TARGET_PROFILE_ID,
+    ObjectRemainderCapability, ObjectRemainderDirectAdmission, ObjectRemainderTargetRoute,
+    ObjectRemainderTargetRouteError, ObjectRemainderTargetRouter,
 };
 pub use page_setup::{
     PAGE_SETUP_PROFILE_ID, PageDimensions, PageGutterType, PageMargins, PageOrientation,

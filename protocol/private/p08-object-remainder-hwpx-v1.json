@@ -1,0 +1,78 @@
+{
+  "schema_version": "hwpx-agent.p08-object-remainder-hwpx-contract/v1",
+  "task": "P08-17",
+  "profile": "hwpx-agent.object-remainder-target.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
+  "feature_ids": ["OBJ-003", "OBJ-012", "OBJ-013", "OBJ-014", "OBJ-019", "OBJ-030", "OBJ-044", "OBJ-046", "OBJ-047"],
+  "capabilities": ["obj.drawing_gallery", "obj.form_object_insert", "obj.caption_insert", "obj.paragraph_band_object", "obj.margin_caption", "obj.image_properties", "obj.aspect_lock", "obj.printable", "obj.alt_text"],
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_qualification": "implementation/p08/evidence/p08-17-object-remainder-hwpx-source-qualification.current-2020.v1.json",
+  "migration": "protocol/migrations/p08-object-remainder-hwpx-v0-to-v1.md",
+  "policy": "implementation/p08/P08-17_OBJECT_REMAINDER_HWPX_POLICY.md",
+  "report": "implementation/p08/P08-17_OBJECT_REMAINDER_HWPX_REPORT.md",
+  "source_locks": [
+    {"path": "docs/03_document_model/08_drawing_image_chart.md", "sha256": "ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b"},
+    {"path": "docs/04_feature_catalog/09_obj.md", "sha256": "e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8"},
+    {"path": "docs/04_feature_catalog/contracts/09_obj_contracts.md", "sha256": "e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2"},
+    {"path": "docs/09_roadmap/P08_images_shapes_drawing_charts.md", "sha256": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3"},
+    {"path": "specs/work-breakdown-structure.json", "sha256": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2"}
+  ],
+  "implementation_files": [
+    "crates/hwpx-package/src/lib.rs",
+    "crates/hwpx-package/src/object_common_properties_hwpx.rs",
+    "crates/hwpx-package/src/object_remainder_target.rs",
+    "crates/hwpx-package/tests/object_common_properties_hwpx.rs",
+    "crates/hwpx-package/tests/object_remainder_target.rs"
+  ],
+  "direct_profiles": {
+    "OBJ-019": "existing_plain_caption_and_outMargin_only",
+    "OBJ-030": "checked_imgDim_orgSz_curSz_mapping",
+    "OBJ-046": "existing_admitted_form_root_only",
+    "OBJ-047": "existing_shapeComment_description_only_empty_title"
+  },
+  "unavailable_profiles": {
+    "OBJ-003": "drawing_gallery_template_unqualified",
+    "OBJ-012": "form_insertion_state_incomplete",
+    "OBJ-013": "caption_insertion_unqualified",
+    "OBJ-014": "paragraph_band_native_construct_unqualified",
+    "OBJ-044": "aspect_lock_native_field_unqualified"
+  },
+  "failure_policy": [
+    "target_identity_drift_rejected_before_route",
+    "unsupported_or_lossy_native_profile_rejected_before_effect",
+    "direct_preflight_rejection_never_widens_to_desktop_automation",
+    "source_state_object_and_document_flow_drift_rejected",
+    "checked_integer_conversion_without_saturation",
+    "all_untouched_bytes_preserved_exactly",
+    "no_partial_output_or_fallback_after_failure"
+  ],
+  "evidence_boundary": {
+    "direct_hwpx_profiles": 4,
+    "unavailable_with_reason_profiles": 5,
+    "focused_rust_tests": "11/11 PASS",
+    "schema": true,
+    "semantic_reopen": true,
+    "negative": true,
+    "preservation": true,
+    "actual_target_hwpx": false,
+    "hancom_open": false,
+    "save_reopen": false,
+    "resource_integrity": false,
+    "object_bounds": false,
+    "render": false,
+    "automation_runtime_binding": false,
+    "differential": false,
+    "integration_rows": ["OBJ-019", "OBJ-030", "OBJ-046", "OBJ-047"],
+    "unit_rows": ["OBJ-003", "OBJ-012", "OBJ-013", "OBJ-014", "OBJ-044"],
+    "release_green_rows": 0,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "current_target": "not_run",
+    "release_green_rows": 0,
+    "p08": "in_progress",
+    "product_complete": false
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "schema_version": "hwpx-agent.p08-object-remainder-hwpx-source-qualification/v1",
+  "task": "P08-17",
+  "profile": "hwpx-agent.object-remainder-target.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
+  "source_sha256": {
+    "docs/03_document_model/08_drawing_image_chart.md": "ea35c475b434995174d6130f63e98254a19156aea0d99715511bb9b5c804194b",
+    "docs/04_feature_catalog/09_obj.md": "e3c4c71e8d8c608c8e403404c1cf7767bbd91bdfd93dbcdb07f2e91e90c785e8",
+    "docs/04_feature_catalog/contracts/09_obj_contracts.md": "e1274922109762ab3de1b7118e954510f37d1f0686b9b0c5fc1152936983bec2",
+    "docs/09_roadmap/P08_images_shapes_drawing_charts.md": "f07ee05eb72481f86b9499fbc9aa3f5e8191f42f875b6e0bd1a88fc7c9a62fe3",
+    "specs/work-breakdown-structure.json": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2"
+  },
+  "implementation_sha256": {
+    "crates/hwpx-package/src/object_common_properties_hwpx.rs": "e1aeeea3fa03fe6325efa78d40d704c9e4420b24fd834da6b4fd2c1b705b86b6",
+    "crates/hwpx-package/src/object_remainder_target.rs": "a688ad663a3c8e63b68904b464a89d540ad1b67d3dcce602bade62a8feb57231",
+    "crates/hwpx-package/tests/object_common_properties_hwpx.rs": "94c2a449c151214c50778b752fe59c92e2b28e5748ed692d4f08feb4c465d956",
+    "crates/hwpx-package/tests/object_remainder_target.rs": "56a19d5d02835592fade9e6d537d9629fdf2f04ce9fac46a9109298978b00f78"
+  },
+  "official_sources": {
+    "owpml_model": {
+      "repository": "https://github.com/hancom-io/hwpx-owpml-model",
+      "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+      "reviewed_types": [
+        "AbstractShapeObjectType",
+        "AbstractShapeComponentType",
+        "PictureType",
+        "AbstractFormObjectType",
+        "caption",
+        "outMargin",
+        "shapeComment",
+        "orgSz",
+        "curSz",
+        "imgDim",
+        "sz"
+      ]
+    },
+    "automation_archive": {
+      "repository": "https://github.com/hancom-io/devcenter-archive",
+      "commit": "213c7faad552b4853b525887e36accb6025e837b",
+      "documents": [
+        {"path": "hwp-automation/ActionTable_2504.pdf", "sha256": "bb876a95ea4e0f4b052c94188a1390b5f981161223759f59f52fc324c8130a87"},
+        {"path": "hwp-automation/ParameterSetTable_2504.pdf", "sha256": "6fa10e0ae69711af99a03e54c321c6c922796bd943badf8c21b2c7dfb780ad6e"},
+        {"path": "hwp-automation/ParameterSetObject.pdf", "sha256": "7cbf536a8814cf8165a1614edfd9816173bb1bd7c9e585821d776563e2bdb674"},
+        {"path": "hwp-automation/HwpAutomation_2504.pdf", "sha256": "917142de2704ae037b0132f5a344ce5331b1fd96cc19dd574666aaacfbf0268c"}
+      ],
+      "scope": "shape_caption_comment_image_size_protect_size_and_form_surfaces_without_unattended_runtime_claim"
+    }
+  },
+  "native_map": {
+    "OBJ-019": "existing_plain_caption_and_outMargin_only",
+    "OBJ-030": "checked_imgDim_orgSz_curSz_mapping",
+    "OBJ-046": "existing_admitted_form_root_only",
+    "OBJ-047": "existing_shapeComment_description_only_empty_title",
+    "OBJ-003": "CAPABILITY_UNAVAILABLE_FOR_TARGET:qualified_native_template_absent",
+    "OBJ-012": "CAPABILITY_UNAVAILABLE_FOR_TARGET:complete_form_state_absent",
+    "OBJ-013": "CAPABILITY_UNAVAILABLE_FOR_TARGET:subtree_insertion_profile_absent",
+    "OBJ-014": "CAPABILITY_UNAVAILABLE_FOR_TARGET:distinct_native_construct_absent",
+    "OBJ-044": "CAPABILITY_UNAVAILABLE_FOR_TARGET:protect_size_is_not_aspect_lock"
+  },
+  "target": {
+    "product": "Hancom Hangul 2020",
+    "version": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    "target_execution": "not_run"
+  },
+  "tests": {
+    "object_common_properties_hwpx": "6/6 PASS",
+    "object_remainder_target": "5/5 PASS",
+    "focused_total": "11/11 PASS"
+  },
+  "claims": {
+    "direct_hwpx_profiles": 4,
+    "unavailable_with_reason_profiles": 5,
+    "schema": true,
+    "semantic_reopen": true,
+    "negative": true,
+    "preservation": true,
+    "complete_native_coverage_for_all_nine": false,
+    "actual_target_hwpx": false,
+    "hancom_open": false,
+    "save_reopen": false,
+    "resource_integrity": false,
+    "object_bounds": false,
+    "render": false,
+    "automation_runtime_binding": false,
+    "differential": false,
+    "release_green_rows": 0,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}
