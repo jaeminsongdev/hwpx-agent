@@ -253,6 +253,24 @@ fn qualified_model_is_used_only_inside_its_complete_envelope() -> TestResult {
 }
 
 #[test]
+fn high_error_model_keeps_exact_samples_but_unknown_shapes_render_required() -> TestResult {
+    let mut value = qualification_value();
+    value["model"]["width_per_advance_milli"] = json!(1);
+    value["validation"]["extent_max_error_hwpunit"] = json!(998);
+    let estimator = qualified(&value)?;
+
+    let exact = estimator.estimate(ast("x0"), EquationLayoutMode::Inline, 1000)?;
+    assert_eq!(exact.source(), EquationLayoutSource::TargetReadback);
+    assert!(!exact.render_required());
+
+    let unknown = estimator.estimate(ast("z"), EquationLayoutMode::Inline, 1000)?;
+    assert_eq!(unknown.source(), EquationLayoutSource::Provisional);
+    assert!(unknown.render_required());
+    assert_eq!(unknown.source_evidence_sha256(), None);
+    Ok(())
+}
+
+#[test]
 fn qualification_digest_schema_visual_and_sample_tamper_fail_closed() {
     let value = qualification_value();
     let bytes = serde_json::to_vec(&value).unwrap_or_default();

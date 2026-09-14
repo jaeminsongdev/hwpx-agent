@@ -357,7 +357,7 @@ def validate_target_qualification(root: Path, errors: list[str]) -> bool:
 def validate_documents(root: Path, errors: list[str]) -> None:
     for relative, markers in {
         MIGRATION: ("user_attested", "V2 plans and evidence do not migrate", "visual oracle"),
-        POLICY: ("target_pass_v3 / p07_in_progress", "exactly one differing", "user_attested"),
+        POLICY: ("target_pass_v3 / phase_gate_pass", "exactly one differing", "user_attested"),
         REPORT: ("12/12 PASS", "Attempt 14", "editor_target_state=pass"),
     }.items():
         try:

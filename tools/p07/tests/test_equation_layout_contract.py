@@ -11,7 +11,7 @@ from tools.p07 import validate_equation_layout_contract as validator
 def copy_tree(root: Path) -> None:
     for relative in {
         validator.CONTRACT, validator.MIGRATION, validator.POLICY, validator.REPORT,
-        validator.QUALIFICATION, validator.CALIBRATION_MANIFEST,
+        validator.QUALIFICATION, validator.TARGET_QUALIFICATION, validator.CALIBRATION_MANIFEST,
         *validator.SOURCES, *validator.MARKERS,
     }:
         source = validator.ROOT / relative
@@ -21,26 +21,31 @@ def copy_tree(root: Path) -> None:
 
 
 class EquationLayoutContractTests(unittest.TestCase):
-    def test_current_contract_is_unit_passed_without_target_promotion(self) -> None:
+    def test_current_contract_passes_exact_samples_without_general_model_promotion(self) -> None:
         value = validator.validate()
         self.assertEqual(value["state"], "pass", value)
         self.assertEqual(value["source_locks"], 9)
         self.assertEqual(value["implementation_files"], 12)
         self.assertTrue(value["calibration_manifest_verified"])
         self.assertTrue(value["target_toolchain_verified"])
-        self.assertEqual(value["direct_stage"], "unit_passed")
-        self.assertEqual(value["target_qualification"], "not_run")
-        self.assertFalse(value["actual_hangul"])
-        self.assertFalse(value["render"])
+        self.assertTrue(value["target_qualification_verified"])
+        self.assertEqual(value["direct_stage"], "target_passed")
+        self.assertEqual(value["target_qualification"], "pass")
+        self.assertEqual(value["manual_review"], "user_attested")
+        self.assertFalse(value["verified_estimator_active"])
+        self.assertEqual(value["unknown_shapes"], "render_required")
+        self.assertTrue(value["actual_hangul"])
+        self.assertTrue(value["render"])
         self.assertFalse(value["product_complete"])
 
     def test_contract_and_source_tamper_fail(self) -> None:
         for relative, path, replacement in [
-            (validator.CONTRACT, ["gate_decision", "render"], True),
+            (validator.CONTRACT, ["gate_decision", "render"], False),
             (validator.CONTRACT, ["qualification", "minimum_inline_samples"], 1),
             (validator.CONTRACT, ["target_toolchain", "manual_review_schema_version"], "forged"),
             (validator.QUALIFICATION, ["claims", "verified_estimator_active"], True),
             (validator.QUALIFICATION, ["dedicated_target_calibration", "state"], "pass"),
+            (validator.TARGET_QUALIFICATION, ["validation", "extent_max_error_hwpunit"], 150),
         ]:
             with self.subTest(relative=relative, path=path):
                 with tempfile.TemporaryDirectory() as directory:
@@ -95,17 +100,20 @@ class EquationLayoutContractTests(unittest.TestCase):
             target.write_bytes(target.read_bytes() + b"\n# drift\n")
             self.assertIn("target_toolchain_digest", validator.validate(root)["errors"])
 
-    def test_visual_nonclaim_cannot_be_promoted_by_filling_hashes(self) -> None:
+    def test_high_error_general_estimator_cannot_be_promoted(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             copy_tree(root)
             target = root / validator.QUALIFICATION
             value = json.loads(target.read_text(encoding="utf-8"))
-            value["dedicated_target_calibration"]["qualification_sha256"] = "a" * 64
+            value["claims"]["verified_estimator_active"] = True
+            value["dedicated_target_calibration"]["verified_estimator_active"] = True
             target.write_text(json.dumps(value), encoding="utf-8")
             result = validator.validate(root)
             self.assertEqual(result["state"], "fail")
-            self.assertIn("qualification_target_run", result["errors"])
+            self.assertTrue(
+                {"qualification_target_run", "qualification_claims"}.issubset(result["errors"])
+            )
 
 
 if __name__ == "__main__":

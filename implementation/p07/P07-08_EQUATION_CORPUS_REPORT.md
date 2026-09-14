@@ -2,7 +2,7 @@
 
 ## Result
 
-Result: `unit_passed / tier_b_target_not_run`.
+Result: `target_passed / tier_b_target_pass`.
 
 `equation-engine` now runs one exact, finite A/B/C corpus across LaTeX, MathML and EqEdit, checks
 AST-to-EqEdit-to-AST semantic equality, requires exact negative errors and exposes an opaque
@@ -22,17 +22,18 @@ byte-preserving legacy-script boundary. The committed 64-case manifest is raw-by
 
 ## Exact boundary
 
-No Tier B case has been executed in Hangul in this card. Therefore `tier_b_target_state` remains
-`not_run`, `actual_hangul=false` and `product_complete=false`. The HWPX preservation fixture is
-synthetic and cannot be promoted to real HWPX or target evidence.
+The exact Hangul 2020 11.0.0.9136 x86 ko-KR run passed all 14 Tier B cases. Each case passed native
+insertion, immediate readback, save, close, reopen, second native readback and the strict HWPX
+oracle. The run used two bounded automation sessions and left zero owned HWP processes. The
+redacted target qualification binds the plan, manifest, harness, executable, child trace and full
+private target evidence by SHA-256 without publishing formulas or local paths.
 
-The follow-up exact-target plan builder and one-session x86 STA harness are now implemented and
-source-hash locked. They require all 14 cases to pass insert/readback/save/close/reopen/readback and
-independent native HWPX oracle checks. Their target and visual states remain `not_run` until the
-combined campaign actually executes.
+This promotes `tier_b_target_state=pass`, `actual_hangul=true`, `save_reopen=true` and
+`p07_08=pass`. Render and visual inspection were not executed for P07-08 and remain `not_run`;
+the component-only synthetic preservation fixture is still not promoted to real-document evidence.
 
-## Next exact task
+## Handoff
 
-Implement P07-09's editor-smoke protocol, request/receipt binding and fail-closed evidence loader at
-`max`. After implementation closes, execute the P06/P07 target, save/reopen, render and differential
-work together as requested by the user.
+P07-07's user-attested layout review and the 8/8 direct/automation differential are now separate
+passing inputs to the aggregate P07 Gate. This report does not promote P07-08 render or any
+other-version claim.

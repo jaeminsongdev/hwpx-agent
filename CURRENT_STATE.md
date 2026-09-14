@@ -1,15 +1,15 @@
 # CURRENT STATE
 
-> 기준일: 2026-09-07
+> 기준일: 2026-09-14
 > 프로젝트 코드명: `hwpx-agent`  
 > 문서 세트 버전: `2.0-design`  
 > 규범 키워드: **MUST/SHALL=필수**, **SHOULD=권장**, **MAY=선택**
 
 ## 현재 상태
 
-- 상태: `P06_IN_PROGRESS_P06_01_02_03_COMPLETE_P06_04_READY_CURRENT_PC_LOCAL_ONLY`
-- 현재 phase: `P06_TABLE_ENGINE` + `P15_REMOTE_MCP_CONTROL_PLANE`
-- 구현 코드: P01 foundation, P02 signed source/registry pipeline, P03 bounded HWPX package/preserving XML core와 P04 DocumentGraph→selector/plan/router→transaction/diff/idempotency·CAS→VS-0 core CLI vertical이 build·test 가능하다. P05-01~09와 실제 한글 2020 layout Gate가 닫혔다. P06-01 bounded `TableGrid`, P06-02 deterministic create/insert/delete, P06-03 rectangular merge/split와 explicit content/identity transfer가 source successor v21~v23, cross-platform property/negative tests와 exact commit current/independent FULL로 완료됐고 P06-04가 준비됐다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐다. P14와 P15는 각 보고서의 scoped local 범위에서 통과했고 P16/P17 local 구현은 `PLANS.md`의 최신 원장을 따른다.
+- 상태: `P07_PASS_SCOPED_CURRENT_PC_HANGUL_2020_NATIVE_EQUATION_P08_AUTHORIZED_LOCAL_ONLY`
+- 현재 phase: `P08_OBJECT_GRAPHICS_ENGINE` + `P15_REMOTE_MCP_CONTROL_PLANE`
+- 구현 코드: P01~P05의 기존 scoped Gate에 이어 P06 table engine은 현재 PC에서 61/61 direct·automation·differential Gate를 닫았고, P07 native equation engine은 9/9 task와 8/8 direct/automation differential을 통과했다. P07-07은 사용자가 확인한 4 inline/4 display 정확 샘플만 target-readback으로 허용하며 고오차 일반 estimator는 비활성, unknown shape는 `render_required`다. P08은 동일한 current-PC local 범위에서 재기준선 확인 후 진행한다. P10 current-PC worker 기반은 일부 실제 의존성을 제외하고 진행됐고, P14/P15 및 P16/P17 local 상태는 `PLANS.md`의 최신 원장을 따른다.
 - 기준 입력: `HWPX_Agent_Product_Design_v2_2026-08-31`
 - 설계 baseline: 16개 영역, 609개 feature, 609개 capability contract, P00~P20, 190개 WBS task
 - root workflow skill: 9개
@@ -96,6 +96,11 @@
 
 ## P06 현재 상태
 
+- 2026-09-14 authoritative override: P06 Gate는 현재 PC의 한글 2020 범위에서 61/61 direct
+  oracle, automation runtime/routing 및 contract-normalized differential을 통과해 완료됐다.
+  권위 문서는 `implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md`와
+  `PLANS.md`다. 아래 P06-01~03 서술은 보존된 선행 milestone이며 현재 phase 상태가 아니다.
+
 - P06-01 `PASS_SCOPED_CURRENT_PC_LOCAL_PURE_IR`: bounded `TableGrid`, slot→master mapping,
   rectangular span, canonical JSON/SHA-256, finite limits와 typed fail-closed errors를 구현했다.
 - Fixed-seed property corpus 256건, TableGrid Rust 7/7, P06 계약/이식성 5/5, source successor
@@ -123,6 +128,22 @@
 - 이 PASS도 순수 IR 범위다. HWPX/Flow bytes, rich text·style·formula 의미론, 실제 한글 2020
   save/reopen/readback/render는 증명하지 않았다. Authoritative task report는
   `implementation/p06/P06-03_REPORT.md`다.
+
+## P07 현재 상태
+
+- Gate: `PASS_SCOPED_CURRENT_PC_HANGUL_2020_NATIVE_EQUATION`; 권위 문서는
+  `implementation/p07/P07_GATE_REPORT.md`다.
+- P07-01~09가 각 계약 범위에서 9/9 닫혔고, aggregate validator는 하위 계약 10/10과
+  matched direct/automation differential 8/8을 통과한다.
+- P07-07은 한글 2020 `11.0.0.9136` x86의 4 inline/4 display native save/reopen, PDF,
+  structural raster와 사용자 `user_attested` 원본-detail 검토를 SHA-256으로 결부했다.
+- fitted model 오차 1868/105 HWPUNIT은 잠금 기준 150/50을 초과하므로 general verified
+  estimator는 활성화하지 않는다. 정확 샘플만 `target_readback`; unknown shape는 provisional
+  `render_required=true`다.
+- P07-08 Tier B는 14/14 target save/reopen/native readback, P07-09 editor smoke는 exact target
+  v3, differential은 semantic/script/layout 8/8과 silent fallback 0을 통과했다.
+- 다른 PC/한글 버전, arbitrary document/equation, production과 제품 전체 완료는 주장하지
+  않는다. P08은 동일 current-PC local 범위에서만 승인된다.
 
 ## P10 현재 상태
 

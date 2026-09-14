@@ -11,7 +11,8 @@ from tools.p07 import validate_equation_corpus_contract as validator
 def copy_tree(root: Path) -> None:
     for relative in {
         validator.CONTRACT, validator.MIGRATION, validator.POLICY, validator.REPORT,
-        validator.QUALIFICATION, validator.MANIFEST, *validator.SOURCES, *validator.MARKERS,
+        validator.QUALIFICATION, validator.TARGET_QUALIFICATION, validator.MANIFEST,
+        *validator.SOURCES, *validator.MARKERS,
     }:
         source = validator.ROOT / relative
         target = root / relative
@@ -20,24 +21,27 @@ def copy_tree(root: Path) -> None:
 
 
 class EquationCorpusContractTests(unittest.TestCase):
-    def test_current_contract_is_unit_passed_without_target_promotion(self) -> None:
+    def test_current_contract_is_exact_target_passed_without_render_promotion(self) -> None:
         value = validator.validate()
         self.assertEqual(value["state"], "pass", value)
         self.assertEqual(value["source_locks"], 9)
         self.assertEqual(value["implementation_files"], 7)
         self.assertTrue(value["manifest_verified"])
         self.assertTrue(value["target_harness_verified"])
-        self.assertEqual(value["tier_b_target"], "not_run")
-        self.assertFalse(value["actual_hangul"])
+        self.assertTrue(value["target_qualification_verified"])
+        self.assertEqual(value["tier_b_target"], "pass")
+        self.assertTrue(value["actual_hangul"])
+        self.assertTrue(value["save_reopen"])
         self.assertFalse(value["render"])
         self.assertFalse(value["product_complete"])
 
     def test_contract_source_and_qualification_tamper_fail(self) -> None:
         for relative, path, replacement in [
-            (validator.CONTRACT, ["gate_decision", "actual_hangul"], True),
+            (validator.CONTRACT, ["gate_decision", "actual_hangul"], False),
             (validator.CONTRACT, ["tier_policy", "minimum_tier_a_semantic"], 1),
-            (validator.QUALIFICATION, ["claims", "tier_b_target_complete"], True),
-            (validator.QUALIFICATION, ["tier_b_target_execution", "state"], "pass"),
+            (validator.QUALIFICATION, ["claims", "tier_b_target_complete"], False),
+            (validator.QUALIFICATION, ["tier_b_target_execution", "state"], "fail"),
+            (validator.TARGET_QUALIFICATION, ["automation", "native_readback_passed"], 13),
         ]:
             with self.subTest(relative=relative, path=path):
                 with tempfile.TemporaryDirectory() as directory:

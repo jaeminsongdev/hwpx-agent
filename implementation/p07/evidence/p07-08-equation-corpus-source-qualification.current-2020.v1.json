@@ -1,10 +1,12 @@
 {
   "schema_version": "hwpx-agent.equation-corpus-source-qualification/v1",
   "task": "P07-08",
-  "recorded_date": "2026-09-11",
+  "recorded_date": "2026-09-14",
   "target": {
     "product": "Hangul 2020",
+    "prog_id": "HWPFrame.HwpObject.2",
     "version": "11.0.0.9136",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
     "architecture": "x86",
     "locale": "ko-KR",
     "other_versions": "not_qualified"
@@ -31,33 +33,41 @@
     "synthetic_hwpx_same_part_preserve": "pass"
   },
   "tier_b_target_execution": {
-    "state": "not_run",
-    "request_sha256": null,
-    "output_hwpx_sha256": null,
-    "save_reopen_sha256": null,
-    "render_evidence_sha256": null,
-    "case_count": null,
-    "silent_approximation_count": null
+    "state": "pass",
+    "latest_attempt": "p07-08-20260914-attempt16",
+    "plan_file_sha256": "14166c425dc0e155b3e919c44e853d98888d60746401aefa5756c4eea638f146",
+    "plan_sha256": "63eab7db7f0e6ada4bba2b4fc08244155783e6723446633fc85c8cea2e8e09df",
+    "target_evidence_sha256": "7123a2bc3f6b196b6986bfb3f71c3e0abb61e2a118cee48e2a1c613aeb1a1b19",
+    "target_qualification_sha256": "e44923149d081f2d6e2100db5a0fe99fc3913bd8c84d2e7ca8be145dae5489c5",
+    "case_count": 14,
+    "save_reopen_passed": 14,
+    "native_readback_passed": 14,
+    "hwp_session_count": 2,
+    "silent_approximation_count": 0,
+    "render_state": "not_run"
   },
   "target_harness": {
-    "state": "implementation_ready",
+    "state": "target_passed",
     "plan_builder_raw_sha256": "98bcb2cc15af5d7a6d1cf45d5469284e09c799d5774fae706a99dd0b97c8018f",
-    "parent_raw_sha256": "49f54c859e191133569e7563985fa3855b1d943e9b483829e5e7c4418501dd78",
-    "child_raw_sha256": "feca3d29bc48366d8ccdfe2aad6863aeb39062eadf24cf375af7be67fb684edb",
-    "bundle_sha256": "558e36915d7fd380f1b146fbd60b484a586a6b14a19a6f6e28dd041090e0565d",
+    "parent_raw_sha256": "67767c766ac04f9cc69f4dbb2212b12ed7d67581c3740c892f022f7efa5a84e6",
+    "child_raw_sha256": "dd32414a1be971ee7e7c60d3adadaa3bb6d5942c9681a6410abb39ed131d7e3b",
+    "bundle_sha256": "679dc087825d62f119f499a0135d4a0f353343867af3a314f1d471f496ee64d2",
     "oracle_raw_sha256": "3374c47a1fd18cb0929a2ef32abd984ab13babfb6ee26e6fc509fcdcd28f7cb8",
-    "single_session_case_count": 14,
-    "target_run": "not_run"
+    "hwp_session_count": 2,
+    "create_session_case_count": 14,
+    "readback_session_case_count": 14,
+    "target_run": "pass"
   },
   "claims": {
     "tier_a_component_complete": true,
     "tier_b_component_complete": true,
     "tier_c_component_complete": true,
     "legacy_synthetic_preservation": true,
-    "tier_b_target_complete": false,
-    "actual_hangul": false,
+    "tier_b_target_complete": true,
+    "actual_hangul": true,
+    "save_reopen": true,
     "render": false,
-    "p07_08_complete": false,
+    "p07_08_complete": true,
     "p07_complete": false,
     "product_complete": false
   }

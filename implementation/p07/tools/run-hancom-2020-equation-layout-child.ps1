@@ -22,7 +22,17 @@ function Get-Sha256String {
 
 function Get-Sha256File {
     param([Parameter(Mandatory)][string]$Path)
-    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+    $algorithm = [Security.Cryptography.SHA256]::Create()
+    $stream = [IO.File]::Open(
+        $Path, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::Read
+    )
+    try {
+        return (($algorithm.ComputeHash($stream) | ForEach-Object { $_.ToString('x2') }) -join '')
+    }
+    finally {
+        $stream.Dispose()
+        $algorithm.Dispose()
+    }
 }
 
 function Get-ComProperty {
@@ -63,7 +73,12 @@ function Set-ComProperty {
 
 function Resolve-ParameterSetObject {
     param([Parameter(Mandatory)]$Container, [Parameter(Mandatory)][string]$DocumentedId)
-    foreach ($candidate in @($DocumentedId, $DocumentedId + 'E', 'H' + $DocumentedId, 'H' + $DocumentedId + 'E')) {
+    foreach ($candidate in @(
+        $DocumentedId,
+        ($DocumentedId + 'E'),
+        ('H' + $DocumentedId),
+        ('H' + $DocumentedId + 'E')
+    )) {
         try {
             $value = Get-ComProperty -ComObject $Container -Name $candidate
             if ($null -ne $value) { return $value }
@@ -119,7 +134,7 @@ function Apply-Program {
     Set-ComProperty $ParameterSet 'String' $Script
     Set-ComProperty $ParameterSet 'BaseUnit' 1000
     Set-ComProperty $ParameterSet 'Color' 0
-    Set-ComProperty $ParameterSet 'LineMode' $(if ($Layout -ceq 'inline') { 1 } else { 0 })
+    Set-ComProperty $ParameterSet 'LineMode' $(if ($Layout -ceq 'inline') { 0 } else { 1 })
     Set-ComProperty $ParameterSet 'Version' 'Equation Version 60'
     Set-ComProperty $ParameterSet 'ApplyTo' 0
     Set-ComProperty $ParameterSet 'EqFontName' 'HancomEQN'
@@ -184,13 +199,22 @@ $trace = [ordered]@{
     plan_sha256 = [string]$plan.plan_sha256
     state = 'effect_unknown'; exact_build = '11.0.0.9136'
     apartment_state = [string][Threading.Thread]::CurrentThread.GetApartmentState()
+    security_module = [ordered]@{
+        module_type = 'FilePathCheckDLL'
+        registry_value_name = 'FilePathCheckerModuleExample'
+        dll_sha256 = '9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6'
+        preflight_state = 'not_run'; register_state = 'not_run'; register_return = $null
+        display_register_state = 'not_run'; display_register_return = $null
+        readback_register_state = 'not_run'; readback_register_return = $null
+    }
+    hwp_session_count = 0; create_session_quit_invoked = $false
     sample_results = New-Object Collections.ArrayList
     failed_sample = $null; failed_phase = $null; error_code = $null
     quit_invoked = $false; user_document_opened = $false
     external_network_invoked = $false; registry_or_system_setting_changed = $false
     computer_use_click_or_type_invoked = $false
 }
-$hwp = $null; $documents = $null; $document = $null
+$hwp = $null; $documents = $null; $document = $null; $window = $null
 $parameters = $null; $parameterSet = $null; $parameterHSet = $null
 $activeSample = $null; $phase = 'initialization'; $current = $null
 try {
@@ -198,13 +222,72 @@ try {
     $hwp = New-Object -ComObject 'HWPFrame.HwpObject.2'
     $version = ([string]$hwp.Version).Replace(',', '.').Replace(' ', '')
     if ($version -cne '11.0.0.9136') { throw 'LAYOUT_VERSION_MISMATCH' }
+
+    $phase = 'security_module_preflight'
+    $securityModuleName = 'FilePathCheckerModuleExample'
+    $securityModulePath = Join-Path (
+        [Environment]::GetFolderPath('LocalApplicationData')
+    ) 'hwpx-agent\HancomAutomation\FilePathCheckerModuleExample.dll'
+    $securityModuleItem = Get-Item -LiteralPath $securityModulePath -Force
+    if ($securityModuleItem.PSIsContainer -or
+        ($securityModuleItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or
+        $securityModuleItem.Length -ne 217229 -or
+        (Get-Sha256File $securityModuleItem.FullName) -cne
+            [string]$trace.security_module.dll_sha256) {
+        throw 'LAYOUT_SECURITY_MODULE_IDENTITY_MISMATCH'
+    }
+    $securityModuleRegistryKey = Get-Item -LiteralPath (
+        'Registry::HKEY_CURRENT_USER\Software\HNC\HwpAutomation\Modules'
+    )
+    try {
+        if ([string]$securityModuleRegistryKey.GetValueKind($securityModuleName) -cne 'String' -or
+            [string]$securityModuleRegistryKey.GetValue($securityModuleName) -cne
+                $securityModuleItem.FullName) {
+            throw 'LAYOUT_SECURITY_MODULE_REGISTRY_MISMATCH'
+        }
+    }
+    finally { $securityModuleRegistryKey.Dispose() }
+    $trace.security_module.preflight_state = 'pass'
+
+    $phase = 'security_module_register'
+    $trace.security_module.register_return = [bool]$hwp.RegisterModule(
+        'FilePathCheckDLL', $securityModuleName
+    )
+    $trace.security_module.register_state = 'call_completed'
+
     $documents = $hwp.XHwpDocuments
-    $parameters = $hwp.HParameterSet
-    $parameterSet = Resolve-ParameterSetObject $parameters 'EqEdit'
-    $parameterHSet = Get-ComProperty $parameterSet 'HSet'
-    Write-Output 'P07_LAYOUT_ACCESS_APPROVAL_MAY_BE_REQUIRED'
+    $window = $hwp.XHwpWindows.Item(0)
+    $window.Visible = $true
+    $trace.hwp_session_count = 1
+    Write-Output 'P07_LAYOUT_SECURITY_MODULE_CALL_COMPLETED'
 
     foreach ($sample in @($plan.samples)) {
+        if ([int]$sample.ordinal -eq 4) {
+            $phase = 'inline_create_session_quit'
+            Clear-ComObject $parameterHSet; $parameterHSet = $null
+            Clear-ComObject $parameterSet; $parameterSet = $null
+            Clear-ComObject $parameters; $parameters = $null
+            Clear-ComObject $document; $document = $null
+            $hwp.Quit()
+            Clear-ComObject $window; $window = $null
+            Clear-ComObject $documents; $documents = $null
+            Clear-ComObject $hwp; $hwp = $null
+            [GC]::Collect(); [GC]::WaitForPendingFinalizers()
+
+            $phase = 'display_create_com_create'
+            $hwp = New-Object -ComObject 'HWPFrame.HwpObject.2'
+            $version = ([string]$hwp.Version).Replace(',', '.').Replace(' ', '')
+            if ($version -cne '11.0.0.9136') { throw 'LAYOUT_DISPLAY_VERSION_MISMATCH' }
+            $trace.security_module.display_register_return = [bool]$hwp.RegisterModule(
+                'FilePathCheckDLL', $securityModuleName
+            )
+            $trace.security_module.display_register_state = 'call_completed'
+            $documents = $hwp.XHwpDocuments
+            $window = $hwp.XHwpWindows.Item(0)
+            $window.Visible = $true
+            $trace.hwp_session_count = 2
+            Write-Output 'P07_LAYOUT_DISPLAY_CREATE_SESSION_STARTED'
+        }
         $activeSample = [string]$sample.id
         $layout = [string]$sample.layout
         $current = [ordered]@{
@@ -214,6 +297,7 @@ try {
             pdf_sha256 = $null; pdf_bytes = $null; pdf_signature_valid = $false
             save = 'not_run'; close = 'not_run'; reopen = 'not_run'
             reopen_readback = 'not_run'; pdf_export = 'not_run'; reopen_close = 'not_run'
+            reopen_document_count_before = $null; reopen_document_count_after = $null
         }
         [void]$trace.sample_results.Add($current)
         $outputPath = Join-Path $run ($activeSample + '.hwpx')
@@ -223,9 +307,16 @@ try {
         }
 
         $phase = 'document_add'
-        $document = $documents.Add($false)
+        if ([int]$documents.Count -eq 0) { $document = $documents.Add($false) }
+        elseif ([int]$documents.Count -eq 1) { $document = $documents.Item(0) }
+        else { throw 'LAYOUT_DOCUMENT_COUNT_INVALID' }
         if ($null -eq $document) { throw 'LAYOUT_DOCUMENT_ADD_FAILED' }
         [void]$document.SetActive_XHwpDocument()
+        if ($null -eq $parameterSet) {
+            $parameters = $hwp.HParameterSet
+            $parameterSet = Resolve-ParameterSetObject $parameters 'EqEdit'
+            $parameterHSet = Get-ComProperty $parameterSet 'HSet'
+        }
         if ($layout -ceq 'inline') {
             $phase = 'inline_context'
             Insert-PlainText $hwp 'I'
@@ -255,15 +346,81 @@ try {
             -not (Test-Path -LiteralPath $outputPath -PathType Leaf)) { throw 'LAYOUT_SAVE_FAILED' }
         $current.artifact_sha256 = Get-Sha256File $outputPath; $current.save = 'pass'
         $phase = 'close'
-        [void]$document.Close($false); Clear-ComObject $document; $document = $null
-        $current.close = 'pass'
+        Write-Output ("P07_LAYOUT_PHASE {0} {1}" -f $activeSample, $phase)
+        [void]$hwp.Clear(1)
+        [void]$document.Close($false)
+        Clear-ComObject $document
+        $remainingDocumentCount = [int]$documents.Count
+        if ($remainingDocumentCount -gt 1) { throw 'LAYOUT_CLOSE_DOCUMENT_COUNT_INVALID' }
+        if ($remainingDocumentCount -eq 1) {
+            $document = $documents.Item(0)
+            if ($null -eq $document) { throw 'LAYOUT_CLOSE_BLANK_DOCUMENT_MISSING' }
+            [void]$document.SetActive_XHwpDocument()
+        }
+        $current.close = 'pass'; $current.state = 'saved_waiting_readback'
+    }
+
+    $phase = 'create_session_quit'
+    Clear-ComObject $parameterHSet; $parameterHSet = $null
+    Clear-ComObject $parameterSet; $parameterSet = $null
+    Clear-ComObject $parameters; $parameters = $null
+    Clear-ComObject $document; $document = $null
+    $hwp.Quit(); $trace.create_session_quit_invoked = $true
+    Clear-ComObject $window; $window = $null
+    Clear-ComObject $documents; $documents = $null
+    Clear-ComObject $hwp; $hwp = $null
+    [GC]::Collect(); [GC]::WaitForPendingFinalizers()
+    $trace.hwp_session_count = 2
+
+    $phase = 'readback_com_create'
+    $hwp = New-Object -ComObject 'HWPFrame.HwpObject.2'
+    $version = ([string]$hwp.Version).Replace(',', '.').Replace(' ', '')
+    if ($version -cne '11.0.0.9136') { throw 'LAYOUT_READBACK_VERSION_MISMATCH' }
+    $trace.security_module.readback_register_return = [bool]$hwp.RegisterModule(
+        'FilePathCheckDLL', $securityModuleName
+    )
+    $trace.security_module.readback_register_state = 'call_completed'
+    $documents = $hwp.XHwpDocuments
+    $window = $hwp.XHwpWindows.Item(0)
+    $window.Visible = $true
+    $trace.hwp_session_count = 3
+    Write-Output 'P07_LAYOUT_READBACK_SESSION_STARTED'
+
+    if ([int]$documents.Count -eq 0) { $document = $documents.Add($false) }
+    elseif ([int]$documents.Count -eq 1) { $document = $documents.Item(0) }
+    else { throw 'LAYOUT_READBACK_DOCUMENT_COUNT_INVALID' }
+    if ($null -eq $document) { throw 'LAYOUT_READBACK_DOCUMENT_ADD_FAILED' }
+    [void]$document.SetActive_XHwpDocument()
+    Clear-ComObject $document; $document = $null
+
+    for ($index = 0; $index -lt @($plan.samples).Count; $index += 1) {
+        $sample = @($plan.samples)[$index]
+        $activeSample = [string]$sample.id
+        $current = @($trace.sample_results)[$index]
+        $outputPath = Join-Path $run ($activeSample + '.hwpx')
+        $pdfPath = Join-Path $run ($activeSample + '.pdf')
 
         $phase = 'reopen'
-        $document = $documents.Add($false)
-        if ($null -eq $document -or $document.Open($outputPath, 'HWPX', 'lock:false;setcurdir:false') -eq $false) {
+        Write-Output ("P07_LAYOUT_PHASE {0} {1}" -f $activeSample, $phase)
+        $documentCountBeforeOpen = [int]$documents.Count
+        $reopenSucceeded = $hwp.Open($outputPath, 'HWPX', 'lock:false;setcurdir:false') -ne $false
+        $documentCountAfterOpen = [int]$documents.Count
+        $current.reopen_document_count_before = $documentCountBeforeOpen
+        $current.reopen_document_count_after = $documentCountAfterOpen
+        if (-not $reopenSucceeded -or $documentCountAfterOpen -lt 1 -or
+            $documentCountAfterOpen -lt $documentCountBeforeOpen -or
+            $documentCountAfterOpen -gt ($documentCountBeforeOpen + 1)) {
             throw 'LAYOUT_REOPEN_FAILED'
         }
+        Clear-ComObject $document
+        $document = $documents.Item(([int]$documents.Count) - 1)
+        if ($null -eq $document) { throw 'LAYOUT_REOPEN_DOCUMENT_MISSING' }
         [void]$document.SetActive_XHwpDocument(); $current.reopen = 'pass'
+        if ($null -eq $parameterSet) {
+            $parameters = $hwp.HParameterSet
+            $parameterSet = Resolve-ParameterSetObject $parameters 'EqEdit'
+            $parameterHSet = Get-ComProperty $parameterSet 'HSet'
+        }
         $phase = 'reopen_select'
         [void]$hwp.HAction.Run('MoveDocEnd')
         if ($hwp.HAction.Run('SelectCtrlReverse') -eq $false) { throw 'LAYOUT_REOPEN_SELECT_FAILED' }
@@ -281,11 +438,16 @@ try {
         $current.pdf_bytes = Assert-Pdf $pdfPath
         $current.pdf_sha256 = Get-Sha256File $pdfPath
         $current.pdf_signature_valid = $true; $current.pdf_export = 'pass'
-        $phase = 'reopen_close'
-        [void]$document.Close($false); Clear-ComObject $document; $document = $null
-        $current.reopen_close = 'pass'; $current.state = 'pass'
+        $phase = 'readback_session_hold'
+        Write-Output ("P07_LAYOUT_PHASE {0} {1}" -f $activeSample, $phase)
+        Clear-ComObject $document; $document = $null
+        $current.state = 'readback_pass_waiting_session_close'
     }
-    $phase = 'quit'; $hwp.Quit(); $trace.quit_invoked = $true; $trace.state = 'pass'
+    $phase = 'quit'; $hwp.Quit(); $trace.quit_invoked = $true
+    foreach ($result in @($trace.sample_results)) {
+        $result.reopen_close = 'pass'; $result.state = 'pass'
+    }
+    $trace.state = 'pass'
 }
 catch {
     $trace.failed_sample = $activeSample; $trace.failed_phase = $phase
@@ -296,7 +458,11 @@ catch {
 }
 finally {
     Clear-ComObject $parameterHSet; Clear-ComObject $parameterSet; Clear-ComObject $parameters
-    if ($null -ne $document) { try { [void]$document.Close($false) } catch { }; Clear-ComObject $document }
+    if ($null -ne $document) {
+        if ($null -ne $hwp) { try { [void]$hwp.Clear(1) } catch { } }
+        Clear-ComObject $document
+    }
+    Clear-ComObject $window
     Clear-ComObject $documents
     if ($null -ne $hwp -and -not $trace.quit_invoked) {
         try { $hwp.Quit(); $trace.quit_invoked = $true } catch { }

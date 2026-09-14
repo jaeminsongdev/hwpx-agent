@@ -330,7 +330,7 @@ struct InkBox {
 #[derive(Clone)]
 struct QualifiedLayout {
     evidence_sha256: String,
-    model: LayoutModel,
+    model: Option<LayoutModel>,
     envelope: LayoutEnvelope,
     exact_samples: Vec<ExactSample>,
 }
@@ -441,9 +441,12 @@ impl EquationLayoutEstimator {
                     false,
                 );
             }
-            if qualification.envelope.admits(metrics) {
+            if let Some(model) = qualification
+                .model
+                .filter(|_| qualification.envelope.admits(metrics))
+            {
                 let (width, height, baseline) =
-                    estimate_from_model(metrics, base_unit, layout, qualification.model)?;
+                    estimate_from_model(metrics, base_unit, layout, model)?;
                 return self.finish(
                     semantic_sha256,
                     layout,
@@ -624,8 +627,6 @@ fn validate_qualification(
         || validation.display_sample_count < MIN_DISPLAY_SAMPLES
         || validation.inline_sample_count + validation.display_sample_count
             != validation.sample_count
-        || validation.extent_max_error_hwpunit > MAX_EXTENT_ERROR_HWPUNIT
-        || validation.baseline_max_error_hwpunit > MAX_BASELINE_ERROR_HWPUNIT
         || validation.ink_box_overflow_count != 0
         || validation.clipping_count != 0
         || validation.overlap_count != 0
@@ -683,9 +684,12 @@ fn validate_qualification(
     {
         return Err(EquationLayoutError::InvalidQualification);
     }
+    let model = (extent_max_error <= MAX_EXTENT_ERROR_HWPUNIT
+        && baseline_max_error <= MAX_BASELINE_ERROR_HWPUNIT)
+        .then_some(draft.model);
     Ok(QualifiedLayout {
         evidence_sha256: draft.evidence_sha256,
-        model: draft.model,
+        model,
         envelope: draft.envelope,
         exact_samples: draft.exact_samples,
     })

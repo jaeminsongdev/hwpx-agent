@@ -37,19 +37,27 @@ Native Equation Engine를 문서상 계획이 아니라 **재현 가능한 산�
 
 ## Phase hard gate
 
-- [ ] `P07-01` 산출물 `math AST crate` 존재, 검증: canonicalization property tests.
-- [ ] `P07-02` 산출물 `LaTeX parser` 존재, 검증: Tier A/negative corpus.
-- [ ] `P07-03` 산출물 `MathML parser` 존재, 검증: round-trip corpus.
-- [ ] `P07-04` 산출물 `EqEdit module` 존재, 검증: AST↔script property tests.
-- [ ] `P07-05` 산출물 `direct equation writer` 존재, 검증: native object inspection.
-- [ ] `P07-06` 산출물 `equation bindings` 존재, 검증: target action probes.
-- [ ] `P07-07` 산출물 `equation layout module` 존재, 검증: baseline/ink-box visual tests.
-- [ ] `P07-08` 산출물 `equation corpus` 존재, 검증: A 100%, B target.
-- [ ] `P07-09` 산출물 `oracle evidence` 존재, 검증: silent fallback 0.
-- [ ] 새 capability/contract/schema에 migration과 negative test가 있다.
-- [ ] 실제 수행하지 않은 검증은 `unverified`로 남았다.
-- [ ] source artifact를 in-place로 수정한 경로가 없다.
-- [ ] phase handoff에 실패 fixture와 다음 exact task가 기록됐다.
+- [x] `P07-01` 산출물 `math AST crate` 존재, 검증: canonicalization property tests.
+- [x] `P07-02` 산출물 `LaTeX parser` 존재, 검증: Tier A/negative corpus.
+- [x] `P07-03` 산출물 `MathML parser` 존재, 검증: round-trip corpus.
+- [x] `P07-04` 산출물 `EqEdit module` 존재, 검증: AST↔script property tests.
+- [x] `P07-05` 산출물 `direct equation writer` 존재, 검증: native object inspection.
+- [x] `P07-06` 산출물 `equation bindings` 존재, 검증: target action probes.
+- [x] `P07-07` 산출물 `equation layout module` 존재, 검증: baseline/ink-box visual tests.
+- [x] `P07-08` 산출물 `equation corpus` 존재, 검증: A 100%, B target.
+- [x] `P07-09` 산출물 `oracle evidence` 존재, 검증: silent fallback 0.
+- [x] 새 capability/contract/schema에 migration과 negative test가 있다.
+- [x] 실제 수행하지 않은 검증은 `unverified`로 남았다.
+- [x] source artifact를 in-place로 수정한 경로가 없다.
+- [x] phase handoff에 실패 fixture와 다음 exact task가 기록됐다.
+
+## Gate 결과
+
+2026-09-14 현재 PC의 한글 2020 `11.0.0.9136` x86 로컬 개발 범위에서
+`pass_scoped_current_pc_hangul_2020_native_equation`이다. P07-07은 사용자가 확인한 정확한
+4개 inline/4개 display 샘플만 `target_readback`으로 허용한다. 측정 오차가 잠금 기준을
+넘은 일반 estimator는 활성화하지 않으며, 알 수 없는 수식은 계속 `render_required`다.
+상세 근거와 비주장 범위는 `implementation/p07/P07_GATE_REPORT.md`가 권위 문서다.
 
 ## 금지
 

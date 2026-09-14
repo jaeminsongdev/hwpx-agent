@@ -1,0 +1,69 @@
+{
+  "schema_version": "hwpx-agent.p07-phase-gate-contract/v1",
+  "profile_id": "hwpx-agent.equation-layout.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
+  "phase": "P07",
+  "scope": "current_pc_hangul_2020_bounded_native_equation_engine",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path":"WORK_BREAKDOWN_STRUCTURE.csv","sha256":"3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path":"docs/09_roadmap/P07_native_equation_engine.md","sha256":"5e2f87f8b568cc60023b9571ddace660f10189eefa6fa6f348be94ac54ea803f"},
+    {"path":"tools/p07/validate_math_ast_contract.py","sha256":"2a08c5b87878b0dc69f30731eb51f91e221e3920ad79f2da48e517cf02847a18"},
+    {"path":"tools/p07/validate_latex_adapter_contract.py","sha256":"033e6801fd35f62d7f3e229650d4d4e16631df18ac49bcdc1f4f0422c73b45e2"},
+    {"path":"tools/p07/validate_mathml_adapter_contract.py","sha256":"4d95b5e497ee7e25b125dc11f59df4873ec16bce3363c1cfc090a3ead38f87b7"},
+    {"path":"tools/p07/validate_eqedit_adapter_contract.py","sha256":"7aae97a2e1a0fd4f0dd5d4b92f55429b133426b7bcc3ccc0d947e103e87d733b"},
+    {"path":"tools/p07/validate_equation_hwpx_contract.py","sha256":"76d49b0b33f892a7e7e5166f5b06eb0f007b1ba258841425560d37d4c07b2154"},
+    {"path":"tools/p07/validate_equation_automation_contract.py","sha256":"9073593f558bcf3cde9b454627928046b4baa3eb74e05552d8556edaa7c820ca"},
+    {"path":"tools/p07/validate_equation_layout_contract.py","sha256":"f15fe62cb5d555c9f079adb308375285d1f2fa12a8479111b4efb62ba0790d88"},
+    {"path":"tools/p07/validate_equation_corpus_contract.py","sha256":"476e399e37ad52b3b96f73f482ad71e202c1b52897b78c4500915c95965323d0"},
+    {"path":"tools/p07/validate_equation_editor_smoke_contract.py","sha256":"a1c858ccee4a67a04f230f84e69aaa43dc4534f2bdc74a0df7942c06b2e6d785"},
+    {"path":"tools/p07/validate_equation_differential_contract.py","sha256":"f5fadee20a644617c808a49464c87e9b7302d999a00382077cecfe5f86de6950"}
+  ],
+  "migration": "protocol/migrations/p07-phase-gate-v0-to-v1.md",
+  "report": "implementation/p07/P07_GATE_REPORT.md",
+  "required_validator_results": [
+    {"id":"P07-01","required":{"task":"P07-01","state":"pass","direct_stage":"unit_passed","actual_hangul":false}},
+    {"id":"P07-02","required":{"task":"P07-02","state":"pass","direct_stage":"unit_passed","actual_hangul":false}},
+    {"id":"P07-03","required":{"task":"P07-03","state":"pass","direct_stage":"unit_passed","actual_hangul":false}},
+    {"id":"P07-04","required":{"task":"P07-04","state":"pass","direct_stage":"unit_passed","installed_source_qualified":true}},
+    {"id":"P07-05","required":{"task":"P07-05","state":"pass","direct_stage":"oracle_verified","actual_hangul":true,"target_evidence_verified":true}},
+    {"id":"P07-06","required":{"task":"P07-06","state":"pass","direct_stage":"oracle_verified","actual_hangul":true,"target_evidence_verified":true}},
+    {"id":"P07-07","required":{"task":"P07-07","state":"pass","direct_stage":"target_passed","actual_hangul":true,"render":true,"target_qualification":"pass","manual_review":"user_attested","verified_estimator_active":false,"unknown_shapes":"render_required"}},
+    {"id":"P07-08","required":{"task":"P07-08","state":"pass","direct_stage":"target_passed","actual_hangul":true,"save_reopen":true,"tier_b_target":"pass"}},
+    {"id":"P07-09","required":{"task":"P07-09","state":"pass","direct_stage":"target_passed","actual_hangul":true,"save_reopen":true,"editor_target":"pass"}},
+    {"id":"differential","required":{"task":"P07-GATE","state":"pass","differential":"pass","matched_cases":8,"actual_hangul":true}}
+  ],
+  "gate_policy": {
+    "required_task_count": 9,
+    "required_validator_count": 10,
+    "required_differential_cases": 8,
+    "p07_07_requires_actual_hangul": true,
+    "p07_07_requires_render": true,
+    "p07_07_requires_user_attested_manual_review": true,
+    "unknown_layout_shapes_require_render": true,
+    "verified_general_estimator_required": false
+  },
+  "failure_policy": [
+    "malformed_duplicate_unknown_oversized_or_untrusted_contract_rejected",
+    "source_or_constituent_validator_drift_rejected",
+    "task_validator_failure_or_required_result_mismatch_rejected",
+    "phase_pass_rejected_until_all_nine_tasks_and_differential_pass",
+    "automation_or_structural_raster_cannot_replace_user_attested_visual_review",
+    "general_estimator_is_not_promoted_when_fit_thresholds_fail",
+    "other_version_production_or_product_overclaim_rejected"
+  ],
+  "not_claimed": {
+    "general_verified_layout_estimator": false,
+    "arbitrary_equation_or_document_compatibility": false,
+    "other_hangul_versions": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "validator_contracts": "pass_10_of_10",
+    "tasks_closed": "9_of_9",
+    "differential": "pass_8_of_8",
+    "manual_review": "user_attested",
+    "p07": "pass_scoped_current_pc_hangul_2020_native_equation",
+    "p08_authorization": "authorized_current_pc_local_only"
+  }
+}

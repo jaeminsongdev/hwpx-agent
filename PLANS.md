@@ -23,7 +23,8 @@
 | P00-P04 | scoped current-PC PASS | phase reports remain authoritative; DEV-01 development-infrastructure PASS is non-Gate |
 | P05 | scoped current-PC PASS | `implementation/p05/P05_GATE_REPORT.md` |
 | P06 | scoped current-PC PASS | 01-07 current-PC PASS; P06-08 pure inspector PASS; P06-09 is 61/61 green with direct oracle, exact-target automation runtime/binding and exact differential closure |
-| P07-P09 | in progress | P07-01~09 implementation/unit checks pass; P07-09 exact current-target v3 passes user-attested edit plus native HWPX/save/reopen readback, without photo/render/P07/product promotion. P08 remains 5 cataloged, 19 unit, 34 integration, 0 oracle/green. P09 remains 7 cataloged, 38 unit, 8 integration, 0 oracle/green with target evidence not run |
+| P07 | scoped current-PC PASS | 01-09 closed; P07-07 has 4 inline/4 display native+raster+`user_attested` exact samples while the high-error general estimator stays inactive; direct/automation semantic-script-layout differential is 8/8 |
+| P08-P09 | in progress | P08 is authorized for current-PC local rebaseline and remains 5 cataloged, 19 unit, 34 integration, 0 oracle/green at the last matrix snapshot. P09 remains 7 cataloged, 38 unit, 8 integration, 0 oracle/green with target evidence not run |
 | P10 | partial | 01-04,07,09,10 scoped pass; 05/06 actual dependencies and 08 remain |
 | P11-P13 | open | depend on P06-P10 |
 | P14-P15 | scoped local PASS | disposable PostgreSQL and local MCP/Inspector staging Gates |
@@ -38,7 +39,7 @@
 |---|---|---|
 | P-0055 | P06-07 pagination | complete on this PC: exact target v2 passed licensed Hangul 2020 save/reopen, structural readback, 10-page PDF and visual oracle |
 | P-0057 | P06-09 table conformance | complete on this PC: 61/61 direct rows are `oracle_verified`; v2 exact official Action bindings, exact-target runtime and contract-normalized differentials are 61/61 PASS. Sixty rows used fresh unsaved disposable documents with in-memory snapshots and discard rollback; TABLE-006 reuses its frozen native/direct chart lifecycle and retry. One long-session TABLE-061 COM failure is preserved and its isolated retry passed. File open/save was not invoked by the final runtime batch, routing is enabled only for the bounded current-PC profile, and product/other-PC/production claims remain false |
-| P-0097 | P07 native equation target | P07-09 exact Hangul 2020 target v3 is closed: eight UI checks are `user_attested`, native object identity/semantics and two fresh save/reopen cycles are verified; P07-07/08 target, render and differential Gates remain |
+| P-0097 | P07 native equation target | complete on this PC: P07-01~09 are 9/9 closed, P07-08 Tier B passes 14/14 target save/reopen/native readback, P07-09 exact editor v3 passes, and the matched direct/automation semantic-script-layout differential passes 8/8. P07-07 binds four inline plus four display native lifecycles, structural rasters and the user's `user_attested` review; the 1868/105 HWPUNIT model errors keep the general estimator inactive and unknown shapes `render_required`. Aggregate validators pass 10/10. Other versions, arbitrary documents, production and product completion remain false |
 | P-0095 | P08 object HWPX integration | P08-15 proves an exact common-root `href` partial profile for 11 shape-component tags but does not advance OBJ-048; close chart semantics or an exact fallback before row promotion, then map the remaining nine P08-10 models |
 | P-0096 | P09 fields/forms/notes/comments/links | P09-01~10 typed components cover 46/46 P09-owned rows; P09-12/13/14/15 add exact existing-form REF-018/019, point-bookmark REF-031/032, HTTPS/current-tab hyperlink REF-033/034 and closed plain-text footnote/endnote REF-021/022 static-section lowering/readback. Matrix stages are 7 cataloged, 38 unit, 8 integration, 0 oracle/green; actual generated-package/Hangul/render/automation/differential remain not run |
 | P-0082/0085-0087 | P16 registered app | local bundle and one-tool MCP host pass; actual registered app and Hangul operation remain |
@@ -107,7 +108,7 @@
 
 ## Next actions
 
-1. Goal pursuit remains active at `max`; P06 is closed for this PC. Resume P07 target/render/differential Gates, then continue P08 onward in ledger order. No remote push is implied.
+1. Goal pursuit remains active at `max`; P06 and P07 are closed for this PC. Rebaseline P08 from its live WBS, contracts and matrix, then implement the first dependency-ready open work package. No remote push is implied.
 2. Preserve attempts 01-20, the long-session TABLE-061 failure and all other predecessor evidence; the isolated retry is the promoted runtime result.
 3. Keep P06 routing bounded to this exact build/profile until separate arbitrary-document, other-PC/version and production Gates exist.
 

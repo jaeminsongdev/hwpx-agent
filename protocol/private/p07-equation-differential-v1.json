@@ -1,0 +1,67 @@
+{
+  "schema_version": "hwpx-agent.p07-equation-differential-contract/v1",
+  "qualification_schema_version": "hwpx-agent.p07-equation-differential-qualification/v1",
+  "receipt_schema_version": "hwpx-agent.p07-equation-differential-receipt/v1",
+  "profile_id": "hwpx-agent.equation-layout.hangul-2020-11.0.0.9136-x86-ko-KR/v1",
+  "task": "P07-GATE",
+  "scope": "matched_direct_component_and_exact_target_automation_semantic_script_layout_parity",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_locks": [
+    {"path":"WORK_BREAKDOWN_STRUCTURE.csv","sha256":"3a115b34b4bb57d50ac3899aee7d8155e69a6290c524b976e9b65b848efad444"},
+    {"path":"docs/09_roadmap/P07_native_equation_engine.md","sha256":"5e2f87f8b568cc60023b9571ddace660f10189eefa6fa6f348be94ac54ea803f"},
+    {"path":"implementation/p07/P07-05_NATIVE_EQUATION_HWPX_REPORT.md","sha256":"7636f9842f7d9522255c0bacd00b1c5c42e039ccab8a93fe29e84c2c1867f57b"}
+  ],
+  "oracle": {
+    "path": "crates/hwpx-package/examples/p07_phase_equation_differential.rs",
+    "raw_sha256": "44e54af33d79d9840725638faef92636cc3370e042db4519c50387cd24903244"
+  },
+  "qualification": {
+    "path": "implementation/p07/evidence/p07-equation-differential.current-2020.v1.json",
+    "raw_sha256": "1632774d0b783fb23ae9e9e7e0c7d5db32932b26230db4c629dd1e1f2aa76918"
+  },
+  "direct_target_evidence": {
+    "path": "implementation/p07/evidence/target/p07-05-native-equation.current-2020.attempt01.v1.json",
+    "raw_sha256": "58d6a3599492d57cc873d9c80f83f606aa32aae38f9c514cdcec7eb00fe12a5f"
+  },
+  "migration": "protocol/migrations/p07-equation-differential-v0-to-v1.md",
+  "report": "implementation/p07/P07_GATE_DIFFERENTIAL_REPORT.md",
+  "comparison_policy": {
+    "required_cases": 8,
+    "required_inline": 4,
+    "required_display": 4,
+    "equal_fields": ["normalized_semantic_sha256", "canonical_eqedit_script_sha256", "layout"],
+    "normalized_nonidentity_fields": ["zip_bytes", "native_object_id", "extent", "line_cache"],
+    "maximum_silent_fallback_count": 0,
+    "direct_exact_target_compatibility_required": true,
+    "automation_exact_target_execution_required": true
+  },
+  "failure_policy": [
+    "malformed_duplicate_unknown_oversized_or_untrusted_contract_rejected",
+    "source_or_oracle_qualification_and_direct_target_digest_drift_rejected",
+    "missing_duplicate_or_wrong_mode_case_count_rejected",
+    "semantic_script_or_layout_mismatch_rejected",
+    "silent_fallback_or_missing_route_target_boundary_rejected",
+    "byte_object_id_extent_or_line_cache_nonidentity_is_not_semantic_failure",
+    "private_scripts_paths_and_raw_documents_are_not_published"
+  ],
+  "not_claimed": {
+    "byte_identity": false,
+    "object_id_identity": false,
+    "extent_identity": false,
+    "render": false,
+    "other_hangul_versions": false,
+    "p07_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "direct_target_compatibility": "pass",
+    "automation_target_execution": "pass",
+    "matched_differential": "pass",
+    "actual_hangul": true,
+    "render": false,
+    "p07": "in_progress",
+    "product_complete": false
+  }
+}

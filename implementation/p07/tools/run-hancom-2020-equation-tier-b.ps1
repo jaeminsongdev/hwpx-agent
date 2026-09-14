@@ -48,6 +48,36 @@ function Assert-Inside {
     return $candidateFull
 }
 
+function Get-OwnedAutomationHwpProcesses {
+    param([Parameter(Mandatory)][datetime]$NotBefore)
+    $cutoff = $NotBefore.AddSeconds(-2)
+    return @(
+        Get-CimInstance Win32_Process -Filter "Name='Hwp.exe'" -ErrorAction SilentlyContinue |
+            Where-Object {
+                [datetime]$_.CreationDate -ge $cutoff -and
+                [string]$_.CommandLine -match '(?i)(?:^|\s)-Automation(?:\s|$)' -and
+                [string]$_.CommandLine -match '(?i)(?:^|\s)-Embedding(?:\s|$)'
+            }
+    )
+}
+
+function Stop-OwnedAutomationProcesses {
+    param(
+        [Parameter(Mandatory)]$ChildProcess,
+        [Parameter(Mandatory)][datetime]$NotBefore
+    )
+    try {
+        if (-not $ChildProcess.HasExited) {
+            Stop-Process -Id ([int]$ChildProcess.Id) -Force -ErrorAction SilentlyContinue
+            [void]$ChildProcess.WaitForExit(5000)
+        }
+    }
+    catch { }
+    foreach ($process in @(Get-OwnedAutomationHwpProcesses -NotBefore $NotBefore)) {
+        Stop-Process -Id ([int]$process.ProcessId) -Force -ErrorAction SilentlyContinue
+    }
+}
+
 function Write-JsonNoOverwrite {
     param([Parameter(Mandatory)][string]$Path, [Parameter(Mandatory)]$Value)
     if (Test-Path -LiteralPath $Path) { throw 'TIER_B_OUTPUT_ALREADY_EXISTS' }
@@ -136,15 +166,26 @@ $childProcess = Start-Process -FilePath $x86 -ArgumentList @(
     '-NoProfile', '-STA', '-File', $child, '-RunDirectory', $run, '-PlanPath', $planFile,
     '-ExpectedPlanFileSha256', $ExpectedPlanFileSha256
 ) -WindowStyle Hidden -PassThru -RedirectStandardOutput $childStdout -RedirectStandardError $childStderr
+$childStartedAt = $childProcess.StartTime
 if (-not $childProcess.WaitForExit($TimeoutSeconds * 1000)) {
+    Stop-OwnedAutomationProcesses -ChildProcess $childProcess -NotBefore $childStartedAt
     throw 'TIER_B_CHILD_TIMEOUT_EFFECT_UNKNOWN'
 }
 if ($childProcess.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $tracePath -PathType Leaf)) {
+    Stop-OwnedAutomationProcesses -ChildProcess $childProcess -NotBefore $childStartedAt
     throw 'TIER_B_CHILD_FAILED_OR_EFFECT_UNKNOWN'
 }
 $trace = Get-Content -Raw -Encoding UTF8 -LiteralPath $tracePath | ConvertFrom-Json
 if ([string]$trace.state -cne 'pass' -or @($trace.case_results).Count -ne 14 -or
-    [bool]$trace.computer_use_click_or_type_invoked) { throw 'TIER_B_CHILD_TRACE_FAILED' }
+    [string]$trace.security_module.preflight_state -cne 'pass' -or
+    [string]$trace.security_module.register_state -cne 'call_completed' -or
+    [string]$trace.security_module.readback_register_state -cne 'call_completed' -or
+    [int]$trace.hwp_session_count -ne 2 -or
+    -not [bool]$trace.create_session_quit_invoked -or
+    [bool]$trace.computer_use_click_or_type_invoked) {
+    Stop-OwnedAutomationProcesses -ChildProcess $childProcess -NotBefore $childStartedAt
+    throw 'TIER_B_CHILD_TRACE_FAILED'
+}
 $oracles = New-Object Collections.ArrayList
 for ($index = 0; $index -lt 14; $index += 1) {
     $case = @($plan.cases)[$index]; $runtime = @($trace.case_results)[$index]
@@ -169,6 +210,7 @@ for ($index = 0; $index -lt 14; $index += 1) {
     })
 }
 if (@(Get-CimInstance Win32_Process -Filter "Name='Hwp.exe'" -ErrorAction SilentlyContinue).Count -ne 0) {
+    Stop-OwnedAutomationProcesses -ChildProcess $childProcess -NotBefore $childStartedAt
     throw 'TIER_B_HWP_PROCESS_REMAINED'
 }
 $evidence = [ordered]@{
@@ -181,10 +223,21 @@ $evidence = [ordered]@{
     timeout_seconds = $TimeoutSeconds
     target = [ordered]@{ product = 'Hangul 2020'; build = '11.0.0.9136'; architecture = 'x86'; locale = 'ko-KR'; executable_sha256 = $ExpectedExecutableSha256 }
     state = 'pass'; case_count = 14; save_reopen_passed = 14; native_readback_passed = 14
+    hwp_session_count = 2; session_strategy = 'batch_create_then_batch_readback'
     cases = $oracles; render_state = 'not_run'; visual_state = 'not_run'
     actual_hangul = $true; computer_use_click_or_type_invoked = $false
     user_document_opened = $false; external_network_invoked = $false
     registry_or_system_setting_changed = $false; production_ready = $false; product_complete = $false
+    security_module = [ordered]@{
+        module_type = [string]$trace.security_module.module_type
+        registry_value_name = [string]$trace.security_module.registry_value_name
+        dll_sha256 = [string]$trace.security_module.dll_sha256
+        preflight_state = [string]$trace.security_module.preflight_state
+        register_state = [string]$trace.security_module.register_state
+        register_return = [bool]$trace.security_module.register_return
+        readback_register_state = [string]$trace.security_module.readback_register_state
+        readback_register_return = [bool]$trace.security_module.readback_register_return
+    }
 }
 Write-JsonNoOverwrite $evidencePath $evidence
 [ordered]@{

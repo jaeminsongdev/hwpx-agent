@@ -1,7 +1,7 @@
 schema: hwpx-agent.roadmap-status/v2
-updated_at: 2026-09-07
-current_phase: P06
-status: p06_in_progress_p06_01_02_complete_p06_03_ready_current_pc_local_only
+updated_at: 2026-09-14
+current_phase: P08
+status: p07_pass_scoped_current_pc_hangul_2020_native_equation_p08_authorized_local_only
 design_baseline:
   feature_domains: 16
   features: 609
@@ -14,7 +14,7 @@ design_baseline:
   generated_outputs_idempotent: true
 runtime_validation:
   product_code_built: true
-  product_code_scope: p01_to_p05_complete_p06_01_02_pure_ir_complete_current_pc_local_p10_partial_p14_scoped_complete_p15_in_progress
+  product_code_scope: p01_to_p07_scoped_complete_current_pc_local_p08_rebaseline_ready_p10_partial_p14_scoped_complete_p15_in_progress
   hwpx_artifact_generated: true
   hancom_automation_executed: true
   hancom_automation_probe_attempted: true
@@ -797,8 +797,8 @@ p05_execution:
     decision: pass_scoped_current_pc_hangul_2020_local_layout
     p06_authorization: current_pc_local_only
 p06_execution:
-  current_task: P06-04_cell_formatting_ready
-  gate_state: in_progress_current_pc_local
+  current_task: phase_gate_complete_p07_handoff
+  gate_state: pass_scoped_current_pc_hangul_2020_table_engine
   implementation_base_commit: 0bd152dd85fa42632f8f7213e96e445af44524be
   source_qualification_and_audited_full_commit: 5cfa20e54566652f0d3cd17d26996bc45379ea33
   next_task_reasoning_recommendation: max
@@ -806,12 +806,22 @@ p06_execution:
     P06-01: completed_scoped_current_pc_local_pure_ir
     P06-02: completed_scoped_current_pc_local_pure_ir
     P06-03: completed_scoped_current_pc_local_pure_ir
-    P06-04: ready_current_pc_local
-    P06-05: blocked_by_P06_04
-    P06-06: blocked_by_P06_05
-    P06-07: blocked_by_P06_06
-    P06-08: blocked_by_P06_07
-    P06-09: blocked_by_P06_08
+    P06-04: completed_exact_current_target
+    P06-05: completed_exact_current_target
+    P06-06: completed_exact_current_target
+    P06-07: completed_exact_current_target
+    P06-08: completed_scoped_pure_ir
+    P06-09: completed_61_of_61_exact_current_target_direct_automation_differential
+  final_gate:
+    required_rows: 61
+    direct_oracle_verified: 61
+    automation_runtime_verified: 61
+    routing_enabled_current_profile: 61
+    differential_exact_match: 61
+    residual_hwp_processes: 0
+    other_pc_or_version_qualified: false
+    production_ready: false
+    product_complete: false
   table_grid:
     schema_version: hwpx-agent.table-grid/v1
     property_cases: 256
@@ -864,6 +874,36 @@ p06_execution:
     user_documents_opened: false
     other_pc_or_version_qualified: false
     decision: pass_scoped_current_pc_local_pure_ir
+p07_execution:
+  current_task: phase_gate_complete_p08_handoff
+  gate_state: pass_scoped_current_pc_hangul_2020_native_equation
+  target_profile: hwpx-agent.equation-layout.hangul-2020-11.0.0.9136-x86-ko-KR/v1
+  tasks:
+    P07-01: completed_component
+    P07-02: completed_component
+    P07-03: completed_component
+    P07-04: completed_installed_source_profile
+    P07-05: completed_exact_current_target
+    P07-06: completed_exact_current_target
+    P07-07: completed_exact_samples_general_estimator_inactive
+    P07-08: completed_14_of_14_exact_current_target
+    P07-09: completed_exact_current_target_v3
+  aggregate_gate:
+    validators: 10_of_10_passed
+    tasks: 9_of_9_closed
+    differential: 8_of_8_passed
+    p07_07_inline_samples: 4
+    p07_07_display_samples: 4
+    p07_07_manual_review: user_attested
+    p07_07_extent_max_error_hwpunit: 1868
+    p07_07_baseline_max_error_hwpunit: 105
+    verified_general_estimator_active: false
+    unknown_shapes: render_required
+    residual_hwp_processes: 0
+    p08_authorization: current_pc_local_only
+    other_pc_or_version_qualified: false
+    production_ready: false
+    product_complete: false
 p10_execution:
   current_task: mixed_current_pc_scope_external_dependencies_open
   gate_state: in_progress_current_pc_local
@@ -1072,9 +1112,9 @@ phases:
   P03: completed_current_pc_local_scope
   P04: completed_current_pc_local_scope
   P05: completed_current_pc_hangul_2020_local_layout
-  P06: in_progress_P06_01_02_complete_P06_03_ready_current_pc_local_scope
-  P07: blocked_by_P06
-  P08: blocked_by_P07
+  P06: completed_current_pc_hangul_2020_table_engine
+  P07: completed_current_pc_hangul_2020_native_equation
+  P08: in_progress_rebaseline_ready_current_pc_local_scope
   P09: blocked_by_P08
   P10: in_progress_current_pc_local_scope
   P11: blocked_by_P06_P07_P08_P09_P10

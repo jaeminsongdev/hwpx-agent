@@ -15,6 +15,8 @@ MIGRATION = "protocol/migrations/p07-equation-corpus-v0-to-v1.md"
 POLICY = "implementation/p07/P07-08_EQUATION_CORPUS_POLICY.md"
 REPORT = "implementation/p07/P07-08_EQUATION_CORPUS_REPORT.md"
 QUALIFICATION = "implementation/p07/evidence/p07-08-equation-corpus-source-qualification.current-2020.v1.json"
+TARGET_QUALIFICATION = "implementation/p07/evidence/p07-08-equation-corpus-target-qualification.current-2020.v1.json"
+TARGET_QUALIFICATION_SHA256 = "e44923149d081f2d6e2100db5a0fe99fc3913bd8c84d2e7ca8be145dae5489c5"
 MANIFEST = "implementation/p07/fixtures/p07-08-equation-corpus.current-2020.v1.json"
 MANIFEST_SHA256 = "8893bd3169f40a5b49472cbb6c2dd4a578202b338d47d49270d237084ad6bd3f"
 PLAN_BUILDER = "crates/equation-engine/examples/p07_08_tier_b_target_plan.rs"
@@ -27,10 +29,10 @@ TARGET_HARNESS = {
     "plan_builder_path": PLAN_BUILDER,
     "plan_builder_raw_sha256": "98bcb2cc15af5d7a6d1cf45d5469284e09c799d5774fae706a99dd0b97c8018f",
     "parent_path": PARENT,
-    "parent_raw_sha256": "49f54c859e191133569e7563985fa3855b1d943e9b483829e5e7c4418501dd78",
+    "parent_raw_sha256": "67767c766ac04f9cc69f4dbb2212b12ed7d67581c3740c892f022f7efa5a84e6",
     "child_path": CHILD,
-    "child_raw_sha256": "feca3d29bc48366d8ccdfe2aad6863aeb39062eadf24cf375af7be67fb684edb",
-    "bundle_sha256": "558e36915d7fd380f1b146fbd60b484a586a6b14a19a6f6e28dd041090e0565d",
+    "child_raw_sha256": "dd32414a1be971ee7e7c60d3adadaa3bb6d5942c9681a6410abb39ed131d7e3b",
+    "bundle_sha256": "679dc087825d62f119f499a0135d4a0f353343867af3a314f1d471f496ee64d2",
     "oracle_path": ORACLE,
     "oracle_raw_sha256": "3374c47a1fd18cb0929a2ef32abd984ab13babfb6ee26e6fc509fcdcd28f7cb8",
 }
@@ -48,15 +50,14 @@ LIMITS = {
     "serialized_bytes": 4_194_304,
 }
 NOT_CLAIMED = {
-    "tier_b_target_execution": False, "actual_hangul": False, "save_reopen": False,
     "render": False, "editor_smoke": False, "automation_parity": False,
     "differential": False, "other_hangul_versions": False, "p07_complete": False,
     "production_ready": False, "product_complete": False,
 }
 GATE = {
-    "component": "pass", "direct_stage": "unit_passed", "tier_a_component": "pass",
-    "tier_b_component": "pass", "tier_b_target": "not_run", "tier_c_component": "pass",
-    "actual_hangul": False, "render": False, "p07_08": "in_progress",
+    "component": "pass", "direct_stage": "target_passed", "tier_a_component": "pass",
+    "tier_b_component": "pass", "tier_b_target": "pass", "tier_c_component": "pass",
+    "actual_hangul": True, "save_reopen": True, "render": False, "p07_08": "pass",
     "p07": "in_progress", "product_complete": False,
 }
 MARKERS = {
@@ -78,7 +79,7 @@ MARKERS = {
     ),
     PLAN_BUILDER: ("validate_component_manifest", "cases.len() != 14", "canonical Tier B EqEdit"),
     PARENT: ("TIER_B_PREEXISTING_HWP_PROCESS", "Invoke-Oracle", "render_state = 'not_run'"),
-    CHILD: ("P07_TIER_B_ACCESS_APPROVAL_MAY_BE_REQUIRED", "TIER_B_REOPEN_READBACK_MISMATCH", "computer_use_click_or_type_invoked = $false"),
+    CHILD: ("P07_TIER_B_SECURITY_MODULE_CALL_COMPLETED", "TIER_B_REOPEN_READBACK_MISMATCH", "computer_use_click_or_type_invoked = $false"),
 }
 DIGEST = re.compile(r"^[0-9a-f]{64}$")
 CASE_ID = re.compile(r"^[a-z0-9-]+$")
@@ -123,7 +124,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     try:
         contract = load(root, CONTRACT)
     except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
-        return result(["contract_json_or_path"], 0, 0, False, False, False)
+        return result(["contract_json_or_path"], 0, 0, False, False, False, False)
     exact = {
         "schema_version": "hwpx-agent.equation-corpus-contract/v1",
         "manifest_schema_version": "hwpx-agent.equation-corpus/v1",
@@ -132,7 +133,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         "task": "P07-08",
         "scope": "hash_pinned_tier_a_b_c_semantic_negative_and_legacy_preservation_corpus",
         "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
-        "source_qualification": QUALIFICATION, "target_qualification": None,
+        "source_qualification": QUALIFICATION, "target_qualification": TARGET_QUALIFICATION,
         "target_harness": TARGET_HARNESS,
         "migration": MIGRATION, "policy": POLICY, "report": REPORT,
         "implementation_files": list(MARKERS), "default_limits": LIMITS,
@@ -166,10 +167,11 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     manifest_ok = validate_manifest(root, errors)
     target_harness_ok = validate_target_harness(root, errors)
     qualification_ok = validate_qualification(root, errors)
+    target_qualification_ok = validate_target_qualification(root, errors)
     validate_documents(root, errors)
     return result(
         errors, source_count, implementation_count, manifest_ok, qualification_ok,
-        target_harness_ok,
+        target_harness_ok, target_qualification_ok,
     )
 
 
@@ -286,10 +288,13 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
     except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
         errors.append("qualification_json_or_path")
         return False
-    if value.get("schema_version") != "hwpx-agent.equation-corpus-source-qualification/v1" or value.get("task") != "P07-08" or value.get("recorded_date") != "2026-09-11":
+    if value.get("schema_version") != "hwpx-agent.equation-corpus-source-qualification/v1" or value.get("task") != "P07-08" or value.get("recorded_date") != "2026-09-14":
         errors.append("qualification_identity")
     target = value.get("target")
-    if target != {"product": "Hangul 2020", "version": "11.0.0.9136", "architecture": "x86", "locale": "ko-KR", "other_versions": "not_qualified"}:
+    if target != {"product": "Hangul 2020", "prog_id": "HWPFrame.HwpObject.2",
+                  "version": "11.0.0.9136",
+                  "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+                  "architecture": "x86", "locale": "ko-KR", "other_versions": "not_qualified"}:
         errors.append("qualification_target")
     if value.get("manifest") != {"path": MANIFEST, "raw_sha256": MANIFEST_SHA256,
                                   "total_cases": 64, "tier_a_semantic": 44,
@@ -304,33 +309,105 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
                       "synthetic_hwpx_same_part_preserve": "pass"}:
         errors.append("qualification_component")
     target_run = value.get("tier_b_target_execution")
-    if not isinstance(target_run, dict) or target_run.get("state") != "not_run" or any(item is not None for key, item in target_run.items() if key != "state"):
+    if target_run != {
+        "state": "pass",
+        "latest_attempt": "p07-08-20260914-attempt16",
+        "plan_file_sha256": "14166c425dc0e155b3e919c44e853d98888d60746401aefa5756c4eea638f146",
+        "plan_sha256": "63eab7db7f0e6ada4bba2b4fc08244155783e6723446633fc85c8cea2e8e09df",
+        "target_evidence_sha256": "7123a2bc3f6b196b6986bfb3f71c3e0abb61e2a118cee48e2a1c613aeb1a1b19",
+        "target_qualification_sha256": TARGET_QUALIFICATION_SHA256,
+        "case_count": 14, "save_reopen_passed": 14, "native_readback_passed": 14,
+        "hwp_session_count": 2, "silent_approximation_count": 0, "render_state": "not_run",
+    }:
         errors.append("qualification_target_run")
     if value.get("target_harness") != {
-        "state": "implementation_ready",
+        "state": "target_passed",
         "plan_builder_raw_sha256": TARGET_HARNESS["plan_builder_raw_sha256"],
         "parent_raw_sha256": TARGET_HARNESS["parent_raw_sha256"],
         "child_raw_sha256": TARGET_HARNESS["child_raw_sha256"],
         "bundle_sha256": TARGET_HARNESS["bundle_sha256"],
         "oracle_raw_sha256": TARGET_HARNESS["oracle_raw_sha256"],
-        "single_session_case_count": 14,
-        "target_run": "not_run",
+        "hwp_session_count": 2,
+        "create_session_case_count": 14,
+        "readback_session_case_count": 14,
+        "target_run": "pass",
     }:
         errors.append("qualification_target_harness")
     claims = value.get("claims")
     if claims != {"tier_a_component_complete": True, "tier_b_component_complete": True,
                    "tier_c_component_complete": True, "legacy_synthetic_preservation": True,
-                   "tier_b_target_complete": False, "actual_hangul": False, "render": False,
-                   "p07_08_complete": False, "p07_complete": False, "product_complete": False}:
+                   "tier_b_target_complete": True, "actual_hangul": True,
+                   "save_reopen": True, "render": False,
+                   "p07_08_complete": True, "p07_complete": False, "product_complete": False}:
         errors.append("qualification_claims")
     return not any(error.startswith("qualification_") for error in errors)
+
+
+def validate_target_qualification(root: Path, errors: list[str]) -> bool:
+    try:
+        path = file(root, TARGET_QUALIFICATION)
+        value = json.loads(path.read_bytes(), object_pairs_hook=duplicate_guard)
+    except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
+        errors.append("target_qualification_json_or_path")
+        return False
+    if raw_digest(path) != TARGET_QUALIFICATION_SHA256:
+        errors.append("target_qualification_digest")
+    if not isinstance(value, dict) or set(value) != {
+        "schema_version", "task", "recorded_date", "attempt_id", "target",
+        "identities", "automation", "security_module", "claims",
+    }:
+        errors.append("target_qualification_shape")
+        return False
+    if (value.get("schema_version") != "hwpx-agent.equation-corpus-target-qualification/v1"
+            or value.get("task") != "P07-08" or value.get("recorded_date") != "2026-09-14"
+            or value.get("attempt_id") != "p07-08-20260914-attempt16"):
+        errors.append("target_qualification_identity")
+    if value.get("target") != {
+        "product": "Hangul 2020", "prog_id": "HWPFrame.HwpObject.2",
+        "version": "11.0.0.9136",
+        "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+        "architecture": "x86", "locale": "ko-KR",
+    }:
+        errors.append("target_qualification_target")
+    if value.get("identities") != {
+        "plan_file_sha256": "14166c425dc0e155b3e919c44e853d98888d60746401aefa5756c4eea638f146",
+        "plan_sha256": "63eab7db7f0e6ada4bba2b4fc08244155783e6723446633fc85c8cea2e8e09df",
+        "manifest_sha256": MANIFEST_SHA256,
+        "harness_sha256": TARGET_HARNESS["bundle_sha256"],
+        "oracle_executable_sha256": "c77102e93523ffefba57423ffe3eed89e177a202a4bb2e3a4cd6f0ce6ea2b1b9",
+        "child_trace_sha256": "7046c69408376cd2eaf6fda2555101b5f99e12e2543110058e788fd0d5a4ee0a",
+        "target_evidence_sha256": "7123a2bc3f6b196b6986bfb3f71c3e0abb61e2a118cee48e2a1c613aeb1a1b19",
+    }:
+        errors.append("target_qualification_identities")
+    if value.get("automation") != {
+        "state": "pass", "exact_target_preflight": "passed", "case_count": 14,
+        "save_reopen_passed": 14, "native_readback_passed": 14,
+        "hwp_session_count": 2, "session_strategy": "batch_create_then_batch_readback",
+        "silent_approximation_count": 0, "hwp_processes_after": 0,
+        "computer_use_click_or_type_invoked": False,
+    }:
+        errors.append("target_qualification_automation")
+    if value.get("security_module") != {
+        "module_type": "FilePathCheckDLL",
+        "dll_sha256": "9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6",
+        "preflight_state": "pass", "create_register_state": "call_completed",
+        "readback_register_state": "call_completed",
+    }:
+        errors.append("target_qualification_security")
+    if value.get("claims") != {
+        "tier_b_target_complete": True, "actual_hangul": True, "save_reopen": True,
+        "render": False, "editor_smoke": False, "p07_08_complete": True,
+        "p07_complete": False, "product_complete": False,
+    }:
+        errors.append("target_qualification_claims")
+    return not any(error.startswith("target_qualification_") for error in errors)
 
 
 def validate_documents(root: Path, errors: list[str]) -> None:
     for relative, markers in {
         MIGRATION: ("There is no stored v0", "MUST NOT be relabeled", "never count as semantic success"),
-        POLICY: ("unit_passed / tier_b_target_not_run", "64 cases", "exact-target harness"),
-        REPORT: ("10/10 PASS", "44/44", "14/14", "one-session x86 STA harness"),
+        POLICY: ("target_passed / tier_b_target_pass", "64 cases", "exact-target harness"),
+        REPORT: ("10/10 PASS", "44/44", "14/14", "two bounded automation sessions"),
     }.items():
         try:
             text = file(root, relative).read_text(encoding="utf-8")
@@ -342,7 +419,7 @@ def validate_documents(root: Path, errors: list[str]) -> None:
 
 def result(
     errors: list[str], sources: int, implementation: int, manifest: bool,
-    qualification: bool, target_harness: bool,
+    qualification: bool, target_harness: bool, target_qualification: bool,
 ) -> dict[str, Any]:
     unique = sorted(set(errors))
     return {
@@ -351,8 +428,10 @@ def result(
         "source_locks": sources, "implementation_files": implementation,
         "manifest_verified": manifest, "source_qualification_verified": qualification,
         "target_harness_verified": target_harness,
-        "task": "P07-08", "direct_stage": "unit_passed" if not unique else "not_proven",
-        "tier_b_target": "not_run", "actual_hangul": False, "render": False,
+        "target_qualification_verified": target_qualification,
+        "task": "P07-08", "direct_stage": "target_passed" if not unique else "not_proven",
+        "tier_b_target": "pass" if not unique else "not_proven",
+        "actual_hangul": not unique, "save_reopen": not unique, "render": False,
         "p07": "in_progress", "product_complete": False,
     }
 
@@ -362,4 +441,4 @@ if __name__ == "__main__":
     print(json.dumps(value, ensure_ascii=False, sort_keys=True))
     if value["state"] != "pass":
         sys.exit(1)
-    print(f"P07_EQUATION_CORPUS_CONTRACT_PASS source_locks={value['source_locks']} implementation_files={value['implementation_files']} tier_b_target=not_run")
+    print(f"P07_EQUATION_CORPUS_CONTRACT_PASS source_locks={value['source_locks']} implementation_files={value['implementation_files']} tier_b_target=pass")

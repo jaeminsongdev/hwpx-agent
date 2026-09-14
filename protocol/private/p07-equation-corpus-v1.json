@@ -12,10 +12,10 @@
     {"path":"docs/03_document_model/07_equation_model.md","sha256":"939e6973fcb7af1119ac496801af0e3848cc39021224b2f760113991ade0c43e"},
     {"path":"docs/04_feature_catalog/08_eq.md","sha256":"d515b2c63feb7797c55a2634fad6faf1b20c4644f16c42b26288551869e7975b"},
     {"path":"docs/04_feature_catalog/contracts/08_eq_contracts.md","sha256":"dfd3a1615ddb7f61cae87308deb0bc8237f03f194a63f1bff9304919fa88119b"},
-    {"path":"docs/09_roadmap/P07_native_equation_engine.md","sha256":"b8e7632e256a7112221812643f3dd24833e0d9bd59568cbdf23ec292a298bf9d"},
+    {"path":"docs/09_roadmap/P07_native_equation_engine.md","sha256":"5e2f87f8b568cc60023b9571ddace660f10189eefa6fa6f348be94ac54ea803f"},
     {"path":"docs/12_implementation_guides/06_native_equation_pipeline.md","sha256":"fca1909edfd0a7078bf3656d583578df15ab5bde56161a963984d6784e1fcb5b"},
     {"path":"implementation/p07/P07-04_EQEDIT_POLICY.md","sha256":"2d0d89a8e612929b1e12d3b3ead357c808863ffbd6a82abe577681b30927de46"},
-    {"path":"implementation/p07/P07-07_EQUATION_LAYOUT_REPORT.md","sha256":"bdf3e665a48c31e4d7ab90993e61609c9ead22c999c772142aaf360ca7cb57be"}
+    {"path":"implementation/p07/P07-07_EQUATION_LAYOUT_REPORT.md","sha256":"3dbe4900eeb2d0dfac3dbe63f12328399cadce6a2049ede9847e3171704f1f43"}
   ],
   "manifest": {
     "path": "implementation/p07/fixtures/p07-08-equation-corpus.current-2020.v1.json",
@@ -27,17 +27,17 @@
     "tier_c_reject": 4
   },
   "source_qualification": "implementation/p07/evidence/p07-08-equation-corpus-source-qualification.current-2020.v1.json",
-  "target_qualification": null,
+  "target_qualification": "implementation/p07/evidence/p07-08-equation-corpus-target-qualification.current-2020.v1.json",
   "target_harness": {
     "plan_schema_version": "hwpx-agent.p07-08-tier-b-target-plan/v1",
     "evidence_schema_version": "hwpx-agent.p07-08-tier-b-target-evidence/v1",
     "plan_builder_path": "crates/equation-engine/examples/p07_08_tier_b_target_plan.rs",
     "plan_builder_raw_sha256": "98bcb2cc15af5d7a6d1cf45d5469284e09c799d5774fae706a99dd0b97c8018f",
     "parent_path": "implementation/p07/tools/run-hancom-2020-equation-tier-b.ps1",
-    "parent_raw_sha256": "49f54c859e191133569e7563985fa3855b1d943e9b483829e5e7c4418501dd78",
+    "parent_raw_sha256": "67767c766ac04f9cc69f4dbb2212b12ed7d67581c3740c892f022f7efa5a84e6",
     "child_path": "implementation/p07/tools/run-hancom-2020-equation-tier-b-child.ps1",
-    "child_raw_sha256": "feca3d29bc48366d8ccdfe2aad6863aeb39062eadf24cf375af7be67fb684edb",
-    "bundle_sha256": "558e36915d7fd380f1b146fbd60b484a586a6b14a19a6f6e28dd041090e0565d",
+    "child_raw_sha256": "dd32414a1be971ee7e7c60d3adadaa3bb6d5942c9681a6410abb39ed131d7e3b",
+    "bundle_sha256": "679dc087825d62f119f499a0135d4a0f353343867af3a314f1d471f496ee64d2",
     "oracle_path": "crates/hwpx-package/examples/p07_09_equation_editor_oracle.rs",
     "oracle_raw_sha256": "3374c47a1fd18cb0929a2ef32abd984ab13babfb6ee26e6fc509fcdcd28f7cb8"
   },
@@ -83,9 +83,6 @@
     "component_or_synthetic_results_never_promote_target_render_or_product"
   ],
   "not_claimed": {
-    "tier_b_target_execution": false,
-    "actual_hangul": false,
-    "save_reopen": false,
     "render": false,
     "editor_smoke": false,
     "automation_parity": false,
@@ -97,14 +94,15 @@
   },
   "gate_decision": {
     "component": "pass",
-    "direct_stage": "unit_passed",
+    "direct_stage": "target_passed",
     "tier_a_component": "pass",
     "tier_b_component": "pass",
-    "tier_b_target": "not_run",
+    "tier_b_target": "pass",
     "tier_c_component": "pass",
-    "actual_hangul": false,
+    "actual_hangul": true,
+    "save_reopen": true,
     "render": false,
-    "p07_08": "in_progress",
+    "p07_08": "pass",
     "p07": "in_progress",
     "product_complete": false
   }

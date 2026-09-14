@@ -1389,7 +1389,6 @@ fn read_equation_shape(
     require_attr(equation, "lock", "0")?;
     require_attr(equation, "dropcapstyle", "None")?;
     require_attr(equation, "version", EQUATION_VERSION)?;
-    require_attr(equation, "lineMode", "CHAR")?;
     require_attr(equation, "font", EQUATION_FONT)?;
     let object_id = parse_u32(attr(equation, "id")?)?;
     let baseline_percent = parse_u8(attr(equation, "baseLine")?)?;
@@ -1416,7 +1415,21 @@ fn read_equation_shape(
         size,
         &["width", "widthRelTo", "height", "heightRelTo", "protect"],
     )?;
-    require_attr(size, "widthRelTo", "ABSOLUTE")?;
+    let line_mode = attr(equation, "lineMode")?;
+    let width_relation = attr(size, "widthRelTo")?;
+    let layout_shape_matches = match (profile, layout) {
+        (EquationHwpxReadProfile::DirectLowerer, _)
+        | (EquationHwpxReadProfile::AutomationCurrent2020, EquationLayout::Inline) => {
+            line_mode == "CHAR" && width_relation == "ABSOLUTE"
+        }
+        (EquationHwpxReadProfile::AutomationCurrent2020, EquationLayout::Display) => {
+            (line_mode == "CHAR" && width_relation == "ABSOLUTE")
+                || (line_mode == "LINE" && width_relation == "COLUMN")
+        }
+    };
+    if !layout_shape_matches {
+        return Err(EquationHwpxError::ReadbackMismatch);
+    }
     require_attr(size, "heightRelTo", "ABSOLUTE")?;
     require_attr(size, "protect", "0")?;
     let position = element(&document, children[1])?;
@@ -1581,19 +1594,29 @@ fn infer_layout_context(
             element(document, *index).is_ok_and(|value| has_name(value, "linesegarray"))
         })
         .collect::<Vec<_>>();
+    let standard_equation_run = run_children.len() == 2
+        && run_children[0] == equation
+        && has_name(element(document, run_children[1])?, "t")
+        && element(document, run_children[1])?.is_empty();
+    let automation_inline_run = profile == EquationHwpxReadProfile::AutomationCurrent2020
+        && run_children.len() == 3
+        && has_name(element(document, run_children[0])?, "t")
+        && element_has_visible_text(document, run_children[0])?
+        && run_children[1] == equation
+        && has_name(element(document, run_children[2])?, "t")
+        && element(document, run_children[2])?.is_empty();
     if paragraph_children.len() != runs.len() + line_segments.len()
         || line_segments.len() > 1
         || line_segments
             .first()
             .is_some_and(|index| Some(index) != paragraph_children.last())
-        || run_children.len() != 2
-        || run_children[0] != equation
-        || !has_name(element(document, run_children[1])?, "t")
-        || !element(document, run_children[1])?.is_empty()
+        || (!standard_equation_run && !automation_inline_run)
     {
         return Err(EquationHwpxError::ReadbackMismatch);
     }
-    if runs.len() == 1 {
+    if automation_inline_run {
+        Ok(EquationLayout::Inline)
+    } else if runs.len() == 1 {
         Ok(EquationLayout::Display)
     } else if paragraph_has_other_visible_content(document, paragraph, run)? {
         Ok(EquationLayout::Inline)
@@ -1602,6 +1625,26 @@ fn infer_layout_context(
     } else {
         Err(EquationHwpxError::ReadbackMismatch)
     }
+}
+
+fn element_has_visible_text(
+    document: &PreservingXmlDocument,
+    container: usize,
+) -> Result<bool, EquationHwpxError> {
+    let span = element(document, container)?
+        .outer_span()
+        .ok_or(EquationHwpxError::UnsupportedTarget)?;
+    for token in document.tokens() {
+        if token.span().start() < span.start() || token.span().end() > span.end() {
+            continue;
+        }
+        if matches!(token.kind(), XmlTokenKind::Text | XmlTokenKind::Reference)
+            && !document.source_text(token.span())?.trim().is_empty()
+        {
+            return Ok(true);
+        }
+    }
+    Ok(false)
 }
 
 fn paragraph_has_other_visible_content(

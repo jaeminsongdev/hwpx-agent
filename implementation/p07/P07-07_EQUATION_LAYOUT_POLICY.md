@@ -2,10 +2,11 @@
 
 ## Decision
 
-P07-07 is `unit_passed / target_not_run`. The complete typed estimator, qualification format,
-structural metric model, conservative fallback and HWPX binding are implemented. No qualification
-is active until the exact current target supplies the required inline/display native readback and
-baseline/ink-box visual evidence.
+P07-07 is `target_passed_exact_samples / general_estimator_inactive`. The complete typed estimator,
+qualification format, structural metric model, conservative fallback and HWPX binding are
+implemented. The exact current target supplied four inline and four display native readbacks,
+structural raster evidence and the user's original-detail `user_attested` review. Those exact
+samples are qualified; the fitted general model is not.
 
 The target toolchain is also implementation-complete. A hash-pinned plan selects exactly four
 Tier B semantics in both inline and display contexts. One bounded x86 STA session creates, reads,
@@ -19,9 +20,11 @@ single-run display paragraph as inline.
 1. An exact semantic/layout/base-unit sample in a trusted qualification returns its recorded target
    width, height and baseline as `target_readback`.
 2. A non-exact expression inside every qualified structural envelope bound uses the fixed-point
-   font model and returns `verified_estimator`.
-3. With no qualification or outside its envelope, the expression uses a conservative fixed-point
-   provisional estimate with no evidence digest and `render_required=true`.
+   font model and returns `verified_estimator` only when the calibration's recomputed extent and
+   baseline errors meet the 150/50 HWPUNIT thresholds.
+3. With no qualification, outside its envelope, or when the measured model error exceeds either
+   threshold, the expression uses a conservative fixed-point provisional estimate with no evidence
+   digest and `render_required=true`. Exact target-readback samples remain usable in that case.
 
 No floating-point arithmetic, saturation, silent clamping, text/image fallback or arbitrary
 caller assertion is used.
@@ -38,22 +41,27 @@ has a finite limit and checked overflow path.
 
 A target qualification is strict JSON pinned by its exact byte SHA. It binds current build,
 architecture, locale, font name, font-metric digest, semantic corpus digest, evidence digest, model
-coefficients, a structural envelope and exact samples. Admission requires at least four inline and
-four display cases, exact sample-count accounting, object-extent maximum error at most 150 HWPUNIT,
-baseline maximum error at most 50 HWPUNIT, zero ink overflow, clipping, overlap and silent fallback,
-and inspection of every page. The validator recomputes both maximum errors from each sample's
-bounded structural metrics rather than trusting the reported totals. Each ink box must be finite
-and strictly inside its rendered page.
+coefficients, a structural envelope and exact samples. Exact-sample admission requires at least four
+inline and four display cases, exact sample-count accounting, zero ink overflow, clipping, overlap
+and silent fallback, and inspection of every page. The validator recomputes both maximum errors from
+each sample's bounded structural metrics rather than trusting the reported totals. A model is active
+only when object-extent error is at most 150 HWPUNIT and baseline error is at most 50 HWPUNIT;
+otherwise it is retained as measured rejected calibration and all non-exact shapes stay provisional.
+Each ink box must be finite and strictly inside its rendered page.
 
-The two P07-06 display readbacks are useful candidates but have no inline or ink-box evidence, so
-they do not qualify this model. The dedicated current-target calibration remains `not_run`.
+The earlier two P07-06 display readbacks were useful candidates but had no inline or ink-box
+evidence and were never promoted. The dedicated eight-sample current-target run now closes that
+evidence gap. Its maximum extent error is 1868 HWPUNIT and maximum baseline error is 105 HWPUNIT,
+both above the locked 150/50 thresholds. Accordingly, exact samples use target readback while every
+unknown shape remains provisional and render-required.
 
 PDF export is not visual PASS. A separately hash-pinned `pdftoppm` pass rasterizes every one-page
 PDF and measures only bounded, non-edge-touching ink boxes. Its result stays
 `structural_pass_manual_not_run`. Qualification construction additionally requires a strict manual
 review record for all eight original-detail PNGs with zero clipping, overlap and silent fallback,
 then deterministically fits the fixed-point width, height and mode-specific baseline coefficients.
-If the recomputed 150/50 HWPUNIT thresholds are not met, no qualification is emitted.
+If the recomputed 150/50 HWPUNIT thresholds are not met, the exact samples may still be qualified,
+but the fitted model is not activated and every non-exact shape remains render-required.
 
 The estimator exposes the same bounded typed structural metrics used internally by provisional and
 qualified models. Calibration tooling therefore cannot substitute a second metric implementation
@@ -72,9 +80,10 @@ Qualification and estimate Debug output redact semantic, metric and evidence val
 receipts are deterministic and bounded. No font file, document text, private path or raw
 automation identifier is recorded.
 
-Actual target calibration, baseline/ink-box visual PASS, active verified-estimator coverage, P07-08
-target corpus, P07-09 editor smoke, other Hangul versions, P07 completion, production and product
-completion remain `false` / `not_run`.
+Actual target calibration and the bounded baseline/ink-box visual review are `pass` for these eight
+samples. Active verified-estimator coverage remains `false`; P07-08 and P07-09 are owned by their
+separate contracts. Other Hangul versions, arbitrary equations/documents, production and product
+completion remain `false` / `not_run`. P07 phase completion is decided only by the aggregate Gate.
 
-Reasoning level: `max`. The combined P06/P07 current-target run remains `max` because native
-readback, raster identity, original-detail review and model admission must remain one exact chain.
+Reasoning level: `max`. Native readback, raster identity, original-detail review and model admission
+remain one exact hash-bound chain.

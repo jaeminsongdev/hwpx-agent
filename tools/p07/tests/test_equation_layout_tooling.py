@@ -69,7 +69,90 @@ class EquationLayoutToolingTests(unittest.TestCase):
         self.assertIn('"manual_review_state": "not_run"', raster)
         self.assertIn('"qualification_eligible": False', raster)
         self.assertIn('manual.get("all_pages_inspected") is not True', builder)
-        self.assertIn('fail("LAYOUT_MODEL_THRESHOLD_FAILED")', builder)
+        self.assertIn('"exact_sample_qualification_candidate": True', builder)
+        self.assertIn('"verified_estimator_candidate": (', builder)
+
+    def test_target_children_resolve_equation_parameter_set_after_document_activation(self) -> None:
+        for relative in (
+            "implementation/p07/tools/run-hancom-2020-equation-tier-b-child.ps1",
+            "implementation/p07/tools/run-hancom-2020-equation-layout-child.ps1",
+        ):
+            with self.subTest(relative=relative):
+                script = (ROOT / relative).read_text(encoding="utf-8")
+                document_add = script.index("$document = $documents.Add($false)")
+                document_activate = script.index("[void]$document.SetActive_XHwpDocument()")
+                parameter_resolve = script.index(
+                    "$parameterSet = Resolve-ParameterSetObject $parameters 'EqEdit'"
+                )
+                window_visible = script.index("$window.Visible = $true")
+                save_as = script.index("$document.SaveAs($outputPath, 'HWPX', '')")
+                self.assertLess(document_add, document_activate)
+                self.assertLess(document_activate, parameter_resolve)
+                self.assertLess(window_visible, save_as)
+                self.assertEqual(script.count("Resolve-ParameterSetObject $parameters 'EqEdit'"), 2)
+                self.assertIn("($DocumentedId + 'E')", script)
+                self.assertIn("('H' + $DocumentedId)", script)
+                self.assertIn("('H' + $DocumentedId + 'E')", script)
+                self.assertIn("$hwp.RegisterModule(", script)
+                self.assertIn("'FilePathCheckDLL', $securityModuleName", script)
+                self.assertIn(
+                    "9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6",
+                    script,
+                )
+                self.assertIn("Clear-ComObject $window", script)
+                self.assertIn("[void]$hwp.Clear(1)", script)
+                self.assertIn("$hwp.Open($outputPath, 'HWPX'", script)
+                self.assertEqual(script.count("$reopenSucceeded = $hwp.Open("), 1)
+                self.assertNotIn("$document.Open($outputPath, 'HWPX'", script)
+                self.assertIn("$documents.Item(([int]$documents.Count) - 1)", script)
+                self.assertIn("$document = $documents.Item(0)", script)
+                if relative.endswith("equation-layout-child.ps1"):
+                    self.assertIn("$document.Close($false)", script)
+                    self.assertIn("saved_waiting_readback", script)
+                    self.assertIn("readback_pass_waiting_session_close", script)
+                    self.assertIn("$trace.hwp_session_count = 3", script)
+                    self.assertIn("display_register_state", script)
+                    self.assertIn("P07_LAYOUT_DISPLAY_CREATE_SESSION_STARTED", script)
+                    self.assertIn(
+                        "$(if ($Layout -ceq 'inline') { 0 } else { 1 })", script
+                    )
+                else:
+                    self.assertNotIn("$document.Close($false)", script)
+                    self.assertIn("saved_waiting_create_session_close", script)
+                    self.assertIn("readback_pass_waiting_session_close", script)
+                self.assertIn("reopen_document_count_before", script)
+                self.assertIn("reopen_document_count_after", script)
+                self.assertGreaterEqual(
+                    script.count("[void]$document.SetActive_XHwpDocument()"), 3
+                )
+                self.assertIn("$trace.hwp_session_count = 2", script)
+                self.assertIn("create_session_quit_invoked = $false", script)
+                self.assertIn("READBACK_SESSION_STARTED", script)
+                self.assertNotIn("Get-FileHash", script)
+                self.assertIn("$algorithm.ComputeHash($stream)", script)
+
+    def test_target_parents_bound_timeout_cleanup_to_owned_automation_processes(self) -> None:
+        for relative, timeout_error in (
+            (
+                "implementation/p07/tools/run-hancom-2020-equation-tier-b.ps1",
+                "TIER_B_CHILD_TIMEOUT_EFFECT_UNKNOWN",
+            ),
+            (
+                "implementation/p07/tools/run-hancom-2020-equation-layout.ps1",
+                "LAYOUT_CHILD_TIMEOUT_EFFECT_UNKNOWN",
+            ),
+        ):
+            with self.subTest(relative=relative):
+                script = (ROOT / relative).read_text(encoding="utf-8")
+                self.assertIn("$childStartedAt = $childProcess.StartTime", script)
+                self.assertIn("$childProcess.WaitForExit($TimeoutSeconds * 1000)", script)
+                self.assertIn(timeout_error, script)
+                self.assertIn("Stop-Process -Id ([int]$ChildProcess.Id)", script)
+                self.assertIn("Stop-Process -Id ([int]$process.ProcessId)", script)
+                self.assertIn("[datetime]$_.CreationDate -ge $cutoff", script)
+                self.assertIn("-Automation", script)
+                self.assertIn("-Embedding", script)
+                self.assertNotIn("Get-Process Hwp | Stop-Process", script)
 
     def test_exact_evidence_chain_builds_a_loader_compatible_candidate(self) -> None:
         private = ROOT / "implementation/p07/evidence/private"

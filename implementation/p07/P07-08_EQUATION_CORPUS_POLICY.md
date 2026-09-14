@@ -2,10 +2,10 @@
 
 ## Decision
 
-P07-08 is `unit_passed / tier_b_target_not_run`. The hash-pinned A/B/C manifest, bounded multi-adapter
-runner, exact negative checks and byte-preserving legacy boundary are implemented. Tier A is
-component-complete. Tier B has semantic component coverage but is not target-qualified until the
-exact current Hangul build executes and reopens every Tier B case.
+P07-08 is `target_passed / tier_b_target_pass`. The hash-pinned A/B/C manifest, bounded multi-adapter
+runner, exact negative checks and byte-preserving legacy boundary are implemented. Tier A and Tier C
+are component-complete. All 14 Tier B cases are additionally qualified on the exact current Hangul
+build through native insertion, save, close, reopen and native readback.
 
 ## Immutable corpus
 
@@ -24,9 +24,10 @@ equality. Ambiguity, unsupported positive input and any round-trip drift fail cl
 
 - Tier A proves the finite common-source profile with no ambiguity or approximation.
 - Tier B covers matrices, cases, aligned piles, delimiters, double/triple integrals, annotations,
-  combinatorics, symbol mixtures and presentation MathML. The current 14/14 result is component
-  evidence only; target insertion, visual inspection, edit and save/reopen remain `not_run`.
-  It is component evidence only.
+  combinatorics, symbol mixtures and presentation MathML. Component semantic checks pass 14/14.
+  The exact Hangul 2020 11.0.0.9136 x86 ko-KR target run also passes 14/14 native insert and
+  save/reopen readback checks with zero silent approximation. Render and visual inspection remain
+  outside this card and therefore remain `not_run`.
 - Tier C has two disjoint outcomes. `preserve_exact` admits only opaque `legacy_eqedit` bytes and
   returns those same bytes. `reject` requires the exact stable adapter error. A rejected case that
   succeeds is `equation_corpus_silent_approximation`.
@@ -43,15 +44,17 @@ content and digests. No private source, path, automation identifier or document 
 
 ## Non-claims
 
-Actual Hangul Tier B execution, render quality, editor double-click flow, save/reopen, automation
-parity, differential evidence, P07 completion, other Hangul versions, production and product
-completion remain `false` / `not_run`.
+Render quality, editor double-click flow and automation parity remain outside this task. P07 phase
+completion is claimed only by the separate aggregate Gate; other Hangul versions, production and
+product completion remain `false` / `not_run`. Actual Hangul Tier B execution and save/reopen are
+qualified only for the exact pinned target and 14-case corpus.
 
-The exact-target harness is implementation-ready. Its hash-pinned plan builder revalidates the full
+The exact-target harness has passed. Its hash-pinned plan builder revalidates the full
 64-case manifest and emits all 14 canonical Tier B scripts with semantic hashes. One bounded x86
-STA session inserts, reads, saves, closes, reopens and reads every case; a separate strict native
-HWPX oracle then checks each artifact and records layout extents. This tooling does not itself
-promote the still-unrun target or visual fields.
+STA create session inserts, reads and saves every case; a second bounded session reopens and reads
+every case. A separate strict native HWPX oracle checks each artifact and records layout extents.
+The private evidence is promoted through a redacted hash-bound target qualification; visual fields
+remain unpromoted.
 
-Reasoning level: `max`. P07-09 remains `max` because editor mutation, native readback and
-save/reopen evidence must be bound without confusing UI success with semantic success.
+Reasoning level: `max`. P07-09 and the aggregate differential are now separately closed; neither
+changes this task's render non-claim.

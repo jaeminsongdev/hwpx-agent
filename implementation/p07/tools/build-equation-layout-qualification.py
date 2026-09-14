@@ -342,8 +342,6 @@ def build(arguments: argparse.Namespace) -> tuple[dict[str, Any], Path]:
     )
     extent_error = max(width_error, height_error)
     baseline_error = max(inline_baseline_error, display_baseline_error)
-    if extent_error > MAX_EXTENT_ERROR or baseline_error > MAX_BASELINE_ERROR:
-        fail("LAYOUT_MODEL_THRESHOLD_FAILED")
     evidence_bundle = {
         "plan_file_sha256": arguments.expected_plan_sha256,
         "target_evidence_sha256": arguments.expected_target_evidence_sha256,
@@ -435,6 +433,11 @@ def main(arguments: list[str]) -> int:
             "actual_hangul_asserted_by_builder": False,
             "render_asserted_by_builder": False,
             "product_complete": False,
+            "exact_sample_qualification_candidate": True,
+            "verified_estimator_candidate": (
+                qualification["validation"]["extent_max_error_hwpunit"] <= MAX_EXTENT_ERROR
+                and qualification["validation"]["baseline_max_error_hwpunit"] <= MAX_BASELINE_ERROR
+            ),
         }, separators=(",", ":")))
         return 0
     except QualificationError as error:

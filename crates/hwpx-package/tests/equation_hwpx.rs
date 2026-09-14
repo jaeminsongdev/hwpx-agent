@@ -198,6 +198,40 @@ fn automation_native_profile_is_distinct_strict_and_semantically_read_back() -> 
     assert_eq!(readback.layout(), EquationLayout::Display);
     assert_eq!(readback.style().baseline_percent, 86);
     assert_eq!(readback.extent().width_hwpunit, 2_230);
+
+    let inline = section.replace(
+        "<q:run charPrIDRef=\"1\"><q:equation",
+        "<q:run charPrIDRef=\"1\"><q:t>I</q:t><q:equation",
+    );
+    let inline_readback =
+        EquationHwpxReader::read_automation_in_section(inline.as_bytes(), 0, limits)?;
+    assert_eq!(inline_readback.layout(), EquationLayout::Inline);
+    for drifted in [
+        inline.replace("lineMode=\"CHAR\"", "lineMode=\"LINE\""),
+        inline.replace("widthRelTo=\"ABSOLUTE\"", "widthRelTo=\"COLUMN\""),
+        inline.replace("<q:t>I</q:t>", "<q:t/>"),
+    ] {
+        assert_code(
+            EquationHwpxReader::read_automation_in_section(drifted.as_bytes(), 0, limits),
+            "equation_hwpx_readback_mismatch",
+        );
+    }
+
+    let line_display = section
+        .replace("lineMode=\"CHAR\"", "lineMode=\"LINE\"")
+        .replace("widthRelTo=\"ABSOLUTE\"", "widthRelTo=\"COLUMN\"");
+    let line_display_readback =
+        EquationHwpxReader::read_automation_in_section(line_display.as_bytes(), 0, limits)?;
+    assert_eq!(line_display_readback.layout(), EquationLayout::Display);
+    for drifted in [
+        line_display.replace("lineMode=\"LINE\"", "lineMode=\"CHAR\""),
+        line_display.replace("widthRelTo=\"COLUMN\"", "widthRelTo=\"ABSOLUTE\""),
+    ] {
+        assert_code(
+            EquationHwpxReader::read_automation_in_section(drifted.as_bytes(), 0, limits),
+            "equation_hwpx_readback_mismatch",
+        );
+    }
     assert_code(
         EquationHwpxReader::read_in_section(section.as_bytes(), 0, limits),
         "equation_hwpx_readback_mismatch",

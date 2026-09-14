@@ -12,13 +12,16 @@
     {"path": "docs/03_document_model/07_equation_model.md", "sha256": "939e6973fcb7af1119ac496801af0e3848cc39021224b2f760113991ade0c43e"},
     {"path": "docs/04_feature_catalog/08_eq.md", "sha256": "d515b2c63feb7797c55a2634fad6faf1b20c4644f16c42b26288551869e7975b"},
     {"path": "docs/04_feature_catalog/contracts/08_eq_contracts.md", "sha256": "dfd3a1615ddb7f61cae87308deb0bc8237f03f194a63f1bff9304919fa88119b"},
-    {"path": "docs/09_roadmap/P07_native_equation_engine.md", "sha256": "b8e7632e256a7112221812643f3dd24833e0d9bd59568cbdf23ec292a298bf9d"},
+    {"path": "docs/09_roadmap/P07_native_equation_engine.md", "sha256": "5e2f87f8b568cc60023b9571ddace660f10189eefa6fa6f348be94ac54ea803f"},
     {"path": "docs/12_implementation_guides/06_native_equation_pipeline.md", "sha256": "fca1909edfd0a7078bf3656d583578df15ab5bde56161a963984d6784e1fcb5b"},
     {"path": "implementation/p07/P07-05_NATIVE_EQUATION_HWPX_POLICY.md", "sha256": "cfcfb1ed2af559a60ed08038431d850a90e5b954011efb75fd32f245a5989478"},
     {"path": "implementation/p07/P07-06_EQUATION_AUTOMATION_REPORT.md", "sha256": "85d8718ac4cd39b8957a3f08d5ecc6cb841c4873d65eceda090bbd3ac6725ba3"}
   ],
   "source_qualification": "implementation/p07/evidence/p07-07-equation-layout-source-qualification.current-2020.v1.json",
-  "target_qualification": null,
+  "target_qualification": {
+    "path": "implementation/p07/evidence/p07-07-equation-layout-target-qualification.current-2020.v1.json",
+    "raw_sha256": "dff15f942fceb3a4b4f967fe13de07c800768649c6e5f76342c6f3f98b729381"
+  },
   "calibration_manifest": {
     "path": "implementation/p07/fixtures/p07-07-equation-layout-samples.current-2020.v1.json",
     "raw_sha256": "d689991e3c92fcd81aa21c64dde5cbff17a57f4a33b89976ef35058b08c76944",
@@ -37,17 +40,17 @@
     "hwpx_oracle_path": "crates/hwpx-package/examples/p07_07_equation_layout_oracle.rs",
     "hwpx_oracle_raw_sha256": "adea0ddb0c4bb5905ffc419146f936bf2f3aebb59616d6ed8e54e769f8da305e",
     "qualification_oracle_path": "crates/equation-engine/examples/p07_07_layout_qualification_oracle.rs",
-    "qualification_oracle_raw_sha256": "5bbd3379a65b623f59e2211ad54c4d3a95ce8b77598c3a1fe687a59b9beaa18d",
+    "qualification_oracle_raw_sha256": "da906746e63bd14c3a7a04aec853d1b9bf9474e80c24e114abc350891d646a7c",
     "parent_path": "implementation/p07/tools/run-hancom-2020-equation-layout.ps1",
-    "parent_raw_sha256": "45c736ed6450b9c614f6da3dc6268e594f01227d4db0b9efadb240a59648d9b2",
+    "parent_raw_sha256": "90f3e1564ff6a92f60d3a366c5057f4ce4d41836da27a63665975bb36f3b9cee",
     "child_path": "implementation/p07/tools/run-hancom-2020-equation-layout-child.ps1",
-    "child_raw_sha256": "76e82a64a3fadd67c850b018ffc2e760e107ffc943a270d0a0f0e52a97a7ad53",
-    "harness_bundle_sha256": "a41fa800ac0be31d04d4f0225b29682d3d2e86fe61071df39e1d6aa9ac384307",
+    "child_raw_sha256": "cfe69f59dcb56f8c73e47c58ac5547b0286019738ce257d8300b7082b60fef41",
+    "harness_bundle_sha256": "b0deb368341245ce0e55ff3a63f470f0e7c7c3c9dfdbb5f342cc9244b6e55c47",
     "raster_verifier_path": "implementation/p07/tools/verify-equation-layout-pdfs.py",
     "raster_verifier_raw_sha256": "1cfc9bb244b48089a516efa00bfe2a6367f322244150495039a8edbcb94d5eb7",
     "qualification_builder_path": "implementation/p07/tools/build-equation-layout-qualification.py",
-    "qualification_builder_raw_sha256": "6993c02dcc051fcffe2134faed2d8180065472cced5407e37caa51537f8f26df",
-    "toolchain_bundle_sha256": "7f5b410c39b23c0f4217ef2bf83bab82e4fc749c32a31f0f407adff339a43347"
+    "qualification_builder_raw_sha256": "74c1829a33780f55a4d9d1a696930668399a5464d3aee11a68ffb860996bc854",
+    "toolchain_bundle_sha256": "b374ca058c4ef21d78d2fbd8db89669220c12490ee7fc0f94e8eb01e3196ba66"
   },
   "migration": "protocol/migrations/p07-equation-layout-v0-to-v1.md",
   "policy": "implementation/p07/P07-07_EQUATION_LAYOUT_POLICY.md",
@@ -68,20 +71,21 @@
   ],
   "estimation_order": {
     "exact": "trusted_semantic_layout_base_unit_target_readback_sample",
-    "model": "trusted_fixed_point_font_model_inside_complete_structural_envelope",
+    "model": "trusted_fixed_point_font_model_inside_complete_structural_envelope_only_when_error_thresholds_pass",
     "fallback": "conservative_provisional_without_evidence_and_render_required"
   },
   "qualification": {
     "minimum_inline_samples": 4,
     "minimum_display_samples": 4,
-    "maximum_extent_error_hwpunit": 150,
-    "maximum_baseline_error_hwpunit": 50,
+    "verified_estimator_maximum_extent_error_hwpunit": 150,
+    "verified_estimator_maximum_baseline_error_hwpunit": 50,
     "maximum_ink_overflow_count": 0,
     "maximum_clipping_count": 0,
     "maximum_overlap_count": 0,
     "maximum_silent_fallback_count": 0,
     "all_pages_inspected": true,
-    "trusted_exact_byte_sha_required": true
+    "trusted_exact_byte_sha_required": true,
+    "model_error_threshold_scope": "verified_estimator_only_exact_samples_remain_admissible"
   },
   "binding": {
     "semantic": "normalized_math_ast_semantic_sha",
@@ -104,7 +108,8 @@
     "malformed_duplicate_unknown_oversized_or_untrusted_qualification_rejected",
     "wrong_target_font_profile_evidence_or_corpus_identity_rejected",
     "insufficient_inline_display_or_inconsistent_sample_accounting_rejected",
-    "baseline_error_overflow_clip_overlap_silent_fallback_or_partial_page_review_rejected",
+    "ink_overflow_clip_overlap_silent_fallback_or_partial_page_review_rejected",
+    "model_error_above_threshold_disables_verified_estimator_without_invalidating_exact_samples",
     "duplicate_sample_invalid_ink_box_extent_baseline_or_digest_rejected",
     "math_ast_metric_limit_or_checked_arithmetic_overflow_rejected",
     "outside_envelope_never_promoted_and_remains_render_required",
@@ -113,11 +118,7 @@
     "no_target_render_other_version_p07_production_or_product_promotion"
   ],
   "not_claimed": {
-    "actual_target_layout_calibration": false,
     "verified_estimator_active": false,
-    "baseline_visual": false,
-    "ink_box_visual": false,
-    "render": false,
     "p07_08_corpus": false,
     "p07_09_editor_smoke": false,
     "other_hangul_versions": false,
@@ -127,11 +128,14 @@
   },
   "gate_decision": {
     "component": "pass",
-    "direct_stage": "unit_passed",
-    "target_qualification": "not_run",
-    "actual_hangul": false,
-    "render": false,
-    "p07_07": "in_progress",
+    "direct_stage": "target_passed",
+    "target_qualification": "pass_exact_samples_general_estimator_inactive",
+    "actual_hangul": true,
+    "render": true,
+    "manual_review": "user_attested",
+    "verified_estimator_active": false,
+    "unknown_shapes": "render_required",
+    "p07_07": "pass",
     "p07": "in_progress",
     "product_complete": false
   }

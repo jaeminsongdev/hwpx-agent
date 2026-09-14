@@ -2,11 +2,11 @@
 
 ## Decision
 
-P07-09 is `target_pass_v3 / p07_in_progress` for the exact current Hangul 2020 target. V3 keeps
+P07-09 is `target_pass_v3 / phase_gate_pass` for the exact current Hangul 2020 target. V3 keeps
 the semantic edit and saved native serialization as independent boundaries, replaces unverified
 photo collection with a plan-bound `user_attested` checklist, and preserves all automatic native
-save/reopen and structural readback Gates. P07-09 is closed; P07 remains in progress because its
-layout/corpus/render/differential Gates are separate.
+save/reopen and structural readback Gates. P07-09 is closed; its evidence is now one separately
+validated input to the passing P07 aggregate Gate.
 
 ## Planned edit boundary
 
@@ -72,8 +72,9 @@ Attempts 06 through 13 and the failed child/finalizer traces in 14 remain failur
 They are not rewritten or promoted. Attempt 14's separately hash-bound v4 finalizer passed two
 fresh reopen/close cycles, while the Rust target and evidence oracles proved the requested `x+2`
 semantics, preserved native object identity, changed package graph/document flow and zero fallback.
-This closes only the exact-current-target editor-smoke and save/reopen Gate. Visual oracle, render,
-P07 differential, P07 completion, other-version, production and product claims remain absent.
+This closes only the exact-current-target editor-smoke and save/reopen Gate. Visual oracle and
+render remain absent from this task. P07 differential and phase completion are established only by
+their separate aggregate contracts; other-version, production and product claims remain absent.
 
-Reasoning level: `max`. The combined target campaign also remains `max` because manual UI,
-immutable artifacts, structural readback, render and differential evidence must agree.
+Reasoning level: `max`. The completed aggregate campaign keeps manual UI, immutable artifacts,
+structural readback, render and differential evidence as distinct hash-bound claims.

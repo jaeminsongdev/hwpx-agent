@@ -2,7 +2,7 @@
 
 ## Result
 
-Result: `target_pass_v3 / p07_in_progress`.
+Result: `target_pass_v3 / phase_gate_pass`.
 
 The fail-closed protocol separates canonical planned before/after programs from the saved raw
 native-editor script. V3 also separates user-observed UI state (`user_attested`) from machine
@@ -45,11 +45,10 @@ The public qualification binds the failed child trace and passing lifecycle-fina
 distinct identities, so the failed same-apartment reopen cannot be relabeled as the passing trace.
 
 `editor_target_state=pass`, `actual_hangul=true` and `save_reopen=true` are bounded to this exact
-target and card. `visual_oracle=false`, `render=false`, `p07_complete=false` and
-`product_complete=false` remain explicit.
+target and card. `visual_oracle=false`, `render=false` and `product_complete=false` remain explicit.
+P07 completion comes from the separate 9/9 aggregate Gate, not from this editor-smoke receipt.
 
-## Next exact task
+## Handoff
 
-After the user-requested goal pause, resume at `max` with the remaining P07-07 baseline/ink-box,
-P07-08 Tier B corpus, render and direct/automation differential Gates, coordinated with the
-remaining P06 exact-current-target campaign.
+The separate P07-07, P07-08 and 8/8 differential inputs now pass the aggregate P07 Gate. Begin the
+P08 rebaseline without promoting this task's absent visual-oracle or render claims.
