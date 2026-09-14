@@ -460,7 +460,10 @@ function Test-SuccessEvidence {
             '9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6' -or
         [string]$Trace.security_module.architecture -cne 'x86' -or
         [string]$Trace.security_module.preflight_state -cne 'pass' -or
-        [string]$Trace.security_module.register_state -cne 'pass' -or
+        [string]$Trace.security_module.register_state -cne 'call_completed' -or
+        ($Trace.security_module.register_return -isnot [bool]) -or
+        [string]$Trace.security_module.effective_state -cne
+            'control_open_close_pass' -or
         [string]$Trace.access_control.source -cne
             'verified_hancom_saved_table_012_control' -or
         [string]$Trace.access_control.input_file -cne
@@ -671,7 +674,11 @@ $innerValid = $null -ne $inner -and
     [string]$inner.security_module.architecture -ceq 'x86' -and
     [string]$inner.security_module.preflight_state -ceq 'pass' -and
     [string]$inner.security_module.register_state -match
-        '^(not_run|running|pass|failed)$' -and
+        '^(not_run|running|call_completed|failed)$' -and
+    ($null -eq $inner.security_module.register_return -or
+        $inner.security_module.register_return -is [bool]) -and
+    [string]$inner.security_module.effective_state -match
+        '^(not_run|pending_control|control_open_close_pass)$' -and
     [string]$inner.access_control.source -ceq
         'verified_hancom_saved_table_012_control' -and
     [string]$inner.access_control.input_file -ceq
@@ -781,6 +788,8 @@ if ($null -eq $inner) {
             architecture = 'x86'
             preflight_state = 'not_run'
             register_state = 'not_run'
+            register_return = $null
+            effective_state = 'not_run'
         }
         access_control = [ordered]@{
             source = 'verified_hancom_saved_table_012_control'

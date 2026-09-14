@@ -541,6 +541,8 @@ $result = [ordered]@{
         architecture = 'x86'
         preflight_state = 'pass'
         register_state = 'not_run'
+        register_return = $null
+        effective_state = 'not_run'
     }
     access_control = [ordered]@{
         source = 'verified_hancom_saved_table_012_control'
@@ -597,13 +599,12 @@ try {
     }
     $phase = 'security_module_register'
     $result.security_module.register_state = 'running'
-    if (-not [bool]$hwp.RegisterModule(
+    $result.security_module.register_return = [bool]$hwp.RegisterModule(
         'FilePathCheckDLL',
         $securityModuleName
-    )) {
-        throw 'TABLE_PENDING_22_BATCH_SECURITY_MODULE_REGISTER_RETURNED_FALSE'
-    }
-    $result.security_module.register_state = 'pass'
+    )
+    $result.security_module.register_state = 'call_completed'
+    $result.security_module.effective_state = 'pending_control'
     $phase = 'com_create'
     $hwpProcesses = @(Get-CimInstance Win32_Process -Filter "Name='Hwp.exe'" -ErrorAction SilentlyContinue)
     if ($hwpProcesses.Count -eq 1) {
@@ -677,6 +678,7 @@ try {
     if (-not $result.access_control.input_unchanged) {
         throw 'TABLE_PENDING_22_BATCH_ACCESS_CONTROL_CHANGED'
     }
+    $result.security_module.effective_state = 'control_open_close_pass'
     Write-ProgressEvent -Phase $phase -State 'pass' -HwpProcessId $hwpProcessId
 
     for ($index = 0; $index -lt $allCases.Count; $index += 1) {

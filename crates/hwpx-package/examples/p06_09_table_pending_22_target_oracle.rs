@@ -164,6 +164,8 @@ struct RuntimeSecurityModule {
     architecture: String,
     preflight_state: String,
     register_state: String,
+    register_return: bool,
+    effective_state: String,
 }
 
 #[derive(Deserialize)]
@@ -265,6 +267,7 @@ struct OracleReceipt {
     input_immutability_passed: usize,
     pdf_signature_passed: usize,
     actual_hangul_2020: bool,
+    security_module_register_return: bool,
     render: &'static str,
     automation: &'static str,
     differential: &'static str,
@@ -452,6 +455,7 @@ fn run(arguments: &Arguments) -> Result<(), AnyError> {
         input_immutability_passed: EXPECTED_CASE_COUNT,
         pdf_signature_passed: EXPECTED_CASE_COUNT,
         actual_hangul_2020: true,
+        security_module_register_return: runtime.security_module.register_return,
         render: "pdf_signature_passed_external_original_detail_review_required",
         automation: "not_run",
         differential: "not_run",
@@ -525,7 +529,8 @@ fn require_runtime_boundary(value: &RuntimeTrace) -> Result<(), AnyError> {
             != "9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6"
         || value.security_module.architecture != "x86"
         || value.security_module.preflight_state != "pass"
-        || value.security_module.register_state != "pass"
+        || value.security_module.register_state != "call_completed"
+        || value.security_module.effective_state != "control_open_close_pass"
         || value.access_control.source != "verified_hancom_saved_table_012_control"
         || value.access_control.input_file != EXPECTED_ACCESS_CONTROL_FILE
         || value.access_control.input_sha256 != EXPECTED_ACCESS_CONTROL_SHA256

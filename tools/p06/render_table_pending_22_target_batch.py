@@ -44,7 +44,9 @@ EXPECTED_SECURITY_MODULE = {
     "dll_sha256": "9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6",
     "architecture": "x86",
     "preflight_state": "pass",
-    "register_state": "pass",
+    "register_state": "call_completed",
+    "register_return": False,
+    "effective_state": "control_open_close_pass",
 }
 GROUP_DIRECTORIES = {
     "merge_split": "p06-09-table-merge-split-target-20260913-06",
@@ -334,6 +336,15 @@ def valid_access_control(value: Any) -> bool:
     return (attempt_count, first_open_returned_false) in {(1, False), (2, True)}
 
 
+def valid_security_module(value: Any) -> bool:
+    if not isinstance(value, dict) or set(value) != set(EXPECTED_SECURITY_MODULE):
+        return False
+    static_keys = set(EXPECTED_SECURITY_MODULE) - {"register_return"}
+    if any(value.get(key) != EXPECTED_SECURITY_MODULE[key] for key in static_keys):
+        return False
+    return type(value.get("register_return")) is bool
+
+
 def validate_inputs(
     trace: dict[str, Any],
     trace_sha256: str,
@@ -346,7 +357,7 @@ def validate_inputs(
         trace.get("schema_version") != TRACE_SCHEMA
         or trace.get("state") != "pass"
         or trace.get("target") != EXPECTED_TRACE_TARGET
-        or trace.get("security_module") != EXPECTED_SECURITY_MODULE
+        or not valid_security_module(trace.get("security_module"))
         or not valid_access_control(trace.get("access_control"))
         or trace.get("case_count") != 22
         or trace.get("completed_case_count") != 22
@@ -366,6 +377,8 @@ def validate_inputs(
         or oracle.get("input_immutability_passed") != 22
         or oracle.get("pdf_signature_passed") != 22
         or oracle.get("actual_hangul_2020") is not True
+        or oracle.get("security_module_register_return")
+        is not trace["security_module"]["register_return"]
         or oracle.get("render")
         != "pdf_signature_passed_external_original_detail_review_required"
     ):

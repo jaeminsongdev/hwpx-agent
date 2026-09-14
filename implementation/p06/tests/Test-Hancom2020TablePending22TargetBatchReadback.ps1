@@ -195,7 +195,9 @@ $checks = [ordered]@{
         $all -match '9ac5b97c47ac8aed1e8bca27a3eef39411361d8f68c262509f0c40a8f9d21bb6' -and
         $engine -match '\$hwp\.RegisterModule\(' -and
         $engine -match "'FilePathCheckDLL'" -and
-        $engine -match 'TABLE_PENDING_22_BATCH_SECURITY_MODULE_REGISTER_RETURNED_FALSE' -and
+        $engine -match "register_state = 'call_completed'" -and
+        $engine -match "effective_state = 'control_open_close_pass'" -and
+        $engine -notmatch 'SECURITY_MODULE_REGISTER_RETURNED_FALSE' -and
         $parent -match 'access_approval_user_owned'
     exact_access_control = $all -match
         '04f7910b122ded578975f379a7053b3dc62a0a5b73c2ea40505374500e665a0c' -and

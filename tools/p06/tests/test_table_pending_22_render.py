@@ -71,6 +71,7 @@ def success_inputs() -> tuple[dict[str, object], dict[str, object]]:
         "input_immutability_passed": 22,
         "pdf_signature_passed": 22,
         "actual_hangul_2020": True,
+        "security_module_register_return": False,
         "render": "pdf_signature_passed_external_original_detail_review_required",
     }
     return trace, oracle
