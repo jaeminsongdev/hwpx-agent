@@ -57,6 +57,22 @@ fn exact_current_2020_header_lifts_reference_domains_borders_and_paragraphs() ->
 }
 
 #[test]
+fn current_2020_header_without_unused_numberings_is_admitted() -> TestResult {
+    let header = std::str::from_utf8(HEADER)?;
+    let start = header.find("<hh:numberings ").ok_or("numberings start")?;
+    let end = header.find("</hh:numberings>").ok_or("numberings end")? + "</hh:numberings>".len();
+    let without_numberings = format!("{}{}", &header[..start], &header[end..]);
+    let catalog = ParagraphStyleCatalogReader::read(
+        without_numberings.as_bytes(),
+        ParagraphStyleLimits::default(),
+    )?;
+    assert!(catalog.references.numbering_ids.is_empty());
+    assert_eq!(catalog.border_fills.len(), 2);
+    assert_eq!(catalog.styles.len(), 20);
+    Ok(())
+}
+
+#[test]
 fn lower_is_deterministic_and_exactly_readable_with_external_domains() -> TestResult {
     let catalog = ParagraphStyleCatalogReader::read(HEADER, ParagraphStyleLimits::default())?;
     let (first, first_receipt) =

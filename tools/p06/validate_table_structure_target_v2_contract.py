@@ -27,7 +27,7 @@ MANIFEST = f"{TARGET_DIRECTORY}/fixture-manifest.json"
 SOURCE_LOCKS = {
     "protocol/private/p06-table-structure-hwpx-v1.json": "adc72910ad5766617b454cc8f8a2e96a154871131e745831ee04dbec082e448c",
     "tools/p06/validate_table_structure_hwpx_contract.py": "f461d390f9e421fc208343b432c46e140659e44e48d1daeb55c07c3dc0d63632",
-    "crates/hwpx-package/src/table_ruling_hwpx.rs": "0f974f8c9c8f187b44856864e984d2f4d87d8f561b9b0ed1798cc0bdebcf1d8b",
+    "crates/hwpx-package/src/table_ruling_hwpx.rs": "96b25f546b6414f866c20b483c2539f56dbfc209934983c9631cce2fb6aa5f68",
     "crates/hwpx-package/src/table_ruling_hwpx/structure_hwpx.rs": "dd9f70ab869c48da9962885414fda96da8fb6467ff0b7e509cb9841fc88b336c",
     "crates/hwpx-package/tests/table_structure_hwpx.rs": "582687ae6fded4ae8ebe9b9b7e9f89f53a91d792c07c1b7e76af5a88f71310ea",
     "crates/hwpx-package/examples/p06_09_table_structure_target_fixture.rs": "23b6cd0d4332bdaf7391467a1e507c27a3b0b4d35e7949a75e680c689f69226b",

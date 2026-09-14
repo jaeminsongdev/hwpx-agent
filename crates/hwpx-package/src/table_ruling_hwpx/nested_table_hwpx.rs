@@ -158,7 +158,8 @@ impl TableNestedTableHwpxReader {
             return Err(TableNestedTableHwpxError::UnsupportedTemplateProfile);
         }
         validate_template_payload_profile(template_section, template_table_ordinal)?;
-        let wrapper = super::insertion_wrapper(template_section, template_table_ordinal)?;
+        let nested_wrapper_sha256 =
+            super::insertion_wrapper_semantic_digest(template_section, template_table_ordinal)?;
         validate_cross_table_logical_identities(&parent.state, &template.state, None)?;
         ensure_template_native_identity_available(
             section,
@@ -176,7 +177,7 @@ impl TableNestedTableHwpxReader {
             section_sha256: Sha256::digest(section).into(),
             template_section_sha256: Sha256::digest(template_section).into(),
             insertion_context_sha256,
-            nested_wrapper_sha256: hex(Sha256::digest(&wrapper)),
+            nested_wrapper_sha256,
             source_table_count: TablePaginationHwpxReader::count_in_section(
                 section,
                 limits.pagination,
@@ -694,7 +695,11 @@ impl TableNestedTableHwpxLowerer {
             return Err(TableNestedTableHwpxError::PlanBindingMismatch);
         }
         let wrapper = super::insertion_wrapper(template_section, request.template_table_ordinal)?;
-        if hex(Sha256::digest(&wrapper)) != source.nested_wrapper_sha256 {
+        if super::insertion_wrapper_semantic_digest(
+            template_section,
+            request.template_table_ordinal,
+        )? != source.nested_wrapper_sha256
+        {
             return Err(TableNestedTableHwpxError::SourceBindingMismatch);
         }
         ensure_template_native_identity_available(
@@ -1214,6 +1219,18 @@ fn validate_template_payload_profile(
 
     let document = PreservingXmlDocument::parse(template_section)?;
     let table = super::selected_table(&document, template_table_ordinal)?;
+    let run = super::element(&document, table)?
+        .parent()
+        .ok_or(TableNestedTableHwpxError::UnsupportedTemplateProfile)?;
+    let paragraph = super::element(&document, run)?
+        .parent()
+        .ok_or(TableNestedTableHwpxError::UnsupportedTemplateProfile)?;
+    if !super::has_name(super::element(&document, run)?, "run")
+        || !super::has_name(super::element(&document, paragraph)?, "p")
+        || super::element(&document, paragraph)?.parent() != Some(document.root_element())
+    {
+        return Err(TableNestedTableHwpxError::UnsupportedTemplateProfile);
+    }
     for (index, value) in document.elements().iter().enumerate() {
         if !super::is_descendant(&document, index, table)? {
             continue;

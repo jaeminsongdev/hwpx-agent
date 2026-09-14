@@ -84,23 +84,62 @@ function Test-AccessControlIdentityFailsBeforeCom {
     $targetRoot = (Resolve-Path -LiteralPath (
         Join-Path $PSScriptRoot '..\..\..\fixtures\target-build'
     )).Path.TrimEnd('\')
-    $trace = Join-Path $targetRoot (
+    $directory = Join-Path $targetRoot (
         'hwpx-agent-p06-pending-22-access-control-' +
-        [guid]::NewGuid().ToString('N') + '.json'
+        [guid]::NewGuid().ToString('N')
     )
-    $invoke = @{
-        MergeSplitManifestPath = Join-Path $targetRoot `
+    [void][System.IO.Directory]::CreateDirectory($directory)
+    $sourceManifestPaths = @(
+        Join-Path $targetRoot `
             'p06-09-table-merge-split-target-20260913-06\fixture-manifest.json'
+        Join-Path $targetRoot `
+            'p06-09-table-layout-placement-target-20260913-04\fixture-manifest.json'
+        Join-Path $targetRoot `
+            'p06-09-table-remaining-target-20260913-10\fixture-manifest.json'
+    )
+    $isolatedManifestPaths = @()
+    for ($index = 0; $index -lt $sourceManifestPaths.Count; $index += 1) {
+        $sourceManifest = [System.IO.Path]::GetFullPath(
+            [string]$sourceManifestPaths[$index]
+        )
+        $sourceDirectory = [System.IO.Path]::GetDirectoryName($sourceManifest)
+        $isolatedDirectory = Join-Path $directory ('group-' + $index)
+        [void][System.IO.Directory]::CreateDirectory($isolatedDirectory)
+        $isolatedManifest = Join-Path $isolatedDirectory 'fixture-manifest.json'
+        [System.IO.File]::Copy($sourceManifest, $isolatedManifest, $false)
+        $manifestRecord = Get-Content -Raw -LiteralPath $sourceManifest |
+            ConvertFrom-Json
+        foreach ($case in @($manifestRecord.cases)) {
+            $relativeFile = [string]$case.file
+            $sourceFile = [System.IO.Path]::GetFullPath((
+                Join-Path $sourceDirectory $relativeFile
+            ))
+            if (-not $sourceFile.StartsWith(
+                $sourceDirectory.TrimEnd('\') + '\',
+                [System.StringComparison]::OrdinalIgnoreCase
+            )) {
+                throw 'TEST_FIXTURE_PATH_ESCAPES_MANIFEST_DIRECTORY'
+            }
+            $isolatedFile = [System.IO.Path]::GetFullPath((
+                Join-Path $isolatedDirectory $relativeFile
+            ))
+            $isolatedParent = [System.IO.Path]::GetDirectoryName($isolatedFile)
+            [void][System.IO.Directory]::CreateDirectory($isolatedParent)
+            [System.IO.File]::Copy($sourceFile, $isolatedFile, $false)
+        }
+        $isolatedManifestPaths += $isolatedManifest
+    }
+    $trace = Join-Path $directory 'trace.json'
+    $invoke = @{
+        MergeSplitManifestPath = $isolatedManifestPaths[0]
         ExpectedMergeSplitManifestSha256 =
             '682635284ae5686832dfd89598ea6c106c6b110119e0d54a8e8a24b63e9f3f97'
-        LayoutPlacementManifestPath = Join-Path $targetRoot `
-            'p06-09-table-layout-placement-target-20260913-04\fixture-manifest.json'
+        LayoutPlacementManifestPath = $isolatedManifestPaths[1]
         ExpectedLayoutPlacementManifestSha256 =
-            '33c391ff2b151f815c4e2e79c9144c53547fe87d5e35d1e856e4e796b3978faf'
-        RemainingManifestPath = Join-Path $targetRoot `
-            'p06-09-table-remaining-target-20260913-10\fixture-manifest.json'
+            '053b401cbcd2a21b3e845a29ffef28b9c1f633dfa825ac3f52d520cb5f6a3430'
+        RemainingManifestPath = $isolatedManifestPaths[2]
         ExpectedRemainingManifestSha256 =
-            '1aeddc699c91c4878242a64e7674d1689a86b8abeda704370eeaac337bf95a8e'
+            'e4bb736d7182769546cefd50f2a30fd4bffba7293c589174d8aa0858f9e45c39'
         AccessControlPath = Join-Path $targetRoot `
             'p06-09-table-structure-target-20260913-05\table-012-insert-row-3x3.hancom-2020-readback.hwpx'
         ExpectedAccessControlSha256 = ('0' * 64)
@@ -110,8 +149,13 @@ function Test-AccessControlIdentityFailsBeforeCom {
     try { & $parentPath @invoke | Out-Null }
     catch { $observed = [string]$_.Exception.Message }
     finally {
-        if ([System.IO.File]::Exists($trace)) {
-            [System.IO.File]::Delete($trace)
+        $fullDirectory = [System.IO.Path]::GetFullPath($directory)
+        if ([System.IO.Directory]::Exists($fullDirectory) -and
+            $fullDirectory.StartsWith(
+                $targetRoot + '\hwpx-agent-p06-pending-22-access-control-',
+                [System.StringComparison]::OrdinalIgnoreCase
+            )) {
+            [System.IO.Directory]::Delete($fullDirectory, $true)
         }
     }
     return $observed -ceq
@@ -174,9 +218,9 @@ $checks = [ordered]@{
     exact_manifest_digests = $all -match
         '682635284ae5686832dfd89598ea6c106c6b110119e0d54a8e8a24b63e9f3f97' -and
         $all -match
-        '33c391ff2b151f815c4e2e79c9144c53547fe87d5e35d1e856e4e796b3978faf' -and
+        '053b401cbcd2a21b3e845a29ffef28b9c1f633dfa825ac3f52d520cb5f6a3430' -and
         $all -match
-        '1aeddc699c91c4878242a64e7674d1689a86b8abeda704370eeaac337bf95a8e'
+        'e4bb736d7182769546cefd50f2a30fd4bffba7293c589174d8aa0858f9e45c39'
     exact_22_feature_bindings = $featureBindingsExact -and
         $engine -match '\$allCases\.Count -ne 22' -and
         $parent -match '\$allCases\.Count -ne 22'
@@ -241,6 +285,23 @@ $checks = [ordered]@{
     text_preservation = $engine -match 'input_text_sha256' -and
         $engine -match 'output_text_sha256' -and
         $engine -match 'TABLE_PENDING_22_BATCH_OUTPUT_TEXT_MISMATCH'
+    canonical_text_overload_safe = $engine -match
+        '\$Value\.Replace\("`0", ''''\)' -and
+        $engine -notmatch '\$Value\.Replace\(\[char\]0, ''''\)'
+    one_window_case_reuse = [regex]::Matches(
+        $engine,
+        '\$documents\.Add\(\$false\)'
+    ).Count -eq 2 -and
+        [regex]::Matches(
+            $engine,
+            '\$hwp\.Open\('
+        ).Count -eq 3 -and
+        [regex]::Matches(
+            $engine,
+            '\$hwp\.Clear\(1\)'
+        ).Count -eq 2 -and
+        $engine -match 'TABLE_PENDING_22_BATCH_INPUT_DOCUMENT_COUNT_INVALID' -and
+        $engine -match 'TABLE_PENDING_22_BATCH_OUTPUT_DOCUMENT_COUNT_INVALID'
     layout_text_contract_bound = $engine -match
         'e90f2af9593f587921c00b8c9a4d1c3fed8ed2284bc5463a17d7f259478cdb91' -and
         $engine -match 'fixture_contract'

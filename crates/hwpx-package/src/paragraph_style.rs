@@ -957,11 +957,15 @@ fn read_reference_domains(
     limits: ParagraphStyleLimits,
 ) -> Result<ParagraphReferenceDomains, ParagraphStyleError> {
     let tabs = exactly_one_child(document, ref_list, HEAD_NS, "tabProperties")?;
-    let numberings = exactly_one_child(document, ref_list, HEAD_NS, "numberings")?;
+    let numberings = optional_one_child(document, ref_list, HEAD_NS, "numberings")?;
     let bullets = optional_one_child(document, ref_list, HEAD_NS, "bullets")?;
     let references = ParagraphReferenceDomains {
         tab_property_ids: read_id_domain(document, tabs, "tabPr", 0, limits)?,
-        numbering_ids: read_id_domain(document, numberings, "numbering", 1, limits)?,
+        numbering_ids: if let Some(numberings) = numberings {
+            read_id_domain(document, numberings, "numbering", 1, limits)?
+        } else {
+            Vec::new()
+        },
         bullet_ids: if let Some(bullets) = bullets {
             read_id_domain(document, bullets, "bullet", 1, limits)?
         } else {

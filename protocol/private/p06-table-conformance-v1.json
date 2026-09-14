@@ -1,20 +1,32 @@
 {
-  "schema_version": "hwpx-agent.p06-table-conformance-contract/v1",
-  "scope": "p06_09_current_pc_hancom_2020_fail_closed_matrix",
-  "target": {
-    "profile_id": "hancom-hangul-2020-secondary",
-    "product": "Hancom Hangul 2020",
-    "build": "11.0.0.9136",
-    "locale": "ko-KR",
-    "architecture": "x86",
-    "scope": "current_pc_personal_local_development"
+  "catalog_baseline": "protocol/baseline/catalog-v5.lock.json",
+  "catalog_migration": "protocol/migrations/catalog-v4-to-v5.md",
+  "expected_current_summary": {
+    "automation_binding_counts": {
+      "verified_current_target": 61
+    },
+    "differential_counts": {
+      "exact_match": 61
+    },
+    "direct_stage_counts": {
+      "cataloged": 0,
+      "integration_passed": 0,
+      "oracle_verified": 61,
+      "unit_passed": 0
+    },
+    "green_rows": 61,
+    "non_green_rows": 0,
+    "required_matrix": "green",
+    "required_rows": 61
   },
-  "row_policy": {
-    "feature_ids": "exactly_TABLE_001_through_TABLE_061_once_in_order",
-    "missing_direct_evidence": "cataloged_non_green",
-    "missing_automation_binding": "non_green",
-    "missing_differential": "non_green",
-    "all_rows_required": 61
+  "gate_decision": {
+    "current_snapshot": "pass_green",
+    "matrix_engine": "gate_pass",
+    "p06": "pass",
+    "p06_07": "pass",
+    "p06_09": "pass",
+    "product_complete": false,
+    "required_matrix": "green"
   },
   "green_rule": [
     "direct_hwpx_oracle_verified",
@@ -26,25 +38,41 @@
     "automation_runtime_verified_current_target",
     "direct_automation_differential_exact_match"
   ],
-  "expected_current_summary": {
-    "required_rows": 61,
-    "green_rows": 0,
-    "non_green_rows": 61,
-    "direct_stage_counts": {
-      "cataloged": 0,
-      "unit_passed": 0,
-      "integration_passed": 22,
-      "oracle_verified": 39
-    },
-    "automation_binding_counts": {
-      "candidate_unverified": 32,
-      "unavailable_with_reason": 29
-    },
-    "differential_counts": {
-      "not_run": 61
-    },
-    "required_matrix": "non_green"
+  "human_report": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
+  "machine_report": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
+  "migration": "protocol/migrations/p06-table-conformance-v0-to-v1.md",
+  "not_claimed": {
+    "any_release_enabled_table_capability": true,
+    "arbitrary_user_document_compatibility": false,
+    "other_pc_or_version": false,
+    "p06_09_complete": true,
+    "p06_phase_complete": true,
+    "product_complete": false,
+    "production": false
   },
+  "policy": "implementation/p06/P06-09_TABLE_CONFORMANCE_POLICY.md",
+  "privacy": {
+    "absolute_private_paths": false,
+    "document_content": false,
+    "raw_action_identifiers": false,
+    "raw_parameter_identifiers": false,
+    "raw_probe_values": false
+  },
+  "row_policy": {
+    "all_rows_required": 61,
+    "feature_ids": "exactly_TABLE_001_through_TABLE_061_once_in_order",
+    "missing_automation_binding": "non_green",
+    "missing_differential": "non_green",
+    "missing_direct_evidence": "cataloged_non_green"
+  },
+  "schema_catalog": "protocol/generated/typescript/schema-catalog-v5.json",
+  "schema_version": "hwpx-agent.p06-table-conformance-contract/v1",
+  "schemas": [
+    "protocol/json-schema/p06-table-automation-projection-v1.schema.json",
+    "protocol/json-schema/p06-table-conformance-evidence-v1.schema.json",
+    "protocol/json-schema/p06-table-conformance-report-v1.schema.json"
+  ],
+  "scope": "p06_09_current_pc_hancom_2020_fail_closed_matrix",
   "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
   "source_locks": [
     {
@@ -217,11 +245,11 @@
     },
     {
       "path": "crates/hwpx-package/examples/p06_09_table_layout_placement_target_fixture.rs",
-      "sha256": "6f7e0474c1bf6a678618fec4b59a09d18d22e89fbb2a22ece6a65719f81b5442"
+      "sha256": "a30d66dae2fcc86947369c86227e3a4253b0cdafacf0ed32c28543ae6e5bfafe"
     },
     {
       "path": "crates/hwpx-package/examples/p06_09_table_layout_placement_target_oracle.rs",
-      "sha256": "97f16e2b3269c36001b08c342e0aa0a7fd4f9680befa552c4c2971712ad63e53"
+      "sha256": "ea76a131259f50c25001f3a7ecb0271bb8786576583db145e2ed1bc3aa4c7a3b"
     },
     {
       "path": "crates/hwpx-package/examples/p06_09_table_merge_split_target_fixture.rs",
@@ -245,7 +273,7 @@
     },
     {
       "path": "crates/hwpx-package/examples/p06_09_table_pending_22_target_oracle.rs",
-      "sha256": "7c6d89754e58e244ed58bc47710dc2d942c3d17a9544bdeb049d45cbd4cad834"
+      "sha256": "05aaa4434a2821c720cfd12522fe2ea3bd18136f74aff54fbdb57903a98e7eea"
     },
     {
       "path": "crates/hwpx-package/examples/p06_09_table_properties_target_fixture.rs",
@@ -257,11 +285,11 @@
     },
     {
       "path": "crates/hwpx-package/examples/p06_09_table_remaining_target_fixture.rs",
-      "sha256": "e6b47bcd6d00c1729d72c5c7f52c087eec5581860d8213e6993a1b06d0c02bbc"
+      "sha256": "4a49829ed8b6c7cb7a06663c862a219ca68e9179b772349b914dc34cb1a936bf"
     },
     {
       "path": "crates/hwpx-package/examples/p06_09_table_remaining_target_oracle.rs",
-      "sha256": "f93d146689e3a3495eee226f1467701f3801684371640e7937a88c3885b3787e"
+      "sha256": "ce2d549907ea33d5c69480819ca3b782f239c2a7f5d16a7f62fce1cb288d06b1"
     },
     {
       "path": "crates/hwpx-package/examples/p06_09_table_ruling_target_fixture.rs",
@@ -333,7 +361,7 @@
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx.rs",
-      "sha256": "0f974f8c9c8f187b44856864e984d2f4d87d8f561b9b0ed1798cc0bdebcf1d8b"
+      "sha256": "96b25f546b6414f866c20b483c2539f56dbfc209934983c9631cce2fb6aa5f68"
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/aggregate_hwpx.rs",
@@ -341,7 +369,7 @@
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/auto_fill_hwpx.rs",
-      "sha256": "2459dd4dae3e6b39bdff62e3f83d2532563b2e7211f937ce1a27cdc597ce7de0"
+      "sha256": "865502336129a400ebef1ab89ac07ccb0eb464ce00aa8ff3737e07e26a033bab"
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/create_hwpx.rs",
@@ -357,7 +385,7 @@
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/nested_table_hwpx.rs",
-      "sha256": "fdee9a0e94b3355dfe6ee78b090b4f0c404f264e93b0fb950c3c4b89347f8563"
+      "sha256": "653898d644d442cf7329318cb1d08ec14bc4d224c5a5d187a770179eb5e4165d"
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/partition_hwpx.rs",
@@ -385,7 +413,7 @@
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/text_conversion_hwpx.rs",
-      "sha256": "96417983c223fe20e844fc904d2202bdf8502f0a54c76ee44ca2f5b5384e3c8d"
+      "sha256": "127d9f58d6d20a190b5c018ae6e850465e45054b99f76d38c35b8d2ba304c5cf"
     },
     {
       "path": "crates/hwpx-package/src/table_ruling_hwpx/transpose_hwpx.rs",
@@ -405,7 +433,7 @@
     },
     {
       "path": "crates/hwpx-package/tests/table_auto_fill_hwpx.rs",
-      "sha256": "e072bbbfc00f3718a514842171a211883a61f6f37028e3cfc23737d6298fdfab"
+      "sha256": "6d4ba209f70de18ba80a400408e023448ff02f489cee8c184a72017989811445"
     },
     {
       "path": "crates/hwpx-package/tests/table_cell_style.rs",
@@ -437,7 +465,7 @@
     },
     {
       "path": "crates/hwpx-package/tests/table_nested_table_hwpx.rs",
-      "sha256": "70cf9d23b06b90e434636451cbfa6aadff1558bf55b27f6fc2425e5e861d3ccd"
+      "sha256": "6989e31b6ccf77e3f4dec01cbf5a22e3fe97ab2e4d1e8fa032e90516e3a2f7a2"
     },
     {
       "path": "crates/hwpx-package/tests/table_number_format_hwpx.rs",
@@ -457,11 +485,11 @@
     },
     {
       "path": "crates/hwpx-package/tests/table_ruling_hwpx.rs",
-      "sha256": "b6cab6807650368c2220008163a3990f4e62b95b7769646d1ba44eb8047bedee"
+      "sha256": "f7a514c820f3eecc47accce545c41fca4d1687465a1311591692a889d1ba4f84"
     },
     {
       "path": "crates/hwpx-package/tests/table_sort_hwpx.rs",
-      "sha256": "d984222c1f0a98bc09e48bcebd08fdc272df551cf2799103af7befd080fb5164"
+      "sha256": "805082388a2ef211baa3d300388cf89808bd62551a1690d77ecf9e00e5df654f"
     },
     {
       "path": "crates/hwpx-package/tests/table_split_hwpx.rs",
@@ -601,7 +629,7 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-      "sha256": "48df75c5510581a55c571d9435d13414060259653551504251e48fe089840958"
+      "sha256": "b7d5defadbfcd2e328bc10e611f0f3ce6f330ff8f15debc5280173ee3b253339"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_CREATE_HWPX_POLICY.md",
@@ -665,7 +693,7 @@
     },
     {
       "path": "implementation/p06/P06-09_TABLE_NESTED_TABLE_HWPX_REPORT.md",
-      "sha256": "c05040d72728926109ebf9ccb002d4925f8b59df700285baea41ae27922e029c"
+      "sha256": "9e79edf3130df86fff03e8fb0f3af663c869c498d29a55c1f7ab414e10191ed6"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_NUMBER_FORMAT_HWPX_POLICY.md",
@@ -694,6 +722,10 @@
     {
       "path": "implementation/p06/P06-09_TABLE_PARTITION_TARGET_READBACK_REPORT.md",
       "sha256": "fc504f0b34e3c3447c37894c5b2c7918f2e77769564b00948bff430b0061c18d"
+    },
+    {
+      "path": "implementation/p06/P06-09_TABLE_PENDING_22_TARGET_READBACK_REPORT.md",
+      "sha256": "3b0a5c91558e309bcef7d6a9f05eeda084c40f3ab2f5b24e7f4466f0528cf3f5"
     },
     {
       "path": "implementation/p06/P06-09_TABLE_PLACEMENT_HWPX_POLICY.md",
@@ -857,7 +889,7 @@
     },
     {
       "path": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-      "sha256": "b8b4dd418173f17127cb6377d6a31b70ff1d1fbbb26a82ab5095c0384cef2afe"
+      "sha256": "9751dc97455ea7173d1db1e004ec630732c7a3074ba7e3cddabe487d6cb9440f"
     },
     {
       "path": "implementation/p06/evidence/target/p06-table-aggregate.current-2020.attempt02.v2.json",
@@ -874,6 +906,10 @@
     {
       "path": "implementation/p06/evidence/target/p06-table-automation-candidate-6-surface.current-2020.attempt02.v1.json",
       "sha256": "4557926a92a10fbae05050b737dc509c3fda5863a134788486e9ae64dca71008"
+    },
+    {
+      "path": "implementation/p06/evidence/target/p06-table-automation-v2.current-2020.attempt01.v1.json",
+      "sha256": "bbb2bdd886dd06e4f70726a17e1d51a15d2b3d23ceab900ce1af7cfc8518a0ac"
     },
     {
       "path": "implementation/p06/evidence/target/p06-table-borders-diagonal.current-2020.attempt01.v3.json",
@@ -908,6 +944,10 @@
       "sha256": "3046dd4255c7ad4759bbd510d3661d3a6839a54bdb0322b8976671d546468bb1"
     },
     {
+      "path": "implementation/p06/evidence/target/p06-table-pending-22.current-2020.attempt21.v1.json",
+      "sha256": "e8fe1221c5a1cd1c80ecb31d4eb527692d9e079d1c6af1afdcc05b1ae846baf2"
+    },
+    {
       "path": "implementation/p06/evidence/target/p06-table-properties.current-2020.attempt01.v2.json",
       "sha256": "f71d95ee607c17f4b4960e1feab2926497e3b0cd9fc12e896b36b0021666895a"
     },
@@ -929,15 +969,23 @@
     },
     {
       "path": "implementation/p06/p06-09-current-2020-automation-projection.json",
-      "sha256": "8366b5ef61bb7756072d54ae18210a7aabc92efa875a60afd531477f98e6788c"
+      "sha256": "3130b740d310ac51d2974ac4b0f8d4678d88dca0dca192296804988a1000c06f"
     },
     {
       "path": "implementation/p06/p06-09-current-2020-direct-evidence.json",
-      "sha256": "75303d824f03570676a3e4b09b49d70ea624eca6d416871d323cec01dad3c48e"
+      "sha256": "3e2f4111989929adb55c7d1f49ac5778151e972d4e4e9689a84a5195b564ccf5"
     },
     {
       "path": "implementation/p06/tests/Test-Hancom2020TableAggregateTargetBatchReadback.ps1",
       "sha256": "f05f7dc566d3472ad7eec006549b81a0b8775c543edeb8ca505cd6f2e29c9308"
+    },
+    {
+      "path": "implementation/p06/tests/Test-Hancom2020TableAutomationV2Runtime.ps1",
+      "sha256": "ad30e4e81816be448687b0b6219a66d212c8e2904f1bdde20762869f3796f05e"
+    },
+    {
+      "path": "implementation/p06/tests/Test-Hancom2020TableAutomationV2Surface.ps1",
+      "sha256": "7ea72702b66688aa0b1809dd6ca22a9865943e3791728fc58f8278518591930e"
     },
     {
       "path": "implementation/p06/tests/Test-Hancom2020TableChartProduct.ps1",
@@ -953,7 +1001,7 @@
     },
     {
       "path": "implementation/p06/tests/Test-Hancom2020TableLayoutPlacementTargetBatchReadback.ps1",
-      "sha256": "615448c94bfa3fb5f5833ebb4fa8a639231237c0c32c9630e7f199e51f0e929a"
+      "sha256": "b20d81eee32e51fef168ad7fcdc70ca2b84d94d63bcc0293312847d3de0242a1"
     },
     {
       "path": "implementation/p06/tests/Test-Hancom2020TableMergeSplitTargetBatchReadback.ps1",
@@ -965,11 +1013,11 @@
     },
     {
       "path": "implementation/p06/tests/Test-Hancom2020TablePending22TargetBatchReadback.ps1",
-      "sha256": "41586b72fd0ae219fa7e5829a028d4a331e9eb8539fac7f6d8da7c60ff199aae"
+      "sha256": "ef13b3fabd582f908e9c9b9929703f42df090b90f117a5edb15d426fda6b3cc1"
     },
     {
       "path": "implementation/p06/tests/Test-Hancom2020TablePending22TargetBatchVerify.ps1",
-      "sha256": "5b898507b938fd92f1139b7ee19e352873324a24d90643b904b8eb912785d01b"
+      "sha256": "fe94753a4ffad37cd951821fbb0bd3fb0e542c7410bb9d33bc39b8c3cc960349"
     },
     {
       "path": "implementation/p06/tests/Test-Hancom2020TablePropertiesTargetReadback.ps1",
@@ -977,7 +1025,7 @@
     },
     {
       "path": "implementation/p06/tests/Test-Hancom2020TableRemainingTargetBatchReadback.ps1",
-      "sha256": "921ecb1ba44d98bfeb951039a26fa31f9ad19c5b30f0b0e8206612188974da26"
+      "sha256": "9cd5885e70ec8170e3d8bda0555d7cc99b70efedd79890b3463641f71c90c6df"
     },
     {
       "path": "implementation/p06/tests/Test-Hancom2020TableRulingTargetBatchReadback.ps1",
@@ -1028,6 +1076,14 @@
       "sha256": "7ee77471caec8273a4cdaca5f1a44368e67434f7d4f8466e7a76f3dcf6d3533d"
     },
     {
+      "path": "implementation/p06/tools/run-hancom-2020-table-automation-v2-runtime-child.ps1",
+      "sha256": "4dbb9a3d81d98aa2a7769f784a9bd73d2ac09c1bc6ecf741efb0ddebf2698d1b"
+    },
+    {
+      "path": "implementation/p06/tools/run-hancom-2020-table-automation-v2-surface-child.ps1",
+      "sha256": "0697162ce4a128abcca0e48929a24b2ccdac6786ae8d1adc57a4e64e206f6494"
+    },
+    {
       "path": "implementation/p06/tools/run-hancom-2020-table-chart-product.ps1",
       "sha256": "6434b431a2e4ad52aa42d7c0f21600f5e389ca52a1c54456d29a7d5ce03142ba"
     },
@@ -1045,7 +1101,7 @@
     },
     {
       "path": "implementation/p06/tools/run-hancom-2020-table-layout-placement-target-batch-readback.ps1",
-      "sha256": "7fdc4b8be70ec9b9bdf19ca40e87bbfec735e728e2e26577ed3b267263d44561"
+      "sha256": "f258376f9e83467ff3b0fb9d93a8baa26c842d037b3240f44152163092bb7f95"
     },
     {
       "path": "implementation/p06/tools/run-hancom-2020-table-merge-split-target-batch-readback.ps1",
@@ -1057,15 +1113,15 @@
     },
     {
       "path": "implementation/p06/tools/run-hancom-2020-table-pending-22-target-batch-engine.ps1",
-      "sha256": "bc4da65a0299135a949e46c0d0fe1ad94051f325b8e3d0b86a30e463f0348592"
+      "sha256": "f77c0b5134b108b22441629959250162d30b47840e989eb1fff1336296306e3d"
     },
     {
       "path": "implementation/p06/tools/run-hancom-2020-table-pending-22-target-batch-readback.ps1",
-      "sha256": "564646aaaa9acf1d6e319d83eb14bb2188afdba435bb9edc871b29e9504ef7d4"
+      "sha256": "df4738e8b610aed0bb7a397cd818a60b2104bd21917970929bb2f5cea0ea4453"
     },
     {
       "path": "implementation/p06/tools/run-hancom-2020-table-pending-22-target-batch-verify.ps1",
-      "sha256": "233e35456c76b2a306535229670c2e63edea679b1b2809b0f48c68336a497fdf"
+      "sha256": "8be072521aeda9b001698a359e5abcecebd524d1218aba8886f682f3fc698e46"
     },
     {
       "path": "implementation/p06/tools/run-hancom-2020-table-properties-target-readback.ps1",
@@ -1073,7 +1129,7 @@
     },
     {
       "path": "implementation/p06/tools/run-hancom-2020-table-remaining-target-batch-readback.ps1",
-      "sha256": "35b8bd88ec2784349032361aca762f69ccfc396fcfea8870bffd5cb83fae43e2"
+      "sha256": "d4dc14496e9ea5fa84982bc0bc775922f8a8be15755576e1ab41cafd03f6b726"
     },
     {
       "path": "implementation/p06/tools/run-hancom-2020-table-ruling-target-batch-engine.ps1",
@@ -1121,11 +1177,11 @@
     },
     {
       "path": "protocol/json-schema/p06-table-conformance-evidence-v1.schema.json",
-      "sha256": "ca55c945d93b7d20f23920236e48810fd5f900e6a9f12bada4e4b136cc80a919"
+      "sha256": "ba2a819d2b130ba70e3d5903a9dafa747445824e91550ae6dd98af1677817e78"
     },
     {
       "path": "protocol/json-schema/p06-table-conformance-report-v1.schema.json",
-      "sha256": "9da2263d7fa77ef16cbd9fc221efdc6f27088f914ef9d62e5e7b1123cb2410de"
+      "sha256": "1826fbd3beeb2112a232e25159d45c0645479c7609fd6fad85bbf7eb4a369ffc"
     },
     {
       "path": "protocol/migrations/catalog-v4-to-v5.md",
@@ -1158,6 +1214,14 @@
     {
       "path": "protocol/migrations/p06-table-automation-binding-overlay-v0-to-v1.md",
       "sha256": "0c3bb045567707c7a7ae7323a3d1f8776764e9f084e381a609398964d20a9669"
+    },
+    {
+      "path": "protocol/migrations/p06-table-automation-binding-overlay-v1-to-v2.md",
+      "sha256": "5e78114797307c209f13a28636d25cec5edca3e473893d98cf6678ab10a85e5d"
+    },
+    {
+      "path": "protocol/migrations/p06-table-automation-binding-overlay-v2-to-qualification-v1.md",
+      "sha256": "58db0517ba546569a20be57ff1d6a035657a4ee4fb4c1cf1182b0358bcefcf59"
     },
     {
       "path": "protocol/migrations/p06-table-chart-hwpx-v1-to-render-diff-v1.md",
@@ -1352,6 +1416,14 @@
       "sha256": "4f25ab83bd0ddb8e466ba9555c97c5e1db10c6a3accfe72dcee2828b8699026d"
     },
     {
+      "path": "protocol/private/p06-table-automation-binding-overlay-v2.json",
+      "sha256": "ee8a6fd688fd0a2c75bcdee27971782be19164a79356aa6fe13b99e5621e268f"
+    },
+    {
+      "path": "protocol/private/p06-table-automation-v2-qualification-v1.json",
+      "sha256": "34d02838c0bdee34e859d7fb6ea4cef7a09b23b6b7d59f0c8b570d5a0e2bb2a8"
+    },
+    {
       "path": "protocol/private/p06-table-chart-hwpx-v1.json",
       "sha256": "d3074291e72a2e14fea28e873e752ea77a989386641439b6c88e3f1a8adb27cb"
     },
@@ -1393,7 +1465,7 @@
     },
     {
       "path": "protocol/private/p06-table-layout-placement-target-v1.json",
-      "sha256": "1605b3fa74f2f8979eb60fd0b4565b38465893e2b017ac49dce7f8b307ffe249"
+      "sha256": "dea35e4dd34bf0d0d7237e9ebb7227797c42c150dce6b09f8b6468dcc2e7640d"
     },
     {
       "path": "protocol/private/p06-table-merge-split-hwpx-v1.json",
@@ -1401,11 +1473,11 @@
     },
     {
       "path": "protocol/private/p06-table-merge-split-target-runtime-v1.json",
-      "sha256": "7b2209cec7f25b7531ca42544cb4f9b91fe7109be2d7779eaeabe88a9645fb84"
+      "sha256": "663c394253e4d99b13e2e8f5da4103d054eacc7911559d9858e39cee0f8eda8e"
     },
     {
       "path": "protocol/private/p06-table-nested-table-hwpx-v1.json",
-      "sha256": "01c36673c1d06385f283b78b33d7ec1ba135d153b118991dedba52646b1e2429"
+      "sha256": "ffa11dec4cba9023037ec3a3177372bd440badc23372a641ccbd18535d11de20"
     },
     {
       "path": "protocol/private/p06-table-number-format-hwpx-v1.json",
@@ -1445,7 +1517,7 @@
     },
     {
       "path": "protocol/private/p06-table-properties-target-v3.json",
-      "sha256": "f27b83a66d1735265389c4d18ea9cd9964cd6e650689b2220a61541c70f95ffc"
+      "sha256": "3deb1b7e1eee2dc516a203402461fea2dbcaa7550cbda70ab8b8aa3ccb42db2a"
     },
     {
       "path": "protocol/private/p06-table-properties-v1.json",
@@ -1453,7 +1525,7 @@
     },
     {
       "path": "protocol/private/p06-table-remaining-target-v1.json",
-      "sha256": "dece159fec2b6486a8954f86c90f1c982d52ca50cb7e77270f68ecd4b92e3310"
+      "sha256": "93d66410fdefe50b60f075b3b344f1e662f1886acf907a84826872d2d25fb42b"
     },
     {
       "path": "protocol/private/p06-table-ruling-hwpx-v1.json",
@@ -1461,7 +1533,7 @@
     },
     {
       "path": "protocol/private/p06-table-ruling-target-v2.json",
-      "sha256": "547a3e322c80e401fc790287a47c1a37098c1f72de1bdf7558537c2dfdcfa702"
+      "sha256": "34b8ac5d0294a3bdfa21dd0a92ca17e01759d99da08ffb62d8b05eb07b960335"
     },
     {
       "path": "protocol/private/p06-table-ruling-v1.json",
@@ -1485,7 +1557,7 @@
     },
     {
       "path": "protocol/private/p06-table-structure-target-v2.json",
-      "sha256": "f7bfcf108c53e37408c0bbe20faa720a0330fdbe9ad21b211e2c60849522642b"
+      "sha256": "223444983f9c9fba2b89212252016646cfc411800045c032a057815e3b07590e"
     },
     {
       "path": "protocol/private/p06-table-style-hwpx-v1.json",
@@ -1501,7 +1573,7 @@
     },
     {
       "path": "protocol/private/p06-table-text-conversion-target-v2.json",
-      "sha256": "9280c79eed7d7f3c146f7e3774d506178a523af9d0708d1683ae1b185c67721c"
+      "sha256": "6211610b7b9122d2b131be7e1e09a71a1e48496d9c6d5111102bf0a7845ce496"
     },
     {
       "path": "protocol/private/p06-table-text-conversion-v1.json",
@@ -1536,6 +1608,10 @@
       "sha256": "f0acefe755e1e3e701453fd7356a4cd9ad375b0ea1d9ff186fc4215a9b939be1"
     },
     {
+      "path": "tools/p06/build_table_automation_binding_overlay_v2.py",
+      "sha256": "43e4dc78342cc49ae411655ef937743836b627a8762b78df774ef143d9213516"
+    },
+    {
       "path": "tools/p06/build_table_automation_candidate_32_surface_evidence.py",
       "sha256": "fbc534023a284e20c00718069cd638b27e57f7663e8498841476034de18edc94"
     },
@@ -1544,8 +1620,12 @@
       "sha256": "d6ac253cb6f9863d8cc6badb18856d18fed3bccfcf747a87628d48845ea50fc8"
     },
     {
+      "path": "tools/p06/finalize_table_automation_v2_qualification.py",
+      "sha256": "4c5390c1558acf23726e5551313de0eba93786960accdfcdfd1c3532d414be19"
+    },
+    {
       "path": "tools/p06/finalize_table_pending_22_visual_review.py",
-      "sha256": "f51cda9a911168a771be8a26a6d56a573d15e4d9de714687d97b597ace823a02"
+      "sha256": "865efc0cb4466e85886091c1c0cffb574904101fb769f82cec718112d3bac66a"
     },
     {
       "path": "tools/p06/plan_table_automation_candidate_32_batch.py",
@@ -1569,7 +1649,7 @@
     },
     {
       "path": "tools/p06/table_conformance.py",
-      "sha256": "0e4929c633c029ee8b3fb582ea4a918f46b6278db90677e19e793a0f880b9411"
+      "sha256": "983c28e45ec21605f4892126077c1da2187aa1543cf6f59ee85b81748ae59bf2"
     },
     {
       "path": "tools/p06/tests/test_table_absolute_reference_hwpx_contract.py",
@@ -1600,6 +1680,10 @@
       "sha256": "68c3cc2382d1b6e858e686cd717ba9c874b69ce2698f8367fcac1eed652a0f31"
     },
     {
+      "path": "tools/p06/tests/test_table_automation_binding_overlay_v2.py",
+      "sha256": "da6b356a9781dc756acaa2e194703dc0830a47389479ec9f949d8295e9c06be7"
+    },
+    {
       "path": "tools/p06/tests/test_table_automation_candidate_32_batch_plan.py",
       "sha256": "fe5c1bd3d7559319c4a51dcd6c26b64bda010139ca9d6ddc8eba185b89fccbc6"
     },
@@ -1620,6 +1704,10 @@
       "sha256": "baf33e293de3f33b077cc263d97c6cd79711749b0becc434279cca1f290e002f"
     },
     {
+      "path": "tools/p06/tests/test_table_automation_v2_qualification.py",
+      "sha256": "356f08f5f917ffe97d0bb18fe0bd43b2d90359a3e34a19d8ac0791e506ba826c"
+    },
+    {
       "path": "tools/p06/tests/test_table_chart_contract.py",
       "sha256": "fc73edb4fd1fdfa78254af7a93107ebaa96278a24356059652a76b7672b906a2"
     },
@@ -1637,11 +1725,11 @@
     },
     {
       "path": "tools/p06/tests/test_table_conformance.py",
-      "sha256": "f11477ac2bde74a59c90066e58c17b4df9512c743b6204a8375a2d263101de71"
+      "sha256": "4b87a5a81ee2608b072acb7812b0458b4af75c0d7da40787248401a1dab4c9ab"
     },
     {
       "path": "tools/p06/tests/test_table_conformance_contract.py",
-      "sha256": "21d94c226e47b2caaad3f60f8478d88955097ff3780514c0c6f8fc70a53b56fd"
+      "sha256": "70c073ee7808f9f5b66f5c19d25579f23a7c7c7b152fd3baed2d1d21a6c09d00"
     },
     {
       "path": "tools/p06/tests/test_table_create_hwpx_contract.py",
@@ -1709,7 +1797,7 @@
     },
     {
       "path": "tools/p06/tests/test_table_pending_22_visual_review_finalizer.py",
-      "sha256": "5db6113525d66dba5ff2ac6fb44926c407e56853052942ad80e41678598bc95c"
+      "sha256": "382047b428acce88725e83bddcecfc8591e29a54a8ed6c77f6902339408c8603"
     },
     {
       "path": "tools/p06/tests/test_table_placement_contract.py",
@@ -1849,7 +1937,7 @@
     },
     {
       "path": "tools/p06/validate_table_conformance_contract.py",
-      "sha256": "e17048373fd37b1facd52837ba1b1a519a2d2509df0ab24eb8b4e8e0b15c765d"
+      "sha256": "6724f11479848023f31dbf5bbe3d5fd66a50bd8a2638ed79d9a814c0cf3a22f1"
     },
     {
       "path": "tools/p06/validate_table_create_hwpx_contract.py",
@@ -1877,7 +1965,7 @@
     },
     {
       "path": "tools/p06/validate_table_layout_placement_target_v1_contract.py",
-      "sha256": "0d934238d11c90e0bc8868d71fea99594eac5cf9a7760d32f104095de5c86a44"
+      "sha256": "93eddd51789f63a16b4e0899797624f1a0d6a2821b678af544ce86082770a626"
     },
     {
       "path": "tools/p06/validate_table_merge_split_hwpx_contract.py",
@@ -1889,7 +1977,7 @@
     },
     {
       "path": "tools/p06/validate_table_nested_table_hwpx_contract.py",
-      "sha256": "3520f5b642dbbd24925a3eceb45f76b5834b8c922d9f5b966c6001dfbe7f7339"
+      "sha256": "89083a2f3e3fcab822632ec3e29fc615130bcaf306e46dd5daff2b474d8620f1"
     },
     {
       "path": "tools/p06/validate_table_number_format_contract.py",
@@ -1933,11 +2021,11 @@
     },
     {
       "path": "tools/p06/validate_table_properties_target_v3_contract.py",
-      "sha256": "3cd00e999f7a627583d96e7a819af85a9482c9adafeb6cdfd88089ce454afa91"
+      "sha256": "ae624c12ba88c8596982bb3992d26938f7cba39e1c16d421de57a9f5c60d5b72"
     },
     {
       "path": "tools/p06/validate_table_remaining_target_v1_contract.py",
-      "sha256": "73e133695c37d020210f8f6060b1607f0e1e431eda5cd58c81216250213ebada"
+      "sha256": "d35131ba46e1ea191bd8bf30482647258f5d84a802a8379661743f36ebeea1a8"
     },
     {
       "path": "tools/p06/validate_table_ruling_contract.py",
@@ -1949,7 +2037,7 @@
     },
     {
       "path": "tools/p06/validate_table_ruling_target_v2_contract.py",
-      "sha256": "66379ea07c368a3751ed1cebc8ed12258661dbf70aafb6d4388789a9344844a7"
+      "sha256": "fa3402e7b886c23cd87cd9cf0e7792066d935aa680d18aaecee91dd950dc5c72"
     },
     {
       "path": "tools/p06/validate_table_sort_contract.py",
@@ -1969,7 +2057,7 @@
     },
     {
       "path": "tools/p06/validate_table_structure_target_v2_contract.py",
-      "sha256": "1b9287989ba5213ac1a7e7e049f68c71dcb0331f6158ef65519436c9b82d5889"
+      "sha256": "d9f84d7e96131fa3d8beb30fcfa542ce31af2edf85ccc575880c327df8112be4"
     },
     {
       "path": "tools/p06/validate_table_style_hwpx_contract.py",
@@ -1989,7 +2077,7 @@
     },
     {
       "path": "tools/p06/validate_table_text_conversion_target_v2_contract.py",
-      "sha256": "0c8f0598fe6d02de111f0e41b7115f06bc43d17f00101c55d0ea5cc0da82a84f"
+      "sha256": "86a9d23d91c894713b1b0a575aaa7c374920208051b30bd23677bb61e73fd7c3"
     },
     {
       "path": "tools/p06/validate_table_text_to_table_hwpx_contract.py",
@@ -2016,41 +2104,12 @@
       "sha256": "f8f9e74838f1901e89a3c265196098592c3c15dc594baf71cf11853adfbea931"
     }
   ],
-  "schemas": [
-    "protocol/json-schema/p06-table-automation-projection-v1.schema.json",
-    "protocol/json-schema/p06-table-conformance-evidence-v1.schema.json",
-    "protocol/json-schema/p06-table-conformance-report-v1.schema.json"
-  ],
-  "migration": "protocol/migrations/p06-table-conformance-v0-to-v1.md",
-  "schema_catalog": "protocol/generated/typescript/schema-catalog-v5.json",
-  "catalog_migration": "protocol/migrations/catalog-v4-to-v5.md",
-  "catalog_baseline": "protocol/baseline/catalog-v5.lock.json",
-  "policy": "implementation/p06/P06-09_TABLE_CONFORMANCE_POLICY.md",
-  "human_report": "implementation/p06/P06-09_TABLE_CONFORMANCE_REPORT.md",
-  "machine_report": "implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json",
-  "privacy": {
-    "raw_action_identifiers": false,
-    "raw_parameter_identifiers": false,
-    "raw_probe_values": false,
-    "document_content": false,
-    "absolute_private_paths": false
-  },
-  "gate_decision": {
-    "matrix_engine": "component_pass",
-    "current_snapshot": "pass_truthful_non_green",
-    "required_matrix": "non_green",
-    "p06_07": "pass",
-    "p06_09": "in_progress",
-    "p06": "in_progress",
-    "product_complete": false
-  },
-  "not_claimed": {
-    "any_release_enabled_table_capability": false,
-    "p06_09_complete": false,
-    "p06_phase_complete": false,
-    "arbitrary_user_document_compatibility": false,
-    "other_pc_or_version": false,
-    "production": false,
-    "product_complete": false
+  "target": {
+    "architecture": "x86",
+    "build": "11.0.0.9136",
+    "locale": "ko-KR",
+    "product": "Hancom Hangul 2020",
+    "profile_id": "hancom-hangul-2020-secondary",
+    "scope": "current_pc_personal_local_development"
   }
 }

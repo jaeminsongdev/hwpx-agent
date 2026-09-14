@@ -27,7 +27,7 @@ const MAX_PROGRESS_BYTES: u64 = 64 * 1024;
 const EXPECTED_FIXTURE_SCHEMA: &str = "hwpx-agent.p06-09-table-remaining-target-fixture/v1";
 const EXPECTED_RUNTIME_SCHEMA: &str = "hwpx-agent.p06-09-table-remaining-target-batch-readback/v1";
 const EXPECTED_FIXTURE_MANIFEST_SHA256: &str =
-    "1aeddc699c91c4878242a64e7674d1689a86b8abeda704370eeaac337bf95a8e";
+    "e4bb736d7182769546cefd50f2a30fd4bffba7293c589174d8aa0858f9e45c39";
 const EXPECTED_TRACE_SCHEMA: &str =
     "hwpx-agent.p06-09-hancom-2020-table-properties-target-readback/v1";
 const EXPECTED_HANCOM_VERSION: &str = "11.0.0.9136";
@@ -766,23 +766,63 @@ fn require_style_oracle(
         case.primary_table_ordinal,
         &binding,
         limits,
-    )?;
+    )
+    .map_err(|error| {
+        format!(
+            "TABLE-020 target style read failed: {}:{error:?}",
+            error.code()
+        )
+    })?;
     let right = TableStyleHwpxReader::read_existing(
         &actual.header,
         &actual.section,
         case.primary_table_ordinal,
         &binding,
         limits,
-    )?;
-    if left.properties.grid != right.properties.grid
-        || left.properties.state != right.properties.state
-        || left.properties.table_value != right.properties.table_value
-        || left.properties.cell_values != right.properties.cell_values
-        || left.cell_style_sha256 != right.cell_style_sha256
-        || left.properties.payload_block_count != right.properties.payload_block_count
-        || left.properties.formula_count != right.properties.formula_count
-    {
-        return Err("TABLE-020 typed style readback differs".into());
+    )
+    .map_err(|error| {
+        format!(
+            "TABLE-020 actual style read failed: {}:{error:?}",
+            error.code()
+        )
+    })?;
+    let mut mismatches = Vec::new();
+    if left.properties.grid != right.properties.grid {
+        mismatches.push("properties.grid".to_owned());
+    }
+    if left.properties.state != right.properties.state {
+        mismatches.extend(properties_state_mismatches(
+            &left.properties.state,
+            &right.properties.state,
+        ));
+    }
+    if left.properties.table_value != right.properties.table_value {
+        mismatches.push("properties.table_value".to_owned());
+    }
+    if left.properties.cell_values != right.properties.cell_values {
+        mismatches.push("properties.cell_values".to_owned());
+    }
+    if left.cell_style_sha256 != right.cell_style_sha256 {
+        mismatches.push("cell_style_sha256".to_owned());
+    }
+    if left.properties.payload_block_count != right.properties.payload_block_count {
+        mismatches.push(format!(
+            "payload_block_count(expected={},actual={})",
+            left.properties.payload_block_count, right.properties.payload_block_count
+        ));
+    }
+    if left.properties.formula_count != right.properties.formula_count {
+        mismatches.push(format!(
+            "formula_count(expected={},actual={})",
+            left.properties.formula_count, right.properties.formula_count
+        ));
+    }
+    if !mismatches.is_empty() {
+        return Err(format!(
+            "TABLE-020 typed style readback differs: {}",
+            mismatches.join(",")
+        )
+        .into());
     }
     Ok(())
 }
@@ -907,14 +947,26 @@ fn require_nested_oracle(
             ordinal,
             binding,
             limits,
-        )?;
+        )
+        .map_err(|error| {
+            format!(
+                "TABLE-054 target ordinal {ordinal} ruling read failed: {}:{error:?}",
+                error.code(),
+            )
+        })?;
         let right = TableRulingHwpxReader::read_existing(
             &actual.header,
             &actual.section,
             ordinal,
             binding,
             limits,
-        )?;
+        )
+        .map_err(|error| {
+            format!(
+                "TABLE-054 actual ordinal {ordinal} ruling read failed: {}:{error:?}",
+                error.code(),
+            )
+        })?;
         let left_pagination = TablePaginationHwpxReader::read_in_section(
             &target.section,
             ordinal,
@@ -943,14 +995,26 @@ fn require_sort_oracle(
         case.primary_table_ordinal,
         &binding,
         limits,
-    )?;
+    )
+    .map_err(|error| {
+        format!(
+            "TABLE-056 target sort read failed: {}:{error:?}",
+            error.code()
+        )
+    })?;
     let right = TableSortHwpxReader::read_context(
         &actual.header,
         &actual.section,
         case.primary_table_ordinal,
         &binding,
         limits,
-    )?;
+    )
+    .map_err(|error| {
+        format!(
+            "TABLE-056 actual sort read failed: {}:{error:?}",
+            error.code()
+        )
+    })?;
     require_ruling_and_pagination(
         &left.ruling,
         &right.ruling,
@@ -981,7 +1045,14 @@ fn require_auto_fill_oracle(
         region,
         &binding,
         auto_limits,
-    )?;
+    )
+    .map_err(|error| {
+        format!(
+            "{} target auto-fill read failed: {}:{error:?}",
+            case.feature_id,
+            error.code(),
+        )
+    })?;
     let right = TableAutoFillHwpxReader::read_context(
         &actual.header,
         &actual.section,
@@ -989,7 +1060,14 @@ fn require_auto_fill_oracle(
         region,
         &binding,
         auto_limits,
-    )?;
+    )
+    .map_err(|error| {
+        format!(
+            "{} actual auto-fill read failed: {}:{error:?}",
+            case.feature_id,
+            error.code(),
+        )
+    })?;
     require_ruling_and_pagination(
         &left.ruling,
         &right.ruling,
@@ -1063,15 +1141,134 @@ fn require_ruling_and_pagination(
     left_pagination: &TablePaginationHwpxReadback,
     right_pagination: &TablePaginationHwpxReadback,
 ) -> Result<(), AnyError> {
-    if left.grid != right.grid
-        || left.state != right.state
-        || left.payload_block_count != right.payload_block_count
-        || left.formula_count != right.formula_count
-        || !pagination_semantic_equal(left_pagination, right_pagination)
-    {
-        return Err("typed ruling or pagination readback differs".into());
+    let mut mismatches = Vec::new();
+    if left.grid != right.grid {
+        mismatches.push("grid".to_owned());
+    }
+    if left.state != right.state {
+        mismatches.extend(ruling_state_mismatches(&left.state, &right.state));
+    }
+    if left.payload_block_count != right.payload_block_count {
+        mismatches.push(format!(
+            "payload_block_count(expected={},actual={})",
+            left.payload_block_count, right.payload_block_count
+        ));
+    }
+    if left.formula_count != right.formula_count {
+        mismatches.push(format!(
+            "formula_count(expected={},actual={})",
+            left.formula_count, right.formula_count
+        ));
+    }
+    if !pagination_semantic_equal(left_pagination, right_pagination) {
+        mismatches.push(format!(
+            "pagination(page_split={:?}/{:?},repeat_header_rows={}/{},row_count={}/{},column_count={}/{},caption={}/{})",
+            left_pagination.page_split,
+            right_pagination.page_split,
+            left_pagination.repeat_header_rows,
+            right_pagination.repeat_header_rows,
+            left_pagination.row_count,
+            right_pagination.row_count,
+            left_pagination.column_count,
+            right_pagination.column_count,
+            left_pagination.caption.is_some(),
+            right_pagination.caption.is_some()
+        ));
+    }
+    if !mismatches.is_empty() {
+        return Err(format!(
+            "typed ruling or pagination readback differs: {}",
+            mismatches.join(",")
+        )
+        .into());
     }
     Ok(())
+}
+
+fn properties_state_mismatches(
+    left: &domain_ir::TablePropertiesState,
+    right: &domain_ir::TablePropertiesState,
+) -> Vec<String> {
+    let mut mismatches = Vec::new();
+    if left.table_id() != right.table_id() {
+        mismatches.push("properties.state.table_id".to_owned());
+    }
+    if left.grid_sha256() != right.grid_sha256() {
+        mismatches.push("properties.state.grid_sha256".to_owned());
+    }
+    if left.table_properties_sha256() != right.table_properties_sha256() {
+        mismatches.push("properties.state.table_properties_sha256".to_owned());
+    }
+    if left.cells().len() != right.cells().len() {
+        mismatches.push("properties.state.cells.length".to_owned());
+    }
+    for (index, (left_cell, right_cell)) in left.cells().iter().zip(right.cells()).enumerate() {
+        if left_cell.master_cell_id != right_cell.master_cell_id {
+            mismatches.push(format!("properties.state.cells[{index}].master_cell_id"));
+        }
+        if left_cell.coordinate != right_cell.coordinate {
+            mismatches.push(format!("properties.state.cells[{index}].coordinate"));
+        }
+        if left_cell.payload_sha256 != right_cell.payload_sha256 {
+            mismatches.push(format!("properties.state.cells[{index}].payload_sha256"));
+        }
+        if left_cell.formula_sha256 != right_cell.formula_sha256 {
+            mismatches.push(format!("properties.state.cells[{index}].formula_sha256"));
+        }
+        if left_cell.properties != right_cell.properties {
+            mismatches.push(format!("properties.state.cells[{index}].properties"));
+        }
+    }
+    mismatches
+}
+
+fn ruling_state_mismatches(
+    left: &domain_ir::TableRulingState,
+    right: &domain_ir::TableRulingState,
+) -> Vec<String> {
+    let mut mismatches = Vec::new();
+    if left.table_id() != right.table_id() {
+        mismatches.push("state.table_id".to_owned());
+    }
+    if left.frame() != right.frame() {
+        mismatches.push("state.frame".to_owned());
+    }
+    if left.grid_sha256() != right.grid_sha256() {
+        mismatches.push("state.grid_sha256".to_owned());
+    }
+    if left.table_properties_sha256() != right.table_properties_sha256() {
+        mismatches.push("state.table_properties_sha256".to_owned());
+    }
+    if left.row_boundaries_hwpunit() != right.row_boundaries_hwpunit() {
+        mismatches.push("state.row_boundaries_hwpunit".to_owned());
+    }
+    if left.column_boundaries_hwpunit() != right.column_boundaries_hwpunit() {
+        mismatches.push("state.column_boundaries_hwpunit".to_owned());
+    }
+    if left.edges() != right.edges() {
+        mismatches.push("state.edges".to_owned());
+    }
+    if left.cells().len() != right.cells().len() {
+        mismatches.push("state.cells.length".to_owned());
+    }
+    for (index, (left_cell, right_cell)) in left.cells().iter().zip(right.cells()).enumerate() {
+        if left_cell.master_cell_id() != right_cell.master_cell_id() {
+            mismatches.push(format!("state.cells[{index}].master_cell_id"));
+        }
+        if left_cell.coordinate() != right_cell.coordinate() {
+            mismatches.push(format!("state.cells[{index}].coordinate"));
+        }
+        if left_cell.payload() != right_cell.payload() {
+            mismatches.push(format!("state.cells[{index}].payload"));
+        }
+        if left_cell.properties() != right_cell.properties() {
+            mismatches.push(format!("state.cells[{index}].properties"));
+        }
+        if left_cell.formula() != right_cell.formula() {
+            mismatches.push(format!("state.cells[{index}].formula"));
+        }
+    }
+    mismatches
 }
 
 fn pagination_semantic_equal(

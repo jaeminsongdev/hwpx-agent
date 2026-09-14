@@ -10,15 +10,16 @@ from tools.p06 import validate_table_conformance_contract as validator
 
 
 class TableConformanceContractTests(unittest.TestCase):
-    def test_repository_contract_passes_without_promoting_matrix(self) -> None:
+    def test_repository_contract_passes_with_promoted_matrix(self) -> None:
         report = validator.validate()
         self.assertEqual(report["state"], "pass", report)
-        self.assertEqual(report["source_locks"], 492)
+        self.assertEqual(report["source_locks"], len(validator.EXPECTED_SOURCE_PATHS))
         self.assertEqual(report["schemas"], 3)
-        self.assertEqual(report["green_rows"], 0)
-        self.assertEqual(report["required_matrix"], "non_green")
+        self.assertEqual(report["green_rows"], 61)
+        self.assertEqual(report["required_matrix"], "green")
         self.assertEqual(report["p06_07"], "pass")
-        self.assertEqual(report["p06_09"], "in_progress")
+        self.assertEqual(report["p06_09"], "pass")
+        self.assertEqual(report["p06"], "pass")
         self.assertFalse(report["product_complete"])
 
     def test_locked_source_and_committed_report_drift_fail(self) -> None:
@@ -45,7 +46,7 @@ class TableConformanceContractTests(unittest.TestCase):
             contract_path = root / validator.CONTRACT
             original = contract_path.read_text(encoding="utf-8")
             contract_path.write_text(
-                original.replace("{\n", '{\n  "schema_version": "duplicate",\n', 1),
+                original.replace("{", '{"schema_version":"duplicate",', 1),
                 encoding="utf-8",
             )
             self.assertEqual(validator.validate(root)["errors"], ["contract_json_or_path"])
@@ -66,7 +67,7 @@ class TableConformanceContractTests(unittest.TestCase):
             contract_path = root / validator.CONTRACT
             contract = json.loads(contract_path.read_text(encoding="utf-8"))
             contract["green_rule"].pop()
-            contract["not_claimed"]["p06_09_complete"] = True
+            contract["not_claimed"]["p06_09_complete"] = False
             contract_path.write_text(json.dumps(contract), encoding="utf-8")
             errors = validator.validate(root)["errors"]
             self.assertIn("green_rule", errors)

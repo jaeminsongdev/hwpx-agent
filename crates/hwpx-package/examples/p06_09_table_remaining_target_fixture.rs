@@ -1489,7 +1489,7 @@ fn common_binding() -> Result<TableRulingHwpxBinding, AnyError> {
 fn nested_template_binding() -> Result<TableRulingHwpxBinding, AnyError> {
     Ok(TableRulingHwpxBinding {
         table_id: id("remaining-target-nested-table")?,
-        row_boundaries_hwpunit: vec![0, 2_000, 4_000],
+        row_boundaries_hwpunit: vec![0, 1_500, 3_000],
         column_boundaries_hwpunit: vec![0, 6_000, 12_000],
         cells: ["a", "b", "c", "d"]
             .into_iter()
@@ -1547,11 +1547,12 @@ fn auto_fill_source_section() -> Vec<u8> {
         concat!(
             r#"<hs:sec xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph">"#,
             "{}",
+            r#"<hp:p id="8700" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0">"#,
             r#"<hp:tbl id="8701" zOrder="0" numberingType="TABLE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" pageBreak="CELL" repeatHeader="1" rowCnt="2" colCnt="3" cellSpacing="0" borderFillIDRef="1" noAdjust="0">"#,
             r#"<hp:sz width="36000" widthRelTo="ABSOLUTE" height="8000" heightRelTo="ABSOLUTE" protect="0"/>"#,
             r#"<hp:pos treatAsChar="0" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/>"#,
             r#"<hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:inMargin left="0" right="0" top="0" bottom="0"/>"#,
-            "<hp:tr>{row0}</hp:tr><hp:tr>{row1}</hp:tr></hp:tbl>{}</hs:sec>"
+            "<hp:tr>{row0}</hp:tr><hp:tr>{row1}</hp:tr></hp:tbl></hp:run></hp:p>{}</hs:sec>"
         ),
         text_paragraph(87, "BEFORE"),
         text_paragraph(88, "AFTER"),
@@ -1573,7 +1574,7 @@ fn auto_fill_cell(row: u32, column: u32, value: &str) -> String {
             r#"<hp:cellAddr colAddr="{column}" rowAddr="{row}"/><hp:cellSpan colSpan="1" rowSpan="1"/>"#,
             r#"<hp:cellSz width="12000" height="4000"/><hp:cellMargin left="0" right="0" top="0" bottom="0"/>"#,
             r#"<hp:subList id="" textDirection="HORIZONTAL" lineWrap="BREAK" vertAlign="CENTER" linkListIDRef="0" linkListNextIDRef="0" textWidth="0" textHeight="0" hasTextRef="0" hasNumRef="0">"#,
-            r#"<hp:p id="0" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0">{text}</hp:run></hp:p></hp:subList></hp:tc>"#
+            r#"<hp:p id="0" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0">{text}</hp:run></hp:p></hp:subList></hp:tc>"#
         ),
         header = u8::from(row == 0),
         column = column,
@@ -1596,12 +1597,12 @@ fn nested_template_section() -> Vec<u8> {
     format!(
         concat!(
             r#"<hs:sec xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph">"#,
-            r#"<hp:p id="8900" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"><hp:ctrl>"#,
+            r#"<hp:p id="8900" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0">"#,
             r#"<hp:tbl id="8901" zOrder="0" numberingType="TABLE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" pageBreak="CELL" repeatHeader="0" rowCnt="2" colCnt="2" cellSpacing="0" borderFillIDRef="1" noAdjust="0">"#,
-            r#"<hp:sz width="12000" widthRelTo="ABSOLUTE" height="4000" heightRelTo="ABSOLUTE" protect="0"/>"#,
+            r#"<hp:sz width="12000" widthRelTo="ABSOLUTE" height="3000" heightRelTo="ABSOLUTE" protect="0"/>"#,
             r#"<hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/>"#,
             r#"<hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:inMargin left="0" right="0" top="0" bottom="0"/>"#,
-            "{row0}{row1}</hp:tbl></hp:ctrl><hp:t/></hp:run></hp:p></hs:sec>"
+            "{row0}{row1}</hp:tbl></hp:run></hp:p></hs:sec>"
         ),
         row0 = row0,
         row1 = row1,
@@ -1616,7 +1617,7 @@ fn nested_cell(row: u32, column: u32, payload: &str) -> String {
             r#"<hp:subList id="" textDirection="HORIZONTAL" lineWrap="BREAK" vertAlign="CENTER" linkListIDRef="0" linkListNextIDRef="0" textWidth="0" textHeight="0" hasTextRef="0" hasNumRef="0">"#,
             "{payload}</hp:subList>",
             r#"<hp:cellAddr colAddr="{column}" rowAddr="{row}"/><hp:cellSpan colSpan="1" rowSpan="1"/>"#,
-            r#"<hp:cellSz width="6000" height="2000"/><hp:cellMargin left="0" right="0" top="0" bottom="0"/></hp:tc>"#
+            r#"<hp:cellSz width="6000" height="1500"/><hp:cellMargin left="0" right="0" top="0" bottom="0"/></hp:tc>"#
         ),
         payload = payload,
         column = column,
@@ -1641,11 +1642,12 @@ fn absolute_source_section() -> Vec<u8> {
         concat!(
             r#"<hs:sec xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph">"#,
             "{}",
+            r#"<hp:p id="9000" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0">"#,
             r#"<hp:tbl id="9001" zOrder="0" numberingType="TABLE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" pageBreak="CELL" repeatHeader="1" rowCnt="2" colCnt="3" cellSpacing="0" borderFillIDRef="1" noAdjust="0">"#,
             r#"<hp:sz width="18000" widthRelTo="ABSOLUTE" height="4000" heightRelTo="ABSOLUTE" protect="0"/>"#,
             r#"<hp:pos treatAsChar="0" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/>"#,
             r#"<hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:inMargin left="0" right="0" top="0" bottom="0"/>"#,
-            "<hp:tr>{row0}</hp:tr><hp:tr>{row1}</hp:tr></hp:tbl>{}</hs:sec>"
+            "<hp:tr>{row0}</hp:tr><hp:tr>{row1}</hp:tr></hp:tbl></hp:run></hp:p>{}</hs:sec>"
         ),
         text_paragraph(95, "BEFORE"),
         text_paragraph(96, "AFTER"),
@@ -1673,7 +1675,7 @@ fn absolute_cell(row: u32, column: u32, payload: &str) -> String {
 
 fn text_paragraph(identifier: u32, value: &str) -> String {
     format!(
-        r#"<hp:p id="{identifier}" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"><hp:t>{value}</hp:t></hp:run></hp:p>"#
+        r#"<hp:p id="{identifier}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:t>{value}</hp:t></hp:run></hp:p>"#
     )
 }
 
@@ -1681,7 +1683,7 @@ fn formula_paragraph(begin_id: u64, field_id: u64, formula: &str, result: &str) 
     let native = format!("={formula}");
     format!(
         concat!(
-            r#"<hp:p id="0" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"><hp:ctrl>"#,
+            r#"<hp:p id="0" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:ctrl>"#,
             r#"<hp:fieldBegin id="{begin_id}" type="FORMULA" name="" editable="0" dirty="0" zorder="-1" fieldid="{field_id}">"#,
             r#"<hp:parameters cnt="5" name=""><hp:integerParam name="Prop">8</hp:integerParam>"#,
             r#"<hp:stringParam name="Command">{native}??%g,;;{result}</hp:stringParam>"#,

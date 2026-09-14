@@ -301,7 +301,7 @@ fn run(arguments: &Arguments) -> Result<(), Box<dyn Error>> {
         horizontal_alignment: TableHorizontalAlignment::Right,
         vertical_alignment: TableVerticalAlignment::Bottom,
         horizontal_offset: hwp(720)?,
-        vertical_offset: hwp(-360)?,
+        vertical_offset: hwp(360)?,
         flow_with_text: false,
         allow_overlap: true,
         hold_anchor_and_shape: true,

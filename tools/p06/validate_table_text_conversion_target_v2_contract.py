@@ -51,7 +51,7 @@ SOURCE_LOCKS = {
     "crates/hwpx-package/src/table_ruling_hwpx/create_hwpx.rs":
         "ebd710a2409612eebbe30951f8e738a71b4ab615be8eba1a0579a08ad2b718f3",
     "crates/hwpx-package/src/table_ruling_hwpx/text_conversion_hwpx.rs":
-        "96417983c223fe20e844fc904d2202bdf8502f0a54c76ee44ca2f5b5384e3c8d",
+        "127d9f58d6d20a190b5c018ae6e850465e45054b99f76d38c35b8d2ba304c5cf",
     "crates/hwpx-package/src/table_ruling_hwpx/table_to_text_hwpx.rs":
         "8b1e7976185ed839e2bee62ce6cc51d750d515a866de2783e5785fb3e89f71a2",
     "crates/hwpx-package/examples/p06_09_table_text_conversion_target_fixture.rs":

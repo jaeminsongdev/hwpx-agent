@@ -206,6 +206,21 @@ fn read(
     TableSortHwpxReader::read_context(HEADER, section, 0, binding, TableSortHwpxLimits::default())
 }
 
+#[test]
+fn hancom_linesegarray_is_ignored_by_plain_text_reader() -> TestResult {
+    let source = regular_section();
+    let source_text = String::from_utf8(source)?;
+    let cached = source_text.replace(
+        "</hp:p>",
+        r#"<hp:linesegarray><hp:lineseg textpos="0" vertpos="0"/></hp:linesegarray></hp:p>"#,
+    );
+    let binding = regular_binding("lineseg")?;
+    let plain = read(source_text.as_bytes(), &binding)?;
+    let with_cache = read(cached.as_bytes(), &binding)?;
+    assert_eq!(plain.text_grid, with_cache.text_grid);
+    Ok(())
+}
+
 fn key(
     offset: u32,
     direction: TableSortDirection,

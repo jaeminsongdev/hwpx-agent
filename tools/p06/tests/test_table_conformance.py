@@ -32,28 +32,29 @@ class TableConformanceTests(unittest.TestCase):
             evidence_path=DEFAULT_EVIDENCE,
         )
 
-    def test_current_matrix_is_exact_reproducible_and_non_green(self) -> None:
+    def test_current_matrix_is_exact_reproducible_and_green(self) -> None:
         report = self.build_current()
         committed = (ROOT / REPORT).read_bytes()
         self.assertEqual(conformance.canonical_json(report), committed)
         self.assertEqual(report["summary"]["required_rows"], 61)
-        self.assertEqual(report["summary"]["green_rows"], 0)
-        self.assertEqual(report["summary"]["non_green_rows"], 61)
+        self.assertEqual(report["summary"]["green_rows"], 61)
+        self.assertEqual(report["summary"]["non_green_rows"], 0)
         self.assertEqual(
             report["summary"]["direct_stage_counts"],
             {
                 "cataloged": 0,
-                "integration_passed": 22,
-                "oracle_verified": 39,
+                "integration_passed": 0,
+                "oracle_verified": 61,
                 "unit_passed": 0,
             },
         )
         self.assertEqual(
             report["summary"]["automation_binding_counts"],
-            {"candidate_unverified": 32, "unavailable_with_reason": 29},
+            {"verified_current_target": 61},
         )
-        self.assertEqual(report["summary"]["differential_counts"], {"not_run": 61})
-        self.assertEqual(report["summary"]["p06_09"], "in_progress")
+        self.assertEqual(report["summary"]["differential_counts"], {"exact_match": 61})
+        self.assertEqual(report["summary"]["p06_09"], "pass")
+        self.assertEqual(report["summary"]["p06_phase"], "pass")
         self.assertFalse(report["summary"]["product_complete"])
         self.assertEqual(
             [row["feature_id"] for row in report["rows"]],
@@ -135,8 +136,8 @@ class TableConformanceTests(unittest.TestCase):
             ],
             "not_claimed": {
                 "p06_07_renderer_gate": False,
-                "p06_09_complete": False,
-                "p06_phase_complete": False,
+                "p06_09_complete": True,
+                "p06_phase_complete": True,
                 "production": False,
                 "other_pc_or_version": False,
                 "product_complete": False,

@@ -95,7 +95,7 @@ $checks = [ordered]@{
     exact_fixture_schema = $batch -match
         'hwpx-agent\.p06-09-table-remaining-target-fixture/v1'
     exact_manifest_digest = $batch -match
-        '1aeddc699c91c4878242a64e7674d1689a86b8abeda704370eeaac337bf95a8e'
+        'e4bb736d7182769546cefd50f2a30fd4bffba7293c589174d8aa0858f9e45c39'
     exact_ten_case_bindings = $bindingsPresent
     all_outputs_preflighted_before_first_case =
         $batch -match '\$prepared \+= \[ordered\]@\{' -and

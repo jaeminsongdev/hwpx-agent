@@ -161,7 +161,7 @@ fn table(
 
 fn table_paragraph(identifier: u32, table: &str) -> String {
     format!(
-        r#"<hp:p id="{identifier}" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"><hp:ctrl>{table}</hp:ctrl><hp:t/></hp:run></hp:p>"#
+        r#"<hp:p id="{identifier}" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0">{table}</hp:run></hp:p>"#
     )
 }
 
@@ -417,6 +417,90 @@ fn inserts_complete_nested_table_and_reopens_parent_payload_formula_and_paginati
 }
 
 #[test]
+fn hancom_nested_wrapper_normalization_preserves_composed_semantics() -> TestResult {
+    let header = header()?;
+    let section = parent_section();
+    let template = template_section(true, 800, 101, 202);
+    let source = context(&header, &section, &template)?;
+    let (request, plan) = admitted(&source, draft(&source, 'a', 'b')?, 'a')?;
+    let output = TableNestedTableHwpxLowerer::lower_at_cell_placeholder(
+        &header,
+        &section,
+        &parent_binding(false)?,
+        &template,
+        &template_binding()?,
+        &flow('a'),
+        &request,
+        &plan,
+        TableNestedTableHwpxLimits::default(),
+    )?;
+    let target_parent = TableRulingHwpxReader::read_existing(
+        &output.header,
+        &output.section,
+        output.parent_table_ordinal,
+        &output.parent_binding,
+        TableNestedTableHwpxLimits::default().ruling,
+    )?;
+    let target_nested = TableRulingHwpxReader::read_existing(
+        &output.header,
+        &output.section,
+        output.nested_table_ordinal,
+        &output.nested_binding,
+        TableNestedTableHwpxLimits::default().ruling,
+    )?;
+
+    let mut normalized = String::from_utf8(output.section.clone())?;
+    normalized = normalized.replacen(
+        r#"<hp:p id="900" paraPrIDRef="0" styleIDRef="0">"#,
+        r#"<hp:p id="900" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">"#,
+        1,
+    );
+    let formula_tail =
+        r#"<hp:fieldEnd beginIDRef="101" fieldid="202"/></hp:ctrl><hp:t/></hp:run></hp:p>"#;
+    let cached_formula_tail = concat!(
+        r#"<hp:fieldEnd beginIDRef="101" fieldid="202"/></hp:ctrl><hp:t/></hp:run>"#,
+        r#"<hp:linesegarray><hp:lineseg textpos="0" vertpos="0"/></hp:linesegarray></hp:p>"#,
+    );
+    assert!(normalized.contains(formula_tail));
+    normalized = normalized.replacen(formula_tail, cached_formula_tail, 1);
+    assert_eq!(normalized.matches(r#"fieldid="202""#).count(), 2);
+    normalized = normalized.replace(r#"fieldid="202""#, r#"fieldid="627469685""#);
+    normalized = normalized.replacen(
+        "</hp:tbl></hp:run></hp:p>",
+        "</hp:tbl><hp:t/></hp:run></hp:p>",
+        1,
+    );
+
+    let normalized_parent = TableRulingHwpxReader::read_existing(
+        &output.header,
+        normalized.as_bytes(),
+        output.parent_table_ordinal,
+        &output.parent_binding,
+        TableNestedTableHwpxLimits::default().ruling,
+    )?;
+    let normalized_nested = TableRulingHwpxReader::read_existing(
+        &output.header,
+        normalized.as_bytes(),
+        output.nested_table_ordinal,
+        &output.nested_binding,
+        TableNestedTableHwpxLimits::default().ruling,
+    )?;
+    assert_eq!(target_parent.state, normalized_parent.state);
+    assert_eq!(target_nested.state, normalized_nested.state);
+
+    let nondefault = normalized.replacen(r#"pageBreak="0""#, r#"pageBreak="1""#, 1);
+    let nondefault_parent = TableRulingHwpxReader::read_existing(
+        &output.header,
+        nondefault.as_bytes(),
+        output.parent_table_ordinal,
+        &output.parent_binding,
+        TableNestedTableHwpxLimits::default().ruling,
+    )?;
+    assert_ne!(target_parent.state, nondefault_parent.state);
+    Ok(())
+}
+
+#[test]
 fn covered_merged_cell_and_non_inline_template_fail_closed() -> TestResult {
     let header = header()?;
     let merged = merged_parent_section();
@@ -441,6 +525,16 @@ fn covered_merged_cell_and_non_inline_template_fail_closed() -> TestResult {
     let floating = template_section(false, 800, 101, 202);
     assert!(matches!(
         context(&header, &section, &floating),
+        Err(error) if error.downcast_ref::<TableNestedTableHwpxError>()
+            .is_some_and(|value| matches!(value, TableNestedTableHwpxError::UnsupportedTemplateProfile))
+    ));
+
+    let control_wrapped = String::from_utf8(template.clone())?
+        .replacen(r#"<hp:tbl id="800""#, r#"<hp:ctrl><hp:tbl id="800""#, 1)
+        .replacen("</hp:tbl>", "</hp:tbl></hp:ctrl>", 1)
+        .into_bytes();
+    assert!(matches!(
+        context(&header, &section, &control_wrapped),
         Err(error) if error.downcast_ref::<TableNestedTableHwpxError>()
             .is_some_and(|value| matches!(value, TableNestedTableHwpxError::UnsupportedTemplateProfile))
     ));

@@ -12,7 +12,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$exactManifestSha256 = '1aeddc699c91c4878242a64e7674d1689a86b8abeda704370eeaac337bf95a8e'
+$exactManifestSha256 = 'e4bb736d7182769546cefd50f2a30fd4bffba7293c589174d8aa0858f9e45c39'
 $probeSentinelSha256 = '0000000000000000000000000000000000000000000000000000000000000000'
 $singleRunner = (Resolve-Path -LiteralPath (
     Join-Path $PSScriptRoot 'run-hancom-2020-table-properties-target-readback.ps1'

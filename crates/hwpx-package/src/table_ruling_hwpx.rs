@@ -1432,7 +1432,7 @@ fn payload_paragraphs(
             output
                 .try_reserve(1)
                 .map_err(|_| TableRulingHwpxError::AllocationFailed)?;
-            output.push((hex(Sha256::digest(&bytes)), bytes));
+            output.push((semantic_payload_digest(source, document, index)?, bytes));
         }
         child = value.next_sibling();
     }
@@ -2494,20 +2494,38 @@ pub(super) fn insertion_wrapper(
     table_ordinal: usize,
 ) -> Result<Vec<u8>, TableRulingHwpxError> {
     let document = PreservingXmlDocument::parse(template_section)?;
-    let table = selected_table(&document, table_ordinal)?;
+    let wrapper = insertion_wrapper_element(template_section, &document, table_ordinal)?;
+    Ok(element_bytes(template_section, element(&document, wrapper)?)?.to_vec())
+}
+
+pub(super) fn insertion_wrapper_semantic_digest(
+    template_section: &[u8],
+    table_ordinal: usize,
+) -> Result<String, TableRulingHwpxError> {
+    let document = PreservingXmlDocument::parse(template_section)?;
+    let wrapper = insertion_wrapper_element(template_section, &document, table_ordinal)?;
+    semantic_payload_digest(template_section, &document, wrapper)
+}
+
+fn insertion_wrapper_element(
+    template_section: &[u8],
+    document: &PreservingXmlDocument,
+    table_ordinal: usize,
+) -> Result<usize, TableRulingHwpxError> {
+    let table = selected_table(document, table_ordinal)?;
     let root = document.root_element();
     let mut wrapper = table;
-    while element(&document, wrapper)?.parent() != Some(root) {
-        wrapper = element(&document, wrapper)?
+    while element(document, wrapper)?.parent() != Some(root) {
+        wrapper = element(document, wrapper)?
             .parent()
             .ok_or(TableRulingHwpxError::InvalidOuterTemplate)?;
     }
-    if !has_name(element(&document, wrapper)?, "p") {
+    if !has_name(element(document, wrapper)?, "p") {
         return Err(TableRulingHwpxError::InvalidOuterTemplate);
     }
     let mut table_count = 0_usize;
     for (index, value) in document.elements().iter().enumerate() {
-        if has_name(value, "tbl") && (index == table || is_descendant(&document, index, wrapper)?) {
+        if has_name(value, "tbl") && (index == table || is_descendant(document, index, wrapper)?) {
             table_count = table_count
                 .checked_add(1)
                 .ok_or(TableRulingHwpxError::AllocationFailed)?;
@@ -2519,8 +2537,8 @@ pub(super) fn insertion_wrapper(
     for (index, value) in document.elements().iter().enumerate() {
         if index == wrapper
             || index == table
-            || !is_descendant(&document, index, wrapper)?
-            || is_descendant(&document, index, table)?
+            || !is_descendant(document, index, wrapper)?
+            || is_descendant(document, index, table)?
         {
             continue;
         }
@@ -2541,7 +2559,7 @@ pub(super) fn insertion_wrapper(
             }
         }
     }
-    Ok(element_bytes(template_section, element(&document, wrapper)?)?.to_vec())
+    Ok(wrapper)
 }
 
 fn ensure_native_table_id_available(
@@ -2638,7 +2656,7 @@ fn payload_digests(
             output
                 .try_reserve(1)
                 .map_err(|_| TableRulingHwpxError::AllocationFailed)?;
-            output.push(hex(Sha256::digest(element_bytes(source, value)?)));
+            output.push(semantic_payload_digest(source, document, index)?);
         }
         child = value.next_sibling();
     }
@@ -2657,6 +2675,13 @@ fn is_empty_scaffold(
         }
         match value.name().local_name() {
             "run" => saw_empty_content = true,
+            "linesegarray" if value.parent() == Some(paragraph) => {}
+            "lineseg"
+                if value.parent().is_some_and(|parent| {
+                    element(document, parent).is_ok_and(|parent| {
+                        has_name(parent, "linesegarray") && parent.parent() == Some(paragraph)
+                    })
+                }) => {}
             "t" if has_name(value, "t") => {
                 saw_empty_content = true;
                 let span = value
@@ -2673,6 +2698,122 @@ fn is_empty_scaffold(
         }
     }
     Ok(saw_empty_content)
+}
+
+fn semantic_payload_digest(
+    source: &[u8],
+    document: &PreservingXmlDocument,
+    paragraph: usize,
+) -> Result<String, TableRulingHwpxError> {
+    let paragraph_element = element(document, paragraph)?;
+    let paragraph_span = paragraph_element
+        .outer_span()
+        .ok_or(TableRulingHwpxError::UnsupportedCellShape)?;
+    let mut nested_table = None;
+    for (index, value) in document.elements().iter().enumerate() {
+        if has_name(value, "tbl") && is_descendant(document, index, paragraph)? {
+            nested_table = Some(index);
+            break;
+        }
+    }
+    let contains_nested_table = nested_table.is_some();
+    let mut excluded_spans = Vec::new();
+    excluded_spans
+        .try_reserve_exact(document.elements().len())
+        .map_err(|_| TableRulingHwpxError::AllocationFailed)?;
+    for (index, value) in document.elements().iter().enumerate() {
+        let owned = index == paragraph || is_descendant(document, index, paragraph)?;
+        if !owned {
+            continue;
+        }
+        if has_name(value, "linesegarray")
+            && (contains_nested_table || value.parent() == Some(paragraph))
+        {
+            let span = value
+                .outer_span()
+                .ok_or(TableRulingHwpxError::UnsupportedCellShape)?;
+            excluded_spans.push((span.start(), span.end()));
+        }
+        let outside_nested_table = nested_table
+            .map(|table| is_descendant(document, index, table))
+            .transpose()?
+            .is_some_and(|inside| !inside);
+        if has_name(value, "t") && outside_nested_table && value.first_child().is_none() {
+            let content = value
+                .content_span()
+                .ok_or(TableRulingHwpxError::UnsupportedCellShape)?;
+            if source
+                .get(content.start()..content.end())
+                .is_some_and(<[u8]>::is_empty)
+            {
+                let span = value
+                    .outer_span()
+                    .ok_or(TableRulingHwpxError::UnsupportedCellShape)?;
+                excluded_spans.push((span.start(), span.end()));
+            }
+        }
+        if !contains_nested_table {
+            continue;
+        }
+        for attribute in value.attributes() {
+            let default_false_paragraph_attribute = has_name(value, "p")
+                && attribute.name().namespace().is_none()
+                && matches!(
+                    attribute.name().local_name(),
+                    "pageBreak" | "columnBreak" | "merged"
+                )
+                && attribute.semantic_value() == "0";
+            let regenerated_formula_field_id =
+                matches!(value.name().local_name(), "fieldBegin" | "fieldEnd")
+                    && value.name().namespace() == Some(PARAGRAPH_NS)
+                    && attribute.name().namespace().is_none()
+                    && attribute.name().local_name() == "fieldid";
+            if default_false_paragraph_attribute || regenerated_formula_field_id {
+                excluded_spans.push(attribute_exclusion_span(source, value, attribute)?);
+            }
+        }
+    }
+    excluded_spans.sort_unstable_by_key(|span| span.0);
+    let mut digest = Sha256::new();
+    let mut cursor = paragraph_span.start();
+    for (start, end) in excluded_spans {
+        if start < cursor || end < start || end > paragraph_span.end() {
+            return Err(TableRulingHwpxError::UnsupportedCellShape);
+        }
+        digest.update(
+            source
+                .get(cursor..start)
+                .ok_or(TableRulingHwpxError::UnsupportedCellShape)?,
+        );
+        cursor = end;
+    }
+    digest.update(
+        source
+            .get(cursor..paragraph_span.end())
+            .ok_or(TableRulingHwpxError::UnsupportedCellShape)?,
+    );
+    Ok(hex(digest.finalize()))
+}
+
+fn attribute_exclusion_span(
+    source: &[u8],
+    element: &XmlElementToken,
+    attribute: &crate::XmlAttributeToken,
+) -> Result<(usize, usize), TableRulingHwpxError> {
+    let start_tag_span = element.start_tag_span();
+    let span = attribute.span();
+    let mut start = span.start();
+    while start > start_tag_span.start()
+        && source
+            .get(start - 1)
+            .is_some_and(|byte| matches!(byte, b' ' | b'\t' | b'\r' | b'\n'))
+    {
+        start -= 1;
+    }
+    if start < start_tag_span.start() || span.end() > start_tag_span.end() {
+        return Err(TableRulingHwpxError::UnsupportedCellShape);
+    }
+    Ok((start, span.end()))
 }
 
 fn has_formula_descendant(

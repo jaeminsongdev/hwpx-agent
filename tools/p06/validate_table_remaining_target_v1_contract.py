@@ -13,7 +13,8 @@ ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONTRACT = ROOT / "protocol/private/p06-table-remaining-target-v1.json"
 EXPECTED_SCHEMA = "hwpx-agent.p06-09-table-remaining-target-contract/v1"
 EXPECTED_MANIFEST_SCHEMA = "hwpx-agent.p06-09-table-remaining-target-fixture/v1"
-EXPECTED_MANIFEST_SHA256 = "1aeddc699c91c4878242a64e7674d1689a86b8abeda704370eeaac337bf95a8e"
+EXPECTED_MANIFEST_SHA256 = "41a8e398576846d18f15b17495da36925ba5ca5273f8a7115e5c9e4a94cd7c1d"
+HISTORICAL_MANIFEST_SHA256 = "1aeddc699c91c4878242a64e7674d1689a86b8abeda704370eeaac337bf95a8e"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 EXPECTED_CASES = {
     "TABLE-020": ("table.table_style", "table_style_hwpx", "common", "table-020-style.hwpx", 0, 1),
@@ -275,6 +276,15 @@ def validate_failed_runtime(
 ) -> None:
     runtime = contract["batch_runtime"]
     attempt = ROOT / runtime["attempt_directory"]
+    historical_manifest_path = attempt / "fixture-manifest.json"
+    if sha256_file(historical_manifest_path) != HISTORICAL_MANIFEST_SHA256:
+        raise ContractError("historical fixture manifest digest differs")
+    historical_manifest = load_json(historical_manifest_path)
+    historical_cases = {
+        case.get("feature_id"): case for case in historical_manifest.get("cases", [])
+    }
+    if set(historical_cases) != set(EXPECTED_CASES):
+        raise ContractError("historical fixture case set differs")
     batch_trace_path = attempt / runtime["batch_trace_file"]
     if sha256_file(batch_trace_path) != runtime["batch_trace_sha256"]:
         raise ContractError("failed batch trace digest differs")
@@ -302,7 +312,7 @@ def validate_failed_runtime(
         batch_trace.get("schema_version")
         != "hwpx-agent.p06-09-table-remaining-target-batch-readback-failure/v1"
         or batch_trace.get("state") != "failed"
-        or batch_trace.get("fixture_manifest_sha256") != EXPECTED_MANIFEST_SHA256
+        or batch_trace.get("fixture_manifest_sha256") != HISTORICAL_MANIFEST_SHA256
         or batch_trace.get("target") is not None
         or batch_trace.get("attempted_case_count") != 10
         or batch_trace.get("probed_case_count") != 0
@@ -322,8 +332,8 @@ def validate_failed_runtime(
     for feature, failure, trace_contract in zip(
         EXPECTED_CASES, failures, trace_contracts, strict=True
     ):
-        contract_case = cases[feature]
-        expected_case_id = Path(contract_case["file"]).stem
+        historical_case = historical_cases[feature]
+        expected_case_id = Path(historical_case["file"]).stem
         require_exact_keys(
             trace_contract,
             {
@@ -378,7 +388,7 @@ def validate_failed_runtime(
             or failure.get("child_exit_code") != 2
             or failure.get("error_code") != "TABLE_PROPERTIES_TARGET_READBACK_TIMEOUT"
             or failure.get("failed_phase") != "open_input"
-            or failure.get("input_sha256") != contract_case["sha256"]
+            or failure.get("input_sha256") != historical_case["sha256"]
             or failure.get("input_unchanged") is not True
             or failure.get("output_absent") is not True
             or failure.get("trace_path") != trace_contract["trace_file"]
@@ -396,7 +406,7 @@ def validate_failed_runtime(
             or "target" in case_trace
             or case_trace.get("delegated_engine_schema") is not None
             or case_trace.get("state") != "failed"
-            or case_trace.get("input_sha256") != contract_case["sha256"]
+            or case_trace.get("input_sha256") != historical_case["sha256"]
             or case_trace.get("failed_phase") != "open_input"
             or case_trace.get("error_code") != "TABLE_PROPERTIES_TARGET_READBACK_TIMEOUT"
             or case_trace.get("input_unchanged") is not True

@@ -22,6 +22,7 @@ ORACLE_RECEIPT_NAME = "pending-22-oracle-receipt.json"
 RENDER_MANIFEST_NAME = "pending-22-render-manifest.json"
 OBSERVATION_NAME = "pending-22-visual-review-observations.json"
 RECEIPT_NAME = "pending-22-visual-review-receipt.json"
+ACCESS_PROMPT_ACTION = "user_attested_allow_all"
 FINDING_RE = re.compile(r"[^\x00-\x1f\x7f]{1,500}\Z")
 
 EXPECTED_MANIFEST_KEYS = {
@@ -305,7 +306,7 @@ def validate_observations(
         or observations["inspection_detail"] != "original"
         or observations["all_pages_inspected"] is not True
         or observations["computer_use_click_or_type_invoked"] is not False
-        or observations["user_access_prompt_action"] != "not_recorded"
+        or observations["user_access_prompt_action"] != ACCESS_PROMPT_ACTION
         or observations["not_claimed"] != NOT_CLAIMED
     ):
         raise VisualReviewError("observations_boundary_mismatch")
@@ -375,6 +376,8 @@ def build_receipt(
             "file": OBSERVATION_NAME,
             "sha256": observation_sha256,
             "review_actor": "assistant_visual_review",
+            "computer_use_click_or_type_invoked": False,
+            "user_access_prompt_action": ACCESS_PROMPT_ACTION,
         },
         "trace_sha256": manifest["trace_sha256"],
         "oracle_receipt_sha256": manifest["oracle_receipt_sha256"],

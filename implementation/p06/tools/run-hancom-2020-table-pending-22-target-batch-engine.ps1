@@ -20,8 +20,8 @@ $ErrorActionPreference = 'Stop'
 
 $expectedManifestSha256 = [ordered]@{
     merge_split = '682635284ae5686832dfd89598ea6c106c6b110119e0d54a8e8a24b63e9f3f97'
-    layout_placement = '33c391ff2b151f815c4e2e79c9144c53547fe87d5e35d1e856e4e796b3978faf'
-    remaining = '1aeddc699c91c4878242a64e7674d1689a86b8abeda704370eeaac337bf95a8e'
+    layout_placement = '053b401cbcd2a21b3e845a29ffef28b9c1f633dfa825ac3f52d520cb5f6a3430'
+    remaining = 'e4bb736d7182769546cefd50f2a30fd4bffba7293c589174d8aa0858f9e45c39'
 }
 $expectedManifestSchema = [ordered]@{
     merge_split = 'hwpx-agent.p06-09-table-merge-split-target-fixture/v1'
@@ -139,7 +139,7 @@ function Write-NewUtf8File {
 function ConvertTo-CanonicalText {
     param([Parameter(Mandatory)][AllowEmptyString()][string]$Value)
 
-    $normalized = $Value.Replace([char]0, '')
+    $normalized = $Value.Replace("`0", '')
     $lineFeed = [string][char]10
     $normalized = $normalized.Replace(
         [Environment]::NewLine,
@@ -687,20 +687,22 @@ try {
         $activeResult = New-CaseResult -Entry $activeEntry
         $result.cases += ,$activeResult
 
-        $document = $documents.Add($false)
-        if ($null -eq $document) {
-            throw 'TABLE_PENDING_22_BATCH_DOCUMENT_ADD_FAILED'
-        }
-
         $phase = 'open_input'
         $activeResult.phases.open_input = 'running'
         Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId -GlobalCaseIndex $activeIndex -GroupCaseIndex ([int]$activeEntry.group_case_index) -GroupId ([string]$activeEntry.group_id) -FeatureId ([string]$activeEntry.feature_id)
-        if ($document.Open(
+        if ($hwp.Open(
             [string]$activeEntry.input_path,
             'HWPX',
             'lock:false;setcurdir:false'
         ) -eq $false) {
             throw 'TABLE_PENDING_22_BATCH_INPUT_OPEN_RETURNED_FALSE'
+        }
+        if ([int]$documents.Count -ne 1) {
+            throw 'TABLE_PENDING_22_BATCH_INPUT_DOCUMENT_COUNT_INVALID'
+        }
+        $document = $documents.Item(0)
+        if ($null -eq $document) {
+            throw 'TABLE_PENDING_22_BATCH_INPUT_DOCUMENT_MISSING'
         }
         [void]$document.SetActive_XHwpDocument()
         $activeResult.phases.open_input = 'pass'
@@ -744,7 +746,7 @@ try {
         $phase = 'close_input'
         $activeResult.phases.close_input = 'running'
         Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId -GlobalCaseIndex $activeIndex -GroupCaseIndex ([int]$activeEntry.group_case_index) -GroupId ([string]$activeEntry.group_id) -FeatureId ([string]$activeEntry.feature_id)
-        [void]$document.Close($false)
+        [void]$hwp.Clear(1)
         Clear-ComObject -Value $document
         $document = $null
         $activeResult.phases.close_input = 'pass'
@@ -753,14 +755,19 @@ try {
         $phase = 'reopen_output'
         $activeResult.phases.reopen_output = 'running'
         Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId -GlobalCaseIndex $activeIndex -GroupCaseIndex ([int]$activeEntry.group_case_index) -GroupId ([string]$activeEntry.group_id) -FeatureId ([string]$activeEntry.feature_id)
-        $document = $documents.Add($false)
-        if ($null -eq $document -or
-            $document.Open(
-                [string]$activeEntry.output_path,
-                'HWPX',
-                'lock:false;setcurdir:false'
-            ) -eq $false) {
+        if ($hwp.Open(
+            [string]$activeEntry.output_path,
+            'HWPX',
+            'lock:false;setcurdir:false'
+        ) -eq $false) {
             throw 'TABLE_PENDING_22_BATCH_OUTPUT_OPEN_RETURNED_FALSE'
+        }
+        if ([int]$documents.Count -ne 1) {
+            throw 'TABLE_PENDING_22_BATCH_OUTPUT_DOCUMENT_COUNT_INVALID'
+        }
+        $document = $documents.Item(0)
+        if ($null -eq $document) {
+            throw 'TABLE_PENDING_22_BATCH_OUTPUT_DOCUMENT_MISSING'
         }
         [void]$document.SetActive_XHwpDocument()
         $activeResult.phases.reopen_output = 'pass'
@@ -813,7 +820,7 @@ try {
         $phase = 'close_output'
         $activeResult.phases.close_output = 'running'
         Write-ProgressEvent -Phase $phase -State 'running' -HwpProcessId $hwpProcessId -GlobalCaseIndex $activeIndex -GroupCaseIndex ([int]$activeEntry.group_case_index) -GroupId ([string]$activeEntry.group_id) -FeatureId ([string]$activeEntry.feature_id)
-        [void]$document.Close($false)
+        [void]$hwp.Clear(1)
         Clear-ComObject -Value $document
         $document = $null
         $activeResult.phases.close_output = 'pass'

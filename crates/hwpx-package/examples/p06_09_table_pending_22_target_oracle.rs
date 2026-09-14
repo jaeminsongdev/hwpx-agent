@@ -30,9 +30,9 @@ const EXPECTED_PROGRESS_EVENT_COUNT_RETRY: u32 = 363;
 const EXPECTED_MERGE_SPLIT_SHA256: &str =
     "682635284ae5686832dfd89598ea6c106c6b110119e0d54a8e8a24b63e9f3f97";
 const EXPECTED_LAYOUT_PLACEMENT_SHA256: &str =
-    "33c391ff2b151f815c4e2e79c9144c53547fe87d5e35d1e856e4e796b3978faf";
+    "053b401cbcd2a21b3e845a29ffef28b9c1f633dfa825ac3f52d520cb5f6a3430";
 const EXPECTED_REMAINING_SHA256: &str =
-    "1aeddc699c91c4878242a64e7674d1689a86b8abeda704370eeaac337bf95a8e";
+    "e4bb736d7182769546cefd50f2a30fd4bffba7293c589174d8aa0858f9e45c39";
 const EXPECTED_LAYOUT_TEXT_SHA256: &str =
     "e90f2af9593f587921c00b8c9a4d1c3fed8ed2284bc5463a17d7f259478cdb91";
 const EXPECTED_HANCOM_SHA256: &str =
@@ -366,6 +366,7 @@ fn run(arguments: &Arguments) -> Result<(), AnyError> {
 
     let mut feature_ids = Vec::with_capacity(EXPECTED_CASE_COUNT);
     let mut unique_features = BTreeSet::new();
+    let mut semantic_failures = Vec::new();
     for (runtime_case, (group, group_case_index, fixture_case)) in
         runtime.cases.iter().zip(expected)
     {
@@ -382,31 +383,41 @@ fn run(arguments: &Arguments) -> Result<(), AnyError> {
         if !pdf.starts_with(b"%PDF-") || pdf.len() as u64 != runtime_case.render_pdf_bytes {
             return Err(format!("{} PDF boundary differs", runtime_case.feature_id).into());
         }
-        match group.id {
+        let semantic_result = match group.id {
             "merge_split" => merge_split_oracle::validate_pending_22_case(
                 &group.bytes,
                 &runtime_case.feature_id,
                 &input,
                 &output,
-            )?,
+            ),
             "layout_placement" => layout_placement_oracle::validate_pending_22_case(
                 &group.bytes,
                 &runtime_case.feature_id,
                 &input,
                 &output,
-            )?,
+            ),
             "remaining" => remaining_oracle::validate_pending_22_case(
                 &group.bytes,
                 &runtime_case.feature_id,
                 &input,
                 &output,
-            )?,
+            ),
             _ => return Err("unknown pending-22 group".into()),
+        };
+        if let Err(error) = semantic_result {
+            semantic_failures.push(format!("{}={error}", runtime_case.feature_id));
         }
         if !unique_features.insert(runtime_case.feature_id.clone()) {
             return Err("pending-22 feature ID is duplicated".into());
         }
         feature_ids.push(runtime_case.feature_id.clone());
+    }
+    if !semantic_failures.is_empty() {
+        return Err(format!(
+            "pending-22 typed semantic failures: {}",
+            semantic_failures.join(" | ")
+        )
+        .into());
     }
 
     require_digest(

@@ -958,6 +958,25 @@ fn hancom_self_closing_empty_run_is_scaffold_not_payload() -> TestResult {
     assert_eq!(readback.payload_block_count, 0);
     assert!(readback.state.cells()[0].payload().is_empty());
 
+    let layout_cache = empty.replace(
+        "</hp:p>",
+        r#"<hp:linesegarray><hp:lineseg textpos="0" vertpos="0"/></hp:linesegarray></hp:p>"#,
+    );
+    let cached_section = table(
+        &[vec![cell(0, 0, 1, 1, 2000, 1000, 3, &layout_cache)]],
+        1,
+        1,
+    );
+    let cached_readback = TableRulingHwpxReader::read_existing(
+        &header()?,
+        &cached_section,
+        0,
+        &binding,
+        TableRulingHwpxLimits::default(),
+    )?;
+    assert_eq!(cached_readback.payload_block_count, 0);
+    assert!(cached_readback.state.cells()[0].payload().is_empty());
+
     let control = empty.replace("/>", "><hp:ctrl/></hp:run>");
     let nonempty_section = table(&[vec![cell(0, 0, 1, 1, 2000, 1000, 3, &control)]], 1, 1);
     assert!(matches!(
@@ -970,6 +989,40 @@ fn hancom_self_closing_empty_run_is_scaffold_not_payload() -> TestResult {
         ),
         Err(TableRulingHwpxError::PayloadBindingMismatch)
     ));
+    Ok(())
+}
+
+#[test]
+fn hancom_linesegarray_is_excluded_from_payload_identity() -> TestResult {
+    let payload = r#"<hp:p id="0" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:t>payload</hp:t></hp:run></hp:p>"#;
+    let cached_payload = payload.replace(
+        "</hp:p>",
+        r#"<hp:linesegarray><hp:lineseg textpos="0" vertpos="0"/></hp:linesegarray></hp:p>"#,
+    );
+    let source = table(&[vec![cell(0, 0, 1, 1, 2000, 1000, 3, payload)]], 1, 1);
+    let cached = table(
+        &[vec![cell(0, 0, 1, 1, 2000, 1000, 3, &cached_payload)]],
+        1,
+        1,
+    );
+    let binding = binding_with_boundaries(&[1], vec![0, 1000], vec![0, 2000])?;
+    let source_readback = TableRulingHwpxReader::read_existing(
+        &header()?,
+        &source,
+        0,
+        &binding,
+        TableRulingHwpxLimits::default(),
+    )?;
+    let cached_readback = TableRulingHwpxReader::read_existing(
+        &header()?,
+        &cached,
+        0,
+        &binding,
+        TableRulingHwpxLimits::default(),
+    )?;
+    assert_eq!(source_readback.state, cached_readback.state);
+    assert_eq!(source_readback.payload_block_count, 1);
+    assert_eq!(cached_readback.payload_block_count, 1);
     Ok(())
 }
 

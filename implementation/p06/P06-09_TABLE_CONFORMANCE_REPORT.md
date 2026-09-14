@@ -1,34 +1,37 @@
 # P06-09 current-PC table conformance report
 
-- Generated: 2026-09-13
+- Generated: 2026-09-14
 - Target: licensed Hancom Hangul 2020 `11.0.0.9136`, `ko-KR`, x86 on this PC
 - Matrix schema: `hwpx-agent.table-conformance-report/v1`
-- Matrix state: `non_green`
-- Task state: `in_progress`
+- Matrix state: `green`
+- Task state: `pass`
 - Recommended reasoning: `max`
 
 ## Result
 
 The deterministic report contains every `TABLE-001` through `TABLE-061` capability exactly once.
-Current green coverage is **0/61**. This does not erase the completed P06 components; it shows that
-the roadmap's release row requires more than component or one-fixture evidence.
+Current green coverage is **61/61**. Every row has a direct oracle, all required validation and
+fixture classes, negative and rollback/retry evidence, an exact current-target automation binding
+and runtime result, and a contract-normalized exact direct/automation differential.
 
 | Dimension | Current evidence |
 |---|---:|
-| direct `oracle_verified` | 39 |
-| direct `integration_passed` | 22 |
+| direct `oracle_verified` | 61 |
+| direct `integration_passed` | 0 |
 | direct `unit_passed` | 0 |
 | direct `cataloged` only | 0 |
-| automation `candidate_unverified` | 6 |
-| automation `unavailable_with_reason` | 55 |
-| automation runtime verified | 0 |
-| differential exact match | 0 |
-| green rows | 0/61 |
+| automation `verified_current_target` | 61 |
+| automation runtime verified | 61 |
+| differential exact match | 61 |
+| green rows | 61/61 |
 
 The machine-readable authority is
 `implementation/p06/evidence/conformance/p06-table-conformance.current-2020.v1.json`.
 
-## Existing evidence admitted conservatively
+## Existing evidence admitted conservatively (historical progression)
+
+The open-state statements in this section describe the evidence boundary at each earlier milestone.
+They are retained as provenance and are superseded by the final qualification below.
 
 - P06-02 contributes the exact blank unmerged grid creation contract. A template-based preserving
   HWPX adapter now creates arbitrary bounded rectangular dimensions with caller-bound logical IDs
@@ -214,60 +217,42 @@ The machine-readable authority is
   `First` receipts intentional discards, and request/build/lower all recheck source state, grid,
   content and flow. Selected formulas, diagonals or unequal complete merge-cell properties fail
   closed, while an unselected same-table formula/cache survives topology change and strict reopen.
-  This is static integration evidence, not licensed Hangul or render evidence.
-- The remaining 22 target candidates now share one exact single-HWP-session lifecycle runner, so one
-  user-owned `allow all` decision can cover one access control plus the 2/10/10 prepared groups
-  without 22 separate prompts. Attempts 01 through 04 timed out at TABLE-016 `open_input`; attempts
-  05 and 06 returned `Open=false` after prompt resolution. A same-session diagnostic then returned
-  `Open=false` for a previously verified Hangul-saved TABLE-012 control before testing TABLE-016,
-  isolating the current failure to file-access admission. Every run kept all inputs exact, published
-  no HWPX/PDF output and left zero HWP processes. The runner now hash-binds and opens that exact
-  TABLE-012 control before any pending case; the Rust oracle and renderer require its open, close and
-  immutability states to pass. Integrated attempts 07 and 08 returned `Open=false` on that control
-  with 0/22 cases, unchanged control bytes, no HWPX/PDF output and zero remaining HWP processes.
-  Attempt 08 followed the user's attestation that the instructed second button was selected, while
-  the automation trace still cannot independently attest the click. Attempt 08 trace SHA-256 is
-  `ed27da43ad209485af8dfc8e85a943af8b0fd408c59ad3521c6162a271c7275c` and progress SHA-256 is
-  `4b0056befd11152226e7ee053eea4a1ba5caf6e472636378473c1881bfcb347a`.
-  The exact installed `Hnc.Office.String.ko-KR.dll` (`11.0.0.10677`, SHA-256
-  `528b0b7f881f3648fd9bc8be5722e5f275fd53809a3f93159005c77737ad0867`) binds the four
-  dialog choices in order as `접근 허용`, `모두 허용`, `허용 안 함`, and `모두 안 함`.
-  The current `HKCU\Software\HNC\HwpAutomation\Modules` key has no named module registration,
-  so the prompt is expected; no registry value or system setting was changed. Attempt 05 waited
-  about 509 seconds, attempt 06 about 13 seconds and attempt 07 about 5.8 seconds between
-  `open/running` and `open/failed`, which is consistent with prompt resolution rather than an
-  immediate file, ACL or package rejection. Attempt 09 later timed out waiting at the first control
-  open, while attempts 10 and 11 returned false for both the first call and a same-method retry on a
-  same/new document. The bounded retry therefore now uses `HwpObject.Open` on one new active document
-  in the same session after `XHwpDocument.Open=false`, requires exactly one document afterward and
-  fails closed on any drift. It records the attempt count and first result; both the Rust oracle and
-  renderer reject inconsistent values. Configuration-only validation, 29/29 readback checks, 28/28
-  wrapper checks, 11/11 renderer tests and 4/4 Rust oracle unit tests pass without invoking HWP.
-  Attempt 12 then returned false through that alternate surface as well. Its trace SHA-256 is
-  `63874e1aa2b93240c37b3447644f48753a4ff76936ffc3dc68989ec7f8424015`; 0/22 completed, no output
-  was published and zero HWP processes remained. Read-only installation inspection found no
-  `FilePathCheckerModuleExample.dll` and no named value under
-  `HKCU\Software\HNC\HwpAutomation\Modules`. Hancom's official Automation guide requires that
-  module, a matching registry value and `RegisterModule("FilePathCheckDLL", value_name)` for
-  approval-free sequential file access. That installation/registration is not performed without
-  explicit user authorization, and the matrix remains 0/61.
-  Attempt 03 trace SHA-256 is
-  `577771fdbde65e572b0bfc59697d1a5334101927764b5afaeba6f8f721071356`. A combined offline oracle now admits only a
-  complete 22-case success trace, then reuses all three existing typed semantic readers directly;
-  every failed attempt is rejected before any oracle receipt is created. A single end-to-end wrapper
-  now creates a new attempt directory, runs that one HWP session, hashes the resulting trace and
-  invokes the combined oracle automatically; configuration-only and pre-existing-attempt paths are
-  proven side-effect free. After the oracle passes, the same command uses pinned Poppler 26.07.0
-  tools to render all 22 one-page A4 PDFs at 144 DPI into bounded PNG review candidates and writes a
-  hash-bound manifest whose visual-review state remains `not_run`. A separate fail-closed finalizer
-  accepts only all 22 original-detail assistant findings in exact feature order, rehashes every PNG
-  and PDF plus the source manifest/observation files, and creates one promotion-ready receipt while
-  keeping automation, differential, P06-09 and P06 completion unclaimed. Unreviewed preparation
-  still promotes no row.
+  This remains the foundational static integration evidence; the exact-target promotion is below.
+- Attempt 21 completed the former 22-row direct gap in one exact HWP session after the user selected
+  `모두 허용`. That click is recorded only as `user_attested_allow_all`; Computer Use performed no
+  click or typing. All 22 save/close/reopen/PDF lifecycles passed with 361 ordered progress events,
+  immutable inputs and zero remaining owned HWP processes. The independent typed oracle passed
+  22/22. All 22 one-page A4 PDFs were rendered at 144 DPI and inspected at original detail with no
+  clipping, overlap, blank page or black box. Attempts 01-20 remain preserved as failed predecessor
+  evidence, so the new create-new attempt also closes the bounded retry boundary. The trace SHA-256
+  is `df5d7bfcf79e884280a7bfad86dbcd8337f73ec3b020844eff096fe3b5429f9d`; the final visual receipt
+  SHA-256 is `b74dd57945a63179087d294c48c9592d5ef34c56c87a8957d0ecfc1cdef02148`.
+  TABLE-054 required a nested-only native-default semantic normalization; the ordinary payload
+  contract remains strict and a non-default page-break regression still fails. Fresh independent
+  fixture builds remained deterministic. The 22 rows therefore advance to direct `oracle_verified`,
+  while automation runtime and exact differentials remain `not_run`.
 
 No evidence is promoted merely because a neighboring feature used the same table fixture.
 
-## Automation boundary
+## Automation qualification history and final closure
+
+The final v2 review resolves all 61 rows to exact official Action identifiers, including reviewed
+parameter/context/effect/composite specializations where one Action is shared. The current-target
+runner executed 60 rows on fresh unsaved disposable documents using in-memory `HWPML2X` snapshots;
+it never called file open/save and discarded every document for rollback. TABLE-006 reuses the
+already frozen exact-target `InsertChart` lifecycle because that evidence includes native Action
+execution, save/reopen semantic relift, direct-product comparison, render comparison and retry.
+
+The final run preserves one long-session COM failure at TABLE-061 and a successful isolated retry.
+All 61 bindings are `verified_current_target`, all 61 runtime states are verified, routing is enabled
+for the bounded current-PC profile, and all 61 contract-normalized differentials are `exact_match`.
+The public receipt contains only hashes and states; raw Action/ParameterSet names, document content,
+private trace paths and absolute paths are excluded. Authority:
+`implementation/p06/evidence/target/p06-table-automation-v2.current-2020.attempt01.v1.json` and
+`protocol/private/p06-table-automation-v2-qualification-v1.json`.
+
+The following paragraphs preserve the earlier candidate and canary progression; their then-current
+non-promotion statements are historical rather than the final matrix state.
 
 The immutable P02 registry contains six table candidates. A P06-specific exact official ActionTable
 review preserves those six and admits 26 additional exact, unique, single-action mappings, producing
@@ -339,7 +324,7 @@ runtime state, differential state or release decision. Authority:
 `implementation/p06/P06-09_TABLE_CROSS_PROPERTY_BATCH_REPORT.md` and
 `implementation/p06/evidence/target/p06-table-cross-property-preservation.current-2020.v1.json`.
 
-## Validation and blockers
+## Final validation
 
 The generator verifies 61-row identity across catalog, contract and projection; exact target;
 operation schema presence; required validation/fixture subsets; evidence file digests; canonical
@@ -347,20 +332,12 @@ ordering; duplicate JSON keys; finite files; path containment; privacy; and crea
 Protocol code generation publishes the three P06 schemas through additive catalog v5 while baseline
 locks prove catalogs v2 through v4 remain unchanged.
 
-Current aggregate blockers include 0 missing direct evidence rows, 22 rows below direct oracle,
-22 rows with one missing render validation, 29 rows without an admitted automation candidate, 61
-unverified automation runtime rows and 61 missing
-differentials. A row can carry multiple blockers, so blocker counts are not intended to sum to 61.
+The regenerated report has no row blockers: 61/61 direct rows are `oracle_verified`, 61/61
+automation bindings and runtimes are verified on the exact target, and 61/61 differentials are
+`exact_match`.
 
-## Decision and next implementation order
+## Decision
 
-P06-09's matrix engine and current snapshot are implemented, but the roadmap completion criterion
-`required matrix green` is not satisfied. The next current-PC sequence is:
-
-1. close the remaining 22 integration-only target oracles in the existing one-session batch;
-2. runtime-qualify the 32 exact-source candidates, resolve the other 29 bindings and run safe
-   disposable differentials; and
-3. regenerate until all 61 rows are green, then run the P06 hard Gate.
-
-P06-09 and P06 remain in progress. No production, other-PC/version or whole-product completion is
-claimed.
+The roadmap completion criterion `required matrix green` is satisfied. P06-09 and the current-PC P06
+phase are PASS. Arbitrary user-document compatibility, production, another PC/version and whole-
+product completion remain outside this claim.

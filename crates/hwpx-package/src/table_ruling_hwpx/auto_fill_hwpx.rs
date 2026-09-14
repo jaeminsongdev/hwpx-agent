@@ -1242,19 +1242,22 @@ fn only_direct_child(
 ) -> Result<usize, TableAutoFillHwpxError> {
     let mut child = super::element(document, parent)?.first_child();
     let mut found = None;
-    let mut count = 0_usize;
+    let mut saw_layout_cache = false;
     while let Some(index) = child {
         let value = super::element(document, index)?;
-        count = count
-            .checked_add(1)
-            .ok_or(TableAutoFillHwpxError::Allocation)?;
-        if super::has_name(value, local_name) && found.replace(index).is_some() {
+        if super::has_name(value, local_name) {
+            if found.replace(index).is_some() {
+                return Err(TableAutoFillHwpxError::UnsupportedRichContent);
+            }
+        } else if local_name == "run" && super::has_name(value, "linesegarray") {
+            if saw_layout_cache {
+                return Err(TableAutoFillHwpxError::UnsupportedRichContent);
+            }
+            saw_layout_cache = true;
+        } else {
             return Err(TableAutoFillHwpxError::UnsupportedRichContent);
         }
         child = value.next_sibling();
-    }
-    if count != 1 {
-        return Err(TableAutoFillHwpxError::UnsupportedRichContent);
     }
     found.ok_or(TableAutoFillHwpxError::UnsupportedRichContent)
 }
@@ -1277,9 +1280,15 @@ fn unique_direct_child(
 }
 
 fn plain_visible_text(flow: &crate::TextFlow) -> Result<String, TableAutoFillHwpxError> {
-    let [ParagraphChild::Run(run)] = flow.children.as_slice() else {
-        return Err(TableAutoFillHwpxError::UnsupportedRichContent);
-    };
+    let mut run = None;
+    for child in &flow.children {
+        match child {
+            ParagraphChild::Run(value) if run.replace(value).is_none() => {}
+            ParagraphChild::Opaque(value) if !value.may_contain_visible_text() => {}
+            _ => return Err(TableAutoFillHwpxError::UnsupportedRichContent),
+        }
+    }
+    let run = run.ok_or(TableAutoFillHwpxError::UnsupportedRichContent)?;
     let [TextRunItem::Text(span)] = run.items.as_slice() else {
         return Err(TableAutoFillHwpxError::UnsupportedRichContent);
     };

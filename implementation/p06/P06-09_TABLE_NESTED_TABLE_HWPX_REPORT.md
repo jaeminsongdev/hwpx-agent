@@ -22,7 +22,7 @@ could be counted as a formula of its parent.
 
 | Check | Result |
 |---|---:|
-| Dedicated TABLE-054 adapter tests | 7/7 PASS |
+| Dedicated TABLE-054 adapter tests | 8/8 PASS |
 | Complete nested state and formula/cache reopen | PASS |
 | Complete parent state with one ordered payload insertion | PASS |
 | Merged covered-cell selector and non-inline/resource-bearing template | fail closed |

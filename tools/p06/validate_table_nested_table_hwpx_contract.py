@@ -36,7 +36,7 @@ EXPECTED_SOURCE_PATHS = {
 }
 EXPECTED_FEATURES = {"TABLE-054": "table.nested_table"}
 EXPECTED_EVIDENCE = {
-    "adapter_tests": 7,
+    "adapter_tests": 8,
     "feature_count": 1,
     "backend": "direct_hwpx",
     "direct_stage": "integration_passed",
@@ -103,7 +103,7 @@ IMPLEMENTATION_MARKERS = {
     ),
     REPORT: (
         "Result: `integration_pass`",
-        "7/7 PASS",
+        "8/8 PASS",
         "unit_passed`: 5 to 4",
         "integration_passed`: 41 to 42",
         "green rows: remains 0/61",

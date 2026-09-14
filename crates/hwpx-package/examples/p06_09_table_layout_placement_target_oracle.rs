@@ -24,7 +24,7 @@ const EXPECTED_FIXTURE_SCHEMA: &str = "hwpx-agent.p06-09-table-layout-placement-
 const EXPECTED_RUNTIME_SCHEMA: &str =
     "hwpx-agent.p06-09-table-layout-placement-target-batch-readback/v1";
 const EXPECTED_FIXTURE_MANIFEST_SHA256: &str =
-    "33c391ff2b151f815c4e2e79c9144c53547fe87d5e35d1e856e4e796b3978faf";
+    "053b401cbcd2a21b3e845a29ffef28b9c1f633dfa825ac3f52d520cb5f6a3430";
 const EXPECTED_TRACE_SCHEMA: &str =
     "hwpx-agent.p06-09-hancom-2020-table-properties-target-readback/v1";
 const EXPECTED_ANCESTOR_SHA256: &str =
@@ -566,17 +566,148 @@ fn require_typed_actual(case: &FixtureCase, section: &[u8]) -> Result<(), Box<dy
         TableLayoutHwpxReader::read_in_section(section, 0, TableLayoutHwpxLimits::default())?;
     let placement =
         TablePlacementHwpxReader::read_in_section(section, 0, TableLayoutHwpxLimits::default())?;
-    if layout.rows != case.layout.rows
-        || layout.columns != case.layout.columns
-        || layout.table_width_hwpunit != case.layout.table_width_hwpunit
-        || layout.table_height_hwpunit != case.layout.table_height_hwpunit
-        || track_widths(&layout)? != case.layout.column_widths_hwpunit
-        || track_heights(&layout)? != case.layout.row_heights_hwpunit
-        || !placement_matches(&placement, &case.placement)
-    {
-        return Err(format!("{} typed target differs", case.feature_id).into());
+    let mismatches = typed_target_mismatches(case, &layout, &placement)?;
+    if !mismatches.is_empty() {
+        return Err(format!(
+            "{} typed target differs: {}",
+            case.feature_id,
+            mismatches.join(",")
+        )
+        .into());
     }
     Ok(())
+}
+
+fn typed_target_mismatches(
+    case: &FixtureCase,
+    layout: &TableLayoutHwpxReadback,
+    placement: &TablePlacementHwpxReadback,
+) -> Result<Vec<String>, Box<dyn Error>> {
+    let mut mismatches = Vec::new();
+    if layout.rows != case.layout.rows {
+        mismatches.push(format!(
+            "layout.rows(expected={},actual={})",
+            case.layout.rows, layout.rows
+        ));
+    }
+    if layout.columns != case.layout.columns {
+        mismatches.push(format!(
+            "layout.columns(expected={},actual={})",
+            case.layout.columns, layout.columns
+        ));
+    }
+    if layout.table_width_hwpunit != case.layout.table_width_hwpunit {
+        mismatches.push(format!(
+            "layout.table_width_hwpunit(expected={},actual={})",
+            case.layout.table_width_hwpunit, layout.table_width_hwpunit
+        ));
+    }
+    if layout.table_height_hwpunit != case.layout.table_height_hwpunit {
+        mismatches.push(format!(
+            "layout.table_height_hwpunit(expected={},actual={})",
+            case.layout.table_height_hwpunit, layout.table_height_hwpunit
+        ));
+    }
+    let actual_widths = track_widths(layout)?;
+    if actual_widths != case.layout.column_widths_hwpunit {
+        mismatches.push(format!(
+            "layout.column_widths_hwpunit(expected={:?},actual={actual_widths:?})",
+            case.layout.column_widths_hwpunit
+        ));
+    }
+    let actual_heights = track_heights(layout)?;
+    if actual_heights != case.layout.row_heights_hwpunit {
+        mismatches.push(format!(
+            "layout.row_heights_hwpunit(expected={:?},actual={actual_heights:?})",
+            case.layout.row_heights_hwpunit
+        ));
+    }
+    placement_mismatches(&mut mismatches, placement, &case.placement);
+    Ok(mismatches)
+}
+
+fn placement_mismatches(
+    mismatches: &mut Vec<String>,
+    actual: &TablePlacementHwpxReadback,
+    expected: &PlacementEvidence,
+) {
+    macro_rules! compare {
+        ($name:literal, $actual:expr, $expected:expr) => {
+            if $actual != $expected {
+                mismatches.push(format!(
+                    concat!($name, "(expected={:?},actual={:?})"),
+                    $expected, $actual
+                ));
+            }
+        };
+    }
+    compare!(
+        "placement.treat_as_char",
+        actual.attachment_flags.treat_as_char,
+        expected.treat_as_char
+    );
+    compare!(
+        "placement.affect_line_spacing",
+        actual.attachment_flags.affect_line_spacing,
+        expected.affect_line_spacing
+    );
+    compare!(
+        "placement.horizontal_reference",
+        actual.horizontal_reference,
+        expected.horizontal_reference
+    );
+    compare!(
+        "placement.vertical_reference",
+        actual.vertical_reference,
+        expected.vertical_reference
+    );
+    compare!(
+        "placement.horizontal_alignment",
+        actual.horizontal_alignment,
+        expected.horizontal_alignment
+    );
+    compare!(
+        "placement.vertical_alignment",
+        actual.vertical_alignment,
+        expected.vertical_alignment
+    );
+    compare!(
+        "placement.horizontal_offset_hwpunit",
+        actual.horizontal_offset_hwpunit,
+        expected.horizontal_offset_hwpunit
+    );
+    compare!(
+        "placement.vertical_offset_hwpunit",
+        actual.vertical_offset_hwpunit,
+        expected.vertical_offset_hwpunit
+    );
+    compare!(
+        "placement.flow_with_text",
+        actual.floating_flags.flow_with_text,
+        expected.flow_with_text
+    );
+    compare!(
+        "placement.allow_overlap",
+        actual.floating_flags.allow_overlap,
+        expected.allow_overlap
+    );
+    compare!(
+        "placement.hold_anchor_and_shape",
+        actual.floating_flags.hold_anchor_and_shape,
+        expected.hold_anchor_and_shape
+    );
+    compare!("placement.text_wrap", actual.text_wrap, expected.text_wrap);
+    compare!("placement.text_flow", actual.text_flow, expected.text_flow);
+    compare!(
+        "placement.outer_margins_hwpunit",
+        [
+            actual.outer_margins.left_hwpunit,
+            actual.outer_margins.right_hwpunit,
+            actual.outer_margins.top_hwpunit,
+            actual.outer_margins.bottom_hwpunit,
+        ],
+        expected.outer_margins_hwpunit
+    );
 }
 
 fn require_properties_oracle(
@@ -602,18 +733,87 @@ fn require_properties_oracle(
         &binding,
         limits,
     )?;
-    if target.grid != actual.grid
-        || !semantic_properties_state_equal(&target.state, &actual.state)
-        || target.table_value != actual.table_value
-        || target.cell_values != actual.cell_values
-        || target.payload_block_count != actual.payload_block_count
-        || target.formula_count != actual.formula_count
-        || target.payload_block_count != 9
-        || target.formula_count != 0
-    {
-        return Err(format!("{} typed properties differ", case.feature_id).into());
+    let mismatches = properties_mismatches(&target, &actual);
+    if !mismatches.is_empty() {
+        return Err(format!(
+            "{} typed properties differ: {}",
+            case.feature_id,
+            mismatches.join(",")
+        )
+        .into());
     }
     Ok(())
+}
+
+fn properties_mismatches(
+    target: &hwpx_package::TablePropertiesHwpxReadback,
+    actual: &hwpx_package::TablePropertiesHwpxReadback,
+) -> Vec<String> {
+    let mut mismatches = Vec::new();
+    if target.grid != actual.grid {
+        mismatches.push("grid".to_owned());
+    }
+    if target.state.table_id() != actual.state.table_id() {
+        mismatches.push("state.table_id".to_owned());
+    }
+    if target.state.grid_sha256() != actual.state.grid_sha256() {
+        mismatches.push("state.grid_sha256".to_owned());
+    }
+    if target.state.table_properties_sha256() != actual.state.table_properties_sha256() {
+        mismatches.push("state.table_properties_sha256".to_owned());
+    }
+    if target.state.cells().len() != actual.state.cells().len() {
+        mismatches.push("state.cells.length".to_owned());
+    }
+    for (index, (target_cell, actual_cell)) in target
+        .state
+        .cells()
+        .iter()
+        .zip(actual.state.cells())
+        .enumerate()
+    {
+        if target_cell.master_cell_id != actual_cell.master_cell_id {
+            mismatches.push(format!("state.cells[{index}].master_cell_id"));
+        }
+        if target_cell.coordinate != actual_cell.coordinate {
+            mismatches.push(format!("state.cells[{index}].coordinate"));
+        }
+        if target_cell.formula_sha256 != actual_cell.formula_sha256 {
+            mismatches.push(format!("state.cells[{index}].formula_sha256"));
+        }
+        if target_cell.properties != actual_cell.properties {
+            mismatches.push(format!("state.cells[{index}].properties"));
+        }
+    }
+    if target.table_value != actual.table_value {
+        mismatches.push("table_value".to_owned());
+    }
+    if target.cell_values.len() != actual.cell_values.len() {
+        mismatches.push("cell_values.length".to_owned());
+    }
+    for (index, (target_cell, actual_cell)) in target
+        .cell_values
+        .iter()
+        .zip(&actual.cell_values)
+        .enumerate()
+    {
+        if target_cell != actual_cell {
+            mismatches.push(format!("cell_values[{index}]"));
+        }
+    }
+    if target.payload_block_count != actual.payload_block_count {
+        mismatches.push("payload_block_count".to_owned());
+    }
+    if target.formula_count != actual.formula_count {
+        mismatches.push("formula_count".to_owned());
+    }
+    if target.payload_block_count != 9 {
+        mismatches.push("target.payload_block_count_expected_9".to_owned());
+    }
+    if target.formula_count != 0 {
+        mismatches.push("target.formula_count_expected_0".to_owned());
+    }
+    mismatches
 }
 
 fn properties_binding(case: &FixtureCase) -> Result<TablePropertiesHwpxBinding, Box<dyn Error>> {
@@ -666,44 +866,6 @@ fn properties_binding(case: &FixtureCase) -> Result<TablePropertiesHwpxBinding, 
         },
         diagonals: Vec::new(),
     })
-}
-
-fn semantic_properties_state_equal(
-    left: &domain_ir::TablePropertiesState,
-    right: &domain_ir::TablePropertiesState,
-) -> bool {
-    left.table_id() == right.table_id()
-        && left.grid_sha256() == right.grid_sha256()
-        && left.table_properties_sha256() == right.table_properties_sha256()
-        && left.cells().len() == right.cells().len()
-        && left.cells().iter().zip(right.cells()).all(|(left, right)| {
-            left.master_cell_id == right.master_cell_id
-                && left.coordinate == right.coordinate
-                && left.formula_sha256 == right.formula_sha256
-                && left.properties == right.properties
-        })
-}
-
-fn placement_matches(value: &TablePlacementHwpxReadback, expected: &PlacementEvidence) -> bool {
-    value.attachment_flags.treat_as_char == expected.treat_as_char
-        && value.attachment_flags.affect_line_spacing == expected.affect_line_spacing
-        && value.horizontal_reference == expected.horizontal_reference
-        && value.vertical_reference == expected.vertical_reference
-        && value.horizontal_alignment == expected.horizontal_alignment
-        && value.vertical_alignment == expected.vertical_alignment
-        && value.horizontal_offset_hwpunit == expected.horizontal_offset_hwpunit
-        && value.vertical_offset_hwpunit == expected.vertical_offset_hwpunit
-        && value.floating_flags.flow_with_text == expected.flow_with_text
-        && value.floating_flags.allow_overlap == expected.allow_overlap
-        && value.floating_flags.hold_anchor_and_shape == expected.hold_anchor_and_shape
-        && value.text_wrap == expected.text_wrap
-        && value.text_flow == expected.text_flow
-        && [
-            value.outer_margins.left_hwpunit,
-            value.outer_margins.right_hwpunit,
-            value.outer_margins.top_hwpunit,
-            value.outer_margins.bottom_hwpunit,
-        ] == expected.outer_margins_hwpunit
 }
 
 fn require_payload_oracle(target: &[u8], actual: &[u8]) -> Result<(), Box<dyn Error>> {

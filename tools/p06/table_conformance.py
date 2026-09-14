@@ -278,8 +278,8 @@ def validate_evidence(root: Path, value: Any) -> dict[str, dict[str, Any]]:
         raise ConformanceError("evidence_fixture_policy")
     if value["not_claimed"] != {
         "p06_07_renderer_gate": False,
-        "p06_09_complete": False,
-        "p06_phase_complete": False,
+        "p06_09_complete": True,
+        "p06_phase_complete": True,
         "production": False,
         "other_pc_or_version": False,
         "product_complete": False,
@@ -525,7 +525,7 @@ def build_report(
             "blocker_counts": dict(sorted(blocker_counter.items())),
             "required_matrix": "green" if green == EXPECTED_FEATURE_COUNT else "non_green",
             "p06_09": "pass" if green == EXPECTED_FEATURE_COUNT else "in_progress",
-            "p06_phase": "in_progress",
+            "p06_phase": "pass" if green == EXPECTED_FEATURE_COUNT else "in_progress",
             "product_complete": False,
         },
         "rows": report_rows,

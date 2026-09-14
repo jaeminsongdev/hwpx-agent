@@ -259,6 +259,21 @@ fn read(
     )
 }
 
+#[test]
+fn hancom_linesegarray_is_accepted_in_scalar_cells() -> TestResult {
+    let source = String::from_utf8(regular_section())?;
+    let cached = source.replace(
+        "</hp:p>",
+        r#"<hp:linesegarray><hp:lineseg textpos="0" vertpos="0"/></hp:linesegarray></hp:p>"#,
+    );
+    let binding = regular_binding("lineseg")?;
+    let plain = read(source.as_bytes(), &binding, region())?;
+    let with_cache = read(cached.as_bytes(), &binding, region())?;
+    assert_eq!(plain.region, with_cache.region);
+    assert_eq!(plain.source_table_count, with_cache.source_table_count);
+    Ok(())
+}
+
 #[allow(clippy::too_many_arguments)]
 fn draft(
     source: &TableAutoFillHwpxReadback,

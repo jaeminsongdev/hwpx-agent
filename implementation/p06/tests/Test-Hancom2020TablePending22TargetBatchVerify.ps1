@@ -61,9 +61,9 @@ $checks = [ordered]@{
     exact_manifest_digests = $wrapper -match
         '682635284ae5686832dfd89598ea6c106c6b110119e0d54a8e8a24b63e9f3f97' -and
         $wrapper -match
-        '33c391ff2b151f815c4e2e79c9144c53547fe87d5e35d1e856e4e796b3978faf' -and
+        '053b401cbcd2a21b3e845a29ffef28b9c1f633dfa825ac3f52d520cb5f6a3430' -and
         $wrapper -match
-        '1aeddc699c91c4878242a64e7674d1689a86b8abeda704370eeaac337bf95a8e'
+        'e4bb736d7182769546cefd50f2a30fd4bffba7293c589174d8aa0858f9e45c39'
     exact_manifest_paths = $wrapper -match
         'p06-09-table-merge-split-target-20260913-06' -and
         $wrapper -match

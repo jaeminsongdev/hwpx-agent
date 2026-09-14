@@ -1138,7 +1138,7 @@ pub(super) fn require_plain_text_flow(flow: &TextFlow) -> Result<(), TableTextTo
             .items
             .iter()
             .any(|item| !matches!(item, TextRunItem::Text(_))),
-        ParagraphChild::Opaque(_) => true,
+        ParagraphChild::Opaque(opaque) => opaque.may_contain_visible_text(),
     }) {
         return Err(TableTextToTableHwpxError::SourceBindingMismatch);
     }

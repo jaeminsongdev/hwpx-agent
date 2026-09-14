@@ -85,7 +85,7 @@ def success_observations(
         "inspection_detail": "original",
         "all_pages_inspected": True,
         "computer_use_click_or_type_invoked": False,
-        "user_access_prompt_action": "not_recorded",
+        "user_access_prompt_action": finalizer.ACCESS_PROMPT_ACTION,
         "cases": [
             {
                 "feature_id": case["feature_id"],
@@ -158,6 +158,13 @@ class Pending22VisualReviewFinalizerTests(unittest.TestCase):
         )
         self.assertEqual(receipt["gate_decision"]["automation_runtime"], "not_run")
         self.assertEqual(receipt["gate_decision"]["p06"], "in_progress")
+        self.assertFalse(
+            receipt["review_observations"]["computer_use_click_or_type_invoked"]
+        )
+        self.assertEqual(
+            receipt["review_observations"]["user_access_prompt_action"],
+            "user_attested_allow_all",
+        )
 
     def test_manifest_rejects_extra_key(self) -> None:
         manifest = success_manifest()
