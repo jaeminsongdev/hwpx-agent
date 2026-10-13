@@ -1430,3 +1430,17 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+
+<!-- BEGIN P09_R362_STATUS -->
+> 2026-10-14 P09 r362 — 실패 검토 선언 재사용을 실제 현재26쌍 전체Binding의 private namespace에 연결·검증했다. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/P10 새구현0/목표ACTIVE.
+> 연결 코드가 기본 module/controller·attempt를 거부하고 원own_inputs globals, partial-role, manifest 및bootstrap의 단일private attempt identity를 확인한다. 원검토fn 보존·종료후복원/default source모듈변경0/제품-Native-GO-queue0. 실제호출지점 M.attempt 부재 수정전r814 실패 보존.
+> r815 PASS_CURRENT160_PRIVATE_REVIEW_CONNECTION_CODE22_WHOLE_BINDING_NOT_CONTROLLER_NATIVE_OR_GO/CODE22 22/22/원Rust787 및26쌍 유지/DATA038-pref038 승인/fresh1126-final1126/CPU39.65%-가용RAM49.15095%/cleanupTrue/private 원fn 복원True.
+> 원전체실패검토1+중복선언재사용2/해당호출에서(원4128024+review1433)*2=8258914bytes 재읽기 회피. 최초전체검토·최종fresh 유지/파일bytes-runtimeJSON행-hash계산 캐시0. 최종검사전1236회·341868664bytes/반복163277580bytes. r811과 진단SELF/review 입력이 달라 전체차이를 runtime개선율로승격0.
+> 남은 큰반복은158run005 6회/159run001 5회 등. 새실행identity-controller DATA 연결·전체source/import·Native600+shared720 전체비용·실제두Native읽기·독립승인 미검증. 기존run002 존재→동일번호재실행0. 외부D:/dev/books Python작업 보존/접근허용-UAC-OS설정-외부종료-삭제이동-push0/PCfreeze해결 미증명.
+> 근거 r814-r815 및 implementation/p09/P09-361_CASE160_PRIVATE_REVIEW_CONNECTION_R362.md. 권위153·성공159·실패160두회·사용자변경 보존/원scope-rate-deadline-자원보호 유지.
+<!-- END P09_R362_STATUS -->
+
+
+
+
+
