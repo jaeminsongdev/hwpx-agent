@@ -2700,3 +2700,17 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+
+<!-- BEGIN P09_R356_STATUS -->
+> 2026-10-14 P09 r356 — 실제run002 capsule002.v4/25쌍·공통parent-frame-worker-fulloracle Binding 연결검증 PASS. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE.
+> capsule v3 연결원v2 connector/원encoder-decoder metadata inverse 및원workerdispatch bytecode-defaults-closure 유지/새TASKcase160-current-r002-tests·wireSchema/v4 별도namespace/16KiB상한그대로. r793 원6+신규2=CODE8 8/8/실제mf026/25pairs memoryencode-decode·fresh199-final199/CPU44.32%-RAM47.96782%/cleanupTrue·worker실행0.
+> 실제capsule파일13604-SHA3f230f4273530d6536f68ef679dd6afb9ab6401faad077c58d570f263f83a79c/메모리canonical13603-SHA78d2aafb9cae809a268607b123521a7b80b017b22693eea2bdbd36fa6d6937fb 차이는LF1이며r794 실제byte동일검증. 이전capsule001 및실패run001 보존/기존24→25 relabel0.
+> 원core16 nonimportAST 모두보존·private160 partial-role 명시연결→새capsule25 typeddecode→parentaccess-frame-worker/raw-fulloracle sameBinding module. 실제mf026 fulladmission·capsule25 전체descriptor-실제pin 일치/same-reader contextadmission1-중복1회피/finalfresh유지.
+> r794 PASS_ACTUAL160_RUN002_SHARED25_PARENT_WORKER_ORACLE_GRAPH_NOT_ENGINE_PREFLIGHT_NATIVE_OR_GO/fresh198-final198/CPU50.56%-최소가용RAM43.59007%/cleanupTrue·engine-worker-Native제품0/실제engineconfiguration·fullscope-cost-preflight 아직미검증.
+> 다음 boundedrun002 bootstrap/실제controller-DATA에기검증단일identity·선언재사용연결→원600/shared720 cost-wholepreflight→단일160제품·독립승인. 원권위153-성공159-실패160-user변경 보존/원scope-rate-deadline약화0/PCfreeze해결미증명/접근허용-UAC-OS설정-외부종료-삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_RUN002_CAPSULE_GRAPH_R356.md;근거r793-r794/actualcapsule002.
+<!-- END P09_R356_STATUS -->
+
+
+
+
+
