@@ -1334,3 +1334,16 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+
+<!-- BEGIN P09_R353_STATUS -->
+> 2026-10-14 P09 r353 — 선언재사용을 실제160 fullBinding/독립159 wholeoracle에연결하고finalfresh PASS. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE.
+> 원bind·previous callback·이전159 prepare code객체그대로/private 의존성만연결·동일private159 graph/facade 공유1회/원전체manifest admission1회+검증선언 재사용1회/기본CONFIG160·원159graph-checkpoint·원manifestloader 변경0/관측row-frame 변경0/원Native두byte/finalfresh생략0.
+> r775 PASS_SHARED159_MANIFEST_ACTUAL160_FULL_BINDING_FINAL_FRESH_NOT_CONTROLLER_PREFLIGHT_OR_GO/scope2772/Rust787/pairs24/fresh1083-final1083/CPU48.94%-최소가용RAM39.66937%/parentCPU5.45623%-private71.16016MiB/cleanupTrue·제품-Native-queue0.
+> 준비reads1285→1191/bytes459281820→330902234/진단전체차이128379586bytes-27.95225%·진단source세트같지않아동일workload정확효과승격0. 공통역사16개 byte총감소88240666 확인/158결과9→6/147등5→3/159결과5그대로. 최종포함reads2274-bytes502671672/원final1083회 모두유지·before r772최종fresh STOP보존.
+> 다음 실제controller·DATA·검토된별도physicalrun 및실패provenance 연결/원600과전체shared720 비용·전체preflight 후단일제품실행과독립승인. 원160run001 deadline실패와권위153·성공159·사용자변경 보존/원deadline-rate-scope약화0/PCfreeze해결미증명/접근허용-UAC-OS설정-외부종료-삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_SHARED_MANIFEST_R353.md;근거r775-r776.
+<!-- END P09_R353_STATUS -->
+
+
+
+
+
