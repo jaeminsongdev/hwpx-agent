@@ -1152,3 +1152,16 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- END P09_R338_STATUS -->
 
 
+<!-- BEGIN P09_R339_STATUS -->
+> 2026-10-14 P09 r339 — actual158/run005제품+독립승인완료. 공식152/249·잔여97·next159·generation개별47·delta1/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/전체목표ACTIVE. 권위accept158001/396156bytes/SHAae5968271c2529880cb562a1ae3a48621af39d2af8d747d1ef77f6c245794f34·성공157/실패001~004/모든failed-superseded증거보존/성공158 replay0.
+> prior144/145/146 원 scope8,024,854→새무손실2,095,289bytes/절감5,929,565·r713선택/r714 exclusive2MiB/s publisher·6freshdecodesexact/원본보존. failed004 정확ROOT+r703+reviewer source·ROLE V2 CODE9r715 9/9·추가failure provenance/003역할보존·원2287363→941783bytes exclusive r716/fresh23-final23/CPU25.38%/RAM24.80986%/cleanupTrue·실패→제품승격0.
+> manifest022 원12+failed0041+prior3=16·모든원 admission/fresh-original-physical/type/schema 유지·r717 CODE4+실제fulladmission fresh110-final110 PASS/CPU41.1%/RAM22.36410%. capsule003 canonical8973/fileLF8974/SHA2bca52eab846a58415d5610f51a06077db8de5cb946c4728ba6141409774273a<16KiB·r718 memorytransport/fresh110-final110 PASS/실제workerdispatch아님.
+> V7 물리5/task005/root005·원identity/worker/단일adapter code·review001~004 유지. V25/DATA031/core16-role4-timing3 namespaces·원samereader선언만·최종fresh/2byte/600·60margin/15capture/decode5/rates/경고-Job보호유지. r719two-roleboot/r720staleattemptattribute/r721oldroletestrouting 실패보존후수정·r722 CODE27 PASS runlabelsuperseded보존·r723현재CODE27 27/27/fresh34-final34/CPU21.86%/RAM22.69982%/cleanupTrue.
+> wholepref033 PASS251.58247s/raw2681/292213238bytes/Rust787/import63/fresh992/read1994/324736759bytes/final992/CPU35.67%/RAM20.81787%/cleanupTrue. physical2665/255190755bytes·semantic2665/281194120bytes/dirs372·complete모델597.313651<600/estimate≠completion·scope제외/rates변경0.
+> actualrun005 PASS644.03s/bootstrap포함·Frame COMMITTED/wholebyte2/Nativehandles3037opened=closed/remaining0/ownedempty-cleanupTrue·root4404465/SHA34db0892a40886196a3307ba21decfdcb7ecdede4e6e02feb48422636a54ded4·test1PASS/248filtered/ignored0. Native before_release508.973422<600·GO→completecapture1.545879<15(실제GO1/capture1)·32decode0.434143<shared5·CPU32.83%/RAM20.81828%/parentCPU5.79596%/private49.23047MiB. reserve+checkpoint총219.322843/최대0.234912s·순수CreateFileW총0.552143/최대0.015838s(각3037/unknown0/accounting불완전0)·정상측정이지과거CPU폭증원인·프리즈해결증명아님.
+> 독립승인001/002 FAILdelta0-cleanupTrue: 현재Nativescope에없는옛source-stat DATA158 경로조회(sql_source_link_or_missing). fake옛DATA추가0·현재ownInputs/독립inheritedscope/원frozenflatprepareAST및completeoracle로별도prepare 연결. r724 ORACLE_SCOPE순서실패보존→semantic compose후physicalprojector로수정/V25-root005불변. r725전체read-onlyprepare PASS/fresh222-final222/CPU47.85%/RAM21.43887%/cleanupTrue/원Native·제품·Job·resource·strictwindow 모두유지/원장쓰기0. 독립diagnostic003 r725state-root-sourcepinsfresh 확인→canonical152실제생성/delta1-cleanupTrue/제품-Native재실행0.
+> 다음159 새STEP/DATA/controller/fullcurrent scope-cost/preflight→독립제품·승인. old597초모델·158 runtime복사승격0·전수249/signed16/whole reconciliation/P09 Gate 별도미완료·접근허용/한글/UAC/OS·Defender·WSL변경/외부앱종료/삭제이동/원격push0. source18exactarchive p361-r339-qualified·세부 implementation/p09/P09-361_CASE158_ACCEPTED_WITH_TIMING_R339.md;근거r713-r725/DATA031/pref033/actual158005/accept158001.
+<!-- END P09_R339_STATUS -->
+
+
+
