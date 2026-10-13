@@ -1458,3 +1458,18 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+
+<!-- BEGIN P09_R364_STATUS -->
+> 2026-10-14 P09 r364 — 실제manifest028/capsule004의run003·29쌍 채택 및controllerV31 CODE18 검증. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/P10 새구현0/목표ACTIVE.
+> 기존26쌍 wholeadmission+133/138/137 실제fresh3쌍 추가·historical run002 metadata 보존. r821 final뒤TESTpin추가 fresh214/final213→INCOMPLETE로보존·PASS근거사용0. 수정r822 CODE18 18/18/fresh216-final216/CPU35.62%-가용RAM48.70530%/cleanupTrue. canonicalwire15662·실제capsule15663bytes(한LF명시)·원16KiB유지/원worker-connector code보존.
+> 새whole29 Binding/cost r823 CPU보호92.23%·RAM51.70347%에서중단/cleanupTrue·제품Native0. pacedread/O1guard/4096metadata원장 코드검토후 기존표본 부모자원·완료읽기 telemetry 및복원오류에도close 보강. 단일r824 CPU75%·부모4.95320%-private48.90234MiB·RAM36.41125%보호중단/cleanupTrue. wholeBinding-finalfresh-600/shared720 PASS승격0/추가대규모읽기0.
+> 중단후 MRT/TiWorker/별도Python 부하 관측은원인증명아님·외부종료/OS변경0. 코드준비계속하여controllerV31 원task-pref metadata inverse/원engine-worker·physical3 단일template·29쌍 새bootstrap 연결·private첫실패review 및history 재사용 연결.
+> r826 원14+신규4 CODE18 18/18/actualbounded29-task003/source원namespace보존/fresh68-final68/CPU52.74%-가용RAM47.21316%/cleanupTrue·engine-frame-worker0. actualimportinventory·wholeBinding-cost는이검사로대체0/DATA039-전체pref-제품실행 미검증.
+> 다음 중단증거기반 입력검증코드 검토→whole29 원600/shared720 비용-finalfresh→DATA039·원전체pref→단일run003 두Native읽기·독립승인. 권위153·성공159·실패160두회·원본·사용자변경 보존/원scope-rate-deadline-자원보호유지/접근허용-UAC-삭제이동-push0/PCfreeze해결 미증명.
+> 근거 r821-r826 및 implementation/p09/P09-361_CASE160_RUN003_MANIFEST_CONTROLLER_R364.md.
+<!-- END P09_R364_STATUS -->
+
+
+
+
+
