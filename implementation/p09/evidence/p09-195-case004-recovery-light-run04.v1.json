@@ -1,0 +1,713 @@
+{
+  "state": "PASS_P195_CONTRACTS_AND_PENDING_PLAN_ONLY_NOT_RECOVERY",
+  "goal_status": "active",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "actual_product_child_executed": false,
+  "new_whole_source_audit_executed": false,
+  "original_failed_closing_not_overwritten": true,
+  "contract_tests_run": 154,
+  "contract_tests_passed": 154,
+  "observation_contract_tests_passed": 10,
+  "independent_closing_contract_tests_passed": 12,
+  "plan": {
+    "state": "PLAN_ONLY_NOT_RUNTIME_OR_GATE",
+    "binding": {
+      "compiled_inventory_pin": {
+        "path": "implementation/p09/evidence/p09-186-observed-r07-list-output.source-closing-run01.v1.json",
+        "bytes": 339893,
+        "sha256": "7b06997d3b8090967597fad1d12b94446e20e3a17ba206233ae8711fdb1d455d"
+      },
+      "compiled_test_executable_pin": {
+        "path": "target/p09-175-xml-initial-capacity/debug/deps/form_stored_provider-p152-r07.exe",
+        "bytes": 14216704,
+        "sha256": "2b47e5815500549401f6f1960d92ba67f0d3410fc39d91cc91fd7f886d67dc5d"
+      },
+      "exact_input_manifest_sha256": "1a4c86e6a286e12a644645769724381ca5add93df5d704234bec9a9decc0c27a",
+      "expected_test_count": 249
+    },
+    "accepted_test_names": [
+      "actual_import::actual_aead_tamper_cannot_be_reclassified_as_an_importer_or_policy_failure",
+      "actual_import::actual_head_advance_invalidates_old_import_even_with_identical_result_bytes",
+      "actual_import::all_ten_actual_stored_results_import_without_caller_maps_and_preserve_whole_graphs"
+    ],
+    "accepted_individual_cases": 3,
+    "remaining_individual_cases": 246,
+    "successful_candidates_requiring_separate_closing": 1,
+    "remaining_regular_cases": 240,
+    "remaining_corpus_cases": 6,
+    "corpus_case_names": [
+      "actual_import::formula_policy_issuer::corpus::all16_actual_formula_sources_and_current_derivatives_keep_native_cell_protection_denial",
+      "actual_import::formula_policy_issuer::corpus::all16_current_derivatives_are_signed_exact_noops_then_denied_new_policy_and_expired_approval",
+      "actual_import::formula_policy_issuer::corpus::all36_frozen_originals_signed_full_candidates_or_no_formula_denial_and_live_revocation",
+      "actual_import::formula_policy_issuer::corpus::changed::all16_changed_original_comparators_reject_an_extra_numeric_input_leaf_change",
+      "actual_import::formula_policy_issuer::corpus::changed::all16_original_numeric_derivatives_have_signed_changed_candidates_exact_current_and_live_revocation",
+      "actual_import::formula_policy_issuer::corpus::changed::all32_changed_and_current_numeric_derivatives_keep_valid_signature_cell_protection_denial"
+    ],
+    "corpus_cases_deferred_not_skipped": true,
+    "next_index": 5,
+    "next_test_name": "actual_import::field_ranges::actual_aead_tamper_is_original_service_failure_not_field_projection_failure",
+    "next_attempt": 1,
+    "maximum_cases_per_invocation": 1,
+    "automatic_retry": false,
+    "parallel_execution": false,
+    "full249_current_qualified": false,
+    "signed16_current_qualified": false,
+    "all249_individual_runtime_qualified": false,
+    "single_process_full249_qualified": false,
+    "product_complete": false,
+    "P09_gate": "OPEN",
+    "A12_gate": "OPEN",
+    "A13_gate": "OPEN"
+  },
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "IO": {
+    "read_passes": 69,
+    "bytes_read": 23255348,
+    "bound_inputs": 27,
+    "final_fresh_hashes": 27,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P195_binary1p5_other4_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 1572864,
+      "other": 4194304
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 23255348
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 23255348,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0.0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    },
+    "existing_pressure_and_guards_and_deadline_preserved": true,
+    "rate_budget": {
+      "binary_bytes_per_whole_pass": 375777280,
+      "other_bytes_per_whole_pass": 103599300,
+      "predicted_two_pass_rate_lower_bound_seconds": 527.2255166371663,
+      "estimated_seconds_with_metadata_allowance_and_margin": 575.2255166371663,
+      "unchanged_maximum_scope_seconds": 600,
+      "prediction_is_not_completion_guarantee": true
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/recover_r07_case004_closing.py",
+      "bytes": 12463,
+      "sha256": "e3ec47826e80b5cdd905036426b10cd09250818e525c452995dc1eeb299930b2"
+    },
+    {
+      "path": "tools/p09/tests/test_r07_independent_closing.py",
+      "bytes": 5099,
+      "sha256": "b333f19ed81e8ea4ca0ddb988d4ec3b0b65027f1a92b320133dd0e17c0f5bd7c"
+    },
+    {
+      "path": "tools/p09/observe_shared_metadata_recheck.py",
+      "bytes": 10213,
+      "sha256": "49b0960aa6ffb4be31eec630c66f263938f9cbcbe2b65d52dff3d69be9fca735"
+    },
+    {
+      "path": "tools/p09/tests/test_observed_shared_metadata.py",
+      "bytes": 5733,
+      "sha256": "7d6248ee6c9ece4ffefbde81f2291d50d008a0cbca03106e56dc4a062cf0fabe"
+    },
+    {
+      "path": "tools/p09/review_pending_r07_closing.py",
+      "bytes": 4905,
+      "sha256": "0c9d2c9e042923e31be05e6e765d9ead522b78de3d6dc979f76f5414615ebace"
+    },
+    {
+      "path": "tools/p09/tests/test_pending_r07_closing_review.py",
+      "bytes": 2192,
+      "sha256": "c26f14ae73358646f85aa262498112a9e668e0c2b76d2096e839b2ffd740e64f"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-004-attempt-001.json",
+      "bytes": 617816,
+      "sha256": "53159ac973e75e5562439c8a173afa948c9b7c23719826cb51a205d305b9634a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run05.closing.v1.json",
+      "bytes": 304809,
+      "sha256": "715d9f22098622741f5f844ed832a5917078b417cfb4122dee081b1bb90cb3bd"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-194-pending-case004-closing-review-run01.v1.json",
+      "bytes": 16265,
+      "sha256": "a0789196efcba9e241ec77f2deff0227b427a17a3d601a462a732dfc8dcf5dd9"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run01.preparation.v1.json",
+      "bytes": 601637,
+      "sha256": "076afa535640a5afad9f50ed3fd932ab29238cc8f6ed0a20b2ca526ff11cc5f1"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-001-attempt-001.json",
+      "bytes": 617840,
+      "sha256": "7dfdede3acbe6a1f900a3775beb4512ac173ad4c0599c420b4670bfa608bad64"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run01.closing.v1.json",
+      "bytes": 895299,
+      "sha256": "8e220071e5126f80fe9a31ca140c46edf20ae1304bf0233a975990b1ce096f7a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-186-observed-r07-list-output.source-closing-run01.v1.json",
+      "bytes": 339893,
+      "sha256": "7b06997d3b8090967597fad1d12b94446e20e3a17ba206233ae8711fdb1d455d"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-187-current-r07-full.actual-run01.v1.json",
+      "bytes": 1992698,
+      "sha256": "681466f38eaa9d99be9070d4342ff8f6bfaeb18c29723737dcdc55e41d7de761"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-187-current-r07-full.preparation-run01.v1.json",
+      "bytes": 339465,
+      "sha256": "72c75dab9b05611c58c7c0820f90050397b564367eaee545577dfc216277ece3"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-187-current-r07-full.light-run01.v1.json",
+      "bytes": 3483,
+      "sha256": "d8354e6e6196ccc8af1c5004be3b3a649edd6f9b45c775b7b7aca5e597270b0b"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-188-current-r07-full-stop-and-owned-IO-probe-r2-run01.v1.json",
+      "bytes": 12904,
+      "sha256": "a0ad259557f0e56f6dd9a2f405b1a34d3cc0b6a230718de9cdbe43c17ec21dda"
+    },
+    {
+      "path": "tools/p09/inspect_current_r07_stop.py",
+      "bytes": 13361,
+      "sha256": "b68dfafaf70a1c768d3ee38f7ae8df77172f06c85b3b84cfa61e05b56dd4895f"
+    },
+    {
+      "path": "tools/p09/tests/test_current_r07_stop.py",
+      "bytes": 2839,
+      "sha256": "b55b4c60368effe00ece8b73f447ca4b1e74ab76b8fdbd36a20632e19eeb84db"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-188-current-r07-full-stop-and-owned-IO-probe-run01.v1.json",
+      "bytes": 3239,
+      "sha256": "a62e5b5121b5d3233b072b16ad387826c2bef90e91000d4406c89f1fde750dd1"
+    },
+    {
+      "path": "tools/p09/run_resumable_r07_case.py",
+      "bytes": 16792,
+      "sha256": "e5ea77db108ebe72a330a3c58ac19e5a13ed71a2086282426cd149f7ecdf6b59"
+    },
+    {
+      "path": "tools/p09/tests/test_run_resumable_r07_case.py",
+      "bytes": 5689,
+      "sha256": "87100979cdcb9a563ff2b288aac82b15848dc9f701ac613940cd95705e53ae38"
+    },
+    {
+      "path": "tools/p09/resumable_current_r07.py",
+      "bytes": 14014,
+      "sha256": "18fe998bee7287bbe557755b554125d420f26aaeb021df9ad14824ed75f1d0ff"
+    },
+    {
+      "path": "tools/p09/tests/test_resumable_current_r07.py",
+      "bytes": 10300,
+      "sha256": "8cd0b43e5804d1eeec2646eaf1df1bca08a375ecfa2b452aa5ffafd73e3bd4ba"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-002-attempt-001.json",
+      "bytes": 659057,
+      "sha256": "b1b4447f28219bd47afa7f665185c1cd2a5752ef2dd165a401846ca119a8163a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run02.closing.v1.json",
+      "bytes": 898623,
+      "sha256": "4c2b452cd1acfbadfbe46a6e2b5154f6b889a97106a1510e79b4d5b9b2408422"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-003-attempt-001.json",
+      "bytes": 701199,
+      "sha256": "eb37b8dc27f5c5646afa5eac627be5a73ae72a26f8c4ee78c5c724a3436830df"
+    }
+  ],
+  "metadata_observation": {
+    "completed_sample_count": 14,
+    "samples": [
+      {
+        "time_utc": "2026-10-08T02:43:09.669659+00:00",
+        "system_cpu_percent": 19.25,
+        "available_ram_percent": 36.44738882803003,
+        "commit_used_percent": 43.32552472047109,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 63593750,
+          "kernel_including_idle": 69062500,
+          "user": 9687500,
+          "total": 78750000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 24317952,
+        "own_working_set_bytes": 35180544,
+        "own_private_percent_total_ram": 0.07278951056195783,
+        "own_working_set_percent_total_ram": 0.10530387505754688,
+        "phase_at_sample": "admission",
+        "phases_since_previous_sample": [
+          "admission"
+        ],
+        "audited_logical_read_bytes": null,
+        "audited_logical_read_passes": null,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:43:10.170310+00:00",
+        "system_cpu_percent": 14.37,
+        "available_ram_percent": 36.53833587019756,
+        "commit_used_percent": 43.31314370642482,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 68906250,
+          "kernel_including_idle": 72968750,
+          "user": 7500000,
+          "total": 80468750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 24317952,
+        "own_working_set_bytes": 35180544,
+        "own_private_percent_total_ram": 0.07278951056195783,
+        "own_working_set_percent_total_ram": 0.10530387505754688,
+        "phase_at_sample": "admission",
+        "phases_since_previous_sample": [
+          "admission"
+        ],
+        "audited_logical_read_bytes": null,
+        "audited_logical_read_passes": null,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:43:10.684726+00:00",
+        "system_cpu_percent": 13.7,
+        "available_ram_percent": 36.52618589462624,
+        "commit_used_percent": 43.29893658411214,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 71875000,
+          "kernel_including_idle": 75625000,
+          "user": 7656250,
+          "total": 83281250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 24653824,
+        "own_working_set_bytes": 35553280,
+        "own_private_percent_total_ram": 0.07379485667381239,
+        "own_working_set_percent_total_ram": 0.10641956403533669,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 2063246,
+        "audited_logical_read_passes": 14,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T02:43:12.053540+00:00",
+        "system_cpu_percent": 21.73,
+        "available_ram_percent": 36.41226301570731,
+        "commit_used_percent": 43.343389276768775,
+        "parent_cpu_machine_percent": 3.645461,
+        "parent_cpu_delta_100ns": 7968750,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 171093750,
+          "kernel_including_idle": 188906250,
+          "user": 29687500,
+          "total": 218593750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 40292352,
+        "own_working_set_bytes": 51474432,
+        "own_private_percent_total_ram": 0.12060475246723583,
+        "own_working_set_percent_total_ram": 0.15407542180093042,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "contract_tests",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 2206131,
+        "audited_logical_read_passes": 14,
+        "audited_logical_read_bytes_delta": 142885,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T02:43:12.564993+00:00",
+        "system_cpu_percent": 16.54,
+        "available_ram_percent": 36.38969176946433,
+        "commit_used_percent": 43.34739106259831,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 67031250,
+          "kernel_including_idle": 73437500,
+          "user": 6875000,
+          "total": 80312500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 40292352,
+        "own_working_set_bytes": 51474432,
+        "own_private_percent_total_ram": 0.12060475246723583,
+        "own_working_set_percent_total_ram": 0.15407542180093042,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 4277576,
+        "audited_logical_read_passes": 17,
+        "audited_logical_read_bytes_delta": 2071445,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T02:43:13.074446+00:00",
+        "system_cpu_percent": 17.71,
+        "available_ram_percent": 36.42098010211619,
+        "commit_used_percent": 43.35451288483732,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 67500000,
+          "kernel_including_idle": 74062500,
+          "user": 7968750,
+          "total": 82031250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 40091648,
+        "own_working_set_bytes": 51318784,
+        "own_private_percent_total_ram": 0.12000399686381054,
+        "own_working_set_percent_total_ram": 0.1536095297003149,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 6339029,
+        "audited_logical_read_passes": 21,
+        "audited_logical_read_bytes_delta": 2061453,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T02:43:13.586975+00:00",
+        "system_cpu_percent": 21.21,
+        "available_ram_percent": 36.3146095793546,
+        "commit_used_percent": 43.458888015893194,
+        "parent_cpu_machine_percent": 0.189394,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 65000000,
+          "kernel_including_idle": 71250000,
+          "user": 11250000,
+          "total": 82500000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 40775680,
+        "own_working_set_bytes": 51867648,
+        "own_private_percent_total_ram": 0.12205147004283143,
+        "own_working_set_percent_total_ram": 0.1552524123709065,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 8360653,
+        "audited_logical_read_passes": 23,
+        "audited_logical_read_bytes_delta": 2021624,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T02:43:14.093307+00:00",
+        "system_cpu_percent": 12.64,
+        "available_ram_percent": 36.31413142693555,
+        "commit_used_percent": 43.50735814673594,
+        "parent_cpu_machine_percent": 0.574713,
+        "parent_cpu_delta_100ns": 468750,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 71250000,
+          "kernel_including_idle": 74218750,
+          "user": 7343750,
+          "total": 81562500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 41492480,
+        "own_working_set_bytes": 52535296,
+        "own_private_percent_total_ram": 0.12419702576935031,
+        "own_working_set_percent_total_ram": 0.1572508442761784,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 10148093,
+        "audited_logical_read_passes": 34,
+        "audited_logical_read_bytes_delta": 1787440,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T02:43:14.599064+00:00",
+        "system_cpu_percent": 14.96,
+        "available_ram_percent": 36.35525253497409,
+        "commit_used_percent": 43.41541098679604,
+        "parent_cpu_machine_percent": 0.378788,
+        "parent_cpu_delta_100ns": 312500,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 70156250,
+          "kernel_including_idle": 74531250,
+          "user": 7968750,
+          "total": 82500000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 40022016,
+        "own_working_set_bytes": 51453952,
+        "own_private_percent_total_ram": 0.11979557145037728,
+        "own_working_set_percent_total_ram": 0.1540141202087442,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 12161201,
+        "audited_logical_read_passes": 37,
+        "audited_logical_read_bytes_delta": 2013108,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T02:43:15.102819+00:00",
+        "system_cpu_percent": 14.66,
+        "available_ram_percent": 36.30618674058822,
+        "commit_used_percent": 43.39749425597645,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 65468750,
+          "kernel_including_idle": 69218750,
+          "user": 7500000,
+          "total": 76718750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 42737664,
+        "own_working_set_bytes": 53514240,
+        "own_private_percent_total_ram": 0.12792416257427455,
+        "own_working_set_percent_total_ram": 0.16018106038268132,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 14182231,
+        "audited_logical_read_passes": 40,
+        "audited_logical_read_bytes_delta": 2021030,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T02:43:15.608788+00:00",
+        "system_cpu_percent": 27.95,
+        "available_ram_percent": 36.29512793335781,
+        "commit_used_percent": 43.45894540786728,
+        "parent_cpu_machine_percent": 0.375235,
+        "parent_cpu_delta_100ns": 312500,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 60000000,
+          "kernel_including_idle": 69218750,
+          "user": 14062500,
+          "total": 83281250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 43794432,
+        "own_working_set_bytes": 54546432,
+        "own_private_percent_total_ram": 0.13108732473108525,
+        "own_working_set_percent_total_ram": 0.16327066062886852,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "final_fresh_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 16110751,
+        "audited_logical_read_passes": 50,
+        "audited_logical_read_bytes_delta": 1928520,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T02:43:16.120271+00:00",
+        "system_cpu_percent": 18.48,
+        "available_ram_percent": 36.21866032726468,
+        "commit_used_percent": 43.54943168119405,
+        "parent_cpu_machine_percent": 0.194553,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 65468750,
+          "kernel_including_idle": 72656250,
+          "user": 7656250,
+          "total": 80312500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 43794432,
+        "own_working_set_bytes": 54546432,
+        "own_private_percent_total_ram": 0.13108732473108525,
+        "own_working_set_percent_total_ram": 0.16327066062886852,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 18198461,
+        "audited_logical_read_passes": 54,
+        "audited_logical_read_bytes_delta": 2087710,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T02:43:16.630411+00:00",
+        "system_cpu_percent": 10.08,
+        "available_ram_percent": 36.23714888746805,
+        "commit_used_percent": 43.52886448466207,
+        "parent_cpu_machine_percent": 0.190114,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 73906250,
+          "kernel_including_idle": 75937500,
+          "user": 6250000,
+          "total": 82187500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 43794432,
+        "own_working_set_bytes": 54546432,
+        "own_private_percent_total_ram": 0.13108732473108525,
+        "own_working_set_percent_total_ram": 0.16327066062886852,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 20285621,
+        "audited_logical_read_passes": 56,
+        "audited_logical_read_bytes_delta": 2087160,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T02:43:17.146289+00:00",
+        "system_cpu_percent": 15.62,
+        "available_ram_percent": 36.14314902600965,
+        "commit_used_percent": 43.624093422029325,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 71718750,
+          "kernel_including_idle": 75468750,
+          "user": 9531250,
+          "total": 85000000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 43794432,
+        "own_working_set_bytes": 54546432,
+        "own_private_percent_total_ram": 0.13108732473108525,
+        "own_working_set_percent_total_ram": 0.16327066062886852,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 22376422,
+        "audited_logical_read_passes": 68,
+        "audited_logical_read_bytes_delta": 2090801,
+        "reader_counters_observed": true
+      }
+    ],
+    "system_cpu_max_percent": 27.95,
+    "own_cpu_max_machine_percent": 3.645461,
+    "own_private_max_bytes": 43794432,
+    "own_working_set_max_bytes": 54546432,
+    "available_ram_min_percent": 36.14314902600965,
+    "own_process_only": true,
+    "foreign_PID_query_executed": false,
+    "new_sampler_thread_started": false,
+    "extra_own_memory_query_per_existing_sample": 1,
+    "original_guard_and_CPU_denominator_unchanged": true,
+    "read_counters_are_logical_not_physical_disk_IO": true,
+    "samples_can_span_multiple_phases": true,
+    "CPU_cause_or_PC_freeze_resolution_established": false
+  }
+}

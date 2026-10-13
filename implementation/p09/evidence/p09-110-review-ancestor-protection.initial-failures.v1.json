@@ -1,0 +1,119 @@
+{
+  "schema": "hwpx-agent.p09-110-review-ancestor-protection-initial-failures/v1",
+  "recorded_at_utc": "2026-10-04 21:59:49 UTC",
+  "failures": [
+    {
+      "kind": "preimage_command_parse_failure_before_any_action",
+      "terminal_chunk": "51417b",
+      "exit_code": 1,
+      "reason": "PowerShell foreach piped without collection expression; corrected edbafb created verified whole preimages; no earlier mutation"
+    },
+    {
+      "kind": "new_test_compile_private_APIs_and_unsupported_error_comparison",
+      "start_chunk": "6a02ae",
+      "session_id": 91449,
+      "terminal_chunk": "c0114c",
+      "exit_code": 1,
+      "error_codes": [
+        "E0624",
+        "E0369"
+      ],
+      "errors": 4,
+      "source": {
+        "path": "implementation/p09/source-archive/p09-110-failed-test-compilation/ancestor_protection.rs",
+        "bytes": 16155,
+        "sha256": "69ef046cfb6ec532f476b152e6a50df4285df5f60375ac83097161fb73276e80"
+      },
+      "production_or_private_visibility_changed_to_accommodate_tests": false
+    },
+    {
+      "kind": "new_test_compile_private_XML_bytes_access",
+      "terminal_chunk": "4a6397",
+      "exit_code": 1,
+      "error_codes": [
+        "E0624"
+      ],
+      "errors": 1,
+      "source": {
+        "path": "implementation/p09/source-archive/p09-110-failed-private-xml-access/ancestor_protection.rs",
+        "bytes": 16246,
+        "sha256": "23d8a0a39823a4036a51153d006d487c28e3bc57924b0bbf1c722fd76137798b"
+      },
+      "production_or_private_visibility_changed_to_accommodate_tests": false
+    },
+    {
+      "kind": "actual_original_production_ancestor_protection_gap_and_one_stronger_importer_fixture_failure",
+      "start_chunk": "97a740",
+      "session_id": 5589,
+      "terminal_chunk": "a587c6",
+      "exit_code": 1,
+      "passed": 6,
+      "failed": 8,
+      "actual_protection_gap_test_failures": 7,
+      "positive_fixture_original_boolean_failure": 1,
+      "source": {
+        "path": "implementation/p09/source-archive/p09-110-prefixed-regression/ancestor_protection.rs",
+        "bytes": 16526,
+        "sha256": "9b875cad590a55acf0c30b8cb54f1a34bede72384737ec9995067e975ee58f08"
+      },
+      "executable": {
+        "path": "target/p09-110-review-ancestor-protection/debug/deps/review_cell_body_output-581a88b7cee111ae-before-fix.exe",
+        "bytes": 8387072,
+        "sha256": "d1eea46b7473d0a790f7428b81dee472bcdc2e7e37400c828284540408804e15"
+      },
+      "original_production_parents": [
+        {
+          "path": "crates/hwpx-package/src/document_import/structure/review/body_output.rs",
+          "bytes": 15508,
+          "sha256": "fc9e166d13e845270a8423d3dcfd4ac9b0189055c986678f4961b5262a148b13",
+          "archive_path": "implementation/p09/source-archive/p09-110-pre-review-ancestor-protection/crates/hwpx-package/src/document_import/structure/review/body_output.rs"
+        },
+        {
+          "path": "crates/hwpx-package/src/document_import/structure/review/cell_body_output.rs",
+          "bytes": 7550,
+          "sha256": "12282d9c63d505f07db1ad7caebaeac6dbc7ddc0b454819ab7962ac8371709c9",
+          "archive_path": "implementation/p09/source-archive/p09-110-pre-review-ancestor-protection/crates/hwpx-package/src/document_import/structure/review/cell_body_output.rs"
+        }
+      ],
+      "failed_tests_not_counted_as_pass": true
+    },
+    {
+      "kind": "first_guard_fix_new_fixture_conflicts_with_stronger_original_boolean_validator",
+      "start_chunk": "c21a14",
+      "session_id": 51620,
+      "terminal_chunk": "adc291",
+      "exit_code": 1,
+      "passed": 11,
+      "failed": 3,
+      "error": "FormImportError::Body(StructureImportError::Table{code:table_layout_hwpx_invalid_boolean})",
+      "source": {
+        "path": "implementation/p09/source-archive/p09-110-prefixed-regression/ancestor_protection.rs",
+        "bytes": 16526,
+        "sha256": "9b875cad590a55acf0c30b8cb54f1a34bede72384737ec9995067e975ee58f08"
+      },
+      "executable": {
+        "path": "target/p09-110-review-ancestor-protection/debug/deps/review_cell_body_output-581a88b7cee111ae-original-validator-mismatch.exe",
+        "bytes": 8387072,
+        "sha256": "28ec33599cdd39c285e44f32223cb60425f4f832489e9843b4df8581f64d6cee"
+      },
+      "correction": "Only new synthetic fixture checks: nested protection uses native 1; exact original invalid_boolean/unsupported_shape is independent denial, NOT accepted output. Original parser/guards/assertions/limits unchanged."
+    }
+  ],
+  "original_default_failure": {
+    "terminal_chunk": "91477a",
+    "exit_code": 1,
+    "error": "matrix_drift",
+    "retained": true
+  },
+  "corrected_focused": {
+    "start_chunk": "aa01a4",
+    "session_id": 91361,
+    "terminal_chunk": "34cf4d",
+    "exit_code": 0,
+    "passed": 14,
+    "failed": 0,
+    "ignored": 0,
+    "not_added_to_final_execution_counts": true
+  },
+  "native_sql_product_gate_acceptance": false
+}

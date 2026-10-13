@@ -1,0 +1,109 @@
+{
+  "schema_version": "hwpx-agent.p09-metadata-read-stop-review/v1",
+  "state": "FAILED_NOT_ACCEPTED",
+  "goal_status": "active",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "whole1470_current_fresh_qualified": false,
+  "historical67_current_fresh_qualified": false,
+  "legacy_whole_acceptance_not_changed": true,
+  "historical_whole_gate_reconciliation_required": true,
+  "actual_product_child_executed": false,
+  "actual_product_body_or_full_source_executed": false,
+  "automatic_retry_allowed": false,
+  "original_failed_root_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p244-admission-run002.v1.json",
+    "bytes": 68645,
+    "sha256": "b0b1d3714afa9b47dff09361e51c7fbfdede7aeb9b4160a619bd11efb0b86319"
+  },
+  "original_preflight_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p244-light-run001.v1.json",
+    "bytes": 47554,
+    "sha256": "7799f70bbd6641f187ead3c5901ee3173ee0d46ea498fb78aabc3940d4876233"
+  },
+  "review": {
+    "original_failure_preserved": true,
+    "stopped_during_metadata_before_selection": true,
+    "Native20_not_exercised": true,
+    "product_body_unexecuted": true,
+    "runtime_previously_accepted": 73,
+    "next_unexecuted_index": 80,
+    "automatic_retry_allowed": false,
+    "additional_metadata_entry_density_optimization_required": true,
+    "CPU_cause_or_PC_freeze_resolution_established": false,
+    "missing_Job_not_measured_zero": true
+  },
+  "error_code": "P208_POST_STOP_RUNTIME_METADATA_STOP_CONTRACT12",
+  "IO": {
+    "read_passes": 4,
+    "bytes_read": 143846,
+    "bound_inputs": 4,
+    "final_fresh_hashes": 0,
+    "finished": false,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P206_binary1_other2_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 1048576,
+      "other": 2097152
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 143846
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 143846,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0.0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "implementation/p09/evidence/locked-r07/p244-admission-run002.v1.json",
+      "bytes": 68645,
+      "sha256": "b0b1d3714afa9b47dff09361e51c7fbfdede7aeb9b4160a619bd11efb0b86319"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p244-light-run001.v1.json",
+      "bytes": 47554,
+      "sha256": "7799f70bbd6641f187ead3c5901ee3173ee0d46ea498fb78aabc3940d4876233"
+    },
+    {
+      "path": "tools/p09/resume_lower_native_runtime.py",
+      "bytes": 25646,
+      "sha256": "a69268b0e4b04161c5950488fb40a149eb1e9740d529a3223f24e2417f6e6467"
+    },
+    {
+      "path": "tools/p09/tests/test_lower_native_runtime.py",
+      "bytes": 2001,
+      "sha256": "1bf893a6d58f1d05fcd770dcedcd733ded7cbdd6712766aa3e4672de2c6ebb2f"
+    }
+  ],
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null
+}

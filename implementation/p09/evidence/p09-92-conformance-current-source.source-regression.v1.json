@@ -1,0 +1,70 @@
+{
+  "schema_version": "hwpx-agent.p09-92-conformance-current-source-source-regression/v1",
+  "created_date": "2026-10-04",
+  "scope": "original_REF53_current_source_conformance_not_native_or_product_gate",
+  "goal_status": "active",
+  "gate": {
+    "P09": "OPEN",
+    "A12": "OPEN",
+    "A13": "OPEN",
+    "P26": "failed_semantic_non_green",
+    "P62": "UNRESOLVED",
+    "native_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+    "full_native34": "NOT_RUN",
+    "P10_new_implementation": false,
+    "goal_status": "active"
+  },
+  "current_profile_python": {
+    "command": "python -m unittest tools.p09.tests.test_conformance_current_source -q",
+    "chunk_id": "a8a5f9",
+    "exit_code": 0,
+    "tests": 19,
+    "seconds": 42.951,
+    "state": "pass",
+    "passed": 19,
+    "failed": 0,
+    "errors": 0,
+    "original_actual_upstreams_per_positive_pipeline": 15,
+    "positive_actual_repository_pipeline": true,
+    "positive_test_owned_clone_pipeline": true,
+    "subcase_count": "not_separately_counted"
+  },
+  "historical_original_python": {
+    "command": "python -m unittest tools.p09.tests.test_reference_conformance_contract -q",
+    "chunk_id": "aeb702",
+    "exit_code": 1,
+    "total": 9,
+    "passed": 8,
+    "failed": 0,
+    "errors": 1,
+    "error": "matrix_drift",
+    "seconds": 0.147,
+    "original_tests_edited": false,
+    "original_archive_default_failure_exact": true
+  },
+  "Rust": {
+    "command": "cargo test -p hwpx-package --test form_control_hwpx --test field_auto_number_hwpx",
+    "exit_code": 0,
+    "chunk_id": "f7103e",
+    "targets": [
+      {
+        "target": "field_auto_number_hwpx",
+        "passed": 8,
+        "path": "target/debug/deps/field_auto_number_hwpx-eef1590dda74c252.exe"
+      },
+      {
+        "target": "form_control_hwpx",
+        "passed": 6,
+        "path": "target/debug/deps/form_control_hwpx-3d73fee5b7605f7c.exe"
+      }
+    ],
+    "passed": 14,
+    "failed": 0,
+    "source_and_test_edits": false
+  },
+  "prior_Rust_results": "P90 11 and P91 137 preserved; not reexecuted in P92",
+  "python_syntax_files": 3,
+  "syntax_and_diff_check": true,
+  "native_executed": false,
+  "actual_SQL_reexecuted": false
+}

@@ -1,0 +1,367 @@
+{
+  "stage_profile": {
+    "P09_gate": "OPEN",
+    "changed_inputs": 16,
+    "formula_targets": 16,
+    "lowered_candidates": 6,
+    "mathematically_unchanged": 10,
+    "native_or_SQL_qualified": false,
+    "original_inputs": 36,
+    "original_no_changes": 16,
+    "original_no_targets": 20,
+    "product_complete": false,
+    "qualification": "TEST_ONLY_PURE_OUTPUT_PROFILE_NOT_SIGNED_SQL_NATIVE_OR_GATE",
+    "schema_version": "hwpx-agent.p09-output-stage-timing/v1",
+    "source_cell_bindings": 128,
+    "stages": {
+      "artifact_verify_and_full_candidate_readback": {
+        "calls": 6,
+        "max_us": 94849,
+        "min_us": 87444,
+        "total_us": 546290
+      },
+      "bind_and_pre_verify": {
+        "calls": 16,
+        "max_us": 6653,
+        "min_us": 4741,
+        "total_us": 90452
+      },
+      "edits_and_protection": {
+        "calls": 16,
+        "max_us": 286,
+        "min_us": 90,
+        "total_us": 2139
+      },
+      "export_verified_candidate": {
+        "calls": 6,
+        "max_us": 42404,
+        "min_us": 39975,
+        "total_us": 246297
+      },
+      "fresh_source_reconstruction": {
+        "calls": 16,
+        "max_us": 46695,
+        "min_us": 42847,
+        "total_us": 716367
+      },
+      "noop_fresh_source_verify": {
+        "calls": 10,
+        "max_us": 56980,
+        "min_us": 48297,
+        "total_us": 514762
+      },
+      "patch_preservation_checks": {
+        "calls": 6,
+        "max_us": 29,
+        "min_us": 12,
+        "total_us": 95
+      },
+      "post_source_verify": {
+        "calls": 6,
+        "max_us": 6413,
+        "min_us": 5411,
+        "total_us": 36536
+      },
+      "preserving_patch": {
+        "calls": 6,
+        "max_us": 96435,
+        "min_us": 92757,
+        "total_us": 566949
+      },
+      "preserving_writer_build": {
+        "calls": 6,
+        "max_us": 43294,
+        "min_us": 40847,
+        "total_us": 253801
+      }
+    },
+    "unchanged_changed_source_graphs": 16,
+    "unchanged_original_graphs": 36
+  },
+  "schema_version": "hwpx-agent.p09-output-stage-profile-completed-summary/v1",
+  "state": "PASS_PURE_OUTPUT_STAGE_PROFILE_AND_OUTPUT6_ONLY_NOT_FULL249_SQL_NATIVE_OR_GATE",
+  "actual_runs": [
+    {
+      "receipt_pin": {
+        "path": "implementation/p09/evidence/p09-149-output-stage-profile.actual-run04.v1.json",
+        "bytes": 319482,
+        "sha256": "c5960b1a00d875c8e97f086110db27877ff1a2f1362d1b86a47193c54497ace6"
+      },
+      "task": "formula-output-stage-profile-tests",
+      "tests_passed": 1,
+      "elapsed_seconds": 41.71,
+      "source_count": 896,
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 18.062,
+        "peak_job_private_mib": 1323.14,
+        "peak_job_private_percent": 4.152876362657767,
+        "owned_processes": []
+      },
+      "limits": {
+        "verified": true,
+        "job_private_limit_mib": 2548.87109375,
+        "cpu_hard_cap_machine_percent": 6.25,
+        "affinity_mask": 1,
+        "priority_class": 16384,
+        "active_process_limit": 16,
+        "kill_on_close": true,
+        "breakaway_disabled": true
+      },
+      "host_CPU_max": 35.06,
+      "available_RAM_min": 40.93864997955592,
+      "commit_max": 37.784120924263306,
+      "outside_component_filtered": 56
+    },
+    {
+      "receipt_pin": {
+        "path": "implementation/p09/evidence/p09-149-output-stage-profile.actual-run05.v1.json",
+        "bytes": 298910,
+        "sha256": "bed82344c78655384b89128b438ca577a8150748cc18acae1e1008eaec88afee"
+      },
+      "task": "import-formula-output-tests",
+      "tests_passed": 6,
+      "elapsed_seconds": 38.12,
+      "source_count": 906,
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 23.047,
+        "peak_job_private_mib": 1287.35,
+        "peak_job_private_percent": 4.040522804498801,
+        "owned_processes": []
+      },
+      "limits": {
+        "verified": true,
+        "job_private_limit_mib": 2548.87109375,
+        "cpu_hard_cap_machine_percent": 6.25,
+        "affinity_mask": 1,
+        "priority_class": 16384,
+        "active_process_limit": 16,
+        "kill_on_close": true,
+        "breakaway_disabled": true
+      },
+      "host_CPU_max": 71.86,
+      "available_RAM_min": 41.4135779348597,
+      "commit_max": 37.19596275636538,
+      "outside_component_filtered": null
+    }
+  ],
+  "failed_runs_preserved": [
+    {
+      "receipt_pin": {
+        "path": "implementation/p09/evidence/p09-149-output-stage-profile.actual-run01.v1.json",
+        "bytes": 183722,
+        "sha256": "7bfe8c4623845be75c1840da83bce87d86a6be00b05cb514951a4279b859d2ab"
+      },
+      "state": "STOPPED_NOT_ACCEPTED",
+      "stop_reason": "OWNED_COMMAND_FAILED",
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 0.172,
+        "peak_job_private_mib": 19.88,
+        "peak_job_private_percent": 0.062405020845606424,
+        "owned_processes": []
+      },
+      "closed_failure_diagnostic": null,
+      "product_failure_established": false
+    },
+    {
+      "receipt_pin": {
+        "path": "implementation/p09/evidence/p09-149-output-stage-profile.actual-run02.v1.json",
+        "bytes": 249017,
+        "sha256": "10a08c2abdaeecec3f034830308e6db05286973c9d14a1ed98fec52f007c3192"
+      },
+      "state": "STOPPED_NOT_ACCEPTED",
+      "stop_reason": "OWNED_COMMAND_FAILED",
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 14.203,
+        "peak_job_private_mib": 1379.15,
+        "peak_job_private_percent": 4.328652548092632,
+        "owned_processes": []
+      },
+      "closed_failure_diagnostic": null,
+      "product_failure_established": false
+    },
+    {
+      "receipt_pin": {
+        "path": "implementation/p09/evidence/p09-149-output-stage-profile.actual-run03.v1.json",
+        "bytes": 198235,
+        "sha256": "833cb75e8517025e945c9a11b4cb31c5c033df57dd97c4cd255951b5e6160887"
+      },
+      "state": "STOPPED_NOT_ACCEPTED",
+      "stop_reason": "OWNED_COMMAND_FAILED",
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 3.312,
+        "peak_job_private_mib": 56.54,
+        "peak_job_private_percent": 0.1774435887423304,
+        "owned_processes": []
+      },
+      "closed_failure_diagnostic": {
+        "allowed_error_kinds": [
+          "NoChange"
+        ],
+        "panic_locations": [],
+        "borrow_panic_observed": false,
+        "assertion_panic_observed": false,
+        "expected_test_failure_observed": true,
+        "raw_output_persisted": false
+      },
+      "product_failure_established": false
+    }
+  ],
+  "support_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-output-stage-profile-candidate.run03.v1.json",
+      "bytes": 3585,
+      "sha256": "18c34f71e8afd03b7f8e48e178498f7f27034c8c62f2bdb612958c687b20308d"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-output-stage-timing-r8/source-preimages.v1.json",
+      "bytes": 16124,
+      "sha256": "522216ba72d2abff346a3c1ad6b875a1711df0f2aab416f551cadea74fe1f7e7"
+    },
+    {
+      "path": "tools/p09/run_output_stage_profile.py",
+      "bytes": 15919,
+      "sha256": "655c40ce9bbb1d0d2c6327f3e92051ac1edcf68e9e7334da9125e276373f1da7"
+    },
+    {
+      "path": "tools/p09/tests/test_output_stage_profile.py",
+      "bytes": 11479,
+      "sha256": "968e6e9049960c1c1e0e64d3c0357c6f0b6238165c33a343ca37231effacb42e"
+    },
+    {
+      "path": "tools/p09/diagnose_output_stage_profile.py",
+      "bytes": 2597,
+      "sha256": "f09c6f11f6fe806734c69c763bfb16e5b3579487a2a134143d575a46b4f7bf80"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-output-stage-profile.light-run04.v1.json",
+      "bytes": 1337,
+      "sha256": "f99aef962484f43c51366be3ee0543e58ba4aa80be743c39ba51027dc17f1e0f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-output-stage-profile.light-run02.v1.json",
+      "bytes": 1368,
+      "sha256": "ffb67ae5e5cb13c968208dff635ba55aa3ddcc4f2fa880223ecbba739ca0704a"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-output-stage-worker-suffix-r8/source-preimages.v1.json",
+      "bytes": 34209,
+      "sha256": "ba28820843951d51e60180030355f90141de305e1be342958b777fbb010822a6"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-output-stage-noop-classification-r8/source-preimages.v1.json",
+      "bytes": 65497,
+      "sha256": "fe09bad48b586b12001631a45c55ccf5503436fbf3e2d8414e885a4fd6ced9c4"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-output-stage-profile.owned-rustfmt-run02.v1.json",
+      "bytes": 2342,
+      "sha256": "73638c7c0ed8b307fdc11e8287cb47bdab1e4b0565e0331d2104befb6a4e0beb"
+    }
+  ],
+  "prior_document_pins": [
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 143658,
+      "sha256": "b069eba0964f721592664f0e4d22b80230bc0ad13734cbc7830aa69cf98cfc3e"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 237290,
+      "sha256": "ab99651b3ff9215e8bed083b374a260eb339aa6628ad8e34d53b038af734b05c"
+    }
+  ],
+  "current_source_union": 906,
+  "expected_chain_count": 893,
+  "source_closing_exact": true,
+  "product_body_text_exact_after_removing_test_only_additions": true,
+  "new_child_or_thread_started": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "statistical_speedup_proven": false,
+  "exact_CPU_profiler": false,
+  "signed_SQL_native_or_Gate_qualified": false,
+  "IO": {
+    "read_passes": 1850,
+    "bytes_read": 47934367,
+    "bound_inputs": 919,
+    "final_fresh_hashes": 919,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 14.2705,
+  "profile_stage_total_seconds": 2.973688,
+  "profile_stage_scope": "Numeric16 only; elapsed, not CPU. Three common stages count16, six candidate stages count6, one explicit fresh no-op stage count10. Original36 setup/denial checks and compilation lie outside this sum.",
+  "profile_stage_ranked": [
+    {
+      "name": "fresh_source_reconstruction",
+      "calls": 16,
+      "total_seconds": 0.716367,
+      "percent_of_numeric16_stage_sum": 24.09018700011568
+    },
+    {
+      "name": "preserving_patch",
+      "calls": 6,
+      "total_seconds": 0.566949,
+      "percent_of_numeric16_stage_sum": 19.065517297039904
+    },
+    {
+      "name": "artifact_verify_and_full_candidate_readback",
+      "calls": 6,
+      "total_seconds": 0.54629,
+      "percent_of_numeric16_stage_sum": 18.370790748726833
+    },
+    {
+      "name": "noop_fresh_source_verify",
+      "calls": 10,
+      "total_seconds": 0.514762,
+      "percent_of_numeric16_stage_sum": 17.31055847150071
+    },
+    {
+      "name": "preserving_writer_build",
+      "calls": 6,
+      "total_seconds": 0.253801,
+      "percent_of_numeric16_stage_sum": 8.534890008635742
+    },
+    {
+      "name": "export_verified_candidate",
+      "calls": 6,
+      "total_seconds": 0.246297,
+      "percent_of_numeric16_stage_sum": 8.282543427555279
+    },
+    {
+      "name": "bind_and_pre_verify",
+      "calls": 16,
+      "total_seconds": 0.090452,
+      "percent_of_numeric16_stage_sum": 3.0417447963606135
+    },
+    {
+      "name": "post_source_verify",
+      "calls": 6,
+      "total_seconds": 0.036536,
+      "percent_of_numeric16_stage_sum": 1.2286426820836618
+    },
+    {
+      "name": "edits_and_protection",
+      "calls": 16,
+      "total_seconds": 0.002139,
+      "percent_of_numeric16_stage_sum": 0.0719308817871949
+    },
+    {
+      "name": "patch_preservation_checks",
+      "calls": 6,
+      "total_seconds": 0.000095,
+      "percent_of_numeric16_stage_sum": 0.0031946861943821948
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version": "hwpx-agent.p09-r111-literal-receipt-document-prefix-review/v1",
+  "state": "PASS_LITERAL_RECEIPT_AND_DOCUMENT_PREFIX_NOT_RUNTIME_REEXECUTION_OR_GATE",
+  "time_utc": "2026-10-09T03:43:42Z",
+  "goal_status": "ACTIVE",
+  "document_revision": 111,
+  "accepted_runtime_subset": 88,
+  "next_runtime_index": 95,
+  "remaining_individual_cases": 161,
+  "remaining_regular_cases": 155,
+  "remaining_corpus_cases": 6,
+  "all_successful_bodies_pending_whole_reconciliation": 85,
+  "independent_source_closing_pending": 0,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "whole1470_current_fresh_qualified": false,
+  "historical67_current_fresh_qualified": false,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "PC_freeze_resolved": false,
+  "actual_product_body_reexecuted": false,
+  "full_source_byte_validation_reexecuted": false,
+  "passed_body_reexecuted": false,
+  "old_failed_receipts_reclassified": false,
+  "new_validator_or_full_runtime_qualification_claimed": false,
+  "new_code_pins_verified": 16,
+  "accepted_root_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p273-case-094-run002.v1.json",
+    "bytes": 624020,
+    "sha256": "4c8b5cb8db208be26487e966653747a2ad92c3bc37d1c5268047957b6b166eb5"
+  },
+  "accepted_body_pin": {
+    "path": "implementation/p09/evidence/locked-r07/cases/p273-case-094-run002.json",
+    "bytes": 190211,
+    "sha256": "aa18a99412c8546d35b70142ecf87ec097faaf328daebaee2684e2a4f6d7171e"
+  },
+  "documents": [
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 466513,
+      "sha256": "3f302dc736fe598cf05d206dd5a08a541c27ff487d32b04b38e2572a08326497",
+      "archive_path": "implementation/p09/evidence/runtime-progress-r110/CURRENT_STATE.md",
+      "archive_bytes": 465243,
+      "archive_sha256": "ea03f1853cc9c5e0691098819f5b6e83c3c670a7e329bc58ad49b0d7b74c944b",
+      "prefix_bytes": 1270,
+      "prefix_sha256": "b6006abdb669fe80d20c772579d7d887ddeb6257b043a052a941db16ec5647b7",
+      "exact_old_suffix_verified": true
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 560145,
+      "sha256": "6193295b9cbb4e15dde2addb688b71212c7e95174941d57918c4cb333d14bca6",
+      "archive_path": "implementation/p09/evidence/runtime-progress-r110/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "archive_bytes": 558875,
+      "archive_sha256": "2df6021404bf7f2f07f318e783532f0f0210a7bfc3a109cc8e06e1782a5929c4",
+      "prefix_bytes": 1270,
+      "prefix_sha256": "b6006abdb669fe80d20c772579d7d887ddeb6257b043a052a941db16ec5647b7",
+      "exact_old_suffix_verified": true
+    }
+  ],
+  "report_pin": {
+    "path": "implementation/p09/P09-273_DIAGNOSTIC_GUARDED_RUNTIME_REPORT.md",
+    "bytes": 6521,
+    "sha256": "a5772a77364a537569bdd0b4270f4da5eca32ce64c94cf96bf23a3f05619f0bd"
+  },
+  "literal_receipt_readonly_review": {
+    "state": "PASS_LITERAL_ACCEPTED_RECEIPT_AND_NEW16_CODE_REVIEW_NOT_RUNTIME_OR_GATE",
+    "new_code_pins_verified": 16,
+    "actual_body_reexecuted": false,
+    "full_source_reexecuted": false,
+    "runtime_accepted": 88,
+    "next_index": 95,
+    "P09_gate": "OPEN"
+  },
+  "review_method": "Read current accepted root/body and compare fixed length/SHA, original decoder, closed acceptance, COMMITTED two exact byte pin sets, Job0/timing/new16 code pins; read both documents and exact archive byte suffix/shared prefix SHA. No original body, source-byte frame or resource guard rerun."
+}
+

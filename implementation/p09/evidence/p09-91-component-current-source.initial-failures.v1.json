@@ -1,0 +1,68 @@
+{
+  "schema": "hwpx-agent.p09-91-component-current-source-initial-failures/v1",
+  "state": "retained_not_promoted",
+  "official_fingerprint_conflict": {
+    "files": 5,
+    "affected_family": "reference_auxiliary",
+    "cause": "old auxiliary fingerprints exclude UTF8 BOM while other original official fingerprints retain BOM",
+    "all_nine_auxiliary_files_BOM_present_and_historical_BOM_removed_hashes_exact": true,
+    "diagnostic_chunk": "cc010f",
+    "actual_official_files_not_changed": true,
+    "old_official_fingerprints_not_changed": true,
+    "explicit_exact_family_convention_not_fallback": true
+  },
+  "initial_isolated_profile_test": {
+    "tool_chunk": "aa90da",
+    "exit_code": 1,
+    "total_tests": 18,
+    "failed": 1,
+    "family": "hyperlink_hwpx",
+    "error": "public_export",
+    "cause": "immutable initial 171-pin receipt did not cover required public export crates/hwpx-package/src/lib.rs; isolated copy therefore missed that file",
+    "original_guard_detected_missing_file": true,
+    "initial_actual_repository_profile_runs": "12 PASS did not substitute for isolated completeness check",
+    "corrected_by": "include exact public-export bytes and keep original public-export guard",
+    "original_guard_removed": false,
+    "archive_prefix": "implementation/p09/source-archive/p09-91-initial-current-profile",
+    "archived_files": 3,
+    "initial_qualification": {
+      "path": "implementation/p09/evidence/p09-91-component-current-source.qualification.v2.json",
+      "bytes": 72953,
+      "sha256": "a76704f0f7beecfdea8c0518121c18f97de9449afccfd5442b8a69bbef3af7e5"
+    },
+    "corrected_qualification": {
+      "path": "implementation/p09/evidence/p09-91-component-current-source.qualification.v2.json",
+      "bytes": 73278,
+      "sha256": "373d7b49f04b42988be162c8d78357406f1e4b62c0ce6111145d4e5324edb7df"
+    },
+    "corrected_test_chunks": [
+      "728fac",
+      "3f9311",
+      "d81e2b"
+    ],
+    "corrected_tests_passed": 19,
+    "corrected_subcases": 183
+  },
+  "initial_preservation_audit": {
+    "tool_chunk": "990f96",
+    "exit_code": 1,
+    "error": "original1551 drift: tools/p09/validate_bookmark_hwpx_contract.py",
+    "cause": "new archive generation added one extra EOF newline to original snapshots",
+    "source_original_content_not_lost": true,
+    "corrected_by": "remove exact extra EOF newline with apply_patch and check complete byte size and SHA256 of all 15 snapshots",
+    "corrected_raw_snapshot_chunk": "95a1bb",
+    "corrected_original1551_audit_chunk": "3a5ad2",
+    "whole_raw_archive_instead_of_only_normalized_text": true
+  },
+  "original_legacy_failures_retained": {
+    "default_validators": "2 PASS / 13 FAIL",
+    "twelve_original_Python_tests": "47 PASS / 12 FAIL / 0 ERROR",
+    "conformance": "fail:matrix_drift"
+  },
+  "native_executed": false,
+  "p09_complete": false,
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "goal_status": "active"
+}
+

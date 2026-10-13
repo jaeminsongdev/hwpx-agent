@@ -1,0 +1,402 @@
+{
+  "schema_version": "hwpx-agent.p09-held-path-guard-optimization-progress/v1",
+  "goal_status": "BLOCKED",
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "runtime_group": {
+    "accepted": 101,
+    "total": 249,
+    "remaining": 148,
+    "regular_remaining": 142,
+    "corpus_remaining": 6,
+    "next_index": 108,
+    "preserved_success_product_source_closing_pending": 1,
+    "whole_reconciliation_pending": 98,
+    "not_whole_P09_percentage": true
+  },
+  "scope": {
+    "source_inputs": 1658,
+    "directories": 308,
+    "code_files": 95,
+    "controller_files": 191,
+    "changed_runtime_files": [
+      "tools/p09/resume_preserved106_queue_runtime.py",
+      "tools/p09/tests/test_preserved106_queue_runtime.py"
+    ],
+    "schema": "hwpx-agent.p09-preserved106-fixed-runtime-queue/v13"
+  },
+  "code_pins": [
+    {
+      "path": "tools/p09/resume_preserved106_queue_runtime.py",
+      "bytes": 103973,
+      "sha256": "b816eff344fb0d0c179e89a7ddd84293963076a37133c1481678f928d7495f8a"
+    },
+    {
+      "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+      "bytes": 59989,
+      "sha256": "2d5be72150a82ac05159e03ae42b49c4dc51889ae39c080c75c3f7d0fb0f599d"
+    }
+  ],
+  "implemented": [
+    "live exact-held fresh metadata for unchanged original three source predicate guards; original stream identity, byte reads, guards, pacing and cleanup unchanged",
+    "runner-local closing synthetic template built once; independent deep-copy per test; no receipt/PASS/Native cache",
+    "strict original source021 / review022 stop and archive-code bindings"
+  ],
+  "pure_adapter_test": {
+    "executed": 26,
+    "passed": 26,
+    "seconds": 0.026,
+    "Native_started": false,
+    "product_started": false,
+    "not_formal504_or_product_proof": true
+  },
+  "small_real_native_pin": {
+    "path": "implementation/p09/evidence/p09-344-held-path-guard-small-native.v1.json",
+    "state": "PASS_SMALL_NATIVE_PATH_GUARD_NOT_FULL_SOURCE_OR_PRODUCT",
+    "not_full1658_source_or_product": true
+  },
+  "current_full_contract_qualification": {
+    "pin": {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-review-run024.v1.json",
+      "bytes": 187771,
+      "sha256": "3c71d341e8c63086187c8abc22fa6833cbfa64a306da57f793d27e5828464ad5"
+    },
+    "executions": 504,
+    "per_runner": 252,
+    "runner_calls": 2,
+    "all_before_after_checks": 504,
+    "metadata_bound_and_fresh": 196,
+    "read_passes": 392,
+    "bytes_read": 37371442,
+    "cleanup_confirmed": true,
+    "Native_or_product_started": false,
+    "observer": {
+      "sample_count": 71,
+      "host_CPU_max": 17.11,
+      "own_CPU_max": 6.445312,
+      "own_private_max_bytes": 95010816,
+      "free_RAM_min_percent": 33.10894089852196
+    }
+  },
+  "preserved_CPU_stops": [
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-review-run022.v1.json",
+      "state": "FAILED_NOT_ACCEPTED",
+      "stage": "contract_tests",
+      "error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+      "resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+      "resource_watcher_cleanup_confirmed": true,
+      "actual_product_child_executed": false,
+      "independent_source_frame_attempted": false,
+      "contract_checkpoint_statistics": {
+        "started_tests": 14,
+        "stopped_tests": 14,
+        "successful_before_test_checks": 14,
+        "successful_after_test_checks": 13,
+        "runner_calls": 1,
+        "returned_runner_calls": 0,
+        "successful_before_runner_checks": 1,
+        "successful_after_runner_checks": 0,
+        "original_unittest_results_preserved": true,
+        "new_sampler_or_thread_or_sleep_started": false,
+        "original_guard_or_test_coverage_relaxed": false,
+        "test_results_are_not_product_acceptance": true
+      },
+      "IO": {
+        "bound_inputs": 193,
+        "read_passes": 193,
+        "bytes_read": 18082911,
+        "final_fresh_hashes": 0,
+        "finished": false
+      },
+      "observer": {
+        "completed_sample_count": 42,
+        "system_cpu_max_percent": 100,
+        "own_cpu_max_machine_percent": 5.929487,
+        "own_private_max_bytes": 87158784,
+        "available_ram_min_percent": 31.181802744962695
+      },
+      "last4": [
+        {
+          "phase_at_sample": "contract_tests",
+          "system_cpu_percent": 99.22,
+          "parent_cpu_machine_percent": 0,
+          "own_private_bytes": 87158784,
+          "available_ram_percent": 31.650012045762864,
+          "commit_used_percent": 40.00877471109271,
+          "audited_logical_read_bytes_delta": 0,
+          "audited_logical_read_passes": 193
+        },
+        {
+          "phase_at_sample": "contract_tests",
+          "system_cpu_percent": 100,
+          "parent_cpu_machine_percent": 0,
+          "own_private_bytes": 87158784,
+          "available_ram_percent": 31.93187676663526,
+          "commit_used_percent": 40.02429141390502,
+          "audited_logical_read_bytes_delta": 0,
+          "audited_logical_read_passes": 193
+        },
+        {
+          "phase_at_sample": "contract_tests",
+          "system_cpu_percent": 100,
+          "parent_cpu_machine_percent": 0,
+          "own_private_bytes": 87158784,
+          "available_ram_percent": 31.818174573448196,
+          "commit_used_percent": 40.023691406903204,
+          "audited_logical_read_bytes_delta": 0,
+          "audited_logical_read_passes": 193
+        },
+        {
+          "phase_at_sample": "contract_tests",
+          "system_cpu_percent": 100,
+          "parent_cpu_machine_percent": 0,
+          "own_private_bytes": 87158784,
+          "available_ram_percent": 31.75438413661918,
+          "commit_used_percent": 39.9827291897615,
+          "audited_logical_read_bytes_delta": 0,
+          "audited_logical_read_passes": 193
+        }
+      ]
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-review-run023.v1.json",
+      "state": "FAILED_NOT_ACCEPTED",
+      "stage": "contract_tests",
+      "error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+      "resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+      "resource_watcher_cleanup_confirmed": true,
+      "actual_product_child_executed": false,
+      "independent_source_frame_attempted": false,
+      "contract_checkpoint_statistics": {
+        "started_tests": 152,
+        "stopped_tests": 152,
+        "successful_before_test_checks": 152,
+        "successful_after_test_checks": 151,
+        "runner_calls": 1,
+        "returned_runner_calls": 0,
+        "successful_before_runner_checks": 1,
+        "successful_after_runner_checks": 0,
+        "original_unittest_results_preserved": true,
+        "new_sampler_or_thread_or_sleep_started": false,
+        "original_guard_or_test_coverage_relaxed": false,
+        "test_results_are_not_product_acceptance": true
+      },
+      "IO": {
+        "bound_inputs": 196,
+        "read_passes": 196,
+        "bytes_read": 18685721,
+        "final_fresh_hashes": 0,
+        "finished": false
+      },
+      "observer": {
+        "completed_sample_count": 38,
+        "system_cpu_max_percent": 100,
+        "own_cpu_max_machine_percent": 6.358382,
+        "own_private_max_bytes": 94277632,
+        "available_ram_min_percent": 31.897780821061264
+      },
+      "last4": [
+        {
+          "phase_at_sample": "contract_tests",
+          "system_cpu_percent": 100,
+          "parent_cpu_machine_percent": 5.871212,
+          "own_private_bytes": 93089792,
+          "available_ram_percent": 32.06226525321542,
+          "commit_used_percent": 39.98757098539359,
+          "audited_logical_read_bytes_delta": 0,
+          "audited_logical_read_passes": 196
+        },
+        {
+          "phase_at_sample": "contract_tests",
+          "system_cpu_percent": 100,
+          "parent_cpu_machine_percent": 0,
+          "own_private_bytes": 93089792,
+          "available_ram_percent": 31.897780821061264,
+          "commit_used_percent": 39.96789075573386,
+          "audited_logical_read_bytes_delta": 0,
+          "audited_logical_read_passes": 196
+        },
+        {
+          "phase_at_sample": "contract_tests",
+          "system_cpu_percent": 100,
+          "parent_cpu_machine_percent": 0,
+          "own_private_bytes": 93089792,
+          "available_ram_percent": 32.46789788871186,
+          "commit_used_percent": 39.92955291704361,
+          "audited_logical_read_bytes_delta": 0,
+          "audited_logical_read_passes": 196
+        },
+        {
+          "phase_at_sample": "contract_tests",
+          "system_cpu_percent": 100,
+          "parent_cpu_machine_percent": 0,
+          "own_private_bytes": 93089792,
+          "available_ram_percent": 32.050581169744724,
+          "commit_used_percent": 39.95849412434013,
+          "audited_logical_read_bytes_delta": 0,
+          "audited_logical_read_passes": 196
+        }
+      ]
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-source-run025.v1.json",
+      "state": "FAILED_NOT_ACCEPTED",
+      "stage": "anchor",
+      "error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+      "resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+      "resource_watcher_cleanup_confirmed": true,
+      "actual_product_child_executed": false,
+      "independent_source_frame_attempted": false,
+      "contract_checkpoint_statistics": null,
+      "IO": {
+        "bound_inputs": 182,
+        "read_passes": 183,
+        "bytes_read": 15920654,
+        "final_fresh_hashes": 0,
+        "finished": false
+      },
+      "observer": {
+        "completed_sample_count": 30,
+        "system_cpu_max_percent": 100,
+        "own_cpu_max_machine_percent": 1.5625,
+        "own_private_max_bytes": 72757248,
+        "available_ram_min_percent": 30.29170362641829
+      },
+      "last4": [
+        {
+          "phase_at_sample": "metadata_read_parse",
+          "system_cpu_percent": 100,
+          "parent_cpu_machine_percent": 0.183824,
+          "own_private_bytes": 72757248,
+          "available_ram_percent": 30.29170362641829,
+          "commit_used_percent": 40.675643362725154,
+          "audited_logical_read_bytes_delta": 857283,
+          "audited_logical_read_passes": 183
+        },
+        {
+          "phase_at_sample": "metadata_read_parse",
+          "system_cpu_percent": 100,
+          "parent_cpu_machine_percent": 0,
+          "own_private_bytes": 72757248,
+          "available_ram_percent": 30.310461913627282,
+          "commit_used_percent": 40.55900200157118,
+          "audited_logical_read_bytes_delta": 0,
+          "audited_logical_read_passes": 183
+        },
+        {
+          "phase_at_sample": "metadata_read_parse",
+          "system_cpu_percent": 100,
+          "parent_cpu_machine_percent": 0,
+          "own_private_bytes": 72757248,
+          "available_ram_percent": 30.42259478605438,
+          "commit_used_percent": 40.54679316344718,
+          "audited_logical_read_bytes_delta": 0,
+          "audited_logical_read_passes": 183
+        },
+        {
+          "phase_at_sample": "metadata_read_parse",
+          "system_cpu_percent": 100,
+          "parent_cpu_machine_percent": 0,
+          "own_private_bytes": 72757248,
+          "available_ram_percent": 30.77087365190136,
+          "commit_used_percent": 40.417692526464094,
+          "audited_logical_read_bytes_delta": 0,
+          "audited_logical_read_passes": 183
+        }
+      ]
+    }
+  ],
+  "stop_pins": [
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-review-run022.v1.json",
+      "bytes": 438848,
+      "sha256": "626321cae7d63f9b45d896d986186aa812c1094a59405d06f94c9c43a5af6288"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-review-run023.v1.json",
+      "bytes": 436239,
+      "sha256": "7cf8f144c52682fb8db7c79ceab920bbc47de03b8ab77148f3f1f160acaf3051"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-source-run025.v1.json",
+      "bytes": 81648,
+      "sha256": "75675ac835ef192466c5b7adde17e358caabd6559dcc9c06abf6469676c35c2c"
+    }
+  ],
+  "passive_idle_observation": {
+    "original_guard_only": true,
+    "samples": 6,
+    "host_CPU_tail": [
+      20.77,
+      0.76,
+      5.53,
+      6.37
+    ],
+    "own_CPU_tail": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "no_workload_native_file_locks_product_or_thread": true,
+    "cleanup_confirmed": true,
+    "not_qualification": true
+  },
+  "blocked_audit": {
+    "same_sustained_system_CPU_protection_in_consecutive_goal_turns_at_least": 3,
+    "evidence_reports": [
+      "implementation/p09/P09-342_QUEUE_COST_AND_PRESERVED108_PROGRESS.md",
+      "implementation/p09/P09-343_PRESERVED108_SOURCE_ONLY_PROGRESS.md",
+      "implementation/p09/P09-344_HELD_PATH_GUARD_OPTIMIZATION.md"
+    ],
+    "CPU_not_continuously_saturated_at_idle": true,
+    "workload_saturation_cause_unproven": true,
+    "own_CPU_RAM_direct_full_load_not_proven": true,
+    "latest_SOURCE025_before_Native_adapter_or_product": true,
+    "identified_safe_own_code_candidates_implemented": true,
+    "next_required_full_source_qualification_blocked": true,
+    "blind_retry_guard_relaxation_foreign_process_changes_not_permitted": true,
+    "requires_stable_external_state_or_authorized_further_diagnosis": true
+  },
+  "code_archives": {
+    "current504": "implementation/p09/evidence/p340-formal504-code",
+    "prior_partial484": "implementation/p09/evidence/p340-v12-partial484-code"
+  },
+  "prior_documents_archived_exact": [
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 509259,
+      "sha256": "2088bee27f88c9fce7f5c44c1535e2f1ab5f6c227cb39519ddfa888c126628ce",
+      "firstline": "> r136 진행/문서미마감 (2026-10-10): 고정runtime2경로/full1658/code95/controller191에서 보존108 source-only review/source/accept 및 actual108 명시적재실행차단 구현. 원v9 실제108 성공/partialafter728/Job/1966lock·2386dup정리를 archive-bound검토; 현재95와옛실행95의controller2 epoch분리·원1656scope유지·원Native두byte/identity/cleanup oracle재사용. v10 compile중첩제한과 closing-review019 합성기대pin alias2실패/current200만 보존·검사삭제없음; patch.multiple/기대pin독립복사+2검사로 v11 현재202+다음202=404PASS/189fresh/정리TRUE. source021 새제품0 metadata190fresh 후 Native1966/1966close·dup426/426close·before미완료 boundaries[]에서 metadata_hash CPU STOP; last4 host100/own0/읽기증가0·ownmax1.252236%/private74620928bytes/정리TRUE. 원FAILED/partial 보존·SourceFull/compound102미수용/accept미실행·원제품108재실행0. 수용101/249·잔여148(142+6)·next108·성공제품source closing pending1·whole재조정98. 다음은source의3 pathname guard 조회 중복 후보를 live held metadata로 원의미보존 최적화검토/자격 후 source021실패검토·독립fresh·source-only마감; 후보구현NOT_RUN/맹목retry없음. 목표ACTIVE/P09·A12·A13 OPEN/whole1470/full249/signed16/product완료·프리즈해결FALSE또는미확정. 원보호불변·문서final-fresh NOT_RUN(r128/P325 마지막기존자격)·r135전체byte archive보존. 세부 implementation/p09/P09-343_PRESERVED108_SOURCE_ONLY_PROGRESS.md. 접근허용/Git/빌드/OS변경/외부프로세스종료 없음."
+    },
+    {
+      "path": "implementation\\p09\\P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 602891,
+      "sha256": "919989f2fb4b90345c02f289e760f67aedcc78e6af544cfd03e4b3d3262863d5",
+      "firstline": "> r136 진행/문서미마감 (2026-10-10): 고정runtime2경로/full1658/code95/controller191에서 보존108 source-only review/source/accept 및 actual108 명시적재실행차단 구현. 원v9 실제108 성공/partialafter728/Job/1966lock·2386dup정리를 archive-bound검토; 현재95와옛실행95의controller2 epoch분리·원1656scope유지·원Native두byte/identity/cleanup oracle재사용. v10 compile중첩제한과 closing-review019 합성기대pin alias2실패/current200만 보존·검사삭제없음; patch.multiple/기대pin독립복사+2검사로 v11 현재202+다음202=404PASS/189fresh/정리TRUE. source021 새제품0 metadata190fresh 후 Native1966/1966close·dup426/426close·before미완료 boundaries[]에서 metadata_hash CPU STOP; last4 host100/own0/읽기증가0·ownmax1.252236%/private74620928bytes/정리TRUE. 원FAILED/partial 보존·SourceFull/compound102미수용/accept미실행·원제품108재실행0. 수용101/249·잔여148(142+6)·next108·성공제품source closing pending1·whole재조정98. 다음은source의3 pathname guard 조회 중복 후보를 live held metadata로 원의미보존 최적화검토/자격 후 source021실패검토·독립fresh·source-only마감; 후보구현NOT_RUN/맹목retry없음. 목표ACTIVE/P09·A12·A13 OPEN/whole1470/full249/signed16/product완료·프리즈해결FALSE또는미확정. 원보호불변·문서final-fresh NOT_RUN(r128/P325 마지막기존자격)·r135전체byte archive보존. 세부 implementation/p09/P09-343_PRESERVED108_SOURCE_ONLY_PROGRESS.md. 접근허용/Git/빌드/OS변경/외부프로세스종료 없음."
+    },
+    {
+      "path": "implementation\\p09\\P09-343_PRESERVED108_SOURCE_ONLY_PROGRESS.md",
+      "bytes": 9640,
+      "sha256": "51dea5cbbc2b7be1c5e675fc57494a5040bed0e8c82e40de7f53a98c18eb34a0",
+      "firstline": "# P09-343 — 보존108 source-only 마감 경로와 현재95 고정 코드 검증 (2026-10-10)"
+    }
+  ],
+  "document_final_fresh_qualification": "NOT_RUN; prior r128/P325 is not current document qualification",
+  "whole1470_full249_signed16_product_complete": false,
+  "PC_freeze_resolved": false,
+  "preserved_products107_and108_reexecution_count": 0,
+  "closing_accept_executed": false,
+  "sessions": {
+    "review022": 66026,
+    "review023": 37973,
+    "review024": 30388,
+    "source025": 3359,
+    "all_confirmed_terminal": true
+  },
+  "system_settings_changed": false,
+  "foreign_processes_terminated": false,
+  "deletion_moving_build_git_Hangul_permission_prompts_executed": false
+}

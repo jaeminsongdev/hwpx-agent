@@ -1,0 +1,167 @@
+{
+  "schema": "hwpx-agent.p09-91-component-current-source-validation/v1",
+  "state": "pass_explicit_current_profiles_legacy_and_conformance_non_green",
+  "current_original_profiles": {
+    "twelve_added": 12,
+    "comment_current_profile_from_P90": 1,
+    "previous_original_form_HWPX_and_auto_number_validators": 2,
+    "all_fifteen_available_current_source_profiles": true,
+    "all_native_green_rows": 0,
+    "immutable_qualification": {
+      "path": "implementation/p09/evidence/p09-91-component-current-source.qualification.v2.json",
+      "bytes": 73278,
+      "sha256": "373d7b49f04b42988be162c8d78357406f1e4b62c0ce6111145d4e5324edb7df"
+    },
+    "raw_pins": 172,
+    "official_source_files": 68,
+    "current_compiled_executables": 14,
+    "original_result_fields_and_guards_retained_except_explicit_current_output_schema_version": true,
+    "current_output_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+    "original_default_all_fields_exact": true
+  },
+  "legacy_default": {
+    "passed": 2,
+    "failed": 13,
+    "failures_not_removed": true,
+    "twelve_profiles": [
+      {
+        "family": "field_core",
+        "legacy_state": "fail",
+        "legacy_errors": [
+          "implementation_digest"
+        ],
+        "current_exit_code": 0,
+        "all_original_default_fields_exact": true
+      },
+      {
+        "family": "form_control",
+        "legacy_state": "fail",
+        "legacy_errors": [
+          "implementation_digest"
+        ],
+        "current_exit_code": 0,
+        "all_original_default_fields_exact": true
+      },
+      {
+        "family": "note_engine",
+        "legacy_state": "fail",
+        "legacy_errors": [
+          "implementation_digest"
+        ],
+        "current_exit_code": 0,
+        "all_original_default_fields_exact": true
+      },
+      {
+        "family": "link_reference",
+        "legacy_state": "fail",
+        "legacy_errors": [
+          "implementation_digest"
+        ],
+        "current_exit_code": 0,
+        "all_original_default_fields_exact": true
+      },
+      {
+        "family": "cross_reference",
+        "legacy_state": "fail",
+        "legacy_errors": [
+          "implementation_digest"
+        ],
+        "current_exit_code": 0,
+        "all_original_default_fields_exact": true
+      },
+      {
+        "family": "toc_index",
+        "legacy_state": "fail",
+        "legacy_errors": [
+          "implementation_digest"
+        ],
+        "current_exit_code": 0,
+        "all_original_default_fields_exact": true
+      },
+      {
+        "family": "citation",
+        "legacy_state": "fail",
+        "legacy_errors": [
+          "digest:crates/domain-ir/src/lib.rs"
+        ],
+        "current_exit_code": 0,
+        "all_original_default_fields_exact": true
+      },
+      {
+        "family": "mail_merge",
+        "legacy_state": "fail",
+        "legacy_errors": [
+          "digest:crates/domain-ir/src/lib.rs"
+        ],
+        "current_exit_code": 0,
+        "all_original_default_fields_exact": true
+      },
+      {
+        "family": "reference_auxiliary",
+        "legacy_state": "fail",
+        "legacy_errors": [
+          "digest:crates/domain-ir/src/lib.rs"
+        ],
+        "current_exit_code": 0,
+        "all_original_default_fields_exact": true
+      },
+      {
+        "family": "bookmark_hwpx",
+        "legacy_state": "fail",
+        "legacy_errors": [
+          "implementation_digest"
+        ],
+        "current_exit_code": 0,
+        "all_original_default_fields_exact": true
+      },
+      {
+        "family": "note_hwpx",
+        "legacy_state": "fail",
+        "legacy_errors": [
+          "implementation_digest"
+        ],
+        "current_exit_code": 0,
+        "all_original_default_fields_exact": true
+      },
+      {
+        "family": "hyperlink_hwpx",
+        "legacy_state": "fail",
+        "legacy_errors": [
+          "implementation_digest"
+        ],
+        "current_exit_code": 0,
+        "all_original_default_fields_exact": true
+      }
+    ]
+  },
+  "conformance": {
+    "command": "python tools/p09/validate_reference_conformance_contract.py",
+    "tool_chunk": "a20a13",
+    "exit_code": 1,
+    "state": "fail",
+    "error": "matrix_drift",
+    "contract_matrix_qualification_and_validator_unchanged": true
+  },
+  "Python_syntax": {
+    "tool_chunks": [
+      "74b883",
+      "314edf"
+    ],
+    "exit_code": 0,
+    "files": 14
+  },
+  "diff_check": {
+    "tool_chunk": "314edf",
+    "exit_code": 0
+  },
+  "strict_Rust_lint": "previous_P89_preserved_not_reexecuted_no_Rust_source_changes_in_P91",
+  "native_executed": false,
+  "actual_SQL_reexecuted": false,
+  "full_comment_product_acceptance": false,
+  "performance_acceptance": false,
+  "p09_complete": false,
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "goal_status": "active"
+}
+

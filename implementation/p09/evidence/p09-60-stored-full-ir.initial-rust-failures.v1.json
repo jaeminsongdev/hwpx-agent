@@ -1,0 +1,13 @@
+{
+  "schema": "hwpx-agent.p09-stored-full-ir-initial-rust-failures/v1",
+  "scope": "actual_compile_or_clippy_failure_not_native_evidence",
+  "attempts": [
+    {"chunk": "58bb58", "terminal_exit_code": 1, "stage": "cargo_test_compile", "error_code": "E0599", "cause": "test used domain_ir ArtifactId instead of artifact_service ArtifactId"},
+    {"chunk": "288e44", "terminal_exit_code": 1, "stage": "strict_clippy", "cause": "new enum entry caused existing decode_record to exceed 100 lines"},
+    {"chunk": "53a163", "terminal_composite_exit_code": 0, "cargo_reported_failure": true, "stage": "strict_clippy", "cause": "match_same_arms; subsequent read-only Get-Content command supplied composite terminal status"}
+  ],
+  "repairs": "correct test ID type, extract actual PostgreSQL artifact-kind decoder, merge equivalent source retention patterns; no lint allowance or validation weakening",
+  "native_activated": false,
+  "raw_values_or_full_logs_present": false,
+  "p09_complete": false
+}

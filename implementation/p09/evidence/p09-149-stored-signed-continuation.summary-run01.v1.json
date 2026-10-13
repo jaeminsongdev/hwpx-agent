@@ -1,0 +1,186 @@
+{
+  "schema_version": "hwpx-agent.p09-stored-signed-continuation-progress/v1",
+  "state": "CURRENT_FULL249_COMPILED_INVENTORY_EXACT_SIGNED16_RUNTIME_DURATION_STOP_NOT_GATE",
+  "actual_runs": [
+    {
+      "receipt": "implementation/p09/evidence/p09-149-stored-signed-continuation.inventory-run01.v1.json",
+      "state": "PASS_SCOPED_NOT_GATE",
+      "stop_reason": null,
+      "task": "stored-signed-inventory",
+      "elapsed_seconds": 45.17,
+      "tests_passed": null,
+      "owned_cpu_seconds": 33.781,
+      "peak_owned_private_mib": 1919.79,
+      "peak_owned_private_percent": 6.02551740076345,
+      "maximum_sampled_owned_job_cpu_machine_percent": 6.2926052137554676,
+      "maximum_host_CPU_percent": 34.38,
+      "minimum_available_RAM_percent": 40.43432178063961,
+      "maximum_commit_used_percent": 37.44345260098601,
+      "resolved_owned_limits": {
+        "total_ram_mib": 31860.92,
+        "job_private_memory_limit_mib": 2548.87,
+        "machine_logical_processors": 16,
+        "job_cpu_hard_cap_machine_percent": 6.25
+      },
+      "closing_active_processes": 0,
+      "cleanup_confirmed": true,
+      "source_freeze_count": 903
+    },
+    {
+      "receipt": "implementation/p09/evidence/p09-149-stored-signed-continuation.actual-run01.v1.json",
+      "state": "STOPPED_NOT_ACCEPTED",
+      "stop_reason": "STOP_DURATION_LIMIT",
+      "task": "stored-signed-changed-tests",
+      "elapsed_seconds": 604.03,
+      "tests_passed": null,
+      "owned_cpu_seconds": 533.422,
+      "peak_owned_private_mib": 64.37,
+      "peak_owned_private_percent": 0.2020255272090182,
+      "maximum_sampled_owned_job_cpu_machine_percent": 6.388252429595132,
+      "maximum_host_CPU_percent": 41.86,
+      "minimum_available_RAM_percent": 44.278679490142395,
+      "maximum_commit_used_percent": 36.31417681413291,
+      "resolved_owned_limits": {
+        "total_ram_mib": 31860.92,
+        "job_private_memory_limit_mib": 2548.87,
+        "machine_logical_processors": 16,
+        "job_cpu_hard_cap_machine_percent": 6.25
+      },
+      "closing_active_processes": 0,
+      "cleanup_confirmed": true,
+      "source_freeze_count": 904
+    }
+  ],
+  "compiled_full249_inventory_exact": true,
+  "complete_source_test_count": 249,
+  "source_module_instances": 58,
+  "runtime_progress": {
+    "scope": "source_whitelisted_libtest_progress_not_full_runtime_pass",
+    "timing": "parent_first_observation_not_exact_test_execution_time",
+    "expected_tests": 1,
+    "completed_observed": 0,
+    "passed_observed": 0,
+    "failed_observed": 0,
+    "ignored_observed": 0,
+    "pending_test": "actual_import::formula_policy_issuer::corpus::changed::all16_original_numeric_derivatives_have_signed_changed_candidates_exact_current_and_live_revocation",
+    "pending_observed_seconds": 599.524,
+    "observations": 1170,
+    "events": []
+  },
+  "selected_original_test": "actual_import::formula_policy_issuer::corpus::changed::all16_original_numeric_derivatives_have_signed_changed_candidates_exact_current_and_live_revocation",
+  "unchanged_original_Rust_sources": true,
+  "new_helpers": 2,
+  "helper_contract_tests_passed": 12,
+  "failed_light_guard_preserved": true,
+  "helper_whole_preimage_verified": true,
+  "runtime_source_union": 904,
+  "expected_chain_count": 901,
+  "whole_current_Rust_inputs": 782,
+  "source_closing_exact": true,
+  "disjoint_partition_plan_count": 42,
+  "partition_plan_all249_exact_once_verified": true,
+  "partition_plan_not_runtime_qualification": true,
+  "prior_document_pins": [
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 154602,
+      "sha256": "0f521c20970e9fe0a32ca9602690149ab3497f6b5f075821f568df8be91520e4"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 248234,
+      "sha256": "6b631f7cde999831599ad57d127898c2035cbb296293564027dd54f6eb6c5555"
+    }
+  ],
+  "support_pins": [
+    {
+      "path": "tools/p09/run_stored_signed_continuation.py",
+      "bytes": 13168,
+      "sha256": "8079084b1244d360cf887a3c79caf6caf73daaeb1214a94ab13d187e962fc119"
+    },
+    {
+      "path": "tools/p09/tests/test_stored_signed_continuation.py",
+      "bytes": 8065,
+      "sha256": "a23430d97bf17a005ae46b6ee41acda1a14b5a995c689cc2b966b6b8d3e4e148"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-call-local-xml-reuse-candidate.run01.v1.json",
+      "bytes": 1667,
+      "sha256": "5d229e2a37f0dd033417d263d27e94f6904f58eab363b44dbc7bdcff3e83b69b"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-stored-signed-continuation.inventory-run01.v1.json",
+      "bytes": 377708,
+      "sha256": "65451ab43c4a88623e845e7ea3da03b3bc214dae5011ab9f0c1120a1d8d6dee5"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-stored-signed-continuation.actual-run01.v1.json",
+      "bytes": 2529646,
+      "sha256": "8385d9c3ba27b9fce29014479a617f5e0b92db131efc38fad1a445ffe02cf7e1"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-stored-suite-disjoint-partitions.plan-run01.v1.json",
+      "bytes": 42936,
+      "sha256": "779d02fae54bb6a869c572e11f206dcc1c1a65799951187fd78e865db9dcebce"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-signed-continuation-inventory-tail-r10/helper-preimages.v1.json",
+      "bytes": 11706,
+      "sha256": "402ff513b975568ce81a50ea867177f6a2a3620a70e2b561b5c3af6f984160d3"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-stored-signed-continuation.whole-source-audit-failed-run01.v1.json",
+      "bytes": 388,
+      "sha256": "d1d9b3b533e1e57d0cd29150463d10a9a52199b358dd51151c54c83a95d41c44"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-stored-signed-continuation.light-run01.v1.json",
+      "bytes": 1017,
+      "sha256": "19283a1cc315f0420608e8457d4c683e28e05af209375267eef4e51090cdf3ec"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-stored-signed-continuation.light-run02.v1.json",
+      "bytes": 980,
+      "sha256": "2ed929007821d307494f94297780a912ae4cb281017e0e75066b2566138a0b44"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-stored-signed-continuation.initial-binding-run01.v1.json",
+      "bytes": 1744,
+      "sha256": "6f68603e8febc959535847df446ecbedcbba7d10333aa6eda2c866c2562eff8a"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 154602,
+      "sha256": "0f521c20970e9fe0a32ca9602690149ab3497f6b5f075821f568df8be91520e4"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 248234,
+      "sha256": "6b631f7cde999831599ad57d127898c2035cbb296293564027dd54f6eb6c5555"
+    }
+  ],
+  "same_full249_prefix_not_repeated": true,
+  "next_action": "TEST_ONLY_PER_OPERATION_COST_MEASUREMENT_OF_ORIGINAL_SIGNED16_BODY_PRESERVE_ALL_FRESH_AUTH_AND_NEGATIVE_CHECKS_NOT_REPEAT600_OR_EXTEND_DEADLINE_BLINDLY",
+  "signed_changed16_component_complete": false,
+  "full249_current_qualified": false,
+  "signed_SQL_native_or_Gate_qualified": false,
+  "exact_CPU_profiler": false,
+  "PC_freeze_resolved": false,
+  "new_child_or_thread_started": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "IO": {
+    "read_passes": 3645,
+    "bytes_read": 96753290,
+    "bound_inputs": 913,
+    "final_fresh_hashes": 913,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 32.82389790000161
+}

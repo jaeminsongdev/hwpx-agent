@@ -1,0 +1,63 @@
+{
+  "schema": "hwpx-agent.p09-101-oracle-diagnostics-initial-failures/v1",
+  "recorded_at_utc": "2026-10-04 17:24:02 UTC",
+  "state": "FAILURES_RETAINED_NOT_SQL_or_native_failures",
+  "failures": [
+    {
+      "language": "python",
+      "terminal_chunk_id": "532194",
+      "exit_code": 1,
+      "passed": 10,
+      "failed": 1,
+      "reason": "Static test assumed 26 AND predicates; pinned original has 24. All original clauses retained."
+    },
+    {
+      "language": "rust",
+      "start_chunk_id": "dcc266",
+      "session_id": 55348,
+      "terminal_chunk_id": "b2637e",
+      "exit_code": 1,
+      "error_code": "E0432",
+      "tests": "NOT_RUN_compile_failure",
+      "failed_executable_produced": false,
+      "reason": "Wrong nested import namespace; fixed immediate parent import."
+    },
+    {
+      "kind": "read_only_command_invocation",
+      "terminal_chunk_id": "965b87",
+      "exit_code": 1,
+      "reason": "Current-source option sent to wrong original script; corrected original validator passed at 19dc65."
+    }
+  ],
+  "failed_source_preimages": [
+    {
+      "path": "implementation/p09/source-archive/p09-101-initial-failure/crates/product-cli/examples/stored_source_policy_postgres_probe/worker/oracle_snapshot.rs",
+      "bytes": 4649,
+      "sha256": "71fa1fdb7f2fbace08dd2fad849c537931b74fffbdfad0fe0c98a758ecb07845"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-101-initial-failure/tools/p09/tests/test_source_policy_oracle_diagnostics.py",
+      "bytes": 7225,
+      "sha256": "046b641848b8b1a6dbebd6ffb124b2871189749b02ef523f2ed6944d681abe77"
+    }
+  ],
+  "original_default_conformance": {
+    "terminal_chunk_id": "967b2b",
+    "exit_code": 1,
+    "state": "FAIL:matrix_drift",
+    "retained": true
+  },
+  "qualification": {
+    "native_executed": false,
+    "actual_SQL_executed": false,
+    "SQL_failure_root_cause_proven": false,
+    "original_atomic_oracle_verified": false,
+    "full_comment_product_acceptance": false,
+    "native_author_time_state_binding": false,
+    "product_complete": false,
+    "P10_new_implementation": false,
+    "execution_publication_authority": false,
+    "new_table_insertion_implemented": false,
+    "P09_gate": "OPEN"
+  }
+}

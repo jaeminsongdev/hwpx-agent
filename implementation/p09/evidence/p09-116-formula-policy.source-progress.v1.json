@@ -1,0 +1,280 @@
+{
+  "schema": "hwpx-agent.p09-116-formula-policy-source-progress/v1",
+  "inherited_checkpoint": {
+    "path": "implementation/p09/evidence/p09-115-product-formula-request.source-progress.v1.json",
+    "bytes": 18280,
+    "sha256": "5c3919ff9ab79d74a4eb6c75eb1ba9c047263ac701f7805f909538d050adc4a7"
+  },
+  "inherited_raw_pin_entries": 2114,
+  "current_source_files_count": 1047,
+  "qualification": {
+    "native_recalculation_verified": false,
+    "full_field_policy_qualified": false,
+    "issuer_verified": false,
+    "atomic_execution_publication_verified": false,
+    "actual_SQL_verified": false,
+    "P09_complete": false,
+    "product_complete": false,
+    "full_document_import_verified": false,
+    "signed_registry_verified": false,
+    "CLI_transport_verified": false,
+    "full_product_execution_verified": false,
+    "formula_policy_trusted_issuer_verified": false,
+    "formula_policy_SQL_repository_verified": false,
+    "actual_source_formula_policy_data_binding_verified": true,
+    "original_product_formula_policy_data_gating_verified": true
+  },
+  "P09_gate": "OPEN",
+  "P10_new_implementation": false,
+  "product_complete": false,
+  "remaining_coarse_groups_minimum": 6,
+  "remaining_coarse_groups_closed_by_slice": 0,
+  "source_delta": [
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy.rs",
+      "bytes": 12681,
+      "sha256": "013f5477e2884fbb074a43db3c30f956570c1a2838c06627d1eb05c780eaf370"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_operations.rs",
+      "bytes": 5760,
+      "sha256": "3d5bc7387bae143dbc150291956ab56efdc93fcf425790107f0e76266017b281"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_operations/formula.rs",
+      "bytes": 9718,
+      "sha256": "e9f1bd4e1833ff5b28d394369ff304800a92df9027d537a66f7c04bafcaa1ba7"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import.rs",
+      "bytes": 16148,
+      "sha256": "6b286d91df0619de36aa4ccfdda89e70c15d85ef08ea07811a67fbcc39ced7c0"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas.rs",
+      "bytes": 6447,
+      "sha256": "46c068c48ab3b00655cd1fa70f1cd289b810ecde573b7a9e101ad755cdb799b4"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/wire.rs",
+      "bytes": 4178,
+      "sha256": "7a35a4314292234295c7692b0bbdee2754dc5e95d908d947b4dd226cfee999d9"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/targets.rs",
+      "bytes": 2842,
+      "sha256": "6760687bfcd0f238392b16afb1912f9d7bcfc8662623e5875b12a417de66506d"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_operations/policy.rs",
+      "bytes": 6565,
+      "sha256": "fa8a071e076d65d704fd11fef51160fe0beb2707ee15e46cb9011fb2f1959cdc"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy.rs",
+      "bytes": 29014,
+      "sha256": "cf942fd79aeb6daa2e4e6660f74b4d87f94e78e56691c220d7061b8916e89da3"
+    },
+    {
+      "path": "tools/p09/verify_formula_policy_progress.py",
+      "bytes": 8755,
+      "sha256": "14d220f135ea1cba52f234d50ade1a3653755447b7fe5ca4eb67a542ef6e7c18"
+    },
+    {
+      "path": "tools/p09/tests/test_formula_policy_progress.py",
+      "bytes": 5618,
+      "sha256": "373e8145c3d764f3dacd26888e8b4f508dd381338f248d5aa5110956d8e772f7"
+    },
+    {
+      "path": "implementation/p09/P09-116_FORMULA_POLICY_POLICY.md",
+      "bytes": 4229,
+      "sha256": "f0cf636d4d8b445af27befc23a0e14ae9f428cca466809a532ae38bac59a8fc4"
+    },
+    {
+      "path": "implementation/p09/P09-116_FORMULA_POLICY_REPORT.md",
+      "bytes": 5281,
+      "sha256": "3da0a813963f643421cce7b59e20e6670291ed5d1eb623f1468e8ad5385f575f"
+    },
+    {
+      "path": "protocol/migrations/p09-source-formula-policy-v0-to-v1.md",
+      "bytes": 2775,
+      "sha256": "7b30e30f28dca0ceb0633aa5bec667037aed367e4072bf15aa360c9e9740e6ff"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-116-formula-policy.initial-failures.v1.json",
+      "bytes": 1968,
+      "sha256": "4e70059f7e20be767ef73e74ce7ea323f8cd17aadfe2b5bdcda6c79402e78896"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-116-formula-policy.preservation.v1.json",
+      "bytes": 5806,
+      "sha256": "d2203aa4af3adaa59b132248b98efe9407dd6d9daf0c2cac2bef4061ad20d07b"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-116-formula-policy.source-regression.v1.json",
+      "bytes": 6768,
+      "sha256": "dcc9443c732868b0ef90e12530ceddb8875700d84d90bf07f35fa66e6c723c32"
+    }
+  ],
+  "source_archives_added": [
+    {
+      "path": "implementation/p09/source-archive/p09-116-pre-formula-policy/crates/product-cli/src/form_stored_provider/actual_import/source_policy.rs",
+      "bytes": 12663,
+      "sha256": "2fa0a39e4847afe1b861fe50a2d1e2aa818c804aae950234a27d7596c8ddf0e6"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-116-pre-formula-policy/crates/product-cli/src/form_product_request/stored_operations.rs",
+      "bytes": 5744,
+      "sha256": "f756a1d2efc85fffef9e531b5f0ac17164e61a159939ecf887ab43802ea2973f"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-116-pre-formula-policy/crates/product-cli/src/form_product_request/stored_operations/formula.rs",
+      "bytes": 9118,
+      "sha256": "3d89875afe5facbdb3fb264b2c2470ce38075fb318a22191f04b64dde1799530"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-116-pre-formula-policy/crates/product-cli/tests/form_stored_provider/actual_import.rs",
+      "bytes": 16084,
+      "sha256": "9f52643a572b826256a4d06db881f21b4d242ef86f38f3093ff257ddcb1a125d"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-116-initial-fixture-conflict/crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas.rs",
+      "bytes": 6447,
+      "sha256": "46c068c48ab3b00655cd1fa70f1cd289b810ecde573b7a9e101ad755cdb799b4"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-116-initial-fixture-conflict/crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/wire.rs",
+      "bytes": 4178,
+      "sha256": "7a35a4314292234295c7692b0bbdee2754dc5e95d908d947b4dd226cfee999d9"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-116-initial-fixture-conflict/crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/targets.rs",
+      "bytes": 2842,
+      "sha256": "6760687bfcd0f238392b16afb1912f9d7bcfc8662623e5875b12a417de66506d"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-116-initial-fixture-conflict/crates/product-cli/src/form_product_request/stored_operations/policy.rs",
+      "bytes": 6565,
+      "sha256": "fa8a071e076d65d704fd11fef51160fe0beb2707ee15e46cb9011fb2f1959cdc"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-116-initial-fixture-conflict/crates/product-cli/tests/form_stored_provider/actual_import/formula_policy.rs",
+      "bytes": 25422,
+      "sha256": "e073e577dce40a977de63d16c7b373cec73cafef181ff23701ce2e6065ae6527"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-116-pre-lint-and-shape-strengthening/crates/product-cli/tests/form_stored_provider/actual_import/formula_policy.rs",
+      "bytes": 27322,
+      "sha256": "8dfbdaff56eb6e71d60748ea9cb8043e345956bc02d09326674ee1675f0ff833"
+    }
+  ],
+  "predecessor_receipts_added": [
+    {
+      "path": "implementation/p09/evidence/p09-115-product-formula-request.source-progress.v1.json",
+      "bytes": 18280,
+      "sha256": "5c3919ff9ab79d74a4eb6c75eb1ba9c047263ac701f7805f909538d050adc4a7"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-115-product-formula-request.final-audit.v1.json",
+      "bytes": 14873,
+      "sha256": "ad4eb9e4791996e3b92c45b09b7eec4fc22ffce2919361762709adb0081148dd"
+    }
+  ],
+  "current_executables": [
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/hwpx_agent_cli-0dbeda1edae1a540.exe",
+      "bytes": 1160192,
+      "sha256": "1dae25bbf260c6a336471971b3c6b4225912c0c04319f42f9c9b2603834437ad"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+      "bytes": 21368320,
+      "sha256": "b5ebe664bde61fd06ee373957a8f5159065a0f3329ebdc2b660401399416964b"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/form_product_request-b9b309ced3b4e156.exe",
+      "bytes": 7964160,
+      "sha256": "6d37dda60f7b8d3cefd6bcadeff88ecdb602e73ab0f67fd28636ed123c6be0fd"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/form_value_operation-899bdd52f412e0da.exe",
+      "bytes": 8809472,
+      "sha256": "fbf1ca267f22f1e48bee048f3dfe57b2250d98f20d941d9a9cb4731c301c5618"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/document_import_formula_evaluation-7ce11a20f7395847.exe",
+      "bytes": 7071744,
+      "sha256": "09588f6ec92f6b481b0c4c121eac41b1e6afb319e965b90b3f0e80f1fe4b592f"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/document_import_formula_output-3a092c4eef2e8f0f.exe",
+      "bytes": 8053248,
+      "sha256": "4099fccf0f268953b8100c0b4ace16bf1bcd8492e3c3d8f2ea614643907ab1fa"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/document_import_formula_batch-bea22a1ddc584290.exe",
+      "bytes": 8210944,
+      "sha256": "d4cf898f5220300a01779fa170d3be30f1b4086dc535439d22b44eb62db36696"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/hwpx_package-a850ad738bc59b10.exe",
+      "bytes": 13302784,
+      "sha256": "8284b4773ee5d5ba5cc5365fd2e8a042b19f5a9d92d2f13a43b333c2a7c87ab2"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/id_index-b06ac4c244093f4c.exe",
+      "bytes": 3729408,
+      "sha256": "b4dfebf89b600619e29004dfdeb8d74398a910948cf01b62d6aab50493e08d6e"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/patch_element_content-4a43081747b336ae.exe",
+      "bytes": 6295040,
+      "sha256": "d5e8287335624d16a9c519adb8acd6966c56cf9ae9b367cdb4df199e92e37c50"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/patch_engine-f16fef8e94eda711.exe",
+      "bytes": 5153280,
+      "sha256": "b2859e3a1d6cab383a48be57ea498a062c474e669fd77a4154b94ed8027028c3"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/patch_leaf_text-8e937ccb1f8696d7.exe",
+      "bytes": 6267904,
+      "sha256": "2c44e8c85cd6895a8a2c61d8d95581401a75b967e7b220b078061f6517ad29fb"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/review_cell_body_output-581a88b7cee111ae.exe",
+      "bytes": 8550400,
+      "sha256": "ae1d2d18712db63cea34a692826a985845e8df7b9f495420be698ec5d52f37f1"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/review_delete_output-c5dd540b6b40acb8.exe",
+      "bytes": 6909440,
+      "sha256": "7f9da7d19990202906efbc7775cfda19267f45e9c81a57c749a4702a1a325de5"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/table_formula-20f3bf8409a62442.exe",
+      "bytes": 2135552,
+      "sha256": "9c234db18d7139434c1612df1542fbef3b0d52e456d03a1a6954b3675d1d445b"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/text_flow-511dd1904a1b61b0.exe",
+      "bytes": 3943424,
+      "sha256": "1d905d21cf5d71dbd8f8c0097e4d8f466516ded9355fefcee236a1894f9187ff"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/hwpx_agent_cli.exe",
+      "bytes": 5084160,
+      "sha256": "008b061ce9c3ea7d87031ef3382572fdef87549081582903253a9c7b93fa7a28"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/hwpx-agent-cli.exe",
+      "bytes": 5084160,
+      "sha256": "008b061ce9c3ea7d87031ef3382572fdef87549081582903253a9c7b93fa7a28"
+    },
+    {
+      "path": "target/p09-116-formula-policy/debug/deps/form_stored_provider-e02d02396d2f2bbd-initial-fixture-conflict.exe",
+      "bytes": 21337600,
+      "sha256": "9476d03a401ca1a3a1bc9f564d686b7951105741eb791083db6b9222ff5287f0"
+    }
+  ]
+}

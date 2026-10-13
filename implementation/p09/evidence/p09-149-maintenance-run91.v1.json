@@ -1,0 +1,1498 @@
+{
+  "schema_version": "hwpx-agent.p09-conservative-maintenance/v1",
+  "task": "domain-check",
+  "policy": {
+    "profile": "P149_OWNED_WORKLOAD_V4_PARTITIONED_TEST_CODEGEN",
+    "logical_cpu_limit": 1,
+    "priority": "BelowNormal",
+    "cargo_jobs": 1,
+    "test_threads": 1,
+    "sample_seconds": 0.5,
+    "start_ram_min_percent": 10,
+    "start_consecutive_samples": 2,
+    "admission_max_seconds": 3,
+    "emergency_cpu_percent": 98,
+    "emergency_cpu_consecutive_samples": 4,
+    "stop_ram_min_percent": 8,
+    "stop_commit_used_percent": 95,
+    "job_memory_limit_percent": 8,
+    "job_memory_stop_percent": 7,
+    "test_debug_info": "line-tables-only",
+    "dev_debug_info": "line-tables-only",
+    "test_opt_level": 0,
+    "test_codegen_units": 16,
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "output_limit_bytes_per_stream": 32768
+  },
+  "maximum_seconds": 180,
+  "state": "PASS_SCOPED_NOT_GATE",
+  "heavy_work_started": true,
+  "samples": [
+    {
+      "time_utc": "2026-10-07T12:09:18.187167+00:00",
+      "system_cpu_percent": 0.6,
+      "available_ram_mib": 8120.68,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.487914697608442,
+      "commit_used_percent": 43.855743081801876
+    },
+    {
+      "time_utc": "2026-10-07T12:09:18.687788+00:00",
+      "system_cpu_percent": 2.88,
+      "available_ram_mib": 8116.11,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.473545604399984,
+      "commit_used_percent": 43.86179010888979
+    },
+    {
+      "time_utc": "2026-10-07T12:09:18.950050+00:00",
+      "system_cpu_percent": 4.69,
+      "available_ram_mib": 8109.04,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.45135442802856,
+      "commit_used_percent": 43.86923019571237,
+      "active_processes": 1,
+      "job_cpu_seconds": 0.0,
+      "peak_job_private_mib": 0.36,
+      "peak_job_private_percent": 0.0011402096146643217,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 1.96,
+          "private_mib": 0.36
+        }
+      ],
+      "job_elapsed_seconds": 1.2635718999954406
+    },
+    {
+      "time_utc": "2026-10-07T12:09:19.461589+00:00",
+      "system_cpu_percent": 13.52,
+      "available_ram_mib": 8064.07,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.310238162815804,
+      "commit_used_percent": 43.93586227762762,
+      "active_processes": 5,
+      "job_cpu_seconds": 0.234,
+      "peak_job_private_mib": 49.54,
+      "peak_job_private_percent": 0.155473098102777,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 44.44,
+          "private_mib": 31.62
+        }
+      ],
+      "job_elapsed_seconds": 1.7752972000016598,
+      "owned_job_cpu_machine_percent": 2.85797868501367,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:19.972743+00:00",
+      "system_cpu_percent": 19.09,
+      "available_ram_mib": 7691.82,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.14185433638268,
+      "commit_used_percent": 44.69396329824997,
+      "active_processes": 6,
+      "job_cpu_seconds": 0.484,
+      "peak_job_private_mib": 609.4,
+      "peak_job_private_percent": 1.9126832381217438,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.13,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 357.42,
+          "private_mib": 561.44
+        }
+      ],
+      "job_elapsed_seconds": 2.286441400006879,
+      "owned_job_cpu_machine_percent": 3.0568673184280386,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:20.484928+00:00",
+      "system_cpu_percent": 13.58,
+      "available_ram_mib": 7576.12,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.778740485226624,
+      "commit_used_percent": 44.843391128964306,
+      "active_processes": 6,
+      "job_cpu_seconds": 0.953,
+      "peak_job_private_mib": 722.75,
+      "peak_job_private_percent": 2.268440898215449,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.13,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 471.0,
+          "private_mib": 674.55
+        }
+      ],
+      "job_elapsed_seconds": 2.798673500001314,
+      "owned_job_cpu_machine_percent": 5.722503529224048,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:21.003614+00:00",
+      "system_cpu_percent": 13.66,
+      "available_ram_mib": 7475.52,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.46297598387523,
+      "commit_used_percent": 45.015801836574475,
+      "active_processes": 6,
+      "job_cpu_seconds": 1.469,
+      "peak_job_private_mib": 840.38,
+      "peak_job_private_percent": 2.637648127634819,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.13,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 578.05,
+          "private_mib": 788.89
+        }
+      ],
+      "job_elapsed_seconds": 3.3176353000017116,
+      "owned_job_cpu_machine_percent": 6.214330226227693,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:21.509425+00:00",
+      "system_cpu_percent": 12.71,
+      "available_ram_mib": 7396.88,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.216163513414934,
+      "commit_used_percent": 45.11664996995008,
+      "active_processes": 6,
+      "job_cpu_seconds": 1.906,
+      "peak_job_private_mib": 909.04,
+      "peak_job_private_percent": 2.853160005124813,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.13,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 642.83,
+          "private_mib": 853.13
+        }
+      ],
+      "job_elapsed_seconds": 3.823208000001614,
+      "owned_job_cpu_machine_percent": 5.402289324563067,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:22.020395+00:00",
+      "system_cpu_percent": 12.33,
+      "available_ram_mib": 7330.06,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.006438506227322,
+      "commit_used_percent": 45.185129029940505,
+      "active_processes": 6,
+      "job_cpu_seconds": 2.375,
+      "peak_job_private_mib": 967.46,
+      "peak_job_private_percent": 3.0365253276723356,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.18,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 692.91,
+          "private_mib": 901.4
+        }
+      ],
+      "job_elapsed_seconds": 4.334133900003508,
+      "owned_job_cpu_machine_percent": 5.7371333103080815,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:22.532450+00:00",
+      "system_cpu_percent": 8.13,
+      "available_ram_mib": 7213.64,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 22.64104423584194,
+      "commit_used_percent": 45.326761987083366,
+      "active_processes": 6,
+      "job_cpu_seconds": 2.859,
+      "peak_job_private_mib": 1127.7,
+      "peak_job_private_percent": 3.539431329649925,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.18,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 796.42,
+          "private_mib": 1007.06
+        }
+      ],
+      "job_elapsed_seconds": 4.846208700007992,
+      "owned_job_cpu_machine_percent": 5.907340099480605,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:23.042003+00:00",
+      "system_cpu_percent": 7.03,
+      "available_ram_mib": 7186.16,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 22.554768374999004,
+      "commit_used_percent": 45.31506967672614,
+      "active_processes": 6,
+      "job_cpu_seconds": 3.266,
+      "peak_job_private_mib": 1127.7,
+      "peak_job_private_percent": 3.539431329649925,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.18,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 811.48,
+          "private_mib": 995.52
+        }
+      ],
+      "job_elapsed_seconds": 5.355769500005408,
+      "owned_job_cpu_machine_percent": 4.992044129008546,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:23.550861+00:00",
+      "system_cpu_percent": 6.99,
+      "available_ram_mib": 7094.34,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 22.266601850449863,
+      "commit_used_percent": 45.374501674619545,
+      "active_processes": 6,
+      "job_cpu_seconds": 3.672,
+      "peak_job_private_mib": 1127.7,
+      "peak_job_private_percent": 3.539431329649925,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.18,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 881.09,
+          "private_mib": 1038.86
+        }
+      ],
+      "job_elapsed_seconds": 5.864660999999614,
+      "owned_job_cpu_machine_percent": 4.986328126975771,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:24.062054+00:00",
+      "system_cpu_percent": 13.64,
+      "available_ram_mib": 7053.77,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 22.139253922842137,
+      "commit_used_percent": 45.41148297574046,
+      "active_processes": 6,
+      "job_cpu_seconds": 4.156,
+      "peak_job_private_mib": 1127.7,
+      "peak_job_private_percent": 3.539431329649925,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.18,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 912.24,
+          "private_mib": 1064.08
+        }
+      ],
+      "job_elapsed_seconds": 6.375924100007978,
+      "owned_job_cpu_machine_percent": 5.91671880867309,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:24.572448+00:00",
+      "system_cpu_percent": 8.75,
+      "available_ram_mib": 7023.1,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 22.042985902472847,
+      "commit_used_percent": 45.44669556056906,
+      "active_processes": 6,
+      "job_cpu_seconds": 4.672,
+      "peak_job_private_mib": 1131.92,
+      "peak_job_private_percent": 3.5526969941990303,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.18,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 936.15,
+          "private_mib": 1083.96
+        }
+      ],
+      "job_elapsed_seconds": 6.886213400008273,
+      "owned_job_cpu_machine_percent": 6.319944392324384,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:25.082668+00:00",
+      "system_cpu_percent": 7.03,
+      "available_ram_mib": 6990.29,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 21.939999227599937,
+      "commit_used_percent": 45.48352033812429,
+      "active_processes": 6,
+      "job_cpu_seconds": 5.156,
+      "peak_job_private_mib": 1159.86,
+      "peak_job_private_percent": 3.640395051980685,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.18,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 969.13,
+          "private_mib": 1111.91
+        }
+      ],
+      "job_elapsed_seconds": 7.396491499996046,
+      "owned_job_cpu_machine_percent": 5.928139969307888,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:25.592716+00:00",
+      "system_cpu_percent": 7.46,
+      "available_ram_mib": 6892.34,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 21.632584003104313,
+      "commit_used_percent": 45.596885139303104,
+      "active_processes": 6,
+      "job_cpu_seconds": 5.625,
+      "peak_job_private_mib": 1246.2,
+      "peak_job_private_percent": 3.911384870399239,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.18,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 1058.73,
+          "private_mib": 1198.25
+        }
+      ],
+      "job_elapsed_seconds": 7.906498900003498,
+      "owned_job_cpu_machine_percent": 5.747465624924594,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:26.100371+00:00",
+      "system_cpu_percent": 6.6,
+      "available_ram_mib": 6753.81,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 21.19778407004565,
+      "commit_used_percent": 45.77677245590118,
+      "active_processes": 6,
+      "job_cpu_seconds": 6.109,
+      "peak_job_private_mib": 1383.37,
+      "peak_job_private_percent": 4.3419059523233,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.18,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 1194.46,
+          "private_mib": 1335.41
+        }
+      ],
+      "job_elapsed_seconds": 8.414131099998485,
+      "owned_job_cpu_machine_percent": 5.959038847476329,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:26.608917+00:00",
+      "system_cpu_percent": 6.27,
+      "available_ram_mib": 6610.82,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 20.748995113650086,
+      "commit_used_percent": 45.97067906653311,
+      "active_processes": 6,
+      "job_cpu_seconds": 6.594,
+      "peak_job_private_mib": 1527.29,
+      "peak_job_private_percent": 4.793625124825367,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.18,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 1325.75,
+          "private_mib": 1479.34
+        }
+      ],
+      "job_elapsed_seconds": 8.922692000007373,
+      "owned_job_cpu_machine_percent": 5.9604464282390275,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:27.119102+00:00",
+      "system_cpu_percent": 7.97,
+      "available_ram_mib": 6505.57,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 20.418640833358364,
+      "commit_used_percent": 46.10779892753183,
+      "active_processes": 6,
+      "job_cpu_seconds": 7.078,
+      "peak_job_private_mib": 1634.27,
+      "peak_job_private_percent": 5.129386205547917,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.18,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 1421.03,
+          "private_mib": 1583.59
+        }
+      ],
+      "job_elapsed_seconds": 9.43285769999784,
+      "owned_job_cpu_machine_percent": 5.929446060479036,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:27.629331+00:00",
+      "system_cpu_percent": 10.06,
+      "available_ram_mib": 6420.17,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 20.150618012001626,
+      "commit_used_percent": 46.20537571838447,
+      "active_processes": 6,
+      "job_cpu_seconds": 7.531,
+      "peak_job_private_mib": 1705.11,
+      "peak_job_private_percent": 5.351714820089022,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.18,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 8664,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 1493.08,
+          "private_mib": 1657.15
+        }
+      ],
+      "job_elapsed_seconds": 9.943107600003714,
+      "owned_job_cpu_machine_percent": 5.548751699838455,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:28.141142+00:00",
+      "system_cpu_percent": 10.29,
+      "available_ram_mib": 7824.59,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.55859482038327,
+      "commit_used_percent": 44.159925761916284,
+      "active_processes": 6,
+      "job_cpu_seconds": 8.0,
+      "peak_job_private_mib": 1715.18,
+      "peak_job_private_percent": 5.383346441657129,
+      "owned_processes": [
+        {
+          "pid": 13508,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 20.99,
+          "private_mib": 12.25
+        },
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        },
+        {
+          "pid": 30412,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.51,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 22344,
+          "role": "other-owned",
+          "memory_observed": true,
+          "working_set_mib": 12.01,
+          "private_mib": 3.21
+        },
+        {
+          "pid": 17020,
+          "role": "cargo.exe",
+          "memory_observed": true,
+          "working_set_mib": 46.27,
+          "private_mib": 30.09
+        },
+        {
+          "pid": 18796,
+          "role": "rustc.exe",
+          "memory_observed": true,
+          "working_set_mib": 35.61,
+          "private_mib": 128.43
+        }
+      ],
+      "job_elapsed_seconds": 10.456154700004845,
+      "owned_job_cpu_machine_percent": 5.7134130569952335,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "checking",
+          "package": "domain-ir"
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:28.264499+00:00",
+      "system_cpu_percent": 7.87,
+      "available_ram_mib": 7893.02,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.773346558130154,
+      "commit_used_percent": 43.926309122668194,
+      "active_processes": 1,
+      "job_cpu_seconds": 8.062,
+      "peak_job_private_mib": 1715.18,
+      "peak_job_private_percent": 5.383346441657129,
+      "owned_processes": [
+        {
+          "pid": 28748,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.66,
+          "private_mib": 1.2
+        }
+      ],
+      "job_elapsed_seconds": 10.577992100006668,
+      "owned_job_cpu_machine_percent": 3.180468394714581,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "build_finished",
+          "package": null
+        }
+      }
+    },
+    {
+      "time_utc": "2026-10-07T12:09:28.339492+00:00",
+      "system_cpu_percent": 6.15,
+      "available_ram_mib": 7894.92,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.779317333209097,
+      "commit_used_percent": 43.925724768022945,
+      "active_processes": 0,
+      "job_cpu_seconds": 8.062,
+      "peak_job_private_mib": 1715.18,
+      "peak_job_private_percent": 5.383346441657129,
+      "owned_processes": [],
+      "job_elapsed_seconds": 10.652881600006367,
+      "owned_job_cpu_machine_percent": 0,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "build_finished",
+          "package": null
+        }
+      }
+    }
+  ],
+  "source_freeze": [
+    {
+      "path": "Cargo.toml",
+      "bytes": 2695,
+      "sha256": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5"
+    },
+    {
+      "path": "Cargo.lock",
+      "bytes": 61056,
+      "sha256": "3dba694d1b6066a8ff7fec347c51edd1b09b7046ca070bbaf3ac78cc8b708887"
+    },
+    {
+      "path": "crates/domain-ir/src/document_graph.rs",
+      "bytes": 47118,
+      "sha256": "2dec2054cd9c6d9887ed89bc434e4bc2109011ef12db45d2b310ba2b0a496448"
+    },
+    {
+      "path": "crates/domain-ir/tests/document_graph.rs",
+      "bytes": 22856,
+      "sha256": "960d5d06d1dee16058ecaa897ade43d2b12da353d80e777b191e1f6efb8fafc7"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics/evaluation/source.rs",
+      "bytes": 15395,
+      "sha256": "16535ac191c1adbc880b4a7adaafeb55737d45caf33fd533b313c7591c052e4b"
+    },
+    {
+      "path": "crates/product-cli/src/comment_operation.rs",
+      "bytes": 24752,
+      "sha256": "68bc8f9508d3bb574cb9766e51173f12390a1a30974f4ab34fa75f905538652d"
+    },
+    {
+      "path": "crates/product-cli/src/comment_operation/rich_bodies.rs",
+      "bytes": 18031,
+      "sha256": "c0190d598304febac35deabc902ed1f8b767bb7b08b47ce10080cff77dba3bc0"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/comments.rs",
+      "bytes": 10117,
+      "sha256": "1451ff6d48f4aacd00b399fa5a754a75ec7f5387ed96b221189628f4cb54fd56"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/comments/rich_bodies.rs",
+      "bytes": 8862,
+      "sha256": "cb6e89f2a6f9bbc4997818a4b46dac0bfacd2f6dd670bc8b0cf9b362fa4d7833"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review/locations.rs",
+      "bytes": 13528,
+      "sha256": "89a9d0ad3b082504dbff97ac1cacb15d6c598a293341e6d75fd1b3ccbba1f1ff"
+    },
+    {
+      "path": "crates/product-cli/src/form_value_operation/full_document.rs",
+      "bytes": 23641,
+      "sha256": "08650555d0dbc4d45fa7392093a6de147ed6de2e300e4adff0e953c26d04b26c"
+    },
+    {
+      "path": "tools/p09/tests/test_conservative_maintenance.py",
+      "bytes": 17114,
+      "sha256": "9c0471744081b745ece2e4606a2e0458c39809aea27c5ae69335f264ed5c7ac4"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    {
+      "path": "tools/p09/tests/test_maintenance_completion.py",
+      "bytes": 14931,
+      "sha256": "7026e8d31ebbda1a4a88793e0e2e0104230d6065c4efc867cb1ae757a6e7a759"
+    },
+    {
+      "path": "tools/p09/verify_maintenance_completion_light.py",
+      "bytes": 4262,
+      "sha256": "09e0b6b03b88e2ceb003c655f52f46c9b11c2daf38c5adb6ad30be15cd04666c"
+    },
+    {
+      "path": "crates/domain-ir/Cargo.toml",
+      "bytes": 315,
+      "sha256": "78676d2e10dd80aa0ce93e5beeb6b457202ee5229e5d9cc096eff5ff9c209857"
+    },
+    {
+      "path": "crates/hwpx-package/Cargo.toml",
+      "bytes": 663,
+      "sha256": "1b8e0008d86102dddde09c11931505962c932a04a3b2db60a363cb37481b282c"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_formula_evaluation.rs",
+      "bytes": 12975,
+      "sha256": "d081591eab9b42f07abb77c4daa4f668c9f09f2eea0d51f858386d3519d0eb9b"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_formula_evaluation_fixture.rs",
+      "bytes": 4374,
+      "sha256": "2439a43d24ba8e9d6df5b86f73d85174a7d3557cdae7d582262d0163a3a03197"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_settings_inputs.rs",
+      "bytes": 2182,
+      "sha256": "bde4b8180dc2a30b411d1a0340e466ba5b235263015b0712f73b98435d989a0e"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_field_fixture.rs",
+      "bytes": 2850,
+      "sha256": "eaa5b0c52e615adc355ff73bcf2a62a4c7e91bdc42d284a6e02d5e5751b60f06"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-77-document-import-active-security.source-progress.v1.json",
+      "bytes": 112797,
+      "sha256": "36b30c931b760bddedb4950c46c8bf7ed84a046dc8998f7f4a51530cfe9f693d"
+    },
+    {
+      "path": "crates/product-cli/Cargo.toml",
+      "bytes": 772,
+      "sha256": "280f6845d791cdf75e64f7b7fb0a5858e14f8c170f80cf4ee4b8c5e50c2c4a00"
+    },
+    {
+      "path": "crates/product-cli/src/lib.rs",
+      "bytes": 26524,
+      "sha256": "0018013e7d6929533f8b072b2ee7702f195d9af4a568001935f3ee2e5e07c70d"
+    },
+    {
+      "path": "crates/product-cli/tests/comment_operation.rs",
+      "bytes": 20083,
+      "sha256": "6ed2ba90032fabba65727570523a8b338fed64365c6c2271900b1e34c00da71b"
+    },
+    {
+      "path": "crates/product-cli/tests/comment_operation/rich_bodies.rs",
+      "bytes": 19031,
+      "sha256": "ddcfd24ef3a8ee6a14479b138de8c44c23ea59364beb512cf1721b85b701eb5e"
+    }
+  ],
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "native_or_SQL_run": false,
+  "owned_tree_empty": true,
+  "cleanup_confirmed": true,
+  "worker_created": true,
+  "job_assigned": true,
+  "writer_authorized": true,
+  "operation_phase": "final_source_freeze",
+  "exit_code": 0,
+  "stop_reason": null,
+  "last_cargo_announcement": {
+    "source": "last_complete_cargo_style_stderr_announcement",
+    "process_or_compiler_phase_attribution_verified": false,
+    "announcement": {
+      "stage": "build_finished",
+      "package": null
+    }
+  },
+  "cargo_announcement_at_cleanup": {
+    "source": "last_complete_cargo_style_stderr_announcement",
+    "process_or_compiler_phase_attribution_verified": false,
+    "announcement": {
+      "stage": "build_finished",
+      "package": null
+    }
+  },
+  "resolved_owned_limits": {
+    "total_ram_mib": 31860.92,
+    "job_private_memory_limit_mib": 2548.87,
+    "machine_logical_processors": 16,
+    "job_cpu_hard_cap_machine_percent": 6.25
+  },
+  "owned_limits_readback": {
+    "verified": true,
+    "job_private_limit_mib": 2548.87109375,
+    "cpu_hard_cap_machine_percent": 6.25,
+    "affinity_mask": 1,
+    "priority_class": 16384,
+    "active_process_limit": 16,
+    "kill_on_close": true,
+    "breakaway_disabled": true
+  },
+  "compiler_error_codes": [],
+  "compiler_diagnostic_locations": [],
+  "job_final": {
+    "active_processes": 0,
+    "job_cpu_seconds": 8.062,
+    "peak_job_private_mib": 1715.18,
+    "peak_job_private_percent": 5.383346441657129,
+    "owned_processes": []
+  },
+  "elapsed_seconds": 10.65
+}

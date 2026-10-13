@@ -1,0 +1,150 @@
+{
+  "schema_version": "hwpx-agent.p09-aead-full-terminal-audit/v1",
+  "state": "PASS_TERMINAL_SOURCE_AND_EXECUTION_AUDIT_NOT_SQL_NATIVE_OR_GATE",
+  "goal_status": "active",
+  "P09_gate": "OPEN",
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "support_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-aead-dependency.inventory-run02.v1.json",
+      "bytes": 407055,
+      "sha256": "f3b1cfd12623cf8e305e5c16ac140f35d3d205e843943f270afa330d942454b8"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-aead-dependency.actual-run01.v1.json",
+      "bytes": 955812,
+      "sha256": "1f061b97ced0be9655ea80656cb128c239eda73904129e034075eba690edbd5f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-aead-full-stored.light-run01.v1.json",
+      "bytes": 1740,
+      "sha256": "0c48ca153def555e96a1e79ebec91d1adf3dbe7cfaa1cc290831f3f918b4eacb"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-aead-full-stored.actual-run01.v1.json",
+      "bytes": 4463943,
+      "sha256": "0bb7a7d88310270ecb9cde1d7f349e659bd59c3eaccb2d93951ce574ddab50e8"
+    }
+  ],
+  "current_helpers": [
+    {
+      "path": "tools/p09/run_aead_full_stored.py",
+      "bytes": 7976,
+      "sha256": "173cef7b965768667f58941a878564d99a00d98962b17190df62cdedebd43ebb"
+    },
+    {
+      "path": "tools/p09/tests/test_aead_full_stored.py",
+      "bytes": 4699,
+      "sha256": "b7db11ba98d0f644d160338b26b2027c4fb611df3ad1b53277275a0b7621dfed"
+    },
+    {
+      "path": "tools/p09/run_aead_dependency_signed_tests.py",
+      "bytes": 15118,
+      "sha256": "3c31c0daa6b50c4612da29777361bcbb24c1c128fc9934937e6a8f5eb13173ca"
+    },
+    {
+      "path": "tools/p09/tests/test_aead_dependency_signed_tests.py",
+      "bytes": 10029,
+      "sha256": "3646c5f29877d95893d12ea5c32b1ed50248bac6d0c6f05b766d2160f96c1d30"
+    }
+  ],
+  "current_Rust_inputs": 783,
+  "original_test_names": 249,
+  "original_modules": 59,
+  "source_closing_exact": true,
+  "execution_source_freezes_current_exact": true,
+  "bound_current_inputs": 971,
+  "current_profile_config_keys": 81,
+  "compiler_inventory_current_qualified": true,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "signed16_qualification_basis": null,
+  "individual_diagnostic_tests_passed": null,
+  "observed_sequences_not_case_PASS": 8,
+  "original_capture_light_checks": 13,
+  "adapter_light_checks": 9,
+  "contracts_passed": 22,
+  "metrics": {
+    "inventory": {
+      "state": "PASS_SCOPED_NOT_GATE",
+      "stop_reason": null,
+      "elapsed_seconds": 49.4,
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 35.594,
+        "peak_job_private_mib": 926.05,
+        "peak_job_private_percent": 2.906541431600603,
+        "owned_processes": []
+      },
+      "host_CPU_max": 32.23,
+      "available_RAM_min_percent": 13.917190131179277,
+      "commit_max_percent": 38.25008636187737
+    },
+    "diagnostic": {
+      "state": "STOPPED_NOT_ACCEPTED",
+      "stop_reason": "STOP_DURATION_LIMIT",
+      "elapsed_seconds": 185.85,
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 170.969,
+        "peak_job_private_mib": 64.7,
+        "peak_job_private_percent": 0.20305539395774727,
+        "owned_processes": []
+      },
+      "host_CPU_max": 49.43,
+      "available_RAM_min_percent": 18.659591645573812,
+      "commit_max_percent": 35.86068108725234
+    },
+    "full": {
+      "state": "STOPPED_NOT_ACCEPTED",
+      "stop_reason": "STOP_LOW_AVAILABLE_RAM",
+      "elapsed_seconds": 1096.6,
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 1016.625,
+        "peak_job_private_mib": 66,
+        "peak_job_private_percent": 0.20716260063422628,
+        "owned_processes": []
+      },
+      "host_CPU_max": 100,
+      "available_RAM_min_percent": 7.847805311047344,
+      "commit_max_percent": 35.73850400932505
+    }
+  },
+  "capture_diagnostics": {
+    "buffered_bytes": {
+      "stdout": 104,
+      "stderr": 199
+    },
+    "received_bytes": {
+      "stdout": 104,
+      "stderr": 199
+    },
+    "error_code": null,
+    "per_stream_limit_bytes": 32768,
+    "raw_log_content_included": false
+  },
+  "all_owned_trees_empty": true,
+  "original_Rust_or_product_assertions_changed": false,
+  "original_resource_caps_or_OS_settings_changed": false,
+  "statistical_speedup_proven": false,
+  "PC_freeze_resolved": false,
+  "new_child_or_thread_started": false,
+  "P09_non_permission_remaining_work_units": 76,
+  "completed_current_checklist_units": [],
+  "IO": {
+    "read_passes": 4989,
+    "bytes_read": 211303016,
+    "bound_inputs": 974,
+    "final_fresh_hashes": 974,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 29.3272
+}

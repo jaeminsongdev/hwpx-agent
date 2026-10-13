@@ -1,0 +1,74 @@
+{
+  "schema": "hwpx-agent.p09-93-comment-full-ir-failures/v1",
+  "initial_compile": {
+    "chunk_id": "c18d21",
+    "exit_code": 1,
+    "errors": [
+      "local Views binding shadows function",
+      "moved args array reused"
+    ],
+    "whole_source_archive": "implementation/p09/source-archive/p09-93-initial-comment-product/crates/product-cli/src/comment_operation.rs"
+  },
+  "initial_tests": {
+    "chunk_id": "0fde90",
+    "exit_code": 1,
+    "passed": 4,
+    "failed": 2,
+    "errors": 0,
+    "whole_source_archives": [
+      {
+        "path": "implementation/p09/source-archive/p09-93-failed-view-tests/crates/product-cli/src/comment_operation.rs",
+        "bytes": 22154,
+        "sha256": "7ea3b3d3f4a288e0980f4e4e06cad0276b90c7c3b1f47e1f06ad55abff76dc19"
+      },
+      {
+        "path": "implementation/p09/source-archive/p09-93-failed-view-tests/crates/product-cli/tests/comment_operation.rs",
+        "bytes": 15054,
+        "sha256": "0263426c9653a5fdb556408137979fb2eed06e3af90c6dc46d0f096994985f3c"
+      }
+    ],
+    "cause": "DocumentGraph canonicalizes review catalog by ID; initial code treated catalog order as presentation order and one negative changed already-equal target.",
+    "correction": "Root complete canonical component state binds ordered inventories; catalog views match by ID. Negative now mutates actual component order or actual other-section target; unrelated catalog reorder separately tested as canonical-equivalent.",
+    "original_tests_modified": false
+  },
+  "lint_failures": [
+    {
+      "chunk_id": "8b2a6e",
+      "exit_code": 1,
+      "errors": [
+        "prepare_json too_many_lines"
+      ],
+      "correction": "split target selection/insertion/view application; no allow/guard reduction"
+    },
+    {
+      "chunk_id": "5657f7",
+      "lint_exit_code": 1,
+      "test_exit_code": 0,
+      "errors": [
+        "needless_borrow in extracted helper"
+      ],
+      "correction": "remove redundant references",
+      "combined_shell_exit_code_is_not_lint_success": true
+    },
+    {
+      "chunk_id": "a36419",
+      "exit_code": 1,
+      "errors": [
+        "unreadable fixture timestamp literals",
+        "single_char_pattern"
+      ],
+      "correction": "fixture numeric separators and char pattern only"
+    }
+  ],
+  "gate": {
+    "P09": "OPEN",
+    "A12": "OPEN",
+    "A13": "OPEN",
+    "P26": "failed_semantic_non_green",
+    "P62": "UNRESOLVED",
+    "native_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+    "full_native34": "NOT_RUN",
+    "P10_new_implementation": false,
+    "goal_status": "active"
+  }
+}

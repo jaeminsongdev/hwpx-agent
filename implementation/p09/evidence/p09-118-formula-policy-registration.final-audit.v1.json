@@ -1,0 +1,272 @@
+{
+  "schema_version": "hwpx-agent.p09-118-generated-formula-policy-registration-final-audit/v1",
+  "state": "PASS_generated_actual_source_policy_DATA_registration_and_scoped_product_regression_NOT_SQL_issuer_native_or_Gate",
+  "checkpoint": {
+    "path": "implementation/p09/evidence/p09-118-formula-policy-registration.source-progress.v1.json",
+    "bytes": 8036,
+    "sha256": "e07d41a6f2da50bab2241a08e23058dfdffdb91b8063a7b06630120010b6d046"
+  },
+  "source_regression": {
+    "path": "implementation/p09/evidence/p09-118-formula-policy-registration.source-regression.v1.json",
+    "bytes": 7311,
+    "sha256": "d625ff6ab09c35a58889c64db7f84ea607aaed210b277e900a46e56c578ed713"
+  },
+  "preservation": {
+    "output": "c91df9",
+    "exit_code": 0,
+    "previous_sources": 1062,
+    "unchanged_previous_sources": 1060,
+    "whole_parent_preimages": 2,
+    "exact_inverse": true,
+    "unmodified_P117_audit_on_preimage_view": true,
+    "inherited_raw_pins": 2206,
+    "prior_executables_preserved": 473,
+    "all_prior_executables_reexecuted": false
+  },
+  "source_freeze": [
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas.rs",
+      "bytes": 6487,
+      "sha256": "0db27ef759bd09226dca318b4e738d1bf6c1c0aaf17fa8412d553b240458e09b"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import.rs",
+      "bytes": 16238,
+      "sha256": "4c8bc2cf813c36d643fd17074bdb81779edba0e159b939fd4a44f132dcecb531"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/registration.rs",
+      "bytes": 12295,
+      "sha256": "1fee4e5db67110f8a7312c4dff6571e2c679d3be802bb975904ebf59d816d707"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/registration/generation.rs",
+      "bytes": 3139,
+      "sha256": "4b49868a4cb31118a39592757d595ed864ea2d9f35b3d8a3c09df53e1e58a870"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/registration/postgres.rs",
+      "bytes": 3859,
+      "sha256": "d2c7f64578c13debccb50536dc4d72b148995edf0a4706cffb5ef06ef380fe4a"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_registration.rs",
+      "bytes": 26198,
+      "sha256": "87d97b205d2f9190ab22a0391f336244d14aa80d88fa33d6a8ab82d769be294e"
+    }
+  ],
+  "runtime": {
+    "command": "cargo test -p artifact-service -p revision-service -p hwpx-agent-cli --lib --test form_stored_provider --test form_product_request --test form_value_operation --locked --offline --target-dir target/p09-118-formula-policy-registration",
+    "start": "d82440",
+    "session": 45941,
+    "terminal": "a3f81a",
+    "exit_code": 0,
+    "passed": 287,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0,
+    "suites": {
+      "artifact_lib": 25,
+      "cli_lib": 6,
+      "form_product_request": 10,
+      "form_stored_provider": 208,
+      "form_value_operation": 18,
+      "revision_lib": 20
+    },
+    "new_registration_tests_included": 11,
+    "stored_seconds": 423.41,
+    "product_seconds": 12.95,
+    "form_seconds": 11.68,
+    "performance_acceptance": false,
+    "full_workspace_run": false,
+    "hwpx_package_136_rerun": false
+  },
+  "test_inventory": {
+    "test_executables": [
+      {
+        "path": "target/p09-118-formula-policy-registration/debug/deps/hwpx_agent_cli-0dbeda1edae1a540.exe",
+        "listed_test_count": 6,
+        "bytes": 1160192,
+        "sha256": "9643f4369e19b82edd073698a76fabdf1f431cc92df6a46d8a07da9d15e9b03a"
+      },
+      {
+        "path": "target/p09-118-formula-policy-registration/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+        "listed_test_count": 208,
+        "bytes": 21649920,
+        "sha256": "b23e9627dd59d53db54cae9397e57feddafdf44adcfef2a29b5c355beaac63fd"
+      },
+      {
+        "path": "target/p09-118-formula-policy-registration/debug/deps/form_product_request-b9b309ced3b4e156.exe",
+        "listed_test_count": 10,
+        "bytes": 7964160,
+        "sha256": "d86a2578715687498a11c4ce1a4a7428ad6ffdb52950e23a150f1ac596253c44"
+      },
+      {
+        "path": "target/p09-118-formula-policy-registration/debug/deps/form_value_operation-899bdd52f412e0da.exe",
+        "listed_test_count": 18,
+        "bytes": 8809472,
+        "sha256": "3b61a2f2c9c1e28935f3aa10a80c6f68304adaeaf5c91fea94b5a03945fd0a77"
+      },
+      {
+        "path": "target/p09-118-formula-policy-registration/debug/deps/artifact_service-c722486ab67dc904.exe",
+        "listed_test_count": 25,
+        "bytes": 2694656,
+        "sha256": "217a9a0ea43589d3e425237b815b5d8ee576dd15c55a217f9f159f0eb1ae21cd"
+      },
+      {
+        "path": "target/p09-118-formula-policy-registration/debug/deps/revision_service-1b137e63992c86e2.exe",
+        "listed_test_count": 20,
+        "bytes": 1686016,
+        "sha256": "1627fdb55e4c757b1d1df63c2f2503773d7ce788722a6ccbbb275804455e0649"
+      }
+    ],
+    "distinct_fully_qualified_test_pairs": 287,
+    "listing_is_execution_proof": false
+  },
+  "strict_lint": {
+    "output": "fa9d2b",
+    "exit_code": 0,
+    "suppression_added": false
+  },
+  "format_diff": {
+    "output": "502c2b",
+    "exit_code": 0,
+    "parents_not_formatted": true
+  },
+  "original_corpus": {
+    "frozen_count": 36,
+    "original_zip_XML_census_output": "e71845",
+    "typed_original_importer_matched": true,
+    "formula_source_registered_and_read": 16,
+    "no_formula_source_rejected_before_ingest": 20,
+    "formula_fields": 16,
+    "original_bytes_unchanged": true
+  },
+  "conformance": {
+    "start": "6ad8b5",
+    "session": 25861,
+    "terminal": "ace9a2",
+    "exit_code": 0,
+    "upstreams": 15,
+    "green_rows": 0,
+    "historical_default_matrix_drift_retained": true
+  },
+  "evidence_verifier": {
+    "terminal": "573ce9",
+    "exit_code": 0,
+    "negative_tests_passed": 6,
+    "inherited_raw_pin_entries": 2206,
+    "current_groups": {
+      "source_delta": 11,
+      "source_archives_added": 4,
+      "predecessor_receipts_added": 2,
+      "current_executables": 9
+    },
+    "current_source_files": 1071,
+    "self_pin_cycles_excluded": [
+      "source-progress",
+      "final-audit"
+    ]
+  },
+  "failures_retained": [
+    {
+      "stage": "test_compile",
+      "start": "8d3d6f",
+      "session": 46560,
+      "terminal": "3d0060",
+      "exit_code": 1,
+      "codes": [
+        "E0308_quarantine_match_arm",
+        "unused_import"
+      ],
+      "archive": "implementation/p09/source-archive/p09-118-initial-test-compile/crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_registration.rs",
+      "production_guards_weakened": false
+    },
+    {
+      "stage": "initial_targeted_runtime",
+      "start": "553ce2",
+      "session": 83374,
+      "terminal": "b7879a",
+      "exit_code": 1,
+      "passed": 10,
+      "failed": 1,
+      "filtered": 197,
+      "seconds": 141.9,
+      "error": "new_test_wrongly_assumed_all_36_originals_contain_formula_targets",
+      "corrected_from_independent_original_census": true,
+      "all_36_inputs_still_tested": true,
+      "no_formula_guard_unchanged": true,
+      "archive": "implementation/p09/source-archive/p09-118-initial-regression-and-lint/crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_registration.rs",
+      "executable": "target/p09-118-formula-policy-registration/debug/deps/form_stored_provider-e02d02396d2f2bbd-initial-regression.exe",
+      "included_in_final_PASS_count": false
+    },
+    {
+      "stage": "initial_strict_lint",
+      "start": "37bdbe",
+      "session": 91757,
+      "terminal": "4b87be",
+      "exit_code": 1,
+      "codes": [
+        "semicolon_if_nothing_returned_three_new_test_lines"
+      ],
+      "suppression_added": false
+    }
+  ],
+  "qualification": {
+    "native_recalculation_verified": false,
+    "full_field_policy_qualified": false,
+    "issuer_verified": false,
+    "atomic_execution_publication_verified": false,
+    "actual_SQL_verified": false,
+    "P09_complete": false,
+    "product_complete": false,
+    "full_document_import_verified": false,
+    "signed_registry_verified": false,
+    "CLI_transport_verified": false,
+    "full_product_execution_verified": false,
+    "formula_policy_trusted_issuer_verified": false,
+    "formula_policy_SQL_repository_verified": false,
+    "source_formula_SQL_repository_and_bridge_implemented": true,
+    "separate_formula_SQL_domain_and_original_guards_source_verified": true,
+    "trusted_formula_issuer_verified": false,
+    "actual_SQL21_registration_verified": false,
+    "source_derived_formula_policy_generation_registration_implemented": true
+  },
+  "environment": {
+    "source_freeze_6_exact": true,
+    "HEAD": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+    "PLANS_exists": false,
+    "Hwp_count": 0
+  },
+  "remaining_coarse_groups_minimum": 6,
+  "remaining_coarse_groups_closed_by_slice": 0,
+  "conversation_minimum_30_conditions_not_exhaustive_or_decremented": true,
+  "gate": {
+    "P09": "OPEN",
+    "A12": "OPEN",
+    "A13": "OPEN",
+    "native34": "NOT_RUN",
+    "native_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+    "P26": "failed_semantic_non_green",
+    "P62": "UNRESOLVED",
+    "P84_SQL": "UNRESOLVED",
+    "P10_new_implementation": false,
+    "product_complete": false,
+    "goal_status": "active"
+  },
+  "not_executed": [
+    "Hangul",
+    "COM",
+    "UI",
+    "access_allow_popup",
+    "actual_SQL",
+    "operating_or_trust_DB",
+    "installation_or_settings",
+    "stage",
+    "commit",
+    "push",
+    "delete",
+    "move"
+  ],
+  "next_boundary": "Trusted server issuer/signature and registry evidence for exact generated field policy DATA; separately actual SQL21 migration/security/CAS/revocation qualification. Full product execution/native/import/Gate remain required."
+}

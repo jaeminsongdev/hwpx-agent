@@ -1,0 +1,29 @@
+{
+  "schema": "hwpx-agent.p09-85-initial-failures/v1",
+  "failures": [
+    {
+      "tool_chunk": "db40cc",
+      "state": "fail",
+      "code": "CLIPPY_CAST_SIGN_LOSS",
+      "archive": "implementation/p09/source-archive/p09-85-initial-registration-lint/registration.rs",
+      "correction": "checked signed-to-unsigned conversion, no allow"
+    },
+    {
+      "tool_chunk": "ee5327",
+      "state": "fail",
+      "code": "CLIPPY_DOC_MARKDOWN",
+      "correction": "source doc identifier backticks"
+    },
+    {
+      "tool_chunk": "ca2c4e",
+      "state": "fail",
+      "code": "CLIPPY_DOC_MARKDOWN",
+      "correction": "test doc identifier backticks"
+    }
+  ],
+  "additional_preimage": "implementation/p09/source-archive/p09-85-pre-real-artifact-validation/registration.rs",
+  "all_recorded_lint_issues_fixed": true,
+  "P84_unresolved_SQL_intermittence_retained": 2,
+  "no_runtime_failure_observed_in_P85_run01": true,
+  "p09_complete": false
+}

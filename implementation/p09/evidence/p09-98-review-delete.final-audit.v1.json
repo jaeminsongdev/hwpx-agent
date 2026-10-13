@@ -1,0 +1,187 @@
+{
+  "schema": "hwpx-agent.p09-98-review-delete-final-audit/v1",
+  "recorded_at_utc": "2026-10-04 15:47:15 UTC",
+  "state": "PASS_SCOPED_IMPLEMENTATION_SOURCE_REGRESSION_AND_PRESERVATION_NOT_P09_GATE_OR_FULL_GOAL",
+  "git_head": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+  "current_checkpoint": {
+    "path": "implementation/p09/evidence/p09-98-review-delete.source-progress.v1.json",
+    "bytes": 10168,
+    "sha256": "0ee405068fb4f98368b416dc131d0edf043d01175296ba036decf566629539ab"
+  },
+  "receipt_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-98-review-delete.initial-failures.v1.json",
+      "bytes": 2644,
+      "sha256": "3bbfae000206455b1ff3c02ffb6d87b31921b39a30575c3e4b2bd92b399ac3dd"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-98-review-delete.preservation.v1.json",
+      "bytes": 2239,
+      "sha256": "c5ff482e37d59754b030bbf5ccf7c7136512e4db03895c4b79206ddfed0716fc"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-98-review-delete.source-regression.v1.json",
+      "bytes": 5347,
+      "sha256": "5eaa7302e39850b588e13f107b0f394e40b6b14720e84a771658ffa8e4f95ce6"
+    }
+  ],
+  "current_audit": {
+    "state": "pass_scoped_inheritance_and_delta_NOT_native_or_Gate",
+    "checkpoint": {
+      "path": "implementation/p09/evidence/p09-98-review-delete.source-progress.v1.json",
+      "bytes": 10168,
+      "sha256": "0ee405068fb4f98368b416dc131d0edf043d01175296ba036decf566629539ab"
+    },
+    "inherited_raw_pin_entries": 1269,
+    "current_groups": {
+      "source_delta": 15,
+      "source_archives_added": 9,
+      "predecessor_receipts_added": 2,
+      "current_executables": 15
+    },
+    "P09_gate": "OPEN",
+    "product_complete": false,
+    "terminal_chunk_id": "7f707c",
+    "exit_code": 0
+  },
+  "preservation_scope": {
+    "inherited_raw_pin_entries": 1269,
+    "previous_current_source_files": 828,
+    "unchanged_previous_source_files": 825,
+    "whole_parent_preimages": 3,
+    "parent_inverse_exact": true,
+    "current_source_files": 840,
+    "current_raw_pin_entries": 41,
+    "old_executables_preserved_not_reexecuted": 85,
+    "all_historical_qualification_reexecuted": false,
+    "all_failed_new_binaries_preserved": false
+  },
+  "verification": {
+    "rust_named_passed": 277,
+    "rust_failed": 0,
+    "rust_ignored": 0,
+    "new_delete_feature_tests": 8,
+    "new_tests_included_in_277": true,
+    "package_named_passed": 119,
+    "product_named_passed": 158,
+    "package_terminal_chunk_id": "daf98b",
+    "product_terminal_chunk_id": "c2b83b",
+    "same_live_product_handle_polled_to_terminal": true,
+    "python_passed": 8,
+    "strict_clippy_scopes_passed": 2,
+    "format_and_diff_passed": true,
+    "current_source_component_validators_passed": 15,
+    "default_conformance": "FAIL:matrix_drift",
+    "default_failure_preserved": true
+  },
+  "requirement_audit": [
+    {
+      "id": "P09-04-existing-native-format-delete-output",
+      "state": "SCOPED_SOURCE_IMPLEMENTATION_AND_TESTS_PASS",
+      "evidence": "original actual marker handle and original paired collector select both MEMO wrappers or one hidden explanation; original patch/writer outputs separate immutable package"
+    },
+    {
+      "id": "P09-unrelated-document-and-source-preservation",
+      "state": "PASS_DECLARED_SCOPE",
+      "evidence": "whole section exact outside deleted subtree ranges; other part digests unchanged; exact parent inverse and immutable input; original captured negative retained"
+    },
+    {
+      "id": "P09-source-deletion-fresh-stored-access",
+      "state": "PASS_ORIGINAL_IN_MEMORY_SERVICE_FIXTURE_NOT_SQL_OR_ATOMIC_LEASE",
+      "evidence": "original ACL/AEAD/head checks before preparation and replay/bytes callback; revoke/tamper/head changes reject; no new ingest/commit"
+    },
+    {
+      "id": "P09-04-insert-style-show-resolve-delete-author-time-readback-full-product",
+      "state": "INCOMPLETE",
+      "evidence": "style/body/deletion source outputs implemented, full native typed state/compiler/metadata/protection/insertion/show/resolve and actual native acceptance remain incomplete"
+    },
+    {
+      "id": "P11-public-review-comment-delete-qualification",
+      "state": "NOT_QUALIFIED_NOT_PHASE_MOVED",
+      "evidence": "original P11 generated contracts unchanged; fresh product route denies RouteUnqualified"
+    },
+    {
+      "id": "P09-all-nine-roadmap-tasks-and-real-product-gate",
+      "state": "OPEN_INCOMPLETE",
+      "evidence": "P09/A12/A13 remain OPEN; native34 NOT_RUN/green0; P26 non-green; P62/P84 SQL unresolved"
+    },
+    {
+      "id": "full-goal-P09-through-P20",
+      "state": "NOT_ACHIEVED",
+      "evidence": "real P09 Gate not closed; P10 new implementation not started; no later phase completion claim"
+    }
+  ],
+  "qualification": {
+    "P09_gate": "OPEN",
+    "A12": "OPEN",
+    "A13": "OPEN",
+    "native_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+    "native_required_cases": 34,
+    "native_passed_cases": 0,
+    "native_status": "NOT_RUN",
+    "P26": "failed_semantic_non_green",
+    "P62": "UNRESOLVED",
+    "P84_SQL": "UNRESOLVED",
+    "native_executed": false,
+    "actual_SQL_executed": false,
+    "full_comment_product_acceptance": false,
+    "native_author_time_state_binding": false,
+    "full_typed_comment_compiler_route_connected": false,
+    "execution_publication_authority": false,
+    "P11_capability_qualified": false,
+    "product_complete": false,
+    "P10_new_implementation": false
+  },
+  "remaining_work_groups": [
+    {
+      "id": "metadata_coordinates",
+      "state": "incomplete",
+      "scope": "native author/time/visibility/resolution and coordinates; unknowns NOT fabricated"
+    },
+    {
+      "id": "full_comment_HWPX_compiler",
+      "state": "partial_existing_style_and_paragraph_body_output",
+      "scope": "full native typed state/original compiler/protection integration; new rich Flow and insertion/show/resolve/delete lowering"
+    },
+    {
+      "id": "durable_product_integration",
+      "state": "incomplete",
+      "scope": "actual durable source/IR/provider product integration; fixture tests NOT actual SQL acceptance"
+    },
+    {
+      "id": "remaining_document_semantics",
+      "state": "incomplete",
+      "scope": "remaining unsupported field/Date/external validation and complete-document P09 semantics"
+    },
+    {
+      "id": "trusted_execution_publication",
+      "state": "incomplete",
+      "scope": "trusted issuer, complete protection policy, atomic execution/publication"
+    },
+    {
+      "id": "P84_SQL_diagnosis",
+      "state": "unresolved",
+      "scope": "intermittent SQL failure cause and regression; no actual SQL in this stage"
+    }
+  ],
+  "remaining_count_scope": "minimum six coarse groups, not exactly six fine tasks; native34 separate; existing source deletion output does NOT close an entire group",
+  "execution_constraints": {
+    "native_COM_UI_access_popup_run": false,
+    "actual_SQL_operating_trust_DB_run": false,
+    "install_settings_changed": false,
+    "commit_push": false,
+    "original_source_delete_move": false,
+    "root_PLANS_present": false,
+    "Hwp_processes_at_final_check": 0
+  },
+  "goal": {
+    "objective_scope": "P09 through P20 full original product implementation and authoritative actual Gate completion; unchanged",
+    "status": "active",
+    "completion_unproven": true,
+    "previous_status_answer_goal_turn": "no_progress_status_report",
+    "this_goal_turn": "progress_new_source_deletion_implementation_and_verified_regression",
+    "same_genuine_blocker_three_turns": false,
+    "blocked": false
+  },
+  "next_product_boundary": "Complete full typed native review state and original compiler/protection integration plus remaining insertion/show/resolve/rich Flow lowering; do not fabricate metadata or promote component evidence; native/actual SQL remain outside currently allowed execution"
+}

@@ -1,0 +1,204 @@
+{
+  "schema": "hwpx-agent.p09-authorized-full-ir.source-progress/v1",
+  "date": "2026-10-03",
+  "state": "actual_sql_metadata_component_pass_not_whole_product_native_or_gate",
+  "source_files": [
+    {
+      "path": "migrations/postgres/0019_p09_authorized_full_ir_intent.up.sql",
+      "bytes": 21899,
+      "sha256": "5dfcac89b97600d21efb3a0d922ce6241440fda6bdc94b14bd3eddc59df2ad59"
+    },
+    {
+      "path": "migrations/postgres/0019_p09_authorized_full_ir_intent.down.sql",
+      "bytes": 2207,
+      "sha256": "cb773d16f7122e1be083df13fe493830e777b2f6feaabe04b69e75181234bfa8"
+    },
+    {
+      "path": "tools/p09/test_authorized_full_ir_intent.py",
+      "bytes": 14360,
+      "sha256": "47bb3942add6ea08df58f2a2e162069a636333dd91ec61a26df686cbd5fd46db"
+    },
+    {
+      "path": "tools/p09/fixtures/authorized_full_ir_intent.sql",
+      "bytes": 18480,
+      "sha256": "4b44849f231b4cc410a0121d88af385919bcfc393b5ce587df7fe5620bf16cfc"
+    },
+    {
+      "path": "implementation/p09/P09-61_AUTHORIZED_FULL_IR_POLICY.md",
+      "bytes": 4123,
+      "sha256": "aea131d84583fc81acc3f8952fb2f33b52e81ecf397cd478ea6c3f84f0bd36d6"
+    },
+    {
+      "path": "implementation/p09/P09-61_AUTHORIZED_FULL_IR_REPORT.md",
+      "bytes": 5059,
+      "sha256": "fc570f75cd87fcb799409dd89614cb07c9226cd9f24b604c485b10f0c3ebda97"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-61-authorized-ir.initial-failure.v1.json",
+      "bytes": 1936,
+      "sha256": "8af694f7f7ffb291175a9b577c580f2323c084b7974f2683fffe378286b9b361"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-61-authorized-ir.completion-fixture-failure.v1.json",
+      "bytes": 5542,
+      "sha256": "e3801ac1af7fcd17311aa517f40747c0179a13360df170581ca5b01d6a5fa493"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-61-authorized-ir.actual-sql-pass.v1.json",
+      "bytes": 4996,
+      "sha256": "b9cbc065068d1e161ef4de04737e7c1eb436d1ce9da0f1f146fbd482a76c63df"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-61-authorized-ir.actual-sql-fresh-pass.v1.json",
+      "bytes": 4996,
+      "sha256": "b82737efe6167461bea78712c263aec23e4fd1be4d8698ece0510414c35a87c6"
+    }
+  ],
+  "source_archives": [
+    {
+      "path": "implementation/p09/source-archive/p09-61-initial-authorized-ir/migrations--postgres--0019_p09_authorized_full_ir_intent.down.sql",
+      "bytes": 2207,
+      "sha256": "cb773d16f7122e1be083df13fe493830e777b2f6feaabe04b69e75181234bfa8"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-61-initial-authorized-ir/migrations--postgres--0019_p09_authorized_full_ir_intent.up.sql",
+      "bytes": 21899,
+      "sha256": "5dfcac89b97600d21efb3a0d922ce6241440fda6bdc94b14bd3eddc59df2ad59"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-61-initial-authorized-ir/pre-p61-PLANS.md",
+      "bytes": 33529,
+      "sha256": "e4a88c02f3cf4e926f795f7ec5ca71029808adcd9228094b5ca74da9499887de"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-61-initial-authorized-ir/second-run-harness.py",
+      "bytes": 14360,
+      "sha256": "47bb3942add6ea08df58f2a2e162069a636333dd91ec61a26df686cbd5fd46db"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-61-initial-authorized-ir/tools--p09--fixtures--authorized_full_ir_intent.sql",
+      "bytes": 18416,
+      "sha256": "2f5ed1ba060b682b15ab3865792277501752a834964af00f7266c79000850670"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-61-initial-authorized-ir/tools--p09--test_authorized_full_ir_intent.py",
+      "bytes": 14281,
+      "sha256": "98fe2e71de90a0e1f15a966f84f38ecb6e1ed61a38e408b6dcb6a142f9ea7e1f"
+    }
+  ],
+  "actual_checks": {
+    "complete_sql_metadata_runs": [
+      {
+        "chunk": "866d6b",
+        "host_exit_code": 0,
+        "original_assertions": 28,
+        "new_ir_assertions": 25,
+        "source_pins": 26,
+        "container_removed": true
+      },
+      {
+        "chunk": "228814",
+        "host_exit_code": 0,
+        "original_assertions": 28,
+        "new_ir_assertions": 25,
+        "source_pins": 26,
+        "container_removed": true
+      }
+    ],
+    "same_exact_sources_in_both_runs": true,
+    "complete_applied_schema_versions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "original_v2_claim_and_commit_exact_under_five_additions_each": true,
+    "original_schema18_leaf_exact_under_five_additions": true,
+    "rollback_without_gate_rejected": true,
+    "empty_intent_explicit_rollback_reapply_passed": true,
+    "rollback_with_ir_intent_data_rejected_and_link_preserved": true,
+    "frozen_p60_full_fixture_state": "fail",
+    "frozen_p60_fixture_child_exit_code": 3,
+    "frozen_p60_fixture_first_error_in_schema19": "FULL_IR_COMMIT_INTENT_MISMATCH",
+    "predecessor_source_archive_hash_check": {
+      "chunk": "000358",
+      "pins": 39,
+      "all_exact": true
+    },
+    "original_whole_source_graph_hash_preservation": {
+      "chunk": "000358",
+      "files": 1551,
+      "bytes": 51047460,
+      "declared_archive_origins": 10,
+      "all_original_sha256_exact": true,
+      "entire_original_cli_reexecuted": false
+    },
+    "original_native_preservation": {
+      "chunk": "000358",
+      "files": 75,
+      "all_original_sha256_exact": true,
+      "hwp_processes_at_final_check": 0
+    },
+    "rust_sources_changed_this_turn": false,
+    "rust_tests_run_this_turn": false,
+    "rust135_previous_p60_only": true,
+    "failures_preserved": [
+      {
+        "chunk": "cdb14d",
+        "host_exit_code": 1,
+        "child_exit_code": 3,
+        "cause": "new harness incorrectly required older first rejection code; new intent guard rejected earlier"
+      },
+      {
+        "chunk": "d66092",
+        "host_exit_code": 1,
+        "child_exit_code": 3,
+        "cause": "new receipt fixture raw digest and object-key did not match requested transaction digest; old completion oracle retained"
+      }
+    ]
+  },
+  "claims": {
+    "sql_metadata_authorized_full_ir_component": true,
+    "existing_database_modified": false,
+    "table_or_auth_guard_weakened": false,
+    "fake_authorization_rows_or_session_flags_created": false,
+    "direct_permission_or_hwp_activation": false,
+    "sources_or_failed_native_evidence_deleted": false,
+    "durable_rust_revision_sql_adapter_qualified": false,
+    "full_hwpx_importer_qualified": false,
+    "top_level_full_ir_request_publication_qualified": false,
+    "ir_retention_gc_mirror_lifecycle_qualified": false,
+    "new_ir_cross_session_concurrency_crash_recovery_qualified": false,
+    "whole_current_source_chain_or_native_admission_qualified": false,
+    "native_semantics_render_differential_qualified": false,
+    "product_complete": false,
+    "p09_complete": false,
+    "p10_started": false
+  },
+  "native_source_epoch": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+  "owned_sql_test_containers": {
+    "created": 4,
+    "removed": 4,
+    "residual_prefix_count": 0,
+    "existing_user_containers_touched": false,
+    "image_pulled": false,
+    "network": "none",
+    "host_ports_or_mounts": false
+  },
+  "next_required_work": "Actual durable Rust revision/SQL API binding and top-level stored full-IR request/importer/issuer/publication; qualify IR retention/recovery and genuine whole predecessor source replay/new current admission. No Hancom permission/COM while forbidden."
+}

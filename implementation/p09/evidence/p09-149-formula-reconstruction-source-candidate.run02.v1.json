@@ -1,0 +1,70 @@
+{
+  "schema_version": "hwpx-agent.p09-formula-reconstruction-source-candidate/v1",
+  "qualification": "SOURCE_CANDIDATE_ONLY_NOT_BUILD_RUNTIME_SQL_OR_GATE",
+  "baseline_build_pin": {
+    "path": "target/p09-149-current-issuer-build/current-issuer-build-r4.json",
+    "bytes": 305455,
+    "sha256": "5ce53cf4938ceaa2e8295644e57e3f4fc8becc6a20bdaca4db9cfb6bf5be86c7"
+  },
+  "parent_candidate_pin": {
+    "path": "implementation/p09/evidence/p09-149-stored-reconstruction-source-candidate.run01.v1.json",
+    "bytes": 2844,
+    "sha256": "6b2df2e72a406c7e0938a5975dac6eda0b7acd4a4dac860a5db4243b6912b85a"
+  },
+  "preimage_archive": "implementation/p09/source-archive/p09-149-pre-formula-output-reconstruction-r3/source-preimages.v1.json",
+  "source_deltas": [
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics/evaluation.rs",
+      "bytes": 6668,
+      "sha256": "3aad350f1b880c8d84edb5df78242a1adb41644cfc51d2a8d24e27add20a1a79"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics/evaluation/output.rs",
+      "bytes": 11514,
+      "sha256": "23b153cf75f5dc348a82236bf98bc482d304145b954fdb80a7fb368dade288b8"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_formula_output.rs",
+      "bytes": 13832,
+      "sha256": "7a786b454b717fc289c75e2806b537fd82962c1e4d23432e4f82013a563d9664"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/field_ranges/semantics/evaluation/output.rs",
+      "bytes": 5893,
+      "sha256": "8cb43f6f28538d5d389d159b8eb57e82d4233d24e9b61e6627a0a64ecb6b01ce"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/field_ranges/semantics/evaluation/output/outcome.rs",
+      "bytes": 5597,
+      "sha256": "b07e7913e127a66281efae0e034e6f703e6cdcb19ee002f81a6c2e1092da5f3a"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_output.rs",
+      "bytes": 6522,
+      "sha256": "f42f9a91d9eb7a144289ae34ff2b28070909e1d95420ae809ed817246d61a115"
+    }
+  ],
+  "implementation": "One original-bound complete fresh source/forms reconstruction per pure lower_results call or authenticated stored middle read. Before/after complete meaning/math/value/binding/receipt comparisons, native protection, patch/writer and full candidate readback retained. Each existing live service/head/issuer/trust/approval/clock/revocation check and read count retained; no cross-read or cross-operation cache.",
+  "runtime_test_scope": {
+    "import_forms": 10,
+    "import_fields": 12,
+    "import_meanings": 13,
+    "formula_evaluation": 10,
+    "formula_output": 6,
+    "stored_forms": 249
+  },
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "actual_SQL_or_native_qualified": false,
+  "supersedes_failed_source_candidate_pin": {
+    "path": "implementation/p09/evidence/p09-149-formula-reconstruction-source-candidate.run01.v1.json",
+    "bytes": 2779,
+    "sha256": "1677541042e6f1d23937173a3de3b7c68ce3bcea300a4ad7e405fa7165581e9c"
+  },
+  "compatibility_repair_archive_pin": {
+    "path": "implementation/p09/source-archive/p09-149-pre-formula-reconstruction-box-slice-repair/source-preimages.v1.json",
+    "bytes": 61099,
+    "sha256": "4ab6f6b5381280fbcd693dba244fd0dfb36a190e7d1a1262044e0afc9b3d7a4a"
+  },
+  "compatibility_repair": "Box<[u8]>::as_ref stable byte borrow; no semantic, authorization, source scope, corpus or resource-policy change"
+}

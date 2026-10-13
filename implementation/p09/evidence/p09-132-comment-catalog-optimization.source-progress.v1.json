@@ -1,0 +1,189 @@
+{
+  "schema_version": "hwpx-agent.p09-comment-catalog-optimization/v1",
+  "state": "PASS_CURRENT_COMMENT_CATALOG_OPTIMIZATION_NOT_NATIVE_OR_GATE",
+  "goal_status": "active",
+  "P09_gate": "OPEN",
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "previous_source_files_count": 1155,
+  "current_source_files_count": 1160,
+  "inherited_raw_pin_entries": 2909,
+  "runtime_guard_units_passed": 16,
+  "test_executions": 65,
+  "current_source_inputs": 774,
+  "failed_or_deferred_attempts_preserved": 3,
+  "whole_preimages": 2,
+  "isolated_validator_optimization_observed": true,
+  "current_comment_runtime_accepted": true,
+  "current_whole_workspace_runtime_accepted": false,
+  "current_whole_workspace_lint_accepted": false,
+  "actual_sql_accepted": false,
+  "native_application_accepted": false,
+  "source_delta": [
+    {
+      "path": "crates/domain-ir/src/comment_model.rs",
+      "bytes": 56104,
+      "sha256": "47ceda15a866f4ef9066b85755995083e650f045fc6cebeeac8d8b25466c3173"
+    },
+    {
+      "path": "crates/domain-ir/tests/comment_style_section_protection.rs",
+      "bytes": 5125,
+      "sha256": "ac996695bd2cf364f9978ba5be2a062cb8f9236870c229b49ca6ded7331f9da4"
+    },
+    {
+      "path": "implementation/p09/tests/p09_132_comment_catalog_index.rs",
+      "bytes": 16616,
+      "sha256": "3e250f94571d93a6c5ee75da21e682433a8c93083acc3f5efd3ca2e0e091e97d"
+    },
+    {
+      "path": "tools/p09/run_comment_catalog_regression.ps1",
+      "bytes": 13785,
+      "sha256": "7dc980f7661042e893c58d3a23a7fd88db3a673583416c943a2819c22478f11e"
+    },
+    {
+      "path": "tools/p09/verify_comment_catalog_optimization.py",
+      "bytes": 18133,
+      "sha256": "a6034d9009001edb48e31cfceb06e44e0e57a2abb171d2e5291a4fdde984891c"
+    },
+    {
+      "path": "tools/p09/tests/test_comment_catalog_optimization.py",
+      "bytes": 3055,
+      "sha256": "c456b6379bdcb7c3536fc5e52a650f5216fc12dd6c90b95e13b1b85d13b83916"
+    },
+    {
+      "path": "implementation/p09/P09-132_COMMENT_CATALOG_OPTIMIZATION_REPORT.md",
+      "bytes": 8323,
+      "sha256": "032a91526ca9b16090d50f83e29e0268d7da5d64d26f176a288e0fef5c1c3a7a"
+    }
+  ],
+  "predecessor_receipts_added": [
+    {
+      "path": "implementation/p09/evidence/p09-131-current-table-review-regression.source-progress.v1.json",
+      "bytes": 6664,
+      "sha256": "dbc5d827ae16ebb9614a9ca6d520603de5efbb65e8b7e55366c4bd0dc6ab93f5"
+    }
+  ],
+  "source_archives": [
+    {
+      "path": "implementation/p09/source-archive/p09-132-pre-comment-catalog-index/crates/domain-ir/src/comment_model.rs",
+      "bytes": 55861,
+      "sha256": "7e5ff615134ca42c51114a98bf03c462b5812227b4aacac01feef6b271c55462"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-132-pre-comment-catalog-index/crates/domain-ir/tests/comment_style_section_protection.rs",
+      "bytes": 4943,
+      "sha256": "0362dde09b32eabcfd2e66db36ae4c85a2c54a6997559c524c586e098b22ed35"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-initial-profile-runner.ps1.txt",
+      "bytes": 13777,
+      "sha256": "11a251b8db6ced516c89ad1ea46e0b4d9a80f6fe23e459d2b987c11ebfad1a71"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-initial-package-runner.ps1.txt",
+      "bytes": 13779,
+      "sha256": "1245d65df44fd1d0d4632b71353e45c6e954e1d5739e135355465ee3900a9487"
+    }
+  ],
+  "runtime_runs": [
+    {
+      "path": "target/p09-121-resource-optimized/p132-catalog-build-a.json",
+      "bytes": 165709,
+      "sha256": "52dc22db0cf0908a80ba4b3a2fc15c8de8ce2b1e171b9a613fef4f1f1064c664"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-catalog-list-a.json",
+      "bytes": 155706,
+      "sha256": "35acec5c38ec43e5d82e7e674b685e1cd7dc3891807692085692eb692df2a5c6"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-catalog-test-b.json",
+      "bytes": 156649,
+      "sha256": "c9ff76206e0bbb8570418390da569c758b2a1938c3a6e6c10bd30072425de976"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-model-build-a.json",
+      "bytes": 154330,
+      "sha256": "9cfbd55575d54181afb3e5523f36f90a82ffc45f76d70194e6a45a4b3e70d878"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-model-list-a.json",
+      "bytes": 155277,
+      "sha256": "b51ec47fa856269f847edaca6ed4ca4801bca59667b9e044e1923d39c13c4869"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-model-test-a.json",
+      "bytes": 155658,
+      "sha256": "adab97fb68fb4adef7a72fdfd92286ab520c6147ff35155855b4466a2e82a7fb"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-operation-build-c.json",
+      "bytes": 165563,
+      "sha256": "d733acfc3f20f643a85ebbd0003ca368592948941eb8e38300453ca7212f2adc"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-operation-list-a.json",
+      "bytes": 155968,
+      "sha256": "f208bb75361e078be1361875853289ed83631f988b6d15808c59525535d9ee94"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-operation-test-a.json",
+      "bytes": 156361,
+      "sha256": "35d14128fdb8c3893ab0c4da2d5779f483fe619e46699385b0e25fdf6d4a9bb3"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-stored-build-a.json",
+      "bytes": 154949,
+      "sha256": "b194b5538fa80a31c2b6dfb00a13484dc30e2a797f991da7615423e67fd42cdb"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-stored-list-a.json",
+      "bytes": 156808,
+      "sha256": "d239dd4a2f212e1040028144f3682fd4efa95fe01f7432edd5676491bc755097"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-stored-test-a.json",
+      "bytes": 157218,
+      "sha256": "461e3ffa93fef5bb2056bbd9167054592872fb0609b15338a3150c564df24534"
+    }
+  ],
+  "current_executables": [
+    {
+      "path": "target/p09-121-resource-optimized/debug/deps/comment_style_section_protection-p132-current.exe",
+      "bytes": 2354688,
+      "sha256": "f8d295778e19b770f9c65986807b2a75ae9712e8cec959aa2f7c53317f4ef156"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/debug/deps/comment_model-p132-current.exe",
+      "bytes": 1334272,
+      "sha256": "a5b8cc3d2c559f153d75e95a5bb33746c7f9824be30740d3d9918e94f74412c6"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/debug/deps/comment_operation-p132-current.exe",
+      "bytes": 2960896,
+      "sha256": "e89adca7d926b31255f8153a402664ab8eee73d7a5477513fd3fcfea8732d666"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/debug/deps/stored_comment_provider-p132-current.exe",
+      "bytes": 3931136,
+      "sha256": "bfaeb8599e68e21c10c43d4edc1b37fd1d7f13657c8818b42b26cd7e9220dd9f"
+    }
+  ],
+  "failed_or_deferred_runs": [
+    {
+      "path": "target/p09-121-resource-optimized/p132-catalog-test-a.json",
+      "bytes": 156045,
+      "sha256": "f8cb00b95855bfca876323058cea2dbd8bae005ddb8092f89a97315e497d4895"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-operation-build-a.json",
+      "bytes": 154340,
+      "sha256": "c5bca1d19d6b19b76af44ca230f91aee1188bced856e8ba198ddb7267f131863"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p132-operation-build-b.json",
+      "bytes": 335,
+      "sha256": "46573ce6657ecfac434137df38293939ab898c5db616b467437782e4c1c5483a"
+    }
+  ]
+}

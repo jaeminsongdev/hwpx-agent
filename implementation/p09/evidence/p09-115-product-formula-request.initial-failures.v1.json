@@ -1,0 +1,90 @@
+{
+  "schema": "hwpx-agent.p09-115-product-formula-request-initial-failures/v1",
+  "first_library_check": {
+    "start": "d540e5",
+    "session": 22170,
+    "terminal": "b16dcd",
+    "exit_code": 1,
+    "cause": "new error incorrectly derived Eq/PartialEq for unchanged non-comparable source error",
+    "fix": "remove traits from new error only; original source error untouched",
+    "whole_new_Rust3_preserved": true
+  },
+  "pre_outcome_review": {
+    "check": "e0acbb",
+    "library_exit_code": 0,
+    "warnings": 2,
+    "cause": "new public outcome debug implementations missing; no-op route guard accidentally placed in candidate callback",
+    "fix": "redacted Debug and route-only guard; noticed from readback before accepting tests",
+    "whole_new_Rust2_preserved": true
+  },
+  "first_integration": {
+    "start": "8f87e1",
+    "session": 70889,
+    "terminal": "4fdc69",
+    "exit_code": 1,
+    "passed": 8,
+    "failed": 1,
+    "filtered": 176,
+    "cause": "internally tagged unit operation ignored additional values field despite deny_unknown_fields",
+    "first_index_diagnostic": {
+      "start": "b6ac11",
+      "session": 48856,
+      "terminal": "2e98af",
+      "exit_code": 1,
+      "case_index": 11
+    },
+    "whole_sources_and_failed_executable_preserved": true
+  },
+  "first_strict_lint": {
+    "start": "26da17",
+    "session": 89100,
+    "terminal": "102e56",
+    "exit_code": 1,
+    "causes": [
+      "two large enum variant storage layouts",
+      "two documentation markup warnings"
+    ],
+    "fix": "box large prepared variants; documentation; no lint suppression",
+    "whole_source_preserved": true
+  },
+  "sequence_admission_failure": {
+    "start": "e085ae",
+    "session": 20648,
+    "terminal": "de7a76",
+    "exit_code": 1,
+    "case_index": 13,
+    "cause": "derived struct deserializer admitted single-item sequence instead of required operation object",
+    "fix": "custom map-only visitor, exact required kind, unknown/duplicate rejection, original recursive UniqueJson retained",
+    "whole_sources_and_failed_executable_preserved": true,
+    "final_same_strict_test": {
+      "chunk": "c991d3",
+      "exit_code": 0,
+      "passed": 1,
+      "filtered": 185,
+      "runtime_seconds": 0.07,
+      "not_added_to_final_counts": true
+    }
+  },
+  "interrupted_superseded_CLI": {
+    "start": "9f1307",
+    "session": 56572,
+    "terminal": "be541b",
+    "exit_code": 1,
+    "reason": "known still-failing sequence admission; canceled this authored test session, not external native processes",
+    "partial_suites_not_counted_as_final": true,
+    "not_observation_timeout_restart": true
+  },
+  "final_execution": {
+    "CLI_start": "6a5397",
+    "CLI_session": 66738,
+    "package_start": "1031ac",
+    "package_session": 92902
+  },
+  "PowerShell_initial_archive_parse": {
+    "chunk": "180228",
+    "exit_code": 1,
+    "state": "parse error before any writes; corrected before archiving"
+  },
+  "no_tests_verifiers_bounds_or_source_guard_weakened": true,
+  "no_secrets_or_whole_logs_recorded": true
+}

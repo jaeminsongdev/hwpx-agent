@@ -1,0 +1,96 @@
+{
+  "state": "FAILED_NOT_ACCEPTED",
+  "goal_status": "active",
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "current_compiled249_qualified": false,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "error_code": "P152_PREP_P157_BUILD_WRITER_BUILD_WRITER_FULL_CASE_COST_XML_CAPACITY_ORIGINAL17_PLUS7_PLUS_NEW10",
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "IO": {
+    "read_passes": 7,
+    "bytes_read": 48023,
+    "bound_inputs": 7,
+    "final_fresh_hashes": 0,
+    "finished": false,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P176_binary2p5_other4_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 2621440,
+      "other": 4194304
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 48023
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 48023
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/verify_weighted_audit_io.py",
+      "bytes": 3974,
+      "sha256": "9db753d03adfae1bac716bb6264b7a51d0a5844071e5bf9e557dc88cf705a696"
+    },
+    {
+      "path": "tools/p09/tests/test_weighted_audit_io.py",
+      "bytes": 6450,
+      "sha256": "94602012e6a76a5051138057fac681d8677fdee4f1cd1beec24b7fa3d6775d70"
+    },
+    {
+      "path": "tools/p09/weighted_audit_io.py",
+      "bytes": 3819,
+      "sha256": "c1e15f4cd21382c20c41439aef89a6af468e55dbb49d218b3f6c604c91ce03ca"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    {
+      "path": "tools/p09/live_sql_evidence_reader.py",
+      "bytes": 2109,
+      "sha256": "0458552661a9f69379f41a78d15cdbf1b6c389ede78bed766dcd6616ac937ac7"
+    },
+    {
+      "path": "tools/p09/tests/test_audit_evidence_io.py",
+      "bytes": 13639,
+      "sha256": "76c4ddc42cfdf74b5c604e3fdd2bf6b3f1f2361f362945013d2663aa608c9d2e"
+    },
+    {
+      "path": "tools/p09/tests/test_live_sql_evidence_reader.py",
+      "bytes": 12379,
+      "sha256": "8ff11dbed3b20949ff683a1e21bd5b87f62d041adef508ad99aa36a56192549c"
+    }
+  ],
+  "resource_tail": {
+    "original_completed_sample_count": 2,
+    "tail_limit": 8,
+    "existing_samples_only": true,
+    "additional_native_queries_started": false,
+    "samples": [
+      {
+        "time_utc": "2026-10-07T20:11:30.183123+00:00",
+        "system_cpu_percent": 13.64,
+        "available_ram_mib": 9301.11,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 29.192848065842814,
+        "commit_used_percent": 44.612419737976424
+      },
+      {
+        "time_utc": "2026-10-07T20:11:30.683652+00:00",
+        "system_cpu_percent": 13.42,
+        "available_ram_mib": 9225.66,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 28.956040015227316,
+        "commit_used_percent": 44.644814898622556
+      }
+    ]
+  }
+}

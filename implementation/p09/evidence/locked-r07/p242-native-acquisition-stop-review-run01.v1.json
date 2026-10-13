@@ -1,0 +1,176 @@
+{
+  "schema_version": "hwpx-agent.p09-native-acquisition-stop-review/v1",
+  "state": "PASS_NATIVE_ACQUISITION_STOP_REVIEW_NOT_RUNTIME_OR_AUTOMATIC_RETRY",
+  "goal_status": "active",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "whole1470_current_fresh_qualified": false,
+  "historical67_current_fresh_qualified": false,
+  "legacy_whole_acceptance_not_changed": true,
+  "historical_whole_gate_reconciliation_required": true,
+  "actual_product_child_executed": false,
+  "actual_product_body_or_full_source_executed": false,
+  "automatic_retry_allowed": false,
+  "original_failed_root_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p241-case-080-run002.v1.json",
+    "bytes": 277167,
+    "sha256": "08745fbcf7738da69dbc4bbc9418ceddf811ea0f1a4a1999869ca6711aec6891"
+  },
+  "original_preflight_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p241-light-run001.v1.json",
+    "bytes": 48474,
+    "sha256": "85096d817bcf17d10da8281aacd0fa9d63628e3bebac6647e823d4ec06f0e68d"
+  },
+  "review": {
+    "selected_test_index": 80,
+    "original_failure_preserved": true,
+    "product_body_unexecuted": true,
+    "stopped_before_original_parent_call": true,
+    "all_partial_native_handles_closed": true,
+    "absent_Job_or_borrower_not_invented_as_measured_zero": true,
+    "runtime_acceptance_changed": false,
+    "automatic_retry_allowed": false,
+    "optimization_and_reviewed_new_generation_required_before_next_attempt": true,
+    "runtime_previously_accepted": 73,
+    "next_unexecuted_index": 80,
+    "CPU_cause_or_PC_freeze_resolution_established": false
+  },
+  "stop_review_contract_tests_passed": 20,
+  "peak_summary_contract_tests_passed": 8,
+  "metadata_peak_review": {
+    "sample_count": 286,
+    "system_peak_percent": 100.0,
+    "samples_at_or_above95": 4,
+    "samples_at_or_above98": 4,
+    "maximum_consecutive98_samples": 4,
+    "warning_phase_counts": {
+      "metadata_hash": 4
+    },
+    "own_CPU_max_at_warning": 0.0,
+    "job_CPU_max_at_warning": null,
+    "own_CPU_samples_at_warning": 4,
+    "job_CPU_samples_at_warning": 0,
+    "active_job_process_counts_at_warning": {},
+    "missing_value_reported_as_zero": false,
+    "first_warning_numeric_neighbors": [
+      {
+        "system_cpu_percent": 39.12,
+        "phase_at_sample": "metadata_hash",
+        "parent_cpu_machine_percent": 0.0,
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 98.08,
+        "phase_at_sample": "metadata_hash",
+        "parent_cpu_machine_percent": 0.0,
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 99.61,
+        "phase_at_sample": "metadata_hash",
+        "parent_cpu_machine_percent": 0.0,
+        "audited_logical_read_bytes_delta": 0
+      }
+    ],
+    "all_samples_or_raw_logs_output": false,
+    "external_PID_or_cause_identified": false
+  },
+  "IO": {
+    "read_passes": 18,
+    "bytes_read": 759844,
+    "bound_inputs": 9,
+    "final_fresh_hashes": 9,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P206_binary1_other2_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 1048576,
+      "other": 2097152
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 759844
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 759844,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0.0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "implementation/p09/evidence/locked-r07/p241-case-080-run002.v1.json",
+      "bytes": 277167,
+      "sha256": "08745fbcf7738da69dbc4bbc9418ceddf811ea0f1a4a1999869ca6711aec6891"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p241-light-run001.v1.json",
+      "bytes": 48474,
+      "sha256": "85096d817bcf17d10da8281aacd0fa9d63628e3bebac6647e823d4ec06f0e68d"
+    },
+    {
+      "path": "tools/p09/resume_uncreated_borrower_runtime.py",
+      "bytes": 19444,
+      "sha256": "3e1232f73d7a97ed1e680d39d777c34f0c9e4a8e19119ded8ed62c4035aa468a"
+    },
+    {
+      "path": "tools/p09/tests/test_uncreated_borrower_runtime.py",
+      "bytes": 3670,
+      "sha256": "f4a93521844c1498414c5d9bcb01c762c95af42b672ba4b5f95064d34ca6e6fd"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p224-cpu-peak-review-run01.v1.json",
+      "bytes": 8727,
+      "sha256": "659a277ae8be29c1ca60b7b76c3df4a445008145fd6fabee2fd66f72bb12a254"
+    },
+    {
+      "path": "tools/p09/review_packed_cpu_peak_r2.py",
+      "bytes": 8218,
+      "sha256": "7e98009e692bd9d5c2c1f071d5aae3e19213a96067ce4866f470f60c22570395"
+    },
+    {
+      "path": "tools/p09/tests/test_packed_cpu_peak_summary_r2.py",
+      "bytes": 2692,
+      "sha256": "f13e7f6abccdb87cbd645693c658de42b73bd2839b974be4a365abba450d793e"
+    },
+    {
+      "path": "tools/p09/review_native_acquisition_stop.py",
+      "bytes": 8901,
+      "sha256": "b53b52d1f1d9ca73553edd5b3063c19fb2560353905424a2a9224dc4a4562de3"
+    },
+    {
+      "path": "tools/p09/tests/test_native_acquisition_stop.py",
+      "bytes": 2629,
+      "sha256": "d70c6f8cd034378de6a717e2f0e42788602ab4324a3972e45e7e806e5f73ff22"
+    }
+  ],
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "original_uncreated_body_and_sidecar_preserved": true
+}

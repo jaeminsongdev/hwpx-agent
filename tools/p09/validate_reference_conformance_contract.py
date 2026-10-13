@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import conformance_current_source as current_source
+
 from reference_conformance import (
     DEFERRED_P11,
     MATRIX,
@@ -32,8 +34,8 @@ EXPECTED_SOURCE_LOCKS = {
     "specs/feature-coverage-matrix.json": "a3fa1cd5c5b0b0e09bc93354f724ed3516bdb987f1c171cc27d7564dc6390950",
     "specs/capability-contracts.generated.json": "b25b5300f605c7da4ed8552ef0f7405251582601f32a420f884cd91a256bb306",
     "specs/work-breakdown-structure.json": "56b5f9fe1279a15e7262d2dbb2c60c372f3bc9ad33acb418e1c905f2a731f2b2",
-    "tools/p09/reference_conformance.py": "caba9ebeedf7ed15afb9ef79ed65b8ad3ba5a966938365b3247e767876278fe0",
-    "implementation/p09/evidence/conformance/p09-reference-conformance.current-2020.v1.json": "15d53966b6aac005556e9c1f72fa20696846aae7d9847c0658acd45c35596cd8",
+    "tools/p09/reference_conformance.py": "a6a560618a4019d506c1b2b25bd17e8ea7c52998176fff831693b3f66e517208",
+    "implementation/p09/evidence/conformance/p09-reference-conformance.current-2020.v1.json": "1ac344338c2e1728706e81f72590b4a6ffaee68194c0b1e669ad5190242f36d1",
 }
 
 EXPECTED_SUMMARY = {
@@ -43,11 +45,11 @@ EXPECTED_SUMMARY = {
     "component_covered_rows": 46,
     "component_stage_counts": {
         "cataloged": 7,
-        "unit_passed": 38,
-        "integration_passed": 8,
+        "unit_passed": 35,
+        "integration_passed": 11,
         "oracle_verified": 0,
     },
-    "direct_hwpx_implemented_rows": 8,
+    "direct_hwpx_implemented_rows": 11,
     "actual_hwpx_rows": 0,
     "actual_hangul_rows": 0,
     "render_verified_rows": 0,
@@ -100,6 +102,7 @@ EXPECTED_UPSTREAM = [
     "tools/p09/validate_bookmark_hwpx_contract.py",
     "tools/p09/validate_note_hwpx_contract.py",
     "tools/p09/validate_hyperlink_hwpx_contract.py",
+    "tools/p09/validate_field_auto_number_hwpx_contract.py",
 ]
 
 
@@ -186,9 +189,10 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ConformanceError("privacy_contract")
 
 
-def _validate_matrix(matrix: dict[str, Any]) -> None:
+def _validate_matrix(matrix: dict[str, Any], *, current: bool = False) -> None:
     expected = build_matrix()
-    if matrix != expected or canonical_bytes(matrix) != (ROOT / MATRIX).read_bytes():
+    expected_bytes = current_source.current_matrix_bytes(ROOT) if current else (ROOT / MATRIX).read_bytes()
+    if matrix != expected or canonical_bytes(matrix) != expected_bytes:
         raise ConformanceError("matrix_drift")
     if matrix["summary"] != EXPECTED_SUMMARY or matrix["privacy"] != EXPECTED_PRIVACY:
         raise ConformanceError("matrix_claim_drift")
@@ -207,6 +211,9 @@ def _validate_matrix(matrix: dict[str, Any]) -> None:
         "REF-032",
         "REF-033",
         "REF-034",
+        "REF-006",
+        "REF-008",
+        "REF-009",
     }
     if any(
         row["direct_hwpx"]["implementation_state"]
@@ -224,7 +231,7 @@ def _validate_matrix(matrix: dict[str, Any]) -> None:
         raise ConformanceError("private_path_leak")
 
 
-def _validate_qualification(qualification: dict[str, Any]) -> None:
+def _validate_qualification(qualification: dict[str, Any], *, current: bool = False) -> None:
     _exact_keys(
         qualification,
         {
@@ -265,7 +272,10 @@ def _validate_qualification(qualification: dict[str, Any]) -> None:
     implementation = qualification["implementation_sha256"]
     if not isinstance(implementation, dict) or set(implementation) != expected_implementation_paths:
         raise ConformanceError("qualification_implementation_set")
+    current_validator_digest = current_source.admitted_validator_digest(ROOT) if current else None
     for path, expected in implementation.items():
+        if current and path == "tools/p09/validate_reference_conformance_contract.py":
+            expected = current_validator_digest
         if normalized_sha256(Path(path)) != expected:
             raise ConformanceError(f"qualification_implementation_drift:{path}")
     expected_claims = {
@@ -290,10 +300,11 @@ def _validate_qualification(qualification: dict[str, Any]) -> None:
         raise ConformanceError("qualification_claim_promotion")
 
 
-def _run_upstream() -> None:
+def _run_upstream(*, current: bool = False) -> list[str] | None:
+    verified = []
     for validator in EXPECTED_UPSTREAM:
         result = subprocess.run(
-            [sys.executable, validator],
+            [sys.executable, validator, *current_source.upstream_arguments(validator)] if current else [sys.executable, validator],
             cwd=ROOT,
             capture_output=True,
             text=True,
@@ -313,6 +324,10 @@ def _run_upstream() -> None:
                 payload = candidate
         if payload is None or payload.get("state") != "pass":
             raise ConformanceError(f"upstream_not_pass:{validator}")
+        if current:
+            current_source.validate_upstream_payload(validator, payload)
+            verified.append(validator)
+    return verified if current else None
 
 
 def validate(
@@ -320,18 +335,26 @@ def validate(
     contract_override: dict[str, Any] | None = None,
     matrix_override: dict[str, Any] | None = None,
     run_upstream: bool = True,
+    source_profile: str = "historical_v1",
 ) -> dict[str, Any]:
+    if source_profile not in ("historical_v1", current_source.PROFILE):
+        raise ConformanceError("source_profile_unknown")
+    current = source_profile == current_source.PROFILE
+    if current and (contract_override is not None or matrix_override is not None):
+        raise ConformanceError("current_source_overrides_not_admitted")
+    if current and not run_upstream:
+        raise ConformanceError("current_source_upstream_required")
+    bundle = current_source.verify_bundle(ROOT) if current else None
     contract = contract_override if contract_override is not None else load_json(CONTRACT)
-    matrix = matrix_override if matrix_override is not None else load_json(MATRIX)
+    matrix = bundle["matrix_wrapper"]["matrix"] if current else (matrix_override if matrix_override is not None else load_json(MATRIX))
     qualification = load_json(QUALIFICATION)
     if not isinstance(contract, dict) or not isinstance(matrix, dict) or not isinstance(qualification, dict):
         raise ConformanceError("document_shape")
     _validate_contract(contract)
-    _validate_matrix(matrix)
-    _validate_qualification(qualification)
-    if run_upstream:
-        _run_upstream()
-    return {
+    _validate_matrix(matrix, current=current)
+    _validate_qualification(qualification, current=current)
+    upstream_verified = _run_upstream(current=current) if run_upstream else None
+    response = {
         "schema_version": "hwpx-agent.p09-reference-conformance-validation/v1",
         "state": "pass",
         "task": "P09-11",
@@ -350,11 +373,23 @@ def validate(
         "p09": "in_progress",
         "product_complete": False,
     }
+    if current:
+        response.update({
+            "schema_version": "hwpx-agent.p09-reference-conformance-current-source-validation/v2",
+            "source_profile": current_source.PROFILE,
+            "current_source_qualification_verified": True,
+            "current_matrix_wrapper_verified": True,
+            "upstream_validators_verified": len(upstream_verified),
+            "historical_default_failure_retained": True,
+            "P09_gate": "OPEN",
+            "P10_new_implementation": False,
+        })
+    return response
 
 
 def main() -> int:
     try:
-        result = validate()
+        result = validate(source_profile=current_source.cli_profile(sys.argv[1:]))
     except (ConformanceError, OSError, subprocess.SubprocessError) as error:
         print(json.dumps({"state": "fail", "error": str(error)}, sort_keys=True))
         return 1

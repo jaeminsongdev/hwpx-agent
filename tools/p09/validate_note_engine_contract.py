@@ -8,6 +8,14 @@ import re
 import sys
 from typing import Any
 
+if __package__:
+    from . import component_current_source
+else:
+    from pathlib import Path as _Path
+    import sys as _sys
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from tools.p09 import component_current_source
+
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = "protocol/private/p09-note-engine-v1.json"
@@ -188,8 +196,11 @@ def canonical_digest(path: Path) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def validate(root: Path = ROOT) -> dict[str, Any]:
+def validate(root: Path = ROOT, *, source_profile: str = "historical_v1") -> dict[str, Any]:
     errors: list[str] = []
+    if source_profile not in ("historical_v1", component_current_source.PROFILE):
+        return result(["source_profile_unknown"], 0, 0, False)
+    current = source_profile == component_current_source.PROFILE
     try:
         contract = load(root, CONTRACT)
     except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
@@ -258,10 +269,12 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         errors.append("gate_decision")
 
     source_count = validate_locks(root, contract.get("source_locks"), SOURCE_SHA256, errors, "source")
-    implementation_count = validate_implementation(root, errors)
+    implementation_count = validate_implementation(root, errors, current=current)
     qualification_ok = validate_qualification(root, errors)
     validate_documents(root, errors)
-    return result(errors, source_count, implementation_count, qualification_ok)
+    current_verified = component_current_source.verify(root, "note_engine", errors) if current else False
+    value = result(errors, source_count, implementation_count, qualification_ok)
+    return component_current_source.decorate(value, "note_engine", current_verified) if current else value
 
 
 def validate_locks(
@@ -297,8 +310,9 @@ def validate_locks(
     return len(declared)
 
 
-def validate_implementation(root: Path, errors: list[str]) -> int:
-    for relative, expected in IMPLEMENTATION_SHA256.items():
+def validate_implementation(root: Path, errors: list[str], *, current: bool = False) -> int:
+    expected_digests = component_current_source.IMPLEMENTATION_SHA256["note_engine"] if current else IMPLEMENTATION_SHA256
+    for relative, expected in expected_digests.items():
         try:
             path = file(root, relative)
             if canonical_digest(path) != expected:
@@ -406,6 +420,6 @@ def result(errors: list[str], sources: int, implementation: int, qualification: 
 
 
 if __name__ == "__main__":
-    result_value = validate()
+    result_value = validate(source_profile=component_current_source.cli_profile(sys.argv[1:]))
     print(json.dumps(result_value, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
     sys.exit(0 if result_value["state"] == "pass" else 1)

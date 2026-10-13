@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "state": "PASS_SCOPED_COMPILE_AND_STOP_PRESERVATION_NOT_RUNTIME_OR_GATE",
+  "source_variant": "unchanged-r11-Rust-artifact-service-serde-json-sha2-opt1-r16",
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "goal_status": "active",
+  "P10_new_implementation": false,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "original_Rust_or_assertions_changed": false,
+  "PC_freeze_resolved": false,
+  "exact_CPU_hot_function_proven": false,
+  "statistical_speedup_proven": false,
+  "original_owned_runtime_policy_changed": false,
+  "new_child_or_thread_started": false,
+  "candidate_adopted_as_default": false,
+  "source_test_count": 249,
+  "source_module_instances": 59,
+  "current_Rust_inputs": 783,
+  "execution_source_freezes_current_exact": true,
+  "compiled_inventory_current_exact": true,
+  "current_helpers": [
+    {
+      "path": "tools/p09/run_artifact_compute_signed_tests.py",
+      "bytes": 11727,
+      "sha256": "4c4dee855800f4eaabd8099428932adcc68861961cff66719118b9cd7c06a80c"
+    },
+    {
+      "path": "tools/p09/tests/test_artifact_compute_signed_tests.py",
+      "bytes": 7952,
+      "sha256": "44cf5727058f1e35bacc49ebeef0fafab46c8e05c92ea54146206e05f577fb31"
+    }
+  ],
+  "support_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-artifact-compute.inventory-run01.v1.json",
+      "bytes": 1526829,
+      "sha256": "5c5b10be3a72e84d804d3d5bc3a02d493d6b0e541c115b514438fc2dc3559ff3"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-artifact-compute.actual-run01.v1.json",
+      "bytes": 945216,
+      "sha256": "bb759d82a7075d23e049756b83bddeadfcdc36e7d068f11c4085caff0fdc7529"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-artifact-compute.light-run02.v1.json",
+      "bytes": 3201,
+      "sha256": "9f42195f517ace87e3dd6e16bc5f4ea24068330d273dab915c5dcaf69da099f7"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-artifact-compute.light-run01.v1.json",
+      "bytes": 3046,
+      "sha256": "554bdbda69ea6db416fe3c7d2ae60d259db96e1a677613c687ef1c568bfaef49"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-artifact-compute-unique-key-count-r16/helper-preimages.v1.json",
+      "bytes": 28189,
+      "sha256": "1579ef061d5daa396410e03bb710ced4998833a4f573a37fbc829ddb44a2f331"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-algorithm.final-progress-sync-run01.v1.json",
+      "bytes": 1795,
+      "sha256": "38c8d2679f805d50d81d0fe184afec42c5dfcdbcfcf31af679b2d96146f67cd8"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-artifact-compute.audit-failure-run01.v1.json",
+      "bytes": 7110,
+      "sha256": "2b889f2b5900c0bcfea1647f09eb7abba2ca0fbf9b48bd5968c7f12c98919587"
+    }
+  ],
+  "parent_pin": {
+    "path": "implementation/p09/evidence/p09-149-signed-algorithm.summary-run01.v1.json",
+    "bytes": 26951,
+    "sha256": "bd14b32947e85aa8004cca5964782e47007bd7bcb355bc5c5068246c44cc2c6e"
+  },
+  "test_package_profile_config": [
+    "profile.test.package.hwpx-package.opt-level=1",
+    "profile.test.package.hwpx-package.debug-assertions=true",
+    "profile.test.package.hwpx-package.overflow-checks=true",
+    "profile.test.package.hwpx-package.codegen-units=16",
+    "profile.test.package.hwpx-package.debug=\"line-tables-only\"",
+    "profile.test.package.hwpx-agent-cli.opt-level=1",
+    "profile.test.package.hwpx-agent-cli.debug-assertions=true",
+    "profile.test.package.hwpx-agent-cli.overflow-checks=true",
+    "profile.test.package.hwpx-agent-cli.codegen-units=16",
+    "profile.test.package.hwpx-agent-cli.debug=\"line-tables-only\"",
+    "profile.test.lto=\"off\"",
+    "profile.test.package.serde_json.opt-level=1",
+    "profile.test.package.serde_json.debug-assertions=true",
+    "profile.test.package.serde_json.overflow-checks=true",
+    "profile.test.package.serde_json.codegen-units=16",
+    "profile.test.package.serde_json.debug=\"line-tables-only\"",
+    "profile.test.package.sha2.opt-level=1",
+    "profile.test.package.sha2.debug-assertions=true",
+    "profile.test.package.sha2.overflow-checks=true",
+    "profile.test.package.sha2.codegen-units=16",
+    "profile.test.package.sha2.debug=\"line-tables-only\"",
+    "profile.test.package.artifact-service.opt-level=1",
+    "profile.test.package.artifact-service.debug-assertions=true",
+    "profile.test.package.artifact-service.overflow-checks=true",
+    "profile.test.package.artifact-service.codegen-units=16",
+    "profile.test.package.artifact-service.debug=\"line-tables-only\""
+  ],
+  "optimized_compute_packages": [
+    "serde_json",
+    "sha2",
+    "artifact-service"
+  ],
+  "domain_ir_optimized": false,
+  "light01_failure_preserved": true,
+  "light02_contract_checks": 11,
+  "binding_resource_schedule": {
+    "qualification": "FULL_SOURCE_BINDING_CADENCE_ONLY_NOT_COMPILE_RUNTIME_OR_GATE",
+    "callback_modules": [
+      "run_call_local_xml_regression",
+      "run_optimized_signed_tests",
+      "run_output_stage_profile",
+      "run_readback_buffer_regression",
+      "run_signed_stage_cost",
+      "run_source_stage_profile",
+      "run_stored_comment_regression",
+      "run_xml_roundtrip_regression"
+    ],
+    "reader_instances": 8,
+    "IO_checkpoints": 12293,
+    "unchanged_original_pressure_callback_calls": 14,
+    "canonical_sample_count": 16,
+    "original_resource_stop": null,
+    "whole_scope_maximum_seconds": 600,
+    "canonical_sample_interval_seconds": 0.5,
+    "per_IO_sleep_added": false,
+    "source_read_or_final_hash_checks_scheduled_or_removed": false,
+    "all_legacy_readers_final_fresh_hash_inventory_exact": true,
+    "read_passes": 2121,
+    "bytes_read": 51323658,
+    "closing_fresh_hashes": 1023,
+    "elapsed_binding_seconds": 7.101354300000821,
+    "thresholds_or_owned_runtime_policy_changed": false,
+    "new_child_or_watcher_thread_started": false,
+    "cleanup_confirmed": true
+  },
+  "inventory": {
+    "state": "PASS_SCOPED_NOT_GATE",
+    "stop_reason": null,
+    "elapsed_seconds": 318.51,
+    "maximum_seconds": 600,
+    "compiled_inventory_exact": true,
+    "runtime_tests_executed": false,
+    "tests_passed": null,
+    "job_final": {
+      "active_processes": 0,
+      "job_cpu_seconds": 269.625,
+      "peak_job_private_mib": 927.09,
+      "peak_job_private_percent": 2.9098026763049116,
+      "owned_processes": []
+    },
+    "resolved_owned_limits": {
+      "total_ram_mib": 31860.92,
+      "job_private_memory_limit_mib": 2548.87,
+      "machine_logical_processors": 16,
+      "job_cpu_hard_cap_machine_percent": 6.25
+    },
+    "owned_tree_empty": true,
+    "cleanup_confirmed": true,
+    "host_CPU_max": 92.42,
+    "available_RAM_percent_min": 27.47723718628144,
+    "commit_percent_max": 39.761102255645454,
+    "host_saturation_longest_streak": 0
+  },
+  "actual": {
+    "state": "STOPPED_NOT_ACCEPTED",
+    "stop_reason": "STOP_DURATION_LIMIT",
+    "elapsed_seconds": 184.58,
+    "maximum_seconds": 180,
+    "compiled_inventory_exact": null,
+    "runtime_tests_executed": null,
+    "tests_passed": null,
+    "job_final": {
+      "active_processes": 0,
+      "job_cpu_seconds": 173.266,
+      "peak_job_private_mib": 64.68,
+      "peak_job_private_percent": 0.2030186130024355,
+      "owned_processes": []
+    },
+    "resolved_owned_limits": {
+      "total_ram_mib": 31860.92,
+      "job_private_memory_limit_mib": 2548.87,
+      "machine_logical_processors": 16,
+      "job_cpu_hard_cap_machine_percent": 6.25
+    },
+    "owned_tree_empty": true,
+    "cleanup_confirmed": true,
+    "host_CPU_max": 86.28,
+    "available_RAM_percent_min": 29.755903190073557,
+    "commit_percent_max": 39.09430664834367,
+    "host_saturation_longest_streak": 0,
+    "partial_cost": {
+      "qualification": "TEST_ONLY_STAGE_ELAPSED_NOT_CPU_PROFILER_OR_CASE_RUNTIME_PASS",
+      "fully_observed_case_sequences": 6,
+      "last_observed_case": 6,
+      "next_expected_stage": "changed_consume",
+      "outer_signed_pair_overlaps_nested_PAIR_do_not_sum_both": true,
+      "signed16_runtime_complete": false,
+      "marker_count": 109,
+      "case0_elapsed_us": {
+        "original_expected": 59567,
+        "numeric_derivative": 34690,
+        "expected_candidate": 185392,
+        "outside_compare": 27341,
+        "changed_setup": 6181,
+        "changed_register": 773182,
+        "changed_prepare": 2729115,
+        "changed_consume": 7965314,
+        "changed_route_denied": 10038151,
+        "current_expected": 52859,
+        "current_setup": 5918,
+        "current_register": 770609,
+        "current_prepare": 1676305,
+        "current_consume": 3552099,
+        "rebind_denied": 30,
+        "live_revocation_denied": 114454,
+        "signed_pair": 27689738
+      }
+    }
+  },
+  "partial_observation_comparison": {
+    "qualification": "ONE_BOUNDED_OBSERVATION_DIFFERENT_HOST_CONDITIONS_NOT_STATISTICAL_SPEEDUP",
+    "r15_sequences": 6,
+    "r16_sequences": 6,
+    "r15_case0_elapsed_us": {
+      "original_expected": 58997,
+      "numeric_derivative": 34693,
+      "expected_candidate": 185976,
+      "outside_compare": 26892,
+      "changed_setup": 7303,
+      "changed_register": 826830,
+      "changed_prepare": 2769272,
+      "changed_consume": 8798002,
+      "changed_route_denied": 10883896,
+      "current_expected": 53745,
+      "current_setup": 6780,
+      "current_register": 822393,
+      "current_prepare": 1102912,
+      "current_consume": 2958286,
+      "rebind_denied": 39,
+      "live_revocation_denied": 95034,
+      "signed_pair": 28328381
+    },
+    "r16_case0_elapsed_us": {
+      "original_expected": 59567,
+      "numeric_derivative": 34690,
+      "expected_candidate": 185392,
+      "outside_compare": 27341,
+      "changed_setup": 6181,
+      "changed_register": 773182,
+      "changed_prepare": 2729115,
+      "changed_consume": 7965314,
+      "changed_route_denied": 10038151,
+      "current_expected": 52859,
+      "current_setup": 5918,
+      "current_register": 770609,
+      "current_prepare": 1676305,
+      "current_consume": 3552099,
+      "rebind_denied": 30,
+      "live_revocation_denied": 114454,
+      "signed_pair": 27689738
+    },
+    "r15_compile_seconds": 176.68,
+    "r16_compile_seconds": 318.51,
+    "signed_pair_overlaps_nested_stages_do_not_sum": true,
+    "fresh_compile_memory_peaks_not_comparable_as_total_RAM_savings": true
+  },
+  "next_action": "Measure fresh IR decoding/canonical validation and complete reconstruction inside original signed consumers; preserve all fresh reads, exact bytes, auth/signature/clock/negative assertions. Do not blindly repeat r16 or raise caps/timeouts.",
+  "source_closing_exact": true,
+  "IO": {
+    "read_passes": 2824,
+    "bytes_read": 83809979,
+    "bound_inputs": 937,
+    "final_fresh_hashes": 937,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 22.301893
+}

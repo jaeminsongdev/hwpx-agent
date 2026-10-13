@@ -1,0 +1,456 @@
+{
+  "schema_version": "hwpx-agent.p09-flat125-terminal-connection-and-distinct119/v1",
+  "state": "PASS_ACTUAL125_AND_DISTINCT119_WITH_TERMINAL_ADMISSION_AND_EARLY_BUDGET_NOT_FULL249_OR_GATE",
+  "current_authority_pin": {
+    "path": "implementation/p09/evidence/p09-361-case125-current-epoch-accept001.v1.json",
+    "bytes": 296658,
+    "sha256": "25d7f9ebb46d0c0ea3fba872001718bf8caef1d9812358ecda44e5b8f98a52e6"
+  },
+  "actual_runtime_pin": {
+    "path": "implementation/p09/evidence/p09-361-case125-current-runtime-run003.v1.json",
+    "bytes": 2248577,
+    "sha256": "14ffc0425db99c436d11bdb19490aa6d1ceddde2eacf71478bb3d7cc0a2a13f9"
+  },
+  "accepted_count_before": 118,
+  "accepted_count_after": 119,
+  "accepted_count_delta": 1,
+  "current_generation_accepted": 14,
+  "remaining_individual_cases": 130,
+  "next_runtime_index": 126,
+  "historical105_not_rebased": true,
+  "previous_failures_preserved": [
+    {
+      "path": "implementation/p09/evidence/p09-361-case125-current-runtime-run001.v1.json",
+      "bytes": 411802,
+      "sha256": "a23992d43df24d545cf75dcb47ed5560ee5da099d238481ccbe881c4ae86e4a0"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case125-current-runtime-run002.v1.json",
+      "bytes": 263480,
+      "sha256": "33990111d0b79fa568d58d7c9f898b3ed2541e280c8e4ca4b2957da5f9e262ad"
+    }
+  ],
+  "new_fixed_code_pins": [
+    {
+      "path": "tools/p09/flat_current_queue_budget_runtime_v2.py",
+      "bytes": 10359,
+      "sha256": "41a0dae1cbd6ab37890944c2262c4ec2072242b171b23beb55830196c4ab7bcc"
+    },
+    {
+      "path": "tools/p09/tests/test_flat_current_queue_budget_connection_v2.py",
+      "bytes": 9621,
+      "sha256": "959114569d26501505fab913952b64813d678ddde556537e29c8144ea607c8ec"
+    },
+    {
+      "path": "tools/p09/flat_current_queue_budget_acceptance_v2.py",
+      "bytes": 4380,
+      "sha256": "c3c41885cecb0762b13934b211f670baf2dfe65488e42773e91480762bd8599c"
+    }
+  ],
+  "qualified_code_archive": "implementation/p09/evidence/p361-budget-terminal-v2-qualified-code",
+  "archive_bytes": 27935,
+  "archive_not_claimed_Native_covered": true,
+  "contract_qualification_path": "implementation/p09/evidence/p09-361-case125-budget-terminal-code-qualification-r278.v1.json",
+  "preflight_qualification_path": "implementation/p09/evidence/p09-361-case125-budget-terminal-full-preflight-r279.v1.json",
+  "runtime_summary": {
+    "case": [
+      "actual_import::source_assembly::assembly_rejects_all_five_authenticated_scope_substitutions"
+    ],
+    "passed": 1,
+    "failed": 0,
+    "filtered": 248,
+    "elapsed_seconds": 471.9,
+    "inputs": 1847,
+    "directories": 359,
+    "bytes_per_pass": 175672489,
+    "frame_state": "COMMITTED",
+    "CPU_max": 56.26,
+    "RAM_min": 43.394820873682555,
+    "cleanup": true,
+    "owned_tree_empty": true,
+    "source_guards_rates_deadlines_and_scope_unchanged": true,
+    "body_or_Native_not_replayed_after_pass": true
+  },
+  "both_complete_byte_passes_fresh_review": {
+    "state": "PASS_BOUNDED_ACTUAL125_BOTH_COMPLETE_BYTE_BOUNDARIES_NOT_REPLAY",
+    "root_pin": {
+      "path": "implementation/p09/evidence/p09-361-case125-current-runtime-run003.v1.json",
+      "bytes": 2248577,
+      "sha256": "14ffc0425db99c436d11bdb19490aa6d1ceddde2eacf71478bb3d7cc0a2a13f9"
+    },
+    "byte_boundaries": [
+      {
+        "role": "before",
+        "actual_byte_pin_count": 1847,
+        "read_passes": 1847,
+        "bytes_read": 175672489,
+        "bytes_read_by_kind": {
+          "binary": 28433408,
+          "other": 147239081
+        },
+        "read_rates_by_kind": {
+          "binary": 1048576,
+          "other": 2097152
+        }
+      },
+      {
+        "role": "after",
+        "actual_byte_pin_count": 1847,
+        "read_passes": 1847,
+        "bytes_read": 175672489,
+        "bytes_read_by_kind": {
+          "binary": 28433408,
+          "other": 147239081
+        },
+        "read_rates_by_kind": {
+          "binary": 1048576,
+          "other": 2097152
+        }
+      }
+    ],
+    "accepted_count_delta": 0,
+    "CPU_max": 10.61,
+    "RAM_min": 42.82726621258534,
+    "cleanup_confirmed": true
+  },
+  "semantic_contract": {
+    "source_pin": {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_assembly.rs",
+      "bytes": 8369,
+      "sha256": "87ef5c15e550538bcb48310aa212121741cc27bd81ba026210a5541ce22b5f27"
+    },
+    "fixture": "StoredFixture with first actual_corpus entry",
+    "pipeline": [
+      "stored import_actual_forms",
+      "import_field_ranges",
+      "import_semantics",
+      "import_catalog",
+      "import_document_assembly"
+    ],
+    "changed_authenticated_binding_fields": [
+      "document",
+      "branch",
+      "project",
+      "subject",
+      "tenant"
+    ],
+    "variant_count": 5,
+    "StoredFormProvider_rebound_each_variant": true,
+    "new_assembly_import_denied_each_variant": true,
+    "cached_assembly_verify_denied_each_variant": true,
+    "error_checks": "is_err, not exact error variants",
+    "live_SQL_or_Hangul": false,
+    "previous_literal_substring_checks_not_semantic_coverage_proof": true
+  },
+  "handle_and_resource_review": {
+    "state": "PASS_FRESH126_DATA_AND_ACTUAL125_RESOURCE_REVIEW_NOT126_RUNTIME",
+    "next_data_pins": [
+      {
+        "path": "implementation/p09/evidence/p09-361-case126-step-config001.v1.json",
+        "bytes": 675,
+        "sha256": "69145b3d3f6632b5062f545b69d16e44765f929ccdcb17ec509cfc613abdca3f"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case126-metadata-connection-data001.v1.json",
+        "bytes": 1380,
+        "sha256": "d7321a5e70bdd0a50dfb4b9f3e9fd7125194930036ef53dcc9784b8f590fa452"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case126-budget-connection-data001.v1.json",
+        "bytes": 2433,
+        "sha256": "7bf37d89198946a2aa19b4e65f2300417bb73389ce63cc088b85c68165568a35"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case126-budget-terminal-connection-data001.v1.json",
+        "bytes": 3151,
+        "sha256": "edf87fb2f69f707e02790634e73bb0361454b0672dda47f31d298cdfef44463a"
+      }
+    ],
+    "Native_frame_byte_boundaries": [
+      {
+        "role": "before"
+      },
+      {
+        "role": "after"
+      }
+    ],
+    "native_handle_accounting": {
+      "input_lock_handles_opened": 2206,
+      "input_lock_handles_closed": 2206,
+      "input_lock_handles_remaining": 0,
+      "borrowed_scalar_counters": {
+        "duplicate_handles_opened": 1847,
+        "duplicate_handles_closed": 1847,
+        "duplicate_handles_remaining": 0,
+        "duplicate_close_failed_attempts": 0,
+        "shared_offset_resets": 3694,
+        "active_borrow_binding": false,
+        "byte_stream_pathname_reopens": 0,
+        "original_held_handles_closed_by_borrower": false,
+        "redundant_pre_descriptor_metadata_queries": 0,
+        "original_pre_read_stream_identity_check_retained": true,
+        "input_scope_reduced": false,
+        "original_resource_guards_and_pacing_retained": true,
+        "measured_CPU_or_freeze_improvement_claimed": false,
+        "retained_within_one_live_frame_only": true,
+        "unbuffered_raw_streams": true,
+        "parsed_JSON_hash_or_byte_cache": false,
+        "physical_handle_ceiling": 8192,
+        "physical_handle_peak": 4053,
+        "new_duplicate_open_reservations": 1847,
+        "reused_stream_pressure_checkpoints": 1847,
+        "logical_read_leases": 3694,
+        "logical_read_lease_returns": 3694,
+        "pending_open_reservation": false,
+        "resource_callback_retained_on_reuse": true,
+        "cursor_reset_and_fresh_identity_on_each_pass": true
+      }
+    },
+    "final_actual_sample": [
+      {
+        "time_utc": "2026-10-11T09:04:48.803806+00:00",
+        "system_cpu_percent": 16.99,
+        "available_ram_mib": 14630.75,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 45.92067941780652,
+        "commit_used_percent": 34.429085250716575,
+        "existing_system_time_breakdown": {
+          "kernel_busy_machine_percent": 12.890625,
+          "user_machine_percent": 4.1015625,
+          "extra_system_time_query": false,
+          "original_K32_resource_CPU_replaced": false
+        },
+        "serial_cpu_attribution": {
+          "available": false,
+          "reason": "NOT_SAMPLED_COLD_INTERVAL",
+          "values": null,
+          "fresh_for_this_original_resource_sample": false
+        },
+        "parent_cpu_machine_percent": 0.39022689052722714,
+        "parent_private_mib": 45.37890625,
+        "parent_private_percent": 0.1424281192855422
+      }
+    ],
+    "actual_CPU_counts": {
+      "75": {
+        "count": 0,
+        "max_consecutive": 0
+      },
+      "90": {
+        "count": 0,
+        "max_consecutive": 0
+      },
+      "98": {
+        "count": 0,
+        "max_consecutive": 0
+      }
+    },
+    "acceptance_CPU_counts": {
+      "75": {
+        "count": 4,
+        "max_consecutive": 2
+      },
+      "90": {
+        "count": 0,
+        "max_consecutive": 0
+      },
+      "98": {
+        "count": 0,
+        "max_consecutive": 0
+      }
+    },
+    "full_product_scope_not_signed16_or_Gate": true,
+    "actual126_runtime_or_preflight_executed": false,
+    "fresh_pins": 34,
+    "read_passes": 68,
+    "bytes_read": 5545542,
+    "final_hashes": 34,
+    "CPU_max": 32.83,
+    "RAM_min": 49.34735259878905,
+    "cleanup_confirmed": true
+  },
+  "independent_full_oracle_proof": {
+    "qualified113_acceptor_AST_restored_exactly": true,
+    "changed_metadata_or_new_explicit_mechanics": [
+      "physical_expected_counters",
+      "retained_physical_cost_model"
+    ],
+    "actual_receipt_observations_modified": false,
+    "expected_duplicate_counter_changes": 3,
+    "case115_metadata_bound": true,
+    "explicit_final_resource_wait_cost_seconds": 0.5,
+    "all_original_whole_source_product_Job_resource_cleanup_predicates_retained": true,
+    "flat_case_data_not_recursive_controller_import": true,
+    "explicit_runtime_index": 125,
+    "explicit_prior_count": 118,
+    "reviewed_metadata_controller_pins_added": true,
+    "original_full_oracle_not_replaced": true,
+    "early_budget_controller_pins_added": true,
+    "terminal_admission_controller_pins_added": true,
+    "original_validator_projection": {
+      "original_oracle_AST_restored_exactly": true,
+      "metadata_fields_projected": 9,
+      "input_count": 1847,
+      "directory_count": 359,
+      "helper_count": 55,
+      "qualification_checks_skipped": false,
+      "qualified_oracle_pin": {
+        "path": "tools/p09/accept_case112_current_epoch.py",
+        "bytes": 20933,
+        "sha256": "03fa9362f56b6105b48b8b49599f32ccc8cbf4aa9d0b0836f3cf8580cc9c680c"
+      },
+      "additional_PDH_cost_equality_extended_by_seconds": 2.05
+    },
+    "all_original_whole_Native_product_resource_and_cleanup_checks_retained": true,
+    "previous115_source_data_not_rebased": true,
+    "metadata_binding_actual_restored_checked": true,
+    "actual_sole_early_budget_probe_binding_checked": true,
+    "actual_completed_body_admission_before_capture_access": true
+  },
+  "actual_completed_body_admission_and_early_budget_binding_independently_qualified": true,
+  "generic_helper_self_flags_not_modified": true,
+  "acceptance": {
+    "fresh_read_passes": 1749,
+    "fresh_bytes_read": 72246570,
+    "final_fresh_hashes": 873,
+    "elapsed_seconds": 149.12905950000277,
+    "accepted_current_generation_case_count": 14,
+    "fresh_pins": 873,
+    "samples": 291,
+    "CPU_max": 84.71,
+    "RAM_min": 40.3651368036982,
+    "cleanup": true,
+    "product_or_Native_replayed": false
+  },
+  "post_acceptance_full_oracle_and_negative8": {
+    "full_oracle_positive": true,
+    "negatives": [
+      {
+        "name": "no_whole_source",
+        "error_code": "CURRENT_STORED_RUNTIME_SCOPE_PIN_COUNT"
+      },
+      {
+        "name": "no_distinct_final_sample",
+        "error_code": "CURRENT_EPOCH_ACCEPT_RESOURCE_HISTORY"
+      },
+      {
+        "name": "fake_gate",
+        "error_code": "CURRENT_EPOCH_ACCEPT_CANDIDATE"
+      },
+      {
+        "name": "failed_cleanup",
+        "error_code": "CURRENT_EPOCH_ACCEPT_TERMINAL_REVIEW_COMPLETED_BODY_REQUIRED"
+      },
+      {
+        "name": "wrong_product_case",
+        "error_code": "CURRENT_EPOCH_ACCEPT_CANDIDATE"
+      },
+      {
+        "name": "synthetic_candidate",
+        "error_code": "FLAT_ACCEPT_NO_SYNTHETIC_CANDIDATE"
+      },
+      {
+        "name": "probe_only_imported_not_executed",
+        "error_code": "BUDGET_ACCEPT_ACTUAL_EARLY_CHECKS_NOT_IMPORTED_ONLY"
+      },
+      {
+        "name": "active_metadata_binding",
+        "error_code": "CURRENT_EPOCH_ACCEPT_REAL_RESTORED_METADATA_SCOPE"
+      }
+    ],
+    "resource_failures_not_negative_PASS": true,
+    "fresh_pins": 47,
+    "reads": 122,
+    "bytes_read": 12918293,
+    "final_hashes": 47,
+    "CPU_max": 16.55,
+    "RAM_min": 47.342484026337615,
+    "cleanup": true
+  },
+  "next126": {
+    "case": "actual_import::source_bookmarks::all_scope5_substitutions_deny_fresh_observed_name_selection_on_the_existing_model",
+    "data_pins": [
+      {
+        "path": "implementation/p09/evidence/p09-361-case126-step-config001.v1.json",
+        "bytes": 675,
+        "sha256": "69145b3d3f6632b5062f545b69d16e44765f929ccdcb17ec509cfc613abdca3f"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case126-metadata-connection-data001.v1.json",
+        "bytes": 1380,
+        "sha256": "d7321a5e70bdd0a50dfb4b9f3e9fd7125194930036ef53dcc9784b8f590fa452"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case126-budget-connection-data001.v1.json",
+        "bytes": 2433,
+        "sha256": "7bf37d89198946a2aa19b4e65f2300417bb73389ce63cc088b85c68165568a35"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case126-budget-terminal-connection-data001.v1.json",
+        "bytes": 3151,
+        "sha256": "edf87fb2f69f707e02790634e73bb0361454b0672dda47f31d298cdfef44463a"
+      }
+    ],
+    "archive_directory": "implementation/p09/evidence/p361-flat126-qualified-data",
+    "archive_bytes": 7639,
+    "fixed_code12_reused": true,
+    "new_per_case_controller": false,
+    "only_first_attempt_run001": true,
+    "full_preflight_NOT_RUN": true,
+    "actual_runtime_NOT_RUN": true
+  },
+  "preserved_failures_this_turn": [
+    {
+      "kind": "synthetic_contract_failure",
+      "reason": "Closure in fake function; original module-level function has no closure",
+      "receipt": "implementation/p09/evidence/p09-361-case125-terminal-connection-contracts-failed001.v1.json",
+      "old_test_source_archive": "implementation/p09/evidence/p361-budget-terminal-contract-failed001-code/tools/p09/tests/test_flat_current_queue_budget_connection_v2.py",
+      "corrected14_contracts_PASS": true,
+      "production_code_not_changed_for_test_repair": true
+    },
+    {
+      "kind": "diagnostic_source_path_guess",
+      "reason": "Guessed crate path absent; actual test source located from committed Native source_freeze",
+      "actual_source_pin": {
+        "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_assembly.rs",
+        "bytes": 8369,
+        "sha256": "87ef5c15e550538bcb48310aa212121741cc27bd81ba026210a5541ce22b5f27"
+      },
+      "not_Native_product_or_acceptance_failure": true
+    },
+    {
+      "kind": "post_review_aggregation_failure",
+      "reason": "Base DATA not in reviewed_inputs snapshots until explicit q.pin; final q.finish ran, finally Guard.close executed, explicit cleanup metric not recorded",
+      "corrected_by": "Explicit fresh base q.pin equality; no runtime or acceptance replay"
+    },
+    {
+      "kind": "tool_output_transport_failure",
+      "reason": "Per-input borrowed stream map unexpectedly produced 155678 output tokens; process exit0 but tool output truncated and JSON parse failed",
+      "corrected_by": "Scalar allowlist and <=8192 UTF8 output; same immutable actual artifact reread only",
+      "raw_full_map_not_saved_or_repeated": true,
+      "not_product_or_acceptance_failure": true
+    }
+  ],
+  "interpretation": {
+    "actual_CPU_over75_90_98_counts_all_zero": true,
+    "acceptance_over75_count4_max_consecutive2": true,
+    "acceptance_over90_98_zero": true,
+    "PDH_OS_call_hard_preemption_guaranteed": false,
+    "Defender_hot_causality_established": false,
+    "PC_freeze_resolved": false,
+    "paired_CPU_or_freeze_improvement_claimed": false,
+    "requested_exclusion_state": "UNVERIFIED_NON_ADMIN_NON_PATH_ENTRY; no absence claim",
+    "OS_Defender_WSL_changes": false,
+    "Hangul_or_access_prompts": false,
+    "parallel_verifier_or_build": false,
+    "unrelated_process_termination": false,
+    "deletion_move_commit_push": false
+  },
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "P10_started": false,
+  "goal_status": "ACTIVE"
+}

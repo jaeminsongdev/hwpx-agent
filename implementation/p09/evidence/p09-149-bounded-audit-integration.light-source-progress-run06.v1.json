@@ -1,0 +1,108 @@
+{
+  "schema_version": "hwpx-agent.p09-bounded-audit-integration-light/v1",
+  "state": "PASS_LIGHT_READONLY_TOOL_INTEGRATION_NOT_ACTUAL_TOOL_PRODUCT_OR_PC_FREEZE_PROOF",
+  "tests_run": 8,
+  "tests_passed": 8,
+  "failed_tests": [],
+  "source_freeze": [
+    {
+      "path": "tools/p09/verify_formula_issuer_authority_current.py",
+      "bytes": 46551,
+      "sha256": "b93155c0e16ca498d479a29cf647e48103b12ef61e18ddc1a93765b73dc57a66"
+    },
+    {
+      "path": "tools/p09/verify_formula_issuer_live_current.py",
+      "bytes": 19317,
+      "sha256": "a159512a62688bce72e9755cf387e68fa6d2cded70c829b515e6e5b59039f337"
+    },
+    {
+      "path": "tools/p09/bounded_audit_tools.py",
+      "bytes": 14961,
+      "sha256": "d7ecfa9ed77fe44ba95a66a143fcc9ca200a652853555887177558b806d73167"
+    },
+    {
+      "path": "tools/p09/tests/test_bounded_audit_tools.py",
+      "bytes": 20259,
+      "sha256": "3622bbe6e5382816e4ab31e287ddd966e8e461ec96e8c64bf96e60f111d40baf"
+    },
+    {
+      "path": "tools/p09/tests/test_bounded_audit_tool_integration.py",
+      "bytes": 11956,
+      "sha256": "01b68d8147a9f75eb370e03883662c9498aa19017b7107ffe52ca3a842cc85ee"
+    },
+    {
+      "path": "tools/p09/verify_bounded_audit_tool_integration_light.py",
+      "bytes": 4538,
+      "sha256": "443ec4bbfcb11ee5927295363f75de713d65efcac6ed3cd865e10fcfb0d52384"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 22942,
+      "sha256": "dc212b25ebc534ab19f643c51361271bb86392cf01b669a0fe25f3e37ea13e01"
+    },
+    {
+      "path": "tools/p09/verify_audit_evidence_io.py",
+      "bytes": 6183,
+      "sha256": "d4a8587e9cbbb1840a527d46d5d8cd49a7e3eb52b306a1bb5e5e2110698bf38d"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5453,
+      "sha256": "556f57a76bbe7c1f55df919cb48c757e8cb4136c522f789863a3423f41928c95"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-bounded-audit-integration/source-preimages.v1.json",
+      "bytes": 82883,
+      "sha256": "79edd68e1522d08be69964c69bf7169afc220cad94791f2e7449bdc0233df6c1"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-integration-setup-repair/source-preimages.v1.json",
+      "bytes": 21139,
+      "sha256": "329eb464595e6309da6793cece0eacd6eedc8f45bfb8e3ae15fb6e568345e2c1"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "self_resource_before": {
+    "cpu_seconds": 0.125,
+    "memory_observed": true,
+    "working_set_mib": 26.25,
+    "private_mib": 17.57,
+    "system": {
+      "time_utc": "2026-10-06T11:12:00.025359+00:00",
+      "system_cpu_percent": 33.33,
+      "available_ram_mib": 8245.89,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.88089468447764,
+      "commit_used_percent": 35.92492879351688
+    }
+  },
+  "logical_cpu_limit": 1,
+  "priority": "BelowNormal",
+  "actual_child_tools_run": false,
+  "full_authority_or_negative_audit_run": false,
+  "actual_Cargo_Rust_compile_product_EXE_SQL_native_run": false,
+  "new_git_started": false,
+  "system_or_Defender_or_WSL_settings_changed": false,
+  "raw_logs_printed_or_saved": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "product_complete": false,
+  "suite_error_count": 0,
+  "self_resource_after": {
+    "cpu_seconds": 0.1875,
+    "memory_observed": true,
+    "working_set_mib": 33.98,
+    "private_mib": 25.36,
+    "system": {
+      "time_utc": "2026-10-06T11:12:00.135054+00:00",
+      "system_cpu_percent": 13.11,
+      "available_ram_mib": 8245.22,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.878785909706433,
+      "commit_used_percent": 35.934210640962434
+    }
+  },
+  "elapsed_seconds": 0.1315,
+  "elapsed_scope": "main_entry_through_final_resource_sample_excludes_python_startup_and_receipt_write"
+}

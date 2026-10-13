@@ -1,0 +1,236 @@
+{
+  "schema_version": "hwpx-agent.p09-formula-issuer-registry-management-source-progress/v1",
+  "state": "PASS_SQL22_MANAGEMENT_COMPONENT_NOT_ACTUAL_DB_ISSUER_PROVISIONING_NATIVE_OR_GATE",
+  "source_contract_tests": 8,
+  "failed_guard_replays_preserved": 1,
+  "current_revision_library_cases": 32,
+  "new_management_unit_cases": 8,
+  "historical_P137_component_executions": 63,
+  "historical_stored_cases": 234,
+  "strict_lint_packages": 32,
+  "strict_lint_targets": 358,
+  "SQL22_management_adapters_implemented": true,
+  "issuer_product_provisioning_implemented": false,
+  "actual_sql_executed": false,
+  "schema22_migration_applied": false,
+  "native_application_executed": false,
+  "trust_configuration_changed": false,
+  "production_key_custody_qualified": false,
+  "atomic_publication_qualified": false,
+  "management_receipt_is_row_readback_or_signature_authority": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "product_complete": false,
+  "goal_status": "active",
+  "P10_new_implementation": false,
+  "accepted_runtime_receipts": [
+    {
+      "path": "target/p09-121-resource-optimized/p138-revision-build-r1.json",
+      "bytes": 166980,
+      "sha256": "36dd28e18d27edb93a689ee26ff74bcd063d783ae2b13c7f3c5f20e8ea443ba5"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p138-revision-list-r1.json",
+      "bytes": 169985,
+      "sha256": "dfb0e7097af634d100e7fe16e9836c92ab86cf2afd5ff4beedf68a3b08410995"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p138-revision-test-r1.json",
+      "bytes": 170410,
+      "sha256": "c903e496dc2748e419388ea83c14e4b62fc30fdf590a4639a36bd2988d94b16e"
+    }
+  ],
+  "accepted_lint_receipt": {
+    "path": "target/p09-121-resource-optimized/p138-workspace-lint-r1.json",
+    "bytes": 375395,
+    "sha256": "7d50d4b743439be1619cf56ca7661d54696b6942e25df9079b31c1ccb0f87e3c"
+  },
+  "current_executable": {
+    "bytes": 1070592,
+    "path": "target/p09-121-resource-optimized/debug/deps/revision_service-p138-r1.exe",
+    "sha256": "f3bc3726118ea0904fc267337dbbc2233a069a5e66c34cfe70a30097c3ef07fd"
+  },
+  "source_delta": [
+    {
+      "path": "crates/revision-service/src/postgres/source_formula_policy/issuer_registry.rs",
+      "bytes": 22377,
+      "sha256": "3d278251aaee8ca1687ff59156a1b05a265d954db245eb70e4dd82f8fddce64d"
+    },
+    {
+      "path": "crates/revision-service/src/postgres/source_formula_policy/issuer_registry/management.rs",
+      "bytes": 31783,
+      "sha256": "4458af3359b12c9a88a148b01580d77d9e3df058318e564d4b985bae474ad2c1"
+    },
+    {
+      "path": "tools/p09/run_formula_issuer_registry_management.ps1",
+      "bytes": 15868,
+      "sha256": "338c9f16ddb42fd1933466fe328e0532943ace042870c0e5b3ab5c7b717a4036"
+    },
+    {
+      "path": "tools/p09/run_formula_issuer_registry_management_lint.ps1",
+      "bytes": 13152,
+      "sha256": "e8d6eda0ad505994955a6e2570552fb57ebcbc73ffdcbbab598a271571913f74"
+    },
+    {
+      "path": "tools/p09/tests/test_formula_issuer_registry_management.py",
+      "bytes": 9031,
+      "sha256": "b7265151a7ede5607773c7816ef4770170579e911dcc12a86ffd21cc307ffb9a"
+    },
+    {
+      "path": "tools/p09/verify_formula_issuer_registry_management.py",
+      "bytes": 12144,
+      "sha256": "f09f11e9546ae028e1adb680c1842b52885786d855f49e95169da77aed2d3af2"
+    },
+    {
+      "path": "implementation/p09/P09-138_FORMULA_ISSUER_REGISTRY_MANAGEMENT_REPORT.md",
+      "bytes": 9434,
+      "sha256": "484d58b36496496b42e95660cc6ff2a74678a262d2b75057bab4b7fd8fe229ac"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-138-initial-source-contract-failure.v1.json",
+      "bytes": 568,
+      "sha256": "e761d839a8382d936aa75d1ff3c71287ed780bcf78417899e8057b86d1b7636e"
+    }
+  ],
+  "source_archives_added": [
+    {
+      "path": "implementation/p09/source-archive/p09-138-pre-registry-management/source-preimages.v1.json",
+      "bytes": 32384,
+      "sha256": "541ffd9f4b0fee00d16bb13a5ac907804a395e1f8636c2a4e5c2c7c4be841b9c"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-138-initial-bind-shape/tools/p09/tests/test_formula_issuer_registry_management.py",
+      "bytes": 9117,
+      "sha256": "070610915759c35502fa363e389ed272bfa37b26a03c9c9b44bdc6d2a9680da7"
+    }
+  ],
+  "predecessor_receipts_added": [
+    {
+      "path": "implementation/p09/evidence/p09-137-formula-issuer-registry-reads.source-progress.v1.json",
+      "bytes": 16586,
+      "sha256": "e285932e66af805ba7058ae78debd59979c759868d1ddeec47ea06ae1f332157"
+    }
+  ],
+  "migration_inputs": [
+    {
+      "path": "migrations/postgres/0001_p14_metadata.up.sql",
+      "bytes": 28206,
+      "sha256": "7c00f744993581448acb4b6d4d8a46f1ff03d108750da0afc671c3b5e2b0a78d"
+    },
+    {
+      "path": "migrations/postgres/0002_p14_artifact_service.up.sql",
+      "bytes": 13929,
+      "sha256": "202753fbd6f20f181b09bd6227766dfb808811bd4e734a4a418cb5bae4eaee56"
+    },
+    {
+      "path": "migrations/postgres/0003_p14_revision_cas.up.sql",
+      "bytes": 18994,
+      "sha256": "beeac1f22fde0eb3474d40acc14838c1e9676a74b68c5b6f9608713ba6e6e53a"
+    },
+    {
+      "path": "migrations/postgres/0004_p14_history_checkpoints.up.sql",
+      "bytes": 18734,
+      "sha256": "e336890d4ee3fdf4819f52c079ba320f450b01ec516bf5ffaaf505a76b14f249"
+    },
+    {
+      "path": "migrations/postgres/0005_p14_job_state_machine.up.sql",
+      "bytes": 42699,
+      "sha256": "4f15cd28510d55fa58a18aef7b8edf8b4606169fd722a0b8d2c63da2cfb4bf9b"
+    },
+    {
+      "path": "migrations/postgres/0006_p14_worker_lease_fencing.up.sql",
+      "bytes": 30885,
+      "sha256": "03af7cc8b2ae883ff132e3b1737b29c3829fcb0fa9887566485f865b3c0393ab"
+    },
+    {
+      "path": "migrations/postgres/0007_p14_idempotency_reconciliation.up.sql",
+      "bytes": 113376,
+      "sha256": "cc60353df6cf3c51155417e39d0f1f4c348d2a6282bba7d63de9ea0282be5e5d"
+    },
+    {
+      "path": "migrations/postgres/0008_p14_cancel_cleanup.up.sql",
+      "bytes": 85360,
+      "sha256": "2ba28c1386db9c5aeb4661d11069e48f8624c2560b69301a0750ab9344c46f29"
+    },
+    {
+      "path": "migrations/postgres/0009_p14_retention_local_mirror.up.sql",
+      "bytes": 65641,
+      "sha256": "272da51d665be7b9c0b5150a641ca1f9f51b9b78cddb839096acb57eb71e9ec2"
+    },
+    {
+      "path": "migrations/postgres/0010_p16_artifact_repository.up.sql",
+      "bytes": 2724,
+      "sha256": "3d1ce21be0cb100bbc098e798b1917e52c4767da9a832359578179d9b0522420"
+    },
+    {
+      "path": "migrations/postgres/0011_p16_plan_source.up.sql",
+      "bytes": 4578,
+      "sha256": "3aa21685e7511322414265b076f1ed43ff6b7e39c4dd1ee695e121a161777bbc"
+    },
+    {
+      "path": "migrations/postgres/0012_p16_durable_plan_store.up.sql",
+      "bytes": 8656,
+      "sha256": "d85b1b4bbfbf8f63d85ae1088ae676d5c70bf926d6eb3c1cdb070a4b297d6cc0"
+    },
+    {
+      "path": "migrations/postgres/0013_p16_plan_review_evidence.up.sql",
+      "bytes": 7817,
+      "sha256": "16c818ddb5aac58b168174cb39067c2d941e572d883fef3be9b5c452a5b6c923"
+    },
+    {
+      "path": "migrations/postgres/0014_p17_history_checkpoint_note.up.sql",
+      "bytes": 7542,
+      "sha256": "d3e8a2846780f9442ea4b3acf55c072a2ba663590e3b24c9e46736517bb4c129"
+    },
+    {
+      "path": "migrations/postgres/0015_p17_atomic_mirror_checkpoint.up.sql",
+      "bytes": 5292,
+      "sha256": "ff513cf4eed8b9498241e5b111646f1a4b58e7e373e4126b75d9ad317c69b25a"
+    },
+    {
+      "path": "migrations/postgres/0016_p17_durable_git_mirror_push.up.sql",
+      "bytes": 42597,
+      "sha256": "a928dab01d36399a9ce5f24800f689ffcb585abb1da7bdcdf228d8cedafb7263"
+    },
+    {
+      "path": "migrations/postgres/0017_p17_durable_git_mirror_pull.up.sql",
+      "bytes": 20765,
+      "sha256": "2880461cc22be5cbcc0df3802f3996ad8a0ee9ad6a2509d5798e040bdbeea1f4"
+    },
+    {
+      "path": "migrations/postgres/0018_p09_full_document_ir.up.sql",
+      "bytes": 15733,
+      "sha256": "0c167d47f42183d4f79e9dac30150e799cb0c030950bfde1cc7348741d56ca0a"
+    },
+    {
+      "path": "migrations/postgres/0019_p09_authorized_full_ir_intent.up.sql",
+      "bytes": 21899,
+      "sha256": "5dfcac89b97600d21efb3a0d922ce6241440fda6bdc94b14bd3eddc59df2ad59"
+    },
+    {
+      "path": "migrations/postgres/0020_p09_source_form_policy.up.sql",
+      "bytes": 13468,
+      "sha256": "2d189ca60c2a4b2d36c41d1118ce618aee7c98bfa8432a1b7813b0b4edf31dc0"
+    },
+    {
+      "path": "migrations/postgres/0021_p09_source_formula_policy.up.sql",
+      "bytes": 13712,
+      "sha256": "a16fa22b7b1dad0e5994c945391e990fa58d17ea606b7428fcc918cf7862cc06"
+    },
+    {
+      "path": "migrations/postgres/0022_p09_formula_issuer_registry.up.sql",
+      "bytes": 22124,
+      "sha256": "ef690febbe84363c28500f0ea6bf368314803d53f3120713f50d477518ec4b71"
+    }
+  ],
+  "previous_source_files_count": 1202,
+  "current_source_files_count": 1210,
+  "source_inventory_counting": "historical_graph_plus_declared_delta_not_unique_path_union",
+  "inherited_raw_pin_entries": 3399,
+  "new_raw_pin_entries": 38,
+  "remaining_coarse_groups_minimum": 6,
+  "remaining_groups_closed_by_slice": 0,
+  "minimum_30_conditions_not_exhaustive": true,
+  "native34_state": "NOT_RUN_INPUT_CHANGED_RE_ADMISSION_REQUIRED"
+}

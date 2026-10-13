@@ -1,0 +1,62 @@
+{
+  "schema": "hwpx-agent.p09-95-review-metadata-initial-failures/v1",
+  "state": "failed_runs_retained_corrected_tests_NOT_native_acceptance",
+  "failures": [
+    {
+      "start_chunk_id": "576363",
+      "terminal_chunk_id": "204811",
+      "exit_code": 1,
+      "kind": "new_test_compile_nonexistent_APIs",
+      "correction": "Use original DocumentGraph::from_json and actual source/internal reader APIs; do not create alternate importer or weaken checks",
+      "archive": {
+        "path": "implementation/p09/source-archive/p09-95-initial-tests/crates/hwpx-package/tests/document_import_review_metadata.rs",
+        "bytes": 8880,
+        "sha256": "8c993163b84d0c83378168bfe30adddc9ab93d0cc1a6870b5a04767d4ca517c1"
+      }
+    },
+    {
+      "terminal_chunk_id": "9050b0",
+      "exit_code": 1,
+      "passed": 6,
+      "failed": 1,
+      "kind": "new_positive_CDATA_expectation_rejected_by_original_SafeXml",
+      "correction": "Keep original CDATA rejection; make new test explicitly negative, do NOT weaken safe XML",
+      "archive": {
+        "path": "implementation/p09/source-archive/p09-95-cdata-failed-test/crates/hwpx-package/tests/document_import_review_metadata.rs",
+        "bytes": 9115,
+        "sha256": "f0e2360713835d3b5ec3be77f4bb0c67f41e14ff3768189c1e477e873a878f6b"
+      }
+    },
+    {
+      "terminal_chunk_id": "decc14",
+      "session_id": 2326,
+      "exit_code": 101,
+      "kind": "new_private_test_compile_TextFlowLowerer_missing",
+      "correction": "Use original TextFlowWriter::lower; only new test changed",
+      "archive": {
+        "path": "implementation/p09/source-archive/p09-95-private-test-compile-failure/crates/hwpx-package/src/text_flow/source_memo/meta_tests.rs",
+        "bytes": 1734,
+        "sha256": "d8dc298cdf7b7f57b54d07da5edb43a0711ee15a35192dd24ae719070ceedfc0"
+      }
+    },
+    {
+      "terminal_chunk_id": "dd2bb5",
+      "exit_code": 1,
+      "kind": "lint_invocation_duplicate_lib_flag",
+      "product_lint_result": false,
+      "correction": "Separate package and product strict lint invocations; no lint allowance added"
+    }
+  ],
+  "failed_whole_test_source_archives": 3,
+  "current_default_conformance": {
+    "terminal_chunk_id": "26f789",
+    "exit_code": 1,
+    "state": "FAIL:matrix_drift",
+    "preserved": true
+  },
+  "original_checks_not_weakened": true,
+  "native_executed": false,
+  "actual_SQL_executed": false,
+  "product_complete": false,
+  "P09_gate": "OPEN"
+}

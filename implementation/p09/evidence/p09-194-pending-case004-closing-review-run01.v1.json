@@ -1,0 +1,402 @@
+{
+  "state": "PASS_PENDING_CASE004_AND_PRESERVED_STOP_PLAN_ONLY_NOT_CLOSING_OR_GATE",
+  "goal_status": "active",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "actual_product_test_child_executed": false,
+  "new_whole_source_or_EXE_reaudit_executed": false,
+  "pending_review_not_source_closing": true,
+  "contract_tests_run": 154,
+  "contract_tests_passed": 154,
+  "pending_review_contract_tests_passed": 4,
+  "plan": {
+    "state": "PLAN_ONLY_NOT_RUNTIME_OR_GATE",
+    "binding": {
+      "compiled_inventory_pin": {
+        "path": "implementation/p09/evidence/p09-186-observed-r07-list-output.source-closing-run01.v1.json",
+        "bytes": 339893,
+        "sha256": "7b06997d3b8090967597fad1d12b94446e20e3a17ba206233ae8711fdb1d455d"
+      },
+      "compiled_test_executable_pin": {
+        "path": "target/p09-175-xml-initial-capacity/debug/deps/form_stored_provider-p152-r07.exe",
+        "bytes": 14216704,
+        "sha256": "2b47e5815500549401f6f1960d92ba67f0d3410fc39d91cc91fd7f886d67dc5d"
+      },
+      "exact_input_manifest_sha256": "1a4c86e6a286e12a644645769724381ca5add93df5d704234bec9a9decc0c27a",
+      "expected_test_count": 249
+    },
+    "accepted_test_names": [
+      "actual_import::actual_aead_tamper_cannot_be_reclassified_as_an_importer_or_policy_failure",
+      "actual_import::actual_head_advance_invalidates_old_import_even_with_identical_result_bytes",
+      "actual_import::all_ten_actual_stored_results_import_without_caller_maps_and_preserve_whole_graphs"
+    ],
+    "accepted_individual_cases": 3,
+    "remaining_individual_cases": 246,
+    "successful_candidates_requiring_separate_closing": 1,
+    "remaining_regular_cases": 240,
+    "remaining_corpus_cases": 6,
+    "corpus_case_names": [
+      "actual_import::formula_policy_issuer::corpus::all16_actual_formula_sources_and_current_derivatives_keep_native_cell_protection_denial",
+      "actual_import::formula_policy_issuer::corpus::all16_current_derivatives_are_signed_exact_noops_then_denied_new_policy_and_expired_approval",
+      "actual_import::formula_policy_issuer::corpus::all36_frozen_originals_signed_full_candidates_or_no_formula_denial_and_live_revocation",
+      "actual_import::formula_policy_issuer::corpus::changed::all16_changed_original_comparators_reject_an_extra_numeric_input_leaf_change",
+      "actual_import::formula_policy_issuer::corpus::changed::all16_original_numeric_derivatives_have_signed_changed_candidates_exact_current_and_live_revocation",
+      "actual_import::formula_policy_issuer::corpus::changed::all32_changed_and_current_numeric_derivatives_keep_valid_signature_cell_protection_denial"
+    ],
+    "corpus_cases_deferred_not_skipped": true,
+    "next_index": 5,
+    "next_test_name": "actual_import::field_ranges::actual_aead_tamper_is_original_service_failure_not_field_projection_failure",
+    "next_attempt": 1,
+    "maximum_cases_per_invocation": 1,
+    "automatic_retry": false,
+    "parallel_execution": false,
+    "full249_current_qualified": false,
+    "signed16_current_qualified": false,
+    "all249_individual_runtime_qualified": false,
+    "single_process_full249_qualified": false,
+    "product_complete": false,
+    "P09_gate": "OPEN",
+    "A12_gate": "OPEN",
+    "A13_gate": "OPEN"
+  },
+  "successful_case_receipt_pin": {
+    "path": "implementation/p09/evidence/resumable-r07/p190-case-004-attempt-001.json",
+    "bytes": 617816,
+    "sha256": "53159ac973e75e5562439c8a173afa948c9b7c23719826cb51a205d305b9634a"
+  },
+  "original_failed_closing_pin": {
+    "path": "implementation/p09/evidence/p09-191-r07-resumable-run05.closing.v1.json",
+    "bytes": 304809,
+    "sha256": "715d9f22098622741f5f844ed832a5917078b417cfb4122dee081b1bb90cb3bd"
+  },
+  "successful_case004_requires_independent_closing": true,
+  "automatically_reexecute_successful_case004": false,
+  "start_case005_before_candidate_closing": false,
+  "original_failed_closing_not_overwritten": true,
+  "whole_source_recovery_or_fresh_closing_completed": false,
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "IO": {
+    "read_passes": 58,
+    "bytes_read": 21972698,
+    "bound_inputs": 24,
+    "final_fresh_hashes": 24,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P176_binary2p5_other4_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 2621440,
+      "other": 4194304
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 21972698
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 21972698,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0.0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/review_pending_r07_closing.py",
+      "bytes": 4905,
+      "sha256": "0c9d2c9e042923e31be05e6e765d9ead522b78de3d6dc979f76f5414615ebace"
+    },
+    {
+      "path": "tools/p09/tests/test_pending_r07_closing_review.py",
+      "bytes": 2192,
+      "sha256": "c26f14ae73358646f85aa262498112a9e668e0c2b76d2096e839b2ffd740e64f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run01.preparation.v1.json",
+      "bytes": 601637,
+      "sha256": "076afa535640a5afad9f50ed3fd932ab29238cc8f6ed0a20b2ca526ff11cc5f1"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-001-attempt-001.json",
+      "bytes": 617840,
+      "sha256": "7dfdede3acbe6a1f900a3775beb4512ac173ad4c0599c420b4670bfa608bad64"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run01.closing.v1.json",
+      "bytes": 895299,
+      "sha256": "8e220071e5126f80fe9a31ca140c46edf20ae1304bf0233a975990b1ce096f7a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-186-observed-r07-list-output.source-closing-run01.v1.json",
+      "bytes": 339893,
+      "sha256": "7b06997d3b8090967597fad1d12b94446e20e3a17ba206233ae8711fdb1d455d"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-187-current-r07-full.actual-run01.v1.json",
+      "bytes": 1992698,
+      "sha256": "681466f38eaa9d99be9070d4342ff8f6bfaeb18c29723737dcdc55e41d7de761"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-187-current-r07-full.preparation-run01.v1.json",
+      "bytes": 339465,
+      "sha256": "72c75dab9b05611c58c7c0820f90050397b564367eaee545577dfc216277ece3"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-187-current-r07-full.light-run01.v1.json",
+      "bytes": 3483,
+      "sha256": "d8354e6e6196ccc8af1c5004be3b3a649edd6f9b45c775b7b7aca5e597270b0b"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-188-current-r07-full-stop-and-owned-IO-probe-r2-run01.v1.json",
+      "bytes": 12904,
+      "sha256": "a0ad259557f0e56f6dd9a2f405b1a34d3cc0b6a230718de9cdbe43c17ec21dda"
+    },
+    {
+      "path": "tools/p09/inspect_current_r07_stop.py",
+      "bytes": 13361,
+      "sha256": "b68dfafaf70a1c768d3ee38f7ae8df77172f06c85b3b84cfa61e05b56dd4895f"
+    },
+    {
+      "path": "tools/p09/tests/test_current_r07_stop.py",
+      "bytes": 2839,
+      "sha256": "b55b4c60368effe00ece8b73f447ca4b1e74ab76b8fdbd36a20632e19eeb84db"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-188-current-r07-full-stop-and-owned-IO-probe-run01.v1.json",
+      "bytes": 3239,
+      "sha256": "a62e5b5121b5d3233b072b16ad387826c2bef90e91000d4406c89f1fde750dd1"
+    },
+    {
+      "path": "tools/p09/run_resumable_r07_case.py",
+      "bytes": 16792,
+      "sha256": "e5ea77db108ebe72a330a3c58ac19e5a13ed71a2086282426cd149f7ecdf6b59"
+    },
+    {
+      "path": "tools/p09/tests/test_run_resumable_r07_case.py",
+      "bytes": 5689,
+      "sha256": "87100979cdcb9a563ff2b288aac82b15848dc9f701ac613940cd95705e53ae38"
+    },
+    {
+      "path": "tools/p09/resumable_current_r07.py",
+      "bytes": 14014,
+      "sha256": "18fe998bee7287bbe557755b554125d420f26aaeb021df9ad14824ed75f1d0ff"
+    },
+    {
+      "path": "tools/p09/tests/test_resumable_current_r07.py",
+      "bytes": 10300,
+      "sha256": "8cd0b43e5804d1eeec2646eaf1df1bca08a375ecfa2b452aa5ffafd73e3bd4ba"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-004-attempt-001.json",
+      "bytes": 617816,
+      "sha256": "53159ac973e75e5562439c8a173afa948c9b7c23719826cb51a205d305b9634a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run05.closing.v1.json",
+      "bytes": 304809,
+      "sha256": "715d9f22098622741f5f844ed832a5917078b417cfb4122dee081b1bb90cb3bd"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-002-attempt-001.json",
+      "bytes": 659057,
+      "sha256": "b1b4447f28219bd47afa7f665185c1cd2a5752ef2dd165a401846ca119a8163a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run02.closing.v1.json",
+      "bytes": 898623,
+      "sha256": "4c2b452cd1acfbadfbe46a6e2b5154f6b889a97106a1510e79b4d5b9b2408422"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-003-attempt-001.json",
+      "bytes": 701199,
+      "sha256": "eb37b8dc27f5c5646afa5eac627be5a73ae72a26f8c4ee78c5c724a3436830df"
+    },
+    {
+      "path": "tools/p09/run_shared_resumable_r07_batch.py",
+      "bytes": 16910,
+      "sha256": "bcb6aed818b12ce9263263cfb0481c5755cc55b3ec0bb967851033994695683e"
+    },
+    {
+      "path": "tools/p09/tests/test_shared_resumable_r07_batch.py",
+      "bytes": 4856,
+      "sha256": "62174e0062265df3c2129f72d2a18bedfb5f9683a887d67952ae31c8509df1ed"
+    }
+  ],
+  "resource_tail": {
+    "original_completed_sample_count": 13,
+    "tail_limit": 8,
+    "existing_samples_only": true,
+    "extra_sampler_thread_started": false,
+    "foreign_Process_query_executed": false,
+    "samples": [
+      {
+        "time_utc": "2026-10-08T02:22:29.442462+00:00",
+        "system_cpu_percent": 4.29,
+        "available_ram_percent": 56.12588649765,
+        "commit_used_percent": 37.52080654715118,
+        "parent_cpu_machine_percent": 0.194932,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 76718750,
+          "kernel_including_idle": 78281250,
+          "user": 1875000,
+          "total": 80156250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:22:29.957528+00:00",
+        "system_cpu_percent": 4.29,
+        "available_ram_percent": 56.047077170735356,
+        "commit_used_percent": 37.56245225052974,
+        "parent_cpu_machine_percent": 0.746269,
+        "parent_cpu_delta_100ns": 625000,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 80156250,
+          "kernel_including_idle": 82187500,
+          "user": 1562500,
+          "total": 83750000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:22:30.469671+00:00",
+        "system_cpu_percent": 11.56,
+        "available_ram_percent": 55.94243535287342,
+        "commit_used_percent": 37.60595014943566,
+        "parent_cpu_machine_percent": 0.192678,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 71718750,
+          "kernel_including_idle": 75312500,
+          "user": 5781250,
+          "total": 81093750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:22:30.980710+00:00",
+        "system_cpu_percent": 8.16,
+        "available_ram_percent": 55.899597800253666,
+        "commit_used_percent": 37.65543246600321,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 75625000,
+          "kernel_including_idle": 79062500,
+          "user": 3281250,
+          "total": 82343750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:22:31.493948+00:00",
+        "system_cpu_percent": 3.08,
+        "available_ram_percent": 55.8978323143987,
+        "commit_used_percent": 37.65508811415869,
+        "parent_cpu_machine_percent": 0.384615,
+        "parent_cpu_delta_100ns": 312500,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78750000,
+          "kernel_including_idle": 79687500,
+          "user": 1562500,
+          "total": 81250000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:22:32.008619+00:00",
+        "system_cpu_percent": 5.08,
+        "available_ram_percent": 55.76092133840992,
+        "commit_used_percent": 37.708113080763084,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78906250,
+          "kernel_including_idle": 80468750,
+          "user": 2656250,
+          "total": 83125000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:22:32.508760+00:00",
+        "system_cpu_percent": 9.53,
+        "available_ram_percent": 55.664420371990325,
+        "commit_used_percent": 37.711493989782035,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 72656250,
+          "kernel_including_idle": 77187500,
+          "user": 3125000,
+          "total": 80312500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:22:33.009719+00:00",
+        "system_cpu_percent": 10.94,
+        "available_ram_percent": 55.489195900885136,
+        "commit_used_percent": 37.745287427615025,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 72500000,
+          "kernel_including_idle": 78125000,
+          "user": 3281250,
+          "total": 81406250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      }
+    ]
+  }
+}

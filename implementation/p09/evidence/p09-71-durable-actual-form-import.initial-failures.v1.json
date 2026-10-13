@@ -1,0 +1,41 @@
+{
+  "schema": "hwpx-agent.p09-durable-actual-form-import.initial-failures/v1",
+  "date": "2026-10-04",
+  "state": "original_failures_retained_not_pass",
+  "failures": [
+    {
+      "tool_chunk": "025ce8",
+      "state": "compile_fail",
+      "scope": "new_actual_import_helper_only",
+      "issues": [
+        "unused ArtifactPermission import",
+        "nonexistent ArtifactService::get_permissions"
+      ],
+      "repair": "use original metadata record.permissions_for after checking original source artifact identity; remove unused import",
+      "archive": "implementation/p09/source-archive/p09-71-initial-durable-import-compile/crates/product-cli/examples/support/stored_actual_import.rs"
+    },
+    {
+      "tool_chunk": "a52c7f",
+      "state": "strict_lint_fail",
+      "issues": [
+        "run too_many_lines111",
+        "safety too_many_lines126",
+        "new root mode arm missing semicolon"
+      ],
+      "outer_shell_exit_zero_is_not_lint_pass": true,
+      "repair": "extract same partial-denial and wrong-key operations; add semicolon; no assertion omission or allow/skip",
+      "archives": [
+        "implementation/p09/source-archive/p09-71-initial-durable-import-lint/crates/product-cli/examples/support/stored_actual_import.rs",
+        "implementation/p09/source-archive/p09-71-initial-durable-import-lint/crates/product-cli/examples/stored_full_document_request_probe.rs"
+      ]
+    }
+  ],
+  "corrected_strict_example_lint": {
+    "tool_chunk": "84f820",
+    "exit_code": 0,
+    "command": "cargo clippy --offline --locked -p hwpx-agent-cli --example stored_full_document_request_probe -- -D warnings"
+  },
+  "predecessor_p62_16fde8_cause": "UNRESOLVED",
+  "native_started": false,
+  "p09_complete": false
+}

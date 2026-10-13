@@ -1,0 +1,66 @@
+{
+  "state": "FAILED_NOT_ACCEPTED",
+  "tests_run": 10,
+  "tests_passed": 5,
+  "failed_tests": [
+    "test_annotation_never_claims_whole249_SQL_native_or_Gate",
+    "test_current_compile_gates_delegate_all_original_source_name_cleanup_checks",
+    "test_only_exact_five_packages_with_compute16_are_configured",
+    "test_worker_compiled_inventory_has_no_runtime_test_selection",
+    "test_worker_preserves_exact_original_signed16_filter_and_environment"
+  ],
+  "source_freeze": [
+    {
+      "path": "tools/p09/run_artifact_compute_signed_tests.py",
+      "bytes": 10418,
+      "sha256": "fbe95e96afe1303599794feb51441814d6b3ae2fbaaece840781737039e2f0c6"
+    },
+    {
+      "path": "tools/p09/tests/test_artifact_compute_signed_tests.py",
+      "bytes": 7547,
+      "sha256": "c5d714808c14d2c956bd55d3e8f85d84825409a41be6e90491b9449a4195840a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-algorithm.summary-run01.v1.json",
+      "bytes": 26951,
+      "sha256": "bd14b32947e85aa8004cca5964782e47007bd7bcb355bc5c5068246c44cc2c6e"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-algorithm.final-progress-sync-run01.v1.json",
+      "bytes": 1795,
+      "sha256": "38c8d2679f805d50d81d0fe184afec42c5dfcdbcfcf31af679b2d96146f67cd8"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "test_package_profile_config": [
+    "profile.test.package.hwpx-package.opt-level=1",
+    "profile.test.package.hwpx-package.debug-assertions=true",
+    "profile.test.package.hwpx-package.overflow-checks=true",
+    "profile.test.package.hwpx-package.codegen-units=16",
+    "profile.test.package.hwpx-package.debug=\"line-tables-only\"",
+    "profile.test.package.hwpx-agent-cli.opt-level=1",
+    "profile.test.package.hwpx-agent-cli.debug-assertions=true",
+    "profile.test.package.hwpx-agent-cli.overflow-checks=true",
+    "profile.test.package.hwpx-agent-cli.codegen-units=16",
+    "profile.test.package.hwpx-agent-cli.debug=\"line-tables-only\"",
+    "profile.test.lto=\"off\"",
+    "profile.test.package.serde_json.opt-level=1",
+    "profile.test.package.serde_json.debug-assertions=true",
+    "profile.test.package.serde_json.overflow-checks=true",
+    "profile.test.package.serde_json.codegen-units=16",
+    "profile.test.package.serde_json.debug=\"line-tables-only\"",
+    "profile.test.package.sha2.opt-level=1",
+    "profile.test.package.sha2.debug-assertions=true",
+    "profile.test.package.sha2.overflow-checks=true",
+    "profile.test.package.sha2.codegen-units=16",
+    "profile.test.package.sha2.debug=\"line-tables-only\"",
+    "profile.test.package.artifact-service.opt-level=1",
+    "profile.test.package.artifact-service.debug-assertions=true",
+    "profile.test.package.artifact-service.overflow-checks=true",
+    "profile.test.package.artifact-service.codegen-units=16",
+    "profile.test.package.artifact-service.debug=\"line-tables-only\""
+  ],
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "Cargo_SQL_native_executed": false
+}

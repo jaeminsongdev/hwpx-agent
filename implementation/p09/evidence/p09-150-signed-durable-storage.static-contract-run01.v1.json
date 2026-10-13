@@ -1,0 +1,113 @@
+{
+  "schema_version": "hwpx-agent.p09-signed-durable-storage-static-contract/v1",
+  "state": "STATIC_SOURCE_OBSERVATION_AND_INTEGRATION_REQUIREMENTS_NOT_IMPLEMENTED_OR_TESTED",
+  "goal_status": "active",
+  "P09_gate": "OPEN",
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "source_observation_scope": "bounded excerpts of public source and complete P09-65/P09-71 policy text; no full source closing audit, compiler, SQL or native execution",
+  "resource_observation": {
+    "available_RAM_percent": 7.32,
+    "named_verification_processes": [],
+    "heavy_work_started": false
+  },
+  "finding": {
+    "existing_local_encrypted_blob_store": {
+      "path": "crates/artifact-service/src/store.rs",
+      "lines": [
+        569,
+        574,
+        629
+      ],
+      "behavior": "SecureWorkspace-owned canonical ObjectKey, bounded ciphertext, publish-if-absent, fresh get, quarantine/restore"
+    },
+    "signed_SQL_probe_memory_storage": {
+      "path": "crates/product-cli/examples/formula_issuer_product_postgres_probe.rs",
+      "lines": [
+        154,
+        158,
+        179,
+        231,
+        261
+      ],
+      "behavior": "Service alias/constructor use InMemoryBlobStore; original signed issuer workflow already checks full plaintext/ciphertext digests"
+    },
+    "consumer_provider_memory_storage": {
+      "path": "crates/product-cli/examples/formula_issuer_product_postgres_probe/source.rs",
+      "lines": [
+        586,
+        589
+      ],
+      "behavior": "Provider alias explicitly fixes InMemoryBlobStore; Pipeline Service shares root alias"
+    },
+    "protocol_false_qualification": {
+      "path": "crates/product-cli/examples/formula_issuer_product_postgres_probe.rs",
+      "line": 308,
+      "behavior": "existing durable and production key custody qualification remain false"
+    },
+    "runtime_and_build_bindings": [
+      "tools/p09/run_formula_issuer_product_probe.py",
+      "tools/p09/issuer_sql_build_contract.py",
+      "tools/p09/current_issuer_build_inputs.py"
+    ],
+    "precedent_policies": [
+      "implementation/p09/P09-65_DURABLE_FULL_REQUEST_POLICY.md",
+      "implementation/p09/P09-71_DURABLE_ACTUAL_FORM_IMPORT_POLICY.md"
+    ]
+  },
+  "implementation_requirements": [
+    {
+      "id": "DS01",
+      "requirement": "Reuse LocalEncryptedBlobStore, do not create a weaker blob backend. Bind new durable mode only to a trusted driver's fresh owned canonical private root, never public request JSON or arbitrary caller root."
+    },
+    {
+      "id": "DS02",
+      "requirement": "Preserve legacy RAM mode and all original SQL22/schema/role/RLS/source/policy/signature/clock/head/ACL/AEAD/digest/callback/negative/whole byte+graph assertions. Keep RouteUnqualified denial; no real operation publication before P09 Gate."
+    },
+    {
+      "id": "DS03",
+      "requirement": "Before code edits preserve complete original root/source/driver/build-binding bytes and connect explicit reviewed deltas to original immutable receipts. Require a current new build/source freeze; do not restamp historical EXEs."
+    },
+    {
+      "id": "DS04",
+      "requirement": "Use one closed provider-owned blob adapter for root Service and source Provider aliases so current signed consumer and registry provisioner share the same actual durable service. No caller-selected scanner verdict, key, artifact or approval bit."
+    },
+    {
+      "id": "DS05",
+      "requirement": "Validate real encrypted disk bytes against original metadata ciphertext digest, tag bound and plaintext inequality. Reopen with a fresh LocalEncryptedBlobStore and repeat whole AEAD/digest/candidate comparison through original service and fresh authority reads."
+    },
+    {
+      "id": "DS06",
+      "requirement": "Add bounded bad-key/tampered-ciphertext/ACL/quarantine and head/ingest/no-publication invariants without replacing existing negatives. Assert absent/duplicate/malformed additional checks fail closed; old synthetic scanner and ephemeral keys stay explicitly unqualified."
+    },
+    {
+      "id": "DS07",
+      "requirement": "Retain independently verified owner/root/prefix/link containment and unique labeled disposable DB identity plus same CPU/RAM/Job/GO/stream/IO/timeout policy. Do not run Docker SQL until resource admission, image identity and backend containment are satisfied."
+    },
+    {
+      "id": "DS08",
+      "requirement": "Persist only closed outcome/check names and necessary digests; never credentials, AES/signing keys, source plaintext or full logs. Ciphertext/evidence retention and bounded cleanup require exact owned-target validation; no original/private/native/failed evidence removal."
+    },
+    {
+      "id": "DS09",
+      "requirement": "Separate same-process new-handle disk read from independent process restart/crash recovery, stable key custody, production scanner/issuer admission, atomic execution/publication, CLI transport, native and Gate acceptance. The latter are NOT_RUN/unqualified until independently proven."
+    }
+  ],
+  "implementation_strategy": "A closed probe-owned memory/local adapter can connect root and Provider aliases while preserving the old default mode and reusing existing production ArtifactService/LocalEncryptedBlobStore; exact code delta and current-runtime proof are still required.",
+  "not_run": [
+    "code implementation",
+    "new compiled build/inventory",
+    "durable signed SQL consumer",
+    "reopen/AEAD negatives",
+    "new source closing audit",
+    "independent process restart",
+    "production key custody",
+    "native/render/P09 Gate"
+  ],
+  "remaining_completion_units": 76,
+  "completion_units_deducted": 0,
+  "pending_capture_audit": "r21 actual-run02 stopped low RAM; post-current-source/Job-final/capture audit remains deferred. No blind whole249 replay.",
+  "broad_OS_or_unrelated_process_mutation": false,
+  "raw_logs_printed_or_saved": false,
+  "next_action": "After original resource admission permits required preservation/audit, finish r21 terminal audit and archive/bind the real root/provider/driver source before implementing DS01-DS09. Never declare this static contract or an alias alone as durable product completion."
+}

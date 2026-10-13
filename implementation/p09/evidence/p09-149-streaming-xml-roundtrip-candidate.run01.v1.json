@@ -1,0 +1,31 @@
+{
+  "schema_version": "hwpx-agent.p09-streaming-xml-roundtrip-candidate/v1",
+  "qualification": "SOURCE_CANDIDATE_ONLY_NOT_BUILD_RUNTIME_SQL_OR_GATE",
+  "baseline_build_pin": {
+    "path": "target/p09-149-current-issuer-build/current-issuer-build-r4.json",
+    "bytes": 305455,
+    "sha256": "5ce53cf4938ceaa2e8295644e57e3f4fc8becc6a20bdaca4db9cfb6bf5be86c7"
+  },
+  "parent_candidate_pin": {
+    "path": "implementation/p09/evidence/p09-149-source-stage-profile-candidate.run01.v1.json",
+    "bytes": 1483,
+    "sha256": "e06fe91a38c0b63abf5de077e46cb4a092e7eb03058e5a237c887f16ecbcfb5e"
+  },
+  "preimage_archive": "implementation/p09/source-archive/p09-149-pre-streaming-xml-roundtrip-r6/source-preimages.v1.json",
+  "source_deltas": [
+    {
+      "path": "crates/hwpx-package/src/preserving_xml.rs",
+      "bytes": 43702,
+      "sha256": "167cb93624a38f45397b5624bb826ffe19c25caed8e1011d73834299426508c4"
+    }
+  ],
+  "implementation": "Eliminate whole-XML serialized temporary buffer from untouched verification. Compare every token payload at its reconstructed offset, retain complete size and SHA256 checks and original invalid-span precedence. Hash the equal original only after whole-byte equality. Preserve prior allocating implementation as test-only independent oracle. Add six full/negative regressions, including all XML parts of all36 immutable source packages. Original safe parser and seven XML tests unchanged. No cross-read cache or authorization change.",
+  "XML_component_tests": 13,
+  "original_XML_component_tests": 7,
+  "new_XML_regressions": 6,
+  "reviewed_Rust_deltas_from_r4": 18,
+  "library_Rust_deltas_from_r4": 17,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "actual_SQL_or_native_qualified": false
+}

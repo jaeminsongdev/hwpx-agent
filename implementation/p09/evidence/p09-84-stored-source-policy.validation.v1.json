@@ -1,0 +1,48 @@
+{
+  "schema": "hwpx-agent.p09-84-validation/v1",
+  "state": "scoped_pass_with_existing_conformance_drift_and_unresolved_historical_intermittence",
+  "strict_lint": {
+    "command": "cargo clippy --offline --locked -p domain-ir -p hwpx-package -p artifact-service -p revision-service -p hwpx-agent-cli --lib --tests --examples -- -D warnings",
+    "chunk_id": "d31e4f",
+    "wall_time_seconds": 1.6122845,
+    "exit_code": 0,
+    "original_token_count": 38,
+    "output": "    Checking hwpx-agent-cli v0.1.0 (D:\\개발\\hwpx-agent\\crates\\product-cli)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.12s\n"
+  },
+  "format": {
+    "command": "rustfmt --check --edition 2024 --config skip_children=true <new five Rust sources>",
+    "chunk_id": "5a58ba",
+    "wall_time_seconds": 0.3225178,
+    "exit_code": 0,
+    "original_token_count": 0,
+    "output": ""
+  },
+  "runner_syntax": {
+    "chunk_id": "87ccb9",
+    "wall_time_seconds": 1.6211799,
+    "exit_code": 0,
+    "original_token_count": 128,
+    "output": "[{\"path\":\"crates/hwpx-package/src/note_hwpx.rs\",\"P83_current_bytes_retained\":true,\"sha256\":\"3364d95456e783633c77b044a223afa911c6c2035fe79c447c742bc4f40ce7c4\"},{\"path\":\"crates/hwpx-package/src/bookmark_hwpx.rs\",\"P83_current_bytes_retained\":true,\"sha256\":\"87ef96beaf7e9f513cf61aa26e367e0d2a1df4b5b0d370971c0d7418b86e4c51\"},{\"path\":\"crates/hwpx-package/src/hyperlink_hwpx.rs\",\"P83_current_bytes_retained\":true,\"sha256\":\"4e60e8c176d2bcdaac6c7b55ef3be0107c36b437250f501351ff1be02da7e99e\"}]\r\nP84_RUNNER_SYNTAX_PASS\r\n",
+    "unrelated_drift_sources_verified_against": "p09-83-stored-source-policy.source-progress.v1.json"
+  },
+  "phase_conformance": {
+    "command": "py -3 tools/p09/validate_reference_conformance_contract.py",
+    "exit_code": 1,
+    "tool_chunk": "29c1fb",
+    "error": "matrix_drift",
+    "changed_rows": 6,
+    "changed_common_sources": 3,
+    "source_paths": [
+      "crates/hwpx-package/src/note_hwpx.rs",
+      "crates/hwpx-package/src/bookmark_hwpx.rs",
+      "crates/hwpx-package/src/hyperlink_hwpx.rs"
+    ],
+    "P83_current_source_bytes_retained": true,
+    "summary_equal": true,
+    "claims_equal": true,
+    "validator_matrix_not_changed": true,
+    "upstream_not_reached": true
+  },
+  "native_executed": false,
+  "p09_complete": false
+}

@@ -1,0 +1,88 @@
+{
+  "schema": "hwpx-agent.p09-86-policy-product-validation/v1",
+  "state": "scoped_policy_product_preparation_pass_native_and_phase_gate_open",
+  "actual_SQL_runs": [
+    "implementation/p09/evidence/p09-86-policy-product.actual-postgres.run01.v1.json",
+    "implementation/p09/evidence/p09-86-policy-product.actual-postgres.run02.v1.json"
+  ],
+  "distinct_run_ids": [
+    "184a2e83-d353-4516-bbec-ad03e20287ee",
+    "d495745b-3abd-4380-9fdc-f0cb7898bced"
+  ],
+  "source_pins": 72,
+  "assertions_per_run": 492,
+  "probe_executable_sha256": "4a22599699f2a269e323846ae73b9e5abcc1f84c076f930c6a76aaa5fb1f2853",
+  "cipherfiles": [
+    48,
+    48
+  ],
+  "cipherbytes": [
+    189398,
+    189398
+  ],
+  "owned_resources_removed": true,
+  "source_pins_per_SQL_run": 72,
+  "unchanged_SQL_metadata_assertions": 85,
+  "unchanged_source_bridge_and_admission_assertions": 207,
+  "typed_policy_registration_assertions": 100,
+  "new_policy_product_assertions": 100,
+  "independent_product_case_processes_per_run": 10,
+  "product_case_IDs": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "per_product_case_deadline_seconds": 180,
+  "product_probe_legacy_cases_field": "fixture inventory size 10; selected_product_case and single receipt bind each actually executed case; runner verifies total exact ID coverage 0..9",
+  "current_strict_lint": {
+    "crates": 5,
+    "lib_tests_examples": true,
+    "exit_code": 0,
+    "chunk_id": "36b595"
+  },
+  "new_Rust_format": {
+    "files": 4,
+    "recursive_children": false,
+    "exit_code": 0
+  },
+  "python_runner_syntax": true,
+  "diff_check": true,
+  "new_focused_Rust_tests": {
+    "passed": 7,
+    "failed": 0,
+    "exit_code": 0,
+    "terminal_chunk_id": "e35ccd",
+    "included_in_broader_source_target_not_extra_distinct_count": true
+  },
+  "conformance": {
+    "command": "python tools/p09/validate_reference_conformance_contract.py",
+    "exit_code": 1,
+    "error": "matrix_drift",
+    "chunk_id": "907940",
+    "original_matrix_and_admission_guards_unchanged": true
+  },
+  "real_external_authentication_issuer_or_scanner_qualified": false,
+  "atomic_policy_source_execution_lease": false,
+  "full_document_import_authority": false,
+  "route_or_publication_authority": false,
+  "native_executed": false,
+  "P09_gate": "OPEN",
+  "a12": "OPEN",
+  "a13": "OPEN",
+  "p09_complete": false,
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "root_PLANS_absent": true,
+  "goal_status": "active",
+  "previous_P84_SQL_intermittence_root_causes_still_unresolved": true,
+  "DB_restart_or_crash_recovery_tested": false,
+  "initial_SQL_timeout_preserved": "implementation/p09/evidence/p09-86-policy-product.initial-postgres-failure.v1.json",
+  "performance_acceptance_claimed": false
+}

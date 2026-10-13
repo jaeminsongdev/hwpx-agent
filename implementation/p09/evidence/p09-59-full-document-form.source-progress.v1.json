@@ -1,0 +1,150 @@
+{
+  "schema": "hwpx-agent.p09-full-document-form.source-progress/v1",
+  "date": "2026-10-03",
+  "state": "scoped_source_progress_not_complete_source_chain_or_product_qualification",
+  "source_files": [
+    {
+      "path": "crates/product-cli/src/form_value_operation.rs",
+      "bytes": 18191,
+      "sha256": "f27df1214d02fbc7681ad15c7efc3e1c7151177cea02daba97a62d7ef28af8d1"
+    },
+    {
+      "path": "crates/product-cli/tests/form_value_operation.rs",
+      "bytes": 29595,
+      "sha256": "abd18f49a9e3f410a2117a7268a4112d43f153bbba4b4837958f25928cd18f7b"
+    },
+    {
+      "path": "crates/product-cli/src/form_value_operation/full_document.rs",
+      "bytes": 14906,
+      "sha256": "b1d0d32c618a1120036dabc1bdc688fa69228d16901d2bb26e4864c31bf00600"
+    },
+    {
+      "path": "crates/product-cli/tests/form_value_operation/full_document.rs",
+      "bytes": 16488,
+      "sha256": "808f37f5758fb9f84e89973cc0d1a2b16e4c39f8a64ca949e4fbe57d527149a7"
+    },
+    {
+      "path": "implementation/p09/P09-59_FULL_DOCUMENT_FORM_POLICY.md",
+      "bytes": 4123,
+      "sha256": "02760c712724e315084f936fb996fee321845a7ab7a17e837dbeb357534355cb"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-59-full-document-form.initial-failures.v1.json",
+      "bytes": 987,
+      "sha256": "3dff7f4448a96efaa421a71000496d5b915718a23fab964d8cb2e2cb6657d008"
+    }
+  ],
+  "source_archives": [
+    {
+      "original": "crates/product-cli/src/form_value_operation.rs",
+      "path": "implementation/p09/source-archive/p09-59-pre-full-document-form/form_value_operation.rs",
+      "bytes": 18168,
+      "sha256": "29f350da18e136479a172b5f28a603d735493ce1f07bfae11bd76aac5b8f73de",
+      "exact_declaration_inverse_verified": true
+    },
+    {
+      "original": "crates/product-cli/tests/form_value_operation.rs",
+      "path": "implementation/p09/source-archive/p09-59-pre-full-document-form/test_form_value_operation.rs",
+      "bytes": 29526,
+      "sha256": "13c9be74c298839872385dcb5a23ac236f26e0bfb5feab342a1ddc869a228a88",
+      "exact_declaration_inverse_verified": true
+    }
+  ],
+  "actual_checks": {
+    "product_tests": {
+      "exit_code": 0,
+      "passed": 54,
+      "new_full_ir_tests": 9,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 0,
+      "suites": {
+        "form_product_request": 10,
+        "form_stored_product_request": 8,
+        "form_stored_provider": 8,
+        "form_value_operation": 18,
+        "form_value_preparation": 10
+      },
+      "terminal_session": 82207,
+      "terminal_chunks": [
+        "93f03c",
+        "53ccbc",
+        "bfc930"
+      ],
+      "command": "cargo test --locked --offline -p hwpx-agent-cli --test form_value_operation --test form_value_preparation --test form_stored_provider --test form_stored_product_request --test form_product_request"
+    },
+    "strict_clippy": {
+      "exit_code": 0,
+      "chunk": "93f03c",
+      "command": "cargo clippy --locked --offline -p hwpx-agent-cli --lib --test form_value_operation -- -D warnings"
+    },
+    "new_file_rustfmt_check": {
+      "exit_code": 0,
+      "chunk": "0fe240",
+      "files": 2
+    },
+    "original_graph_hash_preservation": {
+      "state": "all_hashes_exact_with_two_explicit_archive_origins_not_cli_replay",
+      "files": 1551,
+      "bytes": 51047460,
+      "source_capsule": "implementation/p09/evidence/p09-48-native-form-color-preparation.source-qualified.v1.json",
+      "source_capsule_sha256": "d68d07c05a13422d58b35fda228e4ab6766418a8c10f70954871a37747b95d44",
+      "archive_origins": 2,
+      "live_original_origins": 1549,
+      "chunk": "456fe4"
+    },
+    "original_native_preservation": {
+      "files": 75,
+      "all_expected_sha256_exact": true,
+      "chunk": "c12dc4"
+    },
+    "original_p58_direct_pins": {
+      "files": 8,
+      "all_exact": true,
+      "chunk": "dd737c"
+    },
+    "old_p58_current": {
+      "before": {
+        "exit_code": 0,
+        "state": "NOT_RUN",
+        "cases": 0,
+        "chunk": "01e9ff"
+      },
+      "after": {
+        "exit_code": 1,
+        "state": "fail",
+        "error_code": "ValueError",
+        "chunk": "c83169"
+      },
+      "current_source_status": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+      "original_guard_or_capsule_overridden": false
+    }
+  },
+  "native_boundary": {
+    "hwp_process_count": 0,
+    "sdk_attempt_directories": 0,
+    "p58_dispatch_exists": false,
+    "p56_dispatch_exists": false,
+    "p56_current_exists": false,
+    "activation": false,
+    "permission_prompts": false,
+    "chunk": "dd737c"
+  },
+  "claims": {
+    "caller_supplied_full_ir_form_preparation_implemented": true,
+    "genuine_full_graph_operation_compiler_used": true,
+    "all_other_full_graph_fields_preserved_in_scoped_tests": true,
+    "full_ir_import_attested": false,
+    "persisted_ir_artifact_or_stored_request_connected": false,
+    "signed_route_manifest_cas_idempotency_or_publication_qualified": false,
+    "whole_archived_predecessor_cli_reexecuted": false,
+    "current_complete_source_chain_or_native_admission_qualified": false,
+    "whole_ordinary_suites_qualified": false,
+    "native_semantics_or_render_or_differential_qualified": false,
+    "raw_values_or_full_logs_present": false,
+    "green_rows": 0,
+    "p09_complete": false,
+    "p10_started": false
+  },
+  "next_boundary": "Actual whole predecessor source replay/new source admission and genuine persisted full IR linkage; no native execution while permission prompts forbidden"
+}

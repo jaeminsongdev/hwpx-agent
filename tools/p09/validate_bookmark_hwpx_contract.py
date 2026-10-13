@@ -5,7 +5,16 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import sys
 from typing import Any
+
+if __package__:
+    from . import component_current_source
+else:
+    from pathlib import Path as _Path
+    import sys as _sys
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from tools.p09 import component_current_source
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -143,8 +152,14 @@ def validate(
     *,
     contract_override: dict[str, Any] | None = None,
     qualification_override: dict[str, Any] | None = None,
+    source_profile: str = "historical_v1",
 ) -> dict[str, Any]:
     errors: list[str] = []
+    if source_profile not in ("historical_v1", component_current_source.PROFILE):
+        return result(["source_profile_unknown"], 0, 0, False)
+    current = source_profile == component_current_source.PROFILE
+    if current and (contract_override is not None or qualification_override is not None):
+        errors.append("current_source_override_not_admitted")
     try:
         contract = contract_override if contract_override is not None else load(root, CONTRACT)
         qualification = (
@@ -154,10 +169,12 @@ def validate(
         return result(["contract_or_qualification_json"], 0, 0, False)
     validate_contract(contract, errors)
     source_count = validate_locks(root, contract.get("source_locks"), SOURCE_SHA256, True, errors)
-    implementation_count = validate_implementation(root, errors)
+    implementation_count = validate_implementation(root, errors, current=current)
     qualification_ok = validate_qualification(qualification, errors)
     validate_documents(root, errors)
-    return result(errors, source_count, implementation_count, qualification_ok)
+    current_verified = component_current_source.verify(root, "bookmark_hwpx", errors) if current else False
+    value = result(errors, source_count, implementation_count, qualification_ok)
+    return component_current_source.decorate(value, "bookmark_hwpx", current_verified) if current else value
 
 
 def validate_contract(contract: Any, errors: list[str]) -> None:
@@ -231,8 +248,9 @@ def validate_locks(
     return len(declared)
 
 
-def validate_implementation(root: Path, errors: list[str]) -> int:
-    for relative, expected in IMPLEMENTATION_SHA256.items():
+def validate_implementation(root: Path, errors: list[str], *, current: bool = False) -> int:
+    expected_digests = component_current_source.IMPLEMENTATION_SHA256["bookmark_hwpx"] if current else IMPLEMENTATION_SHA256
+    for relative, expected in expected_digests.items():
         try:
             path = bounded_file(root, relative)
             if raw_digest(path) != expected:
@@ -322,7 +340,7 @@ def result(errors: list[str], sources: int, implementation: int, qualification: 
 
 
 def main() -> int:
-    response = validate()
+    response = validate(source_profile=component_current_source.cli_profile(sys.argv[1:]))
     print(json.dumps(response, sort_keys=True, separators=(",", ":")))
     return 0 if response["state"] == "pass" else 1
 

@@ -1,0 +1,159 @@
+{
+  "schema": "hwpx-agent.p09-96-memo-style-final-audit/v1",
+  "state": "PASS_SCOPED_EXISTING_STYLE_OUTPUT_AND_SOURCE_EVIDENCE_NOT_P09_GATE",
+  "recorded_at_utc": "2026-10-04 14:27:26 UTC",
+  "checkpoint": {
+    "path": "implementation/p09/evidence/p09-96-memo-style-output.source-progress.v1.json",
+    "bytes": 12952,
+    "sha256": "4aebe074bef35ecca8e5a322b308837f15228f48046a2d3381f1ee8966dc0f13"
+  },
+  "regression": {
+    "path": "implementation/p09/evidence/p09-96-memo-style-output.source-regression.v1.json",
+    "bytes": 8196,
+    "sha256": "e059743ba1a9c100c6875c70bd2cb34d1c48a50e61dcd5778c9b993b5632c5c5"
+  },
+  "initial_failures": {
+    "path": "implementation/p09/evidence/p09-96-memo-style-output.initial-failures.v1.json",
+    "bytes": 3192,
+    "sha256": "7403c5a697a13f54ef5fcf77f01345145bfbaf1332d5e49673c20fa51d0d6b29"
+  },
+  "preservation": {
+    "path": "implementation/p09/evidence/p09-96-memo-style-output.preservation.v1.json",
+    "bytes": 2798,
+    "sha256": "527deabf85ccf48bdf854885ba1da0af60d303ca90fd967fb6614d3d29e6dd3a"
+  },
+  "live_checkpoint_audit": {
+    "terminal_chunk_id": "d74468",
+    "exit_code": 0,
+    "previous_raw_pin_entries": 1183,
+    "unchanged_previous_source_files": 797,
+    "whole_parent_preimages": 6,
+    "parent_inverse_exact": true,
+    "current_groups": {
+      "source_delta": 18,
+      "source_archives_added": 10,
+      "predecessor_receipts_added": 2,
+      "current_executables": 9
+    },
+    "current_raw_pin_entries": 39,
+    "old_executables_preserved_not_reexecuted": 62,
+    "scope": "all declared P95 inherited and P96 exact-path delta pins; not every original historical qualification reexecuted"
+  },
+  "executed_verification": {
+    "rust_passed": 228,
+    "rust_failed": 0,
+    "rust_ignored": 0,
+    "python_passed": 8,
+    "strict_clippy_passed": 2,
+    "scoped_rust_format": "PASS",
+    "git_diff_check": "PASS",
+    "original_current_source_conformance": {
+      "upstream_validators_verified": 15,
+      "green_rows": 0,
+      "P09_gate": "OPEN"
+    },
+    "default_conformance": {
+      "state": "FAIL:matrix_drift",
+      "terminal_chunk_id": "19cac2",
+      "exit_code": 1
+    }
+  },
+  "requirement_evidence": [
+    {
+      "requirement": "Existing source memoPr selected through original catalog; no raw XML/offset/ID admission",
+      "state": "implemented_component_verified",
+      "evidence": "lower_memo_style original source/anchor/selector validation and new package negative tests"
+    },
+    {
+      "requirement": "Seven selected existing style attributes lowered to actual HWPX bytes with all unrelated expanded bytes exact",
+      "state": "implemented_component_verified",
+      "evidence": "original ID/patch/writer + exact header and all other part comparisons + original full catalog output reimport"
+    },
+    {
+      "requirement": "Original duplicate/dangling/wrong-type/foreign-namespace checks and legacy memoShape retained",
+      "state": "implemented_component_verified",
+      "evidence": "original ID tests8 plus new native declaration/collision tests"
+    },
+    {
+      "requirement": "Fresh stored source authorization and head checks before callback",
+      "state": "implemented_component_verified_NOT_atomic_publication",
+      "evidence": "original service AES-GCM/ACL/head replay; callback blocked after tamper/revoke/head advance; in-memory repositories and fixture keys"
+    },
+    {
+      "requirement": "Original source, raw captures, official sources, failed evidence and old test executables retained",
+      "state": "verified_declared_inherited_and_delta_scope",
+      "evidence": "P95 raw1183 + six exact whole preimages/inverses + P96 exact delta39"
+    },
+    {
+      "requirement": "Full comment metadata/body/state/compiler/protection/issuer/durable/atomic publication integration",
+      "state": "incomplete",
+      "evidence": "full source-native typed comment and product execution route remain unqualified"
+    },
+    {
+      "requirement": "Actual Hangul save/reopen/render/differential and P09 Gate",
+      "state": "NOT_RUN_OR_OPEN",
+      "evidence": "no native/UI/access run; native admission requires re-admission, full native34 NOT_RUN/green0; P09/A12/A13 OPEN"
+    }
+  ],
+  "qualification": {
+    "native_executed": false,
+    "actual_SQL_executed": false,
+    "full_comment_product_acceptance": false,
+    "native_author_time_state_binding": false,
+    "product_complete": false,
+    "P10_new_implementation": false,
+    "execution_publication_authority": false,
+    "P09_gate": "OPEN",
+    "A12": "OPEN",
+    "A13": "OPEN",
+    "P26": "failed_semantic_non_green",
+    "P62": "UNRESOLVED",
+    "P84_SQL": "UNRESOLVED",
+    "native_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+    "full_native_queue": {
+      "cases": 34,
+      "state": "NOT_RUN",
+      "green": 0
+    },
+    "goal_status": "active"
+  },
+  "remaining_work_groups": [
+    {
+      "id": "metadata_coordinates",
+      "state": "incomplete",
+      "scope": "native author/time/visibility/resolution and coordinates; unknown values NOT fabricated"
+    },
+    {
+      "id": "full_comment_HWPX",
+      "state": "partial_existing_style_header_only",
+      "scope": "complete comment header/body/MEMO lowering and original typed state/compiler integration"
+    },
+    {
+      "id": "durable_product_integration",
+      "state": "incomplete",
+      "scope": "actual durable source/IR/provider/product integration; fixture checks not production SQL acceptance"
+    },
+    {
+      "id": "remaining_document_semantics",
+      "state": "incomplete",
+      "scope": "unsupported field/Date/external validation and remaining complete-document P09 semantics"
+    },
+    {
+      "id": "trusted_execution_publication",
+      "state": "incomplete",
+      "scope": "trusted issuer, complete protection policy, atomic execution/publication"
+    },
+    {
+      "id": "P84_SQL_diagnosis",
+      "state": "unresolved",
+      "scope": "SQL intermittent cause and regression; no actual SQL run in this stage"
+    }
+  ],
+  "remaining_count_scope": "minimum six coarse groups, not exhaustive fine-grained tasks; native34 separate; style output does not complete an entire group",
+  "goal_complete": false,
+  "P10_new_implementation": false,
+  "root_PLANS_absent": true,
+  "no_original_HWPX_rewrite_or_cleanup": true,
+  "all_original_or_historical_qualification_reexecuted": false,
+  "next_product_boundary": "Connect exact original source style/body observations to original typed comment state/compiler and full HWPX lowering without fabricated metadata or dropping protection/partial-context guards. Native permissions and actual SQL remain outside current allowed execution."
+}

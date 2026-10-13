@@ -1,0 +1,106 @@
+{
+  "schema": "hwpx-agent.p09-103-review-table-context-final-audit/v1",
+  "recorded_at_utc": "2026-10-04 18:42:42 UTC",
+  "checkpoint": {
+    "path": "implementation/p09/evidence/p09-103-review-table-context.source-progress.v1.json",
+    "bytes": 18075,
+    "sha256": "a9beb6b1b3201840573c50603e7e2ea039d63601edf35ec01c706ea830eecdb6"
+  },
+  "current_byte_audit": {
+    "terminal_chunk_id": "ac8dba",
+    "exit_code": 0,
+    "state": "pass_scoped_inheritance_and_table_context_delta_NOT_output_SQL_native_or_Gate",
+    "checkpoint": {
+      "path": "implementation/p09/evidence/p09-103-review-table-context.source-progress.v1.json",
+      "bytes": 18075,
+      "sha256": "a9beb6b1b3201840573c50603e7e2ea039d63601edf35ec01c706ea830eecdb6"
+    },
+    "inherited_raw_pin_entries": 1479,
+    "current_groups": {
+      "source_delta": 14,
+      "source_archives_added": 13,
+      "predecessor_receipts_added": 2,
+      "current_executables": 36
+    },
+    "P09_gate": "OPEN",
+    "product_complete": false
+  },
+  "regression_receipts": [
+    {
+      "path": "implementation/p09/evidence/p09-103-review-table-context.initial-failures.v1.json",
+      "bytes": 6918,
+      "sha256": "dd447b969aa64355fbb1d67fc99e40c2ca761e068d272b421668b2ee91117e53"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-103-review-table-context.preservation.v1.json",
+      "bytes": 2895,
+      "sha256": "62c756d63cca2f00ae4706b1dc25e9a50d3c8c45ae51ae8533c7ddc92dc81cd5"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-103-review-table-context.source-regression.v1.json",
+      "bytes": 4474,
+      "sha256": "38ba9ededdb16f9982fe65ef4b7dfa5c0cb9a252e1dd4d738e8fad74170f969f"
+    }
+  ],
+  "verification": {
+    "rust_passed": 320,
+    "package_passed": 153,
+    "product_passed": 167,
+    "new_context_tests": 7,
+    "reused_native_create_tests": 8,
+    "unique_counts_not_repeated_runs": true,
+    "python_passed": 8,
+    "python_final_chunk": "9e84bd",
+    "strict_package_chunk": "962943",
+    "strict_product_chunk": "6be6fa",
+    "original_component_validators": 15,
+    "green_rows": 0,
+    "default_conformance": "FAIL:matrix_drift",
+    "all_historical_qualification_reexecuted": false
+  },
+  "preservation": {
+    "old_current_source_entries": 890,
+    "unchanged": 886,
+    "whole_parent_preimages": 4,
+    "parent_inverse_exact": true,
+    "exact_prior_P102_audit_passed": true,
+    "current_source_and_evidence_entries": 900,
+    "inherited_raw_pin_entries": 1479,
+    "current_group_pin_entries": 65,
+    "raw_entries_available_for_next_checkpoint": 1544,
+    "old_executables_preserved_not_reexecuted": 158,
+    "current_owned_executable_inventory": 36,
+    "all_current_executables_executed_or_passed": false,
+    "failed_context_14_pass_1_fail_executable_preserved": true,
+    "no_original_guard_or_assertion_removed": true
+  },
+  "scope": {
+    "terminal_scope_chunk": "ac8dba",
+    "git_head": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+    "Hwp_count": 0,
+    "root_PLANS_exists": false,
+    "native_executed": false,
+    "actual_SQL_executed": false,
+    "installation_settings_changed": false,
+    "commit_push_or_stage_performed": false,
+    "original_deleted_moved": false,
+    "new_table_inserted": false,
+    "whole_package_ID_closure_verified": false,
+    "full_document_flow_bound": false,
+    "full_comment_product_acceptance": false,
+    "execution_publication_authority": false,
+    "P09_gate": "OPEN",
+    "A12": "OPEN",
+    "A13": "OPEN",
+    "native34": "NOT_RUN/green0",
+    "native_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+    "P26": "failed_semantic_non_green",
+    "P62": "UNRESOLVED",
+    "P84_SQL": "UNRESOLVED",
+    "minimum_coarse_remaining_non_permission_groups": 6,
+    "P10_new_implementation": false,
+    "product_complete": false,
+    "goal_status": "active",
+    "all_started_command_sessions_terminal": true
+  }
+}

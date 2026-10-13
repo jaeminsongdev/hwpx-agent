@@ -1,0 +1,67 @@
+{
+  "schema": "hwpx-agent.p09-89-memo-catalog-initial-failures/v1",
+  "state": "failures_preserved_not_upgraded_by_scoped_pass",
+  "initial_private_compile": {
+    "exit_code": 1,
+    "chunk_id": "834eeb",
+    "error": "E0432 nested test fixture crate alias unresolved",
+    "archive_prefix": "implementation/p09/source-archive/p09-89-pre-memo-catalog/initial-private-compile",
+    "whole_source_archives": 2,
+    "correction": "reuse original Hancom2020Vs0Builder directly in one shared in-memory synthetic fixture; no original captured source or runtime parser changes"
+  },
+  "initial_stored_compile": {
+    "exit_code": 1,
+    "terminal_chunk_id": "bcb664",
+    "error": "stale copied test used old fixture markers/signature and removed type import",
+    "correction": "remove obsolete copied body test; preserve original P88 test untouched and add native memo catalog failure test"
+  },
+  "initial_strict_lint": {
+    "exit_code": 1,
+    "initial_chunk_id": "c659de",
+    "terminal_chunk_id": "9a3510",
+    "diagnostics": [
+      "doc_markdown",
+      "collapsible_if",
+      "nonminimal_bool"
+    ],
+    "archive_prefix": "implementation/p09/source-archive/p09-89-pre-memo-catalog/initial-lint-and-stored-compile",
+    "whole_source_archives": 2,
+    "correction": "documentation backticks, equivalent let-chain and equivalent boolean expression; no lint allowance or guard/budget weakening"
+  },
+  "new_format_after_section_id_optimization": {
+    "exit_code": 1,
+    "chunk_id": "808eed",
+    "error": "one new test assertion wrapping",
+    "correction_exit_code": 0,
+    "correction_chunk_id": "e47793",
+    "final_check_chunk_id": "6dbe86"
+  },
+  "original_comment_contract": {
+    "command": "python tools/p09/validate_comment_model_contract.py",
+    "exit_code": 1,
+    "error": "implementation_digest",
+    "chunk_id": "6c3ee1",
+    "old_source_qualification_not_rewritten": true,
+    "comment_component_and_shared_lib_exact_P88": true,
+    "parity_chunk_id": "2adb27"
+  },
+  "original_comment_python_tests": {
+    "command": "python -m unittest discover -s tools/p09/tests -p test_comment_model_contract.py",
+    "passed": 4,
+    "failed": 1,
+    "exit_code": 1,
+    "chunk_id": "59a216"
+  },
+  "original_conformance": {
+    "command": "python tools/p09/validate_reference_conformance_contract.py",
+    "exit_code": 1,
+    "error": "matrix_drift",
+    "chunk_id": "6e5c04",
+    "old_matrix_not_rewritten": true
+  },
+  "preserved_P26": "failed_semantic_non_green",
+  "preserved_P62": "UNRESOLVED",
+  "native_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+  "full_native34": "NOT_RUN",
+  "native_executed": false
+}

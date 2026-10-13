@@ -1,0 +1,32 @@
+{
+  "schema_version": "hwpx-agent.p09-output-stage-profile-candidate/v1",
+  "qualification": "SOURCE_CANDIDATE_ONLY_NOT_BUILD_RUNTIME_SQL_OR_GATE",
+  "baseline_build_pin": {
+    "path": "target/p09-149-current-issuer-build/current-issuer-build-r4.json",
+    "bytes": 305455,
+    "sha256": "5ce53cf4938ceaa2e8295644e57e3f4fc8becc6a20bdaca4db9cfb6bf5be86c7"
+  },
+  "parent_candidate_pin": {
+    "path": "implementation/p09/evidence/p09-149-moved-readback-buffer-candidate.run01.v1.json",
+    "bytes": 1609,
+    "sha256": "15cba96439dd94fcc5c6f341b17bcc656bbb1e1ca71df7c87fbe5454bbc0a734"
+  },
+  "preimage_archive": "implementation/p09/source-archive/p09-149-pre-output-stage-timing-r8/source-preimages.v1.json",
+  "source_deltas": [
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics/evaluation/output.rs",
+      "bytes": 21875,
+      "sha256": "854ec650d7b820684aba6e0c7ce13c5013c64c7d636f5b0dc6a1ec3231926dd5"
+    }
+  ],
+  "implementation": "Test-only seven private timing boundaries in the unchanged lowering body plus fresh reconstruction and verified export timing. All timers/collector/corpus derivative test are cfg(test). After removing only exact test-gated statements and test-only modules, original product text is byte-identical after newline normalization. No product API, callback, receipt, live authorization, cache or check/order change. Test all36 original denials and all16 numeric derivatives through complete original patch/writer/full candidate readback. Numeric aggregates only.",
+  "product_body_text_exact_after_removing_test_only_additions": true,
+  "original_inputs": 36,
+  "changed_inputs": 16,
+  "stages": 9,
+  "reviewed_Rust_deltas_from_r4": 19,
+  "library_Rust_deltas_from_r4": 18,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "actual_SQL_or_native_qualified": false
+}

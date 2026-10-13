@@ -1,0 +1,66 @@
+{
+  "schema_version": "hwpx-agent.p09-92-conformance-current-source-initial-failures/v1",
+  "created_date": "2026-10-04",
+  "scope": "original_REF53_current_source_conformance_not_native_or_product_gate",
+  "goal_status": "active",
+  "gate": {
+    "P09": "OPEN",
+    "A12": "OPEN",
+    "A13": "OPEN",
+    "P26": "failed_semantic_non_green",
+    "P62": "UNRESOLVED",
+    "native_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+    "full_native34": "NOT_RUN",
+    "P10_new_implementation": false,
+    "goal_status": "active"
+  },
+  "initial_isolated_profile_test": {
+    "exit_code": 1,
+    "total_tests": 18,
+    "failed": 1,
+    "errors": 0,
+    "chunk_id": "294089",
+    "failed_test": "test_complete_test_owned_clone_can_run_the_same_cli_pipeline",
+    "error": "qualification_fixture_path",
+    "missing_original_inputs": [
+      {
+        "path": "fixtures/target-build/p05-08-current-2020-20260907-v12/p05-08-header-footer-output-attempt02.hwpx",
+        "bytes": 14661,
+        "sha256": "2fd7af9efb54132160b617b7b28399804596115fb2758bf193e5b0cd830838ac"
+      },
+      {
+        "path": "implementation/p05/P05-08_HANCOM2020_MASTER_PAGE_REPAIR.md",
+        "bytes": 6233,
+        "sha256": "88d76133576de8bc86b5be4ec7731440da2fc2669d407bdf9ffc8d46d394a385"
+      }
+    ],
+    "initial_qualification": {
+      "path": "implementation/p09/evidence/p09-92-conformance-current-source.qualification.v2.json",
+      "bytes": 86896,
+      "sha256": "ddd8e78d535839dbbc5cc3b2750db876f86bb6f3c4ca90332629ca1060758b3e"
+    },
+    "archive_prefix": "implementation/p09/source-archive/p09-92-initial-current-profile",
+    "snapshots": [
+      {
+        "path": "implementation/p09/source-archive/p09-92-initial-current-profile/implementation/p09/evidence/p09-92-conformance-current-source.qualification.v2.json",
+        "bytes": 86896,
+        "sha256": "ddd8e78d535839dbbc5cc3b2750db876f86bb6f3c4ca90332629ca1060758b3e"
+      },
+      {
+        "path": "implementation/p09/source-archive/p09-92-initial-current-profile/tools/p09/conformance_current_source.py",
+        "bytes": 10588,
+        "sha256": "659f1162e60b66ef56eecbd5e15ad359b35b0b779db51ff2f73712941c4772b5"
+      },
+      {
+        "path": "implementation/p09/source-archive/p09-92-initial-current-profile/tools/p09/tests/test_conformance_current_source.py",
+        "bytes": 12381,
+        "sha256": "845c1f9961f7691cbff4c2c632793ea52b08d593cae71b181e079c0a56c92cc1"
+      }
+    ],
+    "original_guard_removed": false,
+    "original_fixture_regenerated": false,
+    "native_reexecuted": false,
+    "corrected_raw_pin_count": 242,
+    "correction": "bind original P05 package and authority report whole bytes and include them in owned clone; retain original auto-number fixture guard"
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "schema_version": "hwpx-agent.p09-scheduled-binding-summary/v1",
+  "state": "PASS_SCOPED_BINDING_COMPILE_AND_STOP_PRESERVATION_NOT_RUNTIME_OR_GATE",
+  "source_variant": "unchanged-r11-Rust-two-package-profile-scheduled-binding-r13",
+  "source_test_count": 249,
+  "source_module_instances": 59,
+  "current_Rust_inputs": 783,
+  "current_helpers": [
+    {
+      "path": "tools/p09/run_scheduled_signed_tests.py",
+      "bytes": 8516,
+      "sha256": "9192c930145e57b0441752ec5f013f6fb46cd8b464530b1f8fb81485bc8a8d54"
+    },
+    {
+      "path": "tools/p09/tests/test_scheduled_signed_tests.py",
+      "bytes": 11578,
+      "sha256": "27f2498005c14080d21e1225af1bc3526b69598db7832101e29198d4e138354e"
+    },
+    {
+      "path": "tools/p09/scheduled_binding_resources.py",
+      "bytes": 9179,
+      "sha256": "82f0454022b15598f0a5122438671cc343e3ba4604c26c8665a4c7e3a15f6479"
+    }
+  ],
+  "support_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-scheduled.inventory-run01.v1.json",
+      "bytes": 891978,
+      "sha256": "94e1c0f94ab12a74d0d7fe4cdd5356a3cfbb246214c5b93422cb5431f6d2c884"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-scheduled.actual-run01.v1.json",
+      "bytes": 935416,
+      "sha256": "b1b6a9f2fc2f5ee28bc8bcfadba4111c8a47fb3dc609e163e81c3aa6a8dec3fe"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-scheduled-reader-constructor-r13/helper-preimages.v1.json",
+      "bytes": 34445,
+      "sha256": "0106674b20fe000613fc11c25da4e1fc0964eb6005f29b46228d4f4d5c77fc77"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-scheduled.binding-failure-run01.v1.json",
+      "bytes": 1110,
+      "sha256": "cab9348cccf7996ecf4cf93992e169ace171dfc3d6211e809dcf04eee5359521"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-scheduled.light-run01.v1.json",
+      "bytes": 843,
+      "sha256": "f063a733f755edd0ed59c90b659811b1b1455ad1451b4b964c70cc25b24b054f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-scheduled.light-run02.v1.json",
+      "bytes": 844,
+      "sha256": "9e604d555609bc17b0cd109a4b49c74e4d2a8ad5d4b6c7d01e28b28acc0d7d0c"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-scheduled.binding-run01.v1.json",
+      "bytes": 7336,
+      "sha256": "f6746d0281528fafc332870e52af64cf1aa85ec5f19d89450e19635bb8d94327"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-basic-opt.summary-run01.v1.json",
+      "bytes": 7182,
+      "sha256": "8df7a176cffceac7e5e7892b2967e5b8f201d343137a25aff2e8668964c498ce"
+    }
+  ],
+  "whole_previous_helper_bytes": 23927,
+  "original_test_and_Rust_body_unchanged": true,
+  "original_owned_runtime_policy_changed": false,
+  "source_read_or_closing_hash_removed": false,
+  "per_IO_blocking_half_second_sleep_added": false,
+  "original_callback_AST_and_closure_allowlist_enforced": true,
+  "canonical_manual_sample_seconds": 0.5,
+  "light01": {
+    "tests_run": 14,
+    "tests_passed": 14,
+    "qualification": "historical contract scope missed real constructor binding failure"
+  },
+  "light02": {
+    "tests_run": 17,
+    "tests_passed": 17,
+    "qualification": "contract only, real constructor/fresh closing/cross-reader cadence included"
+  },
+  "original_binding_failure_preserved": true,
+  "compiled_inventory_current_exact": true,
+  "inventory": {
+    "state": "PASS_SCOPED_NOT_GATE",
+    "elapsed_seconds": 175.32,
+    "job_CPU_seconds": 158.391,
+    "peak_job_private_mib": 1979.77,
+    "peak_job_private_percent": 6.213774590367436,
+    "host_CPU_max": 100,
+    "host_CPU_at_least98_longest_streak": 2,
+    "available_RAM_percent_min": 30.930515258272802,
+    "commit_percent_max": 39.80485580970867,
+    "finalactive": 0,
+    "cleanup": true
+  },
+  "actual": {
+    "state": "STOPPED_NOT_ACCEPTED",
+    "stop_reason": "STOP_DURATION_LIMIT",
+    "elapsed_seconds": 184.23,
+    "maximum_seconds": 180,
+    "tests_passed": null,
+    "original_single_test_complete": false,
+    "whole_signed16_complete": false,
+    "fully_observed_case_sequences": 3,
+    "markers": 64,
+    "last_observed_case": 3,
+    "next_expected_stage": "current_consume",
+    "qualification": "partial test-only stage observation is not per-case or global runtime PASS",
+    "job_CPU_seconds": 174.719,
+    "peak_job_private_mib": 63.92,
+    "peak_job_private_percent": 0.2006278509071716,
+    "host_CPU_max": 57.58,
+    "available_RAM_percent_min": 35.56449877672673,
+    "commit_percent_max": 38.69964291235468,
+    "finalactive": 0,
+    "cleanup": true
+  },
+  "source_audit": {
+    "exec_session": 43828,
+    "terminal_exit": 0,
+    "current_execution_source_freezes_exact": true,
+    "current_compiled_inventory_acceptance_checked": true,
+    "source_test_count": 249,
+    "source_module_instances": 59,
+    "current_Rust_inputs": 783,
+    "closing_fresh_hashes": 927,
+    "read_passes": 2790,
+    "bytes_read": 74731529,
+    "elapsed_seconds": 20.57555,
+    "resource_stop": null,
+    "watcher_cleanup_confirmed": true,
+    "new_child_or_thread_started": false
+  },
+  "prior_docs": [
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 168378,
+      "sha256": "ec470ed2a717ae978c2ab41075eb1ec869f0f0d1d107d0f1f58aa34e7d1e68c6"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 262010,
+      "sha256": "14c3c1d2dc6cb935248aa9b1c612d4579b04952ff6d1285f201fb6e9e51c7bc6"
+    }
+  ],
+  "r12_entire_prior_documents_restored_exact": [
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 164390,
+      "sha256": "cbc9fa722d73973daa7f3e4a9f69e9aab6c13c766fa148739599effe84ccf1fd"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 258022,
+      "sha256": "8f20bbcb17705e9640c606892b78dd043eea17aef729d242c3e542c3d19a7e5a"
+    }
+  ],
+  "source_closing_exact": true,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "SQL_native_or_Gate_qualified": false,
+  "PC_freeze_resolved": false,
+  "statistical_speedup_proven": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "P10_new_implementation": false,
+  "goal_status": "active",
+  "next_action": "Compare test-only domain-ir opt1 with smaller64 codegen units under identical runtime caps; compile current249 before signed16; no duration increase or input/assertion/auth skipping"
+}

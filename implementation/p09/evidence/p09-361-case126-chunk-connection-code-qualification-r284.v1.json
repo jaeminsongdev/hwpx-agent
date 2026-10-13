@@ -1,0 +1,404 @@
+{
+  "schema_version": "hwpx-agent.p09-flat-chunk-connection-code-qualification/v1",
+  "state": "PASS_CHUNK_CONNECTION14_AND_ORIGINAL_SCRATCH15_NOT_FULL_PREFLIGHT_OR_RUNTIME",
+  "actual126_product_executed": false,
+  "accepted_count_after": 119,
+  "accepted_count_delta": 0,
+  "contracts": {
+    "run": 29,
+    "errors": 0,
+    "failures": 0,
+    "skips": 0,
+    "failed_names": []
+  },
+  "new_code_pins": [
+    {
+      "path": "tools/p09/flat_current_queue_chunk_runtime_v1.py",
+      "bytes": 16597,
+      "sha256": "3963df1621c570d16d7937692351db9366b994ae812ef5375b7d5fca7e5494f0"
+    },
+    {
+      "path": "tools/p09/tests/test_flat_current_queue_chunk_connection_v1.py",
+      "bytes": 10468,
+      "sha256": "eafd70318afbee7f0ba2ceeacf10ac11aacab86080ad30fa3b3fe56ab7effc33"
+    },
+    {
+      "path": "tools/p09/reusable_audit_chunk_v1.py",
+      "bytes": 8088,
+      "sha256": "1aa1db74585cbdf50df32ac0c9dc07dfd31557fc37647ca6e6ea3969fbb60e75"
+    },
+    {
+      "path": "tools/p09/tests/test_reusable_audit_chunk_v1.py",
+      "bytes": 10148,
+      "sha256": "60af53923c129d9f67774b8347a5e7df6aef85ea1c30cd9e65378e4a37a5a399"
+    }
+  ],
+  "template_proof": {
+    "original_engine_bytecode_unchanged": true,
+    "original_build_module_and_default_reader_unmodified": true,
+    "metadata_reader_leaf_projection": {
+      "original_leaf_read_AST_restored_exactly": true,
+      "chunk_read_allocation_operations_changed": 1,
+      "scratch_lease_wrappers_added": 1,
+      "original_checkpoints_hash_parse_pacing_and_stream_statements_removed": 0,
+      "original_chunk_bytes": 65536,
+      "default_reader_mutated": false,
+      "runtime_or_freeze_resolution_qualified": false,
+      "original_MRO_preserved_with_one_leaf_insert": true
+    },
+    "boundary_reader_leaf_projection": {
+      "original_leaf_read_AST_restored_exactly": true,
+      "chunk_read_allocation_operations_changed": 1,
+      "scratch_lease_wrappers_added": 1,
+      "original_checkpoints_hash_parse_pacing_and_stream_statements_removed": 0,
+      "original_chunk_bytes": 65536,
+      "default_reader_mutated": false,
+      "runtime_or_freeze_resolution_qualified": false,
+      "original_MRO_preserved_with_one_leaf_insert": true
+    },
+    "original_identity_pressure_byte_and_open_wrappers_preserved": true,
+    "added_sampler_thread_or_query": false,
+    "runtime_product_connection_qualified": false
+  },
+  "original_import_count": 57,
+  "fresh_inputs": 6,
+  "fresh_read_passes": 12,
+  "fresh_bytes_read": 128474,
+  "final_fresh_hashes": 6,
+  "original_complete_runtime_and_acceptor_oracles_retained": true,
+  "Native_source_or_product_runtime_qualified": false,
+  "metadata": {
+    "warning_CPU_percent": 75,
+    "checks": 283,
+    "warning_stops": 0,
+    "latched": false,
+    "active": false,
+    "original_checkpoint_restored": true,
+    "original_hard_guard_first": true,
+    "original_cool_checkpoint_retained": true,
+    "added_sampler_or_native_query": false,
+    "added_cooling_waits": 0,
+    "automatic_retry_or_resume": false,
+    "cleanup_guarded": false,
+    "complete_source_reads_or_deadlines_weakened": false,
+    "runtime_connection_qualified": false,
+    "PC_freeze_resolved": false
+  },
+  "cleanup_confirmed": true,
+  "CPU_max": 17.1,
+  "RAM_min": 42.29890778953202,
+  "prior_bounded_live_factory_inspection": {
+    "state": "PASS_LIVE119_PRESERVED16_CHUNK2_AND_FACTORY_INSERTION_NOT_NATIVE",
+    "factory_types": {
+      "BuildReader": {
+        "original_MRO": [
+          "BuildReader",
+          "WeightedReader",
+          "AuditEvidenceReader",
+          "object"
+        ],
+        "candidate_MRO": [
+          "ReusableReader",
+          "BuildReader",
+          "WeightedReader",
+          "ChunkLeaf",
+          "AuditEvidenceReader",
+          "object"
+        ],
+        "proof": {
+          "original_leaf_read_AST_restored_exactly": true,
+          "chunk_read_allocation_operations_changed": 1,
+          "scratch_lease_wrappers_added": 1,
+          "original_checkpoints_hash_parse_pacing_and_stream_statements_removed": 0,
+          "original_chunk_bytes": 65536,
+          "default_reader_mutated": false,
+          "runtime_or_freeze_resolution_qualified": false,
+          "original_MRO_preserved_with_one_leaf_insert": true
+        }
+      },
+      "BoundaryReader": {
+        "original_MRO": [
+          "BoundaryReader",
+          "WeightedReader",
+          "WeightedReader",
+          "AuditEvidenceReader",
+          "object"
+        ],
+        "candidate_MRO": [
+          "ReusableReader",
+          "BoundaryReader",
+          "WeightedReader",
+          "WeightedReader",
+          "ChunkLeaf",
+          "AuditEvidenceReader",
+          "object"
+        ],
+        "proof": {
+          "original_leaf_read_AST_restored_exactly": true,
+          "chunk_read_allocation_operations_changed": 1,
+          "scratch_lease_wrappers_added": 1,
+          "original_checkpoints_hash_parse_pacing_and_stream_statements_removed": 0,
+          "original_chunk_bytes": 65536,
+          "default_reader_mutated": false,
+          "runtime_or_freeze_resolution_qualified": false,
+          "original_MRO_preserved_with_one_leaf_insert": true
+        }
+      },
+      "AcceptanceReader": {
+        "original_MRO": [
+          "AcceptanceReader",
+          "WeightedReader",
+          "WeightedReader",
+          "AuditEvidenceReader",
+          "object"
+        ],
+        "candidate_MRO": [
+          "ReusableReader",
+          "AcceptanceReader",
+          "WeightedReader",
+          "WeightedReader",
+          "ChunkLeaf",
+          "AuditEvidenceReader",
+          "object"
+        ],
+        "proof": {
+          "original_leaf_read_AST_restored_exactly": true,
+          "chunk_read_allocation_operations_changed": 1,
+          "scratch_lease_wrappers_added": 1,
+          "original_checkpoints_hash_parse_pacing_and_stream_statements_removed": 0,
+          "original_chunk_bytes": 65536,
+          "default_reader_mutated": false,
+          "runtime_or_freeze_resolution_qualified": false,
+          "original_MRO_preserved_with_one_leaf_insert": true
+        }
+      }
+    },
+    "prior_terminal_data_pin": {
+      "path": "implementation/p09/evidence/p09-361-case126-budget-terminal-connection-data001.v1.json",
+      "bytes": 3151,
+      "sha256": "edf87fb2f69f707e02790634e73bb0361454b0672dda47f31d298cdfef44463a"
+    },
+    "base_step_pin": {
+      "path": "implementation/p09/evidence/p09-361-case126-step-config001.v1.json",
+      "bytes": 675,
+      "sha256": "69145b3d3f6632b5062f545b69d16e44765f929ccdcb17ec509cfc613abdca3f"
+    },
+    "scratch_qualification_pin": {
+      "path": "implementation/p09/evidence/p09-361-case126-stop-and-reusable-chunk-qualification-r282.v1.json",
+      "bytes": 14689,
+      "sha256": "3a89e24990c8d2c3050fd147cbd05c201ddac35021b596595cf89a1d327d0da5"
+    },
+    "failed_preflight_pin": {
+      "path": "implementation/p09/evidence/p09-361-case126-budget-terminal-preflight001.v1.json",
+      "bytes": 42554,
+      "sha256": "1ba359b53cb573ec5cb3cbb747878afc053a14c8afdb1de1730b9135a30f3507"
+    },
+    "frozen_leaf_pin": {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    "source_pins": [
+      {
+        "path": "tools/p09/reusable_audit_chunk_v1.py",
+        "bytes": 8088,
+        "sha256": "1aa1db74585cbdf50df32ac0c9dc07dfd31557fc37647ca6e6ea3969fbb60e75"
+      },
+      {
+        "path": "tools/p09/tests/test_reusable_audit_chunk_v1.py",
+        "bytes": 10148,
+        "sha256": "60af53923c129d9f67774b8347a5e7df6aef85ea1c30cd9e65378e4a37a5a399"
+      }
+    ],
+    "fresh_inputs": 26,
+    "fresh_read_passes": 52,
+    "fresh_bytes_read": 1010008,
+    "final_fresh_hashes": 26,
+    "metadata": {
+      "warning_CPU_percent": 75,
+      "checks": 310,
+      "warning_stops": 0,
+      "latched": false,
+      "active": false,
+      "original_checkpoint_restored": true,
+      "original_hard_guard_first": true,
+      "original_cool_checkpoint_retained": true,
+      "added_sampler_or_native_query": false,
+      "added_cooling_waits": 0,
+      "automatic_retry_or_resume": false,
+      "cleanup_guarded": false,
+      "complete_source_reads_or_deadlines_weakened": false,
+      "runtime_connection_qualified": false,
+      "PC_freeze_resolved": false
+    },
+    "cleanup_confirmed": true,
+    "CPU_max": 25.4,
+    "RAM_min": 41.23355967924555
+  },
+  "preformal_failures": [
+    {
+      "state": "FAILED_NOT_ACCEPTED",
+      "error_code": "FLAT_QUEUE_CONFIG_REQUIRED",
+      "metadata": {
+        "warning_CPU_percent": 75,
+        "checks": 163,
+        "warning_stops": 0,
+        "latched": false,
+        "active": false,
+        "original_checkpoint_restored": true,
+        "original_hard_guard_first": true,
+        "original_cool_checkpoint_retained": true,
+        "added_sampler_or_native_query": false,
+        "added_cooling_waits": 0,
+        "automatic_retry_or_resume": false,
+        "cleanup_guarded": false,
+        "complete_source_reads_or_deadlines_weakened": false,
+        "runtime_connection_qualified": false,
+        "PC_freeze_resolved": false
+      },
+      "cleanup_confirmed": true,
+      "CPU_max": 11.9,
+      "RAM_min": 42.224438615344155,
+      "interpretation": "Bounded template inspection omitted base.configure126; no product/Native frame or source edit occurred. Configuration was corrected before the second bounded inspection."
+    },
+    {
+      "state": "FAILED_NOT_ACCEPTED",
+      "actual126_product_executed": false,
+      "accepted_count_after": 119,
+      "accepted_count_delta": 0,
+      "contracts": {
+        "run": 29,
+        "errors": 1,
+        "failures": 0,
+        "skips": 0,
+        "failed_names": [
+          "test_build_reader_open_pacer_and_owned_rate_envelope_preserved"
+        ]
+      },
+      "error_code": "CURRENT_EPOCH_ACCEPT_CONNECTION14_PLUS_CHUNK15",
+      "metadata": {
+        "warning_CPU_percent": 75,
+        "checks": 229,
+        "warning_stops": 0,
+        "latched": false,
+        "active": false,
+        "original_checkpoint_restored": true,
+        "original_hard_guard_first": true,
+        "original_cool_checkpoint_retained": true,
+        "added_sampler_or_native_query": false,
+        "added_cooling_waits": 0,
+        "automatic_retry_or_resume": false,
+        "cleanup_guarded": false,
+        "complete_source_reads_or_deadlines_weakened": false,
+        "runtime_connection_qualified": false,
+        "PC_freeze_resolved": false
+      },
+      "cleanup_confirmed": true,
+      "CPU_max": 13.77,
+      "RAM_min": 41.85124678243268,
+      "interpretation": "Synthetic test assumed QueryPacer.rate; original reports request_limit_per_second20 via summary and actually counts requests. Assertion corrected against original summary, not removed.",
+      "preserved_test_preimage": {
+        "path": "implementation/p09/evidence/p361-chunk-connection-preformal-failed-test/test_flat_current_queue_chunk_connection_v1.py",
+        "bytes": 10101,
+        "sha256": "380bf4f1abb844034fe51c2c859009ea99568557122786a602accd4bb7b4cd55"
+      }
+    }
+  ],
+  "pre_data_qualification_link_qualification": {
+    "state": "PASS_CHUNK_CONNECTION14_AND_ORIGINAL_SCRATCH15_NOT_FULL_PREFLIGHT_OR_RUNTIME",
+    "actual126_product_executed": false,
+    "accepted_count_after": 119,
+    "accepted_count_delta": 0,
+    "contracts": {
+      "run": 29,
+      "errors": 0,
+      "failures": 0,
+      "skips": 0,
+      "failed_names": []
+    },
+    "new_code_pins": [
+      {
+        "path": "tools/p09/flat_current_queue_chunk_runtime_v1.py",
+        "bytes": 15671,
+        "sha256": "dc9f373e724665faf35059aa13c9ae93d3429f6e80ed742c343e50bee913c802"
+      },
+      {
+        "path": "tools/p09/tests/test_flat_current_queue_chunk_connection_v1.py",
+        "bytes": 10203,
+        "sha256": "7a2947e40abf68d399944b75e1b942f05e59a50b1cf993e87b6835aa62925035"
+      },
+      {
+        "path": "tools/p09/reusable_audit_chunk_v1.py",
+        "bytes": 8088,
+        "sha256": "1aa1db74585cbdf50df32ac0c9dc07dfd31557fc37647ca6e6ea3969fbb60e75"
+      },
+      {
+        "path": "tools/p09/tests/test_reusable_audit_chunk_v1.py",
+        "bytes": 10148,
+        "sha256": "60af53923c129d9f67774b8347a5e7df6aef85ea1c30cd9e65378e4a37a5a399"
+      }
+    ],
+    "template_proof": {
+      "original_engine_bytecode_unchanged": true,
+      "original_build_module_and_default_reader_unmodified": true,
+      "metadata_reader_leaf_projection": {
+        "original_leaf_read_AST_restored_exactly": true,
+        "chunk_read_allocation_operations_changed": 1,
+        "scratch_lease_wrappers_added": 1,
+        "original_checkpoints_hash_parse_pacing_and_stream_statements_removed": 0,
+        "original_chunk_bytes": 65536,
+        "default_reader_mutated": false,
+        "runtime_or_freeze_resolution_qualified": false,
+        "original_MRO_preserved_with_one_leaf_insert": true
+      },
+      "boundary_reader_leaf_projection": {
+        "original_leaf_read_AST_restored_exactly": true,
+        "chunk_read_allocation_operations_changed": 1,
+        "scratch_lease_wrappers_added": 1,
+        "original_checkpoints_hash_parse_pacing_and_stream_statements_removed": 0,
+        "original_chunk_bytes": 65536,
+        "default_reader_mutated": false,
+        "runtime_or_freeze_resolution_qualified": false,
+        "original_MRO_preserved_with_one_leaf_insert": true
+      },
+      "original_identity_pressure_byte_and_open_wrappers_preserved": true,
+      "added_sampler_thread_or_query": false,
+      "runtime_product_connection_qualified": false
+    },
+    "original_import_count": 57,
+    "fresh_inputs": 6,
+    "fresh_read_passes": 12,
+    "fresh_bytes_read": 126092,
+    "final_fresh_hashes": 6,
+    "original_complete_runtime_and_acceptor_oracles_retained": true,
+    "Native_source_or_product_runtime_qualified": false,
+    "metadata": {
+      "warning_CPU_percent": 75,
+      "checks": 283,
+      "warning_stops": 0,
+      "latched": false,
+      "active": false,
+      "original_checkpoint_restored": true,
+      "original_hard_guard_first": true,
+      "original_cool_checkpoint_retained": true,
+      "added_sampler_or_native_query": false,
+      "added_cooling_waits": 0,
+      "automatic_retry_or_resume": false,
+      "cleanup_guarded": false,
+      "complete_source_reads_or_deadlines_weakened": false,
+      "runtime_connection_qualified": false,
+      "PC_freeze_resolved": false
+    },
+    "cleanup_confirmed": true,
+    "CPU_max": 22.43,
+    "RAM_min": 42.38279288827969
+  },
+  "prior_two_code_preimage_archive": "implementation/p09/evidence/p361-chunk-connection-before-qualified-data-link",
+  "original_source_two_reads_or_guard_or_rates_or_deadlines_reduced": false,
+  "actual_whole_Native_or_product_connection_qualified": false,
+  "whole126_preflight_executed": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false
+}

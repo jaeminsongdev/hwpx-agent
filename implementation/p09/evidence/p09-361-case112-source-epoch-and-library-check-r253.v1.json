@@ -1,0 +1,99 @@
+{
+  "schema_version": "hwpx-agent.p09-case112-source-epoch-and-library-check-summary/v1",
+  "state": "PASS_SOURCE_EPOCH_AND_CURRENT_CLI_LIBRARY_CHECK_ONLY_NOT_TEST_BUILD_RUNTIME_OR_GATE",
+  "date_local": "2026-10-11",
+  "goal_status": "active",
+  "queue": {
+    "accepted_cases": 105,
+    "total_cases": 249,
+    "remaining_cases": 144,
+    "next_case": 112,
+    "accepted_count_delta": 0,
+    "passed_case111_replayed": false
+  },
+  "source_epoch_audit_pin": {
+    "path": "implementation/p09/evidence/p09-361-case112-source-epoch-run001.v1.json",
+    "bytes": 164636,
+    "sha256": "60b495ced9324e5f0daa8286ccc718e87b987776200cdd569736af965f90114b"
+  },
+  "library_check_pin": {
+    "path": "implementation/p09/evidence/p09-361-case112-current-lib-check-run001.v1.json",
+    "bytes": 425444,
+    "sha256": "afda1589e83a4364d0dc27e76bc7aa9531cc9b38e4f7cba81d154db277fb9e18"
+  },
+  "epoch_findings": {
+    "current_library_registration_only_normalized_delta": true,
+    "current_registered_module_absent_from_original_frozen_source": true,
+    "original_test_binary_bytes_preserved": true,
+    "user_source_modified": false,
+    "original_frozen_source_pins_rebased": false,
+    "original_failed_or_partial_evidence_promoted": false,
+    "original_source_frame_preserved": true,
+    "current_library_pin": {
+      "path": "crates/product-cli/src/lib.rs",
+      "bytes": 26562,
+      "sha256": "4811ee756dde8335a8ae70836dba8093684c2b7aa26c49af654e0a9c4d997323"
+    },
+    "current_module_pin": {
+      "path": "crates/product-cli/src/reference_validation_product.rs",
+      "bytes": 6645,
+      "sha256": "9943fe55690775ae58564c247324ae239d9218f571e804a553297be4672e28bd"
+    }
+  },
+  "actual_library_check": {
+    "cargo_arguments": ["check", "--quiet", "-p", "hwpx-agent-cli", "--lib", "--locked", "--offline", "--jobs", "1", "--color=never"],
+    "target_directory": "target/p09-361-case112-current-lib-check-r001",
+    "fresh_target_before_execution_required": true,
+    "whole_workspace_Rust_input_inventory_count": 787,
+    "pinned_inputs_before_after": 806,
+    "bytes_per_complete_input_pass": 30968701,
+    "before_after_inventory_and_bytes_exact": true,
+    "current_CLI_library_typecheck_qualified": true,
+    "whole_workspace_compilation_qualified": false,
+    "current_test_executable_built": false,
+    "current_library_bound_to_old_test_binary": false,
+    "compiler_exit_code": 0,
+    "elapsed_seconds": 96.72,
+    "resource_samples": 191,
+    "system_cpu_max_percent": 43.18,
+    "owned_job_cpu_max_machine_percent": 6.339898810002539,
+    "available_ram_min_percent": 45.40225185268737,
+    "job_private_peak_mib": 1525.63,
+    "commit_used_max_percent": 32.40420770823256,
+    "owned_job_cpu_hard_cap_readback_machine_percent": 6.25,
+    "owned_job_private_limit_readback_mib": 2548.87109375,
+    "one_logical_cpu_one_cargo_job": true,
+    "priority": "BelowNormal",
+    "job_kill_on_close_and_no_breakaway_readback_verified": true,
+    "assertions_and_overflow_checks_retained": true,
+    "incremental_compilation_disabled": true,
+    "raw_output_limits_retained": true,
+    "output_requires_exact_completion_marker_and_empty_stderr": true,
+    "resource_stop_reason": null,
+    "cleanup_confirmed": true,
+    "owned_process_tree_empty": true,
+    "PC_freeze_resolved": false
+  },
+  "targeted_verification": {
+    "synthetic_contracts_run": 17,
+    "synthetic_contracts_passed": 17,
+    "synthetic_contracts_failed_or_skipped": 0,
+    "AST_and_source_whitespace_files_passed": 4,
+    "actual_native_or_product_execution_by_contract_suite": false,
+    "whole249_replayed": false
+  },
+  "next_boundary": "Build and bind a fresh current-source form_stored_provider test executable with the retained optimized dependency profile, then verify its compiled listing before authorizing case112 runtime. Preserve prior passed cases and historical source/binary evidence; do not stamp the old executable as current.",
+  "runtime_tests_executed": false,
+  "Hangul_or_access_permission_workflow_started": false,
+  "parallel_observer_or_other_build_started": false,
+  "Defender_settings_changed_this_stage": false,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "whole_gate_reconciliation_required": true,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "P10_implementation_started": false,
+  "product_complete": false,
+  "raw_logs_or_secrets_included": false
+}

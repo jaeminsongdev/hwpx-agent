@@ -3,6 +3,8 @@
 implementation/p07/tools/run-hancom-2020-equation-editor-smoke.ps1 -text -eol whitespace=cr-at-eol
 implementation/p07/tools/run-hancom-2020-equation-editor-smoke-child.ps1 -text -eol whitespace=cr-at-eol
 implementation/p07/tools/finalize-hancom-2020-equation-editor-smoke.ps1 -text -eol whitespace=cr-at-eol
+implementation/p09/tools/run-hancom-2020-sdk-baseline-capture.ps1 -text -eol whitespace=cr-at-eol
+implementation/p09/tools/sdk-baseline-owned-session.ps1 -text -eol whitespace=cr-at-eol
 *.cmd text eol=crlf
 *.bat text eol=crlf
 *.png binary
@@ -14,3 +16,7 @@ implementation/p07/tools/finalize-hancom-2020-equation-editor-smoke.ps1 -text -e
 *.pb binary
 artifacts/p17/current-workspace-source-runs/*/receipt.json binary -eol
 artifacts/p17/durable-git-mirror-push/runs/*/receipt.json binary -eol
+# P09 검증은 원시 바이트 SHA-256을 결속하므로 checkout 시 줄바꿈을 변환하지 않는다.
+tools/p09/** -text -eol
+implementation/p09/** -text -eol
+CURRENT_STATE.md -text -eol

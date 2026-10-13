@@ -1,0 +1,45 @@
+{
+  "state": "PASS_SPLIT_DOMAIN_CONTRACT_ONLY_NOT_COMPILE_RUNTIME_OR_GATE",
+  "tests_run": 10,
+  "tests_passed": 10,
+  "failed_tests": [],
+  "source_freeze": [
+    {
+      "path": "tools/p09/run_split_domain_signed_tests.py",
+      "bytes": 9145,
+      "sha256": "5d9e41d527fdf84f01a8e8f06a9dc726f2256e73f24e6be8885438b43e6ec820"
+    },
+    {
+      "path": "tools/p09/tests/test_split_domain_signed_tests.py",
+      "bytes": 7277,
+      "sha256": "75195c5356ed724c19a9c01c16a6cce339cb7ff400b1d83b0d789fc0fefbedd9"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-scheduled.summary-run01.v1.json",
+      "bytes": 6404,
+      "sha256": "a567bb39e98412a6702da44c8edc332155f9e832850d24da2dd07b317cf6b245"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "test_package_profile_config": [
+    "profile.test.package.hwpx-package.opt-level=1",
+    "profile.test.package.hwpx-package.debug-assertions=true",
+    "profile.test.package.hwpx-package.overflow-checks=true",
+    "profile.test.package.hwpx-package.codegen-units=16",
+    "profile.test.package.hwpx-package.debug=\"line-tables-only\"",
+    "profile.test.package.hwpx-agent-cli.opt-level=1",
+    "profile.test.package.hwpx-agent-cli.debug-assertions=true",
+    "profile.test.package.hwpx-agent-cli.overflow-checks=true",
+    "profile.test.package.hwpx-agent-cli.codegen-units=16",
+    "profile.test.package.hwpx-agent-cli.debug=\"line-tables-only\"",
+    "profile.test.lto=\"off\"",
+    "profile.test.package.domain-ir.opt-level=1",
+    "profile.test.package.domain-ir.debug-assertions=true",
+    "profile.test.package.domain-ir.overflow-checks=true",
+    "profile.test.package.domain-ir.codegen-units=64",
+    "profile.test.package.domain-ir.debug=\"line-tables-only\""
+  ],
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "Cargo_SQL_native_executed": false
+}

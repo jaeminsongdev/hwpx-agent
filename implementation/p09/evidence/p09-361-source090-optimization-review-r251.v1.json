@@ -1,0 +1,98 @@
+{
+  "schema_version": "hwpx-agent.p09-source-stop-code-review/v1",
+  "state": "REVIEW_COMPLETE_NOT_SOURCE_OR_PRODUCT_OR_GATE_PASS",
+  "goal_status": "active",
+  "source_receipt_pin": {
+    "path": "implementation/p09/evidence/p09-361-post-product-source/p340-post-stop-source-run090.v1.json",
+    "bytes": 232767,
+    "sha256": "c5f3ef7111aa8d3fb4c24d9b27e30767cde03136bb02d8fd11f143a50bbf1baa"
+  },
+  "source_result": {
+    "state": "FAILED_NOT_ACCEPTED",
+    "error_code": "STOP_NATIVE_OPEN_AFTER_HOST_SATURATION",
+    "resource_stop_reason": null,
+    "classification": "POLICY_CIRCUIT_BREAKER",
+    "failure_stage": "source_frame_acquire",
+    "completed_native_handles": 607,
+    "closed_native_handles": 607,
+    "remaining_native_handles": 0,
+    "active_readers": 0,
+    "active_byte_streams": 0,
+    "watcher_cleanup_confirmed": true,
+    "completed_full_source_byte_boundaries": 0,
+    "actual_product_child_executed": false,
+    "accepted_count_delta": 0
+  },
+  "saved_same_run_observations": {
+    "sample_count": 248,
+    "host_cpu_max_percent": 98.04,
+    "own_cpu_max_machine_percent": 2.218115,
+    "own_private_max_bytes": 37400576,
+    "available_ram_min_percent": 28.190297306591944,
+    "peak_time_utc": "2026-10-10T22:37:25.578419+00:00",
+    "own_cpu_at_host_peak_percent": 0.0,
+    "audited_byte_delta_at_host_peak": 0,
+    "watcher_phase_label": "metadata_hash",
+    "watcher_label_is_not_proof_of_hash_activity": true,
+    "foreign_process_cpu_not_measured": true,
+    "cause_or_freeze_resolution_established": false
+  },
+  "code_review": {
+    "paths": [
+      "tools/p09/locked_runtime_inputs.py",
+      "tools/p09/resume_preserved106_queue_runtime.py",
+      "tools/p09/close_p340_post_product_source_frame.py",
+      "tools/p09/accept_p340_case111_compound.py"
+    ],
+    "acquisition_rate_per_second": 5,
+    "global_and_byte_open_ceiling_per_second": 20,
+    "ancestor_walk_steps": 315,
+    "ancestor_deduplication_already_present": true,
+    "inspect_completed": 607,
+    "inspect_total_seconds": 0.018469000060576946,
+    "inspect_max_seconds": 0.0009547999943606555,
+    "open_elapsed_includes_pacing_and_pressure": true,
+    "read_identity_and_native_close_checks_retained": true,
+    "cached_owner_samples_reused": true,
+    "no_parallel_sidecar_or_pdh_or_test_runner": true,
+    "further_safe_hot_loop_optimization_demonstrated": false,
+    "external_on_open_interaction_ruled_out": false,
+    "guard_or_deadline_relaxation_authorized_as_optimization": false
+  },
+  "current_verifier_qualification": {
+    "stop_review": {
+      "path": "implementation/p09/evidence/locked-r07/p340-stop-review-run126.v1.json",
+      "bytes": 84062,
+      "sha256": "609a268a25c91a43a3938e36a7aa8e557b7c54f652ec02978d9df839fe67b33c"
+    },
+    "light": {
+      "path": "implementation/p09/evidence/locked-r07/p340-light-run127.v1.json",
+      "bytes": 86226,
+      "sha256": "fa07f471bfbf2e5b78e41318d89a00f9d14071783f99ad922df5b8e0b5489bc9"
+    },
+    "fresh": {
+      "path": "implementation/p09/evidence/locked-r07/p340-light-review-run128.v1.json",
+      "bytes": 78002,
+      "sha256": "501e2b045ad8d4377235067f0563929c7f0944601bf3b06b327c479e74355a26"
+    },
+    "contract_executions": 1032,
+    "light_fresh_hashes": 283,
+    "independent_fresh_hashes": 284,
+    "light_and_fresh_host_cpu_max_percent": 63.42,
+    "light_and_fresh_own_cpu_max_machine_percent": 6.238532,
+    "light_and_fresh_own_private_max_bytes": 96747520,
+    "light_and_fresh_available_ram_min_percent": 28.91846213921714,
+    "cleanup_confirmed": true,
+    "resource_stop": null,
+    "native_or_product_qualification": false
+  },
+  "source_ast_and_whitespace_files_passed": 6,
+  "original_user_source_overwritten": false,
+  "defender_settings_changed_by_this_review": false,
+  "accepted_product_cases": 104,
+  "total_product_cases": 249,
+  "next_case": 111,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "next_boundary": "Historical case111 source still needs a complete independently guarded frame. Do not replay its passed product child, reuse partial Native work as a pass, or promote the archive projection to current-product qualification."
+}

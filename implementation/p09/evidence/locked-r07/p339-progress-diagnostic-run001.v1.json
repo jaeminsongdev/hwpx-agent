@@ -1,0 +1,233 @@
+{
+  "schema_version": "hwpx-agent.p09-p339-progress-diagnostic/v1",
+  "date": "2026-10-10",
+  "goal_status": "ACTIVE",
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "accepted_individual_cases": 100,
+  "remaining_individual_cases": 149,
+  "remaining_regular": 143,
+  "remaining_corpus": 6,
+  "next_runtime_index": 107,
+  "source_closing_pending": 0,
+  "whole_reconciliation_pending": 97,
+  "whole1470_current_fresh_qualified": false,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "PC_freeze_resolved": false,
+  "current_document_final_fresh_qualified": "NOT_RUN",
+  "product106_reexecution_count": 0,
+  "original_failed_or_partial_promoted": false,
+  "review": {
+    "pin": {
+      "path": "implementation/p09/evidence/locked-r07/p338-review-run003.v1.json",
+      "bytes": 293891,
+      "sha256": "612b841e87840352adae2e1fab8819fc02556060da26912af028b372128e43f2"
+    },
+    "state": "PASS_PRESERVED106_REVIEW_NOT_SOURCE_RUNTIME_OR_GATE",
+    "contracts": 61,
+    "reused": 0,
+    "cleanup": true,
+    "native": false,
+    "qualified": false,
+    "IO": {
+      "bound_inputs": 142,
+      "final_fresh_hashes": 142,
+      "read_passes": 284,
+      "bytes_read": 21089576,
+      "finished": true
+    },
+    "previous_failure_review": {
+      "original_pin": {
+        "path": "implementation/p09/evidence/locked-r07/p338-source-run002.v1.json",
+        "bytes": 706878,
+        "sha256": "b7967fc1e225f99bd11daaf12d7fe66104bdfc9692d1ae9610424caeb3addd6a"
+      },
+      "original_declared_native_false_preserved": true,
+      "actual_Native_acquisition_happened": true,
+      "opened_and_closed": 612,
+      "actual_byte_boundaries_completed": 0,
+      "actual_product_reexecuted": false,
+      "original_FAILED_not_promoted": true,
+      "duplicate91_source_reads_identified": true,
+      "CPU_or_freeze_solution_established": false
+    },
+    "own_cpu": 5.978261,
+    "own_private": 56623104,
+    "free_min": 39.75778514895367
+  },
+  "source": {
+    "pin": {
+      "path": "implementation/p09/evidence/locked-r07/p338-source-run004.v1.json",
+      "bytes": 628772,
+      "sha256": "2d19eaa5057ceac9b3dbc93e5c8f889facd5734ca720c451d0b547ec7d8688db"
+    },
+    "state": "PASS_PRESERVED106_INDEPENDENT_FULL_SOURCE_NOT_RUNTIME_OR_GATE",
+    "contracts": 0,
+    "reused": 61,
+    "cleanup": true,
+    "native": true,
+    "qualified": true,
+    "IO": {
+      "bound_inputs": 143,
+      "final_fresh_hashes": 143,
+      "read_passes": 286,
+      "bytes_read": 21677358,
+      "finished": true
+    },
+    "frame": {
+      "frame_state": "COMMITTED",
+      "registered_live_frame": false,
+      "input_count": 1656,
+      "input_bytes": 120940347
+    },
+    "boundaries": [
+      {
+        "role": "before",
+        "reader_diagnostics": {
+          "read_passes": 1656,
+          "bytes_read": 120940347,
+          "read_rates_by_kind": {
+            "binary": 1048576,
+            "other": 2097152
+          },
+          "bytes_read_by_kind": {
+            "binary": 14216704,
+            "other": 106723643
+          },
+          "near_saturation_read_backpressure": {
+            "warning_system_CPU_percent": 95,
+            "cool_distinct_sample_windows": 2,
+            "maximum_pause_windows_per_entry": 8,
+            "warning_entries": 0,
+            "completed_pause_windows": 0,
+            "maximum_observed_pause_windows_in_one_entry": 0,
+            "requested_pause_seconds": 0,
+            "original_hard_resource_decisions_unmodified": true,
+            "original_IO_deadline_unmodified": true,
+            "original_sampler_windows_reused": true,
+            "new_native_query_or_sampler_thread_started": false,
+            "original_read_checks_skipped": false
+          },
+          "last_completed_protected_EXE_path": null,
+          "interrupted_protected_EXE_path": null,
+          "arbitrary_source_paths_or_private_artifact_names_saved": false,
+          "original_owned_read_operations_preserved": true,
+          "extra_sampler_or_native_query_started": false
+        }
+      },
+      {
+        "role": "after",
+        "reader_diagnostics": {
+          "read_passes": 1656,
+          "bytes_read": 120940347,
+          "read_rates_by_kind": {
+            "binary": 1048576,
+            "other": 2097152
+          },
+          "bytes_read_by_kind": {
+            "binary": 14216704,
+            "other": 106723643
+          },
+          "near_saturation_read_backpressure": {
+            "warning_system_CPU_percent": 95,
+            "cool_distinct_sample_windows": 2,
+            "maximum_pause_windows_per_entry": 8,
+            "warning_entries": 0,
+            "completed_pause_windows": 0,
+            "maximum_observed_pause_windows_in_one_entry": 0,
+            "requested_pause_seconds": 0,
+            "original_hard_resource_decisions_unmodified": true,
+            "original_IO_deadline_unmodified": true,
+            "original_sampler_windows_reused": true,
+            "new_native_query_or_sampler_thread_started": false,
+            "original_read_checks_skipped": false
+          },
+          "last_completed_protected_EXE_path": null,
+          "interrupted_protected_EXE_path": null,
+          "arbitrary_source_paths_or_private_artifact_names_saved": false,
+          "original_owned_read_operations_preserved": true,
+          "extra_sampler_or_native_query_started": false
+        }
+      }
+    ],
+    "handles": {
+      "input_lock_handles_opened": 1964,
+      "input_lock_handles_closed": 1964,
+      "input_lock_handles_remaining": 0,
+      "handle_close_failed_attempts": 0,
+      "active_reader_bindings": 0,
+      "active_byte_streams": 0,
+      "borrowed_byte_streams": {
+        "duplicate_handles_opened": 3312,
+        "duplicate_handles_closed": 3312,
+        "duplicate_handles_remaining": 0,
+        "duplicate_close_failed_attempts": 0,
+        "shared_offset_resets": 3312,
+        "active_borrow_binding": false,
+        "byte_stream_pathname_reopens": 0,
+        "original_held_handles_closed_by_borrower": false,
+        "redundant_pre_descriptor_metadata_queries": 0,
+        "original_pre_read_stream_identity_check_retained": true,
+        "input_scope_reduced": false,
+        "original_resource_guards_and_pacing_retained": true,
+        "measured_CPU_or_freeze_improvement_claimed": false
+      }
+    },
+    "own_cpu": 1.136364,
+    "own_private": 58142720,
+    "free_min": 39.25100488634991,
+    "host_max": 49.15
+  },
+  "accept": {
+    "pin": {
+      "path": "implementation/p09/evidence/locked-r07/p338-accept-run005.v1.json",
+      "bytes": 293887,
+      "sha256": "c46d5d978246006da2a1164adeafcd4d14662acf2f2cd6bd9e7f86a47853513b"
+    },
+    "state": "PASS_EXACT100_PRESERVED106_COMPOUND_NOT_WHOLE_OR_GATE",
+    "cleanup": true,
+    "contracts": 0,
+    "reused": 61,
+    "plan": {
+      "legacy_whole_accepted_individual_cases": 3,
+      "legacy_whole_pending_successful_candidates": 1,
+      "runtime_source_qualified_individual_cases": 100,
+      "runtime_remaining_individual_cases": 149,
+      "runtime_remaining_regular_cases": 143,
+      "runtime_remaining_corpus_cases": 6,
+      "runtime_successful_candidates_requiring_closing": 0,
+      "next_runtime_index": 107,
+      "historical_whole_gate_reconciliation_required": true,
+      "whole1470_current_fresh_qualified": false,
+      "full249_current_qualified": false,
+      "signed16_current_qualified": false,
+      "product_complete": false,
+      "prior_runtime_qualified_cases": 99,
+      "locked_compound_qualified_individual_cases": 1,
+      "all_successful_bodies_pending_whole_reconciliation": 97,
+      "prior_runtime_receipts_and_validators_unchanged": true,
+      "original_STOP_receipts_not_reclassified": true
+    },
+    "accepted": 1,
+    "original_failed_accepted": false,
+    "original_partial_after_completed": false,
+    "additional_source_executed": false,
+    "product_executed": false,
+    "IO": {
+      "bound_inputs": 144,
+      "final_fresh_hashes": 144,
+      "read_passes": 288,
+      "bytes_read": 22934902,
+      "finished": true
+    }
+  },
+  "next_product_test": "actual_import::fresh_service_read_does_not_turn_stale_or_wrong_policy_into_authority",
+  "next_product_runtime": "NOT_RUN",
+  "next_action": "Bind immutable compound100 and original current93 pins into next stable runtime queue before independent fresh/107 execution",
+  "no_guard_relaxation": true,
+  "original_two_full_byte_boundaries_retained": true,
+  "no_Git_Cargo_Hangul_OS_foreign_process_change": true
+}

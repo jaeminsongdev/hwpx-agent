@@ -1,0 +1,14 @@
+{
+  "schema_version": "hwpx-agent.p09-owned-sql-failure-resolution/v1",
+  "original_failure": "implementation/p09/evidence/p09-140-sql-run02.v1.json",
+  "failed_stage": "wait_ready",
+  "actual_migrations_applied": 0,
+  "owned_container_removed": true,
+  "diagnosis": "initialization_socket_server_readiness_is_not_final_TCP_server_readiness",
+  "direct_cause_not_proven_by_redacted_run02_diagnostic": true,
+  "correction": "require_pg_isready_host_127_0_0_1_inside_networkless_owned_container",
+  "operational_settings_changed": false,
+  "production_adapter_retry_added": false,
+  "P09_gate": "OPEN",
+  "product_complete": false
+}

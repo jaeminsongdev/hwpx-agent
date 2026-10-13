@@ -1,0 +1,100 @@
+{
+  "schema_version": "hwpx-agent.p09-terminal-review-guard-qualification/v1",
+  "state": "PASS_TERMINAL_REVIEW8_AND_ACTUAL_FAILED002_EARLY_REJECTION_NOT_PRODUCT_CONNECTION_OR_ACCEPTANCE",
+  "previous_stop_record_pin": {
+    "path": "implementation/p09/evidence/p09-361-case125-budget-runtime-stop-and-bounded-review-r275.v1.json",
+    "bytes": 11530,
+    "sha256": "79c3720c5788c9923e3e172d6f6a1efba7864eaf24ece7d6f96d4c05648993f7"
+  },
+  "failed002_pin": {
+    "path": "implementation/p09/evidence/p09-361-case125-current-runtime-run002.v1.json",
+    "bytes": 263480,
+    "sha256": "33990111d0b79fa568d58d7c9f898b3ed2541e280c8e4ca4b2957da5f9e262ad"
+  },
+  "synthetic_qualification": {
+    "state": "PASS_SYNTHETIC8_TERMINAL_REVIEW_GUARD_NOT_PRODUCT_CONNECTION",
+    "contracts": 8,
+    "code_pins": [
+      {
+        "path": "tools/p09/flat_candidate_terminal_review_guard_v1.py",
+        "bytes": 2280,
+        "sha256": "b7a9abc50c4fe240e12929ad7340090028e7995e5d308750c4b25cf31dc98f55"
+      },
+      {
+        "path": "tools/p09/tests/test_flat_candidate_terminal_review_guard_v1.py",
+        "bytes": 3663,
+        "sha256": "35e8be4109e9c776493a716e8190de8e2d7f651bc5149a3fd32d3c8d54fc716f"
+      }
+    ],
+    "failures": [],
+    "CPU_max": 17.91,
+    "RAM_min": 44.24079510617129,
+    "fresh_pins": 2,
+    "reads": 4,
+    "bytes_read": 11886,
+    "final_hashes": 2,
+    "cleanup_confirmed": true
+  },
+  "actual_readonly_review": {
+    "state": "PASS_FRESH_POSTCHANGE_AND_FAILED002_TERMINAL_ADMISSION_REJECTION_NOT_ACCEPTANCE_OR_RUNTIME_CONNECTION",
+    "failed002_rejection": "CURRENT_EPOCH_ACCEPT_TERMINAL_REVIEW_COMPLETED_BODY_REQUIRED",
+    "original_complete_prepare_bytecode_and_full_oracle_dependency_retained": true,
+    "complete_product_oracle_exercised_on_failed_prebody": false,
+    "accepted_count_after": 118,
+    "accepted_count_delta": 0,
+    "next_runtime_index": 125,
+    "reviewed_run003_executed": false,
+    "record_pin": {
+      "path": "implementation/p09/evidence/p09-361-case125-budget-runtime-stop-and-bounded-review-r275.v1.json",
+      "bytes": 11530,
+      "sha256": "79c3720c5788c9923e3e172d6f6a1efba7864eaf24ece7d6f96d4c05648993f7"
+    },
+    "fresh_pins": 52,
+    "reads": 116,
+    "bytes_read": 8603249,
+    "final_hashes": 52,
+    "CPU_max": 64.39,
+    "RAM_min": 44.03735964234199,
+    "cleanup_confirmed": true
+  },
+  "preserved_prior_failed_postchange_review": {
+    "state": "FAILED_REVIEW_NOT_NEGATIVE_PASS",
+    "error": "TypeError_capture_diagnostics_None_subscript_in_retained_original_oracle_projection",
+    "source": "tools/p09/accept_current_queue_epoch.py:47",
+    "q_finish_reached": false,
+    "product_or_Native_or_queue_executed": false,
+    "resource_failure_as_rejection_counted": false,
+    "recorded_cleanup_result_available": false,
+    "finally_original_Guard_close_executed": true
+  },
+  "implementation": {
+    "prebody_completed_flags_checked_before_original_capture_access": true,
+    "same_complete_prepare_function_code_and_original_full_oracle_retained": true,
+    "old_modules_not_mutated": true,
+    "extra_root_reads_or_parsed_cache": false,
+    "complete_shape_must_still_delegate_to_original_full_validator": true,
+    "errors_never_promoted_to_success": true,
+    "guard_pins_refreshed_under_original_Guard": true,
+    "not_a_new_queue_writer_or_retry_driver": true,
+    "runtime_product_connection_qualified": false,
+    "actual_completed_product_case_oracle_with_guard_NOT_RUN": true,
+    "old_qualified_acceptors_not_edited": true,
+    "archive_directory": "implementation/p09/evidence/p361-terminal-review-guard-v1-qualified-code",
+    "archive_bytes": 5943,
+    "archive_not_failed_Native_frame": true
+  },
+  "accepted_count_after": 118,
+  "accepted_count_delta": 0,
+  "runtime_remaining": 131,
+  "next_runtime_index": 125,
+  "current_generation_accepted": 13,
+  "reviewed_run003_authorized": false,
+  "reviewed_run003_executed": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "P10_started": false,
+  "goal_status": "ACTIVE",
+  "PC_freeze_resolved": false,
+  "next": "Explicitly qualify future runtime/acceptance connection using preserved failed002 and new guard before any third125 attempt; do not use old DATA/driver to authorize it. Retain original source scope/byte passes/resource/deadline oracle."
+}

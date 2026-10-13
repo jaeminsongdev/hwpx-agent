@@ -1,0 +1,37 @@
+{
+  "schema_version": "hwpx-agent.p09-form-reconstruction-source-candidate/v1",
+  "qualification": "SOURCE_CANDIDATE_ONLY_NOT_BUILD_RUNTIME_SQL_OR_GATE",
+  "baseline_build_pin": {
+    "path": "target/p09-149-current-issuer-build/current-issuer-build-r4.json",
+    "bytes": 305455,
+    "sha256": "5ce53cf4938ceaa2e8295644e57e3f4fc8becc6a20bdaca4db9cfb6bf5be86c7"
+  },
+  "preimage_archive": "implementation/p09/source-archive/p09-149-pre-form-reconstruction-sharing-r1/source-preimages.v1.json",
+  "source_deltas": [
+    {
+      "path": "crates/hwpx-package/src/document_import/forms.rs",
+      "bytes": 17548,
+      "sha256": "1fb919a92fb3ebb42e60ba3b4ab39a31279f2cdb3458f821bc8e18d8b404272a"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields.rs",
+      "bytes": 20688,
+      "sha256": "b11c8fe0d2607e9716dde5253998097ca6aafb83b6b8b6b94b38f7ac3e4d0f10"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics.rs",
+      "bytes": 12487,
+      "sha256": "ad9ddd88e779e17518e7791173bfc1b0622752013294ad01e187af363c224186"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_field_semantics.rs",
+      "bytes": 15425,
+      "sha256": "b64b4964a4fb389f83f5b261f3233ebd03ef167fcc544bd179cf145787f083e7"
+    }
+  ],
+  "implementation": "One fresh source/forms reconstruction per package-level field/meaning verify_source call; whole original source/body/forms/fields/meanings/receipt checks retained. Stored service/head/authentication code unchanged.",
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "previous_candidate_preserved": "implementation/p09/evidence/p09-149-form-reconstruction-source-candidate.run01.v1.json",
+  "mechanical_format_archive": "implementation/p09/source-archive/p09-149-pre-form-reconstruction-format-r1/source-preimages.v1.json"
+}

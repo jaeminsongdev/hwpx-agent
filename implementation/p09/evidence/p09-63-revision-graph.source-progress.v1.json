@@ -1,0 +1,565 @@
+{
+  "schema": "hwpx-agent.p09-revision-graph.source-progress/v1",
+  "date": "2026-10-04",
+  "state": "bounded_actual_canonical_sql_metadata_dag_cas_acl_component_pass_not_whole_product_native_or_gate",
+  "source_files": [
+    {
+      "path": "Cargo.lock",
+      "bytes": 61026,
+      "sha256": "70489fafb9048c90a533f388634555064cb4648cbdf5c645ecbb2cf2c23ee9b1"
+    },
+    {
+      "path": "Cargo.toml",
+      "bytes": 2695,
+      "sha256": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5"
+    },
+    {
+      "path": "crates/revision-service/Cargo.toml",
+      "bytes": 405,
+      "sha256": "49ce9309d52adc375d724d7aeba5ad94448fc764b9d704157652bf4bbf04a762"
+    },
+    {
+      "path": "crates/revision-service/examples/postgres_revision_probe.rs",
+      "bytes": 14804,
+      "sha256": "20580cf1ec3f5a513f691cca39c3bb910354f45bd66ae188d904183d84a7f324"
+    },
+    {
+      "path": "crates/revision-service/examples/support/postgres_revision_graph.rs",
+      "bytes": 15771,
+      "sha256": "2b6a48a568d0870adb252d0952bf1230b66357974cfe898153102b1943fa6879"
+    },
+    {
+      "path": "crates/revision-service/src/lib.rs",
+      "bytes": 441,
+      "sha256": "f96c376ca14ec8cbf46f36c02bbbda66f62f5c84ca7b15c6d0ad5d981435b092"
+    },
+    {
+      "path": "crates/revision-service/src/postgres.rs",
+      "bytes": 33784,
+      "sha256": "d0ce129637f413cd10a56824df0d6f4739a5c32cb391124a5b6817b2b3761dd9"
+    },
+    {
+      "path": "crates/revision-service/src/service.rs",
+      "bytes": 20773,
+      "sha256": "d3048dcfb239f8cbfac34a623ee8eb847520796cd93004667bac61748e065951"
+    },
+    {
+      "path": "crates/revision-service/src/store.rs",
+      "bytes": 7574,
+      "sha256": "4c303fd64d920d82647a1952ab70cc3067ae788244cb0ac876d42c07da1c3b47"
+    },
+    {
+      "path": "crates/revision-service/src/types.rs",
+      "bytes": 24254,
+      "sha256": "b18624d3f356fd718db049dca195cce8c56336b7a0eb6ee1f1122d0d0c0b29db"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.actual-fresh-pass.v1.json",
+      "bytes": 14011,
+      "sha256": "234da7c9f6f3bf393f7a19c90d645c38f1f3a886e66aea6842abc6f03197240f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.actual-pass.v1.json",
+      "bytes": 14011,
+      "sha256": "e7c2511b85334c8f3a2df473e4d97761cf3427161cc188fdca75ed427e5a458a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.claim-constraint-failure.v1.json",
+      "bytes": 11687,
+      "sha256": "e0483858203fd84c50f628d3cc3e6ab9ed182172136f4333e4523f75661c340e"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.concurrent-cas-failure.v1.json",
+      "bytes": 11790,
+      "sha256": "c41232ef85d3dec2caf246bf8c77d9f7d71fdc6f187750498852564172083a20"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.diagnostic-lint-failure.v1.json",
+      "bytes": 418,
+      "sha256": "481f96077d5f2ae9007bba0d2690dbb442116e12df0a319d65f2574c7b23870d"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.initial-build-failure.v1.json",
+      "bytes": 508,
+      "sha256": "593418ad703bda3ad0466dd3c6c0503d49d61448a797ddf83f48f63492a08a63"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.initial-driver-failure.v1.json",
+      "bytes": 11511,
+      "sha256": "8685555df20c17304b2e9a14b99d65fbc5f1751c398153ccd27cc0acd11341d7"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.preservation-invocation-failure.v1.json",
+      "bytes": 563,
+      "sha256": "3d6664ad7c35906ce049e677c1688d1ec02068d645b22b37d62324b7a96cc4b0"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.read-committed-pass.v1.json",
+      "bytes": 13954,
+      "sha256": "f2392dcf3d1a00f69c88aff02f411cd411682f573994ed038e1cd4c5b867731f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.seed-failure.v1.json",
+      "bytes": 11324,
+      "sha256": "f6609bdc0280c3330721587e2b75d2ebd46abe95892ae312b02ecf2a82df3bf3"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.seed-manager-failure.v1.json",
+      "bytes": 11277,
+      "sha256": "ad21391747c055d3e8629910628b4e7103f44c48b572ea4e870449c1f996ddaa"
+    },
+    {
+      "path": "implementation/p09/P09-63_POSTGRES_REVISION_GRAPH_POLICY.md",
+      "bytes": 4997,
+      "sha256": "9dcde4a8e6a712074e95322cc96930d3170f25e0d72cbabe31ff195fb3ed8ecf"
+    },
+    {
+      "path": "implementation/p09/P09-63_POSTGRES_REVISION_GRAPH_REPORT.md",
+      "bytes": 7537,
+      "sha256": "91232f02bbe58f0f2e34dd1dc05e656efec9a77491d88c826cd5146c6c41b020"
+    },
+    {
+      "path": "migrations/postgres/0001_p14_metadata.up.sql",
+      "bytes": 28206,
+      "sha256": "7c00f744993581448acb4b6d4d8a46f1ff03d108750da0afc671c3b5e2b0a78d"
+    },
+    {
+      "path": "migrations/postgres/0002_p14_artifact_service.up.sql",
+      "bytes": 13929,
+      "sha256": "202753fbd6f20f181b09bd6227766dfb808811bd4e734a4a418cb5bae4eaee56"
+    },
+    {
+      "path": "migrations/postgres/0003_p14_revision_cas.up.sql",
+      "bytes": 18994,
+      "sha256": "beeac1f22fde0eb3474d40acc14838c1e9676a74b68c5b6f9608713ba6e6e53a"
+    },
+    {
+      "path": "migrations/postgres/0004_p14_history_checkpoints.up.sql",
+      "bytes": 18734,
+      "sha256": "e336890d4ee3fdf4819f52c079ba320f450b01ec516bf5ffaaf505a76b14f249"
+    },
+    {
+      "path": "migrations/postgres/0005_p14_job_state_machine.up.sql",
+      "bytes": 42699,
+      "sha256": "4f15cd28510d55fa58a18aef7b8edf8b4606169fd722a0b8d2c63da2cfb4bf9b"
+    },
+    {
+      "path": "migrations/postgres/0006_p14_worker_lease_fencing.up.sql",
+      "bytes": 30885,
+      "sha256": "03af7cc8b2ae883ff132e3b1737b29c3829fcb0fa9887566485f865b3c0393ab"
+    },
+    {
+      "path": "migrations/postgres/0007_p14_idempotency_reconciliation.up.sql",
+      "bytes": 113376,
+      "sha256": "cc60353df6cf3c51155417e39d0f1f4c348d2a6282bba7d63de9ea0282be5e5d"
+    },
+    {
+      "path": "migrations/postgres/0008_p14_cancel_cleanup.up.sql",
+      "bytes": 85360,
+      "sha256": "2ba28c1386db9c5aeb4661d11069e48f8624c2560b69301a0750ab9344c46f29"
+    },
+    {
+      "path": "migrations/postgres/0009_p14_retention_local_mirror.up.sql",
+      "bytes": 65641,
+      "sha256": "272da51d665be7b9c0b5150a641ca1f9f51b9b78cddb839096acb57eb71e9ec2"
+    },
+    {
+      "path": "migrations/postgres/0010_p16_artifact_repository.up.sql",
+      "bytes": 2724,
+      "sha256": "3d1ce21be0cb100bbc098e798b1917e52c4767da9a832359578179d9b0522420"
+    },
+    {
+      "path": "migrations/postgres/0011_p16_plan_source.up.sql",
+      "bytes": 4578,
+      "sha256": "3aa21685e7511322414265b076f1ed43ff6b7e39c4dd1ee695e121a161777bbc"
+    },
+    {
+      "path": "migrations/postgres/0012_p16_durable_plan_store.up.sql",
+      "bytes": 8656,
+      "sha256": "d85b1b4bbfbf8f63d85ae1088ae676d5c70bf926d6eb3c1cdb070a4b297d6cc0"
+    },
+    {
+      "path": "migrations/postgres/0013_p16_plan_review_evidence.up.sql",
+      "bytes": 7817,
+      "sha256": "16c818ddb5aac58b168174cb39067c2d941e572d883fef3be9b5c452a5b6c923"
+    },
+    {
+      "path": "migrations/postgres/0014_p17_history_checkpoint_note.up.sql",
+      "bytes": 7542,
+      "sha256": "d3e8a2846780f9442ea4b3acf55c072a2ba663590e3b24c9e46736517bb4c129"
+    },
+    {
+      "path": "migrations/postgres/0015_p17_atomic_mirror_checkpoint.up.sql",
+      "bytes": 5292,
+      "sha256": "ff513cf4eed8b9498241e5b111646f1a4b58e7e373e4126b75d9ad317c69b25a"
+    },
+    {
+      "path": "migrations/postgres/0016_p17_durable_git_mirror_push.up.sql",
+      "bytes": 42597,
+      "sha256": "a928dab01d36399a9ce5f24800f689ffcb585abb1da7bdcdf228d8cedafb7263"
+    },
+    {
+      "path": "migrations/postgres/0017_p17_durable_git_mirror_pull.up.sql",
+      "bytes": 20765,
+      "sha256": "2880461cc22be5cbcc0df3802f3996ad8a0ee9ad6a2509d5798e040bdbeea1f4"
+    },
+    {
+      "path": "migrations/postgres/0018_p09_full_document_ir.up.sql",
+      "bytes": 15733,
+      "sha256": "0c167d47f42183d4f79e9dac30150e799cb0c030950bfde1cc7348741d56ca0a"
+    },
+    {
+      "path": "migrations/postgres/0019_p09_authorized_full_ir_intent.up.sql",
+      "bytes": 21899,
+      "sha256": "5dfcac89b97600d21efb3a0d922ce6241440fda6bdc94b14bd3eddc59df2ad59"
+    },
+    {
+      "path": "PLANS.md",
+      "bytes": 37064,
+      "sha256": "f6f2baa2d4a23f7490a386bbfe664e231aecfaa41d5d34917071bb37187ce059"
+    },
+    {
+      "path": "tools/p09/fixtures/authorized_full_ir_intent.sql",
+      "bytes": 18480,
+      "sha256": "4b44849f231b4cc410a0121d88af385919bcfc393b5ce587df7fe5620bf16cfc"
+    },
+    {
+      "path": "tools/p09/fixtures/postgres_revision_adapter.sql",
+      "bytes": 2552,
+      "sha256": "24702787268c0a96f0ffe9e7d9b76f0e95bbc25b6dd9e3cdbd15889bff57b835"
+    },
+    {
+      "path": "tools/p09/fixtures/postgres_revision_graph_oracle.sql",
+      "bytes": 2283,
+      "sha256": "c193bd07e7adaee4f1592c4e38bd851ecec09697901bc2fa42d586ffece6afa3"
+    },
+    {
+      "path": "tools/p09/fixtures/postgres_revision_graph_seed.sql",
+      "bytes": 2402,
+      "sha256": "d528df67a298934de0a32ed5a7d893d9d99016f5ac7d46f95fa6a3c8be004feb"
+    },
+    {
+      "path": "tools/p09/run_postgres_revision_checks.py",
+      "bytes": 15621,
+      "sha256": "c792a67395b5cd626b40f2f330c9407e2827f432cc0a5f0bc0f8fc8ca500948f"
+    },
+    {
+      "path": "tools/p09/run_postgres_revision_graph_checks.py",
+      "bytes": 18868,
+      "sha256": "4e78254e5c688498ba4eee04628f82916c2667d98ac840aa297137da94cabafc"
+    },
+    {
+      "path": "tools/p14/fixtures/p14_idempotency_reconciliation_smoke.sql",
+      "bytes": 46823,
+      "sha256": "c671b18f8d180f38cdd8d07a67918295621c5acc688cb55471cf89f248baf1f9"
+    },
+    {
+      "path": "tools/p14/test_postgres_migrations.py",
+      "bytes": 15659,
+      "sha256": "568bc020bca0d402b3a9bfd063ffb08a1911069b3f39fe1607353781b1b99f4a"
+    }
+  ],
+  "source_archives": [
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/copied-verified-time-graph-seed.sql",
+      "bytes": 2375,
+      "sha256": "747be343b1beda277649e7813019e357b8c6cd993674929cca071992c5e051ac"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/diagnostic-map-graph-module.rs",
+      "bytes": 14906,
+      "sha256": "d63e7e5ab1a9e3d171b7ba1b0ba1c4a5b136c769142329e58bf7b19eadccbcb7"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/duplicate-transaction-graph-module.rs",
+      "bytes": 14892,
+      "sha256": "b529d4e0ce7a89e8465062e6743fab437b557bbb7acec2235010649b54168abf"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/initial-graph-harness.py",
+      "bytes": 18552,
+      "sha256": "f7b59da4b89a4e1297bb5267d5389afc1781644178564647f75b93aaadeea02b"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/initial-graph-module.rs",
+      "bytes": 14050,
+      "sha256": "802932916bed111c22b1a8b24476daec723b4b4408022aaa43e9503f7984f647"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/initial-graph-oracle.sql",
+      "bytes": 1970,
+      "sha256": "0d6afd8407d65ab0bf7a356c7a396ca2793cc0497597f9fedafce82a2abbe245"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/initial-graph-seed.sql",
+      "bytes": 347,
+      "sha256": "72d60fe76d18a14589569f4e788954f1c72c72d7dd99e7bf7ab2da08762bcd97"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/nontransactional-graph-seed.sql",
+      "bytes": 2387,
+      "sha256": "688ea4aa8a7837fc393ada25a536a05b7100906741f621f8a5c51c1ae410228d"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/PLANS.md",
+      "bytes": 36044,
+      "sha256": "3fce8a86a968bc48c7116fe81613252def5d0b86a792fb35b2d4e70b2090c42e"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/postgres_revision_probe.rs",
+      "bytes": 14585,
+      "sha256": "b083ac7b555c0d53190538810fe2560623e500297e8f39a51e7ed67cf7d6b53f"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/postgres.rs",
+      "bytes": 33490,
+      "sha256": "30a66e29d97f8b8f69b22bdbabb83084676e9d013710a3acfb92ef0dd81a5ad1"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/pre-diagnostic-graph-harness.py",
+      "bytes": 18552,
+      "sha256": "f7b59da4b89a4e1297bb5267d5389afc1781644178564647f75b93aaadeea02b"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/pre-diagnostic-graph-module.rs",
+      "bytes": 14247,
+      "sha256": "e10099328e99730a800b1b19ab56cc04f5efd3ea31b68ff1db6b3bc8fa793288"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-63-pre-revision-graph/pre-exact-conflict-graph-module.rs",
+      "bytes": 15080,
+      "sha256": "466dc4ad7b2b232dad8efc98dd27b51cc36cf05d24effd9b229eb699ab137edb"
+    }
+  ],
+  "predecessor_receipts": [
+    {
+      "path": "implementation/p09/evidence/p09-59-full-document-form.source-progress.v1.json",
+      "bytes": 5453,
+      "sha256": "7b591f5ff59837faebde7884e0b8dd2389a19ab46be62f783dc92ff81aab1b06"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-60-stored-full-ir.source-progress.v1.json",
+      "bytes": 10490,
+      "sha256": "63f05db52c0c99a6024bdb24f7f557a85ae20edcc12a27544e1b9504bd161b56"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-61-authorized-ir.source-progress.v1.json",
+      "bytes": 7470,
+      "sha256": "7ede02eaa7b48f91773b15f9a1649861e3dc67ff0c0fe1fa2c67ffba2aa5ba35"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-62-postgres-revision.source-progress.v1.json",
+      "bytes": 24084,
+      "sha256": "07e429af083222bd380abcee62a7c60b69dfa5934823327d503d2002d73309a4"
+    }
+  ],
+  "owned_db_runs": [
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.actual-fresh-pass.v1.json",
+      "run_id": "5efed14c-25b7-48fa-aaa6-261d94f958f4",
+      "state": "pass",
+      "container_removed": true,
+      "volume_removed": true
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.actual-pass.v1.json",
+      "run_id": "9a614771-a0d4-4d0c-ac0d-1799ae4fc1eb",
+      "state": "pass",
+      "container_removed": true,
+      "volume_removed": true
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.claim-constraint-failure.v1.json",
+      "run_id": "75e31ab2-cdd4-43f1-a1ed-999bc4fcf3dc",
+      "state": "fail",
+      "container_removed": true,
+      "volume_removed": true
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.concurrent-cas-failure.v1.json",
+      "run_id": "2d3a2ad0-57c8-4a20-af24-675ac7d38493",
+      "state": "fail",
+      "container_removed": true,
+      "volume_removed": true
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.initial-driver-failure.v1.json",
+      "run_id": "03006292-bc5b-42cc-8ce8-04c6583c20a8",
+      "state": "fail",
+      "container_removed": true,
+      "volume_removed": true
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.read-committed-pass.v1.json",
+      "run_id": "beb43d76-7800-4250-8d32-9defd9ffc984",
+      "state": "pass",
+      "container_removed": true,
+      "volume_removed": true
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.seed-failure.v1.json",
+      "run_id": "b5c886db-820b-4f83-8384-23ef83ccbc07",
+      "state": "fail",
+      "container_removed": true,
+      "volume_removed": true
+    },
+    {
+      "path": "implementation/p09/evidence/p09-63-revision-graph.seed-manager-failure.v1.json",
+      "run_id": "2996c72a-3ff7-49ae-88c4-a2b532f97714",
+      "state": "fail",
+      "container_removed": true,
+      "volume_removed": true
+    }
+  ],
+  "resources": {
+    "runs": 8,
+    "all_removed": true,
+    "remaining_containers": 0,
+    "remaining_volumes": 0,
+    "hwp_process_count": 0,
+    "existing_databases_modified": false,
+    "native_activated": false,
+    "permission_prompts": false,
+    "image_pull": false,
+    "host_file_mounts": false
+  },
+  "verification": {
+    "current_actual_db": {
+      "receipts": [
+        "implementation/p09/evidence/p09-63-revision-graph.actual-pass.v1.json",
+        "implementation/p09/evidence/p09-63-revision-graph.actual-fresh-pass.v1.json"
+      ],
+      "terminal_chunks": [
+        "2403bb",
+        "2b7288"
+      ],
+      "exit_codes": [
+        0,
+        0
+      ],
+      "each_sql_assertions": 62,
+      "sql_breakdown": {
+        "unchanged_original": 28,
+        "unchanged_authorized_ir": 25,
+        "new_graph": 9
+      },
+      "each_rust_executed_assertions_including_repeated_reads": 69,
+      "rust_breakdown": {
+        "unchanged_root_and_admission": 31,
+        "graph_write_including_first_verify": 18,
+        "independent_graph_verify": 6,
+        "restart_graph_verify": 6,
+        "actual_acl_denied": 2,
+        "restored_acl_graph_verify": 6
+      },
+      "source_file_pins": 38,
+      "probe_executable_separately_pinned": true,
+      "same_sources_and_executable": true,
+      "full_schema1_to19": true
+    },
+    "runtime_cas_failure_and_fix": {
+      "failure_receipt": "implementation/p09/evidence/p09-63-revision-graph.concurrent-cas-failure.v1.json",
+      "actual_failure_terminal": "9ac620",
+      "actual_server_timing_category": "SERIALIZATION_FAILURE",
+      "expected_one_commit_one_typed_conflict_not_weakened": true,
+      "write_isolation": "ReadCommitted",
+      "consistent_read_isolation": "RepeatableRead",
+      "unchanged_sql_branch_lock_and_guards": true,
+      "automatic_retry": false,
+      "unknown_or_backend_error_disguised_as_conflict": false
+    },
+    "named_rust_regressions": {
+      "passed": 140,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 0,
+      "service_lib_tests": 78,
+      "service_suite_counts": [
+        25,
+        10,
+        18,
+        1,
+        14,
+        5,
+        5
+      ],
+      "product_tests": 62,
+      "product_suite_counts": [
+        10,
+        8,
+        16,
+        18,
+        10
+      ],
+      "service_results_chunk": "372271",
+      "combined_command_terminal": "a0bb99",
+      "combined_command_exit_code": 0
+    },
+    "strict_clippy_format_python_compile_scoped_diff_check": {
+      "exit_code": 0,
+      "terminal_chunk": "f00990",
+      "four_crate_lib_tests": true,
+      "revision_lib_tests_examples": true,
+      "warnings_denied": true,
+      "lint_allow_added": false
+    },
+    "original_preservation": {
+      "predecessor_pin_entries": 137,
+      "failures": [],
+      "modified_originals_preserved_in_archive": [
+        "crates/revision-service/src/types.rs",
+        "crates/revision-service/src/lib.rs",
+        "crates/revision-service/examples/postgres_revision_probe.rs",
+        "crates/revision-service/src/postgres.rs",
+        "PLANS.md"
+      ],
+      "graph_files": 1551,
+      "graph_bytes": 51047460,
+      "archive_origins": 14,
+      "graph_failures": [],
+      "native_files": 75,
+      "native_failures": [],
+      "entire_original_cli_reexecuted": false,
+      "hwp_process_count": 0,
+      "terminal_chunk": "0d895d"
+    },
+    "historical_p62_narrative_correction": {
+      "actual_source_file_pins": 34,
+      "separate_probe_executable_pin": 1,
+      "old_narrative_count": 35,
+      "original_manifest_or_receipts_overwritten": false
+    },
+    "earlier_p62_prevalidation_failure": {
+      "receipt": "implementation/p09/evidence/p09-62-postgres-revision.current-fresh-driver-failure.v1.json",
+      "state": "UNRESOLVED",
+      "underlying_error_category_not_captured": true,
+      "assumed_same_as_concurrent_cas_failure": false,
+      "later_pass_does_not_erase_failure": true
+    }
+  },
+  "claims": {
+    "bounded_actual_canonical_legacy_no_ir_and_full_ir_children_merge_qualified": true,
+    "actual_two_connection_one_winner_exact_typed_conflict_qualified": true,
+    "actual_loser_node_absence_auth_preservation_qualified": true,
+    "actual_project_acl_revocation_restore_and_db_restart_qualified": true,
+    "arbitrary_legacy_sql_opaque_rows_large_dag_all_counterexamples_or_load_qualified": false,
+    "actual_previous_result_to_next_document_input_import_chain_qualified": false,
+    "actual_blob_aead_scanner_import_or_issuer_qualified_by_this_sql_fixture": false,
+    "top_level_full_ir_product_request_and_actual_artifact_provider_connected": false,
+    "full_hwpx_import_provenance_qualified": false,
+    "actual_issuer_execution_manifest_idempotent_publication_qualified": false,
+    "full_ir_retention_gc_sync_recovery_qualified": false,
+    "actual_network_ack_loss_power_loss_qualified": false,
+    "whole_original_cli_reexecuted": false,
+    "current_whole_source_or_native_admission_qualified": false,
+    "whole_workspace_or_ordinary_suites_qualified": false,
+    "native_semantics_render_direct_differential_qualified": false,
+    "permission_prompt_or_hwp_activated": false,
+    "green_rows": 0,
+    "p09_complete": false,
+    "p10_started": false,
+    "goal_status": "active"
+  },
+  "native_source_epoch": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+  "next_required_work": "Actual top-level stored full-IR request/Artifact+Revision provider and complete importer/provenance, issuer/publication/lifecycle; earlier P62 prevalidation cause remains open. Whole original CLI replay/new source admission before any future native batch; no prompts while forbidden."
+}

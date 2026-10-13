@@ -1,0 +1,146 @@
+{
+  "schema_version": "hwpx-agent.p09-source035-stop-defender-diagnostic/v1",
+  "state": "SOURCE_STOP_REVIEWED_DEFENDER_CPU_OBSERVED_NOT_SCAN_CAUSE_OR_GATE",
+  "date": "2026-10-10",
+  "requested_order": [
+    "one_guarded_verification_attempt",
+    "verification_code_review_after_cpu_stop",
+    "defender_diagnostic_after_code_review"
+  ],
+  "source_receipt_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p340-closing-source-run035.v1.json",
+    "bytes": 482430,
+    "sha256": "0ad8be685abcd1ca91c6f8dfe999a260e8c009a0d2dc3131405b9e9e3aad201e"
+  },
+  "review_receipt_reused": {
+    "path": "implementation/p09/evidence/locked-r07/p340-closing-review-run031.v1.json",
+    "bytes": 193495,
+    "sha256": "bd3de3f92235390c1ae17576181c2326ce694ceb9cbf48bc8a1b31b2c3868fa5"
+  },
+  "source_result": {
+    "state": "FAILED_NOT_ACCEPTED",
+    "stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+    "stage": "source_frame_acquire",
+    "watcher_cleanup": true,
+    "contract_executions": 0,
+    "qualified_contract_executions_reused": 730,
+    "product_child_executed": false,
+    "source_boundaries_completed": 0,
+    "handles_opened": 93,
+    "handles_closed": 93,
+    "remaining_handles": 0,
+    "active_readers": 0,
+    "active_streams": 0,
+    "close_failures": 0,
+    "frame_state": "CLOSED",
+    "system_cpu_max_percent": 100,
+    "own_cpu_max_machine_percent": 1.771654,
+    "own_private_max_bytes": 83484672,
+    "available_ram_min_percent": 21.25576311593541,
+    "preparation_bound": 209,
+    "preparation_fresh": 209,
+    "preparation_reads": 418,
+    "preparation_bytes": 43485170,
+    "preparation_finished": true,
+    "inspect_total_seconds": 0.003292999812401831,
+    "open_total_seconds_including_pacing": 7.051354500290472,
+    "failed_take_ordinal": 94,
+    "failed_take_kind": "directory",
+    "failed_before_native_operation": true
+  },
+  "code_review": {
+    "new_busy_spin_or_unbounded_retry_identified": false,
+    "ancestry_visits_deduplicated": true,
+    "original_no_burst_pacer_and_backpressure_retained": true,
+    "resource_sampler_lock_and_wait_reviewed": true,
+    "cleanup_not_guarded_by_pressure": true,
+    "code_changed": false,
+    "guard_relaxed": false,
+    "product_success_reexecuted": false
+  },
+  "external_observations_after_terminal": [
+    {
+      "time": "2026-10-10T08:17:49.4931444+09:00",
+      "host_cpu_pct": 100,
+      "available_ram_mib": 7148,
+      "commit_pct": 43,
+      "queue": []
+    }
+  ],
+  "defender_after_review": {
+    "time": "2026-10-10T08:19:55.9338008+09:00",
+    "host_busy_pct": 100,
+    "defender_machine_cpu_pct": 85.2,
+    "top": [
+      {
+        "name": "MsMpEng",
+        "pid": 20952,
+        "cpu_pct": 85.2
+      },
+      {
+        "name": "System",
+        "pid": 4,
+        "cpu_pct": 4.51
+      },
+      {
+        "name": "maple-re",
+        "pid": 226052,
+        "cpu_pct": 3.93
+      },
+      {
+        "name": "pwsh#1",
+        "pid": 227768,
+        "cpu_pct": 2.01
+      },
+      {
+        "name": "ChatGPT",
+        "pid": 271344,
+        "cpu_pct": 0.45
+      },
+      {
+        "name": "codex",
+        "pid": 708596,
+        "cpu_pct": 0.45
+      }
+    ],
+    "available_ram_mib": 7718,
+    "commit_pct": 42,
+    "queue_count": 0,
+    "git_count": 0,
+    "measurement": "paired_raw_PerfProc_deltas_normalized_by_16_logical_cpus; PID_name_and_start_counter_match"
+  },
+  "defender_event_diagnostic": {
+    "window_minutes": 25,
+    "event_ids": [
+      1000,
+      1001,
+      1002,
+      2000,
+      2001,
+      2002
+    ],
+    "result": "no_matching_events",
+    "real_time_protection_enabled": true,
+    "full_scan_start_time": null,
+    "full_scan_end_time": null,
+    "antivirus_signature_last_updated": "2026-10-10T00:11:21+09:00",
+    "real_time_or_other_engine_work_hypothesis_only": true
+  },
+  "authority_boundary": {
+    "elevated": false,
+    "performance_recording_cmd_available": true,
+    "timed_seconds_parameter_available": true,
+    "performance_recording_executed": false,
+    "ETW_scan_file_or_process_attribution": "NOT_RUN_REQUIRES_ADMINISTRATOR",
+    "OS_or_Defender_or_WSL_setting_changed": false,
+    "foreign_process_terminated": false
+  },
+  "acceptance": {
+    "P09_gate": "OPEN",
+    "new_source_or_product_accepted": false,
+    "PC_freeze_cause_established": false,
+    "PC_freeze_resolved": false,
+    "verification_triggered_defender_established": false
+  },
+  "official_reference": "https://learn.microsoft.com/en-us/defender-endpoint/performance-analyzer-reference"
+}

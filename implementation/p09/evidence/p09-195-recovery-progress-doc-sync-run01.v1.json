@@ -1,0 +1,282 @@
+{
+  "state": "PASS_P195_RECOVERY_STOP_AND_SCOPE_COST_R65_DOC_SYNC_ONLY_NOT_CLOSING_OR_GATE",
+  "goal_status": "active",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "additional_product_child_executed": false,
+  "additional_heavy_closing_executed": false,
+  "original_passed_contract_tests_not_reexecuted": true,
+  "accepted_individual_cases": 3,
+  "successful_candidates_requiring_separate_closing": 1,
+  "reused_contract_test_proofs": 180,
+  "exact_prior_document_bytes_preserved": true,
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "IO": {
+    "read_passes": 44,
+    "bytes_read": 8804801,
+    "bound_inputs": 20,
+    "final_fresh_hashes": 20,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P176_binary2p5_other4_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 2621440,
+      "other": 4194304
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 8804801
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 8804801,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0.0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/sync_r07_recovery_progress.py",
+      "bytes": 4642,
+      "sha256": "4c0b1d62b1813ab4c430138ecaf55ae4c6e1eae71fa31684ca65920f451e517a"
+    },
+    {
+      "path": "tools/p09/sync_pending_r07_review_docs.py",
+      "bytes": 4465,
+      "sha256": "7696d53c8b554e1fbcf3768d8ac79588c13259bf42b47e566f751941ac95f984"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-195-closing-workload-inventory-run01.v1.json",
+      "bytes": 18179,
+      "sha256": "ca8d0fa757a27069ba96ce5f4b416adcd387705f9b0cd071c81276e8a3af30a5"
+    },
+    {
+      "path": "tools/p09/audit_r07_closing_workload.py",
+      "bytes": 5561,
+      "sha256": "bea8485eaa6abf3bc1748cb73127fa78632a11308be4f368fc929adfee8b179e"
+    },
+    {
+      "path": "tools/p09/tests/test_r07_closing_workload.py",
+      "bytes": 1798,
+      "sha256": "b4c89f6e5c7cc68469b6e8a2e8046a1bb2646e346fb0c860874cf4a1edf1a644"
+    },
+    {
+      "path": "tools/p09/recover_r07_case004_closing.py",
+      "bytes": 12463,
+      "sha256": "e3ec47826e80b5cdd905036426b10cd09250818e525c452995dc1eeb299930b2"
+    },
+    {
+      "path": "tools/p09/tests/test_r07_independent_closing.py",
+      "bytes": 5099,
+      "sha256": "b333f19ed81e8ea4ca0ddb988d4ec3b0b65027f1a92b320133dd0e17c0f5bd7c"
+    },
+    {
+      "path": "tools/p09/observe_shared_metadata_recheck.py",
+      "bytes": 10213,
+      "sha256": "49b0960aa6ffb4be31eec630c66f263938f9cbcbe2b65d52dff3d69be9fca735"
+    },
+    {
+      "path": "tools/p09/tests/test_observed_shared_metadata.py",
+      "bytes": 5733,
+      "sha256": "7d6248ee6c9ece4ffefbde81f2291d50d008a0cbca03106e56dc4a062cf0fabe"
+    },
+    {
+      "path": "tools/p09/review_pending_r07_closing.py",
+      "bytes": 4905,
+      "sha256": "0c9d2c9e042923e31be05e6e765d9ead522b78de3d6dc979f76f5414615ebace"
+    },
+    {
+      "path": "tools/p09/tests/test_pending_r07_closing_review.py",
+      "bytes": 2192,
+      "sha256": "c26f14ae73358646f85aa262498112a9e668e0c2b76d2096e839b2ffd740e64f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-195-case004-recovery-light-run04.v1.json",
+      "bytes": 28959,
+      "sha256": "a4a8803485e247713079adadd6e66d908708a945cee07b914429beddf09ca338"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-195-independent-case004-recovery-closing-run03.v1.json",
+      "bytes": 758505,
+      "sha256": "070c8087d9cc548a33faeaefd407fd0858a5691e7f33d3fd2d8b7214a9f527bf"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run05.closing.v1.json",
+      "bytes": 304809,
+      "sha256": "715d9f22098622741f5f844ed832a5917078b417cfb4122dee081b1bb90cb3bd"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-004-attempt-001.json",
+      "bytes": 617816,
+      "sha256": "53159ac973e75e5562439c8a173afa948c9b7c23719826cb51a205d305b9634a"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-195-pre-recovery-progress/CURRENT_STATE.md",
+      "bytes": 392350,
+      "sha256": "eed661d442ba83a8c76949d0510fdfce4592ad589f893c94d2474c56cd0aff71"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 393963,
+      "sha256": "8914921bb621f81ba4db655dc7ebf3d4b89e84258809fb05a8c5328cd11d77ef"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-195-pre-recovery-progress/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 485982,
+      "sha256": "56afff4b662fd314d587239338fc7b886eda90143b8061bb8df4816b5ba8c138"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 487595,
+      "sha256": "742d27261ffb9187ea4deb188eb4a973434d64b889e3392e1b6a263c33dec12c"
+    },
+    {
+      "path": "implementation/p09/P09-195_INDEPENDENT_CLOSING_RECOVERY_REPORT.md",
+      "bytes": 7517,
+      "sha256": "7783bfc8eec257c5242b6334cdd6a809d7568523930a98f92526365aa0d78e51"
+    }
+  ],
+  "resource_tail": {
+    "original_completed_sample_count": 6,
+    "tail_limit": 8,
+    "existing_samples_only": true,
+    "extra_sampler_thread_started": false,
+    "foreign_Process_query_executed": false,
+    "samples": [
+      {
+        "time_utc": "2026-10-08T02:58:20.185532+00:00",
+        "system_cpu_percent": 0.79,
+        "available_ram_percent": 38.19371180527672,
+        "commit_used_percent": 41.73026262619517,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78437500,
+          "kernel_including_idle": 78593750,
+          "user": 468750,
+          "total": 79062500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:58:20.685894+00:00",
+        "system_cpu_percent": 2.16,
+        "available_ram_percent": 38.210520701854186,
+        "commit_used_percent": 41.72987131728094,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77968750,
+          "kernel_including_idle": 78906250,
+          "user": 781250,
+          "total": 79687500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:58:21.196984+00:00",
+        "system_cpu_percent": 5.99,
+        "available_ram_percent": 38.21020193357482,
+        "commit_used_percent": 41.727220851568546,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78437500,
+          "kernel_including_idle": 83281250,
+          "user": 156250,
+          "total": 83437500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:58:21.708080+00:00",
+        "system_cpu_percent": 2.36,
+        "available_ram_percent": 38.196494897561976,
+        "commit_used_percent": 41.73114959306743,
+        "parent_cpu_machine_percent": 0.196464,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77656250,
+          "kernel_including_idle": 78750000,
+          "user": 781250,
+          "total": 79531250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:58:22.223916+00:00",
+        "system_cpu_percent": 2.83,
+        "available_ram_percent": 38.19910634538911,
+        "commit_used_percent": 41.73028349600393,
+        "parent_cpu_machine_percent": 0.188679,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 80468750,
+          "kernel_including_idle": 81875000,
+          "user": 937500,
+          "total": 82812500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:58:22.728612+00:00",
+        "system_cpu_percent": 5.62,
+        "available_ram_percent": 38.17193747973216,
+        "commit_used_percent": 41.7331478772561,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 76093750,
+          "kernel_including_idle": 79062500,
+          "user": 1562500,
+          "total": 80625000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      }
+    ]
+  }
+}

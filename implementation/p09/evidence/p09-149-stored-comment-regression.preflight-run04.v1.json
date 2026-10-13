@@ -1,0 +1,15 @@
+{
+  "schema_version": "hwpx-agent.p09-stored-regression-preflight-failure/v1",
+  "task": "stored-form-list",
+  "state": "FAILED_BEFORE_RUN_NOT_ACCEPTED",
+  "error_code": "REGRESSION_MODULE_DECLARATION_UNSUPPORTED",
+  "failure_phase": "recursive_source_module_inventory",
+  "owned_worker_created": false,
+  "Cargo_or_test_EXE_executed": false,
+  "runtime_tests_executed": false,
+  "source_closing_completed": false,
+  "failure_source_archive": "implementation/p09/source-archive/p09-149-pre-stored-regression-module-syntax-repair/source-preimages.v1.json",
+  "cause": "Six literal #[path] declarations use pub(super) mod; first recursive parser detected them but did not support their visibility syntax. No module was silently skipped.",
+  "product_complete": false,
+  "P09_gate": "OPEN"
+}

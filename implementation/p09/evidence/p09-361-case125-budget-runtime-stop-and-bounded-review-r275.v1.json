@@ -1,0 +1,297 @@
+{
+  "schema_version": "hwpx-agent.p09-reviewed-budget-runtime-stop-and-bounded-review/v1",
+  "state": "PASS_FAILED125_RUN002_REVIEW_AND_BOUNDED_REVIEWER10_NOT_PRODUCT_OR_GATE",
+  "accepted_count_before": 118,
+  "accepted_count_after": 118,
+  "accepted_count_delta": 0,
+  "runtime_remaining": 131,
+  "next_runtime_index": 125,
+  "current_generation_accepted": 13,
+  "current_authority_pin": {
+    "path": "implementation/p09/evidence/p09-361-case124-current-epoch-accept001.v1.json",
+    "bytes": 282434,
+    "sha256": "590fe2bfc32251bf14d5cfd134969548a4a293ebf7823007073545ac4e950292"
+  },
+  "failed_first_pin": {
+    "path": "implementation/p09/evidence/p09-361-case125-current-runtime-run001.v1.json",
+    "bytes": 411802,
+    "sha256": "a23992d43df24d545cf75dcb47ed5560ee5da099d238481ccbe881c4ae86e4a0"
+  },
+  "failed_second_pin": {
+    "path": "implementation/p09/evidence/p09-361-case125-current-runtime-run002.v1.json",
+    "bytes": 263480,
+    "sha256": "33990111d0b79fa568d58d7c9f898b3ed2541e280c8e4ca4b2957da5f9e262ad"
+  },
+  "observer_qualification_pin": {
+    "path": "implementation/p09/evidence/p09-361-case125-observer-budget-connection-qualification-r273.v1.json",
+    "bytes": 17287,
+    "sha256": "44650363a1895edd072d709ab9bc50c4e78551f0a9bf7cff5be03982d59bb8bd"
+  },
+  "full_preflight_pin": {
+    "path": "implementation/p09/evidence/p09-361-case125-budget-preflight001.v1.json",
+    "bytes": 54451,
+    "sha256": "6b61d0fac7800f09d31303cb1f6d17ba1874d6cd2c81977a08f14fa22dad3c56"
+  },
+  "controller_qualification_path": "implementation/p09/evidence/p09-361-case125-budget-controller-and-full-preflight-r274.v1.json",
+  "failed_second_bounded_review": {
+    "state": "PASS_BOUNDED_READONLY_PREBODY_STOP_REVIEW_NOT_ACCEPTANCE_OR_RETRY",
+    "selected_test_index": 125,
+    "stop_reason": "STOP_NATIVE_OPEN_AFTER_HOST_SATURATION",
+    "elapsed_seconds": 108.82,
+    "sample_count": 215,
+    "host_CPU_max_percent": 94.57,
+    "available_RAM_min_percent": 45.294091323433946,
+    "CPU_threshold_counts": {
+      "75": {
+        "samples": 1,
+        "longest_consecutive_samples": 1,
+        "full_high_load_duration_established": false
+      },
+      "90": {
+        "samples": 1,
+        "longest_consecutive_samples": 1,
+        "full_high_load_duration_established": false
+      },
+      "98": {
+        "samples": 0,
+        "longest_consecutive_samples": 0,
+        "full_high_load_duration_established": false
+      }
+    },
+    "hot_samples": [
+      {
+        "time_utc": "2026-10-11T08:31:15.312610+00:00",
+        "host_CPU_percent": 94.57,
+        "parent_machine_CPU_percent": 0.1303255394349841,
+        "existing_system_time_breakdown": {
+          "kernel_busy_machine_percent": 27.285714285714285,
+          "user_machine_percent": 67.28571428571429,
+          "extra_system_time_query": false,
+          "original_K32_resource_CPU_replaced": false
+        },
+        "diagnostic_available": false,
+        "diagnostic_reason": "MEASUREMENT_COST_BUDGET_EXCEEDED",
+        "diagnostic_added_wall_seconds": 0.0662397999985842,
+        "hot_interval_process_attribution_established": false
+      },
+      {
+        "time_utc": "2026-10-11T08:30:41.474893+00:00",
+        "host_CPU_percent": 44.53,
+        "parent_machine_CPU_percent": 0,
+        "existing_system_time_breakdown": {
+          "kernel_busy_machine_percent": 15.625,
+          "user_machine_percent": 28.90625,
+          "extra_system_time_query": false,
+          "original_K32_resource_CPU_replaced": false
+        },
+        "diagnostic_available": false,
+        "diagnostic_reason": "NOT_SAMPLED_COLD_INTERVAL",
+        "diagnostic_added_wall_seconds": null,
+        "hot_interval_process_attribution_established": false
+      },
+      {
+        "time_utc": "2026-10-11T08:30:38.959101+00:00",
+        "host_CPU_percent": 38.7,
+        "parent_machine_CPU_percent": 0,
+        "existing_system_time_breakdown": {
+          "kernel_busy_machine_percent": 10.344827586206897,
+          "user_machine_percent": 28.35249042145594,
+          "extra_system_time_query": false,
+          "original_K32_resource_CPU_replaced": false
+        },
+        "diagnostic_available": false,
+        "diagnostic_reason": "NOT_SAMPLED_COLD_INTERVAL",
+        "diagnostic_added_wall_seconds": null,
+        "hot_interval_process_attribution_established": false
+      }
+    ],
+    "available_PDH_samples": 14,
+    "last_available_PDH_sample": {
+      "time_utc": "2026-10-11T08:31:12.114649+00:00",
+      "PDH_interval_seconds": 8.038882699998794,
+      "not_same_original_K32_interval": true,
+      "MsMpEng_machine_CPU_percent": 1.7250006384543208,
+      "System_machine_CPU_percent": 0.8989439946874629
+    },
+    "available_PDH_process_maxima": {
+      "MsMpEng": 3.501565514147595,
+      "System": 3.7871239957118696
+    },
+    "counters_not_causal_or_hot_interval_proof": true,
+    "closed_handles": {
+      "opened": 1020,
+      "closed": 1020,
+      "remaining": 0,
+      "frame_input_count": 1839,
+      "frame_input_bytes": 175370813,
+      "native_open_pacing": {
+        "maximum_opens_per_second": 20,
+        "open_reservations": 1020,
+        "requested_sleep_seconds": 71.89891511447149,
+        "idle_time_cannot_accumulate_multiple_open_credits": true
+      },
+      "operations": {
+        "open_with_pacing": {
+          "started": 1020,
+          "completed": 1020,
+          "failed": 0,
+          "elapsed_total_seconds": 73.44001679989742,
+          "elapsed_max_seconds": 0.42460910000954755
+        },
+        "inspect_metadata": {
+          "started": 1020,
+          "completed": 1020,
+          "failed": 0,
+          "elapsed_total_seconds": 0.02979239974229131,
+          "elapsed_max_seconds": 0.0004859000036958605
+        }
+      },
+      "complete_byte_passes": 0,
+      "causal_trigger_established": false
+    },
+    "probe": {
+      "collect_calls": 16,
+      "samples": 15,
+      "maximum_added_sample_seconds": 0.0662397999985842,
+      "total_added_sample_seconds": 0.12491769998450764,
+      "disabled_reason": "MEASUREMENT_COST_BUDGET_EXCEEDED",
+      "query_remaining": false,
+      "cleanup_confirmed": true,
+      "early_budget_checks": 113,
+      "early_budget_stops": 1,
+      "cost_checked_before_formatted_reads": true
+    },
+    "product_body_executed": false,
+    "accepted_count_delta": 0,
+    "automatic_retry_authorized": false,
+    "PC_freeze_resolved": false,
+    "extra_sampler_query_or_child": false,
+    "secret_or_full_log_values_recorded": false,
+    "root_pin": {
+      "path": "implementation/p09/evidence/p09-361-case125-current-runtime-run002.v1.json",
+      "bytes": 263480,
+      "sha256": "33990111d0b79fa568d58d7c9f898b3ed2541e280c8e4ca4b2957da5f9e262ad"
+    },
+    "reviewer_code_pins": [
+      {
+        "path": "tools/p09/review_flat_prebody_stop_v1.py",
+        "bytes": 9618,
+        "sha256": "7eb5fa1810e0733a217ff8432573bc6a712e5e053113c30a9567133fb1f705d4"
+      },
+      {
+        "path": "tools/p09/tests/test_review_flat_prebody_stop_v1.py",
+        "bytes": 5915,
+        "sha256": "2f7dc987799c352ed499888c98428e77c9997b55d0b5a0601765f0e3872d0b90"
+      }
+    ],
+    "fresh_pins": 3,
+    "fresh_read_passes": 6,
+    "fresh_bytes_read": 558026,
+    "final_fresh_hashes": 3,
+    "review_CPU_max_percent": 23.8,
+    "review_RAM_min_percent": 44.75553231544083,
+    "review_cleanup_confirmed": true
+  },
+  "post_stop_reviewer_qualification": {
+    "state": "PASS_SYNTHETIC10_BOUNDED_STOP_REVIEW_NOT_PRODUCT",
+    "contracts": 10,
+    "code_pins": [
+      {
+        "path": "tools/p09/review_flat_prebody_stop_v1.py",
+        "bytes": 9618,
+        "sha256": "7eb5fa1810e0733a217ff8432573bc6a712e5e053113c30a9567133fb1f705d4"
+      },
+      {
+        "path": "tools/p09/tests/test_review_flat_prebody_stop_v1.py",
+        "bytes": 5915,
+        "sha256": "2f7dc987799c352ed499888c98428e77c9997b55d0b5a0601765f0e3872d0b90"
+      }
+    ],
+    "failures": [],
+    "CPU_max": 16.54,
+    "RAM_min": 45.67333975365342,
+    "fresh_pins": 2,
+    "reads": 4,
+    "bytes_read": 31066,
+    "final_hashes": 2,
+    "cleanup_confirmed": true
+  },
+  "actual_light_observer": {
+    "CPU_max": 21.46,
+    "RAM_min": 46.558976116286665,
+    "cleanup": true,
+    "one_original_observer": true,
+    "Native_input_frame_or_product": false
+  },
+  "actual_body_executed": false,
+  "runtime_product_connection_qualified": false,
+  "actual_sole_observer_early_budget_binding_seen_before_prebody_stop": true,
+  "actual_early_budget_checks": 113,
+  "actual_early_budget_stops": 1,
+  "actual_hot_collect_wall_seconds": 0.0662397999985842,
+  "hot_interval_process_attribution_established": false,
+  "Defender_caused_freeze_established": false,
+  "PC_freeze_resolved": false,
+  "original_complete_inputs_and_two_byte_pass_requirement_retained": true,
+  "original_deadlines_and_resource_guards_retained": true,
+  "accepted_originals_not_rebased": true,
+  "original_input_lock_code_review": {
+    "source": "tools/p09/locked_runtime_inputs.py",
+    "directory_access_already_zero": true,
+    "regular_READ_needed_for_preserved_byte_streams": true,
+    "only_share_READ_preserved": true,
+    "duplicate_ancestor_walk_already_eliminated": true,
+    "metadata_inspect_already_held_handle_only": true,
+    "Native_actual_take_completed": 1020,
+    "Native_actual_take_failed": 0,
+    "open_with_pacing_elapsed_total_seconds": 73.44001679989742,
+    "requested_pacing_sleep_seconds": 71.89891511447149,
+    "metadata_inspect_elapsed_total_seconds": 0.02979239974229131,
+    "CPU_causality_established": false,
+    "unsafe_access_share_or_input_changes_made": false
+  },
+  "post_stop_optimization": {
+    "new_code_files": [
+      {
+        "path": "tools/p09/review_flat_prebody_stop_v1.py",
+        "bytes": 9618,
+        "sha256": "7eb5fa1810e0733a217ff8432573bc6a712e5e053113c30a9567133fb1f705d4"
+      },
+      {
+        "path": "tools/p09/tests/test_review_flat_prebody_stop_v1.py",
+        "bytes": 5915,
+        "sha256": "2f7dc987799c352ed499888c98428e77c9997b55d0b5a0601765f0e3872d0b90"
+      }
+    ],
+    "synthetic_contracts_passed": 10,
+    "actual_failed_receipt_review_PASS": true,
+    "one_guard_and_root_final_reread_only": true,
+    "extra_PDH_process_inventory_Native_worker_or_queue": false,
+    "output_UTF8_limit_bytes": 8192,
+    "top_sample_selection": "heapq.nlargest(3), not full sort/print",
+    "originals_archived": "implementation/p09/evidence/p361-prebody-stop-review-v1-qualified-code",
+    "archive_bytes": 15533,
+    "archive_not_failed_Native_frame": true,
+    "output_not_entire_log_or_sample_series": true
+  },
+  "preserved_review_failures": [
+    {
+      "state": "FAILED_INSPECTION_NOT_PRODUCT_OR_NATIVE_OR_ACCEPTANCE",
+      "error": "KeyError_resource_samples_wrong_receipt_field",
+      "corrected_by": "same immutable failed002 receipt samples field; subsequent fixed reviewer PASS; no product retry"
+    },
+    {
+      "state": "FAILED_ORCHESTRATION_PARSE_NO_TOOL_EXECUTED",
+      "error": "JS_syntax_error_before_archive_or_record_creation",
+      "corrected_by": "same exact pins and fresh targets; no source or verifier replay"
+    }
+  ],
+  "reviewed_run003_authorized": false,
+  "reviewed_run003_executed": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "P10_started": false,
+  "goal_status": "ACTIVE",
+  "next": "Optimize/qualify further in-scope changes and explicitly review failed002 before distinct retry authority. New driver DATA cannot authorize third125 attempt. No automatic rerun, weakened thresholds or Gate promotion."
+}

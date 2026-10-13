@@ -1,0 +1,72 @@
+{
+  "schema": "hwpx-agent.p09-98-review-delete-initial-failures/v1",
+  "recorded_at_utc": "2026-10-04 15:44:51 UTC",
+  "failures": [
+    {
+      "stage": "initial-wrapper-fixture-failure",
+      "start_chunk_id": "e8547b",
+      "terminal_chunk_id": "a90f1c",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 6,
+      "error": "text_flow_field_mismatch",
+      "cause": "new synthetic ctrl carried unknown attribute, original preserved control reader did not begin field stack",
+      "changed": "only new fixture; original reader unchanged"
+    },
+    {
+      "stage": "initial-marker-fixture-failure",
+      "terminal_chunk_id": "f36641",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 6,
+      "error": "text_flow_unsupported_shape",
+      "cause": "unknown native marker attribute in new fixture",
+      "changed": "move new opaque attribute to originally supported subList; no reader weakening"
+    },
+    {
+      "stage": "initial-nested-fixture-failure",
+      "terminal_chunk_id": "155d44",
+      "exit_code": 1,
+      "passed": 5,
+      "failed": 1,
+      "error": "text_flow_invalid_field",
+      "cause": "new positive fixture had nested hidden review forbidden by original importer",
+      "changed": "new test proves original exact typed import error; original nested prohibition retained"
+    },
+    {
+      "stage": "initial-lint-failure",
+      "package_terminal_chunk_id": "1ddbc6",
+      "product_terminal_chunk_id": "8e467b",
+      "exit_code": 1,
+      "error": "too_many_lines_172_100",
+      "full_regression": "NOT_RUN_after_strict_failure",
+      "changed": "separate original selection, output readback, nested defense; no allow"
+    },
+    {
+      "stage": "second-lint-failure",
+      "start_chunk_id": "27e64b",
+      "terminal_chunk_id": "6c444d",
+      "exit_code": 1,
+      "error": "too_many_lines_111_100",
+      "full_regression": "NOT_RUN_after_strict_failure",
+      "changed": "factor original paired marker target selection; no allow"
+    },
+    {
+      "stage": "third-lint-failure",
+      "package_terminal_chunk_id": "23c943",
+      "product_terminal_chunk_id": "aaaf43",
+      "exit_code": 1,
+      "error": "similar_names_path_patch",
+      "full_regression": "NOT_RUN_after_strict_failure",
+      "changed": "rename new selected_part variable only; no allow"
+    }
+  ],
+  "whole_related_failed_source_preserved": true,
+  "all_failed_binaries_preserved": false,
+  "failed_new_binaries_replaced_by_corrected_builds": true,
+  "full_log_or_secret_values_in_receipt": false,
+  "native_executed": false,
+  "actual_SQL_executed": false,
+  "product_complete": false,
+  "P09_gate": "OPEN"
+}

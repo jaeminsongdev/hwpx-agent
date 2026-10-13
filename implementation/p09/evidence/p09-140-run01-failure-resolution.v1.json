@@ -1,0 +1,14 @@
+{
+  "schema_version": "hwpx-agent.p09-owned-sql-failure-resolution/v1",
+  "original_failure": "implementation/p09/evidence/p09-140-sql-run01.v1.json",
+  "failed_transaction_not_promoted": true,
+  "SQL22_Rust_or_migrations_modified": false,
+  "fixture_error": "dedicated_direct_RLS_probe_missing_current_tenant_id_EXECUTE",
+  "fixture_correction": "grant_only_RLS_policy_expression_helper_to_fixture_only_direct_probe_role",
+  "cleanup_observation_error": "Docker29_missing_object_message_lowercase_not_matched",
+  "fresh_inspect": {"container": "hwpx-agent-p140-8ef9c3ce1010", "exit_code": 1, "case_insensitive_missing_object_match": true},
+  "owned_container_confirmed_absent": true,
+  "access_profiles_or_production_permissions_weakened": false,
+  "P09_gate": "OPEN",
+  "product_complete": false
+}

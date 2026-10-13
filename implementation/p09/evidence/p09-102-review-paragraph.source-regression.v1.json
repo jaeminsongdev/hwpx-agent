@@ -1,0 +1,177 @@
+{
+  "schema": "hwpx-agent.p09-102-review-paragraph-source-regression/v1",
+  "recorded_at_utc": "2026-10-04 17:55:29 UTC",
+  "state": "PASS_SCOPED_SOURCE_COMPONENT_NOT_native_SQL_full_comment_product_or_Gate",
+  "git_head": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+  "rust": {
+    "passed": 305,
+    "failed": 0,
+    "ignored": 0,
+    "package": {
+      "passed": 138,
+      "start_chunk_id": "9f56bf",
+      "session_id": 85706,
+      "terminal_chunk_id": "871884",
+      "exit_code": 0,
+      "command": "cargo test -p hwpx-package --lib --test id_index --test patch_engine --test document_import_memo_catalog --test document_import_review_metadata --test memo_style_output --test text_flow --test document_import_review --test document_import_assembly_review --test review_body_output --test patch_element_content --test review_delete_output --test review_locations --test review_cell_body_output --test review_paragraph_output --target-dir target/p09-102-package-fixed --locked --offline",
+      "suites": {
+        "lib": 42,
+        "id_index": 8,
+        "patch_engine": 6,
+        "document_import_memo_catalog": 6,
+        "document_import_review_metadata": 8,
+        "memo_style_output": 4,
+        "text_flow": 12,
+        "document_import_review": 15,
+        "document_import_assembly_review": 3,
+        "review_body_output": 5,
+        "patch_element_content": 4,
+        "review_delete_output": 6,
+        "review_locations": 7,
+        "review_cell_body_output": 6,
+        "review_paragraph_output": 6
+      }
+    },
+    "product": {
+      "passed": 167,
+      "start_chunk_id": "8590d3",
+      "session_id": 17675,
+      "terminal_chunk_id": "9a62c8",
+      "exit_code": 0,
+      "command": "cargo test -p hwpx-agent-cli --test comment_operation --test form_stored_provider --test stored_comment_provider --target-dir target/p09-102-product --locked --offline",
+      "suites": {
+        "comment_operation": 8,
+        "form_stored_provider": 143,
+        "stored_comment_provider": 16
+      },
+      "stored_provider_elapsed_seconds": 260.13,
+      "same_session_polled_to_terminal": true
+    },
+    "new_named_feature_tests": {
+      "package": 6,
+      "stored": 3,
+      "included_in_305": true
+    },
+    "all_historical_qualification_reexecuted": false
+  },
+  "python": {
+    "passed": 8,
+    "failed": 0,
+    "terminal_chunk_id": "86d0fe",
+    "exit_code": 0,
+    "scope": "live prior raw/declared transforms/read-view restoration and mocked manifest rejection NOT native/SQL"
+  },
+  "strict_clippy": [
+    {
+      "scope": "package lib/new paragraph test",
+      "terminal_chunk_id": "87b010",
+      "exit_code": 0
+    },
+    {
+      "scope": "product lib/whole stored provider target",
+      "terminal_chunk_id": "909ccf",
+      "exit_code": 0
+    }
+  ],
+  "format_diff": {
+    "new_rust_and_shared_pipeline": {
+      "terminal_chunk_id": "1f55af",
+      "exit_code": 0,
+      "files": 6
+    },
+    "diff_check": {
+      "terminal_chunk_id": "509528",
+      "exit_code": 0
+    },
+    "python_syntax": {
+      "terminal_chunk_id": "e5f86c",
+      "exit_code": 0,
+      "parsed": 2
+    }
+  },
+  "current_source_component_conformance": {
+    "terminal_chunk_id": "b655eb",
+    "exit_code": 0,
+    "upstream_validators_verified": 15,
+    "green_rows": 0,
+    "P09_gate": "OPEN"
+  },
+  "default_conformance": {
+    "terminal_chunk_id": "c91da4",
+    "exit_code": 1,
+    "state": "FAIL:matrix_drift",
+    "failure_preserved": true
+  },
+  "tested_code": [
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review.rs",
+      "bytes": 20501,
+      "sha256": "3322023b6ac8ba79e6441e63f367796a3627676d87777a51faa17a730c1e19c4"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review/body_output.rs",
+      "bytes": 15508,
+      "sha256": "fc9e166d13e845270a8423d3dcfd4ac9b0189055c986678f4961b5262a148b13"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review/cell_body_output.rs",
+      "bytes": 7550,
+      "sha256": "12282d9c63d505f07db1ad7caebaeac6dbc7ddc0b454819ab7962ac8371709c9"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/review.rs",
+      "bytes": 4427,
+      "sha256": "e4d09bb30e8a08d3127fed511422b3f34b3673fbfba8bcd41c73308a1a221115"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import.rs",
+      "bytes": 15782,
+      "sha256": "c820f7ee5646a0945fce98d35d69c2cb9f1c1f6012cf2cfe1e507d1a800a5e96"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_cell_output.rs",
+      "bytes": 6403,
+      "sha256": "f5d3952e6cc36ec646f838a81867f77c97aff7833f602a9eb9710b65d5ac08fd"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review/paragraph_output.rs",
+      "bytes": 5900,
+      "sha256": "ee92cfe45970ff085149deccb2db5308fc413006aeb5825246f4034b1c1eb00d"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/review/paragraph_output.rs",
+      "bytes": 6420,
+      "sha256": "9978ae8ebacaeafdd5ae0970175ed480e071c6e720a68858093eadcec29818b7"
+    },
+    {
+      "path": "crates/hwpx-package/tests/review_paragraph_output.rs",
+      "bytes": 11663,
+      "sha256": "90edee6a594a859bb78ac51da8ec668fd8375523321c911541f0371fb5629986"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_paragraph_output.rs",
+      "bytes": 7043,
+      "sha256": "6c34e9ba11c2d92ca316ee7e684dcd0dfca3ac485a7ca1eaea60a4e2aab6757c"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/review_paragraph_output_fixture.rs",
+      "bytes": 2302,
+      "sha256": "063fd1be1b4d6f60c8556a223381dcf98cc1018e382260e41b712395627c5e2e"
+    }
+  ],
+  "qualification": {
+    "native_executed": false,
+    "actual_SQL_executed": false,
+    "SQL_failure_root_cause_proven": false,
+    "original_atomic_oracle_verified": false,
+    "full_comment_product_acceptance": false,
+    "native_author_time_state_binding": false,
+    "product_complete": false,
+    "P10_new_implementation": false,
+    "execution_publication_authority": false,
+    "new_table_insertion_implemented": false,
+    "native_caret_or_visual_coordinates_verified": false,
+    "full_typed_comment_compiler_route_connected": false,
+    "P09_gate": "OPEN"
+  }
+}

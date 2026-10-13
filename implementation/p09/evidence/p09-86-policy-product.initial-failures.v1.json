@@ -1,0 +1,80 @@
+{
+  "schema": "hwpx-agent.p09-86-initial-failures/v1",
+  "state": "historical_failures_preserved_not_current_pass",
+  "failures": [
+    {
+      "stage": "first_new_Rust_tests",
+      "command": "cargo test -p hwpx-agent-cli --test form_stored_provider actual_import::policy_product -- --test-threads=1",
+      "exit_code": 1,
+      "passed": 5,
+      "failed": 2,
+      "total": 7,
+      "diagnostic": "v1 native state incorrectly compared with separately versioned v2 managed-values state",
+      "failure_locations": [
+        "policy_product.rs:200",
+        "policy_product.rs:265"
+      ],
+      "chunk_id": "fb1738",
+      "original_test_preimage": {
+        "path": "implementation/p09/source-archive/p09-86-pre-policy-product/initial-test-profile/crates/product-cli/tests/form_stored_provider/actual_import/policy_product.rs",
+        "bytes": 17118,
+        "sha256": "ecd54f83820aad12a23651d496270b60f032d7116d05342a74f8e93dba35fc3c"
+      }
+    },
+    {
+      "stage": "second_new_Rust_tests",
+      "exit_code": 1,
+      "passed": 6,
+      "failed": 1,
+      "total": 7,
+      "diagnostic": "existing five-kind fixture request helper used for actual single-text-control case; out-of-bounds index3/length1",
+      "location": "crates/product-cli/tests/form_stored_provider.rs:388",
+      "chunk_id": "41899a",
+      "original_existing_helper_changed": false
+    },
+    {
+      "stage": "initial_new_SQL_probe_compilation",
+      "exit_code": 1,
+      "error_code": "E0609",
+      "diagnostic": "test probe attempted source_revision field absent on original FormImportReceipt; fixed by passing already authenticated original RevisionHead",
+      "chunk_id": "10f07b",
+      "original_receipt_schema_or_guard_changed": false
+    },
+    {
+      "stage": "initial_actual_PostgreSQL_whole_product_batch",
+      "state": "fail",
+      "receipt_path": "implementation/p09/evidence/p09-86-policy-product.initial-postgres-failure.v1.json",
+      "error_type": "TimeoutExpired",
+      "deadline_seconds": 180,
+      "run_id": "ca549991-2092-48e5-afdc-63929959c069",
+      "terminal_chunk_id": "73796b",
+      "source_archives": [
+        {
+          "path": "implementation/p09/source-archive/p09-86-pre-policy-product/initial-sql-batch/crates/product-cli/examples/policy_product_postgres_probe.rs",
+          "bytes": 21077,
+          "sha256": "fbde61ecb395946e543a66480a350491583fe12f92732a15e8dd0294ac12bf0a"
+        },
+        {
+          "path": "implementation/p09/source-archive/p09-86-pre-policy-product/initial-sql-batch/tools/p09/run_policy_product_postgres_checks.py",
+          "bytes": 18734,
+          "sha256": "ab361dc9187e46f3ad9b3c5f268a3e28b2ed498f87d470a0f453e0bd67c12366"
+        }
+      ],
+      "timed_out_child_exit_code_unavailable": true,
+      "receipt_child_exit_code_is_previous_completed_probe": true,
+      "container_removed": true,
+      "owned_blob_root_removed": true,
+      "corrective_action": "ten exact identity-checked cases in separate bounded 180-second processes; total coverage and checks unchanged"
+    },
+    {
+      "stage": "current_original_conformance_validator",
+      "exit_code": 1,
+      "diagnostic": "matrix_drift",
+      "chunk_id": "907940",
+      "original_matrix_or_component_guards_changed": false
+    }
+  ],
+  "guard_or_requirement_weakening": false,
+  "production_bug_inferred_from_test_fixture_or_budget_error": false,
+  "previous_P84_SQL_intermittence_root_causes_still_unresolved": true
+}

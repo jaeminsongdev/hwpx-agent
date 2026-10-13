@@ -1,0 +1,1607 @@
+{
+  "schema_version": 1,
+  "state": "PASS_R20_TERMINAL_AUDIT_FULL249_UNFINISHED_NOT_SQL_NATIVE_OR_GATE",
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "goal_status": "active",
+  "P10_new_implementation": false,
+  "current_helpers": [
+    {
+      "path": "tools/p09/run_compression_dependency_signed_tests.py",
+      "bytes": 11308,
+      "sha256": "739283f70a736f3ee3015232212aec24f086688a368f0e9ca29dc6c3dbaa6f9e"
+    },
+    {
+      "path": "tools/p09/tests/test_compression_dependency_signed_tests.py",
+      "bytes": 6662,
+      "sha256": "22103a3990f0df09ae5bb68910071207e432a1d7564bdb6b882cd631cad6e863"
+    },
+    {
+      "path": "tools/p09/run_compression_full_stored.py",
+      "bytes": 9153,
+      "sha256": "42c8e456f68e1bb5122dff51cddc7fe44e0f5813f57788f30507c9840da500c0"
+    },
+    {
+      "path": "tools/p09/tests/test_compression_full_stored.py",
+      "bytes": 3486,
+      "sha256": "462a2bed71527f1b7f051426f5a4a4d92a4d88b9a448be7a4133de58962c7432"
+    }
+  ],
+  "support_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-compression-dependency.diagnostic-run01.v1.json",
+      "bytes": 521118,
+      "sha256": "d35db67b9ad794ab6e89e6827583565c2a84357ae597698ef374c905c797c412"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-compression-dependency.inventory-run01.v1.json",
+      "bytes": 717249,
+      "sha256": "6c53d193abdddba845127bd27aaa1d86f83cadb80129a70ee94d43ff1fbc234c"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-compression-full-stored.actual-run01.v1.json",
+      "bytes": 3607741,
+      "sha256": "677ef24e932a3f48690a6b4818e41f2753b977206b904f649fa22df3b89fd774"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-compression-dependency.light-run01.v1.json",
+      "bytes": 1475,
+      "sha256": "b3486e477cf32133ae98e3d857bfd09147eb2412fa52de9198205ccbaba00c17"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-compression-full-stored.light-run01.v1.json",
+      "bytes": 1399,
+      "sha256": "e774187f53762e80bd6adb3899b99614bcc725af1166e0ed6478147a471bb494"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-compression-dependency.metadata-run01.v1.json",
+      "bytes": 815,
+      "sha256": "a75e77ca62a743a61167901cfcb831ca8d46aa6478724e3245245ecd976ab688"
+    }
+  ],
+  "parent_pin": {
+    "path": "implementation/p09/evidence/p09-149-xml-dependency.summary-run01.v1.json",
+    "bytes": 21637,
+    "sha256": "43a261e638723da2f5be754bf02e24ff50b34980daa0b76f8b7f26fa792b6116"
+  },
+  "baseline_pin": {
+    "path": "implementation/p09/evidence/p09-149-xml-dependency.diagnostic-run01.v1.json",
+    "bytes": 549588,
+    "sha256": "78b09e7e098fcd3bb875832da54474c600e3316483222290429153a26c069bfb"
+  },
+  "current_Rust_inputs": 783,
+  "original_stored_test_names": 249,
+  "original_stored_module_instances": 59,
+  "current_execution_source_freeze_count": 960,
+  "execution_source_freezes_current_exact": true,
+  "current_contract_checks": 20,
+  "compiled_inventory_current_exact": true,
+  "baseline_complete36_profile": {
+    "P09_gate": "OPEN",
+    "formula_targets": 16,
+    "originals": 36,
+    "product_complete": false,
+    "qualification": "PURE_COMPLETE36_RECONSTRUCTION_NOT_SIGNED_SQL_NATIVE_OR_GATE",
+    "runtime_signed_consumer_qualified": false,
+    "schema_version": "hwpx-agent.p09-reconstruction-stage-timing/v1",
+    "source_cell_bindings": 128,
+    "stages": {
+      "forms_graph_canonical_sha256": {
+        "calls": 36,
+        "max_us": 799,
+        "min_us": 314,
+        "total_us": 21522
+      },
+      "forms_import": {
+        "calls": 36,
+        "max_us": 42221,
+        "min_us": 1422,
+        "total_us": 443744
+      },
+      "fresh_complete_reconstruction": {
+        "calls": 36,
+        "max_us": 59720,
+        "min_us": 14422,
+        "total_us": 993101
+      },
+      "source_import": {
+        "calls": 36,
+        "max_us": 18083,
+        "min_us": 13366,
+        "total_us": 546225
+      }
+    },
+    "tamper_denied": 36,
+    "whole_graph_receipts_equal": 36
+  },
+  "candidate_complete36_profile": {
+    "P09_gate": "OPEN",
+    "formula_targets": 16,
+    "originals": 36,
+    "product_complete": false,
+    "qualification": "PURE_COMPLETE36_RECONSTRUCTION_NOT_SIGNED_SQL_NATIVE_OR_GATE",
+    "runtime_signed_consumer_qualified": false,
+    "schema_version": "hwpx-agent.p09-reconstruction-stage-timing/v1",
+    "source_cell_bindings": 128,
+    "stages": {
+      "forms_graph_canonical_sha256": {
+        "calls": 36,
+        "max_us": 798,
+        "min_us": 308,
+        "total_us": 20996
+      },
+      "forms_import": {
+        "calls": 36,
+        "max_us": 38355,
+        "min_us": 1388,
+        "total_us": 420306
+      },
+      "fresh_complete_reconstruction": {
+        "calls": 36,
+        "max_us": 52599,
+        "min_us": 13853,
+        "total_us": 926391
+      },
+      "source_import": {
+        "calls": 36,
+        "max_us": 39535,
+        "min_us": 12266,
+        "total_us": 531005
+      }
+    },
+    "tamper_denied": 36,
+    "whole_graph_receipts_equal": 36
+  },
+  "resource_metrics": {
+    "diagnostic": {
+      "state": "PASS_SCOPED_NOT_GATE",
+      "stop_reason": null,
+      "elapsed_seconds": 90.19,
+      "maximum_seconds": 180,
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 77.484,
+        "peak_job_private_mib": 1591,
+        "peak_job_private_percent": 4.993566397900053,
+        "owned_processes": []
+      },
+      "host_CPU_max": 36.55,
+      "host_saturation_longest_streak": 0,
+      "available_RAM_percent_min": 33.385631765013834,
+      "commit_percent_max": 39.34742612387703,
+      "cleanup_confirmed": true,
+      "owned_tree_empty": true
+    },
+    "inventory": {
+      "state": "PASS_SCOPED_NOT_GATE",
+      "stop_reason": null,
+      "elapsed_seconds": 130.68,
+      "maximum_seconds": 600,
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 118.766,
+        "peak_job_private_mib": 1605.54,
+        "peak_job_private_percent": 5.0391993031235,
+        "owned_processes": []
+      },
+      "host_CPU_max": 77.27,
+      "host_saturation_longest_streak": 0,
+      "available_RAM_percent_min": 32.986521618926005,
+      "commit_percent_max": 39.556771175538415,
+      "cleanup_confirmed": true,
+      "owned_tree_empty": true
+    },
+    "full249": {
+      "state": "STOPPED_NOT_ACCEPTED",
+      "stop_reason": "OWNED_RUNNER_FAILURE",
+      "elapsed_seconds": 868.77,
+      "maximum_seconds": 1200,
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 845.844,
+        "peak_job_private_mib": 64.42,
+        "peak_job_private_percent": 0.2021971716671397,
+        "owned_processes": []
+      },
+      "host_CPU_max": 100,
+      "host_saturation_longest_streak": 1,
+      "available_RAM_percent_min": 35.81914559066843,
+      "commit_percent_max": 38.16961759675491,
+      "cleanup_confirmed": true,
+      "owned_tree_empty": true
+    }
+  },
+  "signed_stage_cost": {
+    "qualification": "TEST_ONLY_STAGE_ELAPSED_NOT_CPU_PROFILER_OR_CASE_RUNTIME_PASS",
+    "events": [
+      {
+        "case_index": 0,
+        "stage": "original_expected",
+        "elapsed_us": 63637
+      },
+      {
+        "case_index": 0,
+        "stage": "numeric_derivative",
+        "elapsed_us": 37121
+      },
+      {
+        "case_index": 0,
+        "stage": "expected_candidate",
+        "elapsed_us": 196357
+      },
+      {
+        "case_index": 0,
+        "stage": "outside_compare",
+        "elapsed_us": 35724
+      },
+      {
+        "case_index": 0,
+        "stage": "changed_setup",
+        "elapsed_us": 6789
+      },
+      {
+        "case_index": 0,
+        "stage": "changed_register",
+        "elapsed_us": 907149
+      },
+      {
+        "case_index": 0,
+        "stage": "changed_prepare",
+        "elapsed_us": 2961794
+      },
+      {
+        "case_index": 0,
+        "stage": "changed_consume",
+        "elapsed_us": 8703367
+      },
+      {
+        "case_index": 0,
+        "stage": "changed_route_denied",
+        "elapsed_us": 11037839
+      },
+      {
+        "case_index": 0,
+        "stage": "current_expected",
+        "elapsed_us": 51223
+      },
+      {
+        "case_index": 0,
+        "stage": "current_setup",
+        "elapsed_us": 10844
+      },
+      {
+        "case_index": 0,
+        "stage": "current_register",
+        "elapsed_us": 867026
+      },
+      {
+        "case_index": 0,
+        "stage": "current_prepare",
+        "elapsed_us": 1255050
+      },
+      {
+        "case_index": 0,
+        "stage": "current_consume",
+        "elapsed_us": 3199605
+      },
+      {
+        "case_index": 0,
+        "stage": "rebind_denied",
+        "elapsed_us": 29
+      },
+      {
+        "case_index": 0,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 108675
+      },
+      {
+        "case_index": 0,
+        "stage": "signed_pair",
+        "elapsed_us": 29113888
+      },
+      {
+        "case_index": 1,
+        "stage": "original_expected",
+        "elapsed_us": 58060
+      },
+      {
+        "case_index": 1,
+        "stage": "numeric_derivative",
+        "elapsed_us": 34851
+      },
+      {
+        "case_index": 1,
+        "stage": "expected_candidate",
+        "elapsed_us": 180616
+      },
+      {
+        "case_index": 1,
+        "stage": "outside_compare",
+        "elapsed_us": 26906
+      },
+      {
+        "case_index": 1,
+        "stage": "changed_setup",
+        "elapsed_us": 8288
+      },
+      {
+        "case_index": 1,
+        "stage": "changed_register",
+        "elapsed_us": 831804
+      },
+      {
+        "case_index": 1,
+        "stage": "changed_prepare",
+        "elapsed_us": 2831459
+      },
+      {
+        "case_index": 1,
+        "stage": "changed_consume",
+        "elapsed_us": 8065400
+      },
+      {
+        "case_index": 1,
+        "stage": "changed_route_denied",
+        "elapsed_us": 10331379
+      },
+      {
+        "case_index": 1,
+        "stage": "current_expected",
+        "elapsed_us": 54448
+      },
+      {
+        "case_index": 1,
+        "stage": "current_setup",
+        "elapsed_us": 9013
+      },
+      {
+        "case_index": 1,
+        "stage": "current_register",
+        "elapsed_us": 848679
+      },
+      {
+        "case_index": 1,
+        "stage": "current_prepare",
+        "elapsed_us": 1179401
+      },
+      {
+        "case_index": 1,
+        "stage": "current_consume",
+        "elapsed_us": 3034034
+      },
+      {
+        "case_index": 1,
+        "stage": "rebind_denied",
+        "elapsed_us": 26
+      },
+      {
+        "case_index": 1,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 102262
+      },
+      {
+        "case_index": 1,
+        "stage": "signed_pair",
+        "elapsed_us": 27300700
+      },
+      {
+        "case_index": 2,
+        "stage": "original_expected",
+        "elapsed_us": 64490
+      },
+      {
+        "case_index": 2,
+        "stage": "numeric_derivative",
+        "elapsed_us": 37127
+      },
+      {
+        "case_index": 2,
+        "stage": "expected_candidate",
+        "elapsed_us": 197551
+      },
+      {
+        "case_index": 2,
+        "stage": "outside_compare",
+        "elapsed_us": 28213
+      },
+      {
+        "case_index": 2,
+        "stage": "changed_setup",
+        "elapsed_us": 10769
+      },
+      {
+        "case_index": 2,
+        "stage": "changed_register",
+        "elapsed_us": 925594
+      },
+      {
+        "case_index": 2,
+        "stage": "changed_prepare",
+        "elapsed_us": 2992543
+      },
+      {
+        "case_index": 2,
+        "stage": "changed_consume",
+        "elapsed_us": 8715147
+      },
+      {
+        "case_index": 2,
+        "stage": "changed_route_denied",
+        "elapsed_us": 10891844
+      },
+      {
+        "case_index": 2,
+        "stage": "current_expected",
+        "elapsed_us": 63607
+      },
+      {
+        "case_index": 2,
+        "stage": "current_setup",
+        "elapsed_us": 10674
+      },
+      {
+        "case_index": 2,
+        "stage": "current_register",
+        "elapsed_us": 877163
+      },
+      {
+        "case_index": 2,
+        "stage": "current_prepare",
+        "elapsed_us": 1211123
+      },
+      {
+        "case_index": 2,
+        "stage": "current_consume",
+        "elapsed_us": 3737068
+      },
+      {
+        "case_index": 2,
+        "stage": "rebind_denied",
+        "elapsed_us": 32
+      },
+      {
+        "case_index": 2,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 120292
+      },
+      {
+        "case_index": 2,
+        "stage": "signed_pair",
+        "elapsed_us": 29560736
+      },
+      {
+        "case_index": 3,
+        "stage": "original_expected",
+        "elapsed_us": 61672
+      },
+      {
+        "case_index": 3,
+        "stage": "numeric_derivative",
+        "elapsed_us": 34854
+      },
+      {
+        "case_index": 3,
+        "stage": "expected_candidate",
+        "elapsed_us": 174948
+      },
+      {
+        "case_index": 3,
+        "stage": "outside_compare",
+        "elapsed_us": 26208
+      },
+      {
+        "case_index": 3,
+        "stage": "changed_setup",
+        "elapsed_us": 11196
+      },
+      {
+        "case_index": 3,
+        "stage": "changed_register",
+        "elapsed_us": 781526
+      },
+      {
+        "case_index": 3,
+        "stage": "changed_prepare",
+        "elapsed_us": 2423680
+      },
+      {
+        "case_index": 3,
+        "stage": "changed_consume",
+        "elapsed_us": 7860329
+      },
+      {
+        "case_index": 3,
+        "stage": "changed_route_denied",
+        "elapsed_us": 9961473
+      },
+      {
+        "case_index": 3,
+        "stage": "current_expected",
+        "elapsed_us": 40042
+      },
+      {
+        "case_index": 3,
+        "stage": "current_setup",
+        "elapsed_us": 6966
+      },
+      {
+        "case_index": 3,
+        "stage": "current_register",
+        "elapsed_us": 640150
+      },
+      {
+        "case_index": 3,
+        "stage": "current_prepare",
+        "elapsed_us": 917029
+      },
+      {
+        "case_index": 3,
+        "stage": "current_consume",
+        "elapsed_us": 2548748
+      },
+      {
+        "case_index": 3,
+        "stage": "rebind_denied",
+        "elapsed_us": 34
+      },
+      {
+        "case_index": 3,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 190790
+      },
+      {
+        "case_index": 3,
+        "stage": "signed_pair",
+        "elapsed_us": 25387645
+      },
+      {
+        "case_index": 4,
+        "stage": "original_expected",
+        "elapsed_us": 299269
+      },
+      {
+        "case_index": 4,
+        "stage": "numeric_derivative",
+        "elapsed_us": 54628
+      },
+      {
+        "case_index": 4,
+        "stage": "expected_candidate",
+        "elapsed_us": 180704
+      },
+      {
+        "case_index": 4,
+        "stage": "outside_compare",
+        "elapsed_us": 20577
+      },
+      {
+        "case_index": 4,
+        "stage": "changed_setup",
+        "elapsed_us": 6757
+      },
+      {
+        "case_index": 4,
+        "stage": "changed_register",
+        "elapsed_us": 1018824
+      },
+      {
+        "case_index": 4,
+        "stage": "changed_prepare",
+        "elapsed_us": 2831036
+      },
+      {
+        "case_index": 4,
+        "stage": "changed_consume",
+        "elapsed_us": 7988363
+      },
+      {
+        "case_index": 4,
+        "stage": "changed_route_denied",
+        "elapsed_us": 10728310
+      },
+      {
+        "case_index": 4,
+        "stage": "current_expected",
+        "elapsed_us": 49116
+      },
+      {
+        "case_index": 4,
+        "stage": "current_setup",
+        "elapsed_us": 6750
+      },
+      {
+        "case_index": 4,
+        "stage": "current_register",
+        "elapsed_us": 852545
+      },
+      {
+        "case_index": 4,
+        "stage": "current_prepare",
+        "elapsed_us": 1183731
+      },
+      {
+        "case_index": 4,
+        "stage": "current_consume",
+        "elapsed_us": 3160209
+      },
+      {
+        "case_index": 4,
+        "stage": "rebind_denied",
+        "elapsed_us": 29
+      },
+      {
+        "case_index": 4,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 111956
+      },
+      {
+        "case_index": 4,
+        "stage": "signed_pair",
+        "elapsed_us": 27942318
+      },
+      {
+        "case_index": 5,
+        "stage": "original_expected",
+        "elapsed_us": 52687
+      },
+      {
+        "case_index": 5,
+        "stage": "numeric_derivative",
+        "elapsed_us": 33345
+      },
+      {
+        "case_index": 5,
+        "stage": "expected_candidate",
+        "elapsed_us": 172224
+      },
+      {
+        "case_index": 5,
+        "stage": "outside_compare",
+        "elapsed_us": 25679
+      },
+      {
+        "case_index": 5,
+        "stage": "changed_setup",
+        "elapsed_us": 6555
+      },
+      {
+        "case_index": 5,
+        "stage": "changed_register",
+        "elapsed_us": 789098
+      },
+      {
+        "case_index": 5,
+        "stage": "changed_prepare",
+        "elapsed_us": 2850332
+      },
+      {
+        "case_index": 5,
+        "stage": "changed_consume",
+        "elapsed_us": 8856150
+      },
+      {
+        "case_index": 5,
+        "stage": "changed_route_denied",
+        "elapsed_us": 7562856
+      },
+      {
+        "case_index": 5,
+        "stage": "current_expected",
+        "elapsed_us": 46977
+      },
+      {
+        "case_index": 5,
+        "stage": "current_setup",
+        "elapsed_us": 8066
+      },
+      {
+        "case_index": 5,
+        "stage": "current_register",
+        "elapsed_us": 670005
+      },
+      {
+        "case_index": 5,
+        "stage": "current_prepare",
+        "elapsed_us": 832457
+      },
+      {
+        "case_index": 5,
+        "stage": "current_consume",
+        "elapsed_us": 2172891
+      },
+      {
+        "case_index": 5,
+        "stage": "rebind_denied",
+        "elapsed_us": 23
+      },
+      {
+        "case_index": 5,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 74150
+      },
+      {
+        "case_index": 5,
+        "stage": "signed_pair",
+        "elapsed_us": 23872435
+      },
+      {
+        "case_index": 6,
+        "stage": "original_expected",
+        "elapsed_us": 44360
+      },
+      {
+        "case_index": 6,
+        "stage": "numeric_derivative",
+        "elapsed_us": 24925
+      },
+      {
+        "case_index": 6,
+        "stage": "expected_candidate",
+        "elapsed_us": 134903
+      },
+      {
+        "case_index": 6,
+        "stage": "outside_compare",
+        "elapsed_us": 19817
+      },
+      {
+        "case_index": 6,
+        "stage": "changed_setup",
+        "elapsed_us": 6817
+      },
+      {
+        "case_index": 6,
+        "stage": "changed_register",
+        "elapsed_us": 648791
+      },
+      {
+        "case_index": 6,
+        "stage": "changed_prepare",
+        "elapsed_us": 2211768
+      },
+      {
+        "case_index": 6,
+        "stage": "changed_consume",
+        "elapsed_us": 6310276
+      },
+      {
+        "case_index": 6,
+        "stage": "changed_route_denied",
+        "elapsed_us": 8274876
+      },
+      {
+        "case_index": 6,
+        "stage": "current_expected",
+        "elapsed_us": 41991
+      },
+      {
+        "case_index": 6,
+        "stage": "current_setup",
+        "elapsed_us": 6799
+      },
+      {
+        "case_index": 6,
+        "stage": "current_register",
+        "elapsed_us": 667788
+      },
+      {
+        "case_index": 6,
+        "stage": "current_prepare",
+        "elapsed_us": 891983
+      },
+      {
+        "case_index": 6,
+        "stage": "current_consume",
+        "elapsed_us": 2327286
+      },
+      {
+        "case_index": 6,
+        "stage": "rebind_denied",
+        "elapsed_us": 22
+      },
+      {
+        "case_index": 6,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 77833
+      },
+      {
+        "case_index": 6,
+        "stage": "signed_pair",
+        "elapsed_us": 21468905
+      },
+      {
+        "case_index": 7,
+        "stage": "original_expected",
+        "elapsed_us": 40572
+      },
+      {
+        "case_index": 7,
+        "stage": "numeric_derivative",
+        "elapsed_us": 22967
+      },
+      {
+        "case_index": 7,
+        "stage": "expected_candidate",
+        "elapsed_us": 129203
+      },
+      {
+        "case_index": 7,
+        "stage": "outside_compare",
+        "elapsed_us": 18634
+      },
+      {
+        "case_index": 7,
+        "stage": "changed_setup",
+        "elapsed_us": 6494
+      },
+      {
+        "case_index": 7,
+        "stage": "changed_register",
+        "elapsed_us": 610369
+      },
+      {
+        "case_index": 7,
+        "stage": "changed_prepare",
+        "elapsed_us": 2056960
+      },
+      {
+        "case_index": 7,
+        "stage": "changed_consume",
+        "elapsed_us": 5898256
+      },
+      {
+        "case_index": 7,
+        "stage": "changed_route_denied",
+        "elapsed_us": 7509561
+      },
+      {
+        "case_index": 7,
+        "stage": "current_expected",
+        "elapsed_us": 38896
+      },
+      {
+        "case_index": 7,
+        "stage": "current_setup",
+        "elapsed_us": 6463
+      },
+      {
+        "case_index": 7,
+        "stage": "current_register",
+        "elapsed_us": 612579
+      },
+      {
+        "case_index": 7,
+        "stage": "current_prepare",
+        "elapsed_us": 825160
+      },
+      {
+        "case_index": 7,
+        "stage": "current_consume",
+        "elapsed_us": 2198971
+      },
+      {
+        "case_index": 7,
+        "stage": "rebind_denied",
+        "elapsed_us": 24
+      },
+      {
+        "case_index": 7,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 74389
+      },
+      {
+        "case_index": 7,
+        "stage": "signed_pair",
+        "elapsed_us": 19840668
+      },
+      {
+        "case_index": 8,
+        "stage": "original_expected",
+        "elapsed_us": 43959
+      },
+      {
+        "case_index": 8,
+        "stage": "numeric_derivative",
+        "elapsed_us": 25972
+      },
+      {
+        "case_index": 8,
+        "stage": "expected_candidate",
+        "elapsed_us": 136917
+      },
+      {
+        "case_index": 8,
+        "stage": "outside_compare",
+        "elapsed_us": 20011
+      },
+      {
+        "case_index": 8,
+        "stage": "changed_setup",
+        "elapsed_us": 7419
+      },
+      {
+        "case_index": 8,
+        "stage": "changed_register",
+        "elapsed_us": 651337
+      },
+      {
+        "case_index": 8,
+        "stage": "changed_prepare",
+        "elapsed_us": 2180363
+      },
+      {
+        "case_index": 8,
+        "stage": "changed_consume",
+        "elapsed_us": 6349708
+      },
+      {
+        "case_index": 8,
+        "stage": "changed_route_denied",
+        "elapsed_us": 9853668
+      },
+      {
+        "case_index": 8,
+        "stage": "current_expected",
+        "elapsed_us": 51025
+      },
+      {
+        "case_index": 8,
+        "stage": "current_setup",
+        "elapsed_us": 6783
+      },
+      {
+        "case_index": 8,
+        "stage": "current_register",
+        "elapsed_us": 881328
+      },
+      {
+        "case_index": 8,
+        "stage": "current_prepare",
+        "elapsed_us": 1244155
+      },
+      {
+        "case_index": 8,
+        "stage": "current_consume",
+        "elapsed_us": 3264214
+      },
+      {
+        "case_index": 8,
+        "stage": "rebind_denied",
+        "elapsed_us": 28
+      },
+      {
+        "case_index": 8,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 110499
+      },
+      {
+        "case_index": 8,
+        "stage": "signed_pair",
+        "elapsed_us": 24604999
+      },
+      {
+        "case_index": 9,
+        "stage": "original_expected",
+        "elapsed_us": 48792
+      },
+      {
+        "case_index": 9,
+        "stage": "numeric_derivative",
+        "elapsed_us": 34218
+      },
+      {
+        "case_index": 9,
+        "stage": "expected_candidate",
+        "elapsed_us": 183234
+      },
+      {
+        "case_index": 9,
+        "stage": "outside_compare",
+        "elapsed_us": 26262
+      },
+      {
+        "case_index": 9,
+        "stage": "changed_setup",
+        "elapsed_us": 9626
+      },
+      {
+        "case_index": 9,
+        "stage": "changed_register",
+        "elapsed_us": 897308
+      },
+      {
+        "case_index": 9,
+        "stage": "changed_prepare",
+        "elapsed_us": 2929721
+      },
+      {
+        "case_index": 9,
+        "stage": "changed_consume",
+        "elapsed_us": 8318762
+      },
+      {
+        "case_index": 9,
+        "stage": "changed_route_denied",
+        "elapsed_us": 10257142
+      },
+      {
+        "case_index": 9,
+        "stage": "current_expected",
+        "elapsed_us": 40661
+      },
+      {
+        "case_index": 9,
+        "stage": "current_setup",
+        "elapsed_us": 6562
+      },
+      {
+        "case_index": 9,
+        "stage": "current_register",
+        "elapsed_us": 844324
+      },
+      {
+        "case_index": 9,
+        "stage": "current_prepare",
+        "elapsed_us": 1105656
+      },
+      {
+        "case_index": 9,
+        "stage": "current_consume",
+        "elapsed_us": 3087966
+      },
+      {
+        "case_index": 9,
+        "stage": "rebind_denied",
+        "elapsed_us": 29
+      },
+      {
+        "case_index": 9,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 88351
+      },
+      {
+        "case_index": 9,
+        "stage": "signed_pair",
+        "elapsed_us": 27589834
+      },
+      {
+        "case_index": 10,
+        "stage": "original_expected",
+        "elapsed_us": 57522
+      },
+      {
+        "case_index": 10,
+        "stage": "numeric_derivative",
+        "elapsed_us": 37233
+      },
+      {
+        "case_index": 10,
+        "stage": "expected_candidate",
+        "elapsed_us": 194917
+      },
+      {
+        "case_index": 10,
+        "stage": "outside_compare",
+        "elapsed_us": 28359
+      },
+      {
+        "case_index": 10,
+        "stage": "changed_setup",
+        "elapsed_us": 10587
+      },
+      {
+        "case_index": 10,
+        "stage": "changed_register",
+        "elapsed_us": 920529
+      },
+      {
+        "case_index": 10,
+        "stage": "changed_prepare",
+        "elapsed_us": 2961163
+      },
+      {
+        "case_index": 10,
+        "stage": "changed_consume",
+        "elapsed_us": 8363764
+      },
+      {
+        "case_index": 10,
+        "stage": "changed_route_denied",
+        "elapsed_us": 7873557
+      },
+      {
+        "case_index": 10,
+        "stage": "current_expected",
+        "elapsed_us": 41655
+      },
+      {
+        "case_index": 10,
+        "stage": "current_setup",
+        "elapsed_us": 6879
+      },
+      {
+        "case_index": 10,
+        "stage": "current_register",
+        "elapsed_us": 647883
+      },
+      {
+        "case_index": 10,
+        "stage": "current_prepare",
+        "elapsed_us": 932155
+      },
+      {
+        "case_index": 10,
+        "stage": "current_consume",
+        "elapsed_us": 2449530
+      },
+      {
+        "case_index": 10,
+        "stage": "rebind_denied",
+        "elapsed_us": 35
+      },
+      {
+        "case_index": 10,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 78454
+      },
+      {
+        "case_index": 10,
+        "stage": "signed_pair",
+        "elapsed_us": 24289142
+      },
+      {
+        "case_index": 11,
+        "stage": "original_expected",
+        "elapsed_us": 39954
+      },
+      {
+        "case_index": 11,
+        "stage": "numeric_derivative",
+        "elapsed_us": 22392
+      },
+      {
+        "case_index": 11,
+        "stage": "expected_candidate",
+        "elapsed_us": 125845
+      },
+      {
+        "case_index": 11,
+        "stage": "outside_compare",
+        "elapsed_us": 18344
+      },
+      {
+        "case_index": 11,
+        "stage": "changed_setup",
+        "elapsed_us": 6463
+      },
+      {
+        "case_index": 11,
+        "stage": "changed_register",
+        "elapsed_us": 609253
+      },
+      {
+        "case_index": 11,
+        "stage": "changed_prepare",
+        "elapsed_us": 2080397
+      },
+      {
+        "case_index": 11,
+        "stage": "changed_consume",
+        "elapsed_us": 6295732
+      },
+      {
+        "case_index": 11,
+        "stage": "changed_route_denied",
+        "elapsed_us": 7448964
+      },
+      {
+        "case_index": 11,
+        "stage": "current_expected",
+        "elapsed_us": 40181
+      },
+      {
+        "case_index": 11,
+        "stage": "current_setup",
+        "elapsed_us": 6487
+      },
+      {
+        "case_index": 11,
+        "stage": "current_register",
+        "elapsed_us": 658981
+      },
+      {
+        "case_index": 11,
+        "stage": "current_prepare",
+        "elapsed_us": 821578
+      },
+      {
+        "case_index": 11,
+        "stage": "current_consume",
+        "elapsed_us": 2169531
+      },
+      {
+        "case_index": 11,
+        "stage": "rebind_denied",
+        "elapsed_us": 23
+      },
+      {
+        "case_index": 11,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 73276
+      },
+      {
+        "case_index": 11,
+        "stage": "signed_pair",
+        "elapsed_us": 20213558
+      },
+      {
+        "case_index": 12,
+        "stage": "original_expected",
+        "elapsed_us": 43327
+      },
+      {
+        "case_index": 12,
+        "stage": "numeric_derivative",
+        "elapsed_us": 24777
+      },
+      {
+        "case_index": 12,
+        "stage": "expected_candidate",
+        "elapsed_us": 134532
+      },
+      {
+        "case_index": 12,
+        "stage": "outside_compare",
+        "elapsed_us": 19859
+      },
+      {
+        "case_index": 12,
+        "stage": "changed_setup",
+        "elapsed_us": 6689
+      },
+      {
+        "case_index": 12,
+        "stage": "changed_register",
+        "elapsed_us": 654361
+      },
+      {
+        "case_index": 12,
+        "stage": "changed_prepare",
+        "elapsed_us": 2241588
+      },
+      {
+        "case_index": 12,
+        "stage": "changed_consume",
+        "elapsed_us": 6352856
+      },
+      {
+        "case_index": 12,
+        "stage": "changed_route_denied",
+        "elapsed_us": 9613685
+      },
+      {
+        "case_index": 12,
+        "stage": "current_expected",
+        "elapsed_us": 43982
+      },
+      {
+        "case_index": 12,
+        "stage": "current_setup",
+        "elapsed_us": 6994
+      },
+      {
+        "case_index": 12,
+        "stage": "current_register",
+        "elapsed_us": 674200
+      },
+      {
+        "case_index": 12,
+        "stage": "current_prepare",
+        "elapsed_us": 883865
+      },
+      {
+        "case_index": 12,
+        "stage": "current_consume",
+        "elapsed_us": 2347492
+      },
+      {
+        "case_index": 12,
+        "stage": "rebind_denied",
+        "elapsed_us": 23
+      },
+      {
+        "case_index": 12,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 78606
+      },
+      {
+        "case_index": 12,
+        "stage": "signed_pair",
+        "elapsed_us": 22906981
+      },
+      {
+        "case_index": 13,
+        "stage": "original_expected",
+        "elapsed_us": 40524
+      },
+      {
+        "case_index": 13,
+        "stage": "numeric_derivative",
+        "elapsed_us": 23254
+      },
+      {
+        "case_index": 13,
+        "stage": "expected_candidate",
+        "elapsed_us": 129087
+      },
+      {
+        "case_index": 13,
+        "stage": "outside_compare",
+        "elapsed_us": 18563
+      },
+      {
+        "case_index": 13,
+        "stage": "changed_setup",
+        "elapsed_us": 6544
+      },
+      {
+        "case_index": 13,
+        "stage": "changed_register",
+        "elapsed_us": 614530
+      },
+      {
+        "case_index": 13,
+        "stage": "changed_prepare",
+        "elapsed_us": 2055723
+      },
+      {
+        "case_index": 13,
+        "stage": "changed_consume",
+        "elapsed_us": 5963539
+      },
+      {
+        "case_index": 13,
+        "stage": "changed_route_denied",
+        "elapsed_us": 8955945
+      },
+      {
+        "case_index": 13,
+        "stage": "current_expected",
+        "elapsed_us": 55647
+      },
+      {
+        "case_index": 13,
+        "stage": "current_setup",
+        "elapsed_us": 10345
+      },
+      {
+        "case_index": 13,
+        "stage": "current_register",
+        "elapsed_us": 800982
+      },
+      {
+        "case_index": 13,
+        "stage": "current_prepare",
+        "elapsed_us": 1109350
+      },
+      {
+        "case_index": 13,
+        "stage": "current_consume",
+        "elapsed_us": 2983828
+      },
+      {
+        "case_index": 13,
+        "stage": "rebind_denied",
+        "elapsed_us": 24
+      },
+      {
+        "case_index": 13,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 76489
+      },
+      {
+        "case_index": 13,
+        "stage": "signed_pair",
+        "elapsed_us": 22636924
+      },
+      {
+        "case_index": 14,
+        "stage": "original_expected",
+        "elapsed_us": 65245
+      },
+      {
+        "case_index": 14,
+        "stage": "numeric_derivative",
+        "elapsed_us": 33545
+      },
+      {
+        "case_index": 14,
+        "stage": "expected_candidate",
+        "elapsed_us": 198336
+      },
+      {
+        "case_index": 14,
+        "stage": "outside_compare",
+        "elapsed_us": 20877
+      },
+      {
+        "case_index": 14,
+        "stage": "changed_setup",
+        "elapsed_us": 7044
+      },
+      {
+        "case_index": 14,
+        "stage": "changed_register",
+        "elapsed_us": 796045
+      },
+      {
+        "case_index": 14,
+        "stage": "changed_prepare",
+        "elapsed_us": 3107290
+      },
+      {
+        "case_index": 14,
+        "stage": "changed_consume",
+        "elapsed_us": 8161230
+      },
+      {
+        "case_index": 14,
+        "stage": "changed_route_denied",
+        "elapsed_us": 10969305
+      },
+      {
+        "case_index": 14,
+        "stage": "current_expected",
+        "elapsed_us": 64205
+      },
+      {
+        "case_index": 14,
+        "stage": "current_setup",
+        "elapsed_us": 11155
+      },
+      {
+        "case_index": 14,
+        "stage": "current_register",
+        "elapsed_us": 868083
+      },
+      {
+        "case_index": 14,
+        "stage": "current_prepare",
+        "elapsed_us": 1195793
+      },
+      {
+        "case_index": 14,
+        "stage": "current_consume",
+        "elapsed_us": 4642455
+      },
+      {
+        "case_index": 14,
+        "stage": "rebind_denied",
+        "elapsed_us": 30
+      },
+      {
+        "case_index": 14,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 122054
+      },
+      {
+        "case_index": 14,
+        "stage": "signed_pair",
+        "elapsed_us": 29949636
+      },
+      {
+        "case_index": 15,
+        "stage": "original_expected",
+        "elapsed_us": 54986
+      },
+      {
+        "case_index": 15,
+        "stage": "numeric_derivative",
+        "elapsed_us": 31845
+      },
+      {
+        "case_index": 15,
+        "stage": "expected_candidate",
+        "elapsed_us": 193868
+      },
+      {
+        "case_index": 15,
+        "stage": "outside_compare",
+        "elapsed_us": 29122
+      },
+      {
+        "case_index": 15,
+        "stage": "changed_setup",
+        "elapsed_us": 9787
+      },
+      {
+        "case_index": 15,
+        "stage": "changed_register",
+        "elapsed_us": 844191
+      },
+      {
+        "case_index": 15,
+        "stage": "changed_prepare",
+        "elapsed_us": 3013653
+      },
+      {
+        "case_index": 15,
+        "stage": "changed_consume",
+        "elapsed_us": 6920264
+      },
+      {
+        "case_index": 15,
+        "stage": "changed_route_denied",
+        "elapsed_us": 7414498
+      },
+      {
+        "case_index": 15,
+        "stage": "current_expected",
+        "elapsed_us": 40527
+      },
+      {
+        "case_index": 15,
+        "stage": "current_setup",
+        "elapsed_us": 6554
+      },
+      {
+        "case_index": 15,
+        "stage": "current_register",
+        "elapsed_us": 611791
+      },
+      {
+        "case_index": 15,
+        "stage": "current_prepare",
+        "elapsed_us": 822142
+      },
+      {
+        "case_index": 15,
+        "stage": "current_consume",
+        "elapsed_us": 2371351
+      },
+      {
+        "case_index": 15,
+        "stage": "rebind_denied",
+        "elapsed_us": 22
+      },
+      {
+        "case_index": 15,
+        "stage": "live_revocation_denied",
+        "elapsed_us": 74426
+      },
+      {
+        "case_index": 15,
+        "stage": "signed_pair",
+        "elapsed_us": 22132342
+      }
+    ],
+    "fully_observed_case_sequences": 16,
+    "last_observed_case": 15,
+    "next_expected_stage": null,
+    "outer_signed_pair_overlaps_nested_PAIR_do_not_sum_both": true,
+    "signed16_runtime_complete": false
+  },
+  "signed16_current_qualified": false,
+  "full249_current_qualified": false,
+  "product_sources_or_original_assertions_changed": false,
+  "original_owned_resource_policy_changed": false,
+  "PC_freeze_resolved": false,
+  "statistical_speedup_proven": false,
+  "new_child_or_thread_started": false,
+  "source_closing_exact": true,
+  "raw_logs_printed_or_saved": false,
+  "IO": {
+    "read_passes": 2075,
+    "bytes_read": 75202526,
+    "bound_inputs": 965,
+    "final_fresh_hashes": 965,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 10.829
+}

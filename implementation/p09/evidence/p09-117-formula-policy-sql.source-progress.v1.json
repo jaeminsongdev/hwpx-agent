@@ -1,0 +1,260 @@
+{
+  "schema": "hwpx-agent.p09-117-formula-policy-sql-source-progress/v1",
+  "inherited_checkpoint": {
+    "path": "implementation/p09/evidence/p09-116-formula-policy.source-progress.v1.json",
+    "bytes": 12155,
+    "sha256": "ec18119dd57c08567d28fc3acff9dc25691fc991a61f27c45e4a836d3efc02a9"
+  },
+  "inherited_raw_pin_entries": 2162,
+  "current_source_files_count": 1062,
+  "qualification": {
+    "native_recalculation_verified": false,
+    "full_field_policy_qualified": false,
+    "issuer_verified": false,
+    "atomic_execution_publication_verified": false,
+    "actual_SQL_verified": false,
+    "P09_complete": false,
+    "product_complete": false,
+    "full_document_import_verified": false,
+    "signed_registry_verified": false,
+    "CLI_transport_verified": false,
+    "full_product_execution_verified": false,
+    "formula_policy_trusted_issuer_verified": false,
+    "formula_policy_SQL_repository_verified": false,
+    "source_formula_SQL_repository_and_bridge_implemented": true,
+    "separate_formula_SQL_domain_and_original_guards_source_verified": true
+  },
+  "P09_gate": "OPEN",
+  "P10_new_implementation": false,
+  "product_complete": false,
+  "remaining_coarse_groups_minimum": 6,
+  "remaining_coarse_groups_closed_by_slice": 0,
+  "source_delta": [
+    {
+      "path": "crates/revision-service/src/postgres.rs",
+      "bytes": 33843,
+      "sha256": "3d51c2690e2f91d494b9475afb66076919e82388f1a03ddc2cf25aca66b8d42a"
+    },
+    {
+      "path": "crates/artifact-service/src/store/postgres_repository.rs",
+      "bytes": 32261,
+      "sha256": "ebede734f0d66b927c03d69ae08e9c23b4517261567a419a3c02818217c73975"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas.rs",
+      "bytes": 6465,
+      "sha256": "4604ae7692ed3ec4f11bfdf21e9432581a08c182bb7e2baf9eb082bfe3c7448c"
+    },
+    {
+      "path": "crates/revision-service/src/postgres/source_formula_policy.rs",
+      "bytes": 19615,
+      "sha256": "b819c801b86538aa17e36b2b7eae85b6851113aaf357ab6131f737fa70a85ada"
+    },
+    {
+      "path": "crates/revision-service/src/postgres/source_formula_policy/registration.rs",
+      "bytes": 7124,
+      "sha256": "bfa2c0d91abc4f637dfb0a6223e34e544f00934c2750ab9955aeb97119870eed"
+    },
+    {
+      "path": "crates/artifact-service/src/store/postgres_repository/source_formula_policy.rs",
+      "bytes": 3108,
+      "sha256": "25a2f76dec6e187c966742898de6a3be614cf3085820649c8e5f42595ab498c2"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/postgres.rs",
+      "bytes": 2607,
+      "sha256": "9e58ec53e248e78c0f6bc0bb452384b9e4913dcdc67763c9b8a0e0531aad0a66"
+    },
+    {
+      "path": "migrations/postgres/0021_p09_source_formula_policy.up.sql",
+      "bytes": 13712,
+      "sha256": "a16fa22b7b1dad0e5994c945391e990fa58d17ea606b7428fcc918cf7862cc06"
+    },
+    {
+      "path": "migrations/postgres/0021_p09_source_formula_policy.down.sql",
+      "bytes": 1886,
+      "sha256": "daa9326dfdc49b1eec601216668c6359dcc60b5700be18e256d8b89a3ac1d290"
+    },
+    {
+      "path": "tools/p09/tests/test_formula_policy_sql_source.py",
+      "bytes": 8129,
+      "sha256": "de1754e99b86e748df55a9e591062b79d6f41f5d043a98981b6008c0f5a5e6a4"
+    },
+    {
+      "path": "tools/p09/verify_formula_policy_sql_progress.py",
+      "bytes": 8091,
+      "sha256": "9daa3614806173c89665570e7c88752ef7121c75731c77924d3c7fb24f9a5e96"
+    },
+    {
+      "path": "tools/p09/tests/test_formula_policy_sql_progress.py",
+      "bytes": 5658,
+      "sha256": "47e7c5941a67c0be1393d385025d5d0597dded707cb9870778519c402919ddfd"
+    },
+    {
+      "path": "implementation/p09/P09-117_FORMULA_POLICY_SQL_POLICY.md",
+      "bytes": 3898,
+      "sha256": "5b84916beb9e34e1ed640de58a37fbee1d64cf2e52c93d0b0e0b2772684bef6f"
+    },
+    {
+      "sha256": "238805310385488fdc66da35fc361d7bf8188d3d24cf3dae5416efff0e4052cb",
+      "bytes": 4221,
+      "path": "implementation/p09/P09-117_FORMULA_POLICY_SQL_REPORT.md"
+    },
+    {
+      "path": "protocol/migrations/p09-source-formula-policy-sql20-to-sql21.md",
+      "bytes": 2294,
+      "sha256": "cf38803f1ae5eed2a9c331cf96bb39d1893eaa2e2827eec74741a6c5f70636ce"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-117-formula-policy-sql.initial-failures.v1.json",
+      "bytes": 1783,
+      "sha256": "56dd3a12e67e3cbc8446364c31fc0373ed775d4ee848047a2367fe0610f049f4"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-117-formula-policy-sql.preservation.v1.json",
+      "bytes": 5482,
+      "sha256": "fb3272b7c135f627023e01e1e1148d18be09be537921e7d75c61d639b0a5fd8b"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-117-formula-policy-sql.source-regression.v1.json",
+      "bytes": 3338,
+      "sha256": "151f3a5fc7ac50ef062b53df36f4e40a5bf9f500f34c9d209af9a47685e16c18"
+    }
+  ],
+  "source_archives_added": [
+    {
+      "path": "implementation/p09/source-archive/p09-117-pre-formula-policy-sql/crates/revision-service/src/postgres.rs",
+      "bytes": 33812,
+      "sha256": "ab737acee09553a21051baff8816fce335ab8836c66ecadc27114eb2ce00e1b6"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-117-pre-formula-policy-sql/crates/artifact-service/src/store/postgres_repository.rs",
+      "bytes": 32230,
+      "sha256": "80be0548ef93e9c9c5371dd95748f09f4e8743f4a65f9f3bf36a52b7ced643e8"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-117-pre-formula-policy-sql/crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas.rs",
+      "bytes": 6447,
+      "sha256": "46c068c48ab3b00655cd1fa70f1cd289b810ecde573b7a9e101ad755cdb799b4"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-117-initial-api-name-review/crates/revision-service/src/postgres/source_formula_policy.rs",
+      "bytes": 19615,
+      "sha256": "b819c801b86538aa17e36b2b7eae85b6851113aaf357ab6131f737fa70a85ada"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-117-initial-api-name-review/crates/revision-service/src/postgres/source_formula_policy/registration.rs",
+      "bytes": 4680,
+      "sha256": "c52cb182971487f176283c80b951cd1970407611bf0e8ed4b18bb799cc1a3793"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-117-initial-api-name-review/crates/artifact-service/src/store/postgres_repository/source_formula_policy.rs",
+      "bytes": 3105,
+      "sha256": "5647ed1900d35b34df1f9036324f3aa1477f89789f20afa0b848338ea6a6b153"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-117-initial-api-name-review/crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/postgres.rs",
+      "bytes": 2607,
+      "sha256": "9e58ec53e248e78c0f6bc0bb452384b9e4913dcdc67763c9b8a0e0531aad0a66"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-117-initial-api-name-review/migrations/postgres/0021_p09_source_formula_policy.up.sql",
+      "bytes": 13703,
+      "sha256": "04f9b78fbfb143b4e72ec1dfece8e17e3af7ba3608b3cd8c3e13c56d14a76012"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-117-pre-lint-fix/crates/revision-service/src/postgres/source_formula_policy/registration.rs",
+      "bytes": 7121,
+      "sha256": "e624076c3d3343ed255aa583faacfcf40e4e5d5f2cfcea32a92e4b9889918350"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-117-pre-unit-test-layout-fix/crates/revision-service/src/postgres/source_formula_policy/registration.rs",
+      "bytes": 7123,
+      "sha256": "f8e7144af4b0143cdce346f307047dece16af0d24ef72e20cc1d0e4155254ca7"
+    }
+  ],
+  "predecessor_receipts_added": [
+    {
+      "path": "implementation/p09/evidence/p09-116-formula-policy.source-progress.v1.json",
+      "bytes": 12155,
+      "sha256": "ec18119dd57c08567d28fc3acff9dc25691fc991a61f27c45e4a836d3efc02a9"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-116-formula-policy.final-audit.v1.json",
+      "bytes": 12185,
+      "sha256": "bd1ef0b39e5c1ffe9dbb847d5c20db3d7e1ab8f2f728591f12b44c4e6f3600bc"
+    }
+  ],
+  "current_executables": [
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/hwpx_agent_cli-0dbeda1edae1a540.exe",
+      "bytes": 1160192,
+      "sha256": "7e85300164de9a80102697b109bcfc0f2268d0ae13c30cb397cbfcb3e0ef302e"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+      "bytes": 21368320,
+      "sha256": "ae4462fd4bf3150abbd4d004886d70c520a562a4f36d0e5a79af17880bdf2bc1"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/form_product_request-b9b309ced3b4e156.exe",
+      "bytes": 7964160,
+      "sha256": "9553003f2aa355b869a75237b93bb853dd57f0d1424e890f842f92a335b8a155"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/form_value_operation-899bdd52f412e0da.exe",
+      "bytes": 8809472,
+      "sha256": "6318a872febd84e9278aa5357b0ded5e826d1100c97c1986266651a76a3fb59f"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/artifact_service-c722486ab67dc904.exe",
+      "bytes": 2694656,
+      "sha256": "60e6a3c3abf151c018567a3bcd749f8efd391d1befc65aec51a683bc97642759"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/revision_service-1b137e63992c86e2.exe",
+      "bytes": 1686016,
+      "sha256": "7cc62e8dcb72d125f4b8dee83be0810bc50b7a1e53909a51f138eadf609d87ce"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/hwpx_agent_cli.exe",
+      "bytes": 5084160,
+      "sha256": "f7a8a08537e9ae7ce91f4278d0df7ddb5b419716f6a5231bc908edc0d5563c66"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/hwpx-agent-cli.exe",
+      "bytes": 5084160,
+      "sha256": "f7a8a08537e9ae7ce91f4278d0df7ddb5b419716f6a5231bc908edc0d5563c66"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/hwpx_agent_cli-0dbeda1edae1a540-pre-test-module-layout.exe",
+      "bytes": 1160192,
+      "sha256": "182799190cc025186b7ec38a65ef8c0316d5cdf5ee3a8fc8450da2f6e870baf6"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/form_stored_provider-e02d02396d2f2bbd-pre-test-module-layout.exe",
+      "bytes": 21368320,
+      "sha256": "d73aff0943c06bea2e2022d83d945f0907dbf88dcb40d18ddeca41514b15bdeb"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/form_product_request-b9b309ced3b4e156-pre-test-module-layout.exe",
+      "bytes": 7964160,
+      "sha256": "66eaf2379697535b7fb702faf540e87038cb8e53929c08f8414ec64771859b27"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/form_value_operation-899bdd52f412e0da-pre-test-module-layout.exe",
+      "bytes": 8809472,
+      "sha256": "e761ecb9ec97e6f93513f3812a939b5d763c52a81d1a4d7d51591a2f0cd5c2d6"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/artifact_service-c722486ab67dc904-pre-test-module-layout.exe",
+      "bytes": 2694656,
+      "sha256": "60e6a3c3abf151c018567a3bcd749f8efd391d1befc65aec51a683bc97642759"
+    },
+    {
+      "path": "target/p09-117-formula-policy-sql/debug/deps/revision_service-1b137e63992c86e2-pre-test-module-layout.exe",
+      "bytes": 1686016,
+      "sha256": "1189a6e78654a6e85dd2d56aa456d3bc108b73e105d31bd831c13c601c877a81"
+    }
+  ]
+}

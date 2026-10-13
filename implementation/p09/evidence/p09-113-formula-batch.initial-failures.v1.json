@@ -1,0 +1,164 @@
+{
+  "schema": "hwpx-agent.p09-113-formula-batch-initial-failures/v1",
+  "recorded_at_utc": "2026-10-04 23:42:33 UTC",
+  "failure_records": [
+    {
+      "stage": "initial actual fixture assumption",
+      "start_chunk": "c77d91",
+      "session": 30265,
+      "terminal_chunk": "eba6f4",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 4,
+      "cause": "pinned first actual table is2x4/8cell with original formula D2; incorrect3cell derivative assertion",
+      "archive_group": "p09-113-initial-fixture"
+    },
+    {
+      "stage": "fragment namespace",
+      "terminal_chunk": "04de72",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 6,
+      "cause": "copied hp subtree parsed without actual root namespace context",
+      "archive_group": "p09-113-initial-namespace"
+    },
+    {
+      "stage": "package order",
+      "terminal_chunk": "46c053",
+      "exit_code": 1,
+      "passed": 1,
+      "failed": 5,
+      "cause": "new in-memory sorted package writer placed mimetype last",
+      "archive_group": "p09-113-initial-package-order"
+    },
+    {
+      "stage": "multi-part patch",
+      "terminal_chunk": "aaa84a",
+      "exit_code": 1,
+      "passed": 3,
+      "failed": 3,
+      "cause": "paragraph id0 sentinel copied as repeated10000 ID declarations",
+      "archive_group": "p09-113-initial-multi-part-patch"
+    },
+    {
+      "stage": "independent ID admission",
+      "terminal_chunk": "15e34f",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 1,
+      "filtered": 5,
+      "cause": "original ID index confirms duplicate paragraph declarations; zero sentinel preserved without relaxing index",
+      "archive_group": "p09-113-initial-index"
+    },
+    {
+      "stage": "actual original multi-table readback defect",
+      "start_chunk": "c5cf3b",
+      "session": 83365,
+      "terminal_chunk": "fca90c",
+      "exit_code": 1,
+      "passed": 4,
+      "failed": 2,
+      "cause": "hash-sorted value-vector zip compares different tables after source version hash/order changes",
+      "archive_group": "p09-113-pre-value-rebinding"
+    },
+    {
+      "stage": "empty result ordinal overconstraint",
+      "start_chunk": "24f860",
+      "session": 93837,
+      "terminal_chunk": "959042",
+      "exit_code": 1,
+      "passed": 5,
+      "failed": 1,
+      "cause": "empty-to-filled text legitimately changes normalized inline range ordinals; actual element range and exact whole leaf bytes retained",
+      "archive_group": "p09-113-initial-empty-binding"
+    },
+    {
+      "stage": "strict lint",
+      "start_chunk": "e8516f",
+      "session": 1581,
+      "terminal_chunk": "3d636b",
+      "exit_code": 1,
+      "cause": "new test helper method-closure2 and filter-map-bool-then1; expression-only fix, no suppression",
+      "archive_group": "p09-113-initial-lint"
+    },
+    {
+      "stage": "first raw archive pin read",
+      "terminal_chunk": "NOT_RECORDED",
+      "exit_code": "NOT_RECORDED",
+      "functions_state": "pinreadincomplete:archives",
+      "cause": "fixture/test archive path index confusion; failed checker source retained",
+      "archive_group": "p09-113-initial-archive-inventory"
+    },
+    {
+      "stage": "second raw archive pin read",
+      "terminal_chunk": "aba781",
+      "exit_code": 1,
+      "cause": "same fixture/test index confusion in empty-binding archive; corrected against actual inventory",
+      "archive_group": "p09-113-second-archive-inventory"
+    }
+  ],
+  "failed_executable_pins": [
+    {
+      "path": "target/p09-113-formula-batch/debug/deps/document_import_formula_batch-bea22a1ddc584290-initial-fixture-failed.exe",
+      "bytes": 8148480,
+      "sha256": "27df4b96c12d593419a715b93fe6a21ede9aa214239fa084d75c55b68c67a5f7"
+    },
+    {
+      "path": "target/p09-113-formula-batch/debug/deps/document_import_formula_batch-bea22a1ddc584290-namespace-failed.exe",
+      "bytes": 8180736,
+      "sha256": "e5c264ec0b6a7d12191c7ce860b65a7f68badee221a586497f55783b826ae186"
+    },
+    {
+      "path": "target/p09-113-formula-batch/debug/deps/document_import_formula_batch-bea22a1ddc584290-package-order-failed.exe",
+      "bytes": 8183296,
+      "sha256": "f0555466c9c80905a3e204eb13e3e5267eb87536485039a3760523d3b94e4a2d"
+    },
+    {
+      "path": "target/p09-113-formula-batch/debug/deps/document_import_formula_batch-bea22a1ddc584290-multi-part-patch-failed.exe",
+      "bytes": 8187392,
+      "sha256": "a865b9b46ddafdcf96cc578422b9d7c595191a3259c9db5ff33a72508aa86c4f"
+    },
+    {
+      "path": "target/p09-113-formula-batch/debug/deps/document_import_formula_batch-bea22a1ddc584290-index-failed.exe",
+      "bytes": 8199168,
+      "sha256": "cc35e97c29482b248ea7c0bbe0f6cbe02b2d60b4109c609b5afa3a558c3b1619"
+    },
+    {
+      "path": "target/p09-113-formula-batch/debug/deps/document_import_formula_batch-bea22a1ddc584290-readback-failed.exe",
+      "bytes": 8198144,
+      "sha256": "7eeed331b42a4456138832c9824caf16874680c1aba4e75627a3a5a53ceca9a3"
+    },
+    {
+      "path": "target/p09-113-formula-batch/debug/deps/document_import_formula_batch-bea22a1ddc584290-empty-binding-failed.exe",
+      "bytes": 8201728,
+      "sha256": "b299155bc860fd7b6779f74f88c919cfe05807ad27c3944f5240f2f844835b53"
+    }
+  ],
+  "pre_lint_executable_pins": [
+    {
+      "path": "target/p09-113-formula-batch/debug/deps/document_import_formula_batch-bea22a1ddc584290-pre-lint.exe",
+      "bytes": 8210432,
+      "sha256": "6e2cd35099c8bdd9e03183d2eb74c9bf8a3361e960d4da9937af60dfe52e7726"
+    }
+  ],
+  "preliminary_passing_batch6": {
+    "start_chunk": "c3b79c",
+    "session": 23839,
+    "terminal_chunk": "92db12",
+    "exit_code": 0,
+    "not_accumulated_as_final_extra_pass": true
+  },
+  "all_failures_preserved": true,
+  "guard_limits_namespace_ID_rules_not_relaxed": true,
+  "goal_status": "active",
+  "P09_gate": "OPEN",
+  "A12": "OPEN",
+  "A13": "OPEN",
+  "native34": "NOT_RUN",
+  "native_re_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+  "P26": "failed_semantic_non_green",
+  "P62": "UNRESOLVED",
+  "P84_SQL": "UNRESOLVED",
+  "product_complete": false,
+  "P10_new_implementation": false
+}

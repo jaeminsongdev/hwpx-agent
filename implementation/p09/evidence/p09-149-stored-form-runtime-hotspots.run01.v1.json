@@ -1,0 +1,125 @@
+{
+  "schema_version": "hwpx-agent.p09-stored-form-runtime-hotspot-evidence/v1",
+  "state": "PARTIAL31_OF249_RUNTIME_TIMING_AND_STATIC_REPEAT_IMPORT_CANDIDATES_NOT_FULL_PASS",
+  "source_receipt_pin": {
+    "path": "implementation/p09/evidence/p09-149-stored-comment-regression.actual-run07.v1.json",
+    "bytes": 922233,
+    "sha256": "0528b7aee96bec2cab772f8f96a34e07cb0e51b456828b61eea44a5fefd2759a"
+  },
+  "observed_completed": 31,
+  "expected_tests": 249,
+  "remaining_without_completion": 218,
+  "timing_kind": "parent_first_observation_not_exact_test_execution_time",
+  "top_observed_pending_windows": [
+    {
+      "name": "actual_import::formula_evaluation::every_locked_actual_source_evaluates_like_direct_without_ingest_head_or_full_route",
+      "outcome": "ok",
+      "first_observed_at_seconds": 170.472,
+      "pending_observed_seconds_at_completion": 53.33
+    },
+    {
+      "name": "actual_import::formula_compiler::mixed_current_and_empty_results_compile_only_changed_actual_fields",
+      "outcome": "ok",
+      "first_observed_at_seconds": 106.873,
+      "pending_observed_seconds_at_completion": 29.284
+    },
+    {
+      "name": "actual_import::formula_compiler::fresh_acl_aead_head_and_quarantine_changes_deny_compilation_and_never_invoke_cached_consumer",
+      "outcome": "ok",
+      "first_observed_at_seconds": 77.589,
+      "pending_observed_seconds_at_completion": 28.707
+    },
+    {
+      "name": "actual_import::formula_compiler::actual_multi_section_compiler_targets_original_source_fields_and_whole_candidate_without_publication",
+      "outcome": "ok",
+      "first_observed_at_seconds": 48.882,
+      "pending_observed_seconds_at_completion": 22.537
+    },
+    {
+      "name": "actual_import::all_ten_actual_stored_results_import_without_caller_maps_and_preserve_whole_graphs",
+      "outcome": "ok",
+      "first_observed_at_seconds": 16.093,
+      "pending_observed_seconds_at_completion": 10.765
+    },
+    {
+      "name": "actual_import::formula_compiler::actual_field_graph_and_compiled_candidate_do_not_become_full_import_or_issuer_authority",
+      "outcome": "ok",
+      "first_observed_at_seconds": 26.346,
+      "pending_observed_seconds_at_completion": 8.207
+    }
+  ],
+  "pending_at_timeout": "actual_import::formula_output::revoked_acl_tampered_aead_head_advance_and_quarantine_never_release_cached_result_bytes",
+  "pending_observed_seconds_at_timeout": 0.536,
+  "candidate_source_pins": [
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics/evaluation.rs",
+      "bytes": 5902,
+      "sha256": "6cf1e783743afd19f63265d87ad55d7bb3b54b219b2efe3c3f91c251eeb2a3f7"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics.rs",
+      "bytes": 12883,
+      "sha256": "f954c78d1f438bde9eb095ff1436b5378d5061875cda1f181c5ad193df8d920c"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields.rs",
+      "bytes": 20592,
+      "sha256": "9ca9f2b7518c8abc815692780a2c1101c16707bd8cfa8fd554ce47979edf2120"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/forms.rs",
+      "bytes": 16756,
+      "sha256": "b31e729e3b8926f63ed1583d4f736bff366767d1293c9e3a8ae6ff1b42265eff"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/field_ranges/semantics/evaluation.rs",
+      "bytes": 4801,
+      "sha256": "1e294bdd0c36face23cb0e5e56328fe881e5a0e937bf5b493c732e0fb05e7312"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/field_ranges/semantics.rs",
+      "bytes": 4652,
+      "sha256": "94da45e3765e745711faefe16ae59549d1bcb5bca7b50e480d609099204d2466"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/field_ranges.rs",
+      "bytes": 4177,
+      "sha256": "af0036ed8ff936a62989fc2b6452556d2f7f71ec3999daa0dce4c0737dbcfc42"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import.rs",
+      "bytes": 10908,
+      "sha256": "0bea828152e8d3434eca5c5f93a43216f56dfd53adc96e0b428d3be62316a699"
+    }
+  ],
+  "causal_CPU_profile_collected": false,
+  "Rust_product_optimization_implemented": false,
+  "full249_runtime_accepted": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "static_repeated_reconstruction_observations": [
+    {
+      "path": "crates/hwpx-package/src/document_import/fields.rs",
+      "function": "ImportedDocumentFields::verify_source",
+      "observation": "Builds fresh ImportedSourcePackage/ImportedDocumentForms, then self.forms.verify_source rebuilds source/forms again before full field graph/fields/receipt comparisons."
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics.rs",
+      "function": "ImportedDocumentFieldSemantics::verify_source",
+      "observation": "Calls self.fields.verify_source then independently imports fresh source/forms/fields before full meaning graph/observations/receipt comparisons."
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/field_ranges/semantics.rs",
+      "function": "StoredImportedFieldSemantics::verify",
+      "observation": "Calls ranges.verify, fresh_source, and imported.verify_source followed by check_head; these operations contain nested source/form reconstructions."
+    }
+  ],
+  "interpretation": "Parent-observed pending windows locate slow cases; they are not exact execution durations or a profiler attribution. Last pending case was observed for only 0.536s and is not identified as the bottleneck.",
+  "required_optimization_invariants": [
+    "Retain fresh ACL/AEAD/quarantine/head/provider scope checks and before/after security checkpoints.",
+    "Retain whole source/body/forms/ranges/meaning graph/observations/receipt comparisons; never digest-only or cached-authorization acceptance.",
+    "Reconstruct once within one immutable fresh snapshot and reuse only that verified reconstruction, not across authorization epochs; audit equivalence and error behavior.",
+    "Keep all original corpus assertions and full249 unfiltered terminal acceptance; smaller selected tests are diagnostics only.",
+    "A Rust source edit invalidates current-r4 byte bindings; create fresh source/build evidence and preserve r4 protected EXEs/receipts instead of restamping old PASS."
+  ]
+}

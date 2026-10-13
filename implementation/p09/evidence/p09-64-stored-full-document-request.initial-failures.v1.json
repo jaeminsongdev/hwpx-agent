@@ -1,0 +1,40 @@
+{
+  "schema": "hwpx-agent.p09-stored-full-document-request.initial-failures/v1",
+  "date": "2026-10-04",
+  "failures": [
+    {
+      "terminal_chunk": "5a8d3e",
+      "command": "cargo test --offline -p hwpx-agent-cli --test form_stored_provider",
+      "exit_code": 1,
+      "category": "E0583_new_test_module_path",
+      "source_archive": "implementation/p09/source-archive/p09-64-initial-module-path/crates/product-cli/tests/form_stored_provider/full_document.rs",
+      "correction": "explicit_relative_path_attribute_only"
+    },
+    {
+      "terminal_chunk": "d97953",
+      "command": "cargo test --offline -p hwpx-agent-cli --test form_stored_provider",
+      "exit_code": 1,
+      "category": "E0609_new_test_control_property_field",
+      "source_archive": "implementation/p09/source-archive/p09-64-initial-graph-field/crates/product-cli/tests/form_stored_provider/full_document/product_request.rs",
+      "correction": "actual_FormControlNode_properties_not_NodeCommon"
+    },
+    {
+      "terminal_chunk": "9e2c9c",
+      "command": "cargo clippy --offline -p hwpx-agent-cli --lib --tests -- -D warnings",
+      "exit_code": 1,
+      "category": "doc_markdown_and_too_many_lines_new_test",
+      "source_archive": "implementation/p09/source-archive/p09-64-initial-lint/crates/product-cli/tests/form_stored_provider/full_document/product_request.rs",
+      "correction": "documentation_ticks_and_same_assertion_helper_extraction_no_allow_or_skip"
+    }
+  ],
+  "read_only_invocation_errors": [
+    {"terminal_chunk": "346975", "category": "powershell_brace_path_parser_error", "corrected_chunk": "d49388"},
+    {"terminal_chunk": "aa1158", "category": "powershell_foreach_pipeline_parser_error", "corrected_chunk": "955979"}
+  ],
+  "edit_invocation_errors": [
+    {"operation": "first_ledger_patch", "category": "non_sequential_hunk_context_rejected", "files_changed_by_failed_patch": false, "correction": "sort_hunks_in_original_line_order"}
+  ],
+  "original_expectations_or_guards_weakened": false,
+  "native_activated": false,
+  "p09_complete": false
+}

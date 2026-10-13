@@ -1,0 +1,16 @@
+Initial direct-view component run: 23 contracts, one failure, terminal exit1, guard cleanup true. No runtime134/product/Native acceptance. The failed original-held-close-history assertion must be reviewed against the exact old implementation; this failed attempt must not be promoted or overwritten.
+...........F...........
+======================================================================
+FAIL: test_original_held_close_failure_never_becomes_cleanup_success (__main__.ViewContracts.test_original_held_close_failure_never_becomes_cleanup_success)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\����\hwpx-agent\tools\p09\tests\test_held_native_read_views_v1.py", line 223, in test_original_held_close_failure_never_becomes_cleanup_success
+    self.assertFalse(self.held.summary()["input_lock_cleanup_confirmed"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.067s
+
+FAILED (failures=1)
+{"contract_count": 23, "passed": false, "cleanup_confirmed": true, "actual_product_or_full_Native_test": false, "synthetic_component_only": true}

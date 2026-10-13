@@ -1,0 +1,221 @@
+{
+  "schema_version": "hwpx-agent.p09-budget-terminal-code-qualification/v2",
+  "state": "PASS_SYNTHETIC14_AND_EXPLICIT_DATA_REVIEW_NOT_NATIVE_OR_PRODUCT_OR_RETRY",
+  "synthetic_qualification": {
+    "state": "PASS_SYNTHETIC14_TERMINAL_PRODUCT_CONNECTION_NOT_PRODUCT_OR_RETRY",
+    "contracts": 14,
+    "code_pins": [
+      {
+        "path": "tools/p09/flat_current_queue_budget_runtime_v2.py",
+        "bytes": 10359,
+        "sha256": "41a0dae1cbd6ab37890944c2262c4ec2072242b171b23beb55830196c4ab7bcc"
+      },
+      {
+        "path": "tools/p09/tests/test_flat_current_queue_budget_connection_v2.py",
+        "bytes": 9621,
+        "sha256": "959114569d26501505fab913952b64813d678ddde556537e29c8144ea607c8ec"
+      },
+      {
+        "path": "tools/p09/flat_current_queue_budget_acceptance_v2.py",
+        "bytes": 4380,
+        "sha256": "c3c41885cecb0762b13934b211f670baf2dfe65488e42773e91480762bd8599c"
+      },
+      {
+        "path": "tools/p09/flat_candidate_terminal_review_guard_v1.py",
+        "bytes": 2280,
+        "sha256": "b7a9abc50c4fe240e12929ad7340090028e7995e5d308750c4b25cf31dc98f55"
+      },
+      {
+        "path": "tools/p09/tests/test_flat_candidate_terminal_review_guard_v1.py",
+        "bytes": 3663,
+        "sha256": "35e8be4109e9c776493a716e8190de8e2d7f651bc5149a3fd32d3c8d54fc716f"
+      },
+      {
+        "path": "tools/p09/flat_current_queue_budget_runtime_v1.py",
+        "bytes": 11367,
+        "sha256": "56154d39edb1b1af3b6e51813329264cb996ec08b42ee3d4bf769c57589a1b31"
+      },
+      {
+        "path": "tools/p09/tests/test_flat_current_queue_budget_connection_v1.py",
+        "bytes": 10154,
+        "sha256": "bb73ed330193d87b34cf54f6ff3da33555f9d532364e3d80dedc9167b3038614"
+      },
+      {
+        "path": "tools/p09/flat_current_queue_budget_acceptance_v1.py",
+        "bytes": 6590,
+        "sha256": "9f34cc7d8535b8af959bd121f34a9d7b228800ea1abbfcc5804bb02f427ad6bb"
+      },
+      {
+        "path": "tools/p09/serial_observer_budget_connection_v1.py",
+        "bytes": 3286,
+        "sha256": "fbdf1c4e84a7bab11214ee89c63c1d14434a13e87dbac542d4764847142d205a"
+      },
+      {
+        "path": "tools/p09/tests/test_serial_observer_budget_connection_v1.py",
+        "bytes": 4422,
+        "sha256": "6cc1e3e576acaa5ba3da544138c1501eccd40789486c227f947cde1d9f64b5cb"
+      },
+      {
+        "path": "tools/p09/serial_cpu_attribution_budget_v1.py",
+        "bytes": 6076,
+        "sha256": "42019f5a7a64ac681ddfa7cf6bde93a6479a6f7edf43fc7ca5861fc401b6c601"
+      },
+      {
+        "path": "tools/p09/tests/test_serial_cpu_attribution_budget_v1.py",
+        "bytes": 5636,
+        "sha256": "43cd7040674fe0549cfcc83882039357c0b6372771b71c9179043af66094f286"
+      }
+    ],
+    "failures": [],
+    "CPU_max": 18.06,
+    "RAM_min": 47.110727226918264,
+    "fresh_pins": 14,
+    "reads": 28,
+    "bytes_read": 190870,
+    "final_hashes": 14,
+    "Native_or_product_executed": false,
+    "cleanup_confirmed": true
+  },
+  "data_review": {
+    "state": "PASS_REVIEWED125_RUN003_DATA_NOT_EXECUTED",
+    "data": {
+      "schema_version": "hwpx-agent.p09-flat-budget-terminal-connection/v2",
+      "index": 125,
+      "before": 118,
+      "run": 3,
+      "base_step_pin": {
+        "path": "implementation/p09/evidence/p09-361-case125-step-config001.v1.json",
+        "bytes": 652,
+        "sha256": "02c40e07d3438bfde4d8ddb0d538f4dde3fd7adeaab9062cf86fbee379cc7979"
+      },
+      "prior_budget_connection_pin": {
+        "path": "implementation/p09/evidence/p09-361-case125-budget-connection-data001.v1.json",
+        "bytes": 2626,
+        "sha256": "080961671fe2a8c123360adaea3ca1ebc5f3ff3a360f36208de1d24e92985ea5"
+      },
+      "failed_runtime_pins": [
+        {
+          "path": "implementation/p09/evidence/p09-361-case125-current-runtime-run001.v1.json",
+          "bytes": 411802,
+          "sha256": "a23992d43df24d545cf75dcb47ed5560ee5da099d238481ccbe881c4ae86e4a0"
+        },
+        {
+          "path": "implementation/p09/evidence/p09-361-case125-current-runtime-run002.v1.json",
+          "bytes": 263480,
+          "sha256": "33990111d0b79fa568d58d7c9f898b3ed2541e280c8e4ca4b2957da5f9e262ad"
+        }
+      ],
+      "terminal_qualification_pin": {
+        "path": "implementation/p09/evidence/p09-361-case125-terminal-review-guard-and-fresh-postcheck-r276.v1.json",
+        "bytes": 4318,
+        "sha256": "ba30a295c3ddd67e13e335b74698407ff0b2d491e904a35858b07b17339b5502"
+      },
+      "connection_code_pins": [
+        {
+          "path": "tools/p09/flat_current_queue_budget_runtime_v2.py",
+          "bytes": 10359,
+          "sha256": "41a0dae1cbd6ab37890944c2262c4ec2072242b171b23beb55830196c4ab7bcc"
+        },
+        {
+          "path": "tools/p09/tests/test_flat_current_queue_budget_connection_v2.py",
+          "bytes": 9621,
+          "sha256": "959114569d26501505fab913952b64813d678ddde556537e29c8144ea607c8ec"
+        },
+        {
+          "path": "tools/p09/flat_current_queue_budget_acceptance_v2.py",
+          "bytes": 4380,
+          "sha256": "c3c41885cecb0762b13934b211f670baf2dfe65488e42773e91480762bd8599c"
+        },
+        {
+          "path": "tools/p09/flat_candidate_terminal_review_guard_v1.py",
+          "bytes": 2280,
+          "sha256": "b7a9abc50c4fe240e12929ad7340090028e7995e5d308750c4b25cf31dc98f55"
+        },
+        {
+          "path": "tools/p09/tests/test_flat_candidate_terminal_review_guard_v1.py",
+          "bytes": 3663,
+          "sha256": "35e8be4109e9c776493a716e8190de8e2d7f651bc5149a3fd32d3c8d54fc716f"
+        },
+        {
+          "path": "tools/p09/flat_current_queue_budget_runtime_v1.py",
+          "bytes": 11367,
+          "sha256": "56154d39edb1b1af3b6e51813329264cb996ec08b42ee3d4bf769c57589a1b31"
+        },
+        {
+          "path": "tools/p09/tests/test_flat_current_queue_budget_connection_v1.py",
+          "bytes": 10154,
+          "sha256": "bb73ed330193d87b34cf54f6ff3da33555f9d532364e3d80dedc9167b3038614"
+        },
+        {
+          "path": "tools/p09/flat_current_queue_budget_acceptance_v1.py",
+          "bytes": 6590,
+          "sha256": "9f34cc7d8535b8af959bd121f34a9d7b228800ea1abbfcc5804bb02f427ad6bb"
+        },
+        {
+          "path": "tools/p09/serial_observer_budget_connection_v1.py",
+          "bytes": 3286,
+          "sha256": "fbdf1c4e84a7bab11214ee89c63c1d14434a13e87dbac542d4764847142d205a"
+        },
+        {
+          "path": "tools/p09/tests/test_serial_observer_budget_connection_v1.py",
+          "bytes": 4422,
+          "sha256": "6cc1e3e576acaa5ba3da544138c1501eccd40789486c227f947cde1d9f64b5cb"
+        },
+        {
+          "path": "tools/p09/serial_cpu_attribution_budget_v1.py",
+          "bytes": 6076,
+          "sha256": "42019f5a7a64ac681ddfa7cf6bde93a6479a6f7edf43fc7ca5861fc401b6c601"
+        },
+        {
+          "path": "tools/p09/tests/test_serial_cpu_attribution_budget_v1.py",
+          "bytes": 5636,
+          "sha256": "43cd7040674fe0549cfcc83882039357c0b6372771b71c9179043af66094f286"
+        }
+      ]
+    },
+    "CPU_max": 26.59,
+    "RAM_min": 47.00544787249759,
+    "fresh_pins": 33,
+    "read_passes": 66,
+    "final_hashes": 33,
+    "cleanup_confirmed": true
+  },
+  "accepted_count_after": 118,
+  "accepted_count_delta": 0,
+  "next_runtime_index": 125,
+  "reviewed125_attempt": 3,
+  "actual125_run003_executed": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "runtime_product_connection_qualified": false,
+  "previous_contract_failure": {
+    "path": "implementation/p09/evidence/p09-361-case125-terminal-connection-contracts-failed001.v1.json",
+    "expected_test_module_preimage": "implementation/p09/evidence/p361-budget-terminal-contract-failed001-code/tools/p09/tests/test_flat_current_queue_budget_connection_v2.py",
+    "error": "Synthetic fake validator accidentally had closure; fixed to module-level like original. Production code unchanged; failure not product/Native/acceptance."
+  },
+  "external_readonly_snapshot": {
+    "ScanAvgCPULoadFactor": 10,
+    "EnableLowCpuPriority": true,
+    "ScanOnlyIfIdleEnabled": true,
+    "not_elevated": true,
+    "ExclusionEntryCount": 1,
+    "VisibleEntriesAllAbsoluteWindowsPaths": false,
+    "exact_requested_path_exclusion_state": "UNVERIFIED_NON_ADMIN_NON_PATH_ENTRY",
+    "raw_exclusion_values_not_recorded": true,
+    "git_cargo_rustc_process_count_observed": 0,
+    "PythonProcessCount": 3,
+    "P09_signature_visible_in_Python_commands": false,
+    "raw_process_commands_not_recorded": true,
+    "MsMpEngWorkingSetMiB": 435.8,
+    "vmmemWSLWorkingSetMiB": 971.2,
+    "no_OS_or_Defender_setting_changed": true,
+    "not_hot_interval_causal_evidence": true,
+    "official_sources": [
+      "https://learn.microsoft.com/en-us/defender-endpoint/troubleshoot-mdav-scan-issues",
+      "https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-defender#hideexclusionsfromlocalusers"
+    ]
+  },
+  "PC_freeze_resolved": false,
+  "full_preflight_NOT_RUN": true
+}

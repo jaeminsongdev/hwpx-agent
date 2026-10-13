@@ -1,0 +1,182 @@
+{
+  "schema": "hwpx-agent.p09-90-comment-current-source-validation/v1",
+  "state": "pass_explicit_current_profile_legacy_conformance_non_green",
+  "explicit_current_profile": {
+    "command": "python tools/p09/validate_comment_model_contract.py --current-source-v2",
+    "exit_code": 0,
+    "tool_chunk": "b9ff5f",
+    "schema_version": "hwpx-agent.p09-comment-model-current-source-validation/v2",
+    "capabilities": 5,
+    "raw_pins": 32,
+    "official_sources": 17,
+    "authoritative_sources": 4,
+    "current_Rust_component_tests": 11,
+    "historical_default_still_fails": true
+  },
+  "legacy_validator_baseline": {
+    "tool_chunk": "71ef7a",
+    "commands": "original 15 validate_<name>_contract.py noargs, no Hwp/COM/UI",
+    "passed": 2,
+    "failed": 13,
+    "total": 15,
+    "rows": [
+      {
+        "validator": "field_core",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "implementation_digest"
+        ]
+      },
+      {
+        "validator": "form_control",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "implementation_digest"
+        ]
+      },
+      {
+        "validator": "note_engine",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "implementation_digest"
+        ]
+      },
+      {
+        "validator": "comment_model",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "implementation_digest"
+        ]
+      },
+      {
+        "validator": "link_reference",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "implementation_digest"
+        ]
+      },
+      {
+        "validator": "cross_reference",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "implementation_digest"
+        ]
+      },
+      {
+        "validator": "toc_index",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "implementation_digest"
+        ]
+      },
+      {
+        "validator": "citation",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "digest:crates/domain-ir/src/lib.rs"
+        ]
+      },
+      {
+        "validator": "mail_merge",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "digest:crates/domain-ir/src/lib.rs"
+        ]
+      },
+      {
+        "validator": "reference_auxiliary",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "digest:crates/domain-ir/src/lib.rs"
+        ]
+      },
+      {
+        "validator": "form_control_hwpx",
+        "exit_code": 0,
+        "state": "pass",
+        "errors": []
+      },
+      {
+        "validator": "bookmark_hwpx",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "implementation_digest"
+        ]
+      },
+      {
+        "validator": "note_hwpx",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "implementation_digest"
+        ]
+      },
+      {
+        "validator": "hyperlink_hwpx",
+        "exit_code": 1,
+        "state": "fail",
+        "errors": [
+          "implementation_digest"
+        ]
+      },
+      {
+        "validator": "field_auto_number_hwpx",
+        "exit_code": 0,
+        "state": "pass",
+        "errors": []
+      }
+    ],
+    "failures_not_filtered": true,
+    "full_current_profile_admission_for_other_12_legacy_failures": "NOT_IMPLEMENTED"
+  },
+  "conformance": {
+    "command": "python tools/p09/validate_reference_conformance_contract.py",
+    "tool_chunk": "11a6ca",
+    "exit_code": 1,
+    "state": "fail",
+    "error": "matrix_drift",
+    "matrix_unchanged": true
+  },
+  "Python_syntax": {
+    "command": "python -m py_compile tools/p09/comment_current_source.py tools/p09/validate_comment_model_contract.py tools/p09/tests/test_comment_current_source.py",
+    "tool_chunk": "e7b67d",
+    "exit_code": 0
+  },
+  "diff_check": {
+    "command": "git diff --check",
+    "tool_chunk": "068529",
+    "exit_code": 0
+  },
+  "broad_preservation": {
+    "tool_chunk": "c20d47",
+    "exit_code": 0,
+    "original1551": true,
+    "native75": true,
+    "P59_P89_declared11978": true,
+    "P89_source636_all_unchanged": true
+  },
+  "claims": {
+    "native_author_time_binding": false,
+    "native_visibility_resolution_binding": false,
+    "full_comment_product_acceptance": false,
+    "native_executed": false,
+    "actual_SQL_reexecuted": false,
+    "performance_acceptance": false,
+    "p09_complete": false,
+    "product_complete": false,
+    "P10_new_implementation": false
+  },
+  "goal_status": "active"
+}
+

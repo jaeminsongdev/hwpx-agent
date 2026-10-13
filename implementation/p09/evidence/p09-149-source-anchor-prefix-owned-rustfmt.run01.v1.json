@@ -1,0 +1,144 @@
+{
+  "schema_version": "hwpx-agent.p09-owned-rustfmt/v1",
+  "qualification": "OWNED_FORMAT_ONLY_NOT_BUILD_RUNTIME_SQL_OR_GATE",
+  "files_checked": 2,
+  "mechanically_formatted": 2,
+  "rows": [
+    {
+      "path": "crates/hwpx-package/src/document_import.rs",
+      "audit_limits": {
+        "task": "rustfmt-stdin",
+        "input_bytes": 19285,
+        "timeout_seconds": 10,
+        "output_limits": {
+          "stdout": 1048576,
+          "stderr": 32768
+        },
+        "job_private_peak_mib": 21.45,
+        "job_accounting_observed": true,
+        "worker_created": true,
+        "job_assigned": true,
+        "writer_authorized": true,
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "logical_cpu_limit": 1,
+        "priority": "BelowNormal",
+        "operation_phase": "running",
+        "job_cpu_hard_cap_machine_percent": 6.25,
+        "job_private_limit_mib": 2548.87109375,
+        "system_first": {
+          "time_utc": "2026-10-06T22:31:22.685583+00:00",
+          "system_cpu_percent": 5.26,
+          "available_ram_percent": 34.30136720941053,
+          "available_ram_mib": 10928.73,
+          "total_ram_mib": 31860.92,
+          "commit_used_percent": 38.79894667988213
+        },
+        "system_last": {
+          "time_utc": "2026-10-06T22:31:22.974414+00:00",
+          "system_cpu_percent": 6.25,
+          "available_ram_percent": 34.54077444753472,
+          "available_ram_mib": 11005.01,
+          "total_ram_mib": 31860.92,
+          "commit_used_percent": 38.62787685748472
+        },
+        "system_sample_count": 4,
+        "job_last": {
+          "active_processes": 0,
+          "job_cpu_seconds": 0.125,
+          "peak_job_private_mib": 21.45,
+          "peak_job_private_percent": 0.06730914822050674,
+          "owned_processes": []
+        },
+        "job_last_active": {
+          "active_processes": 1,
+          "job_cpu_seconds": 0.125,
+          "peak_job_private_mib": 21.45,
+          "peak_job_private_percent": 0.06730914822050674,
+          "owned_processes": [
+            {
+              "pid": 22260,
+              "memory_observed": true,
+              "working_set_mib": 7.14,
+              "private_mib": 1.22,
+              "role": "conhost.exe"
+            }
+          ]
+        },
+        "elapsed_seconds": 0.3095
+      },
+      "source_before_after_exact": true,
+      "resource_stop": null,
+      "resource_watcher_cleanup_confirmed": true
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_source.rs",
+      "audit_limits": {
+        "task": "rustfmt-stdin",
+        "input_bytes": 21199,
+        "timeout_seconds": 10,
+        "output_limits": {
+          "stdout": 1048576,
+          "stderr": 32768
+        },
+        "job_private_peak_mib": 21.71,
+        "job_accounting_observed": true,
+        "worker_created": true,
+        "job_assigned": true,
+        "writer_authorized": true,
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "logical_cpu_limit": 1,
+        "priority": "BelowNormal",
+        "operation_phase": "running",
+        "job_cpu_hard_cap_machine_percent": 6.25,
+        "job_private_limit_mib": 2548.87109375,
+        "system_first": {
+          "time_utc": "2026-10-06T22:31:24.514027+00:00",
+          "system_cpu_percent": 50,
+          "available_ram_percent": 34.44827034492567,
+          "available_ram_mib": 10975.54,
+          "total_ram_mib": 31860.92,
+          "commit_used_percent": 38.67886701773511
+        },
+        "system_last": {
+          "time_utc": "2026-10-06T22:31:24.701828+00:00",
+          "system_cpu_percent": 26.23,
+          "available_ram_percent": 34.37318815481594,
+          "available_ram_mib": 10951.61,
+          "total_ram_mib": 31860.92,
+          "commit_used_percent": 38.70504297537107
+        },
+        "system_sample_count": 3,
+        "job_last": {
+          "active_processes": 0,
+          "job_cpu_seconds": 0.141,
+          "peak_job_private_mib": 21.71,
+          "peak_job_private_percent": 0.06813058955580253,
+          "owned_processes": []
+        },
+        "job_last_active": {
+          "active_processes": 1,
+          "job_cpu_seconds": 0.141,
+          "peak_job_private_mib": 21.71,
+          "peak_job_private_percent": 0.06813058955580253,
+          "owned_processes": [
+            {
+              "pid": 13548,
+              "memory_observed": true,
+              "working_set_mib": 7.13,
+              "private_mib": 1.21,
+              "role": "conhost.exe"
+            }
+          ]
+        },
+        "elapsed_seconds": 0.2089
+      },
+      "source_before_after_exact": true,
+      "resource_stop": null,
+      "resource_watcher_cleanup_confirmed": true
+    }
+  ],
+  "product_complete": false,
+  "P09_gate": "OPEN"
+}

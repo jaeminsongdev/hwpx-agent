@@ -1,0 +1,49 @@
+{
+  "schema": "hwpx-agent.p09-90-comment-current-source-initial-failures/v1",
+  "state": "retained_not_upgraded_to_success",
+  "current_profile_initial": {
+    "exit_code": 1,
+    "tool_chunks": [
+      "dae9d3",
+      "eea1cf"
+    ],
+    "error": "current_source_v2_qualification",
+    "direct_helper_error": "current_source_v2_profile",
+    "cause": "immutable_receipt_uses_full_official_cache_paths_while_original_validator_uses_17_cache_relative_paths",
+    "physical_official_sources_already_equal": true,
+    "corrected_by": "compare_full_path_receipt_against_exact_prefixed_original_17_mapping_and_use_same_prefix_for_reads",
+    "guard_removed": false,
+    "receipt_rewritten": false,
+    "archive_prefix": "implementation/p09/source-archive/p09-90-initial-current-profile",
+    "archived_files": 1,
+    "corrected_current_cli_chunk": "b9ff5f"
+  },
+  "preservation_audit_initial": {
+    "exit_code": 1,
+    "tool_chunk": "1e8c30",
+    "error": "P89 current/archive origin coverage drift",
+    "cause": "incorrect_expectation_that_modified_original_validator_was_one_of_P89_636_source_rows",
+    "diagnosis_chunk": "00ec44",
+    "actual_P89_source_rows_unchanged": 636,
+    "modified_validator_not_in_P89_source_rows": true,
+    "validator_in_original1551_preserved_as_complete_archive": true,
+    "corrected_broad_audit_chunk": "c20d47",
+    "failures_preserved": true
+  },
+  "original_failures_not_removed": {
+    "legacy_validators": {
+      "passed": 2,
+      "failed": 13,
+      "total": 15
+    },
+    "historical_comment_default": "fail:implementation_digest",
+    "historical_comment_Python_tests": "4 PASS / 1 FAIL",
+    "conformance": "fail:matrix_drift"
+  },
+  "native_executed": false,
+  "p09_complete": false,
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "goal_status": "active"
+}
+

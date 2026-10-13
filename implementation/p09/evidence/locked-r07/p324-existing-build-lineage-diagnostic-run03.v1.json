@@ -1,0 +1,83 @@
+{
+  "schema_version": "hwpx-agent.p09-supplementary-counter-build-lineage/v1",
+  "role": "EXISTING_BEFORE_OWN_ACTUAL_NOT_CPU_ATTRIBUTION_OR_CAUSE",
+  "raw_packet_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p323-actual104-perfproc-before-after-raw-run04.v1.json",
+    "bytes": 259034,
+    "sha256": "9775416dc0706a08e208adbd4c83512535e1532cf2ecda8aa65701f0e974e87c"
+  },
+  "chain_before_own_actual": [
+    {
+      "pid": 533752,
+      "name": "clippy-driver",
+      "creating_pid": 709616
+    },
+    {
+      "pid": 709616,
+      "name": "cargo#1",
+      "creating_pid": 184992
+    },
+    {
+      "pid": 184992,
+      "name": "cargo-clippy",
+      "creating_pid": 611440
+    },
+    {
+      "pid": 611440,
+      "name": "cargo",
+      "creating_pid": 504664
+    },
+    {
+      "pid": 504664,
+      "name": "python#1",
+      "creating_pid": 658140
+    },
+    {
+      "pid": 658140,
+      "name": "maple-re",
+      "creating_pid": 123236
+    },
+    {
+      "pid": 123236,
+      "name": "python",
+      "creating_pid": 250200
+    },
+    {
+      "pid": 250200,
+      "name": "pwsh",
+      "creating_pid": 15012
+    }
+  ],
+  "chain_absent_in_after": [
+    {
+      "pid": 533752,
+      "name": "clippy-driver",
+      "creating_pid": 709616
+    },
+    {
+      "pid": 709616,
+      "name": "cargo#1",
+      "creating_pid": 184992
+    },
+    {
+      "pid": 184992,
+      "name": "cargo-clippy",
+      "creating_pid": 611440
+    },
+    {
+      "pid": 611440,
+      "name": "cargo",
+      "creating_pid": 504664
+    },
+    {
+      "pid": 504664,
+      "name": "python#1",
+      "creating_pid": 658140
+    }
+  ],
+  "interval_CPU_for_exited_processes_unknown_not_zero": true,
+  "command_lines_accounts_or_private_paths_saved": false,
+  "foreign_processes_stopped_or_changed": false,
+  "source": "Already qualified two endpoint snapshot rows; no additional process query",
+  "product_or_source_acceptance": false
+}

@@ -1,0 +1,59 @@
+{
+  "schema": "hwpx-agent.p09-83-initial-failures/v1",
+  "failures": [
+    {
+      "stage": "initial_new_tests",
+      "start_chunk": "c19dac",
+      "terminal_chunk": "f0a32e",
+      "exit_code": 1,
+      "passed": 1,
+      "failed": 6,
+      "filtered": 89,
+      "code": "UNKNOWN_FIXTURE_CASE",
+      "source_archive": "implementation/p09/source-archive/p09-83-initial-policy-tests/stored_source_policy.rs",
+      "correction": "use original frozen five-kinds case; no original manifest/source/guard changed"
+    },
+    {
+      "stage": "role_media_fixture",
+      "start_chunk": "0735ca",
+      "terminal_chunk": "4d6293",
+      "exit_code": 1,
+      "passed": 6,
+      "failed": 1,
+      "filtered": 89,
+      "code": "ARTIFACT_CONTENT_CONFLICT",
+      "source_archive": "implementation/p09/source-archive/p09-83-pre-role-fixture-isolation/stored_source_policy.rs",
+      "correction": "isolate each role/media fixture; preserve original tenant digest uniqueness"
+    },
+    {
+      "stage": "strict_lint",
+      "chunk": "0c99cf",
+      "exit_code": 1,
+      "code": "CLIPPY_DOC_MARKDOWN",
+      "correction": "documentation backticks only"
+    },
+    {
+      "stage": "strict_lint",
+      "chunk": "86482b",
+      "exit_code": 1,
+      "codes": [
+        "CLIPPY_UNNECESSARY_WRAPS",
+        "CLIPPY_SEMICOLON_IF_NOTHING_RETURNED"
+      ],
+      "correction": "new test helper returns Value and explicit semicolon; no lint suppression"
+    },
+    {
+      "stage": "new_scan_test_link_while_previous_test_running",
+      "chunk": "8c57b0",
+      "exit_code": 1,
+      "code": "LNK1104",
+      "cause": "running first full regression owns same Windows test executable",
+      "live_session": 32065,
+      "not_retry_until_terminal": true,
+      "correction": "wait until original stored-provider test executable exits; same final targeted test completed successfully at c564ff/f141c3; no process kill/delete or lock workaround"
+    }
+  ],
+  "product_guards_weakened": false,
+  "original_evidence_removed": false,
+  "full_logs_or_private_values_retained": false
+}

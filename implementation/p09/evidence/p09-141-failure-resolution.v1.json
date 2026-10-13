@@ -1,0 +1,46 @@
+{
+  "schema_version": "hwpx-agent.p09-141-failure-resolution/v1",
+  "state": "HISTORICAL_FAILURES_PRESERVED_CURRENT_CREDENTIAL_METADATA44_AND_STRICT_LINT_PASS_NOT_GATE",
+  "failed_runs_preserved": [
+    "implementation/p09/evidence/p09-141-adapter-run01.v1.json",
+    "implementation/p09/evidence/p09-141-adapter-run02.v1.json",
+    "implementation/p09/evidence/p09-141-adapter-run03.v1.json",
+    "implementation/p09/evidence/p09-141-adapter-run04.v1.json"
+  ],
+  "failed_build_receipt": "target/p09-121-resource-optimized/p141-adapter-build-r1.json",
+  "failed_lint_receipt": "target/p09-121-resource-optimized/p141-workspace-lint-r4.json",
+  "run01_run02": {
+    "stage": "new_credential_profiles",
+    "sqlstate": "23514",
+    "run02_exact_constraint_name": "artifacts_time_order",
+    "cause": "New synthetic artifact copied an earlier verified_at while its created_at default was the later fixture transaction timestamp",
+    "fix": "Only the new P141 fixture uses transaction_timestamp() for the new artifact verification timestamp",
+    "Rust_DB_adapter_executed": false
+  },
+  "run03": {
+    "stage": "Rust_credential_bound_metadata_probe",
+    "cause": "cargo rustc example with test profile produced a zero-test harness rather than invoking the example main",
+    "fixed_profile": "dev with opt-level1, debug assertions and overflow checks enabled, codegen units1",
+    "same_r2_executable_bounded_list_observation": {"exit_code": 0, "zero_tests_zero_benchmarks": true, "JSON_probe_protocol": false},
+    "r2_executable_preserved_not_qualified_as_DB_probe": true,
+    "Rust_DB_adapter_executed": false
+  },
+  "run04": {
+    "metadata_checks_passed": 42,
+    "stage": "owned_schema22_fingerprint_negative",
+    "sqlstate": "55000",
+    "cause": "Original immutable schema identity rejects UPDATE even in the owned disposable DB",
+    "fix": "Clone the owned schema21 base before original SQL22 application; install deliberately wrong vs exact fingerprint via original migration session setting in two control databases with identical grants",
+    "identity_or_trigger_protection_disabled": false
+  },
+  "compiler": {"diagnostics": ["E0308", "E0382", "E0382", "E0382"], "fix": "New probe returns Result and clones its fixed context before owned constructors; original production code unchanged"},
+  "lint": {"diagnostic": "clippy::too_many_lines", "fix": "Separate original readback and context checks without removing assertions, changing order or suppressing warnings"},
+  "inverse_archive": "Run05 dispatcher bytes reconstructed by exact sole source-count inverse transition 829 to 828 and authenticated against its existing source_freeze SHA256 and byte length before publication",
+  "production_SQL_or_adapter_modified": false,
+  "historical_receipts_overwritten": false,
+  "real_AEAD_or_Ed25519_executed": false,
+  "native_application_executed": false,
+  "app_freeze_cause_resolved": false,
+  "P09_gate": "OPEN",
+  "product_complete": false
+}

@@ -8,6 +8,11 @@ import re
 import sys
 from typing import Any
 
+if __package__:
+    from . import comment_current_source
+else:
+    import comment_current_source
+
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = "protocol/private/p09-comment-model-v1.json"
@@ -191,8 +196,11 @@ def canonical_digest(path: Path) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def validate(root: Path = ROOT) -> dict[str, Any]:
+def validate(root: Path = ROOT, *, source_profile: str = "historical_v1") -> dict[str, Any]:
     errors: list[str] = []
+    if source_profile not in ("historical_v1", comment_current_source.PROFILE):
+        return result(["source_profile_unknown"], 0, 0, False)
+    current = source_profile == comment_current_source.PROFILE
     try:
         contract = load(root, CONTRACT)
     except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
@@ -265,10 +273,30 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         errors.append("gate_decision")
 
     source_count = validate_locks(root, contract.get("source_locks"), SOURCE_SHA256, errors, "source")
-    implementation_count = validate_implementation(root, errors)
+    implementation_count = validate_implementation(root, errors, current=current)
     qualification_ok = validate_qualification(root, errors)
     validate_documents(root, errors)
-    return result(errors, source_count, implementation_count, qualification_ok)
+    current_verified = False
+    if current:
+        try:
+            comment_current_source.verify_receipt(
+                root, SOURCE_SHA256, OFFICIAL_SOURCE_SHA256, OFFICIAL_COMMIT,
+            )
+            current_verified = True
+        except (OSError, UnicodeDecodeError, ValueError, KeyError, TypeError):
+            errors.append("current_source_v2_qualification")
+    value = result(errors, source_count, implementation_count, qualification_ok)
+    if current:
+        value.update({
+            "schema_version": "hwpx-agent.p09-comment-model-current-source-validation/v2",
+            "source_profile": comment_current_source.PROFILE,
+            "historical_source_qualification_verified": qualification_ok,
+            "current_source_qualification_verified": current_verified,
+            "current_source_raw_pins": 32 if current_verified else 0,
+            "current_component_Rust_tests": 11 if current_verified else 0,
+            "historical_default_failure_retained": True,
+        })
+    return value
 
 
 def validate_locks(
@@ -304,8 +332,9 @@ def validate_locks(
     return len(declared)
 
 
-def validate_implementation(root: Path, errors: list[str]) -> int:
-    for relative, expected in IMPLEMENTATION_SHA256.items():
+def validate_implementation(root: Path, errors: list[str], *, current: bool = False) -> int:
+    expected_digests = comment_current_source.IMPLEMENTATION_SHA256 if current else IMPLEMENTATION_SHA256
+    for relative, expected in expected_digests.items():
         try:
             path = file(root, relative)
             if canonical_digest(path) != expected:
@@ -419,6 +448,11 @@ def result(errors: list[str], sources: int, implementation: int, qualification: 
 
 
 if __name__ == "__main__":
-    result_value = validate()
+    if sys.argv[1:] == ["--current-source-v2"]:
+        result_value = validate(source_profile=comment_current_source.PROFILE)
+    elif not sys.argv[1:]:
+        result_value = validate()
+    else:
+        result_value = result(["source_profile_unknown"], 0, 0, False)
     print(json.dumps(result_value, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
     sys.exit(0 if result_value["state"] == "pass" else 1)

@@ -1,0 +1,81 @@
+{
+  "schema": "hwpx-agent.p09-87-review-body-validation/v1",
+  "state": "scoped_source_service_reader_pass_existing_contract_drift_and_native_gate_open",
+  "current_Rust_tests": {
+    "passed": 274,
+    "failed": 0,
+    "new20_included": true,
+    "receipt": "implementation/p09/evidence/p09-87-review-body.source-regression.v1.json"
+  },
+  "strict_lint": {
+    "command": "cargo clippy -p hwpx-package -p hwpx-agent-cli -p domain-ir -p artifact-service -p revision-service --lib --tests --examples -- -D warnings",
+    "crates": 5,
+    "exit_code": 0,
+    "chunk_ids": [
+      "28875d",
+      "2de82c"
+    ],
+    "warnings_allowed": false
+  },
+  "new_Rust_format": {
+    "files": 5,
+    "recursive_children": false,
+    "exit_code": 0,
+    "chunk_id": "f92f33"
+  },
+  "diff_check": {
+    "exit_code": 0,
+    "chunk_id": "2de82c"
+  },
+  "diagnostic": {
+    "command": "cargo run -p hwpx-package --example document_import_review_diagnostic",
+    "chunk_id": "25cde6",
+    "exit_code": 0,
+    "inputs": 36,
+    "section_memo_references": 44,
+    "memo_style_records": 0,
+    "memo_field_ranges": 0,
+    "hidden_comment_elements": 0,
+    "positive_native_review_body_evidence": false
+  },
+  "original_comment_contract": {
+    "exit_code": 1,
+    "error": "implementation_digest",
+    "chunk_id": "2005ce",
+    "python_tests_passed": 4,
+    "python_tests_failed": 1,
+    "failure_receipt": "implementation/p09/evidence/p09-87-review-body.initial-failures.v1.json"
+  },
+  "conformance": {
+    "exit_code": 1,
+    "error": "matrix_drift",
+    "chunk_id": "be9620",
+    "green_rows": 0,
+    "required_rows": 53,
+    "P09_owned_rows": 46,
+    "P11_deferred_rows": 7,
+    "integration_passed_rows": 11,
+    "unit_passed_rows": 35,
+    "original_matrix_unchanged": true
+  },
+  "actual_ArtifactService_AEAD": true,
+  "in_memory_metadata_revision_and_ciphertext_fixture": true,
+  "external_authenticated_issuer_or_scanner": false,
+  "actual_SQL_reexecuted_for_P87": false,
+  "native_author_time_binding_verified": false,
+  "native_visibility_resolution_binding_verified": false,
+  "atomic_execution_lease": false,
+  "full_comment_or_document_import_authority": false,
+  "publication_authority": false,
+  "native_executed": false,
+  "performance_acceptance_claimed": false,
+  "P09_gate": "OPEN",
+  "a12": "OPEN",
+  "a13": "OPEN",
+  "p09_complete": false,
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "root_PLANS_absent": true,
+  "hwp_process_count": 0,
+  "goal_status": "active"
+}

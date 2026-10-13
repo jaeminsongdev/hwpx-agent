@@ -1,0 +1,63 @@
+{
+  "schema_version": "hwpx-agent.p09-field-object-caption-hwpx-source-qualification/v2",
+  "task": "P09-18",
+  "profile": "hwpx-agent.field-object-caption-hwpx.hwpml-2011-digit/v1",
+  "base_commit": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+  "official_source": {
+    "repository": "https://github.com/hancom-io/hwpx-owpml-model.git",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "reviewed_sha256": {
+      "OWPML/Class/enumdef.h": "1c86392c934ac85f7ddd85c710b76be7649403a8404bce146db52558a0b95457",
+      "OWPML/Class/Para/AbstractShapeObjectType.cpp": "16c4a18de9c05de64ed1fe25b57b8a1fb4f81ffd9da9cb523aa5a109fbe9d45a",
+      "OWPML/Class/Para/caption.cpp": "8805053557991e1a48b9ecb6a5a831f40ed110207473e07233a15939814cdac6",
+      "OWPML/Class/Para/AutoNumNewNumType.cpp": "58dd79b1e927b832868cf77c4ff089a3cab269c327a23e0a5aac0e21ecefbcf8",
+      "OWPML/Class/Para/AutoNumFormatType.cpp": "86752d873fe366e3f72d8e9f50a71d8e29cfec712663fbaf4079d7a664c67a2c",
+      "OWPML/Class/Para/PictureType.cpp": "07475a21f4895f9f6f6d3c566155aedf494a3782976a6ce399bcc4e056b8babe",
+      "OWPML/Class/Para/TableType.cpp": "d309be141175faf18bb922b9bddb2344bbb018bfd5764fc025c1323960d4911d",
+      "OWPML/Class/Para/EquationType.cpp": "b7b446ce33172106b9f94de024094804db562cd522ab3e52e7b92c398d16bbf7",
+      "OWPML/Class/Para/RectangleType.cpp": "7c9ec1256fa01482afc2d0519f26ac680987ff466c693e7f7022650a7d339dc4",
+      "OWPML/Class/Para/EllipseType.cpp": "511a51b77ba63a5b68c15c55d69d4bbad8b0c25e7a5cc5d316c8c26c994f2ce0",
+      "OWPML/Class/Para/LineType.cpp": "4611bf677bc1367a41300ff3eb447c62fb4ca1e1fbda6cae62bf68cc032cb732",
+      "OWPML/Class/Para/ArcType.cpp": "83670263bafa76656b6b6ea0cce9fb3d232d6d6756e18288c999948a7bef0f6a",
+      "OWPML/Class/Para/PolygonType.cpp": "c08cc1c0f7581b02e00e3354eb411fe870510344914d26abb806567cda69a8bf",
+      "OWPML/Class/Para/CurveType.cpp": "f80eb27d2f4c177790eb759766fd38396c6e468529fe2db5d3e397415481b3d5",
+      "OWPML/Class/Para/ConnectLineType.cpp": "06591aa904936c19cabb0f5d64d64f3b26695c5adce9c9ed8feb16c1c0e7de24"
+    }
+  },
+  "implementation_sha256": {
+    "crates/hwpx-package/src/field_object_caption_hwpx.rs": "2dd63a557787ffe1f84a0c9f49c7d0ace89af22037ade6ee8d51db380835adda",
+    "crates/hwpx-package/tests/field_object_caption_hwpx.rs": "589e4d08b4045abd85ccb89f8ac4b7d624e5cc5f2327953779ba42288bae23d9",
+    "crates/domain-ir/src/field_engine.rs": "c9c77c27f741cb985de6da734a14fdf28917d89500d25a73a8cce2d7e2ad5da5",
+    "crates/domain-ir/tests/field_engine.rs": "15a3f49dab9aed32f087ec7aceb1c3d38617681f01162ce4415fe4b77338abb1",
+    "crates/hwpx-package/src/field_auto_number_hwpx.rs": "2927752005e5a1f2914089935dcec21fd61239f44e9861dabca8a505e5b05288",
+    "crates/hwpx-package/tests/field_auto_number_hwpx.rs": "3151a26ce5fc826c0a78d94da40de922903bee5c0344c05260a01d94ba85dc70"
+  },
+  "public_export": {
+    "path": "crates/hwpx-package/src/lib.rs",
+    "markers": [
+      "mod field_object_caption_hwpx;",
+      "pub use field_object_caption_hwpx::{"
+    ]
+  },
+  "tests": {
+    "caption_public": "9/9 PASS",
+    "caption_private_tamper": "1/1 PASS",
+    "focused_clippy": "PASS"
+  },
+  "claims": {
+    "static_caption_composition": true,
+    "synthetic_object_shell_tests": true,
+    "typed_projection_readback": true,
+    "outside_caption_byte_preserved": true,
+    "application_owned_sequence_derivation": false,
+    "complete_native_objects": false,
+    "complete_package_hwpx": false,
+    "actual_hangul": false,
+    "semantic_save_reopen": false,
+    "render": false,
+    "differential": false,
+    "green_rows": 0,
+    "p09_complete": false,
+    "product_complete": false
+  }
+}

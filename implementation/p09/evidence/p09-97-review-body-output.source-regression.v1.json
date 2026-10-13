@@ -1,0 +1,235 @@
+{
+  "schema": "hwpx-agent.p09-97-review-body-source-regression/v1",
+  "state": "PASS_SCOPED_SOURCE_COMPONENT_NOT_native_SQL_full_comment_product_or_Gate",
+  "recorded_at_utc": "2026-10-04 15:13:50 UTC",
+  "git_head": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+  "rust": {
+    "passed": 269,
+    "failed": 0,
+    "ignored": 0,
+    "package": {
+      "passed": 113,
+      "start_chunk_id": "96f686",
+      "terminal_chunk_id": "d5f852",
+      "exit_code": 0,
+      "command": "cargo test -p hwpx-package --lib --test id_index --test patch_engine --test document_import_memo_catalog --test document_import_review_metadata --test memo_style_output --test text_flow --test document_import_review --test document_import_assembly_review --test review_body_output --test patch_element_content --target-dir target/p09-97-package --locked --offline",
+      "suites": {
+        "lib": 42,
+        "id_index": 8,
+        "patch_engine": 6,
+        "document_import_memo_catalog": 6,
+        "document_import_review_metadata": 8,
+        "memo_style_output": 4,
+        "text_flow": 12,
+        "document_import_review": 15,
+        "document_import_assembly_review": 3,
+        "review_body_output": 5,
+        "patch_element_content": 4
+      },
+      "final_stronger_part_count_assertion": {
+        "terminal_chunk_id": "19dd45",
+        "exit_code": 0,
+        "passed": 5,
+        "included_in_113_not_added_again": true,
+        "production_source_unchanged_since_full_run": true
+      }
+    },
+    "product": {
+      "passed": 156,
+      "start_chunk_id": "1b5e39",
+      "terminal_chunk_id": "210a63",
+      "exit_code": 0,
+      "stored_provider_elapsed_seconds": 282.15,
+      "command": "cargo test -p hwpx-agent-cli --test comment_operation --test form_stored_provider --test stored_comment_provider --target-dir target/p09-97-regression --locked --offline",
+      "suites": {
+        "comment_operation": 8,
+        "form_stored_provider": 132,
+        "stored_comment_provider": 16
+      }
+    },
+    "new_named_feature_tests": {
+      "content_patch": 4,
+      "package_body": 5,
+      "stored_body": 2,
+      "included_in_269": true
+    },
+    "all_historical_qualification_reexecuted": false
+  },
+  "python": {
+    "passed": 8,
+    "failed": 0,
+    "terminal_chunk_id": "e60977",
+    "exit_code": 0,
+    "scope": "four inherited raw/preimage checks + four mocked manifest scope checks; mock checks are not live raw or native evidence"
+  },
+  "strict_clippy": [
+    {
+      "scope": "package lib and two new integration tests",
+      "terminal_chunk_id": "19dd45",
+      "exit_code": 0
+    },
+    {
+      "scope": "product lib and original stored provider test target",
+      "terminal_chunk_id": "d08426",
+      "exit_code": 0
+    }
+  ],
+  "format_diff": {
+    "terminal_chunk_id": "8f0e93",
+    "exit_code": 0,
+    "scope": "five new Rust files and original patch.rs check only; no recursive formatter rewrite; git diff --check"
+  },
+  "current_source_component_conformance": {
+    "terminal_chunk_id": "a5c4da",
+    "exit_code": 0,
+    "upstream_validators_verified": 15,
+    "green_rows": 0,
+    "P09_gate": "OPEN",
+    "scope": "original declared component checks, not new body output/native/full product acceptance"
+  },
+  "default_conformance": {
+    "terminal_chunk_id": "6b90b1",
+    "exit_code": 1,
+    "state": "FAIL:matrix_drift",
+    "failure_preserved": true
+  },
+  "tested_source_delta": [
+    {
+      "path": "crates/hwpx-package/src/patch.rs",
+      "bytes": 71753,
+      "sha256": "e1578dd45cb6bd766965002076b948f5895a577ceca9ecaac6a8802adc0af849"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review.rs",
+      "bytes": 20407,
+      "sha256": "50d1b43f2801b74f3edb8bd70904a8c5ed152bdcb6368c55432c9331408da043"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/review.rs",
+      "bytes": 4333,
+      "sha256": "6a657d351875b7a7e68bbda01c3c1643bac008adf60a4df2e98bb6b35d310713"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import.rs",
+      "bytes": 15442,
+      "sha256": "65a5b4a8f871cfc3118d0bb01798600eddecda89b806fb7914307907f2c0ab54"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review/body_output.rs",
+      "bytes": 12456,
+      "sha256": "e769e241dbafeba34440a5e3ca0439c7023526a209df20da8bc8c0bd2e07df59"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/review/body_output.rs",
+      "bytes": 5831,
+      "sha256": "4f1f8c45f438efb802ad3e89b26de9053cd143ffd9bffb94883af4f6a8df8401"
+    },
+    {
+      "path": "crates/hwpx-package/tests/review_body_output.rs",
+      "bytes": 11218,
+      "sha256": "304a9633ef84627d74acafbc822554e5dd9616d24ef490abcfce607e84b80fee"
+    },
+    {
+      "path": "crates/hwpx-package/tests/patch_element_content.rs",
+      "bytes": 8341,
+      "sha256": "c8804276b793874a05f559dfee636cfbfabccafb147ba97ac320cb7bed1cca58"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_output.rs",
+      "bytes": 4134,
+      "sha256": "0aafc8a1b21f74c232ae46b5fdc645896d876f6cfe4ecb3bfd3695d23187d652"
+    }
+  ],
+  "current_executables": [
+    {
+      "path": "target/p09-97-package/debug/deps/document_import_assembly_review-312fc213dbce8bd9.exe",
+      "bytes": 9093120,
+      "sha256": "335cdc181401fcd9db524e06dc6d83af4119f8c566095513f18a17f2e3c6b902"
+    },
+    {
+      "path": "target/p09-97-package/debug/deps/document_import_memo_catalog-093bd8d5c2597e35.exe",
+      "bytes": 9219584,
+      "sha256": "a5f42b2fdb528098804be81df0c293a48cf4f255ef81c70ed470ccc81b2bccc0"
+    },
+    {
+      "path": "target/p09-97-package/debug/deps/document_import_review-67551457d524f20f.exe",
+      "bytes": 6639616,
+      "sha256": "b9d92b1f44f88074ffebf4fcac2c20ae2256c88d682a9682b5ab35c1f02bf4d4"
+    },
+    {
+      "path": "target/p09-97-package/debug/deps/document_import_review_metadata-8537eb795457ed5e.exe",
+      "bytes": 10197504,
+      "sha256": "20e762a02c95e11d081b198531a79b87c2d85525135db176bf2314b6d1fec575"
+    },
+    {
+      "path": "target/p09-97-package/debug/deps/hwpx_package-a850ad738bc59b10.exe",
+      "bytes": 13276160,
+      "sha256": "f5578a57960ec54e4444d46ecb10f24870d28555822d9dce19c753bb7744a0af"
+    },
+    {
+      "path": "target/p09-97-package/debug/deps/id_index-b06ac4c244093f4c.exe",
+      "bytes": 3729408,
+      "sha256": "c49339d1115fc7a5d5ec48d7b48a6ef0016c20d405604caf22e42e4166909544"
+    },
+    {
+      "path": "target/p09-97-package/debug/deps/memo_style_output-f87ca3d69966fa82.exe",
+      "bytes": 7854080,
+      "sha256": "0071be0d53a71e81664e9bfe49760b62893353e83f2fd0cdf7ff26ab548fb5c4"
+    },
+    {
+      "path": "target/p09-97-package/debug/deps/patch_element_content-4a43081747b336ae.exe",
+      "bytes": 6289408,
+      "sha256": "fc7386733987f689f632504689e0972aa04e39a77cccd0ab04b74ce20d4cb238"
+    },
+    {
+      "path": "target/p09-97-package/debug/deps/patch_engine-f16fef8e94eda711.exe",
+      "bytes": 5147136,
+      "sha256": "a3c32b7b1f9abe471e6a57fd5085add7c9b86ee87a089b7a27b33b0da96f6c82"
+    },
+    {
+      "path": "target/p09-97-package/debug/deps/review_body_output-8759bbf6453e18f5.exe",
+      "bytes": 6936064,
+      "sha256": "d8f11982bdfb14483cb2964bb88ebdb8eab8c4bf3bd281762bb21a744a38e182"
+    },
+    {
+      "path": "target/p09-97-package/debug/deps/text_flow-511dd1904a1b61b0.exe",
+      "bytes": 3942912,
+      "sha256": "174bf4994b6cae0043e050aaacf10ce4525e7fdf42b337d679cdb5f55e8b1318"
+    },
+    {
+      "path": "target/p09-97-regression/debug/deps/comment_operation-75493e8123c566c8.exe",
+      "bytes": 4965888,
+      "sha256": "c0a11afe752a6bc293a11fe7fca38bb2fd6a0a07bb991bb6dbd8136a32ecbec4"
+    },
+    {
+      "path": "target/p09-97-regression/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+      "bytes": 17474560,
+      "sha256": "415653c0c9542fb8f855525b43e50c8f332f8e9698b9afc17c7ebdb1cfb681a2"
+    },
+    {
+      "path": "target/p09-97-regression/debug/deps/stored_comment_provider-9065c76bcbac10b7.exe",
+      "bytes": 7130112,
+      "sha256": "73f9169d37f3e21e04e6e845719aa0e6e2bf4d9a3351a76baeba78dc7dc26dad"
+    }
+  ],
+  "qualification": {
+    "synthetic_native_format_positive": true,
+    "new_positive_native_capture": false,
+    "existing_actual_inputs": 36,
+    "original_AES_GCM_ACL_head_code_executed": true,
+    "repositories_actor_scanner_keys": "in_memory_fixture",
+    "new_ingest_revision_commit_or_publication": false,
+    "native_executed": false,
+    "actual_SQL_executed": false,
+    "full_comment_product_acceptance": false,
+    "native_author_time_state_binding": false,
+    "full_typed_comment_compiler_route_connected": false,
+    "execution_publication_authority": false,
+    "P09_gate": "OPEN",
+    "P10_new_implementation": false,
+    "product_complete": false
+  },
+  "root_PLANS_absent": true,
+  "Hwp_process_count_observed": 0,
+  "installation_settings_commit_push_delete_move_executed": false
+}

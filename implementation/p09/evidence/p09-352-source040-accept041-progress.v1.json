@@ -1,0 +1,289 @@
+{
+  "schema_version": "hwpx-agent.p09-352-source040-accept041-progress/v1",
+  "date": "2026-10-10",
+  "state": "SOURCE040_AND_ACCEPT041_PASS_NOT_GATE",
+  "goal_status": "ACTIVE",
+  "PC_freeze_resolved": false,
+  "source": {
+    "receipt_pin": {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-source-run040.v1.json",
+      "bytes": 538084,
+      "sha256": "7690a07c92fbd66041dd64cf4cc6751511b55b07278efe6281f3c87981b191b3"
+    },
+    "state": "PASS_PRESERVED108_INDEPENDENT_WHOLE_SOURCE_NOT_PRODUCT_RERUN",
+    "closing_review_pin": {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-review-run037.v1.json",
+      "bytes": 190535,
+      "sha256": "add11f331e8fb653aeecdc3e6ccb5001b44d26196a47c32d0ae2a0189d6ffb5d"
+    },
+    "runtime_contract_executions": 0,
+    "reused_light_contract_executions": 790,
+    "actual_product_child_executed": false,
+    "resource_watcher_cleanup_confirmed": true,
+    "current_code_pair": [
+      {
+        "path": "tools/p09/resume_preserved106_queue_runtime.py",
+        "bytes": 136765,
+        "sha256": "82063ee4121d2cce3a1af6b3691b7fbd498a35fdfb292588764a2609f957ba23"
+      },
+      {
+        "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+        "bytes": 107566,
+        "sha256": "abab47c6c3fa55da769cdf3e4baca5b7f45e763795ad1d191386a7deacbd2f41"
+      }
+    ],
+    "preparation": {
+      "bound_inputs": 209,
+      "read_passes": 418,
+      "bytes_read": 43516202,
+      "final_fresh_hashes": 209,
+      "finished": true,
+      "metadata_path_query_statistics": {
+        "source_requests": 418,
+        "original_is_file_calls": 0,
+        "metadata_path_policy": "REQUEST_LOCAL_DIRECT_REGULAR_LSTAT_V2",
+        "initial_lstat_attempts": 418,
+        "initial_lstat_successes": 418,
+        "single_lstat_regular_file_checks": 418,
+        "fresh_symlink_lstat_attempts": 418,
+        "fresh_symlink_lstat_successes": 418,
+        "junction_queries_coalesced": 418,
+        "original_symlink_fallback_calls": 0,
+        "original_junction_fallback_calls": 0,
+        "original_predicate_calls": 1254,
+        "initial_original_read_passes": 0,
+        "original_reader_root_restored": true,
+        "active_metadata_path_binding": false,
+        "metadata_reused_between_source_requests": false,
+        "original_name_resolution_and_open_and_all_bytes_and_JSON_validation_retained": true,
+        "original_resource_guards_and_pacing_and_deadlines_retained": true,
+        "new_sampler_or_thread_or_Native_handle_started": false,
+        "atomic_filesystem_or_Native_frame_claimed": false,
+        "CPU_cause_or_PC_freeze_improvement_claimed": false
+      }
+    },
+    "frame": {
+      "frame_state": "COMMITTED",
+      "registered_live_frame": false,
+      "input_count": 1658,
+      "input_bytes": 121184678,
+      "held_identity_after_owned_cleanup": {
+        "held_identity_checks_complete": true,
+        "separate_pathname_reopens": 0,
+        "regular_file_count": 1658,
+        "directory_count": 308
+      }
+    },
+    "byte_boundaries": [
+      {
+        "role": "before",
+        "actual_pin_count": 1658,
+        "read_passes": 1658,
+        "bytes_read": 121184678
+      },
+      {
+        "role": "after",
+        "actual_pin_count": 1658,
+        "read_passes": 1658,
+        "bytes_read": 121184678
+      }
+    ],
+    "handles": {
+      "input_lock_handles_opened": 1966,
+      "input_lock_handles_closed": 1966,
+      "input_lock_handles_remaining": 0,
+      "active_reader_bindings": 0,
+      "active_byte_streams": 0,
+      "handle_close_failed_attempts": 0,
+      "input_lock_cleanup_confirmed": true,
+      "handle_metadata_checks": 7248,
+      "borrowed_byte_streams": {
+        "duplicate_handles_opened": 3316,
+        "duplicate_handles_closed": 3316,
+        "duplicate_handles_remaining": 0,
+        "duplicate_close_failed_attempts": 0,
+        "shared_offset_resets": 3316,
+        "active_borrow_binding": false,
+        "byte_stream_pathname_reopens": 0,
+        "original_held_handles_closed_by_borrower": false,
+        "redundant_pre_descriptor_metadata_queries": 0,
+        "original_pre_read_stream_identity_check_retained": true,
+        "input_scope_reduced": false,
+        "original_resource_guards_and_pacing_retained": true,
+        "measured_CPU_or_freeze_improvement_claimed": false
+      },
+      "native_acquisition_diagnostics": {
+        "take_attempts": 1966,
+        "take_completed": 1966,
+        "take_failed": 0,
+        "input_kinds": {
+          "directory": {
+            "started": 308,
+            "completed": 308,
+            "failed": 0
+          },
+          "regular": {
+            "started": 1658,
+            "completed": 1658,
+            "failed": 0
+          }
+        },
+        "operations": {
+          "open_with_pacing": {
+            "started": 1966,
+            "completed": 1966,
+            "failed": 0,
+            "measured": 1966,
+            "unknown": 0,
+            "elapsed_total_seconds": 140.52362669998547,
+            "elapsed_max_seconds": 0.08867079997435212
+          },
+          "inspect_metadata": {
+            "started": 1966,
+            "completed": 1966,
+            "failed": 0,
+            "measured": 1966,
+            "unknown": 0,
+            "elapsed_total_seconds": 0.06334539875388145,
+            "elapsed_max_seconds": 0.00007150002056732774
+          }
+        },
+        "last_attempt": {
+          "ordinal": 1966,
+          "kind": "regular",
+          "last_native_operation": "inspect_metadata",
+          "completed": true
+        },
+        "active_take": false,
+        "path_or_handle_or_exception_values_recorded": false,
+        "bounded_aggregate_not_per_input_trace": true,
+        "open_elapsed_includes_original_pacer_and_pressure_wait": true,
+        "inspect_elapsed_covers_original_metadata_bundle": true,
+        "original_native_methods_and_arguments_retained": true,
+        "original_take_guard_and_identity_checks_retained": true,
+        "original_pacer_clock_sleeper_checkpoint_and_credit_retained": true,
+        "cleanup_callback_or_close_wrapped": false,
+        "extra_sampler_or_thread_or_native_query_started": false,
+        "diagnostic_clock_failures_do_not_mask_original_return_or_exception": true,
+        "CPU_cause_or_PC_freeze_improvement_claimed": false
+      }
+    },
+    "observation": {
+      "completed_sample_count": 845,
+      "system_cpu_max_percent": 41.7,
+      "own_cpu_max_machine_percent": 1.976285,
+      "own_private_max_bytes": 81723392,
+      "available_ram_min_percent": 24.203621820669547
+    }
+  },
+  "accept": {
+    "receipt_pin": {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-accept-run041.v1.json",
+      "bytes": 193683,
+      "sha256": "e376ca04d7175509fe334a23e25655b9bdf36bd13f1a9b03b2aeaeadb0badc61"
+    },
+    "state": "PASS_PRESERVED108_COMPOUND102_NOT_WHOLE_OR_GATE",
+    "closing_source_pin": {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-source-run040.v1.json",
+      "bytes": 538084,
+      "sha256": "7690a07c92fbd66041dd64cf4cc6751511b55b07278efe6281f3c87981b191b3"
+    },
+    "runtime_contract_executions": 0,
+    "actual_product_child_executed": false,
+    "resource_watcher_cleanup_confirmed": true,
+    "preparation": {
+      "bound_inputs": 210,
+      "read_passes": 420,
+      "bytes_read": 44592370,
+      "final_fresh_hashes": 210,
+      "finished": true,
+      "metadata_path_query_statistics": {
+        "source_requests": 420,
+        "original_is_file_calls": 0,
+        "metadata_path_policy": "REQUEST_LOCAL_DIRECT_REGULAR_LSTAT_V2",
+        "initial_lstat_attempts": 420,
+        "initial_lstat_successes": 420,
+        "single_lstat_regular_file_checks": 420,
+        "fresh_symlink_lstat_attempts": 420,
+        "fresh_symlink_lstat_successes": 420,
+        "junction_queries_coalesced": 420,
+        "original_symlink_fallback_calls": 0,
+        "original_junction_fallback_calls": 0,
+        "original_predicate_calls": 1260,
+        "initial_original_read_passes": 0,
+        "original_reader_root_restored": true,
+        "active_metadata_path_binding": false,
+        "metadata_reused_between_source_requests": false,
+        "original_name_resolution_and_open_and_all_bytes_and_JSON_validation_retained": true,
+        "original_resource_guards_and_pacing_and_deadlines_retained": true,
+        "new_sampler_or_thread_or_Native_handle_started": false,
+        "atomic_filesystem_or_Native_frame_claimed": false,
+        "CPU_cause_or_PC_freeze_improvement_claimed": false
+      }
+    },
+    "observation": {
+      "completed_sample_count": 57,
+      "system_cpu_max_percent": 14.52,
+      "own_cpu_max_machine_percent": 1.964637,
+      "own_private_max_bytes": 112947200,
+      "available_ram_min_percent": 24.689326595879674
+    },
+    "runtime_plan": {
+      "scope": "INDIVIDUAL_RUNTIME_PROGRESS_NOT_WHOLE_OR_GATE",
+      "legacy_whole_accepted_individual_cases": 3,
+      "legacy_whole_pending_successful_candidates": 1,
+      "runtime_source_qualified_individual_cases": 102,
+      "runtime_remaining_individual_cases": 147,
+      "runtime_remaining_regular_cases": 141,
+      "runtime_remaining_corpus_cases": 6,
+      "runtime_successful_candidates_requiring_closing": 0,
+      "next_runtime_index": 109,
+      "historical_whole_gate_reconciliation_required": true,
+      "whole1470_current_fresh_qualified": false,
+      "full249_current_qualified": false,
+      "signed16_current_qualified": false,
+      "product_complete": false,
+      "P09_gate": "OPEN",
+      "prior_runtime_qualified_cases": 101,
+      "locked_compound_qualified_individual_cases": 1,
+      "all_successful_bodies_pending_whole_reconciliation": 99,
+      "prior_runtime_receipts_and_validators_unchanged": true,
+      "original_STOP_receipts_not_reclassified": true
+    }
+  },
+  "gates": {
+    "P09_gate": "OPEN",
+    "A12_gate": "OPEN",
+    "A13_gate": "OPEN",
+    "product_complete": false,
+    "PC_freeze_resolved": false,
+    "whole1470_current_fresh_qualified": false,
+    "full249_current_qualified": false,
+    "signed16_current_qualified": false
+  },
+  "post_terminal_diagnostic": {
+    "not_new_qualification": true,
+    "system_cpu_samples_percent": [
+      9.57,
+      11.13
+    ],
+    "available_ram_samples_percent": [
+      25.04195787477188,
+      25.366243297437165
+    ],
+    "matching_owned_python_processes": 0
+  },
+  "scope": {
+    "code_changes_this_step": 0,
+    "previous_optimization": "P350/P351 qualified V19 reused unchanged",
+    "prior_source038_failure_preserved": true,
+    "admin_or_Hangul_prompt": false,
+    "Defender_OS_WSL_changes": false,
+    "Git_or_build": false,
+    "foreign_process_termination": false,
+    "deletion_or_move": false,
+    "document_final_fresh": "NOT_RUN",
+    "next_runtime_index": 109,
+    "prior_101_cursor_evidence_not_promoted_to_new_102_cursor": true
+  }
+}

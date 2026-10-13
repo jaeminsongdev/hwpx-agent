@@ -1,0 +1,171 @@
+{
+  "schema_version": "hwpx-agent.p09-p192-serial-case-event/v1",
+  "state": "PASS_SERIAL_CASE_EVENT_METADATA_ONLY_NOT_BATCH_CLOSING",
+  "goal_status": "active",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "step": 1,
+  "actual_runtime_in_this_metadata_event": false,
+  "case_return_code": 0,
+  "case_receipt_path": "implementation/p09/evidence/resumable-r07/p190-case-004-attempt-001.json",
+  "supplemental_scheduler_input_pins": [
+    {
+      "path": "tools/p09/run_shared_resumable_r07_batch.py",
+      "bytes": 16910,
+      "sha256": "bcb6aed818b12ce9263263cfb0481c5755cc55b3ec0bb967851033994695683e"
+    },
+    {
+      "path": "tools/p09/tests/test_shared_resumable_r07_batch.py",
+      "bytes": 4856,
+      "sha256": "62174e0062265df3c2129f72d2a18bedfb5f9683a887d67952ae31c8509df1ed"
+    }
+  ],
+  "case_receipt_pin": {
+    "path": "implementation/p09/evidence/resumable-r07/p190-case-004-attempt-001.json",
+    "bytes": 617816,
+    "sha256": "53159ac973e75e5562439c8a173afa948c9b7c23719826cb51a205d305b9634a"
+  },
+  "case_state": "PASS_EXACT_R07_SINGLE_CASE_NOT_FULL_OR_GATE",
+  "plan": {
+    "state": "PLAN_ONLY_NOT_RUNTIME_OR_GATE",
+    "binding": {
+      "compiled_inventory_pin": {
+        "path": "implementation/p09/evidence/p09-186-observed-r07-list-output.source-closing-run01.v1.json",
+        "bytes": 339893,
+        "sha256": "7b06997d3b8090967597fad1d12b94446e20e3a17ba206233ae8711fdb1d455d"
+      },
+      "compiled_test_executable_pin": {
+        "path": "target/p09-175-xml-initial-capacity/debug/deps/form_stored_provider-p152-r07.exe",
+        "bytes": 14216704,
+        "sha256": "2b47e5815500549401f6f1960d92ba67f0d3410fc39d91cc91fd7f886d67dc5d"
+      },
+      "exact_input_manifest_sha256": "1a4c86e6a286e12a644645769724381ca5add93df5d704234bec9a9decc0c27a",
+      "expected_test_count": 249
+    },
+    "accepted_test_names": [
+      "actual_import::actual_aead_tamper_cannot_be_reclassified_as_an_importer_or_policy_failure",
+      "actual_import::actual_head_advance_invalidates_old_import_even_with_identical_result_bytes",
+      "actual_import::all_ten_actual_stored_results_import_without_caller_maps_and_preserve_whole_graphs"
+    ],
+    "accepted_individual_cases": 3,
+    "remaining_individual_cases": 246,
+    "successful_candidates_requiring_separate_closing": 1,
+    "remaining_regular_cases": 240,
+    "remaining_corpus_cases": 6,
+    "corpus_case_names": [
+      "actual_import::formula_policy_issuer::corpus::all16_actual_formula_sources_and_current_derivatives_keep_native_cell_protection_denial",
+      "actual_import::formula_policy_issuer::corpus::all16_current_derivatives_are_signed_exact_noops_then_denied_new_policy_and_expired_approval",
+      "actual_import::formula_policy_issuer::corpus::all36_frozen_originals_signed_full_candidates_or_no_formula_denial_and_live_revocation",
+      "actual_import::formula_policy_issuer::corpus::changed::all16_changed_original_comparators_reject_an_extra_numeric_input_leaf_change",
+      "actual_import::formula_policy_issuer::corpus::changed::all16_original_numeric_derivatives_have_signed_changed_candidates_exact_current_and_live_revocation",
+      "actual_import::formula_policy_issuer::corpus::changed::all32_changed_and_current_numeric_derivatives_keep_valid_signature_cell_protection_denial"
+    ],
+    "corpus_cases_deferred_not_skipped": true,
+    "next_index": 5,
+    "next_test_name": "actual_import::field_ranges::actual_aead_tamper_is_original_service_failure_not_field_projection_failure",
+    "next_attempt": 1,
+    "maximum_cases_per_invocation": 1,
+    "automatic_retry": false,
+    "parallel_execution": false,
+    "full249_current_qualified": false,
+    "signed16_current_qualified": false,
+    "all249_individual_runtime_qualified": false,
+    "single_process_full249_qualified": false,
+    "product_complete": false,
+    "P09_gate": "OPEN",
+    "A12_gate": "OPEN",
+    "A13_gate": "OPEN"
+  },
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "IO": {
+    "read_passes": 17,
+    "bytes_read": 9441016,
+    "bound_inputs": 8,
+    "final_fresh_hashes": 8,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P176_binary2p5_other4_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 2621440,
+      "other": 4194304
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 9441016
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 9441016,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0.0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/run_shared_resumable_r07_batch.py",
+      "bytes": 16910,
+      "sha256": "bcb6aed818b12ce9263263cfb0481c5755cc55b3ec0bb967851033994695683e"
+    },
+    {
+      "path": "tools/p09/tests/test_shared_resumable_r07_batch.py",
+      "bytes": 4856,
+      "sha256": "62174e0062265df3c2129f72d2a18bedfb5f9683a887d67952ae31c8509df1ed"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-004-attempt-001.json",
+      "bytes": 617816,
+      "sha256": "53159ac973e75e5562439c8a173afa948c9b7c23719826cb51a205d305b9634a"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-001-attempt-001.json",
+      "bytes": 617840,
+      "sha256": "7dfdede3acbe6a1f900a3775beb4512ac173ad4c0599c420b4670bfa608bad64"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run01.closing.v1.json",
+      "bytes": 895299,
+      "sha256": "8e220071e5126f80fe9a31ca140c46edf20ae1304bf0233a975990b1ce096f7a"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-002-attempt-001.json",
+      "bytes": 659057,
+      "sha256": "b1b4447f28219bd47afa7f665185c1cd2a5752ef2dd165a401846ca119a8163a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run02.closing.v1.json",
+      "bytes": 898623,
+      "sha256": "4c2b452cd1acfbadfbe46a6e2b5154f6b889a97106a1510e79b4d5b9b2408422"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-003-attempt-001.json",
+      "bytes": 701199,
+      "sha256": "eb37b8dc27f5c5646afa5eac627be5a73ae72a26f8c4ee78c5c724a3436830df"
+    }
+  ]
+}

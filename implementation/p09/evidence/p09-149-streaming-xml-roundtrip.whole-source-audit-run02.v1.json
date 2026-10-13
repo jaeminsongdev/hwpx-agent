@@ -1,0 +1,188 @@
+{
+  "receipt_pin": {
+    "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.actual-run09.v1.json",
+    "bytes": 4843500,
+    "sha256": "67f2897fdbf364aee5f7e78bd493b92d3f22bdc0d698b5af9c7fea429b882c98"
+  },
+  "state": "STOPPED_NOT_ACCEPTED",
+  "stop_reason": "STOP_DURATION_LIMIT",
+  "elapsed_seconds": 1204.14,
+  "tests_passed": null,
+  "runtime_tests_executed": null,
+  "owned_tree_empty": true,
+  "cleanup_confirmed": true,
+  "job_accounting": null,
+  "final_active_processes": null,
+  "owned_processes": null,
+  "host": {
+    "CPU_max": 100,
+    "hot_samples": [
+      {
+        "time_utc": "2026-10-06T23:17:31.736920+00:00",
+        "system_cpu_percent": 100,
+        "available_ram_mib": 14059.41,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 44.12743620190047,
+        "commit_used_percent": 35.51384051803457,
+        "active_processes": 7,
+        "job_cpu_seconds": 20.484,
+        "peak_job_private_mib": 1487.72,
+        "peak_job_private_percent": 4.669428099056017,
+        "owned_processes": [
+          {
+            "pid": 28284,
+            "role": "python.exe",
+            "memory_observed": true,
+            "working_set_mib": 29.84,
+            "private_mib": 19.11
+          },
+          {
+            "pid": 11624,
+            "role": "conhost.exe",
+            "memory_observed": true,
+            "working_set_mib": 7.13,
+            "private_mib": 1.21
+          },
+          {
+            "pid": 23120,
+            "role": "conhost.exe",
+            "memory_observed": true,
+            "working_set_mib": 6.98,
+            "private_mib": 1.2
+          },
+          {
+            "pid": 18740,
+            "role": "other-owned",
+            "memory_observed": true,
+            "working_set_mib": 12.2,
+            "private_mib": 3.29
+          },
+          {
+            "pid": 10452,
+            "role": "cargo.exe",
+            "memory_observed": true,
+            "working_set_mib": 54.7,
+            "private_mib": 38.85
+          },
+          {
+            "pid": 19476,
+            "role": "rustc.exe",
+            "memory_observed": true,
+            "working_set_mib": 100.62,
+            "private_mib": 58.84
+          },
+          {
+            "pid": 15272,
+            "role": "other-owned",
+            "memory_observed": true,
+            "working_set_mib": 126.18,
+            "private_mib": 228.33
+          }
+        ],
+        "job_elapsed_seconds": 28.676179900001443,
+        "owned_job_cpu_machine_percent": 0.5601716950575487,
+        "cargo_announcement": {
+          "source": "last_complete_cargo_style_stderr_announcement",
+          "process_or_compiler_phase_attribution_verified": false,
+          "announcement": {
+            "stage": "compiling",
+            "package": "hwpx-agent-cli"
+          }
+        }
+      }
+    ],
+    "hot_streak_max": 1,
+    "available_RAM_min": 41.811842118975356,
+    "commit_max": 36.86065797393914
+  },
+  "runtime_progress_keys": [
+    "scope",
+    "timing",
+    "expected_tests",
+    "completed_observed",
+    "passed_observed",
+    "failed_observed",
+    "ignored_observed",
+    "pending_test",
+    "pending_observed_seconds",
+    "observations",
+    "events"
+  ],
+  "runtime_progress_summary": {
+    "scope": "source_whitelisted_libtest_progress_not_full_runtime_pass",
+    "timing": "parent_first_observation_not_exact_test_execution_time",
+    "expected_tests": 249,
+    "completed_observed": 50,
+    "passed_observed": 50,
+    "failed_observed": 0,
+    "ignored_observed": 0,
+    "pending_test": "actual_import::formula_policy_issuer::corpus::changed::all16_original_numeric_derivatives_have_signed_changed_candidates_exact_current_and_live_revocation",
+    "pending_observed_seconds": 222.202,
+    "observations": 2335
+  },
+  "source_count": 898,
+  "expected_count": 885,
+  "prior_document_pins": [
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 139630,
+      "sha256": "abca04d0da953d4f200396ae0a1fde0144e24bc9b10d130fcf1227667e9f56ee"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 233262,
+      "sha256": "fe853e4375b296497f837bd6fde120167cec7d6373baf4efbbbd4acf27ddd397"
+    }
+  ],
+  "candidate_pin": {
+    "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip-candidate.run01.v1.json",
+    "bytes": 1738,
+    "sha256": "ec30cdc4344d1bca94e1de3f583cdd811fddc3822a08d958fd51623360f16343"
+  },
+  "IO": {
+    "read_passes": 2690,
+    "bytes_read": 79162982,
+    "bound_inputs": 901,
+    "final_fresh_hashes": 901,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "state_audit": "PASS_POST_STOP_CURRENT_SOURCE_EXACT_NOT_WHOLE_TEST_PASS",
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 16.3372,
+  "signed_corpus_events": [
+    {
+      "name": "actual_import::formula_policy_issuer::corpus::all16_actual_formula_sources_and_current_derivatives_keep_native_cell_protection_denial",
+      "outcome": "ok",
+      "first_observed_at_seconds": 513.173,
+      "pending_observed_seconds_at_completion": 89.577
+    },
+    {
+      "name": "actual_import::formula_policy_issuer::corpus::all16_current_derivatives_are_signed_exact_noops_then_denied_new_policy_and_expired_approval",
+      "outcome": "ok",
+      "first_observed_at_seconds": 744.557,
+      "pending_observed_seconds_at_completion": 231.384
+    },
+    {
+      "name": "actual_import::formula_policy_issuer::corpus::all36_frozen_originals_signed_full_candidates_or_no_formula_denial_and_live_revocation",
+      "outcome": "ok",
+      "first_observed_at_seconds": 966.074,
+      "pending_observed_seconds_at_completion": 221.516
+    },
+    {
+      "name": "actual_import::formula_policy_issuer::corpus::changed::all16_changed_original_comparators_reject_an_extra_numeric_input_leaf_change",
+      "outcome": "ok",
+      "first_observed_at_seconds": 981.943,
+      "pending_observed_seconds_at_completion": 15.869
+    }
+  ],
+  "new_child_or_thread_started": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "whole249_accepted": false,
+  "remaining_without_completion": 199
+}

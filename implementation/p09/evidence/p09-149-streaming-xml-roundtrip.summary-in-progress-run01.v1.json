@@ -1,0 +1,318 @@
+{
+  "schema_version": "hwpx-agent.p09-streaming-xml-roundtrip-summary/v1",
+  "state": "R6_XML13_PACKAGE63_PROFILE36_PASS_WHOLE249_RUNNING_NOT_GATE",
+  "source_variant": "streaming-xml-r6",
+  "library_Rust_deltas_from_r4_baseline": 17,
+  "Rust_deltas_with_diagnostic_example": 18,
+  "implementation": "Production untouched XML verification now compares every concatenated token byte, complete reconstructed length and complete original SHA256 without allocating a whole-XML serialized buffer. Original allocating algorithm retained as test oracle. No raw source modification, cross-call cache or authorization changes.",
+  "whole_original_preimage_bytes": 36441,
+  "original_XML_component_tests_retained": 7,
+  "new_XML_regressions": 6,
+  "complete_XML_component_tests_passed": 13,
+  "whole_library_unit_tests_qualified": false,
+  "outside_XML_component_filtered": 39,
+  "current_package_full_targets_passed": 63,
+  "package_target_counts": {
+    "source": 12,
+    "forms": 10,
+    "fields": 12,
+    "meanings": 13,
+    "formula_evaluation": 10,
+    "formula_output": 6
+  },
+  "original36_XML_all_modeled_parts_old_algorithm_oracle_passed": true,
+  "XML_negative_and_equal_alias_span_regressions_passed": true,
+  "runner_contract_tests_passed": 10,
+  "complete_source_stage_profile": {
+    "P09_gate": "OPEN",
+    "actual_historical_inputs": 36,
+    "formula_targets": 16,
+    "inputs_with_formula_targets": 16,
+    "native_or_SQL_qualified": false,
+    "product_complete": false,
+    "qualification": "PROFILE_ONLY_NOT_SIGNED_SERVICE_SQL_NATIVE_OR_GATE",
+    "schema_version": "hwpx-agent.p09-source-stage-timing/v1",
+    "source_cell_bindings": 128,
+    "stages": {
+      "field_ranges_import": {
+        "calls": 36,
+        "max_us": 3754,
+        "min_us": 933,
+        "total_us": 71122
+      },
+      "field_semantics_import": {
+        "calls": 36,
+        "max_us": 16016,
+        "min_us": 939,
+        "total_us": 89824
+      },
+      "forms_import": {
+        "calls": 36,
+        "max_us": 1350809,
+        "min_us": 2041,
+        "total_us": 2262075
+      },
+      "fresh_source_verify": {
+        "calls": 36,
+        "max_us": 1632449,
+        "min_us": 40342,
+        "total_us": 4272838
+      },
+      "meaning_graph_canonical_sha256": {
+        "calls": 36,
+        "max_us": 7253,
+        "min_us": 563,
+        "total_us": 61236
+      },
+      "meaning_graph_clone": {
+        "calls": 36,
+        "max_us": 254,
+        "min_us": 14,
+        "total_us": 2280
+      },
+      "source_formula_evaluation": {
+        "calls": 36,
+        "max_us": 1140,
+        "min_us": 10,
+        "total_us": 8644
+      },
+      "source_import": {
+        "calls": 36,
+        "max_us": 392913,
+        "min_us": 35788,
+        "total_us": 1892087
+      }
+    },
+    "unchanged_whole_meaning_graphs": 36
+  },
+  "single_elapsed_stage_comparison_seconds": {
+    "r5_original_seven_stages": 4.879926,
+    "r6_original_seven_stages": 8.59887,
+    "r5_fresh_source_verify": 2.458451,
+    "r6_fresh_source_verify": 4.272838
+  },
+  "elapsed_observation_r6_slower_than_r5_not_speedup": true,
+  "exact_CPU_profiler": false,
+  "statistical_speedup_proven": false,
+  "end_to_end_memory_reduction_measured": false,
+  "PC_freeze_resolved": false,
+  "single_freeze_cause_identified": false,
+  "run_observations": [
+    {
+      "run": 1,
+      "task": "xml-roundtrip-tests",
+      "source_inputs": 888,
+      "tests_passed": 13,
+      "elapsed_seconds": 29.88,
+      "job_peak_mib": 1476.75,
+      "job_cpu_seconds": 20.375,
+      "host_cpu_max_percent": 63.48,
+      "available_ram_min_percent": 42.3250345281218,
+      "commit_max_percent": 37.18580437695195,
+      "final_active_processes": 0,
+      "cleanup_confirmed": true
+    },
+    {
+      "run": 2,
+      "task": "import-source-tests",
+      "source_inputs": 898,
+      "tests_passed": 12,
+      "elapsed_seconds": 30.15,
+      "job_peak_mib": 1477.97,
+      "job_cpu_seconds": 20.094,
+      "host_cpu_max_percent": 60.55,
+      "available_ram_min_percent": 40.73100922650264,
+      "commit_max_percent": 37.50948467589944,
+      "final_active_processes": 0,
+      "cleanup_confirmed": true
+    },
+    {
+      "run": 3,
+      "task": "import-forms-tests",
+      "source_inputs": 898,
+      "tests_passed": 10,
+      "elapsed_seconds": 16.98,
+      "job_peak_mib": 660.93,
+      "job_cpu_seconds": 7.281,
+      "host_cpu_max_percent": 47.63,
+      "available_ram_min_percent": 43.991542832341985,
+      "commit_max_percent": 35.947645580351036,
+      "final_active_processes": 0,
+      "cleanup_confirmed": true
+    },
+    {
+      "run": 4,
+      "task": "import-fields-tests",
+      "source_inputs": 898,
+      "tests_passed": 12,
+      "elapsed_seconds": 10.74,
+      "job_peak_mib": 659.17,
+      "job_cpu_seconds": 3.109,
+      "host_cpu_max_percent": 39.65,
+      "available_ram_min_percent": 42.85753693880691,
+      "commit_max_percent": 36.11908584185391,
+      "final_active_processes": 0,
+      "cleanup_confirmed": true
+    },
+    {
+      "run": 5,
+      "task": "import-meanings-tests",
+      "source_inputs": 898,
+      "tests_passed": 13,
+      "elapsed_seconds": 12.38,
+      "job_peak_mib": 659.85,
+      "job_cpu_seconds": 4.766,
+      "host_cpu_max_percent": 33.79,
+      "available_ram_min_percent": 43.246250334859944,
+      "commit_max_percent": 35.75326939902203,
+      "final_active_processes": 0,
+      "cleanup_confirmed": true
+    },
+    {
+      "run": 6,
+      "task": "import-formula-evaluation-tests",
+      "source_inputs": 898,
+      "tests_passed": 10,
+      "elapsed_seconds": 15.67,
+      "job_peak_mib": 661.79,
+      "job_cpu_seconds": 7.781,
+      "host_cpu_max_percent": 39.13,
+      "available_ram_min_percent": 42.87456652111625,
+      "commit_max_percent": 35.965870140849816,
+      "final_active_processes": 0,
+      "cleanup_confirmed": true
+    },
+    {
+      "run": 7,
+      "task": "import-formula-output-tests",
+      "source_inputs": 898,
+      "tests_passed": 6,
+      "elapsed_seconds": 26.03,
+      "job_peak_mib": 661.07,
+      "job_cpu_seconds": 16.891,
+      "host_cpu_max_percent": 50,
+      "available_ram_min_percent": 42.67755546414807,
+      "commit_max_percent": 35.99478526088539,
+      "final_active_processes": 0,
+      "cleanup_confirmed": true
+    },
+    {
+      "run": 8,
+      "task": "source-formula-stage-profile",
+      "source_inputs": 888,
+      "tests_passed": null,
+      "elapsed_seconds": 23.34,
+      "job_peak_mib": 656.38,
+      "job_cpu_seconds": 6.797,
+      "host_cpu_max_percent": 53.91,
+      "available_ram_min_percent": 42.571932820811156,
+      "commit_max_percent": 36.188253605533376,
+      "final_active_processes": 0,
+      "cleanup_confirmed": true
+    }
+  ],
+  "current_source_union": 898,
+  "all_completed_runs_current_source_closing_exact": true,
+  "evidence_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip-candidate.run01.v1.json",
+      "bytes": 1738,
+      "sha256": "ec30cdc4344d1bca94e1de3f583cdd811fddc3822a08d958fd51623360f16343"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-streaming-xml-roundtrip-r6/source-preimages.v1.json",
+      "bytes": 49379,
+      "sha256": "4de3d8fcbff35b5836619fb1c2da9dc2277ccf70fa1fafba81f1f6ad796cee1b"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip-candidate.audit-run01.v1.json",
+      "bytes": 484,
+      "sha256": "bb1cbbf5721adff5efd7acf4ef22e4dc597d1f44b741fbe72f689641c91befe0"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.owned-rustfmt-run01.v1.json",
+      "bytes": 2082,
+      "sha256": "f6574c5640c58c19c4564f42b034608ac46bd3ad0d519a3c826003a909cfaa93"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-streaming-xml-rustfmt-r6/source-preimages.v1.json",
+      "bytes": 57525,
+      "sha256": "82c2fe647dee4ad40841231de9af2da2cd0d5bdae178f81c1c647f42ee906023"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.light-run01.v1.json",
+      "bytes": 1081,
+      "sha256": "528a8af25b1a06c42ae373809bfae5eca3be0dbbabe24f7ce9a7bb5ace7ccebc"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.light-run02.v1.json",
+      "bytes": 1081,
+      "sha256": "8e9043ea31903fb7b6ed2094e32c104dfb06500486ff1880c646b3db6422c834"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.actual-run01.v1.json",
+      "bytes": 275246,
+      "sha256": "20a6ce816b84d6f3287421c4190f53281ca486baddee6dd2c73ab54a8ebeec6f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.actual-run02.v1.json",
+      "bytes": 282932,
+      "sha256": "d0adfecf0b8533a402c417aecba673a7de765744acffb3251b8e7eeb18505b6f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.actual-run03.v1.json",
+      "bytes": 226358,
+      "sha256": "592f130d445e8a5dd090da585a6e36a00e766605bdab7a8593837d0c2379a2fa"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.actual-run04.v1.json",
+      "bytes": 208775,
+      "sha256": "88e9941e9b6c16c7991e1e1f64c23f14db63961c3271ac2fa92428eb8152a7b1"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.actual-run05.v1.json",
+      "bytes": 214176,
+      "sha256": "b98fc1d054b3c038f14f73c7c36ff5add7357b7c0db76b2df70d38b51bc27320"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.actual-run06.v1.json",
+      "bytes": 226259,
+      "sha256": "f08fcf9189c4f74ab30db9eae2b5373b80c631f65fed13f5d328a0c935ddad9b"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.actual-run07.v1.json",
+      "bytes": 266183,
+      "sha256": "5ca3e20aeb9cc7314606f19e587966552ba84c40ea4d4fac9a7ef17c2aa38be4"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.actual-run08.v1.json",
+      "bytes": 238750,
+      "sha256": "7e9a51b0492130d3e6ae9e7ccd02e46652b856a0131ce8c7377e1c057be55c9f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-source-stage-profile.actual-run01.v1.json",
+      "bytes": 215628,
+      "sha256": "fe9a8f005f593f6e46e7787e1056b83caa1d289ac4adbc8e7e467159b7099942"
+    }
+  ],
+  "whole_stored_target": 249,
+  "whole_stored_runtime": {
+    "state": "IN_PROGRESS_NOT_ACCEPTED",
+    "task": "stored-form-tests",
+    "expected_receipt": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.actual-run09.v1.json",
+    "owned_exec_session_id": 56684,
+    "maximum_seconds": 1200,
+    "confirmed_live_by_exec_poll": true,
+    "tests_passed": null,
+    "whole_pass": false
+  },
+  "goal_status": "active",
+  "P09_gate": "OPEN",
+  "A12": "OPEN",
+  "A13": "OPEN",
+  "product_complete": false,
+  "P10_started": false,
+  "signed_SQL_native_or_Gate_qualified": false,
+  "next_action": "Poll the exact owned full249 exec session56684 to its authoritative terminal state; never restart on observation timeout. Preserve its result and independently rebind all source/receipt evidence after stop. If costly output paths remain, measure pure patch/writer/candidate-readback stages while retaining all original fresh service/issuer/trust/approval/ACL/AEAD/quarantine/head/revocation/corpus assertions. Do not rerun a completed prefix as whole-suite PASS.",
+  "remaining": "Current full249 and full signed corpus; fresh SQL build/Changed3/full36/strict lint/full authority/native/storage-custody-atomic/P09 Gate. P10-P20 not started."
+}

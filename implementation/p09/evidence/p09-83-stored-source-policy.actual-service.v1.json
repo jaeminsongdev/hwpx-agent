@@ -1,0 +1,83 @@
+{
+  "schema": "hwpx-agent.p09-83-actual-stored-policy-service/v1",
+  "state": "pass_component_only",
+  "command": "cargo test --offline --locked -p hwpx-agent-cli --test form_stored_provider stored_source_policy -- --nocapture",
+  "start_chunk": "c564ff",
+  "terminal_chunk": "f141c3",
+  "session": 70707,
+  "exit_code": 0,
+  "passed": 11,
+  "failed": 0,
+  "ignored": 0,
+  "filtered": 89,
+  "test_names": [
+    "actual_import::stored_source_policy::unverified_policy_scan_is_denied_while_original_source_remains_readable",
+    "actual_import::stored_source_policy::cached_policy_from_another_authenticated_provider_is_denied_before_policy_read",
+    "actual_import::stored_source_policy::policy_only_ciphertext_tamper_fails_with_original_source_read_still_valid",
+    "actual_import::stored_source_policy::latest_policy_revocation_is_checked_during_create_and_cached_verification",
+    "actual_import::stored_source_policy::wrong_media_or_artifact_role_never_becomes_policy",
+    "actual_import::stored_source_policy::new_latest_valid_policy_can_be_loaded_but_cached_old_version_is_stale",
+    "actual_import::stored_source_policy::strict_nested_duplicates_and_missing_nullable_selection_fields_are_rejected",
+    "actual_import::stored_source_policy::consumer_rejects_every_foreign_or_stale_repository_binding",
+    "actual_import::stored_source_policy::cached_policy_rechecks_both_acls_policy_quarantine_and_source_head",
+    "actual_import::stored_source_policy::strict_payload_rejects_unknown_missing_duplicate_and_unbound_fields_no_defaults",
+    "actual_import::stored_source_policy::actual_ten_sources_stored_encrypted_policy_matches_whole_original_component_no_writes"
+  ],
+  "current_source_pins": [
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import.rs",
+      "bytes": 10892,
+      "sha256": "48172a85910a567a5ff33313a9273702ebcbd442a652251afd7017f4762c0945"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy.rs",
+      "bytes": 12529,
+      "sha256": "123373f16cb1f4b7fcddd13f5db6c490b1fe0c765352e2a4663cc1eb915a16ba"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/wire.rs",
+      "bytes": 4863,
+      "sha256": "d5a832b8568e5eb65d268266a034eb92508270110f30b209774210b92634f380"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import.rs",
+      "bytes": 14862,
+      "sha256": "23c3b6c33371cff64288a7f20ed2462b2704995487981d134261d419dd84fdfa"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/stored_source_policy.rs",
+      "bytes": 23279,
+      "sha256": "31e39078e550da875c8654479a50d6c3b4ac8f1b9aaa5ceab29039123fca4418"
+    }
+  ],
+  "fixture_authority": {
+    "metadata_repository": "in-memory test fixture only",
+    "policy_repository": "synthetic mutable latest/revocation fixture, not SQL adapter",
+    "revision_repository": "real InMemoryRevisionRepository service implementation with synthetic sealed node identities",
+    "scanner": "synthetic Clean/Unverified fixture only, not real scanner",
+    "crypto": "actual unchanged ArtifactService AES256-GCM with synthetic keys",
+    "sources": "all ten pinned P09-42 source/output packages; not ten fresh native captures",
+    "private_values_emitted": false
+  },
+  "coverage": {
+    "fresh_repository_before_and_after_policy_binding": true,
+    "real_policy_descriptor_acl_and_AEAD_download": true,
+    "policy_only_ciphertext_tamper_with_source_still_readable": true,
+    "strict_typed_payload_no_missing_nullable_defaults": true,
+    "duplicate_top_binding_variant_validation_fields_denied": true,
+    "complete_source_anchor_order_graph_state_match": true,
+    "fresh_cached_verification": true,
+    "no_content_ingest_or_head_commit_by_consumer": true
+  },
+  "qualification": {
+    "component_actual_AEAD_and_decoder_tested": true,
+    "schema20_Rust_repository_tested": false,
+    "operational_database_mutated": false,
+    "real_scanner_or_external_issuer_tested": false,
+    "atomic_CAS_lease_or_parallel_SQL_revoke_tested": false,
+    "complete_importer_or_product_route_qualified": false,
+    "native_executed": false,
+    "p09_gate_complete": false,
+    "p10_new_implementation": false
+  }
+}

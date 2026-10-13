@@ -7,6 +7,14 @@ from pathlib import Path
 import sys
 from typing import Any
 
+if __package__:
+    from . import component_current_source
+else:
+    from pathlib import Path as _Path
+    import sys as _sys
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from tools.p09 import component_current_source
+
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = "protocol/private/p09-toc-index-v1.json"
@@ -149,8 +157,11 @@ def canonical_digest(path: Path) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def validate(root: Path = ROOT) -> dict[str, Any]:
+def validate(root: Path = ROOT, *, source_profile: str = "historical_v1") -> dict[str, Any]:
     errors: list[str] = []
+    if source_profile not in ("historical_v1", component_current_source.PROFILE):
+        return result(["source_profile_unknown"], False)
+    current = source_profile == component_current_source.PROFILE
     try:
         contract = load(root, CONTRACT)
     except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
@@ -236,7 +247,8 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     }:
         errors.append("state_binding")
 
-    for path, digest in IMPLEMENTATION_SHA256.items():
+    expected_implementation = component_current_source.IMPLEMENTATION_SHA256["toc_index"] if current else IMPLEMENTATION_SHA256
+    for path, digest in expected_implementation.items():
         try:
             target = file(root, path)
             if canonical_digest(target) != digest:
@@ -249,7 +261,9 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
 
     qualification_verified = validate_qualification(root, errors)
     validate_text_artifacts(root, errors)
-    return result(errors, qualification_verified)
+    current_verified = component_current_source.verify(root, "toc_index", errors) if current else False
+    value = result(errors, qualification_verified)
+    return component_current_source.decorate(value, "toc_index", current_verified) if current else value
 
 
 def validate_qualification(root: Path, errors: list[str]) -> bool:
@@ -342,6 +356,6 @@ def result(errors: list[str], qualification_verified: bool) -> dict[str, Any]:
 
 
 if __name__ == "__main__":
-    outcome = validate()
+    outcome = validate(source_profile=component_current_source.cli_profile(sys.argv[1:]))
     print(json.dumps(outcome, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
     sys.exit(0 if outcome["state"] == "pass" else 1)

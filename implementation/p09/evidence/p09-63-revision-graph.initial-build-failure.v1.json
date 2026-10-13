@@ -1,0 +1,10 @@
+{
+  "schema": "hwpx-agent.p09-revision-graph.failure/v1",
+  "state": "fail",
+  "actual_exit_code": 1,
+  "actual_terminal_chunk": "0f2647",
+  "error": "E0599: RevisionNode has no public source_artifact_id getter",
+  "archive": "implementation/p09/source-archive/p09-63-pre-revision-graph/initial-graph-module.rs",
+  "correction": "compare the actual serialized node source_artifact_id with the serialized typed request source; do not omit source parity",
+  "expectations_or_existing_guards_weakened": false
+}

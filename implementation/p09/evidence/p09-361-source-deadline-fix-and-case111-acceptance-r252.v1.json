@@ -1,0 +1,112 @@
+{
+  "schema_version": "hwpx-agent.p09-source-deadline-and-compound-progress/v1",
+  "state": "CASE111_COMPOUND_ACCEPTED_NOT_WHOLE_OR_GATE",
+  "goal_status": "active",
+  "failed_source_receipts_preserved": [
+    {
+      "path": "implementation/p09/evidence/p09-361-post-product-source/p340-post-stop-source-run091.v1.json",
+      "bytes": 1303413,
+      "sha256": "103e6077afc66650be9352e6a74f20191307c25876141888d8ef065186cddfc9",
+      "classification": "ORIGINAL_LOCK_DEADLINE",
+      "error_code": "P206_LOCK_DEADLINE_EXCEEDED",
+      "completed_byte_boundaries": 1,
+      "handles_remaining": 0,
+      "accepted": false
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-post-product-source/p340-post-stop-source-run092.v1.json",
+      "bytes": 28481,
+      "sha256": "a7166c49ee2aa23957fce0e0662d45e2673bbf36d214b85f19aafb66c2220ee8",
+      "classification": "EXACT_LOCAL_PHASE_BINDING_FAILURE",
+      "error_code": "P193_CLOSED_PHASE",
+      "native_handles_opened": 0,
+      "accepted": false
+    }
+  ],
+  "optimization": {
+    "missing_two_byte_pass_native_reservations_accounted": 3330,
+    "missing_native_pacing_seconds_accounted": 166.5,
+    "byte_and_native_costs_assumed_overlapped": false,
+    "old_acquisition_rate_per_second": 5,
+    "selected_acquisition_rate_per_second": 9,
+    "original_candidate_rate_per_second": 14,
+    "global_and_byte_reservation_ceiling_per_second": 20,
+    "hard_lock_deadline_seconds": 600,
+    "CPU_RAM_guards_and_identity_or_byte_checks_relaxed": false,
+    "old_five_per_second_budget_now_rejected_before_native": true,
+    "archived_frame_density_baseline_matches_actual_global_ceiling": true,
+    "closed_phase_whitelist_retained_and_regression_checked": true,
+    "targeted_contracts_passed": 89,
+    "source_contracts_passed": 44,
+    "AST_and_whitespace_source_files_passed": 6
+  },
+  "completed_source_pin": {
+    "path": "implementation/p09/evidence/p09-361-post-product-source/p340-post-stop-source-run093.v1.json",
+    "bytes": 510360,
+    "sha256": "7ff40b0c565c4cccd803f7e9a27eb64b8c54639567afc90f2ac7d7144e2ceb1a"
+  },
+  "completed_source": {
+    "state": "PASS_INDEPENDENT_P340_CASE111_SOURCE_FRAME_NOT_RUNTIME_OR_GATE",
+    "physical_inputs": 1665,
+    "directories": 316,
+    "bytes_per_actual_boundary": 121773827,
+    "actual_whole_byte_boundaries": 2,
+    "native_handles_opened_and_closed": 1981,
+    "duplicate_handles_opened_and_closed": 3330,
+    "native_and_duplicate_handles_remaining": 0,
+    "lock_seconds_after_acquire": 223.76922639999975,
+    "lock_seconds_before_release": 483.9527780000062,
+    "host_cpu_max_percent": 59.77,
+    "own_cpu_max_machine_percent": 2.840909,
+    "own_private_max_bytes": 43532288,
+    "available_ram_min_percent": 33.74418477771123,
+    "cleanup_confirmed": true,
+    "resource_stop": null,
+    "original_product_child_replayed": false,
+    "current_product_source_qualified": false
+  },
+  "qualification_pins": {
+    "stop_review": {
+      "path": "implementation/p09/evidence/locked-r07/p340-stop-review-run129.v1.json",
+      "bytes": 85862,
+      "sha256": "2af79ba0832be294344b324b650a31dbe958e891f6f98cfb7aa4ceadbdadbb89"
+    },
+    "light": {
+      "path": "implementation/p09/evidence/locked-r07/p340-light-run130.v1.json",
+      "bytes": 97682,
+      "sha256": "900945fcd553123ace76ee4aca7175500158788fb99c8e53a241442e548c6d0d"
+    },
+    "fresh": {
+      "path": "implementation/p09/evidence/locked-r07/p340-light-review-run131.v1.json",
+      "bytes": 94990,
+      "sha256": "6d05cb6bf810ff5c19c61d1bc2d76921a00abb00d0f959c51e5fed9402a782ff"
+    }
+  },
+  "qualified_queue": {
+    "full_contract_executions": 1032,
+    "light_final_fresh_hashes": 298,
+    "independent_final_fresh_hashes": 299,
+    "accepted_before": 104,
+    "accepted_after": 105,
+    "accepted_count_delta": 1,
+    "remaining_individual_cases": 144,
+    "next_case": 112,
+    "new_product_child_executed": false,
+    "old_failed_root_reclassified_as_pass": false,
+    "original_partial_after_hash_completed": false,
+    "full249_current_qualified": false,
+    "whole_gate_reconciliation_still_required": true
+  },
+  "code_archives": [
+    "implementation/p09/evidence/p361-qualified1032-code",
+    "implementation/p09/evidence/p361-source092-closed-phase-code",
+    "implementation/p09/evidence/p361-source093-qualified-code"
+  ],
+  "next_boundary": "Case112 needs a deliberate source/binary epoch check; do not overwrite the current library, rebase old frozen pins, or replay case111. Source093 is historical original-source plus current-observation evidence, not qualification of the new current library module.",
+  "Hangul_or_access_permission_workflow_started": false,
+  "PC_freeze_resolved": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "P10_started": false
+}

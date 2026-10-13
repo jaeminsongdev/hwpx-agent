@@ -1,0 +1,33 @@
+{
+  "schema": "hwpx-agent.p09-85-registration-regression/v1",
+  "state": "focused_current_source_pass",
+  "new_registration_tests": {
+    "command": "cargo test --offline --locked -p hwpx-agent-cli --test form_stored_provider policy_registration -- --nocapture",
+    "passed": 5,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 100,
+    "tool_chunk": "49dd7a"
+  },
+  "unchanged_stored_policy_tests": {
+    "command": "cargo test --offline --locked -p hwpx-agent-cli --test form_stored_provider actual_import::stored_source_policy -- --nocapture",
+    "passed": 11,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 94,
+    "terminal_tool_chunk": "023a7c"
+  },
+  "revision_lib_tests": {
+    "command": "cargo test --offline --locked -p revision-service --lib",
+    "passed": 16,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 0,
+    "tool_chunk": "634eba"
+  },
+  "distinct_current_tests": 32,
+  "full_current_107_target_batch_reexecuted": false,
+  "P84_full_107_targets_1096_tests": "historical receipt preserved; not a new P85 full-batch pass",
+  "native_executed": false,
+  "p09_complete": false
+}

@@ -1,0 +1,60 @@
+{
+  "profile": "hwpx-agent.p09-81-initial-failures/v1",
+  "failures_preserved": true,
+  "older_readers_guards_tests_or_qualification_not_weakened": true,
+  "entries": [
+    {
+      "chunk": "3c9607",
+      "status": "FAILED",
+      "scope": "new assembly compile",
+      "reason": "hex is only a dev dependency; use existing original document_import::hex_digest instead",
+      "archive": "implementation/p09/source-archive/p09-81-initial-assembly-compile"
+    },
+    {
+      "chunk": "2e6e6f",
+      "status": "FAILED",
+      "scope": "new source strict lint",
+      "reason": "assigning_clones and semicolon_if_nothing_returned; fixed only new implementation",
+      "archive": "implementation/p09/source-archive/p09-81-initial-assembly-lint"
+    },
+    {
+      "chunk": "797a3b",
+      "status": "FAILED",
+      "scope": "new derived formula integration test",
+      "reason": "original frozen replace_formula helper requires canonical leading equals; test input corrected without relaxing reader",
+      "archive": "implementation/p09/source-archive/p09-81-initial-assembly-formula-test"
+    },
+    {
+      "chunk": "ca0fa6",
+      "status": "FAILED",
+      "scope": "parent exact reapplication",
+      "reason": "CRLF assumption on actually LF original text omitted new module exports; restored exact original text plus declared additions using detected LF",
+      "archive": "implementation/p09/source-archive/p09-81-initial-parent-reapplication"
+    },
+    {
+      "chunk": "25f8ee",
+      "status": "FAILED",
+      "scope": "new read-only preservation selector",
+      "reason": "latest manifest still selected P79 while count expected P80; fix read-only selector to P80 without changing historical guards or evidence"
+    },
+    {
+      "chunk": "3b1cb9",
+      "status": "FILTERED_FOCUSED_CHECK_ONLY",
+      "scope": "focused two new private unit tests",
+      "reason": "same cargo name filter skipped integration target; zero integration tests not treated as integration PASS; subsequent unfiltered new target 192a06 passed4"
+    }
+  ],
+  "corrected_target": {
+    "chunk": "192a06",
+    "passed": 4,
+    "failed": 0,
+    "filtered": 0
+  },
+  "strict_current_lint": {
+    "chunk": "a8da85",
+    "exit_code": 0
+  },
+  "root_PLANS_absent": true,
+  "native_executed": false,
+  "p09_complete": false
+}

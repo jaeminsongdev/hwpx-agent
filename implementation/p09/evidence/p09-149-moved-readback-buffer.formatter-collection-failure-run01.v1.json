@@ -1,0 +1,9 @@
+{
+  "state": "FAILED_NOT_ACCEPTED",
+  "operation": "r7 owned rustfmt result collection",
+  "error_code": "RESULT_SERIALIZATION_FAILED",
+  "cause": "The temporary collection wrapper tried to JSON-serialize CompletedProcess instead of its scalar fields.",
+  "repair": "Recheck with explicit returncode, stdout, stderr and audit_limits fields; do not assume formatting PASS from this failure.",
+  "product_complete": false,
+  "P09_gate": "OPEN"
+}

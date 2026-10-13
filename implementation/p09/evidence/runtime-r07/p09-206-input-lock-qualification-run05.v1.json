@@ -1,0 +1,254 @@
+{
+  "schema_version": "hwpx-agent.p09-locked-runtime-input-qualification/v1",
+  "state": "PASS_LOCK_CODE_CONTRACTS_AND_FULL_SCOPE_COST_AUDIT_NOT_NATIVE_FULL_RUNTIME_OR_GATE",
+  "goal_status": "active",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "whole1470_current_fresh_qualified": false,
+  "historical67_current_fresh_qualified": false,
+  "legacy_whole_acceptance_not_changed": true,
+  "historical_whole_gate_reconciliation_required": true,
+  "actual_product_child_executed": false,
+  "actual_product_test_body_or_shared_frame_executed": false,
+  "existing_actual_runner_input_scope_changed": false,
+  "new_input_exclusions": [],
+  "content_or_attributes_written_or_deleted": false,
+  "qualification_scope": "contracts-only",
+  "input_lock_contract_tests_passed": 43,
+  "qualification_helper_pins": [
+    {
+      "path": "tools/p09/locked_runtime_inputs.py",
+      "bytes": 15465,
+      "sha256": "e7c40a2ec0367e01c359e3b89c179d45367e9db233348e76ba82364cc0599e14"
+    },
+    {
+      "path": "tools/p09/tests/test_locked_runtime_inputs.py",
+      "bytes": 18214,
+      "sha256": "c6c1f3c08c5a72d153ee4135fbf7e6246d3d53e4b8e9ebf29a414d48d6e919c6"
+    },
+    {
+      "path": "tools/p09/qualify_locked_runtime_inputs.py",
+      "bytes": 11857,
+      "sha256": "04d4e9b79954f4d551bf26f7a7f91aef47bedef32e79d68d1f628dd6b4716455"
+    },
+    {
+      "path": "tools/p09/tests/test_locked_runtime_input_qualification.py",
+      "bytes": 1691,
+      "sha256": "79945a7e4851fd79317be42f061abbc1f75fe1f0d6e145e7bc954101b799f1d8"
+    }
+  ],
+  "preserved_failed_full_scope_receipt_pin": {
+    "path": "implementation/p09/evidence/runtime-r07/p09-206-input-lock-qualification-run01.v1.json",
+    "bytes": 344819,
+    "sha256": "a71f78acdeb3a0d86a5c9798415be2c374fa4cf97142f9e011de749094e2a43a"
+  },
+  "full_scope_open_request_budget": {
+    "input_files": 1467,
+    "ancestor_directories": 306,
+    "unchanged_byte_read_opens": 2934,
+    "before_source_scope_open_requests": 8253,
+    "optimized_source_scope_open_requests": 4707,
+    "redundant_pathname_open_requests_removed": 3546,
+    "modeled_open_request_reduction_percent": 42.96619411123228,
+    "excludes_bootstrap_baseline_metadata_and_permission_probes": true,
+    "model_not_measured_CPU_RAM_or_wall_time_improvement": true
+  },
+  "actual_native_input_lock_created_in_this_run": false,
+  "latest_full_runtime_lock_qualification": "NOT_RUN",
+  "shared_open_pacer_for_native_handles_and_actual_byte_streams": true,
+  "required_full_byte_hash_before_and_final_passes_retained": true,
+  "original_hard_CPU_RAM_deadline_and_cleanup_unchanged": true,
+  "official_references": [
+    "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew",
+    "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfileinformationbyhandle",
+    "https://docs.python.org/3/library/msvcrt.html#msvcrt.get_osfhandle"
+  ],
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "IO": {
+    "read_passes": 11,
+    "bytes_read": 1128911,
+    "bound_inputs": 5,
+    "final_fresh_hashes": 5,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P206_binary1_other2_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 1048576,
+      "other": 2097152
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 1128911
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 1128911,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0.0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/locked_runtime_inputs.py",
+      "bytes": 15465,
+      "sha256": "e7c40a2ec0367e01c359e3b89c179d45367e9db233348e76ba82364cc0599e14"
+    },
+    {
+      "path": "tools/p09/tests/test_locked_runtime_inputs.py",
+      "bytes": 18214,
+      "sha256": "c6c1f3c08c5a72d153ee4135fbf7e6246d3d53e4b8e9ebf29a414d48d6e919c6"
+    },
+    {
+      "path": "tools/p09/qualify_locked_runtime_inputs.py",
+      "bytes": 11857,
+      "sha256": "04d4e9b79954f4d551bf26f7a7f91aef47bedef32e79d68d1f628dd6b4716455"
+    },
+    {
+      "path": "tools/p09/tests/test_locked_runtime_input_qualification.py",
+      "bytes": 1691,
+      "sha256": "79945a7e4851fd79317be42f061abbc1f75fe1f0d6e145e7bc954101b799f1d8"
+    },
+    {
+      "path": "implementation/p09/evidence/runtime-r07/p09-206-input-lock-qualification-run01.v1.json",
+      "bytes": 344819,
+      "sha256": "a71f78acdeb3a0d86a5c9798415be2c374fa4cf97142f9e011de749094e2a43a"
+    }
+  ],
+  "metadata_observation": {
+    "completed_sample_count": 3,
+    "samples": [
+      {
+        "time_utc": "2026-10-08T06:37:41.084479+00:00",
+        "system_cpu_percent": 27.56,
+        "available_ram_percent": 34.20493980490155,
+        "commit_used_percent": 42.10155739382628,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 57500000,
+          "kernel_including_idle": 68437500,
+          "user": 10937500,
+          "total": 79375000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 24170496,
+        "own_working_set_bytes": 35246080,
+        "own_private_percent_total_ram": 0.0723481390982168,
+        "own_working_set_percent_total_ram": 0.10550004015254288,
+        "phase_at_sample": "admission",
+        "phases_since_previous_sample": [
+          "admission"
+        ],
+        "audited_logical_read_bytes": null,
+        "audited_logical_read_passes": null,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": false
+      },
+      {
+        "time_utc": "2026-10-08T06:37:41.585056+00:00",
+        "system_cpu_percent": 23.2,
+        "available_ram_percent": 34.27970322673191,
+        "commit_used_percent": 42.01565204352211,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 61562500,
+          "kernel_including_idle": 71875000,
+          "user": 8281250,
+          "total": 80156250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 24170496,
+        "own_working_set_bytes": 35246080,
+        "own_private_percent_total_ram": 0.0723481390982168,
+        "own_working_set_percent_total_ram": 0.10550004015254288,
+        "phase_at_sample": "admission",
+        "phases_since_previous_sample": [
+          "admission"
+        ],
+        "audited_logical_read_bytes": null,
+        "audited_logical_read_passes": null,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": false
+      },
+      {
+        "time_utc": "2026-10-08T06:37:42.114388+00:00",
+        "system_cpu_percent": 23.22,
+        "available_ram_percent": 34.246318379627276,
+        "commit_used_percent": 42.03812882755553,
+        "parent_cpu_machine_percent": 0.187266,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 64062500,
+          "kernel_including_idle": 75625000,
+          "user": 7812500,
+          "total": 83437500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 25673728,
+        "own_working_set_bytes": 36306944,
+        "own_private_percent_total_ram": 0.07684767596468783,
+        "own_working_set_percent_total_ram": 0.10867546262779083,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "final_fresh_hash",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 1046236,
+        "audited_logical_read_passes": 11,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": true
+      }
+    ],
+    "system_cpu_max_percent": 27.56,
+    "own_cpu_max_machine_percent": 0.187266,
+    "own_private_max_bytes": 25673728,
+    "own_working_set_max_bytes": 36306944,
+    "available_ram_min_percent": 34.20493980490155,
+    "own_process_only": true,
+    "foreign_PID_query_executed": false,
+    "new_sampler_thread_started": false,
+    "extra_own_memory_query_per_existing_sample": 1,
+    "original_guard_and_CPU_denominator_unchanged": true,
+    "read_counters_are_logical_not_physical_disk_IO": true,
+    "samples_can_span_multiple_phases": true,
+    "CPU_cause_or_PC_freeze_resolution_established": false
+  }
+}

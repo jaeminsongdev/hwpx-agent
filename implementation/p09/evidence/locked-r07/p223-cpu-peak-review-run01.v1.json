@@ -1,0 +1,202 @@
+{
+  "schema_version": "hwpx-agent.p09-packed-cpu-peak-review/v1",
+  "state": "PASS_BOUNDED_CPU_PEAK_REVIEW_NOT_CAUSE_OR_GATE",
+  "goal_status": "active",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "whole1470_current_fresh_qualified": false,
+  "historical67_current_fresh_qualified": false,
+  "legacy_whole_acceptance_not_changed": true,
+  "historical_whole_gate_reconciliation_required": true,
+  "actual_product_child_executed": false,
+  "product_body_reexecuted": false,
+  "original_files_rewritten": false,
+  "CPU_cause_or_PC_freeze_resolution_established": false,
+  "metadata_peak_review": {
+    "sample_count": 864,
+    "system_peak_percent": 100.0,
+    "samples_at_or_above95": 2,
+    "samples_at_or_above98": 2,
+    "maximum_consecutive98_samples": 2,
+    "warning_phase_counts": {
+      "admission": 2
+    },
+    "own_CPU_max_at_warning": 0.168919,
+    "job_CPU_max_at_warning": 0.0,
+    "first_warning_numeric_neighbors": [
+      {
+        "system_cpu_percent": 70.58,
+        "phase_at_sample": "admission",
+        "parent_cpu_machine_percent": 0.0,
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 100.0,
+        "phase_at_sample": "admission",
+        "parent_cpu_machine_percent": 0.0,
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 100.0,
+        "phase_at_sample": "admission",
+        "parent_cpu_machine_percent": 0.168919,
+        "audited_logical_read_bytes_delta": 0
+      }
+    ],
+    "all_samples_or_raw_logs_output": false,
+    "external_PID_or_cause_identified": false
+  },
+  "original_parent_peak_review": {
+    "sample_count": 524,
+    "system_peak_percent": 100.0,
+    "samples_at_or_above95": 2,
+    "samples_at_or_above98": 2,
+    "maximum_consecutive98_samples": 2,
+    "warning_phase_counts": {
+      "not_tagged_original_parent": 2
+    },
+    "own_CPU_max_at_warning": 0.177936,
+    "job_CPU_max_at_warning": 0.4836653651484533,
+    "first_warning_numeric_neighbors": [
+      {
+        "system_cpu_percent": 77.47,
+        "parent_cpu_machine_percent": 0.0,
+        "owned_job_cpu_machine_percent": 0.43093356273489963
+      },
+      {
+        "system_cpu_percent": 100.0,
+        "parent_cpu_machine_percent": 0.0,
+        "owned_job_cpu_machine_percent": 0.4836653651484533
+      },
+      {
+        "system_cpu_percent": 100.0,
+        "parent_cpu_machine_percent": 0.177936,
+        "owned_job_cpu_machine_percent": 0.3752347032550777
+      }
+    ],
+    "all_samples_or_raw_logs_output": false,
+    "external_PID_or_cause_identified": false
+  },
+  "native_pressure": {
+    "warning_system_CPU_percent": 95,
+    "cool_distinct_sample_windows": 2,
+    "maximum_pause_windows_per_entry": 8,
+    "warning_entries": 0,
+    "completed_pause_windows": 0,
+    "maximum_observed_pause_windows_in_one_entry": 0,
+    "requested_pause_seconds": 0.0,
+    "original_hard_resource_decisions_unmodified": true,
+    "original_IO_deadline_unmodified": true,
+    "original_sampler_windows_reused": true,
+    "new_native_query_or_sampler_thread_started": false,
+    "original_read_checks_skipped": false,
+    "original_frame_deadline_checked_before_open": true,
+    "original_32_open_rate_limit_and_no_burst_credits_preserved": true,
+    "pressure_applies_to_native_reservations_including_borrowed_streams": true,
+    "original_owner_sample_source_reused": true,
+    "cleanup_not_guarded_by_pressure": true,
+    "measured_CPU_or_PC_freeze_improvement_claimed": false
+  },
+  "owned_read_pressure": [
+    {
+      "near_saturation_read_backpressure": {
+        "warning_system_CPU_percent": 95,
+        "cool_distinct_sample_windows": 2,
+        "maximum_pause_windows_per_entry": 8,
+        "warning_entries": 0,
+        "completed_pause_windows": 0,
+        "maximum_observed_pause_windows_in_one_entry": 0,
+        "requested_pause_seconds": 0.0,
+        "original_hard_resource_decisions_unmodified": true,
+        "original_IO_deadline_unmodified": true,
+        "original_sampler_windows_reused": true,
+        "new_native_query_or_sampler_thread_started": false,
+        "original_read_checks_skipped": false
+      }
+    },
+    {
+      "near_saturation_read_backpressure": {
+        "warning_system_CPU_percent": 95,
+        "cool_distinct_sample_windows": 2,
+        "maximum_pause_windows_per_entry": 8,
+        "warning_entries": 0,
+        "completed_pause_windows": 0,
+        "maximum_observed_pause_windows_in_one_entry": 0,
+        "requested_pause_seconds": 0.0,
+        "original_hard_resource_decisions_unmodified": true,
+        "original_IO_deadline_unmodified": true,
+        "original_sampler_windows_reused": true,
+        "new_native_query_or_sampler_thread_started": false,
+        "original_read_checks_skipped": false
+      }
+    }
+  ],
+  "phase_counter_interpretation": "phase_at_sample is a caller scope tag, not external CPU cause",
+  "IO": {
+    "read_passes": 7,
+    "bytes_read": 2139568,
+    "bound_inputs": 3,
+    "final_fresh_hashes": 3,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P206_binary1_other2_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 1048576,
+      "other": 2097152
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 2139568
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 2139568,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0.0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/review_packed_cpu_peak.py",
+      "bytes": 5677,
+      "sha256": "8f02c5af8087c1f4c05044910c08434044f27a86c16d03a3df39c84b158e2459"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-043-run009.v1.json",
+      "bytes": 585368,
+      "sha256": "36139bea1c5a9c7e128485d9350b3c9eeaa439392498be9b0ffe9c5869c59c06"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-043-run009.json",
+      "bytes": 186055,
+      "sha256": "de8ecef23d916b34a113b8b6882e5c3fc9030c85b3878c522f785a69a5b8fc49"
+    }
+  ],
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null
+}

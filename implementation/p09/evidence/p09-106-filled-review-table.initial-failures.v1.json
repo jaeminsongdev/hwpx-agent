@@ -1,0 +1,77 @@
+{
+  "schema": "hwpx-agent.p09-106-filled-review-table-initial-failures/v1",
+  "recorded_at_utc": "2026-10-04 20:17:32 UTC",
+  "state": "PRESERVED_FAILED_BUILD_AND_LINT_NOT_current_acceptance",
+  "failures": [
+    {
+      "kind": "lib_compile",
+      "code": "E0432",
+      "start_chunk": "f0dc57",
+      "session_id": 3146,
+      "terminal_chunk": "4a2af7",
+      "exit_code": 1,
+      "scope": "new sibling import only",
+      "archive": {
+        "path": "implementation/p09/source-archive/p09-106-initial-build/crates/hwpx-package/src/document_import/structure/review/table_create_context/filled_output.rs",
+        "bytes": 11366,
+        "sha256": "bbfee8339636849cc937087d75a9f3a6dcd0e2227404e56ab95cd41547ff7f90"
+      },
+      "correction": "reuse original parent named helper; original modules/guards unchanged",
+      "fixed_check_chunk": "9813c1",
+      "fixed_check_exit_code": 0
+    },
+    {
+      "kind": "integration_test_compile",
+      "codes": [
+        "E0425",
+        "E0624"
+      ],
+      "start_chunk": "df9dc0",
+      "session_id": 17467,
+      "terminal_chunk": "e6fc34",
+      "exit_code": 1,
+      "scope": "new test span type and private attribute getter",
+      "archive": {
+        "path": "implementation/p09/source-archive/p09-106-test-build/crates/hwpx-package/tests/review_filled_table_output.rs",
+        "bytes": 20473,
+        "sha256": "2c3b5fecc0a3c0e601fc2c6d45394be3fec225dcabbae40b71138b03883c7989"
+      },
+      "correction": "original public XmlByteSpan and fixture-only raw span values; no original API exposure"
+    },
+    {
+      "kind": "strict_lint",
+      "code": "clippy::useless_vec",
+      "start_chunk": "66b316",
+      "session_id": 14779,
+      "terminal_chunk": "736cc6",
+      "exit_code": 1,
+      "archive": {
+        "path": "implementation/p09/source-archive/p09-106-initial-lint/crates/hwpx-package/tests/review_filled_table_output.rs",
+        "bytes": 20576,
+        "sha256": "816df9a550a43d4c0bd8ef3ad0701f0c3b18a4e2f12c6bfdfbb345319c6307fa"
+      },
+      "correction": "test array rather than heap Vec; no lint allow",
+      "fixed_terminal_chunk": "65f46c",
+      "fixed_exit_code": 0
+    }
+  ],
+  "initial_regression": {
+    "start_chunk": "b82dae",
+    "session_id": 64388,
+    "terminal_chunk": "576fd7",
+    "exit_code": 0,
+    "passed": 23,
+    "failed": 0,
+    "ignored": 0,
+    "reused": 15,
+    "new": 8,
+    "added_to_final_counts": false,
+    "preserved_executable": {
+      "path": "target/p09-106-pre-lint-regression/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+      "bytes": 9692672,
+      "sha256": "4f63bb19e81bda017b97a4e2ed8639ace5f9b2bbc6defec427d5564de11101f6"
+    }
+  },
+  "old_source_guards_weakening": false,
+  "failed_evidence_deleted": false
+}

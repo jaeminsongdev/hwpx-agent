@@ -1,0 +1,118 @@
+{
+  "state": "PASS_READONLY_PARENT_FILE_PROBE_ONLY_NOT_WHOLE_LISTING_OR_CAUSE",
+  "goal_status": "active",
+  "current_compiled249_qualified": false,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "whole_listing_preparation_executed": false,
+  "protected_EXE_workload_executed": false,
+  "actual_Cargo_SQL_Hangul_child_or_product_EXE_executed": false,
+  "own_parent_Process_query_executed": true,
+  "foreign_Process_query_executed": false,
+  "additional_sampler_thread_started": false,
+  "original_resource_guards_and_rates_preserved": true,
+  "contract_tests_passed": 11,
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "IO": {
+    "read_passes": 8,
+    "bytes_read": 24780,
+    "bound_inputs": 4,
+    "final_fresh_hashes": 4,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P176_binary2p5_other4_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 2621440,
+      "other": 4194304
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 24780
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 24780,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/readonly_parent_file_observation.py",
+      "bytes": 6233,
+      "sha256": "d7c0dcb0f10f4a3b076c36a1af9a7d378891eb12ea3b5113abdc5d4251685176"
+    },
+    {
+      "path": "tools/p09/tests/test_readonly_parent_file_observation.py",
+      "bytes": 2308,
+      "sha256": "e5d2efc8c0d6713c54bc98f4cabfa366dc04f84d329223c02df02a064c265c63"
+    },
+    {
+      "path": "tools/p09/pre_go_parent_cpu_observer_r2.py",
+      "bytes": 2930,
+      "sha256": "92537869dd3490c0da85de700f9dfe4b7c0ec19cd382397f5d5a2c358e3af3d3"
+    },
+    {
+      "path": "tools/p09/tests/test_parent_cpu_observer_interval.py",
+      "bytes": 919,
+      "sha256": "7d2e864025ead480db8e8659be78466ad5aba2e8879e075efbc19da2fc5521f0"
+    }
+  ],
+  "parent_observation_tail": {
+    "original_completed_sample_count": 2,
+    "tail_limit": 8,
+    "existing_samples_only": true,
+    "extra_sampler_thread_started": false,
+    "foreign_Process_query_executed": false,
+    "samples": [
+      {
+        "time_utc": "2026-10-07T22:16:05.716489+00:00",
+        "system_cpu_percent": 24.75,
+        "available_ram_percent": 32.86562261881628,
+        "commit_used_percent": 42.40836966984432,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 58906250,
+          "kernel_including_idle": 64218750,
+          "user": 14062500,
+          "total": 78281250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-07T22:16:06.216795+00:00",
+        "system_cpu_percent": 18.45,
+        "available_ram_percent": 32.60086104216385,
+        "commit_used_percent": 42.35134813486258,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 65625000,
+          "kernel_including_idle": 69531250,
+          "user": 10937500,
+          "total": 80468750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,594 @@
+{
+  "schema_version": "hwpx-agent.p09-p340-process-cpu-sidecar/v1",
+  "state": "STOPPED_NOT_ACCEPTED",
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "scanner_child_started": true,
+  "scanner_child_replayed": false,
+  "actual_product_child_executed": false,
+  "process_creation_or_command_line_saved": false,
+  "raw_logs_saved": false,
+  "PC_freeze_resolved": false,
+  "stop_root_pins": [
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-case-109-run050.v1.json",
+      "bytes": 554430,
+      "sha256": "87921f615d50cb28bd6e0917f458cbc07ca98d4fd014ff5e3c5834e22bf94067"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-case-109-run059.v1.json",
+      "bytes": 509270,
+      "sha256": "c08b42a7f820e8cd214a502d0f3cff055e3c839f06d3a28a236c9b856b99eaad"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-case-110-run065.v1.json",
+      "bytes": 461324,
+      "sha256": "60fd6251f28f09f7ad6dbeb24524d5cb5ca9511cacdb7f0dfbc8d35d00519283"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-case-110-run071.v1.json",
+      "bytes": 214500,
+      "sha256": "5e8eb76e024c7b874494d32cfb4cde8b1e22b0e708bc8cf0cad1f2e075eecaa4"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-case-111-run083.v1.json",
+      "bytes": 1066545,
+      "sha256": "7312357110f497ed7e9104df3c641d8224430667caa960053209f18f7648ff8a"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-light-run090.v1.json",
+      "bytes": 63021,
+      "sha256": "828caba6036dd466ac0c18488545ead6e66cce8e0058b13bf24433f3567e2cf8"
+    }
+  ],
+  "process_cpu_attribution": {
+    "state": "INCOMPLETE_PROCESS_CPU_OBSERVATION",
+    "samples": [
+      {
+        "system_cpu_percent": 3.558052,
+        "total_system_delta_100ns": 166875000,
+        "top_cpu_groups": [
+          {
+            "label": "python.exe",
+            "cpu_delta_100ns": 156250,
+            "matched_processes": 1,
+            "machine_cpu_percent": 0.093633
+          },
+          {
+            "label": "Codex.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 2,
+            "machine_cpu_percent": 0.0
+          },
+          {
+            "label": "OTHER",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 181,
+            "machine_cpu_percent": 0.0
+          },
+          {
+            "label": "node.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 42,
+            "machine_cpu_percent": 0.0
+          },
+          {
+            "label": "pwsh.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 1,
+            "machine_cpu_percent": 0.0
+          }
+        ],
+        "process_counts": {
+          "OTHER": 344,
+          "System": 1,
+          "MsMpEng.exe": 1,
+          "SearchIndexer.exe": 1,
+          "Codex.exe": 2,
+          "node.exe": 42,
+          "pwsh.exe": 1,
+          "python.exe": 2
+        },
+        "inaccessible_processes": 165,
+        "newly_seen_or_reused_PIDs": 2,
+        "counter_reset_processes": 0,
+        "no_longer_readable_PIDs": 0,
+        "scan_seconds": 0.008078,
+        "snapshot_interval_seconds": 1.04384,
+        "CPU_samples_not_atomic": true,
+        "all_system_CPU_attributed": false,
+        "exited_short_lived_protected_processes_and_kernel_work_may_be_missing": true,
+        "CPU_cause_or_PC_freeze_resolution_established": false,
+        "time_utc": "2026-10-10T21:12:32.637707+00:00",
+        "host_system_cpu_percent": 3.82,
+        "available_ram_percent": 46.54949889013467,
+        "commit_used_percent": 29.642829397191747,
+        "scanner_child_alive": true
+      },
+      {
+        "system_cpu_percent": 4.222649,
+        "total_system_delta_100ns": 162812500,
+        "top_cpu_groups": [
+          {
+            "label": "python.exe",
+            "cpu_delta_100ns": 1718750,
+            "matched_processes": 2,
+            "machine_cpu_percent": 1.055662
+          },
+          {
+            "label": "Codex.exe",
+            "cpu_delta_100ns": 468750,
+            "matched_processes": 2,
+            "machine_cpu_percent": 0.287908
+          },
+          {
+            "label": "OTHER",
+            "cpu_delta_100ns": 312500,
+            "matched_processes": 182,
+            "machine_cpu_percent": 0.191939
+          },
+          {
+            "label": "node.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 42,
+            "machine_cpu_percent": 0.0
+          },
+          {
+            "label": "pwsh.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 1,
+            "machine_cpu_percent": 0.0
+          }
+        ],
+        "process_counts": {
+          "OTHER": 346,
+          "System": 1,
+          "MsMpEng.exe": 1,
+          "SearchIndexer.exe": 1,
+          "Codex.exe": 2,
+          "node.exe": 42,
+          "pwsh.exe": 1,
+          "python.exe": 2
+        },
+        "inaccessible_processes": 165,
+        "newly_seen_or_reused_PIDs": 2,
+        "counter_reset_processes": 0,
+        "no_longer_readable_PIDs": 0,
+        "scan_seconds": 0.008411,
+        "snapshot_interval_seconds": 1.017986,
+        "CPU_samples_not_atomic": true,
+        "all_system_CPU_attributed": false,
+        "exited_short_lived_protected_processes_and_kernel_work_may_be_missing": true,
+        "CPU_cause_or_PC_freeze_resolution_established": false,
+        "time_utc": "2026-10-10T21:12:33.655680+00:00",
+        "host_system_cpu_percent": 3.72,
+        "available_ram_percent": 46.54102701009453,
+        "commit_used_percent": 29.656029551231807,
+        "scanner_child_alive": true
+      },
+      {
+        "system_cpu_percent": 0.567644,
+        "total_system_delta_100ns": 165156250,
+        "top_cpu_groups": [
+          {
+            "label": "python.exe",
+            "cpu_delta_100ns": 312500,
+            "matched_processes": 2,
+            "machine_cpu_percent": 0.189215
+          },
+          {
+            "label": "Codex.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 2,
+            "machine_cpu_percent": 0.0
+          },
+          {
+            "label": "OTHER",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 184,
+            "machine_cpu_percent": 0.0
+          },
+          {
+            "label": "node.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 42,
+            "machine_cpu_percent": 0.0
+          },
+          {
+            "label": "pwsh.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 1,
+            "machine_cpu_percent": 0.0
+          }
+        ],
+        "process_counts": {
+          "OTHER": 346,
+          "System": 1,
+          "MsMpEng.exe": 1,
+          "SearchIndexer.exe": 1,
+          "Codex.exe": 2,
+          "node.exe": 42,
+          "pwsh.exe": 1,
+          "python.exe": 2
+        },
+        "inaccessible_processes": 165,
+        "newly_seen_or_reused_PIDs": 0,
+        "counter_reset_processes": 0,
+        "no_longer_readable_PIDs": 0,
+        "scan_seconds": 0.008465,
+        "snapshot_interval_seconds": 1.030876,
+        "CPU_samples_not_atomic": true,
+        "all_system_CPU_attributed": false,
+        "exited_short_lived_protected_processes_and_kernel_work_may_be_missing": true,
+        "CPU_cause_or_PC_freeze_resolution_established": false,
+        "time_utc": "2026-10-10T21:12:34.686554+00:00",
+        "host_system_cpu_percent": 0.39,
+        "available_ram_percent": 46.53916344169207,
+        "commit_used_percent": 29.657542612366832,
+        "scanner_child_alive": true
+      },
+      {
+        "system_cpu_percent": 7.019231,
+        "total_system_delta_100ns": 162500000,
+        "top_cpu_groups": [
+          {
+            "label": "Codex.exe",
+            "cpu_delta_100ns": 9218750,
+            "matched_processes": 2,
+            "machine_cpu_percent": 5.673077
+          },
+          {
+            "label": "OTHER",
+            "cpu_delta_100ns": 156250,
+            "matched_processes": 184,
+            "machine_cpu_percent": 0.096154
+          },
+          {
+            "label": "python.exe",
+            "cpu_delta_100ns": 156250,
+            "matched_processes": 2,
+            "machine_cpu_percent": 0.096154
+          },
+          {
+            "label": "node.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 42,
+            "machine_cpu_percent": 0.0
+          },
+          {
+            "label": "pwsh.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 1,
+            "machine_cpu_percent": 0.0
+          }
+        ],
+        "process_counts": {
+          "OTHER": 346,
+          "System": 1,
+          "MsMpEng.exe": 1,
+          "SearchIndexer.exe": 1,
+          "Codex.exe": 2,
+          "node.exe": 42,
+          "pwsh.exe": 1,
+          "python.exe": 2
+        },
+        "inaccessible_processes": 165,
+        "newly_seen_or_reused_PIDs": 0,
+        "counter_reset_processes": 0,
+        "no_longer_readable_PIDs": 0,
+        "scan_seconds": 0.009292,
+        "snapshot_interval_seconds": 1.017991,
+        "CPU_samples_not_atomic": true,
+        "all_system_CPU_attributed": false,
+        "exited_short_lived_protected_processes_and_kernel_work_may_be_missing": true,
+        "CPU_cause_or_PC_freeze_resolution_established": false,
+        "time_utc": "2026-10-10T21:12:35.704556+00:00",
+        "host_system_cpu_percent": 11.75,
+        "available_ram_percent": 46.5507249219784,
+        "commit_used_percent": 29.659958292730686,
+        "scanner_child_alive": true
+      },
+      {
+        "system_cpu_percent": 8.014911,
+        "total_system_delta_100ns": 167656250,
+        "top_cpu_groups": [
+          {
+            "label": "Codex.exe",
+            "cpu_delta_100ns": 1718750,
+            "matched_processes": 2,
+            "machine_cpu_percent": 1.025163
+          },
+          {
+            "label": "python.exe",
+            "cpu_delta_100ns": 781250,
+            "matched_processes": 2,
+            "machine_cpu_percent": 0.465983
+          },
+          {
+            "label": "OTHER",
+            "cpu_delta_100ns": 156250,
+            "matched_processes": 184,
+            "machine_cpu_percent": 0.093197
+          },
+          {
+            "label": "node.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 42,
+            "machine_cpu_percent": 0.0
+          },
+          {
+            "label": "pwsh.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 1,
+            "machine_cpu_percent": 0.0
+          }
+        ],
+        "process_counts": {
+          "OTHER": 350,
+          "System": 1,
+          "MsMpEng.exe": 1,
+          "SearchIndexer.exe": 1,
+          "Codex.exe": 2,
+          "node.exe": 42,
+          "pwsh.exe": 1,
+          "python.exe": 2,
+          "git.exe": 4
+        },
+        "inaccessible_processes": 166,
+        "newly_seen_or_reused_PIDs": 7,
+        "counter_reset_processes": 0,
+        "no_longer_readable_PIDs": 0,
+        "scan_seconds": 0.008489,
+        "snapshot_interval_seconds": 1.034271,
+        "CPU_samples_not_atomic": true,
+        "all_system_CPU_attributed": false,
+        "exited_short_lived_protected_processes_and_kernel_work_may_be_missing": true,
+        "CPU_cause_or_PC_freeze_resolution_established": false,
+        "time_utc": "2026-10-10T21:12:36.738822+00:00",
+        "host_system_cpu_percent": 10.0,
+        "available_ram_percent": 46.399383551188976,
+        "commit_used_percent": 29.851537919685985,
+        "scanner_child_alive": true
+      },
+      {
+        "system_cpu_percent": 7.039537,
+        "total_system_delta_100ns": 162031250,
+        "top_cpu_groups": [
+          {
+            "label": "Codex.exe",
+            "cpu_delta_100ns": 937500,
+            "matched_processes": 2,
+            "machine_cpu_percent": 0.578592
+          },
+          {
+            "label": "python.exe",
+            "cpu_delta_100ns": 937500,
+            "matched_processes": 2,
+            "machine_cpu_percent": 0.578592
+          },
+          {
+            "label": "OTHER",
+            "cpu_delta_100ns": 468750,
+            "matched_processes": 184,
+            "machine_cpu_percent": 0.289296
+          },
+          {
+            "label": "node.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 42,
+            "machine_cpu_percent": 0.0
+          },
+          {
+            "label": "pwsh.exe",
+            "cpu_delta_100ns": 0,
+            "matched_processes": 1,
+            "machine_cpu_percent": 0.0
+          }
+        ],
+        "process_counts": {
+          "OTHER": 348,
+          "System": 1,
+          "MsMpEng.exe": 1,
+          "SearchIndexer.exe": 1,
+          "Codex.exe": 2,
+          "node.exe": 42,
+          "pwsh.exe": 1,
+          "python.exe": 2,
+          "git.exe": 2
+        },
+        "inaccessible_processes": 166,
+        "newly_seen_or_reused_PIDs": 3,
+        "counter_reset_processes": 0,
+        "no_longer_readable_PIDs": 7,
+        "scan_seconds": 0.008152,
+        "snapshot_interval_seconds": 1.018557,
+        "CPU_samples_not_atomic": true,
+        "all_system_CPU_attributed": false,
+        "exited_short_lived_protected_processes_and_kernel_work_may_be_missing": true,
+        "CPU_cause_or_PC_freeze_resolution_established": false,
+        "time_utc": "2026-10-10T21:12:37.757370+00:00",
+        "host_system_cpu_percent": 8.95,
+        "available_ram_percent": 46.37087831082237,
+        "commit_used_percent": 29.764114290794595,
+        "scanner_child_alive": true
+      }
+    ],
+    "completed_intervals": 6,
+    "observer_error": "CPU_ATTRIBUTION_SCAN_TIME_LIMIT",
+    "controller_stop_reason": null,
+    "sample_interval_min_seconds": 1.0,
+    "maximum_processes_per_snapshot": 1024,
+    "maximum_snapshot_seconds": 0.25,
+    "process_labels": [
+      "Code.exe",
+      "Codex.exe",
+      "MsMpEng.exe",
+      "MsSense.exe",
+      "OTHER",
+      "SearchIndexer.exe",
+      "System",
+      "cargo.exe",
+      "git.exe",
+      "node.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "python.exe",
+      "pythonw.exe",
+      "rustc.exe",
+      "vmmem",
+      "vmmemWSL"
+    ],
+    "raw_process_names_saved": false,
+    "command_lines_paths_environments_or_modules_queried": false,
+    "process_state_changed": false,
+    "new_sampler_thread_started": false,
+    "all_system_CPU_attributed": false,
+    "causal_attribution": false,
+    "CPU_cause_or_PC_freeze_resolution_established": false
+  },
+  "scanner_receipt_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p340-stop-review-run115.v1.json",
+    "bytes": 66222,
+    "sha256": "603e48cb86f9fd016f1c1e06338787c5f96ef9c661cc873bd830719c02fde7f2"
+  },
+  "scanner_result": {
+    "state": "FAILED_NOT_ACCEPTED",
+    "error_code": null,
+    "resource_stop_reason": null
+  },
+  "source_pins": [
+    {
+      "path": "tools/p09/run_p340_stop_review_attribution.py",
+      "bytes": 19463,
+      "sha256": "5bb40191ecc13e4aff401f56d00da678744d543fad12057ad7cc6dacdfd84938"
+    },
+    {
+      "path": "tools/p09/tests/test_p340_stop_review_attribution.py",
+      "bytes": 7809,
+      "sha256": "10b5dff970818e98e653808ec53b08e2e9b17b39d62fec16e0ebf473a2b37335"
+    },
+    {
+      "path": "tools/p09/process_cpu_attribution.py",
+      "bytes": 10972,
+      "sha256": "22601ba74408e09951e470f33a092099d6fddbb8a8d47e0bcf9bb2f6cea57a82"
+    },
+    {
+      "path": "tools/p09/tests/test_process_cpu_attribution.py",
+      "bytes": 4174,
+      "sha256": "e8bd14bedc3834fb44b7e5a5e4822f0588b85c624e30be2f0193ce790dea6984"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    {
+      "path": "tools/p09/observe_shared_metadata_recheck.py",
+      "bytes": 10213,
+      "sha256": "49b0960aa6ffb4be31eec630c66f263938f9cbcbe2b65d52dff3d69be9fca735"
+    },
+    {
+      "path": "tools/p09/sync_shared_resumable_r07_progress.py",
+      "bytes": 7372,
+      "sha256": "ee876e267e44b0d3d8de3290ebf25bc8fb2a589a19c900ca4dedb021a03a9191"
+    },
+    {
+      "path": "tools/p09/resume_preserved106_queue_runtime.py",
+      "bytes": 218973,
+      "sha256": "259bee298b5ca6eaa2eec9ab29a91c3868da104e9b0ceecf0871b767e5be9d00"
+    },
+    {
+      "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+      "bytes": 178751,
+      "sha256": "a9c0aff73d2e636c688e9c08a8f57f8c6ea7da1d3b1a5892b2dfb020330ae2de"
+    }
+  ],
+  "scanner_child_pid": 82160,
+  "scanner_child_cleanup_confirmed": true,
+  "scanner_exit_code": 2,
+  "scanner_stdout_state": "FAILED_NOT_ACCEPTED",
+  "elapsed_seconds": 16.45,
+  "sample_stream_path": "implementation/p09/evidence/p09-p340-stop-review-attribution-run013.samples.jsonl",
+  "sample_stream_pin": {
+    "path": "implementation/p09/evidence/p09-p340-stop-review-attribution-run013.samples.jsonl",
+    "bytes": 7547,
+    "sha256": "655f700b5d28e931775e80a53f3dfe87b0a04c5f9036ecf9240bb8477281097c"
+  },
+  "source_closing_exact": true,
+  "source_pins_after": [
+    {
+      "path": "tools/p09/run_p340_stop_review_attribution.py",
+      "bytes": 19463,
+      "sha256": "5bb40191ecc13e4aff401f56d00da678744d543fad12057ad7cc6dacdfd84938"
+    },
+    {
+      "path": "tools/p09/tests/test_p340_stop_review_attribution.py",
+      "bytes": 7809,
+      "sha256": "10b5dff970818e98e653808ec53b08e2e9b17b39d62fec16e0ebf473a2b37335"
+    },
+    {
+      "path": "tools/p09/process_cpu_attribution.py",
+      "bytes": 10972,
+      "sha256": "22601ba74408e09951e470f33a092099d6fddbb8a8d47e0bcf9bb2f6cea57a82"
+    },
+    {
+      "path": "tools/p09/tests/test_process_cpu_attribution.py",
+      "bytes": 4174,
+      "sha256": "e8bd14bedc3834fb44b7e5a5e4822f0588b85c624e30be2f0193ce790dea6984"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    {
+      "path": "tools/p09/observe_shared_metadata_recheck.py",
+      "bytes": 10213,
+      "sha256": "49b0960aa6ffb4be31eec630c66f263938f9cbcbe2b65d52dff3d69be9fca735"
+    },
+    {
+      "path": "tools/p09/sync_shared_resumable_r07_progress.py",
+      "bytes": 7372,
+      "sha256": "ee876e267e44b0d3d8de3290ebf25bc8fb2a589a19c900ca4dedb021a03a9191"
+    },
+    {
+      "path": "tools/p09/resume_preserved106_queue_runtime.py",
+      "bytes": 218973,
+      "sha256": "259bee298b5ca6eaa2eec9ab29a91c3868da104e9b0ceecf0871b767e5be9d00"
+    },
+    {
+      "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+      "bytes": 178751,
+      "sha256": "a9c0aff73d2e636c688e9c08a8f57f8c6ea7da1d3b1a5892b2dfb020330ae2de"
+    }
+  ],
+  "resource_stop_reason": null,
+  "startup_policy": {
+    "observer_priority": "BelowNormal",
+    "observer_single_logical_CPU": true,
+    "process_snapshot_seconds_max": 0.25,
+    "interval_seconds_min": 1.0,
+    "original_scanner_resource_guards_unchanged": true,
+    "controller_cpu_backstop_windows": 6
+  }
+}

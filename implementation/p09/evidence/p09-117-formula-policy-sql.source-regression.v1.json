@@ -1,0 +1,96 @@
+{
+  "schema": "hwpx-agent.p09-117-formula-policy-sql-source-regression/v1",
+  "final_source_fixed_before_run": true,
+  "final_run": {
+    "command": "cargo test -p artifact-service -p revision-service -p hwpx-agent-cli --lib --test form_stored_provider --test form_product_request --test form_value_operation --locked --offline --target-dir target/p09-117-formula-policy-sql",
+    "start_chunk": "dd6d1d",
+    "session": 59167,
+    "state": "pass_scoped_runtime_NOT_actual_SQL",
+    "terminal_chunk": "ae6acc",
+    "exit_code": 0,
+    "passed": 276,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0,
+    "per_suite": {
+      "artifact_lib": 25,
+      "CLI_lib": 6,
+      "form_product_request": 10,
+      "form_stored_provider": 197,
+      "form_value_operation": 18,
+      "revision_lib": 20
+    },
+    "stored_runtime_seconds": 372.94,
+    "product_runtime_seconds": 12.76,
+    "form_runtime_seconds": 12.15
+  },
+  "previous276_runtime_added_to_final_count": false,
+  "strict_lib_and_CLI_lint": {
+    "start_chunk": "2be139",
+    "terminal_chunk": "cd94ed",
+    "exit_code": 0
+  },
+  "unit_test_lint_after_layout_fix": {
+    "terminal_chunk": "26b927",
+    "exit_code": 0
+  },
+  "current_conformance": {
+    "start_chunk": "8c750d",
+    "terminal_chunk": "2fc57b",
+    "exit_code": 0,
+    "upstream_validators": 15,
+    "green_rows": 0
+  },
+  "actual_SQL_migration_admission_register_read_revoke_and_CAS": "NOT_RUN",
+  "trusted_issuer_or_native_or_Gate_PASS": false,
+  "test_inventory": {
+    "list_is_not_execution": true,
+    "unique_pairs": 276,
+    "total": 276,
+    "inventory": [
+      {
+        "names_sha256": "0f54b0b0d953694d0940fc61a2bb4fff81164a1b5b5b1bbbaffa64b7201da238",
+        "path": "target/p09-117-formula-policy-sql/debug/deps/hwpx_agent_cli-0dbeda1edae1a540.exe",
+        "distinct": 6,
+        "count": 6
+      },
+      {
+        "names_sha256": "965720deab722315517357816afe7fc426c620a208fb05fbd9c70180c61dde81",
+        "path": "target/p09-117-formula-policy-sql/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+        "distinct": 197,
+        "count": 197
+      },
+      {
+        "names_sha256": "607ab7b7c1e242c19b32bfa08d17b89a913259c13bb9790a539f82d91bdcca89",
+        "path": "target/p09-117-formula-policy-sql/debug/deps/form_product_request-b9b309ced3b4e156.exe",
+        "distinct": 10,
+        "count": 10
+      },
+      {
+        "names_sha256": "066afad076ec7b7f5c5c593d11a916059a2dd0604b08fd8c3b9844591ed13679",
+        "path": "target/p09-117-formula-policy-sql/debug/deps/form_value_operation-899bdd52f412e0da.exe",
+        "distinct": 18,
+        "count": 18
+      },
+      {
+        "names_sha256": "b8be4bbfad0cfab2e09710b44a3b16726a70601204093103f28c899762feb733",
+        "path": "target/p09-117-formula-policy-sql/debug/deps/artifact_service-c722486ab67dc904.exe",
+        "distinct": 25,
+        "count": 25
+      },
+      {
+        "names_sha256": "0a7b99e15a4b2b047c2e2b52a4156f05006b282409b4d171841120a5479ec678",
+        "path": "target/p09-117-formula-policy-sql/debug/deps/revision_service-1b137e63992c86e2.exe",
+        "distinct": 20,
+        "count": 20
+      }
+    ]
+  },
+  "package_136_or_all_workspace_reexecuted": false,
+  "original_default_conformance": {
+    "terminal_chunk": "ef37a6",
+    "exit_code": 1,
+    "error": "matrix_drift",
+    "retained": true
+  }
+}

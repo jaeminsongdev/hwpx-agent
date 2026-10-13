@@ -1,0 +1,201 @@
+{
+  "schema_version": "hwpx-agent.p09-p340-process-cpu-sidecar/v1",
+  "state": "STOPPED_NOT_ACCEPTED",
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "scanner_child_started": true,
+  "scanner_child_replayed": false,
+  "actual_product_child_executed": false,
+  "process_creation_or_command_line_saved": false,
+  "raw_logs_saved": false,
+  "PC_freeze_resolved": false,
+  "stop_root_pins": [
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-case-111-run083.v1.json",
+      "bytes": 1066545,
+      "sha256": "7312357110f497ed7e9104df3c641d8224430667caa960053209f18f7648ff8a"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p340-light-run090.v1.json",
+      "bytes": 63021,
+      "sha256": "828caba6036dd466ac0c18488545ead6e66cce8e0058b13bf24433f3567e2cf8"
+    }
+  ],
+  "process_cpu_attribution": {
+    "state": "INCOMPLETE_PROCESS_CPU_OBSERVATION",
+    "samples": [],
+    "completed_intervals": 0,
+    "observer_error": null,
+    "controller_stop_reason": null,
+    "sample_interval_min_seconds": 1.0,
+    "maximum_processes_per_snapshot": 1024,
+    "maximum_snapshot_seconds": 0.25,
+    "process_labels": [
+      "Code.exe",
+      "Codex.exe",
+      "MsMpEng.exe",
+      "MsSense.exe",
+      "OTHER",
+      "SearchIndexer.exe",
+      "System",
+      "cargo.exe",
+      "git.exe",
+      "node.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "python.exe",
+      "pythonw.exe",
+      "rustc.exe",
+      "vmmem",
+      "vmmemWSL"
+    ],
+    "raw_process_names_saved": false,
+    "command_lines_paths_environments_or_modules_queried": false,
+    "process_state_changed": false,
+    "new_sampler_thread_started": false,
+    "all_system_CPU_attributed": false,
+    "causal_attribution": false,
+    "CPU_cause_or_PC_freeze_resolution_established": false
+  },
+  "scanner_receipt_pin": null,
+  "scanner_result": {
+    "state": "NOT_WRITTEN",
+    "error_code": null,
+    "resource_stop_reason": null
+  },
+  "source_pins": [
+    {
+      "path": "tools/p09/run_p340_stop_review_attribution.py",
+      "bytes": 19155,
+      "sha256": "39bc67a2407986abb70ce3b49e2523a3b90dbc34e0794a327609166eef5968dc"
+    },
+    {
+      "path": "tools/p09/tests/test_p340_stop_review_attribution.py",
+      "bytes": 6822,
+      "sha256": "5cf5167f5e32a268df1046c12fa2646d161b0749af55d834fe9520b61555df5a"
+    },
+    {
+      "path": "tools/p09/process_cpu_attribution.py",
+      "bytes": 10972,
+      "sha256": "22601ba74408e09951e470f33a092099d6fddbb8a8d47e0bcf9bb2f6cea57a82"
+    },
+    {
+      "path": "tools/p09/tests/test_process_cpu_attribution.py",
+      "bytes": 4174,
+      "sha256": "e8bd14bedc3834fb44b7e5a5e4822f0588b85c624e30be2f0193ce790dea6984"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    {
+      "path": "tools/p09/observe_shared_metadata_recheck.py",
+      "bytes": 10213,
+      "sha256": "49b0960aa6ffb4be31eec630c66f263938f9cbcbe2b65d52dff3d69be9fca735"
+    },
+    {
+      "path": "tools/p09/sync_shared_resumable_r07_progress.py",
+      "bytes": 7372,
+      "sha256": "ee876e267e44b0d3d8de3290ebf25bc8fb2a589a19c900ca4dedb021a03a9191"
+    },
+    {
+      "path": "tools/p09/resume_preserved106_queue_runtime.py",
+      "bytes": 213708,
+      "sha256": "0f32bfbd9669a58ebf9183a6d6ace2f947b6b435bcc0eb0c2c3ae9d9345f078a"
+    },
+    {
+      "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+      "bytes": 170535,
+      "sha256": "9f5855f948962f114b11e5d2278078a421706b312367f85cb937fde5b907d33d"
+    }
+  ],
+  "scanner_child_pid": 45420,
+  "scanner_child_cleanup_confirmed": true,
+  "scanner_exit_code": null,
+  "scanner_stdout_state": null,
+  "elapsed_seconds": 0.017,
+  "sample_stream_path": "implementation/p09/evidence/p09-p340-stop-review-attribution-run001.samples.jsonl",
+  "sample_stream_pin": {
+    "path": "implementation/p09/evidence/p09-p340-stop-review-attribution-run001.samples.jsonl",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "source_closing_exact": true,
+  "source_pins_after": [
+    {
+      "path": "tools/p09/run_p340_stop_review_attribution.py",
+      "bytes": 19155,
+      "sha256": "39bc67a2407986abb70ce3b49e2523a3b90dbc34e0794a327609166eef5968dc"
+    },
+    {
+      "path": "tools/p09/tests/test_p340_stop_review_attribution.py",
+      "bytes": 6822,
+      "sha256": "5cf5167f5e32a268df1046c12fa2646d161b0749af55d834fe9520b61555df5a"
+    },
+    {
+      "path": "tools/p09/process_cpu_attribution.py",
+      "bytes": 10972,
+      "sha256": "22601ba74408e09951e470f33a092099d6fddbb8a8d47e0bcf9bb2f6cea57a82"
+    },
+    {
+      "path": "tools/p09/tests/test_process_cpu_attribution.py",
+      "bytes": 4174,
+      "sha256": "e8bd14bedc3834fb44b7e5a5e4822f0588b85c624e30be2f0193ce790dea6984"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    {
+      "path": "tools/p09/observe_shared_metadata_recheck.py",
+      "bytes": 10213,
+      "sha256": "49b0960aa6ffb4be31eec630c66f263938f9cbcbe2b65d52dff3d69be9fca735"
+    },
+    {
+      "path": "tools/p09/sync_shared_resumable_r07_progress.py",
+      "bytes": 7372,
+      "sha256": "ee876e267e44b0d3d8de3290ebf25bc8fb2a589a19c900ca4dedb021a03a9191"
+    },
+    {
+      "path": "tools/p09/resume_preserved106_queue_runtime.py",
+      "bytes": 213708,
+      "sha256": "0f32bfbd9669a58ebf9183a6d6ace2f947b6b435bcc0eb0c2c3ae9d9345f078a"
+    },
+    {
+      "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+      "bytes": 170535,
+      "sha256": "9f5855f948962f114b11e5d2278078a421706b312367f85cb937fde5b907d33d"
+    }
+  ],
+  "resource_stop_reason": null,
+  "startup_policy": {
+    "observer_priority": "BelowNormal",
+    "observer_single_logical_CPU": true,
+    "process_snapshot_seconds_max": 0.25,
+    "interval_seconds_min": 1.0,
+    "original_scanner_resource_guards_unchanged": true,
+    "controller_cpu_backstop_windows": 6
+  }
+}

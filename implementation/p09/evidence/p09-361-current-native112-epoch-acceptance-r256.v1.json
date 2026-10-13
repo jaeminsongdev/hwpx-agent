@@ -1,0 +1,105 @@
+{
+  "schema_version": "hwpx-agent.p09-current-native112-epoch-acceptance-summary/v1",
+  "state": "PASS_ACTUAL_EXACT112_AND_DISTINCT_CURRENT_EPOCH_ACCEPTANCE_NOT_FULL249_OR_GATE",
+  "date_local": "2026-10-11",
+  "goal_status": "active",
+  "queue": {"accepted_cases_before": 105, "accepted_cases": 106, "accepted_count_delta": 1, "total_cases": 249, "remaining_cases": 143, "next_case": 113},
+  "authoritative_current_epoch_acceptance_pin": {
+    "path": "implementation/p09/evidence/p09-361-case112-current-epoch-accept001.v1.json",
+    "bytes": 272872,
+    "sha256": "97b3df87038e5299a2bf824e82f1e91d0cbc25a505d7212f527aeafdc665c28b"
+  },
+  "prior105_authority_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p340-light-review-run131.v1.json",
+    "bytes": 94990,
+    "sha256": "6d05cb6bf810ff5c19c61d1bc2d76921a00abb00d0f959c51e5fed9402a782ff"
+  },
+  "actual_runtime": {
+    "pin": {"path": "implementation/p09/evidence/p09-361-case112-current-runtime-run004.v1.json", "bytes": 1707675, "sha256": "16b6b25ecd11a543b9b2f2fae8e7a7e7b1456d68858fcbeb23712809633b989d"},
+    "state": "PASS_EXACT112_CURRENT_NATIVE_RUNTIME_CANDIDATE_NOT_QUEUE_OR_GATE",
+    "exact_test": "actual_import::policy_product::fresh_policy_acl_revocation_and_source_aead_tamper_deny_cached_product",
+    "passed": 1, "failed": 0, "ignored": 0, "measured": 0, "filtered_out": 248, "exit_code": 0,
+    "product_scope": "Actual AEAD/source/compiler; in-memory ACL revocation and source-AEAD tamper denial of cached product. Actor/scanner/repository are test doubles, not live SQL or Hangul acceptance.",
+    "current_Rust_inputs": 787, "whole_runtime_inputs_each_pass": 1710, "ancestor_directories": 335,
+    "whole_runtime_bytes_each_pass": 140408033, "actual_whole_byte_passes": 2,
+    "historical_current_union_preserved": true, "old_mutable_logical_pins_projected_to_exact_archives": 3,
+    "imported_helper_and_test_paths": 28, "Native_frame_state": "COMMITTED",
+    "Native_handles_opened": 2045, "Native_handles_closed": 2045, "Native_handles_remaining": 0,
+    "borrowed_duplicates_opened": 3420, "borrowed_duplicates_closed": 3420, "borrowed_duplicates_remaining": 0,
+    "shared_offset_resets": 3420, "stream_identity_checks": 3420, "original_lock_metadata_checks": 7510,
+    "additional_fresh_held_metadata_queries": 3420, "path_guard_predicates": 10260,
+    "source_scope_reduced": false, "original_byte_or_identity_checks_skipped": false,
+    "serialized_pin_used_as_live_handle": false, "separate_pathname_byte_reopens": 0,
+    "selected_acquisition_reservations_per_second": 14, "restored_original_global_byte_native_reservations_per_second": 20,
+    "original_acquisition_ceiling_per_second": 14, "pacer_clock_credit_or_counters_reset": false,
+    "original_lock_deadline_seconds": 600, "original_worker_maximum_seconds": 1200,
+    "modeled_complete_runtime_seconds": 589.4411743981498, "model_not_completion_guarantee": true,
+    "actual_elapsed_seconds": 467.84, "original_resource_samples": 925,
+    "host_CPU_max_percent": 65.03, "commit_used_max_percent": 38.59662431886814,
+    "available_RAM_min_percent": 30.93627760793831, "parent_CPU_max_machine_percent": 1.3245117320032198,
+    "parent_private_peak_mib": 30.65625, "job_private_peak_mib": 34.12,
+    "Job_interval_CPU_max_machine_percent": 6.355902998530901,
+    "verified_configured_Job_CPU_hard_cap_machine_percent": 6.25,
+    "interval_sample_is_not_configured_cap_readback": true,
+    "capture_complete": true, "captured_stdout_bytes": 228, "captured_stderr_bytes": 0,
+    "per_stream_capture_limit_bytes": 32768, "raw_log_content_included": false,
+    "owned_cleanup_before_Native_release": true, "owned_tree_empty": true, "final_active_job_processes": 0,
+    "resource_stop_reason": null, "source_frame_qualified": true,
+    "successful_product_cases_replayed": false, "actual_Cargo_SQL_Hangul_run": false
+  },
+  "distinct_acceptance": {
+    "state": "PASS_EXACT112_CURRENT_EPOCH_ACCEPTED_ONCE_NOT_FULL249_OR_GATE",
+    "accepted_current_generation_case_count": 1, "historical105_rebased_to_current_generation": false,
+    "immutable_epoch_key": "16b6b25ecd11a543b9b2f2fae8e7a7e7b1456d68858fcbeb23712809633b989d:112",
+    "duplicate_same_output_refuses_overwrite": true,
+    "actual_product_or_Native_frame_reexecuted": false,
+    "current_Rust_inventory_checked_before_after": true, "current_Rust_inputs": 787,
+    "fresh_qualifier_inputs": 823, "fresh_qualifier_read_passes": 1646, "fresh_qualifier_bytes_read": 68089908,
+    "final_fresh_hashes": 823, "qualifier_is_not_new_Native_or_product_evidence": true,
+    "original_full1710_runtime_boundaries_validated_from_immutable_root004": true,
+    "qualifier_file_opens_per_second": 20, "binary_read_bytes_per_second": 1048576,
+    "other_read_bytes_per_second": 2097152, "closing_hash_open_pacing_retained": true,
+    "elapsed_seconds": 131.04057810000086, "resource_samples": 260,
+    "host_CPU_max_percent": 68.23, "available_RAM_min_percent": 35.887080015129236,
+    "commit_used_max_percent": 35.75035806070015, "parent_CPU_max_machine_percent": 1.8961774809746847,
+    "parent_private_peak_mib": 22.14453125, "cleanup_confirmed": true,
+    "sole_serial_sampler": true, "parallel_observer_started": false
+  },
+  "preserved_failed_attempts": [
+    {"run": 1, "pin": {"path": "implementation/p09/evidence/p09-361-case112-current-runtime-run001.v1.json", "bytes": 3720, "sha256": "8c26646fe69111b5429f33ee53f13c044d2d3d45828d8141e15c3f7252e3f7e2"}, "raw_state": "NOT_RUN", "cause": "Nonexistent Windows parent sampling method; changed to proven ProcessMemory/process_time API.", "product_executed": false, "Native_frame": null},
+    {"run": 2, "pin": {"path": "implementation/p09/evidence/p09-361-case112-current-runtime-run002.v1.json", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}, "state": "EMPTY_SERIALIZATION_FAILURE_NOT_SOURCE_OR_PRODUCT_EVIDENCE", "cause": "Exact worker suffix rejection before EXE call, followed by nonexistent capture diagnostics method. Both fixed and regression-tested against actual original worker/capture APIs.", "product_call_rejected_before_subprocess_call": true, "whole_input_Native_PASS_claimed": false, "resource_or_cleanup_values_not_reconstructed": true},
+    {"run": 3, "pin": {"path": "implementation/p09/evidence/p09-361-case112-current-runtime-run003.v1.json", "bytes": 56097, "sha256": "1fd05236e9c1a56be7402a708e4372e154f957e617cf6286bd1ef0ef6356c470"}, "state": "DEFERRED_NOT_STARTED", "stop_reason": "STOP_SYSTEM_COMMIT_PRESSURE", "elapsed_seconds": 45.18, "resource_samples": 69, "Native_opened_closed": 244, "Native_remaining": 0, "actual_byte_boundaries": 0, "worker_created": false, "product_executed": false, "cleanup_confirmed": true, "host_CPU_max_percent": 100.0, "commit_used_max_percent": 99.96097867507288, "available_RAM_min_percent": 9.64126921268526, "parent_CPU_max_machine_percent": 1.0999274270617518, "parent_private_peak_mib": 28.76953125, "direct_or_indirect_cause_attribution_verified": false}
+  ],
+  "failed_attempt_code_preimages": {
+    "archive_directories": ["implementation/p09/evidence/p361-current-runtime-failed001-code", "implementation/p09/evidence/p361-current-runtime-failed002-code", "implementation/p09/evidence/p361-current-runtime-failed003-code"],
+    "files_preserved": 12, "exact_preimages_inside_successful_runtime1710_scope": true,
+    "failed_receipts_overwritten_or_promoted": false
+  },
+  "optimization": {
+    "original_Native_definitions_AST_loaded_from_exact_seven_source_pins": true,
+    "historical_top_level_runner_import_graph_executed": false,
+    "lean_native_helper_local_import_modules": 5,
+    "first_original90percent_acquisition_warning_fails_before_next_Native_open": true,
+    "warning_latch_does_not_resume_opens_after_cooldown": true,
+    "original_hard_resource_and600_guard_called_before_unlatched_open": true,
+    "successful_original_take_open_and_identity_checks_retained": true,
+    "original_byte_boundary95percent_cooling_policy_changed": false,
+    "new_sampler_thread_or_native_query_added_by_fail_fast": false,
+    "global_CPU_RAM_threshold_or_time_limit_raised": false,
+    "PC_freeze_or_measured_CPU_improvement_established": false,
+    "post_stop_CPU_attribution_samples": "Truncated process snapshot and invalid performance-counter sample were not promoted to causal evidence. Post-terminal memory/resource observations cannot identify the saturation window's consumer."
+  },
+  "qualified_runtime_code_pins": [
+    {"path": "tools/p09/current_stored_native_bridge.py", "bytes": 7987, "sha256": "74e654c4bd1be0142cce7bc74c281727a1f738a6091270b9571062f0a98f8e6b"},
+    {"path": "tools/p09/run_case112_current_stored.py", "bytes": 23159, "sha256": "6f2a79556ebcfae40765ebd127a8fcc1022e5ee8611d666fd3daa723a4236713"},
+    {"path": "tools/p09/tests/test_case112_current_stored_runtime.py", "bytes": 12215, "sha256": "233981cbe341abd528b11027c7dc7d642e6c2397620999069cbd181206babdbb"},
+    {"path": "tools/p09/tests/test_current_stored_native_bridge.py", "bytes": 9020, "sha256": "579088f43ee076b9867c756b0683e72d327ce6092e9cafb812fc8fcad5fdb666"}
+  ],
+  "qualified_acceptance_code_pins": [
+    {"path": "tools/p09/accept_case112_current_epoch.py", "bytes": 20933, "sha256": "03fa9362f56b6105b48b8b49599f32ccc8cbf4aa9d0b0836f3cf8580cc9c680c"},
+    {"path": "tools/p09/tests/test_case112_current_epoch_acceptance.py", "bytes": 6361, "sha256": "9169bd351aeed8b943622820352e01adc855b0c62b2740d8b43e8c05468d8aaf"}
+  ],
+  "small_contracts": {"Native_bridge": 15, "current_runtime": 13, "original_frame": 20, "original_borrowed_streams": 24, "original_input_locks": 38, "distinct_epoch_acceptance": 15, "total_distinct_contracts": 125, "product_bodies_reexecuted_by_contracts": false},
+  "scope_boundaries": {"P09_gate": "OPEN", "A12_gate": "OPEN", "A13_gate": "OPEN", "P10_started": false, "full249_current_qualified": false, "signed16_current_qualified": false, "whole_runtime_reconciliation_required": true, "Hangul_or_access_prompt_started": false, "Defender_OS_or_WSL_settings_changed": false, "unrelated_processes_terminated": false, "delete_move_commit_push_executed": false},
+  "next": "Preserve the runtime004 and acceptance code epochs; prepare separately qualified next113 current-generation admission and unique acceptance. Never replay accepted111/112 or silently replace historical105/current EXE/source pins."
+}

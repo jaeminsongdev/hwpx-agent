@@ -1,0 +1,91 @@
+{
+  "schema_version": "hwpx-agent.p09-negative-root-copy-light-verification/v1",
+  "state": "PASS_LIGHT_ROOT_COPY_BOUNDARIES_NOT_AUTHORITY_SQL_OR_PC_FREEZE_PROOF",
+  "fixtures_started": true,
+  "source_freeze": [
+    {
+      "path": "tools/p09/tests/test_authority_sql_current_audit.py",
+      "bytes": 10075,
+      "sha256": "e68c029903fcb1d2b52e235283e45d869c691b270dbeb1bbaa3f8591ae608f18"
+    },
+    {
+      "path": "tools/p09/tests/test_negative_root_copy.py",
+      "bytes": 5916,
+      "sha256": "6b6b3a1cddab4d0fcc0f1b6a0119dcffb77e1819ed0cdea8ea1f7aa7ce1ed2e2"
+    },
+    {
+      "path": "tools/p09/verify_negative_root_copy_light.py",
+      "bytes": 4199,
+      "sha256": "e5dba4214be89b62893d11aee2fbb528791a77d54800f74334a6cad3c47c5cba"
+    },
+    {
+      "path": "tools/p09/verify_formula_issuer_authority_current.py",
+      "bytes": 46871,
+      "sha256": "bbf5c30f0ad690bcbe32094985641b34825ccbd2c42e2495f06296ebf280a617"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 22942,
+      "sha256": "dc212b25ebc534ab19f643c51361271bb86392cf01b669a0fe25f3e37ea13e01"
+    },
+    {
+      "path": "tools/p09/verify_audit_evidence_io.py",
+      "bytes": 6183,
+      "sha256": "d4a8587e9cbbb1840a527d46d5d8cd49a7e3eb52b306a1bb5e5e2110698bf38d"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-root-only-negative-copies/source-preimages.v1.json",
+      "bytes": 13773,
+      "sha256": "8dfa2ca5a5003aef169d5d2b445dc2296b7e02d0af65903dfb4d30fbfb12f9d5"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-single-read-audit/source-preimages.v1.json",
+      "bytes": 57824,
+      "sha256": "138a8e6c455d6f58b1f5dbb3249466216a4d803a015a4ca31e81004d435d836d"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "tests_run": 4,
+  "tests_passed": 4,
+  "failed_tests": [],
+  "logical_cpu_limit": 1,
+  "priority": "BelowNormal",
+  "minimum_available_ram_percent": 8,
+  "self_resource_before": {
+    "cpu_seconds": 0.078125,
+    "memory_observed": true,
+    "working_set_mib": 21.86,
+    "private_mib": 13.34,
+    "system": {
+      "time_utc": "2026-10-06T11:23:30.945818+00:00",
+      "system_cpu_percent": 50.0,
+      "available_ram_mib": 8061.48,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.302109571691904,
+      "commit_used_percent": 35.18351840244953
+    }
+  },
+  "memory_values_are_samples_not_peak": true,
+  "actual_authority_negative_tests_executed": false,
+  "actual_child_or_Rust_SQL_native_run": false,
+  "new_git_started": false,
+  "system_or_Defender_or_WSL_settings_changed": false,
+  "raw_logs_printed_or_saved": false,
+  "P09_gate": "OPEN",
+  "product_complete": false,
+  "elapsed_seconds": 0.0209,
+  "self_resource_after": {
+    "cpu_seconds": 0.09375,
+    "memory_observed": true,
+    "working_set_mib": 25.3,
+    "private_mib": 16.81,
+    "system": {
+      "time_utc": "2026-10-06T11:23:30.970096+00:00",
+      "system_cpu_percent": 6.9,
+      "available_ram_mib": 8062.79,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.306216778368384,
+      "commit_used_percent": 35.18829237120315
+    }
+  }
+}

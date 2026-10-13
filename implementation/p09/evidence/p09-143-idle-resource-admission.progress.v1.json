@@ -1,0 +1,143 @@
+{
+  "schema_version": "hwpx-agent.p09-143-idle-resource-admission-progress/v1",
+  "state": "IMPLEMENTED_SOURCE_GUARDS6_PREFLIGHT_DEFERRED_NOT_PRODUCT",
+  "verified_direct_pins": [
+    {
+      "path": "tools/p09/check_idle_resource_window.py",
+      "bytes": 3282,
+      "sha256": "c72da76029ce7e26410356a3a1908a3d4f46a60a80b8a3600341d10d1c160f25"
+    },
+    {
+      "path": "tools/p09/tests/test_idle_resource_window.py",
+      "bytes": 1541,
+      "sha256": "dd7db890abed4f67110f13d4a41d40b167e83de6c767a0624de443670a550f45"
+    },
+    {
+      "path": "implementation/p09/P09-143_RESOURCE_IDLE_ADMISSION.md",
+      "bytes": 3105,
+      "sha256": "03db46e610efa0e9be2395884cd291dba9945f7446655da3c2ee6c8f84cf7695"
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p143-idle-preflight-r1.json",
+      "bytes": 2545,
+      "sha256": "f993e0f71ab7cea7b7de8951c2f392da60c79d6826f53271fc361251caae5c09"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-143-issuer-product.implementation-progress.v1.json",
+      "bytes": 15522,
+      "sha256": "ed372ef023a433fa087bd52019e68312019e553a2d93b8ac0a4c7d3bae62dd1b"
+    },
+    {
+      "path": "tools/p09/verify_formula_issuer_product_progress.py",
+      "bytes": 7015,
+      "sha256": "ef479cc5f4860d05ee4b155573bd5e639d8430cbf850bdf3647d4e82333ac003"
+    }
+  ],
+  "preflight_source_freeze": [
+    {
+      "path": "tools/p09/check_idle_resource_window.py",
+      "bytes": 3282,
+      "sha256": "c72da76029ce7e26410356a3a1908a3d4f46a60a80b8a3600341d10d1c160f25"
+    },
+    {
+      "path": "tools/p09/run_formula_issuer_registry_sql_checks.py",
+      "bytes": 20838,
+      "sha256": "efb0635f6ec0d5d7fbcd1881cfef83f2133182b351379586b9f239a6d68846d3"
+    },
+    {
+      "path": "tools/p14/test_postgres_migrations.py",
+      "bytes": 15659,
+      "sha256": "568bc020bca0d402b3a9bfd063ffb08a1911069b3f39fe1607353781b1b99f4a"
+    }
+  ],
+  "preflight_source_freeze_exact_after": true,
+  "condition_unit_tests": {
+    "executed": 6,
+    "passed": 6,
+    "failed": 0,
+    "scope": "pure_admission_conditions_not_Rust_DB_native_or_product"
+  },
+  "preflight_state": "DEFERRED_RESOURCE_PRESSURE_NO_HEAVY_WORK_STARTED",
+  "elapsed_seconds": 20.12,
+  "samples": [
+    {
+      "time_utc": "2026-10-05T21:53:11.339745+00:00",
+      "system_cpu_percent": 79.48,
+      "available_ram_mib": 13868.5
+    },
+    {
+      "time_utc": "2026-10-05T21:53:13.341412+00:00",
+      "system_cpu_percent": 82.5,
+      "available_ram_mib": 13738.9
+    },
+    {
+      "time_utc": "2026-10-05T21:53:15.346431+00:00",
+      "system_cpu_percent": 88.43,
+      "available_ram_mib": 13566.87
+    },
+    {
+      "time_utc": "2026-10-05T21:53:17.355467+00:00",
+      "system_cpu_percent": 81.73,
+      "available_ram_mib": 13566.56
+    },
+    {
+      "time_utc": "2026-10-05T21:53:19.372923+00:00",
+      "system_cpu_percent": 78.41,
+      "available_ram_mib": 13419.3
+    },
+    {
+      "time_utc": "2026-10-05T21:53:21.423038+00:00",
+      "system_cpu_percent": 78.76,
+      "available_ram_mib": 13298.63
+    },
+    {
+      "time_utc": "2026-10-05T21:53:23.435755+00:00",
+      "system_cpu_percent": 76.79,
+      "available_ram_mib": 13327.42
+    },
+    {
+      "time_utc": "2026-10-05T21:53:25.436582+00:00",
+      "system_cpu_percent": 81.49,
+      "available_ram_mib": 13177.23
+    },
+    {
+      "time_utc": "2026-10-05T21:53:27.440694+00:00",
+      "system_cpu_percent": 78.76,
+      "available_ram_mib": 13097.05
+    },
+    {
+      "time_utc": "2026-10-05T21:53:29.441979+00:00",
+      "system_cpu_percent": 86.87,
+      "available_ram_mib": 12813.92
+    }
+  ],
+  "policy": {
+    "CPU_max_percent": 50,
+    "available_RAM_min_MiB": 8192,
+    "required_consecutive_stable_samples": 3,
+    "sample_seconds": 2,
+    "maximum_seconds": 20
+  },
+  "followup_read_only_observation": {
+    "At": "2026-10-06T06:55:00.9330428+09:00",
+    "CPU": 69,
+    "UserCPU": 31,
+    "PrivilegedCPU": 34,
+    "DPC": 0,
+    "Interrupt": 1,
+    "AvailableMiB": 12757,
+    "RustWorkloads": [],
+    "RecentAppEvents": []
+  },
+  "prior_P143_checkpoint_exact_and_unchanged": true,
+  "heavy_build_test_DB_or_native_started_this_turn": false,
+  "current_NoChange_fix_build_and_runtime": "NOT_RUN",
+  "current_strict_workspace_lint": "NOT_RUN",
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "product_complete": false,
+  "goal_status": "active",
+  "coarse_remaining_minimum": 6,
+  "coarse_closed_this_turn": 0
+}

@@ -1,0 +1,4928 @@
+{
+  "schema_version": "hwpx-agent.p09-generic-runtime-document-delta/v1",
+  "state": "PASS_GENERIC_RUNTIME_DOCUMENT_DELTA_NOT_WHOLE_OR_GATE",
+  "goal_status": "active",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "whole1470_current_fresh_qualified": false,
+  "historical67_current_fresh_qualified": false,
+  "legacy_whole_acceptance_not_changed": true,
+  "historical_whole_gate_reconciliation_required": true,
+  "actual_product_child_executed": false,
+  "new_product_or_full_source_frame_executed": false,
+  "compact_pressure_document_provider": true,
+  "compact_pressure_runtime_contract_tests_passed": 62,
+  "document_delta_contract_tests_passed": 8,
+  "IO": {
+    "read_passes": 254,
+    "bytes_read": 146322741,
+    "bound_inputs": 92,
+    "final_fresh_hashes": 92,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P206_binary1_other2_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 1048576,
+      "other": 2097152
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 146322741
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 146322741,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0.0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "implementation/p09/evidence/locked-r07/p216-generic-doc-delta-r0084-run01.v1.json",
+      "bytes": 175897,
+      "sha256": "d79891832adbacb08a239e05781eb1cb746f1c16859e09620e12ea344d9bfc8a"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p214-case-013-pair-closing-run01.v1.json",
+      "bytes": 34085,
+      "sha256": "a05a85a61a7caffe91c8c3bf7fa8b5934c9d67c4c6d6d296fbeff56dd67edfaa"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p213-borrowed-frame-actual-run01.v1.json",
+      "bytes": 1312117,
+      "sha256": "48a9f05f2e37c6d9334ec65553bd2581f652e38f4b6385082dffbe38fae54126"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p213-case-013-run01.json",
+      "bytes": 789210,
+      "sha256": "425791485d0d79724b50f345f05619e0b3c29b2ad6dbf196931dbbe470a2a928"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p212-case-012-compound-run02.v1.json",
+      "bytes": 124287,
+      "sha256": "e3659306fa6daa34531be0049a18117265124ef3509cbb44e79a2ebd9df3837d"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p211-borrowed-source-frame-run01.v1.json",
+      "bytes": 1281951,
+      "sha256": "1f5d45554d2d6c288b5dc602761ffcebc7d15ee1b8be33784e7df0b5e54d8c51"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run01.preparation.v1.json",
+      "bytes": 601637,
+      "sha256": "076afa535640a5afad9f50ed3fd932ab29238cc8f6ed0a20b2ca526ff11cc5f1"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-186-observed-r07-list-output.source-closing-run01.v1.json",
+      "bytes": 339893,
+      "sha256": "7b06997d3b8090967597fad1d12b94446e20e3a17ba206233ae8711fdb1d455d"
+    },
+    {
+      "path": "tools/p09/accept_locked_runtime_candidate.py",
+      "bytes": 10201,
+      "sha256": "ebb4a38998a0858d50a61841db27ebeeb357a5b8d585768ee4b9f7b6c0853f56"
+    },
+    {
+      "path": "tools/p09/tests/test_locked_runtime_compound.py",
+      "bytes": 4304,
+      "sha256": "6736162ffce35ed7e760f99f8bfa4ecf3c6350be61e888420b2fd28b4a06cc65"
+    },
+    {
+      "path": "tools/p09/run_borrowed_runtime_r07_case.py",
+      "bytes": 9871,
+      "sha256": "cd3a7be4d9eb431898511f07aeda8bdb8f570445e25fcab6e4a39fb8460ebfd8"
+    },
+    {
+      "path": "tools/p09/tests/test_borrowed_runtime_case.py",
+      "bytes": 2243,
+      "sha256": "e41e3a3451d3e13091d26f4e625db812604754084f5b0e41e9a56bd7da459637"
+    },
+    {
+      "path": "tools/p09/runtime_input_frame.py",
+      "bytes": 5802,
+      "sha256": "44a21215a76f4160ca7bfeb55b02f3bb464a2017671b0c2dae9883d7c9cd8929"
+    },
+    {
+      "path": "tools/p09/tests/test_runtime_input_frame.py",
+      "bytes": 8066,
+      "sha256": "669b9b9336e7f44b5070bda0ba79eedec1e05f10f4d8ff4a32c2e32c9843f111"
+    },
+    {
+      "path": "tools/p09/run_locked_runtime_r07_case.py",
+      "bytes": 14969,
+      "sha256": "108616a4efa725674a100d7f1c33477488ade81f1c79e00870a24b1c95e271b3"
+    },
+    {
+      "path": "tools/p09/tests/test_locked_runtime_r07_case.py",
+      "bytes": 6594,
+      "sha256": "31827dda9194d89ac03624452ed34ef093aa12086d36d9aa62c8d2c5437842ad"
+    },
+    {
+      "path": "tools/p09/locked_runtime_qualification_evidence.py",
+      "bytes": 7861,
+      "sha256": "d0500a12c4c9a9d16345dbfa3ccdc82d6fc055aa550866185886869364fd076c"
+    },
+    {
+      "path": "tools/p09/tests/test_locked_runtime_qualification_evidence.py",
+      "bytes": 8247,
+      "sha256": "c832601ee9a4d6c992632426ed9692ca8c902ee1cd98f267ee600c43ceb85f5b"
+    },
+    {
+      "path": "tools/p09/borrowed_locked_streams.py",
+      "bytes": 7276,
+      "sha256": "7299572c1fc86a932e6df50891e3004dc94c0e635978c04d81a3f961571a3ae5"
+    },
+    {
+      "path": "tools/p09/tests/test_borrowed_locked_streams.py",
+      "bytes": 11519,
+      "sha256": "9b65ad459de7af1d200dadb914c16de80683e711f7274f55b7044276683133b0"
+    },
+    {
+      "path": "tools/p09/probe_borrowed_locked_streams.py",
+      "bytes": 5217,
+      "sha256": "89ed48bfa98939cae27a9e66eb897c8f307a50d6a1fb5255b9b420af9ac4005c"
+    },
+    {
+      "path": "tools/p09/review_post_stop_frame.py",
+      "bytes": 8781,
+      "sha256": "a2ecfada28fd0ed9965db9a5fa11d51b51ef310bd60cbe31493acbf90df46a52"
+    },
+    {
+      "path": "tools/p09/tests/test_review_post_stop_frame.py",
+      "bytes": 2092,
+      "sha256": "e482fda3588e3eb008a41f60df2e36f96be48f23dbed7ca499f099d2a9821f88"
+    },
+    {
+      "path": "tools/p09/close_borrowed_source_frame.py",
+      "bytes": 8765,
+      "sha256": "b5162931ba113cf0bd4a6695022b58adbe9bb0b3243bd2861b958bf6d85a70cf"
+    },
+    {
+      "path": "tools/p09/tests/test_borrowed_source_frame_closing.py",
+      "bytes": 3742,
+      "sha256": "84a0aaa108374da1a13fa23bf1f50ae1f54d41575245a739747a044d84b2a52c"
+    },
+    {
+      "path": "tools/p09/close_borrowed_runtime_pair.py",
+      "bytes": 9084,
+      "sha256": "1d75129037f6f27c51da03aed94fd000d72d634349f2b172e9cecf09a4f51b3c"
+    },
+    {
+      "path": "tools/p09/tests/test_borrowed_runtime_pair.py",
+      "bytes": 2403,
+      "sha256": "bc7579613e035db0b5bb27cafa541f8a6e3f778293a9926d95a9e256e731485c"
+    },
+    {
+      "path": "tools/p09/resume_generic_locked_runtime.py",
+      "bytes": 13467,
+      "sha256": "e339f925e58a2633a3a742590d3e3bdeabfba0a837764a7d7ea2cf9691ac5368"
+    },
+    {
+      "path": "tools/p09/tests/test_generic_locked_runtime.py",
+      "bytes": 5394,
+      "sha256": "0f24df0b2e6b8b98f9840d2c3705af19ac3b8e2a89d1ddeed5dc30f7b6f27b90"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-014-run001.v1.json",
+      "bytes": 2036363,
+      "sha256": "0adc30d144213c49b9aca37a878a8286e4bb4271bfcdd7daf31fd3ffe263c952"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-014-run001.json",
+      "bytes": 792014,
+      "sha256": "8beaf52d17fc1061cc43b400747993f1b3764014776ea666561f78f853c1b1da"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-015-run002.v1.json",
+      "bytes": 2052380,
+      "sha256": "47282ac819b91c50a9c47a4171e8783610ddd682e078b2531e8d76bfcdf42ab7"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-015-run002.json",
+      "bytes": 805843,
+      "sha256": "52f6e875bda1c73ddc35498e8ba5cc67892f757e258b6c2b0d3ff77608113684"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-016-run003.v1.json",
+      "bytes": 2052894,
+      "sha256": "582ede6d0779f8b4c9b8f9bbce8214a80f93682cdd226a510bb5999ea8b9c70f"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-016-run003.json",
+      "bytes": 791902,
+      "sha256": "c991091404e3f5cd976cbe48ccc23679d993c155b2e6ea9b1acf588380d2d7ee"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-017-run004.v1.json",
+      "bytes": 2110917,
+      "sha256": "035ee1f3a7139cc12825659ec349253ed7edd2fbb3bbee42330657c82a0a2884"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-017-run004.json",
+      "bytes": 825111,
+      "sha256": "052303cdb4d677eb2b954913f8b52947b6449be8832c6165856e9279683729cc"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-018-run005.v1.json",
+      "bytes": 2110684,
+      "sha256": "8482d13e956c84db753f1d4129244b73b8382e8e0a14b997645965b4e84e1b1a"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-018-run005.json",
+      "bytes": 798725,
+      "sha256": "b8ccc141ada8c06c658e37bdcd0185654144b88d506f7ffd61c7bb2ecdf12ccc"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-019-run006.v1.json",
+      "bytes": 2083844,
+      "sha256": "4cae4ab3eb0e54cdc1a226b1afbc9999293ace5ff0243bbc769e1da21849a00e"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-019-run006.json",
+      "bytes": 810353,
+      "sha256": "4852058263767819facdd0b27fee1485b783cdd7d14af20508b658d63aebaf00"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-020-run007.v1.json",
+      "bytes": 2143480,
+      "sha256": "5feb2874a71443cabe82cd003dbfd3a3496bef6a430cb1a8cacab849a5561da6"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-020-run007.json",
+      "bytes": 882400,
+      "sha256": "4338267dc01b31c4231a9d9298140256d184acb7e630598b3d06eba2b809ff86"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-021-run008.v1.json",
+      "bytes": 2103393,
+      "sha256": "bbba659a0cf07291e5d283acfd63f3f00c2300899f8219605c445efe4070f80c"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-021-run008.json",
+      "bytes": 810271,
+      "sha256": "2d0b55af6bb4f8910a806af70b6dd33b058ac8b82a32810c766fe97ef893ece6"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p217-native-open-light-run01.v1.json",
+      "bytes": 7106,
+      "sha256": "118263568c50a5b36fff75571191592a1917cd601b5a73499e2a366637d37c77"
+    },
+    {
+      "path": "tools/p09/qualify_native_open_backpressure.py",
+      "bytes": 3137,
+      "sha256": "8e774740e7e1899bec332b264bda901e521e6a48b7ea2115dc3adfaf4eec96f4"
+    },
+    {
+      "path": "tools/p09/native_open_backpressure.py",
+      "bytes": 1672,
+      "sha256": "6b282003cc3b837eb6d156a883e134b971efda0697615ce2cf198302ce85c641"
+    },
+    {
+      "path": "tools/p09/tests/test_native_open_backpressure.py",
+      "bytes": 4576,
+      "sha256": "0ed1137c326ec0dbe8570ac195e54e023f81b773afe2fdb7a2cde47f00e5478f"
+    },
+    {
+      "path": "tools/p09/locked_runtime_inputs.py",
+      "bytes": 15465,
+      "sha256": "e7c40a2ec0367e01c359e3b89c179d45367e9db233348e76ba82364cc0599e14"
+    },
+    {
+      "path": "tools/p09/tests/test_locked_runtime_inputs.py",
+      "bytes": 18214,
+      "sha256": "c6c1f3c08c5a72d153ee4135fbf7e6246d3d53e4b8e9ebf29a414d48d6e919c6"
+    },
+    {
+      "path": "tools/p09/near_saturation_read_backpressure.py",
+      "bytes": 6072,
+      "sha256": "82ad99f21ed2e3bf100e20809cea38173bb1e7749b71ab2430d661a8fd905162"
+    },
+    {
+      "path": "tools/p09/tests/test_near_saturation_read_backpressure.py",
+      "bytes": 3558,
+      "sha256": "fa3f49c27a00d31731b378dd3201641927e52e9fd22b5ea14980551c4c041fcd"
+    },
+    {
+      "path": "tools/p09/resume_native_pressure_runtime.py",
+      "bytes": 14486,
+      "sha256": "1f78855e90c1f9ee384b81eaf261c79ae92f0632760a663fe3ab0f29b2e2e47b"
+    },
+    {
+      "path": "tools/p09/tests/test_native_pressure_runtime.py",
+      "bytes": 4161,
+      "sha256": "eb914e0a41662536932c7e9ac6bcf89654bba53243927f6d655a72b222d9a2b0"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-native-pressure-light-run001.v1.json",
+      "bytes": 94457,
+      "sha256": "49b03e64a3583028e689a2be7910d629ac88e61e0d40a56bac393be889734324"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-native-pressure-light-run002.v1.json",
+      "bytes": 103064,
+      "sha256": "1029b4de5dcd2f2ff9dee3435359d1c89b7718b7ce9b2be60fbf2915e788cb82"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-native-pressure-light-run003.v1.json",
+      "bytes": 110531,
+      "sha256": "655f49d8a1d7a96ec3ea3f2b7e59d9251ed6ac038b3a9fd4d4d18ef7811572a3"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-native-pressure-light-run004.v1.json",
+      "bytes": 135114,
+      "sha256": "9dc0769998ad0f624f2ab7b60f28322625c3a82dd924a4066b95d1c40fe34ecc"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-022-run001.v1.json",
+      "bytes": 2207155,
+      "sha256": "340efcf21d3b1e02eab7f28e65ad4a1f559983c6936f94dc80caf5c1f5402d4e"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-022-run001.json",
+      "bytes": 814807,
+      "sha256": "99b0aea58b74349c8349970b01a0d44bfd0a79aed7fc6b7109657155c80cdcc1"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-023-run002.v1.json",
+      "bytes": 2121841,
+      "sha256": "0131a422cab2f6d19fe60085ca95a9911f71cd5153d1f141633e4aadc0a04dc9"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-023-run002.json",
+      "bytes": 797982,
+      "sha256": "210092f405b6de3c2eb7c81a81f59b8ed3ab8497cda163f2ad854f3a561bc4b5"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-024-run003.v1.json",
+      "bytes": 2139183,
+      "sha256": "81aa767f01555786b2351620126544b6c2811d2c463e0d864c49c757909753e5"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-024-run003.json",
+      "bytes": 809726,
+      "sha256": "7be43ee555b8651c41d49de9d31b8f34e3eccde566096097a9bebc0c9913adca"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-025-run004.v1.json",
+      "bytes": 2239083,
+      "sha256": "908f1fd351a0e3d466db064dbbff3d3d282379e0d1ef2239ec4a34fe11a35524"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-025-run004.json",
+      "bytes": 896514,
+      "sha256": "bfb0a70653259069dccb8330918c45f2175c1b4087cef0703ae5a49d552fb876"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-026-run005.v1.json",
+      "bytes": 2203576,
+      "sha256": "5797c1c9bce3d0166ce304a9f804691c71f3a107b064458242252cfd963f5495"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-026-run005.json",
+      "bytes": 851431,
+      "sha256": "a655bab9ef9acf8f77e3d002376271de9736f7b5f6a6005a88e608f462a9bdb8"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-027-run006.v1.json",
+      "bytes": 2187404,
+      "sha256": "276ef8ce58c76954a42f3b816476586b2cdad71727ceb9c1ca36f5743ff11974"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-027-run006.json",
+      "bytes": 839467,
+      "sha256": "43f03b098c88295cfc23390a7a18d8439f1d362fbfd669e1f6388c86f4fd8896"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-028-run007.v1.json",
+      "bytes": 2166291,
+      "sha256": "1bf735447eeb2b7fafbd14baf6df5fb8b62204402df2d05504601b3ab7d5f590"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-028-run007.json",
+      "bytes": 803125,
+      "sha256": "7deb9983e4ccc7c76435a449627c27ff990d3de11d2e53b00944259180570e7d"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-029-run008.v1.json",
+      "bytes": 2222962,
+      "sha256": "6cc90037a0fe969aae7467cab32ea667bf2e08a88c148ccd7da717424b7652d1"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-029-run008.json",
+      "bytes": 818884,
+      "sha256": "4dd91230e02228ea4073c16b26a1d3a060f473c2dc0b4080e158ff60ea036e8b"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p219-compact-receipt-light-run01.v1.json",
+      "bytes": 18123,
+      "sha256": "fedd3863a799814fa883f5bf1a57a159d4781aaf9466cc120edce5a6c9b901bf"
+    },
+    {
+      "path": "tools/p09/receipt_compact_json.py",
+      "bytes": 2657,
+      "sha256": "a12d8114131ada0bf2058d16837a9f1a81fbff25adeccc8b18117b7669be7217"
+    },
+    {
+      "path": "tools/p09/tests/test_receipt_compact_json.py",
+      "bytes": 5039,
+      "sha256": "738432425b888dc3c0a9bcba18203bfd531f0e8c9169b3a753c9d868e4c40101"
+    },
+    {
+      "path": "tools/p09/qualify_receipt_compact_json.py",
+      "bytes": 6070,
+      "sha256": "566828c2edb00cfe24d13db653643e88ac9f8acf25f0c7a717608320cfbe67a7"
+    },
+    {
+      "path": "tools/p09/resume_compact_pressure_runtime.py",
+      "bytes": 17920,
+      "sha256": "c0c82868b94841f4f27a213f3e3eef0b95899f9318f7d648634f4b4eb3318ea3"
+    },
+    {
+      "path": "tools/p09/tests/test_compact_pressure_runtime.py",
+      "bytes": 3907,
+      "sha256": "58ca29452fa3f7726bfe624367ef8ebc57b221ed4738332382bd036a07834bd9"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p220-compact-light-run001.v1.json",
+      "bytes": 134127,
+      "sha256": "2532539eb6e73692ec536b7d159b09dbe62ca22a43b9781cbd4a91b75bf5a23b"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p220-case-030-run001.v1.json",
+      "bytes": 1542273,
+      "sha256": "35032b1e17b1d7f02c7a500dcab0dfacf47bfe110718ae20dc0c7389378ccae3"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p220-case-030-run001.json",
+      "bytes": 609774,
+      "sha256": "b622b02cb251af2a32faa722bce88ae3901b0800bd33083607f44a05f2b9da50"
+    },
+    {
+      "path": "implementation/p09/evidence/runtime-progress-r84/CURRENT_STATE.md",
+      "bytes": 420476,
+      "sha256": "11b0524725770adf869240cc0a8be3f644f54232f4e505cb1dc349030e4ef8b9"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 422170,
+      "sha256": "553a5c96049de9e336203e823d106f857e22e266d731f33a00d13ecb7229565a"
+    },
+    {
+      "path": "implementation/p09/evidence/runtime-progress-r84/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 514108,
+      "sha256": "22b21cb115045fab0bc55b3cb3bb39e607a0e917e934977d919c20c6a60d4e15"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 515802,
+      "sha256": "191e1d58d77a99a0008715bef8d6215798f247a6918319cfa35cf67d6ced13c8"
+    },
+    {
+      "path": "implementation/p09/P09-216_GENERIC_RUNTIME_R0085_REPORT.md",
+      "bytes": 7382,
+      "sha256": "4837b8d4aab03c51feb3098f5fa871e03d6a27bf57e5903a5476b0d0202a6f50"
+    },
+    {
+      "path": "tools/p09/sync_compact_pressure_document_delta.py",
+      "bytes": 5863,
+      "sha256": "0c9ca23899f87eac2056d3394097311a3307b45b6bf14b1888979ea0135ae63e"
+    },
+    {
+      "path": "tools/p09/sync_generic_runtime_document_delta.py",
+      "bytes": 8597,
+      "sha256": "41b7ec330b51baaea8bca087c3b59b291cac58f915856d16538b4735ca21f1a4"
+    },
+    {
+      "path": "tools/p09/tests/test_generic_runtime_document_delta.py",
+      "bytes": 2298,
+      "sha256": "177ebc0665ae8277d7d4e73a8d0048b724df795fa1449b211e1e664c50e6f1ce"
+    }
+  ],
+  "metadata_observation": {
+    "completed_sample_count": 140,
+    "samples": [
+      {
+        "time_utc": "2026-10-08T11:54:34.061833+00:00",
+        "system_cpu_percent": 2.77,
+        "available_ram_percent": 45.15823473483077,
+        "commit_used_percent": 38.549025502541085,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 76718750,
+          "kernel_including_idle": 78281250,
+          "user": 625000,
+          "total": 78906250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 26165248,
+        "own_working_set_bytes": 36196352,
+        "own_private_percent_total_ram": 0.07831891417715792,
+        "own_working_set_percent_total_ram": 0.10834443402998506,
+        "phase_at_sample": "admission",
+        "phases_since_previous_sample": [
+          "admission"
+        ],
+        "audited_logical_read_bytes": null,
+        "audited_logical_read_passes": null,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": false
+      },
+      {
+        "time_utc": "2026-10-08T11:54:34.562343+00:00",
+        "system_cpu_percent": 3.88,
+        "available_ram_percent": 45.15112375013716,
+        "commit_used_percent": 38.54952116049911,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77500000,
+          "kernel_including_idle": 78593750,
+          "user": 2031250,
+          "total": 80625000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 26165248,
+        "own_working_set_bytes": 36196352,
+        "own_private_percent_total_ram": 0.07831891417715792,
+        "own_working_set_percent_total_ram": 0.10834443402998506,
+        "phase_at_sample": "admission",
+        "phases_since_previous_sample": [
+          "admission"
+        ],
+        "audited_logical_read_bytes": null,
+        "audited_logical_read_passes": null,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": false
+      },
+      {
+        "time_utc": "2026-10-08T11:54:35.075652+00:00",
+        "system_cpu_percent": 2.32,
+        "available_ram_percent": 45.16105460807133,
+        "commit_used_percent": 38.55572471115271,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 79062500,
+          "kernel_including_idle": 80000000,
+          "user": 937500,
+          "total": 80937500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 26820608,
+        "own_working_set_bytes": 36757504,
+        "own_private_percent_total_ram": 0.08028056512711805,
+        "own_working_set_percent_total_ram": 0.11002409765588841,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 1061950,
+        "audited_logical_read_passes": 3,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:35.582216+00:00",
+        "system_cpu_percent": 3.27,
+        "available_ram_percent": 45.05624114575128,
+        "commit_used_percent": 38.63585434188284,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78593750,
+          "kernel_including_idle": 79843750,
+          "user": 1406250,
+          "total": 81250000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 26820608,
+        "own_working_set_bytes": 36757504,
+        "own_private_percent_total_ram": 0.08028056512711805,
+        "own_working_set_percent_total_ram": 0.11002409765588841,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 2111923,
+        "audited_logical_read_passes": 4,
+        "audited_logical_read_bytes_delta": 1049973,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:36.085502+00:00",
+        "system_cpu_percent": 1.33,
+        "available_ram_percent": 45.16476948455782,
+        "commit_used_percent": 38.54386544232542,
+        "parent_cpu_machine_percent": 0.380228,
+        "parent_cpu_delta_100ns": 312500,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 81093750,
+          "kernel_including_idle": 81562500,
+          "user": 625000,
+          "total": 82187500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 26820608,
+        "own_working_set_bytes": 36827136,
+        "own_private_percent_total_ram": 0.08028056512711805,
+        "own_working_set_percent_total_ram": 0.11023252306932169,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 3156492,
+        "audited_logical_read_passes": 6,
+        "audited_logical_read_bytes_delta": 1044569,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:36.607734+00:00",
+        "system_cpu_percent": 3.18,
+        "available_ram_percent": 45.15608917910425,
+        "commit_used_percent": 38.53606013384956,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 80937500,
+          "kernel_including_idle": 82187500,
+          "user": 1406250,
+          "total": 83593750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 26820608,
+        "own_working_set_bytes": 36827136,
+        "own_private_percent_total_ram": 0.08028056512711805,
+        "own_working_set_percent_total_ram": 0.11023252306932169,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 4241835,
+        "audited_logical_read_passes": 7,
+        "audited_logical_read_bytes_delta": 1085343,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:37.110351+00:00",
+        "system_cpu_percent": 1.57,
+        "available_ram_percent": 45.149431826192824,
+        "commit_used_percent": 38.53660274887729,
+        "parent_cpu_machine_percent": 0.195695,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78593750,
+          "kernel_including_idle": 79218750,
+          "user": 625000,
+          "total": 79843750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 28012544,
+        "own_working_set_bytes": 38223872,
+        "own_private_percent_total_ram": 0.08384831779235802,
+        "own_working_set_percent_total_ram": 0.1144132916564242,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 5282986,
+        "audited_logical_read_passes": 10,
+        "audited_logical_read_bytes_delta": 1041151,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:37.619478+00:00",
+        "system_cpu_percent": 3.85,
+        "available_ram_percent": 45.156591852160176,
+        "commit_used_percent": 38.535747086718175,
+        "parent_cpu_machine_percent": 0.192308,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78125000,
+          "kernel_including_idle": 79218750,
+          "user": 2031250,
+          "total": 81250000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 29237248,
+        "own_working_set_bytes": 39448576,
+        "own_private_percent_total_ram": 0.087514153005096,
+        "own_working_set_percent_total_ram": 0.11807912686916218,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 6332959,
+        "audited_logical_read_passes": 11,
+        "audited_logical_read_bytes_delta": 1049973,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:38.127782+00:00",
+        "system_cpu_percent": 4.8,
+        "available_ram_percent": 45.16419324959127,
+        "commit_used_percent": 38.53241313476893,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77500000,
+          "kernel_including_idle": 80312500,
+          "user": 1093750,
+          "total": 81406250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 30744576,
+        "own_working_set_bytes": 41025536,
+        "own_private_percent_total_ram": 0.09202595019000429,
+        "own_working_set_percent_total_ram": 0.12279934946750372,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 7377528,
+        "audited_logical_read_passes": 13,
+        "audited_logical_read_bytes_delta": 1044569,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:38.653438+00:00",
+        "system_cpu_percent": 3.77,
+        "available_ram_percent": 45.16514955442938,
+        "commit_used_percent": 38.53315401297987,
+        "parent_cpu_machine_percent": 0.188324,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 79843750,
+          "kernel_including_idle": 81875000,
+          "user": 1093750,
+          "total": 82968750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 32305152,
+        "own_working_set_bytes": 42889216,
+        "own_private_percent_total_ram": 0.09669713151459683,
+        "own_working_set_percent_total_ram": 0.12837779435645283,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 8462871,
+        "audited_logical_read_passes": 14,
+        "audited_logical_read_bytes_delta": 1085343,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:39.154817+00:00",
+        "system_cpu_percent": 2.5,
+        "available_ram_percent": 45.156738975981426,
+        "commit_used_percent": 38.5381784194386,
+        "parent_cpu_machine_percent": 0.963391,
+        "parent_cpu_delta_100ns": 781250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 79062500,
+          "kernel_including_idle": 80156250,
+          "user": 937500,
+          "total": 81093750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 35160064,
+        "own_working_set_bytes": 45223936,
+        "own_private_percent_total_ram": 0.10524257346536062,
+        "own_working_set_percent_total_ram": 0.13536617586568575,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 9341344,
+        "audited_logical_read_passes": 42,
+        "audited_logical_read_bytes_delta": 878473,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:39.678054+00:00",
+        "system_cpu_percent": 3.0,
+        "available_ram_percent": 45.161005566797584,
+        "commit_used_percent": 38.541924550110835,
+        "parent_cpu_machine_percent": 0.187617,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 80781250,
+          "kernel_including_idle": 81875000,
+          "user": 1406250,
+          "total": 83281250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 34942976,
+        "own_working_set_bytes": 45625344,
+        "own_private_percent_total_ram": 0.10459277658818633,
+        "own_working_set_percent_total_ram": 0.13656768707253633,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 10379315,
+        "audited_logical_read_passes": 60,
+        "audited_logical_read_bytes_delta": 1037971,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:40.182292+00:00",
+        "system_cpu_percent": 1.14,
+        "available_ram_percent": 45.153563553506174,
+        "commit_used_percent": 38.526720894429914,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 81093750,
+          "kernel_including_idle": 81562500,
+          "user": 468750,
+          "total": 82031250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 35459072,
+        "own_working_set_bytes": 45993984,
+        "own_private_percent_total_ram": 0.10613757671127992,
+        "own_working_set_percent_total_ram": 0.1376711157318889,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 11427891,
+        "audited_logical_read_passes": 60,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:40.696289+00:00",
+        "system_cpu_percent": 2.29,
+        "available_ram_percent": 45.15434821388616,
+        "commit_used_percent": 38.5291730969591,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 79843750,
+          "kernel_including_idle": 80781250,
+          "user": 937500,
+          "total": 81718750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 35139584,
+        "own_working_set_bytes": 44969984,
+        "own_private_percent_total_ram": 0.10518127187317436,
+        "own_working_set_percent_total_ram": 0.1346060361225762,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 12486796,
+        "audited_logical_read_passes": 62,
+        "audited_logical_read_bytes_delta": 1058905,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:41.213367+00:00",
+        "system_cpu_percent": 1.88,
+        "available_ram_percent": 45.142700911370774,
+        "commit_used_percent": 38.52753481697152,
+        "parent_cpu_machine_percent": 0.187617,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 81718750,
+          "kernel_including_idle": 83125000,
+          "user": 156250,
+          "total": 83281250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 34701312,
+        "own_working_set_bytes": 45453312,
+        "own_private_percent_total_ram": 0.10386941780038852,
+        "own_working_set_percent_total_ram": 0.1360527536981718,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 13540954,
+        "audited_logical_read_passes": 63,
+        "audited_logical_read_bytes_delta": 1054158,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:41.717658+00:00",
+        "system_cpu_percent": 1.78,
+        "available_ram_percent": 45.135062732984366,
+        "commit_used_percent": 38.531891389549955,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77656250,
+          "kernel_including_idle": 78593750,
+          "user": 468750,
+          "total": 79062500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 35549184,
+        "own_working_set_bytes": 46202880,
+        "own_private_percent_total_ram": 0.10640730371689944,
+        "own_working_set_percent_total_ram": 0.13829639197218868,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 14589530,
+        "audited_logical_read_passes": 63,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:42.236783+00:00",
+        "system_cpu_percent": 2.27,
+        "available_ram_percent": 45.12920230077136,
+        "commit_used_percent": 38.53140094904412,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 80781250,
+          "kernel_including_idle": 81250000,
+          "user": 1406250,
+          "total": 82656250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36003840,
+        "own_working_set_bytes": 46268416,
+        "own_private_percent_total_ram": 0.10776819906343428,
+        "own_working_set_percent_total_ram": 0.13849255706718472,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 15658870,
+        "audited_logical_read_passes": 64,
+        "audited_logical_read_bytes_delta": 1069340,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:42.751039+00:00",
+        "system_cpu_percent": 1.5,
+        "available_ram_percent": 45.12852798325731,
+        "commit_used_percent": 38.53323227476272,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 82187500,
+          "kernel_including_idle": 83125000,
+          "user": 312500,
+          "total": 83437500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37076992,
+        "own_working_set_bytes": 47321088,
+        "own_private_percent_total_ram": 0.11098040249399398,
+        "own_working_set_percent_total_ram": 0.14164345890555816,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 16726857,
+        "audited_logical_read_passes": 65,
+        "audited_logical_read_bytes_delta": 1067987,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:43.276088+00:00",
+        "system_cpu_percent": 5.35,
+        "available_ram_percent": 45.11523779807133,
+        "commit_used_percent": 38.53157312496638,
+        "parent_cpu_machine_percent": 0.184502,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 80156250,
+          "kernel_including_idle": 83125000,
+          "user": 1562500,
+          "total": 84687500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36622336,
+        "own_working_set_bytes": 47001600,
+        "own_private_percent_total_ram": 0.10961950714745915,
+        "own_working_set_percent_total_ram": 0.1406871540674526,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 17794844,
+        "audited_logical_read_passes": 66,
+        "audited_logical_read_bytes_delta": 1067987,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:43.795968+00:00",
+        "system_cpu_percent": 8.92,
+        "available_ram_percent": 44.93377282488158,
+        "commit_used_percent": 38.62409420464715,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 75000000,
+          "kernel_including_idle": 77656250,
+          "user": 4687500,
+          "total": 82343750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 35905536,
+        "own_working_set_bytes": 46272512,
+        "own_private_percent_total_ram": 0.10747395142094025,
+        "own_working_set_percent_total_ram": 0.13850481738562195,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 18864698,
+        "audited_logical_read_passes": 67,
+        "audited_logical_read_bytes_delta": 1069854,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:44.303569+00:00",
+        "system_cpu_percent": 4.67,
+        "available_ram_percent": 45.118425480865014,
+        "commit_used_percent": 38.53214182725506,
+        "parent_cpu_machine_percent": 0.194553,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 76562500,
+          "kernel_including_idle": 78125000,
+          "user": 2187500,
+          "total": 80312500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36777984,
+        "own_working_set_bytes": 46936064,
+        "own_private_percent_total_ram": 0.11008539924807467,
+        "own_working_set_percent_total_ram": 0.14049098897245657,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 19918744,
+        "audited_logical_read_passes": 68,
+        "audited_logical_read_bytes_delta": 1054046,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:44.821795+00:00",
+        "system_cpu_percent": 2.06,
+        "available_ram_percent": 45.09262977087304,
+        "commit_used_percent": 38.55272467614361,
+        "parent_cpu_machine_percent": 0.187617,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 81562500,
+          "kernel_including_idle": 82031250,
+          "user": 1250000,
+          "total": 83281250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37011456,
+        "own_working_set_bytes": 47783936,
+        "own_private_percent_total_ram": 0.11078423739899797,
+        "own_working_set_percent_total_ram": 0.14302887488896748,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 20972790,
+        "audited_logical_read_passes": 69,
+        "audited_logical_read_bytes_delta": 1054046,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:45.325807+00:00",
+        "system_cpu_percent": 2.69,
+        "available_ram_percent": 45.08192651287732,
+        "commit_used_percent": 38.550622042911144,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 79062500,
+          "kernel_including_idle": 80156250,
+          "user": 1093750,
+          "total": 81250000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37502976,
+        "own_working_set_bytes": 48431104,
+        "own_private_percent_total_ram": 0.11225547561146805,
+        "own_working_set_percent_total_ram": 0.1449660052020531,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 22021366,
+        "audited_logical_read_passes": 69,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:45.840956+00:00",
+        "system_cpu_percent": 1.33,
+        "available_ram_percent": 45.10515981631591,
+        "commit_used_percent": 38.531953998976235,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 81093750,
+          "kernel_including_idle": 81718750,
+          "user": 468750,
+          "total": 82187500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36003840,
+        "own_working_set_bytes": 47013888,
+        "own_private_percent_total_ram": 0.10776819906343428,
+        "own_working_set_percent_total_ram": 0.14072393502276434,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 23083707,
+        "audited_logical_read_passes": 70,
+        "audited_logical_read_bytes_delta": 1062341,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:46.351730+00:00",
+        "system_cpu_percent": 3.63,
+        "available_ram_percent": 45.10759961968492,
+        "commit_used_percent": 38.53301835922294,
+        "parent_cpu_machine_percent": 0.191205,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78750000,
+          "kernel_including_idle": 80156250,
+          "user": 1562500,
+          "total": 81718750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 38699008,
+        "own_working_set_bytes": 48943104,
+        "own_private_percent_total_ram": 0.11583548859514528,
+        "own_working_set_percent_total_ram": 0.14649854500670945,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 24144105,
+        "audited_logical_read_passes": 71,
+        "audited_logical_read_bytes_delta": 1060398,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:46.865952+00:00",
+        "system_cpu_percent": 1.48,
+        "available_ram_percent": 45.11163326445078,
+        "commit_used_percent": 38.53540273487366,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 83125000,
+          "kernel_including_idle": 84062500,
+          "user": 312500,
+          "total": 84375000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36782080,
+        "own_working_set_bytes": 47878144,
+        "own_private_percent_total_ram": 0.11009765956651192,
+        "own_working_set_percent_total_ram": 0.14331086221302425,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 25192681,
+        "audited_logical_read_passes": 72,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:47.369311+00:00",
+        "system_cpu_percent": 2.58,
+        "available_ram_percent": 45.10059897785725,
+        "commit_used_percent": 38.53816798453422,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 76562500,
+          "kernel_including_idle": 77968750,
+          "user": 625000,
+          "total": 78593750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 38031360,
+        "own_working_set_bytes": 48992256,
+        "own_private_percent_total_ram": 0.1138370566898734,
+        "own_working_set_percent_total_ram": 0.14664566882795646,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 26241257,
+        "audited_logical_read_passes": 72,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:47.890409+00:00",
+        "system_cpu_percent": 2.23,
+        "available_ram_percent": 45.09998596193539,
+        "commit_used_percent": 38.538903645292976,
+        "parent_cpu_machine_percent": 0.18622,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 82031250,
+          "kernel_including_idle": 83125000,
+          "user": 781250,
+          "total": 83906250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37068800,
+        "own_working_set_bytes": 47546368,
+        "own_private_percent_total_ram": 0.11095588185711948,
+        "own_working_set_percent_total_ram": 0.14231777641960694,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 27315658,
+        "audited_logical_read_passes": 74,
+        "audited_logical_read_bytes_delta": 1074401,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:48.412354+00:00",
+        "system_cpu_percent": 7.78,
+        "available_ram_percent": 45.11890363328407,
+        "commit_used_percent": 38.53900277688458,
+        "parent_cpu_machine_percent": 0.189753,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 75937500,
+          "kernel_including_idle": 80468750,
+          "user": 1875000,
+          "total": 82343750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37060608,
+        "own_working_set_bytes": 48123904,
+        "own_private_percent_total_ram": 0.11093136122024497,
+        "own_working_set_percent_total_ram": 0.14404648131925932,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 28376527,
+        "audited_logical_read_passes": 75,
+        "audited_logical_read_bytes_delta": 1060869,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:48.916206+00:00",
+        "system_cpu_percent": 2.71,
+        "available_ram_percent": 45.10187405097473,
+        "commit_used_percent": 38.5439280517517,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78437500,
+          "kernel_including_idle": 79062500,
+          "user": 1562500,
+          "total": 80625000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37888000,
+        "own_working_set_bytes": 48631808,
+        "own_private_percent_total_ram": 0.11340794554456964,
+        "own_working_set_percent_total_ram": 0.1455667608054784,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 29425103,
+        "audited_logical_read_passes": 75,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:49.418379+00:00",
+        "system_cpu_percent": 2.49,
+        "available_ram_percent": 45.09842890149386,
+        "commit_used_percent": 38.55697168222606,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 79687500,
+          "kernel_including_idle": 81250000,
+          "user": 468750,
+          "total": 81718750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36265984,
+        "own_working_set_bytes": 47194112,
+        "own_private_percent_total_ram": 0.10855285944341832,
+        "own_working_set_percent_total_ram": 0.14126338903400337,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 30460371,
+        "audited_logical_read_passes": 76,
+        "audited_logical_read_bytes_delta": 1035268,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:49.934375+00:00",
+        "system_cpu_percent": 4.04,
+        "available_ram_percent": 45.1057483116009,
+        "commit_used_percent": 38.55865170183117,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77968750,
+          "kernel_including_idle": 79687500,
+          "user": 1562500,
+          "total": 81250000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37232640,
+        "own_working_set_bytes": 48115712,
+        "own_private_percent_total_ram": 0.1114462945946095,
+        "own_working_set_percent_total_ram": 0.1440219606823848,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 31532868,
+        "audited_logical_read_passes": 77,
+        "audited_logical_read_bytes_delta": 1072497,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:50.462048+00:00",
+        "system_cpu_percent": 2.2,
+        "available_ram_percent": 45.102830355812834,
+        "commit_used_percent": 38.55599601866658,
+        "parent_cpu_machine_percent": 0.18315,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 83437500,
+          "kernel_including_idle": 84687500,
+          "user": 625000,
+          "total": 85312500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37056512,
+        "own_working_set_bytes": 48062464,
+        "own_private_percent_total_ram": 0.11091910090180772,
+        "own_working_set_percent_total_ram": 0.14386257654270054,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 32605365,
+        "audited_logical_read_passes": 78,
+        "audited_logical_read_bytes_delta": 1072497,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:50.965965+00:00",
+        "system_cpu_percent": 1.78,
+        "available_ram_percent": 45.09379450112458,
+        "commit_used_percent": 38.55480122211513,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77812500,
+          "kernel_including_idle": 78750000,
+          "user": 468750,
+          "total": 79218750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 38166528,
+        "own_working_set_bytes": 49111040,
+        "own_private_percent_total_ram": 0.11424164719830268,
+        "own_working_set_percent_total_ram": 0.14700121806263675,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 33653941,
+        "audited_logical_read_passes": 78,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:51.482132+00:00",
+        "system_cpu_percent": 2.43,
+        "available_ram_percent": 45.10129781600818,
+        "commit_used_percent": 38.551399443287416,
+        "parent_cpu_machine_percent": 0.186916,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 81562500,
+          "kernel_including_idle": 82968750,
+          "user": 625000,
+          "total": 83593750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36245504,
+        "own_working_set_bytes": 47370240,
+        "own_private_percent_total_ram": 0.10849155785123207,
+        "own_working_set_percent_total_ram": 0.14179058272680517,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 34713741,
+        "audited_logical_read_passes": 80,
+        "audited_logical_read_bytes_delta": 1059800,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:52.011232+00:00",
+        "system_cpu_percent": 4.07,
+        "available_ram_percent": 45.11148614062953,
+        "commit_used_percent": 38.55228119270748,
+        "parent_cpu_machine_percent": 0.185185,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 80937500,
+          "kernel_including_idle": 83125000,
+          "user": 1250000,
+          "total": 84375000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37085184,
+        "own_working_set_bytes": 47710208,
+        "own_private_percent_total_ram": 0.11100492313086847,
+        "own_working_set_percent_total_ram": 0.14280818915709698,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 35792749,
+        "audited_logical_read_passes": 81,
+        "audited_logical_read_bytes_delta": 1079008,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:52.515516+00:00",
+        "system_cpu_percent": 2.53,
+        "available_ram_percent": 45.1057483116009,
+        "commit_used_percent": 38.55361164301587,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78281250,
+          "kernel_including_idle": 79062500,
+          "user": 1250000,
+          "total": 80312500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37752832,
+        "own_working_set_bytes": 48758784,
+        "own_private_percent_total_ram": 0.11300335503614035,
+        "own_working_set_percent_total_ram": 0.14594683067703318,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 36841325,
+        "audited_logical_read_passes": 81,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:53.028152+00:00",
+        "system_cpu_percent": 7.13,
+        "available_ram_percent": 45.08625440528567,
+        "commit_used_percent": 38.56299783950522,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77343750,
+          "kernel_including_idle": 80781250,
+          "user": 2500000,
+          "total": 83281250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36274176,
+        "own_working_set_bytes": 47378432,
+        "own_private_percent_total_ram": 0.10857738008029283,
+        "own_working_set_percent_total_ram": 0.14181510336367967,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 37896142,
+        "audited_logical_read_passes": 82,
+        "audited_logical_read_bytes_delta": 1054817,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:53.544169+00:00",
+        "system_cpu_percent": 4.79,
+        "available_ram_percent": 45.083005420899795,
+        "commit_used_percent": 38.551430748000556,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77656250,
+          "kernel_including_idle": 79531250,
+          "user": 2031250,
+          "total": 81562500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37138432,
+        "own_working_set_bytes": 48234496,
+        "own_private_percent_total_ram": 0.11116430727055274,
+        "own_working_set_percent_total_ram": 0.14437750991706508,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 38968557,
+        "audited_logical_read_passes": 83,
+        "audited_logical_read_bytes_delta": 1072415,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:54.074356+00:00",
+        "system_cpu_percent": 1.62,
+        "available_ram_percent": 45.10770996255086,
+        "commit_used_percent": 38.54600981517541,
+        "parent_cpu_machine_percent": 0.18018,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 85312500,
+          "kernel_including_idle": 86250000,
+          "user": 468750,
+          "total": 86718750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 35844096,
+        "own_working_set_bytes": 46956544,
+        "own_private_percent_total_ram": 0.10729004664438149,
+        "own_working_set_percent_total_ram": 0.14055229056464283,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 40040972,
+        "audited_logical_read_passes": 84,
+        "audited_logical_read_bytes_delta": 1072415,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:54.578811+00:00",
+        "system_cpu_percent": 2.37,
+        "available_ram_percent": 45.104228032114676,
+        "commit_used_percent": 38.54369848385535,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77343750,
+          "kernel_including_idle": 78281250,
+          "user": 937500,
+          "total": 79218750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 35844096,
+        "own_working_set_bytes": 46956544,
+        "own_private_percent_total_ram": 0.10729004664438149,
+        "own_working_set_percent_total_ram": 0.14055229056464283,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 41089548,
+        "audited_logical_read_passes": 84,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:55.086302+00:00",
+        "system_cpu_percent": 2.84,
+        "available_ram_percent": 45.115495264758515,
+        "commit_used_percent": 38.54389152958637,
+        "parent_cpu_machine_percent": 0.568182,
+        "parent_cpu_delta_100ns": 468750,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 80156250,
+          "kernel_including_idle": 82031250,
+          "user": 468750,
+          "total": 82500000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37060608,
+        "own_working_set_bytes": 48082944,
+        "own_private_percent_total_ram": 0.11093136122024497,
+        "own_working_set_percent_total_ram": 0.1439238781348868,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 42111440,
+        "audited_logical_read_passes": 105,
+        "audited_logical_read_bytes_delta": 1021892,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:55.590334+00:00",
+        "system_cpu_percent": 2.81,
+        "available_ram_percent": 45.1117068263614,
+        "commit_used_percent": 38.54301499761849,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 75781250,
+          "kernel_including_idle": 77031250,
+          "user": 937500,
+          "total": 77968750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37556224,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11241485975115231,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 43160016,
+        "audited_logical_read_passes": 105,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:56.090843+00:00",
+        "system_cpu_percent": 1.9,
+        "available_ram_percent": 45.12290049709461,
+        "commit_used_percent": 38.5398584390437,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 80468750,
+          "kernel_including_idle": 81562500,
+          "user": 468750,
+          "total": 82031250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36175872,
+        "own_working_set_bytes": 47235072,
+        "own_private_percent_total_ram": 0.1082831324377988,
+        "own_working_set_percent_total_ram": 0.1413859922183759,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 44187523,
+        "audited_logical_read_passes": 106,
+        "audited_logical_read_bytes_delta": 1027507,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:56.608617+00:00",
+        "system_cpu_percent": 3.3,
+        "available_ram_percent": 45.11916109997125,
+        "commit_used_percent": 38.54580111708782,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77812500,
+          "kernel_including_idle": 79531250,
+          "user": 937500,
+          "total": 80468750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37187584,
+        "own_working_set_bytes": 47628288,
+        "own_private_percent_total_ram": 0.11131143109179975,
+        "own_working_set_percent_total_ram": 0.14256298278835197,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 45264474,
+        "audited_logical_read_passes": 107,
+        "audited_logical_read_bytes_delta": 1076951,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:57.136864+00:00",
+        "system_cpu_percent": 1.62,
+        "available_ram_percent": 45.1145021789651,
+        "commit_used_percent": 38.54470023467578,
+        "parent_cpu_machine_percent": 0.180505,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 85156250,
+          "kernel_including_idle": 86093750,
+          "user": 468750,
+          "total": 86562500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37068800,
+        "own_working_set_bytes": 47996928,
+        "own_private_percent_total_ram": 0.11095588185711948,
+        "own_working_set_percent_total_ram": 0.14366641144770453,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 46341425,
+        "audited_logical_read_passes": 108,
+        "audited_logical_read_bytes_delta": 1076951,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:57.640365+00:00",
+        "system_cpu_percent": 2.17,
+        "available_ram_percent": 45.112614089925756,
+        "commit_used_percent": 38.54399587863016,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77500000,
+          "kernel_including_idle": 78437500,
+          "user": 781250,
+          "total": 79218750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 38002688,
+        "own_working_set_bytes": 48934912,
+        "own_private_percent_total_ram": 0.11375123446081264,
+        "own_working_set_percent_total_ram": 0.14647402436983495,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 47390001,
+        "audited_logical_read_passes": 108,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:58.161754+00:00",
+        "system_cpu_percent": 7.72,
+        "available_ram_percent": 45.12519317664238,
+        "commit_used_percent": 38.54651590803781,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78437500,
+          "kernel_including_idle": 82812500,
+          "user": 2187500,
+          "total": 85000000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36175872,
+        "own_working_set_bytes": 47276032,
+        "own_private_percent_total_ram": 0.1082831324377988,
+        "own_working_set_percent_total_ram": 0.1415085954027484,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 48463266,
+        "audited_logical_read_passes": 109,
+        "audited_logical_read_bytes_delta": 1073265,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:58.688409+00:00",
+        "system_cpu_percent": 3.22,
+        "available_ram_percent": 45.13421677101219,
+        "commit_used_percent": 38.54654721275095,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 79843750,
+          "kernel_including_idle": 80937500,
+          "user": 1562500,
+          "total": 82500000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36212736,
+        "own_working_set_bytes": 47329280,
+        "own_private_percent_total_ram": 0.10839347530373407,
+        "own_working_set_percent_total_ram": 0.14166797954243265,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 49534942,
+        "audited_logical_read_passes": 111,
+        "audited_logical_read_bytes_delta": 1071676,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:59.191714+00:00",
+        "system_cpu_percent": 1.35,
+        "available_ram_percent": 45.12525447823457,
+        "commit_used_percent": 38.545399373269206,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 79687500,
+          "kernel_including_idle": 80000000,
+          "user": 781250,
+          "total": 80781250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37179392,
+        "own_working_set_bytes": 48226304,
+        "own_private_percent_total_ram": 0.11128691045492524,
+        "own_working_set_percent_total_ram": 0.14435298928019058,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 50583518,
+        "audited_logical_read_passes": 111,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:54:59.722159+00:00",
+        "system_cpu_percent": 2.74,
+        "available_ram_percent": 45.1275716784192,
+        "commit_used_percent": 38.543171521184185,
+        "parent_cpu_machine_percent": 0.365631,
+        "parent_cpu_delta_100ns": 312500,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 83125000,
+          "kernel_including_idle": 84687500,
+          "user": 781250,
+          "total": 85468750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36175872,
+        "own_working_set_bytes": 47210496,
+        "own_private_percent_total_ram": 0.1082831324377988,
+        "own_working_set_percent_total_ram": 0.1413124303077524,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 51674125,
+        "audited_logical_read_passes": 112,
+        "audited_logical_read_bytes_delta": 1090607,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:00.238773+00:00",
+        "system_cpu_percent": 8.82,
+        "available_ram_percent": 45.08043075402797,
+        "commit_used_percent": 38.604273103778304,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 75937500,
+          "kernel_including_idle": 78593750,
+          "user": 4687500,
+          "total": 83281250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36986880,
+        "own_working_set_bytes": 47669248,
+        "own_private_percent_total_ram": 0.11071067548837446,
+        "own_working_set_percent_total_ram": 0.14268558597272446,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 52745995,
+        "audited_logical_read_passes": 113,
+        "audited_logical_read_bytes_delta": 1071870,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:00.765959+00:00",
+        "system_cpu_percent": 9.93,
+        "available_ram_percent": 45.01806251413768,
+        "commit_used_percent": 38.64207354489302,
+        "parent_cpu_machine_percent": 0.367647,
+        "parent_cpu_delta_100ns": 312500,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 76562500,
+          "kernel_including_idle": 79843750,
+          "user": 5156250,
+          "total": 85000000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37023744,
+        "own_working_set_bytes": 47988736,
+        "own_private_percent_total_ram": 0.11082101835430971,
+        "own_working_set_percent_total_ram": 0.14364189081083004,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 53817865,
+        "audited_logical_read_passes": 114,
+        "audited_logical_read_bytes_delta": 1071870,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:01.270087+00:00",
+        "system_cpu_percent": 9.8,
+        "available_ram_percent": 45.13518533616874,
+        "commit_used_percent": 38.56706745221322,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 71875000,
+          "kernel_including_idle": 73593750,
+          "user": 6093750,
+          "total": 79687500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37969920,
+        "own_working_set_bytes": 48898048,
+        "own_private_percent_total_ram": 0.11365315191331464,
+        "own_working_set_percent_total_ram": 0.1463636815038997,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 54866441,
+        "audited_logical_read_passes": 114,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:01.784006+00:00",
+        "system_cpu_percent": 4.78,
+        "available_ram_percent": 45.16901155473711,
+        "commit_used_percent": 38.54848288751335,
+        "parent_cpu_machine_percent": 0.191205,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77812500,
+          "kernel_including_idle": 80312500,
+          "user": 1406250,
+          "total": 81718750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36192256,
+        "own_working_set_bytes": 47284224,
+        "own_private_percent_total_ram": 0.10833217371154781,
+        "own_working_set_percent_total_ram": 0.1415331160396229,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 55925876,
+        "audited_logical_read_passes": 115,
+        "audited_logical_read_bytes_delta": 1059435,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:02.309227+00:00",
+        "system_cpu_percent": 1.68,
+        "available_ram_percent": 45.17972707305127,
+        "commit_used_percent": 38.54116280209114,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 82500000,
+          "kernel_including_idle": 83281250,
+          "user": 625000,
+          "total": 83906250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37003264,
+        "own_working_set_bytes": 48009216,
+        "own_private_percent_total_ram": 0.11075971676212346,
+        "own_working_set_percent_total_ram": 0.1437031924030163,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 57018998,
+        "audited_logical_read_passes": 116,
+        "audited_logical_read_bytes_delta": 1093122,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:02.814825+00:00",
+        "system_cpu_percent": 3.66,
+        "available_ram_percent": 45.184680241699915,
+        "commit_used_percent": 38.545816769444386,
+        "parent_cpu_machine_percent": 0.192678,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78125000,
+          "kernel_including_idle": 79843750,
+          "user": 1250000,
+          "total": 81093750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37978112,
+        "own_working_set_bytes": 48996352,
+        "own_private_percent_total_ram": 0.11367767255018915,
+        "own_working_set_percent_total_ram": 0.14665792914639372,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 58046584,
+        "audited_logical_read_passes": 117,
+        "audited_logical_read_bytes_delta": 1027586,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:03.319258+00:00",
+        "system_cpu_percent": 4.04,
+        "available_ram_percent": 45.16853340231806,
+        "commit_used_percent": 38.54818027528634,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77968750,
+          "kernel_including_idle": 80625000,
+          "user": 625000,
+          "total": 81250000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 38121472,
+        "own_working_set_bytes": 49229824,
+        "own_private_percent_total_ram": 0.11410678369549292,
+        "own_working_set_percent_total_ram": 0.147356767297317,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 59095160,
+        "audited_logical_read_passes": 117,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:03.848590+00:00",
+        "system_cpu_percent": 2.99,
+        "available_ram_percent": 45.17651486962071,
+        "commit_used_percent": 38.545075891233445,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 81093750,
+          "kernel_including_idle": 81875000,
+          "user": 1718750,
+          "total": 83593750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36200448,
+        "own_working_set_bytes": 47325184,
+        "own_private_percent_total_ram": 0.10835669434842231,
+        "own_working_set_percent_total_ram": 0.1416557192239954,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 60184624,
+        "audited_logical_read_passes": 118,
+        "audited_logical_read_bytes_delta": 1089464,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:04.362753+00:00",
+        "system_cpu_percent": 2.99,
+        "available_ram_percent": 45.170188545307084,
+        "commit_used_percent": 38.54731939567503,
+        "parent_cpu_machine_percent": 0.373134,
+        "parent_cpu_delta_100ns": 312500,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 81250000,
+          "kernel_including_idle": 82656250,
+          "user": 1093750,
+          "total": 83750000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37093376,
+        "own_working_set_bytes": 47505408,
+        "own_private_percent_total_ram": 0.11102944376774299,
+        "own_working_set_percent_total_ram": 0.14219517323523445,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 61232126,
+        "audited_logical_read_passes": 120,
+        "audited_logical_read_bytes_delta": 1047502,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:04.867122+00:00",
+        "system_cpu_percent": 2.92,
+        "available_ram_percent": 45.16494112901594,
+        "commit_used_percent": 38.54844636534802,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77968750,
+          "kernel_including_idle": 79843750,
+          "user": 468750,
+          "total": 80312500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37347328,
+        "own_working_set_bytes": 48402432,
+        "own_private_percent_total_ram": 0.11178958351085252,
+        "own_working_set_percent_total_ram": 0.14488018297299235,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 62280702,
+        "audited_logical_read_passes": 120,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:05.389527+00:00",
+        "system_cpu_percent": 6.86,
+        "available_ram_percent": 45.01742497757894,
+        "commit_used_percent": 38.63465954533139,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78437500,
+          "kernel_including_idle": 80312500,
+          "user": 3906250,
+          "total": 84218750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37023744,
+        "own_working_set_bytes": 47288320,
+        "own_private_percent_total_ram": 0.11082101835430971,
+        "own_working_set_percent_total_ram": 0.14154537635806014,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 63353994,
+        "audited_logical_read_passes": 121,
+        "audited_logical_read_bytes_delta": 1073292,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:05.919199+00:00",
+        "system_cpu_percent": 7.05,
+        "available_ram_percent": 45.016076342550846,
+        "commit_used_percent": 38.625565526164664,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78281250,
+          "kernel_including_idle": 80312500,
+          "user": 3906250,
+          "total": 84218750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37023744,
+        "own_working_set_bytes": 47616000,
+        "own_private_percent_total_ram": 0.11082101835430971,
+        "own_working_set_percent_total_ram": 0.1425262018330402,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 64455605,
+        "audited_logical_read_passes": 122,
+        "audited_logical_read_bytes_delta": 1101611,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:06.428225+00:00",
+        "system_cpu_percent": 2.3,
+        "available_ram_percent": 45.032210921614265,
+        "commit_used_percent": 38.61746804036618,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 79531250,
+          "kernel_including_idle": 80781250,
+          "user": 625000,
+          "total": 81406250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36855808,
+        "own_working_set_bytes": 47648768,
+        "own_private_percent_total_ram": 0.11031834529838243,
+        "own_working_set_percent_total_ram": 0.1426242843805382,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 65491680,
+        "audited_logical_read_passes": 123,
+        "audited_logical_read_bytes_delta": 1036075,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:06.932764+00:00",
+        "system_cpu_percent": 6.0,
+        "available_ram_percent": 44.91052726112456,
+        "commit_used_percent": 38.70636299077508,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 75937500,
+          "kernel_including_idle": 79687500,
+          "user": 1093750,
+          "total": 80781250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37396480,
+        "own_working_set_bytes": 48447488,
+        "own_private_percent_total_ram": 0.11193670733209954,
+        "own_working_set_percent_total_ram": 0.14501504647580213,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 66540256,
+        "audited_logical_read_passes": 123,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:07.444965+00:00",
+        "system_cpu_percent": 11.09,
+        "available_ram_percent": 44.866255251247644,
+        "commit_used_percent": 38.724295373951236,
+        "parent_cpu_machine_percent": 0.191205,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 72656250,
+          "kernel_including_idle": 76562500,
+          "user": 5156250,
+          "total": 81718750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36208640,
+        "own_working_set_bytes": 47136768,
+        "own_private_percent_total_ram": 0.10838121498529682,
+        "own_working_set_percent_total_ram": 0.14109174457588186,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 67592435,
+        "audited_logical_read_passes": 124,
+        "audited_logical_read_bytes_delta": 1052179,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:07.957711+00:00",
+        "system_cpu_percent": 11.2,
+        "available_ram_percent": 44.59878414422058,
+        "commit_used_percent": 38.73769900862669,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 73125000,
+          "kernel_including_idle": 79687500,
+          "user": 2656250,
+          "total": 82343750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37101568,
+        "own_working_set_bytes": 47927296,
+        "own_private_percent_total_ram": 0.11105396440461748,
+        "own_working_set_percent_total_ram": 0.14345798603427126,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 68657704,
+        "audited_logical_read_passes": 125,
+        "audited_logical_read_bytes_delta": 1065269,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:08.482430+00:00",
+        "system_cpu_percent": 12.66,
+        "available_ram_percent": 44.41264798970624,
+        "commit_used_percent": 38.77435161025966,
+        "parent_cpu_machine_percent": 0.18622,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 73281250,
+          "kernel_including_idle": 79843750,
+          "user": 4062500,
+          "total": 83906250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37093376,
+        "own_working_set_bytes": 48041984,
+        "own_private_percent_total_ram": 0.11102944376774299,
+        "own_working_set_percent_total_ram": 0.14380127495051429,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 69722973,
+        "audited_logical_read_passes": 126,
+        "audited_logical_read_bytes_delta": 1065269,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:08.987176+00:00",
+        "system_cpu_percent": 8.67,
+        "available_ram_percent": 44.66975912765382,
+        "commit_used_percent": 38.7766733764841,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 74062500,
+          "kernel_including_idle": 77812500,
+          "user": 3281250,
+          "total": 81093750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 38391808,
+        "own_working_set_bytes": 49135616,
+        "own_private_percent_total_ram": 0.11491596471235148,
+        "own_working_set_percent_total_ram": 0.14707477997326024,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 70771549,
+        "audited_logical_read_passes": 126,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:09.511702+00:00",
+        "system_cpu_percent": 11.62,
+        "available_ram_percent": 44.46815045127167,
+        "commit_used_percent": 38.78089951275779,
+        "parent_cpu_machine_percent": 0.184502,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 74843750,
+          "kernel_including_idle": 80000000,
+          "user": 4687500,
+          "total": 84687500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36241408,
+        "own_working_set_bytes": 47153152,
+        "own_private_percent_total_ram": 0.10847929753279482,
+        "own_working_set_percent_total_ram": 0.14114078584963088,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 71847315,
+        "audited_logical_read_passes": 128,
+        "audited_logical_read_bytes_delta": 1075766,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:10.011908+00:00",
+        "system_cpu_percent": 9.24,
+        "available_ram_percent": 44.328971316372,
+        "commit_used_percent": 38.76497584867469,
+        "parent_cpu_machine_percent": 0.200803,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 70625000,
+          "kernel_including_idle": 74062500,
+          "user": 3750000,
+          "total": 77812500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 35807232,
+        "own_working_set_bytes": 46977024,
+        "own_private_percent_total_ram": 0.10717970377844624,
+        "own_working_set_percent_total_ram": 0.1406135921568291,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 72862807,
+        "audited_logical_read_passes": 129,
+        "audited_logical_read_bytes_delta": 1015492,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:10.516397+00:00",
+        "system_cpu_percent": 9.51,
+        "available_ram_percent": 44.6462193162543,
+        "commit_used_percent": 38.770485478187055,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 74375000,
+          "kernel_including_idle": 78593750,
+          "user": 3593750,
+          "total": 82187500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 35807232,
+        "own_working_set_bytes": 46977024,
+        "own_private_percent_total_ram": 0.10717970377844624,
+        "own_working_set_percent_total_ram": 0.1406135921568291,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 73911383,
+        "audited_logical_read_passes": 129,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:11.045458+00:00",
+        "system_cpu_percent": 7.51,
+        "available_ram_percent": 44.484199208106034,
+        "commit_used_percent": 38.77070461117903,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 78906250,
+          "kernel_including_idle": 82031250,
+          "user": 3281250,
+          "total": 85312500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 35823616,
+        "own_working_set_bytes": 46993408,
+        "own_private_percent_total_ram": 0.10722874505219523,
+        "own_working_set_percent_total_ram": 0.14066263343057808,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 75004709,
+        "audited_logical_read_passes": 135,
+        "audited_logical_read_bytes_delta": 1093326,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:11.550155+00:00",
+        "system_cpu_percent": 11.51,
+        "available_ram_percent": 44.74908338794283,
+        "commit_used_percent": 38.7741272598155,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 69687500,
+          "kernel_including_idle": 73593750,
+          "user": 5156250,
+          "total": 78750000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 35823616,
+        "own_working_set_bytes": 46993408,
+        "own_private_percent_total_ram": 0.10722874505219523,
+        "own_working_set_percent_total_ram": 0.14066263343057808,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 76053285,
+        "audited_logical_read_passes": 135,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:12.056819+00:00",
+        "system_cpu_percent": 9.02,
+        "available_ram_percent": 44.55457343593585,
+        "commit_used_percent": 38.77293768071624,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 75625000,
+          "kernel_including_idle": 79375000,
+          "user": 3750000,
+          "total": 83125000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 35823616,
+        "own_working_set_bytes": 46993408,
+        "own_private_percent_total_ram": 0.10722874505219523,
+        "own_working_set_percent_total_ram": 0.14066263343057808,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 77105464,
+        "audited_logical_read_passes": 136,
+        "audited_logical_read_bytes_delta": 1052179,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:12.571516+00:00",
+        "system_cpu_percent": 10.34,
+        "available_ram_percent": 44.368375979829324,
+        "commit_used_percent": 38.7811499504629,
+        "parent_cpu_machine_percent": 0.191571,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 73125000,
+          "kernel_including_idle": 77343750,
+          "user": 4218750,
+          "total": 81562500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37191680,
+        "own_working_set_bytes": 47874048,
+        "own_private_percent_total_ram": 0.111323691410237,
+        "own_working_set_percent_total_ram": 0.143298601894587,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 78143845,
+        "audited_logical_read_passes": 143,
+        "audited_logical_read_bytes_delta": 1038381,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:13.075933+00:00",
+        "system_cpu_percent": 14.01,
+        "available_ram_percent": 44.606005471780115,
+        "commit_used_percent": 38.8215017256984,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 70000000,
+          "kernel_including_idle": 74843750,
+          "user": 6562500,
+          "total": 81406250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37466112,
+        "own_working_set_bytes": 48353280,
+        "own_private_percent_total_ram": 0.1121451327455328,
+        "own_working_set_percent_total_ram": 0.14473305915174534,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 79192421,
+        "audited_logical_read_passes": 143,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:13.587632+00:00",
+        "system_cpu_percent": 18.09,
+        "available_ram_percent": 44.410330789521595,
+        "commit_used_percent": 38.80168584228174,
+        "parent_cpu_machine_percent": 0.583658,
+        "parent_cpu_delta_100ns": 468750,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 65781250,
+          "kernel_including_idle": 71093750,
+          "user": 9218750,
+          "total": 80312500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36294656,
+        "own_working_set_bytes": 47296512,
+        "own_private_percent_total_ram": 0.10863868167247907,
+        "own_working_set_percent_total_ram": 0.14156989699493466,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 80144870,
+        "audited_logical_read_passes": 144,
+        "audited_logical_read_bytes_delta": 952449,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:14.093186+00:00",
+        "system_cpu_percent": 9.0,
+        "available_ram_percent": 44.222674355521036,
+        "commit_used_percent": 38.790562234213205,
+        "parent_cpu_machine_percent": 0.574713,
+        "parent_cpu_delta_100ns": 468750,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 74218750,
+          "kernel_including_idle": 77656250,
+          "user": 3906250,
+          "total": 81562500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36298752,
+        "own_working_set_bytes": 47292416,
+        "own_private_percent_total_ram": 0.10865094199091634,
+        "own_working_set_percent_total_ram": 0.1415576366764974,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 81102274,
+        "audited_logical_read_passes": 146,
+        "audited_logical_read_bytes_delta": 957404,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:14.609415+00:00",
+        "system_cpu_percent": 9.42,
+        "available_ram_percent": 44.58426792719087,
+        "commit_used_percent": 38.78404041897602,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 73593750,
+          "kernel_including_idle": 76875000,
+          "user": 4375000,
+          "total": 81250000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48365568,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1447698401070571,
+        "phase_at_sample": "admission",
+        "phases_since_previous_sample": [
+          "admission",
+          "document_read",
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 82168788,
+        "audited_logical_read_passes": 149,
+        "audited_logical_read_bytes_delta": 1066514,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:15.111804+00:00",
+        "system_cpu_percent": 9.81,
+        "available_ram_percent": 44.40111103005678,
+        "commit_used_percent": 38.78753611194315,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 73281250,
+          "kernel_including_idle": 77968750,
+          "user": 3281250,
+          "total": 81250000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 36818944,
+        "own_working_set_bytes": 48173056,
+        "own_private_percent_total_ram": 0.11020800243244717,
+        "own_working_set_percent_total_ram": 0.1441936051405063,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 83208042,
+        "audited_logical_read_passes": 151,
+        "audited_logical_read_bytes_delta": 1039254,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:15.641191+00:00",
+        "system_cpu_percent": 12.87,
+        "available_ram_percent": 44.68953502129311,
+        "commit_used_percent": 38.814400773268154,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 74062500,
+          "kernel_including_idle": 78125000,
+          "user": 6875000,
+          "total": 85000000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 38780928,
+        "own_working_set_bytes": 49770496,
+        "own_private_percent_total_ram": 0.1160806949638903,
+        "own_working_set_percent_total_ram": 0.14897512933103413,
+        "phase_at_sample": "document_read",
+        "phases_since_previous_sample": [
+          "admission",
+          "document_read",
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 84301794,
+        "audited_logical_read_passes": 153,
+        "audited_logical_read_bytes_delta": 1093752,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:16.171118+00:00",
+        "system_cpu_percent": 16.85,
+        "available_ram_percent": 44.65960758398778,
+        "commit_used_percent": 38.82769484144763,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 70937500,
+          "kernel_including_idle": 73750000,
+          "user": 11562500,
+          "total": 85312500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 39649280,
+        "own_working_set_bytes": 50843648,
+        "own_private_percent_total_ram": 0.11867988247258746,
+        "own_working_set_percent_total_ram": 0.15218733276159382,
+        "phase_at_sample": "admission",
+        "phases_since_previous_sample": [
+          "admission",
+          "document_read"
+        ],
+        "audited_logical_read_bytes": 85398934,
+        "audited_logical_read_passes": 155,
+        "audited_logical_read_bytes_delta": 1097140,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:16.677562+00:00",
+        "system_cpu_percent": 20.42,
+        "available_ram_percent": 44.60767287508759,
+        "commit_used_percent": 38.854658634364235,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 65156250,
+          "kernel_including_idle": 68437500,
+          "user": 13437500,
+          "total": 81875000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "document_read",
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 86444712,
+        "audited_logical_read_passes": 157,
+        "audited_logical_read_bytes_delta": 1045778,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:17.181877+00:00",
+        "system_cpu_percent": 17.34,
+        "available_ram_percent": 44.59755811237685,
+        "commit_used_percent": 38.85750214580765,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 67031250,
+          "kernel_including_idle": 69531250,
+          "user": 11562500,
+          "total": 81093750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 87493288,
+        "audited_logical_read_passes": 157,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:17.684913+00:00",
+        "system_cpu_percent": 18.55,
+        "available_ram_percent": 44.57781899969288,
+        "commit_used_percent": 38.85619256530802,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 65156250,
+          "kernel_including_idle": 68906250,
+          "user": 11093750,
+          "total": 80000000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "metadata_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 88536602,
+        "audited_logical_read_passes": 158,
+        "audited_logical_read_bytes_delta": 1043314,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:18.205496+00:00",
+        "system_cpu_percent": 23.48,
+        "available_ram_percent": 44.566478205138424,
+        "commit_used_percent": 38.85966738846639,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 63125000,
+          "kernel_including_idle": 68593750,
+          "user": 13906250,
+          "total": 82500000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "final_fresh_hash",
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 89595459,
+        "audited_logical_read_passes": 163,
+        "audited_logical_read_bytes_delta": 1058857,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:18.727199+00:00",
+        "system_cpu_percent": 19.7,
+        "available_ram_percent": 44.578603660072865,
+        "commit_used_percent": 38.852498609157685,
+        "parent_cpu_machine_percent": 0.185874,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 67500000,
+          "kernel_including_idle": 71562500,
+          "user": 12500000,
+          "total": 84062500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 90678120,
+        "audited_logical_read_passes": 165,
+        "audited_logical_read_bytes_delta": 1082661,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:19.232676+00:00",
+        "system_cpu_percent": 17.95,
+        "available_ram_percent": 44.59141569283979,
+        "commit_used_percent": 38.85135598712813,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 66406250,
+          "kernel_including_idle": 68906250,
+          "user": 12031250,
+          "total": 80937500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 91728093,
+        "audited_logical_read_passes": 166,
+        "audited_logical_read_bytes_delta": 1049973,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:19.736693+00:00",
+        "system_cpu_percent": 17.03,
+        "available_ram_percent": 44.54924019741565,
+        "commit_used_percent": 38.876691934961535,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 66250000,
+          "kernel_including_idle": 69531250,
+          "user": 10312500,
+          "total": 79843750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 92772662,
+        "audited_logical_read_passes": 168,
+        "audited_logical_read_bytes_delta": 1044569,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:20.265537+00:00",
+        "system_cpu_percent": 20.92,
+        "available_ram_percent": 44.62216457148042,
+        "commit_used_percent": 38.832693160645405,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 67343750,
+          "kernel_including_idle": 70000000,
+          "user": 15156250,
+          "total": 85156250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 93869818,
+        "audited_logical_read_passes": 170,
+        "audited_logical_read_bytes_delta": 1097156,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:20.765900+00:00",
+        "system_cpu_percent": 20.78,
+        "available_ram_percent": 44.52270886831744,
+        "commit_used_percent": 38.87279449817579,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 63125000,
+          "kernel_including_idle": 66718750,
+          "user": 12968750,
+          "total": 79687500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 94889897,
+        "audited_logical_read_passes": 192,
+        "audited_logical_read_bytes_delta": 1020079,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:21.270827+00:00",
+        "system_cpu_percent": 20.5,
+        "available_ram_percent": 44.524645998630525,
+        "commit_used_percent": 38.86599094052037,
+        "parent_cpu_machine_percent": 0.191571,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 64843750,
+          "kernel_including_idle": 69218750,
+          "user": 12343750,
+          "total": 81562500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 95938473,
+        "audited_logical_read_passes": 192,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:21.779696+00:00",
+        "system_cpu_percent": 12.43,
+        "available_ram_percent": 44.59272754691258,
+        "commit_used_percent": 38.82681830947975,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 70468750,
+          "kernel_including_idle": 74062500,
+          "user": 6406250,
+          "total": 80468750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 96991796,
+        "audited_logical_read_passes": 193,
+        "audited_logical_read_bytes_delta": 1053323,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:22.287470+00:00",
+        "system_cpu_percent": 7.93,
+        "available_ram_percent": 44.604951084394514,
+        "commit_used_percent": 38.820541714495484,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 74375000,
+          "kernel_including_idle": 75468750,
+          "user": 5312500,
+          "total": 80781250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 98045954,
+        "audited_logical_read_passes": 194,
+        "audited_logical_read_bytes_delta": 1054158,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:22.792811+00:00",
+        "system_cpu_percent": 8.37,
+        "available_ram_percent": 44.72273596362118,
+        "commit_used_percent": 38.79669795798834,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 75312500,
+          "kernel_including_idle": 77343750,
+          "user": 4843750,
+          "total": 82187500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 99094530,
+        "audited_logical_read_passes": 194,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:23.321250+00:00",
+        "system_cpu_percent": 13.51,
+        "available_ram_percent": 44.668582137083845,
+        "commit_used_percent": 38.81075899163971,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 72031250,
+          "kernel_including_idle": 77031250,
+          "user": 6250000,
+          "total": 83281250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 100183281,
+        "audited_logical_read_passes": 196,
+        "audited_logical_read_bytes_delta": 1088751,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:23.825676+00:00",
+        "system_cpu_percent": 10.15,
+        "available_ram_percent": 44.68165163653796,
+        "commit_used_percent": 38.80461283296019,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 73281250,
+          "kernel_including_idle": 75937500,
+          "user": 5625000,
+          "total": 81562500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 101231857,
+        "audited_logical_read_passes": 196,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:24.414589+00:00",
+        "system_cpu_percent": 13.21,
+        "available_ram_percent": 44.62090175868138,
+        "commit_used_percent": 38.819294743422134,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 73906250,
+          "kernel_including_idle": 75781250,
+          "user": 9375000,
+          "total": 85156250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 102236175,
+        "audited_logical_read_passes": 197,
+        "audited_logical_read_bytes_delta": 1004318,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:24.945883+00:00",
+        "system_cpu_percent": 9.2,
+        "available_ram_percent": 44.616843593278645,
+        "commit_used_percent": 38.81234509710539,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 84843750,
+          "kernel_including_idle": 87500000,
+          "user": 5937500,
+          "total": 93437500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 103224685,
+        "audited_logical_read_passes": 198,
+        "audited_logical_read_bytes_delta": 988510,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:25.453889+00:00",
+        "system_cpu_percent": 11.32,
+        "available_ram_percent": 44.572694186586105,
+        "commit_used_percent": 38.77891688092569,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 72187500,
+          "kernel_including_idle": 76875000,
+          "user": 4531250,
+          "total": 81406250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 104273261,
+        "audited_logical_read_passes": 198,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:25.965612+00:00",
+        "system_cpu_percent": 9.48,
+        "available_ram_percent": 44.457385891683764,
+        "commit_used_percent": 38.780706467026775,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 73125000,
+          "kernel_including_idle": 78281250,
+          "user": 2500000,
+          "total": 80781250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 105335602,
+        "audited_logical_read_passes": 199,
+        "audited_logical_read_bytes_delta": 1062341,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:26.488875+00:00",
+        "system_cpu_percent": 8.35,
+        "available_ram_percent": 44.70517918761904,
+        "commit_used_percent": 38.78253779274537,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77187500,
+          "kernel_including_idle": 80625000,
+          "user": 3593750,
+          "total": 84218750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 106422857,
+        "audited_logical_read_passes": 200,
+        "audited_logical_read_bytes_delta": 1087255,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:26.993094+00:00",
+        "system_cpu_percent": 9.21,
+        "available_ram_percent": 44.46085556180151,
+        "commit_used_percent": 38.79080745446612,
+        "parent_cpu_machine_percent": 0.191939,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 73906250,
+          "kernel_including_idle": 77968750,
+          "user": 3437500,
+          "total": 81406250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 107471433,
+        "audited_logical_read_passes": 200,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:27.505455+00:00",
+        "system_cpu_percent": 8.19,
+        "available_ram_percent": 44.29460564379239,
+        "commit_used_percent": 38.77306289956879,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 75312500,
+          "kernel_including_idle": 78437500,
+          "user": 3593750,
+          "total": 82031250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 108533541,
+        "audited_logical_read_passes": 201,
+        "audited_logical_read_bytes_delta": 1062108,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:28.016073+00:00",
+        "system_cpu_percent": 10.98,
+        "available_ram_percent": 44.6412171063319,
+        "commit_used_percent": 38.770965483788515,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 72187500,
+          "kernel_including_idle": 77031250,
+          "user": 4062500,
+          "total": 81093750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 109594410,
+        "audited_logical_read_passes": 202,
+        "audited_logical_read_bytes_delta": 1060869,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:28.521749+00:00",
+        "system_cpu_percent": 12.16,
+        "available_ram_percent": 44.453597453286655,
+        "commit_used_percent": 38.77624032795235,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 71093750,
+          "kernel_including_idle": 77500000,
+          "user": 3437500,
+          "total": 80937500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 110642986,
+        "audited_logical_read_passes": 202,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:29.033140+00:00",
+        "system_cpu_percent": 9.54,
+        "available_ram_percent": 44.26672567966608,
+        "commit_used_percent": 38.775833366681546,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 74062500,
+          "kernel_including_idle": 77656250,
+          "user": 4218750,
+          "total": 81875000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 111702175,
+        "audited_logical_read_passes": 204,
+        "audited_logical_read_bytes_delta": 1059189,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:29.542864+00:00",
+        "system_cpu_percent": 17.78,
+        "available_ram_percent": 44.47294423578064,
+        "commit_used_percent": 38.80010495426825,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 67187500,
+          "kernel_including_idle": 72812500,
+          "user": 8906250,
+          "total": 81718750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37105664,
+        "own_working_set_bytes": 48451584,
+        "own_private_percent_total_ram": 0.11106622472305473,
+        "own_working_set_percent_total_ram": 0.14502730679423936,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 112750751,
+        "audited_logical_read_passes": 204,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:30.069573+00:00",
+        "system_cpu_percent": 8.99,
+        "available_ram_percent": 44.31902819811939,
+        "commit_used_percent": 38.78707175869826,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77500000,
+          "kernel_including_idle": 81718750,
+          "user": 3437500,
+          "total": 85156250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37134336,
+        "own_working_set_bytes": 48480256,
+        "own_private_percent_total_ram": 0.11115204695211549,
+        "own_working_set_percent_total_ram": 0.14511312902330012,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 113845655,
+        "audited_logical_read_passes": 205,
+        "audited_logical_read_bytes_delta": 1094904,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:30.589182+00:00",
+        "system_cpu_percent": 7.46,
+        "available_ram_percent": 44.63523407093452,
+        "commit_used_percent": 38.77938645162276,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77500000,
+          "kernel_including_idle": 80000000,
+          "user": 3750000,
+          "total": 83750000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37134336,
+        "own_working_set_bytes": 48480256,
+        "own_private_percent_total_ram": 0.11115204695211549,
+        "own_working_set_percent_total_ram": 0.14511312902330012,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 114924663,
+        "audited_logical_read_passes": 206,
+        "audited_logical_read_bytes_delta": 1079008,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:31.094381+00:00",
+        "system_cpu_percent": 9.31,
+        "available_ram_percent": 44.43123463245711,
+        "commit_used_percent": 38.780675162313635,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 71562500,
+          "kernel_including_idle": 74531250,
+          "user": 4375000,
+          "total": 78906250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37134336,
+        "own_working_set_bytes": 48480256,
+        "own_private_percent_total_ram": 0.11115204695211549,
+        "own_working_set_percent_total_ram": 0.14511312902330012,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 115973239,
+        "audited_logical_read_passes": 206,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:31.602208+00:00",
+        "system_cpu_percent": 11.15,
+        "available_ram_percent": 44.249732878312045,
+        "commit_used_percent": 38.7766212019622,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 73437500,
+          "kernel_including_idle": 77656250,
+          "user": 5000000,
+          "total": 82656250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37134336,
+        "own_working_set_bytes": 48480256,
+        "own_private_percent_total_ram": 0.11115204695211549,
+        "own_working_set_percent_total_ram": 0.14511312902330012,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 117028056,
+        "audited_logical_read_passes": 207,
+        "audited_logical_read_bytes_delta": 1054817,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:32.122664+00:00",
+        "system_cpu_percent": 9.83,
+        "available_ram_percent": 44.57394473906671,
+        "commit_used_percent": 38.77331855472609,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 73125000,
+          "kernel_including_idle": 77500000,
+          "user": 3593750,
+          "total": 81093750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37134336,
+        "own_working_set_bytes": 48480256,
+        "own_private_percent_total_ram": 0.11115204695211549,
+        "own_working_set_percent_total_ram": 0.14511312902330012,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 118097796,
+        "audited_logical_read_passes": 222,
+        "audited_logical_read_bytes_delta": 1069740,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:32.627407+00:00",
+        "system_cpu_percent": 8.94,
+        "available_ram_percent": 44.42911359736746,
+        "commit_used_percent": 38.783283888408505,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 74843750,
+          "kernel_including_idle": 77812500,
+          "user": 4375000,
+          "total": 82187500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37134336,
+        "own_working_set_bytes": 48480256,
+        "own_private_percent_total_ram": 0.11115204695211549,
+        "own_working_set_percent_total_ram": 0.14511312902330012,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 119146372,
+        "audited_logical_read_passes": 222,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:33.153526+00:00",
+        "system_cpu_percent": 12.04,
+        "available_ram_percent": 44.22822827977311,
+        "commit_used_percent": 38.793885751258074,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 74218750,
+          "kernel_including_idle": 78906250,
+          "user": 5468750,
+          "total": 84375000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37134336,
+        "own_working_set_bytes": 48480256,
+        "own_private_percent_total_ram": 0.11115204695211549,
+        "own_working_set_percent_total_ram": 0.14511312902330012,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 120239415,
+        "audited_logical_read_passes": 223,
+        "audited_logical_read_bytes_delta": 1093043,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:33.674740+00:00",
+        "system_cpu_percent": 18.95,
+        "available_ram_percent": 44.55078499753874,
+        "commit_used_percent": 38.84950900905296,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 67500000,
+          "kernel_including_idle": 71875000,
+          "user": 11406250,
+          "total": 83281250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 121316366,
+        "audited_logical_read_passes": 224,
+        "audited_logical_read_bytes_delta": 1076951,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:34.179479+00:00",
+        "system_cpu_percent": 19.2,
+        "available_ram_percent": 44.59113370551573,
+        "commit_used_percent": 38.82756962259507,
+        "parent_cpu_machine_percent": 0.190114,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 66406250,
+          "kernel_including_idle": 70156250,
+          "user": 12031250,
+          "total": 82187500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 122364942,
+        "audited_logical_read_passes": 224,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:34.696930+00:00",
+        "system_cpu_percent": 23.67,
+        "available_ram_percent": 44.617248183787076,
+        "commit_used_percent": 38.820134753224686,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 62968750,
+          "kernel_including_idle": 68281250,
+          "user": 14218750,
+          "total": 82500000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 123438207,
+        "audited_logical_read_passes": 225,
+        "audited_logical_read_bytes_delta": 1073265,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:35.207820+00:00",
+        "system_cpu_percent": 18.09,
+        "available_ram_percent": 44.601383331729274,
+        "commit_used_percent": 38.82540437993633,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 65781250,
+          "kernel_including_idle": 67656250,
+          "user": 12656250,
+          "total": 80312500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 124498333,
+        "audited_logical_read_passes": 226,
+        "audited_logical_read_bytes_delta": 1060126,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:35.712184+00:00",
+        "system_cpu_percent": 19.47,
+        "available_ram_percent": 44.61843743467549,
+        "commit_used_percent": 38.829333121435205,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 65937500,
+          "kernel_including_idle": 68906250,
+          "user": 12968750,
+          "total": 81875000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 125546909,
+        "audited_logical_read_passes": 226,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:36.239517+00:00",
+        "system_cpu_percent": 16.76,
+        "available_ram_percent": 44.480177823658614,
+        "commit_used_percent": 38.9235237858167,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 69843750,
+          "kernel_including_idle": 73125000,
+          "user": 10781250,
+          "total": 83906250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 126637516,
+        "audited_logical_read_passes": 227,
+        "audited_logical_read_bytes_delta": 1090607,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:36.755310+00:00",
+        "system_cpu_percent": 20.45,
+        "available_ram_percent": 44.5476463560188,
+        "commit_used_percent": 38.85232643323542,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 66875000,
+          "kernel_including_idle": 70781250,
+          "user": 13281250,
+          "total": 84062500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 127709386,
+        "audited_logical_read_passes": 228,
+        "audited_logical_read_bytes_delta": 1071870,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:37.260048+00:00",
+        "system_cpu_percent": 16.96,
+        "available_ram_percent": 44.514997128020404,
+        "commit_used_percent": 38.8644987491941,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 66562500,
+          "kernel_including_idle": 69843750,
+          "user": 10312500,
+          "total": 80156250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 128757962,
+        "audited_logical_read_passes": 228,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:37.772566+00:00",
+        "system_cpu_percent": 17.02,
+        "available_ram_percent": 44.57368727237952,
+        "commit_used_percent": 38.84416112055847,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 67812500,
+          "kernel_including_idle": 71406250,
+          "user": 10312500,
+          "total": 81718750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 129817397,
+        "audited_logical_read_passes": 229,
+        "audited_logical_read_bytes_delta": 1059435,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:38.298824+00:00",
+        "system_cpu_percent": 22.89,
+        "available_ram_percent": 44.54247250163829,
+        "commit_used_percent": 38.85559777575839,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 64218750,
+          "kernel_including_idle": 70156250,
+          "user": 13125000,
+          "total": 83281250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 130910519,
+        "audited_logical_read_passes": 230,
+        "audited_logical_read_bytes_delta": 1093122,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:38.803442+00:00",
+        "system_cpu_percent": 19.73,
+        "available_ram_percent": 44.582171412738106,
+        "commit_used_percent": 38.847088111236914,
+        "parent_cpu_machine_percent": 0.191571,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 65468750,
+          "kernel_including_idle": 68437500,
+          "user": 13125000,
+          "total": 81562500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 131959095,
+        "audited_logical_read_passes": 230,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:39.328856+00:00",
+        "system_cpu_percent": 12.92,
+        "available_ram_percent": 44.52533257646301,
+        "commit_used_percent": 38.85006727643726,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 72656250,
+          "kernel_including_idle": 75781250,
+          "user": 7656250,
+          "total": 83437500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 133048022,
+        "audited_logical_read_passes": 231,
+        "audited_logical_read_bytes_delta": 1088927,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:39.833610+00:00",
+        "system_cpu_percent": 11.07,
+        "available_ram_percent": 44.58859581959922,
+        "commit_used_percent": 38.82397479803634,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 72812500,
+          "kernel_including_idle": 80625000,
+          "user": 1250000,
+          "total": 81875000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 134096598,
+        "audited_logical_read_passes": 232,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:40.338185+00:00",
+        "system_cpu_percent": 9.8,
+        "available_ram_percent": 44.59401488034849,
+        "commit_used_percent": 38.81609122777763,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 70468750,
+          "kernel_including_idle": 76562500,
+          "user": 1562500,
+          "total": 78125000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 135145174,
+        "audited_logical_read_passes": 232,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:40.848775+00:00",
+        "system_cpu_percent": 9.43,
+        "available_ram_percent": 44.591575076979474,
+        "commit_used_percent": 38.82252956377978,
+        "parent_cpu_machine_percent": 0.188679,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 75000000,
+          "kernel_including_idle": 80468750,
+          "user": 2343750,
+          "total": 82812500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 136205965,
+        "audited_logical_read_passes": 234,
+        "audited_logical_read_bytes_delta": 1060791,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:41.353295+00:00",
+        "system_cpu_percent": 7.98,
+        "available_ram_percent": 44.63337050253206,
+        "commit_used_percent": 38.80239019832736,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 75625000,
+          "kernel_including_idle": 80000000,
+          "user": 2187500,
+          "total": 82187500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 137254541,
+        "audited_logical_read_passes": 234,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:41.860486+00:00",
+        "system_cpu_percent": 9.2,
+        "available_ram_percent": 44.70951934034583,
+        "commit_used_percent": 38.790504842239116,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 72500000,
+          "kernel_including_idle": 75625000,
+          "user": 4218750,
+          "total": 79843750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 138306720,
+        "audited_logical_read_passes": 235,
+        "audited_logical_read_bytes_delta": 1052179,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:42.373917+00:00",
+        "system_cpu_percent": 16.64,
+        "available_ram_percent": 44.73278942473973,
+        "commit_used_percent": 38.76401062001958,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 68906250,
+          "kernel_including_idle": 73281250,
+          "user": 9375000,
+          "total": 82656250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 139371989,
+        "audited_logical_read_passes": 236,
+        "audited_logical_read_bytes_delta": 1065269,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:42.897792+00:00",
+        "system_cpu_percent": 26.78,
+        "available_ram_percent": 44.81291060572716,
+        "commit_used_percent": 38.73716682850334,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 61093750,
+          "kernel_including_idle": 66250000,
+          "user": 17187500,
+          "total": 83437500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 140420565,
+        "audited_logical_read_passes": 236,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:43.399283+00:00",
+        "system_cpu_percent": 5.17,
+        "available_ram_percent": 44.972834199422664,
+        "commit_used_percent": 38.647124038612695,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77343750,
+          "kernel_including_idle": 78906250,
+          "user": 2656250,
+          "total": 81562500
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 141463879,
+        "audited_logical_read_passes": 237,
+        "audited_logical_read_bytes_delta": 1043314,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:43.917567+00:00",
+        "system_cpu_percent": 4.26,
+        "available_ram_percent": 44.975224961517924,
+        "commit_used_percent": 38.64998841986486,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77343750,
+          "kernel_including_idle": 79218750,
+          "user": 1562500,
+          "total": 80781250
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 142536142,
+        "audited_logical_read_passes": 245,
+        "audited_logical_read_bytes_delta": 1072263,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:44.422495+00:00",
+        "system_cpu_percent": 1.15,
+        "available_ram_percent": 44.9672189735784,
+        "commit_used_percent": 38.65089103909369,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 80781250,
+          "kernel_including_idle": 81562500,
+          "user": 156250,
+          "total": 81718750
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 143584718,
+        "audited_logical_read_passes": 245,
+        "audited_logical_read_bytes_delta": 1048576,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:44.953534+00:00",
+        "system_cpu_percent": 3.01,
+        "available_ram_percent": 44.97878045386473,
+        "commit_used_percent": 38.645908372252485,
+        "parent_cpu_machine_percent": 0.18797,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 80625000,
+          "kernel_including_idle": 82500000,
+          "user": 625000,
+          "total": 83125000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 144688189,
+        "audited_logical_read_passes": 247,
+        "audited_logical_read_bytes_delta": 1103471,
+        "reader_counters_observed": true
+      },
+      {
+        "time_utc": "2026-10-08T11:55:45.454589+00:00",
+        "system_cpu_percent": 2.67,
+        "available_ram_percent": 44.97482037100949,
+        "commit_used_percent": 38.64598141658314,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 79687500,
+          "kernel_including_idle": 80781250,
+          "user": 1093750,
+          "total": 81875000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 37019648,
+        "own_working_set_bytes": 48414720,
+        "own_private_percent_total_ram": 0.11080875803587246,
+        "own_working_set_percent_total_ram": 0.1449169639283041,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "final_fresh_hash"
+        ],
+        "audited_logical_read_bytes": 145727443,
+        "audited_logical_read_passes": 249,
+        "audited_logical_read_bytes_delta": 1039254,
+        "reader_counters_observed": true
+      }
+    ],
+    "system_cpu_max_percent": 26.78,
+    "own_cpu_max_machine_percent": 0.963391,
+    "own_private_max_bytes": 39649280,
+    "own_working_set_max_bytes": 50843648,
+    "available_ram_min_percent": 44.222674355521036,
+    "own_process_only": true,
+    "foreign_PID_query_executed": false,
+    "new_sampler_thread_started": false,
+    "extra_own_memory_query_per_existing_sample": 1,
+    "original_guard_and_CPU_denominator_unchanged": true,
+    "read_counters_are_logical_not_physical_disk_IO": true,
+    "samples_can_span_multiple_phases": true,
+    "CPU_cause_or_PC_freeze_resolution_established": false
+  },
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "document_revision": 85,
+  "runtime_plan": {
+    "scope": "INDIVIDUAL_RUNTIME_PROGRESS_NOT_WHOLE_OR_GATE",
+    "legacy_whole_accepted_individual_cases": 3,
+    "legacy_whole_pending_successful_candidates": 1,
+    "runtime_source_qualified_individual_cases": 30,
+    "runtime_remaining_individual_cases": 219,
+    "runtime_remaining_regular_cases": 213,
+    "runtime_remaining_corpus_cases": 6,
+    "runtime_successful_candidates_requiring_closing": 0,
+    "next_runtime_index": 31,
+    "runtime_qualified_test_names": [
+      "actual_import::actual_aead_tamper_cannot_be_reclassified_as_an_importer_or_policy_failure",
+      "actual_import::actual_head_advance_invalidates_old_import_even_with_identical_result_bytes",
+      "actual_import::all_ten_actual_stored_results_import_without_caller_maps_and_preserve_whole_graphs",
+      "actual_import::debug_and_receipts_do_not_expose_raw_package_graph_or_policy_values",
+      "actual_import::field_ranges::actual_aead_tamper_is_original_service_failure_not_field_projection_failure",
+      "actual_import::field_ranges::advanced_head_invalidates_cached_source_and_range_even_when_result_bytes_equal",
+      "actual_import::field_ranges::cached_field_ranges_cannot_rebind_document_branch_project_subject_or_tenant",
+      "actual_import::field_ranges::captured_stored_result_field_ranges_match_whole_direct_graph_without_ingest_or_head_change",
+      "actual_import::field_ranges::each_new_partial_marker_independently_denies_full_product_without_old_markers",
+      "actual_import::field_ranges::revoked_source_acl_denies_new_range_import_and_cached_range_verification",
+      "actual_import::field_ranges::stored_range_debug_and_receipt_do_not_disclose_cached_field_content",
+      "actual_import::field_semantics::actual_aead_tamper_denies_meaning_before_supported_tuple_parsing",
+      "actual_import::field_semantics::actual_captured_source_meaning_matches_direct_import_without_ingest_or_head_write",
+      "actual_import::field_semantics::all_scope5_substitutions_reject_fresh_and_cached_meaning_models",
+      "actual_import::field_semantics::head_advance_invalidates_meanings_even_when_result_bytes_are_same",
+      "actual_import::field_semantics::revoked_acl_denies_new_meaning_import_and_cached_meaning_verify",
+      "actual_import::field_semantics::semantic_partial_markers_each_deny_full_context_without_predecessor_markers",
+      "actual_import::formula_compiler::actual_field_graph_and_compiled_candidate_do_not_become_full_import_or_issuer_authority",
+      "actual_import::formula_compiler::actual_multi_section_compiler_targets_original_source_fields_and_whole_candidate_without_publication",
+      "actual_import::formula_compiler::fresh_acl_aead_head_and_quarantine_changes_deny_compilation_and_never_invoke_cached_consumer",
+      "actual_import::formula_compiler::mixed_current_and_empty_results_compile_only_changed_actual_fields",
+      "actual_import::formula_compiler::protected_or_invalid_second_section_never_creates_a_partial_stored_plan",
+      "actual_import::formula_compiler::provider_scope_substitutions_cannot_rebind_compiled_batch_or_release_candidates",
+      "actual_import::formula_evaluation::authorized_actual_source_cycle_rejects_without_using_old_cached_value",
+      "actual_import::formula_evaluation::authorized_nonnumeric_source_rejects_math_without_ingest_or_cache_fallback",
+      "actual_import::formula_evaluation::every_locked_actual_source_evaluates_like_direct_without_ingest_head_or_full_route",
+      "actual_import::formula_evaluation::five_authentication_scope_substitutions_reject_new_and_cached_numeric_models",
+      "actual_import::formula_evaluation::fresh_and_cached_evaluation_reject_actual_aead_acl_head_and_quarantine_changes",
+      "actual_import::formula_evaluation::missing_document_read_scope_rejects_provider_before_numeric_model_reuse",
+      "actual_import::formula_output::authenticated_actual_result_output_is_replayable_but_does_not_ingest_commit_or_authorize_route"
+    ],
+    "historical_whole_gate_reconciliation_required": true,
+    "whole1470_current_fresh_qualified": false,
+    "full249_current_qualified": false,
+    "signed16_current_qualified": false,
+    "product_complete": false,
+    "P09_gate": "OPEN",
+    "prior_runtime_qualified_cases": 29,
+    "locked_compound_qualified_individual_cases": 1,
+    "all_successful_bodies_pending_whole_reconciliation": 27,
+    "prior_runtime_receipts_and_validators_unchanged": true,
+    "original_STOP_receipts_not_reclassified": true
+  },
+  "previous_document_receipt_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p216-generic-doc-delta-r0084-run01.v1.json",
+    "bytes": 175897,
+    "sha256": "d79891832adbacb08a239e05781eb1cb746f1c16859e09620e12ea344d9bfc8a"
+  },
+  "new_actual_runtime_pair_pins": [
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-029-run008.v1.json",
+      "bytes": 2222962,
+      "sha256": "6cc90037a0fe969aae7467cab32ea667bf2e08a88c148ccd7da717424b7652d1"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p220-case-030-run001.v1.json",
+      "bytes": 1542273,
+      "sha256": "35032b1e17b1d7f02c7a500dcab0dfacf47bfe110718ae20dc0c7389378ccae3"
+    }
+  ],
+  "exact_prior_document_bytes_preserved": true,
+  "original_failure_receipts_preserved": true
+}

@@ -1,0 +1,333 @@
+{
+  "schema_version": "hwpx-agent.p09-current114-retained-streams-body-pass-closing-sampler-stop-summary/v1",
+  "state": "ACTUAL114_BODY_AND_TWO_FULL_BYTE_PASSES_COMPLETE_CLOSING_IDENTITY_UNRESOLVED_NOT_ACCEPTED",
+  "date_local": "2026-10-11",
+  "goal_status": "ACTIVE",
+  "previous_goal_turn": "PROGRESS_ACTUAL113_ACCEPTED_AND_QUEUE_ADVANCED_TO107",
+  "queue": {
+    "accepted_after": 107,
+    "total_individual_cases": 249,
+    "remaining_individual_cases": 142,
+    "next_runtime_index": 114,
+    "accepted_delta_this_turn": 0,
+    "authority_pin": {
+      "path": "implementation/p09/evidence/p09-361-case113-current-epoch-accept001.v1.json",
+      "bytes": 274684,
+      "sha256": "5c3493c8b903b7aca288f90499e60fa3038046fd8ccfc68d75d602d0f4cea289"
+    }
+  },
+  "admission_issue": {
+    "original_1731_scope_plus_prior114_body_lineage_before_new_code_inputs": 1733,
+    "original_complete_model_seconds": 600.5110343388149,
+    "original_deadline_seconds": 600,
+    "actual_full_attempt_not_started_under_old_overbudget_model": true,
+    "input_scope_removed": false,
+    "deadline_or_rates_raised": false
+  },
+  "retained_stream_optimization": {
+    "mode": "One raw unbuffered DuplicateHandle/CRT stream per input retained within one live frame, two complete actual byte reads with cursor reset and fresh Native identity each time",
+    "hash_JSON_or_byte_cache": false,
+    "physical_streams_retained_across_frames": false,
+    "physical_handle_ceiling_including_held_and_retained": 8192,
+    "only_second_real_duplicate_open_reservation_removed": true,
+    "reused_stream_runs_original_pressure_checkpoint": true,
+    "original_path_source_binding_reader_stream_identity_AST_restored_exactly": true,
+    "original_byte_rates": {
+      "binary": 1048576,
+      "other": 2097152
+    },
+    "original_acquisition_rate": 14,
+    "original_new_physical_open_ceiling": 20,
+    "original_CPU_RAM_and600_deadlines_retained": true
+  },
+  "real_small_probe": {
+    "pin": {
+      "path": "implementation/p09/evidence/p09-361-retained-read-streams-probe001.v1.json",
+      "bytes": 50036,
+      "sha256": "49e12c5626b4baa271eb9372368bd80ca63f2578d77069c82e6f9643b27b4195"
+    },
+    "elapsed": 13.586284599994542,
+    "inputs": 40,
+    "each_bytes": 623087,
+    "state": "CLOSED",
+    "registered": false,
+    "held": {
+      "input_lock_handles_opened": 47,
+      "input_lock_handles_closed": 47,
+      "input_lock_handles_remaining": 0,
+      "byte_stream_identity_checks": 80
+    },
+    "borrowed": {
+      "duplicate_handles_opened": 40,
+      "duplicate_handles_closed": 40,
+      "duplicate_handles_remaining": 0,
+      "duplicate_close_failed_attempts": 0,
+      "shared_offset_resets": 80,
+      "active_borrow_binding": false,
+      "byte_stream_pathname_reopens": 0,
+      "original_held_handles_closed_by_borrower": false,
+      "redundant_pre_descriptor_metadata_queries": 0,
+      "original_pre_read_stream_identity_check_retained": true,
+      "input_scope_reduced": false,
+      "original_resource_guards_and_pacing_retained": true,
+      "measured_CPU_or_freeze_improvement_claimed": false,
+      "retained_within_one_live_frame_only": true,
+      "unbuffered_raw_streams": true,
+      "parsed_JSON_hash_or_byte_cache": false,
+      "physical_handle_ceiling": 8192,
+      "physical_handle_peak": 87,
+      "new_duplicate_open_reservations": 40,
+      "reused_stream_pressure_checkpoints": 40,
+      "logical_read_leases": 80,
+      "logical_read_lease_returns": 80,
+      "pending_open_reservation": false,
+      "resource_callback_retained_on_reuse": true,
+      "cursor_reset_and_fresh_identity_on_each_pass": true
+    },
+    "native_pacing": {
+      "maximum_opens_per_second": 20,
+      "open_reservations": 87,
+      "requested_sleep_seconds": 4.383719071399115,
+      "idle_time_cannot_accumulate_multiple_open_credits": true
+    },
+    "samples": 27,
+    "CPU_max": 46.25,
+    "RAM_free_min": 47.4364103258854,
+    "private_peak": 27.10546875,
+    "current_pins": [
+      {
+        "path": "tools/p09/retained_read_streams.py",
+        "bytes": 10939,
+        "sha256": "1b0dff19ee3e09eaf4337325f541bafb2d21ce0c6def41ccd5c5791600963ab1"
+      },
+      {
+        "path": "tools/p09/tests/test_retained_read_streams.py",
+        "bytes": 10625,
+        "sha256": "185424c4a7a3175f26a5407052b7e262faf01dc52cef4bd5421709dad598ad59"
+      },
+      {
+        "path": "tools/p09/probe_retained_read_streams.py",
+        "bytes": 5507,
+        "sha256": "a8878ef922e01bd856fb078569d378e892ab628463955951f940e77130f54d7c"
+      }
+    ]
+  },
+  "actual114": {
+    "pin": {
+      "path": "implementation/p09/evidence/p09-361-case114-current-runtime-run001.v1.json",
+      "bytes": 2061087,
+      "sha256": "59d337ea82f6357bbe006f7508c61298ca983d7fb409cc896748c5990ea6e71f"
+    },
+    "state": "STOPPED_NOT_ACCEPTED",
+    "stop_reason": "CPU_SAMPLE_INTERVAL_MISSING",
+    "closing_error_code": "CPU_SAMPLE_INTERVAL_MISSING",
+    "test": "actual_import::policy_product::repository_revocation_mid_verification_denies_after_original_compiler_reads",
+    "product_body_observed": true,
+    "actual_product_child_executed": true,
+    "passed": 1,
+    "failed": 0,
+    "filtered": 248,
+    "whole_input_count": 1750,
+    "directory_count": 347,
+    "each_complete_before_after_bytes": 145318263,
+    "held_handles_opened_closed": 2097,
+    "duplicates_opened_closed": 1750,
+    "original_stream_identity_checks": 3500,
+    "shared_cursor_resets": 3500,
+    "physical_handle_peak": 3847,
+    "logical_read_leases_and_returns": 3500,
+    "new_duplicate_reservations": 1750,
+    "reused_pressure_checkpoints": 1750,
+    "remaining_handles": 0,
+    "frame_state": "CLOSED",
+    "frame_registered": false,
+    "held_identity_after_owned_cleanup": null,
+    "original_owned_cleanup_confirmed_before_frame_release": false,
+    "post_Job_cleanup_resource_samples": 0,
+    "Native_source_frame_qualified": false,
+    "current_generation_runtime_candidate_qualified": false,
+    "cleanup_confirmed": true,
+    "owned_tree_empty": true,
+    "elapsed_seconds": 417.68,
+    "resource": {
+      "sample_count": 823,
+      "host_CPU_max_percent": 66.99,
+      "available_RAM_min_percent": 46.447664685194866,
+      "commit_max_percent": 34.87594437841179,
+      "parent_CPU_max_machine_percent": 2.3172545119441317,
+      "parent_private_max_MiB": 43.9609375,
+      "Job_private_max_MiB": 35.79
+    },
+    "capture": {
+      "received_stdout": 233,
+      "received_stderr": 0,
+      "full_received": true,
+      "raw_log_content_included": false,
+      "original_each_stream_cap": 32768
+    },
+    "model": {
+      "predicted_runtime_combined_seconds": 516.3882203510829,
+      "removed_second_physical_reservations": 1750,
+      "removed_nominal_physical_open_wait_seconds": 87.5,
+      "unchanged_margin_seconds": 60,
+      "unchanged_lock_deadline_seconds": 600,
+      "explicit_PDH_cost_seconds": 2.05,
+      "IO_or_native_wait_overlap_assumed": false
+    },
+    "PDH": {
+      "existing_observer_instances": 1,
+      "second_sampler": false,
+      "samples": 52,
+      "setup_seconds": 0.255751099990448,
+      "maximum_added_sample_seconds": 0.021616100013488904,
+      "total_added_sample_seconds": 0.26251159998355433,
+      "query_remaining": false,
+      "cleanup_confirmed": true
+    },
+    "actual_source_AEAD_compiler_with_actor_scanner_repository_test_doubles": true,
+    "live_SQL_or_Hangul_acceptance": false
+  },
+  "closing_cause": {
+    "original_code": "run_case112_current_stored.py run_owned.write initializes post_time=0, then post_guard samples immediately when the c.run sole observer just sampled at final cleanup; GetSystemTimes can have zero total delta",
+    "failure_location": "Frame.commit's initial check before held_identity_after_owned_cleanup and owned_cleanup_seen; two whole byte boundaries were already complete",
+    "original_profile_retry_for_missing_interval_exists_but_post_guard_bypassed_it": true,
+    "last_completed_resource_CPU_percent": 29.69,
+    "no_high_CPU_guard_stop_this_attempt": true,
+    "old_PC_freeze_root_cause": "UNCONFIRMED"
+  },
+  "sampler_handoff_fix": {
+    "helper": "tools/p09/postcleanup_sampler_handoff.py",
+    "test": "tools/p09/tests/test_postcleanup_sampler_handoff.py",
+    "pure_contracts": 6,
+    "exact_qualified_engine_code_footprint_including_exception_table_verified": true,
+    "one_timestamp_assignment_to_last_successful_same_owner_sample": true,
+    "AST_undo_exact": true,
+    "extra_queries_threads_processes_sleeps_retries_or_zero_samples": false,
+    "original_CPU_RAM_decisions_and_sample_interval_retained": true,
+    "original_deadlines_not_extended": true,
+    "integrated_in_new_actual_product_run": false,
+    "old114_runtime_code_unchanged": true
+  },
+  "acceptance_prototype": {
+    "helper": "tools/p09/accept_case114_current_epoch.py",
+    "contract_count": 10,
+    "actual_ROOT_PIN": null,
+    "actual114_failed_root_rejected_despite_body_pass": true,
+    "actual_queue_advance": false,
+    "original113_acceptor_AST_undo_exact": true,
+    "original112_nonphysical_oracle_checks_retained": true,
+    "expected_physical_counter_changes": 3,
+    "exact_cost_equality_matches_pinned_runtime_arithmetic_construction_not_float_reassociation": true,
+    "tolerance_widened": false,
+    "synthetic_models_memory_only_not_evidence": true,
+    "initial_float_associativity_and_fixture_method_binding_errors_corrected": true
+  },
+  "small_contracts": {
+    "retained_streams": 16,
+    "current114_runtime": 9,
+    "acceptance_prototype": 10,
+    "sampler_handoff": 6,
+    "total": 41,
+    "actual_products_or_Native_frames_not_replayed_by_contracts": true,
+    "initial_handoff_AST_nested_assignment_location_error_corrected": true
+  },
+  "current_code_pins": [
+    {
+      "path": "tools/p09/run_case114_current_queue.py",
+      "bytes": 8761,
+      "sha256": "f1839223763d910d3d713e300bbd75d0c012090373dc9a622dc048ca20130349"
+    },
+    {
+      "path": "tools/p09/tests/test_case114_current_queue.py",
+      "bytes": 6821,
+      "sha256": "423e547782a167aac15072510aaaf3e33584bc4e341fd6dd20928327af594e87"
+    },
+    {
+      "path": "tools/p09/retained_read_streams.py",
+      "bytes": 10939,
+      "sha256": "1b0dff19ee3e09eaf4337325f541bafb2d21ce0c6def41ccd5c5791600963ab1"
+    },
+    {
+      "path": "tools/p09/tests/test_retained_read_streams.py",
+      "bytes": 10625,
+      "sha256": "185424c4a7a3175f26a5407052b7e262faf01dc52cef4bd5421709dad598ad59"
+    },
+    {
+      "path": "tools/p09/probe_retained_read_streams.py",
+      "bytes": 5507,
+      "sha256": "a8878ef922e01bd856fb078569d378e892ab628463955951f940e77130f54d7c"
+    },
+    {
+      "path": "tools/p09/accept_case114_current_epoch.py",
+      "bytes": 10806,
+      "sha256": "2e1a11faa4ba09978b23609f42018784ea093d699b33bebc5625abdb4234f8c9"
+    },
+    {
+      "path": "tools/p09/tests/test_case114_current_epoch.py",
+      "bytes": 10077,
+      "sha256": "82cb13a13c6e1b03e7312831a6aec7e54e97fa6197ad9a8868948d2951baa59f"
+    },
+    {
+      "path": "tools/p09/postcleanup_sampler_handoff.py",
+      "bytes": 4775,
+      "sha256": "26a23c539eaf38eae0c7560142afd53d67c02983ac8ece18cd84ef8d29b5abf9"
+    },
+    {
+      "path": "tools/p09/tests/test_postcleanup_sampler_handoff.py",
+      "bytes": 3510,
+      "sha256": "35fa0b5bdcda4f0e85148f89643f9e7e93aa31123781735f157cd26bb3adbc39"
+    }
+  ],
+  "preserved_failed_code_preimages": [
+    {
+      "path": "implementation/p09/evidence/p361-case114-failed001-code/tools/p09/run_case114_current_queue.py",
+      "bytes": 8761,
+      "sha256": "f1839223763d910d3d713e300bbd75d0c012090373dc9a622dc048ca20130349"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-case114-failed001-code/tools/p09/tests/test_case114_current_queue.py",
+      "bytes": 6821,
+      "sha256": "423e547782a167aac15072510aaaf3e33584bc4e341fd6dd20928327af594e87"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-case114-failed001-code/tools/p09/retained_read_streams.py",
+      "bytes": 10939,
+      "sha256": "1b0dff19ee3e09eaf4337325f541bafb2d21ce0c6def41ccd5c5791600963ab1"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-case114-failed001-code/tools/p09/tests/test_retained_read_streams.py",
+      "bytes": 10625,
+      "sha256": "185424c4a7a3175f26a5407052b7e262faf01dc52cef4bd5421709dad598ad59"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-case114-failed001-code/tools/p09/probe_retained_read_streams.py",
+      "bytes": 5507,
+      "sha256": "a8878ef922e01bd856fb078569d378e892ab628463955951f940e77130f54d7c"
+    }
+  ],
+  "preserved_bytes": 42653,
+  "preservation_exactly_verified_against_actual114_or_small_real_probe_pins": true,
+  "scope_boundaries": {
+    "successful111_112_113_replayed": false,
+    "passed114_replayed": false,
+    "full249_current_qualified": false,
+    "signed16_current_qualified": false,
+    "whole_runtime_reconciliation_required": true,
+    "P09_gate": "OPEN",
+    "A12_gate": "OPEN",
+    "A13_gate": "OPEN",
+    "P10_started": false,
+    "PC_freeze_resolved": false,
+    "Defender_OS_WSL_settings_changed": false,
+    "Hangul_access_prompt_started": false,
+    "delete_move_commit_push_or_unrelated_termination": false
+  },
+  "next": {
+    "do_not_replay114_body": true,
+    "do_not_rename_failed_root_or_closed_frame_to_PASS": true,
+    "required": "Complete separately pinned full-current-source closing recovery with actual post-owned-cleanup Native identities, then strict distinct compound acceptance of the preserved114 body and independent source epoch. Revalidate full1750 inherited bytes plus all current helpers/new evidence and original resource/600 limits. Only then increment107 to108; keep epoch boundaries explicit.",
+    "source_only_closing_recovery_implemented": false,
+    "source_only_closing_recovery": "NOT_RUN",
+    "future_product_engine_handoff_fix_must_be_integrated_and_separately_qualified": true
+  }
+}

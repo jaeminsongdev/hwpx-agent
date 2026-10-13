@@ -1,0 +1,143 @@
+{
+  "schema": "hwpx-agent.p09-99-review-locations-source-regression/v1",
+  "recorded_at_utc": "2026-10-04 16:15:35 UTC",
+  "state": "PASS_SCOPED_SOURCE_COMPONENT_NOT_native_caret_visual_SQL_full_comment_product_or_Gate",
+  "git_head": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+  "rust": {
+    "passed": 287,
+    "failed": 0,
+    "ignored": 0,
+    "package": {
+      "passed": 126,
+      "start_chunk_id": "cb5112",
+      "terminal_chunk_id": "9a766d",
+      "exit_code": 0,
+      "command": "cargo test -p hwpx-package --lib --test id_index --test patch_engine --test document_import_memo_catalog --test document_import_review_metadata --test memo_style_output --test text_flow --test document_import_review --test document_import_assembly_review --test review_body_output --test patch_element_content --test review_delete_output --test review_locations --target-dir target/p09-99-package --locked --offline",
+      "suites": {
+        "lib": 42,
+        "id_index": 8,
+        "patch_engine": 6,
+        "document_import_memo_catalog": 6,
+        "document_import_review_metadata": 8,
+        "memo_style_output": 4,
+        "text_flow": 12,
+        "document_import_review": 15,
+        "document_import_assembly_review": 3,
+        "review_body_output": 5,
+        "patch_element_content": 4,
+        "review_delete_output": 6,
+        "review_locations": 7
+      },
+      "new_location_suite_elapsed_seconds": 5.22
+    },
+    "product": {
+      "passed": 161,
+      "start_chunk_id": "bcb602",
+      "terminal_chunk_id": "88d8e2",
+      "exit_code": 0,
+      "command": "cargo test -p hwpx-agent-cli --test comment_operation --test form_stored_provider --test stored_comment_provider --target-dir target/p09-99-regression --locked --offline",
+      "suites": {
+        "comment_operation": 8,
+        "form_stored_provider": 137,
+        "stored_comment_provider": 16
+      },
+      "stored_provider_elapsed_seconds": 263.28,
+      "same_session_polled_to_terminal": true
+    },
+    "new_named_feature_tests": {
+      "package_locations": 7,
+      "stored_locations": 3,
+      "included_in_287": true
+    },
+    "all_historical_qualification_reexecuted": false
+  },
+  "python": {
+    "passed": 8,
+    "failed": 0,
+    "terminal_chunk_id": "ca3b79",
+    "exit_code": 0,
+    "scope": "one live prior raw/inverse audit; three view/restore/preimage tests; four mocked current manifests; mock tests NOT live raw/native evidence"
+  },
+  "strict_clippy": [
+    {
+      "scope": "package/lib/new location test",
+      "command": "cargo clippy -p hwpx-package --lib --test review_locations --target-dir target/p09-99-package --locked --offline -- -D warnings",
+      "terminal_chunk_id": "9a766d",
+      "exit_code": 0
+    },
+    {
+      "scope": "product/lib/original stored provider test target",
+      "command": "cargo clippy -p hwpx-agent-cli --lib --test form_stored_provider --target-dir target/p09-99-regression --locked --offline -- -D warnings",
+      "terminal_chunk_id": "88d8e2",
+      "exit_code": 0
+    }
+  ],
+  "format_diff": {
+    "terminal_chunk_id": "f2e6f0",
+    "exit_code": 0,
+    "scope": "four new Rust files check only; git diff --check; no original formatter sweep"
+  },
+  "current_source_component_conformance": {
+    "terminal_chunk_id": "6e469e",
+    "exit_code": 0,
+    "upstream_validators_verified": 15,
+    "green_rows": 0,
+    "P09_gate": "OPEN",
+    "scope": "original declared component checks NOT new location native or full product acceptance"
+  },
+  "default_conformance": {
+    "terminal_chunk_id": "0c038d",
+    "exit_code": 1,
+    "state": "FAIL:matrix_drift",
+    "failure_preserved": true
+  },
+  "tested_source_delta": [
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review.rs",
+      "bytes": 20449,
+      "sha256": "3d41efdbb0c8d504b2825cb5384d7460d0318c0e22a6e06d8fd6b6c547ab99c3"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/review.rs",
+      "bytes": 4375,
+      "sha256": "05a487128e7b0a0dcd8cc539c8b6d7adc767d4d3685538f5032fa3cc9bc6e7fb"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import.rs",
+      "bytes": 15600,
+      "sha256": "300d0bfd9a0337805f2e6bebbf75f55acee6cb1cd113a6712b181f80844b7aa2"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review/locations.rs",
+      "bytes": 13497,
+      "sha256": "ada9fcc160f3cf85027cc7d283f15466a4849bfbfaaf7e22e7c1ae9bfd5aacd2"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/review/locations.rs",
+      "bytes": 5098,
+      "sha256": "54bd6efcd8d450a3cfeb65b7faae6ae75820e9b1c0f974f36c44cf83cd058209"
+    },
+    {
+      "path": "crates/hwpx-package/tests/review_locations.rs",
+      "bytes": 10049,
+      "sha256": "4b7c1737e8d98995b9763e57b0b5b1c6a8980ae69229879bed0bd652e48f8578"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_locations.rs",
+      "bytes": 6185,
+      "sha256": "e91e095ea8e42ea46a9907557a13acade26d5e04ca77b7a0ac5058d07211de15"
+    }
+  ],
+  "qualification": {
+    "native_executed": false,
+    "actual_SQL_executed": false,
+    "native_caret_or_visual_coordinates_verified": false,
+    "full_comment_product_acceptance": false,
+    "native_author_time_state_binding": false,
+    "execution_publication_authority": false,
+    "full_typed_comment_compiler_route_connected": false,
+    "product_complete": false,
+    "P09_gate": "OPEN",
+    "P10_new_implementation": false
+  }
+}

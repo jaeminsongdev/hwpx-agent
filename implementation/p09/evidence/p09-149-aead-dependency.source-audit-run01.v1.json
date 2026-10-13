@@ -1,0 +1,118 @@
+{
+  "schema_version": "hwpx-agent.p09-aead-candidate-source-audit/v1",
+  "state": "PASS_SOURCE_CONTRACT_COMPILER_DEFERRED_NOT_RUNTIME_SQL_NATIVE_OR_GATE",
+  "goal_status": "active",
+  "P09_gate": "OPEN",
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "current_helpers": [
+    {
+      "path": "tools/p09/run_aead_dependency_signed_tests.py",
+      "bytes": 15118,
+      "sha256": "3c31c0daa6b50c4612da29777361bcbb24c1c128fc9934937e6a8f5eb13173ca"
+    },
+    {
+      "path": "tools/p09/tests/test_aead_dependency_signed_tests.py",
+      "bytes": 10029,
+      "sha256": "3646c5f29877d95893d12ea5c32b1ed50248bac6d0c6f05b766d2160f96c1d30"
+    }
+  ],
+  "parent_pin": {
+    "path": "implementation/p09/evidence/p09-149-compression-captured-suite.terminal-audit-run01.v1.json",
+    "bytes": 9174,
+    "sha256": "333380ecf6f02892fec76fcd4581e5b6e61ff03026a7268a4af97b086f571af7"
+  },
+  "current_stopped_pin": {
+    "path": "implementation/p09/evidence/p09-149-compression-full-stored.actual-run02.v1.json",
+    "bytes": 3322888,
+    "sha256": "103c85ed2b7bad5885c37e7cc22f8f55ba46c4a2c6435b4f8110e34687940557"
+  },
+  "support_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-aead-dependency.light-run02.v1.json",
+      "bytes": 1479,
+      "sha256": "5a1480ceef4fd12f09d3de2dbf348836042475bdfbff6fbf511388acccf1e864"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-aead-dependency.inventory-run01.v1.json",
+      "bytes": 50901,
+      "sha256": "dfa51c41409751708847dbe09534c9e05ea8fc2246af74c712c1a6c1225c928f"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-aead-compiler-headroom-r23/helper-preimages.v1.json",
+      "bytes": 30112,
+      "sha256": "5e7b0e8c5297e03fc6f5410dc62e756ea072b33cd338aea2be4496eb55906e5d"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-aead-dependency.light-run01.v1.json",
+      "bytes": 1478,
+      "sha256": "de90fc241e3663b6acf7a3eec35e3e358f51b0ed50b01e5707a3bd8aca8163af"
+    }
+  ],
+  "whole_preimages_original14": {
+    "tools/p09/run_aead_dependency_signed_tests.py": {
+      "path": "tools/p09/run_aead_dependency_signed_tests.py",
+      "bytes": 12786,
+      "sha256": "6993a36c853c71fe01eaa7301080cb7e80b4a130b14acff1564de8885ee87907"
+    },
+    "tools/p09/tests/test_aead_dependency_signed_tests.py": {
+      "path": "tools/p09/tests/test_aead_dependency_signed_tests.py",
+      "bytes": 9007,
+      "sha256": "2a3bd296d06aa9c0ad83ddb2f0c8e7a45a6bcc02a6c050cafd9215a5df9eb2b8"
+    }
+  },
+  "contract_checks": 17,
+  "source_closing_exact": true,
+  "bound_current_inputs": 968,
+  "prior_r21_full_source_freeze_current_exact": true,
+  "current_Rust_inputs": 783,
+  "original_test_names": 249,
+  "original_modules": 59,
+  "scoped_AEAD_packages": [
+    "aead",
+    "aes",
+    "aes-gcm",
+    "cipher",
+    "ctr",
+    "ghash",
+    "polyval",
+    "universal-hash"
+  ],
+  "scoped_profile_key_count": 81,
+  "same_Cargo_lock_packages_unique": true,
+  "original_Rust_or_product_assertions_changed": false,
+  "original_global_resource_policy_changed": false,
+  "compile_admission_RAM_percent": 15,
+  "precompiled_runtime_admission_RAM_percent": 10,
+  "compiler_run_started": false,
+  "new_profile_compiled_inventory_qualified": false,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "statistical_speedup_proven": false,
+  "PC_freeze_resolved": false,
+  "raw_logs_printed_or_saved": false,
+  "new_child_or_thread_started": false,
+  "inventory_stop_metrics": {
+    "elapsed_seconds": 3,
+    "host_CPU_max": 8.95,
+    "available_RAM_percent_min": 13.966685036710459,
+    "commit_percent_max": 41.65097822271978,
+    "owned_tree_empty": true,
+    "cleanup_confirmed": true
+  },
+  "next_action": "After compiler headroom15% stable, compile new exact249 inventory then original signed/whole249 with same limits; no cap increase, blind retry, assertion removal, SQL/native acceptance or promotion.",
+  "IO": {
+    "read_passes": 2916,
+    "bytes_read": 112063721,
+    "bound_inputs": 970,
+    "final_fresh_hashes": 970,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 36.9686
+}

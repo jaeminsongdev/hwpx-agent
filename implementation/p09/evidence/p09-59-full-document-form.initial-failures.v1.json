@@ -1,0 +1,14 @@
+{
+  "schema": "hwpx-agent.p09-full-document-form-initial-failures/v1",
+  "scope": "actual_source_compile_and_clippy_failures_not_native_evidence",
+  "attempts": [
+    {"tool_chunk": "6563b1", "exit_code": 1, "stage": "cargo_test_compile", "cause": "new_module_unclosed_impl_delimiter"},
+    {"tool_chunk": "4ceb1f", "exit_code": 1, "stage": "cargo_test_compile", "error_codes": ["E0559", "E0609"], "cause": "test_fixture_fields_not_in_actual_domain_api"},
+    {"tool_chunk": "9624ce", "exit_code": 1, "stage": "strict_clippy", "cause": ["wildcard_imports", "too_many_lines"]},
+    {"tool_chunk": "56c114", "exit_code": 1, "stage": "strict_clippy", "cause": ["test_fixture_too_many_lines", "collapsible_if"]}
+  ],
+  "repairs": "new code delimiter and fixture fields corrected; compiler and fixture helpers split; explicit production imports; no lint allow or validation weakening",
+  "native_started": false,
+  "raw_document_values_or_full_logs_present": false,
+  "p09_complete": false
+}

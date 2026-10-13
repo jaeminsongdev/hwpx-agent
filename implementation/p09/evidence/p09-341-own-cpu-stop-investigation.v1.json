@@ -1,0 +1,484 @@
+{
+  "schema_version": "hwpx-agent.p09-own-cpu-stop-investigation/v1",
+  "goal_status": "active",
+  "product_runtime_accepted": 101,
+  "remaining_in_this_249_group": 148,
+  "remaining_regular": 142,
+  "remaining_corpus": 6,
+  "next_index": 108,
+  "source_closing_pending": 0,
+  "whole_reconciliation_pending": 98,
+  "current_code_schema": "v7",
+  "current_code_contract_executions": 272,
+  "current_code_distinct_fresh_pass": true,
+  "current_code_full_native_qualified": false,
+  "actual107_reexecuted": false,
+  "stop13_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p340-case-108-run013.v1.json",
+    "bytes": 185528,
+    "sha256": "0c0040175691708de217afa660bc3a779e0bee86f6f826aaee22514857d6df6c"
+  },
+  "stop13": {
+    "state": "FAILED_NOT_ACCEPTED",
+    "error": "STOP_SUSTAINED_SYSTEM_CPU",
+    "stage": "source_frame_acquire",
+    "diagnostic": {
+      "stage": "source_frame_acquire",
+      "exception_class": "ValueError",
+      "locations": [
+        {
+          "file": "locked_runtime_inputs.py",
+          "line": 72
+        },
+        {
+          "file": "near_saturation_read_backpressure.py",
+          "line": 37
+        },
+        {
+          "file": "qualify_rejected_parent_connection_r2.py",
+          "line": 54
+        },
+        {
+          "file": "locked_runtime_inputs.py",
+          "line": 158
+        },
+        {
+          "file": "review_checkpoint_queue_stop.py",
+          "line": 62
+        },
+        {
+          "file": "build_current_issuer_probe.py",
+          "line": 68
+        },
+        {
+          "file": "sql_percentage_resources.py",
+          "line": 101
+        },
+        {
+          "file": "conservative_maintenance.py",
+          "line": 74
+        }
+      ],
+      "exception_message_included": false,
+      "diagnostic_not_acceptance": true
+    },
+    "product": false,
+    "attempt": true,
+    "qualified": false,
+    "cleanup": true,
+    "sidecar": null,
+    "bodypin": null,
+    "bodypath": "implementation/p09/evidence/locked-r07/cases/p340-case-108-run013.json",
+    "io": {
+      "bound_inputs": 172,
+      "final_fresh_hashes": 172,
+      "read_passes": 344,
+      "bytes_read": 27989852,
+      "finished": true
+    },
+    "observer_keys": [
+      "completed_sample_count",
+      "samples",
+      "system_cpu_max_percent",
+      "own_cpu_max_machine_percent",
+      "own_private_max_bytes",
+      "own_working_set_max_bytes",
+      "available_ram_min_percent",
+      "own_process_only",
+      "foreign_PID_query_executed",
+      "new_sampler_thread_started",
+      "extra_own_memory_query_per_existing_sample",
+      "original_guard_and_CPU_denominator_unchanged",
+      "read_counters_are_logical_not_physical_disk_IO",
+      "samples_can_span_multiple_phases",
+      "CPU_cause_or_PC_freeze_resolution_established"
+    ],
+    "frame_keys": [
+      "frame_state",
+      "registered_live_frame",
+      "input_count",
+      "input_bytes",
+      "actual_byte_boundaries",
+      "original_owned_cleanup_confirmed_before_release",
+      "held_identity_after_owned_cleanup",
+      "handles",
+      "original_two_actual_per_case_byte_reads_retained",
+      "serialized_pin_reused_as_live_handle",
+      "input_exclusions_added",
+      "security_sandbox_claimed"
+    ],
+    "observer_scalar": {
+      "completed_sample_count": 76,
+      "system_cpu_max_percent": 100,
+      "own_cpu_max_machine_percent": 1.893939,
+      "own_private_max_bytes": 63287296,
+      "own_working_set_max_bytes": 74690560,
+      "available_ram_min_percent": 30.624939081542767,
+      "own_process_only": true,
+      "foreign_PID_query_executed": false,
+      "new_sampler_thread_started": false,
+      "extra_own_memory_query_per_existing_sample": 1,
+      "original_guard_and_CPU_denominator_unchanged": true,
+      "read_counters_are_logical_not_physical_disk_IO": true,
+      "samples_can_span_multiple_phases": true,
+      "CPU_cause_or_PC_freeze_resolution_established": false
+    },
+    "sample_keys": {
+      "samples": [
+        "time_utc",
+        "system_cpu_percent",
+        "available_ram_percent",
+        "commit_used_percent",
+        "parent_cpu_machine_percent",
+        "parent_cpu_delta_100ns",
+        "raw_system_cpu_delta_100ns",
+        "parent_affinity_mask",
+        "parent_priority_readback",
+        "parent_process_only",
+        "foreign_Process_query_executed",
+        "own_private_bytes",
+        "own_working_set_bytes",
+        "own_private_percent_total_ram",
+        "own_working_set_percent_total_ram",
+        "phase_at_sample",
+        "phases_since_previous_sample",
+        "audited_logical_read_bytes",
+        "audited_logical_read_passes",
+        "audited_logical_read_bytes_delta",
+        "reader_counters_observed"
+      ]
+    },
+    "handle_keys": [
+      "input_lock_handles_opened",
+      "input_lock_handles_closed",
+      "input_lock_handles_remaining",
+      "input_lock_cleanup_confirmed",
+      "handle_metadata_checks",
+      "maximum_lock_seconds",
+      "ancestor_walk_steps",
+      "handle_close_failed_attempts",
+      "active_reader_bindings",
+      "active_byte_streams",
+      "release_started",
+      "byte_stream_identity_checks",
+      "separate_pathname_reopens",
+      "file_write_or_delete_operation_executed",
+      "input_scope_reduced",
+      "kernel_or_malicious_bypass_protection_claimed",
+      "native_open_pacing",
+      "probe_handles_opened",
+      "probe_handles_closed",
+      "probe_handles_remaining",
+      "probe_handle_close_failed_attempts",
+      "borrowed_byte_streams",
+      "native_open_backpressure",
+      "lower_native_fan_out",
+      "lock_timing_diagnostic",
+      "acquisition_phase_pressure"
+    ]
+  },
+  "stop13_samples": {
+    "frame": {
+      "frame_state": "CLOSED",
+      "registered_live_frame": false,
+      "input_count": 1658,
+      "input_bytes": 121024424,
+      "actual_byte_boundaries": []
+    },
+    "handles": {
+      "input_lock_handles_opened": 163,
+      "input_lock_handles_closed": 163,
+      "input_lock_handles_remaining": 0,
+      "handle_close_failed_attempts": 0,
+      "active_reader_bindings": 0,
+      "active_byte_streams": 0,
+      "probe_handles_opened": 0,
+      "probe_handles_closed": 0,
+      "probe_handles_remaining": 0,
+      "probe_handle_close_failed_attempts": 0
+    },
+    "pacing": {
+      "native_open_pacing": {
+        "maximum_opens_per_second": 20,
+        "open_reservations": 163,
+        "requested_sleep_seconds": 10.178252271524554,
+        "idle_time_cannot_accumulate_multiple_open_credits": true
+      },
+      "native_open_backpressure": {
+        "warning_system_CPU_percent": 95,
+        "cool_distinct_sample_windows": 2,
+        "maximum_pause_windows_per_entry": 8,
+        "warning_entries": 0,
+        "completed_pause_windows": 0,
+        "maximum_observed_pause_windows_in_one_entry": 0,
+        "requested_pause_seconds": 0,
+        "original_hard_resource_decisions_unmodified": true,
+        "original_IO_deadline_unmodified": true,
+        "original_sampler_windows_reused": true,
+        "new_native_query_or_sampler_thread_started": false,
+        "original_read_checks_skipped": false,
+        "original_frame_deadline_checked_before_open": true,
+        "original_32_open_rate_limit_and_no_burst_credits_preserved": true,
+        "pressure_applies_to_native_reservations_including_borrowed_streams": true,
+        "original_owner_sample_source_reused": true,
+        "cleanup_not_guarded_by_pressure": true,
+        "measured_CPU_or_PC_freeze_improvement_claimed": false
+      },
+      "lower_native_fan_out": {
+        "original_upper_ceiling_per_second": 32,
+        "selected_maximum_reservations_per_second": 20,
+        "nominal_reservation_density_reduction_percent": 37.5,
+        "original_pacer_and_no_burst_preserved": true,
+        "original_CPU_RAM_IO_lock_guards_preserved": true,
+        "all_identity_and_byte_checks_retained": true,
+        "cleanup_not_rate_or_pressure_guarded": true,
+        "measured_CPU_or_PC_freeze_improvement_claimed": false
+      },
+      "acquisition_phase_pressure": {
+        "acquisition_maximum_reservations_per_second": 14,
+        "original_global_and_byte_reservation_ceiling_per_second": 20,
+        "acquisition_used": true,
+        "acquisition_complete": false,
+        "acquisition_reservations": 163,
+        "restored_original_rate": 20,
+        "same_original_pacer": true,
+        "clock_and_sleeper_and_checkpoint_retained": true,
+        "clock_previous_credit_or_reservation_counter_reset": false,
+        "extra_sampler_or_thread_started": false,
+        "original_CPU_RAM600_and_all_byte_identity_guards_preserved": true,
+        "cleanup_callback_wrapped": false,
+        "nominal_acquisition_density_reduction_percent": 30,
+        "CPU_or_PC_freeze_improvement_established": false
+      }
+    },
+    "last4": [
+      {
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 63287296,
+        "available_ram_percent": 32.753170978109814,
+        "commit_used_percent": 39.51736375914926,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 63287296,
+        "available_ram_percent": 32.36065688334123,
+        "commit_used_percent": 39.53946488662503,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 63287296,
+        "available_ram_percent": 32.50394322491738,
+        "commit_used_percent": 39.60315432550526,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 63287296,
+        "available_ram_percent": 32.41389118599577,
+        "commit_used_percent": 39.54142664864837,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      }
+    ],
+    "body_exists": false
+  },
+  "stop13_earlytrace": {
+    "early": {
+      "early_source_warning_CPU_percent": 90,
+      "cool_distinct_samples": 2,
+      "maximum_pause_windows": 8,
+      "warning_entries": 1,
+      "completed_pause_windows": 4,
+      "maximum_observed_pause_windows": 4,
+      "requested_pause_seconds": 2,
+      "original_guard_called_before_pressure": true,
+      "original_hard_CPU_RAM600_guards_preserved": true,
+      "existing_owner_samples_only": true,
+      "new_sampler_or_thread_started": false,
+      "source_byte_reads_or_identity_checks_skipped": false,
+      "cleanup_callback_wrapped": false,
+      "CPU_or_PC_freeze_improvement_established": false
+    },
+    "trace": {
+      "original_guard_checks": 2284,
+      "explicit_phase_events": [
+        {
+          "label": "before_acquire",
+          "phase": "admission",
+          "original_lock_elapsed_seconds": 0.00588640000205487,
+          "guard_check_number": 1
+        }
+      ],
+      "first_original_error": {
+        "original_error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+        "original_lock_elapsed_seconds": 14.397405199997593,
+        "phase": "metadata_hash",
+        "guard_check_number": 2284,
+        "original_lock_limit_seconds": 600
+      },
+      "original_lock_limit_seconds": 600,
+      "original_check_invoked_without_replacement": true,
+      "extra_clock_only_at_boundary_or_first_error": true,
+      "extra_CPU_RAM_or_native_query_started": false,
+      "original_resource_guard_or_deadline_extended": false,
+      "cleanup_callback_wrapped": false,
+      "unknown_measurements_not_zeroed": true,
+      "CPU_or_PC_freeze_improvement_established": false
+    },
+    "samples": [
+      {
+        "system_cpu_percent": 10.16,
+        "parent_cpu_machine_percent": 0,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 5.9,
+        "parent_cpu_machine_percent": 0,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 9.78,
+        "parent_cpu_machine_percent": 0,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 7.65,
+        "parent_cpu_machine_percent": 0,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 8.12,
+        "parent_cpu_machine_percent": 0,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 10.88,
+        "parent_cpu_machine_percent": 0,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 43.69,
+        "parent_cpu_machine_percent": 0,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 97.07,
+        "parent_cpu_machine_percent": 0,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      }
+    ]
+  },
+  "stop14": {
+    "state": "FAILED_NOT_ACCEPTED",
+    "stage": "anchor",
+    "error": "STOP_SUSTAINED_SYSTEM_CPU",
+    "cleanup": true,
+    "attempt": false,
+    "product": false,
+    "io": {
+      "bound_inputs": 116,
+      "final_fresh_hashes": 0,
+      "read_passes": 116,
+      "bytes_read": 5247335,
+      "finished": false
+    },
+    "observer": {
+      "completed_sample_count": 18,
+      "system_cpu_max_percent": 100,
+      "own_cpu_max_machine_percent": 1.470588,
+      "own_private_max_bytes": 45678592,
+      "available_ram_min_percent": 25.488920043720295
+    },
+    "last4": [
+      {
+        "system_cpu_percent": 99.82,
+        "parent_cpu_machine_percent": 1.470588,
+        "own_private_bytes": 45678592,
+        "available_ram_percent": 25.488920043720295,
+        "commit_used_percent": 42.79979336802348,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 728947
+      },
+      {
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 45678592,
+        "available_ram_percent": 25.864245172039855,
+        "commit_used_percent": 42.733630856805306,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 45678592,
+        "available_ram_percent": 25.807063046848516,
+        "commit_used_percent": 42.67749628869582,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 45678592,
+        "available_ram_percent": 25.686531856291904,
+        "commit_used_percent": 42.698376532359184,
+        "phase_at_sample": "metadata_hash",
+        "audited_logical_read_bytes_delta": 0
+      }
+    ]
+  },
+  "stop14_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p340-stop-review-run014.v1.json",
+    "bytes": 58697,
+    "sha256": "c6085b6033fc781929e766562ba7f59b97eec871176e264c6dd4284652971365"
+  },
+  "stop13_independent_review_completed": false,
+  "foreign_process_query": false,
+  "unrelated_process_termination": false,
+  "os_security_settings_changed": false,
+  "PC_freeze_resolved": false,
+  "current_document_final_fresh_qualified": false,
+  "previous_unsaved_diagnostic_session30727_outcome": "UNCONFIRMED"
+}

@@ -1,0 +1,129 @@
+{
+  "schema": "hwpx-agent.p09-87-review-body-source-regression/v1",
+  "state": "scoped_current_source_regression_pass_not_native_or_phase_gate",
+  "package": {
+    "command": "cargo test -p hwpx-package --test text_flow --test document_import_source --test document_import_structure --test document_import_forms --test document_import_fields --test document_import_field_semantics --test document_import_notes --test document_import_bookmarks --test document_import_review --test document_import_form_policies",
+    "targets": 10,
+    "passed": 119,
+    "failed": 0,
+    "exit_code": 0,
+    "initial_chunk_id": "dd6bd2",
+    "terminal_chunk_id": "fa4771"
+  },
+  "product": {
+    "command": "cargo test -p hwpx-agent-cli --test form_stored_provider --test form_stored_product_request --test policy_bound_form_import --test form_value_operation",
+    "targets": 4,
+    "passed": 144,
+    "failed": 0,
+    "exit_code": 0,
+    "initial_chunk_id": "da2422",
+    "terminal_chunk_id": "0049db",
+    "stored_provider_passed": 117,
+    "stored_provider_elapsed_seconds": 258.81
+  },
+  "original_comment_component": {
+    "commands": [
+      "cargo test -p domain-ir --test comment_model",
+      "cargo test -p domain-ir --lib comment_model"
+    ],
+    "passed": 11,
+    "failed": 0,
+    "individual_Rust_exit_codes": [
+      0,
+      0
+    ],
+    "chunk_id": "57885a",
+    "combined_command_later_failed_at_python_validator": true
+  },
+  "total_passed_Rust_tests": 274,
+  "new_source_reader_tests": 15,
+  "new_stored_reader_tests": 5,
+  "new20_included_not_extra_count": true,
+  "targets": [
+    {
+      "target": "document_import_bookmarks",
+      "passed": 10,
+      "path": "target/debug/deps/document_import_bookmarks-74a6fbeb6250462d.exe"
+    },
+    {
+      "target": "document_import_field_semantics",
+      "passed": 11,
+      "path": "target/debug/deps/document_import_field_semantics-464254f1536720e4.exe"
+    },
+    {
+      "target": "document_import_fields",
+      "passed": 12,
+      "path": "target/debug/deps/document_import_fields-cac70a6adee69279.exe"
+    },
+    {
+      "target": "document_import_form_policies",
+      "passed": 14,
+      "path": "target/debug/deps/document_import_form_policies-3ed0deb2a55bc591.exe"
+    },
+    {
+      "target": "document_import_forms",
+      "passed": 10,
+      "path": "target/debug/deps/document_import_forms-c6007f066e757199.exe"
+    },
+    {
+      "target": "document_import_notes",
+      "passed": 11,
+      "path": "target/debug/deps/document_import_notes-44c8a108ebd84c66.exe"
+    },
+    {
+      "target": "document_import_review",
+      "passed": 15,
+      "path": "target/debug/deps/document_import_review-67551457d524f20f.exe"
+    },
+    {
+      "target": "document_import_source",
+      "passed": 10,
+      "path": "target/debug/deps/document_import_source-c22fefefc9d531ce.exe"
+    },
+    {
+      "target": "document_import_structure",
+      "passed": 14,
+      "path": "target/debug/deps/document_import_structure-1c3e383906925a4a.exe"
+    },
+    {
+      "target": "text_flow",
+      "passed": 12,
+      "path": "target/debug/deps/text_flow-511dd1904a1b61b0.exe"
+    },
+    {
+      "target": "form_stored_product_request",
+      "passed": 8,
+      "path": "target/debug/deps/form_stored_product_request-6c30ea9633165961.exe"
+    },
+    {
+      "target": "form_stored_provider",
+      "passed": 117,
+      "path": "target/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe"
+    },
+    {
+      "target": "form_value_operation",
+      "passed": 18,
+      "path": "target/debug/deps/form_value_operation-899bdd52f412e0da.exe"
+    },
+    {
+      "target": "policy_bound_form_import",
+      "passed": 1,
+      "path": "target/debug/deps/policy_bound_form_import-dbc5d546fda182f4.exe"
+    },
+    {
+      "target": "comment_model",
+      "passed": 10,
+      "path": "target/debug/deps/comment_model-7d8aabb3e248028a.exe"
+    },
+    {
+      "target": "domain_ir",
+      "passed": 1,
+      "path": "target/debug/deps/domain_ir-ecb12d853696afea.exe"
+    }
+  ],
+  "full_workspace_or_previous_107_target_batch_reexecuted": false,
+  "actual_SQL_reexecuted_for_P87": false,
+  "native_executed": false,
+  "p09_complete": false,
+  "product_complete": false
+}

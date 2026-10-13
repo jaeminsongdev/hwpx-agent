@@ -1,0 +1,58 @@
+{
+  "schema": "hwpx-agent.p09-89-memo-catalog-final-audit/v1",
+  "state": "pass_scoped_original_assembly_audit_native_and_phase_gate_open",
+  "source_checkpoint": {
+    "path": "implementation/p09/evidence/p09-89-memo-catalog.source-progress.v1.json",
+    "bytes": 183976,
+    "sha256": "0f3130fda5a002e9719dbc4245d8d078a5350f2f9c2771dfdc60ad5dd52f7a2a"
+  },
+  "raw_source_archive_predecessor_actual_pins": 822,
+  "official_source_pins": 8,
+  "current_test_executables": 25,
+  "historical_executables_preserved_not_reexecuted": 4,
+  "total_executable_pins": 29,
+  "total_pins": 859,
+  "Rust_tests_passed": 334,
+  "compiled_current_filtered_tests_listed": 334,
+  "new11_included": true,
+  "old_parent_whole_preimages_and_inverse": 4,
+  "historical_pin_entries_preserved": 11192,
+  "original_source_files_preserved": 1551,
+  "native_originals_preserved": 75,
+  "original_comment_contract": "fail:implementation_digest",
+  "original_comment_Python_tests": "4 PASS / 1 FAIL",
+  "conformance": "fail:matrix_drift",
+  "P09_gate": "OPEN",
+  "a12": "OPEN",
+  "a13": "OPEN",
+  "actual36_source_memo_properties": 0,
+  "actual36_explicit_memo_refs": 44,
+  "actual36_unresolved_memo_refs": 44,
+  "default_memo_style_fabricated": false,
+  "native_author_time_visibility_resolution_and_MEMO_box_style_acceptance_unverified": true,
+  "comment_style_mutation_product_path_implemented": false,
+  "actual_SQL_reexecuted_for_P89": false,
+  "native_executed": false,
+  "performance_acceptance": false,
+  "full_comment_or_document_or_publication_authority": false,
+  "p09_complete": false,
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "root_PLANS_absent": true,
+  "hwp_process_count": 0,
+  "goal_status": "active",
+  "diff_check": true,
+  "audit_runs": [
+    {
+      "chunk_id": "be1130",
+      "exit_code": 0
+    },
+    {
+      "chunk_id": "e0ce67",
+      "exit_code": 0
+    }
+  ],
+  "reproducible_audit_command": "$ErrorActionPreference='Stop'\nfunction TaskPin([string]$p) {\n if([IO.Path]::IsPathRooted($p)-or($p.Replace('\\','/').Split('/')|Where-Object{$_-eq'..'})){throw 'pin scope'}\n $taskFile=Get-Item -LiteralPath $p\n if($taskFile.PSIsContainer-or($taskFile.Attributes-band[IO.FileAttributes]::ReparsePoint)){throw 'pin type/link'}\n [ordered]@{path=$p.Replace('\\','/');bytes=$taskFile.Length;sha256=(Get-FileHash -LiteralPath $p).Hash.ToLowerInvariant()}\n}\nfunction VerifyTaskPin($p) { $taskNow=TaskPin $p.path; if($taskNow.bytes-ne$p.bytes-or$taskNow.sha256-ne$p.sha256){throw \"raw pin drift: $($p.path)\"} }\n$taskProgressPath='implementation/p09/evidence/p09-89-memo-catalog.source-progress.v1.json'\n$taskProgress=Get-Content -LiteralPath $taskProgressPath -Raw|ConvertFrom-Json\n$taskExpected=@{source_files=636;source_archives=103;predecessor_receipts=47;actual_inputs=36}\n$taskPins=0\nforeach($taskField in $taskExpected.Keys){\n if($taskProgress.$taskField.Count-ne$taskExpected[$taskField]){throw 'array coverage drift'}\n if(@($taskProgress.$taskField.path|Sort-Object -Unique).Count-ne$taskProgress.$taskField.Count){throw 'duplicate pins'}\n foreach($taskPin in $taskProgress.$taskField){VerifyTaskPin $taskPin;$taskPins++}\n}\nif($taskPins-ne822){throw 'whole raw pin total'}\nforeach($taskPin in $taskProgress.official_model.sources){VerifyTaskPin $taskPin}\nif((git -C 'fixtures/target-build/official-source-cache/hwpx-owpml-model-145338' rev-parse HEAD)-ne$taskProgress.official_model.commit){throw 'official source HEAD drift'}\n$taskExes=@($taskProgress.actual_current_regression_executables)+@($taskProgress.historical_executables_preserved_not_reexecuted)\nif($taskExes.Count-ne29-or@($taskExes.path|Sort-Object -Unique).Count-ne29){throw 'executable coverage'}\nforeach($taskPin in $taskExes){VerifyTaskPin $taskPin}\n$taskListed=0\nforeach($taskExe in $taskProgress.actual_current_regression_executables){\n $taskArgs=@('--list')\n if($taskExe.target-eq'domain_ir'){$taskArgs=@('comment_model','--list')}\n if($taskExe.target-eq'hwpx_package'){$taskArgs=@('document_import::fields::semantics::catalog','--list')}\n $taskRows=@(& $taskExe.path @taskArgs)\n if($LASTEXITCODE-ne0){throw 'test list failed'}\n $taskCount=@($taskRows|Where-Object{$_-match': test$'}).Count\n if($taskCount-ne$taskExe.passed){throw \"current compiled test count: $($taskExe.target)\"}\n $taskListed+=$taskCount\n}\nif($taskListed-ne334){throw 'compiled test total'}\n$taskPrefix='implementation/p09/evidence/p09-89-memo-catalog'\n$taskRegression=Get-Content -LiteralPath ($taskPrefix+'.source-regression.v1.json') -Raw|ConvertFrom-Json\n$taskValidation=Get-Content -LiteralPath ($taskPrefix+'.validation.v1.json') -Raw|ConvertFrom-Json\n$taskPreservation=Get-Content -LiteralPath ($taskPrefix+'.preservation.v1.json') -Raw|ConvertFrom-Json\n$taskFailures=Get-Content -LiteralPath ($taskPrefix+'.initial-failures.v1.json') -Raw|ConvertFrom-Json\nif($taskRegression.package.passed-ne166-or$taskRegression.package_private_catalog.passed-ne5-or$taskRegression.product.passed-ne152-or$taskRegression.original_comment_component.passed-ne11-or$taskRegression.total_passed_Rust_tests-ne334){throw 'test result counts'}\nif(($taskProgress.actual_current_regression_executables.passed|Measure-Object -Sum).Sum-ne334){throw 'test executable linkage'}\nif($taskRegression.package.exit_code-ne0-or$taskRegression.package_private_catalog.exit_code-ne0-or$taskRegression.product.exit_code-ne0-or($taskRegression.original_comment_component.individual_exit_codes|Where-Object{$_-ne0})){throw 'test completion'}\nif($taskValidation.strict_lint.exit_code-ne0-or$taskValidation.new_Rust_format.files-ne5-or$taskValidation.diff_check.exit_code-ne0){throw 'quality drift'}\nif($taskValidation.original_comment_contract.exit_code-ne1-or$taskValidation.original_comment_contract.error-ne'implementation_digest'-or$taskValidation.original_comment_contract.python_tests_failed-ne1-or$taskValidation.conformance.exit_code-ne1-or$taskValidation.conformance.error-ne'matrix_drift'){throw 'failed qualification was promoted'}\nif($taskPreservation.predecessor_pin_entries-ne11192-or$taskPreservation.P88_unchanged_source_files-ne621-or$taskPreservation.P88_original_archive_origins.Count-ne4-or$taskPreservation.parent_inverses.Count-ne4-or($taskPreservation.parent_inverses|Where-Object{-not$_.complete_normalized_parent_inverse_exact})){throw 'preservation'}\nforeach($taskPin in $taskPreservation.parent_inverses){VerifyTaskPin ([pscustomobject]@{path=$taskPin.archive_path;bytes=$taskPin.original_bytes;sha256=$taskPin.original_sha256})}\n$taskFailureSources=@($taskProgress.source_archives|Where-Object{$_.path.StartsWith($taskFailures.initial_strict_lint.archive_prefix+'/')})\nif($taskFailureSources.Count-ne2-or$taskFailures.initial_strict_lint.exit_code-ne1-or$taskFailures.initial_private_compile.exit_code-ne1-or$taskFailures.initial_stored_compile.exit_code-ne1){throw 'lint failure not preserved'}\nif(@($taskProgress.source_archives|Where-Object{$_.path.StartsWith($taskFailures.initial_private_compile.archive_prefix+'/')}).Count-ne2){throw 'private compile failure not pinned'}\nif($taskProgress.official_model.sources.Count-ne8-or@($taskProgress.official_model.sources.path|Sort-Object -Unique).Count-ne8){throw 'official model source coverage'}\nif($taskRegression.actual36_current_memo_properties-ne0-or$taskRegression.actual36_current_explicit_section_memo_refs-ne44-or$taskRegression.actual36_current_unresolved_section_memo_refs-ne44){throw 'missing actual source style replaced by default'}\nforeach($taskClaim in @('native_author_time_binding','native_visibility_resolution_binding','native_MEMO_box_style_binding','full_comment_product_acceptance','full_document_import_authority','operation_execution_or_publication_authority','atomic_execution_lease','performance_acceptance','native_executed','p09_complete','product_complete','P10_new_implementation','comment_style_mutation_product_path_implemented','native_memo_shape_render_acceptance')){if($taskProgress.qualification.$taskClaim){throw 'unsupported qualification promotion'}}\nif($taskProgress.qualification.p09_gate-ne'OPEN'-or$taskProgress.qualification.a12-ne'OPEN'-or$taskProgress.qualification.a13-ne'OPEN'-or$taskProgress.qualification.P26-ne'failed_semantic_non_green'-or$taskProgress.qualification.P62-ne'UNRESOLVED'-or$taskProgress.qualification.native_admission-ne'INPUT_CHANGED_RE_ADMISSION_REQUIRED'-or$taskProgress.qualification.full_native34-ne'NOT_RUN'){throw 'original Gate state drift'}\n$taskMatrix=Get-Content -LiteralPath 'implementation/p09/evidence/conformance/p09-reference-conformance.current-2020.v1.json' -Raw|ConvertFrom-Json\nif($taskMatrix.summary.required_rows-ne53-or$taskMatrix.summary.p09_owned_rows-ne46-or$taskMatrix.summary.p11_deferred_rows-ne7-or$taskMatrix.summary.green_rows-ne0){throw 'matrix owner/green drift'}\nif(Test-Path -LiteralPath PLANS.md){throw 'root PLANS recreated'}\nif(@(Get-Process Hwp -ErrorAction SilentlyContinue).Count-ne0){throw 'native process present'}\nif((git rev-parse HEAD)-ne'1f8cd23da15d2e517e0e5640eae2bffe2c19af3f'){throw 'HEAD changed'}\ngit diff --check\nif($LASTEXITCODE-ne0){throw 'diff check'}\n[ordered]@{\nschema='hwpx-agent.p09-89-memo-catalog-final-audit/v1';state='pass_scoped_original_assembly_audit_native_and_phase_gate_open';\nsource_checkpoint=(TaskPin $taskProgressPath);raw_source_archive_predecessor_actual_pins=$taskPins;official_source_pins=8;current_test_executables=25;historical_executables_preserved_not_reexecuted=4;total_executable_pins=29;total_pins=859;\nRust_tests_passed=334;compiled_current_filtered_tests_listed=334;new11_included=$true;old_parent_whole_preimages_and_inverse=4;historical_pin_entries_preserved=11192;original_source_files_preserved=1551;native_originals_preserved=75;\noriginal_comment_contract='fail:implementation_digest';original_comment_Python_tests='4 PASS / 1 FAIL';conformance='fail:matrix_drift';P09_gate='OPEN';a12='OPEN';a13='OPEN';\nactual36_source_memo_properties=0;actual36_explicit_memo_refs=44;actual36_unresolved_memo_refs=44;default_memo_style_fabricated=$false;native_author_time_visibility_resolution_and_MEMO_box_style_acceptance_unverified=$true;comment_style_mutation_product_path_implemented=$false;actual_SQL_reexecuted_for_P89=$false;native_executed=$false;performance_acceptance=$false;full_comment_or_document_or_publication_authority=$false;p09_complete=$false;product_complete=$false;P10_new_implementation=$false;root_PLANS_absent=$true;hwp_process_count=0;goal_status='active';diff_check=$true\n}|ConvertTo-Json -Depth 6 -Compress\n",
+  "independent_reexecution_pass": true,
+  "full_objective_complete": false
+}

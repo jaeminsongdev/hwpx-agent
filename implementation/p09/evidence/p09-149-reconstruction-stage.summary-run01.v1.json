@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "state": "PASS_COMPLETE36_RECONSTRUCTION_DIAGNOSTIC_NOT_SIGNED_SQL_NATIVE_OR_GATE",
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "goal_status": "active",
+  "P10_new_implementation": false,
+  "signed16_current_qualified": false,
+  "full249_current_qualified": false,
+  "product_sources_or_original_assertions_changed": false,
+  "PC_freeze_resolved": false,
+  "exact_CPU_hot_function_proven": false,
+  "statistical_speedup_proven": false,
+  "original_owned_resource_policy_changed": false,
+  "new_child_or_thread_started": false,
+  "current_helpers": [
+    {
+      "path": "tools/p09/run_reconstruction_stage_profile.py",
+      "bytes": 11434,
+      "sha256": "90ac7b2575ce8afc7cfbbdda8f1750cb1c2666f6dd2f5041d212fea454ca73e4"
+    },
+    {
+      "path": "tools/p09/tests/test_reconstruction_stage_profile.py",
+      "bytes": 3894,
+      "sha256": "9c01facbcb1d7c8613a034b75078e057fec74058870668b445aa212208bbe67a"
+    }
+  ],
+  "example_pin": {
+    "path": "crates/hwpx-package/examples/source_formula_evaluation_probe.rs",
+    "bytes": 11389,
+    "sha256": "a216e026863946ab25adc11fc7476b9b2a47417b6a23620c8ee8638c199201cb"
+  },
+  "archive_pin": {
+    "path": "implementation/p09/source-archive/p09-149-pre-reconstruction-stage-probe-r18/source-preimages.v1.json",
+    "bytes": 11933,
+    "sha256": "102d9740d47cd7e3e699207b2eba20d946b8897b30ffffa7ab33b3e5da4ff8b9"
+  },
+  "parent_pin": {
+    "path": "implementation/p09/evidence/p09-149-signed-call-model.summary-run01.v1.json",
+    "bytes": 13786,
+    "sha256": "0ad5aef3dd430a934a2086650cddea2cf9c274b8d7634ebcc433474148ba2e4f"
+  },
+  "prior_execution_pin": {
+    "path": "implementation/p09/evidence/p09-149-signed-artifact-compute.actual-run01.v1.json",
+    "bytes": 945216,
+    "sha256": "bb759d82a7075d23e049756b83bddeadfcdc36e7d068f11c4085caff0fdc7529"
+  },
+  "support_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-reconstruction-stage.actual-run01.v1.json",
+      "bytes": 741866,
+      "sha256": "5fa54800d94ba4e0893a450632c7bf97c18be9ff67475c096f3c057861667095"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-reconstruction-stage.light-run01.v1.json",
+      "bytes": 1685,
+      "sha256": "6a717349bf226ec11cc70bf7bac1d176d54051f980854df8f587e0131e9e24d7"
+    }
+  ],
+  "current_Rust_inputs": 783,
+  "original_stored_test_names": 249,
+  "original_stored_module_instances": 59,
+  "only_diagnostic_example_changed_from_prior_source_freeze": true,
+  "whole_default_example_body_exact_after_closed_extension_removal": true,
+  "current_execution_source_freeze_count": 949,
+  "execution_source_freeze_current_exact": true,
+  "current_contract_checks": 10,
+  "stage_profile": {
+    "P09_gate": "OPEN",
+    "formula_targets": 16,
+    "originals": 36,
+    "product_complete": false,
+    "qualification": "PURE_COMPLETE36_RECONSTRUCTION_NOT_SIGNED_SQL_NATIVE_OR_GATE",
+    "runtime_signed_consumer_qualified": false,
+    "schema_version": "hwpx-agent.p09-reconstruction-stage-timing/v1",
+    "source_cell_bindings": 128,
+    "stages": {
+      "forms_graph_canonical_sha256": {
+        "calls": 36,
+        "max_us": 838,
+        "min_us": 330,
+        "total_us": 22090
+      },
+      "forms_import": {
+        "calls": 36,
+        "max_us": 54777,
+        "min_us": 1453,
+        "total_us": 578040
+      },
+      "fresh_complete_reconstruction": {
+        "calls": 36,
+        "max_us": 76238,
+        "min_us": 19082,
+        "total_us": 1290087
+      },
+      "source_import": {
+        "calls": 36,
+        "max_us": 29348,
+        "min_us": 17361,
+        "total_us": 714669
+      }
+    },
+    "tamper_denied": 36,
+    "whole_graph_receipts_equal": 36
+  },
+  "resource_metrics": {
+    "elapsed_seconds": 148.61,
+    "maximum_seconds": 180,
+    "job_final": {
+      "active_processes": 0,
+      "job_cpu_seconds": 133.734,
+      "peak_job_private_mib": 1969.5,
+      "peak_job_private_percent": 6.181554473514341,
+      "owned_processes": []
+    },
+    "resolved_owned_limits": {
+      "total_ram_mib": 31860.92,
+      "job_private_memory_limit_mib": 2548.87,
+      "machine_logical_processors": 16,
+      "job_cpu_hard_cap_machine_percent": 6.25
+    },
+    "cleanup_confirmed": true,
+    "owned_tree_empty": true
+  },
+  "host_CPU_max": 63.26,
+  "host_saturation_longest_streak": 0,
+  "available_RAM_percent_min": 39.941150471501196,
+  "commit_percent_max": 37.724798492865894,
+  "interpretation": "One bounded pure importer measurement only: canonical hash duration is small compared with fresh import/form rebuild. Full reconstruction includes import/form/check work; do not sum overlapping stages or infer actual signed consumer per-call counts or CPU hot functions.",
+  "next_action": "Investigate source import and form reconstruction/parsing cost with exact same whole inputs/graph/receipt comparisons and fresh authorization boundaries; preserve original signed16/full249 pending status. No canonical hash cache or blind r18 replay.",
+  "source_closing_exact": true,
+  "IO": {
+    "read_passes": 1916,
+    "bytes_read": 57392479,
+    "bound_inputs": 951,
+    "final_fresh_hashes": 951,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 25.1214
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": "hwpx-agent.p09-cpu-spike-inspection/v1",
+  "state": "OBSERVED_CPU_SPIKE_FROM_SAVED_RECEIPT_NOT_CAUSE_OR_GATE",
+  "source_receipt_pin": {
+    "path": "implementation/p09/evidence/runtime-r07/cases/p190-case-010-attempt-001.json",
+    "bytes": 951728,
+    "sha256": "b93d6ea8e8f790f1de3088c2ccb97bf9fc5f3340a38d9ed524ff5e9fe0ea5958"
+  },
+  "warning_sample_indices": [154],
+  "warning_samples": [
+    {
+      "sample_index": 154,
+      "time_utc": "2026-10-08T04:13:45.303681+00:00",
+      "system_cpu_percent": 100.0,
+      "parent_cpu_machine_percent": 0.0,
+      "active_processes": 0,
+      "owned_job_cpu_machine_percent": 0,
+      "available_ram_percent": 36.937838346475374,
+      "commit_used_percent": 42.37425796742776,
+      "raw_system_cpu_delta_100ns": {
+        "idle": 0,
+        "kernel_including_idle": 20468750,
+        "user": 65156250,
+        "total": 85625000
+      }
+    }
+  ],
+  "second_source_read_backpressure": {
+    "warning_entries": 1,
+    "completed_pause_windows": 2,
+    "requested_pause_seconds": 1.0
+  },
+  "source_run_terminal_pass_does_not_prove_freeze_resolution": true,
+  "CPU_cause_or_PC_freeze_resolution_established": false,
+  "new_stress_or_product_test_executed_by_inspection": false,
+  "foreign_processes_requeried_by_inspection": false,
+  "original_receipt_not_modified": true,
+  "P09_gate": "OPEN",
+  "product_complete": false
+}

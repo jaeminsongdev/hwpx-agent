@@ -1,0 +1,53 @@
+{
+  "schema": "hwpx-agent.p09-document-import-source.initial-failures/v1",
+  "overwritten": false,
+  "failures": [
+    {
+      "chunk_id": "88c4fa",
+      "kind": "strict_lint",
+      "count": 2,
+      "cause": "new documentation syntax and return type complexity",
+      "source_archive": "implementation/p09/source-archives/p09-66-initial-source-lint/document_import.rs"
+    },
+    {
+      "chunk_id": "a286fc",
+      "kind": "integration",
+      "passed": 4,
+      "failed": 6,
+      "cause": "new positive fixture used CDATA forbidden by unchanged original safe XML policy",
+      "source_archive": "implementation/p09/source-archive/p09-66-initial-fixture/document_import_source.rs"
+    },
+    {
+      "chunk_id": "474ddf",
+      "kind": "integration",
+      "passed": 9,
+      "failed": 1,
+      "cause": "new cross-part forgery oracle replaced first actual asset SHA with same asset SHA",
+      "source_archive": "implementation/p09/source-archive/p09-66-part-oracle-failure/document_import_source.rs"
+    },
+    {
+      "chunk_id": "6d1ffa",
+      "kind": "new_preservation_diagnostic",
+      "predecessor_pin_failures": 0,
+      "native_failures": 0,
+      "original_graph_failures": 1,
+      "cause": "new lib archive origin omitted from original graph resolver",
+      "corrected_check": "7f303b",
+      "original_manifest_modified": false
+    },
+    {
+      "chunk_id": "b03703",
+      "kind": "regression_invocation",
+      "cause": "mistyped new Cargo package selector",
+      "correct_selector": "hwpx-agent-cli"
+    },
+    {
+      "kind": "new_plan_patch_preparation",
+      "cause": "first hunks out of order then second preparation exceeded 120 line bound; both rejected before changes",
+      "final_snapshot_lines": 120
+    }
+  ],
+  "original_p62_16fde8_cause": "UNRESOLVED",
+  "raw_logs_retained_here": false,
+  "private_values_included": false
+}

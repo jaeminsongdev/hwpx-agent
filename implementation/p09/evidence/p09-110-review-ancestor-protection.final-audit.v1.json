@@ -1,0 +1,128 @@
+{
+  "schema": "hwpx-agent.p09-110-review-ancestor-protection-final-audit/v1",
+  "recorded_at_utc": "2026-10-04 21:59:49 UTC",
+  "state": "PASS_SCOPED_ACTUAL_SOURCE_ANCESTOR_GUARD_NOT_full_native_protection_SQL_issuer_atomic_execution_publication_or_Gate",
+  "git_head": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+  "current_audit_command": "python tools/p09/verify_review_ancestor_protection_progress.py --current",
+  "current_audit_terminal_chunk": "f5aa35",
+  "current_audit_exit_code": 0,
+  "current_audit": {
+    "state": "pass_actual_observed_main_ancestor_guard_NOT_full_protection_native_execution_publication_or_Gate",
+    "checkpoint": {
+      "path": "implementation/p09/evidence/p09-110-review-ancestor-protection.source-progress.v1.json",
+      "bytes": 13390,
+      "sha256": "936785caee1b37965ed75cf895518004e1407e5d94beaa07b5a0cea39bdfe3d1"
+    },
+    "inherited_raw_pin_entries": 1763,
+    "current_groups": {
+      "source_delta": 12,
+      "source_archives_added": 6,
+      "predecessor_receipts_added": 2,
+      "current_executables": 23
+    },
+    "P09_gate": "OPEN",
+    "product_complete": false
+  },
+  "prior_source_audit": {
+    "state": "pass_prior_raw_and_whole_guard_inverse_NOT_full_protection_native_or_Gate",
+    "previous_checkpoint": {
+      "path": "implementation/p09/evidence/p09-109-stored-rich-comment.source-progress.v1.json",
+      "bytes": 8496,
+      "sha256": "cb5c9a6ef664de952a91289ed44a131309551fabba8f5e1f0dccbd575cdfc41e"
+    },
+    "inherited_raw_pin_entries": 1763,
+    "previous_current_source_files": 962,
+    "unchanged_previous_source_files": 959,
+    "whole_parent_preimages": [
+      {
+        "path": "crates/hwpx-package/src/document_import/structure/review/body_output.rs",
+        "bytes": 15508,
+        "sha256": "fc9e166d13e845270a8423d3dcfd4ac9b0189055c986678f4961b5262a148b13",
+        "archive_path": "implementation/p09/source-archive/p09-110-pre-review-ancestor-protection/crates/hwpx-package/src/document_import/structure/review/body_output.rs"
+      },
+      {
+        "path": "crates/hwpx-package/src/document_import/structure/review/cell_body_output.rs",
+        "bytes": 7550,
+        "sha256": "12282d9c63d505f07db1ad7caebaeac6dbc7ddc0b454819ab7962ac8371709c9",
+        "archive_path": "implementation/p09/source-archive/p09-110-pre-review-ancestor-protection/crates/hwpx-package/src/document_import/structure/review/cell_body_output.rs"
+      },
+      {
+        "path": "crates/hwpx-package/tests/review_cell_body_output.rs",
+        "bytes": 12762,
+        "sha256": "0f6566c2c7fd02f5a6ef9dc7d8ebb6b72ffa4668bf48a389eefd35786e3a1743",
+        "archive_path": "implementation/p09/source-archive/p09-110-pre-review-ancestor-protection/crates/hwpx-package/tests/review_cell_body_output.rs"
+      }
+    ],
+    "parent_inverse_exact": true,
+    "previous_unchanged_audit_passed_on_exact_parent_preimages": true,
+    "old_executables_preserved": 283,
+    "old_executables_all_reexecuted": false,
+    "all_historical_qualification_reexecuted": false
+  },
+  "source_files": 971,
+  "old_source_preservation": {
+    "previous": 962,
+    "unchanged": 959,
+    "whole_parent_preimages": 3,
+    "whole_parent_inverse_exact": true,
+    "original_previous_audit_on_preimages_passed": true,
+    "previous_raw_entries": 1763,
+    "old_executables_preserved": 283,
+    "all_old_executables_reexecuted": false
+  },
+  "current_executable_inventory": {
+    "total": 23,
+    "passing_suite_executables": 20,
+    "unexecuted_CLI": 1,
+    "preserved_failed_diagnostic_executables": 2,
+    "failed_executables_not_counted_as_pass": true
+  },
+  "new_original_production_source_changes": {
+    "parents": 2,
+    "public_API_or_DB_schema_changed": false,
+    "observed_MAIN_ancestor_guard": true,
+    "original_selected_to_body_guard_retained": true,
+    "no_original_native_boolean_or_budget_relaxation": true,
+    "original_whole_package_preservation_and_ID_checks_retained": true
+  },
+  "final_validation": {
+    "Rust_execution_passed": 397,
+    "Rust_unique_tests": 374,
+    "reused_duplicate_executions": 23,
+    "duplicate_functions": 15,
+    "new_Rust_tests": 8,
+    "package17_passed": 190,
+    "product3_passed": 207,
+    "failed": 0,
+    "ignored": 0,
+    "Python_passed": 8,
+    "strict_lint": "PASS",
+    "isolated_Rust1_fmt": "PASS",
+    "diff_check": "PASS",
+    "current_source_original_component_validators": 15,
+    "green_rows": 0,
+    "default_original_failure": "matrix_drift_retained",
+    "final_check_chunk": "0c86f9",
+    "final_check_exit_code": 0
+  },
+  "initial_compile_runtime_and_original_validator_failures_preserved": true,
+  "goal_objective": "P09~P20 전체 제품 구현·검증 완료; P00~P08/사용자 변경 보존; 실제 구현→제품 경로 검증→문제 수정→최적화→통합 검증→문서·원장 동기화; P09 Gate 실제 종료 전 P10 금지; 지원 없는 항목 NOT_RUN/unverified/unavailable",
+  "goal_status": "active",
+  "full_goal_complete": false,
+  "P09_gate": "OPEN",
+  "A12": "OPEN",
+  "A13": "OPEN",
+  "native34": "NOT_RUN",
+  "native_re_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+  "P26": "failed_semantic_non_green",
+  "P62": "UNRESOLVED",
+  "P84_SQL": "UNRESOLVED",
+  "full_native_protection_qualified": false,
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "remaining_coarse_groups_minimum": 6,
+  "remaining_coarse_groups_closed_by_slice": 0,
+  "no_native_COM_UI_SQL_operating_trust_DB_settings_install_stage_commit_push_delete_move": true,
+  "PLANS_deleted_state_preserved": true,
+  "all_historical_qualification_reexecuted": false
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": "hwpx-agent.p09-121-resource-optimization/v1",
+  "state": "TARGETED3_PASS_FULL228_RESOURCE_STOP_AND_DEFERRED",
+  "test_workers": 1,
+  "logical_cpu_limit": 2,
+  "priority": "BelowNormal",
+  "build_jobs": 1,
+  "test_opt_level": 1,
+  "debug_assertions": true,
+  "overflow_checks": true,
+  "system_cpu_stop_percent": 85,
+  "system_cpu_stop_consecutive_samples": 3,
+  "minimum_available_ram_mib": 4096,
+  "maximum_test_working_set_mib": 2048,
+  "full_retry_sample_seconds": 2,
+  "full228_accepted": false,
+  "baseline_deferred_no_test_started": true,
+  "no_further_heavy_retry": true,
+  "affinity_is_not_cpu_percentage_quota": true,
+  "build_root_not_sum_of_all_children": true,
+  "pressure_cause": "NOT_DETERMINED",
+  "runtime_runs": [
+    {
+      "path": "target/p09-121-resource-optimized/p121-build-resources-20261005-a.json",
+      "state": "PASS_BUILD_NOT_TEST_EXECUTION",
+      "system_cpu_max_percent": 31,
+      "available_ram_min_mib": 16262,
+      "root_working_set_max_mib": 11.55,
+      "sample_count": 6
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p121-lint-resources-20261005-a.json",
+      "state": "PASS_STRICT_LINT_NOT_TEST_EXECUTION",
+      "system_cpu_max_percent": 100,
+      "available_ram_min_mib": 15636,
+      "root_working_set_max_mib": 11.74,
+      "sample_count": 14
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p121-targeted-resources-20261005-a.json",
+      "state": "NOT_ACCEPTED_STOP_OR_FAILURE",
+      "system_cpu_max_percent": 100,
+      "available_ram_min_mib": 16005,
+      "root_working_set_max_mib": 19.77,
+      "sample_count": 19
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p121-diagnostic-resources-20261005-a.json",
+      "state": "NOT_ACCEPTED_STOP_OR_FAILURE",
+      "system_cpu_max_percent": 51,
+      "available_ram_min_mib": 17021,
+      "root_working_set_max_mib": 19.59,
+      "sample_count": 15
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p121-build-resources-20261005-b.json",
+      "state": "PASS_BUILD_NOT_TEST_EXECUTION",
+      "system_cpu_max_percent": 33,
+      "available_ram_min_mib": 14972,
+      "root_working_set_max_mib": 11.87,
+      "sample_count": 6
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p121-lint-resources-20261005-b.json",
+      "state": "PASS_STRICT_LINT_NOT_TEST_EXECUTION",
+      "system_cpu_max_percent": 0,
+      "available_ram_min_mib": 16603,
+      "root_working_set_max_mib": 0,
+      "sample_count": 1
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p121-targeted-resources-20261005-b.json",
+      "state": "PASS_RESOURCE_BOUNDED_SCOPED_TESTS_NOT_Gate",
+      "system_cpu_max_percent": 100,
+      "available_ram_min_mib": 15116,
+      "root_working_set_max_mib": 20.66,
+      "sample_count": 44
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p121-full-resources-20261005-b.json",
+      "state": "NOT_ACCEPTED_STOP_OR_FAILURE",
+      "system_cpu_max_percent": 100,
+      "available_ram_min_mib": 2797,
+      "root_working_set_max_mib": 25.47,
+      "sample_count": 27
+    },
+    {
+      "path": "target/p09-121-resource-optimized/p121-full-resources-20261005-c.json",
+      "state": "DEFERRED_BASELINE_RESOURCE_PRESSURE_NOT_STARTED",
+      "system_cpu_max_percent": 100,
+      "available_ram_min_mib": 15737,
+      "root_working_set_max_mib": 0,
+      "sample_count": 1
+    }
+  ],
+  "P09_gate": "OPEN",
+  "product_complete": false
+}

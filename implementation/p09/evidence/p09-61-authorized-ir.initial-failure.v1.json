@@ -1,0 +1,49 @@
+{
+  "schema": "hwpx-agent.p09-authorized-ir-initial-diagnostic/v1",
+  "state": "fail",
+  "actual_terminal_chunk": "cdb14d",
+  "actual_host_exit_code": 1,
+  "actual_child_exit_code": 3,
+  "failed_stage": "frozen_predecessor_failure_remains",
+  "error_code": "p61_sql_original_unauthorized_leaf_not_rejected",
+  "constant_diagnostic_codes": [
+    "FULL_IR_COMMIT_INTENT_MISMATCH"
+  ],
+  "actual_child_stderr_sha256": "9b611ddd02702250426c32df1594e46e6cd57e3b9748c60880d8fa8c8a8d3d9a",
+  "actual_child_stdout_sha256": "bd6f9f8d9ed56da81023eca0bf19421768a82a67da4b9947a0defa9a2460d056",
+  "applied_schema_versions": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "empty_ir_explicit_rollback_and_reapply_passed": true,
+  "rollback_without_gate_rejected": true,
+  "container": "hwpx-agent-p09-ir-auth-2bee9a43058d",
+  "container_removed": true,
+  "native_activated": false,
+  "p09_complete": false,
+  "diagnostic": "New BEFORE receipt intent guard correctly rejects an unadmitted IR before the unchanged idempotency guard. New harness incorrectly required the previous first error code. Original frozen fixture/guards remain unchanged; only new harness expectation will recognize the new explicit intent denial.",
+  "archive": "implementation/p09/source-archive/p09-61-initial-authorized-ir",
+  "source_sha256": {
+    "migrations/postgres/0019_p09_authorized_full_ir_intent.up.sql": "5dfcac89b97600d21efb3a0d922ce6241440fda6bdc94b14bd3eddc59df2ad59",
+    "migrations/postgres/0019_p09_authorized_full_ir_intent.down.sql": "cb773d16f7122e1be083df13fe493830e777b2f6feaabe04b69e75181234bfa8",
+    "tools/p09/fixtures/authorized_full_ir_intent.sql": "2f5ed1ba060b682b15ab3865792277501752a834964af00f7266c79000850670",
+    "tools/p09/test_authorized_full_ir_intent.py": "98fe2e71de90a0e1f15a966f84f38ecb6e1ed61a38e408b6dcb6a142f9ea7e1f"
+  }
+}

@@ -1,0 +1,329 @@
+{
+  "schema": "hwpx-agent.p09-114-stored-formula-compiler-final-audit/v1",
+  "recorded_at_utc": "2026-10-05 00:20:32 UTC",
+  "head": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+  "source_checkpoint": {
+    "path": "implementation/p09/evidence/p09-114-stored-formula-compiler.source-progress.v1.json",
+    "bytes": 13401,
+    "sha256": "6b36343cbd40d522f51aea69f24c01f1350db635167484d36b43950ceddae96d"
+  },
+  "current_source_audit": {
+    "command": "python tools/p09/verify_stored_formula_compiler_progress.py --current",
+    "terminal_chunk": "5bbe36",
+    "exit_code": 0,
+    "result": {
+      "state": "pass_stored_actual_source_original_compiler_binding_NOT_product_route_native_SQL_or_Gate",
+      "checkpoint": {
+        "path": "implementation/p09/evidence/p09-114-stored-formula-compiler.source-progress.v1.json",
+        "bytes": 13401,
+        "sha256": "6b36343cbd40d522f51aea69f24c01f1350db635167484d36b43950ceddae96d"
+      },
+      "inherited_raw_pin_entries": 2012,
+      "current_groups": {
+        "source_delta": 14,
+        "source_archives_added": 8,
+        "predecessor_receipts_added": 2,
+        "current_executables": 18
+      },
+      "P09_gate": "OPEN",
+      "product_complete": false
+    }
+  },
+  "source_files": 1021,
+  "old_source_preservation": {
+    "state": "pass_whole_original_ancestry_NOT_native_SQL_or_Gate",
+    "previous_checkpoint": {
+      "path": "implementation/p09/evidence/p09-113-formula-batch.source-progress.v1.json",
+      "bytes": 15982,
+      "sha256": "3310245bede45656351054df5649da367451d2f5ef0c868d7de3c67c5992b308"
+    },
+    "inherited_raw_pin_entries": 2012,
+    "previous_source_files": 1009,
+    "unchanged_previous_source_files": 1007,
+    "whole_parent_preimages": 2,
+    "whole_parent_inverse_exact": true,
+    "previous_unmodified_audit_on_preimages_passed": true,
+    "old_executables_preserved": 401,
+    "all_old_executables_reexecuted": false
+  },
+  "production_change": {
+    "original_OperationPlanCompiler_used": true,
+    "actual_source_revision_graph_Field_targets_and_computed_candidate_bound": true,
+    "only_PlanId_caller_supplied": true,
+    "actual_partial_markers_preserved": true,
+    "original_Atomic_plan_and_finite_limits_retained": true,
+    "fresh_original_source_results_checks_before_and_after_compile": true,
+    "immutable_reference_ID_indexes_duplicate_rejection": true,
+    "new_capability_argument_contract_not_qualified_by_P06_native_PASS": true,
+    "original_product_route_unqualified": true,
+    "original_full_document_context_projection_rejection_retained": true,
+    "no_DB_schema_ExecutionManifest_issuer_signed_registry_or_backend_changed": true,
+    "not_transactional_policy_lease_or_atomic_publication": true
+  },
+  "final_source_Rust": {
+    "schema": "hwpx-agent.p09-114-stored-formula-compiler-source-regression/v1",
+    "final_source_unchanged_during_accepted_execution": true,
+    "package": {
+      "command": "cargo test -p hwpx-package --lib --test table_formula --test document_import_formula_evaluation --test document_import_formula_output --test document_import_formula_batch --test patch_leaf_text --test patch_engine --test patch_element_content --test review_cell_body_output --test review_delete_output --test id_index --test text_flow --locked --offline --target-dir target/p09-114-stored-formula-compiler",
+      "start_chunk": "08e328",
+      "session": 62418,
+      "terminal_chunk": "0ccd64",
+      "exit_code": 0,
+      "passed": 136,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 0
+    },
+    "cli": {
+      "command": "cargo test -p hwpx-agent-cli --test form_stored_provider --test form_value_operation --test form_product_request --locked --offline --target-dir target/p09-114-stored-formula-compiler",
+      "start_chunk": "609573",
+      "session": 22718,
+      "terminal_chunk": "134b1d",
+      "exit_code": 0,
+      "passed": 204,
+      "per_suite": {
+        "form_product_request": 10,
+        "form_stored_provider": 176,
+        "form_value_operation": 18
+      },
+      "earlier_suite_terminal_chunk": "1c224f",
+      "stored_runtime_seconds": 384.04,
+      "form_operation_runtime_seconds": 13.73,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 0
+    },
+    "test_inventory": [
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/document_import_formula_batch-bea22a1ddc584290.exe",
+        "test_count": 6,
+        "distinct_fully_qualified_names_within_binary": 6,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/document_import_formula_evaluation-7ce11a20f7395847.exe",
+        "test_count": 10,
+        "distinct_fully_qualified_names_within_binary": 10,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/document_import_formula_output-3a092c4eef2e8f0f.exe",
+        "test_count": 5,
+        "distinct_fully_qualified_names_within_binary": 5,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/form_product_request-b9b309ced3b4e156.exe",
+        "test_count": 10,
+        "distinct_fully_qualified_names_within_binary": 10,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+        "test_count": 176,
+        "distinct_fully_qualified_names_within_binary": 176,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/form_value_operation-899bdd52f412e0da.exe",
+        "test_count": 18,
+        "distinct_fully_qualified_names_within_binary": 18,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/hwpx_package-a850ad738bc59b10.exe",
+        "test_count": 46,
+        "distinct_fully_qualified_names_within_binary": 46,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/id_index-b06ac4c244093f4c.exe",
+        "test_count": 8,
+        "distinct_fully_qualified_names_within_binary": 8,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/patch_element_content-4a43081747b336ae.exe",
+        "test_count": 4,
+        "distinct_fully_qualified_names_within_binary": 4,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/patch_engine-f16fef8e94eda711.exe",
+        "test_count": 6,
+        "distinct_fully_qualified_names_within_binary": 6,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/patch_leaf_text-8e937ccb1f8696d7.exe",
+        "test_count": 2,
+        "distinct_fully_qualified_names_within_binary": 2,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/review_cell_body_output-581a88b7cee111ae.exe",
+        "test_count": 22,
+        "distinct_fully_qualified_names_within_binary": 22,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/review_delete_output-c5dd540b6b40acb8.exe",
+        "test_count": 6,
+        "distinct_fully_qualified_names_within_binary": 6,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/table_formula-20f3bf8409a62442.exe",
+        "test_count": 9,
+        "distinct_fully_qualified_names_within_binary": 9,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      },
+      {
+        "path": "target/p09-114-stored-formula-compiler/debug/deps/text_flow-511dd1904a1b61b0.exe",
+        "test_count": 12,
+        "distinct_fully_qualified_names_within_binary": 12,
+        "list_exit_code": 0,
+        "list_terminal_chunk": "2fcdf0"
+      }
+    ],
+    "test_counts": {
+      "executions": 340,
+      "unique_executable_and_fully_qualified_function_pairs": 340,
+      "duplicate_executions_in_accepted_final_set": 0,
+      "new_integration_tests": 6,
+      "all_new_tests_in_total": true,
+      "not_counts_of_features_or_unique_sources": true
+    },
+    "strict_lint": {
+      "command": "cargo clippy -p hwpx-package -p hwpx-agent-cli --lib --test table_formula --test document_import_formula_evaluation --test document_import_formula_output --test document_import_formula_batch --test patch_leaf_text --test patch_engine --test patch_element_content --test review_cell_body_output --test review_delete_output --test id_index --test text_flow --test form_stored_provider --test form_value_operation --test form_product_request --locked --offline --target-dir target/p09-114-stored-formula-compiler -- -D warnings",
+      "start_chunk": "2270a0",
+      "terminal_chunk": "2270a0",
+      "exit_code": 0
+    },
+    "format_and_diff": {
+      "terminal_chunk": "b9d658",
+      "exit_code": 0,
+      "new_Rust_files": 4,
+      "only_owned_Rust_formatted": true
+    },
+    "current_source_conformance": {
+      "terminal_chunk": "a0e041",
+      "exit_code": 0,
+      "upstream_validators": 15,
+      "green_rows": 0,
+      "Gate": "OPEN"
+    },
+    "historical_default_conformance": {
+      "terminal_chunk": "ca1557",
+      "exit_code": 1,
+      "error": "matrix_drift",
+      "retained": true
+    },
+    "authority": {
+      "original_generic_compiler_binding": true,
+      "actual_native_recalculation": false,
+      "full_import": false,
+      "full_field_policy": false,
+      "signed_registry": false,
+      "issuer": false,
+      "atomic_execution_publication": false,
+      "actual_SQL": false,
+      "Gate": false,
+      "product_complete": false
+    },
+    "excluded_runs": [
+      "focused pre-lint6 tests",
+      "partial CLI observation without terminal",
+      "failed type/lint/import runs",
+      "unexecuted CLI copies",
+      "all historical executable/native re-execution"
+    ]
+  },
+  "final_validation": {
+    "Python": {
+      "command": "python -m unittest tools.p09.tests.test_stored_formula_compiler_progress",
+      "terminal_chunk": "869ecb",
+      "exit_code": 0,
+      "passed": 9,
+      "failed": 0
+    },
+    "diff_environment": {
+      "terminal_chunk": "2a5cad",
+      "exit_code": 0,
+      "HEAD_unchanged": true,
+      "Hwp_processes": 0,
+      "Cargo_processes": 0,
+      "PLANS_exists": false
+    },
+    "new_owned_Rust4_format": {
+      "terminal_chunk": "b9d658",
+      "exit_code": 0
+    },
+    "current_component_validators": 15,
+    "green_rows": 0,
+    "original_default_matrix_drift_retained": true
+  },
+  "current_executable_inventory": {
+    "total": 18,
+    "passing_final_test_executables": 15,
+    "unexecuted_CLI_copies": 2,
+    "pre_lint_diagnostic": 1,
+    "not_all_executables_claimed_passing": true
+  },
+  "qualification": {
+    "native_recalculation_verified": false,
+    "full_field_policy_qualified": false,
+    "issuer_verified": false,
+    "atomic_execution_publication_verified": false,
+    "actual_SQL_verified": false,
+    "P09_complete": false,
+    "product_complete": false,
+    "full_document_import_verified": false,
+    "signed_registry_verified": false,
+    "actual_source_original_compiler_binding_verified": true
+  },
+  "remaining": [
+    "native metadata and coordinates",
+    "full comment and rich Flow/compiler/source mapping",
+    "durable real integration",
+    "fields/date/external/document semantics and full product request binding",
+    "trusted issuer/full protection/atomic execution/publication",
+    "actual P84 SQL failure cause and regression"
+  ],
+  "remaining_coarse_groups_minimum": 6,
+  "remaining_coarse_groups_closed_by_slice": 0,
+  "exact_next_safe_task": "Implement full source-derived field-result binding in the original strict product request contract, retaining actual full-import/field-policy/issuer/registry and atomic durable-publication boundaries; do not promote partial graphs or caller policy.",
+  "all_historical_native_qualification_or_executables_reexecuted": false,
+  "initial_failures_preimages_and_pre_lint_executable_preserved": true,
+  "no_native_COM_UI_SQL_operating_trust_DB_settings_install_stage_commit_push_delete_move": true,
+  "PLANS_deleted_state_preserved": true,
+  "previous_goal_turn_classification": "progress: reproduced and fixed P113 original multi-table source-position value correspondence defect",
+  "this_goal_turn_classification": "progress: authenticated actual field result candidate connected to original compiler; fresh multi-section stored product-path regressions and source evidence verified",
+  "goal_objective": "P09~P20 전체 제품 구현·검증 완료: D:\\개발\\hwpx-agent의 현재 P00~P08 결과와 사용자 소유 변경을 보존하고, P09부터 P20까지 각 단계별로 실제 제품 구현 → 제품 경로 검증 → 문제 수정 → 최적화 → 통합 검증 → 문서·원장 동기화를 수행한다. P09 Gate가 권위 있는 결과로 실제 닫히기 전에는 P10 새 구현으로 넘어가지 않으며, 지원 증거가 없는 항목은 NOT_RUN/unverified/unavailable 상태를 유지한다.",
+  "goal_status": "active",
+  "full_goal_complete": false,
+  "P09_gate": "OPEN",
+  "A12": "OPEN",
+  "A13": "OPEN",
+  "native34": "NOT_RUN",
+  "native_re_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+  "P26": "failed_semantic_non_green",
+  "P62": "UNRESOLVED",
+  "P84_SQL": "UNRESOLVED",
+  "product_complete": false,
+  "P10_new_implementation": false
+}

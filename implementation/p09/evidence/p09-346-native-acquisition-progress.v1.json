@@ -1,0 +1,397 @@
+{
+  "schema": "hwpx-agent/p09-native-acquisition-diagnostic-progress/v1",
+  "date": "2026-10-10",
+  "goal_status": "ACTIVE",
+  "previous_turn_classification": "PROGRESS",
+  "current_code": [
+    {
+      "path": "tools/p09/resume_preserved106_queue_runtime.py",
+      "bytes": 129869,
+      "sha256": "bb50f0ca366bf29ee536eb1058bb4806f93dd9575d7dd7bf7fa7f58a2ea440fe"
+    },
+    {
+      "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+      "bytes": 89290,
+      "sha256": "e89be74ba46d5494ce6f917333051a52f605a118d360cfaa034e10fe0b00c318"
+    }
+  ],
+  "pure_new_contracts_passed": 45,
+  "guard_policy_changed": false,
+  "passed_product_reexecuted": false,
+  "acquisition_diagnostic_is_product_acceptance": false,
+  "PC_freeze_resolved": false,
+  "source_attempt": {
+    "receipt": {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-source-run029.v1.json",
+      "bytes": 1395264,
+      "sha256": "1f5af31def4ea7476296b049af54490b852cfcda875f4a44c1e82e10f3975cc0"
+    },
+    "state": "FAILED_NOT_ACCEPTED",
+    "error": "STOP_SUSTAINED_SYSTEM_CPU",
+    "stage": "final_fresh_hash",
+    "cleanup": true,
+    "frame": {
+      "frame_state": "CLOSED",
+      "registered_live_frame": false,
+      "input_count": 1658,
+      "input_bytes": 121150122
+    },
+    "boundary_counts": [
+      {
+        "role": "before",
+        "pins": 1658,
+        "reader": {
+          "read_passes": 1658,
+          "bytes_read": 121150122
+        }
+      }
+    ],
+    "handles": {
+      "input_lock_handles_opened": 1966,
+      "input_lock_handles_closed": 1966,
+      "input_lock_handles_remaining": 0,
+      "handle_metadata_checks": 5101,
+      "active_reader_bindings": 0,
+      "active_byte_streams": 0,
+      "handle_close_failed_attempts": 0,
+      "input_lock_cleanup_confirmed": true,
+      "native_acquisition_diagnostics": {
+        "take_attempts": 1966,
+        "take_completed": 1966,
+        "take_failed": 0,
+        "input_kinds": {
+          "directory": {
+            "started": 308,
+            "completed": 308,
+            "failed": 0
+          },
+          "regular": {
+            "started": 1658,
+            "completed": 1658,
+            "failed": 0
+          }
+        },
+        "operations": {
+          "open_with_pacing": {
+            "started": 1966,
+            "completed": 1966,
+            "failed": 0,
+            "measured": 1966,
+            "unknown": 0,
+            "elapsed_total_seconds": 140.6431372995139,
+            "elapsed_max_seconds": 0.08264619996771216
+          },
+          "inspect_metadata": {
+            "started": 1966,
+            "completed": 1966,
+            "failed": 0,
+            "measured": 1966,
+            "unknown": 0,
+            "elapsed_total_seconds": 0.06472260056762025,
+            "elapsed_max_seconds": 0.005357300047762692
+          }
+        },
+        "last_attempt": {
+          "ordinal": 1966,
+          "kind": "regular",
+          "last_native_operation": "inspect_metadata",
+          "completed": true
+        },
+        "active_take": false,
+        "path_or_handle_or_exception_values_recorded": false,
+        "bounded_aggregate_not_per_input_trace": true,
+        "open_elapsed_includes_original_pacer_and_pressure_wait": true,
+        "inspect_elapsed_covers_original_metadata_bundle": true,
+        "original_native_methods_and_arguments_retained": true,
+        "original_take_guard_and_identity_checks_retained": true,
+        "original_pacer_clock_sleeper_checkpoint_and_credit_retained": true,
+        "cleanup_callback_or_close_wrapped": false,
+        "extra_sampler_or_thread_or_native_query_started": false,
+        "diagnostic_clock_failures_do_not_mask_original_return_or_exception": true,
+        "CPU_cause_or_PC_freeze_improvement_claimed": false
+      },
+      "acquisition_phase_pressure": {
+        "acquisition_maximum_reservations_per_second": 14,
+        "original_global_and_byte_reservation_ceiling_per_second": 20,
+        "acquisition_used": true,
+        "acquisition_complete": true,
+        "acquisition_reservations": 1966,
+        "restored_original_rate": 20,
+        "same_original_pacer": true,
+        "clock_and_sleeper_and_checkpoint_retained": true,
+        "clock_previous_credit_or_reservation_counter_reset": false,
+        "extra_sampler_or_thread_started": false,
+        "original_CPU_RAM600_and_all_byte_identity_guards_preserved": true,
+        "cleanup_callback_wrapped": false,
+        "nominal_acquisition_density_reduction_percent": 30,
+        "CPU_or_PC_freeze_improvement_established": false
+      },
+      "native_open_backpressure": {
+        "warning_system_CPU_percent": 95,
+        "cool_distinct_sample_windows": 2,
+        "maximum_pause_windows_per_entry": 8,
+        "warning_entries": 0,
+        "completed_pause_windows": 0,
+        "maximum_observed_pause_windows_in_one_entry": 0,
+        "requested_pause_seconds": 0,
+        "original_hard_resource_decisions_unmodified": true,
+        "original_IO_deadline_unmodified": true,
+        "original_sampler_windows_reused": true,
+        "new_native_query_or_sampler_thread_started": false,
+        "original_read_checks_skipped": false,
+        "original_frame_deadline_checked_before_open": true,
+        "original_32_open_rate_limit_and_no_burst_credits_preserved": true,
+        "pressure_applies_to_native_reservations_including_borrowed_streams": true,
+        "original_owner_sample_source_reused": true,
+        "cleanup_not_guarded_by_pressure": true,
+        "measured_CPU_or_PC_freeze_improvement_claimed": false
+      },
+      "borrowed_byte_streams": {
+        "duplicate_handles_opened": 3135,
+        "duplicate_handles_closed": 3135,
+        "duplicate_handles_remaining": 0,
+        "duplicate_close_failed_attempts": 0,
+        "shared_offset_resets": 3135,
+        "active_borrow_binding": false,
+        "byte_stream_pathname_reopens": 0,
+        "original_held_handles_closed_by_borrower": false,
+        "redundant_pre_descriptor_metadata_queries": 0,
+        "original_pre_read_stream_identity_check_retained": true,
+        "input_scope_reduced": false,
+        "original_resource_guards_and_pacing_retained": true,
+        "measured_CPU_or_freeze_improvement_claimed": false
+      }
+    },
+    "reader_IO": [
+      {
+        "read_passes": 1658,
+        "bytes_read": 121150122
+      }
+    ],
+    "prep": {
+      "bound_inputs": 203,
+      "read_passes": 406,
+      "bytes_read": 39729668,
+      "final_fresh_hashes": 203,
+      "finished": true
+    },
+    "source_guards": [
+      {
+        "native_metadata_queries_attempted": 1658,
+        "fresh_held_metadata_queries": 1658,
+        "original_path_guard_predicates": 4974,
+        "original_reader_root_restored": true,
+        "active_path_guard_adapter": false,
+        "pathname_metadata_probes": 0,
+        "original_stream_identity_check_retained": true,
+        "metadata_reused_between_source_requests": false,
+        "added_native_queries_recorded_separately_from_original_lock_checks": true,
+        "kernel_call_reduction_or_CPU_freeze_improvement_claimed": false
+      },
+      {
+        "native_metadata_queries_attempted": 1478,
+        "fresh_held_metadata_queries": 1478,
+        "original_path_guard_predicates": 4434,
+        "original_reader_root_restored": true,
+        "active_path_guard_adapter": false,
+        "pathname_metadata_probes": 0,
+        "original_stream_identity_check_retained": true,
+        "metadata_reused_between_source_requests": false,
+        "added_native_queries_recorded_separately_from_original_lock_checks": true,
+        "kernel_call_reduction_or_CPU_freeze_improvement_claimed": false
+      }
+    ],
+    "observer": {
+      "completed_sample_count": 830,
+      "system_cpu_max_percent": 100,
+      "own_cpu_max_machine_percent": 1.724138,
+      "own_private_max_bytes": 85319680,
+      "available_ram_min_percent": 31.526207350183505
+    },
+    "tail4": [
+      {
+        "phase_at_sample": "final_fresh_hash",
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 85282816,
+        "available_ram_percent": 31.526207350183505,
+        "audited_logical_read_bytes_delta": 0,
+        "audited_logical_read_passes": 3541
+      },
+      {
+        "phase_at_sample": "final_fresh_hash",
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 85282816,
+        "available_ram_percent": 32.0535359064881,
+        "audited_logical_read_bytes_delta": 0,
+        "audited_logical_read_passes": 3541
+      },
+      {
+        "phase_at_sample": "final_fresh_hash",
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 85282816,
+        "available_ram_percent": 31.682575451532202,
+        "audited_logical_read_bytes_delta": 0,
+        "audited_logical_read_passes": 3541
+      },
+      {
+        "phase_at_sample": "final_fresh_hash",
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 85282816,
+        "available_ram_percent": 31.889615448982056,
+        "audited_logical_read_bytes_delta": 0,
+        "audited_logical_read_passes": 3541
+      }
+    ]
+  },
+  "qualifications": [
+    {
+      "receipt": {
+        "path": "implementation/p09/evidence/locked-r07/p340-closing-review-run028.v1.json",
+        "bytes": 189415,
+        "sha256": "ce69eff1ec284d4cc5daf0203b39f2b2617fde2534e9bf9845288b22b6b1c8f7"
+      },
+      "state": "PASS_PRESERVED108_SOURCE_REVIEW_NOT_NATIVE_OR_PRODUCT",
+      "tests": 672,
+      "metadata": {
+        "bound": 202,
+        "fresh": 202,
+        "reads": 404,
+        "bytes": 39350838,
+        "finished": true
+      },
+      "observer": {
+        "completed_sample_count": 73,
+        "system_cpu_max_percent": 20.04,
+        "own_cpu_max_machine_percent": 6.470588,
+        "own_private_max_bytes": 98770944,
+        "available_ram_min_percent": 32.510183727001944
+      },
+      "cleanup": true
+    }
+  ],
+  "current_formal_review": {
+    "receipt": {
+      "path": "implementation/p09/evidence/locked-r07/p340-closing-review-run030.v1.json",
+      "bytes": 33393,
+      "sha256": "ede89b1ced23a869b9554c871f089363f7cdaa4cb70b3ab0029b7444e8799633"
+    },
+    "schema": "hwpx-agent.p09-preserved106-fixed-runtime-queue/v16",
+    "state": "FAILED_NOT_ACCEPTED",
+    "error": "STOP_SUSTAINED_SYSTEM_CPU",
+    "stage": "anchor",
+    "cleanup": true,
+    "tests": 0,
+    "native": false,
+    "prep": {
+      "bound_inputs": 5,
+      "read_passes": 6,
+      "bytes_read": 1708135,
+      "final_fresh_hashes": 0,
+      "finished": false
+    },
+    "observer": {
+      "completed_sample_count": 8,
+      "system_cpu_max_percent": 100,
+      "own_cpu_max_machine_percent": 1.123596,
+      "own_private_max_bytes": 46546944,
+      "available_ram_min_percent": 30.994403777649318
+    },
+    "tail4": [
+      {
+        "phase_at_sample": "metadata_read_parse",
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 46546944,
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "phase_at_sample": "metadata_read_parse",
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 46546944,
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "phase_at_sample": "metadata_read_parse",
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 46546944,
+        "audited_logical_read_bytes_delta": 0
+      },
+      {
+        "phase_at_sample": "metadata_read_parse",
+        "system_cpu_percent": 100,
+        "parent_cpu_machine_percent": 0,
+        "own_private_bytes": 46546944,
+        "audited_logical_read_bytes_delta": 0
+      }
+    ],
+    "expected_contract_count": 700,
+    "current_contract_qualification": "NOT_QUALIFIED"
+  },
+  "pure_facade_subset": {
+    "tests_passed": 84,
+    "includes_real_product_or_full_native": false,
+    "before_final_header_negative_test_addition": true,
+    "not_exact_final_code_pair_qualification": true
+  },
+  "readonly_host_snapshot_after_own_runs_terminal": {
+    "source": "Win32_PerfFormattedData_PerfOS_Processor _Total",
+    "system_cpu_percent": 100,
+    "available_ram_percent": 32.82,
+    "one_snapshot_not_averaged_or_root_cause": true
+  },
+  "acceptance": {
+    "accepted": 101,
+    "total": 249,
+    "remaining": 148,
+    "regular_remaining": 142,
+    "corpus_remaining": 6,
+    "next_actual": 108,
+    "source_closing_pending": 1,
+    "whole_reconciliation_pending": 98,
+    "P09": "OPEN",
+    "A12": "OPEN",
+    "A13": "OPEN",
+    "current_full_native_source": "NOT_QUALIFIED",
+    "compound102": "NOT_ACCEPTED",
+    "document_final_fresh": "NOT_RUN"
+  },
+  "archives": [
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 512255,
+      "sha256": "f2e02a40e84efa7c2a40a94f5c79b3fa789206078bc6947c883d4d8a0226145c",
+      "archive": "implementation/p09/evidence/runtime-progress-r138"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 605887,
+      "sha256": "b30798e009f45da002766d44327027aa20df2edb0451dd88d69621c04ca9f52c",
+      "archive": "implementation/p09/evidence/runtime-progress-r138"
+    },
+    {
+      "path": "implementation/p09/P09-345_ANCHOR_METADATA_PATH_OPTIMIZATION.md",
+      "bytes": 7551,
+      "sha256": "d36b2b466dc1c9659fcd965a1b1d1a52ed14220df640144e4f5a245e4d6e387c",
+      "archive": "implementation/p09/evidence/runtime-progress-r138"
+    },
+    {
+      "path": "tools/p09/resume_preserved106_queue_runtime.py",
+      "bytes": 129869,
+      "sha256": "bb50f0ca366bf29ee536eb1058bb4806f93dd9575d7dd7bf7fa7f58a2ea440fe",
+      "archive": "implementation/p09/evidence/p340-v16-preformal700-code"
+    },
+    {
+      "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+      "bytes": 89290,
+      "sha256": "e89be74ba46d5494ce6f917333051a52f605a118d360cfaa034e10fe0b00c318",
+      "archive": "implementation/p09/evidence/p340-v16-preformal700-code"
+    }
+  ],
+  "next_safe_action": "Review and remove repeated MetadataPathQueries.Source class construction with original predicates/JSON/finalfresh/resource guards intact; qualify changed code, do not repeat stopped full frame without a reviewed change and a live admissible resource state."
+}

@@ -1,0 +1,103 @@
+{
+  "schema_version": "hwpx-agent.p09-unprivileged-code-optimization-review/v1",
+  "state": "IMPLEMENTED_NOT_RUNTIME_QUALIFIED",
+  "date": "2026-10-10",
+  "scope": "Verification code only; no UAC or external settings/process changes",
+  "static_checks": {
+    "rows": [
+      {
+        "path": "tools/p09/resume_preserved106_queue_runtime.py",
+        "bytes": 134620,
+        "sha256": "e257e3e1facf3c20e998c99df9e65d09b6ce3a737354d2073102d4845090790a",
+        "AST_compile": "PASS",
+        "changed_or_added_definitions": [
+          "MetadataPathSource",
+          "MetadataPathQueries",
+          "metadata_path_contract"
+        ],
+        "original_archive_bytes": 132620,
+        "original_archive_sha256": "341e5a327adeb1e6111c600a19b9b39a71afa85a6e8956b823292c957e57839e"
+      },
+      {
+        "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+        "bytes": 100074,
+        "sha256": "2bf04ab63ac3610d21eb5d17bdad4f7ddbadeef82cee2f11bf06005d35cb74d0",
+        "AST_compile": "PASS",
+        "changed_or_added_definitions": [
+          "metadata_stats",
+          "fixture",
+          "light_fixture",
+          "StopTests",
+          "build_closing_template",
+          "MetadataPathQueryTests",
+          "MetadataPathOracleTests",
+          "MetadataPathFacadeTests",
+          "FixtureAllocationTests",
+          "SingleLstatMetadataTests"
+        ],
+        "original_archive_bytes": 93235,
+        "original_archive_sha256": "6b3e68e2e8f32977499b47131a6fd216ad17416224b181c108aa4fa0e8ae6783"
+      }
+    ],
+    "declared_test_count": 379,
+    "literal_test_definitions": 379,
+    "count_matches": true,
+    "source_original_non_metadata_definition_changes": [],
+    "stop_test_methods": 8,
+    "original_receipt_pins": [
+      {
+        "path": "implementation/p09/evidence/locked-r07/p340-closing-review-run031.v1.json",
+        "bytes": 193495,
+        "sha256": "bd3de3f92235390c1ae17576181c2326ce694ceb9cbf48bc8a1b31b2c3868fa5"
+      },
+      {
+        "path": "implementation/p09/evidence/locked-r07/p340-closing-source-run035.v1.json",
+        "bytes": 482430,
+        "sha256": "0ad8be685abcd1ca91c6f8dfe999a260e8c009a0d2dc3131405b9e9e3aad201e"
+      }
+    ]
+  },
+  "bounded_contract_attempts": [
+    {
+      "selected_contracts": 41,
+      "tests_executed": 0,
+      "error_code": "DEFERRED_ALREADY_SATURATED_SYSTEM",
+      "host_cpu_max_percent": 100,
+      "own_cpu_max_machine_percent": 0,
+      "available_ram_min_percent": 23.25154679242484,
+      "own_private_max_bytes": 30605312,
+      "owner_closed": true
+    },
+    {
+      "selected_contracts": 45,
+      "tests_executed": 0,
+      "error_code": "DEFERRED_ALREADY_SATURATED_SYSTEM",
+      "host_cpu_max_percent": 100,
+      "own_cpu_max_machine_percent": 0,
+      "available_ram_min_percent": 23.70531343810593,
+      "own_private_max_bytes": 29835264,
+      "owner_closed": true
+    }
+  ],
+  "expected_reduction_not_measured": {
+    "direct_regular_metadata_path_queries_per_request": {
+      "previous": 2,
+      "current": 1
+    },
+    "stop_test_methods": 8,
+    "removed_copies_per_stop_test": {
+      "entire_fixture": 1,
+      "entire_frame": 1
+    },
+    "frame_only_projection_does_not_copy_unused_body": true,
+    "accepted_template_excludes_frame_before_deepcopy": true
+  },
+  "formal_current_contract_tests_required": 758,
+  "formal_current_contract_tests_executed": 0,
+  "current_code_qualified": false,
+  "original_730_qualification_reused_as_current": false,
+  "source_or_product_attempted": false,
+  "defender_cause_or_freeze_resolution_established": false,
+  "registered_goal_observed": "paused",
+  "goal_status_changed": false
+}

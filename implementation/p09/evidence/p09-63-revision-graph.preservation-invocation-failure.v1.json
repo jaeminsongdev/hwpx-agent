@@ -1,0 +1,10 @@
+{
+  "schema": "hwpx-agent.p09-revision-graph.failure/v1",
+  "state": "invalid_readonly_audit_invocation",
+  "actual_exit_code": 1,
+  "actual_terminal_chunk": "aee9f3",
+  "cause": "PowerShell @($null) created three nonexistent predecessor_receipts records for older schemas; reported140 instead of137 and attempted null paths",
+  "files_modified": false,
+  "guard_or_manifest_changed": false,
+  "correction": "iterate only properties actually declared by each schema, reject malformed declared entries, verify all real137 records and whole original graph again"
+}

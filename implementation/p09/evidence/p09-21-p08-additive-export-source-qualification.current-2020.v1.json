@@ -1,0 +1,790 @@
+{
+  "bridge_source_sha256": {
+    "implementation/p09/P09-21_P08_ADDITIVE_EXPORT_SOURCE_POLICY.md": "3b7bb9e61470bb5827f4d7b9e02f1164563ccc00581b7237fe2138b5be5fb0f4",
+    "protocol/migrations/p09-p08-additive-export-source-bridge-v0-to-v1.md": "7192f7a358c7ad28319694a54ba926fc15cdf9c69f19f21c16b9ded9b686f7af",
+    "tools/p09/tests/test_p08_additive_export_source_bridge.py": "2e5db113d2d4dcd5fa963f3e0c1af9e5db2f72825c6679c3fce6e0434f52a339",
+    "tools/p09/verify_p08_additive_export_source_bridge.py": "94f0f30b9dadf773f1c93374c835164e9b4f909f765cbfd1137f16d71d80a270"
+  },
+  "claims": {
+    "current_target_promotion": false,
+    "dependency_source_qualification": true,
+    "exact_predecessor_projection": true,
+    "legacy_live_aggregate_now_pass": false,
+    "legacy_validator_or_receipt_rewritten": false,
+    "new_target_execution": false,
+    "p09_complete": false,
+    "product_complete": false
+  },
+  "historical_p08_authority": {
+    "actual_hangul": "pass",
+    "actual_hwpx": "pass",
+    "asset_threshold_required_rows": 44,
+    "automation": "34_verified_8_unavailable",
+    "differential": "34_exact_8_not_applicable",
+    "direct_stage_counts": {
+      "cataloged": 5,
+      "integration_passed": 2,
+      "oracle_verified": 41,
+      "unit_passed": 10
+    },
+    "green_rows": 41,
+    "implementation_covered_rows": 53,
+    "non_green_rows": 17,
+    "obj044": "CAPABILITY_UNAVAILABLE_FOR_TARGET",
+    "p08": "pass_with_target_unavailable",
+    "p11": "deferred",
+    "product_complete": false,
+    "render": "pass",
+    "render_threshold_calibrated_rows": 41,
+    "render_threshold_required_rows": 53,
+    "required_rows": 58,
+    "save_reopen": "pass",
+    "schema_version": "hwpx-agent.p08-object-conformance-validation/v1",
+    "state": "pass",
+    "target_profile_id": "hancom-hangul-2020-secondary",
+    "task": "P08-09"
+  },
+  "legacy_asset_validator": {
+    "actual_hangul": false,
+    "asset_target": "not_run",
+    "direct_stage": "not_proven",
+    "errors": [
+      "implementation_digest"
+    ],
+    "implementation_files": 6,
+    "p08": "in_progress",
+    "product_complete": false,
+    "render": false,
+    "schema_version": "hwpx-agent.p08-asset-pipeline-validation/v1",
+    "source_locks": 8,
+    "source_qualification_verified": true,
+    "state": "fail",
+    "task": "P08-01"
+  },
+  "new_p09_module_sha256": {
+    "crates/hwpx-package/src/field_auto_number_hwpx.rs": "2927752005e5a1f2914089935dcec21fd61239f44e9861dabca8a505e5b05288",
+    "crates/hwpx-package/src/field_object_caption_hwpx.rs": "2dd63a557787ffe1f84a0c9f49c7d0ace89af22037ade6ee8d51db380835adda"
+  },
+  "predecessor_sha256": {
+    "implementation/p08/evidence/p08-01-asset-pipeline-source-qualification.v1.json": "c51a238396b7f7b1afa48a8a2567bf0ce9b525852accd8d464e56ad5c2ee693b",
+    "protocol/private/p08-asset-pipeline-v1.json": "3cc93cc0869af0d2f9ab9cea2ea5d16a74450eb28c3e6e59abd59d65ddf9087a",
+    "tools/p08/validate_asset_pipeline_contract.py": "3d66d5eb4f24822faadefa789675be7d87700031602ebf5064e486d44a32ffdc",
+    "tools/p08/validate_object_conformance_contract.py": "b8a0821feecfd47a8beaeb77785240555a410749b52b11fc01bb700ee3aa8b14"
+  },
+  "privacy": {
+    "absolute_private_paths": false,
+    "external_network_invoked": false,
+    "raw_document_text_present": false,
+    "registry_or_trust_setting_changed": false
+  },
+  "required_current_validators": [
+    {
+      "actual_legacy_result": {
+        "actual_hangul": false,
+        "asset_target": "not_run",
+        "direct_stage": "not_proven",
+        "errors": [
+          "implementation_digest"
+        ],
+        "implementation_files": 6,
+        "p08": "in_progress",
+        "product_complete": false,
+        "render": false,
+        "schema_version": "hwpx-agent.p08-asset-pipeline-validation/v1",
+        "source_locks": 8,
+        "source_qualification_verified": true,
+        "state": "fail",
+        "task": "P08-01"
+      },
+      "exit_code": 1,
+      "path": "tools/p08/validate_asset_pipeline_contract.py",
+      "source_admission": "exact_export_drift_source_qualified_legacy_fail",
+      "source_sha256": "3d66d5eb4f24822faadefa789675be7d87700031602ebf5064e486d44a32ffdc",
+      "state": "fail",
+      "unchanged_implementation_sha256": {
+        "crates/hwpx-package/src/asset.rs": "2a7aa557159e6c68fe1ed05111f44a846b9d174a9382c7f42d4295f7cdc72f9e",
+        "crates/hwpx-package/src/graph.rs": "8a3f32bb1e849150139d26eca4ed02c829e940c329b9a6233168c2078da960ba",
+        "crates/hwpx-package/src/patch.rs": "bdad473ef1888c1226bed3beb9dd75329b270d54492293e98bcb0277f1f99776",
+        "crates/hwpx-package/src/preservation.rs": "2b07ad95631e9b1d4dd45e7133e96afad0dbd458b48736db0f89d5f6d2986498",
+        "crates/hwpx-package/tests/asset_pipeline.rs": "8ca6c97eb0ac93e9d8d3d8046a01a7d2fdbeaaeb2df386abecbfbc4cfd189b21"
+      }
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": false,
+        "actual_hwpx_target": "not_run",
+        "direct_stage": "not_proven",
+        "errors": [
+          "implementation_digest"
+        ],
+        "implementation_files": 7,
+        "p08": "in_progress",
+        "p08_02_complete": false,
+        "product_complete": false,
+        "render": false,
+        "schema_version": "hwpx-agent.p08-image-hwpx-validation/v1",
+        "source_locks": 9,
+        "source_qualification_verified": true,
+        "state": "fail",
+        "static_hwpml": "not_proven",
+        "task": "P08-02"
+      },
+      "exit_code": 1,
+      "path": "tools/p08/validate_image_hwpx_contract.py",
+      "source_admission": "exact_export_drift_source_qualified_legacy_fail",
+      "source_sha256": "a659e7d31cc1d3540493d13c9dcbb8c45563ca8b35e02d7b7816e5dbfe9e308f",
+      "state": "fail",
+      "unchanged_implementation_sha256": {
+        "crates/hwpx-package/src/asset.rs": "2a7aa557159e6c68fe1ed05111f44a846b9d174a9382c7f42d4295f7cdc72f9e",
+        "crates/hwpx-package/src/graph.rs": "8a3f32bb1e849150139d26eca4ed02c829e940c329b9a6233168c2078da960ba",
+        "crates/hwpx-package/src/id_index.rs": "96294a6d114aff3151ea7f411a94e44d139a981e42604671c6570c441d9f9d5c",
+        "crates/hwpx-package/src/image_hwpx.rs": "c8c3bc0d4e31d5c5bd6943c2e416702a7cda93e2fdbf9e896415da813dafe9a1",
+        "crates/hwpx-package/src/patch.rs": "bdad473ef1888c1226bed3beb9dd75329b270d54492293e98bcb0277f1f99776",
+        "crates/hwpx-package/tests/image_hwpx.rs": "0efeeedad56ab978b3fa3f72413b27060e4cb1b93d4926bdd7b725c85b9f8aae"
+      }
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": false,
+        "common_geometry": "not_proven",
+        "direct_stage": "not_proven",
+        "errors": [
+          "implementation_digest"
+        ],
+        "full_package_hwpx": "not_run",
+        "implementation_files": 6,
+        "p08": "in_progress",
+        "p08_03_complete": false,
+        "product_complete": false,
+        "render": false,
+        "schema_version": "hwpx-agent.p08-object-geometry-validation/v1",
+        "source_locks": 9,
+        "source_qualification_verified": true,
+        "state": "fail",
+        "task": "P08-03"
+      },
+      "exit_code": 1,
+      "path": "tools/p08/validate_object_geometry_contract.py",
+      "source_admission": "exact_export_drift_source_qualified_legacy_fail",
+      "source_sha256": "35bb45d1e483f00ff3a69376cd1b8336a31f4049396e7e42fcd000da6d899271",
+      "state": "fail",
+      "unchanged_implementation_sha256": {
+        "crates/domain-ir/src/lib.rs": "b4726732a47175205a7e35f3aa8e018e66b2a0fbada144bebeac3f395540c058",
+        "crates/domain-ir/src/object_geometry.rs": "767e96f5f20d5e1a20d0599e5487634d3fbd3ad759b0bfd3084a71bea645b1cb",
+        "crates/domain-ir/tests/object_geometry.rs": "4583daf1671f9cb6a9673bbb6aa94817a8797313306519df36893060f3d45691",
+        "crates/hwpx-package/src/object_geometry_hwpx.rs": "88bbd23bb63cd95e18fdc96c06d9c7029c6cae89ae5917233801036a57fc4a69",
+        "crates/hwpx-package/tests/object_geometry_hwpx.rs": "279a36296655fe5e395e36cba44eb2f3e1495b1ae1746115c9c16beb13bce9a1"
+      }
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": false,
+        "actual_target_hwpx": "not_run",
+        "direct_stage": "not_proven",
+        "errors": [
+          "implementation_digest"
+        ],
+        "implementation_files": 7,
+        "p08": "in_progress",
+        "p08_04_complete": false,
+        "product_complete": false,
+        "render": false,
+        "schema_version": "hwpx-agent.p08-basic-shape-validation/v1",
+        "source_locks": 9,
+        "source_qualification_verified": true,
+        "state": "fail",
+        "static_shape": "not_proven",
+        "synthetic_full_package_reopen": "not_proven",
+        "task": "P08-04"
+      },
+      "exit_code": 1,
+      "path": "tools/p08/validate_basic_shape_contract.py",
+      "source_admission": "exact_export_drift_source_qualified_legacy_fail",
+      "source_sha256": "ddaf052311e781a2792f4b44e5a74649e3141440e0c96e6d9ebdf630bc711bc4",
+      "state": "fail",
+      "unchanged_implementation_sha256": {
+        "crates/domain-ir/src/basic_shape.rs": "6eebfbe838b9f76530a2f3cddc414d146df2f97384305232db8f3e7b02acb3c6",
+        "crates/domain-ir/src/lib.rs": "b4726732a47175205a7e35f3aa8e018e66b2a0fbada144bebeac3f395540c058",
+        "crates/domain-ir/tests/basic_shape.rs": "8461d657ceee1cafad2673b7e1db89863d0128ca9074e9d24395b943cdff7a01",
+        "crates/hwpx-package/src/basic_shape_hwpx.rs": "d05e9311f35a68dd08fc2a7c630f823dec5313b87ea8b96632e641a38df9868a",
+        "crates/hwpx-package/src/id_index.rs": "96294a6d114aff3151ea7f411a94e44d139a981e42604671c6570c441d9f9d5c",
+        "crates/hwpx-package/tests/basic_shape_hwpx.rs": "5d91c82ddc008148e4061d43d1121fe23397fa7977c03d439ab75df22867aabb"
+      }
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": false,
+        "actual_target_hwpx": "not_run",
+        "direct_stage": "not_proven",
+        "errors": [
+          "implementation_digest"
+        ],
+        "implementation_files": 6,
+        "p08": "in_progress",
+        "p08_05_complete": false,
+        "product_complete": false,
+        "render": false,
+        "schema_version": "hwpx-agent.p08-object-appearance-validation/v1",
+        "source_locks": 9,
+        "source_qualification_verified": true,
+        "state": "fail",
+        "static_appearance": "not_proven",
+        "synthetic_section_roundtrip": "not_proven",
+        "task": "P08-05",
+        "visual_diff": false
+      },
+      "exit_code": 1,
+      "path": "tools/p08/validate_object_appearance_contract.py",
+      "source_admission": "exact_export_drift_source_qualified_legacy_fail",
+      "source_sha256": "ea1489ff47ce701905f3163fdb7bcfa2ac5296aec9fb07af93d84611b52aa510",
+      "state": "fail",
+      "unchanged_implementation_sha256": {
+        "crates/domain-ir/src/lib.rs": "b4726732a47175205a7e35f3aa8e018e66b2a0fbada144bebeac3f395540c058",
+        "crates/domain-ir/src/object_appearance.rs": "f8809b3587a901e1be40cc8e09d06d780c6ffd0189f01c6c52d675290abd5a81",
+        "crates/domain-ir/tests/object_appearance.rs": "7ba9f137a76d952ededf3228cc9b76c6e4fdf98783f12546d7ded9debed9da81",
+        "crates/hwpx-package/src/object_appearance_hwpx.rs": "cd19aae862cc95968e6f02ebe1ebc195f57bba44a82e0c09ac2b910aefce53c3",
+        "crates/hwpx-package/tests/object_appearance_hwpx.rs": "b0fa7b333869963a48f0ded42c8a3b71ad0a5c4b83945669fa4a750300580c4e"
+      }
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": false,
+        "direct_hwpx": "not_run",
+        "direct_stage": "unit_passed",
+        "errors": [],
+        "graph_invariant_tests": "pass",
+        "implementation_files": 3,
+        "p08": "in_progress",
+        "p08_06_complete": false,
+        "product_complete": false,
+        "pure_object_graph": "pass",
+        "render_diff": false,
+        "schema_version": "hwpx-agent.p08-object-composition-validation/v1",
+        "source_locks": 9,
+        "source_qualification_verified": true,
+        "state": "pass",
+        "task": "P08-06"
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_object_composition_contract.py",
+      "source_admission": "pass",
+      "source_sha256": "db71ecf973af76b675561e6e6dc55e91e4a7e4154dd01840bef3af16849957de",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": false,
+        "actual_target_profile": "not_run",
+        "automation_contract": "pass",
+        "direct_stage": "unit_passed",
+        "errors": [],
+        "exact_chart_state": "pass",
+        "implementation_files": 3,
+        "p08": "in_progress",
+        "p08_07_complete": false,
+        "product_complete": false,
+        "render_diff": false,
+        "schema_version": "hwpx-agent.p08-chart-automation-validation/v1",
+        "source_locks": 9,
+        "source_qualification_verified": true,
+        "state": "pass",
+        "task": "P08-07"
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_chart_automation_contract.py",
+      "source_admission": "pass",
+      "source_sha256": "880558143995265c6908fde0c5908ff465373f69dc8a8e770edbf2ce64d202b8",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "direct_hwpx": "not_run",
+        "direct_stage": "unit_passed",
+        "errors": [],
+        "exact_canvas_state": "pass",
+        "implementation_files": 3,
+        "official_source_locks_verified": true,
+        "p08": "in_progress",
+        "p08_08_complete": false,
+        "product_complete": false,
+        "schema_version": "hwpx-agent.p08-drawing-canvas-validation/v1",
+        "security_corpus": "not_run",
+        "source_locks": 12,
+        "source_qualification_verified": true,
+        "state": "pass",
+        "task": "P08-08"
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_drawing_canvas_contract.py",
+      "source_admission": "pass",
+      "source_sha256": "a479b141f430986b4861cb727f4ffb3d460717681940e250c2b5008027d66c58",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": "not_run",
+        "actual_hwpx": "not_run",
+        "direct_stage": "not_proven",
+        "errors": [
+          "implementation_digest"
+        ],
+        "implementation_files": 4,
+        "official_source_locks_verified": true,
+        "p08": "in_progress",
+        "p08_08_green": false,
+        "p08_08_implementation_complete": false,
+        "product_complete": false,
+        "schema_version": "hwpx-agent.p08-active-content-validation/v1",
+        "source_locks": 5,
+        "source_qualification_verified": true,
+        "state": "fail",
+        "synthetic_security_corpus": "not_proven",
+        "task": "P08-08"
+      },
+      "exit_code": 1,
+      "path": "tools/p08/validate_active_content_contract.py",
+      "source_admission": "exact_export_drift_source_qualified_legacy_fail",
+      "source_sha256": "798fd8abb23dcbb01a6915d2c0c8d38f4adcfd954d18ddf32a008f0545bb8cdf",
+      "state": "fail",
+      "unchanged_implementation_sha256": {
+        "crates/hwpx-package/src/active_content.rs": "d9c095d7c58fcdc0c375dc754d6c059e7159e60a4d16ebd825262f6ea2f3d017",
+        "crates/hwpx-package/src/reader.rs": "e40d1da01f1aa52b2d1453fe8165d862e6c3a284c7dfaaa10eed1b7850d3e115",
+        "crates/hwpx-package/tests/active_content.rs": "af64cbf35f648d15dfe4f20205c87f56ea47d74d81ae4814167fdd22e2f359ae"
+      }
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": "not_run",
+        "actual_hwpx": "not_run",
+        "automation": "not_run",
+        "capabilities": 14,
+        "differential": "not_run",
+        "direct_hwpx": "not_run",
+        "direct_stage": "unit_passed",
+        "errors": [],
+        "implementation_files": 9,
+        "p08": "in_progress",
+        "p08_10_green": false,
+        "product_complete": false,
+        "render": "not_run",
+        "schema_version": "hwpx-agent.p08-object-remainder-validation/v1",
+        "source_locks": 6,
+        "source_qualification_verified": true,
+        "state": "pass",
+        "task": "P08-10"
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_object_remainder_contract.py",
+      "source_admission": "pass",
+      "source_sha256": "0a5319e8a9d9a41944f54542a87bf055a3b232fbf45d2bba8ff90eccc149ba14",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": false,
+        "direct_stage": "not_proven",
+        "errors": [
+          "implementation_digest"
+        ],
+        "implementation_files": 7,
+        "p08_complete": false,
+        "product_complete": false,
+        "schema_version": "hwpx-agent.p08-object-hwpx-integration-validation/v1",
+        "source_locks": 5,
+        "source_qualification_verified": true,
+        "state": "fail",
+        "static_section_hwpx": false
+      },
+      "exit_code": 1,
+      "path": "tools/p08/validate_object_hwpx_integration_contract.py",
+      "source_admission": "exact_export_drift_source_qualified_legacy_fail",
+      "source_sha256": "db0f5bef0dc2c344e4b77dcc0fb3e300773b1d2be835d6088c00c4822c766b30",
+      "state": "fail",
+      "unchanged_implementation_sha256": {
+        "crates/domain-ir/src/drawing_canvas.rs": "e0fc9e25852f19ab70ad6fdfd3680f1d8dd5a07e7d184cb2d02d5103533de118",
+        "crates/domain-ir/src/object_composition.rs": "d3389af14835039ca9c39dc65f453906704ae456d67720772db810b2f8ca8045",
+        "crates/hwpx-package/src/drawing_canvas_hwpx.rs": "7d40271139e25907e2c6e485f71a695863c773a5dc233001a4208977cd553564",
+        "crates/hwpx-package/src/object_composition_hwpx.rs": "1a84abd5f48b11ac099451388cb424ed28289b9e5a9f0a2d20382596149ea4ef",
+        "crates/hwpx-package/tests/drawing_canvas_hwpx.rs": "11272daf25ac2039adeb1c735eb016f09a14d88f5892fdb77cda915766b6ae11",
+        "crates/hwpx-package/tests/object_composition_hwpx.rs": "602d3d542be639f5485846fb61d061da38c7386fe1b6fe34bb1f3f0a9a7ea913"
+      }
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": false,
+        "direct_stage": "not_proven",
+        "errors": [
+          "implementation_digest"
+        ],
+        "implementation_files": 6,
+        "p08_complete": false,
+        "product_complete": false,
+        "schema_version": "hwpx-agent.p08-freeform-hwpx-integration-validation/v1",
+        "source_locks": 5,
+        "source_qualification_verified": true,
+        "state": "fail"
+      },
+      "exit_code": 1,
+      "path": "tools/p08/validate_freeform_hwpx_integration_contract.py",
+      "source_admission": "exact_export_drift_source_qualified_legacy_fail",
+      "source_sha256": "32efc40523fcf7493aee9b4ecc061c6001910f73df13e87211d07f70abf6c6c0",
+      "state": "fail",
+      "unchanged_implementation_sha256": {
+        "crates/domain-ir/src/shape_points.rs": "e64750c645c00fcd4c40543dde7c8f6736e699e0b7781044458fc2b2f60909af",
+        "crates/hwpx-package/src/basic_shape_hwpx.rs": "d05e9311f35a68dd08fc2a7c630f823dec5313b87ea8b96632e641a38df9868a",
+        "crates/hwpx-package/src/shape_points_hwpx.rs": "94f35e535966494caabdf28463d0f962b44f6daa40bd62bf4338d0c7bbcbff2d",
+        "crates/hwpx-package/tests/basic_shape_hwpx.rs": "5d91c82ddc008148e4061d43d1121fe23397fa7977c03d439ab75df22867aabb",
+        "crates/hwpx-package/tests/shape_points_hwpx.rs": "203ca2410f7f18fa316b549d119a719bb52c191493e9ce7c4ed85f5f32a6a559"
+      }
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": false,
+        "direct_stage": "not_proven",
+        "errors": [
+          "implementation_digest"
+        ],
+        "implementation_files": 4,
+        "p08_complete": false,
+        "product_complete": false,
+        "schema_version": "hwpx-agent.p08-textbox-properties-hwpx-validation/v1",
+        "source_locks": 5,
+        "source_qualification_verified": true,
+        "state": "fail"
+      },
+      "exit_code": 1,
+      "path": "tools/p08/validate_textbox_properties_hwpx_contract.py",
+      "source_admission": "exact_export_drift_source_qualified_legacy_fail",
+      "source_sha256": "b73070838fbee5e56bac6f99709d5165c6895e27b58eafa9037b126613f30955",
+      "state": "fail",
+      "unchanged_implementation_sha256": {
+        "crates/domain-ir/src/object_properties.rs": "f0bed7df4dc15092f764edd18f10351de2420b9f90dbd0e3909cdda6c3415695",
+        "crates/hwpx-package/src/textbox_properties_hwpx.rs": "bf5638328a5f57664defdc494a95c79f386847f08eed6134b5a6f8d7f246f1b5",
+        "crates/hwpx-package/tests/textbox_properties_hwpx.rs": "971e0c186caef9ba0e8bb939f3faf1017c46bddc88eca61eebc4644597fb59a6"
+      }
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": false,
+        "direct_stage": "integration_passed",
+        "errors": [],
+        "implementation_files": 4,
+        "p08_complete": false,
+        "product_complete": false,
+        "schema_version": "hwpx-agent.p08-object-protect-hwpx-validation/v1",
+        "source_locks": 5,
+        "source_qualification_verified": true,
+        "state": "pass"
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_object_protect_hwpx_contract.py",
+      "source_admission": "pass",
+      "source_sha256": "0da02bbed9070921084f71511d45bc38bbfeef647d0f05425cebe527774c13ed",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": false,
+        "direct_stage": "partial_profile_pass",
+        "errors": [],
+        "implementation_files": 4,
+        "p08_complete": false,
+        "product_complete": false,
+        "schema_version": "hwpx-agent.p08-object-hyperlink-hwpx-validation/v1",
+        "source_locks": 5,
+        "source_qualification_verified": true,
+        "state": "pass"
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_object_hyperlink_hwpx_contract.py",
+      "source_admission": "pass",
+      "source_sha256": "3b40102487a94f1df52c98e6e19440a5bbe5439f79f51f4130ed20cbc143ba43",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "actual_target_mutation": false,
+        "chart_fallback": "unavailable_with_reason",
+        "errors": [],
+        "implementation_files": 3,
+        "obj_048_row_stage": "unit_passed",
+        "p08_complete": false,
+        "schema_version": "hwpx-agent.p08-object-hyperlink-target-route-validation/v1",
+        "source_locks": 5,
+        "source_qualification_verified": true,
+        "state": "pass"
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_object_hyperlink_target_route_contract.py",
+      "source_admission": "pass",
+      "source_sha256": "d039e801c2cc1113f564bb3a0ed45462d1febc21064969fbc8184600d41debef",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "actual_target": "not_run",
+        "direct_hwpx_profiles": 8,
+        "errors": [],
+        "implementation_files": 10,
+        "p08_complete": false,
+        "schema_version": "hwpx-agent.p08-object-remainder-hwpx-validation/v1",
+        "source_locks": 5,
+        "source_qualification_verified": true,
+        "state": "pass",
+        "unavailable_with_reason_profiles": 1
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_object_remainder_hwpx_contract.py",
+      "source_admission": "pass",
+      "source_sha256": "85722f08fe864fbc1209b5c3dc25a83c6b71c2da1e81a0c91b90a75fb40c53d4",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "attempt_id": "p08-20-object-target-20260915-18",
+        "automation_runtime": "not_run",
+        "differential": "not_run",
+        "direct_stage": "oracle_verified",
+        "feature_count": 41,
+        "object_bounds_passed": 41,
+        "p08": "in_progress",
+        "primary_cases_passed": 41,
+        "product_complete": false,
+        "render_passed": 41,
+        "representative_retries_passed": 3,
+        "required_matrix": "non_green",
+        "resource_integrity_passed": 10,
+        "schema_version": "hwpx-agent.p08-object-target-qualification-validation/v1",
+        "semantic_reopen_passed": 41,
+        "state": "pass",
+        "task": "P08-20"
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_object_target_qualification.py",
+      "source_admission": "pass",
+      "source_sha256": "f2b47e1eab3a6a6e7d230868e65a5fbfeb8120a861f330ac504d64f75b366bc4",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "actual_target_runtime": "not_run",
+        "automation_binding": "unavailable_with_reason",
+        "decision": "CAPABILITY_UNAVAILABLE_FOR_TARGET",
+        "direct_hwpx_mapping": "unavailable",
+        "exact_installed_surface_negative_qualification": true,
+        "exact_official_source_negative_qualification": true,
+        "feature_id": "OBJ-044",
+        "p08": "in_progress",
+        "product_complete": false,
+        "row": "non_green",
+        "schema_version": "hwpx-agent.p08-aspect-lock-negative-qualification-validation/v1",
+        "state": "pass",
+        "task": "P08-21"
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_aspect_lock_negative_qualification.py",
+      "source_admission": "pass",
+      "source_sha256": "51296a984e78b3cc2a6b8033017ecaf09add2d1cff1e6a5d341e2d94c3b70f1d",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "candidate_unverified": 40,
+        "differential": "not_run",
+        "known_modal": 2,
+        "must_probe": 24,
+        "none_expected": 14,
+        "p08": "in_progress",
+        "p08_rows": 42,
+        "product_complete": false,
+        "routing_enabled": 0,
+        "runtime_verified": 0,
+        "schema_version": "hwpx-agent.p08-object-automation-binding-overlay-validation/v1",
+        "state": "pass",
+        "task": "P08-22",
+        "unavailable_with_reason": 2
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_object_automation_binding_overlay.py",
+      "source_admission": "pass",
+      "source_sha256": "e602cdd89aad2a953cbb09890c62635cf9a2d5cc7fa96f89878753af0ab714ea",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "action_execute_count": 0,
+        "attempt_id": "p08-23-object-surface-20260915-06",
+        "automation_runtime": "not_run",
+        "differential": "not_run",
+        "document_save_count": 0,
+        "excluded_known_modal_count": 2,
+        "hwp_file_open_count": 0,
+        "p08": "in_progress",
+        "product_complete": false,
+        "schema_version": "hwpx-agent.p08-object-surface-qualification-validation/v1",
+        "state": "pass",
+        "surface_present_count": 38,
+        "task": "P08-23"
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_object_surface_qualification.py",
+      "source_admission": "pass",
+      "source_sha256": "e08ea212a8f62b2dec04f6e55a08d70c258f781f6835d4eb86612f249304d992",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "attempt_id": "p08-24-object-shape-canary-20260915-05",
+        "differential": "not_run",
+        "document_save_count": 0,
+        "hwp_file_open_count": 0,
+        "p08": "in_progress",
+        "product_complete": false,
+        "qualified_canary_case_count": 5,
+        "raw_undo_exact_count": 4,
+        "routing": "disabled",
+        "schema_version": "hwpx-agent.p08-object-shape-canary-validation/v1",
+        "semantic_undo_verified_count": 5,
+        "state": "pass",
+        "task": "P08-24"
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_object_shape_canary_qualification.py",
+      "source_admission": "pass",
+      "source_sha256": "0421a76e5485b40acdc933a794ea1c7359214ab2ee9b97e7e80b932d6b34e42a",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "automation_runtime_verified": 34,
+        "automation_unavailable_with_reason": 8,
+        "p08_green_rows": 41,
+        "p08_phase_gate": "pass_with_target_unavailable",
+        "p08_rows": 42,
+        "schema_version": "hwpx-agent.p08-object-automation-v2-validation/v1",
+        "state": "pass",
+        "target_profile_id": "hancom-hangul-2020-secondary",
+        "task": "P08-25"
+      },
+      "exit_code": 0,
+      "path": "tools/p08/validate_object_automation_v2_qualification.py",
+      "source_admission": "pass",
+      "source_sha256": "44e12e706eb29f56cf7a54166d88c64116b34bf9c411dd6d147f57c8cd943955",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": "not_run",
+        "actual_hwpx": "not_run",
+        "automation": "not_run",
+        "differential": "not_run",
+        "errors": [],
+        "field_readback": "not_run",
+        "green_rows": 0,
+        "implementation_locks": 4,
+        "integration_rows": 3,
+        "p09": "in_progress",
+        "product_complete": false,
+        "reference_update": "not_run",
+        "render": "not_run",
+        "schema_version": "hwpx-agent.p09-field-auto-number-hwpx-validation/v1",
+        "semantic_reopen": "not_run",
+        "source_locks": 4,
+        "source_qualification": true,
+        "state": "pass",
+        "static_section_hwpx": true
+      },
+      "exit_code": 0,
+      "path": "tools/p09/validate_field_auto_number_hwpx_contract.py",
+      "source_admission": "pass",
+      "source_sha256": "5b525cdaab8db9a23704c9ff856577b4823e5a4b58bb748c3b7cd413911dfa3f",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    },
+    {
+      "actual_legacy_result": {
+        "actual_hangul": "not_run",
+        "differential": "not_run",
+        "errors": [],
+        "green_rows": 0,
+        "implementation_locks": 6,
+        "official_locks": 15,
+        "p09": "in_progress",
+        "product_complete": false,
+        "render": "not_run",
+        "schema_version": "hwpx-agent.p09-field-object-caption-hwpx-validation/v1",
+        "semantic_save_reopen": "not_run",
+        "source_locks": 4,
+        "state": "pass"
+      },
+      "exit_code": 0,
+      "path": "tools/p09/validate_field_object_caption_hwpx_contract.py",
+      "source_admission": "pass",
+      "source_sha256": "dffc594a2f92dc71db053e1161dc22370efc396bf99d6e94bb960014daa3f4e4",
+      "state": "pass",
+      "unchanged_implementation_sha256": {}
+    }
+  ],
+  "required_validator_sha256": {
+    "tools/p08/validate_active_content_contract.py": "798fd8abb23dcbb01a6915d2c0c8d38f4adcfd954d18ddf32a008f0545bb8cdf",
+    "tools/p08/validate_aspect_lock_negative_qualification.py": "51296a984e78b3cc2a6b8033017ecaf09add2d1cff1e6a5d341e2d94c3b70f1d",
+    "tools/p08/validate_asset_pipeline_contract.py": "3d66d5eb4f24822faadefa789675be7d87700031602ebf5064e486d44a32ffdc",
+    "tools/p08/validate_basic_shape_contract.py": "ddaf052311e781a2792f4b44e5a74649e3141440e0c96e6d9ebdf630bc711bc4",
+    "tools/p08/validate_chart_automation_contract.py": "880558143995265c6908fde0c5908ff465373f69dc8a8e770edbf2ce64d202b8",
+    "tools/p08/validate_drawing_canvas_contract.py": "a479b141f430986b4861cb727f4ffb3d460717681940e250c2b5008027d66c58",
+    "tools/p08/validate_freeform_hwpx_integration_contract.py": "32efc40523fcf7493aee9b4ecc061c6001910f73df13e87211d07f70abf6c6c0",
+    "tools/p08/validate_image_hwpx_contract.py": "a659e7d31cc1d3540493d13c9dcbb8c45563ca8b35e02d7b7816e5dbfe9e308f",
+    "tools/p08/validate_object_appearance_contract.py": "ea1489ff47ce701905f3163fdb7bcfa2ac5296aec9fb07af93d84611b52aa510",
+    "tools/p08/validate_object_automation_binding_overlay.py": "e602cdd89aad2a953cbb09890c62635cf9a2d5cc7fa96f89878753af0ab714ea",
+    "tools/p08/validate_object_automation_v2_qualification.py": "44e12e706eb29f56cf7a54166d88c64116b34bf9c411dd6d147f57c8cd943955",
+    "tools/p08/validate_object_composition_contract.py": "db71ecf973af76b675561e6e6dc55e91e4a7e4154dd01840bef3af16849957de",
+    "tools/p08/validate_object_geometry_contract.py": "35bb45d1e483f00ff3a69376cd1b8336a31f4049396e7e42fcd000da6d899271",
+    "tools/p08/validate_object_hwpx_integration_contract.py": "db0f5bef0dc2c344e4b77dcc0fb3e300773b1d2be835d6088c00c4822c766b30",
+    "tools/p08/validate_object_hyperlink_hwpx_contract.py": "3b40102487a94f1df52c98e6e19440a5bbe5439f79f51f4130ed20cbc143ba43",
+    "tools/p08/validate_object_hyperlink_target_route_contract.py": "d039e801c2cc1113f564bb3a0ed45462d1febc21064969fbc8184600d41debef",
+    "tools/p08/validate_object_protect_hwpx_contract.py": "0da02bbed9070921084f71511d45bc38bbfeef647d0f05425cebe527774c13ed",
+    "tools/p08/validate_object_remainder_contract.py": "0a5319e8a9d9a41944f54542a87bf055a3b232fbf45d2bba8ff90eccc149ba14",
+    "tools/p08/validate_object_remainder_hwpx_contract.py": "85722f08fe864fbc1209b5c3dc25a83c6b71c2da1e81a0c91b90a75fb40c53d4",
+    "tools/p08/validate_object_shape_canary_qualification.py": "0421a76e5485b40acdc933a794ea1c7359214ab2ee9b97e7e80b932d6b34e42a",
+    "tools/p08/validate_object_surface_qualification.py": "e08ea212a8f62b2dec04f6e55a08d70c258f781f6835d4eb86612f249304d992",
+    "tools/p08/validate_object_target_qualification.py": "f2b47e1eab3a6a6e7d230868e65a5fbfeb8120a861f330ac504d64f75b366bc4",
+    "tools/p08/validate_textbox_properties_hwpx_contract.py": "b73070838fbee5e56bac6f99709d5165c6895e27b58eafa9037b126613f30955",
+    "tools/p09/validate_field_auto_number_hwpx_contract.py": "5b525cdaab8db9a23704c9ff856577b4823e5a4b58bb748c3b7cd413911dfa3f",
+    "tools/p09/validate_field_object_caption_hwpx_contract.py": "dffc594a2f92dc71db053e1161dc22370efc396bf99d6e94bb960014daa3f4e4"
+  },
+  "schema_version": "hwpx-agent.p09-p08-additive-export-source-bridge/v1",
+  "scope": "exact_additive_p09_exports_over_preserved_p08_source",
+  "shared_lib": {
+    "current_raw_sha256": "9b1a0b883e0dfa9f99a61762d21d3bf03c98569289e2aba9b36b6d69ae2311d8",
+    "exact_deltas_sha256": [
+      "4ed031f889352ef2e1046ff22ca37553e979325e978930c9486f906fc026e452",
+      "7e044d6733f6fe8b68c6f019ca5a3fc2c174e63a052907b3404e827874463477",
+      "4644fdafcd718859ce8c0698ac9835a35c7386cbf91d305377653114a1dae4c0",
+      "cbfc8d1f328a364f0c81c74c67a815fa3955c62c96dfd583d23f1883dd2076e3"
+    ],
+    "predecessor_raw_sha256": "a22f9f73f04e17ac3439022fcf6aaa0fb5f5ddb02d48257d10998bd01bdf2e12"
+  },
+  "state": "source_qualified_non_gate",
+  "task": "P09-21",
+  "unchanged_asset_implementation_sha256": {
+    "crates/hwpx-package/src/asset.rs": "2a7aa557159e6c68fe1ed05111f44a846b9d174a9382c7f42d4295f7cdc72f9e",
+    "crates/hwpx-package/src/graph.rs": "8a3f32bb1e849150139d26eca4ed02c829e940c329b9a6233168c2078da960ba",
+    "crates/hwpx-package/src/patch.rs": "bdad473ef1888c1226bed3beb9dd75329b270d54492293e98bcb0277f1f99776",
+    "crates/hwpx-package/src/preservation.rs": "2b07ad95631e9b1d4dd45e7133e96afad0dbd458b48736db0f89d5f6d2986498",
+    "crates/hwpx-package/tests/asset_pipeline.rs": "8ca6c97eb0ac93e9d8d3d8046a01a7d2fdbeaaeb2df386abecbfbc4cfd189b21"
+  }
+}

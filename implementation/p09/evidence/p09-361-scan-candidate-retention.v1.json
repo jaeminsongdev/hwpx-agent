@@ -1,0 +1,183 @@
+{
+  "schema_version": "hwpx-agent.p09-scan-candidate-retention/v1",
+  "state": "CANDIDATE_OPTIMIZATION_NOT_QUALIFIED",
+  "code_version": "hwpx-agent.p09-preserved106-fixed-runtime-queue/v24",
+  "candidate_archive": "implementation/p09/evidence/p361-v24-candidate-code",
+  "code_pins": [
+    {
+      "path": "tools/p09/resume_preserved106_queue_runtime.py",
+      "bytes": 179934,
+      "sha256": "417e8f7f1b736c07387324bb6829ed22d176ae8e8498f2977738101d32438c95"
+    },
+    {
+      "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+      "bytes": 137611,
+      "sha256": "8ebe6bc796214808f8f67c49e59c51845af6e1c7173699f8af7f0f7241e425ac"
+    }
+  ],
+  "preserves_all_light_fresh_contract_validation": true,
+  "retains_only_final_plan_candidates_for_selection": true,
+  "isolated_source_syntax_check": "PASS",
+  "isolated_retention_behavior_check": "PASS",
+  "full_contract_qualification": "NOT_RUN",
+  "independent_stop_review": {
+    "receipt": "implementation/p09/evidence/locked-r07/p340-stop-review-run078.v1.json",
+    "bytes": 105127,
+    "sha256": "b2ccbe3d5f8cd9f532f531542471b974dfa00e7f4713aa4a4fc9fca4b179298d",
+    "state": "FAILED_NOT_ACCEPTED",
+    "failure_stage": "selection",
+    "error_code": "P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_UNREVIEWED_STOP_BLOCKS_GO",
+    "runtime_contract_executions": 0,
+    "actual_product_child_executed": false,
+    "resource_stop_reason": null,
+    "unreviewed_stop_identity": "implementation/p09/evidence/locked-r07/p340-case-109-run050.v1.json"
+  },
+  "run078_input_reconciliation": {
+    "pinned_runtime_receipts_checked": 37,
+    "failed_not_accepted_count": 14,
+    "run072_reviewed_root_path": "implementation/p09/evidence/locked-r07/p340-case-110-run071.v1.json",
+    "run072_reviewed_root_sha256_matches_run071": true,
+    "all_failed_roots_are_unreviewed": false,
+    "first_missing_review": {
+      "root": "implementation/p09/evidence/locked-r07/p340-case-109-run050.v1.json",
+      "review": "implementation/p09/evidence/locked-r07/p340-stop-review-run056.v1.json",
+      "review_missing_from_runs": [78, 79]
+    },
+    "additional_review_mapping": [
+      {"root": "implementation/p09/evidence/locked-r07/p340-case-109-run059.v1.json", "review": "implementation/p09/evidence/locked-r07/p340-stop-review-run060.v1.json", "missing_from_run078_added_in_run079": true},
+      {"root": "implementation/p09/evidence/locked-r07/p340-case-110-run065.v1.json", "review": "implementation/p09/evidence/locked-r07/p340-stop-review-run068.v1.json"},
+      {"root": "implementation/p09/evidence/locked-r07/p340-case-110-run071.v1.json", "review": "implementation/p09/evidence/locked-r07/p340-stop-review-run072.v1.json"}
+    ],
+    "reviewed_root_sha256_mappings_confirmed": true
+  },
+  "followup_stop_review_attempts": [
+    {
+      "run": 79,
+      "state": "FAILED_NOT_ACCEPTED",
+      "error_code": "P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_UNREVIEWED_STOP_BLOCKS_GO",
+      "missing_review": "implementation/p09/evidence/locked-r07/p340-stop-review-run056.v1.json",
+      "runtime_contract_executions": 0,
+      "actual_product_child_executed": false
+    },
+    {
+      "run": 80,
+      "receipt": "implementation/p09/evidence/locked-r07/p340-stop-review-run080.v1.json",
+      "bytes": 67878,
+      "sha256": "b4d8804dc8be51e1f4ac97ca192a4d37fc5117af92a12e56f6fa06d6a78f32dc",
+      "state": "PASS_PRESERVED106_PRE_PRODUCT_STOP_REVIEW_NOT_GO",
+      "reviewed_root": "implementation/p09/evidence/locked-r07/p340-light-review-run076.v1.json",
+      "reviewed_root_sha256": "4e9336654bd7e5452d2196730128c38f537c0213df8368649f224369d947d3b0",
+      "selected_cursor": 111,
+      "runtime_contract_executions": 0,
+      "actual_product_child_executed": false,
+      "resource_watcher_cleanup_confirmed": true,
+      "resource_stop_reason": null
+    }
+  ],
+  "light_qualification": {
+    "run": 81,
+    "receipt": "implementation/p09/evidence/locked-r07/p340-light-run081.v1.json",
+    "bytes": 73318,
+    "sha256": "b73a92b6d7434eaf287e1b291e30d841c1171cfe43b1da7e91b4731d6b7faf43",
+    "state": "PASS_PRESERVED106_NEXT_QUEUE_NOT_ACTUAL_OR_GATE",
+    "runtime_contract_executions": 906,
+    "own_queue_contract_tests_passed": 453,
+    "synthetic_following_queue_contract_tests_passed": 453,
+    "selected_cursor": 111,
+    "source_attempted": false,
+    "actual_product_child_executed": false,
+    "resource_watcher_cleanup_confirmed": true,
+    "resource_stop_reason": null,
+    "candidate_v24_code_pins_match": true
+  },
+  "fresh_review": {
+    "run": 82,
+    "receipt": "implementation/p09/evidence/locked-r07/p340-light-review-run082.v1.json",
+    "bytes": 68834,
+    "sha256": "1f000e9048555de0a4de5b0c17a420316e2daf873d8ebd9beb539d813b540b2f",
+    "state": "PASS_PRESERVED106_DISTINCT_FRESH_NOT_NATIVE_OR_PRODUCT",
+    "selected_cursor": 111,
+    "runtime_contract_executions": 0,
+    "reused_light_contracts": 906,
+    "source_attempted": false,
+    "actual_product_child_executed": false,
+    "resource_watcher_cleanup_confirmed": true,
+    "resource_stop_reason": null
+  },
+  "actual_run": {
+    "run": 83,
+    "receipt": "implementation/p09/evidence/locked-r07/p340-case-111-run083.v1.json",
+    "bytes": 1066545,
+    "sha256": "7312357110f497ed7e9104df3c641d8224430667caa960053209f18f7648ff8a",
+    "state": "FAILED_NOT_ACCEPTED",
+    "error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+    "selected_index": 111,
+    "source_attempted": true,
+    "source_qualified": false,
+    "frame_actual_product_child_flag": false,
+    "frame_contract_executions": 0,
+    "product_test_passed": true,
+    "product_test_summary": {"passed": 1, "failed": 0, "filtered_out": 248, "exit_code": 0},
+    "embedded_parent_sidecar": {
+      "receipt": "implementation/p09/evidence/locked-r07/cases/p340-failure-111-run083.json",
+      "bytes": 565807,
+      "sha256": "b8495d04c9444875cd500d2941c5b055fab1bab630325cbefb327f9f79ec1e72",
+      "state": "STOPPED_NOT_ACCEPTED",
+      "operation_phase": "final_source_freeze",
+      "actual_product_child_executed": true,
+      "second_source_reader_passes": 727,
+      "second_source_reader_expected_passes": 1654,
+      "second_source_reader_bytes": 63288057,
+      "cleanup_confirmed": true,
+      "owned_tree_empty": true
+    },
+    "outer_source_qualified": false,
+    "outer_source_frame_committed": false,
+    "resource_watcher_cleanup_confirmed": true,
+    "resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU"
+  },
+  "resource_guard_unit_tests": {
+    "command": "python -B -m unittest tools.p09.tests.test_conservative_maintenance",
+    "state": "PASS",
+    "tests": 12,
+    "elapsed_seconds": 0.312,
+    "actual_product_or_full_input_hashing_executed": false
+  },
+  "stop_review_run": {
+    "run": 84,
+    "receipt": "implementation/p09/evidence/locked-r07/p340-stop-review-run084.v1.json",
+    "bytes": 109314,
+    "sha256": "c5669e04ec93f9a18a751a4437498c803f1190bf28c12b2483c6a49c828c8dcb",
+    "state": "FAILED_NOT_ACCEPTED",
+    "phase": "selection",
+    "error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+    "selected_cursor": null,
+    "runtime_contract_executions": 0,
+    "actual_product_child_executed": false,
+    "preparation_read_passes": 258,
+    "preparation_bytes_read": 31064092,
+    "preparation_bound_inputs": 250,
+    "preparation_final_fresh_hashes": 0,
+    "early_pressure_warning_entries": 1,
+    "early_pressure_pause_windows": 3,
+    "early_pressure_pause_seconds": 1.5,
+    "near_saturation_read_backpressure_entries": 0,
+    "system_cpu_max_percent": 100.0,
+    "own_cpu_max_machine_percent": 2.389706,
+    "available_ram_min_percent": 13.693279935559767,
+    "resource_watcher_cleanup_confirmed": true
+  },
+  "latest_resource_observation": {
+    "source": "p340-stop-review-run084.metadata_observation",
+    "ram_free_percent_min": 13.693279935559767,
+    "cpu_load_percent_samples_ge_98": 5,
+    "cpu_load_percent_max": 100.0,
+    "own_cpu_max_machine_percent": 2.389706,
+    "additional_full_validation_started": false,
+    "next_stage_state": "STOPPED_NOT_ACCEPTED_STOP_SUSTAINED_SYSTEM_CPU"
+  },
+  "bounded_receipt_reconciliation_after_run078": "DEFERRED_CPU_100_PERCENT_TWO_SAMPLES",
+  "product_gate_changed": false,
+  "system_or_defender_changes": false,
+  "pc_freeze_cause_established": false
+}

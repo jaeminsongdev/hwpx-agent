@@ -1,0 +1,77 @@
+{
+  "schema": "hwpx-agent.p09-96-memo-style-initial-failures/v1",
+  "state": "failed_initial_runs_retained_checks_NOT_weakened",
+  "first_stored_run": {
+    "start_chunk_id": "ad25e8",
+    "terminal_chunk_id": "bf8f30",
+    "exit_code": 101,
+    "passed": 0,
+    "failed": 2
+  },
+  "first_package_run": {
+    "start_chunk_id": "337bf5",
+    "terminal_chunk_id": "af1b10",
+    "exit_code": 101,
+    "passed": 1,
+    "failed": 3,
+    "diagnosis": "CoreV1 does not include original paired-field/preview scope; unknown ID-like attributes rejected; no suppression or fallback"
+  },
+  "correction": "Explicit existing FormulaV3 table/paired-field profile and original preview-text preservation; all original unknown/duplicate/dangling checks retained",
+  "initial_whole_source_archives": [
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics/catalog/memo_style.rs",
+      "bytes": 13299,
+      "sha256": "1d23d1440b820ee6e31ea2ac6c09a747e755e0d2424741f447e096aa64a5d086",
+      "archive_path": "implementation/p09/source-archive/p09-96-initial-core-profile-failure/crates/hwpx-package/src/document_import/fields/semantics/catalog/memo_style.rs"
+    },
+    {
+      "path": "crates/hwpx-package/tests/memo_style_output.rs",
+      "bytes": 12542,
+      "sha256": "e065a1b5cbcaad2938915529203d22e5e999a2f40be50301ed9ed84cdee8ccfc",
+      "archive_path": "implementation/p09/source-archive/p09-96-initial-core-profile-failure/crates/hwpx-package/tests/memo_style_output.rs"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/field_ranges/semantics/catalog/memo_style.rs",
+      "bytes": 5807,
+      "sha256": "c1603e08ee74dd389f5b42fa72112ff41a19a1546b293e56d3f23c211cc797b2",
+      "archive_path": "implementation/p09/source-archive/p09-96-initial-core-profile-failure/crates/product-cli/src/form_stored_provider/actual_import/field_ranges/semantics/catalog/memo_style.rs"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_memo_style.rs",
+      "bytes": 4449,
+      "sha256": "2351cc0abaae3c6df42152535dae91190b39fe1a20aeab9c83b64cbfae8dd2ec",
+      "archive_path": "implementation/p09/source-archive/p09-96-initial-core-profile-failure/crates/product-cli/tests/form_stored_provider/actual_import/source_memo_style.rs"
+    }
+  ],
+  "strict_lint_failures": [
+    {
+      "terminal_chunk_id": "074b76",
+      "exit_code": 1,
+      "error": "new lowering function103lines; extracted receipt helper without allow"
+    },
+    {
+      "terminal_chunk_id": "ed426c",
+      "exit_code": 101,
+      "error": "new test literal separators/type alias/needless update"
+    },
+    {
+      "terminal_chunk_id": "7acb51",
+      "exit_code": 101,
+      "error": "new test literals/duplicate fixture declaration; reused original fixture via parent-only visibility"
+    }
+  ],
+  "compile_warnings_fixed": [
+    "unused import",
+    "test snake-case name"
+  ],
+  "default_conformance": {
+    "terminal_chunk_id": "161e18",
+    "exit_code": 1,
+    "state": "FAIL:matrix_drift",
+    "preserved": true
+  },
+  "native_executed": false,
+  "actual_SQL_executed": false,
+  "product_complete": false,
+  "P09_gate": "OPEN"
+}

@@ -1,0 +1,755 @@
+{
+  "schema_version": "hwpx-agent.p09-flat126-reusable-chunk-and-distinct120/v1",
+  "state": "PASS_ACTUAL126_AND_DISTINCT120_WITH_CHUNK_CONNECTION_NOT_FULL249_OR_GATE",
+  "accepted_count_before": 119,
+  "accepted_count_after": 120,
+  "accepted_count_delta": 1,
+  "remaining_individual_cases": 129,
+  "next_runtime_index": 127,
+  "current_generation_case_count": 15,
+  "historical105_rebased": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "goal_status": "ACTIVE",
+  "P10_implementation_started": false,
+  "connection_qualification_pin": {
+    "path": "implementation/p09/evidence/p09-361-case126-chunk-connection-code-qualification-r284.v1.json",
+    "bytes": 14938,
+    "sha256": "6949e5659cac4b4b6134fc0f027ed089d659afd060b56a542ced3ad142470326"
+  },
+  "explicit126_chunk_data_review": {
+    "state": "PASS_EXPLICIT_CHUNK_DATA_AND_PRESERVED16_WITH_QUALIFIED4_NOT_FULL_PREFLIGHT_OR_NATIVE",
+    "data_pin": {
+      "path": "implementation/p09/evidence/p09-361-case126-chunk-connection-data001.v1.json",
+      "bytes": 2053,
+      "sha256": "f3d64349b8aafec8bac918d17b7d9a05d26fc72d9f7df5bbb82e402252b5b302"
+    },
+    "fresh_inputs": 44,
+    "fresh_read_passes": 88,
+    "fresh_bytes_read": 794700,
+    "final_fresh_hashes": 44,
+    "accepted_count_after": 119,
+    "accepted_count_delta": 0,
+    "next_runtime_index": 126,
+    "product_or_Native_frame_executed": false,
+    "metadata": {
+      "warning_CPU_percent": 75,
+      "checks": 504,
+      "warning_stops": 0,
+      "latched": false,
+      "active": false,
+      "original_checkpoint_restored": true,
+      "original_hard_guard_first": true,
+      "original_cool_checkpoint_retained": true,
+      "added_sampler_or_native_query": false,
+      "added_cooling_waits": 0,
+      "automatic_retry_or_resume": false,
+      "cleanup_guarded": false,
+      "complete_source_reads_or_deadlines_weakened": false,
+      "runtime_connection_qualified": false,
+      "PC_freeze_resolved": false
+    },
+    "cleanup_confirmed": true,
+    "CPU_max": 16.18,
+    "RAM_min": 43.8025622839502
+  },
+  "full1861_preflight": {
+    "state": "PASS_FULL1861_CHUNK_PREFLIGHT_AND_EXACT_RUN001_READINESS_NOT_PRODUCT",
+    "preflight_pin": {
+      "path": "implementation/p09/evidence/p09-361-case126-chunk-preflight001.v1.json",
+      "bytes": 60964,
+      "sha256": "b4bae71f387d4867e3d2964174729c2bb0dbd82b000983cb9ba7b8a8e57f3842"
+    },
+    "data_pin": {
+      "path": "implementation/p09/evidence/p09-361-case126-chunk-connection-data001.v1.json",
+      "bytes": 2053,
+      "sha256": "f3d64349b8aafec8bac918d17b7d9a05d26fc72d9f7df5bbb82e402252b5b302"
+    },
+    "preflight": {
+      "inputs": 1861,
+      "directories": 359,
+      "bytes": 178344898,
+      "current_Rust": 787,
+      "imports": 60,
+      "fresh_inputs": 205,
+      "fresh_read_passes": 411,
+      "fresh_bytes_read": 80342087,
+      "final_fresh_hashes": 205,
+      "elapsed_seconds": 64.60259899999073,
+      "CPU_max": 45.12,
+      "RAM_min": 42.192243019127936,
+      "samples": 126,
+      "CPU_at_or_above75": 0,
+      "complete_runtime_budget": {
+        "inputs": 1861,
+        "directories": 359,
+        "binary_bytes": 28433408,
+        "other_bytes": 149911490,
+        "selected_acquisition_rate_per_second": 14,
+        "original_acquisition_ceiling_per_second": 14,
+        "unchanged_byte_native_ceiling_per_second": 20,
+        "acquisition_reservations": 2220,
+        "native_acquisition_seconds": 158.57142857142858,
+        "two_actual_byte_pass_native_reservations": 1861,
+        "extra_byte_open_reservations": 0,
+        "all_native_byte_open_pacing_seconds": 93.05,
+        "two_actual_byte_pass_nominal_seconds": 197.19915962219238,
+        "nominal_early_yield_allowance_seconds": 4,
+        "unallocated_margin_seconds": 60,
+        "predicted_combined_seconds": 512.820588193621,
+        "unchanged_lock_deadline_seconds": 600,
+        "nominal_fits_unchanged_deadline": true,
+        "byte_and_native_costs_assumed_overlapped": false,
+        "idle_pacer_credit_assumed": false,
+        "estimate_not_completion_guarantee": true,
+        "actual_runner_closure_qualified": false,
+        "Native_source_frame_qualified": false,
+        "GO_authorized": false,
+        "queue_advance_authorized": false,
+        "PC_freeze_improvement_claimed": false,
+        "removed_second_duplicate_handle_reservations": 1861,
+        "removed_second_duplicate_pacing_seconds": 93.05,
+        "byte_or_native_costs_assumed_overlapped": false,
+        "parsed_JSON_hash_or_byte_cache": false,
+        "predicted_runtime_combined_seconds": 562.720588193621,
+        "product_allowance_seconds": 20,
+        "pre_GO_and_assignment_allowance_seconds": 3,
+        "final_inventory_checkpoint_count": 167,
+        "final_inventory_pacing_seconds": 8.35,
+        "additional_early_source_wait_allowance_seconds": 11,
+        "post_cleanup_identity_allowance_seconds": 5,
+        "additional_serial_PDH_maximum_sample_budget_seconds": 2.05,
+        "PDH_OS_call_latency_hard_preemption_guaranteed": false,
+        "unknown_pressure_waits_included": false,
+        "actual_completion_guaranteed": false,
+        "final_postcleanup_distinct_sample_wait_allowance_seconds": 0.5,
+        "final_postcleanup_same_owner_actual_sample_required": true
+      },
+      "workspace": {
+        "workspace_used": true,
+        "workspace_allocations": 1,
+        "workspace_bytes": 65536,
+        "active_lease": false,
+        "leases": 411,
+        "lease_returns": 411,
+        "readinto_attempts": 1972,
+        "readinto_completed": 1972,
+        "returned_bytes": 80342087,
+        "invalid_readinto_returns": 0,
+        "fresh_stream_read_before_every_exposed_chunk": true,
+        "unread_tail_exposed": false,
+        "file_bytes_or_hash_or_JSON_cache": false,
+        "original_MRO_wrappers_preserved": true,
+        "original_stream_open_and_identity_binding_preserved": true,
+        "original_checkpoints_pacing_parse_budget_and_final_hashes_preserved": true,
+        "added_sampler_query_thread_or_process": false,
+        "actual_whole_Native_or_product_connection_qualified": false,
+        "PC_freeze_resolved": false
+      }
+    },
+    "new_code_pins": [
+      {
+        "path": "tools/p09/flat_current_queue_chunk_runtime_v1.py",
+        "bytes": 16597,
+        "sha256": "3963df1621c570d16d7937692351db9366b994ae812ef5375b7d5fca7e5494f0"
+      },
+      {
+        "path": "tools/p09/tests/test_flat_current_queue_chunk_connection_v1.py",
+        "bytes": 10468,
+        "sha256": "eafd70318afbee7f0ba2ceeacf10ac11aacab86080ad30fa3b3fe56ab7effc33"
+      },
+      {
+        "path": "tools/p09/reusable_audit_chunk_v1.py",
+        "bytes": 8088,
+        "sha256": "1aa1db74585cbdf50df32ac0c9dc07dfd31557fc37647ca6e6ea3969fbb60e75"
+      },
+      {
+        "path": "tools/p09/tests/test_reusable_audit_chunk_v1.py",
+        "bytes": 10148,
+        "sha256": "60af53923c129d9f67774b8347a5e7df6aef85ea1c30cd9e65378e4a37a5a399"
+      }
+    ],
+    "semantic_source_pin": {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_bookmarks.rs",
+      "bytes": 7217,
+      "sha256": "eebba28d2efeef815bf41e9d212248cf41fb74760fba881d1bc080d64c77486b"
+    },
+    "fresh_inputs": 42,
+    "fresh_read_passes": 85,
+    "fresh_bytes_read": 842513,
+    "final_fresh_hashes": 42,
+    "accepted_count_after": 119,
+    "accepted_count_delta": 0,
+    "actual126_product_executed": false,
+    "metadata": {
+      "warning_CPU_percent": 75,
+      "checks": 492,
+      "warning_stops": 0,
+      "latched": false,
+      "active": false,
+      "original_checkpoint_restored": true,
+      "original_hard_guard_first": true,
+      "original_cool_checkpoint_retained": true,
+      "added_sampler_or_native_query": false,
+      "added_cooling_waits": 0,
+      "automatic_retry_or_resume": false,
+      "cleanup_guarded": false,
+      "complete_source_reads_or_deadlines_weakened": false,
+      "runtime_connection_qualified": false,
+      "PC_freeze_resolved": false
+    },
+    "cleanup_confirmed": true,
+    "CPU_max": 16.83,
+    "RAM_min": 43.800147001218065
+  },
+  "actual126": {
+    "state": "PASS_BOUNDED_ACTUAL126_WITH_CHUNK_METADATA_AND_TWO_WHOLE_BOUNDARIES_NOT_ACCEPTANCE",
+    "runtime_pin": {
+      "path": "implementation/p09/evidence/p09-361-case126-current-runtime-run001.v1.json",
+      "bytes": 2288730,
+      "sha256": "f9af0d798b874f08c9e03bffba1051d2aa5cd7546f3642566c59290329249826"
+    },
+    "selected_case": "actual_import::source_bookmarks::all_scope5_substitutions_deny_fresh_observed_name_selection_on_the_existing_model",
+    "terminal": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 248
+    },
+    "elapsed_seconds": 477.08,
+    "inputs": 1861,
+    "input_bytes": 178344898,
+    "boundaries": [
+      {
+        "role": "before",
+        "inputs": 1861,
+        "bytes": 178344898,
+        "workspace": {
+          "workspace_used": true,
+          "workspace_allocations": 1,
+          "workspace_bytes": 65536,
+          "active_lease": false,
+          "leases": 1861,
+          "lease_returns": 1861,
+          "readinto_attempts": 5985,
+          "readinto_completed": 5985,
+          "returned_bytes": 178344898,
+          "invalid_readinto_returns": 0,
+          "fresh_stream_read_before_every_exposed_chunk": true,
+          "unread_tail_exposed": false,
+          "file_bytes_or_hash_or_JSON_cache": false,
+          "original_MRO_wrappers_preserved": true,
+          "original_stream_open_and_identity_binding_preserved": true,
+          "original_checkpoints_pacing_parse_budget_and_final_hashes_preserved": true,
+          "added_sampler_query_thread_or_process": false,
+          "actual_whole_Native_or_product_connection_qualified": false,
+          "PC_freeze_resolved": false
+        }
+      },
+      {
+        "role": "after",
+        "inputs": 1861,
+        "bytes": 178344898,
+        "workspace": {
+          "workspace_used": true,
+          "workspace_allocations": 1,
+          "workspace_bytes": 65536,
+          "active_lease": false,
+          "leases": 1861,
+          "lease_returns": 1861,
+          "readinto_attempts": 5985,
+          "readinto_completed": 5985,
+          "returned_bytes": 178344898,
+          "invalid_readinto_returns": 0,
+          "fresh_stream_read_before_every_exposed_chunk": true,
+          "unread_tail_exposed": false,
+          "file_bytes_or_hash_or_JSON_cache": false,
+          "original_MRO_wrappers_preserved": true,
+          "original_stream_open_and_identity_binding_preserved": true,
+          "original_checkpoints_pacing_parse_budget_and_final_hashes_preserved": true,
+          "added_sampler_query_thread_or_process": false,
+          "actual_whole_Native_or_product_connection_qualified": false,
+          "PC_freeze_resolved": false
+        }
+      }
+    ],
+    "metadata_workspace": {
+      "workspace_used": true,
+      "workspace_allocations": 1,
+      "workspace_bytes": 65536,
+      "active_lease": false,
+      "leases": 216,
+      "lease_returns": 216,
+      "readinto_attempts": 1010,
+      "readinto_completed": 1010,
+      "returned_bytes": 40553615,
+      "invalid_readinto_returns": 0,
+      "fresh_stream_read_before_every_exposed_chunk": true,
+      "unread_tail_exposed": false,
+      "file_bytes_or_hash_or_JSON_cache": false,
+      "original_MRO_wrappers_preserved": true,
+      "original_stream_open_and_identity_binding_preserved": true,
+      "original_checkpoints_pacing_parse_budget_and_final_hashes_preserved": true,
+      "added_sampler_query_thread_or_process": false,
+      "actual_whole_Native_or_product_connection_qualified": false,
+      "PC_freeze_resolved": false
+    },
+    "handles": {
+      "input_lock_handles_opened": 2220,
+      "input_lock_handles_closed": 2220,
+      "input_lock_handles_remaining": 0,
+      "input_lock_cleanup_confirmed": true
+    },
+    "borrowed": {
+      "duplicate_handles_opened": 1861,
+      "duplicate_handles_closed": 1861,
+      "duplicate_handles_remaining": 0,
+      "physical_handle_peak": 4081,
+      "logical_read_leases": 3722,
+      "logical_read_lease_returns": 3722,
+      "shared_offset_resets": 3722
+    },
+    "resource": {
+      "samples": 944,
+      "CPU_max": 62.69,
+      "RAM_min": 40.86218237346279,
+      "CPU_at_or_above75": 0,
+      "CPU_at_or_above90": 0,
+      "CPU_at_or_above98": 0,
+      "peak_parent_CPU": 0
+    },
+    "early_budget_probe": {
+      "samples": 59,
+      "collect_calls": 60,
+      "early_budget_checks": 472,
+      "early_budget_stops": 0,
+      "query_remaining": false,
+      "cleanup_confirmed": true,
+      "maximum_sample_seconds": null,
+      "sample_seconds": null
+    },
+    "budget": {
+      "inputs": 1861,
+      "directories": 359,
+      "binary_bytes": 28433408,
+      "other_bytes": 149911490,
+      "selected_acquisition_rate_per_second": 14,
+      "original_acquisition_ceiling_per_second": 14,
+      "unchanged_byte_native_ceiling_per_second": 20,
+      "acquisition_reservations": 2220,
+      "native_acquisition_seconds": 158.57142857142858,
+      "two_actual_byte_pass_native_reservations": 1861,
+      "extra_byte_open_reservations": 0,
+      "all_native_byte_open_pacing_seconds": 93.05,
+      "two_actual_byte_pass_nominal_seconds": 197.19915962219238,
+      "nominal_early_yield_allowance_seconds": 4,
+      "unallocated_margin_seconds": 60,
+      "predicted_combined_seconds": 512.820588193621,
+      "unchanged_lock_deadline_seconds": 600,
+      "nominal_fits_unchanged_deadline": true,
+      "byte_and_native_costs_assumed_overlapped": false,
+      "idle_pacer_credit_assumed": false,
+      "estimate_not_completion_guarantee": true,
+      "actual_runner_closure_qualified": false,
+      "Native_source_frame_qualified": false,
+      "GO_authorized": false,
+      "queue_advance_authorized": false,
+      "PC_freeze_improvement_claimed": false,
+      "removed_second_duplicate_handle_reservations": 1861,
+      "removed_second_duplicate_pacing_seconds": 93.05,
+      "byte_or_native_costs_assumed_overlapped": false,
+      "parsed_JSON_hash_or_byte_cache": false,
+      "predicted_runtime_combined_seconds": 562.720588193621,
+      "product_allowance_seconds": 20,
+      "pre_GO_and_assignment_allowance_seconds": 3,
+      "final_inventory_checkpoint_count": 167,
+      "final_inventory_pacing_seconds": 8.35,
+      "additional_early_source_wait_allowance_seconds": 11,
+      "post_cleanup_identity_allowance_seconds": 5,
+      "additional_serial_PDH_maximum_sample_budget_seconds": 2.05,
+      "PDH_OS_call_latency_hard_preemption_guaranteed": false,
+      "unknown_pressure_waits_included": false,
+      "actual_completion_guaranteed": false,
+      "final_postcleanup_distinct_sample_wait_allowance_seconds": 0.5,
+      "final_postcleanup_same_owner_actual_sample_required": true
+    },
+    "fresh_inputs": 41,
+    "fresh_read_passes": 82,
+    "fresh_bytes_read": 5281558,
+    "final_fresh_hashes": 41,
+    "accepted_count_after": 119,
+    "accepted_count_delta": 0,
+    "next_runtime_index": 126,
+    "actual126_product_executed": true,
+    "full_independent_acceptance_executed": false,
+    "metadata": {
+      "warning_CPU_percent": 75,
+      "checks": 674,
+      "warning_stops": 0,
+      "latched": false,
+      "active": false,
+      "original_checkpoint_restored": true,
+      "original_hard_guard_first": true,
+      "original_cool_checkpoint_retained": true,
+      "added_sampler_or_native_query": false,
+      "added_cooling_waits": 0,
+      "automatic_retry_or_resume": false,
+      "cleanup_guarded": false,
+      "complete_source_reads_or_deadlines_weakened": false,
+      "runtime_connection_qualified": false,
+      "PC_freeze_resolved": false
+    },
+    "cleanup_confirmed": true,
+    "CPU_max": 23.63,
+    "RAM_min": 39.50431532558195
+  },
+  "independent_full_oracle_and_negative_qualification": {
+    "state": "PASS_COMPLETE_ORACLE_POSITIVE_AND12_NEGATIVE_WITH_DISTINCT120_NOT_FULL249_OR_GATE",
+    "runtime_pin": {
+      "path": "implementation/p09/evidence/p09-361-case126-current-runtime-run001.v1.json",
+      "bytes": 2288730,
+      "sha256": "f9af0d798b874f08c9e03bffba1051d2aa5cd7546f3642566c59290329249826"
+    },
+    "authority_pin": {
+      "path": "implementation/p09/evidence/p09-361-case126-current-epoch-accept001.v1.json",
+      "bytes": 289933,
+      "sha256": "f072b5d4309319c60f061b59bf07b18d5daabdad31f301158a2b1e71c8c28113"
+    },
+    "full_oracle_positive": 1,
+    "negative_rejections": [
+      {
+        "name": "no_whole_source",
+        "state": "EXPECTED_REJECTION",
+        "code": "CURRENT_STORED_RUNTIME_SCOPE_PIN_COUNT"
+      },
+      {
+        "name": "no_distinct_final_sample",
+        "state": "EXPECTED_REJECTION",
+        "code": "CURRENT_EPOCH_ACCEPT_RESOURCE_HISTORY"
+      },
+      {
+        "name": "fake_gate",
+        "state": "EXPECTED_REJECTION",
+        "code": "CURRENT_EPOCH_ACCEPT_CANDIDATE"
+      },
+      {
+        "name": "failed_cleanup",
+        "state": "EXPECTED_REJECTION",
+        "code": "CURRENT_EPOCH_ACCEPT_TERMINAL_REVIEW_COMPLETED_BODY_REQUIRED"
+      },
+      {
+        "name": "wrong_product_case",
+        "state": "EXPECTED_REJECTION",
+        "code": "CURRENT_EPOCH_ACCEPT_CANDIDATE"
+      },
+      {
+        "name": "synthetic_candidate",
+        "state": "EXPECTED_REJECTION",
+        "code": "FLAT_ACCEPT_NO_SYNTHETIC_CANDIDATE"
+      },
+      {
+        "name": "zero_actual_earlychecks",
+        "state": "EXPECTED_REJECTION",
+        "code": "BUDGET_ACCEPT_ACTUAL_EARLY_CHECKS_NOT_IMPORTED_ONLY"
+      },
+      {
+        "name": "active_metadata_binding",
+        "state": "EXPECTED_REJECTION",
+        "code": "CURRENT_EPOCH_ACCEPT_REAL_RESTORED_METADATA_SCOPE"
+      },
+      {
+        "name": "metadata_workspace_import_only",
+        "state": "EXPECTED_REJECTION",
+        "code": "CURRENT_EPOCH_ACCEPT_ACTUAL_WORKSPACE"
+      },
+      {
+        "name": "before_workspace_import_only",
+        "state": "EXPECTED_REJECTION",
+        "code": "CURRENT_EPOCH_ACCEPT_ACTUAL_WORKSPACE"
+      },
+      {
+        "name": "after_workspace_import_only",
+        "state": "EXPECTED_REJECTION",
+        "code": "CURRENT_EPOCH_ACCEPT_ACTUAL_WORKSPACE"
+      },
+      {
+        "name": "incomplete_readinto_calls",
+        "state": "EXPECTED_REJECTION",
+        "code": "CURRENT_EPOCH_ACCEPT_ALL_READINTO_COMPLETED"
+      }
+    ],
+    "total_contracts_passed": 13,
+    "actual_connection_proof": {
+      "qualified113_acceptor_AST_restored_exactly": true,
+      "changed_metadata_or_new_explicit_mechanics": [
+        "physical_expected_counters",
+        "retained_physical_cost_model"
+      ],
+      "actual_receipt_observations_modified": false,
+      "expected_duplicate_counter_changes": 3,
+      "case115_metadata_bound": true,
+      "explicit_final_resource_wait_cost_seconds": 0.5,
+      "all_original_whole_source_product_Job_resource_cleanup_predicates_retained": true,
+      "flat_case_data_not_recursive_controller_import": true,
+      "explicit_runtime_index": 126,
+      "explicit_prior_count": 119,
+      "reviewed_metadata_controller_pins_added": true,
+      "original_full_oracle_not_replaced": true,
+      "early_budget_controller_pins_added": true,
+      "terminal_admission_controller_pins_added": true,
+      "reusable_chunk_controller_pins_added": true,
+      "original_validator_projection": {
+        "original_oracle_AST_restored_exactly": true,
+        "metadata_fields_projected": 9,
+        "input_count": 1861,
+        "directory_count": 359,
+        "helper_count": 57,
+        "qualification_checks_skipped": false,
+        "qualified_oracle_pin": {
+          "path": "tools/p09/accept_case112_current_epoch.py",
+          "bytes": 20933,
+          "sha256": "03fa9362f56b6105b48b8b49599f32ccc8cbf4aa9d0b0836f3cf8580cc9c680c"
+        },
+        "additional_PDH_cost_equality_extended_by_seconds": 2.05
+      },
+      "all_original_whole_Native_product_resource_and_cleanup_checks_retained": true,
+      "previous115_source_data_not_rebased": true,
+      "metadata_binding_actual_restored_checked": true,
+      "actual_sole_early_budget_probe_binding_checked": true,
+      "actual_completed_body_admission_before_capture_access": true,
+      "actual_metadata_and_two_whole_boundary_chunk_usage_checked": true
+    },
+    "authority": {
+      "before": 119,
+      "after": 120,
+      "delta": 1,
+      "next": 127,
+      "current_generation": 15,
+      "fresh_inputs": 879,
+      "fresh_read_passes": 1760,
+      "fresh_bytes_read": 70830840,
+      "final_fresh_hashes": 879,
+      "elapsed_seconds": 137.540975099997,
+      "samples": 273,
+      "CPU_max": 56.24,
+      "RAM_min": 39.27465504061537,
+      "cleanup": true,
+      "CPU_at_or_above75": 0,
+      "CPU_at_or_above90": 0,
+      "CPU_at_or_above98": 0
+    },
+    "probe_scalar_values": {
+      "fixed_counter_count": 7,
+      "wildcard_or_process_inventory": false,
+      "collect_calls": 60,
+      "samples": 59,
+      "setup_seconds": 0.602453700004844,
+      "maximum_added_sample_seconds": 0.007984600000781938,
+      "total_added_sample_seconds": 0.24118650001764763,
+      "maximum_sample_budget_seconds": 0.05,
+      "total_added_sample_budget_seconds": 2,
+      "disabled_reason": null,
+      "query_remaining": false,
+      "cleanup_confirmed": true,
+      "close_attempts": 1,
+      "original_K32_CPU_RAM_decisions_replaced": false,
+      "second_sampler_thread_or_process": false,
+      "extra_PDH_queries_added_to_original_observer": true,
+      "interval_alignment_exact": false,
+      "security_sandbox_or_CPU_freeze_improvement_claimed": false,
+      "early_budget_checks": 472,
+      "early_budget_stops": 0,
+      "cost_checked_before_formatted_reads": true,
+      "original_seven_counter_PID_status_and_final_cost_checks_retained": true,
+      "original_CPU_RAM_guards_replaced": false,
+      "runtime_connection_qualified": false,
+      "PC_freeze_resolved": false
+    },
+    "fresh_inputs": 7,
+    "fresh_read_passes": 34,
+    "fresh_bytes_read": 8430532,
+    "final_fresh_hashes": 7,
+    "product_or_Native_replayed": false,
+    "metadata": {
+      "warning_CPU_percent": 75,
+      "checks": 1085,
+      "warning_stops": 0,
+      "latched": false,
+      "active": false,
+      "original_checkpoint_restored": true,
+      "original_hard_guard_first": true,
+      "original_cool_checkpoint_retained": true,
+      "added_sampler_or_native_query": false,
+      "added_cooling_waits": 0,
+      "automatic_retry_or_resume": false,
+      "cleanup_guarded": false,
+      "complete_source_reads_or_deadlines_weakened": false,
+      "runtime_connection_qualified": false,
+      "PC_freeze_resolved": false
+    },
+    "cleanup_confirmed": true,
+    "CPU_max": 17.81,
+    "RAM_min": 39.9850914527803
+  },
+  "semantic_case": {
+    "source_pin": {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_bookmarks.rs",
+      "bytes": 7217,
+      "sha256": "eebba28d2efeef815bf41e9d212248cf41fb74760fba881d1bc080d64c77486b"
+    },
+    "input": "HWPX fixture package containing marker point; StoredFixture -> provider.import_actual_forms",
+    "scope_substitutions": [
+      "document",
+      "branch",
+      "project",
+      "subject",
+      "tenant"
+    ],
+    "fresh_name_selection": "observed_bookmark_by_name(other, point, 5) rejects StoredActualFormImportError::Binding",
+    "cached_model_verification": "verify(other, 5) rejects StoredActualFormImportError::Binding",
+    "exact_negative_assertions": 10,
+    "fixture_service_dependencies": true,
+    "live_SQL_or_Hangul_UI_qualified": false
+  },
+  "preformal_negative_mutation_failure": {
+    "state": "FAILED_NOT_ACCEPTED",
+    "error_code": "UNREJECTED_NO_DISTINCT_FINAL_SAMPLE",
+    "metadata": {
+      "warning_CPU_percent": 75,
+      "checks": 741,
+      "warning_stops": 0,
+      "latched": false,
+      "active": false,
+      "original_checkpoint_restored": true,
+      "original_hard_guard_first": true,
+      "original_cool_checkpoint_retained": true,
+      "added_sampler_or_native_query": false,
+      "added_cooling_waits": 0,
+      "automatic_retry_or_resume": false,
+      "cleanup_guarded": false,
+      "complete_source_reads_or_deadlines_weakened": false,
+      "runtime_connection_qualified": false,
+      "PC_freeze_resolved": false
+    },
+    "cleanup_confirmed": true,
+    "CPU_max": 14.79,
+    "RAM_min": 40.40074076843998,
+    "interpretation": "The initial QA added a non-existent outer final_post_Job_cleanup_resource_sample field. Source and actual root confirmed final samples are post_Job_cleanup_resource_samples. Corrected test empties that actual list and the unchanged production oracle rejects it. Product and acceptance not replayed."
+  },
+  "code_archive": {
+    "root": "implementation/p09/evidence/p361-chunk-connection-v1-qualified-code",
+    "files": 4,
+    "bytes": 45301,
+    "pins_exact": true,
+    "archive_files_Native_covered_claimed": false
+  },
+  "next127": {
+    "state": "PASS_EXACT_NEXT127_DATA5_CODE4_AND_AUTHORITY120_NOT_WHOLE_PREFLIGHT_OR_RUNTIME",
+    "case": "actual_import::source_bookmarks::bookmark_markers_individually_deny_full_context_even_without_old_partial_metadata",
+    "authority_pin": {
+      "path": "implementation/p09/evidence/p09-361-case126-current-epoch-accept001.v1.json",
+      "bytes": 289933,
+      "sha256": "f072b5d4309319c60f061b59bf07b18d5daabdad31f301158a2b1e71c8c28113"
+    },
+    "runtime_pin": {
+      "path": "implementation/p09/evidence/p09-361-case126-current-runtime-run001.v1.json",
+      "bytes": 2288730,
+      "sha256": "f9af0d798b874f08c9e03bffba1051d2aa5cd7546f3642566c59290329249826"
+    },
+    "data_pins": [
+      {
+        "path": "implementation/p09/evidence/p09-361-case127-step-config001.v1.json",
+        "bytes": 675,
+        "sha256": "aa4a297d614eb86f279f7af82d52fc1ecea59be7bfe7bdcc21aeea2a80b4d3e4"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case127-metadata-connection-data001.v1.json",
+        "bytes": 1380,
+        "sha256": "b9bbe23aa48765640265a1e958ae6e9261840873693f36217266414c635e1254"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case127-budget-connection-data001.v1.json",
+        "bytes": 2433,
+        "sha256": "6cf3b80f74c097407b773a32b2d9a123008ae4e07829e27cee31e7d2f220260e"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case127-budget-terminal-connection-data001.v1.json",
+        "bytes": 3151,
+        "sha256": "888f041fc3173327a2f023ac9ddd09211e3df3460087a990ff1b6064fb467f46"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case127-chunk-connection-data001.v1.json",
+        "bytes": 1855,
+        "sha256": "ad6e1edae0b4a519858f34ecb46db250a0784a8684b3d1256d119b69ed24a110"
+      }
+    ],
+    "new_code_pins": [
+      {
+        "path": "tools/p09/flat_current_queue_chunk_runtime_v1.py",
+        "bytes": 16597,
+        "sha256": "3963df1621c570d16d7937692351db9366b994ae812ef5375b7d5fca7e5494f0"
+      },
+      {
+        "path": "tools/p09/tests/test_flat_current_queue_chunk_connection_v1.py",
+        "bytes": 10468,
+        "sha256": "eafd70318afbee7f0ba2ceeacf10ac11aacab86080ad30fa3b3fe56ab7effc33"
+      },
+      {
+        "path": "tools/p09/reusable_audit_chunk_v1.py",
+        "bytes": 8088,
+        "sha256": "1aa1db74585cbdf50df32ac0c9dc07dfd31557fc37647ca6e6ea3969fbb60e75"
+      },
+      {
+        "path": "tools/p09/tests/test_reusable_audit_chunk_v1.py",
+        "bytes": 10148,
+        "sha256": "60af53923c129d9f67774b8347a5e7df6aef85ea1c30cd9e65378e4a37a5a399"
+      }
+    ],
+    "fresh_inputs": 42,
+    "fresh_read_passes": 84,
+    "fresh_bytes_read": 5777270,
+    "final_fresh_hashes": 42,
+    "accepted_count_after": 120,
+    "accepted_count_delta": 0,
+    "next_runtime_index": 127,
+    "actual127_or_full_preflight127_executed": false,
+    "metadata": {
+      "warning_CPU_percent": 75,
+      "checks": 712,
+      "warning_stops": 0,
+      "latched": false,
+      "active": false,
+      "original_checkpoint_restored": true,
+      "original_hard_guard_first": true,
+      "original_cool_checkpoint_retained": true,
+      "added_sampler_or_native_query": false,
+      "added_cooling_waits": 0,
+      "automatic_retry_or_resume": false,
+      "cleanup_guarded": false,
+      "complete_source_reads_or_deadlines_weakened": false,
+      "runtime_connection_qualified": false,
+      "PC_freeze_resolved": false
+    },
+    "cleanup_confirmed": true,
+    "CPU_max": 28.16,
+    "RAM_min": 43.28657452220006
+  },
+  "next127_archive": {
+    "root": "implementation/p09/evidence/p361-flat127-qualified-data",
+    "files": 5,
+    "bytes": 9494,
+    "Native_covered_retroactively": false
+  },
+  "source_scope_byte_pass_rates_guards_and_deadlines_reduced": false,
+  "CPU_culprit_or_IO_induced_external_load_proven": false,
+  "paired_CPU_performance_improvement_proven": false,
+  "PC_freeze_resolved": false,
+  "whole249_signed16_or_reconciliation_complete": false,
+  "OS_Defender_WSL_changed": false,
+  "access_UAC_Hangul_prompt_requested": false,
+  "parallel_verifier_or_build_started": false,
+  "unrelated_process_terminated": false,
+  "delete_or_move_or_commit_or_push_executed": false
+}

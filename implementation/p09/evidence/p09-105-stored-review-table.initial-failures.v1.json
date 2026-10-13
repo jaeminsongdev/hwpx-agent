@@ -1,0 +1,76 @@
+{
+  "schema": "hwpx-agent.p09-105-stored-review-table-initial-failures/v1",
+  "recorded_at_utc": "2026-10-04 19:41:53 UTC",
+  "failure_source_snapshots": [
+    {
+      "path": "implementation/p09/source-archive/p09-105-duplicate-fixture/crates/product-cli/tests/form_stored_provider/actual_import/source_review_table_output.rs",
+      "bytes": 13841,
+      "sha256": "3400f307acbbd25901087382ba96f76628d3273f773fedbf38174b3f0f073b5b"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-105-initial-build/crates/product-cli/src/form_stored_provider/actual_import/review/table_output.rs",
+      "bytes": 10097,
+      "sha256": "10e2f289a6c01c0216d3e6fa60144dc37d753341f90b239a230c450ebfe016f4"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-105-initial-build/crates/product-cli/tests/form_stored_provider/actual_import/source_review_table_output.rs",
+      "bytes": 13841,
+      "sha256": "3400f307acbbd25901087382ba96f76628d3273f773fedbf38174b3f0f073b5b"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-105-pre-quarantine-test/crates/product-cli/tests/form_stored_provider/actual_import/source_review_table_output.rs",
+      "bytes": 13803,
+      "sha256": "452d0f238651cf2d23c72a1f169d4d24c5909d021f8d9494014a366ffd8dd4c2"
+    }
+  ],
+  "failures": [
+    {
+      "terminal_chunk": "d5d865",
+      "session_id": 94839,
+      "result": "compile_failure_E0599",
+      "scope": "test cloned a closed error enum without Clone; no runtime tests executed"
+    },
+    {
+      "terminal_chunk": "7f0a27",
+      "session_id": 89083,
+      "result": "strict_lint_large_types_passed_by_value",
+      "scope": "internal 392-byte limits packet changed to borrowed input; public stored snapshot remains owned"
+    },
+    {
+      "terminal_chunk": "a10143",
+      "result": "strict_lint_duplicate_mod",
+      "scope": "shared original assembly fixture loaded twice; reuse single existing module via test-only derivative helper; no lint allow or original fixture change"
+    }
+  ],
+  "retained_earlier_successes": [
+    {
+      "chunk": "6cdd79",
+      "session_id": 30950,
+      "passed": 22,
+      "reused_native": 8,
+      "reused_P103_context": 7,
+      "new_service_tests": 7,
+      "executable": {
+        "path": "target/p09-105-duplicate-fixture/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+        "bytes": 19701248,
+        "sha256": "5a9a9a044ae8b925c9d6c0f127341b1502f263e3bc5ee4f687d8249a77f3d2ca"
+      },
+      "NOT_added_to_final_unique_count": true
+    },
+    {
+      "chunk": "d6075f",
+      "session_id": 16049,
+      "product_passed": 182,
+      "form_passed": 158,
+      "executable": {
+        "path": "target/p09-105-pre-quarantine-regression/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+        "bytes": 19601408,
+        "sha256": "7b0215a75814efd76985a55d7c986418f921120cd5cd48fe5f4c85810e7e3d7b"
+      },
+      "scope": "before eighth cached-quarantine test and receipt privacy assertions",
+      "NOT_added_to_final_unique_count": true
+    }
+  ],
+  "no_private_values_or_full_logs_recorded": true,
+  "original_guard_assertion_or_fixture_removed": false
+}

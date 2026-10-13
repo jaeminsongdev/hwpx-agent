@@ -1,0 +1,90 @@
+{
+  "schema_version": "hwpx-agent.p09-compression-captured-suite-partial/v1",
+  "state": "PARTIAL_EXECUTION_STOPPED_POST_SOURCE_AUDIT_DEFERRED",
+  "goal_status": "active",
+  "P09_gate": "OPEN",
+  "A12": "OPEN",
+  "A13": "OPEN",
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "changed_helpers": [
+    "tools/p09/run_compression_full_stored.py",
+    "tools/p09/tests/test_compression_full_stored.py"
+  ],
+  "preserved_preimages": "implementation/p09/source-archive/p09-149-pre-compression-full-capture-r20/helper-preimages.v1.json",
+  "previous_failed_execution_pin": {
+    "path": "implementation/p09/evidence/p09-149-compression-full-stored.actual-run01.v1.json",
+    "bytes": 3607741,
+    "sha256": "677ef24e932a3f48690a6b4818e41f2753b977206b904f649fa22df3b89fd774"
+  },
+  "previous_failed_execution_reclassified": false,
+  "previous_failure_root_cause_confirmed": false,
+  "output_change": "full unfiltered249 with libtest captured output and terse formatting; child RUST_TEST_NOCAPTURE=0; closed capture error allowlist and numeric byte counts",
+  "original_Rust_assertions_or_product_sources_changed": false,
+  "original_owned_resource_policy_changed": false,
+  "light_contract": {
+    "path": "implementation/p09/evidence/p09-149-compression-full-stored.light-run02.v1.json",
+    "observed_state": "PASS_FULL249_CAPTURED_TERSE_CONTRACT_ONLY_NOT_RUNTIME_OR_GATE",
+    "tests_run": 13,
+    "tests_passed": 13,
+    "failed_tests": []
+  },
+  "execution": {
+    "path": "implementation/p09/evidence/p09-149-compression-full-stored.actual-run02.v1.json",
+    "tool_session": 48392,
+    "tool_terminal_exit": 1,
+    "observed_state": "STOPPED_NOT_ACCEPTED",
+    "observed_stop_reason": "STOP_LOW_AVAILABLE_RAM",
+    "elapsed_seconds": 800.67,
+    "tests_passed": null,
+    "owned_tree_empty": true,
+    "full249_current_qualified": false,
+    "signed16_current_qualified": false
+  },
+  "source_closing_exact": false,
+  "post_execution_full_source_audit_completed": false,
+  "post_audit_observations": [
+    {
+      "path": "implementation/p09/evidence/p09-149-compression-full-stored.audit-not-accepted-run01.v1.json",
+      "state": "DEFERRED_OR_FAILED_NOT_ACCEPTED"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-compression-full-stored.audit-diagnostic-run01.v1.json",
+      "state": "DIAGNOSTIC_NOT_ACCEPTED",
+      "failure_location": "sql_percentage_resources.py:82",
+      "stage": "admission_stable_window_not_admitted"
+    }
+  ],
+  "latest_resource_observation": {
+    "available_RAM_percent": 8.07,
+    "named_verification_processes": [],
+    "time_UTC": "2026-10-07 04:35:00 UTC"
+  },
+  "prior_owned_process_working_set_observation": {
+    "test_EXE_RAM_MiB": 23.6,
+    "all_four_owned_processes_RAM_MiB": 117.3,
+    "scope": "instant working-set sample, not peak private Job accounting"
+  },
+  "P09_non_permission_remaining_completion_units": 76,
+  "completion_units_deducted_this_turn": 0,
+  "raw_logs_printed_or_saved": false,
+  "OS_Defender_WSL_Codex_settings_changed": false,
+  "SQL_Hancom_access_prompt_executed": false,
+  "Git_download_delete_move_executed": false,
+  "PC_freeze_resolved": false,
+  "prior_document_pins": [
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 191973,
+      "sha256": "a6fe5ddd7aff9ebd7939f7e7ad346d01fa4be63b102ac963e151d5bdf4e05e49"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 285605,
+      "sha256": "f3e0b1b6b329f99c238658e42fcfc08a2275fd60be9335e98138d9dc06e8af78"
+    }
+  ],
+  "source": "terminal tool output and bounded resource observations only; current full-source/capture/Job-final receipt audit deferred",
+  "next_action": "When original resource admission passes, inspect failed run02 numeric capture/resource/cleanup receipt and complete the unchanged full-source audit. Do not blindly replay full249, raise caps, remove assertions or kill unrelated processes.",
+  "official_output_contract": "https://doc.rust-lang.org/rustc/tests/index.html#output-options"
+}

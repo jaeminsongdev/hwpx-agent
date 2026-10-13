@@ -1,0 +1,73 @@
+{
+  "schema_version": "hwpx-agent.p09-field-auto-number-hwpx-source-qualification/v1",
+  "task": "P09-16",
+  "base_commit": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+  "profile": "hwpx-agent.field-auto-number-hwpx.hwpml-2011-digit/v1",
+  "official_source": {
+    "repository": "https://github.com/hancom-io/hwpx-owpml-model.git",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "scope": "HWPML_2011_autoNum_autoNumFormat_PAGE_PICTURE_TABLE_EQUATION_DIGIT_shape_only",
+    "reviewed_sha256": {
+      "OWPML/Class/enumdef.h": "1c86392c934ac85f7ddd85c710b76be7649403a8404bce146db52558a0b95457",
+      "OWPML/Class/Para/AutoNumNewNumType.h": "2dbef2bf7771a97501517ba8c0cf0bea2e0ec425048416854a283a119447533a",
+      "OWPML/Class/Para/AutoNumNewNumType.cpp": "58dd79b1e927b832868cf77c4ff089a3cab269c327a23e0a5aac0e21ecefbcf8",
+      "OWPML/Class/Para/AutoNumFormatType.h": "68ff9aee1b497be0f5be24b451bdd0810e93eb781b9c801651efc4dbbf43a155",
+      "OWPML/Class/Para/AutoNumFormatType.cpp": "86752d873fe366e3f72d8e9f50a71d8e29cfec712663fbaf4079d7a664c67a2c",
+      "OWPML/Class/Para/ctrl.h": "e043d1b8a570724179ba7f57f1521dbb65a2c393ba116dbb0d2c3bae2277cc7e",
+      "OWPML/Class/Para/ctrl.cpp": "a928569df0b890d8a58470a70a1501520bfb4d8af121df58eeb1fd8b9e0eed1d"
+    }
+  },
+  "existing_fixture": {
+    "package_path": "fixtures/target-build/p05-08-current-2020-20260907-v12/p05-08-header-footer-output-attempt02.hwpx",
+    "package_sha256": "2fd7af9efb54132160b617b7b28399804596115fb2758bf193e5b0cd830838ac",
+    "section_entry": "Contents/section0.xml",
+    "section_sha256": "2eb80a4b707984bc5dca382735d62f9898f1a8b56c36f6e9af1118be4b8aeccb",
+    "authority_report": "implementation/p05/P05-08_HANCOM2020_MASTER_PAGE_REPAIR.md",
+    "qualification": "licensed_hangul_2020_save_reopen_PAGE_DIGIT_lexical_shape_only",
+    "generated_by_this_adapter": false,
+    "object_number_target_qualified": false
+  },
+  "implementation_sha256": {
+    "crates/domain-ir/src/field_engine.rs": "c9c77c27f741cb985de6da734a14fdf28917d89500d25a73a8cce2d7e2ad5da5",
+    "crates/domain-ir/tests/field_engine.rs": "15a3f49dab9aed32f087ec7aceb1c3d38617681f01162ce4415fe4b77338abb1",
+    "crates/hwpx-package/src/field_auto_number_hwpx.rs": "2927752005e5a1f2914089935dcec21fd61239f44e9861dabca8a505e5b05288",
+    "crates/hwpx-package/tests/field_auto_number_hwpx.rs": "3151a26ce5fc826c0a78d94da40de922903bee5c0344c05260a01d94ba85dc70"
+  },
+  "public_export": {
+    "path": "crates/hwpx-package/src/lib.rs",
+    "markers": ["mod field_auto_number_hwpx;", "pub use field_auto_number_hwpx::{"],
+    "verified": true
+  },
+  "tests": {
+    "field_engine_domain": "8/8 PASS",
+    "field_auto_number_hwpx_public": "8/8 PASS",
+    "field_auto_number_hwpx_private_tamper": "1/1 PASS",
+    "focused_total": "17/17 PASS",
+    "fixture_classes": ["boundary", "happy_path", "negative", "preservation"],
+    "focused_clippy": "PASS"
+  },
+  "claims": {
+    "three_row_closed_digit_static_section_integration": true,
+    "typed_target_projection_readback": true,
+    "outside_delta_byte_preserved": true,
+    "complete_state_flow_map_and_projection_bound": true,
+    "existing_fixture_page_digit_source_qualified": true,
+    "existing_fixture_generated_by_adapter": false,
+    "object_number_target_qualified": false,
+    "complete_package_hwpx": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "semantic_reopen": false,
+    "field_readback": false,
+    "reference_update": false,
+    "hancom_open": false,
+    "save_reopen": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "green_rows": 0,
+    "p09_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

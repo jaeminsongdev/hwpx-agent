@@ -1,0 +1,21 @@
+{
+  "schema": "hwpx-agent.p09-durable-full-request.initial-failures/v1",
+  "date": "2026-10-04",
+  "build_and_lint_failures": [
+    {"terminal_chunk":"c698a8","exit_code":1,"category":"E0432_E0603_explicit_fixture_imports","archive":"implementation/p09/source-archive/p09-65-initial-imports"},
+    {"terminal_chunk":"866ea3","exit_code":1,"category":"E0603_private_package_module_import","archive":"implementation/p09/source-archive/p09-65-private-import"},
+    {"terminal_chunk":"5b00e8","exit_code":1,"category":"unused_wildcard_semicolon_strict_lint","archive":"implementation/p09/source-archive/p09-65-before-safety-oracle"},
+    {"terminal_chunk":"7a14bd","exit_code":1,"category":"new_safety_function_149_lines_strict_lint","archive":"implementation/p09/source-archive/p09-65-initial-safety-lint"},
+    {"terminal_chunk":"60a075","exit_code":1,"category":"new_safety_function_114_lines_strict_lint","archive":"implementation/p09/source-archive/p09-65-safety-helper-lint"}
+  ],
+  "actual_db_failures": [
+    "implementation/p09/evidence/p09-65-stored-full-request.initial-db-failure.v1.json",
+    "implementation/p09/evidence/p09-65-stored-full-request.diagnostic-db-failure.v1.json",
+    "implementation/p09/evidence/p09-65-stored-full-request.sql-oracle-failure.v1.json"
+  ],
+  "old_parser_compiler_sql_guards_or_oracles_weakened": false,
+  "assertions_removed_or_skipped": false,
+  "earlier_p62_prevalidation_failure":"UNRESOLVED",
+  "native_activated":false,
+  "p09_complete":false
+}

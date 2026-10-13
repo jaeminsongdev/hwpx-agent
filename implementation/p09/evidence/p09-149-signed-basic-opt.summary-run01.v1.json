@@ -1,0 +1,178 @@
+{
+  "schema_version": "hwpx-agent.p09-basic-opt-profile-progress/v1",
+  "state": "PROFILE_COMPILE_STOP_AND_NEW_TWO_PACKAGE_CANDIDATE_NOT_COMPILED_OR_RUNTIME_OR_GATE",
+  "test_package_profile_config": [
+    "profile.test.package.hwpx-package.opt-level=1",
+    "profile.test.package.hwpx-package.debug-assertions=true",
+    "profile.test.package.hwpx-package.overflow-checks=true",
+    "profile.test.package.hwpx-package.codegen-units=16",
+    "profile.test.package.hwpx-package.debug=\"line-tables-only\"",
+    "profile.test.package.hwpx-agent-cli.opt-level=1",
+    "profile.test.package.hwpx-agent-cli.debug-assertions=true",
+    "profile.test.package.hwpx-agent-cli.overflow-checks=true",
+    "profile.test.package.hwpx-agent-cli.codegen-units=16",
+    "profile.test.package.hwpx-agent-cli.debug=\"line-tables-only\"",
+    "profile.test.lto=\"off\""
+  ],
+  "profile_packages": [
+    "hwpx-package",
+    "hwpx-agent-cli"
+  ],
+  "source_variant": "unchanged-r11-Rust-basic-opt-two-package-test-profile-r12",
+  "Rust_sources_or_original_assertions_changed": false,
+  "whole_original_helper_preimages": 2,
+  "whole_original_helper_bytes": 15691,
+  "original_signed_assertion_body_after_cfg_removal_exact": true,
+  "source_names": 249,
+  "source_module_instances": 59,
+  "whole_current_Rust_inputs": 783,
+  "old_source_freeze_exact_except_declared_two_helpers": true,
+  "original_r11_runtime_source_freeze_current_exact": true,
+  "full_current_source_closing_exact": true,
+  "light_runs": [
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-basic-opt.light-run01.v1.json",
+      "pin": {
+        "path": "implementation/p09/evidence/p09-149-signed-basic-opt.light-run01.v1.json",
+        "bytes": 877,
+        "sha256": "3a9b1504f16c68831587987f4b48e84db9b481cff35ec1d8592e102741973865"
+      },
+      "tests_run": 12,
+      "tests_passed": 12,
+      "original_or_current_helper_binding_exact": true
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-basic-opt.light-run02.v1.json",
+      "pin": {
+        "path": "implementation/p09/evidence/p09-149-signed-basic-opt.light-run02.v1.json",
+        "bytes": 1334,
+        "sha256": "a49d76fa6a5deed4c04c93eb6f29ec25becce4b50c75d37064420bffaeb465d8"
+      },
+      "tests_run": 12,
+      "tests_passed": 12,
+      "original_or_current_helper_binding_exact": true
+    }
+  ],
+  "actual_compile_stop": {
+    "pin": {
+      "path": "implementation/p09/evidence/p09-149-signed-basic-opt.inventory-run01.v1.json",
+      "bytes": 618983,
+      "sha256": "90edf58f7074ee3570af894e16e143f6ca0daf17f6b7d15baa9177d4536891ef"
+    },
+    "elapsed_seconds": 107.25,
+    "stop_reason": "STOP_OWNED_JOB_MEMORY_BUDGET",
+    "peak_owned_private_mib": 2253.93,
+    "peak_owned_private_percent": 7.074289560522756,
+    "maximum_host_cpu_percent": 60.23,
+    "minimum_available_RAM_percent": 30.6404851653212,
+    "maximum_commit_used_percent": 39.47956331803454,
+    "last_Cargo_announcement": {
+      "source": "last_complete_cargo_style_stderr_announcement",
+      "process_or_compiler_phase_attribution_verified": false,
+      "announcement": {
+        "stage": "compiling",
+        "package": "domain-ir"
+      }
+    },
+    "compiler_internal_phase_or_exact_memory_cause_proven": false,
+    "resolved_owned_limits": {
+      "total_ram_mib": 31860.92,
+      "job_private_memory_limit_mib": 2548.87,
+      "machine_logical_processors": 16,
+      "job_cpu_hard_cap_machine_percent": 6.25
+    },
+    "closing_active_processes": 0,
+    "owned_tree_empty": true,
+    "cleanup_confirmed": true
+  },
+  "second_attempt_binding_stop": {
+    "pin": {
+      "path": "implementation/p09/evidence/p09-149-signed-basic-opt.binding-stop-run02.v1.json",
+      "bytes": 681,
+      "sha256": "e8134ba04204153c90fe1ef2ec49f6009ae92089e0a4f522b0686ef5365209f5"
+    },
+    "state": "DEFERRED_NOT_STARTED",
+    "reason": "STOP_SUSTAINED_SYSTEM_CPU",
+    "Cargo_worker_started": false,
+    "CPU_stop_is_proven_false_positive": false
+  },
+  "current_two_package_inventory_complete": false,
+  "current_two_package_signed16_runtime_complete": false,
+  "full249_current_qualified": false,
+  "SQL_native_or_Gate_qualified": false,
+  "debug_assertions_or_overflow_disabled": false,
+  "original_owned_runtime_resource_policy_changed": false,
+  "system_or_Defender_or_WSL_or_Codex_settings_changed": false,
+  "PC_freeze_resolved": false,
+  "statistical_speedup_proven": false,
+  "support_pins": [
+    {
+      "path": "tools/p09/run_optimized_signed_tests.py",
+      "bytes": 11368,
+      "sha256": "ca65cafe5340159a6eb429bbebc2e31b96c7e3bd5aa11874936a82c4212cb7ad"
+    },
+    {
+      "path": "tools/p09/tests/test_optimized_signed_tests.py",
+      "bytes": 7056,
+      "sha256": "f98d020d96ca55943538cda4a33f07a586c6f4244465cbe83bd0c0ffae806ac5"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-basic-opt-memory-scope-r12/helper-preimages.v1.json",
+      "bytes": 22197,
+      "sha256": "4945e21149ed499cbe2d001c978300439b12a111f4466db518d893654b37e6dc"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-stage-cost.summary-run01.v1.json",
+      "bytes": 6947,
+      "sha256": "cab38d820add8b78e0a3ee82d0d03915e548160e25d2f79941bed78125449aa6"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-basic-opt.binding-stop-run02.v1.json",
+      "bytes": 681,
+      "sha256": "e8134ba04204153c90fe1ef2ec49f6009ae92089e0a4f522b0686ef5365209f5"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-basic-opt.inventory-run01.v1.json",
+      "bytes": 618983,
+      "sha256": "90edf58f7074ee3570af894e16e143f6ca0daf17f6b7d15baa9177d4536891ef"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-stage-cost.final-progress-sync-run01.v1.json",
+      "bytes": 4234,
+      "sha256": "2c5e46d6d4405a4e85720f28f8ad025ef279418c487079d53a4ea9ef78457f47"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 164390,
+      "sha256": "cbc9fa722d73973daa7f3e4a9f69e9aab6c13c766fa148739599effe84ccf1fd"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 258022,
+      "sha256": "8f20bbcb17705e9640c606892b78dd043eea17aef729d242c3e542c3d19a7e5a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-basic-opt.readonly-audit-scope-failure-run01.v1.json",
+      "bytes": 808,
+      "sha256": "518ce2ab95b7ce2acc78e6624eec7dbea0f8235991643e51943b431397be0e80"
+    }
+  ],
+  "new_child_or_thread_started_in_this_audit": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "next_action": "REVIEW_SOURCE_BINDING_GETSYSTEMTIMES_SAMPLE_INTERVAL_VERSUS_CANONICAL_0_5_SECOND_RESOURCE_GUARD_WITHOUT_REDUCING_SOURCE_COVERAGE_OR_RAISING_CAPS_THEN_COMPILE_AND_EXECUTE_THE_UNCHANGED_FULL_SIGNED16",
+  "IO": {
+    "read_passes": 2897,
+    "bytes_read": 72016644,
+    "bound_inputs": 922,
+    "final_fresh_hashes": 922,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 10.087343300001521
+}

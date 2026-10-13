@@ -1,0 +1,338 @@
+{
+  "schema_version": "hwpx-agent.p09-119-signed-formula-component-source-regression/v1",
+  "state": "PASS_scoped_signed_formula_component_NOT_production_trust_SQL_native_or_Gate",
+  "source_freeze": [
+    {
+      "path": "Cargo.lock",
+      "bytes": 61056,
+      "sha256": "3dba694d1b6066a8ff7fec347c51edd1b09b7046ca070bbaf3ac78cc8b708887"
+    },
+    {
+      "path": "crates/product-cli/Cargo.toml",
+      "bytes": 772,
+      "sha256": "280f6845d791cdf75e64f7b7fb0a5858e14f8c170f80cf4ee4b8c5e50c2c4a00"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas.rs",
+      "bytes": 6503,
+      "sha256": "b6a0d65ab2728a0ef851a801e7bc0a35a10942e4965158389a58fb091cfc7ed0"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import.rs",
+      "bytes": 16316,
+      "sha256": "1eec7c9aa19d418d485ebd0b7ea5f08059b0e603535cde49e1eeae436151aaaa"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer.rs",
+      "bytes": 10115,
+      "sha256": "82ea6bd2482d2bf5bff0a2a469a867e7126386e9b8aabec60080adadc4dbdcbd"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/wire.rs",
+      "bytes": 3711,
+      "sha256": "4db4c96ce65a7244646211054db9267a76e3cf4452cca8002e7dec18fa0b968c"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/provider.rs",
+      "bytes": 8856,
+      "sha256": "6d7aadaacfbca78a4e0ffb118b82d13435ddbd387faff549331ae28b25197c10"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/product.rs",
+      "bytes": 7488,
+      "sha256": "48adbce1a99fa6301b1c2ae59a00e1b5593158e2177bcdd7a8514cb3f87400e0"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_issuer.rs",
+      "bytes": 44568,
+      "sha256": "255864b2cb995a99bfa3d1a3747102278680512655386a8f33473fa6f7e6caa0"
+    }
+  ],
+  "source_freeze_verified_in_run": {
+    "output": "d96a9c",
+    "exit_code": 0,
+    "code_freeze_9_exact": true
+  },
+  "runtime": {
+    "command": "cargo test -p artifact-service -p revision-service -p hwpx-agent-cli --lib --test form_stored_provider --test form_product_request --test form_value_operation --locked --offline --target-dir target/p09-119-formula-policy-issuer",
+    "start": "d79fe9",
+    "session": 21708,
+    "terminal": "4c2f9d",
+    "exit_code": 0,
+    "passed": 301,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0,
+    "suites": {
+      "artifact_lib": 25,
+      "cli_lib": 6,
+      "form_product_request": 10,
+      "form_stored_provider": 222,
+      "form_value_operation": 18,
+      "revision_lib": 20
+    },
+    "new_issuer_tests_included": 14,
+    "stored_seconds": 531.01,
+    "product_seconds": 13.59,
+    "form_seconds": 13.14,
+    "performance_acceptance": false,
+    "full_workspace_run": false,
+    "hwpx_package_136_rerun": false
+  },
+  "test_inventory": {
+    "output": "15739f",
+    "test_executables": [
+      {
+        "path": "target/p09-119-formula-policy-issuer/debug/deps/hwpx_agent_cli-2e652378818f9b3c.exe",
+        "bytes": 1160192,
+        "sha256": "9b0dd3943ec98d472a528596b92d72fbf927c610d4660ac6c4b3b7fe9fae41a9",
+        "listed_test_count": 6,
+        "new_issuer_tests_included": 0
+      },
+      {
+        "path": "target/p09-119-formula-policy-issuer/debug/deps/form_stored_provider-9df9b9ece65a1dfd.exe",
+        "bytes": 22708224,
+        "sha256": "f69bcf6ed40b989ca034f9b2c483bc3b6da6434b89cff5740f0b0f4b4c4bf8d2",
+        "listed_test_count": 222,
+        "new_issuer_tests_included": 14
+      },
+      {
+        "path": "target/p09-119-formula-policy-issuer/debug/deps/form_product_request-705fd2bcec70396c.exe",
+        "bytes": 8283136,
+        "sha256": "80cebd2182f84aa3bf30eb4f0b499de2f43dbf28cd9ea3ce98becfcdc97c6da6",
+        "listed_test_count": 10,
+        "new_issuer_tests_included": 0
+      },
+      {
+        "path": "target/p09-119-formula-policy-issuer/debug/deps/form_value_operation-7cdd3d0f9fe6622c.exe",
+        "bytes": 9128448,
+        "sha256": "0880a329c66f867f1135f40ccc3e9c2ce03b8094e4013d5270c15a1bcafed8c1",
+        "listed_test_count": 18,
+        "new_issuer_tests_included": 0
+      },
+      {
+        "path": "target/p09-119-formula-policy-issuer/debug/deps/artifact_service-c722486ab67dc904.exe",
+        "bytes": 2694656,
+        "sha256": "8fc10b24dd43ce62263786cbe685fb1e113aab2e52a62a961cddf70b574dd027",
+        "listed_test_count": 25,
+        "new_issuer_tests_included": 0
+      },
+      {
+        "path": "target/p09-119-formula-policy-issuer/debug/deps/revision_service-1b137e63992c86e2.exe",
+        "bytes": 1686016,
+        "sha256": "d01ebcb2430586a316b4a29fd86b9ac88e7ebd491d79dbcb12e680c95e1757f2",
+        "listed_test_count": 20,
+        "new_issuer_tests_included": 0
+      }
+    ],
+    "distinct_binary_test_pairs": 301,
+    "listing_is_execution_evidence": false
+  },
+  "strict_lint": {
+    "production_library": {
+      "start": "599263",
+      "session": 99316,
+      "terminal": "0e7b7a",
+      "exit_code": 0
+    },
+    "final_selected_tests": {
+      "terminal": "17d8fd",
+      "exit_code": 0
+    }
+  },
+  "cli_binary_build": {
+    "terminal": "8bab5e",
+    "exit_code": 0,
+    "executed": false,
+    "transport_verified": false
+  },
+  "initial_targeted_run": {
+    "start": "1ad476",
+    "session": 91842,
+    "terminal": "05b047",
+    "exit_code": 0,
+    "passed": 12,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 208,
+    "seconds": 348.09,
+    "adds_to_final_count": false
+  },
+  "initial_full_regression": {
+    "start": "ec0306",
+    "session": 6783,
+    "terminal": "1d10b0",
+    "exit_code": 1,
+    "passed_suites": {
+      "artifact_lib": 25,
+      "cli_lib": 6,
+      "form_product_request": 10
+    },
+    "stored": {
+      "passed": 221,
+      "failed": 1,
+      "ignored": 0,
+      "filtered": 0,
+      "seconds": 494.14
+    },
+    "unexecuted_suites": [
+      "form_value_operation",
+      "revision_lib"
+    ],
+    "failure": "new_approval_only_AEAD_test_selector_omitted_actual_object_key_suffix_no_tamper_applied",
+    "fix": "new_test_exact_ObjectKey_constructor_and_positive_tamper_hit_counter_only_NO_original_guard_change",
+    "source_freeze": [
+      {
+        "path": "Cargo.lock",
+        "bytes": 61056,
+        "sha256": "3dba694d1b6066a8ff7fec347c51edd1b09b7046ca070bbaf3ac78cc8b708887"
+      },
+      {
+        "path": "crates/product-cli/Cargo.toml",
+        "bytes": 772,
+        "sha256": "280f6845d791cdf75e64f7b7fb0a5858e14f8c170f80cf4ee4b8c5e50c2c4a00"
+      },
+      {
+        "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas.rs",
+        "bytes": 6503,
+        "sha256": "b6a0d65ab2728a0ef851a801e7bc0a35a10942e4965158389a58fb091cfc7ed0"
+      },
+      {
+        "path": "crates/product-cli/tests/form_stored_provider/actual_import.rs",
+        "bytes": 16316,
+        "sha256": "1eec7c9aa19d418d485ebd0b7ea5f08059b0e603535cde49e1eeae436151aaaa"
+      },
+      {
+        "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer.rs",
+        "bytes": 10115,
+        "sha256": "82ea6bd2482d2bf5bff0a2a469a867e7126386e9b8aabec60080adadc4dbdcbd"
+      },
+      {
+        "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/wire.rs",
+        "bytes": 3711,
+        "sha256": "4db4c96ce65a7244646211054db9267a76e3cf4452cca8002e7dec18fa0b968c"
+      },
+      {
+        "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/provider.rs",
+        "bytes": 8856,
+        "sha256": "6d7aadaacfbca78a4e0ffb118b82d13435ddbd387faff549331ae28b25197c10"
+      },
+      {
+        "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/product.rs",
+        "bytes": 7488,
+        "sha256": "48adbce1a99fa6301b1c2ae59a00e1b5593158e2177bcdd7a8514cb3f87400e0"
+      },
+      {
+        "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_issuer.rs",
+        "bytes": 44212,
+        "sha256": "0c0d31380c493673b90bdd4d4459b5570e580c5bca55406ae0d2e494df3496b5"
+      }
+    ],
+    "preserved_executables": [
+      {
+        "path": "target/p09-119-formula-policy-issuer/debug/deps/hwpx_agent_cli-2e652378818f9b3c-initial-full-regression.exe",
+        "bytes": 1160192,
+        "sha256": "9b0dd3943ec98d472a528596b92d72fbf927c610d4660ac6c4b3b7fe9fae41a9"
+      },
+      {
+        "path": "target/p09-119-formula-policy-issuer/debug/deps/form_stored_provider-9df9b9ece65a1dfd-initial-full-regression.exe",
+        "bytes": 22705664,
+        "sha256": "550c57004c046ef289dcfa0400390e85e7ad9e36546e93bfc07875d86f1fa210"
+      },
+      {
+        "path": "target/p09-119-formula-policy-issuer/debug/deps/form_product_request-705fd2bcec70396c-initial-full-regression.exe",
+        "bytes": 8283136,
+        "sha256": "80cebd2182f84aa3bf30eb4f0b499de2f43dbf28cd9ea3ce98becfcdc97c6da6"
+      },
+      {
+        "path": "target/p09-119-formula-policy-issuer/debug/deps/form_value_operation-7cdd3d0f9fe6622c-initial-full-regression.exe",
+        "bytes": 9128448,
+        "sha256": "0880a329c66f867f1135f40ccc3e9c2ce03b8094e4013d5270c15a1bcafed8c1"
+      },
+      {
+        "path": "target/p09-119-formula-policy-issuer/debug/deps/artifact_service-c722486ab67dc904-initial-full-regression.exe",
+        "bytes": 2694656,
+        "sha256": "8fc10b24dd43ce62263786cbe685fb1e113aab2e52a62a961cddf70b574dd027"
+      },
+      {
+        "path": "target/p09-119-formula-policy-issuer/debug/deps/revision_service-1b137e63992c86e2-initial-full-regression.exe",
+        "bytes": 1686016,
+        "sha256": "d01ebcb2430586a316b4a29fd86b9ac88e7ebd491d79dbcb12e680c95e1757f2"
+      }
+    ],
+    "executable_listing_is_not_execution_evidence": true
+  },
+  "fixed_exact_target": {
+    "start": "2d6e93",
+    "session": 20796,
+    "terminal": "729dbe",
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 221,
+    "seconds": 21.86,
+    "adds_to_final_count": false
+  },
+  "retained_other_failures": [
+    {
+      "terminal": "67feb5",
+      "exit_code": 1,
+      "kind": "initial_new_test_compile_ArtifactId_Option_E0308",
+      "whole_source_archived": true
+    },
+    {
+      "terminal": "618bb6",
+      "exit_code": 1,
+      "kind": "new_test_semicolon_lint_5",
+      "whole_source_archived": true
+    },
+    {
+      "terminal": "1497ec",
+      "exit_code": 1,
+      "kind": "new_test_too_many_lines_112_100",
+      "whole_source_archived": true
+    },
+    {
+      "kind": "bounded_observation_JSON_truncated_parse",
+      "source_mutation": false,
+      "regression_restart": false,
+      "verified_refresh": "8dfafa"
+    }
+  ],
+  "current_conformance": {
+    "terminal": "8b2707",
+    "exit_code": 0,
+    "upstream_passed": 15,
+    "green_rows": 0,
+    "historical_default_matrix_drift_retained": true
+  },
+  "preservation": {
+    "terminal": "f9f0d5",
+    "exit_code": 0,
+    "inherited_raw_pin_entries": 2232,
+    "previous_source_files": 1071,
+    "unchanged_previous_source_files": 1067,
+    "whole_parent_preimages": 4,
+    "whole_parent_inverse_exact": true,
+    "previous_unmodified_audit_on_preimages_passed": true,
+    "old_executables_preserved": 482,
+    "all_old_executables_reexecuted": false
+  },
+  "source_scope": {
+    "issuer_metadata_repository": "synthetic_in_memory",
+    "test_keys": "synthetic_explicit_no_operating_keys_read_or_installed",
+    "crypto": "actual_ring_Ed25519_and_original_ArtifactService_AES_GCM",
+    "new_signed_tests_source": "generated_bounded_HWPX",
+    "original_36_and_formula_16_registration": "P118_DATA_scope_rerun_NOT_all_original_signed_product_qualification"
+  },
+  "native_COM_UI_access_popup_run": false,
+  "actual_SQL_run": false,
+  "operating_trust_DB_or_settings_changed": false,
+  "stage_commit_push": false,
+  "deletion_or_move": false,
+  "P09_gate": "OPEN",
+  "P10_new_implementation": false,
+  "product_complete": false,
+  "goal_status": "active"
+}

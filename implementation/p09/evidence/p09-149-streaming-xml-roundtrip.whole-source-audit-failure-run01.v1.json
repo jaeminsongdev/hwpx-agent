@@ -1,0 +1,12 @@
+{
+  "schema_version": "hwpx-agent.p09-whole-source-audit-failure/v1",
+  "state": "FAILED_NOT_ACCEPTED",
+  "error_code": "CPU_SAMPLE_INTERVAL_MISSING",
+  "operation": "Read-only post-stop source audit of r6 actual09",
+  "cause": "Audit resources and nested helper binding shared one Windows CPU sampler; closely spaced independent checkpoints saw a missing CPU interval.",
+  "scope": "Audit orchestration only; does not change the authoritative STOP_DURATION_LIMIT runtime receipt or establish a product failure.",
+  "new_test_or_build_started": false,
+  "repair": "Use separate Windows sampler instances for independent resource and helper-binding observation; retain original pressure decisions.",
+  "product_complete": false,
+  "P09_gate": "OPEN"
+}

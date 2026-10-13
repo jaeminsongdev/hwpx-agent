@@ -1,0 +1,115 @@
+{
+  "schema": "hwpx-agent.p09-108-rich-comment-flow-initial-failures/v1",
+  "state": "INITIAL_FAILURES_RETAINED_NOT_FINAL_PRODUCT_OR_NATIVE_ACCEPTANCE",
+  "failures": [
+    {
+      "stage": "first_comment_test_compilation",
+      "start_chunk": "97b64d",
+      "session_id": 5596,
+      "terminal_chunk": "9aaea4",
+      "exit_code": 1,
+      "errors": [
+        "E0599 Properties has no remove",
+        "E0599 PropertyValue has no Bool",
+        "E0618 local bodies shadows fixture function"
+      ],
+      "exact_owned_test_source": {
+        "path": "implementation/p09/source-archive/p09-108-failed-test-compilation/rich_bodies.rs",
+        "bytes": 15522,
+        "sha256": "c658ad80b126e621e8cf7bb0424b032cac87f61d7e6fa1d5a0ea25a9a8b5ab42"
+      },
+      "fix": "rebuild metadata excluding view; use existing Boolean variant; name protected_bodies; original guards/test assertions retained"
+    },
+    {
+      "stage": "protected_nested_body_runtime",
+      "terminal_chunk": "ae0f59",
+      "exit_code": 1,
+      "passed": 15,
+      "failed": 1,
+      "ignored": 0,
+      "failed_test": "rich_bodies::original_full_admission_and_nested_body_protection_are_not_bypassed",
+      "exact_owned_production": {
+        "path": "implementation/p09/source-archive/p09-108-failed-protected-body/production-rich_bodies.rs",
+        "bytes": 15181,
+        "sha256": "233a0189032368301c05b18335ff05e22da5e757f0734d98edaccbd19829cb10"
+      },
+      "exact_owned_test": {
+        "path": "implementation/p09/source-archive/p09-108-failed-protected-body/test-rich_bodies.rs",
+        "bytes": 15780,
+        "sha256": "af3db52caefaa3f20abf73de455d7547b5d02fa8da8a8392a2325c60f69a2712"
+      },
+      "preserved_executable": "target/p09-108-rich-comment-flow/debug/deps/comment_operation-75493e8123c566c8-failed-protected-body.exe",
+      "fix": "retain rejecting assertion; add conservative recursive caller flag rejection after original whole graph validation; NOT native protection mapping"
+    },
+    {
+      "stage": "first_strict_lint",
+      "start_chunk": "269476",
+      "session_id": 32274,
+      "terminal_chunk": "60458c",
+      "exit_code": 1,
+      "errors": [
+        "doc_markdown CommentBuilder missing backticks",
+        "too_many_lines 112/100"
+      ],
+      "exact_owned_production": {
+        "path": "implementation/p09/source-archive/p09-108-failed-strict-lint/rich_bodies.rs",
+        "bytes": 17701,
+        "sha256": "265edf24eebd76d1a5ecabe4b86362df90aab265b3cad3a8d30707cabe8c3978"
+      },
+      "fix": "correct doc and extract unchanged insertion/body list logic into private updated_bodies; no lint suppression or guard removal"
+    }
+  ],
+  "warnings": [
+    {
+      "stage": "initial_library_check",
+      "session_id": 32869,
+      "start_chunk": "1d418c",
+      "terminal_chunk": "73cd6d",
+      "exit_code": 0,
+      "warning": "missing_debug_implementations on preparation type",
+      "pre_debug_source": {
+        "path": "implementation/p09/source-archive/p09-108-pre-debug-warning/crates/product-cli/src/comment_operation/rich_bodies.rs",
+        "bytes": 15164,
+        "sha256": "b3e7eda6fa32c191cdc702f2dbe2b9d423e3921c18d59bf3c8c1139f70bd9226"
+      },
+      "exact_first_check_source_claimed": false,
+      "explanation": "snapshot preserves current source before derive Debug fix; initial check could have read before intervening final target/replay admission changes"
+    }
+  ],
+  "pre_refactor_diagnostic_test_run": {
+    "start_chunk": "b6b7d7",
+    "session_id": 28998,
+    "terminal_chunk": "498e3d",
+    "exit_code": 0,
+    "comment_passed": 16,
+    "form_passed": 167,
+    "stored_comment_passed": 16,
+    "not_final_source_after_refactor": true,
+    "not_added_to_final_unique_or_execution_count": true,
+    "preserved_test_executables": [
+      "target/p09-108-rich-comment-flow/debug/deps/comment_operation-75493e8123c566c8-pre-lint-refactor.exe",
+      "target/p09-108-rich-comment-flow/debug/deps/form_stored_provider-e02d02396d2f2bbd-pre-lint-refactor.exe",
+      "target/p09-108-rich-comment-flow/debug/deps/stored_comment_provider-9065c76bcbac10b7-pre-lint-refactor.exe"
+    ],
+    "unexecuted_diagnostic_cli": "target/p09-108-rich-comment-flow/debug/deps/hwpx_agent_cli-pre-lint-refactor.exe"
+  },
+  "raw_logs_copied_or_secrets_output": false,
+  "pre_insertion_budget_diagnostic_test_run": {
+    "start_chunk": "b7bee6",
+    "session_id": 98459,
+    "terminal_chunk": "c541d1",
+    "exit_code": 0,
+    "comment_passed": 16,
+    "form_passed": 167,
+    "stored_comment_passed": 16,
+    "not_final_source_after_budget_fix": true,
+    "not_added_to_final_unique_or_execution_count": true,
+    "preserved_test_executables": [
+      "target/p09-108-rich-comment-flow/debug/deps/comment_operation-75493e8123c566c8-pre-insertion-budget.exe",
+      "target/p09-108-rich-comment-flow/debug/deps/form_stored_provider-e02d02396d2f2bbd-pre-insertion-budget.exe",
+      "target/p09-108-rich-comment-flow/debug/deps/stored_comment_provider-9065c76bcbac10b7-pre-insertion-budget.exe"
+    ],
+    "unexecuted_diagnostic_cli": "target/p09-108-rich-comment-flow/debug/deps/hwpx_agent_cli-pre-insertion-budget.exe",
+    "reason_for_final_rerun": "bound inserted body object before cloning; add oversized typed insertion case to existing test; source changed, NOT observation timeout"
+  }
+}

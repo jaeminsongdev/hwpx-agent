@@ -1,0 +1,92 @@
+{
+  "schema": "hwpx-agent.p09-112-formula-result-output-initial-failures/v1",
+  "recorded_at_utc": "2026-10-04 23:09:10 UTC",
+  "failure_records": [
+    {
+      "kind": "source_regression_fixture_assumptions",
+      "command": "cargo test -p hwpx-package --test patch_leaf_text --test document_import_formula_output --locked --offline --target-dir target/p09-112-formula-result-output",
+      "start_chunk": "9ae6ae",
+      "session": 12292,
+      "terminal_chunk": "33697c",
+      "exit_code": 1,
+      "passed": 2,
+      "failed": 2,
+      "failures": [
+        "NoChange for mathematically unaffected first-cell derivative",
+        "absolute A1 expected value guessed without verifying actual input"
+      ],
+      "source_archives": "p09-112-initial-regression",
+      "executable": "target/p09-112-formula-result-output/debug/deps/document_import_formula_output-3a092c4eef2e8f0f-initial-failed.exe",
+      "correction": "All36 inventory inspected; all16 formula derivatives considered, unchanged outputs independently bound to computed/cache equality; absolute case uses typed 0*A1+3 independent of actual input. Original native/math guards retained."
+    },
+    {
+      "kind": "new_test_fixture_compile",
+      "chunk": "5a6570",
+      "exit_code": 1,
+      "error_code": "E0716",
+      "source_archive": "p09-112-initial-compile",
+      "correction": "Lifetime of owned entry bytes held before writer.write_all; no original helper modified."
+    },
+    {
+      "kind": "self_closing_result_preservation_readback",
+      "start_chunk": "c2f761",
+      "session": 85005,
+      "terminal_chunk": "43ac08",
+      "exit_code": 1,
+      "passed": 4,
+      "failed": 1,
+      "error": "Preservation",
+      "source_archives": "p09-112-empty-result-readback",
+      "executable": "target/p09-112-formula-result-output/debug/deps/document_import_formula_output-3a092c4eef2e8f0f-empty-result-failed.exe",
+      "correction": "Independent expected leaf edits include original source name and self-closing '/>' expansion. Existing whole-part equality, original decoder and protection guards unchanged."
+    },
+    {
+      "kind": "invalid_lint_command_duplicate_lib",
+      "chunk": "98ddf9",
+      "exit_code": 1,
+      "lint_or_tests_executed": false,
+      "correction": "Use --lib once for selected two packages."
+    },
+    {
+      "kind": "initial_strict_lint",
+      "start_chunk": "1e2d5a",
+      "session": 82464,
+      "terminal_chunk": "695d49",
+      "exit_code": 1,
+      "errors": [
+        "readback function110/100",
+        "four booleans in new receipt",
+        "wildcard import in new helper"
+      ],
+      "source_archives": "p09-112-initial-lint",
+      "correction": "Split private readback helper, use explicit Unqualified authority enum and explicit imports. No allow or ceiling relaxation."
+    },
+    {
+      "kind": "new_test_strict_lint",
+      "start_chunk": "974925",
+      "session": 11143,
+      "terminal_chunk": "e0439b",
+      "exit_code": 1,
+      "errors": [
+        "similar path/patch names",
+        "unnecessary Result return"
+      ],
+      "source_archive": "p09-112-test-lint",
+      "correction": "Rename new local variable and remove empty wrapping Result. Assertions retained; final126 package tests rerun after change."
+    }
+  ],
+  "evidence_test_failure": {"kind":"initial_evidence_test_phase_path_assumption","chunk":"5a6290","Python_exit_code":1,"combined_shell_exit_code":0,"passed":7,"failed":1,"expected_wrong_assumption":"Every Markdown path including migration contains112","corrected":"Implementation docs require exact P09-112_ prefix; migration requires exact declared conventional path","snapshot_archive":"p09-112-initial-evidence-test","first_raw_current_manifest_pass_not_full_acceptance":true,"combined_shell_exit0_not_used_as_Python_pass":true},
+  "earlier_focused_or_pre_lint_passes_not_accumulated": true,
+  "pre_lint_executables_preserved": 13,
+  "P09_gate": "OPEN",
+  "A12": "OPEN",
+  "A13": "OPEN",
+  "native34": "NOT_RUN",
+  "native_re_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+  "P26": "failed_semantic_non_green",
+  "P62": "UNRESOLVED",
+  "P84_SQL": "UNRESOLVED",
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "goal_status": "active"
+}

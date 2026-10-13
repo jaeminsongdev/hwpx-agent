@@ -1,0 +1,212 @@
+{
+  "schema_version": "hwpx-agent.p09-92-conformance-current-source-validation/v1",
+  "created_date": "2026-10-04",
+  "scope": "original_REF53_current_source_conformance_not_native_or_product_gate",
+  "goal_status": "active",
+  "gate": {
+    "P09": "OPEN",
+    "A12": "OPEN",
+    "A13": "OPEN",
+    "P26": "failed_semantic_non_green",
+    "P62": "UNRESOLVED",
+    "native_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+    "full_native34": "NOT_RUN",
+    "P10_new_implementation": false,
+    "goal_status": "active"
+  },
+  "current_profile": {
+    "command": "python tools/p09/validate_reference_conformance_contract.py --current-source-v2",
+    "exit_code": 0,
+    "chunk_id": "957fd2",
+    "result": {
+      "P09_gate": "OPEN",
+      "P10_new_implementation": false,
+      "actual_hangul": "not_run",
+      "actual_hwpx": "not_run",
+      "automation": "not_run",
+      "component_covered_rows": 46,
+      "component_stage_counts": {
+        "cataloged": 7,
+        "integration_passed": 11,
+        "oracle_verified": 0,
+        "unit_passed": 35
+      },
+      "current_matrix_wrapper_verified": true,
+      "current_source_qualification_verified": true,
+      "differential": "not_run",
+      "green_rows": 0,
+      "historical_default_failure_retained": true,
+      "p09": "in_progress",
+      "p09_owned_rows": 46,
+      "p11_deferred_rows": 7,
+      "product_complete": false,
+      "render": "not_run",
+      "required_rows": 53,
+      "schema_version": "hwpx-agent.p09-reference-conformance-current-source-validation/v2",
+      "source_profile": "current_source_v2",
+      "state": "pass",
+      "target_profile_id": "hancom-hangul-2020-secondary",
+      "task": "P09-11",
+      "upstream_validators_verified": 15
+    },
+    "immutable_qualification": {
+      "path": "implementation/p09/evidence/p09-92-conformance-current-source.qualification.v2.json",
+      "bytes": 87548,
+      "sha256": "ace2f794eebffd52e95095cfc43d0a81c09791453f28127adbbaf6afdde0501e"
+    },
+    "raw_pins": 242,
+    "upstream_profiles": [
+      {
+        "validator": "tools/p09/validate_field_core_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_form_control_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_note_engine_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_comment_model_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-comment-model-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_link_reference_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_cross_reference_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_toc_index_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_citation_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_mail_merge_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_reference_auxiliary_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_form_control_hwpx_contract.py",
+        "arguments": [],
+        "expected_schema": "hwpx-agent.p09-form-control-hwpx-validation/v1",
+        "source_profile": "historical_unchanged_fixture_source"
+      },
+      {
+        "validator": "tools/p09/validate_bookmark_hwpx_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_note_hwpx_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_hyperlink_hwpx_contract.py",
+        "arguments": [
+          "--current-source-v2"
+        ],
+        "expected_schema": "hwpx-agent.p09-original-component-current-source-validation/v2",
+        "source_profile": "current_source_v2"
+      },
+      {
+        "validator": "tools/p09/validate_field_auto_number_hwpx_contract.py",
+        "arguments": [],
+        "expected_schema": "hwpx-agent.p09-field-auto-number-hwpx-validation/v1",
+        "source_profile": "historical_unchanged_fixture_source"
+      }
+    ]
+  },
+  "historical_default": {
+    "command": "python tools/p09/validate_reference_conformance_contract.py",
+    "exit_code": 1,
+    "chunk_id": "6fd5f8",
+    "result": {
+      "error": "matrix_drift",
+      "state": "fail"
+    },
+    "error_is_not_filtered": true
+  },
+  "scope_boundary": {
+    "original_REF_rows": 53,
+    "P09_rows": 46,
+    "P11_deferred": 7,
+    "green_rows": 0,
+    "changed_component_digest_rows": [
+      "REF-021",
+      "REF-022",
+      "REF-031",
+      "REF-032",
+      "REF-033",
+      "REF-034"
+    ],
+    "all_non_component_row_fields_unchanged": true,
+    "fixture_page_number_proof": "historical lexical PAGE DIGIT shape only; not current native or object-number acceptance",
+    "overrides_allowed": false,
+    "upstream_skipping_allowed": false,
+    "full_comment_product_acceptance": false,
+    "p09_complete": false,
+    "product_complete": false,
+    "P10_new_implementation": false,
+    "root_PLANS_absent": true,
+    "native_executed": false,
+    "actual_SQL_reexecuted": false
+  }
+}

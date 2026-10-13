@@ -7,6 +7,14 @@ from pathlib import Path
 import sys
 from typing import Any
 
+if __package__:
+    from . import component_current_source
+else:
+    from pathlib import Path as _Path
+    import sys as _sys
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from tools.p09 import component_current_source
+
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = "protocol/private/p09-mail-merge-v1.json"
@@ -132,8 +140,11 @@ def exact_source_locks(value: Any) -> bool:
     return len({path for path, _ in pairs}) == len(pairs) and dict(pairs) == SOURCE_SHA256
 
 
-def validate(root: Path = ROOT) -> dict[str, Any]:
+def validate(root: Path = ROOT, *, source_profile: str = "historical_v1") -> dict[str, Any]:
     errors: list[str] = []
+    if source_profile not in ("historical_v1", component_current_source.PROFILE):
+        return result(["source_profile_unknown"], False)
+    current = source_profile == component_current_source.PROFILE
     contract = read_json(root / CONTRACT, errors, "contract_json")
     qualification = read_json(root / QUALIFICATION, errors, "qualification_json")
     if not isinstance(contract, dict) or not isinstance(qualification, dict):
@@ -204,7 +215,8 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     }:
         errors.append("gate_decision")
 
-    for path, expected in {**SOURCE_SHA256, **IMPLEMENTATION_SHA256}.items():
+    expected_implementation = component_current_source.IMPLEMENTATION_SHA256["mail_merge"] if current else IMPLEMENTATION_SHA256
+    for path, expected in {**SOURCE_SHA256, **expected_implementation}.items():
         try:
             actual = digest(root / path)
         except (OSError, UnicodeError):
@@ -284,7 +296,9 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         if any(marker not in text for marker in required):
             errors.append(f"marker:{path}")
 
-    return result(errors, not any(error.startswith("qualification_") for error in errors))
+    current_verified = component_current_source.verify(root, "mail_merge", errors) if current else False
+    value = result(errors, not any(error.startswith("qualification_") for error in errors))
+    return component_current_source.decorate(value, "mail_merge", current_verified) if current else value
 
 
 def result(errors: list[str], qualification_verified: bool) -> dict[str, Any]:
@@ -319,6 +333,6 @@ def result(errors: list[str], qualification_verified: bool) -> dict[str, Any]:
 
 
 if __name__ == "__main__":
-    outcome = validate()
+    outcome = validate(source_profile=component_current_source.cli_profile(sys.argv[1:]))
     print(json.dumps(outcome, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
     sys.exit(0 if outcome["state"] == "pass" else 1)

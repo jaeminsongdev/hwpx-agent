@@ -1,0 +1,144 @@
+{
+  "schema_version": "hwpx-agent.p09-moved-readback-buffer-completed-summary/v1",
+  "state": "PASS_READBACK_COMPONENT_AND_OUTPUT6_ONLY_NOT_FULL249_SQL_NATIVE_OR_GATE",
+  "actual_runs": [
+    {
+      "receipt_pin": {
+        "path": "implementation/p09/evidence/p09-149-moved-readback-buffer.actual-run01.v1.json",
+        "bytes": 226270,
+        "sha256": "23241c7d863b0506f34d5c96d7b080b485a2998051136dd6779e7163d5683391"
+      },
+      "task": "readback-buffer-tests",
+      "tests_passed": 4,
+      "elapsed_seconds": 16.68,
+      "source_count": 892,
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 8.609,
+        "peak_job_private_mib": 1310.83,
+        "peak_job_private_percent": 4.114231838943553,
+        "owned_processes": []
+      },
+      "limits": {
+        "verified": true,
+        "job_private_limit_mib": 2548.87109375,
+        "cpu_hard_cap_machine_percent": 6.25,
+        "affinity_mask": 1,
+        "priority_class": 16384,
+        "active_process_limit": 16,
+        "kill_on_close": true,
+        "breakaway_disabled": true
+      },
+      "host_CPU_max": 15.91,
+      "available_RAM_min": 43.249021166826765,
+      "commit_max": 36.42066501332563,
+      "outside_component_filtered": 52,
+      "source_variant": "moved-readback-buffer-r7"
+    },
+    {
+      "receipt_pin": {
+        "path": "implementation/p09/evidence/p09-149-moved-readback-buffer.actual-run02.v1.json",
+        "bytes": 322154,
+        "sha256": "077cce9eae47ee92c7528c2c36d2f5a9e0fbc629b83fc4c79233f95f0c12f9ff"
+      },
+      "task": "import-formula-output-tests",
+      "tests_passed": 6,
+      "elapsed_seconds": 40.62,
+      "source_count": 902,
+      "job_final": {
+        "active_processes": 0,
+        "job_cpu_seconds": 30.906,
+        "peak_job_private_mib": 1440.46,
+        "peak_job_private_percent": 4.521078245965282,
+        "owned_processes": []
+      },
+      "limits": {
+        "verified": true,
+        "job_private_limit_mib": 2548.87109375,
+        "cpu_hard_cap_machine_percent": 6.25,
+        "affinity_mask": 1,
+        "priority_class": 16384,
+        "active_process_limit": 16,
+        "kill_on_close": true,
+        "breakaway_disabled": true
+      },
+      "host_CPU_max": 36.72,
+      "available_RAM_min": 41.91327173340673,
+      "commit_max": 36.67740540067867,
+      "outside_component_filtered": null,
+      "source_variant": "moved-readback-buffer-r7"
+    }
+  ],
+  "support_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-moved-readback-buffer-candidate.run01.v1.json",
+      "bytes": 1609,
+      "sha256": "15cba96439dd94fcc5c6f341b17bcc656bbb1e1ca71df7c87fbe5454bbc0a734"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-moved-readback-buffer-r7/source-preimages.v1.json",
+      "bytes": 7482,
+      "sha256": "7f3ec82c65a26755ea3eecdc0969f8bb6152c0dbfc6aca32401e458e5a864805"
+    },
+    {
+      "path": "tools/p09/run_readback_buffer_regression.py",
+      "bytes": 11438,
+      "sha256": "6eb0b4f16ae4a2c24dc40d52a82977b194481b6fc5e81cffda300b0bb04d4103"
+    },
+    {
+      "path": "tools/p09/tests/test_readback_buffer_regression.py",
+      "bytes": 7078,
+      "sha256": "655082fbacffaf4d9c9fff0894054d3312997020a8a753d577bb32d4bd3f2404"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-moved-readback-buffer.light-run01.v1.json",
+      "bytes": 1350,
+      "sha256": "f32824168105c728eab27cdfb380de8b850f05126b5c07b27d160911b5329a95"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-moved-readback-buffer.owned-rustfmt-run02.v1.json",
+      "bytes": 2533,
+      "sha256": "9c5f048fc70d4cebbb756f57fc0b45449fe099024fc69d67122498f2b9efdb71"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.summary-terminal-run01.v1.json",
+      "bytes": 3538,
+      "sha256": "0e56df2c176750ad505a0d7e03ef3244220c321e95defbfbe157ff55005f8011"
+    }
+  ],
+  "prior_document_pins": [
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 139630,
+      "sha256": "abca04d0da953d4f200396ae0a1fde0144e24bc9b10d130fcf1227667e9f56ee"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 233262,
+      "sha256": "fe853e4375b296497f837bd6fde120167cec7d6373baf4efbbbd4acf27ddd397"
+    }
+  ],
+  "current_source_union": 902,
+  "expected_chain_count": 889,
+  "source_closing_exact": true,
+  "new_child_or_thread_started": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "statistical_speedup_proven": false,
+  "signed_SQL_native_or_Gate_qualified": false,
+  "IO": {
+    "read_passes": 3605,
+    "bytes_read": 87421412,
+    "bound_inputs": 909,
+    "final_fresh_hashes": 909,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 19.2506
+}

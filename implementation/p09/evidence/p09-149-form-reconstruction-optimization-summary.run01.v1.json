@@ -1,0 +1,109 @@
+{
+  "schema_version": "hwpx-agent.p09-form-reconstruction-optimization-summary/v1",
+  "state": "PACKAGE34_EXACT_RUNTIME_PASS_STORED249_PARTIAL32_OBSERVED_RECONSTRUCTION_IMPROVEMENT_NOT_GATE",
+  "source_variant": "reconstruction-r1",
+  "source_candidate": "implementation/p09/evidence/p09-149-form-reconstruction-source-candidate.run02.v1.json",
+  "source_receipt_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-stored-comment-regression.actual-run07.v1.json",
+      "bytes": 922233,
+      "sha256": "0528b7aee96bec2cab772f8f96a34e07cb0e51b456828b61eea44a5fefd2759a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-stored-comment-regression.actual-run11.v1.json",
+      "bytes": 246792,
+      "sha256": "47428da6d1938fbbfa0716cef791fb9a714fbb996dbff84a906f74a242740c06"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-stored-comment-regression.actual-run12.v1.json",
+      "bytes": 203868,
+      "sha256": "1d73b422c7a4fb235faf5fda30ef188e1f1531b278451852b2dca9118209e18e"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-stored-comment-regression.actual-run13.v1.json",
+      "bytes": 211873,
+      "sha256": "5baba772b529df18dc06a636b4447341165dfe5911d3ffbb56927c4fe676843f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-stored-comment-regression.actual-run14.v1.json",
+      "bytes": 922044,
+      "sha256": "5f9a38c70a924fd623bb99d5512d242273a3c98dbddca9e6c7b843cfa39084f1"
+    }
+  ],
+  "package_regression": [
+    {
+      "run": 11,
+      "task": "import-forms-tests",
+      "state": "PASS_SCOPED_NOT_GATE",
+      "passed": 10,
+      "elapsed_seconds": 22.24,
+      "source_inputs": 883,
+      "job_peak_mib": 1310.24,
+      "job_cpu_seconds": 12.406,
+      "cleanup": true,
+      "active_processes": 0
+    },
+    {
+      "run": 12,
+      "task": "import-fields-tests",
+      "state": "PASS_SCOPED_NOT_GATE",
+      "passed": 12,
+      "elapsed_seconds": 10.36,
+      "source_inputs": 883,
+      "job_peak_mib": 658.16,
+      "job_cpu_seconds": 3.141,
+      "cleanup": true,
+      "active_processes": 0
+    },
+    {
+      "run": 13,
+      "task": "import-meanings-tests",
+      "state": "PASS_SCOPED_NOT_GATE",
+      "passed": 12,
+      "elapsed_seconds": 12.93,
+      "source_inputs": 883,
+      "job_peak_mib": 658.64,
+      "job_cpu_seconds": 4.672,
+      "cleanup": true,
+      "active_processes": 0
+    }
+  ],
+  "matched_parent_observation_windows": [
+    {
+      "name": "actual_import::formula_compiler::actual_multi_section_compiler_targets_original_source_fields_and_whole_candidate_without_publication",
+      "before_observed_seconds": 22.537,
+      "after_observed_seconds": 17.968,
+      "completed_after": true
+    },
+    {
+      "name": "actual_import::formula_compiler::fresh_acl_aead_head_and_quarantine_changes_deny_compilation_and_never_invoke_cached_consumer",
+      "before_observed_seconds": 28.707,
+      "after_observed_seconds": 18.99,
+      "completed_after": true
+    },
+    {
+      "name": "actual_import::formula_compiler::mixed_current_and_empty_results_compile_only_changed_actual_fields",
+      "before_observed_seconds": 29.284,
+      "after_observed_seconds": 11.292,
+      "completed_after": true
+    },
+    {
+      "name": "actual_import::formula_evaluation::every_locked_actual_source_evaluates_like_direct_without_ingest_head_or_full_route",
+      "before_observed_seconds": 53.33,
+      "after_observed_seconds": 41.142,
+      "completed_after": true
+    }
+  ],
+  "observation_is_exact_duration_or_profiler": false,
+  "whole249_accepted": false,
+  "whole249_observed_completed": 32,
+  "whole249_remaining_without_completion": 217,
+  "whole249_state": "STOPPED_NOT_ACCEPTED",
+  "whole249_stop_reason": "STOP_DURATION_LIMIT",
+  "new_SQL_or_native_build_qualified": false,
+  "historical_r4_not_restamped": true,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "implementation_scope": "3 Rust package source files optimize fresh source/form/field/meaning reconstruction; one new integration regression in existing file. Stored service authentication/head checkpoints unchanged; full source/body/forms/fields/meaning graphs/observations/receipts retained.",
+  "acceptance_boundary": "These are package-level actual Rust regression passes. Full249 stored target timed out and remains failed; observed windows are single-run parent samples, not statistically controlled speedups. Current worktree differs from historical r4 by four declared Rust files, so old SQL build/receipts cannot qualify current code."
+}

@@ -1,0 +1,88 @@
+{
+  "schema_version": "hwpx-agent.p09-145-resource-bootstrap/v1",
+  "state": "PASS_PRE_HASH_RESOURCE_BOUND_TARGET_ACCEPTED_NOT_NATIVE_OR_GATE",
+  "mode": "unit",
+  "limits_before_target_and_hashes": {
+    "affinity_mask": 1,
+    "priority_class": 16384,
+    "logical_cpu_limit": 1,
+    "priority": "BelowNormal"
+  },
+  "target_started": true,
+  "target_exit_code": 0,
+  "target_receipt": {
+    "path": "target/p09-121-resource-optimized/p144-corpus-unit-run3.json",
+    "bytes": 175223,
+    "sha256": "aec4410885f0abb2711f4b917afb705d2ccb3426795d098aa51cb4c4b49082e1"
+  },
+  "P09_gate": "OPEN",
+  "product_complete": false,
+  "target_post_hash_and_continuous_guards_replaced": false,
+  "bootstrap_continuous_stop_implemented": false,
+  "native_application_started_by_bootstrap": false,
+  "pre_hash_stable_samples": 3,
+  "source_freeze": [
+    {
+      "path": "tools/p09/run_resource_bounded_python.py",
+      "bytes": 10374,
+      "sha256": "f652979b971e36e7211746a40acdf6abfff6f1e77899a8eab595e07ebce78e8b"
+    },
+    {
+      "path": "tools/p09/run_formula_issuer_registry_sql_checks.py",
+      "bytes": 20838,
+      "sha256": "efb0635f6ec0d5d7fbcd1881cfef83f2133182b351379586b9f239a6d68846d3"
+    },
+    {
+      "path": "tools/p09/check_idle_resource_window.py",
+      "bytes": 3282,
+      "sha256": "c72da76029ce7e26410356a3a1908a3d4f46a60a80b8a3600341d10d1c160f25"
+    },
+    {
+      "path": "tools/p09/idle_resource_admission.py",
+      "bytes": 790,
+      "sha256": "d29fa16e108ab749081f586b1686cf17c2c247932615a5367572efc169cd83b7"
+    },
+    {
+      "path": "tools/p09/run_formula_issuer_corpus_unit_probe.py",
+      "bytes": 7432,
+      "sha256": "f9d2a272d1b84c98c543fe5a5619cedb148098da3697b61029970d31219916c9"
+    }
+  ],
+  "limits_immediately_before_target": {
+    "affinity_mask": 1,
+    "priority_class": 16384,
+    "logical_cpu_limit": 1,
+    "priority": "BelowNormal"
+  },
+  "output": {
+    "stdout_bytes_discarded": 196,
+    "stderr_bytes_discarded": 0
+  },
+  "limits_after_target": {
+    "affinity_mask": 1,
+    "priority_class": 16384,
+    "logical_cpu_limit": 1,
+    "priority": "BelowNormal"
+  },
+  "target_state": "PASS_TYPED_ROUTE_AND_SOURCE_INDEX_UNIT11_NOT_DB_NATIVE_OR_GATE",
+  "source_freeze_exact_after": true,
+  "pre_hash_admission_samples": [
+    {
+      "time_utc": "2026-10-05T23:34:12.872096+00:00",
+      "system_cpu_percent": 4.12,
+      "available_ram_mib": 13345.49
+    },
+    {
+      "time_utc": "2026-10-05T23:34:14.872516+00:00",
+      "system_cpu_percent": 9.44,
+      "available_ram_mib": 13320.12
+    },
+    {
+      "time_utc": "2026-10-05T23:34:16.872731+00:00",
+      "system_cpu_percent": 6.09,
+      "available_ram_mib": 13332.8
+    }
+  ],
+  "pre_hash_admission_stop_reason": null,
+  "elapsed_seconds": 12.44
+}

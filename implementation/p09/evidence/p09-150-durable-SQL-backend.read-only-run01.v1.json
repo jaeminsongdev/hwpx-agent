@@ -1,0 +1,189 @@
+{
+  "schema_version": "hwpx-agent.p09-current-durable-SQL-backend-read-only/v1",
+  "state": "PASS_READ_ONLY_DIAGNOSIS_ONLY_NOT_SQL_OR_GATE",
+  "exact_local_endpoint": "npipe:////./pipe/dockerDesktopLinuxEngine",
+  "commands": [
+    {
+      "command_kind": "server_version",
+      "exit_code": 0,
+      "stdout_bytes": 7,
+      "stderr_bytes": 0,
+      "backend_connection_error": false,
+      "pinned_image_not_found_error": false,
+      "raw_stdout_or_stderr_included": false
+    },
+    {
+      "command_kind": "fixed_image_inspect",
+      "exit_code": 1,
+      "stdout_bytes": 3,
+      "stderr_bytes": 138,
+      "backend_connection_error": false,
+      "pinned_image_not_found_error": true,
+      "raw_stdout_or_stderr_included": false
+    }
+  ],
+  "owned_host_job_profiles": [
+    {
+      "worker_created": true,
+      "job_assigned": true,
+      "limits_readback": {
+        "verified": true,
+        "job_private_limit_mib": 2230.25,
+        "cpu_hard_cap_machine_percent": 6.25,
+        "affinity_mask": 1,
+        "priority_class": 16384,
+        "active_process_limit": 16,
+        "kill_on_close": true,
+        "breakaway_disabled": true
+      },
+      "target_authorized": true,
+      "last_job_accounting": {
+        "active_processes": 0,
+        "job_cpu_seconds": 0.141,
+        "peak_job_private_mib": 66.6,
+        "peak_job_private_percent": 0.20903842935512565,
+        "owned_processes": []
+      },
+      "owned_tree_empty": true,
+      "cleanup_confirmed": true,
+      "job_handle_closed": true
+    },
+    {
+      "worker_created": true,
+      "job_assigned": true,
+      "limits_readback": {
+        "verified": true,
+        "job_private_limit_mib": 2230.25,
+        "cpu_hard_cap_machine_percent": 6.25,
+        "affinity_mask": 1,
+        "priority_class": 16384,
+        "active_process_limit": 16,
+        "kill_on_close": true,
+        "breakaway_disabled": true
+      },
+      "target_authorized": true,
+      "last_job_accounting": {
+        "active_processes": 0,
+        "job_cpu_seconds": 0.156,
+        "peak_job_private_mib": 66.64,
+        "peak_job_private_percent": 0.2091732928579354,
+        "owned_processes": []
+      },
+      "owned_tree_empty": true,
+      "cleanup_confirmed": true,
+      "job_handle_closed": true
+    }
+  ],
+  "backend_started_or_stopped": false,
+  "image_pulled_or_removed": false,
+  "container_created": false,
+  "SQL_or_native_executed": false,
+  "source_closing_exact": true,
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-07T08:07:33.785001+00:00",
+      "system_cpu_percent": 64.65,
+      "available_ram_mib": 12562.98,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 39.43069211336626,
+      "commit_used_percent": 38.49585444727538
+    },
+    {
+      "time_utc": "2026-10-07T08:07:34.285546+00:00",
+      "system_cpu_percent": 30.08,
+      "available_ram_mib": 12528.53,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 39.32256836506814,
+      "commit_used_percent": 38.551462052713696
+    },
+    {
+      "time_utc": "2026-10-07T08:07:34.949993+00:00",
+      "system_cpu_percent": 18.31,
+      "available_ram_mib": 12536.47,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 39.34749359245108,
+      "commit_used_percent": 38.5445384936579
+    },
+    {
+      "time_utc": "2026-10-07T08:07:35.488692+00:00",
+      "system_cpu_percent": 24.82,
+      "available_ram_mib": 12584.73,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 39.498945306106435,
+      "commit_used_percent": 38.443763404612945
+    },
+    {
+      "time_utc": "2026-10-07T08:07:36.015180+00:00",
+      "system_cpu_percent": 25.37,
+      "available_ram_mib": 12519.61,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 39.294565797757464,
+      "commit_used_percent": 38.62027502964426
+    },
+    {
+      "time_utc": "2026-10-07T08:07:37.548987+00:00",
+      "system_cpu_percent": 41.07,
+      "available_ram_mib": 12612.96,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 39.587562887770886,
+      "commit_used_percent": 38.491336133679056
+    },
+    {
+      "time_utc": "2026-10-07T08:07:38.077578+00:00",
+      "system_cpu_percent": 58.82,
+      "available_ram_mib": 12534.58,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 39.34155959832745,
+      "commit_used_percent": 38.59155817279189
+    },
+    {
+      "time_utc": "2026-10-07T08:07:38.619729+00:00",
+      "system_cpu_percent": 48.99,
+      "available_ram_mib": 12534.53,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 39.341400214187765,
+      "commit_used_percent": 38.55828126272569
+    }
+  ],
+  "P09_gate": "OPEN",
+  "product_complete": false,
+  "raw_logs_included": false,
+  "system_or_Defender_or_WSL_settings_changed": false,
+  "diagnosis": "FIXED_LOCAL_IMAGE_ABSENT",
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "IO": {
+    "read_passes": 8,
+    "bytes_read": 695438,
+    "bound_inputs": 4,
+    "final_fresh_hashes": 4,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/diagnose_signed_durable_sql_backend.py",
+      "bytes": 5051,
+      "sha256": "350514adc733e5e7bb1534feffdfeb755eae54fa876a047d61e055410b2b159d"
+    },
+    {
+      "path": "tools/p09/sql_runtime_supervision.py",
+      "bytes": 2988,
+      "sha256": "5bb767211e6cb7b82b8ce322ac9913ee352890f8096b530410e438a397320fa2"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-146-corpus-consumer-run07.v1.json",
+      "bytes": 331147,
+      "sha256": "42e8ce7a55743d2d9fc459db35b67e23e4c6b9e76928ca4f89e03e9625c1be60"
+    }
+  ],
+  "wall_seconds": 5.7132
+}

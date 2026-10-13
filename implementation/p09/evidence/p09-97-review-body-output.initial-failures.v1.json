@@ -1,0 +1,136 @@
+{
+  "schema": "hwpx-agent.p09-97-review-body-initial-failures/v1",
+  "state": "failed_initial_checks_retained_NOT_weakened",
+  "initial_runs": [
+    {
+      "start_chunk_id": "4815ef",
+      "terminal_chunk_id": "a93943",
+      "exit_code": 1,
+      "error": "new patch handler used nonexistent self.limits; corrected to original self.patch_limits",
+      "source_archives": [
+        {
+          "path": "implementation/p09/source-archive/p09-97-initial-compile-failure/crates/hwpx-package/src/document_import/structure/review/body_output.rs",
+          "bytes": 12100,
+          "sha256": "ca86d5e02fc210d61c403762d6d7a2fce8a2df3b4995f4d863c9ceb6a7428e34"
+        },
+        {
+          "path": "implementation/p09/source-archive/p09-97-initial-compile-failure/crates/hwpx-package/src/patch.rs",
+          "bytes": 71567,
+          "sha256": "b6d184697a1569e2821ccb31c6cffdce193a74852156f4836168bc31d3541a8d"
+        },
+        {
+          "path": "implementation/p09/source-archive/p09-97-initial-compile-failure/crates/hwpx-package/tests/review_body_output.rs",
+          "bytes": 7886,
+          "sha256": "0d420c67db6cf4ff164a4d3689254ba6948a0aa4ed3227f1786b7139cfbcb1fd"
+        }
+      ]
+    },
+    {
+      "start_chunk_id": "448aec",
+      "terminal_chunk_id": "4b14fc",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 3,
+      "error": "new tab fixture omitted mandatory width/leader/type; original reader retained"
+    },
+    {
+      "start_chunk_id": "ee79cb",
+      "terminal_chunk_id": "228a42",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 2,
+      "error": "same new tab fixture omission in stored output tests",
+      "source_archives": [
+        {
+          "path": "implementation/p09/source-archive/p09-97-initial-tab-fixture-failure/crates/hwpx-package/tests/review_body_output.rs",
+          "bytes": 7938,
+          "sha256": "4661d941809f2efb25f4cef2de69178fd5d86c375e46d552c8ed09834c280424"
+        },
+        {
+          "path": "implementation/p09/source-archive/p09-97-initial-tab-fixture-failure/crates/product-cli/tests/form_stored_provider/actual_import/source_review_output.rs",
+          "bytes": 4101,
+          "sha256": "0de488bdedb48c2edd437953214636d04f1c9b7d1e7b4d10cc0e6a029071f867"
+        }
+      ]
+    },
+    {
+      "terminal_chunk_id": "455f8a",
+      "exit_code": 1,
+      "error": "new generic external test called crate-private with_source_bytes; used existing reader bytes instead",
+      "source_archives": [
+        {
+          "path": "implementation/p09/source-archive/p09-97-initial-private-method-failure/crates/hwpx-package/tests/patch_element_content.rs",
+          "bytes": 6840,
+          "sha256": "4770f6e1b48f34876958531c5ea5285b346461df49c93764f5a959aab04bb2fe"
+        }
+      ]
+    },
+    {
+      "terminal_chunk_id": "fa23f4",
+      "exit_code": 1,
+      "passed": 3,
+      "failed": 1,
+      "error": "new positive reused native paragraph ID twice; strict original duplicate declaration check rejected it",
+      "following_review_body_suite": "not_run_in_this_failed_invocation",
+      "source_archives": [
+        {
+          "path": "implementation/p09/source-archive/p09-97-initial-duplicate-fixture-failure/crates/hwpx-package/tests/patch_element_content.rs",
+          "bytes": 7816,
+          "sha256": "f5fe2d598ff4b214200467b76057451dc3a2c0235f82627fc496c5a5098ab078"
+        }
+      ]
+    },
+    {
+      "start_chunk_id": "2b64d6",
+      "terminal_chunk_id": "b94f60",
+      "exit_code": 1,
+      "error": "new test similar binding names and nested if; corrected without lint allow",
+      "source_archives": [
+        {
+          "path": "implementation/p09/source-archive/p09-97-initial-lint-failure/crates/hwpx-package/tests/patch_element_content.rs",
+          "bytes": 7995,
+          "sha256": "4a33bce2ce38966afaace42f54b72177bc6fc2adfad9b5ba2e9cf79e71d5ef39"
+        },
+        {
+          "path": "implementation/p09/source-archive/p09-97-initial-lint-failure/crates/hwpx-package/tests/review_body_output.rs",
+          "bytes": 11065,
+          "sha256": "2304ff93c3e39b39d8f296b07d1f16095402b456eb5fc49e4d09948f237a23cf"
+        }
+      ]
+    },
+    {
+      "start_chunk_id": "1654ff",
+      "terminal_chunk_id": "8084cf",
+      "exit_code": 1,
+      "passed_before_stop": 100,
+      "failed": 1,
+      "review_body_passed": 4,
+      "review_body_failed": 1,
+      "text_flow_suite": "not_run_in_this_failed_invocation",
+      "error": "new opaque negative fixture had no typed run; original standalone reader requires a run; fixed fixture without changing reader",
+      "source_archives": [
+        {
+          "path": "implementation/p09/source-archive/p09-97-initial-opaque-fixture-failure/crates/hwpx-package/tests/review_body_output.rs",
+          "bytes": 11053,
+          "sha256": "17805ac493c9ce19d3f2643fd9ae6a15746b47f1ca6637c1f880261d7f1e952f"
+        }
+      ]
+    }
+  ],
+  "original_fixtures_and_guards_changed": false,
+  "failed_new_test_binaries_retained": false,
+  "failed_binary_scope": "only earlier-stage frozen71 executables preserved; new failed test binaries were replaced by corrected builds; source snapshots/run results retained",
+  "warnings_fixed_without_allow": [
+    "new integration fixture imported unused captured/forms helpers; added meaningful locked capture rejection and original source fixture preflight"
+  ],
+  "default_conformance": {
+    "terminal_chunk_id": "6b90b1",
+    "exit_code": 1,
+    "state": "FAIL:matrix_drift",
+    "preserved": true
+  },
+  "native_executed": false,
+  "actual_SQL_executed": false,
+  "product_complete": false,
+  "P09_gate": "OPEN"
+}

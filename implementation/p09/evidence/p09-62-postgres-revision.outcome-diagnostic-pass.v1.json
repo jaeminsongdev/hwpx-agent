@@ -1,0 +1,202 @@
+{
+  "actual_probe_executable_sha256": "ab7108870eb95aac743900f5ff69f45b976154468234a56abf1579118038070d",
+  "authorized_ir_sql_assertions": 25,
+  "checks": [
+    "independent_rust_process_seal_hash_ir_link_roundtrip",
+    "postgres_restart_retains_exact_typed_request_receipt_and_full_ir_link",
+    "bypass_role_rejected_by_actual_adapter",
+    "disabled_force_rls_rejected_by_actual_adapter",
+    "disabled_original_commit_guard_rejected_by_actual_adapter",
+    "disabled_new_intent_guard_rejected_by_actual_adapter",
+    "direct_auth_write_grant_rejected_by_actual_adapter",
+    "all_owned_test_mutations_restored_before_final_fresh_read"
+  ],
+  "container": "hwpx-agent-p09-revision-f2f84ea49345",
+  "container_removed": true,
+  "host_binding": "127.0.0.1_only_ephemeral",
+  "host_file_mounts": false,
+  "image": "postgres:18.4-bookworm@sha256:7e6103cf85f88f7a0eddb3ec0b1ba8940eba098ed118ade25a729ca9daee5568",
+  "image_id": "sha256:7e6103cf85f88f7a0eddb3ec0b1ba8940eba098ed118ade25a729ca9daee5568",
+  "initial_seed_duplicate_acl_failure_reproduced": true,
+  "initial_seed_failure_stderr_sha256": "40b95b9f9b5a8d058d4fa28d7dd0873447e6b14b002d363ea3d4fd8941b0e026",
+  "native_activated": false,
+  "original_sql_assertions": 28,
+  "p09_complete": false,
+  "postgres_version": "18.4 (Debian 18.4-1.pgdg12+1)",
+  "probe_runs": [
+    {
+      "actual_assertions": 14,
+      "checks": [
+        "empty_real_db_head",
+        "no_lease_write_denied",
+        "fake_uuid_is_not_real_authority",
+        "received_real_first_lease",
+        "prevalidation_commit_denied",
+        "denied_attempts_preserve_head",
+        "lease_bound_to_whole_typed_request",
+        "actual_authorized_rust_ir_commit",
+        "consumed_real_token_cannot_commit_again",
+        "real_success_completion",
+        "durable_exact_head",
+        "durable_sealed_full_ir_link",
+        "read_only_repository_cannot_commit",
+        "different_subject_service_read_denied"
+      ],
+      "mode": "write",
+      "native_activated": false,
+      "p09_complete": false,
+      "schema": "hwpx-agent.p09-rust-postgres-revision-probe/v1",
+      "scope": "actual_disposable_sql_metadata_not_native_import_or_product",
+      "state": "pass"
+    },
+    {
+      "actual_assertions": 4,
+      "checks": [
+        "durable_exact_head",
+        "durable_sealed_full_ir_link",
+        "read_only_repository_cannot_commit",
+        "different_subject_service_read_denied"
+      ],
+      "mode": "verify",
+      "native_activated": false,
+      "p09_complete": false,
+      "schema": "hwpx-agent.p09-rust-postgres-revision-probe/v1",
+      "scope": "actual_disposable_sql_metadata_not_native_import_or_product",
+      "state": "pass"
+    },
+    {
+      "actual_assertions": 4,
+      "checks": [
+        "durable_exact_head",
+        "durable_sealed_full_ir_link",
+        "read_only_repository_cannot_commit",
+        "different_subject_service_read_denied"
+      ],
+      "mode": "verify",
+      "native_activated": false,
+      "p09_complete": false,
+      "schema": "hwpx-agent.p09-rust-postgres-revision-probe/v1",
+      "scope": "actual_disposable_sql_metadata_not_native_import_or_product",
+      "state": "pass"
+    },
+    {
+      "actual_assertions": 1,
+      "checks": [
+        "unsafe_database_admission_denied"
+      ],
+      "mode": "reject-admission",
+      "native_activated": false,
+      "p09_complete": false,
+      "schema": "hwpx-agent.p09-rust-postgres-revision-probe/v1",
+      "scope": "actual_disposable_sql_metadata_not_native_import_or_product",
+      "state": "pass"
+    },
+    {
+      "actual_assertions": 1,
+      "checks": [
+        "unsafe_database_admission_denied"
+      ],
+      "mode": "reject-admission",
+      "native_activated": false,
+      "p09_complete": false,
+      "schema": "hwpx-agent.p09-rust-postgres-revision-probe/v1",
+      "scope": "actual_disposable_sql_metadata_not_native_import_or_product",
+      "state": "pass"
+    },
+    {
+      "actual_assertions": 1,
+      "checks": [
+        "unsafe_database_admission_denied"
+      ],
+      "mode": "reject-admission",
+      "native_activated": false,
+      "p09_complete": false,
+      "schema": "hwpx-agent.p09-rust-postgres-revision-probe/v1",
+      "scope": "actual_disposable_sql_metadata_not_native_import_or_product",
+      "state": "pass"
+    },
+    {
+      "actual_assertions": 1,
+      "checks": [
+        "unsafe_database_admission_denied"
+      ],
+      "mode": "reject-admission",
+      "native_activated": false,
+      "p09_complete": false,
+      "schema": "hwpx-agent.p09-rust-postgres-revision-probe/v1",
+      "scope": "actual_disposable_sql_metadata_not_native_import_or_product",
+      "state": "pass"
+    },
+    {
+      "actual_assertions": 1,
+      "checks": [
+        "unsafe_database_admission_denied"
+      ],
+      "mode": "reject-admission",
+      "native_activated": false,
+      "p09_complete": false,
+      "schema": "hwpx-agent.p09-rust-postgres-revision-probe/v1",
+      "scope": "actual_disposable_sql_metadata_not_native_import_or_product",
+      "state": "pass"
+    },
+    {
+      "actual_assertions": 4,
+      "checks": [
+        "durable_exact_head",
+        "durable_sealed_full_ir_link",
+        "read_only_repository_cannot_commit",
+        "different_subject_service_read_denied"
+      ],
+      "mode": "verify",
+      "native_activated": false,
+      "p09_complete": false,
+      "schema": "hwpx-agent.p09-rust-postgres-revision-probe/v1",
+      "scope": "actual_disposable_sql_metadata_not_native_import_or_product",
+      "state": "pass"
+    }
+  ],
+  "run_id": "f2f84ea4-9345-4dfe-87e2-c1c3c63716a2",
+  "schema": "hwpx-agent.p09-rust-postgres-revision-checks/v1",
+  "schema_versions": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19",
+  "source_sha256": {
+    "Cargo.lock": "70489fafb9048c90a533f388634555064cb4648cbdf5c645ecbb2cf2c23ee9b1",
+    "Cargo.toml": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5",
+    "crates/revision-service/Cargo.toml": "49ce9309d52adc375d724d7aeba5ad94448fc764b9d704157652bf4bbf04a762",
+    "crates/revision-service/examples/postgres_revision_probe.rs": "37ef3089fd24eb3f4114a74f0666b8b28986d97c6be8fe06b7555535b70881c4",
+    "crates/revision-service/src/lib.rs": "f96c376ca14ec8cbf46f36c02bbbda66f62f5c84ca7b15c6d0ad5d981435b092",
+    "crates/revision-service/src/postgres.rs": "30a66e29d97f8b8f69b22bdbabb83084676e9d013710a3acfb92ef0dd81a5ad1",
+    "crates/revision-service/src/service.rs": "d3048dcfb239f8cbfac34a623ee8eb847520796cd93004667bac61748e065951",
+    "crates/revision-service/src/store.rs": "4c303fd64d920d82647a1952ab70cc3067ae788244cb0ac876d42c07da1c3b47",
+    "crates/revision-service/src/types.rs": "b18624d3f356fd718db049dca195cce8c56336b7a0eb6ee1f1122d0d0c0b29db",
+    "implementation/p09/source-archive/p09-62-pre-postgres-revision/initial-sql-seed.sql": "6fd8b513195a776aea0f46e054ee70f990be2764abac8ba8f7d6cc4620250ed1",
+    "migrations/postgres/0001_p14_metadata.up.sql": "7c00f744993581448acb4b6d4d8a46f1ff03d108750da0afc671c3b5e2b0a78d",
+    "migrations/postgres/0002_p14_artifact_service.up.sql": "202753fbd6f20f181b09bd6227766dfb808811bd4e734a4a418cb5bae4eaee56",
+    "migrations/postgres/0003_p14_revision_cas.up.sql": "beeac1f22fde0eb3474d40acc14838c1e9676a74b68c5b6f9608713ba6e6e53a",
+    "migrations/postgres/0004_p14_history_checkpoints.up.sql": "e336890d4ee3fdf4819f52c079ba320f450b01ec516bf5ffaaf505a76b14f249",
+    "migrations/postgres/0005_p14_job_state_machine.up.sql": "4f15cd28510d55fa58a18aef7b8edf8b4606169fd722a0b8d2c63da2cfb4bf9b",
+    "migrations/postgres/0006_p14_worker_lease_fencing.up.sql": "03af7cc8b2ae883ff132e3b1737b29c3829fcb0fa9887566485f865b3c0393ab",
+    "migrations/postgres/0007_p14_idempotency_reconciliation.up.sql": "cc60353df6cf3c51155417e39d0f1f4c348d2a6282bba7d63de9ea0282be5e5d",
+    "migrations/postgres/0008_p14_cancel_cleanup.up.sql": "2ba28c1386db9c5aeb4661d11069e48f8624c2560b69301a0750ab9344c46f29",
+    "migrations/postgres/0009_p14_retention_local_mirror.up.sql": "272da51d665be7b9c0b5150a641ca1f9f51b9b78cddb839096acb57eb71e9ec2",
+    "migrations/postgres/0010_p16_artifact_repository.up.sql": "3d1ce21be0cb100bbc098e798b1917e52c4767da9a832359578179d9b0522420",
+    "migrations/postgres/0011_p16_plan_source.up.sql": "3aa21685e7511322414265b076f1ed43ff6b7e39c4dd1ee695e121a161777bbc",
+    "migrations/postgres/0012_p16_durable_plan_store.up.sql": "d85b1b4bbfbf8f63d85ae1088ae676d5c70bf926d6eb3c1cdb070a4b297d6cc0",
+    "migrations/postgres/0013_p16_plan_review_evidence.up.sql": "16c818ddb5aac58b168174cb39067c2d941e572d883fef3be9b5c452a5b6c923",
+    "migrations/postgres/0014_p17_history_checkpoint_note.up.sql": "d3e8a2846780f9442ea4b3acf55c072a2ba663590e3b24c9e46736517bb4c129",
+    "migrations/postgres/0015_p17_atomic_mirror_checkpoint.up.sql": "ff513cf4eed8b9498241e5b111646f1a4b58e7e373e4126b75d9ad317c69b25a",
+    "migrations/postgres/0016_p17_durable_git_mirror_push.up.sql": "a928dab01d36399a9ce5f24800f689ffcb585abb1da7bdcdf228d8cedafb7263",
+    "migrations/postgres/0017_p17_durable_git_mirror_pull.up.sql": "2880461cc22be5cbcc0df3802f3996ad8a0ee9ad6a2509d5798e040bdbeea1f4",
+    "migrations/postgres/0018_p09_full_document_ir.up.sql": "0c167d47f42183d4f79e9dac30150e799cb0c030950bfde1cc7348741d56ca0a",
+    "migrations/postgres/0019_p09_authorized_full_ir_intent.up.sql": "5dfcac89b97600d21efb3a0d922ce6241440fda6bdc94b14bd3eddc59df2ad59",
+    "tools/p09/fixtures/authorized_full_ir_intent.sql": "4b44849f231b4cc410a0121d88af385919bcfc393b5ce587df7fe5620bf16cfc",
+    "tools/p09/fixtures/postgres_revision_adapter.sql": "24702787268c0a96f0ffe9e7d9b76f0e95bbc25b6dd9e3cdbd15889bff57b835",
+    "tools/p09/run_postgres_revision_checks.py": "e99101ec87b27c044e35a51170639d5aa2135494ef611f56e146c56bf3734f3f",
+    "tools/p14/fixtures/p14_idempotency_reconciliation_smoke.sql": "c671b18f8d180f38cdd8d07a67918295621c5acc688cb55471cf89f248baf1f9",
+    "tools/p14/test_postgres_migrations.py": "568bc020bca0d402b3a9bfd063ffb08a1911069b3f39fe1607353781b1b99f4a"
+  },
+  "state": "pass",
+  "volume": "hwpx-agent-p09-revision-data-f2f84ea49345",
+  "volume_removed": true,
+  "actual_host_exit_code": 0,
+  "actual_terminal_chunk": "809275"
+}

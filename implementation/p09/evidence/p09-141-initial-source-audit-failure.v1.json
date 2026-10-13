@@ -1,0 +1,12 @@
+{
+  "schema_version": "hwpx-agent.p09-141-source-audit-failure/v1",
+  "state": "FAIL_CLOSED",
+  "error_code": "current_workspace_metadata_drift",
+  "initial_auditor_archive": "implementation/p09/source-archive/p09-141-initial-historical-metadata-audit/source-preimages.v1.json",
+  "cause": "Historical workspace verifier requires exact358 inventory; cargo auto-discovers the new P141 example so current inventory is359",
+  "fix": "Only while evaluating predecessor history, validate current359 inventory and remove exactly the revision-service example target with exact source path and kind; live359 strict lint remains authoritative",
+  "older_verifiers_or_receipts_modified": false,
+  "current_metadata_or_lint_coverage_weakened": false,
+  "P09_gate": "OPEN",
+  "product_complete": false
+}

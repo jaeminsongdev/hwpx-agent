@@ -1,0 +1,143 @@
+{
+  "schema_version": "hwpx-agent.p09-ds06-SQL-admission/v1",
+  "state": "PASS_DS06_SQL_ADMISSION_CONTRACT_ONLY_NOT_SQL_NATIVE_OR_GATE",
+  "mode": "light",
+  "source_closing_exact": true,
+  "actual_SQL_Docker_native_or_EXE_executed": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "remaining_non_permission_work_units": 76,
+  "full_durable_DS01_DS09_qualified": false,
+  "actual_SQL_metadata_or_signed_consumer_qualified": false,
+  "independent_restart_or_key_custody_qualified": false,
+  "PC_freeze_resolved": false,
+  "raw_logs_included": false,
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-07T09:06:54.754454+00:00",
+      "system_cpu_percent": 9.38,
+      "available_ram_mib": 12773.02,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 40.08992943573723,
+      "commit_used_percent": 39.676334309918644
+    },
+    {
+      "time_utc": "2026-10-07T09:06:55.255336+00:00",
+      "system_cpu_percent": 4.73,
+      "available_ram_mib": 12782.92,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 40.12100934297567,
+      "commit_used_percent": 39.67819172289819
+    }
+  ],
+  "provided_driver_guard_count_delta": [
+    842,
+    846
+  ],
+  "whole_original_driver_inverse_exact": true,
+  "original_root_checks_retained": 27,
+  "prior_durable_checks_retained": 4,
+  "new_DS06_checks": 8,
+  "required_check_count": 39,
+  "exact_check_names": [
+    "original_artifact_schema22_admission",
+    "registry_exact_admissions",
+    "original_root_workflow_AEAD_SQL_commit_readback",
+    "root_named_metadata_exact",
+    "real_plaintext_digest_exact",
+    "real_ciphertext_hash_exact",
+    "ciphertext_not_plaintext",
+    "durable_root_disk_ciphertext_tag_and_digest_exact",
+    "durable_root_fresh_handle_original_service_whole_read",
+    "generated_public_key_roundtrip",
+    "real_DB_audit_ingested",
+    "actual_locked_source_and_observed_IR_AEAD",
+    "original_leased_revision_seal_and_IR_link",
+    "actual_source_formula_targets_not_caller_AST",
+    "original_generated_policy_SQL_CAS_and_readback",
+    "original_signature_approval_SQL_commit_readback",
+    "original_consumer_candidate_equals_independent_evaluator",
+    "fresh_consumer_exact_without_cached_trust",
+    "full_product_route_not_falsely_enabled",
+    "consumer_preserves_head_and_artifact_ingest_count",
+    "durable_signed_consumer_fresh_handle_whole_candidate_exact",
+    "durable_signed_consumer_no_head_or_ingest_change",
+    "live_SQL_approval_exact_current_binding",
+    "live_SQL_stale_generation_rejected_without_mutation",
+    "live_SQL_consumer_survives_rejected_CAS",
+    "live_SQL_revocation_race_one_commit_one_denial",
+    "live_SQL_revoked_approval_read_denied",
+    "live_SQL_prepared_candidate_denied_callback_zero",
+    "live_SQL_fresh_prepare_denied",
+    "live_SQL_route_denied_not_merely_unqualified",
+    "live_SQL_revocation_preserves_revision_head",
+    "durable_negative_new_fixture_whole_AEAD_disk_read",
+    "durable_negative_wrong_key_denied",
+    "durable_negative_ACL_grant_fresh_whole_read",
+    "durable_negative_ACL_revoke_deny_restore_fresh_read",
+    "durable_negative_disk_tag_one_byte_tamper_exact",
+    "durable_negative_tampered_disk_ciphertext_denied",
+    "durable_negative_quarantine_disk_relocation_and_read_denied",
+    "durable_negative_no_head_or_additional_ingest_change"
+  ],
+  "original_source_files_modified": false,
+  "original_SQL_security_and_resource_policy_unchanged": true,
+  "owned_root_created": false,
+  "image_downloaded_or_backend_changed": false,
+  "tests_run": 16,
+  "tests_passed": 16,
+  "failed_tests": [],
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "IO": {
+    "read_passes": 15,
+    "bytes_read": 413190,
+    "bound_inputs": 7,
+    "final_fresh_hashes": 7,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/durable_negative_sql_contract.py",
+      "bytes": 7221,
+      "sha256": "f6f028542633bfee2c18a34383f6a12b87f9a652703875a8f6e5107f13b7f0ab"
+    },
+    {
+      "path": "tools/p09/durable_negative_sql_driver.py",
+      "bytes": 2066,
+      "sha256": "7af592ab22bc7961c9925c53353039ee6b266e6467e332efecc48d50e071fe9e"
+    },
+    {
+      "path": "tools/p09/verify_durable_negative_sql_admission.py",
+      "bytes": 5077,
+      "sha256": "94e9e87d5197afc801d0fe9869ca171023d288820268b0bd6a0c6c15e8845e8f"
+    },
+    {
+      "path": "tools/p09/tests/test_durable_negative_sql_admission.py",
+      "bytes": 8453,
+      "sha256": "abfdc046dc5989bf64f180fadcedb2ff4f1735953bae0583b37da915d334361e"
+    },
+    {
+      "path": "tools/p09/signed_durable_sql_root.py",
+      "bytes": 4626,
+      "sha256": "7c2fdef9cb7964beebbfa43d400f2df4183aa61316237cc17d7c33b86ef20199"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-150-pre-durable-SQL-consumer-r29/source-preimages.v1.json",
+      "bytes": 95800,
+      "sha256": "7792b58d2b90f641694acec2fb51bbab848d6807a71e0c02385a3dc92422d332"
+    },
+    {
+      "path": "tools/p09/run_formula_issuer_live_sql_probe.py",
+      "bytes": 35452,
+      "sha256": "65e460c3d5de201de18e53e663e190d6cc6c8e711b723e9f4b74d0a736f1c0c5"
+    }
+  ],
+  "wall_seconds": 1.1053
+}

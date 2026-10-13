@@ -1,0 +1,124 @@
+{
+  "schema_version": "hwpx-agent.p09-120-resource-optimization/v1",
+  "state": "PASS_RESOURCE_BOUNDED_STORED225_NOT_full_performance_or_Gate",
+  "tool_sources": [
+    {
+      "path": "tools/p09/resource_bounded_test_support.ps1",
+      "bytes": 5509,
+      "sha256": "2ddf59210fc552652309b708553f93118b78e2f1ce47b2f17561fee215713e90"
+    },
+    {
+      "path": "tools/p09/run_resource_bounded_tests.ps1",
+      "bytes": 7848,
+      "sha256": "0b713d3e9c83515717f4f57caf4892460c1a51f612950125f84de29e2aea889f"
+    },
+    {
+      "path": "tools/p09/build_resource_optimized_tests.ps1",
+      "bytes": 7082,
+      "sha256": "906634a627a7b096ce1bfaae2a08e823577cfdd82a5cfbd0870a528c6a7c7c84"
+    },
+    {
+      "path": "tools/p09/tests/test_resource_bounded_test_support.ps1",
+      "bytes": 1786,
+      "sha256": "24c89d0c6c39588daa41fac58d65a0cd1e6dd6426e0406d5f526571cd481bef7"
+    }
+  ],
+  "verification": {
+    "policy_assertions": 16,
+    "policy_output": "4e3ae6",
+    "powershell_parse_files": 4,
+    "unit_is_actual_test_execution": false,
+    "limited_smoke": {
+      "session": 64864,
+      "pid": 10720,
+      "terminal": "40ecb7",
+      "state": "NOT_ACCEPTED_STOP_OR_FAILURE",
+      "reason": "STOP_DURATION_LIMIT",
+      "receipt": "target/p09-120-signed-original-corpus/resource-bounded-smoke-20261005-b.json",
+      "seconds": 301.15,
+      "samples": 55,
+      "max_test_working_set_mib": 29.68,
+      "min_available_ram_mib": 12534,
+      "source_freeze_11_exact_after": true,
+      "actual_test_terminal_summary": null
+    },
+    "optimized_build": {
+      "session": 23682,
+      "pid": 20128,
+      "start": "aa1657",
+      "state": "PASS_BUILD_NOT_TEST_EXECUTION",
+      "receipt": "target/p09-120-resource-optimized/build-resource-20261005-a.json",
+      "opt_level": 1,
+      "debug_assertions_configured": true,
+      "overflow_checks_configured": true,
+      "cargo_jobs": 1,
+      "codegen_units": 1,
+      "logical_cpu_limit": 2,
+      "priority": "BelowNormal",
+      "actual_rustc_flags_observed": "65379a",
+      "last_confirmed_live": "105a21",
+      "terminal": "a5a3d9",
+      "exit_code": 0,
+      "seconds": 572.9,
+      "source_freeze_11_exact_after": true,
+      "descendant_limit_observations": 284,
+      "min_available_ram_mib": 6117
+    },
+    "optimized_smoke": {
+      "session": 26501,
+      "pid": 34968,
+      "terminal": "ce27fe",
+      "exit_code": 0,
+      "receipt": "target/p09-120-resource-optimized/smoke-resource-20261005-a.json",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 224,
+      "seconds": 41.39,
+      "source_freeze_11_exact_after": true
+    },
+    "full225": {
+      "start": "c38830",
+      "session": 51730,
+      "pid": 12640,
+      "state": "PASS_RESOURCE_BOUNDED_SCOPED_TESTS_NOT_Gate",
+      "receipt": "target/p09-120-resource-optimized/full225-resource-20261005-a.json",
+      "terminal": "dfbc2d",
+      "exit_code": 0,
+      "passed": 225,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 0,
+      "seconds": 544.01,
+      "resource_metrics": {
+        "samples": 98,
+        "max_system_cpu_percent": 60,
+        "min_available_ram_mib": 17635,
+        "max_test_working_set_mib": 27.17
+      }
+    }
+  },
+  "resource_policy": {
+    "test_threads": 1,
+    "logical_cpu_limit": 2,
+    "priority": "BelowNormal",
+    "sample_seconds": 5,
+    "system_cpu_stop_percent": 85,
+    "system_cpu_stop_consecutive_samples": 3,
+    "minimum_available_ram_mib": 4096,
+    "maximum_test_working_set_mib": 2048,
+    "compiler_parent_working_set_is_not_child_sum": true,
+    "other_apps_not_modified": true
+  },
+  "product_rust_changed": false,
+  "original_executable_preserved": true,
+  "native_SQL_UI_access_popup_run": false,
+  "full225_pass": true,
+  "speedup_verified": false,
+  "P09_gate": "OPEN",
+  "P10_new_implementation": false,
+  "product_complete": false,
+  "goal_status": "active",
+  "same_case_finished_41_seconds_vs_unoptimized_timeout_301_seconds": true,
+  "same_case_observation_is_full_performance_benchmark": false
+}

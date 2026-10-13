@@ -1,0 +1,856 @@
+{
+  "schema": "hwpx-agent.p09-111-review-mutation-protection-source-regression/v1",
+  "recorded_at_utc": "2026-10-04 22:23:41 UTC",
+  "state": "PASS_ORIGINAL_SOURCE_ANCESTOR_AND_CONSUMED_SUBTREE_GUARD_NOT_full_native_protection_SQL_issuer_atomic_execution_publication_or_Gate",
+  "git_head": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+  "rust": {
+    "executed_passed": 405,
+    "unique_passed": 382,
+    "new_tests": 8,
+    "reused_duplicate_executions": 23,
+    "duplicate_function_count": 15,
+    "failed": 0,
+    "ignored": 0,
+    "package": {
+      "passed": 198,
+      "suites": 17,
+      "method": "Fresh final current package rebuild/cargo17; no previous binaries used as current code",
+      "command": "cargo test -p hwpx-package --lib --test document_import_assembly_review --test document_import_memo_catalog --test document_import_review_metadata --test document_import_review --test id_index --test memo_style_output --test patch_element_content --test patch_engine --test review_body_output --test review_cell_body_output --test review_delete_output --test review_filled_table_output --test review_locations --test review_paragraph_output --test review_table_output --test text_flow --target-dir target/p09-111-review-mutation-protection",
+      "start_chunk": "e61eb8",
+      "session_id": 30409,
+      "terminal_chunk": "0c7f5f",
+      "exit_code": 0
+    },
+    "product": {
+      "passed": 207,
+      "suites": 3,
+      "command": "cargo test -p hwpx-agent-cli --test comment_operation --test form_stored_provider --test stored_comment_provider --target-dir target/p09-111-review-mutation-protection",
+      "start_chunk": "31314e",
+      "session_id": 50179,
+      "terminal_chunk": "655c06",
+      "exit_code": 0,
+      "form167_seconds": 296.46,
+      "stored_comment24_seconds": 3.11
+    },
+    "current_test_list": {
+      "terminal_chunk": "a9dbd3",
+      "exit_code": 0,
+      "inventory": [
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/comment_operation-75493e8123c566c8.exe",
+          "tests": [
+            "all_five_original_operations_compile_on_real_paths_and_preserve_complete_document",
+            "canonical_review_catalog_order_is_not_component_presentation_order",
+            "fresh_package_revision_graph_and_model_protection_drift_are_rejected",
+            "insertion_requires_the_exact_anchor_and_an_actual_node_in_the_same_section",
+            "missing_extra_reordered_wrong_section_and_nontext_views_are_rejected",
+            "partial_native_import_markers_and_protection_never_become_full_comment_authority",
+            "rich_bodies::all_five_rich_operations_validate_actual_nested_flow_and_compile_final_not_intermediate_graph",
+            "rich_bodies::complete_exact_ordered_body_inventory_and_flow_digest_are_mandatory",
+            "rich_bodies::explicit_empty_flow_is_bound_and_serialization_has_finite_aggregate_budget",
+            "rich_bodies::fresh_graph_body_package_and_revision_drift_reject_immutable_preparation",
+            "rich_bodies::insertion_requires_exact_new_body_and_noninsertion_rejects_extra_body",
+            "rich_bodies::original_full_admission_and_nested_body_protection_are_not_bypassed",
+            "rich_bodies::original_global_ids_style_resource_and_table_geometry_validate_complete_rich_bodies",
+            "rich_bodies::original_strict_request_unknown_keys_and_wrong_flow_are_still_rejected",
+            "stale_state_flow_unknown_duplicate_oversized_and_delete_requests_fail_closed",
+            "style_and_hidden_operations_work_without_fabricating_authors_or_comments"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/document_import_assembly_review-312fc213dbce8bd9.exe",
+          "tests": [
+            "assembled_reviews_keep_whole_original_source_and_existing_style_links_not_visible_cache",
+            "review_body_change_and_style_change_invalidate_whole_cached_assembly_without_source_writes",
+            "wrong_body_style_references_and_malformed_body_never_fall_back_to_opaque_assembly"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/document_import_memo_catalog-093bd8d5c2597e35.exe",
+          "tests": [
+            "all_locked_actual36_keep_missing_memo_definitions_explicit_and_previous_graph_results",
+            "every_original_native_memo_line_and_width_token_is_bounded_not_defaulted",
+            "exact_memo_definition_section_reference_and_review_use_are_in_original_catalog_and_assembly",
+            "malformed_duplicate_count_and_unknown_native_tokens_fail_closed",
+            "missing_or_unresolved_reference_is_explicit_without_fabricated_default_style",
+            "source_style_or_section_reference_drift_invalidates_whole_cached_catalog_and_assembly"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/document_import_review_metadata-8537eb795457ed5e.exe",
+          "tests": [
+            "empty_plain_entity_and_json_looking_text_remain_uninterpreted_exact_bytes",
+            "locked_actual_capture_keeps_zero_native_metadata_and_original_source_identity",
+            "meta_tag_order_duplicate_namespace_attributes_and_nested_markup_reject_without_silently_losing_data",
+            "metadata_change_including_lexical_only_change_invalidates_whole_source_and_raw_observation",
+            "no_meta_tag_keeps_legacy_serialized_observation_shape_and_existing_complete_body",
+            "original_assembly_carries_exact_meta_sidecar_with_source_styles_and_does_not_promote_native_metadata",
+            "original_memo_reader_preserves_exact_meta_tag_in_all_closed_optional_payload_shapes",
+            "source_preserving_metadata_cannot_enter_original_standalone_typed_paragraph_route"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/document_import_review-67551457d524f20f.exe",
+          "tests": [
+            "debug_redacts_body_parameters_and_paths_without_claiming_full_comments",
+            "duplicate_native_paragraph_and_field_ids_in_separate_paragraphs_are_not_global_identity",
+            "hidden_explanations_direct_and_wrapped_target_only_their_actual_control_nodes",
+            "invalid_empty_duplicate_ordered_envelopes_and_parameter_counts_reject",
+            "malformed_body_paragraph_and_table_semantics_reject_through_original_mapper",
+            "memo_body_reuses_original_field_stack_mapper_and_exact_source_anchors",
+            "memo_parameters_remain_exact_opaque_not_author_time_or_cached_body_defaults",
+            "namespace_rebound_names_remain_opaque_and_do_not_fabricate_reviews",
+            "nested_field_review_note_and_bookmark_semantics_are_not_silently_lost",
+            "non_memo_payload_and_public_typed_reader_boundaries_are_unchanged",
+            "rich_review_paragraphs_tables_and_unknown_xml_stay_in_the_original_body_flow",
+            "source_review_depth_item_and_text_budgets_remain_enforced",
+            "thirty_six_immutable_historical_inputs_retain_original_whole_graph_without_invented_reviews",
+            "unmatched_field_pairs_and_unrepresented_parent_controls_never_admit_reviews",
+            "whole_source_drift_rejects_even_when_visible_cache_is_unchanged"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+          "tests": [
+            "actual_import::actual_aead_tamper_cannot_be_reclassified_as_an_importer_or_policy_failure",
+            "actual_import::actual_head_advance_invalidates_old_import_even_with_identical_result_bytes",
+            "actual_import::all_ten_actual_stored_results_import_without_caller_maps_and_preserve_whole_graphs",
+            "actual_import::debug_and_receipts_do_not_expose_raw_package_graph_or_policy_values",
+            "actual_import::field_ranges::actual_aead_tamper_is_original_service_failure_not_field_projection_failure",
+            "actual_import::field_ranges::advanced_head_invalidates_cached_source_and_range_even_when_result_bytes_equal",
+            "actual_import::field_ranges::cached_field_ranges_cannot_rebind_document_branch_project_subject_or_tenant",
+            "actual_import::field_ranges::captured_stored_result_field_ranges_match_whole_direct_graph_without_ingest_or_head_change",
+            "actual_import::field_ranges::each_new_partial_marker_independently_denies_full_product_without_old_markers",
+            "actual_import::field_ranges::revoked_source_acl_denies_new_range_import_and_cached_range_verification",
+            "actual_import::field_ranges::stored_range_debug_and_receipt_do_not_disclose_cached_field_content",
+            "actual_import::field_semantics::actual_aead_tamper_denies_meaning_before_supported_tuple_parsing",
+            "actual_import::field_semantics::actual_captured_source_meaning_matches_direct_import_without_ingest_or_head_write",
+            "actual_import::field_semantics::all_scope5_substitutions_reject_fresh_and_cached_meaning_models",
+            "actual_import::field_semantics::head_advance_invalidates_meanings_even_when_result_bytes_are_same",
+            "actual_import::field_semantics::revoked_acl_denies_new_meaning_import_and_cached_meaning_verify",
+            "actual_import::field_semantics::semantic_partial_markers_each_deny_full_context_without_predecessor_markers",
+            "actual_import::formula_evaluation::authorized_actual_source_cycle_rejects_without_using_old_cached_value",
+            "actual_import::formula_evaluation::authorized_nonnumeric_source_rejects_math_without_ingest_or_cache_fallback",
+            "actual_import::formula_evaluation::every_locked_actual_source_evaluates_like_direct_without_ingest_head_or_full_route",
+            "actual_import::formula_evaluation::five_authentication_scope_substitutions_reject_new_and_cached_numeric_models",
+            "actual_import::formula_evaluation::fresh_and_cached_evaluation_reject_actual_aead_acl_head_and_quarantine_changes",
+            "actual_import::formula_evaluation::missing_document_read_scope_rejects_provider_before_numeric_model_reuse",
+            "actual_import::fresh_acl_revocation_blocks_import_verification_and_policy_binding",
+            "actual_import::fresh_service_read_does_not_turn_stale_or_wrong_policy_into_authority",
+            "actual_import::no_form_stored_source_preserves_real_body_without_policy_attestation",
+            "actual_import::policy_product::all_five_source_cases_registered_policy_uses_original_whole_product_candidate_no_publication",
+            "actual_import::policy_product::all_ten_observed_sources_retain_exact_original_native_state_and_complete_receipt",
+            "actual_import::policy_product::changed_head_provider_and_trusted_input_access_deny_without_source_or_policy_write",
+            "actual_import::policy_product::fresh_policy_acl_revocation_and_source_aead_tamper_deny_cached_product",
+            "actual_import::policy_product::original_strict_envelope_rejects_injected_maps_policies_artifacts_approval_and_stale_scope",
+            "actual_import::policy_product::repository_revocation_mid_verification_denies_after_original_compiler_reads",
+            "actual_import::policy_product::same_values_new_policy_generation_invalidates_whole_cached_product_no_old_fallback",
+            "actual_import::policy_registration::read_only_incomplete_and_exhausted_generation_deny_before_any_policy_ingest",
+            "actual_import::policy_registration::repository_denial_unknown_ack_and_corrupt_reply_remain_distinct_no_blind_retry",
+            "actual_import::policy_registration::source_head_change_rejects_prepared_registration_before_artifact_or_repository_write",
+            "actual_import::policy_registration::unverified_policy_scan_cannot_reach_registration_repository",
+            "actual_import::policy_registration::validated_registration_reads_back_whole_policy_and_new_generation_without_source_write",
+            "actual_import::provider_document_branch_project_subject_and_tenant_cannot_rebind_import_or_policy",
+            "actual_import::source_assembly::actual36_stored_whole_assembly_and_sidecars_match_direct_without_writes",
+            "actual_import::source_assembly::assembly_creation_and_cached_verify_reject_acl_aead_head_and_quarantine",
+            "actual_import::source_assembly::assembly_profile_and_scope_individually_deny_full_context",
+            "actual_import::source_assembly::assembly_rejects_all_five_authenticated_scope_substitutions",
+            "actual_import::source_bookmarks::all_scope5_substitutions_deny_fresh_observed_name_selection_on_the_existing_model",
+            "actual_import::source_bookmarks::bookmark_markers_individually_deny_full_context_even_without_old_partial_metadata",
+            "actual_import::source_bookmarks::generated_bookmark_packages_use_original_authenticated_stored_read_and_direct_whole_graph",
+            "actual_import::source_bookmarks::native_capture_is_only_negative_bookmark_evidence_and_stays_source_fresh",
+            "actual_import::source_bookmarks::source_name_selection_rechecks_acl_aead_head_and_duplicate_ambiguity",
+            "actual_import::source_catalog::actual_catalog_matches_direct_whole_graph_with_no_ingest_or_head_write",
+            "actual_import::source_catalog::all_five_scope_substitutions_reject_existing_catalog_binding",
+            "actual_import::source_catalog::catalog_rechecks_aead_acl_and_head_on_creation_and_cached_verification",
+            "actual_import::source_catalog::each_catalog_partial_marker_denies_full_context_independently",
+            "actual_import::source_fonts::actual36_stored_fonts_match_direct_without_ingest_head_write_or_full_admission",
+            "actual_import::source_fonts::creation_and_cached_fonts_reject_aead_acl_head_and_quarantine",
+            "actual_import::source_fonts::font_profile_and_scope_each_independently_reject_full_context",
+            "actual_import::source_fonts::fonts_reject_all_five_scope_substitutions_on_new_and_cached_models",
+            "actual_import::source_fonts::missing_read_scope_rejects_provider_before_font_reuse",
+            "actual_import::source_memo_catalog::malformed_native_memo_catalog_denies_before_assembly_without_head_or_ingest_change",
+            "actual_import::source_memo_catalog::memo_catalog_and_assembly_creation_and_cached_verify_recheck_aead_acl_head_and_quarantine",
+            "actual_import::source_memo_catalog::stored_memo_catalog_and_assembly_reject_each_provider_scope_substitution",
+            "actual_import::source_memo_catalog::stored_memo_catalog_and_section_style_relationship_match_direct_whole_assembly_without_publication",
+            "actual_import::source_memo_style::cached_output_callback_rechecks_original_aead_acl_and_head_before_exposing_any_bytes",
+            "actual_import::source_memo_style::original_authenticated_catalog_lowers_actual_style_bytes_without_publishing_or_metadata_defaults",
+            "actual_import::source_notes::actual_note_acl_revocation_denies_fresh_import_and_cached_source_verify",
+            "actual_import::source_notes::actual_note_aead_tamper_and_advanced_head_reject_without_native_work",
+            "actual_import::source_notes::actual_notes_reject_each_scope5_substitution_on_fresh_bound_and_cached_access",
+            "actual_import::source_notes::nine_actual_note_packages_use_original_stored_source_and_whole_direct_graph",
+            "actual_import::source_notes::note_partial_markers_individually_deny_full_context_without_old_markers",
+            "actual_import::source_review::malformed_review_body_fails_product_reader_without_ingest_or_revision_change",
+            "actual_import::source_review::review_acl_revocation_and_aead_tamper_block_derivation_and_cached_verification",
+            "actual_import::source_review::review_head_change_and_provider_scope_rebind_cannot_reuse_cached_body",
+            "actual_import::source_review::review_partial_markers_independently_deny_full_document_promotion",
+            "actual_import::source_review::source_review_bodies_use_actual_aead_reader_and_whole_direct_graph_without_publication",
+            "actual_import::source_review_assembly::malformed_review_style_and_body_deny_stored_assembly_without_head_or_ingest_change",
+            "actual_import::source_review_assembly::review_assembly_creation_and_cached_verify_recheck_aead_acl_head_and_quarantine",
+            "actual_import::source_review_assembly::stored_assembly_retains_complete_source_raw_typed_review_and_old_branches_without_publication",
+            "actual_import::source_review_assembly::stored_review_assembly_rejects_each_provider_scope_substitution",
+            "actual_import::source_review_cell_output::cached_body_callback_rechecks_actual_aead_acl_regrant_and_advanced_head",
+            "actual_import::source_review_cell_output::cached_cell_callback_rejects_all_provider_scope_substitutions",
+            "actual_import::source_review_cell_output::original_stored_review_lowers_typed_cell_with_same_direct_package_and_no_writes",
+            "actual_import::source_review_delete::cached_delete_callback_rechecks_actual_aead_acl_regrant_and_advanced_head",
+            "actual_import::source_review_delete::original_stored_review_deletes_paired_memo_without_ingest_commit_or_native_defaults",
+            "actual_import::source_review_locations::actual_original_stored_locations_match_direct_graph_without_state_defaults_or_writes",
+            "actual_import::source_review_locations::cached_locations_reject_all_original_provider_scope_substitutions_before_callback",
+            "actual_import::source_review_locations::location_callback_rejects_actual_ciphertext_revoked_acl_and_advanced_head",
+            "actual_import::source_review_metadata::cached_meta_sidecar_never_bypasses_fresh_actual_aead_acl_or_head_checks",
+            "actual_import::source_review_metadata::malformed_meta_cannot_fall_back_to_an_old_valid_body_or_fake_author_time",
+            "actual_import::source_review_metadata::original_authenticated_source_reader_carries_exact_meta_sidecar_and_whole_graph_without_writes",
+            "actual_import::source_review_output::cached_body_callback_rechecks_actual_aead_acl_regrant_and_advanced_head",
+            "actual_import::source_review_output::original_stored_review_lowers_complete_typed_body_without_ingest_commit_or_native_defaults",
+            "actual_import::source_review_paragraph_output::cached_paragraph_callback_rechecks_actual_aead_acl_regrant_and_advanced_head",
+            "actual_import::source_review_paragraph_output::cached_paragraph_callback_rejects_all_provider_scope_substitutions",
+            "actual_import::source_review_paragraph_output::original_stored_review_lowers_one_paragraph_with_same_direct_package_and_no_writes",
+            "actual_import::source_review_table_output::both_independent_sources_recheck_actual_aead_acl_regrant_and_callback_denial",
+            "actual_import::source_review_table_output::either_input_quarantined_after_preparation_denies_cached_output_and_product_route",
+            "actual_import::source_review_table_output::either_original_head_advance_invalidates_cached_candidate_without_callback",
+            "actual_import::source_review_table_output::either_provider_scope_substitution_or_different_principal_rejects_cached_bytes",
+            "actual_import::source_review_table_output::filled_output::filled_both_providers_all_five_scope_substitutions_and_principals_reject",
+            "actual_import::source_review_table_output::filled_output::filled_both_services_reject_aead_acl_before_callback_and_route_then_regrant",
+            "actual_import::source_review_table_output::filled_output::filled_each_head_advance_invalidates_whole_preparation_before_callback",
+            "actual_import::source_review_table_output::filled_output::filled_each_quarantined_input_denies_cached_bytes_and_route_without_callback",
+            "actual_import::source_review_table_output::filled_output::filled_neither_input_bypasses_original_result_kind_and_verified_scanner_admission",
+            "actual_import::source_review_table_output::filled_output::filled_original_style_id_geometry_and_writer_guards_never_prepare_partial_output",
+            "actual_import::source_review_table_output::filled_output::filled_stored_memo_hidden_match_actual_direct_and_reversed_input_without_heads_or_ingest",
+            "actual_import::source_review_table_output::filled_output::filled_swapped_service_same_actor_document_generation_and_foreign_anchor_reject",
+            "actual_import::source_review_table_output::fixture::native::closed_package_replacement_preserves_every_nontarget_part_and_graph",
+            "actual_import::source_review_table_output::fixture::native::creates_arbitrary_rectangular_nonuniform_unmerged_table_and_reopens_exactly",
+            "actual_import::source_review_table_output::fixture::native::input_is_bounded_and_debug_omits_ids_hashes_and_content",
+            "actual_import::source_review_table_output::fixture::native::lowerer_rechecks_source_template_current_flow_and_foreign_plan",
+            "actual_import::source_review_table_output::fixture::native::nonblank_template_and_native_identifier_collision_fail_closed",
+            "actual_import::source_review_table_output::fixture::native::one_by_one_boundary_uses_only_template_outer_edges",
+            "actual_import::source_review_table_output::fixture::native::rejects_control_wrapped_table_template_as_non_native_profile",
+            "actual_import::source_review_table_output::fixture::native::request_rejects_part_template_context_flow_identity_track_and_json_tampering",
+            "actual_import::source_review_table_output::foreign_table_anchor_and_finite_writer_limits_do_not_prepare_partial_outputs",
+            "actual_import::source_review_table_output::no_template_import_can_bypass_original_kind_or_scanner_admission",
+            "actual_import::source_review_table_output::stored_two_sources_match_actual_direct_memo_and_hidden_packages_without_publication",
+            "actual_import::source_review_table_output::swapped_services_do_not_rebind_even_when_actor_document_and_generation_equal",
+            "actual_import::source_security::all_scope_substitutions_deny_existing_security_binding_and_recreation",
+            "actual_import::source_security::all_ten_actual_form_sources_and_results_have_source_bound_blocked_controls",
+            "actual_import::source_security::authenticated_actual_security_matches_direct_whole_graph_and_denies_every_activation",
+            "actual_import::source_security::each_security_partial_marker_independently_denies_full_document_context",
+            "actual_import::source_security::security_rechecks_aead_acl_and_head_before_cached_inspection_or_policy_denial",
+            "actual_import::source_settings::actual_stored_settings_match_direct_whole_graph_without_ingest_or_head_write",
+            "actual_import::source_settings::all_ten_actual_form_sources_and_results_retain_security_with_real_settings",
+            "actual_import::source_settings::creation_and_cached_settings_recheck_original_aead_acl_and_head",
+            "actual_import::source_settings::each_settings_partial_qualifier_denies_full_context_independently",
+            "actual_import::source_settings::settings_bindings_reject_all_five_authentication_scope_substitutions",
+            "actual_import::stored_source_policy::actual_ten_sources_stored_encrypted_policy_matches_whole_original_component_no_writes",
+            "actual_import::stored_source_policy::cached_policy_from_another_authenticated_provider_is_denied_before_policy_read",
+            "actual_import::stored_source_policy::cached_policy_rechecks_both_acls_policy_quarantine_and_source_head",
+            "actual_import::stored_source_policy::consumer_rejects_every_foreign_or_stale_repository_binding",
+            "actual_import::stored_source_policy::latest_policy_revocation_is_checked_during_create_and_cached_verification",
+            "actual_import::stored_source_policy::new_latest_valid_policy_can_be_loaded_but_cached_old_version_is_stale",
+            "actual_import::stored_source_policy::policy_only_ciphertext_tamper_fails_with_original_source_read_still_valid",
+            "actual_import::stored_source_policy::strict_nested_duplicates_and_missing_nullable_selection_fields_are_rejected",
+            "actual_import::stored_source_policy::strict_payload_rejects_unknown_missing_duplicate_and_unbound_fields_no_defaults",
+            "actual_import::stored_source_policy::unverified_policy_scan_is_denied_while_original_source_remains_readable",
+            "actual_import::stored_source_policy::wrong_media_or_artifact_role_never_becomes_policy",
+            "actual_import::wrong_artifact_role_unverified_and_invalid_package_stay_fail_closed",
+            "full_document::product_request::full_request_canonical_retry_plan_key_and_public_receipt_are_not_idempotency_or_secrets",
+            "full_document::product_request::full_request_four_locked_whole_package_oracles_and_full_graph_plan_not_projection",
+            "full_document::product_request::full_request_fresh_ir_acl_is_independent_of_source_acl_and_precedes_route",
+            "full_document::product_request::full_request_fresh_ir_aead_corruption_recovery_and_source_corruption_are_checked",
+            "full_document::product_request::full_request_fresh_ir_quarantine_blocks_an_old_valid_preparation",
+            "full_document::product_request::full_request_fresh_map_policy_access_or_provider_scope_cannot_rebind",
+            "full_document::product_request::full_request_inventory_wrong_document_and_protected_ir_remain_unqualified",
+            "full_document::product_request::full_request_missing_ir_wrong_kind_media_and_three_hashes_never_fall_back",
+            "full_document::product_request::full_request_noncanonical_duplicate_ir_is_not_admitted_by_envelope",
+            "full_document::product_request::full_request_original_recursive_strict_parser_rejects_before_artifact_audit",
+            "full_document::product_request::full_request_project_document_source_revision_generation_are_provider_bound",
+            "full_document::product_request::full_request_real_head_advance_invalidates_old_and_fresh_missing_ir_cannot_fall_back",
+            "full_document::stored_full_ir_all_five_kinds_defaults_empty_clear_keep_exact_candidates_and_real_graph",
+            "full_document::stored_full_ir_fresh_ir_only_acl_revocation_precedes_signed_route",
+            "full_document::stored_full_ir_head_advance_and_access_revocation_do_not_rebind_old_preparation",
+            "full_document::stored_full_ir_ir_only_aead_corruption_is_rejected_without_touching_source",
+            "full_document::stored_full_ir_missing_link_and_wrong_kind_media_or_three_digests_fail_closed",
+            "full_document::stored_full_ir_noncanonical_and_duplicate_properties_are_rejected_after_actual_download",
+            "full_document::stored_full_ir_public_receipt_debug_never_exposes_values_paths_or_artifact_ids",
+            "full_document::stored_full_ir_wrong_document_and_explicit_inventory_projection_are_not_promoted",
+            "stored_actual_capture_uses_real_sealed_node_acl_aead_and_original_compiler_without_publish",
+            "stored_all_five_kinds_required_radio_defaults_empty_clear_match_whole_predecessor",
+            "stored_fresh_acl_revocation_blocks_preparation_verification_and_route",
+            "stored_fresh_map_policy_access_and_malformed_input_fail_without_ingest_or_commit",
+            "stored_provider_tenant_subject_scope_branch_document_cannot_be_substituted",
+            "stored_quarantine_unverified_wrong_artifact_kind_and_corrupt_ciphertext_never_prepare",
+            "stored_real_head_advance_rejects_old_preparation_even_when_actual_artifact_is_unchanged",
+            "stored_receipts_debug_and_fixed_errors_do_not_expose_source_subject_artifact_or_paths"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/hwpx_package-a850ad738bc59b10.exe",
+          "tests": [
+            "bookmark_hwpx::private_tests::tampered_private_plan_binding_is_rejected",
+            "document_import::fields::semantics::catalog::assembly::review::tests::every_cached_review_raw_typed_use_graph_and_receipt_mutation_is_rejected",
+            "document_import::fields::semantics::catalog::assembly::review::tests::foreign_original_fields_and_duplicate_or_changed_graph_effects_are_rejected",
+            "document_import::fields::semantics::catalog::assembly::tests::cached_whole_graph_font_sidecar_and_receipt_tampering_are_each_rejected",
+            "document_import::fields::semantics::catalog::assembly::tests::foreign_document_branch_and_duplicate_metadata_are_rejected",
+            "document_import::fields::semantics::catalog::memo::tests::cached_memo_section_reference_binding_and_receipt_mutations_are_rejected",
+            "field_auto_number_hwpx::private_tests::sealed_plan_tampering_is_rejected",
+            "field_object_caption_hwpx::tests::sealed_composition_target_and_source_hash_tampering_are_rejected",
+            "form_control_hwpx::private_tests::public_errors_do_not_contain_source_values",
+            "form_control_hwpx::private_tests::tampered_private_plan_binding_is_rejected",
+            "hyperlink_hwpx::private_tests::recomputed_private_plan_tamper_is_rejected",
+            "native_form_package_lowering::tests::attribute_escape_preserves_literal_whitespace_and_xml_metacharacters",
+            "native_form_package_lowering::tests::bounded_zip_sink_checks_write_seek_and_negative_offsets_before_allocation",
+            "native_form_value_output::tests::private_bounded_write_seek_and_escaped_value_reject_before_allocation",
+            "native_form_value_output::tests::private_gap_patch_rejects_overlap_invalid_ranges_and_small_limit",
+            "native_form_value_output::tests::private_seal_rejects_profile_map_policy_source_access_and_seal_mutations",
+            "note_hwpx::private_tests::tampered_private_plan_binding_is_rejected",
+            "object_appearance_hwpx::tests::tampered_private_plan_binding_is_rejected",
+            "patch::conflict_validation_tests::fifty_thousand_distinct_insertions_are_admitted_without_quadratic_scan",
+            "patch::conflict_validation_tests::insertion_boundaries_conflict_but_adjacent_replacements_do_not",
+            "patch::conflict_validation_tests::sweep_matches_quadratic_reference_for_small_exhaustive_ranges",
+            "preserving_xml::tests::builds_parent_child_sibling_and_matching_tag_index",
+            "preserving_xml::tests::checked_spans_reject_bounds_order_and_utf8_splits",
+            "preserving_xml::tests::inherits_safe_xml_fail_closed_policy_and_codes",
+            "preserving_xml::tests::preserves_every_accepted_token_byte_and_digest",
+            "preserving_xml::tests::preserves_utf8_bom_as_an_explicit_non_markup_token",
+            "preserving_xml::tests::preserving_parser_keeps_finite_safe_reader_limits",
+            "preserving_xml::tests::resolves_rebound_element_and_attribute_namespaces",
+            "safe_xml::tests::blocks_dtd_custom_entity_pi_cdata_and_legacy_encoding",
+            "safe_xml::tests::enforces_depth_event_node_text_attribute_and_namespace_limits",
+            "safe_xml::tests::finite_limit_contract_rejects_zero_overflow_and_bad_relations",
+            "safe_xml::tests::parses_namespace_resolved_xml10_and_safe_references",
+            "safe_xml::tests::rejects_malformed_namespace_attribute_and_root_shapes",
+            "text_flow::source_memo::meta_tests::original_source_profile_counts_complete_meta_bytes_before_accepting_them",
+            "text_flow::source_memo::meta_tests::original_source_profile_meta_is_an_item_and_cannot_bypass_finite_budget",
+            "vs1_layout::tests::automatic_balanced_profile_has_no_explicit_column_break",
+            "vs1_layout::tests::deterministic_layout_artifact_reopens_semantically",
+            "vs1_layout::tests::explicit_and_automatic_profiles_keep_distinct_current_target_column_types",
+            "vs1_layout::tests::invalid_inputs_fail_closed_and_debug_redacts_text",
+            "vs1_layout::tests::mutated_artifact_is_not_released_to_a_consumer",
+            "vs1_layout::tests::visible_text_and_styles_are_bound_to_the_receipt",
+            "writer::tests::checkpoint_failures_leave_destination_absent_or_complete"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/id_index-b06ac4c244093f4c.exe",
+          "tests": [
+            "current_2020_core_profile_indexes_typed_cross_part_references_without_value_leak",
+            "duplicate_dangling_and_wrong_type_are_distinct_fail_closed_diagnostics",
+            "equation_v4_adds_native_equation_ids_without_weakening_formula_v3",
+            "finite_limits_reject_zero_ceiling_and_runtime_overflow",
+            "formula_v3_adds_typed_field_domains_without_weakening_table_v2",
+            "malformed_unknown_and_missing_target_never_produce_a_partial_index",
+            "rejected_preservation_part_blocks_indexing_before_semantic_downgrade",
+            "table_v2_adds_typed_table_domains_without_weakening_core_v1"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/memo_style_output-f87ca3d69966fa82.exe",
+          "tests": [
+            "all_original_native_enum_values_reopen_through_original_catalog",
+            "foreign_anchor_fresh_source_changes_noop_invalid_values_and_small_writer_limit_never_output",
+            "official_memo_pr_declarations_resolve_without_disabling_duplicate_or_dangling_checks",
+            "original_writer_reopens_surgical_seven_attribute_output_and_all_other_bytes_stay_exact"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/patch_element_content-4a43081747b336ae.exe",
+          "tests": [
+            "content_children_and_aggregate_fragment_limits_are_checked_before_output_allocation",
+            "content_only_edit_preserves_inherited_namespace_wrapper_unknown_attributes_and_all_other_bytes",
+            "overlapping_content_and_descendant_edits_remain_atomic_conflicts",
+            "self_closing_content_target_and_dangling_output_style_are_rejected_by_original_guards"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/patch_engine-f16fef8e94eda711.exe",
+          "tests": [
+            "add_relationship_and_part_are_atomic_closed_and_order_independent",
+            "deterministic_id_reservation_rolls_back_on_post_validation_failure",
+            "five_xml_intents_are_surgical_and_keep_every_other_part_exact",
+            "fixed_seed_random_sequences_are_deterministic_and_limits_fail_closed",
+            "overlap_stale_root_and_malicious_fragments_fail_before_publication",
+            "separated_writers_are_deterministic_atomic_and_no_overwrite"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_body_output-8759bbf6453e18f5.exe",
+          "tests": [
+            "complete_memo_body_output_keeps_wrapper_metadata_main_body_and_every_other_part_exact",
+            "hidden_body_uses_same_original_writer_and_preserves_memo_body_and_metadata",
+            "locked_original_capture_has_no_review_target_and_never_fabricates_one",
+            "missing_body_foreign_source_opaque_and_finite_output_budgets_reject_without_defaults",
+            "stale_foreign_missing_noop_empty_unsafe_nested_and_dangling_bodies_do_not_output"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_cell_body_output-581a88b7cee111ae.exe",
+          "tests": [
+            "ancestor_protection::individual_review_paragraphs_reject_protected_main_ancestors",
+            "ancestor_protection::protection_outside_multiple_main_tables_is_not_hidden_by_review_boundary",
+            "ancestor_protection::protection_rejects_before_noop_values_or_writer_but_source_drift_still_wins",
+            "ancestor_protection::review_cells_reject_all_three_main_ancestor_flags",
+            "ancestor_protection::table_insertion_selection_checks_outer_protection_before_template_admission",
+            "ancestor_protection::unknown_observed_flag_values_are_not_reinterpreted_as_unprotected",
+            "ancestor_protection::whole_memo_and_hidden_bodies_reject_all_three_main_ancestor_flags",
+            "ancestor_protection::zero_flags_preserve_exact_patches_and_other_spellings_never_bypass_original_admission",
+            "identical_cell_values_and_immutable_no_review_capture_never_fabricate_edits",
+            "memo_and_hidden_cell_output_preserve_every_byte_outside_actual_cell_contents",
+            "mutation_protection::deleting_unprotected_review_preserves_locked_peer_main_geometry_and_all_parts",
+            "mutation_protection::deletion_rejects_all_three_main_ancestor_flags_for_both_review_kinds",
+            "mutation_protection::deletion_rejects_protected_tables_or_cells_consumed_inside_either_review",
+            "mutation_protection::protected_unselected_review_does_not_block_an_unrelated_exact_paragraph_edit",
+            "mutation_protection::replacement_of_a_paragraph_does_not_erase_a_protected_descendant_table",
+            "mutation_protection::replacing_outer_cell_contents_cannot_remove_a_protected_nested_table",
+            "mutation_protection::source_drift_and_foreign_selection_still_reject_before_mutation",
+            "mutation_protection::whole_body_replacement_checks_consumed_protection_before_values_or_writer",
+            "nested_cell_output_uses_full_source_path_and_rejects_outer_table_or_cell_protection",
+            "other_review_cell_non_cell_main_and_foreign_document_selections_reject",
+            "unsafe_empty_opaque_style_protection_and_finite_budgets_never_return_partial_artifacts",
+            "whole_source_drift_and_old_anchor_after_one_output_are_not_rebound"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_delete_output-c5dd540b6b40acb8.exe",
+          "tests": [
+            "hidden_direct_and_ctrl_delete_preserve_both_memos_exact",
+            "memo_delete_removes_both_paired_wrappers_not_visible_text_other_reviews_or_parts",
+            "memo_without_body_is_removed_without_fabricating_body_or_metadata",
+            "nested_hidden_review_is_rejected_by_original_import_before_deletion",
+            "stale_wrong_end_body_foreign_and_deleted_selection_do_not_output",
+            "tiny_writer_and_historical_captured_source_without_review_are_rejected"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+          "tests": [
+            "actual_geometry_rejects_out_of_bounds_and_overflow_coordinates",
+            "bounded_constructor_rejects_empty_duplicate_cell_and_aggregate_limits",
+            "canonical_edit_order_repeat_all_cells_and_single_cell_boundary",
+            "fresh_source_and_template_whole_bytes_remain_required",
+            "memo_hidden_fill_multiple_paragraphs_exact_other_cells_geometry_parts_and_receipt",
+            "nested_new_table_fills_only_new_cell_and_retains_outer_protection_rejection",
+            "original_package_id_guard_rejects_existing_and_cross_cell_duplicates",
+            "previous::existing_review_cell_context_retains_all_ancestor_protection_checks_and_finite_bounds",
+            "previous::foreign_other_review_main_nonparagraph_and_template_selections_reject",
+            "previous::fresh_replay_binds_both_entire_archives_including_opaque_parts",
+            "previous::memo_and_hidden_prepare_original_native_template_with_actual_tracks_and_ids",
+            "previous::native::closed_package_replacement_preserves_every_nontarget_part_and_graph",
+            "previous::native::creates_arbitrary_rectangular_nonuniform_unmerged_table_and_reopens_exactly",
+            "previous::native::input_is_bounded_and_debug_omits_ids_hashes_and_content",
+            "previous::native::lowerer_rechecks_source_template_current_flow_and_foreign_plan",
+            "previous::native::nonblank_template_and_native_identifier_collision_fail_closed",
+            "previous::native::one_by_one_boundary_uses_only_template_outer_edges",
+            "previous::native::rejects_control_wrapped_table_template_as_non_native_profile",
+            "previous::native::request_rejects_part_template_context_flow_identity_track_and_json_tampering",
+            "previous::nonempty_placeholder_and_native_table_collision_reject",
+            "previous::original_builder_header_is_not_assumed_compatible_with_native_template",
+            "previous::original_nonblank_nonuniform_repeat_and_header_guards_remain",
+            "unsafe_opaque_field_dangling_styles_and_original_writer_limits_reject"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_locations-64747444168c92b2.exe",
+          "tests": [
+            "full_sibling_inventory_keeps_order_and_complete_bindings_without_numeric_identity_aliases",
+            "hidden_direct_and_ctrl_use_actual_item_and_same_point_not_fabricated_range",
+            "memo_source_points_bind_original_paragraph_control_refs_and_cross_run_pair",
+            "nested_table_cell_keeps_complete_path_and_never_flattens_into_simple_section_anchor",
+            "original_locked_capture_without_reviews_has_no_fabricated_location",
+            "sibling_paragraph_order_not_numeric_ids_or_nested_memo_body_paragraphs",
+            "stale_other_document_and_metadata_only_source_changes_cannot_rebind_cached_points"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_paragraph_output-e7777a91049aeb82.exe",
+          "tests": [
+            "foreign_other_review_main_nonparagraph_and_whole_source_drift_reject",
+            "fresh_output_requires_new_anchors_and_immutable_capture_does_not_fabricate_reviews",
+            "memo_and_hidden_plain_paragraph_edits_preserve_all_rich_siblings_and_other_parts",
+            "nested_cell_paragraph_edits_reuse_original_ancestor_protection_guards",
+            "no_op_opaque_bad_style_id_and_finite_writer_values_never_return_artifacts",
+            "unsupported_nested_review_is_rejected_by_original_body_reader_not_promoted"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+          "tests": [
+            "actual_memo_and_hidden_table_outputs_reopen_with_exact_tracks_and_all_other_parts",
+            "geometry_source_template_and_writer_bounds_fail_without_partial_output",
+            "one_by_one_boundary_and_requested_tracks_change_only_native_candidate_not_source",
+            "previous::existing_review_cell_context_retains_all_ancestor_protection_checks_and_finite_bounds",
+            "previous::foreign_other_review_main_nonparagraph_and_template_selections_reject",
+            "previous::fresh_replay_binds_both_entire_archives_including_opaque_parts",
+            "previous::memo_and_hidden_prepare_original_native_template_with_actual_tracks_and_ids",
+            "previous::native::closed_package_replacement_preserves_every_nontarget_part_and_graph",
+            "previous::native::creates_arbitrary_rectangular_nonuniform_unmerged_table_and_reopens_exactly",
+            "previous::native::input_is_bounded_and_debug_omits_ids_hashes_and_content",
+            "previous::native::lowerer_rechecks_source_template_current_flow_and_foreign_plan",
+            "previous::native::nonblank_template_and_native_identifier_collision_fail_closed",
+            "previous::native::one_by_one_boundary_uses_only_template_outer_edges",
+            "previous::native::rejects_control_wrapped_table_template_as_non_native_profile",
+            "previous::native::request_rejects_part_template_context_flow_identity_track_and_json_tampering",
+            "previous::nonempty_placeholder_and_native_table_collision_reject",
+            "previous::original_builder_header_is_not_assumed_compatible_with_native_template",
+            "previous::original_nonblank_nonuniform_repeat_and_header_guards_remain",
+            "same_native_identity_in_another_source_section_cannot_be_inserted",
+            "table_inserted_in_existing_review_cell_preserves_outer_table_and_every_other_cell",
+            "unrelated_duplicate_paragraph_identity_still_fails_original_package_guard"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/stored_comment_provider-9065c76bcbac10b7.exe",
+          "tests": [
+            "all_five_original_operations_use_revision_selected_ir_and_original_compiler_without_writes",
+            "document_scope_is_checked_before_complete_state_and_different_scope_cannot_reverify",
+            "exact_raw_ir_canonicalization_rejects_whitespace_duplicate_and_unknown_keys",
+            "head_advance_and_empty_head_are_rejected_without_mutating_prior_sealed_node",
+            "head_change_during_actual_ir_download_is_rejected_in_prepare_and_fresh_verify",
+            "independent_ir_and_source_acl_revocations_precede_route_denial_and_regrant_revalidates",
+            "independent_ir_and_source_ciphertext_corruption_rejects_and_never_changes_other_content",
+            "independent_ir_and_source_quarantine_precede_route_denial",
+            "missing_ir_wrong_kind_media_and_three_binding_digests_are_rejected",
+            "persisted_partial_import_or_protected_signed_encrypted_graphs_are_not_authority",
+            "provider_rejects_mismatched_actor_tenant_or_absent_read_scope_and_other_actor_reverification",
+            "request_and_insertion_remain_strict_and_do_not_publish_or_default_native_values",
+            "rich_bodies::actual_head_advance_in_download_or_after_cache_rejects_without_atomic_publication_claim",
+            "rich_bodies::all_five_operations_load_entire_persisted_bodies_and_bind_actual_final_compiler_without_writes",
+            "rich_bodies::canonical_outer_ir_never_admits_noncanonical_unknown_duplicate_or_missing_inner_body_json",
+            "rich_bodies::fresh_actor_tenant_project_branch_and_document_cannot_rebind_cached_rich_preparation",
+            "rich_bodies::independent_result_and_ir_acl_aead_quarantine_fail_before_route_and_regrant_reverifies",
+            "rich_bodies::original_missing_ir_kind_media_scanner_and_binding_digest_guards_are_not_bypassed",
+            "rich_bodies::persisted_entire_body_order_digest_and_original_graph_protection_constraints_are_checked",
+            "rich_bodies::stored_rich_insertion_and_original_request_and_partial_document_admission_never_default",
+            "safe_receipt_and_debug_never_contain_document_actor_request_or_paths",
+            "stored_comment_views_require_exact_complete_section_style_and_review_binding",
+            "stored_complete_comment_state_never_defaults_missing_unknown_duplicate_or_oversized_data",
+            "unverified_scanner_for_source_or_ir_and_wrong_source_kind_never_prepare"
+          ]
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/text_flow-511dd1904a1b61b0.exe",
+          "tests": [
+            "adjacent_runs_and_text_spans_are_not_merged",
+            "current_2020_vs0_paragraph_lifts_text_without_promoting_layout",
+            "field_mismatch_duplicate_unclosed_and_depth_fail_closed",
+            "finite_limits_reject_before_partial_flow_or_output",
+            "fixed_unicode_run_boundary_corpus_is_deterministic",
+            "invalid_profile_attributes_text_tabs_and_fields_are_distinct",
+            "nested_field_boundaries_can_cross_run_boundaries",
+            "nonsemantic_document_envelope_is_not_silently_discarded",
+            "potentially_visible_opaque_content_blocks_semantic_text",
+            "unicode_tabs_line_breaks_and_escaping_roundtrip",
+            "unsupported_content_is_opaque_and_never_normalized",
+            "writer_revalidates_publicly_mutable_text_and_fields"
+          ]
+        }
+      ],
+      "duplicate_functions": [
+        {
+          "name": "native::closed_package_replacement_preserves_every_nontarget_part_and_graph",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+              "test": "actual_import::source_review_table_output::fixture::native::closed_package_replacement_preserves_every_nontarget_part_and_graph"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::native::closed_package_replacement_preserves_every_nontarget_part_and_graph"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::native::closed_package_replacement_preserves_every_nontarget_part_and_graph"
+            }
+          ]
+        },
+        {
+          "name": "native::creates_arbitrary_rectangular_nonuniform_unmerged_table_and_reopens_exactly",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+              "test": "actual_import::source_review_table_output::fixture::native::creates_arbitrary_rectangular_nonuniform_unmerged_table_and_reopens_exactly"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::native::creates_arbitrary_rectangular_nonuniform_unmerged_table_and_reopens_exactly"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::native::creates_arbitrary_rectangular_nonuniform_unmerged_table_and_reopens_exactly"
+            }
+          ]
+        },
+        {
+          "name": "native::input_is_bounded_and_debug_omits_ids_hashes_and_content",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+              "test": "actual_import::source_review_table_output::fixture::native::input_is_bounded_and_debug_omits_ids_hashes_and_content"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::native::input_is_bounded_and_debug_omits_ids_hashes_and_content"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::native::input_is_bounded_and_debug_omits_ids_hashes_and_content"
+            }
+          ]
+        },
+        {
+          "name": "native::lowerer_rechecks_source_template_current_flow_and_foreign_plan",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+              "test": "actual_import::source_review_table_output::fixture::native::lowerer_rechecks_source_template_current_flow_and_foreign_plan"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::native::lowerer_rechecks_source_template_current_flow_and_foreign_plan"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::native::lowerer_rechecks_source_template_current_flow_and_foreign_plan"
+            }
+          ]
+        },
+        {
+          "name": "native::nonblank_template_and_native_identifier_collision_fail_closed",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+              "test": "actual_import::source_review_table_output::fixture::native::nonblank_template_and_native_identifier_collision_fail_closed"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::native::nonblank_template_and_native_identifier_collision_fail_closed"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::native::nonblank_template_and_native_identifier_collision_fail_closed"
+            }
+          ]
+        },
+        {
+          "name": "native::one_by_one_boundary_uses_only_template_outer_edges",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+              "test": "actual_import::source_review_table_output::fixture::native::one_by_one_boundary_uses_only_template_outer_edges"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::native::one_by_one_boundary_uses_only_template_outer_edges"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::native::one_by_one_boundary_uses_only_template_outer_edges"
+            }
+          ]
+        },
+        {
+          "name": "native::rejects_control_wrapped_table_template_as_non_native_profile",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+              "test": "actual_import::source_review_table_output::fixture::native::rejects_control_wrapped_table_template_as_non_native_profile"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::native::rejects_control_wrapped_table_template_as_non_native_profile"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::native::rejects_control_wrapped_table_template_as_non_native_profile"
+            }
+          ]
+        },
+        {
+          "name": "native::request_rejects_part_template_context_flow_identity_track_and_json_tampering",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+              "test": "actual_import::source_review_table_output::fixture::native::request_rejects_part_template_context_flow_identity_track_and_json_tampering"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::native::request_rejects_part_template_context_flow_identity_track_and_json_tampering"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::native::request_rejects_part_template_context_flow_identity_track_and_json_tampering"
+            }
+          ]
+        },
+        {
+          "name": "previous::existing_review_cell_context_retains_all_ancestor_protection_checks_and_finite_bounds",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::existing_review_cell_context_retains_all_ancestor_protection_checks_and_finite_bounds"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::existing_review_cell_context_retains_all_ancestor_protection_checks_and_finite_bounds"
+            }
+          ]
+        },
+        {
+          "name": "previous::foreign_other_review_main_nonparagraph_and_template_selections_reject",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::foreign_other_review_main_nonparagraph_and_template_selections_reject"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::foreign_other_review_main_nonparagraph_and_template_selections_reject"
+            }
+          ]
+        },
+        {
+          "name": "previous::fresh_replay_binds_both_entire_archives_including_opaque_parts",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::fresh_replay_binds_both_entire_archives_including_opaque_parts"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::fresh_replay_binds_both_entire_archives_including_opaque_parts"
+            }
+          ]
+        },
+        {
+          "name": "previous::memo_and_hidden_prepare_original_native_template_with_actual_tracks_and_ids",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::memo_and_hidden_prepare_original_native_template_with_actual_tracks_and_ids"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::memo_and_hidden_prepare_original_native_template_with_actual_tracks_and_ids"
+            }
+          ]
+        },
+        {
+          "name": "previous::nonempty_placeholder_and_native_table_collision_reject",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::nonempty_placeholder_and_native_table_collision_reject"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::nonempty_placeholder_and_native_table_collision_reject"
+            }
+          ]
+        },
+        {
+          "name": "previous::original_builder_header_is_not_assumed_compatible_with_native_template",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::original_builder_header_is_not_assumed_compatible_with_native_template"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::original_builder_header_is_not_assumed_compatible_with_native_template"
+            }
+          ]
+        },
+        {
+          "name": "previous::original_nonblank_nonuniform_repeat_and_header_guards_remain",
+          "instances": [
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c.exe",
+              "test": "previous::original_nonblank_nonuniform_repeat_and_header_guards_remain"
+            },
+            {
+              "executable": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+              "test": "previous::original_nonblank_nonuniform_repeat_and_header_guards_remain"
+            }
+          ]
+        }
+      ],
+      "normalization": "Only native:: fixture prefix stripped; all other module-qualified names retained"
+    },
+    "focused_failed_initial_repetitions_not_added_again": true
+  },
+  "strict_lint": {
+    "initial_failures_retained": true,
+    "command": "cargo clippy -p hwpx-package --lib plus same16 integration suites --target-dir target/p09-111-review-mutation-protection-lint -- -D warnings",
+    "start_chunk": "9f101d",
+    "session_id": 65057,
+    "terminal_chunk": "9632da",
+    "exit_code": 0
+  },
+  "isolated_new_Rust1_fmt_and_diff_check": {
+    "terminal_chunk": "446fb3",
+    "exit_code": 0
+  },
+  "current_source_component15": {
+    "command": "python tools/p09/validate_reference_conformance_contract.py --current-source-v2",
+    "terminal_chunk": "3fee65",
+    "exit_code": 0,
+    "upstream_validators_verified": 15,
+    "green_rows": 0,
+    "P09_gate": "OPEN"
+  },
+  "original_default_failure": {
+    "terminal_chunk": "a5619b",
+    "exit_code": 1,
+    "error": "matrix_drift",
+    "retained": true
+  },
+  "prior_whole_source_audit": {
+    "terminal_chunk": "d0ea66",
+    "exit_code": 0,
+    "previous_sources": 971,
+    "unchanged": 967,
+    "whole_parent_preimages": 4,
+    "whole_inverse_exact": true,
+    "raw_entries": 1806,
+    "old_executables": 306
+  },
+  "actual_source_cases": {
+    "deletion_observed_main_ancestor_and_consumed_protection": true,
+    "whole_body_paragraph_cell_consumed_descendants_checked": true,
+    "related_native_three_flags_original_rule_only": true,
+    "protected_peer_not_globally_blocks_unrelated_selection": true,
+    "complete_expected_expanded_bytes_and_reimport_compared": true,
+    "source_and_foreign_validation_before_mutation": true,
+    "protection_before_values_writer_and_partial_artifacts": true
+  },
+  "style_mapping_investigation": {
+    "original_catalog_and_lowerer_inspected": true,
+    "section_wide_memoShapeIDRef_observed": true,
+    "new_native_cascade_or_protection_meaning_qualified": false,
+    "style_API_changed": false
+  },
+  "boundary_check": {
+    "terminal_chunk": "0f09e8",
+    "Hwp_process_count": 0,
+    "PLANS_exists": false,
+    "HEAD_unchanged": true
+  },
+  "native_Hangul_COM_UI_access_prompt_actual_SQL_operating_trust_DB_settings_install_stage_commit_push_delete_move_executed": false,
+  "P09_gate": "OPEN",
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "python9": {
+    "command": "python -m unittest tools.p09.tests.test_review_mutation_protection_progress",
+    "terminal_chunk": "f8476e",
+    "exit_code": 0,
+    "passed": 9
+  },
+  "first_current_manifest_failure_retained": {
+    "terminal_chunk": "02b1a7",
+    "error": "current_group_coverage_drift",
+    "native_product_promotion": false
+  },
+  "failed_current_snapshot_original_raw_groups_verified": {
+    "terminal_chunk": "18d5f7",
+    "exit_code": 0,
+    "entries": 68,
+    "not_current_acceptance": true
+  }
+}

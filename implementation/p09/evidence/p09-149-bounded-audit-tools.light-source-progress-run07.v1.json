@@ -1,0 +1,89 @@
+{
+  "schema_version": "hwpx-agent.p09-bounded-audit-tool-light-verification/v1",
+  "state": "PASS_LIGHT_BOUNDED_AUDIT_TOOL_MOCKS_NOT_ACTUAL_TOOL_OR_PC_FREEZE_PROOF",
+  "fixtures_started": true,
+  "tests_run": 20,
+  "tests_passed": 20,
+  "failed_tests": [],
+  "source_freeze": [
+    {
+      "path": "tools/p09/bounded_audit_tools.py",
+      "bytes": 14961,
+      "sha256": "d7ecfa9ed77fe44ba95a66a143fcc9ca200a652853555887177558b806d73167"
+    },
+    {
+      "path": "tools/p09/tests/test_bounded_audit_tools.py",
+      "bytes": 20259,
+      "sha256": "3622bbe6e5382816e4ab31e287ddd966e8e461ec96e8c64bf96e60f111d40baf"
+    },
+    {
+      "path": "tools/p09/verify_bounded_audit_tools_light.py",
+      "bytes": 6147,
+      "sha256": "bcab0466806d1b82baaf961dd4a9aa9e9f67eb902ce0b0b3b9c40e604234ee50"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 22942,
+      "sha256": "dc212b25ebc534ab19f643c51361271bb86392cf01b669a0fe25f3e37ea13e01"
+    },
+    {
+      "path": "tools/p09/verify_audit_evidence_io.py",
+      "bytes": 6183,
+      "sha256": "d4a8587e9cbbb1840a527d46d5d8cd49a7e3eb52b306a1bb5e5e2110698bf38d"
+    },
+    {
+      "path": "rustfmt.toml",
+      "bytes": 72,
+      "sha256": "db00d320c47bf818306a7c188270fdd372488ae6288668b8ac412f0c70069387"
+    },
+    {
+      "path": "rust-toolchain.toml",
+      "bytes": 86,
+      "sha256": "fa0addad5676243d360310f981a69528b0341d295cb5012253d9721aba4d30c0"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "self_resource_before": {
+    "cpu_seconds": 0.09375,
+    "memory_observed": true,
+    "working_set_mib": 22.0,
+    "private_mib": 13.67,
+    "system": {
+      "time_utc": "2026-10-06T11:11:59.486950+00:00",
+      "system_cpu_percent": 0.0,
+      "available_ram_mib": 8261.24,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.9290654756176,
+      "commit_used_percent": 35.926374027773434
+    }
+  },
+  "logical_cpu_limit": 1,
+  "priority": "BelowNormal",
+  "raw_logs_printed_or_saved": false,
+  "actual_rustfmt_smoke_attempted": false,
+  "rustfmt_smoke_accepted": false,
+  "actual_rg_inventory_run": false,
+  "full_authority_or_negative_audit_run": false,
+  "actual_Cargo_Rust_compile_product_EXE_SQL_native_run": false,
+  "new_git_started": false,
+  "system_or_Defender_or_WSL_settings_changed": false,
+  "P09_gate": "OPEN",
+  "product_complete": false,
+  "verification_elapsed_seconds": 0.0186,
+  "self_resource_after": {
+    "cpu_seconds": 0.15625,
+    "memory_observed": true,
+    "working_set_mib": 28.21,
+    "private_mib": 19.48,
+    "system": {
+      "time_utc": "2026-10-06T11:11:59.550870+00:00",
+      "system_cpu_percent": 10.94,
+      "available_ram_mib": 8244.12,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.875328499907127,
+      "commit_used_percent": 35.93700719533614
+    }
+  },
+  "elapsed_seconds": 0.0854,
+  "elapsed_scope": "main_entry_through_final_resource_sample_includes_imports_and_source_freezes_excludes_python_startup_and_receipt_write"
+}

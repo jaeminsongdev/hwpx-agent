@@ -1,0 +1,14 @@
+{
+  "schema_version": "hwpx-agent.p09-formula-issuer-registry-source-finding/v1",
+  "state": "SOURCE_REVIEW_ROLLBACK_VISIBILITY_AND_INSERT_WINDOW_FIXED_NOT_LIVE_SQL",
+  "pre_fix_source": "implementation/p09/source-archive/p09-136-pre-global-rollback-visibility/migrations/postgres/0022_p09_formula_issuer_registry.down.sql",
+  "finding": "FORCE_RLS_can_hide_other_tenant_history_from_an_ordinary_table_owner_and_a_concurrent_insert_can_follow_an_unlocked_empty_check",
+  "source_fix": "require_explicit_downgrade_gate_and_global_superuser_or_BYPASSRLS_visibility_then_ACCESS_EXCLUSIVE_on_all4_new_history_tables_before_empty_check",
+  "application_role_privilege_grants_added": false,
+  "RLS_disabled_on_history_tables": false,
+  "pre_fix_contract_counterexample_expected": "test_empty_history_only_explicit_latest_rollback_and_no_cascade",
+  "actual_rollback_executed": false,
+  "actual_SQL_executed": false,
+  "P09_gate": "OPEN",
+  "product_complete": false
+}

@@ -1,0 +1,16 @@
+{
+  "schema": "hwpx-agent.p09-116-formula-policy-initial-failures/v1",
+  "library_check": {"start_chunk":"2308f7","session":44678,"terminal_chunk":"aa20cc","exit_code":0,"runtime_seconds":27.33},
+  "initial_focused": {"start_chunk":"bb3364","session":40471,"terminal_chunk":"a9dbb1","exit_code":101,"passed":9,"failed":1,"filtered":186,"runtime_seconds":160.17,"cause":"Synthetic same-content policy ingest with conflicting media/role hit original dedup Conflict before consumer validation."},
+  "independent_failure_reproduction": {"terminal_chunk":"de5b53","exit_code":101,"passed":0,"failed":1,"runtime_seconds":0.56,"cause":"Original artifact ingest Conflict"},
+  "corrected_descriptor_focus": {"terminal_chunk":"1cc74a","exit_code":0,"passed":1,"filtered":196,"runtime_seconds":2.54,"fix":"Independent synthetic artifact store per descriptor, original service dedup guard unchanged."},
+  "initial_strict_lint": {"start_chunk":"be9c9e","session":80658,"terminal_chunk":"c5104a","exit_code":1,"cause":"semicolon_if_nothing_returned in newly authored fixture","failed_executable_created":false},
+  "corrected_strict_lint": {"terminal_chunk":"7ddc50","exit_code":0,"warning_suppression_added":false},
+  "strengthened_positional_shape_focus": {"terminal_chunk":"649400","exit_code":0,"passed":1,"filtered":196,"runtime_seconds":3.19,"complete_declaration_order_root_binding_rule_begin_end_arrays_rejected":true},
+  "failed_executable": "target/p09-116-formula-policy/debug/deps/form_stored_provider-e02d02396d2f2bbd-initial-fixture-conflict.exe",
+  "failed_sources": "implementation/p09/source-archive/p09-116-initial-fixture-conflict/",
+  "pre_lint_source": "implementation/p09/source-archive/p09-116-pre-lint-and-shape-strengthening/crates/product-cli/tests/form_stored_provider/actual_import/formula_policy.rs",
+  "focused_or_failed_runs_added_to_final_total":false,
+  "original_guards_or_failed_evidence_deleted":false,
+  "issuer_native_SQL_or_Gate_claim":false
+}

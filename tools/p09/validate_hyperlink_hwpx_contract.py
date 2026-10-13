@@ -8,6 +8,14 @@ import re
 import sys
 from typing import Any
 
+if __package__:
+    from . import component_current_source
+else:
+    from pathlib import Path as _Path
+    import sys as _sys
+    _sys.path.insert(0, str(_Path(__file__).resolve().parents[2]))
+    from tools.p09 import component_current_source
+
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = "protocol/private/p09-hyperlink-hwpx-v1.json"
@@ -37,9 +45,12 @@ OFFICIAL_SOURCE_SHA256 = {
 IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/link_reference.rs": "fd2e80c05810eea21b085499bab4f9bf95b8329287adc55fd46e240eb113766f",
     "crates/domain-ir/tests/link_reference.rs": "1514ff19e9c2041335ad62033767c2042056e0a1d3de3c1e69b6a2029107d252",
-    "crates/hwpx-package/src/lib.rs": "f97fe8a7fcd972280a0e3306953347c5663a84d592045f799edc0e6e12656f12",
     "crates/hwpx-package/src/hyperlink_hwpx.rs": "416572db4e7f37bcfb4a6dfb4976489099d0087b21e36109ebd967649146a1e3",
     "crates/hwpx-package/tests/hyperlink_hwpx.rs": "3b36d7ff7b920c28d0cc290f82548acbad9df00a62882adab8b273c2a5b8b518",
+}
+PUBLIC_EXPORT = {
+    "path": "crates/hwpx-package/src/lib.rs",
+    "markers": ["mod hyperlink_hwpx;", "pub use hyperlink_hwpx::{"],
 }
 CAPABILITIES = {"REF-033": "ref.hyperlink_insert", "REF-034": "ref.hyperlink_edit"}
 CLAIMS = {
@@ -93,8 +104,11 @@ def canonical_digest(path: Path) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def validate(root: Path = ROOT) -> dict[str, Any]:
+def validate(root: Path = ROOT, *, source_profile: str = "historical_v1") -> dict[str, Any]:
     errors: list[str] = []
+    if source_profile not in ("historical_v1", component_current_source.PROFILE):
+        return result(["source_profile_unknown"], False)
+    current = source_profile == component_current_source.PROFILE
     try:
         contract = load(root, CONTRACT)
     except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
@@ -103,6 +117,7 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         "schema_version", "task", "scope", "source_lock_canonicalization",
         "source_qualification", "migration", "policy", "report", "source_locks",
         "capability_features", "domain_model", "adapter_profile", "implementation_files",
+        "public_export",
         "native_profile", "state_binding", "failure_policy", "evidence_boundary", "gate_decision",
     }
     if not isinstance(contract, dict) or set(contract) != required:
@@ -143,17 +158,21 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         errors.append("profiles")
     if contract.get("implementation_files") != list(IMPLEMENTATION_SHA256):
         errors.append("implementation_files")
-    for path, digest in IMPLEMENTATION_SHA256.items():
+    expected_implementation = component_current_source.IMPLEMENTATION_SHA256["hyperlink_hwpx"] if current else IMPLEMENTATION_SHA256
+    for path, digest in expected_implementation.items():
         try:
             if not DIGEST.fullmatch(digest) or canonical_digest(file(root, path)) != digest:
                 errors.append("implementation_digest")
         except (OSError, ValueError):
             errors.append("implementation_digest")
+    validate_public_export(root, contract.get("public_export"), errors)
     validate_native_profile(contract.get("native_profile"), errors)
     validate_boundary(contract, errors)
     qualification_ok = validate_qualification(root, errors)
     validate_text(root, errors)
-    return result(sorted(set(errors)), qualification_ok)
+    current_verified = component_current_source.verify(root, "hyperlink_hwpx", errors) if current else False
+    value = result(sorted(set(errors)), qualification_ok)
+    return component_current_source.decorate(value, "hyperlink_hwpx", current_verified) if current else value
 
 
 def validate_native_profile(value: Any, errors: list[str]) -> None:
@@ -177,6 +196,18 @@ def validate_native_profile(value: Any, errors: list[str]) -> None:
         errors.append("native_profile")
     if set(value) != {"field_runs", "begin_attributes", "parameters", "identity", "range", "edit"}:
         errors.append("native_profile")
+
+
+def validate_public_export(root: Path, value: Any, errors: list[str]) -> None:
+    if value != PUBLIC_EXPORT:
+        errors.append("public_export")
+        return
+    try:
+        source = file(root, PUBLIC_EXPORT["path"]).read_text(encoding="utf-8")
+        if any(marker not in source for marker in PUBLIC_EXPORT["markers"]):
+            errors.append("public_export")
+    except (OSError, UnicodeDecodeError, ValueError):
+        errors.append("public_export")
 
 
 def validate_boundary(contract: dict[str, Any], errors: list[str]) -> None:
@@ -221,7 +252,7 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
         return False
     if not isinstance(value, dict) or set(value) != {
         "schema_version", "task", "base_commit", "scope", "target", "discovery",
-        "official_model", "source_sha256", "implementation_sha256", "tests", "claims",
+        "official_model", "source_sha256", "implementation_sha256", "public_export", "tests", "claims",
     }:
         errors.append("qualification_shape")
     if (
@@ -253,6 +284,8 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
         errors.append("qualification_sources")
     if value.get("implementation_sha256") != IMPLEMENTATION_SHA256:
         errors.append("qualification_implementation")
+    if value.get("public_export") != {**PUBLIC_EXPORT, "verified": True}:
+        errors.append("qualification_public_export")
     if value.get("tests") != {
         "public_link_reference": "10/10 PASS",
         "public_hyperlink_hwpx": "8/8 PASS",
@@ -312,6 +345,6 @@ def result(errors: list[str], qualification_verified: bool) -> dict[str, Any]:
 
 
 if __name__ == "__main__":
-    outcome = validate()
+    outcome = validate(source_profile=component_current_source.cli_profile(sys.argv[1:]))
     print(json.dumps(outcome, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
     sys.exit(0 if outcome["state"] == "pass" else 1)

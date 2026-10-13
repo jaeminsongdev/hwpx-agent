@@ -1,0 +1,59 @@
+{
+  "schema": "hwpx-agent.p09-109-stored-rich-comment-initial-failures/v1",
+  "state": "OWNED_TEST_FAILURES_RETAINED_NOT_native_SQL_product_or_Gate",
+  "failures": [
+    {
+      "stage": "first_stored_comment_test_compilation",
+      "start_chunk": "f59e77",
+      "session_id": 48030,
+      "terminal_chunk": "5eecfb",
+      "exit_code": 1,
+      "errors": [
+        "E0308 set_permissions returns u64, flag.store returns unit",
+        "E0308 domain ProjectId is not revision ProjectId",
+        "E0433 BranchId not imported"
+      ],
+      "exact_owned_test_source": "implementation/p09/source-archive/p09-109-failed-test-compilation/rich_bodies.rs",
+      "fix": "discard fixture set_permissions return with statement; explicit revision_service IDs; no production/test assertion weakening"
+    },
+    {
+      "stage": "second_test_compilation_and_pending_first_lint",
+      "test_terminal_chunk": "b63e4b",
+      "lint_start_chunk": "346310",
+      "lint_session_id": 32664,
+      "lint_terminal_chunk": "498ae8",
+      "exit_code": 1,
+      "error": "E0308 quarantine returns ArtifactDescriptor rather than unit",
+      "exact_owned_test_source": "implementation/p09/source-archive/p09-109-failed-quarantine-return/rich_bodies.rs",
+      "fix": "discard fixture quarantine return via statement; no guard or lint suppression"
+    },
+    {
+      "stage": "oversized_negative_fixture_construction",
+      "terminal_chunk": "783d26",
+      "exit_code": 1,
+      "passed": 23,
+      "failed": 1,
+      "ignored": 0,
+      "error": "LimitExceeded from ORIGINAL graph string ceiling before new body parser",
+      "failed_test": "rich_bodies::canonical_outer_ir_never_admits_noncanonical_unknown_duplicate_or_missing_inner_body_json",
+      "exact_owned_test_source": "implementation/p09/source-archive/p09-109-failed-oversized-ir-construction/rich_bodies.rs",
+      "exact_executable": "target/p09-109-stored-rich-comment/debug/deps/stored_comment_provider-9065c76bcbac10b7-failed-oversized-ir.exe",
+      "fix": "retain oversized negative; explicitly assert original graph construction rejection plus actual stored raw graph rejection; DO NOT widen original limits"
+    }
+  ],
+  "library_check": {
+    "start_chunk": "635f44",
+    "session_id": 23453,
+    "terminal_chunk": "e662df",
+    "exit_code": 0
+  },
+  "focused_corrected_tests": {
+    "terminal_chunk": "c9d656",
+    "passed": 24,
+    "failed": 0,
+    "ignored": 0,
+    "not_added_again_to_final_counts": true
+  },
+  "observed_production_failure": false,
+  "raw_logs_or_actual_secret_values_copied": false
+}

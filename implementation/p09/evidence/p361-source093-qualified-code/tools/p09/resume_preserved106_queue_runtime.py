@@ -1,0 +1,3097 @@
+"""P340: 보존106 compound100에서 시작하는 고정 실행 큐.
+원93 코드/제품 증거 보존. 새2 코드 포함 full1658. 통과 제품 재실행/자동 retry 없음.
+원 감시기, 두 byte, Native identity, Job, pacing, cleanup은 기존 구현을 그대로 사용한다.
+"""
+import os,sys
+# 검증 프로세스와 그 자식만 적용한다. 기존 cache/OS/Defender 설정은 건드리지 않는다.
+# SELF 자체 import도 쓰지 않으려면 launcher의 python -B를 함께 사용한다.
+sys.dont_write_bytecode=True
+os.environ['PYTHONDONTWRITEBYTECODE']='1'
+import complete_preserved106_source as x
+import audit_evidence_io as audit
+import os,stat,threading,math,time
+import argparse,copy,hashlib,io,json,re,sys,types,unittest
+from pathlib import PurePosixPath
+from unittest.mock import patch
+m=x.m;p=m.p;g=m.g;r=m.r
+SELF='tools/p09/resume_preserved106_queue_runtime.py'
+TEST='tools/p09/tests/test_preserved106_queue_runtime.py'
+CASE111_SATURATION_POLICY_STOP='STOP_NATIVE_OPEN_AFTER_HOST_SATURATION'
+CLOSING_CODE=[
+ dict(path=x.SELF,bytes=33090,sha256='d2c97f3723be25194c43a2142a95c58ae299b2f66919bba33b8442664b49518a'),
+ dict(path=x.TEST,bytes=11920,sha256='943a4496515e6f13f2a25c87f52bc80d54dfe600ef6a783db184a09a8eb1027a')]
+FROZEN93=x.CODE91+CLOSING_CODE
+COMPOUND_REVIEW=dict(path=p.DIR+'/p338-review-run003.v1.json',bytes=293891,sha256='612b841e87840352adae2e1fab8819fc02556060da26912af028b372128e43f2')
+COMPOUND_SOURCE=dict(path=p.DIR+'/p338-source-run004.v1.json',bytes=628772,sha256='2d19eaa5057ceac9b3dbc93e5c8f889facd5734ca720c451d0b547ec7d8688db')
+COMPOUND=dict(path=p.DIR+'/p338-accept-run005.v1.json',bytes=293887,sha256='c46d5d978246006da2a1164adeafcd4d14662acf2f2cd6bd9e7f86a47853513b')
+SCHEMA='hwpx-agent.p09-preserved106-fixed-runtime-queue/v24'
+VERIFIER_CURRENT_SCHEMA=SCHEMA
+REQUIRE_CURRENT_EARLY_READ_PRESSURE=True
+PASS='PASS_EXACT_PRESERVED106_NEXT_RUNTIME_NOT_WHOLE_OR_GATE'
+LIGHT='PASS_PRESERVED106_NEXT_QUEUE_NOT_ACTUAL_OR_GATE'
+FRESH='PASS_PRESERVED106_DISTINCT_FRESH_NOT_NATIVE_OR_PRODUCT'
+STOP_REVIEW='PASS_PRESERVED106_PRE_PRODUCT_STOP_REVIEW_NOT_GO'
+N=1658;DIRECTORIES=308
+COUNT=516
+EXECUTED=2*COUNT
+FILE=re.compile(r'p340-case-([0-9]{3})-run([0-9]{3})\.v1\.json')
+STARTUP_LIMITS=m.STARTUP_LIMITS
+LAST_TERMINAL=None
+PREFRAME_ERROR='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_DEFERRED_PREFRAME_RAM_WINDOW'
+
+def require(ok,code):m.require(ok,'PRESERVED106_QUEUE_'+code)
+
+SELECTION_DIAGNOSTIC_FAILURES=[
+    dict(path=p.DIR+'/p340-light-run085.v1.json',bytes=95581,
+        sha256='a3207fa7272c59bf09f3e21ffce6f1013d1ce08b7ac3232ceb8111a488a4b7aa',
+        error='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_UNREVIEWED_STOP_BLOCKS_GO'),
+    dict(path=p.DIR+'/p340-light-run086.v1.json',bytes=105093,
+        sha256='7a4681b0001b4ecd6815f5c46a0aafd4f19e4dd2ec2651133d43655e03d687da',
+        error='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_SCOPED_FILENAME_NOT_SUBSTRING'),
+    dict(path=p.DIR+'/p340-light-run087.v1.json',bytes=105768,
+        sha256='98777172af21a0d1f83d298976874301172b51252de8186e6b9dc179f6df5eab',
+        error='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_EXACT_CURRENT_SCOPE_CODE_CURSOR'),
+    dict(path=p.DIR+'/p340-light-run088.v1.json',bytes=105766,
+        sha256='36acaf74161e892888c194ab8dbe0e8eb6f43f2253f0d384e485b6d2bf1f6595',
+        error='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_EXACT_CURRENT_SCOPE_CODE_CURSOR'),
+    dict(path=p.DIR+'/p340-light-run089.v1.json',bytes=95515,
+        sha256='9f3bd1949060857666c7fdf6000fa1d2c7caeff77c9654b5948225b7eaa738e0',
+        error='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_UNREVIEWED_STOP_BLOCKS_GO'),
+    dict(path=p.DIR+'/p340-stop-review-run091.v1.json',bytes=96731,
+        sha256='b0d20038a1727011081132b207cb6b3ebde64862ee65ce0d34d60c77bf1f62be',
+        error='P208_DEFERRED_RUNTIME_CURRENT_STOP_IMMUTABLE_LITERAL_BYTES'),
+    dict(path=p.DIR+'/p340-stop-review-run092.v1.json',bytes=107233,
+        sha256='94fa2d4c32a8cf56b932663801d5a2b758059bd6fd53a54142f53689a9512b9d',
+        error='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_UNREVIEWED_STOP_BLOCKS_GO'),
+    dict(path=p.DIR+'/p340-stop-review-run093.v1.json',bytes=137514,
+        sha256='77e4ddcac4dc201463e220f766c66267a7966b462c567e1670575bee1062a511',
+        error='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_EXACT_CURRENT_SCOPE_CODE_CURSOR')]
+
+# This is an old light-review attempt that never passed bootstrap admission.
+# It is preserved as a failed, non-GO artifact; it is not a product-stop root.
+HISTORICAL_LIGHT_REVIEW_ADMISSION_DEFER=dict(
+    path=p.DIR+'/p340-light-review-run076.v1.json',bytes=23783,
+    sha256='4e9336654bd7e5452d2196730128c38f537c0213df8368649f224369d947d3b0')
+
+def selection_diagnostic_failure(q,name,doc):
+    expected=next((row for row in SELECTION_DIAGNOSTIC_FAILURES if row['path']==name),None)
+    if expected is None:return False
+    pin={k:expected[k] for k in ('path','bytes','sha256')}
+    require(q.reader.snapshots.get(name)==pin and doc['state']=='FAILED_NOT_ACCEPTED'
+        and doc['error_code']==expected['error'] and doc['resource_stop_reason'] is None
+        and doc['failure_diagnostic']['stage']=='selection' and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['runtime_contract_executions']==0 and doc['accepted_exact_product_body_count']==0
+        and doc['source_attempted'] is False and doc['source_qualified'] is False
+        and doc['actual_product_child_executed'] is False and doc.get('selected_test_index') is None
+        and 'prior_runtime_plan' not in doc and 'runtime_plan' not in doc,
+        'EXACT_SELECTION_DIAGNOSTIC_NOT_PRODUCT_OR_ACCEPTANCE')
+    return True
+
+CONTRACT118_FAILURE_PIN=dict(path=p.DIR+'/p340-light-run118.v1.json',bytes=232065,
+    sha256='7120506f916bd9c8cc8e13bc578625d6b7dc7eb4e05133a59216f1e6d17f6843')
+CONTRACT118_CODE=[
+ dict(path=SELF,bytes=220256,sha256='90ff3a1a45a842124085b50c1eaf8ee2aaf4c0b97161047fa389075a6e1a5a55'),
+ dict(path=TEST,bytes=184110,sha256='f650e2535092c7f5dc16c1a035e96edd4253ce6374c5bf7c64e5d26f67407894')]
+PARTIAL_CONTRACT_FAILURE_SPECS=[
+ dict(pin=CONTRACT118_FAILURE_PIN,codes=CONTRACT118_CODE,tests=52,bound=273,reads=291,bytes=34444756,
+    failure='test_recursive_source_review_and_header_stay_in_original_epoch (test_preserved106_queue_runtime.Archived790EpochTests.test_recursive_source_review_and_header_stay_in_original_epoch)'),
+ dict(pin=dict(path=p.DIR+'/p340-light-run120.v1.json',bytes=233059,
+    sha256='a26905d6b5cacbf6f78c6e726556397a67675b3272b9dd342f35450062b6f87b'),
+    codes=[dict(path=SELF,bytes=222975,sha256='21ca99cef06b508668ce0b5475889e6e9b05099f026a64296f265573be0b7b16'),
+        dict(path=TEST,bytes=187142,sha256='0e45240a60bdd90d8b9bf89dac8699968069ad827c15dc6b3c496fdfecdf1077')],
+    tests=100,bound=274,reads=292,bytes=34681392,
+    failure='test_compound102_no_rerun (test_preserved106_queue_runtime.Completed108ClosingTests.test_compound102_no_rerun)')]
+
+def contract118_failure_review(q,name,doc):
+    """Preserve the exact failed partial suite, never a current LIGHT/GO qualification."""
+    spec=next((item for item in PARTIAL_CONTRACT_FAILURE_SPECS if item['pin']['path']==name),None)
+    if spec is None:return False
+    require(q.reader.snapshots.get(name)==spec['pin']
+        and doc['schema_version']==SCHEMA and doc['state']=='FAILED_NOT_ACCEPTED'
+        and doc['error_code']=='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_ALL_CURRENT_AND_FOLLOWING_CONTRACTS'
+        and doc['failure_diagnostic']['stage']=='contract_tests'
+        and doc['contract_failures']==[spec['failure']]
+        and doc['current95_code_pins']==FROZEN93+spec['codes']
+        and doc['prior_runtime_plan']['runtime_source_qualified_individual_cases']==104
+        and doc['prior_runtime_plan']['next_runtime_index']==doc['selected_test_index']==111
+        and doc['resource_stop_reason'] is None and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['source_attempted'] is False and doc['source_qualified'] is False
+        and doc['actual_product_child_executed'] is False
+        and doc['runtime_contract_executions']==doc['accepted_exact_product_body_count']==0
+        and 'runtime_plan' not in doc,'EXACT_PARTIAL_CONTRACT118_NOT_GO_OR_ADVANCE')
+    row=doc['contract_checkpoint_statistics'];io_=doc['preparation_IO']
+    require(all(row[k]==spec['tests'] for k in ('started_tests','stopped_tests','successful_before_test_checks',
+        'successful_after_test_checks')) and all(row[k]==1 for k in ('runner_calls','returned_runner_calls',
+        'successful_before_runner_checks','successful_after_runner_checks'))
+        and row['original_unittest_results_preserved'] is True
+        and row['original_guard_or_test_coverage_relaxed'] is False
+        and row['new_sampler_or_thread_or_sleep_started'] is False
+        and io_['bound_inputs']==spec['bound'] and io_['read_passes']==spec['reads'] and io_['bytes_read']==spec['bytes']
+        and io_['final_fresh_hashes']==0 and io_['finished'] is False,
+        'CONTRACT118_PARTIAL52_AND_UNFINISHED_READER_NOT_QUALIFICATION')
+    return True
+
+PREQUAL_FAILURE=dict(path=p.DIR+'/p340-light-run001.v1.json',bytes=132457,sha256='98514e8cf9b405089da66f76a36fc887a69906d20b2bf89c59047bba2aa85b94')
+PREQUAL_CODE=[
+ dict(path=SELF,bytes=30583,sha256='1ab74777e0a65aee2d175ece582794a3be2a329153df64c08eb8255b2f5c7249'),
+ dict(path=TEST,bytes=15621,sha256='b3f25091c526915e3a18b013ca05b93d7c5e111cd3cdefe9b6939178c11f0658')]
+PREQUAL2_FAILURE=dict(path=p.DIR+'/p340-light-run002.v1.json',bytes=132469,sha256='45f69f90dd7b3a38a2297b486376a3a85c335415d69bd13a6e713d3a9db75dbe')
+PREQUAL2_CODE=[
+ dict(path=SELF,bytes=34341,sha256='85b500833ff4cad7efa5b21fca21320cea9c14a2c36e65c912030797f6c7330d'),
+ dict(path=TEST,bytes=16988,sha256='2a2e98db27d71c3b1b6743eb78d2a9c19e070283483bff0a4acc14c1f5ca6a33')]
+PREQUAL_SPECS=[
+ dict(pin=PREQUAL_FAILURE,codes=PREQUAL_CODE,archive='p340-preformal140-code',version=1,tests=70,failures=4,bound=147,
+      cause='MISSING_OPTIONAL_ERROR_FIELD'),
+ dict(pin=PREQUAL2_FAILURE,codes=PREQUAL2_CODE,archive='p340-preformal156-code',version=2,tests=78,failures=2,bound=150,
+      cause='SYNTHETIC_PASS_STATE_NOT_REBOUND')]
+
+def prequal_summary(spec=None):
+    spec=PREQUAL_SPECS[0] if spec is None else spec
+    return dict(original_failure_pin=spec['pin'],original_FAILED_preserved=True,
+        actual_contracts_started_and_stopped=spec['tests'],partial_runner_calls=1,
+        contract_qualification_pass=False,actual_Native_or_product_executed=False,
+        cleanup_confirmed=True,found_cause=spec['cause'],guard_or_product_acceptance_changed=False)
+
+def prequal_review(doc,spec=None):
+    spec=PREQUAL_SPECS[0] if spec is None else spec
+    require(spec in PREQUAL_SPECS and doc['schema_version']==f'hwpx-agent.p09-preserved106-fixed-runtime-queue/v{spec["version"]}'
+        and doc['state']=='FAILED_NOT_ACCEPTED'
+        and doc['error_code']=='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_ALL_CURRENT_AND_FOLLOWING_CONTRACTS'
+        and doc['resource_stop_reason'] is None and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['failure_diagnostic']['stage']=='contract_tests'
+        and doc['current95_code_pins']==FROZEN93+spec['codes'] and doc['original93_pins']==FROZEN93
+        and doc['startup_limits']==STARTUP_LIMITS and doc['compound100_pin']==COMPOUND
+        and doc['prior_runtime_plan']['runtime_source_qualified_individual_cases']==100
+        and doc['selected_test_index']==107 and doc['runtime_contract_executions']==0
+        and doc['accepted_exact_product_body_count']==0 and doc['source_attempted'] is False
+        and doc['actual_product_child_executed'] is False and doc['source_qualified'] is False
+        and doc['original_parent_capture_adapter_selected'] is False and doc['diagnostic_parent_connection_selected'] is False
+        and doc.get('terminal_source_frame') is None and doc.get('case_receipt_pin') is None
+        and doc.get('terminal_parent_failure_sidecar_pin') is None and 'runtime_plan' not in doc,
+        'IMMUTABLE_PREFORMAL_FAILURE_NEVER_ACCEPTED_OR_PRODUCT')
+    row=doc['contract_checkpoint_statistics'];io_=doc['preparation_IO'];count=spec['tests']
+    require(row['started_tests']==row['stopped_tests']==row['successful_before_test_checks']==row['successful_after_test_checks']==count
+        and row['runner_calls']==row['returned_runner_calls']==row['successful_before_runner_checks']==row['successful_after_runner_checks']==1
+        and row['original_unittest_results_preserved'] is True and row['original_guard_or_test_coverage_relaxed'] is False
+        and row['new_sampler_or_thread_or_sleep_started'] is False
+        and len(doc['contract_failures'])==spec['failures'] and io_['bound_inputs']==io_['read_passes']==spec['bound']
+        and io_['final_fresh_hashes']==0 and io_['finished'] is False,'PARTIAL_CURRENT_RUNNER_NOT_FULL_PASS')
+    return prequal_summary(spec)
+
+PRIOR_LIGHT=dict(path=p.DIR+'/p340-light-run003.v1.json',bytes=49266,sha256='645e7cafa3c4c3ea495aa26a03b5514b402308963ef3526163defdcdbf99131d')
+PRIOR_LIGHT_CODE=[
+ dict(path=SELF,bytes=35532,sha256='7e9228c891a08689f4debc82cc74781fdd268f26e2aec58a979e6e5a7100eaef'),
+ dict(path=TEST,bytes=18326,sha256='1a9afc7da79c04c637588dc6b9cda5d9b511305920943fc89028e39059f074b0')]
+
+def prior_light_review(doc,plan,names,required,binding,extras,baseline,added):
+    prior_required={**required,**{z['path']:z for z in PRIOR_LIGHT_CODE}}
+    prior_added={**added,**{z['path']:z for z in PRIOR_LIGHT_CODE}}
+    prior_extras={**extras,**{z['path']:z for z in PRIOR_LIGHT_CODE}}
+    index,name=g.old.select(plan,names)
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v3' and doc['state']==LIGHT
+        and doc.get('error_code') is None and doc['resource_stop_reason'] is None
+        and doc['resource_watcher_cleanup_confirmed'] is True and doc['prior_runtime_plan']==plan
+        and doc['selected_test_index']==index==107 and doc['selected_test_name']==name
+        and doc['current95_code_pins']==FROZEN93+PRIOR_LIGHT_CODE and doc['original93_pins']==FROZEN93
+        and doc['scope_budget']==budget(prior_required,baseline,prior_added) and doc['scope_added_ten_pins']==list(prior_added.values())
+        and doc['extra_frame_controller_pins']==list(prior_extras.values()) and doc['binding']==binding
+        and doc['compound100_pin']==COMPOUND and doc['compound100_review_pin']==COMPOUND_REVIEW
+        and doc['compound100_source_pin']==COMPOUND_SOURCE and doc['startup_limits']==STARTUP_LIMITS
+        and doc['stop_resume_policy']==m.STOP_POLICY and doc['original_successful_bodies_not_reexecuted'] is True
+        and doc['prequalification_failure_reviews']==[prequal_summary(z) for z in PREQUAL_SPECS],
+        'ARCHIVE_BOUND172_PREVIOUS_CODE_NOT_CURRENT_GO')
+    require(doc['runtime_contract_executions']==172 and doc['own_queue_contract_tests_passed']==doc['synthetic_following_queue_contract_tests_passed']==86
+        and doc['source_attempted'] is False and doc['source_qualified'] is False and doc['actual_product_child_executed'] is False
+        and doc['original_parent_capture_adapter_selected'] is False and doc['diagnostic_parent_connection_selected'] is False
+        and doc['accepted_exact_product_body_count']==0 and doc.get('case_receipt_pin') is None
+        and doc.get('closing_component') is None and doc['preparation_IO']['finished'] is True
+        and doc['preparation_IO']['bound_inputs']==doc['preparation_IO']['final_fresh_hashes']==153
+        and doc['preparation_IO']['read_passes']==306,'PREVIOUS172_METADATA_ONLY')
+    m.guarded_contract(doc['contract_checkpoint_statistics'],172);m.leading_contract(doc['preparation_IO'])
+    require(doc['P09_gate']==doc['A12_gate']==doc['A13_gate']=='OPEN' and all(doc[k] is False for k in (
+        'whole1470_current_fresh_qualified','full249_current_qualified','signed16_current_qualified','product_complete','PC_freeze_resolved')),
+        'PREVIOUS172_NOT_GATE')
+    return dict(pin=PRIOR_LIGHT,archive_bound_contract_executions=172,previous_code_only=True,current_actual_GO=False,
+        actual_Native_or_product_executed=False,cleanup_confirmed=True)
+
+def existing_body_contract(paths,known):
+    require(type(paths) is list and len(paths)<=999 and len(set(paths))==len(paths),'BOUNDED_DISTINCT_BODY_INVENTORY')
+    for name in paths:
+        require(name in known and known[name]['path']==name and known[name]['bytes']==0
+            and known[name]['sha256']==hashlib.sha256(b'').hexdigest(),'UNKNOWN_OR_NONEMPTY_BODY_BLOCKS_PRODUCT_REPLAY')
+
+def existing_body_guard(q,index):
+    paths=[]
+    for path in (p.c.ROOT/p.DIR/'cases').glob(f'p340-case-{index:03}-run*.json'):
+        paths.append(path.relative_to(p.c.ROOT).as_posix())
+        require(len(paths)<=999,'BOUNDED_DISTINCT_BODY_INVENTORY')
+    existing_body_contract(paths,q.reviewed_zero_pins)
+    for name in paths:require(q.pin(name)==q.reviewed_zero_pins[name],'REVIEWED_ZERO_STILL_EXACT')
+
+def placeholder(q,rp,doc):
+    name=doc.get('case_receipt_path')
+    if name is None:return None
+    match=FILE.fullmatch(PurePosixPath(rp['path']).name);require(match is not None,'BODY_ONLY_EXACT_CASE_FAILURE')
+    index,number=map(int,match.groups())
+    require(name==f'{p.DIR}/cases/p340-case-{index:03}-run{number:03}.json','FAILURE_BODY_PATH_MATCHES_ROOT')
+    if not (p.c.ROOT/name).exists():return None
+    pin=q.pin(name)
+    require(pin['bytes']==0 and pin['sha256']==hashlib.sha256(b'').hexdigest(),'PRE_PRODUCT_BODY_ZERO_NOT_PASSED_PRODUCT')
+    return pin
+
+EPOCH_LIGHT=dict(path=p.DIR+'/p340-light-run004.v1.json',bytes=49322,sha256='8feb8f2758040f0028eb9f13a8466e13d8a95b012a210f102d3a133f78fc0ac6')
+EPOCH_FRESH=dict(path=p.DIR+'/p340-light-review-run005.v1.json',bytes=47106,sha256='67994e90aa3ce8f9063dce096ac6647058e331c745278f9dca6041f03c10661f')
+EPOCH_FAILURE=dict(path=p.DIR+'/p340-case-107-run006.v1.json',bytes=148100,sha256='d1bfffe5861c46f7eb7fdbbc92c4910aaa95c9d2e776dc1d22abbab749f1d2aa')
+EPOCH_CODE=[
+ dict(path=SELF,bytes=41166,sha256='1515339e63000f73ba6c304d5ce186246a59b41f231cb0d00b4161687a6f1f58'),
+ dict(path=TEST,bytes=21036,sha256='1e493272502108659021df1a153c5929730c6bebafd605b944995d4951af904c')]
+
+def reserved_post_reads(q):
+    limit=m.m.m.META_READ_LIMIT
+    count=q.shared_budget['read_calls']
+    require(limit==720 and type(count) is int and 0<=count<=limit-2,'ORIGINAL720_POST_TWO_READS_RESERVED')
+    return True
+
+def epoch_review(light,fresh,failed,plan,names,required,binding,extras,baseline,added):
+    older={z['path']:z for z in EPOCH_CODE}
+    old_required={**required,**older};old_extras={**extras,**older};old_added={**added,**older};codes=FROZEN93+EPOCH_CODE
+    old_common=rebound(common,SCHEMA='hwpx-agent.p09-preserved106-fixed-runtime-queue/v4')
+    old_light=rebound(light_contract,common=old_common,COUNT=99,EXECUTED=198)
+    old_fresh=rebound(fresh_contract,common=old_common,light_contract=old_light,EXECUTED=198)
+    old_light(light,plan,names,old_required,binding,old_extras,baseline,old_added,codes)
+    old_fresh(fresh,light,EPOCH_LIGHT,plan,names,old_required,binding,old_extras,baseline,old_added,codes)
+    require(failed['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v4' and failed['state']=='FAILED_NOT_ACCEPTED'
+        and failed['error_code']=='P152_FULL_REDACTED_FAILURE' and failed['resource_stop_reason'] is None
+        and failed['resource_watcher_cleanup_confirmed'] is True and failed['current95_code_pins']==codes
+        and failed['prior_runtime_plan']==plan and failed['selected_test_index']==107
+        and failed['qualified_light_pin']==EPOCH_LIGHT and failed['independent_fresh_pin']==EPOCH_FRESH
+        and failed['runtime_contract_executions']==0 and failed['reused_light_contract_executions']==198
+        and failed['accepted_exact_product_body_count']==0 and failed['actual_product_child_executed'] is False
+        and failed['source_attempted'] is False and failed['source_qualified'] is False
+        and failed['original_parent_capture_adapter_selected'] is False and failed['diagnostic_parent_connection_selected'] is False
+        and failed.get('terminal_source_frame') is None and failed.get('terminal_parent_failure_sidecar_pin') is None
+        and failed.get('case_receipt_path') is None and failed.get('case_receipt_pin') is None and 'runtime_plan' not in failed,
+        'EXACT_PRE_NATIVE_ATTRIBUTE_FAILURE_NOT_PRODUCT_REPLAY')
+    d=failed['failure_diagnostic'];io_=failed['preparation_IO']
+    require(d['stage']=='final_fresh_preparation' and d['exception_class']=='AttributeError'
+        and d['locations']==[dict(file='resume_preserved106_queue_runtime.py',line=459)]
+        and d['exception_message_included'] is False and d['diagnostic_not_acceptance'] is True
+        and io_['finished'] is True and io_['bound_inputs']==io_['final_fresh_hashes']==158
+        and io_['read_passes']==317 and failed['existing_body_replay_guard_verified'] is True
+        and failed['qualified_contract_checkpoint_statistics']==light['contract_checkpoint_statistics'],
+        'ORIGINAL_PHASE_LINE_COMPLETE_FRESH_AND_NO_NATIVE')
+    return dict(failure_pin=EPOCH_FAILURE,light_pin=EPOCH_LIGHT,fresh_pin=EPOCH_FRESH,
+        original_FAILED_preserved=True,original198_contracts_previous_code_only=True,
+        current_actual_GO=False,Native_or_product_started=False,cleanup_confirmed=True,
+        fixed_cause='META_READ_LIMIT_MODULE_REFERENCE',source_scope_reduced=False)
+
+NATIVE107_ROOT=dict(path=p.DIR+'/p340-case-107-run009.v1.json',bytes=677180,sha256='7e88493af85906c48e69cc620daa432adad87a785109c35d458b77bd8f65b7fb')
+NATIVE107_BODY=dict(path=p.DIR+'/cases/p340-case-107-run009.json',bytes=191699,sha256='c74a592e305a882f5aadda54a10ced7f98a8369cd3b83ec412084bd6b0782e6d')
+NATIVE107_LIGHT=dict(path=p.DIR+'/p340-light-run007.v1.json',bytes=50410,sha256='327a54c5655da57ae3a751157f2ea9cbe4d5fcefdffb374c3a9a8d0adb29aace')
+NATIVE107_FRESH=dict(path=p.DIR+'/p340-light-review-run008.v1.json',bytes=47746,sha256='a695fb73b386837c8138d2c8c1dcb90662ccf00d808ef27548ab5b954c79be71')
+NATIVE107_CODE=[
+ dict(path=SELF,bytes=46937,sha256='3422b3b404e8efa5ae54813a2b22a633097b01a6c554fdf87c32d93365706b5a'),
+ dict(path=TEST,bytes=24869,sha256='21154ffd3e7d98637af869be395e2fb117aa8fe69d166d57064b31e407b66408')]
+
+def native107_epoch(root,body,light,fresh,legacy,base,names,required,binding,extras,baseline,added):
+    old={z['path']:z for z in NATIVE107_CODE}
+    old_required={**required,**old};old_extras={**extras,**old};old_added={**added,**old};codes=FROZEN93+NATIVE107_CODE
+    old_common=rebound(common,SCHEMA='hwpx-agent.p09-preserved106-fixed-runtime-queue/v5')
+    old_light=rebound(light_contract,common=old_common,COUNT=116,EXECUTED=232)
+    old_fresh=rebound(fresh_contract,common=old_common,light_contract=old_light,EXECUTED=232)
+    old_record=rebound(record,common=old_common,SCHEMA='hwpx-agent.p09-preserved106-fixed-runtime-queue/v5',EXECUTED=232)
+    old_light(light,base,names,old_required,binding,old_extras,baseline,old_added,codes)
+    old_fresh(fresh,light,NATIVE107_LIGHT,base,names,old_required,binding,old_extras,baseline,old_added,codes)
+    require(root['qualified_light_pin']==NATIVE107_LIGHT and root['independent_fresh_pin']==NATIVE107_FRESH
+        and root['case_receipt_pin']==NATIVE107_BODY
+        and root['qualified_contract_checkpoint_statistics']==light['contract_checkpoint_statistics'],
+        'NATIVE107_LITERAL_CHAIN_NOT_NEW_EXECUTION')
+    result=old_record(root,body,NATIVE107_BODY,legacy,base,names,old_required,binding,old_extras,baseline,old_added,codes)
+    require(result['runtime_source_qualified_individual_cases']==101 and result['next_runtime_index']==108
+        and result['runtime_remaining_individual_cases']==148,'EXACT_NATIVE101_NEXT108')
+    return result
+
+def current_contract_scope(scope,plan):
+    require(type(scope) is tuple and len(scope)==10 and type(plan) is dict,'EXACT_CONTRACT_SCOPE_SHAPE')
+    base=scope[1];names=scope[2];g.old.select(plan,names)
+    require(plan['runtime_source_qualified_individual_cases']>=base['runtime_source_qualified_individual_cases']
+        and set(base['runtime_qualified_test_names'])<=set(plan['runtime_qualified_test_names']),
+        'SCANNED_CURRENT_PLAN_NOT_STALE_OR_ROLLBACK')
+    return (scope[0],plan,*scope[2:])
+
+def ancestor_directories(required):
+    # 각 파일은 검사하되 이미 등록한 부모의 조상은 재생성/재순회하지 않는다.
+    directories={PurePosixPath('.')}
+    for name in required:
+        current=PurePosixPath(name).parent
+        while current not in directories:
+            directories.add(current);current=current.parent
+    return directories
+
+def budget(required,baseline,added):
+    require(len(required)==N and len(baseline)==1644 and len(added)==14
+        and not set(baseline)&set(added) and required=={**baseline,**added}
+        and baseline[p.m.EXE['path']]==p.m.EXE and sum(z['bytes'] for z in baseline.values())==120516712
+        and sum(z['bytes'] for z in added.values())<=1048576,'ALL1644_PLUS14_NOT_SUBSET')
+    directories=ancestor_directories(required)
+    require(len(directories)==DIRECTORIES,'ALL308_ANCESTORS')
+    binary=p.m.EXE['bytes'];other=sum(z['bytes'] for z in required.values())-binary
+    seconds=(N+DIRECTORIES)/14+2*N/20+2*binary/1048576+2*other/2097152+60+20+15+60
+    require(seconds<600,'ORIGINAL600_FITS_NOT_PROOF')
+    return dict(full_runtime_inputs=N,baseline_full_source_inputs=1644,new_inputs=14,
+        actual_ancestor_directory_count=DIRECTORIES,native_rate=20,acquisition_native_rate=14,metadata_rate=32,
+        original_IO_scope_seconds=600,shared_metadata_read_limit=720,extra_new_bytes_upper_bound=1048576,
+        metadata_allowance_seconds=60,product_allowance_seconds=20,early_yield_allowance_seconds=15,
+        margin_seconds=60,nominal_combined_seconds=seconds,prediction_not_completion_guarantee=True)
+
+def rebound(function,**expected):
+    # 보호 함수/자원 owner를 바꾸지 않고 pure validator의 scope/namespace 기대값만 별도 globals로 준다.
+    globals_=dict(function.__globals__,**expected)
+    result=types.FunctionType(function.__code__,globals_,function.__name__,function.__defaults__,function.__closure__)
+    result.__kwdefaults__=copy.copy(function.__kwdefaults__)
+    return result
+
+def native_pair(component,body,pin,required,binding,extras):
+    return rebound(m.native_pair,N=N,DIRECTORIES=DIRECTORIES)(component,body,pin,required,binding,extras)
+
+def stopped(doc,plan,required,binding,extras,baseline,added,names,sidecar=None):
+    if doc.get('error_code')=='bootstrap_idle_window_not_admitted':return initial_ram_deferred(doc)
+    if doc.get('error_code')=='DEFERRED_ALREADY_SATURATED_SYSTEM':return initial_cpu_deferred(doc)
+    if doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v22' and SCHEMA!=doc['schema_version']:
+        require(doc['current95_code_pins']==FROZEN93+FORMAL890_CODE,
+            'EXACT890_STOP_CODE')
+        old=archived_pair_scope((None,plan,names,binding,required,extras,baseline,added,None,None),FORMAL890_CODE)
+        return epoch890_oracles()[3](doc,plan,old[4],binding,old[5],baseline,old[7],names,sidecar)
+    if doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v20' and SCHEMA!=doc['schema_version']:
+        return epoch828_stopped(doc,plan,required,binding,extras,baseline,added,names,sidecar)
+    if doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v21' and SCHEMA!=doc['schema_version']:
+        require(doc['current95_code_pins']==FROZEN93+FORMAL862_CODE,'EXACT862_STOP_CODE')
+        old=archived_pair_scope((None,plan,names,binding,required,extras,baseline,added,None,None),FORMAL862_CODE)
+        return epoch862_oracles()[3](doc,plan,old[4],binding,old[5],baseline,old[7],names,sidecar)
+    if doc.get('error_code')==PREFRAME_ERROR:
+        return preframe_deferred(doc,plan,required,binding,extras,baseline,added,names)
+    if doc.get('error_code')=='TERMINAL_FAILURE_EXACT_STOP_NOT_PASS' and sidecar is not None:
+        return ram_parent_rejection(doc,sidecar,plan,required,binding,extras,baseline,added,names)
+    if doc.get('failure_diagnostic',{}).get('stage')=='preframe_ram_admission':
+        require(doc['source_attempted'] is False and doc.get('terminal_source_frame') is None
+            and doc.get('case_receipt_path') is None and sidecar is None,'PREFRAME_CPU_STOP_NO_NATIVE_OR_BODY')
+        # 원 CPU STOP oracle의 허용된 바로 전 pre-product 단계에만 음성 검토를 바인딩.
+        # 원 root/표본/STOP reason은 수정하지 않고, 원 guard를 통과시킨 적도 없다.
+        view=dict(doc,failure_diagnostic=dict(doc['failure_diagnostic'],stage='final_fresh_preparation'))
+        row=rebound(m.stopped_before_product,N=N,DIRECTORIES=DIRECTORIES,budget=budget)(
+            view,plan,required,binding,extras,baseline,added,names,sidecar,expected_schema=SCHEMA)
+        return dict(row,original_failure_stage_preserved='preframe_ram_admission',
+            oracle_stage_binding='final_fresh_preparation',original_failed_document_modified=False)
+    require(doc.get('source_attempted') is False or doc.get('terminal_source_frame') is not None,'ATTEMPT_NEEDS_FRAME')
+    return rebound(m.stopped_before_product,N=N,DIRECTORIES=DIRECTORIES,budget=budget)(
+        doc,plan,required,binding,extras,baseline,added,names,sidecar,expected_schema=SCHEMA)
+
+def compound(doc,reviewed,source,legacy,base,names,required,checked,codes):
+    x.review_receipt(reviewed,required,checked,codes);x.source_receipt(source,required,checked,codes);x.prepared(doc,required)
+    require(doc['state']==x.ACCEPT_PASS and doc['review']==checked and doc['current93_code_pins']==codes
+        and doc['review_pin']==source['review_pin']==COMPOUND_REVIEW and doc['separate_source_frame_pin']==COMPOUND_SOURCE
+        and doc['prior_runtime_plan']==base and doc['runtime_plan']==x.advance(legacy,base,names)
+        and doc['accepted_exact_compound_case_count']==doc['semantic_body_capture_pass_count']==1
+        and doc['original_failed_root_accepted'] is False and doc['original_partial_after_hash_completed'] is False
+        and doc['additional_source_frame_executed'] is False and doc['actual_source_frame_executed'] is False
+        and doc['actual_product_child_executed'] is False,'EXACT_CLOSED100_NO_PRODUCT_REPLAY')
+    return doc['runtime_plan']
+
+SCOPE_FAILURE=dict(path=p.DIR+'/p340-light-run010.v1.json',bytes=155508,sha256='4feb599ee48ff2fa75df20c9e76c687aec5ad67d6e49b64c20ecc74ed4e59365')
+SCOPE_FAILURE_CODE=[
+ dict(path=SELF,bytes=50953,sha256='7025b4e9aa9c987b6ecf922053d16991279257932ac7dd98631502c44f00245e'),
+ dict(path=TEST,bytes=27688,sha256='723d9710736cd57d623fd21049c670508004e0b8751a65b69c5d29bcc3bdbcee')]
+
+def scope_failure_summary():
+    return dict(pin=SCOPE_FAILURE,original_failed_preserved=True,current_contracts128_partial_one_runner=True,
+        qualification256_not_passed=True,Native_or_product_started=False,cleanup_confirmed=True,
+        body_actual_child_false_must_be_rejected=True)
+
+def scope_failure_review(doc):
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v6'
+        and doc['state']=='FAILED_NOT_ACCEPTED'
+        and doc['error_code']=='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_ALL_CURRENT_AND_FOLLOWING_CONTRACTS'
+        and doc['resource_stop_reason'] is None and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['failure_diagnostic']['stage']=='contract_tests'
+        and doc['current95_code_pins']==FROZEN93+SCOPE_FAILURE_CODE and doc['original93_pins']==FROZEN93
+        and doc['native107_epoch_root_pin']==NATIVE107_ROOT and doc['startup_limits']==STARTUP_LIMITS
+        and doc['compound100_pin']==COMPOUND and doc['prior_runtime_plan']['runtime_source_qualified_individual_cases']==101
+        and doc['selected_test_index']==108 and doc['runtime_contract_executions']==0
+        and doc['accepted_exact_product_body_count']==0 and doc['source_attempted'] is False
+        and doc['source_qualified'] is False and doc['actual_product_child_executed'] is False
+        and doc['original_parent_capture_adapter_selected'] is False and doc['diagnostic_parent_connection_selected'] is False
+        and doc.get('terminal_source_frame') is None and doc.get('case_receipt_pin') is None
+        and doc.get('terminal_parent_failure_sidecar_pin') is None and 'runtime_plan' not in doc,
+        'EXACT_SCOPE_FAILURE_NOT_PRODUCT_OR_ACCEPTANCE')
+    row=doc['contract_checkpoint_statistics'];io_=doc['preparation_IO']
+    require(row['started_tests']==row['stopped_tests']==row['successful_before_test_checks']==row['successful_after_test_checks']==128
+        and row['runner_calls']==row['returned_runner_calls']==row['successful_before_runner_checks']==row['successful_after_runner_checks']==1
+        and row['original_unittest_results_preserved'] is True and row['original_guard_or_test_coverage_relaxed'] is False
+        and row['new_sampler_or_thread_or_sleep_started'] is False
+        and doc['contract_failures']==['test_native107_child_required (test_preserved106_queue_runtime.Native107EpochTests.test_native107_child_required)']
+        and io_['bound_inputs']==io_['read_passes']==167 and io_['final_fresh_hashes']==0 and io_['finished'] is False,
+        'ORIGINAL128_FAILURE_NOT256_PASS')
+    return scope_failure_summary()
+
+EPOCH272_CODE=[
+ dict(path=SELF,bytes=54919,sha256='78fb64845c7f4b00afa81ed0f5c4dbb0a1a321a37d5f857da7b001d8f651f08f'),
+ dict(path=TEST,bytes=29158,sha256='f51d1933e043c81bb1526992663d688a98bb74181f1fd41a232231680bc9571e')]
+EPOCH272_PINS=[
+ dict(path=p.DIR+'/p340-light-run011.v1.json',bytes=53534,sha256='fbb1c05ba0b1147afb82e11cbff39b8828de37d51f7af1d61a3b43fe46d8dbe0'),
+ dict(path=p.DIR+'/p340-light-review-run012.v1.json',bytes=50674,sha256='596e12216ca8bb93c5746e6592b9cce0a1d6b5f513691c36ff2ad40dd0bc5537'),
+ dict(path=p.DIR+'/p340-case-108-run013.v1.json',bytes=185528,sha256='0c0040175691708de217afa660bc3a779e0bee86f6f826aaee22514857d6df6c'),
+ dict(path=p.DIR+'/p340-stop-review-run014.v1.json',bytes=58697,sha256='c6085b6033fc781929e766562ba7f59b97eec871176e264c6dd4284652971365')]
+
+def epoch272_summary():
+    return dict(pins=EPOCH272_PINS,original272_previous_code_only=True,current_actual_GO=False,
+        original_failed_roots_preserved=True,partial_Native163_all_closed=True,
+        product_started=False,accepted_delta=0,actual_product_reexecution_authorized=False)
+
+def epoch272_review(light,fresh,native_stop,metadata_stop,plan,names,required,binding,extras,baseline,added):
+    old={z['path']:z for z in EPOCH272_CODE};req={**required,**old};ext={**extras,**old};add={**added,**old}
+    codes=FROZEN93+EPOCH272_CODE;schema='hwpx-agent.p09-preserved106-fixed-runtime-queue/v7'
+    old_common=rebound(common,SCHEMA=schema)
+    old_light=rebound(light_contract,common=old_common,COUNT=136,EXECUTED=272)
+    old_fresh=rebound(fresh_contract,common=old_common,light_contract=old_light,EXECUTED=272)
+    old_light(light,plan,names,req,binding,ext,baseline,add,codes)
+    old_fresh(fresh,light,EPOCH272_PINS[0],plan,names,req,binding,ext,baseline,add,codes)
+    old_stop=rebound(m.stopped_before_product,N=N,DIRECTORIES=DIRECTORIES,budget=budget)
+    for doc,stage,bound,finished in ((native_stop,'source_frame_acquire',172,True),(metadata_stop,'anchor',116,False)):
+        classified=old_stop(doc,plan,req,binding,ext,baseline,add,names,expected_schema=schema)
+        io_=doc['preparation_IO'];observation=doc['metadata_observation']
+        require(classified['actual_product_reexecution_authorized'] is False
+            and doc['failure_diagnostic']['stage']==stage and doc['startup_limits']==STARTUP_LIMITS
+            and io_['bound_inputs']==bound and io_['final_fresh_hashes']==(bound if finished else 0)
+            and io_['read_passes']==(2*bound if finished else bound) and io_['finished'] is finished
+            and observation['foreign_PID_query_executed'] is False and observation['new_sampler_thread_started'] is False,
+            'EXACT_PRE_PRODUCT_EPOCH272_CPU_STOP_NO_GO')
+    require(native_stop['current95_code_pins']==codes and native_stop['source_attempted'] is True
+        and native_stop['qualified_light_pin']==EPOCH272_PINS[0] and native_stop['independent_fresh_pin']==EPOCH272_PINS[1]
+        and native_stop['terminal_source_frame']['handles']['input_lock_handles_opened']==163
+        and metadata_stop['source_attempted'] is False and metadata_stop.get('terminal_source_frame') is None
+        and metadata_stop.get('selected_test_index') is None and 'runtime_plan' not in metadata_stop,
+        'EXACT_NATIVE163_AND_ANCHOR_NO_FRAME_NO_ADVANCE')
+    return epoch272_summary()
+
+PARTIAL308_PIN=dict(path=p.DIR+'/p340-light-run015.v1.json',bytes=139871,sha256='c016966616aa1e3ba0f5da5aa954ae833c7589c9a6f9426022d62bfa7f3c4c45')
+PARTIAL308_CODE=[
+ dict(path=SELF,bytes=60077,sha256='8f34c5b858101840b6f292dce3a0e9fe6664935bd1b5a8b9b0f0dde7891affe3'),
+ dict(path=TEST,bytes=33635,sha256='8cd044b3ab1c27291ecad1c9c956941b53e6070c66b0cf3a8e38552bfbecac8b')]
+
+def partial308_summary():
+    return dict(pin=PARTIAL308_PIN,original_failed_preserved=True,qualification308_not_passed=True,
+        only12_started12_stopped11_after_checks=True,Native_or_product_started=False,current_actual_GO=False)
+
+def partial308_review(doc,plan,names,required,binding,extras,baseline,added):
+    old={z['path']:z for z in PARTIAL308_CODE};req={**required,**old};ext={**extras,**old};add={**added,**old}
+    stopped_check=rebound(m.stopped_before_product,N=N,DIRECTORIES=DIRECTORIES,budget=budget)
+    stopped_check(doc,plan,req,binding,ext,baseline,add,names,expected_schema='hwpx-agent.p09-preserved106-fixed-runtime-queue/v8')
+    row=doc['contract_checkpoint_statistics'];io_=doc['preparation_IO']
+    require(doc['failure_diagnostic']['stage']=='contract_tests' and doc['current95_code_pins']==FROZEN93+PARTIAL308_CODE
+        and doc['source_attempted'] is False and doc['source_qualified'] is False
+        and doc.get('terminal_source_frame') is None and doc.get('case_receipt_pin') is None
+        and doc['runtime_contract_executions']==0 and doc['epoch272_stop_review']==epoch272_summary()
+        and row['started_tests']==row['stopped_tests']==row['successful_before_test_checks']==12
+        and row['successful_after_test_checks']==11 and row['runner_calls']==row['successful_before_runner_checks']==1
+        and row['returned_runner_calls']==row['successful_after_runner_checks']==0
+        and row['original_unittest_results_preserved'] is True and row['original_guard_or_test_coverage_relaxed'] is False
+        and row['new_sampler_or_thread_or_sleep_started'] is False
+        and io_['bound_inputs']==io_['read_passes']==176 and io_['final_fresh_hashes']==0 and io_['finished'] is False,
+        'EXACT_PARTIAL12_CPU_STOP_NOT308_PASS')
+    return partial308_summary()
+
+C_REVIEW='PASS_PRESERVED108_SOURCE_REVIEW_NOT_NATIVE_OR_PRODUCT'
+C_SOURCE='PASS_PRESERVED108_INDEPENDENT_WHOLE_SOURCE_NOT_PRODUCT_RERUN'
+C_ACCEPT='PASS_PRESERVED108_COMPOUND102_NOT_WHOLE_OR_GATE'
+C_STATES=(C_REVIEW,C_SOURCE,C_ACCEPT)
+P108_NAME='actual_import::no_form_stored_source_preserves_real_body_without_policy_attestation'
+P108_ROOT=dict(path=p.DIR+'/p340-case-108-run018.v1.json',bytes=988355,sha256='1a9896bd97da63066101075aa65f2d0a0fdf42bdf5405755faaa2a57849f186d')
+P108_BODY=dict(path=p.DIR+'/cases/p340-failure-108-run018.json',bytes=557079,sha256='eaa7265c260f5e2ab39813016f317ab4a5d6507c94b2bba473e484a8cb4397f8')
+P108_ZERO=dict(path=p.DIR+'/cases/p340-case-108-run018.json',bytes=0,sha256=hashlib.sha256(b'').hexdigest())
+P108_LIGHT=dict(path=p.DIR+'/p340-light-run016.v1.json',bytes=53610,sha256='405f431597d4137acb0a9e5f0cabce7b44fd760a709efce20155c0724353b0da')
+P108_FRESH=dict(path=p.DIR+'/p340-light-review-run017.v1.json',bytes=51774,sha256='be2680ef2bb5256ef671dc187386b2f6df377662388260fd2e07ddc32bb63c25')
+P108_CODE=[
+ dict(path=SELF,bytes=63174,sha256='df27dcd564610c1488afa63877e72280e5558e73b978449fecbba996f8f2af3d'),
+ dict(path=TEST,bytes=35821,sha256='caa6165d523f9b3b465a7a6d7fa8cec1d9e235f6cea0baca8ec6ec78ff9cc34b')]
+
+def pending108_summary():
+    return dict(original_root_pin=P108_ROOT,original_parent_pin=P108_BODY,original_zero_pin=P108_ZERO,
+        original_executed_code95_pins=FROZEN93+P108_CODE,semantic_body_capture_complete=True,
+        original_failed_root_preserved=True,original_stopped_parent_preserved=True,original_partial_after_completed=False,
+        original_zero_placeholder_preserved=True,source_closing_candidate_count=1,accepted_delta=0,
+        successful_product_reexecution_allowed=False,original_Job_cleanup_confirmed=True,
+        independent_current_source_closing_required=True)
+
+def pending108_review(root,body,light,fresh,plan,names,required,binding,extras,baseline,added):
+    old={z['path']:z for z in P108_CODE};req={**required,**old};ext={**extras,**old};add={**added,**old}
+    codes=FROZEN93+P108_CODE;schema='hwpx-agent.p09-preserved106-fixed-runtime-queue/v9'
+    old_common=rebound(common,SCHEMA=schema)
+    old_light=rebound(light_contract,common=old_common,COUNT=160,EXECUTED=320)
+    old_fresh=rebound(fresh_contract,common=old_common,light_contract=old_light,EXECUTED=320)
+    old_light(light,plan,names,req,binding,ext,baseline,add,codes)
+    old_fresh(fresh,light,P108_LIGHT,plan,names,req,binding,ext,baseline,add,codes)
+    require(root['schema_version']==schema and root['state']=='FAILED_NOT_ACCEPTED'
+        and root['error_code']==root['resource_stop_reason']=='STOP_SUSTAINED_SYSTEM_CPU'
+        and root['resource_watcher_cleanup_confirmed'] is True and root['failure_diagnostic']['stage']=='owned_parent'
+        and root['selected_test_index']==108 and root['selected_test_name']==P108_NAME==names[107]
+        and root['prior_runtime_plan']==plan and plan['runtime_source_qualified_individual_cases']==101
+        and plan['next_runtime_index']==108 and P108_NAME not in plan['runtime_qualified_test_names']
+        and root['current95_code_pins']==codes and root['binding']==binding
+        and root['qualified_light_pin']==P108_LIGHT and root['independent_fresh_pin']==P108_FRESH
+        and root['runtime_contract_executions']==0 and root['reused_light_contract_executions']==320
+        and root['qualified_contract_checkpoint_statistics']==light['contract_checkpoint_statistics']
+        and root['accepted_exact_product_body_count']==0 and root.get('case_receipt_pin') is None
+        and root.get('closing_component') is None and 'runtime_plan' not in root
+        and root['terminal_parent_failure_sidecar_pin']==P108_BODY and root['case_receipt_path']==P108_ZERO['path']
+        and root['original_failure_body_placeholder_preserved'] is True and root.get('terminal_failure_write_error') is None,
+        'ORIGINAL108_FAILED_NOT_RETRY_OR_ACCEPTANCE')
+    require(body['state']=='STOPPED_NOT_ACCEPTED' and body['operation_phase']=='final_source_freeze'
+        and body['stop_reason']==body['resource_stop_reason']=='STOP_SUSTAINED_SYSTEM_CPU'
+        and body['policy']==p.c.POLICY and body['maximum_seconds']==1200
+        and body['actual_product_child_executed'] is True and type(body['exit_code']) is int and body['exit_code']==0
+        and body['selected_test_names']==body['passed_test_names']==[P108_NAME]
+        and body['terminal_summary']==dict(passed=1,failed=0,ignored=0,measured=0,filtered_out=248)
+        and body['test_arguments']==p.v.arguments(P108_NAME) and body['binding']==binding
+        and body['task']==body['minimal_worker_task']=='p204-r07-case-108-tests'
+        and body['minimal_owned_worker_path']==p.m.SELF
+        and body['capture']==dict(error_code=None,per_stream_limit_bytes=32768,complete_streams=True,raw_logs_saved=False)
+        and all(body[k] is True for k in ('worker_created','job_assigned','writer_authorized','owned_limits_verified',
+            'actual_job_membership_checked','cleanup_confirmed','owned_tree_empty'))
+        and body['job_final']['active_processes']==0 and body['job_final']['owned_processes']==[],
+        'ONE_REAL_SUCCESSFUL_CHILD_PRESERVED_NO_RERUN')
+    m.m.job_contract(body)
+    require(p.v.pins(body['source_freeze'])==req and len(req)==1658 and sum(z['bytes'] for z in req.values())==121039342,
+        'EXACT_ORIGINAL_EXECUTED1658_OLD95_NOT_CURRENT_CODE_ALIAS')
+    passes=body['owned_source_reader_passes'];frame=root['terminal_source_frame'];h=frame['handles'];dup=h['borrowed_byte_streams']
+    require(len(passes)==2 and passes[0]['read_passes']==1658 and passes[0]['bytes_read']==121039342
+        and passes[1]['read_passes']==728 and passes[1]['bytes_read']==63288057
+        and all(z['read_rates_by_kind']==dict(binary=1048576,other=2097152)
+            and z['original_owned_read_operations_preserved'] is True and z['extra_sampler_or_native_query_started'] is False for z in passes)
+        and frame['frame_state']=='CLOSED' and frame['registered_live_frame'] is False
+        and frame['input_count']==1658 and frame['input_bytes']==121039342
+        and len(frame['actual_byte_boundaries'])==1 and frame['actual_byte_boundaries'][0]['role']=='before'
+        and p.v.pins(frame['actual_byte_boundaries'][0]['actual_byte_pins'])==req
+        and frame['held_identity_after_owned_cleanup'] is None
+        and h['input_lock_handles_opened']==h['input_lock_handles_closed']==1966
+        and h['input_lock_handles_remaining']==h['active_reader_bindings']==h['active_byte_streams']==h['handle_close_failed_attempts']==0
+        and h['input_lock_cleanup_confirmed'] is True and h['maximum_lock_seconds']==600
+        and dup['duplicate_handles_opened']==dup['duplicate_handles_closed']==dup['shared_offset_resets']==2386
+        and dup['duplicate_handles_remaining']==dup['duplicate_close_failed_attempts']==0
+        and dup['active_borrow_binding'] is False and dup['byte_stream_pathname_reopens']==0,
+        'ORIGINAL_FULL_BEFORE_PARTIAL728_ALL_HANDLES_CLOSED')
+    m.profile.phase_contract(h['acquisition_phase_pressure'],1966,True);m.m.early_contract(root['early_source_checkpoint'])
+    io_=root['preparation_IO'];stats=root['terminal_parent_failure_statistics']
+    require(io_['finished'] is True and io_['bound_inputs']==io_['final_fresh_hashes']==181
+        and io_['read_passes']==362 and io_['bytes_read']==29354226
+        and stats['characters_written']==P108_BODY['bytes'] and stats['semantic_fields_intentionally_removed']==0
+        and stats['terminal_failed_evidence_only'] is True and stats['runtime_accepted'] is False
+        and stats['original_files_rewritten'] is False and stats['original_live_frame_guard_restarted'] is False,
+        'ORIGINAL_ALL_METADATA_AND_BOUNDED_FAILURE_WRITE')
+    for doc in (root,body):
+        require(doc['P09_gate']==doc['A12_gate']==doc['A13_gate']=='OPEN'
+            and all(doc[k] is False for k in ('full249_current_qualified','signed16_current_qualified','product_complete','PC_freeze_resolved')),
+            'PENDING108_NO_GATE_PROMOTION')
+    return pending108_summary()
+
+def closing_pin(value,kind):
+    pin=json.loads(value) if isinstance(value,str) else value
+    require(kind in ('review','source','accept') and type(pin) is dict and set(pin)=={'path','bytes','sha256'}
+        and type(pin['bytes']) is int and 0<pin['bytes']<=16777216 and isinstance(pin['sha256'],str)
+        and re.fullmatch('[0-9a-f]{64}',pin['sha256']) is not None and isinstance(pin['path'],str)
+        and re.fullmatch(re.escape(p.DIR)+r'/p340-closing-'+kind+r'-run[0-9]{3}\.v1\.json',pin['path']) is not None,
+        'EXACT_CLOSING_LITERAL_PIN')
+    return pin
+
+def closing_contract(doc,scope,codes,reviewed=None,review_pin=None,source=None,source_pin=None):
+    legacy,plan,names,binding,required,extras,baseline,added,_,_=scope
+    common(doc,plan,names,required,binding,extras,baseline,added,codes)
+    require(plan['runtime_source_qualified_individual_cases']==101 and plan['next_runtime_index']==108
+        and doc['pending108_product_review']==pending108_summary()
+        and doc['actual_product_child_executed'] is False and doc['accepted_exact_product_body_count']==0
+        and doc['source_attempted'] is False and doc['source_qualified'] is False
+        and doc['original_parent_capture_adapter_selected'] is False and doc['diagnostic_parent_connection_selected'] is False
+        and doc['successful_product_reexecution_allowed'] is False
+        and doc['original_failed_root_accepted'] is False and doc['original_partial_after_hash_completed'] is False
+        and doc['source_kind']=='INDEPENDENT_CURRENT95_AFTER_COMPLETED108_NOT_ORIGINAL_PARTIAL_AFTER'
+        and doc['original_executed_source_pins']==list(pending108_scope(required).values())
+        and doc['current_source_transition_paths']==[SELF,TEST],
+        'INDEPENDENT_SOURCE_EPOCH_NOT_NEW_PRODUCT_OR_ORIGINAL_REWRITE')
+    if doc['state']==C_REVIEW:
+        require(doc['runtime_contract_executions']==EXECUTED and doc['reused_light_contract_executions']==0
+            and doc['own_queue_contract_tests_passed']==doc['synthetic_following_queue_contract_tests_passed']==COUNT
+            and doc['independent_source_frame_attempted'] is False and doc['independent_source_frame_qualified'] is False
+            and doc.get('source_frame') is None and 'runtime_plan' not in doc,'CLOSING_REVIEW_ONLY_ALL_CURRENT_CONTRACTS')
+        m.guarded_contract(doc['contract_checkpoint_statistics'],EXECUTED)
+        return
+    require(doc['state'] in (C_SOURCE,C_ACCEPT) and reviewed is not None,'ONLY_SOURCE_OR_ACCEPT')
+    closing_contract(reviewed,scope,codes);closing_pin(review_pin,'review')
+    require(doc['closing_review_pin']==review_pin and doc['runtime_contract_executions']==0
+        and doc['contract_checkpoint_statistics'] is None and doc['reused_light_contract_executions']==EXECUTED
+        and doc['qualified_contract_checkpoint_statistics']==reviewed['contract_checkpoint_statistics'],
+        'EXACT_SAME_CODE_REVIEW_REUSE_NO_FABRICATED_TESTS')
+    if doc['state']==C_SOURCE:
+        require(doc['independent_source_frame_attempted'] is True and doc['independent_source_frame_qualified'] is True
+            and 'runtime_plan' not in doc,'SOURCE_NATIVE_ONLY_NO_ADVANCE')
+        path_guard_contract(doc['source_path_guard_diagnostics'])
+        if int(SCHEMA.rsplit('/v',1)[1])>=15:acquisition_diagnostic_contract(doc['source_frame']['handles'])
+        rebound(x.validate_source,N=N,DIRECTORIES=DIRECTORIES,SOURCE_PASS=C_SOURCE,prepared=closing_source_header)(doc,required)
+        return
+    closing_pin(source_pin,'source')
+    require(source is not None and source['closing_review_pin']==review_pin and doc['closing_source_pin']==source_pin,
+        'EXACT_REVIEW_SOURCE_ACCEPT_CHAIN')
+    closing_contract(source,scope,codes,reviewed,review_pin)
+    require(doc['independent_source_frame_attempted'] is False and doc['independent_source_frame_qualified'] is False
+        and doc.get('source_frame') is None and doc['accepted_exact_compound_case_count']==1
+        and doc['semantic_body_capture_pass_count']==1
+        and doc['runtime_plan']==g.advance(legacy,plan,names,108),'EXACT_ONCE_COMPOUND102_NOT_ORIGINAL_FAILED_PASS')
+
+def closing_source_header(doc,required):
+    # 106 전용 metadata 기대값만 현재108로 바인딩. 원 Native/두 byte/identity/cleanup oracle 유지.
+    require(doc['schema_version']==SCHEMA and doc['state']==C_SOURCE and len(required)==N
+        and doc['resource_stop_reason'] is None and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['preparation_IO']['finished'] is True
+        and doc['preparation_IO']['bound_inputs']==doc['preparation_IO']['final_fresh_hashes']
+        and doc['pending108_product_review']==pending108_summary() and doc['actual_product_child_executed'] is False
+        and doc['successful_product_reexecution_allowed'] is False
+        and doc['original_failed_root_accepted'] is False and doc['original_partial_after_hash_completed'] is False
+        and doc['independent_source_frame_attempted'] is True and doc['independent_source_frame_qualified'] is True
+        and p.v.pins(doc['original_executed_source_pins'])==pending108_scope(required)
+        and doc['current_source_transition_paths']==[SELF,TEST],
+        'CURRENT1658_SOURCE_HEADER_REPLACES_ONLY_106_SPECIFIC_METADATA')
+
+def pending108_scope(required):
+    return {**required,**{z['path']:z for z in P108_CODE}}
+
+def require_no_pending_product_reexecution(index):
+    require(index!=108,'SUCCESSFUL108_SOURCE_CLOSING_REQUIRED_NO_PRODUCT_REEXECUTION')
+    require(index!=111,'SUCCESSFUL111_SOURCE_CLOSING_REQUIRED_NO_PRODUCT_REEXECUTION')
+
+QUALIFIED1028_PIN=dict(path=p.DIR+'/p340-light-run122.v1.json',bytes=81618,
+    sha256='aaf669e76577cbb21364ddfee78dd7292d873cae24f3ea114a4840b126183647')
+QUALIFIED1028_CODE=[
+ dict(path=SELF,bytes=223789,sha256='99a384abe0ef19fa6765c9c9f8a7a4094f0003ab9caa432d6ef70581c435e5eb'),
+ dict(path=TEST,bytes=187937,sha256='c428a159980f4b0c5b79c2e9d49024f4b128bdd4e538a717dc81b242410716cd')]
+REPLAY1028_PINS=[
+ dict(path=p.DIR+'/p340-light-run124.v1.json',bytes=80278,
+    sha256='8d4899c5b7e8df3624968cabf574b246417af92fa9f426dfbf73f39bdd97c9ec'),
+ dict(path=p.DIR+'/p340-light-review-run125.v1.json',bytes=77482,
+    sha256='f304e1d7ad839167f187d8bfafd432fb4f7402e65a5dbb1bb2e30a5b7878fd27')]
+REPLAY1028_CODE=[
+ dict(path=SELF,bytes=225193,sha256='9cf7d1e0d64969762399ac9bf27a5a8cc43f55dc2f2ca5742f9fc520483b1d19'),
+ dict(path=TEST,bytes=188052,sha256='8571736c431413fa067b432251b12df056637d3a15ec95a5bd8d526c37263256')]
+REPLAY1032_PINS=[
+ dict(path=p.DIR+'/p340-light-run127.v1.json',bytes=86226,
+    sha256='fa07f471bfbf2e5b78e41318d89a00f9d14071783f99ad922df5b8e0b5489bc9'),
+ dict(path=p.DIR+'/p340-light-review-run128.v1.json',bytes=78002,
+    sha256='501e2b045ad8d4377235067f0563929c7f0944601bf3b06b327c479e74355a26')]
+REPLAY1032_CODE=[
+ dict(path=SELF,bytes=227264,sha256='dc6b24ec5bd1120f94a7cbe5313616572834590627c14553975203032fcad79e'),
+ dict(path=TEST,bytes=189615,sha256='8228ff6b6a5a862db4cced548d3821b205588ce4004d4c37aaa3d30a50ef5538')]
+
+def historical_replay1028_pair(q,scope,doc,pin,plan):
+    if pin in REPLAY1032_PINS:
+        pins,codes,count,archive_root=REPLAY1032_PINS,REPLAY1032_CODE,516,'p361-qualified1032-code'
+    else:
+        pins,codes,count,archive_root=REPLAY1028_PINS,REPLAY1028_CODE,514,'p361-qualified1028-replay-code'
+    executed=2*count
+    require(pin in pins and doc['current95_code_pins']==FROZEN93+codes,
+        'EXACT_REPLAY1028_HISTORICAL_PAIR_NOT_CURRENT_GO')
+    for logical in codes:
+        archive=dict(logical,path='implementation/p09/evidence/'+archive_root+'/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_REPLAY1028_PHYSICAL_CODE_ARCHIVE')
+    old=archived_pair_scope((scope[0],plan,*scope[2:]),codes)
+    light_oracle=rebound(light_contract,COUNT=count,EXECUTED=executed)
+    if pin==pins[0]:
+        light_oracle(doc,plan,old[2],old[4],old[3],old[5],old[6],old[7],FROZEN93+codes)
+    else:
+        lp=doc['reviewed_light_pin'];require(lp==pins[0],'REPLAY1028_EXACT_LIGHT_FRESH_CHAIN')
+        light=m.m.m.review.bound_json(q,lp)
+        rebound(fresh_contract,light_contract=light_oracle,EXECUTED=executed)(doc,light,lp,
+            plan,old[2],old[4],old[3],old[5],old[6],old[7],FROZEN93+codes)
+    return dict(current_GO=False,historical_contract_executions=executed,product_replayed=False)
+
+def historical1028_light(q,scope,doc,pin,plan):
+    """Validate the exact older LIGHT under its archived pair, never today's GO."""
+    require(pin==QUALIFIED1028_PIN and doc['current95_code_pins']==FROZEN93+QUALIFIED1028_CODE,
+        'EXACT_QUALIFIED1028_HISTORICAL_LIGHT')
+    for logical in QUALIFIED1028_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p361-qualified1028-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_QUALIFIED1028_CODE_ARCHIVE')
+    old=archived_pair_scope((scope[0],plan,*scope[2:]),QUALIFIED1028_CODE)
+    rebound(light_contract,COUNT=514,EXECUTED=1028)(doc,plan,old[2],old[4],old[3],old[5],
+        old[6],old[7],FROZEN93+QUALIFIED1028_CODE)
+    return dict(current_GO=False,historical_contract_executions=1028,product_replayed=False)
+
+FORMAL790_CODE=[
+ dict(path=SELF,bytes=136765,sha256='82063ee4121d2cce3a1af6b3691b7fbd498a35fdfb292588764a2609f957ba23'),
+ dict(path=TEST,bytes=107566,sha256='abab47c6c3fa55da769cdf3e4baca5b7f45e763795ad1d191386a7deacbd2f41')]
+FORMAL790_CLOSING=[
+ dict(path=p.DIR+'/p340-closing-review-run037.v1.json',bytes=190535,sha256='add11f331e8fb653aeecdc3e6ccb5001b44d26196a47c32d0ae2a0189d6ffb5d'),
+ dict(path=p.DIR+'/p340-closing-source-run040.v1.json',bytes=538084,sha256='7690a07c92fbd66041dd64cf4cc6751511b55b07278efe6281f3c87981b191b3'),
+ dict(path=p.DIR+'/p340-closing-accept-run041.v1.json',bytes=193683,sha256='e376ca04d7175509fe334a23e25655b9bdf36bd13f1a9b03b2aeaeadb0badc61')]
+PREFORMAL109_PIN=dict(path=p.DIR+'/p340-light-run042.v1.json',bytes=181050,sha256='c82d6893409f3175b9792c1ddc288a8802b521952dfaf6b64367fc0750a87aee')
+PREFORMAL109_FAILURE='test_literal_source_failure_preserved_not_accept (test_preserved106_queue_runtime.Source021StopReviewTests.test_literal_source_failure_preserved_not_accept)'
+
+def archived_pair_scope(scope,pair):
+    require(type(scope) is tuple and len(scope)==10,'ARCHIVED790_SCOPE_SHAPE')
+    legacy,plan,names,binding,required,extras,baseline,added,latest,prior=scope
+    old={z['path']:z for z in pair}
+    require(set(old)=={SELF,TEST} and all(required[k]==extras[k]==added[k] for k in old),
+        'ARCHIVED790_ONLY_TWO_TRANSITION_PATHS')
+    # 과거 source의 물리 바이트는 별도 archive에서 확인한다. 새 current GO가 아니다.
+    return (legacy,plan,names,binding,{**required,**old},{**extras,**old},baseline,
+        {**added,**old},latest,prior)
+
+def archived790_scope(scope):return archived_pair_scope(scope,FORMAL790_CODE)
+
+FORMAL862_CODE=[
+ dict(path=SELF,bytes=152778,sha256='9fcf1446bf38e14b67c05f10f25b693e6656a9864227d7d71a21ae9bc27b8473'),
+ dict(path=TEST,bytes=123113,sha256='c01811db277830995f6fb911cd7f181800f17170cfdf0a8037938d1583c54819')]
+FORMAL862_PINS=[
+ dict(path=p.DIR+'/p340-stop-review-run056.v1.json',bytes=64166,sha256='b6a55cbe91c82661f68ae75e24dcc4f8aa995130247c66f09e96c5d88160b4c8'),
+ dict(path=p.DIR+'/p340-light-run057.v1.json',bytes=68134,sha256='a64c0ba40d8c0f0225539d3775514c5edb3983d3c381ee796c6eca4406a51e0f'),
+ dict(path=p.DIR+'/p340-light-review-run058.v1.json',bytes=64018,sha256='61a00fcb8ffb378d8ae6977fe7ab6bf3185c427f33698954f3b253117a7df853'),
+ dict(path=p.DIR+'/p340-case-109-run059.v1.json',bytes=509270,sha256='c08b42a7f820e8cd214a502d0f3cff055e3c839f06d3a28a236c9b856b99eaad'),
+ dict(path=p.DIR+'/p340-stop-review-run060.v1.json',bytes=64850,sha256='911f8c79d63540ab61f28c79c95e69647a03b4517070c94aa8990fe811d308e8'),
+ dict(path=p.DIR+'/p340-light-review-run061.v1.json',bytes=64786,sha256='0f4e7b894f927ee9e41169e5420cd1d64b40f690630891309014d706f2184bc9'),
+ dict(path=p.DIR+'/p340-case-109-run062.v1.json',bytes=703412,sha256='5b1f3220d0448673b61aff5ee0db885cf03b7c9261e6e51f06464901da74d0d9'),
+ dict(path=p.DIR+'/p340-light-run063.v1.json',bytes=69306,sha256='3a1216d510063794c449a5fc622c46a4bfaadf99b87079ca9359a2de344094c6'),
+ dict(path=p.DIR+'/p340-light-review-run064.v1.json',bytes=65674,sha256='72be9720d93578ac456412ec2565e24f0999e3a17a41f3b05e9d9da90c734434'),
+ dict(path=p.DIR+'/p340-case-110-run065.v1.json',bytes=461324,sha256='60fd6251f28f09f7ad6dbeb24524d5cb5ca9511cacdb7f0dfbc8d35d00519283')]
+RAM065_SIDE=dict(path=p.DIR+'/cases/p340-failure-110-run065.json',bytes=12256,
+    sha256='a020fbb8a93f1220e84b3e8aa78d5559d242af755090564b0b413945f682d805')
+PREFORMAL066_PIN=dict(path=p.DIR+'/p340-stop-review-run066.v1.json',bytes=71487,
+    sha256='9bf482796d4c66a92de164bf64adb8d62ca8626b84ae79a191f2f26b5a735bea')
+PREFORMAL066_CODE=[
+ dict(path=SELF,bytes=168607,sha256='4185462737b7a3ae04b83c3c1a68e6125a4ca90ed0cd1be907c33e21ce3cd272'),
+ dict(path=TEST,bytes=131794,sha256='dc7f5cdad0b2ecacc134fa6fcb671b9e175434b23f2f22eb066f6a1fe8728257')]
+
+def preformal066_review(doc):
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v22'
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['error_code']=='P152_FULL_REDACTED_FAILURE'
+        and doc['failure_diagnostic']['stage']=='anchor' and doc['failure_diagnostic']['exception_class']=='KeyError'
+        and doc['resource_stop_reason'] is None and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['source_attempted'] is False and doc['source_qualified'] is False
+        and doc['actual_product_child_executed'] is False and doc['accepted_exact_product_body_count']==doc['runtime_contract_executions']==0
+        and doc.get('terminal_source_frame') is None and doc.get('current95_code_pins') is None
+        and doc['preparation_IO']['finished'] is False,'PREFORMAL066_NOT_NATIVE_OR_QUALIFIED')
+    pins={z['path']:z for z in doc['bound_preparation_input_pins']}
+    require(all(pins.get(z['path'])==z for z in PREFORMAL066_CODE),'PREFORMAL066_EXACT_FAILED_CODE_PAIR')
+    return dict(original_failed_preserved=True,current_GO=False,Native_or_product_started=False,
+        found_cause='NATIVE107_V5_RECORD_ORACLE_INHERITED_V22_PREFRAME_FIELD')
+
+def epoch862_oracles():
+    schema='hwpx-agent.p09-preserved106-fixed-runtime-queue/v21'
+    old_common=rebound(common,SCHEMA=schema,metadata_path_contract=rebound(metadata_path_contract,SCHEMA=schema))
+    old_light=rebound(light_contract,common=old_common,COUNT=431,EXECUTED=862)
+    old_fresh=rebound(fresh_contract,common=old_common,light_contract=old_light,EXECUTED=862)
+    old_record=rebound(record,common=old_common,SCHEMA=schema,EXECUTED=862)
+    old_stop=rebound(stopped,SCHEMA=schema,ram_parent_rejection=rebound(ram_parent_rejection,SCHEMA=schema))
+    old_review=rebound(review_contract,common=old_common,stopped=old_stop)
+    return old_light,old_fresh,old_record,old_stop,old_review
+
+def epoch862_profile(doc,pin,scope):
+    require(pin in FORMAL862_PINS and doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v21'
+        and doc['current95_code_pins']==FROZEN93+FORMAL862_CODE,'EXACT862_PIN_AND_CODE_NOT_CURRENT_GO')
+    return archived_pair_scope(scope,FORMAL862_CODE),FROZEN93+FORMAL862_CODE,epoch862_oracles()
+
+FORMAL890_CODE=[
+ dict(path=SELF,bytes=171815,sha256='6496afa6b57f4327ec55ee35fd483567fc880a9c13cb0c55c0eb1d35e66be1b5'),
+ dict(path=TEST,bytes=132419,sha256='2c2fa1ce3a02dc752e78d607b92df2dcfbd56d737dbebf6a17d0fd49f8a44902')]
+CASE111_V24_CODE=[
+ dict(path=SELF,bytes=179934,sha256='417e8f7f1b736c07387324bb6829ed22d176ae8e8498f2977738101d32438c95'),
+ dict(path=TEST,bytes=137611,sha256='8ebe6bc796214808f8f67c49e59c51845af6e1c7173699f8af7f0f7241e425ac')]
+CASE111_V24_CODE_ARCHIVE=[
+ dict(row,path='implementation/p09/evidence/p361-v24-candidate-code/'+row['path'])
+ for row in CASE111_V24_CODE]
+FORMAL890_PINS=[
+ dict(path=p.DIR+'/p340-stop-review-run068.v1.json',bytes=66518,sha256='8a13957758d45fbf36c23404ac54311b93cac4d19e13e83d82dccc19dade4dbe'),
+ dict(path=p.DIR+'/p340-light-run069.v1.json',bytes=70506,sha256='60a091bf73386714d7d9a78f6d09a5b6b54c8d2c4bb1d0470cee1924ff982ff7'),
+ dict(path=p.DIR+'/p340-light-review-run070.v1.json',bytes=66702,sha256='d5b34a8ecde061e65b4171e4d87996c035e58f1bef62ff477a394172b1de059a'),
+ dict(path=p.DIR+'/p340-case-110-run071.v1.json',bytes=214500,sha256='5e8eb76e024c7b874494d32cfb4cde8b1e22b0e708bc8cf0cad1f2e075eecaa4'),
+ dict(path=p.DIR+'/p340-stop-review-run072.v1.json',bytes=67062,sha256='dd3d7f78e2b48ac3592a78f80901c4062e15f10342fbdbad6eb81a7812ec4fc2'),
+ dict(path=p.DIR+'/p340-light-review-run073.v1.json',bytes=67258,sha256='330bc35319bb8bd4d56c898618bb01dfe1d39dc07afea46e759a1813f466fa07'),
+ dict(path=p.DIR+'/p340-case-110-run074.v1.json',bytes=696572,sha256='96b5f76459f94ecb39cf029eeaedf0ddce085ba569763889f99684a67387eb06'),
+ dict(path=p.DIR+'/p340-light-run075.v1.json',bytes=72294,sha256='b7c33ab1a35db500106b25f0760041c394aab9d4b4505ec1f41d3f93f7f7f542')]
+INITIAL076_PIN=dict(path=p.DIR+'/p340-light-review-run076.v1.json',bytes=23783,
+    sha256='4e9336654bd7e5452d2196730128c38f537c0213df8368649f224369d947d3b0')
+
+def epoch890_oracles():
+    schema='hwpx-agent.p09-preserved106-fixed-runtime-queue/v22'
+    old_common=rebound(common,SCHEMA=schema,metadata_path_contract=rebound(metadata_path_contract,SCHEMA=schema))
+    old_light=rebound(light_contract,common=old_common,COUNT=445,EXECUTED=890)
+    old_fresh=rebound(fresh_contract,common=old_common,light_contract=old_light,EXECUTED=890)
+    old_record=rebound(record,common=old_common,SCHEMA=schema,EXECUTED=890)
+    old_stop=rebound(stopped,SCHEMA=schema,preframe_deferred=rebound(preframe_deferred,SCHEMA=schema),
+        ram_parent_rejection=rebound(ram_parent_rejection,SCHEMA=schema))
+    old_review=rebound(review_contract,common=old_common,stopped=old_stop)
+    return old_light,old_fresh,old_record,old_stop,old_review
+
+def archival_profile(doc,pin,scope):
+    if doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v21':
+        return epoch862_profile(doc,pin,scope)
+    require(pin in FORMAL890_PINS and doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v22'
+        and doc['current95_code_pins']==FROZEN93+FORMAL890_CODE,'EXACT890_PIN_AND_CODE_NOT_CURRENT_GO')
+    return archived_pair_scope(scope,FORMAL890_CODE),FROZEN93+FORMAL890_CODE,epoch890_oracles()
+
+def preframe_ram_window(owner,clock=time.monotonic):
+    # 기존 sampler/checkpoint만 사용. 추가 표본, thread, sleep, Native, 재시도는 없다.
+    owner.checkpoint_io()
+    with owner.lock:
+        rows=[{k:v[k] for k in ('system_cpu_percent','available_ram_percent','commit_used_percent')}
+            for v in owner.samples[-p.c.POLICY['start_consecutive_samples']:]]
+        count=len(owner.samples);age=clock()-owner.last_sample_at
+    require(type(age) in (int,float) and math.isfinite(age) and 0<=age<=p.c.POLICY['sample_seconds'],
+        'PREFRAME_SAMPLE_FRESHNESS')
+    require(len(rows)==p.c.POLICY['start_consecutive_samples'],'PREFRAME_TWO_ORIGINAL_SAMPLES')
+    admitted=0
+    for row in rows:
+        _,reason=p.c.decision(row,0);require(reason is None,'PREFRAME_ORIGINAL_RESOURCE_STOP')
+        require(row['system_cpu_percent']<p.c.POLICY['emergency_cpu_percent'],'PREFRAME_ALREADY_SATURATED')
+        admitted=p.c.admitted_count(row,admitted)
+    return dict(state='PASS_PREFRAME_RAM_WINDOW_NOT_PRODUCT_OR_GO' if admitted==len(rows) else 'DEFERRED_PREFRAME_RAM_WINDOW_NOT_GO',
+        original_samples=rows,original_sample_count=count,start_ram_min_percent=p.c.POLICY['start_ram_min_percent'],
+        start_consecutive_samples=p.c.POLICY['start_consecutive_samples'],sample_age_seconds=age,
+        original_checkpoint_called=True,new_sampler_thread_or_Native_started=False,parent_admission_recheck_retained=True)
+
+def initial_ram_deferred(doc):
+    # 原 admission에는 아직 Reader/cursor/code95가 없다. 검토의 현재 cursor를
+    # 원 실패 cursor라고 꾸미지 않고, 오직 실행 전 음성 분류만 한다.
+    require(doc['schema_version'] in (SCHEMA,'hwpx-agent.p09-preserved106-fixed-runtime-queue/v22')
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['error_code']=='bootstrap_idle_window_not_admitted'
+        and doc['failure_diagnostic']['stage']=='admission' and doc['failure_diagnostic']['exception_class']=='ValueError'
+        and doc['resource_stop_reason'] is None and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['original93_pins']==FROZEN93 and doc['startup_limits']==STARTUP_LIMITS
+        and doc['stop_resume_policy']==m.STOP_POLICY and doc['verification_bytecode_cache_writes_disabled'] is True,
+        'INITIAL_RAM_ORIGINAL_ADMISSION_AND_POLICY')
+    require(all(doc[k] is False for k in ('source_attempted','source_qualified','actual_product_child_executed',
+        'original_parent_capture_adapter_selected','diagnostic_parent_connection_selected','actual_input_path_guard_selected',
+        'actual_boundary_adapter_restored','parent_return_status_recorded_before_after_parent_guard'))
+        and doc['actual_source_path_guard_diagnostics']==[] and doc['contract_checkpoint_statistics'] is None
+        and all(type(doc[k]) is int and doc[k]==0 for k in ('accepted_exact_product_body_count','runtime_contract_executions'))
+        and all(doc.get(k) is None for k in ('prior_runtime_plan','runtime_plan','selected_test_index','selected_test_name',
+        'current95_code_pins','preparation_IO','bound_preparation_input_pins','terminal_source_frame','case_receipt_path',
+        'case_receipt_pin','terminal_parent_failure_sidecar_pin')),'INITIAL_RAM_NO_READER_CURSOR_NATIVE_PRODUCT_OR_GO')
+    require(all(type(doc[k]) is type(v) and doc[k]==v for k,v in p.r.flags().items()),'INITIAL_RAM_NO_GATE_PROMOTION')
+    obs=doc['metadata_observation'];rows=obs['samples']
+    require(type(rows) is list and 1<=len(rows)<=6 and type(obs['completed_sample_count']) is int
+        and obs['completed_sample_count']==len(rows) and obs['new_sampler_thread_started'] is False
+        and obs['foreign_PID_query_executed'] is False and obs['own_process_only'] is True
+        and obs['original_guard_and_CPU_denominator_unchanged'] is True,'INITIAL_RAM_ORIGINAL_OBSERVATIONS')
+    hot=count=0;low=False
+    for row in rows:
+        hot,reason=p.c.decision(row,hot)
+        require(reason is None and row['system_cpu_percent']<p.c.POLICY['emergency_cpu_percent'],
+            'INITIAL_RAM_NOT_CPU_COMMIT_OR_HARD_STOP')
+        count=p.c.admitted_count(row,count);low=low or row['available_ram_percent']<p.c.POLICY['start_ram_min_percent']
+        require(count<p.c.POLICY['start_consecutive_samples'],'INITIAL_RAM_NO_CONSECUTIVE_START_WINDOW')
+    require(low,'INITIAL_RAM_ACTUAL_LOW_START_SAMPLE')
+    return dict(state='STRICT_INITIAL_RAM_DEFER_NO_CURSOR_NOT_PRODUCT_OR_GO',current_GO=False,
+        original_failed_preserved=True,original_cursor_unbound=True,review_cursor_is_projection_not_original_failure_cursor=True,
+        Reader_Native_or_product_started=False,cleanup_confirmed=True)
+
+def historical_light_review_admission_deferred(q,name,doc):
+    """Exclude only the exact old no-work reviewer attempt, never as a stop PASS or GO."""
+    pin=HISTORICAL_LIGHT_REVIEW_ADMISSION_DEFER
+    if name!=pin['path']:return False
+    expected={k:pin[k] for k in ('path','bytes','sha256')}
+    require(q.reader.snapshots.get(name)==expected,
+        'EXACT_HISTORICAL_LIGHT_REVIEW_ADMISSION_DEFER_PIN')
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v22'
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['error_code']=='bootstrap_idle_window_not_admitted',
+        'EXACT_HISTORICAL_LIGHT_REVIEW_ADMISSION_DEFER_CLASS')
+    classified=initial_ram_deferred(doc)
+    require(classified['state']=='STRICT_INITIAL_RAM_DEFER_NO_CURSOR_NOT_PRODUCT_OR_GO'
+        and classified['current_GO'] is False and classified['Reader_Native_or_product_started'] is False
+        and classified['cleanup_confirmed'] is True,
+        'HISTORICAL_LIGHT_REVIEW_DEFER_REMAINS_NON_GO')
+    return True
+
+def initial_cpu_deferred(doc):
+    """Classify an exact pre-reader saturated-CPU admission refusal without cursor or GO."""
+    require(doc['schema_version']==SCHEMA and doc['state']=='FAILED_NOT_ACCEPTED'
+        and doc['error_code']=='DEFERRED_ALREADY_SATURATED_SYSTEM'
+        and doc['failure_diagnostic']['stage']=='admission'
+        and doc['failure_diagnostic']['exception_class']=='ValueError'
+        and doc['resource_stop_reason'] is None and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['original93_pins']==FROZEN93 and doc['startup_limits']==STARTUP_LIMITS
+        and doc['stop_resume_policy']==m.STOP_POLICY and doc['verification_bytecode_cache_writes_disabled'] is True,
+        'INITIAL_CPU_ORIGINAL_ADMISSION_AND_POLICY')
+    require(all(doc[k] is False for k in ('source_attempted','source_qualified','actual_product_child_executed',
+        'original_parent_capture_adapter_selected','diagnostic_parent_connection_selected','actual_input_path_guard_selected',
+        'actual_boundary_adapter_restored','parent_return_status_recorded_before_after_parent_guard'))
+        and doc['actual_source_path_guard_diagnostics']==[] and doc['contract_checkpoint_statistics'] is None
+        and all(type(doc[k]) is int and doc[k]==0 for k in ('accepted_exact_product_body_count','runtime_contract_executions'))
+        and all(doc.get(k) is None for k in ('prior_runtime_plan','runtime_plan','selected_test_index','selected_test_name',
+        'current95_code_pins','preparation_IO','bound_preparation_input_pins','terminal_source_frame','case_receipt_path',
+        'case_receipt_pin','terminal_parent_failure_sidecar_pin')),'INITIAL_CPU_NO_READER_CURSOR_NATIVE_PRODUCT_OR_GO')
+    require(all(type(doc[k]) is type(v) and doc[k]==v for k,v in p.r.flags().items()),'INITIAL_CPU_NO_GATE_PROMOTION')
+    obs=doc['metadata_observation'];rows=obs['samples']
+    require(type(rows) is list and len(rows)==1 and obs['completed_sample_count']==1
+        and obs['new_sampler_thread_started'] is False and obs['foreign_PID_query_executed'] is False
+        and obs['own_process_only'] is True and obs['original_guard_and_CPU_denominator_unchanged'] is True,
+        'INITIAL_CPU_EXACT_SINGLE_SYSTEM_SAMPLE')
+    row=rows[0];hot,reason=p.c.decision(row,0)
+    require(row['system_cpu_percent']>=p.c.POLICY['emergency_cpu_percent'] and hot==1 and reason is None
+        and row['system_cpu_percent']==obs['system_cpu_max_percent']
+        and row['available_ram_percent']>=p.c.POLICY['start_ram_min_percent']
+        and obs['own_cpu_max_machine_percent']==row['parent_cpu_machine_percent']==0
+        and obs['new_sampler_thread_started'] is False,'INITIAL_CPU_HOST_SATURATION_REFUSAL')
+    return dict(state='STRICT_INITIAL_CPU_DEFER_NO_CURSOR_NOT_PRODUCT_OR_GO',current_GO=False,
+        original_failed_preserved=True,original_cursor_unbound=True,
+        review_cursor_is_projection_not_original_failure_cursor=True,Reader_Native_or_product_started=False,
+        cleanup_confirmed=True)
+
+def initial_review_projection(plan,plans,reviewed=None):
+    at=reviewed['prior_runtime_plan'] if reviewed is not None else plan
+    require(at in plans,'INITIAL_RAM_REVIEW_PROJECTION_IS_KNOWN_NOT_ORIGINAL_CURSOR')
+    return copy.deepcopy(at)
+
+def preframe_contract(row,passed):
+    require(type(row) is dict and row['state']==('PASS_PREFRAME_RAM_WINDOW_NOT_PRODUCT_OR_GO' if passed else 'DEFERRED_PREFRAME_RAM_WINDOW_NOT_GO')
+        and row['start_ram_min_percent']==p.c.POLICY['start_ram_min_percent']
+        and type(row['start_ram_min_percent']) is int and row['start_consecutive_samples']==2
+        and type(row['start_consecutive_samples']) is int and type(row['original_sample_count']) is int
+        and row['original_sample_count']>=2 and row['original_checkpoint_called'] is True
+        and row['new_sampler_thread_or_Native_started'] is False and row['parent_admission_recheck_retained'] is True,
+        'PREFRAME_POLICY_AND_NO_EXTRA_WORK')
+    age=row['sample_age_seconds'];require(type(age) in (int,float) and math.isfinite(age)
+        and 0<=age<=p.c.POLICY['sample_seconds'],'PREFRAME_EXACT_SAMPLE_AGE')
+    rows=row['original_samples'];require(type(rows) is list and len(rows)==2,'PREFRAME_SAMPLE_PAIR')
+    count=0
+    for s in rows:
+        _,reason=p.c.decision(s,0);require(reason is None and s['system_cpu_percent']<98,'PREFRAME_HARD_GUARDS_RETAINED')
+        count=p.c.admitted_count(s,count)
+    require((count==2) is passed,'PREFRAME_START_RAM_NOT_RELAXED')
+
+def preframe_deferred(doc,plan,required,binding,extras,baseline,added,names):
+    index,name=g.old.select(plan,names)
+    require(doc['schema_version']==SCHEMA and doc['state']=='FAILED_NOT_ACCEPTED'
+        and doc['resource_stop_reason'] is None and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['error_code']==PREFRAME_ERROR
+        and doc['failure_diagnostic']['stage']=='preframe_ram_admission'
+        and doc['prior_runtime_plan']==plan and doc['selected_test_index']==index and doc['selected_test_name']==name
+        and doc['binding']==binding and doc['scope_budget']==budget(required,baseline,added)
+        and doc['current95_code_pins']==FROZEN93+[required[SELF],required[TEST]]
+        and doc['scope_added_ten_pins']==list(added.values()) and doc['extra_frame_controller_pins']==list(extras.values())
+        and doc['source_attempted'] is False and doc.get('terminal_source_frame') is None
+        and doc.get('case_receipt_path') is None and doc.get('case_receipt_pin') is None
+        and doc.get('terminal_parent_failure_sidecar_pin') is None and doc['actual_product_child_executed'] is False
+        and doc['accepted_exact_product_body_count']==doc['runtime_contract_executions']==0
+        and 'runtime_plan' not in doc,'STRICT_PREFRAME_NO_WORK_NO_CURSOR_ADVANCE')
+    preframe_contract(doc['preframe_ram_admission'],False)
+    return dict(state='STRICT_PREFRAME_RAM_DEFER_NOT_PRODUCT_OR_GO',current_GO=False,
+        original_failed_preserved=True,Native_or_product_started=False,cleanup_confirmed=True)
+
+def ram_parent_rejection(doc,side,plan,required,binding,extras,baseline,added,names):
+    # CPU 실패를 RAM으로 바꾸지 않는다. 원 거절/미생성 Job 지표/0byte body를 보존한다.
+    index,name=g.old.select(plan,names)
+    require(doc['schema_version']==SCHEMA and doc['state']=='FAILED_NOT_ACCEPTED'
+        and doc['error_code']=='TERMINAL_FAILURE_EXACT_STOP_NOT_PASS' and doc['resource_stop_reason'] is None
+        and doc['failure_diagnostic']['stage']=='owned_parent' and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['prior_runtime_plan']==plan and doc['selected_test_index']==index and doc['selected_test_name']==name
+        and doc['binding']==binding and doc['current95_code_pins']==FROZEN93+[required[SELF],required[TEST]]
+        and doc['scope_budget']==budget(required,baseline,added) and doc['scope_added_ten_pins']==list(added.values())
+        and doc['extra_frame_controller_pins']==list(extras.values()) and doc['source_attempted'] is True
+        and doc['source_qualified'] is False and doc['actual_product_child_executed'] is False
+        and doc['runtime_contract_executions']==doc['accepted_exact_product_body_count']==0
+        and 'runtime_plan' not in doc and doc.get('case_receipt_pin') is None,'RAM_REJECTION_EXACT_SCOPE_NO_ACCEPTANCE')
+    if SCHEMA.endswith('/v21'):
+        require(index==110 and doc['qualified_light_pin']==FORMAL862_PINS[7]
+            and doc['independent_fresh_pin']==FORMAL862_PINS[8]
+            and doc['terminal_parent_failure_sidecar_pin']==RAM065_SIDE,'ONLY_EXACT_HISTORICAL_RAM065')
+    else:preframe_contract(doc['preframe_ram_admission'],True)
+    require(side['state']=='REJECTED_ORIGINAL_PARENT_DIAGNOSTIC_NOT_ACCEPTED'
+        and side['original_validation_error']==doc['error_code'] and side['diagnostic_only'] is True
+        and side['runtime_accepted'] is False and side['owner_done'] is True and side['owner_cleanup_confirmed'] is True
+        and side['owner_stop_reason'] is None and side['product_body_executed_by_diagnostic'] is False
+        and side['live_guard_sampler_or_frame_restarted'] is False and side['original_parent_state_reason_preserved'] is True,
+        'RAM_REJECTION_ORIGINAL_DIAGNOSTIC_ONLY')
+    frame=doc['terminal_source_frame'];h=frame['handles'];parent=side['original_parent_document']
+    require(side['original_frame_snapshot']==frame and frame['frame_state']=='CLOSED'
+        and frame['registered_live_frame'] is False and frame['input_count']==N
+        and frame['input_bytes']==sum(z['bytes'] for z in required.values()) and frame['actual_byte_boundaries']==[]
+        and doc['actual_input_path_guard_selected'] is True and doc['actual_boundary_adapter_restored'] is True
+        and doc['actual_source_path_guard_diagnostics']==[] and h['borrowed_byte_streams'] is None,
+        'RAM_BEFORE_ANY_SOURCE_BYTE_OR_JOB')
+    require(all(type(h[k]) is int and h[k]==N+DIRECTORIES for k in ('input_lock_handles_opened','input_lock_handles_closed'))
+        and h['input_lock_cleanup_confirmed'] is True and all(type(h[k]) is int and h[k]==0 for k in
+        ('input_lock_handles_remaining','active_reader_bindings','active_byte_streams','handle_close_failed_attempts')),
+        'RAM_ALL_EXACT_HANDLES_CLOSED')
+    require(parent['state']=='DEFERRED_NOT_STARTED' and parent['stop_reason']==parent['resource_stop_reason']=='DEFERRED_STABLE_RESOURCE_WINDOW'
+        and parent['operation_phase']=='admission' and parent['task']==f'p204-r07-case-{index:03}-tests'
+        and parent['binding']==binding and parent['selected_test_names']==[name] and parent.get('job_final') is None
+        and parent['owned_source_reader_passes']==[] and parent['owned_tree_empty'] is True and parent['cleanup_confirmed'] is True
+        and parent.get('exit_code') is None and parent.get('tests_passed') is None and all(parent[k] is False for k in
+        ('worker_created','job_assigned','writer_authorized','actual_job_membership_checked','owned_limits_verified','heavy_work_started','actual_product_child_executed')),
+        'RAM_PARENT_NO_WORKER_NO_FABRICATED_JOB_METRICS')
+    rows=parent['samples'];require(type(rows) is list and len(rows)==6,'RAM_EXACT_ORIGINAL_SIX_WINDOWS')
+    for row in rows:
+        _,reason=p.c.decision(row,0);require(reason is None and row['system_cpu_percent']<98
+            and 8<=row['available_ram_percent']<10,'RAM_ONLY_NOT_CPU_HARD_STOP_OR_ADMITTED')
+    return dict(state='STRICT_PARENT_RAM_REJECTION_NOT_PRODUCT_OR_GO',current_GO=False,
+        original_failed_preserved=True,Native_handles_opened_and_closed=N+DIRECTORIES,
+        original_parent_reason='DEFERRED_STABLE_RESOURCE_WINDOW',actual_product_child_executed=False,cleanup_confirmed=True)
+
+FORMAL828_CODE=[
+ dict(path=SELF,bytes=144808,sha256='1ebb76627ec364043d2cca9315159710c298a7738a799065edcde2d4c84827b9'),
+ dict(path=TEST,bytes=114490,sha256='375ed6f589fe163a7c3e0af440f9a0b119e6d67fea2fec8f4dfe87c76b1774bb')]
+EPOCH828_PINS=[
+ dict(path=p.DIR+'/p340-light-run048.v1.json',bytes=66190,sha256='63487c607b6b3cb7a9bf927625abc6e9f12e355cc7063096611857bd582372a1'),
+ dict(path=p.DIR+'/p340-light-review-run049.v1.json',bytes=62674,sha256='3e361f41d5364cfb0354728d7713dcee8e211c01bfd8c6dbd521cc0aedd3c549'),
+ dict(path=p.DIR+'/p340-case-109-run050.v1.json',bytes=554430,sha256='87921f615d50cb28bd6e0917f458cbc07ca98d4fd014ff5e3c5834e22bf94067')]
+EPOCH828_SIDE=dict(path=p.DIR+'/cases/p340-failure-109-run050.json',bytes=66103,
+    sha256='e3e9f9e07e1c39fa8ee29e28f70ecaf8bc90645f5766f435b4aab8911d9d5792')
+
+def epoch828_validators():
+    old_schema='hwpx-agent.p09-preserved106-fixed-runtime-queue/v20'
+    old_common=rebound(common,SCHEMA=old_schema,metadata_path_contract=rebound(metadata_path_contract,SCHEMA=old_schema))
+    old_light=rebound(light_contract,common=old_common,COUNT=414,EXECUTED=828)
+    old_fresh=rebound(fresh_contract,common=old_common,light_contract=old_light,EXECUTED=828)
+    return old_light,old_fresh
+
+def epoch828_stopped(doc,plan,required,binding,extras,baseline,added,names,sidecar):
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v20'
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['prior_runtime_plan']==plan
+        and doc['selected_test_index']==109 and doc['current95_code_pins']==FROZEN93+FORMAL828_CODE
+        and doc['qualified_light_pin']==EPOCH828_PINS[0] and doc['independent_fresh_pin']==EPOCH828_PINS[1]
+        and doc['terminal_parent_failure_sidecar_pin']==EPOCH828_SIDE
+        and doc['actual_product_child_executed'] is False,'ONLY_EXACT828_PRE_PRODUCT_STOP_EPOCH')
+    scope=archived_pair_scope((None,plan,names,binding,required,extras,baseline,added,None,None),FORMAL828_CODE)
+    # 원 STOP oracle/schema/input2만 과거 값. STOP를 수용하거나 independent review를 생략하지 않는다.
+    old_stop=rebound(stopped,SCHEMA='hwpx-agent.p09-preserved106-fixed-runtime-queue/v20')
+    return old_stop(doc,plan,scope[4],binding,scope[5],baseline,scope[7],names,sidecar)
+
+def epoch828_from_reader(q,scope):
+    bound=m.m.m.review.bound_json
+    for logical in FORMAL828_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-formal828-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT828_PHYSICAL_CODE_ARCHIVE')
+    light,fresh,failed=[bound(q,pin) for pin in EPOCH828_PINS]
+    old=archived_pair_scope(scope,FORMAL828_CODE)
+    legacy,plan,names,binding,required,extras,baseline,added,_,_=old
+    old_light,old_fresh=epoch828_validators();codes=FROZEN93+FORMAL828_CODE
+    old_light(light,plan,names,required,binding,extras,baseline,added,codes)
+    old_fresh(fresh,light,EPOCH828_PINS[0],plan,names,required,binding,extras,baseline,added,codes)
+    require(failed['terminal_parent_failure_sidecar_pin']==EPOCH828_SIDE,'EXACT828_FAILED_SIDECAR_BINDING')
+    side=bound(q,EPOCH828_SIDE);classification=epoch828_stopped(failed,plan,scope[4],binding,scope[5],baseline,scope[7],names,side)
+    zero=placeholder(q,EPOCH828_PINS[2],failed)
+    require(zero is not None and zero['bytes']==0,'EXACT828_ORIGINAL_ZERO_BODY_NOT_PRODUCT_REPLAY')
+    return dict(pins=EPOCH828_PINS,qualified_historical_contracts=828,current_GO=False,
+        original_failed_root_preserved=True,classification_only_not_independent_STOP_review=True,
+        independent_current_STOP_review_required=True,body_placeholder_preserved=True,
+        actual_product_reexecution=False,stop_classification=classification)
+
+def archived790_closing_oracle():
+    old_schema='hwpx-agent.p09-preserved106-fixed-runtime-queue/v19'
+    old_metadata=rebound(metadata_path_contract,SCHEMA=old_schema)
+    old_common=rebound(common,SCHEMA=old_schema,metadata_path_contract=old_metadata)
+    old_header=rebound(closing_source_header,SCHEMA=old_schema)
+    old_closing=rebound(closing_contract,common=old_common,closing_source_header=old_header,
+        SCHEMA=old_schema,COUNT=395,EXECUTED=790)
+    # source/accept의 재귀 검증도 동일 과거 epoch oracle을 사용한다.
+    old_closing.__globals__['closing_contract']=old_closing
+    return old_closing
+
+def archived790_closing_contract(doc,scope,codes,reviewed,rp,source,sp,pin):
+    require([rp,sp,pin]==FORMAL790_CLOSING and codes==FROZEN93+FORMAL790_CODE,
+        'EXACT_ARCHIVED790_CHAIN_NOT_CURRENT_GO')
+    old_closing=archived790_closing_oracle()
+    old_closing(doc,archived790_scope(scope),codes,reviewed,rp,source,sp)
+
+PREFORMAL045_PIN=dict(path=p.DIR+'/p340-light-run045.v1.json',bytes=89321,sha256='c7a139b87bf27b78cfcccb9e58105cb83032473366ad823f07d9fb24ec292dd9')
+PREFORMAL045_CODE=[
+ dict(path=SELF,bytes=142150,sha256='7df77950075e125178d789c875577bad0d2916617c09dd47f12ac550c189a13e'),
+ dict(path=TEST,bytes=112320,sha256='b292d2c44bf5034b1fd6d5c9dd895407929ebc0a4a43684e8e209787eefb28e0')]
+
+def preformal045_review(doc):
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v20'
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['failure_diagnostic']['stage']=='selection'
+        and doc['error_code']=='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_ORIGINAL_HISTORICAL_METADATA_COUNTS'
+        and doc['resource_stop_reason'] is None and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['runtime_contract_executions']==0 and doc['contract_checkpoint_statistics'] is None
+        and doc['actual_product_child_executed'] is False and doc['source_attempted'] is False
+        and doc['source_qualified'] is False and doc['accepted_exact_product_body_count']==0
+        and 'runtime_plan' not in doc and 'prior_runtime_plan' not in doc,
+        'EXACT_PREFORMAL045_SELECTION_FAILURE_NOT_GO')
+    io_=doc['preparation_IO']
+    require(io_['bound_inputs']==io_['read_passes']==213 and io_['bytes_read']==22744338
+        and io_['final_fresh_hashes']==0 and io_['finished'] is False,
+        'PREFORMAL045_UNFINISHED_READER_NOT_CURRENT_QUALIFICATION')
+    return dict(pin=PREFORMAL045_PIN,original_failed_preserved=True,current_GO=False,
+        found_cause='ARCHIVED_V19_METADATA_ORACLE_USED_CURRENT_V20_GLOBAL_SCHEMA',
+        actual_contracts_executed=0,Native_or_product_started=False,resource_cleanup_confirmed=True)
+
+def preformal109_review(doc,plan):
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v19'
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['prior_runtime_plan']==plan
+        and plan['runtime_source_qualified_individual_cases']==102 and plan['next_runtime_index']==109
+        and doc['selected_test_index']==109 and doc['current95_code_pins']==FROZEN93+FORMAL790_CODE
+        and doc['failure_diagnostic']['stage']=='contract_tests'
+        and doc['error_code']=='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_ALL_CURRENT_AND_FOLLOWING_CONTRACTS'
+        and doc['contract_failures']==[PREFORMAL109_FAILURE]
+        and doc['resource_stop_reason'] is None and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['actual_product_child_executed'] is False and doc['source_attempted'] is False
+        and doc['source_qualified'] is False and doc['runtime_contract_executions']==0
+        and doc['accepted_exact_product_body_count']==0 and 'runtime_plan' not in doc,
+        'EXACT_PREFORMAL109_FAILED_NOT_GO_OR_PRODUCT')
+    row=doc['contract_checkpoint_statistics'];io_=doc['preparation_IO']
+    require(row['started_tests']==row['stopped_tests']==row['successful_before_test_checks']==row['successful_after_test_checks']==395
+        and row['runner_calls']==row['returned_runner_calls']==row['successful_before_runner_checks']==row['successful_after_runner_checks']==1
+        and row['original_unittest_results_preserved'] is True
+        and row['original_guard_or_test_coverage_relaxed'] is False
+        and row['new_sampler_or_thread_or_sleep_started'] is False
+        and io_['bound_inputs']==io_['read_passes']==211 and io_['bytes_read']==22489868
+        and io_['final_fresh_hashes']==0 and io_['finished'] is False,
+        'PREFORMAL109_PARTIAL395_NOT_790_QUALIFICATION')
+    return dict(pin=PREFORMAL109_PIN,original_failed_preserved=True,partial395_not790_qualified=True,
+        found_cause='HISTORICAL_SOURCE021_TEST_USED_NEW_CURSOR102',actual_product_reexecution=False,
+        Native_or_product_started=False,resource_cleanup_confirmed=True,current_GO=False)
+
+def closing_accept_from_folder(q,scope):
+    folder=p.c.ROOT/p.DIR;paths=[]
+    for path in folder.glob('p340-closing-accept-run*.v1.json'):
+        paths.append(path)
+        require(len(paths)<=64,'BOUNDED_COMPOUND_ACCEPT_NAMESPACE')
+    accepted=None
+    bound=m.m.m.review.bound_json
+    for path in sorted(paths):
+        name=path.relative_to(p.c.ROOT).as_posix();doc=q.json(name)
+        if doc['state']=='FAILED_NOT_ACCEPTED':
+            require(doc['actual_product_child_executed'] is False and doc['resource_watcher_cleanup_confirmed'] is True,
+                'FAILED_ACCEPT_NO_PRODUCT_OR_LIVE_RESOURCES');continue
+        pin=closing_pin(q.reader.snapshots[name],'accept')
+        rp=closing_pin(doc['closing_review_pin'],'review');reviewed=bound(q,rp)
+        sp=closing_pin(doc['closing_source_pin'],'source');source=bound(q,sp)
+        if doc.get('current95_code_pins')==FROZEN93+FORMAL790_CODE:
+            for logical in FORMAL790_CODE:
+                archive=dict(logical,path='implementation/p09/evidence/p340-formal790-code/'+logical['path'])
+                require(q.pin(archive['path'])==archive,'EXACT_ARCHIVED790_CODE_BYTES')
+            archived790_closing_contract(doc,scope,FROZEN93+FORMAL790_CODE,reviewed,rp,source,sp,pin)
+        else:
+            closing_contract(doc,scope,q.codes,reviewed,rp,source,sp)
+        require(accepted is None,'ONLY_ONE_COMPOUND108_ACCEPTANCE')
+        accepted=(pin,doc)
+    return accepted
+
+PREFORMAL400_PIN=dict(path=p.DIR+'/p340-closing-review-run019.v1.json',bytes=429686,sha256='d47ba93eb8c8d40be27658663574203929332932639dd2be20385900e86f39b2')
+PREFORMAL400_CODE=[
+ dict(path=SELF,bytes=87356,sha256='c7217c6eed7a6ef992ff405d308b30d6b1c360ec6e641bf25aa6c577535044a9'),
+ dict(path=TEST,bytes=44479,sha256='b99464b89a36eef2fc73bceb2c1c85f50926f5d872cd4fc77e62c6d6c8788dd3')]
+
+def preformal400_summary():
+    return dict(pin=PREFORMAL400_PIN,original_failed_preserved=True,qualification400_not_passed=True,
+        partial_current200_one_runner=True,Native_or_product_started=False,cleanup_confirmed=True,
+        found_cause='SYNTHETIC_EXPECTED_PIN_ALIAS_NOT_INDEPENDENT')
+
+def preformal400_review(doc):
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v10'
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['failure_diagnostic']['stage']=='contract_tests'
+        and doc['error_code']=='P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_ALL_CURRENT_AND_FOLLOWING_CONTRACTS'
+        and doc['resource_stop_reason'] is None and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['current95_code_pins']==FROZEN93+PREFORMAL400_CODE
+        and doc['pending108_product_review']==pending108_summary() and doc['runtime_contract_executions']==0
+        and doc['actual_product_child_executed'] is False and doc['independent_source_frame_attempted'] is False
+        and doc['independent_source_frame_qualified'] is False and doc.get('source_frame') is None
+        and doc['contract_failures']==[
+            'test_accept_no_source_pin_substitution (test_preserved106_queue_runtime.Completed108ClosingTests.test_accept_no_source_pin_substitution)',
+            'test_source_wrong_review_pin (test_preserved106_queue_runtime.Completed108ClosingTests.test_source_wrong_review_pin)'],
+        'IMMUTABLE_PREFORMAL400_TWO_SYNTHETIC_ALIAS_FAILURES_NOT_NATIVE')
+    row=doc['contract_checkpoint_statistics'];io_=doc['preparation_IO']
+    require(row['started_tests']==row['stopped_tests']==row['successful_before_test_checks']==row['successful_after_test_checks']==200
+        and row['runner_calls']==row['returned_runner_calls']==row['successful_before_runner_checks']==row['successful_after_runner_checks']==1
+        and row['original_unittest_results_preserved'] is True and row['new_sampler_or_thread_or_sleep_started'] is False
+        and row['original_guard_or_test_coverage_relaxed'] is False
+        and io_['bound_inputs']==io_['read_passes']==186 and io_['final_fresh_hashes']==0 and io_['finished'] is False,
+        'PARTIAL200_NOT400_QUALIFICATION')
+    return preformal400_summary()
+
+
+
+class HeldPathSource:
+    """각 요청에는 새 값 객체만 생성한다. 원 predicate/owner/token guard는 매번 실행."""
+    __slots__=('owner','path','current','root','token')
+    def __init__(self,owner,path,current,root,token):
+        self.owner=owner;self.path=path;self.current=current;self.root=root;self.token=token
+    def __str__(self):return str(self.path)
+    def relative_to(self,base):return self.path.relative_to(base)
+    def predicate(self,result):
+        owner=self.owner;owner.check()
+        require(owner.root is self.root and owner.frame.held.borrower.binding_token is self.token,
+            'EXACT_PATH_FACADE_TOKEN')
+        owner.guards+=1;return result
+    def is_file(self):return self.predicate(not self.current['directory'])
+    def is_symlink(self):return self.predicate(self.current['reparse'])
+    def is_junction(self):return self.predicate(self.current['reparse'])
+    def open(self,mode):raise ValueError('HELD_PATH_FACADE_REQUIRES_ORIGINAL_BORROW_WRAPPER')
+
+class HeldPathGuard:
+    """한 source 요청의 세 pathname 판정을 신선한 exact-held metadata로 묶는다.
+
+    원 AuditEvidenceReader._source boolean guard와 P206 stream identity 검사는
+    그대로 실행한다. reader/frame/binding 수명 밖으로 facade를 내보내지 않는다.
+    Native.inspect의 내부 kernel 호출 수 감소나 프리즈 해결은 주장하지 않는다.
+    """
+    def __init__(self,frame,reader):
+        frame.check()
+        require(reader.root==frame.held.root and '_source' not in vars(reader)
+            and getattr(reader._source,'__func__',None) is audit.AuditEvidenceReader._source,
+            'EXACT_ORIGINAL_AUDIT_SOURCE_AND_ROOT')
+        self.frame=frame;self.reader=reader;self.original_root=reader.root;self.closed=False
+        self.regular={str(path):(name,handle) for name,path,handle,directory in frame.held.owned if not directory}
+        require(set(self.regular)=={str(self.original_root/name) for name in frame.inputs},
+            'ALL_EXACT_HELD_REGULAR_INPUTS')
+        self.attempted=self.queries=self.guards=0;self.restored=False
+        owner=self
+        class Root:
+            def __truediv__(self,name):return owner.source(name)
+        self.root=Root();reader.root=self.root
+    def check(self):
+        require(not self.closed and self.reader.root is self.root,'LIVE_PATH_GUARD_ROOT')
+        self.frame.check();held=self.frame.held
+        require(id(self.reader) in held.active_readers
+            and getattr(self.reader,'_p206_input_lock_owner',None) is held
+            and held.borrower is not None and held.borrower.active_binding
+            and held.borrower.bound_reader is self.reader
+            and held.borrower.loan is None and held.borrower.close_failures==0,
+            'LIVE_ORIGINAL_READER_AND_BORROW_BINDING')
+    def source(self,name):
+        self.check()
+        require(type(name) is str and name in self.frame.inputs,'EXACT_FRAME_INPUT_NAME')
+        path=self.original_root/name;key=str(path)
+        require(key in self.regular and self.regular[key][0]==name,'EXACT_HELD_PATH_NAME')
+        self.attempted+=1
+        current=self.frame.held.api.inspect(self.regular[key][1]);self.queries+=1
+        require(current==self.frame.held.files[key] and current['directory'] is False
+            and current['reparse'] is False and current['inheritable'] is False,
+            'FRESH_HELD_PATH_IDENTITY_TYPE_LINK_INHERITANCE')
+        return HeldPathSource(self,path,current,self.root,self.frame.held.borrower.binding_token)
+    def restore(self):
+        # STOP 후 원 resource callback을 재호출하지 않아도 adapter를 반드시 복구한다.
+        self.frame.registry.check()
+        correct=self.reader.root is self.root
+        self.reader.root=self.original_root;self.closed=True;self.restored=self.reader.root is self.original_root
+        require(correct and self.restored,'ORIGINAL_READER_ROOT_RESTORED')
+    def summary(self):
+        return dict(native_metadata_queries_attempted=self.attempted,fresh_held_metadata_queries=self.queries,
+            original_path_guard_predicates=self.guards,original_reader_root_restored=self.restored,
+            active_path_guard_adapter=not self.closed,pathname_metadata_probes=0,
+            original_stream_identity_check_retained=True,metadata_reused_between_source_requests=False,
+            added_native_queries_recorded_separately_from_original_lock_checks=True,
+            kernel_call_reduction_or_CPU_freeze_improvement_claimed=False)
+
+def read_with_held_path_guards(frame,factory,checkpoint,diagnostics,*,boundary=None):
+    adapters=[]
+    def wrapped(guarded):
+        reader=factory(guarded);adapters.append(HeldPathGuard(frame,reader));return reader
+    original=frame.read_boundary if boundary is None else boundary
+    try:return original(wrapped,checkpoint)
+    finally:
+        for adapter in adapters:
+            try:adapter.restore()
+            finally:diagnostics.append(adapter.summary())
+
+class ActualHeldPathGuards:
+    """같은 원 Frame의 실제 parent 두 경계에 기존 guard를 연결한다.
+
+    별도 sampler/thread/handle/cache를 만들지 않는다. STOP 후에도 원 instance
+    method를 복구하고, Reader root/token/원 stream identity/모든 byte는 유지한다.
+    """
+    def __init__(self,frame,diagnostics):
+        self.frame=frame;self.diagnostics=diagnostics;self.original=frame.read_boundary
+        self.wrapper=self.read_boundary;self.installed=False;self.restored=False
+    def __enter__(self):
+        self.frame.check()
+        require(not self.installed and not self.restored and 'read_boundary' not in vars(self.frame)
+            and getattr(self.original,'__func__',None) is p.frames.Frame.read_boundary,
+            'ONE_EXACT_ORIGINAL_ACTUAL_FRAME_BOUNDARY')
+        self.frame.read_boundary=self.wrapper;self.installed=True
+        return self
+    def read_boundary(self,factory,checkpoint):
+        require(self.installed and not self.restored and self.frame.read_boundary is self.wrapper,
+            'LIVE_EXACT_ACTUAL_BOUNDARY_ADAPTER')
+        return read_with_held_path_guards(self.frame,factory,checkpoint,self.diagnostics,boundary=self.original)
+    def __exit__(self,*error):
+        correct=self.frame.read_boundary is self.wrapper
+        vars(self.frame).pop('read_boundary',None)
+        self.installed=False;self.restored=True
+        require(correct and getattr(self.frame.read_boundary,'__func__',None) is p.frames.Frame.read_boundary,
+            'ORIGINAL_ACTUAL_FRAME_BOUNDARY_RESTORED')
+        return False
+
+def path_guard_contract(rows):
+    require(type(rows) is list and len(rows)==2,'TWO_PATH_GUARD_BOUNDARIES')
+    for row in rows:
+        require(row['native_metadata_queries_attempted']==row['fresh_held_metadata_queries']==N
+            and row['original_path_guard_predicates']==3*N
+            and row['original_reader_root_restored'] is True and row['active_path_guard_adapter'] is False
+            and row['pathname_metadata_probes']==0 and row['original_stream_identity_check_retained'] is True
+            and row['metadata_reused_between_source_requests'] is False
+            and row['added_native_queries_recorded_separately_from_original_lock_checks'] is True
+            and row['kernel_call_reduction_or_CPU_freeze_improvement_claimed'] is False,
+            'ALL_CURRENT_INPUT_GUARDS_FRESH_RESTORED_NOT_SKIPPED')
+
+SOURCE021_PIN=dict(path=p.DIR+'/p340-closing-source-run021.v1.json',bytes=819478,sha256='8c94da41f340ef9d877a488b1a56ab23d10fa6f6dfda566777dc5d2530b30f95')
+REVIEW404_PIN=dict(path=p.DIR+'/p340-closing-review-run020.v1.json',bytes=186067,sha256='d6ad33748c2092ea1065938fa9d2834975b6380c12d77fce836d12d0eecb769a')
+SOURCE021_CODE=[
+ dict(path=SELF,bytes=90666,sha256='cbc7051ab7542ab71efe239758dcd9651954e20edfd739ce434dae1c193c3dc4'),
+ dict(path=TEST,bytes=44786,sha256='fa3a811c945d3ca6b2087a99d4704f8784599d9142a148c8d62a9cb22b51ee1e')]
+
+def source021_summary():
+    return dict(pin=SOURCE021_PIN,qualified_review_pin=REVIEW404_PIN,
+        original_failed_preserved=True,independent_source_not_qualified=True,
+        actual_product_reexecution=False,partial_read_count426_not_full_boundary=True,
+        owned_handle_and_adapter_cleanup_confirmed=True,CPU_stop_not_bypassed=True)
+
+def source021_review(doc,reviewed,scope):
+    legacy,plan,names,binding,required,extras,baseline,added,_,_=scope
+    old_required={**required,**{z['path']:z for z in SOURCE021_CODE}}
+    old_added={**added,**{z['path']:z for z in SOURCE021_CODE}}
+    old_extras={**extras,**{z['path']:z for z in SOURCE021_CODE}}
+    old_scope=(legacy,plan,names,binding,old_required,old_extras,baseline,old_added,scope[8],scope[9])
+    old_common=rebound(common,SCHEMA='hwpx-agent.p09-preserved106-fixed-runtime-queue/v11')
+    rebound(closing_contract,common=old_common,COUNT=202,EXECUTED=404)(reviewed,old_scope,FROZEN93+SOURCE021_CODE)
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v11'
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['error_code']==doc['resource_stop_reason']=='STOP_SUSTAINED_SYSTEM_CPU'
+        and doc['failure_diagnostic']['stage']=='metadata_hash'
+        and doc['resource_watcher_cleanup_confirmed'] is True and doc['current95_code_pins']==FROZEN93+SOURCE021_CODE
+        and doc['closing_review_pin']==REVIEW404_PIN and doc['actual_product_child_executed'] is False
+        and doc['accepted_exact_product_body_count']==doc['runtime_contract_executions']==0
+        and doc['reused_light_contract_executions']==404 and doc['independent_source_frame_attempted'] is True
+        and doc['independent_source_frame_qualified'] is False
+        and doc['successful_product_reexecution_allowed'] is False and doc['original_failed_root_accepted'] is False
+        and doc['original_partial_after_hash_completed'] is False
+        and doc['pending108_product_review']==pending108_summary(),
+        'EXACT_SOURCE021_CPU_STOP_AFTER404_NOT_NEW_PRODUCT')
+    f=doc['source_frame'];h=f['handles'];b=h['borrowed_byte_streams'];io_=doc['preparation_IO']
+    require(f['frame_state']=='CLOSED' and f['registered_live_frame'] is False
+        and f['input_count']==N and f['input_bytes']==121075799 and f['actual_byte_boundaries']==[]
+        and h['input_lock_handles_opened']==h['input_lock_handles_closed']==N+DIRECTORIES
+        and h['input_lock_cleanup_confirmed'] is True
+        and all(h[k]==0 for k in ('input_lock_handles_remaining','active_reader_bindings','active_byte_streams','handle_close_failed_attempts'))
+        and h['handle_metadata_checks']==N+DIRECTORIES+426
+        and b['duplicate_handles_opened']==b['duplicate_handles_closed']==b['shared_offset_resets']==426
+        and b['duplicate_handles_remaining']==b['duplicate_close_failed_attempts']==b['byte_stream_pathname_reopens']==0
+        and b['active_borrow_binding'] is False
+        and io_['bound_inputs']==io_['final_fresh_hashes']==190 and io_['read_passes']==380
+        and io_['bytes_read']==34211174 and io_['finished'] is True
+        and doc['early_source_checkpoint']['original_hard_CPU_RAM600_guards_preserved'] is True,
+        'ALL_SOURCE021_RESOURCES_CLOSED_PARTIAL426_NEVER_FULL')
+    return source021_summary()
+
+
+
+REVIEW022_PIN=dict(path=p.DIR+'/p340-closing-review-run022.v1.json',bytes=438848,sha256='626321cae7d63f9b45d896d986186aa812c1094a59405d06f94c9c43a5af6288')
+REVIEW022_CODE=[
+ dict(path=SELF,bytes=100997,sha256='bf52033555c8b067645044d4ea4f09cf0901322b7fcaeaccd40f6fc91af5a1f8'),
+ dict(path=TEST,bytes=56849,sha256='14be30332205ad2acb9ef30bced4d286d1b813e18142d701128e54e232f171f8')]
+
+def review022_summary():
+    return dict(pin=REVIEW022_PIN,original_CPU_stop_preserved=True,partial14_not484_qualified=True,
+        Native_or_product_started=False,resource_owner_cleanup_confirmed=True,
+        original_contract_scope_and_guards_retained=True)
+
+def review022_stop(doc):
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v12'
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['error_code']==doc['resource_stop_reason']=='STOP_SUSTAINED_SYSTEM_CPU'
+        and doc['failure_diagnostic']['stage']=='contract_tests' and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['current95_code_pins']==FROZEN93+REVIEW022_CODE
+        and doc['source021_CPU_stop_review']==source021_summary()
+        and doc['runtime_contract_executions']==0 and doc['actual_product_child_executed'] is False
+        and doc['independent_source_frame_attempted'] is False and doc['independent_source_frame_qualified'] is False
+        and doc.get('source_frame') is None and doc['source_path_guard_diagnostics']==[],
+        'EXACT_REVIEW022_CONTRACT_CPU_STOP_NO_NATIVE')
+    row=doc['contract_checkpoint_statistics'];io_=doc['preparation_IO']
+    require(row['started_tests']==row['stopped_tests']==row['successful_before_test_checks']==14
+        and row['successful_after_test_checks']==13
+        and row['runner_calls']==row['successful_before_runner_checks']==1
+        and row['returned_runner_calls']==row['successful_after_runner_checks']==0
+        and row['original_unittest_results_preserved'] is True and row['original_guard_or_test_coverage_relaxed'] is False
+        and row['new_sampler_or_thread_or_sleep_started'] is False
+        and io_['bound_inputs']==io_['read_passes']==193 and io_['final_fresh_hashes']==0
+        and io_['bytes_read']==18082911 and io_['finished'] is False,
+        'REVIEW022_PARTIAL14_PREPARATION_UNFINISHED_NO_PROMOTION')
+    return review022_summary()
+
+
+
+
+class MetadataPathSource:
+    """요청별 새 slots 객체. 판정 순서/오류 fallback/token/원 open을 유지한다."""
+    __slots__=('owner','path','token','info','calls','passed_file','link','junction','direct')
+    def __init__(self,owner,path,token):
+        self.owner=owner;self.path=path;self.token=token
+        self.info=None;self.calls=[];self.passed_file=False;self.link=False;self.junction=False;self.direct=False
+    def predicate(self,kind):
+        self.owner.check(self.token);self.owner.predicates+=1;self.calls.append(kind)
+    def is_file(self):
+        self.predicate('file');self.owner.initial_lstat_attempts+=1
+        self.info=self.fresh_lstat()
+        if self.info is not None:
+            self.owner.initial_lstat_successes+=1
+            # direct regular file만 stat+lstat 중복을 제거한다. reparse/비정상 모양은
+            # 원 is_file -> 새 lstat -> 원 fallback 순서로 돌아간다.
+            self.direct=bool(stat.S_ISREG(self.info.st_mode)
+                and not self.info.st_file_attributes & (stat.FILE_ATTRIBUTE_REPARSE_POINT|stat.FILE_ATTRIBUTE_DIRECTORY))
+        if self.direct:
+            self.owner.direct_files+=1;self.passed_file=True;return True
+        self.info=None;self.owner.file_calls+=1
+        self.passed_file=self.path.is_file();return self.passed_file
+    def fresh_lstat(self):
+        self.owner.lstat_attempts+=1
+        try:info=self.path.lstat();self.owner.lstat_successes+=1
+        except (OSError,ValueError):return None
+        return info if all(type(getattr(info,k,None)) is int
+            for k in ('st_mode','st_file_attributes','st_reparse_tag')) else None
+    def is_symlink(self):
+        self.predicate('symlink')
+        require(self.calls==['file','symlink'] and self.passed_file,'ORIGINAL_FILE_THEN_LINK_ORDER')
+        if not self.direct:self.info=self.fresh_lstat()
+        if self.info is not None and all(type(getattr(self.info,k,None)) is int
+                for k in ('st_mode','st_file_attributes','st_reparse_tag')):
+            self.link=stat.S_ISLNK(self.info.st_mode)
+        else:
+            self.info=None;self.owner.fallback_symlink+=1;self.link=self.path.is_symlink()
+        return self.link
+    def is_junction(self):
+        self.predicate('junction')
+        require(self.calls==['file','symlink','junction'] and not self.link,'ORIGINAL_LINK_THEN_JUNCTION_ORDER')
+        if self.info is None:
+            self.owner.fallback_junction+=1;self.junction=self.path.is_junction()
+        else:
+            self.owner.coalesced+=1
+            self.junction=bool(self.info.st_file_attributes&stat.FILE_ATTRIBUTE_REPARSE_POINT
+                and self.info.st_reparse_tag==stat.IO_REPARSE_TAG_MOUNT_POINT)
+        return self.junction
+    def open(self,mode):
+        self.owner.check(self.token)
+        require(mode=='rb' and self.calls==['file','symlink','junction']
+            and self.passed_file and not self.link and not self.junction,'ALL_ORIGINAL_METADATA_GUARDS_BEFORE_READ')
+        return self.path.open(mode)
+
+class MetadataPathQueries:
+    """direct regular file의 세 판정은 요청마다 새 lstat 한 번에서 얻는다.
+
+    경로 해석·file open·바이트/JSON/원 checkpoint는 그대로다. lstat 오류 또는
+    지원하지 않는 metadata 모양은 원 Path guard에 돌아간다. 원자적 filesystem
+    admission이나 Native handle witness가 아니며 요청 사이 metadata cache도 없다.
+    """
+    def __init__(self,q):
+        reader=q.reader
+        require(not q.finished and reader.root==p.c.ROOT and '_source' not in vars(reader)
+            and getattr(reader._source,'__func__',None) is audit.AuditEvidenceReader._source,
+            'EXACT_ORIGINAL_METADATA_READER_SOURCE_ROOT')
+        self.q=q;self.reader=reader;self.resources=q.resources;self.original_root=reader.root
+        self.owner=(os.getpid(),threading.get_ident());self.closed=False;self.restored=False;self.token=None
+        self.initial_reads=reader.read_passes
+        self.requests=self.file_calls=self.lstat_attempts=self.lstat_successes=0
+        self.initial_lstat_attempts=self.initial_lstat_successes=self.direct_files=0
+        self.coalesced=self.fallback_symlink=self.fallback_junction=self.predicates=0
+        owner=self
+        class Root:
+            def __truediv__(self,name):return owner.source(name)
+        self.root=Root();reader.root=self.root
+    def check(self,token=None):
+        require((os.getpid(),threading.get_ident())==self.owner and not self.closed and not self.q.finished
+            and self.q.resources is self.resources and self.q.reader is self.reader and self.reader.root is self.root
+            and (token is None or self.token is token),'EXACT_LIVE_METADATA_ROOT_OWNER_REQUEST')
+    def source(self,name):
+        self.check();path=self.original_root/name;token=object();self.token=token;self.requests+=1
+        return MetadataPathSource(self,path,token)
+    def restore(self):
+        if self.closed:return
+        correct=self.reader.root is self.root
+        self.reader.root=self.original_root;self.closed=True;self.token=None
+        self.restored=self.reader.root is self.original_root
+        require(correct and self.restored,'METADATA_ORIGINAL_ROOT_RESTORED')
+    def summary(self):
+        return dict(source_requests=self.requests,original_is_file_calls=self.file_calls,
+            metadata_path_policy='REQUEST_LOCAL_DIRECT_REGULAR_LSTAT_V2',
+            initial_lstat_attempts=self.initial_lstat_attempts,initial_lstat_successes=self.initial_lstat_successes,
+            single_lstat_regular_file_checks=self.direct_files,
+            fresh_symlink_lstat_attempts=self.lstat_attempts,fresh_symlink_lstat_successes=self.lstat_successes,
+            junction_queries_coalesced=self.coalesced,original_symlink_fallback_calls=self.fallback_symlink,
+            original_junction_fallback_calls=self.fallback_junction,original_predicate_calls=self.predicates,
+            initial_original_read_passes=self.initial_reads,original_reader_root_restored=self.restored,
+            active_metadata_path_binding=not self.closed,metadata_reused_between_source_requests=False,
+            original_name_resolution_and_open_and_all_bytes_and_JSON_validation_retained=True,
+            original_resource_guards_and_pacing_and_deadlines_retained=True,
+            new_sampler_or_thread_or_Native_handle_started=False,atomic_filesystem_or_Native_frame_claimed=False,
+            CPU_cause_or_PC_freeze_improvement_claimed=False)
+
+class PreSaturationReadCheckpoint:
+    """Throttle source reads before the inherited 90/95/98% guards approach saturation."""
+    WARNING_PERCENT=75
+    COOL_SAMPLES=2
+    MAX_WINDOWS=8
+    def __init__(self,reader,resources,sleep=time.sleep):
+        require(callable(reader.checkpoint) and callable(getattr(resources,'checkpoint_io',None))
+            and hasattr(resources,'lock') and hasattr(resources,'samples'),
+            'EARLY_READ_PRESSURE_ORIGINAL_OWNER')
+        self.reader=reader;self.resources=resources;self.original=reader.checkpoint
+        self.hard=resources.checkpoint_io;self.sleep=sleep
+        self.warning_entries=self.pause_windows=self.maximum_windows=0;self.active=True;self.restored=False
+        reader.checkpoint=self
+    def latest(self):
+        with self.resources.lock:
+            require(bool(self.resources.samples),'EARLY_READ_PRESSURE_NO_ORIGINAL_SAMPLE')
+            row=self.resources.samples[-1]
+        value=row.get('system_cpu_percent')
+        require(type(value) in (int,float) and math.isfinite(value) and 0<=value<=100,
+            'EARLY_READ_PRESSURE_CPU_INVALID')
+        return row,value
+    def __call__(self):
+        require(self.active and self.reader.checkpoint is self,'EARLY_READ_PRESSURE_EXACT_BINDING')
+        self.hard()
+        row,value=self.latest()
+        if value>=self.WARNING_PERCENT:
+            self.warning_entries+=1;cool=windows=0
+            while cool<self.COOL_SAMPLES:
+                require(windows<self.MAX_WINDOWS,'STOP_EARLY_READ_PRESSURE_NOT_COOLING')
+                previous=row;self.sleep(m.p.c.POLICY['sample_seconds']);windows+=1;self.pause_windows+=1
+                self.maximum_windows=max(self.maximum_windows,windows)
+                self.hard();row,value=self.latest()
+                require(row is not previous,'EARLY_READ_PRESSURE_SAMPLE_NOT_ADVANCED')
+                cool=cool+1 if value<self.WARNING_PERCENT else 0
+        # 원 전체 90/95/98 callback graph는 cooldown 뒤에도 호출한다.
+        self.original()
+    def restore(self):
+        if not self.active:return
+        require(self.reader.checkpoint is self,'EARLY_READ_PRESSURE_RESTORE_EXACT_BINDING')
+        self.reader.checkpoint=self.original;self.active=False
+        self.restored=self.reader.checkpoint is self.original
+        require(self.restored,'EARLY_READ_PRESSURE_ORIGINAL_RESTORED')
+    def summary(self):
+        return dict(warning_system_CPU_percent=self.WARNING_PERCENT,cool_distinct_sample_windows=self.COOL_SAMPLES,
+            maximum_pause_windows_per_entry=self.MAX_WINDOWS,warning_entries=self.warning_entries,
+            completed_pause_windows=self.pause_windows,maximum_observed_pause_windows_in_one_entry=self.maximum_windows,
+            requested_pause_seconds=self.pause_windows*m.p.c.POLICY['sample_seconds'],
+            hard_guard_called_before_pressure=True,existing_full_checkpoint_called_after_cooldown=True,
+            existing_hard_90_95_98_CPU_RAM_IO_guards_preserved=True,existing_sampler_windows_reused=True,
+            new_sampler_or_thread_started=False,
+            source_reads_hashes_or_identity_checks_skipped=False,original_reader_checkpoint_restored=self.restored,
+            cleanup_not_guarded_or_paced=True,CPU_cause_or_PC_freeze_resolution_established=False)
+
+class MetadataReader(m.Reader):
+    def __init__(self,owner,context):
+        super().__init__(owner,context)
+        try:
+            self.early_read_pressure=PreSaturationReadCheckpoint(self.reader,owner)
+            self.path_queries=MetadataPathQueries(self)
+        except BaseException:
+            if hasattr(self,'early_read_pressure'):self.early_read_pressure.restore()
+            super().close_entry();raise
+    def finish(self):
+        try:return super().finish()
+        finally:self.early_read_pressure.restore();self.path_queries.restore()
+    def close_entry(self):
+        try:
+            if hasattr(self,'early_read_pressure'):self.early_read_pressure.restore()
+            if hasattr(self,'path_queries'):self.path_queries.restore()
+        finally:super().close_entry()
+    def summary(self):
+        return dict(super().summary(),metadata_path_query_statistics=self.path_queries.summary(),
+            early_system_read_pressure=self.early_read_pressure.summary())
+
+def metadata_path_contract(doc):
+    io_=doc['preparation_IO'];row=io_['metadata_path_query_statistics'];n=io_['read_passes']-row['initial_original_read_passes']
+    if doc['schema_version']==SCHEMA:
+        direct=row['single_lstat_regular_file_checks'];fallback=row['original_is_file_calls']
+        require(row['metadata_path_policy']=='REQUEST_LOCAL_DIRECT_REGULAR_LSTAT_V2'
+            and type(direct) is int and type(fallback) is int and 0<=direct<=n and 0<=fallback<=n
+            and direct+fallback==n and row['initial_lstat_attempts']==n
+            and direct<=row['initial_lstat_successes']<=n
+            and row['fresh_symlink_lstat_attempts']==n+fallback,'SINGLE_LSTAT_OR_EXACT_ORIGINAL_FALLBACK')
+    else:
+        # 역사적 실패 증거의 기존 V1 계수식은 변경하지 않는다.
+        require(row['source_requests']==row['original_is_file_calls']==row['fresh_symlink_lstat_attempts']==n,
+            'ORIGINAL_HISTORICAL_METADATA_COUNTS')
+    require(type(n) is int and n>0 and row['source_requests']==n
+        and row['original_predicate_calls']==3*n and 0<=row['fresh_symlink_lstat_successes']<=row['fresh_symlink_lstat_attempts']
+        and row['junction_queries_coalesced']+row['original_junction_fallback_calls']==n
+        and row['original_symlink_fallback_calls']==row['original_junction_fallback_calls']
+        and row['original_reader_root_restored'] is True and row['active_metadata_path_binding'] is False
+        and row['metadata_reused_between_source_requests'] is False
+        and row['original_name_resolution_and_open_and_all_bytes_and_JSON_validation_retained'] is True
+        and row['original_resource_guards_and_pacing_and_deadlines_retained'] is True
+        and row['new_sampler_or_thread_or_Native_handle_started'] is False
+        and row['atomic_filesystem_or_Native_frame_claimed'] is False
+        and row['CPU_cause_or_PC_freeze_improvement_claimed'] is False,
+        'WHOLE_METADATA_PATH_GUARD_ACCOUNTING_AND_RESTORATION')
+
+def pre_saturation_read_pressure_contract(row):
+    require(type(row) is dict and row['warning_system_CPU_percent']==75
+        and row['cool_distinct_sample_windows']==2 and row['maximum_pause_windows_per_entry']==8,
+        'EARLY_READ_PRESSURE_POLICY')
+    entries=row['warning_entries'];windows=row['completed_pause_windows'];maximum=row['maximum_observed_pause_windows_in_one_entry']
+    require(all(type(value) is int and value>=0 for value in (entries,windows,maximum))
+        and 2*entries<=windows<=8*entries and 0<=maximum<=8
+        and ((entries==0 and maximum==0) or (entries>0 and 2<=maximum<=8))
+        and row['requested_pause_seconds']==0.5*windows,'EARLY_READ_PRESSURE_BOUNDED_COOLDOWN_ACCOUNTING')
+    require(all(row[key] is True for key in ('hard_guard_called_before_pressure','existing_full_checkpoint_called_after_cooldown',
+        'existing_hard_90_95_98_CPU_RAM_IO_guards_preserved','existing_sampler_windows_reused',
+        'original_reader_checkpoint_restored','cleanup_not_guarded_or_paced'))
+        and all(row[key] is False for key in ('new_sampler_or_thread_started','source_reads_hashes_or_identity_checks_skipped',
+        'CPU_cause_or_PC_freeze_resolution_established')),'EARLY_READ_PRESSURE_NO_GUARD_OR_EVIDENCE_RELAXATION')
+
+def current_early_read_pressure_contract(io_,schema,verifier_schema,required):
+    if schema==verifier_schema and required:
+        pre_saturation_read_pressure_contract(io_.get('early_system_read_pressure'))
+
+SOURCE025_PIN=dict(path=p.DIR+'/p340-closing-source-run025.v1.json',bytes=81648,sha256='75675ac835ef192466c5b7adde17e358caabd6559dcc9c06abf6469676c35c2c')
+REVIEW504_PIN=dict(path=p.DIR+'/p340-closing-review-run024.v1.json',bytes=187771,sha256='3c71d341e8c63086187c8abc22fa6833cbfa64a306da57f793d27e5828464ad5')
+SOURCE025_CODE=[
+ dict(path=SELF,bytes=103973,sha256='b816eff344fb0d0c179e89a7ddd84293963076a37133c1481678f928d7495f8a'),
+ dict(path=TEST,bytes=59989,sha256='2d5be72150a82ac05159e03ae42b49c4dc51889ae39c080c75c3f7d0fb0f599d')]
+
+def source025_summary():
+    return dict(pin=SOURCE025_PIN,original_anchor_CPU_stop_preserved=True,whole_source_qualified=False,
+        Native_frame_or_product_started=False,metadata182bound183read_no_fresh=True,
+        original_guard_cleanup_confirmed=True,failed_evidence_not_GO_or_current_source=True)
+
+def source025_stop(doc):
+    pins=p.v.pins(doc['bound_preparation_input_pins'])
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v13'
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['error_code']==doc['resource_stop_reason']=='STOP_SUSTAINED_SYSTEM_CPU'
+        and doc['failure_diagnostic']['stage']=='anchor' and doc['resource_watcher_cleanup_confirmed'] is True
+        and all(pins.get(z['path'])==z for z in SOURCE025_CODE)
+        and doc['source_attempted'] is False and doc['source_qualified'] is False
+        and doc['independent_source_frame_attempted'] is False and doc['independent_source_frame_qualified'] is False
+        and doc['actual_product_child_executed'] is False and doc['runtime_contract_executions']==doc['accepted_exact_product_body_count']==0
+        and doc['successful_product_reexecution_allowed'] is False and doc.get('source_frame') is None
+        and doc['source_path_guard_diagnostics']==[],
+        'EXACT_ORIGINAL_ANCHOR025_NO_FRAME_NO_PRODUCT')
+    io_=doc['preparation_IO']
+    require(io_['bound_inputs']==182 and io_['read_passes']==183 and io_['bytes_read']==15920654
+        and io_['final_fresh_hashes']==0 and io_['finished'] is False,'SOURCE025_PARTIAL_METADATA_NEVER_FRESH')
+    return source025_summary()
+
+
+
+class AcquisitionDiagnostics:
+    """원 take/open/inspect 호출의 bounded 시간 회계. 경로/handle 값은 저장하지 않는다."""
+    def __init__(self,clock=time.monotonic):
+        self.clock=clock;self.owner=(os.getpid(),threading.get_ident());self.current=None
+        self.attempts=0;self.completed=0;self.failures=0;self.last=None
+        self.kinds={kind:dict(started=0,completed=0,failed=0) for kind in ('directory','regular')}
+        self.operations={op:dict(started=0,completed=0,failed=0,measured=0,unknown=0,
+            elapsed_total_seconds=0.0,elapsed_max_seconds=None) for op in ('open_with_pacing','inspect_metadata')}
+    def now(self):
+        try:
+            value=self.clock()
+            return value if type(value) in (int,float) and math.isfinite(value) and value>=0 else None
+        except Exception:return None
+    def begin(self,directory):
+        require(self.current is None and type(directory) is bool
+            and self.owner==(os.getpid(),threading.get_ident()),'ONE_OWNER_ACQUISITION_DIAGNOSTIC')
+        kind='directory' if directory else 'regular';self.attempts+=1;self.kinds[kind]['started']+=1
+        self.current=dict(ordinal=self.attempts,kind=kind,last_native_operation=None)
+    def call(self,operation,function,*args):
+        if self.current is None:return function(*args)
+        require(operation in self.operations,'BOUNDED_NATIVE_OPERATION')
+        row=self.operations[operation];row['started']+=1;self.current['last_native_operation']=operation
+        started=self.now();ok=False
+        try:
+            result=function(*args);ok=True;return result
+        finally:
+            ended=self.now();row['completed' if ok else 'failed']+=1
+            elapsed=None if started is None or ended is None or ended<started else ended-started
+            if elapsed is None:row['unknown']+=1
+            else:
+                row['measured']+=1;row['elapsed_total_seconds']+=elapsed
+                previous=row['elapsed_max_seconds']
+                row['elapsed_max_seconds']=elapsed if previous is None else max(previous,elapsed)
+    def end(self,completed):
+        row=self.current
+        self.completed+=int(completed);self.failures+=int(not completed)
+        self.kinds[row['kind']]['completed' if completed else 'failed']+=1
+        self.last=dict(row,completed=completed);self.current=None
+    def summary(self):
+        return dict(take_attempts=self.attempts,take_completed=self.completed,take_failed=self.failures,
+            input_kinds=copy.deepcopy(self.kinds),operations=copy.deepcopy(self.operations),
+            last_attempt=copy.deepcopy(self.last),active_take=self.current is not None,
+            path_or_handle_or_exception_values_recorded=False,bounded_aggregate_not_per_input_trace=True,
+            open_elapsed_includes_original_pacer_and_pressure_wait=True,inspect_elapsed_covers_original_metadata_bundle=True,
+            original_native_methods_and_arguments_retained=True,original_take_guard_and_identity_checks_retained=True,
+            original_pacer_clock_sleeper_checkpoint_and_credit_retained=True,
+            cleanup_callback_or_close_wrapped=False,extra_sampler_or_thread_or_native_query_started=False,
+            diagnostic_clock_failures_do_not_mask_original_return_or_exception=True,
+            CPU_cause_or_PC_freeze_improvement_claimed=False)
+
+class AcquisitionNative:
+    """원 Native instance에 위임. close/create/borrow와 비획득 inspect는 새 계측 없이 원 경로."""
+    def __init__(self,native,diagnostics):self.original=native;self.diagnostics=diagnostics
+    def __getattr__(self,name):return getattr(self.original,name)
+    def open(self,path,directory):
+        return self.diagnostics.call('open_with_pacing',self.original.open,path,directory)
+    def inspect(self,handle):
+        return self.diagnostics.call('inspect_metadata',self.original.inspect,handle)
+
+class OneWayNativeSaturationCheckpoint:
+    """90% source 또는 95% Native 경고 후 이 frame의 Native open을 재개하지 않는다."""
+    def __init__(self,checkpoint,early_checkpoint=None):
+        require(callable(checkpoint) and type(getattr(checkpoint,'warning_entries',None)) is int,
+            'NATIVE_SATURATION_CHECKPOINT_BINDING')
+        require(early_checkpoint is None or
+            type(getattr(early_checkpoint,'warning_entries',None)) is int,
+            'EARLY_SATURATION_CHECKPOINT_BINDING')
+        self.checkpoint=checkpoint
+        self.early_checkpoint=early_checkpoint
+        self.warning_entries_at_start=checkpoint.warning_entries
+        self.early_warning_entries_at_start=(early_checkpoint.warning_entries
+            if early_checkpoint is not None else None)
+        self.saturation_seen=False
+    def __call__(self):
+        early_warned=(self.early_checkpoint is not None and
+            self.early_checkpoint.warning_entries>self.early_warning_entries_at_start)
+        if early_warned:
+            # A prior 90% warning is already a circuit-breaker event. Do not run
+            # another resource checkpoint (or reserve/open a file) before stopping.
+            self.saturation_seen=True
+            raise ValueError(CASE111_SATURATION_POLICY_STOP)
+        before=self.checkpoint.warning_entries
+        self.checkpoint()
+        after=self.checkpoint.warning_entries
+        early_warned=(self.early_checkpoint is not None and
+            self.early_checkpoint.warning_entries>self.early_warning_entries_at_start)
+        if after>before or early_warned:
+            self.saturation_seen=True
+        if self.saturation_seen:
+            # Stable policy code: do not mislabel this as a resource-watcher STOP.
+            raise ValueError(CASE111_SATURATION_POLICY_STOP)
+    def summary(self):
+        return dict(one_way_circuit_breaker=True,warning_entries_at_start=self.warning_entries_at_start,
+            early_source_warning_entries_at_start=self.early_warning_entries_at_start,
+            saturation_seen=self.saturation_seen,opens_resume_after_cooldown=False,
+            original_checkpoint_and_resource_guards_run_before_unlatched_reservations=True,
+            latched_warning_preempts_next_resource_checkpoint=True,
+            native_open_or_identity_checks_skipped_for_success=False,
+            policy_stop_code=CASE111_SATURATION_POLICY_STOP if self.saturation_seen else None)
+
+class AcquisitionInputLocks(m.profile.InputLocks):
+    def __init__(self,*args,**keywords):
+        super().__init__(*args,**keywords)
+        self.acquisition_diagnostics=AcquisitionDiagnostics()
+        self.original_open_checkpoint=self.api.pacer.checkpoint
+        early_checkpoint=self.checkpoint
+        if type(getattr(early_checkpoint,'warning_entries',None)) is not int:early_checkpoint=None
+        self.saturation_checkpoint=OneWayNativeSaturationCheckpoint(
+            self.original_open_checkpoint,early_checkpoint)
+        self.original_native=self.api;self.api=AcquisitionNative(self.api,self.acquisition_diagnostics)
+    def take(self,name,path,directory,pin=None):
+        self.acquisition_diagnostics.begin(directory);completed=False
+        checkpoint=self.api.pacer.checkpoint
+        require(checkpoint is self.original_open_checkpoint,'NATIVE_PACER_CHECKPOINT_BEFORE_TAKE')
+        self.api.pacer.checkpoint=self.saturation_checkpoint
+        try:
+            result=super().take(name,path,directory,pin);completed=True;return result
+        finally:
+            self.api.pacer.checkpoint=checkpoint
+            self.acquisition_diagnostics.end(completed)
+    def summary(self):
+        row=super().summary();row['native_acquisition_diagnostics']=self.acquisition_diagnostics.summary()
+        row['one_way_native_saturation_circuit_breaker']=self.saturation_checkpoint.summary()
+        return row
+
+def acquisition_diagnostic_contract(handles):
+    row=handles['native_acquisition_diagnostics'];n=N+DIRECTORIES
+    require(row['take_attempts']==row['take_completed']==n and row['take_failed']==0 and row['active_take'] is False
+        and row['input_kinds']==dict(directory=dict(started=DIRECTORIES,completed=DIRECTORIES,failed=0),
+            regular=dict(started=N,completed=N,failed=0))
+        and row['last_attempt']==dict(ordinal=n,kind='regular',last_native_operation='inspect_metadata',completed=True),
+        'COMPLETE_ORIGINAL_ACQUISITION_DIAGNOSTIC_ACCOUNTING')
+    require(set(row['operations'])=={'open_with_pacing','inspect_metadata'},'BOUNDED_ACQUISITION_OPERATION_SET')
+    for op in row['operations'].values():
+        require(op['started']==op['completed']==n and op['failed']==0
+            and all(type(op[k]) is int and op[k]>=0 for k in ('measured','unknown'))
+            and op['measured']+op['unknown']==n
+            and type(op['elapsed_total_seconds']) in (int,float) and math.isfinite(op['elapsed_total_seconds'])
+            and op['elapsed_total_seconds']>=0
+            and ((op['measured']==0 and op['elapsed_max_seconds'] is None and op['elapsed_total_seconds']==0)
+                or (op['measured']>0 and type(op['elapsed_max_seconds']) in (int,float)
+                    and math.isfinite(op['elapsed_max_seconds']) and 0<=op['elapsed_max_seconds']<=op['elapsed_total_seconds'])),
+            'ACQUISITION_DURATION_UNKNOWN_NOT_FABRICATED')
+    for name in ('bounded_aggregate_not_per_input_trace','open_elapsed_includes_original_pacer_and_pressure_wait',
+        'inspect_elapsed_covers_original_metadata_bundle','original_native_methods_and_arguments_retained',
+        'original_take_guard_and_identity_checks_retained','original_pacer_clock_sleeper_checkpoint_and_credit_retained',
+        'diagnostic_clock_failures_do_not_mask_original_return_or_exception'):
+        require(row[name] is True,'ACQUISITION_ORIGINAL_METHODS_RETAINED')
+    for name in ('path_or_handle_or_exception_values_recorded','cleanup_callback_or_close_wrapped',
+        'extra_sampler_or_thread_or_native_query_started','CPU_cause_or_PC_freeze_improvement_claimed'):
+        require(row[name] is False,'ACQUISITION_DIAGNOSTIC_NOT_SECURITY_OR_CPU_FIX')
+
+SOURCE027_PIN=dict(path=p.DIR+'/p340-closing-source-run027.v1.json',bytes=512631,
+    sha256='f1d51aa582d5242ac74acde41252f5bff2ce3f78dd601f556f02cc66bcf6865c')
+REVIEW582_PIN=dict(path=p.DIR+'/p340-closing-review-run026.v1.json',bytes=188519,
+    sha256='e6c245bc7701e84b6401c67328fa5bd774f5b47b690a3d29913185a51e5610e4')
+SOURCE027_CODE=[
+ dict(path=SELF,bytes=113799,sha256='9ff4b194fcdd4e0b22dfacd94421ef68e38a460d7f084e26b090cc69d6646f37'),
+ dict(path=TEST,bytes=71845,sha256='914d0c5505dc43ac908d33cf77da7df6d571721414158bd30e62566854f9789a')]
+
+def source027_summary():
+    return dict(pin=SOURCE027_PIN,qualified_review_pin=REVIEW582_PIN,original_acquire_CPU_stop_preserved=True,
+        original365_handles_all_closed=True,original_metadata400_reads200_fresh_finished=True,
+        actual_byte_boundaries_not_started=True,whole_source_qualified=False,product_reexecuted=False,
+        failed_evidence_not_GO_or_current_source=True)
+
+def source027_stop(doc):
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v14'
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['error_code']==doc['resource_stop_reason']=='STOP_SUSTAINED_SYSTEM_CPU'
+        and doc['failure_diagnostic']['stage']=='source_frame_acquire' and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['closing_review_pin']==REVIEW582_PIN and doc['current95_code_pins']==FROZEN93+SOURCE027_CODE
+        and doc['source_attempted'] is False and doc['source_qualified'] is False
+        and doc['independent_source_frame_attempted'] is True and doc['independent_source_frame_qualified'] is False
+        and doc['actual_product_child_executed'] is False
+        and doc['runtime_contract_executions']==doc['accepted_exact_product_body_count']==0
+        and doc['successful_product_reexecution_allowed'] is False and doc['source_path_guard_diagnostics']==[],
+        'EXACT_ORIGINAL_SOURCE027_ACQUIRE_STOP')
+    io_=doc['preparation_IO'];metadata_path_contract(doc)
+    require(io_['bound_inputs']==io_['final_fresh_hashes']==200 and io_['read_passes']==400
+        and io_['bytes_read']==38283064 and io_['finished'] is True,'SOURCE027_METADATA_NOT_WHOLE_SOURCE')
+    frame=doc['source_frame'];h=frame['handles']
+    require(frame['frame_state']=='CLOSED' and frame['registered_live_frame'] is False
+        and frame['input_count']==N and frame['input_bytes']==121125991 and frame['actual_byte_boundaries']==[]
+        and h['input_lock_handles_opened']==h['input_lock_handles_closed']==h['handle_metadata_checks']==365
+        and h['input_lock_handles_remaining']==h['active_reader_bindings']==h['active_byte_streams']==h['handle_close_failed_attempts']==0
+        and h['input_lock_cleanup_confirmed'] is True and h['maximum_lock_seconds']==600
+        and h['acquisition_phase_pressure']['acquisition_complete'] is False
+        and h['acquisition_phase_pressure']['restored_original_rate']==20
+        and h['native_open_pacing']['maximum_opens_per_second']==20
+        and h['borrowed_byte_streams'] is None,'SOURCE027_PARTIAL_HANDLES_NEVER_FULL_SOURCE')
+    return source027_summary()
+
+
+
+SOURCE029_PIN=dict(path=p.DIR+'/p340-closing-source-run029.v1.json',bytes=1395264,
+    sha256='1f5af31def4ea7476296b049af54490b852cfcda875f4a44c1e82e10f3975cc0')
+REVIEW672_PIN=dict(path=p.DIR+'/p340-closing-review-run028.v1.json',bytes=189415,
+    sha256='ce69eff1ec284d4cc5daf0203b39f2b2617fde2534e9bf9845288b22b6b1c8f7')
+SOURCE029_CODE=[
+ dict(path=SELF,bytes=124535,sha256='3ad54687ef0919bd06030b38c3fba39fe195d3405a3bf15144125a31cbd831ef'),
+ dict(path=TEST,bytes=85240,sha256='8c69896a1ab96e57dd748a293fe620fef55ad5b9cc4d1c0b2e50508fa7ba8aae')]
+
+def source029_summary():
+    return dict(pin=SOURCE029_PIN,qualified_review_pin=REVIEW672_PIN,original_after_CPU_stop_preserved=True,
+        original1966_handles_and3135_duplicates_all_closed=True,original1658_before_byte_boundary_complete=True,
+        original_after_read_partial_not_completed=True,original_acquisition_diagnostic_complete=True,
+        whole_source_qualified=False,product_reexecuted=False,failed_evidence_not_GO_or_current_source=True)
+
+def source029_stop(doc):
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v15'
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['error_code']==doc['resource_stop_reason']=='STOP_SUSTAINED_SYSTEM_CPU'
+        and doc['failure_diagnostic']['stage']=='final_fresh_hash' and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['closing_review_pin']==REVIEW672_PIN and doc['current95_code_pins']==FROZEN93+SOURCE029_CODE
+        and doc['source_attempted'] is False and doc['source_qualified'] is False
+        and doc['independent_source_frame_attempted'] is True and doc['independent_source_frame_qualified'] is False
+        and doc['actual_product_child_executed'] is False
+        and doc['runtime_contract_executions']==doc['accepted_exact_product_body_count']==0
+        and doc['successful_product_reexecution_allowed'] is False,'EXACT_ORIGINAL_SOURCE029_AFTER_CPU_STOP')
+    io_=doc['preparation_IO'];metadata_path_contract(doc)
+    require(io_['bound_inputs']==io_['final_fresh_hashes']==203 and io_['read_passes']==406
+        and io_['bytes_read']==39729668 and io_['finished'] is True,'SOURCE029_METADATA_NOT_WHOLE_SOURCE')
+    frame=doc['source_frame'];h=frame['handles'];before=frame['actual_byte_boundaries']
+    acquisition_diagnostic_contract(h)
+    require(frame['frame_state']=='CLOSED' and frame['registered_live_frame'] is False
+        and frame['input_count']==N and frame['input_bytes']==121150122 and len(before)==1
+        and before[0]['role']=='before' and len(before[0]['actual_byte_pins'])==N
+        and before[0]['reader_diagnostics']['read_passes']==N
+        and before[0]['reader_diagnostics']['bytes_read']==121150122
+        and h['input_lock_handles_opened']==h['input_lock_handles_closed']==N+DIRECTORIES
+        and h['input_lock_handles_remaining']==h['active_reader_bindings']==h['active_byte_streams']==h['handle_close_failed_attempts']==0
+        and h['input_lock_cleanup_confirmed'] is True and h['maximum_lock_seconds']==600
+        and h['acquisition_phase_pressure']['acquisition_complete'] is True
+        and h['native_open_pacing']['maximum_opens_per_second']==20,'SOURCE029_ONE_BEFORE_NOT_TWO_BOUNDARIES')
+    byte_pins=p.v.pins(before[0]['actual_byte_pins'])
+    require(len(byte_pins)==N and sum(z['bytes'] for z in byte_pins.values())==121150122
+        and all(byte_pins.get(z['path'])==z for z in FROZEN93+SOURCE029_CODE),'SOURCE029_BEFORE_EXACT_CODE_AND_BYTE_ACCOUNTING')
+    borrow=h['borrowed_byte_streams']
+    require(borrow['duplicate_handles_opened']==borrow['duplicate_handles_closed']==borrow['shared_offset_resets']==3135
+        and borrow['duplicate_handles_remaining']==borrow['duplicate_close_failed_attempts']==0
+        and borrow['active_borrow_binding'] is False,'SOURCE029_ORIGINAL_DUPLICATES_CLOSED')
+    rows=doc['source_path_guard_diagnostics']
+    require(len(rows)==2 and rows[0]['fresh_held_metadata_queries']==rows[0]['native_metadata_queries_attempted']==N
+        and rows[0]['original_path_guard_predicates']==3*N
+        and rows[1]['fresh_held_metadata_queries']==rows[1]['native_metadata_queries_attempted']==1478
+        and rows[1]['original_path_guard_predicates']==4434
+        and all(z['original_reader_root_restored'] is True and z['active_path_guard_adapter'] is False for z in rows),
+        'SOURCE029_PARTIAL_AFTER_GUARDS_NOT_SOURCE_PASS')
+    return source029_summary()
+
+
+
+REVIEW030_PIN=dict(path=p.DIR+'/p340-closing-review-run030.v1.json',bytes=33393,
+    sha256='ede89b1ced23a869b9554c871f089363f7cdaa4cb70b3ab0029b7444e8799633')
+REVIEW030_CANDIDATE_CODE=[
+ dict(path=SELF,bytes=129869,sha256='bb50f0ca366bf29ee536eb1058bb4806f93dd9575d7dd7bf7fa7f58a2ea440fe'),
+ dict(path=TEST,bytes=89290,sha256='e89be74ba46d5494ce6f917333051a52f605a118d360cfaa034e10fe0b00c318')]
+
+def review030_summary():
+    return dict(pin=REVIEW030_PIN,original_anchor_CPU_stop_preserved=True,
+        original700_contracts_not_started=True,Native_frame_or_product_started=False,
+        original5_bound6_reads_zero_fresh_unfinished=True,original_guard_cleanup_confirmed=True,
+        candidate_archive_not_runtime95_qualification=True,failed_evidence_not_GO_or_current_source=True)
+
+def review030_stop(doc):
+    require(doc['schema_version']=='hwpx-agent.p09-preserved106-fixed-runtime-queue/v16'
+        and doc['state']=='FAILED_NOT_ACCEPTED' and doc['error_code']==doc['resource_stop_reason']=='STOP_SUSTAINED_SYSTEM_CPU'
+        and doc['failure_diagnostic']['stage']=='anchor' and doc['resource_watcher_cleanup_confirmed'] is True
+        and doc['source_attempted'] is False and doc['source_qualified'] is False
+        and doc['independent_source_frame_attempted'] is False and doc['independent_source_frame_qualified'] is False
+        and doc['actual_product_child_executed'] is False
+        and doc['runtime_contract_executions']==doc['accepted_exact_product_body_count']==0
+        and doc['successful_product_reexecution_allowed'] is False
+        and doc.get('source_frame') is None and doc.get('current95_code_pins') is None
+        and doc['source_path_guard_diagnostics']==[],'EXACT_ORIGINAL_REVIEW030_NOT_CONTRACT_OR_NATIVE')
+    io_=doc['preparation_IO']
+    require(io_['bound_inputs']==5 and io_['read_passes']==6 and io_['bytes_read']==1708135
+        and io_['final_fresh_hashes']==0 and io_['finished'] is False,'REVIEW030_PARTIAL_METADATA_NEVER_FRESH')
+    return review030_summary()
+
+
+def bootstrap(q):
+    healthy={};original_json=q.json
+    def capture_healthy(name):
+        value=original_json(name)
+        if name==p.DIR+'/cases/p335-case-105-run009.json':healthy['body']=value
+        return value
+    with patch.object(q,'json',capture_healthy):
+        legacy,base,names,binding,original,closed,root,body,checked,codes,latest=x.load(q)
+    require('body' in healthy,'ONE_SAME_READER_HEALTHY_BODY_FOR_SYNTHETIC_CONTRACTS')
+    require(codes==FROZEN93,'PHYSICAL_ORIGINAL93_IMMUTABLE')
+    bound=m.m.m.review.bound_json
+    reviewed=bound(q,COMPOUND_REVIEW);source=bound(q,COMPOUND_SOURCE);doc=bound(q,COMPOUND)
+    plan=compound(doc,reviewed,source,legacy,base,names,closed,checked,codes)
+    oldadded=p.v.pins(root['scope_added_ten_pins']);oldextras=p.v.pins(root['extra_frame_controller_pins'])
+    baseline={k:v for k,v in original.items() if k not in oldadded}
+    new={z['path']:z for z in CLOSING_CODE}
+    new.update({name:q.pin(name) for name in (SELF,TEST)})
+    added={**oldadded,**new};required={**baseline,**added};extras={**oldextras,**new}
+    require(len(oldadded)==10 and len(oldextras)==187 and len(extras)==191 and required=={**closed,SELF:new[SELF],TEST:new[TEST]},
+        'ORIGINAL_FULL_SCOPE_PLUS_CLOSING2_AND_CURRENT2')
+    budget(required,baseline,added)
+    q.codes=FROZEN93+[new[SELF],new[TEST]]
+    q.prequal_documents=[];q.prequal_reviews=[]
+    for spec in PREQUAL_SPECS:
+        for logical in spec['codes']:
+            archive=dict(logical,path='implementation/p09/evidence/'+spec['archive']+'/'+logical['path'])
+            require(q.pin(archive['path'])==archive,'EXACT_PREFORMAL_CODE_ARCHIVE')
+        failure=bound(q,spec['pin']);q.prequal_documents.append(failure);q.prequal_reviews.append(prequal_review(failure,spec))
+    q.prequal_document=q.prequal_documents[0]
+    for logical in PRIOR_LIGHT_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-formal172-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_PRIOR172_CODE_ARCHIVE')
+    q.prior_light_document=bound(q,PRIOR_LIGHT)
+    q.prior_light_review=prior_light_review(q.prior_light_document,plan,names,required,binding,extras,baseline,added)
+    for logical in EPOCH_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-formal198-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_PRIOR198_CODE_ARCHIVE')
+    q.epoch_documents=[bound(q,z) for z in (EPOCH_LIGHT,EPOCH_FRESH,EPOCH_FAILURE)]
+    q.epoch_review=epoch_review(*q.epoch_documents,plan,names,required,binding,extras,baseline,added)
+    q.native107_base=plan
+    for logical in NATIVE107_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-formal232-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_NATIVE107_CODE_ARCHIVE')
+    q.native107_documents=[bound(q,z) for z in (NATIVE107_ROOT,NATIVE107_BODY,NATIVE107_LIGHT,NATIVE107_FRESH)]
+    plan=native107_epoch(*q.native107_documents,legacy,plan,names,required,binding,extras,baseline,added)
+    for logical in SCOPE_FAILURE_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-preformal256-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_SCOPE_FAILURE_CODE_ARCHIVE')
+    q.scope_failure_document=bound(q,SCOPE_FAILURE)
+    q.scope_failure_review=scope_failure_review(q.scope_failure_document)
+    for logical in EPOCH272_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-formal272-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_PRIOR272_CODE_ARCHIVE')
+    q.epoch272_documents=[bound(q,z) for z in EPOCH272_PINS]
+    q.epoch272_review=epoch272_review(*q.epoch272_documents,plan,names,required,binding,extras,baseline,added)
+    for logical in PARTIAL308_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-v8-partial308-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_PARTIAL308_CODE_ARCHIVE')
+    q.partial308_document=bound(q,PARTIAL308_PIN)
+    q.partial308_review=partial308_review(q.partial308_document,plan,names,required,binding,extras,baseline,added)
+    for logical in P108_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-formal320-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_PRODUCT108_V9_CODE_ARCHIVE')
+    q.pending108_base=plan
+    q.pending108_documents=[bound(q,z) for z in (P108_ROOT,P108_BODY,P108_LIGHT,P108_FRESH)]
+    require(q.pin(P108_ZERO['path'])==P108_ZERO,'ORIGINAL108_ZERO_PLACEHOLDER_UNCHANGED')
+    q.pending108_review=pending108_review(*q.pending108_documents,plan,names,required,binding,extras,baseline,added)
+    for logical in PREFORMAL400_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-v10-partial400-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_PREFORMAL400_CODE_ARCHIVE')
+    q.preformal400_document=bound(q,PREFORMAL400_PIN)
+    q.preformal400_review=preformal400_review(q.preformal400_document)
+    for logical in SOURCE021_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-formal404-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_SOURCE021_V11_CODE_ARCHIVE')
+    q.source021_document=bound(q,SOURCE021_PIN);q.review404_document=bound(q,REVIEW404_PIN)
+    q.source021_review=source021_review(q.source021_document,q.review404_document,
+        (legacy,plan,names,binding,required,extras,baseline,added,(latest,healthy['body']),(doc,reviewed,source,base,closed,checked,codes)))
+    for logical in REVIEW022_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-v12-partial484-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_REVIEW022_CODE_ARCHIVE')
+    q.review022_document=bound(q,REVIEW022_PIN);q.review022_stop=review022_stop(q.review022_document)
+    for logical in SOURCE025_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-formal504-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_SOURCE025_QUALIFIED504_CODE_ARCHIVE')
+    q.source025_document=bound(q,SOURCE025_PIN);q.source025_review=source025_stop(q.source025_document)
+    for logical in SOURCE027_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-formal582-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_SOURCE027_QUALIFIED582_CODE_ARCHIVE')
+    q.source027_document=bound(q,SOURCE027_PIN);q.source027_review=source027_stop(q.source027_document)
+    for logical in SOURCE029_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-formal672-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_SOURCE029_QUALIFIED672_CODE_ARCHIVE')
+    q.source029_document=bound(q,SOURCE029_PIN);q.source029_review=source029_stop(q.source029_document)
+    for logical in REVIEW030_CANDIDATE_CODE:
+        archive=dict(logical,path='implementation/p09/evidence/p340-v16-preformal700-code/'+logical['path'])
+        require(q.pin(archive['path'])==archive,'EXACT_REVIEW030_PREFORMAL_CANDIDATE_ARCHIVE')
+    q.review030_document=bound(q,REVIEW030_PIN);q.review030_review=review030_stop(q.review030_document)
+    return legacy,plan,names,binding,required,extras,baseline,added,(latest,healthy['body']),(doc,reviewed,source,base,closed,checked,codes)
+
+def bootstrap_historical(q):
+    """Read the pinned baseline under its historical evidence contract only."""
+    global REQUIRE_CURRENT_EARLY_READ_PRESSURE
+    previous=REQUIRE_CURRENT_EARLY_READ_PRESSURE
+    REQUIRE_CURRENT_EARLY_READ_PRESSURE=False
+    try:return bootstrap(q)
+    finally:REQUIRE_CURRENT_EARLY_READ_PRESSURE=previous
+
+def pin_argument(value,kind):
+    pin=json.loads(value) if isinstance(value,str) else value
+    require(type(pin) is dict and set(pin)=={'path','bytes','sha256'} and type(pin['bytes']) is int
+        and 0<pin['bytes']<=16777216 and isinstance(pin['sha256'],str) and re.fullmatch('[0-9a-f]{64}',pin['sha256']) is not None,
+        'EXACT_LITERAL_PIN')
+    pattern={'stop':r'p340-(?:case-[0-9]{3}|admission|light|light-review)-run[0-9]{3}\.v1\.json',
+        'review':r'p340-stop-review-run[0-9]{3}\.v1\.json','light':r'p340-light-run[0-9]{3}\.v1\.json','fresh':r'p340-light-review-run[0-9]{3}\.v1\.json'}[kind]
+    require(isinstance(pin['path'],str) and pin['path'].startswith(p.DIR+'/')
+        and re.fullmatch(pattern,pin['path'][len(p.DIR)+1:]) is not None,'SCOPED_FILENAME_NOT_SUBSTRING')
+    return pin
+
+def stop_targets(value):
+    if value is None:return ()
+    rows=(value,) if type(value) is dict else value
+    require(type(rows) in (list,tuple) and 1<=len(rows)<=8,'EXACT_BOUNDED_STOP_TARGETS')
+    require(all(type(row) is dict and set(row)=={'path','bytes','sha256'} for row in rows),
+        'EXACT_STOP_TARGET_PIN_SHAPE')
+    require(len({row['path'] for row in rows})==len(rows),'UNIQUE_STOP_TARGETS')
+    return tuple(rows)
+
+def reviewed_stop_entries(doc):
+    rows=doc.get('reviewed_stops')
+    if rows is None:
+        rows=[dict(reviewed_root_pin=doc['reviewed_root_pin'],
+            reviewed_failure_classification=doc['reviewed_failure_classification'],
+            reviewed_body_placeholder_pin=doc['reviewed_body_placeholder_pin'])]
+    else:
+        require(type(rows) is list and 2<=len(rows)<=8 and all(type(row) is dict and set(row)=={
+            'reviewed_root_pin','reviewed_failure_classification','reviewed_body_placeholder_pin'} for row in rows),
+            'EXACT_BOUNDED_MULTI_STOP_REVIEW_SHAPE')
+        require(rows[0]['reviewed_root_pin']==doc['reviewed_root_pin']
+            and rows[0]['reviewed_failure_classification']==doc['reviewed_failure_classification']
+            and rows[0]['reviewed_body_placeholder_pin']==doc['reviewed_body_placeholder_pin'],
+            'MULTI_STOP_PRIMARY_REVIEW_MIRROR')
+    pins=[pin_argument(row['reviewed_root_pin'],'stop') for row in rows]
+    require(len({pin['path'] for pin in pins})==len(rows),'UNIQUE_REVIEWED_STOP_ROOTS')
+    return rows
+
+def review_scope_cursor_contract(reviews,plans):
+    """Bind each review's own cursor to progress reconstructed by this scan."""
+    require(type(plans) is list and bool(plans),'REVIEW_ACTUAL_CURSOR_HISTORY_REQUIRED')
+    for _,reviewed,_ in reviews.values():
+        require(reviewed.get('prior_runtime_plan') in plans,'REVIEW_SCOPE_CURSOR_FROM_ACTUAL_HISTORY')
+
+
+def common(doc,plan,names,required,binding,extras,baseline,added,codes):
+    if int(SCHEMA.rsplit('/v',1)[1])>=21:
+        require(doc['verification_bytecode_cache_writes_disabled'] is True,
+            'CURRENT_READ_ONLY_BYTECODE_POLICY_REQUIRED')
+    index,name=g.old.select(plan,names)
+    if int(SCHEMA.rsplit('/v',1)[1])>=17:require(doc['review030_CPU_stop_review']==review030_summary(),'CURRENT_REVIEW030_STOP_REVIEW_REQUIRED')
+    if int(SCHEMA.rsplit('/v',1)[1])>=16:require(doc['source029_CPU_stop_review']==source029_summary(),'CURRENT_SOURCE029_STOP_REVIEW_REQUIRED')
+    if int(SCHEMA.rsplit('/v',1)[1])>=15:require(doc['source027_CPU_stop_review']==source027_summary(),'CURRENT_SOURCE027_STOP_REVIEW_REQUIRED')
+    if int(SCHEMA.rsplit('/v',1)[1])>=14:
+        require(doc['source025_CPU_stop_review']==source025_summary(),'CURRENT_SOURCE025_STOP_REVIEW_REQUIRED');metadata_path_contract(doc)
+    if int(SCHEMA.rsplit('/v',1)[1])>=13:require(doc['review022_CPU_stop_review']==review022_summary(),'CURRENT_CONTRACT_CPU_STOP_REVIEW_REQUIRED')
+    if int(SCHEMA.rsplit('/v',1)[1])>=12:require(doc['source021_CPU_stop_review']==source021_summary(),'CURRENT_SOURCE021_CLEANUP_REVIEW_REQUIRED')
+    if int(SCHEMA.rsplit('/v',1)[1])>=11:require(doc['preformal400_failure_review']==preformal400_summary(),'CURRENT_PREFORMAL400_REVIEW_REQUIRED')
+    if int(SCHEMA.rsplit('/v',1)[1])>=10:require(doc['pending108_product_review']==pending108_summary(),'CURRENT_COMPLETED108_CAPTURE_REVIEW_REQUIRED')
+    if int(SCHEMA.rsplit('/v',1)[1])>=9:require(doc['partial308_stop_review']==partial308_summary(),'CURRENT_PARTIAL308_STOP_REVIEW_REQUIRED')
+    if int(SCHEMA.rsplit('/v',1)[1])>=8:require(doc['epoch272_stop_review']==epoch272_summary(),'CURRENT_PRIOR272_STOP_REVIEW_REQUIRED')
+    if int(SCHEMA.rsplit('/v',1)[1])>=7:require(doc['scope_fix_failure_review']==scope_failure_summary(),'CURRENT_SCOPE_FAILURE_REVIEW_REQUIRED')
+    if int(SCHEMA.rsplit('/v',1)[1])>=6:require(doc['native107_epoch_root_pin']==NATIVE107_ROOT,'CURRENT_NATIVE101_EPOCH_REQUIRED')
+    require(doc['schema_version']==SCHEMA,'CURRENT_SCOPE_SCHEMA')
+    require(doc.get('error_code') is None,'CURRENT_SCOPE_NO_PRIOR_ERROR')
+    require(doc['resource_stop_reason'] is None,'CURRENT_SCOPE_NO_RESOURCE_STOP')
+    require(doc['resource_watcher_cleanup_confirmed'] is True,'CURRENT_SCOPE_CLEANUP')
+    require(doc['compound100_pin']==COMPOUND,'CURRENT_SCOPE_COMPOUND100_PIN')
+    require(doc['compound100_review_pin']==COMPOUND_REVIEW,'CURRENT_SCOPE_COMPOUND100_REVIEW_PIN')
+    require(doc['compound100_source_pin']==COMPOUND_SOURCE,'CURRENT_SCOPE_COMPOUND100_SOURCE_PIN')
+    require(doc['original93_pins']==FROZEN93,'CURRENT_SCOPE_ORIGINAL93_PINS')
+    require(doc['current95_code_pins']==codes,'CURRENT_SCOPE_CURRENT95_PINS')
+    require(doc['startup_limits']==STARTUP_LIMITS,'CURRENT_SCOPE_STARTUP_LIMITS')
+    require(doc['stop_resume_policy']==m.STOP_POLICY,'CURRENT_SCOPE_STOP_RESUME_POLICY')
+    require(doc['original_successful_bodies_not_reexecuted'] is True,'CURRENT_SCOPE_NO_SUCCESS_REPLAY')
+    require(doc['prior_runtime_plan']==plan,'CURRENT_SCOPE_PRIOR_PLAN')
+    require(doc['selected_test_index']==index,'CURRENT_SCOPE_SELECTED_INDEX')
+    require(doc['selected_test_name']==name,'CURRENT_SCOPE_SELECTED_NAME')
+    require(doc['binding']==binding,'CURRENT_SCOPE_BINDING')
+    require(doc['prequalification_failure_reviews']==[prequal_summary(z) for z in PREQUAL_SPECS],
+        'CURRENT_SCOPE_PREQUALIFICATION_REVIEWS')
+    require(doc['scope_budget']==budget(required,baseline,added),'CURRENT_SCOPE_BUDGET')
+    require(doc['scope_added_ten_pins']==list(added.values()),'CURRENT_SCOPE_ADDED_PINS')
+    require(doc['extra_frame_controller_pins']==list(extras.values()),'CURRENT_SCOPE_EXTRA_PINS')
+    require(doc['P09_gate']==doc['A12_gate']==doc['A13_gate']=='OPEN'
+        and all(doc[k] is False for k in ('whole1470_current_fresh_qualified','historical67_current_fresh_qualified',
+            'full249_current_qualified','signed16_current_qualified','product_complete','PC_freeze_resolved')),'NO_GATE_PROMOTION')
+    io_=doc['preparation_IO'];require(io_['finished'] is True and io_['bound_inputs']==io_['final_fresh_hashes'],'ORIGINAL_ALL_FRESH')
+    current_early_read_pressure_contract(io_,SCHEMA,VERIFIER_CURRENT_SCHEMA,REQUIRE_CURRENT_EARLY_READ_PRESSURE)
+    m.leading_contract(io_)
+
+def light_contract(doc,plan,names,required,binding,extras,baseline,added,codes):
+    common(doc,plan,names,required,binding,extras,baseline,added,codes)
+    require(doc['state']==LIGHT and doc['runtime_contract_executions']==EXECUTED
+        and doc['own_queue_contract_tests_passed']==doc['synthetic_following_queue_contract_tests_passed']==COUNT
+        and doc['accepted_exact_product_body_count']==0 and doc['source_attempted'] is False
+        and doc['actual_product_child_executed'] is False and doc['source_qualified'] is False
+        and doc['original_parent_capture_adapter_selected'] is False and doc['diagnostic_parent_connection_selected'] is False
+        and doc.get('closing_component') is None
+        and doc.get('case_receipt_pin') is None,'ACTUAL_CONTRACTS_NOT_NATIVE_OR_PRODUCT')
+    m.guarded_contract(doc['contract_checkpoint_statistics'],EXECUTED)
+
+def fresh_contract(doc,light,light_pin,plan,names,required,binding,extras,baseline,added,codes):
+    light_contract(light,plan,names,required,binding,extras,baseline,added,codes)
+    common(doc,plan,names,required,binding,extras,baseline,added,codes)
+    require(doc['state']==FRESH and doc['reviewed_light_pin']==light_pin and doc['runtime_contract_executions']==0
+        and doc['reused_light_contract_executions']==EXECUTED and doc['contract_checkpoint_statistics'] is None
+        and doc['qualified_contract_checkpoint_statistics']==light['contract_checkpoint_statistics']
+        and doc['source_attempted'] is False and doc['source_qualified'] is False and doc['actual_product_child_executed'] is False
+        and doc.get('closing_component') is None and doc.get('case_receipt_pin') is None
+        and doc['original_parent_capture_adapter_selected'] is False and doc['diagnostic_parent_connection_selected'] is False
+        and doc['accepted_exact_product_body_count']==0,'DISTINCT_FRESH_NO_FABRICATED_EXECUTIONS')
+
+def record(doc,body,pin,legacy,plan,names,required,binding,extras,baseline,added,codes):
+    if int(SCHEMA.rsplit('/v',1)[1])>=22:preframe_contract(doc['preframe_ram_admission'],True)
+    if int(doc['schema_version'].rsplit('/v',1)[1])>=21:
+        require(doc['actual_input_path_guard_selected'] is True and doc['actual_boundary_adapter_restored'] is True,
+            'ACTUAL_PARENT_PATH_GUARD_CONNECTED_AND_RESTORED')
+        path_guard_contract(doc['actual_source_path_guard_diagnostics'])
+    common(doc,plan,names,required,binding,extras,baseline,added,codes);index,name=g.old.select(plan,names)
+    require(doc['state']==PASS and doc['runtime_contract_executions']==0 and doc['reused_light_contract_executions']==EXECUTED
+        and doc['contract_checkpoint_statistics'] is None and doc['accepted_exact_product_body_count']==1
+        and doc['runtime_plan']==g.advance(legacy,plan,names,index) and name not in plan['runtime_qualified_test_names']
+        and doc['case_receipt_pin']==pin and doc['actual_product_child_executed'] is True
+        and body['actual_product_child_executed'] is True
+        and doc['source_attempted'] is True and doc['source_qualified'] is True
+        and doc['existing_body_replay_guard_verified'] is True
+        and body['task']==body['minimal_worker_task']==f'p204-r07-case-{index:03}-tests'
+        and doc['parent_return_status_recorded_before_after_parent_guard'] is True
+        and type(doc['original_parent_return_code']) is int and doc['original_parent_return_code']==0
+        and doc['original_parent_pending_failure_before_after_parent_guard'] is False
+        and doc['original_parent_rejected_failure_before_after_parent_guard'] is False
+        and doc['aggregate_post_reader_connection_verified'] is True
+        and doc['original_parent_capture_adapter_selected'] is True and doc['diagnostic_parent_connection_selected'] is True
+        and doc['early_source_guard_connected'] is True and doc['acquisition_phase_connection_selected'] is True
+        and doc['native_timing_connected'] is True,'EXACT_NEXT_ONE_ACTUAL_NATIVE_RETURN')
+    m.guarded_contract(doc['qualified_contract_checkpoint_statistics'],EXECUTED)
+    pin_argument(doc['qualified_light_pin'],'light');pin_argument(doc['independent_fresh_pin'],'fresh')
+    require(doc['receipt_serialization_policy']==r.policy() and doc['monotonic_binding_policy']==m.review.policy()
+        and doc['preparation_IO']['read_passes']+doc['closing_component']['metadata_IO']['read_passes']<=720,
+        'ORIGINAL_AGGREGATE_READ_BUDGET')
+    terminal_io=doc['closing_component']['metadata_IO']
+    if doc['schema_version']==VERIFIER_CURRENT_SCHEMA:
+        pre_saturation_read_pressure_contract(terminal_io['early_system_read_pressure'])
+    m.leading_contract(terminal_io);m.m.job_contract(body)
+    m.m.early_contract(doc['early_source_checkpoint'])
+    native_pair(doc['closing_component'],body,pin,required,binding,extras)
+    r.stats_contract(doc['packed_parent_write_statistics'],pin)
+    return doc['runtime_plan']
+
+def reviewed_failure_classification(doc,rp,root,plan,names,required,binding,extras,baseline,added,sidecar,zero):
+    if root.get('selected_test_index')!=111:
+        return stopped(root,plan,required,binding,extras,baseline,added,names,sidecar)
+    classification=doc.get('case111_product_review')
+    source_review=classification.get('source_review') if type(classification) is dict else None
+    require(type(classification) is dict
+        and classification.get('state')=='PASS_CASE111_SEMANTIC_BODY_REVIEW_NOT_SOURCE_OR_QUEUE'
+        and classification.get('product_root_pin')==rp
+        and classification.get('product_sidecar_pin')==root.get('terminal_parent_failure_sidecar_pin')
+        and classification.get('product_placeholder_pin')==zero
+        and classification.get('semantic_body_capture_complete') is True
+        and classification.get('runtime_acceptance_changed') is False
+        and classification.get('accepted_count_delta')==0
+        and classification.get('queue_cursor_advanced') is False
+        and classification.get('P09_gate')==classification.get('A12_gate')==classification.get('A13_gate')=='OPEN'
+        and classification.get('product_complete') is False
+        and type(source_review) is dict
+        and source_review.get('state')=='PASS_SEMANTIC_STOP_REVIEW_NOT_SOURCE_CLOSURE_OR_RUNTIME_ACCEPTANCE'
+        and source_review.get('runtime_accepted') is False
+        and source_review.get('accepted_count_delta')==0,
+        'EXACT_CASE111_SEMANTIC_STOP_REVIEW_NOT_SOURCE_OR_QUEUE')
+    return classification
+
+
+def review_contract(doc,rp,root,plan,names,required,binding,extras,baseline,added,codes,sidecar=None,zero=None,
+    reviewed_stop=None,target_results=None,plan_history=None):
+    require(reviewed_stop is None or target_results is None,'REVIEW_ENTRY_OR_NEW_BATCH_NOT_BOTH')
+    # A batch review has its own scan cursor; each failed root keeps its original cursor.
+    # Reused review cursors are independently checked against _scan's completed history.
+    review_plan=doc['prior_runtime_plan'] if reviewed_stop is not None else plan
+    common(doc,review_plan,names,required,binding,extras,baseline,added,codes)
+    require(doc['state']==STOP_REVIEW and doc['runtime_contract_executions']==0
+        and doc['source_attempted'] is False and doc['actual_product_child_executed'] is False
+        and doc['accepted_exact_product_body_count']==0,'REVIEW_NOT_GO_OR_ADVANCE')
+    if target_results is not None:
+        require(type(target_results) is list and 1<=len(target_results)<=8,'EXACT_REVIEWED_STOP_RESULT_COUNT')
+        require(type(plan_history) is list and plan in plan_history
+            and all(item[2] in plan_history for item in target_results),'MULTI_REVIEW_KNOWN_CURSOR_HISTORY')
+        expected=[]
+        for item in target_results:
+            trp,troot,tplan,tclassification,tside,tzero=item
+            classification=reviewed_failure_classification(doc,trp,troot,tplan,names,required,binding,
+                extras,baseline,added,tside,tzero)
+            require(tclassification==classification,'MULTI_REVIEW_CLASSIFICATION')
+            expected.append(dict(reviewed_root_pin=trp,reviewed_failure_classification=classification,
+                reviewed_body_placeholder_pin=tzero))
+        require(doc['reviewed_root_pin']==expected[0]['reviewed_root_pin']
+            and doc['reviewed_failure_classification']==expected[0]['reviewed_failure_classification']
+            and doc['reviewed_body_placeholder_pin']==expected[0]['reviewed_body_placeholder_pin'],
+            'MULTI_REVIEW_PRIMARY_MIRROR')
+        if len(expected)==1:
+            require('reviewed_stops' not in doc,'SINGLE_REVIEW_NO_MULTI_FIELD')
+        else:require(doc.get('reviewed_stops')==expected,'EXACT_MULTI_REVIEWED_STOP_SET')
+    else:
+        classification=reviewed_failure_classification(doc,rp,root,plan,names,required,binding,
+            extras,baseline,added,sidecar,zero)
+        if reviewed_stop is None:
+            require(doc['reviewed_root_pin']==rp and doc['reviewed_failure_classification']==classification
+                and doc['reviewed_body_placeholder_pin']==zero,'REVIEWED_STOP_CLASSIFICATION')
+        else:
+            require(reviewed_stop in reviewed_stop_entries(doc)
+                and reviewed_stop==dict(reviewed_root_pin=rp,reviewed_failure_classification=classification,
+                    reviewed_body_placeholder_pin=zero),'EXACT_MULTI_REVIEW_ENTRY')
+
+def cached_light_json(q):
+    # 같은 Reader의 LIGHT/FRESH 각 마지막1개, 총2개만 유지. 원 final-fresh는 그대로 수행.
+    original=q.json;last={}
+    def read(name):
+        match=re.fullmatch(re.escape(p.DIR)+r'/p340-(light|light-review)-run[0-9]{3}\.v1\.json',name)
+        kind=match.group(1) if match else None
+        if kind in last and last[kind][0]==name:
+            q.reader.checkpoint()
+            return last[kind][1]
+        value=original(name)
+        pin=q.reader.snapshots.get(name,{})
+        if kind is not None and value.get('state')==({'light':LIGHT,'light-review':FRESH}[kind]) \
+                and value.get('source_attempted') is False and value.get('actual_product_child_executed') is False \
+                and value.get('closing_component') is None and type(pin.get('bytes')) is int and 0<pin['bytes']<=131072:
+            # 128KiB 초과/제품/Native/실패 JSON은 cache 대상 아님. 별도 명령 간 재사용 없음.
+            last[kind]=(name,value)
+        return value
+    return read
+
+def scan(q,scope,approved_pins=(),target=None):
+    with patch.object(q,'json',cached_light_json(q)):
+        q.closed108=closing_accept_from_folder(q,scope)
+        if q.closed108 is not None:scope=current_contract_scope(scope,q.closed108[1]['runtime_plan'])
+        q.preformal109_review=preformal109_review(m.m.m.review.bound_json(q,PREFORMAL109_PIN),scope[1])
+        for logical in PREFORMAL045_CODE:
+            archive=dict(logical,path='implementation/p09/evidence/p353-v20-candidate-code/'+logical['path'])
+            require(q.pin(archive['path'])==archive,'EXACT_PREFORMAL045_CANDIDATE_ARCHIVE')
+        q.preformal045_review=preformal045_review(m.m.m.review.bound_json(q,PREFORMAL045_PIN))
+        q.epoch828_review=epoch828_from_reader(q,scope)
+        for logical in FORMAL862_CODE:
+            archive=dict(logical,path='implementation/p09/evidence/p340-formal862-code/'+logical['path'])
+            require(q.pin(archive['path'])==archive,'EXACT862_PHYSICAL_CODE_ARCHIVE')
+        for logical in FORMAL890_CODE:
+            archive=dict(logical,path='implementation/p09/evidence/p340-formal890-code/'+logical['path'])
+            require(q.pin(archive['path'])==archive,'EXACT890_PHYSICAL_CODE_ARCHIVE')
+        for archive in CASE111_V24_CODE_ARCHIVE:
+            require(q.pin(archive['path'])==archive,'EXACT_CASE111_V24_PHYSICAL_CODE_ARCHIVE')
+        for logical in PREFORMAL066_CODE:
+            archive=dict(logical,path='implementation/p09/evidence/p358-v22-preformal066-code/'+logical['path'])
+            require(q.pin(archive['path'])==archive,'EXACT066_FAILED_CODE_ARCHIVE')
+        q.preformal066_review=preformal066_review(m.m.m.review.bound_json(q,PREFORMAL066_PIN))
+        return _scan(q,scope,approved_pins,target)
+
+def _remember_current_candidate(rows,row,plan):
+    # 큐의 최종 위치에 해당하는 후보만 보관한다. 그 외 문서도 아래에서
+    # 계약 검증은 끝까지 수행하지만 선택에 쓰이지 않으므로 즉시 참조를 놓는다.
+    if row[1]['prior_runtime_plan']==plan:rows.append(row)
+
+def scan_case111_product_root(q,scope,plan,root_pin,root,*,include_source_acceptance):
+    """Review the exact preserved case111 root in both GO and stop-target scans.
+
+    A stop-target scan validates its existing product review but must not derive
+    a new source acceptance or advance the queue.
+    """
+    import accept_p340_case111_compound as case111
+    import review_current_queue_stop as current_stop_review
+    require(root_pin==case111.source.ROOT_PIN,'CASE111_EXACT_ROOT_PIN')
+    body_pin=case111_sidecar_pin(root)
+    body=current_stop_review.bound_json(q,body_pin)
+    zero=placeholder(q,root_pin,root)
+    require(zero is not None,'CASE111_ORIGINAL_ZERO_PLACEHOLDER_REQUIRED')
+    product_review=case111_product_review(q,scope,plan,root_pin,root,body,body_pin)
+    q.case111_product_review=product_review
+    q.reviewed_zero_pins[zero['path']]=zero
+    q.case111_compound_acceptance=None
+    if include_source_acceptance:
+        q.case111_compound_acceptance=case111_source_queue_acceptance(
+            q,scope,plan,product_review,root,body,root_pin,body_pin)
+        if q.case111_compound_acceptance is not None:
+            plan=q.case111_compound_acceptance['runtime_plan']
+    return plan
+
+def case111_historical_code_freeze(root,body):
+    """Bind run083's historical code pins to its child freeze, not today's scanner revision."""
+    historical=root.get('current95_code_pins')
+    require(type(historical) is list and len(historical)==95,'EXACT_HISTORICAL_CASE111_CODE_SET')
+    frozen=p.v.pins(body['source_freeze'])
+    require(all(type(row) is dict and frozen.get(row.get('path'))==row for row in historical),
+        'ALL_HISTORICAL_CASE111_CODE_PINS_IN_CHILD_FREEZE')
+    return dict(historical_code_pin_count=len(historical),all_historical_code_pins_in_child_freeze=True,
+        current_scanner_code_pins_qualified_separately=True)
+
+def case111_historical_scope(root,scope,plan):
+    """Reconstruct run083's exact input scope from its frozen 95-code receipt pins."""
+    historical=root.get('current95_code_pins')
+    require(type(historical) is list and len(historical)==95 and historical[:93]==FROZEN93
+        and historical[93:]==CASE111_V24_CODE,
+        'EXACT_CASE111_HISTORICAL_95_CODE_PINS')
+    legacy,base,names,binding,required,extras,baseline,added,latest,prior=scope
+    require(root.get('prior_runtime_plan')==plan
+        and plan['runtime_source_qualified_individual_cases']==104 and plan['next_runtime_index']==111,
+        'EXACT_CASE111_HISTORICAL_CURSOR')
+    # 과거 pair는 bootstrap의 초기 cursor가 아닌 run083의 실제 검증 cursor에서 재검토한다.
+    return archived_pair_scope((legacy,plan,names,binding,required,extras,baseline,added,latest,prior),historical[93:])
+
+def case111_historical_light_fresh(root,light,fresh,light_pin,fresh_pin,scope,plan):
+    """Validate run083's 906 historical executions under its own frozen code pair."""
+    historical=root['current95_code_pins']
+    old_scope=case111_historical_scope(root,scope,plan)
+    old_schema=root['schema_version']
+    old_common=rebound(common,SCHEMA=old_schema,REQUIRE_CURRENT_EARLY_READ_PRESSURE=False)
+    old_light=rebound(light_contract,common=old_common,COUNT=453,EXECUTED=906)
+    old_fresh=rebound(fresh_contract,common=old_common,light_contract=old_light,EXECUTED=906)
+    old_light(light,old_scope[1],old_scope[2],old_scope[4],old_scope[3],old_scope[5],
+        old_scope[6],old_scope[7],historical)
+    old_fresh(fresh,light,light_pin,old_scope[1],old_scope[2],old_scope[4],old_scope[3],
+        old_scope[5],old_scope[6],old_scope[7],historical)
+    require(root['reused_light_contract_executions']==906
+        and root['qualified_light_pin']==light_pin and root['independent_fresh_pin']==fresh_pin
+        and fresh['reviewed_light_pin']==light_pin
+        and root['qualified_contract_checkpoint_statistics']==light['contract_checkpoint_statistics'],
+        'EXACT_CASE111_HISTORICAL_LIGHT_FRESH_CHAIN')
+    return dict(historical_contract_executions=906,historical_test_count=453,
+        historical_code_pins=historical,current_scanner_code_pins_qualified_separately=True)
+
+def case111_plan_transition(legacy,plan,names,product_review,source_pin,source_candidate):
+    """A single compound PASS advances 104/111 to 105/112; no candidate never advances."""
+    if source_candidate is None:return None
+    import accept_p340_case111_compound as case111
+    require(type(source_candidate) is dict and source_candidate.get('state')==case111.PASS
+        and source_candidate.get('source_receipt_pin')==source_pin
+        and source_candidate.get('selected_test_index')==111,
+        'EXACT_VALIDATED_CASE111_SOURCE_CANDIDATE')
+    index,name=g.old.select(plan,names)
+    reviewed_name=product_review['source_review']['product_test']['name']
+    require(index==111 and name==reviewed_name,
+        'EXACT_CASE111_COMPOUND_CURSOR')
+    next_plan=g.advance(legacy,plan,names,index)
+    require(next_plan['runtime_source_qualified_individual_cases']==105
+        and next_plan['next_runtime_index']==112
+        and next_plan['runtime_remaining_individual_cases']==144,
+        'ONE_CASE111_COMPOUND_ADVANCE_ONLY')
+    return dict(schema_version='hwpx-agent.p09-case111-compound-queue-transition/v1',
+        state='PASS_CASE111_COMPOUND_ADVANCED_NOT_WHOLE_OR_GATE',
+        product_review=product_review,source_candidate=source_candidate,
+        source_receipt_pin=source_pin,prior_runtime_plan=plan,runtime_plan=next_plan,
+        selected_test_index=111,selected_test_name=name,
+        semantic_body_capture_pass_count=1,accepted_exact_compound_case_count=1,
+        accepted_count_delta=1,original_failed_root_accepted=False,
+        original_partial_after_hash_completed=False,original_product_child_replayed=False,
+        P09_gate='OPEN',A12_gate='OPEN',A13_gate='OPEN',product_complete=False)
+
+def case111_source_receipt_paths(source_module):
+    folder=p.c.ROOT/source_module.SOURCE_DIR
+    if not folder.is_dir():return []
+    paths=[]
+    for path in folder.glob('p340-post-stop-source-run*.v1.json'):
+        paths.append(path)
+        require(len(paths)<=64,'BOUNDED_CASE111_SOURCE_RECEIPTS')
+    return sorted(paths)
+
+def case111_sidecar_pin(root):
+    """Bind case111's failure sidecar by its dedicated fixed pin, not a root filename rule."""
+    import accept_p340_case111_compound as case111
+    pin=root.get('terminal_parent_failure_sidecar_pin')
+    require(pin==case111.source.BODY_PIN,'CASE111_EXACT_PRODUCT_SIDECAR_PIN')
+    return pin
+
+def case111_historical_support_path(q,name):
+    """Keep run083's old 453/906 light-fresh pair historical, never current GO candidates."""
+    product=q.case111_product_review
+    if product is None:return False
+    historical=product.get('historical_light_fresh_review')
+    if not isinstance(historical,dict):return False
+    pins={product['qualified_light_pin']['path']:product['qualified_light_pin'],
+        product['independent_fresh_pin']['path']:product['independent_fresh_pin']}
+    pin=pins.get(name)
+    if pin is None:return False
+    require(q.reader.snapshots.get(name)==pin and historical.get('historical_test_count')==453
+        and historical.get('historical_contract_executions')==906
+        and historical.get('current_scanner_code_pins_qualified_separately') is True,
+        'EXACT_CASE111_HISTORICAL_LIGHT_FRESH_NOT_CURRENT_GO')
+    return True
+
+def case111_product_review(q,scope,plan,root_pin,root,body,body_pin):
+    """Review the preserved child PASS at the exact live cursor without advancing it."""
+    import accept_p340_case111_compound as case111
+    import review_p340_post_product_stop as case111_review
+    legacy,base,names,binding,required,extras,baseline,added,latest,prior=scope
+    require(root_pin==case111.source.ROOT_PIN and body_pin==case111.source.BODY_PIN
+        and plan['runtime_source_qualified_individual_cases']==104 and plan['next_runtime_index']==111
+        and root['prior_runtime_plan']==plan and root['schema_version']==SCHEMA
+        and root['binding']==binding
+        and root['selected_test_index']==111 and root['selected_test_name']==case111_review.TEST_NAME==names[110]
+        and root['runtime_contract_executions']==0 and root['reused_light_contract_executions']==906
+        and root['accepted_exact_product_body_count']==0 and root['source_attempted'] is True
+        and root['source_qualified'] is False and root['actual_product_child_executed'] is False
+        and root.get('case_receipt_pin') is None and root.get('closing_component') is None
+        and 'runtime_plan' not in root,'EXACT_CURRENT_CASE111_FAILED_PRODUCT_ROOT')
+    light_pin=pin_argument(root['qualified_light_pin'],'light');light=m.m.m.review.bound_json(q,light_pin)
+    fresh_pin=pin_argument(root['independent_fresh_pin'],'fresh');fresh=m.m.m.review.bound_json(q,fresh_pin)
+    historical_light_fresh=case111_historical_light_fresh(root,light,fresh,light_pin,fresh_pin,scope,plan)
+    historical_code_freeze=case111_historical_code_freeze(root,body)
+    require(body['policy']==p.c.POLICY,'EXACT_CASE111_CHILD_POLICY')
+    m.m.job_contract(body)
+    # Historical receipts validate only their own frozen code. Current scanner GO
+    # still requires a distinct current-code LIGHT/FRESH pair elsewhere in scan().
+    placeholder_pin=placeholder(q,root_pin,root)
+    require(placeholder_pin==case111.EMPTY_RECEIPT_PIN,'ORIGINAL_CASE111_ZERO_PLACEHOLDER')
+    result=case111.review_product_candidate(root,body,root_pin,body_pin,placeholder_pin,plan)
+    result.update(qualified_light_pin=light_pin,independent_fresh_pin=fresh_pin,
+        qualified_contract_checkpoint_statistics=light['contract_checkpoint_statistics'],
+        historical_light_fresh_review=historical_light_fresh,
+        historical_product_code_freeze=historical_code_freeze,
+        original_failed_root_preserved=True,original_product_child_replayed=False,
+        current_scanner_code_pins=q.codes,source_closure_required=True)
+    return result
+
+def case111_source_queue_acceptance(q,scope,plan,product_review,root,body,root_pin,body_pin):
+    """Derive one exact case111 compound queue step from a fresh full source receipt."""
+    import accept_p340_case111_compound as case111
+    import close_p340_post_product_source_frame as case111_source
+    legacy,base,names,binding,required,extras,baseline,added,latest,prior=scope
+    paths=case111_source_receipt_paths(case111_source)
+    failed=[];accepted=None
+    for path in paths:
+        name=path.relative_to(p.c.ROOT).as_posix();source_doc=q.json(name)
+        source_pin=q.reader.snapshots.get(name)
+        require(type(source_pin) is dict and source_pin.get('path')==name,'CASE111_SOURCE_RECEIPT_BOUND')
+        if source_doc.get('state')=='FAILED_NOT_ACCEPTED':
+            if source_pin==case111.CLOSED_PHASE092_PIN:
+                for logical in case111.CLOSED_PHASE092_CODE:
+                    archive=dict(logical,path='implementation/p09/evidence/p361-source092-closed-phase-code/'+logical['path'])
+                    require(q.pin(archive['path'])==archive,'EXACT_CLOSED_PHASE092_FAILED_CODE_ARCHIVE')
+            failed.append(case111.validate_failed_source_receipt(source_doc,source_pin));continue
+        require(source_doc.get('state')==case111_source.PASS,'NO_UNKNOWN_CASE111_SOURCE_RECEIPT_STATE')
+        source_extras={name:q.pin(name) for name in case111_source.EXTRAS}
+        observations=None
+        if source_doc['schema_version']==case111_source.ARCHIVED_SCHEMA:
+            observations={row['path']:q.pin(row['path']) for row in case111_source.FROZEN_MUTABLE_PINS}
+            for row in case111_source.ARCHIVE_BINDINGS:
+                require(q.pin(row['archive_pin']['path'])==row['archive_pin'],
+                    'EXACT_CASE111_ARCHIVED_ORIGINAL_BYTES')
+        source_required=case111_source.required_from_document(source_doc,body,source_extras,observations)
+        candidate=case111.validate(root,body,root_pin,body_pin,source_doc,source_pin,
+            source_required,plan)
+        require(accepted is None,'ONLY_ONE_CASE111_FULL_SOURCE_ACCEPTANCE')
+        accepted=(source_pin,candidate)
+    q.case111_failed_source_receipts=failed
+    if accepted is None:return None
+    source_pin,candidate=accepted
+    transition=case111_plan_transition(legacy,plan,names,product_review,source_pin,candidate)
+    transition.update(product_root_pin=root_pin,product_sidecar_pin=body_pin,
+        product_placeholder_pin=product_review['product_placeholder_pin'])
+    return transition
+
+def review_scanned_failure(q,scope,reviews,name,rp,doc,at,target):
+    """Review one failed receipt immediately so _scan never retains every full JSON body."""
+    legacy,base,names,binding,required,extras,baseline,added,latest,prior=scope
+    bound=m.m.m.review.bound_json
+    if doc['schema_version'] in ('hwpx-agent.p09-preserved106-fixed-runtime-queue/v21',
+            'hwpx-agent.p09-preserved106-fixed-runtime-queue/v22') \
+            and doc.get('error_code')!='bootstrap_idle_window_not_admitted':
+        archival_profile(doc,rp,scope)
+    side=bound(q,doc['terminal_parent_failure_sidecar_pin']) if doc.get('terminal_parent_failure_sidecar_pin') else None
+    zero=placeholder(q,rp,doc)
+    if doc.get('error_code') in (PREFRAME_ERROR,'TERMINAL_FAILURE_EXACT_STOP_NOT_PASS'):
+        lp=pin_argument(doc['qualified_light_pin'],'light');light=bound(q,lp)
+        fp=pin_argument(doc['independent_fresh_pin'],'fresh');fresh=bound(q,fp)
+        old=scope;old_codes=q.codes;oracles=(light_contract,fresh_contract)
+        if doc['schema_version'] in ('hwpx-agent.p09-preserved106-fixed-runtime-queue/v21',
+                'hwpx-agent.p09-preserved106-fixed-runtime-queue/v22'):
+            old,old_codes,oracles=archival_profile(doc,rp,scope)
+            archival_profile(light,lp,scope);archival_profile(fresh,fp,scope)
+        oracles[0](light,at,names,old[4],binding,old[5],baseline,old[7],old_codes)
+        oracles[1](fresh,light,lp,at,names,old[4],binding,old[5],baseline,old[7],old_codes)
+        require(doc['qualified_contract_checkpoint_statistics']==light['contract_checkpoint_statistics'],
+            'RAM_DEFER_EXACT_QUALIFICATION_NOT_FABRICATED')
+        require((zero is None and side is None) if doc['error_code']==PREFRAME_ERROR else
+            (zero is not None and zero['bytes']==0 and side is not None),'RAM_DEFER_ORIGINAL_BODY_NOT_REEXECUTED')
+    if rp in stop_targets(target):
+        result=(rp,doc,at,stopped(doc,at,required,binding,extras,baseline,added,names,side),side,zero)
+        return result,False
+    require(name in reviews,'UNREVIEWED_STOP_BLOCKS_GO')
+    ap,reviewed,reviewed_stop=reviews[name]
+    if doc.get('selected_test_index')==111:
+        require(type(q.case111_product_review) is dict and reviewed_stop is not None
+            and reviewed_stop['reviewed_failure_classification']==q.case111_product_review,
+            'REUSED_CASE111_REVIEW_MATCHES_FRESH_SEMANTIC_CLASSIFICATION')
+    if reviewed['schema_version'] in ('hwpx-agent.p09-preserved106-fixed-runtime-queue/v21',
+            'hwpx-agent.p09-preserved106-fixed-runtime-queue/v22'):
+        old,old_codes,oracles=archival_profile(reviewed,ap,scope)
+        oracles[4](reviewed,rp,doc,at,names,old[4],binding,old[5],baseline,old[7],old_codes,side,zero)
+    else:
+        review_contract(reviewed,rp,doc,at,names,required,binding,extras,baseline,added,q.codes,side,zero,
+            reviewed_stop=reviewed_stop)
+    if zero is not None:q.reviewed_zero_pins[zero['path']]=zero
+    return None,True
+
+def _scan(q,scope,approved_pins=(),target=None):
+    legacy,base,names,binding,required,extras,baseline,added,latest,prior=scope
+    targets=stop_targets(target);target_by_path={row['path']:row for row in targets}
+    codes=q.codes;bound=m.m.m.review.bound_json;folder=p.c.ROOT/p.DIR
+    files=[]
+    for path in folder.glob('p340-*-run*.v1.json'):
+        files.append(path)
+        require(len(files)<=2048,'BOUNDED_FIXED_NAMESPACE')
+    rows=[];support=[];reviews={};plan=base;plans=[base];target_results=[];used=set()
+    q.reviewed_zero_pins={};q.case111_product_review=None;q.case111_compound_acceptance=None;q.case111_failed_source_receipts=[]
+    for ap in approved_pins:
+        ap=pin_argument(ap,'review');d=bound(q,ap)
+        for entry in reviewed_stop_entries(d):
+            rp=pin_argument(entry['reviewed_root_pin'],'stop')
+            require(rp['path'] not in reviews,'NO_DUPLICATE_APPROVAL')
+            reviews[rp['path']]=(ap,d,entry)
+    for path in sorted(files):
+        match=FILE.fullmatch(path.name)
+        (rows if match else support).append(path)
+    for path in rows:
+        if path.relative_to(p.c.ROOT).as_posix()==P108_ROOT['path']:
+            require(q.reader.snapshots[P108_ROOT['path']]==P108_ROOT and q.pending108_review==pending108_summary(),
+                'ONLY_EXACT_SUCCESSFUL108_CAPTURE_PRESERVED_NOT_PRODUCT_RETRY')
+            continue
+        if path.relative_to(p.c.ROOT).as_posix()==EPOCH272_PINS[2]['path']:
+            require(q.reader.snapshots[EPOCH272_PINS[2]['path']]==EPOCH272_PINS[2]
+                and q.epoch272_review==epoch272_summary(),'ONLY_EXACT_REVIEWED_PRE_PRODUCT_NATIVE_STOP272')
+            continue
+        if path.relative_to(p.c.ROOT).as_posix()==NATIVE107_ROOT['path']:
+            require(q.reader.snapshots[NATIVE107_ROOT['path']]==NATIVE107_ROOT,'ONLY_EXACT_NATIVE107_ALREADY_IN_BASE101')
+            continue
+        if path.relative_to(p.c.ROOT).as_posix()==EPOCH_FAILURE['path']:
+            require(q.reader.snapshots[EPOCH_FAILURE['path']]==EPOCH_FAILURE and q.epoch_review['Native_or_product_started'] is False,
+                'ONLY_EXACT_PRE_NATIVE_MODULE_FAILURE_ARCHIVE_REVIEW')
+            continue
+        d=q.json(path.relative_to(p.c.ROOT).as_posix());rp=q.reader.snapshots[path.relative_to(p.c.ROOT).as_posix()]
+        index,number=map(int,FILE.fullmatch(path.name).groups())
+        require(1<=index<=249 and 1<=number<=999 and d.get('selected_test_index')==index,'EXACT_CASE_FILE_ID')
+        if rp['path']==EPOCH828_PINS[2]['path']:
+            require(rp==EPOCH828_PINS[2] and q.epoch828_review['independent_current_STOP_review_required'] is True,
+                'EXACT828_FAILED_ROOT_STILL_NEEDS_INDEPENDENT_REVIEW')
+        if d['state']=='FAILED_NOT_ACCEPTED':
+            if rp['path']=='implementation/p09/evidence/locked-r07/p340-case-111-run083.v1.json':
+                import accept_p340_case111_compound as case111
+                if rp==case111.source.ROOT_PIN:
+                    original_stop_plan=copy.deepcopy(plan)
+                    plan=scan_case111_product_root(q,scope,plan,rp,d,
+                        include_source_acceptance=not targets)
+                    if q.case111_compound_acceptance is not None:
+                        plans.append(plan)
+                    if rp['path'] in target_by_path:
+                        side=bound(q,case111_sidecar_pin(d))
+                        zero=q.reviewed_zero_pins.get(case111.EMPTY_RECEIPT_PIN['path'])
+                        classification=q.case111_product_review
+                        require(type(classification) is dict
+                            and classification.get('product_root_pin')==rp
+                            and classification.get('product_sidecar_pin')==case111_sidecar_pin(d)
+                            and classification.get('state')=='PASS_CASE111_SEMANTIC_BODY_REVIEW_NOT_SOURCE_OR_QUEUE',
+                            'EXACT_CASE111_SEMANTIC_STOP_REVIEW_NOT_SOURCE_OR_QUEUE')
+                        target_results.append((rp,d,plan,classification,side,zero))
+                    elif rp['path'] in reviews:
+                        target_row,was_reviewed=review_scanned_failure(q,scope,reviews,rp['path'],rp,d,
+                            original_stop_plan,target)
+                        require(target_row is None and was_reviewed,'CASE111_REUSED_REVIEW_WITHOUT_PRODUCT_REPLAY')
+                        used.add(rp['path'])
+                    continue
+            target_row,was_reviewed=review_scanned_failure(q,scope,reviews,rp['path'],rp,d,
+                copy.deepcopy(plan),target)
+            if target_row is not None:
+                require(not any(item[0]['path']==target_row[0]['path'] for item in target_results),
+                    'NO_DUPLICATE_STOP_RESULT');target_results.append(target_row)
+            if was_reviewed:used.add(rp['path'])
+            continue
+        bp=d['case_receipt_pin'];require(bp['path']==f'{p.DIR}/cases/p340-case-{index:03}-run{number:03}.json','EXACT_BODY_PATH')
+        body=bound(q,bp)
+        lp=pin_argument(d['qualified_light_pin'],'light');light=bound(q,lp)
+        fp=pin_argument(d['independent_fresh_pin'],'fresh');fresh=bound(q,fp)
+        validators=(light_contract,fresh_contract,record);r_required,r_extras,r_added,r_codes=required,extras,added,codes
+        if d['schema_version'] in ('hwpx-agent.p09-preserved106-fixed-runtime-queue/v21','hwpx-agent.p09-preserved106-fixed-runtime-queue/v22'):
+            old,r_codes,oracles=archival_profile(d,rp,scope);r_required,r_extras,r_added=old[4],old[5],old[7]
+            archival_profile(light,lp,scope);archival_profile(fresh,fp,scope);validators=oracles[:3]
+        validators[0](light,plan,names,r_required,binding,r_extras,baseline,r_added,r_codes)
+        validators[1](fresh,light,lp,plan,names,r_required,binding,r_extras,baseline,r_added,r_codes)
+        require(fresh['reviewed_light_pin']==lp and d['qualified_contract_checkpoint_statistics']==light['contract_checkpoint_statistics'],
+            'ACCEPTED_ORIGINAL_CURRENT_LIGHT_FRESH_CHAIN')
+        plan=validators[2](d,body,bp,legacy,plan,names,r_required,binding,r_extras,baseline,r_added,r_codes);plans.append(plan)
+    lights=[];freshes=[]
+    for path in support:
+        name=path.relative_to(p.c.ROOT).as_posix()
+        if name==PREFORMAL066_PIN['path']:
+            require(q.reader.snapshots[name]==PREFORMAL066_PIN and q.preformal066_review['current_GO'] is False,
+                'EXACT_REVIEWED066_PREQUALIFICATION_FAILURE_NOT_GO')
+            continue
+        previous828={z['path']:z for z in EPOCH828_PINS[:2]}
+        if name in previous828:
+            require(q.reader.snapshots[name]==previous828[name] and q.epoch828_review['current_GO'] is False,
+                'ARCHIVED828_LIGHT_FRESH_NOT_CURRENT_GO')
+            continue
+        if name==PREFORMAL109_PIN['path']:
+            require(q.reader.snapshots[name]==PREFORMAL109_PIN and q.preformal109_review['current_GO'] is False,
+                'ONLY_EXACT_REVIEWED_PREFORMAL109_FAILURE_NOT_GO')
+            continue
+        if name==PREFORMAL045_PIN['path']:
+            require(q.reader.snapshots[name]==PREFORMAL045_PIN and q.preformal045_review['current_GO'] is False,
+                'ONLY_EXACT_REVIEWED_PREFORMAL045_FAILURE_NOT_GO')
+            continue
+        previous108={z['path']:z for z in (P108_LIGHT,P108_FRESH)}
+        if name in previous108:
+            require(q.reader.snapshots[name]==previous108[name] and q.pending108_review==pending108_summary(),
+                'ORIGINAL320_PRODUCT108_EPOCH_NOT_CURRENT_GO')
+            continue
+        if path.name.startswith('p340-closing-'):
+            require(re.fullmatch(r'p340-closing-(?:review|source|accept)-run[0-9]{3}\.v1\.json',path.name) is not None,
+                'NO_UNKNOWN_CLOSING_NAMESPACE')
+            continue
+        if name==PARTIAL308_PIN['path']:
+            require(q.reader.snapshots[name]==PARTIAL308_PIN and q.partial308_review==partial308_summary(),
+                'ONLY_EXACT_INDEPENDENT_REVIEWED_PARTIAL308_STOP')
+            continue
+        prior272={z['path']:z for z in EPOCH272_PINS}
+        if name in prior272:
+            require(q.reader.snapshots[name]==prior272[name] and q.epoch272_review==epoch272_summary(),
+                'ONLY_EXACT_ARCHIVE_REVIEW272_NOT_CURRENT_GO')
+            continue
+        prequal={z['pin']['path']:z['pin'] for z in PREQUAL_SPECS}
+        epochs={z['path']:z for z in (EPOCH_LIGHT,EPOCH_FRESH)}
+        natives={z['path']:z for z in (NATIVE107_LIGHT,NATIVE107_FRESH)}
+        if name in natives:
+            require(q.reader.snapshots[name]==natives[name],'NATIVE107_PREVIOUS_CODE_QUALIFICATION_NOT_CURRENT_GO')
+            continue
+        if name in epochs:
+            require(q.reader.snapshots[name]==epochs[name] and q.epoch_review['current_actual_GO'] is False,'ONLY_ARCHIVE_BOUND198_NOT_CURRENT_GO')
+            continue
+        if name==PRIOR_LIGHT['path']:
+            require(q.reader.snapshots[name]==PRIOR_LIGHT and q.prior_light_review['current_actual_GO'] is False,
+                'PRIOR172_ARCHIVE_REVIEW_NOT_CURRENT_GO')
+            continue
+        if name==SCOPE_FAILURE['path']:
+            require(q.reader.snapshots[name]==SCOPE_FAILURE and q.scope_failure_review==scope_failure_summary(),
+                'ONLY_EXACT_INDEPENDENT_REVIEWED_SCOPE_FAILURE')
+            continue
+        if name in prequal:
+            require(q.reader.snapshots[name]==prequal[name]
+                and q.prequal_reviews==[prequal_summary(z) for z in PREQUAL_SPECS],'ONLY_EXACT_INDEPENDENT_REVIEWED_PREFORMAL_FAILURE')
+            continue
+        if path.name.startswith('p340-stop-review-'):continue
+        require(re.fullmatch(r'p340-(?:admission|light|light-review)-run[0-9]{3}\.v1\.json',path.name) is not None,'NO_UNKNOWN_ROWS')
+        d=q.json(name);rp=q.reader.snapshots[name]
+        if selection_diagnostic_failure(q,name,d):continue
+        if contract118_failure_review(q,name,d):continue
+        if historical_light_review_admission_deferred(q,name,d):continue
+        if case111_historical_support_path(q,name):continue
+        if d['state']=='FAILED_NOT_ACCEPTED':
+            if d.get('error_code') in ('bootstrap_idle_window_not_admitted','DEFERRED_ALREADY_SATURATED_SYSTEM'):
+                require(d['schema_version']==SCHEMA or rp==INITIAL076_PIN,'ONLY_EXACT_OLD_INITIAL_RAM_DEFER')
+                if d['error_code']=='bootstrap_idle_window_not_admitted':initial_ram_deferred(d)
+                else:initial_cpu_deferred(d)
+                at=initial_review_projection(plan,plans,reviews[name][1] if name in reviews else None)
+            else:at=d.get('prior_runtime_plan',base)
+            require(at in plans,'FAILED_CURSOR_KNOWN_NO_ADVANCE')
+            target_row,was_reviewed=review_scanned_failure(q,scope,reviews,name,rp,d,at,target)
+            if target_row is not None:
+                require(not any(item[0]['path']==target_row[0]['path'] for item in target_results),
+                    'NO_DUPLICATE_STOP_RESULT');target_results.append(target_row)
+            if was_reviewed:used.add(name)
+            continue
+        at=d['prior_runtime_plan'];require(at in plans,'QUALIFICATION_KNOWN_CURSOR')
+        if name==QUALIFIED1028_PIN['path']:
+            historical1028_light(q,scope,d,rp,at)
+            continue
+        if rp in REPLAY1028_PINS or rp in REPLAY1032_PINS:
+            historical_replay1028_pair(q,scope,d,rp,at)
+            continue
+        if d['schema_version'] in ('hwpx-agent.p09-preserved106-fixed-runtime-queue/v21','hwpx-agent.p09-preserved106-fixed-runtime-queue/v22'):
+            old,old_codes,oracles=archival_profile(d,rp,scope)
+            if d['state']==LIGHT:oracles[0](d,at,names,old[4],binding,old[5],baseline,old[7],old_codes)
+            else:
+                lp=pin_argument(d['reviewed_light_pin'],'light');ld=bound(q,lp);archival_profile(ld,lp,scope)
+                oracles[1](d,ld,lp,at,names,old[4],binding,old[5],baseline,old[7],old_codes)
+            continue  # 과거862 자격은 보존하지만 새 코드 GO 목록에는 넣지 않는다.
+        if d['state']==LIGHT:
+            light_contract(d,at,names,required,binding,extras,baseline,added,codes)
+            _remember_current_candidate(lights,(rp,d),plan)
+        else:
+            lp=pin_argument(d['reviewed_light_pin'],'light');ld=bound(q,lp)
+            fresh_contract(d,ld,lp,at,names,required,binding,extras,baseline,added,codes)
+            _remember_current_candidate(freshes,(rp,d,lp,ld),plan)
+    review_scope_cursor_contract(reviews,plans)
+    require(used==set(reviews) and {row[0]['path'] for row in target_results}==set(target_by_path),
+        'NO_UNUSED_APPROVAL_OR_MISSING_TARGET')
+    q.lights=lights;q.freshes=freshes
+    return plan,target_results,plans
+
+def select_light(q,plan):
+    rows=[row for row in q.lights if row[1]['prior_runtime_plan']==plan]
+    require(bool(rows),'CURRENT_QUALIFIED_LIGHT_REQUIRED');return rows[-1]
+
+def select_go(q,plan):
+    rows=[row for row in q.freshes if row[1]['prior_runtime_plan']==plan]
+    require(bool(rows),'DISTINCT_CURRENT_FRESH_BEFORE_PRODUCT');return rows[-1]
+
+def run_contract_suite(test_module):
+    suite=unittest.defaultTestLoader.loadTestsFromModule(test_module)
+    # 정상 PASS면 전체 suite를 유지하고, 첫 실패/오류면 추가 부하를 만들지 않는다.
+    return unittest.TextTestRunner(stream=io.StringIO(),verbosity=0,failfast=True).run(suite)
+
+def contracts(scope,q):
+    sys.path.insert(0,str(p.c.ROOT/'tools/p09/tests'))
+    import test_preserved106_queue_runtime as t
+    statistics=None
+    try:
+        with m.WarmTestIsolation(),m.guarded.bind(q.reader.checkpoint) as statistics, \
+                patch('subprocess.Popen',side_effect=AssertionError('NO_CONTRACT_CHILD')), \
+                patch('subprocess.run',side_effect=AssertionError('NO_CONTRACT_CHILD')), \
+                patch('threading.Thread.start',side_effect=AssertionError('NO_CONTRACT_THREAD')):
+            for following in (False,True):
+                with patch.multiple(t,FIXTURES=scope,FOLLOWING=following,TEMPLATE=None,LIGHT_TEMPLATE=None,CLOSING_TEMPLATE=None,CLOSING_TEMPLATE_BUILDS=0,PREQUALIFICATION=q.prequal_document,PREQUALIFICATION2=q.prequal_documents[1],LITERAL_PRIOR_LIGHT=q.prior_light_document,EPOCH_DOCUMENTS=q.epoch_documents,NATIVE107_DOCUMENTS=q.native107_documents,NATIVE107_BASE=q.native107_base,SCOPE_FAILURE_DOCUMENT=q.scope_failure_document,EPOCH272_DOCUMENTS=q.epoch272_documents,PARTIAL308_DOCUMENT=q.partial308_document,PENDING108_DOCUMENTS=q.pending108_documents,PENDING108_BASE=q.pending108_base,SOURCE021_DOCUMENT=q.source021_document,REVIEW404_DOCUMENT=q.review404_document,REVIEW022_DOCUMENT=q.review022_document,SOURCE025_DOCUMENT=q.source025_document,SOURCE027_DOCUMENT=q.source027_document,SOURCE029_DOCUMENT=q.source029_document,REVIEW030_DOCUMENT=q.review030_document):
+                    result=run_contract_suite(t)
+                if not result.wasSuccessful():q.contract_failures=[str(t) for t,_ in result.failures+result.errors][:8]
+                require(result.wasSuccessful() and result.testsRun==COUNT and not result.skipped,'ALL_CURRENT_AND_FOLLOWING_CONTRACTS')
+        row=statistics.summary();m.guarded_contract(row,EXECUTED)
+        require(unittest.TextTestRunner is m.guarded._ORIGINAL_RUNNER and m.guarded._ACTIVE is False,'ORIGINAL_RUNNER_RESTORED')
+        return EXECUTED,row
+    finally:q.contract_statistics=statistics.summary() if statistics is not None else None
+
+def preserve(capture,owner,out,index,number):
+    path=p.c.ROOT/f'{p.DIR}/cases/p340-failure-{index:03}-run{number:03}.json'
+    with path.open('x',encoding='utf-8') as stream:
+        output=m.PinningOutput(stream)
+        stats=capture.write_rejected(output,owner,out) if capture.rejected else capture.write_terminal(output,owner,out)
+    out.update(terminal_parent_failure_sidecar_pin=dict(path=path.relative_to(p.c.ROOT).as_posix(),
+        bytes=output.written,sha256=output.digest.hexdigest()),terminal_parent_failure_statistics=stats,
+        original_failure_body_placeholder_preserved=True)
+
+def closing_main(args):
+    global LAST_TERMINAL
+    require((args.mode!='closing-review')==(args.closing_review_pin is not None)
+        and (args.mode=='closing-accept')==(args.closing_source_pin is not None)
+        and not args.review_pin and not args.stop_root_pin,'EXPLICIT_SOURCE_ONLY_MODE_PINS')
+    destination=p.c.ROOT/f'{p.DIR}/p340-{args.mode}-run{args.run:03}.v1.json'
+    require(not destination.exists(),'FRESH_SOURCE_ONLY_OUTPUT')
+    context=g.observation.Context();owner=g.observation.Resources(context)
+    q=frame=early=proposed=scope=reviewed=source=rp=sp=None;stage='admission'
+    out=dict(schema_version=SCHEMA,state='FAILED_NOT_ACCEPTED',**p.r.flags(),
+        compound100_pin=COMPOUND,compound100_review_pin=COMPOUND_REVIEW,compound100_source_pin=COMPOUND_SOURCE,
+        original93_pins=FROZEN93,startup_limits=STARTUP_LIMITS,stop_resume_policy=m.STOP_POLICY,
+        original_successful_bodies_not_reexecuted=True,accepted_exact_product_body_count=0,
+        runtime_contract_executions=0,contract_checkpoint_statistics=None,reused_light_contract_executions=0,
+        source_attempted=False,source_qualified=False,original_parent_capture_adapter_selected=False,
+        diagnostic_parent_connection_selected=False,receipt_serialization_policy=r.policy(),
+        verification_bytecode_cache_writes_disabled=sys.dont_write_bytecode and os.environ.get('PYTHONDONTWRITEBYTECODE')=='1',
+        monotonic_binding_policy=m.review.policy(),successful_product_reexecution_allowed=False,
+        original_failed_root_accepted=False,original_partial_after_hash_completed=False,
+        independent_source_frame_attempted=False,independent_source_frame_qualified=False,
+        source_kind='INDEPENDENT_CURRENT95_AFTER_COMPLETED108_NOT_ORIGINAL_PARTIAL_AFTER',source_path_guard_diagnostics=[])
+    try:
+        owner.admit();q=MetadataReader(owner,context);stage='anchor';scope=bootstrap(q)
+        legacy,base,names,binding,required,extras,baseline,added,_,_=scope
+        stage='selection';plan,_,_=scan(q,scope)
+        require(plan==base and q.closed108 is None,'PENDING108_NOT_ALREADY_ACCEPTED')
+        index,name=g.old.select(plan,names);require(index==108 and name==P108_NAME,'ONE_PENDING108_SOURCE_ONLY')
+        out.update(prior_runtime_plan=plan,selected_test_index=index,selected_test_name=name,binding=binding,
+            scope_budget=budget(required,baseline,added),scope_added_ten_pins=list(added.values()),
+            extra_frame_controller_pins=list(extras.values()),current95_code_pins=q.codes,
+            case111_product_review=q.case111_product_review,
+            case111_compound_acceptance=q.case111_compound_acceptance,
+            case111_failed_source_receipts=q.case111_failed_source_receipts,
+            prequalification_failure_reviews=q.prequal_reviews,native107_epoch_root_pin=NATIVE107_ROOT,
+            preformal109_failure_review=q.preformal109_review,
+            preformal045_failure_review=q.preformal045_review,
+            historical828_epoch_review=q.epoch828_review,
+            scope_fix_failure_review=q.scope_failure_review,epoch272_stop_review=q.epoch272_review,
+            partial308_stop_review=q.partial308_review,pending108_product_review=q.pending108_review,
+            preformal400_failure_review=q.preformal400_review,source021_CPU_stop_review=q.source021_review,review022_CPU_stop_review=q.review022_stop,source025_CPU_stop_review=q.source025_review,source027_CPU_stop_review=q.source027_review,source029_CPU_stop_review=q.source029_review,review030_CPU_stop_review=q.review030_review,
+            original_executed_source_pins=list(pending108_scope(required).values()),current_source_transition_paths=[SELF,TEST])
+        bound=m.m.m.review.bound_json
+        if args.mode!='closing-review':
+            rp=closing_pin(args.closing_review_pin,'review');reviewed=bound(q,rp)
+            closing_contract(reviewed,scope,q.codes);out['closing_review_pin']=rp
+        if args.mode=='closing-accept':
+            sp=closing_pin(args.closing_source_pin,'source');source=bound(q,sp)
+            closing_contract(source,scope,q.codes,reviewed,rp);require(source['closing_review_pin']==rp,'SAME_REVIEW_SOURCE_CHAIN')
+            out['closing_source_pin']=sp
+        stage='contract_tests'
+        if args.mode=='closing-review':
+            with context.scope('contract_tests'):
+                out['runtime_contract_executions'],out['contract_checkpoint_statistics']=contracts(scope,q)
+            out.update(own_queue_contract_tests_passed=COUNT,synthetic_following_queue_contract_tests_passed=COUNT)
+        else:
+            out.update(reused_light_contract_executions=EXECUTED,
+                qualified_contract_checkpoint_statistics=reviewed['contract_checkpoint_statistics'])
+        stage='final_fresh_preparation';q.finish()
+        if args.mode=='closing-review':proposed=dict(state=C_REVIEW)
+        elif args.mode=='closing-accept':
+            proposed=dict(state=C_ACCEPT,runtime_plan=g.advance(legacy,base,names,108),
+                accepted_exact_compound_case_count=1,semantic_body_capture_pass_count=1)
+        else:
+            early=m.early_review.EarlySourceCheckpoint(owner.checkpoint_io,owner)
+            held=AcquisitionInputLocks(p.c.ROOT,early,owner,context)
+            require(held.checkpoint is early and held.api.pacer.rate==20 and held.open_pressure.resources is owner,
+                'SOURCE_ONLY_ORIGINAL_NATIVE_OWNER')
+            frame=p.frames.Frame(p.frames.Registry(),required,early,held=held)
+            context.reader=p.frames.Counters(q.reader,frame.readers)
+            out.update(independent_source_frame_attempted=True,early_source_native_and_byte_guard_connected=True)
+            stage='source_frame_acquire';held.mark('before_acquire')
+            with context.scope('metadata_hash'):frame.acquire()
+            held.mark('after_acquire')
+            def factory(checkpoint):
+                return p.core.run.owned.OwnedReader(p.c.ROOT,checkpoint,samples=owner,protected={p.m.EXE['path']})
+            for phase in ('metadata_hash','final_fresh_hash'):
+                stage=phase
+                with context.scope(phase):read_with_held_path_guards(frame,factory,owner.checkpoint_io,out['source_path_guard_diagnostics'])
+            stage='source_commit';held.mark('before_release')
+            out.update(source_frame=frame.commit(q.pending108_documents[1]),early_source_runtime_connection_verified=True,
+                independent_source_frame_qualified=True);proposed=dict(state=C_SOURCE)
+    except (ValueError,OSError,KeyError,TypeError,AttributeError,IndexError,KeyboardInterrupt) as error:
+        out.update(error_code=p.b.run.original.closed_error(error),failure_diagnostic=m.m.diagnostic(error,stage));proposed=None
+    finally:
+        if frame is not None:
+            try:
+                if not frame.close():out['error_code']='SOURCE_FRAME_CLEANUP_FAILED';proposed=None
+            except (ValueError,OSError):out['error_code']='SOURCE_FRAME_CLEANUP_FAILED';proposed=None
+            out['source_frame']=frame.summary()
+        if early is not None:out['early_source_checkpoint']=early.summary()
+        if q is not None:
+            q.close_entry();out.update(preparation_IO=q.summary(),bound_preparation_input_pins=list(q.reader.snapshots.values()))
+            if hasattr(q,'contract_statistics'):out['contract_checkpoint_statistics']=q.contract_statistics
+            if hasattr(q,'contract_failures'):out['contract_failures']=q.contract_failures
+        out['metadata_observation']=g.observation.summary(owner)
+        def validate(doc):closing_contract(doc,scope,q.codes,reviewed,rp,source,sp)
+        m.complete_runtime(out,owner,proposed,validate)
+        try:
+            with destination.open('x',encoding='utf-8') as stream:
+                output=m.PinningOutput(stream)
+                writer=r.packed.dump if out['state'] in C_STATES else r.compact.dump
+                def terminal():require(owner.done.is_set(),'NO_RESOURCE_RESTART')
+                writer(out,output,checkpoint=terminal,indent=2)
+                pin=dict(path=destination.relative_to(p.c.ROOT).as_posix(),bytes=output.written,sha256=output.digest.hexdigest())
+        except (ValueError,OSError,TypeError):
+            print(json.dumps(dict(state='FAILED_NOT_ACCEPTED',error_code='ROOT_SERIALIZATION_FAILED')));return 2
+        LAST_TERMINAL=dict(state=out['state'],receipt_pin=pin,resource_watcher_cleanup_confirmed=out.get('resource_watcher_cleanup_confirmed'),
+            runtime_contract_executions=out['runtime_contract_executions'],error_code=out.get('error_code'),
+            resource_stop_reason=out.get('resource_stop_reason'),actual_product_child_executed=False)
+        print(json.dumps(LAST_TERMINAL),flush=True)
+    return 0 if out['state'] in C_STATES else 2
+
+def closing_chain(args):
+    """helper import만 공유. 단계별 main/owner/reader/fresh/receipt는 원 경로 그대로.
+
+    qualification -> independent source -> acceptance 한 번씩만 수행한다.
+    실패/미완료/정리 실패는 즉시 terminal이며 다음 단계나 자동 retry가 없다.
+    """
+    require(args.mode=='closing-chain' and type(args.run) is int and 1<=args.run<=997
+        and not args.review_pin and not args.stop_root_pin
+        and args.closing_review_pin is None and args.closing_source_pin is None,'EXACT_FRESH_CLOSING_CHAIN_ARGUMENTS')
+    stages=(('closing-review',C_REVIEW),('closing-source',C_SOURCE),('closing-accept',C_ACCEPT))
+    for offset,(mode,_) in enumerate(stages):
+        require(not (p.c.ROOT/f'{p.DIR}/p340-{mode}-run{args.run+offset:03}.v1.json').exists(),
+            'ALL_CHAIN_OUTPUTS_FRESH_BEFORE_FIRST_STAGE')
+    review_pin=source_pin=None
+    for offset,(mode,state) in enumerate(stages):
+        argv=['--mode',mode,'--run',str(args.run+offset)]
+        if review_pin is not None:argv+=['--closing-review-pin',json.dumps(review_pin)]
+        if source_pin is not None:argv+=['--closing-source-pin',json.dumps(source_pin)]
+        rc=main(argv)
+        if rc!=0:return rc
+        terminal=LAST_TERMINAL
+        require(type(terminal) is dict and terminal['state']==state
+            and terminal['resource_watcher_cleanup_confirmed'] is True
+            and terminal['error_code'] is None and terminal['resource_stop_reason'] is None
+            and terminal['actual_product_child_executed'] is False
+            and terminal['runtime_contract_executions']==(EXECUTED if offset==0 else 0),
+            'EXACT_CLEAN_TERMINAL_BEFORE_NEXT_CHAIN_STAGE')
+        pin=closing_pin(terminal['receipt_pin'],mode.removeprefix('closing-'))
+        require(pin['path']==f'{p.DIR}/p340-{mode}-run{args.run+offset:03}.v1.json','EXACT_CHAIN_RUN_PIN')
+        if offset==0:review_pin=dict(pin)
+        if offset==1:source_pin=dict(pin)
+    return 0
+
+def main(argv=None):
+    global LAST_TERMINAL
+    LAST_TERMINAL=None
+    ap=argparse.ArgumentParser();ap.add_argument('--mode',choices=('light','light-review','actual','stop-review','closing-review','closing-source','closing-accept','closing-chain'),required=True)
+    ap.add_argument('--run',type=int,required=True);ap.add_argument('--review-pin',action='append',default=[]);ap.add_argument('--stop-root-pin',action='append',default=[]);ap.add_argument('--closing-review-pin');ap.add_argument('--closing-source-pin')
+    args=ap.parse_args(argv);require(p.c.Path.cwd().resolve()==p.c.ROOT and 1<=args.run<=999,'CWD_RUN')
+    require((args.mode=='stop-review')==bool(args.stop_root_pin),'STOP_TARGET_ONLY')
+    if args.mode=='closing-chain':return closing_chain(args)
+    if args.mode.startswith('closing-'):return closing_main(args)
+    require(args.closing_review_pin is None and args.closing_source_pin is None,'CLOSING_PINS_ONLY_IN_CLOSING_MODES')
+    destination=p.c.ROOT/f'{p.DIR}/p340-{args.mode if args.mode!="actual" else "admission"}-run{args.run:03}.v1.json'
+    require(not destination.exists(),'FRESH_ONLY')
+    context=g.observation.Context();owner=g.observation.Resources(context)
+    q=meta=frame=early=capture=parent=proposed=actual_adapter=None;scope=plan=body=target_result=None;writes=[];index=None
+    stage='admission'
+    out=dict(schema_version=SCHEMA,state='FAILED_NOT_ACCEPTED',**p.r.flags(),compound100_pin=COMPOUND,
+        compound100_review_pin=COMPOUND_REVIEW,compound100_source_pin=COMPOUND_SOURCE,original93_pins=FROZEN93,
+        startup_limits=STARTUP_LIMITS,stop_resume_policy=m.STOP_POLICY,original_successful_bodies_not_reexecuted=True,
+        accepted_exact_product_body_count=0,runtime_contract_executions=0,contract_checkpoint_statistics=None,
+        source_attempted=False,source_qualified=False,original_parent_capture_adapter_selected=False,
+        actual_input_path_guard_selected=False,actual_boundary_adapter_restored=False,actual_source_path_guard_diagnostics=[],
+        verification_bytecode_cache_writes_disabled=sys.dont_write_bytecode and os.environ.get('PYTHONDONTWRITEBYTECODE')=='1',
+        diagnostic_parent_connection_selected=False,parent_return_status_recorded_before_after_parent_guard=False,
+        receipt_serialization_policy=r.policy(),monotonic_binding_policy=m.review.policy())
+    try:
+        owner.admit();stage='reader_constructor';q=MetadataReader(owner,context)
+        stage='anchor';scope=bootstrap_historical(q)
+        legacy,base,names,binding,required,extras,baseline,added,latest,prior=scope
+        stage='selection';target=[pin_argument(value,'stop') for value in args.stop_root_pin] if args.stop_root_pin else None
+        plan,target_results,plan_history=scan(q,scope,args.review_pin,target);index,name=g.old.select(plan,names)
+        out.update(preformal109_failure_review=q.preformal109_review,
+            preformal045_failure_review=q.preformal045_review,historical828_epoch_review=q.epoch828_review)
+        out.update(prior_runtime_plan=plan,selected_test_index=index,selected_test_name=name,binding=binding,
+            scope_budget=budget(required,baseline,added),scope_added_ten_pins=list(added.values()),
+            extra_frame_controller_pins=list(extras.values()),current95_code_pins=q.codes,
+            case111_product_review=q.case111_product_review,
+            case111_compound_acceptance=q.case111_compound_acceptance,
+            case111_failed_source_receipts=q.case111_failed_source_receipts,
+            prequalification_failure_reviews=q.prequal_reviews,native107_epoch_root_pin=NATIVE107_ROOT,
+            scope_fix_failure_review=q.scope_failure_review,epoch272_stop_review=q.epoch272_review,partial308_stop_review=q.partial308_review,pending108_product_review=q.pending108_review,preformal400_failure_review=q.preformal400_review,source021_CPU_stop_review=q.source021_review,review022_CPU_stop_review=q.review022_stop,source025_CPU_stop_review=q.source025_review,source027_CPU_stop_review=q.source027_review,source029_CPU_stop_review=q.source029_review,review030_CPU_stop_review=q.review030_review)
+        if args.mode=='light':
+            stage='contract_tests'
+            with context.scope('contract_tests'):out['runtime_contract_executions'],out['contract_checkpoint_statistics']=contracts(current_contract_scope(scope,plan),q)
+            out.update(own_queue_contract_tests_passed=COUNT,synthetic_following_queue_contract_tests_passed=COUNT)
+        elif args.mode in ('light-review','actual'):
+            if args.mode=='light-review':
+                lp,light=select_light(q,plan);out['reviewed_light_pin']=lp
+            else:
+                fp,fresh,lp,light=select_go(q,plan)
+                out.update(independent_fresh_pin=fp,qualified_light_pin=lp)
+            out.update(reused_light_contract_executions=EXECUTED,
+                qualified_contract_checkpoint_statistics=light['contract_checkpoint_statistics'])
+        stage='final_fresh_preparation'
+        if args.mode=='actual':require_no_pending_product_reexecution(index);existing_body_guard(q,index);out['existing_body_replay_guard_verified']=True
+        q.finish()
+        if args.mode=='light':proposed=dict(state=LIGHT)
+        elif args.mode=='light-review':proposed=dict(state=FRESH)
+        elif args.mode=='stop-review':
+            require(1<=len(target_results)<=8 and plan in plan_history
+                and all(item[2] in plan_history for item in target_results),'REVIEW_KNOWN_STOP_CURSORS')
+            reviewed_stops=[dict(reviewed_root_pin=rp,reviewed_failure_classification=classification,
+                reviewed_body_placeholder_pin=zero) for rp,root,at,classification,side,zero in target_results]
+            rp,root,at,classification,side,zero=target_results[0]
+            out.update(reviewed_root_pin=rp,reviewed_failure_classification=classification,
+                reviewed_body_placeholder_pin=zero)
+            if len(reviewed_stops)>1:out['reviewed_stops']=reviewed_stops
+            proposed=dict(state=STOP_REVIEW)
+        else:
+            destination=p.c.ROOT/f'{p.DIR}/p340-case-{index:03}-run{args.run:03}.v1.json';require(not destination.exists(),'FRESH_CASE')
+            body_path=p.c.ROOT/f'{p.DIR}/cases/p340-case-{index:03}-run{args.run:03}.json'
+            require(not body_path.exists() and reserved_post_reads(q),'NEW_BODY_AND_RESERVED_POST_READS')
+            stage='preframe_ram_admission';out['preframe_ram_admission']=preframe_ram_window(owner)
+            require(out['preframe_ram_admission']['state']=='PASS_PREFRAME_RAM_WINDOW_NOT_PRODUCT_OR_GO',
+                'DEFERRED_PREFRAME_RAM_WINDOW')
+            early=m.early_review.EarlySourceCheckpoint(owner.checkpoint_io,owner)
+            held=AcquisitionInputLocks(p.c.ROOT,early,owner,context)
+            require(held.checkpoint is early and held.api.pacer.rate==20 and held.open_pressure.resources is owner,'ORIGINAL_NATIVE20_OWNER')
+            frame=p.frames.Frame(p.frames.Registry(),required,early,held=held)
+            counter=p.frames.Counters(q.reader,frame.readers);context.reader=counter
+            out.update(source_attempted=True,early_source_guard_connected=True,acquisition_phase_connection_selected=True,
+                case_receipt_path=body_path.relative_to(p.c.ROOT).as_posix())
+            stage='source_frame_acquire';held.mark('before_acquire')
+            with context.scope('metadata_hash'):frame.acquire()
+            held.mark('after_acquire')
+            parent=m.connection.ParentConnection(frame,writes,index,name,binding);capture=parent.capture
+            out.update(original_parent_capture_adapter_selected=isinstance(capture,m.m.m.support.candidate.Capture),
+                diagnostic_parent_connection_selected=type(parent) is m.connection.ParentConnection and type(capture) is m.m.a.Capture,
+                native_timing_connected=isinstance(held,m.connection.TimedInputLocks))
+            stage='owned_parent';held.mark('before_parent')
+            actual_adapter=ActualHeldPathGuards(frame,out['actual_source_path_guard_diagnostics'])
+            out['actual_input_path_guard_selected']=True
+            with actual_adapter:code=parent.run(body_path,context)
+            m.record_return_before_original_guard(out,capture,code,held)
+            if capture.pending:out['original_parent_STOP_captured_not_accepted']=True;raise ValueError('ORIGINAL_PARENT_STOP_DEFERRED_NOT_ACCEPTED')
+            stage='post_reader_constructor';meta=m.review.construct(MetadataReader,owner,context,counter)
+            require(context.reader is counter and counter.metadata==[meta.reader],'ORIGINAL_MONOTONIC_COUNTER')
+            out['aggregate_post_reader_connection_verified']=True
+            body=meta.json(body_path.relative_to(p.c.ROOT).as_posix());pin=meta.reader.snapshots[body_path.relative_to(p.c.ROOT).as_posix()]
+            require(code==0 and len(writes)==1,'ORIGINAL_PARENT_EXACT_ONCE')
+            p.validate_parent(body,name,binding,required);m.m.job_contract(body);r.stats_contract(writes[0],pin);meta.finish()
+            stage='source_frame_closing';held.mark('before_release')
+            component=dict(schema_version=p.CLOSING_SCHEMA,state=p.PASS,**p.r.flags(),selected_test_name=name,binding=binding,
+                case_receipt_pin=pin,metadata_IO=meta.summary(),source_frame=frame.commit(body),
+                extra_frame_controller_pins=list(extras.values()),sealed_whole_before_anchor=p.b.BASE_CLOSE)
+            out.update(case_receipt_pin=pin,closing_component=component,packed_parent_write_statistics=writes[0],
+                source_qualified=True,actual_product_child_executed=body.get('actual_product_child_executed') is True)
+            proposed=dict(state=PASS,runtime_plan=g.advance(legacy,plan,names,index),accepted_exact_product_body_count=1)
+    except (ValueError,OSError,KeyError,TypeError,AttributeError,IndexError,KeyboardInterrupt,p.c.subprocess.SubprocessError) as error:
+        out.update(error_code=p.b.run.original.closed_error(error),failure_diagnostic=m.m.diagnostic(error,stage));proposed=None
+    finally:
+        if actual_adapter is not None:out['actual_boundary_adapter_restored']=actual_adapter.restored
+        if frame is not None:
+            try:
+                if not frame.close():out['error_code']='SOURCE_FRAME_CLEANUP_FAILED';proposed=None
+            except (ValueError,OSError):out['error_code']='SOURCE_FRAME_CLEANUP_FAILED';proposed=None
+            out['terminal_source_frame']=frame.summary()
+        if early is not None:out['early_source_checkpoint']=early.summary()
+        for reader in (q,meta):
+            if reader is not None:reader.close_entry()
+        if q is not None:
+            out.update(preparation_IO=q.summary(),bound_preparation_input_pins=list(q.reader.snapshots.values()))
+            if hasattr(q,'contract_statistics'):out['contract_checkpoint_statistics']=q.contract_statistics
+            if hasattr(q,'contract_failures'):out['contract_failures']=q.contract_failures
+        if meta is not None:out['terminal_metadata_IO']=meta.summary()
+        out['metadata_observation']=g.observation.summary(owner)
+        def validate(doc):
+            if doc['state']==LIGHT:light_contract(doc,plan,names,required,binding,extras,baseline,added,q.codes)
+            elif doc['state']==FRESH:fresh_contract(doc,light,lp,plan,names,required,binding,extras,baseline,added,q.codes)
+            elif doc['state']==STOP_REVIEW:review_contract(doc,rp,root,plan,names,required,binding,extras,baseline,added,q.codes,side,zero,
+                target_results=target_results,plan_history=plan_history)
+            else:
+                doc['closing_component'].update(resource_stop_reason=doc['resource_stop_reason'],
+                    resource_watcher_cleanup_confirmed=doc['resource_watcher_cleanup_confirmed'])
+                record(doc,body,pin,legacy,plan,names,required,binding,extras,baseline,added,q.codes)
+        m.complete_runtime(out,owner,proposed,validate)
+        if capture is not None and (capture.pending or capture.rejected):
+            try:preserve(capture,owner,out,index,args.run)
+            except (ValueError,OSError,KeyError,TypeError,AttributeError) as error:out.update(state='FAILED_NOT_ACCEPTED',terminal_failure_write_error=p.b.run.original.closed_error(error))
+        try:
+            with destination.open('x',encoding='utf-8') as stream:
+                output=m.PinningOutput(stream)
+                writer=r.packed.dump if out['state'] in (PASS,LIGHT,FRESH,STOP_REVIEW) else r.compact.dump
+                def terminal():require(owner.done.is_set(),'NO_WATCHER_RESTART')
+                writer(out,output,checkpoint=terminal,indent=2)
+                receipt_pin=dict(path=destination.relative_to(p.c.ROOT).as_posix(),bytes=output.written,sha256=output.digest.hexdigest())
+        except (ValueError,OSError,TypeError):
+            print(json.dumps(dict(state='FAILED_NOT_ACCEPTED',error_code='ROOT_SERIALIZATION_FAILED')));return 2
+        LAST_TERMINAL=dict(state=out['state'],receipt_pin=receipt_pin,
+            resource_watcher_cleanup_confirmed=out.get('resource_watcher_cleanup_confirmed'),
+            runtime_contract_executions=out['runtime_contract_executions'],selected_test_index=out.get('selected_test_index'),
+            error_code=out.get('error_code'),resource_stop_reason=out.get('resource_stop_reason'))
+        print(json.dumps(LAST_TERMINAL),flush=True)
+    return 0 if out['state'] in (PASS,LIGHT,FRESH,STOP_REVIEW) else 2
+
+if __name__=='__main__':
+    sys.modules.setdefault('resume_preserved106_queue_runtime',sys.modules[__name__])
+    raise SystemExit(main())

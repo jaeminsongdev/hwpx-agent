@@ -1,0 +1,567 @@
+{
+  "state": "PASS_ADMISSION_DEFER_REVIEW_NOT_SUSTAINED_STOP_OR_ACCEPTANCE",
+  "root_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p326-admission-run002.v1.json",
+    "bytes": 10649,
+    "sha256": "5f2baeab8d3a1a1c61dfc75af46acd0280dd46d617227ce666e7f56a549548fa"
+  },
+  "counter_raw_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p326-actual-admission-perfproc-before-after-raw-run03.v1.json",
+    "bytes": 257303,
+    "sha256": "e3591882093ff2906581071dd537ea83af459cd98bd623672460a942a30caa2e"
+  },
+  "original_error": "DEFERRED_ALREADY_SATURATED_SYSTEM",
+  "original_resource_stop_reason": null,
+  "original_cleanup_confirmed": true,
+  "failure_diagnostic": {
+    "stage": "admission",
+    "exception_class": "ValueError",
+    "locations": [
+      {
+        "file": "resume_reviewed_stop_queue_runtime.py",
+        "line": 533
+      },
+      {
+        "file": "sql_percentage_resources.py",
+        "line": 76
+      },
+      {
+        "file": "conservative_maintenance.py",
+        "line": 74
+      }
+    ],
+    "exception_message_included": false,
+    "diagnostic_not_acceptance": true
+  },
+  "Reader_Native_Job_product_not_started": true,
+  "actual_product_child_executed": false,
+  "contract_executions": null,
+  "original_flags": {
+    "per_test_original_checkpoint_selected": false,
+    "original_parent_capture_adapter_selected": false,
+    "diagnostic_parent_connection_selected": false,
+    "early_source_guard_connected": false,
+    "acquisition_phase_connection_selected": false,
+    "native_timing_connected": false
+  },
+  "original_observation": {
+    "completed_sample_count": 1,
+    "system_cpu_max_percent": 100,
+    "own_cpu_max_machine_percent": 0,
+    "own_private_max_bytes": 31301632,
+    "own_working_set_max_bytes": 41791488,
+    "available_ram_min_percent": 22.61811744036428,
+    "own_process_only": true,
+    "foreign_PID_query_executed": false,
+    "new_sampler_thread_started": false,
+    "extra_own_memory_query_per_existing_sample": 1,
+    "original_guard_and_CPU_denominator_unchanged": true,
+    "read_counters_are_logical_not_physical_disk_IO": true,
+    "samples_can_span_multiple_phases": true,
+    "CPU_cause_or_PC_freeze_resolution_established": false
+  },
+  "original_last4": [
+    {
+      "time_utc": "2026-10-09T12:45:37.807259+00:00",
+      "system_cpu_percent": 100,
+      "available_ram_percent": 22.61811744036428,
+      "commit_used_percent": 41.93667546972592,
+      "parent_cpu_machine_percent": 0,
+      "parent_cpu_delta_100ns": 0,
+      "raw_system_cpu_delta_100ns": {
+        "idle": 0,
+        "kernel_including_idle": 9531250,
+        "user": 70468750,
+        "total": 80000000
+      },
+      "parent_affinity_mask": 1,
+      "parent_priority_readback": "BelowNormal",
+      "parent_process_only": true,
+      "foreign_Process_query_executed": false,
+      "own_private_bytes": 31301632,
+      "own_working_set_bytes": 41791488,
+      "own_private_percent_total_ram": 0.09369335349747039,
+      "own_working_set_percent_total_ram": 0.1250920290152696,
+      "phase_at_sample": "admission",
+      "phases_since_previous_sample": [
+        "admission"
+      ],
+      "audited_logical_read_bytes": null,
+      "audited_logical_read_passes": null,
+      "audited_logical_read_bytes_delta": null,
+      "reader_counters_observed": false
+    }
+  ],
+  "supplementary_counter_window": {
+    "schema_version": "hwpx-agent.p09-perfproc-cpu-window/v1",
+    "scope": "DIAGNOSTIC_WINDOW_NOT_GUARD_OR_CAUSE",
+    "processor_count": 16,
+    "before_rows": 374,
+    "after_rows": 370,
+    "compared_process_count": 362,
+    "identity_drift_skipped": 6,
+    "disappeared_count": 4,
+    "new_count": 0,
+    "top8": [
+      {
+        "pid": 20952,
+        "name": "MsMpEng",
+        "creating_pid": 1856,
+        "machine_CPU_percent": 75.33117,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 874360832,
+        "working_set_bytes": 1058095104
+      },
+      {
+        "pid": 22996,
+        "name": "RadeonSoftware",
+        "creating_pid": 11784,
+        "machine_CPU_percent": 5.647174,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 479477760,
+        "working_set_bytes": 84054016
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "creating_pid": 0,
+        "machine_CPU_percent": 3.169876,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 73728,
+        "working_set_bytes": 8216576
+      },
+      {
+        "pid": 8020,
+        "name": "WmiPrvSE",
+        "creating_pid": 2044,
+        "machine_CPU_percent": 0.879041,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 28008448,
+        "working_set_bytes": 41394176
+      },
+      {
+        "pid": 26092,
+        "name": "Taskmgr",
+        "creating_pid": 31288,
+        "machine_CPU_percent": 0.66594,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 405798912,
+        "working_set_bytes": 333795328
+      },
+      {
+        "pid": 7120,
+        "name": "IMGSF50Start_x86",
+        "creating_pid": 5344,
+        "machine_CPU_percent": 0.213101,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 4558848,
+        "working_set_bytes": 6205440
+      },
+      {
+        "pid": 3156,
+        "name": "svchost#19",
+        "creating_pid": 1856,
+        "machine_CPU_percent": 0.186463,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 4624384,
+        "working_set_bytes": 7249920
+      },
+      {
+        "pid": 11724,
+        "name": "GCC",
+        "creating_pid": 2508,
+        "machine_CPU_percent": 0.159826,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 283504640,
+        "working_set_bytes": 27013120
+      }
+    ],
+    "watched": [
+      {
+        "pid": 20952,
+        "name": "MsMpEng",
+        "creating_pid": 1856,
+        "machine_CPU_percent": 75.33117,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 874360832,
+        "working_set_bytes": 1058095104
+      },
+      {
+        "pid": 8020,
+        "name": "WmiPrvSE",
+        "creating_pid": 2044,
+        "machine_CPU_percent": 0.879041,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 28008448,
+        "working_set_bytes": 41394176
+      },
+      {
+        "pid": 15012,
+        "name": "codex",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0.159826,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 634314752,
+        "working_set_bytes": 569520128
+      },
+      {
+        "pid": 710404,
+        "name": "WmiPrvSE#2",
+        "creating_pid": 2044,
+        "machine_CPU_percent": 0.133188,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 12972032,
+        "working_set_bytes": 20996096
+      },
+      {
+        "pid": 30496,
+        "name": "ChatGPT#3",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0.053275,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 423145472,
+        "working_set_bytes": 92786688
+      },
+      {
+        "pid": 31872,
+        "name": "ChatGPT",
+        "creating_pid": 11300,
+        "machine_CPU_percent": 0.053275,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 959725568,
+        "working_set_bytes": 318971904
+      },
+      {
+        "pid": 6352,
+        "name": "ChatGPT#4",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0.026638,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 33189888,
+        "working_set_bytes": 40124416
+      },
+      {
+        "pid": 2432,
+        "name": "codex#1",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 8761344,
+        "working_set_bytes": 16814080
+      },
+      {
+        "pid": 8196,
+        "name": "ChatGPT#6",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 2123161600,
+        "working_set_bytes": 1826586624
+      },
+      {
+        "pid": 9300,
+        "name": "WmiPrvSE#1",
+        "creating_pid": 2044,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 67432448,
+        "working_set_bytes": 75259904
+      },
+      {
+        "pid": 12608,
+        "name": "ChatGPT#9",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 392544256,
+        "working_set_bytes": 287989760
+      },
+      {
+        "pid": 18248,
+        "name": "git#1",
+        "creating_pid": 20824,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 692224,
+        "working_set_bytes": 126976
+      },
+      {
+        "pid": 19788,
+        "name": "ChatGPT#11",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 29298688,
+        "working_set_bytes": 7442432
+      },
+      {
+        "pid": 20732,
+        "name": "ChatGPT#7",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 111435776,
+        "working_set_bytes": 78688256
+      },
+      {
+        "pid": 21900,
+        "name": "ChatGPT#8",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 417579008,
+        "working_set_bytes": 362164224
+      },
+      {
+        "pid": 24256,
+        "name": "ChatGPT#10",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 28639232,
+        "working_set_bytes": 23490560
+      },
+      {
+        "pid": 28336,
+        "name": "git",
+        "creating_pid": 2600,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 692224,
+        "working_set_bytes": 122880
+      },
+      {
+        "pid": 29272,
+        "name": "ChatGPT#5",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 10477568,
+        "working_set_bytes": 8024064
+      },
+      {
+        "pid": 31608,
+        "name": "ChatGPT#2",
+        "creating_pid": 32736,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 2686976,
+        "working_set_bytes": 2514944
+      },
+      {
+        "pid": 32736,
+        "name": "ChatGPT#1",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 3141632,
+        "working_set_bytes": 3420160
+      },
+      {
+        "pid": 60604,
+        "name": "git#2",
+        "creating_pid": 117320,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 692224,
+        "working_set_bytes": 2629632
+      },
+      {
+        "pid": 724280,
+        "name": "ChatGPT#12",
+        "creating_pid": 31872,
+        "machine_CPU_percent": 0,
+        "sample_seconds": 3.6661036,
+        "private_bytes": 16785408,
+        "working_set_bytes": 30412800
+      }
+    ],
+    "idle_machine_CPU_percent": 0,
+    "total_including_idle_machine_CPU_percent": 44.697915,
+    "host_busy_from_idle_percent": 100,
+    "raw_elapsed_token_interpreted_as_wall_time": false,
+    "raw_uint64_as_decimal_strings_preserved": true,
+    "source_scope_or_guard_changed": false,
+    "CPU_cause_or_PC_freeze_resolution_established": false,
+    "official_counter_reference": "https://learn.microsoft.com/en-us/previous-versions/aa394323(v=vs.85)"
+  },
+  "admission_deferral_not_supported_by_frozen_P326_CPU_STOP_reviewer": true,
+  "existing_compiler_processes_before": [
+    {
+      "pid": 90516,
+      "name": "maple-re",
+      "creating_pid": 58360
+    }
+  ],
+  "foreign_processes_changed_or_stopped": false,
+  "IO": {
+    "read_passes": 4,
+    "bytes_read": 535904,
+    "bound_inputs": 2,
+    "final_fresh_hashes": 2,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P206_binary1_other2_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 1048576,
+      "other": 2097152
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 535904
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 535904,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    },
+    "metadata_read_entry_pacing": {
+      "maximum_metadata_read_entries_per_second": 32,
+      "entry_calls": 4,
+      "completed_original_read_calls": 4,
+      "failed_calls": 0,
+      "reservations": 4,
+      "requested_sleep_seconds": 0.044438600016292185,
+      "binding_active": false,
+      "no_idle_burst": true,
+      "original_reader_and_bytes_and_fresh_checks_preserved": true,
+      "original_CPU_RAM_IO_and_parse_budget_preserved": true,
+      "original_pressure_checkpoint_reused": true,
+      "extra_sampler_or_thread_started": false,
+      "original_reads_skipped": false,
+      "cached_pins_or_parsed_JSON_substituted": false,
+      "cleanup_not_guarded_or_paced": true,
+      "measured_CPU_or_PC_freeze_improvement_claimed": false
+    },
+    "shared_metadata_read_budget_limit": 720,
+    "early_metadata_pressure": {
+      "selected_metadata_warning_CPU_percent": 90,
+      "constructor_original95_path_retained": true,
+      "original95_pressure_retained_as_base": true,
+      "original_guard_and_sampler_reused": true,
+      "reader_or_aggregate_counter_replaced": false,
+      "CPU_RAM600_or720_guard_extended": false,
+      "cleanup_callback_wrapped": false,
+      "new_sampler_or_thread_started": false,
+      "source_byte_or_identity_checks_skipped": false,
+      "CPU_or_PC_freeze_improvement_established": false,
+      "original_early_source_algorithm_statistics": {
+        "early_source_warning_CPU_percent": 90,
+        "cool_distinct_samples": 2,
+        "maximum_pause_windows": 8,
+        "warning_entries": 0,
+        "completed_pause_windows": 0,
+        "maximum_observed_pause_windows": 0,
+        "requested_pause_seconds": 0,
+        "original_guard_called_before_pressure": true,
+        "original_hard_CPU_RAM600_guards_preserved": true,
+        "existing_owner_samples_only": true,
+        "new_sampler_or_thread_started": false,
+        "source_byte_reads_or_identity_checks_skipped": false,
+        "cleanup_callback_wrapped": false,
+        "CPU_or_PC_freeze_improvement_established": false
+      }
+    },
+    "metadata_entry_early_pressure_connection": {
+      "entry_and_byte_warning_CPU_percent": 90,
+      "original_entry_rate_per_second": 32,
+      "same_original_entry_pacer": true,
+      "entry_and_byte_share_existing_early_object": true,
+      "original95_retained_as_first_base": true,
+      "original_clock_sleeper_reader_retained": true,
+      "constructor_before_attachment_original95_preserved": true,
+      "clock_credit_or_read_counter_reset": false,
+      "original600_720_CPU_RAM_guards_preserved": true,
+      "extra_CPU_native_query_sampler_or_thread_started": false,
+      "cleanup_callback_wrapped": false,
+      "original_reads_source_byte_or_identity_checks_skipped": false,
+      "CPU_or_PC_freeze_improvement_established": false
+    },
+    "leading_metadata_entry_pressure": {
+      "pre_entry_warning_CPU_percent": 90,
+      "original_entry_rate": 32,
+      "calls": 4,
+      "completed_original_reads": 4,
+      "failed_calls": 0,
+      "leading_binding_active": false,
+      "early_pressure": {
+        "early_source_warning_CPU_percent": 90,
+        "cool_distinct_samples": 2,
+        "maximum_pause_windows": 8,
+        "warning_entries": 0,
+        "completed_pause_windows": 0,
+        "maximum_observed_pause_windows": 0,
+        "requested_pause_seconds": 0,
+        "original_guard_called_before_pressure": true,
+        "original_hard_CPU_RAM600_guards_preserved": true,
+        "existing_owner_samples_only": true,
+        "new_sampler_or_thread_started": false,
+        "source_byte_reads_or_identity_checks_skipped": false,
+        "cleanup_callback_wrapped": false,
+        "CPU_or_PC_freeze_improvement_established": false
+      },
+      "original_inner95_and90_callbacks_unmodified": true,
+      "original_entry_pacer_and_reader_retained": true,
+      "original_hard_CPU_RAM_IO600_720_and_all_reads_preserved": true,
+      "new_sampler_or_thread_started": false,
+      "original_clock_credit_or_counter_reset": false,
+      "source_or_case_or_read_exclusions_added": false,
+      "cleanup_not_guarded_or_paced": true,
+      "CPU_cause_or_PC_freeze_resolution_established": false
+    },
+    "leading_metadata_checkpoint_pressure": {
+      "warning_CPU_percent": 90,
+      "inner_guard_calls": 42,
+      "early_pressure": {
+        "early_source_warning_CPU_percent": 90,
+        "cool_distinct_samples": 2,
+        "maximum_pause_windows": 8,
+        "warning_entries": 0,
+        "completed_pause_windows": 0,
+        "maximum_observed_pause_windows": 0,
+        "requested_pause_seconds": 0,
+        "original_guard_called_before_pressure": true,
+        "original_hard_CPU_RAM600_guards_preserved": true,
+        "existing_owner_samples_only": true,
+        "new_sampler_or_thread_started": false,
+        "source_byte_reads_or_identity_checks_skipped": false,
+        "cleanup_callback_wrapped": false,
+        "CPU_or_PC_freeze_improvement_established": false
+      },
+      "binding_active": false,
+      "original95_guard_callback_wrapped_only_while_bound": true,
+      "original_hard_CPU_RAM_IO600_callback_always_first": true,
+      "hard_callback_restored_after_close": true,
+      "original95_object_and_outer90_and_entry32_callbacks_retained": true,
+      "original_reader_and_byte_pacer_and_counters_retained": true,
+      "new_sampler_or_thread_or_native_query_started": false,
+      "guards_or_deadline_or_source_coverage_relaxed": false,
+      "cleanup_not_guarded_or_paced": true,
+      "CPU_cause_or_PC_freeze_resolution_established": false
+    }
+  },
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "validation_command": "$taskReviewCode=@'\nimport sys,json\nsys.path[:0]=['tools/p09']\nimport resume_reviewed_stop_queue_runtime as x\nc=x.g.observation.Context();o=x.g.observation.Resources(c);q=None;out={'state':'FAILED_NOT_ACCEPTED'}\ntry:\n o.admit();q=x.Reader(o,c)\n rp=x.p.DIR+'/p326-admission-run002.v1.json';d=q.json(rp)\n pp=x.p.DIR+'/p326-actual-admission-perfproc-before-after-raw-run03.v1.json';packet=q.json(pp)\n x.require(d['schema_version']==x.SCHEMA and d['state']=='FAILED_NOT_ACCEPTED'\n  and d['error_code']=='DEFERRED_ALREADY_SATURATED_SYSTEM' and d['resource_stop_reason'] is None\n  and d['resource_watcher_cleanup_confirmed'] is True and d['accepted_exact_product_body_count']==0\n  and d['actual_product_child_executed'] is False and d['failure_diagnostic']['stage']=='admission'\n  and d.get('preparation_IO') is None and d.get('terminal_source_frame') is None\n  and d.get('case_receipt_path') is None and d.get('terminal_parent_failure_sidecar_pin') is None,\n  'ADMISSION_DEFER_NOT_HARD_STOP_OR_PRODUCT')\n window=x.counter.window(packet['before'],packet['after'],packet['processors'])\n flags=('per_test_original_checkpoint_selected','original_parent_capture_adapter_selected','diagnostic_parent_connection_selected',\n  'early_source_guard_connected','acquisition_phase_connection_selected','native_timing_connected')\n out.update(root_pin=q.reader.snapshots[rp],counter_raw_pin=q.reader.snapshots[pp],\n  original_error=d['error_code'],original_resource_stop_reason=d['resource_stop_reason'],\n  original_cleanup_confirmed=d['resource_watcher_cleanup_confirmed'],failure_diagnostic=d['failure_diagnostic'],\n  Reader_Native_Job_product_not_started=True,actual_product_child_executed=False,contract_executions=d.get('runtime_contract_executions'),\n  original_flags={k:d.get(k) for k in flags},\n  original_observation={k:v for k,v in d['metadata_observation'].items() if k!='samples'},\n  original_last4=d['metadata_observation']['samples'][-4:],supplementary_counter_window=window,\n  admission_deferral_not_supported_by_frozen_P326_CPU_STOP_reviewer=True,\n  existing_compiler_processes_before=[{k:r[k] for k in ('pid','name','creating_pid')} for r in packet['before']['rows']\n   if r['name'].split('#')[0] in ('cargo','cargo-clippy','clippy-driver','rustc','maple-re')],\n  foreign_processes_changed_or_stopped=False)\n q.finish();out['state']='PASS_ADMISSION_DEFER_REVIEW_NOT_SUSTAINED_STOP_OR_ACCEPTANCE'\nexcept (ValueError,OSError,KeyError,TypeError,AttributeError,IndexError,KeyboardInterrupt) as e:\n out['error']=x.p.b.run.original.closed_error(e);out['diagnostic']=x.m.diagnostic(e,'p327_admission_defer_review')\nfinally:\n if q is not None:q.close_entry();out['IO']=q.summary()\n x.g.complete(out,o,None,None)\n if out.get('resource_stop_reason') or not out.get('resource_watcher_cleanup_confirmed'):out['state']='FAILED_NOT_ACCEPTED'\n print(json.dumps(out))\n\n'@\n$taskReviewCode | python -B"
+}

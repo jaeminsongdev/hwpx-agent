@@ -1,0 +1,111 @@
+{
+  "schema_version": "hwpx-agent.p09-container-absence-light-fixtures/v1",
+  "state": "PASS_LIGHT_ABSENCE_FIXTURES_NOT_DOCKER_OR_PC_FREEZE_PROOF",
+  "source_freeze": [
+    {
+      "path": "tools/p09/bounded_container_absence.py",
+      "bytes": 7659,
+      "sha256": "ed05837e0ca1cddffbdb578cd77b2935a16dd90bb81fd4454da13159d3d83497"
+    },
+    {
+      "path": "tools/p09/tests/test_bounded_container_absence.py",
+      "bytes": 19046,
+      "sha256": "a1852ac04fb26fd8b597ac7ecd2971163d2ee0b01b1618ad7e1b55eb4732b133"
+    },
+    {
+      "path": "tools/p09/verify_container_absence_light.py",
+      "bytes": 4459,
+      "sha256": "fc59524307e4d8d997c32a3074d4c08e50bd1af48e8ca4d65deb475de5c65d4c"
+    },
+    {
+      "path": "tools/p09/verify_formula_issuer_authority_current.py",
+      "bytes": 47264,
+      "sha256": "048bc9e5939bc4d516a4afdca82ee724f14a701bfd43cd15697001895407fa49"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 22942,
+      "sha256": "dc212b25ebc534ab19f643c51361271bb86392cf01b669a0fe25f3e37ea13e01"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 3822,
+      "sha256": "0cf267e0524baec7e7b2b204b8aed805928528d067cdf42264048d7bff69b530"
+    },
+    {
+      "path": "tools/p09/verify_audit_evidence_io.py",
+      "bytes": 6183,
+      "sha256": "d4a8587e9cbbb1840a527d46d5d8cd49a7e3eb52b306a1bb5e5e2110698bf38d"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-batch-absence-audit/source-preimages.v1.json",
+      "bytes": 57998,
+      "sha256": "640ccfe2c00e06b6a5b8f540184502a68c828ce708245246937d6588c2827284"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-final-resource-check/source-preimages.v1.json",
+      "bytes": 178926,
+      "sha256": "f2ff893f5250e26ef8eea18dfecb1ee9651b233a8f6f98a92d83dbcde64c3da4"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-live-bounded-absence/source-preimages.v1.json",
+      "bytes": 192917,
+      "sha256": "f2b360d9aa3c4e3202f9b32e64eb93d3a680d87296cea2046be19fbfb14676b9"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "tests_run": 21,
+  "tests_passed": 21,
+  "failed_tests": [],
+  "elapsed_seconds": 0.0439,
+  "logical_cpu_limit": 1,
+  "priority": "BelowNormal",
+  "self_resource_before": {
+    "cpu_seconds": 0.1875,
+    "memory_observed": true,
+    "working_set_mib": 26.8,
+    "private_mib": 18.06,
+    "system": {
+      "time_utc": "2026-10-06T11:32:54.681321+00:00",
+      "system_cpu_percent": 12.5,
+      "available_ram_mib": 7914.17,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.839748442786306,
+      "commit_used_percent": 35.43096650745264
+    }
+  },
+  "self_resource_after": {
+    "cpu_seconds": 0.21875,
+    "memory_observed": true,
+    "working_set_mib": 31.35,
+    "private_mib": 22.8,
+    "system": {
+      "time_utc": "2026-10-06T11:32:54.725204+00:00",
+      "system_cpu_percent": 81.25,
+      "available_ram_mib": 7893.07,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.773518202588274,
+      "commit_used_percent": 35.46743649825896
+    }
+  },
+  "self_cpu_seconds_during_checks": 0.03125,
+  "memory_values_are_samples_not_peak": true,
+  "query_structure": {
+    "references_preserved": 12,
+    "old_inspect_processes": 12,
+    "new_inspect_batches": 2,
+    "new_waiting_workers": 2,
+    "timeout_seconds_per_batch": 10,
+    "output_limit_bytes_per_stream": 32768
+  },
+  "actual_Docker_or_child_process_started": false,
+  "authority_audit_or_Rust_SQL_native_run": false,
+  "new_git_started": false,
+  "system_or_Defender_or_WSL_settings_changed": false,
+  "live_inspector_lifecycle_verified": false,
+  "raw_logs_printed_or_saved": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "product_complete": false
+}

@@ -1,0 +1,222 @@
+{
+  "schema": "hwpx-agent.p09-91-component-current-source-regression/v1",
+  "state": "pass_current_original_components_and_source_profiles_not_native_or_phase_gate",
+  "domain": {
+    "command": "cargo test -p domain-ir --test field_engine --test form_control --test note_engine --test link_reference --test cross_reference --test toc_index --test citation --test mail_merge --test reference_auxiliary --lib",
+    "public_passed": 93,
+    "library_all_passed": 18,
+    "focused_private": 9,
+    "ancillary_private": 9,
+    "passed": 111,
+    "failed": 0,
+    "exit_code": 0,
+    "tool_chunk": "97e9ce"
+  },
+  "package": {
+    "command": "cargo test -p hwpx-package --test bookmark_hwpx --test note_hwpx --test hyperlink_hwpx",
+    "public_passed": 23,
+    "failed": 0,
+    "exit_code": 0,
+    "tool_chunk": "7a0ddf"
+  },
+  "package_private": {
+    "commands": [
+      "cargo test -p hwpx-package --lib bookmark_hwpx",
+      "cargo test -p hwpx-package --lib note_hwpx",
+      "cargo test -p hwpx-package --lib hyperlink_hwpx"
+    ],
+    "passed": 3,
+    "failed": 0,
+    "exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "tool_chunk": "02c901"
+  },
+  "total_Rust_tests_passed": 137,
+  "focused_original_twelve_Rust_tests": 128,
+  "ancillary_domain_private_tests_included": 9,
+  "current_profile_python": {
+    "passed": 19,
+    "failed": 0,
+    "errors": 0,
+    "subcases": 183,
+    "tool_chunks": [
+      "728fac",
+      "3f9311",
+      "d81e2b"
+    ],
+    "test_owned_isolated_copy_only": true,
+    "actual_source_verification_does_not_use_fake_root_or_globals_patch": true
+  },
+  "P90_comment_profile_Python_reexecuted": {
+    "passed": 22,
+    "failed": 0,
+    "tool_chunk": "f75294",
+    "full_P90_public_comment_Rust10_not_reexecuted_this_phase": true
+  },
+  "historical_original_Python": {
+    "tool_chunk": "d7ddec",
+    "exit_code": 1,
+    "rows": [
+      {
+        "family": "field_core",
+        "tests": 5,
+        "passed": 4,
+        "failed": 1,
+        "errors": 0,
+        "failure_ids": [
+          "tools.p09.tests.test_field_core_contract.FieldCoreContractTests.test_current_contract_is_ten_capability_unit_pass_without_target_promotion"
+        ],
+        "error_ids": []
+      },
+      {
+        "family": "form_control",
+        "tests": 5,
+        "passed": 4,
+        "failed": 1,
+        "errors": 0,
+        "failure_ids": [
+          "tools.p09.tests.test_form_control_contract.FormControlContractTests.test_current_contract_is_eight_capability_unit_without_target_promotion"
+        ],
+        "error_ids": []
+      },
+      {
+        "family": "note_engine",
+        "tests": 5,
+        "passed": 4,
+        "failed": 1,
+        "errors": 0,
+        "failure_ids": [
+          "tools.p09.tests.test_note_engine_contract.NoteEngineContractTests.test_current_contract_is_five_capability_unit_without_target_promotion"
+        ],
+        "error_ids": []
+      },
+      {
+        "family": "link_reference",
+        "tests": 5,
+        "passed": 4,
+        "failed": 1,
+        "errors": 0,
+        "failure_ids": [
+          "tools.p09.tests.test_link_reference_contract.LinkReferenceContractTests.test_current_contract_is_four_capability_unit_without_target_promotion"
+        ],
+        "error_ids": []
+      },
+      {
+        "family": "cross_reference",
+        "tests": 5,
+        "passed": 4,
+        "failed": 1,
+        "errors": 0,
+        "failure_ids": [
+          "tools.p09.tests.test_cross_reference_contract.CrossReferenceContractTests.test_current_contract_is_ref_035_unit_without_target_promotion"
+        ],
+        "error_ids": []
+      },
+      {
+        "family": "toc_index",
+        "tests": 5,
+        "passed": 4,
+        "failed": 1,
+        "errors": 0,
+        "failure_ids": [
+          "tools.p09.tests.test_toc_index_contract.TocIndexContractTests.test_current_contract_is_five_capability_unit_without_target_promotion"
+        ],
+        "error_ids": []
+      },
+      {
+        "family": "citation",
+        "tests": 5,
+        "passed": 4,
+        "failed": 1,
+        "errors": 0,
+        "failure_ids": [
+          "tools.p09.tests.test_citation_contract.CitationContractTests.test_current_contract_is_one_capability_unit_without_target_promotion"
+        ],
+        "error_ids": []
+      },
+      {
+        "family": "mail_merge",
+        "tests": 5,
+        "passed": 4,
+        "failed": 1,
+        "errors": 0,
+        "failure_ids": [
+          "tools.p09.tests.test_mail_merge_contract.MailMergeContractTests.test_current_contract_is_one_capability_unit_without_generation_promotion"
+        ],
+        "error_ids": []
+      },
+      {
+        "family": "reference_auxiliary",
+        "tests": 5,
+        "passed": 4,
+        "failed": 1,
+        "errors": 0,
+        "failure_ids": [
+          "tools.p09.tests.test_reference_auxiliary_contract.ReferenceAuxiliaryContractTests.test_current_contract_is_six_unit_capabilities_without_target_promotion"
+        ],
+        "error_ids": []
+      },
+      {
+        "family": "bookmark_hwpx",
+        "tests": 5,
+        "passed": 4,
+        "failed": 1,
+        "errors": 0,
+        "failure_ids": [
+          "tools.p09.tests.test_bookmark_hwpx_contract.BookmarkHwpxContractTests.test_contract_passes_without_target_promotion"
+        ],
+        "error_ids": []
+      },
+      {
+        "family": "note_hwpx",
+        "tests": 5,
+        "passed": 4,
+        "failed": 1,
+        "errors": 0,
+        "failure_ids": [
+          "tools.p09.tests.test_note_hwpx_contract.NoteHwpxContractTests.test_contract_passes_without_target_or_rich_body_promotion"
+        ],
+        "error_ids": []
+      },
+      {
+        "family": "hyperlink_hwpx",
+        "tests": 4,
+        "passed": 3,
+        "failed": 1,
+        "errors": 0,
+        "failure_ids": [
+          "tools.p09.tests.test_hyperlink_hwpx_contract.HyperlinkHwpxContractTests.test_current_contract_is_exact_static_integration_without_target_promotion"
+        ],
+        "error_ids": []
+      }
+    ],
+    "tests": 59,
+    "passed": 47,
+    "failed": 12,
+    "errors": 0,
+    "original_test_files_changed": false,
+    "failures_not_filtered": true
+  },
+  "actual_original_profile_CLI": {
+    "twelve_passed": 12,
+    "tool_chunks": [
+      "acea32",
+      "43e332"
+    ],
+    "legacy_default_all_fields_exact": true,
+    "versioned_current_output_schema_verified_in_final_python_tests": true,
+    "latest_hyperlink_profile_chunk": "c4e87f",
+    "raw_pins": 172
+  },
+  "native_executed": false,
+  "actual_SQL_reexecuted": false,
+  "full_comment_product_acceptance": false,
+  "p09_complete": false,
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "goal_status": "active"
+}
+

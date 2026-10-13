@@ -1,0 +1,29 @@
+{
+  "schema": "hwpx-agent.p09-79-formula-evaluation-initial-failures/v1",
+  "date": "2026-10-04",
+  "state": "RETAINED_NEW_EVALUATOR_LINT_ERRORS",
+  "failures": [
+    {
+      "chunks": [
+        "5e89be",
+        "eaed94"
+      ],
+      "exit_code": 1,
+      "kind": "strict_new_source_lint",
+      "observed": [
+        "many_single_char_names in new exact power helper",
+        "derivable_impls for new EvaluationLimits Default"
+      ],
+      "whole_source_archives": [
+        "implementation/p09/source-archive/p09-79-initial-evaluator-lint/crates/domain-ir/src/formula_evaluation.rs",
+        "implementation/p09/source-archive/p09-79-initial-evaluator-lint/crates/domain-ir/src/formula_evaluation/exact.rs"
+      ],
+      "correction": "Renamed only new arithmetic local bindings, used derived Default. No allow/skip/old parser/cached-result/assertion changes."
+    }
+  ],
+  "corrected_strict_chunk": "c1245f",
+  "corrected_strict_exit_code": 0,
+  "original_failures_P26_P62_not_promoted": true,
+  "original_source_receipt_locks_not_updated": true,
+  "native_or_permission_started": false
+}

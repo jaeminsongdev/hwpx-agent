@@ -1,0 +1,16 @@
+{
+  "schema": "hwpx-agent.p09-stored-actual-form-import.initial-failures/v1",
+  "failures": [
+    {
+      "execution": "984675",
+      "state": "new_test_compile_failed",
+      "cause": "new test invoked the existing metadata audit_events trait method without importing its trait",
+      "repair": "import ArtifactMetadataRepository as _ in the new child test only",
+      "archive": "implementation/p09/source-archive/p09-70-initial-stored-import-test-compile/crates/product-cli/tests/form_stored_provider/actual_import.rs",
+      "old_service_or_test_guards_changed": false
+    }
+  ],
+  "prior_P69_failures_preserved": true,
+  "P62_16fde8_cause": "UNRESOLVED",
+  "whole_qualification_or_native_pass": false
+}

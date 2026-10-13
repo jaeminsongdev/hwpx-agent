@@ -1,0 +1,96 @@
+{
+  "schema_version": "hwpx-agent.p09-ir-partition-terminal-audit/v1",
+  "state": "PASS_FAILURE_SOURCE_AND_CLEANUP_AUDIT_NOT_RUNTIME_OR_GATE",
+  "goal_status": "active",
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "P10_new_implementation": false,
+  "support_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-ir-partition.inventory-run01.v1.json",
+      "bytes": 396775,
+      "sha256": "dda9b98aa09a11dc88578dbd2fecacfb1adf46c5792ab891813e6aa60c3c6be9"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-ir-partition.light-run01.v1.json",
+      "bytes": 1615,
+      "sha256": "4a92052c7bc64426646e461c727457397eab739e38a7a50bee1eb684ec05b8c4"
+    }
+  ],
+  "parent_pin": {
+    "path": "implementation/p09/evidence/p09-149-aead-full-stored.terminal-audit-run01.v1.json",
+    "bytes": 4931,
+    "sha256": "377dcd379245f3724091010f673a68f9972db9ef52500a00526945b7d81063c5"
+  },
+  "current_helpers": [
+    {
+      "path": "tools/p09/run_ir_partitioned_signed_tests.py",
+      "bytes": 8165,
+      "sha256": "55723e67dc6eca4333c9af6620a19810e40b5fa052b8a2af3a54957347e73fe9"
+    },
+    {
+      "path": "tools/p09/tests/test_ir_partitioned_signed_tests.py",
+      "bytes": 4031,
+      "sha256": "8ba6427b01a2bb674aabbeda286f333ade4a44e8274e9ec51d133ea09502b372"
+    }
+  ],
+  "contract_checks": 8,
+  "source_closing_exact": true,
+  "execution_source_freeze_current_exact": true,
+  "current_Rust_inputs": 783,
+  "original_test_names": 249,
+  "original_modules": 59,
+  "bound_current_inputs": 972,
+  "command_local_config_keys": 86,
+  "domain_ir_test_opt_level": 1,
+  "domain_ir_test_codegen_units": 64,
+  "current_IR_compiled_inventory_qualified": false,
+  "current_IR_runtime_qualified": false,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "original_Rust_or_assertions_changed": false,
+  "original_resource_caps_or_OS_settings_changed": false,
+  "CPU_or_RAM_limit_increased": false,
+  "PC_freeze_resolved": false,
+  "new_child_or_thread_started": false,
+  "IR_candidate_adopted": false,
+  "IR_compile_metrics": {
+    "elapsed_seconds": 44.76,
+    "stop_reason": "STOP_OWNED_JOB_MEMORY_BUDGET",
+    "job_final": {
+      "active_processes": 0,
+      "job_cpu_seconds": 35.812,
+      "peak_job_private_mib": 2251.52,
+      "peak_job_private_percent": 7.066712683728534,
+      "owned_processes": []
+    },
+    "host_CPU_max": 43.56,
+    "available_RAM_min_percent": 17.693601155902822,
+    "commit_max_percent": 36.85550313117567
+  },
+  "last_cargo_announcement": {
+    "source": "last_complete_cargo_style_stderr_announcement",
+    "process_or_compiler_phase_attribution_verified": false,
+    "announcement": {
+      "stage": "compiling",
+      "package": "domain-ir"
+    }
+  },
+  "compiler_internal_phase_attribution_verified": false,
+  "P09_non_permission_remaining_work_units": 76,
+  "next_action": "Keep failed candidate unqualified; no cap increase or unchanged heavy retry. Proceed with original LocalEncryptedBlobStore signed-consumer integration and bounded original-profile verification after preserving original example sources.",
+  "IO": {
+    "read_passes": 2077,
+    "bytes_read": 75703974,
+    "bound_inputs": 974,
+    "final_fresh_hashes": 974,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 11.0725
+}

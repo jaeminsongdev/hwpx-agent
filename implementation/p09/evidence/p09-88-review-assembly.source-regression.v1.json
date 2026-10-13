@@ -1,0 +1,153 @@
+{
+  "schema": "hwpx-agent.p09-88-review-assembly-source-regression/v1",
+  "state": "scoped_current_original_assembly_and_authenticated_stored_service_regression_pass_not_native_gate",
+  "package": {
+    "command": "cargo test -p hwpx-package --test text_flow --test document_import_source --test document_import_structure --test document_import_forms --test document_import_fields --test document_import_field_semantics --test document_import_notes --test document_import_bookmarks --test document_import_review --test document_import_form_policies --test document_import_assembly --test document_import_assembly_review",
+    "targets": 12,
+    "passed": 126,
+    "failed": 0,
+    "exit_code": 0,
+    "initial_chunk_id": "998e10",
+    "terminal_chunk_id": "321722"
+  },
+  "package_private_assembly": {
+    "command": "cargo test -p hwpx-package --lib assembly",
+    "passed": 4,
+    "failed": 0,
+    "exit_code": 0,
+    "terminal_chunk_id": "321722"
+  },
+  "product": {
+    "command": "cargo test -p hwpx-agent-cli --test form_stored_provider --test form_stored_product_request --test policy_bound_form_import --test form_value_operation",
+    "targets": 4,
+    "passed": 148,
+    "failed": 0,
+    "exit_code": 0,
+    "initial_chunk_id": "1e751b",
+    "terminal_chunk_id": "7732f6",
+    "stored_provider_passed": 121,
+    "stored_provider_elapsed_seconds": 250.88
+  },
+  "original_comment_component": {
+    "commands": [
+      "cargo test -p domain-ir --test comment_model",
+      "cargo test -p domain-ir --lib comment_model"
+    ],
+    "passed": 11,
+    "failed": 0,
+    "individual_exit_codes": [
+      0,
+      0
+    ],
+    "terminal_chunk_id": "321722"
+  },
+  "total_passed_Rust_tests": 289,
+  "new_public_assembly_tests": 3,
+  "new_private_assembly_tests": 2,
+  "new_stored_assembly_tests": 4,
+  "new9_included_not_extra": true,
+  "targets": [
+    {
+      "target": "document_import_bookmarks",
+      "passed": 10,
+      "path": "target/debug/deps/document_import_bookmarks-74a6fbeb6250462d.exe"
+    },
+    {
+      "target": "document_import_field_semantics",
+      "passed": 11,
+      "path": "target/debug/deps/document_import_field_semantics-464254f1536720e4.exe"
+    },
+    {
+      "target": "document_import_fields",
+      "passed": 12,
+      "path": "target/debug/deps/document_import_fields-cac70a6adee69279.exe"
+    },
+    {
+      "target": "document_import_form_policies",
+      "passed": 14,
+      "path": "target/debug/deps/document_import_form_policies-3ed0deb2a55bc591.exe"
+    },
+    {
+      "target": "document_import_forms",
+      "passed": 10,
+      "path": "target/debug/deps/document_import_forms-c6007f066e757199.exe"
+    },
+    {
+      "target": "document_import_notes",
+      "passed": 11,
+      "path": "target/debug/deps/document_import_notes-44c8a108ebd84c66.exe"
+    },
+    {
+      "target": "document_import_review",
+      "passed": 15,
+      "path": "target/debug/deps/document_import_review-67551457d524f20f.exe"
+    },
+    {
+      "target": "document_import_source",
+      "passed": 10,
+      "path": "target/debug/deps/document_import_source-c22fefefc9d531ce.exe"
+    },
+    {
+      "target": "document_import_structure",
+      "passed": 14,
+      "path": "target/debug/deps/document_import_structure-1c3e383906925a4a.exe"
+    },
+    {
+      "target": "text_flow",
+      "passed": 12,
+      "path": "target/debug/deps/text_flow-511dd1904a1b61b0.exe"
+    },
+    {
+      "target": "form_stored_product_request",
+      "passed": 8,
+      "path": "target/debug/deps/form_stored_product_request-6c30ea9633165961.exe"
+    },
+    {
+      "target": "form_stored_provider",
+      "passed": 121,
+      "path": "target/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe"
+    },
+    {
+      "target": "form_value_operation",
+      "passed": 18,
+      "path": "target/debug/deps/form_value_operation-899bdd52f412e0da.exe"
+    },
+    {
+      "target": "policy_bound_form_import",
+      "passed": 1,
+      "path": "target/debug/deps/policy_bound_form_import-dbc5d546fda182f4.exe"
+    },
+    {
+      "target": "comment_model",
+      "passed": 10,
+      "path": "target/debug/deps/comment_model-7d8aabb3e248028a.exe"
+    },
+    {
+      "target": "domain_ir",
+      "passed": 1,
+      "path": "target/debug/deps/domain_ir-ecb12d853696afea.exe"
+    },
+    {
+      "target": "document_import_assembly",
+      "passed": 4,
+      "path": "target/debug/deps/document_import_assembly-3ee3d0371c9a396b.exe"
+    },
+    {
+      "target": "document_import_assembly_review",
+      "passed": 3,
+      "path": "target/debug/deps/document_import_assembly_review-312fc213dbce8bd9.exe"
+    },
+    {
+      "target": "hwpx_package",
+      "filter": "assembly",
+      "passed": 4,
+      "path": "target/debug/deps/hwpx_package-a850ad738bc59b10.exe"
+    }
+  ],
+  "all_actual36_original_assembly_inputs_and_existing_exact_oracles_pass": true,
+  "actual_SQL_reexecuted_for_P88": false,
+  "full_workspace_or_historical107_target_batch": false,
+  "native_executed": false,
+  "p09_complete": false,
+  "product_complete": false
+}

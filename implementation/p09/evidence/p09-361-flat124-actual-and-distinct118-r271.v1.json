@@ -1,0 +1,657 @@
+{
+  "schema_version": "hwpx-agent.p09-flat-metadata124-actual-and-independent-acceptance/v1",
+  "state": "PASS_ACTUAL124_DISTINCT118_WITH_REUSED_FIXED_CODE_NOT_FULL249_OR_GATE",
+  "goal_status": "active",
+  "prior_goal_turn_classification": "PROGRESS_ACTUAL123_AND_DISTINCT117",
+  "authority_pin": {
+    "path": "implementation/p09/evidence/p09-361-case124-current-epoch-accept001.v1.json",
+    "bytes": 282434,
+    "sha256": "590fe2bfc32251bf14d5cfd134969548a4a293ebf7823007073545ac4e950292"
+  },
+  "actual_runtime_pin": {
+    "path": "implementation/p09/evidence/p09-361-case124-current-runtime-run001.v1.json",
+    "bytes": 2228659,
+    "sha256": "8f9a39d08db56210003d2057f189468cb99cc9fb070fa14378e656e4ffc00be5"
+  },
+  "before": 117,
+  "accepted_delta": 1,
+  "after": 118,
+  "remaining": 131,
+  "next": 125,
+  "accepted_current_generation_case_count": 13,
+  "historical105_rebased": false,
+  "initial_current_check": {
+    "state": "PASS_CURRENT117_AND_FIXED_CODE_NEXT124_DATA_NOT_PRODUCT",
+    "samples": 5,
+    "CPU_max": 89.38,
+    "RAM_min": 42.00995660460289,
+    "cleanup": true,
+    "not_actual124_CPU_max": true
+  },
+  "preflight": {
+    "pin": {
+      "path": "implementation/p09/evidence/p09-361-case124-metadata-preflight001.v1.json",
+      "bytes": 51377,
+      "sha256": "d5cb0515e8fb8c82d73f537bcabd0fa91b8ade3a99e679695aba4b740a046562"
+    },
+    "state": "PASS_REVIEWED_METADATA_CONNECTION_PREFLIGHT_NOT_NATIVE_OR_PRODUCT_OR_ACCEPTANCE",
+    "inputs": 1824,
+    "bytes": 172355107,
+    "imports": 50,
+    "elapsed": 56.082167900007335,
+    "reads": 337,
+    "bytes_read": 68361832,
+    "final_hashes": 168,
+    "cleanup": true,
+    "samples": 109,
+    "CPU_max": 69.04,
+    "RAM_min": 42.81607254185213,
+    "commit_max": 36.13024075463559,
+    "parent_CPU_max": 3.2124030625502917,
+    "parent_private_max": 34.08203125
+  },
+  "test_source_pin": {
+    "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_assembly.rs",
+    "bytes": 8369,
+    "sha256": "87ef5c15e550538bcb48310aa212121741cc27bd81ba026210a5541ce22b5f27"
+  },
+  "actual_test_semantics": {
+    "input_from_actual_corpus": "first entry",
+    "direct_import_chain": [
+      "ImportedSourcePackage",
+      "ImportedDocumentForms",
+      "ImportedDocumentFields",
+      "ImportedDocumentFieldSemantics",
+      "ImportedDocumentCatalog",
+      "ImportedDocumentAssembly"
+    ],
+    "variants": [
+      "document_assembly_profile_only",
+      "document_assembly_scope_only"
+    ],
+    "source_profile_cleared_each_variant": true,
+    "metadata_cleared_then_one_marker_inserted": true,
+    "canonical_graph_digest_and_original_input_digest_used": true,
+    "FullDocumentFormContext_bind_rejected_each_variant_with": "FullDocumentFormError::Projection",
+    "source_test_inspected_and_matched_to_actual_frame_pin": true,
+    "stored_provider_used_in_selected_test": false,
+    "live_SQL_or_Hangul_acceptance": false
+  },
+  "actual124": {
+    "state": "PASS_EXACT_CURRENT_QUEUE_NATIVE_RUNTIME_CANDIDATE_NOT_QUEUE_OR_GATE",
+    "test": "actual_import::source_assembly::assembly_profile_and_scope_individually_deny_full_context",
+    "terminal": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 248
+    },
+    "elapsed_seconds": 484.5,
+    "resource_samples": 941,
+    "CPU_max_percent": 62.53,
+    "RAM_min_percent": 42.333837436759744,
+    "commit_max_percent": 36.44716967044955,
+    "parent_CPU_max_machine_percent": 2.9779959926142783,
+    "parent_private_max_MiB": 45.5,
+    "frame_state": "COMMITTED",
+    "inputs": 1824,
+    "bytes_per_boundary": 172355107,
+    "boundaries": [
+      {
+        "role": "before",
+        "inputs": 1824,
+        "bytes": 172355107
+      },
+      {
+        "role": "after",
+        "inputs": 1824,
+        "bytes": 172355107
+      }
+    ],
+    "handles": {
+      "input_lock_handles_opened": 2183,
+      "input_lock_handles_closed": 2183,
+      "input_lock_handles_remaining": 0,
+      "handle_metadata_checks": 8014,
+      "byte_stream_identity_checks": 3648
+    },
+    "borrowed_streams": {
+      "duplicate_handles_opened": 1824,
+      "duplicate_handles_closed": 1824,
+      "duplicate_handles_remaining": 0,
+      "duplicate_close_failed_attempts": 0,
+      "shared_offset_resets": 3648,
+      "active_borrow_binding": false,
+      "byte_stream_pathname_reopens": 0,
+      "original_held_handles_closed_by_borrower": false,
+      "redundant_pre_descriptor_metadata_queries": 0,
+      "original_pre_read_stream_identity_check_retained": true,
+      "input_scope_reduced": false,
+      "original_resource_guards_and_pacing_retained": true,
+      "measured_CPU_or_freeze_improvement_claimed": false,
+      "retained_within_one_live_frame_only": true,
+      "unbuffered_raw_streams": true,
+      "parsed_JSON_hash_or_byte_cache": false,
+      "physical_handle_ceiling": 8192,
+      "physical_handle_peak": 4007,
+      "new_duplicate_open_reservations": 1824,
+      "reused_stream_pressure_checkpoints": 1824,
+      "logical_read_leases": 3648,
+      "logical_read_lease_returns": 3648,
+      "pending_open_reservation": false,
+      "resource_callback_retained_on_reuse": true,
+      "cursor_reset_and_fresh_identity_on_each_pass": true
+    },
+    "metadata_pressure": {
+      "warning_system_CPU_percent": 75,
+      "cool_distinct_samples": 2,
+      "maximum_pause_windows": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "original_checkpoint_restored": true,
+      "original_owned_hard_guards_retained": true,
+      "existing_system_samples_reused": true,
+      "new_sampler_or_thread_started": false,
+      "source_reads_hashes_or_path_checks_skipped": false,
+      "metadata_failfast_connection": {
+        "warning_CPU_percent": 75,
+        "checks": 3811,
+        "warning_stops": 0,
+        "latched": false,
+        "active": false,
+        "original_checkpoint_restored": true,
+        "original_hard_guard_first": true,
+        "original_cool_checkpoint_retained": true,
+        "added_sampler_or_native_query": false,
+        "added_cooling_waits": 0,
+        "automatic_retry_or_resume": false,
+        "cleanup_guarded": false,
+        "complete_source_reads_or_deadlines_weakened": false,
+        "runtime_connection_qualified": false,
+        "PC_freeze_resolved": false
+      }
+    },
+    "post_cleanup_actual_samples": 1,
+    "post_cleanup_sample_gap_seconds": 0.500521,
+    "post_cleanup_CPU_percent": 14.09,
+    "closing_error_code": null,
+    "cleanup": true,
+    "tree_empty": true,
+    "imports": 48,
+    "complete_runtime_budget": {
+      "inputs": 1824,
+      "directories": 359,
+      "binary_bytes": 28433408,
+      "other_bytes": 143921699,
+      "selected_acquisition_rate_per_second": 14,
+      "original_acquisition_ceiling_per_second": 14,
+      "unchanged_byte_native_ceiling_per_second": 20,
+      "acquisition_reservations": 2183,
+      "native_acquisition_seconds": 155.92857142857142,
+      "two_actual_byte_pass_native_reservations": 1824,
+      "extra_byte_open_reservations": 0,
+      "all_native_byte_open_pacing_seconds": 91.2,
+      "two_actual_byte_pass_nominal_seconds": 191.48684978485107,
+      "nominal_early_yield_allowance_seconds": 4,
+      "unallocated_margin_seconds": 60,
+      "predicted_combined_seconds": 502.6154212134225,
+      "unchanged_lock_deadline_seconds": 600,
+      "nominal_fits_unchanged_deadline": true,
+      "byte_and_native_costs_assumed_overlapped": false,
+      "idle_pacer_credit_assumed": false,
+      "estimate_not_completion_guarantee": true,
+      "actual_runner_closure_qualified": false,
+      "Native_source_frame_qualified": false,
+      "GO_authorized": false,
+      "queue_advance_authorized": false,
+      "PC_freeze_improvement_claimed": false,
+      "removed_second_duplicate_handle_reservations": 1824,
+      "removed_second_duplicate_pacing_seconds": 91.2,
+      "byte_or_native_costs_assumed_overlapped": false,
+      "parsed_JSON_hash_or_byte_cache": false,
+      "predicted_runtime_combined_seconds": 552.5154212134225,
+      "product_allowance_seconds": 20,
+      "pre_GO_and_assignment_allowance_seconds": 3,
+      "final_inventory_checkpoint_count": 167,
+      "final_inventory_pacing_seconds": 8.35,
+      "additional_early_source_wait_allowance_seconds": 11,
+      "post_cleanup_identity_allowance_seconds": 5,
+      "additional_serial_PDH_maximum_sample_budget_seconds": 2.05,
+      "PDH_OS_call_latency_hard_preemption_guaranteed": false,
+      "unknown_pressure_waits_included": false,
+      "actual_completion_guaranteed": false,
+      "final_postcleanup_distinct_sample_wait_allowance_seconds": 0.5,
+      "final_postcleanup_same_owner_actual_sample_required": true
+    },
+    "lock_timing": {
+      "original_guard_checks": 84026,
+      "explicit_phase_events": [
+        {
+          "label": "before_acquire",
+          "phase": "metadata_hash",
+          "original_lock_elapsed_seconds": 0.006921199994394556,
+          "guard_check_number": 1
+        },
+        {
+          "label": "after_acquire",
+          "phase": "metadata_hash",
+          "original_lock_elapsed_seconds": 158.50465609999083,
+          "guard_check_number": 10524
+        },
+        {
+          "label": "before_parent",
+          "phase": "metadata_hash",
+          "original_lock_elapsed_seconds": 337.3257056000002,
+          "guard_check_number": 46755
+        },
+        {
+          "label": "after_parent",
+          "phase": "final_fresh_hash",
+          "original_lock_elapsed_seconds": 451.4537568999949,
+          "guard_check_number": 81841
+        },
+        {
+          "label": "before_release",
+          "phase": "final_fresh_hash",
+          "original_lock_elapsed_seconds": 451.4537610999978,
+          "guard_check_number": 81842
+        }
+      ],
+      "first_original_error": null,
+      "original_lock_limit_seconds": 600,
+      "original_check_invoked_without_replacement": true,
+      "extra_clock_only_at_boundary_or_first_error": true,
+      "extra_CPU_RAM_or_native_query_started": false,
+      "original_resource_guard_or_deadline_extended": false,
+      "cleanup_callback_wrapped": false,
+      "unknown_measurements_not_zeroed": true,
+      "CPU_or_PC_freeze_improvement_established": false
+    },
+    "complete_stream_capture": {
+      "buffered_bytes": {
+        "stdout": 216,
+        "stderr": 0
+      },
+      "complete_streams": true
+    }
+  },
+  "optional_PDH": {
+    "existing_observer_instances": 1,
+    "second_sampler_thread_or_process": false,
+    "cold_counter_interval_seconds": 8,
+    "original_warning_for_forced_read_percent": 75,
+    "original_CPU_RAM_decisions_replaced": false,
+    "additional_PDH_queries_explicit": true,
+    "PDH_interval_identical_to_K32_interval": false,
+    "probes": [
+      {
+        "fixed_counter_count": 7,
+        "wildcard_or_process_inventory": false,
+        "collect_calls": 24,
+        "samples": 23,
+        "setup_seconds": 0.3181392000115011,
+        "maximum_added_sample_seconds": 0.05094799998914823,
+        "total_added_sample_seconds": 0.1484496000193758,
+        "maximum_sample_budget_seconds": 0.05,
+        "total_added_sample_budget_seconds": 2,
+        "disabled_reason": "MEASUREMENT_COST_BUDGET_EXCEEDED",
+        "query_remaining": false,
+        "cleanup_confirmed": true,
+        "close_attempts": 1,
+        "counter_status": {
+          "MsMpEng_cpu": {
+            "return_status": 0,
+            "counter_status": 0
+          },
+          "MsMpEng_pid": {
+            "return_status": 0,
+            "counter_status": 0
+          },
+          "System_cpu": {
+            "return_status": 0,
+            "counter_status": 0
+          },
+          "System_pid": {
+            "return_status": 0,
+            "counter_status": 0
+          },
+          "total_cpu": {
+            "return_status": 0,
+            "counter_status": 0
+          },
+          "DPC_cpu": {
+            "return_status": 0,
+            "counter_status": 0
+          },
+          "interrupt_cpu": {
+            "return_status": 0,
+            "counter_status": 0
+          }
+        },
+        "original_K32_CPU_RAM_decisions_replaced": false,
+        "second_sampler_thread_or_process": false,
+        "extra_PDH_queries_added_to_original_observer": true,
+        "interval_alignment_exact": false,
+        "security_sandbox_or_CPU_freeze_improvement_claimed": false
+      }
+    ]
+  },
+  "optional_PDH_cost_stop_not_hidden": {
+    "maximum_added_call_ms": 50.94799998914823,
+    "nominal_limit_ms": 50,
+    "disabled_reason": "MEASUREMENT_COST_BUDGET_EXCEEDED",
+    "original_K32_CPU_RAM_guard_retained": true,
+    "query_closed_and_cleanup_confirmed": true,
+    "hard_OS_call_preemption_or_exact_alignment_guaranteed": false,
+    "CPU_causal_process_identified": false
+  },
+  "CPU_resource_review": {
+    "CPU_histogram": {
+      "75": {
+        "samples_at_or_above": 0,
+        "longest_consecutive": 0
+      },
+      "90": {
+        "samples_at_or_above": 0,
+        "longest_consecutive": 0
+      },
+      "98": {
+        "samples_at_or_above": 0,
+        "longest_consecutive": 0
+      }
+    },
+    "hot_sample_count": 0,
+    "resource_guard_stop_observed": false,
+    "initial_check_peak89_not_hidden": true,
+    "previous_actual123_high_samples_not_erased": true,
+    "metadata75_failfast_is_early_metadata_scope_not_global75_CPU_cap": true,
+    "related_code_review_pins": [
+      {
+        "path": "tools/p09/retained_read_streams.py",
+        "bytes": 10939,
+        "sha256": "1b0dff19ee3e09eaf4337325f541bafb2d21ce0c6def41ccd5c5791600963ab1"
+      },
+      {
+        "path": "tools/p09/metadata_pressure_failfast.py",
+        "bytes": 2942,
+        "sha256": "c61ae620fe63cda94b029efe29fb252612c941c6f47ca4265a5c6c8491ce0c9c"
+      }
+    ],
+    "original_frozen_code_not_modified": true,
+    "additional_sampler_trace_or_admin_request_started": false,
+    "arbitrary_wait_or_lowered_verification_added": false,
+    "paired_CPU_improvement_proven": false,
+    "PC_freeze_resolved": false
+  },
+  "independent_acceptance": {
+    "state": "PASS_EXACT_FLAT_CURRENT_EPOCH_ACCEPTED_ONCE_NOT_FULL249_OR_GATE",
+    "elapsed_seconds": 135.31676180000068,
+    "fresh_inputs": 854,
+    "fresh_read_passes": 1710,
+    "fresh_bytes_read": 70186150,
+    "final_hashes": 854,
+    "cleanup": true,
+    "evidence": {
+      "whole_runtime_input_count": 1824,
+      "whole_runtime_input_bytes": 172355107,
+      "ancestor_directory_count": 359,
+      "actual_full_byte_passes": 2,
+      "original_resource_samples": 941,
+      "post_Job_cleanup_resource_samples": 1,
+      "lossless_historical_current_union_validated": true,
+      "actual_owned_Native_cleanup_validated": true
+    },
+    "proof": {
+      "qualified113_acceptor_AST_restored_exactly": true,
+      "changed_metadata_or_new_explicit_mechanics": [
+        "physical_expected_counters",
+        "retained_physical_cost_model"
+      ],
+      "actual_receipt_observations_modified": false,
+      "expected_duplicate_counter_changes": 3,
+      "case115_metadata_bound": true,
+      "explicit_final_resource_wait_cost_seconds": 0.5,
+      "all_original_whole_source_product_Job_resource_cleanup_predicates_retained": true,
+      "flat_case_data_not_recursive_controller_import": true,
+      "explicit_runtime_index": 124,
+      "explicit_prior_count": 117,
+      "reviewed_metadata_controller_pins_added": true,
+      "original_full_oracle_not_replaced": true,
+      "original_validator_projection": {
+        "original_oracle_AST_restored_exactly": true,
+        "metadata_fields_projected": 9,
+        "input_count": 1824,
+        "directory_count": 359,
+        "helper_count": 48,
+        "qualification_checks_skipped": false,
+        "qualified_oracle_pin": {
+          "path": "tools/p09/accept_case112_current_epoch.py",
+          "bytes": 20933,
+          "sha256": "03fa9362f56b6105b48b8b49599f32ccc8cbf4aa9d0b0836f3cf8580cc9c680c"
+        },
+        "additional_PDH_cost_equality_extended_by_seconds": 2.05
+      },
+      "all_original_whole_Native_product_resource_and_cleanup_checks_retained": true,
+      "previous115_source_data_not_rebased": true,
+      "metadata_binding_actual_restored_checked": true
+    },
+    "samples": 268,
+    "CPU_max": 55.98,
+    "RAM_min": 42.62033655800142,
+    "commit_max": 36.657526907835745,
+    "parent_CPU_max": 3.31952510863852,
+    "parent_private_max": 31.59375,
+    "root": {
+      "path": "implementation/p09/evidence/p09-361-case124-current-runtime-run001.v1.json",
+      "bytes": 2228659,
+      "sha256": "8f9a39d08db56210003d2057f189468cb99cc9fb070fa14378e656e4ffc00be5"
+    },
+    "Native_or_product_replayed": false,
+    "unique_actual124_epoch_accepted_once": true
+  },
+  "post_review": {
+    "state": "PASS_REAL124_FULL_ORACLE_AND_EIGHT_NEGATIVES_NOT_NEW_PRODUCT_OR_QUEUE_ADVANCE",
+    "contracts": 9,
+    "negative_rejections": [
+      {
+        "case": "missing_source",
+        "rejection": "CURRENT_STORED_RUNTIME_SCOPE_EXACT_PIN_COUNT"
+      },
+      {
+        "case": "missing_post_sample",
+        "rejection": "CURRENT_EPOCH_ACCEPT_RESOURCE_HISTORY"
+      },
+      {
+        "case": "gate_promotion",
+        "rejection": "CURRENT_EPOCH_ACCEPT_CANDIDATE"
+      },
+      {
+        "case": "cleanup_false",
+        "rejection": "CURRENT_EPOCH_ACCEPT_CANDIDATE"
+      },
+      {
+        "case": "wrong_passed_name",
+        "rejection": "CURRENT_EPOCH_ACCEPT_CANDIDATE"
+      },
+      {
+        "case": "synthetic_candidate",
+        "rejection": "FLAT_ACCEPT_NO_SYNTHETIC_CANDIDATE"
+      },
+      {
+        "case": "active_metadata_binding",
+        "rejection": "CURRENT_EPOCH_ACCEPT_REAL_RESTORED_METADATA_SCOPE"
+      },
+      {
+        "case": "unauthorized_second_attempt_root",
+        "rejection": "FLAT_ACCEPT_EXACT_ACTUAL_ROOT_PATH"
+      }
+    ],
+    "CPU_histogram": {
+      "actual_at75": {
+        "samples_at_or_above": 0,
+        "longest_consecutive": 0
+      },
+      "actual_at90": {
+        "samples_at_or_above": 0,
+        "longest_consecutive": 0
+      },
+      "actual_at98": {
+        "samples_at_or_above": 0,
+        "longest_consecutive": 0
+      },
+      "accept_at75": {
+        "samples_at_or_above": 0,
+        "longest_consecutive": 0
+      },
+      "accept_at90": {
+        "samples_at_or_above": 0,
+        "longest_consecutive": 0
+      },
+      "accept_at98": {
+        "samples_at_or_above": 0,
+        "longest_consecutive": 0
+      }
+    },
+    "related_code_review_pins": [
+      {
+        "path": "tools/p09/retained_read_streams.py",
+        "bytes": 10939,
+        "sha256": "1b0dff19ee3e09eaf4337325f541bafb2d21ce0c6def41ccd5c5791600963ab1"
+      },
+      {
+        "path": "tools/p09/metadata_pressure_failfast.py",
+        "bytes": 2942,
+        "sha256": "c61ae620fe63cda94b029efe29fb252612c941c6f47ca4265a5c6c8491ce0c9c"
+      }
+    ],
+    "fresh_pins": 31,
+    "read_passes": 84,
+    "bytes_read": 9904552,
+    "final_hashes": 31,
+    "samples": 18,
+    "CPU_max": 52.78,
+    "RAM_min": 44.40678755749323,
+    "cleanup": true,
+    "accepted_delta": 0,
+    "reused_core_archive_exact": true,
+    "original_failed120_preserved": true
+  },
+  "preserved_original_failure120_pin": {
+    "path": "implementation/p09/evidence/p09-361-case120-current-runtime-run001.v1.json",
+    "bytes": 46951,
+    "sha256": "ce95eeb3db66595d59467e72c3ac43aba162e7b6931cf03886961918df9629b4",
+    "overwritten_or_promoted": false
+  },
+  "prior_consolidated_receipt_pin": {
+    "path": "implementation/p09/evidence/p09-361-flat123-actual-and-distinct117-r270.v1.json",
+    "bytes": 25183,
+    "sha256": "dc90f92676b81fdbdcb7f43df5c2fd0d42f71aef5c0e18e2ca6e09af109df7a4"
+  },
+  "prior_post_review_aggregate_failure122_retained_not_relabelled_PASS": true,
+  "archive": {
+    "root": "implementation/p09/evidence/p361-flat124-qualified-data",
+    "files": 2,
+    "bytes": 2030,
+    "data_pins": [
+      {
+        "path": "implementation/p09/evidence/p361-flat124-qualified-data/p09-361-case124-step-config001.v1.json",
+        "bytes": 650,
+        "sha256": "4afc810de3a30be3edf66a47438ccf32b78c51a93109eb091f1400a19d8cce58"
+      },
+      {
+        "path": "implementation/p09/evidence/p361-flat124-qualified-data/p09-361-case124-metadata-connection-data001.v1.json",
+        "bytes": 1380,
+        "sha256": "bdd731bda65d5aaec957981f0471ed5aa3ec4f672dd11daf374ebcd5da6db5ca"
+      }
+    ],
+    "only_new_step_and_connection_DATA_copied": true,
+    "fixed_code_archive_reused_not_recopied": true,
+    "current_and_archive_compared_to_actual_frame_pins": true,
+    "created_after_actual124_not_claimed_inside_its_Native_frame": true,
+    "originals_preserved": true
+  },
+  "next125": {
+    "base_step_pin": {
+      "path": "implementation/p09/evidence/p09-361-case125-step-config001.v1.json",
+      "bytes": 652,
+      "sha256": "02c40e07d3438bfde4d8ddb0d538f4dde3fd7adeaab9062cf86fbee379cc7979"
+    },
+    "metadata_data_path": "implementation/p09/evidence/p09-361-case125-metadata-connection-data001.v1.json",
+    "case": "actual_import::source_assembly::assembly_rejects_all_five_authenticated_scope_substitutions",
+    "before": 118,
+    "run": 1,
+    "failed_runtime_pin": null,
+    "new_per_case_controller_added": false,
+    "actual125": "NOT_RUN",
+    "full_preflight125": "NOT_RUN",
+    "same_fixed_code_pins_reused": [
+      {
+        "path": "tools/p09/flat_current_queue_metadata_runtime.py",
+        "bytes": 13283,
+        "sha256": "cc8fa8950e252e19ff58ad682ab01dba3fe0b0a82b5f4b2f3324072089bc0bf0"
+      },
+      {
+        "path": "tools/p09/tests/test_flat_current_queue_metadata_connection.py",
+        "bytes": 4896,
+        "sha256": "3d694c9497eb8354113a2df3969f218bd63fbc438144d64c29325d07ac324026"
+      },
+      {
+        "path": "tools/p09/flat_current_queue_metadata_acceptance.py",
+        "bytes": 6197,
+        "sha256": "fc0baf4cbab261240830c79c06790519154ccd2533a373c25fc7cc1810a51331"
+      },
+      {
+        "path": "tools/p09/metadata_pressure_failfast.py",
+        "bytes": 2942,
+        "sha256": "c61ae620fe63cda94b029efe29fb252612c941c6f47ca4265a5c6c8491ce0c9c"
+      }
+    ],
+    "metadata_data_pin": {
+      "path": "implementation/p09/evidence/p09-361-case125-metadata-connection-data001.v1.json",
+      "bytes": 1380,
+      "sha256": "f4a091f7a5604295acab251046195fe1b16a521eb0790b37a22b24599c03d80e"
+    }
+  },
+  "frozen_flat_core_and_metadata_connection_code_four_unchanged": true,
+  "no_recursive_per_case_controller_import": true,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "whole_reconciliation_complete": false,
+  "P10_started": false,
+  "CPU_causal_process_identified": false,
+  "paired_CPU_improvement_proven": false,
+  "PC_freeze_resolved": false,
+  "Defender_OS_WSL_settings_changed": false,
+  "Hangul_or_access_prompt_started": false,
+  "parallel_verifier_or_build_started": false,
+  "unrelated_process_terminated": false,
+  "files_deleted_or_moved": false,
+  "commit_or_push": false,
+  "post_change_review": {
+    "state": "PASS_CURRENT118_PRIOR_CPU_HIGH_FAILURE_CODE_AST_DOCS_NEXT125_NOT_NEW_RUNTIME",
+    "fresh_pins": 22,
+    "read_passes": 48,
+    "bytes_read": 8693222,
+    "final_hashes": 22,
+    "samples": 13,
+    "CPU_max": 21.75,
+    "RAM_min": 45.46068453035931,
+    "next_base_pin": {
+      "path": "implementation/p09/evidence/p09-361-case125-step-config001.v1.json",
+      "bytes": 652,
+      "sha256": "02c40e07d3438bfde4d8ddb0d538f4dde3fd7adeaab9062cf86fbee379cc7979"
+    },
+    "next_metadata_pin": {
+      "path": "implementation/p09/evidence/p09-361-case125-metadata-connection-data001.v1.json",
+      "bytes": 1380,
+      "sha256": "f4a091f7a5604295acab251046195fe1b16a521eb0790b37a22b24599c03d80e"
+    },
+    "queue_delta": 0,
+    "product_or_Native_replayed": false,
+    "cleanup": true
+  }
+}

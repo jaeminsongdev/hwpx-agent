@@ -1,0 +1,116 @@
+{
+  "schema": "hwpx-agent.p09-94-stored-comment-source-regression/v1",
+  "new_stored_comment_tests": {
+    "command": "cargo test -p hwpx-agent-cli --test stored_comment_provider --locked --offline",
+    "start_chunk_id": "b40847",
+    "terminal_chunk_id": "88ee16",
+    "exit_code": 0,
+    "passed": 16,
+    "failed": 0,
+    "ignored": 0,
+    "all_original_five_preparation_operations": true,
+    "head_change_during_actual_IR_download_tested": true,
+    "actual_artifact_and_revision_service_APIs": true,
+    "fixture_repository": "in_memory",
+    "positive_source": "explicit synthetic storage-only bytes NOT HWPX/native comment evidence",
+    "scanner_actor_keys": "synthetic fixture only"
+  },
+  "original_product_tests": {
+    "command": "cargo test -p hwpx-agent-cli --target-dir target/p09-94-regression --test form_stored_provider --test form_value_operation --test comment_operation --locked --offline",
+    "start_chunk_id": "d2deb0",
+    "terminal_chunks": [
+      "ea114f",
+      "60f040"
+    ],
+    "exit_code": 0,
+    "targets": [
+      {
+        "target": "comment_operation",
+        "passed": 8
+      },
+      {
+        "target": "form_stored_provider",
+        "passed": 125
+      },
+      {
+        "target": "form_value_operation",
+        "passed": 18
+      }
+    ],
+    "failed": 0,
+    "ignored": 0,
+    "SQL_or_Hangul_invoked": false
+  },
+  "original_comment_model": {
+    "command": "cargo test -p domain-ir --target-dir target/p09-94-regression --test comment_model --locked --offline",
+    "terminal_chunk_id": "9c16c0",
+    "exit_code": 0,
+    "passed": 10,
+    "failed": 0,
+    "ignored": 0
+  },
+  "total_Rust_passed": 177,
+  "strict_clippy": {
+    "command": "cargo clippy -p hwpx-agent-cli --lib --test stored_comment_provider --locked --offline -- -D warnings",
+    "chunk_id": "a2a750",
+    "exit_code": 0
+  },
+  "format_and_diff": {
+    "chunk_id": "2ec19f",
+    "exit_code": 0,
+    "new_source_and_test_recursive_format": true,
+    "diff_check": true
+  },
+  "existing_current_source_conformance": {
+    "command": "python tools/p09/validate_reference_conformance_contract.py --current-source-v2",
+    "start_chunk_id": "14959f",
+    "terminal_chunk_id": "31b532",
+    "exit_code": 0,
+    "result": {
+      "P09_gate": "OPEN",
+      "P10_new_implementation": false,
+      "actual_hangul": "not_run",
+      "actual_hwpx": "not_run",
+      "automation": "not_run",
+      "component_covered_rows": 46,
+      "component_stage_counts": {
+        "cataloged": 7,
+        "integration_passed": 11,
+        "oracle_verified": 0,
+        "unit_passed": 35
+      },
+      "current_matrix_wrapper_verified": true,
+      "current_source_qualification_verified": true,
+      "differential": "not_run",
+      "green_rows": 0,
+      "historical_default_failure_retained": true,
+      "p09": "in_progress",
+      "p09_owned_rows": 46,
+      "p11_deferred_rows": 7,
+      "product_complete": false,
+      "render": "not_run",
+      "required_rows": 53,
+      "schema_version": "hwpx-agent.p09-reference-conformance-current-source-validation/v2",
+      "source_profile": "current_source_v2",
+      "state": "pass",
+      "target_profile_id": "hancom-hangul-2020-secondary",
+      "task": "P09-11",
+      "upstream_validators_verified": 15
+    },
+    "scope": "original 15 component/source validators; excludes whole new product/native acceptance"
+  },
+  "original_default_conformance": {
+    "chunk_id": "acabad",
+    "exit_code": 1,
+    "error": "matrix_drift",
+    "retained": true
+  },
+  "baseline_isolated_target": "target/p09-94-regression",
+  "old_executables_not_overwritten": true,
+  "native_executed": false,
+  "actual_SQL_executed": false,
+  "issuer_execution_publication_verified": false,
+  "P09_gate": "OPEN",
+  "P10_new_implementation": false,
+  "goal_status": "active"
+}

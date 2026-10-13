@@ -1,0 +1,597 @@
+{
+  "schema_version": "hwpx-agent.p09-353-actual-read-path-and-cursor-fix/v1",
+  "date": "2026-10-10",
+  "goal_status": "ACTIVE",
+  "state": "V20_828_PASS_V21_ACTUAL_PATH_IMPLEMENTED_NOT_QUALIFIED",
+  "progress_classification": "PROGRESS_CODE_CHANGES_AND_NEW_AUTHORITATIVE_EVIDENCE",
+  "current_code_pair": [
+    {
+      "path": "tools/p09/resume_preserved106_queue_runtime.py",
+      "bytes": 147209,
+      "sha256": "b8594abf09a84f86af0b630420a74a89ca39d580a2f05f5b9462d826b1a55015"
+    },
+    {
+      "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+      "bytes": 118103,
+      "sha256": "713625771b6a486aa4fa26b5dfbcd2c7edde80dc637f4da2ada81c1afe986e2b"
+    }
+  ],
+  "current_schema": "hwpx-agent.p09-preserved106-fixed-runtime-queue/v21",
+  "declared_tests": 423,
+  "required_formal_executions": 846,
+  "current_formal_qualified": false,
+  "AST_compile_passed_paths": 2,
+  "actual_adapter_fake_tests": "NOT_RUN_ADMISSION_CPU100",
+  "last_qualified_v20_code_pair": [
+    {
+      "path": "tools/p09/resume_preserved106_queue_runtime.py",
+      "bytes": 144808,
+      "sha256": "1ebb76627ec364043d2cca9315159710c298a7738a799065edcde2d4c84827b9"
+    },
+    {
+      "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+      "bytes": 114490,
+      "sha256": "375ed6f589fe163a7c3e0af440f9a0b119e6d67fea2fec8f4dfe87c76b1774bb"
+    }
+  ],
+  "formal828_archive": "implementation/p09/evidence/p340-formal828-code",
+  "v20_pure_tests_passed": [
+    13,
+    19
+  ],
+  "receipts": [
+    {
+      "pin": {
+        "path": "implementation/p09/evidence/locked-r07/p340-light-run042.v1.json",
+        "bytes": 181050,
+        "sha256": "c82d6893409f3175b9792c1ddc288a8802b521952dfaf6b64367fc0750a87aee"
+      },
+      "schema_version": "hwpx-agent.p09-preserved106-fixed-runtime-queue/v19",
+      "state": "FAILED_NOT_ACCEPTED",
+      "stage": "contract_tests",
+      "error_code": "P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_ALL_CURRENT_AND_FOLLOWING_CONTRACTS",
+      "resource_stop_reason": null,
+      "resource_watcher_cleanup_confirmed": true,
+      "runtime_contract_executions": 0,
+      "contract_checkpoint_statistics": {
+        "started_tests": 395,
+        "stopped_tests": 395,
+        "successful_before_test_checks": 395,
+        "successful_after_test_checks": 395,
+        "runner_calls": 1,
+        "returned_runner_calls": 1,
+        "successful_before_runner_checks": 1,
+        "successful_after_runner_checks": 1,
+        "original_unittest_results_preserved": true,
+        "new_sampler_or_thread_or_sleep_started": false,
+        "original_guard_or_test_coverage_relaxed": false,
+        "test_results_are_not_product_acceptance": true
+      },
+      "contract_failures": [
+        "test_literal_source_failure_preserved_not_accept (test_preserved106_queue_runtime.Source021StopReviewTests.test_literal_source_failure_preserved_not_accept)"
+      ],
+      "actual_product_child_executed": false,
+      "preparation": {
+        "bound_inputs": 211,
+        "read_passes": 211,
+        "bytes_read": 22489868,
+        "final_fresh_hashes": 0,
+        "finished": false
+      },
+      "source_frame": {
+        "state": null,
+        "registered_live": null,
+        "input_count": null,
+        "input_bytes": null,
+        "complete_byte_boundaries": 0,
+        "handles": {
+          "input_lock_handles_opened": null,
+          "input_lock_handles_closed": null,
+          "input_lock_handles_remaining": null,
+          "active_reader_bindings": null,
+          "active_byte_streams": null,
+          "handle_close_failed_attempts": null
+        },
+        "borrowed": null
+      },
+      "sidecar_pin": null,
+      "observation": {
+        "samples": 42,
+        "host_cpu_max_percent": 29.36,
+        "own_cpu_max_machine_percent": 6.375228,
+        "own_private_max_bytes": 95916032,
+        "available_ram_min_percent": 23.882364696658268,
+        "last_four": [
+          {
+            "host_cpu_percent": 25.83,
+            "own_cpu_percent": 6.262231,
+            "logical_read_bytes_delta": 0,
+            "phase": "contract_tests"
+          },
+          {
+            "host_cpu_percent": 24.91,
+            "own_cpu_percent": 6.227106,
+            "logical_read_bytes_delta": 0,
+            "phase": "contract_tests"
+          },
+          {
+            "host_cpu_percent": 26.3,
+            "own_cpu_percent": 6.333973,
+            "logical_read_bytes_delta": 0,
+            "phase": "contract_tests"
+          },
+          {
+            "host_cpu_percent": 29.09,
+            "own_cpu_percent": 6,
+            "logical_read_bytes_delta": 0,
+            "phase": "contract_tests"
+          }
+        ]
+      }
+    },
+    {
+      "pin": {
+        "path": "implementation/p09/evidence/locked-r07/p340-light-run045.v1.json",
+        "bytes": 89321,
+        "sha256": "c7a139b87bf27b78cfcccb9e58105cb83032473366ad823f07d9fb24ec292dd9"
+      },
+      "schema_version": "hwpx-agent.p09-preserved106-fixed-runtime-queue/v20",
+      "state": "FAILED_NOT_ACCEPTED",
+      "stage": "selection",
+      "error_code": "P208_POST_STOP_RUNTIME_DIAGNOSTIC_RUNTIME_REVIEWED_STOP_QUEUE_RUNTIME_PRESERVED106_QUEUE_ORIGINAL_HISTORICAL_METADATA_COUNTS",
+      "resource_stop_reason": null,
+      "resource_watcher_cleanup_confirmed": true,
+      "runtime_contract_executions": 0,
+      "contract_checkpoint_statistics": null,
+      "contract_failures": [],
+      "actual_product_child_executed": false,
+      "preparation": {
+        "bound_inputs": 213,
+        "read_passes": 213,
+        "bytes_read": 22744338,
+        "final_fresh_hashes": 0,
+        "finished": false
+      },
+      "source_frame": {
+        "state": null,
+        "registered_live": null,
+        "input_count": null,
+        "input_bytes": null,
+        "complete_byte_boundaries": 0,
+        "handles": {
+          "input_lock_handles_opened": null,
+          "input_lock_handles_closed": null,
+          "input_lock_handles_remaining": null,
+          "active_reader_bindings": null,
+          "active_byte_streams": null,
+          "handle_close_failed_attempts": null
+        },
+        "borrowed": null
+      },
+      "sidecar_pin": null,
+      "observation": {
+        "samples": 31,
+        "host_cpu_max_percent": 53.88,
+        "own_cpu_max_machine_percent": 1.701323,
+        "own_private_max_bytes": 76316672,
+        "available_ram_min_percent": 21.285948019927922,
+        "last_four": [
+          {
+            "host_cpu_percent": 17.18,
+            "own_cpu_percent": 0.182815,
+            "logical_read_bytes_delta": 1021639,
+            "phase": "metadata_hash"
+          },
+          {
+            "host_cpu_percent": 17.8,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 1056395,
+            "phase": "metadata_read_parse"
+          },
+          {
+            "host_cpu_percent": 17.69,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 1048576,
+            "phase": "metadata_read_parse"
+          },
+          {
+            "host_cpu_percent": 20.27,
+            "own_cpu_percent": 0.568182,
+            "logical_read_bytes_delta": 917922,
+            "phase": "metadata_read_parse"
+          }
+        ]
+      }
+    },
+    {
+      "pin": {
+        "path": "implementation/p09/evidence/locked-r07/p340-light-run048.v1.json",
+        "bytes": 66190,
+        "sha256": "63487c607b6b3cb7a9bf927625abc6e9f12e355cc7063096611857bd582372a1"
+      },
+      "schema_version": "hwpx-agent.p09-preserved106-fixed-runtime-queue/v20",
+      "state": "PASS_PRESERVED106_NEXT_QUEUE_NOT_ACTUAL_OR_GATE",
+      "stage": null,
+      "error_code": null,
+      "resource_stop_reason": null,
+      "resource_watcher_cleanup_confirmed": true,
+      "runtime_contract_executions": 828,
+      "contract_checkpoint_statistics": {
+        "started_tests": 828,
+        "stopped_tests": 828,
+        "successful_before_test_checks": 828,
+        "successful_after_test_checks": 828,
+        "runner_calls": 2,
+        "returned_runner_calls": 2,
+        "successful_before_runner_checks": 2,
+        "successful_after_runner_checks": 2,
+        "original_unittest_results_preserved": true,
+        "new_sampler_or_thread_or_sleep_started": false,
+        "original_guard_or_test_coverage_relaxed": false,
+        "test_results_are_not_product_acceptance": true
+      },
+      "contract_failures": [],
+      "actual_product_child_executed": false,
+      "preparation": {
+        "bound_inputs": 217,
+        "read_passes": 434,
+        "bytes_read": 46548014,
+        "final_fresh_hashes": 217,
+        "finished": true
+      },
+      "source_frame": {
+        "state": null,
+        "registered_live": null,
+        "input_count": null,
+        "input_bytes": null,
+        "complete_byte_boundaries": 0,
+        "handles": {
+          "input_lock_handles_opened": null,
+          "input_lock_handles_closed": null,
+          "input_lock_handles_remaining": null,
+          "active_reader_bindings": null,
+          "active_byte_streams": null,
+          "handle_close_failed_attempts": null
+        },
+        "borrowed": null
+      },
+      "sidecar_pin": null,
+      "observation": {
+        "samples": 86,
+        "host_cpu_max_percent": 100,
+        "own_cpu_max_machine_percent": 6.525912,
+        "own_private_max_bytes": 95977472,
+        "available_ram_min_percent": 23.42694290798815,
+        "last_four": [
+          {
+            "host_cpu_percent": 10.82,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 1066710,
+            "phase": "final_fresh_hash"
+          },
+          {
+            "host_cpu_percent": 6.42,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 1050086,
+            "phase": "final_fresh_hash"
+          },
+          {
+            "host_cpu_percent": 7.46,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 1066381,
+            "phase": "final_fresh_hash"
+          },
+          {
+            "host_cpu_percent": 7.47,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 1044985,
+            "phase": "final_fresh_hash"
+          }
+        ]
+      }
+    },
+    {
+      "pin": {
+        "path": "implementation/p09/evidence/locked-r07/p340-light-review-run049.v1.json",
+        "bytes": 62674,
+        "sha256": "3e361f41d5364cfb0354728d7713dcee8e211c01bfd8c6dbd521cc0aedd3c549"
+      },
+      "schema_version": "hwpx-agent.p09-preserved106-fixed-runtime-queue/v20",
+      "state": "PASS_PRESERVED106_DISTINCT_FRESH_NOT_NATIVE_OR_PRODUCT",
+      "stage": null,
+      "error_code": null,
+      "resource_stop_reason": null,
+      "resource_watcher_cleanup_confirmed": true,
+      "runtime_contract_executions": 0,
+      "contract_checkpoint_statistics": null,
+      "contract_failures": [],
+      "actual_product_child_executed": false,
+      "preparation": {
+        "bound_inputs": 218,
+        "read_passes": 436,
+        "bytes_read": 46680394,
+        "final_fresh_hashes": 218,
+        "finished": true
+      },
+      "source_frame": {
+        "state": null,
+        "registered_live": null,
+        "input_count": null,
+        "input_bytes": null,
+        "complete_byte_boundaries": 0,
+        "handles": {
+          "input_lock_handles_opened": null,
+          "input_lock_handles_closed": null,
+          "input_lock_handles_remaining": null,
+          "active_reader_bindings": null,
+          "active_byte_streams": null,
+          "handle_close_failed_attempts": null
+        },
+        "borrowed": null
+      },
+      "sidecar_pin": null,
+      "observation": {
+        "samples": 59,
+        "host_cpu_max_percent": 44.42,
+        "own_cpu_max_machine_percent": 1.757812,
+        "own_private_max_bytes": 111542272,
+        "available_ram_min_percent": 23.899063250369803,
+        "last_four": [
+          {
+            "host_cpu_percent": 0.96,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 1066710,
+            "phase": "final_fresh_hash"
+          },
+          {
+            "host_cpu_percent": 3.72,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 1050086,
+            "phase": "final_fresh_hash"
+          },
+          {
+            "host_cpu_percent": 4.85,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 1055067,
+            "phase": "final_fresh_hash"
+          },
+          {
+            "host_cpu_percent": 12.25,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 1038486,
+            "phase": "final_fresh_hash"
+          }
+        ]
+      }
+    },
+    {
+      "pin": {
+        "path": "implementation/p09/evidence/locked-r07/p340-case-109-run050.v1.json",
+        "bytes": 554430,
+        "sha256": "87921f615d50cb28bd6e0917f458cbc07ca98d4fd014ff5e3c5834e22bf94067"
+      },
+      "schema_version": "hwpx-agent.p09-preserved106-fixed-runtime-queue/v20",
+      "state": "FAILED_NOT_ACCEPTED",
+      "stage": "owned_parent",
+      "error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+      "resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+      "resource_watcher_cleanup_confirmed": true,
+      "runtime_contract_executions": 0,
+      "contract_checkpoint_statistics": null,
+      "contract_failures": [],
+      "actual_product_child_executed": false,
+      "preparation": {
+        "bound_inputs": 219,
+        "read_passes": 438,
+        "bytes_read": 46805742,
+        "final_fresh_hashes": 219,
+        "finished": true
+      },
+      "source_frame": {
+        "state": "CLOSED",
+        "registered_live": false,
+        "input_count": 1658,
+        "input_bytes": 121199645,
+        "complete_byte_boundaries": 0,
+        "handles": {
+          "input_lock_handles_opened": 1966,
+          "input_lock_handles_closed": 1966,
+          "input_lock_handles_remaining": 0,
+          "active_reader_bindings": 0,
+          "active_byte_streams": 0,
+          "handle_close_failed_attempts": 0
+        },
+        "borrowed": {
+          "duplicate_handles_opened": 805,
+          "duplicate_handles_closed": 805,
+          "duplicate_handles_remaining": 0,
+          "duplicate_close_failed_attempts": 0,
+          "shared_offset_resets": 805,
+          "active_borrow_binding": false,
+          "byte_stream_pathname_reopens": 0,
+          "original_held_handles_closed_by_borrower": false,
+          "redundant_pre_descriptor_metadata_queries": 0,
+          "original_pre_read_stream_identity_check_retained": true,
+          "input_scope_reduced": false,
+          "original_resource_guards_and_pacing_retained": true,
+          "measured_CPU_or_freeze_improvement_claimed": false
+        }
+      },
+      "sidecar_pin": {
+        "path": "implementation/p09/evidence/locked-r07/cases/p340-failure-109-run050.json",
+        "bytes": 66103,
+        "sha256": "e3e9f9e07e1c39fa8ee29e28f70ecaf8bc90645f5766f435b4aab8911d9d5792"
+      },
+      "observation": {
+        "samples": 466,
+        "host_cpu_max_percent": 100,
+        "own_cpu_max_machine_percent": 1.584158,
+        "own_private_max_bytes": 140472320,
+        "available_ram_min_percent": 21.621770402242657,
+        "last_four": [
+          {
+            "host_cpu_percent": 98.17,
+            "own_cpu_percent": 0.182815,
+            "logical_read_bytes_delta": 239730,
+            "phase": "metadata_hash"
+          },
+          {
+            "host_cpu_percent": 100,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 0,
+            "phase": "metadata_hash"
+          },
+          {
+            "host_cpu_percent": 100,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 0,
+            "phase": "metadata_hash"
+          },
+          {
+            "host_cpu_percent": 100,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 0,
+            "phase": "metadata_hash"
+          }
+        ]
+      }
+    },
+    {
+      "pin": {
+        "path": "implementation/p09/evidence/locked-r07/p340-stop-review-run051.v1.json",
+        "bytes": 185095,
+        "sha256": "7b7b8a1a03bc4375c1559aa73ab2106b53e5b0c6a2b4afa0ac4779cc99fd5583"
+      },
+      "schema_version": "hwpx-agent.p09-preserved106-fixed-runtime-queue/v20",
+      "state": "FAILED_NOT_ACCEPTED",
+      "stage": "final_fresh_preparation",
+      "error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+      "resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+      "resource_watcher_cleanup_confirmed": true,
+      "runtime_contract_executions": 0,
+      "contract_checkpoint_statistics": null,
+      "contract_failures": [],
+      "actual_product_child_executed": false,
+      "preparation": {
+        "bound_inputs": 222,
+        "read_passes": 229,
+        "bytes_read": 26136568,
+        "final_fresh_hashes": 6,
+        "finished": false
+      },
+      "source_frame": {
+        "state": null,
+        "registered_live": null,
+        "input_count": null,
+        "input_bytes": null,
+        "complete_byte_boundaries": 0,
+        "handles": {
+          "input_lock_handles_opened": null,
+          "input_lock_handles_closed": null,
+          "input_lock_handles_remaining": null,
+          "active_reader_bindings": null,
+          "active_byte_streams": null,
+          "handle_close_failed_attempts": null
+        },
+        "borrowed": null
+      },
+      "sidecar_pin": null,
+      "observation": {
+        "samples": 45,
+        "host_cpu_max_percent": 100,
+        "own_cpu_max_machine_percent": 1.757812,
+        "own_private_max_bytes": 80146432,
+        "available_ram_min_percent": 22.169328483968712,
+        "last_four": [
+          {
+            "host_cpu_percent": 99.24,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 1064973,
+            "phase": "final_fresh_hash"
+          },
+          {
+            "host_cpu_percent": 100,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 0,
+            "phase": "final_fresh_hash"
+          },
+          {
+            "host_cpu_percent": 100,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 0,
+            "phase": "final_fresh_hash"
+          },
+          {
+            "host_cpu_percent": 100,
+            "own_cpu_percent": 0,
+            "logical_read_bytes_delta": 0,
+            "phase": "final_fresh_hash"
+          }
+        ]
+      }
+    }
+  ],
+  "accepted_progress": {
+    "runtime_source_qualified_individual_cases": 102,
+    "total_queue": 249,
+    "runtime_remaining_individual_cases": 147,
+    "regular": 141,
+    "corpus": 6,
+    "next_runtime_index": 109,
+    "successful_body_closing_pending": 0,
+    "historical_whole_reconciliation_count": 99
+  },
+  "optimization": {
+    "implemented": "Actual parent Frame.read_boundary now calls the same fresh held-path guard used by standalone source closing",
+    "retained": [
+      "same original Frame method and instance",
+      "all1658 inputs",
+      "before and after full-byte requirements",
+      "original AuditEvidenceReader._source boolean checks",
+      "original borrowed stream identity and duplicate cleanup",
+      "per-request fresh Native metadata and token checks",
+      "original owner/CPU/RAM/Job/deadline/pacing",
+      "restoration on success and exception"
+    ],
+    "new_sampler_thread_or_handle_cache": false,
+    "actual_CPU_improvement_measured": false,
+    "PC_freeze_resolved": false
+  },
+  "next_required": [
+    "Validate the preserved literal V20/828 LIGHT048/FRESH049/STOP050 under their original epoch; keep independent STOP review requirement",
+    "Validate actual held-path adapter fake regression tests after valid admission",
+    "Qualify full current/following423x2=846 under V21; historical828 is not current qualification",
+    "Fresh proof before any exact109 product execution; never replay107/108"
+  ],
+  "CPU_observer_diagnostic": {
+    "GetSystemTimes_formula_matches_primary_API_documentation": true,
+    "primary_source": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getsystemtimes",
+    "normal_period_counter_samples": [
+      15.05,
+      14.23
+    ],
+    "separate_Windows_formatted_counter_samples": [
+      12,
+      14
+    ],
+    "not_simultaneous_confirmation_of_saturated_period": true
+  },
+  "gates": {
+    "P09_gate": "OPEN",
+    "A12_gate": "OPEN",
+    "A13_gate": "OPEN",
+    "product_complete": false,
+    "PC_freeze_resolved": false,
+    "full249_current_qualified": false,
+    "signed16_current_qualified": false,
+    "whole1470_current_fresh_qualified": false,
+    "document_final_fresh": "NOT_RUN"
+  },
+  "scope": {
+    "UAC_or_Hangul_prompt": false,
+    "Git_or_build": false,
+    "Defender_OS_WSL_changes": false,
+    "foreign_process_termination": false,
+    "deletion_or_move": false
+  }
+}

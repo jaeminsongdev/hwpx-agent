@@ -1,0 +1,15 @@
+{
+  "schema_version": "hwpx-agent.p09-invocation-failure/v1",
+  "state": "FAILED_BEFORE_COMPILER_START",
+  "invocation": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/p09/run_formula_issuer_registry_provision.ps1 -Mode Build -Suite Provision -Variant r4",
+  "error_code": "PropertyNotFoundStrict",
+  "missing_property": "ProcessStartInfo.ArgumentList",
+  "cause": "Windows_PowerShell_5_runtime_not_supported_by_existing_runner",
+  "new_runtime_receipt_created": false,
+  "compiler_started": false,
+  "resolution": "confirmed_terminal_then_invoked_same_fresh_r4_with_supported_pwsh",
+  "runner_or_thresholds_changed": false,
+  "actual_sql_executed": false,
+  "P09_gate": "OPEN",
+  "product_complete": false
+}

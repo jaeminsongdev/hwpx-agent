@@ -1,0 +1,76 @@
+{
+  "schema": "hwpx-agent.p09-87-review-body-initial-failures/v1",
+  "state": "preserved_failures_no_native_or_gate_promotion",
+  "initial_reader_compile": {
+    "terminal_chunk_id": "20a3f2",
+    "exit_code": 1,
+    "errors": [
+      "E0433 undeclared production hex dependency",
+      "E0599 XmlAttributeToken::value does not exist",
+      "E0597 Self::import lifetime bound to local fresh forms"
+    ],
+    "corrections": "existing hex_digest and semantic_value; fresh type-qualified import; no new dependency"
+  },
+  "initial_new_test_compile": {
+    "terminal_chunk_id": "6f6ba6",
+    "exit_code": 1,
+    "error": "E0599 Properties::get does not exist",
+    "correction": "existing Properties::iter used; original domain API untouched"
+  },
+  "initial_lint": [
+    {
+      "initial_chunk_id": "af80e4",
+      "terminal_chunk_id": "b36b73",
+      "exit_code": 1,
+      "error": "new review importer 198/100 lines",
+      "correction": "new importer split into original-source collector/marker/read-link helpers"
+    },
+    {
+      "terminal_chunk_id": "49d7a5",
+      "exit_code": 1,
+      "error": "existing full_document::bind with new review guard 108/100 lines",
+      "correction": "new review guard extracted"
+    },
+    {
+      "terminal_chunk_id": "d1671f",
+      "exit_code": 1,
+      "error": "existing full_document::bind with extra helper call 101/100 lines",
+      "correction": "new review guard composes unchanged original section-settings helper; original call count/other guards preserved"
+    }
+  ],
+  "warnings_allowed": false,
+  "guards_or_budgets_weakened": false,
+  "frozen_comment_contract": {
+    "validator_chunk_id": "57885a",
+    "validator_exit_code": 1,
+    "error": "implementation_digest",
+    "python_unit_command_chunk_id": "fa2b06",
+    "tests": 5,
+    "passed": 4,
+    "failed": 1,
+    "changed_old_contract": false,
+    "drift_check_chunk_id": "d3929b",
+    "drift_file": "crates/domain-ir/src/lib.rs",
+    "current_canonical_sha256": "f7d26ac5a32f865e82f11ee7031e5ba17f40d679f523201ff33e60d3430aa791",
+    "old_canonical_sha256": "b4726732a47175205a7e35f3aa8e018e66b2a0fbada144bebeac3f395540c058",
+    "same_as_P86_current_raw_source": true,
+    "original_comment_model_and_tests_canonical_same": true
+  },
+  "conformance": {
+    "chunk_id": "be9620",
+    "exit_code": 1,
+    "error": "matrix_drift",
+    "original_matrix_unchanged": true
+  },
+  "failure_source_archives": [
+    "implementation/p09/source-archive/p09-87-pre-review-bodies/initial-compile/crates/hwpx-package/src/document_import/structure/review.rs",
+    "implementation/p09/source-archive/p09-87-pre-review-bodies/initial-test-compile/crates/hwpx-package/tests/document_import_review.rs",
+    "implementation/p09/source-archive/p09-87-pre-review-bodies/initial-lint/crates/hwpx-package/src/document_import/structure/review.rs",
+    "implementation/p09/source-archive/p09-87-pre-review-bodies/initial-guard-lint/crates/product-cli/src/form_value_operation/full_document.rs",
+    "implementation/p09/source-archive/p09-87-pre-review-bodies/initial-guard-helper-lint/crates/product-cli/src/form_value_operation/full_document.rs"
+  ],
+  "native_executed": false,
+  "P09_gate": "OPEN",
+  "p09_complete": false,
+  "product_complete": false
+}

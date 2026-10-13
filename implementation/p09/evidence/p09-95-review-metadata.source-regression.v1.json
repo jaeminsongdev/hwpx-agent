@@ -1,0 +1,266 @@
+{
+  "schema": "hwpx-agent.p09-95-review-metadata-regression/v1",
+  "state": "pass_scoped_original_source_and_stored_reader_regression_NOT_native_or_full_product_gate",
+  "major_run": {
+    "start_chunk_id": "c4a5af",
+    "terminal_chunk_id": "110e0f",
+    "session_id": 90425,
+    "exit_code": 0,
+    "package": {
+      "terminal_chunk_id": "428fb8",
+      "exit_code": 0,
+      "targets": [
+        {
+          "target": "hwpx_package_lib",
+          "passed": 42,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "document_import_assembly_review",
+          "passed": 3,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "document_import_catalog",
+          "passed": 7,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "document_import_fields",
+          "passed": 12,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "document_import_memo_catalog",
+          "passed": 6,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "document_import_review",
+          "passed": 15,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "document_import_review_metadata",
+          "passed": 8,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "text_flow",
+          "passed": 12,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "total_passed": 105
+    },
+    "product": {
+      "terminal_chunk_id": "110e0f",
+      "exit_code": 0,
+      "comment_operation_terminal": "6dc926",
+      "targets": [
+        {
+          "target": "comment_operation",
+          "passed": 8,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "form_stored_provider",
+          "passed": 128,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "target": "stored_comment_provider",
+          "passed": 16,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "total_passed": 152
+    },
+    "total_Rust_passed": 257,
+    "failed": 0,
+    "ignored": 0,
+    "new_function_tests": 13
+  },
+  "final_small_rerun": {
+    "start_chunk_id": "46cbd8",
+    "terminal_chunk_id": "edc371",
+    "session_id": 90777,
+    "exit_code": 0,
+    "package_private_budget": 2,
+    "package_review_metadata": 8,
+    "product_source_review_metadata": 3,
+    "total_passed": 13,
+    "original_125_product_tests_NOT_rerun_in_final_small_pass": true,
+    "last_source_edit_after_major_run": "only module documentation comment; current code rebuilt and new13 reexecuted"
+  },
+  "python_verifier": {
+    "terminal_chunk_id": "ba9b82",
+    "passed": 3,
+    "exit_code": 0
+  },
+  "strict_clippy": [
+    {
+      "target": "hwpx-package --lib --test document_import_review_metadata",
+      "terminal_chunk_id": "daf5f3",
+      "exit_code": 0
+    },
+    {
+      "target": "hwpx-agent-cli --lib --test form_stored_provider",
+      "terminal_chunk_id": "b31409",
+      "exit_code": 0
+    },
+    {
+      "target": "hwpx-package --tests",
+      "terminal_chunk_id": "8e9409",
+      "exit_code": 0
+    }
+  ],
+  "format_and_diff": {
+    "terminal_chunk_id": "f1ded2",
+    "exit_code": 0
+  },
+  "component_conformance": {
+    "terminal_chunk_id": "db8f3d",
+    "exit_code": 0,
+    "upstream_validators_verified": 15,
+    "green_rows": 0,
+    "P09_gate": "OPEN",
+    "qualification": "original component scope; NOT new native metadata or full product acceptance"
+  },
+  "original_default_conformance": {
+    "terminal_chunk_id": "26f789",
+    "exit_code": 1,
+    "state": "FAIL:matrix_drift",
+    "preserved": true
+  },
+  "current_executables": [
+    {
+      "path": "target/p09-95-regression/debug/deps/comment_operation-75493e8123c566c8.exe",
+      "bytes": 4965376,
+      "sha256": "68945053acc2cfc6722066b12e9919f480893ed5a325de27d212ea5813820ab8",
+      "target": "comment_operation",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "current_stage_original_and_new_Rust_tests_NOT_native_or_SQL_or_full_product_Gate"
+    },
+    {
+      "path": "target/p09-95-regression/debug/deps/document_import_assembly_review-312fc213dbce8bd9.exe",
+      "bytes": 9093120,
+      "sha256": "fd6eeeb9b69e4330fc9c3136e09c39ed8ad556fbcfa9fc18499ca790109b102c",
+      "target": "document_import_assembly_review",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "current_stage_original_and_new_Rust_tests_NOT_native_or_SQL_or_full_product_Gate"
+    },
+    {
+      "path": "target/p09-95-regression/debug/deps/document_import_catalog-ecd36ef380e89478.exe",
+      "bytes": 6931456,
+      "sha256": "38689d2a4db755f21a16a5f7c442e96cfc77af404b54cf83019198087cc50afc",
+      "target": "document_import_catalog",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "current_stage_original_and_new_Rust_tests_NOT_native_or_SQL_or_full_product_Gate"
+    },
+    {
+      "path": "target/p09-95-regression/debug/deps/document_import_fields-cac70a6adee69279.exe",
+      "bytes": 5879808,
+      "sha256": "87a8b57c0f71ebec0689527a8390288f076cf95bba69f528964e6aa0e2ca31b2",
+      "target": "document_import_fields",
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "current_stage_original_and_new_Rust_tests_NOT_native_or_SQL_or_full_product_Gate"
+    },
+    {
+      "path": "target/p09-95-regression/debug/deps/document_import_memo_catalog-093bd8d5c2597e35.exe",
+      "bytes": 9219584,
+      "sha256": "af8a9631c92dcf0a59c11a501637524d958e9484825b987a5fac4d9760d6ded3",
+      "target": "document_import_memo_catalog",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "current_stage_original_and_new_Rust_tests_NOT_native_or_SQL_or_full_product_Gate"
+    },
+    {
+      "path": "target/p09-95-regression/debug/deps/document_import_review_metadata-8537eb795457ed5e.exe",
+      "bytes": 10197504,
+      "sha256": "b2fc15877ea5348e1acf2c4beabd89f83663311cb99a94afa4135196853f96c6",
+      "target": "document_import_review_metadata",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "current_stage_original_and_new_Rust_tests_NOT_native_or_SQL_or_full_product_Gate"
+    },
+    {
+      "path": "target/p09-95-regression/debug/deps/document_import_review-67551457d524f20f.exe",
+      "bytes": 6639616,
+      "sha256": "fdb03be77bd7781ce3986d48f10cb721f00c32a68cdecb65065ebe7bea8cff3b",
+      "target": "document_import_review",
+      "passed": 15,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "current_stage_original_and_new_Rust_tests_NOT_native_or_SQL_or_full_product_Gate"
+    },
+    {
+      "path": "target/p09-95-regression/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+      "bytes": 16448512,
+      "sha256": "55568eefa0320602d6ce234016a2eceebae2d98cc476e501f0c690ab99c2aba2",
+      "target": "form_stored_provider",
+      "passed": 128,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "current_stage_original_and_new_Rust_tests_NOT_native_or_SQL_or_full_product_Gate"
+    },
+    {
+      "path": "target/p09-95-regression/debug/deps/hwpx_package-a850ad738bc59b10.exe",
+      "bytes": 13276160,
+      "sha256": "4b326bbbaeeed4b34afac8df259a59e7029e876f416edc08d505854d89ff6846",
+      "target": "hwpx_package_lib",
+      "passed": 42,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "current_stage_original_and_new_Rust_tests_NOT_native_or_SQL_or_full_product_Gate"
+    },
+    {
+      "path": "target/p09-95-regression/debug/deps/stored_comment_provider-9065c76bcbac10b7.exe",
+      "bytes": 7130112,
+      "sha256": "d50e00ec4e2393a93e41bf90e559383634b4a0bf50f718d81af9a59eb06dec6c",
+      "target": "stored_comment_provider",
+      "passed": 16,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "current_stage_original_and_new_Rust_tests_NOT_native_or_SQL_or_full_product_Gate"
+    },
+    {
+      "path": "target/p09-95-regression/debug/deps/text_flow-511dd1904a1b61b0.exe",
+      "bytes": 3942912,
+      "sha256": "5277b905fb71ec79d83ae62a8d61924e79d8a59ec8f5f379b98cba169ab98dbe",
+      "target": "text_flow",
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "current_stage_original_and_new_Rust_tests_NOT_native_or_SQL_or_full_product_Gate"
+    }
+  ],
+  "fixture_scope": "existing synthetic native-format package fixtures; actual capture zero-review negative; in-memory repositories with actual AES-GCM/ACL/head code and synthetic actor/scanner/key; NOT native capture or issuer or SQL proof",
+  "native_executed": false,
+  "actual_SQL_executed": false,
+  "HWPX_comment_lowering": false,
+  "full_comment_product_acceptance": false,
+  "product_complete": false,
+  "P09_gate": "OPEN"
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": "hwpx-agent.p09-moved-readback-buffer-candidate/v1",
+  "qualification": "SOURCE_CANDIDATE_ONLY_NOT_BUILD_RUNTIME_SQL_OR_GATE",
+  "baseline_build_pin": {
+    "path": "target/p09-149-current-issuer-build/current-issuer-build-r4.json",
+    "bytes": 305455,
+    "sha256": "5ce53cf4938ceaa2e8295644e57e3f4fc8becc6a20bdaca4db9cfb6bf5be86c7"
+  },
+  "parent_candidate_pin": {
+    "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip-candidate.run01.v1.json",
+    "bytes": 1738,
+    "sha256": "ec30cdc4344d1bca94e1de3f583cdd811fddc3822a08d958fd51623360f16343"
+  },
+  "preimage_archive": "implementation/p09/source-archive/p09-149-pre-moved-readback-buffer-r7/source-preimages.v1.json",
+  "source_deltas": [
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics/evaluation/output/readback.rs",
+      "bytes": 9609,
+      "sha256": "2cc67be43500163249cf81e90d8fd11df4b40961ea397a3d55970137a9c2f5dd"
+    }
+  ],
+  "implementation": "Move each fresh bounded part read into the expected-output buffer instead of duplicating the entire part. Preserve original-length span bounds, reverse splice order, ASCII/overlap validation, all full candidate imports and exact full part comparisons. Immutable source package and all fresh authorization/service reads unchanged. Keep original allocating algorithm as independent test oracle; add four regressions. No cross-read cache.",
+  "reviewed_Rust_deltas_from_r4": 19,
+  "library_Rust_deltas_from_r4": 18,
+  "unit_tests": 4,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "actual_SQL_or_native_qualified": false
+}

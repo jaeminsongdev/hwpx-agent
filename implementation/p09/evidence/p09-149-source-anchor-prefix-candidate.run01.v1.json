@@ -1,0 +1,41 @@
+{
+  "schema_version": "hwpx-agent.p09-source-anchor-prefix-candidate/v1",
+  "qualification": "SOURCE_CANDIDATE_ONLY_NOT_BUILD_RUNTIME_SQL_OR_GATE",
+  "baseline_build_pin": {
+    "path": "target/p09-149-current-issuer-build/current-issuer-build-r4.json",
+    "bytes": 305455,
+    "sha256": "5ce53cf4938ceaa2e8295644e57e3f4fc8becc6a20bdaca4db9cfb6bf5be86c7"
+  },
+  "parent_candidate_pin": {
+    "path": "implementation/p09/evidence/p09-149-formula-reconstruction-source-candidate.run02.v1.json",
+    "bytes": 3449,
+    "sha256": "24fd2df9dfb82f03639f7a199520b1d3a5b2a32c5aed4d65f2882562229a1330"
+  },
+  "preimage_archive": "implementation/p09/source-archive/p09-149-pre-source-anchor-prefix-sharing-r4/source-preimages.v1.json",
+  "source_deltas": [
+    {
+      "path": "crates/hwpx-package/src/document_import.rs",
+      "bytes": 19254,
+      "sha256": "f82b5229747775e0e98bf195c844764828ef70baa55a560154b2900928f6e2ec"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_source.rs",
+      "bytes": 21695,
+      "sha256": "45dd94b989e58c46a06e342ad74081ae683ddc65aa0785c0651027873bc46be3"
+    }
+  ],
+  "implementation": "Share five immutable profile/document/package/path/part-digest SHA256 frames only within one freshly admitted part. Clone unfinalized same-part hash state for each original whole-part/element suffix. All original framing, raw fingerprint hashes, overlapping fingerprint budgets, provenance order, equality and fresh source reconstruction retained. No cross-part/read/operation cache or authorization change.",
+  "runtime_test_scope": {
+    "source": 12,
+    "forms": 10,
+    "fields": 12,
+    "meanings": 13,
+    "formula_evaluation": 10,
+    "formula_output": 6,
+    "stored_forms": 249
+  },
+  "reviewed_Rust_deltas_from_r4": 16,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "actual_SQL_or_native_qualified": false
+}

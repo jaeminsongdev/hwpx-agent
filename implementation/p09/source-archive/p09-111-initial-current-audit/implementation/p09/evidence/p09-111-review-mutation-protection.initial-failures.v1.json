@@ -1,0 +1,233 @@
+{
+  "schema": "hwpx-agent.p09-111-review-mutation-protection-initial-failures/v1",
+  "recorded_at_utc": "2026-10-04 22:23:41 UTC",
+  "failures": [
+    {
+      "kind": "actual_original_P110_mutation_protection_failures",
+      "start_chunk": "3d108c",
+      "session_id": 1335,
+      "terminal_chunk": "0a9a2c",
+      "exit_code": 1,
+      "passed": 16,
+      "failed": 6,
+      "source": {
+        "path": "implementation/p09/source-archive/p09-111-prefixed-regression/mutation_protection.rs",
+        "bytes": 12032,
+        "sha256": "8fd1da99474b5a10910090ca77a0154abbb2cb65eb4783e7d3fc3d7a1f1779b7"
+      },
+      "executable": {
+        "path": "target/p09-111-review-mutation-protection/debug/deps/review_cell_body_output-581a88b7cee111ae-before-fix.exe",
+        "bytes": 8542720,
+        "sha256": "e7bb4e7dfde4840de22aa573a86ee89eab1be09e26aeca362e37b2c1b8b3d5cc"
+      },
+      "original_production_whole_preimages": [
+        {
+          "path": "crates/hwpx-package/src/document_import/structure/review/body_output.rs",
+          "bytes": 15593,
+          "sha256": "f9b49b714051856f621d2b6f22a329810946cd02babec1e5a0c1a7ec9ae9e93d",
+          "archive_path": "implementation/p09/source-archive/p09-111-pre-review-mutation-protection/crates/hwpx-package/src/document_import/structure/review/body_output.rs"
+        },
+        {
+          "path": "crates/hwpx-package/src/document_import/structure/review/delete_output.rs",
+          "bytes": 13278,
+          "sha256": "8c9d5c89e2499c2cfd98417d2cd7f824cb6f5645be65f50b22ab53a832d975ca",
+          "archive_path": "implementation/p09/source-archive/p09-111-pre-review-mutation-protection/crates/hwpx-package/src/document_import/structure/review/delete_output.rs"
+        },
+        {
+          "path": "crates/hwpx-package/src/document_import/structure/review/cell_body_output.rs",
+          "bytes": 7837,
+          "sha256": "1f4774bdfd6c9a094e68d565a7501fb35be7fb33e69d5524a7f49b4a78998170",
+          "archive_path": "implementation/p09/source-archive/p09-111-pre-review-mutation-protection/crates/hwpx-package/src/document_import/structure/review/cell_body_output.rs"
+        }
+      ],
+      "actual_protection_gaps_NOT_weakened_negative_fixtures": true
+    },
+    {
+      "kind": "strict_lint_original_big_function_line_limits",
+      "start_chunk": "011735",
+      "session_id": 4848,
+      "terminal_chunk": "83613a",
+      "exit_code": 1,
+      "errors": 2,
+      "body_function_lines": "101/100",
+      "delete_function_lines": "102/100",
+      "source_archives": [
+        {
+          "path": "implementation/p09/source-archive/p09-111-initial-lint-and-empty-checker/crates/hwpx-package/src/document_import/structure/review/body_output.rs",
+          "bytes": 15679,
+          "sha256": "f736ada83a13ad206a45ca4f31288cc39fcb61c8419c24a9c2807fe3cab8cba9"
+        },
+        {
+          "path": "implementation/p09/source-archive/p09-111-initial-lint-and-empty-checker/crates/hwpx-package/src/document_import/structure/review/cell_body_output.rs",
+          "bytes": 8913,
+          "sha256": "101a3ce645c1e25e3963ae782940aa7eacfaeeaab3a799c60c60dfed8eb35030"
+        },
+        {
+          "path": "implementation/p09/source-archive/p09-111-initial-lint-and-empty-checker/crates/hwpx-package/src/document_import/structure/review/delete_output.rs",
+          "bytes": 13618,
+          "sha256": "585861335f4e6f097d4f539f6f21e9b000fb68303581987a4b88d2bbe0cb2fcb"
+        }
+      ],
+      "diagnostic_executables": [
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/comment_operation-75493e8123c566c8-pre-lint-refactor.exe",
+          "bytes": 5268992,
+          "sha256": "63923036319fd336c3d6cc5d7001fd15f7a8a145af43cc2fa97a94afcedc23a1"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/document_import_assembly_review-312fc213dbce8bd9-pre-lint-refactor.exe",
+          "bytes": 9092608,
+          "sha256": "312aa5a5b69e6fb0458ba6966155d86550104456871971be0ec667799dbdf5d2"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/document_import_memo_catalog-093bd8d5c2597e35-pre-lint-refactor.exe",
+          "bytes": 9219584,
+          "sha256": "2f3e18d8d7828891a0a6e2acf19450826f97cc5bc914f458a2ccfa641cecc8cb"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/document_import_review_metadata-8537eb795457ed5e-pre-lint-refactor.exe",
+          "bytes": 10197504,
+          "sha256": "f85e3133cf35e77a900e626f6ddfaa249c2e7c09ba83cb4dcf4730756f6723e8"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/document_import_review-67551457d524f20f-pre-lint-refactor.exe",
+          "bytes": 6639616,
+          "sha256": "4bd248dc0b653ac131c0de68503bb3d760a3b6e678c230f73113785eea14ee37"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/form_stored_provider-e02d02396d2f2bbd-pre-lint-refactor.exe",
+          "bytes": 19790848,
+          "sha256": "2125c0fe6585ab7312eea3a1408638e801d0c51782dd02628abf79107119b2a9"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/hwpx_agent_cli-pre-lint-refactor.exe",
+          "bytes": 5084160,
+          "sha256": "6f647814cab00edbb14a02a5d2b156c7b644b080fcbcb6564c67f80f1c353436"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/hwpx_package-a850ad738bc59b10-pre-lint-refactor.exe",
+          "bytes": 13276160,
+          "sha256": "35cce793ea6d3155ecee944c3e18786270b5c474dfd2822a4c6e41917910098e"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/id_index-b06ac4c244093f4c-pre-lint-refactor.exe",
+          "bytes": 3729408,
+          "sha256": "a2777417142b6f375680500190be04db4831f34feaf19cb0d62837e2c79beca9"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/memo_style_output-f87ca3d69966fa82-pre-lint-refactor.exe",
+          "bytes": 7854080,
+          "sha256": "065e12c35defe8fae271512d0eb04bc9ec951d9e2554c4509519f1727148f490"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/patch_element_content-4a43081747b336ae-pre-lint-refactor.exe",
+          "bytes": 6289408,
+          "sha256": "48109d9f7ed279950a727cf18614387f7036d813f56b08249e9bec30a2816db3"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/patch_engine-f16fef8e94eda711-pre-lint-refactor.exe",
+          "bytes": 5147136,
+          "sha256": "ec9502be31005886e346d7f6d22167ab33d5b95379bc79bf581fc66ddce3986a"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_body_output-8759bbf6453e18f5-pre-lint-refactor.exe",
+          "bytes": 6944768,
+          "sha256": "7d3021fcf92f23d88056d24f734dfae153c59d41b839ded73494db1b0bf157cc"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_cell_body_output-581a88b7cee111ae-pre-lint-refactor.exe",
+          "bytes": 8544768,
+          "sha256": "ca850e1f7b07f97128e3dc2216104f15404651f46f6ad536d5cd888fab932418"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_delete_output-c5dd540b6b40acb8-pre-lint-refactor.exe",
+          "bytes": 6903808,
+          "sha256": "72af5e3a369b7c10d6ec367c2e8f1670a495aa41d1bb31bbe37a10ad4d90b829"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_filled_table_output-c9fe0a354b64314c-pre-lint-refactor.exe",
+          "bytes": 9693696,
+          "sha256": "349b4c1dd713b906267f2bbc42bac12871708dea13973a337034c859f1793c33"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_locations-64747444168c92b2-pre-lint-refactor.exe",
+          "bytes": 6041088,
+          "sha256": "253e1245b3605b047656b10d950a7474d771c3ea05a51f24391ec2675428ec9f"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_paragraph_output-e7777a91049aeb82-pre-lint-refactor.exe",
+          "bytes": 7227904,
+          "sha256": "97f575d242ff4a692cb37c8243553bf5c3c754eeaa5c1b30b5b396453a242111"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/review_table_output-b0f1a70b4428ad1b-pre-lint-refactor.exe",
+          "bytes": 9373184,
+          "sha256": "f66a84599146d6ec9384df287df099fd1c8d99c5d2193266af302c67e84edd12"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/stored_comment_provider-9065c76bcbac10b7-pre-lint-refactor.exe",
+          "bytes": 7485440,
+          "sha256": "a2c8e1508b5c963905dce6736480135efff68e8948e28d926938db54490cb217"
+        },
+        {
+          "path": "target/p09-111-review-mutation-protection/debug/deps/text_flow-511dd1904a1b61b0-pre-lint-refactor.exe",
+          "bytes": 3943424,
+          "sha256": "4cd71acf9ece495a89f5cf4320edeaa97b559479b84e063cf4a6ef0dfdd6b5b5"
+        }
+      ],
+      "correction": "Unified private ancestor+subtree guard and private deletion-target helper. No allow-warning, original limit, private visibility, ID/budget/readback guard relaxation."
+    },
+    {
+      "kind": "incomplete_read_output_consumed_as_empty_new_checker_content",
+      "discovered_chunk": "2b9b0d",
+      "new_files_bytes": 1,
+      "unaccepted_empty_python_exit0_chunk": "97f25e",
+      "read_handle_details": "not retained; underlying cause unverified",
+      "sources": [
+        {
+          "path": "implementation/p09/source-archive/p09-111-initial-lint-and-empty-checker/tools/p09/verify_review_mutation_protection_progress.py",
+          "bytes": 1,
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        },
+        {
+          "path": "implementation/p09/source-archive/p09-111-initial-lint-and-empty-checker/tools/p09/tests/test_review_mutation_protection_progress.py",
+          "bytes": 1,
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        }
+      ],
+      "original_files_overwritten": false,
+      "empty_exit0_counted_as_verification": false,
+      "corrected_template_read_chunks": [
+        "0dbc78",
+        "e2cff4"
+      ],
+      "corrected_template_chars": [
+        10480,
+        5941
+      ],
+      "actual_python8_terminal_chunk": "894705",
+      "actual_prior_audit_terminal_chunk": "d0ea66"
+    }
+  ],
+  "initial_guard_focused": {
+    "start_chunk": "6cbb38",
+    "session_id": 96380,
+    "terminal_chunk": "f035e0",
+    "exit_code": 0,
+    "passed": 22,
+    "not_added_again_to_final_counts": true
+  },
+  "initial_pre_lint_full_suites": {
+    "package_terminal_chunk": "10a10b",
+    "product_terminal_chunk": "1caf87",
+    "exit_code": 0,
+    "not_final_code_evidence_or_added_to_final_counts": true
+  },
+  "original_default_failure": {
+    "terminal_chunk": "a5619b",
+    "exit_code": 1,
+    "error": "matrix_drift",
+    "retained": true
+  },
+  "native_SQL_product_Gate_acceptance": false
+}

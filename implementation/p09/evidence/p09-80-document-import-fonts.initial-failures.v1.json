@@ -1,0 +1,73 @@
+{
+  "schema": "hwpx-agent.p09-80-fonts-initial-failures/v1",
+  "date": "2026-10-04",
+  "historical_failures_preserved": true,
+  "failures": [
+    {
+      "kind": "new-core-helper-api",
+      "terminal_chunk": "6a37d5",
+      "exit_code": 1,
+      "error": "Properties has no get method",
+      "correction": "new helper uses original iter API; original Properties unchanged"
+    },
+    {
+      "kind": "invocation",
+      "terminal_chunk": "db2f76",
+      "exit_code": 1,
+      "error": "product-cli is a directory, not Cargo package ID",
+      "correction": "actual package ID hwpx-agent-cli; no dependency changes"
+    },
+    {
+      "kind": "new-test-api",
+      "terminal_chunk": "4a4d60",
+      "exit_code": 1,
+      "error": "XmlElementToken has no full_span method",
+      "correction": "new test uses checked outer_span; original XML API unchanged"
+    },
+    {
+      "kind": "new-service-test-api",
+      "terminal_chunk": "dc532a",
+      "exit_code": 1,
+      "error": "set_permissions returns u64, unlike unit branch",
+      "correction": "new test retains original call and discards return via statement"
+    },
+    {
+      "kind": "new-test-helper-lint",
+      "terminal_chunk": "858a1a",
+      "exit_code": 1,
+      "error": "duplicate_mod and nonminimal_bool, plus existing new-test compile failure",
+      "correction": "reuse unchanged frozen input loader via test-only sibling module visibility; simplify new helper boolean; no allow or skip"
+    },
+    {
+      "kind": "concurrent-build-output-lock",
+      "terminal_chunk": "3d838f",
+      "exit_code": 1,
+      "error": "LNK1104: form_stored_provider-e02d02396d2f2bbd.exe remained in use by live focused run",
+      "correction": "focused session25380 observed terminal exit0 at bc0913; zero remaining exact-name processes before new full run10827; no kill, deletion or test filtering"
+    }
+  ],
+  "source_archives": [
+    {
+      "path": "implementation/p09/source-archive/p09-80-initial-font-compile/crates/hwpx-package/src/document_import/fields/semantics/catalog/fonts/source.rs",
+      "bytes": 8900,
+      "sha256": "f8b8d3b86d2526ed481292e8a361b2d65bb7afd6718c870f85fd450c827d9bf9"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-80-initial-font-service-lint/crates/hwpx-package/tests/support/document_import_fonts_fixture.rs",
+      "bytes": 3300,
+      "sha256": "5fcb2d55ddcf6930137215dbeffae4c4715479ac283d1d8178f3a711010ea340"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-80-initial-font-service-lint/crates/product-cli/tests/form_stored_provider/actual_import/source_fonts.rs",
+      "bytes": 8543,
+      "sha256": "0b3194065187642464d89906f45e1cb8a1416a0265a576a81c8cc31cb804d9be"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-80-initial-font-tests/crates/hwpx-package/tests/document_import_fonts.rs",
+      "bytes": 7184,
+      "sha256": "b2ced0102998d70408cf4ba4c5603e39bbbb154d26365d6c8bd5db1bd45cf456"
+    }
+  ],
+  "originals_not_modified_to_manufacture_pass": true,
+  "logs_not_dumped": true
+}

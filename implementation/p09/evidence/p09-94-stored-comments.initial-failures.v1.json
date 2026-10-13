@@ -1,0 +1,66 @@
+{
+  "schema": "hwpx-agent.p09-94-stored-comment-initial-failures/v1",
+  "initial_compile": {
+    "chunk_id": "315291",
+    "exit_code": 1,
+    "diagnostic": "E0609 new test used nonexistent DocumentGraphDraft.security; corrected new tests to ORIGINAL security_state",
+    "whole_source_archives": [
+      {
+        "path": "implementation/p09/source-archive/p09-94-initial-tests/crates/product-cli/src/form_stored_provider/comments.rs",
+        "bytes": 10150,
+        "sha256": "b1453d2dba4225890ff334d2727ad135b88e3e098fd699cbbfaaa87654fbcc79"
+      },
+      {
+        "path": "implementation/p09/source-archive/p09-94-initial-tests/crates/product-cli/tests/stored_comment_provider.rs",
+        "bytes": 21774,
+        "sha256": "4532e95d87549f1f402632ff683124c8a97451297ea4af4c8fcebcf6402c286c"
+      },
+      {
+        "path": "implementation/p09/source-archive/p09-94-initial-tests/crates/product-cli/tests/stored_comment_provider/comment_fixture.rs",
+        "bytes": 8694,
+        "sha256": "295f58bb44be58d3933b3795665b3944e461443ff2208044e46589e01b3609fb"
+      },
+      {
+        "path": "implementation/p09/source-archive/p09-94-initial-tests/crates/product-cli/tests/stored_comment_provider/store_fixture.rs",
+        "bytes": 10203,
+        "sha256": "0679765979d24106f23486d1b3696a935bede801eca1826617e25110ca55a054"
+      }
+    ],
+    "original_product_guards_or_tests_weakened": false
+  },
+  "strict_lint_failures": [
+    {
+      "chunk_id": "0f224d",
+      "exit_code": 1,
+      "diagnostic": "collapsible_if in new stored_state"
+    },
+    {
+      "chunk_id": "c24b4d",
+      "exit_code": 1,
+      "diagnostic": "elidable_lifetime_names and semicolon_if_nothing_returned in new test"
+    }
+  ],
+  "preservation_probe_failure": {
+    "chunk_id": "c1f60f",
+    "exit_code": 1,
+    "diagnostic": "audit probe retained P92 selector while expecting P93 count; corrected to P93, exact hash/coverage requirements retained",
+    "corrected_chunk_id": "12512f",
+    "product_drift_detected": false
+  },
+  "conformance_unknown_argument_probe": {
+    "chunk_id": "8c7993",
+    "command": "python tools/p09/validate_reference_conformance_contract.py --help",
+    "diagnostic": "source_profile_unknown; unsupported argument, NOT a successful conformance run",
+    "shell_combined_exit_not_used_as_validation": true
+  },
+  "historical_default_conformance": {
+    "chunk_id": "acabad",
+    "exit_code": 1,
+    "result": {
+      "error": "matrix_drift",
+      "state": "fail"
+    },
+    "retained": true
+  },
+  "native_or_SQL_failure_reclassified": false
+}

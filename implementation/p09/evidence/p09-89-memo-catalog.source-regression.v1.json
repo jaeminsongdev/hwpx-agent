@@ -1,0 +1,187 @@
+{
+  "schema": "hwpx-agent.p09-89-memo-catalog-source-regression/v1",
+  "state": "scoped_current_original_catalog_assembly_and_authenticated_stored_read_regression_pass_not_mutation_or_native_gate",
+  "package": {
+    "command": "cargo test -p hwpx-package --test text_flow --test document_import_source --test document_import_structure --test document_import_forms --test document_import_fields --test document_import_field_semantics --test document_import_notes --test document_import_bookmarks --test document_import_review --test document_import_form_policies --test document_import_catalog --test document_import_fonts --test document_import_active_security --test document_import_section_settings --test document_import_formula_evaluation --test document_import_assembly --test document_import_assembly_review --test document_import_memo_catalog",
+    "targets": 18,
+    "passed": 166,
+    "failed": 0,
+    "exit_code": 0,
+    "initial_chunk_id": "686445",
+    "terminal_chunk_id": "3bcf3b"
+  },
+  "package_private_catalog": {
+    "command": "cargo test -p hwpx-package --lib document_import::fields::semantics::catalog",
+    "passed": 5,
+    "failed": 0,
+    "exit_code": 0,
+    "terminal_chunk_id": "3bcf3b"
+  },
+  "product": {
+    "command": "cargo test -p hwpx-agent-cli --test form_stored_provider --test form_stored_product_request --test policy_bound_form_import --test form_value_operation",
+    "targets": 4,
+    "passed": 152,
+    "failed": 0,
+    "exit_code": 0,
+    "initial_chunk_id": "7776ab",
+    "terminal_chunk_id": "0f0cbb",
+    "stored_provider_passed": 125,
+    "stored_provider_elapsed_seconds": 266.06
+  },
+  "original_comment_component": {
+    "commands": [
+      "cargo test -p domain-ir --test comment_model",
+      "cargo test -p domain-ir --lib comment_model"
+    ],
+    "passed": 11,
+    "failed": 0,
+    "individual_exit_codes": [
+      0,
+      0
+    ],
+    "terminal_chunk_id": "3bcf3b"
+  },
+  "total_passed_Rust_tests": 334,
+  "new_public_memo_catalog_tests": 6,
+  "new_private_memo_catalog_tests": 1,
+  "new_stored_memo_catalog_tests": 4,
+  "new11_included_not_extra": true,
+  "additional_legacy_catalog_fonts_security_settings_formula_tests": 34,
+  "targets": [
+    {
+      "target": "document_import_bookmarks",
+      "passed": 10,
+      "path": "target/debug/deps/document_import_bookmarks-74a6fbeb6250462d.exe"
+    },
+    {
+      "target": "document_import_field_semantics",
+      "passed": 11,
+      "path": "target/debug/deps/document_import_field_semantics-464254f1536720e4.exe"
+    },
+    {
+      "target": "document_import_fields",
+      "passed": 12,
+      "path": "target/debug/deps/document_import_fields-cac70a6adee69279.exe"
+    },
+    {
+      "target": "document_import_form_policies",
+      "passed": 14,
+      "path": "target/debug/deps/document_import_form_policies-3ed0deb2a55bc591.exe"
+    },
+    {
+      "target": "document_import_forms",
+      "passed": 10,
+      "path": "target/debug/deps/document_import_forms-c6007f066e757199.exe"
+    },
+    {
+      "target": "document_import_notes",
+      "passed": 11,
+      "path": "target/debug/deps/document_import_notes-44c8a108ebd84c66.exe"
+    },
+    {
+      "target": "document_import_review",
+      "passed": 15,
+      "path": "target/debug/deps/document_import_review-67551457d524f20f.exe"
+    },
+    {
+      "target": "document_import_source",
+      "passed": 10,
+      "path": "target/debug/deps/document_import_source-c22fefefc9d531ce.exe"
+    },
+    {
+      "target": "document_import_structure",
+      "passed": 14,
+      "path": "target/debug/deps/document_import_structure-1c3e383906925a4a.exe"
+    },
+    {
+      "target": "text_flow",
+      "passed": 12,
+      "path": "target/debug/deps/text_flow-511dd1904a1b61b0.exe"
+    },
+    {
+      "target": "form_stored_product_request",
+      "passed": 8,
+      "path": "target/debug/deps/form_stored_product_request-6c30ea9633165961.exe"
+    },
+    {
+      "target": "form_stored_provider",
+      "passed": 125,
+      "path": "target/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe"
+    },
+    {
+      "target": "form_value_operation",
+      "passed": 18,
+      "path": "target/debug/deps/form_value_operation-899bdd52f412e0da.exe"
+    },
+    {
+      "target": "policy_bound_form_import",
+      "passed": 1,
+      "path": "target/debug/deps/policy_bound_form_import-dbc5d546fda182f4.exe"
+    },
+    {
+      "target": "comment_model",
+      "passed": 10,
+      "path": "target/debug/deps/comment_model-7d8aabb3e248028a.exe"
+    },
+    {
+      "target": "domain_ir",
+      "passed": 1,
+      "path": "target/debug/deps/domain_ir-ecb12d853696afea.exe"
+    },
+    {
+      "target": "document_import_assembly",
+      "passed": 4,
+      "path": "target/debug/deps/document_import_assembly-3ee3d0371c9a396b.exe"
+    },
+    {
+      "target": "document_import_assembly_review",
+      "passed": 3,
+      "path": "target/debug/deps/document_import_assembly_review-312fc213dbce8bd9.exe"
+    },
+    {
+      "target": "hwpx_package",
+      "filter": "document_import::fields::semantics::catalog",
+      "passed": 5,
+      "path": "target/debug/deps/hwpx_package-a850ad738bc59b10.exe"
+    },
+    {
+      "target": "document_import_memo_catalog",
+      "passed": 6,
+      "path": "target/debug/deps/document_import_memo_catalog-093bd8d5c2597e35.exe"
+    },
+    {
+      "target": "document_import_catalog",
+      "passed": 7,
+      "path": "target/debug/deps/document_import_catalog-ecd36ef380e89478.exe"
+    },
+    {
+      "target": "document_import_fonts",
+      "passed": 7,
+      "path": "target/debug/deps/document_import_fonts-771fc73b042043a0.exe"
+    },
+    {
+      "target": "document_import_active_security",
+      "passed": 5,
+      "path": "target/debug/deps/document_import_active_security-d5a9b76c9d8dd591.exe"
+    },
+    {
+      "target": "document_import_section_settings",
+      "passed": 5,
+      "path": "target/debug/deps/document_import_section_settings-6aae40d34645d605.exe"
+    },
+    {
+      "target": "document_import_formula_evaluation",
+      "passed": 10,
+      "path": "target/debug/deps/document_import_formula_evaluation-7ce11a20f7395847.exe"
+    }
+  ],
+  "all_actual36_previous_graph_oracles_retained": true,
+  "actual36_current_memo_properties": 0,
+  "actual36_current_explicit_section_memo_refs": 44,
+  "actual36_current_unresolved_section_memo_refs": 44,
+  "actual_SQL_reexecuted_for_P89": false,
+  "full_workspace_or_historical107_target_batch": false,
+  "native_executed": false,
+  "p09_complete": false,
+  "product_complete": false
+}

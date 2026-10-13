@@ -1,0 +1,229 @@
+{
+  "schema_version": "hwpx-agent.p09-native-host-cpu-observer/v1",
+  "task": "p153-host-cpu-observer-r03",
+  "policy": {
+    "profile": "P149_OWNED_WORKLOAD_V4_PARTITIONED_TEST_CODEGEN",
+    "logical_cpu_limit": 1,
+    "priority": "BelowNormal",
+    "cargo_jobs": 1,
+    "test_threads": 1,
+    "sample_seconds": 0.5,
+    "start_ram_min_percent": 10,
+    "start_consecutive_samples": 2,
+    "admission_max_seconds": 3,
+    "emergency_cpu_percent": 98,
+    "emergency_cpu_consecutive_samples": 4,
+    "stop_ram_min_percent": 8,
+    "stop_commit_used_percent": 95,
+    "job_memory_limit_percent": 8,
+    "job_memory_stop_percent": 7,
+    "test_debug_info": "line-tables-only",
+    "dev_debug_info": "line-tables-only",
+    "test_opt_level": 0,
+    "test_codegen_units": 16,
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "output_limit_bytes_per_stream": 32768
+  },
+  "maximum_seconds": 30,
+  "state": "STOPPED_NOT_ACCEPTED",
+  "heavy_work_started": true,
+  "samples": [
+    {
+      "time_utc": "2026-10-07T10:51:29.442563+00:00",
+      "system_cpu_percent": 39.26,
+      "available_ram_mib": 12943.32,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 40.62443027832762,
+      "commit_used_percent": 39.146262037249166
+    },
+    {
+      "time_utc": "2026-10-07T10:51:29.942780+00:00",
+      "system_cpu_percent": 18.16,
+      "available_ram_mib": 12928.46,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 40.577804287310755,
+      "commit_used_percent": 39.21822113785015
+    },
+    {
+      "time_utc": "2026-10-07T10:51:30.135646+00:00",
+      "system_cpu_percent": 20.67,
+      "available_ram_mib": 12918.69,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 40.54712897058075,
+      "commit_used_percent": 39.25894856964331,
+      "active_processes": 1,
+      "job_cpu_seconds": 0.0,
+      "peak_job_private_mib": 0.36,
+      "peak_job_private_percent": 0.0011402096146643217,
+      "owned_processes": [
+        {
+          "pid": 23468,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 1.96,
+          "private_mib": 0.36
+        }
+      ],
+      "job_elapsed_seconds": 1.1943100999924354
+    },
+    {
+      "time_utc": "2026-10-07T10:51:30.651168+00:00",
+      "system_cpu_percent": 31.25,
+      "available_ram_mib": 12849.59,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 40.33026845806266,
+      "commit_used_percent": 39.417992164743346,
+      "active_processes": 2,
+      "job_cpu_seconds": 0.359,
+      "peak_job_private_mib": 28.67,
+      "peak_job_private_percent": 0.08999073732942066,
+      "owned_processes": [
+        {
+          "pid": 23468,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 35.31,
+          "private_mib": 24.61
+        },
+        {
+          "pid": 5488,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.69,
+          "private_mib": 1.25
+        }
+      ],
+      "job_elapsed_seconds": 1.7127523999952246,
+      "owned_job_cpu_machine_percent": 4.327868308561876,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      }
+    },
+    {
+      "time_utc": "2026-10-07T10:51:30.896268+00:00",
+      "system_cpu_percent": 93.33,
+      "available_ram_mib": 12903.04,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 40.49802639523956,
+      "commit_used_percent": 38.171829796483365,
+      "active_processes": 1,
+      "job_cpu_seconds": 0.406,
+      "peak_job_private_mib": 28.67,
+      "peak_job_private_percent": 0.08999073732942066,
+      "owned_processes": [
+        {
+          "pid": 5488,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.73,
+          "private_mib": 1.25
+        }
+      ],
+      "job_elapsed_seconds": 1.954990899990662,
+      "owned_job_cpu_machine_percent": 1.2126478656593938,
+      "cargo_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      }
+    }
+  ],
+  "source_freeze": [
+    {
+      "path": "tools/p09/probe_host_cpu_observer.py",
+      "bytes": 10880,
+      "sha256": "c1a72504b5d10bb5d808b351e17086e922c39c8dc4da602e7a8cd6f81cfc7b93"
+    },
+    {
+      "path": "tools/p09/host_cpu_observer.py",
+      "bytes": 7390,
+      "sha256": "0c81c97775d6bc004d192d407f29e7f45b1d2a9b96c575543e3ff800eb51feb0"
+    },
+    {
+      "path": "tools/p09/tests/test_host_cpu_observer.py",
+      "bytes": 6150,
+      "sha256": "8512717d21dcea84d3ad3ddb63f526836ddcb3b5bdf70f9656d86305500a5e17"
+    },
+    {
+      "path": "tools/p09/tests/test_probe_host_cpu_observer.py",
+      "bytes": 3272,
+      "sha256": "3bfba40355632a3a41aeb1ca2a97311524a68ce65840204ff9052013abc752c0"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    }
+  ],
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "native_or_SQL_run": false,
+  "owned_tree_empty": true,
+  "cleanup_confirmed": true,
+  "worker_created": true,
+  "job_assigned": true,
+  "writer_authorized": true,
+  "operation_phase": "running",
+  "exit_code": 2,
+  "stop_reason": "OWNED_COMMAND_FAILED",
+  "last_cargo_announcement": {
+    "source": "last_complete_cargo_style_stderr_announcement",
+    "process_or_compiler_phase_attribution_verified": false,
+    "announcement": null
+  },
+  "cargo_announcement_at_cleanup": {
+    "source": "last_complete_cargo_style_stderr_announcement",
+    "process_or_compiler_phase_attribution_verified": false,
+    "announcement": null
+  },
+  "resolved_owned_limits": {
+    "total_ram_mib": 31860.92,
+    "job_private_memory_limit_mib": 2548.87,
+    "machine_logical_processors": 16,
+    "job_cpu_hard_cap_machine_percent": 6.25
+  },
+  "owned_limits_readback": {
+    "verified": true,
+    "job_private_limit_mib": 2548.87109375,
+    "cpu_hard_cap_machine_percent": 6.25,
+    "affinity_mask": 1,
+    "priority_class": 16384,
+    "active_process_limit": 16,
+    "kill_on_close": true,
+    "breakaway_disabled": true
+  },
+  "compiler_error_codes": [],
+  "compiler_diagnostic_locations": [],
+  "job_final": {
+    "active_processes": 0,
+    "job_cpu_seconds": 0.406,
+    "peak_job_private_mib": 28.67,
+    "peak_job_private_percent": 0.08999073732942066,
+    "owned_processes": []
+  },
+  "elapsed_seconds": 1.96,
+  "observer_probe": null,
+  "observer_query_cleanup_confirmed": false,
+  "observer_failure_code": "P153_COUNTER_ADD",
+  "raw_process_names_saved": false,
+  "commands_paths_saved": false,
+  "causal_attribution": false,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "PC_freeze_resolved": false,
+  "Rust_or_test_body_executed": false,
+  "remaining_non_permission_work_units": 76
+}

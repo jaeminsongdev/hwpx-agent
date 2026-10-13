@@ -1,0 +1,87 @@
+{
+  "schema": "hwpx-agent.p09-79-formula-evaluation-source-initial-failures/v1",
+  "date": "2026-10-04",
+  "state": "RETAINED_SOURCE_ADAPTER_FAILURES_AND_CORRECTIONS_NOT_ERASED",
+  "original_math_failures_receipt_unchanged": "implementation/p09/evidence/p09-79-formula-evaluation.initial-failures.v1.json",
+  "failures": [
+    {
+      "chunks": [
+        "fcfdc2",
+        "552149"
+      ],
+      "kind": "new_source_adapter_compile",
+      "observed": "DocumentGraph has no notes getter; unused ImportedSourcePart import",
+      "whole_source_archive": "implementation/p09/source-archive/p09-79-initial-source-evaluation-compile",
+      "correction": "New helper reads all sections and notes through original clone().into_draft(); original APIs and note coverage unchanged"
+    },
+    {
+      "chunks": [
+        "568783"
+      ],
+      "kind": "actual_source_missing_numeric_input",
+      "observed": "Math(MissingValue): new adapter incorrectly required flattened cell to have only one paragraph with text-only inlines",
+      "diagnostic_chunk": "fb1e19",
+      "whole_source_archive": "implementation/p09/source-archive/p09-79-first-actual-numeric-rejection",
+      "correction": "New adapter binds exact original paragraph through cell/source anchors and original source-preserving TextFlowReader. Only structurally exact non-visible HP lineseg layout metadata may be ignored for arithmetic; original graph preserved"
+    },
+    {
+      "chunks": [
+        "a240da"
+      ],
+      "kind": "new_source_strict_lint",
+      "observed": "manual_let_else",
+      "whole_source_archive": "implementation/p09/source-archive/p09-79-numeric-profile-lint",
+      "correction": "Only new numeric profile local pattern rewritten; no allow/skip/old guard changes"
+    },
+    {
+      "chunks": [
+        "bd9d0e",
+        "75eceb"
+      ],
+      "kind": "new_service_missing_scope_test_construction",
+      "observed": "4 PASS/1 FAIL: original provider bind correctly returned Scope before an unauthorized provider existed",
+      "whole_source_archive": "implementation/p09/source-archive/p09-79-missing-read-scope-fixture",
+      "correction": "New test asserts original bind's Scope rejection, then separately verifies still-authorized provider; original production scope guard unchanged"
+    },
+    {
+      "chunks": [
+        "12cbc1",
+        "1f3d4b"
+      ],
+      "kind": "new_source_formula_fixture_serialization",
+      "observed": "9 PASS/1 FAIL: original native reader rejected noncanonical expression serialization",
+      "whole_source_archive": "implementation/p09/source-archive/p09-79-noncanonical-source-test",
+      "correction": "New in-memory derivative uses unchanged original FormulaAst canonical serializer for command+Formula tuple; cycle and division-by-zero assertions unchanged"
+    },
+    {
+      "chunks": [
+        "f36f97",
+        "e72d8e",
+        "fba9a4"
+      ],
+      "kind": "whole_preservation_detected_formatting_drift",
+      "observed": "Whole cargo fmt mechanically wrapped/reordered five unrelated frozen files and pre-existing test module order",
+      "whole_source_archive": "implementation/p09/source-archive/p09-79-formatting-drift",
+      "correction_chunks": [
+        "4982b2",
+        "618625",
+        "6928f6",
+        "aee8b9"
+      ],
+      "correction": "Preserved all six formatted whole files; restored unrelated five to exact math-checkpoint hashes and original test root module order. Five authorized code inverses exact. Formatting check now targets eleven new files only; no original guard/test/body/user changes discarded"
+    },
+    {
+      "chunks": [
+        "bacda5",
+        "bfefff"
+      ],
+      "kind": "new_inverse_audit_row_construction",
+      "observed": "False domain inverse rejection from PowerShell array expression construction; independent exact SHA check matched original 26177 bytes",
+      "correction": "Use explicit JSON object rows and exact SHA comparison",
+      "corrected_chunk": "6928f6"
+    }
+  ],
+  "original_reader_parser_cache_guards_dependencies_tests_locks_not_weakened": true,
+  "scope_permission_native_executed": false,
+  "failed_P26_P62_not_promoted": true
+}

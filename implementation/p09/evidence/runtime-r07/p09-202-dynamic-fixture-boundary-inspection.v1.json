@@ -1,0 +1,46 @@
+{
+  "schema_version": "hwpx-agent.p09-dynamic-fixture-boundary-inspection/v1",
+  "state": "OBSERVED_DECLARED_FIXTURE_BOUNDARIES_NOT_NEW_RUNTIME_OR_GATE",
+  "parent_case_pin": {
+    "path": "implementation/p09/evidence/runtime-r07/cases/p190-case-010-attempt-001.json",
+    "bytes": 951728,
+    "sha256": "b93d6ea8e8f790f1de3088c2ccb97bf9fc5f3340a38d9ed524ff5e9fe0ea5958"
+  },
+  "families": [
+    {
+      "family": "P77_source_corpus",
+      "manifest_pin": {
+        "path": "implementation/p09/evidence/p09-77-document-import-active-security.source-progress.v1.json",
+        "bytes": 112797,
+        "sha256": "36b30c931b760bddedb4950c46c8bf7ed84a046dc8998f7f4a51530cfe9f693d"
+      },
+      "Rust_source": "crates/hwpx-package/tests/support/document_import_settings_inputs.rs",
+      "declared_packages": 36,
+      "declared_package_bytes": 510909,
+      "packages_present_in_old_Python_freeze": 1,
+      "manifest_present_in_old_Python_freeze": true
+    },
+    {
+      "family": "P09_42_source_and_output_matrix",
+      "manifest_pin": {
+        "path": "fixtures/target-build/p09-42-product-form-values-01/output/fixture-manifest.json",
+        "bytes": 7471,
+        "sha256": "8208bff3f87a4e56ec68caecaf41b00c3fdccc5b3f083289f3c13ccede19466e"
+      },
+      "Rust_source": "crates/hwpx-package/examples/document_import_form_policies_support/mod.rs",
+      "declared_cases": 5,
+      "declared_packages": 10,
+      "declared_package_bytes": 159833,
+      "packages_present_in_old_Python_freeze": 0,
+      "manifest_present_in_old_Python_freeze": false
+    }
+  ],
+  "actual_package_contents_read_by_inspection": false,
+  "Rust_per_package_read_digest_checks_preserved": true,
+  "fixture_dependency_closure_complete": false,
+  "runtime_scope_changed": false,
+  "existing_runtime_results_reclassified_as_failure": false,
+  "new_product_test_executed": false,
+  "product_complete": false,
+  "P09_gate": "OPEN"
+}

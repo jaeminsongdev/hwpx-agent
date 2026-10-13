@@ -1,0 +1,104 @@
+{
+  "schema_version": "hwpx-agent.p09-bounded-audit-tool-light-verification/v1",
+  "state": "FAILED_NOT_ACCEPTED",
+  "fixtures_started": true,
+  "tests_run": 12,
+  "tests_passed": 12,
+  "failed_tests": [],
+  "source_freeze": [
+    {
+      "path": "tools/p09/bounded_audit_tools.py",
+      "bytes": 10641,
+      "sha256": "c535c76b43c45228e4a9941dd1a76132019372c52cc92a2b8a59595f6e4252e1"
+    },
+    {
+      "path": "tools/p09/tests/test_bounded_audit_tools.py",
+      "bytes": 10357,
+      "sha256": "5bfa0dd2b0b79acbac48af886819e3f2c2750efb35779f6ed6ae9ac5db9383f0"
+    },
+    {
+      "path": "tools/p09/verify_bounded_audit_tools_light.py",
+      "bytes": 5442,
+      "sha256": "09629e88892e06d1f596a4424d3637edd2c990d0e751fe93e774fa820d890c8c"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 22942,
+      "sha256": "dc212b25ebc534ab19f643c51361271bb86392cf01b669a0fe25f3e37ea13e01"
+    },
+    {
+      "path": "tools/p09/verify_audit_evidence_io.py",
+      "bytes": 6183,
+      "sha256": "d4a8587e9cbbb1840a527d46d5d8cd49a7e3eb52b306a1bb5e5e2110698bf38d"
+    },
+    {
+      "path": "rustfmt.toml",
+      "bytes": 72,
+      "sha256": "db00d320c47bf818306a7c188270fdd372488ae6288668b8ac412f0c70069387"
+    },
+    {
+      "path": "rust-toolchain.toml",
+      "bytes": 86,
+      "sha256": "fa0addad5676243d360310f981a69528b0341d295cb5012253d9721aba4d30c0"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "self_resource_before": {
+    "cpu_seconds": 0.109375,
+    "memory_observed": true,
+    "working_set_mib": 21.91,
+    "private_mib": 13.38,
+    "system": {
+      "time_utc": "2026-10-06T10:03:26.244136+00:00",
+      "system_cpu_percent": 100.0,
+      "available_ram_mib": 10265.31,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 32.21912376730161,
+      "commit_used_percent": 37.66854392335605
+    }
+  },
+  "logical_cpu_limit": 1,
+  "priority": "BelowNormal",
+  "raw_logs_printed_or_saved": false,
+  "actual_rustfmt_smoke_attempted": true,
+  "rustfmt_smoke_accepted": false,
+  "actual_rg_inventory_run": false,
+  "full_authority_or_negative_audit_run": false,
+  "actual_Cargo_Rust_compile_product_EXE_SQL_native_run": false,
+  "new_git_started": false,
+  "system_or_Defender_or_WSL_settings_changed": false,
+  "P09_gate": "OPEN",
+  "product_complete": false,
+  "rustfmt_smoke_profile": {
+    "task": "rustfmt-stdin",
+    "input_bytes": 25,
+    "timeout_seconds": 10,
+    "output_limits": {
+      "stdout": 1048576,
+      "stderr": 32768
+    },
+    "job_private_peak_mib": 12.45,
+    "owned_tree_empty": true,
+    "logical_cpu_limit": 1,
+    "priority": "BelowNormal",
+    "job_cpu_hard_cap_machine_percent": 6.25,
+    "job_private_limit_mib": 2548.87109375
+  },
+  "rustfmt_smoke_output_bytes": 0,
+  "rustfmt_smoke_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "elapsed_seconds": 0.2977,
+  "self_resource_after": {
+    "cpu_seconds": 0.140625,
+    "memory_observed": true,
+    "working_set_mib": 28.22,
+    "private_mib": 18.63,
+    "system": {
+      "time_utc": "2026-10-06T10:03:26.582632+00:00",
+      "system_cpu_percent": 9.97,
+      "available_ram_mib": 10263.26,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 32.21269936044049,
+      "commit_used_percent": 37.674079640129364
+    }
+  }
+}

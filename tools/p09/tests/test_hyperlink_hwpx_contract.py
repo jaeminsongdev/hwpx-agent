@@ -17,6 +17,7 @@ def copy_tree(root: Path) -> None:
         validator.QUALIFICATION,
         *validator.SOURCE_SHA256,
         *validator.IMPLEMENTATION_SHA256,
+        validator.PUBLIC_EXPORT["path"],
     }:
         source = validator.ROOT / relative
         target = root / relative
@@ -30,7 +31,7 @@ class HyperlinkHwpxContractTests(unittest.TestCase):
         self.assertEqual(value["state"], "pass", value)
         self.assertEqual(value["source_locks"], 4)
         self.assertEqual(value["official_source_files"], 11)
-        self.assertEqual(value["implementation_files"], 5)
+        self.assertEqual(value["implementation_files"], 4)
         self.assertTrue(value["source_qualification_verified"])
         self.assertEqual(value["capabilities"], 2)
         self.assertEqual(value["direct_stage"], "integration_passed")
@@ -78,6 +79,16 @@ class HyperlinkHwpxContractTests(unittest.TestCase):
             value["claims"]["generated_output_hancom_open"] = True
             target.write_text(json.dumps(value), encoding="utf-8")
             self.assertIn("qualification_claims", validator.validate(root)["errors"])
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            copy_tree(root)
+            target = root / validator.PUBLIC_EXPORT["path"]
+            text = target.read_text(encoding="utf-8")
+            target.write_text(
+                text.replace("mod hyperlink_hwpx;", "mod hyperlink_hwpx_missing;"),
+                encoding="utf-8",
+            )
+            self.assertIn("public_export", validator.validate(root)["errors"])
 
     def test_duplicate_key_private_path_and_discovery_promotion_fail_closed(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

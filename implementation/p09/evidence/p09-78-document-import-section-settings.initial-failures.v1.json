@@ -1,0 +1,81 @@
+{
+  "schema": "hwpx-agent.p09-78-section-settings-initial-failures/v1",
+  "date": "2026-10-04",
+  "state": "RETAINED_NEW_IMPLEMENTATION_AND_AUDIT_ERRORS_NOT_HIDDEN",
+  "failures": [
+    {
+      "kind": "new_source_function_too_long",
+      "chunks": [
+        "1d35ce",
+        "9499c5"
+      ],
+      "observed": "121 lines exceeds 100 line strict lint",
+      "whole_source_archive": "implementation/p09/source-archive/p09-78-initial-strict-settings/crates/hwpx-package/src/document_import/fields/semantics/catalog/security/settings/source.rs",
+      "correction": "Split new bind_section helper only; original PageSetupReader and SectionColumnReader unchanged."
+    },
+    {
+      "kind": "authorized_full_context_function_too_long",
+      "chunks": [
+        "0b6559"
+      ],
+      "observed": "101 lines exceeds 100 line strict lint after added call",
+      "whole_source_archive": "implementation/p09/source-archive/p09-78-initial-strict-settings/crates/product-cli/src/form_value_operation/full_document.rs",
+      "correction": "New section-settings helper always calls unchanged original active-security helper before independent settings denial; replaces original call at same site. Whole inverse exact."
+    },
+    {
+      "kind": "new_preservation_audit_wrong_literal",
+      "chunks": [
+        "77ac2f"
+      ],
+      "observed": "Mechanical 460 to 472 replacement accidentally changed fixed original byte total 51047460 to 51047472; counts guard rejected.",
+      "whole_source_archive": "implementation/p09/source-archive/p09-78-initial-preservation-check/preservation-check.ps1",
+      "correction": "Restored original 51047460 literal against immutable original graph manifest; current hashes, expectations, source manifests and predecessor receipts were not relaxed. Corrected complete audit e030f4 PASS."
+    },
+    {
+      "kind": "pre_final_regression_draft_inaccurate_strict_crate_list",
+      "observed": "Initial regression draft inferred domain-ir in original four-crate check; predecessor command actually names artifact-service instead. No final audit had accepted this draft.",
+      "whole_draft_archives": [
+        "implementation/p09/source-archive/p09-78-pre-final-receipt-exact/implementation/p09/evidence/p09-78-document-import-section-settings.rust-regression.v1.json",
+        "implementation/p09/source-archive/p09-78-pre-final-receipt-exact/implementation/p09/evidence/p09-78-document-import-section-settings.source-progress.v1.json"
+      ],
+      "correction": "Performed fresh explicit five-crate lib/tests strict lint 9b96c3 exit0; current regression names full actual command and all five crates. Prior draft and exact hashes preserved."
+    },
+    {
+      "kind": "new_draft_archive_extra_final_newline",
+      "chunks": [
+        "d79b1f",
+        "bcb38e"
+      ],
+      "observed": "PowerShell Get-Content -Raw console output added final newline to already newline-terminated text; new archive copies were 1 byte longer and exact hash check failed.",
+      "retained_copy_attempts": "implementation/p09/source-archive/p09-78-pre-final-receipt-correction/",
+      "correction": "Read exact original text through JSON serialization and made separate exact whole copies; failed copies preserved, original drafts unmodified until exact copies checked."
+    }
+  ],
+  "retained_diagnostics": [
+    {
+      "kind": "initial_reader_compatibility_diagnostic",
+      "chunk": "55744d",
+      "inputs": 36,
+      "page_setups": 44,
+      "column_spans": 44,
+      "whole_source_archive": "implementation/p09/source-archive/p09-78-initial-reader-diagnostic/crates/hwpx-package/examples/document_import_section_settings_probe.rs",
+      "qualification": "Compatibility of original page/column readers on selected entries only; not complete source-spine/header-count proof. Replaced by actual full-source consumer while whole initial source is preserved."
+    },
+    {
+      "kind": "pre_optimization_new_service_checkpoint",
+      "chunk": "862c5c",
+      "tests_passed": 5,
+      "elapsed_seconds": 349.75,
+      "whole_source_archive": "implementation/p09/source-archive/p09-78-pre-source-checkpoint-optimization/crates/product-cli/src/form_stored_provider/actual_import/field_ranges/semantics/catalog/security/settings.rs",
+      "corrected_chunk": "d417d9",
+      "corrected_tests_passed": 5,
+      "corrected_elapsed_seconds": 251.86,
+      "controlled_benchmark": false,
+      "qualification": "Observed timings only; concurrent jobs differ. Does not establish a general performance improvement. Original authenticated source checks before/after, full prior semantics before, deterministic new settings reconstruction retained."
+    }
+  ],
+  "old_readers_guards_tests_dependencies_not_weakened": true,
+  "old_failures_not_relabelled": true,
+  "native_or_permission_started": false,
+  "p09_gate": "OPEN"
+}

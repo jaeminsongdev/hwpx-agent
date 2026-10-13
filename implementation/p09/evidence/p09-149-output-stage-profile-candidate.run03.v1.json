@@ -1,0 +1,64 @@
+{
+  "schema_version": "hwpx-agent.p09-output-stage-profile-candidate/v1",
+  "qualification": "SOURCE_CANDIDATE_ONLY_NOT_BUILD_RUNTIME_SQL_OR_GATE",
+  "baseline_build_pin": {
+    "path": "target/p09-149-current-issuer-build/current-issuer-build-r4.json",
+    "bytes": 305455,
+    "sha256": "5ce53cf4938ceaa2e8295644e57e3f4fc8becc6a20bdaca4db9cfb6bf5be86c7"
+  },
+  "parent_candidate_pin": {
+    "path": "implementation/p09/evidence/p09-149-moved-readback-buffer-candidate.run01.v1.json",
+    "bytes": 1609,
+    "sha256": "15cba96439dd94fcc5c6f341b17bcc656bbb1e1ca71df7c87fbe5454bbc0a734"
+  },
+  "preimage_archive": "implementation/p09/source-archive/p09-149-pre-output-stage-timing-r8/source-preimages.v1.json",
+  "source_deltas": [
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics/evaluation/output.rs",
+      "bytes": 24152,
+      "sha256": "d997814b3a76b005d93529332a388840a805552174b4bcb716795656bce8e8ca"
+    }
+  ],
+  "implementation": "Test-only profile of original36 and all16 numeric derivatives. Preserve original NoChange denial with exact cache proof and full fresh-source verification. Three shared stages cover all16; six complete lowering stages cover every mathematically changed candidate; one no-op fresh-source stage covers every mathematically unchanged derivative. Both outcome counts must be positive and sum exactly16. Preserve all product text after stripping only exact cfg(test) additions. No forced mutation, dropped inputs, live authorization change or product API/receipt/callback.",
+  "product_body_text_exact_after_removing_test_only_additions": true,
+  "original_inputs": 36,
+  "changed_inputs": 16,
+  "stages": 10,
+  "reviewed_Rust_deltas_from_r4": 19,
+  "library_Rust_deltas_from_r4": 18,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "actual_SQL_or_native_qualified": false,
+  "superseded_candidate_pin": {
+    "path": "implementation/p09/evidence/p09-149-output-stage-profile-candidate.run02.v1.json",
+    "bytes": 3077,
+    "sha256": "4645f81f32c5c032d3a13c5719d9bad0bdb471ff694ddfcaa8ab1adcbffb65d5"
+  },
+  "worker_suffix_repair_archive_pin": {
+    "path": "implementation/p09/source-archive/p09-149-pre-output-stage-worker-suffix-r8/source-preimages.v1.json",
+    "bytes": 34209,
+    "sha256": "ba28820843951d51e60180030355f90141de305e1be342958b777fbb010822a6"
+  },
+  "failed_worker_receipt_pin": {
+    "path": "implementation/p09/evidence/p09-149-output-stage-profile.actual-run01.v1.json",
+    "bytes": 183722,
+    "sha256": "7bfe8c4623845be75c1840da83bce87d86a6be00b05cb514951a4279b859d2ab"
+  },
+  "failed_guard_receipt_pin": {
+    "path": "implementation/p09/evidence/p09-149-output-stage-profile.light-run02.v1.json",
+    "bytes": 1368,
+    "sha256": "ffb67ae5e5cb13c968208dff635ba55aa3ddcc4f2fa880223ecbba739ca0704a"
+  },
+  "worker_task": "formula-output-stage-profile-tests",
+  "repair": "Keep tests suffix fix; correct diagnostic assumption that every numeric derivative changes the formula. Preserve original normal no-op behavior and separately prove complete no-op and lowered coverage.",
+  "no_op_classification_repair_archive_pin": {
+    "path": "implementation/p09/source-archive/p09-149-pre-output-stage-noop-classification-r8/source-preimages.v1.json",
+    "bytes": 65497,
+    "sha256": "fe09bad48b586b12001631a45c55ccf5503436fbf3e2d8414e885a4fd6ced9c4"
+  },
+  "failed_diagnostic_receipt_pin": {
+    "path": "implementation/p09/evidence/p09-149-output-stage-profile.actual-run03.v1.json",
+    "bytes": 198235,
+    "sha256": "833cb75e8517025e945c9a11b4cb31c5c033df57dd97c4cd255951b5e6160887"
+  }
+}

@@ -1,0 +1,781 @@
+{
+  "schema_version": "hwpx-agent.p09-warm-stop-actual104-summary/v1",
+  "state": "DIAGNOSTIC_SUMMARY_NOT_NEW_PRODUCT_OR_DOCUMENT_QUALIFICATION",
+  "own_code_archive_source_pin": {
+    "path": "implementation/p09/evidence/p335-formal528-code/resume_admission_classified_queue_runtime.py",
+    "bytes": 91588,
+    "sha256": "5752160e18cad873a027733990a09b3817987425e2e7e5faeac8c271d472a2de"
+  },
+  "own_code_archive_test_pin": {
+    "path": "implementation/p09/evidence/p335-formal528-code/test_admission_classified_queue_runtime.py",
+    "bytes": 67362,
+    "sha256": "55c1ba9003b6bcdc86ac6345bdd9ec3a4fa436ddf174f7277be496f41854a9af"
+  },
+  "original_STOP_summary": {
+    "pin": {
+      "path": "implementation/p09/evidence/locked-r07/p335-case-104-run003.v1.json",
+      "sha256": "ea547ac25f744bdc1eebbebe5e43233a4c4ed106536ba9b22e1ec7974f518b6d",
+      "bytes": 215398
+    },
+    "state": "FAILED_NOT_ACCEPTED",
+    "stage": "source_frame_acquire",
+    "error": "STOP_SUSTAINED_SYSTEM_CPU",
+    "stop": "STOP_SUSTAINED_SYSTEM_CPU",
+    "cleanup": true,
+    "accepted": 0,
+    "actual": false,
+    "contracts": 528,
+    "prep": {
+      "reads": 256,
+      "bytes": 12226110,
+      "finished": true,
+      "bound": 128,
+      "fresh": 128
+    },
+    "frame": {
+      "state": "CLOSED",
+      "registered": false,
+      "bytes": 120895337,
+      "boundaries": 0,
+      "inputs": 1654
+    },
+    "handles": {
+      "streams": 0,
+      "dup": null,
+      "failed": 0,
+      "readers": 0,
+      "complete": false,
+      "remaining": 0,
+      "opened": 624,
+      "closed": 624
+    },
+    "parentAdapter": false,
+    "parentConnection": false,
+    "sidecar": null,
+    "obs": {
+      "samples": 149,
+      "privateMax": 53313536,
+      "ownMax": 6.463878,
+      "hostMax": 100,
+      "last4": [
+        {
+          "time_utc": "2026-10-10T00:23:54.200763+09:00",
+          "system_cpu_percent": 99.03,
+          "available_ram_percent": 39.919155460224765,
+          "commit_used_percent": 38.62953078982887,
+          "parent_cpu_machine_percent": 0,
+          "parent_cpu_delta_100ns": 0,
+          "raw_system_cpu_delta_100ns": {
+            "idle": 781250,
+            "kernel_including_idle": 12968750,
+            "user": 67656250,
+            "total": 80625000
+          },
+          "parent_affinity_mask": 1,
+          "parent_priority_readback": "BelowNormal",
+          "parent_process_only": true,
+          "foreign_Process_query_executed": false,
+          "own_private_bytes": 51224576,
+          "own_working_set_bytes": 62652416,
+          "own_private_percent_total_ram": 0.15332754237625815,
+          "own_working_set_percent_total_ram": 0.1875338308161878,
+          "phase_at_sample": "metadata_hash",
+          "phases_since_previous_sample": [
+            "metadata_hash"
+          ],
+          "audited_logical_read_bytes": 12226110,
+          "audited_logical_read_passes": 256,
+          "audited_logical_read_bytes_delta": 0,
+          "reader_counters_observed": true
+        },
+        {
+          "time_utc": "2026-10-10T00:23:54.701491+09:00",
+          "system_cpu_percent": 100,
+          "available_ram_percent": 39.40995991488887,
+          "commit_used_percent": 38.73152676268622,
+          "parent_cpu_machine_percent": 0,
+          "parent_cpu_delta_100ns": 0,
+          "raw_system_cpu_delta_100ns": {
+            "idle": 0,
+            "kernel_including_idle": 8437500,
+            "user": 71562500,
+            "total": 80000000
+          },
+          "parent_affinity_mask": 1,
+          "parent_priority_readback": "BelowNormal",
+          "parent_process_only": true,
+          "foreign_Process_query_executed": false,
+          "own_private_bytes": 51224576,
+          "own_working_set_bytes": 62652416,
+          "own_private_percent_total_ram": 0.15332754237625815,
+          "own_working_set_percent_total_ram": 0.1875338308161878,
+          "phase_at_sample": "metadata_hash",
+          "phases_since_previous_sample": [
+            "metadata_hash"
+          ],
+          "audited_logical_read_bytes": 12226110,
+          "audited_logical_read_passes": 256,
+          "audited_logical_read_bytes_delta": 0,
+          "reader_counters_observed": true
+        },
+        {
+          "time_utc": "2026-10-10T00:23:55.209634+09:00",
+          "system_cpu_percent": 100,
+          "available_ram_percent": 39.56176717777891,
+          "commit_used_percent": 38.655289351289646,
+          "parent_cpu_machine_percent": 0,
+          "parent_cpu_delta_100ns": 0,
+          "raw_system_cpu_delta_100ns": {
+            "idle": 0,
+            "kernel_including_idle": 7812500,
+            "user": 72187500,
+            "total": 80000000
+          },
+          "parent_affinity_mask": 1,
+          "parent_priority_readback": "BelowNormal",
+          "parent_process_only": true,
+          "foreign_Process_query_executed": false,
+          "own_private_bytes": 51224576,
+          "own_working_set_bytes": 62652416,
+          "own_private_percent_total_ram": 0.15332754237625815,
+          "own_working_set_percent_total_ram": 0.1875338308161878,
+          "phase_at_sample": "metadata_hash",
+          "phases_since_previous_sample": [
+            "metadata_hash"
+          ],
+          "audited_logical_read_bytes": 12226110,
+          "audited_logical_read_passes": 256,
+          "audited_logical_read_bytes_delta": 0,
+          "reader_counters_observed": true
+        },
+        {
+          "time_utc": "2026-10-10T00:23:55.710237+09:00",
+          "system_cpu_percent": 100,
+          "available_ram_percent": 39.827779306911935,
+          "commit_used_percent": 38.67494871114061,
+          "parent_cpu_machine_percent": 0,
+          "parent_cpu_delta_100ns": 0,
+          "raw_system_cpu_delta_100ns": {
+            "idle": 0,
+            "kernel_including_idle": 9375000,
+            "user": 70625000,
+            "total": 80000000
+          },
+          "parent_affinity_mask": 1,
+          "parent_priority_readback": "BelowNormal",
+          "parent_process_only": true,
+          "foreign_Process_query_executed": false,
+          "own_private_bytes": 51224576,
+          "own_working_set_bytes": 62652416,
+          "own_private_percent_total_ram": 0.15332754237625815,
+          "own_working_set_percent_total_ram": 0.1875338308161878,
+          "phase_at_sample": "metadata_hash",
+          "phases_since_previous_sample": [
+            "metadata_hash"
+          ],
+          "audited_logical_read_bytes": 12226110,
+          "audited_logical_read_passes": 256,
+          "audited_logical_read_bytes_delta": 0,
+          "reader_counters_observed": true
+        }
+      ],
+      "freeMin": 39.40995991488887
+    }
+  },
+  "actual104_pass_summary": {
+    "root_pin": {
+      "path": "implementation/p09/evidence/locked-r07/p335-case-104-run006.v1.json",
+      "bytes": 667184,
+      "sha256": "1ceb8955c548d5defe07f5f4aca97180a637c5cc55441e7e7eab75cae01c5fd9"
+    },
+    "body_pin": {
+      "path": "implementation/p09/evidence/locked-r07/cases/p335-case-104-run006.json",
+      "bytes": 191227,
+      "sha256": "04644c29b17b108a89d7c13b6b1749cbfc092e58a48911433cd8f41071f31930"
+    },
+    "root_state": "PASS_EXACT_R07_REVIEWED_STOP_QUEUE_RUNTIME_NOT_WHOLE_OR_GATE",
+    "stop": null,
+    "cleanup": true,
+    "accepted_delta": 1,
+    "selected": 104,
+    "actual": true,
+    "runtime_plan": {
+      "scope": "INDIVIDUAL_RUNTIME_PROGRESS_NOT_WHOLE_OR_GATE",
+      "legacy_whole_accepted_individual_cases": 3,
+      "legacy_whole_pending_successful_candidates": 1,
+      "runtime_source_qualified_individual_cases": 98,
+      "runtime_remaining_individual_cases": 151,
+      "runtime_remaining_regular_cases": 145,
+      "runtime_remaining_corpus_cases": 6,
+      "runtime_successful_candidates_requiring_closing": 0,
+      "next_runtime_index": 105,
+      "historical_whole_gate_reconciliation_required": true,
+      "whole1470_current_fresh_qualified": false,
+      "full249_current_qualified": false,
+      "signed16_current_qualified": false,
+      "product_complete": false,
+      "P09_gate": "OPEN",
+      "prior_runtime_qualified_cases": 97,
+      "locked_compound_qualified_individual_cases": 1,
+      "all_successful_bodies_pending_whole_reconciliation": 95,
+      "prior_runtime_receipts_and_validators_unchanged": true,
+      "original_STOP_receipts_not_reclassified": true
+    },
+    "prior_plan": {
+      "scope": "INDIVIDUAL_RUNTIME_PROGRESS_NOT_WHOLE_OR_GATE",
+      "legacy_whole_accepted_individual_cases": 3,
+      "legacy_whole_pending_successful_candidates": 1,
+      "runtime_source_qualified_individual_cases": 97,
+      "runtime_remaining_individual_cases": 152,
+      "runtime_remaining_regular_cases": 146,
+      "runtime_remaining_corpus_cases": 6,
+      "runtime_successful_candidates_requiring_closing": 0,
+      "next_runtime_index": 104,
+      "historical_whole_gate_reconciliation_required": true,
+      "whole1470_current_fresh_qualified": false,
+      "full249_current_qualified": false,
+      "signed16_current_qualified": false,
+      "product_complete": false,
+      "P09_gate": "OPEN",
+      "prior_runtime_qualified_cases": 96,
+      "locked_compound_qualified_individual_cases": 1,
+      "all_successful_bodies_pending_whole_reconciliation": 94,
+      "prior_runtime_receipts_and_validators_unchanged": true,
+      "original_STOP_receipts_not_reclassified": true
+    },
+    "contracts": 528,
+    "preparation": {
+      "bound_inputs": 131,
+      "final_fresh_hashes": 131,
+      "read_passes": 262,
+      "bytes_read": 12822858,
+      "finished": true
+    },
+    "post_metadata": {
+      "bound_inputs": 1,
+      "final_fresh_hashes": 1,
+      "read_passes": 2,
+      "bytes_read": 382454,
+      "finished": true
+    },
+    "frame": {
+      "state": "COMMITTED",
+      "registered": false,
+      "input_count": 1654,
+      "input_bytes": 120895337,
+      "boundaries": [
+        {
+          "role": "before"
+        },
+        {
+          "role": "after"
+        }
+      ],
+      "held_closing_identity": {
+        "held_identity_checks_complete": true,
+        "separate_pathname_reopens": 0,
+        "regular_file_count": 1654,
+        "directory_count": 308
+      }
+    },
+    "handles": {
+      "opened": 1962,
+      "closed": 1962,
+      "remaining": 0,
+      "failed": 0,
+      "readers": 0,
+      "streams": 0,
+      "dup": {
+        "duplicate_handles_opened": 3308,
+        "duplicate_handles_closed": 3308,
+        "duplicate_handles_remaining": 0,
+        "duplicate_close_failed_attempts": 0,
+        "shared_offset_resets": 3308,
+        "active_borrow_binding": false,
+        "byte_stream_pathname_reopens": 0,
+        "original_held_handles_closed_by_borrower": false,
+        "redundant_pre_descriptor_metadata_queries": 0,
+        "original_pre_read_stream_identity_check_retained": true,
+        "input_scope_reduced": false,
+        "original_resource_guards_and_pacing_retained": true,
+        "measured_CPU_or_freeze_improvement_claimed": false
+      }
+    },
+    "body": {
+      "state": "PASS_SCOPED_NOT_GATE",
+      "stop": null,
+      "worker_created": true,
+      "job_assigned": true,
+      "actual": true,
+      "exit_code": 0,
+      "owned_tree_empty": true,
+      "cleanup": true,
+      "selected": [
+        "actual_import::formula_product_request::nochange_protected_and_invalid_second_section_cannot_be_successful_noop_or_partial_product"
+      ],
+      "passed": [
+        "actual_import::formula_product_request::nochange_protected_and_invalid_second_section_cannot_be_successful_noop_or_partial_product"
+      ],
+      "test_arguments": [
+        "actual_import::formula_product_request::nochange_protected_and_invalid_second_section_cannot_be_successful_noop_or_partial_product",
+        "--exact",
+        "--test-threads=1",
+        "--format=pretty",
+        "--color=never"
+      ],
+      "reader_passes": [
+        {
+          "read_passes": 1654,
+          "bytes_read": 120895337,
+          "bytes_read_by_kind": {
+            "binary": 14216704,
+            "other": 106678633
+          },
+          "last_completed_protected_EXE_path": null,
+          "interrupted_protected_EXE_path": null,
+          "arbitrary_source_paths_or_private_artifact_names_saved": false,
+          "original_owned_read_operations_preserved": true,
+          "extra_sampler_or_native_query_started": false
+        },
+        {
+          "read_passes": 1654,
+          "bytes_read": 120895337,
+          "bytes_read_by_kind": {
+            "binary": 14216704,
+            "other": 106678633
+          },
+          "last_completed_protected_EXE_path": null,
+          "interrupted_protected_EXE_path": null,
+          "arbitrary_source_paths_or_private_artifact_names_saved": false,
+          "original_owned_read_operations_preserved": true,
+          "extra_sampler_or_native_query_started": false
+        }
+      ],
+      "job_policy": null,
+      "elapsed": 262.35
+    },
+    "observer": {
+      "samples": 858,
+      "host_max": 100,
+      "own_max": 6.500956,
+      "private_max": 57331712,
+      "RAM_free_min": 39.46644320192928
+    }
+  },
+  "metadata_receipt_summaries": {
+    "p335-light-run001.v1.json": {
+      "pin": {
+        "path": "implementation/p09/evidence/locked-r07/p335-light-run001.v1.json",
+        "bytes": 41950,
+        "sha256": "f1a1bc083dc460eb1056daaa730438ba9dbf52c0438309891ac4d4eb6398da78"
+      },
+      "state": "PASS_REVIEWED_STOP_QUEUE_SELECTION_NOT_ACTUAL_OR_GATE",
+      "bound": 126,
+      "fresh": 126,
+      "reads": 252,
+      "bytes": 12065326,
+      "finished": true,
+      "cleanup": true,
+      "stop": null,
+      "contracts": 528,
+      "current_code_count": 0,
+      "previous333_reviews": [
+        {
+          "root_pin": {
+            "path": "implementation/p09/evidence/locked-r07/p333-case-104-run003.v1.json",
+            "bytes": 420388,
+            "sha256": "0c1ae08ee3174df43df6e56b306a36b991e285447149c1cb7cee8c2431ffd528"
+          },
+          "classification": {
+            "failure_kind": "SUSTAINED_CPU_STOP",
+            "original_error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+            "original_resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+            "stage": "owned_parent",
+            "selected_test_index": 104,
+            "selected_test_name": "actual_import::formula_product_request::nochange_protected_and_invalid_second_section_cannot_be_successful_noop_or_partial_product",
+            "accepted_count_delta": 0,
+            "actual_product_reexecution_authorized": false,
+            "pre_product_retry_candidate_only": true,
+            "original_cleanup_confirmed": true
+          },
+          "old_review_pin": {
+            "path": "implementation/p09/evidence/locked-r07/p333-stop-review-run004.v1.json",
+            "bytes": 42822,
+            "sha256": "b87ac3a999c963f99383545bad8f74bdcc1b3d59a5e1829bafb8f4f8d5ed6699"
+          }
+        },
+        {
+          "root_pin": {
+            "path": "implementation/p09/evidence/locked-r07/p333-admission-run006.v1.json",
+            "bytes": 44647,
+            "sha256": "f92ae76c1d12bbe7ca1985b4095f028fe792cbb3a7ec27ddc0af23d5eca2a232"
+          },
+          "classification": {
+            "failure_kind": "SUSTAINED_CPU_STOP",
+            "original_error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+            "original_resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+            "stage": "anchor",
+            "selected_test_index": null,
+            "selected_test_name": null,
+            "accepted_count_delta": 0,
+            "actual_product_reexecution_authorized": false,
+            "pre_product_retry_candidate_only": true,
+            "original_cleanup_confirmed": true
+          },
+          "first_independent_review_in_current_reader": true
+        }
+      ],
+      "observer": {
+        "samples": 56,
+        "host_max": 24.52,
+        "own_max": 6.469501,
+        "private_max": 53039104
+      }
+    },
+    "p335-light-review-run002.v1.json": {
+      "pin": {
+        "path": "implementation/p09/evidence/locked-r07/p335-light-review-run002.v1.json",
+        "bytes": 38442,
+        "sha256": "08eee9c635c4f6ef35481c1dbbbcfd094a387076d291292777f07bf9d5d2eb5a"
+      },
+      "state": "PASS_INDEPENDENT_WARM_LIGHT_FRESH_NOT_NATIVE_OR_PRODUCT",
+      "bound": 127,
+      "fresh": 127,
+      "reads": 254,
+      "bytes": 12149226,
+      "finished": true,
+      "cleanup": true,
+      "stop": null,
+      "contracts": null,
+      "current_code_count": 91,
+      "previous333_reviews": [
+        {
+          "root_pin": {
+            "path": "implementation/p09/evidence/locked-r07/p333-case-104-run003.v1.json",
+            "bytes": 420388,
+            "sha256": "0c1ae08ee3174df43df6e56b306a36b991e285447149c1cb7cee8c2431ffd528"
+          },
+          "classification": {
+            "failure_kind": "SUSTAINED_CPU_STOP",
+            "original_error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+            "original_resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+            "stage": "owned_parent",
+            "selected_test_index": 104,
+            "selected_test_name": "actual_import::formula_product_request::nochange_protected_and_invalid_second_section_cannot_be_successful_noop_or_partial_product",
+            "accepted_count_delta": 0,
+            "actual_product_reexecution_authorized": false,
+            "pre_product_retry_candidate_only": true,
+            "original_cleanup_confirmed": true
+          },
+          "old_review_pin": {
+            "path": "implementation/p09/evidence/locked-r07/p333-stop-review-run004.v1.json",
+            "bytes": 42822,
+            "sha256": "b87ac3a999c963f99383545bad8f74bdcc1b3d59a5e1829bafb8f4f8d5ed6699"
+          }
+        },
+        {
+          "root_pin": {
+            "path": "implementation/p09/evidence/locked-r07/p333-admission-run006.v1.json",
+            "bytes": 44647,
+            "sha256": "f92ae76c1d12bbe7ca1985b4095f028fe792cbb3a7ec27ddc0af23d5eca2a232"
+          },
+          "classification": {
+            "failure_kind": "SUSTAINED_CPU_STOP",
+            "original_error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+            "original_resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+            "stage": "anchor",
+            "selected_test_index": null,
+            "selected_test_name": null,
+            "accepted_count_delta": 0,
+            "actual_product_reexecution_authorized": false,
+            "pre_product_retry_candidate_only": true,
+            "original_cleanup_confirmed": true
+          },
+          "first_independent_review_in_current_reader": true
+        }
+      ],
+      "observer": {
+        "samples": 23,
+        "host_max": 19.92,
+        "own_max": 0.94697,
+        "private_max": 50348032
+      }
+    },
+    "p335-stop-review-run004.v1.json": {
+      "pin": {
+        "path": "implementation/p09/evidence/locked-r07/p335-stop-review-run004.v1.json",
+        "bytes": 44230,
+        "sha256": "708a19314d817034c138a77cc0345a8427605f2f0c6c675c04cb6a5df7bf77f1"
+      },
+      "state": "PASS_FRESH_REVIEWED_PRE_PRODUCT_CPU_STOP_NOT_ACCEPTANCE",
+      "bound": 129,
+      "fresh": 129,
+      "reads": 258,
+      "bytes": 12656906,
+      "finished": true,
+      "cleanup": true,
+      "stop": null,
+      "contracts": null,
+      "current_code_count": 91,
+      "previous333_reviews": [
+        {
+          "root_pin": {
+            "path": "implementation/p09/evidence/locked-r07/p333-case-104-run003.v1.json",
+            "bytes": 420388,
+            "sha256": "0c1ae08ee3174df43df6e56b306a36b991e285447149c1cb7cee8c2431ffd528"
+          },
+          "classification": {
+            "failure_kind": "SUSTAINED_CPU_STOP",
+            "original_error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+            "original_resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+            "stage": "owned_parent",
+            "selected_test_index": 104,
+            "selected_test_name": "actual_import::formula_product_request::nochange_protected_and_invalid_second_section_cannot_be_successful_noop_or_partial_product",
+            "accepted_count_delta": 0,
+            "actual_product_reexecution_authorized": false,
+            "pre_product_retry_candidate_only": true,
+            "original_cleanup_confirmed": true
+          },
+          "old_review_pin": {
+            "path": "implementation/p09/evidence/locked-r07/p333-stop-review-run004.v1.json",
+            "bytes": 42822,
+            "sha256": "b87ac3a999c963f99383545bad8f74bdcc1b3d59a5e1829bafb8f4f8d5ed6699"
+          }
+        },
+        {
+          "root_pin": {
+            "path": "implementation/p09/evidence/locked-r07/p333-admission-run006.v1.json",
+            "bytes": 44647,
+            "sha256": "f92ae76c1d12bbe7ca1985b4095f028fe792cbb3a7ec27ddc0af23d5eca2a232"
+          },
+          "classification": {
+            "failure_kind": "SUSTAINED_CPU_STOP",
+            "original_error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+            "original_resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+            "stage": "anchor",
+            "selected_test_index": null,
+            "selected_test_name": null,
+            "accepted_count_delta": 0,
+            "actual_product_reexecution_authorized": false,
+            "pre_product_retry_candidate_only": true,
+            "original_cleanup_confirmed": true
+          },
+          "first_independent_review_in_current_reader": true
+        }
+      ],
+      "observer": {
+        "samples": 23,
+        "host_max": 22.43,
+        "own_max": 1.140684,
+        "private_max": 53547008
+      }
+    },
+    "p335-light-review-run005.v1.json": {
+      "pin": {
+        "path": "implementation/p09/evidence/locked-r07/p335-light-review-run005.v1.json",
+        "bytes": 38746,
+        "sha256": "4e1a0df6ed1cd638d418f4f4b9f79272ce60c397377980979d97057c3a94fddf"
+      },
+      "state": "PASS_INDEPENDENT_WARM_LIGHT_FRESH_NOT_NATIVE_OR_PRODUCT",
+      "bound": 130,
+      "fresh": 130,
+      "reads": 260,
+      "bytes": 12745366,
+      "finished": true,
+      "cleanup": true,
+      "stop": null,
+      "contracts": null,
+      "current_code_count": 91,
+      "previous333_reviews": [
+        {
+          "root_pin": {
+            "path": "implementation/p09/evidence/locked-r07/p333-case-104-run003.v1.json",
+            "bytes": 420388,
+            "sha256": "0c1ae08ee3174df43df6e56b306a36b991e285447149c1cb7cee8c2431ffd528"
+          },
+          "classification": {
+            "failure_kind": "SUSTAINED_CPU_STOP",
+            "original_error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+            "original_resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+            "stage": "owned_parent",
+            "selected_test_index": 104,
+            "selected_test_name": "actual_import::formula_product_request::nochange_protected_and_invalid_second_section_cannot_be_successful_noop_or_partial_product",
+            "accepted_count_delta": 0,
+            "actual_product_reexecution_authorized": false,
+            "pre_product_retry_candidate_only": true,
+            "original_cleanup_confirmed": true
+          },
+          "old_review_pin": {
+            "path": "implementation/p09/evidence/locked-r07/p333-stop-review-run004.v1.json",
+            "bytes": 42822,
+            "sha256": "b87ac3a999c963f99383545bad8f74bdcc1b3d59a5e1829bafb8f4f8d5ed6699"
+          }
+        },
+        {
+          "root_pin": {
+            "path": "implementation/p09/evidence/locked-r07/p333-admission-run006.v1.json",
+            "bytes": 44647,
+            "sha256": "f92ae76c1d12bbe7ca1985b4095f028fe792cbb3a7ec27ddc0af23d5eca2a232"
+          },
+          "classification": {
+            "failure_kind": "SUSTAINED_CPU_STOP",
+            "original_error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+            "original_resource_stop_reason": "STOP_SUSTAINED_SYSTEM_CPU",
+            "stage": "anchor",
+            "selected_test_index": null,
+            "selected_test_name": null,
+            "accepted_count_delta": 0,
+            "actual_product_reexecution_authorized": false,
+            "pre_product_retry_candidate_only": true,
+            "original_cleanup_confirmed": true
+          },
+          "first_independent_review_in_current_reader": true
+        }
+      ],
+      "observer": {
+        "samples": 24,
+        "host_max": 13.71,
+        "own_max": 0.972763,
+        "private_max": 53178368
+      }
+    }
+  },
+  "code91_Native_vs_independent_metadata_comparison": {
+    "code_count": 91,
+    "matching_Native": 91,
+    "matching_metadata": 91,
+    "all_match": true
+  },
+  "next105_metadata_summaries": {
+    "p335-light-run007.v1.json": {
+      "pin": {
+        "path": "implementation/p09/evidence/locked-r07/p335-light-run007.v1.json",
+        "bytes": 45458,
+        "sha256": "e9dea745e88ea2f7ec3760496d6d2d3c907477dab26a75283064c203ff6e1b76"
+      },
+      "state": "PASS_REVIEWED_STOP_QUEUE_SELECTION_NOT_ACTUAL_OR_GATE",
+      "selected": 105,
+      "plan": {
+        "scope": "INDIVIDUAL_RUNTIME_PROGRESS_NOT_WHOLE_OR_GATE",
+        "legacy_whole_accepted_individual_cases": 3,
+        "legacy_whole_pending_successful_candidates": 1,
+        "runtime_source_qualified_individual_cases": 98,
+        "runtime_remaining_individual_cases": 151,
+        "runtime_remaining_regular_cases": 145,
+        "runtime_remaining_corpus_cases": 6,
+        "runtime_successful_candidates_requiring_closing": 0,
+        "next_runtime_index": 105,
+        "historical_whole_gate_reconciliation_required": true,
+        "whole1470_current_fresh_qualified": false,
+        "full249_current_qualified": false,
+        "signed16_current_qualified": false,
+        "product_complete": false,
+        "P09_gate": "OPEN",
+        "prior_runtime_qualified_cases": 97,
+        "locked_compound_qualified_individual_cases": 1,
+        "all_successful_bodies_pending_whole_reconciliation": 95,
+        "prior_runtime_receipts_and_validators_unchanged": true,
+        "original_STOP_receipts_not_reclassified": true
+      },
+      "contracts": 528,
+      "bound": 133,
+      "fresh": 133,
+      "reads": 266,
+      "bytes": 14539680,
+      "finished": true,
+      "cleanup": true,
+      "stop": null,
+      "codes": 0,
+      "observer": {
+        "samples": 78,
+        "host_max": 27.12,
+        "own_max": 6.25,
+        "private_max": 60178432
+      }
+    },
+    "p335-light-review-run008.v1.json": {
+      "pin": {
+        "path": "implementation/p09/evidence/locked-r07/p335-light-review-run008.v1.json",
+        "bytes": 40338,
+        "sha256": "ec92b0fe4a6fce0443e0b4fccd5feaac85a2dc357b6b9380fd21a3142b232655"
+      },
+      "state": "PASS_INDEPENDENT_WARM_LIGHT_FRESH_NOT_NATIVE_OR_PRODUCT",
+      "selected": 105,
+      "plan": {
+        "scope": "INDIVIDUAL_RUNTIME_PROGRESS_NOT_WHOLE_OR_GATE",
+        "legacy_whole_accepted_individual_cases": 3,
+        "legacy_whole_pending_successful_candidates": 1,
+        "runtime_source_qualified_individual_cases": 98,
+        "runtime_remaining_individual_cases": 151,
+        "runtime_remaining_regular_cases": 145,
+        "runtime_remaining_corpus_cases": 6,
+        "runtime_successful_candidates_requiring_closing": 0,
+        "next_runtime_index": 105,
+        "historical_whole_gate_reconciliation_required": true,
+        "whole1470_current_fresh_qualified": false,
+        "full249_current_qualified": false,
+        "signed16_current_qualified": false,
+        "product_complete": false,
+        "P09_gate": "OPEN",
+        "prior_runtime_qualified_cases": 97,
+        "locked_compound_qualified_individual_cases": 1,
+        "all_successful_bodies_pending_whole_reconciliation": 95,
+        "prior_runtime_receipts_and_validators_unchanged": true,
+        "original_STOP_receipts_not_reclassified": true
+      },
+      "contracts": null,
+      "bound": 134,
+      "fresh": 134,
+      "reads": 268,
+      "bytes": 14630596,
+      "finished": true,
+      "cleanup": true,
+      "stop": null,
+      "codes": 91,
+      "observer": {
+        "samples": 29,
+        "host_max": 26.96,
+        "own_max": 1.13852,
+        "private_max": 60944384
+      }
+    }
+  },
+  "declared_active_goal": true,
+  "P09_Gate": "OPEN",
+  "PC_freeze_solution_established": false,
+  "document_final_fresh_qualification": "NOT_RUN",
+  "whole_reconciliation_pending": 95,
+  "warm_session_handoff": {
+    "session_id": 16972,
+    "owned_python_id": 167172,
+    "synchronous_blocking_stdin_idle": true,
+    "active_Native_frames_readers_streams_Jobs_watchers": 0,
+    "automatic_retry": false,
+    "last_terminal_mode": "light-review",
+    "next_run": 9,
+    "next_test_index": 105,
+    "actual_request_review_pins": [
+      {
+        "path": "implementation/p09/evidence/locked-r07/p335-stop-review-run004.v1.json",
+        "bytes": 44230,
+        "sha256": "708a19314d817034c138a77cc0345a8427605f2f0c6c675c04cb6a5df7bf77f1"
+      }
+    ],
+    "last_qualified_fresh_pin": {
+      "path": "implementation/p09/evidence/locked-r07/p335-light-review-run008.v1.json",
+      "bytes": 40338,
+      "sha256": "ec92b0fe4a6fce0443e0b4fccd5feaac85a2dc357b6b9380fd21a3142b232655"
+    }
+  },
+  "unchanged_guards": [
+    "CPU98x4",
+    "ratio_RAM_commit",
+    "Native600",
+    "metadata720",
+    "no_burst14/20/32",
+    "two_entire_byte_passes",
+    "Job_cleanup"
+  ],
+  "successful_product_reexecution_count": 0,
+  "foreign_process_or_OS_changed": false
+}

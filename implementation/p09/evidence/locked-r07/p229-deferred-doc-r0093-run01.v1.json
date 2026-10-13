@@ -1,0 +1,997 @@
+{
+  "schema_version": "hwpx-agent.p09-deferred-runtime-document-delta/v1",
+  "state": "PASS_DEFERRED_RUNTIME_DOCUMENT_DELTA_NOT_WHOLE_OR_GATE",
+  "goal_status": "active",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "whole1470_current_fresh_qualified": false,
+  "historical67_current_fresh_qualified": false,
+  "legacy_whole_acceptance_not_changed": true,
+  "historical_whole_gate_reconciliation_required": true,
+  "actual_product_child_executed": false,
+  "new_product_or_full_source_frame_executed": false,
+  "synthetic_STOP_connection_only_not_live_CPU_stress_test": true,
+  "PC_freeze_resolution_established": false,
+  "deferred_runtime_contract_tests_passed": 144,
+  "document_contract_tests_passed": 12,
+  "IO": {
+    "read_passes": 465,
+    "bytes_read": 203429282,
+    "bound_inputs": 167,
+    "final_fresh_hashes": 167,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P206_binary1_other2_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 1048576,
+      "other": 2097152
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 203429282
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 203429282,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0.0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "implementation/p09/evidence/locked-r07/p226-stop-notice-run01.v1.json",
+      "bytes": 14737,
+      "sha256": "df2713cd6b0461108bfa486ca13d3196f990034702252d74004efebe133ce1a7"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p214-case-013-pair-closing-run01.v1.json",
+      "bytes": 34085,
+      "sha256": "a05a85a61a7caffe91c8c3bf7fa8b5934c9d67c4c6d6d296fbeff56dd67edfaa"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p213-borrowed-frame-actual-run01.v1.json",
+      "bytes": 1312117,
+      "sha256": "48a9f05f2e37c6d9334ec65553bd2581f652e38f4b6385082dffbe38fae54126"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p213-case-013-run01.json",
+      "bytes": 789210,
+      "sha256": "425791485d0d79724b50f345f05619e0b3c29b2ad6dbf196931dbbe470a2a928"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p212-case-012-compound-run02.v1.json",
+      "bytes": 124287,
+      "sha256": "e3659306fa6daa34531be0049a18117265124ef3509cbb44e79a2ebd9df3837d"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p211-borrowed-source-frame-run01.v1.json",
+      "bytes": 1281951,
+      "sha256": "1f5d45554d2d6c288b5dc602761ffcebc7d15ee1b8be33784e7df0b5e54d8c51"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run01.preparation.v1.json",
+      "bytes": 601637,
+      "sha256": "076afa535640a5afad9f50ed3fd932ab29238cc8f6ed0a20b2ca526ff11cc5f1"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-186-observed-r07-list-output.source-closing-run01.v1.json",
+      "bytes": 339893,
+      "sha256": "7b06997d3b8090967597fad1d12b94446e20e3a17ba206233ae8711fdb1d455d"
+    },
+    {
+      "path": "tools/p09/accept_locked_runtime_candidate.py",
+      "bytes": 10201,
+      "sha256": "ebb4a38998a0858d50a61841db27ebeeb357a5b8d585768ee4b9f7b6c0853f56"
+    },
+    {
+      "path": "tools/p09/tests/test_locked_runtime_compound.py",
+      "bytes": 4304,
+      "sha256": "6736162ffce35ed7e760f99f8bfa4ecf3c6350be61e888420b2fd28b4a06cc65"
+    },
+    {
+      "path": "tools/p09/run_borrowed_runtime_r07_case.py",
+      "bytes": 9871,
+      "sha256": "cd3a7be4d9eb431898511f07aeda8bdb8f570445e25fcab6e4a39fb8460ebfd8"
+    },
+    {
+      "path": "tools/p09/tests/test_borrowed_runtime_case.py",
+      "bytes": 2243,
+      "sha256": "e41e3a3451d3e13091d26f4e625db812604754084f5b0e41e9a56bd7da459637"
+    },
+    {
+      "path": "tools/p09/runtime_input_frame.py",
+      "bytes": 5802,
+      "sha256": "44a21215a76f4160ca7bfeb55b02f3bb464a2017671b0c2dae9883d7c9cd8929"
+    },
+    {
+      "path": "tools/p09/tests/test_runtime_input_frame.py",
+      "bytes": 8066,
+      "sha256": "669b9b9336e7f44b5070bda0ba79eedec1e05f10f4d8ff4a32c2e32c9843f111"
+    },
+    {
+      "path": "tools/p09/run_locked_runtime_r07_case.py",
+      "bytes": 14969,
+      "sha256": "108616a4efa725674a100d7f1c33477488ade81f1c79e00870a24b1c95e271b3"
+    },
+    {
+      "path": "tools/p09/tests/test_locked_runtime_r07_case.py",
+      "bytes": 6594,
+      "sha256": "31827dda9194d89ac03624452ed34ef093aa12086d36d9aa62c8d2c5437842ad"
+    },
+    {
+      "path": "tools/p09/locked_runtime_qualification_evidence.py",
+      "bytes": 7861,
+      "sha256": "d0500a12c4c9a9d16345dbfa3ccdc82d6fc055aa550866185886869364fd076c"
+    },
+    {
+      "path": "tools/p09/tests/test_locked_runtime_qualification_evidence.py",
+      "bytes": 8247,
+      "sha256": "c832601ee9a4d6c992632426ed9692ca8c902ee1cd98f267ee600c43ceb85f5b"
+    },
+    {
+      "path": "tools/p09/borrowed_locked_streams.py",
+      "bytes": 7276,
+      "sha256": "7299572c1fc86a932e6df50891e3004dc94c0e635978c04d81a3f961571a3ae5"
+    },
+    {
+      "path": "tools/p09/tests/test_borrowed_locked_streams.py",
+      "bytes": 11519,
+      "sha256": "9b65ad459de7af1d200dadb914c16de80683e711f7274f55b7044276683133b0"
+    },
+    {
+      "path": "tools/p09/probe_borrowed_locked_streams.py",
+      "bytes": 5217,
+      "sha256": "89ed48bfa98939cae27a9e66eb897c8f307a50d6a1fb5255b9b420af9ac4005c"
+    },
+    {
+      "path": "tools/p09/review_post_stop_frame.py",
+      "bytes": 8781,
+      "sha256": "a2ecfada28fd0ed9965db9a5fa11d51b51ef310bd60cbe31493acbf90df46a52"
+    },
+    {
+      "path": "tools/p09/tests/test_review_post_stop_frame.py",
+      "bytes": 2092,
+      "sha256": "e482fda3588e3eb008a41f60df2e36f96be48f23dbed7ca499f099d2a9821f88"
+    },
+    {
+      "path": "tools/p09/close_borrowed_source_frame.py",
+      "bytes": 8765,
+      "sha256": "b5162931ba113cf0bd4a6695022b58adbe9bb0b3243bd2861b958bf6d85a70cf"
+    },
+    {
+      "path": "tools/p09/tests/test_borrowed_source_frame_closing.py",
+      "bytes": 3742,
+      "sha256": "84a0aaa108374da1a13fa23bf1f50ae1f54d41575245a739747a044d84b2a52c"
+    },
+    {
+      "path": "tools/p09/close_borrowed_runtime_pair.py",
+      "bytes": 9084,
+      "sha256": "1d75129037f6f27c51da03aed94fd000d72d634349f2b172e9cecf09a4f51b3c"
+    },
+    {
+      "path": "tools/p09/tests/test_borrowed_runtime_pair.py",
+      "bytes": 2403,
+      "sha256": "bc7579613e035db0b5bb27cafa541f8a6e3f778293a9926d95a9e256e731485c"
+    },
+    {
+      "path": "tools/p09/resume_generic_locked_runtime.py",
+      "bytes": 13467,
+      "sha256": "e339f925e58a2633a3a742590d3e3bdeabfba0a837764a7d7ea2cf9691ac5368"
+    },
+    {
+      "path": "tools/p09/tests/test_generic_locked_runtime.py",
+      "bytes": 5394,
+      "sha256": "0f24df0b2e6b8b98f9840d2c3705af19ac3b8e2a89d1ddeed5dc30f7b6f27b90"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-014-run001.v1.json",
+      "bytes": 2036363,
+      "sha256": "0adc30d144213c49b9aca37a878a8286e4bb4271bfcdd7daf31fd3ffe263c952"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-014-run001.json",
+      "bytes": 792014,
+      "sha256": "8beaf52d17fc1061cc43b400747993f1b3764014776ea666561f78f853c1b1da"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-015-run002.v1.json",
+      "bytes": 2052380,
+      "sha256": "47282ac819b91c50a9c47a4171e8783610ddd682e078b2531e8d76bfcdf42ab7"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-015-run002.json",
+      "bytes": 805843,
+      "sha256": "52f6e875bda1c73ddc35498e8ba5cc67892f757e258b6c2b0d3ff77608113684"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-016-run003.v1.json",
+      "bytes": 2052894,
+      "sha256": "582ede6d0779f8b4c9b8f9bbce8214a80f93682cdd226a510bb5999ea8b9c70f"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-016-run003.json",
+      "bytes": 791902,
+      "sha256": "c991091404e3f5cd976cbe48ccc23679d993c155b2e6ea9b1acf588380d2d7ee"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-017-run004.v1.json",
+      "bytes": 2110917,
+      "sha256": "035ee1f3a7139cc12825659ec349253ed7edd2fbb3bbee42330657c82a0a2884"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-017-run004.json",
+      "bytes": 825111,
+      "sha256": "052303cdb4d677eb2b954913f8b52947b6449be8832c6165856e9279683729cc"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-018-run005.v1.json",
+      "bytes": 2110684,
+      "sha256": "8482d13e956c84db753f1d4129244b73b8382e8e0a14b997645965b4e84e1b1a"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-018-run005.json",
+      "bytes": 798725,
+      "sha256": "b8ccc141ada8c06c658e37bdcd0185654144b88d506f7ffd61c7bb2ecdf12ccc"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-019-run006.v1.json",
+      "bytes": 2083844,
+      "sha256": "4cae4ab3eb0e54cdc1a226b1afbc9999293ace5ff0243bbc769e1da21849a00e"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-019-run006.json",
+      "bytes": 810353,
+      "sha256": "4852058263767819facdd0b27fee1485b783cdd7d14af20508b658d63aebaf00"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-020-run007.v1.json",
+      "bytes": 2143480,
+      "sha256": "5feb2874a71443cabe82cd003dbfd3a3496bef6a430cb1a8cacab849a5561da6"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-020-run007.json",
+      "bytes": 882400,
+      "sha256": "4338267dc01b31c4231a9d9298140256d184acb7e630598b3d06eba2b809ff86"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p215-case-021-run008.v1.json",
+      "bytes": 2103393,
+      "sha256": "bbba659a0cf07291e5d283acfd63f3f00c2300899f8219605c445efe4070f80c"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p215-case-021-run008.json",
+      "bytes": 810271,
+      "sha256": "2d0b55af6bb4f8910a806af70b6dd33b058ac8b82a32810c766fe97ef893ece6"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p217-native-open-light-run01.v1.json",
+      "bytes": 7106,
+      "sha256": "118263568c50a5b36fff75571191592a1917cd601b5a73499e2a366637d37c77"
+    },
+    {
+      "path": "tools/p09/qualify_native_open_backpressure.py",
+      "bytes": 3137,
+      "sha256": "8e774740e7e1899bec332b264bda901e521e6a48b7ea2115dc3adfaf4eec96f4"
+    },
+    {
+      "path": "tools/p09/native_open_backpressure.py",
+      "bytes": 1672,
+      "sha256": "6b282003cc3b837eb6d156a883e134b971efda0697615ce2cf198302ce85c641"
+    },
+    {
+      "path": "tools/p09/tests/test_native_open_backpressure.py",
+      "bytes": 4576,
+      "sha256": "0ed1137c326ec0dbe8570ac195e54e023f81b773afe2fdb7a2cde47f00e5478f"
+    },
+    {
+      "path": "tools/p09/locked_runtime_inputs.py",
+      "bytes": 15465,
+      "sha256": "e7c40a2ec0367e01c359e3b89c179d45367e9db233348e76ba82364cc0599e14"
+    },
+    {
+      "path": "tools/p09/tests/test_locked_runtime_inputs.py",
+      "bytes": 18214,
+      "sha256": "c6c1f3c08c5a72d153ee4135fbf7e6246d3d53e4b8e9ebf29a414d48d6e919c6"
+    },
+    {
+      "path": "tools/p09/near_saturation_read_backpressure.py",
+      "bytes": 6072,
+      "sha256": "82ad99f21ed2e3bf100e20809cea38173bb1e7749b71ab2430d661a8fd905162"
+    },
+    {
+      "path": "tools/p09/tests/test_near_saturation_read_backpressure.py",
+      "bytes": 3558,
+      "sha256": "fa3f49c27a00d31731b378dd3201641927e52e9fd22b5ea14980551c4c041fcd"
+    },
+    {
+      "path": "tools/p09/resume_native_pressure_runtime.py",
+      "bytes": 14486,
+      "sha256": "1f78855e90c1f9ee384b81eaf261c79ae92f0632760a663fe3ab0f29b2e2e47b"
+    },
+    {
+      "path": "tools/p09/tests/test_native_pressure_runtime.py",
+      "bytes": 4161,
+      "sha256": "eb914e0a41662536932c7e9ac6bcf89654bba53243927f6d655a72b222d9a2b0"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-native-pressure-light-run001.v1.json",
+      "bytes": 94457,
+      "sha256": "49b03e64a3583028e689a2be7910d629ac88e61e0d40a56bac393be889734324"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-native-pressure-light-run002.v1.json",
+      "bytes": 103064,
+      "sha256": "1029b4de5dcd2f2ff9dee3435359d1c89b7718b7ce9b2be60fbf2915e788cb82"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-native-pressure-light-run003.v1.json",
+      "bytes": 110531,
+      "sha256": "655f49d8a1d7a96ec3ea3f2b7e59d9251ed6ac038b3a9fd4d4d18ef7811572a3"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-native-pressure-light-run004.v1.json",
+      "bytes": 135114,
+      "sha256": "9dc0769998ad0f624f2ab7b60f28322625c3a82dd924a4066b95d1c40fe34ecc"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-022-run001.v1.json",
+      "bytes": 2207155,
+      "sha256": "340efcf21d3b1e02eab7f28e65ad4a1f559983c6936f94dc80caf5c1f5402d4e"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-022-run001.json",
+      "bytes": 814807,
+      "sha256": "99b0aea58b74349c8349970b01a0d44bfd0a79aed7fc6b7109657155c80cdcc1"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-023-run002.v1.json",
+      "bytes": 2121841,
+      "sha256": "0131a422cab2f6d19fe60085ca95a9911f71cd5153d1f141633e4aadc0a04dc9"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-023-run002.json",
+      "bytes": 797982,
+      "sha256": "210092f405b6de3c2eb7c81a81f59b8ed3ab8497cda163f2ad854f3a561bc4b5"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-024-run003.v1.json",
+      "bytes": 2139183,
+      "sha256": "81aa767f01555786b2351620126544b6c2811d2c463e0d864c49c757909753e5"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-024-run003.json",
+      "bytes": 809726,
+      "sha256": "7be43ee555b8651c41d49de9d31b8f34e3eccde566096097a9bebc0c9913adca"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-025-run004.v1.json",
+      "bytes": 2239083,
+      "sha256": "908f1fd351a0e3d466db064dbbff3d3d282379e0d1ef2239ec4a34fe11a35524"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-025-run004.json",
+      "bytes": 896514,
+      "sha256": "bfb0a70653259069dccb8330918c45f2175c1b4087cef0703ae5a49d552fb876"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-026-run005.v1.json",
+      "bytes": 2203576,
+      "sha256": "5797c1c9bce3d0166ce304a9f804691c71f3a107b064458242252cfd963f5495"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-026-run005.json",
+      "bytes": 851431,
+      "sha256": "a655bab9ef9acf8f77e3d002376271de9736f7b5f6a6005a88e608f462a9bdb8"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-027-run006.v1.json",
+      "bytes": 2187404,
+      "sha256": "276ef8ce58c76954a42f3b816476586b2cdad71727ceb9c1ca36f5743ff11974"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-027-run006.json",
+      "bytes": 839467,
+      "sha256": "43f03b098c88295cfc23390a7a18d8439f1d362fbfd669e1f6388c86f4fd8896"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-028-run007.v1.json",
+      "bytes": 2166291,
+      "sha256": "1bf735447eeb2b7fafbd14baf6df5fb8b62204402df2d05504601b3ab7d5f590"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-028-run007.json",
+      "bytes": 803125,
+      "sha256": "7deb9983e4ccc7c76435a449627c27ff990d3de11d2e53b00944259180570e7d"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p218-case-029-run008.v1.json",
+      "bytes": 2222962,
+      "sha256": "6cc90037a0fe969aae7467cab32ea667bf2e08a88c148ccd7da717424b7652d1"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p218-case-029-run008.json",
+      "bytes": 818884,
+      "sha256": "4dd91230e02228ea4073c16b26a1d3a060f473c2dc0b4080e158ff60ea036e8b"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p219-compact-receipt-light-run01.v1.json",
+      "bytes": 18123,
+      "sha256": "fedd3863a799814fa883f5bf1a57a159d4781aaf9466cc120edce5a6c9b901bf"
+    },
+    {
+      "path": "tools/p09/receipt_compact_json.py",
+      "bytes": 2657,
+      "sha256": "a12d8114131ada0bf2058d16837a9f1a81fbff25adeccc8b18117b7669be7217"
+    },
+    {
+      "path": "tools/p09/tests/test_receipt_compact_json.py",
+      "bytes": 5039,
+      "sha256": "738432425b888dc3c0a9bcba18203bfd531f0e8c9169b3a753c9d868e4c40101"
+    },
+    {
+      "path": "tools/p09/qualify_receipt_compact_json.py",
+      "bytes": 6070,
+      "sha256": "566828c2edb00cfe24d13db653643e88ac9f8acf25f0c7a717608320cfbe67a7"
+    },
+    {
+      "path": "tools/p09/resume_compact_pressure_runtime.py",
+      "bytes": 17920,
+      "sha256": "c0c82868b94841f4f27a213f3e3eef0b95899f9318f7d648634f4b4eb3318ea3"
+    },
+    {
+      "path": "tools/p09/tests/test_compact_pressure_runtime.py",
+      "bytes": 3907,
+      "sha256": "58ca29452fa3f7726bfe624367ef8ebc57b221ed4738332382bd036a07834bd9"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p220-compact-light-run001.v1.json",
+      "bytes": 134127,
+      "sha256": "2532539eb6e73692ec536b7d159b09dbe62ca22a43b9781cbd4a91b75bf5a23b"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p220-case-030-run001.v1.json",
+      "bytes": 1542273,
+      "sha256": "35032b1e17b1d7f02c7a500dcab0dfacf47bfe110718ae20dc0c7389378ccae3"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p220-case-030-run001.json",
+      "bytes": 609774,
+      "sha256": "b622b02cb251af2a32faa722bce88ae3901b0800bd33083607f44a05f2b9da50"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p220-case-031-run002.v1.json",
+      "bytes": 1570341,
+      "sha256": "b30fe5d154ac1ccbd9d4a18f6b4d3259ce09939258d0ab3c433ad0a0ce1741ca"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p220-case-031-run002.json",
+      "bytes": 627379,
+      "sha256": "c26930d709c0288fcd466483bff46292a7727ee6d392a11541d90f9ff177546d"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p220-case-032-run003.v1.json",
+      "bytes": 1560624,
+      "sha256": "885849bdd5aad4a136f43432a6342670db795324c66761c05559171836ac8e2b"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p220-case-032-run003.json",
+      "bytes": 634572,
+      "sha256": "c8b30d0554703b41f7077ccdb6da069a892f204d46d12d10b4fab8a8b69ee24a"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p220-case-033-run004.v1.json",
+      "bytes": 1613946,
+      "sha256": "520e9b60a946537ced2e87424da0b79105c5b6274e75057d666d3b19a6c3e2d1"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p220-case-033-run004.json",
+      "bytes": 688629,
+      "sha256": "6f68db5fe234f996116a617164a6691365eae872c4bed3454bd18f8d0d06ec89"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p220-case-034-run005.v1.json",
+      "bytes": 1588449,
+      "sha256": "49c1280ee39dac81d4140dba7ba0890b24375a87c659111bf561f8888889f6d8"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p220-case-034-run005.json",
+      "bytes": 654324,
+      "sha256": "6b24709076f77d02a506df32fd5b38767c9b3fc69f1bf4841fc25d2114a0cd9f"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p221-packed-receipt-light-run01.v1.json",
+      "bytes": 18137,
+      "sha256": "c01529a6ade583042ef46fb5aef544f32a96cb7243a013bc73e23c1a3a3a554c"
+    },
+    {
+      "path": "tools/p09/packed_receipt_json.py",
+      "bytes": 5958,
+      "sha256": "2eca058b0989cf410809b23a7171fd0ca7ab82bf3e0784077fd08851143c01e6"
+    },
+    {
+      "path": "tools/p09/tests/test_packed_receipt_json.py",
+      "bytes": 6143,
+      "sha256": "a36f0b396f108654710e6762c66921f7a9c4898253616ba4b65c60ced4e9153e"
+    },
+    {
+      "path": "tools/p09/qualify_packed_receipt_json.py",
+      "bytes": 6027,
+      "sha256": "e27900d8f0d93d5852ee61d11332cade9cd60742d74688557001081bf11b66a7"
+    },
+    {
+      "path": "tools/p09/resume_packed_pressure_runtime.py",
+      "bytes": 17964,
+      "sha256": "d2b7caf58ba185d273d3bea47730a4e9fdc080e2e7548127b56b4b71b1585745"
+    },
+    {
+      "path": "tools/p09/tests/test_packed_pressure_runtime.py",
+      "bytes": 3937,
+      "sha256": "3bfe6cf94f019c981a5ba3a3a074b1e4a7bbc57b74562c4a220ffd28f7686969"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p226-stop-review-run01.v1.json",
+      "bytes": 14694,
+      "sha256": "f1ee9b8c0250cecd2ec51852f5a8dcfc8c9ff5ca9499f39ddc57a75d4a3eb530"
+    },
+    {
+      "path": "tools/p09/review_packed_cpu_stop.py",
+      "bytes": 6182,
+      "sha256": "fdbf7384113cecac6d446a5c2b07e2955c8ff85e824f644ea032223041f31aed"
+    },
+    {
+      "path": "tools/p09/terminal_failure_receipt.py",
+      "bytes": 3712,
+      "sha256": "ecf70786e7539729637cfc19f4a9a93577cad1470b87f6d348fd63f8fc3b3ad0"
+    },
+    {
+      "path": "tools/p09/tests/test_terminal_failure_receipt.py",
+      "bytes": 4149,
+      "sha256": "489e7ad22d6b70647a38de7a3bae3196e8e92072aaa950ef8346bc2befc18cac"
+    },
+    {
+      "path": "tools/p09/review_packed_cpu_peak_r2.py",
+      "bytes": 8218,
+      "sha256": "7e98009e692bd9d5c2c1f071d5aae3e19213a96067ce4866f470f60c22570395"
+    },
+    {
+      "path": "tools/p09/tests/test_packed_cpu_peak_summary_r2.py",
+      "bytes": 2692,
+      "sha256": "f13e7f6abccdb87cbd645693c658de42b73bd2839b974be4a365abba450d793e"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-060-run020.v1.json",
+      "bytes": 208007,
+      "sha256": "78c11517c8bb36289de5b9ade68f0910c2e583c5cba1058895a38b81bb4ff9b0"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-060-run020.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-059-run019.v1.json",
+      "bytes": 588180,
+      "sha256": "c7cf3da34fff99b65716bda258bf73d797b1537a7f63f36391743a2c8ed6cea6"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-packed-light-run001.v1.json",
+      "bytes": 32322,
+      "sha256": "873b88e5041de56e721f3b2897a0f0296e5b3976facb7dd6e4562672c7ecee1d"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-035-run001.v1.json",
+      "bytes": 568292,
+      "sha256": "0b855f63cf3e789bfdd89b279f2cc179dbf98f349707a61c7dba7a1c6132659f"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-035-run001.json",
+      "bytes": 175299,
+      "sha256": "a48d1d3a8e3dcf41fcf833604eab0df010f0eefeed62cf188e509839a50c860e"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-036-run002.v1.json",
+      "bytes": 579232,
+      "sha256": "150494ac692875e83df34f9c0fed55a3b7a698b33fca928dc03153aa3cd1ac3f"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-036-run002.json",
+      "bytes": 187875,
+      "sha256": "1e514ecb3574c633f320357dc341e1e254c0c08071a82fa218ed039db3426067"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-037-run003.v1.json",
+      "bytes": 562712,
+      "sha256": "c8335a3bdccd4f65bd78d4ae8b26cb3fa11d03a5ef6a87fbcc76d11cd9f9ff5b"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-037-run003.json",
+      "bytes": 166147,
+      "sha256": "3d894f23aa0cb81e8c7f7eb4290cfa8537f812805a178b156c5e362e904bf801"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-038-run004.v1.json",
+      "bytes": 562368,
+      "sha256": "eb190905b98d648972c8184425a824e19ad8f7293639675cad455f3e9fd8315b"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-038-run004.json",
+      "bytes": 163539,
+      "sha256": "268a447c7bc2b7f6eb585294dfde16943c4c636156d8cba50c503001a2de52d2"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-039-run005.v1.json",
+      "bytes": 584156,
+      "sha256": "511b49513d45fcd9beba401fe6784c3cf6c1e89654d22e1db0bc5a4d5f02f5c4"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-039-run005.json",
+      "bytes": 193731,
+      "sha256": "3bbc3d246c2fbf0a2b73378294b86166dba205396d09dc9d023cba02c52e5668"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-040-run006.v1.json",
+      "bytes": 566616,
+      "sha256": "976a043fc22de9faba59a1cd284559a1cdfd57e5bf3b5097aa6be2e3159e4583"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-040-run006.json",
+      "bytes": 168951,
+      "sha256": "a48d9ab702075b4cb2107b225366f0cf6728091b03284f02dabf6776f2e2e374"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-041-run007.v1.json",
+      "bytes": 576664,
+      "sha256": "b17170c72ed979c46b54f47f2e7adcc2449d93ff295af43978bf78c4c2802c62"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-041-run007.json",
+      "bytes": 174215,
+      "sha256": "c09dc5f9352a061143daf1c2c232a264435e8d874bf5684abe2080b5377c04d1"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-042-run008.v1.json",
+      "bytes": 568736,
+      "sha256": "322a2d5066ed9d79809929662f5e035f1a33c68aa61911d1c6a8814231d3dcdc"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-042-run008.json",
+      "bytes": 169843,
+      "sha256": "5b1da18d03160ad8484706e5e848e75832994883f295f1dc9eda25800f90b923"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-043-run009.v1.json",
+      "bytes": 585368,
+      "sha256": "36139bea1c5a9c7e128485d9350b3c9eeaa439392498be9b0ffe9c5869c59c06"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-043-run009.json",
+      "bytes": 186055,
+      "sha256": "de8ecef23d916b34a113b8b6882e5c3fc9030c85b3878c522f785a69a5b8fc49"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-044-run010.v1.json",
+      "bytes": 566612,
+      "sha256": "e1fe24a5060102fe48c5153cd9a57d3eae323e679757ca36ed66fe1ac186b8c3"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-044-run010.json",
+      "bytes": 168107,
+      "sha256": "15a63e1069dbef3fd7b0e85d15b9223ffb1da9b0b9f45f7b8d6e988c72178461"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-045-run011.v1.json",
+      "bytes": 573960,
+      "sha256": "cbc5b72e400a5afb7c94c3046eeb65655357df80180d4db06cdb0749ccf41d30"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-045-run011.json",
+      "bytes": 181615,
+      "sha256": "72109a976d528c3c9b94319859b1f6efc90e124a2471eb73f2e95106f4d87b6c"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-046-run012.v1.json",
+      "bytes": 567800,
+      "sha256": "ddba0b8ef2f4dffcfe5fbf8cb1d55938f1bc2cb034abedf90ed389372b1115c5"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-046-run012.json",
+      "bytes": 169231,
+      "sha256": "6d28d549452662e4229ccfb17f884a56f290d0390b259a20295c6153294a0171"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-053-run013.v1.json",
+      "bytes": 571276,
+      "sha256": "f64dbc2d4195bd453d5c8d9654a2e47145d0e8b0462fe618f88bdaabad2681ef"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-053-run013.json",
+      "bytes": 180227,
+      "sha256": "d177593a569981889b6fc6cd3fae94d700610fa0af56ea1e77ca6d9996af8b8b"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-054-run014.v1.json",
+      "bytes": 572908,
+      "sha256": "6568ff02a570deb252be18ccdfd25a89cb38e04204860a52d9745f3aeb6e9a17"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-054-run014.json",
+      "bytes": 177227,
+      "sha256": "a8885e500ac70cad6aebd55498d8d097288b9b79ceb4b293f56bd5d3720b1b82"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-055-run015.v1.json",
+      "bytes": 567128,
+      "sha256": "d10c73e4e1342137f638cd8886d73b40e94725fd35c5fd56911e6c0cd70b367a"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-055-run015.json",
+      "bytes": 166327,
+      "sha256": "372f384667f32e4631971c7494275f1e9e6c1b6c251d83806883c84299b7db42"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-056-run016.v1.json",
+      "bytes": 567484,
+      "sha256": "1ae9fb2c7065dabab02b8db749ebb06b0a462175cdc0e80ae983854f83ef19de"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-056-run016.json",
+      "bytes": 167567,
+      "sha256": "7884491b99aab6e648eb8ccdfbc6f22ec4fb01481ad5b8df5ebb50c02a0229fd"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-057-run017.v1.json",
+      "bytes": 577392,
+      "sha256": "2ad0ecded1a8f8544fab6db2a153e60fec2a3e34dd2c4d3fd79b91762579c4aa"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-057-run017.json",
+      "bytes": 178063,
+      "sha256": "3ceba4c728c129e5e403dc78a8868c29943e9fdf26ee2cb2d43ad8e93b1d4888"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-058-run018.v1.json",
+      "bytes": 566976,
+      "sha256": "72145bf8602f96fd42a3f6023abd6fa4b9ed55c46de924cd919b66fcab0847df"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-058-run018.json",
+      "bytes": 162911,
+      "sha256": "9765f12a5389e3a26025b482e3894f98e83940f9f40ecc37c01e657a495a63be"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-059-run019.json",
+      "bytes": 195683,
+      "sha256": "7839ce1dd88561496c52531a5afc7fe53723926efe93e2d0a0fa9b34baebdee4"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p227-parent-stop-connection-run01.v1.json",
+      "bytes": 6857,
+      "sha256": "3e980627f22938f16a9fc46f14b1fa1cf3fe8b63fa7907e73333bc93e1f60c68"
+    },
+    {
+      "path": "tools/p09/qualify_deferred_parent_failure.py",
+      "bytes": 7345,
+      "sha256": "78ae90a13456446296d02c8767d9ee751246f5a574030aee3630af0a779d43dd"
+    },
+    {
+      "path": "tools/p09/deferred_parent_failure.py",
+      "bytes": 3656,
+      "sha256": "11539bfaa277c8951399006a5149d88165d22acc0446123baea216f6bef53b99"
+    },
+    {
+      "path": "tools/p09/tests/test_deferred_parent_failure.py",
+      "bytes": 9374,
+      "sha256": "2f1caa93d66e45f6b2da90ef2e8f94e35d2df48284de5766a959fd5257e77e42"
+    },
+    {
+      "path": "tools/p09/terminal_failure_receipt_r2.py",
+      "bytes": 4295,
+      "sha256": "41c72b87bb266fe32e7b6e01261429073de0e28dd4c8fc2b400a9afd6fc9cc0c"
+    },
+    {
+      "path": "tools/p09/tests/test_terminal_failure_receipt_r2.py",
+      "bytes": 1939,
+      "sha256": "ebcec4fd8c199e44a681175c2250e93f80f912d9ca1c88c9135b4493654935e3"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p227-synthetic-stop-run01.json",
+      "bytes": 1823,
+      "sha256": "cb93fd81ea4d58cbe990da4e1d94a9787982b7b9e54eff8f3118d71c231d2767"
+    },
+    {
+      "path": "tools/p09/resume_deferred_failure_runtime.py",
+      "bytes": 24186,
+      "sha256": "ec2de4db8407752ba9e482529dba6d3c271ae89f8fb7a329ca9a2d0a6ee1bf0b"
+    },
+    {
+      "path": "tools/p09/tests/test_deferred_failure_runtime.py",
+      "bytes": 2919,
+      "sha256": "bbf08bbde01928c95135af6b1be4b395a8495446744cd238e775bc71e5272647"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p228-packed-light-run001.v1.json",
+      "bytes": 38238,
+      "sha256": "4c7f5d5722c8b4c4bd0c0ca552c5c18625911bf5aa37ff2bd26bc2949553ac8c"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p228-case-060-run001.v1.json",
+      "bytes": 572432,
+      "sha256": "f864face44fdfaf2277c0c4bf958fffacf0f968955fd8cc7d169f369e7dac04f"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p228-case-060-run001.json",
+      "bytes": 167339,
+      "sha256": "9bb595dc4cedf4a5aff617f78c6f34cd2a9da8bfd7a221d540e04bcdcd28b02a"
+    },
+    {
+      "path": "implementation/p09/evidence/runtime-progress-r92/CURRENT_STATE.md",
+      "bytes": 432971,
+      "sha256": "517a5d60587c456938c8c35b4db971d5013426a0b257499157d6da80588a33ff"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 434668,
+      "sha256": "3e21764923b2886edb2fc4d57d805f5aee8520f0a458d76d98462d16da7ccb9d"
+    },
+    {
+      "path": "implementation/p09/evidence/runtime-progress-r92/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 526603,
+      "sha256": "2379237b389d9fc76582e740a9b050d76f7440e1febe3b23329090f09cf05245"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 528300,
+      "sha256": "697598c318046b94cfa1baaf80d439cdb60e17c8bf39201cdcaa5e7585e6d2c9"
+    },
+    {
+      "path": "implementation/p09/P09-229_DEFERRED_FAILURE_RUNTIME_R0093_REPORT.md",
+      "bytes": 7685,
+      "sha256": "2ec78e048e17e1603a99f694ad6faca3f9cce466a0a6691481b6195353fc8f24"
+    },
+    {
+      "path": "tools/p09/sync_deferred_runtime_documents.py",
+      "bytes": 7486,
+      "sha256": "cb00892f8d8d1625efe42275a5e67a575dc0e84f29113134880ef0c19f70f277"
+    },
+    {
+      "path": "tools/p09/tests/test_deferred_runtime_documents.py",
+      "bytes": 1445,
+      "sha256": "b4fd9ad56c8f59d12da8f0f88f8a7fa010d94d8495afb2e06cad97936849901e"
+    },
+    {
+      "path": "tools/p09/sync_generic_runtime_document_delta.py",
+      "bytes": 8597,
+      "sha256": "41b7ec330b51baaea8bca087c3b59b291cac58f915856d16538b4735ca21f1a4"
+    },
+    {
+      "path": "tools/p09/tests/test_generic_runtime_document_delta.py",
+      "bytes": 2298,
+      "sha256": "177ebc0665ae8277d7d4e73a8d0048b724df795fa1449b211e1e664c50e6f1ce"
+    }
+  ],
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "document_revision": 93,
+  "runtime_plan": {
+    "scope": "INDIVIDUAL_RUNTIME_PROGRESS_NOT_WHOLE_OR_GATE",
+    "legacy_whole_accepted_individual_cases": 3,
+    "legacy_whole_pending_successful_candidates": 1,
+    "runtime_source_qualified_individual_cases": 54,
+    "runtime_remaining_individual_cases": 195,
+    "runtime_remaining_regular_cases": 189,
+    "runtime_remaining_corpus_cases": 6,
+    "runtime_successful_candidates_requiring_closing": 0,
+    "next_runtime_index": 61,
+    "runtime_qualified_test_names": [
+      "actual_import::actual_aead_tamper_cannot_be_reclassified_as_an_importer_or_policy_failure",
+      "actual_import::actual_head_advance_invalidates_old_import_even_with_identical_result_bytes",
+      "actual_import::all_ten_actual_stored_results_import_without_caller_maps_and_preserve_whole_graphs",
+      "actual_import::debug_and_receipts_do_not_expose_raw_package_graph_or_policy_values",
+      "actual_import::field_ranges::actual_aead_tamper_is_original_service_failure_not_field_projection_failure",
+      "actual_import::field_ranges::advanced_head_invalidates_cached_source_and_range_even_when_result_bytes_equal",
+      "actual_import::field_ranges::cached_field_ranges_cannot_rebind_document_branch_project_subject_or_tenant",
+      "actual_import::field_ranges::captured_stored_result_field_ranges_match_whole_direct_graph_without_ingest_or_head_change",
+      "actual_import::field_ranges::each_new_partial_marker_independently_denies_full_product_without_old_markers",
+      "actual_import::field_ranges::revoked_source_acl_denies_new_range_import_and_cached_range_verification",
+      "actual_import::field_ranges::stored_range_debug_and_receipt_do_not_disclose_cached_field_content",
+      "actual_import::field_semantics::actual_aead_tamper_denies_meaning_before_supported_tuple_parsing",
+      "actual_import::field_semantics::actual_captured_source_meaning_matches_direct_import_without_ingest_or_head_write",
+      "actual_import::field_semantics::all_scope5_substitutions_reject_fresh_and_cached_meaning_models",
+      "actual_import::field_semantics::head_advance_invalidates_meanings_even_when_result_bytes_are_same",
+      "actual_import::field_semantics::revoked_acl_denies_new_meaning_import_and_cached_meaning_verify",
+      "actual_import::field_semantics::semantic_partial_markers_each_deny_full_context_without_predecessor_markers",
+      "actual_import::formula_compiler::actual_field_graph_and_compiled_candidate_do_not_become_full_import_or_issuer_authority",
+      "actual_import::formula_compiler::actual_multi_section_compiler_targets_original_source_fields_and_whole_candidate_without_publication",
+      "actual_import::formula_compiler::fresh_acl_aead_head_and_quarantine_changes_deny_compilation_and_never_invoke_cached_consumer",
+      "actual_import::formula_compiler::mixed_current_and_empty_results_compile_only_changed_actual_fields",
+      "actual_import::formula_compiler::protected_or_invalid_second_section_never_creates_a_partial_stored_plan",
+      "actual_import::formula_compiler::provider_scope_substitutions_cannot_rebind_compiled_batch_or_release_candidates",
+      "actual_import::formula_evaluation::authorized_actual_source_cycle_rejects_without_using_old_cached_value",
+      "actual_import::formula_evaluation::authorized_nonnumeric_source_rejects_math_without_ingest_or_cache_fallback",
+      "actual_import::formula_evaluation::every_locked_actual_source_evaluates_like_direct_without_ingest_head_or_full_route",
+      "actual_import::formula_evaluation::five_authentication_scope_substitutions_reject_new_and_cached_numeric_models",
+      "actual_import::formula_evaluation::fresh_and_cached_evaluation_reject_actual_aead_acl_head_and_quarantine_changes",
+      "actual_import::formula_evaluation::missing_document_read_scope_rejects_provider_before_numeric_model_reuse",
+      "actual_import::formula_output::authenticated_actual_result_output_is_replayable_but_does_not_ingest_commit_or_authorize_route",
+      "actual_import::formula_output::five_actor_and_document_scope_substitutions_reject_preparation_and_cached_consumption",
+      "actual_import::formula_output::revoked_acl_tampered_aead_head_advance_and_quarantine_never_release_cached_result_bytes",
+      "actual_import::formula_policy::actual_four_target_policy_gates_original_changed_and_current_product_candidates",
+      "actual_import::formula_policy::allowed_policy_never_overrides_original_native_protection_or_invalid_second_section",
+      "actual_import::formula_policy::cached_changed_and_current_products_recheck_source_policy_acl_aead_quarantine_and_head",
+      "actual_import::formula_policy::cached_formula_policy_products_refuse_five_foreign_provider_scopes",
+      "actual_import::formula_policy::explicit_denial_including_current_results_prevents_product_preparation",
+      "actual_import::formula_policy::form_policy_media_or_non_evidence_artifact_never_grants_formula_permission",
+      "actual_import::formula_policy::latest_version_order_and_revocation_are_rechecked_without_old_policy_fallback",
+      "actual_import::formula_policy::policy_revocation_during_binding_and_immediately_before_callback_is_not_cached",
+      "actual_import::formula_policy::strict_policy_shape_unknown_duplicate_coercion_and_bounds_never_become_permissions",
+      "actual_import::formula_policy::strict_request_refuses_caller_policy_and_other_operations_before_source_or_policy_reads",
+      "actual_import::formula_policy::whole_actual_target_coverage_anchors_ast_graph_and_source_bindings_are_required",
+      "actual_import::formula_policy_issuer::approval_only_acl_quarantine_aead_and_latest_revocation_deny_fresh_and_cached_products",
+      "actual_import::formula_policy_issuer::approval_only_aead_tamper_denies_candidate_with_source_and_original_policy_still_valid",
+      "actual_import::formula_policy_issuer::cached_signed_product_denies_five_foreign_scopes_new_policy_and_old_signature_replay",
+      "actual_import::formula_policy_issuer::genuine_ed25519_generated_policy_gates_original_changed_and_current_products_and_authorized_reader",
+      "actual_import::formula_policy_issuer::genuine_signature_cannot_approve_foreign_source_policy_binding_audience_operation_or_root_generation",
+      "actual_import::formula_policy_issuer::issuer_expiry_not_before_root_bounds_clock_failure_and_backwards_time_deny_cached_bytes",
+      "actual_import::formula_policy_issuer::key_revocation_same_counter_trust_change_and_mid_read_change_never_use_cached_root",
+      "actual_import::formula_policy_issuer::malformed_unknown_duplicate_coerced_positional_and_trailing_approval_never_grants_permission",
+      "actual_import::formula_policy_issuer::one_bit_bad_signature_wrong_domain_foreign_key_and_missing_latest_approval_are_denied",
+      "actual_import::formula_policy_issuer::proof_and_clock_revocation_immediately_before_candidate_callback_never_call_consumer",
+      "actual_import::formula_policy_issuer::provision::provision_approval_write_and_postcommit_failures_preserve_exact_outcome_without_retry"
+    ],
+    "historical_whole_gate_reconciliation_required": true,
+    "whole1470_current_fresh_qualified": false,
+    "full249_current_qualified": false,
+    "signed16_current_qualified": false,
+    "product_complete": false,
+    "P09_gate": "OPEN",
+    "prior_runtime_qualified_cases": 53,
+    "locked_compound_qualified_individual_cases": 1,
+    "all_successful_bodies_pending_whole_reconciliation": 51,
+    "prior_runtime_receipts_and_validators_unchanged": true,
+    "original_STOP_receipts_not_reclassified": true
+  },
+  "previous_document_receipt_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p226-stop-notice-run01.v1.json",
+    "bytes": 14737,
+    "sha256": "df2713cd6b0461108bfa486ca13d3196f990034702252d74004efebe133ce1a7"
+  },
+  "new_actual_runtime_pair_pins": [
+    {
+      "path": "implementation/p09/evidence/locked-r07/p228-case-060-run001.v1.json",
+      "bytes": 572432,
+      "sha256": "f864face44fdfaf2277c0c4bf958fffacf0f968955fd8cc7d169f369e7dac04f"
+    }
+  ],
+  "exact_prior_document_bytes_preserved": true,
+  "original_STOP_and_zero_body_preserved": true
+}

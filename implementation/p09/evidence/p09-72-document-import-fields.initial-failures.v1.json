@@ -1,0 +1,68 @@
+{
+  "schema": "hwpx-agent.p09-document-import-fields.initial-failures/v1",
+  "date": "2026-10-04",
+  "state": "original_new_failures_retained_not_promoted",
+  "failures": [
+    {
+      "chunk": "99c96f",
+      "scope": "new_fields_importer_compile",
+      "error": "E0597 local rebuilt_forms borrowed as impl lifetime",
+      "repair": "infer rebuilt ImportedDocumentFields lifetime locally",
+      "archive": "implementation/p09/source-archive/p09-72-initial-field-ranges-compile"
+    },
+    {
+      "chunk": "3a1376",
+      "scope": "new_fields_importer_strict_lint",
+      "errors": [
+        "paragraph112 lines",
+        "redundant semantic_value closure"
+      ],
+      "repair": "extract same source wrapper validation helper and use original method reference; no allow/skip",
+      "archive": "implementation/p09/source-archive/p09-72-initial-field-ranges-lint"
+    },
+    {
+      "chunk": "bb03ef",
+      "scope": "new_package_tests",
+      "passed": 9,
+      "failed": 1,
+      "error": "ordinary valid fieldEnd rejected hidden attributed begin in original parser before new importer",
+      "repair": "use attributed wrappers for BOTH markers so new strict wrapper rejection is actually exercised; expected Binding not weakened",
+      "archive": "implementation/p09/source-archive/p09-72-initial-field-ranges-tests"
+    },
+    {
+      "chunk": "1356d0",
+      "scope": "new_test_module_compile",
+      "error": "E0583 implicit nested test module path",
+      "repair": "explicit new child module path only; original test bodies unchanged",
+      "archive": "implementation/p09/source-archive/p09-72-initial-field-ranges-tests"
+    },
+    {
+      "chunk": "066dad",
+      "scope": "new_service_test_fixture_compile",
+      "error": "shared synthetic ZIP constructor requires direct dev dependency",
+      "repair": "CLI zip.workspace dev-dependency and matching lock entry only; production deps unchanged",
+      "archive": "implementation/p09/source-archive/p09-72-initial-service-fixture-compile"
+    },
+    {
+      "chunk": "28877a",
+      "scope": "native_order_repair_strict_lint",
+      "error": "new finish no longer needs mut self",
+      "repair": "remove unused mut without skip/allow",
+      "archive": "implementation/p09/source-archive/p09-72-native-order-lint"
+    }
+  ],
+  "inspection_repair": {
+    "issue": "normalized attached-table graph traversal differs from XML field start order",
+    "whole_pre_repair_source": "implementation/p09/source-archive/p09-72-before-native-order-repair",
+    "repair": "sort by actual immutable source spine and element position",
+    "new_regression": "actual_xml_order_survives_normalized_attached_table_graph_order",
+    "regression_after_repair_reexecuted": true
+  },
+  "read_only_or_patch_context_errors": [
+    "nonexistent guessed package_io/support paths were not runtime validation",
+    "rustfmt-split const caused one apply_patch context mismatch with no file mutation"
+  ],
+  "predecessor_P62_16fde8_cause": "UNRESOLVED",
+  "native_started": false,
+  "p09_complete": false
+}

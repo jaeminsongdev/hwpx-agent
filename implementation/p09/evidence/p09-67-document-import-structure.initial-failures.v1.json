@@ -1,0 +1,82 @@
+{
+  "schema": "hwpx-agent.p09-document-import-structure.initial-failures/v1",
+  "date": "2026-10-04",
+  "raw_source_archive_root": "implementation/p09/source-archive",
+  "failures": [
+    {
+      "execution": "52ada9",
+      "stage": "initial_structure_compile",
+      "state": "FAIL_RETAINED",
+      "diagnostic": "E0283_properties_key_type_inference",
+      "repair": "new_properties_key_type_only"
+    },
+    {
+      "execution": "dbe9b2/9d51a6",
+      "stage": "initial_structure_lint",
+      "state": "FAIL_RETAINED",
+      "diagnostic": "too_many_lines_cast_possible_wrap_unused_self_needless_pass_by_value",
+      "repair": "split_resource_helper_checked_conversion_static_depth_borrow_properties"
+    },
+    {
+      "execution": "3e4e18",
+      "stage": "initial_test_compile",
+      "state": "FAIL_RETAINED",
+      "diagnostic": "missing_SourceImportError_import",
+      "repair": "new_test_import_only"
+    },
+    {
+      "execution": "48f2b3",
+      "stage": "initial_test_lint",
+      "state": "FAIL_RETAINED",
+      "diagnostic": "format_push_string_and_unnecessary_map_err",
+      "repair": "fmt_Write_write_and_direct_Err_no_assertion_removal"
+    },
+    {
+      "execution": "468532",
+      "stage": "initial_product_test_compile",
+      "state": "FAIL_RETAINED",
+      "diagnostic": "E0599_guessed_private_bytes_api",
+      "repair": "original_with_verified_bytes_callback_no_visibility_change"
+    },
+    {
+      "execution": "2d36f4",
+      "stage": "initial_actual_saved_table_corpus",
+      "state": "FAIL_RETAINED",
+      "diagnostic": "all_16_rejected_text_flow_unsupported_shape",
+      "repair": "explicit_private_source_preserving_parameter_profile_public_typed_reader_unchanged"
+    },
+    {
+      "execution": "73eae8/343b1d",
+      "stage": "initial_parameter_test_syntax",
+      "state": "FAIL_RETAINED",
+      "diagnostic": "missing_final_closing_brace_in_new_test",
+      "repair": "new_test_closing_brace_only"
+    },
+    {
+      "execution": "9ce2e2/ac04fd",
+      "stage": "initial_parameter_test_lint",
+      "state": "FAIL_RETAINED",
+      "diagnostic": "needless_raw_string_hashes_and_redundant_pattern_matching",
+      "repair": "literal_delimiter_and_is_err_identical_assertion"
+    }
+  ],
+  "diagnostic_errors": [
+    {
+      "stage": "saved_table_output_extraction",
+      "diagnostic": "stderr_appended_after_JSON",
+      "repair": "closed_JSON_extent_extraction_no_product_source_change"
+    },
+    {
+      "stage": "read_only_search",
+      "diagnostic": "PowerShell_literal_glob_paths_not_expanded_by_rg",
+      "repair": "exact_paths_discovered_with_rg_files"
+    }
+  ],
+  "previous_p62_failure": {
+    "execution": "16fde8",
+    "state": "UNRESOLVED"
+  },
+  "predecessor_failure_or_receipt_removed": false,
+  "original_hwpx_modified": false,
+  "native_started": false
+}

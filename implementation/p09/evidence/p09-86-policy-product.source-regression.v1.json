@@ -1,0 +1,48 @@
+{
+  "schema": "hwpx-agent.p09-86-source-regression/v1",
+  "state": "current_four_affected_targets_pass",
+  "distinct_current_tests": 135,
+  "runs": [
+    {
+      "command": "cargo test -p hwpx-agent-cli --test form_stored_product_request -- --test-threads=1",
+      "passed": 8
+    },
+    {
+      "command": "cargo test -p hwpx-agent-cli --test form_stored_provider -- --test-threads=1",
+      "passed": 112,
+      "new_policy_product_tests_included": 7,
+      "existing_stored_policy_tests_included": 11,
+      "existing_registration_tests_included": 5
+    },
+    {
+      "command": "cargo test -p hwpx-agent-cli --test policy_bound_form_import -- --test-threads=1",
+      "passed": 1
+    },
+    {
+      "command": "cargo test -p hwpx-package --test document_import_form_policies -- --test-threads=1",
+      "passed": 14
+    }
+  ],
+  "failures": 0,
+  "ignored": 0,
+  "filtered_out": 0,
+  "terminal_exit_code": 0,
+  "terminal_session_id": 40136,
+  "terminal_chunk_id": "290e16",
+  "original_stored_request_summary_chunk_id": "fcba04",
+  "terminal_summaries": [
+    "test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 27.17s",
+    "test result: ok. 112 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1211.85s",
+    "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.65s",
+    "test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.74s"
+  ],
+  "original_native_and_managed_value_profiles_kept_separate": true,
+  "full_context_partial_admission_guards_retained": true,
+  "compiler_entire_typed_plan_graph_and_candidate_checks_reused": true,
+  "current_workspace_all_targets_or_full_107_target_batch": false,
+  "historical_P84_107_target_1096_test_qualification_not_new_current_pass": true,
+  "native_executed": false,
+  "p09_complete": false,
+  "P09_gate": "OPEN",
+  "goal_status": "active"
+}

@@ -1,0 +1,13 @@
+{
+  "schema": "hwpx-agent.p09-postgres-revision.failure/v1",
+  "state": "fail",
+  "actual_exit_code": 1,
+  "actual_terminal_chunk": "db09f9",
+  "command": "cargo clippy -p artifact-service -p retention-sync-service -p revision-service -p hwpx-agent-cli --lib --tests --offline --locked -- -D warnings",
+  "diagnostics": ["new postgres.rs:854 needless_pass_by_value in coarse database error classifier"],
+  "archived_sources": ["implementation/p09/source-archive/p09-62-pre-postgres-revision/pre-final-lint-repository.rs", "implementation/p09/source-archive/p09-62-pre-postgres-revision/pre-final-lint-boundary.rs"],
+  "prior_actual_sql_pass_is_historical_after_correction": true,
+  "guards_or_lints_weakened": false,
+  "native_activated": false,
+  "p09_complete": false
+}

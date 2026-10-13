@@ -1,0 +1,74 @@
+{
+  "schema": "hwpx-agent.p09-document-import-field-semantics.initial-failures/v1",
+  "date": "2026-10-04",
+  "state": "failed_and_intermediate_sources_preserved_not_upgraded_to_pass",
+  "failures": [
+    {
+      "chunks": [
+        "4b53ef",
+        "d450e1"
+      ],
+      "phase": "initial_compile",
+      "errors": [
+        "FormImportError_conversion",
+        "PropertyValue_Bool_wrong_name",
+        "HyperlinkHwpxLimits_default_not_available",
+        "LinkReferenceLimits_default_not_available"
+      ],
+      "archive": "implementation/p09/source-archive/p09-73-initial-semantics-compile",
+      "repair": "Use original type names and explicit bounded constructors; chain original error conversion; no old guard changes"
+    },
+    {
+      "chunk": "23231c",
+      "phase": "test_compile",
+      "error": "DocumentGraph_references_getter_not_available",
+      "archive": "implementation/p09/source-archive/p09-73-initial-semantics-tests",
+      "repair": "Inspect immutable cloned draft; no public graph API change"
+    },
+    {
+      "chunk": "2da987",
+      "phase": "synthetic_HTTPS_fixture",
+      "passed": 7,
+      "failed": 1,
+      "error": "test_Command_missing_native_escaped_colon",
+      "archive": "implementation/p09/source-archive/p09-73-initial-https-fixture",
+      "repair": "Use original exact HTTPS command tuple; production parser unchanged"
+    },
+    {
+      "chunk": "025af6",
+      "phase": "service_test_module_path",
+      "error": "relative_path_one_parent_too_many",
+      "archive": "implementation/p09/source-archive/p09-73-initial-service-test-path",
+      "repair": "Correct new helper path; original support content unchanged"
+    },
+    {
+      "chunk": "b0d20d",
+      "phase": "strict_lint",
+      "errors": [
+        "test_expect_used",
+        "collapsible_if"
+      ],
+      "archive": "implementation/p09/source-archive/p09-73-initial-semantics-lint",
+      "repair": "No panic/allow/skip; canonical test command construction and let-chain"
+    },
+    {
+      "chunk": "a4da38",
+      "phase": "duplicate_fixture_lint",
+      "error": "same_existing_helper_loaded_twice",
+      "archive": "implementation/p09/source-archive/p09-73-duplicate-fixture-lint",
+      "repair": "Reuse same helper with test-only pub(super) visibility; also preserve intermediate new command construction before correction"
+    }
+  ],
+  "read_only_or_no_mutation_errors": [
+    "incorrect_glob_paths_or_guessed_files",
+    "failed_atomic_apply_patch_context",
+    "unexecuted_new_probe_transform_rejected_by_internal_assertion"
+  ],
+  "eight_failed_intermediate_source_files_preserved": true,
+  "nine_whole_pre_change_originals_preserved": true,
+  "original_parser_service_SQL_tests_guards_assertions_not_weakened": true,
+  "P62_16fde8_root_cause": "UNRESOLVED",
+  "p09_complete": false,
+  "native_started": false,
+  "permission_prompt_requested": false
+}

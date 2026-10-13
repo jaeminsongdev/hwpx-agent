@@ -1,0 +1,16 @@
+{
+  "schema_version": "hwpx-agent.p09-144-readonly-audit-attempt/v1",
+  "state": "FAIL_CLOSED_RESOURCE_STOP_NOT_CURRENT_PROGRESS_ACCEPTANCE",
+  "command": "python -B tools/p09/verify_formula_issuer_corpus_current.py --receipt implementation/p09/evidence/p09-144-corpus-consumer.progress.v1.json",
+  "observed_exit_code": 1,
+  "observed_terminal_result": {
+    "state": "FAIL_CLOSED",
+    "error_code": "STOP_SUSTAINED_SYSTEM_CPU",
+    "P09_gate": "OPEN"
+  },
+  "requested_success_receipt_created": false,
+  "complete_current_readonly_audit_accepted": false,
+  "cause_of_host_CPU_pressure_or_Codex_hang_established": false,
+  "native_or_DB_started_by_this_readonly_audit": false,
+  "product_complete": false
+}

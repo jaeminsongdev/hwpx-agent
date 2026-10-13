@@ -1,0 +1,96 @@
+{
+  "schema": "hwpx-agent.p09-document-import-form-policy.final-audit/v1",
+  "date": "2026-10-04",
+  "execution": "6a3cbc",
+  "source_progress_path": "implementation/p09/evidence/p09-69-document-import-form-policy.source-progress.v1.json",
+  "source_progress_bytes": 75567,
+  "source_progress_sha256": "c0297148e36df36e16d08691ee0db770f82d1fbdd29f0bbc539c87288401e324",
+  "checked_pins": 95,
+  "all_pins_exact": true,
+  "fresh_whole_policy_receipts_exact": true,
+  "executable_sha256": "5b955dbc7efa1e3cafb9f04614541440aa6218ee00e6a9a235f110a8665485d0",
+  "actual_cases": 10,
+  "case_accumulated_forms": 50,
+  "unique_source_sha256": 8,
+  "verified_native_overlay_issues": 100,
+  "legacy_verdict_retained": true,
+  "plans_lines": 120,
+  "hwp_process_count": 0,
+  "goal_active": true,
+  "gate_complete": false,
+  "P10_started": false,
+  "native_started": false,
+  "permission_prompt_requested": false,
+  "source_qualification": "bounded_component_source_progress_not_whole_historical_or_current_cli_qualification_native_or_Gate",
+  "predecessor_preservation": {
+    "execution": "677eba",
+    "pins": 544,
+    "original_graph_files": 1551,
+    "original_graph_bytes": 51047460,
+    "archive_origins": 24,
+    "native_files": 75,
+    "failures": [],
+    "whole_original_cli_reexecuted": false
+  },
+  "compatibility": {
+    "execution": "56a42d",
+    "root_declaration_and_comment_inverse_exact": true,
+    "product_additive_guard_inverse_exact": true,
+    "unchanged_prior_crate_files": 30
+  },
+  "verified_tests": {
+    "package": 203,
+    "product_cli": 90,
+    "original_domain_public": 23,
+    "total_named": 316,
+    "new_tests": 15,
+    "separate_filtered_unit": {
+      "passed": 1,
+      "filtered": 17
+    },
+    "package_cli_failed": 0,
+    "package_cli_ignored": 0,
+    "package_cli_filtered": 0,
+    "whole_workspace_or_python_or_qualification_cli": false
+  },
+  "format": {
+    "execution": "730466",
+    "rustfmt7": true,
+    "scoped_diff": true
+  },
+  "fresh_consumers": {
+    "policy_final_fresh2": "33c09b",
+    "policy_independent_replay": "6a3cbc",
+    "previous_forms10_body10_saved_tables16_receipts_exact": "12c759",
+    "executable_current_sha256": "5b955dbc7efa1e3cafb9f04614541440aa6218ee00e6a9a235f110a8665485d0",
+    "authority": "explicit_TEST_caller_choices_not_actual_provider_issuer_or_native_default_oracle"
+  },
+  "executed_commands": [
+    "cargo test -p hwpx-package --lib --test form_input_native_binding_public --test native_form_color_public --test native_form_package_output_public --test native_form_package_public --test native_form_value_output_public --test native_root_manifest_public --test package_graph --test preservation_map --test text_flow --test table_layout --test document_import_source --test document_import_structure --test document_import_forms --test document_import_form_policies --locked --offline",
+    "cargo test -p hwpx-agent-cli --lib --tests --locked --offline",
+    "cargo test -p domain-ir --test form_control --test form_input_public --locked --offline",
+    "cargo clippy -p hwpx-package -p hwpx-agent-cli -p artifact-service -p revision-service --lib --tests --locked --offline -- -D warnings",
+    "cargo clippy -p hwpx-package --example document_import_form_policies_probe --locked --offline -- -D warnings",
+    "cargo build -p hwpx-package --example document_import_form_policies_probe --example document_import_forms_probe --example document_import_structure_probe --example document_import_saved_tables_probe --locked --offline",
+    "target/debug/examples/document_import_form_policies_probe.exe",
+    "target/debug/examples/document_import_forms_probe.exe",
+    "target/debug/examples/document_import_structure_probe.exe",
+    "target/debug/examples/document_import_saved_tables_probe.exe"
+  ],
+  "preserved_failed_and_pending_evidence": {
+    "new_initial_failures": "implementation/p09/evidence/p09-69-document-import-form-policy.initial-failures.v1.json",
+    "initial_unpublished_progress": "implementation/p09/source-archive/p09-69-pre-final-policy-progress/source-progress.v1.json",
+    "archive_files": 9,
+    "P62_16fde8": "UNRESOLVED"
+  },
+  "not_qualified": [
+    "authoritative_policy_provider_and_issuer",
+    "complete_field_note_reference_catalog_security_importer",
+    "persisted_actual_Source_Result_IR_and_previous_result_input_chain",
+    "signed_execution_ExecutionManifest_publication_idempotency",
+    "IR_lifecycle_restart_recovery_concurrency",
+    "whole_current_and_archived_qualification_cli_admission",
+    "native_defaults_protection_external_validation_style_saved_package_render_differential",
+    "P09_Gate_P10"
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": "hwpx-agent.p09-container-absence-light-fixtures/v1",
+  "state": "PASS_LIGHT_ABSENCE_FIXTURES_NOT_DOCKER_OR_PC_FREEZE_PROOF",
+  "source_freeze": [
+    {
+      "path": "tools/p09/bounded_container_absence.py",
+      "bytes": 7003,
+      "sha256": "654891646eef92fea81f2e3fb07cbafb344287da57f167435e02e801cf1e2a55"
+    },
+    {
+      "path": "tools/p09/tests/test_bounded_container_absence.py",
+      "bytes": 13951,
+      "sha256": "540c99b4dc74eabedcbb25ed65805fc51e2f440397f1b6f6564061f235c6bf05"
+    },
+    {
+      "path": "tools/p09/verify_container_absence_light.py",
+      "bytes": 4021,
+      "sha256": "95e5deeaf0919ce36c8e61ebbd93fd143d1905c77b36679103ff7294a8dffe40"
+    },
+    {
+      "path": "tools/p09/verify_formula_issuer_authority_current.py",
+      "bytes": 43512,
+      "sha256": "fc72efe756b8c4d824534ca045b1075313d389306a740ae3da39137ea0d1e0d8"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 22942,
+      "sha256": "dc212b25ebc534ab19f643c51361271bb86392cf01b669a0fe25f3e37ea13e01"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 3822,
+      "sha256": "0cf267e0524baec7e7b2b204b8aed805928528d067cdf42264048d7bff69b530"
+    },
+    {
+      "path": "tools/p09/verify_audit_evidence_io.py",
+      "bytes": 4784,
+      "sha256": "5cd5dbd15dfbf2662a8ddf68831572d2f60118e65288399fa858af636fde4610"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-batch-absence-audit/source-preimages.v1.json",
+      "bytes": 57998,
+      "sha256": "640ccfe2c00e06b6a5b8f540184502a68c828ce708245246937d6588c2827284"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "tests_run": 19,
+  "tests_passed": 19,
+  "failed_tests": [],
+  "elapsed_seconds": 0.1787,
+  "logical_cpu_limit": 1,
+  "priority": "BelowNormal",
+  "self_resource_before": {
+    "cpu_seconds": 0.28125,
+    "memory_observed": true,
+    "working_set_mib": 27.06,
+    "private_mib": 18.02,
+    "system": {
+      "time_utc": "2026-10-06T08:39:48.371749+00:00",
+      "system_cpu_percent": 99.74,
+      "available_ram_mib": 9789.22,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.724848416487923,
+      "commit_used_percent": 53.223135873463846
+    }
+  },
+  "self_resource_after": {
+    "cpu_seconds": 0.328125,
+    "memory_observed": true,
+    "working_set_mib": 30.71,
+    "private_mib": 22.72,
+    "system": {
+      "time_utc": "2026-10-06T08:39:48.550495+00:00",
+      "system_cpu_percent": 77.4,
+      "available_ram_mib": 10039.66,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 31.51089421245538,
+      "commit_used_percent": 52.8609142551907
+    }
+  },
+  "self_cpu_seconds_during_checks": 0.046875,
+  "memory_values_are_samples_not_peak": true,
+  "query_structure": {
+    "references_preserved": 12,
+    "old_inspect_processes": 12,
+    "new_inspect_batches": 2,
+    "new_waiting_workers": 2,
+    "timeout_seconds_per_batch": 10,
+    "output_limit_bytes_per_stream": 32768
+  },
+  "actual_Docker_or_child_process_started": false,
+  "authority_audit_or_Rust_SQL_native_run": false,
+  "new_git_started": false,
+  "system_or_Defender_or_WSL_settings_changed": false,
+  "live_inspector_lifecycle_verified": false,
+  "raw_logs_printed_or_saved": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "product_complete": false
+}

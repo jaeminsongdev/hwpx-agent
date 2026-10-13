@@ -1,0 +1,262 @@
+{
+  "schema_version": "hwpx-agent.p09-runner-safety-light-fixtures/v1",
+  "state": "FAILED_NOT_ACCEPTED",
+  "source_freeze": [
+    {
+      "path": "Cargo.toml",
+      "bytes": 2695,
+      "sha256": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5"
+    },
+    {
+      "path": "Cargo.lock",
+      "bytes": 61056,
+      "sha256": "3dba694d1b6066a8ff7fec347c51edd1b09b7046ca070bbaf3ac78cc8b708887"
+    },
+    {
+      "path": "crates/domain-ir/src/document_graph.rs",
+      "bytes": 45840,
+      "sha256": "adc2f0c9df19bfd50f2f8560fe1f0d946b2e90b332e7d836695209fbe4eabf63"
+    },
+    {
+      "path": "crates/domain-ir/tests/document_graph.rs",
+      "bytes": 19603,
+      "sha256": "545c0f2ce6316f296e9e993d0460cace290ede431768ff0e2541621402c5524c"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics/evaluation/source.rs",
+      "bytes": 15395,
+      "sha256": "16535ac191c1adbc880b4a7adaafeb55737d45caf33fd533b313c7591c052e4b"
+    },
+    {
+      "path": "crates/product-cli/src/comment_operation.rs",
+      "bytes": 24752,
+      "sha256": "68bc8f9508d3bb574cb9766e51173f12390a1a30974f4ab34fa75f905538652d"
+    },
+    {
+      "path": "crates/product-cli/src/comment_operation/rich_bodies.rs",
+      "bytes": 18031,
+      "sha256": "c0190d598304febac35deabc902ed1f8b767bb7b08b47ce10080cff77dba3bc0"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 22942,
+      "sha256": "dc212b25ebc534ab19f643c51361271bb86392cf01b669a0fe25f3e37ea13e01"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 3822,
+      "sha256": "0cf267e0524baec7e7b2b204b8aed805928528d067cdf42264048d7bff69b530"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/comments.rs",
+      "bytes": 10117,
+      "sha256": "1451ff6d48f4aacd00b399fa5a754a75ec7f5387ed96b221189628f4cb54fd56"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/comments/rich_bodies.rs",
+      "bytes": 8862,
+      "sha256": "cb6e89f2a6f9bbc4997818a4b46dac0bfacd2f6dd670bc8b0cf9b362fa4d7833"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review/locations.rs",
+      "bytes": 13528,
+      "sha256": "89a9d0ad3b082504dbff97ac1cacb15d6c598a293341e6d75fd1b3ccbba1f1ff"
+    },
+    {
+      "path": "crates/product-cli/src/form_value_operation/full_document.rs",
+      "bytes": 23641,
+      "sha256": "08650555d0dbc4d45fa7392093a6de147ed6de2e300e4adff0e953c26d04b26c"
+    },
+    {
+      "path": "tools/p09/tests/test_conservative_maintenance.py",
+      "bytes": 13318,
+      "sha256": "47b6eac49404067575516548e84d9542311bc4fa6f87728b2c7360f22a48397e"
+    },
+    {
+      "path": "tools/p09/verify_maintenance_safety.py",
+      "bytes": 3942,
+      "sha256": "6cf82b0adbba9de8bd5151e273e8324f4897f79a390477958b6a0a46334cd055"
+    },
+    {
+      "path": "tools/p09/verify_audit_evidence_io.py",
+      "bytes": 6183,
+      "sha256": "d4a8587e9cbbb1840a527d46d5d8cd49a7e3eb52b306a1bb5e5e2110698bf38d"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "tests_run": 12,
+  "tests_passed": 11,
+  "failed_tests": [
+    {
+      "test": "test_owned_descendant_tree_is_killed_without_foreign_processes",
+      "equality_count_mismatch": null
+    }
+  ],
+  "elapsed_seconds": 0.3257,
+  "profile": {
+    "profile": "P149_OWNED_WORKLOAD_V2",
+    "logical_cpu_limit": 1,
+    "priority": "BelowNormal",
+    "cargo_jobs": 1,
+    "test_threads": 1,
+    "sample_seconds": 0.5,
+    "start_ram_min_percent": 10,
+    "start_consecutive_samples": 2,
+    "admission_max_seconds": 3,
+    "emergency_cpu_percent": 98,
+    "emergency_cpu_consecutive_samples": 4,
+    "stop_ram_min_percent": 8,
+    "stop_commit_used_percent": 95,
+    "job_memory_limit_percent": 8,
+    "job_memory_stop_percent": 7,
+    "test_debug_info": "line-tables-only",
+    "dev_debug_info": "line-tables-only",
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "output_limit_bytes_per_stream": 32768
+  },
+  "self_resource_before": {
+    "cpu_seconds": 0.140625,
+    "memory_observed": true,
+    "working_set_mib": 26.88,
+    "private_mib": 18.29,
+    "system": {
+      "time_utc": "2026-10-06T09:12:18.727374+00:00",
+      "system_cpu_percent": 57.14,
+      "available_ram_mib": 6961.69,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 21.850241436320825,
+      "commit_used_percent": 35.344195060084964
+    }
+  },
+  "self_resource_after": {
+    "cpu_seconds": 0.140625,
+    "memory_observed": true,
+    "working_set_mib": 27.31,
+    "private_mib": 18.31,
+    "system": {
+      "time_utc": "2026-10-06T09:12:19.054137+00:00",
+      "system_cpu_percent": 39.51,
+      "available_ram_mib": 6949.38,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 21.81159691260661,
+      "commit_used_percent": 35.35348212498271
+    }
+  },
+  "self_cpu_seconds_during_checks": 0.0,
+  "memory_values_are_samples_not_peak": true,
+  "owned_job_observations": [
+    {
+      "active_processes": 1,
+      "job_cpu_seconds": 0.0,
+      "peak_job_private_mib": 0.37,
+      "peak_job_private_percent": 0.0011524699331015725,
+      "owned_processes": [
+        {
+          "pid": 30516,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 1.96,
+          "private_mib": 0.37
+        }
+      ]
+    },
+    {
+      "active_processes": 2,
+      "job_cpu_seconds": 0.047,
+      "peak_job_private_mib": 7.83,
+      "peak_job_private_percent": 0.024569678148250545,
+      "owned_processes": [
+        {
+          "pid": 30516,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 11.71,
+          "private_mib": 6.58
+        },
+        {
+          "pid": 2432,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.18,
+          "private_mib": 1.24
+        }
+      ]
+    },
+    {
+      "active_processes": 4,
+      "job_cpu_seconds": 0.094,
+      "peak_job_private_mib": 13.06,
+      "peak_job_private_percent": 0.04098624453572933,
+      "owned_processes": [
+        {
+          "pid": 30516,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 12.93,
+          "private_mib": 7.09
+        },
+        {
+          "pid": 2432,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.18,
+          "private_mib": 1.24
+        },
+        {
+          "pid": 33736,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.48,
+          "private_mib": 3.52
+        },
+        {
+          "pid": 30228,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.18,
+          "private_mib": 1.21
+        }
+      ]
+    },
+    {
+      "active_processes": 1,
+      "job_cpu_seconds": 0.031,
+      "peak_job_private_mib": 6.4,
+      "peak_job_private_percent": 0.020094661918654014,
+      "owned_processes": [
+        {
+          "pid": 26776,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.61,
+          "private_mib": 1.2
+        }
+      ]
+    },
+    {
+      "active_processes": 0,
+      "job_cpu_seconds": 0.031,
+      "peak_job_private_mib": 6.4,
+      "peak_job_private_percent": 0.020094661918654014,
+      "owned_processes": []
+    },
+    {
+      "active_processes": 0,
+      "job_cpu_seconds": 0.031,
+      "peak_job_private_mib": 6.4,
+      "peak_job_private_percent": 0.020094661918654014,
+      "owned_processes": []
+    }
+  ],
+  "actual_Rust_SQL_native_or_authority_audit_run": false,
+  "owned_python_job_smokes_run": true,
+  "new_git_started": false,
+  "foreign_processes_modified": false,
+  "system_or_Defender_or_WSL_settings_changed": false,
+  "raw_logs_printed_or_saved": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "product_complete": false
+}

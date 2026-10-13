@@ -1,0 +1,187 @@
+{
+  "schema": "hwpx-agent.p09-112-formula-result-output-final-audit/v1",
+  "recorded_at_utc": "2026-10-04 23:17:46 UTC",
+  "head": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+  "source_checkpoint": {
+    "path": "implementation/p09/evidence/p09-112-formula-result-output.source-progress.v1.json",
+    "bytes": 21806,
+    "sha256": "865619a8c97e63e42b47a599b63c11d888e4225575ef554343263b5b1b3b5053"
+  },
+  "current_source_audit": {
+    "command": "python tools/p09/verify_formula_result_output_progress.py --current",
+    "terminal_chunk": "2a5c43",
+    "exit_code": 0,
+    "result": {
+      "state": "pass_source_math_result_candidate_NOT_native_execution_publication_SQL_or_Gate",
+      "checkpoint": {
+        "path": "implementation/p09/evidence/p09-112-formula-result-output.source-progress.v1.json",
+        "bytes": 21806,
+        "sha256": "865619a8c97e63e42b47a599b63c11d888e4225575ef554343263b5b1b3b5053"
+      },
+      "inherited_raw_pin_entries": 1881,
+      "current_groups": {
+        "source_delta": 23,
+        "source_archives_added": 23,
+        "predecessor_receipts_added": 2,
+        "current_executables": 29
+      },
+      "P09_gate": "OPEN",
+      "product_complete": false
+    }
+  },
+  "source_files": 997,
+  "old_source_preservation": {
+    "state": "pass_whole_original_ancestry_NOT_native_SQL_or_Gate",
+    "previous_checkpoint": {
+      "path": "implementation/p09/evidence/p09-111-review-mutation-protection.source-progress.v1.json",
+      "bytes": 21977,
+      "sha256": "1c64001f27f9de08ea13d4ae39be76fa8b8f152cc576790708d7b38adf2d84c0"
+    },
+    "inherited_raw_pin_entries": 1881,
+    "previous_source_files": 980,
+    "unchanged_previous_source_files": 974,
+    "whole_parent_preimages": 6,
+    "whole_parent_inverse_exact": true,
+    "previous_unmodified_audit_on_preimages_passed": true,
+    "old_executables_preserved": 349,
+    "all_old_executables_reexecuted": false
+  },
+  "first_failed_evidence_test_snapshot_preserved": {
+    "checkpoint": {
+      "path": "implementation/p09/source-archive/p09-112-initial-evidence-test/implementation/p09/evidence/p09-112-formula-result-output.source-progress.v1.json",
+      "bytes": 19465,
+      "sha256": "01ff1974fe492a58aa372388e5566865257db470a31c21c6b08ede052b3b4acb"
+    },
+    "original_raw_group_entries_verified": 71,
+    "original_groups": {
+      "source_delta": 23,
+      "source_archives_added": 17,
+      "predecessor_receipts_added": 2,
+      "current_executables": 29
+    },
+    "mismatches": 0,
+    "terminal_chunk": "a565f3",
+    "exit_code": 0,
+    "Python_first_run": {
+      "passed": 7,
+      "failed": 1
+    },
+    "not_current_acceptance": true
+  },
+  "final_source_Rust_tests": {
+    "package": {
+      "command": "cargo test -p hwpx-package --lib --test table_formula --test document_import_formula_evaluation --test document_import_formula_output --test patch_leaf_text --test patch_engine --test patch_element_content --test review_cell_body_output --test review_delete_output --test id_index --test text_flow --locked --offline --target-dir target/p09-112-formula-result-output",
+      "start_chunk": "b25d1d",
+      "session": 96271,
+      "terminal_chunk": "f24379",
+      "exit_code": 0,
+      "passed": 126,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 0
+    },
+    "stored": {
+      "command": "cargo test -p hwpx-agent-cli --test form_stored_provider --locked --offline --target-dir target/p09-112-formula-result-output",
+      "start_chunk": "1ea521",
+      "session": 87423,
+      "terminal_chunk": "eaafde",
+      "exit_code": 0,
+      "passed": 170,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 0,
+      "runtime_seconds": 295.28
+    }
+  },
+  "test_counts": {
+    "executions": 296,
+    "unique": 296,
+    "duplicate_executions": 0,
+    "duplicate_functions": 0
+  },
+  "new_Rust_tests": 10,
+  "strict_lint": {
+    "command": "cargo clippy -p hwpx-package -p hwpx-agent-cli --lib --test table_formula --test document_import_formula_evaluation --test document_import_formula_output --test patch_leaf_text --test patch_engine --test patch_element_content --test review_cell_body_output --test review_delete_output --test id_index --test text_flow --test form_stored_provider --locked --offline --target-dir target/p09-112-formula-result-output -- -D warnings",
+    "terminal_chunk": "1e4f61",
+    "exit_code": 0
+  },
+  "current_executable_inventory": {
+    "total": 29,
+    "passing_final_test_executables": 12,
+    "unexecuted_current_CLI_copies": 2,
+    "pre_lint_diagnostic_executables": 13,
+    "failed_executables": 2,
+    "all_executables_not_claimed_passing": true
+  },
+  "final_validation": {
+    "Python": {
+      "command": "python -m unittest tools.p09.tests.test_formula_result_output_progress",
+      "terminal_chunk": "fa4113",
+      "exit_code": 0,
+      "passed": 8,
+      "failed": 0
+    },
+    "new_Rust9_format": {
+      "command": "rustfmt --check --edition 2024 --config skip_children=true [nine newly owned Rust paths]",
+      "terminal_chunk": "6cbc62",
+      "exit_code": 0,
+      "passed": true
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "terminal_chunk": "b543cc",
+      "exit_code": 0,
+      "passed": true
+    },
+    "environment": {
+      "terminal_chunk": "2fbe97",
+      "exit_code": 0,
+      "Hwp_processes": 0,
+      "PLANS_exists": false
+    },
+    "current_source_component_validators": 15,
+    "green_rows": 0,
+    "original_default_failure": "matrix_drift_retained"
+  },
+  "qualification": {
+    "native_recalculation_verified": false,
+    "full_field_policy_qualified": false,
+    "issuer_verified": false,
+    "atomic_execution_publication_verified": false,
+    "actual_SQL_verified": false,
+    "P09_complete": false,
+    "product_complete": false,
+    "original_computed_results_preserving_candidate_bound": true
+  },
+  "scope": "ALL original-admitted source math results -> preserving candidate + fresh authenticated stored reader; NOT full field product/compiler/policy/native issuer atomic execution/publication SQL or Gate",
+  "remaining": [
+    "native metadata and coordinates",
+    "full comment and rich Flow/compiler/source mapping",
+    "durable real integration",
+    "fields/Date/external/document semantics and full original compiler/product binding",
+    "trusted issuer/full protection/atomic execution/publication",
+    "actual P84 SQL failure cause and regression"
+  ],
+  "exact_next_safe_task": "Multiple-formula/multi-section source batch including mixed protection, stale and no-partial-output corpus; then bind actual source results to original full operation compiler/product envelope without promoting partial import/native permissions.",
+  "remaining_coarse_groups_minimum": 6,
+  "remaining_coarse_groups_closed_by_slice": 0,
+  "initial_runtime_compile_empty_lint_and_evidence_test_failures_preserved": true,
+  "combined_shell_exit0_not_used_for_first_Python_failure": true,
+  "original_contract_and_private_reference_locks_not_modified": true,
+  "all_historical_qualification_or_executables_reexecuted": false,
+  "no_native_COM_UI_SQL_operating_trust_DB_settings_install_stage_commit_push_delete_move": true,
+  "PLANS_deleted_state_preserved": true,
+  "goal_objective": "P09~P20 전체 제품 구현·검증 완료; P00~P08/사용자 변경 보존; 실제 구현→제품 경로 검증→문제 수정→최적화→통합 검증→문서·원장 동기화; P09 Gate 실제 종료 전 P10 금지; 지원 없는 항목 NOT_RUN/unverified/unavailable",
+  "goal_status": "active",
+  "full_goal_complete": false,
+  "P09_gate": "OPEN",
+  "A12": "OPEN",
+  "A13": "OPEN",
+  "native34": "NOT_RUN",
+  "native_re_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+  "P26": "failed_semantic_non_green",
+  "P62": "UNRESOLVED",
+  "P84_SQL": "UNRESOLVED",
+  "P10_new_implementation": false,
+  "product_complete": false
+}

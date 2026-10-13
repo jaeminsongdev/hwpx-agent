@@ -1,0 +1,89 @@
+{
+  "schema_version": "hwpx-agent.p09-audit-io-light-fixtures/v1",
+  "state": "PASS_LIGHT_IO_FIXTURES_NOT_RUST_SQL_NATIVE_OR_PC_FREEZE_PROOF",
+  "source_freeze": [
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 3544,
+      "sha256": "c02f292d398a06801d365fa1a627b7a8ac561a5c3df733a0c7943a92111361d1"
+    },
+    {
+      "path": "tools/p09/verify_formula_issuer_authority_current.py",
+      "bytes": 43512,
+      "sha256": "fc72efe756b8c4d824534ca045b1075313d389306a740ae3da39137ea0d1e0d8"
+    },
+    {
+      "path": "tools/p09/tests/test_audit_evidence_io.py",
+      "bytes": 9080,
+      "sha256": "952234a44435893fae0ec5473cd8580203f881c6db6c4a15f9eca6426ebe5a27"
+    },
+    {
+      "path": "tools/p09/verify_audit_evidence_io.py",
+      "bytes": 4784,
+      "sha256": "5cd5dbd15dfbf2662a8ddf68831572d2f60118e65288399fa858af636fde4610"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 22942,
+      "sha256": "dc212b25ebc534ab19f643c51361271bb86392cf01b669a0fe25f3e37ea13e01"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-single-read-audit/source-preimages.v1.json",
+      "bytes": 57824,
+      "sha256": "138a8e6c455d6f58b1f5dbb3249466216a4d803a015a4ca31e81004d435d836d"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "tests_run": 12,
+  "tests_passed": 12,
+  "failed_tests": [],
+  "elapsed_seconds": 0.3151,
+  "logical_cpu_limit": 1,
+  "priority": "BelowNormal",
+  "self_resource_before": {
+    "cpu_seconds": 0.1875,
+    "memory_observed": true,
+    "working_set_mib": 26.91,
+    "private_mib": 18.3,
+    "system": {
+      "time_utc": "2026-10-06T08:39:49.412426+00:00",
+      "system_cpu_percent": 98.97,
+      "available_ram_mib": 10255.96,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 32.18979708559971,
+      "commit_used_percent": 52.73332146189045
+    }
+  },
+  "self_resource_after": {
+    "cpu_seconds": 0.203125,
+    "memory_observed": true,
+    "working_set_mib": 30.36,
+    "private_mib": 21.16,
+    "system": {
+      "time_utc": "2026-10-06T08:39:49.727990+00:00",
+      "system_cpu_percent": 97.76,
+      "available_ram_mib": 10332.08,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 32.428701650667975,
+      "commit_used_percent": 52.5931076517432
+    }
+  },
+  "self_cpu_seconds_during_checks": 0.015625,
+  "memory_values_are_samples_not_peak": true,
+  "hash_chunk_bytes": 65536,
+  "maximum_parse_bytes": 16777216,
+  "json_read_pass_fixture": {
+    "before_pin_parse_final": 3,
+    "after_bound_parse_final": 2,
+    "same_bytes_and_digest_verified": true,
+    "final_fresh_hash_retained": true
+  },
+  "actual_Rust_SQL_native_or_authority_audit_run": false,
+  "new_git_started": false,
+  "system_or_Defender_or_WSL_settings_changed": false,
+  "raw_logs_printed_or_saved": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "product_complete": false
+}

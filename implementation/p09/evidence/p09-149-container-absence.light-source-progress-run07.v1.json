@@ -1,0 +1,106 @@
+{
+  "schema_version": "hwpx-agent.p09-container-absence-light-fixtures/v1",
+  "state": "PASS_LIGHT_ABSENCE_FIXTURES_NOT_DOCKER_OR_PC_FREEZE_PROOF",
+  "source_freeze": [
+    {
+      "path": "tools/p09/bounded_container_absence.py",
+      "bytes": 7116,
+      "sha256": "7c9357b4230ada78ba25d7cec08430f520ae4a1057b17798740095a3b5f7a012"
+    },
+    {
+      "path": "tools/p09/tests/test_bounded_container_absence.py",
+      "bytes": 15195,
+      "sha256": "9aa69fae5d3e3fce4bca24612605d4da555bffc1241ddcd75380868a35568a41"
+    },
+    {
+      "path": "tools/p09/verify_container_absence_light.py",
+      "bytes": 4360,
+      "sha256": "74d424ad625a0e7037bb44cf6244aa6c4fd72ec8a0d96c06bd50e31ad4d6d251"
+    },
+    {
+      "path": "tools/p09/verify_formula_issuer_authority_current.py",
+      "bytes": 46551,
+      "sha256": "b93155c0e16ca498d479a29cf647e48103b12ef61e18ddc1a93765b73dc57a66"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 22942,
+      "sha256": "dc212b25ebc534ab19f643c51361271bb86392cf01b669a0fe25f3e37ea13e01"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 3822,
+      "sha256": "0cf267e0524baec7e7b2b204b8aed805928528d067cdf42264048d7bff69b530"
+    },
+    {
+      "path": "tools/p09/verify_audit_evidence_io.py",
+      "bytes": 6183,
+      "sha256": "d4a8587e9cbbb1840a527d46d5d8cd49a7e3eb52b306a1bb5e5e2110698bf38d"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-batch-absence-audit/source-preimages.v1.json",
+      "bytes": 57998,
+      "sha256": "640ccfe2c00e06b6a5b8f540184502a68c828ce708245246937d6588c2827284"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-final-resource-check/source-preimages.v1.json",
+      "bytes": 178926,
+      "sha256": "f2ff893f5250e26ef8eea18dfecb1ee9651b233a8f6f98a92d83dbcde64c3da4"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "tests_run": 19,
+  "tests_passed": 19,
+  "failed_tests": [],
+  "elapsed_seconds": 0.0507,
+  "logical_cpu_limit": 1,
+  "priority": "BelowNormal",
+  "self_resource_before": {
+    "cpu_seconds": 0.140625,
+    "memory_observed": true,
+    "working_set_mib": 26.96,
+    "private_mib": 18.29,
+    "system": {
+      "time_utc": "2026-10-06T11:11:15.304755+00:00",
+      "system_cpu_percent": 18.75,
+      "available_ram_mib": 8176.27,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.66236676865208,
+      "commit_used_percent": 35.964263165575375
+    }
+  },
+  "self_resource_after": {
+    "cpu_seconds": 0.1875,
+    "memory_observed": true,
+    "working_set_mib": 30.5,
+    "private_mib": 21.34,
+    "system": {
+      "time_utc": "2026-10-06T11:11:15.355438+00:00",
+      "system_cpu_percent": 30.43,
+      "available_ram_mib": 8179.52,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.67257961391031,
+      "commit_used_percent": 35.969757142731176
+    }
+  },
+  "self_cpu_seconds_during_checks": 0.046875,
+  "memory_values_are_samples_not_peak": true,
+  "query_structure": {
+    "references_preserved": 12,
+    "old_inspect_processes": 12,
+    "new_inspect_batches": 2,
+    "new_waiting_workers": 2,
+    "timeout_seconds_per_batch": 10,
+    "output_limit_bytes_per_stream": 32768
+  },
+  "actual_Docker_or_child_process_started": false,
+  "authority_audit_or_Rust_SQL_native_run": false,
+  "new_git_started": false,
+  "system_or_Defender_or_WSL_settings_changed": false,
+  "live_inspector_lifecycle_verified": false,
+  "raw_logs_printed_or_saved": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "product_complete": false
+}

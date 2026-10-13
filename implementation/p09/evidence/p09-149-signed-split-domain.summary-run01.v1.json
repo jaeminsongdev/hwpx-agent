@@ -1,0 +1,284 @@
+{
+  "schema_version": "hwpx-agent.p09-split-domain-summary/v1",
+  "state": "STOP_PRESERVED_CURRENT_SOURCE_AUDIT_NOT_COMPILE_RUNTIME_OR_GATE",
+  "source_variant": "unchanged-r11-Rust-domain-ir-opt1-cgu64-two-packages-opt1-r14",
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "goal_status": "active",
+  "P10_new_implementation": false,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "original_Rust_or_assertions_changed": false,
+  "PC_freeze_resolved": false,
+  "compiler_memory_root_cause_proven": false,
+  "original_owned_runtime_policy_changed": false,
+  "new_child_or_thread_started": false,
+  "source_test_count": 249,
+  "source_module_instances": 59,
+  "current_Rust_inputs": 783,
+  "execution_source_freeze_current_exact": true,
+  "light01_contract_checks": 10,
+  "test_package_profile_config": [
+    "profile.test.package.hwpx-package.opt-level=1",
+    "profile.test.package.hwpx-package.debug-assertions=true",
+    "profile.test.package.hwpx-package.overflow-checks=true",
+    "profile.test.package.hwpx-package.codegen-units=16",
+    "profile.test.package.hwpx-package.debug=\"line-tables-only\"",
+    "profile.test.package.hwpx-agent-cli.opt-level=1",
+    "profile.test.package.hwpx-agent-cli.debug-assertions=true",
+    "profile.test.package.hwpx-agent-cli.overflow-checks=true",
+    "profile.test.package.hwpx-agent-cli.codegen-units=16",
+    "profile.test.package.hwpx-agent-cli.debug=\"line-tables-only\"",
+    "profile.test.lto=\"off\"",
+    "profile.test.package.domain-ir.opt-level=1",
+    "profile.test.package.domain-ir.debug-assertions=true",
+    "profile.test.package.domain-ir.overflow-checks=true",
+    "profile.test.package.domain-ir.codegen-units=64",
+    "profile.test.package.domain-ir.debug=\"line-tables-only\""
+  ],
+  "current_helpers": [
+    {
+      "path": "tools/p09/run_split_domain_signed_tests.py",
+      "bytes": 9145,
+      "sha256": "5d9e41d527fdf84f01a8e8f06a9dc726f2256e73f24e6be8885438b43e6ec820"
+    },
+    {
+      "path": "tools/p09/tests/test_split_domain_signed_tests.py",
+      "bytes": 7277,
+      "sha256": "75195c5356ed724c19a9c01c16a6cce339cb7ff400b1d83b0d789fc0fefbedd9"
+    }
+  ],
+  "parent_pin": {
+    "path": "implementation/p09/evidence/p09-149-signed-scheduled.summary-run01.v1.json",
+    "bytes": 6404,
+    "sha256": "a567bb39e98412a6702da44c8edc332155f9e832850d24da2dd07b317cf6b245"
+  },
+  "support_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-split-domain.inventory-run01.v1.json",
+      "bytes": 389049,
+      "sha256": "02fe218f84220790cac0ae741f3236001a874643d793774e4759b2432ca80bd6"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-split-domain.light-run01.v1.json",
+      "bytes": 1882,
+      "sha256": "7e74337e143a92a40cbbc8c764f6934a317264546f783d95e1b53bb6b19ae2b3"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-scheduled.final-progress-sync-run01.v1.json",
+      "bytes": 2008,
+      "sha256": "b7d949026f7457c7859bb0f67864ef2bae97fa5cb07203cae51859ab67f92a17"
+    }
+  ],
+  "binding_resource_schedule": {
+    "qualification": "FULL_SOURCE_BINDING_CADENCE_ONLY_NOT_COMPILE_RUNTIME_OR_GATE",
+    "callback_modules": [
+      "run_call_local_xml_regression",
+      "run_optimized_signed_tests",
+      "run_output_stage_profile",
+      "run_readback_buffer_regression",
+      "run_signed_stage_cost",
+      "run_source_stage_profile",
+      "run_stored_comment_regression",
+      "run_xml_roundtrip_regression"
+    ],
+    "reader_instances": 8,
+    "IO_checkpoints": 12305,
+    "unchanged_original_pressure_callback_calls": 13,
+    "canonical_sample_count": 15,
+    "canonical_host_samples": [
+      {
+        "time_utc": "2026-10-07T02:20:08.514358+00:00",
+        "system_cpu_percent": 2.81,
+        "available_ram_mib": 10071.44,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.61064416326085,
+        "commit_used_percent": 38.281479771703076
+      },
+      {
+        "time_utc": "2026-10-07T02:20:09.015299+00:00",
+        "system_cpu_percent": 2.48,
+        "available_ram_mib": 10071.82,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.611821153830828,
+        "commit_used_percent": 38.28294065831621
+      },
+      {
+        "time_utc": "2026-10-07T02:20:09.518240+00:00",
+        "system_cpu_percent": 8.2,
+        "available_ram_mib": 10070.82,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.608707032947766,
+        "commit_used_percent": 38.28399458365853
+      },
+      {
+        "time_utc": "2026-10-07T02:20:10.023203+00:00",
+        "system_cpu_percent": 2.72,
+        "available_ram_mib": 10071.52,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.610901629948035,
+        "commit_used_percent": 38.28607634708224
+      },
+      {
+        "time_utc": "2026-10-07T02:20:10.524212+00:00",
+        "system_cpu_percent": 4.75,
+        "available_ram_mib": 10067.33,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.597734047946428,
+        "commit_used_percent": 38.27931452904433
+      },
+      {
+        "time_utc": "2026-10-07T02:20:11.026844+00:00",
+        "system_cpu_percent": 4.49,
+        "available_ram_mib": 10065.46,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.591873615733423,
+        "commit_used_percent": 38.27677884728011
+      },
+      {
+        "time_utc": "2026-10-07T02:20:11.533033+00:00",
+        "system_cpu_percent": 5.16,
+        "available_ram_mib": 10069.16,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.60347187697506,
+        "commit_used_percent": 38.28106759298009
+      },
+      {
+        "time_utc": "2026-10-07T02:20:12.033253+00:00",
+        "system_cpu_percent": 1.54,
+        "available_ram_mib": 10065.6,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.592302726878724,
+        "commit_used_percent": 38.285424165558524
+      },
+      {
+        "time_utc": "2026-10-07T02:20:12.534053+00:00",
+        "system_cpu_percent": 5.17,
+        "available_ram_mib": 10071.63,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.611244918864276,
+        "commit_used_percent": 38.28440154492933
+      },
+      {
+        "time_utc": "2026-10-07T02:20:13.034956+00:00",
+        "system_cpu_percent": 2.88,
+        "available_ram_mib": 10067.99,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.59981830208076,
+        "commit_used_percent": 38.283791103023134
+      },
+      {
+        "time_utc": "2026-10-07T02:20:13.536057+00:00",
+        "system_cpu_percent": 3.32,
+        "available_ram_mib": 10062.61,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.58291132295579,
+        "commit_used_percent": 38.29123118984571
+      },
+      {
+        "time_utc": "2026-10-07T02:20:14.037195+00:00",
+        "system_cpu_percent": 5.08,
+        "available_ram_mib": 10069.54,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.60467338818191,
+        "commit_used_percent": 38.2928642523811
+      },
+      {
+        "time_utc": "2026-10-07T02:20:14.541613+00:00",
+        "system_cpu_percent": 6.63,
+        "available_ram_mib": 10066.09,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.59383526668338,
+        "commit_used_percent": 38.28668678898844
+      },
+      {
+        "time_utc": "2026-10-07T02:20:15.042702+00:00",
+        "system_cpu_percent": 7.23,
+        "available_ram_mib": 10065.33,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.591456764906553,
+        "commit_used_percent": 38.28393197423225
+      },
+      {
+        "time_utc": "2026-10-07T02:20:15.547071+00:00",
+        "system_cpu_percent": 5.7,
+        "available_ram_mib": 10068.57,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 31.60164508952791,
+        "commit_used_percent": 38.28534590377568
+      }
+    ],
+    "original_resource_stop": null,
+    "whole_scope_maximum_seconds": 600,
+    "canonical_sample_interval_seconds": 0.5,
+    "per_IO_sleep_added": false,
+    "source_read_or_final_hash_checks_scheduled_or_removed": false,
+    "all_legacy_readers_final_fresh_hash_inventory_exact": true,
+    "read_passes": 2121,
+    "bytes_read": 51323658,
+    "closing_fresh_hashes": 1023,
+    "elapsed_binding_seconds": 6.925726000001305,
+    "thresholds_or_owned_runtime_policy_changed": false,
+    "new_child_or_watcher_thread_started": false,
+    "cleanup_confirmed": true
+  },
+  "actual_inventory_attempt": {
+    "state": "STOPPED_NOT_ACCEPTED",
+    "stop_reason": "STOP_OWNED_JOB_MEMORY_BUDGET",
+    "elapsed_seconds": 43.55,
+    "maximum_seconds": 600,
+    "compiled_inventory_exact": false,
+    "runtime_tests_executed": false,
+    "job_final": {
+      "active_processes": 0,
+      "job_cpu_seconds": 37.609,
+      "peak_job_private_mib": 2247.93,
+      "peak_job_private_percent": 7.055457711403139,
+      "owned_processes": []
+    },
+    "resolved_owned_limits": {
+      "total_ram_mib": 31860.92,
+      "job_private_memory_limit_mib": 2548.87,
+      "machine_logical_processors": 16,
+      "job_cpu_hard_cap_machine_percent": 6.25
+    },
+    "owned_tree_empty": true,
+    "cleanup_confirmed": true,
+    "last_cargo_announcement": {
+      "source": "last_complete_cargo_style_stderr_announcement",
+      "process_or_compiler_phase_attribution_verified": false,
+      "announcement": {
+        "stage": "compiling",
+        "package": "domain-ir"
+      }
+    },
+    "cargo_announcement_at_cleanup": {
+      "source": "last_complete_cargo_style_stderr_announcement",
+      "process_or_compiler_phase_attribution_verified": false,
+      "announcement": {
+        "stage": "compiling",
+        "package": "domain-ir"
+      }
+    },
+    "host_CPU_max": 36.13,
+    "host_saturation_longest_streak": 0,
+    "available_RAM_percent_min": 25.864220651402977,
+    "commit_percent_max": 40.9073451970196
+  },
+  "next_action": "Do not retry domain opt1/16 or64CGU or raise caps. Inspect serialization/hash/decompression dependency costs; choose a distinct measured profile or pure algorithm change retaining every auth/source/math/negative check.",
+  "source_closing_exact": true,
+  "IO": {
+    "read_passes": 1860,
+    "bytes_read": 46157235,
+    "bound_inputs": 926,
+    "final_fresh_hashes": 926,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 17.837619
+}

@@ -1,0 +1,81 @@
+{
+  "schema": "hwpx-agent.p09-document-import-style-catalog.initial-failures/v1",
+  "date": "2026-10-04",
+  "state": "failed_predecessors_retained_not_relabelled_as_success",
+  "events": [
+    {
+      "chunk": "58f171",
+      "state": "compile_failed",
+      "reason": "EntryMetadata has no name() method",
+      "archive": "p09-76-initial-probe"
+    },
+    {
+      "chunk": "123d24",
+      "state": "compile_failed",
+      "reason": "PackagePath cannot compare directly with str; corrected to as_str",
+      "archive": "p09-76-initial-probe-path"
+    },
+    {
+      "chunk": "adb27c",
+      "state": "compile_failed",
+      "reason": "new Flow used nodes instead of original children and unused import",
+      "archive": "p09-76-initial-catalog"
+    },
+    {
+      "chunk": "22aa85",
+      "state": "service_test_compile_failed",
+      "reason": "new audit test called audit_events on ArtifactService instead of original metadata repository",
+      "archive": "p09-76-initial-service-test"
+    },
+    {
+      "chunk": "023cc8",
+      "state": "package_tests_failed_6_pass_1_fail",
+      "reason": "new foreign namespace success assumption contradicted original text_flow_unsupported_shape; retain original rejection and add separate missing-attribute positive",
+      "archive": "p09-76-initial-validation"
+    },
+    {
+      "chunk": "f76b44",
+      "terminal_chunk": "7e2967",
+      "state": "strict_lint_failed",
+      "reason": "new read_header/attach functions over100 lines; refactored new functions without allow/skip",
+      "archive": "p09-76-initial-validation"
+    },
+    {
+      "chunk": "4acd10",
+      "state": "strict_lint_failed",
+      "reason": "new helper numeric literal without separators; numeric value unchanged",
+      "archive": "p09-76-initial-helper-lint"
+    },
+    {
+      "chunk": "d9df5b",
+      "state": "strict_example_failed",
+      "reason": "new main over100 lines and statement semicolons; refactored consume helper",
+      "archive": "p09-76-initial-probe-lint"
+    },
+    {
+      "state": "apply_patch_context_rejected",
+      "reason": "after core helper refactor, test patch matched pre-format text instead of formatted context; test not written by failed patch, repaired using fresh text",
+      "old_tests_or_expectations_changed": false
+    },
+    {
+      "state": "bounded_readonly_filename_guess_failed",
+      "reason": "src graph wildcard/old style filename did not exist; used rg explicit source paths, no mutation"
+    }
+  ],
+  "original_reader_diagnostic": {
+    "chunk": "244983",
+    "actual_packages": 26,
+    "character_passed": 26,
+    "paragraph_passed": 26,
+    "error_codes": {}
+  },
+  "first_catalog_probe_before_final_refactor": {
+    "chunk": "039456",
+    "exit_code": 0,
+    "scope": "historical same source semantics not final executable attestation"
+  },
+  "original_tests_guards_assertions_skips_locks_Cargo_dependencies_not_weakened": true,
+  "raw_XML_names_parameter_values_or_secrets_printed": false,
+  "native_started": false,
+  "permission_prompt_requested": false
+}

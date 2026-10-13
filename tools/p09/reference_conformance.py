@@ -56,6 +56,13 @@ STATIC_SECTION_PROFILES: dict[str, dict[str, tuple[str, ...]]] = {
             "crates/hwpx-package/tests/note_hwpx.rs",
         ),
     },
+    "p09-16-field-auto-number-hwpx-v1": {
+        "features": ("REF-006", "REF-008", "REF-009"),
+        "evidence": (
+            "crates/hwpx-package/src/field_auto_number_hwpx.rs",
+            "crates/hwpx-package/tests/field_auto_number_hwpx.rs",
+        ),
+    },
 }
 STATIC_SECTION_INTEGRATION = {
     feature
@@ -409,7 +416,7 @@ def build_matrix(
         "p11_deferred_rows": phase_counts["P11"],
         "component_covered_rows": len(compiled),
         "component_stage_counts": {stage: stage_counts[stage] for stage in STAGES},
-        "direct_hwpx_implemented_rows": 8,
+        "direct_hwpx_implemented_rows": 11,
         "actual_hwpx_rows": 0,
         "actual_hangul_rows": 0,
         "render_verified_rows": 0,
@@ -426,11 +433,11 @@ def build_matrix(
         "component_covered_rows": 46,
         "component_stage_counts": {
             "cataloged": 7,
-            "unit_passed": 38,
-            "integration_passed": 8,
+            "unit_passed": 35,
+            "integration_passed": 11,
             "oracle_verified": 0,
         },
-        "direct_hwpx_implemented_rows": 8,
+        "direct_hwpx_implemented_rows": 11,
         "actual_hwpx_rows": 0,
         "actual_hangul_rows": 0,
         "render_verified_rows": 0,

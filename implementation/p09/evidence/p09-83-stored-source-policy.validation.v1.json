@@ -1,0 +1,54 @@
+{
+  "schema": "hwpx-agent.p09-83-stored-source-policy-validation/v1",
+  "state": "actual_encrypted_policy_component_pass_full_product_provider_incomplete",
+  "current_source_pins": [
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import.rs",
+      "bytes": 10892,
+      "sha256": "48172a85910a567a5ff33313a9273702ebcbd442a652251afd7017f4762c0945"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy.rs",
+      "bytes": 12529,
+      "sha256": "123373f16cb1f4b7fcddd13f5db6c490b1fe0c765352e2a4663cc1eb915a16ba"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/wire.rs",
+      "bytes": 4863,
+      "sha256": "d5a832b8568e5eb65d268266a034eb92508270110f30b209774210b92634f380"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import.rs",
+      "bytes": 14862,
+      "sha256": "23c3b6c33371cff64288a7f20ed2462b2704995487981d134261d419dd84fdfa"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/stored_source_policy.rs",
+      "bytes": 23279,
+      "sha256": "31e39078e550da875c8654479a50d6c3b4ac8f1b9aaa5ceab29039123fca4418"
+    }
+  ],
+  "actual_service_receipt": "implementation/p09/evidence/p09-83-stored-source-policy.actual-service.v1.json",
+  "regression_receipt": "implementation/p09/evidence/p09-83-stored-source-policy.source-regression.v1.json",
+  "preservation_receipt": "implementation/p09/evidence/p09-83-stored-source-policy.preservation.v1.json",
+  "failed_runs_receipt": "implementation/p09/evidence/p09-83-stored-source-policy.initial-failures.v1.json",
+  "qualifications": {
+    "typed_decoder_tested": true,
+    "actual_encrypted_policy_ArtifactService_read_tested": true,
+    "current_whole_stored_target_100_passed": true,
+    "original_policy_state_and_whole_graph_tested": true,
+    "schema20_SQL_unchanged": true,
+    "schema20_Rust_repository_connected": false,
+    "real_scanner_or_issuer_qualified": false,
+    "full_product_policy_provider_qualified": false,
+    "atomic_CAS_lease_qualified": false,
+    "full_importer_qualified": false,
+    "native_executed": false,
+    "p09_complete": false,
+    "p10_new_implementation": false
+  },
+  "root_PLANS_absent": true,
+  "operational_DB_mutated": false,
+  "goal_status": "active",
+  "next_task": "exact_schema20_admission_and_real_Postgres_policy_read_adapter_plus_revision_service_profile_connection"
+}

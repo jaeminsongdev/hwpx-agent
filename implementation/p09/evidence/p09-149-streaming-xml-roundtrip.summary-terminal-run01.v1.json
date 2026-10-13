@@ -1,0 +1,94 @@
+{
+  "schema_version": "hwpx-agent.p09-streaming-xml-roundtrip-terminal-summary/v1",
+  "state": "STOPPED_NOT_ACCEPTED",
+  "receipt_pin": {
+    "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.actual-run09.v1.json",
+    "bytes": 4843500,
+    "sha256": "67f2897fdbf364aee5f7e78bd493b92d3f22bdc0d698b5af9c7fea429b882c98"
+  },
+  "source_variant": "streaming-xml-r6",
+  "stop_reason": "STOP_DURATION_LIMIT",
+  "elapsed_seconds": 1204.14,
+  "runtime_progress": {
+    "scope": "source_whitelisted_libtest_progress_not_full_runtime_pass",
+    "timing": "parent_first_observation_not_exact_test_execution_time",
+    "expected_tests": 249,
+    "completed_observed": 50,
+    "passed_observed": 50,
+    "failed_observed": 0,
+    "ignored_observed": 0,
+    "pending_test": "actual_import::formula_policy_issuer::corpus::changed::all16_original_numeric_derivatives_have_signed_changed_candidates_exact_current_and_live_revocation",
+    "pending_observed_seconds": 222.202,
+    "observations": 2335
+  },
+  "signed_corpus_events": [
+    {
+      "name": "actual_import::formula_policy_issuer::corpus::all16_actual_formula_sources_and_current_derivatives_keep_native_cell_protection_denial",
+      "outcome": "ok",
+      "first_observed_at_seconds": 513.173,
+      "pending_observed_seconds_at_completion": 89.577
+    },
+    {
+      "name": "actual_import::formula_policy_issuer::corpus::all16_current_derivatives_are_signed_exact_noops_then_denied_new_policy_and_expired_approval",
+      "outcome": "ok",
+      "first_observed_at_seconds": 744.557,
+      "pending_observed_seconds_at_completion": 231.384
+    },
+    {
+      "name": "actual_import::formula_policy_issuer::corpus::all36_frozen_originals_signed_full_candidates_or_no_formula_denial_and_live_revocation",
+      "outcome": "ok",
+      "first_observed_at_seconds": 966.074,
+      "pending_observed_seconds_at_completion": 221.516
+    },
+    {
+      "name": "actual_import::formula_policy_issuer::corpus::changed::all16_changed_original_comparators_reject_an_extra_numeric_input_leaf_change",
+      "outcome": "ok",
+      "first_observed_at_seconds": 981.943,
+      "pending_observed_seconds_at_completion": 15.869
+    }
+  ],
+  "remaining_without_completion": 199,
+  "tests_passed": null,
+  "whole249_accepted": false,
+  "job_final": {
+    "active_processes": 0,
+    "job_cpu_seconds": 1074.469,
+    "peak_job_private_mib": 1487.72,
+    "peak_job_private_percent": 4.669428099056017,
+    "owned_processes": []
+  },
+  "owned_limits_readback": {
+    "verified": true,
+    "job_private_limit_mib": 2548.87109375,
+    "cpu_hard_cap_machine_percent": 6.25,
+    "affinity_mask": 1,
+    "priority_class": 16384,
+    "active_process_limit": 16,
+    "kill_on_close": true,
+    "breakaway_disabled": true
+  },
+  "owned_tree_empty": true,
+  "cleanup_confirmed": true,
+  "supporting_post_stop_audit_pin": {
+    "path": "implementation/p09/evidence/p09-149-streaming-xml-roundtrip.whole-source-audit-run02.v1.json",
+    "bytes": 6228,
+    "sha256": "99bd12d08b8adb31e22774a444ee128b25586cb28fe02a741300c820e9dd16c6"
+  },
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "SQL_native_or_Gate_qualified": false,
+  "IO": {
+    "read_passes": 16,
+    "bytes_read": 15328136,
+    "bound_inputs": 7,
+    "final_fresh_hashes": 7,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true
+}

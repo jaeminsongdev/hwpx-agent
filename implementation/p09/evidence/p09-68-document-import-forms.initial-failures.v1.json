@@ -1,0 +1,50 @@
+{
+  "schema": "hwpx-agent.p09-document-import-forms.initial-failures/v1",
+  "date": "2026-10-04",
+  "failures": [
+    {
+      "execution": "4a7264",
+      "stage": "initial_form_compile",
+      "state": "FAIL_RETAINED",
+      "diagnostic": "E0599_PropertyValue_Bool_does_not_exist",
+      "repair": "new_code_uses_original_Boolean_variant"
+    },
+    {
+      "execution": "91c5f1",
+      "stage": "initial_form_lint",
+      "state": "FAIL_RETAINED",
+      "diagnostic": "new_import_function_105_lines",
+      "repair": "extract_observation_helper_no_allow_or_guard_change"
+    },
+    {
+      "execution": "e80d13",
+      "stage": "initial_form_tests",
+      "state": "FAIL_RETAINED",
+      "passed": 6,
+      "failed": 2,
+      "diagnostics": [
+        "derived_test_zip_did_not_put_mimetype_first_source_graph_rejected",
+        "new_negative_test_assumed_edit_in_both_five_kind_sections"
+      ],
+      "repair": "test_zip_uses_original_mimetype_first_contract_and_duplicate_ID_test_selects_actual_native_form_by_namespace_original_expected_rejection_preserved"
+    }
+  ],
+  "patch_diagnostics": [
+    {
+      "stage": "helper_extraction",
+      "cause": "formatted_import_context_did_not_match",
+      "result": "atomic_patch_rejected_no_source_change",
+      "repair": "exact_function_anchor_patch"
+    }
+  ],
+  "original_guard_changed_to_pass": false,
+  "old_assertions_removed": false,
+  "original_hwpx_mutated": false,
+  "whole_failure_sources_preserved": true,
+  "previous_p62_failure": {
+    "execution": "16fde8",
+    "state": "UNRESOLVED"
+  },
+  "native_started": false,
+  "permission_prompt_requested": false
+}

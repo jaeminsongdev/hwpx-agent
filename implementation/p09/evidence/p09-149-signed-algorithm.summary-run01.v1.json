@@ -1,0 +1,932 @@
+{
+  "schema_version": "hwpx-agent.p09-algorithm-profile-summary/v1",
+  "state": "PASS_SCOPED_COMPILE_AND_STOP_PRESERVATION_NOT_RUNTIME_OR_GATE",
+  "source_variant": "unchanged-r11-Rust-serde-json-sha2-opt1-two-packages-opt1-r15",
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "goal_status": "active",
+  "P10_new_implementation": false,
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "original_Rust_or_assertions_changed": false,
+  "PC_freeze_resolved": false,
+  "exact_CPU_hot_function_proven": false,
+  "statistical_speedup_proven": false,
+  "original_owned_runtime_policy_changed": false,
+  "new_child_or_thread_started": false,
+  "source_test_count": 249,
+  "source_module_instances": 59,
+  "current_Rust_inputs": 783,
+  "execution_source_freezes_current_exact": true,
+  "compiled_inventory_current_exact": true,
+  "light01_contract_checks": 10,
+  "test_package_profile_config": [
+    "profile.test.package.hwpx-package.opt-level=1",
+    "profile.test.package.hwpx-package.debug-assertions=true",
+    "profile.test.package.hwpx-package.overflow-checks=true",
+    "profile.test.package.hwpx-package.codegen-units=16",
+    "profile.test.package.hwpx-package.debug=\"line-tables-only\"",
+    "profile.test.package.hwpx-agent-cli.opt-level=1",
+    "profile.test.package.hwpx-agent-cli.debug-assertions=true",
+    "profile.test.package.hwpx-agent-cli.overflow-checks=true",
+    "profile.test.package.hwpx-agent-cli.codegen-units=16",
+    "profile.test.package.hwpx-agent-cli.debug=\"line-tables-only\"",
+    "profile.test.lto=\"off\"",
+    "profile.test.package.serde_json.opt-level=1",
+    "profile.test.package.serde_json.debug-assertions=true",
+    "profile.test.package.serde_json.overflow-checks=true",
+    "profile.test.package.serde_json.codegen-units=16",
+    "profile.test.package.serde_json.debug=\"line-tables-only\"",
+    "profile.test.package.sha2.opt-level=1",
+    "profile.test.package.sha2.debug-assertions=true",
+    "profile.test.package.sha2.overflow-checks=true",
+    "profile.test.package.sha2.codegen-units=16",
+    "profile.test.package.sha2.debug=\"line-tables-only\""
+  ],
+  "optimized_algorithm_dependencies": [
+    "serde_json",
+    "sha2"
+  ],
+  "domain_ir_optimized": false,
+  "current_helpers": [
+    {
+      "path": "tools/p09/run_algorithm_dependency_signed_tests.py",
+      "bytes": 9653,
+      "sha256": "a9c7c07f5dba6a95dd3fc6619b74bfaba30e4705ea6118f659dc036c8dcffe36"
+    },
+    {
+      "path": "tools/p09/tests/test_algorithm_dependency_signed_tests.py",
+      "bytes": 7536,
+      "sha256": "4c3e0924b88c68a1b54d5025d12845e85e59d2400ae8cd005560ca0c63ec0cdc"
+    }
+  ],
+  "parent_pin": {
+    "path": "implementation/p09/evidence/p09-149-signed-split-domain.summary-run01.v1.json",
+    "bytes": 10597,
+    "sha256": "9237e77f84cde850e93bf84c1d264095304f543e858d1692ddd463a0a019b1fc"
+  },
+  "support_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-algorithm.inventory-run01.v1.json",
+      "bytes": 898278,
+      "sha256": "ffa0b8fe9f5ee6e463daf8904fb36a583762fb640c7a2cf4b20b4a36b45e2b18"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-algorithm.actual-run01.v1.json",
+      "bytes": 941596,
+      "sha256": "0792d62ad1b06f7b56285df4817d50e6983f38a49698a6dc41f91594a77cac48"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-algorithm.light-run01.v1.json",
+      "bytes": 2181,
+      "sha256": "833d819a88240d326c43938867324f2595d9119901212cd265e4b9ea6bde17ab"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-algorithm-profile-generation-failure-run01.v1.json",
+      "bytes": 418,
+      "sha256": "678cc6cdacd7695307d202fd1f5c55fb66187bf240c9a572a8662aaee5df7005"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-split-domain.final-progress-sync-run01.v1.json",
+      "bytes": 1798,
+      "sha256": "228b7c5b6c60c5c30a476112663e1310937a5ac170e4f43472c43ee712970d41"
+    }
+  ],
+  "binding_resource_schedule": {
+    "qualification": "FULL_SOURCE_BINDING_CADENCE_ONLY_NOT_COMPILE_RUNTIME_OR_GATE",
+    "callback_modules": [
+      "run_call_local_xml_regression",
+      "run_optimized_signed_tests",
+      "run_output_stage_profile",
+      "run_readback_buffer_regression",
+      "run_signed_stage_cost",
+      "run_source_stage_profile",
+      "run_stored_comment_regression",
+      "run_xml_roundtrip_regression"
+    ],
+    "reader_instances": 8,
+    "IO_checkpoints": 12307,
+    "unchanged_original_pressure_callback_calls": 14,
+    "canonical_sample_count": 16,
+    "canonical_host_samples": [
+      {
+        "time_utc": "2026-10-07T02:33:16.379603+00:00",
+        "system_cpu_percent": 8.81,
+        "available_ram_mib": 10372.89,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.55679745770037,
+        "commit_used_percent": 38.26064126765723
+      },
+      {
+        "time_utc": "2026-10-07T02:33:16.880384+00:00",
+        "system_cpu_percent": 9.75,
+        "available_ram_mib": 10363.3,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.52669837593692,
+        "commit_used_percent": 38.27050746974804
+      },
+      {
+        "time_utc": "2026-10-07T02:33:17.381053+00:00",
+        "system_cpu_percent": 9.38,
+        "available_ram_mib": 10369.51,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.54616776161527,
+        "commit_used_percent": 38.23708447102052
+      },
+      {
+        "time_utc": "2026-10-07T02:33:17.885370+00:00",
+        "system_cpu_percent": 9.6,
+        "available_ram_mib": 10417.95,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.69822023087406,
+        "commit_used_percent": 38.24155061009495
+      },
+      {
+        "time_utc": "2026-10-07T02:33:18.389322+00:00",
+        "system_cpu_percent": 7.71,
+        "available_ram_mib": 10406.8,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.663217021735704,
+        "commit_used_percent": 38.239051450496056
+      },
+      {
+        "time_utc": "2026-10-07T02:33:18.889576+00:00",
+        "system_cpu_percent": 8.4,
+        "available_ram_mib": 10413.52,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.68429250912934,
+        "commit_used_percent": 38.23809143929314
+      },
+      {
+        "time_utc": "2026-10-07T02:33:19.390000+00:00",
+        "system_cpu_percent": 22.97,
+        "available_ram_mib": 10381.38,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.58343912966451,
+        "commit_used_percent": 38.28425545626802
+      },
+      {
+        "time_utc": "2026-10-07T02:33:19.890896+00:00",
+        "system_cpu_percent": 14.65,
+        "available_ram_mib": 10372.98,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.557067184705986,
+        "commit_used_percent": 38.28229369424468
+      },
+      {
+        "time_utc": "2026-10-07T02:33:20.392201+00:00",
+        "system_cpu_percent": 11.37,
+        "available_ram_mib": 10388.77,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.606635652147794,
+        "commit_used_percent": 38.285194597662176
+      },
+      {
+        "time_utc": "2026-10-07T02:33:20.894809+00:00",
+        "system_cpu_percent": 8.4,
+        "available_ram_mib": 10410.88,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.67601679418419,
+        "commit_used_percent": 38.24446194841683
+      },
+      {
+        "time_utc": "2026-10-07T02:33:21.396578+00:00",
+        "system_cpu_percent": 8.01,
+        "available_ram_mib": 10389.18,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.60791072526527,
+        "commit_used_percent": 38.25890907353023
+      },
+      {
+        "time_utc": "2026-10-07T02:33:21.897856+00:00",
+        "system_cpu_percent": 9.16,
+        "available_ram_mib": 10379.96,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.57898863407179,
+        "commit_used_percent": 38.27930409413995
+      },
+      {
+        "time_utc": "2026-10-07T02:33:22.400649+00:00",
+        "system_cpu_percent": 6.61,
+        "available_ram_mib": 10374.88,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.56301343914806,
+        "commit_used_percent": 38.294867754021965
+      },
+      {
+        "time_utc": "2026-10-07T02:33:22.901523+00:00",
+        "system_cpu_percent": 9.36,
+        "available_ram_mib": 10353.1,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.49466216386038,
+        "commit_used_percent": 38.29322947403438
+      },
+      {
+        "time_utc": "2026-10-07T02:33:23.401711+00:00",
+        "system_cpu_percent": 11.84,
+        "available_ram_mib": 10353.95,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.49734717359814,
+        "commit_used_percent": 38.28359283983992
+      },
+      {
+        "time_utc": "2026-10-07T02:33:23.902984+00:00",
+        "system_cpu_percent": 13.11,
+        "available_ram_mib": 10368.37,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 32.54260000895003,
+        "commit_used_percent": 38.28968682399755
+      }
+    ],
+    "original_resource_stop": null,
+    "whole_scope_maximum_seconds": 600,
+    "canonical_sample_interval_seconds": 0.5,
+    "per_IO_sleep_added": false,
+    "source_read_or_final_hash_checks_scheduled_or_removed": false,
+    "all_legacy_readers_final_fresh_hash_inventory_exact": true,
+    "read_passes": 2121,
+    "bytes_read": 51323658,
+    "closing_fresh_hashes": 1023,
+    "elapsed_binding_seconds": 7.070753499996499,
+    "thresholds_or_owned_runtime_policy_changed": false,
+    "new_child_or_watcher_thread_started": false,
+    "cleanup_confirmed": true
+  },
+  "inventory": {
+    "state": "PASS_SCOPED_NOT_GATE",
+    "stop_reason": null,
+    "elapsed_seconds": 176.68,
+    "maximum_seconds": 600,
+    "compiled_inventory_exact": true,
+    "runtime_tests_executed": false,
+    "tests_passed": null,
+    "job_final": {
+      "active_processes": 0,
+      "job_cpu_seconds": 162.562,
+      "peak_job_private_mib": 1981.89,
+      "peak_job_private_percent": 6.220431943278863,
+      "owned_processes": []
+    },
+    "resolved_owned_limits": {
+      "total_ram_mib": 31860.92,
+      "job_private_memory_limit_mib": 2548.87,
+      "machine_logical_processors": 16,
+      "job_cpu_hard_cap_machine_percent": 6.25
+    },
+    "owned_tree_empty": true,
+    "cleanup_confirmed": true,
+    "signed_stage_cost": null,
+    "host_CPU_max": 82.42,
+    "host_saturation_longest_streak": 0,
+    "available_RAM_percent_min": 20.520793806577537,
+    "commit_percent_max": 43.52397051450809
+  },
+  "actual": {
+    "state": "STOPPED_NOT_ACCEPTED",
+    "stop_reason": "STOP_DURATION_LIMIT",
+    "elapsed_seconds": 184.21,
+    "maximum_seconds": 180,
+    "compiled_inventory_exact": null,
+    "runtime_tests_executed": null,
+    "tests_passed": null,
+    "job_final": {
+      "active_processes": 0,
+      "job_cpu_seconds": 173.484,
+      "peak_job_private_mib": 63.87,
+      "peak_job_private_percent": 0.2004562064490501,
+      "owned_processes": []
+    },
+    "resolved_owned_limits": {
+      "total_ram_mib": 31860.92,
+      "job_private_memory_limit_mib": 2548.87,
+      "machine_logical_processors": 16,
+      "job_cpu_hard_cap_machine_percent": 6.25
+    },
+    "owned_tree_empty": true,
+    "cleanup_confirmed": true,
+    "signed_stage_cost": {
+      "qualification": "TEST_ONLY_STAGE_ELAPSED_NOT_CPU_PROFILER_OR_CASE_RUNTIME_PASS",
+      "events": [
+        {
+          "case_index": 0,
+          "stage": "original_expected",
+          "elapsed_us": 58997
+        },
+        {
+          "case_index": 0,
+          "stage": "numeric_derivative",
+          "elapsed_us": 34693
+        },
+        {
+          "case_index": 0,
+          "stage": "expected_candidate",
+          "elapsed_us": 185976
+        },
+        {
+          "case_index": 0,
+          "stage": "outside_compare",
+          "elapsed_us": 26892
+        },
+        {
+          "case_index": 0,
+          "stage": "changed_setup",
+          "elapsed_us": 7303
+        },
+        {
+          "case_index": 0,
+          "stage": "changed_register",
+          "elapsed_us": 826830
+        },
+        {
+          "case_index": 0,
+          "stage": "changed_prepare",
+          "elapsed_us": 2769272
+        },
+        {
+          "case_index": 0,
+          "stage": "changed_consume",
+          "elapsed_us": 8798002
+        },
+        {
+          "case_index": 0,
+          "stage": "changed_route_denied",
+          "elapsed_us": 10883896
+        },
+        {
+          "case_index": 0,
+          "stage": "current_expected",
+          "elapsed_us": 53745
+        },
+        {
+          "case_index": 0,
+          "stage": "current_setup",
+          "elapsed_us": 6780
+        },
+        {
+          "case_index": 0,
+          "stage": "current_register",
+          "elapsed_us": 822393
+        },
+        {
+          "case_index": 0,
+          "stage": "current_prepare",
+          "elapsed_us": 1102912
+        },
+        {
+          "case_index": 0,
+          "stage": "current_consume",
+          "elapsed_us": 2958286
+        },
+        {
+          "case_index": 0,
+          "stage": "rebind_denied",
+          "elapsed_us": 39
+        },
+        {
+          "case_index": 0,
+          "stage": "live_revocation_denied",
+          "elapsed_us": 95034
+        },
+        {
+          "case_index": 0,
+          "stage": "signed_pair",
+          "elapsed_us": 28328381
+        },
+        {
+          "case_index": 1,
+          "stage": "original_expected",
+          "elapsed_us": 55326
+        },
+        {
+          "case_index": 1,
+          "stage": "numeric_derivative",
+          "elapsed_us": 35614
+        },
+        {
+          "case_index": 1,
+          "stage": "expected_candidate",
+          "elapsed_us": 187372
+        },
+        {
+          "case_index": 1,
+          "stage": "outside_compare",
+          "elapsed_us": 24932
+        },
+        {
+          "case_index": 1,
+          "stage": "changed_setup",
+          "elapsed_us": 6618
+        },
+        {
+          "case_index": 1,
+          "stage": "changed_register",
+          "elapsed_us": 746231
+        },
+        {
+          "case_index": 1,
+          "stage": "changed_prepare",
+          "elapsed_us": 2700984
+        },
+        {
+          "case_index": 1,
+          "stage": "changed_consume",
+          "elapsed_us": 7355814
+        },
+        {
+          "case_index": 1,
+          "stage": "changed_route_denied",
+          "elapsed_us": 10815502
+        },
+        {
+          "case_index": 1,
+          "stage": "current_expected",
+          "elapsed_us": 81093
+        },
+        {
+          "case_index": 1,
+          "stage": "current_setup",
+          "elapsed_us": 8703
+        },
+        {
+          "case_index": 1,
+          "stage": "current_register",
+          "elapsed_us": 1033596
+        },
+        {
+          "case_index": 1,
+          "stage": "current_prepare",
+          "elapsed_us": 1527624
+        },
+        {
+          "case_index": 1,
+          "stage": "current_consume",
+          "elapsed_us": 3104337
+        },
+        {
+          "case_index": 1,
+          "stage": "rebind_denied",
+          "elapsed_us": 23
+        },
+        {
+          "case_index": 1,
+          "stage": "live_revocation_denied",
+          "elapsed_us": 87260
+        },
+        {
+          "case_index": 1,
+          "stage": "signed_pair",
+          "elapsed_us": 27471971
+        },
+        {
+          "case_index": 2,
+          "stage": "original_expected",
+          "elapsed_us": 55433
+        },
+        {
+          "case_index": 2,
+          "stage": "numeric_derivative",
+          "elapsed_us": 33029
+        },
+        {
+          "case_index": 2,
+          "stage": "expected_candidate",
+          "elapsed_us": 179628
+        },
+        {
+          "case_index": 2,
+          "stage": "outside_compare",
+          "elapsed_us": 26061
+        },
+        {
+          "case_index": 2,
+          "stage": "changed_setup",
+          "elapsed_us": 6682
+        },
+        {
+          "case_index": 2,
+          "stage": "changed_register",
+          "elapsed_us": 812067
+        },
+        {
+          "case_index": 2,
+          "stage": "changed_prepare",
+          "elapsed_us": 2646327
+        },
+        {
+          "case_index": 2,
+          "stage": "changed_consume",
+          "elapsed_us": 7787926
+        },
+        {
+          "case_index": 2,
+          "stage": "changed_route_denied",
+          "elapsed_us": 10492448
+        },
+        {
+          "case_index": 2,
+          "stage": "current_expected",
+          "elapsed_us": 52175
+        },
+        {
+          "case_index": 2,
+          "stage": "current_setup",
+          "elapsed_us": 6827
+        },
+        {
+          "case_index": 2,
+          "stage": "current_register",
+          "elapsed_us": 873180
+        },
+        {
+          "case_index": 2,
+          "stage": "current_prepare",
+          "elapsed_us": 1285355
+        },
+        {
+          "case_index": 2,
+          "stage": "current_consume",
+          "elapsed_us": 2958839
+        },
+        {
+          "case_index": 2,
+          "stage": "rebind_denied",
+          "elapsed_us": 24
+        },
+        {
+          "case_index": 2,
+          "stage": "live_revocation_denied",
+          "elapsed_us": 92489
+        },
+        {
+          "case_index": 2,
+          "stage": "signed_pair",
+          "elapsed_us": 27018097
+        },
+        {
+          "case_index": 3,
+          "stage": "original_expected",
+          "elapsed_us": 51608
+        },
+        {
+          "case_index": 3,
+          "stage": "numeric_derivative",
+          "elapsed_us": 31156
+        },
+        {
+          "case_index": 3,
+          "stage": "expected_candidate",
+          "elapsed_us": 169085
+        },
+        {
+          "case_index": 3,
+          "stage": "outside_compare",
+          "elapsed_us": 24707
+        },
+        {
+          "case_index": 3,
+          "stage": "changed_setup",
+          "elapsed_us": 6584
+        },
+        {
+          "case_index": 3,
+          "stage": "changed_register",
+          "elapsed_us": 728203
+        },
+        {
+          "case_index": 3,
+          "stage": "changed_prepare",
+          "elapsed_us": 2814131
+        },
+        {
+          "case_index": 3,
+          "stage": "changed_consume",
+          "elapsed_us": 9364406
+        },
+        {
+          "case_index": 3,
+          "stage": "changed_route_denied",
+          "elapsed_us": 9305294
+        },
+        {
+          "case_index": 3,
+          "stage": "current_expected",
+          "elapsed_us": 47841
+        },
+        {
+          "case_index": 3,
+          "stage": "current_setup",
+          "elapsed_us": 6885
+        },
+        {
+          "case_index": 3,
+          "stage": "current_register",
+          "elapsed_us": 733591
+        },
+        {
+          "case_index": 3,
+          "stage": "current_prepare",
+          "elapsed_us": 1028794
+        },
+        {
+          "case_index": 3,
+          "stage": "current_consume",
+          "elapsed_us": 2652976
+        },
+        {
+          "case_index": 3,
+          "stage": "rebind_denied",
+          "elapsed_us": 29
+        },
+        {
+          "case_index": 3,
+          "stage": "live_revocation_denied",
+          "elapsed_us": 89516
+        },
+        {
+          "case_index": 3,
+          "stage": "signed_pair",
+          "elapsed_us": 26781791
+        },
+        {
+          "case_index": 4,
+          "stage": "original_expected",
+          "elapsed_us": 56141
+        },
+        {
+          "case_index": 4,
+          "stage": "numeric_derivative",
+          "elapsed_us": 33293
+        },
+        {
+          "case_index": 4,
+          "stage": "expected_candidate",
+          "elapsed_us": 180615
+        },
+        {
+          "case_index": 4,
+          "stage": "outside_compare",
+          "elapsed_us": 26248
+        },
+        {
+          "case_index": 4,
+          "stage": "changed_setup",
+          "elapsed_us": 6792
+        },
+        {
+          "case_index": 4,
+          "stage": "changed_register",
+          "elapsed_us": 776513
+        },
+        {
+          "case_index": 4,
+          "stage": "changed_prepare",
+          "elapsed_us": 2758965
+        },
+        {
+          "case_index": 4,
+          "stage": "changed_consume",
+          "elapsed_us": 8061885
+        },
+        {
+          "case_index": 4,
+          "stage": "changed_route_denied",
+          "elapsed_us": 9834143
+        },
+        {
+          "case_index": 4,
+          "stage": "current_expected",
+          "elapsed_us": 77934
+        },
+        {
+          "case_index": 4,
+          "stage": "current_setup",
+          "elapsed_us": 7514
+        },
+        {
+          "case_index": 4,
+          "stage": "current_register",
+          "elapsed_us": 771288
+        },
+        {
+          "case_index": 4,
+          "stage": "current_prepare",
+          "elapsed_us": 1034948
+        },
+        {
+          "case_index": 4,
+          "stage": "current_consume",
+          "elapsed_us": 2788864
+        },
+        {
+          "case_index": 4,
+          "stage": "rebind_denied",
+          "elapsed_us": 32
+        },
+        {
+          "case_index": 4,
+          "stage": "live_revocation_denied",
+          "elapsed_us": 91728
+        },
+        {
+          "case_index": 4,
+          "stage": "signed_pair",
+          "elapsed_us": 26213983
+        },
+        {
+          "case_index": 5,
+          "stage": "original_expected",
+          "elapsed_us": 51110
+        },
+        {
+          "case_index": 5,
+          "stage": "numeric_derivative",
+          "elapsed_us": 30839
+        },
+        {
+          "case_index": 5,
+          "stage": "expected_candidate",
+          "elapsed_us": 169456
+        },
+        {
+          "case_index": 5,
+          "stage": "outside_compare",
+          "elapsed_us": 24337
+        },
+        {
+          "case_index": 5,
+          "stage": "changed_setup",
+          "elapsed_us": 6645
+        },
+        {
+          "case_index": 5,
+          "stage": "changed_register",
+          "elapsed_us": 722045
+        },
+        {
+          "case_index": 5,
+          "stage": "changed_prepare",
+          "elapsed_us": 2521021
+        },
+        {
+          "case_index": 5,
+          "stage": "changed_consume",
+          "elapsed_us": 7352771
+        },
+        {
+          "case_index": 5,
+          "stage": "changed_route_denied",
+          "elapsed_us": 9317520
+        },
+        {
+          "case_index": 5,
+          "stage": "current_expected",
+          "elapsed_us": 47514
+        },
+        {
+          "case_index": 5,
+          "stage": "current_setup",
+          "elapsed_us": 6496
+        },
+        {
+          "case_index": 5,
+          "stage": "current_register",
+          "elapsed_us": 725132
+        },
+        {
+          "case_index": 5,
+          "stage": "current_prepare",
+          "elapsed_us": 981307
+        },
+        {
+          "case_index": 5,
+          "stage": "current_consume",
+          "elapsed_us": 2578232
+        },
+        {
+          "case_index": 5,
+          "stage": "rebind_denied",
+          "elapsed_us": 27
+        },
+        {
+          "case_index": 5,
+          "stage": "live_revocation_denied",
+          "elapsed_us": 87144
+        },
+        {
+          "case_index": 5,
+          "stage": "signed_pair",
+          "elapsed_us": 24349034
+        },
+        {
+          "case_index": 6,
+          "stage": "original_expected",
+          "elapsed_us": 56669
+        },
+        {
+          "case_index": 6,
+          "stage": "numeric_derivative",
+          "elapsed_us": 33570
+        },
+        {
+          "case_index": 6,
+          "stage": "expected_candidate",
+          "elapsed_us": 214001
+        },
+        {
+          "case_index": 6,
+          "stage": "outside_compare",
+          "elapsed_us": 31615
+        },
+        {
+          "case_index": 6,
+          "stage": "changed_setup",
+          "elapsed_us": 8133
+        },
+        {
+          "case_index": 6,
+          "stage": "changed_register",
+          "elapsed_us": 817138
+        },
+        {
+          "case_index": 6,
+          "stage": "changed_prepare",
+          "elapsed_us": 2661245
+        },
+        {
+          "case_index": 6,
+          "stage": "changed_consume",
+          "elapsed_us": 7819562
+        }
+      ],
+      "fully_observed_case_sequences": 6,
+      "last_observed_case": 6,
+      "next_expected_stage": "changed_route_denied",
+      "outer_signed_pair_overlaps_nested_PAIR_do_not_sum_both": true,
+      "signed16_runtime_complete": false
+    },
+    "host_CPU_max": 98.33,
+    "host_saturation_longest_streak": 1,
+    "available_RAM_percent_min": 29.48693632419715,
+    "commit_percent_max": 39.41290514885834
+  },
+  "partial_observation_comparison": {
+    "qualification": "SINGLE_BOUNDED_STAGE_ELAPSED_NOT_STATISTICAL_SPEEDUP_OR_RUNTIME_PASS",
+    "r13_original_profile_complete_sequences": 3,
+    "r15_dependency_profile_complete_sequences": 6,
+    "r13_case0": {
+      "original_expected": 97390,
+      "numeric_derivative": 54164,
+      "expected_candidate": 290345,
+      "outside_compare": 46638,
+      "changed_setup": 9240,
+      "changed_register": 1329659,
+      "changed_prepare": 5498365,
+      "changed_consume": 16124656,
+      "changed_route_denied": 20732767,
+      "current_expected": 124485,
+      "current_setup": 13417,
+      "current_register": 1684002,
+      "current_prepare": 2393878,
+      "current_consume": 5879519,
+      "rebind_denied": 47,
+      "live_revocation_denied": 186489,
+      "signed_pair": 53980321
+    },
+    "r15_case0": {
+      "original_expected": 58997,
+      "numeric_derivative": 34693,
+      "expected_candidate": 185976,
+      "outside_compare": 26892,
+      "changed_setup": 7303,
+      "changed_register": 826830,
+      "changed_prepare": 2769272,
+      "changed_consume": 8798002,
+      "changed_route_denied": 10883896,
+      "current_expected": 53745,
+      "current_setup": 6780,
+      "current_register": 822393,
+      "current_prepare": 1102912,
+      "current_consume": 2958286,
+      "rebind_denied": 39,
+      "live_revocation_denied": 95034,
+      "signed_pair": 28328381
+    },
+    "signed_pair_overlaps_nested_stages_do_not_sum_both": true
+  },
+  "next_action": "Inspect fresh ArtifactService AEAD/IR decoding and repeated complete reconstruction cost with preserved full checks; no blind same-profile replay, cap increase, timeout extension, or auth result cache.",
+  "source_closing_exact": true,
+  "IO": {
+    "read_passes": 2807,
+    "bytes_read": 77000821,
+    "bound_inputs": 934,
+    "final_fresh_hashes": 934,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true,
+  "elapsed_audit_seconds": 25.609635
+}

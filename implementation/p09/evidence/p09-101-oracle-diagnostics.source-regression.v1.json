@@ -1,0 +1,125 @@
+{
+  "schema": "hwpx-agent.p09-101-oracle-diagnostics-source-regression/v1",
+  "recorded_at_utc": "2026-10-04 17:24:02 UTC",
+  "state": "PASS_SCOPED_SOURCE_COMPONENT_NOT_SQL_cause_native_product_or_Gate",
+  "git_head": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+  "rust": {
+    "passed": 45,
+    "failed": 0,
+    "ignored": 0,
+    "example": {
+      "passed": 4,
+      "terminal_chunk_id": "c407ee",
+      "exit_code": 0,
+      "command": "cargo test -p hwpx-agent-cli --example stored_source_policy_postgres_probe --target-dir target/p09-101-diagnostics --offline --locked",
+      "main_executed": false
+    },
+    "libraries": {
+      "artifact_service": 25,
+      "revision_service": 16,
+      "start_chunk_id": "2ca13f",
+      "session_id": 55714,
+      "terminal_chunk_id": "ba85d0",
+      "exit_code": 0
+    },
+    "all_historical_qualification_reexecuted": false
+  },
+  "python": {
+    "passed": 22,
+    "failed": 0,
+    "terminal_chunk_id": "ab5717",
+    "exit_code": 0,
+    "diagnostics": 14,
+    "preservation": 8,
+    "scope": "source/parser/query-shape and mocked callbacks; live prior-view/raw inheritance plus mock manifest rejection; NOT actual SQL"
+  },
+  "strict_clippy": {
+    "terminal_chunk_id": "ba85d0",
+    "exit_code": 0,
+    "command": "cargo clippy -p hwpx-agent-cli --example stored_source_policy_postgres_probe --target-dir target/p09-101-diagnostics --offline --locked -- -D warnings"
+  },
+  "current_source_component_conformance": {
+    "terminal_chunk_id": "19dc65",
+    "exit_code": 0,
+    "upstream_validators_verified": 15,
+    "green_rows": 0,
+    "P09_gate": "OPEN"
+  },
+  "default_conformance": {
+    "terminal_chunk_id": "967b2b",
+    "exit_code": 1,
+    "state": "FAIL:matrix_drift",
+    "failure_preserved": true
+  },
+  "format_diff": {
+    "rustfmt": {
+      "terminal_chunk_id": "63ba47",
+      "exit_code": 0,
+      "new_rust_files": 1
+    },
+    "diff_check": {
+      "terminal_chunk_id": "84c135",
+      "exit_code": 0
+    }
+  },
+  "python_syntax": {
+    "terminal_chunk_id": "9e06af",
+    "exit_code": 0,
+    "parsed": 5
+  },
+  "tested_source_delta": [
+    {
+      "path": "tools/p09/run_stored_source_policy_postgres_checks.py",
+      "bytes": 18621,
+      "sha256": "bbdcb8fb794ace091f4254738fe2878eb49431061f6e9c1dcf0f6a9d93465246"
+    },
+    {
+      "path": "crates/product-cli/examples/stored_source_policy_postgres_probe/worker.rs",
+      "bytes": 6343,
+      "sha256": "0c787c8851bcc8a0afbb73b26828f1d7c1a116ab993bfbb8b12671c5e134eac4"
+    },
+    {
+      "path": "crates/product-cli/examples/stored_source_policy_postgres_probe/worker/oracle_snapshot.rs",
+      "bytes": 4642,
+      "sha256": "b923fa9c727b218769f660b6d256e2515a66811fc4c4c8f0124fe68bf7bc8080"
+    },
+    {
+      "path": "crates/product-cli/examples/stored_source_policy_postgres_probe/worker/oracle_snapshot.sql",
+      "bytes": 4273,
+      "sha256": "d419410277addf88cfc2da51e15c08350db60ece823e8092e039c3ba5365b8b2"
+    },
+    {
+      "path": "tools/p09/source_policy_oracle_diagnostics.py",
+      "bytes": 5777,
+      "sha256": "99aff54c68501c867733f28f8079bf160f26929bc2d16b461218b541a690ec37"
+    },
+    {
+      "path": "tools/p09/tests/test_source_policy_oracle_diagnostics.py",
+      "bytes": 9339,
+      "sha256": "1e0635b83858be7c6df7915fcecb1e300c5df61ad715a12842dd3696420d4e91"
+    },
+    {
+      "path": "tools/p09/verify_source_policy_oracle_progress.py",
+      "bytes": 10039,
+      "sha256": "b180f0e025e6f0f62f7af9f12826a22e1dd8ecb2e3c6c2812f2a36013ee8ce32"
+    },
+    {
+      "path": "tools/p09/tests/test_source_policy_oracle_progress.py",
+      "bytes": 4556,
+      "sha256": "92ceb4dd1cb632f87cd723c1620806b185043c0a853a000b2f303a9f79e90a03"
+    }
+  ],
+  "qualification": {
+    "native_executed": false,
+    "actual_SQL_executed": false,
+    "SQL_failure_root_cause_proven": false,
+    "original_atomic_oracle_verified": false,
+    "full_comment_product_acceptance": false,
+    "native_author_time_state_binding": false,
+    "product_complete": false,
+    "P10_new_implementation": false,
+    "execution_publication_authority": false,
+    "new_table_insertion_implemented": false,
+    "P09_gate": "OPEN"
+  }
+}

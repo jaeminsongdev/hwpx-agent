@@ -1,0 +1,264 @@
+{
+  "schema_version": "hwpx-agent.p09-runner-safety-light-fixtures/v1",
+  "state": "PASS_LIGHT_RUNNER_SAFETY_NOT_RUST_SQL_NATIVE_OR_PC_FREEZE_PROOF",
+  "source_freeze": [
+    {
+      "path": "Cargo.toml",
+      "bytes": 2695,
+      "sha256": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5"
+    },
+    {
+      "path": "Cargo.lock",
+      "bytes": 61056,
+      "sha256": "3dba694d1b6066a8ff7fec347c51edd1b09b7046ca070bbaf3ac78cc8b708887"
+    },
+    {
+      "path": "crates/domain-ir/src/document_graph.rs",
+      "bytes": 45840,
+      "sha256": "adc2f0c9df19bfd50f2f8560fe1f0d946b2e90b332e7d836695209fbe4eabf63"
+    },
+    {
+      "path": "crates/domain-ir/tests/document_graph.rs",
+      "bytes": 19603,
+      "sha256": "545c0f2ce6316f296e9e993d0460cace290ede431768ff0e2541621402c5524c"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics/evaluation/source.rs",
+      "bytes": 15395,
+      "sha256": "16535ac191c1adbc880b4a7adaafeb55737d45caf33fd533b313c7591c052e4b"
+    },
+    {
+      "path": "crates/product-cli/src/comment_operation.rs",
+      "bytes": 24752,
+      "sha256": "68bc8f9508d3bb574cb9766e51173f12390a1a30974f4ab34fa75f905538652d"
+    },
+    {
+      "path": "crates/product-cli/src/comment_operation/rich_bodies.rs",
+      "bytes": 18031,
+      "sha256": "c0190d598304febac35deabc902ed1f8b767bb7b08b47ce10080cff77dba3bc0"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 22942,
+      "sha256": "dc212b25ebc534ab19f643c51361271bb86392cf01b669a0fe25f3e37ea13e01"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 3822,
+      "sha256": "0cf267e0524baec7e7b2b204b8aed805928528d067cdf42264048d7bff69b530"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/comments.rs",
+      "bytes": 10117,
+      "sha256": "1451ff6d48f4aacd00b399fa5a754a75ec7f5387ed96b221189628f4cb54fd56"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/comments/rich_bodies.rs",
+      "bytes": 8862,
+      "sha256": "cb6e89f2a6f9bbc4997818a4b46dac0bfacd2f6dd670bc8b0cf9b362fa4d7833"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review/locations.rs",
+      "bytes": 13528,
+      "sha256": "89a9d0ad3b082504dbff97ac1cacb15d6c598a293341e6d75fd1b3ccbba1f1ff"
+    },
+    {
+      "path": "crates/product-cli/src/form_value_operation/full_document.rs",
+      "bytes": 23641,
+      "sha256": "08650555d0dbc4d45fa7392093a6de147ed6de2e300e4adff0e953c26d04b26c"
+    },
+    {
+      "path": "tools/p09/tests/test_conservative_maintenance.py",
+      "bytes": 14943,
+      "sha256": "7399b077c1c150cbc525503706f823ff36001ed88be404b978d0ddfe236a5694"
+    },
+    {
+      "path": "tools/p09/verify_maintenance_safety.py",
+      "bytes": 4673,
+      "sha256": "8604db771e0e9551c439089e4dee4ae91617b4eef250c4e7c0b347e07eec97ba"
+    },
+    {
+      "path": "tools/p09/verify_audit_evidence_io.py",
+      "bytes": 6183,
+      "sha256": "d4a8587e9cbbb1840a527d46d5d8cd49a7e3eb52b306a1bb5e5e2110698bf38d"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "tests_run": 12,
+  "tests_passed": 12,
+  "failed_tests": [],
+  "elapsed_seconds": 0.2529,
+  "profile": {
+    "profile": "P149_OWNED_WORKLOAD_V2",
+    "logical_cpu_limit": 1,
+    "priority": "BelowNormal",
+    "cargo_jobs": 1,
+    "test_threads": 1,
+    "sample_seconds": 0.5,
+    "start_ram_min_percent": 10,
+    "start_consecutive_samples": 2,
+    "admission_max_seconds": 3,
+    "emergency_cpu_percent": 98,
+    "emergency_cpu_consecutive_samples": 4,
+    "stop_ram_min_percent": 8,
+    "stop_commit_used_percent": 95,
+    "job_memory_limit_percent": 8,
+    "job_memory_stop_percent": 7,
+    "test_debug_info": "line-tables-only",
+    "dev_debug_info": "line-tables-only",
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "output_limit_bytes_per_stream": 32768
+  },
+  "self_resource_before": {
+    "cpu_seconds": 0.140625,
+    "memory_observed": true,
+    "working_set_mib": 27.11,
+    "private_mib": 18.3,
+    "system": {
+      "time_utc": "2026-10-06T09:15:34.398677+00:00",
+      "system_cpu_percent": 0.0,
+      "available_ram_mib": 9330.29,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 29.28442038425064,
+      "commit_used_percent": 35.38680077466643
+    }
+  },
+  "self_resource_after": {
+    "cpu_seconds": 0.171875,
+    "memory_observed": true,
+    "working_set_mib": 27.46,
+    "private_mib": 18.41,
+    "system": {
+      "time_utc": "2026-10-06T09:15:34.653076+00:00",
+      "system_cpu_percent": 15.07,
+      "available_ram_mib": 9336.07,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 29.302565655537773,
+      "commit_used_percent": 35.36508052120052
+    }
+  },
+  "self_cpu_seconds_during_checks": 0.03125,
+  "memory_values_are_samples_not_peak": true,
+  "owned_job_observations": [
+    {
+      "active_processes": 1,
+      "job_cpu_seconds": 0.0,
+      "peak_job_private_mib": 0.36,
+      "peak_job_private_percent": 0.0011402096146643217,
+      "owned_processes": [
+        {
+          "pid": 14696,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 1.96,
+          "private_mib": 0.36
+        }
+      ]
+    },
+    {
+      "active_processes": 3,
+      "job_cpu_seconds": 0.047,
+      "peak_job_private_mib": 8.72,
+      "peak_job_private_percent": 0.02737729107038097,
+      "owned_processes": [
+        {
+          "pid": 14696,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 12.93,
+          "private_mib": 7.09
+        },
+        {
+          "pid": 18488,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.16,
+          "private_mib": 1.21
+        },
+        {
+          "pid": 30708,
+          "role": "python.exe",
+          "memory_observed": true,
+          "working_set_mib": 2.46,
+          "private_mib": 0.42
+        }
+      ]
+    },
+    {
+      "active_processes": 0,
+      "job_cpu_seconds": 0.047,
+      "peak_job_private_mib": 8.72,
+      "peak_job_private_percent": 0.02737729107038097,
+      "owned_processes": []
+    },
+    {
+      "active_processes": 0,
+      "job_cpu_seconds": 0.047,
+      "peak_job_private_mib": 8.72,
+      "peak_job_private_percent": 0.02737729107038097,
+      "owned_processes": []
+    },
+    {
+      "active_processes": 0,
+      "job_cpu_seconds": 0.047,
+      "peak_job_private_mib": 8.72,
+      "peak_job_private_percent": 0.02737729107038097,
+      "owned_processes": []
+    },
+    {
+      "active_processes": 0,
+      "job_cpu_seconds": 0.047,
+      "peak_job_private_mib": 8.72,
+      "peak_job_private_percent": 0.02737729107038097,
+      "owned_processes": []
+    },
+    {
+      "active_processes": 1,
+      "job_cpu_seconds": 0.016,
+      "peak_job_private_mib": 6.45,
+      "peak_job_private_percent": 0.020254046058338273,
+      "owned_processes": [
+        {
+          "pid": 14712,
+          "role": "conhost.exe",
+          "memory_observed": true,
+          "working_set_mib": 7.61,
+          "private_mib": 1.2
+        }
+      ]
+    },
+    {
+      "active_processes": 0,
+      "job_cpu_seconds": 0.031,
+      "peak_job_private_mib": 6.45,
+      "peak_job_private_percent": 0.020254046058338273,
+      "owned_processes": []
+    },
+    {
+      "active_processes": 0,
+      "job_cpu_seconds": 0.031,
+      "peak_job_private_mib": 6.45,
+      "peak_job_private_percent": 0.020254046058338273,
+      "owned_processes": []
+    }
+  ],
+  "console_helper_bindings": [
+    {
+      "pid": 18488,
+      "system_image_match": true,
+      "affinity_matches": true,
+      "priority_matches": true
+    }
+  ],
+  "actual_Rust_SQL_native_or_authority_audit_run": false,
+  "owned_python_job_smokes_run": true,
+  "new_git_started": false,
+  "foreign_processes_modified": false,
+  "system_or_Defender_or_WSL_settings_changed": false,
+  "raw_logs_printed_or_saved": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "product_complete": false
+}

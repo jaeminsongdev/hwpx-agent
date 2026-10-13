@@ -1,0 +1,28 @@
+{
+  "schema_version": "hwpx-agent.p09-source-stage-profile-candidate/v1",
+  "qualification": "SOURCE_CANDIDATE_ONLY_NOT_BUILD_RUNTIME_SQL_OR_GATE",
+  "baseline_build_pin": {
+    "path": "target/p09-149-current-issuer-build/current-issuer-build-r4.json",
+    "bytes": 305455,
+    "sha256": "5ce53cf4938ceaa2e8295644e57e3f4fc8becc6a20bdaca4db9cfb6bf5be86c7"
+  },
+  "parent_candidate_pin": {
+    "path": "implementation/p09/evidence/p09-149-source-anchor-prefix-candidate.run01.v1.json",
+    "bytes": 1864,
+    "sha256": "91505a2d1158cc86153dc77d8adc36abf97a3bc6e445e89acdd3100a52bfc285"
+  },
+  "preimage_archive": "implementation/p09/source-archive/p09-149-pre-source-stage-timing-probe/source-preimages.v1.json",
+  "source_deltas": [
+    {
+      "path": "crates/hwpx-package/examples/source_formula_evaluation_probe.rs",
+      "bytes": 7838,
+      "sha256": "adef0e6a95f3e77824573633a51bc44ffb0c7388e23c52a1469f0dcb2e3dd046"
+    }
+  ],
+  "implementation": "Add closed --timing-only numeric stage observations to the original complete36 immutable source consumer. Original imports, source verification, full graph equality, source-anchor resolution and cache comparisons retained. Default evidence output unchanged. Add one profile-only canonical graph receipt equality check. No library or authorization change.",
+  "reviewed_Rust_deltas_from_r4": 17,
+  "library_Rust_deltas_from_r4": 16,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "actual_SQL_or_native_qualified": false
+}

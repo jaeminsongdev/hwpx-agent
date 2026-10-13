@@ -1,0 +1,13 @@
+{
+  "schema": "hwpx-agent.p09-document-import-form-policy.initial-failures/v1",
+  "failures": [
+    {"execution": "9e5877", "state": "compile_failed", "cause": "new code omitted FormControlError mapping and used Self::bind with long borrowed lifetime for a local fresh rebuild", "repair": "map canonical budget failure explicitly and infer a fresh PolicyBoundDocumentForms lifetime", "archive": "p09-69-initial-policy-compile", "old_readers_changed": false},
+    {"execution": "71b121", "state": "new_test_compile_failed", "cause": "new test treated a source spine slice as Iterator and retained an unused import", "repair": "call iter on the original slice and remove unused import", "archive": "p09-69-initial-policy-test-compile", "old_tests_changed": false},
+    {"execution": "15b55c", "state": "12_pass_1_fail", "cause": "new fixture expectation incorrectly classified an editable combo custom default as invalid", "archive": "p09-69-initial-policy-test-run", "old_validator_changed": false},
+    {"execution": "0078aa", "state": "diagnostic_1_fail_12_filtered", "cause": "bounded variant label identified editable combo case 3; unchanged domain explicitly permits custom values when edit_enable is true", "repair": "new invalid combo uses NUL and separate positive custom-default test added; all original guards and cases kept", "archive": "p09-69-policy-test-diagnostic", "old_validator_changed": false},
+    {"execution": "323909", "state": "new_test_strict_lint_failed", "cause": "three missing semicolons in new test unit-valued match arms", "repair": "add semicolons; no lint allow or skip", "archive": "p09-69-initial-policy-test-lint"},
+    {"execution": "4672d9", "state": "predecessor_consumer_comparison_failed", "cause": "new comparison helper compared a whole raw consumer receipt against the P67 evidence wrapper instead of wrapper.evidence", "repair": "select the actual saved evidence record; unchanged consumer and saved receipts then compare exact in 277cc7 and 12c759", "source_or_expected_receipt_changed": false}
+  ],
+  "retained_earlier_failure": {"execution": "P62_16fde8", "state": "UNRESOLVED"},
+  "whole_qualification_or_native_pass": false
+}

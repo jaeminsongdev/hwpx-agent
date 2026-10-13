@@ -1,0 +1,380 @@
+{
+  "schema_version": "hwpx-agent.p09-r07-resumable-batch-closing/v1",
+  "state": "FAILED_NOT_ACCEPTED",
+  "goal_status": "active",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "source_closing_exact": false,
+  "actual_test_runtime_executed": false,
+  "case_receipt_pins": {},
+  "publisher": "P192_shared_batch",
+  "error_code": "P152_FULL_REDACTED_FAILURE",
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "IO": {
+    "read_passes": 14,
+    "bytes_read": 2205734,
+    "bound_inputs": 10,
+    "final_fresh_hashes": 0,
+    "finished": false,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P195_binary1p5_other4_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 1572864,
+      "other": 4194304
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 2205734
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 2205734,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0.0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    },
+    "existing_pressure_and_guards_and_deadline_preserved": true,
+    "rate_budget": {
+      "binary_bytes_per_whole_pass": 375777280,
+      "other_bytes_per_whole_pass": 103599300,
+      "predicted_two_pass_rate_lower_bound_seconds": 527.2255166371663,
+      "estimated_seconds_with_metadata_allowance_and_margin": 575.2255166371663,
+      "unchanged_maximum_scope_seconds": 600,
+      "prediction_is_not_completion_guarantee": true
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/recover_r07_case004_closing.py",
+      "bytes": 12179,
+      "sha256": "4c398f98f2d6c2bdbdee2c9a859359a236547e249297a15de26c5d69190df719"
+    },
+    {
+      "path": "tools/p09/tests/test_r07_independent_closing.py",
+      "bytes": 4986,
+      "sha256": "139046e62fbfbab3e6532002712fbd7c2e1ef225e792696e21268ed28312593a"
+    },
+    {
+      "path": "tools/p09/observe_shared_metadata_recheck.py",
+      "bytes": 10213,
+      "sha256": "49b0960aa6ffb4be31eec630c66f263938f9cbcbe2b65d52dff3d69be9fca735"
+    },
+    {
+      "path": "tools/p09/tests/test_observed_shared_metadata.py",
+      "bytes": 5733,
+      "sha256": "7d6248ee6c9ece4ffefbde81f2291d50d008a0cbca03106e56dc4a062cf0fabe"
+    },
+    {
+      "path": "tools/p09/review_pending_r07_closing.py",
+      "bytes": 4905,
+      "sha256": "0c9d2c9e042923e31be05e6e765d9ead522b78de3d6dc979f76f5414615ebace"
+    },
+    {
+      "path": "tools/p09/tests/test_pending_r07_closing_review.py",
+      "bytes": 2192,
+      "sha256": "c26f14ae73358646f85aa262498112a9e668e0c2b76d2096e839b2ffd740e64f"
+    },
+    {
+      "path": "implementation/p09/evidence/resumable-r07/p190-case-004-attempt-001.json",
+      "bytes": 617816,
+      "sha256": "53159ac973e75e5562439c8a173afa948c9b7c23719826cb51a205d305b9634a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run05.closing.v1.json",
+      "bytes": 304809,
+      "sha256": "715d9f22098622741f5f844ed832a5917078b417cfb4122dee081b1bb90cb3bd"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-194-pending-case004-closing-review-run01.v1.json",
+      "bytes": 16265,
+      "sha256": "a0789196efcba9e241ec77f2deff0227b427a17a3d601a462a732dfc8dcf5dd9"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-191-r07-resumable-run01.preparation.v1.json",
+      "bytes": 601637,
+      "sha256": "076afa535640a5afad9f50ed3fd932ab29238cc8f6ed0a20b2ca526ff11cc5f1"
+    }
+  ],
+  "wall_seconds": 2.8694,
+  "resource_tail": {
+    "original_completed_sample_count": 3,
+    "tail_limit": 8,
+    "existing_samples_only": true,
+    "extra_sampler_thread_started": false,
+    "foreign_Process_query_executed": false,
+    "samples": [
+      {
+        "time_utc": "2026-10-08T02:42:02.387659+00:00",
+        "system_cpu_percent": 23.63,
+        "available_ram_percent": 37.14954952524982,
+        "commit_used_percent": 42.98923905703317,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 61093750,
+          "kernel_including_idle": 67500000,
+          "user": 12500000,
+          "total": 80000000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:42:02.888065+00:00",
+        "system_cpu_percent": 23.05,
+        "available_ram_percent": 37.1516828206579,
+        "commit_used_percent": 43.07996533316067,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 61562500,
+          "kernel_including_idle": 69062500,
+          "user": 10937500,
+          "total": 80000000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:42:03.404926+00:00",
+        "system_cpu_percent": 16.48,
+        "available_ram_percent": 37.21347482558164,
+        "commit_used_percent": 43.04747104092293,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 68906250,
+          "kernel_including_idle": 74687500,
+          "user": 7812500,
+          "total": 82500000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false
+      }
+    ]
+  },
+  "recovery_publisher": "P195_independent_closing",
+  "original_failed_closing_reference": "implementation/p09/evidence/p09-191-r07-resumable-run05.closing.v1.json",
+  "original_failed_closing_pin": {
+    "path": "implementation/p09/evidence/p09-191-r07-resumable-run05.closing.v1.json",
+    "bytes": 304809,
+    "sha256": "715d9f22098622741f5f844ed832a5917078b417cfb4122dee081b1bb90cb3bd"
+  },
+  "candidate_case_pin": {
+    "path": "implementation/p09/evidence/resumable-r07/p190-case-004-attempt-001.json",
+    "bytes": 617816,
+    "sha256": "53159ac973e75e5562439c8a173afa948c9b7c23719826cb51a205d305b9634a"
+  },
+  "recovery_controller_input_pins": [
+    {
+      "path": "tools/p09/recover_r07_case004_closing.py",
+      "bytes": 12179,
+      "sha256": "4c398f98f2d6c2bdbdee2c9a859359a236547e249297a15de26c5d69190df719"
+    },
+    {
+      "path": "tools/p09/tests/test_r07_independent_closing.py",
+      "bytes": 4986,
+      "sha256": "139046e62fbfbab3e6532002712fbd7c2e1ef225e792696e21268ed28312593a"
+    },
+    {
+      "path": "tools/p09/observe_shared_metadata_recheck.py",
+      "bytes": 10213,
+      "sha256": "49b0960aa6ffb4be31eec630c66f263938f9cbcbe2b65d52dff3d69be9fca735"
+    },
+    {
+      "path": "tools/p09/tests/test_observed_shared_metadata.py",
+      "bytes": 5733,
+      "sha256": "7d6248ee6c9ece4ffefbde81f2291d50d008a0cbca03106e56dc4a062cf0fabe"
+    },
+    {
+      "path": "tools/p09/review_pending_r07_closing.py",
+      "bytes": 4905,
+      "sha256": "0c9d2c9e042923e31be05e6e765d9ead522b78de3d6dc979f76f5414615ebace"
+    },
+    {
+      "path": "tools/p09/tests/test_pending_r07_closing_review.py",
+      "bytes": 2192,
+      "sha256": "c26f14ae73358646f85aa262498112a9e668e0c2b76d2096e839b2ffd740e64f"
+    }
+  ],
+  "recovery_metadata_observation": {
+    "completed_sample_count": 3,
+    "samples": [
+      {
+        "time_utc": "2026-10-08T02:42:02.387659+00:00",
+        "system_cpu_percent": 23.63,
+        "available_ram_percent": 37.14954952524982,
+        "commit_used_percent": 42.98923905703317,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 61093750,
+          "kernel_including_idle": 67500000,
+          "user": 12500000,
+          "total": 80000000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 24170496,
+        "own_working_set_bytes": 34639872,
+        "own_private_percent_total_ram": 0.0723481390982168,
+        "own_working_set_percent_total_ram": 0.10368551302382976,
+        "phase_at_sample": "admission",
+        "phases_since_previous_sample": [
+          "admission"
+        ],
+        "audited_logical_read_bytes": null,
+        "audited_logical_read_passes": null,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:42:02.888065+00:00",
+        "system_cpu_percent": 23.05,
+        "available_ram_percent": 37.1516828206579,
+        "commit_used_percent": 43.07996533316067,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 61562500,
+          "kernel_including_idle": 69062500,
+          "user": 10937500,
+          "total": 80000000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 24170496,
+        "own_working_set_bytes": 34639872,
+        "own_private_percent_total_ram": 0.0723481390982168,
+        "own_working_set_percent_total_ram": 0.10368551302382976,
+        "phase_at_sample": "admission",
+        "phases_since_previous_sample": [
+          "admission"
+        ],
+        "audited_logical_read_bytes": null,
+        "audited_logical_read_passes": null,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": false
+      },
+      {
+        "time_utc": "2026-10-08T02:42:03.404926+00:00",
+        "system_cpu_percent": 16.48,
+        "available_ram_percent": 37.21347482558164,
+        "commit_used_percent": 43.04747104092293,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 68906250,
+          "kernel_including_idle": 74687500,
+          "user": 7812500,
+          "total": 82500000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 25497600,
+        "own_working_set_bytes": 36265984,
+        "own_private_percent_total_ram": 0.07632048227188605,
+        "own_working_set_percent_total_ram": 0.10855285944341832,
+        "phase_at_sample": "metadata_read_parse",
+        "phases_since_previous_sample": [
+          "admission",
+          "metadata_hash",
+          "metadata_read_parse"
+        ],
+        "audited_logical_read_bytes": 2062849,
+        "audited_logical_read_passes": 14,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": true
+      }
+    ],
+    "system_cpu_max_percent": 23.63,
+    "own_cpu_max_machine_percent": 0.0,
+    "own_private_max_bytes": 25497600,
+    "own_working_set_max_bytes": 36265984,
+    "available_ram_min_percent": 37.14954952524982,
+    "own_process_only": true,
+    "foreign_PID_query_executed": false,
+    "new_sampler_thread_started": false,
+    "extra_own_memory_query_per_existing_sample": 1,
+    "original_guard_and_CPU_denominator_unchanged": true,
+    "read_counters_are_logical_not_physical_disk_IO": true,
+    "samples_can_span_multiple_phases": true,
+    "CPU_cause_or_PC_freeze_resolution_established": false
+  },
+  "candidate_body_reexecuted": false,
+  "additional_product_child_executed": false,
+  "original_failed_file_not_replaced": true,
+  "closed_error_diagnostic": {
+    "exception_type": "TypeError",
+    "exception_values_or_locals_saved": false,
+    "public_code_frames": [
+      {
+        "module": "run_shared_resumable_r07_batch.py",
+        "function": "close",
+        "line": 190
+      },
+      {
+        "module": "recover_r07_case004_closing.py",
+        "function": "<lambda>",
+        "line": 150
+      },
+      {
+        "module": "recover_r07_case004_closing.py",
+        "function": "contracts",
+        "line": 111
+      },
+      {
+        "module": "recover_r07_case004_closing.py",
+        "function": "new_contracts",
+        "line": 100
+      },
+      {
+        "module": "test_r07_independent_closing.py",
+        "function": "<module>",
+        "line": 7
+      },
+      {
+        "module": "recover_r07_case004_closing.py",
+        "function": "<module>",
+        "line": 62
+      }
+    ]
+  }
+}

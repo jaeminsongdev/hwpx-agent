@@ -1,0 +1,107 @@
+{
+  "schema_version": "hwpx-agent.p09-aead-full-partial-summary/v1",
+  "state": "PARTIAL_TERMINAL_OBSERVED_FINAL_SOURCE_AUDIT_DEFERRED",
+  "goal_status": "active",
+  "P09_gate": "OPEN",
+  "product_complete": false,
+  "P10_new_implementation": false,
+  "implementation": {
+    "new_helpers": [
+      "tools/p09/run_aead_full_stored.py",
+      "tools/p09/tests/test_aead_full_stored.py"
+    ],
+    "original_Rust_product_assertions_changed": false,
+    "original_full_capture_runner_reused": true,
+    "scoped_profile_config_keys": 81,
+    "original_policy_or_OS_settings_changed": false
+  },
+  "observed_results": {
+    "compiled_inventory": {
+      "path": "implementation/p09/evidence/p09-149-aead-dependency.inventory-run02.v1.json",
+      "state": "PASS_SCOPED_NOT_GATE",
+      "compiled_inventory_exact": true,
+      "elapsed_seconds": 49.4,
+      "peak_job_private_MiB": 926.05,
+      "host_CPU_max_percent": 32.23,
+      "available_RAM_min_percent": 13.917190131179277,
+      "cleanup_confirmed": true,
+      "owned_tree_empty": true
+    },
+    "signed_diagnostic": {
+      "path": "implementation/p09/evidence/p09-149-aead-dependency.actual-run01.v1.json",
+      "state": "STOPPED_NOT_ACCEPTED",
+      "stop_reason": "STOP_DURATION_LIMIT",
+      "elapsed_seconds": 185.85,
+      "tests_passed": null,
+      "observed_sequences_not_case_PASS": 8,
+      "peak_job_private_MiB": 64.7,
+      "host_CPU_max_percent": 49.43,
+      "available_RAM_min_percent": 18.659591645573812,
+      "cleanup_confirmed": true,
+      "owned_tree_empty": true
+    },
+    "adapter_contract": {
+      "path": "implementation/p09/evidence/p09-149-aead-full-stored.light-run01.v1.json",
+      "state": "PASS_AEAD_FULL_CONTRACT_ONLY_NOT_RUNTIME_OR_GATE",
+      "tests_run": 22,
+      "tests_passed": 22,
+      "failed_tests": []
+    },
+    "full249": {
+      "path": "implementation/p09/evidence/p09-149-aead-full-stored.actual-run01.v1.json",
+      "state": "STOPPED_NOT_ACCEPTED",
+      "stop_reason": "STOP_LOW_AVAILABLE_RAM",
+      "elapsed_seconds": 1096.6,
+      "tests_passed": null,
+      "owned_tree_empty": true,
+      "terminal_command_exit_code": 1,
+      "independent_source_and_resource_audit_complete": false
+    }
+  },
+  "terminal_audit": {
+    "state": "FAILED_OR_DEFERRED_NOT_ACCEPTED",
+    "error_code": "AEAD_TERMINAL_AUDIT_NOT_ACCEPTED",
+    "exception_type": "ValueError",
+    "locations": [
+      {
+        "file": "<stdin>",
+        "line": 12
+      },
+      {
+        "file": "sql_percentage_resources.py",
+        "line": 82
+      },
+      {
+        "file": "conservative_maintenance.py",
+        "line": 74
+      }
+    ],
+    "source_closing_exact": false,
+    "product_complete": false,
+    "P09_gate": "OPEN",
+    "resource_stop": null,
+    "resource_watcher_cleanup_confirmed": true,
+    "elapsed_audit_seconds": 3.0152
+  },
+  "current_full249_qualified": false,
+  "current_signed16_qualified": false,
+  "statistical_speedup_proven": false,
+  "PC_freeze_resolved": false,
+  "resource_revalidation": {
+    "available_RAM_percent": [
+      8.576,
+      8.5681,
+      8.5486,
+      8.5585,
+      8.5447,
+      8.552
+    ],
+    "named_heavy_verification_processes": [],
+    "audit_admission_RAM_min_percent": 10
+  },
+  "P09_non_permission_remaining_work_units": 76,
+  "completed_checklist_units": [],
+  "next_action": "When the unchanged10% source-audit admission succeeds, audit the terminal full receipt and final sources first. No blind full-suite rerun, cap increase, raw log disclosure, unrelated process kill, OS change or SQL/native/Gate promotion.",
+  "source_closing_exact": false,
+  "prior_failed_and_stopped_evidence_preserved": true
+}

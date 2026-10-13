@@ -1,0 +1,121 @@
+{
+  "schema": "hwpx-agent.p09-103-review-table-context-source-regression/v1",
+  "recorded_at_utc": "2026-10-04 18:39:18 UTC",
+  "state": "PASS_SCOPED_SOURCE_COMPONENT_NOT_table_output_SQL_native_full_product_or_Gate",
+  "git_head": "1f8cd23da15d2e517e0e5640eae2bffe2c19af3f",
+  "rust": {
+    "passed": 320,
+    "failed": 0,
+    "ignored": 0,
+    "package": {
+      "passed": 153,
+      "start_chunk_id": "eb9bfe",
+      "session_id": 24272,
+      "terminal_chunk_id": "22f29a",
+      "exit_code": 0,
+      "command": "cargo test -p hwpx-package --test review_table_create_context --test review_paragraph_output --test review_cell_body_output --test review_body_output --test review_delete_output --test review_locations --test document_import_assembly_review --test document_import_review --test memo_style_output --test document_import_review_metadata --test document_import_memo_catalog --test patch_element_content --test text_flow --test patch_engine --test id_index --lib --target-dir target/p09-103-review-table-fixed --locked --offline",
+      "suites": {
+        "lib": 42,
+        "document_import_assembly_review": 3,
+        "document_import_memo_catalog": 6,
+        "document_import_review": 15,
+        "document_import_review_metadata": 8,
+        "id_index": 8,
+        "memo_style_output": 4,
+        "patch_element_content": 4,
+        "patch_engine": 6,
+        "review_body_output": 5,
+        "review_cell_body_output": 6,
+        "review_delete_output": 6,
+        "review_locations": 7,
+        "review_paragraph_output": 6,
+        "review_table_create_context": 15,
+        "text_flow": 12
+      },
+      "earlier_corrected_package_terminal_chunk": "73e346",
+      "earlier_package_passed": 153,
+      "repeated_executions_not_added_to_unique_count": true
+    },
+    "product": {
+      "passed": 167,
+      "start_chunk_id": "f64db8",
+      "session_id": 29125,
+      "terminal_chunk_id": "2223a8",
+      "exit_code": 0,
+      "command": "cargo test -p hwpx-agent-cli --test form_stored_provider --test comment_operation --test stored_comment_provider --target-dir target/p09-103-product",
+      "suites": {
+        "comment_operation": 8,
+        "form_stored_provider": 143,
+        "stored_comment_provider": 16
+      },
+      "stored_provider_elapsed_seconds": 265.46,
+      "actual_SQL": false,
+      "same_handle_polled_to_terminal": true
+    },
+    "new_context_tests": 7,
+    "reused_original_native_create_tests": 8,
+    "included_in_320": true,
+    "all_historical_qualification_reexecuted": false
+  },
+  "python": {
+    "chunk_id": "87b76a",
+    "passed": 8,
+    "failed": 0,
+    "scope": "live prior audit + byte/inventory mock tamper tests NOT runtime acceptance"
+  },
+  "strict_lint": {
+    "package": {
+      "chunk_id": "962943",
+      "exit_code": 0,
+      "command": "cargo clippy -p hwpx-package --lib --test review_table_create_context --target-dir target/p09-103-review-table-lint -- -D warnings"
+    },
+    "product": {
+      "chunk_id": "6be6fa",
+      "exit_code": 0,
+      "command": "cargo clippy -p hwpx-agent-cli --lib --test form_stored_provider --test comment_operation --test stored_comment_provider --target-dir target/p09-103-product --locked --offline -- -D warnings"
+    }
+  },
+  "format_diff_checks": {
+    "chunk_id": "1746e3",
+    "exit_code": 0,
+    "new_Rust_files": 2,
+    "targeted_parent_diff": true,
+    "whole_diff_chunk_id": "6ab7f9",
+    "whole_diff_exit_code": 0
+  },
+  "syntax": {
+    "chunk_id": "2be92c",
+    "parsed_files": 2
+  },
+  "original_current_source_conformance": {
+    "chunk_id": "18ba8e",
+    "exit_code": 0,
+    "validators": 15,
+    "green_rows": 0,
+    "P09_gate": "OPEN",
+    "not_new_context_acceptance": true
+  },
+  "default_conformance": {
+    "chunk_id": "71cc5a",
+    "exit_code": 1,
+    "state": "FAIL:matrix_drift",
+    "failure_preserved": true
+  },
+  "tested_code": [
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review/table_create_context.rs",
+      "bytes": 15127,
+      "sha256": "b515ebfda44656afcceab1d2e227051f984db4ded61524e2f7148da1e04da969"
+    },
+    {
+      "path": "crates/hwpx-package/src/table_ruling_hwpx/create_hwpx.rs",
+      "bytes": 52384,
+      "sha256": "599789c7e457b338e414f9a99ec04a8da1b80d6a3056ab9480e3a3df216b5a85"
+    },
+    {
+      "path": "crates/hwpx-package/tests/review_table_create_context.rs",
+      "bytes": 18491,
+      "sha256": "ac7703743f1fc03ba915fccb1ff2db0bbda9177fd7a38bc408d63a5583013ad3"
+    }
+  ]
+}

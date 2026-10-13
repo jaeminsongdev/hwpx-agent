@@ -1,0 +1,60 @@
+{
+  "schema": "hwpx-agent.p09-114-stored-formula-compiler-initial-failures/v1",
+  "prior_goal_turn": "progress: P113 actual multi-table binding fix and source evidence finalized",
+  "previous_observation": {
+    "missing_handles": [
+      7725,
+      24604,
+      73837
+    ],
+    "state": "handles missing; no current matching process on d38ff2/bd0e31; not terminal PASS",
+    "cli_action": "fresh final-source regression 609573/session22718",
+    "partial_prior_cli_execution_not_counted": true
+  },
+  "failures": [
+    {
+      "chunk": "bf7062",
+      "exit_code": 1,
+      "scope": "integration compile",
+      "cause": "set_permissions returns u64 but match needs unit",
+      "whole_source_preserved": true,
+      "fix": "explicit unit branches; no assertions changed"
+    },
+    {
+      "chunk": "4fd120",
+      "exit_code": 1,
+      "scope": "strict lint",
+      "cause": "function110lines and doc Markdown",
+      "whole_source_and_pre_lint_executable_preserved": true,
+      "fix": "split helpers, indexed lookup with duplicate rejection, doc markup; no lint suppression"
+    },
+    {
+      "chunk": "b1bf9c",
+      "exit_code": 1,
+      "scope": "strict lint",
+      "cause": "duplicate evaluation/settings fixture modules",
+      "fix": "exact owned batch adapter body reusing existing evaluation module",
+      "whole_source_preserved": true
+    },
+    {
+      "chunk": "548f08",
+      "exit_code": 1,
+      "scope": "fixture adapter compile",
+      "cause": "one extra super level in import",
+      "fix": "two super levels to actual_import evaluation fixture",
+      "whole_source_preserved": true
+    }
+  ],
+  "focused_diagnostic": {
+    "start": "c1249c",
+    "session": 20669,
+    "terminal": "36f51d",
+    "exit_code": 0,
+    "passed": 6,
+    "filtered": 170,
+    "final_source": false,
+    "not_added_to_final_counts": true
+  },
+  "other_diagnostics": "Absent-path exploratory reads and JS parse errors are not product tests. An inventory output was parsed before terminal; parser rejected empty JSON; actual inventory recollected from a specific live handle. No secret values/full logs.",
+  "original_verifiers_and_tests_not_weakened": true
+}

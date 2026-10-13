@@ -1,0 +1,49 @@
+{
+  "schema": "hwpx-agent.p09-88-review-assembly-initial-failures/v1",
+  "state": "failures_preserved_not_upgraded_by_scoped_pass",
+  "initial_strict_lint": {
+    "exit_code": 1,
+    "chunk_id": "6bd57c",
+    "diagnostics": [
+      "clippy::assigning_clones in new ReviewAssembly inverse",
+      "clippy::semicolon_if_nothing_returned in new private test"
+    ],
+    "pre_correction_whole_sources": 3,
+    "archive_prefix": "implementation/p09/source-archive/p09-88-pre-review-assembly/initial-lint",
+    "correction": "clone_from and semicolon; no warning allowance, guard weakening, or budget increase",
+    "corrected_previous_run": {
+      "exit_code": 0,
+      "terminal_chunk_id": "593e85"
+    },
+    "final_current_run": {
+      "exit_code": 0,
+      "chunk_id": "c1904f"
+    }
+  },
+  "original_comment_contract": {
+    "command": "python tools/p09/validate_comment_model_contract.py",
+    "exit_code": 1,
+    "error": "implementation_digest",
+    "chunk_id": "8b3dce",
+    "old_source_qualification_not_rewritten": true
+  },
+  "original_comment_python_tests": {
+    "command": "python -m unittest discover -s tools/p09/tests -p test_comment_model_contract.py",
+    "passed": 4,
+    "failed": 1,
+    "exit_code": 1,
+    "chunk_id": "a48272"
+  },
+  "original_conformance": {
+    "command": "python tools/p09/validate_reference_conformance_contract.py",
+    "exit_code": 1,
+    "error": "matrix_drift",
+    "chunk_id": "b6eb1d",
+    "old_matrix_not_rewritten": true
+  },
+  "preserved_P26": "failed_semantic_non_green",
+  "preserved_P62": "UNRESOLVED",
+  "native_admission": "INPUT_CHANGED_RE_ADMISSION_REQUIRED",
+  "full_native34": "NOT_RUN",
+  "native_executed": false
+}

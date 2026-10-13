@@ -1,0 +1,68 @@
+{
+  "schema": "hwpx-agent.p09-84-initial-failures/v1",
+  "build_lint_failures": [
+    {
+      "stage": "strict_lint",
+      "chunk": "9af6d9",
+      "code": "CLIPPY_MISSING_ERRORS_DOC",
+      "exit_code": 1
+    },
+    {
+      "stage": "probe_compile",
+      "chunk": "7a8e2c",
+      "code": "E0560_SCAN_EVIDENCE_FIELD",
+      "exit_code": 1,
+      "archive": "implementation/p09/source-archive/p09-84-initial-probe-compile/stored_source_policy_postgres_probe.rs"
+    },
+    {
+      "stage": "strict_lint",
+      "chunk": "b13c95",
+      "exit_code": 1,
+      "code": "CLIPPY_WILDCARD_IMPORT"
+    },
+    {
+      "stage": "strict_lint",
+      "chunk": "df7023",
+      "exit_code": 1,
+      "codes": [
+        "CLIPPY_WILDCARD_IMPORT",
+        "CLIPPY_TOO_MANY_LINES"
+      ],
+      "correction": "explicit imports and split test helpers, no lint suppression"
+    }
+  ],
+  "runtime_failures": [
+    {
+      "receipt": "implementation/p09/evidence/p09-84-stored-source-policy.initial-sql-failure.v1.json",
+      "correction": "probe assumption changed; original artifact constructor verifies17-prefix and permits20; constructor unchanged"
+    },
+    {
+      "receipt": "implementation/p09/evidence/p09-84-stored-source-policy.receipt-oracle-failure.v1.json",
+      "correction": "fixture expected transaction SHA now hashes exact actual receipt bytes; original complete oracle unchanged"
+    },
+    {
+      "receipt": "implementation/p09/evidence/p09-84-stored-source-policy.registry-tamper-failure.v1.json",
+      "correction": "registry corruption prepared only in disposable admin transaction, immutable trigger reenabled before app admission"
+    },
+    {
+      "receipt": "implementation/p09/evidence/p09-84-stored-source-policy.repeated-oracle-failure.v1.json",
+      "state": "unresolved_not_reproduced_by_latest_two_complete_runs",
+      "code": "55000",
+      "correction": null
+    },
+    {
+      "receipt": "implementation/p09/evidence/p09-84-stored-source-policy.original-policy-fixture-failure.v1.json",
+      "state": "unresolved_not_reproduced_by_latest_two_complete_runs",
+      "closed_error": "p84_sql_failed",
+      "correction": null
+    }
+  ],
+  "latest_runs": [
+    "implementation/p09/evidence/p09-84-stored-source-policy.actual-postgres.run01.v1.json",
+    "implementation/p09/evidence/p09-84-stored-source-policy.actual-postgres.run02.v1.json"
+  ],
+  "current_two_runs_pass": true,
+  "not_claimed_every_historical_failure_root_cause_solved": true,
+  "phase_conformance_error": "matrix_drift",
+  "p09_complete": false
+}

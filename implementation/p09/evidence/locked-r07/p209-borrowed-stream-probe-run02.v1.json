@@ -1,0 +1,245 @@
+{
+  "schema_version": "hwpx-agent.p09-borrowed-stream-small-native-probe/v1",
+  "state": "PASS_SMALL_NATIVE_BORROWED_STREAMS_NOT_FULL_RUNTIME_PRODUCT_OR_GATE",
+  "actual_product_body_executed": false,
+  "full_runtime_source_frame_qualified": false,
+  "PC_freeze_resolved": false,
+  "input_scope_reduced": false,
+  "P09_gate": "OPEN",
+  "borrow_contract_tests_passed": 24,
+  "source_pins": [
+    {
+      "path": "tools/p09/borrowed_locked_streams.py",
+      "bytes": 6858,
+      "sha256": "8f78bb8b8021812b22db4c1ac9d8c664adbf58be41ce697b0e6daeeee7bcda00"
+    },
+    {
+      "path": "tools/p09/tests/test_borrowed_locked_streams.py",
+      "bytes": 11493,
+      "sha256": "be97dd0b29a276f3aeb93640bdece7ab2b8553d24b94bb609870d0fa0afae0c0"
+    },
+    {
+      "path": "tools/p09/probe_borrowed_locked_streams.py",
+      "bytes": 5217,
+      "sha256": "89ed48bfa98939cae27a9e66eb897c8f307a50d6a1fb5255b9b420af9ac4005c"
+    },
+    {
+      "path": "tools/p09/tests/fixtures/p206-input-lock-probe.txt",
+      "bytes": 32,
+      "sha256": "2cdc697ef31d417e00c81e9b878094550f30b64b265270e6b84797994e083a59"
+    }
+  ],
+  "actual_byte_boundaries": [
+    {
+      "pins": [
+        {
+          "path": "tools/p09/borrowed_locked_streams.py",
+          "bytes": 6858,
+          "sha256": "8f78bb8b8021812b22db4c1ac9d8c664adbf58be41ce697b0e6daeeee7bcda00"
+        },
+        {
+          "path": "tools/p09/tests/test_borrowed_locked_streams.py",
+          "bytes": 11493,
+          "sha256": "be97dd0b29a276f3aeb93640bdece7ab2b8553d24b94bb609870d0fa0afae0c0"
+        },
+        {
+          "path": "tools/p09/probe_borrowed_locked_streams.py",
+          "bytes": 5217,
+          "sha256": "89ed48bfa98939cae27a9e66eb897c8f307a50d6a1fb5255b9b420af9ac4005c"
+        },
+        {
+          "path": "tools/p09/tests/fixtures/p206-input-lock-probe.txt",
+          "bytes": 32,
+          "sha256": "2cdc697ef31d417e00c81e9b878094550f30b64b265270e6b84797994e083a59"
+        }
+      ],
+      "read_passes": 4,
+      "bytes_read": 23600
+    },
+    {
+      "pins": [
+        {
+          "path": "tools/p09/borrowed_locked_streams.py",
+          "bytes": 6858,
+          "sha256": "8f78bb8b8021812b22db4c1ac9d8c664adbf58be41ce697b0e6daeeee7bcda00"
+        },
+        {
+          "path": "tools/p09/tests/test_borrowed_locked_streams.py",
+          "bytes": 11493,
+          "sha256": "be97dd0b29a276f3aeb93640bdece7ab2b8553d24b94bb609870d0fa0afae0c0"
+        },
+        {
+          "path": "tools/p09/probe_borrowed_locked_streams.py",
+          "bytes": 5217,
+          "sha256": "89ed48bfa98939cae27a9e66eb897c8f307a50d6a1fb5255b9b420af9ac4005c"
+        },
+        {
+          "path": "tools/p09/tests/fixtures/p206-input-lock-probe.txt",
+          "bytes": 32,
+          "sha256": "2cdc697ef31d417e00c81e9b878094550f30b64b265270e6b84797994e083a59"
+        }
+      ],
+      "read_passes": 4,
+      "bytes_read": 23600
+    }
+  ],
+  "read_rates_by_kind": {
+    "binary": 1048576,
+    "other": 2097152
+  },
+  "no_source_contents_or_raw_handles_saved": true,
+  "input_locks": {
+    "input_lock_handles_opened": 9,
+    "input_lock_handles_closed": 9,
+    "input_lock_handles_remaining": 0,
+    "input_lock_cleanup_confirmed": true,
+    "handle_metadata_checks": 26,
+    "maximum_lock_seconds": 600,
+    "ancestor_walk_steps": 4,
+    "handle_close_failed_attempts": 0,
+    "active_reader_bindings": 0,
+    "active_byte_streams": 0,
+    "release_started": true,
+    "byte_stream_identity_checks": 8,
+    "separate_pathname_reopens": 0,
+    "file_write_or_delete_operation_executed": false,
+    "input_scope_reduced": false,
+    "kernel_or_malicious_bypass_protection_claimed": false,
+    "native_open_pacing": {
+      "maximum_opens_per_second": 32,
+      "open_reservations": 17,
+      "requested_sleep_seconds": 0.4722662999702152,
+      "idle_time_cannot_accumulate_multiple_open_credits": true
+    },
+    "probe_handles_opened": 0,
+    "probe_handles_closed": 0,
+    "probe_handles_remaining": 0,
+    "probe_handle_close_failed_attempts": 0,
+    "borrowed_byte_streams": {
+      "duplicate_handles_opened": 8,
+      "duplicate_handles_closed": 8,
+      "duplicate_handles_remaining": 0,
+      "duplicate_close_failed_attempts": 0,
+      "shared_offset_resets": 8,
+      "active_borrow_binding": false,
+      "byte_stream_pathname_reopens": 0,
+      "original_held_handles_closed_by_borrower": false,
+      "input_scope_reduced": false,
+      "original_resource_guards_and_pacing_retained": true,
+      "measured_CPU_or_freeze_improvement_claimed": false
+    }
+  },
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "metadata_observation": {
+    "completed_sample_count": 3,
+    "samples": [
+      {
+        "time_utc": "2026-10-08T07:57:55.019533+00:00",
+        "system_cpu_percent": 3.32,
+        "available_ram_percent": 35.6133316250623,
+        "commit_used_percent": 41.363945307953074,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77343750,
+          "kernel_including_idle": 78906250,
+          "user": 1093750,
+          "total": 80000000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 23228416,
+        "own_working_set_bytes": 33869824,
+        "own_private_percent_total_ram": 0.06952826585764912,
+        "own_working_set_percent_total_ram": 0.10138057315762662,
+        "phase_at_sample": "admission",
+        "phases_since_previous_sample": [
+          "admission"
+        ],
+        "audited_logical_read_bytes": null,
+        "audited_logical_read_passes": null,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": false
+      },
+      {
+        "time_utc": "2026-10-08T07:57:55.519865+00:00",
+        "system_cpu_percent": 2.93,
+        "available_ram_percent": 35.64709654203848,
+        "commit_used_percent": 41.27690255307153,
+        "parent_cpu_machine_percent": 0.0,
+        "parent_cpu_delta_100ns": 0,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77656250,
+          "kernel_including_idle": 78906250,
+          "user": 1093750,
+          "total": 80000000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 23228416,
+        "own_working_set_bytes": 33869824,
+        "own_private_percent_total_ram": 0.06952826585764912,
+        "own_working_set_percent_total_ram": 0.10138057315762662,
+        "phase_at_sample": "admission",
+        "phases_since_previous_sample": [
+          "admission"
+        ],
+        "audited_logical_read_bytes": null,
+        "audited_logical_read_passes": null,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": false
+      },
+      {
+        "time_utc": "2026-10-08T07:57:56.020551+00:00",
+        "system_cpu_percent": 2.73,
+        "available_ram_percent": 35.66229933690068,
+        "commit_used_percent": 41.266702434040575,
+        "parent_cpu_machine_percent": 0.195312,
+        "parent_cpu_delta_100ns": 156250,
+        "raw_system_cpu_delta_100ns": {
+          "idle": 77812500,
+          "kernel_including_idle": 79218750,
+          "user": 781250,
+          "total": 80000000
+        },
+        "parent_affinity_mask": 1,
+        "parent_priority_readback": "BelowNormal",
+        "parent_process_only": true,
+        "foreign_Process_query_executed": false,
+        "own_private_bytes": 25935872,
+        "own_working_set_bytes": 35573760,
+        "own_private_percent_total_ram": 0.07763233634467188,
+        "own_working_set_percent_total_ram": 0.10648086562752294,
+        "phase_at_sample": "final_fresh_hash",
+        "phases_since_previous_sample": [
+          "admission",
+          "final_fresh_hash",
+          "metadata_hash"
+        ],
+        "audited_logical_read_bytes": 65551,
+        "audited_logical_read_passes": 10,
+        "audited_logical_read_bytes_delta": null,
+        "reader_counters_observed": true
+      }
+    ],
+    "system_cpu_max_percent": 3.32,
+    "own_cpu_max_machine_percent": 0.195312,
+    "own_private_max_bytes": 25935872,
+    "own_working_set_max_bytes": 35573760,
+    "available_ram_min_percent": 35.6133316250623,
+    "own_process_only": true,
+    "foreign_PID_query_executed": false,
+    "new_sampler_thread_started": false,
+    "extra_own_memory_query_per_existing_sample": 1,
+    "original_guard_and_CPU_denominator_unchanged": true,
+    "read_counters_are_logical_not_physical_disk_IO": true,
+    "samples_can_span_multiple_phases": true,
+    "CPU_cause_or_PC_freeze_resolution_established": false
+  },
+  "wall_seconds": 1.5334
+}

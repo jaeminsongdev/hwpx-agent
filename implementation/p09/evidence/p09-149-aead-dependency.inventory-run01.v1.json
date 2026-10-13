@@ -1,0 +1,729 @@
+{
+  "schema_version": "hwpx-agent.p09-conservative-maintenance/v1",
+  "task": "aead-dependency-signed-inventory",
+  "policy": {
+    "profile": "P149_OWNED_WORKLOAD_V4_PARTITIONED_TEST_CODEGEN",
+    "logical_cpu_limit": 1,
+    "priority": "BelowNormal",
+    "cargo_jobs": 1,
+    "test_threads": 1,
+    "sample_seconds": 0.5,
+    "start_ram_min_percent": 10,
+    "start_consecutive_samples": 2,
+    "admission_max_seconds": 3,
+    "emergency_cpu_percent": 98,
+    "emergency_cpu_consecutive_samples": 4,
+    "stop_ram_min_percent": 8,
+    "stop_commit_used_percent": 95,
+    "job_memory_limit_percent": 8,
+    "job_memory_stop_percent": 7,
+    "test_debug_info": "line-tables-only",
+    "dev_debug_info": "line-tables-only",
+    "test_opt_level": 0,
+    "test_codegen_units": 16,
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "output_limit_bytes_per_stream": 32768
+  },
+  "maximum_seconds": 600,
+  "state": "DEFERRED_NOT_STARTED",
+  "heavy_work_started": false,
+  "samples": [
+    {
+      "time_utc": "2026-10-07T04:59:19.837311+00:00",
+      "system_cpu_percent": 7.12,
+      "available_ram_mib": 4456.5,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 13.987343673277225,
+      "commit_used_percent": 41.58260351177316
+    },
+    {
+      "time_utc": "2026-10-07T04:59:20.337933+00:00",
+      "system_cpu_percent": 4.51,
+      "available_ram_mib": 4463.53,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 14.009412246464278,
+      "commit_used_percent": 41.57444863400058
+    },
+    {
+      "time_utc": "2026-10-07T04:59:20.839221+00:00",
+      "system_cpu_percent": 8.95,
+      "available_ram_mib": 4449.91,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 13.966685036710459,
+      "commit_used_percent": 41.65097822271978
+    },
+    {
+      "time_utc": "2026-10-07T04:59:21.339663+00:00",
+      "system_cpu_percent": 3.72,
+      "available_ram_mib": 4468.94,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 14.02639278749987,
+      "commit_used_percent": 41.57706257754764
+    },
+    {
+      "time_utc": "2026-10-07T04:59:21.840512+00:00",
+      "system_cpu_percent": 5.45,
+      "available_ram_mib": 4460.14,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 13.99878255037918,
+      "commit_used_percent": 41.5759147380659
+    },
+    {
+      "time_utc": "2026-10-07T04:59:22.341093+00:00",
+      "system_cpu_percent": 2.95,
+      "available_ram_mib": 4461.71,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 14.003723458709393,
+      "commit_used_percent": 41.57562256074328
+    }
+  ],
+  "source_freeze": [],
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "native_or_SQL_run": false,
+  "owned_tree_empty": true,
+  "cleanup_confirmed": true,
+  "worker_created": false,
+  "job_assigned": false,
+  "writer_authorized": false,
+  "operation_phase": "admission",
+  "exit_code": null,
+  "stop_reason": "DEFERRED_STABLE_RESOURCE_WINDOW",
+  "last_cargo_announcement": null,
+  "cargo_announcement_at_cleanup": null,
+  "resolved_owned_limits": {
+    "total_ram_mib": 31860.92,
+    "job_private_memory_limit_mib": 2548.87,
+    "machine_logical_processors": 16,
+    "job_cpu_hard_cap_machine_percent": 6.25
+  },
+  "elapsed_seconds": 3.0,
+  "source_variant": "unchanged-r21-sources-aead-stack-test-opt1-r23",
+  "optimization_parent_pin": {
+    "path": "implementation/p09/evidence/p09-149-call-local-xml-reuse-candidate.run01.v1.json",
+    "bytes": 1667,
+    "sha256": "5d229e2a37f0dd033417d263d27e94f6904f58eab363b44dbc7bdcff3e83b69b"
+  },
+  "execution_mode": "compiled_inventory_only",
+  "source_test_names": [
+    "actual_import::actual_aead_tamper_cannot_be_reclassified_as_an_importer_or_policy_failure",
+    "actual_import::actual_head_advance_invalidates_old_import_even_with_identical_result_bytes",
+    "actual_import::all_ten_actual_stored_results_import_without_caller_maps_and_preserve_whole_graphs",
+    "actual_import::debug_and_receipts_do_not_expose_raw_package_graph_or_policy_values",
+    "actual_import::field_ranges::actual_aead_tamper_is_original_service_failure_not_field_projection_failure",
+    "actual_import::field_ranges::advanced_head_invalidates_cached_source_and_range_even_when_result_bytes_equal",
+    "actual_import::field_ranges::cached_field_ranges_cannot_rebind_document_branch_project_subject_or_tenant",
+    "actual_import::field_ranges::captured_stored_result_field_ranges_match_whole_direct_graph_without_ingest_or_head_change",
+    "actual_import::field_ranges::each_new_partial_marker_independently_denies_full_product_without_old_markers",
+    "actual_import::field_ranges::revoked_source_acl_denies_new_range_import_and_cached_range_verification",
+    "actual_import::field_ranges::stored_range_debug_and_receipt_do_not_disclose_cached_field_content",
+    "actual_import::field_semantics::actual_aead_tamper_denies_meaning_before_supported_tuple_parsing",
+    "actual_import::field_semantics::actual_captured_source_meaning_matches_direct_import_without_ingest_or_head_write",
+    "actual_import::field_semantics::all_scope5_substitutions_reject_fresh_and_cached_meaning_models",
+    "actual_import::field_semantics::head_advance_invalidates_meanings_even_when_result_bytes_are_same",
+    "actual_import::field_semantics::revoked_acl_denies_new_meaning_import_and_cached_meaning_verify",
+    "actual_import::field_semantics::semantic_partial_markers_each_deny_full_context_without_predecessor_markers",
+    "actual_import::formula_compiler::actual_field_graph_and_compiled_candidate_do_not_become_full_import_or_issuer_authority",
+    "actual_import::formula_compiler::actual_multi_section_compiler_targets_original_source_fields_and_whole_candidate_without_publication",
+    "actual_import::formula_compiler::fresh_acl_aead_head_and_quarantine_changes_deny_compilation_and_never_invoke_cached_consumer",
+    "actual_import::formula_compiler::mixed_current_and_empty_results_compile_only_changed_actual_fields",
+    "actual_import::formula_compiler::protected_or_invalid_second_section_never_creates_a_partial_stored_plan",
+    "actual_import::formula_compiler::provider_scope_substitutions_cannot_rebind_compiled_batch_or_release_candidates",
+    "actual_import::formula_evaluation::authorized_actual_source_cycle_rejects_without_using_old_cached_value",
+    "actual_import::formula_evaluation::authorized_nonnumeric_source_rejects_math_without_ingest_or_cache_fallback",
+    "actual_import::formula_evaluation::every_locked_actual_source_evaluates_like_direct_without_ingest_head_or_full_route",
+    "actual_import::formula_evaluation::five_authentication_scope_substitutions_reject_new_and_cached_numeric_models",
+    "actual_import::formula_evaluation::fresh_and_cached_evaluation_reject_actual_aead_acl_head_and_quarantine_changes",
+    "actual_import::formula_evaluation::missing_document_read_scope_rejects_provider_before_numeric_model_reuse",
+    "actual_import::formula_output::authenticated_actual_result_output_is_replayable_but_does_not_ingest_commit_or_authorize_route",
+    "actual_import::formula_output::five_actor_and_document_scope_substitutions_reject_preparation_and_cached_consumption",
+    "actual_import::formula_output::revoked_acl_tampered_aead_head_advance_and_quarantine_never_release_cached_result_bytes",
+    "actual_import::formula_policy::actual_four_target_policy_gates_original_changed_and_current_product_candidates",
+    "actual_import::formula_policy::allowed_policy_never_overrides_original_native_protection_or_invalid_second_section",
+    "actual_import::formula_policy::cached_changed_and_current_products_recheck_source_policy_acl_aead_quarantine_and_head",
+    "actual_import::formula_policy::cached_formula_policy_products_refuse_five_foreign_provider_scopes",
+    "actual_import::formula_policy::explicit_denial_including_current_results_prevents_product_preparation",
+    "actual_import::formula_policy::form_policy_media_or_non_evidence_artifact_never_grants_formula_permission",
+    "actual_import::formula_policy::latest_version_order_and_revocation_are_rechecked_without_old_policy_fallback",
+    "actual_import::formula_policy::policy_revocation_during_binding_and_immediately_before_callback_is_not_cached",
+    "actual_import::formula_policy::strict_policy_shape_unknown_duplicate_coercion_and_bounds_never_become_permissions",
+    "actual_import::formula_policy::strict_request_refuses_caller_policy_and_other_operations_before_source_or_policy_reads",
+    "actual_import::formula_policy::whole_actual_target_coverage_anchors_ast_graph_and_source_bindings_are_required",
+    "actual_import::formula_policy_issuer::approval_only_acl_quarantine_aead_and_latest_revocation_deny_fresh_and_cached_products",
+    "actual_import::formula_policy_issuer::approval_only_aead_tamper_denies_candidate_with_source_and_original_policy_still_valid",
+    "actual_import::formula_policy_issuer::cached_signed_product_denies_five_foreign_scopes_new_policy_and_old_signature_replay",
+    "actual_import::formula_policy_issuer::corpus::all16_actual_formula_sources_and_current_derivatives_keep_native_cell_protection_denial",
+    "actual_import::formula_policy_issuer::corpus::all16_current_derivatives_are_signed_exact_noops_then_denied_new_policy_and_expired_approval",
+    "actual_import::formula_policy_issuer::corpus::all36_frozen_originals_signed_full_candidates_or_no_formula_denial_and_live_revocation",
+    "actual_import::formula_policy_issuer::corpus::changed::all16_changed_original_comparators_reject_an_extra_numeric_input_leaf_change",
+    "actual_import::formula_policy_issuer::corpus::changed::all16_original_numeric_derivatives_have_signed_changed_candidates_exact_current_and_live_revocation",
+    "actual_import::formula_policy_issuer::corpus::changed::all32_changed_and_current_numeric_derivatives_keep_valid_signature_cell_protection_denial",
+    "actual_import::formula_policy_issuer::genuine_ed25519_generated_policy_gates_original_changed_and_current_products_and_authorized_reader",
+    "actual_import::formula_policy_issuer::genuine_signature_cannot_approve_foreign_source_policy_binding_audience_operation_or_root_generation",
+    "actual_import::formula_policy_issuer::issuer_expiry_not_before_root_bounds_clock_failure_and_backwards_time_deny_cached_bytes",
+    "actual_import::formula_policy_issuer::key_revocation_same_counter_trust_change_and_mid_read_change_never_use_cached_root",
+    "actual_import::formula_policy_issuer::malformed_unknown_duplicate_coerced_positional_and_trailing_approval_never_grants_permission",
+    "actual_import::formula_policy_issuer::one_bit_bad_signature_wrong_domain_foreign_key_and_missing_latest_approval_are_denied",
+    "actual_import::formula_policy_issuer::proof_and_clock_revocation_immediately_before_candidate_callback_never_call_consumer",
+    "actual_import::formula_policy_issuer::provision::provision_approval_write_and_postcommit_failures_preserve_exact_outcome_without_retry",
+    "actual_import::formula_policy_issuer::provision::provision_genuine_root_and_approval_drive_original_changed_and_current_product",
+    "actual_import::formula_policy_issuer::provision::provision_live_registry_revocation_blocks_original_consumer_callback_and_publication",
+    "actual_import::formula_policy_issuer::provision::provision_root_failure_keeps_artifact_and_distinguishes_commit_outcome",
+    "actual_import::formula_policy_issuer::provision::provision_root_scope_time_and_generation_fail_before_artifact_or_registry",
+    "actual_import::formula_policy_issuer::provision::provision_same_generation_root_or_policy_drift_stops_before_approval_ingest",
+    "actual_import::formula_policy_issuer::provision::provision_scanner_and_aead_failures_never_register_root",
+    "actual_import::formula_policy_issuer::provision::provision_signer_key_signature_lifetime_and_clock_fail_closed_before_approval_write",
+    "actual_import::formula_policy_issuer::public_request_cannot_supply_issuer_approval_keys_clock_or_signature_before_server_reads",
+    "actual_import::formula_policy_issuer::registry::registry_approval_rejects_wrong_policy_root_scope_alias_and_generation",
+    "actual_import::formula_policy_issuer::registry::registry_denial_after_prepare_never_calls_consumer_or_publishes",
+    "actual_import::formula_policy_issuer::registry::registry_genuine_changed_current_and_historical_owner_reader_use_original_ed25519_product",
+    "actual_import::formula_policy_issuer::registry::registry_root_artifact_media_kind_digest_acl_and_aead_fail_closed",
+    "actual_import::formula_policy_issuer::registry::registry_root_same_generation_change_and_clock_backward_expiry_are_denied",
+    "actual_import::formula_policy_issuer::registry::registry_root_strict_payload_rejects_unknown_duplicate_coercion_positional_and_trailing",
+    "actual_import::formula_policy_issuer::registry::registry_trusted_metadata_does_not_replace_ed25519_or_protection_checks",
+    "actual_import::formula_policy_issuer::server_trust_requires_explicit_nonempty_unique_keys_exact_scope_generation_and_lifetime",
+    "actual_import::formula_policy_issuer::signed_data_never_overrides_denied_targets_native_protection_or_invalid_second_section",
+    "actual_import::formula_policy_issuer::wrong_approval_media_role_and_artifact_alias_cannot_use_policy_or_other_domain_as_signature",
+    "actual_import::formula_policy_registration::all_36_locked_originals_register_16_formula_sources_and_reject_20_without_formula_targets",
+    "actual_import::formula_policy_registration::explicit_denials_are_storable_data_but_never_allow_current_or_changed_recalculation",
+    "actual_import::formula_policy_registration::five_foreign_writer_scopes_and_fresh_source_acl_revocation_never_write_policy",
+    "actual_import::formula_policy_registration::generated_allowance_never_bypasses_native_protection_or_invalid_second_section",
+    "actual_import::formula_policy_registration::generated_four_target_registration_is_consumed_by_original_changed_and_current_product_paths",
+    "actual_import::formula_policy_registration::missing_duplicate_extra_non_formula_empty_and_oversized_decisions_fail_before_ingest",
+    "actual_import::formula_policy_registration::read_only_exhausted_generation_and_no_formula_source_cannot_create_policy",
+    "actual_import::formula_policy_registration::repository_denial_unknown_ack_and_all_15_reply_mismatches_never_retry_or_erase_evidence",
+    "actual_import::formula_policy_registration::sorted_generation_cas_and_latest_revocation_flow_keep_old_products_unusable",
+    "actual_import::formula_policy_registration::source_head_quarantine_and_aead_drift_deny_before_any_registration_write",
+    "actual_import::formula_policy_registration::unverified_policy_artifact_is_retained_but_never_sent_to_registrar",
+    "actual_import::formula_policy_revocation::changed_current_policy_denies_before_revocation_write",
+    "actual_import::formula_policy_revocation::current_writer_can_revoke_another_creators_policy_without_author_defaults",
+    "actual_import::formula_policy_revocation::denied_unknown_and_all_15_inexact_commit_replies_are_never_retried",
+    "actual_import::formula_policy_revocation::read_only_revoke_denies_before_any_repository_write",
+    "actual_import::formula_policy_revocation::revocation_denies_existing_prepared_formula_callback_and_preserves_original_artifacts",
+    "actual_import::formula_policy_revocation::stale_head_quarantine_and_aead_tamper_deny_before_revocation_write",
+    "actual_import::formula_product_request::cached_changed_and_unchanged_products_cannot_rebind_five_provider_scopes",
+    "actual_import::formula_product_request::canonical_retry_key_and_plan_id_are_request_data_not_idempotency_claims_or_public_secrets",
+    "actual_import::formula_product_request::changed_and_noop_cached_products_recheck_acl_aead_quarantine_before_candidate_or_route",
+    "actual_import::formula_product_request::common_dispatch_keeps_v1_original_form_candidate_and_rejects_missing_or_cross_kind_bindings",
+    "actual_import::formula_product_request::common_strict_product_entry_compiles_source_four_fields_and_preserves_original_whole_candidate",
+    "actual_import::formula_product_request::current_whole_formula_results_are_true_noop_without_fabricating_empty_plan_or_execution",
+    "actual_import::formula_product_request::identity_mismatches_and_advanced_head_deny_original_provider_before_formula_preparation",
+    "actual_import::formula_product_request::mixed_empty_and_current_sections_keep_original_unchanged_part_and_only_two_changed_operations",
+    "actual_import::formula_product_request::nochange_protected_and_invalid_second_section_cannot_be_successful_noop_or_partial_product",
+    "actual_import::formula_product_request::strict_original_duplicate_parser_rejects_unknown_values_operations_coercions_and_limits_before_reads",
+    "actual_import::fresh_acl_revocation_blocks_import_verification_and_policy_binding",
+    "actual_import::fresh_service_read_does_not_turn_stale_or_wrong_policy_into_authority",
+    "actual_import::no_form_stored_source_preserves_real_body_without_policy_attestation",
+    "actual_import::policy_product::all_five_source_cases_registered_policy_uses_original_whole_product_candidate_no_publication",
+    "actual_import::policy_product::all_ten_observed_sources_retain_exact_original_native_state_and_complete_receipt",
+    "actual_import::policy_product::changed_head_provider_and_trusted_input_access_deny_without_source_or_policy_write",
+    "actual_import::policy_product::fresh_policy_acl_revocation_and_source_aead_tamper_deny_cached_product",
+    "actual_import::policy_product::original_strict_envelope_rejects_injected_maps_policies_artifacts_approval_and_stale_scope",
+    "actual_import::policy_product::repository_revocation_mid_verification_denies_after_original_compiler_reads",
+    "actual_import::policy_product::same_values_new_policy_generation_invalidates_whole_cached_product_no_old_fallback",
+    "actual_import::policy_registration::read_only_incomplete_and_exhausted_generation_deny_before_any_policy_ingest",
+    "actual_import::policy_registration::repository_denial_unknown_ack_and_corrupt_reply_remain_distinct_no_blind_retry",
+    "actual_import::policy_registration::source_head_change_rejects_prepared_registration_before_artifact_or_repository_write",
+    "actual_import::policy_registration::unverified_policy_scan_cannot_reach_registration_repository",
+    "actual_import::policy_registration::validated_registration_reads_back_whole_policy_and_new_generation_without_source_write",
+    "actual_import::provider_document_branch_project_subject_and_tenant_cannot_rebind_import_or_policy",
+    "actual_import::source_assembly::actual36_stored_whole_assembly_and_sidecars_match_direct_without_writes",
+    "actual_import::source_assembly::assembly_creation_and_cached_verify_reject_acl_aead_head_and_quarantine",
+    "actual_import::source_assembly::assembly_profile_and_scope_individually_deny_full_context",
+    "actual_import::source_assembly::assembly_rejects_all_five_authenticated_scope_substitutions",
+    "actual_import::source_bookmarks::all_scope5_substitutions_deny_fresh_observed_name_selection_on_the_existing_model",
+    "actual_import::source_bookmarks::bookmark_markers_individually_deny_full_context_even_without_old_partial_metadata",
+    "actual_import::source_bookmarks::generated_bookmark_packages_use_original_authenticated_stored_read_and_direct_whole_graph",
+    "actual_import::source_bookmarks::native_capture_is_only_negative_bookmark_evidence_and_stays_source_fresh",
+    "actual_import::source_bookmarks::source_name_selection_rechecks_acl_aead_head_and_duplicate_ambiguity",
+    "actual_import::source_catalog::actual_catalog_matches_direct_whole_graph_with_no_ingest_or_head_write",
+    "actual_import::source_catalog::all_five_scope_substitutions_reject_existing_catalog_binding",
+    "actual_import::source_catalog::catalog_rechecks_aead_acl_and_head_on_creation_and_cached_verification",
+    "actual_import::source_catalog::each_catalog_partial_marker_denies_full_context_independently",
+    "actual_import::source_fonts::actual36_stored_fonts_match_direct_without_ingest_head_write_or_full_admission",
+    "actual_import::source_fonts::creation_and_cached_fonts_reject_aead_acl_head_and_quarantine",
+    "actual_import::source_fonts::font_profile_and_scope_each_independently_reject_full_context",
+    "actual_import::source_fonts::fonts_reject_all_five_scope_substitutions_on_new_and_cached_models",
+    "actual_import::source_fonts::missing_read_scope_rejects_provider_before_font_reuse",
+    "actual_import::source_memo_catalog::malformed_native_memo_catalog_denies_before_assembly_without_head_or_ingest_change",
+    "actual_import::source_memo_catalog::memo_catalog_and_assembly_creation_and_cached_verify_recheck_aead_acl_head_and_quarantine",
+    "actual_import::source_memo_catalog::stored_memo_catalog_and_assembly_reject_each_provider_scope_substitution",
+    "actual_import::source_memo_catalog::stored_memo_catalog_and_section_style_relationship_match_direct_whole_assembly_without_publication",
+    "actual_import::source_memo_style::cached_output_callback_rechecks_original_aead_acl_and_head_before_exposing_any_bytes",
+    "actual_import::source_memo_style::original_authenticated_catalog_lowers_actual_style_bytes_without_publishing_or_metadata_defaults",
+    "actual_import::source_notes::actual_note_acl_revocation_denies_fresh_import_and_cached_source_verify",
+    "actual_import::source_notes::actual_note_aead_tamper_and_advanced_head_reject_without_native_work",
+    "actual_import::source_notes::actual_notes_reject_each_scope5_substitution_on_fresh_bound_and_cached_access",
+    "actual_import::source_notes::nine_actual_note_packages_use_original_stored_source_and_whole_direct_graph",
+    "actual_import::source_notes::note_partial_markers_individually_deny_full_context_without_old_markers",
+    "actual_import::source_review::malformed_review_body_fails_product_reader_without_ingest_or_revision_change",
+    "actual_import::source_review::review_acl_revocation_and_aead_tamper_block_derivation_and_cached_verification",
+    "actual_import::source_review::review_head_change_and_provider_scope_rebind_cannot_reuse_cached_body",
+    "actual_import::source_review::review_partial_markers_independently_deny_full_document_promotion",
+    "actual_import::source_review::source_review_bodies_use_actual_aead_reader_and_whole_direct_graph_without_publication",
+    "actual_import::source_review_assembly::malformed_review_style_and_body_deny_stored_assembly_without_head_or_ingest_change",
+    "actual_import::source_review_assembly::review_assembly_creation_and_cached_verify_recheck_aead_acl_head_and_quarantine",
+    "actual_import::source_review_assembly::stored_assembly_retains_complete_source_raw_typed_review_and_old_branches_without_publication",
+    "actual_import::source_review_assembly::stored_review_assembly_rejects_each_provider_scope_substitution",
+    "actual_import::source_review_cell_output::cached_body_callback_rechecks_actual_aead_acl_regrant_and_advanced_head",
+    "actual_import::source_review_cell_output::cached_cell_callback_rejects_all_provider_scope_substitutions",
+    "actual_import::source_review_cell_output::original_stored_review_lowers_typed_cell_with_same_direct_package_and_no_writes",
+    "actual_import::source_review_delete::cached_delete_callback_rechecks_actual_aead_acl_regrant_and_advanced_head",
+    "actual_import::source_review_delete::original_stored_review_deletes_paired_memo_without_ingest_commit_or_native_defaults",
+    "actual_import::source_review_locations::actual_original_stored_locations_match_direct_graph_without_state_defaults_or_writes",
+    "actual_import::source_review_locations::cached_locations_reject_all_original_provider_scope_substitutions_before_callback",
+    "actual_import::source_review_locations::location_callback_rejects_actual_ciphertext_revoked_acl_and_advanced_head",
+    "actual_import::source_review_metadata::cached_meta_sidecar_never_bypasses_fresh_actual_aead_acl_or_head_checks",
+    "actual_import::source_review_metadata::malformed_meta_cannot_fall_back_to_an_old_valid_body_or_fake_author_time",
+    "actual_import::source_review_metadata::original_authenticated_source_reader_carries_exact_meta_sidecar_and_whole_graph_without_writes",
+    "actual_import::source_review_output::cached_body_callback_rechecks_actual_aead_acl_regrant_and_advanced_head",
+    "actual_import::source_review_output::original_stored_review_lowers_complete_typed_body_without_ingest_commit_or_native_defaults",
+    "actual_import::source_review_paragraph_output::cached_paragraph_callback_rechecks_actual_aead_acl_regrant_and_advanced_head",
+    "actual_import::source_review_paragraph_output::cached_paragraph_callback_rejects_all_provider_scope_substitutions",
+    "actual_import::source_review_paragraph_output::original_stored_review_lowers_one_paragraph_with_same_direct_package_and_no_writes",
+    "actual_import::source_review_table_output::both_independent_sources_recheck_actual_aead_acl_regrant_and_callback_denial",
+    "actual_import::source_review_table_output::either_input_quarantined_after_preparation_denies_cached_output_and_product_route",
+    "actual_import::source_review_table_output::either_original_head_advance_invalidates_cached_candidate_without_callback",
+    "actual_import::source_review_table_output::either_provider_scope_substitution_or_different_principal_rejects_cached_bytes",
+    "actual_import::source_review_table_output::filled_output::filled_both_providers_all_five_scope_substitutions_and_principals_reject",
+    "actual_import::source_review_table_output::filled_output::filled_both_services_reject_aead_acl_before_callback_and_route_then_regrant",
+    "actual_import::source_review_table_output::filled_output::filled_each_head_advance_invalidates_whole_preparation_before_callback",
+    "actual_import::source_review_table_output::filled_output::filled_each_quarantined_input_denies_cached_bytes_and_route_without_callback",
+    "actual_import::source_review_table_output::filled_output::filled_neither_input_bypasses_original_result_kind_and_verified_scanner_admission",
+    "actual_import::source_review_table_output::filled_output::filled_original_style_id_geometry_and_writer_guards_never_prepare_partial_output",
+    "actual_import::source_review_table_output::filled_output::filled_stored_memo_hidden_match_actual_direct_and_reversed_input_without_heads_or_ingest",
+    "actual_import::source_review_table_output::filled_output::filled_swapped_service_same_actor_document_generation_and_foreign_anchor_reject",
+    "actual_import::source_review_table_output::fixture::native::closed_package_replacement_preserves_every_nontarget_part_and_graph",
+    "actual_import::source_review_table_output::fixture::native::creates_arbitrary_rectangular_nonuniform_unmerged_table_and_reopens_exactly",
+    "actual_import::source_review_table_output::fixture::native::input_is_bounded_and_debug_omits_ids_hashes_and_content",
+    "actual_import::source_review_table_output::fixture::native::lowerer_rechecks_source_template_current_flow_and_foreign_plan",
+    "actual_import::source_review_table_output::fixture::native::nonblank_template_and_native_identifier_collision_fail_closed",
+    "actual_import::source_review_table_output::fixture::native::one_by_one_boundary_uses_only_template_outer_edges",
+    "actual_import::source_review_table_output::fixture::native::rejects_control_wrapped_table_template_as_non_native_profile",
+    "actual_import::source_review_table_output::fixture::native::request_rejects_part_template_context_flow_identity_track_and_json_tampering",
+    "actual_import::source_review_table_output::foreign_table_anchor_and_finite_writer_limits_do_not_prepare_partial_outputs",
+    "actual_import::source_review_table_output::no_template_import_can_bypass_original_kind_or_scanner_admission",
+    "actual_import::source_review_table_output::stored_two_sources_match_actual_direct_memo_and_hidden_packages_without_publication",
+    "actual_import::source_review_table_output::swapped_services_do_not_rebind_even_when_actor_document_and_generation_equal",
+    "actual_import::source_security::all_scope_substitutions_deny_existing_security_binding_and_recreation",
+    "actual_import::source_security::all_ten_actual_form_sources_and_results_have_source_bound_blocked_controls",
+    "actual_import::source_security::authenticated_actual_security_matches_direct_whole_graph_and_denies_every_activation",
+    "actual_import::source_security::each_security_partial_marker_independently_denies_full_document_context",
+    "actual_import::source_security::security_rechecks_aead_acl_and_head_before_cached_inspection_or_policy_denial",
+    "actual_import::source_settings::actual_stored_settings_match_direct_whole_graph_without_ingest_or_head_write",
+    "actual_import::source_settings::all_ten_actual_form_sources_and_results_retain_security_with_real_settings",
+    "actual_import::source_settings::creation_and_cached_settings_recheck_original_aead_acl_and_head",
+    "actual_import::source_settings::each_settings_partial_qualifier_denies_full_context_independently",
+    "actual_import::source_settings::settings_bindings_reject_all_five_authentication_scope_substitutions",
+    "actual_import::stored_source_policy::actual_ten_sources_stored_encrypted_policy_matches_whole_original_component_no_writes",
+    "actual_import::stored_source_policy::cached_policy_from_another_authenticated_provider_is_denied_before_policy_read",
+    "actual_import::stored_source_policy::cached_policy_rechecks_both_acls_policy_quarantine_and_source_head",
+    "actual_import::stored_source_policy::consumer_rejects_every_foreign_or_stale_repository_binding",
+    "actual_import::stored_source_policy::latest_policy_revocation_is_checked_during_create_and_cached_verification",
+    "actual_import::stored_source_policy::new_latest_valid_policy_can_be_loaded_but_cached_old_version_is_stale",
+    "actual_import::stored_source_policy::policy_only_ciphertext_tamper_fails_with_original_source_read_still_valid",
+    "actual_import::stored_source_policy::strict_nested_duplicates_and_missing_nullable_selection_fields_are_rejected",
+    "actual_import::stored_source_policy::strict_payload_rejects_unknown_missing_duplicate_and_unbound_fields_no_defaults",
+    "actual_import::stored_source_policy::unverified_policy_scan_is_denied_while_original_source_remains_readable",
+    "actual_import::stored_source_policy::wrong_media_or_artifact_role_never_becomes_policy",
+    "actual_import::wrong_artifact_role_unverified_and_invalid_package_stay_fail_closed",
+    "full_document::product_request::full_request_canonical_retry_plan_key_and_public_receipt_are_not_idempotency_or_secrets",
+    "full_document::product_request::full_request_four_locked_whole_package_oracles_and_full_graph_plan_not_projection",
+    "full_document::product_request::full_request_fresh_ir_acl_is_independent_of_source_acl_and_precedes_route",
+    "full_document::product_request::full_request_fresh_ir_aead_corruption_recovery_and_source_corruption_are_checked",
+    "full_document::product_request::full_request_fresh_ir_quarantine_blocks_an_old_valid_preparation",
+    "full_document::product_request::full_request_fresh_map_policy_access_or_provider_scope_cannot_rebind",
+    "full_document::product_request::full_request_inventory_wrong_document_and_protected_ir_remain_unqualified",
+    "full_document::product_request::full_request_missing_ir_wrong_kind_media_and_three_hashes_never_fall_back",
+    "full_document::product_request::full_request_noncanonical_duplicate_ir_is_not_admitted_by_envelope",
+    "full_document::product_request::full_request_original_recursive_strict_parser_rejects_before_artifact_audit",
+    "full_document::product_request::full_request_project_document_source_revision_generation_are_provider_bound",
+    "full_document::product_request::full_request_real_head_advance_invalidates_old_and_fresh_missing_ir_cannot_fall_back",
+    "full_document::stored_full_ir_all_five_kinds_defaults_empty_clear_keep_exact_candidates_and_real_graph",
+    "full_document::stored_full_ir_fresh_ir_only_acl_revocation_precedes_signed_route",
+    "full_document::stored_full_ir_head_advance_and_access_revocation_do_not_rebind_old_preparation",
+    "full_document::stored_full_ir_ir_only_aead_corruption_is_rejected_without_touching_source",
+    "full_document::stored_full_ir_missing_link_and_wrong_kind_media_or_three_digests_fail_closed",
+    "full_document::stored_full_ir_noncanonical_and_duplicate_properties_are_rejected_after_actual_download",
+    "full_document::stored_full_ir_public_receipt_debug_never_exposes_values_paths_or_artifact_ids",
+    "full_document::stored_full_ir_wrong_document_and_explicit_inventory_projection_are_not_promoted",
+    "stored_actual_capture_uses_real_sealed_node_acl_aead_and_original_compiler_without_publish",
+    "stored_all_five_kinds_required_radio_defaults_empty_clear_match_whole_predecessor",
+    "stored_fresh_acl_revocation_blocks_preparation_verification_and_route",
+    "stored_fresh_map_policy_access_and_malformed_input_fail_without_ingest_or_commit",
+    "stored_provider_tenant_subject_scope_branch_document_cannot_be_substituted",
+    "stored_quarantine_unverified_wrong_artifact_kind_and_corrupt_ciphertext_never_prepare",
+    "stored_real_head_advance_rejects_old_preparation_even_when_actual_artifact_is_unchanged",
+    "stored_receipts_debug_and_fixed_errors_do_not_expose_source_subject_artifact_or_paths"
+  ],
+  "source_module_instances": [
+    {
+      "path": "crates/product-cli/tests/form_stored_provider.rs",
+      "prefix": ""
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import.rs",
+      "prefix": "actual_import::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/field_ranges.rs",
+      "prefix": "actual_import::field_ranges::"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_field_fixture.rs",
+      "prefix": "actual_import::field_ranges::fixture::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/field_semantics.rs",
+      "prefix": "actual_import::field_semantics::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_evaluation.rs",
+      "prefix": "actual_import::formula_evaluation::"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_formula_evaluation_fixture.rs",
+      "prefix": "actual_import::formula_evaluation::fixture::"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_settings_inputs.rs",
+      "prefix": "actual_import::formula_evaluation::fixture::inputs::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_output.rs",
+      "prefix": "actual_import::formula_output::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_compiler.rs",
+      "prefix": "actual_import::formula_compiler::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_compiler/fixture.rs",
+      "prefix": "actual_import::formula_compiler::fixture::"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_formula_output_fixture.rs",
+      "prefix": "actual_import::formula_compiler::fixture::output::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_product_request.rs",
+      "prefix": "actual_import::formula_product_request::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy.rs",
+      "prefix": "actual_import::formula_policy::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_registration.rs",
+      "prefix": "actual_import::formula_policy_registration::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_revocation.rs",
+      "prefix": "actual_import::formula_policy_revocation::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_issuer.rs",
+      "prefix": "actual_import::formula_policy_issuer::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_issuer/corpus.rs",
+      "prefix": "actual_import::formula_policy_issuer::corpus::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_issuer/corpus/verification.rs",
+      "prefix": "actual_import::formula_policy_issuer::corpus::verification::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_issuer/corpus/changed.rs",
+      "prefix": "actual_import::formula_policy_issuer::corpus::changed::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_issuer/corpus/changed/cost_profile.rs",
+      "prefix": "actual_import::formula_policy_issuer::corpus::changed::cost_profile::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_issuer/corpus/changed/consumer.rs",
+      "prefix": "actual_import::formula_policy_issuer::corpus::changed::consumer::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_issuer/corpus/changed/mutation.rs",
+      "prefix": "actual_import::formula_policy_issuer::corpus::changed::mutation::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_issuer/registry.rs",
+      "prefix": "actual_import::formula_policy_issuer::registry::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/formula_policy_issuer/provision.rs",
+      "prefix": "actual_import::formula_policy_issuer::provision::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_bookmarks.rs",
+      "prefix": "actual_import::source_bookmarks::"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_bookmark_fixture.rs",
+      "prefix": "actual_import::source_bookmarks::fixture::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_catalog.rs",
+      "prefix": "actual_import::source_catalog::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_security.rs",
+      "prefix": "actual_import::source_security::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_settings.rs",
+      "prefix": "actual_import::source_settings::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_notes.rs",
+      "prefix": "actual_import::source_notes::"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_note_fixture.rs",
+      "prefix": "actual_import::source_notes::notes::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_fonts.rs",
+      "prefix": "actual_import::source_fonts::"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_fonts_fixture.rs",
+      "prefix": "actual_import::source_fonts::fixture::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_assembly.rs",
+      "prefix": "actual_import::source_assembly::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/stored_source_policy.rs",
+      "prefix": "actual_import::stored_source_policy::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/policy_registration.rs",
+      "prefix": "actual_import::policy_registration::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/policy_product.rs",
+      "prefix": "actual_import::policy_product::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review.rs",
+      "prefix": "actual_import::source_review::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_metadata.rs",
+      "prefix": "actual_import::source_review_metadata::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_assembly.rs",
+      "prefix": "actual_import::source_review_assembly::"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_review_assembly_fixture.rs",
+      "prefix": "actual_import::source_review_assembly::fixture::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_memo_catalog.rs",
+      "prefix": "actual_import::source_memo_catalog::"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_memo_catalog_fixture.rs",
+      "prefix": "actual_import::source_memo_catalog::fixture::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_memo_style.rs",
+      "prefix": "actual_import::source_memo_style::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_output.rs",
+      "prefix": "actual_import::source_review_output::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_delete.rs",
+      "prefix": "actual_import::source_review_delete::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_locations.rs",
+      "prefix": "actual_import::source_review_locations::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_cell_output.rs",
+      "prefix": "actual_import::source_review_cell_output::"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/review_cell_output_fixture.rs",
+      "prefix": "actual_import::source_review_cell_output::fixture::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_paragraph_output.rs",
+      "prefix": "actual_import::source_review_paragraph_output::"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/review_paragraph_output_fixture.rs",
+      "prefix": "actual_import::source_review_paragraph_output::fixture::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_table_output.rs",
+      "prefix": "actual_import::source_review_table_output::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/review_table_fixture.rs",
+      "prefix": "actual_import::source_review_table_output::fixture::"
+    },
+    {
+      "path": "crates/hwpx-package/tests/table_create_hwpx.rs",
+      "prefix": "actual_import::source_review_table_output::fixture::native::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_review_filled_table_output.rs",
+      "prefix": "actual_import::source_review_table_output::filled_output::"
+    },
+    {
+      "path": "crates/hwpx-package/examples/document_import_form_policies_support/mod.rs",
+      "prefix": "actual_import::support::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/full_document.rs",
+      "prefix": "full_document::"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/full_document/product_request.rs",
+      "prefix": "full_document::product_request::"
+    }
+  ],
+  "selected_test_names": [],
+  "expected_test_count": 249,
+  "compiled_inventory_exact": false,
+  "runtime_tests_executed": false,
+  "signed_changed16_component_complete": false,
+  "outside_component_filtered": null,
+  "full249_current_qualified": false,
+  "signed_SQL_native_or_Gate_qualified": false,
+  "PC_freeze_resolved": false,
+  "baseline_build_qualification": "HISTORICAL_R4_NOT_NEW_SQL_BUILD",
+  "raw_logs_printed_or_saved": false,
+  "original_test_bodies_changed": false,
+  "resource_policy_changed": false,
+  "system_or_Defender_or_WSL_or_Codex_settings_changed": false,
+  "test_sources_changed": true,
+  "original_assertion_body_exact_after_declared_cfg_removal": true,
+  "stage_candidate": "implementation/p09/evidence/p09-149-signed-stage-cost-candidate.run01.v1.json",
+  "exact_CPU_profiler": false,
+  "statistical_speedup_proven": false,
+  "Rust_sources_or_original_test_assertions_changed": false,
+  "test_package_profile_config": [
+    "profile.test.package.hwpx-package.opt-level=1",
+    "profile.test.package.hwpx-package.debug-assertions=true",
+    "profile.test.package.hwpx-package.overflow-checks=true",
+    "profile.test.package.hwpx-package.codegen-units=16",
+    "profile.test.package.hwpx-package.debug=\"line-tables-only\"",
+    "profile.test.package.hwpx-agent-cli.opt-level=1",
+    "profile.test.package.hwpx-agent-cli.debug-assertions=true",
+    "profile.test.package.hwpx-agent-cli.overflow-checks=true",
+    "profile.test.package.hwpx-agent-cli.codegen-units=16",
+    "profile.test.package.hwpx-agent-cli.debug=\"line-tables-only\"",
+    "profile.test.lto=\"off\"",
+    "profile.test.package.serde_json.opt-level=1",
+    "profile.test.package.serde_json.debug-assertions=true",
+    "profile.test.package.serde_json.overflow-checks=true",
+    "profile.test.package.serde_json.codegen-units=16",
+    "profile.test.package.serde_json.debug=\"line-tables-only\"",
+    "profile.test.package.sha2.opt-level=1",
+    "profile.test.package.sha2.debug-assertions=true",
+    "profile.test.package.sha2.overflow-checks=true",
+    "profile.test.package.sha2.codegen-units=16",
+    "profile.test.package.sha2.debug=\"line-tables-only\"",
+    "profile.test.package.quick-xml.opt-level=1",
+    "profile.test.package.quick-xml.debug-assertions=true",
+    "profile.test.package.quick-xml.overflow-checks=true",
+    "profile.test.package.quick-xml.codegen-units=16",
+    "profile.test.package.quick-xml.debug=\"line-tables-only\"",
+    "profile.test.package.zip.opt-level=1",
+    "profile.test.package.zip.debug-assertions=true",
+    "profile.test.package.zip.overflow-checks=true",
+    "profile.test.package.zip.codegen-units=16",
+    "profile.test.package.zip.debug=\"line-tables-only\"",
+    "profile.test.package.flate2.opt-level=1",
+    "profile.test.package.flate2.debug-assertions=true",
+    "profile.test.package.flate2.overflow-checks=true",
+    "profile.test.package.flate2.codegen-units=16",
+    "profile.test.package.flate2.debug=\"line-tables-only\"",
+    "profile.test.package.zlib-rs.opt-level=1",
+    "profile.test.package.zlib-rs.debug-assertions=true",
+    "profile.test.package.zlib-rs.overflow-checks=true",
+    "profile.test.package.zlib-rs.codegen-units=16",
+    "profile.test.package.zlib-rs.debug=\"line-tables-only\"",
+    "profile.test.package.aead.opt-level=1",
+    "profile.test.package.aead.debug-assertions=true",
+    "profile.test.package.aead.overflow-checks=true",
+    "profile.test.package.aead.codegen-units=16",
+    "profile.test.package.aead.debug=\"line-tables-only\"",
+    "profile.test.package.aes.opt-level=1",
+    "profile.test.package.aes.debug-assertions=true",
+    "profile.test.package.aes.overflow-checks=true",
+    "profile.test.package.aes.codegen-units=16",
+    "profile.test.package.aes.debug=\"line-tables-only\"",
+    "profile.test.package.aes-gcm.opt-level=1",
+    "profile.test.package.aes-gcm.debug-assertions=true",
+    "profile.test.package.aes-gcm.overflow-checks=true",
+    "profile.test.package.aes-gcm.codegen-units=16",
+    "profile.test.package.aes-gcm.debug=\"line-tables-only\"",
+    "profile.test.package.cipher.opt-level=1",
+    "profile.test.package.cipher.debug-assertions=true",
+    "profile.test.package.cipher.overflow-checks=true",
+    "profile.test.package.cipher.codegen-units=16",
+    "profile.test.package.cipher.debug=\"line-tables-only\"",
+    "profile.test.package.ctr.opt-level=1",
+    "profile.test.package.ctr.debug-assertions=true",
+    "profile.test.package.ctr.overflow-checks=true",
+    "profile.test.package.ctr.codegen-units=16",
+    "profile.test.package.ctr.debug=\"line-tables-only\"",
+    "profile.test.package.ghash.opt-level=1",
+    "profile.test.package.ghash.debug-assertions=true",
+    "profile.test.package.ghash.overflow-checks=true",
+    "profile.test.package.ghash.codegen-units=16",
+    "profile.test.package.ghash.debug=\"line-tables-only\"",
+    "profile.test.package.polyval.opt-level=1",
+    "profile.test.package.polyval.debug-assertions=true",
+    "profile.test.package.polyval.overflow-checks=true",
+    "profile.test.package.polyval.codegen-units=16",
+    "profile.test.package.polyval.debug=\"line-tables-only\"",
+    "profile.test.package.universal-hash.opt-level=1",
+    "profile.test.package.universal-hash.debug-assertions=true",
+    "profile.test.package.universal-hash.overflow-checks=true",
+    "profile.test.package.universal-hash.codegen-units=16",
+    "profile.test.package.universal-hash.debug=\"line-tables-only\""
+  ],
+  "test_profile_parent_pin": {
+    "path": "implementation/p09/evidence/p09-149-signed-stage-cost.summary-run01.v1.json",
+    "bytes": 6947,
+    "sha256": "cab38d820add8b78e0a3ee82d0d03915e548160e25d2f79941bed78125449aa6"
+  },
+  "basic_test_package_optimization_only": true,
+  "assertion_or_overflow_checks_disabled": false,
+  "whole_Cargo_or_OS_settings_changed": false,
+  "original_owned_resource_policy_changed": false,
+  "new_profile_qualified_only_after_current_compiled_inventory": true,
+  "additional_admission_available_RAM_min_percent": 15,
+  "optimized_aead_dependencies": [
+    "aead",
+    "aes",
+    "aes-gcm",
+    "cipher",
+    "ctr",
+    "ghash",
+    "polyval",
+    "universal-hash"
+  ],
+  "aead_dependencies_opt_level": 1,
+  "aead_dependencies_parent_pin": {
+    "path": "implementation/p09/evidence/p09-149-compression-captured-suite.terminal-audit-run01.v1.json",
+    "bytes": 9174,
+    "sha256": "333380ecf6f02892fec76fcd4581e5b6e61ff03026a7268a4af97b086f571af7"
+  },
+  "product_sources_or_original_test_assertions_changed": false
+}

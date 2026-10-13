@@ -1,0 +1,25 @@
+{
+  "schema": "hwpx-agent.p09-99-review-locations-initial-failures/v1",
+  "recorded_at_utc": "2026-10-04 16:15:35 UTC",
+  "failures": [
+    {
+      "stage": "initial-compile-failure",
+      "check_start_chunk_id": "501b68",
+      "check_terminal_chunk_id": "bb47b7",
+      "test_start_chunk_id": "f4f0d7",
+      "test_terminal_chunk_id": "0580ad",
+      "exit_code": 1,
+      "error": "E0599_Sha256_new_missing_Digest_trait_import",
+      "new_location_tests": "NOT_RUN_compile_failure",
+      "whole_related_new_package_source_preserved": true,
+      "fix": "add Digest as _ import only; original source readers/validators unchanged"
+    }
+  ],
+  "no_skipped_or_weakened_original_checks": true,
+  "full_failed_source_logs_exposed": false,
+  "all_failed_new_binaries_preserved": false,
+  "native_executed": false,
+  "actual_SQL_executed": false,
+  "product_complete": false,
+  "P09_gate": "OPEN"
+}

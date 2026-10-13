@@ -1,0 +1,40 @@
+{
+  "schema_version": "hwpx-agent.p09-conservative-maintenance/v1",
+  "task": "domain-tests",
+  "policy": {
+    "profile": "P149_CONSERVATIVE_V1",
+    "logical_cpu_limit": 1,
+    "priority": "BelowNormal",
+    "cargo_jobs": 1,
+    "test_threads": 1,
+    "sample_seconds": 1,
+    "start_cpu_max_percent": 35,
+    "start_ram_min_mib": 12288,
+    "start_consecutive_samples": 10,
+    "admission_max_seconds": 25,
+    "stop_cpu_percent": 60,
+    "stop_cpu_consecutive_samples": 2,
+    "stop_cpu_immediate_percent": 75,
+    "stop_ram_min_mib": 8192,
+    "job_memory_limit_mib": 2048,
+    "output_limit_bytes_per_stream": 32768
+  },
+  "maximum_seconds": 180,
+  "state": "DEFERRED_NOT_STARTED",
+  "heavy_work_started": false,
+  "samples": [
+    {
+      "time_utc": "2026-10-06T07:04:03.769422+00:00",
+      "system_cpu_percent": 33.3,
+      "available_ram_mib": 4244.64
+    }
+  ],
+  "source_freeze": [],
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "native_or_SQL_run": false,
+  "owned_tree_empty": true,
+  "exit_code": null,
+  "stop_reason": "STOP_LOW_AVAILABLE_RAM",
+  "elapsed_seconds": 1.0
+}

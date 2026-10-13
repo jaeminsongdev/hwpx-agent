@@ -1,0 +1,117 @@
+{
+  "schema_version": "hwpx-agent.p09-held-path-guard-small-native/v1",
+  "provenance": "Actual guarded Windows Native diagnostic stdout; no product, no full1658 qualification, no synthetic Job cleanup or COMMITTED claim",
+  "result": {
+    "diagnostic_kind": "SMALL_REAL_NATIVE_HELD_PATH_GUARD_NOT_FULL_SOURCE_OR_PRODUCT",
+    "state": "PASS_SMALL_NATIVE_PATH_GUARD_NOT_FULL_SOURCE_OR_PRODUCT",
+    "actual_product_child_executed": false,
+    "full1658_qualified": false,
+    "P09_gate": "OPEN",
+    "source_path_guard_diagnostics": [
+      {
+        "native_metadata_queries_attempted": 3,
+        "fresh_held_metadata_queries": 3,
+        "original_path_guard_predicates": 9,
+        "original_reader_root_restored": true,
+        "active_path_guard_adapter": false,
+        "pathname_metadata_probes": 0,
+        "original_stream_identity_check_retained": true,
+        "metadata_reused_between_source_requests": false,
+        "added_native_queries_recorded_separately_from_original_lock_checks": true,
+        "kernel_call_reduction_or_CPU_freeze_improvement_claimed": false
+      },
+      {
+        "native_metadata_queries_attempted": 3,
+        "fresh_held_metadata_queries": 3,
+        "original_path_guard_predicates": 9,
+        "original_reader_root_restored": true,
+        "active_path_guard_adapter": false,
+        "pathname_metadata_probes": 0,
+        "original_stream_identity_check_retained": true,
+        "metadata_reused_between_source_requests": false,
+        "added_native_queries_recorded_separately_from_original_lock_checks": true,
+        "kernel_call_reduction_or_CPU_freeze_improvement_claimed": false
+      }
+    ],
+    "pins": [
+      {
+        "path": "tools/p09/resume_preserved106_queue_runtime.py",
+        "bytes": 103973,
+        "sha256": "b816eff344fb0d0c179e89a7ddd84293963076a37133c1481678f928d7495f8a"
+      },
+      {
+        "path": "tools/p09/tests/test_preserved106_queue_runtime.py",
+        "bytes": 59989,
+        "sha256": "2d5be72150a82ac05159e03ae42b49c4dc51889ae39c080c75c3f7d0fb0f599d"
+      },
+      {
+        "path": "tools/p09/locked_runtime_inputs.py",
+        "bytes": 15465,
+        "sha256": "e7c40a2ec0367e01c359e3b89c179d45367e9db233348e76ba82364cc0599e14"
+      }
+    ],
+    "fresh_held_identity_after": {
+      "held_identity_checks_complete": true,
+      "separate_pathname_reopens": 0,
+      "regular_file_count": 3,
+      "directory_count": 4
+    },
+    "frame_state": "CLOSED",
+    "registered_live_frame": false,
+    "complete_byte_boundary_count": 2,
+    "frame_cleanup_confirmed": true,
+    "handles": {
+      "input_lock_handles_opened": 7,
+      "input_lock_handles_closed": 7,
+      "input_lock_handles_remaining": 0,
+      "handle_metadata_checks": 20,
+      "active_reader_bindings": 0,
+      "active_byte_streams": 0,
+      "handle_close_failed_attempts": 0,
+      "input_lock_cleanup_confirmed": true,
+      "borrowed_byte_streams": {
+        "duplicate_handles_opened": 6,
+        "duplicate_handles_closed": 6,
+        "duplicate_handles_remaining": 0,
+        "duplicate_close_failed_attempts": 0,
+        "shared_offset_resets": 6,
+        "active_borrow_binding": false,
+        "byte_stream_pathname_reopens": 0,
+        "original_held_handles_closed_by_borrower": false,
+        "redundant_pre_descriptor_metadata_queries": 0,
+        "original_pre_read_stream_identity_check_retained": true,
+        "input_scope_reduced": false,
+        "original_resource_guards_and_pacing_retained": true,
+        "measured_CPU_or_freeze_improvement_claimed": false
+      },
+      "acquisition_phase_pressure": {
+        "acquisition_maximum_reservations_per_second": 14,
+        "original_global_and_byte_reservation_ceiling_per_second": 20,
+        "acquisition_used": true,
+        "acquisition_complete": true,
+        "acquisition_reservations": 7,
+        "restored_original_rate": 20,
+        "same_original_pacer": true,
+        "clock_and_sleeper_and_checkpoint_retained": true,
+        "clock_previous_credit_or_reservation_counter_reset": false,
+        "extra_sampler_or_thread_started": false,
+        "original_CPU_RAM600_and_all_byte_identity_guards_preserved": true,
+        "cleanup_callback_wrapped": false,
+        "nominal_acquisition_density_reduction_percent": 30,
+        "CPU_or_PC_freeze_improvement_established": false
+      }
+    },
+    "resource_stop_reason": null,
+    "resource_watcher_cleanup_confirmed": true,
+    "observation": {
+      "completed_sample_count": 3,
+      "system_cpu_max_percent": 2.72,
+      "own_cpu_max_machine_percent": 0.3861,
+      "own_private_max_bytes": 28979200,
+      "available_ram_min_percent": 33.81804093597723
+    },
+    "input_count": 3,
+    "initial_read_passes": 3,
+    "initial_bytes": 179427
+  }
+}

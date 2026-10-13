@@ -1,0 +1,361 @@
+{
+  "schema_version": 1,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "goal_status": "active",
+  "Cargo_SQL_native_or_new_thread_started": false,
+  "source_or_auth_checks_changed": false,
+  "helper_pins": [
+    {
+      "path": "tools/p09/inspect_signed_verification_amplification.py",
+      "bytes": 15245,
+      "sha256": "9feee14e07a5a9d9aacf67edfb6526813c297a248a2a783a2d85fdf4873508e2"
+    },
+    {
+      "path": "tools/p09/tests/test_signed_verification_amplification.py",
+      "bytes": 5310,
+      "sha256": "3dd54d3e87bc43173e643f6f7d9f103b29b63248d9d5931dfd35eb3d2b0f6a09"
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "crates/hwpx-package/src/document_import/forms.rs",
+      "bytes": 19244,
+      "sha256": "f760363b3d44c98fa505b293b441124cb13db766d059e1ca875e2c63c5dd1275"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_operations/formula.rs",
+      "bytes": 9718,
+      "sha256": "e9f1bd4e1833ff5b28d394369ff304800a92df9027d537a66f7c04bafcaa1ba7"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_operations/policy.rs",
+      "bytes": 6565,
+      "sha256": "fa8a071e076d65d704fd11fef51160fe0beb2707ee15e46cb9011fb2f1959cdc"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import.rs",
+      "bytes": 11665,
+      "sha256": "688dd0f0348ec240a483e76781e327e20caf37a2bce47f0040db2768b375b6ce"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/field_ranges/semantics/evaluation/output.rs",
+      "bytes": 5893,
+      "sha256": "8cb43f6f28538d5d389d159b8eb57e82d4233d24e9b61e6627a0a64ecb6b01ce"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas.rs",
+      "bytes": 6523,
+      "sha256": "55c9e98aa6fe6d566d265654e93c125c4e6e936c631d55673a585478f714d8e2"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/product.rs",
+      "bytes": 7488,
+      "sha256": "48adbce1a99fa6301b1c2ae59a00e1b5593158e2177bcdd7a8514cb3f87400e0"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/provider.rs",
+      "bytes": 8867,
+      "sha256": "81e99cd904eff0efc9b01bff2857933b266b2cfaa9a3bab627e423919cecb020"
+    }
+  ],
+  "state": "PASS_CURRENT_SOURCE_STATIC_CALL_MODEL_ONLY_NOT_RUNTIME_OR_GATE",
+  "parent_pin": {
+    "path": "implementation/p09/evidence/p09-149-signed-artifact-compute.summary-run01.v1.json",
+    "bytes": 11037,
+    "sha256": "080ccd35959d4c5745fa9eb801ae17f5baa46081e06a38286e7b519dd15b40b7"
+  },
+  "prior_actual_pin": {
+    "path": "implementation/p09/evidence/p09-149-signed-artifact-compute.actual-run01.v1.json",
+    "bytes": 945216,
+    "sha256": "bb759d82a7075d23e049756b83bddeadfcdc36e7d068f11c4085caff0fdc7529"
+  },
+  "model": {
+    "qualification": "CONDITIONAL_STATIC_CALL_MODEL_NOT_RUNTIME_COUNT_OR_CPU_PROFILE",
+    "assumptions": [
+      "All preceding fresh verification checks succeed",
+      "consume callback is reached exactly once",
+      "Changed plan reaches current output route denial"
+    ],
+    "functions": [
+      {
+        "node": "I.consume",
+        "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/product.rs",
+        "function": "with_verified_bytes",
+        "line": 125,
+        "direct_calls": [
+          {
+            "call": "self.verify(",
+            "target": "I.verify",
+            "lexical_sites": 1
+          },
+          {
+            "call": "self.product.with_verified_bytes(",
+            "target": "P.consume",
+            "lexical_sites": 1
+          }
+        ]
+      },
+      {
+        "node": "I.route",
+        "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/product.rs",
+        "function": "require_current_product_route",
+        "line": 154,
+        "direct_calls": [
+          {
+            "call": "self.verify(",
+            "target": "I.verify",
+            "lexical_sites": 1
+          },
+          {
+            "call": "self.product.require_current_product_route(",
+            "target": "P.route",
+            "lexical_sites": 1
+          }
+        ]
+      },
+      {
+        "node": "I.verify",
+        "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/product.rs",
+        "function": "verify",
+        "line": 98,
+        "direct_calls": [
+          {
+            "call": "self.product.verify(",
+            "target": "P.verify",
+            "lexical_sites": 1
+          }
+        ]
+      },
+      {
+        "node": "P.consume",
+        "path": "crates/product-cli/src/form_product_request/stored_operations/policy.rs",
+        "function": "with_verified_bytes",
+        "line": 109,
+        "direct_calls": [
+          {
+            "call": "self.verify(",
+            "target": "P.verify",
+            "lexical_sites": 1
+          },
+          {
+            "call": "self.product.with_verified_bytes(",
+            "target": "F.consume",
+            "lexical_sites": 1
+          },
+          {
+            "call": "self.policy.verify(",
+            "target": "D.verify",
+            "lexical_sites": 1
+          }
+        ]
+      },
+      {
+        "node": "P.route",
+        "path": "crates/product-cli/src/form_product_request/stored_operations/policy.rs",
+        "function": "require_current_product_route",
+        "line": 134,
+        "direct_calls": [
+          {
+            "call": "self.verify(",
+            "target": "P.verify",
+            "lexical_sites": 1
+          },
+          {
+            "call": "self.product.require_current_product_route(",
+            "target": "F.route",
+            "lexical_sites": 1
+          },
+          {
+            "call": "self.policy.verify(",
+            "target": "D.verify",
+            "lexical_sites": 1
+          }
+        ]
+      },
+      {
+        "node": "P.verify",
+        "path": "crates/product-cli/src/form_product_request/stored_operations/policy.rs",
+        "function": "verify",
+        "line": 80,
+        "direct_calls": [
+          {
+            "call": "self.product.verify(",
+            "target": "F.verify",
+            "lexical_sites": 1
+          },
+          {
+            "call": "self.policy.verify(",
+            "target": "D.verify",
+            "lexical_sites": 2
+          }
+        ]
+      },
+      {
+        "node": "F.consume",
+        "path": "crates/product-cli/src/form_product_request/stored_operations/formula.rs",
+        "function": "with_verified_bytes",
+        "line": 95,
+        "direct_calls": [
+          {
+            "call": "self.verify(",
+            "target": "F.verify",
+            "lexical_sites": 1
+          }
+        ]
+      },
+      {
+        "node": "F.route",
+        "path": "crates/product-cli/src/form_product_request/stored_operations/formula.rs",
+        "function": "require_current_product_route",
+        "line": 113,
+        "direct_calls": [
+          {
+            "call": "self.verify(",
+            "target": "F.verify",
+            "lexical_sites": 1
+          }
+        ]
+      },
+      {
+        "node": "F.verify",
+        "path": "crates/product-cli/src/form_product_request/stored_operations/formula.rs",
+        "function": "verify",
+        "line": 66,
+        "direct_calls": [
+          {
+            "call": "build(",
+            "target": "F.build",
+            "lexical_sites": 1
+          }
+        ]
+      },
+      {
+        "node": "F.build",
+        "path": "crates/product-cli/src/form_product_request/stored_operations/formula.rs",
+        "function": "build",
+        "line": 194,
+        "direct_calls": []
+      },
+      {
+        "node": "D.verify",
+        "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas.rs",
+        "function": "verify",
+        "line": 122,
+        "direct_calls": [
+          {
+            "call": "source.bind_stored_formula_policy(",
+            "target": "D.bind",
+            "lexical_sites": 1
+          }
+        ]
+      },
+      {
+        "node": "D.bind",
+        "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas.rs",
+        "function": "bind_stored_formula_policy",
+        "line": 59,
+        "direct_calls": [
+          {
+            "call": "repository.read_current_formula_policy(",
+            "target": "S.read",
+            "lexical_sites": 2
+          }
+        ]
+      },
+      {
+        "node": "S.read",
+        "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/provider.rs",
+        "function": "read_current_formula_policy",
+        "line": 226,
+        "direct_calls": [
+          {
+            "call": "self.read_signed(",
+            "target": "S.signature",
+            "lexical_sites": 1
+          }
+        ]
+      },
+      {
+        "node": "S.signature",
+        "path": "crates/product-cli/src/form_stored_provider/actual_import/source_policy/formulas/issuer/provider.rs",
+        "function": "read_signed",
+        "line": 62,
+        "direct_calls": []
+      }
+    ],
+    "candidate_consume": {
+      "D.bind": 5,
+      "D.verify": 5,
+      "F.build": 3,
+      "F.consume": 1,
+      "F.verify": 3,
+      "I.consume": 1,
+      "I.verify": 1,
+      "P.consume": 1,
+      "P.verify": 2,
+      "S.read": 10,
+      "S.signature": 10
+    },
+    "changed_route_denial": {
+      "D.bind": 4,
+      "D.verify": 4,
+      "F.build": 3,
+      "F.route": 1,
+      "F.verify": 3,
+      "I.route": 1,
+      "I.verify": 1,
+      "P.route": 1,
+      "P.verify": 2,
+      "S.read": 8,
+      "S.signature": 8
+    },
+    "excluded_post_denial_edge": {
+      "from": "P.route",
+      "to": "D.verify",
+      "lexical_sites": 1,
+      "source_not_modified": true
+    },
+    "extra_changed_route_pipeline_is_not_in_F_build_count": true,
+    "runtime_call_counts_proven": false,
+    "CPU_hot_function_proven": false,
+    "fresh_checks_can_be_removed": false,
+    "authority_cache_authorized": false,
+    "reconstruction_source_witness": {
+      "source_path": "crates/product-cli/src/form_stored_provider/actual_import.rs",
+      "source_function": "fresh_source_reconstructed",
+      "source_line": 162,
+      "fresh_service_source_call": 1,
+      "whole_bytes_reconstruction_call": 1,
+      "head_check_call": 1,
+      "forms_path": "crates/hwpx-package/src/document_import/forms.rs",
+      "form_rebuild_function": "rebuild_for_verification",
+      "form_rebuild_line": 289,
+      "fresh_package_import_call": 1,
+      "form_import_call": 1,
+      "whole_rebuilt_comparison_call": 1,
+      "sealed_IR_JSON_decode_proven_selected_here": false,
+      "runtime_multiplicity_of_reconstruction_unmeasured": true
+    },
+    "next_measurement_targets": [
+      "F.build actual source/ranges/semantics/evaluation/output/compiler",
+      "D.bind source reconstruction/target semantic binding versus S.signature",
+      "F.route extra Changed result/compiler verification"
+    ]
+  },
+  "runtime_replayed": false,
+  "source_closing_exact": true,
+  "IO": {
+    "read_passes": 34,
+    "bytes_read": 3137758,
+    "bound_inputs": 12,
+    "final_fresh_hashes": 12,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "resource_stop": null,
+  "resource_watcher_cleanup_confirmed": true
+}

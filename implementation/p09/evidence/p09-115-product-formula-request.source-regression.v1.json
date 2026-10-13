@@ -1,0 +1,203 @@
+{
+  "schema": "hwpx-agent.p09-115-product-formula-request-source-regression/v1",
+  "final_CLI_source_fixed_before_accepted_CLI_run": true,
+  "package_source_and_fixtures_unchanged_during_package_run": true,
+  "overlapping_package_run_edits": "Only CLI request code changed; hwpx-package does not depend on CLI.",
+  "CLI": {
+    "command": "cargo test -p hwpx-agent-cli --lib --test form_stored_provider --test form_value_operation --test form_product_request --locked --offline --target-dir target/p09-115-product-formula-request",
+    "start_chunk": "6a5397",
+    "session": 66738,
+    "terminal_chunk": "1b79e0",
+    "earlier_terminal_chunks": [
+      "6a5397",
+      "83f230"
+    ],
+    "exit_code": 0,
+    "passed": 220,
+    "per_suite": {
+      "lib": 6,
+      "form_product_request": 10,
+      "form_stored_provider": 186,
+      "form_value_operation": 18
+    },
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0,
+    "stored_runtime_seconds": 467.01,
+    "form_runtime_seconds": 14.32
+  },
+  "package": {
+    "command": "cargo test -p hwpx-package --lib --test table_formula --test document_import_formula_evaluation --test document_import_formula_output --test document_import_formula_batch --test patch_leaf_text --test patch_engine --test patch_element_content --test review_cell_body_output --test review_delete_output --test id_index --test text_flow --locked --offline --target-dir target/p09-115-product-formula-request",
+    "start_chunk": "1031ac",
+    "session": 92902,
+    "terminal_chunk": "5f9f83",
+    "earlier_terminal_chunk": "bc8f03",
+    "exit_code": 0,
+    "passed": 136,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0
+  },
+  "test_inventory": [
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/document_import_formula_batch-bea22a1ddc584290.exe",
+      "count": 6,
+      "distinct": 6,
+      "names_sha256": "68f4da3b317a478823e76642f378686b60d82295d96afd070d40361aad00f83e"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/document_import_formula_evaluation-7ce11a20f7395847.exe",
+      "count": 10,
+      "distinct": 10,
+      "names_sha256": "79306f031fc368acc1e0390a3be2280f1f854b47ddd30ada00c2be04692f2a07"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/document_import_formula_output-3a092c4eef2e8f0f.exe",
+      "count": 5,
+      "distinct": 5,
+      "names_sha256": "bde1063a150326670ce057277d26f5380a1c7d44563d2fb6699b3d1a61e58bfb"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/form_product_request-b9b309ced3b4e156.exe",
+      "count": 10,
+      "distinct": 10,
+      "names_sha256": "1ed60ca40915c226606eb5f2f0ff841ceee838ebdd951850a6ad5434cf7ab299"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/form_stored_provider-e02d02396d2f2bbd.exe",
+      "count": 186,
+      "distinct": 186,
+      "names_sha256": "c18dfce9089e06d32ada03f34b1d5c332f16ef8a994c8e1f94ce690bf306f67d"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/form_value_operation-899bdd52f412e0da.exe",
+      "count": 18,
+      "distinct": 18,
+      "names_sha256": "e33bda2ddb8c607de6f1cc451f50e3399eef6112ee84ec166b7b4f5d61afe745"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/hwpx_agent_cli-0dbeda1edae1a540.exe",
+      "count": 6,
+      "distinct": 6,
+      "names_sha256": "1bd24818bf01bfa9ce71593e670b36da86a131aef32775c430b3b4e4ba6a35a3"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/hwpx_package-a850ad738bc59b10.exe",
+      "count": 46,
+      "distinct": 46,
+      "names_sha256": "938e582eafafb6861c497d347aa4faf49c10e4a9570277d1aede708e197d379c"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/id_index-b06ac4c244093f4c.exe",
+      "count": 8,
+      "distinct": 8,
+      "names_sha256": "4348afbb9090c7328a916fd0b2ea695d5ee3e5bd0cba2b1bb352b2eb22ccf647"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/patch_element_content-4a43081747b336ae.exe",
+      "count": 4,
+      "distinct": 4,
+      "names_sha256": "ff47309f2b2064c1310679cfb7897053a69ae8785907182c4f164aedcb536b91"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/patch_engine-f16fef8e94eda711.exe",
+      "count": 6,
+      "distinct": 6,
+      "names_sha256": "f7edd665f0e3b41c63a71150f1fffe0029b034b76bfb53fe207c21f206c71c4d"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/patch_leaf_text-8e937ccb1f8696d7.exe",
+      "count": 2,
+      "distinct": 2,
+      "names_sha256": "aa631189cc5094be0333e6845d01f458aa7ed005fac6248522f10e26c46acf4d"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/review_cell_body_output-581a88b7cee111ae.exe",
+      "count": 22,
+      "distinct": 22,
+      "names_sha256": "ca23ab607507d674e86a7d0b522ae4b8c60de1c4ebe5b96032c298674bde308e"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/review_delete_output-c5dd540b6b40acb8.exe",
+      "count": 6,
+      "distinct": 6,
+      "names_sha256": "7a7714645ca4fdc4697eed5185762019f092df0c4c0613b78646eec5e56b29b5"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/table_formula-20f3bf8409a62442.exe",
+      "count": 9,
+      "distinct": 9,
+      "names_sha256": "70540ad171065f0c93a95518bf61e0ca369e7341774bd044fc0c426eee90c6b2"
+    },
+    {
+      "path": "target/p09-115-product-formula-request/debug/deps/text_flow-511dd1904a1b61b0.exe",
+      "count": 12,
+      "distinct": 12,
+      "names_sha256": "117fee84a1c423df1b3e81c4112ea8b40958e02174cd09b0aa968f11e93acc3d"
+    }
+  ],
+  "test_counts": {
+    "final_executions": 356,
+    "unique_executable_and_fully_qualified_function_pairs": 356,
+    "duplicate_executions_in_accepted_set": 0,
+    "new_integration_tests": 10,
+    "new_tests_in_total": true,
+    "not_feature_or_unique_fixture_count": true
+  },
+  "inventory": {
+    "terminal_chunk": "5752d6",
+    "exit_code": 0,
+    "test_executables": 16
+  },
+  "strict_lint": {
+    "terminal_chunk": "fea9d7",
+    "exit_code": 0,
+    "packages": [
+      "hwpx-agent-cli",
+      "hwpx-package"
+    ],
+    "warnings_as_errors": true
+  },
+  "format_diff": {
+    "terminal_chunk": "ca1f42",
+    "exit_code": 0,
+    "new_Rust_files": 5,
+    "only_new_owned_Rust_formatted": true
+  },
+  "component_conformance": {
+    "terminal_chunk": "944f02",
+    "exit_code": 0,
+    "validators": 15,
+    "green_rows": 0,
+    "Gate": "OPEN"
+  },
+  "default_conformance": {
+    "terminal_chunk": "c854c9",
+    "exit_code": 1,
+    "error": "matrix_drift",
+    "retained": true
+  },
+  "qualifications": {
+    "actual_common_product_API_source_only_dispatch": true,
+    "exact_original_protected_no_change": true,
+    "actual_CLI_HTTP_transport": false,
+    "full_product_execution": false,
+    "full_importer": false,
+    "full_field_policy": false,
+    "issuer": false,
+    "signed_registry": false,
+    "atomic_durable_execution_publication": false,
+    "native": false,
+    "actual_SQL": false,
+    "P09_Gate": false
+  },
+  "excluded_from_final_counts": [
+    "focused strict1 PASS",
+    "first integration8 PASS/1FAIL",
+    "two strict diagnostic FAILs",
+    "canceled superseded CLI lib/form partial suites",
+    "unexecuted CLI copies",
+    "failed executable copies",
+    "all old native executable qualification reexecution"
+  ]
+}

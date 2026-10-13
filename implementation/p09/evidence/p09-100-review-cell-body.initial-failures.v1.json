@@ -1,0 +1,93 @@
+{
+  "schema": "hwpx-agent.p09-100-review-cell-body-initial-failures/v1",
+  "recorded_at_utc": "2026-10-04 16:47:39 UTC",
+  "failures_preserved": true,
+  "runs": [
+    {
+      "start_chunk_id": "097c28",
+      "session_id": 31073,
+      "terminal_chunk_id": "c565a3",
+      "exit_code": 1,
+      "state": "test_failure",
+      "original_body_tests": {
+        "passed": 5,
+        "failed": 0
+      },
+      "new_cell_tests": {
+        "passed": 3,
+        "failed": 2
+      },
+      "causes": [
+        "two target paragraphs shared native paragraph ID and original patch/ID guard rejected them",
+        "table sz protect not yet checked by initial selection guard"
+      ],
+      "correction": "distinct paragraph IDs plus actual containing and ancestor table/cell/sz protection checks; original ID guards unchanged",
+      "preserved_whole_source_files": 4,
+      "preserved_failed_executable": "implementation/p09/source-archive/p09-100-initial-failure/review_cell_body_output-581a88b7cee111ae.exe"
+    },
+    {
+      "terminal_chunk_id": "1d2d59",
+      "exit_code": 1,
+      "state": "compile_failure_E0308",
+      "cause": "test assigned Option to original u32 TextParagraphProperties.id",
+      "tests": "NOT_RUN",
+      "preserved_whole_test_source": "implementation/p09/source-archive/p09-100-test-id-compile-failure/crates/hwpx-package/tests/review_cell_body_output.rs",
+      "correction": "assign original u32 directly"
+    },
+    {
+      "start_chunk_id": "5bdf4a",
+      "session_id": 90068,
+      "terminal_chunk_id": "58cbc8",
+      "exit_code": 101,
+      "state": "strict_lint_failure_format_collect",
+      "planned_full_regression": "NOT_RUN"
+    },
+    {
+      "start_chunk_id": "b917b3",
+      "session_id": 16422,
+      "terminal_chunk_id": "347a9d",
+      "exit_code": 101,
+      "state": "strict_lint_failure_format_collect_duplicate_mod",
+      "planned_full_regression": "NOT_RUN"
+    },
+    {
+      "terminal_chunk_id": "34c083",
+      "exit_code": 101,
+      "state": "strict_lint_failure_format_push_string",
+      "planned_full_regression": "NOT_RUN"
+    },
+    {
+      "terminal_chunk_id": "97ca5c",
+      "exit_code": 101,
+      "state": "strict_lint_failure_format_push_string_duplicate_mod",
+      "planned_full_regression": "NOT_RUN"
+    },
+    {
+      "terminal_chunk_id": "0382e6",
+      "exit_code": 101,
+      "state": "strict_lint_failure_expect_used",
+      "planned_full_regression": "NOT_RUN"
+    },
+    {
+      "terminal_chunk_id": "4bd48a",
+      "exit_code": 101,
+      "state": "strict_lint_failure_expect_used",
+      "planned_full_regression": "NOT_RUN"
+    }
+  ],
+  "lint_corrections": "infallible String fmt::Write without extra per-cell format allocation/expect; one original fixture module shared with pub(super) declaration and use; no new lint suppressions",
+  "scope": "whole directly related source retained before each correction; one actual failed executable copied before overwrite; not blanket preservation of every intermediate executable or reexecution of historical qualification",
+  "qualification": {
+    "native_executed": false,
+    "actual_SQL_executed": false,
+    "native_caret_or_visual_coordinates_verified": false,
+    "full_comment_product_acceptance": false,
+    "native_author_time_state_binding": false,
+    "execution_publication_authority": false,
+    "full_typed_comment_compiler_route_connected": false,
+    "new_table_insertion_implemented": false,
+    "product_complete": false,
+    "P09_gate": "OPEN",
+    "P10_new_implementation": false
+  }
+}

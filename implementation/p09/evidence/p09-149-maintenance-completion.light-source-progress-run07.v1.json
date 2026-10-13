@@ -1,0 +1,145 @@
+{
+  "schema_version": "hwpx-agent.p09-maintenance-completion-light/v1",
+  "state": "PASS_LIGHT_CARGO_SUPERVISOR_COMPLETION_NOT_ACTUAL_CARGO_OR_PC_FREEZE_PROOF",
+  "tests_run": 9,
+  "tests_passed": 9,
+  "failed_tests": [],
+  "source_freeze": [
+    {
+      "path": "Cargo.toml",
+      "bytes": 2695,
+      "sha256": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5"
+    },
+    {
+      "path": "Cargo.lock",
+      "bytes": 61056,
+      "sha256": "3dba694d1b6066a8ff7fec347c51edd1b09b7046ca070bbaf3ac78cc8b708887"
+    },
+    {
+      "path": "crates/domain-ir/src/document_graph.rs",
+      "bytes": 46182,
+      "sha256": "82607c916cb01c1340023e4cdf6ffd00f41fec7d483a5eee6846652ad9299806"
+    },
+    {
+      "path": "crates/domain-ir/tests/document_graph.rs",
+      "bytes": 19603,
+      "sha256": "545c0f2ce6316f296e9e993d0460cace290ede431768ff0e2541621402c5524c"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields/semantics/evaluation/source.rs",
+      "bytes": 15395,
+      "sha256": "16535ac191c1adbc880b4a7adaafeb55737d45caf33fd533b313c7591c052e4b"
+    },
+    {
+      "path": "crates/product-cli/src/comment_operation.rs",
+      "bytes": 24752,
+      "sha256": "68bc8f9508d3bb574cb9766e51173f12390a1a30974f4ab34fa75f905538652d"
+    },
+    {
+      "path": "crates/product-cli/src/comment_operation/rich_bodies.rs",
+      "bytes": 18031,
+      "sha256": "c0190d598304febac35deabc902ed1f8b767bb7b08b47ce10080cff77dba3bc0"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 28578,
+      "sha256": "90ca8b96e466f7740644263b166bae2cf7699f7477247300c9805930f2f4e40d"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 3822,
+      "sha256": "0cf267e0524baec7e7b2b204b8aed805928528d067cdf42264048d7bff69b530"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/comments.rs",
+      "bytes": 10117,
+      "sha256": "1451ff6d48f4aacd00b399fa5a754a75ec7f5387ed96b221189628f4cb54fd56"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/comments/rich_bodies.rs",
+      "bytes": 8862,
+      "sha256": "cb6e89f2a6f9bbc4997818a4b46dac0bfacd2f6dd670bc8b0cf9b362fa4d7833"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review/locations.rs",
+      "bytes": 13528,
+      "sha256": "89a9d0ad3b082504dbff97ac1cacb15d6c598a293341e6d75fd1b3ccbba1f1ff"
+    },
+    {
+      "path": "crates/product-cli/src/form_value_operation/full_document.rs",
+      "bytes": 23641,
+      "sha256": "08650555d0dbc4d45fa7392093a6de147ed6de2e300e4adff0e953c26d04b26c"
+    },
+    {
+      "path": "tools/p09/tests/test_conservative_maintenance.py",
+      "bytes": 16298,
+      "sha256": "f18fb922c4b1800e708f063ee1dfe5cc004bc41e5f10d43d73e87e5da9026a0f"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5453,
+      "sha256": "556f57a76bbe7c1f55df919cb48c757e8cb4136c522f789863a3423f41928c95"
+    },
+    {
+      "path": "tools/p09/tests/test_maintenance_completion.py",
+      "bytes": 14931,
+      "sha256": "7026e8d31ebbda1a4a88793e0e2e0104230d6065c4efc867cb1ae757a6e7a759"
+    },
+    {
+      "path": "tools/p09/verify_maintenance_completion_light.py",
+      "bytes": 4262,
+      "sha256": "09e0b6b03b88e2ceb003c655f52f46c9b11c2daf38c5adb6ad30be15cd04666c"
+    },
+    {
+      "path": "tools/p09/verify_audit_evidence_io.py",
+      "bytes": 6183,
+      "sha256": "d4a8587e9cbbb1840a527d46d5d8cd49a7e3eb52b306a1bb5e5e2110698bf38d"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-149-pre-maintenance-completion-guards/source-preimages.v1.json",
+      "bytes": 56465,
+      "sha256": "e086d52fb6750dfa37af7813c1425e58a2cf853fe0d8e8e6a1b82fc0dc8fdad1"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "self_resource_before": {
+    "cpu_seconds": 0.140625,
+    "memory_observed": true,
+    "working_set_mib": 26.29,
+    "private_mib": 17.59,
+    "system": {
+      "time_utc": "2026-10-06T12:29:57.561051+00:00",
+      "system_cpu_percent": 18.18,
+      "available_ram_mib": 17128.19,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 53.75924044875217,
+      "commit_used_percent": 31.67438006102645
+    }
+  },
+  "logical_cpu_limit": 1,
+  "priority": "BelowNormal",
+  "actual_Cargo_or_child_process_run": false,
+  "SQL_native_or_full_audit_run": false,
+  "new_git_started": false,
+  "system_or_Defender_or_WSL_settings_changed": false,
+  "raw_logs_printed_or_saved": false,
+  "P09_gate": "OPEN",
+  "product_complete": false,
+  "suite_error_count": 0,
+  "self_resource_after": {
+    "cpu_seconds": 0.15625,
+    "memory_observed": true,
+    "working_set_mib": 28.47,
+    "private_mib": 18.91,
+    "system": {
+      "time_utc": "2026-10-06T12:29:57.665909+00:00",
+      "system_cpu_percent": 24.3,
+      "available_ram_mib": 17142.09,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 53.80288718238879,
+      "commit_used_percent": 31.677834014376064
+    }
+  },
+  "elapsed_seconds": 0.1269,
+  "elapsed_scope": "main_entry_through_final_resource_sample_excludes_python_startup_and_receipt_write"
+}

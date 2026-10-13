@@ -1,0 +1,50 @@
+{
+  "state": "PASS_ALGORITHM_PROFILE_CONTRACT_ONLY_NOT_COMPILE_RUNTIME_OR_GATE",
+  "tests_run": 10,
+  "tests_passed": 10,
+  "failed_tests": [],
+  "source_freeze": [
+    {
+      "path": "tools/p09/run_algorithm_dependency_signed_tests.py",
+      "bytes": 9653,
+      "sha256": "a9c7c07f5dba6a95dd3fc6619b74bfaba30e4705ea6118f659dc036c8dcffe36"
+    },
+    {
+      "path": "tools/p09/tests/test_algorithm_dependency_signed_tests.py",
+      "bytes": 7536,
+      "sha256": "4c3e0924b88c68a1b54d5025d12845e85e59d2400ae8cd005560ca0c63ec0cdc"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-149-signed-split-domain.summary-run01.v1.json",
+      "bytes": 10597,
+      "sha256": "9237e77f84cde850e93bf84c1d264095304f543e858d1692ddd463a0a019b1fc"
+    }
+  ],
+  "source_freeze_exact_after": true,
+  "test_package_profile_config": [
+    "profile.test.package.hwpx-package.opt-level=1",
+    "profile.test.package.hwpx-package.debug-assertions=true",
+    "profile.test.package.hwpx-package.overflow-checks=true",
+    "profile.test.package.hwpx-package.codegen-units=16",
+    "profile.test.package.hwpx-package.debug=\"line-tables-only\"",
+    "profile.test.package.hwpx-agent-cli.opt-level=1",
+    "profile.test.package.hwpx-agent-cli.debug-assertions=true",
+    "profile.test.package.hwpx-agent-cli.overflow-checks=true",
+    "profile.test.package.hwpx-agent-cli.codegen-units=16",
+    "profile.test.package.hwpx-agent-cli.debug=\"line-tables-only\"",
+    "profile.test.lto=\"off\"",
+    "profile.test.package.serde_json.opt-level=1",
+    "profile.test.package.serde_json.debug-assertions=true",
+    "profile.test.package.serde_json.overflow-checks=true",
+    "profile.test.package.serde_json.codegen-units=16",
+    "profile.test.package.serde_json.debug=\"line-tables-only\"",
+    "profile.test.package.sha2.opt-level=1",
+    "profile.test.package.sha2.debug-assertions=true",
+    "profile.test.package.sha2.overflow-checks=true",
+    "profile.test.package.sha2.codegen-units=16",
+    "profile.test.package.sha2.debug=\"line-tables-only\""
+  ],
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "Cargo_SQL_native_executed": false
+}

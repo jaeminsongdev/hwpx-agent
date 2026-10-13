@@ -1,0 +1,70 @@
+{
+  "schema_version": "hwpx-agent.p09-durable-negative-terminal-audit/v1",
+  "state": "FAILED_NOT_ACCEPTED",
+  "source_closing_exact": true,
+  "actual_SQL_or_native_executed": false,
+  "audit_new_child_or_thread_started": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "remaining_non_permission_work_units": 76,
+  "same_process_InMemory_metadata_only": true,
+  "actual_SQL_metadata_or_signed_consumer_controls_qualified": false,
+  "full_durable_DS01_DS09_qualified": false,
+  "production_scanner_or_key_custody_qualified": false,
+  "independent_restart_or_OS_ACL_qualified": false,
+  "full249_current_qualified": false,
+  "PC_freeze_resolved": false,
+  "raw_logs_included": false,
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-07T08:40:32.774741+00:00",
+      "system_cpu_percent": 12.12,
+      "available_ram_mib": 12952.58,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 40.65349949334234,
+      "commit_used_percent": 38.92806818667397
+    },
+    {
+      "time_utc": "2026-10-07T08:40:33.275196+00:00",
+      "system_cpu_percent": 12.33,
+      "available_ram_mib": 12973.38,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 40.7187856890207,
+      "commit_used_percent": 39.08140388907843
+    }
+  ],
+  "actual_receipt_pin": {
+    "path": "implementation/p09/evidence/p09-151-durable-negative.actual-run01.v1.json",
+    "bytes": 1208286,
+    "sha256": "fe29fa020e37f437860fa8ce63678177c6f3a693c163ec514996cb969af64d3f"
+  },
+  "error_code": "P151_AUDIT_REDACTED_FAILURE",
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "IO": {
+    "read_passes": 4,
+    "bytes_read": 2436798,
+    "bound_inputs": 2,
+    "final_fresh_hashes": 2,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/audit_durable_negative_example.py",
+      "bytes": 10113,
+      "sha256": "56bd6ff39daf07b2634bf3d7752941228525d2dee14bff14266f30f1ddea68a5"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-151-durable-negative.actual-run01.v1.json",
+      "bytes": 1208286,
+      "sha256": "fe29fa020e37f437860fa8ce63678177c6f3a693c163ec514996cb969af64d3f"
+    }
+  ],
+  "wall_seconds": 1.3158
+}

@@ -1,0 +1,268 @@
+{
+  "schema_version": "hwpx-agent.p09-packed-stop-document-notice/v1",
+  "state": "PASS_PACKED_STOP_DOCUMENT_NOTICE_NOT_RUNTIME_RESUME_OR_GATE",
+  "goal_status": "active",
+  "full249_current_qualified": false,
+  "signed16_current_qualified": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "whole1470_current_fresh_qualified": false,
+  "historical67_current_fresh_qualified": false,
+  "legacy_whole_acceptance_not_changed": true,
+  "historical_whole_gate_reconciliation_required": true,
+  "actual_product_child_executed": false,
+  "new_product_or_full_source_frame_executed": false,
+  "runtime_resume_authorized": false,
+  "failure_writer_actual_connection": false,
+  "notice_contract_tests_passed": 6,
+  "IO": {
+    "read_passes": 51,
+    "bytes_read": 8343105,
+    "bound_inputs": 22,
+    "final_fresh_hashes": 22,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": null,
+    "maximum_scope_seconds": 600,
+    "read_rate_policy": "P206_binary1_other2_MiB_per_second",
+    "read_rates_by_kind": {
+      "binary": 1048576,
+      "other": 2097152
+    },
+    "bytes_read_by_kind": {
+      "binary": 0,
+      "other": 8343105
+    },
+    "burst_bytes": 65536,
+    "all_original_read_operations_preserved": true,
+    "pacer_bytes_read": 8343105,
+    "protected_file_read_context": {
+      "last_completed_protected_EXE_path": null,
+      "interrupted_protected_EXE_path": null,
+      "arbitrary_source_paths_or_private_artifact_names_saved": false,
+      "every_original_fresh_read_and_guard_preserved": true
+    },
+    "near_saturation_read_backpressure": {
+      "warning_system_CPU_percent": 95,
+      "cool_distinct_sample_windows": 2,
+      "maximum_pause_windows_per_entry": 8,
+      "warning_entries": 0,
+      "completed_pause_windows": 0,
+      "maximum_observed_pause_windows_in_one_entry": 0,
+      "requested_pause_seconds": 0.0,
+      "original_hard_resource_decisions_unmodified": true,
+      "original_IO_deadline_unmodified": true,
+      "original_sampler_windows_reused": true,
+      "new_native_query_or_sampler_thread_started": false,
+      "original_read_checks_skipped": false
+    }
+  },
+  "bound_input_pins": [
+    {
+      "path": "implementation/p09/evidence/locked-r07/p226-stop-review-run01.v1.json",
+      "bytes": 14694,
+      "sha256": "f1ee9b8c0250cecd2ec51852f5a8dcfc8c9ff5ca9499f39ddc57a75d4a3eb530"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p216-generic-doc-delta-r0091-run01.v1.json",
+      "bytes": 314452,
+      "sha256": "30d087a42ca86f1f8cb4c32f264302e9192d25f787ce099c8e76af309257081c"
+    },
+    {
+      "path": "tools/p09/review_packed_cpu_stop.py",
+      "bytes": 6182,
+      "sha256": "fdbf7384113cecac6d446a5c2b07e2955c8ff85e824f644ea032223041f31aed"
+    },
+    {
+      "path": "tools/p09/terminal_failure_receipt.py",
+      "bytes": 3712,
+      "sha256": "ecf70786e7539729637cfc19f4a9a93577cad1470b87f6d348fd63f8fc3b3ad0"
+    },
+    {
+      "path": "tools/p09/tests/test_terminal_failure_receipt.py",
+      "bytes": 4149,
+      "sha256": "489e7ad22d6b70647a38de7a3bae3196e8e92072aaa950ef8346bc2befc18cac"
+    },
+    {
+      "path": "tools/p09/review_packed_cpu_peak_r2.py",
+      "bytes": 8218,
+      "sha256": "7e98009e692bd9d5c2c1f071d5aae3e19213a96067ce4866f470f60c22570395"
+    },
+    {
+      "path": "tools/p09/tests/test_packed_cpu_peak_summary_r2.py",
+      "bytes": 2692,
+      "sha256": "f13e7f6abccdb87cbd645693c658de42b73bd2839b974be4a365abba450d793e"
+    },
+    {
+      "path": "tools/p09/receipt_compact_json.py",
+      "bytes": 2657,
+      "sha256": "a12d8114131ada0bf2058d16837a9f1a81fbff25adeccc8b18117b7669be7217"
+    },
+    {
+      "path": "tools/p09/run_locked_runtime_r07_case.py",
+      "bytes": 14969,
+      "sha256": "108616a4efa725674a100d7f1c33477488ade81f1c79e00870a24b1c95e271b3"
+    },
+    {
+      "path": "tools/p09/resume_packed_pressure_runtime.py",
+      "bytes": 17964,
+      "sha256": "d2b7caf58ba185d273d3bea47730a4e9fdc080e2e7548127b56b4b71b1585745"
+    },
+    {
+      "path": "tools/p09/runtime_input_frame.py",
+      "bytes": 5802,
+      "sha256": "44a21215a76f4160ca7bfeb55b02f3bb464a2017671b0c2dae9883d7c9cd8929"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-060-run020.v1.json",
+      "bytes": 208007,
+      "sha256": "78c11517c8bb36289de5b9ade68f0910c2e583c5cba1058895a38b81bb4ff9b0"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/cases/p222-case-060-run020.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "implementation/p09/evidence/locked-r07/p222-case-059-run019.v1.json",
+      "bytes": 588180,
+      "sha256": "c7cf3da34fff99b65716bda258bf73d797b1537a7f63f36391743a2c8ed6cea6"
+    },
+    {
+      "path": "implementation/p09/evidence/runtime-progress-r91/CURRENT_STATE.md",
+      "bytes": 431370,
+      "sha256": "3cfd9c8be9abb9b53853fb801f715afab240c45c6ecc192ef4bca841585d533b"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 432971,
+      "sha256": "517a5d60587c456938c8c35b4db971d5013426a0b257499157d6da80588a33ff"
+    },
+    {
+      "path": "implementation/p09/evidence/runtime-progress-r91/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 525002,
+      "sha256": "a90b42881c0669ad8636754a1dafde9dc02d9ce0b11424025d1327d476c9b35f"
+    },
+    {
+      "path": "implementation/p09/P09-149_CONSERVATIVE_OPTIMIZATION_PROGRESS.md",
+      "bytes": 526603,
+      "sha256": "2379237b389d9fc76582e740a9b050d76f7440e1febe3b23329090f09cf05245"
+    },
+    {
+      "path": "implementation/p09/P09-226_CPU_STOP_FAILURE_WRITER_REPORT.md",
+      "bytes": 6457,
+      "sha256": "8c82fd29c174c95696f5515503765e16ff0f02bd50208cba2bd2920975979f08"
+    },
+    {
+      "path": "tools/p09/sync_packed_stop_notice.py",
+      "bytes": 6282,
+      "sha256": "c9ba88ac2f93f931169f51c14012bb63b3984372cfd8269e1177465b6e5702af"
+    },
+    {
+      "path": "tools/p09/tests/test_packed_stop_notice.py",
+      "bytes": 1740,
+      "sha256": "546ffa0cb6421155bc2f422a83f735045132ee684999b9d81b85132d3ac1bf33"
+    },
+    {
+      "path": "tools/p09/sync_generic_runtime_document_delta.py",
+      "bytes": 8597,
+      "sha256": "41b7ec330b51baaea8bca087c3b59b291cac58f915856d16538b4735ca21f1a4"
+    }
+  ],
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "document_revision": 92,
+  "runtime_plan": {
+    "scope": "INDIVIDUAL_RUNTIME_PROGRESS_NOT_WHOLE_OR_GATE",
+    "legacy_whole_accepted_individual_cases": 3,
+    "legacy_whole_pending_successful_candidates": 1,
+    "runtime_source_qualified_individual_cases": 53,
+    "runtime_remaining_individual_cases": 196,
+    "runtime_remaining_regular_cases": 190,
+    "runtime_remaining_corpus_cases": 6,
+    "runtime_successful_candidates_requiring_closing": 0,
+    "next_runtime_index": 60,
+    "runtime_qualified_test_names": [
+      "actual_import::actual_aead_tamper_cannot_be_reclassified_as_an_importer_or_policy_failure",
+      "actual_import::actual_head_advance_invalidates_old_import_even_with_identical_result_bytes",
+      "actual_import::all_ten_actual_stored_results_import_without_caller_maps_and_preserve_whole_graphs",
+      "actual_import::debug_and_receipts_do_not_expose_raw_package_graph_or_policy_values",
+      "actual_import::field_ranges::actual_aead_tamper_is_original_service_failure_not_field_projection_failure",
+      "actual_import::field_ranges::advanced_head_invalidates_cached_source_and_range_even_when_result_bytes_equal",
+      "actual_import::field_ranges::cached_field_ranges_cannot_rebind_document_branch_project_subject_or_tenant",
+      "actual_import::field_ranges::captured_stored_result_field_ranges_match_whole_direct_graph_without_ingest_or_head_change",
+      "actual_import::field_ranges::each_new_partial_marker_independently_denies_full_product_without_old_markers",
+      "actual_import::field_ranges::revoked_source_acl_denies_new_range_import_and_cached_range_verification",
+      "actual_import::field_ranges::stored_range_debug_and_receipt_do_not_disclose_cached_field_content",
+      "actual_import::field_semantics::actual_aead_tamper_denies_meaning_before_supported_tuple_parsing",
+      "actual_import::field_semantics::actual_captured_source_meaning_matches_direct_import_without_ingest_or_head_write",
+      "actual_import::field_semantics::all_scope5_substitutions_reject_fresh_and_cached_meaning_models",
+      "actual_import::field_semantics::head_advance_invalidates_meanings_even_when_result_bytes_are_same",
+      "actual_import::field_semantics::revoked_acl_denies_new_meaning_import_and_cached_meaning_verify",
+      "actual_import::field_semantics::semantic_partial_markers_each_deny_full_context_without_predecessor_markers",
+      "actual_import::formula_compiler::actual_field_graph_and_compiled_candidate_do_not_become_full_import_or_issuer_authority",
+      "actual_import::formula_compiler::actual_multi_section_compiler_targets_original_source_fields_and_whole_candidate_without_publication",
+      "actual_import::formula_compiler::fresh_acl_aead_head_and_quarantine_changes_deny_compilation_and_never_invoke_cached_consumer",
+      "actual_import::formula_compiler::mixed_current_and_empty_results_compile_only_changed_actual_fields",
+      "actual_import::formula_compiler::protected_or_invalid_second_section_never_creates_a_partial_stored_plan",
+      "actual_import::formula_compiler::provider_scope_substitutions_cannot_rebind_compiled_batch_or_release_candidates",
+      "actual_import::formula_evaluation::authorized_actual_source_cycle_rejects_without_using_old_cached_value",
+      "actual_import::formula_evaluation::authorized_nonnumeric_source_rejects_math_without_ingest_or_cache_fallback",
+      "actual_import::formula_evaluation::every_locked_actual_source_evaluates_like_direct_without_ingest_head_or_full_route",
+      "actual_import::formula_evaluation::five_authentication_scope_substitutions_reject_new_and_cached_numeric_models",
+      "actual_import::formula_evaluation::fresh_and_cached_evaluation_reject_actual_aead_acl_head_and_quarantine_changes",
+      "actual_import::formula_evaluation::missing_document_read_scope_rejects_provider_before_numeric_model_reuse",
+      "actual_import::formula_output::authenticated_actual_result_output_is_replayable_but_does_not_ingest_commit_or_authorize_route",
+      "actual_import::formula_output::five_actor_and_document_scope_substitutions_reject_preparation_and_cached_consumption",
+      "actual_import::formula_output::revoked_acl_tampered_aead_head_advance_and_quarantine_never_release_cached_result_bytes",
+      "actual_import::formula_policy::actual_four_target_policy_gates_original_changed_and_current_product_candidates",
+      "actual_import::formula_policy::allowed_policy_never_overrides_original_native_protection_or_invalid_second_section",
+      "actual_import::formula_policy::cached_changed_and_current_products_recheck_source_policy_acl_aead_quarantine_and_head",
+      "actual_import::formula_policy::cached_formula_policy_products_refuse_five_foreign_provider_scopes",
+      "actual_import::formula_policy::explicit_denial_including_current_results_prevents_product_preparation",
+      "actual_import::formula_policy::form_policy_media_or_non_evidence_artifact_never_grants_formula_permission",
+      "actual_import::formula_policy::latest_version_order_and_revocation_are_rechecked_without_old_policy_fallback",
+      "actual_import::formula_policy::policy_revocation_during_binding_and_immediately_before_callback_is_not_cached",
+      "actual_import::formula_policy::strict_policy_shape_unknown_duplicate_coercion_and_bounds_never_become_permissions",
+      "actual_import::formula_policy::strict_request_refuses_caller_policy_and_other_operations_before_source_or_policy_reads",
+      "actual_import::formula_policy::whole_actual_target_coverage_anchors_ast_graph_and_source_bindings_are_required",
+      "actual_import::formula_policy_issuer::approval_only_acl_quarantine_aead_and_latest_revocation_deny_fresh_and_cached_products",
+      "actual_import::formula_policy_issuer::approval_only_aead_tamper_denies_candidate_with_source_and_original_policy_still_valid",
+      "actual_import::formula_policy_issuer::cached_signed_product_denies_five_foreign_scopes_new_policy_and_old_signature_replay",
+      "actual_import::formula_policy_issuer::genuine_ed25519_generated_policy_gates_original_changed_and_current_products_and_authorized_reader",
+      "actual_import::formula_policy_issuer::genuine_signature_cannot_approve_foreign_source_policy_binding_audience_operation_or_root_generation",
+      "actual_import::formula_policy_issuer::issuer_expiry_not_before_root_bounds_clock_failure_and_backwards_time_deny_cached_bytes",
+      "actual_import::formula_policy_issuer::key_revocation_same_counter_trust_change_and_mid_read_change_never_use_cached_root",
+      "actual_import::formula_policy_issuer::malformed_unknown_duplicate_coerced_positional_and_trailing_approval_never_grants_permission",
+      "actual_import::formula_policy_issuer::one_bit_bad_signature_wrong_domain_foreign_key_and_missing_latest_approval_are_denied",
+      "actual_import::formula_policy_issuer::proof_and_clock_revocation_immediately_before_candidate_callback_never_call_consumer"
+    ],
+    "historical_whole_gate_reconciliation_required": true,
+    "whole1470_current_fresh_qualified": false,
+    "full249_current_qualified": false,
+    "signed16_current_qualified": false,
+    "product_complete": false,
+    "P09_gate": "OPEN",
+    "prior_runtime_qualified_cases": 52,
+    "locked_compound_qualified_individual_cases": 1,
+    "all_successful_bodies_pending_whole_reconciliation": 50,
+    "prior_runtime_receipts_and_validators_unchanged": true,
+    "original_STOP_receipts_not_reclassified": true
+  },
+  "original_stop_preserved": true,
+  "exact_prior_document_bytes_preserved": true,
+  "support_review_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p226-stop-review-run01.v1.json",
+    "bytes": 14694,
+    "sha256": "f1ee9b8c0250cecd2ec51852f5a8dcfc8c9ff5ca9499f39ddc57a75d4a3eb530"
+  },
+  "previous_document_receipt_pin": {
+    "path": "implementation/p09/evidence/locked-r07/p216-generic-doc-delta-r0091-run01.v1.json",
+    "bytes": 314452,
+    "sha256": "30d087a42ca86f1f8cb4c32f264302e9192d25f787ce099c8e76af309257081c"
+  }
+}

@@ -1,0 +1,514 @@
+{
+  "schema_version": "hwpx-agent.p09-ds06-SQL-admission/v1",
+  "state": "PASS_DS06_SQL_ADMISSION_CONTRACT_ONLY_NOT_SQL_NATIVE_OR_GATE",
+  "mode": "light",
+  "source_closing_exact": true,
+  "actual_SQL_Docker_native_or_EXE_executed": false,
+  "product_complete": false,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "remaining_non_permission_work_units": 76,
+  "full_durable_DS01_DS09_qualified": false,
+  "actual_SQL_metadata_or_signed_consumer_qualified": false,
+  "independent_restart_or_key_custody_qualified": false,
+  "PC_freeze_resolved": false,
+  "raw_logs_included": false,
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-07T09:07:43.152633+00:00",
+      "system_cpu_percent": 6.65,
+      "available_ram_mib": 12728.61,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 39.950554135742564,
+      "commit_used_percent": 39.80208012514372
+    },
+    {
+      "time_utc": "2026-10-07T09:07:43.653404+00:00",
+      "system_cpu_percent": 8.52,
+      "available_ram_mib": 12692.93,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 39.83856838713672,
+      "commit_used_percent": 39.80921759973929
+    }
+  ],
+  "provided_driver_guard_count_delta": [
+    842,
+    846
+  ],
+  "whole_original_driver_inverse_exact": true,
+  "original_root_checks_retained": 27,
+  "prior_durable_checks_retained": 4,
+  "new_DS06_checks": 8,
+  "required_check_count": 39,
+  "exact_check_names": [
+    "original_artifact_schema22_admission",
+    "registry_exact_admissions",
+    "original_root_workflow_AEAD_SQL_commit_readback",
+    "root_named_metadata_exact",
+    "real_plaintext_digest_exact",
+    "real_ciphertext_hash_exact",
+    "ciphertext_not_plaintext",
+    "durable_root_disk_ciphertext_tag_and_digest_exact",
+    "durable_root_fresh_handle_original_service_whole_read",
+    "generated_public_key_roundtrip",
+    "real_DB_audit_ingested",
+    "actual_locked_source_and_observed_IR_AEAD",
+    "original_leased_revision_seal_and_IR_link",
+    "actual_source_formula_targets_not_caller_AST",
+    "original_generated_policy_SQL_CAS_and_readback",
+    "original_signature_approval_SQL_commit_readback",
+    "original_consumer_candidate_equals_independent_evaluator",
+    "fresh_consumer_exact_without_cached_trust",
+    "full_product_route_not_falsely_enabled",
+    "consumer_preserves_head_and_artifact_ingest_count",
+    "durable_signed_consumer_fresh_handle_whole_candidate_exact",
+    "durable_signed_consumer_no_head_or_ingest_change",
+    "live_SQL_approval_exact_current_binding",
+    "live_SQL_stale_generation_rejected_without_mutation",
+    "live_SQL_consumer_survives_rejected_CAS",
+    "live_SQL_revocation_race_one_commit_one_denial",
+    "live_SQL_revoked_approval_read_denied",
+    "live_SQL_prepared_candidate_denied_callback_zero",
+    "live_SQL_fresh_prepare_denied",
+    "live_SQL_route_denied_not_merely_unqualified",
+    "live_SQL_revocation_preserves_revision_head",
+    "durable_negative_new_fixture_whole_AEAD_disk_read",
+    "durable_negative_wrong_key_denied",
+    "durable_negative_ACL_grant_fresh_whole_read",
+    "durable_negative_ACL_revoke_deny_restore_fresh_read",
+    "durable_negative_disk_tag_one_byte_tamper_exact",
+    "durable_negative_tampered_disk_ciphertext_denied",
+    "durable_negative_quarantine_disk_relocation_and_read_denied",
+    "durable_negative_no_head_or_additional_ingest_change"
+  ],
+  "original_source_files_modified": false,
+  "original_SQL_security_and_resource_policy_unchanged": true,
+  "owned_root_created": false,
+  "image_downloaded_or_backend_changed": false,
+  "tests_run": 16,
+  "tests_passed": 16,
+  "failed_tests": [],
+  "imported_helper_inventory": [
+    "tools/p09/audit_evidence_io.py",
+    "tools/p09/bounded_container_absence.py",
+    "tools/p09/bounded_process_progress.py",
+    "tools/p09/build_current_issuer_probe.py",
+    "tools/p09/build_durable_negative_probe.py",
+    "tools/p09/build_signed_durable_probe.py",
+    "tools/p09/check_idle_resource_window.py",
+    "tools/p09/conservative_maintenance.py",
+    "tools/p09/current_issuer_build_inputs.py",
+    "tools/p09/durable_negative_sql_contract.py",
+    "tools/p09/durable_negative_sql_driver.py",
+    "tools/p09/issuer_sql_build_contract.py",
+    "tools/p09/live_sql_evidence_reader.py",
+    "tools/p09/owned_probe_build.py",
+    "tools/p09/owned_sql_job.py",
+    "tools/p09/run_aead_dependency_signed_tests.py",
+    "tools/p09/run_algorithm_dependency_signed_tests.py",
+    "tools/p09/run_call_local_xml_regression.py",
+    "tools/p09/run_compression_dependency_signed_tests.py",
+    "tools/p09/run_compression_full_stored.py",
+    "tools/p09/run_durable_negative_example_tests.py",
+    "tools/p09/run_formula_issuer_live_sql_probe.py",
+    "tools/p09/run_formula_issuer_registry_sql_checks.py",
+    "tools/p09/run_optimized_signed_tests.py",
+    "tools/p09/run_output_stage_profile.py",
+    "tools/p09/run_readback_buffer_regression.py",
+    "tools/p09/run_reconstruction_stage_profile.py",
+    "tools/p09/run_resource_bounded_python.py",
+    "tools/p09/run_scheduled_signed_tests.py",
+    "tools/p09/run_signed_durable_example_tests.py",
+    "tools/p09/run_signed_durable_sql_probe.py",
+    "tools/p09/run_signed_stage_cost.py",
+    "tools/p09/run_source_stage_profile.py",
+    "tools/p09/run_stored_comment_regression.py",
+    "tools/p09/run_stored_signed_continuation.py",
+    "tools/p09/run_supervised_sql_probe.py",
+    "tools/p09/run_xml_dependency_signed_tests.py",
+    "tools/p09/run_xml_roundtrip_regression.py",
+    "tools/p09/scheduled_binding_resources.py",
+    "tools/p09/signed_durable_build_stream.py",
+    "tools/p09/signed_durable_sql_contract.py",
+    "tools/p09/signed_durable_sql_driver.py",
+    "tools/p09/signed_durable_sql_root.py",
+    "tools/p09/sql_call_accounting.py",
+    "tools/p09/sql_call_supervisor.py",
+    "tools/p09/sql_cancelled_call.py",
+    "tools/p09/sql_container_ownership.py",
+    "tools/p09/sql_cooperative_cancel.py",
+    "tools/p09/sql_owned_execution.py",
+    "tools/p09/sql_parent_cleanup.py",
+    "tools/p09/sql_percentage_resources.py",
+    "tools/p09/sql_runtime_supervision.py",
+    "tools/p09/tests/test_durable_negative_sql_admission.py",
+    "tools/p09/tests/test_signed_durable_sql_connection.py",
+    "tools/p09/verify_audit_evidence_io.py",
+    "tools/p09/verify_bounded_pipe_io_light.py",
+    "tools/p09/verify_durable_negative_sql_admission.py",
+    "tools/p09/verify_issuer_sql_build_contract.py",
+    "tools/p09/verify_sql_call_accounting.py",
+    "tools/p09/verify_sql_call_supervisor.py",
+    "tools/p09/verify_sql_cancelled_call.py",
+    "tools/p09/verify_sql_container_ownership.py",
+    "tools/p09/verify_sql_cooperative_cancel.py",
+    "tools/p09/verify_sql_percentage_resources_light.py"
+  ],
+  "resource_watcher_cleanup_confirmed": true,
+  "resource_stop_reason": null,
+  "IO": {
+    "read_passes": 143,
+    "bytes_read": 1838806,
+    "bound_inputs": 68,
+    "final_fresh_hashes": 68,
+    "finished": true,
+    "chunk_bytes": 65536,
+    "parse_budget_bytes": 16777216,
+    "read_bytes_per_second": 8388608,
+    "maximum_scope_seconds": 600
+  },
+  "bound_input_pins": [
+    {
+      "path": "tools/p09/durable_negative_sql_contract.py",
+      "bytes": 7221,
+      "sha256": "f6f028542633bfee2c18a34383f6a12b87f9a652703875a8f6e5107f13b7f0ab"
+    },
+    {
+      "path": "tools/p09/durable_negative_sql_driver.py",
+      "bytes": 2066,
+      "sha256": "7af592ab22bc7961c9925c53353039ee6b266e6467e332efecc48d50e071fe9e"
+    },
+    {
+      "path": "tools/p09/verify_durable_negative_sql_admission.py",
+      "bytes": 5774,
+      "sha256": "779eb588dcab95e5f54e8647b6e9c9c9812fcf4816df2c2f422410509aba16d1"
+    },
+    {
+      "path": "tools/p09/tests/test_durable_negative_sql_admission.py",
+      "bytes": 8453,
+      "sha256": "abfdc046dc5989bf64f180fadcedb2ff4f1735953bae0583b37da915d334361e"
+    },
+    {
+      "path": "tools/p09/signed_durable_sql_root.py",
+      "bytes": 4626,
+      "sha256": "7c2fdef9cb7964beebbfa43d400f2df4183aa61316237cc17d7c33b86ef20199"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-150-pre-durable-SQL-consumer-r29/source-preimages.v1.json",
+      "bytes": 95800,
+      "sha256": "7792b58d2b90f641694acec2fb51bbab848d6807a71e0c02385a3dc92422d332"
+    },
+    {
+      "path": "crates/product-cli/examples/formula_issuer_product_postgres_probe/durable_negative.rs",
+      "bytes": 12739,
+      "sha256": "334f2f80995c4260cedf4fc38938874c9041eb3491505cfa51c7663f83681d87"
+    },
+    {
+      "path": "implementation/p09/source-archive/p09-151-pre-SQL-light-helper-closing-r31/source-preimages.v1.json",
+      "bytes": 7388,
+      "sha256": "1f19433b3f5861ec09f83fcbb27caea16e9d47b500423125ac474bd26447af29"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-151-SQL-admission.light-run01.v1.json",
+      "bytes": 5486,
+      "sha256": "d65612381063c548e945fbbc6b9aadfe8a9a8969e4ffff2fd62cfa7d12c198bb"
+    },
+    {
+      "path": "tools/p09/run_formula_issuer_live_sql_probe.py",
+      "bytes": 35452,
+      "sha256": "65e460c3d5de201de18e53e663e190d6cc6c8e711b723e9f4b74d0a736f1c0c5"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    {
+      "path": "tools/p09/bounded_container_absence.py",
+      "bytes": 7659,
+      "sha256": "ed05837e0ca1cddffbdb578cd77b2935a16dd90bb81fd4454da13159d3d83497"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    },
+    {
+      "path": "tools/p09/build_current_issuer_probe.py",
+      "bytes": 21653,
+      "sha256": "742611d7d5748d5fd4fa7d2bc46e7d76b8ef830479f31d153f80753fb22071ce"
+    },
+    {
+      "path": "tools/p09/build_durable_negative_probe.py",
+      "bytes": 10687,
+      "sha256": "47d92ad39f2bdcb772ad3e9fa8dc6b038fc64ab3c6f70965e428f8e5c9ddb900"
+    },
+    {
+      "path": "tools/p09/build_signed_durable_probe.py",
+      "bytes": 16177,
+      "sha256": "516785184e1d78cfe1c5c142635eda50c267c2bca350859279ee5e4e22ccaee1"
+    },
+    {
+      "path": "tools/p09/check_idle_resource_window.py",
+      "bytes": 3282,
+      "sha256": "c72da76029ce7e26410356a3a1908a3d4f46a60a80b8a3600341d10d1c160f25"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/current_issuer_build_inputs.py",
+      "bytes": 18791,
+      "sha256": "7034d77e17c2d6b460d8de753039398adc7c08913f63db203982844ac3e1bd38"
+    },
+    {
+      "path": "tools/p09/issuer_sql_build_contract.py",
+      "bytes": 5558,
+      "sha256": "edfc4b3cdbc28483fd816c7094bb6040fad4b27b3d51a458318642f2502e717b"
+    },
+    {
+      "path": "tools/p09/live_sql_evidence_reader.py",
+      "bytes": 2109,
+      "sha256": "0458552661a9f69379f41a78d15cdbf1b6c389ede78bed766dcd6616ac937ac7"
+    },
+    {
+      "path": "tools/p09/owned_probe_build.py",
+      "bytes": 13542,
+      "sha256": "6930a12de969455cc06944e3354aab9e36ccaf7e5de0df71f18473e7eb6776a2"
+    },
+    {
+      "path": "tools/p09/owned_sql_job.py",
+      "bytes": 13850,
+      "sha256": "30b08c4d779494bbdb7579b9bb28782b4f4588fc69b931cc9d18af326d46b7a0"
+    },
+    {
+      "path": "tools/p09/run_aead_dependency_signed_tests.py",
+      "bytes": 15118,
+      "sha256": "3c31c0daa6b50c4612da29777361bcbb24c1c128fc9934937e6a8f5eb13173ca"
+    },
+    {
+      "path": "tools/p09/run_algorithm_dependency_signed_tests.py",
+      "bytes": 9653,
+      "sha256": "a9c7c07f5dba6a95dd3fc6619b74bfaba30e4705ea6118f659dc036c8dcffe36"
+    },
+    {
+      "path": "tools/p09/run_call_local_xml_regression.py",
+      "bytes": 13486,
+      "sha256": "5e1ecfacc752c6fe0d65466f52eba3488d93d5e5af3d7209adaf59ffa0ddea5f"
+    },
+    {
+      "path": "tools/p09/run_compression_dependency_signed_tests.py",
+      "bytes": 11308,
+      "sha256": "739283f70a736f3ee3015232212aec24f086688a368f0e9ca29dc6c3dbaa6f9e"
+    },
+    {
+      "path": "tools/p09/run_compression_full_stored.py",
+      "bytes": 12538,
+      "sha256": "a69696db06a93ebffc952a25e7a32b61238192f4c0370815bc7bacfc430090a5"
+    },
+    {
+      "path": "tools/p09/run_durable_negative_example_tests.py",
+      "bytes": 12904,
+      "sha256": "7b30b98e11e6023dd17bb53e6bc0cf685b37035221a7965e68d74e8f559a2e63"
+    },
+    {
+      "path": "tools/p09/run_formula_issuer_registry_sql_checks.py",
+      "bytes": 20838,
+      "sha256": "efb0635f6ec0d5d7fbcd1881cfef83f2133182b351379586b9f239a6d68846d3"
+    },
+    {
+      "path": "tools/p09/run_optimized_signed_tests.py",
+      "bytes": 11368,
+      "sha256": "ca65cafe5340159a6eb429bbebc2e31b96c7e3bd5aa11874936a82c4212cb7ad"
+    },
+    {
+      "path": "tools/p09/run_output_stage_profile.py",
+      "bytes": 15919,
+      "sha256": "655c40ce9bbb1d0d2c6327f3e92051ac1edcf68e9e7334da9125e276373f1da7"
+    },
+    {
+      "path": "tools/p09/run_readback_buffer_regression.py",
+      "bytes": 11438,
+      "sha256": "6eb0b4f16ae4a2c24dc40d52a82977b194481b6fc5e81cffda300b0bb04d4103"
+    },
+    {
+      "path": "tools/p09/run_reconstruction_stage_profile.py",
+      "bytes": 11434,
+      "sha256": "90ac7b2575ce8afc7cfbbdda8f1750cb1c2666f6dd2f5041d212fea454ca73e4"
+    },
+    {
+      "path": "tools/p09/run_resource_bounded_python.py",
+      "bytes": 10374,
+      "sha256": "f652979b971e36e7211746a40acdf6abfff6f1e77899a8eab595e07ebce78e8b"
+    },
+    {
+      "path": "tools/p09/run_scheduled_signed_tests.py",
+      "bytes": 8516,
+      "sha256": "9192c930145e57b0441752ec5f013f6fb46cd8b464530b1f8fb81485bc8a8d54"
+    },
+    {
+      "path": "tools/p09/run_signed_durable_example_tests.py",
+      "bytes": 18926,
+      "sha256": "5a5b26656d5aa3b3b5eb18922745dd82b238ff80f88e761fdc28c5fea5e5c948"
+    },
+    {
+      "path": "tools/p09/run_signed_durable_sql_probe.py",
+      "bytes": 13105,
+      "sha256": "1b1c005181ac1090d0d05292a3dd989cc9a33c5ad51651a5716cc6e67aae20d2"
+    },
+    {
+      "path": "tools/p09/run_signed_stage_cost.py",
+      "bytes": 14024,
+      "sha256": "5439441909dfc2c98be011b644a8613cf6c314b60f439a187d75fc945823ddf3"
+    },
+    {
+      "path": "tools/p09/run_source_stage_profile.py",
+      "bytes": 11702,
+      "sha256": "9c64cf111d1c9ab7e8e0d0c12264ffd6f7e04a6dfde577d3597dbe8a2aea5cd1"
+    },
+    {
+      "path": "tools/p09/run_stored_comment_regression.py",
+      "bytes": 36834,
+      "sha256": "2521519520da9a07aa368952a14586d78f287a46f7d3569e3de379669a476ed2"
+    },
+    {
+      "path": "tools/p09/run_stored_signed_continuation.py",
+      "bytes": 13168,
+      "sha256": "8079084b1244d360cf887a3c79caf6caf73daaeb1214a94ab13d187e962fc119"
+    },
+    {
+      "path": "tools/p09/run_supervised_sql_probe.py",
+      "bytes": 12685,
+      "sha256": "46cee54c87589a9f9106fb0de5b4e431cbbab254242869e90bee1b748f6c6aa3"
+    },
+    {
+      "path": "tools/p09/run_xml_dependency_signed_tests.py",
+      "bytes": 10854,
+      "sha256": "492ddf1b3dc328441f09876473c9c19f12600532628019cce951f7126613512f"
+    },
+    {
+      "path": "tools/p09/run_xml_roundtrip_regression.py",
+      "bytes": 13174,
+      "sha256": "43fc090ba743f6bac8ae68ac77ab614b2d1276073210691e1dea37eef2b3b46d"
+    },
+    {
+      "path": "tools/p09/scheduled_binding_resources.py",
+      "bytes": 9179,
+      "sha256": "82f0454022b15598f0a5122438671cc343e3ba4604c26c8665a4c7e3a15f6479"
+    },
+    {
+      "path": "tools/p09/signed_durable_build_stream.py",
+      "bytes": 7534,
+      "sha256": "953c97f96b5783b4d0439ce672025ea492c3f020f0ac1bb77d8ea0d98e0425e2"
+    },
+    {
+      "path": "tools/p09/signed_durable_sql_contract.py",
+      "bytes": 7556,
+      "sha256": "59ad06acec92e6413e473e32edf93367d70ee0e70c6422211549d58dcc352726"
+    },
+    {
+      "path": "tools/p09/signed_durable_sql_driver.py",
+      "bytes": 2697,
+      "sha256": "03fc8916c7cdfbe45fb28a3ac304a9f508d064dc5e3bd529daab90dad92e4a9a"
+    },
+    {
+      "path": "tools/p09/sql_call_accounting.py",
+      "bytes": 3947,
+      "sha256": "8545c0e5e06e2d632ba94619297d4ca52fbfb68c30c989adbc857534c36d200a"
+    },
+    {
+      "path": "tools/p09/sql_call_supervisor.py",
+      "bytes": 10114,
+      "sha256": "b708dd45c936620e5e887a75dc8c71c51b72835b99c5326eb54ab93b759ec1fa"
+    },
+    {
+      "path": "tools/p09/sql_cancelled_call.py",
+      "bytes": 2905,
+      "sha256": "323ea64945e54f7ff67a10fd66e6aa30c2003ccb02c6fe079405421682e9dcb3"
+    },
+    {
+      "path": "tools/p09/sql_container_ownership.py",
+      "bytes": 5891,
+      "sha256": "c09632ce4e749893207b886fd8854558a4172b6df8dfcfa88afaa7941302366e"
+    },
+    {
+      "path": "tools/p09/sql_cooperative_cancel.py",
+      "bytes": 4166,
+      "sha256": "9d04a4b27158f0ec52c0adedb9d7be3716ccb98072e0bbe11572380ae6f93dbd"
+    },
+    {
+      "path": "tools/p09/sql_owned_execution.py",
+      "bytes": 17115,
+      "sha256": "7689c1a7d4aedf75a758561d8a00d4e4ab399ea363ec65e5c9d1f50429e4abad"
+    },
+    {
+      "path": "tools/p09/sql_parent_cleanup.py",
+      "bytes": 9508,
+      "sha256": "3bd38075b5f8c0602e580e3220e3419077e3be8dedf4a89504e7858d5134866d"
+    },
+    {
+      "path": "tools/p09/sql_percentage_resources.py",
+      "bytes": 5269,
+      "sha256": "0fff4a6ce008f1011283b12a56af59a87db04a8c4f85a028a1c9f306763ab3a9"
+    },
+    {
+      "path": "tools/p09/sql_runtime_supervision.py",
+      "bytes": 2988,
+      "sha256": "5bb767211e6cb7b82b8ce322ac9913ee352890f8096b530410e438a397320fa2"
+    },
+    {
+      "path": "tools/p09/tests/test_signed_durable_sql_connection.py",
+      "bytes": 17909,
+      "sha256": "9acca679d3d6215f1108dc09772a45c1a3a24c48d26e008b3c03432c828c1dc7"
+    },
+    {
+      "path": "tools/p09/verify_audit_evidence_io.py",
+      "bytes": 6183,
+      "sha256": "d4a8587e9cbbb1840a527d46d5d8cd49a7e3eb52b306a1bb5e5e2110698bf38d"
+    },
+    {
+      "path": "tools/p09/verify_bounded_pipe_io_light.py",
+      "bytes": 4435,
+      "sha256": "03e61cefe0a361eff6f58b1c1874b5b8b51d560f2e9bc0a91ffe009db053e854"
+    },
+    {
+      "path": "tools/p09/verify_issuer_sql_build_contract.py",
+      "bytes": 6123,
+      "sha256": "608d014b1e882f16817a43758cdeeb76cca38801f9521f72b8a63e654ecbc3c6"
+    },
+    {
+      "path": "tools/p09/verify_sql_call_accounting.py",
+      "bytes": 11088,
+      "sha256": "997ae0350a5da4e45782f2ac1663b1d1461ae930d0e30b76f239d605d9048001"
+    },
+    {
+      "path": "tools/p09/verify_sql_call_supervisor.py",
+      "bytes": 13608,
+      "sha256": "4fe0d97a8e16b8fed68e612e0c17d4c645a9aa1ffc0428d32114f545a0fe0850"
+    },
+    {
+      "path": "tools/p09/verify_sql_cancelled_call.py",
+      "bytes": 9282,
+      "sha256": "a72d881c81b131b2cef2ee1f0d48537a7a6d309d4877e01182817d71ce01583f"
+    },
+    {
+      "path": "tools/p09/verify_sql_container_ownership.py",
+      "bytes": 11226,
+      "sha256": "d082299731fd71257bdb6562128ee4d078a0242b253ab3978f5a2e626ae66bdc"
+    },
+    {
+      "path": "tools/p09/verify_sql_cooperative_cancel.py",
+      "bytes": 14689,
+      "sha256": "23e47ab1d714c01d465a1a9080bfceb7df4175c582604ccd93de81802de83f43"
+    },
+    {
+      "path": "tools/p09/verify_sql_percentage_resources_light.py",
+      "bytes": 5193,
+      "sha256": "60add409d0e44fdbe7276e358e4f6d99eb1598023a4910651865e57b584c4065"
+    }
+  ],
+  "wall_seconds": 1.3062
+}

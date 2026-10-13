@@ -1,0 +1,178 @@
+{
+  "schema": "hwpx-agent.p09-104-review-table-output-initial-failures/v1",
+  "recorded_at_utc": "2026-10-04 19:18:39 UTC",
+  "failed_source_snapshots": [
+    {
+      "sha256": "abfe48c1655b0ec7127a19e5000851b6508de66ec14bb2825b38b7a0117298c4",
+      "path": "implementation/p09/source-archive/p09-104-initial-cross-section-test/crates/hwpx-package/tests/review_table_output.rs",
+      "bytes": 11613
+    },
+    {
+      "sha256": "f1ad4e5e0b4a250842a29bfcb646dad90b39fb470bed93c3d93208f1fec1c8d1",
+      "path": "implementation/p09/source-archive/p09-104-initial-lint/crates/hwpx-package/src/document_import/structure/review/table_create_context/output.rs",
+      "bytes": 17287
+    },
+    {
+      "sha256": "b21ba97abd84457468353a09ce372d76098db481a29d097059b74ca2d38465b0",
+      "path": "implementation/p09/source-archive/p09-104-initial-lint/crates/hwpx-package/src/table_ruling_hwpx/create_hwpx/review_output.rs",
+      "bytes": 5995
+    },
+    {
+      "sha256": "f23ea14507dd298724bdad111fa520d23cae80d011783a9448cf576ab2572d69",
+      "path": "implementation/p09/source-archive/p09-104-initial-writer-api/crates/hwpx-package/src/document_import/structure/review/table_create_context/output.rs",
+      "bytes": 17260
+    },
+    {
+      "sha256": "b2dfec224299a64dab7f6af29a3ed886d90f8accae47ed78cb4cd92866de6585",
+      "path": "implementation/p09/source-archive/p09-104-nested-diagnostic/crates/hwpx-package/src/document_import/structure/review/table_create_context/output.rs",
+      "bytes": 17767
+    },
+    {
+      "sha256": "32e2667b140636d350ecacf0a1a9fa6fa90eaf5dc12cef2ad0ff8790ae1746c6",
+      "path": "implementation/p09/source-archive/p09-104-nested-runtime-failure/crates/hwpx-package/src/document_import/structure/review/table_create_context/output.rs",
+      "bytes": 17537
+    },
+    {
+      "sha256": "048ea36ceb125102c73721e117f0b239ce649f20cef76a04983b627b1846a76f",
+      "path": "implementation/p09/source-archive/p09-104-nested-runtime-failure/crates/hwpx-package/src/table_ruling_hwpx/create_hwpx/review_output.rs",
+      "bytes": 6339
+    },
+    {
+      "sha256": "f69f6d35659a03b08a327ed34baec7fa0c6dc33f6cfa90a83465593ca5c74423",
+      "path": "implementation/p09/source-archive/p09-104-nested-runtime-failure/crates/hwpx-package/tests/review_table_output.rs",
+      "bytes": 15583
+    },
+    {
+      "sha256": "6b4c4efa0827f27d98213c5d1167f1b61a5617c50c9d733d36c600c6880534f3",
+      "path": "implementation/p09/source-archive/p09-104-nested-test-lint/crates/hwpx-package/tests/review_table_output.rs",
+      "bytes": 15468
+    },
+    {
+      "sha256": "dc1f092ef2d670dfdbcd35a772777adde5920c8292bd2e215b51efd6d4a129e2",
+      "path": "implementation/p09/source-archive/p09-104-private-identity-test/crates/hwpx-package/tests/review_table_output.rs",
+      "bytes": 17949
+    },
+    {
+      "sha256": "c04082df92d24f5375518bb3b0224b27fb97f5a36218eaa1e7e14d8dd277ae3a",
+      "path": "implementation/p09/source-archive/p09-104-test-lint/crates/hwpx-package/tests/review_table_output.rs",
+      "bytes": 11871
+    },
+    {
+      "sha256": "f600f2034bc4eaf5cd30297b3b59dbb49308c28d393fcfa92568e42a99b9d6cf",
+      "path": "implementation/p09/source-archive/p09-104-unbound-wrapper/crates/hwpx-package/src/table_ruling_hwpx/create_hwpx/review_output.rs",
+      "bytes": 8061
+    },
+    {
+      "sha256": "012a9151a96c2053dce0a2d9b53ac32c10187ada0d27d38467363a174f00d6d1",
+      "path": "implementation/p09/source-archive/p09-104-wrapper-arity/crates/hwpx-package/src/table_ruling_hwpx/create_hwpx/review_output.rs",
+      "bytes": 8895
+    }
+  ],
+  "failures": [
+    {
+      "chunk": "049759",
+      "result": "compile_failure_writer_API_E0599_E0061",
+      "scope": "original APIs guessed; corrected to unchanged original profile and transaction interfaces"
+    },
+    {
+      "chunk": "0b2b26",
+      "result": "same_compile_failure_in_test_build",
+      "scope": "not an executed runtime test"
+    },
+    {
+      "chunk": "1022c3",
+      "result": "18_PASS_1_FAIL_Graph",
+      "scope": "cross-section derivative ZIP mimetype not first stored; corrected fixture only",
+      "retained_executable": "target/p09-104-review-table-output/debug/deps/review_table_output-b0f1a70b4428ad1b.exe"
+    },
+    {
+      "chunk": "966d74",
+      "result": "strict_lint_failure",
+      "scope": "large lowering/native functions, clone/semicolon/borrow; extracted helpers, no lint allow"
+    },
+    {
+      "chunk": "aaed37",
+      "result": "strict_test_lint_failure",
+      "scope": "117-line positive and default reassignment; extracted preservation helper"
+    },
+    {
+      "chunk": "f92a17",
+      "result": "strict_nested_test_lint_failure",
+      "scope": "102-line nested positive; extracted fixture helper"
+    },
+    {
+      "chunk": "e8096c",
+      "result": "19_PASS_1_FAIL_Patch",
+      "scope": "nested original ID rejection initially redacted generic error",
+      "retained_executable": "target/p09-104-review-table-output-fixed/debug/deps/review_table_output-b0f1a70b4428ad1b.exe"
+    },
+    {
+      "chunk": "c7188b",
+      "session_id": 43900,
+      "result": "0_PASS_1_FAIL_id_index_validation_failed",
+      "scope": "original closed error diagnostic; duplicated template wrapper paragraph identity",
+      "retained_executable": "target/p09-104-nested-diagnostic/debug/deps/review_table_output-b0f1a70b4428ad1b.exe"
+    },
+    {
+      "chunk": "83ea30",
+      "result": "17_PASS_3_FAIL_NamespaceInvalid",
+      "scope": "bare native wrapper fragment inherits namespaces; original parser correctly rejected unbound fragment",
+      "retained_executable": "target/p09-104-unbound-wrapper/debug/deps/review_table_output-b0f1a70b4428ad1b.exe"
+    },
+    {
+      "chunk": "bd8feb",
+      "result": "compile_failure_E0061",
+      "scope": "original insertion wrapper helper requires rendered bytes; corrected exact arity"
+    },
+    {
+      "chunk": "97bae3",
+      "terminal_chunk": "91cfba",
+      "session_id": 36077,
+      "result": "compile_failure_E0624",
+      "scope": "test used crate-private semantic_value; corrected test to public exact raw value spans"
+    },
+    {
+      "chunk": "94d70b",
+      "session_id": 62527,
+      "result": "strict_lint_compile_failure_E0624",
+      "scope": "same private test accessor, no public API widened"
+    },
+    {
+      "chunk": "8b4296",
+      "result": "source_profile_unknown",
+      "scope": "incorrect conformance CLI flag; exact --current-source-v2 later passed; not a Gate result"
+    }
+  ],
+  "earlier_corrected_rounds": {
+    "chunk": "d2342e",
+    "package_passed": 157,
+    "new_output_cases": 4,
+    "later_nested_case_failed": true,
+    "historical_NOT_final_current_source_acceptance": true
+  },
+  "no_private_XML_or_full_logs_recorded": true,
+  "original_guard_or_assertion_removed": false,
+  "retained_failed_executable_pins": [
+    {
+      "sha256": "aefd73564a9fc136daf8c7b654f6427a85f6bf1bba24ebac1fe4c5acdd7659ff",
+      "path": "target/p09-104-review-table-output/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+      "bytes": 9325568
+    },
+    {
+      "sha256": "f4ae200b3dbdfb3605760cb394c082310e0d5d5293d038b8f44edf8c2c7ecb8a",
+      "path": "target/p09-104-review-table-output-fixed/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+      "bytes": 9345024
+    },
+    {
+      "sha256": "b5ee5438f26948266580688fe434ec1a5f8464f6cbd9fbcb3ed6477908ec00a3",
+      "path": "target/p09-104-nested-diagnostic/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+      "bytes": 9351680
+    },
+    {
+      "sha256": "5c0fa0fa1b15fb098e9deecea3c713b93c0d727e14c5920c70f745f950d463a2",
+      "path": "target/p09-104-unbound-wrapper/debug/deps/review_table_output-b0f1a70b4428ad1b.exe",
+      "bytes": 9356800
+    }
+  ],
+  "intermediate_success_executables_not_all_separately_preserved": true
+}

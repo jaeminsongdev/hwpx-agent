@@ -1,0 +1,12 @@
+{
+  "schema_version": "hwpx-agent.p09-146-source-guard-attempt/v1",
+  "state": "FAIL_CLOSED_SOURCE_GUARD_NOT_PRODUCT_ACCEPTANCE",
+  "tests": 6,
+  "failures": 1,
+  "errors": 0,
+  "failed_test": "test_driver_preserves_original_security_and_fresh_output_boundaries",
+  "diagnosis": "The new guard rejected all ALTER ROLE statements, including the unchanged original owned-role PASSWORD initialization. Preserve original initialization and reject added role mutation instead.",
+  "actual_SQL_consumer_acceptance": false,
+  "P09_gate": "OPEN",
+  "product_complete": false
+}
