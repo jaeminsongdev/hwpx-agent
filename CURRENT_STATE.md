@@ -2596,3 +2596,16 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+
+<!-- BEGIN P09_R348_STATUS -->
+> 2026-10-14 P09 r348 — 실제160capsule v3/24쌍-memorytransport/commonparent-frame-worker-fulloracle Binding 연결. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE·성공159 replay0.
+> capsule encoder-decoder metadata160-before153-authority153-root159/tuple-frozenset 포함inverse전체code/defaults-closure-kwdefaults/closedschema-hash-type-16KiB유지/원workerdispatchbytecode그대로. r758 CODE6 6/6+actualmanifest24 encode-decode/fresh143-final143/cleanupTrue·actualworkerdispatch0. 실제file13081-SHAaec00cb8654f501d6dc6abf49271315412f92fad57a9d9979e6b79644ec73723/canonical+LF 구분.
+> r758 전체CPUpeak98.48%/RAM45.92039%보존·peakparentattribution출력없어검증기단독원인확정0/hardguard연속중단미발동. post snapshot System8.81%-CompatTelRunner5.44%는과거peak인과증거아님/Defender-OS변경외부종료0. decoder64KiB checkpoint-progress-size-hash/16KiBcaps/no_unbounded_parallel_retry 코드재점검·same-reader contextdeclaration 실제1/중복1회피/JSON-hash-bytecache0/finalfresh유지.
+> r759 원core16 exactprivate graph/parentaccess-frame-worker/raw-fulloracle same160Binding/실제capsule24·manifest핀일치+원전체manifestadmission. 원sampler75metadatawarning-hardguard-deadline-cleanup 유지/PASS_ACTUAL160_SHARED_PARENT_WORKER_ORACLE_GRAPH_MANIFEST24_NOT_ENGINE_CONFIG_NATIVE_OR_GO/fresh154-final154/전체CPU44.88%-RAM42.31558%/parentCPU3.82863%-private59.73829MiB/warningchecks16392-stop0/cleanupTrue·engine-frame-workerdispatch0/actual160engineconfig·fullscope-preflight-GO 미검증.
+> 다음:160실제engine설정/독립이전159wholeoracle/controller-DATA/wholecurrentScope-cost-preflight→단일160제품·독립승인. 원권위-성공-실패-user변경-private보존/peak원인및PCfreeze해결미증명·한글접근허용-UAC-OS-Defender-WSL-외부종료-원본삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_CAPSULE_GRAPH_R348.md;근거r758-r760/capsule001.v3.
+<!-- END P09_R348_STATUS -->
+
+
+
+
+
