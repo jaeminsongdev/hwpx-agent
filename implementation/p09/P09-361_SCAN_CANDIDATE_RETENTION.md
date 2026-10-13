@@ -1217,3 +1217,18 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+
+<!-- BEGIN P09_R344_STATUS -->
+> 2026-10-14 P09 r344 — 실제159 controller/wholepreflight/단일제품·Native 실행 PASS. 독립승인전 공식152/249·잔여97·next159·generation47·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE.
+> V26/원engine-worker/20쌍privateBinding/Native split timing/원CPU-RAM-600-15초/조건보존. r746 CODE14 14/14/fresh31-final31/전체CPU13.47%/RAM58.29078%/cleanupTrue/DATA034. wholepref034 helper64초과로193.43873s FAIL/Native제품0/cleanupTrue/CPU25.65%/RAM58.54833%·원실패·CODE·DATA·controller보존.
+> V27 원10helper-controller+원test1 exact핀/모든nonimport AST·함수·초기화유지/private namespace/실제projectimport후숨기기0/sys.modules제거변경0/원helper64 ceiling유지·원pref/test 목적지literal만034→035 inverse 전체codeexact. r748 원CODE14 14/14/fresh39-final39/CPU23.54%/RAM57.61120%/cleanupTrue/DATA035.
+> wholepref035 PASS329.36622s/raw2727/300924814bytes/Rust787/import64/fresh1037-final1037/read2197/464653513bytes/CPU48.24%/RAM53.51210%/cleanupTrue. physical2707/251718262bytes/semantic286207680bytes/dirs372/complete모델597.002024<600·GO승격아님. a5a1e46 체크포인트커밋후실제1회159/run001.
+> 실제ROOT4580676/SHA090e2e069852a45d2db306f9968c2ca997962222e3bc622c7c10c7dee2d830d2·PASS_EXACT_CURRENT_QUEUE_NATIVE_RUNTIME_CANDIDATE_NOT_QUEUE_OR_GATE/715.68s-bootstrap포함·test1PASS/failed0/ignored0/248filtered/Ownedempty-cleanupTrue. Frame COMMITTED/wholebyte2/physical2708-252002317bytes/handles3080opened=closed/remaining0/Nativebefore_release512.663800<600.
+> 실제GO1/capture1→complete3.461506<15·decode40/0.613506<shared5·actualcomplete모델597.344348<600(새pref035도Native범위포함). 원reserve-checkpoints220.070431s/CreateFileW0.608411s/각3080·accounting불완전False·정상계측이지과거freeze원인해결증명아님. 전체CPU47.68%/최소가용RAM57.02411%/parentCPU6.31517%/private70.13281MiB.
+> 다음:별도current159 전체readonly prepare/oracle·독립승인후에만153/249로전진/성공159replay0. 공식authority152/성공158/실패034/원사용자변경보존·한글/접근허용/UAC/OS-Defender-WSL/외부종료/삭제이동/원격push0. 세부 implementation/p09/P09-361_CASE159_CONTROLLER_NATIVE_R344.md;근거CODEr746-r748/DATA034035/pref034035/actual159001.
+<!-- END P09_R344_STATUS -->
+
+
+
+
+
