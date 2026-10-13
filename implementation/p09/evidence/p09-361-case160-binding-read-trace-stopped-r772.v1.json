@@ -1,0 +1,172 @@
+{
+  "state": "FAILED_NOT_ACCEPTED",
+  "accepted_count_delta": 0,
+  "Native_or_product_executed": false,
+  "queue_acceptance_called": false,
+  "P09_gate": "OPEN",
+  "binding_reads_before_final": {
+    "request_count": 1285,
+    "read_bytes": 459281820,
+    "unique_paths": 1079,
+    "repeated_read_bytes": 283404539,
+    "top_repeated_sources": [
+      {
+        "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run005.v1.json",
+        "calls": 9,
+        "bytes": 39640185,
+        "repeat_bytes": 35235720
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case159-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 22903380,
+        "repeat_bytes": 18322704
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case157-current-runtime-run001.v1.json",
+        "calls": 7,
+        "bytes": 17572751,
+        "repeat_bytes": 15062358
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case147-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 14652865,
+        "repeat_bytes": 11722292
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case149-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 14627360,
+        "repeat_bytes": 11701888
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case150-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 14446715,
+        "repeat_bytes": 11557372
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case148-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 14363275,
+        "repeat_bytes": 11490620
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run004.v1.json",
+        "calls": 6,
+        "bytes": 13724178,
+        "repeat_bytes": 11436815
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run003.v1.json",
+        "calls": 6,
+        "bytes": 13254156,
+        "repeat_bytes": 11045130
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case146-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 13573540,
+        "repeat_bytes": 10858832
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case145-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 13366055,
+        "repeat_bytes": 10692844
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case144-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 13184675,
+        "repeat_bytes": 10547740
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case156-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 12570785,
+        "repeat_bytes": 10056628
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case155-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 12185275,
+        "repeat_bytes": 9748220
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case152-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 11870340,
+        "repeat_bytes": 9496272
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case151-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 11417400,
+        "repeat_bytes": 9133920
+      }
+    ],
+    "counts_only_no_payload_or_hash_or_JSON_cache": true
+  },
+  "error_type": "ValueError",
+  "safe_frames": [
+    {
+      "file": "trace_successor160_binding_reads_r352.py",
+      "function": "main",
+      "line": 69
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "finish",
+      "line": 137
+    },
+    {
+      "file": "trace_successor160_binding_reads_r352.py",
+      "function": "_read",
+      "line": 34
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "_read",
+      "line": 245
+    },
+    {
+      "file": "weighted_audit_io.py",
+      "function": "_read",
+      "line": 44
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "_read",
+      "line": 83
+    },
+    {
+      "file": "weighted_audit_io.py",
+      "function": "reserve",
+      "line": 35
+    },
+    {
+      "file": "terminal_metadata_pressure_v1.py",
+      "function": "check",
+      "line": 40
+    }
+  ],
+  "error_code": "STOP_TERMINAL_METADATA_WARNING_BEFORE_MORE_WORK",
+  "cleanup_confirmed": true,
+  "metadata_warning": {
+    "warning_CPU_percent": 75,
+    "checks": 64250,
+    "warning_stops": 1,
+    "latched": true,
+    "all_guard_entry_points_including_inventory_and_final_force": true,
+    "additional_sampler_or_thread_or_process": false,
+    "original_hard_guard_and_cleanup_unchanged": true,
+    "automatic_retry_or_resume": false,
+    "PC_freeze_resolved": false
+  },
+  "CPU_max": 85.71,
+  "RAM_min": 40.44565031487563,
+  "parent_CPU_max": 6.248387082988488,
+  "parent_private_MiB_max": 70.63671875
+}

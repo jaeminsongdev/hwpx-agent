@@ -2646,3 +2646,16 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+
+<!-- BEGIN P09_R352_STATUS -->
+> 2026-10-14 P09 r352 — 실제160/run001 최종metadata 공유720초 deadline STOPPED_NOT_ACCEPTED. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE. 원실패4128024-SHA5e2af60e8961c16661a25301d462ead53445141ef67bb58ef52f33253a001df0·승격0/overwrite0.
+> actualchild/body/captureComplete1.692330<15 있으나final_source_freeze 미완료·원byte경계1개뿐/fullNative제품PASS아님. handles3114 opened=closed/remaining0/cleanupTrue/ownedemptyTrue/CPU최대88.57%-가용RAM40.02374%/parentCPU5.64263%-private75.69532MiB·이번stop은CPU보호가아닌metadata deadline/CPUpeak원인및PCfreeze해결 미증명. Native reserve/checkpoints222.719431s vs CreateFileW0.756862s/상한600 및shared720 보존.
+> 준비metadata159 302772053bytes/1175reads→160 455904666bytes/1297reads. r772 원binding 읽기계측1285requests/459281820bytes/unique1079/반복283404539bytes·158결과9회/159결과5회/여러147~157결과5~7회. binding후최종fresh에서75% metadata경고STOP/CPU85.71%-가용RAM40.44565%/cleanupTrue이므로전체freshPASS승격0. r771 계측counter None payload TypeError 실패도보존·원read 반환pin.bytes로계측수정.
+> same_reader_manifest_declaration_once_v1 원loader 최초전체admission/동일reader·owner·모든의존성객체·pin·ledger 조건에서만검증선언 재사용/Binding원constructor 재구성·원Native두byte/finalfresh 대체0/파일payload-JSONcache0. r773 신규12+기존원7=CODE19 19/19/fresh7-final7/CPU25.34%-가용RAM41.88699%/cleanupTrue·실제160 fullgraph/preflight연결및실제읽기감소 아직미검증.
+> 다음: 동일private159 graph를양쪽admission에연결해재사용조건충족→원전체binding/finalfresh로실제읽기감소검증→600뿐아닌전체shared720 비용검토→원실패pin을포함한검토된별도physicalrun 준비. 실패후무수정재실행0/원deadline증가0/사용자변경보존/접근허용-UAC-OS설정-외부종료-삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_METADATA_OPTIMIZATION_R352.md;근거run001-r770-r771-r772-r773.
+<!-- END P09_R352_STATUS -->
+
+
+
+
+
