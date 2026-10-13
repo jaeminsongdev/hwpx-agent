@@ -1444,3 +1444,17 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+
+<!-- BEGIN P09_R363_STATUS -->
+> 2026-10-14 P09 r363 — 과거159 승인선언 재사용 실제26쌍 전체Binding 연결 및 run003 단일identity 검증·큰과거증거3개 무손실표현 준비. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/P10 새구현0/목표ACTIVE.
+> r817 CODE43 43/43(기존22+history12+원successor9)/원history승인1·선언재사용1/원failed160검토1·선언재사용2/원fn복원/Rust787·26쌍 유지/fresh1128-final1128/CPU37.55%-가용RAM51.52322%/cleanupTrue. 최종검사전337075843bytes·반복158476959bytes. 진단입력차이를 명시하고 동일runtime개선율로승격0/파일bytes-runtimeJSON행-hash캐시0.
+> r818 run003 CODE20 20/20(기존12+신규8)/두실패원본 및review 검토/실제원template·물리3의단일adapter·원workerbody 및engineglobals/engine-worker0/run003root없음/fresh56-final56/CPU20.25%-가용RAM52.87543%/cleanupTrue. 실행번호metadata 원code inverse·원기록 재작성0/실제제품-GO권한0.
+> r819 기존실제159scope내133-138-137 원본→640755/648571/646707byte표현/차이합5516359bytes/원CODE13 publisher2MiB-s·exclusive·각2회복원/fresh27-final27/CPU35.23%-가용RAM51.54273%/cleanupTrue·원본삭제0. 새manifest-capsule-controller 채택·전체비용·실제시간절감 미검증.
+> 다음 run003 identity+재사용연결+새표현을 실제manifest-capsule-controller DATA에 연결→원16KiB/helper-import-scope·Native600/shared720 전체비용·wholepreflight→단일제품두Native읽기·독립승인. 원권위153·성공159·실패160두회·사용자변경 보존/접근허용-UAC-OS설정-외부종료-삭제이동-push0/PCfreeze해결 미증명.
+> 근거 r817-r819 및 implementation/p09/P09-361_CASE160_HISTORY_REUSE_AND_RUN003_R363.md. 원scope-rate-deadline-자원보호 유지.
+<!-- END P09_R363_STATUS -->
+
+
+
+
+
