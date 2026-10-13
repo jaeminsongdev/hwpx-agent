@@ -2672,3 +2672,17 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+
+<!-- BEGIN P09_R354_STATUS -->
+> 2026-10-14 P09 r354 — 실제160/run002 identity·원단일physical template 및partial160실패 역할검증. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE.
+> r780 원identity8+신규4=CODE12 12/12/root-task-publicrun2→logical1 일치/원template metadata158→160 inverse전체code 동일/원engine-worker-body-defaults-closure 보존. 실제window wrapper그래프7함수 안단일adapter1개·원run_owned 정확동일private환경·physical2/actualengine0/worker0/fresh36-final36/CPU29.92%-가용RAM47.62325%/cleanupTrue.
+> r778/r779 private환경 검사대상을worker/최외곽wrapper와직접비교한검증기실패보존·원adapter state를캡처한실제wrapper까지16이내탐색하여원functioncode·global identity확인. r781 기존158 extension attribute가160successor 그래프에없다는검증기실패도보존·원lineage 객체 및24개descriptor전체 불변확인으로연결검사수정.
+> runtime_failed160_partial_projection_v1 실제run001 STOPPED/capture후final_source_freeze 미완료·byte경계1/handles3114완전정리·cleanup·720/600 review검증. 새역할preserved_same_case_partial_post_product_source_failure_not_accepted_product/원실패승격0/기존24쌍·Projection-codec-Bindingconstructor 그대로·metadata역변환전체code동일.
+> r782 CODE6 6/6+실제메모리25쌍 bijection/두복원정확/fresh58-final58/CPU34.63%-가용RAM48.18469%/cleanupTrue. 원4128024bytes→메모리encoded1535747-SHA62f252f09fbe751789b0df6d3d13911ea1d6f617b8244d16331e996ea132d32e/파일publish0·기존manifest024를25쌍으로relabel0/실제fullcontroller-Native제품GO0.
+> 다음 실제실패envelope·25쌍manifest·run002capsule/controller/DATA에검증된재사용연결→원600/shared720 전체cost-preflight→단일160제품·독립승인. 원권위153-성공159-실패160-user변경 보존/원scope-rate-deadline약화0/PCfreeze해결미증명/접근허용-UAC-OS설정-외부종료-삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_RUN002_IDENTITY_PARTIAL_ROLE_R354.md;근거r778-r782.
+<!-- END P09_R354_STATUS -->
+
+
+
+
+
