@@ -2467,3 +2467,13 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 > 다음:원 acquisition pacing/checkpoint/OS-open latency 경계 검토 및 관련 최적화 새자격→새 독립attempt/wholepreflight→미완료158제품·독립승인. 한글/접근허용/UAC/OS·Defender·WSL 변경/외부앱종료/삭제이동0·PCfreeze해결미증명. 세부 implementation/p09/P09-361_SAME_READER_FAILED_ROLE_R337.md;근거r700-r703/DATA030/pref032/actual004.
 <!-- END P09_R337_STATUS -->
 
+<!-- BEGIN P09_R338_STATUS -->
+> 2026-10-13 P09 r338 — Native open 대기/checkpoint와CreateFileW 경계를추가조회없는bounded timing으로분리. 권위151/249·잔여98·next158·delta0/P09-A12-A13 OPEN/P10 새구현0/목표ACTIVE·성공157/실패004 replay0.
+> 원 Native.create reserve→CreateFileW 코드 확인·기존open_with_pacing 최대5.27702s는pacer/자원검사포함으로순수OS지연·CPU원인단정불가. 새Timing은clock last_error보존/unknown≠0/계측late오류가원handle반환·원exception을가리지않음/accounting_unavailable≠completeproof·path-handle-error값/per-input로그/추가OS조회·sampler·thread0.
+> 초기r705원RAM admissionSTOP/가용6.02495%/CODE12·Native NOT_RUN·원preimages보존. 두sample22.63/22.65% 회복확인후보강V1 CODE14/r706 14/14 및기존fixture Native1opened=1closed/remainingFalse/fresh5-final5/CPU17.69%/RAM21.84395%/cleanupTrue. 단일fixture시간으로대량제품·경고원인설명0.
+> V1proxy는실제bridge pacer alias객체identity 계약에부적합하여미연결보존. V2는명시적소유instance call경계만계측·Native/pacer/kernel/phase_pacer/checkpoint objects/credit/rate/counter·원class methods/close 유지. r707 qualifier unaryplus생성오류/NOT_RUN보존후수정·r708 CODE8 8/8이나fixture pin index오류로FAIL/Nativehandle정리후index수정·r709 alias CODE8+실제fixture PASS/fresh-final완전/CPU1.41%/RAM27.07385%/cleanupTrue·기존CODE14 재실행0/pin 확인.
+> 원 complete bridge+stricter fail-fast API connection의r710 시험1실패는handle취득전ancestor checkpointSTOP에즉시closed를잘못기대한것·원코드변경0/시험enclosing-owner close로수정. r711 CODE6 6/6/fresh22-final22/CPU20.07%/RAM25.62378%/cleanupTrue·원 acquisition/check/take/close/heldidentity 메서드/pressure/rate/pacer alias 유지·fake lifecycle이지case158 whole live Native/GO/product가아님.
+> 다음:새immutable controller/Native namespace에timing 연결·실패004+r703 독립review·DATA/capsule/sourcegraph/fullscope/cost 새결속 및wholepreflight→새독립attempt/실제품/별도승인. oldpref032 599.620531모델을새코드GO로승격0·필요시원 receipt보존한명시적무손실IO확대검토/원최종fresh·Native2byte/600·60margin·15capture·decode5·rates·warning보호유지. 한글/접근허용/UAC/OS·Defender·WSL변경/외부앱종료/삭제이동0·CPU인과/PCfreeze해결미증명. 세부 implementation/p09/P09-361_NATIVE_OPEN_PHASE_TIMING_R338.md;근거r705-r711/source9archive p361-r338-qualified.
+<!-- END P09_R338_STATUS -->
+
+
