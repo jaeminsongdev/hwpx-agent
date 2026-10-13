@@ -2741,3 +2741,17 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+
+<!-- BEGIN P09_R361_STATUS -->
+> 2026-10-14 P09 r361 — 먼저 P09 변경을 886564d에 커밋하고, 26쌍 controller 및 전체 preflight를 38bfd94에 커밋한 뒤 목표를 재개했다. 공식153/249·잔여96·next160·generation48·delta0, P09/A12/A13 OPEN, P10 새 구현0, 목표ACTIVE.
+> r804 수정된 전체 Binding PASS/fresh1119-final1119/예상Native599.461205초<600. r807 controller CODE18 18/18/fresh59-final59. DATA038 전체preflight PASS/import64/fresh1117-final1117/CPU43.35%-가용RAM52.42144%/cleanupTrue. 기존 r803-r805-r806 실패와 DATA037/preflight037 보존.
+> 단일 case160 run002는 final_source_freeze에서 공유메타데이터720.01초로 STOPPED_NOT_ACCEPTED. 제품본문·자식실행 관측/GO-capture1.721333초/Native읽기1회만 완료/frameCLOSED/핸들3154개 전부닫힘/cleanupTrue·ownedemptyTrue. CPU44.34%-가용RAM49.83681%/부모CPU4.65388%-private77.95703MiB. CPU보호중단 아님/공식승인 증가0/자동재시도0.
+> r811 전체현재Binding 중복읽기 집계 PASS/fresh1119-final1119/최종검사전1235회·354229890bytes 중175665951bytes 반복. 큰 과거158run005 6회·159run001 5회·실패160run001 5회. 진단SELF/review 입력 차이를 명시하고 실제runtime bootstrap350504248bytes/1246회와 구분한다.
+> r812 동일reader 실패검토 선언재사용 CODE14 14/14+실제원검토1/선언재사용1/fresh8-final8/cleanupTrue. 파일바이트·runtimeJSON행·hash캐시 없음/제품controller 연결·실제시간절감 미검증. 다음 중복승인 호출 검토·독립연결·전체scope/import·공유720 비용검증→새단일실행·독립승인.
+> 원Native600/shared720·속도·전체scope·두Native읽기·최종fresh·CPU/RAM보호 유지. 권위153/성공159/실패160두회/사용자변경 보존. PCfreeze 해결 미증명/접근허용-UAC-OS설정-외부종료-삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_METADATA_DUPLICATE_REVIEW_R361.md;근거 r804-r812.
+<!-- END P09_R361_STATUS -->
+
+
+
+
+
