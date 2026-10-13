@@ -1258,3 +1258,16 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+
+<!-- BEGIN P09_R347_STATUS -->
+> 2026-10-14 P09 r347 — 실제160 manifest024/24pairBinding·CODE10 및원159전체manifest admission PASS. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE·성공159 replay0.
+> 원private159constructor/실패descriptor case159→160 literal1/원repr key prior_failure_lineage→historical_case159_failure_lineage/inverse전체codeexact/defaults-closure-kwdefaults유지·원semantic_union/project/runtime_budget/validate_scope_evidence 객체그대로. 새successor_context160-before153-authority153-root159와historical159-before152-prior158-root158실패003004값분리/옛값relabel승격0/defaultmodule변경0.
+> actualmanifest024/v2 실제3724-SHAd4f2a5fd4a44deb4fcab40ae67e531c3c8311ebf627e1607b62eaa2678ecbea8/placeholder사용0. 별도159graph에서원manifest023전체admission/source-producer-qualification-failure-authority/20쌍검증그대로→별도160graph에서20+4=24/모든원본-physical fresh/원scope+actual159semantic+authority153-root159-현재manifest합집합·현재관측frame으로기대값생성0.
+> r756 PASS_ACTUAL160_BINDING_CODE10_MANIFEST24_OLD159_FULL_ADMISSION_NOT_CURRENT_CONTROLLER_OR_GO/CODE10 10/10/sourcepairs24/fresh139-final139/전체CPU43.57%/최소가용RAM50.69241%/cleanupTrue·actual160Native-worker-product0/GO0. baseline inputs2719-dirs372/physical248592796bytes/semantic291550735bytes/예측594.878490<600·원60margin/14-20rates/twobyte/15capture/shareddecoder5/CPU-RAM보호유지·새controller-DATA-imports-wholepreflight 미포함이므로전체GO로승격0.
+> 다음:160capsule-parent-fulloracle sameBinding/독립이전159wholeoracle/controller-DATA/fullcurrentScope-cost/wholepreflight→단일160제품·독립승인. 원authority153/152-success159/158-manifest023-failure034-userP08/P17/sharedRust/private보존·PCfreeze해결미증명/한글접근허용-UAC-OS-Defender-WSL-외부종료-원본삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_MANIFEST_BINDING_R347.md;근거manifest024/r756.
+<!-- END P09_R347_STATUS -->
+
+
+
+
+
