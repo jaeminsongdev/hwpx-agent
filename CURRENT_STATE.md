@@ -2609,3 +2609,15 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+
+<!-- BEGIN P09_R349_STATUS -->
+> 2026-10-14 P09 r349 — 기본 CONFIG160/before153을 유지한 독립 이전159 전체 검사 PASS. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE.
+> 원159 함수군 전체 code/defaults/closure/kwdefaults를 별도 환경에 보존하고 raw admission·하위 old.base·frozen prepare 설정을 private159/before152에 연결했다. 기본160 설정 임시교체0/원 graph-checkpoint 변경0/성공159 runtime replay0/관측 frame 수정0/queue 승인0.
+> r762 CODE9 통과 후 하위 의존성이 기본160 설정을 참조해 CURRENT_EPOCH_ACCEPT_EXACT159_CURRENT_BINDING_CONFIG로 실패한 증거 보존. 의존성 연결 수정 후 r763 CODE9 9/9·원159 전체 oracle 및 두 실제 byte boundary 확인/fresh221-final221/cleanupTrue/CPU최대35.78%/최소가용RAM42.20384%/parentCPU6.21934%/metadata warning stop0.
+> 다음은 기본160 설정에서 동일160 Binding과 실제manifest24 및 독립159 의미 scope 연결, 실제160 controller-DATA·전체 비용·preflight다. 현재160 Native/제품/GO 미실행. 원권위·성공·실패·사용자변경 보존/PCfreeze 해결 미증명/접근허용-UAC-OS변경-외부종료-원본삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_ISOLATED_PRIOR_R349.md.
+<!-- END P09_R349_STATUS -->
+
+
+
+
+
