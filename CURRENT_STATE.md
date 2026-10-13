@@ -2633,3 +2633,16 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+
+<!-- BEGIN P09_R351_STATUS -->
+> 2026-10-14 P09 r351 — 실제160 controller V28/CODE16·DATA036·전체preflight036 PASS. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE.
+> 원159 controller 함수군 전체metadata inverse/code-defaults-closure-kwdefaults 유지·private rawnamespace로 모든원source핀 보존/실제모듈 import후 숨김0/helper상한64 유지. 실제160/before153/24쌍 공통parent-worker-oracle 연결·bounded bootstrap 원64reads-262144bytes 유지/역사receipt bootstrap읽기0/원15초 window 전체code inverse·독립159 wholeoracle 유지.
+> 첫r767 CODE16에서 DATA fixture함수159 잔류·preflight034/035 연결차이로 error1/failure1 보존. 해당함수와035→036 metadata 수정 후 r768 CODE16 16/16/fresh42-final42/CPU24.8%/가용RAM43.28874%/cleanupTrue·engine-frame-workerdispatch0/wholecurrent160제품-GO승격0.
+> preflight036 원전체검사 PASS/inputs2765-dirs372/rawbytes310090610/Rust787/imports64/fresh1076-final1076/CPU36.49%-가용RAM41.27160%/cleanupTrue. 원전체physical cost inputs2741/binary28433408-other220285885/예측596.570556<600/60margin-14/20rates-twoactualbytes-15capture-shareddecoder5 유지·실제완료 보장 아님.
+> 다음 단일160 제품실행→별도wholeoracle 승인. Native제품 실행0/성공159 replay0/queue승인0/PCfreeze해결 미증명/원권위·실패·user변경 보존/접근허용-UAC-OS설정-외부종료-원본삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_CONTROLLER_PREFLIGHT_R351.md;근거r767-r768-DATA036-preflight036.
+<!-- END P09_R351_STATUS -->
+
+
+
+
+
