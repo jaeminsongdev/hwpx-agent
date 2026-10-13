@@ -1389,3 +1389,16 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+
+<!-- BEGIN P09_R357_STATUS -->
+> 2026-10-14 P09 r357 — boundedrun002 bootstrap/실제25쌍 원전체Binding·독립159 oracle/finalfresh PASS. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE.
+> bootstrap original.Reader._read code그대로/원64reads-262144bytes 상한유지/고정core16+capsule002+mf026+base024만허용·역사receipt읽기0. 실제25쌍/task160-r002/mf026 정확/parent-frame-worker-raw-fulloracle 같은모듈·기본159bootstrap namespace변경0.
+> currentBinding v3 원V2bind code그대로/privatefactory를25쌍 partial-role graph로·manifest를actual026로·capsule을run002로명시연결/기검증shared159 facade-선언재사용 유지·원첫전체manifest admission1+중복1회피/기본CONFIG160·원159graph-checkpoint변경0/관측frame수정0.
+> r796 PASS_RUN002_BOOTSTRAP_CODE7_ORIGINAL_WHOLE25_BINDING_NOT_CONTROLLER_PREFLIGHT_OR_GO/CODE7 7/7/원compiledRust787·bootstrap·archive·이전159wholeoracle/actual25 bootstrap 및freshgraph descriptor-actualmanifestpin 일치/fresh1100-final1100/CPU47.73%-가용RAM49.72216%/cleanupTrue·제품-worker-Native-queue0.
+> 다음 실제controller-DATA에기검증run002 단일identity·bootstrap·wholeBinding 연결→원600/shared720 전체cost-wholepreflight→단일160제품·독립승인. 새controller/source-import inventory/fullpreflight 아직미검증/원권위153-성공159-실패160-user변경 보존/원scope-rate-deadline약화0/PCfreeze해결미증명/접근허용-UAC-OS설정-외부종료-삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_RUN002_BOOTSTRAP_BINDING_R357.md;근거r796.
+<!-- END P09_R357_STATUS -->
+
+
+
+
+
