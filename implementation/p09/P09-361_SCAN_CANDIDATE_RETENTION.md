@@ -1361,3 +1361,17 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+
+<!-- BEGIN P09_R355_STATUS -->
+> 2026-10-14 P09 r355 — 실패envelope실제exclusive publish·수정role v2 및실제manifest026/25쌍 전체admission PASS. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE.
+> r784 원CODE13 publisher/2MiB-s/xb-fsync/두복원/원4128024bytes→실제1535747-SHA62f252f09fbe751789b0df6d3d13911ea1d6f617b8244d16331e996ea132d32e/representation감소2592277bytes·원본삭제0/fresh71-final71/CPU42.72%-RAM50.50058%/cleanupTrue.
+> 최초manifest025 연결r785는CODE5 통과후partial extension attr누락으로실패·원role v1문자열co_consts만project하고co_names 속성명은이전failed004 잔류. v1·생산pin·manifest025 보존/v2에서co_names+상수metadata inverse전체원code 동일·실제partial160 attr/provenance확인. r786 dependency alias누락/r787 old6test discovery/r789 JSONstring report오류도보존·cleanup미확인r789는unknown 유지.
+> r790 CODE7 7/7/원v1helper-test-qualifier를같은reader에서pin/final검증/fresh61-final61/CPU28.67%-RAM49.55814%/cleanupTrue. r788 이전제한sourcepin qualification 보존/현재전체Source검증으로승격0.
+> 새실제manifest026.v4/physical2/25쌍·기존actual24 fulladmission 및원original-physical fresh/actualfailed1provenance·원scopeProjection/생산CODE6 pin과최신roleCODE7 pin분리검증. r791 PASS_ACTUAL160_MANIFEST026_CODE5_FULL_ADMISSION_NOT_RUN002_CAPSULE_CONTROLLER_OR_GO/CODE5 5/5/fresh194-final194/CPU42.30%-RAM48.47709%/cleanupTrue·제품-Native-queue0.
+> 다음run002 capsule/commonparent-worker-fulloracle/controller-DATA에검증된재사용·identity 연결→원600/shared720 cost-wholepreflight→단일160제품·독립승인. 원권위153-성공159-실패160-user변경 보존/기존capsule24를25로relabel0/원scope-rate-deadline약화0/PCfreeze해결미증명/접근허용-UAC-OS설정-외부종료-삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_FAILURE_ENVELOPE_MANIFEST_R355.md;근거r784-r791/actualmanifest026.
+<!-- END P09_R355_STATUS -->
+
+
+
+
+
