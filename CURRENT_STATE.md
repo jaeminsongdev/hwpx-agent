@@ -2515,3 +2515,16 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+
+<!-- BEGIN P09_R342_STATUS -->
+> 2026-10-14 P09 r342 — 사용자 요청에 따라 기존 graph 작업3개를 6271296으로 먼저 커밋하고 목표 재개. 공식152/249·잔여97·next159·generation47·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE·성공158 replay0.
+> 실제 core16 private parent/frame/worker raw policy/fulloracle same159Binding+20쌍 capsule 연결·원engine-worker code보존/actualexecution0. r736 PASS/fresh38-final38/CPU27.29%/최소가용RAM55.84185%/cleanupTrue·Native/GO아님.
+> strict window 원case literal157→159 하나만/inverse 전체codeexact/defaults-closure-kwdefaults 및원15초/COMMITTED/GO-capture-cleanup-resource-scope 조건유지/defaultnamespace-row변경0. 새12+원9=CODE21. r737 CODE21통과후 FLAT_QUEUE_CONFIG_REQUIRED로template구성실패/제품실행0-delta0-cleanupTrue/실패receipt보존;원manifest admission뒤159/before152명시configure 및검사수정/조건완화0.
+> r738 CODE21 21/21+원158전체manifest admission/new159samegraph/실제manifest023-capsule20쌍핀일치/failed003004역할보존/원engine연결 PASS/fresh138-final138/전체CPU66.48%/최소가용RAM51.64105%/cleanupTrue. actualengine-frame-workerdispatch0/완전controller-scope-cost/GO아님·과거PCfreeze해결미증명.
+> 다음:new159controller-DATA/독립predecessor158전체oracle/wholecurrentScope-cost/wholepreflight→실제단일159제품·독립승인. P08-P17-sharedRust-private원본/전체실패증거보존·한글/접근허용/UAC/OS-Defender-WSL/외부종료/삭제이동/원격push0. 세부 implementation/p09/P09-361_CASE159_SHARED_GRAPH_WINDOW_R342.md;근거r736-r738.
+<!-- END P09_R342_STATUS -->
+
+
+
+
+
