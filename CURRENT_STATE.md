@@ -2727,3 +2727,17 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+
+<!-- BEGIN P09_R358_STATUS -->
+> 2026-10-14 P09 r358 — 실제run002 controllerV29 CODE18/DATA037 연결·wholepreflight037 비용거부 후정확비용진단/131 lossless 표현추가. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE.
+> 원V28 및모든old/new raw source private namespace로보존·원function metadata inverse/단일physical2 identity·bounded19입력·25쌍 sharedBinding·선언재사용·fulloracle·원engine-worker본체 유지. r798 원14+신규4=CODE18 18/18/engine-frame-worker0/fresh53-final53/CPU14.44%-가용RAM51.80887%/cleanupTrue·DATA037 closed실제pin·기존DATA036·원run001 보존.
+> 원wholepreflight037 FAILED_NOT_ACCEPTED/ENVELOPE_SCOPE_BINDING_COMPLETE_COST_PLUS_SHARED_DECODER5/Native제품0/fresh1106-final0/elapsed226.93849/CPU32.31%-RAM51.86300%/cleanupTrue·전체preflight PASS승격0·원600와shareddecoder5 및원scope-rate 유지·CPU보호중단아님.
+> r799 원Binding budget함수와실제거부조건그대로관측/decoder포함600.326911354>600·진단selfinput차이명시/최종fresh1107-final1107/CPU45.12%-RAM49.87641%/cleanupTrue·GO권한0/원scope내미표현역사131-133-138등목록확인. 정확예산완화0/제품재실행0.
+> r800 실제이전159 scope안131원2499193bytes→실제644411bytes/representation차이1854782bytes/원CODE13 publisher2MiB-s·xb-fsync·두원본복원/fresh23-final23/CPU31.87%-RAM50.39740%/cleanupTrue·원본삭제0. 새표현아직manifest-controller-native scope에채택0/채택후완전비용검증0.
+> 다음새manifest-capsule-controller DATA에131표현채택→원600 및전체shared720 cost-wholepreflight→단일160/run002제품·독립승인. preflight037실패·원권위153-성공159-실패160-user변경 보존/원helper64-scope-rate-deadline약화0/PCfreeze해결미증명/접근허용-UAC-OS설정-외부종료-삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_RUN002_CONTROLLER_COST_R358.md;근거r798-r800/DATA037/preflight037.
+<!-- END P09_R358_STATUS -->
+
+
+
+
+
