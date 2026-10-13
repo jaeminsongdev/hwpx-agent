@@ -1,0 +1,58 @@
+{
+  "state": "FAILED_NOT_ACCEPTED",
+  "accepted_count_delta": 0,
+  "actual160_product_or_Native_executed": false,
+  "actual160_GO_authorized": false,
+  "P09_gate": "OPEN",
+  "contracts": {
+    "run": 18,
+    "errors": 0,
+    "failures": 1,
+    "skipped": 0
+  },
+  "failed_test_names": [
+    "test_original_whole_preflight_code_retained_except_destination"
+  ],
+  "safe_test_failure_tails": [
+    "AssertionError: <code[28 chars]28526BA14F0, file \"tools/p09/flat_current_queu[28 chars] 164> != <code[28 chars]285263ACD20, file \"tools/p09/flat_current_queu[28 chars] 164>"
+  ],
+  "error_type": "ValueError",
+  "safe_frames": [
+    {
+      "file": "qualify_adopted26_controller_r360.py",
+      "function": "main",
+      "line": 42
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "exact",
+      "line": 51
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "exact",
+      "line": 55
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "require",
+      "line": 43
+    }
+  ],
+  "error_code": "CURRENT_EPOCH_ACCEPT_CURRENT160_RUN002_CONTROLLER18",
+  "cleanup_confirmed": true,
+  "metadata_warning": {
+    "warning_CPU_percent": 75,
+    "checks": 329,
+    "warning_stops": 0,
+    "latched": false,
+    "all_guard_entry_points_including_inventory_and_final_force": true,
+    "additional_sampler_or_thread_or_process": false,
+    "original_hard_guard_and_cleanup_unchanged": true,
+    "automatic_retry_or_resume": false,
+    "PC_freeze_resolved": false
+  },
+  "CPU_max": 20.77,
+  "RAM_min": 53.951764229172326,
+  "parent_CPU_max": 6.007929145758742
+}

@@ -2,6 +2,7 @@
 from types import FunctionType
 import runtime_successor_worker_capsule_v3 as original
 SELF="tools/p09/runtime_successor_worker_capsule_v4.py"
+TEST="tools/p09/tests/test_runtime_successor_worker_capsule_v4.py"
 SCHEMA="hwpx-agent.p09-envelope-worker-policy-capsule/v5"
 TASK=original.TASK
 constant=original.constant
