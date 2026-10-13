@@ -1177,3 +1177,16 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+<!-- BEGIN P09_R341_STATUS -->
+> 2026-10-14 P09 r341 — 실제159 manifest023/20쌍 admission·worker capsule v2 CODE6 및상속범위baseline비용. 공식152/249·잔여97·next159·generation47·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE·성공158 replay0.
+> old158/new159 graph 분리하여원manifest022 load 그대로검증·원source/producer/qualifier/failure/authority·16쌍original/physical fresh 유지/옛index-before변경0. 새actual manifest023에16context+원4producer=20·원Scope와실제158semantic·authority152-root158-manifest핀충돌없이합침·placeholder출판사용0. r731 CODE4 4/4+실제fulladmission/fresh130-final130/CPU40.68%/RAM19.70909%/cleanupTrue/전체159GO아님.
+> 새closedcapsule wire/v2 index159/before152/authority_pin/prior_runtime_pin(옛151/157잘못된표기0)·encoder/decoder metadata inverse 전체code exact·원defaults-closure/workerdispatch bytecode/16KiB/hash/schema/type/guard/once-only 유지/defaultnamespace불변. r732 roundtriperror1은frozenset closedkeyset 변환누락·원실패-sourcepreimage보존후검사삭제없이수정. r733 CODE6 6/6+실제20쌍메모리encode-decode/privateBindingtype/fresh134-final134/CPU43.95%/RAM18.74810%/cleanupTrue·actualworkerdispatch0.
+> capsule001.v2 canonical11019/SHA2513e092c8716e0f40c02ab424cc58393bff2fa058e63d9c4efa8fe2abbbe028·LF포함실제file11020/SHA307eb20b57ed084f01cd69ae5d20b8a5f8e45ef71a363306f12e98a041a2c0f8<16KiB. canonical/file차이명시·원 root/권위152/failed003004/currentconstructor역할유지.
+> r734 baseline 입력2679/dirs372/physical251572850bytes/semantic286062268bytes·원complete식+새20pair 예측594.863348<600·60margin/14-20rates/15capture/shareddecode5/두실제읽기/원CPU-RAM보호유지·fresh130-final130/CPU45.11%/RAM17.17587%/cleanupTrue. 아직새 159controller-DATA/imports/currentRust inventory/fullscope-wholepreflight없으므로complete159GO로승격0/actualcompletion보장0.
+> 다음:private parent-worker-fulloracle same159Binding 통합·strict15/timing/원전체independentacceptance 연결·새controller/DATA/fullcurrentScope-cost/wholepreflight→실제159/독립승인. oldruntime158/baseline/manifest/캡슐시험복사제품승격0·source7exactarchive p361-r341-qualified·원user문서/권위152/성공158/실패전체보존·접근허용/한글/UAC/OS·Defender·WSL/외부앱종료/원본삭제이동/원격push0·PCfreeze원인해결미증명. 세부 implementation/p09/P09-361_CASE159_MANIFEST_CAPSULE_R341.md;근거r731-r734/actualmanifest023/capsule001.v2.
+<!-- END P09_R341_STATUS -->
+
+
+
+
+
