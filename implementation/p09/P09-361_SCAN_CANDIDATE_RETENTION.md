@@ -1203,3 +1203,17 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+
+<!-- BEGIN P09_R343_STATUS -->
+> 2026-10-14 P09 r343 — private158 전체 oracle와 원래159 binding 연결. 공식152/249·잔여97·next159·generation47·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE·성공158 제품/Native replay0.
+> V25 원함수 code-defaults-closure-kwdefaults 유지/privatebase158-before151와default159-before152 분리/원same-reader admission 재연결/원frozenprepare r.CONFIG158 private·temporaryCONFIGswap0/기본binding-checkpoint불변. 원DATA-manifest-COMMITTED/두byte/product/resource/cleanup/strict15 전체oracle 유지.
+> r740 중복configure test error1/run0→설정없을때만configure/불변조건유지. r741 CODE8통과뒤 r.CONFIG현재159의root경로거부→원prepare code그대로privateCONFIG158 연결. r742 독립compile2회객체identity failure1→전체compiledcode equality 검사. 실패3receipt보존/없는sourcepins-finalfresh 관측주장0. r743 CODE9 9/9+실제전체158oracle PASS/fresh228-final228/전체CPU28.97%/최소가용RAM55.36061%/cleanupTrue.
+> 실제159 frozenbinding AST authority-compiledroster-Rust787-bootstrap-archive 검사실행·priorcallback에서 독립전체158oracle 및 원row-roster-body-fixture fresh 일치/관측카운터수정0/hash-only선행대체0. 원manifest admission+20쌍capsule/failure역할+semantic-fresh핀 합집합. r744 CODE8 8/8+원binding PASS/Rust787/semantic-physical2698/dirs372/physical251664289bytes/semantic286153707bytes/fresh1028-final1028/전체CPU56.06%/최소가용RAM51.98427%/cleanupTrue.
+> 입력수집stage 모델596.307694<600·원14-20rates/두actualbyte/60margin/15capture/shareddecode5 보존. new159controller-DATA/importinventory/wholepreflight 미포함이므로 전체currentGO 승격0/actual159제품0/독립승인0/PCfreeze해결미증명.
+> 다음:실제159controller-DATA/wholecurrent source-import-Rustscope/completecost/wholepreflight→단일159제품·독립승인. 원P08-P17-sharedRust-private/성공158/전체실패 보존·한글/접근허용/UAC/OS-Defender-WSL/외부종료/삭제이동/원격push0. 세부 implementation/p09/P09-361_CASE159_PREDECESSOR_BINDING_R343.md;근거r740-r744.
+<!-- END P09_R343_STATUS -->
+
+
+
+
+
