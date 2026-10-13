@@ -1296,3 +1296,15 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+
+<!-- BEGIN P09_R350_STATUS -->
+> 2026-10-14 P09 r350 — 기본CONFIG160 유지·실제24쌍manifest/commonBinding·독립159 전체oracle를 원binding AST에 연결하여 PASS. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/full249-currentFalse/signed16False/P10 새구현0/목표ACTIVE.
+> 원compiled-Rust/bootstrap/archive 검사와 원previous callback 경로에 독립159 whole oracle 연결·원row/listing 불변확인·기본160 설정 임시교체0·새manifest 기대값을 실제frame에서 생성0·원semantic합집합 및physical projection. scope2757/Rust787/pairs24/fresh1068-final1068/cleanupTrue·same-reader declaration실제1/중복1회피/finalfresh 유지.
+> r765 PASS_ACTUAL160_FULL_BINDING_PRIVATE159_WHOLE_ORACLE_NOT_CONTROLLER_PREFLIGHT_NATIVE_OR_GO/CPU최대41.38%/최소가용RAM41.40697%/parentCPU5.01211%/private69.64454MiB/metadata warning stop0·Native제품실행0/성공159 replay0/queue승인0·PCfreeze해결미증명.
+> 다음은 실제160 controller-DATA/전체import inventory·cost·preflight 후 단일제품실행과 독립승인. 원권위·성공·실패·user변경 보존/접근허용-UAC-OS설정-외부종료-원본삭제이동-원격push0. 세부 implementation/p09/P09-361_CASE160_FULL_BINDING_R350.md;근거r765.
+<!-- END P09_R350_STATUS -->
+
+
+
+
+
