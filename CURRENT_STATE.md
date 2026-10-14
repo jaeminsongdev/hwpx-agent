@@ -2838,3 +2838,15 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+<!-- BEGIN P09_R368_STATUS -->
+> 2026-10-14 P09 r368 — 원 checkpoint 무손실 transport 및 원 worker codec의 compact wire 구현·실제 검증. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/P10새구현0/목표ACTIVE.
+> r839 원2693611→별도973539bytes·1720072bytes 감소·두 원본 byte/hash 복원·decoder합0.034654초<5·원64KiB/2MiB-s exclusive-fsync·fresh26-final26/CPU35.19%-RAM59.094759%/cleanupTrue. 원본 r834 보존. transport 읽기 원장에는 실제 carrier만 기록/원본Raw Native잠금 주장0/파일-hash-JSON캐시0.
+> r840 CODE58 58/58·actualmanifest29/Rust787/inventory167·fresh49-final49/4,571,712bytes·18.042750초/CPU29.98%-RAM59.563729%·부모4.539395%-private46.765625MiB/cleanupTrue. 새scope 원Native비용601.811217초로600제한거부/PASS를비용-runtime-GO승인으로승격0. qualifier입력차이 명시/원scope-rate-deadline 유지.
+> r841 원 encode/decode code-defaults-closure 및 worker 본체 유지·private JSON 인터페이스만 compact 연결·actual29 모든필드/manifest/descriptor 복원·canonical15662→10337bytes·5325bytes 감소/원16KiB 유지. CODE14 14/14·fresh25-final25/CPU10.95%-RAM62.462902%/cleanupTrue. 새 capsule 현재manifest/controller 채택0/31쌍은unitfixture만/actualworker호출0. 결합unit72 통과.
+> 다음 큰미표현입력 무손실검토·새compactcapsule/manifest→실패003독립검토·004identity→새전체prep-cost-pref·실제두Native읽기·독립160oracle. 기존run003 재실행0·제품-승인증가-접근허용-UAC-OS변경-외부종료-삭제이동-push0·PCfreeze해결미증명. 세부 implementation/p09/P09-361_LOSSLESS_CHECKPOINT_COMPACT_CAPSULE_R368.md, r839-r841.
+<!-- END P09_R368_STATUS -->
+
+
+
+
+
