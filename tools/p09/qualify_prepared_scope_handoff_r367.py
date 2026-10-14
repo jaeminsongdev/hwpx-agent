@@ -14,7 +14,7 @@ import time
 import unittest
 
 SELF="tools/p09/qualify_prepared_scope_handoff_r367.py"
-OUTPUT="implementation/p09/evidence/p09-361-prepared-scope-handoff-code46-r836.v1.json"
+OUTPUT="implementation/p09/evidence/p09-361-prepared-scope-handoff-code46-r837.v1.json"
 CHECKPOINT=dict(path="implementation/p09/evidence/p09-361-case160-prepared-input-checkpoint-r834.v1.json",
     bytes=2693611,sha256="73f321efd4ffd05adebeff806c2d5f5c620c8307e73209a47583de35371b1233")
 
@@ -26,6 +26,7 @@ def main():
     if not (k.SetPriorityClass(handle,0x4000) and k.SetProcessAffinityMask(handle,1)):
         raise ValueError("LOCAL_LIMITS_NOT_APPLIED")
     sys.path.insert(0,str(Path(__file__).resolve().parent))
+    sys.path.insert(0,str(Path(__file__).resolve().parents[2]))
     import accept_case112_current_epoch as a
     import distinct_final_sample_guard_v1 as distinct
     import terminal_metadata_pressure_v1 as pressure

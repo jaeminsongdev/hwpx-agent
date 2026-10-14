@@ -2825,3 +2825,16 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+<!-- BEGIN P09_R367_STATUS -->
+> 2026-10-14 P09 r367 — 원 전체 준비 checkpoint r834 생성 및 실제 scope 재구성 CODE46 검증. 공식153/249·잔여96·next160·generation48·delta0, P09/A12/A13 OPEN, P10 새구현0, 목표ACTIVE.
+> r834 전체 선행 oracle·reader 최종재읽기1145/1145·선언scope2835(관측1145/선언만1690, Rust787 바이트재읽기0)·29쌍 유지/361.414573초/528138313bytes/CPU42.05%-가용RAM57.988290%·부모CPU4.188859%/cleanupTrue. 전체scope 두 실제 Native읽기를 대체하지 않음. checkpoint2693611bytes/SHA73f321...b1233, 실패r833 보존.
+> 새로운 prepared_scope_handoff는 원 checkpoint byte pin·현재DATA/pref/권위/성공159·manifest 표현·Rust 집합·fresh/declared 분할을 대조하고 전체scope+checkpoint를 반환한다. 원 자원오류 유지/GO와runtime연결권한0. 최초 독립 r836 test-loading 실패 및 당시 코드는7146439 보존, repo root module 경로 보강 후r837 CODE46 46/46 통과.
+> r837 실제bounded21/원64-262144 한도·manifest29/Rust787·inventory167회20/s·fresh38-final38/전체선언2836·qualifier포함2839·physical2810·7,888,384bytes/18.070373초/CPU38.04%-RAM59.665367%·부모4.177763%-private48.054688MiB/cleanupTrue. 목적과입력다른 두 검사의 차이를 제품성능개선율로 승격0.
+> 새scope의원Native비용603.148728초(원decoder5포함)로600제한거부, CODE46 PASS를비용/runtime PASS로승격0. 다음 무손실입력표현·실제연결scope 비용→실패003검토/새004identity→전체pref·실제두Native읽기·독립160oracle. 기존run003재실행0/원600-shared720·scope·자원보호 유지/제품실행-승인증가-접근허용-UAC-OS변경-외부종료-삭제이동-push0/PCfreeze해결미증명.
+> 세부 implementation/p09/P09-361_PREPARED_SCOPE_HANDOFF_R367.md 및 r834/r836/r837. 이전 권위·성공·세실패 runtime 및 사용자변경 보존.
+<!-- END P09_R367_STATUS -->
+
+
+
+
+
