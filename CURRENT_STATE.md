@@ -2946,3 +2946,7 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 <!-- BEGIN P09_NATIVE011_PREFLIGHT_R392_STATUS -->
 > 초기tool50개복원수정본 wholepref011 PASS/76.565초·inputs2890·imports64·CPU61.86%·가용RAM38.04%·cleanupTrue. CODE32 fresh158-final158 유지. 다음소스고정 Native011→독립전체검사→공식승인/Native010독립미통과승격0/공식153/249·잔여96·next160/P09-A12-A13 OPEN/목표ACTIVE.
 <!-- END P09_NATIVE011_PREFLIGHT_R392_STATUS -->
+
+<!-- BEGIN P09_CASE160_ACCEPTED_R393_STATUS -->
+> 2026-10-15 case160 공식승인완료 — 원조건초기입력50복원 후Native011 PASS/2경계·2857입력·bootstrap340/제품1PASS·GO→완전수집1.957초/전체555.37초·CPU49.61%·가용RAM44.17%/cleanupTrue·빈tree. 독립전체oracle PASS/fresh279-final279/cleanupTrue. 기존qualified v1-v3 승인엔진·원acceptor bytecode 유지/facade3계약PASS·새증거후검증·Native소급0·제품재실행0. canonical case160-current-epoch-accept001 delta1·公式154/249·잔여95·next161·generation49/resourcecleanupTrue/원2857입력·372dirs·2실제읽기검증/fresh1134-final1134·154648309바이트/승인CPU66.99%·가용RAM47.44%. P09-A12-A13 OPEN/full249·signed16·whole-runtime reconciliation 미완료/목표ACTIVE. 다음161 actual_import::source_review_cell_output::cached_cell_callback_rejects_all_provider_scope_substitutions. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_CASE160_ACCEPTED_R393_STATUS -->

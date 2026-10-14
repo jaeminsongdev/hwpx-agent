@@ -72,6 +72,16 @@ Native010 당시 후보 검사는 실제 전후2경계·2,855입력, 제품1PASS
 
 기존 controller에 이 선언·생성자 pin·50개 입력을 bootstrap 반환 및 DATA 읽기 전에 연결했다. 검사 조건·파일·기존 실패 기록을 삭제하지 않았다. 수정된 Native011 CODE32는 오류0·실패0·skip0, fresh158/final158, helper62, 17.419초, CPU최고55.3%, 가용RAM최저47.90%, cleanup=True로 통과했다. 기존 독립 검사기에는 실행 번호·보고서 슬롯 선택을 추가했으며 경로 선택3계약은 통과했다. 이3계약은 전체 oracle 검증을 대신하지 않는다.
 
-수정된 연결의 Native011 whole preflight는 76.565초, 입력2,890개, imports64, CPU최고61.86%, 가용RAM최저38.04%, cleanup=True로 통과했다. 다음은 새 Native011, 그 후 독립 전체 검사 및 공식 승인이다. 공식153/249, 잔여96, next160, P09/A12/A13 OPEN과 목표ACTIVE를 유지한다. 아직 PC 프리즈 해결 또는 전체 목표 완료를 주장하지 않는다.
+수정된 연결의 Native011 whole preflight는 76.565초, 입력2,890개, imports64, CPU최고61.86%, 가용RAM최저38.04%, cleanup=True로 통과했다.
 
-근거: evidence의 case160-current-runtime-run004/run007/run008/run009/run010, native009/010/011-controller-r391, native010-independent-oracle-r392-attempt001..004, native010-bootstrap-requirements-r392 및 attempt002, 세 r392 crosscheck 기록과 관련 controller·독립 검사기·자원 대조 소스.
+## Case160 공식 승인 완료
+
+2026-10-15 Native011은 전후 실제2경계·2,857입력, bootstrap340입력, 제품1PASS, GO→완전수집1.957초, 전체555.37초, CPU최고49.61%, 가용RAM최저44.17%, 빈tree 및cleanup=True로 통과했다. 원 검증이 요구하는 전체 초기 입력을 복원한 뒤 기존 독립 검사도 fresh279/final279, 76.290초, CPU최고62.69%, 가용RAM최저43.81%, cleanup=True로 통과했다.
+
+기존 qualified optimized acceptance v1/v2/v3 엔진과 원 acceptor bytecode를 유지한 case160 facade를 연결했다. Native scope를 먼저 검증한 뒤 독립 oracle 및 새 facade·테스트를 추가 승인 증거로 읽었다. 새 파일을 과거 Native 입력으로 소급하지 않았고 제품을 재실행하지 않았다. facade 경로·epoch·원 범위 검증 실패 시 증거를 읽지 않는 순서3계약은 별도로 통과했다.
+
+공식 case160-current-epoch-accept001 기록은 accepted_count_before153, delta1, after154, remaining95, next161, generation49, resource_cleanup_confirmed=True다. 원 runtime 전체2,857입력·242,618,708바이트·372디렉터리·두 실제 읽기와 소유 Native 정리를 검증했다. 승인 단계 fresh1134/final1134, 2281 read passes, 154,648,309바이트이며 runtime·controller·oracle·facade·테스트 핀 일치를 다시 확인했다. 승인 단계 CPU최고66.99%, 가용RAM최저47.44%, cleanup=True다.
+
+공식154/249, 잔여95, next161, generation49로 이동했다. P09/A12/A13은 OPEN이고 full249 및 signed16 전체 승인이나 whole-runtime reconciliation 완료로 승격하지 않는다. 다음 compiled249의161번 대상은 actual_import::source_review_cell_output::cached_cell_callback_rejects_all_provider_scope_substitutions다. 목표는 ACTIVE이며 PC 프리즈 해결 또는 P09~P20 전체 완료는 주장하지 않는다.
+
+근거: evidence의 case160-current-runtime-run004/run007/run008/run009/run010/run011, native009/010/011-controller-r391, native010-independent-oracle-r392-attempt001..004 및 native011-independent-oracle-r392-attempt001, native010-bootstrap-requirements-r392 및 attempt002, case160-current-epoch-accept001, case160-optimized-acceptance-attempt001, 세 r392 crosscheck 기록과 관련 소스.

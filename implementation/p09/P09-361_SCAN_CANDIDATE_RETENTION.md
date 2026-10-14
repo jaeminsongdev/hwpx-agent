@@ -1621,3 +1621,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_NATIVE011_PREFLIGHT_R392_STATUS -->
 > 초기입력50복원수정본 CODE32 및wholepref011 PASS/inputs2890·imports64·cleanupTrue/원조건유지·실패원본보존. Native010 후보기록은독립미통과로공식승격0/다음별도Native011→독립전체검사→승인/공식153/249·delta0/P09-A12-A13 OPEN.
 <!-- END P09_NATIVE011_PREFLIGHT_R392_STATUS -->
+
+<!-- BEGIN P09_CASE160_ACCEPTED_R393_STATUS -->
+> case160 Native011·독립전체oracle·원qualified 승인엔진을통과/canonical delta1로154/249·잔여95·next161·generation49 이동. 이전모든실패·중단원본보존/원2857입력·두실제읽기검증/approval fresh1134-final1134·cleanupTrue/새facade는후검증증거·Native소급0·제품재실행0. P09-A12-A13 OPEN/full249·signed16·whole-runtime reconciliation 미완료/목표ACTIVE. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_CASE160_ACCEPTED_R393_STATUS -->
