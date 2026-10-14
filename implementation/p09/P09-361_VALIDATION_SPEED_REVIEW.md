@@ -257,3 +257,21 @@ bounded_successor_capsule_wire_v2는 동일한 전체 compact 자료에만 무�
 이 결과는 전송 단위의 검증이다. 원 parent와 실제 worker 진입점 모두에 v2를 연결하고, 새 source 선언·전체 CODE·preflight·비용·실제 Native 및 독립 검사를 수행해야 한다. 승인된161과 기존 v1 소스는 그대로 보존했다. 공식155/249·잔여94·next162·generation50, P09/A12/A13 OPEN 및 목표ACTIVE를 유지한다.
 
 근거: case162-successor-selection001, lossless-receipts001, successor-binding001, successor-connections002 및 bounded-wire-qualification001.v2.json. 새 전송 자료는 case162-bounded-worker-capsule003.v2.json이며 구현과 회귀 검사는 bounded_successor_capsule_wire_v2에 있다.
+
+## 사례162의 v2 실행 연결과 CPU 보호 중단
+
+current_queue_successor_wire_runtime_v2는 승인161에서 고정된 v1 source5개를 명시적 private namespace로 읽고 원 함수 본문·defaults·closure를 유지한다. parent와 실제 worker가 같은 v2 전송을 사용하도록 연결했으며 새 코드·테스트·전송 코드를 각 실제 reader의 입력과 최종 해시 확인에 포함한다. v1 파일과 공유 builtins 및 sys.modules는 수정하지 않았다.
+
+첫 worker 시작 검사는 사례160 전용 controller의 인자 파서 의존성으로 실패했다. 해당 기록을 보존하고 worker에서는 과거 controller를 구성하지 않도록 수정했다. 이후 원 worker의 GO 없는 WORKER_NOT_AUTHORIZED 거부를 확인했다. 준비004의 entry 검사는 실행하지 않은002/003의 Native 기록을 요구해 중단됐다. 없는 기록을 만들어 넣거나 기존 replay guard를 완화하지 않았다. graph 기록의 경로 metadata만 v2로 분리했고, source AST 전체의 정확한 역변환으로 그 외 본문이 유지되는 것을 확인했다.
+
+현재002 graph v2는48pair·wire7,003바이트·fresh37/final37·10.180초로 통과했다. startup factory003은 원11계약·fresh23/final23·11.769초·CPU최고40.34%·cleanup=True로 통과했다. CODE002-001은74계약·fresh96/final96·13.942초, 전체 preflight002-001은 원10계약·입력2,909개·Rust787·fresh400/final400·114.609초·CPU최고62.75%·가용RAM최저28.018%로 통과했다.
+
+entry002-001은 원6계약, 실제 Native helper64개 및 fresh401/final401을 확인했다. 전체118.039초·CPU최고44.47%·가용RAM최저29.373%·cleanup=True다. 준비된 물리 입력2,910개의 원 비용 모델은591.2856초이며 추가로 발행된 qualification도 실제 Native 입력에 포함된다. 이 계산은 실제 완료를 보증하지 않는다.
+
+실제 Native002는233.13초에 원 acquisition CPU 포화 보호로 중단됐다. 마지막 시스템CPU94.65% 표본에서 해당 부모CPU는0%, 부모 메모리는49.449MiB였다. 직전 시스템 표본은29.8%·21.55%·31.81%였다. worker와 제품은 생성되지 않았고 실제 입력 바이트 경계도 시작되지 않았다. Frame은 CLOSED, 열린 잠금2,366개가 모두 닫혀 remaining0이며 cleanup과 빈 소유 프로세스 트리가 확인됐다.
+
+잠금 코드의 원 호출 속도·no-burst 및 resource/identity 검사를 점검했다. 경고 구간의 추가 프로세스 진단은 기존 정책에 따라 unavailable이었다. 낮은 부하 구간의 일부 Python·앱 계수는 중단 순간의 CPU 상승 주체를 증명하지 않으므로 특정 외부 프로세스 원인으로 확정하지 않았다. 보호나 OS 설정을 바꾸지 않았으며 프리즈 해결도 주장하지 않는다.
+
+v2 readonly review/acceptance adapter는 원 frozen source와 검사·승인 본문을 재사용하는 별도 연결을 구현했고2개 계약이 통과했다. 실제 Native 후보가 없으므로 실제 독립 검사·승인은 NOT_RUN이다. 다음은 중단된 partial Frame의 완전 정리 증거와 원 replay 조건을 보존한 새 번호 준비다. 동일002와 승인161을 덮어쓰거나 재실행하지 않는다.
+
+공식155/249·잔여94·next162·generation50, P09/A12/A13 OPEN 및 목표ACTIVE를 유지한다. 근거는 case162-successor-connections002.v2, successor-factory001..003, successor-code/run002·004, successor-preflight/run002·004, successor-dispatch-qualification/run002·004 및 current-runtime-run002 기록이다. 구현은 current_queue_successor_wire_runtime_v2와 current_queue_successor_wire_review_v2 및 해당 테스트다.

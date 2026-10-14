@@ -1669,3 +1669,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE162_WIRE_STATUS -->
 > 사례162 현재155원장 기반STEP/4개원본무손실 준비·원본보존. Binding001 전체48pair·fresh123-final123·cleanupTrue. 원compact 연결002는16KiB 한도중단·실패보존·제품0. 새wire v2 원worker encoder/decoder 및compact pack/unpack 유지·실제48pair/manifest 정확역변환·7003바이트·fresh23-final23·cleanupTrue·현재source핀일치/5회귀PASS·원한도완화/연결누락0. 실제parent-worker v2연결·전체사전검증·Native·독립승인 미완료/원본v1 및승인161 수정0. 공식155/249·잔여94·next162/P09-A12-A13 OPEN/목표ACTIVE/GO·제품0.
 <!-- END P09_CASE162_WIRE_STATUS -->
+
+<!-- BEGIN P09_CASE162_V2_RUNTIME_STATUS -->
+> v2 parent/worker 동일전송연결·v1 immutable source 유지·새source 실제metadata/finalhash 포함. worker구성parser실패 및004준비/실행번호결합실패보존·원재실행보호/64/16KiB/시간한도 완화0/graph경로만원AST역변환으로v2분리. 002 CODE74·wholepref10·entry6/실제helper64·fresh401-final401 PASS·원cost591.286초. Native002는233.13초 systemCPU94.65% 원acquisition 보호중단·제품0/FrameCLOSED·2366핸들전부닫힘·바이트경계0·cleanupTrue·빈tree/높은CPU주체미확정·기록덮어쓰기0. v2 review/accept2계약만PASS·실제checker/queue미실행. 공식155/249·잔여94·next162/P09-A12-A13 OPEN/목표ACTIVE/PCfreeze미증명. 다음closed partialFrame 검토를유지한새번호준비.
+<!-- END P09_CASE162_V2_RUNTIME_STATUS -->

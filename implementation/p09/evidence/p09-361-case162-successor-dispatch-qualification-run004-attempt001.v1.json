@@ -1,0 +1,80 @@
+{
+  "state": "FAILED_SUCCESSOR_DISPATCH_CONSTRUCTION_NOT_ADOPTED",
+  "index": 162,
+  "physical_run": 4,
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "product_or_Native_executed": false,
+  "contracts": {
+    "run": 6,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "error_type": "ValueError",
+  "error_code": "sql_source_link_or_missing",
+  "failure_frames": [
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "main",
+      "line": 261
+    },
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "callback",
+      "line": 163
+    },
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "previous_stops",
+      "line": 65
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "json",
+      "line": 113
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "_read",
+      "line": 245
+    },
+    {
+      "file": "weighted_audit_io.py",
+      "function": "_read",
+      "line": 44
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "_read",
+      "line": 79
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "_source",
+      "line": 71
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "require",
+      "line": 20
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 50.51169170000139,
+  "CPU_max": 53.65,
+  "RAM_min": 30.7799708081818,
+  "terminal_resource_sample": {
+    "system_cpu_percent": 25.59,
+    "available_ram_percent": 30.887616404060864,
+    "commit_used_percent": 43.13918486713947,
+    "parent_cpu_machine_percent": 2.9010207731204996,
+    "parent_private_mib": 45.640625,
+    "parent_private_percent": 0.14324956062083802
+  },
+  "metadata_progress": {
+    "fresh_inputs": 401,
+    "actual_read_passes": 410,
+    "actual_bytes_read": 62865856
+  }
+}
