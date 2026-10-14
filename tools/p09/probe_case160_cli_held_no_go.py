@@ -5,6 +5,23 @@ import re
 import subprocess
 import sys
 import time
+if sys.argv[1:] in (["--cpu-budget-child"], ["--cpu-budget-child", "0.8"]):
+    import ctypes
+    from ctypes import wintypes as w
+    if sys.stdin.readline() != "P149_GO\n": raise SystemExit(2)
+    k = ctypes.WinDLL("kernel32", use_last_error=True)
+    k.GetCurrentProcess.restype = w.HANDLE
+    k.IsProcessInJob.argtypes = [w.HANDLE, w.HANDLE, ctypes.POINTER(w.BOOL)]
+    member = w.BOOL()
+    if not k.IsProcessInJob(k.GetCurrentProcess(), None, ctypes.byref(member)) or not member.value:
+        raise SystemExit(2)
+    target = .8 if sys.argv[-1] == "0.8" else .1
+    started_cpu, started_wall = time.process_time(), time.monotonic()
+    while time.process_time()-started_cpu < target: pass
+    cpu, wall = time.process_time()-started_cpu, time.monotonic()-started_wall
+    print(json.dumps(dict(cpu_seconds=cpu, wall_seconds=wall, cpu_per_wall_percent=100*cpu/wall,
+        product_or_Native_executed=False, in_owned_Job=True)), flush=True)
+    raise SystemExit(0)
 if len(sys.argv) == 4 and sys.argv[1:3] == ["--trace-owned-worker", "--task"]:
     import faulthandler
     import runpy
@@ -22,9 +39,11 @@ from bounded_process_progress import BoundedProcessCapture
 SELF = "tools/p09/probe_case160_cli_held_no_go.py"
 OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-held-no-go-r378.v1.json"
 FULL_HELD = sys.argv[1:] == ["--go-full-held"]
+BUDGET = sys.argv[1:] in (["--cpu-budget-probe"], ["--cpu-budget-sustained"])
+CPU_TARGET = .8 if sys.argv[1:] == ["--cpu-budget-sustained"] else .1
 TRACE = sys.argv[1:] == ["--go-evidence-trace"]
 EVIDENCE_HELD = sys.argv[1:] in (["--go-evidence-held"], ["--go-evidence-trace"])
-GO = sys.argv[1:] in (["--go"], ["--go-full-held"], ["--go-evidence-held"], ["--go-evidence-trace"])
+GO = BUDGET or sys.argv[1:] in (["--go"], ["--go-full-held"], ["--go-evidence-held"], ["--go-evidence-trace"])
 if GO:
     OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-held-product-r380.v1.json"
 if FULL_HELD:
@@ -33,6 +52,9 @@ if EVIDENCE_HELD:
     OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-evidence-held-product-r382.v1.json"
 if TRACE:
     OUTPUT = "implementation/p09/evidence/p09-361-case160-evidence-held-worker-stack-r384.v1.json"
+if BUDGET:
+    OUTPUT = "implementation/p09/evidence/p09-361-owned-Job-cpu-budget-r385.v1.json"
+    if CPU_TARGET == .8: OUTPUT = "implementation/p09/evidence/p09-361-owned-Job-sustained-cpu-budget-r386.v1.json"
 
 
 def repository_stack(decoded, root):
@@ -70,12 +92,12 @@ def main():
     try:
         guard.acquire(); q = a.AcceptanceReader(c.old.c.ROOT, guard.check)
         q.pin(SELF); q.pin(controller.SELF)
-        stopped = q.json("implementation/p09/evidence/p09-361-case160-current-runtime-run006.v1.json")
+        stopped = {} if BUDGET else q.json("implementation/p09/evidence/p09-361-case160-current-runtime-run006.v1.json")
         phase = "worker_input_byte_qualification"
-        selected = {p["path"]:p for p in stopped["bootstrap_metadata"]["input_pins"]
+        selected = {p["path"]:p for p in stopped.get("bootstrap_metadata", {}).get("input_pins", [])
             if p["path"].startswith("tools/p09/") and p["path"].endswith(".py")}
         for p in (c.CONFIG_PIN, c.MANIFEST, c.CAPSULE): selected[p["path"]] = p
-        if GO:
+        if GO and not BUDGET:
             executable = stopped["compiled_test_executable_pin"]
             selected[executable["path"]] = executable
             a.exact(stopped["selected_test_names"], ["actual_import::source_review_cell_output::cached_body_callback_rechecks_actual_aead_acl_regrant_and_advanced_head"], "ONE_ORIGINAL_CASE160")
@@ -106,10 +128,23 @@ def main():
             full_Native_frame_or_product_scope_qualification_claimed=False,
             same_actual_worker_argv_without_B=True)
         windows = guard.windows; job = windows.job(); limits = windows.verify_job_limits(job)
+        if BUDGET:
+            ctypes = c.old.c.ctypes
+            parent_rate = c.old.c.CpuRate()
+            ctypes.set_last_error(0)
+            observed = bool(windows.k.QueryInformationJobObject(None, 15, ctypes.byref(parent_rate), ctypes.sizeof(parent_rate), None))
+            out.update(parent_associated_Job_cpu_query=dict(success=observed, flags=parent_rate.flags,
+                rate=parent_rate.rate, win32_error=ctypes.get_last_error()),
+                actual_product_child_executed=False, product_or_Native_executed=False,
+                requested_cpu_seconds=CPU_TARGET, cpu_rate_or_affinity_changed=False)
         phase = "owned_worker_startup"
         if GO: binding = c.prior.WINDOW.connect(subprocess.Popen, BoundedProcessCapture)
         factory = binding.Popen if GO else subprocess.Popen
         command = [sys.executable, str(c.old.c.ROOT/controller.SELF), "--owned-worker", "--task", controller.TASK]
+        if BUDGET:
+            command = [sys.executable, str(c.old.c.ROOT/SELF), "--cpu-budget-child"]
+            if CPU_TARGET == .8: command.append("0.8")
+            out["same_actual_worker_argv_without_B"] = False
         if TRACE:
             command = [sys.executable, str(c.old.c.ROOT/SELF), "--trace-owned-worker", "--task", controller.TASK]
             out.update(same_actual_worker_argv_without_B=False, actual_controller_main_via_runpy=True,
@@ -139,7 +174,14 @@ def main():
             a.require(time.monotonic() < deadline, "NO_GO_DIAGNOSTIC15_TIMEOUT")
         output, errors = capture.communicate(timeout=3)
         code = None
-        if GO:
+        if BUDGET:
+            observed = json.loads(output)
+            a.require(process.returncode == 0 and not errors and type(observed) is dict
+                and observed.get("in_owned_Job") is True and observed.get("product_or_Native_executed") is False,
+                "BOUNDED_CPU_PROBE_TERMINAL")
+            a.require(CPU_TARGET <= observed["cpu_seconds"] < CPU_TARGET+.1 and 0 < observed["wall_seconds"] < 15, "BOUNDED_CPU_PROBE_MEASUREMENT")
+            out["cpu_budget_measurement"] = observed
+        elif GO:
             a.require(process.returncode == 0 and not errors, "ACTUAL_CASE160_TERMINAL")
             summaries = re.findall(r"test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored; (\d+) measured; (\d+) filtered out", output)
             a.require(len(summaries) == 1 and summaries[0][:4] == ("1", "0", "0", "0"), "ONE_ACTUAL_CASE160_PASS")
@@ -158,6 +200,7 @@ def main():
         out.update(state="PASS_EXACT_CLI_HELD_SUBSET_ACTUAL_PRODUCT_NOT_NATIVE_OR_ACCEPTANCE" if GO else "PASS_EXACT_CLI_HELD_SUBSET_GO_REJECTION_NOT_PRODUCT_OR_NATIVE", worker_error_code=code,
             owned_Job_limits=limits, fresh_inputs=len(q.snapshots), final_fresh_hashes=q.final_fresh_hashes,
             source_pins=list(q.snapshots.values()), stdout_bytes=len(output), stderr_bytes=len(errors))
+        if BUDGET: out["state"] = "PASS_MEASURED_OWNED_JOB_CPU_BUDGET_NOT_PRODUCT_OR_POLICY_CHANGE"
     except (ValueError, OSError, KeyError, TypeError, AttributeError, subprocess.SubprocessError) as error:
         out["error_type"] = type(error).__name__
         if error.args and type(error.args[0]) is str and re.fullmatch("[A-Za-z_][A-Za-z0-9_]{1,160}", error.args[0]): out["error_code"] = error.args[0]
