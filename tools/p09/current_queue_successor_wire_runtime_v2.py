@@ -65,10 +65,11 @@ def graph_v2_paths(namespace,pin):
         class Rewrite(ast.NodeTransformer):
             def visit_JoinedStr(self,value):
                 nonlocal count
-                if any(isinstance(n,ast.Constant) and type(n.value) is str and "-successor-connections" in n.value for n in value.values):
+                markers=("-successor-connections","-successor-worker-capsule","-successor-worker-bootstrap")
+                if any(isinstance(n,ast.Constant) and type(n.value) is str and any(marker in n.value for marker in markers) for n in value.values):
                     for item in value.values:
-                        if isinstance(item,ast.Constant) and item.value==".v1.json":
-                            item._old_graph_suffix=copy.deepcopy(item);item.value=".v2.json";count+=1
+                        if isinstance(item,ast.Constant) and item.value in (".v1.json",".compact.v1.json"):
+                            item._old_graph_suffix=copy.deepcopy(item);item.value=item.value.replace(".v1.json",".v2.json");count+=1
                 return self.generic_visit(value)
         changed=Rewrite().visit(changed)
         if not count:continue
@@ -81,6 +82,31 @@ def graph_v2_paths(namespace,pin):
         exec(compile(ast.fix_missing_locations(ast.Module(body=[changed],type_ignores=[])),pin["path"],"exec"),env)
         setattr(namespace,node.name,env[node.name])
     return namespace
+
+
+def closed_prebody_stop(row,index,run,a):
+    """Resolved partial acquisition only; never replay a body or live Frame."""
+    a.fields(row,dict(state="DEFERRED_NOT_STARTED",task=f"case{index}-current-r{run:03}-tests",
+        worker_created=False,product_body_observed=False,actual_product_child_executed=False,
+        cleanup_confirmed=True,owned_tree_empty=True,accepted_count_delta=0,
+        current_generation_runtime_candidate_qualified=False,Native_source_frame_qualified=False),
+        "V2_PREVIOUS_PREBODY_ONLY")
+    a.require(row["passed_test_names"]==[] and row["stop_reason"] in
+        ("STOP_METADATA_WARNING_BEFORE_COOLING_OR_RESUME","STOP_NATIVE_OPEN_AFTER_HOST_SATURATION",
+         "STOP_SYSTEM_COMMIT_PRESSURE","FLAT_QUEUE_LEAN_IMPORTED_HELPER_BOUND"),"V2_REVIEWED_PREBODY_STOP")
+    frame=row["source_frame"]
+    if frame is None:return True
+    a.fields(frame,dict(frame_state="CLOSED",registered_live_frame=False),"V2_CLOSED_NOT_LIVE_FRAME")
+    a.require(frame["actual_byte_boundaries"]==[],"V2_NO_PRODUCT_OR_BYTE_BOUNDARY_REPLAY")
+    handles=frame["handles"]
+    a.fields(handles,dict(input_lock_handles_remaining=0,input_lock_cleanup_confirmed=True,
+        active_reader_bindings=0,active_byte_streams=0,handle_close_failed_attempts=0,
+        file_write_or_delete_operation_executed=False),"V2_COMPLETE_PARTIAL_LOCK_CLEANUP")
+    opened,closed=handles["input_lock_handles_opened"],handles["input_lock_handles_closed"]
+    a.require(type(opened) is int and type(closed) is int and 0<=opened==closed,"V2_ALL_OPENED_LOCKS_CLOSED")
+    a.fields(row["parent_live_raw_access_policy"],dict(active_scope=False,
+        all_original_open_function_identities_restored=True),"V2_RESTORED_PARENT_POLICY")
+    return True
 
 
 def load(root,a,scope,bytes_policy,envelope,*,worker=False):
@@ -113,6 +139,12 @@ def load(root,a,scope,bytes_policy,envelope,*,worker=False):
             fn.__globals__.update(SELF=SELF,TEST=TEST)
     runtime.SELF,runtime.TEST=SELF,TEST
     dispatch=private["current_queue_successor_dispatch"]
+    def previous_stops(q,ctx,aa):
+        for run in range(2,ctx.run):
+            row=q.json(f"implementation/p09/evidence/p09-361-case{ctx.index}-current-runtime-run{run:03}.v1.json")
+            closed_prebody_stop(row,ctx.index,run,aa)
+    dispatch.previous_stops.__globals__["previous_stops"]=previous_stops
+    dispatch.previous_stops=previous_stops
     original=dispatch.current_namespaces
     def current_namespaces(q,ctx,aa,old,ss,bb,qualification=None):
         linked,controller,sourceproof=original(q,ctx,aa,old,ss,bb,qualification)

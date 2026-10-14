@@ -16,6 +16,19 @@ class Tests(unittest.TestCase):
         tree=ast.parse((Path(__file__).parents[3]/m.SELF).read_text(encoding="utf-8"))
         calls=[n for n in ast.walk(tree) if isinstance(n,ast.Call)]
         self.assertFalse(any(isinstance(n.func,ast.Attribute) and n.func.attr in ("run_owned","worker","owned_worker_entry") for n in calls))
+        class Sources:
+            root=Path(".")
+            def json(self,name):return name
+            def pin(self,name):return name
+        source=Sources();adapted=m.assembly_reader(source)
+        self.assertEqual(adapted.json("receipt"),"receipt")
+        self.assertIs(adapted.pin.__self__,source)
+        self.assertIsNone(adapted.checkpoint())
+        live=type("Live",(),{"checkpoint":lambda self:None})()
+        self.assertIs(m.assembly_reader(live),live)
+        with self.assertRaises(ValueError):m.assembly_reader(object())
+        source.checkpoint=None
+        with self.assertRaises(ValueError):m.assembly_reader(source)
 
 
 if __name__=="__main__":unittest.main()

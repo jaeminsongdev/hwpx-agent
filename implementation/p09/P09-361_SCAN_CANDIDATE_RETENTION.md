@@ -1673,3 +1673,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE162_V2_RUNTIME_STATUS -->
 > v2 parent/worker 동일전송연결·v1 immutable source 유지·새source 실제metadata/finalhash 포함. worker구성parser실패 및004준비/실행번호결합실패보존·원재실행보호/64/16KiB/시간한도 완화0/graph경로만원AST역변환으로v2분리. 002 CODE74·wholepref10·entry6/실제helper64·fresh401-final401 PASS·원cost591.286초. Native002는233.13초 systemCPU94.65% 원acquisition 보호중단·제품0/FrameCLOSED·2366핸들전부닫힘·바이트경계0·cleanupTrue·빈tree/높은CPU주체미확정·기록덮어쓰기0. v2 review/accept2계약만PASS·실제checker/queue미실행. 공식155/249·잔여94·next162/P09-A12-A13 OPEN/목표ACTIVE/PCfreeze미증명. 다음closed partialFrame 검토를유지한새번호준비.
 <!-- END P09_CASE162_V2_RUNTIME_STATUS -->
+
+<!-- BEGIN P09_CASE162_ACCEPTED_STATUS -->
+> 사례162 Native003 실제제품1PASS·전후2경계·Frame COMMITTED·cleanupTrue·578.76초/독립리뷰002 fresh406-final406 PASS. 승인조립오류와CPU보호중단 승인001은 보존했으며 봉인된Native 소스·제품 결과는 재실행하지 않았다. 승인002 canonical current-epoch-accept001은 before155·delta1·after156·잔여93·next163·generation51·fresh1212-final1212·resourcecleanupTrue. 후보4476388바이트/SHA256 ff944507caae40afdd6456de71623bdad9b822c2641798cab12793c1a7198ed6, canonical437552바이트/SHA256 dc5b07a24c330e7f72c4f9e1def6ac8017015ca0f72cd1b01f0b93cba7f23718. 공식156/249·P09/A12/A13 OPEN·목표ACTIVE/전체속도개선·PC프리즈해결미증명. 다음163이며 승인161/162 재실행0·원본/실패증거삭제0.
+<!-- END P09_CASE162_ACCEPTED_STATUS -->

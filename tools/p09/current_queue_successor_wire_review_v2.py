@@ -15,8 +15,24 @@ PINS=[dict(path="tools/p09/review_current_queue_successor.py",bytes=9381,
     sha256="c199a3f47a7e7ec1426d6fd764628d773ab8b880b011e3c13f4ebe9d40c86990")]
 
 
+def assembly_reader(reader):
+    """Only frozen acceptance's bounded Sources lacks a live guard callback."""
+    if callable(getattr(reader,"checkpoint",None)):return reader
+    if (type(reader).__name__!="Sources" or
+        set(vars(type(reader)))-{"__module__","__dict__","__weakref__","__doc__","__firstlineno__","__static_attributes__"} != {"root","json","pin"}
+        or set(vars(reader)) or not callable(reader.json) or not callable(reader.pin)):
+        raise ValueError("V2_ACCEPTANCE_EXACT_ASSEMBLY_READER_REQUIRED")
+    return NS(root=reader.root,json=reader.json,pin=reader.pin,checkpoint=lambda:None)
+
+
 def load(root,a,scope,bytes_policy,envelope,bridge):
     modules,proof=bridge.load(root,a,scope,bytes_policy,envelope)
+    dispatch=modules.current_queue_successor_dispatch
+    original=dispatch.current_namespaces
+    def current_namespaces(q,*args,**kwargs):
+        return original(assembly_reader(q),*args,**kwargs)
+    original.__globals__["current_namespaces"]=current_namespaces
+    dispatch.current_namespaces=current_namespaces
     names,sourceproof=envelope.namespace_bundle.load(root,PINS,{})
     reuse={**vars(modules),**vars(names)}
     for namespace in vars(names).values():bridge.bind_imports(namespace,reuse)

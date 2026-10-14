@@ -275,3 +275,19 @@ entry002-001은 원6계약, 실제 Native helper64개 및 fresh401/final401을 �
 v2 readonly review/acceptance adapter는 원 frozen source와 검사·승인 본문을 재사용하는 별도 연결을 구현했고2개 계약이 통과했다. 실제 Native 후보가 없으므로 실제 독립 검사·승인은 NOT_RUN이다. 다음은 중단된 partial Frame의 완전 정리 증거와 원 replay 조건을 보존한 새 번호 준비다. 동일002와 승인161을 덮어쓰거나 재실행하지 않는다.
 
 공식155/249·잔여94·next162·generation50, P09/A12/A13 OPEN 및 목표ACTIVE를 유지한다. 근거는 case162-successor-connections002.v2, successor-factory001..003, successor-code/run002·004, successor-preflight/run002·004, successor-dispatch-qualification/run002·004 및 current-runtime-run002 기록이다. 구현은 current_queue_successor_wire_runtime_v2와 current_queue_successor_wire_review_v2 및 해당 테스트다.
+
+## 사례162 재시도 연결 개선과 공식 승인
+
+제품 실행 전 중단된 partial Frame은 CLOSED, 모든 잠금 닫힘, 실제 읽기 경계 없음, reader와 stream 없음, 원 open 함수 복원 및 빈 소유 프로세스 트리가 확인된 경우에만 새 번호 준비에 사용한다. 살아 있는 Frame이나 제품 실행이 관측된 기록은 거부한다. 원 기록을 수정하거나 제품 결과를 재실행하지 않는다. graph와 capsule 및 bootstrap의 경로 metadata를 함께 v2로 분리하고 원 AST의 정확한 역변환을 유지했다.
+
+CODE003-001은74계약 통과 뒤 CPU80.84% 최종 경고로 거부됐으며 기록을 보존했다. CODE003-002는74계약·fresh96/final96·14.019초로 통과했다. 전체 preflight003-001은 입력2,909개·Rust787·fresh400/final400·105.596초, entry003-001은6계약·실제helper64·fresh402/final402·110.195초로 통과했다. 현재 qualification source402개 해시가 모두 일치한다.
+
+Native003은578.76초, 제품 GO부터 완전 출력 수집3.193초로 통과했다. 물리 입력2,912개·233,019,142바이트에 대해 실제 전후 경계2회를 완료했고 Frame COMMITTED·cleanup 및 빈 소유 트리를 확인했다. 시스템CPU 최고65.07%·가용RAM 최저30.602%·parent private 최고56.961MiB다. 제품 구간은 전체의 약0.552%이며, 여전히 입력 고정과 증거 확인이 대부분의 시간을 차지한다. 전체 속도가 크게 개선됐다는 실측 주장은 하지 않는다.
+
+독립 리뷰001은117.629초에 통과했다. 승인 조립용 Sources의 checkpoint 누락은 승인 시작 전에 발견됐고 canonical과 진단이 없음을 확인한 뒤 실패를 별도 보존했다. 이미 봉인된 Native 소스를 바꾸지 않고 post-Native adapter에서 정확한 준비 객체만 연결했다. 실제 guard callback이 있는 reader는 그대로 유지한다. 어댑터2계약과 새 리뷰002가 통과했다. 리뷰002는 fresh406/final406·113.476초·CPU62.43%·가용RAM32.542%·cleanup=True다.
+
+승인001은 시스템CPU96.38%의75% metadata 경고로 중단됐다. 당시 parentCPU0.135%·private56.863MiB·가용RAM32.662%였고 cleanup=True·delta0·canonical 없음이다. guard는0.5초 원 표본을 재사용하며 각 callback이 추가 OS sampler를 실행하지 않는다. CPU 상승 주체는 확정되지 않았다. 짧은 후속 표본26.37%·17.58%에서 부담이 내려간 것을 확인한 뒤 제품 및 독립 리뷰를 재실행하지 않고 승인002만 실행했다.
+
+승인002는234.209초에 canonical을 한 번 발행했다. before155·delta1·after156·잔여93·next163·generation51, fresh1,212/final1,212·2,441읽기·206,537,101바이트·cleanup=True다. 승인CPU최고53.55%·가용RAM최저33.614%이며 제품 및 Native 재실행은0이다. P09/A12/A13은 OPEN이고 full249·signed16·전체 runtime reconciliation은 미완료다. 목표는 ACTIVE이며 다음은 사례163이다. 프리즈 근본 해결과 전체 검증 시간 감소는 아직 입증되지 않았다.
+
+근거: case162 current-runtime-run003, successor-whole-review-run003-attempt001/002, successor-acceptance-facade-setup001, optimized-acceptance-attempt001/002 및 current-epoch-accept001. canonical은437,552바이트·SHA256 dc5b07a24c330e7f72c4f9e1def6ac8017015ca0f72cd1b01f0b93cba7f23718이다. 운영 출력은 개수·요약 값만 남기고 pin 및 전체 로그 배열을 반복 출력하지 않는다.
