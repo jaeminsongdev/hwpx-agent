@@ -11,9 +11,12 @@ from bounded_process_progress import BoundedProcessCapture
 
 SELF = "tools/p09/probe_case160_cli_held_no_go.py"
 OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-held-no-go-r378.v1.json"
-GO = sys.argv[1:] == ["--go"]
+FULL_HELD = sys.argv[1:] == ["--go-full-held"]
+GO = sys.argv[1:] in (["--go"], ["--go-full-held"])
 if GO:
     OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-held-product-r380.v1.json"
+if FULL_HELD:
+    OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-full-held-product-r381.v1.json"
 
 
 def main():
@@ -41,9 +44,22 @@ def main():
             a.exact(stopped["selected_test_names"], ["actual_import::source_review_cell_output::cached_body_callback_rechecks_actual_aead_acl_regrant_and_advanced_head"], "ONE_ORIGINAL_CASE160")
         a.require(0 < len(selected) <= 512, "BOUNDED_HELD_STARTUP_SUBSET")
         for name, pin in selected.items(): a.exact(q.pin(name), pin, "CURRENT_HELD_STARTUP_BYTES")
+        lock_inputs = selected
+        if FULL_HELD:
+            original = a.locks.input_pins(stopped["source_freeze"])
+            a.require(len(original) == 2850, "EXACT_RUN006_DECLARED_LOCK_COUNT")
+            lock_inputs = dict(original)
+            for name, pin in selected.items():
+                if name in lock_inputs: a.exact(lock_inputs[name], pin, "DECLARED_AND_FRESH_LOCK_PIN_AGREE")
+                lock_inputs[name] = pin
+            out.update(original_declared_file_count=len(original), all_original_declared_files_held=True,
+                all_declared_bytes_freshly_hashed=False,
+                remaining_declared_bytes_proven_current=False,
+                current_byte_verified_subset_count=len(selected))
         held = a.locks.InputLocks(c.old.c.ROOT, q.checkpoint)
-        held.acquire(selected)
-        out.update(held_source_subset_count=len(selected), original_SHARE_READ_deny_write_delete=True,
+        held.acquire(lock_inputs)
+        out.update(held_source_subset_count=len(lock_inputs), original_SHARE_READ_deny_write_delete=True,
+            held_acquisition_witness=held.acquisition_witness(),
             full_Native_frame_or_product_scope_qualification_claimed=False,
             same_actual_worker_argv_without_B=True)
         windows = guard.windows; job = windows.job(); limits = windows.verify_job_limits(job)
@@ -82,6 +98,7 @@ def main():
             a.require(process.returncode != 0 and not errors and type(code) is str and code.endswith("WORKER_NOT_AUTHORIZED"), "EXACT_ORIGINAL_GO_REJECTION")
         final = windows.accounting(job); empty = final["active_processes"] == 0 and final["owned_processes"] == []
         a.require(empty, "NO_GO_JOB_EMPTY")
+        held.verify_held_identities()
         q.finish(); guard.check(force=True)
         out.update(state="PASS_EXACT_CLI_HELD_SUBSET_ACTUAL_PRODUCT_NOT_NATIVE_OR_ACCEPTANCE" if GO else "PASS_EXACT_CLI_HELD_SUBSET_GO_REJECTION_NOT_PRODUCT_OR_NATIVE", worker_error_code=code,
             owned_Job_limits=limits, fresh_inputs=len(q.snapshots), final_fresh_hashes=q.final_fresh_hashes,
