@@ -1,4 +1,4 @@
-"""Distinct run007 using the whole qualified run006 implementation.
+"""Bounded Native attempts using the whole qualified run006 implementation.
 
 원 run006 소스와 기록은 보존한다. 실행 identity와 새 산출물 위치만
 명시적으로 투영하고, 초기 qualified 입력 읽기 및 독립 체커를 유지한다.
@@ -9,20 +9,47 @@ from pathlib import Path
 import re
 import sys
 from types import FunctionType
+
+
+def native_attempt(argv):
+    """Select once before imports; worker identity selects the same context."""
+    values = []
+    for index, value in enumerate(argv):
+        if value == "--native-attempt":
+            if index + 1 >= len(argv): raise ValueError("NATIVE_ATTEMPT_REQUIRED")
+            values.append(argv[index + 1])
+    if len(argv) == 3 and argv[:2] == ["--owned-worker", "--task"]:
+        match = re.fullmatch(r"case160-current-r([0-9]{3})-tests", argv[2])
+        if match is None: raise ValueError("EXACT_CASE160_WORKER_ATTEMPT")
+        values.append(match[1])
+    if len(values) > 1: raise ValueError("ONE_NATIVE_ATTEMPT")
+    if not values: return 7
+    value = values[0]
+    if type(value) is not str or re.fullmatch(r"[0-9]{1,3}", value) is None:
+        raise ValueError("TYPED_NATIVE_ATTEMPT")
+    result = int(value)
+    if not 7 <= result <= 14: raise ValueError("CLOSED_NATIVE_ATTEMPT")
+    return result
+
+
+NATIVE = native_attempt(sys.argv[1:])
 import flat_current_queue_envelope_runtime_v25 as old
 
 SELF = "tools/p09/case160_run007_controller.py"
 TEST = "tools/p09/tests/test_case160_run007_controller.py"
-DATA = "implementation/p09/evidence/p09-361-case160-envelope-controller-data047.v1.json"
-QUAL = "implementation/p09/evidence/p09-361-case160-run007-controller-r390.v1.json"
-PREFLIGHT = "implementation/p09/evidence/p09-361-case160-envelope-controller-preflight046.v1.json"
-CONFIG = "implementation/p09/evidence/p09-361-case160-run007-graph-config-r388.v1.json"
-MANIFEST_PATH = "implementation/p09/evidence/p09-361-case160-source-manifest033.v8.json"
-CAPSULE_PATH = "implementation/p09/evidence/p09-361-case160-worker-policy-capsule010.compact.v1.json"
-ROOT = "implementation/p09/evidence/p09-361-case160-current-runtime-run007.v1.json"
-TASK = "case160-current-r007-tests"
-QUAL_STATE = "PASS_RUN007_CONTROLLER_CONNECTION_NOT_WHOLE_PREFLIGHT_NATIVE_OR_GO"
-SCHEMA = "hwpx-agent.p09-case160-run007-controller/v1"
+STEM = f"implementation/p09/evidence/p09-361-case160-native{NATIVE:03}-controller-r391"
+DATA = STEM+"-data001.v1.json"
+QUAL = STEM+"-qualification001.v1.json"
+PREFLIGHT = STEM+"-preflight002.v1.json"
+# Existing run007 declarations remain immutable; later attempts get distinct pins.
+CONFIG = ("implementation/p09/evidence/p09-361-case160-run007-graph-config-r388.v1.json"
+    if NATIVE == 7 else STEM+"-graph-config.v1.json")
+MANIFEST_PATH = f"implementation/p09/evidence/p09-361-case160-source-manifest{26+NATIVE:03}.v8.json"
+CAPSULE_PATH = f"implementation/p09/evidence/p09-361-case160-worker-policy-capsule{3+NATIVE:03}.compact.v1.json"
+ROOT = f"implementation/p09/evidence/p09-361-case160-current-runtime-run{NATIVE:03}.v1.json"
+TASK = f"case160-current-r{NATIVE:03}-tests"
+QUAL_STATE = f"PASS_RUN{NATIVE:03}_CONTROLLER_CONNECTION_NOT_WHOLE_PREFLIGHT_NATIVE_OR_GO"
+SCHEMA = f"hwpx-agent.p09-case160-run{NATIVE:03}-controller/v1"
 SOURCE_PIN = dict(path="tools/p09/case160_attempt_controller.py", bytes=16064,
     sha256="e9b0dc870cd25a65a8b5f5ba1b0dd8195cf08c8f9f36c59185a9cdf0592a5613")
 TEST_PIN = dict(path="tools/p09/tests/test_case160_attempt_controller.py", bytes=2370,
@@ -35,9 +62,10 @@ a = old.a
 LEGACY_PINS = original.LEGACY_PINS
 projected = original.projected
 
-MAPPING = {6:7, 27:31, original.TASK:TASK,
-    "hwpx-agent.p09-run006-graph-config/v1":"hwpx-agent.p09-run007-graph-config/v1",
-    "-envelope-controller-preflight044.v1.json":"-envelope-controller-preflight046.v1.json",
+PREFLIGHT_SUFFIX = PREFLIGHT.removeprefix("implementation/p09/evidence/p09-361-case160")
+MAPPING = {6:NATIVE, 27:32, original.TASK:TASK,
+    "hwpx-agent.p09-run006-graph-config/v1":f"hwpx-agent.p09-run{NATIVE:03}-graph-config/v1",
+    "-envelope-controller-preflight044.v1.json":PREFLIGHT_SUFFIX,
     "tools.p09.tests.test_case160_attempt_controller":"tools.p09.tests.test_case160_run007_controller"}
 env = base.clone_family(original.read_config.__globals__, dict(SELF=SELF, TEST=TEST, DATA=DATA,
     QUAL=QUAL, PREFLIGHT=PREFLIGHT, CONFIG=CONFIG, MANIFEST_PATH=MANIFEST_PATH,
@@ -74,8 +102,8 @@ CURRENT = initialize() if (old.c.ROOT/CONFIG).is_file() else None
 def select_preflight(current, attempt):
     """Closed metadata selection; no automatic retry or source edits."""
     a.require(type(attempt) is int and 2 <= attempt <= 8, "CLOSED_RUN007_PREFLIGHT_ATTEMPT")
-    path = f"implementation/p09/evidence/p09-361-case160-envelope-controller-preflight{44+attempt:03}.v1.json"
-    suffix = "-envelope-controller-preflight"+f"{44+attempt:03}.v1.json"
+    path = STEM+f"-preflight{attempt:03}.v1.json"
+    suffix = path.removeprefix("implementation/p09/evidence/p09-361-case160")
     before = current.after
     fn = current._env["preflight_projection"]
     a.require(sum(type(v) is str and v == before for v in fn.__code__.co_consts) == 1, "ONE_ORIGINAL_PREFLIGHT_DESTINATION")
@@ -94,8 +122,8 @@ def select_preflight(current, attempt):
 def select_qualification(current, attempt):
     """Preserve failed CODE receipts without changing source for a retry."""
     a.require(type(attempt) is int and 1 <= attempt <= 8, "CLOSED_RUN007_QUALIFICATION_ATTEMPT")
-    qual = QUAL if attempt == 1 else "implementation/p09/evidence/p09-361-case160-run007-controller-r390-run"+f"{attempt:03}.v1.json"
-    data = "implementation/p09/evidence/p09-361-case160-envelope-controller-data"+f"{46+attempt:03}.v1.json"
+    qual = STEM+f"-qualification{attempt:03}.v1.json"
+    data = STEM+f"-data{attempt:03}.v1.json"
     family = current.binding.__globals__
     family.update(QUAL=qual, DATA=data)
     current._env.update(QUAL=qual, DATA=data)
@@ -129,7 +157,9 @@ if __name__ == "__main__":
         mode.add_argument("--run", type=int)
         parser.add_argument("--preflight-attempt", type=int, default=2)
         parser.add_argument("--qualification-attempt", type=int, default=1)
+        parser.add_argument("--native-attempt", type=int, default=7)
         args = parser.parse_args()
+        a.exact(args.native_attempt, NATIVE, "ONE_NATIVE_CONTEXT_BEFORE_IMPORTS")
         if args.prepare_artifacts: raise SystemExit(prepare_artifacts())
         a.require(CURRENT is not None, "RUN007_CONFIG_REQUIRED")
         select_qualification(CURRENT, args.qualification_attempt)

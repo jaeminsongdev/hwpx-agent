@@ -36,4 +36,14 @@ run007 controller는 소스를 다시 수정하지 않고 qualification 1..8과 
 
 공식153/249, 잔여96, next160, generation48 및 P09/A12/A13 OPEN을 유지한다. 목표는 ACTIVE이며 PC 프리즈 또는 전체 속도 문제가 해결됐다고 주장하지 않는다.
 
-근거: evidence의 case160-current-runtime-run004/run007, run007-controller-r390 및 envelope-controller-preflight046 기록과 tools/p09/case160_run007_controller.py 및 해당 테스트 소스.
+## 동일 소스의 Native 실행 번호 선택
+
+입력 읽기 경로는 이미 잠근 핸들을 재사용해 두 경계의 중복 Native open을 제거했다. 남은 두 실제 읽기를 과거 결과로 대체하지 않는다. 따라서 이번 추가 개선은 보호 중단 후 새 runtime 파일을 복제하던 흐름을 없애는 데 적용했다.
+
+기존 controller 한 개에서 --native-attempt 7..14를 실행 전 한 번 선택한다. worker는 정확한 case160 task에서 같은 번호를 선택한다. 각 번호의 graph config, manifest, capsule, CODE/DATA, preflight 및 Native root는 별도 위치이며 기존 파일 덮어쓰기와 자동 재시도는 허용하지 않는다. 새 runtime 소스 파일은 추가하지 않았다. 변경된 연결과 소스는 새 CODE로 검증하고, 이후 같은 소스의 실행 선택에는 복제·편집을 하지 않는다.
+
+Native008의 최초 CODE 시도는 시스템CPU82.54% 경고로 current_source_bytes에서 중단돼 실패 기록을 보존했다. 짧은 읽기 전용 자원 표본에서 CPU28.32/41.41/27.15%, 가용RAM32.3~32.5%를 확인한 뒤 별도 슬롯으로 진행했다. 두 번째 CODE는 32계약 오류0·실패0·skip0, 12.209초, fresh106/final106, helper62, CPU최고46.2%, 가용RAM최저30.25%, cleanup=True로 통과했다.
+
+Native008 whole preflight는 71.452초, 입력2,888개, 선언 바이트333,764,489, imports64, CPU최고63.48%, 가용RAM최저31.03%, cleanup=True로 통과했다. CODE32 및 preflight는 Native·제품·승인이 아니다. 기존 Native007의 STOPPED_NOT_ACCEPTED와 공식153/249를 유지하며, 다음은 동일 소스와 별도 root로 Native008을 한 번 실행하는 것이다. 보호 조건·초당 acquisition14 및 binary1MiB/s/other2MiB/s는 유지했다.
+
+근거: evidence의 case160-current-runtime-run004/run007, run007-controller-r390, envelope-controller-preflight046, native008-controller-r391의 qualification001/002 및 preflight002 기록과 tools/p09/case160_run007_controller.py 및 해당 테스트 소스.

@@ -9,6 +9,18 @@ MODULE, SOURCE_PROOF = controller.inherited_tests()
 
 
 class Tests(MODULE.Tests):
+    def test_native_attempt_is_closed_and_worker_matches_parent(self):
+        select = controller.native_attempt
+        self.assertEqual(select([]), 7)
+        for run in range(7, 15):
+            self.assertEqual(select(["--native-attempt", str(run)]), run)
+            self.assertEqual(select(["--owned-worker", "--task", f"case160-current-r{run:03}-tests"]), run)
+        for argv in (["--native-attempt"], ["--native-attempt", "6"],
+                     ["--native-attempt", "15"], ["--native-attempt", "True"],
+                     ["--native-attempt", 8], ["--native-attempt", "7", "--native-attempt", "8"],
+                     ["--owned-worker", "--task", "case159-current-r008-tests"]):
+            with self.assertRaises(ValueError): select(argv)
+
     def test_preflight_selection_is_closed_and_does_not_retry(self):
         # Reader-count 31 must not be rewritten as a suite-count substitution.
         original = controller.original.test_namespace
@@ -25,13 +37,13 @@ class Tests(MODULE.Tests):
         before = current._env["preflight_projection"]
         binding = current.binding
         selected = controller.select_preflight(current, 3)
-        self.assertTrue(selected.endswith("preflight047.v1.json"))
+        self.assertEqual(selected, controller.STEM+"-preflight003.v1.json")
         self.assertIs(current.binding, binding)
         self.assertEqual(current.binding.__globals__["PREFLIGHT"], selected)
         self.assertEqual(current.M.PREFLIGHT, selected)
         self.assertIs(current.M.preflight_projection, current._env["preflight_projection"])
         inverse = controller.projected(current.M.preflight_projection, current._env,
-            {"-envelope-controller-preflight047.v1.json":"-envelope-controller-preflight046.v1.json"})
+            {selected.removeprefix("implementation/p09/evidence/p09-361-case160"):controller.PREFLIGHT_SUFFIX})
         self.assertEqual(inverse.__code__, before.__code__)
         self.assertEqual(inverse.__defaults__, before.__defaults__)
         self.assertEqual(inverse.__closure__, before.__closure__)
@@ -47,8 +59,8 @@ class Tests(MODULE.Tests):
         current = controller.initialize()
         qualify, binding, api = current.qualify, current.binding, current.API
         qual, data = controller.select_qualification(current, 2)
-        self.assertTrue(qual.endswith("r390-run002.v1.json"))
-        self.assertTrue(data.endswith("data048.v1.json"))
+        self.assertEqual(qual, controller.STEM+"-qualification002.v1.json")
+        self.assertEqual(data, controller.STEM+"-data002.v1.json")
         self.assertIs(current.qualify, qualify)
         self.assertIs(current.binding, binding)
         self.assertIs(current.API, api)

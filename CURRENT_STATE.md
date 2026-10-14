@@ -2930,3 +2930,7 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 <!-- BEGIN P09_SPEED_REVIEW_NATIVE007_STATUS -->
 > 목표 재개 Native007 — 제품 실제1회/GO→완전수집2.940초/exit0/terminal1PASS-0FAIL-248filtered. final_source_freeze 544.93초에서시스템CPU97.16%로 STOP_NATIVE_SOURCE_PRESSURE_NO_COOLING. before2855입력·242575809바이트만완료/after미완료·전체STOPPED_NOT_ACCEPTED. 중단소유Job active0·JobCPU0·parentCPU0·가용RAM31.58%·빈tree/cleanupTrue. CPU상승주체 미확정·Defender단정0·보호완화0·자동재시도0. 공식153/249·delta0·잔여96·next160/P09-A12-A13 OPEN/목표ACTIVE. CODE31 및 wholepref046 통과유지. 다음 준비·전후검증 직렬중복 비용 최적화. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
 <!-- END P09_SPEED_REVIEW_NATIVE007_STATUS -->
+
+<!-- BEGIN P09_NATIVE_SELECTION_R391_STATUS -->
+> Native 번호7..14를 같은controller에서선택/worker정확task동일번호/새runtime소스파일0·덮어쓰기0·자동재시도0. run008 선언준비 후 CODE첫시도CPU82.54%로초반중단/실패보존·cleanupTrue. 자원짧은표본확인 후 CODE두번째32계약PASS/fresh106-final106/helper62/12.209초/CPU46.2%·가용RAM30.25%/cleanupTrue. wholepref002 PASS/71.452초/inputs2888/imports64/CPU63.48%·가용RAM31.03%/cleanupTrue. 원Native·신선도·CPU/RAM·시간한도 유지/공식153/249·잔여96·next160/P09-A12-A13 OPEN/목표ACTIVE. 다음 같은소스 Native008 1회. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_NATIVE_SELECTION_R391_STATUS -->

@@ -1605,3 +1605,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_SPEED_REVIEW_NATIVE007_STATUS -->
 > Native007 제품출력1PASS/GO→완전수집2.940초/exit0 보존. after 경계 final_source_freeze가CPU97.16% 보호중단돼 전체Native는STOPPED_NOT_ACCEPTED/544.93초/before만완료/cleanupTrue·빈tree. 기록덮어쓰기·제품승인승격0/공식153/249·delta0/P09-A12-A13 OPEN. CODE31 및wholepref046 유지/목표ACTIVE. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
 <!-- END P09_SPEED_REVIEW_NATIVE007_STATUS -->
+
+<!-- BEGIN P09_NATIVE_SELECTION_R391_STATUS -->
+> Native007 STOPPED_NOT_ACCEPTED 원기록보존. 같은controller의별도Native번호008 선언준비·CODE32 PASS·wholepref002 PASS/첫CODE CPU경고실패보존. Native번호7..14/metadata시도닫힌범위·worker부모동일task/원보호·전체검사유지/자동반복·기존승인승격0. 공식153/249·delta0·next160/P09-A12-A13 OPEN/목표ACTIVE. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_NATIVE_SELECTION_R391_STATUS -->
