@@ -157,7 +157,7 @@ def current_input_scope(q,graph,step,report_pin,manifest_pin,source_pins):
     import accept_case112_current_epoch as a
     import current_stored_runtime_scope as scope
     import current_queue_successor_binding as bindings
-    import prepare_current_queue_step as steps
+    import re
     q.checkpoint()
     index=step["index"]
     metadata.require(type(index) is int and 161<=index<=249 and graph.binding.next_case==index,"PARENT_EXACT_CURRENT_STEP")
@@ -177,6 +177,13 @@ def current_input_scope(q,graph,step,report_pin,manifest_pin,source_pins):
     a.exact(q.pin(report["capsule_pin"]["path"]),report["capsule_pin"],"CAPSULE_IN_ACTUAL_PARENT_SCOPE")
     authority=a.read_exact(q,step["prior_queue_pin"]);prior=a.read_exact(q,step["prior_candidate_pin"])
     listing=a.read_exact(q,scope.LIST_PIN)
+    # Use the exact already-declared function body, not another default module
+    # import. All source bytes stay in the same Native/qualifier scope.
+    step_source_name="tools/p09/prepare_current_queue_step.py"
+    step_sources=scope.pins(report["source_pins"])
+    raw=q.text(step_source_name)
+    a.exact(q.snapshots[step_source_name],step_sources[step_source_name],"EXACT_ORIGINAL_STEP_DERIVATION_SOURCE")
+    steps=a.native.definitions(raw,("derive_step",),dict(re=re))
     a.exact(steps.derive_step(index,step["prior_queue_pin"],authority,prior,listing["source_test_names"]),step,
         "APPROVED_PREDECESSOR_AND_FULL_COMPILED_LIST")
     representation=prior["source_input_representation"]

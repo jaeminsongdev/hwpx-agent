@@ -187,3 +187,21 @@ current_queue_successor_oracle은 qualified case160의 validator family 전체�
 이 연결은 실제 후보 checker 실행이나 공식 queue 승인에 해당하지 않는다. 전체 current imported closure·CODE·cost·parent admission·whole preflight를 검증한 뒤 Native 후보와 독립 전체 검사를 수행해야 한다. 공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN, 목표ACTIVE를 유지한다.
 
 근거: tools/p09/current_queue_successor_oracle.py와 해당 테스트 및 evidence/p09-361-case161-successor-oracle-connection001.v1.json.
+
+## 공통 코드 검증과 전체 메타데이터 사전 검증
+
+current_queue_successor_controller에 CODE와 preflight의 닫힌 실행 선택을 추가했다. CODE의 원 실행 helper64개 한도는 유지하며 테스트 전용 import는 별도 증거로만 기록한다. 동일 보호 모듈을 새 default module로 중복 읽지 않고 승인된 controller의 명시적 private guard를 재사용했다. 초기 CODE helper 초과 실패와 수정 전 통과 기록은 모두 보존했다.
+
+현재 CODE008은74계약 오류0·실패0·skip0, 기본 실행 helper63, 코드·테스트 import91, fresh91/final91,12.9625초, CPU최고31.51%, 가용RAM최저42.19%, cleanup=True로 통과했다. source 또는 연결이 바뀐 뒤에는 이전 CODE를 현재 것으로 사용하지 않았다.
+
+전체 preflight는 원10계약을 자식 생성 금지 상태에서 실행하고, 실패 원본·Native definition pin·현재 부모 입력·Rust787 전체 목록·전체 source 범위와 비용·독립 검사기 연결을 확인한다. 원 시험이 전역 CONFIG에 가상 STEP을 남기는 문제는 시험 동안만 격리해 실제 STEP의 일회성 설정을 보존했다. 현재 STEP 파일을 실제 읽은 뒤 선언에 포함하도록 수정했다. 해당 실패와 진단 기록은 별도 보존했다.
+
+실제 helper 목록 대조로 default import가 추가되는3개 경로를 확인했다. STEP derive 함수는 고정된 원 소스의 함수 본문을 그대로 컴파일하고 loader는 승인된 명시적 객체를 재사용했다. 원10시험 소스도 승인된 pin을 먼저 확인하고 non-import AST 전체를 유지하는 private namespace에서 실행한다. sys.modules의 기존 항목을 숨기거나 helper 한도를 늘리지 않았다. 원 source 및 두 실제 Native 읽기 의무는 유지한다.
+
+현재 preflight007은 source 입력2,885개·Rust787·기본 helper64, fresh381/final381, 실제 준비 읽기768회·110,036,851바이트를 확인했다. 전체96.1678초, CPU최고63.13%, 가용RAM최저41.98%, cleanup=True다. 원 메타데이터 checkpoint가 복원됐고 실제 Native Frame·제품 자식은 실행하지 않았다. controller·테스트·runtime의 현재 hash는 사전 검증 기록과 일치한다.
+
+현재 의미·물리 입력은 각각2,885개이고 물리 바이트230,075,691이다. decoder5초를 포함한 원 비용 모델은589.0763초로600초 안이다. preflight 자체의 발행 이후 기록과 실제 실행 진입점이 Native 입력으로 추가될 때 전체 비용과 핀을 다시 확인해야 한다. 사전 검증을 Native 두 실제 경계 읽기 또는 제품 승인으로 대신하지 않는다.
+
+공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN, 목표ACTIVE를 유지한다. 다음은 CODE·preflight pin을 요구하는 실제 Native 실행 진입점을 연결하고 현재 후보와 독립 검사를 수행하는 것이다.
+
+근거: current_queue_successor_controller와 해당 테스트, case161-successor-code-run002-attempt001..008 및 successor-preflight-run002-attempt001..007 기록.

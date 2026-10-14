@@ -1653,3 +1653,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE161_ORACLE_CONNECTION_STATUS -->
 > 원validator family를유지한현재독립wholeoracle 연결/관측후보에서기대범위복사0·source/resource/cost/window 조건유지/신규5·전체70계약PASS. 실제연결001 선언의미입력2871·fresh28-final28·cleanupTrue·현재소스핀일치/후보checker·제품·queue실행0. 전체CODE-closure-cost-parent-pref 및Native후보·독립전체검사남음/공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE.
 <!-- END P09_CASE161_ORACLE_CONNECTION_STATUS -->
+
+<!-- BEGIN P09_CASE161_WHOLE_PREFLIGHT_STATUS -->
+> 현재CODE008 74계약·fresh91-final91 PASS/wholepref007 원10계약·scope2885·Rust787·helper64·fresh381-final381·cleanupTrue/현재source핀일치·원cost589.076초. 중복import·시험CONFIG잔류·STEP선언누락수정/실패원본보존·범위/64/시간한도완화0. 발행pref 및Native entry의추가입력확인필수/Native·제품NOT_RUN·공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE.
+<!-- END P09_CASE161_WHOLE_PREFLIGHT_STATUS -->
