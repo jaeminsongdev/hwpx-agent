@@ -1633,3 +1633,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE161_BINDING_SPEED_STATUS -->
 > 공통Binding161..249 구현 및 case161준비003 PASS/기존실패·manifest002 보존. 중복final finish 제거·전체입력병합 일괄화/28계약PASS·fresh103-final103·38pair·136.702초·cleanupTrue. 실제원본·물리pin·과거provenance·scope-resource-byte-handle oracle 유지. 새runtime whole연결·cost·CODE-pref·제품·독립승인 미완료/GO0·delta0. 공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
 <!-- END P09_CASE161_BINDING_SPEED_STATUS -->
+
+<!-- BEGIN P09_CASE161_CONNECTIONS_STATUS -->
+> 공통parent-Frame-worker-wholeoracle 연결 graph 및인자형wire 구현/53계약PASS. 실제case16138pair·wire13340바이트·전항목복원·fresh29-final29·cleanupTrue/원본·approved160·보호조건변경0. 현재준비범위cost597.830초는actualcontroller-CODE-wholepref 미포함으로GO근거아님. 제품NOT_RUN·승인delta0/공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE.
+<!-- END P09_CASE161_CONNECTIONS_STATUS -->

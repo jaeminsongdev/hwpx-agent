@@ -2958,3 +2958,7 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 <!-- BEGIN P09_CASE161_BINDING_SPEED_STATUS -->
 > case161 공통 Binding 준비003 통과 — 일회성 finish 중복호출에 따른 audit_final_hash_inventory 실패 수정/실패001·002 및 manifest002 보존. 입력별 전체재검증1135회→일괄2회/실제 동일범위 병합23.486초→0.061초/전체Native 단축률아님. Binding·기존scope·oracle 연결28계약PASS. 실제준비38pair·physical2871·239778095바이트/fresh103-final103·136.702초/CPU32.59%·가용RAM50.42%·cleanupTrue. 원본·실패lineage·oracle보존/새parent-worker-CODE-pref 미연결·제품NOT_RUN·GO0·delta0. 공식154/249·잔여95·next161·generation49/P09-A12-A13 OPEN/목표ACTIVE. 다음공통실제연결·전체cost 확인. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
 <!-- END P09_CASE161_BINDING_SPEED_STATUS -->
+
+<!-- BEGIN P09_CASE161_CONNECTIONS_STATUS -->
+> 공통successor161..249 parent-Frame-worker-wholeoracle graph 구현/원고정source10·동일privateBinding·원본문과metadata역변환 유지. 신규8+기존계약총53PASS/fixture2읽기·정리·원실패판정 유지. 실제161 연결준비001 38pair·wire13340바이트(원16KiB내)/전항목복원·manifestpin일치/fresh29-final29·9.151초/CPU17.7%·가용RAM45.43%·cleanupTrue. 원전체cost 함수의현재준비범위 계산597.830초·여유2.170초/actualcontroller-CODE-wholepref 미포함·GO허용아님. 새제품NOT_RUN·delta0/공식154/249·잔여95·next161·generation49/P09-A12-A13 OPEN/목표ACTIVE. 다음공통실제controller 및전체cost여유 확보. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_CASE161_CONNECTIONS_STATUS -->

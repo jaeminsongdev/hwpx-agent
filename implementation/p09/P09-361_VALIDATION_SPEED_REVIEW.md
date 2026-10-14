@@ -115,3 +115,17 @@ case별 준비 script를 복제하지 않도록 prepare_current_queue_step과 pr
 P09 목표는 case161 공통 successor 연결 작업으로 재개했다. 다음 완료 경계는 실제 parent·worker·독립 oracle 연결과 전체 입력 비용 검증이다. 앞선596.085초 계산과 준비003은 아직 신규 전체 runtime 연결을 포함하지 않으므로 GO를 허용하지 않는다. 공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN을 유지한다.
 
 근거: tools/p09/current_queue_successor_binding.py 및 해당 테스트, evidence/p09-361-case161-successor-binding001/002/003.v1.json과 successor-manifest002/003.v1.json. 병합 비교는 이 세션의 bounded terminal 실행 결과다.
+
+## 공통 부모 작업 프로세스와 전체 검사 연결
+
+current_queue_successor_connections는161..249의 공통 private graph를 구성한다. 원 parent·Frame·worker·whole oracle 소스10개를 고정된 hash와 원 non-import AST로 읽고 동일한 Binding namespace를 공유한다. 원 worker connector 본문·defaults·closure를 유지하며 encoder·decoder와 compact pack의 사례·개수·필드명 상수만 변경한다. 역변환은 원 code 전체와 같아야 한다. 사례별 원본 연결 소스나 approved case160을 변경하지 않는다.
+
+공통 연결8계약과 기존 Binding·worker·compact wire·whole oracle 계약을 함께 실행해53개가 통과했다. fixture parent에서 원 두 읽기·decoder·Frame 정리와 정책 복원을 확인했고, whole checker의 원 terminal 실패가 계속 실패하는지 확인했다. 타 사례의 transport, hash 변조, 닫힌 실행 번호 위반 및 자동 재호출은 거부한다. 최초 whole oracle fixture는 필수 mechanics_projection 의존 항목이 빠져 실패했으며 fixture를 원 인터페이스에 맞춘 뒤 통과했다. 원 oracle 조건은 바꾸지 않았다.
+
+실제 case161 연결 준비001은 승인160·compiled249 명단·STEP·manifest003의 맥락과 pin을 새로 확인했다. 38pair 전체를 compact wire13,340바이트로 전달·복원해 descriptor 및 manifest pin이 모두 일치했다. 기존16KiB 제한을 유지했고 actual artifact를 읽은 뒤 입력29개 모두 최종 재확인했다. 전체9.1513초, CPU최고17.70%, 가용RAM최저45.43%, cleanup=True다. 현재 연결 소스·테스트·capsule의 실제 hash도 준비 기록과 일치한다.
+
+기존 strict window의 원 전체 비용 함수를 연결 준비 범위에 적용한 계산은 physical2,877입력·239,853,617바이트, shared decoder5초 포함597.8299초다. 한도600초까지 명목 여유는2.1701초이며 새 actual runtime controller·CODE·whole preflight를 아직 포함하지 않았다. 이 계산은 실행 허용이 아니다. 추가 증거 표현 최적화와 실제 실행의 전체 imported closure를 검증해야 한다. 범위·속도·시간 제한을 완화하지 않는다.
+
+공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN을 유지한다. 새 전체 engine·worker dispatch·독립 oracle의 실제 제품 실행은 NOT_RUN이며 목표는 ACTIVE다. 다음은 실제 공통 실행 컨트롤러 연결과 전체 비용 여유 확보다.
+
+근거: tools/p09/current_queue_successor_connections.py와 해당 테스트, evidence/p09-361-case161-successor-connections001.v1.json 및 successor-worker-capsule001.compact.v1.json. 비용 계산은 이 세션에서 원 비용 함수를 실행한 bounded terminal 결과다.
