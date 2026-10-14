@@ -1589,3 +1589,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 > 원strictWindow연결진단 첫r378은진단15timeout·cleanupFalse로보존/사후worker잔여없음. 진단cleanup의만료communicate→progress재진입만수정·원window변경0. r378-run002는제품호출sink가로채기·GO/capture1·GO→완료1.504157초<15/총3.0715초/stdin닫힘-cleanupTrue/CPU9.41%-RAM46.2556%.
 > 동일연결후속통과로항상재현되는래퍼원인확정아님/간헐적결합조건차이원인미확정. production·checker·scope·15/600/720·자원보호유지/동일006자동재실행-제품/Native재실행-OS변경0/PCfreeze미증명. 다음실제전달조건차이점검. 세부 implementation/p09/P09-361_WORKER_TRANSPORT_DIAGNOSTIC_R378.md.
 <!-- END P09_R378_STATUS -->
+
+<!-- BEGIN P09_R379_R383_STATUS -->
+> P09 사례160 입력 잠금 비교 — 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/목표ACTIVE. r379 실제worker 함수 진단 통과 후 r380 실제CLI·218개 입력 잠금에서 제품1PASS/GO→완료2.50초/전체63.83초/cleanupTrue. 전체2,850개 잠금의 r381-run002와 증거 폴더 합집합1,262개 잠금의 r382는15초중단 재현·출력0·child실행null 유지. 진단 소유Job 전체 선종료로 정리순서 수정/r382 빈Job·cleanupTrue. r383 스택진단은CPU81.64% 경고로GO 전 중단·스택없음/정상정리. 전체 바이트 신선도·Native·공식승인으로 승격0/원체커·자원·시간한도 유지/기존006·승인사례 재실행0/PCfreeze 미증명. 다음 증거 파일 잠금 조건의 worker 대기 위치 확인. 세부 implementation/p09/P09-361_INPUT_LOCK_WORKER_DIAGNOSTIC_R379_R383.md.
+<!-- END P09_R379_R383_STATUS -->

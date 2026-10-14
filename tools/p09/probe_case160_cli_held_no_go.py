@@ -5,6 +5,16 @@ import re
 import subprocess
 import sys
 import time
+if len(sys.argv) == 4 and sys.argv[1:3] == ["--trace-owned-worker", "--task"]:
+    import faulthandler
+    import runpy
+    task = sys.argv[3]
+    original = Path(__file__).resolve().with_name("case160_attempt_controller.py")
+    sys.argv = [str(original), "--owned-worker", "--task", task]
+    faulthandler.dump_traceback_later(5, repeat=False)
+    try: runpy.run_path(str(original), run_name="__main__")
+    finally: faulthandler.cancel_dump_traceback_later()
+    raise SystemExit(0)
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import case160_attempt_controller as controller
 from bounded_process_progress import BoundedProcessCapture
@@ -12,14 +22,17 @@ from bounded_process_progress import BoundedProcessCapture
 SELF = "tools/p09/probe_case160_cli_held_no_go.py"
 OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-held-no-go-r378.v1.json"
 FULL_HELD = sys.argv[1:] == ["--go-full-held"]
-EVIDENCE_HELD = sys.argv[1:] == ["--go-evidence-held"]
-GO = sys.argv[1:] in (["--go"], ["--go-full-held"], ["--go-evidence-held"])
+TRACE = sys.argv[1:] == ["--go-evidence-trace"]
+EVIDENCE_HELD = sys.argv[1:] in (["--go-evidence-held"], ["--go-evidence-trace"])
+GO = sys.argv[1:] in (["--go"], ["--go-full-held"], ["--go-evidence-held"], ["--go-evidence-trace"])
 if GO:
     OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-held-product-r380.v1.json"
 if FULL_HELD:
     OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-full-held-product-r381-run002.v1.json"
 if EVIDENCE_HELD:
     OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-evidence-held-product-r382.v1.json"
+if TRACE:
+    OUTPUT = "implementation/p09/evidence/p09-361-case160-evidence-held-worker-stack-r383.v1.json"
 
 
 def main():
@@ -75,7 +88,13 @@ def main():
         windows = guard.windows; job = windows.job(); limits = windows.verify_job_limits(job)
         if GO: binding = c.prior.WINDOW.connect(subprocess.Popen, BoundedProcessCapture)
         factory = binding.Popen if GO else subprocess.Popen
-        process = factory([sys.executable, str(c.old.c.ROOT/controller.SELF), "--owned-worker", "--task", controller.TASK],
+        command = [sys.executable, str(c.old.c.ROOT/controller.SELF), "--owned-worker", "--task", controller.TASK]
+        if TRACE:
+            command = [sys.executable, str(c.old.c.ROOT/SELF), "--trace-owned-worker", "--task", controller.TASK]
+            out.update(same_actual_worker_argv_without_B=False, actual_controller_main_via_runpy=True,
+                diagnostic_watchdog_thread_added=True, diagnostic_stack_timeout_seconds=5,
+                production_controller_modified=False, raw_stack_or_log_persisted=False)
+        process = factory(command,
             cwd=c.old.c.ROOT, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
             creationflags=subprocess.BELOW_NORMAL_PRIORITY_CLASS | subprocess.CREATE_NO_WINDOW)
         handle = windows.k.OpenProcess(0x101, False, process.pid)
@@ -132,6 +151,15 @@ def main():
                 with capture.lock:
                     out["stdout_bytes"] = len(capture.buffers["stdout"])
                     out["stderr_bytes"] = len(capture.buffers["stderr"])
+                    if TRACE:
+                        decoded = bytes(capture.buffers["stderr"]).decode("utf-8", errors="replace")
+                        frames = []
+                        for filename, lineno, function in re.findall(r'File "([^"\n]+)", line ([0-9]+) in ([A-Za-z0-9_<>]+)', decoded):
+                            normalized = filename.replace("\\", "/")
+                            prefix = c.old.c.ROOT.as_posix()+"/"
+                            if normalized.startswith(prefix) and len(frames) < 16:
+                                frames.append(dict(path=normalized[len(prefix):], line=int(lineno), function=function))
+                        out["worker_wait_stack_repository_frames"] = frames
             elif process:
                 for stream in (process.stdin, process.stdout, process.stderr):
                     if stream: stream.close()
