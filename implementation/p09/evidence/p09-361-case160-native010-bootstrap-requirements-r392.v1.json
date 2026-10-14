@@ -1,0 +1,64 @@
+{
+  "state": "FAILED_RUN004_INDEPENDENT_ORACLE_NOT_ACCEPTED",
+  "accepted_count_delta": 0,
+  "product_or_Native_reexecuted": false,
+  "queue_acceptance_called": false,
+  "P09_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "error_type": "ValueError",
+  "error_code": "CURRENT_EPOCH_ACCEPT_UNCHANGED_ACCEPTED159_AUTHORITY",
+  "failure_frames": [
+    {
+      "file": "qualify_case160_run004_readonly.py",
+      "function": "main",
+      "line": 102
+    },
+    {
+      "file": "qualify_case160_run004_readonly.py",
+      "function": "bootstrap_requirements",
+      "line": 37
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "fields",
+      "line": 60
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "exact",
+      "line": 48
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "require",
+      "line": 43
+    }
+  ],
+  "missing_bootstrap_tool_path_count": 0,
+  "missing_bootstrap_path_list_complete": true,
+  "missing_bootstrap_tool_paths": [],
+  "cleanup_confirmed": true,
+  "terminal_phase": "original_initial_requirements",
+  "elapsed_seconds": 3.4564623000005668,
+  "native_attempt": 10,
+  "report_attempt": 1,
+  "qualifier_source_pin": {
+    "path": "tools/p09/qualify_case160_run004_readonly.py",
+    "bytes": 12499,
+    "sha256": "c280ddd395719056d51cbce5003e00ebbf414f65e1a51963dc4d13d3b910d238"
+  },
+  "observed_runtime_pin": {
+    "path": "implementation/p09/evidence/p09-361-case160-current-runtime-run010.v1.json",
+    "bytes": 4415434,
+    "sha256": "0ba61590cc9246bc0c7d0a60d7006c73169a4a8906e2a70e6e3f3da4aa285f64"
+  },
+  "CPU_max": 19.54,
+  "RAM_min": 50.209412369067465,
+  "parent_CPU_max": 0.0,
+  "parent_private_MiB_max": 44.54296875,
+  "metadata_progress": {
+    "fresh_inputs": 2,
+    "fresh_read_passes": 2,
+    "fresh_bytes_read": 441996
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "state": "FAILED_RUN004_INDEPENDENT_ORACLE_NOT_ACCEPTED",
+  "accepted_count_delta": 0,
+  "product_or_Native_reexecuted": false,
+  "queue_acceptance_called": false,
+  "P09_gate": "OPEN",
+  "PC_freeze_resolved": false,
+  "error_type": "ValueError",
+  "error_code": "CURRENT_EPOCH_ACCEPT_BOOTSTRAP_CONTROLLER",
+  "failure_frames": [
+    {
+      "file": "case160_run004_controller.py",
+      "function": "prepare_candidate",
+      "line": 224
+    },
+    {
+      "file": "flat_current_queue_acceptance.py",
+      "function": "prepare",
+      "line": 68
+    },
+    {
+      "file": "flat_current_queue_envelope_runtime_v26.py",
+      "function": "validate_candidate",
+      "line": 167
+    },
+    {
+      "file": "flat_current_queue_source_stat_runtime_v2.py",
+      "function": "validate_candidate",
+      "line": 400
+    },
+    {
+      "file": "flat_current_queue_chunk_runtime_v1.py",
+      "function": "validate_candidate",
+      "line": 256
+    },
+    {
+      "file": "flat_current_queue_budget_acceptance_v2.py",
+      "function": "validate_candidate",
+      "line": 35
+    },
+    {
+      "file": "flat_current_queue_budget_acceptance_v1.py",
+      "function": "validate_candidate",
+      "line": 72
+    },
+    {
+      "file": "flat_current_queue_metadata_acceptance.py",
+      "function": "validate_candidate",
+      "line": 47
+    },
+    {
+      "file": "flat_current_queue_acceptance.py",
+      "function": "validate_candidate",
+      "line": 43
+    },
+    {
+      "file": "runtime_envelope_full_oracle_connection_v1.py",
+      "function": "execute",
+      "line": 61
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "validate",
+      "line": 109
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "require",
+      "line": 43
+    }
+  ],
+  "missing_bootstrap_tool_paths": [
+    "tools/p09/flat_current_queue_direct_view_runtime_v3.py",
+    "tools/p09/flat_current_queue_direct_view_runtime_v4.py",
+    "tools/p09/flat_current_queue_inherited_scope_runtime_v1.py",
+    "tools/p09/flat_current_queue_inherited_scope_runtime_v2.py",
+    "tools/p09/flat_current_queue_native_diagnostic_runtime_v10.py",
+    "tools/p09/flat_current_queue_native_diagnostic_runtime_v11.py",
+    "tools/p09/flat_current_queue_native_diagnostic_runtime_v12.py",
+    "tools/p09/flat_current_queue_native_diagnostic_runtime_v14.py",
+    "tools/p09/flat_current_queue_native_diagnostic_runtime_v15.py",
+    "tools/p09/flat_current_queue_native_diagnostic_runtime_v16.py",
+    "tools/p09/flat_current_queue_native_diagnostic_runtime_v6.py",
+    "tools/p09/flat_current_queue_native_diagnostic_runtime_v8.py",
+    "tools/p09/flat_current_queue_native_diagnostic_runtime_v9.py",
+    "tools/p09/flat_current_queue_native_pressure_runtime_v17.py",
+    "tools/p09/held_native_view_oracle_v1.py",
+    "tools/p09/native_pressure_full_connection_v1.py"
+  ],
+  "cleanup_confirmed": true,
+  "terminal_phase": "independent_current160_whole_oracle",
+  "elapsed_seconds": 40.98912980000023,
+  "native_attempt": 10,
+  "report_attempt": 3,
+  "CPU_max": 41.18,
+  "RAM_min": 48.51318505295538,
+  "parent_CPU_max": 1.708790512716987,
+  "parent_private_MiB_max": 52.65625,
+  "metadata_progress": {
+    "fresh_inputs": 227,
+    "fresh_read_passes": 240,
+    "fresh_bytes_read": 52507514
+  }
+}

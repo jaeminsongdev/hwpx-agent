@@ -58,4 +58,20 @@ mock 기반 수치·범위·누락·역할 필터·64개 상한 검사가 통과
 
 두 측정 기록은 target의 원본을 유지한 채 evidence에 바이트 그대로 복사하고 hash 일치를 확인했다. 다음은 같은 소스를 유지하면서 입력 고정 구간과 프로세스 성능 계수의 시간 관계를 확인하는 것이다. 현재까지 CPU 폭증의 원인은 미확정이며 공식153/249, 잔여96, next160 및 P09/A12/A13 OPEN을 유지한다.
 
-근거: evidence의 case160-current-runtime-run004/run007/run008, run007-controller-r390, envelope-controller-preflight046, native008-controller-r391의 qualification001/002 및 preflight002, post-native008-process-counters-r391 및 default-crosscheck-r391 기록과 관련 controller·테스트·자원 대조 소스.
+## 동시 측정과 전체 초기 입력 복원
+
+Native009는 CODE32 및 whole preflight 통과 뒤 실행 시작3.23초에 시스템CPU83.15% 경고로 중단됐다. worker·제품 실행은 없고 cleanup=True였다. 후속8표본은 Native CPU19.98~32.58%와 CIM18~32%가 대체로 비슷했으며 중단 순간을 측정한 것은 아니다.
+
+Native010은 보조8표본을 시작한 뒤 실행했다. 시작 구간의 Native CPU11.14~27.71%, CIM7~35%, Defender 전체 용량 기준 시간 계수0~0.3125%를 확인했다. 입력 고정 구간의 별도8표본은 Native CPU24.48~36.36%, CIM22~35%, Defender0.3125~3%였다. 보조 측정은 원 guard와 별도이며 서로 동일한 측정 구간을 보장하지 않는다. 이 실행에서는 이전 급등이 재현되지 않아 CPU 폭증 원인을 확정하지 않는다. 세 측정은 target 원본을 유지한 채 evidence로 복사하고 동일 hash를 확인했다.
+
+Defender 평균 검사 CPU목표10, 낮은우선순위True 및 idle scan throttle 비활성화False를 현재 읽기 전용으로 확인했다. HideExclusionsFromLocalUsers=True이고 제외 목록에는 실제 경로 대신 비경로 표시값만 반환돼 개발 폴더 제외 유지 여부는 현재 권한에서 UNVERIFIED다. 목록이 안 보인다고 제외가 없다고 판단하지 않는다. [Microsoft의 제외 목록 표시 정책](https://learn.microsoft.com/en-us/windows/client-management/mdm/defender-csp#configurationhideexclusionsfromlocalusers)에 따라 표시와 실제 적용은 구분한다. 설정은 변경하지 않았다.
+
+Native010 당시 후보 검사는 실제 전후2경계·2,855입력, 제품1PASS, GO→완전수집2.010초, 전체585.14초, CPU최고72.29%, 가용RAM최저44.71%, 빈tree 및cleanup=True로 통과했다. 그러나 독립 전체 검사는 BOOTSTRAP_CONTROLLER로 실패했다. 첫 누락에서 검사를 끝내는 원 조건을 바꾸지 않고, 실패 frame의 원 CODE_PINS/SOURCES 요구 집합을 확인해 누락된 초기 tool50개를 모두 찾았다. Native010 기록은 보존하며 승인에 사용하지 않는다.
+
+50개의 핀 값은 현재 후보의 source_freeze가 아니라 승인된 case159의 고정 원본에서 가져왔다. 50개 모두 승인된 원본에 있었고 합계477,533바이트였다. 선언 준비는 실제 fresh53/final53, cleanup=True로 완료됐다. 최초 선언 준비의 authority 정리 필드명 오류도 별도 실패 기록으로 보존하고 실제 resource_cleanup_confirmed 필드를 확인해 수정했다.
+
+기존 controller에 이 선언·생성자 pin·50개 입력을 bootstrap 반환 및 DATA 읽기 전에 연결했다. 검사 조건·파일·기존 실패 기록을 삭제하지 않았다. 수정된 Native011 CODE32는 오류0·실패0·skip0, fresh158/final158, helper62, 17.419초, CPU최고55.3%, 가용RAM최저47.90%, cleanup=True로 통과했다. 기존 독립 검사기에는 실행 번호·보고서 슬롯 선택을 추가했으며 경로 선택3계약은 통과했다. 이3계약은 전체 oracle 검증을 대신하지 않는다.
+
+수정된 연결의 Native011 whole preflight는 76.565초, 입력2,890개, imports64, CPU최고61.86%, 가용RAM최저38.04%, cleanup=True로 통과했다. 다음은 새 Native011, 그 후 독립 전체 검사 및 공식 승인이다. 공식153/249, 잔여96, next160, P09/A12/A13 OPEN과 목표ACTIVE를 유지한다. 아직 PC 프리즈 해결 또는 전체 목표 완료를 주장하지 않는다.
+
+근거: evidence의 case160-current-runtime-run004/run007/run008/run009/run010, native009/010/011-controller-r391, native010-independent-oracle-r392-attempt001..004, native010-bootstrap-requirements-r392 및 attempt002, 세 r392 crosscheck 기록과 관련 controller·독립 검사기·자원 대조 소스.

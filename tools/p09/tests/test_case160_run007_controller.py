@@ -10,6 +10,9 @@ MODULE, SOURCE_PROOF = controller.inherited_tests()
 
 class Tests(MODULE.Tests):
     def test_native_attempt_is_closed_and_worker_matches_parent(self):
+        self.assertEqual(len(controller.EXTRA_INITIAL_PINS), 50)
+        self.assertIs(controller.env["LEGACY_PINS"], controller.LEGACY_PINS)
+        self.assertIn("tools/p09/tests/test_current_queue_native.py", {p["path"] for p in controller.LEGACY_PINS})
         select = controller.native_attempt
         self.assertEqual(select([]), 7)
         for run in range(7, 15):

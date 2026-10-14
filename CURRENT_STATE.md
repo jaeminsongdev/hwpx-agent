@@ -2938,3 +2938,11 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 <!-- BEGIN P09_NATIVE008_COUNTER_R391_STATUS -->
 > Native008 입력고정CPU92.38%/70.13초 STOP_NATIVE_OPEN_AFTER_HOST_SATURATION·DEFERRED_NOT_STARTED/worker생성·제품실행0/cleanupTrue·빈tree. CODE32소스hash유지. 기존읽기전용자원대조에기본OFF 선택형CIM프로세스계수추가/임의이름·경로·commandline수집0/역할·PID·숫자만/상한64·불가≠0·runner변경0. 수치·범위·역할·불가·상한mock PASS, 실제2표본 nativeCPU26.23/48.88 대CIM24/46·Defender전체용량시간계수5.94/6.88/조회0.408/0.434초/중단순간아님·인과미확정. 기본OFF회귀1표본 및 기존증거검사12PASS. 측정원본target보존·evidence동일바이트복사검증. 공식153/249·delta0·next160/P09-A12-A13 OPEN/목표ACTIVE. 다음입력고정시점과성능계수시간관계확인. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
 <!-- END P09_NATIVE008_COUNTER_R391_STATUS -->
+
+<!-- BEGIN P09_NATIVE010_BOOTSTRAP_R392_STATUS -->
+> Native009 시작3.23초CPU83.15% 경고중단/제품0/cleanupTrue. Native010 당시후보PASS/2경계·2855입력/제품1PASS·GO→완전수집2.010초/전체585.14초/CPU72.29%·가용RAM44.71%/cleanupTrue·빈tree. 독립전체검사BOOTSTRAP_CONTROLLER 실패/원CODE_PINS·SOURCES에서초기입력50누락전수확인/현재후보관측아닌승인case159핀으로선언fresh53-final53 준비. 초기tool50+선언+생성자핀을DATA전실제읽기에연결/Native011 CODE32 PASS·fresh158-final158/helper62/17.419초/cleanupTrue. 독립검사기닫힌실행선택3계약PASS≠wholeoracle. 동시측정시CPU급등미재현·원인미확정/Defender10%·낮은우선순위True 유지·제외목록사용자숨김으로적용확인불가·설정변경0. 공식153/249·delta0·잔여96·next160/P09-A12-A13 OPEN/목표ACTIVE. 다음수정연결wholepref→Native011→독립전체검사→공식승인. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_NATIVE010_BOOTSTRAP_R392_STATUS -->
+
+<!-- BEGIN P09_NATIVE011_PREFLIGHT_R392_STATUS -->
+> 초기tool50개복원수정본 wholepref011 PASS/76.565초·inputs2890·imports64·CPU61.86%·가용RAM38.04%·cleanupTrue. CODE32 fresh158-final158 유지. 다음소스고정 Native011→독립전체검사→공식승인/Native010독립미통과승격0/공식153/249·잔여96·next160/P09-A12-A13 OPEN/목표ACTIVE.
+<!-- END P09_NATIVE011_PREFLIGHT_R392_STATUS -->

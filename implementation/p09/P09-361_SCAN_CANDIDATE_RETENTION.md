@@ -1613,3 +1613,11 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_NATIVE008_COUNTER_R391_STATUS -->
 > Native008 CPU92.38% 경고로입력고정중단/제품·worker0/cleanupTrue·빈tree/실패기록보존. 선택형읽기전용CIM계수·기본OFF회귀·기존증거12검사PASS/원CODE32해시유지/runner·보호조건변경0. 후속표본은중단시점과다르고원인미확정. 두측정target원본유지·evidence복사동일hash확인. 공식153/249·delta0/P09-A12-A13 OPEN/목표ACTIVE. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
 <!-- END P09_NATIVE008_COUNTER_R391_STATUS -->
+
+<!-- BEGIN P09_NATIVE010_BOOTSTRAP_R392_STATUS -->
+> Native009 CPU경고중단및Native010 후보PASS 원기록보존/Native010 독립BOOTSTRAP_CONTROLLER 실패는승인승격0. 처음멈춘누락1개만고치지않고전체초기tool50개확인/승인159원본핀·실제fresh53-final53 선언준비. 최초authority정리필드명오류도실패보존. 원조건유지·초기실제읽기복원 후Native011 CODE32 fresh158-final158 PASS/독립경로선택3계약PASS≠wholeoracle. 측정target원본및evidence동일hash복사보존. 공식153/249·delta0/P09-A12-A13 OPEN/목표ACTIVE. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_NATIVE010_BOOTSTRAP_R392_STATUS -->
+
+<!-- BEGIN P09_NATIVE011_PREFLIGHT_R392_STATUS -->
+> 초기입력50복원수정본 CODE32 및wholepref011 PASS/inputs2890·imports64·cleanupTrue/원조건유지·실패원본보존. Native010 후보기록은독립미통과로공식승격0/다음별도Native011→독립전체검사→승인/공식153/249·delta0/P09-A12-A13 OPEN.
+<!-- END P09_NATIVE011_PREFLIGHT_R392_STATUS -->
