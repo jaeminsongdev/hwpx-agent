@@ -1525,3 +1525,16 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+<!-- BEGIN P09_R369_STATUS -->
+> 2026-10-14 P09 r369 — 실제실패003 독립검토·실패002003 무손실표현·새004 단일identity·private31 두실패 역할 검증. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/P10새구현0/목표ACTIVE.
+> r843 CODE10/fresh4-final4/원003 CLOSED·완전before1개·2801inputs-247714063bytes 일치/핸들3173·view5589 모두닫힘/decoder44를58로승격0/CPU8.98%-RAM62.948815%/cleanupTrue. 원실패 보존/재시도-GO권한0.
+> r844 원0024217213→1560359bytes·0034242304→1572291bytes/합5326867bytes 감소·원본복원4회·decoder합0.061121초<5·원64KiB/2MiB-s exclusive-fsync/fresh24-final24/CPU8.13%-RAM64.608641%/cleanupTrue. 새실패alias actualmanifest채택0/원본재작성-성공승격0.
+> r845 CODE38/fresh63-final63·actual원template의physical4 단일adapter·원workercode 유지·adapter와원engine 동일privateglobals·engine-worker호출0·004root없음/CPU33.7%-RAM62.804352%/cleanupTrue. 새controller-Native-GO권한0.
+> r846 CODE12/fresh51-final51·원29+두실패private31·원기타descriptor/representation위임·실패provenance불변·compact31 wire11015bytes<원16384·CPU18.89%-RAM65.145337%/cleanupTrue. 기존manifestpin은진단constructor만/actual31manifest생성-승인0. qualifier포함Native비용601.222810초로600조건미충족·runtime PASS승격0. 결합unit122 통과.
+> 다음 실제이전scope 추가과거입력 무손실검토→새compactcapsule/actualmanifest/graph→004controller 전체prep-cost-pref·두실제Native읽기·독립160oracle. 기존003 재실행0/제품실행-승인증가-접근허용-UAC-OS변경-외부종료-삭제이동-push0/PCfreeze미증명. 세부 implementation/p09/P09-361_FAILED003_REVIEW_RUN004_IDENTITY_R369.md, r843-r846.
+<!-- END P09_R369_STATUS -->
+
+
+
+
+
