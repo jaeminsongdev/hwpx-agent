@@ -145,3 +145,17 @@ current_queue_successor_runtime은 사례161..249·물리 실행2..8에서 기�
 목표는 ACTIVE, 공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN을 유지한다. actual Native·제품 실행은 NOT_RUN이다. 다음은 실제 부모 입력 binding·worker 진입점과 독립 whole oracle을 연결하고 전체 CODE·closure·cost·preflight를 검증하는 것이다. OS·보호 기준·원본·approved case160은 변경하지 않았다.
 
 근거: current_queue_successor_connections와 current_queue_successor_runtime 및 해당 테스트, evidence의 case161-successor-connections002, expanded-manifest002, worker-capsule002 및 factory001/002. 비용 추정은 원 비용 함수를 실행한 이 세션의 bounded terminal 결과다.
+
+## 실제 부모 입력 준비와 작업 프로세스 정책 연결
+
+공통 runtime에 실제 부모 binding callback과 once-only worker policy 연결을 추가했다. 새 binding은 현재 STEP·연결 준비·manifest·capsule·승인 predecessor·compiled249를 실제 읽고 확인한다. 이전 초기 bootstrap 입력을 모두 읽은 뒤 전체 inherited scope와 승인 fresh 입력을 명시적 alias만 사용해 병합하며 Rust787 및 고정 EXE를 유지한다. 원 parent·worker 함수는 대체하지 않고 동일 private environment와 Binding/Frame 연결을 유지한다.
+
+부모의 두 번 읽기·정리·정책 복원, 타 worker task 및 재호출 거부, 타 사례의 부모 준비를 receipt IO 전에 거부하는3개 회귀 계약을 추가했다. 전체 관련60개가1.811초에 통과했다.
+
+factory003은 실제 구성 검증의 bindings import 누락으로 종료돼 성공한 준비 기록이 없었다. 관측 실패를 별도 보존하고 serialized cleanup receipt는 unavailable로 구분했다. 올바른 함수에 import를 추가하고 NameError도 안전한 실패 보고 경계에 포함했다. factory004는6계약과 실제 부모 입력 준비·worker callable 연결을 fresh375/final375,87.0413초, CPU최고14.99%, 가용RAM최저43.03%, cleanup=True로 통과했다. 부모·worker dispatch count와 생성된 실제 Frame 수는0이다.
+
+준비 의미 입력2,877개·Rust787의 원 비용 모델은 decoder5초 포함588.4297초다. 전체 imported closure·실제 worker CLI·독립 whole oracle·CODE·whole preflight는 미완료이므로 실행 허용이 아니다. factory004의 실제 runtime 소스와 테스트 hash는 현재 파일과 일치한다.
+
+공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN, 목표ACTIVE를 유지한다. 다음은 제한된 worker bootstrap으로 실제 CLI 진입점을 연결하고 독립 whole oracle과 전체 사전 검증을 완성하는 것이다. Native·제품 실행 및 공식 승인 delta는0이다.
+
+근거: current_queue_successor_runtime와 해당 테스트, evidence/p09-361-case161-successor-factory003/004.v1.json. fixture 및 입력 준비 결과는 실제 제품 또는 Native 승인과 구분한다.

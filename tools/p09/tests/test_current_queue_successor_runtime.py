@@ -4,6 +4,7 @@ import sys
 from types import SimpleNamespace as NS
 import unittest
 sys.path.insert(0,str(Path(__file__).parents[1]))
+sys.path.insert(0,str(Path(__file__).parent))
 import current_queue_successor_runtime as m
 import runtime_envelope_namespace_bundle_v1 as loader
 
@@ -42,6 +43,39 @@ def fixture_window():
 
 
 class Tests(unittest.TestCase):
+    def parent_fixture(self):
+        from test_current_queue_successor_connections import Tests as GraphTests
+        graph,unused,state,semantic,held,engine=GraphTests().connected_parent_fixture()
+        engine.run_owned.__globals__.update(SELF="fixture-source",TEST="fixture-test")
+        return graph,engine,semantic,held
+
+    def test_current_parent_composition_preserves_body_and_two_reads(self):
+        graph,engine,semantic,held=self.parent_fixture();body=engine.run_owned;worker=engine.worker
+        def binding(q):return semantic,{"crates/product-cli/src/current.rs"}
+        connected,state,proof=m.compose_parent(lambda:(engine,{}),graph,binding,lambda:None)
+        row=connected.run_owned(1)
+        self.assertIs(state.original,body);self.assertIs(connected.worker,worker)
+        self.assertEqual(len(row["source_frame"]["actual_byte_boundaries"]),2)
+        self.assertEqual(row["source_input_representation"]["next_case"],161)
+        self.assertFalse(held.open);self.assertTrue(state.frames[0].raw_policy.restored)
+        self.assertFalse(proof["actual_parent_Native_product_or_GO_qualified"])
+
+    def test_current_worker_connector_is_once_only_and_rejects_other_task(self):
+        graph,engine,semantic,held=self.parent_fixture();worker=engine.worker
+        execute,state,policy,proof=m.compose_worker(lambda:(engine,{}),graph,ROOT,lambda:None)
+        with self.assertRaises(ValueError):execute("case162-current-r001-tests")
+        self.assertEqual(state.attempts,0)
+        self.assertEqual(execute(graph.worker.TASK),2)
+        with self.assertRaises(ValueError):execute(graph.worker.TASK)
+        self.assertIs(state.original,worker);self.assertTrue(policy.restored)
+
+    def test_parent_admission_rejects_wrong_case_before_receipt_IO(self):
+        graph,engine,semantic,held=self.parent_fixture()
+        class Reader:
+            checkpoint=staticmethod(lambda:None)
+            def pin(self,*args):raise AssertionError("UNEXPECTED_RECEIPT_IO")
+        with self.assertRaises(ValueError):m.current_input_scope(Reader(),graph,dict(index=162),{},{},{})
+
     def test_contexts_and_single_adapter_are_exact(self):
         for index,run in ((161,2),(161,8),(165,3),(249,8)):
             window,retry=fixture_window();before=window.template.__globals__.copy()
