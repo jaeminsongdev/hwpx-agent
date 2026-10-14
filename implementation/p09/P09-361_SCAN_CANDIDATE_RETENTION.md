@@ -1593,3 +1593,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_R379_R383_STATUS -->
 > P09 사례160 입력 잠금 비교 — 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/목표ACTIVE. r379 실제worker 함수 진단 통과 후 r380 실제CLI·218개 입력 잠금에서 제품1PASS/GO→완료2.50초/전체63.83초/cleanupTrue. 전체2,850개 잠금의 r381-run002와 증거 폴더 합집합1,262개 잠금의 r382는15초중단 재현·출력0·child실행null 유지. 진단 소유Job 전체 선종료로 정리순서 수정/r382 빈Job·cleanupTrue. r383 스택진단은CPU81.64% 경고로GO 전 중단·스택없음/정상정리. 전체 바이트 신선도·Native·공식승인으로 승격0/원체커·자원·시간한도 유지/기존006·승인사례 재실행0/PCfreeze 미증명. 다음 증거 파일 잠금 조건의 worker 대기 위치 확인. 세부 implementation/p09/P09-361_INPUT_LOCK_WORKER_DIAGNOSTIC_R379_R383.md.
 <!-- END P09_R379_R383_STATUS -->
+
+<!-- BEGIN P09_R384_R390_STATUS -->
+> P09 사례160 — 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/목표ACTIVE. r384 초기화 스택 이후 r387 계측에서 candidate 복제6회·깊이6·0.144ms/제품 subprocess 대기·GO→완전수집5.509초, 진단stderr로 실패 보존/제품PASS 승격0. 동일 Job CPU 0.109초→벽0.110초 및0.813초→벽0.821초/한도완화0. 별도run007 초기CODE27 fresh106-final106/helper62 통과 후 preflight045 CPU75.95% 경고중단. 반복 소스변경과 CODE재검사를 줄이는 닫힌 qualification1..8·preflight2..8 선택 구현/현재31계약 NOT_RUN·문법만통과. r389는RAM3.877%로계약·GO 전중단/cleanupTrue·P09 잔여프로세스없음/최근가용RAM4.86%·Native007 미시작. 다음 자원 시작조건 충족 시 CODE31→wholepref→실제Native·독립검사·공식승인. 세부 implementation/p09/P09-361_WORKER_PROFILE_AND_RETRY_SELECTION_R384_R390.md.
+<!-- END P09_R384_R390_STATUS -->

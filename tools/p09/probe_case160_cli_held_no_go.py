@@ -28,9 +28,37 @@ if len(sys.argv) == 4 and sys.argv[1:3] == ["--trace-owned-worker", "--task"]:
     task = sys.argv[3]
     original = Path(__file__).resolve().with_name("case160_attempt_controller.py")
     sys.argv = [str(original), "--owned-worker", "--task", task]
+    active = {}
+    counts = dict(calls=0, returns=0, maximum_depth=0, root_starts=0, root_returns=0)
+    def profile(frame, event, arg):
+        code = frame.f_code
+        if code.co_name != "candidate_connection" or not code.co_filename.replace("\\", "/").endswith("tools/p09/flat_current_queue_direct_view_runtime_v3.py"):
+            return
+        key = id(frame)
+        if event == "call":
+            counts["calls"] += 1
+            is_root = not active
+            active[key] = (time.monotonic(), time.process_time(), is_root)
+            counts["maximum_depth"] = max(counts["maximum_depth"], len(active))
+            if is_root:
+                counts["root_starts"] += 1
+                if counts["root_starts"] <= 8:
+                    print(json.dumps(dict(stage="candidate_graph_begin", **counts)), flush=True)
+        elif event == "return" and key in active:
+            wall, cpu, is_root = active.pop(key)
+            counts["returns"] += 1
+            if is_root:
+                counts["root_returns"] += 1
+                if counts["root_returns"] <= 8:
+                    print(json.dumps(dict(stage="candidate_graph_end", wall_seconds=time.monotonic()-wall,
+                        cpu_seconds=time.process_time()-cpu, **counts)), flush=True)
+    sys.setprofile(profile)
     faulthandler.dump_traceback_later(5, repeat=False)
     try: runpy.run_path(str(original), run_name="__main__")
-    finally: faulthandler.cancel_dump_traceback_later()
+    finally:
+        sys.setprofile(None)
+        faulthandler.cancel_dump_traceback_later()
+        print(json.dumps(dict(stage="candidate_profile_terminal", **counts)), flush=True)
     raise SystemExit(0)
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import case160_attempt_controller as controller
@@ -51,7 +79,7 @@ if FULL_HELD:
 if EVIDENCE_HELD:
     OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-evidence-held-product-r382.v1.json"
 if TRACE:
-    OUTPUT = "implementation/p09/evidence/p09-361-case160-evidence-held-worker-stack-r384.v1.json"
+    OUTPUT = "implementation/p09/evidence/p09-361-case160-evidence-held-worker-profile-r387.v1.json"
 if BUDGET:
     OUTPUT = "implementation/p09/evidence/p09-361-owned-Job-cpu-budget-r385.v1.json"
     if CPU_TARGET == .8: OUTPUT = "implementation/p09/evidence/p09-361-owned-Job-sustained-cpu-budget-r386.v1.json"
@@ -149,6 +177,7 @@ def main():
             command = [sys.executable, str(c.old.c.ROOT/SELF), "--trace-owned-worker", "--task", controller.TASK]
             out.update(same_actual_worker_argv_without_B=False, actual_controller_main_via_runpy=True,
                 diagnostic_watchdog_thread_added=True, diagnostic_stack_timeout_seconds=5,
+                diagnostic_python_profile_added=True,
                 production_controller_modified=False, raw_stack_or_log_persisted=False)
         process = factory(command,
             cwd=c.old.c.ROOT, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -220,6 +249,13 @@ def main():
                     if TRACE:
                         decoded = bytes(capture.buffers["stderr"]).decode("utf-8", errors="replace")
                         out["worker_wait_stack_repository_frames"] = repository_stack(decoded, c.old.c.ROOT)
+                        stages = []
+                        for line in bytes(capture.buffers["stdout"]).decode("utf-8", errors="replace").splitlines():
+                            try: row = json.loads(line)
+                            except (ValueError, TypeError): continue
+                            if type(row) is dict and row.get("stage") in ("candidate_graph_begin", "candidate_graph_end", "candidate_profile_terminal") and len(stages) < 17:
+                                stages.append({k:v for k,v in row.items() if k in ("stage", "calls", "returns", "maximum_depth", "root_starts", "root_returns", "wall_seconds", "cpu_seconds")})
+                        out["candidate_graph_profile"] = stages
             elif process:
                 for stream in (process.stdin, process.stdout, process.stderr):
                     if stream: stream.close()

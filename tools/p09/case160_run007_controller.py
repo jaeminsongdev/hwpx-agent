@@ -13,9 +13,9 @@ import flat_current_queue_envelope_runtime_v25 as old
 
 SELF = "tools/p09/case160_run007_controller.py"
 TEST = "tools/p09/tests/test_case160_run007_controller.py"
-DATA = "implementation/p09/evidence/p09-361-case160-envelope-controller-data045.v1.json"
-QUAL = "implementation/p09/evidence/p09-361-case160-run007-controller-r388.v1.json"
-PREFLIGHT = "implementation/p09/evidence/p09-361-case160-envelope-controller-preflight045.v1.json"
+DATA = "implementation/p09/evidence/p09-361-case160-envelope-controller-data047.v1.json"
+QUAL = "implementation/p09/evidence/p09-361-case160-run007-controller-r390.v1.json"
+PREFLIGHT = "implementation/p09/evidence/p09-361-case160-envelope-controller-preflight046.v1.json"
 CONFIG = "implementation/p09/evidence/p09-361-case160-run007-graph-config-r388.v1.json"
 MANIFEST_PATH = "implementation/p09/evidence/p09-361-case160-source-manifest033.v8.json"
 CAPSULE_PATH = "implementation/p09/evidence/p09-361-case160-worker-policy-capsule010.compact.v1.json"
@@ -35,9 +35,9 @@ a = old.a
 LEGACY_PINS = original.LEGACY_PINS
 projected = original.projected
 
-MAPPING = {6:7, original.TASK:TASK,
+MAPPING = {6:7, 27:31, original.TASK:TASK,
     "hwpx-agent.p09-run006-graph-config/v1":"hwpx-agent.p09-run007-graph-config/v1",
-    "-envelope-controller-preflight044.v1.json":"-envelope-controller-preflight045.v1.json",
+    "-envelope-controller-preflight044.v1.json":"-envelope-controller-preflight046.v1.json",
     "tools.p09.tests.test_case160_attempt_controller":"tools.p09.tests.test_case160_run007_controller"}
 env = base.clone_family(original.read_config.__globals__, dict(SELF=SELF, TEST=TEST, DATA=DATA,
     QUAL=QUAL, PREFLIGHT=PREFLIGHT, CONFIG=CONFIG, MANIFEST_PATH=MANIFEST_PATH,
@@ -67,6 +67,41 @@ env["initialize"] = initialize
 CURRENT = initialize() if (old.c.ROOT/CONFIG).is_file() else None
 
 
+def select_preflight(current, attempt):
+    """Closed metadata selection; no automatic retry or source edits."""
+    a.require(type(attempt) is int and 2 <= attempt <= 8, "CLOSED_RUN007_PREFLIGHT_ATTEMPT")
+    path = f"implementation/p09/evidence/p09-361-case160-envelope-controller-preflight{44+attempt:03}.v1.json"
+    suffix = "-envelope-controller-preflight"+f"{44+attempt:03}.v1.json"
+    before = current.after
+    fn = current._env["preflight_projection"]
+    a.require(sum(type(v) is str and v == before for v in fn.__code__.co_consts) == 1, "ONE_ORIGINAL_PREFLIGHT_DESTINATION")
+    # project() proves that inverse metadata substitution restores every code body.
+    changed = projected(fn, current._env, {before:suffix})
+    family = current.binding.__globals__
+    family.update(PREFLIGHT=path, after=suffix)
+    current._env.update(PREFLIGHT=path, preflight_projection=changed)
+    current.M.PREFLIGHT = path
+    current.M.preflight_projection = changed
+    current.PREFLIGHT = path
+    current.after = suffix
+    return path
+
+
+def select_qualification(current, attempt):
+    """Preserve failed CODE receipts without changing source for a retry."""
+    a.require(type(attempt) is int and 1 <= attempt <= 8, "CLOSED_RUN007_QUALIFICATION_ATTEMPT")
+    qual = QUAL if attempt == 1 else "implementation/p09/evidence/p09-361-case160-run007-controller-r390-run"+f"{attempt:03}.v1.json"
+    data = "implementation/p09/evidence/p09-361-case160-envelope-controller-data"+f"{46+attempt:03}.v1.json"
+    family = current.binding.__globals__
+    family.update(QUAL=qual, DATA=data)
+    current._env.update(QUAL=qual, DATA=data)
+    current.M.QUAL, current.M.DATA = qual, data
+    current.QUAL, current.DATA = qual, data
+    current._api_env["QUAL_PATH"] = qual
+    current.API.QUAL_PATH = qual
+    return qual, data
+
+
 def inherited_tests():
     ns, proof = old.namespace_bundle.load(old.c.ROOT, [TEST_PIN], {"case160_attempt_controller":sys.modules[__name__]})
     module = ns.test_case160_attempt_controller
@@ -88,10 +123,14 @@ if __name__ == "__main__":
         mode.add_argument("--qualify", action="store_true")
         mode.add_argument("--preflight", action="store_true")
         mode.add_argument("--run", type=int)
+        parser.add_argument("--preflight-attempt", type=int, default=2)
+        parser.add_argument("--qualification-attempt", type=int, default=1)
         args = parser.parse_args()
         if args.prepare_artifacts: raise SystemExit(prepare_artifacts())
         a.require(CURRENT is not None, "RUN007_CONFIG_REQUIRED")
+        select_qualification(CURRENT, args.qualification_attempt)
         if args.qualify: raise SystemExit(CURRENT.qualify())
+        select_preflight(CURRENT, args.preflight_attempt)
         CURRENT.M.base.configure(160)
         raise SystemExit(CURRENT.M.preflight() if args.preflight else CURRENT.run_owned(args.run))
     except (ValueError, OSError, KeyError, TypeError, AttributeError) as error:
