@@ -32,7 +32,24 @@ if FULL_HELD:
 if EVIDENCE_HELD:
     OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-evidence-held-product-r382.v1.json"
 if TRACE:
-    OUTPUT = "implementation/p09/evidence/p09-361-case160-evidence-held-worker-stack-r383.v1.json"
+    OUTPUT = "implementation/p09/evidence/p09-361-case160-evidence-held-worker-stack-r384.v1.json"
+
+
+def repository_stack(decoded, root):
+    """Only bounded repository frames, including pinned virtual filenames."""
+    frames = []
+    prefix = root.as_posix()+"/"
+    for filename, lineno, function in re.findall(r'File "([^"\n]+)", line ([0-9]+) in ([A-Za-z0-9_<>]+)', decoded):
+        normalized = filename.replace("\\", "/")
+        if normalized.casefold().startswith(prefix.casefold()):
+            normalized = normalized[len(prefix):]
+        if not normalized.startswith(("tools/p09/", "implementation/p09/")):
+            continue
+        if ":" in normalized or any(p in ("", ".", "..") for p in normalized.split("/")):
+            continue
+        frames.append(dict(path=normalized, line=int(lineno), function=function))
+        if len(frames) == 16: break
+    return frames
 
 
 def main():
@@ -40,9 +57,10 @@ def main():
     guard = c.FIRST.terminal_metadata_pressure_v1.guard_type(c.FIRST.distinct_final_sample_guard_v1.guard_type(a.Guard))()
     destination = c.old.c.ROOT/OUTPUT
     a.require(not destination.exists(), "EXCLUSIVE_CLI_NO_GO_REPORT")
-    process = capture = job = held = binding = None; empty = False; clean = True
+    process = capture = job = held = binding = q = None; empty = False; clean = True
     out = dict(state="FAILED_EXACT_CLI_NO_GO_DIAGNOSTIC_NOT_PRODUCT", GO_sent=False,
         product_or_Native_executed=False, accepted_count_delta=0, P09_gate="OPEN")
+    phase = "resource_admission"
     if GO:
         out.update(state="FAILED_EXACT_CLI_PRODUCT_DIAGNOSTIC_NOT_NATIVE_OR_ACCEPTANCE",
             product_or_Native_executed=None, actual_product_child_executed=None,
@@ -53,6 +71,7 @@ def main():
         guard.acquire(); q = a.AcceptanceReader(c.old.c.ROOT, guard.check)
         q.pin(SELF); q.pin(controller.SELF)
         stopped = q.json("implementation/p09/evidence/p09-361-case160-current-runtime-run006.v1.json")
+        phase = "worker_input_byte_qualification"
         selected = {p["path"]:p for p in stopped["bootstrap_metadata"]["input_pins"]
             if p["path"].startswith("tools/p09/") and p["path"].endswith(".py")}
         for p in (c.CONFIG_PIN, c.MANIFEST, c.CAPSULE): selected[p["path"]] = p
@@ -80,12 +99,14 @@ def main():
                 remaining_declared_bytes_proven_current=False,
                 current_byte_verified_subset_count=len(selected))
         held = a.locks.InputLocks(c.old.c.ROOT, q.checkpoint)
+        phase = "held_input_acquisition"
         held.acquire(lock_inputs)
         out.update(held_source_subset_count=len(lock_inputs), original_SHARE_READ_deny_write_delete=True,
             held_acquisition_witness=held.acquisition_witness(),
             full_Native_frame_or_product_scope_qualification_claimed=False,
             same_actual_worker_argv_without_B=True)
         windows = guard.windows; job = windows.job(); limits = windows.verify_job_limits(job)
+        phase = "owned_worker_startup"
         if GO: binding = c.prior.WINDOW.connect(subprocess.Popen, BoundedProcessCapture)
         factory = binding.Popen if GO else subprocess.Popen
         command = [sys.executable, str(c.old.c.ROOT/controller.SELF), "--owned-worker", "--task", controller.TASK]
@@ -107,6 +128,7 @@ def main():
         # No-GO closes empty stdin; GO uses the original strict window/capture.
         capture_type = binding.Capture if GO else BoundedProcessCapture
         capture = capture_type(process, output_limit=8192, parse_markers=False)
+        phase = "running_worker"
         deadline = time.monotonic()+15
         while process.poll() is None:
             time.sleep(.5); guard.check(force=True)
@@ -132,6 +154,7 @@ def main():
         a.require(empty, "NO_GO_JOB_EMPTY")
         held.verify_held_identities()
         q.finish(); guard.check(force=True)
+        phase = "completed"
         out.update(state="PASS_EXACT_CLI_HELD_SUBSET_ACTUAL_PRODUCT_NOT_NATIVE_OR_ACCEPTANCE" if GO else "PASS_EXACT_CLI_HELD_SUBSET_GO_REJECTION_NOT_PRODUCT_OR_NATIVE", worker_error_code=code,
             owned_Job_limits=limits, fresh_inputs=len(q.snapshots), final_fresh_hashes=q.final_fresh_hashes,
             source_pins=list(q.snapshots.values()), stdout_bytes=len(output), stderr_bytes=len(errors))
@@ -153,13 +176,7 @@ def main():
                     out["stderr_bytes"] = len(capture.buffers["stderr"])
                     if TRACE:
                         decoded = bytes(capture.buffers["stderr"]).decode("utf-8", errors="replace")
-                        frames = []
-                        for filename, lineno, function in re.findall(r'File "([^"\n]+)", line ([0-9]+) in ([A-Za-z0-9_<>]+)', decoded):
-                            normalized = filename.replace("\\", "/")
-                            prefix = c.old.c.ROOT.as_posix()+"/"
-                            if normalized.startswith(prefix) and len(frames) < 16:
-                                frames.append(dict(path=normalized[len(prefix):], line=int(lineno), function=function))
-                        out["worker_wait_stack_repository_frames"] = frames
+                        out["worker_wait_stack_repository_frames"] = repository_stack(decoded, c.old.c.ROOT)
             elif process:
                 for stream in (process.stdin, process.stdout, process.stderr):
                     if stream: stream.close()
@@ -181,6 +198,10 @@ def main():
         out["owned_job_samples"] = job_samples
         guard.close()
         out.update(cleanup_confirmed=guard.cleanup and clean and (process is None or empty),
+            terminal_phase=phase,
+            diagnostic_source_pin=q.snapshots.get(SELF) if q else None,
+            parent_CPU_max=max((s["parent_cpu_machine_percent"] for s in guard.samples if s.get("parent_cpu_machine_percent") is not None), default=None),
+            parent_private_MiB_max=max((s["parent_private_mib"] for s in guard.samples if s.get("parent_private_mib") is not None), default=None),
             elapsed_seconds=time.monotonic()-started,
             CPU_max=max((s["system_cpu_percent"] for s in guard.samples), default=None),
             RAM_min=min((s["available_ram_percent"] for s in guard.samples), default=None))
