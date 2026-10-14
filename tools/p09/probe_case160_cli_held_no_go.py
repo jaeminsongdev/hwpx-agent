@@ -16,7 +16,7 @@ GO = sys.argv[1:] in (["--go"], ["--go-full-held"])
 if GO:
     OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-held-product-r380.v1.json"
 if FULL_HELD:
-    OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-full-held-product-r381.v1.json"
+    OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-full-held-product-r381-run002.v1.json"
 
 
 def main():
@@ -46,7 +46,11 @@ def main():
         for name, pin in selected.items(): a.exact(q.pin(name), pin, "CURRENT_HELD_STARTUP_BYTES")
         lock_inputs = selected
         if FULL_HELD:
-            original = a.locks.input_pins(stopped["source_freeze"])
+            declared = stopped["source_freeze"]
+            a.require(type(declared) is list and len(declared) == 2850, "EXACT_DECLARED_PIN_LIST")
+            declared_map = {p["path"]:p for p in declared}
+            a.require(len(declared_map) == len(declared), "NO_DUPLICATE_DECLARED_LOCK_PINS")
+            original = a.locks.input_pins(declared_map)
             a.require(len(original) == 2850, "EXACT_RUN006_DECLARED_LOCK_COUNT")
             lock_inputs = dict(original)
             for name, pin in selected.items():
