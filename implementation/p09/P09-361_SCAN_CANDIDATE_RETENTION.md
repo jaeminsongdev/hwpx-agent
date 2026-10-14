@@ -1569,3 +1569,9 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 > 원run003 완료준비scope를 사용하는 연결검사이며 새run004 controller-wholepreflight-독립160oracle·두실제Native읽기·GO 승인은 아직없음. 원scope-rate-deadline·자원보호·실패·user변경 유지/기존003재실행-제품실행-승인증가-접근허용-UAC-OS변경-외부종료-삭제이동-push0/PCfreeze미증명. 다음 실제controller 경로 연결. 세부 implementation/p09/P09-361_RUN004_MANIFEST34_MARGIN_R372.md.
 <!-- END P09_R372_STATUS -->
 
+<!-- BEGIN P09_R374_STATUS -->
+> 2026-10-14 P09 r373-r374 — 새통합run004 controller CODE22·whole preflight041·단일실제제품run004 통과. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/P10새구현0/목표ACTIVE.
+> r373 초기중복configure·시스템CPU보호중단·preflight040 set/frozenset 타입오류는 보존. 타입경계만동일787개 set으로연결/원체커유지. CODE22 fresh96-final96/helper62·wholepref041 fresh275-final275/import64/74.1466초/원전체비용597.940557초<600·margin60-decoder5 유지. 코드·증거 46f0ed8.
+> 실제run004 PASS_EXACT_CURRENT_QUEUE_NATIVE_RUNTIME_CANDIDATE_NOT_QUEUE_OR_GATE·task004·제품1PASS·568.98초/COMMITTED·2845입력·실제두바이트경계·decoder68/0.844921초<5/잔여핸들0·cleanup/treeemptyTrue. 시스템CPU65.23%·부모CPU1.8442%·가용RAM42.1518%·부모private54.015625MiB/PCfreeze미증명.
+> 독립read-only r374는 BOOTSTRAP_CONTROLLER로거부·최종fresh0/공식승인0. 초기276개목록에서 원test_case112_current_stored_runtime.py와 test_current_stored_native_bridge.py의2qualifiedpin 누락. 두파일은 전체Native 입력에있으나 초기읽기조건을대신하지 않음. 원결과·실패·체커보존/사후수정-검사약화-기존004재실행0. 다음 별도attempt 초기두pin fresh읽기→새CODE/DATA/wholepref→실제두Native경계·독립oracle·공식승인. 세부 implementation/p09/P09-361_RUN004_NATIVE_AND_ORACLE_R374.md.
+<!-- END P09_R374_STATUS -->
