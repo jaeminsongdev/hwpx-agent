@@ -109,7 +109,23 @@ def connect(root,loader,bytes_policy,binding_module,bound,step,run,checkpoint):
         whole_engine_worker_dispatch_and_oracle_NOT_RUN=True,GO_authorized=False)
 
 
-def prepare(index,binding_attempt,attempt):
+def select_extra_receipts(scope,semantic,descriptors,index,count):
+    """Largest unmapped prior receipts only; no source/EXE/current input alias."""
+    import re
+    require(type(index) is int and 161<=index<=249 and type(count) is int and 0<=count<=6,"EXTRA_RECEIPT_CONTEXT")
+    pins=scope.pins(semantic)
+    mapped={row["semantic_original_pin"]["path"] for row in descriptors}
+    eligible=[]
+    for name,pin in pins.items():
+        match=re.fullmatch(r"implementation/p09/evidence/p09-361-case([0-9]{3})-current-runtime-run([0-9]{3})\.v1\.json",name)
+        if name not in mapped and match is not None and 112<=int(match[1])<index and 1<=int(match[2])<=999:
+            eligible.append(pin)
+    eligible.sort(key=lambda pin:(-pin["bytes"],pin["path"]))
+    require(len(eligible)>=count,"ALL_REQUESTED_EXTRA_RECEIPTS_AVAILABLE")
+    return eligible[:count]
+
+
+def prepare(index,binding_attempt,attempt,extra_receipts=0):
     """Fresh actual context and transport preparation, not full runtime CODE."""
     import argparse
     import copy
@@ -129,10 +145,12 @@ def prepare(index,binding_attempt,attempt):
     import runtime_envelope_namespace_bundle_v1 as loader
     import owned_source_read_pressure as bytes_policy
     import prepare_current_queue_step as steps
+    import produce_current_queue_envelopes as producer
     import distinct_final_sample_guard_v1 as distinct
     import terminal_metadata_pressure_v1 as pressure
     require(type(index) is int and 161<=index<=249,"PREPARE_INDEX")
     require(all(type(v) is int and 1<=v<=8 for v in (binding_attempt,attempt)),"PREPARE_ATTEMPTS")
+    require(type(extra_receipts) is int and 0<=extra_receipts<=6,"CLOSED_EXTRA_RECEIPT_COUNT")
     capsule_name=f"implementation/p09/evidence/p09-361-case{index}-successor-worker-capsule{attempt:03}.compact.v1.json"
     output=f"implementation/p09/evidence/p09-361-case{index}-successor-connections{attempt:03}.v1.json"
     require(all(not (c.ROOT/n).exists() for n in (capsule_name,output)),"EXCLUSIVE_GRAPH_OUTPUTS")
@@ -150,7 +168,7 @@ def prepare(index,binding_attempt,attempt):
         return dict(path=name,bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
     try:
         guard.acquire();q=a.AcceptanceReader(c.ROOT,guard.check)
-        for name in (SELF,TEST,bindings.SELF,bindings.TEST,loader.SELF,bytes_policy.SELF,steps.SELF,steps.TEST):q.pin(name)
+        for name in (SELF,TEST,bindings.SELF,bindings.TEST,loader.SELF,bytes_policy.SELF,steps.SELF,steps.TEST,producer.SELF):q.pin(name)
         for pin in bindings.PINS+PINS:a.exact(q.pin(pin["path"]),pin,"EXACT_ALL_PRIVATE_GRAPH_SOURCES")
         prepared=q.json(f"implementation/p09/evidence/p09-361-case{index}-successor-binding{binding_attempt:03}.v1.json")
         a.fields(prepared,dict(state="PREPARED_REAL_SUCCESSOR_BINDING_ALL_PAIRS_NOT_WHOLE_RUNTIME_OR_GO",index=index,
@@ -175,6 +193,44 @@ def prepare(index,binding_attempt,attempt):
         bound=module.Binding(manifest["descriptors"],prepared["manifest_pin"],next_case=index)
         require(len(bound.descriptors())==prepared["pair_count"],"ALL_REAL_BINDING_ROWS")
         graph,connected=connect(c.ROOT,loader,bytes_policy,module,bound,step,attempt,guard.check)
+        manifest_pin=prepared["manifest_pin"]
+        extra=dict(original_bytes=0,encoded_bytes=0,decode_passes=0,descriptors=[],original_receipts_rewritten=False)
+        if extra_receipts:
+            physical=graph.namespaces.runtime_envelope_physical_io_v1
+            code=q.json(producer.CODE)
+            a.fields(code,dict(state="PASS_ENVELOPE_PHYSICAL_WRITER_SHARED_DECODER_BOUNDARY_CODE13_NOT_ACTUAL_IO_OR_PRODUCT",
+                contracts=dict(run=13,errors=0,failures=0,skipped=0),cleanup_confirmed=True),"QUALIFIED_UNCHANGED_EXTRA_CODEC")
+            for pin in code["source_pins"]:a.exact(q.pin(pin["path"]),pin,"EXACT_EXTRA_CODEC_AND_PUBLISHER")
+            semantic=bindings.inherited_scope(scope,representation,authority["fresh_input_pins"],q.snapshots,guard.check)
+            originals=select_extra_receipts(scope,list(semantic.values()),bound.descriptors(),index,extra_receipts)
+            pacer=bytes_policy.OwnedPacer()
+            for pin in originals:
+                actual,buffer=q._read(pin["path"],parse=True);q._bind(pin["path"],actual)
+                a.exact(actual,pin,"FRESH_EXTRA_ORIGINAL_FROM_APPROVED_SCOPE")
+                raw=bytes(buffer);encoded=module.source.codec.encode(raw,guard.check)
+                name=producer.output_path(pin,index)
+                encoded_pin=dict(path=name,bytes=len(encoded),sha256=hashlib.sha256(encoded).hexdigest())
+                row=module.source.descriptor(pin,encoded_pin,next_case=index)
+                projection=module.source.Projection({pin["path"]:pin},[row],next_case=index,checkpoint=guard.check)
+                for _ in range(2):
+                    a.exact(projection.decode_fresh(pin["path"],encoded_pin,encoded,guard.check),raw,"EXACT_EXTRA_LOSSLESS_RESTORE")
+                    extra["decode_passes"]+=1
+                if (c.ROOT/name).exists():a.exact(q.fresh_pin(name),encoded_pin,"EXISTING_EXTRA_DERIVATIVE_EXACT")
+                else:physical.publish_exclusive(c.ROOT,encoded,encoded_pin,guard.check,write_pacer=pacer)
+                a.exact(q.fresh_pin(name),encoded_pin,"ACTUAL_EXTRA_PHYSICAL_BYTES")
+                extra["original_bytes"]+=len(raw);extra["encoded_bytes"]+=len(encoded)
+                extra["descriptors"].append(row)
+                del raw,encoded,buffer
+            expanded=dict(manifest,descriptors=bound.descriptors()+extra["descriptors"],
+                prior_prepared_manifest_pin=prepared["manifest_pin"],extra_lossless_count=extra_receipts)
+            name=f"implementation/p09/evidence/p09-361-case{index}-successor-expanded-manifest{attempt:03}.v1.json"
+            manifest_pin=publish(name,(json.dumps(expanded,ensure_ascii=True,allow_nan=False,indent=2)+"\n").encode("utf-8"),262144)
+            a.exact(q.pin(name),manifest_pin,"ACTUAL_EXPANDED_MANIFEST_BYTES")
+            bound=module.Binding(expanded["descriptors"],manifest_pin,next_case=index)
+            require(len(bound.descriptors())==prepared["pair_count"]+extra_receipts,"ALL_OLD_AND_ADDITIONAL_PAIRS")
+            graph=NS(**{**vars(graph),"binding":bound})
+            extra.update(bytes_saved=extra["original_bytes"]-extra["encoded_bytes"],write_rate_bytes_per_second=pacer.rate,
+                qualified_codec_pin=q.snapshots[producer.CODE])
         wire,transport=graph.worker.encode(bound,step["prior_queue_pin"],step["prior_candidate_pin"],guard.check)
         decoded,decoder=graph.worker.decode(wire,transport,guard.check)
         a.exact(decoded.descriptors(),bound.descriptors(),"EVERY_REAL_WORKER_DESCRIPTOR_RESTORED")
@@ -184,7 +240,8 @@ def prepare(index,binding_attempt,attempt):
         q.finish();guard.check(force=True)
         out.update(state="PREPARED_CURRENT_SUCCESSOR_GRAPH_AND_WIRE_NOT_CODE_PREFLIGHT_NATIVE_OR_GO",
             binding_report_pin=q.snapshots[f"implementation/p09/evidence/p09-361-case{index}-successor-binding{binding_attempt:03}.v1.json"],
-            step=step,manifest_pin=prepared["manifest_pin"],capsule_pin=capsule_pin,task=graph.worker.TASK,
+            step=step,manifest_pin=manifest_pin,base_manifest_pin=prepared["manifest_pin"],
+            extra_lossless_preparation=extra,capsule_pin=capsule_pin,task=graph.worker.TASK,
             pair_count=len(bound.descriptors()),all_worker_rows_restored=True,
             source_pins=list(q.snapshots.values()),fresh_inputs=len(q.snapshots),final_fresh_hashes=q.final_fresh_hashes,
             actual_read_passes=q.read_passes,actual_bytes_read=q.bytes_read,
@@ -210,4 +267,5 @@ if __name__=="__main__":
     import argparse
     parser=argparse.ArgumentParser();parser.add_argument("--case",type=int,required=True)
     parser.add_argument("--binding-attempt",type=int,required=True);parser.add_argument("--attempt",type=int,required=True)
-    args=parser.parse_args();raise SystemExit(prepare(args.case,args.binding_attempt,args.attempt))
+    parser.add_argument("--extra-receipts",type=int,default=0)
+    args=parser.parse_args();raise SystemExit(prepare(args.case,args.binding_attempt,args.attempt,args.extra_receipts))

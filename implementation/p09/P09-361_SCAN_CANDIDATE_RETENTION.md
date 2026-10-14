@@ -1637,3 +1637,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE161_CONNECTIONS_STATUS -->
 > 공통parent-Frame-worker-wholeoracle 연결 graph 및인자형wire 구현/53계약PASS. 실제case16138pair·wire13340바이트·전항목복원·fresh29-final29·cleanupTrue/원본·approved160·보호조건변경0. 현재준비범위cost597.830초는actualcontroller-CODE-wholepref 미포함으로GO근거아님. 제품NOT_RUN·승인delta0/공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE.
 <!-- END P09_CASE161_CONNECTIONS_STATUS -->
+
+<!-- BEGIN P09_CASE161_FACTORY_STATUS -->
+> 추가과거6개원본보존·무손실복원12회·읽기량9917795바이트절감/연결00244pair·wire15335바이트·fresh52-final52·cleanupTrue. 공통factory로실제161-run002 기존engine·worker callable 구성/factory0023계약·fresh16-final16·cleanupTrue/실패001보존. 전체57계약PASS·현재핀일치. 연결범위cost588.493초는전체runtimeclosure미검증·GO허용아님. 새parent입력binding·worker진입·독립전체oracle·CODE-pref 남음/제품NOT_RUN·공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE.
+<!-- END P09_CASE161_FACTORY_STATUS -->

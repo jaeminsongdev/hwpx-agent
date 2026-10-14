@@ -33,6 +33,18 @@ def fixture(index=161,run=1):
 
 
 class Tests(unittest.TestCase):
+    def test_extra_selector_only_prior_unmapped_receipts_in_size_order(self):
+        def pin(name,size):return dict(path=name,bytes=size,sha256="a"*64)
+        rows=[pin(f"implementation/p09/evidence/p09-361-case{i}-current-runtime-run001.v1.json",size)
+            for i,size in ((112,5),(113,9),(114,9),(161,100))]
+        rows+=[pin("crates/product-cli/src/lib.rs",1000),pin("target/current.exe",1000)]
+        mapped=[dict(semantic_original_pin=rows[0])]
+        selected=m.select_extra_receipts(scope,rows,mapped,161,2)
+        self.assertEqual(selected,rows[1:3])
+        with self.assertRaises(ValueError):m.select_extra_receipts(scope,rows,mapped,161,3)
+        for count in (True,-1,7,"1",1.0):
+            with self.assertRaises(ValueError):m.select_extra_receipts(scope,rows,mapped,161,count)
+
     def test_one_private_namespace_and_source_pins(self):
         graph,proof,step=fixture()
         self.assertTrue(proof["one_private_binding_namespace"])

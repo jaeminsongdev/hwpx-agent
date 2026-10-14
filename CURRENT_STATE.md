@@ -2962,3 +2962,7 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 <!-- BEGIN P09_CASE161_CONNECTIONS_STATUS -->
 > 공통successor161..249 parent-Frame-worker-wholeoracle graph 구현/원고정source10·동일privateBinding·원본문과metadata역변환 유지. 신규8+기존계약총53PASS/fixture2읽기·정리·원실패판정 유지. 실제161 연결준비001 38pair·wire13340바이트(원16KiB내)/전항목복원·manifestpin일치/fresh29-final29·9.151초/CPU17.7%·가용RAM45.43%·cleanupTrue. 원전체cost 함수의현재준비범위 계산597.830초·여유2.170초/actualcontroller-CODE-wholepref 미포함·GO허용아님. 새제품NOT_RUN·delta0/공식154/249·잔여95·next161·generation49/P09-A12-A13 OPEN/목표ACTIVE. 다음공통실제controller 및전체cost여유 확보. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
 <!-- END P09_CASE161_CONNECTIONS_STATUS -->
+
+<!-- BEGIN P09_CASE161_FACTORY_STATUS -->
+> case161 추가원본6개무손실표현 준비/원본13595897→encoded3678102·절감9917795바이트·정확복원12회·원본수정0. 연결002 44pair·wire15335바이트·전항목복원/fresh52-final52·29.096초·CPU45.83%·가용RAM44.80%·cleanupTrue. 현재연결범위cost588.493초·여유11.507초/전체controller-CODE-wholepref 미포함·GO근거아님. 공통factory161..249·run2..8 구현/실제161-run002 wholeengine·worker callable 구성/factory0023계약·fresh16-final16·7.070초·CPU7.86%·가용RAM44.13%·cleanupTrue/실패001보존·CLI저장소import경로수정. 전체관련57계약PASS·현재소스/artifact핀일치. 새parent binding·worker진입·wholeoracle·CODE-pref 미완료·제품NOT_RUN·delta0. 공식154/249·잔여95·next161·generation49/P09-A12-A13 OPEN/목표ACTIVE.
+<!-- END P09_CASE161_FACTORY_STATUS -->

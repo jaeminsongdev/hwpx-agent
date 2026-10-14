@@ -129,3 +129,19 @@ current_queue_successor_connections는161..249의 공통 private graph를 구성
 공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN을 유지한다. 새 전체 engine·worker dispatch·독립 oracle의 실제 제품 실행은 NOT_RUN이며 목표는 ACTIVE다. 다음은 실제 공통 실행 컨트롤러 연결과 전체 비용 여유 확보다.
 
 근거: tools/p09/current_queue_successor_connections.py와 해당 테스트, evidence/p09-361-case161-successor-connections001.v1.json 및 successor-worker-capsule001.compact.v1.json. 비용 계산은 이 세션에서 원 비용 함수를 실행한 bounded terminal 결과다.
+
+## 추가 무손실 표현과 실제 엔진 구성
+
+연결 준비002는 승인 predecessor 범위에서 아직 표현을 바꾸지 않은 과거 runtime 영수증6개를 크기순으로 선택했다. source·EXE·현재 사례·이미 mapped된 항목은 제외한다. 기존 qualified codec과2MiB/s exclusive publisher로 원본13,595,897바이트를 encoded3,678,102바이트로 준비해9,917,795바이트를 절감했다. 원본마다 두 번 정확히 복원해12회를 확인하고 원본을 변경하지 않았다. 새 selector 계약도 통과했다.
+
+기존38pair를 보존한 expanded manifest002와44pair 전체를 복원하는 worker capsule002를 발행했다. wire15,335바이트는 원16KiB 한도 안에 있다. 실제 준비는 fresh52/final52,29.0961초, CPU최고45.83%, 가용RAM최저44.80%, cleanup=True다. 준비001은 보존하고 현재 준비에는002의 실제 source·artifact pin을 사용한다.
+
+원 strict window 비용 함수를 같은 방식으로 실행한 현재 연결 범위 추정은 physical2,878입력·229,988,091바이트, shared decoder5초 포함588.4928초다. 앞선597.8299초보다 낮고600초까지 명목 여유11.5072초지만, 새 전체 controller·CODE·whole preflight 비용까지 검증한 결과는 아니다.
+
+current_queue_successor_runtime은 사례161..249·물리 실행2..8에서 기존 qualified template chain과 단일 argument adapter를 그대로 사용한다. 원 두 source pin과 전체 metadata code 역변환을 검사해 root·task·logical run이 일치하는 factory를 구성한다. 실제 case161/run002의 기존 whole engine과 worker callable을 구성했고 새 parent 입력 binding·worker 진입점은 아직 연결하지 않았다.
+
+첫 factory 준비는 script 실행의 저장소 모듈 검색 경로 누락으로 계약 로딩에 실패했다. 실패001은 보존하고 명시적 저장소 sys.path를 추가했다. factory002의3계약·실제 구성·fresh16/final16은7.0705초, CPU최고7.86%, 가용RAM최저44.13%, cleanup=True로 통과했다. 연결·factory와 기존 관련 계약 전체57개도1.316초에 통과했다. 현재 연결 및 factory 소스·테스트·expanded manifest·capsule의 실제 hash는 준비 기록과 일치한다.
+
+목표는 ACTIVE, 공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN을 유지한다. actual Native·제품 실행은 NOT_RUN이다. 다음은 실제 부모 입력 binding·worker 진입점과 독립 whole oracle을 연결하고 전체 CODE·closure·cost·preflight를 검증하는 것이다. OS·보호 기준·원본·approved case160은 변경하지 않았다.
+
+근거: current_queue_successor_connections와 current_queue_successor_runtime 및 해당 테스트, evidence의 case161-successor-connections002, expanded-manifest002, worker-capsule002 및 factory001/002. 비용 추정은 원 비용 함수를 실행한 이 세션의 bounded terminal 결과다.
