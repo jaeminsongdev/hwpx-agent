@@ -2934,3 +2934,7 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 <!-- BEGIN P09_NATIVE_SELECTION_R391_STATUS -->
 > Native 번호7..14를 같은controller에서선택/worker정확task동일번호/새runtime소스파일0·덮어쓰기0·자동재시도0. run008 선언준비 후 CODE첫시도CPU82.54%로초반중단/실패보존·cleanupTrue. 자원짧은표본확인 후 CODE두번째32계약PASS/fresh106-final106/helper62/12.209초/CPU46.2%·가용RAM30.25%/cleanupTrue. wholepref002 PASS/71.452초/inputs2888/imports64/CPU63.48%·가용RAM31.03%/cleanupTrue. 원Native·신선도·CPU/RAM·시간한도 유지/공식153/249·잔여96·next160/P09-A12-A13 OPEN/목표ACTIVE. 다음 같은소스 Native008 1회. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
 <!-- END P09_NATIVE_SELECTION_R391_STATUS -->
+
+<!-- BEGIN P09_NATIVE008_COUNTER_R391_STATUS -->
+> Native008 입력고정CPU92.38%/70.13초 STOP_NATIVE_OPEN_AFTER_HOST_SATURATION·DEFERRED_NOT_STARTED/worker생성·제품실행0/cleanupTrue·빈tree. CODE32소스hash유지. 기존읽기전용자원대조에기본OFF 선택형CIM프로세스계수추가/임의이름·경로·commandline수집0/역할·PID·숫자만/상한64·불가≠0·runner변경0. 수치·범위·역할·불가·상한mock PASS, 실제2표본 nativeCPU26.23/48.88 대CIM24/46·Defender전체용량시간계수5.94/6.88/조회0.408/0.434초/중단순간아님·인과미확정. 기본OFF회귀1표본 및 기존증거검사12PASS. 측정원본target보존·evidence동일바이트복사검증. 공식153/249·delta0·next160/P09-A12-A13 OPEN/목표ACTIVE. 다음입력고정시점과성능계수시간관계확인. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_NATIVE008_COUNTER_R391_STATUS -->

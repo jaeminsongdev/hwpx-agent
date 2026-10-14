@@ -1609,3 +1609,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_NATIVE_SELECTION_R391_STATUS -->
 > Native007 STOPPED_NOT_ACCEPTED 원기록보존. 같은controller의별도Native번호008 선언준비·CODE32 PASS·wholepref002 PASS/첫CODE CPU경고실패보존. Native번호7..14/metadata시도닫힌범위·worker부모동일task/원보호·전체검사유지/자동반복·기존승인승격0. 공식153/249·delta0·next160/P09-A12-A13 OPEN/목표ACTIVE. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
 <!-- END P09_NATIVE_SELECTION_R391_STATUS -->
+
+<!-- BEGIN P09_NATIVE008_COUNTER_R391_STATUS -->
+> Native008 CPU92.38% 경고로입력고정중단/제품·worker0/cleanupTrue·빈tree/실패기록보존. 선택형읽기전용CIM계수·기본OFF회귀·기존증거12검사PASS/원CODE32해시유지/runner·보호조건변경0. 후속표본은중단시점과다르고원인미확정. 두측정target원본유지·evidence복사동일hash확인. 공식153/249·delta0/P09-A12-A13 OPEN/목표ACTIVE. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_NATIVE008_COUNTER_R391_STATUS -->

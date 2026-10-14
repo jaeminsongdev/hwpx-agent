@@ -1,7 +1,7 @@
 # 읽기 전용 독립 CPU/RAM 대조. 기존 test runner의 중단 기준/샘플링 코드는 수정하지 않는다.
 [CmdletBinding()]
 param([Parameter(Mandatory)][string]$ReceiptPath,[ValidateRange(1,8)][int]$Count=4,
-      [ValidateRange(1,5)][int]$IntervalSeconds=2)
+      [ValidateRange(1,5)][int]$IntervalSeconds=2,[switch]$IncludeProcessCounters)
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
 . "$PSScriptRoot/native_resource_crosscheck_support.ps1"
@@ -41,6 +41,7 @@ for ($index=0;$index -lt $Count;$index++) {
         native_cpu_percent=$nativeCpu;cim_cpu_percent=$cim.system_cpu_percent;native_available_ram_mib=$nativeMemory.available_ram_mib;
         cim_available_ram_mib=$cim.available_ram_mib;native_total_ram_mib=$nativeMemory.total_ram_mib;
         conservative_inputs=$inputs;consecutive_hot_samples=$hot;resource_decision=Get-P09ResourceDecision $inputs.system_cpu_percent $inputs.available_ram_mib 0 $hot}
+    if ($IncludeProcessCounters) {$sample.process_counter_snapshot=Get-P122ProcessCounterSnapshot $cores}
     $samples+=$sample
     Write-Output ('P122_CROSSCHECK_SAMPLE:'+($sample|ConvertTo-Json -Depth 4 -Compress))
 }
@@ -48,5 +49,6 @@ $result=[ordered]@{schema_version='hwpx-agent.p09-122-resource-crosscheck/v1';st
     logical_processors=$cores;measurement_process_cpu_limit=1;priority='BelowNormal';samples=$samples;stored_test_started=$false;
     measurements_have_adjacent_not_identical_windows=$true;pressure_cause='NOT_DETERMINED';existing_runner_or_thresholds_modified=$false;
     native_API_is_metrics_only_not_Hangul_or_UI=$true;system_settings_changed=$false;P09_gate='OPEN';product_complete=$false}
+if ($IncludeProcessCounters) {$result.optional_process_counter_collection=$true;$result.process_counter_windows_are_not_guard_windows=$true}
 $result|ConvertTo-Json -Depth 8|Set-Content -LiteralPath $receipt -Encoding utf8
 Write-Output 'P122_CROSSCHECK_TERMINAL:MEASURED_READ_ONLY_NOT_TEST_OR_GATE'

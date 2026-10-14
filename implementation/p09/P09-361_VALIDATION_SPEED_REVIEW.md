@@ -44,6 +44,18 @@ run007 controller는 소스를 다시 수정하지 않고 qualification 1..8과 
 
 Native008의 최초 CODE 시도는 시스템CPU82.54% 경고로 current_source_bytes에서 중단돼 실패 기록을 보존했다. 짧은 읽기 전용 자원 표본에서 CPU28.32/41.41/27.15%, 가용RAM32.3~32.5%를 확인한 뒤 별도 슬롯으로 진행했다. 두 번째 CODE는 32계약 오류0·실패0·skip0, 12.209초, fresh106/final106, helper62, CPU최고46.2%, 가용RAM최저30.25%, cleanup=True로 통과했다.
 
-Native008 whole preflight는 71.452초, 입력2,888개, 선언 바이트333,764,489, imports64, CPU최고63.48%, 가용RAM최저31.03%, cleanup=True로 통과했다. CODE32 및 preflight는 Native·제품·승인이 아니다. 기존 Native007의 STOPPED_NOT_ACCEPTED와 공식153/249를 유지하며, 다음은 동일 소스와 별도 root로 Native008을 한 번 실행하는 것이다. 보호 조건·초당 acquisition14 및 binary1MiB/s/other2MiB/s는 유지했다.
+Native008 whole preflight는 71.452초, 입력2,888개, 선언 바이트333,764,489, imports64, CPU최고63.48%, 가용RAM최저31.03%, cleanup=True로 통과했다. CODE32 및 preflight는 Native·제품·승인이 아니다. 보호 조건·초당 acquisition14 및 binary1MiB/s/other2MiB/s는 유지했다.
 
-근거: evidence의 case160-current-runtime-run004/run007, run007-controller-r390, envelope-controller-preflight046, native008-controller-r391의 qualification001/002 및 preflight002 기록과 tools/p09/case160_run007_controller.py 및 해당 테스트 소스.
+Native008은 실제 입력 고정 중 시스템CPU92.38%로 STOP_NATIVE_OPEN_AFTER_HOST_SATURATION이 발생해 70.13초에 DEFERRED_NOT_STARTED로 종료됐다. worker_created=False, actual_product_child_executed=False, owned_tree_empty=True, cleanup=True였다. 부모 CPU최고2.536%, 마지막0%, 가용RAM최저25.37%이며 입력고정90% 경고 기준을 유지했다. 같은 실패의 자동 재시도나 승인 승격은 하지 않았다.
+
+## 선택형 프로세스 성능 계수
+
+기존 읽기 전용 measure_resource_crosscheck.ps1에 IncludeProcessCounters 선택을 추가했다. 기본값은 꺼져 있고 원 runner·중단 기준·Native Frame에는 연결하지 않는다. 해당 세 PowerShell 파일은 Native008 입력 범위에 없으며, 변경 후에도 controller CODE32의 실제 소스 hash가 같음을 확인했다.
+
+표준 Win32_PerfFormattedData_PerfProc_Process 조회로 관리자 승인 없이 Defender 등 지정 역할의 성능 계수를 수집했다. 임의 프로세스명·경로·command line은 저장하지 않고 역할과 PID 및 숫자만 보존한다. 최대64개, 조회실패는 unavailable, PID 생성 identity와 인과관계는 미확정으로 기록한다. Process 계수의 모든 thread 시간 합계를 논리 프로세서 수로 나눈 값과 시스템 전체 계수를 구분한다. [Microsoft WMI 성능 모니터링 문서](https://learn.microsoft.com/en-us/windows/win32/wmisdk/wmi-tasks--performance-monitoring)와 [Process 계수 정의](https://learn.microsoft.com/en-us/previous-versions/aa394323(v=vs.85))를 따른다.
+
+mock 기반 수치·범위·누락·역할 필터·64개 상한 검사가 통과했다. 실제 선택형2표본은 native CPU26.23/48.88%, CIM CPU24/46%, Defender의 전체 용량 기준 시간 계수5.9375/6.875%, 조회0.4082/0.4343초였다. 이는 Native008 중단 이후의 다른 구간이며 CPU92.38% 중단 주체를 증명하지 않는다. 기본값1표본에서는 선택형 필드가 생성되지 않았고 제품 실행 없이 완료됐다. 기존 자원 증거 검증12개도 통과했다.
+
+두 측정 기록은 target의 원본을 유지한 채 evidence에 바이트 그대로 복사하고 hash 일치를 확인했다. 다음은 같은 소스를 유지하면서 입력 고정 구간과 프로세스 성능 계수의 시간 관계를 확인하는 것이다. 현재까지 CPU 폭증의 원인은 미확정이며 공식153/249, 잔여96, next160 및 P09/A12/A13 OPEN을 유지한다.
+
+근거: evidence의 case160-current-runtime-run004/run007/run008, run007-controller-r390, envelope-controller-preflight046, native008-controller-r391의 qualification001/002 및 preflight002, post-native008-process-counters-r391 및 default-crosscheck-r391 기록과 관련 controller·테스트·자원 대조 소스.
