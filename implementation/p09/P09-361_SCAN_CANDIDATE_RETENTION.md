@@ -1597,3 +1597,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_R384_R390_STATUS -->
 > P09 사례160 — 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/목표ACTIVE. r384 초기화 스택 이후 r387 계측에서 candidate 복제6회·깊이6·0.144ms/제품 subprocess 대기·GO→완전수집5.509초, 진단stderr로 실패 보존/제품PASS 승격0. 동일 Job CPU 0.109초→벽0.110초 및0.813초→벽0.821초/한도완화0. 별도run007 초기CODE27 fresh106-final106/helper62 통과 후 preflight045 CPU75.95% 경고중단. 반복 소스변경과 CODE재검사를 줄이는 닫힌 qualification1..8·preflight2..8 선택 구현/현재31계약 NOT_RUN·문법만통과. r389는RAM3.877%로계약·GO 전중단/cleanupTrue·P09 잔여프로세스없음/최근가용RAM4.86%·Native007 미시작. 다음 자원 시작조건 충족 시 CODE31→wholepref→실제Native·독립검사·공식승인. 세부 implementation/p09/P09-361_WORKER_PROFILE_AND_RETRY_SELECTION_R384_R390.md.
 <!-- END P09_R384_R390_STATUS -->
+
+<!-- BEGIN P09_SPEED_REVIEW_STATUS -->
+> 기존 실패·중단 기록 보존. Native004 제품2.236초/전체568.98초를 기준으로 입력 준비·전후 읽기와 소스변경 반복 비용을 구분. run007 test_namespace의 계약수 투영 충돌 수정 및 회귀 검사 후 CODE31 PASS/fresh106-final106, wholepref046 PASS/입력2888/imports64/cleanupTrue. qualification/preflight 선택은 소스 고정·별도 산출물만 허용하며 자동 재시도 없음. 공식153/249·delta0·next160/P09-A12-A13 OPEN 유지. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_SPEED_REVIEW_STATUS -->

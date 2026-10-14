@@ -43,7 +43,11 @@ env = base.clone_family(original.read_config.__globals__, dict(SELF=SELF, TEST=T
     QUAL=QUAL, PREFLIGHT=PREFLIGHT, CONFIG=CONFIG, MANIFEST_PATH=MANIFEST_PATH,
     CAPSULE_PATH=CAPSULE_PATH, ROOT=ROOT, TASK=TASK, QUAL_STATE=QUAL_STATE, SCHEMA=SCHEMA))
 for name in ("connect_graph", "validate_config", "read_config", "publish", "prepare_artifacts", "initialize", "test_namespace"):
-    env[name] = projected(getattr(original, name), env, MAPPING)
+    # test_namespace already contains 31 as the inherited reader-count value,
+    # not the suite size. Applying 27->31 there makes the inverse ambiguous.
+    # Keep that independent count unchanged; initialize alone builds the suite.
+    mapping = {k:v for k,v in MAPPING.items() if name != "test_namespace" or k != 27}
+    env[name] = projected(getattr(original, name), env, mapping)
 globals().update({name:env[name] for name in ("connect_graph", "validate_config", "read_config", "publish", "prepare_artifacts", "test_namespace")})
 initialize_projection = env["initialize"]
 

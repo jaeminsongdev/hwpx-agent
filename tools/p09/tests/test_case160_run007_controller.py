@@ -10,6 +10,11 @@ MODULE, SOURCE_PROOF = controller.inherited_tests()
 
 class Tests(MODULE.Tests):
     def test_preflight_selection_is_closed_and_does_not_retry(self):
+        # Reader-count 31 must not be rewritten as a suite-count substitution.
+        original = controller.original.test_namespace
+        inverse = controller.projected(controller.env["test_namespace"], controller.env,
+            {v:k for k,v in controller.MAPPING.items() if k != 27})
+        self.assertEqual(inverse.__code__, original.__code__)
         current = controller.initialize()
         for value in (True, 1, 9, 2.0, "2"):
             with self.assertRaises(ValueError): controller.select_preflight(current, value)
