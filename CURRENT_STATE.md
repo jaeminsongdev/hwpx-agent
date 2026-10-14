@@ -2863,3 +2863,15 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+<!-- BEGIN P09_R370_STATUS -->
+> 2026-10-14 P09 r370 — 실제이전scope case132 무손실표현·actual run004 manifest029/compactcapsule006/32쌍 graph 생성·검증. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/P10새구현0/목표ACTIVE.
+> r848 realcheckpoint scope안미압축1322472248→635895bytes·1836353bytes 감소/두 byte-hash복원/decoder합0.017703초/원codec64KiB·2MiB-s exclusive-fsync/fresh18-final18/CPU16.82%-RAM64.271152%/cleanupTrue. 승인body 재실행0/원본보존.
+> actualmanifest029742bytes/SHA6e2998...fde6는원manifest028physical3 보존+물리4명시/원29+실패002003+132=32쌍·실패미승인provenance 유지. actualcapsule00611346bytes/SHA2f17b9...bb92·원16KiB·모든32descriptor/manifest 실제wire복원. 새graph 원private parent-frame-worker-fulloracle module공유·원코드/defaults/closure 유지·정확TASK004 및private wire만연결.
+> r849 CODE12/fresh57-final57/선언2856-physical2824·원Native비용599.769495초(decoder5포함)로600/원margin60통과/CPU17.02%-RAM64.140616%/cleanupTrue. 결합unit134 통과. 이전private31진단constructor가아닌실제저장선언/단controller 전체prep-pref-Native-GO-독립oracle승인0. 원run003 checkpoint scope사용·새controller추가입력시비용다시검증필요.
+> 다음 actualmanifest/capsule boundedbootstrap 및004controller 연결→원64reads/262144·전체importclosure·새wholeprep-cost-pref·독립160acceptance→단일제품·두실제Native읽기·공식승인. 원600/shared720·scope·자원보호·실패·user변경 유지/기존003재실행-제품실행-승인증가-접근허용-UAC-OS변경-외부종료-삭제이동-push0/PCfreeze미증명. 세부 implementation/p09/P09-361_RUN004_MANIFEST32_CAPSULE_R370.md, r848-r849.
+<!-- END P09_R370_STATUS -->
+
+
+
+
+
