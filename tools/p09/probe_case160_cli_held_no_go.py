@@ -12,11 +12,14 @@ from bounded_process_progress import BoundedProcessCapture
 SELF = "tools/p09/probe_case160_cli_held_no_go.py"
 OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-held-no-go-r378.v1.json"
 FULL_HELD = sys.argv[1:] == ["--go-full-held"]
-GO = sys.argv[1:] in (["--go"], ["--go-full-held"])
+EVIDENCE_HELD = sys.argv[1:] == ["--go-evidence-held"]
+GO = sys.argv[1:] in (["--go"], ["--go-full-held"], ["--go-evidence-held"])
 if GO:
     OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-held-product-r380.v1.json"
 if FULL_HELD:
     OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-full-held-product-r381-run002.v1.json"
+if EVIDENCE_HELD:
+    OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-evidence-held-product-r382.v1.json"
 
 
 def main():
@@ -28,8 +31,10 @@ def main():
     out = dict(state="FAILED_EXACT_CLI_NO_GO_DIAGNOSTIC_NOT_PRODUCT", GO_sent=False,
         product_or_Native_executed=False, accepted_count_delta=0, P09_gate="OPEN")
     if GO:
-        out.update(product_or_Native_executed=None, actual_product_child_executed=None,
+        out.update(state="FAILED_EXACT_CLI_PRODUCT_DIAGNOSTIC_NOT_NATIVE_OR_ACCEPTANCE",
+            product_or_Native_executed=None, actual_product_child_executed=None,
             full_Native_frame_executed=False, official_acceptance_claimed=False)
+    job_samples = []
     started = time.monotonic()
     try:
         guard.acquire(); q = a.AcceptanceReader(c.old.c.ROOT, guard.check)
@@ -45,18 +50,19 @@ def main():
         a.require(0 < len(selected) <= 512, "BOUNDED_HELD_STARTUP_SUBSET")
         for name, pin in selected.items(): a.exact(q.pin(name), pin, "CURRENT_HELD_STARTUP_BYTES")
         lock_inputs = selected
-        if FULL_HELD:
+        if FULL_HELD or EVIDENCE_HELD:
             declared = stopped["source_freeze"]
             a.require(type(declared) is list and len(declared) == 2850, "EXACT_DECLARED_PIN_LIST")
             declared_map = {p["path"]:p for p in declared}
             a.require(len(declared_map) == len(declared), "NO_DUPLICATE_DECLARED_LOCK_PINS")
             original = a.locks.input_pins(declared_map)
             a.require(len(original) == 2850, "EXACT_RUN006_DECLARED_LOCK_COUNT")
-            lock_inputs = dict(original)
+            lock_inputs = dict(original) if FULL_HELD else {n:p for n,p in original.items() if n.startswith("implementation/p09/")}
             for name, pin in selected.items():
                 if name in lock_inputs: a.exact(lock_inputs[name], pin, "DECLARED_AND_FRESH_LOCK_PIN_AGREE")
                 lock_inputs[name] = pin
-            out.update(original_declared_file_count=len(original), all_original_declared_files_held=True,
+            out.update(original_declared_file_count=len(original), all_original_declared_files_held=FULL_HELD,
+                diagnostic_declared_group="all" if FULL_HELD else "implementation/p09/",
                 all_declared_bytes_freshly_hashed=False,
                 remaining_declared_bytes_proven_current=False,
                 current_byte_verified_subset_count=len(selected))
@@ -85,7 +91,10 @@ def main():
         deadline = time.monotonic()+15
         while process.poll() is None:
             time.sleep(.5); guard.check(force=True)
-            a.require(windows.accounting(job)["peak_job_private_percent"] < a.c.POLICY["job_memory_stop_percent"], "NO_GO_MEMORY_STOP")
+            sample = windows.accounting(job)
+            if len(job_samples) < 32: job_samples.append(sample)
+            a.require(sample["peak_job_private_percent"] < a.c.POLICY["job_memory_stop_percent"], "NO_GO_MEMORY_STOP")
+            if binding: capture.progress()
             a.require(time.monotonic() < deadline, "NO_GO_DIAGNOSTIC15_TIMEOUT")
         output, errors = capture.communicate(timeout=3)
         code = None
@@ -111,8 +120,13 @@ def main():
         out["error_type"] = type(error).__name__
         if error.args and type(error.args[0]) is str and re.fullmatch("[A-Za-z_][A-Za-z0-9_]{1,160}", error.args[0]): out["error_code"] = error.args[0]
     finally:
+        # Match the production runner: terminate the complete owned Job before
+        # joining pipe readers, since product descendants may still own pipes.
         try:
+            if job: clean = bool(guard.windows.k.TerminateJobObject(job, 1)) and clean
             if process and process.poll() is None: process.kill(); process.wait(timeout=5)
+        except (ValueError, OSError, subprocess.SubprocessError): clean = False
+        try:
             if capture:
                 capture.close()
                 with capture.lock:
@@ -122,13 +136,21 @@ def main():
                 for stream in (process.stdin, process.stdout, process.stderr):
                     if stream: stream.close()
             if job:
-                final = guard.windows.accounting(job); empty = final["active_processes"] == 0 and final["owned_processes"] == []
-                clean = bool(guard.windows.k.CloseHandle(job)) and empty
+                deadline = time.monotonic()+5
+                while True:
+                    final = guard.windows.accounting(job); empty = final["active_processes"] == 0 and final["owned_processes"] == []
+                    if empty or time.monotonic() >= deadline: break
+                    time.sleep(.1)
+                out["owned_job_final"] = final
+                clean = empty and clean
         except (ValueError, OSError, subprocess.SubprocessError): clean = False
+        finally:
+            if job: clean = bool(guard.windows.k.CloseHandle(job)) and clean
         if held:
             try: clean = bool(held.close()) and clean
             except (ValueError, OSError): clean = False
         if binding: out["strict_product_window"] = binding.state.diagnostics()
+        out["owned_job_samples"] = job_samples
         guard.close()
         out.update(cleanup_confirmed=guard.cleanup and clean and (process is None or empty),
             elapsed_seconds=time.monotonic()-started,
