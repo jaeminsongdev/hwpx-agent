@@ -1629,3 +1629,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE161_PREPARATION_STATUS -->
 > case160공식승인유지/161 STEP·과거4개무손실표현준비·원본수정0/정확복원8회·fresh31-final31·cleanupTrue/공통준비경로총36계약PASS. 38pair inherited-only 명목596.085초는새컨트롤러등미포함·whole예산미증명/Native·제품GO0·승인delta0/공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE.
 <!-- END P09_CASE161_PREPARATION_STATUS -->
+
+<!-- BEGIN P09_CASE161_BINDING_SPEED_STATUS -->
+> 공통Binding161..249 구현 및 case161준비003 PASS/기존실패·manifest002 보존. 중복final finish 제거·전체입력병합 일괄화/28계약PASS·fresh103-final103·38pair·136.702초·cleanupTrue. 실제원본·물리pin·과거provenance·scope-resource-byte-handle oracle 유지. 새runtime whole연결·cost·CODE-pref·제품·독립승인 미완료/GO0·delta0. 공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_CASE161_BINDING_SPEED_STATUS -->

@@ -97,3 +97,21 @@ case별 준비 script를 복제하지 않도록 prepare_current_queue_step과 pr
 공식154/249·잔여95·next161·generation49와 P09/A12/A13 OPEN을 유지한다. case161 제품 실행은 NOT_RUN이며 다음은 공통 successor 연결과 전체 비용·사전 검증이다. 목표는 ACTIVE다.
 
 근거: evidence의 case160-current-runtime-run004/run007/run008/run009/run010/run011, case160-current-epoch-accept001 및 optimized-acceptance-attempt001, case161-step-config001/successor-selection001/lossless-receipts001/prospective-inherited-cost001, 앞선 r391/r392 기록과 관련 소스.
+
+## 반복 계산과 잘못된 최종 검사 제거
+
+새 공통 successor Binding의 두 번째 준비 실행은 자원 보호가 아니라 audit_final_hash_inventory 오류로 실패했다. 원 AuditEvidenceReader.finish는 전체 입력을 다시 읽고 누적 final_fresh_hashes가 입력 수와 같은지 검사하는 일회성 종료 연산이다. 같은 reader에서 finish를 두 번 호출해 불필요한 전체 재읽기 후에도 개수 검사에서 실패했다. 실패 기록과 이미 발행된 manifest002는 보존하고 채택하지 않았다.
+
+최종 검사를 manifest의 실제 발행·읽기와 범위 투영 뒤에 한 번만 호출하도록 수정했다. 모든 입력은 최초 실제 읽기와 마지막 실제 재읽기를 유지한다. 신규 manifest는 종료 검사가 실패하면 성공 결과로 채택되지 않는다. 코드 회귀 검사는 manifest pin과 투영 뒤에 finish가 정확히 한 번 있는지 확인한다.
+
+기존 준비 코드의 입력 병합도 개선했다. 승인 fresh 입력 1,134개를 하나씩 추가할 때마다 전체 목록을 다시 검증하던 1,135회 extend를 두 번의 일괄 extend로 바꿨다. 명시적 물리 alias의 정확한 pin, 일반 입력 충돌, 전체 pin 형식, 원 guard 오류 및 변경 전후 입력 불변성을 검사한다. 실제 predecessor와 준비 메타데이터를 사용한 단일 코어·낮은 우선순위 비교에서 동일한 병합 결과 2,909개를 얻었다. 기존 23.4856초 대 수정 0.0610초였으며, 이 값은 물리 투영 이전의 범위 병합만 측정한다. 메타데이터 fresh6/final6, CPU최고29.14%, 가용RAM최저50.66%, cleanup=True였다. 전체 Native 시간 단축률로 환산하지 않는다.
+
+수정한 Binding과 기존 범위·전체 oracle 연결 테스트 28개는 실패·오류 없이 통과했다. 실제 case161 준비003은 38pair를 그대로 연결하고 물리·의미 입력 각각2,871개, 물리 바이트239,778,095, 실제 준비 읽기208회·275,719,257바이트, fresh103/final103으로 통과했다. 원 constructor 역투영과 나머지 scope·resource·byte·handle oracle method identity를 유지하며, 과거 실패 lineage를 현재 승인으로 다시 표시하지 않는다.
+
+준비003 전체136.7016초 중 admission1.0007초, predecessor·의존 입력9.6578초, 원본·envelope 읽기59.1105초, manifest 발행·범위 투영0.2275초, 한 번의 완전한 최종 재읽기66.7050초였다. CPU최고32.59%, 가용RAM최저50.42%, cleanup=True다. 이는 준비 경로 통과이며 새 parent·worker·CODE·전체 preflight 또는 제품 실행은 아니다. 준비 소스와 보고서 pin은 새 Native의 사전 검증에서 확인해야 한다.
+
+작업 속도 개선은 불필요한 검증 변형과 재검사를 줄이는 데 우선 적용한다. 동일 입력·소스에서 통과한 결과는 정확한 pin 및 승인 조건이 유지되는 범위에서 재사용하고, 변경에는 관련 계약부터 실행한다. 원인 확인 없는 자동 재시도, 사례별 controller 복제, 개별 진단마다 보조 script 추가, 상태 확인만을 위한 전체 Git 조회를 반복하지 않는다. 이 실행에는 OS 설정 변경·Defender 제외 변경·외부 프로세스 종료·한글 접근 허용 요청이 없었다.
+
+P09 목표는 case161 공통 successor 연결 작업으로 재개했다. 다음 완료 경계는 실제 parent·worker·독립 oracle 연결과 전체 입력 비용 검증이다. 앞선596.085초 계산과 준비003은 아직 신규 전체 runtime 연결을 포함하지 않으므로 GO를 허용하지 않는다. 공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN을 유지한다.
+
+근거: tools/p09/current_queue_successor_binding.py 및 해당 테스트, evidence/p09-361-case161-successor-binding001/002/003.v1.json과 successor-manifest002/003.v1.json. 병합 비교는 이 세션의 bounded terminal 실행 결과다.
