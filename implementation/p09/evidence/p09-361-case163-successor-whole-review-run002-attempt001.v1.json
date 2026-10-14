@@ -1,0 +1,63 @@
+{
+  "state": "FAILED_SUCCESSOR_WHOLE_REVIEW_NOT_ACCEPTED",
+  "index": 163,
+  "physical_run": 2,
+  "accepted_count_delta": 0,
+  "product_or_Native_reexecuted": false,
+  "queue_acceptance_called": false,
+  "P09_gate": "OPEN",
+  "contracts": {
+    "run": 2,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "error_type": "ValueError",
+  "error_code": "STOP_TERMINAL_METADATA_WARNING_BEFORE_MORE_WORK",
+  "failure_frames": [
+    {
+      "file": "review_current_queue_successor.py",
+      "function": "main",
+      "line": 97
+    },
+    {
+      "file": "review_current_queue_successor.py",
+      "function": "prepare",
+      "line": 46
+    },
+    {
+      "file": "flat_current_queue_acceptance.py",
+      "function": "prepare",
+      "line": 66
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "read_exact",
+      "line": 234
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "json",
+      "line": 113
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "_read",
+      "line": 244
+    },
+    {
+      "file": "locked_runtime_inputs.py",
+      "function": "reserve",
+      "line": 72
+    },
+    {
+      "file": "terminal_metadata_pressure_v1.py",
+      "function": "check",
+      "line": 40
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 60.0884081999975,
+  "CPU_max": 75.2,
+  "RAM_min": 46.801546516567676
+}

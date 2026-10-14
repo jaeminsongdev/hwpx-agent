@@ -305,3 +305,23 @@ graph002 v2는52pair를 모두 복원했으며 wire7,535바이트·fresh37/final
 같은 검증의 세 번째 재시도와 제품 실행은 시작하지 않았다. 최종 읽기는 모든 입력을 다시 읽는 원신선성 경계이며 이전 pin으로 대체하지 않는다. allocation 개선용 기존 reusable_audit_chunk_v1과 원 reader의 완전재해시를 검토했으나56MiB 미만의 부모 메모리와 중단순간0% CPU 자료만으로 이를 포화 해결책으로 주장하지 않는다. 다음 개선은 실제 입력 고정·동일 reader 재사용 및 최종 읽기의 비용을 줄이되 source·현재성·CPU/RAM·최종검사 범위를 보존해야 한다. 공식156/249·잔여93·next163·generation51, P09/A12/A13 OPEN 및 목표ACTIVE다. 사례163 제품·Native·독립검사·승인은 NOT_RUN이다.
 
 근거: case163 successor-selection001, lossless-receipts001, successor-binding001, successor-connections002.v2, successor-factory001, successor-code-run002-attempt001, successor-preflight-run002-attempt001/002, successor-dispatch-qualification-run002-attempt001/002. 소스 변경이나 OS 설정 변경 없이 준비 및 실패 증거를 보존했다.
+
+## 준비 reader의 반복 할당 개선과 사례163 실제 통과
+
+successor_preparation_workspace_v1은 기존 reusable_audit_chunk_v1의64KiB readinto workspace를 준비용 AcceptanceReader에 연결한다. 원 reader의 MRO wrapper·파일 열기·속도 제한·checkpoint·parse budget·hash·최종 전체 재읽기를 유지한다. 기존 v2와 승인 소스는 변경하지 않고 정확히 고정된 소스를 private namespace로 구성한다. 새 helper·시험·기존 leaf·guard source 및 코드 검증 기록은 각 실제 reader에서 입력·최종 해시로 확인한다. Native worker·GO·승인 진입점은 제공하지 않는다.
+
+초기 guard namespace 설정 오류는 stage와 guard 생성 전 거부됐으며 별도 기록을 보존했다. 같은 원 controller의 고정 guard namespace로 수정한 뒤 기존15개 scratch 계약과 새2개 연결 계약이 통과했다. code001은 계수 기록 추가 전 소스의 검증이고 현재 source qualification은 code002다. code002는17계약·fresh7/final7·2.019초·CPU45.68%·cleanup=True다. 최종 소스의 CODE002-003은 원74계약·fresh100/final100·14.388초·CPU44.76%·cleanup=True다. 실제 reader1개, workspace65,536바이트1개, leases200/returns200, readinto400회·1,810,596바이트·최종 해시100개를 확인했다.
+
+whole preflight003은12.779초·CPU79.69% 경고로 중단됐으며 parentCPU0.389%·private48.039MiB·cleanup=True다. 짧은 검증 종료 후 표본에서 다른 Python2개와 Git1개가 상위였지만 중단순간 attribution은 아니며 Python2개는 이 준비 명령이나 hwpx 저장소 명령이 아니었다. 특정 외부 프로세스를 원인으로 확정하거나 종료하지 않았다. CODE를 유지하고 preflight004만 진행했다. preflight004는118.998초·입력2,927/Rust787·helper62·fresh415/final415·CPU73.60%·가용RAM44.030%·cleanup=True로 통과했다. 실제 workspace1개·readinto3,685회·836읽기·141,080,631바이트·leases836/returns836·active=False를 확인했다. 이전118.694초와 비슷하므로 시간 감소 또는 프리즈 해결은 입증되지 않았다.
+
+준비 entry로 진행한 qualification003은55.091초·CPU98.26% 보호중단·parentCPU0%·private50.223MiB·cleanup=True다. qualification004는CPU56.70%에서 실제 Native helper 한도에 거부됐다. 준비 entry의 helper를 숨기거나64개 한도를 늘리지 않았다. 이 entry는 CODE/preflight에 사용하고 실제 Native 연결 qualification은 기존 v2 entry로 수행한다. qualification005는6계약·실제Native helper64개·fresh416/final416·116.098초·CPU60.74%·가용RAM45.937%·cleanup=True다. 예상 비용594.166초/600초, Native 발행 직전과 종료 후 해당 source416개 해시 일치를 확인했다.
+
+실제 Native002는567.86초에 제품1개 통과, GO부터 완전 출력 수집1.824초, 물리 입력2,929개·232,279,766바이트에 대한 실제 전후 경계2회 및 Frame COMMITTED·빈 소유 tree·cleanup=True를 확인했다. 시스템CPU최고65.72%·가용RAM최저42.399%·parent private최고55.387MiB다. 후보는4,525,503바이트·SHA256 f2151271e6d74e6019773d198fba861d00a60dcccebcb41969f4bd77ec05736e다. Native 소스와 경로는 변경하지 않았으므로 이전 사례보다 짧은 시간을 준비 버퍼 개선의 효과로 단정하지 않는다.
+
+독립 리뷰001은2계약 통과 뒤60.088초·CPU75.20% 경고로 중단됐다. 원 파일 열기 pacing과 guard 코드를 확인하고 부하 회복 뒤 리뷰002만 진행했다. 리뷰002는117.212초·2계약·fresh420/final420·CPU55.47%·가용RAM41.018%·cleanup=True로 통과했다. 제품을 재실행하지 않았다.
+
+공식 승인001/002는 각각CPU80.23%와75.77% metadata 보호로 중단됐고 delta0·cleanup=True다. 중단순간 부모CPU는 모두0%, private55.129/56.230MiB다. 승인002의 실제 reader도 이미 workspace65,536바이트1개·readinto2,855회·91,642,147바이트·leases831/returns831·active=False를 사용했다. 같은 scratch 개선을 중복 적용할 근거는 없다. canonical은 생성되지 않았고 세 번째 동일 승인 재시도는 시작하지 않았다.
+
+공식156/249·잔여93·next163·generation51, P09/A12/A13 OPEN 및 목표ACTIVE를 유지한다. 사례163 제품·Native·독립 전체 리뷰는 통과했고 공식 승인만 미완료다. 다음은 승인 단계의 반복 읽기·검증 비용을 점검하되 현재성 검사와 원 승인 조건을 보존하는 것이다. CODE·preflight·실제제품·독립검사 통과 및 모든 실패 기록을 보존한다.
+
+근거: preparation-workspace-setup001 및 code001/002, workspace CODE/pref/qualify 계수, successor-code002/003, preflight003/004, dispatch-qualification003..005, current-runtime-run002, whole-review001/002, optimized-acceptance001/002. 사용자 소유 변경과 원본·승인162는 보존했고 OS 설정 변경·외부 프로세스 종료·검증 범위 축소는0이다.
