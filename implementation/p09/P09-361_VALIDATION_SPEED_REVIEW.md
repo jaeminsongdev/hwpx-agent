@@ -26,6 +26,14 @@ run007 controller는 소스를 다시 수정하지 않고 qualification 1..8과 
 - 개별 변경에는 관련 계약부터 실행하고 전체 Native는 승인 경계에 실행한다. 필요한 전후 실제 읽기나 원체커를 생략하지 않는다.
 - 더 큰 속도 개선은 실제 단계별 시간에 근거해 직렬 중복 작업을 줄여야 한다. 이번 변경으로 569초의 전체 Native 비용이 줄었다는 실측 주장은 하지 않는다.
 
-공식153/249, 잔여96, next160, generation48 및 P09/A12/A13 OPEN을 유지한다. 코드 및 사전 검증 PASS는 제품 PASS나 공식 승인으로 승격하지 않는다. 다음은 소스를 고정한 Native run007 한 번이다.
+## 목표 재개 결과
 
-근거: evidence의 case160-current-runtime-run004, run007-controller-r390 및 envelope-controller-preflight046 기록과 tools/p09/case160_run007_controller.py 및 해당 테스트 소스.
+소스를 고정한 Native run007은 실제 제품 호출을 한 번 실행했다. GO부터 완전 출력 수집까지 2.940초, exit0, 제품 terminal summary 1 passed/0 failed/248 filtered out이었다. 그러나 544.93초 시점 final_source_freeze에서 시스템 CPU97.16%로 STOP_NATIVE_SOURCE_PRESSURE_NO_COOLING이 발생했다. before 경계는 입력2,855개/242,575,809바이트를 읽었지만 after 경계가 완료되지 않아 전체 Native는 STOPPED_NOT_ACCEPTED다. 제품 출력만으로 공식 승인하지 않는다.
+
+중단 시 소유 Job active_processes0, owned_job_cpu_machine_percent0, parent CPU0%, 가용 RAM31.58%, owned_tree_empty=True 및 cleanup=True였다. 마지막 CPU 상승의 프로세스별 원인은 확정되지 않았다. 마지막 가용 attribution 표본은 보호 프로세스 등의 접근 불가로 coverage_complete=False이므로 Defender 또는 다른 프로세스가 원인이라고 단정하지 않는다. OS 설정 및 외부 프로세스는 변경하지 않았다.
+
+이 결과도 지연의 대부분이 제품 자체가 아니라 준비·전후 검증에 있음을 뒷받침한다. 다음 최적화는 이 직렬 준비 경로의 중복 비용에 집중하며, 통과한 CODE31은 같은 소스를 쓰는 동안 유지한다. Native 실패를 제품 승인으로 대체하거나 같은 실패를 즉시 자동 반복하지 않는다.
+
+공식153/249, 잔여96, next160, generation48 및 P09/A12/A13 OPEN을 유지한다. 목표는 ACTIVE이며 PC 프리즈 또는 전체 속도 문제가 해결됐다고 주장하지 않는다.
+
+근거: evidence의 case160-current-runtime-run004/run007, run007-controller-r390 및 envelope-controller-preflight046 기록과 tools/p09/case160_run007_controller.py 및 해당 테스트 소스.

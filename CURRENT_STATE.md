@@ -2926,3 +2926,7 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 <!-- BEGIN P09_SPEED_REVIEW_STATUS -->
 > P09 속도 우선 점검 — 공식153/249·잔여96·next160·generation48/P09-A12-A13 OPEN/목표ACTIVE 유지. Native004 전체568.98초 대 제품2.236초, 입력고정·두 실제 읽기가 주된 비용. run007의 계약수/읽기수 투영 충돌 수정 후 CODE31 오류0·실패0·skip0/fresh106-final106/12.162초/cleanupTrue. wholepref046 PASS 입력2888/imports64/71.400초/CPU최고53.41%·가용RAM최저34.83%/cleanupTrue. 닫힌 실행 선택으로 재시도용 소스변경·CODE재검사 반복 방지. CODE 및 wholepref는 Native·제품·승인 아님. 다음 소스를 고정한 Native007 한 번. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
 <!-- END P09_SPEED_REVIEW_STATUS -->
+
+<!-- BEGIN P09_SPEED_REVIEW_NATIVE007_STATUS -->
+> 목표 재개 Native007 — 제품 실제1회/GO→완전수집2.940초/exit0/terminal1PASS-0FAIL-248filtered. final_source_freeze 544.93초에서시스템CPU97.16%로 STOP_NATIVE_SOURCE_PRESSURE_NO_COOLING. before2855입력·242575809바이트만완료/after미완료·전체STOPPED_NOT_ACCEPTED. 중단소유Job active0·JobCPU0·parentCPU0·가용RAM31.58%·빈tree/cleanupTrue. CPU상승주체 미확정·Defender단정0·보호완화0·자동재시도0. 공식153/249·delta0·잔여96·next160/P09-A12-A13 OPEN/목표ACTIVE. CODE31 및 wholepref046 통과유지. 다음 준비·전후검증 직렬중복 비용 최적화. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_SPEED_REVIEW_NATIVE007_STATUS -->
