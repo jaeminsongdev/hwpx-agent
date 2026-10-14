@@ -1,0 +1,49 @@
+{
+  "state": "FAILED_SUCCESSOR_DISPATCH_CONSTRUCTION_NOT_ADOPTED",
+  "index": 163,
+  "physical_run": 2,
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "product_or_Native_executed": false,
+  "error_type": "ValueError",
+  "error_code": "STOP_TERMINAL_METADATA_WARNING_BEFORE_MORE_WORK",
+  "failure_frames": [
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "main",
+      "line": 245
+    },
+    {
+      "file": "current_queue_successor_wire_runtime_v2.py",
+      "function": "current_namespaces",
+      "line": 154
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "pin",
+      "line": 106
+    },
+    {
+      "file": "terminal_metadata_pressure_v1.py",
+      "function": "check",
+      "line": 40
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 54.88141519999772,
+  "CPU_max": 76.39,
+  "RAM_min": 31.387825135982258,
+  "terminal_resource_sample": {
+    "system_cpu_percent": 76.39,
+    "available_ram_percent": 31.387825135982258,
+    "commit_used_percent": 46.08876256195995,
+    "parent_cpu_machine_percent": 0.6908488779601912,
+    "parent_private_mib": 47.11328125,
+    "parent_private_percent": 0.14787170067168154
+  },
+  "metadata_progress": {
+    "fresh_inputs": 413,
+    "actual_read_passes": 414,
+    "actual_bytes_read": 69017258
+  }
+}

@@ -291,3 +291,17 @@ Native003은578.76초, 제품 GO부터 완전 출력 수집3.193초로 통과했
 승인002는234.209초에 canonical을 한 번 발행했다. before155·delta1·after156·잔여93·next163·generation51, fresh1,212/final1,212·2,441읽기·206,537,101바이트·cleanup=True다. 승인CPU최고53.55%·가용RAM최저33.614%이며 제품 및 Native 재실행은0이다. P09/A12/A13은 OPEN이고 full249·signed16·전체 runtime reconciliation은 미완료다. 목표는 ACTIVE이며 다음은 사례163이다. 프리즈 근본 해결과 전체 검증 시간 감소는 아직 입증되지 않았다.
 
 근거: case162 current-runtime-run003, successor-whole-review-run003-attempt001/002, successor-acceptance-facade-setup001, optimized-acceptance-attempt001/002 및 current-epoch-accept001. canonical은437,552바이트·SHA256 dc5b07a24c330e7f72c4f9e1def6ac8017015ca0f72cd1b01f0b93cba7f23718이다. 운영 출력은 개수·요약 값만 남기고 pin 및 전체 로그 배열을 반복 출력하지 않는다.
+
+## 사례163 준비와 최종 읽기 비용
+
+사례163은 actual_import::source_review_delete::cached_delete_callback_rechecks_actual_aead_acl_regrant_and_advanced_head다. 사례162 canonical에서 STEP을 준비했고 fresh9/final9·cleanup=True다. 새 원본4개는11,209,169바이트에서3,904,408바이트 무손실 표현으로 변환했으며7,304,761바이트가 절감됐다. 원본은 보존했고 fresh31/final31·CPU52.06%·cleanup=True다.
+
+전체Binding001은 기존48개와 새4개를 합친52pair, fresh131/final131, 물리 입력2,921개·230,766,078바이트로 통과했다. 총183.949초 중 admission1.001초, predecessor와 dependency 읽기9.577초, 원본 및 envelope 읽기82.773초, manifest와 scope projection0.173초, 최종 전체 재해시90.426초다. 실제 소요의 약94.2%가 원본·envelope와 최종 읽기 두 구간이다.
+
+graph002 v2는52pair를 모두 복원했으며 wire7,535바이트·fresh37/final37·10.191초로 통과했다. factory001은GO 없는 원11계약·fresh23/final23·11.709초로 통과했다. CODE002-001은74계약·fresh96/final96·14.329초·CPU57.39%·cleanup=True다. 전체 preflight001은71.421초·CPU95.55% 보호중단이고 parentCPU0%·private47.625MiB였다. 읽기 경로의64KiB 블록·원속도·no-burst·0.5초 표본 재사용을 점검했으며 직접 계산 폭주를 확인하지 못했다. CODE는 재실행하지 않고 preflight002만 진행했다. preflight002는118.694초·scope2,924·Rust787·fresh412/final412·CPU63.42%·가용RAM31.770%·cleanup=True로 통과했다.
+
+진입 qualification001은54.881초에CPU76.39% 경고로 중단됐다. fresh413·414읽기·69,017,258바이트, parentCPU0.691%·private47.113MiB다. 중단 위치는 이미 읽은 pin의 checkpoint이며 pin은 같은 reader의 snapshots에 있으면 추가 파일 읽기를 하지 않는다. 원반복 fresh 검사는 유지한다. 현재 자원 표본43.20%·37.81% 후 qualification002만 진행했지만 최종 해시 단계67.595초에CPU99.35% 경고로 중단됐다. 6계약은통과했으나 final 미완료이므로 qualification PASS가 아니다. fresh413·452읽기·79,118,885바이트·parentCPU0%·private49.855MiB·가용RAM33.637%·commit44.134%·cleanup=True다.
+
+같은 검증의 세 번째 재시도와 제품 실행은 시작하지 않았다. 최종 읽기는 모든 입력을 다시 읽는 원신선성 경계이며 이전 pin으로 대체하지 않는다. allocation 개선용 기존 reusable_audit_chunk_v1과 원 reader의 완전재해시를 검토했으나56MiB 미만의 부모 메모리와 중단순간0% CPU 자료만으로 이를 포화 해결책으로 주장하지 않는다. 다음 개선은 실제 입력 고정·동일 reader 재사용 및 최종 읽기의 비용을 줄이되 source·현재성·CPU/RAM·최종검사 범위를 보존해야 한다. 공식156/249·잔여93·next163·generation51, P09/A12/A13 OPEN 및 목표ACTIVE다. 사례163 제품·Native·독립검사·승인은 NOT_RUN이다.
+
+근거: case163 successor-selection001, lossless-receipts001, successor-binding001, successor-connections002.v2, successor-factory001, successor-code-run002-attempt001, successor-preflight-run002-attempt001/002, successor-dispatch-qualification-run002-attempt001/002. 소스 변경이나 OS 설정 변경 없이 준비 및 실패 증거를 보존했다.

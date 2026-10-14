@@ -1,0 +1,65 @@
+{
+  "state": "FAILED_SUCCESSOR_DISPATCH_CONSTRUCTION_NOT_ADOPTED",
+  "index": 163,
+  "physical_run": 2,
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "product_or_Native_executed": false,
+  "contracts": {
+    "run": 6,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "error_type": "ValueError",
+  "error_code": "STOP_TERMINAL_METADATA_WARNING_BEFORE_MORE_WORK",
+  "failure_frames": [
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "main",
+      "line": 269
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "finish",
+      "line": 137
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "_read",
+      "line": 245
+    },
+    {
+      "file": "weighted_audit_io.py",
+      "function": "_read",
+      "line": 44
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "_read",
+      "line": 88
+    },
+    {
+      "file": "terminal_metadata_pressure_v1.py",
+      "function": "check",
+      "line": 40
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 67.59521610000229,
+  "CPU_max": 99.35,
+  "RAM_min": 30.85957705579487,
+  "terminal_resource_sample": {
+    "system_cpu_percent": 99.35,
+    "available_ram_percent": 33.6373728834859,
+    "commit_used_percent": 44.134404879499684,
+    "parent_cpu_machine_percent": 0.0,
+    "parent_private_mib": 49.85546875,
+    "parent_private_percent": 0.15647844421463158
+  },
+  "metadata_progress": {
+    "fresh_inputs": 413,
+    "actual_read_passes": 452,
+    "actual_bytes_read": 79118885
+  }
+}

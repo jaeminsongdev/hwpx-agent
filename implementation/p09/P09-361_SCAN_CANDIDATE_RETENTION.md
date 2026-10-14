@@ -1677,3 +1677,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE162_ACCEPTED_STATUS -->
 > 사례162 Native003 실제제품1PASS·전후2경계·Frame COMMITTED·cleanupTrue·578.76초/독립리뷰002 fresh406-final406 PASS. 승인조립오류와CPU보호중단 승인001은 보존했으며 봉인된Native 소스·제품 결과는 재실행하지 않았다. 승인002 canonical current-epoch-accept001은 before155·delta1·after156·잔여93·next163·generation51·fresh1212-final1212·resourcecleanupTrue. 후보4476388바이트/SHA256 ff944507caae40afdd6456de71623bdad9b822c2641798cab12793c1a7198ed6, canonical437552바이트/SHA256 dc5b07a24c330e7f72c4f9e1def6ac8017015ca0f72cd1b01f0b93cba7f23718. 공식156/249·P09/A12/A13 OPEN·목표ACTIVE/전체속도개선·PC프리즈해결미증명. 다음163이며 승인161/162 재실행0·원본/실패증거삭제0.
 <!-- END P09_CASE162_ACCEPTED_STATUS -->
+
+<!-- BEGIN P09_CASE163_PREPARED_STATUS -->
+> 사례163 STEP·4원본무손실·Binding52pair·graph002v2 wire7535·factory11·CODE74·wholepref002 scope2924/Rust787 fresh412-final412 PASS. pref001 및entry001/002 CPU경고중단 보존·cleanupTrue·실제제품/Native0. entry002는6계약PASS지만finalhash중단이므로qualification미인정/동일3차재시도미시작. 원본·승인162·통과CODE/pref보존·source변경0. 공식156/249·잔여93·next163·generation51/P09-A12-A13 OPEN/목표ACTIVE. 다음fresh IO 비용개선검토 후실행진입검증·제품NOT_RUN.
+<!-- END P09_CASE163_PREPARED_STATUS -->
