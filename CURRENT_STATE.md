@@ -2970,3 +2970,7 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 <!-- BEGIN P09_CASE161_PARENT_ADMISSION_STATUS -->
 > 공통runtime 실제parent binding·worker policy callable 연결/원본문·동일privateenv·Frame·once-only 유지. 새회귀3 포함전체60계약PASS. factory003 import누락실패보존·serialized cleanup evidence unavailable구분/정확import 및실패보고수정. factory004 실제이전초기입력포함fresh375-final375·87.041초·CPU14.99%·가용RAM43.03%·cleanupTrue/의미입력2877·Rust787·현재소스핀일치/parent-worker dispatch0·Frame0. 준비범위cost588.430초는전체closure-workerCLI-wholeoracle-CODE-pref 미완료로GO근거아님. 제품NOT_RUN·delta0/공식154/249·잔여95·next161·generation49/P09-A12-A13 OPEN/목표ACTIVE. 다음worker bootstrap·CLI와독립전체검사연결.
 <!-- END P09_CASE161_PARENT_ADMISSION_STATUS -->
+
+<!-- BEGIN P09_CASE161_WORKER_CLI_STATUS -->
+> worker bootstrap9327바이트·특수alias5·원runtime-authority-manifest본문없이44pair복원·원16KiB유지/실제CLI는case160argvparser아닌qualified 공통window직접사용·argv숨김0. 신규5 포함전체65계약PASS. factory005 CPU경고중단·예외late import실패보존/수정후startup-only는전체parent재읽기유예를명시하며GO전whole검사필수유지. 006/007실패보존·wrapper argv/importroot·전용parser의존수정. 008실제CLI EOF/GO0로원WORKER_NOT_AUTHORIZED 거부·과거runtime/authority open0/fresh17-final17·10.376초·CPU32.21%·가용RAM42.52%·cleanupTrue·현재핀일치/제품0·parentadmission승격0. 공식154/249·잔여95·next161·generation49/P09-A12-A13 OPEN/목표ACTIVE. 다음독립wholeoracle와전체CODE-closure-cost-pref→Native.
+<!-- END P09_CASE161_WORKER_CLI_STATUS -->

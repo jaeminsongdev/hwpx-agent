@@ -8,9 +8,115 @@ import current_queue_successor_connections as metadata
 
 SELF="tools/p09/current_queue_successor_runtime.py"
 TEST="tools/p09/tests/test_current_queue_successor_runtime.py"
+WORKER_BOOTSTRAP_SCHEMA="hwpx-agent.p09-current-successor-worker-bootstrap/v1"
 PINS=[
     dict(path="tools/p09/reviewed_case158_attempt_v3.py",bytes=3241,sha256="3b1b05141b47aaa8798733ed83fc6fc4232763e9bd8d29a168f3a614bb1b6bdd"),
     dict(path="tools/p09/reviewed_case158_attempt_v4.py",bytes=1984,sha256="9567a847d0def48b5ba5a69262ab7d12d05ce7902cac4c5998dd0f9290f18223")]
+
+
+def worker_hint(step,run,capsule_pin,manifest_pin,manifest,historical_pairs):
+    """Small sealed context, no historical receipt contents or current PASS."""
+    import copy
+    import produce_current_queue_envelopes as producer
+    import current_stored_runtime_scope as scope
+    index=step["index"]
+    metadata.require(type(index) is int and 161<=index<=249 and type(run) is int and 2<=run<=8,"WORKER_HINT_CONTEXT")
+    current={row["semantic_original_pin"]["path"]:row for row in manifest["descriptors"]}
+    special=[]
+    for row in historical_pairs:
+        old,new=row["semantic_original_pin"],row["physical_envelope_pin"]
+        if new["path"]==producer.output_path(old,index):continue
+        sealed=current[old["path"]]
+        metadata.require(old==sealed["semantic_original_pin"] and new==sealed["physical_envelope_pin"],"HINT_PAIR_IN_EXACT_CURRENT_MANIFEST")
+        metadata.require(type(row["next_case"]) is int and row["next_case"]<index,"HINT_PRIOR_CONTEXT_NOT_RELABELLED")
+        special.append(copy.deepcopy(row))
+    hint=dict(schema_version=WORKER_BOOTSTRAP_SCHEMA,index=index,run=run,step=copy.deepcopy(step),
+        capsule_pin=scope.pins([capsule_pin])[capsule_pin["path"]],manifest_pin=scope.pins([manifest_pin])[manifest_pin["path"]],
+        first_descriptor=copy.deepcopy(manifest["descriptors"][0]),historical_pairs=special,
+        historical_provenance=copy.deepcopy(manifest["historical_predecessor_provenance"]))
+    validate_worker_hint(hint,f"case{index}-current-r{run:03}-tests")
+    return hint
+
+
+def validate_worker_hint(hint,task):
+    import re
+    import current_stored_runtime_scope as scope
+    import current_queue_successor_binding as bindings
+    metadata.require(type(hint) is dict and set(hint)=={"schema_version","index","run","step","capsule_pin","manifest_pin",
+        "first_descriptor","historical_pairs","historical_provenance"},"CLOSED_WORKER_HINT")
+    index,run=hint["index"],hint["run"]
+    metadata.require(hint["schema_version"]==WORKER_BOOTSTRAP_SCHEMA and type(index) is int and 161<=index<=249
+        and type(run) is int and 2<=run<=8 and task==f"case{index}-current-r{run:03}-tests","EXACT_WORKER_HINT_TASK")
+    step=hint["step"]
+    metadata.require(type(step) is dict and set(step)=={"schema_version","index","before","case","prior_queue_pin","prior_candidate_pin"},"CLOSED_WORKER_STEP")
+    metadata.require(step["schema_version"]=="hwpx-agent.p09-flat-current-queue-step/v1" and type(step["index"]) is int
+        and step["index"]==index and type(step["before"]) is int and step["before"]==index-7
+        and type(step["case"]) is str and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_:]*",step["case"]),"EXACT_WORKER_STEP_CONTEXT")
+    scope.pins([step["prior_queue_pin"],step["prior_candidate_pin"],hint["capsule_pin"],hint["manifest_pin"]])
+    metadata.require(hint["capsule_pin"]["path"]==f"implementation/p09/evidence/p09-361-case{index}-successor-worker-capsule{run:03}.compact.v1.json"
+        and hint["capsule_pin"]["bytes"]<=16384,"EXACT_BOUNDED_WORKER_CAPSULE_PATH")
+    metadata.require(hint["manifest_pin"]["path"].startswith(f"implementation/p09/evidence/p09-361-case{index}-successor-")
+        and hint["manifest_pin"]["path"].endswith(".v1.json"),"EXPLICIT_CURRENT_MANIFEST_PATH")
+    metadata.require(type(hint["historical_pairs"]) is list and len(hint["historical_pairs"])<=249
+        and type(hint["historical_provenance"]) is dict and set(hint["historical_provenance"])<=set(bindings.PROVENANCE_KEYS),"CLOSED_PRIOR_HINTS")
+    return index,run
+
+
+def reconstruct_worker_graph(root,loader,scope,bytes_policy,hint,wire,checkpoint):
+    """Decode the exact bounded current transport without original receipt IO."""
+    import current_queue_successor_binding as bindings
+    index,run=validate_worker_hint(hint,f"case{hint['index']}-current-r{hint['run']:03}-tests")
+    module,proof=bindings.connect(root,loader,scope,index,hint["historical_provenance"],hint["historical_pairs"])
+    initial=module.Binding([hint["first_descriptor"]],hint["manifest_pin"],next_case=index)
+    graph,graph_proof=metadata.connect(root,loader,bytes_policy,module,initial,hint["step"],run,checkpoint)
+    expected={k:hint["capsule_pin"][k] for k in ("bytes","sha256")}
+    bound,decoder=graph.worker.decode(wire,expected,checkpoint)
+    module.exact(dict(bound.manifest_pin),hint["manifest_pin"],"EXACT_WORKER_HINT_MANIFEST")
+    metadata.require(bound.descriptors()[0]==hint["first_descriptor"],"EXACT_FIRST_DESCRIPTOR_NOT_SCOPE_SUBSTITUTION")
+    return NS(**{**vars(graph),"binding":bound}),dict(decoder,all_current_rows_reconstructed=True,
+        original_receipt_manifest_or_authority_files_read=False,whole_worker_Native_product_or_GO_qualified=False)
+
+
+def owned_worker_entry(task):
+    """Minimal current startup; original worker still requires GO and Job."""
+    import json
+    from pathlib import Path
+    import re
+    import sys
+    sys.path.insert(0,str(Path(__file__).resolve().parent))
+    import conservative_maintenance as c
+    c.Windows()
+    import current_stored_runtime_scope as scope
+    import runtime_envelope_namespace_bundle_v1 as loader
+    import owned_source_read_pressure as bytes_policy
+    import flat_current_queue_product_window_runtime_v18 as window
+    match=re.fullmatch(r"case([0-9]{3})-current-r([0-9]{3})-tests",task)
+    metadata.require(match is not None,"EXACT_OWNED_WORKER_TASK_SHAPE")
+    index,run=int(match[1]),int(match[2])
+    metadata.require(161<=index<=249 and 2<=run<=8,"CLOSED_OWNED_WORKER_CONTEXT")
+    def read(name):
+        path=c.ROOT/name
+        for parent in (path.parent,*path.parent.parents):
+            metadata.require(parent.is_dir() and not parent.is_symlink() and not parent.is_junction(),"DIRECT_WORKER_ANCESTORS")
+            if parent==c.ROOT:break
+        metadata.require(path.is_file() and not path.is_symlink() and not path.is_junction(),"DIRECT_WORKER_METADATA_FILE")
+        with path.open("rb") as stream:raw=stream.read(16385)
+        metadata.require(0<len(raw)<=16384,"BOUNDED_WORKER_METADATA_BYTES")
+        return raw
+    def unique(pairs):
+        row={}
+        for key,value in pairs:
+            metadata.require(key not in row,"NO_DUPLICATE_WORKER_HINT_KEY");row[key]=value
+        return row
+    name=f"implementation/p09/evidence/p09-361-case{index}-successor-worker-bootstrap{run:03}.v1.json"
+    hint=json.loads(read(name).decode("ascii"),object_pairs_hook=unique)
+    validate_worker_hint(hint,task)
+    wire=read(hint["capsule_pin"]["path"])
+    graph,proof=reconstruct_worker_graph(c.ROOT,loader,scope,bytes_policy,hint,wire,lambda:None)
+    window.M.base.configure(index)
+    template,names,proof=connect_factory(c.ROOT,loader,window,index,run,lambda:None)
+    execute,state,policy,proof=compose_worker(template,graph,c.ROOT,lambda:None)
+    return execute(task)
 
 
 def compose_parent(template,graph,binding_callback,checkpoint):
@@ -114,7 +220,7 @@ def connect_factory(root,loader,window,index,run,checkpoint):
         source_proofs=proofs,current_engine_constructed=False,actual_Native_product_or_GO_qualified=False)
 
 
-def qualify_factory(index,run,connection_attempt,attempt):
+def qualify_factory(index,run,connection_attempt,attempt,startup_only=False):
     """Bounded real engine construction witness, not runtime authorization."""
     import io
     import json
@@ -124,6 +230,7 @@ def qualify_factory(index,run,connection_attempt,attempt):
     import sys
     import time
     import unittest
+    import subprocess
     sys.path.insert(0,str(Path(__file__).resolve().parent))
     import conservative_maintenance as c
     c.Windows()
@@ -170,7 +277,7 @@ def qualify_factory(index,run,connection_attempt,attempt):
         result=unittest.TextTestRunner(stream=io.StringIO(),verbosity=0).run(suite)
         contracts=dict(run=result.testsRun,errors=len(result.errors),failures=len(result.failures),skipped=len(result.skipped))
         out["contracts"]=contracts
-        a.exact(contracts,dict(run=6,errors=0,failures=0,skipped=0),"ALL_FACTORY_CONTRACTS")
+        a.exact(contracts,dict(run=11,errors=0,failures=0,skipped=0),"ALL_FACTORY_CONTRACTS")
         guard.check(force=True);old.old.base.configure(index)
         template,names,proof=connect_factory(c.ROOT,loader,original_window,index,run,guard.check)
         engine,engine_proof=template()
@@ -182,27 +289,69 @@ def qualify_factory(index,run,connection_attempt,attempt):
         module,binding_proof=bindings.connect(c.ROOT,loader,scope,index,history,representation["descriptors"])
         bound=module.Binding(manifest["descriptors"],report["manifest_pin"],next_case=index)
         graph,graph_proof=metadata.connect(c.ROOT,loader,bytes_policy,module,bound,step,run,guard.check)
+        hint=worker_hint(step,run,report["capsule_pin"],report["manifest_pin"],manifest,representation["descriptors"])
+        hint_name=f"implementation/p09/evidence/p09-361-case{index}-successor-worker-bootstrap{run:03}.v1.json"
+        hint_raw=(json.dumps(hint,ensure_ascii=True,allow_nan=False,separators=(",",":"))+"\n").encode("ascii")
+        metadata.require(0<len(hint_raw)<=16384,"ORIGINAL_BOUNDED_WORKER_HINT")
+        import hashlib
+        hint_pin=dict(path=hint_name,bytes=len(hint_raw),sha256=hashlib.sha256(hint_raw).hexdigest())
+        hint_path=c.ROOT/hint_name
+        if not hint_path.exists():
+            for parent in (hint_path.parent,*hint_path.parent.parents):
+                metadata.require(parent.is_dir() and not parent.is_symlink() and not parent.is_junction(),"DIRECT_HINT_ANCESTORS")
+                if parent==c.ROOT:break
+            guard.check(force=True)
+            with hint_path.open("xb") as stream:
+                metadata.require(stream.write(hint_raw)==len(hint_raw),"ALL_WORKER_HINT_BYTES");stream.flush();os.fsync(stream.fileno())
+        a.exact(q.fresh_pin(hint_name),hint_pin,"ACTUAL_WORKER_HINT_BYTES")
         declared=dict(q.snapshots)
         callback=lambda reader:current_input_scope(reader,graph,step,q.snapshots[report_name],report["manifest_pin"],declared)
-        required,rust=callback(q)
+        required,rust=(None,None) if startup_only else callback(q)
         parent,parent_state,parent_proof=compose_parent(lambda:(engine,engine_proof),graph,callback,guard.check)
         worker,worker_state,policy,worker_proof=compose_worker(template,graph,c.ROOT,guard.check)
         metadata.require(parent_state.attempts==worker_state.attempts==0 and not parent_state.frames,"NO_RUNTIME_DISPATCH_DURING_PREPARATION")
-        model=bound.runtime_budget(required,167,original_window.DIRECT.runtime_budget,guard.check)
+        model=None if startup_only else bound.runtime_budget(required,167,original_window.DIRECT.runtime_budget,guard.check)
+        # A separate bounded Python startup receives EOF, never the original GO.
+        # Audit only counts historical runtime/authority opens; paths/logs stay private.
+        audit_program="""import json,os,re,runpy,sys
+hits=[]
+def audit(event,args):
+ if event=='open' and args and isinstance(args[0],(str,bytes,os.PathLike)):
+  name=os.fsdecode(os.fspath(args[0])).replace('\\\\','/').rsplit('/',1)[-1]
+  if re.fullmatch(r'p09-361-case[0-9]{3}-current-(?:runtime-run[0-9]{3}|epoch-accept[0-9]{3})\\.v1\\.json',name):hits.append(1)
+sys.addaudithook(audit)
+path=sys.argv[1];sys.argv=sys.argv[1:];sys.path.insert(0,os.path.dirname(path))
+try:runpy.run_path(path,run_name='__main__')
+finally:print(json.dumps({'historical_runtime_or_authority_opens':len(hits)}))
+"""
+        guard.check(force=True)
+        child=subprocess.run([sys.executable,"-B","-c",audit_program,str(c.ROOT/SELF),"--owned-worker","--task",names.task(index)],
+            input="",text=True,encoding="utf-8",errors="replace",capture_output=True,timeout=15,cwd=c.ROOT,
+            creationflags=subprocess.BELOW_NORMAL_PRIORITY_CLASS|subprocess.CREATE_NO_WINDOW)
+        metadata.require(len(child.stdout.encode("utf-8"))<=4096 and len(child.stderr.encode("utf-8"))<=16384,"BOUNDED_NO_GO_STARTUP_OUTPUT")
+        audit_result=json.loads(child.stdout.strip())
+        metadata.require(child.returncode!=0 and "WORKER_NOT_AUTHORIZED" in child.stderr,"ORIGINAL_GO_REJECTION_BEFORE_PRODUCT")
+        a.exact(audit_result,dict(historical_runtime_or_authority_opens=0),"NO_HISTORICAL_RECEIPT_IO_IN_WORKER_STARTUP")
+        guard.check(force=True)
         q.finish();guard.check(force=True)
-        out.update(state="CONSTRUCTED_REAL_SUCCESSOR_ENGINE_FACTORY_NOT_WHOLE_CODE_PREFLIGHT_NATIVE_OR_GO",
+        out.update(state=("PASS_WORKER_CLI_NO_GO_STARTUP_NOT_PARENT_ADMISSION_NATIVE_OR_PRODUCT" if startup_only else
+            "CONSTRUCTED_REAL_SUCCESSOR_ENGINE_FACTORY_NOT_WHOLE_CODE_PREFLIGHT_NATIVE_OR_GO"),
             contracts=contracts,connection_report_pin=q.snapshots[report_name],manifest_pin=report["manifest_pin"],
             capsule_pin=report["capsule_pin"],task=names.task(index),root_path=names.root_path(old.old.base.CONFIG),
             factory_proof=proof,whole_original_engine_construction_proof=engine_proof,
             worker_body_origin=engine.worker.__code__.co_filename,
             fresh_inputs=len(q.snapshots),final_fresh_hashes=q.final_fresh_hashes,source_pins=list(q.snapshots.values()),
             whole_current_imported_closure_and_cost_NOT_qualified=True,
-            current_parent_readonly_input_admission=True,current_worker_policy_callable_connected=True,
+            current_parent_readonly_input_admission=not startup_only,current_worker_policy_callable_connected=True,
+            worker_bootstrap_pin=hint_pin,worker_cli_NO_GO_rejection=dict(exit_code=child.returncode,
+                original_GO_rejection_observed=True,historical_runtime_or_authority_opens=0,
+                GO_sent=False,product_child_execution_authorized=False,full_worker_product_qualification=False),
             parent_composition_proof=parent_proof,worker_composition_proof=worker_proof,
-            prepared_semantic_inputs=len(required),prepared_Rust_inputs=len(rust),prepared_scope_cost=model,
+            prepared_semantic_inputs=None if startup_only else len(required),prepared_Rust_inputs=None if startup_only else len(rust),
+            prepared_scope_cost=model,full_current_parent_admission_deferred_to_whole_preflight=startup_only,
             actual_parent_and_worker_dispatch_counts=dict(parent=parent_state.attempts,worker=worker_state.attempts),
-            owned_worker_cli_and_independent_whole_oracle_NOT_connected=True)
-    except (ValueError,OSError,KeyError,TypeError,AttributeError,NameError) as error:
+            owned_worker_cli_startup_connected=True,independent_whole_oracle_and_actual_GO_dispatch_NOT_qualified=True)
+    except (ValueError,OSError,KeyError,TypeError,AttributeError,NameError,subprocess.TimeoutExpired) as error:
         if error.args and type(error.args[0]) is str and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{1,160}",error.args[0]):out["error_code"]=error.args[0]
     finally:
         guard.close();out.update(cleanup_confirmed=guard.cleanup,elapsed_seconds=time.monotonic()-started,
@@ -217,11 +366,15 @@ def qualify_factory(index,run,connection_attempt,attempt):
     with output.open("xb") as stream:metadata.require(stream.write(raw)==len(raw),"ALL_FACTORY_REPORT_BYTES");stream.flush();os.fsync(stream.fileno())
     print(json.dumps({k:out.get(k) for k in ("state","contracts","root_path","fresh_inputs","final_fresh_hashes",
         "elapsed_seconds","CPU_max","RAM_min","cleanup_confirmed","error_code")}))
-    return 0 if out["state"].startswith("CONSTRUCTED_") else 1
+    return 0 if out["state"].startswith(("CONSTRUCTED_","PASS_")) else 1
 
 
 if __name__=="__main__":
     import argparse
+    import sys
+    if len(sys.argv)==4 and sys.argv[1:3]==["--owned-worker","--task"]:
+        raise SystemExit(owned_worker_entry(sys.argv[3]))
     parser=argparse.ArgumentParser();parser.add_argument("--case",type=int,required=True);parser.add_argument("--run",type=int,required=True)
     parser.add_argument("--connections-attempt",type=int,required=True);parser.add_argument("--qualification-attempt",type=int,required=True)
-    args=parser.parse_args();raise SystemExit(qualify_factory(args.case,args.run,args.connections_attempt,args.qualification_attempt))
+    parser.add_argument("--startup-only",action="store_true")
+    args=parser.parse_args();raise SystemExit(qualify_factory(args.case,args.run,args.connections_attempt,args.qualification_attempt,args.startup_only))

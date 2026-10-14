@@ -2,6 +2,11 @@
 from pathlib import Path
 import sys
 from types import SimpleNamespace as NS
+import copy
+import ast
+import hashlib
+import json
+from unittest.mock import patch
 import unittest
 sys.path.insert(0,str(Path(__file__).parents[1]))
 sys.path.insert(0,str(Path(__file__).parent))
@@ -43,6 +48,71 @@ def fixture_window():
 
 
 class Tests(unittest.TestCase):
+    def test_owned_worker_does_not_import_case160_specific_argv_parser(self):
+        tree=ast.parse((ROOT/m.SELF).read_text(encoding="utf-8"))
+        entry=next(node for node in tree.body if isinstance(node,ast.FunctionDef) and node.name=="owned_worker_entry")
+        imported=[alias.name for node in ast.walk(entry) if isinstance(node,ast.Import) for alias in node.names]
+        self.assertNotIn("case160_run007_controller",imported)
+        self.assertIn("flat_current_queue_product_window_runtime_v18",imported)
+
+    def test_audited_worker_wrapper_retains_script_argv_and_import_root(self):
+        tree=ast.parse((ROOT/m.SELF).read_text(encoding="utf-8"))
+        assigned=[node for node in ast.walk(tree) if isinstance(node,ast.Assign)
+            and any(isinstance(target,ast.Name) and target.id=="audit_program" for target in node.targets)]
+        self.assertEqual(len(assigned),1)
+        program=assigned[0].value.value
+        self.assertIn("sys.argv=sys.argv[1:]",program)
+        self.assertIn("sys.path.insert(0,os.path.dirname(path))",program)
+        self.assertLess(program.index("sys.path.insert"),program.index("runpy.run_path"))
+
+    def hint_fixture(self):
+        from test_current_queue_successor_connections import fixture
+        graph,proof,step=fixture(161,2)
+        step=dict(step,schema_version="hwpx-agent.p09-flat-current-queue-step/v1",case="actual_import::fixture")
+        manifest_pin=dict(graph.binding.manifest_pin,path="implementation/p09/evidence/p09-361-case161-successor-manifest001.v1.json")
+        bound=graph.binding_module.Binding(graph.binding.descriptors(),manifest_pin,next_case=161)
+        graph=NS(**{**vars(graph),"binding":bound})
+        wire,pin=graph.worker.encode(bound,step["prior_queue_pin"],step["prior_candidate_pin"],lambda:None)
+        capsule_pin=dict(pin,path="implementation/p09/evidence/p09-361-case161-successor-worker-capsule002.compact.v1.json")
+        manifest=dict(descriptors=bound.descriptors(),historical_predecessor_provenance={})
+        hint=m.worker_hint(step,2,capsule_pin,manifest_pin,manifest,[])
+        return graph,hint,wire
+
+    def test_worker_hint_roundtrip_restores_all_rows_and_history_without_receipt_IO(self):
+        import current_stored_runtime_scope as scope
+        import owned_source_read_pressure as bytes_policy
+        graph,hint,wire=self.hint_fixture()
+        # Loader legitimately reads pinned Python source; prohibit evidence IO.
+        original=Path.open
+        def checked(path,*args,**kwargs):
+            if "implementation/p09/evidence" in path.as_posix():raise AssertionError("HISTORICAL_RECEIPT_IO")
+            return original(path,*args,**kwargs)
+        with patch.object(Path,"open",checked):
+            restored,proof=m.reconstruct_worker_graph(ROOT,loader,scope,bytes_policy,hint,wire,lambda:None)
+        self.assertEqual(restored.binding.descriptors(),graph.binding.descriptors())
+        self.assertFalse(proof["original_receipt_manifest_or_authority_files_read"])
+        self.assertLessEqual(len(json.dumps(hint).encode("ascii")),16384)
+
+    def test_worker_hint_task_extra_key_or_first_row_substitution_rejected(self):
+        import current_stored_runtime_scope as scope
+        import owned_source_read_pressure as bytes_policy
+        graph,hint,wire=self.hint_fixture()
+        with self.assertRaises(ValueError):m.validate_worker_hint(hint,"case162-current-r002-tests")
+        extra=dict(hint,unexpected=True)
+        with self.assertRaises(ValueError):m.validate_worker_hint(extra,graph.worker.TASK)
+        changed=copy.deepcopy(hint);changed["first_descriptor"]["semantic_original_pin"]["sha256"]="0"*64
+        with self.assertRaises(ValueError):m.reconstruct_worker_graph(ROOT,loader,scope,bytes_policy,changed,wire,lambda:None)
+
+    def test_worker_hint_transport_tamper_and_guard_stop_retained(self):
+        import current_stored_runtime_scope as scope
+        import owned_source_read_pressure as bytes_policy
+        graph,hint,wire=self.hint_fixture()
+        with self.assertRaises(ValueError):m.reconstruct_worker_graph(ROOT,loader,scope,bytes_policy,hint,wire+b" ",lambda:None)
+        error=ValueError("ORIGINAL_GUARD_STOP")
+        def stop():raise error
+        with self.assertRaises(ValueError) as caught:m.reconstruct_worker_graph(ROOT,loader,scope,bytes_policy,hint,wire,stop)
+        self.assertIs(caught.exception,error)
+
     def parent_fixture(self):
         from test_current_queue_successor_connections import Tests as GraphTests
         graph,unused,state,semantic,held,engine=GraphTests().connected_parent_fixture()

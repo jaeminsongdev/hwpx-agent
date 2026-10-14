@@ -159,3 +159,19 @@ factory003은 실제 구성 검증의 bindings import 누락으로 종료돼 성
 공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN, 목표ACTIVE를 유지한다. 다음은 제한된 worker bootstrap으로 실제 CLI 진입점을 연결하고 독립 whole oracle과 전체 사전 검증을 완성하는 것이다. Native·제품 실행 및 공식 승인 delta는0이다.
 
 근거: current_queue_successor_runtime와 해당 테스트, evidence/p09-361-case161-successor-factory003/004.v1.json. fixture 및 입력 준비 결과는 실제 제품 또는 Native 승인과 구분한다.
+
+## 실제 작업 프로세스 CLI의 승인 전 거부 검증
+
+9,327바이트의 worker bootstrap을 발행했다. 원본 영수증 본문 대신 현재 STEP·capsule/manifest pin·과거 provenance와 특수 경로 alias5개만 전달한다. worker는 원본 runtime·authority·manifest를 읽지 않고 동일 private Binding과 capsule44pair를 복원한다. first descriptor·manifest pin·transport hash·현재 사례·작업 번호를 확인하며 기존16KiB 입력 한도를 유지한다.
+
+actual owned-worker CLI는 case160 전용 argv parser를 불러오지 않고 원 qualified 공통 window template을 직접 사용한다. sys.argv를 숨기거나 case161을160으로 바꾸지 않는다. 원 worker의 GO 문자열·Job 소속 검사·실행 본문 및 once-only 정책은 유지한다. 관련5계약을 추가해 전체65개가3.363초에 통과했다.
+
+factory005는 부모 입력 준비 중 기존 시스템CPU 경고로 중단됐다. 늦은 subprocess import가 예외 처리도 방해해 성공 영수증은 없었으며 원 중단 사유와 serialized resource evidence unavailable을 별도 보존했다. import를 앞당겨 보호 중단을 그대로 기록하도록 수정했다. 이 중단으로 CPU 폭증 주체가 확인되지는 않았다.
+
+이번 변경에 대한 실제 CLI 준비는 startup-only로 검사했다. 동일한 전체 부모 입력 읽기를 다시 수행하지 않지만, parent admission을 통과했다고 표시하지 않으며 현재 소스의 전체 CODE·imported closure·parent admission·whole preflight는 실제 GO 전에 여전히 필수다. factory006/007의 준비 실패도 보존했다. audit wrapper의 script argv/import root를 바로잡고 case160 전용 parser 의존성을 제거했다.
+
+factory008은 실제 CLI에 EOF를 전달하고 GO를 보내지 않아 원 WORKER_NOT_AUTHORIZED로 거부되는 것을 확인했다. Python audit의 과거 current-runtime/current-epoch-accept 파일 open event는0이고 제품 실행은 없었다. Source·bootstrap의 fresh17/final17,10.3759초, CPU최고32.21%, 가용RAM최저42.52%, cleanup=True다. 현재 소스·테스트·bootstrap의 실제 hash도 일치한다. 이 결과는 승인 전 startup이며 Job 승인 후 실행이나 Native·제품 통과가 아니다.
+
+공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN, 목표ACTIVE를 유지한다. 다음은 독립 whole oracle 및 전체 CODE·closure·cost·preflight를 연결한 뒤 실제 Native 검증이다. 준비 실패를 제품 승인으로 바꾸거나 보호 기준을 완화하지 않았다.
+
+근거: current_queue_successor_runtime와 해당 테스트, case161-successor-worker-bootstrap002 및 factory005/006/007/008 기록.
