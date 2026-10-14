@@ -12,4 +12,15 @@ class Tests(unittest.TestCase):
         self.assertFalse(p["actual_run004_engine_worker_Native_or_GO_qualified"])
     def test32_subset_rejected(self):
         with self.assertRaises(ValueError):m.connect(base(),Binding())
+    def test_existing_compact_interface_reused_once(self):
+        b=base();old=m.original.connect(b,Binding())[0]
+        bound=Binding();bound.descriptors=lambda:[{}]*34
+        graph,proof=m.connect(old,bound)
+        self.assertIs(graph.worker.encode,old.worker.encode)
+        self.assertTrue(proof["compact_wire_connection"]["exact_existing_compact_interface_reused_not_stacked"])
+    def test_half_compact_interface_rejected(self):
+        b=base();old=m.original.connect(b,Binding())[0]
+        old.worker.decode=b.worker.decode
+        bound=Binding();bound.descriptors=lambda:[{}]*34
+        with self.assertRaises(ValueError):m.connect(old,bound)
 if __name__=="__main__":unittest.main()
