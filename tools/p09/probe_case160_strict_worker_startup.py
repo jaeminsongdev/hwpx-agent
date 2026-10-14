@@ -7,7 +7,8 @@ import sys
 import time
 from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-CHILD = sys.argv[1:] == ["--diagnostic-child"]
+EXACT = sys.argv[1:] in (["--exact-controller-child"], ["--exact-controller-diagnostic"])
+CHILD = sys.argv[1:] in (["--diagnostic-child"], ["--exact-controller-child"])
 if CHILD: print(json.dumps(dict(stage="child_entry")), flush=True)
 import case160_attempt_controller as controller
 if CHILD: print(json.dumps(dict(stage="controller_import_complete")), flush=True)
@@ -15,17 +16,25 @@ from bounded_process_progress import BoundedProcessCapture
 
 SELF = "tools/p09/probe_case160_strict_worker_startup.py"
 OUTPUT = "implementation/p09/evidence/p09-361-case160-strict-owned-worker-startup-r378-run002.v1.json"
+if EXACT:
+    OUTPUT = "implementation/p09/evidence/p09-361-case160-controller-worker-startup-r379.v1.json"
 
 
 def child():
     c = controller.CURRENT; a = controller.a
     c.old.base.configure(160)
-    graph = c._env["graph_value"]()
-    print(json.dumps(dict(stage="bounded_graph_complete")), flush=True)
-    engine, _ = c.prior.template()
-    print(json.dumps(dict(stage="template_complete")), flush=True)
-    policy = graph.worker.raw_policy.Policy(c.old.c.ROOT, graph.binding, lambda:True, lambda:None)
-    execute, state = graph.worker.connect_worker(engine.worker, policy)
+    policy = None
+    if EXACT:
+        # Same configure and worker call as the controller's __main__ branch.
+        # Diagnostic wrapper/argv and parent held scope remain different.
+        execute = c.M.worker
+    else:
+        graph = c._env["graph_value"]()
+        print(json.dumps(dict(stage="bounded_graph_complete")), flush=True)
+        engine, _ = c.prior.template()
+        print(json.dumps(dict(stage="template_complete")), flush=True)
+        policy = graph.worker.raw_policy.Policy(c.old.c.ROOT, graph.binding, lambda:True, lambda:None)
+        execute, state = graph.worker.connect_worker(engine.worker, policy)
     intercepted = []
     def sink(argv, **kwargs):
         a.exact(argv[1], "actual_import::source_review_cell_output::cached_body_callback_rechecks_actual_aead_acl_regrant_and_advanced_head",
@@ -38,7 +47,7 @@ def child():
     with patch.object(subprocess, "call", sink): result = execute(controller.TASK)
     a.exact(result, 0, "ORIGINAL_WORKER_DIAGNOSTIC_RETURN")
     a.exact(intercepted, [True], "ONE_INTERCEPTED_CALL")
-    a.require(policy.restored, "WORKER_POLICY_RESTORED")
+    if policy is not None: a.require(policy.restored, "WORKER_POLICY_RESTORED")
     print(json.dumps(dict(stage="completed", product_child_executed=False)), flush=True)
     return 0
 
@@ -51,13 +60,16 @@ def main():
     process = capture = job = None
     started = time.monotonic(); empty = False; clean = True; stages = []
     out = dict(state="FAILED_WORKER_STARTUP_DIAGNOSTIC_NOT_PRODUCT", actual_product_or_Native_executed=False,
-        accepted_count_delta=0, P09_gate="OPEN", diagnostic_only=True)
+        accepted_count_delta=0, P09_gate="OPEN", diagnostic_only=True,
+        original_controller_worker_called=EXACT, full_parent_Native_input_scope_held=False,
+        actual_controller_CLI_argv_reproduced=False)
     try:
         guard.acquire(); q = a.AcceptanceReader(c.old.c.ROOT, guard.check)
         q.pin(SELF); q.pin(controller.SELF)
         windows = guard.windows; job = windows.job(); limits = windows.verify_job_limits(job)
         binding = c.prior.WINDOW.connect(subprocess.Popen, BoundedProcessCapture)
-        process = binding.Popen([sys.executable, "-B", str(c.old.c.ROOT/SELF), "--diagnostic-child"],
+        child_args = [sys.executable, str(c.old.c.ROOT/SELF), "--exact-controller-child"] if EXACT else [sys.executable, "-B", str(c.old.c.ROOT/SELF), "--diagnostic-child"]
+        process = binding.Popen(child_args,
             cwd=c.old.c.ROOT, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
             creationflags=subprocess.BELOW_NORMAL_PRIORITY_CLASS | subprocess.CREATE_NO_WINDOW)
         handle = windows.k.OpenProcess(0x101, False, process.pid)
