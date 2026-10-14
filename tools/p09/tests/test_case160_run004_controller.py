@@ -16,7 +16,11 @@ def pin(path):
 class Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        c.old.base.configure(160)
+        if c.old.base.CONFIG is None:
+            c.old.base.configure(160)
+        else:
+            if c.old.base.CONFIG.index != 160 or c.old.base.CONFIG.before != 153:
+                raise ValueError("TEST_REQUIRES_EXACT_EXISTING_CURRENT160_CONFIGURATION")
 
     def setUp(self):
         self.saved = (c._env["_graph"], c._env["_checkpoint"], c._env["_execution_requested"])
@@ -122,6 +126,16 @@ class Tests(unittest.TestCase):
         self.assertIsNot(c._env, c.predecessor._env)
         self.assertIsNot(c._api_env, c.predecessor._api_env)
         self.assertIsNot(c._env["PARENT_STATES"], c.predecessor._env["PARENT_STATES"])
+
+    def test_legacy_engine_rust_type_keeps_all_names(self):
+        prepared = frozenset("fixture/"+str(i)+".rs" for i in range(787))
+        result = c.legacy_rust_set(prepared)
+        self.assertIs(type(result), set)
+        self.assertEqual(result, prepared)
+
+    def test_incomplete_or_mutable_prepared_rust_rejected(self):
+        for rust in (frozenset(), frozenset("a"), set(range(787))):
+            with self.assertRaises(ValueError): c.legacy_rust_set(rust)
 
 
 if __name__ == "__main__": unittest.main()

@@ -13,9 +13,9 @@ import flat_current_queue_envelope_runtime_v25 as old
 
 SELF = "tools/p09/case160_run004_controller.py"
 TEST = "tools/p09/tests/test_case160_run004_controller.py"
-DATA = "implementation/p09/evidence/p09-361-case160-envelope-controller-data040.v1.json"
-QUAL = "implementation/p09/evidence/p09-361-case160-run004-controller-r373.v1.json"
-PREFLIGHT = "implementation/p09/evidence/p09-361-case160-envelope-controller-preflight040.v1.json"
+DATA = "implementation/p09/evidence/p09-361-case160-envelope-controller-data041.v1.json"
+QUAL = "implementation/p09/evidence/p09-361-case160-run004-controller-r373-run005.v1.json"
+PREFLIGHT = "implementation/p09/evidence/p09-361-case160-envelope-controller-preflight041.v1.json"
 QUAL_STATE = "PASS_RUN004_CONTROLLER_CONNECTION_NOT_WHOLE_PREFLIGHT_NATIVE_OR_GO"
 SCHEMA = "hwpx-agent.p09-case160-run004-controller/v1"
 BINDING_CODE = "implementation/p09/evidence/p09-361-run004-parent34-binding-code5-r858.v1.json"
@@ -121,7 +121,7 @@ def own_inputs(q):
     code = a.read_exact(q, row["qualification_pin"])
     a.fields(code, dict(state=QUAL_STATE, cleanup_confirmed=True, product_or_Native_executed=False,
         GO_authorized=False, queue_acceptance_called=False), "EXACT_RUN004_CODE_NOT_PRODUCT")
-    a.exact(code["contracts"], dict(run=20, errors=0, failures=0, skipped=0), "ALL_CONTROLLER_TESTS")
+    a.exact(code["contracts"], dict(run=22, errors=0, failures=0, skipped=0), "ALL_CONTROLLER_TESTS")
     a.exact(code["new_code_pins"], row["controller_code_pins"], "QUALIFIED_CURRENT_CONTROLLER_BYTES")
     for pin in code["source_pins"] + row["controller_code_pins"] + RAW_PINS + [predecessor.RAW_TEST_PIN]:
         a.exact(q.pin(pin["path"]), pin, "ALL_REAL_RUN004_SOURCES")
@@ -143,6 +143,14 @@ def own_inputs(q):
 owned, ADMISSION_COUNTS = old.admission_once.connect(own_inputs)
 
 
+def legacy_rust_set(rust):
+    """Keep every prepared name while matching the original engine's set type."""
+    a.require(type(rust) is frozenset and len(rust) == 787, "EXACT_PREPARED_RUST787_IMMUTABLE_SET")
+    result = set(rust)
+    a.require(frozenset(result) == rust and len(result) == 787, "ALL_PREPARED_RUST_NAMES_RETAINED")
+    return result
+
+
 def binding(q):
     owned(q)
     # The explicit old controller supplies only the provenance context of r834;
@@ -160,14 +168,14 @@ def binding(q):
         a.require(checked["fresh_inputs"] == checked["final_fresh_hashes"] > 0, "ALL_NEW_PREFLIGHT_FINAL_HASHES")
         a.require(checked.get("synthetic_fixture_only_not_evidence", False) is False, "NO_SYNTHETIC_PREFLIGHT")
         a.resource_history(checked["resource_samples"])
-    return old.base.scope.extend(complete, q.snapshots), rust
+    return old.base.scope.extend(complete, q.snapshots), legacy_rust_set(rust)
 
 
 _env.update(own_inputs=owned, validate_data=validate_data, binding=binding)
 # Retain the entire existing preflight body, changing only its destination.
 fn = _env["preflight_projection"]
 before = "-envelope-controller-preflight039.v1.json"
-after = "-envelope-controller-preflight040.v1.json"
+after = "-envelope-controller-preflight041.v1.json"
 a.require(sum(type(x) is str and x == before for x in fn.__code__.co_consts) == 1, "ONE_RUN004_PREFLIGHT_DESTINATION")
 changed = fn.__code__.replace(co_consts=tuple(after if type(x) is str and x == before else x for x in fn.__code__.co_consts))
 a.require(changed.replace(co_consts=fn.__code__.co_consts) == fn.__code__, "ENTIRE_RUN004_PREFLIGHT_CODE_INVERSE")
@@ -263,6 +271,8 @@ def qualify():
         FIRST.distinct_final_sample_guard_v1.guard_type(a.Guard))
     guard = guard_type()
     started = time.monotonic()
+    phase = "resource_admission"
+    q = None
     qualification_path = old.c.ROOT/QUAL
     data_path = old.c.ROOT/DATA
     a.require(not qualification_path.exists() and not data_path.exists(), "EXCLUSIVE_RUN004_CODE_AND_DATA")
@@ -274,12 +284,17 @@ def qualify():
         guard.acquire()
         old.base.configure(160)
         q = a.AcceptanceReader(old.c.ROOT, guard.check)
+        phase = "current_source_bytes"
         code_pins = [q.pin(SELF), q.pin(TEST)]
         for p in RAW_PINS + [predecessor.RAW_TEST_PIN]:
             a.exact(q.pin(p["path"]), p, "ALL_EXACT_RUN004_SOURCE_BYTES")
+        phase = "controller_contracts"
         suite = unittest.defaultTestLoader.loadTestsFromName("tools.p09.tests.test_case160_run004_controller")
         tested = unittest.TextTestRunner(stream=io.StringIO()).run(suite)
-        a.require(tested.wasSuccessful() and tested.testsRun == 20 and not tested.skipped, "RUN004_CODE20")
+        out.update(contracts=dict(run=tested.testsRun, errors=len(tested.errors), failures=len(tested.failures),
+            skipped=len(tested.skipped)), failed_test_ids=[case.id() for case, _ in tested.errors+tested.failures])
+        a.require(tested.wasSuccessful() and tested.testsRun == 22 and not tested.skipped, "RUN004_CODE22")
+        phase = "bounded_graph_connection"
         graph, graph_proof = bootstrap.load(old, q.checkpoint)
         for p in graph_proof["reader_source_pins"]:
             a.exact(q.pin(p["path"]), p, "EXACT_REAL_BOUNDED34_SOURCE")
@@ -292,14 +307,16 @@ def qualify():
         helper_count = sum(1 for module in sys.modules.values()
             if str(getattr(module, "__file__", "")).replace("\\", "/").find("/tools/p09/") >= 0)
         a.require(helper_count <= 64, "ORIGINAL_HELPER64_LIMIT")
+        phase = "final_source_bytes"
         q.finish()
         guard.check(force=True)
-        out.update(state=QUAL_STATE, contracts=dict(run=20, errors=0, failures=0, skipped=0),
+        out.update(state=QUAL_STATE, contracts=dict(run=22, errors=0, failures=0, skipped=0),
             new_code_pins=code_pins, source_pins=[p for n,p in q.snapshots.items() if n not in (SELF, TEST)],
             source_pairs=34, bounded_graph_proof=graph_proof, template_proof=template_proof,
             actual_project_helper_count=helper_count, original_helper64_limit_preserved=True,
             whole_original_engine_worker_connected_not_executed=True,
             fresh_inputs=len(q.snapshots), final_fresh_hashes=q.final_fresh_hashes)
+        phase = "completed"
     except (ValueError, OSError, KeyError, TypeError, AttributeError) as error:
         out["error_type"] = type(error).__name__
         if error.args and type(error.args[0]) is str and re.fullmatch("[A-Za-z_][A-Za-z0-9_]{1,160}", error.args[0]):
@@ -308,7 +325,13 @@ def qualify():
         guard.close()
         _env["_graph"] = None
         _env["_checkpoint"] = None
-        out.update(cleanup_confirmed=guard.cleanup, elapsed_seconds=time.monotonic()-started,
+        out.update(cleanup_confirmed=guard.cleanup, elapsed_seconds=time.monotonic()-started, terminal_phase=phase,
+            parent_CPU_max=max((s["parent_cpu_machine_percent"] for s in guard.samples
+                if s.get("parent_cpu_machine_percent") is not None), default=None),
+            parent_private_MiB_max=max((s["parent_private_mib"] for s in guard.samples
+                if s.get("parent_private_mib") is not None), default=None),
+            metadata_progress=dict(fresh_inputs=len(q.snapshots) if q else 0,
+                fresh_read_passes=q.read_passes if q else 0, fresh_bytes_read=q.bytes_read if q else 0),
             CPU_max=max((s["system_cpu_percent"] for s in guard.samples), default=None),
             RAM_min=min((s["available_ram_percent"] for s in guard.samples), default=None))
     a.require(guard.cleanup, "RUN004_QUALIFICATION_CLEANUP")
@@ -343,7 +366,8 @@ def qualify():
         validate_data(row)
         publish(data_path, row)
     print(json.dumps({k:out.get(k) for k in ("state", "source_pairs", "actual_project_helper_count",
-        "fresh_inputs", "final_fresh_hashes", "CPU_max", "RAM_min", "cleanup_confirmed", "error_code")}))
+        "fresh_inputs", "final_fresh_hashes", "CPU_max", "RAM_min", "parent_CPU_max",
+        "terminal_phase", "cleanup_confirmed", "error_code")}))
     return 0 if out["state"] == QUAL_STATE else 1
 
 
