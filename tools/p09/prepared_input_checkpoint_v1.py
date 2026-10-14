@@ -26,17 +26,31 @@ def export(q,scope,binding,*,context,data_pin,preflight_pin,authority_pin,prior_
         type(q.final_fresh_hashes) is int and q.final_fresh_hashes==len(q.snapshots),"EVERY_FINAL_FRESH_HASH")
     require(type(scope) is dict and 0<len(scope)<=4096,"BOUNDED_COMPLETE_SCOPE")
     for path,value in scope.items():require(pin(value)["path"]==path,"SCOPE_KEY_MATCH")
+    for path,value in q.snapshots.items():require(pin(value)["path"]==path,"FRESH_KEY_MATCH")
+    frozen=copy.deepcopy(q.snapshots);frozen_scope=copy.deepcopy(scope)
+    final_count=q.final_fresh_hashes
     require(type(binding.next_case) is int and binding.next_case==160,"CURRENT_TYPED_BINDING")
     for value in (data_pin,preflight_pin,authority_pin,prior_runtime_pin):
         p=pin(value);require(scope.get(p["path"])==p and q.snapshots.get(p["path"])==p,"CURRENT_AUTHORITY_DATA_BOUND")
     require(scope.get(binding.manifest_pin["path"])==dict(binding.manifest_pin),"ACTUAL_MANIFEST_IN_SCOPE")
     projection,_=binding.project(scope,q.checkpoint)
     representation=binding.representation(projection)
+    require(q.snapshots==frozen and q.final_fresh_hashes==final_count and scope==frozen_scope,
+        "NO_READ_LEDGER_OR_SCOPE_CHANGE_AFTER_FINAL")
+    observed=[];declared=[]
+    for path,value in sorted(scope.items()):
+        if path in frozen:
+            require(frozen[path]==value,"FRESH_SCOPE_PIN_CONFLICT")
+            observed.append(pin(value))
+        else:declared.append(pin(value))
     # Only source declarations are exported. No runtime row, payload or cached
     # computed file hashes become a replacement for future actual live reads.
     result=dict(schema_version=SCHEMA,context=dict(context),data_pin=pin(data_pin),
         preflight_pin=pin(preflight_pin),authority_pin=pin(authority_pin),prior_runtime_pin=pin(prior_runtime_pin),
         complete_scope=[pin(p) for _,p in sorted(scope.items())],representation=representation,
+        scope_inputs_final_fresh_read_here=observed,
+        scope_inputs_declared_not_final_fresh_read_here=declared,
+        every_complete_scope_input_final_fresh_read_here=not declared,
         final_fresh_inputs=[pin(p) for _,p in sorted(q.snapshots.items())],final_fresh_hashes=q.final_fresh_hashes,
         whole_predecessor_oracle_completed=True,product_or_Native_executed=False,
         runtime_admission_qualified=False,GO_authorized=False,queue_advance_authorized=False,

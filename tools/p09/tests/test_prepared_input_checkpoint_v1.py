@@ -55,4 +55,34 @@ class Tests(unittest.TestCase):
         self.q.checkpoint=stop
         with self.assertRaises(ValueError) as caught:m.export(self.q,self.scope,self.binding,**self.args)
         self.assertIs(caught.exception,error)
+    def test_declared_inputs_are_not_promoted_to_fresh_reads(self):
+        self.scope["declared"]=p("declared")
+        row=m.export(self.q,self.scope,self.binding,**self.args)
+        self.assertFalse(row["every_complete_scope_input_final_fresh_read_here"])
+        self.assertEqual(row["scope_inputs_declared_not_final_fresh_read_here"],[p("declared")])
+    def test_all_observed_inputs_reported_exactly(self):
+        row=m.export(self.q,self.scope,self.binding,**self.args)
+        self.assertTrue(row["every_complete_scope_input_final_fresh_read_here"])
+        self.assertEqual(len(row["scope_inputs_final_fresh_read_here"]),6)
+    def test_observed_scope_conflict_rejected(self):
+        self.scope["extra"]["sha256"]="b"*64
+        with self.assertRaises(ValueError):m.export(self.q,self.scope,self.binding,**self.args)
+    def test_snapshot_key_mismatch_rejected(self):
+        self.q.snapshots["extra"]["path"]="renamed"
+        with self.assertRaises(ValueError):m.export(self.q,self.scope,self.binding,**self.args)
+    def test_project_cannot_add_input_after_final(self):
+        def project(scope,checkpoint):
+            self.q.snapshots["late"]=p("late");return scope,{}
+        self.binding.project=project
+        with self.assertRaises(ValueError):m.export(self.q,self.scope,self.binding,**self.args)
+    def test_project_cannot_rewrite_scope(self):
+        def project(scope,checkpoint):
+            scope["extra"]["bytes"]=2;return scope,{}
+        self.binding.project=project
+        with self.assertRaises(ValueError):m.export(self.q,self.scope,self.binding,**self.args)
+    def test_representation_cannot_change_final_count(self):
+        def representation(scope):
+            self.q.final_fresh_hashes+=1;return {}
+        self.binding.representation=representation
+        with self.assertRaises(ValueError):m.export(self.q,self.scope,self.binding,**self.args)
 if __name__=="__main__":unittest.main()
