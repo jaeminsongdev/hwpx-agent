@@ -13,7 +13,7 @@ import sys
 import time
 
 SELF="tools/p09/produce_prepared_input_checkpoint_r366.py"
-OUTPUT="implementation/p09/evidence/p09-361-case160-prepared-input-checkpoint-r833.v1.json"
+OUTPUT="implementation/p09/evidence/p09-361-case160-prepared-input-checkpoint-r834.v1.json"
 MAX_OUTPUT_BYTES=4*1024*1024
 
 def local_limits():
@@ -32,23 +32,26 @@ def main():
     import distinct_final_sample_guard_v1 as distinct
     import terminal_metadata_pressure_v1 as pressure
     import prepared_input_checkpoint_v1 as prepared
+    import preparation_terminal_progress_v1 as progress
     import owned_source_read_pressure as pacing
     destination=a.c.ROOT/OUTPUT
     a.require(not destination.exists() and not destination.is_symlink(),"CHECKPOINT_REFUSE_OVERWRITE")
     guard=pressure.guard_type(distinct.guard_type(a.Guard))()
-    q=None;started=time.monotonic()
+    q=None;phase="admission";started=time.monotonic()
     row=dict(state="FAILED_PREPARATION_NOT_ACCEPTED",accepted_count_delta=0,
         Native_or_product_executed=False,GO_authorized=False,queue_advance_authorized=False,
         P09_gate="OPEN",PC_freeze_resolved=False)
     try:
         guard.acquire();q=a.AcceptanceReader(a.c.ROOT,guard.check)
-        source_paths=(SELF,prepared.SELF,prepared.TEST,pressure.SELF,pressure.TEST,
+        phase="source_pins"
+        source_paths=(SELF,prepared.SELF,prepared.TEST,progress.SELF,progress.TEST,pressure.SELF,pressure.TEST,
             distinct.SELF,distinct.TEST)
         for path in source_paths:q.pin(path)
+        phase="controller_import"
         import flat_current_queue_envelope_runtime_v31 as controller
         m=controller.M;m.base.configure(160)
         controller._env["_execution_requested"]=True
-        scope,rust=m.binding(q)
+        phase="whole_binding";scope,rust=m.binding(q)
         graph=m.graph_value()
         data=q.snapshots[controller.DATA];preflight=q.snapshots[controller.PREFLIGHT]
         successor=controller._env["current_binding"].successor
@@ -56,7 +59,8 @@ def main():
         a.exact(q.pin(successor.AUTHORITY["path"]),successor.AUTHORITY,"CURRENT_AUTHORITY153")
         a.exact(q.pin(successor.ROOT["path"]),successor.ROOT,"CURRENT_SUCCESS159")
         scope=m.base.scope.extend(scope,q.snapshots)
-        q.finish();guard.check(force=True)
+        phase="final_freshness";q.finish();guard.check(force=True)
+        phase="checkpoint_export"
         checkpoint=prepared.export(q,scope,graph.binding,
             context=dict(index=160,before=153,physical_product_run=3),
             data_pin=data,preflight_pin=preflight,authority_pin=successor.AUTHORITY,
@@ -69,12 +73,15 @@ def main():
             controller_binding_called_once=True,product_entrypoint_called=False,
             diagnostic_preparation_not_runtime_handoff=True,
             runtime_handoff_and_new_physical_identity_still_require_qualification=True)
+        phase="completed"
     except (ValueError,OSError,KeyError,TypeError,AttributeError) as error:
         row["error_type"]=type(error).__name__
         if error.args and type(error.args[0]) is str and re.fullmatch("[A-Za-z_][A-Za-z0-9_]{1,160}",error.args[0]):
             row["error_code"]=error.args[0]
     finally:
         guard.close()
+        try:row["terminal_preparation_progress"]=progress.summary(q,phase)
+        except ValueError:row["terminal_preparation_progress"]=dict(phase=phase,counters_invalid=True)
         row.update(cleanup_confirmed=guard.cleanup,elapsed_seconds=time.monotonic()-started,
             metadata_warning=pressure.summary(guard),
             CPU_max=max((s["system_cpu_percent"] for s in guard.samples),default=None),

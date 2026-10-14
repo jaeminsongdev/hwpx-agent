@@ -1488,3 +1488,15 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 
 
 
+<!-- BEGIN P09_R366_STATUS -->
+> 2026-10-14 P09 r366 — 요청대로 0f17bf2에 직전 P09 2파일을 먼저 커밋하고 목표를 재개했다. 공식153/249·잔여96·next160·generation48·delta0, P09/A12/A13 OPEN, P10 새구현0, 목표ACTIVE. P08/P17/공유 Rust 사용자 변경은 별도 보존.
+> 입력 준비 metadata exporter에 실제 최종 재읽기 입력과 선언만 된 scope 입력의 구분, final 이후 원장·scope 변경 거부를 추가했다. Native 두 실제 바이트 경계와 독립 제품 oracle을 대체하지 않음. 보강 CODE17 통과.
+> 단일 준비 r833은 254.305557초에 CPU 보호로 FAILED_PREPARATION_NOT_ACCEPTED. PC 전체CPU95.83%/검증프로세스CPU최대6.256602%·private72.210938MiB/가용RAM최소10.575223%/cleanupTrue. 제품-Native-GO0/승인증가0/원guard-rate 유지. 원인·PCfreeze 해결은 미증명. 실패 및 당시 코드는 a8023db에 보존.
+> 중단 이후 단계와 기존 reader의 완료 카운터만 기록하도록 보강했다. 추가읽기·sampler·자동재시도0, exporter17+progress9=26개 단위검사 통과. 보강 producer의 실제 전체실행은 미검증이며 다음 출력 r834로 실패 증거 덮어쓰기 거부.
+> 다음 실제 준비 checkpoint 생성·전체 scope 확인→새 identity/runtime handoff 독립검증→단일 제품·독립승인. Native600/shared720·전체scope·두실제읽기 조건 유지. 접근허용-UAC-OS변경-외부종료-삭제이동-push0. 세부 implementation/p09/P09-361_PREPARATION_CPU_STOP_R366.md.
+<!-- END P09_R366_STATUS -->
+
+
+
+
+
