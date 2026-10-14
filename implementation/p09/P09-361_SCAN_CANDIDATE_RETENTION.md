@@ -1657,3 +1657,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE161_WHOLE_PREFLIGHT_STATUS -->
 > 현재CODE008 74계약·fresh91-final91 PASS/wholepref007 원10계약·scope2885·Rust787·helper64·fresh381-final381·cleanupTrue/현재source핀일치·원cost589.076초. 중복import·시험CONFIG잔류·STEP선언누락수정/실패원본보존·범위/64/시간한도완화0. 발행pref 및Native entry의추가입력확인필수/Native·제품NOT_RUN·공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE.
 <!-- END P09_CASE161_WHOLE_PREFLIGHT_STATUS -->
+
+<!-- BEGIN P09_CASE161_DISPATCH_STATUS -->
+> 실제 진입점과 원Native 진단 연결 구현. Native002 CPU경고 및 Native003 helper한도 중단 모두 제품0·Frame없음·cleanupTrue·빈tree로 보존/재사용·덮어쓰기0. 약110MB 준비/실행 중복 읽기 제거·실제metadata 전체검사 유지. 현재 entry의6계약 및 exact-source private namespace 연결·원본문/defaults/closure·전체입력 보존. run003 CODE74·wholepref10 통과/현재 dispatch qualification006 실제Native helper64·fresh385-final385·cleanupTrue·현재핀일치. 모델590.648초는새qualification 발행·새Native번호 선언 추가 전 범위/완료나GO근거로승격0. 이전 prebody-only 중단 기록까지 읽어 제품/미정리/미해결Frame 존재 시 새 번호 거부. 공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE·제품NOT_RUN. 다음 번호004 준비와 실제Native·독립검사.
+<!-- END P09_CASE161_DISPATCH_STATUS -->

@@ -205,3 +205,23 @@ current_queue_successor_controller에 CODE와 preflight의 닫힌 실행 선택�
 공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN, 목표ACTIVE를 유지한다. 다음은 CODE·preflight pin을 요구하는 실제 Native 실행 진입점을 연결하고 현재 후보와 독립 검사를 수행하는 것이다.
 
 근거: current_queue_successor_controller와 해당 테스트, case161-successor-code-run002-attempt001..008 및 successor-preflight-run002-attempt001..007 기록.
+
+## 실제 실행 진입점과 중복 준비 읽기 개선
+
+current_queue_successor_dispatch는 고정된 CODE와 전체 preflight를 요구하고 원 외부 실행 chain, Native 진단 연결, 단일 작업 프로세스의 GO/Job, 전체 입력의 두 실제 읽기와 자원 정리를 유지한다. 기존 제품 실행 본문을 새로운 간소화 실행기로 대체하지 않는다. 새 실행 번호는 이전 번호의 제품 미실행·정리 완료·Frame 부재가 모두 확인된 경우에만 허용하며, 통과 또는 미해결 제품을 다시 실행하지 않는다.
+
+실제 Native002는 메타데이터 시작1.65초에 기존 CPU 경고 보호로 중단됐다. 시스템CPU는97.54%, 해당 부모CPU 표본은0%, 부모 메모리는 약46MiB였다. 작업 프로세스와 제품은 생성되지 않았으며 source Frame도 없었다. cleanup과 빈 프로세스 트리가 확인됐다. 높은 CPU 표본에서 추가 프로세스 진단은 기존 정책에 따라 unavailable로 기록됐으므로 CPU 상승 주체는 확인되지 않았다.
+
+준비 단계가 약110MB를 읽고 최종 확인한 뒤 실제 실행의 메타데이터 단계가 같은 선언을 다시 읽는 중복을 제거했다. 시작 단계에서는 고정된 작은 선언과 코드만 확인하고, 전체 CODE·preflight·모든 source pin 및 predecessor 검사에는 실제 metadata callback을 사용한다. 이 callback은 Frame 획득과 GO 전에 반드시 실행된다. 미래 Native 두 바이트 경계 검사를 준비 기록으로 대신하지 않는다.
+
+번호003의 CODE001은74계약·fresh91/final91·12.959초, 전체 preflight001은 원10계약·입력2,885개·Rust787·fresh381/final381·96.257초로 통과했다. 연결003은44pair·wire15,335바이트, worker bootstrap003은9,327바이트로 기존16KiB 한도 안이다. 이들 준비 결과는 제품 승인과 구분한다.
+
+Native003은49.02초에 실제 실행의 imported-helper 한도 검사로 중단됐다. CPU최고64.96%, 가용RAM최저31.57%였고 제품 및 작업 프로세스는 실행되지 않았다. cleanup과 빈 트리가 확인됐다. 사전 검증의 default import 수 외에 실제 엔진이 명시적으로 요구하는 helper가 추가되는 차이를 확인했다. 약3.09초의 구성 점검은 private 연결 이후에도 default60개와 실제 witness를 합친65개가 남는 것을 확인했다.
+
+고정된 원 소스 전체와 기존 controller를 명시적 private namespace에서 재사용하도록 수정했다. 원 loader의 모든 non-import AST 확인을 유지하고, 내부 import는 같은 고정 그래프로 연결한다. 함수의 builtins가 생성 시 고정되는 점을 반영해 동일 code·defaults·closure로 함수를 다시 연결했다. 기본 sys.modules와 공유 builtins를 수정하지 않았으며, 기존 모듈을 숨기거나 원 입력을 삭제하지 않았다. 실패한 namespace 연결과 이전 qualification 기록도 보존했다.
+
+현재 dispatch qualification run003-006은6계약 오류0·실패0·skip0, fresh385/final385, 기본 helper59개 및 실제 Native 명시 witness 포함64개를 확인했다. Rust 전체 목록의 실제 조회는167회이며 원 비용 모델은590.6479초다. 전체108.787초, CPU최고62.85%, 가용RAM최저31.975%, cleanup=True다. 현재 dispatch와 테스트의 hash·바이트 수는 해당 기록과 일치한다. qualification 자체의 발행 및 새 실행 번호 선언을 실제 Native 입력으로 추가할 때 비용과 핀은 다시 확인해야 한다.
+
+공식154/249·잔여95·next161·generation49, P09/A12/A13 OPEN 및 목표ACTIVE를 유지한다. 수정본의 실제 Native·제품은 아직 NOT_RUN이다. 다음은 중단된002/003을 덮어쓰지 않는 번호004의 선언·CODE·전체 preflight·entry 검증과 실제 Native 및 독립 전체 검사다.
+
+근거: tools/p09/current_queue_successor_dispatch.py와 해당 테스트, case161-current-runtime-run002/003, successor-code-run003-attempt001, successor-preflight-run003-attempt001, successor-dispatch-qualification-run002-attempt001/002 및 run003-attempt001..006 기록. OS 설정과 자원·시간 한도는 변경하지 않았다.
