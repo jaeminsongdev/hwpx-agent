@@ -1665,3 +1665,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE161_ACCEPTED_STATUS -->
 > case161 Native004 COMMITTED/원2경계·2891입력·제품1PASS·GO→capture1.305초·576.33초·cleanupTrue·빈tree. 독립전체review001 원검사본문·선언기대범위·fresh390-final390·cleanupTrue. 원qualified 승인엔진과private CONFIG facade3계약 유지/진단경로설정실패보존·canonical없음 확인 후 원경로규칙대로수정. canonical case161-current-epoch-accept001 공식155/249·잔여94·next162·generation50·delta1·resourcecleanupTrue·fresh1196-final1196·모든source현재일치/제품·Native재실행0. entry001 CPU91.21% 중단·002통과 및앞선실패원본보존/64·15·600·720·자원한도 완화0/P09-A12-A13 OPEN/목표ACTIVE·PCfreeze미증명. 리뷰/승인코드는별도수용경계증거이며Native입력으로소급0. 다음162.
 <!-- END P09_CASE161_ACCEPTED_STATUS -->
+
+<!-- BEGIN P09_CASE162_WIRE_STATUS -->
+> 사례162 현재155원장 기반STEP/4개원본무손실 준비·원본보존. Binding001 전체48pair·fresh123-final123·cleanupTrue. 원compact 연결002는16KiB 한도중단·실패보존·제품0. 새wire v2 원worker encoder/decoder 및compact pack/unpack 유지·실제48pair/manifest 정확역변환·7003바이트·fresh23-final23·cleanupTrue·현재source핀일치/5회귀PASS·원한도완화/연결누락0. 실제parent-worker v2연결·전체사전검증·Native·독립승인 미완료/원본v1 및승인161 수정0. 공식155/249·잔여94·next162/P09-A12-A13 OPEN/목표ACTIVE/GO·제품0.
+<!-- END P09_CASE162_WIRE_STATUS -->

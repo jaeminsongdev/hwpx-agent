@@ -243,3 +243,17 @@ accept_current_queue_successor는 qualified optimized acceptance v1-v3와 원 �
 155/249는 해당 제품 검증 큐의 공식 승인 수다. P09/A12/A13은 OPEN이며 full249·signed16·전체 runtime reconciliation을 완료했다고 표시하지 않는다. 목표는 ACTIVE이고 다음 작업은 현재155 원장을 기준으로 사례162를 준비·실행·독립 검사·승인하는 것이다.
 
 근거: case161-current-runtime-run004, successor-whole-review-run004-attempt001, current-epoch-accept001, optimized-acceptance-attempt001 및 successor-acceptance-facade-setup001 기록. 구현은 review_current_queue_successor와 accept_current_queue_successor 및 해당 테스트다. 모든 이전 중단·준비 기록과 사용자 소유 변경은 보존했다.
+
+## 사례162 준비와 작업 프로세스 전송 크기
+
+현재155 원장과 승인161 후보에서 사례162의 STEP을 준비했다. 새로 선택한 원본4개는11,056,581바이트에서 무손실 표현3,469,660바이트로 바뀌며7,586,921바이트가 절감됐다. 원본은 수정하지 않았고 모든 복원과 최종 해시 확인이 통과했다.
+
+Binding001은 기존44개와 새4개 연결을 합친48pair를 확인했다. fresh123/final123, 물리 입력2,902개·229,104,023바이트, CPU최고51.89%·가용RAM최저30.778%·cleanup=True다. 이어진 기존 compact wire 연결002는 원16KiB 한도를 초과해5.234초에 거부됐다. 실패 기록은 보존됐고 제품·Native는 실행하지 않았다.
+
+bounded_successor_capsule_wire_v2는 동일한 전체 compact 자료에만 무손실 압축 표현을 적용한다. 원 worker encoder/decoder의 code·defaults·closure와 기존 pack/unpack, 현재 context·transport hash·Binding 검사는 유지한다. 전송 한도는16KiB 그대로이며 복원 자료에는131,072바이트 상한을 둔다. 끝나지 않은 복원·남은 압축 데이터·잘못된 해시·중복 또는 추가 키·비정상 형식을 거부하고 canonical 재인코딩으로 정확한 역변환을 확인한다. 입력 객체나 기본 namespace를 변경하지 않는다.
+
+5개 회귀 계약과 실제 사례162의48pair 검증001이 통과했다. 전송은7,003바이트이며 원 decoder가48개 연결과 manifest를 정확히 복원했다. 실제 준비는 fresh23/final23·8.173초·CPU최고34.05%·가용RAM최저31.924%·cleanup=True다. 새 소스와 테스트의 현재 hash도 기록과 일치한다. 249개 임의 해시를 항상16KiB에 넣을 수 있다는 보장은 하지 않으며, 임의 자료가 한도를 넘으면 연결을 버리지 않고 거부한다.
+
+이 결과는 전송 단위의 검증이다. 원 parent와 실제 worker 진입점 모두에 v2를 연결하고, 새 source 선언·전체 CODE·preflight·비용·실제 Native 및 독립 검사를 수행해야 한다. 승인된161과 기존 v1 소스는 그대로 보존했다. 공식155/249·잔여94·next162·generation50, P09/A12/A13 OPEN 및 목표ACTIVE를 유지한다.
+
+근거: case162-successor-selection001, lossless-receipts001, successor-binding001, successor-connections002 및 bounded-wire-qualification001.v2.json. 새 전송 자료는 case162-bounded-worker-capsule003.v2.json이며 구현과 회귀 검사는 bounded_successor_capsule_wire_v2에 있다.
