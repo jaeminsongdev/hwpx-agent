@@ -2907,3 +2907,10 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 > run006은445.66초/STOP_STRICT_PRODUCT_WINDOW·원15초창15.02735초·GO1/capture1·제품본문미관찰/child실행null·CLOSED/바이트경계1·bootstrap283·잔여핸들0/cleanup-treeemptyTrue. 시스템CPU58.86%·부모CPU2.1343%·가용RAM39.2246%/승인0·PCfreeze미증명.
 > 소유Job 진단은최종Rust호출가로채기3.0812초/원CLI-noGO거부3.0699초에통과·제품/Native실행0. 실제Job샘플은Python/conhost만관찰. 초기화지연가설재현0/실제명령·GO전달·Native잠금차이원인미확정. 원기록·15/600/720·scope·자원보호유지/동일006자동재시도0. 다음조건차이점검. 세부 implementation/p09/P09-361_RUN006_WINDOW_DIAGNOSTIC_R377.md.
 <!-- END P09_R377_STATUS -->
+
+<!-- BEGIN P09_R378_STATUS -->
+> P09 r378 — 제품재실행없는CLI·부분잠금·원15초GO/capture 비교진단. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/P10새구현0/목표ACTIVE.
+> 실제argv처럼-B없는CLI와Python/config/manifest/capsule217개 FILE_SHARE_READ 부분잠금/noGO는원WORKER_NOT_AUTHORIZED로거부·전체37.7411초/CPU36.79%-RAM42.4202%/cleanupTrue. 전체Native/제품scope검증아님.
+> 원strictWindow연결진단 첫r378은진단15timeout·cleanupFalse로보존/사후worker잔여없음. 진단cleanup의만료communicate→progress재진입만수정·원window변경0. r378-run002는제품호출sink가로채기·GO/capture1·GO→완료1.504157초<15/총3.0715초/stdin닫힘-cleanupTrue/CPU9.41%-RAM46.2556%.
+> 동일연결후속통과로항상재현되는래퍼원인확정아님/간헐적결합조건차이원인미확정. production·checker·scope·15/600/720·자원보호유지/동일006자동재실행-제품/Native재실행-OS변경0/PCfreeze미증명. 다음실제전달조건차이점검. 세부 implementation/p09/P09-361_WORKER_TRANSPORT_DIAGNOSTIC_R378.md.
+<!-- END P09_R378_STATUS -->

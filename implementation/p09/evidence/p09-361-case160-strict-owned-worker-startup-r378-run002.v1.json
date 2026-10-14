@@ -1,0 +1,61 @@
+{
+  "state": "PASS_OWNED_WORKER_STARTUP_PRODUCT_CALL_INTERCEPTED_NOT_PRODUCT_OR_NATIVE",
+  "actual_product_or_Native_executed": false,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "diagnostic_only": true,
+  "strict_product_window": {
+    "maximum_GO_to_complete_capture_seconds": 15,
+    "original_GO_bytes_retained": true,
+    "actual_GO_writes": 1,
+    "actual_capture_count": 1,
+    "actual_complete_capture_within_window": true,
+    "GO_to_complete_capture_elapsed_seconds": 1.5041573999988032,
+    "stopped": false,
+    "added_sampler_thread_or_process_query": false,
+    "capture_constructor_window_check_failed": false,
+    "original_source_scope_rates_CPU_RAM600_and_1200_retained": true,
+    "blocking_OS_latency_hard_preemption_guaranteed": false,
+    "queue_advance_authorized": false,
+    "PC_freeze_resolved": false
+  },
+  "owned_Job_limits": {
+    "verified": true,
+    "job_private_limit_mib": 2548.87109375,
+    "cpu_hard_cap_machine_percent": 6.25,
+    "affinity_mask": 1,
+    "priority_class": 16384,
+    "active_process_limit": 16,
+    "kill_on_close": true,
+    "breakaway_disabled": true
+  },
+  "fresh_inputs": 2,
+  "final_fresh_hashes": 2,
+  "source_pins": [
+    {
+      "path": "tools/p09/probe_case160_strict_worker_startup.py",
+      "bytes": 7952,
+      "sha256": "f1d5f59444af866ed742a9cb26624a07eea11851bb193fc568f90d96cfcb6ffa"
+    },
+    {
+      "path": "tools/p09/case160_attempt_controller.py",
+      "bytes": 16064,
+      "sha256": "e9b0dc870cd25a65a8b5f5ba1b0dd8195cf08c8f9f36c59185a9cdf0592a5613"
+    }
+  ],
+  "stdout_bytes": 232,
+  "stderr_bytes": 0,
+  "stdin_closed_after_capture": true,
+  "cleanup_confirmed": true,
+  "stages": [
+    "child_entry",
+    "controller_import_complete",
+    "bounded_graph_complete",
+    "template_complete",
+    "product_call_intercepted",
+    "completed"
+  ],
+  "elapsed_seconds": 3.0715079000001424,
+  "CPU_max": 9.41,
+  "RAM_min": 46.2555945365569
+}
