@@ -2974,3 +2974,7 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 <!-- BEGIN P09_CASE161_WORKER_CLI_STATUS -->
 > worker bootstrap9327바이트·특수alias5·원runtime-authority-manifest본문없이44pair복원·원16KiB유지/실제CLI는case160argvparser아닌qualified 공통window직접사용·argv숨김0. 신규5 포함전체65계약PASS. factory005 CPU경고중단·예외late import실패보존/수정후startup-only는전체parent재읽기유예를명시하며GO전whole검사필수유지. 006/007실패보존·wrapper argv/importroot·전용parser의존수정. 008실제CLI EOF/GO0로원WORKER_NOT_AUTHORIZED 거부·과거runtime/authority open0/fresh17-final17·10.376초·CPU32.21%·가용RAM42.52%·cleanupTrue·현재핀일치/제품0·parentadmission승격0. 공식154/249·잔여95·next161·generation49/P09-A12-A13 OPEN/목표ACTIVE. 다음독립wholeoracle와전체CODE-closure-cost-pref→Native.
 <!-- END P09_CASE161_WORKER_CLI_STATUS -->
+
+<!-- BEGIN P09_CASE161_ORACLE_CONNECTION_STATUS -->
+> 공통독립wholeoracle 연결구현/qualified validator family·원본문-defaults-closure·source-cost-resource-strictwindow 유지/사례·개수metadata 전체역변환·defaultnamespace/관측record수정0. 선언입력누락negative포함신규5계약·관련전체70PASS. 실제161-run002 oracle연결001 기대의미입력2871을승인predecessor+현재선언에서구성/현재후보사용0·checker실행0·queue호출0/fresh28-final28·9.156초·CPU34.77%·가용RAM42.12%·cleanupTrue·현재핀일치. whole CODE-closure-cost-parent-pref→Native후보→독립전체검사 필요/제품NOT_RUN·공식154/249·잔여95·next161·generation49/P09-A12-A13 OPEN/목표ACTIVE.
+<!-- END P09_CASE161_ORACLE_CONNECTION_STATUS -->

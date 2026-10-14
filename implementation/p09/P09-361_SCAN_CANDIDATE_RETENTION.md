@@ -1649,3 +1649,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE161_WORKER_CLI_STATUS -->
 > actual workerCLI bootstrap9327바이트·44pair복원·전용160parser의존제거/65계약PASS. 008 실제GO미전달/원거부조건확인·과거runtime/authority open0·fresh17-final17·cleanupTrue/제품0·parent/Native승격0. 005보호중단·006/007실패보존. startup-only는전체parentadmission 유예명시·actual GO전whole CODE-closure-cost-pref 필수유지. 독립전체oracle와전체사전검증 남음/공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE.
 <!-- END P09_CASE161_WORKER_CLI_STATUS -->
+
+<!-- BEGIN P09_CASE161_ORACLE_CONNECTION_STATUS -->
+> 원validator family를유지한현재독립wholeoracle 연결/관측후보에서기대범위복사0·source/resource/cost/window 조건유지/신규5·전체70계약PASS. 실제연결001 선언의미입력2871·fresh28-final28·cleanupTrue·현재소스핀일치/후보checker·제품·queue실행0. 전체CODE-closure-cost-parent-pref 및Native후보·독립전체검사남음/공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE.
+<!-- END P09_CASE161_ORACLE_CONNECTION_STATUS -->

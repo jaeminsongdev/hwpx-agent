@@ -175,3 +175,15 @@ factory008은 실제 CLI에 EOF를 전달하고 GO를 보내지 않아 원 WORKE
 공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN, 목표ACTIVE를 유지한다. 다음은 독립 whole oracle 및 전체 CODE·closure·cost·preflight를 연결한 뒤 실제 Native 검증이다. 준비 실패를 제품 승인으로 바꾸거나 보호 기준을 완화하지 않았다.
 
 근거: current_queue_successor_runtime와 해당 테스트, case161-successor-worker-bootstrap002 및 factory005/006/007/008 기록.
+
+## 현재 사례의 독립 전체 검사 연결
+
+current_queue_successor_oracle은 qualified case160의 validator family 전체를 private namespace로 복제한다. 현재 사례·이전 승인 개수·strict window 사례 번호만 원 code 전체 역변환이 성립하는 범위에서 변경한다. 원 generator·checker·defaults·closure, source·cost·resource·strict window 조건과 관측 record는 유지하며 기본 namespace를 수정하지 않는다.
+
+기대 입력은 승인된 predecessor 및 현재 명시적 선언에서 가져온다. 원 scoped_validator가 추가하는 inherited 범위를 private generator에만 연결하고, 그 뒤 원 full physical/semantic oracle projector를 사용한다. 후보 source_freeze를 비우거나 입력을 누락해도 독립적으로 선언된 입력이 기대 범위에 계속 남는5개 회귀 계약이 통과했다.
+
+실제 case161/run002 연결001은 기대 의미 입력2,871개를 선언에서 구성했다. 현재 candidate record를 읽거나 기대 입력의 근거로 사용하지 않았다. 연결·초기 guard와5계약 확인은 fresh28/final28,9.1565초, CPU최고34.77%, 가용RAM최저42.12%, cleanup=True로 통과했다. 현재 oracle 소스·테스트 hash는 준비 기록과 일치한다. 관련 전체70계약은3.470초에 통과했다.
+
+이 연결은 실제 후보 checker 실행이나 공식 queue 승인에 해당하지 않는다. 전체 current imported closure·CODE·cost·parent admission·whole preflight를 검증한 뒤 Native 후보와 독립 전체 검사를 수행해야 한다. 공식154/249·잔여95·next161·generation49 및 P09/A12/A13 OPEN, 목표ACTIVE를 유지한다.
+
+근거: tools/p09/current_queue_successor_oracle.py와 해당 테스트 및 evidence/p09-361-case161-successor-oracle-connection001.v1.json.
