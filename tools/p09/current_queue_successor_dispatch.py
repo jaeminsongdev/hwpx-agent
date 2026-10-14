@@ -223,7 +223,7 @@ def main(ctx,qualify,bootstrap=False):
     old=namespaces.case160_run007_controller
     guards=old.base.FIRST
     guard=guards.terminal_metadata_pressure_v1.guard_type(guards.distinct_final_sample_guard_v1.guard_type(a.Guard))()
-    started=time.monotonic();code=1;prepared=None
+    started=time.monotonic();code=1;prepared=None;q=None
     out=dict(state="FAILED_SUCCESSOR_DISPATCH_CONSTRUCTION_NOT_ADOPTED",index=ctx.index,physical_run=ctx.run,
         accepted_count_delta=0,GO_authorized=False,product_or_Native_executed=False)
     if not qualify:a.require(not (c.ROOT/ctx.root).exists(),"DISPATCH_NO_EXISTING_CANDIDATE_REPLAY")
@@ -298,6 +298,12 @@ def main(ctx,qualify,bootstrap=False):
         guard.close();out.update(cleanup_confirmed=guard.cleanup,elapsed_seconds=time.monotonic()-started,
             CPU_max=max((r["system_cpu_percent"] for r in guard.samples),default=None),
             RAM_min=min((r["available_ram_percent"] for r in guard.samples),default=None))
+        if guard.samples:
+            out["terminal_resource_sample"]={key:guard.samples[-1].get(key) for key in
+                ("system_cpu_percent","available_ram_percent","commit_used_percent",
+                 "parent_cpu_machine_percent","parent_private_mib","parent_private_percent")}
+        out["metadata_progress"]=dict(fresh_inputs=len(q.snapshots) if q else 0,
+            actual_read_passes=q.read_passes if q else 0,actual_bytes_read=q.bytes_read if q else 0)
     a.require(guard.cleanup,"DISPATCH_GUARD_CLEANUP")
     if qualify:
         raw=(json.dumps(out,ensure_ascii=True,allow_nan=False,indent=2)+"\n").encode("utf-8")

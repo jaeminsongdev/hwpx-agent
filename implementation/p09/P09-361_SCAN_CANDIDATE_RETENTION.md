@@ -1661,3 +1661,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE161_DISPATCH_STATUS -->
 > 실제 진입점과 원Native 진단 연결 구현. Native002 CPU경고 및 Native003 helper한도 중단 모두 제품0·Frame없음·cleanupTrue·빈tree로 보존/재사용·덮어쓰기0. 약110MB 준비/실행 중복 읽기 제거·실제metadata 전체검사 유지. 현재 entry의6계약 및 exact-source private namespace 연결·원본문/defaults/closure·전체입력 보존. run003 CODE74·wholepref10 통과/현재 dispatch qualification006 실제Native helper64·fresh385-final385·cleanupTrue·현재핀일치. 모델590.648초는새qualification 발행·새Native번호 선언 추가 전 범위/완료나GO근거로승격0. 이전 prebody-only 중단 기록까지 읽어 제품/미정리/미해결Frame 존재 시 새 번호 거부. 공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE·제품NOT_RUN. 다음 번호004 준비와 실제Native·독립검사.
 <!-- END P09_CASE161_DISPATCH_STATUS -->
+
+<!-- BEGIN P09_CASE161_ACCEPTED_STATUS -->
+> case161 Native004 COMMITTED/원2경계·2891입력·제품1PASS·GO→capture1.305초·576.33초·cleanupTrue·빈tree. 독립전체review001 원검사본문·선언기대범위·fresh390-final390·cleanupTrue. 원qualified 승인엔진과private CONFIG facade3계약 유지/진단경로설정실패보존·canonical없음 확인 후 원경로규칙대로수정. canonical case161-current-epoch-accept001 공식155/249·잔여94·next162·generation50·delta1·resourcecleanupTrue·fresh1196-final1196·모든source현재일치/제품·Native재실행0. entry001 CPU91.21% 중단·002통과 및앞선실패원본보존/64·15·600·720·자원한도 완화0/P09-A12-A13 OPEN/목표ACTIVE·PCfreeze미증명. 리뷰/승인코드는별도수용경계증거이며Native입력으로소급0. 다음162.
+<!-- END P09_CASE161_ACCEPTED_STATUS -->

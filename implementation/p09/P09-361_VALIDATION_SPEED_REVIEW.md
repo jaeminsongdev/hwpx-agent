@@ -225,3 +225,21 @@ Native003은49.02초에 실제 실행의 imported-helper 한도 검사로 중단
 공식154/249·잔여95·next161·generation49, P09/A12/A13 OPEN 및 목표ACTIVE를 유지한다. 수정본의 실제 Native·제품은 아직 NOT_RUN이다. 다음은 중단된002/003을 덮어쓰지 않는 번호004의 선언·CODE·전체 preflight·entry 검증과 실제 Native 및 독립 전체 검사다.
 
 근거: tools/p09/current_queue_successor_dispatch.py와 해당 테스트, case161-current-runtime-run002/003, successor-code-run003-attempt001, successor-preflight-run003-attempt001, successor-dispatch-qualification-run002-attempt001/002 및 run003-attempt001..006 기록. OS 설정과 자원·시간 한도는 변경하지 않았다.
+
+## 사례161의 실제 실행과 공식 승인
+
+번호004의 연결44pair·wire15,335바이트와 bootstrap9,327바이트를 준비하고, CODE74계약 및 원10계약의 전체 preflight를 통과했다. entry qualification001은 시작1.512초에 시스템CPU91.21%로 기존 보호에 중단됐고 제품은 실행되지 않았다. 중단 시 부모 CPU·메모리·실제 읽기량을 작은 숫자 기록으로 남기도록 보완했다. 짧은 시스템 표본11.29%·23.99% 이후 qualification002는 실제 Native helper64개·fresh386/final386·101.028초·CPU최고43.58%·가용RAM최저32.223%·cleanup=True로 통과했다.
+
+Native004는 전체 입력2,891개에 대한 실제 두 바이트 경계와 제품1PASS를 완료했다. GO부터 완전한 출력 수집까지1.3049초로 원15초 이내였고, 전체576.33초·CPU최고82.01%·가용RAM최저29.924%였다. Frame은 COMMITTED이며 cleanup과 빈 소유 프로세스 트리가 확인됐다. 자원·속도·입력·시간 한도는 유지했으며 PC 프리즈의 원인 해결을 주장하지 않는다.
+
+review_current_queue_successor는 선언 및 승인 predecessor에서 기대 범위를 먼저 구성하고, 그 뒤 원 frozen prepare와 전체 validator를 그대로 호출한다. 후보 관측을 기대 범위로 복사하지 않는다. 새 리뷰 코드는 별도 source reader로 실제 앞뒤 해시를 확인하며 Native 입력이었다고 소급하지 않는다. 연결2계약과 실제 독립 전체 검사001은 fresh390/final390·108.876초·CPU최고51.69%·가용RAM최저31.011%·cleanup=True로 통과했다. 리뷰 과정에서는 제품·Native 및 원장 쓰기를 실행하지 않았다.
+
+accept_current_queue_successor는 qualified optimized acceptance v1-v3와 원 수용 bytecode를 재사용한다. 다시 수행하는 전체 후보 검사가 성공한 뒤에만 독립 리뷰 및 새 facade의 source witness를 읽는다. 리뷰의 일회성 CONFIG는 원 configure 코드와 defaults·closure를 유지한 private module에 연결하며 기본 실행 CONFIG를 초기화하지 않는다. 3개 회귀 계약이 통과했다.
+
+처음 승인 연결은 진단 파일명 규칙에서 거부됐다. 승인 검증은 시작되지 않았고 canonical 및 기존 진단 파일이 생성되지 않은 것을 확인했다. 해당 실패를 별도 보존하고 원 optimized-acceptance 경로 형식으로 수정했다. 기존 validator의 경로 규칙을 완화하지 않았다.
+
+공식 canonical case161-current-epoch-accept001은 before154·delta1·after155, 잔여94·next162·generation50으로 발행됐다. 수용 경계의 fresh input1,196개와 최종 해시1,196개, 실제 읽기2,410회·186,423,657바이트 및 resource cleanup을 확인했다. 승인CPU최고55.08%·가용RAM최저30.212%이며 제품·Native 재실행은0이다. Native 후보 해시와 독립 리뷰·승인 source의 현재 해시도 일치한다.
+
+155/249는 해당 제품 검증 큐의 공식 승인 수다. P09/A12/A13은 OPEN이며 full249·signed16·전체 runtime reconciliation을 완료했다고 표시하지 않는다. 목표는 ACTIVE이고 다음 작업은 현재155 원장을 기준으로 사례162를 준비·실행·독립 검사·승인하는 것이다.
+
+근거: case161-current-runtime-run004, successor-whole-review-run004-attempt001, current-epoch-accept001, optimized-acceptance-attempt001 및 successor-acceptance-facade-setup001 기록. 구현은 review_current_queue_successor와 accept_current_queue_successor 및 해당 테스트다. 모든 이전 중단·준비 기록과 사용자 소유 변경은 보존했다.
