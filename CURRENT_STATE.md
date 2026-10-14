@@ -2900,3 +2900,10 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 > 실제run004 PASS_EXACT_CURRENT_QUEUE_NATIVE_RUNTIME_CANDIDATE_NOT_QUEUE_OR_GATE·task004·제품1PASS·568.98초/COMMITTED·2845입력·실제두바이트경계·decoder68/0.844921초<5/잔여핸들0·cleanup/treeemptyTrue. 시스템CPU65.23%·부모CPU1.8442%·가용RAM42.1518%·부모private54.015625MiB/PCfreeze미증명.
 > 독립read-only r374는 BOOTSTRAP_CONTROLLER로거부·최종fresh0/공식승인0. 초기276개목록에서 원test_case112_current_stored_runtime.py와 test_current_stored_native_bridge.py의2qualifiedpin 누락. 두파일은 전체Native 입력에있으나 초기읽기조건을대신하지 않음. 원결과·실패·체커보존/사후수정-검사약화-기존004재실행0. 다음 별도attempt 초기두pin fresh읽기→새CODE/DATA/wholepref→실제두Native경계·독립oracle·공식승인. 세부 implementation/p09/P09-361_RUN004_NATIVE_AND_ORACLE_R374.md.
 <!-- END P09_R374_STATUS -->
+
+<!-- BEGIN P09_R377_STATUS -->
+> 2026-10-14 P09 r375-r377 — 초기qualified읽기복원·실제function globals 연결수정·CODE27/새wholepref044 통과후 별도run006. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/P10새구현0/목표ACTIVE.
+> run005는48.29초/DEFERRED_NOT_STARTED·manifest불일치·제품/Native미시작으로보존. namespace속성dict 대신함수실제globals 복제/고정task004는현재task006으로명시적투영·원체커유지. 현재CODE27 fresh101-final101/helper62·wholepref044 fresh282-final282/import64/89.2685초·원예상runtime598.330629초<600/2700fce.
+> run006은445.66초/STOP_STRICT_PRODUCT_WINDOW·원15초창15.02735초·GO1/capture1·제품본문미관찰/child실행null·CLOSED/바이트경계1·bootstrap283·잔여핸들0/cleanup-treeemptyTrue. 시스템CPU58.86%·부모CPU2.1343%·가용RAM39.2246%/승인0·PCfreeze미증명.
+> 소유Job 진단은최종Rust호출가로채기3.0812초/원CLI-noGO거부3.0699초에통과·제품/Native실행0. 실제Job샘플은Python/conhost만관찰. 초기화지연가설재현0/실제명령·GO전달·Native잠금차이원인미확정. 원기록·15/600/720·scope·자원보호유지/동일006자동재시도0. 다음조건차이점검. 세부 implementation/p09/P09-361_RUN006_WINDOW_DIAGNOSTIC_R377.md.
+<!-- END P09_R377_STATUS -->
