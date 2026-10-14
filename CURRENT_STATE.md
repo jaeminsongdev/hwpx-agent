@@ -2875,3 +2875,15 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+<!-- BEGIN P09_R371_STATUS -->
+> 2026-10-14 P09 r371 — actual32 boundedbootstrap 및전체parent 승인/worker 선언 연결검증. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/P10새구현0/목표ACTIVE.
+> r851 원loader/Reader 코드유지·단일Reader old21+신규4=25 reads/114588bytes·원64/262144 한도유지·본문historical runtime-review읽기0. manifest029/capsule006/32descriptor/TASK004·parent-frame-worker-fulloracle 동일private module·CODE5/fresh34-final34/CPU14.64%-RAM63.979013%/cleanupTrue.
+> r852 새private29 parent에서원prepared carrier byte/hash·전체scope·현재권위/성공159·compiledRust검사→실제manifest32 fullfresh admission(실패002003/review/real132/표현)→별도bounded32와모든descriptor/manifest 일치. CODE9/Rust787-inventory167/fresh64-final64/선언2861-physical2829/CPU12.64%-RAM64.519166%/cleanupTrue. predecessor wholeoracle재실행0/실제두Native읽기·독립현재160 oracle필요 유지. 결합unit143 통과.
+> 새parent qualifier입력포함Native비용600.148056초(decoder5포함)로원600거부·원margin60유지/이전생성599.769495 PASS를확대0. 새controller-wholeprep-pref-Native-GO승인0. 다음 realscope 추가미표현입력 무손실검토→충분비용여유·새manifest/capsule→actual004controller 전체closure/prep/cost/pref/독립acceptance→단일제품·두실제Native읽기·공식승인.
+> 원scope-rate-deadline-helper-wire-자원보호·실패·user변경 유지/기존003재실행-제품실행-승인증가-접근허용-UAC-OS변경-외부종료-삭제이동-push0/PCfreeze미증명. 세부 implementation/p09/P09-361_RUN004_BOUNDED_PARENT32_R371.md, r851-r852.
+<!-- END P09_R371_STATUS -->
+
+
+
+
+
