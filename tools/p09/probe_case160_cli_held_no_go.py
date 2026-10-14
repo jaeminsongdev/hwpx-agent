@@ -11,6 +11,9 @@ from bounded_process_progress import BoundedProcessCapture
 
 SELF = "tools/p09/probe_case160_cli_held_no_go.py"
 OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-held-no-go-r378.v1.json"
+GO = sys.argv[1:] == ["--go"]
+if GO:
+    OUTPUT = "implementation/p09/evidence/p09-361-case160-exact-cli-held-product-r380.v1.json"
 
 
 def main():
@@ -18,9 +21,12 @@ def main():
     guard = c.FIRST.terminal_metadata_pressure_v1.guard_type(c.FIRST.distinct_final_sample_guard_v1.guard_type(a.Guard))()
     destination = c.old.c.ROOT/OUTPUT
     a.require(not destination.exists(), "EXCLUSIVE_CLI_NO_GO_REPORT")
-    process = capture = job = held = None; empty = False; clean = True
+    process = capture = job = held = binding = None; empty = False; clean = True
     out = dict(state="FAILED_EXACT_CLI_NO_GO_DIAGNOSTIC_NOT_PRODUCT", GO_sent=False,
         product_or_Native_executed=False, accepted_count_delta=0, P09_gate="OPEN")
+    if GO:
+        out.update(product_or_Native_executed=None, actual_product_child_executed=None,
+            full_Native_frame_executed=False, official_acceptance_claimed=False)
     started = time.monotonic()
     try:
         guard.acquire(); q = a.AcceptanceReader(c.old.c.ROOT, guard.check)
@@ -29,6 +35,10 @@ def main():
         selected = {p["path"]:p for p in stopped["bootstrap_metadata"]["input_pins"]
             if p["path"].startswith("tools/p09/") and p["path"].endswith(".py")}
         for p in (c.CONFIG_PIN, c.MANIFEST, c.CAPSULE): selected[p["path"]] = p
+        if GO:
+            executable = stopped["compiled_test_executable_pin"]
+            selected[executable["path"]] = executable
+            a.exact(stopped["selected_test_names"], ["actual_import::source_review_cell_output::cached_body_callback_rechecks_actual_aead_acl_regrant_and_advanced_head"], "ONE_ORIGINAL_CASE160")
         a.require(0 < len(selected) <= 512, "BOUNDED_HELD_STARTUP_SUBSET")
         for name, pin in selected.items(): a.exact(q.pin(name), pin, "CURRENT_HELD_STARTUP_BYTES")
         held = a.locks.InputLocks(c.old.c.ROOT, q.checkpoint)
@@ -37,28 +47,43 @@ def main():
             full_Native_frame_or_product_scope_qualification_claimed=False,
             same_actual_worker_argv_without_B=True)
         windows = guard.windows; job = windows.job(); limits = windows.verify_job_limits(job)
-        process = subprocess.Popen([sys.executable, str(c.old.c.ROOT/controller.SELF), "--owned-worker", "--task", controller.TASK],
+        if GO: binding = c.prior.WINDOW.connect(subprocess.Popen, BoundedProcessCapture)
+        factory = binding.Popen if GO else subprocess.Popen
+        process = factory([sys.executable, str(c.old.c.ROOT/controller.SELF), "--owned-worker", "--task", controller.TASK],
             cwd=c.old.c.ROOT, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
             creationflags=subprocess.BELOW_NORMAL_PRIORITY_CLASS | subprocess.CREATE_NO_WINDOW)
         handle = windows.k.OpenProcess(0x101, False, process.pid)
         try: a.require(handle and windows.k.AssignProcessToJobObject(job, handle), "NO_GO_OWNED_JOB_ASSIGN")
         finally:
             if handle: a.require(windows.k.CloseHandle(handle), "NO_GO_ASSIGN_HANDLE_CLOSE")
-        # Bounded capture closes empty stdin. The original worker must reject EOF.
-        capture = BoundedProcessCapture(process, output_limit=8192, parse_markers=False)
+        if GO:
+            guard.check(); process.stdin.write(b"P149_GO\n"); process.stdin.flush()
+            out["GO_sent"] = True
+        # No-GO closes empty stdin; GO uses the original strict window/capture.
+        capture_type = binding.Capture if GO else BoundedProcessCapture
+        capture = capture_type(process, output_limit=8192, parse_markers=False)
         deadline = time.monotonic()+15
         while process.poll() is None:
             time.sleep(.5); guard.check(force=True)
             a.require(windows.accounting(job)["peak_job_private_percent"] < a.c.POLICY["job_memory_stop_percent"], "NO_GO_MEMORY_STOP")
             a.require(time.monotonic() < deadline, "NO_GO_DIAGNOSTIC15_TIMEOUT")
         output, errors = capture.communicate(timeout=3)
-        observed = json.loads(output)
-        code = observed.get("error_code") if type(observed) is dict else None
-        a.require(process.returncode != 0 and not errors and type(code) is str and code.endswith("WORKER_NOT_AUTHORIZED"), "EXACT_ORIGINAL_GO_REJECTION")
+        code = None
+        if GO:
+            a.require(process.returncode == 0 and not errors, "ACTUAL_CASE160_TERMINAL")
+            summaries = re.findall(r"test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored; (\d+) measured; (\d+) filtered out", output)
+            a.require(len(summaries) == 1 and summaries[0][:4] == ("1", "0", "0", "0"), "ONE_ACTUAL_CASE160_PASS")
+            out.update(actual_product_child_executed=True, product_or_Native_executed=True,
+                product_summary=dict(passed=1, failed=0, ignored=0, measured=0, filtered_out=int(summaries[0][4])),
+                strict_product_window=binding.state.diagnostics())
+        else:
+            observed = json.loads(output)
+            code = observed.get("error_code") if type(observed) is dict else None
+            a.require(process.returncode != 0 and not errors and type(code) is str and code.endswith("WORKER_NOT_AUTHORIZED"), "EXACT_ORIGINAL_GO_REJECTION")
         final = windows.accounting(job); empty = final["active_processes"] == 0 and final["owned_processes"] == []
         a.require(empty, "NO_GO_JOB_EMPTY")
         q.finish(); guard.check(force=True)
-        out.update(state="PASS_EXACT_CLI_HELD_SUBSET_GO_REJECTION_NOT_PRODUCT_OR_NATIVE", worker_error_code=code,
+        out.update(state="PASS_EXACT_CLI_HELD_SUBSET_ACTUAL_PRODUCT_NOT_NATIVE_OR_ACCEPTANCE" if GO else "PASS_EXACT_CLI_HELD_SUBSET_GO_REJECTION_NOT_PRODUCT_OR_NATIVE", worker_error_code=code,
             owned_Job_limits=limits, fresh_inputs=len(q.snapshots), final_fresh_hashes=q.final_fresh_hashes,
             source_pins=list(q.snapshots.values()), stdout_bytes=len(output), stderr_bytes=len(errors))
     except (ValueError, OSError, KeyError, TypeError, AttributeError, subprocess.SubprocessError) as error:
@@ -67,7 +92,11 @@ def main():
     finally:
         try:
             if process and process.poll() is None: process.kill(); process.wait(timeout=5)
-            if capture: capture.close()
+            if capture:
+                capture.close()
+                with capture.lock:
+                    out["stdout_bytes"] = len(capture.buffers["stdout"])
+                    out["stderr_bytes"] = len(capture.buffers["stderr"])
             elif process:
                 for stream in (process.stdin, process.stdout, process.stderr):
                     if stream: stream.close()
@@ -78,6 +107,7 @@ def main():
         if held:
             try: clean = bool(held.close()) and clean
             except (ValueError, OSError): clean = False
+        if binding: out["strict_product_window"] = binding.state.diagnostics()
         guard.close()
         out.update(cleanup_confirmed=guard.cleanup and clean and (process is None or empty),
             elapsed_seconds=time.monotonic()-started,
