@@ -2950,3 +2950,7 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 <!-- BEGIN P09_CASE160_ACCEPTED_R393_STATUS -->
 > 2026-10-15 case160 공식승인완료 — 원조건초기입력50복원 후Native011 PASS/2경계·2857입력·bootstrap340/제품1PASS·GO→완전수집1.957초/전체555.37초·CPU49.61%·가용RAM44.17%/cleanupTrue·빈tree. 독립전체oracle PASS/fresh279-final279/cleanupTrue. 기존qualified v1-v3 승인엔진·원acceptor bytecode 유지/facade3계약PASS·새증거후검증·Native소급0·제품재실행0. canonical case160-current-epoch-accept001 delta1·공식154/249·잔여95·next161·generation49/resourcecleanupTrue/원2857입력·372dirs·2실제읽기검증/fresh1134-final1134·154648309바이트/승인CPU66.99%·가용RAM47.44%. P09-A12-A13 OPEN/full249·signed16·whole-runtime reconciliation 미완료/목표ACTIVE. 다음161 actual_import::source_review_cell_output::cached_cell_callback_rejects_all_provider_scope_substitutions. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
 <!-- END P09_CASE160_ACCEPTED_R393_STATUS -->
+
+<!-- BEGIN P09_CASE161_PREPARATION_STATUS -->
+> case161 공통준비 — 개별script복제대신161..249 인자형STEP·무손실생성기 구현/신규7+기존codec·물리IO 총36계약PASS. 승인160 및 compiled249에서 STEP before154·정확161이름준비/fresh9-final9·cleanupTrue. 과거영수증4개 원본11533535→encoded3747348·절감7786187바이트·정확복원8회/fresh31-final31·CPU39.97%·가용RAM48.15%·cleanupTrue/원본수정0·Native승격0. inherited-only 예비38pair·physical2861·239297766바이트·명목596.085초/새controller-config-CODE-pref 제외로whole600 적합미증명. case161제품NOT_RUN/다음공통successor 연결·전체cost·pref. 공식154/249·잔여95·next161·generation49/P09-A12-A13 OPEN/목표ACTIVE. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
+<!-- END P09_CASE161_PREPARATION_STATUS -->

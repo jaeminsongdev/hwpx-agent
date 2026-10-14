@@ -1625,3 +1625,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE160_ACCEPTED_R393_STATUS -->
 > case160 Native011·독립전체oracle·원qualified 승인엔진을통과/canonical delta1로154/249·잔여95·next161·generation49 이동. 이전모든실패·중단원본보존/원2857입력·두실제읽기검증/approval fresh1134-final1134·cleanupTrue/새facade는후검증증거·Native소급0·제품재실행0. P09-A12-A13 OPEN/full249·signed16·whole-runtime reconciliation 미완료/목표ACTIVE. 세부 implementation/p09/P09-361_VALIDATION_SPEED_REVIEW.md.
 <!-- END P09_CASE160_ACCEPTED_R393_STATUS -->
+
+<!-- BEGIN P09_CASE161_PREPARATION_STATUS -->
+> case160공식승인유지/161 STEP·과거4개무손실표현준비·원본수정0/정확복원8회·fresh31-final31·cleanupTrue/공통준비경로총36계약PASS. 38pair inherited-only 명목596.085초는새컨트롤러등미포함·whole예산미증명/Native·제품GO0·승인delta0/공식154/249·잔여95·next161/P09-A12-A13 OPEN/목표ACTIVE.
+<!-- END P09_CASE161_PREPARATION_STATUS -->

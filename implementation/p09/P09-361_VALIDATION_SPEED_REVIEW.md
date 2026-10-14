@@ -84,4 +84,16 @@ Native010 당시 후보 검사는 실제 전후2경계·2,855입력, 제품1PASS
 
 공식154/249, 잔여95, next161, generation49로 이동했다. P09/A12/A13은 OPEN이고 full249 및 signed16 전체 승인이나 whole-runtime reconciliation 완료로 승격하지 않는다. 다음 compiled249의161번 대상은 actual_import::source_review_cell_output::cached_cell_callback_rejects_all_provider_scope_substitutions다. 목표는 ACTIVE이며 PC 프리즈 해결 또는 P09~P20 전체 완료는 주장하지 않는다.
 
-근거: evidence의 case160-current-runtime-run004/run007/run008/run009/run010/run011, native009/010/011-controller-r391, native010-independent-oracle-r392-attempt001..004 및 native011-independent-oracle-r392-attempt001, native010-bootstrap-requirements-r392 및 attempt002, case160-current-epoch-accept001, case160-optimized-acceptance-attempt001, 세 r392 crosscheck 기록과 관련 소스.
+## Case161 공통 준비 경로
+
+case별 준비 script를 복제하지 않도록 prepare_current_queue_step과 produce_current_queue_envelopes를161..249의 공통 인자로 구현했다. 기존160 이하의 승인 코드와 원본은 수정하지 않았다. STEP은 승인된 case160과 compiled249의 정렬된 명단에서 정확한161번 이름 및 before154를 확인하고 불변 config001로 준비했다. fresh9/final9, CPU최고41.78%, 가용RAM최저46.99%, cleanup=True다.
+
+기존 qualified codec·exclusive publisher·2MiB/s 쓰기를 재사용해 과거134/run001,154/run002,127/run002 및 승인된160/run011의 별도 무손실 표현을 준비했다. 원본11,533,535바이트에서 encoded3,747,348바이트, 절감7,786,187바이트다. 각 원본을 두 번 정확한 바이트로 복원해8회 확인했으며 fresh31/final31, CPU최고39.97%, 가용RAM최저48.15%, cleanup=True다. 이는 자료 표현 준비이며 새 runtime·Native·제품 승인이나 기존 원본 교체가 아니다.
+
+신규 선택·생성기7계약과 기존 codec·물리IO 관련 계약을 함께 실행해 총36개가 통과했다. 원본 경로·현재 사례·소스 파일은 envelope 대상으로 허용하지 않고, 사전 승인·정리·두 실제 경계·명단 전체를 요구한다.
+
+승인된160의 전체 semantic 범위와 승인 fresh 입력을 기존 명시적 alias로 합친 예비 계산은 기존34개와 새4개를 합한38pair, physical2,861입력·371dirs·239,297,766바이트·명목596.085초다. 신규 controller/config/CODE/preflight는 포함하지 않았으므로600초 내 전체 실행을 증명하지 않는다. 실행 전에 전체 scope와 provenance 연결 및 원 비용 모델을 검증해야 한다. 제한·실제 두 바이트 읽기·원 검사 범위를 줄이지 않는다.
+
+공식154/249·잔여95·next161·generation49와 P09/A12/A13 OPEN을 유지한다. case161 제품 실행은 NOT_RUN이며 다음은 공통 successor 연결과 전체 비용·사전 검증이다. 목표는 ACTIVE다.
+
+근거: evidence의 case160-current-runtime-run004/run007/run008/run009/run010/run011, case160-current-epoch-accept001 및 optimized-acceptance-attempt001, case161-step-config001/successor-selection001/lossless-receipts001/prospective-inherited-cost001, 앞선 r391/r392 기록과 관련 소스.
