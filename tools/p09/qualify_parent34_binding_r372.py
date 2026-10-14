@@ -2,9 +2,10 @@
 from types import CodeType,FunctionType
 import qualify_parent32_binding_r371 as original
 SELF="tools/p09/qualify_parent34_binding_r372.py"
-OUTPUT="implementation/p09/evidence/p09-361-run004-parent34-binding-code5-r857.v1.json"
+OUTPUT="implementation/p09/evidence/p09-361-run004-parent34-binding-code5-r858.v1.json"
 MAPPING={
     9:5,
+    32:34,
     "test_successor_current_binding_v6":"test_successor_current_binding_v7",
     "test_successor_bounded_graph_bootstrap_v6":"test_successor_bounded_graph_bootstrap_v7",
     "ALL_PARENT32_CODE9":"ALL_PARENT34_CODE5",

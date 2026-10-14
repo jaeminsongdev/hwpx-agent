@@ -2887,3 +2887,10 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+<!-- BEGIN P09_R372_STATUS -->
+> 2026-10-14 P09 r372 — actual run004 manifest030/compact capsule007/34쌍 parent 연결. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/P10새구현0/목표ACTIVE.
+> real 이전136/130 무손실 표현으로 총3605564bytes 감소·원본복원4/fresh20-final20. 새manifest520bytes·capsule12008bytes<원16384. r855 생성비용596.710391초는 당시소스 기록이며 이후수정의현재승인으로 사용하지 않음.
+> r856 compact중복연결 실패를 fae6dfa에 보존. 단일compact연결 수정 및 r857 source_pairs32 잔존표기를 e66bc4a에 보존. 수정후 r858은34쌍/CODE5/fresh69-final69/Rust787·inventory167/단일boundedReader28reads-133296bytes/원Native비용596.780579초(decoder5포함)<600·원margin60/CPU45.96%-가용RAM70.243606%-cleanupTrue. 이번변경 4모듈 unit18 PASS.
+> 원run003 완료준비scope를 사용하는 연결검사이며 새run004 controller-wholepreflight-독립160oracle·두실제Native읽기·GO 승인은 아직없음. 원scope-rate-deadline·자원보호·실패·user변경 유지/기존003재실행-제품실행-승인증가-접근허용-UAC-OS변경-외부종료-삭제이동-push0/PCfreeze미증명. 다음 실제controller 경로 연결. 세부 implementation/p09/P09-361_RUN004_MANIFEST34_MARGIN_R372.md.
+<!-- END P09_R372_STATUS -->
+
