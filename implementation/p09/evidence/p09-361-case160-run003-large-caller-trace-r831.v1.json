@@ -1,0 +1,682 @@
+{
+  "state": "PASS_RUN003_ACTUAL_BINDING_LARGE_CALLERS_NOT_NATIVE_OR_QUEUE",
+  "accepted_count_delta": 0,
+  "Native_or_product_executed": false,
+  "queue_acceptance_called": false,
+  "P09_gate": "OPEN",
+  "source_pins": [
+    {
+      "path": "tools/p09/trace_run003_large_callers_r365.py",
+      "bytes": 4030,
+      "sha256": "27a5f6eecb607b94cd1f30f84d21a84077184b9b4f2ce86870f998c2051c09ba"
+    },
+    {
+      "path": "tools/p09/flat_current_queue_envelope_runtime_v31.py",
+      "bytes": 14869,
+      "sha256": "d6315996ac1cc8e343d9049eda2a46db9dd0cf7c1561f8f99664bc285913eec1"
+    },
+    {
+      "path": "tools/p09/tests/test_flat_current_queue_envelope_runtime_v31.py",
+      "bytes": 1654,
+      "sha256": "b8e060414b6e3340026ad197b702621beca17f0b73001eea87e0ec83828fddf9"
+    },
+    {
+      "path": "tools/p09/trace_adopted26_metadata_reads_r361.py",
+      "bytes": 5173,
+      "sha256": "eef5b8e07e467a4d07c27743dee571fcc447c2b558037cb479b08eec1e4a671f"
+    },
+    {
+      "path": "tools/p09/terminal_metadata_pressure_v1.py",
+      "bytes": 2956,
+      "sha256": "7b5bb9b890cde566f566857c06f010736519ac6e2551480dcf92bdab6dfdd9dd"
+    },
+    {
+      "path": "tools/p09/tests/test_terminal_metadata_pressure_v1.py",
+      "bytes": 4229,
+      "sha256": "7633ede9174db3833c4e08a2d9404dd58d8756220bec8c4641d949fc11e38885"
+    }
+  ],
+  "tracked_callers_before_final": [
+    {
+      "path": "implementation/p09/evidence/p09-361-case159-current-runtime-run001.v1.json",
+      "stack": [
+        [
+          "audit_evidence_io.py",
+          "json",
+          113
+        ],
+        [
+          "accept_case112_current_epoch.py",
+          "read_exact",
+          234
+        ],
+        [
+          "runtime_successor_binding_v2.py",
+          "admission",
+          32
+        ],
+        [
+          "successor_current_binding_v2.py",
+          "admit",
+          46
+        ],
+        [
+          "same_reader_source_admission_once_v1.py",
+          "execute",
+          35
+        ],
+        [
+          "successor_current_binding_v2.py",
+          "bind",
+          48
+        ],
+        [
+          "successor_manifest_shared_admission_v1.py",
+          "bind",
+          43
+        ]
+      ],
+      "calls": 1,
+      "bytes": 4580676
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run005.v1.json",
+      "stack": [
+        [
+          "audit_evidence_io.py",
+          "json",
+          113
+        ],
+        [
+          "accept_case112_current_epoch.py",
+          "read_exact",
+          234
+        ],
+        [
+          "runtime_successor_binding_v1.py",
+          "admission",
+          36
+        ],
+        [
+          "same_reader_history_declaration_once_v1.py",
+          "admission",
+          38
+        ],
+        [
+          "runtime_successor_binding_v2.py",
+          "admission",
+          38
+        ],
+        [
+          "successor_current_binding_v2.py",
+          "admit",
+          46
+        ],
+        [
+          "same_reader_source_admission_once_v1.py",
+          "execute",
+          35
+        ]
+      ],
+      "calls": 1,
+      "bytes": 4404465
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case159-current-runtime-run001.v1.json",
+      "stack": [
+        [
+          "audit_evidence_io.py",
+          "json",
+          113
+        ],
+        [
+          "accept_case112_current_epoch.py",
+          "read_exact",
+          234
+        ],
+        [
+          "runtime_successor_manifest_v2.py",
+          "load",
+          17
+        ],
+        [
+          "runtime_successor_manifest_v4.py",
+          "load",
+          44
+        ],
+        [
+          "runtime_successor_manifest_v5.py",
+          "load",
+          27
+        ],
+        [
+          "runtime_successor_manifest_v6.py",
+          "load",
+          25
+        ],
+        [
+          "successor_current_binding_v2.py",
+          "bind",
+          59
+        ]
+      ],
+      "calls": 1,
+      "bytes": 4580676
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run005.v1.json",
+      "stack": [
+        [
+          "audit_evidence_io.py",
+          "json",
+          113
+        ],
+        [
+          "accept_case112_current_epoch.py",
+          "read_exact",
+          234
+        ],
+        [
+          "runtime_successor_manifest_v1.py",
+          "load",
+          28
+        ],
+        [
+          "same_reader_manifest_declaration_once_v1.py",
+          "load",
+          52
+        ],
+        [
+          "runtime_successor_manifest_v2.py",
+          "load",
+          20
+        ],
+        [
+          "runtime_successor_manifest_v4.py",
+          "load",
+          44
+        ],
+        [
+          "runtime_successor_manifest_v5.py",
+          "load",
+          27
+        ]
+      ],
+      "calls": 1,
+      "bytes": 4404465
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run005.v1.json",
+      "stack": [
+        [
+          "audit_evidence_io.py",
+          "fresh_pin",
+          122
+        ],
+        [
+          "runtime_successor_manifest_v1.py",
+          "load",
+          73
+        ],
+        [
+          "same_reader_manifest_declaration_once_v1.py",
+          "load",
+          52
+        ],
+        [
+          "runtime_successor_manifest_v2.py",
+          "load",
+          20
+        ],
+        [
+          "runtime_successor_manifest_v4.py",
+          "load",
+          44
+        ],
+        [
+          "runtime_successor_manifest_v5.py",
+          "load",
+          27
+        ],
+        [
+          "runtime_successor_manifest_v6.py",
+          "load",
+          25
+        ]
+      ],
+      "calls": 1,
+      "bytes": 4404465
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run005.v1.json",
+      "stack": [
+        [
+          "audit_evidence_io.py",
+          "fresh_pin",
+          122
+        ],
+        [
+          "runtime_successor_manifest_v2.py",
+          "load",
+          53
+        ],
+        [
+          "runtime_successor_manifest_v4.py",
+          "load",
+          44
+        ],
+        [
+          "runtime_successor_manifest_v5.py",
+          "load",
+          27
+        ],
+        [
+          "runtime_successor_manifest_v6.py",
+          "load",
+          25
+        ],
+        [
+          "successor_current_binding_v2.py",
+          "bind",
+          59
+        ],
+        [
+          "successor_manifest_shared_admission_v1.py",
+          "bind",
+          43
+        ]
+      ],
+      "calls": 1,
+      "bytes": 4404465
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case159-current-runtime-run001.v1.json",
+      "stack": [
+        [
+          "audit_evidence_io.py",
+          "fresh_pin",
+          122
+        ],
+        [
+          "runtime_successor_manifest_v2.py",
+          "load",
+          53
+        ],
+        [
+          "runtime_successor_manifest_v4.py",
+          "load",
+          44
+        ],
+        [
+          "runtime_successor_manifest_v5.py",
+          "load",
+          27
+        ],
+        [
+          "runtime_successor_manifest_v6.py",
+          "load",
+          25
+        ],
+        [
+          "successor_current_binding_v2.py",
+          "bind",
+          59
+        ],
+        [
+          "successor_manifest_shared_admission_v1.py",
+          "bind",
+          43
+        ]
+      ],
+      "calls": 1,
+      "bytes": 4580676
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case159-current-runtime-run001.v1.json",
+      "stack": [
+        [
+          "audit_evidence_io.py",
+          "json",
+          113
+        ],
+        [
+          "accept_case112_current_epoch.py",
+          "read_exact",
+          234
+        ],
+        [
+          "flat_current_queue_runtime.py",
+          "binding",
+          178
+        ],
+        [
+          "successor_current_binding_v2.py",
+          "bind",
+          67
+        ],
+        [
+          "successor_manifest_shared_admission_v1.py",
+          "bind",
+          43
+        ],
+        [
+          "successor_current_binding_v3.py",
+          "bind",
+          24
+        ],
+        [
+          "flat_current_queue_envelope_runtime_v31.py",
+          "binding",
+          114
+        ]
+      ],
+      "calls": 1,
+      "bytes": 4580676
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run005.v1.json",
+      "stack": [
+        [
+          "audit_evidence_io.py",
+          "json",
+          113
+        ],
+        [
+          "accept_case112_current_epoch.py",
+          "read_exact",
+          234
+        ],
+        [
+          "flat_current_queue_inherited_scope_runtime_v1.py",
+          "inherited_for_step",
+          93
+        ],
+        [
+          "current_successor_acceptance_prepare_v1.py",
+          "prepare",
+          17
+        ],
+        [
+          "isolated_predecessor159_prepare_v1.py",
+          "prepare",
+          82
+        ],
+        [
+          "successor_current_binding_v2.py",
+          "validate",
+          27
+        ],
+        [
+          "flat_current_queue_runtime.py",
+          "binding",
+          185
+        ]
+      ],
+      "calls": 1,
+      "bytes": 4404465
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case159-current-runtime-run001.v1.json",
+      "stack": [
+        [
+          "audit_evidence_io.py",
+          "json",
+          113
+        ],
+        [
+          "accept_case112_current_epoch.py",
+          "read_exact",
+          234
+        ],
+        [
+          "flat_current_queue_acceptance.py",
+          "prepare",
+          58
+        ],
+        [
+          "current_successor_acceptance_prepare_v1.py",
+          "prepare",
+          36
+        ],
+        [
+          "isolated_predecessor159_prepare_v1.py",
+          "prepare",
+          82
+        ],
+        [
+          "successor_current_binding_v2.py",
+          "validate",
+          27
+        ],
+        [
+          "flat_current_queue_runtime.py",
+          "binding",
+          185
+        ]
+      ],
+      "calls": 1,
+      "bytes": 4580676
+    }
+  ],
+  "binding_reads_before_final": {
+    "request_count": 1249,
+    "read_bytes": 343292792,
+    "unique_paths": 1141,
+    "repeated_read_bytes": 158478499,
+    "top_repeated_sources": [
+      {
+        "path": "implementation/p09/evidence/p09-361-case159-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 22903380,
+        "repeat_bytes": 18322704
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run005.v1.json",
+        "calls": 5,
+        "bytes": 22022325,
+        "repeat_bytes": 17617860
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case157-current-runtime-run001.v1.json",
+        "calls": 4,
+        "bytes": 10041572,
+        "repeat_bytes": 7531179
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run004.v1.json",
+        "calls": 4,
+        "bytes": 9149452,
+        "repeat_bytes": 6862089
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run003.v1.json",
+        "calls": 4,
+        "bytes": 8836104,
+        "repeat_bytes": 6627078
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case147-current-runtime-run001.v1.json",
+        "calls": 3,
+        "bytes": 8791719,
+        "repeat_bytes": 5861146
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case149-current-runtime-run001.v1.json",
+        "calls": 3,
+        "bytes": 8776416,
+        "repeat_bytes": 5850944
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case150-current-runtime-run001.v1.json",
+        "calls": 3,
+        "bytes": 8668029,
+        "repeat_bytes": 5778686
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case148-current-runtime-run001.v1.json",
+        "calls": 3,
+        "bytes": 8617965,
+        "repeat_bytes": 5745310
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case146-current-runtime-run001.v1.json",
+        "calls": 3,
+        "bytes": 8144124,
+        "repeat_bytes": 5429416
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case145-current-runtime-run001.v1.json",
+        "calls": 3,
+        "bytes": 8019633,
+        "repeat_bytes": 5346422
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case144-current-runtime-run001.v1.json",
+        "calls": 3,
+        "bytes": 7910805,
+        "repeat_bytes": 5273870
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case156-current-runtime-run001.v1.json",
+        "calls": 3,
+        "bytes": 7542471,
+        "repeat_bytes": 5028314
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case155-current-runtime-run001.v1.json",
+        "calls": 3,
+        "bytes": 7311165,
+        "repeat_bytes": 4874110
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case152-current-runtime-run001.v1.json",
+        "calls": 3,
+        "bytes": 7122204,
+        "repeat_bytes": 4748136
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case151-current-runtime-run001.v1.json",
+        "calls": 3,
+        "bytes": 6850440,
+        "repeat_bytes": 4566960
+      }
+    ],
+    "counts_only_no_payload_or_hash_or_JSON_cache": true
+  },
+  "full_scope_count": 2831,
+  "rust_source_count": 787,
+  "source_pairs": 29,
+  "fresh_inputs": 1141,
+  "final_fresh_hashes": 1141,
+  "diagnostic_SELF_not_in_actual_runtime_scope": true,
+  "counts_only_no_payload_or_extra_sampler": true,
+  "cleanup_confirmed": true,
+  "CPU_max": 56.81,
+  "RAM_min": 50.0692156277375,
+  "parent_CPU_max": 6.252549718959536,
+  "partial_completed_read_summary": {
+    "request_count": 2390,
+    "read_bytes": 528107085,
+    "unique_paths": 1141,
+    "repeated_read_bytes": 343292792,
+    "top_repeated_sources": [
+      {
+        "path": "implementation/p09/evidence/p09-361-case159-current-runtime-run001.v1.json",
+        "calls": 6,
+        "bytes": 27484056,
+        "repeat_bytes": 22903380
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run005.v1.json",
+        "calls": 6,
+        "bytes": 26426790,
+        "repeat_bytes": 22022325
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case157-current-runtime-run001.v1.json",
+        "calls": 5,
+        "bytes": 12551965,
+        "repeat_bytes": 10041572
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run004.v1.json",
+        "calls": 5,
+        "bytes": 11436815,
+        "repeat_bytes": 9149452
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case158-current-runtime-run003.v1.json",
+        "calls": 5,
+        "bytes": 11045130,
+        "repeat_bytes": 8836104
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case147-current-runtime-run001.v1.json",
+        "calls": 4,
+        "bytes": 11722292,
+        "repeat_bytes": 8791719
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case149-current-runtime-run001.v1.json",
+        "calls": 4,
+        "bytes": 11701888,
+        "repeat_bytes": 8776416
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case150-current-runtime-run001.v1.json",
+        "calls": 4,
+        "bytes": 11557372,
+        "repeat_bytes": 8668029
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case148-current-runtime-run001.v1.json",
+        "calls": 4,
+        "bytes": 11490620,
+        "repeat_bytes": 8617965
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case160-current-runtime-run001.v1.json",
+        "calls": 3,
+        "bytes": 12384072,
+        "repeat_bytes": 8256048
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case146-current-runtime-run001.v1.json",
+        "calls": 4,
+        "bytes": 10858832,
+        "repeat_bytes": 8144124
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case145-current-runtime-run001.v1.json",
+        "calls": 4,
+        "bytes": 10692844,
+        "repeat_bytes": 8019633
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case144-current-runtime-run001.v1.json",
+        "calls": 4,
+        "bytes": 10547740,
+        "repeat_bytes": 7910805
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case156-current-runtime-run001.v1.json",
+        "calls": 4,
+        "bytes": 10056628,
+        "repeat_bytes": 7542471
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case155-current-runtime-run001.v1.json",
+        "calls": 4,
+        "bytes": 9748220,
+        "repeat_bytes": 7311165
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case152-current-runtime-run001.v1.json",
+        "calls": 4,
+        "bytes": 9496272,
+        "repeat_bytes": 7122204
+      }
+    ],
+    "counts_only_no_payload_or_hash_or_JSON_cache": true
+  }
+}

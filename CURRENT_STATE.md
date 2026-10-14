@@ -2798,3 +2798,18 @@ current-PC Hangul 2020 readback/render fixture를 구현·검증한다. 권장 �
 
 
 
+
+<!-- BEGIN P09_R365_STATUS -->
+> 2026-10-14 P09 r365 — 새whole29 Binding 및 DATA039 원전체preflight 통과 후 단일run003실행·shared720중단 보존·큰증거호출지점집계. 공식153/249·잔여96·next160·generation48·delta0/P09-A12-A13 OPEN/P10 새구현0/목표ACTIVE.
+> r825 whole29 CODE43 43/43/원Rust787·bounded21·원64reads-262144byte/fresh1140-final1140/cost595.566609<600/CPU60.8%-부모6.10316%-RAM50.14707%/cleanupTrue. 실패r823-r824 보존. DATA039 actualpin·preflight039 PASS/import64/fresh1139-final1139/cost599.529630<600/CPU51.47%-RAM51.14017%/cleanupTrue·제품Native0. ea68187에먼저커밋.
+> 단일run003 STOPPED_NOT_ACCEPTED/final_source_freeze/shared720.02초. 제품본문·실제자식·GO-capture1.731614초 관측/Native읽기1회만완료/frameCLOSED/actual2801inputs-247714063bytes/핸들3173모두닫힘/cleanup-ownedemptyTrue. CPU62.81%-RAM49.35424%·부모5.61745%-private78.88672MiB/CPU보호중단아님·공식증가0·자동재시도0.
+> bootstrap343697750bytes/1262회/openwait47.31457초·Native원reserve227.11640초/CreateFileW0.33225초. 원Native600비용PASS가bootstrap포함shared720완료를보장하지않음/원scope-rate-deadline약화0.
+> r831 실제DATA039-pref039 전체Binding의큰158run005·159run001 호출지점만집계 PASS/fresh1141-final1141/343292792bytes/CPU56.81%-부모6.25255%-RAM50.06922%/cleanupTrue·제품Native0. 각5회호출이lineage/context/manifest/fresh/원binding/이전wholeoracle의다른경로로분포. 최대7frame·64entry·원내용-log출력0/진단SELF입력차이명시.
+> 다음 동일reader내기승인결과중복경로 검토·최초전체oracle-finalfresh-두Native읽기유지→새identity·변경scope비용-pref→단일제품·독립승인. 세실패runtime·권위153·성공159·user변경 보존/접근허용-UAC-OS변경-외부종료-삭제이동-push0/PCfreeze해결 미증명.
+> 근거 r825 및 r828-r831, implementation/p09/P09-361_CASE160_RUN003_PREFLIGHT_AND_STOP_R365.md.
+<!-- END P09_R365_STATUS -->
+
+
+
+
+
