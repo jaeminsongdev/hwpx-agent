@@ -463,3 +463,13 @@ run003 preflight001은70.103초·CPU81.44%,004는51.349초·CPU75.47%,005는5.68
 실제 Native003은입력 고정93.60초에 CPU95.12%로 중단됐다. 직전79.17%·parent0%에서 마지막parent0.191%·private51.719MiB·가용RAM37.338%·commit43.147%였다. directory372개와 regular154개 등526개 핸들은 모두 닫혔고 remaining0·Frame CLOSED·cleanup 및 빈 소유tree를 확인했다. worker/제품/실제byte boundaries는0·delta0이며 후속 독립 리뷰와 승인은 NOT_RUN이다. open with pacing37.727초 중 요청sleep37.132초, inspect0.0186초였고 기존 no-burst와14회/s 고정을 유지했다. CPU 급등을 코드 busy loop 또는 특정 프로세스 원인으로 확정하지 않는다.
 
 원 closed-prebody 검사를 실제root fresh1/final1에 적용해 통과했고 별도 재실행 없이 cleanup=True를 확인했다. root는2,287,325바이트·SHA256c425e8f636f632f5e8faf9f95b4f4edec89f6902a77a01b156620b1c526b733e다. 다음은 누적된 실패 증거까지 포함하는600초 비용과 Native 입력 고정 경로를 점검하는 것이다. 같은 고비용 실행을 즉시 반복하거나 OS설정·외부 프로세스를 변경하지 않는다. 근거는run003 factory002·CODE001·preflight001..006·entry001/002·해당 workspace 계수·preparation-rust-inventory-code001..004 및 current-runtime-run003이다.
+
+## 완전히 종료된 중단 기록의 무손실 표현
+
+누적 중단 증거의 물리 크기가 다음 실행의 준비 및 전체 입력 비용을 늘린다. 별도 closed_prebody_source_alias_v1은 원 판정으로 완전 종료가 확인된 같은 사례의 이전 실행만 정확한 원본 pin에 연결한다. 현재 또는 미래 실행, 제품 통과 기록, body나 worker가 실행된 기록, 불완전 정리 기록은 거부한다. 기존 projection·budget·handle·정리 검사 메서드와 일반 descriptor 판정은 유지한다. 공유 기본 모듈 대신 검증된 private namespace만 연결한다.
+
+현재 code002는14계약·fresh23/final23·3.672초·CPU55.13%·가용RAM40.080%·cleanup=True로 통과했다. producer002는 run002/003 원본4,809,014바이트를2,047,754바이트로 무손실 표현했다. 원본과 최종 복원 바이트를 검사했고 fresh28/final28·10.178초·CPU26.52%·가용RAM40.666%·cleanup=True였다. producer001의 필수 schema 누락은 projection001이 거부했다. 해당 실패를 보존하고 공통 producer_fields와 시험을 수정한 code002/producer002만 후속 검사에 사용했다.
+
+projection002는 기존60pair에 검증된2pair를 연결했다. 봉인된 이전 preflight 선언과 중단 원본의 논리 pin 전체2,985개를 변경 없이 유지하며 물리표현 합계를235,012,330→232,251,070바이트로2,761,260바이트 줄였다. 실제 읽은33개 입력은 모두 최종 fresh 해시를 완료했고15.266초·CPU34.18%·가용RAM41.428%·cleanup=True였다. 이는 선언된 범위의 표현 연결 검사이며 현재 전체 소스 바이트 재검증은 아니다. parent·worker·독립 oracle의 실제 실행 연결과 Native/제품 검증은 NOT_RUN이다.
+
+다음 작업은 이 구성요소를 실제 parent·worker·독립검사에 동일하게 연결하는 것이다. 연결 전 Native004를 반복하지 않는다. 기존 코드 자격과 통과한 결과는 해당 source pin이 유지되는 범위에서 재사용하고, 변경된 연결 및 이후 단계만 검증한다. 공식158/249·잔여91·next165·generation53과 P09/A12/A13 OPEN·목표ACTIVE를 유지한다. 근거는case165-closed-prebody-code001/002·sources001/002·projection001/002이며 원본과 실패 기록은 삭제하거나 덮어쓰지 않았다.
