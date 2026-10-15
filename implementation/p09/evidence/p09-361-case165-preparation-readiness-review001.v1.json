@@ -1,0 +1,166 @@
+{
+  "state": "REVIEWED_CURRENT_PREPARATION_AND_DISPATCH_NOT_NATIVE_OR_PRODUCT",
+  "contracts": {
+    "observer_and_existing_helpers": 30,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "preflight_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-successor-recovery-preflight-run008-attempt014.v1.json",
+    "bytes": 1197067,
+    "sha256": "f5b9e359845707bbba38e67620b2ffe58cf05f508175a019403e515575e39b39"
+  },
+  "dispatch_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-successor-recovery-dispatch-qualification-run008-attempt007.v1.json",
+    "bytes": 126549,
+    "sha256": "23a83015ca86c571769ba033b4eec2608e8c289eb843f5d5e81dca33ebe9f7f9"
+  },
+  "preflight": {
+    "inputs": 3094,
+    "Rust_inputs": 787,
+    "fresh": 595,
+    "final": 595,
+    "elapsed_seconds": 109.23525579999841,
+    "CPU_max": 77.61,
+    "cleanup_confirmed": true
+  },
+  "dispatch": {
+    "contracts": {
+      "run": 6,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "scope_inputs": 3118,
+    "runtime_default_imports": 60,
+    "actual_Native_helper_count": 64,
+    "fresh": 606,
+    "final": 606,
+    "elapsed_seconds": 119.55102069998975,
+    "CPU_max": 70.13,
+    "cleanup_confirmed": true,
+    "predicted_runtime_combined_seconds": 578.7243612561907,
+    "lock_deadline_seconds": 600,
+    "margin60_retained": true,
+    "aggregate_decoder5_retained": true,
+    "actual_completion_guaranteed": false
+  },
+  "observers": [
+    {
+      "pin": {
+        "path": "implementation/p09/evidence/p09-361-case165-preflight014-live-cpu-observer002.v1.json",
+        "bytes": 96380,
+        "sha256": "8c5acfc4a113f7552dd1890aa03b086bfab521f93bef34a87f6b9051dfca4f6f"
+      },
+      "sample_count": 106,
+      "target_terminal_observed": true,
+      "cleanup_confirmed": true,
+      "observer_work_seconds": 1.87668780014792,
+      "peaks": {
+        "system_CPU": {
+          "valid_samples": 106,
+          "maximum": 58.461538
+        },
+        "stage_CPU": {
+          "valid_samples": 105,
+          "maximum": 4.64684
+        },
+        "observer_CPU": {
+          "valid_samples": 106,
+          "maximum": 0.193424
+        },
+        "Defender_CPU": {
+          "valid_samples": 106,
+          "maximum": 3.9074382424391887
+        },
+        "System_CPU": {
+          "valid_samples": 106,
+          "maximum": 10.66890862971641
+        },
+        "DPC_CPU": {
+          "valid_samples": 106,
+          "maximum": 1.4320749596436124
+        },
+        "interrupt_CPU": {
+          "valid_samples": 106,
+          "maximum": 1.7195648150358251
+        }
+      },
+      "fixed_counter_disabled_reason": null
+    },
+    {
+      "pin": {
+        "path": "implementation/p09/evidence/p09-361-case165-qualify007-live-cpu-observer001.v1.json",
+        "bytes": 129344,
+        "sha256": "23700afe93404f40b3240c236fbf2af826bab49f4a2ad4087b8e22375859c66a"
+      },
+      "sample_count": 151,
+      "target_terminal_observed": true,
+      "cleanup_confirmed": true,
+      "observer_work_seconds": 4.107165300112683,
+      "peaks": {
+        "system_CPU": {
+          "valid_samples": 151,
+          "maximum": 58.021134
+        },
+        "stage_CPU": {
+          "valid_samples": 150,
+          "maximum": 6.318681
+        },
+        "observer_CPU": {
+          "valid_samples": 151,
+          "maximum": 0.192678
+        },
+        "Defender_CPU": {
+          "valid_samples": 13,
+          "maximum": 2.208634426669908
+        },
+        "System_CPU": {
+          "valid_samples": 13,
+          "maximum": 3.2553876988124246
+        },
+        "DPC_CPU": {
+          "valid_samples": 13,
+          "maximum": 1.4378355786467616
+        },
+        "interrupt_CPU": {
+          "valid_samples": 13,
+          "maximum": 1.2437240931633626
+        }
+      },
+      "fixed_counter_disabled_reason": "MEASUREMENT_COST_BUDGET_EXCEEDED"
+    }
+  ],
+  "observer_scope": {
+    "separate_read_only_process": true,
+    "verifier_not_modified_launched_or_terminated": true,
+    "one_CPU_BelowNormal": true,
+    "process_paths_or_commands_collected": false,
+    "process_PID_creation_identity_bound": true,
+    "process_and_PDH_intervals_not_atomic_or_identical_to_original_guard": true,
+    "all_system_CPU_attributed": false,
+    "Probe_summary_no_second_sampler_means_only_no_child_or_thread_inside_Probe": true
+  },
+  "preserved_failure": {
+    "pin": {
+      "path": "implementation/p09/evidence/p09-361-case165-preflight014-live-cpu-observer001.v1.json",
+      "bytes": 2211,
+      "sha256": "ddfd7f128388ac864fbc4bcaea66a9985f70f8d479fbb9a671dfbac0c2d841a2"
+    },
+    "reason": "Creation-time JSON integer rounded by orchestration; observer rejected identity mismatch and closed handle. Raw JSON preserved on corrected attach.",
+    "verifier_restarted": false
+  },
+  "interpretation": {
+    "previous97_percent_event_reproduced": false,
+    "cause_attributed_to_Defender": false,
+    "freeze_solved": false,
+    "full_Defender_coverage_for_dispatch": false,
+    "missing_or_disabled_counters_not_zero": true
+  },
+  "next_boundary": "Qualify exact Native CODE006/preflight014/dispatch007 reference routing on the whole original entry and original Native Guard; any added production source must join a fresh preparation scope before Native",
+  "Native008_started": false,
+  "product_or_Native_executed": false,
+  "GO_authorized": false,
+  "accepted_count_delta": 0
+}

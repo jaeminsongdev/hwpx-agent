@@ -4,7 +4,37 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. run008 제품 실행은 아직 시작하지 않았다.
 
-### 통합 진입점과 현재 준비 재검증
+### 현재 사전검사와 dispatch 자격
+
+v18의 실제 전체 사전검사014와 dispatch007이 모두 통과했다. 이전의 실제 Native helper66개 초과 문제는 공개 준비·worker 진입점 통합으로64개가 되어 기존 상한 안에서 닫혔다. 현재 CODE006·통합 진입점 CODE002·실제 EOF003은 다시 실행하지 않았다.
+
+| 현재 원 본문 실행 | 결과 |
+| --- | --- |
+| 사전검사014 | 입력계획3,094개·Rust 목록787개·기본 import60개, fresh595/final595, 109.235256초, CPU 최고77.61%, 가용RAM 최저25.55772%, cleanup=True |
+| dispatch007 | 원6계약, source scope3,118개·기본 import60개·실제 Native helper64개, fresh606/final606, 119.551021초, CPU 최고70.13%, 가용RAM 최저26.08234%, cleanup=True |
+| dispatch의 원 비용 모델 | 실제 모델 입력3,105개·디렉터리372개, 578.724361초/600초. 여유60초·합산 decoder5초·원1/2MiB와 acquisition14 유지. 실제 완료 보장은 아님 |
+
+dispatch007은 실제 CODE006과 사전검사014의 원 pin을 직접 읽었다. 원 controller 전체 소스 역변환 증명과 private namespace 소스 증명을 유지했다. 이것은 제품을 실행하지 않는 dispatch 구성 자격이며 실제 Native source frame·GO·제품 본문·제품 수용의 PASS가 아니다. Native metadata callback의 전체 admission도 그대로 남는다.
+
+`preparation_live_cpu_observer_v1.py`는 별도 한 CPU·BelowNormal 프로세스에서 조회만 한다. 명시적 PID와64비트 생성 시각을 함께 확인하고 QUERY_LIMITED·SYNCHRONIZE 권한만 열며, 대상 프로세스를 시작하거나 종료하지 않는다. 프로세스 명령줄·경로는 읽지 않고 기존 닫힌 이름 그룹과 고정 PDH7개만 사용한다. 조회는1초 간격·최대240표본/240초·총 관측 작업5초이며 기존 PDH의1회50ms/합산2초 제한도 유지한다. 관측 실패나 비용 초과는 유효값0으로 바꾸지 않는다. 새11개 및 기존19개 계약이30/30으로 통과했다.
+
+| 같은 실행의 관측 | 사전검사014 | dispatch007 |
+| --- | --- | --- |
+| 보존 표본과 종료 확인 | 106개·대상 종료 확인·정리 완료 | 151개·대상 종료 확인·정리 완료 |
+| 별도 관측 작업 시간 | 1.876688초 | 4.107165초 |
+| 검증기 CPU 최고 | 4.64684% | 6.318681% |
+| 관측기 CPU 최고 | 0.193424% | 0.192678% |
+| Defender 유효 표본 | 106개·최고3.907438% | 13개·최고2.208634% |
+
+dispatch의 PDH는14번째 수집에서68.44ms로50ms 비용 제한을 넘어 비활성화됐다. 이후 Defender·System·DPC 값은 미확인으로 남기고 프로세스 그룹 관측만 계속했다. 따라서13개 값으로 dispatch 전체의 Defender 부하를 단정하지 않는다. Probe 내부 요약의 추가 thread/process 없음은 Probe 자체가 자식을 만들지 않는다는 뜻이며, 이번 관측기 전체는 별도 프로세스다. 프로세스 시간 차이·PDH·원 Guard의 측정 창도 서로 같거나 원자적이지 않다.
+
+사전검사014의 첫 관측 연결은 도구 간 JSON 전달에서64비트 생성 시각이 반올림돼 identity mismatch로 거부됐다. 핸들은 정리됐고 검증기는 다시 시작하지 않았다. 원문 JSON 문자열을 숫자로 재해석하지 않고 전달해 두 번째 관측기에서 정확한 대상에 연결했다. 첫 실패 기록도 보존한다.
+
+두 실행에서 이전 시스템97% 급등은 재현되지 않았다. 현재 계측은 이전 프리즈의 원인을 확정하거나 Defender를 배제하는 근거가 아니다. 검증기·관측기의 같은 실행 부하와 확인 불가 범위를 분리했으며, OS·Defender·외부 작업 설정은 변경하지 않았다. 원본 근거와 pin은 `preparation-readiness-review001`에 모았다.
+
+남은 Native 진입 래퍼는 아직 과거 CODE001 참조를 고정하고 있다. 현재 CODE006·사전검사014·dispatch007을 원 Native 보호기와 연결하는 자격을 먼저 닫아야 한다. 준비용 CPU 정책을 Native에 적용하거나 기존 과거 참조로 실행하지 않는다. 새 실행 helper를 추가하면 그 소스·시험·자격 기록을 실제 준비 scope에 넣고 새 epoch를 확인한 뒤에만 Native008을 시작한다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작은 유지한다.
+
+### 통합 진입점 자격과 이전 사전검사 중단
 
 `xz_unified_runtime_v1.py`가 준비 연결과 실제 worker의 공개 진입점을 하나로 묶는다. 게시용 `xz_corpus_delivery_v1.py`를 로드하지 않고 필요한 codec pin과 기존 자원 관측 함수만 포함한다. 복구 함수6개와 관측 함수2개의 AST는 원본과 같고, 기존 v17 함수군은 전체 code object를 유지한 별도 명시적 namespace에서 연결한다. worker 경로와 v18 packet 정규식만 metadata로 변환하며 역변환을 확인한다. `sys.modules` 삭제·helper 상한 확대·실제 witness 누락은 없다.
 
@@ -24,7 +54,7 @@
 
 중단 뒤 코드 검토에서 새 통합 진입점의 while loop0개, 원 관측 AST 동일, 추가 sampler·스레드 없음과 작업 공간 반환을 확인했다. 같은 시점의 자기 CPU/RAM 폭주는 이 표본으로 지지되지 않지만, 검증 I/O와 외부 도구의 상호작용은 배제되지 않는다. Defender 읽기 전용 조회는 평균 검사 목표10%, 낮은 우선순위True, idle CPU throttle 해제False, 실시간 보호True였다. 구성 경로의 literal·상위 경로·wildcard 비교에서는 `D:\개발`, `D:\dev`, `D:\devdata`에 대한 일치를 찾지 못했지만 실제 파일별 제외 여부를 증명한 것은 아니다. 중단 당시 Defender CPU를 측정하지 않았고, 중단 후 표본에도 유효한 Defender CPU 값이 없어 원인으로 확정하지 않는다. 설정 변경은0이다.
 
-다음 경계는 같은 실행 구간의 외부 CPU 귀속을 제한적으로 확인하고 현재 전체 사전검사를 닫은 뒤, 실제 Native helper 합집합과600초 비용을 기존 dispatch 본문으로 검증하는 것이다. 현재 기본 import60은 실제 CODE의 결과지만 실제 Native 합집합≤64는 아직 미검증이다. Native008·제품 실행·GO·수용 증가는0이며 P09/공식158/249·잔여91·next165·P10 미시작을 유지한다. 진단 근거는 `xz-unified-resource-review001`이다.
+이후 같은 실행의 CPU 관측과 현재 전체 사전검사014·실제 dispatch007의 helper64·600초 비용 검증은 앞 절에서 완료했다. 이 절의013 중단은 실패 원본으로 보존하며 새 PASS로 덮어쓰지 않는다. Native008·제품 실행·GO·수용 증가는0이다. 당시 진단 근거는 `xz-unified-resource-review001`이다.
 
 ### 이전 v17 사전검사와 dispatch 구성 실패
 

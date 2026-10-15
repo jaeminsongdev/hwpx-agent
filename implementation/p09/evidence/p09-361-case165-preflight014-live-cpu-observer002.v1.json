@@ -1,0 +1,4292 @@
+{
+  "state": "RECORDED_SAME_RUN_PREPARATION_CPU_NOT_CAUSAL_OR_RUNTIME_QUALIFICATION",
+  "stage": "preflight",
+  "attempt": 14,
+  "target": {
+    "pid": 9640,
+    "creation_time_100ns": 134365590569349464
+  },
+  "source_pins": [
+    {
+      "path": "tools/p09/preparation_live_cpu_observer_v1.py",
+      "bytes": 9675,
+      "sha256": "737d01c3ad0f405d5bcba6562113e4f1b239e7bdd582ce8e2cdf0034421e03a7"
+    },
+    {
+      "path": "tools/p09/tests/test_preparation_live_cpu_observer_v1.py",
+      "bytes": 4901,
+      "sha256": "d898a344795af2976178d1284bb904190e5c3c9c1478101dae533159c33fe128"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/process_cpu_attribution.py",
+      "bytes": 10972,
+      "sha256": "22601ba74408e09951e470f33a092099d6fddbb8a8d47e0bcf9bb2f6cea57a82"
+    },
+    {
+      "path": "tools/p09/tests/test_process_cpu_attribution.py",
+      "bytes": 4174,
+      "sha256": "e8bd14bedc3834fb44b7e5a5e4822f0588b85c624e30be2f0193ce790dea6984"
+    },
+    {
+      "path": "tools/p09/serial_cpu_attribution.py",
+      "bytes": 7906,
+      "sha256": "28bd418112ede9cdec445a70e40b0c41c0f1f077faad8b8e4de4891a6ce082ea"
+    },
+    {
+      "path": "tools/p09/tests/test_serial_cpu_attribution.py",
+      "bytes": 4654,
+      "sha256": "657d001daef81b369e5ec3c69cdc6ee4803e5eec31043ea492c215baa2778373"
+    },
+    {
+      "path": "tools/p09/successor_preparation_workspace_v1.py",
+      "bytes": 9656,
+      "sha256": "003a0978b515c148d1a7f17ba53cdcab9eb77698535714216c90b53c868bbb98"
+    }
+  ],
+  "original_verifier_changed": false,
+  "verifier_process_launched_or_terminated": false,
+  "raw_process_commands_or_paths_recorded": false,
+  "product_or_Native_executed": false,
+  "GO_authorized": false,
+  "accepted_count_delta": 0,
+  "cause_or_PC_freeze_resolution_established": false,
+  "process_CPU_intervals_atomic_or_identical_to_original_Guard": false,
+  "all_system_CPU_attributed": false,
+  "samples": [
+    {
+      "elapsed_seconds": 1.027779,
+      "system_CPU": 33.557692,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.0,
+      "Defender_CPU": 0.7624249651846264,
+      "System_CPU": 2.763790498794271,
+      "DPC_CPU": 0.6671181848967151,
+      "interrupt_CPU": 0.5718114046088041,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.269231
+        ],
+        [
+          "OTHER",
+          7.211538
+        ],
+        [
+          "python.exe",
+          6.153846
+        ],
+        [
+          "git.exe",
+          5.480769
+        ],
+        [
+          "Codex.exe",
+          0.288462
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.01164,
+      "fixed_counter_seconds": 0.005944300006376579,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 2.04322,
+      "system_CPU": 37.151107,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096246,
+      "Defender_CPU": 0.3839409716249807,
+      "System_CPU": 0.6718967003437162,
+      "DPC_CPU": 0.2879569573298447,
+      "interrupt_CPU": 0.47993481480899025,
+      "process_groups": [
+        [
+          "OTHER",
+          9.817132
+        ],
+        [
+          "pwsh.exe",
+          7.892204
+        ],
+        [
+          "python.exe",
+          6.352262
+        ],
+        [
+          "git.exe",
+          5.774783
+        ],
+        [
+          "Codex.exe",
+          0.096246
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010676,
+      "fixed_counter_seconds": 0.004288899988750927,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 3.058216,
+      "system_CPU": 24.975985,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096061,
+      "Defender_CPU": 0.5766666040073549,
+      "System_CPU": 0.5766666040073549,
+      "DPC_CPU": 0.38443948178321574,
+      "interrupt_CPU": 0.2883246904490577,
+      "process_groups": [
+        [
+          "python.exe",
+          6.340058
+        ],
+        [
+          "git.exe",
+          5.85975
+        ],
+        [
+          "OTHER",
+          2.209414
+        ],
+        [
+          "pwsh.exe",
+          0.67243
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.01071,
+      "fixed_counter_seconds": 0.003528999994159676,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 4.091801,
+      "system_CPU": 58.461538,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 3.9074382424391887,
+      "System_CPU": 6.480629280143045,
+      "DPC_CPU": 0.7624269741344758,
+      "interrupt_CPU": 0.9530410369670463,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.942308
+        ],
+        [
+          "python.exe",
+          6.153846
+        ],
+        [
+          "OTHER",
+          5.192308
+        ],
+        [
+          "git.exe",
+          4.903846
+        ],
+        [
+          "Codex.exe",
+          3.173077
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 22,
+      "process_snapshot_seconds": 0.020558,
+      "fixed_counter_seconds": 0.012713200005237013,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 5.111539,
+      "system_CPU": 43.181818,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.189394,
+      "Defender_CPU": 1.618540182961671,
+      "System_CPU": 2.4754143974707916,
+      "DPC_CPU": 0.6664638157237299,
+      "interrupt_CPU": 0.9520800232345898,
+      "process_groups": [
+        [
+          "OTHER",
+          9.469697
+        ],
+        [
+          "python.exe",
+          6.534091
+        ],
+        [
+          "git.exe",
+          5.965909
+        ],
+        [
+          "Codex.exe",
+          0.378788
+        ],
+        [
+          "pwsh.exe",
+          0.189394
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 4,
+      "process_snapshot_seconds": 0.013245,
+      "fixed_counter_seconds": 0.0053736999980174005,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 6.1289,
+      "system_CPU": 43.653846,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.28752678798908815,
+      "System_CPU": 1.4376339399454408,
+      "DPC_CPU": 0.5750560295401004,
+      "interrupt_CPU": 0.6708921582983194,
+      "process_groups": [
+        [
+          "OTHER",
+          13.365385
+        ],
+        [
+          "git.exe",
+          11.346154
+        ],
+        [
+          "pwsh.exe",
+          7.019231
+        ],
+        [
+          "python.exe",
+          6.346154
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.011728,
+      "fixed_counter_seconds": 0.004805999997188337,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 7.149757,
+      "system_CPU": 36.923077,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.38348828305239496,
+      "System_CPU": 1.3422089906833823,
+      "DPC_CPU": 0.0958659349505699,
+      "interrupt_CPU": 0.28761743945180196,
+      "process_groups": [
+        [
+          "git.exe",
+          11.730769
+        ],
+        [
+          "pwsh.exe",
+          10.0
+        ],
+        [
+          "python.exe",
+          6.346154
+        ],
+        [
+          "OTHER",
+          3.846154
+        ],
+        [
+          "Codex.exe",
+          0.384615
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 2,
+      "process_snapshot_seconds": 0.013149,
+      "fixed_counter_seconds": 0.007029899992630817,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 8.17175,
+      "system_CPU": 50.662879,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.0,
+      "Defender_CPU": 1.719567260642596,
+      "System_CPU": 5.063170267447643,
+      "DPC_CPU": 0.3821309491341182,
+      "interrupt_CPU": 1.7195648150358251,
+      "process_groups": [
+        [
+          "git.exe",
+          11.458333
+        ],
+        [
+          "OTHER",
+          6.439394
+        ],
+        [
+          "python.exe",
+          6.25
+        ],
+        [
+          "Codex.exe",
+          0.94697
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 3,
+      "process_snapshot_seconds": 0.014816,
+      "fixed_counter_seconds": 0.006892000004881993,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 9.188468,
+      "system_CPU": 37.307692,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.0565460105363593,
+      "System_CPU": 2.0170423837512317,
+      "DPC_CPU": 0.28815014139981937,
+      "interrupt_CPU": 0.09605332562756036,
+      "process_groups": [
+        [
+          "git.exe",
+          12.019231
+        ],
+        [
+          "pwsh.exe",
+          6.826923
+        ],
+        [
+          "python.exe",
+          6.442308
+        ],
+        [
+          "OTHER",
+          5.961538
+        ],
+        [
+          "Codex.exe",
+          0.288462
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.01055,
+      "fixed_counter_seconds": 0.005804099986562505,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 10.202975,
+      "system_CPU": 34.423077,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.9591713800399437,
+      "System_CPU": 1.0550885180439382,
+      "DPC_CPU": 0.5754954615877675,
+      "interrupt_CPU": 0.28775264175134957,
+      "process_groups": [
+        [
+          "git.exe",
+          11.153846
+        ],
+        [
+          "pwsh.exe",
+          10.384615
+        ],
+        [
+          "python.exe",
+          6.442308
+        ],
+        [
+          "OTHER",
+          2.5
+        ],
+        [
+          "Codex.exe",
+          0.288462
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010956,
+      "fixed_counter_seconds": 0.0032767999946372584,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 11.219316,
+      "system_CPU": 29.326923,
+      "stage_CPU": 0.192308,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.4811165110294013,
+      "System_CPU": 0.5773398132352815,
+      "DPC_CPU": 0.09622699718068496,
+      "interrupt_CPU": 0.481115279371133,
+      "process_groups": [
+        [
+          "git.exe",
+          11.153846
+        ],
+        [
+          "python.exe",
+          6.730769
+        ],
+        [
+          "OTHER",
+          2.019231
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.011524,
+      "fixed_counter_seconds": 0.004533899991656654,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 12.23515,
+      "system_CPU": 46.730769,
+      "stage_CPU": 0.192308,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.4803527398176655,
+      "System_CPU": 3.842821918541324,
+      "DPC_CPU": 0.67249014663569,
+      "interrupt_CPU": 0.7685643837082649,
+      "process_groups": [
+        [
+          "git.exe",
+          10.673077
+        ],
+        [
+          "pwsh.exe",
+          10.192308
+        ],
+        [
+          "OTHER",
+          8.846154
+        ],
+        [
+          "python.exe",
+          6.442308
+        ],
+        [
+          "node.exe",
+          0.192308
+        ],
+        [
+          "Codex.exe",
+          0.096154
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.011281,
+      "fixed_counter_seconds": 0.004102399994735606,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 13.251133,
+      "system_CPU": 28.653846,
+      "stage_CPU": 0.192308,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.2884258694998556,
+      "System_CPU": 0.2884258694998556,
+      "DPC_CPU": 0.672999848584879,
+      "interrupt_CPU": 0.38457274846798023,
+      "process_groups": [
+        [
+          "git.exe",
+          10.865385
+        ],
+        [
+          "python.exe",
+          6.442308
+        ],
+        [
+          "OTHER",
+          2.403846
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.01169,
+      "fixed_counter_seconds": 0.004027100003440864,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 14.268375,
+      "system_CPU": 31.25,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.6726417300865577,
+      "System_CPU": 0.6726417300865577,
+      "DPC_CPU": 0.2882762571534026,
+      "interrupt_CPU": 0.1921808915064036,
+      "process_groups": [
+        [
+          "git.exe",
+          11.25
+        ],
+        [
+          "pwsh.exe",
+          7.307692
+        ],
+        [
+          "OTHER",
+          7.019231
+        ],
+        [
+          "Codex.exe",
+          0.384615
+        ],
+        [
+          "python.exe",
+          0.096154
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.011449,
+      "fixed_counter_seconds": 0.005110300000524148,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 15.28718,
+      "system_CPU": 35.576923,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.821649284537771,
+      "System_CPU": 0.4793813906678345,
+      "DPC_CPU": 0.19175010183441354,
+      "interrupt_CPU": 0.0,
+      "process_groups": [
+        [
+          "git.exe",
+          11.923077
+        ],
+        [
+          "pwsh.exe",
+          10.096154
+        ],
+        [
+          "OTHER",
+          6.634615
+        ],
+        [
+          "Codex.exe",
+          0.288462
+        ],
+        [
+          "python.exe",
+          0.192308
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 2,
+      "process_snapshot_seconds": 0.012559,
+      "fixed_counter_seconds": 0.005552900009206496,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 16.305151,
+      "system_CPU": 39.828897,
+      "stage_CPU": 0.855513,
+      "observer_CPU": 0.0,
+      "Defender_CPU": 0.3836626357821969,
+      "System_CPU": 3.357048063094223,
+      "DPC_CPU": 0.3836577249004589,
+      "interrupt_CPU": 0.9591541340146232,
+      "process_groups": [
+        [
+          "git.exe",
+          11.596958
+        ],
+        [
+          "OTHER",
+          10.646388
+        ],
+        [
+          "python.exe",
+          1.045627
+        ],
+        [
+          "Codex.exe",
+          0.760456
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.01223,
+      "fixed_counter_seconds": 0.004883700006757863,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 17.323599,
+      "system_CPU": 23.394056,
+      "stage_CPU": 0.095877,
+      "observer_CPU": 0.095877,
+      "Defender_CPU": 0.5755686311105436,
+      "System_CPU": 0.5755686311105436,
+      "DPC_CPU": 0.28778554343501817,
+      "interrupt_CPU": 0.4796392980457066,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.053691
+        ],
+        [
+          "git.exe",
+          5.27325
+        ],
+        [
+          "OTHER",
+          4.697987
+        ],
+        [
+          "python.exe",
+          0.191755
+        ],
+        [
+          "Codex.exe",
+          0.095877
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.012589,
+      "fixed_counter_seconds": 0.005497599995578639,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 18.338253,
+      "system_CPU": 21.229587,
+      "stage_CPU": 0.288184,
+      "observer_CPU": 0.096061,
+      "Defender_CPU": 0.48017314235285813,
+      "System_CPU": 0.6722423992940013,
+      "DPC_CPU": 0.19206679845465438,
+      "interrupt_CPU": 0.38414343085526415,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          7.973103
+        ],
+        [
+          "git.exe",
+          5.091258
+        ],
+        [
+          "OTHER",
+          4.610951
+        ],
+        [
+          "python.exe",
+          0.384246
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010949,
+      "fixed_counter_seconds": 0.003337000001920387,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 19.383267,
+      "system_CPU": 30.221367,
+      "stage_CPU": 3.368624,
+      "observer_CPU": 0.192493,
+      "Defender_CPU": 0.1892534009653728,
+      "System_CPU": 1.0408937053095506,
+      "DPC_CPU": 0.47314198096579535,
+      "interrupt_CPU": 0.5677529355655214,
+      "process_groups": [
+        [
+          "OTHER",
+          10.587103
+        ],
+        [
+          "git.exe",
+          5.389798
+        ],
+        [
+          "python.exe",
+          3.657363
+        ],
+        [
+          "Codex.exe",
+          0.288739
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.026916,
+      "fixed_counter_seconds": 0.01688710000598803,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 20.40202,
+      "system_CPU": 28.731343,
+      "stage_CPU": 2.705224,
+      "observer_CPU": 0.093284,
+      "Defender_CPU": 0.85296477636692,
+      "System_CPU": 2.748442057182298,
+      "DPC_CPU": 0.18954530187061833,
+      "interrupt_CPU": 0.8529684156832992,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.208955
+        ],
+        [
+          "OTHER",
+          5.597015
+        ],
+        [
+          "git.exe",
+          5.317164
+        ],
+        [
+          "python.exe",
+          2.798507
+        ],
+        [
+          "node.exe",
+          0.466418
+        ],
+        [
+          "Codex.exe",
+          0.373134
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.013435,
+      "fixed_counter_seconds": 0.004820699992706068,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 21.421717,
+      "system_CPU": 40.92219,
+      "stage_CPU": 0.288184,
+      "observer_CPU": 0.192123,
+      "Defender_CPU": 2.7767361591475828,
+      "System_CPU": 4.308728522815215,
+      "DPC_CPU": 0.2872497937815719,
+      "interrupt_CPU": 0.6702429823229161,
+      "process_groups": [
+        [
+          "OTHER",
+          9.125841
+        ],
+        [
+          "git.exe",
+          4.995197
+        ],
+        [
+          "Codex.exe",
+          0.864553
+        ],
+        [
+          "python.exe",
+          0.67243
+        ],
+        [
+          "node.exe",
+          0.480307
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 3,
+      "process_snapshot_seconds": 0.013159,
+      "fixed_counter_seconds": 0.005028600004152395,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 22.439771,
+      "system_CPU": 52.5,
+      "stage_CPU": 0.192308,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.6313000208020307,
+      "System_CPU": 2.398970618826516,
+      "DPC_CPU": 0.3838303859204152,
+      "interrupt_CPU": 0.3838402121040699,
+      "process_groups": [
+        [
+          "OTHER",
+          23.75
+        ],
+        [
+          "pwsh.exe",
+          7.115385
+        ],
+        [
+          "git.exe",
+          5.096154
+        ],
+        [
+          "Codex.exe",
+          0.480769
+        ],
+        [
+          "python.exe",
+          0.288462
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.012814,
+      "fixed_counter_seconds": 0.00500409999222029,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 23.457659,
+      "system_CPU": 29.423077,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.0,
+      "Defender_CPU": 1.0551000210878811,
+      "System_CPU": 1.246936388558405,
+      "DPC_CPU": 0.2877557789585376,
+      "interrupt_CPU": 0.19183391196502025,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          9.615385
+        ],
+        [
+          "OTHER",
+          9.423077
+        ],
+        [
+          "git.exe",
+          5.576923
+        ],
+        [
+          "Codex.exe",
+          0.096154
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "python.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 2,
+      "process_snapshot_seconds": 0.012819,
+      "fixed_counter_seconds": 0.004687100008595735,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 24.472908,
+      "system_CPU": 28.200192,
+      "stage_CPU": 0.288739,
+      "observer_CPU": 0.096246,
+      "Defender_CPU": 1.2491948573994793,
+      "System_CPU": 3.5554007479831338,
+      "DPC_CPU": 0.0960956020370772,
+      "interrupt_CPU": 0.4804583305617864,
+      "process_groups": [
+        [
+          "git.exe",
+          4.81232
+        ],
+        [
+          "OTHER",
+          3.079885
+        ],
+        [
+          "pwsh.exe",
+          1.732435
+        ],
+        [
+          "python.exe",
+          0.481232
+        ],
+        [
+          "Codex.exe",
+          0.096246
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 2,
+      "process_snapshot_seconds": 0.011224,
+      "fixed_counter_seconds": 0.0033290999999735504,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 25.487668,
+      "system_CPU": 28.392685,
+      "stage_CPU": 0.481232,
+      "observer_CPU": 0.096246,
+      "Defender_CPU": 0.7697160361136478,
+      "System_CPU": 0.9621450451420597,
+      "DPC_CPU": 0.19242654593709638,
+      "interrupt_CPU": 0.7697160361136478,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.27719
+        ],
+        [
+          "python.exe",
+          6.833494
+        ],
+        [
+          "git.exe",
+          5.004812
+        ],
+        [
+          "OTHER",
+          4.234841
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.011076,
+      "fixed_counter_seconds": 0.003410800010897219,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 26.509776,
+      "system_CPU": 34.069098,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.095969,
+      "Defender_CPU": 0.38339516403374996,
+      "System_CPU": 1.6294294471434374,
+      "DPC_CPU": 0.2875475998898374,
+      "interrupt_CPU": 0.5750951997796748,
+      "process_groups": [
+        [
+          "OTHER",
+          10.940499
+        ],
+        [
+          "python.exe",
+          6.525912
+        ],
+        [
+          "git.exe",
+          5.758157
+        ],
+        [
+          "Codex.exe",
+          0.287908
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.013579,
+      "fixed_counter_seconds": 0.007060699994326569,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 27.526104,
+      "system_CPU": 28.503337,
+      "stage_CPU": 0.095329,
+      "observer_CPU": 0.095329,
+      "Defender_CPU": 0.6707356799419449,
+      "System_CPU": 1.0540132113373422,
+      "DPC_CPU": 0.38327262544299523,
+      "interrupt_CPU": 0.2874593750346483,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          6.673022
+        ],
+        [
+          "OTHER",
+          6.387035
+        ],
+        [
+          "git.exe",
+          5.338418
+        ],
+        [
+          "Codex.exe",
+          0.381316
+        ],
+        [
+          "python.exe",
+          0.190658
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.0116,
+      "fixed_counter_seconds": 0.004145900005823933,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 28.548786,
+      "system_CPU": 26.124402,
+      "stage_CPU": 0.191388,
+      "observer_CPU": 0.095694,
+      "Defender_CPU": 1.148867436065129,
+      "System_CPU": 4.595469744260516,
+      "DPC_CPU": 0.5744361689497615,
+      "interrupt_CPU": 0.47869353956853855,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          9.569378
+        ],
+        [
+          "git.exe",
+          5.358852
+        ],
+        [
+          "OTHER",
+          3.062201
+        ],
+        [
+          "python.exe",
+          0.287081
+        ],
+        [
+          "Codex.exe",
+          0.191388
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 2,
+      "process_snapshot_seconds": 0.016409,
+      "fixed_counter_seconds": 0.005954699998255819,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 29.56711,
+      "system_CPU": 32.821497,
+      "stage_CPU": 0.191939,
+      "observer_CPU": 0.095969,
+      "Defender_CPU": 1.054187500785082,
+      "System_CPU": 2.012539774226066,
+      "DPC_CPU": 0.4791749100295819,
+      "interrupt_CPU": 0.7666818187527871,
+      "process_groups": [
+        [
+          "OTHER",
+          7.773512
+        ],
+        [
+          "git.exe",
+          5.566219
+        ],
+        [
+          "pwsh.exe",
+          2.111324
+        ],
+        [
+          "node.exe",
+          0.479846
+        ],
+        [
+          "python.exe",
+          0.479846
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 2,
+      "process_snapshot_seconds": 0.012107,
+      "fixed_counter_seconds": 0.005470399992191233,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 30.590756,
+      "system_CPU": 32.307692,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.0501838229543379,
+      "System_CPU": 2.864137698966376,
+      "DPC_CPU": 1.4320749596436124,
+      "interrupt_CPU": 0.8592449757861674,
+      "process_groups": [
+        [
+          "OTHER",
+          11.442308
+        ],
+        [
+          "pwsh.exe",
+          7.5
+        ],
+        [
+          "git.exe",
+          5.288462
+        ],
+        [
+          "Codex.exe",
+          0.288462
+        ],
+        [
+          "python.exe",
+          0.096154
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.016834,
+      "fixed_counter_seconds": 0.006141399993794039,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 31.607608,
+      "system_CPU": 29.07197,
+      "stage_CPU": 0.284091,
+      "observer_CPU": 0.189394,
+      "Defender_CPU": 0.4796180058833306,
+      "System_CPU": 2.398090029416653,
+      "DPC_CPU": 0.959233556122471,
+      "interrupt_CPU": 0.38368949341828423,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.522727
+        ],
+        [
+          "OTHER",
+          8.238636
+        ],
+        [
+          "git.exe",
+          5.30303
+        ],
+        [
+          "python.exe",
+          0.473485
+        ],
+        [
+          "Codex.exe",
+          0.189394
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.011651,
+      "fixed_counter_seconds": 0.0048177999997278675,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 32.631491,
+      "system_CPU": 33.75,
+      "stage_CPU": 0.480769,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.6234781447112403,
+      "System_CPU": 4.965933148528499,
+      "DPC_CPU": 0.38198996804493834,
+      "interrupt_CPU": 0.5729947311357615,
+      "process_groups": [
+        [
+          "OTHER",
+          5.769231
+        ],
+        [
+          "git.exe",
+          5.480769
+        ],
+        [
+          "python.exe",
+          0.673077
+        ],
+        [
+          "Codex.exe",
+          0.288462
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 5,
+      "process_snapshot_seconds": 0.017403,
+      "fixed_counter_seconds": 0.006069900002330542,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 33.654151,
+      "system_CPU": 42.571429,
+      "stage_CPU": 0.190476,
+      "observer_CPU": 0.190476,
+      "Defender_CPU": 0.5729370988768061,
+      "System_CPU": 1.0503846812741446,
+      "DPC_CPU": 0.3819629549811145,
+      "interrupt_CPU": 0.4774463601315275,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          10.666667
+        ],
+        [
+          "OTHER",
+          10.190476
+        ],
+        [
+          "python.exe",
+          6.47619
+        ],
+        [
+          "git.exe",
+          5.52381
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.015896,
+      "fixed_counter_seconds": 0.006034900012309663,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 34.67574,
+      "system_CPU": 34.512428,
+      "stage_CPU": 0.095602,
+      "observer_CPU": 0.095602,
+      "Defender_CPU": 1.241821007670636,
+      "System_CPU": 1.4328703934661184,
+      "DPC_CPU": 0.19104694036334427,
+      "interrupt_CPU": 0.6686691821359813,
+      "process_groups": [
+        [
+          "python.exe",
+          12.619503
+        ],
+        [
+          "OTHER",
+          4.971319
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 4,
+      "process_snapshot_seconds": 0.015429,
+      "fixed_counter_seconds": 0.0057773000007728115,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 35.696276,
+      "system_CPU": 35.645472,
+      "stage_CPU": 0.096339,
+      "observer_CPU": 0.096339,
+      "Defender_CPU": 1.6265026098011268,
+      "System_CPU": 1.4351493615892295,
+      "DPC_CPU": 0.19135079889032017,
+      "interrupt_CPU": 0.7654129928475891,
+      "process_groups": [
+        [
+          "python.exe",
+          12.427746
+        ],
+        [
+          "pwsh.exe",
+          6.840077
+        ],
+        [
+          "OTHER",
+          6.743738
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.014806,
+      "fixed_counter_seconds": 0.0052404000016395,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 36.721211,
+      "system_CPU": 40.831758,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.094518,
+      "Defender_CPU": 1.0489380834628452,
+      "System_CPU": 3.2421722579760672,
+      "DPC_CPU": 0.38143691268011404,
+      "interrupt_CPU": 1.0489393040453423,
+      "process_groups": [
+        [
+          "OTHER",
+          11.342155
+        ],
+        [
+          "pwsh.exe",
+          10.964083
+        ],
+        [
+          "python.exe",
+          4.536862
+        ],
+        [
+          "Codex.exe",
+          0.189036
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 3,
+      "process_snapshot_seconds": 0.01748,
+      "fixed_counter_seconds": 0.006562100010341965,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 37.742638,
+      "system_CPU": 25.288462,
+      "stage_CPU": 0.192308,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.9563502291764026,
+      "System_CPU": 2.0083354812704455,
+      "DPC_CPU": 0.19126759757869383,
+      "interrupt_CPU": 0.3825449881837344,
+      "process_groups": [
+        [
+          "OTHER",
+          4.711538
+        ],
+        [
+          "python.exe",
+          0.384615
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 3,
+      "process_snapshot_seconds": 0.014547,
+      "fixed_counter_seconds": 0.0061590999976033345,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 38.763923,
+      "system_CPU": 19.563153,
+      "stage_CPU": 0.189934,
+      "observer_CPU": 0.094967,
+      "Defender_CPU": 0.38296215701541575,
+      "System_CPU": 0.8616648532846855,
+      "DPC_CPU": 0.19147862754990297,
+      "interrupt_CPU": 0.47870147079036723,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          7.502374
+        ],
+        [
+          "OTHER",
+          5.603039
+        ],
+        [
+          "python.exe",
+          0.2849
+        ],
+        [
+          "Codex.exe",
+          0.094967
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 2,
+      "process_snapshot_seconds": 0.012534,
+      "fixed_counter_seconds": 0.008107200002996251,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 39.781089,
+      "system_CPU": 27.133269,
+      "stage_CPU": 0.095877,
+      "observer_CPU": 0.095877,
+      "Defender_CPU": 1.2443617928876207,
+      "System_CPU": 0.8614812412298911,
+      "DPC_CPU": 0.2871616389610624,
+      "interrupt_CPU": 0.19143782539333412,
+      "process_groups": [
+        [
+          "OTHER",
+          11.025887
+        ],
+        [
+          "pwsh.exe",
+          8.820709
+        ],
+        [
+          "python.exe",
+          0.191755
+        ],
+        [
+          "Codex.exe",
+          0.095877
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.011474,
+      "fixed_counter_seconds": 0.0050460999918868765,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 40.796996,
+      "system_CPU": 24.615385,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.6725962630225705,
+      "System_CPU": 4.612088660726198,
+      "DPC_CPU": 0.19216790108297252,
+      "interrupt_CPU": 0.6726024124741181,
+      "process_groups": [
+        [
+          "OTHER",
+          9.038462
+        ],
+        [
+          "python.exe",
+          0.384615
+        ],
+        [
+          "Codex.exe",
+          0.192308
+        ],
+        [
+          "pwsh.exe",
+          0.192308
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010829,
+      "fixed_counter_seconds": 0.0046975000004749745,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 41.814864,
+      "system_CPU": 24.423077,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.3839915460421223,
+      "System_CPU": 0.19199577302106116,
+      "DPC_CPU": 0.09600157282937259,
+      "interrupt_CPU": 0.2879850581209604,
+      "process_groups": [
+        [
+          "OTHER",
+          10.576923
+        ],
+        [
+          "pwsh.exe",
+          9.519231
+        ],
+        [
+          "Codex.exe",
+          0.096154
+        ],
+        [
+          "python.exe",
+          0.096154
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.012054,
+      "fixed_counter_seconds": 0.005035700000007637,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 42.832571,
+      "system_CPU": 22.307692,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.3835443117518861,
+      "System_CPU": 1.8218354808214587,
+      "DPC_CPU": 0.19176970119234785,
+      "interrupt_CPU": 0.28765946115571217,
+      "process_groups": [
+        [
+          "OTHER",
+          9.134615
+        ],
+        [
+          "Codex.exe",
+          0.192308
+        ],
+        [
+          "python.exe",
+          0.192308
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 158,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.012568,
+      "fixed_counter_seconds": 0.0048854999913601205,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 43.851544,
+      "system_CPU": 20.769231,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.44078452151065,
+      "System_CPU": 0.4802615071702167,
+      "DPC_CPU": 0.09605598984241841,
+      "interrupt_CPU": 0.19211197968483681,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          7.884615
+        ],
+        [
+          "OTHER",
+          5.096154
+        ],
+        [
+          "Codex.exe",
+          0.576923
+        ],
+        [
+          "python.exe",
+          0.192308
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.012153,
+      "fixed_counter_seconds": 0.006487399994512089,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 44.864878,
+      "system_CPU": 18.024928,
+      "stage_CPU": 0.287632,
+      "observer_CPU": 0.095877,
+      "Defender_CPU": 0.7681307115127186,
+      "System_CPU": 2.688457490294515,
+      "DPC_CPU": 0.28805024582640787,
+      "interrupt_CPU": 0.7681307115127186,
+      "process_groups": [
+        [
+          "OTHER",
+          2.205177
+        ],
+        [
+          "python.exe",
+          0.479386
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.00972,
+      "fixed_counter_seconds": 0.003318899995065294,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 45.876822,
+      "system_CPU": 12.536162,
+      "stage_CPU": 0.096432,
+      "observer_CPU": 0.096432,
+      "Defender_CPU": 0.3861251362743721,
+      "System_CPU": 0.4826564203429651,
+      "DPC_CPU": 0.3861201938726278,
+      "interrupt_CPU": 0.28958520300272655,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          7.232401
+        ],
+        [
+          "OTHER",
+          3.085824
+        ],
+        [
+          "python.exe",
+          0.192864
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.008445,
+      "fixed_counter_seconds": 0.003259199991589412,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 46.893647,
+      "system_CPU": 27.115385,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 2.018204602233508,
+      "System_CPU": 0.7688398484699078,
+      "DPC_CPU": 0.288316173319973,
+      "interrupt_CPU": 0.288316173319973,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          10.480769
+        ],
+        [
+          "OTHER",
+          4.903846
+        ],
+        [
+          "Codex.exe",
+          0.288462
+        ],
+        [
+          "python.exe",
+          0.192308
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 3,
+      "process_snapshot_seconds": 0.012716,
+      "fixed_counter_seconds": 0.003686500000185333,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 47.910372,
+      "system_CPU": 20.865385,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.440763406725355,
+      "System_CPU": 0.9605089378169033,
+      "DPC_CPU": 0.384208492932523,
+      "interrupt_CPU": 0.384208492932523,
+      "process_groups": [
+        [
+          "python.exe",
+          9.326923
+        ],
+        [
+          "OTHER",
+          4.615385
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.012069,
+      "fixed_counter_seconds": 0.003983400005381554,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 48.925358,
+      "system_CPU": 23.461538,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.8276065230350265,
+      "System_CPU": 3.5590232290682096,
+      "DPC_CPU": 0.38475434308874346,
+      "interrupt_CPU": 0.8657021968683034,
+      "process_groups": [
+        [
+          "python.exe",
+          11.057692
+        ],
+        [
+          "OTHER",
+          4.230769
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.01095,
+      "fixed_counter_seconds": 0.003686500000185333,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 49.945814,
+      "system_CPU": 18.60687,
+      "stage_CPU": 0.28626,
+      "observer_CPU": 0.0,
+      "Defender_CPU": 1.1497561069893496,
+      "System_CPU": 0.670691062410454,
+      "DPC_CPU": 0.2874402531538515,
+      "interrupt_CPU": 0.2874402531538515,
+      "process_groups": [
+        [
+          "python.exe",
+          12.022901
+        ],
+        [
+          "OTHER",
+          3.148855
+        ],
+        [
+          "Codex.exe",
+          0.28626
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.014823,
+      "fixed_counter_seconds": 0.004578899999614805,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 50.961848,
+      "system_CPU": 18.111753,
+      "stage_CPU": 0.192678,
+      "observer_CPU": 0.096339,
+      "Defender_CPU": 1.824434211839504,
+      "System_CPU": 1.056251385801818,
+      "DPC_CPU": 0.48011303718103204,
+      "interrupt_CPU": 0.3840963293889296,
+      "process_groups": [
+        [
+          "OTHER",
+          4.624277
+        ],
+        [
+          "python.exe",
+          0.289017
+        ],
+        [
+          "Codex.exe",
+          0.192678
+        ],
+        [
+          "pwsh.exe",
+          0.096339
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 4,
+      "process_snapshot_seconds": 0.011364,
+      "fixed_counter_seconds": 0.003989699995145202,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 52.010595,
+      "system_CPU": 25.81262,
+      "stage_CPU": 1.338432,
+      "observer_CPU": 0.095602,
+      "Defender_CPU": 2.5501298557857517,
+      "System_CPU": 2.739028363621733,
+      "DPC_CPU": 0.09445288076934125,
+      "interrupt_CPU": 1.038943002048349,
+      "process_groups": [
+        [
+          "python.exe",
+          7.552581
+        ],
+        [
+          "OTHER",
+          4.206501
+        ],
+        [
+          "Codex.exe",
+          0.286807
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.028953,
+      "fixed_counter_seconds": 0.018284200006746687,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 53.026598,
+      "system_CPU": 20.63197,
+      "stage_CPU": 4.64684,
+      "observer_CPU": 0.092937,
+      "Defender_CPU": 1.1376390055314374,
+      "System_CPU": 2.7492942633676405,
+      "DPC_CPU": 0.4740150388231597,
+      "interrupt_CPU": 0.9480300776463194,
+      "process_groups": [
+        [
+          "python.exe",
+          7.713755
+        ],
+        [
+          "OTHER",
+          2.32342
+        ],
+        [
+          "Codex.exe",
+          0.185874
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010637,
+      "fixed_counter_seconds": 0.005054900000686757,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 54.043154,
+      "system_CPU": 11.702128,
+      "stage_CPU": 0.096712,
+      "observer_CPU": 0.193424,
+      "Defender_CPU": 0.28821155883108995,
+      "System_CPU": 0.5764231176621799,
+      "DPC_CPU": 0.1921385798154246,
+      "interrupt_CPU": 0.28821278853374094,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          7.059961
+        ],
+        [
+          "OTHER",
+          2.224371
+        ],
+        [
+          "python.exe",
+          0.290135
+        ],
+        [
+          "Codex.exe",
+          0.096712
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.011501,
+      "fixed_counter_seconds": 0.0046430000074906275,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 55.058601,
+      "system_CPU": 13.288719,
+      "stage_CPU": 0.286807,
+      "observer_CPU": 0.095602,
+      "Defender_CPU": 0.3846264429214851,
+      "System_CPU": 0.28846983219111383,
+      "DPC_CPU": 0.0,
+      "interrupt_CPU": 0.480781822847239,
+      "process_groups": [
+        [
+          "OTHER",
+          2.581262
+        ],
+        [
+          "python.exe",
+          0.478011
+        ],
+        [
+          "Codex.exe",
+          0.095602
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010841,
+      "fixed_counter_seconds": 0.004205999997793697,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 56.095672,
+      "system_CPU": 24.326923,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.9603443959107387,
+      "System_CPU": 0.768275516728591,
+      "DPC_CPU": 0.28810454801404833,
+      "interrupt_CPU": 0.1920664207004942,
+      "process_groups": [
+        [
+          "OTHER",
+          8.173077
+        ],
+        [
+          "pwsh.exe",
+          6.923077
+        ],
+        [
+          "Codex.exe",
+          0.288462
+        ],
+        [
+          "python.exe",
+          0.192308
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 5,
+      "process_snapshot_seconds": 0.011574,
+      "fixed_counter_seconds": 0.02494049999222625,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 57.114254,
+      "system_CPU": 29.545455,
+      "stage_CPU": 0.189394,
+      "observer_CPU": 0.094697,
+      "Defender_CPU": 0.6587127213467464,
+      "System_CPU": 3.1053599720632334,
+      "DPC_CPU": 0.3764120873540455,
+      "interrupt_CPU": 0.5646133130180208,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.901515
+        ],
+        [
+          "python.exe",
+          6.439394
+        ],
+        [
+          "OTHER",
+          3.693182
+        ],
+        [
+          "Codex.exe",
+          0.094697
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.012226,
+      "fixed_counter_seconds": 0.005601500000921078,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 58.129611,
+      "system_CPU": 18.173077,
+      "stage_CPU": 0.192308,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.672188261239762,
+      "System_CPU": 0.3841075778512926,
+      "DPC_CPU": 0.0,
+      "interrupt_CPU": 0.2880819125327186,
+      "process_groups": [
+        [
+          "python.exe",
+          6.538462
+        ],
+        [
+          "OTHER",
+          2.692308
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010562,
+      "fixed_counter_seconds": 0.004301599998143502,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 59.145153,
+      "system_CPU": 20.961538,
+      "stage_CPU": 0.192308,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.577341462958018,
+      "System_CPU": 0.3848943086386787,
+      "DPC_CPU": 0.09621741885073146,
+      "interrupt_CPU": 0.19244469099576408,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.653846
+        ],
+        [
+          "python.exe",
+          6.538462
+        ],
+        [
+          "OTHER",
+          2.884615
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010759,
+      "fixed_counter_seconds": 0.004114099996513687,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 60.18375,
+      "system_CPU": 26.634615,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.192308,
+      "Defender_CPU": 0.5644410450209015,
+      "System_CPU": 1.975543657573155,
+      "DPC_CPU": 0.0,
+      "interrupt_CPU": 0.9407326667530438,
+      "process_groups": [
+        [
+          "OTHER",
+          9.519231
+        ],
+        [
+          "python.exe",
+          6.826923
+        ],
+        [
+          "Codex.exe",
+          0.288462
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.033157,
+      "fixed_counter_seconds": 0.004885000002104789,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 61.197457,
+      "system_CPU": 21.857411,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.093809,
+      "Defender_CPU": 0.09616277479351437,
+      "System_CPU": 1.4424416219027154,
+      "DPC_CPU": 0.28848955526406045,
+      "interrupt_CPU": 0.28848955526406045,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          9.474672
+        ],
+        [
+          "python.exe",
+          6.285178
+        ],
+        [
+          "OTHER",
+          1.782364
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010283,
+      "fixed_counter_seconds": 0.002907200003392063,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 62.21315,
+      "system_CPU": 26.371511,
+      "stage_CPU": 2.694899,
+      "observer_CPU": 0.0,
+      "Defender_CPU": 0.7696682628806508,
+      "System_CPU": 0.7696682628806508,
+      "DPC_CPU": 0.38483905731720786,
+      "interrupt_CPU": 0.19241460278172148,
+      "process_groups": [
+        [
+          "python.exe",
+          8.950914
+        ],
+        [
+          "OTHER",
+          3.46487
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.011015,
+      "fixed_counter_seconds": 0.004248099998221733,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 63.230939,
+      "system_CPU": 20.404235,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096246,
+      "Defender_CPU": 0.2881058119992644,
+      "System_CPU": 0.09603527066642147,
+      "DPC_CPU": 0.3841361656598278,
+      "interrupt_CPU": 0.19207791684163011,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          9.528393
+        ],
+        [
+          "python.exe",
+          6.352262
+        ],
+        [
+          "OTHER",
+          2.309913
+        ],
+        [
+          "Codex.exe",
+          0.384986
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.012034,
+      "fixed_counter_seconds": 0.005224900000030175,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 64.245221,
+      "system_CPU": 28.339695,
+      "stage_CPU": 0.09542,
+      "observer_CPU": 0.19084,
+      "Defender_CPU": 0.7689303516912728,
+      "System_CPU": 10.66890862971641,
+      "DPC_CPU": 0.09611998482709722,
+      "interrupt_CPU": 0.38446025469138556,
+      "process_groups": [
+        [
+          "python.exe",
+          6.29771
+        ],
+        [
+          "OTHER",
+          1.812977
+        ],
+        [
+          "Codex.exe",
+          0.19084
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010244,
+      "fixed_counter_seconds": 0.003428600000916049,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 65.262906,
+      "system_CPU": 20.500481,
+      "stage_CPU": 0.096246,
+      "observer_CPU": 0.096246,
+      "Defender_CPU": 0.5766702930565231,
+      "System_CPU": 0.5766702930565231,
+      "DPC_CPU": 0.0961055643596279,
+      "interrupt_CPU": 0.19222097055892398,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.854668
+        ],
+        [
+          "python.exe",
+          6.448508
+        ],
+        [
+          "OTHER",
+          1.732435
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.012218,
+      "fixed_counter_seconds": 0.00513219999265857,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 66.277388,
+      "system_CPU": 24.01537,
+      "stage_CPU": 0.096061,
+      "observer_CPU": 0.096061,
+      "Defender_CPU": 0.288284615088655,
+      "System_CPU": 0.9609487169621834,
+      "DPC_CPU": 0.19219712347858295,
+      "interrupt_CPU": 0.5765716902060254,
+      "process_groups": [
+        [
+          "python.exe",
+          6.628242
+        ],
+        [
+          "OTHER",
+          2.881844
+        ],
+        [
+          "pwsh.exe",
+          0.096061
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010705,
+      "fixed_counter_seconds": 0.0032070999877760187,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 67.294631,
+      "system_CPU": 23.864734,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096618,
+      "Defender_CPU": 0.38464197106842485,
+      "System_CPU": 0.48080246383553105,
+      "DPC_CPU": 0.19231852382559758,
+      "interrupt_CPU": 0.4808012329812237,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.405797
+        ],
+        [
+          "python.exe",
+          6.376812
+        ],
+        [
+          "OTHER",
+          2.898551
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.012155,
+      "fixed_counter_seconds": 0.004397700002300553,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 68.309152,
+      "system_CPU": 24.880383,
+      "stage_CPU": 0.095694,
+      "observer_CPU": 0.095694,
+      "Defender_CPU": 0.7689761411187611,
+      "System_CPU": 3.8448807055938055,
+      "DPC_CPU": 0.5767345665627225,
+      "interrupt_CPU": 0.5767345665627225,
+      "process_groups": [
+        [
+          "python.exe",
+          6.507177
+        ],
+        [
+          "OTHER",
+          3.062201
+        ],
+        [
+          "pwsh.exe",
+          0.191388
+        ],
+        [
+          "Codex.exe",
+          0.095694
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010799,
+      "fixed_counter_seconds": 0.003452000004472211,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 69.325461,
+      "system_CPU": 18.26087,
+      "stage_CPU": 0.096618,
+      "observer_CPU": 0.096618,
+      "Defender_CPU": 0.28871385838345964,
+      "System_CPU": 0.38495181117794613,
+      "DPC_CPU": 0.0,
+      "interrupt_CPU": 0.5774301804585108,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          7.246377
+        ],
+        [
+          "python.exe",
+          6.376812
+        ],
+        [
+          "OTHER",
+          2.608696
+        ],
+        [
+          "Codex.exe",
+          0.096618
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.011476,
+      "fixed_counter_seconds": 0.004293699996196665,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 70.340239,
+      "system_CPU": 23.349282,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.095694,
+      "Defender_CPU": 0.962030737106781,
+      "System_CPU": 2.0202645479242403,
+      "DPC_CPU": 0.38480736924533837,
+      "interrupt_CPU": 0.19240368462266919,
+      "process_groups": [
+        [
+          "OTHER",
+          3.062201
+        ],
+        [
+          "Codex.exe",
+          0.574163
+        ],
+        [
+          "python.exe",
+          0.191388
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010393,
+      "fixed_counter_seconds": 0.0039776000048732385,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 71.358219,
+      "system_CPU": 11.260828,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096246,
+      "Defender_CPU": 0.28854489508649195,
+      "System_CPU": 0.28854489508649195,
+      "DPC_CPU": 0.09618532507015443,
+      "interrupt_CPU": 0.19236080114122323,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          7.218479
+        ],
+        [
+          "OTHER",
+          2.502406
+        ],
+        [
+          "python.exe",
+          0.096246
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.011167,
+      "fixed_counter_seconds": 0.006208500009961426,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 72.373763,
+      "system_CPU": 20.500481,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096246,
+      "Defender_CPU": 0.4792768834793206,
+      "System_CPU": 2.7798059241800597,
+      "DPC_CPU": 0.0,
+      "interrupt_CPU": 0.8627020711092422,
+      "process_groups": [
+        [
+          "OTHER",
+          3.272377
+        ],
+        [
+          "python.exe",
+          0.288739
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.011527,
+      "fixed_counter_seconds": 0.00373139999283012,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 73.389648,
+      "system_CPU": 11.934552,
+      "stage_CPU": 0.096246,
+      "observer_CPU": 0.096246,
+      "Defender_CPU": 0.2886247171077546,
+      "System_CPU": 0.3848329561436728,
+      "DPC_CPU": 0.2886259485732143,
+      "interrupt_CPU": 0.2886259485732143,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          7.314726
+        ],
+        [
+          "OTHER",
+          2.40616
+        ],
+        [
+          "python.exe",
+          0.192493
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010443,
+      "fixed_counter_seconds": 0.00482120001106523,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 74.403063,
+      "system_CPU": 16.778523,
+      "stage_CPU": 0.287632,
+      "observer_CPU": 0.095877,
+      "Defender_CPU": 0.3850096724285962,
+      "System_CPU": 0.8662717629643414,
+      "DPC_CPU": 0.3850047443047891,
+      "interrupt_CPU": 0.0,
+      "process_groups": [
+        [
+          "OTHER",
+          3.835091
+        ],
+        [
+          "python.exe",
+          0.479386
+        ],
+        [
+          "Codex.exe",
+          0.095877
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.009903,
+      "fixed_counter_seconds": 0.0030876999953761697,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 75.418313,
+      "system_CPU": 13.557692,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.48091701582832247,
+      "System_CPU": 0.577100418993987,
+      "DPC_CPU": 0.3847385372529001,
+      "interrupt_CPU": 0.67328012871697,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          7.019231
+        ],
+        [
+          "OTHER",
+          3.653846
+        ],
+        [
+          "Codex.exe",
+          0.096154
+        ],
+        [
+          "python.exe",
+          0.096154
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010903,
+      "fixed_counter_seconds": 0.0037512000126298517,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 76.430978,
+      "system_CPU": 23.75,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.0,
+      "Defender_CPU": 0.7714291667073981,
+      "System_CPU": 7.714291667073982,
+      "DPC_CPU": 0.09642247440509111,
+      "interrupt_CPU": 0.38571952050036595,
+      "process_groups": [
+        [
+          "OTHER",
+          3.942308
+        ],
+        [
+          "python.exe",
+          0.192308
+        ],
+        [
+          "Codex.exe",
+          0.096154
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.009288,
+      "fixed_counter_seconds": 0.002938599995104596,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 77.446408,
+      "system_CPU": 33.557692,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 3.0791738867135963,
+      "System_CPU": 2.7905013348341967,
+      "DPC_CPU": 0.8660213506468629,
+      "interrupt_CPU": 0.6735655927099351,
+      "process_groups": [
+        [
+          "OTHER",
+          7.211538
+        ],
+        [
+          "pwsh.exe",
+          7.211538
+        ],
+        [
+          "Codex.exe",
+          1.153846
+        ],
+        [
+          "python.exe",
+          0.192308
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 3,
+      "process_snapshot_seconds": 0.010444,
+      "fixed_counter_seconds": 0.004117699994822033,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 78.461762,
+      "system_CPU": 26.878613,
+      "stage_CPU": 0.096339,
+      "observer_CPU": 0.0,
+      "Defender_CPU": 0.5774619181881766,
+      "System_CPU": 0.3849746121254511,
+      "DPC_CPU": 0.4812170332380551,
+      "interrupt_CPU": 0.19248484222520795,
+      "process_groups": [
+        [
+          "OTHER",
+          7.514451
+        ],
+        [
+          "git.exe",
+          6.165703
+        ],
+        [
+          "Codex.exe",
+          0.192678
+        ],
+        [
+          "python.exe",
+          0.192678
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 4,
+      "process_snapshot_seconds": 0.010325,
+      "fixed_counter_seconds": 0.004631400006473996,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 79.479726,
+      "system_CPU": 20.154291,
+      "stage_CPU": 0.096432,
+      "observer_CPU": 0.096432,
+      "Defender_CPU": 0.19209256754577078,
+      "System_CPU": 1.6327868241390515,
+      "DPC_CPU": 0.4802301894719947,
+      "interrupt_CPU": 0.19209994390036453,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          7.618129
+        ],
+        [
+          "git.exe",
+          6.171649
+        ],
+        [
+          "OTHER",
+          2.314368
+        ],
+        [
+          "Codex.exe",
+          0.289296
+        ],
+        [
+          "python.exe",
+          0.192864
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.011847,
+      "fixed_counter_seconds": 0.00552189999143593,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 80.496692,
+      "system_CPU": 29.693487,
+      "stage_CPU": 0.191571,
+      "observer_CPU": 0.095785,
+      "Defender_CPU": 0.3844363815730748,
+      "System_CPU": 3.0754910525845984,
+      "DPC_CPU": 0.48054424676992247,
+      "interrupt_CPU": 0.38443146078739066,
+      "process_groups": [
+        [
+          "OTHER",
+          11.015326
+        ],
+        [
+          "pwsh.exe",
+          8.141762
+        ],
+        [
+          "git.exe",
+          3.448276
+        ],
+        [
+          "Codex.exe",
+          0.574713
+        ],
+        [
+          "python.exe",
+          0.287356
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 2,
+      "process_snapshot_seconds": 0.010317,
+      "fixed_counter_seconds": 0.006330899996100925,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 81.514405,
+      "system_CPU": 33.237272,
+      "stage_CPU": 0.096061,
+      "observer_CPU": 0.192123,
+      "Defender_CPU": 1.5325265394363952,
+      "System_CPU": 1.6283094481511697,
+      "DPC_CPU": 0.1915633653870863,
+      "interrupt_CPU": 0.28734995216555564,
+      "process_groups": [
+        [
+          "OTHER",
+          10.566763
+        ],
+        [
+          "git.exe",
+          3.650336
+        ],
+        [
+          "Codex.exe",
+          0.864553
+        ],
+        [
+          "python.exe",
+          0.384246
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 3,
+      "process_snapshot_seconds": 0.01231,
+      "fixed_counter_seconds": 0.004511000006459653,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 82.529436,
+      "system_CPU": 29.287091,
+      "stage_CPU": 0.289017,
+      "observer_CPU": 0.096339,
+      "Defender_CPU": 0.7693091677527261,
+      "System_CPU": 0.7693091677527261,
+      "DPC_CPU": 0.2884921688019407,
+      "interrupt_CPU": 0.09616733865309597,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          9.344894
+        ],
+        [
+          "OTHER",
+          6.840077
+        ],
+        [
+          "git.exe",
+          4.33526
+        ],
+        [
+          "python.exe",
+          0.385356
+        ],
+        [
+          "Codex.exe",
+          0.289017
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010483,
+      "fixed_counter_seconds": 0.004279800006770529,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 83.549673,
+      "system_CPU": 22.93666,
+      "stage_CPU": 0.191939,
+      "observer_CPU": 0.095969,
+      "Defender_CPU": 1.24619390142736,
+      "System_CPU": 1.0544717627462277,
+      "DPC_CPU": 0.4793041196811432,
+      "interrupt_CPU": 0.5751590539132716,
+      "process_groups": [
+        [
+          "git.exe",
+          4.126679
+        ],
+        [
+          "OTHER",
+          3.454894
+        ],
+        [
+          "python.exe",
+          0.383877
+        ],
+        [
+          "Codex.exe",
+          0.191939
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 3,
+      "process_snapshot_seconds": 0.013739,
+      "fixed_counter_seconds": 0.005892499990295619,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 84.565173,
+      "system_CPU": 34.711538,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.2491018150837605,
+      "System_CPU": 3.459051180231952,
+      "DPC_CPU": 0.5765109898083869,
+      "interrupt_CPU": 1.6334445247641254,
+      "process_groups": [
+        [
+          "OTHER",
+          11.25
+        ],
+        [
+          "pwsh.exe",
+          9.519231
+        ],
+        [
+          "git.exe",
+          4.134615
+        ],
+        [
+          "Codex.exe",
+          0.480769
+        ],
+        [
+          "python.exe",
+          0.096154
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010022,
+      "fixed_counter_seconds": 0.004832100006751716,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 85.580769,
+      "system_CPU": 27.692308,
+      "stage_CPU": 0.288462,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.8645037897633014,
+      "System_CPU": 0.9605597664036682,
+      "DPC_CPU": 0.48027865368533307,
+      "interrupt_CPU": 0.6723881479330648,
+      "process_groups": [
+        [
+          "OTHER",
+          12.019231
+        ],
+        [
+          "git.exe",
+          3.75
+        ],
+        [
+          "python.exe",
+          0.480769
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010747,
+      "fixed_counter_seconds": 0.004331100004492328,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 86.598104,
+      "system_CPU": 20.961538,
+      "stage_CPU": 0.192308,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.19217363198202167,
+      "System_CPU": 0.38434726396404334,
+      "DPC_CPU": 0.19218101144948976,
+      "interrupt_CPU": 0.4804328500438095,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.846154
+        ],
+        [
+          "OTHER",
+          5.0
+        ],
+        [
+          "git.exe",
+          4.230769
+        ],
+        [
+          "python.exe",
+          0.288462
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.012045,
+      "fixed_counter_seconds": 0.004850500001339242,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 87.615576,
+      "system_CPU": 21.442308,
+      "stage_CPU": 0.384615,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.19209698850934212,
+      "System_CPU": 0.8644364482920396,
+      "DPC_CPU": 0.7683879540373685,
+      "interrupt_CPU": 0.5762934243694793,
+      "process_groups": [
+        [
+          "OTHER",
+          5.576923
+        ],
+        [
+          "git.exe",
+          4.326923
+        ],
+        [
+          "python.exe",
+          0.576923
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.011967,
+      "fixed_counter_seconds": 0.00518710000324063,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 88.634014,
+      "system_CPU": 24.715909,
+      "stage_CPU": 0.189394,
+      "observer_CPU": 0.094697,
+      "Defender_CPU": 0.5759400447334937,
+      "System_CPU": 3.7436102907677085,
+      "DPC_CPU": 0.28796142166207883,
+      "interrupt_CPU": 0.6719361955495531,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          7.481061
+        ],
+        [
+          "OTHER",
+          6.628788
+        ],
+        [
+          "git.exe",
+          3.693182
+        ],
+        [
+          "python.exe",
+          0.284091
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.01176,
+      "fixed_counter_seconds": 0.005961700007901527,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 89.654717,
+      "system_CPU": 25.144509,
+      "stage_CPU": 0.096339,
+      "observer_CPU": 0.192678,
+      "Defender_CPU": 0.7641787809585331,
+      "System_CPU": 1.2417905190576162,
+      "DPC_CPU": 0.19105203135593046,
+      "interrupt_CPU": 0.28655848405710316,
+      "process_groups": [
+        [
+          "OTHER",
+          7.61079
+        ],
+        [
+          "git.exe",
+          5.298651
+        ],
+        [
+          "python.exe",
+          0.385356
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.014786,
+      "fixed_counter_seconds": 0.005255399999441579,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 90.669473,
+      "system_CPU": 25.239923,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.095969,
+      "Defender_CPU": 1.3451607615615815,
+      "System_CPU": 1.2490778500214685,
+      "DPC_CPU": 0.384326726715381,
+      "interrupt_CPU": 0.4804231667294388,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          6.81382
+        ],
+        [
+          "OTHER",
+          5.086372
+        ],
+        [
+          "git.exe",
+          4.606526
+        ],
+        [
+          "Codex.exe",
+          0.575816
+        ],
+        [
+          "python.exe",
+          0.095969
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010131,
+      "fixed_counter_seconds": 0.0039034000074025244,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 91.688278,
+      "system_CPU": 28.269231,
+      "stage_CPU": 0.192308,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.2493699177630737,
+      "System_CPU": 1.0571591611841393,
+      "DPC_CPU": 0.5766347300344875,
+      "interrupt_CPU": 0.38441659256250044,
+      "process_groups": [
+        [
+          "OTHER",
+          6.634615
+        ],
+        [
+          "git.exe",
+          4.807692
+        ],
+        [
+          "python.exe",
+          0.480769
+        ],
+        [
+          "Codex.exe",
+          0.096154
+        ],
+        [
+          "pwsh.exe",
+          0.096154
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.011755,
+      "fixed_counter_seconds": 0.005963000003248453,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 92.707681,
+      "system_CPU": 24.134615,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.6704617509156898,
+      "System_CPU": 3.160748254316824,
+      "DPC_CPU": 0.3831160965744446,
+      "interrupt_CPU": 0.383125904472058,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          6.923077
+        ],
+        [
+          "OTHER",
+          4.711538
+        ],
+        [
+          "git.exe",
+          4.711538
+        ],
+        [
+          "Codex.exe",
+          0.096154
+        ],
+        [
+          "python.exe",
+          0.096154
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 157,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.01278,
+      "fixed_counter_seconds": 0.0057702000049175695,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 93.72188,
+      "system_CPU": 27.307692,
+      "stage_CPU": 0.192308,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.248281258818627,
+      "System_CPU": 2.304519247049773,
+      "DPC_CPU": 0.2880661349581534,
+      "interrupt_CPU": 0.48010694739177096,
+      "process_groups": [
+        [
+          "git.exe",
+          5.0
+        ],
+        [
+          "OTHER",
+          3.461538
+        ],
+        [
+          "Codex.exe",
+          0.769231
+        ],
+        [
+          "python.exe",
+          0.384615
+        ],
+        [
+          "pwsh.exe",
+          0.192308
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.01016,
+      "fixed_counter_seconds": 0.0033454000076744705,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 94.73769,
+      "system_CPU": 23.653846,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.5773884555714273,
+      "System_CPU": 1.4434711389285682,
+      "DPC_CPU": 0.7698512740952363,
+      "interrupt_CPU": 0.577381064999196,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          7.115385
+        ],
+        [
+          "OTHER",
+          6.730769
+        ],
+        [
+          "git.exe",
+          4.711538
+        ],
+        [
+          "python.exe",
+          0.192308
+        ],
+        [
+          "Codex.exe",
+          0.096154
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.011358,
+      "fixed_counter_seconds": 0.004207300007692538,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 95.752702,
+      "system_CPU": 20.096154,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.48060554687147045,
+      "System_CPU": 0.3844844374971763,
+      "DPC_CPU": 0.3844893588979763,
+      "interrupt_CPU": 0.4806141593228704,
+      "process_groups": [
+        [
+          "git.exe",
+          4.519231
+        ],
+        [
+          "OTHER",
+          2.307692
+        ],
+        [
+          "python.exe",
+          0.480769
+        ],
+        [
+          "Codex.exe",
+          0.192308
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010927,
+      "fixed_counter_seconds": 0.0034860000014305115,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 96.767257,
+      "system_CPU": 24.038462,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.3472480934915163,
+      "System_CPU": 3.8492802671186177,
+      "DPC_CPU": 0.2886972518035818,
+      "interrupt_CPU": 1.0585434510698215,
+      "process_groups": [
+        [
+          "python.exe",
+          6.346154
+        ],
+        [
+          "git.exe",
+          5.288462
+        ],
+        [
+          "OTHER",
+          3.942308
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010412,
+      "fixed_counter_seconds": 0.0032835000019986182,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 97.782151,
+      "system_CPU": 18.269231,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.4439376980389431,
+      "System_CPU": 0.7701001056207697,
+      "DPC_CPU": 0.09625635240175125,
+      "interrupt_CPU": 0.3850549814510608,
+      "process_groups": [
+        [
+          "git.exe",
+          5.480769
+        ],
+        [
+          "OTHER",
+          3.173077
+        ],
+        [
+          "pwsh.exe",
+          0.288462
+        ],
+        [
+          "Codex.exe",
+          0.096154
+        ],
+        [
+          "python.exe",
+          0.096154
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 2,
+      "process_snapshot_seconds": 0.010818,
+      "fixed_counter_seconds": 0.0035226999898441136,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 98.798911,
+      "system_CPU": 24.615385,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 2.5974067392606166,
+      "System_CPU": 2.982207737669597,
+      "DPC_CPU": 0.3848059238617599,
+      "interrupt_CPU": 0.2886019801699301,
+      "process_groups": [
+        [
+          "git.exe",
+          4.326923
+        ],
+        [
+          "OTHER",
+          2.884615
+        ],
+        [
+          "python.exe",
+          0.480769
+        ],
+        [
+          "Codex.exe",
+          0.384615
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 6,
+      "process_snapshot_seconds": 0.011301,
+      "fixed_counter_seconds": 0.005106299999170005,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 99.815366,
+      "system_CPU": 35.384615,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 1.7283537473880197,
+      "System_CPU": 1.248255484224681,
+      "DPC_CPU": 0.3840736943244562,
+      "interrupt_CPU": 0.1920368471622281,
+      "process_groups": [
+        [
+          "OTHER",
+          10.673077
+        ],
+        [
+          "python.exe",
+          6.442308
+        ],
+        [
+          "git.exe",
+          5.288462
+        ],
+        [
+          "pwsh.exe",
+          1.634615
+        ],
+        [
+          "Codex.exe",
+          0.480769
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010747,
+      "fixed_counter_seconds": 0.004580699998768978,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 100.8304,
+      "system_CPU": 29.423077,
+      "stage_CPU": 0.480769,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.48106588707946124,
+      "System_CPU": 4.618232515962829,
+      "DPC_CPU": 0.48106465555079037,
+      "interrupt_CPU": 1.3469869468798334,
+      "process_groups": [
+        [
+          "python.exe",
+          8.846154
+        ],
+        [
+          "git.exe",
+          4.807692
+        ],
+        [
+          "OTHER",
+          2.115385
+        ],
+        [
+          "Codex.exe",
+          0.288462
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010028,
+      "fixed_counter_seconds": 0.004332399999839254,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 101.84715,
+      "system_CPU": 26.346154,
+      "stage_CPU": 0.288462,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.38486673930651766,
+      "System_CPU": 0.48108342413314714,
+      "DPC_CPU": 0.288651286053454,
+      "interrupt_CPU": 0.38486181301225453,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.269231
+        ],
+        [
+          "python.exe",
+          6.634615
+        ],
+        [
+          "git.exe",
+          5.096154
+        ],
+        [
+          "OTHER",
+          1.442308
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.010442,
+      "fixed_counter_seconds": 0.00577010000415612,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 102.862743,
+      "system_CPU": 35.0,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.2882176832440993,
+      "System_CPU": 3.8429024432546575,
+      "DPC_CPU": 0.6725140762134743,
+      "interrupt_CPU": 0.4803615756780504,
+      "process_groups": [
+        [
+          "OTHER",
+          7.596154
+        ],
+        [
+          "pwsh.exe",
+          6.442308
+        ],
+        [
+          "python.exe",
+          6.346154
+        ],
+        [
+          "git.exe",
+          5.192308
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010427,
+      "fixed_counter_seconds": 0.004815899999812245,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 103.876438,
+      "system_CPU": 26.730769,
+      "stage_CPU": 0.096154,
+      "observer_CPU": 0.0,
+      "Defender_CPU": 0.4806547491605445,
+      "System_CPU": 1.922618996642178,
+      "DPC_CPU": 0.19225943871190213,
+      "interrupt_CPU": 0.4806633624936495,
+      "process_groups": [
+        [
+          "python.exe",
+          6.442308
+        ],
+        [
+          "git.exe",
+          4.807692
+        ],
+        [
+          "OTHER",
+          4.423077
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.009813,
+      "fixed_counter_seconds": 0.003270799992606044,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 104.887458,
+      "system_CPU": 27.692308,
+      "stage_CPU": 0.192308,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.5784606645267263,
+      "System_CPU": 3.7599943194237206,
+      "DPC_CPU": 0.09641381290270734,
+      "interrupt_CPU": 0.6748670731329277,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.173077
+        ],
+        [
+          "python.exe",
+          6.538462
+        ],
+        [
+          "git.exe",
+          4.423077
+        ],
+        [
+          "OTHER",
+          2.403846
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.00889,
+      "fixed_counter_seconds": 0.0016247000021394342,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 105.906255,
+      "system_CPU": 30.673077,
+      "stage_CPU": 0.0,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.5776386806035055,
+      "System_CPU": 0.8664580209052584,
+      "DPC_CPU": 0.09626695195465783,
+      "interrupt_CPU": 0.28882057259760474,
+      "process_groups": [
+        [
+          "OTHER",
+          8.461538
+        ],
+        [
+          "python.exe",
+          6.442308
+        ],
+        [
+          "git.exe",
+          5.0
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.012372,
+      "fixed_counter_seconds": 0.005634900007862598,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 106.922457,
+      "system_CPU": 30.865385,
+      "stage_CPU": 0.288462,
+      "observer_CPU": 0.0,
+      "Defender_CPU": 0.4800812698779762,
+      "System_CPU": 0.8641462857803572,
+      "DPC_CPU": 0.48008004086992534,
+      "interrupt_CPU": 0.0,
+      "process_groups": [
+        [
+          "pwsh.exe",
+          8.173077
+        ],
+        [
+          "OTHER",
+          6.730769
+        ],
+        [
+          "python.exe",
+          6.538462
+        ],
+        [
+          "git.exe",
+          5.480769
+        ],
+        [
+          "Codex.exe",
+          0.0
+        ],
+        [
+          "node.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 0,
+      "process_snapshot_seconds": 0.01112,
+      "fixed_counter_seconds": 0.004622899999958463,
+      "fixed_counter_available": true
+    },
+    {
+      "elapsed_seconds": 107.938386,
+      "system_CPU": 26.923077,
+      "stage_CPU": null,
+      "observer_CPU": 0.096154,
+      "Defender_CPU": 0.480256877954694,
+      "System_CPU": 1.440770633864082,
+      "DPC_CPU": 0.38421042019418544,
+      "interrupt_CPU": 0.8644562330304114,
+      "process_groups": [
+        [
+          "python.exe",
+          6.346154
+        ],
+        [
+          "git.exe",
+          4.711538
+        ],
+        [
+          "OTHER",
+          2.403846
+        ],
+        [
+          "Codex.exe",
+          0.096154
+        ],
+        [
+          "node.exe",
+          0.0
+        ],
+        [
+          "pwsh.exe",
+          0.0
+        ]
+      ],
+      "inaccessible_processes": 156,
+      "new_or_reused_PIDs": 1,
+      "process_snapshot_seconds": 0.010921,
+      "fixed_counter_seconds": 0.004444299993338063,
+      "fixed_counter_available": true
+    }
+  ],
+  "sample_count": 106,
+  "stop_reason": "TARGET_TERMINAL",
+  "target_terminal_observed": true,
+  "observer_work_seconds": 1.87668780014792,
+  "elapsed_seconds": 108.30697090001195,
+  "cleanup_confirmed": true,
+  "fixed_probe_summary": {
+    "fixed_counter_count": 7,
+    "wildcard_or_process_inventory": false,
+    "collect_calls": 107,
+    "samples": 106,
+    "setup_seconds": 0.367914499991457,
+    "maximum_added_sample_seconds": 0.02494049999222625,
+    "total_added_sample_seconds": 0.5542935000121361,
+    "maximum_sample_budget_seconds": 0.05,
+    "total_added_sample_budget_seconds": 2.0,
+    "disabled_reason": null,
+    "query_remaining": false,
+    "cleanup_confirmed": true,
+    "close_attempts": 1,
+    "counter_status": {
+      "MsMpEng_cpu": {
+        "return_status": 0,
+        "counter_status": 0
+      },
+      "MsMpEng_pid": {
+        "return_status": 0,
+        "counter_status": 0
+      },
+      "System_cpu": {
+        "return_status": 0,
+        "counter_status": 0
+      },
+      "System_pid": {
+        "return_status": 0,
+        "counter_status": 0
+      },
+      "total_cpu": {
+        "return_status": 0,
+        "counter_status": 0
+      },
+      "DPC_cpu": {
+        "return_status": 0,
+        "counter_status": 0
+      },
+      "interrupt_cpu": {
+        "return_status": 0,
+        "counter_status": 0
+      }
+    },
+    "original_K32_CPU_RAM_decisions_replaced": false,
+    "second_sampler_thread_or_process": false,
+    "extra_PDH_queries_added_to_original_observer": true,
+    "interval_alignment_exact": false,
+    "security_sandbox_or_CPU_freeze_improvement_claimed": false
+  }
+}
