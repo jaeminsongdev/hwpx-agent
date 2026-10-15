@@ -389,3 +389,21 @@ shared_metadata_frame_decoder_budget_v1은 metadata와 Frame의 original Budget 
 다음은 이 연결을 실제 새 Native 진입점에 채택하고 모든 새 source/fixture/qualification을 실제 입력에 포함한 뒤, 원64 helper·16KiB wire·600초 및720초·공유decoder5초·GO/Job·원 전후 읽기 조건을 유지해 제품·독립 원체커·승인을 검증하는 것이다. 원 메타데이터 physical/semantic 계수와 새 공유 budget 증거를 후속 원체커에서 확인하기 전에는 승인하지 않는다. 공식157/249·잔여92·next164·generation52, P09/A12/A13 OPEN 및 목표ACTIVE다. 사례164 제품·Native·독립 리뷰·승인 및 프리즈 근본 해결은 미완료다.
 
 근거: lossless-metadata-connection-run004-attempt001..003 및 shared-metadata-frame-decoder-code001..003. 기존 v3/v2, 승인163, 원본 및003/004 중단 증거는 변경하거나 삭제하지 않았다. 새 구현은 lossless_metadata_connection_v1, shared_metadata_frame_decoder_budget_v1과 해당 시험 파일이다.
+
+## 무손실 metadata의 실제 실행 진입점 채택
+
+current_queue_successor_lossless_runtime_v4는 고정된 v3/v2 및 연결·reader·공유 budget 소스를 명시적 private namespace로 읽어 원 함수 본문과 기존 전체 원체커를 유지한다. 실제 parent template의 초기 BuildReader에 무손실 연결을 적용하고 같은 parent Frame factory에 공유5초 budget hook을 연결한다. 원 metadata binding 뒤56개 전체 semantic pin을 확인한다. 원 전체 validate_candidate가 먼저 통과한 뒤 독립 manifest의56개 descriptor를 기준으로 추가 accounting을 검사한다. 새 source와 기존 component qualification은 실제 reader 입력과 최종 hash에 포함된다. 원본·기존 실행/승인 소스와 공유 builtin을 수정하거나 default module을 숨기지 않는다.
+
+추가 원체커는 독립 descriptor와 actual semantic read counts에서 물리/복원 bytes를 다시 계산하고 cache=False, 모든 mapping, 성공 decode 횟수를 확인한다. metadata와 Frame의 원 work 계수가 shared evidence와 일치해야 하고 Frame은2×56회의 decode를 유지해야 한다. active/error/owner/resource 정책과 합산5초를 확인하며 metadata bytes를 Frame-only evidence로 바꾸지 않는다. 6개 계약은 잘못된 물리 계수·누락 mapping·계수 변조·Frame 미등록·시간 불일치·합산 초과를 거부하고 private import map과 원 function code를 보존하는 것을 확인했다.
+
+초기 adoption001/002와 CODE005-001·preflight005-001은 통과했지만 entry005-001에서 private alias의 globals 이름을 원 helper와 같은 이름으로 덮은 TypeError가 발생했다. Frame·제품 실행 전 종료했고 cleanup=True이며 실패를 보존했다. 원 globals가 해당 function을 가리키는 경우에만 그 이름을 바꾸도록 수정하고3인자 alias/4인자 helper 회귀 검사를 같은6계약에 추가했다. 준비 기록은 이전005.v2를 덮어쓰지 않고005.v4 경로로 분리했다. 고정 v2 graph path projector의 suffix 상수1개만 metadata로 바꿨으며 전체 AST inverse를 확인했다. 전송 내용은 동일한8,071바이트의 기존 v2 wire다.
+
+현재 adoption003은6계약·fresh29/final29·4.023초·CPU32.94%·cleanup=True로 통과했다. graph005.v4는56pair·fresh57/final57·12.159초·CPU33.64%로 통과했고 factory004는GO 없는 원11계약·fresh43/final43·13.741초·CPU32.17%·cleanup=True다. CODE005-002는74계약·fresh115/final115·15.572초·CPU34.74%·cleanup=True다. 전체 preflight005-002는 입력2,957/Rust787/helper60·fresh444/final444·122.133초·CPU57.95%·cleanup=True로 통과했다.
+
+entry005-002는 원6계약·actualNative helper64·fresh448/final448·125.665초·CPU55.70%·가용RAM44.156%·cleanup=True로 통과했다. 원 예상 비용596.192초/600초이며 실제 Native 발행 전과 종료 후 source448개 현재 hash가 모두 일치했다. 원16KiB·64helper·CPU/RAM·GO/Job·600초/720초·전후2회 및 공유decoder5초 조건을 유지했다.
+
+Native005는7.62초에 metadata CPU 경고로 중단됐다. actual 초기 reader의 explicit_fresh_lossless_metadata 기록이 확인됐으나 mapped read/decode 시도는0회였다. metadata 실제117읽기·2,501,662바이트, 마지막시스템CPU82.26%·parentCPU0%·private49.637MiB·가용RAM43.373%다. worker/제품/Frame 생성0·delta0·cleanup=True·빈 소유 tree를 확인했다. 압축 원본 및 decoder 작업을 시작하기 전의 경고이므로 이 실행으로 IO 절감·공유 Frame budget 또는 프리즈 해결을 입증하지 않는다. 원CPU 경고를 무시하거나 동일005를 반복 실행하지 않았다.
+
+실제 독립 원체커/승인 연결은 구현됐지만 Native 후보가 없어 미실행이다. 다음은 이 초기 보호 중단의 깨끗한 prebody 조건을 유지한 새 실행 준비와, 실제 Frame 전후 읽기·기존 및 추가 원체커·승인 검증이다. CODE/preflight 및 component 검증은 같은 소스에서 유지한다. 공식157/249·잔여92·next164·generation52, P09/A12/A13 OPEN 및 목표ACTIVE이며 제품·Frame·독립 리뷰·승인은 미완료다.
+
+근거: lossless-v4-adoption-code001..003, successor-connections005.v2/v4, factory003/004, successor-code/preflight-run005-attempt001/002, dispatch-qualification-run005-attempt001/002 및 current-runtime-run005. 구현은 current_queue_successor_lossless_runtime_v4와 해당 시험 파일이다.
