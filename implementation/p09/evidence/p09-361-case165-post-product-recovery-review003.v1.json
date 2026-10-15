@@ -1,0 +1,167 @@
+{
+  "state": "PASS_READ_ONLY_POST_PRODUCT_FAILURE_CLASSIFICATION_NOT_RETRY_DISPATCH_OR_ACCEPTANCE",
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "next_Native_start_authorized": false,
+  "host_resource_policy": {
+    "profile": "P149_OWNED_WORKLOAD_V5_HOST_RAM_95_PERCENT",
+    "logical_cpu_limit": 1,
+    "priority": "BelowNormal",
+    "cargo_jobs": 1,
+    "test_threads": 1,
+    "sample_seconds": 0.5,
+    "start_ram_min_percent": 5,
+    "start_consecutive_samples": 2,
+    "admission_max_seconds": 3,
+    "emergency_cpu_percent": 98,
+    "emergency_cpu_consecutive_samples": 4,
+    "stop_ram_min_percent": 5,
+    "stop_commit_used_percent": 95,
+    "job_memory_limit_percent": 8,
+    "job_memory_stop_percent": 7,
+    "test_debug_info": "line-tables-only",
+    "dev_debug_info": "line-tables-only",
+    "test_opt_level": 0,
+    "test_codegen_units": 16,
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "output_limit_bytes_per_stream": 32768
+  },
+  "classification": "CLOSED_POST_PRODUCT_RESOURCE_FAILURE_NOT_ACCEPTED",
+  "original_candidate_remains_not_qualified": true,
+  "completed_byte_boundaries": [
+    "before"
+  ],
+  "after_boundary_missing": true,
+  "after_boundary_reconstructed": false,
+  "product_result_reusable_as_full_PASS": false,
+  "eligible_for_retry_design": true,
+  "next_physical_run": 8,
+  "new_full_source_frame_and_two_byte_boundaries_required": true,
+  "original_CPU_RAM_lock_IO_GO_and_oracle_guards_required": true,
+  "queue_advance_authorized": false,
+  "runtime_retry_admission_implemented": false,
+  "candidate_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-current-runtime-run007.v1.json",
+    "bytes": 4199057,
+    "sha256": "3271eb9b07cd0eb1462630bb0f61e7ca7894545ec67f0c516ea8d898391a0f6c"
+  },
+  "authorization": {
+    "source": "explicit_user_reply_in_current_chat",
+    "response": "\ubcf5\uad6c \uacbd\ub85c \uc124\uacc4\u00b7\uac80\uc99d \uc9c4\ud589",
+    "scope": "design_and_verify_only"
+  },
+  "source_pins": [
+    {
+      "path": "tools/p09/post_product_stop_recovery_v1.py",
+      "bytes": 9877,
+      "sha256": "0e9a64bb45832e9ce145b8081f39177ed219d85ba52963501d56e62f0fcc0776"
+    },
+    {
+      "path": "tools/p09/tests/test_post_product_stop_recovery_v1.py",
+      "bytes": 6686,
+      "sha256": "3e28169a6bfd017de119d2da14505ca2056c3b599d83da75582066658a8af487"
+    },
+    {
+      "path": "tools/p09/prepared_run_closure_v1.py",
+      "bytes": 23900,
+      "sha256": "c159da53076f5bb88dce252db163f82a1f1d71522c9dd248349ca615dc84e672"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/current_stored_runtime_scope.py",
+      "bytes": 10087,
+      "sha256": "45f00274f99383c6d27fadea882614a3fd02ca19932bc8735618483f982d8841"
+    },
+    {
+      "path": "tools/p09/locked_runtime_inputs.py",
+      "bytes": 15465,
+      "sha256": "e7c40a2ec0367e01c359e3b89c179d45367e9db233348e76ba82364cc0599e14"
+    },
+    {
+      "path": "tools/p09/borrowed_locked_streams.py",
+      "bytes": 7276,
+      "sha256": "7299572c1fc86a932e6df50891e3004dc94c0e635978c04d81a3f961571a3ae5"
+    },
+    {
+      "path": "tools/p09/runtime_input_frame.py",
+      "bytes": 5802,
+      "sha256": "44a21215a76f4160ca7bfeb55b02f3bb464a2017671b0c2dae9883d7c9cd8929"
+    },
+    {
+      "path": "tools/p09/current_stored_native_bridge.py",
+      "bytes": 7987,
+      "sha256": "74e654c4bd1be0142cce7bc74c281727a1f738a6091270b9571062f0a98f8e6b"
+    },
+    {
+      "path": "tools/p09/live_sql_evidence_reader.py",
+      "bytes": 2109,
+      "sha256": "0458552661a9f69379f41a78d15cdbf1b6c389ede78bed766dcd6616ac937ac7"
+    },
+    {
+      "path": "tools/p09/weighted_audit_io.py",
+      "bytes": 3819,
+      "sha256": "c1e15f4cd21382c20c41439aef89a6af468e55dbb49d218b3f6c604c91ce03ca"
+    },
+    {
+      "path": "tools/p09/owned_source_read_pressure.py",
+      "bytes": 902,
+      "sha256": "dba6d749e68b098fedf4e3202a0b4a2b9a0ba1c5cd893d81b0f148046435dc51"
+    },
+    {
+      "path": "tools/p09/receipt_compact_json.py",
+      "bytes": 2657,
+      "sha256": "a12d8114131ada0bf2058d16837a9f1a81fbff25adeccc8b18117b7669be7217"
+    },
+    {
+      "path": "tools/p09/packed_receipt_json.py",
+      "bytes": 5958,
+      "sha256": "2eca058b0989cf410809b23a7171fd0ca7ab82bf3e0784077fd08851143c01e6"
+    },
+    {
+      "path": "tools/p09/accept_case112_current_epoch.py",
+      "bytes": 20933,
+      "sha256": "03fa9362f56b6105b48b8b49599f32ccc8cbf4aa9d0b0836f3cf8580cc9c680c"
+    },
+    {
+      "path": "tools/p09/terminal_metadata_pressure_v1.py",
+      "bytes": 2956,
+      "sha256": "7b5bb9b890cde566f566857c06f010736519ac6e2551480dcf92bdab6dfdd9dd"
+    },
+    {
+      "path": "tools/p09/distinct_final_sample_guard_v1.py",
+      "bytes": 1683,
+      "sha256": "8c590aa82c2677d391d6d5781b356641f77c7cdc6e55370ca251d6a809ad67c3"
+    },
+    {
+      "path": "tools/p09/successor_preparation_workspace_v1.py",
+      "bytes": 9656,
+      "sha256": "003a0978b515c148d1a7f17ba53cdcab9eb77698535714216c90b53c868bbb98"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case165-post-product-recovery-code003.v1.json",
+      "bytes": 4539,
+      "sha256": "c32bf70d0009b7ee479d145f948cfa5b22258f053fb7cd2589796250158efa18"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case165-current-runtime-run007.v1.json",
+      "bytes": 4199057,
+      "sha256": "3271eb9b07cd0eb1462630bb0f61e7ca7894545ec67f0c516ea8d898391a0f6c"
+    }
+  ],
+  "fresh_inputs": 21,
+  "final_fresh_hashes": 21,
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 7.776677699992433,
+  "CPU_max": 27.29,
+  "RAM_min": 37.787453893539976
+}

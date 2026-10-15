@@ -5,6 +5,65 @@ import unittest
 
 
 class Tests(unittest.TestCase):
+    def test_actual_forward_constructor_has_new_paths_and_window_without_GO(self):
+        import sys
+        from unittest.mock import patch
+        import flat_current_queue_envelope_runtime_v25 as envelope
+        original=envelope.namespace_bundle;seen=[]
+        def load(*args,**kwargs):
+            modules,proof=original.load(*args,**kwargs)
+            controller=getattr(modules,"current_queue_successor_controller",None)
+            if controller is not None:
+                def endpoint(index,run,attempt):
+                    self.assertEqual((index,run,attempt),(165,8,1))
+                    self.assertIn("-successor-recovery-code-run008-",controller.destination(index,run,"code",attempt))
+                    fn=controller.destination
+                    imported=fn.__builtins__["__import__"]("case160_run007_controller",fn.__globals__,None,(),0)
+                    self.assertEqual(imported.old.prior.WINDOW.SECONDS,10)
+                    seen.append(True);return 0
+                controller.run_code=endpoint
+            return modules,proof
+        loader=NS(**{**vars(original),"load":load})
+        with patch.object(envelope,"namespace_bundle",loader),patch.object(sys,"argv",[
+            MODULE.CLOSURE_SOURCE,"--case","165","--run","8","--attempt","1","--code"]), \
+                patch("subprocess.Popen",side_effect=AssertionError("NO_NATIVE_OR_CHILD")), \
+                patch("subprocess.run",side_effect=AssertionError("NO_NATIVE_OR_CHILD")):
+            self.assertEqual(MODULE.main(),0)
+        self.assertEqual(seen,[True])
+
+    def retry_fixture(self):
+        env=dict(__name__="p09_exact_retry_fixture")
+        exec("def previous_stops(q,ctx,a,bridge):\n for run in range(2,ctx.run):q.append(run)\n",env)
+        return NS(previous_stops=env["previous_stops"])
+
+    def test_only_explicit165_run008_uses_reviewed_run007_recovery(self):
+        from unittest.mock import patch
+        namespace=self.retry_fixture();calls=[];seen=[]
+        recovery=NS(admit_failed_run=lambda *args:calls.append(args[1]))
+        MODULE.install_retry(namespace,API,recovery,NS())
+        with patch.dict(namespace.previous_stops.__globals__,absent=lambda *args:False):
+            namespace.previous_stops(seen,NS(index=165,run=8),API,NS())
+        self.assertEqual(seen,[2,3,4,5,6]);self.assertEqual(len(calls),1)
+        self.assertEqual(vars(calls[0]),dict(index=165,run=8))
+
+    def test_other_case_or_target_keeps_all_original_retry_predicates(self):
+        from unittest.mock import patch
+        for index,run in ((164,8),(166,8),(165,7)):
+            namespace=self.retry_fixture();seen=[];calls=[]
+            MODULE.install_retry(namespace,API,NS(admit_failed_run=lambda *args:calls.append(1)),NS())
+            with patch.dict(namespace.previous_stops.__globals__,absent=lambda *args:False):
+                namespace.previous_stops(seen,NS(index=index,run=run),API,NS())
+            self.assertEqual(seen,list(range(2,run)));self.assertEqual(calls,[])
+
+    def test_post_product_cannot_fall_back_to_preparation_or_unqualified_retry(self):
+        from unittest.mock import patch
+        namespace=self.retry_fixture();seen=[]
+        MODULE.install_retry(namespace,API)
+        with patch.dict(namespace.previous_stops.__globals__,absent=lambda *args:False):
+            with self.assertRaisesRegex(ValueError,"QUALIFIED_EXPLICIT_RECOVERY_DEPENDENCIES"):
+                namespace.previous_stops(seen,NS(index=165,run=8),API,NS())
+        self.assertEqual(seen,[2,3,4,5,6])
+
     def test_host_policy_changes_only_three_settings_in_place_and_is_idempotent(self):
         import conservative_maintenance as c
         fixture=NS(POLICY=dict(c.POLICY,profile="P149_OWNED_WORKLOAD_V4_PARTITIONED_TEST_CODEGEN",

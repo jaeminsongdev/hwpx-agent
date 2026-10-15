@@ -18,6 +18,16 @@ OLD=dict(path="tools/p09/expanded_closed_preparation_v1.py",bytes=21675,
     sha256="8de7dc45657401ceefc05a8535114155da138f79d3d17a9c6f2491808e43fca1")
 PREFIX="implementation/p09/evidence/p09-361-case165-"
 STATE="PASS_PREPARATION_ONLY_CLOSED_WITHOUT_NATIVE_NOT_RUNTIME_OR_PRODUCT"
+RECOVERY_PINS=[
+    dict(path="tools/p09/post_product_recovery_connection_v1.py",bytes=8676,
+        sha256="105e55a7534defdd5ea804a03a007c72a96079de042d21fa53d5675064968f77"),
+    dict(path="tools/p09/post_product_recovery_window_v1.py",bytes=12876,
+        sha256="ce0dd3fdddc238dd7181d5c12c0a161a2dea74c791dc8053dd99a2b0ca7e8890"),
+    dict(path="tools/p09/post_product_stop_recovery_v1.py",bytes=9877,
+        sha256="0e9a64bb45832e9ce145b8081f39177ed219d85ba52963501d56e62f0fcc0776")]
+CLOSURE_CODE_STATE="PASS_PREPARED_CLOSURE_AND_EXPLICIT_RECOVERY_CODE27_NOT_NATIVE_OR_PRODUCT"
+CLOSURE_CODE_NAME=PREFIX+"prepared-recovery-code002.v1.json"
+CLOSURE_ATTEMPT=7
 
 
 def require(ok,label):
@@ -95,7 +105,7 @@ def producer_inventory(row):
 def admit(q,ctx,run,a):
     root=PREFIX+f"current-runtime-run{run:03}.v1.json"
     require(absent(q,root),"NATIVE_ABSENT_BEFORE_CLOSURE_ADMISSION")
-    name=PREFIX+f"prepared-only-closure-run{run:03}-attempt005.v1.json"
+    name=PREFIX+f"prepared-only-closure-run{run:03}-attempt{CLOSURE_ATTEMPT:03}.v1.json"
     row=q.json(name);validate(row,ctx.index,run,a)
     inventory=producer_inventory(row)
     # Historical graph program pins need not equal today's source: no historical
@@ -111,13 +121,16 @@ def admit(q,ctx,run,a):
     require(absent(q,root),"NATIVE_ABSENT_AFTER_CLOSURE_ADMISSION")
 
 
-def install_retry(namespace,a):
+def install_retry(namespace,a,recovery=None,reviewer=None):
     original=namespace.previous_stops
     def previous_stops(q,ctx,api,bridge):
         for run in range(2,ctx.run):
             root=f"implementation/p09/evidence/p09-361-case{ctx.index}-current-runtime-run{run:03}.v1.json"
-            closure=PREFIX+f"prepared-only-closure-run{run:03}-attempt005.v1.json"
-            if ctx.index==165 and 4<=run<=7 and absent(q,root) and not absent(q,closure):
+            closure=PREFIX+f"prepared-only-closure-run{run:03}-attempt{CLOSURE_ATTEMPT:03}.v1.json"
+            if ctx.index==165 and ctx.run==8 and run==7:
+                require(recovery is not None and reviewer is not None,"QUALIFIED_EXPLICIT_RECOVERY_DEPENDENCIES")
+                recovery.admit_failed_run(q,ctx,api,reviewer,absent)
+            elif ctx.index==165 and 4<=run<=7 and absent(q,root) and not absent(q,closure):
                 admit(q,ctx,run,api)
             else:
                 # Same original predicates for existing Native and unresolved
@@ -136,7 +149,7 @@ def main():
     import flat_current_queue_envelope_runtime_v25 as envelope
     parser=argparse.ArgumentParser()
     parser.add_argument("--closure-code",action="store_true");parser.add_argument("--close-run",type=int)
-    parser.add_argument("--closure-attempt",type=int,default=5)
+    parser.add_argument("--closure-attempt",type=int,default=CLOSURE_ATTEMPT)
     args,remainder=parser.parse_known_args()
     if args.closure_code or args.close_run is not None:
         # Publication-only dependencies must not enlarge the production graph.
@@ -148,7 +161,7 @@ def main():
         require(not remainder and 1<=args.closure_attempt<=8,"EXCLUSIVE_PRODUCER_MODE")
         run=args.close_run
         require(args.closure_code or type(run) is int and 4<=run<=7,"BOUNDED_CLOSED_RUN")
-        output=PREFIX+(f"prepared-closure-code{args.closure_attempt:03}.v1.json" if args.closure_code else
+        output=PREFIX+(f"prepared-recovery-code{args.closure_attempt:03}.v1.json" if args.closure_code else
             f"prepared-only-closure-run{run:03}-attempt{args.closure_attempt:03}.v1.json")
         require(not(c.ROOT/output).exists(),"EXCLUSIVE_CLOSURE_RECEIPT")
         guard=pressure.guard_type(distinct.guard_type(a.Guard))();started=time.monotonic();q=None
@@ -161,15 +174,29 @@ def main():
             if args.closure_code:
                 tests,_=envelope.namespace_bundle.load(c.ROOT,[q.snapshots[CLOSURE_TEST]],{})
                 tests.test_prepared_run_closure_v1.Tests.data.__globals__.update(MODULE=sys.modules[__name__],API=a)
-                result=unittest.TextTestRunner(stream=io.StringIO(),verbosity=0).run(unittest.defaultTestLoader.loadTestsFromModule(tests.test_prepared_run_closure_v1))
+                # Producer-only imports never enlarge the production module
+                # graph. Every imported helper/test is freshly pinned below.
+                import post_product_recovery_connection_v1 as recovery
+                from tests import test_post_product_recovery_connection_v1 as recovery_tests
+                recovery_tests.MODULE=recovery
+                suite=unittest.TestSuite((unittest.defaultTestLoader.loadTestsFromModule(tests.test_prepared_run_closure_v1),
+                    unittest.defaultTestLoader.loadTestsFromModule(recovery_tests)))
+                result=unittest.TextTestRunner(stream=io.StringIO(),verbosity=0).run(suite)
                 contracts=dict(run=result.testsRun,errors=len(result.errors),failures=len(result.failures),skipped=len(result.skipped));row["contracts"]=contracts
-                a.exact(contracts,dict(run=9,errors=0,failures=0,skipped=0),"ALL_CLOSURE9")
-                row["state"]="PASS_PREPARED_ONLY_CLOSURE_CODE9_NOT_ENTRY_NATIVE_OR_PRODUCT"
+                a.exact(contracts,dict(run=27,errors=0,failures=0,skipped=0),"ALL_CLOSURE_AND_RECOVERY27")
+                for module in tuple(sys.modules.values()):
+                    filename=getattr(module,"__file__",None)
+                    if filename and Path(filename).absolute().is_relative_to(c.ROOT/"tools/p09"):
+                        q.pin(Path(filename).absolute().relative_to(c.ROOT).as_posix())
+                for pin in RECOVERY_PINS:a.exact(q.pin(pin["path"]),pin,"EXACT_RECOVERY_DEPENDENCIES")
+                q.pin(recovery_tests.reviewer.CANDIDATE["path"])
+                q.pin(recovery_tests.tool.WINDOW_PIN["path"])
+                row["state"]=CLOSURE_CODE_STATE
             else:
-                code=q.json(PREFIX+"prepared-closure-code006.v1.json")
-                a.fields(code,dict(state="PASS_PREPARED_ONLY_CLOSURE_CODE9_NOT_ENTRY_NATIVE_OR_PRODUCT",
-                    contracts=dict(run=9,errors=0,failures=0,skipped=0),cleanup_confirmed=True,
-                    host_resource_policy=active_host_policy),"QUALIFIED_CLOSURE_CODE9")
+                code=q.json(CLOSURE_CODE_NAME)
+                a.fields(code,dict(state=CLOSURE_CODE_STATE,
+                    contracts=dict(run=27,errors=0,failures=0,skipped=0),cleanup_confirmed=True,
+                    host_resource_policy=active_host_policy),"QUALIFIED_CLOSURE_RECOVERY_CODE27")
                 for pin in code["source_pins"]:a.exact(q.pin(pin["path"]),pin,"CURRENT_CLOSURE_CODE")
                 root=PREFIX+f"current-runtime-run{run:03}.v1.json";require(absent(q,root),"NATIVE_MUST_ACTUALLY_BE_ABSENT")
                 graph_name=PREFIX+f"successor-connections{run:03}.v9.json";graph=q.json(graph_name)
@@ -222,18 +249,53 @@ finally:print(json.dumps({'historical_runtime_or_authority_opens':len(hits)}))
         require(guard.cleanup,"PRODUCER_CLEANUP");publisher.publish(c.ROOT,output,row,a)
         print(json.dumps({k:row.get(k) for k in ("state","physical_run","contracts","fresh_inputs","final_fresh_hashes","CPU_max","RAM_min","cleanup_confirmed","error_code")}))
         return 0 if row["state"].startswith("PASS_") else 1
+    require(all(remainder.count(flag)==1 and remainder.index(flag)+1<len(remainder)
+        and remainder[remainder.index(flag)+1]==str(value) for flag,value in (("--case",165),("--run",8))),
+        "EXPLICIT_CURRENT165_RECOVERY_RUN008_ONLY")
+    recovery_modules,_=envelope.namespace_bundle.load(c.ROOT,RECOVERY_PINS,{})
+    recovery=recovery_modules.post_product_recovery_connection_v1
+    window_tool=recovery_modules.post_product_recovery_window_v1
+    reviewer=recovery_modules.post_product_stop_recovery_v1
+    window_raw=(c.ROOT/window_tool.WINDOW_PIN["path"]).read_bytes()
     raw,_=envelope.namespace_bundle.load(c.ROOT,[ENTRY],{})
     entry=raw.level6_closed_preparation_v1;original_profile=entry.loader_profile
+    entry.main=recovery.receipt_namespace(entry.main,{
+        "successor-preflight-run":"successor-recovery-preflight-run",
+        "successor-dispatch-qualification-run":"successor-recovery-dispatch-qualification-run"})
     def profile(root,loader,core,api,prior_alias):
         base=original_profile(root,loader,core,api,prior_alias)
         def load(*items,**kwargs):
             modules,proof=base.load(*items,**kwargs)
+            old_pattern=r"implementation/p09/evidence/p09-361-case([0-9]{3})-successor-preflight-run([0-9]{3})-attempt[0-9]{3}\.v1\.json"
+            new_pattern=old_pattern.replace("-successor-","-successor-recovery-",1)
+            for module_name,function_name in (("current_queue_closed_metadata_runtime_v6","load"),
+                ("expanded_closed_preparation_v1","profile_loader")):
+                module=getattr(modules,module_name,None)
+                if module is not None:
+                    fn=getattr(module,function_name)
+                    projected=recovery.receipt_namespace(fn,{old_pattern:new_pattern})
+                    fn.__globals__[function_name]=projected;setattr(module,function_name,projected)
+            driver=getattr(modules,"expanded_unhooked_setup_dependency_v1",None)
+            if driver is not None:
+                original_setup=driver.project_setup_main
+                def setup(*args,**options):
+                    return recovery.receipt_namespace(original_setup(*args,**options),{
+                        "closed-io2-":"closed-recovery-io-","successor-":"successor-recovery-",
+                        "successor-code-run":"successor-recovery-code-run",
+                        "successor-preflight-run":"successor-recovery-preflight-run",
+                        "successor-dispatch-qualification-run":"successor-recovery-dispatch-qualification-run"})
+                driver.project_setup_main=setup;original_setup.__globals__["project_setup_main"]=setup
             v5=getattr(modules,"current_queue_sealed_metadata_runtime_v5",None)
             if v5 is not None:
                 original_paths=v5.retry_paths
                 def retry_paths(raw,namespace,pin):
-                    original_paths(raw,namespace,pin);install_retry(namespace,api)
+                    original_paths(raw,namespace,pin);install_retry(namespace,api,recovery,reviewer)
                 v5.retry_paths=retry_paths;original_paths.__globals__["retry_paths"]=retry_paths
+            oracle=getattr(modules,"current_queue_successor_oracle",None)
+            if oracle is not None:
+                original_connect=oracle.connect
+                oracle.connect=recovery.connect_oracle(original_connect,window_tool,window_raw)
+                original_connect.__globals__["connect"]=oracle.connect
             fix=getattr(modules,"closed_prebody_factory_admission_fix_v1",None)
             if fix is not None:
                 original=fix.load
@@ -243,13 +305,39 @@ finally:print(json.dumps({'historical_runtime_or_authority_opens':len(hits)}))
                         def __init__(self,*args,**kwargs):
                             super().__init__(*args,**kwargs)
                             for name in (CLOSURE_SOURCE,CLOSURE_TEST):self.pin(name)
-                            code=self.json(PREFIX+"prepared-closure-code006.v1.json")
-                            api.fields(code,dict(state="PASS_PREPARED_ONLY_CLOSURE_CODE9_NOT_ENTRY_NATIVE_OR_PRODUCT",
-                                contracts=dict(run=9,errors=0,failures=0,skipped=0),cleanup_confirmed=True,
+                            code=self.json(CLOSURE_CODE_NAME)
+                            api.fields(code,dict(state=CLOSURE_CODE_STATE,
+                                contracts=dict(run=27,errors=0,failures=0,skipped=0),cleanup_confirmed=True,
                                 host_resource_policy=active_host_policy),"CURRENT_CLOSURE_ADAPTER_CODE")
                             for pin in code["source_pins"]:api.exact(self.pin(pin["path"]),pin,"CURRENT_CLOSURE_ADAPTER_SOURCE")
+                            for pin in RECOVERY_PINS:api.exact(self.pin(pin["path"]),pin,"EXACT_RECOVERY_CURRENT_HELPERS")
+                            api.exact(self.pin(window_tool.WINDOW_PIN["path"]),window_tool.WINDOW_PIN,"ORIGINAL_WINDOW_SOURCE")
+                            recovery.qualified(self,PREFIX+"post-product-recovery-window-code006.v1.json",
+                                "PASS_RECOVERY_PRODUCT_WINDOW10_CODE_NOT_RUNTIME_CONNECTION_OR_RETRY",api,12)
+                            pipe=recovery.qualified(self,PREFIX+"post-product-recovery-window-pipe005.v1.json",
+                                "PASS_ACTUAL_OWNED_WINDOW10_SHORT_CAPTURE_AND_TIMEOUT_NOT_NATIVE_OR_RETRY",api)
+                            require(len(pipe["owned_pipe_cases"])==2 and all(r["cleanup_confirmed"] is True
+                                and r["active_processes_after_cleanup"]==0 for r in pipe["owned_pipe_cases"]),"REAL_WINDOW_PIPE_CLEANUP")
+                            recovery.qualified(self,recovery.REVIEW_NAME,recovery.REVIEW_STATE,api)
                     values[1]=NS(**{**vars(a0),"AcceptanceReader":Reader})
-                    return original(*values,**options)
+                    if options.get("ctx") is not None:
+                        ctx=options["ctx"];paths={}
+                        for name,marker in (("preflight","successor-preflight-run008-"),
+                            ("qualification","successor-dispatch-qualification-run008-")):
+                            value=getattr(ctx,name)
+                            if value.startswith(PREFIX+marker):value=value.replace("successor-","successor-recovery-",1)
+                            require(value.startswith(PREFIX+marker.replace("successor-","successor-recovery-",1)),"CURRENT_RECOVERY_RECEIPT_CONTEXT")
+                            paths[name]=value
+                        options["ctx"]=NS(**{**vars(ctx),**paths})
+                    linked=original(*values,**options)
+                    for name in ("current_queue_successor_controller","current_queue_successor_dispatch"):
+                        recovery.bind_current_prior(getattr(linked.modules,name),window_tool,window_raw)
+                    for module_name,function_name in (("current_queue_successor_controller","destination"),
+                        ("current_queue_successor_dispatch","context")):
+                        module=getattr(linked.modules,module_name);fn=getattr(module,function_name)
+                        projected=recovery.receipt_namespace(fn,{"-successor-":"-successor-recovery-"})
+                        fn.__globals__[function_name]=projected;setattr(module,function_name,projected)
+                    return linked
                 fix.load=connected
             return modules,proof
         return NS(**{**vars(base),"load":load})
