@@ -4,6 +4,18 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### Native007 무손실 표현과 70개 바인딩
+
+`prepare_native007_carrier_v1.py`는 case165/run007 원본4,199,057bytes를 그대로 보존하고 별도287,658bytes의 XZ 표현을 게시했다. 원본은 제품 자식이 실행된 뒤 최종 입력 재확인에서 실패한 `STOPPED_NOT_ACCEPTED`다. 이 실행을 prebody 실패·실행 미확인·제품 수용으로 바꾸지 않는다.9계약·fresh28/final28·두 실제 디스크 복원 경계가 통과했다.12.588초·시스템CPU최고47.28%·검증기자체CPU최고2.88669%·전용메모리최고119.96MiB·가용RAM최저20.65%·cleanupTrue다. 읽기 감소는3,911,399bytes이며 원1/2MiB 속도로 두 번 읽는 nominal 절감은3.730201초다. 이 값은 전체 실행 시간의 실측 개선율이 아니다.
+
+`verify_native007_full70_v1.py`는 기존68개 reader와 Native008 reader를 그대로 두고 Native007 reader만 추가했다.70개 전체를 실제 디스크에서 두 번 읽고, 매번 물리 hash와 복원된 원본 hash를 확인했다.140회 복원이 하나의 원 decoder5초 예산에서3.582873초에 완료됐다. 물리 corpus22,170,143bytes·fresh165/final165·41.071초·시스템CPU최고46.97%·검증기자체CPU최고1.17183%·전용메모리최고24.22MiB·가용RAM최저18.93%·cleanupTrue다. 이 재검증은 새70개 전체가 합산5초 조건을 만족하는지 확인하기 위한 것이며, 기존 제품 사례를 다시 실행한 것이 아니다.
+
+`native007_failure_binding_v1.py`는 고정된 기존69개 constructor를 먼저 실행한 뒤 원 raw constructor로70개 전체를 검사한다. 원 nonconstructor scope/바이트/핸들 oracle과 Projection 함수 객체를 유지했다. Native007의 실행True와 Native008의 실행None을 별도 출처로 보존하며, 누락·중복·기존 pin 변조·현재run009 제품 descriptor·잘못된 case·manifest 변조·실패 승격을 거부했다. private 모듈을 계약마다 다시 구성하지 않고 한 번 연결해9계약을 수행했다. CODE001은fresh104/final104·12.117초·시스템CPU최고21.56%·검증기자체CPU최고1.81278%·전용메모리최고45.72MiB·가용RAM최저21.55%·cleanupTrue다. CODE용 manifest는 실제 Native graph/worker packet이 아니다.
+
+현재600초 비용은 아직 닫히지 않았다. plan003의603.563587초에서 새 물리 표현의3.730201초를 빼더라도, 새 필수 소스·시험·증거9개157,546bytes의 acquisition14 및 두 실제 읽기를 더한 읽기 전용 하한은600.626491초다. 새 디렉터리와 이후 worker/dispatch 연결 비용은 이 하한에 포함하지 않았으므로600초 PASS가 될 수 없다. 이 계산은 complete budget/현재 Native 자격이 아니다. 추가 절감 후보로 기존 의미 scope에 이미 포함된 `p09-159-current-graph-full.actual-run01.v1.json`을 제한적으로 읽어 확인했다.3,959,557bytes·SHA256 `70d755fb99fa2ae5f2776d613d52123cdc9fed4e63860e5ed71d593ba6b9784e`이며 원state STOPPED_NOT_ACCEPTED/product_completeFalse를 유지한다. 이 과거 기록의 별도 무손실 표현·실제 복원·엄격한 바인딩 자격은 아직 만들지 않았다.
+
+다음은 추가 원본의 정확한 역할을 유지하는 무손실 표현으로 충분한 여유를 확보한 뒤70개 이상 wire/부모 scope·전체 helper64·600초 complete budget·현재 Frame/독립 검증을 연결하는 작업이다. 실제 제품/Native009·접근허용 요청·OS/Defender 변경·수용 증가는0이며 원Native007/008과 미수용 판정을 보존한다. 근거: `native007-carrier-g001-attempt001`, `native007-full70-physical-attempt001`, `native007-binding-code001`.
+
 ### 전체 입력 선언과 600초 비용 점검
 
 `native009_parent_scope_v1.py`는 이전 수용의 실제 출처 선언을 새 manifest에 포함하고, v1 파일을 덮어쓰지 않는 v2 capsule/bootstrap을 준비했다. 원 validator의 capsule 버전 문자열 슬롯 하나만 바꾸고 전체 code 역변환을 확인했다. 최신 graph004는11계약·fresh126/final126·19.971초·CPU최고42.08%·가용RAM최저19.60%·cleanupTrue다. 잘못된 case/run·변조 hash·이전 v1 경로·실행 미확인을False로 바꾸는 선언을 계속 거부한다.
@@ -12,7 +24,7 @@ plan001/002는 원 부모의 `ALL_DECLARED_ORIGINALS_PRESENT`에서 실패했다
 
 최신 plan003은 원 부모 callback·현재 Rust787 경로/167회 inventory pacing·전체 선언을 연결한 뒤 비용 단계에서 거부됐다. 모델은 의미 입력3,148개·물리 입력3,148개·물리215,082,656bytes이며, 원 complete 비용588.563587초에 새 준비 신호15초를 중복 공제 없이 더한603.563587초다. 원600초보다3.563587초 길어 `COMPLETE_SCOPE_PLUS_READINESS_OUTSIDE600`으로 종료했다.79.214초·CPU최고42.11%·가용RAM최저20.52%·cleanupTrue였고 최종 전체 current hash/Frame 자격은 미완료다. 원10초 제품 캡처·여유60초·decoder5초·acquisition14·IO1/2MiB는 줄이지 않았다.
 
-중간 graph003은 기존75% 단일 표본 정책에서 CPU76.56%로 작업 초기에 중단됐다. 이 실패도 보존하며 새 준비 CPU 정책은 이 producer에 적용하지 않았다. 현재 최적화 후보는 아직 물리 별칭이 없는 Native007 원본4,199,057bytes의 무손실 표현이다. 원본·실패 판정과 두 실제 바이트 경계 검증을 유지한 별도 자격이 필요하며, 예상 절감만으로600초 자격을 선언하지 않는다. 전체 Native helper64·현재 Source Frame·독립 검증·추가 제품 실행은 아직 미완료다.
+중간 graph003은 기존75% 단일 표본 정책에서 CPU76.56%로 작업 초기에 중단됐다. 이 실패도 보존하며 새 준비 CPU 정책은 이 producer에 적용하지 않았다. 당시 다음 후보였던 Native007의 무손실 표현·두 실제 바이트 경계·70개 CODE 바인딩은 앞 절에서 별도로 검증했다. 예상 절감만으로600초 자격을 선언하지 않는다. 전체 Native helper64·현재 Source Frame·독립 검증·추가 제품 실행은 아직 미완료다.
 
 근거: `native009-parent-graph001..004`, `native009-parent-plan001..003`, `native009-parent-declared-scope003`, `successor-native009-parent-graph004.v2`. 실제 제품/Native009 실행과 수용 증가는0이다.
 
