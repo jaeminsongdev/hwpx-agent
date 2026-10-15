@@ -507,3 +507,13 @@ closed_prebody_preparation_io_v1은 현재 해시가 일치한 준비35·상태�
 qualification005는 원6계약과 helper 한도 및 Rust 목록 검사를 통과한 뒤 전체 비용과 shared decoder5 한도로 거부됐다.65.166초·CPU61.89%·가용RAM40.265%·cleanup=True였고 실제529읽기/64,459,191바이트·fresh497/final0이다. 최종 자격 PASS가 아니다. preflight의 예측599.814초는 진입점 전체 비용을 대신하지 않는다. 다음은 원600초·margin60·decoder5·전체 scope를 유지하고 미매핑 과거 영수증을 추가로 무손실 표현하는 등 물리비용을 줄인 후 자격 단계만 재시도하는 것이다. Native/제품·후속 독립 전체 리뷰·승인은 실행하지 않았다. 공식158/249·잔여91·next165·generation53과 P09/A12/A13 OPEN·목표ACTIVE를 유지한다.
 
 근거는closed-io-preflight setup001..006·실행003..006·graph setup001·connections/bootstrap004.v6·private-family-code001·closed-io-qualify setup/실행001..005 및 successor dispatch qualification004-attempt001..005다. 실패와 원본을 모두 보존했다.
+
+## 추가 과거 영수증의 물리비용 감소
+
+expand_closed_preparation_receipts_v1은 기존 qualified select_extra_receipts와 codec13 및 원 배타적 paced publisher를 재사용한다. 통과한 선언 범위에서 미매핑 과거 영수증6개를 선택했으며 현재 사례·소스·EXE·fixture는 변환하지 않는다. 원본2,756,811바이트를741,340바이트로 표현해2,015,471바이트를 줄였다. 전체 바이트 복원12회와fresh33/final33·9.144초·CPU51.98%·가용RAM27.259%·cleanup=True를 확인했다. 새 파생본6개만 생성했고 원본은 보존했다.
+
+probe_extra_closed_receipts_v1은 생산자의 후보 목록을 기대값으로 신뢰하지 않고 승인된 이전 사례164의 원본 source scope에서6개를 독립 재선정했다. 생산자 현재 source 및 원 codec 자격, 실제 원본·encoded pin, 전체 복원 바이트를 다시 검사했다.68개 대응에 기존 논리 입력3,003개를 모두 유지했고 새 진단 manifest1개만 추가해3,004개가 됐다. 같은 원 complete cost 엔진과167개 inventory reservation을 사용한 선언 범위 예측은599.814→598.008초다. 실제fresh53/final53·25.034초·CPU47.06%·가용RAM39.547%·cleanup=True였고 이후53개 source pin도 현재 파일과 일치했다.
+
+이 비교는 선언된 scope의 projection과 비용 검사이며 현재 전체 source 바이트 재검증이나 실제68pair parent·worker·독립 oracle 연결은 아니다. 실제 진입점 전체 비용·자격·Native/제품/후속 독립 전체 리뷰·승인은 NOT_RUN이다. 예측598.008초를 실제 완료 보장 또는 자격 PASS로 처리하지 않는다. 기존 preflight 통과와 qualification005 비용거부, 원600초·margin60·decoder5·전체 scope는 유지한다. 다음은68pair를 실제 경로에 연결한 뒤 변경 범위와 진입점 비용을 검증하는 것이다. 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·목표ACTIVE를 유지한다.
+
+근거는extra-ordinary-receipts001·extra-ordinary-projection001·successor-extra-probe-manifest001 및 실제6개 p361-lossless-runtime-inputs 파생본이다.
