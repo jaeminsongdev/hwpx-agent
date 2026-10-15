@@ -4,6 +4,22 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 73개 packet과 전체 입력 선언 재구성
+
+`native009_full73_transport_v1.py`는 기존 full72 연결에서 원72개 constructor 뒤에 고정 P154 Binding을 설치한다. 원 재구성 함수의 안쪽/바깥쪽 count와 engine count는 private72→73 슬롯만 바꾸고 code 전체 역변환을 확인했다. 바깥 함수의 명명된 reconstruction closure 한 칸만 새 안쪽 함수로 연결하며 다른 cell·globals·defaults와 원 code 본문을 유지한다. capsule 버전은 private v3→v4 슬롯으로 구분한다. 이전 선언과 새 P154 역할·원 parser/해시/schema 검사·제품10초·16KiB 한도는 그대로다.
+
+실제 manifest54,021bytes·capsule10,447bytes·bootstrap12,799bytes를 만들었다. 원 재구성 본문이73개 전체를 동일 private worker/Frame/oracle namespace에 복원했으며 재구성 중 JSON 자료 파일 열기는0회였다. 변조된 기존68개·기존 legacy·새 P154·첫 descriptor·transport hash·실행 미확인/실패 역할·이전 capsule 버전은 거부했다. engine은 한 번 구성했고 worker 호출0이다. 실제 Python worker/Native/Frame 검증은 아니다.
+
+첫 호출001은 sys import 누락으로 Guard/산출물 전에 종료됐다. CODE002는14계약과 packet 재구성을 통과했지만 선언 상속을 추가 대조한 결과 과거 construction003 및 production-worker-launch001 증거 두 개가 빠져 있었다. raw 기록과 packet을 보존하고 이 결과의597.675356초 및 전체 범위 자격은 사용하지 않는다. CODE003은 원 scope의 빈 맵 금지에서 거부돼 초기화 복사를 수정했다. CODE004는 입력 확인 도중 원75% 한 표본 정책에서 시스템CPU최고92.4%로 중단됐으며 자체CPU최고0.19378%·전용45.32MiB·가용RAM최저29.39%·cleanupTrue였다. 두 최대값은 같은 표본임을 보장하지 않으며 원인 프로세스는 미귀속이다.
+
+중단 뒤 코드 검토에서 같은 Reader의 중복 pin 해시는 기존 cache 분기로 방지되고 이 단계의 subprocess 생성도 차단됨을 확인했다. 사후 짧은 조회에서는 Git/Python의 기계 CPU 사용이 각각 약5%였으나 이전92.4% 원인으로 소급하지 않는다. 별도 sampler나 OS/Defender 변경 대신 이미10계약으로 검증된 source predicate helper를 준비 Reader에 연결했다. 일반 파일의 세 논리 조건은 fresh no-follow stat 하나로 판단하고 reparse·오류·알 수 없는 값은 원 검사로 돌아간다. 원 read/pin/fresh_hash 메서드·바이트·해시·최종 읽기·속도·CPU/RAM 보호는 유지한다.
+
+현재 CODE005는16계약·fresh393/final393·Rust787경로/167회 pacing으로 통과했다. 원 Binding의3,207개 입력과 물리204,167,276bytes를 두 상속 증거까지 포함해 정확히 재구성했다. 현재 전체 선언은3,214개다. 동일 Binding으로 정규화한 기준 선언과23개 delta의 전체 round-trip도 검사하고 CODE/graph에 저장해, 다음 단계가 fresh source_pins만 보고 상속 범위를 잃지 않게 했다. 새 scope manifest 전체를 중복 생성하지 않았다. 원 complete583.120478초+별도 준비15초=598.120478/600초이며 이 CODE/graph 결과 및 후속 실행 소스는 추가될 때 다시 계산해야 한다.
+
+CODE005는 실제62.647초·시스템CPU최고47.54%·자체CPU최고5.59334%·전용메모리최고51.07MiB·가용RAM최저29.85%·cleanupTrue다. Source predicate791회는 모두 fresh 일반 파일 판정이었으며 fallback0·stat 재사용0이었다. 이 한 번의 결과는 프리즈 원인이나 해결을 입증하지 않는다. packet은 정확한 기존 바이트 pin으로 확인해 재사용했지만 실패한 부분 검증·기존 closing hash·불완전한 비용 판정은 재사용하지 않았다.
+
+현재 준비 graph는 `successor-native009-full73-graph005.v1.json`이다. graph001 및 CODE002/003/004는 중간 기록으로 보존하며 현재 전체 Source/비용 자격으로 승격하지 않는다. 다음은73개 실제 worker의 EOF/제품 생성 차단 진단과 이 구성의 부모·전체 Native 입력 두 바이트 경계·동적 helper·독립 수용·사전검사/dispatch다. 원본/실패·Native CPU·RAM/commit95%·1코어/BelowNormal·IO1/2MiB·acquisition14·decoder5·제품10초·준비15초·여유60을 유지한다. Native009/제품·접근허용·OS/Defender 변경0·추가 제품 실행 승인대기·공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작이다. 근거: `native009-full73-transport-code002..005`, `successor-native009-full73-graph001/005` 및 v4 capsule/bootstrap.
+
 ### P154 실패 원본의 무손실 표현과 전체73 Binding
 
 `p09-154-observed-full.actual-run01.v1.json`의 실제 원본3,917,483bytes와 SHA256을 확인했다. worker·Job·writer·heavy work가 시작된 뒤 STOP_DURATION_LIMIT로 중단됐으며 product_complete=False·cleanup/owned_tree_empty=True다. 제품 자식 실행과 본문 관측은 미확인이다. 이 기록은 prebody 실패나 제품 수용으로 재분류하지 않는다. 최초 읽기 전용 확인은 원 reader/자원 보호 아래5.731초·시스템CPU최고50.92%·정리 완료였다.
