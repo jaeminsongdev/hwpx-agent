@@ -483,3 +483,13 @@ closed_prebody_worker_connection_v1은 부모의 원 VerifiedPolicy에서만 전
 실제62pair transport001은 구v1 wire16KiB 한도에 걸렸다. 현재 실행 경로가 사용하는 기존 bounded v2를 private source graph에 연결한 뒤 transport002가 통과했다. wire8,887바이트·bootstrap 선언6,064바이트이며16KiB 한도와 전체62개 항목을 유지했다. 실제64개 입력의 final fresh hash를 완료했고17.290초·CPU54.91%·가용RAM40.516%·cleanup=True였다. 부모와 worker의 descriptor 및 representation을 정확히 비교했다.
 
 진단용 확장 manifest는 별도 불변 파일로 발행했지만 실행 capsule/bootstrap은 발행하지 않았다. 전체 현재 소스 바이트 재검증과 실제 parent/worker entry·독립 oracle 연결은 NOT_RUN이다. 이 결과를 Native 또는 제품 통과로 승격하지 않으며 공식158/249는 변하지 않는다. 다음은 실제 entry 연결과 변경 범위 자격·preflight·비용 검증이다. 근거는case165-closed-prebody-worker-code001..004·transport001/002·successor-closed-transport-manifest001/002다.
+
+## 실행 준비 경로의 중단 기록 연결
+
+closed_prebody_runtime_connection_v1은 실제 private runtime의 부모 입력 callback과 worker API 및 동적으로 생성되는 runtime에 같은 연결을 적용한다. 부모 callback은 독립적으로 선언된 producer pin으로 원본을 fresh 검증한 뒤 원 전체 입력 callback을 호출한다. worker 선언만으로 부모·독립 리뷰를 허용하지 않는다. 원 worker 복원 및 hint 함수의 code/defaults/closure는 유지하고 원 내부 validator 의존성을 고정했다. 초기 의존성 연결 실패 code001은 보존했고 현재 code002는8계약·fresh32/final32·6.938초·CPU23.84%·cleanup=True다.
+
+current_queue_closed_metadata_runtime_v6은 frozen V5 실행 준비를 재사용하고 기존 V5 19계약·worker 10계약·runtime 8계약 및 그 소스 해시를 모든 부모 독자에서 확인한다. 실제 graph004.v4는62pair·fresh97/final97·25.314초·CPU25.44%·가용RAM37.412%·cleanup=True로 통과했다. 실제 확장 manifest와8,871바이트 capsule을 배타적으로 발행했다. 이 준비는 Native 실행이나 전체 비용 자격이 아니다.
+
+factory003은 원11계약 통과 후 같은 사례의 source alias를 거부했다. 원 함수가 독자 생성 전에 binding import를 확정하므로 독자 생성 시의 연결 변경이 실행 중인 함수의 import를 바꾸지 못한 것이 원인이다. 준비 graph와 V6 source는 보존했다. closed_prebody_factory_admission_fix_v1은 import를 먼저 연결하되 실제 독자의 VerifiedPolicy가 생긴 후에만 Binding을 만들며 검사를 생략하지 않는다. factory004는11계약·fresh94/final94·28.829초·CPU38.96%·가용RAM39.290%·cleanup=True로 통과했다. 실제 별도 worker CLI는 GO를 받지 않았고 원 GO 거부를 확인했으며 과거 runtime/authority open은0이었다. 제품 실행도0이다.
+
+CODE run004-attempt001은 원74계약·기본helper60/64·fresh145/final145·29.186초·CPU28.97%·가용RAM39.617%·cleanup=True로 통과했다. 이후145개 소스 pin도 현재 파일과 일치했다. 다음은 기존 준비 IO 최적화를 이 경로에 연결한 whole preflight·진입 비용 자격이다. Native·독립전체리뷰·승인은 아직 NOT_RUN이며 V6은 native/review/accept CLI를 거부한다. 공식158/249·잔여91·next165·generation53 및 P09/A12/A13 OPEN·목표ACTIVE를 유지한다. 근거는closed-prebody-runtime-code001/002·successor-connections004.v4·closed-manifest004·worker-capsule/bootstrap004·factory003/004·code-run004-attempt001이다.
