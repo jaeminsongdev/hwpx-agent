@@ -473,3 +473,13 @@ run003 preflight001은70.103초·CPU81.44%,004는51.349초·CPU75.47%,005는5.68
 projection002는 기존60pair에 검증된2pair를 연결했다. 봉인된 이전 preflight 선언과 중단 원본의 논리 pin 전체2,985개를 변경 없이 유지하며 물리표현 합계를235,012,330→232,251,070바이트로2,761,260바이트 줄였다. 실제 읽은33개 입력은 모두 최종 fresh 해시를 완료했고15.266초·CPU34.18%·가용RAM41.428%·cleanup=True였다. 이는 선언된 범위의 표현 연결 검사이며 현재 전체 소스 바이트 재검증은 아니다. parent·worker·독립 oracle의 실제 실행 연결과 Native/제품 검증은 NOT_RUN이다.
 
 다음 작업은 이 구성요소를 실제 parent·worker·독립검사에 동일하게 연결하는 것이다. 연결 전 Native004를 반복하지 않는다. 기존 코드 자격과 통과한 결과는 해당 source pin이 유지되는 범위에서 재사용하고, 변경된 연결 및 이후 단계만 검증한다. 공식158/249·잔여91·next165·generation53과 P09/A12/A13 OPEN·목표ACTIVE를 유지한다. 근거는case165-closed-prebody-code001/002·sources001/002·projection001/002이며 원본과 실패 기록은 삭제하거나 덮어쓰지 않았다.
+
+## 중단 기록의 부모 선언과 worker 전송 연결
+
+closed_prebody_worker_connection_v1은 부모의 원 VerifiedPolicy에서만 전송 선언을 생성한다. worker는 그 선언의 사례·이전 실행 번호·정확한 pin·유일한 대응을 확인하되 원본 바이트 검증을 했다고 주장하지 않는다. 원 worker reconstruction 함수의 code/defaults/closure를 유지하며 private binding 의존성만 연결한다. 전송 복원 뒤 모든 선언 항목이 실제 wire에 존재하는지 다시 비교한다. 원본 전체 검사와 독립 리뷰는 실제 실행 승인에 계속 필요하다.
+
+현재 code004는10계약·fresh32/final32·5.739초·CPU24.8%·가용RAM41.054%·cleanup=True로 통과했다. 원본 증거 IO를 금지한 복원, 부모/worker representation 일치, 원 oracle code 유지, 변경된 pin과 wire·중복·미선언 같은 사례·공유 namespace 거부를 확인했다. 초기 code001은 시험의 필수 manifest pin 누락으로 원 검사가 거부했으며 실패를 보존했다. 중간 code002/003도 보존한다.
+
+실제62pair transport001은 구v1 wire16KiB 한도에 걸렸다. 현재 실행 경로가 사용하는 기존 bounded v2를 private source graph에 연결한 뒤 transport002가 통과했다. wire8,887바이트·bootstrap 선언6,064바이트이며16KiB 한도와 전체62개 항목을 유지했다. 실제64개 입력의 final fresh hash를 완료했고17.290초·CPU54.91%·가용RAM40.516%·cleanup=True였다. 부모와 worker의 descriptor 및 representation을 정확히 비교했다.
+
+진단용 확장 manifest는 별도 불변 파일로 발행했지만 실행 capsule/bootstrap은 발행하지 않았다. 전체 현재 소스 바이트 재검증과 실제 parent/worker entry·독립 oracle 연결은 NOT_RUN이다. 이 결과를 Native 또는 제품 통과로 승격하지 않으며 공식158/249는 변하지 않는다. 다음은 실제 entry 연결과 변경 범위 자격·preflight·비용 검증이다. 근거는case165-closed-prebody-worker-code001..004·transport001/002·successor-closed-transport-manifest001/002다.
