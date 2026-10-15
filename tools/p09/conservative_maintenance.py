@@ -21,12 +21,14 @@ from audit_evidence_io import AuditEvidenceReader
 
 ROOT = Path(__file__).resolve().parents[2]
 TARGET = ROOT / "target/p09-149-conservative"
-POLICY = {"profile": "P149_OWNED_WORKLOAD_V4_PARTITIONED_TEST_CODEGEN", "logical_cpu_limit": 1,
+POLICY = {"profile": "P149_OWNED_WORKLOAD_V5_HOST_RAM_95_PERCENT", "logical_cpu_limit": 1,
     "priority": "BelowNormal", "cargo_jobs": 1, "test_threads": 1,
-    "sample_seconds": 0.5, "start_ram_min_percent": 10,
+    # 사용자 지정 host RAM 상한 95%: available 5%까지 허용한다.
+    # 소유 Job 예산, CPU 보호, commit 보호와 제품 검증 조건은 별개로 유지한다.
+    "sample_seconds": 0.5, "start_ram_min_percent": 5,
     "start_consecutive_samples": 2, "admission_max_seconds": 3,
     "emergency_cpu_percent": 98, "emergency_cpu_consecutive_samples": 4,
-    "stop_ram_min_percent": 8, "stop_commit_used_percent": 95,
+    "stop_ram_min_percent": 5, "stop_commit_used_percent": 95,
     "job_memory_limit_percent": 8, "job_memory_stop_percent": 7,
     "test_debug_info": "line-tables-only", "dev_debug_info": "line-tables-only", "test_opt_level": 0,
     "test_codegen_units": 16,

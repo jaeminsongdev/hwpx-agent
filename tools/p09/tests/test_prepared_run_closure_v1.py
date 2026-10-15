@@ -5,6 +5,47 @@ import unittest
 
 
 class Tests(unittest.TestCase):
+    def original_v6_load(self):
+        from pathlib import Path
+        path="tools/p09/current_queue_closed_metadata_runtime_v6.py"
+        root=Path(__file__).resolve().parents[3]
+        tree=ast.parse((root/path).read_text(encoding="utf-8"))
+        node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=="load")
+        env=dict(__name__="p09_exact_v6_epoch_test")
+        exec(compile(ast.Module(body=[node],type_ignores=[]),path,"exec"),env)
+        return env["load"]
+
+    def test_component_epoch_preserves_complete_original_reader_body(self):
+        from types import CodeType
+        original=self.original_v6_load();changed=MODULE.component_epoch(original)
+        def reverse(value):
+            if type(value) is CodeType:return value.replace(co_consts=tuple(reverse(v) for v in value.co_consts))
+            if type(value) is tuple:return tuple(reverse(v) for v in value)
+            if type(value) is str:return {"runtime-code003":"runtime-code002","worker-code005":"worker-code004"}.get(value,value)
+            return value
+        self.assertEqual(reverse(changed.__code__),original.__code__)
+        self.assertIs(changed.__globals__,original.__globals__)
+        self.assertIs(changed.__defaults__,original.__defaults__)
+        self.assertIs(changed.__kwdefaults__,original.__kwdefaults__)
+        self.assertIs(changed.__closure__,original.__closure__)
+
+    def test_component_epoch_rejects_public_or_already_projected_code(self):
+        original=self.original_v6_load()
+        public=FunctionType(original.__code__,dict(__name__="public"))
+        with self.assertRaises(ValueError):MODULE.component_epoch(public)
+        with self.assertRaises(ValueError):MODULE.component_epoch(MODULE.component_epoch(original))
+        with self.assertRaises(ValueError):MODULE.component_epoch(MODULE.one_run)
+
+    def test_component_epoch_requires_both_exact_fresh_receipt_selectors(self):
+        from types import CodeType
+        original=self.original_v6_load()
+        def corrupt(value):
+            if type(value) is CodeType:return value.replace(co_consts=tuple(corrupt(v) for v in value.co_consts))
+            if type(value) is tuple:return tuple(corrupt(v) for v in value)
+            return "runtime-code099" if value=="runtime-code002" else value
+        broken=FunctionType(corrupt(original.__code__),original.__globals__)
+        with self.assertRaises(ValueError):MODULE.component_epoch(broken)
+
     def data(self):
         p=MODULE.PREFIX;run=5
         pin=lambda path:dict(path=path,bytes=1,sha256="a"*64)

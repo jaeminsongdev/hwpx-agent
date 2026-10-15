@@ -1,5 +1,30 @@
 # P09 검증 속도 분석과 재시도 개선
 
+## 현재 재개 위치와 RAM 정책 변경
+
+2026-10-15 사용자 지시에 따라 현재 대화에서 목표를 ACTIVE로 유지한다. 시스템 RAM 사용률 상한은 95%이며 공통 정책의 시작·유지 기준을 가용 RAM 5%로 맞췄다. 정확히 95%는 허용하고 초과하면 중단한다. CPU 보호, commit 95% 보호, 소유 Job 메모리 중단 7% 및 hard limit 8%는 그대로다. OS·Defender 설정과 다른 작업은 변경하지 않았다.
+
+새 정책의 경계 및 실제 Guard/SQL 정책 연결 5개 테스트는 PASS다. 관련 SQL·CPU 귀속·signed runner 회귀는 52개 중 51개 PASS, 1개 FAIL이다. 실패한 `test_declared_delta_restores_whole_original_bodies`는 `tests/test_signed_durable_example_tests.py:45`에서 기존 Rust 본문과 보관 원본의 차이를 보고했으며, 해당 Rust 소스는 이 변경에서 수정하지 않았다. 전체 회귀 PASS나 제품 PASS로 승격하지 않는다.
+
+변경 후 CODE007-003은 `CURRENT_EPOCH_ACCEPT_V6_CURRENT_QUALIFIED_SOURCES`에서 4.797초 만에 중단됐다. CPU 최고 37.89%, 가용 RAM 최저 21.22%, cleanup=True다. 이는 자원 초과가 아니라 공통 정책 소스 변경에 따른 기존 자격 증거의 해시 불일치다. Native007/008 부재를 확인했고 GO·제품 실행은 없다.
+
+최소한의 구성요소 자격만 순차 갱신했다.
+
+| 현재 증거 | 계약 | 실제 전후 해시 | 시간 | CPU 최고 | 가용 RAM 최저 |
+| --- | ---: | --- | ---: | ---: | ---: |
+| `evidence/p09-361-case165-closed-prebody-runtime-code003.v1.json` | 8 PASS | 32/32 | 6.968초 | 34.36% | 20.64% |
+| `evidence/p09-361-case165-closed-prebody-worker-code005.v1.json` | 10 PASS | 32/32 | 7.441초 | 36.21% | 21.97% |
+
+두 구성요소 모두 cleanup=True이며 Native·제품 승인 증거는 아니다. 실행 adapter가 원 V6 load의 runtime-code002·worker-code004 선택자만 새 자격003·005로 투영하도록 연결했다. 상태·계약 수·fresh source 검사·최종 해시 검사를 포함한 중첩 Reader 전체 코드는 역변환 시 원본과 동일해야 한다. 공개 함수, 중복 투영과 불완전한 선택자 테이블은 거부한다. 기존 V6·자격 파일은 수정하지 않았다.
+
+연결 회귀를 포함한 closure-code005의 9개 계약은 fresh2/final2 PASS다. 이전 준비 run004..007의 closure-attempt004는 각각 fresh7/final7 PASS이며 실제 EOF/NO-GO·기존 Native 부재·제품 실행0을 확인했다. 이어 **CODE007-004의 74개 계약, helper59, fresh170/final170이 PASS**했다. 31.161초, CPU 최고46.50%, 가용 RAM 최저20.87%, cleanup=True다. adapter는 17,345바이트, SHA-256 `d2f8e8fb9b9d22db44e3a9e8ceab36e6414c4de555b1cbe41f24c15de260f363`이며 변경이 없다면 이 CODE를 재사용한다.
+
+preflight007-006은 `CURRENT_EPOCH_ACCEPT_UNCHANGED_CURRENT_PREPARED_GRAPH_DEPENDENCIES`에서 19.223초 만에 중단됐다. CPU 최고36.55%, 가용 RAM 최저20.42%, cleanup=True로 자원 중단이 아니다. 준비 그래프007.v10의 source pin 161개를 직접 비교했으며 불일치는 `tools/p09/conservative_maintenance.py` 하나(이전29,237바이트 → 현재29,410바이트)다. 다음 작업은 이 정책 변경을 검증 가능한 새 준비 그래프로 반영하는 것이다. 기존 그래프·startup 증거를 덮어쓰거나 source 검사를 생략하지 않는다. 이후 전체 preflight → dispatcher 자격 → 미실행 case165 순서로 진행한다. 완료한 제품 사례나 전체 249개를 재실행하지 않는다.
+
+RAM 변경 전 startup factory007은 11계약·fresh119/final119 PASS였고 preflight007-005는 CPU 83.99%에서 보호 중단됐다. 두 기록은 원상 보존하며, RAM 정책 변경이 CPU 폭주를 해결했다는 결론을 내리지 않는다. 공식 수용 상태는 158/249, 잔여91, next165, generation53이고 P09·A12·A13은 OPEN, P10은 시작하지 않았다.
+
+아래 내용은 이전 검증과 최적화 이력이다. 현재 실행 위치와 정책 판정은 이 절을 우선한다.
+
 제품 실행보다 입력 고정과 증거 재검사가 현재 지연의 대부분을 차지한다. 재시도마다 소스를 변경하는 흐름을 제거하고, 검증된 소스와 별도 실행 기록을 유지하는 방식으로 목표 작업을 재개한다. CPU 및 RAM 보호, 실제 전후 바이트 검사, 독립 승인 조건은 유지한다.
 
 ## 확인된 지연

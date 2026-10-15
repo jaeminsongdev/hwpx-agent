@@ -91,7 +91,7 @@ class WarningOnlyContracts(unittest.TestCase):
         self.assertEqual(window.attribution_probe.calls,0)
 
     def test_hard_low_ram_skips_optional_query_but_original_decision_unchanged(self):
-        window=self.make();window.cpu=90.0;window.ram=7.0
+        window=self.make();window.cpu=90.0;window.ram=4.99
         row=window.sample()
         self.assertEqual(c.decision(row,0),(0,"STOP_LOW_AVAILABLE_RAM"))
         self.assertEqual(window.attribution_probe.calls,0)

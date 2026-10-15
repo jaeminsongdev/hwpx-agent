@@ -130,7 +130,7 @@ class SQLPercentageResourceTests(unittest.TestCase):
         reader.finish()
 
     def test_normal_CPU_and_small_machine_RAM_can_admit(self):
-        resources = self.fixture([self.row(cpu=75, ram=10)]*2)
+        resources = self.fixture([self.row(cpu=75, ram=5)]*2)
         sleep, clock = self.clock()
         self.assertEqual(resources.admit(sleep, clock), 2)
         self.assertEqual(len(resources.samples), 2)
@@ -140,7 +140,7 @@ class SQLPercentageResourceTests(unittest.TestCase):
     def test_admission_immediate_saturation_commit_and_RAM_fail_closed(self):
         for row, code in ((self.row(cpu=98), "DEFERRED_ALREADY_SATURATED_SYSTEM"),
                 (self.row(commit=95), "STOP_SYSTEM_COMMIT_PRESSURE"),
-                (self.row(ram=7.99), "STOP_LOW_AVAILABLE_RAM")):
+                (self.row(ram=4.99), "STOP_LOW_AVAILABLE_RAM")):
             resources = self.fixture([row])
             sleep, clock = self.clock()
             with self.assertRaisesRegex(ValueError, "^"+code+"$"):
@@ -148,15 +148,16 @@ class SQLPercentageResourceTests(unittest.TestCase):
             self.assertIsNone(resources.thread.ident)
 
     def test_admission_RAM_stability_and_time_budget_are_not_bypassed(self):
-        resources = self.fixture([self.row(ram=10), self.row(ram=9), self.row(ram=10), self.row(ram=10)])
+        resources = self.fixture([self.row(ram=5), self.row(ram=5)])
         sleep, clock = self.clock()
         self.assertEqual(resources.admit(sleep, clock), 2)
-        self.assertEqual(clock(), 2)
-        resources = self.fixture([self.row(ram=9)]*6)
+        self.assertEqual(clock(), 1)
+        # 시작/중단이 같은 95% 상한이다. 초과하면 재시도 없이 즉시 중단한다.
+        resources = self.fixture([self.row(ram=5), self.row(ram=4.99)])
         sleep, clock = self.clock()
-        with self.assertRaisesRegex(ValueError, "^bootstrap_idle_window_not_admitted$"):
+        with self.assertRaisesRegex(ValueError, "^STOP_LOW_AVAILABLE_RAM$"):
             resources.admit(sleep, clock)
-        self.assertEqual(len(resources.samples), 6)
+        self.assertEqual(len(resources.samples), 2)
         resources = self.fixture([self.row()]*2)
         slow_clock = Mock(side_effect=[0, 0, 0.5, 4])
         with self.assertRaisesRegex(ValueError, "^bootstrap_idle_window_not_admitted$"):
@@ -223,8 +224,8 @@ class SQLPercentageResourceTests(unittest.TestCase):
         self.assertEqual({key: policy[key] for key in ("container_memory_bytes", "container_swap_total_bytes", "pids_limit")},
             {"container_memory_bytes": 536870912, "container_swap_total_bytes": 536870912, "pids_limit": 64})
         self.assertEqual(policy["maximum_commit_used_percent"], 95)
-        self.assertEqual(policy["minimum_available_ram_percent"], 8)
-        self.assertEqual(policy["start_available_ram_min_percent"], 10)
+        self.assertEqual(policy["minimum_available_ram_percent"], 5)
+        self.assertEqual(policy["start_available_ram_min_percent"], 5)
         self.assertFalse(policy["host_child_aggregate_job_enforced"])
         self.assertFalse(policy["container_kernel_limits_qualified_by_this_helper"])
         self.assertNotIn("post_hash_idle_CPU_max_percent", policy)

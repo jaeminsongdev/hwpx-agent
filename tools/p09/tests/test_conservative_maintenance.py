@@ -19,8 +19,8 @@ class PolicyTests(unittest.TestCase):
     def test_normal_background_cpu_does_not_block_admission(self):
         count = c.admitted_count(self.row(cpu=75), 0)
         self.assertLess(count, c.POLICY["start_consecutive_samples"])
-        self.assertEqual(c.admitted_count(self.row(ram=9.99), count), 0)
-        self.assertEqual(c.admitted_count(self.row(cpu=75, ram=10), count), 2)
+        self.assertEqual(c.admitted_count(self.row(ram=4.99), count), 0)
+        self.assertEqual(c.admitted_count(self.row(cpu=75, ram=5), count), 2)
         self.assertNotIn("start_cpu_max_percent", c.POLICY)
         self.assertNotIn("stop_ram_min_mib", c.POLICY)
 
@@ -31,14 +31,41 @@ class PolicyTests(unittest.TestCase):
         self.assertEqual(c.decision(self.row(cpu=97.99), 3), (0, None))
 
     def test_ram_stops_and_invalid_observations_fail_closed(self):
-        self.assertEqual(c.decision(self.row(ram=7.99), 0)[1], "STOP_LOW_AVAILABLE_RAM")
-        self.assertIsNone(c.decision(self.row(ram=8), 0)[1])
+        self.assertEqual(c.decision(self.row(ram=4.99), 0)[1], "STOP_LOW_AVAILABLE_RAM")
+        self.assertIsNone(c.decision(self.row(ram=5), 0)[1])
         self.assertEqual(c.decision(self.row(commit=95), 0)[1], "STOP_SYSTEM_COMMIT_PRESSURE")
         row = dict(self.row(), peak_job_private_percent=7)
         self.assertEqual(c.decision(row, 0)[1], "STOP_OWNED_JOB_MEMORY_BUDGET")
         for cpu, ram in [(math.nan, 30), (101, 30), (-1, 30), (10, math.inf), (10, -1), (True, 30)]:
             with self.subTest(cpu=cpu, ram=ram), self.assertRaisesRegex(ValueError, "OBSERVATION_INVALID"):
                 c.decision(self.row(cpu, ram), 0)
+
+    def test_user_host_ram_ceiling_does_not_raise_owned_or_commit_limits(self):
+        self.assertEqual(c.POLICY["start_ram_min_percent"], 5)
+        self.assertEqual(c.POLICY["stop_ram_min_percent"], 5)
+        for used in (90, 92, 94.99, 95):
+            with self.subTest(used_percent=used):
+                row = self.row(ram=100-used)
+                self.assertIsNone(c.decision(row, 0)[1])
+                self.assertEqual(c.admitted_count(row, 0), 1)
+        self.assertEqual(c.decision(self.row(ram=4.999), 0)[1], "STOP_LOW_AVAILABLE_RAM")
+        self.assertEqual(c.admitted_count(self.row(ram=4.999), 1), 0)
+        self.assertEqual(c.POLICY["stop_commit_used_percent"], 95)
+        self.assertEqual(c.POLICY["job_memory_limit_percent"], 8)
+        self.assertEqual(c.POLICY["job_memory_stop_percent"], 7)
+        self.assertEqual(c.POLICY["logical_cpu_limit"], 1)
+
+    def test_current_guard_and_sql_host_policy_use_the_same_ram_ceiling(self):
+        import accept_case112_current_epoch as acceptance
+        import sql_percentage_resources as sql
+        row = dict(self.row(ram=5), parent_private_percent=0.1,
+            parent_cpu_machine_percent=None)
+        self.assertEqual(acceptance.resource_history([row]), 0)
+        with self.assertRaisesRegex(ValueError, "ORIGINAL_RESOURCE_STOP"):
+            acceptance.resource_history([dict(row, available_ram_percent=4.999)])
+        self.assertIs(sql.decision, c.decision)
+        self.assertEqual(sql.resource_policy()["minimum_available_ram_percent"], 5)
+        self.assertEqual(sql.resource_policy()["start_available_ram_min_percent"], 5)
 
     def test_only_five_scoped_non_sql_non_native_tasks(self):
         self.assertEqual(set(c.TASKS), {"domain-check", "domain-tests", "formula-tests", "comment-tests", "product-check"})

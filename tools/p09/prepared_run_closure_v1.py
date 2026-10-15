@@ -4,7 +4,7 @@ Original Native/failed-graph checks remain for every other run. Closure requires
 actual Native absence, unchanged prepared packets and fresh EOF/NO-GO startup.
 """
 from pathlib import Path
-from types import FunctionType,SimpleNamespace as NS
+from types import CodeType,FunctionType,SimpleNamespace as NS
 import re
 import sys
 
@@ -18,10 +18,40 @@ OLD=dict(path="tools/p09/expanded_closed_preparation_v1.py",bytes=21675,
     sha256="8de7dc45657401ceefc05a8535114155da138f79d3d17a9c6f2491808e43fca1")
 PREFIX="implementation/p09/evidence/p09-361-case165-"
 STATE="PASS_PREPARATION_ONLY_CLOSED_WITHOUT_NATIVE_NOT_RUNTIME_OR_PRODUCT"
+COMPONENT_EPOCH={"runtime-code002":"runtime-code003","worker-code004":"worker-code005"}
 
 
 def require(ok,label):
     if not ok:raise ValueError("PREPARED_RUN_CLOSURE_"+label)
+
+
+def component_epoch(fn):
+    """Select fresh component CODE; retain the full original nested Reader.
+
+    Only two receipt selectors change. States/counts, all fresh source checks,
+    final-hash equality and downstream admission remain bytecode-identical.
+    """
+    require(type(fn) is FunctionType and fn.__name__=="load"
+        and fn.__globals__.get("__name__","").startswith("p09_exact_")
+        and fn.__code__.co_filename.replace("\\","/").endswith(
+            "tools/p09/current_queue_closed_metadata_runtime_v6.py"),"PRIVATE_V6_COMPONENT_EPOCH")
+    counts={k:0 for k in COMPONENT_EPOCH};already={v:0 for v in COMPONENT_EPOCH.values()}
+    def change(value,mapping,count=None):
+        if type(value) is CodeType:
+            return value.replace(co_consts=tuple(change(v,mapping,count) for v in value.co_consts))
+        if type(value) is tuple:return tuple(change(v,mapping,count) for v in value)
+        if type(value) is str:
+            if count is not None:
+                if value in counts:counts[value]+=1
+                if value in already:already[value]+=1
+            return mapping.get(value,value)
+        return value
+    code=change(fn.__code__,COMPONENT_EPOCH,True)
+    require(all(v==1 for v in counts.values()) and not any(already.values()),"EXACT_TWO_ORIGINAL_COMPONENT_SELECTORS")
+    require(change(code,{v:k for k,v in COMPONENT_EPOCH.items()})==fn.__code__,"WHOLE_COMPONENT_EPOCH_CODE_INVERSE")
+    result=FunctionType(code,fn.__globals__,argdefs=fn.__defaults__,closure=fn.__closure__)
+    result.__kwdefaults__=fn.__kwdefaults__
+    return result
 
 
 def one_run(fn,run):
@@ -73,7 +103,7 @@ def producer_inventory(row):
 def admit(q,ctx,run,a):
     root=PREFIX+f"current-runtime-run{run:03}.v1.json"
     require(absent(q,root),"NATIVE_ABSENT_BEFORE_CLOSURE_ADMISSION")
-    name=PREFIX+f"prepared-only-closure-run{run:03}-attempt003.v1.json"
+    name=PREFIX+f"prepared-only-closure-run{run:03}-attempt004.v1.json"
     row=q.json(name);validate(row,ctx.index,run,a)
     inventory=producer_inventory(row)
     # Historical graph program pins need not equal today's source: no historical
@@ -94,7 +124,7 @@ def install_retry(namespace,a):
     def previous_stops(q,ctx,api,bridge):
         for run in range(2,ctx.run):
             root=f"implementation/p09/evidence/p09-361-case{ctx.index}-current-runtime-run{run:03}.v1.json"
-            closure=PREFIX+f"prepared-only-closure-run{run:03}-attempt003.v1.json"
+            closure=PREFIX+f"prepared-only-closure-run{run:03}-attempt004.v1.json"
             if ctx.index==165 and 4<=run<=7 and absent(q,root) and not absent(q,closure):
                 admit(q,ctx,run,api)
             else:
@@ -113,7 +143,7 @@ def main():
     import flat_current_queue_envelope_runtime_v25 as envelope
     parser=argparse.ArgumentParser()
     parser.add_argument("--closure-code",action="store_true");parser.add_argument("--close-run",type=int)
-    parser.add_argument("--closure-attempt",type=int,default=3)
+    parser.add_argument("--closure-attempt",type=int,default=4)
     args,remainder=parser.parse_known_args()
     if args.closure_code or args.close_run is not None:
         # Publication-only dependencies must not enlarge the production graph.
@@ -139,12 +169,12 @@ def main():
                 tests.test_prepared_run_closure_v1.Tests.data.__globals__.update(MODULE=sys.modules[__name__],API=a)
                 result=unittest.TextTestRunner(stream=io.StringIO(),verbosity=0).run(unittest.defaultTestLoader.loadTestsFromModule(tests.test_prepared_run_closure_v1))
                 contracts=dict(run=result.testsRun,errors=len(result.errors),failures=len(result.failures),skipped=len(result.skipped));row["contracts"]=contracts
-                a.exact(contracts,dict(run=6,errors=0,failures=0,skipped=0),"ALL_CLOSURE6")
-                row["state"]="PASS_PREPARED_ONLY_CLOSURE_CODE6_NOT_ENTRY_NATIVE_OR_PRODUCT"
+                a.exact(contracts,dict(run=9,errors=0,failures=0,skipped=0),"ALL_CLOSURE9")
+                row["state"]="PASS_PREPARED_ONLY_CLOSURE_CODE9_NOT_ENTRY_NATIVE_OR_PRODUCT"
             else:
-                code=q.json(PREFIX+"prepared-closure-code004.v1.json")
-                a.fields(code,dict(state="PASS_PREPARED_ONLY_CLOSURE_CODE6_NOT_ENTRY_NATIVE_OR_PRODUCT",
-                    contracts=dict(run=6,errors=0,failures=0,skipped=0),cleanup_confirmed=True),"QUALIFIED_CLOSURE_CODE6")
+                code=q.json(PREFIX+"prepared-closure-code005.v1.json")
+                a.fields(code,dict(state="PASS_PREPARED_ONLY_CLOSURE_CODE9_NOT_ENTRY_NATIVE_OR_PRODUCT",
+                    contracts=dict(run=9,errors=0,failures=0,skipped=0),cleanup_confirmed=True),"QUALIFIED_CLOSURE_CODE9")
                 for pin in code["source_pins"]:a.exact(q.pin(pin["path"]),pin,"CURRENT_CLOSURE_CODE")
                 root=PREFIX+f"current-runtime-run{run:03}.v1.json";require(absent(q,root),"NATIVE_MUST_ACTUALLY_BE_ABSENT")
                 graph_name=PREFIX+f"successor-connections{run:03}.v9.json";graph=q.json(graph_name)
@@ -203,6 +233,10 @@ finally:print(json.dumps({'historical_runtime_or_authority_opens':len(hits)}))
         base=original_profile(root,loader,core,api,prior_alias)
         def load(*items,**kwargs):
             modules,proof=base.load(*items,**kwargs)
+            v6=getattr(modules,"current_queue_closed_metadata_runtime_v6",None)
+            if v6 is not None:
+                original_load=v6.load;v6.load=component_epoch(original_load)
+                original_load.__globals__["load"]=v6.load
             v5=getattr(modules,"current_queue_sealed_metadata_runtime_v5",None)
             if v5 is not None:
                 original_paths=v5.retry_paths
@@ -218,9 +252,9 @@ finally:print(json.dumps({'historical_runtime_or_authority_opens':len(hits)}))
                         def __init__(self,*args,**kwargs):
                             super().__init__(*args,**kwargs)
                             for name in (CLOSURE_SOURCE,CLOSURE_TEST):self.pin(name)
-                            code=self.json(PREFIX+"prepared-closure-code004.v1.json")
-                            api.fields(code,dict(state="PASS_PREPARED_ONLY_CLOSURE_CODE6_NOT_ENTRY_NATIVE_OR_PRODUCT",
-                                contracts=dict(run=6,errors=0,failures=0,skipped=0),cleanup_confirmed=True),"CURRENT_CLOSURE_ADAPTER_CODE")
+                            code=self.json(PREFIX+"prepared-closure-code005.v1.json")
+                            api.fields(code,dict(state="PASS_PREPARED_ONLY_CLOSURE_CODE9_NOT_ENTRY_NATIVE_OR_PRODUCT",
+                                contracts=dict(run=9,errors=0,failures=0,skipped=0),cleanup_confirmed=True),"CURRENT_CLOSURE_ADAPTER_CODE")
                             for pin in code["source_pins"]:api.exact(self.pin(pin["path"]),pin,"CURRENT_CLOSURE_ADAPTER_SOURCE")
                     values[1]=NS(**{**vars(a0),"AcceptanceReader":Reader})
                     return original(*values,**options)

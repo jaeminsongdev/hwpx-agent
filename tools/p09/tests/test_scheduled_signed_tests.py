@@ -79,7 +79,7 @@ class ScheduledSignedTests(unittest.TestCase):
         finally:finish_watcher(resources,{})
 
     def test_memory_and_commit_pressure_keep_original_thresholds(self):
-        for row,code in ((self.row(ram=7),"STOP_LOW_AVAILABLE_RAM"),(self.row(commit=95),"STOP_SYSTEM_COMMIT_PRESSURE")):
+        for row,code in ((self.row(ram=4.99),"STOP_LOW_AVAILABLE_RAM"),(self.row(commit=95),"STOP_SYSTEM_COMMIT_PRESSURE")):
             now=[10.0];resources=self.resources([self.row(),row])
             try:
                 with patch.object(binding.time,"monotonic",side_effect=lambda:now[0]):
