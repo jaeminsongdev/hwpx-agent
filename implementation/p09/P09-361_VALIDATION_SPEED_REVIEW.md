@@ -4,6 +4,33 @@
 
 2026-10-15 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. run008 제품 실행은 아직 시작하지 않았다.
 
+### 일반 기록 전체의 무손실 표현 비교
+
+`receipt_xz_envelope_v1.py`는 원본을 JSON으로 정규화하지 않고 그대로 보존하는 별도 XZ 후보 포맷이다. 기존 zlib 포맷과 명시적으로 구분한다. XZ dictionary8MiB·decoder memory limit32MiB·입출력 chunk64KiB로 제한하고, 닫힌 필드 집합·선언 크기·원본 SHA256·끝난 stream을 확인한다. 중복 키, 잘린 stream, 뒤에 붙은 데이터와 연결된 stream, 선언 초과 출력, 잘못된 포맷 및 guard 중단을 거부한다. 원본·기존 압축본을 수정하거나 제품 decoder에 연결하지 않았다. 표준 API 근거는 [Python 3.13 lzma 문서](https://docs.python.org/3.13/library/lzma.html)다.
+
+첫 `codec-candidate-sample001`은4.037612초·CPU 최고82.03%에서 `STOP_PREPARATION_CPU_ATTRIBUTION_MISSING`으로 종료했고 cleanup=True다. 첫 표본에 자기 CPU 귀속값이 없던 것이며 이를0으로 대체하지 않았다. 진단 전용 `owned_cpu_baseline_v1`은 아직 표본이 없는 Guard에 실제 monotonic/process CPU 쌍을 기록한다. clock skew50ms 초과·역행·비유한 값·이미 활성화된 owner는 거부하며 원 check/close/deadline/표본/중단 정책을 교체하지 않는다. 작은3계약을 먼저 통과한 뒤 진단 Guard에만 사용했다. 현행 준비 진입점과 Native 보호기는 그대로다.
+
+후속 `codec-candidate-sample002`는 실제 크기 상위3개의 원본·기존 물리본을 다시 읽고 baseline/zlib9/XZ 후보 각각을 두 번 복원했다. 후보9계약 및 baseline3계약, fresh93/final93, 44.741715초·CPU 최고88.51%·가용RAM 최저13.48340%·cleanup=True다. zlib9의 절감은79808bytes, XZ는4074423bytes였다. 이3개 표본의 약83% 절감을 전체61개로 외삽하지 않았다.
+
+`xz-corpus-diagnostic001`은 원68개 manifest와 일반61개의 고정 mapping SHA256을 확인한 뒤 일반61개 모두를 순차 비교했다. 각 원본과 기존 압축본을 실제로 읽고, 새 XZ 후보를 메모리에서 만들어 원본 바이트와 두 번 대조했다. 기존 zlib본도 원본과 대조했으며 모든 입력은 마지막에 다시 hash를 확인했다.
+
+| 실제 일반61개 비교 | 결과 |
+| --- | --- |
+| 의미 원본 크기 | 145671067bytes, 원본 변경 없음 |
+| 기존 물리본 합계 | 38801131bytes |
+| XZ 후보 합계 | 13032050bytes |
+| 절감 | 25769081bytes, 66.413221% |
+| 후보 decoder | 122/122회, 원합산5초 중1.766134초 |
+| 소스 경계 | fresh211/final211 |
+| 계약 | baseline3 및 codec/corpus12 모두 PASS |
+| 실제 진단 시간과 자원 | 227.185808초, CPU 최고77.15%, 가용RAM 최저15.11864%, cleanup=True |
+
+새 파일 게시 없이 후보 크기·해시만 기록했으므로 이 결과는 일반61개 표현 비교 PASS다. 특수7개는 descriptor를 그대로 보존했지만 이번에 두 번 복원한 대상은 아니다. `proposed_mapping_sha256`은 시간 측정 열도 포함한 진단 후보 표 전체의 fingerprint이며, worker의 고정 descriptor mapping digest로 사용할 수 없다. 부모/worker full68 oracle·실제 새 파일 경계·현행 실행 profile·새 전체 비용 자격은 아직 미완료다. 두 기록은 `implementation/p09/evidence/p09-361-case165-codec-candidate-sample002.v1.json`과 `implementation/p09/evidence/p09-361-case165-xz-corpus-diagnostic001.v1.json`이다.
+
+원 비용식에서 다른 입력·항·경로 수가 같다면 비실행파일의 두 읽기 항만24.575311초 줄어든다. 새 helper·manifest·자격 산출물 비용을 아직 합치지 않았으므로 이를 새 dispatch 총시간이나600초 통과로 쓰지 않는다. 원1/2MiB 속도·acquisition14·여유60초·합산 decoder5·RAM95%·commit95%·Native CPU 보호·1코어/BelowNormal은 유지한다.
+
+다음은61개 새 물리본을 배타적 경로에 게시하고 특수7개를 포함한 full68 매핑을 부모/worker/독립판정기에 동일하게 연결하는 단계다. 원본과 과거 표현·실패 증거는 보존하며 두 실제 읽기와136회 전체 복원·decoder5를 다시 확인해야 한다. 이후 현행 전체scope/helper64와 미래 dispatch 필수 metadata를 합친600초 비용을 재산정하고 CODE·preflight·dispatch 자격을 닫는다. 이 조건이 충족되기 전 Native008을 시작하지 않는다.
+
 ### Bootstrap 분리와 현재 통과한 사전검사
 
 `preparation_attributed_entry_v1.closed_bootstrap`은 짧은 고정 정책 증명을 원75% Guard에서 먼저 닫은 뒤 그 Guard를 정리하고, 준비 Guard를 새로 만들어 전체 연결 소스를 다시 확인한다. 앞 단계의 소스 확인·마지막 hash·정리 중 하나라도 실패하면 뒤 Guard를 만들지 않는다. 두 소유 sampler/뮤텍스는 직렬이며 Native의 보호기는 바꾸지 않았다. Bootstrap 실패는 `preparation-attributed-bootstrap-{stage}-run008-attemptNNN`으로 별도 기록하고, planner는 이를 실제 사전검사 실행과 구분하며 해당 슬롯을 소비한 것으로 처리한다.
@@ -26,7 +53,7 @@ CPU가 회복되더라도 같은 dispatch를 즉시 반복하지 않는다. `rec
 
 관련21개 회귀가 통과했고, 필수 packet pin 변조도 거부했다. `dispatch-cost-lower-bound-pref010.v1.json`은 약0.126초·1,616,140바이트 읽기로 계산한 metadata pin20개와 별도 분석 코드 pin을 보존한다. GO=False이며 제품/전체 자격 증거가 아니다. Planner 자체와 테스트는 현재010 물리 입력 scope에 포함되지 않으므로 이번 읽기 전용 진단 변경은 현재 사전검사 소스를 바꾸지 않는다.
 
-다음은 큰 불변 증거의 물리적 표현을 무손실로 줄이는 방안을 검토하는 작업이다. 원본 파일·전체 의미 입력·부모/worker의 동일한 매핑·두 실제 바이트 경계·독립 판정기를 모두 보존해야 한다. 원1/2MiB 읽기 속도·acquisition14·600초·여유60초를 높이거나 줄이지 않는다. 표현이 바뀌면 그 변경에 의존하는 source/worker/전체 자격은 다시 닫아야 하며, 현재 Native008은 아직 시작할 수 없다.
+큰 불변 증거의 물리적 표현 비교는 앞 절의 일반61개 실측까지 진행됐다. 원본 파일·전체 의미 입력·부모/worker의 동일한 매핑·두 실제 바이트 경계·독립 판정기를 모두 보존해야 한다. 표현이 바뀌면 그 변경에 의존하는 source/worker/전체 자격은 다시 닫아야 하며, 현재 Native008은 아직 시작할 수 없다.
 
 ### 유한한 후속 준비 기록과 선행 자격 이력
 
