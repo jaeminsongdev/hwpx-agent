@@ -4,6 +4,18 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 72개 실제 전송과 원 부모 입력 검사
+
+`native009_full72_transport_v1.py`는 기존69개 전송 연결의 private 의존성에 Native007/과거실패2개 바인딩을 명시적으로 추가한다. 기존68/69/70 constructor와 원 raw72 constructor를 유지하며, 공개 기본 모듈을 수정하지 않는다. private 재구성/engine 함수의69→72 개수 슬롯과 capsule v1→v3 경로 문자열 슬롯만 바꾸고 전체 code 역변환을 확인했다. 원 worker 재구성 본문·hash/schema·원 task/run9·제품10초 조건을 유지했다.
+
+전송 CODE001은12계약·fresh116/final116·13.672초·시스템CPU최고46.88%·검증기자체CPU최고4.94542%·전용메모리최고46.66MiB·가용RAM최저19.07%·cleanupTrue다. 원 함수가72개 전체를 재구성했고 해당 구간의 JSON 자료 파일 열기는0회였다. capsule10,295bytes·bootstrap11,606bytes는 원16KiB 이내며 manifest52,166bytes를 별도 게시했다. 잘못된 역할·case/run·v2 경로·추가 필드·전송 hash·기존68개/새 항목 변조를 거부했다. 원 engine 구성 후 worker 호출은0이다. 기존 전송·실패 원본을 덮어쓰지 않았다.
+
+`native009_full72_parent_v1.py`의 첫 parent001은 graph의 명시적 입력에 단계 설정이 없어 원 부모 callback의 CURRENT_STEP_PIN에서 KeyError로 실패했다. 원 단계 도출 코드도 부모 graph 입력에 필요했다.7.889초·시스템CPU최고10.75%·cleanupTrue였으며 원 실패를 보존했다. 검사 본문을 바꾸지 않고 step config와 `prepare_current_queue_step.py`의 현재 pin을 포함한 별도 부모 graph를 만들었다. 전송 파일과 step/manifest/capsule/bootstrap 내용은 그대로 유지했다. graph preparation001은fresh122/final122·14.917초·시스템CPU최고53.93%·cleanupTrue다.
+
+parent002는 원 `current_input_scope` 전체 본문에서 실제 권위/전임자/현재 step 도출·전송/manifest·과거 출처를 다시 확인하고, 이전 전체 입력 선언을 원 union 앞에 상속했다. Rust787 경로를 전후 두 번 열거하고 각각167회 pacing을 확인했다. 부모6계약·메타데이터/원 bootstrap 입력fresh506/final506·142.538초·시스템CPU최고62.88%·검증기자체CPU최고3.24281%·전용메모리최고51.94MiB·가용RAM최저17.95%·cleanupTrue로 통과했다. 의미/물리 입력 각각3,179개·물리205,698,876bytes이며, 원 complete 비용에 준비15초를 더한 현재 예상596.828803초는600초 이내다. worker 호출0·GO0이며 Native007 실행True/Native008 실행None/과거 worker·writer 시작 실패 역할은 분리해 보존한다.
+
+506개 입력의 이번 closing hash는3,179개 전체의 현재 바이트 검증을 대체하지 않는다. 실제72개 worker의 EOF/생성차단 진단·전체 Native helper64·현재 전체 Source Frame/두 바이트 경계·독립 수용·사전검사/dispatch는 아직 미완료다. 해당 코드와 결과가 추가되면 비용을 다시 계산해야 한다. 실제 제품/Native009·접근허용 요청·OS/Defender 변경·수용 증가는0이며 추가 제품 실행 승인은 대기 중이다. 근거: `native009-full72-transport-code001`, `native009-full72-parent001/002`, `native009-full72-parent-graph-preparation001`, `native009-full72-parent-declared-scope002`.
+
 ### 과거 실패 기록 두 개와 72개 전체 비용
 
 `legacy_validation_carriers_v1.py`는 이미 의미 입력에 포함된 P159/P165의 full249 시간 제한 실패 기록 두 개만 변환한다. 소스·실행파일·fixture·현재 제품 기록에는 적용하지 않는다. 원본3,959,557/3,939,320bytes·STOPPED_NOT_ACCEPTED·product_completeFalse·P09 OPEN·worker/job/writer 생성True를 보존했고, 실행 전 실패나 제품 수용으로 재분류하지 않았다. 별도 물리 표현은281,526/274,394bytes이며 합계7,342,957bytes를 줄였다. 원1/2MiB 기준 두 읽기의 nominal 절감은7.002789초다.
@@ -16,7 +28,7 @@ physical002는10계약·72개 두 실제 디스크 경계144회 복원·공유 d
 
 binding CODE001은 현재 Rust787 경로와167회 inventory pacing을 확인하고, 이전 전체 입력 선언·새 code/시험/증거·scope manifest 자신까지 포함해 원 complete budget을 계산했다. 의미/물리 입력 각각3,167개·물리204,854,198bytes이며, 원10초 제품 캡처·여유60초·합산 decoder5초·추가 준비15초를 유지한 예상595.166112초로600초 이내다.27.630초·fresh120/final120·시스템CPU최고68.75%·검증기자체CPU최고2.69840%·전용메모리최고50.63MiB·가용RAM최저19.20%·cleanupTrue였다. 원 engine을 구성했지만 worker 호출은0이다. 이 비용은 현 단계 선언의 모델이며, 아직 없는72개 worker packet/dispatch/결과 관련 소스는 추가될 때 재계산해야 한다. 전체 현재 입력 hash·실제 Native Frame·전체 helper64·독립 수용 자격은 미완료다.
 
-다음은 실제 worker의72개 전송·원 재구성 본문·부모 scope를 연결하는 작업이다. wire/bootstrap16KiB·Native600초와 기존 자원 보호는 유지한다. 실제 제품/Native009·접근허용 요청·OS/Defender 변경·수용 증가는0이며 추가 제품 실행 승인은 대기 중이다. 근거: `legacy2-full72-physical-g001-attempt001/002`, `legacy2-binding-code001`, `legacy2-declared-scope001`.
+이 단계의595.166112초를 이후 전송/부모 연결의 비용으로 재사용하지 않는다. 그 연결은 앞 절에서 별도로 검증하고596.828803초로 다시 계산했다. wire/bootstrap16KiB·Native600초와 기존 자원 보호는 유지한다. 실제 제품/Native009·접근허용 요청·OS/Defender 변경·수용 증가는0이며 추가 제품 실행 승인은 대기 중이다. 근거: `legacy2-full72-physical-g001-attempt001/002`, `legacy2-binding-code001`, `legacy2-declared-scope001`.
 
 ### Native007 무손실 표현과 70개 바인딩
 
