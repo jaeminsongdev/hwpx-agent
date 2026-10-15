@@ -325,3 +325,17 @@ whole preflight003은12.779초·CPU79.69% 경고로 중단됐으며 parentCPU0.3
 공식156/249·잔여93·next163·generation51, P09/A12/A13 OPEN 및 목표ACTIVE를 유지한다. 사례163 제품·Native·독립 전체 리뷰는 통과했고 공식 승인만 미완료다. 다음은 승인 단계의 반복 읽기·검증 비용을 점검하되 현재성 검사와 원 승인 조건을 보존하는 것이다. CODE·preflight·실제제품·독립검사 통과 및 모든 실패 기록을 보존한다.
 
 근거: preparation-workspace-setup001 및 code001/002, workspace CODE/pref/qualify 계수, successor-code002/003, preflight003/004, dispatch-qualification003..005, current-runtime-run002, whole-review001/002, optimized-acceptance001/002. 사용자 소유 변경과 원본·승인162는 보존했고 OS 설정 변경·외부 프로세스 종료·검증 범위 축소는0이다.
+
+## 사례163 공식 승인과 사례164 준비
+
+승인 경로는 이미 실제64KiB workspace1개·요청별 fresh stat1회를 사용하며 현재 source 확인과 최종 전체 재해시를 유지한다. 이번 검토에서 해당 검사를 삭제하지 않고 안전하게 제거할 수 있는 중복을 찾지 못했다. 현재 자원 표본CPU23.87/24.56% 및 qualification source416개 해시 일치를 확인한 뒤 제품·Native·독립 리뷰를 재실행하지 않고 승인003만 진행했다.
+
+승인003은238.429초에 공식 canonical을 한 번 발행했다. before156·delta1·after157·잔여92·next164·generation52, fresh1,226/final1,226·2,468읽기·217,192,418바이트·resource cleanup=True다. CPU최고56.53%·가용RAM최저46.818%이며 제품·Native 재실행은0이다. canonical은445,427바이트·SHA256 9471987562d9c5cc25d734487b9c356b57f0e81855b7f9d59c85267f686ac8f2다. 기존 승인001/002 중단과 모든 실패는 보존했다. P09/A12/A13은 OPEN이며 full249·signed16·전체 runtime reconciliation은 미완료다.
+
+사례164의 STEP001은 원장163에서 준비됐으며 fresh9/final9·CPU18.63%·cleanup=True다. 새 원본4개는10,906,643바이트에서3,468,032바이트의 무손실 표현으로 변환했고7,438,611바이트가 절감됐다. 원본을 보존했고 fresh31/final31·CPU42.34%·cleanup=True다. Binding001은 기존52개와 새4개를 합친56pair·fresh139/final139·물리입력2,936개·229,948,922바이트·196.324초·CPU53.61%·가용RAM47.208%·cleanup=True로 통과했다. 원본/envelope 읽기88.993초·최종 재해시96.250초가 대부분의 비용이다.
+
+graph002 v2는5.761초에CPU98.64% metadata 경고로 중단됐으며 cleanup=True·product/Native=False다. 실패 report만 생성됐고 capsule002·bootstrap002·Native002는 생성되지 않았다. 원 exclusive report를 덮어쓰거나 없는 Native 기록을 만들어 넣지 않는다. 현재 원 graph attempt와 실제 run 번호가 묶여 있으므로 단순 run003 재시도는 이전 Native002를 요구한다. 다음은 이 준비 전용 종료 상태를 원 증거로 확인하고, 실제 제품 재실행 방지와 미해결 Frame 거부를 유지하는 재시도 연결을 마련하는 것이다.
+
+공식157/249·잔여92·next164·generation52 및 목표ACTIVE를 유지한다. 사례164는 STEP·무손실 준비·Binding 통과, 전송 준비 실패, CODE/preflight/Native/독립 리뷰/승인 NOT_RUN이다. source·OS 설정 변경 및 검증 범위 축소는0이며 PC프리즈 근본 해결·전체 시간 단축은 입증되지 않았다.
+
+근거: case163-current-epoch-accept001, optimized-acceptance-attempt003 및 case164-step-config001, successor-selection001, lossless-receipts001, successor-binding001, successor-connections002.v2.json.

@@ -1685,3 +1685,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE163_NATIVE_REVIEWED_STATUS -->
 > 사례163 preparation workspace17·CODE003 74·wholepref004·actual entry005 6/helper64 PASS/새준비source는Native실제입력에선언·최종해시유지. 준비entry helper한도실패는보존·실제v2경로유지·원한도완화0. Native002 제품1PASS·전후2경계·COMMITTED·cleanupTrue·567.86초/독립전체리뷰002 fresh420-final420 PASS. 후보4525503바이트/SHA256 f2151271e6d74e6019773d198fba861d00a60dcccebcb41969f4bd77ec05736e. 승인001/002 CPU보호중단·delta0·cleanupTrue·canonical없음/통과제품·Native·리뷰재실행0·기존실패/원본/승인162보존. 공식156/249·잔여93·next163/P09-A12-A13 OPEN·목표ACTIVE. 다음승인단계반복검사비용검토/프리즈해결·시간단축미증명.
 <!-- END P09_CASE163_NATIVE_REVIEWED_STATUS -->
+
+<!-- BEGIN P09_CASE163_ACCEPTED_CASE164_PREPARED_STATUS -->
+> 사례163 승인003 canonical current-epoch-accept001·delta1·공식157/249·잔여92·next164·generation52·cleanupTrue·제품/Native재실행0. canonical445427바이트/SHA256 9471987562d9c5cc25d734487b9c356b57f0e81855b7f9d59c85267f686ac8f2. 사례164 STEP·4원본무손실·Binding56pair PASS/graph002v2 CPU98.64%보호중단·cleanupTrue·제품0/캡슐·bootstrap·Native생성0. 원본·기존실패·승인163보존·준비번호와실행번호결합재시도검토필요·없는Native기록제작0. P09/A12/A13 OPEN·목표ACTIVE·다음164 전송준비재시도연결/실제품NOT_RUN.
+<!-- END P09_CASE163_ACCEPTED_CASE164_PREPARED_STATUS -->
