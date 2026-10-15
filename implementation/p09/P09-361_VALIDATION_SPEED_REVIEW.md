@@ -339,3 +339,19 @@ graph002 v2는5.761초에CPU98.64% metadata 경고로 중단됐으며 cleanup=Tr
 공식157/249·잔여92·next164·generation52 및 목표ACTIVE를 유지한다. 사례164는 STEP·무손실 준비·Binding 통과, 전송 준비 실패, CODE/preflight/Native/독립 리뷰/승인 NOT_RUN이다. source·OS 설정 변경 및 검증 범위 축소는0이며 PC프리즈 근본 해결·전체 시간 단축은 입증되지 않았다.
 
 근거: case163-current-epoch-accept001, optimized-acceptance-attempt003 및 case164-step-config001, successor-selection001, lossless-receipts001, successor-binding001, successor-connections002.v2.json.
+
+## 준비 전용 실패의 검증된 재시도 연결
+
+current_queue_successor_retry_runtime_v3는 고정된 v2 bridge와 시험 소스를 private namespace로 읽고 기존 본문·defaults·closure 및 graph/worker/전체 검사 경로를 유지한다. 바뀌는 entry/test 경로와 새 재시도 코드는 실제 reader의 입력과 최종 해시에 포함한다. 기존 v2와 승인 파일 및 공유 모듈을 수정하지 않는다. 현재 Native 결과가 있으면 v2의 전체 closed-prebody 판정을 사용한다. Native가 없다면 기존 graph 실패의 정확한 key/형식·index·제품 미실행·GO 미승인·delta0·정리 및 CPU metadata 오류를 확인한다. 이전 capsule/bootstrap이 없고 Native 부재를 다시 확인해야 한다. 실패 graph를 가짜 Native 기록으로 바꾸지 않는다.
+
+재시도 code001은6계약 중 mock 연결 오류3개로 실패했다. 시험 namespace의 alias 대신 실제 함수 globals에 fixture를 연결하고 종료 시 원 값으로 복원했다. 해당 실패를 보존했고 code002는6계약·fresh5/final5·1.501초·CPU25.10%·cleanup=True로 통과했다. 제품/GO/정리 불일치, 잘못된 수치, 남은 worker 자료, 부재 재확인 실패를 거부하며 기존 Native 기록은 원 v2 판정을 유지하는 계약이다. 새 entry 경로 metadata 변경에서도 기존 function code identity를 유지한다.
+
+사례164 graph003은56pair 전체 복원·wire8,071바이트·fresh41/final41·10.639초·CPU36.70%·cleanup=True로 통과했다. factory001은GO 없는 원11계약·fresh26/final26·11.748초·CPU46.48%·cleanup=True다. CODE003-001은74계약·fresh99/final99·14.095초·CPU31.25%·cleanup=True로 통과했다. 전체 preflight003-001은 입력2,942개·Rust787·helper62·fresh429/final429·120.637초·CPU57.39%·가용RAM44.698%·cleanup=True다.
+
+entry003-001은 원6계약·실제Native helper64개·fresh431/final431·123.275초·CPU52.46%·가용RAM45.521%·cleanup=True로 통과했다. 이전 실패 graph002가 실제 입력 pin에 포함됐고 Native002의 부재를 확인했다. 실제 실행 직전431개 source pin이 모두 일치했다. 예상 비용594.547초/600초는 완료 보장이 아니며 원16KiB/64helper/GO/Job/전후 읽기/자원 보호 조건은 유지한다.
+
+Native003은57.73초에 STOP_METADATA_WARNING_BEFORE_COOLING_OR_RESUME로 종료됐다. 마지막 시스템CPU83.81%·parentCPU0%·private50.371MiB·가용RAM43.370%·commit40.804%다. worker와 제품 미실행·Frame=None·passed_test_names=[]·delta0·Native/current qualification=False·cleanup=True·빈 소유 tree를 확인했다. 코드의 같은 pin 재사용과 전체 입장 검사의 Native metadata callback 배치를 점검했으며 직접 계산 폭주를 입증하지 못했다. 검증·원본을 삭제하거나 자원 보호를 완화하지 않았다.
+
+실제 v3 독립 리뷰·승인 adapter는 구현됐으나 Native 후보가 없어 실행하지 않았다. 다음은 원003 종료 기록의 완전한 prebody 조건을 유지한 새 번호 준비다. 공식157/249·잔여92·next164·generation52, P09/A12/A13 OPEN 및 목표ACTIVE를 유지한다. 제품·독립 리뷰·승인은 NOT_RUN이며 전체 시간 개선·PC프리즈 해결은 입증되지 않았다.
+
+근거: case164-retry-code001/002, successor-connections003.v2, successor-factory001, successor-code-run003-attempt001, successor-preflight-run003-attempt001, successor-dispatch-qualification-run003-attempt001 및 current-runtime-run003. 구현은 current_queue_successor_retry_runtime_v3와 해당 시험 파일이다.

@@ -1689,3 +1689,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE163_ACCEPTED_CASE164_PREPARED_STATUS -->
 > 사례163 승인003 canonical current-epoch-accept001·delta1·공식157/249·잔여92·next164·generation52·cleanupTrue·제품/Native재실행0. canonical445427바이트/SHA256 9471987562d9c5cc25d734487b9c356b57f0e81855b7f9d59c85267f686ac8f2. 사례164 STEP·4원본무손실·Binding56pair PASS/graph002v2 CPU98.64%보호중단·cleanupTrue·제품0/캡슐·bootstrap·Native생성0. 원본·기존실패·승인163보존·준비번호와실행번호결합재시도검토필요·없는Native기록제작0. P09/A12/A13 OPEN·목표ACTIVE·다음164 전송준비재시도연결/실제품NOT_RUN.
 <!-- END P09_CASE163_ACCEPTED_CASE164_PREPARED_STATUS -->
+
+<!-- BEGIN P09_CASE164_RETRY_RUNTIME_STATUS -->
+> v3 graph-only재시도 source6계약·사례164 graph003/factory11/CODE74/wholepref429/entry431·actualhelper64 PASS. failedgraph002 실제읽기/Native002 실제부재·capsule/bootstrap부재검증·가짜Native증거0/원v2와승인163보존. Native003 실제metadata CPU83.81%보호중단·57.73초·parentCPU0·worker/제품0·FrameNone·delta0·cleanupTrue·빈tree. 제품/독립리뷰/승인NOT_RUN·다음종료003증거를유지한새번호준비. 공식157/249·잔여92·next164/P09-A12-A13 OPEN·목표ACTIVE·기존실패/원본삭제0.
+<!-- END P09_CASE164_RETRY_RUNTIME_STATUS -->
