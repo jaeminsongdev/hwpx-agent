@@ -1693,3 +1693,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE164_RETRY_RUNTIME_STATUS -->
 > v3 graph-only재시도 source6계약·사례164 graph003/factory11/CODE74/wholepref429/entry431·actualhelper64 PASS. failedgraph002 실제읽기/Native002 실제부재·capsule/bootstrap부재검증·가짜Native증거0/원v2와승인163보존. Native003 실제metadata CPU83.81%보호중단·57.73초·parentCPU0·worker/제품0·FrameNone·delta0·cleanupTrue·빈tree. 제품/독립리뷰/승인NOT_RUN·다음종료003증거를유지한새번호준비. 공식157/249·잔여92·next164/P09-A12-A13 OPEN·목표ACTIVE·기존실패/원본삭제0.
 <!-- END P09_CASE164_RETRY_RUNTIME_STATUS -->
+
+<!-- BEGIN P09_CASE164_METADATA_IO_CANDIDATE_STATUS -->
+> 004 graph/factory/CODE74/pref429/entry432 actualhelper64 PASS·Native004 CPU85.69% prebody중단·worker/제품0·FrameNone·cleanupTrue. 별도fresh-lossless metadata후보8계약+probe003 두원본159/163 fresh복원/최종재읽기 PASS·physical18212358→6998420바이트·semantic동일·byte/JSONcache0. probe001/002 실패 및모든기존증거보존·실제Native/원체커/승인연결은미검증·기존Native/승인source변경0. 공식157/249·잔여92·next164/P09-A12-A13 OPEN·목표ACTIVE·제품/리뷰/승인NOT_RUN. 다음초기metadata 실제연결·명시적계수/decoder budget·전체검증.
+<!-- END P09_CASE164_METADATA_IO_CANDIDATE_STATUS -->

@@ -355,3 +355,19 @@ Native003은57.73초에 STOP_METADATA_WARNING_BEFORE_COOLING_OR_RESUME로 종료
 실제 v3 독립 리뷰·승인 adapter는 구현됐으나 Native 후보가 없어 실행하지 않았다. 다음은 원003 종료 기록의 완전한 prebody 조건을 유지한 새 번호 준비다. 공식157/249·잔여92·next164·generation52, P09/A12/A13 OPEN 및 목표ACTIVE를 유지한다. 제품·독립 리뷰·승인은 NOT_RUN이며 전체 시간 개선·PC프리즈 해결은 입증되지 않았다.
 
 근거: case164-retry-code001/002, successor-connections003.v2, successor-factory001, successor-code-run003-attempt001, successor-preflight-run003-attempt001, successor-dispatch-qualification-run003-attempt001 및 current-runtime-run003. 구현은 current_queue_successor_retry_runtime_v3와 해당 시험 파일이다.
+
+## 반복 원본 읽기의 무손실 대체 후보
+
+소스를 변경하지 않은 사례164의004 graph는56pair·wire8,071바이트·fresh41/final41·10.668초, factory002는 원11계약·fresh26/final26·11.876초로 통과했다. CODE004-001은74계약·fresh99/final99·14.159초·CPU46.48%·cleanup=True다. whole preflight004-001은 scope2,942/Rust787/helper62·fresh429/final429·120.715초·CPU47.35%·가용RAM44.881%·cleanup=True로 통과했다. entry004-001은6계약·actualhelper64·fresh432/final432·123.720초·CPU48.85%·cleanup=True이며 source432개 현재 해시가 일치했다. 원 예상 비용594.779초/600초다.
+
+Native004는15.96초 metadata CPU 경고로 중단됐다. 마지막CPU85.69%·parentCPU0.154%·private47.082MiB·가용RAM45.386%·commit39.388%이며 제품/worker 미실행·Frame=None·정리 완료다. Native003/004의 원 timestamp 정밀도를 유지해 계산한 표본 간격은 각각500.881..564.068ms와501.230..624.113ms로,100ms 미만 간격은0개다. 짧은 강제 CPU 표본이 해당 두 중단을 만들었다는 가설은 지지되지 않았다. 경고표본의 기존 kernel busy26.415%·user busy59.277% 및 optional attribution unavailable만 확인했으며 상승 프로세스는 확정되지 않았다.
+
+004 metadata는 중단까지139회·18,038,896바이트를 읽었다. 실제 input pin에는 이미 무손실 표현이 있는 원본162/163이 포함되며 두 원본의 합계9,001,891바이트 대비 물리 표현은3,537,734바이트다. 현재 초기 메타데이터 reader가 원본을 다시 읽는 비용을 줄이는 후보로 fresh_lossless_metadata_reader_v1을 구현했다. 명시적 Projection/descriptor에 있는 과거 runtime JSON만 매 요청 실제 물리 읽기·완전 복원·원본 크기/해시 확인으로 제공한다. 다른 파일은 원 reader를 사용하며 JSON/byte/hash cache는 없다. 물리 bytes_read에는 decoded bytes를 더하지 않고 별도 계수로 기록한다. 현재 Native·Frame·승인 경로는 바꾸지 않았다.
+
+후보8계약은 원본 해시/물리 해시 변조·잘못된 projection·parse budget·decoder 실패를 거부하고 fresh 요청·unmapped 원 reader·물리/의미 byte 구분을 확인했다. actual probe001/002는 각각 current descriptor를 historical로 전달한 오류와 manifest 누락으로 실패했고 기존 Binding 조건을 완화하지 않았다. 이전 manifest의 과거 descriptor를 사용하고 현재 manifest를 전체 projection scope에 포함한 probe003은14.701초·CPU36.52%·가용RAM43.448%·cleanup=True로 통과했다.
+
+probe003은 전체56개 descriptor를 구성한 뒤 큰 원본2개인159-run001과163-run002의 실제 읽기 및 최종 재읽기를 비교했다. 기존 물리 읽기18,212,358바이트 대비 후보6,998,420바이트로11,213,938바이트·61.57%가 절감됐다. 각각의 JSON과 semantic pin이 일치했고 candidate 최종 fresh hash2개·물리읽기4회·mapped decode4/4를 확인했다. 별도 source12개도fresh12/final12 및 현재 해시가 일치한다. 이는2개 원본의 bounded reader 결과이며 전체56개 fresh IO, 실제 Native 메타데이터 연결, 공유 decoder 작업 한도, 전체 비용/후속 원체커/승인 및 PC프리즈 해결은 아직 검증하지 않았다.
+
+다음은 이 후보를 초기 metadata reader에 연결하되 원 workspace·source/ancestor stat·guard·속도 제한과 실제 물리 byte 계수를 유지하고, explicit semantic/physical 기록과 decoder budget을 전체 Native·독립 체커에서 확인하는 것이다. 공식157/249·잔여92·next164·generation52 및 P09/A12/A13 OPEN·목표ACTIVE를 유지한다. 사례164 제품·독립 리뷰·승인은 NOT_RUN이며003/004 및 기존 실패와 원본은 보존한다.
+
+근거: successor-connections004.v2, successor-factory002, successor-code/preflight/dispatch-qualification-run004-attempt001, current-runtime-run004 및 fresh-lossless-metadata-probe001..003. 구현은 fresh_lossless_metadata_reader_v1과 해당 시험 파일이다.
