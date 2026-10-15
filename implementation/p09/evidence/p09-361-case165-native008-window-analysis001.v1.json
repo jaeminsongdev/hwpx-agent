@@ -1,0 +1,166 @@
+{
+  "state": "REVIEWED_NATIVE008_STRICT_WINDOW_FAILURE_NOT_PRODUCT_ACCEPTANCE",
+  "runtime_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-current-runtime-run008.v1.json",
+    "bytes": 3999022,
+    "sha256": "53e27ba4e2f9555ecfa47d942fcbfe4319e3b91e91f7e5180ac18585a02e9df2"
+  },
+  "invocation_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-xz-unified-native-invocation001.v1.json",
+    "bytes": 944,
+    "sha256": "52eeb309324e429fa6e409623722006449dc7574c235230f03f98b176b6ad67a"
+  },
+  "intent_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-xz-unified-native-invocation001.intent.v1.json",
+    "bytes": 913,
+    "sha256": "5defbfc5f2c2611c893113da3ceb2d12463beedadaaffcb0a849733fe17b75a7"
+  },
+  "source_contracts": {
+    "native_wiring": 12,
+    "synthetic_readiness_boundaries": 6,
+    "product_executed_by_contracts": false
+  },
+  "final_preparation": {
+    "preflight_pin": {
+      "path": "implementation/p09/evidence/p09-361-case165-successor-recovery-preflight-run008-attempt015.v1.json",
+      "bytes": 1200471,
+      "sha256": "fc4351bd91747f0893dd9d312114c99e933fe20951f46c86842c29e47df41e89"
+    },
+    "qualification_pin": {
+      "path": "implementation/p09/evidence/p09-361-case165-successor-recovery-dispatch-qualification-run008-attempt008.v1.json",
+      "bytes": 127125,
+      "sha256": "38628bb70f9c01b99cc815d030d79599ce4e438bbcff2f4c5dc9bf1cb3549856"
+    },
+    "helper_count": 64,
+    "predicted_seconds": 579.0037409646171,
+    "lock_deadline_seconds": 600,
+    "decoder_seconds": 5,
+    "margin_seconds": 60
+  },
+  "actual_native": {
+    "state": "STOPPED_NOT_ACCEPTED",
+    "stop_reason": "STOP_STRICT_PRODUCT_WINDOW",
+    "elapsed_seconds": 451.85,
+    "tests_passed_not_observed": true,
+    "product_complete": false,
+    "product_body_observed": false,
+    "actual_product_child_executed": null,
+    "actual_GO_writes": 1,
+    "last_GO_window_check_seconds": 10.015282299995306,
+    "window_seconds": 10,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "owned_tree_empty": true,
+    "cleanup_confirmed": true,
+    "source_frame_state": "CLOSED",
+    "registered_live_frame": false,
+    "actual_byte_boundaries": 1,
+    "original_owned_cleanup_confirmed_before_release": false,
+    "handles_opened": 3481,
+    "handles_closed": 3481,
+    "handles_remaining": 0,
+    "inputs": 3109,
+    "physical_input_bytes": 208181487,
+    "CPU_max": 73.63,
+    "available_RAM_min": 24.180793107739387,
+    "parent_CPU_max": 2.841416619594917,
+    "job_CPU_seconds": 1.141,
+    "peak_job_private_MiB": 47.23,
+    "decoder_elapsed_seconds": 1.3577404000243405,
+    "decoder_completed": 68
+  },
+  "no_product_diagnostics": {
+    "EOF_profile": {
+      "elapsed_seconds": 8.290823399991496,
+      "WORKER_NOT_AUTHORIZED": true,
+      "historical_runtime_or_authority_opens": 0,
+      "GO_sent": false,
+      "profiling_overhead_not_baseline": true,
+      "deepcopy_calls": 3534902
+    },
+    "original_EOF_owned_job": {
+      "elapsed_seconds": 2.4702039000112563,
+      "GO_sent": false,
+      "WORKER_NOT_AUTHORIZED": true,
+      "job_CPU_seconds": 2.203,
+      "preclose_job_active_processes": 2,
+      "job_KILL_ON_CLOSE_and_handle_close": true,
+      "postclose_PID_state_not_measured": true
+    },
+    "GO_with_all_subprocess_creation_denied": [
+      {
+        "first_denied_spawn_seconds": 13.224252999993041,
+        "job_CPU_seconds": 2.828,
+        "active_after_cleanup": 0
+      },
+      {
+        "first_denied_spawn_seconds": 2.7497793000075035,
+        "job_CPU_seconds": 2.609,
+        "active_after_cleanup": 0
+      },
+      {
+        "first_denied_spawn_seconds": 2.5899735999992117,
+        "cargo_lookup_seconds": 0.005460100001073442,
+        "active_after_cleanup": 0
+      }
+    ],
+    "logger_failures_preserved": {
+      "first_trace_terminal": "TypeError",
+      "first_trace_elapsed_seconds": 2.615803499997128,
+      "subprocess_creation_prevented": true,
+      "Windows_commandline_string_not_resolved_to_executable_basename": true
+    },
+    "compiled_product_process_created": false,
+    "actual_Native008_or_product_replayed": false
+  },
+  "AST_candidate": {
+    "source_pin": {
+      "path": "tools/p09/ast_clone_namespace_v1.py",
+      "bytes": 2361,
+      "sha256": "d9f0094355c628cb76743221598032a4007890fe1d08867ea4f54118c3f17b4c"
+    },
+    "test_pin": {
+      "path": "tools/p09/tests/test_ast_clone_namespace_v1.py",
+      "bytes": 3282,
+      "sha256": "8d9b72d71302345c39a80df1a7ff03e823d250707b6fc55a986373012ab68985"
+    },
+    "contracts": 8,
+    "errors": 0,
+    "failures": 0,
+    "original_namespace_loader_entire_code_retained": true,
+    "default_module_not_modified": true,
+    "byte_hash_JSON_or_AST_cache": false,
+    "copy_only_benchmark": {
+      "iterations": 10,
+      "standard_seconds": 0.12953320000087842,
+      "specialized_seconds": 0.047190400000545196,
+      "speedup": 2.7449057435279616
+    },
+    "real_EOF_connected_single_pair": {
+      "baseline_total_seconds": 2.3124908000027062,
+      "candidate_total_seconds": 2.012384999994538,
+      "baseline_connected_seconds": 1.411115000009886,
+      "candidate_connected_seconds": 1.2655639000004157,
+      "both_WORKER_NOT_AUTHORIZED": true,
+      "GO_sent": false,
+      "both_owned_trees_empty": true
+    },
+    "installed_in_qualified_worker_or_Native": false,
+    "window10_fix_proven": false
+  },
+  "CPU_quota_probe": {
+    "bounded_CPU_seconds": 0.15625,
+    "wall_seconds": 0.145642699993914,
+    "original_one_CPU_affinity_and_6_25_percent_job_cap_retained": true,
+    "active_after_cleanup": 0,
+    "double_throttling_cause_proven": false,
+    "official_reference": "https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_cpu_rate_control_information"
+  },
+  "next_work": "Qualify bounded worker readiness before the real unchanged GO/10-second product window; integrate construction optimizations with full source/IO/Job checks; additional Native009 execution approval requested separately",
+  "Native008_accepted": false,
+  "Native008_replayed": false,
+  "Native009_started": false,
+  "additional_Native009_approval": "PENDING_HUMAN_REPLY",
+  "accepted_count_delta": 0,
+  "PC_freeze_solved": false
+}

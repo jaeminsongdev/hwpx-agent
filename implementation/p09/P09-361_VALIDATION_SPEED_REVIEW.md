@@ -2,9 +2,47 @@
 
 ## 현재 재개 위치와 작업 방식 개선
 
-2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. run008 제품 실행은 아직 시작하지 않았다.
+2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
-### 현재 사전검사와 dispatch 자격
+### Native008 실제 실패와 worker 준비 최적화
+
+Native008은 실제 진입했지만 `STOP_STRICT_PRODUCT_WINDOW`로 미수용 종료했다. 제품 캡처10초 제한은 유지했으며 약10.015282초의 마지막 확인에서 중단됐다. stdout/stderr 수신은 모두0, 제품 본문 관측False·실제 제품 자식 실행 여부null·통과한 시험 목록은 비어 있어 제품이 실행되지 않았다고 단정할 수도 없다. Native007·008의 원본과 Native008 실행 의도를 보존하고 같은 Native008을 재실행하지 않는다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작은 그대로다.
+
+| Native008 실제 결과 | 값 |
+| --- | --- |
+| 전체 소요 | 451.85초 |
+| 시스템/검증기 CPU 최고 | 73.63% / 2.841417% |
+| 가용RAM 최저 | 24.18079% |
+| Job CPU 누적/전용 메모리 최고 | 1.141 CPU초 / 47.23MiB |
+| Native 입력 | 3,109개·208181487bytes |
+| 잠금 핸들 | 3,481개 열기·닫기, 잔여0 |
+| Frame과 Job | CLOSED·등록False, 최종 owned tree empty/cleanup True |
+| 실제 바이트 경계 | 첫 경계1개만 완료, 마지막 재확인 미완료 |
+| 디코더 | 68회·1.357740초/원합산5초 |
+
+`original_owned_cleanup_confirmed_before_release=False`도 실패 원본 그대로 유지한다. 최종 Job과 핸들이 정리됐다는 사실을 이 정리 순서의 자격으로 대체하지 않는다. Native source frame·현재 제품 후보·Gate PASS는 모두 미성립이다. 현재 실패는 CPU 보호 중단이나 전체600초 초과가 아니라 GO 이후의 엄격한10초 제품 캡처 종료다.
+
+실제 진입 전의 최종 Native 연결은12계약/fresh208-final208로 닫았고, 참조·완결성·helper64·유한 비용에 대한 별도 합성6계약도 통과했다. 새 실행 소스가 포함된 사전검사015는 입력계획3,097개/Rust787·fresh598-final598·112.548093초·CPU최고56.45%·cleanupTrue로 통과했다. dispatch008은 원6계약·scope3,121개·실제 Native helper64·fresh609-final609·118.084751초·CPU최고61.55%·cleanupTrue이며 모델은579.003741/600초였다. 이 준비 PASS를 실제 Native 성공으로 승격하지 않는다. 원본 코드는 `bc82297`에 먼저 커밋한 뒤 Native를 호출했다.
+
+사전검사015의 별도 관측기는27표본 뒤250ms 프로세스 조회 비용 제한에 도달해 자기만 종료했고 검증기는 재시작하지 않았다. dispatch008의 관측기는147표본을 보존하고 대상 종료·자체 정리를 확인했다. 관측기를 이유로 원 CPU/RAM 보호나 입출력 검사를 바꾸지 않았다.
+
+#### 제품 생성 없는 실패 분석
+
+EOF/GO 진단은 실제 Native008이나 제품 시험을 반복하지 않았다. GO 경로 진단에는 Python audit hook을 시작 전에 설치해 모든 `subprocess.Popen`을 실제 생성 전에 거부했고, 별도 소유 Job의 종료와 잔여0을 확인했다. 진단의 첫 생성 요청 시간은13.224253초, 후속 측정은2.749779초와2.589974초로 달랐다. 이 편차는 준비·스케줄링 구간이10초 예산을 잠식할 수 있음을 보여주지만 Native008의 특정 단일 원인을 확정하지 않는다. 현재 cargo 경로 조회는 한 측정에서5.46ms였으므로 이 값으로 과거 지연을 단정하지 않는다.
+
+한 진단 logger는 Windows Popen의 executable=None/문자열 commandline을 제대로 처리하지 못해 TypeError로 끝났다. 그 실행도 실제 자식 생성 전 거부됐지만 유효한 생성 지연 표본으로 쓰지 않는다. 다른 logger의 단일 문자 basename 역시 실행 파일 식별 근거로 사용하지 않는다. 원시 명령줄·로그·비밀정보는 보고하지 않았다.
+
+프로파일을 켠 EOF 진단은8.290823초·범용 deepcopy 약353만 호출을 관측했고, 실제 원 GO 거부와 과거 제품/수용 파일 열기0을 확인했다. 프로파일 자체의 비용이 있어 이를 평상시 시작 시간으로 보지 않는다. 프로파일 없는 원 소유 Job의 EOF 실행은2.470204초였으며 GO를 보내지 않았다. 독립된0.15 CPU초 한도 진단도 원1코어·Job CPU cap·메모리·정리 제한 아래에서만 실행했다. 중첩 Job quota의 이론은 [Microsoft CPU rate 문서](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_cpu_rate_control_information)로 확인했지만 실제 원인으로 증명하지 않았으며 CPU 상한을 변경하지 않았다.
+
+#### 미적용 AST 복사 후보
+
+`ast_clone_namespace_v1.py`는 원 namespace loader의 전체 code object를 유지하고 copy 의존성만 전용 독립 AST 복사기로 연결한다. 새 source 읽기·bytes/hash·import·전체 non-import AST 검사를 그대로 실행하며 byte/hash/JSON/AST cache를 만들지 않는다. 원본·복사본의 코드 동일성, 위치/추가 속성·공유 그래프·순환 구조·fallback·변조 pin 거부·default module 불변을8계약으로 확인했다.
+
+복사만10회 비교한 값은 범용0.129533초, 후보0.047190초로 약2.7449배였다. 실제 EOF worker 연결의 한 번 비교는 전체2.312491→2.012385초, 연결 본문1.411115→1.265564초였으며 양쪽 모두 원 GO 거부·제품 미실행·Job 잔여0이었다. 이는 작은 비제품 측정이며 현재 Native worker에 적용하거나 제품10초 문제를 해결한 결과가 아니다.
+
+다음은 실제 GO 이전의 명시적 worker 준비 완료 신호와 시작 비용을 제한적으로 분리하고, 실제 GO→완전 캡처10초·Native 잠금600초·원IO1/2MiB·acquisition14·decoder5·1코어·RAM/commit95%를 유지하는 연결 검증이다. Native009에서 동일 시험을1회 추가 실행하는 승인은 별도로 요청했다. 승인 전에는 원본과 재실행 금지를 유지하며 비제품 코드·진단만 진행한다. 근거는 `native008-window-analysis001`에 모았다.
+
+### 이전 사전검사와 dispatch 자격
 
 v18의 실제 전체 사전검사014와 dispatch007이 모두 통과했다. 이전의 실제 Native helper66개 초과 문제는 공개 준비·worker 진입점 통합으로64개가 되어 기존 상한 안에서 닫혔다. 현재 CODE006·통합 진입점 CODE002·실제 EOF003은 다시 실행하지 않았다.
 
