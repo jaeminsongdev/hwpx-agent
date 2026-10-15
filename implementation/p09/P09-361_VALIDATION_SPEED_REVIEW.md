@@ -4,6 +4,18 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 부모의 실제 Source admission 연결
+
+`native009_verified_source_profile_v1.py`는 worker 선언과 실제 부모 `VerifiedPolicy`를 분리한다. 원 `closed_prebody_source_alias.verify`의 private run 상한 슬롯 하나만8→9로 확장하고 code 전체 역변환을 확인했다. 원본·codec·producer/CODE14·완전한 과거 정리 증거·사전 선언한 pin 검사 본문은 유지했다. producer before_run4와 대상 원본2·3번은 그대로이며, 실행된 Native007이나 실행 미확인 Native008을 이 사전 실패 정책에 넣지 않았다.
+
+실제 Reader가 고정 producer를 새로 확인한 뒤에만 원 binding API가 private namespace에 정책을 설치한다. 원 closed-prebody runtime connector가 부모 callback 직전 동일 원본을 다시 검증하고, 실제 graph의 출처와 일치하는지 확인한 다음 원 `current_input_scope` 본문을 호출한다. worker hint/validator/reconstruction은 원 runtime family에 남기고, connector를 위한 네 함수의 globals만 별도 private copy로 만들어 부모 callback 하나를 연결했다. 공개 기본 모듈·worker validator를 수정하지 않았다. 직렬화한 선언이나 가짜 token으로 정책을 만들 수 없고 정책 필드는 불변이다.
+
+첫 profile001은 구형 codec의 하위 v1 의존성을 pin 목록에 빠뜨려 `UNDECLARED_PROJECT_IMPORT`에서 거부됐다.19.619초·시스템CPU최고50.19%·자체CPU최고0.38825%·cleanupTrue였고 원 실패를 보존했다. 기본 모듈을 우회하거나 namespace 검사를 완화하지 않고 codec v1의 정확한 byte/SHA pin을 명시한 profile002에서 통과했다.
+
+profile002는 실제 초기 admission과 callback 재admission·원 부모 검사·9회귀·현재 Rust787/167회 inventory pacing·fresh527/final527이 통과했다. 원본2·3번은 초기 source pin 확인과 두 admission으로 closing 전 각각3회, 마지막 해시 확인까지 각각4회 실제 읽었다.156.982초·시스템CPU최고54.17%·자체CPU최고2.62773%·전용메모리최고53.56MiB·가용RAM최저32.08%·cleanupTrue다. 입력 선언은 의미/물리 각각3,187개·물리206,553,967bytes이며 원 complete583.215710초+준비15초=598.215710초/원600초다. 새 진단/회귀/결과와 scope manifest 자신을 모델에 추가했으며 이후 Native 구성·자격·결과 파일은 다시 반영해야 한다.
+
+이번527개 closing hash는3,187개 전체의 현재 Native 바이트 경계가 아니다. worker 호출0·실제 Frame/Native009/제품/접근허용 요청/OS·Defender 변경0·수용 증가0이며 독립 수용도 미완료다. 다음은 이 admission을 원 전체 engine/Frame/독립 oracle에 연결하고 전체 Native helper64·사전검사/dispatch를 닫는 작업이다. 원제품10초·RAM/commit95%·1코어/BelowNormal·IO1/2MiB·acquisition14·decoder5·여유60은 유지한다. 근거: `native009-verified-source-profile001/002`, `native009-verified-source-declared-scope002`.
+
 ### 72개 실제 worker와 제품 생성 차단 진단
 
 `native009_full72_worker_probe_entry_v1.py`는 source pin으로 확인한 기존 진단 의존성 목록을 재사용하고 실제72개 transport/원 worker 본문을 구성한다. 모든 subprocess 생성은 그래프/worker 준비 전에 설치한 audit hook에서 OS 생성 전에 차단한다. EOF는 원 WORKER_NOT_AUTHORIZED, 진단용 GO는 현재 EXE 경로·정확 case165·원 인수를 확인한 뒤 DIAG_SUBPROCESS_DENIED로 종료했다. 두 경우 모두 실제 원 worker attempts/calls1회·원 raw policy 복원·과거 runtime/그 밖의 JSON 읽기0·기본 helper62개≤기존64개였다. 기본 모듈을 숨기거나 검사 범위/상한을 바꾸지 않았다.
@@ -14,7 +26,7 @@ probe004가 두 실제 자식 진단을 통과한 뒤, 오류 수집기가 알�
 
 최신 EOF는2.254893초, GO_DENIED는 준비2.078133초 뒤 진단용 원 GO bytes를1회 보내고 GO→완전 캡처0.030915초/원10초로 종료했다. 이 캡처는 거부 결과의 캡처이며 제품 PASS가 아니다. Native009 결과/Frame은 생성하지 않았고 원Native008을 다시 실행하지 않았다.355/356개 이번 입력 hash와 자식 helper62개는 전체 Native 부모·동적 경로의 helper64/현재3,179개 이상 Source Frame/두 실제 바이트 경계 자격을 대체하지 않는다.
 
-다음은 선언만 있는 worker 바인딩과 원 부모의 fresh VerifiedPolicy admission을 연결하고 전체 Native 구성·입력·독립 사전검사를 닫는 작업이다. 마지막 부모 모델596.828803초에는 이번 새 진단 소스/회귀시험/결과가 추가되지 않았으므로 통합 시 재계산한다. 실제 제품/Native009·접근허용 요청·OS/Defender 변경·수용 증가는0이며 추가 제품 실행 승인은 대기 중이다. 근거: `native009-full72-actual-worker-probe001..005`.
+이후 원 부모의 fresh VerifiedPolicy admission과 이번 진단 소스/회귀/결과를 앞 절에서 별도로 연결·검증하고598.215710초로 재계산했다. 전체 Native 구성·입력·독립 사전검사는 아직 미완료다. 실제 제품/Native009·접근허용 요청·OS/Defender 변경·수용 증가는0이며 추가 제품 실행 승인은 대기 중이다. 근거: `native009-full72-actual-worker-probe001..005`.
 
 ### 72개 실제 전송과 원 부모 입력 검사
 
