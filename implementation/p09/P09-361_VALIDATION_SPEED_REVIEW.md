@@ -559,3 +559,19 @@ verify_level6_corpus_v1은 생산자의 목록을 그대로 승인하지 않고 
 다음은 새 물리 경로를 parent·worker·독립 oracle의 동일 private Binding에 연결하고 현재 진입점을 재자격하는 것이다. 기존 canonical 경로·실패 및 같은 사례 closed-prebody 판정은 보존한다. Native004는 없고 제품·후속 독립 리뷰·승인도 실행하지 않았다. 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·목표ACTIVE를 유지한다. OS 설정 변경과 GUI 접근 허용 요청은 없었다.
 
 근거는level6-corpus-batch001-attempt001/002·009-attempt001·017-attempt001/002·025/033/041/049/057/065-attempt001·level6-corpus-manifest001·level6-corpus-verification001 및 새 level6 파생본68개다.
+
+## 일반 과거 영수증의 실제 Binding 연결
+
+level6_ordinary_binding_v1은68개 논리 입력을 모두 유지하면서 일반 과거 영수증61개에 새 압축본을 연결한다. 기존 실패 이력5개와 같은 사례의 closed-prebody2개는 기존 물리 pin 및 원 판정을 그대로 사용한다. 일반 과거 영수증61개의 절감량은4,590,320바이트다. 앞선 전체68개 대체 모델596.428초는 이 연결의 실제 진입점 비용으로 사용하지 않는다.
+
+부모의 mapping admission은 원 코퍼스 자격 영수증과 실제 baseline·신규 manifest 및 검사 소스를 fresh 확인한다. 원 manifest에서61개 대응을 독립 재선정하고 코드에 고정한 전체 대응표 SHA256과 비교한다. private Binding은 원 생성자 전체 본문으로 각 항목과 기존 이력을 먼저 검사하고 새 압축본61개가 포함된 경우 전체68개 및 정확한 대응표 digest를 추가 검사한다. 새 descriptor는 원 판정에 위임하는 검사를 유지하며 명시적 새 경로와 전체 digest를 추가한다. Projection·바이트·자원·oracle 메서드는 바꾸지 않는다. 이 metadata admission은 실제 Native의 전후 물리 바이트 읽기를 대신하지 않는다.
+
+첫 두 코드 검사는 시험 namespace 연결 오류로 실패했고 기록을 보존했다. 수정 후8계약이 통과했지만 실제 transport001/002에서 원 worker가 decoder 생성용으로 먼저1행 Binding을 만드는 구간을 확인했다. 전체 대응표 검사는 이 원 초기화 단계도 거부했다. 관측값은rows1/new_rows1이었으며 압축본 변조나 자원 보호 중단이 아니었다.
+
+원 복원 함수의 정확한 첫 descriptor와 manifest로 만드는 초기화에만1회 scoped seed를 연결했다. 같은 구간의 두 번째 생성과 구간 종료 후에는 전체68개 및61개 digest 검사가 적용된다. 원 constructor를 포함한 초기화 본문은 유지하고 이탈 시 원 full 검사 생성자를 복구한다. 현재 code005의10계약은 원 Binding·Projection 동작, 전체 digest, 바뀐 원본·물리 hash, 부분표, current/failed 새 경로, private namespace, 단일 profile, 정확한 seed·잘못된 seed·미사용·복구를 검사했다. fresh8/final8·2.631초·CPU49.5%·가용RAM40.955%·cleanup=True로 통과했다.
+
+transport003은 실제 private parent Binding으로 원 compact wire를 생성하고 원 worker 복원 함수에서68개 전체를 복원했다. 부모·worker의 모든 descriptor와 원 representation이 같았고 parent·Frame·worker·full oracle이 동일한 private Binding namespace를 사용했다. wire9,687바이트와 bootstrap 선언7,078바이트 모두 기존16KiB 한도 안이다. fresh102/final102·27.882초·CPU51.14%·가용RAM37.537%·cleanup=True로 통과했다. 이102개는 transport 준비 입력이며 전체 현재 runtime source freeze가 아니다. 독립 전체 oracle의 실제 실행도 아직 아니다.
+
+발행한 것은 별도 진단 manifest이며 실행 capsule·bootstrap과 Native004/005는 생성하지 않았다. 다음은 동일 연결을 공통 parent·worker entry와 독립 검증 경로에 등록한 뒤 실제 CODE·whole preflight·진입점 비용·별도 worker 시작을 검증하는 것이다. 제품·GO·후속 전체 리뷰·승인은 실행하지 않았고 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·목표ACTIVE를 유지한다. 원본과 기존 파생본, 실패 기록, 사용자 소유 변경은 보존했다.
+
+근거는level6-binding-code001..005·level6-binding-transport001..003·successor-level6-probe-manifest001..003이다.
