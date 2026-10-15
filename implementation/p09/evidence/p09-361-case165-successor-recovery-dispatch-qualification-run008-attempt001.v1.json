@@ -1,0 +1,55 @@
+{
+  "state": "FAILED_SUCCESSOR_DISPATCH_CONSTRUCTION_NOT_ADOPTED",
+  "index": 165,
+  "physical_run": 8,
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "product_or_Native_executed": false,
+  "contracts": {
+    "run": 6,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "error_type": "ValueError",
+  "error_code": "DIRECT_VIEW_ORACLE_FINAL_SAMPLE_INSIDE_ORIGINAL600",
+  "failure_frames": [
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "main",
+      "line": 265
+    },
+    {
+      "file": "runtime_envelope_scope_binding_v1.py",
+      "function": "runtime_budget",
+      "line": 92
+    },
+    {
+      "file": "held_native_view_oracle_v1.py",
+      "function": "runtime_budget",
+      "line": 103
+    },
+    {
+      "file": "held_native_view_oracle_v1.py",
+      "function": "require",
+      "line": 23
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 72.3420569000009,
+  "CPU_max": 68.75,
+  "RAM_min": 27.47375525584526,
+  "terminal_resource_sample": {
+    "system_cpu_percent": 30.49,
+    "available_ram_percent": 28.402425336193257,
+    "commit_used_percent": 49.567911168659556,
+    "parent_cpu_machine_percent": 0.38547254270916204,
+    "parent_private_mib": 65.40234375,
+    "parent_private_percent": 0.20527451159488966
+  },
+  "metadata_progress": {
+    "fresh_inputs": 573,
+    "actual_read_passes": 611,
+    "actual_bytes_read": 76763423
+  }
+}
