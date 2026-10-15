@@ -4,6 +4,16 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 실제 run009 worker 연결과 helper 최적화
+
+`native009_engine_connection_v1.py`는 원 `connect_factory`의 private run 상한 슬롯 하나만8→9로 바꾸고 전체 code 역변환을 확인했다. 원 템플릿을 한 번 구성해 root·task·physical9/logical1을 일치시켰으며, 원 `run_case112_current_stored.py` worker 함수 객체를 원 policy/once-only connector에 연결했다.10계약·fresh108/final108·16.029초·CPU최고32.35%·가용RAM최저22.45%·cleanupTrue로 통과했고, 구성 검증에서는 worker 호출0이었다. 이때의 제품 설정165는 격리된 진단 프로세스 안에서 정상 configure 함수로 선택했으며 원 소스 파일은 바꾸지 않았다.
+
+`native009_worker_probe_entry_v1.py`는 diagnostic 전용이며 모든 subprocess 생성을 OS 생성 전에 거부한다. 별도 소유 Job에서 실제 Python worker 프로세스가69개를 재구성하고 원 worker 본문을 호출했다. EOF는 원 WORKER_NOT_AUTHORIZED로 거부됐고, GO 경로에서는 현재 compiled EXE·case165의 정확한 원 명령과 인수를 확인한 뒤 생성 직전에 차단했다. 실제 제품은 생성하지 않았고 Native009 Frame/결과 파일도 만들지 않았다. 두 경우 모두 once-only attempts/calls1회·원 raw policy 복원·과거 runtime 읽기0·소유 Job 최종잔여0이었다.
+
+첫 실제 worker 진단은 기능을 통과했지만 기본 helper66개를 관측해 기존 상한64개를 만족하지 못했다. 그 결과를 보존하고 codec·bounded wire·10초 연결 라이브러리4개를 source-pinned private namespace로 읽도록 바꿨다. sys.modules에서 모듈을 숨기거나 소스를 제외하거나 상한을 늘리지 않았다. 최신 `native009-actual-worker-probe002`에서는 실제 자식 helper62개를 확인하고64개 이하를 명시적으로 검사했다. 두 실제 worker 진단을 포함한 전체17.353초·fresh113/final113·CPU최고42.14%·가용RAM최저23.37%·cleanupTrue다. GO 진단의 준비1.868131초와 GO→캡처0.028973초는 원10초 안에서 분리됐으며, 캡처 완료는 제품 PASS가 아니다.
+
+다음은 전체 현재 입력/Rust787·바이너리·출처 선언을 원 부모 callback/Frame/독립 검증기에 연결하고, 전체 Native 부모·동적 경로의 helper 상한과600초 비용을 닫는 작업이다. 자식 helper62개로 이 전체 Native 자격을 대체하지 않는다. 추가 제품 실행 승인은 여전히 대기 중이며 공식158/249·next165·P09/A12/A13 OPEN을 유지한다. 근거는 `native009-engine-code001`과 `native009-actual-worker-probe002`다.
+
 ### run009의69개 전송과 원 재구성 본문 검증
 
 `native009_worker_transport_v1.py`는 새로운 manifest·capsule·bootstrap을 별도로 구성했다. 기존 run008 결과를 바꾸지 않고 실제 prior authority의158개 수용·next165를 다시 확인했다. private 함수3개의 run 상한 정수 슬롯만8→9로 바꾸고 원 code 전체로의 역변환을 확인했으며, 외부 연결은165/run009만 허용한다. 원 encode/decode·compact·재구성 본문과16KiB 한도, 기존68개 고정 테이블·constructor 검사 및 실패 이력 역할은 유지했다.
@@ -12,7 +22,7 @@
 
 CODE001은 잘못된 `exact` 인터페이스 호출로 계약 실행 전 AttributeError가 나 실패했다. CPU 보호 중단은 아니었으며30.029초·CPU최고35.16%·cleanupTrue다. 원 실패 결과와 생성한 전송 파일을 보존했다. 타입 엄격 비교를 기존 검증기의 함수로 연결한 CODE002는 기존 파일을 정확히 동일한 바이트·해시인 경우에만 읽기 재사용했고, 실패 판정을 재사용하지 않았다. 전체12계약·기반 입력목록222/최종222·새 입력111/최종111이 통과했다.54.910초·CPU최고40.40%·가용RAM최저21.82%·cleanupTrue다. 변조 wire 해시·변조된69개 목록·실패 이력 누락·잘못된 first descriptor·run008/다른 사례·실행 미확인을False로 바꾸는 주장을 거부했다.
 
-이 결과는 run009 metadata와 원 worker 재구성 함수의 자격이다. 실제 worker 프로세스·제품·Native는 실행하지 않았다. 전체 현재 입력 선언과 Rust787·바이너리·기존 Source 범위, 실제 worker/engine dispatch의9문맥 연결, helper 상한, 원600초 비용 및 Native 사전검사는 아직 남았다. Native009 추가 제품 실행 승인은 계속 대기 중이며 원 Native007/008 미수용 증거를 유지한다. 근거는 `native009-worker-transport-code002`다.
+이 결과는 run009 metadata와 원 worker 재구성 함수의 자격이다. 이 metadata 검증 단계에서는 실제 worker 프로세스·제품·Native를 실행하지 않았다. 이후 실제 worker 연결은 앞 절에서 별도로 검증했으며, 전체 현재 입력 선언·Rust787·바이너리·부모 Frame·전체 helper 상한·600초 비용 및 Native 사전검사는 여전히 남아 있다. Native009 추가 제품 실행 승인은 계속 대기 중이며 원 Native007/008 미수용 증거를 유지한다. 근거는 `native009-worker-transport-code002`다.
 
 ### 복사 의존성과 준비 신호의 통합 검증
 
