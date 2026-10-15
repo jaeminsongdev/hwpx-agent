@@ -407,3 +407,21 @@ Native005는7.62초에 metadata CPU 경고로 중단됐다. actual 초기 reader
 실제 독립 원체커/승인 연결은 구현됐지만 Native 후보가 없어 미실행이다. 다음은 이 초기 보호 중단의 깨끗한 prebody 조건을 유지한 새 실행 준비와, 실제 Frame 전후 읽기·기존 및 추가 원체커·승인 검증이다. CODE/preflight 및 component 검증은 같은 소스에서 유지한다. 공식157/249·잔여92·next164·generation52, P09/A12/A13 OPEN 및 목표ACTIVE이며 제품·Frame·독립 리뷰·승인은 미완료다.
 
 근거: lossless-v4-adoption-code001..003, successor-connections005.v2/v4, factory003/004, successor-code/preflight-run005-attempt001/002, dispatch-qualification-run005-attempt001/002 및 current-runtime-run005. 구현은 current_queue_successor_lossless_runtime_v4와 해당 시험 파일이다.
+
+## 속도 병목과 사례164 공식 승인
+
+사례164가 공식 승인됐고 현재158/249·잔여91·next165·generation53이다. P09/A12/A13은 OPEN이고 목표는 ACTIVE다. 사례165 STEP은fresh9/final9·CPU54.04%·가용RAM45.564%·cleanup=True로 준비됐으며 아직 제품·Native·승인을 실행하지 않았다.
+
+전체 Native006은558.86초지만 제품 GO부터 완전 수집은2.101초로 약0.376%다. 전체Frame의2,963입력 고정과 전후 실제읽기, 누적 증거·현재 source 검증이 지연의 대부분이다. Binding001의196.324초 중 원본/envelope 읽기88.993초·최종읽기96.250초가94.35%다. CPU 경고 중단도 재준비 비용을 추가한다. 보호 기준이나 원Fresh/Final 검사 삭제는 속도 개선 수단으로 사용하지 않는다.
+
+실제 Native metadata는 봉인된 preflight와 entry에서 독립적으로 선언한 논리원본17개를 모두 읽었으며 요청18회 모두 fresh 물리읽기와 decode를 수행했다. mapped physical20,058,350바이트로semantic58,350,277바이트를 복원했으므로 해당 변환 대상의 물리읽기량은38,291,927바이트·65.62% 감소했다. 전체 metadata physical44,345,826바이트와 분리한 계수다. 전체Frame56개는 전후112decode로 유지됐고 metadata0.295초+Frame1.463초=공유1.758초/5초다. 제품1PASS·Frame COMMITTED·두 실제경계·cleanup 및 빈 소유tree를 확인했다. 이는 IO 절감의 실측이며 전체 검증시간 감소의 인과 증명은 아니다.
+
+후속 review001은 metadata에도전체Frame56개를 요구해 ALL_DECLARED_METADATA_MAPPINGS로 거부됐다. 원 dispatch의 outer binding이 compose_parent의 추가56개 metadata pin wrapper를 대체하므로 이 wrapper는 실제 실행되지 않았다. 실제 요청17개는 모두 변환됐고 실행 전 봉인된 두 선언과 정확히 일치했다. lossless_metadata_scope_review_v1은 원Native/v4소스를 수정하지 않고 후속 독립검사에서 단 하나의 metadata 이름비교를 두 선언의 정확한 집합으로 구분한다. 원전체체커와 나머지 v4 계수·전체Frame56·전후112·hash·공유5초·owner/resource 조건을 그대로 유지하며 전체 AST inverse를 확인한다. 누락·추가 metadata, 선언 불일치, 잘못된 pin/바이트/계수,Frame 축소 및 budget 위반을 거부하는9계약과 원 workspace15계약이 통과했다. 새 소스는 post-Native 증거이며 실행입력에 소급 넣지 않는다.
+
+review002는 전체체커 통과 후 최종읽기79.202초에CPU82.90% 경고로 중단됐다. 후속 reader의64KiB 반복할당을 기존 reusable workspace로 연결했다. 원MRO/open/stat/checkpoint/pacing/parse/hash/final읽기는 유지한다. review003은fresh453/final453·127.644초·CPU37.38%·가용RAM47.227%·cleanup=True로 통과했다. 실제 workspace1개·65,536바이트·leases474/returns474·readinto2,236회·90,215,317바이트를 전체체커 이후 계수 시점에 확인했고 최종읽기도 완료했다. 성공 표본만으로 버퍼가CPU경고를 해결했다고 단정하지 않는다.
+
+승인001은84.53% 경고로 중단됐지만 parentCPU0%·private47.465MiB·가용RAM46.266%·commit38.758%·cleanup=True·delta0였다. 승인reader는 이미 reusable workspace와 요청당 single fresh stat을 사용하고 있었으므로 동일 최적화를 중복 적용하지 않았다. 원1/2MiB pacing·20open/s·no-burst·0.5초 표본 재사용과 정리를 점검했다. 낮아진 별도CPU15.26/18.52% 표본 후 승인002만 재시도했으며 제품·Native·독립 리뷰를 재실행하지 않았다. CPU 상승의 외부 프로세스 원인은 미확정이고 OS설정·외부 프로세스를 변경하지 않았다.
+
+승인002는248.685초·fresh1,259/final1,259·2,540읽기·233,216,086바이트·CPU59.33%·가용RAM44.728%·resource cleanup=True로 canonical을 단 한 번 발행했다. before157·delta1·after158이며 제품/Native 재실행0이다. 실패 기록과 원본을 보존했다. 같은소스에서 통과한 준비·제품을 반복하지 않고 실패한 후속 단계만 진행하는 방식으로 운영한다. 일반화된 metadata 연결에도 sealed metadata와 fullFrame 집합을 처음부터 분리해야 하며, 사례164 전용 review 연결을 다른 epoch에 무검증 재사용하지 않는다.
+
+근거: case164 successor-connections006.v4·factory005·code/preflight/dispatch-qualification-run006-attempt001·current-runtime-run006·whole-review-run006-attempt001..003·optimized-acceptance-attempt001/002·current-epoch-accept001 및 case165 step-config001/selection001. Native root SHA256은3d68ad7f4d6775354cde2f3989a29025d3408330308ca00ed08e4b72ad935959, canonical은461,984바이트·SHA256 3d3c118de9421d8601c9d9dc9e4177c64bdb63d12226a68a0e148452de463382다. PC 프리즈 해결과 전체 검증시간 대폭 단축은 아직 입증되지 않았다.

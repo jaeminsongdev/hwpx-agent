@@ -1,0 +1,58 @@
+{
+  "state": "FAILED_SUCCESSOR_WHOLE_REVIEW_NOT_ACCEPTED",
+  "index": 164,
+  "physical_run": 6,
+  "accepted_count_delta": 0,
+  "product_or_Native_reexecuted": false,
+  "queue_acceptance_called": false,
+  "P09_gate": "OPEN",
+  "contracts": {
+    "run": 2,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "error_type": "ValueError",
+  "error_code": "STOP_TERMINAL_METADATA_WARNING_BEFORE_MORE_WORK",
+  "failure_frames": [
+    {
+      "file": "review_current_queue_successor.py",
+      "function": "main",
+      "line": 98
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "finish",
+      "line": 137
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "_read",
+      "line": 245
+    },
+    {
+      "file": "weighted_audit_io.py",
+      "function": "_read",
+      "line": 44
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "_read",
+      "line": 83
+    },
+    {
+      "file": "weighted_audit_io.py",
+      "function": "reserve",
+      "line": 35
+    },
+    {
+      "file": "terminal_metadata_pressure_v1.py",
+      "function": "check",
+      "line": 40
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 79.20153389999905,
+  "CPU_max": 82.9,
+  "RAM_min": 45.59068068674948
+}

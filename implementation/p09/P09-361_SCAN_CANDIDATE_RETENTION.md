@@ -1705,3 +1705,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE164_V4_ADOPTED_STATUS -->
 > 무손실metadata+공유5초 v4 실제실행경로채택/원전체원체커후독립56descriptor 계수검사 추가. alias연결실패와기존005v2증거보존·수정후005v4 adoption6/graph56/factory11/CODE74/pref444/entry448 actualhelper64 PASS·currentsource핀일치. Native005 actualmetadata 새reader기록은있지만mapped/decode0·CPU82.26% prebody보호중단·제품/worker/Frame0·cleanupTrue·delta0. 독립리뷰/승인NOT_RUN·원기록/승인163/원본보존·공식157/249·잔여92·next164/P09-A12-A13 OPEN·목표ACTIVE·다음새번호의실제Frame/원체커검증.
 <!-- END P09_CASE164_V4_ADOPTED_STATUS -->
+
+<!-- BEGIN P09_CASE164_ACCEPTED_CASE165_PREPARED_STATUS -->
+> 사례164 Native006 실제제품1PASS·전후2경계·Frame COMMITTED·cleanupTrue. 원Native root4566486바이트/SHA256 3d68ad7f4d6775354cde2f3989a29025d3408330308ca00ed08e4b72ad935959 및 실행소스 보존. metadata 범위는 봉인된pref/entry 모두17개·전체Frame56개 유지·범위/계수9+workspace15 계약 PASS. review001 범위오류/002 CPU82.90% 중단 보존·003 fresh453/final453 PASS. 후속review에만 원64KiB workspace 연결·전체fresh/final검사 유지·Native source 소급추가0. 승인001 CPU84.53% 중단·delta0·cleanupTrue 보존/002 canonical current-epoch-accept001461984바이트/SHA256 3d3c118de9421d8601c9d9dc9e4177c64bdb63d12226a68a0e148452de463382·delta1·after158·잔여91·next165·generation53·제품/Native재실행0·fresh1259/final1259·248.685초·resourcecleanupTrue. 사례165 STEP9/9 PASS·목표ACTIVE/P09-A12-A13 OPEN·P10미시작·프리즈해결/전체시간단축 미입증·원본/실패/승인163/사용자변경보존.
+<!-- END P09_CASE164_ACCEPTED_CASE165_PREPARED_STATUS -->

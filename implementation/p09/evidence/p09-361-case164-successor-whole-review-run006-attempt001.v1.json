@@ -1,0 +1,53 @@
+{
+  "state": "FAILED_SUCCESSOR_WHOLE_REVIEW_NOT_ACCEPTED",
+  "index": 164,
+  "physical_run": 6,
+  "accepted_count_delta": 0,
+  "product_or_Native_reexecuted": false,
+  "queue_acceptance_called": false,
+  "P09_gate": "OPEN",
+  "contracts": {
+    "run": 2,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "error_type": "ValueError",
+  "error_code": "LOSSLESS_V4_ALL_DECLARED_METADATA_MAPPINGS",
+  "failure_frames": [
+    {
+      "file": "review_current_queue_successor.py",
+      "function": "main",
+      "line": 97
+    },
+    {
+      "file": "review_current_queue_successor.py",
+      "function": "prepare",
+      "line": 46
+    },
+    {
+      "file": "flat_current_queue_acceptance.py",
+      "function": "prepare",
+      "line": 68
+    },
+    {
+      "file": "current_queue_successor_lossless_runtime_v4.py",
+      "function": "checked",
+      "line": 85
+    },
+    {
+      "file": "current_queue_successor_lossless_runtime_v4.py",
+      "function": "validate_accounting",
+      "line": 33
+    },
+    {
+      "file": "current_queue_successor_lossless_runtime_v4.py",
+      "function": "require",
+      "line": 25
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 66.52560800000356,
+  "CPU_max": 56.64,
+  "RAM_min": 44.97061508178552
+}
