@@ -445,3 +445,21 @@ graph002는60pair·wire8,603바이트·fresh63/final63·13.213초, factory001은
 원closed-prebody 검사를 실제 root의 fresh1/final1에 적용해 통과했고 제품 재실행 없이 cleanup=True를 확인했다. 새 graph003은60pair·동일wire8,603바이트·fresh63/final63·13.155초·CPU30.08%·cleanup=True로 준비했다. 다음은 새 번호의 GO 없는 factory·CODE·전체 preflight·entry를 준비하고 기존 중단 기록을 그대로 검증하는 것이다. 원002는 덮어쓰거나 재실행하지 않으며 아직 사례165 후속 독립 리뷰와 승인은 NOT_RUN이다.
 
 근거: case165 lossless-receipts001·successor-binding001/manifest001·sealed-metadata-code001·connections002/003.v4·factory001·CODE002-001·preflight002-001..003·workspace/single-snapshot qualification과 실제 reader 계수·dispatch-qualification002-001/002·current-runtime-run002. root는2,521,689바이트·SHA2562465c110c3c01fd40a90f6d7f0ff0ca40268ea9eab136e5d4071670bc864dc03이다. 프리즈 해결이나 전체 시간 단축은 아직 입증되지 않았다.
+
+## 준비 읽기량 감소와 사례165의 두 번째 Native 중단
+
+준비 preflight는 같은2,983입력·Rust787개 규모에서130.673초/168,632,774바이트에서92.903초/89,264,287바이트로 줄었다. 이번 관측의 시간 감소는28.90%, 물리읽기 감소는79,368,487바이트다. helper와 실행 시점이 다른 비교이므로 모든 검증이나 PC 프리즈가 해결됐다는 의미는 아니다. 최종471개 fresh 해시는 모두 완료했고 CPU48.18%·가용RAM38.922%·cleanup=True였다. 공식158/249·잔여91·next165·generation53과 P09/A12/A13 OPEN 및 목표ACTIVE를 유지한다.
+
+새 preparation_rust_inventory_snapshot_v1은 기존 Rust 목록 snapshot을 준비용 private build에 연결한다. 원 template run 함수의 code/defaults/closure/worker는 유지하며 기본 build 모듈은 변경하지 않는다. 최초 연결은8.252초에 EXACT_ORIGINAL_METHOD_CODE로 거부됐고 실패를 보존했다. 차이는 full-module import symbol을 아는 컴파일과 AST-only 함수 선택의 LOAD_ATTR/PUSH_NULL 호출 준비였다. 실제 함수가 고정된 원본 전체 소스의 컴파일된 함수와 정확히 일치함을 먼저 확인한 다음 같은 원본 AST를 기존 엄격한 projection에 넘긴다. 임의로 유사한 opcode나 변경된 소스를 허용하지 않는다. 실제 Rust 판정1,118회가fresh stat1,118회·file787/directory331·fallback0으로 처리됐다.
+
+run003 preflight001은70.103초·CPU81.44%,004는51.349초·CPU75.47%,005는5.680초·CPU94.06%에서 중단됐다.005는부모CPU0%·private46.496MiB였으며 mapped read/decode0회라 새 무손실 작업 시작 전의 포화다. 별도 설정 검증은fresh15/final15·cleanup=True로 그래프/manifest와 현재 코드 자격을 확인했다. 해당 실패와 초기15/17/22계약 버전 기록을 보존했다. 현재code004는 원 fresh reader8·Rust목록10·새 연결17 등35계약·fresh10/final10·2.021초·CPU18.77%·cleanup=True다.
+
+준비 reader도 기존 fresh_lossless_metadata_reader_v1을 원 reader 계층 아래에 연결한다. 한 preparation reader만 원 DecoderBudget 한 개를 소유하며 매 요청의 실제 물리읽기와 decoder 호출·owner/resource 검사·5초 합산 한도·checkpoint 복원을 유지한다. 기존 snapshot/workspace/자격 witness는 그 위에 쌓고 unmapped 경로는 원 reader를 사용한다. 실제pref006은37회fresh 복원으로physical41,964,355바이트에서semantic121,349,006바이트를 복원했으며 decoder 작업0.518초/5초·error=False·active=False였다. 원본·decoded bytes·JSON·hash 캐시로 최종읽기를 대체하지 않았다. 이 계수는 준비 단계이며 Native Frame decode로 표시하지 않는다.
+
+별도로 원 run_preflight 함수 전체 code/defaults/closure와 import map을 유지한 private json 의존성만 연결했다. ensure_ascii=True/allow_nan=False/indent2의 정확한 최종 profile에서 공백만 없애며 summary/다른 옵션/기본 json 모듈은 변경하지 않는다. 모든 필드·타입·순서·문자열 내부 공백과 오류 전파를 유지한다. 새pref006 파일은1,128,424바이트다. 기존pref003의 공백만 줄인 별도 in-memory 비교는1,392,926→1,152,020바이트·전체 파싱 값 동일이었으며 원본 파일은 수정하지 않았다.
+
+진입003-001은6계약 뒤 ENVELOPE_SCOPE_BINDING_COMPLETE_COST_PLUS_SHARED_DECODER5로 거부됐다. 한도/60초 margin/decoder5/검사 범위를 줄이지 않고 물리기록 비용을 낮춘 후 진입002는6계약·기본helper60/actualNative64·fresh473/final473·98.005초·CPU52.15%·가용RAM38.688%·cleanup=True로 통과했다. 준비 helper는 고정 source pin을 private namespace로 명시적으로 로드했고 기본 모듈을 숨기지 않았다. 원18개 metadata 선언은 pref/entry에서 일치했다. 비용599.821934초에 실제 qualification99,631바이트와 파일 예약을 추가한 추정599.988378초였고 실제 Native 비용도599.988378초로 확인됐다. 이 계산은 완료 보장이 아니며 원600초 한도를 유지한다.
+
+실제 Native003은입력 고정93.60초에 CPU95.12%로 중단됐다. 직전79.17%·parent0%에서 마지막parent0.191%·private51.719MiB·가용RAM37.338%·commit43.147%였다. directory372개와 regular154개 등526개 핸들은 모두 닫혔고 remaining0·Frame CLOSED·cleanup 및 빈 소유tree를 확인했다. worker/제품/실제byte boundaries는0·delta0이며 후속 독립 리뷰와 승인은 NOT_RUN이다. open with pacing37.727초 중 요청sleep37.132초, inspect0.0186초였고 기존 no-burst와14회/s 고정을 유지했다. CPU 급등을 코드 busy loop 또는 특정 프로세스 원인으로 확정하지 않는다.
+
+원 closed-prebody 검사를 실제root fresh1/final1에 적용해 통과했고 별도 재실행 없이 cleanup=True를 확인했다. root는2,287,325바이트·SHA256c425e8f636f632f5e8faf9f95b4f4edec89f6902a77a01b156620b1c526b733e다. 다음은 누적된 실패 증거까지 포함하는600초 비용과 Native 입력 고정 경로를 점검하는 것이다. 같은 고비용 실행을 즉시 반복하거나 OS설정·외부 프로세스를 변경하지 않는다. 근거는run003 factory002·CODE001·preflight001..006·entry001/002·해당 workspace 계수·preparation-rust-inventory-code001..004 및 current-runtime-run003이다.

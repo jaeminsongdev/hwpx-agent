@@ -1,0 +1,50 @@
+{
+  "state": "FAILED_SUCCESSOR_DISPATCH_CONSTRUCTION_NOT_ADOPTED",
+  "index": 165,
+  "physical_run": 3,
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "product_or_Native_executed": false,
+  "contracts": {
+    "run": 6,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "error_type": "ValueError",
+  "error_code": "ENVELOPE_SCOPE_BINDING_COMPLETE_COST_PLUS_SHARED_DECODER5",
+  "failure_frames": [
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "main",
+      "line": 265
+    },
+    {
+      "file": "runtime_envelope_scope_binding_v1.py",
+      "function": "runtime_budget",
+      "line": 97
+    },
+    {
+      "file": "runtime_envelope_scope_binding_v1.py",
+      "function": "require",
+      "line": 19
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 75.18779709999944,
+  "CPU_max": 49.26,
+  "RAM_min": 40.073279923299445,
+  "terminal_resource_sample": {
+    "system_cpu_percent": 8.91,
+    "available_ram_percent": 41.60627335973797,
+    "commit_used_percent": 40.393247733605335,
+    "parent_cpu_machine_percent": 0.19355682347608094,
+    "parent_private_mib": 48.421875,
+    "parent_private_percent": 0.15197890734816055
+  },
+  "metadata_progress": {
+    "fresh_inputs": 473,
+    "actual_read_passes": 489,
+    "actual_bytes_read": 94061635
+  }
+}
