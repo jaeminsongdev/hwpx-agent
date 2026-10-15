@@ -4,6 +4,18 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 전체 부모와 Frame 생성 경로 및 독립 판정기 연결
+
+`native009_full72_construction_v1.py`는 실제 Source admission을 통과한 full72 graph에서 원 engine을 한 번만 구성한다. 같은 engine을 원 부모 connector에 넘기고, 원 Frame을 상속한 projection class와 원 outer 실행 체인·독립 oracle을 연결했다. 독립 판정기의 기대 입력은 이전 전체 선언과 현재 source pin에서 만들며 현재 후보의 관측값을 사용하지 않는다. 부모와 판정기 모두 엄격한 제품 캡처10초를 유지한다. Frame instance 생성·입력 잠금·부모 callback·worker·판정기·GO 실행은 하지 않는다. 프로세스의 audit hook은 모든 subprocess 생성을 영구 거부한다.
+
+첫 construction001은 이미 설정된 case165를 다시 configure해 원 단일 설정 검사에서 거부됐다. 원 설정을 초기화하거나 검사를 완화하지 않고 기존 immutable 설정을 검증해 재사용하도록 수정했다. construction002는 테스트를 읽기 전에 기본62개와 명시적 Native 항목을 합친67개를 관측해 원64개 상한에서 거부됐다. 두 실패와 cleanup 기록은 보존한다.
+
+중복 기본 product-window와 lean import는 envelope가 이미 source pin으로 구성한 namespace를 재사용하도록 바꿨다. runtime의 늦은 Binding import도 같은 선언된 private 의존성으로 연결했다. 그때 전체 private 함수군을 같은 code·defaults·closure로 다시 구성해 실제 Python 함수의 builtins 연결을 일치시켰다. 기본 모듈을 숨기거나 제거하지 않고, source pin이나 원 helper 검사 항목·64개 상한도 줄이지 않았다.
+
+construction003은 실제 구성 객체에 대한8계약·fresh374/final374로 통과했다. 프로젝트 테스트 모듈을 읽기 전 기본59개·Native union64개였다. 실제70.125초·시스템CPU최고52.14%·검증기 자체CPU최고5.05121%·전용메모리최고50.53MiB·가용RAM최저33.45%·cleanupTrue다. 부모/callback/worker/Frame instance/oracle projector/subprocess 호출은 모두0이며 Native009 runtime 원본은 생성하지 않았다. 이 결과는 준비 구성 검증이며 PC 프리즈 해결이나 실제 입력 Frame·독립 제품 수용을 증명하지 않는다.
+
+입력 선언3,191개와 현재 Rust787경로/167회 inventory pacing을 반영한 원 complete 모델은584.236608초다. 기존 allowance를 공제하지 않은 준비15초를 더해599.236608/600초이며 nominal 여유는0.763392초에 불과하다. 이후 production worker 진입·readiness·자격/결과 소스가 추가되면 다시 계산해야 한다. 현재 production run9의 실제 launch/readiness 경로, 전체 입력의 두 실제 바이트 경계·Native 최종 동적 helper 경로·독립 수용·전체 사전검사/dispatch는 미완료다. 추가 제품 실행 승인은 대기 중이고 원 Native CPU·RAM/commit95%·1코어/BelowNormal·IO1/2MiB·acquisition14·decoder5·제품10초·여유60은 유지한다. 새 준비 CPU 정책은 이 구성 실행에 적용하지 않았다. 근거: `native009-full72-construction001/002/003`, `native009-full72-construction-declared-scope003`.
+
 ### 부모의 실제 Source admission 연결
 
 `native009_verified_source_profile_v1.py`는 worker 선언과 실제 부모 `VerifiedPolicy`를 분리한다. 원 `closed_prebody_source_alias.verify`의 private run 상한 슬롯 하나만8→9로 확장하고 code 전체 역변환을 확인했다. 원본·codec·producer/CODE14·완전한 과거 정리 증거·사전 선언한 pin 검사 본문은 유지했다. producer before_run4와 대상 원본2·3번은 그대로이며, 실행된 Native007이나 실행 미확인 Native008을 이 사전 실패 정책에 넣지 않았다.
