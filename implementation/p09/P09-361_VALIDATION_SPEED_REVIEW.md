@@ -4,6 +4,18 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 부모의 원 Job과 실제 Frame checkpoint 연결
+
+`native009_parent_launch_v1.py`는 원 recovery API가 만든 private10초 window에 production launch 의존성을 연결한다. 원 template의 code·defaults·closure와 완전한 capture checker를 유지하고, 같은 globals를 사용하는 실행 wrapper 하나로 원 Job 생성 메서드를 실행 범위 안에서만 관찰한다. 원 메서드가 반환한 handle은 그대로 runner에게 전달되며 추가 Job·Windows sampler·Frame을 생성하지 않는다. 실패 경로에서도 메서드를 복원하고 event를 닫는다. Job 종료·프로세스/pipe 정리는 원 runner가 맡는다.
+
+준비 대기는 metadata Guard로 대체하지 않는다. 실제 부모가 보유한 단일 Frame의 원 `check()`를 호출해 registry/owner·기존 CPU/RAM checkpoint·잠금 시간 검사를 거친다. 첫 전체 바이트 경계가 끝난 BEFORE_READ 상태인지 확인하고, 실제 launch가 생성한 process가 관찰한 동일 원 Job에 속하는지 GO 직전에 검사한다. 아직 Frame이 없거나 읽기가 진행 중인 경우, 다른 Job이나 재실행은 거부한다.
+
+parent-launch-connection001은 새로운 실제 구성에 대한 기존8계약과 Job/Frame 연결12계약을 합쳐20/20으로 통과했다. 합성 객체로 Job 위임·오류 우선순위·원 메서드 복원·재실행 거부·Frame 상태 검사를 검증했으며, 실제 구성의 공유 globals·원 worker·Source policy·full72·독립 oracle10초도 확인했다. 프로젝트 테스트를 읽기 전 기본59개·Native union64개였다. 실제 부모/worker/Frame/Job/Popen 호출은0이고 Native009 runtime 원본도 없다. 실제 Native checkpoint·제품 수용까지 검증한 결과는 아니다.
+
+현재 Rust787경로/167회 pacing·전체 입력 선언3,200개를 원 budget에 다시 전달했다. 새 scope manifest를 중복 생성하지 않고 이전 선언과 현 source pin의 union을 유지했다. 원 complete585.081944초+별도 준비15초=600.081944초로 원600초를 초과하므로 비용 자격은 미완료다. 이 결과 파일과 후속 자격 소스는 다음 모델에 추가해야 한다. 전체 연결 검증은68.052초·fresh381/final381·시스템CPU최고60.16%·자체CPU최고4.25789%·전용메모리최고49.45MiB·가용RAM최저27.51%·cleanupTrue였다.
+
+추가 읽기 전용 범위 점검에서는 현재72개 무손실 변환에 들어 있지 않은 큰 과거 검증 기록을 확인했다. 예를 들어 `p09-154-observed-full.actual-run01.v1.json`은3,917,483bytes다. 아직 해당 기록의 실행/수용 역할을 재판정하거나 새 alias를 적용하지 않았다. 일반 metadata alias를 금지하는 원 정책은 그대로이며, 다음은 큰 과거 원본의 정확한 역할과 허용 가능한 무손실 표현을 확인해 비용을 줄이는 작업이다. 원본 삭제·덮어쓰기·입력 제외·상한 확대·Native/제품 실행·접근허용·OS/Defender 변경은0이다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작을 유지한다. 근거: `native009-parent-launch-connection001`.
+
 ### 실제 worker 진입과 준비 신호 launch 연결
 
 `native009_worker_entry_v1.py`는 case165/run009와 실제 상속 event handle만 받는 production worker 진입점이다. 현재 full72 packet을 원 decoder로 재구성하고 원 worker·한 번 실행 정책·raw policy·GO·Job 검사를 유지한다. 이미 source pin으로 구성한 window/lean namespace와 동일 private Binding을 재사용한다. 진입점 자체에는 제품 생성 차단이나 가상 GO를 넣지 않았다. 이 진입점은 독립 Native dispatcher가 아니며 전체 입력 Frame과 소유 Job·비용·helper 자격은 부모가 제공해야 한다.
