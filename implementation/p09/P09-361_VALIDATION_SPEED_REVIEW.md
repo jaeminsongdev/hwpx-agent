@@ -4,6 +4,27 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. run008 제품 실행은 아직 시작하지 않았다.
 
+### 실제 EOF 시작 검사와 현재 전체 CODE
+
+현재 v17 worker source와 세 packet을 유지한 채 `xz_startup_adapter_v1.py`가 동결된 원 factory 시작 검사 본문을 호출했다. 인자는 case165/run008의 `--bootstrap`으로 고정하며, 새 Native/GO 인터페이스는 없다. 원 engine 구성·11개 계약·원 wire/bootstrap 바이트 비교·15초 자식 timeout·출력4096/16384bytes 상한·EOF·과거 파일 열기 audit·마지막 hash·정리를 모두 원 본문에서 실행했다.
+
+| 실제 완료한 검사 | 결과 |
+| --- | --- |
+| startup adapter CODE001 | 8계약, fresh172/final172, 22.883095초, CPU 최고49.14%, cleanup=True |
+| `successor-xz-factory001` 원 본문 | 11계약, fresh182/final182, 38.337971초, CPU 최고59.7%, 가용RAM 최저18.63110%, cleanup=True |
+| `xz-startup-probe001` 추가 확인 | fresh205/final205, 94.860690초, CPU 최고53.49%, 가용RAM 최저18.49980%, cleanup=True |
+| whole CODE adapter CODE001 | 6계약, fresh184/final184, 24.071826초, CPU 최고57.81%, cleanup=True |
+| `successor-code-run008-attempt005` 원 본문 | 74계약, 기본helper62, 테스트 포함95, fresh187/final187, 43.254297초, CPU 최고86.79%, 가용RAM 최저16.62925%, cleanup=True |
+| `xz-whole-code-qualification005` 추가 확인 | fresh217/final217, 107.858459초, CPU 최고75.86%, 가용RAM 최저17.78432%, cleanup=True |
+
+자식은 실제 exit1과 원 `WORKER_NOT_AUTHORIZED` 거부를 보였고 과거 제품/수용 기록 열기는0회였다. GO를 보내지 않았고 parent/worker dispatch도 각각0이다. 원 factory state는 `PASS_WORKER_CLI_NO_GO_STARTUP_NOT_PARENT_ADMISSION_NATIVE_OR_PRODUCT`다. 바깥 어댑터의 추가 확인은 별도 Guard에서 수행하며 원 Guard·뮤텍스가 정리된 후에만 새 소유자를 만든다. 표의 원 실행과 추가 확인 CPU/RAM은 서로 다른 측정 창이며, 낮은 바깥 수치로 원 실행의86.79%를 대체하지 않는다.
+
+`xz_whole_code_adapter_v1.py`는 기존 controller의 `run_code`와 전체74계약을 재사용했다. XZ 연결 CODE21·실제 EOF 증거·현재 source/packet을 별도로 확인하며, 과거 fixture PASS만으로 새 CODE를 만들지 않았다. 원 helper 상한64를 유지해 기본 import62개를 검사했고, 계약 실행 뒤 테스트 전용 import까지95개가 되는 것은 별도로 기록했다. 테스트가 로드된 process를 Native/preflight로 재사용하지 않는다. XZ61 및 특수7개의 앞선 물리 검증은 다시 실행하지 않았다.
+
+현재 실제 CODE는 `implementation/p09/evidence/p09-361-case165-successor-code-run008-attempt005.v1.json`이다. 기존 `successor-recovery-code-run008-attempt001`은 과거 profile 증거이며 현재 CODE005로 승격할 수 없다. 다음 사전검사에서는 현재 CODE005의 실제 pin을 직접 참조하도록 metadata 경로를 명시적으로 결속해야 한다. 이 차이를 숨기려고 이전 PASS를 새 경로의 실행 결과처럼 복사하거나 이름만 바꾸지 않는다.
+
+남은 준비는 현재 v17 graph·CODE005·EOF 증거를 승인된 case165/run007 post-body 실패 복구, 기존 준비 closure4..6, 새10초 window와 연결하는 것이다. 그 위에서 현행 전체입력·Rust787·독립 판정기·미래 dispatch 필수 metadata를 포함한600초 비용 및 preflight/dispatch를 검증해야 한다. 원 사전검사010의 PASS와600.530초 하한은 여전히 v10의 증거다. 현재 단계는 CODE/시작 검사이며 Native008·제품·GO·P09 Gate는 미완료다.
+
 ### 현재 XZ 부모와 worker 재구성 연결
 
 현재 재개 지점은 `successor-connections008.v17.json`이다. `xz_closed_preparation_v1.py`는 동결된 `level6_closed_preparation_v1.py`의 전체 본문을 재사용한다. 새 파일명·버전·고정 XZ Binding CODE 참조 등 명시한 metadata만 바꾸며, 바꾸기 전 함수 code와 되돌린 AST/code가 원본 전체와 같은지 확인한다. 같은 소스의 AST는 한 번 파싱해 두 함수에 재사용하지만 검사 대상·원본 hash·전체 code inverse는 줄이지 않는다.
@@ -24,7 +45,7 @@ v11~v16의 graph 실패8개, CODE001~008, `xz-actual-worker-linkage-diagnostic00
 
 준비 CODE 기록의 유한 범위만1..16으로 명시했다. graph attempt와 Native physical run 상한은8, 현재 Native run은8이며 자동 재시도와 기존 기록 덮어쓰기는 없다. 이 구분을 현재 CODE 증거와 admission에 결속하고, CODE9/16 허용·17/boolean 거부·graph attempt9 거부를 테스트했다. 실제 제품·GO·queue advance는0이다.
 
-다음은 현재 v17 packet과 worker 진입점을 사용한 실제 EOF/NO-GO 시작 검사다. 이후 기존 helper64와 새 연결 전체를 포함한 현행 scope·독립 판정기·미래 dispatch 필수 입력의600초 비용을 재산정하고 CODE/preflight/dispatch를 닫아야 한다. 선행 v10 사전검사010과600.530초 하한은 그 profile의 증거로 보존하며, 새 v17 runtime 자격으로 승격하지 않는다. Native 보호·RAM95%·commit95%·1코어·BelowNormal·1/2MiB·acquisition14·여유60초·합산 decoder5는 유지한다.
+실제 EOF/NO-GO와 원74계약은 앞 절에서 완료했다. 남은 준비는 기존 helper64와 새 연결 전체를 포함한 현행 scope·독립 판정기·미래 dispatch 필수 입력의600초 비용·preflight/dispatch다. 선행 v10 사전검사010과600.530초 하한은 그 profile의 증거로 보존하며, 새 v17 runtime 자격으로 승격하지 않는다. Native 보호·RAM95%·commit95%·1코어·BelowNormal·1/2MiB·acquisition14·여유60초·합산 decoder5는 유지한다.
 
 ### 새 파일 게시와 전체 물리 경계 검증
 
