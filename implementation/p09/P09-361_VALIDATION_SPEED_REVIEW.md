@@ -2,7 +2,29 @@
 
 ## 현재 재개 위치와 작업 방식 개선
 
-2026-10-15 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. run008 제품 실행은 아직 시작하지 않았다.
+2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. run008 제품 실행은 아직 시작하지 않았다.
+
+### 현재 XZ 부모와 worker 재구성 연결
+
+현재 재개 지점은 `successor-connections008.v17.json`이다. `xz_closed_preparation_v1.py`는 동결된 `level6_closed_preparation_v1.py`의 전체 본문을 재사용한다. 새 파일명·버전·고정 XZ Binding CODE 참조 등 명시한 metadata만 바꾸며, 바꾸기 전 함수 code와 되돌린 AST/code가 원본 전체와 같은지 확인한다. 같은 소스의 AST는 한 번 파싱해 두 함수에 재사용하지만 검사 대상·원본 hash·전체 code inverse는 줄이지 않는다.
+
+실제 준비 경로에서 발견한 문제는 두 가지다. 먼저 원 graph main이 안쪽 profile이 아니라 최상위 loader에서 Guard를 만들고 있었다. graph root와 metadata 준비에만 선행 자격을 갖춘 준비 정책을 연결하고, worker root의 원 보호기는 그대로 두었다. 전체 profile의 안쪽에 둔 준비 라우터는 늦은 import가 profile 바깥을 거치지 못하게 했으므로 라우터를 전체 profile·현재 CODE 검증의 바깥으로 옮겼다. 원75% 한 표본 즉시중단을 준비 정책으로 바꾼 것이지90% 도달이나75% 지속 포화를 허용한 것은 아니다.
+
+두 번째는 private namespace 설치 순서다. 제한된 함수 계측에서 최초 설치 직후에는 부모 공개 함수와 actual worker가 같은 재구성 함수를 봤지만, Binding API 구성 후 같은 runtime의 함수들이 다시 바뀌는 것을 확인했다. worker metadata 변환은 원 코드·기본값·클로저를 유지하면서 원 private 의존성 family를 공유하도록 했다. 원 namespace install/retarget을 끝까지 실행한 뒤 연결을 확인하고, 원 Binding API connect의 반환 직후 최종 공개 재구성·입력 scope 함수를 actual worker 환경에 연결한다. 원 Binding API 반환값과 증명은 그대로 반환하며, 원 graph의 `SAME_PUBLIC_AND_ACTUAL_WORKER_RECONSTRUCTION` 검사는 삭제하거나 약화하지 않았다.
+
+| 현재 자격 | 실행 결과 |
+| --- | --- |
+| `xz-profile-connection-code009` | 21계약 PASS, fresh99/final99, 16.781097초, CPU 최고35.35%, 가용RAM 최저20.80315%, cleanup=True |
+| `xz-entry-v17-graph-run008-attempt001` | 부모/actual worker 함수 동일성 및 전체68행 복원, fresh222/final222, 44.324748초, CPU 최고61.72%, 가용RAM 최저19.52410%, cleanup=True |
+| 실제 v17 packet | manifest47454bytes, capsule9647bytes, bootstrap7076bytes, 원 wire/bootstrap16KiB 한도 이내 |
+
+현재 graph와 세 packet은 새 배타적 경로에 게시됐다. graph state는 `PREPARED_CURRENT_SUCCESSOR_GRAPH_AND_WIRE_NOT_CODE_PREFLIGHT_NATIVE_OR_GO`이며, `all_worker_rows_restored=True`다. 이것은 실제 부모/worker metadata 재구성의 자격이지 실행된 worker의 EOF/NO-GO·전체 Native 입력 lock·제품 본문·독립 제품 판정 또는 Gate PASS가 아니다.
+
+v11~v16의 graph 실패8개, CODE001~008, `xz-actual-worker-linkage-diagnostic001/002`는 보존한다. 과거 CODE의 PASS는 그 당시 소스에만 해당하며 현재 소스로 재사용하지 않는다. CODE004의 한 실패는 원 pressure module에도 `summary`가 있는데 없다고 가정한 테스트 오류였고, 현재는 worker 원 함수 code가 동일한지 비교한다. CODE006은 계약 실행 전 CPU95.17%에서 `STOP_PREPARATION_SYSTEM_PRESSURE90`으로 정리됐으며 원인은 미귀속이다. 후속 CODE는 기존 Guard의 새 표본에서 자기 CPU와 RAM을 집계하고, 별도 sampler·스레드·Windows 호출은 추가하지 않는다. 현재 CODE009의 자기 CPU 최고는 기계 전체 기준4.875971%로 기록됐지만 다른 실행의95.17% 원인으로 소급하지 않는다.
+
+준비 CODE 기록의 유한 범위만1..16으로 명시했다. graph attempt와 Native physical run 상한은8, 현재 Native run은8이며 자동 재시도와 기존 기록 덮어쓰기는 없다. 이 구분을 현재 CODE 증거와 admission에 결속하고, CODE9/16 허용·17/boolean 거부·graph attempt9 거부를 테스트했다. 실제 제품·GO·queue advance는0이다.
+
+다음은 현재 v17 packet과 worker 진입점을 사용한 실제 EOF/NO-GO 시작 검사다. 이후 기존 helper64와 새 연결 전체를 포함한 현행 scope·독립 판정기·미래 dispatch 필수 입력의600초 비용을 재산정하고 CODE/preflight/dispatch를 닫아야 한다. 선행 v10 사전검사010과600.530초 하한은 그 profile의 증거로 보존하며, 새 v17 runtime 자격으로 승격하지 않는다. Native 보호·RAM95%·commit95%·1코어·BelowNormal·1/2MiB·acquisition14·여유60초·합산 decoder5는 유지한다.
 
 ### 새 파일 게시와 전체 물리 경계 검증
 
@@ -20,7 +42,7 @@
 
 `xz-binding-code001`은 원 클래스에 대한 실제13계약(전체 매핑·원 메서드 유지·부분/변조 거부·private 범위·단일 seed 복구·실제 두 XZ 복원·기존 zlib·guard 전파 포함), fresh95/final95·15.660118초·CPU 최고53.98%·가용RAM 최저19.43384%·cleanup=True로 통과했다. 시간 열을 포함한 과거 진단 표 fingerprint는 사용하지 않는다. 실제 ordinary61 digest는 `38bbf083c60b66c125611e0abd136520557f2ffe952dae49c4ca356cc5ec24b5`, full68 digest는 `c858a48e5c4d615e8aac8709b5e214b09a35d5533860370a035204b63fdc8026`이다.
 
-다음은 이 고정 표와 decoder를 실제 부모·worker 재구성 및 독립 제품 판정 경로에 동일하게 연결하는 새 profile이다. 기존 profile은 유지한다. 기존 helper64와 새 연결 전체를 포함한 현행 source scope·필수 metadata·600초 비용을 다시 닫고 CODE/preflight/dispatch를 검증해야 한다. Native008·제품 실행·GO는 아직 없으며 CPU/RAM/commit·1코어·BelowNormal·1/2MiB·acquisition14·여유60·decoder5는 변경하지 않았다.
+이 고정 표와 decoder의 부모·worker metadata 재구성 연결은 앞 절의 v17에서 완료했다. 기존 profile은 유지한다. 아직 독립 제품 판정·기존 helper64와 새 연결 전체를 포함한 현행 source scope·필수 metadata·600초 비용·CODE/preflight/dispatch는 다시 닫아야 한다. Native008·제품 실행·GO는 아직 없으며 CPU/RAM/commit·1코어·BelowNormal·1/2MiB·acquisition14·여유60·decoder5는 변경하지 않았다.
 
 ### 일반 기록 전체의 무손실 표현 비교
 

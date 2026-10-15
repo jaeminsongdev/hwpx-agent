@@ -1,0 +1,64 @@
+{
+  "state": "DIAGNOSTIC_PRIVATE_RUNTIME_INSTALL_ORDER_NOT_QUALIFICATION",
+  "events": [
+    {
+      "event": "call",
+      "operation": "literal",
+      "worker": 1,
+      "globals": 2
+    },
+    {
+      "event": "return",
+      "operation": "literal",
+      "worker": 1,
+      "globals": 2,
+      "returned_worker": 3,
+      "returned_globals": 2
+    },
+    {
+      "event": "call",
+      "operation": "synchronize",
+      "caller": "installed",
+      "runtime": 4,
+      "worker": 3,
+      "worker_globals": 2,
+      "public": 5,
+      "actual": 5,
+      "same": true
+    },
+    {
+      "event": "return",
+      "operation": "synchronize",
+      "caller": "installed",
+      "runtime": 4,
+      "worker": 3,
+      "worker_globals": 2,
+      "public": 5,
+      "actual": 5,
+      "same": true
+    },
+    {
+      "event": "failure_boundary",
+      "runtime": 4,
+      "worker": 6,
+      "worker_globals": 2,
+      "public": 7,
+      "actual": 8,
+      "same": false
+    }
+  ],
+  "total_observed_events": 5,
+  "graph_exit_code": 1,
+  "elapsed_seconds": 37.407232400000794,
+  "objects_are_local_ephemeral_ordinal_ids": true,
+  "GO_authorized": false,
+  "product_or_Native_executed": false,
+  "accepted_count_delta": 0,
+  "runtime_dependencies_or_functions_mutated": false,
+  "profile_callback_disabled": true,
+  "source_pin": {
+    "path": "tools/p09/xz_closed_preparation_v1.py",
+    "bytes": 19711,
+    "sha256": "7b907b68b2892ddf3193ab2e01684d5b7a0fa3c14a95d2a98b85eae6b9b544aa"
+  }
+}
