@@ -4,6 +4,24 @@
 
 2026-10-15 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. run008 제품 실행은 아직 시작하지 않았다.
 
+### 새 파일 게시와 전체 물리 경계 검증
+
+일반61개 XZ 파일을 세대 번호가 있는 별도 경로 `p361-lossless-runtime-inputs/caseNNN-runtime-runNNN.xz8m-g001.envelope.v1.json`에 게시했다. 각 파일의 bytes/SHA256은 선행 전체 실측과 동일하다. 원본·기존 zlib 파일·실패 증거는 보존한다. 파일이 이미 있으면 실제 bytes/hash를 확인하고 원본 바이트로 복원한 뒤 재사용하며, 다른 내용이나 부분 파일을 덮어쓰지 않는다.
+
+첫 `xz-corpus-publication-g001-attempt001`은8개를 생성·복원한 뒤31.540336초·시스템 CPU92.51%에서 `STOP_PREPARATION_SYSTEM_PRESSURE90`으로 종료됐다. 마지막 hash는0이며 실패 원본과 생성 파일을 보존했다. cleanup=True다. 이 실행은 동시 자기 CPU를 기록하지 않아 원인이 미귀속이다.
+
+중단 뒤 게시 코드를 재검토해 원본145671067bytes를 다시 읽고 압축하던 중복 작업을 제거했다. 새로 만들 파일은 기존 압축본의 실제 pin/bytes를 읽고 원 decoder로 복원한 뒤, 의미 원본의 크기와 SHA256 일치를 확인해 인코딩한다. 이미 생성된 정확한 새 파일은 인코딩하지 않고 실제 bytes를 다시 읽어 복원한다. 이것은 게시 입력의 무손실 표현 재사용이며 제품 경계·의미 입력·원본 hash 검사를 생략한 것이 아니다. 기존 원 보호기의 새 표본만 단계별로 집계해 자기 CPU·RAM을 추가 기록하며 별도 sampler·스레드·Windows 측정 호출은 만들지 않았다.
+
+`xz-corpus-publication-g001-attempt002`는53개 생성·8개 재사용으로61개를 완료했다. 실제 seed 읽기는34477145bytes였고 원본 runtime 파일 재읽기는0개다. 원 DecoderBudget5 안에서 기존 seed와 새 물리본114회 복원·2.729851초, 관련17계약 및 선행 baseline3계약, fresh204/final204, 105.756370초·시스템 CPU 최고84.19%·자기 CPU 최고4.294955%·가용RAM 최저17.60823%·cleanup=True로 통과했다. 두 CPU 최대값은 서로 다른 표본일 수 있으며 프리즈 원인이 해결됐다는 판정은 아니다. 원본과 기존 표현은 수정하지 않았다.
+
+별도 `xz-corpus-verification-g001-attempt001`은 고정 실측과 원68개 manifest로 기대 descriptor를 독립 재구성해 게시 manifest와 대조했다. 특수7개는 기존 pin과 decoder를 유지했다. 실제 물리68개를 첫 읽기와 마지막 hash 재확인에서 각각 복원했으며, 원본 크기·SHA256 대조136/136회가 원합산5초 중2.245594초에 완료됐다. fresh159/final159·관련17계약·55.918337초·CPU 최고75.71%·가용RAM 최저17.78297%·cleanup=True다. 새61개와 특수7개를 합친 물리 크기는21611691bytes다. 이것은 전체 물리 경계 검증 PASS이며 아직 Native의 live lock·제품 본문·전체 독립 판정 PASS는 아니다.
+
+`xz_ordinary_binding_v1.py`는 private namespace의 원 Binding constructor와 descriptor에 고정61개 표를 연결한다. 전체68개·고정61개 digest를 모두 확인하고, 완전한 Binding에서 허용된 실제 압축 bytes의 hash에만 XZ decoder를 선택한다. 미완성 표·새 포맷의 미등록 bytes·현재 제품·실패 기록 재압축·다른 세대·임의 경로를 거부한다. 특수7개와 기존 포맷은 원 decoder로 처리하며, Binding의 모든 nonconstructor와 Projection의 모든 원 메서드는 동일한 함수 객체로 유지한다. 원본 private codec도 바꾸지 않고 해당 source namespace에만 명시적 선택기를 둔다.
+
+`xz-binding-code001`은 원 클래스에 대한 실제13계약(전체 매핑·원 메서드 유지·부분/변조 거부·private 범위·단일 seed 복구·실제 두 XZ 복원·기존 zlib·guard 전파 포함), fresh95/final95·15.660118초·CPU 최고53.98%·가용RAM 최저19.43384%·cleanup=True로 통과했다. 시간 열을 포함한 과거 진단 표 fingerprint는 사용하지 않는다. 실제 ordinary61 digest는 `38bbf083c60b66c125611e0abd136520557f2ffe952dae49c4ca356cc5ec24b5`, full68 digest는 `c858a48e5c4d615e8aac8709b5e214b09a35d5533860370a035204b63fdc8026`이다.
+
+다음은 이 고정 표와 decoder를 실제 부모·worker 재구성 및 독립 제품 판정 경로에 동일하게 연결하는 새 profile이다. 기존 profile은 유지한다. 기존 helper64와 새 연결 전체를 포함한 현행 source scope·필수 metadata·600초 비용을 다시 닫고 CODE/preflight/dispatch를 검증해야 한다. Native008·제품 실행·GO는 아직 없으며 CPU/RAM/commit·1코어·BelowNormal·1/2MiB·acquisition14·여유60·decoder5는 변경하지 않았다.
+
 ### 일반 기록 전체의 무손실 표현 비교
 
 `receipt_xz_envelope_v1.py`는 원본을 JSON으로 정규화하지 않고 그대로 보존하는 별도 XZ 후보 포맷이다. 기존 zlib 포맷과 명시적으로 구분한다. XZ dictionary8MiB·decoder memory limit32MiB·입출력 chunk64KiB로 제한하고, 닫힌 필드 집합·선언 크기·원본 SHA256·끝난 stream을 확인한다. 중복 키, 잘린 stream, 뒤에 붙은 데이터와 연결된 stream, 선언 초과 출력, 잘못된 포맷 및 guard 중단을 거부한다. 원본·기존 압축본을 수정하거나 제품 decoder에 연결하지 않았다. 표준 API 근거는 [Python 3.13 lzma 문서](https://docs.python.org/3.13/library/lzma.html)다.
@@ -25,11 +43,11 @@
 | 계약 | baseline3 및 codec/corpus12 모두 PASS |
 | 실제 진단 시간과 자원 | 227.185808초, CPU 최고77.15%, 가용RAM 최저15.11864%, cleanup=True |
 
-새 파일 게시 없이 후보 크기·해시만 기록했으므로 이 결과는 일반61개 표현 비교 PASS다. 특수7개는 descriptor를 그대로 보존했지만 이번에 두 번 복원한 대상은 아니다. `proposed_mapping_sha256`은 시간 측정 열도 포함한 진단 후보 표 전체의 fingerprint이며, worker의 고정 descriptor mapping digest로 사용할 수 없다. 부모/worker full68 oracle·실제 새 파일 경계·현행 실행 profile·새 전체 비용 자격은 아직 미완료다. 두 기록은 `implementation/p09/evidence/p09-361-case165-codec-candidate-sample002.v1.json`과 `implementation/p09/evidence/p09-361-case165-xz-corpus-diagnostic001.v1.json`이다.
+그 비교 실행은 새 파일 게시 없이 후보 크기·해시만 기록한 일반61개 표현 비교 PASS다. 특수7개는 descriptor를 그대로 보존했지만 그 비교에서 두 번 복원한 대상은 아니다. `proposed_mapping_sha256`은 시간 측정 열도 포함한 진단 후보 표 전체의 fingerprint이며, worker의 고정 descriptor mapping digest로 사용할 수 없다. 후속 새 파일·특수7개 포함 실제 두 경계 및 고정 Binding CODE 자격은 앞 절에 구분했다. 두 비교 기록은 `implementation/p09/evidence/p09-361-case165-codec-candidate-sample002.v1.json`과 `implementation/p09/evidence/p09-361-case165-xz-corpus-diagnostic001.v1.json`이다.
 
 원 비용식에서 다른 입력·항·경로 수가 같다면 비실행파일의 두 읽기 항만24.575311초 줄어든다. 새 helper·manifest·자격 산출물 비용을 아직 합치지 않았으므로 이를 새 dispatch 총시간이나600초 통과로 쓰지 않는다. 원1/2MiB 속도·acquisition14·여유60초·합산 decoder5·RAM95%·commit95%·Native CPU 보호·1코어/BelowNormal은 유지한다.
 
-다음은61개 새 물리본을 배타적 경로에 게시하고 특수7개를 포함한 full68 매핑을 부모/worker/독립판정기에 동일하게 연결하는 단계다. 원본과 과거 표현·실패 증거는 보존하며 두 실제 읽기와136회 전체 복원·decoder5를 다시 확인해야 한다. 이후 현행 전체scope/helper64와 미래 dispatch 필수 metadata를 합친600초 비용을 재산정하고 CODE·preflight·dispatch 자격을 닫는다. 이 조건이 충족되기 전 Native008을 시작하지 않는다.
+원본과 과거 표현·실패 증거를 보존한 새 파일 게시와136회 실제 복원은 후속 검증에서 완료했다. 남은 경계는 앞 절의 실제 부모/worker/독립판정 연결과 현행 전체scope·600초 비용·CODE/preflight/dispatch 재자격이다. 이 조건이 충족되기 전 Native008을 시작하지 않는다.
 
 ### Bootstrap 분리와 현재 통과한 사전검사
 
