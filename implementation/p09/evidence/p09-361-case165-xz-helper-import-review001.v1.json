@@ -1,0 +1,40 @@
+{
+  "state": "DIAGNOSTIC_IMPORT_INVENTORY_NOT_DISPATCH_QUALIFICATION_OR_PRODUCT",
+  "method": "Read original preflight012 import inventory; build the current adapter in one bounded process without invoking main, Guard acquisition, Native or product",
+  "preflight_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-successor-recovery-preflight-run008-attempt012.v1.json",
+    "bytes": 1195969,
+    "sha256": "ba5b5538a4b3f4e1cdd3be9f5db5305e86d137561dff5bdc2ce1e9927d7c3477"
+  },
+  "dispatch_failure_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-successor-recovery-dispatch-qualification-run008-attempt005.v1.json",
+    "bytes": 1334,
+    "sha256": "158a1c469f9913a8605346b9696b22ab996789e18b19f2c74c5745d8d0daffa1"
+  },
+  "bootstrap_default_import_count": 60,
+  "after_adapter_build_default_import_count": 60,
+  "adapter_build_new_default_imports": [],
+  "recorded_preflight_default_import_count": 61,
+  "recorded_later_default_import": "tools/p09/bounded_successor_capsule_wire_v2.py",
+  "dispatch_default_import_count": 61,
+  "dispatch_actual_native_helper_count": 66,
+  "unchanged_actual_native_helper_limit": 64,
+  "extra_actual_native_sources": [
+    "tools/p09/held_native_read_views_v1.py",
+    "tools/p09/tests/test_closed_prebody_runtime_connection_v1.py",
+    "tools/p09/tests/test_current_stored_runtime_scope.py",
+    "tools/p09/tests/test_held_native_read_views_v1.py",
+    "tools/p09/xz_closed_preparation_v1.py"
+  ],
+  "production_dependency_review": {
+    "publisher_module": "tools/p09/xz_corpus_delivery_v1.py",
+    "adapter_uses": ["BASELINE", "OLD_ENCODE", "OLD", "XZ", "observed_guard"],
+    "finding": "Preparation imports the corpus publication implementation for constants and resource observation; removing this genuine dependency alone would not close the two-helper excess",
+    "next_design": "Separate publication and test orchestration from a consolidated production profile and recovery entry; qualify the complete source and actual import union before adoption",
+    "implemented": false,
+    "do_not": ["raise helper64", "remove sys.modules entries", "omit actual Native witnesses", "hide imported helpers", "reuse stale source qualification"]
+  },
+  "product_or_Native_executed": false,
+  "GO_authorized": false,
+  "accepted_count_delta": 0
+}

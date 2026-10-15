@@ -4,6 +4,23 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. run008 제품 실행은 아직 시작하지 않았다.
 
+### 현재 전체 사전검사와 dispatch 구성 실패
+
+현재 XZ v17과 실제 CODE005를 승인된 run007 사후 복구 경로에 연결했다. `xz_recovery_preparation_v1.py`는 이전 CODE를 복사하거나 재명명하지 않고 실제 `successor-code-run008-attempt005`의 pin을 직접 읽는다. 기존 준비 closure4..6과 실패한 Native007 원본, 10초 제품 window는 보존한다. setup 경로를 바꾸는 래퍼가 원 main의 실제 globals에도 게시되도록 수정했고, 원 closure의 전체 AST 및 code 역변환과 함께 12개 계약으로 검증했다.
+
+| 현재 실행 | 결과 |
+| --- | --- |
+| recovery adapter CODE004 | 12계약, fresh199/final199, 27.180366초, CPU 최고73.15%, 가용RAM 최저16.62572%, cleanup=True |
+| `successor-recovery-preflight-run008-attempt012` | PASS, 전체 입력3,085개와 Rust787개, 기본 import61개, fresh586/final586, 115.896960초, CPU 최고71.97%, 가용RAM 최저16.34190%, cleanup=True |
+| 같은 사전검사의 원 비용 모델 | 575.697909초/600초. 원 acquisition14·1/2MiB·여유60초·decoder5 및 제품10초 포함. 실제 완료 보장은 아님 |
+| dispatch qualification005 | `DISPATCH_ACTUAL_NATIVE_IMPORTED_HELPER_BOUND` 거부. 기본61개와 추가 실제 Native witness5개의 합집합66개가 기존 상한64개를 초과. 50.646517초, CPU 최고60.61%, cleanup=True |
+
+사전검사011은 CODE 경로 결속 오류로 실패했고 원본을 보존했다. dispatch004와 진단006은 각각 시스템 CPU92.43%와100%에서 준비 보호기로 중단됐으며 setup 이후 자격 본문에는 들어가지 않았다. 004의 마지막 세 표본에서 자기 CPU는 모두0%였지만, 이것만으로 검증 I/O가 다른 프로세스 부하를 유발했을 가능성을 배제하지 않는다. 중단 후 별도 시점의 Python/Git CPU 관측으로 같은 실행의 원인을 확정하지 않는다. 관리자 작업이나 Defender·OS 설정 변경은 하지 않았다.
+
+같은 검증을 다시 실행하지 않고 사전검사012의 저장된 전체 import 목록을 읽었다. 별도 시작 및 adapter build만 수행한 제한된 진단은 기본60개를 그대로 유지했고, 실제 준비 단계에는 `bounded_successor_capsule_wire_v2.py`가 더해져61개였다. 준비 어댑터는 게시용 `xz_corpus_delivery_v1.py`를 상수와 자원 관측에 사용한다. 이 의존성을 실제로 제거해도 한 개만 줄어들므로, 둘 이상이 필요한 현재 제한 문제를 해결했다고 볼 수 없다. 진단은 `xz-helper-import-review001`에 기록했다.
+
+다음 작업은 게시·테스트 준비와 제품 실행 프로필의 의존성을 분리하는 설계다. helper64를 늘리거나 `sys.modules`에서 지우거나 실제 Native witness를 누락하지 않는다. 소스를 바꾸면 현재 CODE004·사전검사012는 그 이전 source epoch의 PASS로 남고, 새 소스의 전체 scope와 dispatch 비용을 다시 확인해야 한다. 현재 dispatch는 미자격이며 Native008·GO·제품 실행·수용 증가는 모두0이다. RAM95%/commit95%·Native CPU·1코어/BelowNormal과 기존 입력 검증도 변경하지 않았다.
+
 ### 실제 EOF 시작 검사와 현재 전체 CODE
 
 현재 v17 worker source와 세 packet을 유지한 채 `xz_startup_adapter_v1.py`가 동결된 원 factory 시작 검사 본문을 호출했다. 인자는 case165/run008의 `--bootstrap`으로 고정하며, 새 Native/GO 인터페이스는 없다. 원 engine 구성·11개 계약·원 wire/bootstrap 바이트 비교·15초 자식 timeout·출력4096/16384bytes 상한·EOF·과거 파일 열기 audit·마지막 hash·정리를 모두 원 본문에서 실행했다.
@@ -21,7 +38,7 @@
 
 `xz_whole_code_adapter_v1.py`는 기존 controller의 `run_code`와 전체74계약을 재사용했다. XZ 연결 CODE21·실제 EOF 증거·현재 source/packet을 별도로 확인하며, 과거 fixture PASS만으로 새 CODE를 만들지 않았다. 원 helper 상한64를 유지해 기본 import62개를 검사했고, 계약 실행 뒤 테스트 전용 import까지95개가 되는 것은 별도로 기록했다. 테스트가 로드된 process를 Native/preflight로 재사용하지 않는다. XZ61 및 특수7개의 앞선 물리 검증은 다시 실행하지 않았다.
 
-현재 실제 CODE는 `implementation/p09/evidence/p09-361-case165-successor-code-run008-attempt005.v1.json`이다. 기존 `successor-recovery-code-run008-attempt001`은 과거 profile 증거이며 현재 CODE005로 승격할 수 없다. 다음 사전검사에서는 현재 CODE005의 실제 pin을 직접 참조하도록 metadata 경로를 명시적으로 결속해야 한다. 이 차이를 숨기려고 이전 PASS를 새 경로의 실행 결과처럼 복사하거나 이름만 바꾸지 않는다.
+현재 실제 CODE는 `implementation/p09/evidence/p09-361-case165-successor-code-run008-attempt005.v1.json`이다. 기존 `successor-recovery-code-run008-attempt001`은 과거 profile 증거이며 현재 CODE005로 승격할 수 없다. 현재 사전검사012는 CODE005의 실제 pin을 직접 참조한다. 이 차이를 숨기려고 이전 PASS를 새 경로의 실행 결과처럼 복사하거나 이름만 바꾸지 않는다.
 
 남은 준비는 현재 v17 graph·CODE005·EOF 증거를 승인된 case165/run007 post-body 실패 복구, 기존 준비 closure4..6, 새10초 window와 연결하는 것이다. 그 위에서 현행 전체입력·Rust787·독립 판정기·미래 dispatch 필수 metadata를 포함한600초 비용 및 preflight/dispatch를 검증해야 한다. 원 사전검사010의 PASS와600.530초 하한은 여전히 v10의 증거다. 현재 단계는 CODE/시작 검사이며 Native008·제품·GO·P09 Gate는 미완료다.
 

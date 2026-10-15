@@ -1,0 +1,53 @@
+{
+  "state": "FAILED_XZ_RECOVERY_PREPARATION_NOT_ADOPTED",
+  "actual_stage_invoked": false,
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "product_or_Native_executed": false,
+  "actual_CODE_reference": "implementation/p09/evidence/p09-361-case165-successor-code-run008-attempt005.v1.json",
+  "Native_policy_changed": false,
+  "contracts": {
+    "run": 10,
+    "errors": 3,
+    "failures": 0,
+    "skipped": 0
+  },
+  "contract_errors": [
+    {
+      "test": "test_frozen_closure_source_and_worker_pin_are_not_rewritten",
+      "exception_type": "ValueError"
+    },
+    {
+      "test": "test_real_completed_loader_construction_does_not_acquire_or_execute",
+      "exception_type": "ValueError"
+    },
+    {
+      "test": "test_whole_frozen_closure_inverse_one_dependency_hook",
+      "exception_type": "ValueError"
+    }
+  ],
+  "error_type": "ValueError",
+  "error_code": "CURRENT_EPOCH_ACCEPT_ALL_CURRENT_CODE_REFERENCE_ADAPTER10",
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 14.77970459999051,
+  "original_fresh_sample_resource_summary": {
+    "bootstrap_policy": {
+      "fresh_samples": 7,
+      "system_CPU_max": 40.04,
+      "parent_CPU_max": 0.19379416150437953,
+      "parent_CPU_missing_samples": 1,
+      "available_RAM_min": 18.60211527273998,
+      "parent_private_percent_max": 0.1385661189778082
+    },
+    "bootstrap_connection": {
+      "fresh_samples": 21,
+      "system_CPU_max": 59.85,
+      "parent_CPU_max": 0.19406200326390863,
+      "parent_CPU_missing_samples": 0,
+      "available_RAM_min": 18.446862860369073,
+      "parent_private_percent_max": 0.1386396808884317
+    }
+  },
+  "CPU_max": 59.85,
+  "RAM_min": 18.446862860369073
+}
