@@ -4,6 +4,16 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 복사 의존성과 준비 신호의 통합 검증
+
+`ast_copy_namespace_connection_v1.py`는 원 namespace loader의 code/defaults/closure를 그대로 두고, 초기 AST 복사와 private helper의 `copy` import에 같은 전용 복사기를 연결한다. 초기 loader에서만 빨라지고 helper 본문은 범용 deepcopy를 쓰는 경로를 줄였다. 일반 import는 원 importlib에 위임하고 기본 copy/importlib 모듈·sys.modules를 변경하지 않는다. 원 소스 읽기·pin·전체 non-import AST 검사도 유지하며 source/hash/AST/JSON cache를 추가하지 않았다.
+
+`qualify_optimized_namespace_v1.py`는 복사기8·새 copy 연결8·실제 실패 바인딩12, 총28계약을 통과했다. 최적화된 root loader를 실제 기존68/실패69 바인딩 구성에 전달했고 원 constructor와 scope/바이트/핸들 oracle을 유지했다. 기존 문맥8의 입력목록222/최종222와 새 입력101/최종101을 저장했으며53.974초·CPU최고35.20%·가용RAM최저22.21%·cleanupTrue였다. 이 준비 시간만으로 성능 향상 비율이나 프리즈 해결을 주장하지 않는다.
+
+`optimized_ready_worker_v1.py`는 source-pinned private 최적화 의존성과 준비 이벤트를 구성하고, 변경하지 않은 공개 worker main 전체를 한 envelope import 의존성만 연결해 호출한다. 실제 EOF/GO 진단은 `probe_optimized_ready_worker_v1.py`에 재사용 가능한 코드로 저장했다. EOF는 원 WORKER_NOT_AUTHORIZED로 종료했고, GO 진단은 준비2.283537초 뒤 원 GO를1회 쓴 다음 첫 제품 Popen이 OS 생성 직전에 거부돼 exit1로 종료했다. 원10초 Capture1회·GO→완전캡처0.042167초를 확인했지만 제품 성공은 아니다. 두 Job 잔여0·기본 copy 불변·과거 runtime 읽기0, 최적화 helper의 default module import0이었다. 자식 기본 helper는61개였으나 이것을 전체 Native helper 상한 자격으로 대체하지 않는다. 전체 진단17.467초·fresh104/final104·CPU최고28.27%·가용RAM최저21.66%·cleanupTrue다.
+
+이 worker는 기존68개/run008 문맥의 비제품 진단이다. 별도로 자격 검증한69개 실패 이력 바인딩을 실제 successor worker 재구성·완전한 입력 선언·helper 상한·600초 예산에 묶는 작업은 아직 남았다. run008 결과를 Native009로 재명명하지 않았고 Native009 제품 실행도 시작하지 않았다. 근거는 `optimized-namespace-code001`과 `optimized-ready-worker-probe001`이다.
+
 ### 같은 사례 실패 이력의 private 바인딩
 
 `native008_failure_binding_v1.py`는 실제 v18 준비 코드의 기존68개 private 바인딩을 구성한 뒤, Native008 원본과 별도 압축본의 정확한 pin 하나만 추가한다. 기존68개 constructor와 고정 테이블 검사를 먼저 전부 실행하고, 코드가 바뀌지 않은 원 constructor가69개 전체의 pin·중복·manifest를 다시 검증한다. 기존 scope·바이트·핸들 검증 메서드와 Projection의 모든 메서드는 원래 함수 객체 그대로다. 별도 provenance는 `같은 사례의 실패한 캡처·제품 실행 여부 미확인·미수용` 역할을 보존하며 임의 별칭·run008 재사용·제품 미실행 False로의 변경을 거부한다.
