@@ -425,3 +425,23 @@ review002는 전체체커 통과 후 최종읽기79.202초에CPU82.90% 경고로
 승인002는248.685초·fresh1,259/final1,259·2,540읽기·233,216,086바이트·CPU59.33%·가용RAM44.728%·resource cleanup=True로 canonical을 단 한 번 발행했다. before157·delta1·after158이며 제품/Native 재실행0이다. 실패 기록과 원본을 보존했다. 같은소스에서 통과한 준비·제품을 반복하지 않고 실패한 후속 단계만 진행하는 방식으로 운영한다. 일반화된 metadata 연결에도 sealed metadata와 fullFrame 집합을 처음부터 분리해야 하며, 사례164 전용 review 연결을 다른 epoch에 무검증 재사용하지 않는다.
 
 근거: case164 successor-connections006.v4·factory005·code/preflight/dispatch-qualification-run006-attempt001·current-runtime-run006·whole-review-run006-attempt001..003·optimized-acceptance-attempt001/002·current-epoch-accept001 및 case165 step-config001/selection001. Native root SHA256은3d68ad7f4d6775354cde2f3989a29025d3408330308ca00ed08e4b72ad935959, canonical은461,984바이트·SHA256 3d3c118de9421d8601c9d9dc9e4177c64bdb63d12226a68a0e148452de463382다. PC 프리즈 해결과 전체 검증시간 대폭 단축은 아직 입증되지 않았다.
+
+## 사례165의 봉인된 metadata 연결과 준비 reader 최적화
+
+공식 원장은158/249·잔여91·next165·generation53이며 P09/A12/A13은 OPEN, 목표는 ACTIVE다. 사례165의 원본4개10,434,968바이트를3,343,196바이트로 무손실 표현해7,091,772바이트를 줄였고 원본은 보존했다. Binding001은60pair·fresh147/final147·215.566초·physical2,972입력/230,079,111바이트·CPU70.83%·cleanup=True로 통과했다.
+
+current_queue_sealed_metadata_runtime_v5는 frozen v4와 metadata-scope 독립검사를 명시적 private namespace로 재사용한다. 진입점·시험·새19계약 자격은 실제 reader의 입력과 최종 해시에 포함하고 기존 v4/승인164를 수정하지 않는다. frozen component 자격은 현재 해시를 모두 다시 확인하며 새 V5 계약 자격을 대신하지 않는다. 준비 전용 실패 재시도는 graph/capsule/bootstrap의 suffix3개만 실제 v4 경로로 연결하고 전체 AST inverse와 기존 Native의 완전 closed-prebody 분기를 유지한다. source-code001은19계약·fresh34/final34·4.625초·CPU58.74%·cleanup=True다.
+
+graph002는60pair·wire8,603바이트·fresh63/final63·13.213초, factory001은GO 없는 원11계약·fresh49/final49·14.696초로 통과했다. CODE002-001은74계약·helper60·fresh120/final120·16.186초·CPU21.51%로 통과했다. 첫 preflight는79.411초·CPU76.72% 경고로 중단됐다. 준비 workspace의 기존17계약을 다시 확인해 연결했지만 preflight002도69.146초·CPU88.13%로 중단됐다. 부모CPU0%·private46.961MiB였고 실제 workspace1개·64KiB·leases472/returns472·readinto2,191회·87,229,129바이트가 확인돼 버퍼가 미적용된 실패는 아니었다.
+
+준비 reader의 원 source conjunction은 일반 파일에서 is_file/is_symlink/is_junction의 경로 조회3회를 사용했다. 기존 single_snapshot_source_guard_v1의10계약·fresh3/final3·cleanup=True를 확인한 뒤 workspace와 결합했다. 일반 Windows non-reparse 파일은 매 요청마다 fresh no-follow stat1회로 같은 조건을 판정하고 나머지 reparse·unknown·오류는 원 메서드로 돌아간다. 원 open pacing·읽기·hash·전체 final pass·자원검사 및 held Native path guard는 유지한다. preflight003은scope2,980·Rust787·helper61·fresh466/final466·130.382초·CPU48.18%·가용RAM42.205%·cleanup=True로 통과했다. workspace1개·leases939/returns939·readinto4,285회·168,584,382바이트·fresh stat939회/ordinary939/fallback0을 확인했다. 이는 실제 연결 확인이며 CPU 급등 해결의 인과 증명이 아니다.
+
+진입 qualification001은 원6계약 통과 후 최종 읽기74.935초·CPU94.34%에서 중단됐다. 동일 reader 개선을 적용하되 준비 helper를 고정된9656바이트 소스의 private namespace로 명시적으로 구성해 기본 모듈을 삭제하거나 실제 helper 한도를 늘리지 않았다. qualification002는6계약·source2,992·기본helper60/actualNative64·fresh467/final467·133.028초·CPU51.04%·가용RAM43.116%·cleanup=True로 통과했다. 예상 비용597.362초/600초이며 알려지지 않은 지연까지 완료를 보장하지는 않는다.
+
+실제 Native002는248.86초에 입력 고정 포화 보호로 중단됐다. 마지막 시스템CPU9.29→89.19→90.75%, 마지막 parentCPU0%·private50.910MiB·가용RAM40.092%·commit42.103%였다. directory372개와 regular2,341개 등2713핸들은 전부 닫혔고 remaining0·active reader/stream0·별도 pathname재열기0·Frame CLOSED·cleanup 및 빈 소유tree를 확인했다. worker/제품은 생성되지 않았고 실제 바이트 경계 및 Frame decode는0회다. 실제 metadata는 봉인된 pref/entry와 같은18개 논리원본을19회 fresh decode해physical21,882,861바이트로semantic62,957,746바이트를 복원했다. 이 결과는 제품·Native PASS가 아니다.
+
+입력 고정 코드의 조상 중복 제거·같은 pacer·no-burst·14회/s acquisition과 원 identity/cleanup 경로를 재검토했다. open with pacing 총194.671초에는 요청 sleep190.899초가 포함됐으며 inspect metadata 총0.547초였다. busy loop·무제한 fan-out·재열기가 병목이라는 근거는 확인하지 못했다. 직렬 attribution은32query 총0.317초·최대0.0138초였고 포화 순간에는 기존75% 정책으로 optional 조회가 억제돼 unavailable이다. 마지막 가용 표본은 다른 시간 구간이고 coverage incomplete이므로 특정 외부 프로세스나 Defender 원인으로 확정하지 않는다. OS설정과 외부 프로세스를 바꾸지 않았다.
+
+원closed-prebody 검사를 실제 root의 fresh1/final1에 적용해 통과했고 제품 재실행 없이 cleanup=True를 확인했다. 새 graph003은60pair·동일wire8,603바이트·fresh63/final63·13.155초·CPU30.08%·cleanup=True로 준비했다. 다음은 새 번호의 GO 없는 factory·CODE·전체 preflight·entry를 준비하고 기존 중단 기록을 그대로 검증하는 것이다. 원002는 덮어쓰거나 재실행하지 않으며 아직 사례165 후속 독립 리뷰와 승인은 NOT_RUN이다.
+
+근거: case165 lossless-receipts001·successor-binding001/manifest001·sealed-metadata-code001·connections002/003.v4·factory001·CODE002-001·preflight002-001..003·workspace/single-snapshot qualification과 실제 reader 계수·dispatch-qualification002-001/002·current-runtime-run002. root는2,521,689바이트·SHA2562465c110c3c01fd40a90f6d7f0ff0ca40268ea9eab136e5d4071670bc864dc03이다. 프리즈 해결이나 전체 시간 단축은 아직 입증되지 않았다.
