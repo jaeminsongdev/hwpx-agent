@@ -6,6 +6,9 @@ This supporting result does not replace dispatcher qualification or acceptance.
 """
 from pathlib import Path
 from types import SimpleNamespace as NS
+from types import FunctionType
+import argparse
+import ast
 import json
 import re
 import sys
@@ -24,7 +27,13 @@ def main():
     import distinct_final_sample_guard_v1 as distinct
     import runtime_envelope_namespace_bundle_v1 as bundle
     import successor_preparation_workspace_v1 as publisher
-    output=PREFIX+"prepared-closure-live-admission001.v1.json"
+    parser=argparse.ArgumentParser()
+    parser.add_argument("--attempt",type=int,default=2)
+    parser.add_argument("--code-attempt",type=int,default=2)
+    parser.add_argument("--run",type=int,default=7)
+    args=parser.parse_args()
+    a.require(2<=args.attempt<=8 and 1<=args.code_attempt<=8 and args.run in (7,8),"BOUNDED_LIVE_PROBE_CONTEXT")
+    output=PREFIX+f"prepared-closure-live-admission{args.attempt:03}.v1.json"
     a.require(not(c.ROOT/output).exists(),"EXCLUSIVE_LIVE_ADMISSION_TEST")
     guard=pressure.guard_type(distinct.guard_type(a.Guard))()
     q=None;started=time.monotonic()
@@ -32,7 +41,7 @@ def main():
         accepted_count_delta=0,GO_authorized=False,product_or_Native_executed=False)
     try:
         guard.acquire();q=a.AcceptanceReader(c.ROOT,guard.check);q.pin(SELF)
-        code=q.json(PREFIX+"successor-code-run008-attempt004.v1.json")
+        code=q.json(PREFIX+f"successor-code-run{args.run:03}-attempt{args.code_attempt:03}.v1.json")
         a.fields(code,dict(state="PASS_CURRENT_SUCCESSOR_CODE_NOT_FULL_PREFLIGHT_NATIVE_OR_PRODUCT",
             contracts=dict(run=74,errors=0,failures=0,skipped=0),cleanup_confirmed=True),"CURRENT_TEST_BASELINE")
         pins={p["path"]:p for p in code["source_pins"]}
@@ -52,11 +61,25 @@ def main():
         modules.current_queue_sealed_metadata_runtime_v5.retry_paths(
             (c.ROOT/retry.SELF).read_bytes(),retry,retry_pin)
         adapter=modules.prepared_run_closure_v1
-        qualification=q.json(PREFIX+"prepared-closure-code003.v1.json")
+        qualification=q.json(PREFIX+"prepared-closure-code004.v1.json")
         a.fields(qualification,dict(state="PASS_PREPARED_ONLY_CLOSURE_CODE6_NOT_ENTRY_NATIVE_OR_PRODUCT",
             contracts=dict(run=6,errors=0,failures=0,skipped=0),cleanup_confirmed=True),"CURRENT_CLOSURE_CODE6")
         for pin in qualification["source_pins"]:a.exact(q.pin(pin["path"]),pin,"CURRENT_CLOSURE_SOURCE")
         adapter.install_retry(retry,a)
+        # Execute the exact pinned original v4 loop which caused the real
+        # dispatcher failure. Do not replace it with an expected mock result.
+        v4_path="tools/p09/current_queue_successor_lossless_runtime_v4.py"
+        a.exact(q.pin(v4_path),pins[v4_path],"EXACT_ORIGINAL_LATE_ROLE_REWRITE")
+        tree=ast.parse((c.ROOT/v4_path).read_text(encoding="utf-8"))
+        load=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=="load")
+        loops=[n for n in load.body if isinstance(n,ast.For) and "vars(retry)" in ast.unparse(n.iter)
+            and "fn.__globals__.update" in ast.unparse(n)]
+        a.require(len(loops)==1,"ONE_ORIGINAL_RETRY_ROLE_REWRITE")
+        roles={n.targets[0].id:ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign)
+            and len(n.targets)==1 and isinstance(n.targets[0],ast.Name) and n.targets[0].id in ("SELF","TEST")}
+        exec(compile(ast.Module(body=loops,type_ignores=[]),v4_path,"exec"),
+            dict(retry=retry,FunctionType=FunctionType,**roles))
+        a.exact(adapter.producer_inventory.__globals__["SELF"],roles["SELF"],"ACTUAL_ROLE_REBIND_OCCURRED")
         retry.previous_stops(q,NS(index=165,run=8),a,modules.current_queue_successor_wire_runtime_v2)
         a.require(all(adapter.absent(q,PREFIX+f"current-runtime-run{n:03}.v1.json") for n in range(4,9)),
             "NO_NEW_OR_UNRESOLVED_NATIVE")
@@ -64,6 +87,7 @@ def main():
         row.update(state="PASS_LIVE_PREDECESSOR_ADMISSION_NOT_DISPATCHER_NATIVE_PRODUCT_OR_ACCEPTANCE",
             original_Native_prebody_records_checked=2,prepared_only_closures_checked=4,
             original_retry_suffix_AST_projection_retained=True,source_pins=list(q.snapshots.values()),
+            actual_original_v4_late_role_rewrite_exercised=True,
             private_source_proofs=proof,fresh_inputs=len(q.snapshots),final_fresh_hashes=q.final_fresh_hashes)
     except (ValueError,OSError,KeyError,TypeError,AttributeError) as error:
         row["error_type"]=type(error).__name__

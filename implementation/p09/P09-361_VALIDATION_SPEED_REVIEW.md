@@ -623,3 +623,17 @@ prepared_run_closure_v1은 사례165의 준비 전용004~007에만 별도 분류
 전체 검사를 반복하는 대신 probe_prepared_run_admission_v1에서 새 분류 경로를 실제 자료로 검증했다. CODE008-004에 고정된 원 v3 retry·v5 suffix projection·v2 Native 판정 전체 본문과 현재 adapter를 같은 private namespace 구조로 실행했다. 원 Native 중단002/003과 준비 전용004~007이 모두 통과했고 Native004~008의 부재도 확인했다. 실제 사용한 direct/private helper와 입력의 fresh45/final45,10.198초·CPU54.3%·가용RAM26.168%·cleanup=True다. 이 검사는 supporting integration test이며 실제 dispatcher 구성·전체 사전검사·Frame·GO·제품·수용을 대체하지 않는다. 생산 진입점이나 새 필수 Gate를 추가하지 않았다.
 
 현 소스의 전체 사전검사 성공 → 실제 dispatcher 재자격 → 미실행165번 경계는 남아 있다. 무거운 동일 재시도는 추가하지 않으며 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·목표ACTIVE를 유지한다. 근거는prepared-closure-live-admission001·resource-attribution-summary001·successor-preflight008-006/007 및 대응 closed-io2 설정/진단이다.
+
+## 역할 메타데이터 충돌 수정과 자원 차단
+
+외부 부하 감소를 새로 관측한 뒤 동일 CODE로 진행한 preflight008-008은source3,044/Rust787/helper59·fresh538/final538·114.539초·CPU62.91%·가용RAM21.595%·cleanup=True로 통과했다. 이어 qual008-003은 원6계약 통과 후 PRODUCER_SOURCE_WITNESSES로 거부됐다. 원 v4.load가 private retry에 설치된 모든 함수의 globals에 SELF/TEST 역할명을 다시 쓰는 구문이 생산자 경로까지 덮어쓴 원인이다. 이전 live001에는 이 원 구문이 포함되지 않았으므로 실제 dispatcher 연결을 증명하지 못했다.
+
+생산자 경로를 CLOSURE_SOURCE/CLOSURE_TEST로 분리하고 일반 역할명만 존재하는 잘못된 inventory를 거부하는 회귀를 추가했다. 현 closure-code004의6계약, prepared-only004~007-attempt003, CODE007-002의74계약이 통과했다. CODE는helper59·fresh170/final170·31.064초·CPU68.64%·cleanup=True다. live002는 CODE007-002에 고정된 원 v4 소스에서 정확한 재바인딩 For 구문 하나를 추출해 실제 실행했고 역할명 변경 발생까지 확인한 뒤 원 Native 중단2건과 준비 전용4건을 검증했다. fresh46/final46·10.182초·CPU34.28%·가용RAM22.299%·cleanup=True다. 원 검사/해시/부재 조건은 완화하지 않았다. 이전 CODE·preflight·live 결과는 해당 이전 소스의 이력으로 보존한다.
+
+8번 회차의 사전검사 번호를 모두 사용했으므로 Native007/008이 실제 없고 기존007.v9/008.v10이 준비만 끝난 상태임을 먼저 확인했다. 기존 자료를 덮어쓰지 않고 아직 없던007.v10 graph/manifest/capsule/bootstrap 경로를 사용했다. predecessor adapter로 graph를 만들려던 첫 시도는 SAME_PUBLIC_AND_ACTUAL_WORKER_RECONSTRUCTION에서 거부됐고 기록을 보존했다. graph/startup에는 predecessor hook이 필요하지 않으므로 원 level6_closed_preparation_v1 진입점을 직접 사용한다. 원 진입점의 graph007-v10-attempt002는68pair·fresh161/final161·37.680초·CPU60.93%·가용RAM18.308%·cleanup=True로 통과했다. adapter의 graph 호출을 통과했다고 주장하지 않는다.
+
+이어 원 진입점의 level6-factory006은5.702초·CPU100%·가용RAM16.614%에서 보호 중단됐다. contracts/root_path는미완료이고cleanup=True이며 Native004~008은 없다. 같은 자원 중단이8ff251d·da1f94e 작업 및 이번 턴의3연속goal턴에서 반복됐다. 수정한 코드의 작은 회귀와 실제 자료 연결은 완료했지만 현 소스 전체 사전검사·실행 자격·제품 경로는 완료하지 못했다. 다른 프로젝트 검증을 중단하도록 요청할 권한도 받지 않았다. 무거운 동일 재시도나 보호 조건 변경 대신 update_goal 결과BLOCKED를 확인했다. 완료/일시정지가 아니며 전체P09~P20 목표 범위는 유지한다.
+
+재개 시 원 level6 진입점으로run007 startup의 다음 미사용 factory 번호를 먼저 검증한다. 이후 현재 prepared_run_closure 소스15411바이트/SHA256 b5e307896acede9ac9f5a4be517a3f4b8986def0ac27d933fe04a3603d852025 및 CODE007-002로 미사용preflight007-005 → qualification007-001 → 아직 실행하지 않은Native007을 순차 진행한다. 어떤 실제 검증도 성공을 가정하지 않으며, 기존007/008 Native가 생겼다면 먼저 상태를 재평가해 재실행을 막는다. 수정 전 preflight008-008을 현 소스 PASS로 재사용하지 않는다. 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·P10미시작을 유지한다.
+
+근거는preflight008-008·qual008-003 및 대응 closed-io2 설정/진단, closure-code004·prepared-only004~007-attempt003·CODE007-002·live-admission002·level6-entry-v10-graph007-attempt001/002·successor-connections007.v10·manifest/capsule/bootstrap007.v10·level6-factory006이다.

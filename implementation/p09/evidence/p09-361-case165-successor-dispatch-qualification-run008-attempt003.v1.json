@@ -1,0 +1,65 @@
+{
+  "state": "FAILED_SUCCESSOR_DISPATCH_CONSTRUCTION_NOT_ADOPTED",
+  "index": 165,
+  "physical_run": 8,
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "product_or_Native_executed": false,
+  "contracts": {
+    "run": 6,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "error_type": "ValueError",
+  "error_code": "PREPARED_RUN_CLOSURE_PRODUCER_SOURCE_WITNESSES",
+  "failure_frames": [
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "main",
+      "line": 261
+    },
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "callback",
+      "line": 163
+    },
+    {
+      "file": "current_queue_successor_retry_runtime_v3.py",
+      "function": "closed",
+      "line": 84
+    },
+    {
+      "file": "prepared_run_closure_v1.py",
+      "function": "previous_stops",
+      "line": 92
+    },
+    {
+      "file": "prepared_run_closure_v1.py",
+      "function": "admit",
+      "line": 71
+    },
+    {
+      "file": "prepared_run_closure_v1.py",
+      "function": "require",
+      "line": 22
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 52.2005075999914,
+  "CPU_max": 44.32,
+  "RAM_min": 23.22117798365577,
+  "terminal_resource_sample": {
+    "system_cpu_percent": 24.05,
+    "available_ram_percent": 23.266148831683605,
+    "commit_used_percent": 46.5920640757721,
+    "parent_cpu_machine_percent": 0.18614816521621344,
+    "parent_private_mib": 51.9375,
+    "parent_private_percent": 0.16301319394168626
+  },
+  "metadata_progress": {
+    "fresh_inputs": 541,
+    "actual_read_passes": 561,
+    "actual_bytes_read": 57469008
+  }
+}

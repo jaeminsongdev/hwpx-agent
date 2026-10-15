@@ -20,6 +20,17 @@ class Tests(unittest.TestCase):
     def test_valid_preparation_only_is_not_Native_pass(self):
         row=self.data();MODULE.validate(row,165,5,API)
         self.assertFalse(row["product_or_Native_executed"])
+        # Match v4's late generic role-metadata rewrite, after installing a
+        # function from this adapter in the private retry namespace.
+        env=dict(MODULE.producer_inventory.__globals__,__name__="p09_exact_role_rewrite_regression")
+        fn=FunctionType(MODULE.producer_inventory.__code__,env)
+        retry=NS(previous_stops=fn)
+        for installed in vars(retry).values():
+            if type(installed) is FunctionType and installed.__globals__.get("__name__","").startswith("p09_exact_"):
+                installed.__globals__.update(SELF="legacy-role.py",TEST="legacy-role-test.py")
+        pins=[dict(path=MODULE.CLOSURE_SOURCE),dict(path=MODULE.CLOSURE_TEST)]
+        self.assertEqual(set(fn(dict(source_pins=pins))),{MODULE.CLOSURE_SOURCE,MODULE.CLOSURE_TEST})
+        with self.assertRaises(ValueError):fn(dict(source_pins=[dict(path="legacy-role.py"),dict(path="legacy-role-test.py")]))
 
     def test_wrong_context_or_claimed_product_rejected(self):
         for key,value in (("physical_run",6),("product_or_Native_executed",True),("GO_authorized",True),("cleanup_confirmed",False)):

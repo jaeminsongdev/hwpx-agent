@@ -8,8 +8,10 @@ from types import FunctionType,SimpleNamespace as NS
 import re
 import sys
 
-SELF="tools/p09/prepared_run_closure_v1.py"
-TEST="tools/p09/tests/test_prepared_run_closure_v1.py"
+# Legacy v4 intentionally rewrites generic SELF/TEST globals on installed
+# functions. Producer witnesses are separate authority, not role metadata.
+CLOSURE_SOURCE="tools/p09/prepared_run_closure_v1.py"
+CLOSURE_TEST="tools/p09/tests/test_prepared_run_closure_v1.py"
 ENTRY=dict(path="tools/p09/level6_closed_preparation_v1.py",bytes=24229,
     sha256="7caea0f722b6205ad9691d35ff217e9c299da490ad2c22dfe98e1300367c55eb")
 OLD=dict(path="tools/p09/expanded_closed_preparation_v1.py",bytes=21675,
@@ -62,16 +64,21 @@ def absent(q,path):
     return False
 
 
+def producer_inventory(row):
+    inventory={p["path"]:p for p in row["source_pins"]}
+    require(CLOSURE_SOURCE in inventory and CLOSURE_TEST in inventory,"PRODUCER_SOURCE_WITNESSES")
+    return inventory
+
+
 def admit(q,ctx,run,a):
     root=PREFIX+f"current-runtime-run{run:03}.v1.json"
     require(absent(q,root),"NATIVE_ABSENT_BEFORE_CLOSURE_ADMISSION")
-    name=PREFIX+f"prepared-only-closure-run{run:03}-attempt002.v1.json"
+    name=PREFIX+f"prepared-only-closure-run{run:03}-attempt003.v1.json"
     row=q.json(name);validate(row,ctx.index,run,a)
-    inventory={p["path"]:p for p in row["source_pins"]}
-    require(SELF in inventory and TEST in inventory,"PRODUCER_SOURCE_WITNESSES")
+    inventory=producer_inventory(row)
     # Historical graph program pins need not equal today's source: no historical
     # Native run is claimed. The closure producer and packet bytes must match.
-    for path in (SELF,TEST,row["worker_entry_pin"]["path"]):
+    for path in (CLOSURE_SOURCE,CLOSURE_TEST,row["worker_entry_pin"]["path"]):
         a.exact(q.pin(path),inventory[path],"CURRENT_CLOSURE_AND_WORKER_SOURCE")
     graph=a.read_exact(q,row["graph_pin"])
     a.fields(graph,dict(state="PREPARED_CURRENT_SUCCESSOR_GRAPH_AND_WIRE_NOT_CODE_PREFLIGHT_NATIVE_OR_GO",
@@ -87,7 +94,7 @@ def install_retry(namespace,a):
     def previous_stops(q,ctx,api,bridge):
         for run in range(2,ctx.run):
             root=f"implementation/p09/evidence/p09-361-case{ctx.index}-current-runtime-run{run:03}.v1.json"
-            closure=PREFIX+f"prepared-only-closure-run{run:03}-attempt002.v1.json"
+            closure=PREFIX+f"prepared-only-closure-run{run:03}-attempt003.v1.json"
             if ctx.index==165 and 4<=run<=7 and absent(q,root) and not absent(q,closure):
                 admit(q,ctx,run,api)
             else:
@@ -106,7 +113,7 @@ def main():
     import flat_current_queue_envelope_runtime_v25 as envelope
     parser=argparse.ArgumentParser()
     parser.add_argument("--closure-code",action="store_true");parser.add_argument("--close-run",type=int)
-    parser.add_argument("--closure-attempt",type=int,default=2)
+    parser.add_argument("--closure-attempt",type=int,default=3)
     args,remainder=parser.parse_known_args()
     if args.closure_code or args.close_run is not None:
         # Publication-only dependencies must not enlarge the production graph.
@@ -126,16 +133,16 @@ def main():
             product_or_Native_executed=False,accepted_count_delta=0,GO_authorized=False)
         try:
             guard.acquire();q=a.AcceptanceReader(c.ROOT,guard.check)
-            for path in (SELF,TEST):q.pin(path)
+            for path in (CLOSURE_SOURCE,CLOSURE_TEST):q.pin(path)
             if args.closure_code:
-                tests,_=envelope.namespace_bundle.load(c.ROOT,[q.snapshots[TEST]],{})
+                tests,_=envelope.namespace_bundle.load(c.ROOT,[q.snapshots[CLOSURE_TEST]],{})
                 tests.test_prepared_run_closure_v1.Tests.data.__globals__.update(MODULE=sys.modules[__name__],API=a)
                 result=unittest.TextTestRunner(stream=io.StringIO(),verbosity=0).run(unittest.defaultTestLoader.loadTestsFromModule(tests.test_prepared_run_closure_v1))
                 contracts=dict(run=result.testsRun,errors=len(result.errors),failures=len(result.failures),skipped=len(result.skipped));row["contracts"]=contracts
                 a.exact(contracts,dict(run=6,errors=0,failures=0,skipped=0),"ALL_CLOSURE6")
                 row["state"]="PASS_PREPARED_ONLY_CLOSURE_CODE6_NOT_ENTRY_NATIVE_OR_PRODUCT"
             else:
-                code=q.json(PREFIX+"prepared-closure-code003.v1.json")
+                code=q.json(PREFIX+"prepared-closure-code004.v1.json")
                 a.fields(code,dict(state="PASS_PREPARED_ONLY_CLOSURE_CODE6_NOT_ENTRY_NATIVE_OR_PRODUCT",
                     contracts=dict(run=6,errors=0,failures=0,skipped=0),cleanup_confirmed=True),"QUALIFIED_CLOSURE_CODE6")
                 for pin in code["source_pins"]:a.exact(q.pin(pin["path"]),pin,"CURRENT_CLOSURE_CODE")
@@ -210,8 +217,8 @@ finally:print(json.dumps({'historical_runtime_or_authority_opens':len(hits)}))
                     class Reader(a0.AcceptanceReader):
                         def __init__(self,*args,**kwargs):
                             super().__init__(*args,**kwargs)
-                            for name in (SELF,TEST):self.pin(name)
-                            code=self.json(PREFIX+"prepared-closure-code003.v1.json")
+                            for name in (CLOSURE_SOURCE,CLOSURE_TEST):self.pin(name)
+                            code=self.json(PREFIX+"prepared-closure-code004.v1.json")
                             api.fields(code,dict(state="PASS_PREPARED_ONLY_CLOSURE_CODE6_NOT_ENTRY_NATIVE_OR_PRODUCT",
                                 contracts=dict(run=6,errors=0,failures=0,skipped=0),cleanup_confirmed=True),"CURRENT_CLOSURE_ADAPTER_CODE")
                             for pin in code["source_pins"]:api.exact(self.pin(pin["path"]),pin,"CURRENT_CLOSURE_ADAPTER_SOURCE")
