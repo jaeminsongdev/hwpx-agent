@@ -4,6 +4,20 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 실제 worker 진입과 준비 신호 launch 연결
+
+`native009_worker_entry_v1.py`는 case165/run009와 실제 상속 event handle만 받는 production worker 진입점이다. 현재 full72 packet을 원 decoder로 재구성하고 원 worker·한 번 실행 정책·raw policy·GO·Job 검사를 유지한다. 이미 source pin으로 구성한 window/lean namespace와 동일 private Binding을 재사용한다. 진입점 자체에는 제품 생성 차단이나 가상 GO를 넣지 않았다. 이 진입점은 독립 Native dispatcher가 아니며 전체 입력 Frame과 소유 Job·비용·helper 자격은 부모가 제공해야 한다.
+
+`native009_worker_launch_v1.py`는 원 worker 명령·task·cwd·pipe·creation flags를 확인한 뒤 실제 production 진입점으로 연결한다. 명시적 handle_list의 event 하나만 상속하고, 준비15초 Gate를 원 제품10초 Input/Capture 바깥에 둔다. GO 직전에는 호출자가 제공한 원 Job handle과 같은 살아 있는 process를 확인한다. 잘못된 명령·다른 Job·추가 launch 옵션·변조된 entry source·재실행을 거부한다. 생성 성공 후 event 상속 해제에 실패하면 프로세스를 원 소유자에게 반환하고 GO에서 실패시킨다. 이미 생성된 프로세스 참조를 잃거나 원 Job 정리를 건너뛰지 않는다.
+
+launch001은12계약과 실제 production `__main__`의 EOF/GO_DENIED 두 실행을 통과했다. 별도 진단 audit가 production 코드 바깥에서 모든 subprocess를 OS 생성 전에 영구 거부한다. EOF는 원 WORKER_NOT_AUTHORIZED, GO 경로는 현재 EXE·정확한 case165 인수를 확인한 뒤 생성 직전에 거부됐다. 두 worker 모두72개 descriptor·원 worker attempts/calls1회·raw policy 복원·기본 helper59개·과거/기타 JSON 읽기0·소유 Job 잔여0이었다. 실제 한 코어 affinity·BelowNormal·기계 CPU hard cap6.25%·kill-on-close/no-breakaway와 원 메모리 제한을 readback했다.
+
+새 준비 신호는1.448817초에 확인됐고, 실제 GO 이후 차단 결과의 완전한 캡처는0.029363초였다. 이는 제품 실행 시간이나 제품 PASS가 아니다. 전체 검증41.439초·fresh367/final367·시스템CPU최고27.24%·검증기 자체CPU최고0.39028%·전용메모리최고45.14MiB·가용RAM최저35.39%·cleanupTrue였다. 실제 제품/Native Frame·Native009 runtime 원본·접근허용 요청·OS/Defender 변경은0이며 공식 수용158/249·P09/A12/A13 OPEN을 유지한다.
+
+현재 construction003의 입력 선언과 새367개 source pin 및 launch001 결과 pin을 읽기 전용으로 비교했다. 기존 pin 충돌이나 새 디렉터리는 없었고 새 파일6개187,528bytes만 추가됐다. 원 acquisition14와 비바이너리2MiB/s의 두 읽기를 적용한 증가분은6/14 + 2×187528/(2×1048576) =0.607412초다. 기존 준비15초 포함599.236608초에 더하면 선언 증분 모델은599.844020/600초로 nominal 여유0.155980초다. 이것은 전체 현재 Native 비용 자격이 아니며 아직 없는 부모 통합·자격/결과 파일은 포함하지 않는다. 새 scope manifest를 만들기 위해 같은 전체 검증을 반복하지 않았다.
+
+다음은 원 부모의 같은 Job 생성과 같은 resource checkpoint에 이 launch를 결속하고, 최종 동적 helper·전체 입력 두 바이트 경계·독립 수용·전체 비용/사전검사/dispatch를 검증하는 작업이다. 현재 launch를 standalone 소유 Job에서 검증한 결과를 전체 부모에 설치된 것으로 승격하지 않는다. 추가 제품 실행 승인은 대기 중이며 원 CPU·RAM/commit95%·IO1/2MiB·acquisition14·decoder5·여유60·제품10초·준비15초는 유지한다. 근거: `native009-production-worker-launch001`, `native009-full72-construction003` 및 그 입력 선언.
+
 ### 전체 부모와 Frame 생성 경로 및 독립 판정기 연결
 
 `native009_full72_construction_v1.py`는 실제 Source admission을 통과한 full72 graph에서 원 engine을 한 번만 구성한다. 같은 engine을 원 부모 connector에 넘기고, 원 Frame을 상속한 projection class와 원 outer 실행 체인·독립 oracle을 연결했다. 독립 판정기의 기대 입력은 이전 전체 선언과 현재 source pin에서 만들며 현재 후보의 관측값을 사용하지 않는다. 부모와 판정기 모두 엄격한 제품 캡처10초를 유지한다. Frame instance 생성·입력 잠금·부모 callback·worker·판정기·GO 실행은 하지 않는다. 프로세스의 audit hook은 모든 subprocess 생성을 영구 거부한다.
