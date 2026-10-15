@@ -1,0 +1,196 @@
+{
+  "schema_version": "hwpx-agent.p09-worker-readiness-connection-review/v1",
+  "state": "PASS_READINESS_CONNECTION12_AND_ACTUAL_PARENT_DIAGNOSTIC_NOT_COMPLETE_NATIVE_BINDING",
+  "candidate_source_pins": [
+    {
+      "path": "tools/p09/worker_readiness_connection_v1.py",
+      "bytes": 5775,
+      "sha256": "d306d62a08e16f717bb526b2a7fa6c60ac44890f6fed965fdf4a70daca3c0a9b"
+    },
+    {
+      "path": "tools/p09/tests/test_worker_readiness_connection_v1.py",
+      "bytes": 6112,
+      "sha256": "cd952792007dab6116ccfd1fd48592f5cbb899129c1f9a5824bcf5a3b322b78d"
+    },
+    {
+      "path": "tools/p09/worker_readiness_bootstrap_v1.py",
+      "bytes": 2188,
+      "sha256": "25ab57f4772eb38899d92ef46fe301de1973176dcc735ca2976e6a877711cc06"
+    }
+  ],
+  "contracts": {
+    "run": 12,
+    "failures": 0,
+    "errors": 0,
+    "elapsed_seconds": 2.0018960000015795,
+    "CPU_max": 27.73,
+    "available_RAM_min_percent": 22.179762014958815,
+    "cleanup_confirmed": true
+  },
+  "actual_parent_diagnostic": {
+    "state": "PASS_ACTUAL_PARENT_BINDING_AND_PINNED_WORKER_BOOTSTRAP_DIAGNOSTIC_NOT_NATIVE_OR_ACCEPTANCE",
+    "window": {
+      "maximum_GO_to_complete_capture_seconds": 10,
+      "original_GO_bytes_retained": true,
+      "actual_GO_writes": 1,
+      "actual_capture_count": 1,
+      "actual_complete_capture_within_window": true,
+      "GO_to_complete_capture_elapsed_seconds": 0.1914287000108743,
+      "stopped": false,
+      "added_sampler_thread_or_process_query": false,
+      "capture_constructor_window_check_failed": false,
+      "original_source_scope_rates_CPU_RAM600_and_1200_retained": true,
+      "blocking_OS_latency_hard_preemption_guaranteed": false,
+      "queue_advance_authorized": false,
+      "PC_freeze_resolved": false,
+      "worker_readiness": {
+        "readiness_limit_seconds": 15,
+        "readiness_elapsed_seconds": 7.653406299999915,
+        "bounded_event_waits": 119,
+        "readiness_confirmed": true,
+        "actual_original_GO_written": true,
+        "stopped": false,
+        "product_window_changed": false,
+        "source_or_Job_checks_replaced": false,
+        "owned_cleanup_is_callers_responsibility": true,
+        "installed_in_Native": false
+      },
+      "readiness_outside_actual_window_input": true,
+      "readiness_setup_errors": [],
+      "added_Native_retry_or_acceptance_authority": false
+    },
+    "original_window_SECONDS": 15,
+    "readiness_private_namespace_not_default_import": true,
+    "historical_runtime_reads": 0,
+    "actual_product_process_creation_denied": true,
+    "active_after_cleanup": 0,
+    "Job_CPU_seconds": 3.312,
+    "cleanup_confirmed": true,
+    "owned_limits_readback": {
+      "verified": true,
+      "job_private_limit_mib": 2548.87109375,
+      "cpu_hard_cap_machine_percent": 6.25,
+      "affinity_mask": 1,
+      "priority_class": 16384,
+      "active_process_limit": 16,
+      "kill_on_close": true,
+      "breakaway_disabled": true
+    },
+    "elapsed_seconds": 9.407979700001306,
+    "CPU_max": 41.6,
+    "RAM_free_min": 22.416619106848064,
+    "Native008_replayed": false,
+    "Native009_started": false,
+    "accepted_count_delta": 0
+  },
+  "known_scope_budget": {
+    "state": "KNOWN_SCOPE_DELTA_ESTIMATE_NOT_COMPLETE_NATIVE009_MODEL",
+    "base_runtime_pin": {
+      "path": "implementation/p09/evidence/p09-361-case165-current-runtime-run008.v1.json",
+      "bytes": 3999022,
+      "sha256": "53e27ba4e2f9555ecfa47d942fcbfe4319e3b91e91f7e5180ac18585a02e9df2"
+    },
+    "known_additional_pins": [
+      {
+        "path": "tools/p09/ast_clone_namespace_v1.py",
+        "bytes": 2361,
+        "sha256": "d9f0094355c628cb76743221598032a4007890fe1d08867ea4f54118c3f17b4c"
+      },
+      {
+        "path": "tools/p09/tests/test_ast_clone_namespace_v1.py",
+        "bytes": 3282,
+        "sha256": "8d9b72d71302345c39a80df1a7ff03e823d250707b6fc55a986373012ab68985"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case165-current-runtime-run008.v1.json",
+        "bytes": 3999022,
+        "sha256": "53e27ba4e2f9555ecfa47d942fcbfe4319e3b91e91f7e5180ac18585a02e9df2"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case165-native008-window-analysis001.v1.json",
+        "bytes": 6219,
+        "sha256": "d5fde81a9c151404c78348089a35d516eb8fbd1b0a34719b726a4ba39e4a55fa"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case165-xz-unified-native-invocation001.intent.v1.json",
+        "bytes": 913,
+        "sha256": "5defbfc5f2c2611c893113da3ceb2d12463beedadaaffcb0a849733fe17b75a7"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case165-xz-unified-native-invocation001.v1.json",
+        "bytes": 944,
+        "sha256": "52eeb309324e429fa6e409623722006449dc7574c235230f03f98b176b6ad67a"
+      },
+      {
+        "path": "tools/p09/worker_readiness_v1.py",
+        "bytes": 6890,
+        "sha256": "047c3f78f8a4472feeec4d56b65716f57e0429091321cb49afe5b685047d3a45"
+      },
+      {
+        "path": "tools/p09/tests/test_worker_readiness_v1.py",
+        "bytes": 6937,
+        "sha256": "c6ee7364b76263b70c0f92648291a450f53a3d64eb7747e314754c62d85ad351"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-case165-worker-readiness-diagnostic001.v1.json",
+        "bytes": 6038,
+        "sha256": "882a7da7a359e941da36d0010840b50147a6f5fb4a4101e6f6306385b5803c12"
+      },
+      {
+        "path": "tools/p09/worker_readiness_connection_v1.py",
+        "bytes": 5775,
+        "sha256": "d306d62a08e16f717bb526b2a7fa6c60ac44890f6fed965fdf4a70daca3c0a9b"
+      },
+      {
+        "path": "tools/p09/tests/test_worker_readiness_connection_v1.py",
+        "bytes": 6112,
+        "sha256": "cd952792007dab6116ccfd1fd48592f5cbb899129c1f9a5824bcf5a3b322b78d"
+      },
+      {
+        "path": "tools/p09/worker_readiness_bootstrap_v1.py",
+        "bytes": 2188,
+        "sha256": "25ab57f4772eb38899d92ef46fe301de1973176dcc735ca2976e6a877711cc06"
+      }
+    ],
+    "known_additional_inputs": 12,
+    "additional_directories": [],
+    "additional_physical_other_bytes": 4046681,
+    "additional_inventory_checkpoints_not_yet_derived": true,
+    "known_scope_model": {
+      "base_predicted_seconds": 579.1964053835187,
+      "additional_readiness_seconds": 15,
+      "additional_native_acquisition_seconds": 0.8571428571428571,
+      "additional_two_actual_byte_pass_seconds": 3.85921573638916,
+      "additional_inventory_pacing_seconds": 0,
+      "predicted_seconds": 598.9127639770508,
+      "unchanged_deadline_seconds": 600,
+      "unchanged_margin_seconds": 60,
+      "preparation_added_without_overlap_or_old_allowance_credit": true,
+      "complete_manifest_derivation_still_required": true,
+      "actual_completion_guaranteed": false,
+      "Native_binding_qualified": false,
+      "GO_authorized": false
+    },
+    "remaining_nominal_seconds": 1.0872360229492415,
+    "source_pins_current": 3109,
+    "full_Native009_scope_or_configuration_qualified": false
+  },
+  "diagnostic_harness": "Bounded inline tool script; uses the actual candidate connect API and the source-pinned repository worker bootstrap. Not a source-qualified Native producer.",
+  "diagnostic_not_acceptance_reason": "The original capture completed with child exit code 1 after an audit hook rejected the first product subprocess creation. No product was created or accepted.",
+  "original_Native007_and_008_failure_preserved": true,
+  "Native008_replayed": false,
+  "Native009_started": false,
+  "full_current_native_input_scope_qualified": false,
+  "whole_Native_helper_count_qualified": false,
+  "AST_optimization_installed": false,
+  "Native_binding_installed": false,
+  "accepted_count_delta": 0,
+  "accepted_count": 158,
+  "total_cases": 249,
+  "next_case": 165,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "additional_Native009_approval": "PENDING_HUMAN_REPLY",
+  "next_action": "Preserve the original Native008 and prepare a separately verified lossless carrier to reduce actual reads; derive full successor scope, parent/worker binding and complete 600-second model before any additional Native invocation.",
+  "PC_freeze_solved": false
+}
