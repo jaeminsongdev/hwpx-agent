@@ -1,0 +1,166 @@
+{
+  "schema_version": "hwpx-agent.p09-worker-readiness-diagnostic/v1",
+  "state": "PASS_READINESS_PROTOCOL17_AND_OWNED_DIAGNOSTICS_NOT_NATIVE_CONNECTION_OR_ACCEPTANCE",
+  "source_pins": [
+    {
+      "path": "tools/p09/worker_readiness_v1.py",
+      "bytes": 6890,
+      "sha256": "047c3f78f8a4472feeec4d56b65716f57e0429091321cb49afe5b685047d3a45"
+    },
+    {
+      "path": "tools/p09/tests/test_worker_readiness_v1.py",
+      "bytes": 6937,
+      "sha256": "c6ee7364b76263b70c0f92648291a450f53a3d64eb7747e314754c62d85ad351"
+    },
+    {
+      "path": "tools/p09/xz_unified_runtime_v1.py",
+      "bytes": 23320,
+      "sha256": "d1daf6cd120e11ea81472aa76d80b6af17afe01a2c1c2b7323bea4daef3a2af9"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/strict_product_window_v1.py",
+      "bytes": 4696,
+      "sha256": "cd35710cbd11e47cc0a83dd2f28c03772b86267713d52bb8129ed52c670cc701"
+    },
+    {
+      "path": "tools/p09/post_product_recovery_window_v1.py",
+      "bytes": 12876,
+      "sha256": "ce0dd3fdddc238dd7181d5c12c0a161a2dea74c791dc8053dd99a2b0ca7e8890"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case165-current-runtime-run008.v1.json",
+      "bytes": 3999022,
+      "sha256": "53e27ba4e2f9555ecfa47d942fcbfe4319e3b91e91f7e5180ac18585a02e9df2"
+    }
+  ],
+  "contracts": {
+    "run": 17,
+    "failures": 0,
+    "errors": 0,
+    "elapsed_seconds": 2.0050169000023743,
+    "CPU_max": 39.38,
+    "available_RAM_min_percent": 21.403254746735538,
+    "cleanup_confirmed": true,
+    "original_tightened_window10_expiry_checked": true
+  },
+  "transport": {
+    "unnamed_Windows_event": true,
+    "explicit_child_handle_list": true,
+    "child_inheritance_cleared": true,
+    "signal_immediately_before_original_readline": true,
+    "original_GO_bytes_retained": true,
+    "parent_checks_same_live_owned_Job_member_before_and_after": true,
+    "bounded_event_wait_milliseconds": 50,
+    "preparation_deadline_seconds": 15,
+    "Native_source_not_modified": true,
+    "original_strict_window_Input_must_be_inside_gate": true
+  },
+  "owned_limits": {
+    "one_logical_CPU_affinity_mask": 1,
+    "priority_class": 16384,
+    "Job_CPU_hard_cap_machine_percent": 6.25,
+    "Job_private_memory_limit_MiB": 2548.87109375,
+    "active_process_limit": 16,
+    "kill_on_close": true,
+    "breakaway_disabled": true,
+    "host_RAM_and_commit_limit_percent": 95
+  },
+  "base_worker_diagnostics": {
+    "state": "PASS_REAL_WINDOWS_READINESS_THREE_DIAGNOSTICS_NOT_UNIFIED_NATIVE_OR_ACCEPTANCE",
+    "elapsed_seconds": 4.504076200013515,
+    "CPU_max": 46.01,
+    "available_RAM_min_percent": 22.52150613107874,
+    "cases": [
+      {
+        "mode": "EOF",
+        "elapsed_seconds": 0.14036039999336936,
+        "original_WORKER_NOT_AUTHORIZED": true,
+        "GO_written": false,
+        "Job_CPU_seconds": 0.109,
+        "active_after_cleanup": 0
+      },
+      {
+        "mode": "GO_DENIED",
+        "elapsed_seconds": 0.1577450999902794,
+        "readiness_elapsed_seconds": 0.13531110000621993,
+        "event_waits": 3,
+        "GO_written": true,
+        "all_subprocess_Popen_denied_before_OS_creation": true,
+        "Job_CPU_seconds": 0.062,
+        "active_after_cleanup": 0
+      },
+      {
+        "mode": "missing",
+        "elapsed_seconds": 0.27043760000378825,
+        "readiness_limit_seconds": 0.25,
+        "readiness_elapsed_seconds": 0.25866269999824,
+        "event_waits": 5,
+        "PREPARATION_TIMEOUT": true,
+        "GO_written": false,
+        "Job_CPU_seconds": 0.062,
+        "active_after_cleanup": 0
+      }
+    ],
+    "cleanup_confirmed": true
+  },
+  "unified_public_worker_diagnostics": {
+    "state": "PASS_REAL_UNIFIED_WORKER_READINESS_DIAGNOSTICS_NOT_NATIVE_OR_ACCEPTANCE",
+    "entry": "tools/p09/xz_unified_runtime_v1.py",
+    "task": "case165-current-r008-tests",
+    "elapsed_seconds": 8.923844900011318,
+    "CPU_max": 54.01,
+    "available_RAM_min_percent": 21.48962869012597,
+    "cases": [
+      {
+        "mode": "EOF",
+        "elapsed_seconds": 3.0251227999979164,
+        "original_WORKER_NOT_AUTHORIZED": true,
+        "GO_written": false,
+        "historical_runtime_JSON_reads": 0,
+        "Job_CPU_seconds": 2.625,
+        "active_after_cleanup": 0
+      },
+      {
+        "mode": "GO_DENIED",
+        "elapsed_seconds": 2.8462777999957325,
+        "readiness_elapsed_seconds": 2.813418100005947,
+        "event_waits": 45,
+        "GO_written": true,
+        "all_subprocess_Popen_denied_before_OS_creation": true,
+        "historical_runtime_JSON_reads": 0,
+        "Job_CPU_seconds": 2.484,
+        "active_after_cleanup": 0
+      }
+    ],
+    "cleanup_confirmed": true,
+    "private_wrapper_before_unmodified_public_runpy_entry": true
+  },
+  "limitations": {
+    "full_Native_binding_qualified": false,
+    "full_current_input_scope_or_final_hash_boundary_executed": false,
+    "source_of_diagnostic_harness": "bounded inline tool scripts; not a source-qualified Native producer",
+    "windows_observed_wait_latency_can_exceed_requested_timeout": true,
+    "readiness_timeout_does_not_extend_product_window": true,
+    "readiness_allowance_not_yet_integrated_in_authoritative_600_second_cost_model": true,
+    "AST_candidate_not_installed": true,
+    "Native008_single_cause_or_PC_freeze_solution_proven": false,
+    "original_cleanup_order_failure_not_reclassified": true
+  },
+  "Native008_replayed": false,
+  "Native009_started": false,
+  "additional_Native009_approval": "PENDING_HUMAN_REPLY",
+  "product_created": false,
+  "product_body_reused": false,
+  "accepted_count_delta": 0,
+  "accepted": 158,
+  "total": 249,
+  "next": 165,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "next_work": "Source-qualify the actual parent/worker readiness binding and AST optimization in a new explicit profile, recalculate complete IO/lock budget, then separately authorize any additional Native product invocation"
+}
