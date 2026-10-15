@@ -4,6 +4,16 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### run009의69개 전송과 원 재구성 본문 검증
+
+`native009_worker_transport_v1.py`는 새로운 manifest·capsule·bootstrap을 별도로 구성했다. 기존 run008 결과를 바꾸지 않고 실제 prior authority의158개 수용·next165를 다시 확인했다. private 함수3개의 run 상한 정수 슬롯만8→9로 바꾸고 원 code 전체로의 역변환을 확인했으며, 외부 연결은165/run009만 허용한다. 원 encode/decode·compact·재구성 본문과16KiB 한도, 기존68개 고정 테이블·constructor 검사 및 실패 이력 역할은 유지했다.
+
+캡슐9,803bytes·bootstrap8,297bytes·manifest46,565bytes를 준비했다. 원 `reconstruct_worker_graph` 본문이 Source pin을 확인한 private graph에서69개 전체를 재구성했고, 실제 재구성 구간의 JSON 자료 파일 열기는0회였다. 캡슐을 먼저 제한적으로 파싱하는 것은 실패 이력의 명시적 descriptor admission을 위한 metadata이며, 그 결과로 원 decoder를 대체하지 않는다. 원 decoder가 전송 해시·닫힌 schema·case/count/authority·manifest·69개 constructor를 다시 검증한다. 실패 이력의 제품 실행 여부None은 이전 prebody 선언과 별도 필드로 유지한다.
+
+CODE001은 잘못된 `exact` 인터페이스 호출로 계약 실행 전 AttributeError가 나 실패했다. CPU 보호 중단은 아니었으며30.029초·CPU최고35.16%·cleanupTrue다. 원 실패 결과와 생성한 전송 파일을 보존했다. 타입 엄격 비교를 기존 검증기의 함수로 연결한 CODE002는 기존 파일을 정확히 동일한 바이트·해시인 경우에만 읽기 재사용했고, 실패 판정을 재사용하지 않았다. 전체12계약·기반 입력목록222/최종222·새 입력111/최종111이 통과했다.54.910초·CPU최고40.40%·가용RAM최저21.82%·cleanupTrue다. 변조 wire 해시·변조된69개 목록·실패 이력 누락·잘못된 first descriptor·run008/다른 사례·실행 미확인을False로 바꾸는 주장을 거부했다.
+
+이 결과는 run009 metadata와 원 worker 재구성 함수의 자격이다. 실제 worker 프로세스·제품·Native는 실행하지 않았다. 전체 현재 입력 선언과 Rust787·바이너리·기존 Source 범위, 실제 worker/engine dispatch의9문맥 연결, helper 상한, 원600초 비용 및 Native 사전검사는 아직 남았다. Native009 추가 제품 실행 승인은 계속 대기 중이며 원 Native007/008 미수용 증거를 유지한다. 근거는 `native009-worker-transport-code002`다.
+
 ### 복사 의존성과 준비 신호의 통합 검증
 
 `ast_copy_namespace_connection_v1.py`는 원 namespace loader의 code/defaults/closure를 그대로 두고, 초기 AST 복사와 private helper의 `copy` import에 같은 전용 복사기를 연결한다. 초기 loader에서만 빨라지고 helper 본문은 범용 deepcopy를 쓰는 경로를 줄였다. 일반 import는 원 importlib에 위임하고 기본 copy/importlib 모듈·sys.modules를 변경하지 않는다. 원 소스 읽기·pin·전체 non-import AST 검사도 유지하며 source/hash/AST/JSON cache를 추가하지 않았다.
