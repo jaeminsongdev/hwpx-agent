@@ -4,6 +4,16 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 73개 부모 연결과 독립 oracle 계약
+
+`qualify_native009_full73_parent_v1.py`는 앞서 검증한 v4 worker 진입점을 기존 `native009_parent_launch_v1.py`의 원 Job 소유권·GO 전 Frame checkpoint 의존성에 연결한다. 새 부모 실행기나 별도 Job·sampler·Frame을 만들지 않고 원 구성 함수와 private launch 경로를 재사용했다. 원 Source 정책은 현재 바이트로 다시 구성했으며 부모·원 worker의 공유 globals와 독립 oracle의 전체 역변환을 검사했다.
+
+parent-connection001은 기존 구성8개와 부모 연결12개에 현재 진입점·원 시간 상한·전체 상속 범위3개를 더한23개 계약을 통과했다. 기존 시험의 descriptor 개수 기대값 두 칸만72→73으로 바꾸고 각각 전체 code 역변환을 확인했다. 원 파일·검사 본문·실패 역할은 유지했다. 프로젝트 테스트를 읽기 전 기본 helper59개·Native 합집합64개였으며 모듈을 숨기거나 상한을 늘리지 않았다.
+
+이전 worker 자격의3,218개 전체 입력과 비용 딕셔너리를 정확히 재구성했다. 현재3,220개 입력·Rust787경로/167회 pacing·기준 선언과 compact delta round-trip을 확인했다. 원 complete+별도 준비15초는598.834949/600초이며 여유1.165051초다. 현 결과 및 후속 소스가 추가되면 다시 계산해야 한다. 실제 연결 검증은63.640초·fresh389/final389·시스템CPU최고45.98%·검증기 자체CPU최고6.23849%·전용메모리최고51.29MiB·가용RAM최저29.28%·cleanupTrue였다.
+
+실제 부모/worker 호출·Frame 인스턴스·프로세스 생성 시도는0이다. Job·Frame의 합성 연결 계약과 실행 전 구성은 통과했지만 실제 전체 Native 입력의 두 바이트 경계·실행 경로 동적 helper·독립 제품 수용·사전검사/dispatch는 아직 미완료다. 기존75% 단일 표본 준비 보호·실제 Native 보호·RAM/commit95%·제품10초/준비15초는 변경하지 않았다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작, 제품/Native009/접근허용·OS/Defender 변경0을 유지한다. 근거: `native009-full73-parent-connection001.v1.json`.
+
 ### 73개 실제 worker 진입점과 제품 생성 차단 검증
 
 `native009_full73_worker_entry_v1.py`는 원 worker의 main·인수 검사·정확한 파일 읽기·GO·Job·실행 함수 본문을 유지하고, 준비 구현과 명시적인 v4 packet 의존성을 연결한다. launch 함수군도 원 code·defaults·closure를 유지한 채 private 진입점 경로만 바꾼다. 기본 모듈과 v3 진입점은 수정하지 않았다. production 진입점에는 진단용 제품 차단을 설치하지 않았다.
@@ -16,7 +26,7 @@
 
 실제 진단은73.295초·시스템CPU최고33.91%·검증기 자체CPU최고4.65357%·전용메모리최고51.16MiB·가용RAM최저29.70%·cleanupTrue였다. 완료 후 두 새 소스의 길이·SHA256과 receipt source pin 일치 및 실행 중복이 없음을 확인했다. 이 결과로 프리즈 원인이나 해결을 단정하지 않는다. 준비 CPU 정책 재설계 허용은 유지하되 이 qualifier에는 새 정책을 적용하지 않았고, 원75% 단일 표본 중단·실제 Native 보호·RAM/commit95%·원 입력 검증을 유지했다.
 
-다음은 이 full73 구성의 실제 부모·원 Job/Frame 연결, 전체 Native 입력의 두 바이트 경계·동적 helper·독립 수용 및 사전검사/dispatch다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작이며 추가 실제 제품 실행은 승인대기다. 근거: `native009-full73-production-worker001.v1.json`과 `successor-native009-full73-graph005.v1.json`.
+이 full73 구성의 부모·원 Job/Frame 의존성 연결 계약은 앞 절에서 통과했다. 전체 Native 입력의 두 바이트 경계·실행 경로 동적 helper·독립 수용 및 사전검사/dispatch는 남아 있다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작이며 추가 실제 제품 실행은 승인대기다. 근거: `native009-full73-production-worker001.v1.json`과 `successor-native009-full73-graph005.v1.json`.
 
 ### 73개 packet과 전체 입력 선언 재구성
 
