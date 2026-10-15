@@ -4,6 +4,20 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 과거 실패 기록 두 개와 72개 전체 비용
+
+`legacy_validation_carriers_v1.py`는 이미 의미 입력에 포함된 P159/P165의 full249 시간 제한 실패 기록 두 개만 변환한다. 소스·실행파일·fixture·현재 제품 기록에는 적용하지 않는다. 원본3,959,557/3,939,320bytes·STOPPED_NOT_ACCEPTED·product_completeFalse·P09 OPEN·worker/job/writer 생성True를 보존했고, 실행 전 실패나 제품 수용으로 재분류하지 않았다. 별도 물리 표현은281,526/274,394bytes이며 합계7,342,957bytes를 줄였다. 원1/2MiB 기준 두 읽기의 nominal 절감은7.002789초다.
+
+첫 physical001은9계약 통과와 두 파일 게시 후, 전체 복원 중 시스템CPU75.95%의 기존 단일 표본 정책에서 중단됐다. 당시 검증기자체CPU최고3.31962%·전용메모리최고120.07MiB·cleanupTrue였으며 부하의 외부 원인은 미귀속이다. 원 실패와 두 파일을 보존했다. 명시적 실패 기록의 byte/SHA pin·같은 generation·정리 완료·미승격 역할·두 실제 파일 hash가 일치할 때만 게시물을 재사용하는 경로를 추가했다. 압축/쓰기는 반복하지 않았지만, 실패한 부분 검증의103회 복원은 가져오지 않고 새 budget/reader에서 전체를 다시 읽었다.
+
+physical002는10계약·72개 두 실제 디스크 경계144회 복원·공유 decoder2.659799초/원5초·fresh173/final173이 통과했다. 물리 corpus22,726,063bytes·49.537초·시스템CPU최고57.81%·검증기자체CPU최고0.97633%·전용메모리최고40.59MiB·가용RAM최저19.03%·cleanupTrue다. 일반 prior descriptor 정책은 바꾸지 않았고, 이 결과는 Native 현재 입력 Frame이나 제품 수용이 아니다.
+
+`legacy_validation_binding_v1.py`는 고정된 기존70개 constructor를 실제 실행한 뒤 원 raw constructor로72개를 검사했다. 원 scope/바이트/핸들 oracle과 Projection 함수 객체를 유지했다. 두 과거 실패와 Native007 실행True/Native008 실행None의 역할을 분리하고, 누락·중복·원본/물리 pin·case·manifest 변조·현재 제품/소스/EXE/fixture descriptor·실패 승격을 거부했다.11계약을 하나의 private 모듈에서 수행해 계약별 재로딩을 피했다.
+
+binding CODE001은 현재 Rust787 경로와167회 inventory pacing을 확인하고, 이전 전체 입력 선언·새 code/시험/증거·scope manifest 자신까지 포함해 원 complete budget을 계산했다. 의미/물리 입력 각각3,167개·물리204,854,198bytes이며, 원10초 제품 캡처·여유60초·합산 decoder5초·추가 준비15초를 유지한 예상595.166112초로600초 이내다.27.630초·fresh120/final120·시스템CPU최고68.75%·검증기자체CPU최고2.69840%·전용메모리최고50.63MiB·가용RAM최저19.20%·cleanupTrue였다. 원 engine을 구성했지만 worker 호출은0이다. 이 비용은 현 단계 선언의 모델이며, 아직 없는72개 worker packet/dispatch/결과 관련 소스는 추가될 때 재계산해야 한다. 전체 현재 입력 hash·실제 Native Frame·전체 helper64·독립 수용 자격은 미완료다.
+
+다음은 실제 worker의72개 전송·원 재구성 본문·부모 scope를 연결하는 작업이다. wire/bootstrap16KiB·Native600초와 기존 자원 보호는 유지한다. 실제 제품/Native009·접근허용 요청·OS/Defender 변경·수용 증가는0이며 추가 제품 실행 승인은 대기 중이다. 근거: `legacy2-full72-physical-g001-attempt001/002`, `legacy2-binding-code001`, `legacy2-declared-scope001`.
+
 ### Native007 무손실 표현과 70개 바인딩
 
 `prepare_native007_carrier_v1.py`는 case165/run007 원본4,199,057bytes를 그대로 보존하고 별도287,658bytes의 XZ 표현을 게시했다. 원본은 제품 자식이 실행된 뒤 최종 입력 재확인에서 실패한 `STOPPED_NOT_ACCEPTED`다. 이 실행을 prebody 실패·실행 미확인·제품 수용으로 바꾸지 않는다.9계약·fresh28/final28·두 실제 디스크 복원 경계가 통과했다.12.588초·시스템CPU최고47.28%·검증기자체CPU최고2.88669%·전용메모리최고119.96MiB·가용RAM최저20.65%·cleanupTrue다. 읽기 감소는3,911,399bytes이며 원1/2MiB 속도로 두 번 읽는 nominal 절감은3.730201초다. 이 값은 전체 실행 시간의 실측 개선율이 아니다.
@@ -12,9 +26,9 @@
 
 `native007_failure_binding_v1.py`는 고정된 기존69개 constructor를 먼저 실행한 뒤 원 raw constructor로70개 전체를 검사한다. 원 nonconstructor scope/바이트/핸들 oracle과 Projection 함수 객체를 유지했다. Native007의 실행True와 Native008의 실행None을 별도 출처로 보존하며, 누락·중복·기존 pin 변조·현재run009 제품 descriptor·잘못된 case·manifest 변조·실패 승격을 거부했다. private 모듈을 계약마다 다시 구성하지 않고 한 번 연결해9계약을 수행했다. CODE001은fresh104/final104·12.117초·시스템CPU최고21.56%·검증기자체CPU최고1.81278%·전용메모리최고45.72MiB·가용RAM최저21.55%·cleanupTrue다. CODE용 manifest는 실제 Native graph/worker packet이 아니다.
 
-현재600초 비용은 아직 닫히지 않았다. plan003의603.563587초에서 새 물리 표현의3.730201초를 빼더라도, 새 필수 소스·시험·증거9개157,546bytes의 acquisition14 및 두 실제 읽기를 더한 읽기 전용 하한은600.626491초다. 새 디렉터리와 이후 worker/dispatch 연결 비용은 이 하한에 포함하지 않았으므로600초 PASS가 될 수 없다. 이 계산은 complete budget/현재 Native 자격이 아니다. 추가 절감 후보로 기존 의미 scope에 이미 포함된 `p09-159-current-graph-full.actual-run01.v1.json`을 제한적으로 읽어 확인했다.3,959,557bytes·SHA256 `70d755fb99fa2ae5f2776d613d52123cdc9fed4e63860e5ed71d593ba6b9784e`이며 원state STOPPED_NOT_ACCEPTED/product_completeFalse를 유지한다. 이 과거 기록의 별도 무손실 표현·실제 복원·엄격한 바인딩 자격은 아직 만들지 않았다.
+이70개 단계에서는600초 비용이 닫히지 않았다. plan003의603.563587초에서 새 물리 표현의3.730201초를 빼더라도, 새 필수 소스·시험·증거9개157,546bytes의 acquisition14 및 두 실제 읽기를 더한 읽기 전용 하한이600.626491초였다. 새 디렉터리와 이후 worker/dispatch 연결 비용은 이 하한에 포함하지 않았으므로600초 PASS로 처리하지 않았다. 이후 P159/P165 원본을 보존한 추가 무손실 표현·실제72개 복원·바인딩 및595.166112초의 현 단계 비용은 앞 절의 별도 증거로 검증했다.
 
-다음은 추가 원본의 정확한 역할을 유지하는 무손실 표현으로 충분한 여유를 확보한 뒤70개 이상 wire/부모 scope·전체 helper64·600초 complete budget·현재 Frame/독립 검증을 연결하는 작업이다. 실제 제품/Native009·접근허용 요청·OS/Defender 변경·수용 증가는0이며 원Native007/008과 미수용 판정을 보존한다. 근거: `native007-carrier-g001-attempt001`, `native007-full70-physical-attempt001`, `native007-binding-code001`.
+이70개 증거를 현재72개 worker/Native 자격으로 승격하지 않는다. 실제 제품/Native009·접근허용 요청·OS/Defender 변경·수용 증가는0이며 원Native007/008과 미수용 판정을 보존한다. 근거: `native007-carrier-g001-attempt001`, `native007-full70-physical-attempt001`, `native007-binding-code001`.
 
 ### 전체 입력 선언과 600초 비용 점검
 
