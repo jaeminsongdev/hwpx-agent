@@ -4,6 +4,18 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 전체 입력 선언과 600초 비용 점검
+
+`native009_parent_scope_v1.py`는 이전 수용의 실제 출처 선언을 새 manifest에 포함하고, v1 파일을 덮어쓰지 않는 v2 capsule/bootstrap을 준비했다. 원 validator의 capsule 버전 문자열 슬롯 하나만 바꾸고 전체 code 역변환을 확인했다. 최신 graph004는11계약·fresh126/final126·19.971초·CPU최고42.08%·가용RAM최저19.60%·cleanupTrue다. 잘못된 case/run·변조 hash·이전 v1 경로·실행 미확인을False로 바꾸는 선언을 계속 거부한다.
+
+plan001/002는 원 부모의 `ALL_DECLARED_ORIGINALS_PRESENT`에서 실패했다. 단일 실패 원본을 먼저 읽는 수정만으로는 부족했으며, Native008이 선언했던 전체 입력을 부모 union 전에 상속해야 했다. plan003의 실제 최초 union에서 빠져 있던 필수 원본은 case165/run002·003이었다. preparation 전용 연결이 원 union 호출 전에 이전 전체 선언을 합치며, 실제 `scope.extend`의 충돌 거부와 원 union 본문을 유지한다. 이는 실패의 선언을 보존하는 작업이지 해당 실행을 PASS로 재사용하거나 현재 모든 입력을 새로 해시했다는 뜻이 아니다.
+
+최신 plan003은 원 부모 callback·현재 Rust787 경로/167회 inventory pacing·전체 선언을 연결한 뒤 비용 단계에서 거부됐다. 모델은 의미 입력3,148개·물리 입력3,148개·물리215,082,656bytes이며, 원 complete 비용588.563587초에 새 준비 신호15초를 중복 공제 없이 더한603.563587초다. 원600초보다3.563587초 길어 `COMPLETE_SCOPE_PLUS_READINESS_OUTSIDE600`으로 종료했다.79.214초·CPU최고42.11%·가용RAM최저20.52%·cleanupTrue였고 최종 전체 current hash/Frame 자격은 미완료다. 원10초 제품 캡처·여유60초·decoder5초·acquisition14·IO1/2MiB는 줄이지 않았다.
+
+중간 graph003은 기존75% 단일 표본 정책에서 CPU76.56%로 작업 초기에 중단됐다. 이 실패도 보존하며 새 준비 CPU 정책은 이 producer에 적용하지 않았다. 현재 최적화 후보는 아직 물리 별칭이 없는 Native007 원본4,199,057bytes의 무손실 표현이다. 원본·실패 판정과 두 실제 바이트 경계 검증을 유지한 별도 자격이 필요하며, 예상 절감만으로600초 자격을 선언하지 않는다. 전체 Native helper64·현재 Source Frame·독립 검증·추가 제품 실행은 아직 미완료다.
+
+근거: `native009-parent-graph001..004`, `native009-parent-plan001..003`, `native009-parent-declared-scope003`, `successor-native009-parent-graph004.v2`. 실제 제품/Native009 실행과 수용 증가는0이다.
+
 ### 실제 run009 worker 연결과 helper 최적화
 
 `native009_engine_connection_v1.py`는 원 `connect_factory`의 private run 상한 슬롯 하나만8→9로 바꾸고 전체 code 역변환을 확인했다. 원 템플릿을 한 번 구성해 root·task·physical9/logical1을 일치시켰으며, 원 `run_case112_current_stored.py` worker 함수 객체를 원 policy/once-only connector에 연결했다.10계약·fresh108/final108·16.029초·CPU최고32.35%·가용RAM최저22.45%·cleanupTrue로 통과했고, 구성 검증에서는 worker 호출0이었다. 이때의 제품 설정165는 격리된 진단 프로세스 안에서 정상 configure 함수로 선택했으며 원 소스 파일은 바꾸지 않았다.
@@ -12,7 +24,7 @@
 
 첫 실제 worker 진단은 기능을 통과했지만 기본 helper66개를 관측해 기존 상한64개를 만족하지 못했다. 그 결과를 보존하고 codec·bounded wire·10초 연결 라이브러리4개를 source-pinned private namespace로 읽도록 바꿨다. sys.modules에서 모듈을 숨기거나 소스를 제외하거나 상한을 늘리지 않았다. 최신 `native009-actual-worker-probe002`에서는 실제 자식 helper62개를 확인하고64개 이하를 명시적으로 검사했다. 두 실제 worker 진단을 포함한 전체17.353초·fresh113/final113·CPU최고42.14%·가용RAM최저23.37%·cleanupTrue다. GO 진단의 준비1.868131초와 GO→캡처0.028973초는 원10초 안에서 분리됐으며, 캡처 완료는 제품 PASS가 아니다.
 
-다음은 전체 현재 입력/Rust787·바이너리·출처 선언을 원 부모 callback/Frame/독립 검증기에 연결하고, 전체 Native 부모·동적 경로의 helper 상한과600초 비용을 닫는 작업이다. 자식 helper62개로 이 전체 Native 자격을 대체하지 않는다. 추가 제품 실행 승인은 여전히 대기 중이며 공식158/249·next165·P09/A12/A13 OPEN을 유지한다. 근거는 `native009-engine-code001`과 `native009-actual-worker-probe002`다.
+현재 전체 선언의 원 부모 callback과 비용 계산은 앞 절까지 진행했다. 다음은600초 비용 초과를 실제 무손실 표현으로 줄이고, 전체 Native 부모·동적 경로의 helper 상한과현재 Source Frame/독립 검증을 닫는 작업이다. 자식 helper62개로 이 전체 Native 자격을 대체하지 않는다. 추가 제품 실행 승인은 여전히 대기 중이며 공식158/249·next165·P09/A12/A13 OPEN을 유지한다. 근거는 `native009-engine-code001`과 `native009-actual-worker-probe002`다.
 
 ### run009의69개 전송과 원 재구성 본문 검증
 
