@@ -4,6 +4,18 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 72개 실제 worker와 제품 생성 차단 진단
+
+`native009_full72_worker_probe_entry_v1.py`는 source pin으로 확인한 기존 진단 의존성 목록을 재사용하고 실제72개 transport/원 worker 본문을 구성한다. 모든 subprocess 생성은 그래프/worker 준비 전에 설치한 audit hook에서 OS 생성 전에 차단한다. EOF는 원 WORKER_NOT_AUTHORIZED, 진단용 GO는 현재 EXE 경로·정확 case165·원 인수를 확인한 뒤 DIAG_SUBPROCESS_DENIED로 종료했다. 두 경우 모두 실제 원 worker attempts/calls1회·원 raw policy 복원·과거 runtime/그 밖의 JSON 읽기0·기본 helper62개≤기존64개였다. 기본 모듈을 숨기거나 검사 범위/상한을 바꾸지 않았다.
+
+첫 probe001/002는 자식의 정상 EOF 거부 뒤 추가 JSON 계측이 실패했고 부모는 처음에 JSONDecodeError만 남겼다. probe002의 제한된 오류 정보에서 postcondition 위치를 확인하고, probe003에서 필수 현재 `step-config001.v1.json`의 읽기1회를 잘못 분류했음을 특정했다. CPU 보호 중단은 아니었으며 모든 소유 Job이 비었고 실패 결과1~3을 보존한다. 현재 설정 파일을 과거 기록과 분리하고 부모 검증의 고정 pin(685bytes·SHA256 `2b549a20ad4f46b7d146b935b0ff103e92db0411ad195f6038457e994b973e7c`)으로 원 읽기 전후 각각 새로 확인했다. 원 읽기1+독립 확인2=3회만 허용하며 다른 JSON 읽기 금지는 유지했다.
+
+probe004가 두 실제 자식 진단을 통과한 뒤, 오류 수집기가 알려진 예외 종류·프로젝트 오류 코드 prefix·마지막6개 basename/함수/행만 반환하도록 보강했다. 임의 문구·식별자형 값·비프로젝트 대문자 값·전체 경로·긴 원본 로그가 출력되지 않는5개 회귀 테스트를 추가했다. 최신 probe005는5계약과 두 worker 진단·fresh356/final356이 통과했다.42.781초·시스템CPU최고55.86%·부모자체CPU최고0.38771%·부모전용메모리최고17.39MiB·가용RAM최저33.55%·cleanupTrue다. 각 자식의 Job CPU1.969초·전용메모리최고46.71MiB였고 두 Job 잔여 프로세스0을 확인했다.1코어·BelowNormal·기계CPU hard cap6.25%·breakaway 금지·kill-on-close 설정도 실제 readback으로 확인했다.
+
+최신 EOF는2.254893초, GO_DENIED는 준비2.078133초 뒤 진단용 원 GO bytes를1회 보내고 GO→완전 캡처0.030915초/원10초로 종료했다. 이 캡처는 거부 결과의 캡처이며 제품 PASS가 아니다. Native009 결과/Frame은 생성하지 않았고 원Native008을 다시 실행하지 않았다.355/356개 이번 입력 hash와 자식 helper62개는 전체 Native 부모·동적 경로의 helper64/현재3,179개 이상 Source Frame/두 실제 바이트 경계 자격을 대체하지 않는다.
+
+다음은 선언만 있는 worker 바인딩과 원 부모의 fresh VerifiedPolicy admission을 연결하고 전체 Native 구성·입력·독립 사전검사를 닫는 작업이다. 마지막 부모 모델596.828803초에는 이번 새 진단 소스/회귀시험/결과가 추가되지 않았으므로 통합 시 재계산한다. 실제 제품/Native009·접근허용 요청·OS/Defender 변경·수용 증가는0이며 추가 제품 실행 승인은 대기 중이다. 근거: `native009-full72-actual-worker-probe001..005`.
+
 ### 72개 실제 전송과 원 부모 입력 검사
 
 `native009_full72_transport_v1.py`는 기존69개 전송 연결의 private 의존성에 Native007/과거실패2개 바인딩을 명시적으로 추가한다. 기존68/69/70 constructor와 원 raw72 constructor를 유지하며, 공개 기본 모듈을 수정하지 않는다. private 재구성/engine 함수의69→72 개수 슬롯과 capsule v1→v3 경로 문자열 슬롯만 바꾸고 전체 code 역변환을 확인했다. 원 worker 재구성 본문·hash/schema·원 task/run9·제품10초 조건을 유지했다.
@@ -14,7 +26,7 @@
 
 parent002는 원 `current_input_scope` 전체 본문에서 실제 권위/전임자/현재 step 도출·전송/manifest·과거 출처를 다시 확인하고, 이전 전체 입력 선언을 원 union 앞에 상속했다. Rust787 경로를 전후 두 번 열거하고 각각167회 pacing을 확인했다. 부모6계약·메타데이터/원 bootstrap 입력fresh506/final506·142.538초·시스템CPU최고62.88%·검증기자체CPU최고3.24281%·전용메모리최고51.94MiB·가용RAM최저17.95%·cleanupTrue로 통과했다. 의미/물리 입력 각각3,179개·물리205,698,876bytes이며, 원 complete 비용에 준비15초를 더한 현재 예상596.828803초는600초 이내다. worker 호출0·GO0이며 Native007 실행True/Native008 실행None/과거 worker·writer 시작 실패 역할은 분리해 보존한다.
 
-506개 입력의 이번 closing hash는3,179개 전체의 현재 바이트 검증을 대체하지 않는다. 실제72개 worker의 EOF/생성차단 진단·전체 Native helper64·현재 전체 Source Frame/두 바이트 경계·독립 수용·사전검사/dispatch는 아직 미완료다. 해당 코드와 결과가 추가되면 비용을 다시 계산해야 한다. 실제 제품/Native009·접근허용 요청·OS/Defender 변경·수용 증가는0이며 추가 제품 실행 승인은 대기 중이다. 근거: `native009-full72-transport-code001`, `native009-full72-parent001/002`, `native009-full72-parent-graph-preparation001`, `native009-full72-parent-declared-scope002`.
+506개 입력의 이번 closing hash는3,179개 전체의 현재 바이트 검증을 대체하지 않는다. 이후 실제72개 worker의 EOF/생성차단 진단은 앞 절에서 별도로 검증했다. 전체 Native helper64·현재 전체 Source Frame/두 바이트 경계·독립 수용·사전검사/dispatch는 아직 미완료다. 해당 코드와 결과가 추가되면 비용을 다시 계산해야 한다. 실제 제품/Native009·접근허용 요청·OS/Defender 변경·수용 증가는0이며 추가 제품 실행 승인은 대기 중이다. 근거: `native009-full72-transport-code001`, `native009-full72-parent001/002`, `native009-full72-parent-graph-preparation001`, `native009-full72-parent-declared-scope002`.
 
 ### 과거 실패 기록 두 개와 72개 전체 비용
 

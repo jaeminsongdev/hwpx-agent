@@ -1,0 +1,85 @@
+{
+  "state": "FAILED_ACTUAL_FULL72_WORKER_NOT_NATIVE",
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "actual_product_or_Native_executed": false,
+  "Native008_replayed": false,
+  "Native009_product_or_Frame_started": false,
+  "whole_current_source_or_Native_helper_bound_qualified": false,
+  "cases": [],
+  "child_setup_failure": {
+    "stderr_characters": 1839,
+    "exception_type": "ValueError",
+    "error_code": "NATIVE009_FULL72_PROBE_ENTRY_NO_OTHER_JSON_IO_OR_COPY_MUTATION",
+    "frames": [
+      {
+        "file": "runtime_envelope_worker_connection_v1.py",
+        "line": 81,
+        "function": "execute"
+      },
+      {
+        "file": "run_case112_current_stored.py",
+        "line": 92,
+        "function": "worker"
+      },
+      {
+        "file": "conservative_maintenance.py",
+        "line": 310,
+        "function": "worker"
+      },
+      {
+        "file": "conservative_maintenance.py",
+        "line": 74,
+        "function": "require"
+      },
+      {
+        "file": "native009_full72_worker_probe_entry_v1.py",
+        "line": 79,
+        "function": "main"
+      },
+      {
+        "file": "native009_full72_worker_probe_entry_v1.py",
+        "line": 25,
+        "function": "require"
+      }
+    ],
+    "raw_log_preserved_or_printed": false,
+    "mode": "EOF",
+    "exit_code": 1
+  },
+  "last_owned_cleanup": {
+    "active_after_cleanup": 0,
+    "Job_CPU_seconds": 2.047,
+    "Job_peak_private_MiB": 46.82,
+    "job_handle_closed": true
+  },
+  "error_type": "JSONDecodeError",
+  "error_frames": [
+    {
+      "file": "probe_native009_full72_worker_v1.py",
+      "function": "main",
+      "line": 91
+    },
+    {
+      "file": "__init__.py",
+      "function": "loads",
+      "line": 352
+    },
+    {
+      "file": "decoder.py",
+      "function": "decode",
+      "line": 345
+    },
+    {
+      "file": "decoder.py",
+      "function": "raw_decode",
+      "line": 363
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 21.419912500001374,
+  "CPU_max": 32.32,
+  "owned_CPU_machine_max": 0.38734411785211936,
+  "owned_private_MiB_max": 14.68359375,
+  "RAM_min": 18.70125220762359
+}
