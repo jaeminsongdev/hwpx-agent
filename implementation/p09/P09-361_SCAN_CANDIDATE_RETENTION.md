@@ -1697,3 +1697,7 @@ P09 Gate는 계속 OPEN이며 run083은 제품 실행 수용에 포함하지 않
 <!-- BEGIN P09_CASE164_METADATA_IO_CANDIDATE_STATUS -->
 > 004 graph/factory/CODE74/pref429/entry432 actualhelper64 PASS·Native004 CPU85.69% prebody중단·worker/제품0·FrameNone·cleanupTrue. 별도fresh-lossless metadata후보8계약+probe003 두원본159/163 fresh복원/최종재읽기 PASS·physical18212358→6998420바이트·semantic동일·byte/JSONcache0. probe001/002 실패 및모든기존증거보존·실제Native/원체커/승인연결은미검증·기존Native/승인source변경0. 공식157/249·잔여92·next164/P09-A12-A13 OPEN·목표ACTIVE·제품/리뷰/승인NOT_RUN. 다음초기metadata 실제연결·명시적계수/decoder budget·전체검증.
 <!-- END P09_CASE164_METADATA_IO_CANDIDATE_STATUS -->
+
+<!-- BEGIN P09_CASE164_LOSSLESS_METADATA_CONNECTED_STATUS -->
+> 실제private metadata BuildReader/원전체callback과56원본fresh복원/최종재읽기 연결검증 PASS·원MRO/workspace/stat/자원/물리계수 유지. metadata+Frame decoder 공유5초 구성요소8계약/Framefactory hook 구현·metadata connection003 479-final479·scope2964/Rust787·decode113·sharedwork1.395초·cleanupTrue·source25현재일치 PASS. 실제Frame생성0·Native/제품/독립원체커/승인 미실행·최종실제연결/원증거조건 검증필요. 기존v2/v3/승인163/원본 및실패 보존·공식157/249·잔여92·next164/P09-A12-A13 OPEN·목표ACTIVE.
+<!-- END P09_CASE164_LOSSLESS_METADATA_CONNECTED_STATUS -->

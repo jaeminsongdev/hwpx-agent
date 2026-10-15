@@ -371,3 +371,21 @@ probe003은 전체56개 descriptor를 구성한 뒤 큰 원본2개인159-run001�
 다음은 이 후보를 초기 metadata reader에 연결하되 원 workspace·source/ancestor stat·guard·속도 제한과 실제 물리 byte 계수를 유지하고, explicit semantic/physical 기록과 decoder budget을 전체 Native·독립 체커에서 확인하는 것이다. 공식157/249·잔여92·next164·generation52 및 P09/A12/A13 OPEN·목표ACTIVE를 유지한다. 사례164 제품·독립 리뷰·승인은 NOT_RUN이며003/004 및 기존 실패와 원본은 보존한다.
 
 근거: successor-connections004.v2, successor-factory002, successor-code/preflight/dispatch-qualification-run004-attempt001, current-runtime-run004 및 fresh-lossless-metadata-probe001..003. 구현은 fresh_lossless_metadata_reader_v1과 해당 시험 파일이다.
+
+## 실제 초기 reader 연결과 공유 decoder 한도
+
+lossless_metadata_connection_v1은 고정된 v3 실행 구성에서 실제 private 엔진을 구성하고 BuildReader에 명시적 fresh 무손실 reader를 연결한다. 엔진 run/worker 함수, 원 생성자 MRO, open pacing·64KiB workspace·source/ancestor stat 및 metadata CPU 경고를 유지한다. 원 dispatcher의 construct 안에 있는 전체 callback AST를 그대로 구성해 CODE/preflight 입장, 이전 종료, 전체 current_input_scope를 실행한다. GO·subprocess·Frame 실행은 하지 않는다. 사전 검증에 선언된 모든 semantic pin이 반환 범위에 유지되는지 확인하고,56개 모든 원본 pin의 실제 복원과 최종 재읽기를 수행한다.
+
+connection001은4계약 통과 후 현재 STEP을 선언하지 않은 KeyError로40.999초에 중단됐다. cleanup=True·제품/Frame 미실행이며 실패를 보존했다. 원 dispatcher와 같이 STEP을 읽고 report와 일치시킨 connection002는110.625초·4계약·current scope2,961/Rust787·metadata fresh476/final476·물리140,330,051바이트·CPU53.71%·가용RAM45.501%·cleanup=True로 통과했다. 실제 original engine function과 reader MRO wrapper를 유지했다. workspace1개·leases961/returns961·returned_bytes140,330,051·source 요청961/stat961·ancestor 방문4,599/stat4,599를 확인했다.
+
+이 실행의 mapped 원본56개는113회 fresh decode·물리93,455,827바이트·복원된 semantic303,651,939바이트다. decoded bytes는 physical counter에 더하지 않았다. metadata decoder 작업은1.399초이며 예전 원 Budget의5초 제한을 사용했다. 이 비교는 계수 구분이며 원 방식의 전체 동일 실행 시간과 직접 비교한 결과는 아니다.
+
+shared_metadata_frame_decoder_budget_v1은 metadata와 Frame의 original Budget object에 추가 합산 check를 연결한다. 원 budget 타입/run 본문/owner/resource 우선 검사 및 Frame-only 계수를 유지한다. active decoder 작업까지 합해5초를 넘으면 sticky error로 중단한다. 새 sampler·thread·IO·deadline은 없다. 원 Frame constructor 이후 해당 budget을 등록하고 summary에 합산 증거를 별도로 추가하는 factory hook을 구현했다. 아직 실제 Native Frame을 생성해 이 hook을 검증하지 않았다.
+
+공유 code001은 bound method 객체의 Python 조회 identity를 잘못 비교한 시험1개가 실패했다. 실제 저장된 원 method와 동일한 function/owner 복원을 검사하도록 시험을 수정했고 기존 실패를 보존했다. code002의8계약과 Frame constructor/summary hook을 포함한 현재 code003의8계약이 통과했다. code003은fresh3/final3·1.501초·CPU16.73%·cleanup=True다. 각 decoder가5초 미만이더라도 합계가 초과하면 거부하고, active 작업·중복/비신선 budget·owner 변경을 거부하며 원 guard 실패가 먼저 발생하는 조건을 확인했다.
+
+공유 계수와 실제 parent Frame factory 연결점을 포함한 connection003은110.817초·4계약·scope2,964/Rust787·metadata fresh479/final479·물리140,359,045바이트·CPU57.27%·가용RAM45.186%·cleanup=True로 통과했다. metadata56개·113decode·mappedphysical93,455,827/semantic303,651,939바이트이며 실제 공유 작업은1.395초/5초다. metadata budget만 등록되고 Frame budget은 미등록·Frame 생성0이다. 실제 private parent가 참조하는 동일 Frame factory에 hook을 연결한 것을 확인했지만 실제 Native 실행·Frame 전후 읽기·원체커·승인 검증은 아니다. source25개 현재 hash와 최종 확인이 일치한다.
+
+다음은 이 연결을 실제 새 Native 진입점에 채택하고 모든 새 source/fixture/qualification을 실제 입력에 포함한 뒤, 원64 helper·16KiB wire·600초 및720초·공유decoder5초·GO/Job·원 전후 읽기 조건을 유지해 제품·독립 원체커·승인을 검증하는 것이다. 원 메타데이터 physical/semantic 계수와 새 공유 budget 증거를 후속 원체커에서 확인하기 전에는 승인하지 않는다. 공식157/249·잔여92·next164·generation52, P09/A12/A13 OPEN 및 목표ACTIVE다. 사례164 제품·Native·독립 리뷰·승인 및 프리즈 근본 해결은 미완료다.
+
+근거: lossless-metadata-connection-run004-attempt001..003 및 shared-metadata-frame-decoder-code001..003. 기존 v3/v2, 승인163, 원본 및003/004 중단 증거는 변경하거나 삭제하지 않았다. 새 구현은 lossless_metadata_connection_v1, shared_metadata_frame_decoder_budget_v1과 해당 시험 파일이다.
