@@ -20,7 +20,7 @@ POLICY_SOURCE=dict(path="tools/p09/preparation_attributed_cpu_v1.py",bytes=9869,
 POLICY_CODE=PREFIX+"preparation-attributed-CPU-design-code001.v1.json"
 PROBE=PREFIX+"preparation-attributed-CPU-probe001.v1.json"
 CONNECTION_STATE="PASS_PREPARATION_ATTRIBUTED_CONNECTION_CODE_NOT_NATIVE_OR_STAGE_EXECUTION"
-CONNECTION_CONTRACTS=27
+CONNECTION_CONTRACTS=30
 IDENTIFIER_POLICY=dict(preflight_record_max=16,dispatch_qualification_max=8,connection_record_max=16,
     Native_physical_run=8,Native_attempt_max=8,code_attempt=1,automatic_retry=False,existing_records_overwritten=False)
 WINDOW_BRIDGE="tools/p09/recovery_dispatch_window_v1.py"
@@ -81,15 +81,40 @@ def witnesses(q,a,policy,*,connection=True,connection_attempt=None):
     for path in (ENTRY_SOURCE,ENTRY_TEST,WINDOW_BRIDGE,WINDOW_TEST):q.pin(path)
     for pin in WINDOW_PINS:a.exact(q.pin(pin["path"]),pin,"ORIGINAL_WINDOW_CONNECTION_SOURCES")
     a.exact(q.pin(ENTRY["path"]),ENTRY,"ORIGINAL_RECOVERY_ENTRY_UNCHANGED")
+    policy_witnesses(q,a,policy)
+    if connection:
+        record=closure(q,connection_path(connection_attempt),CONNECTION_STATE,a,CONNECTION_CONTRACTS)
+        a.exact(record["metadata_identifier_policy"],IDENTIFIER_POLICY,"EXPLICIT_FINITE_METADATA_IDENTIFIERS_NOT_NATIVE_RETRY")
+
+
+def policy_witnesses(q,a,policy):
+    """Only the immutable design/probe, before constructing the new Guard."""
     a.exact(q.pin(POLICY_SOURCE["path"]),POLICY_SOURCE,"EXACT_POLICY_DESIGN_SOURCE")
     design=closure(q,POLICY_CODE,policy.CODE_STATE,a,20)
     a.fields(design,dict(runtime_policy_installed=False,next_preflight_start_authorized=False),"DESIGN_NOT_AUTOMATIC_ADOPTION")
     probe=closure(q,PROBE,"PASS_CONTROLLED_PREPARATION_CPU_GUARD_SOURCE_READS_NOT_RUNTIME_INSTALLATION",a)
     a.fields(probe,dict(runtime_policy_installed=False,actual_Native_or_product_executed=False,
         actual_P09_preflight_executed=False,subprocess_construction_blocked=True,Native008_absent_before_after=True),"CONTROLLED_NO_CHILD_PROBE")
-    if connection:
-        record=closure(q,connection_path(connection_attempt),CONNECTION_STATE,a,CONNECTION_CONTRACTS)
-        a.exact(record["metadata_identifier_policy"],IDENTIFIER_POLICY,"EXPLICIT_FINITE_METADATA_IDENTIFIERS_NOT_NATIVE_RETRY")
+
+
+def closed_bootstrap(root,a,make_original,make_preparation,verify_policy,verify_connection,guards):
+    """Two full closing passes, sequential original mutex/sampler owners."""
+    require(type(guards) is list and not guards,"NEW_SERIAL_BOOTSTRAP_GUARDS")
+    admission=None;q=None
+    for factory,verify in ((make_original,verify_policy),(make_preparation,verify_connection)):
+        require(all(g.cleanup for g in guards),"PREVIOUS_BOOTSTRAP_OWNER_CLOSED")
+        guard=factory();guards.append(guard)
+        try:
+            guard.acquire();q=a.AcceptanceReader(root,guard.check);verify(q)
+            q.finish();guard.check(force=True)
+        finally:guard.close()
+        require(guard.cleanup,"BOOTSTRAP_OWNER_CLEANUP")
+        require(type(q.final_fresh_hashes) is int and q.final_fresh_hashes==len(q.snapshots)>0,"BOOTSTRAP_COMPLETE_FRESH_CLOSURE")
+        if admission is None:admission=q
+    return q,dict(original_guard_closed_before_preparation_guard=True,
+        source_pins=list(admission.snapshots.values()),fresh_inputs=len(admission.snapshots),
+        final_fresh_hashes=admission.final_fresh_hashes,Native_policy_changed=False,
+        automatic_retry_or_resume=False)
 
 
 def reference_bounds(original):
@@ -158,7 +183,9 @@ def metadata_loader(original):
         driver=getattr(modules,"expanded_unhooked_setup_dependency_v1",None)
         if driver is not None:
             prior=driver.project_setup_main
-            def setup(*args,**kwargs):return reference_bounds(prior(*args,**kwargs))
+            def body(*args,**kwargs):return _preparation_reference_bounds(prior(*args,**kwargs))
+            prior.__globals__["_preparation_reference_bounds"]=reference_bounds
+            setup=FunctionType(body.__code__,prior.__globals__,argdefs=body.__defaults__,closure=body.__closure__)
             prior.__globals__["project_setup_main"]=setup;driver.project_setup_main=setup
         fix=getattr(modules,"closed_prebody_factory_admission_fix_v1",None)
         if fix is not None:
@@ -368,15 +395,31 @@ def main():
         except FileNotFoundError:return True
         return False
     require(absent(),"NO_EXISTING_NATIVE008")
-    # Fresh qualification still uses the unchanged 75% baseline guard.
-    try:
-        guard.acquire();q=a.AcceptanceReader(c.ROOT,guard.check);witnesses(q,a,policy,connection_attempt=args.connection_attempt)
-        if ctx.stage=="qualify":preflight_audit(q,a,policy,ctx.values["--preflight-attempt"])
-        q.finish();guard.check(force=True)
-    finally:guard.close()
-    require(guard.cleanup,"PREPARATION_BOOTSTRAP_CLEANUP")
     audit=PREFIX+f"preparation-attributed-{ctx.stage}-run008-attempt{ctx.attempt:03}.v1.json"
-    require(not(c.ROOT/audit).exists(),"EXCLUSIVE_POLICY_STAGE_AUDIT")
+    bootstrap_failure=PREFIX+f"preparation-attributed-bootstrap-{ctx.stage}-run008-attempt{ctx.attempt:03}.v1.json"
+    target=PREFIX+(f"successor-recovery-preflight-run008-attempt{ctx.attempt:03}.v1.json" if ctx.stage=="preflight" else
+        f"successor-recovery-dispatch-qualification-run008-attempt{ctx.attempt:03}.v1.json")
+    outputs=[audit,bootstrap_failure,target]+[PREFIX+f"closed-recovery-io-{ctx.stage}-{part}run008-attempt{ctx.attempt:03}.v1.json" for part in ("","setup-")]
+    require(all(not(c.ROOT/name).exists() for name in outputs),"EXCLUSIVE_PREPARATION_AND_BOOTSTRAP_RECORDS")
+    bootstrap_guards=[]
+    def connection(q):
+        witnesses(q,a,policy,connection_attempt=args.connection_attempt)
+        if ctx.stage=="qualify":preflight_audit(q,a,policy,ctx.values["--preflight-attempt"])
+    try:
+        q,bootstrap_policy=closed_bootstrap(c.ROOT,a,lambda:guard,
+            lambda:policy.guard_type(distinct.guard_type(a.Guard),role=ctx.role)(),
+            lambda q:policy_witnesses(q,a,policy),connection,bootstrap_guards)
+    except (ValueError,OSError,KeyError,TypeError,AttributeError) as error:
+        samples=[s for g in bootstrap_guards for s in g.samples]
+        record=dict(state="FAILED_PREPARATION_BOOTSTRAP_NOT_STAGE_OR_NATIVE",stage=ctx.stage,
+            actual_P09_stage_executed=False,actual_Native_or_product_executed=False,accepted_count_delta=0,GO_authorized=False,
+            connection_record=connection_record,cleanup_confirmed=bool(bootstrap_guards) and all(g.cleanup for g in bootstrap_guards),
+            closed_guard_count=sum(g.cleanup for g in bootstrap_guards),constructed_guard_count=len(bootstrap_guards),
+            elapsed_seconds=time.monotonic()-started,CPU_max=max((s["system_cpu_percent"] for s in samples),default=None),
+            RAM_min=min((s["available_ram_percent"] for s in samples),default=None),error_type=type(error).__name__)
+        if error.args and type(error.args[0]) is str and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{1,160}",error.args[0]):record["error_code"]=error.args[0]
+        publisher.publish(c.ROOT,bootstrap_failure,record,a)
+        print(json.dumps(record));return 1
     routed=route_loader(c.ROOT,metadata_loader(envelope.namespace_bundle),policy,a,ctx.role,instances,
         connection_attempt=args.connection_attempt,
         audit_attempt=ctx.values["--preflight-attempt"] if ctx.stage=="qualify" else None,envelope=envelope)
@@ -387,8 +430,6 @@ def main():
     proxy=NS(**{**vars(envelope),"namespace_bundle":routed})
     code=execute(entry,proxy,remainder)
     require(absent() and instances and all(g.cleanup for g in instances),"NO_NATIVE_AND_ALL_STAGE_GUARDS_CLOSED")
-    target=PREFIX+(f"successor-recovery-preflight-run008-attempt{ctx.attempt:03}.v1.json" if ctx.stage=="preflight" else
-        f"successor-recovery-dispatch-qualification-run008-attempt{ctx.attempt:03}.v1.json")
     target_pin=None
     if (c.ROOT/target).is_file():
         data=(c.ROOT/target).read_bytes();target_pin=dict(path=target,bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
@@ -397,6 +438,7 @@ def main():
         accepted_count_delta=0,GO_authorized=False,actual_Native_or_product_executed=False,
         Native008_absent_before_after=True,cleanup_confirmed=True,
         guard_summaries=[g.preparation_CPU.summary() for g in instances],
+        bootstrap_policy_validation=bootstrap_policy,bootstrap_closed_guard_count=len(bootstrap_guards),
         bootstrap_source_pins=list(q.snapshots.values()),bootstrap_fresh_inputs=len(q.snapshots),
         bootstrap_final_fresh_hashes=q.final_fresh_hashes),a)
     print(json.dumps(dict(preparation_policy_audit=audit,original_stage_exit_code=code,guards=len(instances))))

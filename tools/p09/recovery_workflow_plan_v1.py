@@ -44,7 +44,8 @@ def discover_attempts(exists):
     consumed=[]
     for attempt in range(1,MAX_PREFLIGHT_RECORDS+1):
         paths=[PREFIX+f"{kind}run008-attempt{attempt:03}.v1.json" for kind in (
-            "successor-recovery-preflight-","closed-recovery-io-preflight-setup-","closed-recovery-io-preflight-")]
+            "successor-recovery-preflight-","closed-recovery-io-preflight-setup-","closed-recovery-io-preflight-",
+            "preparation-attributed-bootstrap-preflight-")]
         if any(exists(path) for path in paths):consumed.append(attempt)
     last=max(consumed,default=0)
     return dict(consumed_attempts=consumed,latest_attempt=last or None,
@@ -128,6 +129,71 @@ def budget_lower_bound(reader):
         future_pref_qualification_and_other_inputs_not_included=True,metadata_pins=refs,GO_authorized=False)
 
 
+def dispatch_budget_lower_bound(reader,attempt):
+    """Mandatory current closure additions only, never execution admission."""
+    import current_stored_runtime_scope as scope
+    stages(attempt)
+    pins={};records={};added=[]
+    def load(name,expected=None):
+        if name not in records:
+            raw=bytearray()
+            for chunk in reader.chunks(name):
+                raw.extend(chunk)
+                if len(raw)>2*1048576:raise ValueError("DISPATCH_COST_RECORD_BOUND")
+            pins[name]=dict(path=name,bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+            records[name]=json.loads(raw,object_pairs_hook=unique_json)
+        if expected is not None and pins[name]!=expected:raise ValueError("EXACT_DISPATCH_COST_METADATA_PIN")
+        return records[name]
+    def signature(name):
+        if name not in pins:pins[name]=reader.signature(name)
+        return pins[name]
+    pref_name=PREFIX+f"successor-recovery-preflight-run008-attempt{attempt:03}.v1.json"
+    pref=load(pref_name)
+    if not(pref["state"]=="PASS_CURRENT_SUCCESSOR_WHOLE_METADATA_PREFLIGHT_NOT_NATIVE_PRODUCT_OR_ACCEPTANCE"
+        and pref["index"]==165 and pref["physical_run"]==8 and pref["cleanup_confirmed"] is True
+        and pref["fresh_inputs"]==pref["final_fresh_hashes"]>0 and pref["GO_authorized"] is False):raise ValueError("CLOSED_PREFLIGHT_BEFORE_DISPATCH_COST")
+    audit_name=PREFIX+f"preparation-attributed-preflight-run008-attempt{attempt:03}.v1.json"
+    audit=load(audit_name)
+    if not(audit["original_stage_record_pin"]==pins[pref_name] and audit["original_stage_exit_code"]==0
+        and audit["cleanup_confirmed"] is True and audit["actual_Native_or_product_executed"] is False):raise ValueError("EXACT_SUCCESSFUL_PREFLIGHT_COST_AUDIT")
+    rows=scope.pins(pref["complete_physical_source_scope"]);before=declared_cost(rows,10)
+    if not math.isclose(before["predicted_seconds"],pref["complete_runtime_budget"]["predicted_runtime_combined_seconds"],abs_tol=1e-8):raise ValueError("EXACT_FULL_PREFLIGHT_COST_FORMULA")
+    graph_name=PREFIX+"successor-connections008.v10.json"
+    graph=load(graph_name,rows[graph_name]);manifest=load(graph["manifest_pin"]["path"],graph["manifest_pin"])
+    pairs=manifest["descriptors"];forward={r["semantic_original_pin"]["path"]:r for r in pairs}
+    if len(pairs)!=68 or len(forward)!=68 or len({r["physical_envelope_pin"]["path"] for r in pairs})!=68:raise ValueError("BIJECTIVE_CURRENT_COST_TABLE68")
+    def add(name,expected=None):
+        pin=signature(name)
+        if expected is not None and pin!=expected:raise ValueError("EXACT_DISPATCH_COST_REQUIRED_PIN")
+        if name in forward:
+            row=forward[name]
+            if pin!=row["semantic_original_pin"]:raise ValueError("EXACT_DISPATCH_COST_SEMANTIC_PIN")
+            pin=row["physical_envelope_pin"];name=pin["path"]
+        if name in rows:
+            if rows[name]!=pin:raise ValueError("NO_DISPATCH_COST_CONFLICT_REBASE")
+        else:rows[name]=pin;added.append(pin)
+    add(pref_name);add(audit_name)
+    host_pin=dict(path="tools/p09/prepared_run_closure_v1.py",bytes=23900,
+        sha256="c159da53076f5bb88dce252db163f82a1f1d71522c9dd248349ca615dc84e672")
+    if signature(host_pin["path"])!=host_pin:raise ValueError("FROZEN_DISPATCH_COST_ADMISSION_SOURCE")
+    import prepared_run_closure_v1 as host
+    import accept_case112_current_epoch as api
+    for run in (4,5,6):
+        name=PREFIX+f"prepared-only-closure-run{run:03}-attempt007.v1.json"
+        row=load(name);host.validate(row,165,run,api)
+        if reader.exists(PREFIX+f"current-runtime-run{run:03}.v1.json"):raise ValueError("NATIVE_STILL_ABSENT_FOR_PREPARATION_CLOSURE")
+        add(name)
+        for key in ("worker_entry_pin","graph_pin","capsule_pin","bootstrap_pin"):add(row[key]["path"],row[key])
+        inventory=host.producer_inventory(row)
+        for path in (host.CLOSURE_SOURCE,host.CLOSURE_TEST):add(path,inventory[path])
+    result=declared_cost(rows,10)
+    return dict(scope="MANDATORY_CURRENT_DISPATCH_CLOSURE_LOWER_BOUND_NOT_GO",preflight_pin=pins[pref_name],
+        base=before,mandatory_lower_bound=result,added_inputs=added,
+        cannot_fit_unchanged_600_even_before_future_inputs=result["predicted_seconds"]>=600,
+        future_qualification_setup_and_other_inputs_not_included=True,
+        metadata_pins=list(pins.values()),actual_full_scope_requalification_required=True,GO_authorized=False)
+
+
 def unique_json(pairs):
     result={}
     for key,value in pairs:
@@ -153,7 +219,11 @@ def analyze(rows,read_json,signature):
                 number=stage["path"].rsplit("-attempt",1)[1].split(".",1)[0]
                 setup_path=PREFIX+f"closed-recovery-io-preflight-setup-run008-attempt{number}.v1.json"
                 try:setup=read_json(setup_path)
-                except FileNotFoundError:pass
+                except FileNotFoundError:
+                    bootstrap_path=PREFIX+f"preparation-attributed-bootstrap-preflight-run008-attempt{number}.v1.json"
+                    try:bootstrap=read_json(bootstrap_path)
+                    except FileNotFoundError:pass
+                    else:item.update(status="BOOTSTRAP_RECORD_NO_PREFLIGHT",bootstrap_path=bootstrap_path,error_code=safe_error(bootstrap))
                 else:
                     failed=type(setup) is dict and type(setup.get("state")) is str and setup["state"].startswith("FAILED_")
                     item.update(status="FAILED_SETUP_NO_PREFLIGHT" if failed else "SETUP_EXISTS_PREFLIGHT_MISSING",
@@ -239,7 +309,14 @@ def main():
     parser=argparse.ArgumentParser();parser.add_argument("--preflight-attempt",type=int)
     parser.add_argument("--details",action="store_true")
     parser.add_argument("--budget-lower-bound",action="store_true")
+    parser.add_argument("--dispatch-budget-lower-bound",action="store_true")
     args=parser.parse_args();reader=BoundedReader(c.ROOT);started=time.monotonic()
+    if args.dispatch_budget_lower_bound:
+        if args.preflight_attempt is None:raise ValueError("EXPLICIT_PASS_PREFLIGHT_FOR_DISPATCH_COST")
+        report=dispatch_budget_lower_bound(reader,args.preflight_attempt)
+        report.update(elapsed_seconds=time.monotonic()-started,actual_bytes_read=reader.bytes)
+        if not args.details:report["metadata_pin_count"]=len(report.pop("metadata_pins"))
+        print(json.dumps(report,ensure_ascii=True));return 0
     history=discover_attempts(reader.exists)
     chosen=args.preflight_attempt if args.preflight_attempt is not None else history["latest_attempt"] or 1
     report=analyze(stages(chosen),reader.json,reader.signature)

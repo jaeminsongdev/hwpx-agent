@@ -4,6 +4,26 @@ import recovery_workflow_plan_v1 as m
 
 
 class Tests(unittest.TestCase):
+    def test_current_dispatch_mandatory_lower_bound_exceeds_deadline_without_go(self):
+        import conservative_maintenance as c
+        result=m.dispatch_budget_lower_bound(m.BoundedReader(c.ROOT),10)
+        self.assertTrue(result["cannot_fit_unchanged_600_even_before_future_inputs"])
+        self.assertAlmostEqual(result["mandatory_lower_bound"]["predicted_seconds"],600.5304249082293)
+        self.assertEqual(result["mandatory_lower_bound"]["inputs"],3077)
+        self.assertEqual(len(result["added_inputs"]),11)
+        self.assertTrue(result["future_qualification_setup_and_other_inputs_not_included"])
+        self.assertFalse(result["GO_authorized"])
+
+    def test_dispatch_cost_refuses_changed_required_packet_pin(self):
+        import conservative_maintenance as c
+        class Tampered(m.BoundedReader):
+            def signature(self,path):
+                pin=super().signature(path)
+                if "successor-worker-capsule005.compact.v9" in path:pin=dict(pin,bytes=pin["bytes"]+1)
+                return pin
+        with self.assertRaisesRegex(ValueError,"EXACT_DISPATCH_COST_REQUIRED_PIN"):
+            m.dispatch_budget_lower_bound(Tampered(c.ROOT),10)
+
     def cost_fixture(self):
         return {path:dict(path=path,bytes=size,sha256="a"*64) for path,size in (
             ("target/public.exe",1048576),("fixtures/public.bin",2097152))}
@@ -52,6 +72,8 @@ class Tests(unittest.TestCase):
             m.PREFIX+"closed-recovery-io-preflight-setup-run008-attempt003.v1.json"}
         result=m.discover_attempts(existing.__contains__)
         self.assertEqual(result,dict(consumed_attempts=[1,3],latest_attempt=3,next_unused_attempt=4))
+        existing.add(m.PREFIX+"preparation-attributed-bootstrap-preflight-run008-attempt009.v1.json")
+        self.assertEqual(m.discover_attempts(existing.__contains__)["next_unused_attempt"],10)
 
     def test_missing_whole_preflight_distinguishes_failed_or_pending_setup(self):
         stage=m.stages(3)[-1];stage=dict(stage,dependencies=())
@@ -63,6 +85,12 @@ class Tests(unittest.TestCase):
             result=m.analyze([stage],read,lambda path:None)
             self.assertEqual(result["stages"][0]["status"],expected)
             self.assertFalse(result["GO_authorized"])
+        def read_bootstrap(path):
+            if "bootstrap-preflight" in path:return dict(state="FAILED_PREPARATION_BOOTSTRAP_NOT_STAGE_OR_NATIVE",error_code="CPU_STOP")
+            raise FileNotFoundError
+        result=m.analyze([stage],read_bootstrap,lambda path:None)
+        self.assertEqual(result["stages"][0]["status"],"BOOTSTRAP_RECORD_NO_PREFLIGHT")
+        self.assertFalse(result["GO_authorized"])
 
     def test_consumed_slots_are_bounded_and_error_values_are_not_echoed(self):
         self.assertEqual(m.discover_attempts(lambda path:False)["next_unused_attempt"],1)

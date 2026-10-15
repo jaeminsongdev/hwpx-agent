@@ -25,6 +25,56 @@ def old_fixture():
 
 
 class Tests(unittest.TestCase):
+    def bootstrap_fixture(self,*,fail_finish=None,incomplete=None):
+        events=[]
+        class Guard:
+            def __init__(self,tag):self.tag=tag;self.cleanup=False
+            def acquire(self):events.append((self.tag,"acquire"))
+            def check(self,force=False):events.append((self.tag,"check",force))
+            def close(self):self.cleanup=True;events.append((self.tag,"close"))
+        class Reader:
+            def __init__(self,root,checkpoint):
+                self.tag=checkpoint.__self__.tag;self.snapshots={};self.final_fresh_hashes=0
+            def finish(self):
+                events.append((self.tag,"finish"))
+                if self.tag==fail_finish:raise ValueError("FRESH_CLOSE_STOP")
+                self.final_fresh_hashes=0 if self.tag==incomplete else len(self.snapshots)
+        def verify(q):
+            events.append((q.tag,"verify"))
+            q.snapshots[q.tag]=dict(path=q.tag,bytes=1,sha256="a"*64)
+        first=Guard("policy");second=Guard("connection")
+        def preparation():
+            self.assertTrue(first.cleanup);events.append(("construct","connection"));return second
+        return events,NS(AcceptanceReader=Reader),first,second,preparation,verify
+
+    def test_bootstrap_closes_policy_before_candidate_and_rechecks_all_connection_inputs(self):
+        events,api,first,second,preparation,verify=self.bootstrap_fixture();guards=[]
+        q,proof=MODULE.closed_bootstrap(None,api,lambda:first,preparation,verify,verify,guards)
+        self.assertEqual(guards,[first,second]);self.assertTrue(all(g.cleanup for g in guards))
+        self.assertLess(events.index(("policy","close")),events.index(("construct","connection")))
+        self.assertIn(("policy","finish"),events);self.assertIn(("connection","finish"),events)
+        self.assertIn(("policy","check",True),events);self.assertIn(("connection","check",True),events)
+        self.assertEqual(q.final_fresh_hashes,1);self.assertEqual(set(q.snapshots),{"connection"})
+        self.assertEqual(proof["fresh_inputs"],proof["final_fresh_hashes"])
+        self.assertTrue(proof["original_guard_closed_before_preparation_guard"])
+        self.assertFalse(proof["Native_policy_changed"]);self.assertFalse(proof["automatic_retry_or_resume"])
+
+    def test_bootstrap_policy_error_never_constructs_candidate_and_always_closes_original(self):
+        events,api,first,second,preparation,verify=self.bootstrap_fixture();guards=[]
+        def fail(q):raise ValueError("ORIGINAL_POLICY_STOP")
+        with self.assertRaisesRegex(ValueError,"ORIGINAL_POLICY_STOP"):
+            MODULE.closed_bootstrap(None,api,lambda:first,preparation,fail,verify,guards)
+        self.assertEqual(guards,[first]);self.assertTrue(first.cleanup)
+        self.assertNotIn(("construct","connection"),events)
+
+    def test_bootstrap_incomplete_or_stopped_fresh_closure_is_not_a_pass_or_resume(self):
+        for options in (dict(incomplete="policy"),dict(fail_finish="connection")):
+            events,api,first,second,preparation,verify=self.bootstrap_fixture(**options);guards=[]
+            with self.assertRaises(ValueError):MODULE.closed_bootstrap(None,api,lambda:first,preparation,verify,verify,guards)
+            self.assertTrue(all(g.cleanup for g in guards))
+            self.assertEqual(len(guards),1 if options.get("incomplete")=="policy" else 2)
+            self.assertEqual(events.count(("construct","connection")),0 if len(guards)==1 else 1)
+
     def test_new_finite_preflight_records_do_not_extend_qualification_or_native_scope(self):
         args=arguments();args[args.index("--attempt")+1]="9"
         self.assertEqual(MODULE.context(args).attempt,9)
@@ -97,10 +147,42 @@ class Tests(unittest.TestCase):
             argv=sys.argv
             try:sys.argv=["io"]+["--case","165","--run","8","--attempt","9","--preflight"];return revised()
             finally:sys.argv=argv
-        with self.assertRaisesRegex(ValueError,"CLOSED_PREPARATION_CONTEXT"):execute(original)
-        self.assertEqual(before,[])
-        with self.assertRaises(NoStage):execute(prepared)
+        from pathlib import Path
+        real_exists=Path.exists
+        def unused_output(path):
+            if path.parent==a.c.ROOT/"implementation/p09/evidence" and path.name.startswith("p09-361-case165-") \
+                    and path.name.endswith(("-attempt009.v1.json","-attempt010.v1.json")):return False
+            return real_exists(path)
+        # Record IDs may now have immutable real evidence. Only the isolated
+        # pre-Guard metadata fixture sees empty output paths; no write can run.
+        with patch.object(Path,"exists",unused_output):
+            with self.assertRaisesRegex(ValueError,"CLOSED_PREPARATION_CONTEXT"):execute(original)
+            self.assertEqual(before,[])
+            with self.assertRaises(NoStage):execute(prepared)
         self.assertEqual(before,[True])
+        # Full frozen driver overlays must retain the recovery namespace too.
+        real_windows=a.c.Windows;captured=[]
+        def at_guard():
+            frame=sys._getframe(1)
+            for _ in range(12):
+                if frame is None:break
+                if frame.f_code.co_filename.replace("\\","/").endswith("closed_prebody_preparation_io_v1.py") and "setup_name" in frame.f_locals:
+                    captured.append((frame.f_locals["setup_name"],frame.f_locals["target"]))
+                    raise NoStage()
+                frame=frame.f_back
+            return real_windows()
+        base=MODULE.metadata_loader(ENVELOPE.namespace_bundle)
+        routed=MODULE.route_loader(a.c.ROOT,base,POLICY,a,"whole_metadata_preflight",[],require_connection=False,envelope=ENVELOPE)
+        components=MODULE.window_components(a.c.ROOT,ENVELOPE);window=components.post_product_recovery_window_v1
+        routed,_=components.recovery_dispatch_window_v1.connect_loader(routed,ENVELOPE,
+            components.post_product_recovery_connection_v1,window,(a.c.ROOT/window.WINDOW_PIN["path"]).read_bytes(),MODULE.bind_envelope)
+        proxy=NS(**{**vars(ENVELOPE),"namespace_bundle":routed})
+        with patch.object(Path,"exists",unused_output),patch.object(a.c,"Windows",side_effect=at_guard),patch.object(a.Guard,"acquire",side_effect=AssertionError("NO_ACTUAL_STAGE")), \
+                patch("subprocess.Popen",side_effect=AssertionError("NO_CHILD")),patch("subprocess.run",side_effect=AssertionError("NO_CHILD")):
+            with self.assertRaises(NoStage):MODULE.execute(ENTRY_MODULE,proxy,["--case","165","--run","8","--attempt","10","--code-attempt","1","--preflight"])
+        self.assertEqual(len(captured),1)
+        self.assertEqual(captured[0][0],MODULE.PREFIX+"closed-recovery-io-preflight-setup-run008-attempt010.v1.json")
+        self.assertEqual(captured[0][1],MODULE.PREFIX+"successor-recovery-preflight-run008-attempt010.v1.json")
 
     def checkpoint_fixture(self):
         import flat_current_queue_metadata_runtime as runtime

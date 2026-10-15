@@ -4,17 +4,41 @@
 
 2026-10-15 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. run008 제품 실행은 아직 시작하지 않았다.
 
-### 유한한 후속 준비 기록과 현재 자격
+### Bootstrap 분리와 현재 통과한 사전검사
+
+`preparation_attributed_entry_v1.closed_bootstrap`은 짧은 고정 정책 증명을 원75% Guard에서 먼저 닫은 뒤 그 Guard를 정리하고, 준비 Guard를 새로 만들어 전체 연결 소스를 다시 확인한다. 앞 단계의 소스 확인·마지막 hash·정리 중 하나라도 실패하면 뒤 Guard를 만들지 않는다. 두 소유 sampler/뮤텍스는 직렬이며 Native의 보호기는 바꾸지 않았다. Bootstrap 실패는 `preparation-attributed-bootstrap-{stage}-run008-attemptNNN`으로 별도 기록하고, planner는 이를 실제 사전검사 실행과 구분하며 해당 슬롯을 소비한 것으로 처리한다.
+
+분리 후009는 원 Guard의 정책24/24와 준비 Guard의 연결78/78을 통과했지만, 실제 준비는 `EXPANDED_CLOSED_PREPARATION_EXACT_PARENT_CODE_CONTEXT`로 실패했다. 5.783864초·CPU 최고35.48%·cleanup=True였으며 원인은 번호 확장 래퍼의 globals가 기존 경로 변환과 달랐던 것이다. `closed-io2-` 접두사로 나온 setup·diagnostic과 실패 결과·audit는 보존했다. 래퍼가 동일한 원 함수 환경을 공유하도록 수정하고, 전체 동결 진입점에서 실제 setup/결과 경로가 복구 접두사를 사용하는지 Guard 생성 전에 중단하는 회귀를 추가했다. 이 경로 테스트의 출력 존재 여부는 격리 fixture이며 실제 Guard acquire와 제품/자식은 차단한다. 실제 실행의 덮어쓰기 금지는 그대로다.
+
+현재 `preparation-attributed-connection-code010`은30계약·fresh77/final77·CPU 최고39.58%·가용 RAM 최저21.25828%·cleanup=True로 통과했다. 선행 CODE009와 모든 실패 원본은 보존하며 현재 소스 자격에 섞지 않는다.
+
+실제 `successor-recovery-preflight-run008-attempt010`은 입력3066·Rust787·helper59·fresh563/final563, 119.613973초·CPU 최고89.74%·가용 RAM 최저20.43520%·cleanup=True로 통과했다. Bootstrap 정책24/24·연결78/78·정리된 Guard2개가 audit에 기록됐다. 준비 실행의75% 경고는 총4개였지만 지속 중단 조건에는 도달하지 않았으며90% 이상을 허용한 결과는 아니다. 이 통과 결과는 현재 소스로 보존한다. 비용 모델은598.436290초이며 실제 실행 시간이나 Native 완료 보장은 아니다.
+
+이어 dispatch003 진입은8.652809초의 bootstrap에서 시스템 CPU98.41%·가용 RAM22.72324%로 `STOP_PREPARATION_SYSTEM_PRESSURE90`이 발생했다. Guard2개 모두 정리됐고 실제 dispatch stage와 제품/Native는 시작하지 않았다. 원본은 `preparation-attributed-bootstrap-qualify-run008-attempt003.v1.json`이며, 이를 dispatch 자격 실패 본문이나 성공으로 바꾸지 않는다.
+
+종료 후 별도2.058초의 일부 프로세스 관측에서는 Git2개가 기계 전체 기준6.075%, pwsh8개가3.037%였고 관측 대상 Python6개는0%였다. 전체 프로세스 coverage가 아니며 baseline 없는 새 프로세스도1개여서 앞선98.41%의 원인 귀속 자료는 아니다. 다른 프로세스나 설정은 변경하지 않았다. 이후 직접 실행하는 셸은 invocation 단위 `login=False`로 `-NoProfile`을 확인했다. 기존 프로필 파일은0개여서 이 변경이 이번 CPU 문제를 해결했다는 주장은 하지 않는다.
+
+### Dispatch 필수 비용 하한과 다음 최적화
+
+CPU가 회복되더라도 같은 dispatch를 즉시 반복하지 않는다. `recovery_workflow_plan_v1.py --preflight-attempt 10 --dispatch-budget-lower-bound`는 실제 통과한010 scope의 원 비용 공식을 대조하고, 원 `prepared_run_closure_v1` admission이 반드시 읽는 closure4..6·packet·생산자/worker source와 preflight/audit를 현재68개 manifest의 의미/물리 대응으로 합친다. 각 exact pin·원 closure 판정·Native4..6 부재를 확인하며 큰 EXE를 다시 읽거나 제품을 실행하지 않는다.
+
+기존3066입력의598.436290초에 필수11개 입력을 추가한 정책상 비용 하한은3077입력·600.530425초다. 미래 qualification setup 등은 포함하지 않았는데도 원600초를 초과한다. 이것은 실제 runtime 시간의 실측 하한이 아니라 기존 직렬 acquisition·두 실제 읽기·여유60초·제품10초·decoder5 등의 원 비용 모델에 필요한 예약의 하한이다. 원 guard나 여유를 줄여 통과시키지 않는다.
+
+관련21개 회귀가 통과했고, 필수 packet pin 변조도 거부했다. `dispatch-cost-lower-bound-pref010.v1.json`은 약0.126초·1,616,140바이트 읽기로 계산한 metadata pin20개와 별도 분석 코드 pin을 보존한다. GO=False이며 제품/전체 자격 증거가 아니다. Planner 자체와 테스트는 현재010 물리 입력 scope에 포함되지 않으므로 이번 읽기 전용 진단 변경은 현재 사전검사 소스를 바꾸지 않는다.
+
+다음은 큰 불변 증거의 물리적 표현을 무손실로 줄이는 방안을 검토하는 작업이다. 원본 파일·전체 의미 입력·부모/worker의 동일한 매핑·두 실제 바이트 경계·독립 판정기를 모두 보존해야 한다. 원1/2MiB 읽기 속도·acquisition14·600초·여유60초를 높이거나 줄이지 않는다. 표현이 바뀌면 그 변경에 의존하는 source/worker/전체 자격은 다시 닫아야 하며, 현재 Native008은 아직 시작할 수 없다.
+
+### 유한한 후속 준비 기록과 선행 자격 이력
 
 준비 슬롯1..8의 원본을 보존한 채 사전검사 기록과 연결 CODE 기록의 선택 범위를1..16으로 명시적으로 확장했다. Dispatch 자격 번호·Native 실행 번호는1..8, 현재 Native physical run은8, 제품 CODE 참조는1로 유지한다. `metadata_identifier_policy`를 새 연결 증거와 admission에 명시했으며 자동 재시도와 기존 파일 덮어쓰기는 허용하지 않는다.
 
 동결 IO·level6·dispatch 함수는 metadata 참조를 비교하는 정확한 내부 generator의 상한만 투영하고, 전체 재귀 code inverse가 원본을 복구하는지 확인한다. 컨트롤러 destination은 preflight ID9..16만 추가 허용하며 CODE ID9와 Native run9는 계속 거부한다. 이 변경은 CPU/RAM·600초·입력 읽기·정리 조건을 바꾸지 않는다. 원본 준비 함수는9번을 거부하고, 연결된 실제 준비 함수는9번을 받아들인 뒤 Guard 생성 직전에 테스트가 중단되는 회귀로 확인했다. 테스트에서 실제 Guard·sampler·제품·자식·준비 산출물은 생성하지 않았다.
 
-현재 `preparation-attributed-connection-code008`은27계약·fresh77/final77·CPU 최고45.51%·가용 RAM 최저19.48759%·cleanup=True로 통과했다. 읽기 전용 planner도1..16을 조회하고19개 회귀를 통과했다. 최신 조회는194개 입력·13,089,672바이트·0.091728초이며 기존9개 단계를 재실행 불필요 후보로 유지하고 다음 준비 번호9를 반환했다.
+당시 `preparation-attributed-connection-code008`은27계약·fresh77/final77·CPU 최고45.51%·가용 RAM 최저19.48759%·cleanup=True로 통과했다. 읽기 전용 planner도1..16을 조회하고 당시19개 회귀를 통과했다. 당시 조회는194개 입력·13,089,672바이트·0.091728초이며 기존9개 단계를 재실행 불필요 후보로 유지하고 다음 준비 번호9를 반환했다.
 
-실제 preflight009 진입 명령은8.016초에 `STOP_TERMINAL_METADATA_WARNING_BEFORE_MORE_WORK`로 종료됐다. 위치는 `preparation_attributed_entry_v1.main`의 연결 소스 bootstrap 재확인이며 실제 사전검사나 새 준비 정책의90% 중단이 아니다. 정확한 CPU 표본과 별도 cleanup receipt는 이 CLI 출력에 없으므로 수치를 추정하거나 전체 검증 PASS를 만들지 않는다. 코드의 `finally: guard.close()` 경로는 유지돼 있다. 009의 setup·사전검사 결과와 Native008 파일이 모두 없음을 별도로 확인했다. 따라서 현재 전체 사전검사009는 NOT_RUN이고 Native008도 미시작이다.
+첫 preflight009 진입 명령은8.016초에 `STOP_TERMINAL_METADATA_WARNING_BEFORE_MORE_WORK`로 종료됐다. 위치는 당시 `preparation_attributed_entry_v1.main`의 연결 소스 bootstrap 재확인이며 실제 사전검사나 새 준비 정책의90% 중단이 아니다. 정확한 CPU 표본과 별도 cleanup receipt는 이 CLI 출력에 없으므로 수치를 추정하거나 전체 검증 PASS를 만들지 않는다. 당시009의 setup·사전검사 결과와 Native008 파일이 모두 없음을 확인했다. 후속 bootstrap 분리 뒤 실제009와010 실행 결과는 첫 절을 따른다.
 
-다음은 기존75% bootstrap을 무조건 제거하는 것이 아니라, 먼저 고정된 준비 정책의 증명을 짧은 원 Guard 아래에서 닫고 전체 연결 재검증을 검증된 준비 Guard 아래에서 수행할 수 있는지 설계·검증하는 작업이다. 원 정책·연결 증거의 실제 전후 재확인은 생략하지 않고 Native 보호기는 그대로 둔다. 현재 전체600초 비용과 Native helper64 자격도 여전히 미확인이다.
+이 시점에는 기존75% bootstrap을 무조건 제거하지 않고 짧은 정책 증명과 전체 연결 재확인을 분리하는 설계가 다음 작업이었다. 그 구현과 현재 비용 판정은 첫 절을 따른다. 원 정책·연결 증거의 실제 전후 재확인과 Native 보호기는 유지하며 Native helper64 전체 자격은 아직 없다.
 
 ### 재로딩 연결 수정과 선행 자격 이력
 
@@ -22,7 +46,7 @@
 
 준비 전용 연결에서 발견한 두 누락도 수정했다. 첫째, 원 사전검사의 실제 `MetadataCheckpoint`가 별도75% 즉시중단을 유지하고 있었다. 실제 입력 binding의 namespace attribute만 준비용 facade로 연결하고, 원10개 계약의 함수 globals와 기본 Native class는 그대로 유지했다. 둘째, dispatch가 새로 로딩한 컨트롤러의 Guard가 준비용 정책을 받지 못했다. 준비 모드에서만 명시적 controller 변환을 전달하고, Native의 기본 변환은 비워 둔다. 실제 재로딩 회귀는 준비 역할의 Guard와 정리를 함께 확인한다.
 
-당시 소스의 `preparation-attributed-connection-code007`은23계약·fresh76/final76·CPU 최고72.25%·가용 RAM 최저21.79473%·cleanup=True로 통과했다. CODE004의 실패, 선행 CODE005·006과 모든 실행 원본은 그대로 보존한다. 후속 metadata 번호 범위 변경으로 현재 자격은 위008을 기준으로 하며 소스가 달라진 과거 PASS를 재사용하지 않는다.
+당시 소스의 `preparation-attributed-connection-code007`은23계약·fresh76/final76·CPU 최고72.25%·가용 RAM 최저21.79473%·cleanup=True로 통과했다. CODE004의 실패, 선행 CODE005·006과 모든 실행 원본은 그대로 보존한다. 후속 변경 뒤 현재 자격은 첫 절을 기준으로 하며 소스가 달라진 과거 PASS를 재사용하지 않는다.
 
 | 실행 접미사 | 실제 결과와 경계 |
 | --- | --- |
