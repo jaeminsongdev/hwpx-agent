@@ -1,0 +1,54 @@
+{
+  "state": "FAILED_SUCCESSOR_DISPATCH_CONSTRUCTION_NOT_ADOPTED",
+  "index": 165,
+  "physical_run": 4,
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "product_or_Native_executed": false,
+  "error_type": "ValueError",
+  "error_code": "CURRENT_SUCCESSOR_CONNECTION_CLOSED_WORKER_HINT",
+  "failure_frames": [
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "main",
+      "line": 254
+    },
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "construct",
+      "line": 149
+    },
+    {
+      "file": "current_queue_successor_runtime.py",
+      "function": "reconstruct_worker_graph",
+      "line": 68
+    },
+    {
+      "file": "current_queue_successor_runtime.py",
+      "function": "validate_worker_hint",
+      "line": 45
+    },
+    {
+      "file": "current_queue_successor_connections.py",
+      "function": "require",
+      "line": 25
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 54.86622219999845,
+  "CPU_max": 67.86,
+  "RAM_min": 24.649492821277047,
+  "terminal_resource_sample": {
+    "system_cpu_percent": 37.04,
+    "available_ram_percent": 25.347742476915354,
+    "commit_used_percent": 42.84353111092898,
+    "parent_cpu_machine_percent": 0.5859329297224536,
+    "parent_private_mib": 51.0546875,
+    "parent_private_percent": 0.16024236197486758
+  },
+  "metadata_progress": {
+    "fresh_inputs": 495,
+    "actual_read_passes": 510,
+    "actual_bytes_read": 53990010
+  }
+}

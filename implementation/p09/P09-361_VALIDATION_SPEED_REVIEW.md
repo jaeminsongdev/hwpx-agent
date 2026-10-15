@@ -493,3 +493,17 @@ current_queue_closed_metadata_runtime_v6은 frozen V5 실행 준비를 재사용
 factory003은 원11계약 통과 후 같은 사례의 source alias를 거부했다. 원 함수가 독자 생성 전에 binding import를 확정하므로 독자 생성 시의 연결 변경이 실행 중인 함수의 import를 바꾸지 못한 것이 원인이다. 준비 graph와 V6 source는 보존했다. closed_prebody_factory_admission_fix_v1은 import를 먼저 연결하되 실제 독자의 VerifiedPolicy가 생긴 후에만 Binding을 만들며 검사를 생략하지 않는다. factory004는11계약·fresh94/final94·28.829초·CPU38.96%·가용RAM39.290%·cleanup=True로 통과했다. 실제 별도 worker CLI는 GO를 받지 않았고 원 GO 거부를 확인했으며 과거 runtime/authority open은0이었다. 제품 실행도0이다.
 
 CODE run004-attempt001은 원74계약·기본helper60/64·fresh145/final145·29.186초·CPU28.97%·가용RAM39.617%·cleanup=True로 통과했다. 이후145개 소스 pin도 현재 파일과 일치했다. 다음은 기존 준비 IO 최적화를 이 경로에 연결한 whole preflight·진입 비용 자격이다. Native·독립전체리뷰·승인은 아직 NOT_RUN이며 V6은 native/review/accept CLI를 거부한다. 공식158/249·잔여91·next165·generation53 및 P09/A12/A13 OPEN·목표ACTIVE를 유지한다. 근거는closed-prebody-runtime-code001/002·successor-connections004.v4·closed-manifest004·worker-capsule/bootstrap004·factory003/004·code-run004-attempt001이다.
+
+## 준비 IO 연결 후 전체 preflight 결과
+
+closed_prebody_preparation_io_v1은 현재 해시가 일치한 준비35·상태조회10·workspace17 계약 구성요소를 재사용한다. 설정 단계에도 workspace와 fresh no-follow stat을 적용하고, 실제 단계에는 요청마다 물리읽기·복원·5초 decoder·원 Rust 목록 조회와 최종 재해시를 유지한다. 최초 setup001의 빈 pin union 오류와 setup002의CPU79.1% 중단을 보존했다. pref003/005의 KeyError는 원 전체 callback185행에서 찾았다. graph004.v4의 source 목록에 원 STEP 도출 소스가 없었다. pref004의CPU84.96% 중단 당시 parentCPU0.194%·private53.660MiB였으며 원인 프로세스는 확정하지 않는다.
+
+원 graph004.v4와 V6 source는 변경하지 않았다. 원 selection001에 봉인된 STEP 소스·시험을 fresh 검증하고 원 함수로 STEP을 재도출한 connections004.v6와 bootstrap004.v6를 별도 발행했다. 기존 source pin을 모두 유지하고119개 final hash와 cleanup=True를 확인했다. 실제 capsule은 기존 것을 사용한다. graph/bootstrap receipt suffix만 전체 code inverse가 확인되는 metadata projection으로 연결하며 원 callback·입력 판정·물리 바이트·한도 검사는 바꾸지 않는다.
+
+현재 pref004-006은 원10계약·source3,003개·Rust787개·기본helper63·fresh493/final493·109.453초·CPU59.75%·가용RAM26.251%·cleanup=True로 통과했다. 실제1,009읽기/106,274,376바이트였고45회 fresh 무손실 복원은physical50,155,371바이트에서semantic140,585,062바이트를 복원했다. decoder 작업0.950초/5초·완료45/45·비활성·terminal error 없음이다. Rust predicate1,118회는fresh stat1,118회·file787/directory331·fallback0으로 처리됐다. 이전92.903초 표본보다 입력과 증거가 늘었으므로 전체 시간 단축으로 주장하지 않는다.
+
+진입점 qualification001에서는 dynamic wrapper와 실제 dispatch 함수군의 globals가 달라 새 연결이 실행되지 않았다. closed_preparation_private_entry_v1은 실제 함수군에도 동일한 연결을 등록하며 원 main의 code/defaults/closure를 유지한다. 회귀3계약·fresh6/final6·CPU27.94%·가용RAM41.829%·cleanup=True로 검증했다. qualification002..004는 원 실제 helper 한도가 거부했고004의 계측은default61/actual66이었다. 고정 source의 private 의존성, 기존 namespace loader 재사용, private 진입점 실행으로 소스 검증을 유지하며 기본모듈 중복을 줄였다. sys.modules 삭제나 실제 source 제외는 하지 않았다.
+
+qualification005는 원6계약과 helper 한도 및 Rust 목록 검사를 통과한 뒤 전체 비용과 shared decoder5 한도로 거부됐다.65.166초·CPU61.89%·가용RAM40.265%·cleanup=True였고 실제529읽기/64,459,191바이트·fresh497/final0이다. 최종 자격 PASS가 아니다. preflight의 예측599.814초는 진입점 전체 비용을 대신하지 않는다. 다음은 원600초·margin60·decoder5·전체 scope를 유지하고 미매핑 과거 영수증을 추가로 무손실 표현하는 등 물리비용을 줄인 후 자격 단계만 재시도하는 것이다. Native/제품·후속 독립 전체 리뷰·승인은 실행하지 않았다. 공식158/249·잔여91·next165·generation53과 P09/A12/A13 OPEN·목표ACTIVE를 유지한다.
+
+근거는closed-io-preflight setup001..006·실행003..006·graph setup001·connections/bootstrap004.v6·private-family-code001·closed-io-qualify setup/실행001..005 및 successor dispatch qualification004-attempt001..005다. 실패와 원본을 모두 보존했다.
