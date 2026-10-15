@@ -29,7 +29,8 @@ def native_context(arguments):
         require(type(value) is str and value.isascii() and value.isdecimal(),"INTEGER_NATIVE_CONTEXT")
         values[flag]=int(value)
     require(values["--case"]==165 and values["--run"]==8 and values["--code-attempt"]==1
-        and all(1<=values[k]<=8 for k in ("--attempt","--preflight-attempt","--qualification-attempt")),"ONLY165_RUN008")
+        and 1<=values["--preflight-attempt"]<=16
+        and all(1<=values[k]<=8 for k in ("--attempt","--qualification-attempt")),"ONLY165_RUN008")
     require(set(remaining[::2])==set(flags),"NO_UNKNOWN_NATIVE_FLAGS")
     return values
 
@@ -150,7 +151,7 @@ def main():
     require(guard.cleanup,"ORIGINAL_BOOTSTRAP_GUARD_CLEANUP")
     recovery=components.post_product_recovery_connection_v1;window=components.post_product_recovery_window_v1
     window_raw=(c.ROOT/window.WINDOW_PIN["path"]).read_bytes()
-    routed,observations=connect_loader(envelope.namespace_bundle,envelope,recovery,window,window_raw,
+    routed,observations=connect_loader(entry.metadata_loader(envelope.namespace_bundle),envelope,recovery,window,window_raw,
         entry.bind_envelope,witness=witness)
     proxy=NS(**{**vars(envelope),"namespace_bundle":routed})
     code=entry.execute(original,proxy,forward)

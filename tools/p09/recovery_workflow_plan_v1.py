@@ -13,10 +13,11 @@ import time
 
 PREFIX="implementation/p09/evidence/p09-361-case165-"
 PLANNING_BOUNDS=("PLANNING_BYTE_BOUND","PLANNING_TIME_BOUND","PLANNING_RECORD_BOUND")
+MAX_PREFLIGHT_RECORDS=16
 
 
 def stages(preflight_attempt=1):
-    if type(preflight_attempt) is not int or not 1<=preflight_attempt<=8:raise ValueError("BOUNDED_PREFLIGHT_ATTEMPT")
+    if type(preflight_attempt) is not int or not 1<=preflight_attempt<=MAX_PREFLIGHT_RECORDS:raise ValueError("BOUNDED_PREFLIGHT_ATTEMPT")
     def stage(name,suffix,state,dependencies=()):return dict(name=name,path=PREFIX+suffix+".v1.json",state=state,dependencies=dependencies)
     rows=[
         stage("window_code","post-product-recovery-window-code006","PASS_RECOVERY_PRODUCT_WINDOW10_CODE_NOT_RUNTIME_CONNECTION_OR_RETRY"),
@@ -41,13 +42,13 @@ def valid_path(path):
 def discover_attempts(exists):
     """A setup-only failure consumes its slot too; never fill old gaps."""
     consumed=[]
-    for attempt in range(1,9):
+    for attempt in range(1,MAX_PREFLIGHT_RECORDS+1):
         paths=[PREFIX+f"{kind}run008-attempt{attempt:03}.v1.json" for kind in (
             "successor-recovery-preflight-","closed-recovery-io-preflight-setup-","closed-recovery-io-preflight-")]
         if any(exists(path) for path in paths):consumed.append(attempt)
     last=max(consumed,default=0)
     return dict(consumed_attempts=consumed,latest_attempt=last or None,
-        next_unused_attempt=last+1 if last<8 else None)
+        next_unused_attempt=last+1 if last<MAX_PREFLIGHT_RECORDS else None)
 
 
 def safe_error(row):

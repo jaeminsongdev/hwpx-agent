@@ -20,7 +20,9 @@ POLICY_SOURCE=dict(path="tools/p09/preparation_attributed_cpu_v1.py",bytes=9869,
 POLICY_CODE=PREFIX+"preparation-attributed-CPU-design-code001.v1.json"
 PROBE=PREFIX+"preparation-attributed-CPU-probe001.v1.json"
 CONNECTION_STATE="PASS_PREPARATION_ATTRIBUTED_CONNECTION_CODE_NOT_NATIVE_OR_STAGE_EXECUTION"
-CONNECTION_CONTRACTS=23
+CONNECTION_CONTRACTS=27
+IDENTIFIER_POLICY=dict(preflight_record_max=16,dispatch_qualification_max=8,connection_record_max=16,
+    Native_physical_run=8,Native_attempt_max=8,code_attempt=1,automatic_retry=False,existing_records_overwritten=False)
 WINDOW_BRIDGE="tools/p09/recovery_dispatch_window_v1.py"
 WINDOW_TEST="tools/p09/tests/test_recovery_dispatch_window_v1.py"
 WINDOW_PINS=[
@@ -49,12 +51,13 @@ def context(arguments):
         require(arguments.count(flag)==1 and arguments.index(flag)+1<len(arguments),"EXACT_PREPARATION_FLAGS")
         raw=arguments[arguments.index(flag)+1]
         require(raw.isascii() and raw.isdecimal(),"INTEGER_PREPARATION_VALUE");values[flag]=int(raw)
-    require(values["--case"]==165 and values["--run"]==8 and 1<=values["--attempt"]<=8
+    limit=16 if modes[0]=="--preflight" else 8
+    require(values["--case"]==165 and values["--run"]==8 and 1<=values["--attempt"]<=limit
         and values["--code-attempt"]==1,"ONLY_CURRENT165_RUN008_QUALIFIED_CODE1")
     if modes[0]=="--qualify":
         require(arguments.count("--preflight-attempt")==1 and arguments.index("--preflight-attempt")+1<len(arguments),"EXPLICIT_QUALIFICATION_PREFLIGHT")
         value=arguments[arguments.index("--preflight-attempt")+1]
-        require(value.isascii() and value.isdecimal() and 1<=int(value)<=8,"BOUNDED_QUALIFICATION_PREFLIGHT")
+        require(value.isascii() and value.isdecimal() and 1<=int(value)<=16,"BOUNDED_QUALIFICATION_PREFLIGHT")
         values["--preflight-attempt"]=int(value)
     return NS(role="whole_metadata_preflight" if modes[0]=="--preflight" else "dispatch_construction",
         stage="preflight" if modes[0]=="--preflight" else "qualify",attempt=values["--attempt"],values=values)
@@ -70,7 +73,7 @@ def closure(q,path,state,a,contracts=None):
 
 
 def connection_path(attempt):
-    require(type(attempt) is int and 1<=attempt<=8,"EXPLICIT_BOUNDED_CONNECTION_RECEIPT")
+    require(type(attempt) is int and 1<=attempt<=16,"EXPLICIT_BOUNDED_CONNECTION_RECEIPT")
     return PREFIX+f"preparation-attributed-connection-code{attempt:03}.v1.json"
 
 
@@ -84,7 +87,92 @@ def witnesses(q,a,policy,*,connection=True,connection_attempt=None):
     probe=closure(q,PROBE,"PASS_CONTROLLED_PREPARATION_CPU_GUARD_SOURCE_READS_NOT_RUNTIME_INSTALLATION",a)
     a.fields(probe,dict(runtime_policy_installed=False,actual_Native_or_product_executed=False,
         actual_P09_preflight_executed=False,subprocess_construction_blocked=True,Native008_absent_before_after=True),"CONTROLLED_NO_CHILD_PROBE")
-    if connection:closure(q,connection_path(connection_attempt),CONNECTION_STATE,a,CONNECTION_CONTRACTS)
+    if connection:
+        record=closure(q,connection_path(connection_attempt),CONNECTION_STATE,a,CONNECTION_CONTRACTS)
+        a.exact(record["metadata_identifier_policy"],IDENTIFIER_POLICY,"EXPLICIT_FINITE_METADATA_IDENTIFIERS_NOT_NATIVE_RETRY")
+
+
+def reference_bounds(original):
+    """Change only a nested metadata-reference bound; full recursive code inverse."""
+    from types import CodeType
+    allowed={("closed_prebody_preparation_io_v1.py","main"),("level6_closed_preparation_v1.py","main"),
+        ("current_queue_successor_dispatch.py","context")}
+    require(type(original) is FunctionType and (original.__code__.co_filename.replace("\\","/").rsplit("/",1)[-1],original.__name__) in allowed,"EXACT_REFERENCE_FUNCTION")
+    code=original.__code__;values=list(code.co_consts)
+    slots=[i for i,v in enumerate(values) if type(v) is CodeType and v.co_name=="<genexpr>"
+        and v.co_consts==(1,8,None) and v.co_varnames in ((".0","n"),(".0","v"))]
+    require(len(slots)==1,"ONE_METADATA_REFERENCE_GENERATOR")
+    i=slots[0];before=values[i];values[i]=before.replace(co_consts=(1,16,None))
+    changed=code.replace(co_consts=tuple(values));undo=list(changed.co_consts);undo[i]=before
+    require(changed.replace(co_consts=tuple(undo))==code,"WHOLE_REFERENCE_BOUND_CODE_INVERSE")
+    revised=FunctionType(changed,original.__globals__,argdefs=original.__defaults__,closure=original.__closure__)
+    revised.__kwdefaults__=original.__kwdefaults__
+    return revised
+
+
+def preflight_destinations(original):
+    """Only preflight record IDs9..16; CODE and Native run bounds remain8."""
+    import ast,copy
+    require(type(original) is FunctionType and original.__name__=="destination"
+        and original.__code__.co_filename.replace("\\","/").endswith("current_queue_successor_controller.py"),"EXACT_DESTINATION_FUNCTION")
+    import conservative_maintenance as c
+    tree=ast.parse((c.ROOT/"tools/p09/current_queue_successor_controller.py").read_bytes())
+    node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=="destination")
+    def compiled(value):
+        env=dict(original.__globals__)
+        exec(compile(ast.fix_missing_locations(ast.Module(body=[value],type_ignores=[])),original.__code__.co_filename,"exec",dont_inherit=True),env)
+        return env["destination"]
+    if compiled(copy.deepcopy(node)).__code__!=original.__code__:
+        for n in ast.walk(node):
+            if isinstance(n,ast.Constant) and n.value=="-successor-":n.value="-successor-recovery-"
+    require(compiled(copy.deepcopy(node)).__code__==original.__code__,"ENTIRE_ORIGINAL_DESTINATION_METADATA")
+    before=ast.dump(node,include_attributes=False);pattern=ast.dump(ast.parse("1<=attempt<=8",mode="eval").body,include_attributes=False)
+    class Rewrite(ast.NodeTransformer):
+        count=0
+        def visit_Compare(self,value):
+            if ast.dump(value,include_attributes=False)==pattern:
+                self.count+=1
+                new=ast.parse("1<=attempt<=8 or mode=='preflight' and 9<=attempt<=16",mode="eval").body
+                new._metadata_before=value;return new
+            return self.generic_visit(value)
+    rewrite=Rewrite();node=rewrite.visit(node);require(rewrite.count==1,"ONE_PREFLIGHT_ONLY_BOUND")
+    class Undo(ast.NodeTransformer):
+        def visit(self,value):
+            if hasattr(value,"_metadata_before"):return copy.deepcopy(value._metadata_before)
+            return super().visit(value)
+    require(ast.dump(Undo().visit(copy.deepcopy(node)),include_attributes=False)==before,"ALL_OTHER_DESTINATION_GUARDS_RETAINED")
+    candidate=compiled(node)
+    revised=FunctionType(candidate.__code__,original.__globals__,argdefs=original.__defaults__,closure=original.__closure__)
+    revised.__kwdefaults__=original.__kwdefaults__
+    return revised
+
+
+def metadata_loader(original):
+    def install(namespace,name,transform):
+        prior=getattr(namespace,name);revised=transform(prior)
+        prior.__globals__[name]=revised;setattr(namespace,name,revised)
+    def load(*args,**kwargs):
+        modules,proof=original.load(*args,**kwargs)
+        level=getattr(modules,"level6_closed_preparation_v1",None)
+        if level is not None:install(level,"main",reference_bounds)
+        driver=getattr(modules,"expanded_unhooked_setup_dependency_v1",None)
+        if driver is not None:
+            prior=driver.project_setup_main
+            def setup(*args,**kwargs):return reference_bounds(prior(*args,**kwargs))
+            prior.__globals__["project_setup_main"]=setup;driver.project_setup_main=setup
+        fix=getattr(modules,"closed_prebody_factory_admission_fix_v1",None)
+        if fix is not None:
+            whole=fix.load
+            def connected(*args,**kwargs):
+                linked=whole(*args,**kwargs)
+                family=getattr(linked,"modules",None)
+                if family is not None:
+                    install(family.current_queue_successor_controller,"destination",preflight_destinations)
+                    install(family.current_queue_successor_dispatch,"context",reference_bounds)
+                return linked
+            fix.load=connected
+        return modules,proof
+    return NS(**{**vars(original),"load":load})
 
 
 def window_components(root,envelope):
@@ -244,7 +332,7 @@ def main():
         output=connection_record
         require(not(c.ROOT/output).exists(),"EXCLUSIVE_CONNECTION_RECORD")
         record=dict(state="FAILED_PREPARATION_CONNECTION_NOT_ADOPTED",accepted_count_delta=0,GO_authorized=False,
-            actual_Native_or_product_executed=False,host_resource_policy=host_policy)
+            actual_Native_or_product_executed=False,host_resource_policy=host_policy,metadata_identifier_policy=IDENTIFIER_POLICY)
         try:
             guard.acquire();q=a.AcceptanceReader(c.ROOT,guard.check);witnesses(q,a,policy,connection=False)
             from tests import test_preparation_attributed_entry_v1 as tests
@@ -289,7 +377,7 @@ def main():
     require(guard.cleanup,"PREPARATION_BOOTSTRAP_CLEANUP")
     audit=PREFIX+f"preparation-attributed-{ctx.stage}-run008-attempt{ctx.attempt:03}.v1.json"
     require(not(c.ROOT/audit).exists(),"EXCLUSIVE_POLICY_STAGE_AUDIT")
-    routed=route_loader(c.ROOT,envelope.namespace_bundle,policy,a,ctx.role,instances,
+    routed=route_loader(c.ROOT,metadata_loader(envelope.namespace_bundle),policy,a,ctx.role,instances,
         connection_attempt=args.connection_attempt,
         audit_attempt=ctx.values["--preflight-attempt"] if ctx.stage=="qualify" else None,envelope=envelope)
     tool=windows.post_product_recovery_window_v1

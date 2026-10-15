@@ -14,10 +14,15 @@ def native_args():
 class Tests(unittest.TestCase):
     def test_native_context_rejects_other_cases_workers_modes_and_duplicate_flags(self):
         self.assertEqual(MODULE.native_context(native_args())["--run"],8)
+        args=native_args();args[args.index("--preflight-attempt")+1]="16"
+        self.assertEqual(MODULE.native_context(args)["--preflight-attempt"],16)
         for flag,value in (("--case","164"),("--run","7"),("--code-attempt","2"),("--attempt","9")):
             args=native_args();args[args.index(flag)+1]=value
             with self.assertRaises(ValueError):MODULE.native_context(args)
         for args in (native_args()+["--case","165"],native_args()[:-1]+["--qualify"],native_args()[:-1]+["--owned-worker"]):
+            with self.assertRaises(ValueError):MODULE.native_context(args)
+        for flag in ("--attempt","--qualification-attempt","--preflight-attempt"):
+            args=native_args();args[args.index(flag)+1]="17" if flag=="--preflight-attempt" else "9"
             with self.assertRaises(ValueError):MODULE.native_context(args)
 
     def test_unrelated_loader_graph_is_not_given_a_different_window(self):

@@ -25,6 +25,83 @@ def old_fixture():
 
 
 class Tests(unittest.TestCase):
+    def test_new_finite_preflight_records_do_not_extend_qualification_or_native_scope(self):
+        args=arguments();args[args.index("--attempt")+1]="9"
+        self.assertEqual(MODULE.context(args).attempt,9)
+        args=arguments("--qualify");args[args.index("--preflight-attempt")+1]="16"
+        self.assertEqual(MODULE.context(args).values["--preflight-attempt"],16)
+        args[args.index("--attempt")+1]="9"
+        with self.assertRaises(ValueError):MODULE.context(args)
+        self.assertTrue(MODULE.connection_path(16).endswith("code016.v1.json"))
+
+    def test_nested_reference_inverse_keeps_run_bound_and_every_other_constant(self):
+        from types import CodeType
+        env={}
+        exec(compile("def context(index,run,code,pref,attempt):\n return run<=8 and all(1<=v<=8 for v in (code,pref,attempt)),600,95,98\n", "tools/p09/current_queue_successor_dispatch.py","exec"),env)
+        original=env["context"];new=MODULE.reference_bounds(original)
+        self.assertEqual(new(165,8,1,16,1),(True,600,95,98))
+        self.assertEqual(new(165,9,1,16,1),(False,600,95,98))
+        self.assertEqual(new(165,8,1,17,1),(False,600,95,98))
+        self.assertEqual(original(165,8,1,9,1),(False,600,95,98))
+        values=list(new.__code__.co_consts)
+        i=next(i for i,v in enumerate(values) if type(v) is CodeType)
+        values[i]=values[i].replace(co_consts=(1,8,None))
+        self.assertEqual(new.__code__.replace(co_consts=tuple(values)),original.__code__)
+        with self.assertRaises(ValueError):MODULE.reference_bounds(lambda:None)
+
+    def test_destination_extension_is_preflight_only_and_original_default_stays_closed(self):
+        import current_queue_successor_controller as original
+        new=MODULE.preflight_destinations(original.destination)
+        self.assertTrue(new(165,8,"preflight",16).endswith("attempt016.v1.json"))
+        for args in ((165,8,"code",9),(165,9,"preflight",9),(165,8,"preflight",17),(165,8,"preflight",True)):
+            with self.assertRaises(ValueError):new(*args)
+        with self.assertRaises(ValueError):original.destination(165,8,"preflight",9)
+
+    def test_frozen_entry_uses_extended_metadata_in_final_private_namespaces(self):
+        observed=[]
+        def load(*args,**kwargs):
+            modules,proof=ENVELOPE.namespace_bundle.load(*args,**kwargs)
+            controller=getattr(modules,"current_queue_successor_controller",None)
+            dispatch=getattr(modules,"current_queue_successor_dispatch",None)
+            if controller is not None and dispatch is not None:
+                def endpoint(index,run,attempt):
+                    self.assertTrue(controller.destination(165,8,"preflight",9).endswith("attempt009.v1.json"))
+                    self.assertTrue(dispatch.context(165,8,1,16,1).preflight.endswith("attempt016.v1.json"))
+                    with self.assertRaises(ValueError):dispatch.context(165,9,1,9,1)
+                    observed.append(True);return 0
+                controller.run_code=endpoint
+            return modules,proof
+        base=MODULE.metadata_loader(NS(**{**vars(ENVELOPE.namespace_bundle),"load":load}))
+        routed=MODULE.route_loader(a.c.ROOT,base,POLICY,a,"whole_metadata_preflight",[],require_connection=False,envelope=ENVELOPE)
+        proxy=NS(**{**vars(ENVELOPE),"namespace_bundle":routed})
+        with patch("subprocess.Popen",side_effect=AssertionError("NO_CHILD")),patch("subprocess.run",side_effect=AssertionError("NO_CHILD")):
+            result=MODULE.execute(ENTRY_MODULE,proxy,["--case","165","--run","8","--attempt","1","--code"])
+        self.assertEqual(result,0);self.assertEqual(observed,[True])
+        # Exercise the real IO constructor at ID9, stopping BEFORE its Guard
+        # is constructed. The original still rejects9; no file/sampler/child.
+        level,_=ENVELOPE.namespace_bundle.load(a.c.ROOT,[ENTRY_MODULE.ENTRY],{})
+        modules,_=MODULE.metadata_loader(ENVELOPE.namespace_bundle).load(a.c.ROOT,[level.level6_closed_preparation_v1.DRIVER],{})
+        driver=modules.expanded_unhooked_setup_dependency_v1
+        raw,_=ENVELOPE.namespace_bundle.load(a.c.ROOT,[driver.ORCHESTRATION],{})
+        original=raw.closed_prebody_preparation_io_v1.main
+        prepared=driver.project_setup_main(a.c.ROOT,original)
+        before=[]
+        class NoStage(BaseException):pass
+        def stopped():before.append(True);raise NoStage()
+        pressure=NS(guard_type=lambda base:stopped)
+        from types import FunctionType
+        def execute(fn):
+            prior=fn.__builtins__["__import__"]
+            def imports(name,*args,**kwargs):return pressure if name=="terminal_metadata_pressure_v1" else prior(name,*args,**kwargs)
+            revised=FunctionType(fn.__code__,dict(fn.__globals__,__builtins__={**fn.__builtins__,"__import__":imports}),argdefs=fn.__defaults__,closure=fn.__closure__)
+            argv=sys.argv
+            try:sys.argv=["io"]+["--case","165","--run","8","--attempt","9","--preflight"];return revised()
+            finally:sys.argv=argv
+        with self.assertRaisesRegex(ValueError,"CLOSED_PREPARATION_CONTEXT"):execute(original)
+        self.assertEqual(before,[])
+        with self.assertRaises(NoStage):execute(prepared)
+        self.assertEqual(before,[True])
+
     def checkpoint_fixture(self):
         import flat_current_queue_metadata_runtime as runtime
         guard=POLICY.guard_type(Original,role="whole_metadata_preflight")()
@@ -79,7 +156,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(MODULE.context(arguments("--qualify")).role,"dispatch_construction")
 
     def test_explicit_connection_receipts_are_bounded_and_reach_every_reader(self):
-        for value in (None,True,0,9,"3"):
+        for value in (None,True,0,17,"3"):
             with self.assertRaises(ValueError):MODULE.connection_path(value)
         self.assertEqual(MODULE.connection_path(3),MODULE.PREFIX+"preparation-attributed-connection-code003.v1.json")
         calls=[]
@@ -96,7 +173,7 @@ class Tests(unittest.TestCase):
             with self.subTest(flag=flag),self.assertRaises(ValueError):MODULE.context(arguments()+[flag])
 
     def test_wrong_case_run_duplicate_or_unqualified_code_is_rejected(self):
-        for flag,value in (("--case","166"),("--run","7"),("--attempt","9"),("--code-attempt","2")):
+        for flag,value in (("--case","166"),("--run","7"),("--attempt","17"),("--code-attempt","2")):
             args=arguments();args[args.index(flag)+1]=value
             with self.subTest(flag=flag),self.assertRaises(ValueError):MODULE.context(args)
         for args in (arguments()+["--case","165"],arguments()+["--qualify"],arguments("--qualify")[:-1]):

@@ -67,6 +67,9 @@ class Tests(unittest.TestCase):
     def test_consumed_slots_are_bounded_and_error_values_are_not_echoed(self):
         self.assertEqual(m.discover_attempts(lambda path:False)["next_unused_attempt"],1)
         self.assertIsNone(m.discover_attempts(lambda path:True)["next_unused_attempt"])
+        first_eight=lambda path:any(f"-attempt{i:03}.v1.json" in path for i in range(1,9))
+        self.assertEqual(m.discover_attempts(first_eight)["next_unused_attempt"],9)
+        self.assertTrue(m.stages(16)[-1]["path"].endswith("attempt016.v1.json"))
         self.assertIsNone(m.safe_error(dict(error_code="private arbitrary log text")))
         self.assertIsNone(m.safe_error(dict(error_code=["private"])))
 
@@ -125,7 +128,7 @@ class Tests(unittest.TestCase):
         reader=m.BoundedReader(None,max_bytes=2)
         reader.path=lambda name:NS(open=lambda *args:io.BytesIO(b"abc"))
         with self.assertRaisesRegex(ValueError,"PLANNING_BYTE_BOUND"):list(reader.chunks("public.bin"))
-        for value in (True,0,9):
+        for value in (True,0,17):
             with self.assertRaises(ValueError):m.stages(value)
 
     def test_large_stage_bound_retains_closed_prior_without_promoting_incomplete(self):
