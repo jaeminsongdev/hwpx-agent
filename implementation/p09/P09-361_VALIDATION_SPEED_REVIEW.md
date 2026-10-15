@@ -575,3 +575,25 @@ transport003은 실제 private parent Binding으로 원 compact wire를 생성�
 발행한 것은 별도 진단 manifest이며 실행 capsule·bootstrap과 Native004/005는 생성하지 않았다. 다음은 동일 연결을 공통 parent·worker entry와 독립 검증 경로에 등록한 뒤 실제 CODE·whole preflight·진입점 비용·별도 worker 시작을 검증하는 것이다. 제품·GO·후속 전체 리뷰·승인은 실행하지 않았고 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·목표ACTIVE를 유지한다. 원본과 기존 파생본, 실패 기록, 사용자 소유 변경은 보존했다.
 
 근거는level6-binding-code001..005·level6-binding-transport001..003·successor-level6-probe-manifest001..003이다.
+
+## 실제 공통 진입점과 중복 물리 별칭 정규화
+
+level6_closed_preparation_v1을 실제 parent 준비와 별도 worker CLI에 연결했다. 초기 별도 CLI는 공개 복원 함수가 아니라 원 함수군의 이전 복원 함수를 참조해1행 초기화 검사에서 거부됐다. 같은 private 함수군의 참조를 맞춘 뒤 통과했다. 원 준비 IO 설정이 public runtime 대신 transport를 직접 부르는 경우에도 scoped seed를 연결했다. 기존005..007 및008.v9 준비와 실패·과거 source 결과는 보존했다.
+
+현재008.v10 graph는68개 대응·fresh161/final161·37.684초·CPU50.55%·cleanup=True로 통과했다. 원 namespace projector의 전체 코드 역투영을 유지하면서 receipt suffix만v10으로 연결했고 직렬화 기대값도 동일한 새 suffix에 한정했다. 실제 level6-factory005는 원11계약·fresh119/final119·31.402초·CPU32.39%·가용RAM29.925%·cleanup=True다. 별도 worker는 EOF에서 원 WORKER_NOT_AUTHORIZED로 종료했고 과거 runtime/authority open0, GO 전송0, 제품 실행 허가0이다.
+
+실제 비용 거부를 원 predicate에서 관측하고 전체 scope 차이를 보존했다. 원 모델·Binding 거부 조건을 바꾸지 않았고, 기존 예외 관측에만 덧붙였으며 line/opcode tracing을 추가하지 않았다. 실제3,048개 physical pin을 기존 baseline과의 delta로 재구성한 SHA256이 일치했고 원 거부값603.215125초도 정확히 재현됐다. 진단 파일1개의 비용만 제외한 값은603.128736초이며 다른 관측용 import까지 모두 제거한 원 실행 비용이라는 뜻은 아니다.
+
+같은 원본에 대응하는 이전 압축본15개·6,328,475바이트가 새 압축본과 함께 별도 입력으로 남았다. 그중9개·5,587,135바이트는 승인된 prior164의 descriptor이면서 prior bootstrap metadata에도 있었다. 원 inherited_scope는 승인 fresh 입력의 물리 별칭은 원본으로 환산하지만 준비 reader의 snapshot은 그대로 합친다. 표현을 새 압축본으로 바꾸면 current reverse table이 이전 물리 별칭을 인식하지 못해 이9개가 중복 입력이 된다. 현재 준비 산출물인 나머지6개는 승인된 prior 별칭이 아니므로 그대로 보존한다.
+
+prior_preparation_alias_v1은 승인된 이전 descriptor의 정확한 물리 pin만 원본 논리 pin으로 정규화하고 원 semantic_union 본문을 그대로 호출한다. 원본·실제 읽기·해시 검사를 삭제하거나 물리 IO를 논리 IO로 바꾸지 않는다.6계약은 정확한 별칭·변조·논리 충돌·잘못된 source/context·신규 표현·중복·idempotence·private adapter와 나머지 메서드 보존을 검사했다. fresh8/final8·CPU24.02%·cleanup=True로 통과했다. 실제 scope 재생에서도 prior 논리 pin 전부와 기타 입력이 같았고9개만 환산한 모델은597.243960초였다.15개를 전부 제거하는596.108392초 가정은 적용하지 않았다.
+
+사전 검증의 부모 그래프는 worker wire에서 복원되며 그 hint에는 비정형 이력5개만 전달된다. 이 선언만으로 부모 정규화를 허용하지 않는다. 현재 부모 current_input_scope는 승인 파일과 prior runtime을 매번 fresh 읽고 승인 수·next index·root pin·cleanup 및 representation을 확인한 뒤 전체56개 이력으로 해당 private Binding을 보강한다. 이후 snapshot이 다시 합쳐져도 같은 정규화를 거친다. 원 current_input_scope와 모든 기존 검증은 이어서 호출한다.
+
+현재 CODE008-002는 원74계약·기본helper60/64·fresh167/final167·31.051초·CPU44.79%·가용RAM29.447%·cleanup=True로 통과했다. whole preflight008-002도 원10계약·source3,041개·Rust787개·helper60·fresh535/final535·109.446초·CPU39.36%·가용RAM28.270%·cleanup=True다. 실제1,094읽기/106,412,888바이트이며 decoder57/57회·0.763초/5초·비활성·오류 없음이다. 전체 비용 모델597.391502초가 원600초 한도와60초 margin을 유지하며 통과했다. 이전의 선언 범위 추정과 달리 실제 전체 preflight 결과다.
+
+실제 진입점 qualification008-001은 원6계약 뒤 V3_EXACT_CLOSED_GRAPH_FAILURE로 거부됐다.52.292초·CPU44.79%·가용RAM28.706%·cleanup=True이며 최종 자격 통과가 아니다. 기존 previous_stops는 Native가 없을 때 CPU 경고로 실패한 graph와 미생성 worker 산출물만 허용한다.004..007에는 Native 없이 준비만 끝낸 회차가 있어 이 분류에 맞지 않는다. 다음은 없는 Native 기록을 만들지 않고 실제 파일 부재·준비 산출물 hash·NO-GO 종료 증거로 준비 전용 회차를 종결 검증하는 정책을 추가하는 것이다.
+
+007 preflight001/003/004와008-001의 비용 거부 및007-002의CPU85.76% 보호 중단도 보존했다. 해당 CPU 표본에서 parentCPU0%·private56.574MiB·가용RAM34.320%였지만 부하 원인 프로세스는 확정하지 않는다. Native004..008과 제품 실행·GO·후속 독립 전체 리뷰·승인은 없고 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·목표ACTIVE를 유지한다. OS 설정 변경과 접근 허용 요청은 없었다.
+
+근거는level6-entry graph005..008.v9 및008.v10·level6-factory001..005·CODE006-001/007-001/008-001/002·closed-io2 preflight setup/실행006..008·successor-preflight007-001..004/008-001/002·current-cost-diagnostic001..003·known-scope-cost001..006·observed-scope-replay001/002·prior-preparation-alias-code001·closed-io2-qualify008-001 및 successor-dispatch-qualification008-001이다. known-scope-cost002/006의597.007초는 실제 stage reader의 전체 추가 입력을 포함하지 않은 하한이며 실제603초 거부를 대신하지 않는다.

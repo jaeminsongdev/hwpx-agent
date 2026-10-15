@@ -1,0 +1,70 @@
+{
+  "state": "FAILED_SUCCESSOR_DISPATCH_CONSTRUCTION_NOT_ADOPTED",
+  "index": 165,
+  "physical_run": 8,
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "product_or_Native_executed": false,
+  "contracts": {
+    "run": 6,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "error_type": "ValueError",
+  "error_code": "CURRENT_EPOCH_ACCEPT_V3_EXACT_CLOSED_GRAPH_FAILURE",
+  "failure_frames": [
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "main",
+      "line": 261
+    },
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "callback",
+      "line": 163
+    },
+    {
+      "file": "current_queue_successor_retry_runtime_v3.py",
+      "function": "closed",
+      "line": 84
+    },
+    {
+      "file": "current_queue_sealed_metadata_runtime_v5.py",
+      "function": "previous_stops",
+      "line": 54
+    },
+    {
+      "file": "current_queue_successor_retry_runtime_v3.py",
+      "function": "failed_graph",
+      "line": 36
+    },
+    {
+      "file": "closed_preparation_private_entry_v1.py",
+      "function": "checked",
+      "line": 52
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "require",
+      "line": 43
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 52.2921992999909,
+  "CPU_max": 44.79,
+  "RAM_min": 28.705770134967715,
+  "terminal_resource_sample": {
+    "system_cpu_percent": 31.99,
+    "available_ram_percent": 29.147129338390307,
+    "commit_used_percent": 44.81072471024133,
+    "parent_cpu_machine_percent": 0.36913122691583483,
+    "parent_private_mib": 51.69921875,
+    "parent_private_percent": 0.16226531451701395
+  },
+  "metadata_progress": {
+    "fresh_inputs": 537,
+    "actual_read_passes": 558,
+    "actual_bytes_read": 57457656
+  }
+}
