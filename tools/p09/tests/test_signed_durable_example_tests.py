@@ -141,7 +141,7 @@ class SignedDurableExampleTests(unittest.TestCase):
         self.assertIn('before worker creation', source.lower())
         self.assertEqual(s.c.POLICY['job_memory_limit_percent'], 8)
         self.assertEqual(s.c.POLICY['job_memory_stop_percent'], 7)
-        self.assertEqual(s.c.POLICY['stop_ram_min_percent'], 5)
+        self.assertEqual(s.c.POLICY['stop_ram_min_percent'], 8)
         self.assertEqual(s.c.POLICY['output_limit_bytes_per_stream'], 32768)
 
 

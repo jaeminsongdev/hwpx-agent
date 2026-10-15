@@ -1,27 +1,34 @@
 # P09 검증 속도 분석과 재시도 개선
 
-## 현재 재개 위치와 RAM 정책 변경
+## 현재 재개 위치와 RAM 실행 설정
 
-2026-10-15 사용자 지시에 따라 현재 대화에서 목표를 ACTIVE로 유지한다. 시스템 RAM 사용률 상한은 95%이며 공통 정책의 시작·유지 기준을 가용 RAM 5%로 맞췄다. 정확히 95%는 허용하고 초과하면 중단한다. CPU 보호, commit 95% 보호, 소유 Job 메모리 중단 7% 및 hard limit 8%는 그대로다. OS·Defender 설정과 다른 작업은 변경하지 않았다.
+2026-10-15 현재 대화에서 목표를 ACTIVE로 유지한다. RAM 95%는 현재 검증 진입점의 `configure_host_policy` 실행 설정이다. 정확히 95%는 허용하고 초과 시 중단하며, CPU·commit 95%·소유 Job 7% 중단/8% hard limit은 유지한다. 공유 `conservative_maintenance.py`와 관련 테스트 6개는 이전 고정 소스와 동일한 바이트로 복원했다. 공유 파일의 기본값을 재작성하지 않고 정책 dict의 동일 객체에 profile·RAM 시작/중단 값만 적용하므로 기존 Guard와 SQL의 바인딩도 함께 갱신된다. Native007 기록의 실제 policy도 가용 RAM 5%다.
 
-새 정책의 경계 및 실제 Guard/SQL 정책 연결 5개 테스트는 PASS다. 관련 SQL·CPU 귀속·signed runner 회귀는 52개 중 51개 PASS, 1개 FAIL이다. 실패한 `test_declared_delta_restores_whole_original_bodies`는 `tests/test_signed_durable_example_tests.py:45`에서 기존 Rust 본문과 보관 원본의 차이를 보고했으며, 해당 Rust 소스는 이 변경에서 수정하지 않았다. 전체 회귀 PASS나 제품 PASS로 승격하지 않는다.
+이 분리로 이전 준비 그래프와 직전 수용 증거의 소스 해시 충돌을 해소했다. V6의 구성요소 자격 파일명 투영은 제거했고 원래 runtime-code002·worker-code004 검사를 유지한다. `prepared_run_closure_v1.py`는 16,889바이트, SHA-256 `8c914a79faf481f86c18126e8a3fddc9ff5ae370ba53b93b510ad30d74775151`이다. closure-code006의 9개 회귀와 run004..007 closure-attempt005가 PASS했다. 이전 소스의 CODE·실패 증거는 삭제하지 않았다.
 
-변경 후 CODE007-003은 `CURRENT_EPOCH_ACCEPT_V6_CURRENT_QUALIFIED_SOURCES`에서 4.797초 만에 중단됐다. CPU 최고 37.89%, 가용 RAM 최저 21.22%, cleanup=True다. 이는 자원 초과가 아니라 공통 정책 소스 변경에 따른 기존 자격 증거의 해시 불일치다. Native007/008 부재를 확인했고 GO·제품 실행은 없다.
+| 현재 준비 증거 | 계약 또는 범위 | 실제 전후 해시 | 시간 | CPU 최고 |
+| --- | --- | --- | ---: | ---: |
+| `evidence/p09-361-case165-successor-code-run007-attempt005.v1.json` | 74계약·helper59 PASS | 170/170 | 31.157초 | 53.82% |
+| `evidence/p09-361-case165-successor-preflight-run007-attempt008.v1.json` | 입력3044·Rust787·helper59 PASS | 538/538 | 109.818초 | 61.17% |
+| `evidence/p09-361-case165-successor-dispatch-qualification-run007-attempt001.v1.json` | 6계약·입력3068·Native helper64 PASS | 549/549 | 113.502초 | 56.92% |
 
-최소한의 구성요소 자격만 순차 갱신했다.
+모두 cleanup=True이며 준비 자격이지 제품 수용 결과가 아니다. preflight007-007은 CPU78.99%에서 보호 중단됐지만 당시 검증 부모 CPU는 약0.19%, private memory48.05MiB였다. 검증 종료 후 새 10표본의 CPU 최고26.76%를 확인하고 CODE 재실행 없이 preflight008을 실행해 통과했다. 이 관측은 직접 CPU 점유를 구분할 뿐 간접 영향이나 외부 원인을 확정하지 않는다.
 
-| 현재 증거 | 계약 | 실제 전후 해시 | 시간 | CPU 최고 | 가용 RAM 최저 |
-| --- | ---: | --- | ---: | ---: | ---: |
-| `evidence/p09-361-case165-closed-prebody-runtime-code003.v1.json` | 8 PASS | 32/32 | 6.968초 | 34.36% | 20.64% |
-| `evidence/p09-361-case165-closed-prebody-worker-code005.v1.json` | 10 PASS | 32/32 | 7.441초 | 36.21% | 21.97% |
+### 실제 제품 실행 후 최종 입력 재확인 중단
 
-두 구성요소 모두 cleanup=True이며 Native·제품 승인 증거는 아니다. 실행 adapter가 원 V6 load의 runtime-code002·worker-code004 선택자만 새 자격003·005로 투영하도록 연결했다. 상태·계약 수·fresh source 검사·최종 해시 검사를 포함한 중첩 Reader 전체 코드는 역변환 시 원본과 동일해야 한다. 공개 함수, 중복 투영과 불완전한 선택자 테이블은 거부한다. 기존 V6·자격 파일은 수정하지 않았다.
+Native007은 case165 한 개만 실행했다. 본문 출력은 1 PASS·0 failed·248 filtered, exit0이며 GO부터 완전한 출력 수집까지 2.442초다. 그러나 전체 실행은 574.41초의 `final_source_freeze`에서 `STOP_NATIVE_SOURCE_PRESSURE_NO_COOLING`으로 중단됐다. 전 경계의 실제 바이트 검사는 입력3056개·228,558,382바이트로 완료됐지만 후 경계는 완료되지 않았다. 따라서 `Native_source_frame_qualified=False`, 현재 후보 자격=False, 수용 증가0을 유지한다.
 
-연결 회귀를 포함한 closure-code005의 9개 계약은 fresh2/final2 PASS다. 이전 준비 run004..007의 closure-attempt004는 각각 fresh7/final7 PASS이며 실제 EOF/NO-GO·기존 Native 부재·제품 실행0을 확인했다. 이어 **CODE007-004의 74개 계약, helper59, fresh170/final170이 PASS**했다. 31.161초, CPU 최고46.50%, 가용 RAM 최저20.87%, cleanup=True다. adapter는 17,345바이트, SHA-256 `d2f8e8fb9b9d22db44e3a9e8ceab36e6414c4de555b1cbe41f24c15de260f363`이며 변경이 없다면 이 CODE를 재사용한다.
+잠금3428개는 모두 닫혔고 활성 reader/byte stream·잔여 잠금0, cleanup=True, owned tree empty=True다. 마지막 표본은 시스템 CPU94.87%, 검증 부모0.164%·private65.95MiB, 소유 자식0개였다. 원 source 경고 기준90%의 fail-fast로 중단됐으며 관련 원 회귀16개 PASS다. CPU 원인 프로세스 귀속과 프리즈 해결은 미확정이다.
 
-preflight007-006은 `CURRENT_EPOCH_ACCEPT_UNCHANGED_CURRENT_PREPARED_GRAPH_DEPENDENCIES`에서 19.223초 만에 중단됐다. CPU 최고36.55%, 가용 RAM 최저20.42%, cleanup=True로 자원 중단이 아니다. 준비 그래프007.v10의 source pin 161개를 직접 비교했으며 불일치는 `tools/p09/conservative_maintenance.py` 하나(이전29,237바이트 → 현재29,410바이트)다. 다음 작업은 이 정책 변경을 검증 가능한 새 준비 그래프로 반영하는 것이다. 기존 그래프·startup 증거를 덮어쓰거나 source 검사를 생략하지 않는다. 이후 전체 preflight → dispatcher 자격 → 미실행 case165 순서로 진행한다. 완료한 제품 사례나 전체 249개를 재실행하지 않는다.
+원본은 `evidence/p09-361-case165-current-runtime-run007.v1.json`(4,199,057바이트, SHA-256 `3271eb9b07cd0eb1462630bb0f61e7ca7894545ec67f0c516ea8d898391a0f6c`)이다. 기존 prebody 재시도 판정기는 실제로 `V2_PREVIOUS_PREBODY_ONLY`로 거부했다. 이전 준비-only closure로 이 원본을 대체하거나 완료되지 않은 후 경계를 새로 만든 것으로 표시하지 않는다.
 
-RAM 변경 전 startup factory007은 11계약·fresh119/final119 PASS였고 preflight007-005는 CPU 83.99%에서 보호 중단됐다. 두 기록은 원상 보존하며, RAM 정책 변경이 CPU 폭주를 해결했다는 결론을 내리지 않는다. 공식 수용 상태는 158/249, 잔여91, next165, generation53이고 P09·A12·A13은 OPEN, P10은 시작하지 않았다.
+### 사용자 승인에 따른 복구 판정
+
+사용자는 현재 채팅에서 “복구 경로 설계·검증 진행”을 승인했다. `post_product_stop_recovery_v1.py`는 이 원본의 exact byte/SHA와 case/run·제품 출력·15초 창·닫힌 Frame·전체 잠금 정리·완료된 전 경계만 읽기 전용으로 검증한다. 다른 후보, 수용 PASS, 알 수 없는 중단, 잔여 핸들, 가짜 경계, 변경된 제품 출력은 거부한다.
+
+`post-product-recovery-code001`의 8회귀/fresh19-final19, 실제 `post-product-recovery-review001`의 fresh21-final21은 PASS다. 실제 판정은 10.405초·CPU 최고67.76%·cleanup=True다. 이는 **정리된 제품 실행 후 자원 실패이며 새 전체 재시도 경로를 설계할 수 있다는 판정**이다. `runtime_retry_admission_implemented=False`, `next_Native_start_authorized=False`, GO=False이며 원본의 PASS 승격이나 제품 출력만의 재사용은 허용하지 않는다.
+
+다음은 이 판정을 실제 run8 admission에 연결하고, 실패 원본 전체를 보존하는 입력 표현·helper64·600초 예산을 검증하는 작업이다. run7 자격의 비용 추정은599.662초로 여유가 작아 새 입력 비용을 반드시 포함해야 한다. 현재 run8은 시작하지 않았다. 변경된 소스의 자격은 갱신하고 동일한 준비 결과만 재사용한다. 공식158/249·잔여91·next165·generation53, P09·A12·A13 OPEN, P10 미시작이다. 기존 Rust 본문/원본 비교 실패도 보존하며 OS·Defender·다른 작업은 변경하지 않았다.
 
 아래 내용은 이전 검증과 최적화 이력이다. 현재 실행 위치와 정책 판정은 이 절을 우선한다.
 

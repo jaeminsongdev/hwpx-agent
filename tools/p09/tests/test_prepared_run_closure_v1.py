@@ -5,46 +5,43 @@ import unittest
 
 
 class Tests(unittest.TestCase):
-    def original_v6_load(self):
-        from pathlib import Path
-        path="tools/p09/current_queue_closed_metadata_runtime_v6.py"
-        root=Path(__file__).resolve().parents[3]
-        tree=ast.parse((root/path).read_text(encoding="utf-8"))
-        node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=="load")
-        env=dict(__name__="p09_exact_v6_epoch_test")
-        exec(compile(ast.Module(body=[node],type_ignores=[]),path,"exec"),env)
-        return env["load"]
+    def test_host_policy_changes_only_three_settings_in_place_and_is_idempotent(self):
+        import conservative_maintenance as c
+        fixture=NS(POLICY=dict(c.POLICY,profile="P149_OWNED_WORKLOAD_V4_PARTITIONED_TEST_CODEGEN",
+            start_ram_min_percent=10,stop_ram_min_percent=8))
+        original=fixture.POLICY;before=dict(original)
+        result=MODULE.configure_host_policy(fixture)
+        self.assertIs(fixture.POLICY,original)
+        self.assertEqual({k for k in result if result[k]!=before[k]},
+            {"profile","start_ram_min_percent","stop_ram_min_percent"})
+        self.assertEqual(result["start_ram_min_percent"],5)
+        self.assertEqual(result["stop_ram_min_percent"],5)
+        self.assertEqual(MODULE.configure_host_policy(fixture),result)
 
-    def test_component_epoch_preserves_complete_original_reader_body(self):
-        from types import CodeType
-        original=self.original_v6_load();changed=MODULE.component_epoch(original)
-        def reverse(value):
-            if type(value) is CodeType:return value.replace(co_consts=tuple(reverse(v) for v in value.co_consts))
-            if type(value) is tuple:return tuple(reverse(v) for v in value)
-            if type(value) is str:return {"runtime-code003":"runtime-code002","worker-code005":"worker-code004"}.get(value,value)
-            return value
-        self.assertEqual(reverse(changed.__code__),original.__code__)
-        self.assertIs(changed.__globals__,original.__globals__)
-        self.assertIs(changed.__defaults__,original.__defaults__)
-        self.assertIs(changed.__kwdefaults__,original.__kwdefaults__)
-        self.assertIs(changed.__closure__,original.__closure__)
+    def test_host_policy_rejects_unknown_or_changed_protection_settings(self):
+        import conservative_maintenance as c
+        baseline=MODULE.configure_host_policy(NS(POLICY=dict(c.POLICY)))
+        for key,value in (("profile","unknown"),("start_ram_min_percent",4),
+            ("logical_cpu_limit",2),("emergency_cpu_percent",100),
+            ("job_memory_limit_percent",95),("stop_commit_used_percent",100)):
+            fixture=NS(POLICY=dict(baseline,**{key:value}));before=dict(fixture.POLICY)
+            with self.subTest(key=key),self.assertRaises(ValueError):MODULE.configure_host_policy(fixture)
+            self.assertEqual(fixture.POLICY,before)
 
-    def test_component_epoch_rejects_public_or_already_projected_code(self):
-        original=self.original_v6_load()
-        public=FunctionType(original.__code__,dict(__name__="public"))
-        with self.assertRaises(ValueError):MODULE.component_epoch(public)
-        with self.assertRaises(ValueError):MODULE.component_epoch(MODULE.component_epoch(original))
-        with self.assertRaises(ValueError):MODULE.component_epoch(MODULE.one_run)
-
-    def test_component_epoch_requires_both_exact_fresh_receipt_selectors(self):
-        from types import CodeType
-        original=self.original_v6_load()
-        def corrupt(value):
-            if type(value) is CodeType:return value.replace(co_consts=tuple(corrupt(v) for v in value.co_consts))
-            if type(value) is tuple:return tuple(corrupt(v) for v in value)
-            return "runtime-code099" if value=="runtime-code002" else value
-        broken=FunctionType(corrupt(original.__code__),original.__globals__)
-        with self.assertRaises(ValueError):MODULE.component_epoch(broken)
+    def test_actual_host_guard_admits_95_and_stops_above_without_relaxing_cpu_or_job(self):
+        import conservative_maintenance as c
+        import sql_percentage_resources as sql
+        policy=MODULE.configure_host_policy(NS(POLICY=dict(c.POLICY)))
+        self.assertEqual(c.POLICY,policy)  # Real producer configures before testing.
+        row=dict(system_cpu_percent=20,available_ram_percent=5,commit_used_percent=30)
+        self.assertEqual(c.admitted_count(row,0),1)
+        self.assertEqual(c.decision(row,0),(0,None))
+        self.assertEqual(c.decision(dict(row,available_ram_percent=4.999),0)[1],"STOP_LOW_AVAILABLE_RAM")
+        self.assertEqual(c.decision(dict(row,system_cpu_percent=98),3)[1],"STOP_SUSTAINED_SYSTEM_CPU")
+        self.assertEqual(c.decision(dict(row,peak_job_private_percent=7),0)[1],"STOP_OWNED_JOB_MEMORY_BUDGET")
+        self.assertEqual(c.decision(dict(row,commit_used_percent=95),0)[1],"STOP_SYSTEM_COMMIT_PRESSURE")
+        self.assertEqual(sql.resource_policy()["minimum_available_ram_percent"],5)
+        self.assertEqual(sql.resource_policy()["start_available_ram_min_percent"],5)
 
     def data(self):
         p=MODULE.PREFIX;run=5

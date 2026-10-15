@@ -1,0 +1,106 @@
+{
+  "state": "PASS_PREPARATION_ONLY_CLOSED_WITHOUT_NATIVE_NOT_RUNTIME_OR_PRODUCT",
+  "index": 165,
+  "physical_run": 6,
+  "product_or_Native_executed": false,
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "host_resource_policy": {
+    "profile": "P149_OWNED_WORKLOAD_V5_HOST_RAM_95_PERCENT",
+    "logical_cpu_limit": 1,
+    "priority": "BelowNormal",
+    "cargo_jobs": 1,
+    "test_threads": 1,
+    "sample_seconds": 0.5,
+    "start_ram_min_percent": 5,
+    "start_consecutive_samples": 2,
+    "admission_max_seconds": 3,
+    "emergency_cpu_percent": 98,
+    "emergency_cpu_consecutive_samples": 4,
+    "stop_ram_min_percent": 5,
+    "stop_commit_used_percent": 95,
+    "job_memory_limit_percent": 8,
+    "job_memory_stop_percent": 7,
+    "test_debug_info": "line-tables-only",
+    "dev_debug_info": "line-tables-only",
+    "test_opt_level": 0,
+    "test_codegen_units": 16,
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "output_limit_bytes_per_stream": 32768
+  },
+  "worker_entry_pin": {
+    "path": "tools/p09/level6_closed_preparation_v1.py",
+    "bytes": 24229,
+    "sha256": "7caea0f722b6205ad9691d35ff217e9c299da490ad2c22dfe98e1300367c55eb"
+  },
+  "source_profile_version": "v9",
+  "graph_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-successor-connections006.v9.json",
+    "bytes": 39317,
+    "sha256": "d7b3f8a26b4768845b496bb09e49a2faf68287e67bda501bc0cbe1f053169929"
+  },
+  "capsule_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-successor-worker-capsule006.compact.v9.json",
+    "bytes": 9683,
+    "sha256": "38636c63affaf333012f22fd28d567402f1580c614ad32c2acb39313e4da1562"
+  },
+  "bootstrap_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-successor-worker-bootstrap006.v9.json",
+    "bytes": 7072,
+    "sha256": "7572c05ad315155995907488a6af86ad0d7ec5c2c2083209a31198f20b747c92"
+  },
+  "actual_Native_absent_before": true,
+  "actual_Native_absent_after": true,
+  "no_go_probe": {
+    "exit_code": 1,
+    "original_GO_rejection_observed": true,
+    "historical_runtime_or_authority_opens": 0,
+    "GO_sent": false,
+    "product_child_execution_authorized": false
+  },
+  "new_canonical_Native_receipt_created": false,
+  "source_pins": [
+    {
+      "path": "tools/p09/prepared_run_closure_v1.py",
+      "bytes": 16889,
+      "sha256": "8c914a79faf481f86c18126e8a3fddc9ff5ae370ba53b93b510ad30d74775151"
+    },
+    {
+      "path": "tools/p09/tests/test_prepared_run_closure_v1.py",
+      "bytes": 7322,
+      "sha256": "cdc4287251906bfad583c94b0e06e857cfee362170be83c497ec27c99beed70e"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case165-prepared-closure-code006.v1.json",
+      "bytes": 1627,
+      "sha256": "150840c699b87b25a7b6d110b50049941d590ed71e6c51bc6881ed5a8cf0caef"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case165-successor-connections006.v9.json",
+      "bytes": 39317,
+      "sha256": "d7b3f8a26b4768845b496bb09e49a2faf68287e67bda501bc0cbe1f053169929"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case165-successor-worker-capsule006.compact.v9.json",
+      "bytes": 9683,
+      "sha256": "38636c63affaf333012f22fd28d567402f1580c614ad32c2acb39313e4da1562"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case165-successor-worker-bootstrap006.v9.json",
+      "bytes": 7072,
+      "sha256": "7572c05ad315155995907488a6af86ad0d7ec5c2c2083209a31198f20b747c92"
+    },
+    {
+      "path": "tools/p09/level6_closed_preparation_v1.py",
+      "bytes": 24229,
+      "sha256": "7caea0f722b6205ad9691d35ff217e9c299da490ad2c22dfe98e1300367c55eb"
+    }
+  ],
+  "fresh_inputs": 7,
+  "final_fresh_hashes": 7,
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 4.491611699995701,
+  "CPU_max": 32.95,
+  "RAM_min": 21.397516917706902
+}
