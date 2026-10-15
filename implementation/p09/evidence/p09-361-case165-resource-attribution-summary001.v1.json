@@ -1,0 +1,69 @@
+{
+  "state": "OBSERVED_SYSTEM_PRESSURE_NOT_SINGLE_CAUSE_PROVEN_NOT_PRODUCT_OR_ACCEPTANCE",
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "product_or_Native_executed": false,
+  "observations_are_summaries_of_bounded_diagnostic_commands_not_a_new_gate": true,
+  "stopped_preflights": [
+    {
+      "pin": {"path": "implementation/p09/evidence/p09-361-case165-successor-preflight-run008-attempt006.v1.json", "bytes": 61490, "sha256": "98efa40924e33d9b3b128f29d27882fd442bc396f5164155934ecee712bc1be6"},
+      "elapsed_seconds": 94.62823470000876,
+      "system_CPU_at_stop": 88.53,
+      "parent_CPU_machine_percent_at_stop": 0.0,
+      "parent_private_mib_at_stop": 62.0078125,
+      "cleanup_confirmed": true
+    },
+    {
+      "pin": {"path": "implementation/p09/evidence/p09-361-case165-successor-preflight-run008-attempt007.v1.json", "bytes": 58248, "sha256": "0c11a4e1c73d398289a5336b2148ff477423694559870222073c370563c4132f"},
+      "elapsed_seconds": 91.40490609999688,
+      "system_CPU_at_stop": 80.79,
+      "parent_CPU_machine_percent_at_stop": 0.0,
+      "parent_private_mib_at_stop": 61.60546875,
+      "cleanup_confirmed": true
+    }
+  ],
+  "idle_control": {
+    "this_session_started_P09_validation_product_or_build": false,
+    "duration_seconds": 45.457160600009956,
+    "samples": 90,
+    "system_CPU_max": 34.77,
+    "available_RAM_percent_min": 26.571309996634543,
+    "observer_process_CPU_seconds": 0.0,
+    "does_not_disprove_validation_triggered_external_load": true
+  },
+  "parallel_observer": {
+    "duration_seconds": 113.529,
+    "observer_process_CPU_seconds_excluding_sampling_children": 0.171875,
+    "system_CPU_max_in_separate_sampling_window": 78.91,
+    "available_RAM_percent_min": 25.899702012960383,
+    "last_query_trigger_seconds_since_observer_start": 111.168,
+    "last_query_trigger_system_CPU": 78.91,
+    "last_process_counter_snapshot_machine_CPU_percent": [
+      {"name": "MsMpEng", "CPU_percent": 13.31},
+      {"name": "explorer", "CPU_percent": 9.44},
+      {"name": "codex", "CPU_percent": 9.44},
+      {"name": "System", "CPU_percent": 6.81},
+      {"name": "git", "CPU_percent": 5.19}
+    ],
+    "asynchronous_counter_windows_not_exact_guard_sample": true,
+    "protected_or_unsampled_processes_not_assumed_zero": true,
+    "does_not_identify_scanned_paths_or_single_root_cause": true
+  },
+  "repository_status_cache_experiment": {
+    "git_version": "2.54.0.windows.1",
+    "untracked_cache_filesystem_test_exit_code": 0,
+    "baseline_status_median_seconds": 0.19014894999418175,
+    "warm_cache_status_median_seconds": 0.17578320000029635,
+    "status_bytes_identical_across_5_runs": true,
+    "index_entries_identical_before_after": true,
+    "status_snapshot_sha256": "5dfa3c832f5b35862802f8380185257af81cdae345ecb83fde4e52afd107d11f",
+    "index_entries_snapshot_sha256": "dccb4a91cc18e43f623ea5c051759dcb00067862425df138eb7b9bb2706ed38c",
+    "criterion_relative_improvement_at_least": 0.2,
+    "criterion_absolute_improvement_seconds_at_least": 0.05,
+    "criterion_met": false,
+    "local_configuration_changed": false,
+    "fsmonitor_daemon_started": false,
+    "does_not_benchmark_other_repositories_or_all_Git_operations": true
+  },
+  "external_processes_or_OS_or_Defender_settings_changed": false
+}

@@ -611,3 +611,15 @@ prepared_run_closure_v1은 사례165의 준비 전용004~007에만 별도 분류
 그래프008.v10과 기존 worker NO-GO 증거는 소스가 동일하여 다시 만들지 않았고, 통과한 CODE74도 두 번째 CPU 중단 때 재실행하지 않았다. 같은 무거운 사전검사 재시도를 추가하지 않는다. 다음 경계는 현 소스의 사전검사 성공 → 실제 helper 상한과 준비 회차 분류를 포함한 실행 자격 → 미실행165번이며, 준비 분류의 전체 dispatcher 연결까지 통과했다고 주장하지 않는다. 수정 전 preflight PASS를 현재 소스로 승격하지 않는다. Native004~008·제품 실행·후속 독립 리뷰·승인은 미완료이고 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·목표ACTIVE를 유지한다.
 
 근거는prepared-closure-code001..003·prepared-only-closure-run004..007-attempt001/002·successor-code008-003/004·successor-preflight008-003..005와 대응 closed-io2 설정/진단·successor-dispatch-qualification008-002다.
+
+## 실제 이전 이력의 독립 검증과 CPU 관측
+
+직전 턴은 불필요한 선행 import 수정과 CODE 통과를 포함한 진전이었다. 이번에는 생산 소스와 CODE74·그래프·worker 준비 자료를 그대로 재사용했다. 시작 전8초 관측은 CPU최고42.97%·가용RAM최저27.187%였지만 preflight008-006은94.628초/CPU88.53%, 별도 프로세스 관측을 함께한008-007도91.405초/CPU80.79%에서 원 보호 조건으로 중단됐다. 두 실행 모두정리 완료이며 부모의 해당 표본 CPU는0%, private62.008/61.605MiB였다. 006은종료 해시358/538까지만 완료했으므로 성공으로 처리하지 않는다.
+
+검증을 시작하지 않은45.457초 대조 관측90표본의 CPU최고는34.77%였다. 검증 중 별도 관측의 마지막 PerfProc 표본은 MsMpEng13.31%·Explorer9.44%·Codex9.44%·System6.81%·Git5.19%를 기록했다. 관측 창과 조회 지연이 원 Guard와 다르므로 이 값을 중단 시점 CPU의 정확한 분해나 특정 프로세스의 인과 증명으로 사용하지 않는다. 관측 Python 자체의CPU0.172초는 sampling child 및 WMI service의 비용을 포함하지 않는다. 검증이 외부 부하를 유발했을 가능성도 배제하지 않는다. 다른 작업 종료·메시지 전송·OS/Defender 변경은 없었다.
+
+이 저장소의 상태 탐색 비용도 별도로 비교했다. Git2.54.0.windows.1의 untracked-cache 파일시스템 검사는 통과했고,5회 상태 출력과 전후 인덱스 엔트리는 동일했다. baseline 중앙값0.190149초, warm cache0.175783초로 미리 정한20% 및50ms 개선 조건을 충족하지 않아 설정하지 않았다. fsmonitor daemon도 시작하지 않았다. 이 결과는 해당 저장소의 status 비교이며 다른 저장소나 diff 등 모든 Git 작업의 비용을 설명하지 않는다. 캐시 기능과 파일시스템 검사 조건은 [Git 공식 설명](https://git-scm.com/docs/git-update-index#_untracked_cache)을 따랐다.
+
+전체 검사를 반복하는 대신 probe_prepared_run_admission_v1에서 새 분류 경로를 실제 자료로 검증했다. CODE008-004에 고정된 원 v3 retry·v5 suffix projection·v2 Native 판정 전체 본문과 현재 adapter를 같은 private namespace 구조로 실행했다. 원 Native 중단002/003과 준비 전용004~007이 모두 통과했고 Native004~008의 부재도 확인했다. 실제 사용한 direct/private helper와 입력의 fresh45/final45,10.198초·CPU54.3%·가용RAM26.168%·cleanup=True다. 이 검사는 supporting integration test이며 실제 dispatcher 구성·전체 사전검사·Frame·GO·제품·수용을 대체하지 않는다. 생산 진입점이나 새 필수 Gate를 추가하지 않았다.
+
+현 소스의 전체 사전검사 성공 → 실제 dispatcher 재자격 → 미실행165번 경계는 남아 있다. 무거운 동일 재시도는 추가하지 않으며 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·목표ACTIVE를 유지한다. 근거는prepared-closure-live-admission001·resource-attribution-summary001·successor-preflight008-006/007 및 대응 closed-io2 설정/진단이다.
