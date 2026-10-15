@@ -4,6 +4,20 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 73개 실제 worker 진입점과 제품 생성 차단 검증
+
+`native009_full73_worker_entry_v1.py`는 원 worker의 main·인수 검사·정확한 파일 읽기·GO·Job·실행 함수 본문을 유지하고, 준비 구현과 명시적인 v4 packet 의존성을 연결한다. launch 함수군도 원 code·defaults·closure를 유지한 채 private 진입점 경로만 바꾼다. 기본 모듈과 v3 진입점은 수정하지 않았다. production 진입점에는 진단용 제품 차단을 설치하지 않았다.
+
+`qualify_native009_full73_worker_v1.py`의 production-worker001은 원 launch12개와 새 연결3개, 합계15개 계약을 통과했다. 실제 production `__main__`을 두 소유 Job에서 직렬 실행했다. EOF는 원 WORKER_NOT_AUTHORIZED로 끝났고 GO_DENIED는 정확한 제품 EXE·case165 명령을 확인한 뒤 외부 audit가 OS 프로세스 생성 전에 차단했다. 이 audit의 변경은 허용 JSON 이름 두 개의 v3→v4뿐이며 전체 역변환을 확인했다. 실제 제품과 Native009는 실행하지 않았다.
+
+두 자식 모두 descriptor73·원 worker attempts/calls1·raw policy 복원·기본 helper59·기타 JSON open0·단계 JSON 읽기3회·Job 잔여0이었다. 1코어 affinity·BelowNormal·기계 CPU hard cap6.25%·원 Job 메모리 제한·kill-on-close·no-breakaway를 readback했다. GO_DENIED의 별도 준비는4.455570초, GO부터 완전 캡처까지0.093537초였으며 원 준비15초·제품10초 경계를 바꾸지 않았다. EOF에는 GO를 보내지 않았다.
+
+직전 CODE005의 전체 선언3,214개와 비용 딕셔너리를 정확히 재구성한 뒤 현재 입력3,218개로 확장했다. Rust787경로·167회 pacing, fresh387/final387·기준 선언과 compact delta round-trip을 확인했다. 현재 비용 모델은 원 complete+별도 준비15초=598.592849/600초다. 여유는1.407151초뿐이며 현 결과 파일과 부모 연결·사전검사 소스가 추가되면 다시 계산해야 한다. 이 수치는 실제 Native 완료 보장이 아니다.
+
+실제 진단은73.295초·시스템CPU최고33.91%·검증기 자체CPU최고4.65357%·전용메모리최고51.16MiB·가용RAM최저29.70%·cleanupTrue였다. 완료 후 두 새 소스의 길이·SHA256과 receipt source pin 일치 및 실행 중복이 없음을 확인했다. 이 결과로 프리즈 원인이나 해결을 단정하지 않는다. 준비 CPU 정책 재설계 허용은 유지하되 이 qualifier에는 새 정책을 적용하지 않았고, 원75% 단일 표본 중단·실제 Native 보호·RAM/commit95%·원 입력 검증을 유지했다.
+
+다음은 이 full73 구성의 실제 부모·원 Job/Frame 연결, 전체 Native 입력의 두 바이트 경계·동적 helper·독립 수용 및 사전검사/dispatch다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작이며 추가 실제 제품 실행은 승인대기다. 근거: `native009-full73-production-worker001.v1.json`과 `successor-native009-full73-graph005.v1.json`.
+
 ### 73개 packet과 전체 입력 선언 재구성
 
 `native009_full73_transport_v1.py`는 기존 full72 연결에서 원72개 constructor 뒤에 고정 P154 Binding을 설치한다. 원 재구성 함수의 안쪽/바깥쪽 count와 engine count는 private72→73 슬롯만 바꾸고 code 전체 역변환을 확인했다. 바깥 함수의 명명된 reconstruction closure 한 칸만 새 안쪽 함수로 연결하며 다른 cell·globals·defaults와 원 code 본문을 유지한다. capsule 버전은 private v3→v4 슬롯으로 구분한다. 이전 선언과 새 P154 역할·원 parser/해시/schema 검사·제품10초·16KiB 한도는 그대로다.
@@ -18,7 +32,7 @@
 
 CODE005는 실제62.647초·시스템CPU최고47.54%·자체CPU최고5.59334%·전용메모리최고51.07MiB·가용RAM최저29.85%·cleanupTrue다. Source predicate791회는 모두 fresh 일반 파일 판정이었으며 fallback0·stat 재사용0이었다. 이 한 번의 결과는 프리즈 원인이나 해결을 입증하지 않는다. packet은 정확한 기존 바이트 pin으로 확인해 재사용했지만 실패한 부분 검증·기존 closing hash·불완전한 비용 판정은 재사용하지 않았다.
 
-현재 준비 graph는 `successor-native009-full73-graph005.v1.json`이다. graph001 및 CODE002/003/004는 중간 기록으로 보존하며 현재 전체 Source/비용 자격으로 승격하지 않는다. 다음은73개 실제 worker의 EOF/제품 생성 차단 진단과 이 구성의 부모·전체 Native 입력 두 바이트 경계·동적 helper·독립 수용·사전검사/dispatch다. 원본/실패·Native CPU·RAM/commit95%·1코어/BelowNormal·IO1/2MiB·acquisition14·decoder5·제품10초·준비15초·여유60을 유지한다. Native009/제품·접근허용·OS/Defender 변경0·추가 제품 실행 승인대기·공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작이다. 근거: `native009-full73-transport-code002..005`, `successor-native009-full73-graph001/005` 및 v4 capsule/bootstrap.
+현재 준비 graph는 `successor-native009-full73-graph005.v1.json`이다. graph001 및 CODE002/003/004는 중간 기록으로 보존하며 현재 전체 Source/비용 자격으로 승격하지 않는다. 실제73개 worker의 EOF/제품 생성 차단 진단은 앞 절에서 통과했으며 부모·전체 Native 입력 두 바이트 경계·동적 helper·독립 수용·사전검사/dispatch는 남아 있다. 원본/실패·Native CPU·RAM/commit95%·1코어/BelowNormal·IO1/2MiB·acquisition14·decoder5·제품10초·준비15초·여유60을 유지한다. Native009/제품·접근허용·OS/Defender 변경0·추가 제품 실행 승인대기·공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작이다. 근거: `native009-full73-transport-code002..005`, `successor-native009-full73-graph001/005` 및 v4 capsule/bootstrap.
 
 ### P154 실패 원본의 무손실 표현과 전체73 Binding
 
