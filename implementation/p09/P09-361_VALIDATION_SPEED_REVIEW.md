@@ -517,3 +517,29 @@ probe_extra_closed_receipts_v1은 생산자의 후보 목록을 기대값으로 
 이 비교는 선언된 scope의 projection과 비용 검사이며 현재 전체 source 바이트 재검증이나 실제68pair parent·worker·독립 oracle 연결은 아니다. 실제 진입점 전체 비용·자격·Native/제품/후속 독립 전체 리뷰·승인은 NOT_RUN이다. 예측598.008초를 실제 완료 보장 또는 자격 PASS로 처리하지 않는다. 기존 preflight 통과와 qualification005 비용거부, 원600초·margin60·decoder5·전체 scope는 유지한다. 다음은68pair를 실제 경로에 연결한 뒤 변경 범위와 진입점 비용을 검증하는 것이다. 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·목표ACTIVE를 유지한다.
 
 근거는extra-ordinary-receipts001·extra-ordinary-projection001·successor-extra-probe-manifest001 및 실제6개 p361-lossless-runtime-inputs 파생본이다.
+
+## 실제 68개 연결과 전체 사전 검증
+
+68개 무손실 대응을 실제 private parent·worker 준비 경로에 연결했다. 원 validator·callback·독립 oracle 및 고정 source는 변경하지 않았다. namespace-code003은6계약과fresh6/final6, serialization-code002는4계약과fresh3/final3으로 통과했다. 실제 bootstrap 발행 형식과 기대 직렬화 형식을 맞추되 해당 bootstrap 외 JSON은 바꾸지 않는다. 원 함수의 code/defaults/closure와 전체 역투영 검사를 유지했다. 공유 private 함수군의 실제 globals를 보존해 늦게 연결되는 reader도 같은 worker hint를 확인한다.
+
+graph004.v9는68pair·fresh143/final143·36.184초·CPU50.93%·가용RAM42.265%·cleanup=True로 통과했다. 원 선행 graph의 source pin을 유지하고 추가6개는 승인된 이전 사례164의 scope에서 독립 재선정했다. 실제 manifest와 capsule/bootstrap을 발행했고 두 전송 한도16KiB를 유지했다. 실패시 canonical 성공 graph를 발행하지 않고 별도 진단만 남긴다. v7 manifest suffix 오류와 v8 CPU84.12% 중단 기록을 보존했다.
+
+factory005의 expected bootstrap bytes 오류와006의 private globals 연결 오류도 보존했다. 수정 후 factory007은 원11계약·fresh104/final104·36.456초·CPU56.36%·가용RAM40.407%·cleanup=True다. 실제 별도 worker CLI가 원 GO 부재를 거부했으며 과거 runtime/authority open0, GO 전송0, 제품 실행 허가0이다. 이것은 worker 시작 검사이지 parent 진입 자격이나 Native/제품 통과가 아니다.
+
+원 준비 orchestration이 이전 bootstrap.v4를 읽어 setup007/008이 실패한 원인을 확인했다. 고정 원본은 보존하고 정확히3개 metadata literal만 AST 역투영으로 연결했다. 새 closed-io2 설정 경로는 실패 증거를 덮어쓰지 않는다. 해당 회귀3계약도 원 본문과 전체 AST 역투영을 검사한다. 새 세대 pref007은CPU82.61% 보호 중단이었다. 당시parentCPU0.186%·private48.770MiB·가용RAM40.289%·cleanup=True였으며 원인 프로세스나 프리즈 해결을 주장하지 않는다.
+
+현재 pref004-008은 원10계약·전체source3,016개·Rust787개·기본helper59·fresh516/final516·111.027초·CPU53.04%·가용RAM40.423%·cleanup=True로 통과했다. 실제1,056읽기/108,987,137바이트였고57회 fresh 무손실 복원으로physical51,638,051바이트에서semantic146,098,684바이트를 복원했다. decoder0.904초/5초, 완료57/57, 비활성, terminal error 없음이다. 입력 범위가 늘었으므로 이전 preflight보다 전체가 빨라졌다고 주장하지 않는다.
+
+## 비용상 실패가 확실한 재검증 방지와 압축 표본
+
+whole preflight 예측598.978초는 최종 진입점의 비용이 아니다. check_expanded_entry_cost_floor_v1은 원 complete cost 모델의 baseline을 정확히 재현한 뒤 실제 preflight 결과1,158,296바이트를 추가했다. 그 파일 하나만 더해도 하한600.153630초로 원600초 제한을 넘는다. 자격 영수증과 이후 입력은 아직 포함하지 않았으므로 현재 표현 그대로는 통과할 수 없다. 감사fresh330/final330·42.844초·CPU45.59%·가용RAM40.091%·cleanup=True다. 이는 현재 Python source 모델 재검사이며 전체3,016개 물리 입력의 재검증이 아니다. 결과는DEFERRED이고 실패가 예상되는 full qualification을 다시 실행하지 않았다.
+
+probe_receipt_compression_level6_v1은 기존 encoder의 압축 level1→6 정수 literal 하나만 정확히 투영하고 전체 code 역투영을 확인한다. wire schema·decoder 원본·해시·크기·EOF·64KiB checkpoint·자원 보호는 유지한다. 현재68개 manifest에서 큰 과거 ordinary 영수증3개를 골라 원본과 기존 파생본을 fresh 읽고 전체 원본 바이트를 복원했다. 현재 level1 인코딩이 기존 파생본과 같은지도 확인했고 level6 결과는 각각 기존 decoder로 두 번 완전히 복원했다. 원본과 파생본을 덮어쓰거나 새 압축 파일을 발행하지 않았다.
+
+표본 원본13,672,665바이트의 기존 압축본5,300,577바이트가level6에서4,858,917바이트로 줄었다. 절감441,660바이트(기존 압축본 대비8.33%)다. 세 표본의 encode CPU 합계는level1 0.125초/level6 0.234375초이고level6 두 번씩 복원한 CPU 합계0.140625초다. 전체 실험20.822초·CPU25.19%·가용RAM38.721%·fresh14/final14·cleanup=True로 통과했다. 전체68개 비용·공유 decoder5초 적합성이나 제품 경로 속도 향상은 아직 증명하지 않았다.
+
+지연의 핵심은 여전히 제품 실행 자체보다 직렬 입력 고정·전후 실제 읽기·증거 연결 비용이다. 작은 연결 오류마다 wrapper와 검증 증거를 추가한 작업 방식도 재검증 범위와 준비 부담을 키웠다. 이를 시스템 CPU 폭증의 원인이라고 단정하지 않는다. 동일 소스의 통과 검사는 보존하고, 전체 실행 전에 비용 하한을 검사해 확정 실패 반복을 피하며, 새 증거가 다시 입력비용을 키우는 문제를 포함해 전체 표현을 검증해야 한다. 원600초·margin60·공유decoder5·scope·자원 보호 조건은 완화하지 않는다.
+
+다음은 전체 대응 범위에서 압축효과·전체 바이트 복원·공유 decoder 비용을 검증하고 실제 진입점을 재자격하는 것이다. Native004는 생성되지 않았고 제품·독립 리뷰·승인은 실행하지 않았다. 공식158/249·잔여91·next165·generation53 및 P09/A12/A13 OPEN·목표ACTIVE를 유지한다. PC 프리즈 근본 해결이나 전체 속도 개선 완료는 미입증이다.
+
+근거는expanded-namespace-code001..003·expanded-bootstrap-serialization-code001/002·successor-connections004.v7/v8/v9·successor-expanded68-manifest004.v1·successor-factory005..007·closed-io/closed-io2 setup007/008·closed-io2 실행007/008·successor-preflight004-007/008·expanded-entry-cost-floor001·level6-sample001이다. 실패·원본·기존 승인 source와 사용자 소유 변경을 모두 보존했다.
