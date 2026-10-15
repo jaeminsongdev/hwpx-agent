@@ -597,3 +597,17 @@ prior_preparation_alias_v1은 승인된 이전 descriptor의 정확한 물리 pi
 007 preflight001/003/004와008-001의 비용 거부 및007-002의CPU85.76% 보호 중단도 보존했다. 해당 CPU 표본에서 parentCPU0%·private56.574MiB·가용RAM34.320%였지만 부하 원인 프로세스는 확정하지 않는다. Native004..008과 제품 실행·GO·후속 독립 전체 리뷰·승인은 없고 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·목표ACTIVE를 유지한다. OS 설정 변경과 접근 허용 요청은 없었다.
 
 근거는level6-entry graph005..008.v9 및008.v10·level6-factory001..005·CODE006-001/007-001/008-001/002·closed-io2 preflight setup/실행006..008·successor-preflight007-001..004/008-001/002·current-cost-diagnostic001..003·known-scope-cost001..006·observed-scope-replay001/002·prior-preparation-alias-code001·closed-io2-qualify008-001 및 successor-dispatch-qualification008-001이다. known-scope-cost002/006의597.007초는 실제 stage reader의 전체 추가 입력을 포함하지 않은 하한이며 실제603초 거부를 대신하지 않는다.
+
+## 준비 회차 분류와 불필요한 선행 import 수정
+
+느린 진행에는 직렬 입력 고정·전후 읽기 비용뿐 아니라 연결 오류마다 보조 실행기와 증거가 늘어 재검증 범위까지 커지는 작업 방식이 영향을 줬다. 준비만 끝낸 회차를 실패 graph로만 분류하는 경로도 정상 준비 산출물을 거부했다. 같은 실패를 전체 재실행으로 확인하는 방식은 줄여야 한다.
+
+prepared_run_closure_v1은 사례165의 준비 전용004~007에만 별도 분류를 적용한다. 실제 Native 파일 부재를 전후 확인하고 준비 graph·capsule·bootstrap 및 생산자 소스의 현재 hash와 EOF에서 원 WORKER_NOT_AUTHORIZED 종료를 검사한다. 실제 Native가 있는 회차와 나머지 실패 graph는 원 previous_stops 본문에 위임한다. 없는 Native 기록을 생성하거나 이전 준비를 제품 PASS로 바꾸지 않는다. 현재 closure-code003의6계약과 회차004~007 attempt002가 통과했다. 각 회차fresh7/final7·과거 runtime/authority worker open0·GO0·제품 실행0·cleanup=True다. 첫 코드 검사 실패와 수정 전 attempt001도 보존했다.
+
+수정 전 CODE008-003은 원74계약·helper62·fresh170/final170·32.436초로 통과했고 whole preflight008-003은 원10계약·source3,044/Rust787·fresh538/final538·111.040초·CPU55.98%·가용RAM27.720%·cleanup=True였다. 그러나 qualification008-002는 실제 Native helper67/64 상한에서 거부됐다. 생산 모드에서만 쓰는 pressure·distinct·publisher를 모든 모드에서 선행 import한 원인을 확인했다. 이3개 import를 생산 모드 안으로 옮기고 회귀 검사에 해당 경계를 추가했다. sys.modules 숨김·삭제나 helper 상한 완화는 없다. 최종 CODE008-004는 원74계약·helper59·fresh170/final170·33.557초·CPU40.19%·가용RAM27.642%·cleanup=True다. helper 감소는 확인했지만 전체 실행 시간 개선율은 아직 입증하지 않았다.
+
+최종 소스 preflight008-004는62.135초·CPU91.79%, 이어 동일 CODE와 준비 산출물을 재사용한008-005는45.102초·CPU96.79%에서 원 보호 조건으로 중단됐다. 두 실행 모두cleanup=True이며 전후 해시 완료나 현재 사전검사 PASS로 계산하지 않는다. 해당 급등 표본의 부모 CPU는 각각전체0.183%/0%, private63.082/62.313MiB였다. 종료 후 PerfProc와 실행 파일·스크립트 이름만 제한적으로 확인했으며 books 검증과 MapleRust 검증의 병행 실행을 관찰했다. 이는 동시 부하 관측이지 급등 순간의 원인 프로세스나 검증이 유발한 외부 부하의 인과 증명은 아니다. 명령행 원문·비밀정보는 출력하지 않았고 외부 프로세스·Defender·OS 설정은 바꾸지 않았다.
+
+그래프008.v10과 기존 worker NO-GO 증거는 소스가 동일하여 다시 만들지 않았고, 통과한 CODE74도 두 번째 CPU 중단 때 재실행하지 않았다. 같은 무거운 사전검사 재시도를 추가하지 않는다. 다음 경계는 현 소스의 사전검사 성공 → 실제 helper 상한과 준비 회차 분류를 포함한 실행 자격 → 미실행165번이며, 준비 분류의 전체 dispatcher 연결까지 통과했다고 주장하지 않는다. 수정 전 preflight PASS를 현재 소스로 승격하지 않는다. Native004~008·제품 실행·후속 독립 리뷰·승인은 미완료이고 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·목표ACTIVE를 유지한다.
+
+근거는prepared-closure-code001..003·prepared-only-closure-run004..007-attempt001/002·successor-code008-003/004·successor-preflight008-003..005와 대응 closed-io2 설정/진단·successor-dispatch-qualification008-002다.
