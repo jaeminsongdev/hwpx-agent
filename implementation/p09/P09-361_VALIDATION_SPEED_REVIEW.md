@@ -4,7 +4,29 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. run008 제품 실행은 아직 시작하지 않았다.
 
-### 현재 전체 사전검사와 dispatch 구성 실패
+### 통합 진입점과 현재 준비 재검증
+
+`xz_unified_runtime_v1.py`가 준비 연결과 실제 worker의 공개 진입점을 하나로 묶는다. 게시용 `xz_corpus_delivery_v1.py`를 로드하지 않고 필요한 codec pin과 기존 자원 관측 함수만 포함한다. 복구 함수6개와 관측 함수2개의 AST는 원본과 같고, 기존 v17 함수군은 전체 code object를 유지한 별도 명시적 namespace에서 연결한다. worker 경로와 v18 packet 정규식만 metadata로 변환하며 역변환을 확인한다. `sys.modules` 삭제·helper 상한 확대·실제 witness 누락은 없다.
+
+| v18 실제 완료 항목 | 결과 |
+| --- | --- |
+| 통합 진입점 CODE002 | 18계약, fresh199/final199, 24.983042초, CPU 최고60.23%, cleanup=True |
+| `successor-connections008.v18` | 물리68개 재구성, fresh256/final256, 50.628714초, CPU 최고70.31%, cleanup=True |
+| `successor-code-run008-attempt006` 원 CODE | 전체74계약, 기본 import60개, 테스트 포함93개(분리), fresh221/final221, 37.268942초, CPU 최고71.68%, cleanup=True |
+| `successor-xz-factory003` 원 EOF 검사 | 11계약, fresh228/final228, 48.193381초, CPU 최고55.46%, cleanup=True. GO 없이 실제 worker 권한 거부, 과거 제품·수용 파일 열기0, parent/worker dispatch0 |
+| 현재 CODE006 metadata 바인더 CODE001 | 8계약, fresh205/final205, 27.407354초, CPU 최고46.78%, cleanup=True |
+
+통합 진입점의 첫 CODE001은 자기 자격 기록을 생성하기 전에 읽는 순환 참조로 실패했다. v17 기반 증명과 새 후보 증명을 구분한 뒤 CODE002에서 닫았다. EOF002는 기존75% 단일 표본 보호기에서 시스템85.23%로 중단됐고 원본을 보존했다. 보호기를 바꾸지 않고 코드 검토 후 새 독립 실행003에서 통과했다. 이 시간 차이를 통제된 성능 개선율이나 프리즈 해결로 해석하지 않는다.
+
+`xz_unified_preparation_binding_v1.py`는 고정된 통합 진입점 소스를 바꾸지 않고 실제 CODE006·v18 graph·EOF003의 pin과 모든 현재 프로그램 소스를 확인한다. 원 함수군을 그대로 유지하고 현재 CODE 식별자5→6 및 참조 metadata만 결속한다. 바인더 소스·테스트·8개 계약의 자격도 실제 stage reader에 추가한다. 과거 CODE005와 v17 사전검사012는 과거 profile의 근거로 남으며 현재 v18 준비의 PASS로 대체하지 않는다.
+
+현재 전체 사전검사013은 실제 본문67.646610초에 시스템 CPU97.39%로 `STOP_PREPARATION_SYSTEM_PRESSURE90` 중단됐다. 마지막 표본의 자기 CPU는0%, 전용 메모리67.949MiB, 가용RAM17.63057%, commit51.94413%였다. 실제583읽기·43962835bytes, fresh547/final0이며 64KiB 작업 공간의583 lease가 모두 반환됐고 cleanup=True다. 원 CPU90 중단과 RAM/commit95%는 유지한다. 이를 입력 검증 PASS나 새 dispatch 자격으로 처리하지 않는다.
+
+중단 뒤 코드 검토에서 새 통합 진입점의 while loop0개, 원 관측 AST 동일, 추가 sampler·스레드 없음과 작업 공간 반환을 확인했다. 같은 시점의 자기 CPU/RAM 폭주는 이 표본으로 지지되지 않지만, 검증 I/O와 외부 도구의 상호작용은 배제되지 않는다. Defender 읽기 전용 조회는 평균 검사 목표10%, 낮은 우선순위True, idle CPU throttle 해제False, 실시간 보호True였다. 구성 경로의 literal·상위 경로·wildcard 비교에서는 `D:\개발`, `D:\dev`, `D:\devdata`에 대한 일치를 찾지 못했지만 실제 파일별 제외 여부를 증명한 것은 아니다. 중단 당시 Defender CPU를 측정하지 않았고, 중단 후 표본에도 유효한 Defender CPU 값이 없어 원인으로 확정하지 않는다. 설정 변경은0이다.
+
+다음 경계는 같은 실행 구간의 외부 CPU 귀속을 제한적으로 확인하고 현재 전체 사전검사를 닫은 뒤, 실제 Native helper 합집합과600초 비용을 기존 dispatch 본문으로 검증하는 것이다. 현재 기본 import60은 실제 CODE의 결과지만 실제 Native 합집합≤64는 아직 미검증이다. Native008·제품 실행·GO·수용 증가는0이며 P09/공식158/249·잔여91·next165·P10 미시작을 유지한다. 진단 근거는 `xz-unified-resource-review001`이다.
+
+### 이전 v17 사전검사와 dispatch 구성 실패
 
 현재 XZ v17과 실제 CODE005를 승인된 run007 사후 복구 경로에 연결했다. `xz_recovery_preparation_v1.py`는 이전 CODE를 복사하거나 재명명하지 않고 실제 `successor-code-run008-attempt005`의 pin을 직접 읽는다. 기존 준비 closure4..6과 실패한 Native007 원본, 10초 제품 window는 보존한다. setup 경로를 바꾸는 래퍼가 원 main의 실제 globals에도 게시되도록 수정했고, 원 closure의 전체 AST 및 code 역변환과 함께 12개 계약으로 검증했다.
 
