@@ -543,3 +543,19 @@ probe_receipt_compression_level6_v1은 기존 encoder의 압축 level1→6 정�
 다음은 전체 대응 범위에서 압축효과·전체 바이트 복원·공유 decoder 비용을 검증하고 실제 진입점을 재자격하는 것이다. Native004는 생성되지 않았고 제품·독립 리뷰·승인은 실행하지 않았다. 공식158/249·잔여91·next165·generation53 및 P09/A12/A13 OPEN·목표ACTIVE를 유지한다. PC 프리즈 근본 해결이나 전체 속도 개선 완료는 미입증이다.
 
 근거는expanded-namespace-code001..003·expanded-bootstrap-serialization-code001/002·successor-connections004.v7/v8/v9·successor-expanded68-manifest004.v1·successor-factory005..007·closed-io/closed-io2 setup007/008·closed-io2 실행007/008·successor-preflight004-007/008·expanded-entry-cost-floor001·level6-sample001이다. 실패·원본·기존 승인 source와 사용자 소유 변경을 모두 보존했다.
+
+## 전체 68개 압축본의 순차 준비와 독립 복원
+
+전체68개 원본167,564,011바이트의 새 압축본을 준비했다. 기존 압축본51,971,092바이트에서46,666,900바이트로5,304,192바이트(10.206%) 줄었다. 원본과 기존 압축본은 변경하지 않았고 별도의 `.level6.envelope.v1.json` 파일68개를 배타적으로 발행했다. 새 파일은 현재 실행기의 경로 규칙에 아직 채택되지 않았다.
+
+recompress_preparation_corpus_v1은 최대8개씩9개 배치로 순차 처리한다. 각 배치는 원본과 기존 압축본을 실제 읽고 원본 전체 바이트를 복원한 뒤 level6 결과를 같은 기존 decoder로 두 번 복원한다. 발행된 파일의 실제 hash와 모든 배치 입력의 마지막 fresh hash도 확인한다. 배치마다7개 계약이 통과했고 전체 배치의fresh/final 개수는 같았다. 통과한 배치는 다시 실행하지 않았다. 배치 CPU최고59.82%·가용RAM최저38.708%였으며 자원 보호 중단은 없었다.
+
+첫 시도의 기존 `.failed` 물리파일명 누락 오류는 수정하고 실패 영수증을 보존했다. 다음 배치의 선행 프로세스 종료 확인 전 진입1회는 기존 중복 실행 잠금이 실제 작업 시작 전에 거부했다. 이후에는 실행 핸들의 terminal 결과를 확인하고 다음 배치만 시작했다. 실패를 통과 배치로 계산하거나 기존 파일을 덮어쓰지 않았다.
+
+verify_level6_corpus_v1은 생산자의 목록을 그대로 승인하지 않고 원 graph004.v9의68개 manifest와 각 배치의 순서·범위·원본 descriptor·불변 소스 pin을 비교한다. 누락·중복·미완료·실패 배치 및 바뀐 원본·ordinal·통계를 거부하는6개 계약이 통과했다. 전체 새 압축본을 전후 두 경계에서 실제 다시 읽고 각각 복원해 원 manifest의 원본 크기·SHA256과 일치시켰다. 하나의 기존 DecoderBudget에서136/136회 복원·1.324859초/5초·비활성·오류 없음이며fresh94/final94·52.413초·CPU24.53%·가용RAM40.719%·cleanup=True다. 전체 원본의 동시 current-source freeze나 실제 Native 경계 검증을 대신하지 않는다.
+
+원 complete cost 엔진으로 기존3,016개 physical scope의68개 압축본만 일대일 대체했다. 실제 새 검사 소스·배치 영수증·진단 manifest·이전 preflight 결과까지 포함한3,032개 선언 입력의 모델은596.428080초다. 기존 선언 모델598.977564초를 정확히 재현했고600초 한도·60초 margin·공유decoder5초·Rust inventory 예약167개를 유지했다. 향후 채택 코드와 자격 영수증 및 실제 진입점 전체 범위는 아직 포함하지 않았으므로 이 계산은 실행 허가나 최종 비용 자격이 아니다.10.206%는 압축본 바이트 감소율이지 전체 실행 시간 개선율이 아니다.
+
+다음은 새 물리 경로를 parent·worker·독립 oracle의 동일 private Binding에 연결하고 현재 진입점을 재자격하는 것이다. 기존 canonical 경로·실패 및 같은 사례 closed-prebody 판정은 보존한다. Native004는 없고 제품·후속 독립 리뷰·승인도 실행하지 않았다. 공식158/249·잔여91·next165·generation53/P09-A12-A13 OPEN·목표ACTIVE를 유지한다. OS 설정 변경과 GUI 접근 허용 요청은 없었다.
+
+근거는level6-corpus-batch001-attempt001/002·009-attempt001·017-attempt001/002·025/033/041/049/057/065-attempt001·level6-corpus-manifest001·level6-corpus-verification001 및 새 level6 파생본68개다.
