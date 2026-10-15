@@ -4,6 +4,20 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### P154 실패 원본의 무손실 표현과 전체73 Binding
+
+`p09-154-observed-full.actual-run01.v1.json`의 실제 원본3,917,483bytes와 SHA256을 확인했다. worker·Job·writer·heavy work가 시작된 뒤 STOP_DURATION_LIMIT로 중단됐으며 product_complete=False·cleanup/owned_tree_empty=True다. 제품 자식 실행과 본문 관측은 미확인이다. 이 기록은 prebody 실패나 제품 수용으로 재분류하지 않는다. 최초 읽기 전용 확인은 원 reader/자원 보호 아래5.731초·시스템CPU최고50.92%·정리 완료였다.
+
+`legacy154_full73_carrier_v1.py`는 원본 바이트를 고치거나 JSON을 정규화하지 않고277,562bytes의 별도 XZ 표현을 게시했다. 원본 길이·SHA256이 정확히 복원됐다. 기존72개 reader와 codec 함수는 유지하고 P154 reader만 덧붙였다. 실제 디스크에서73개를 두 번 읽고 각 경계마다 물리 hash와 복원 원본 hash를 대조했다.146회 복원이 하나의 원5초 decoder 예산 중2.064621초에 완료됐으며 과거 실행의 timing이나 실패한 부분 검증을 합산하지 않았다.
+
+physical001은 역할·원본 변조·현재 제품/소스 제외·물리/의미 바이트 분리·실패 시 재사용 조건10계약, fresh175/final175로 통과했다. 실제43.481초·시스템CPU최고32.2%·자체CPU최고3.00983%·전용메모리최고141.34MiB·가용RAM최저31.35%·cleanupTrue다. 물리 읽기 감소는3,639,921bytes이고 원2MiB/s의 두 읽기 nominal 절감은3.471299초다. 이는 전체 실행 시간의 실측 개선율이 아니다.
+
+`legacy154_binding_v1.py`는 고정된 이전72개 constructor를 실제 실행한 뒤 원 raw constructor로73개 전체를 검사한다. nonconstructor와 Projection 함수 객체·이전 codec·scope/바이트/핸들 oracle은 유지한다. 고정된 P154 pin과 출처만 추가하고 일반 metadata·소스·EXE·fixture·현재 제품 alias는 계속 거부한다. P154의 실행 미확인과 Native007 실행True·Native008 실행None·이전 두 legacy 실패의 역할은 별도로 보존한다.
+
+binding CODE001은10계약·fresh386/final386·현재 Rust787경로/167회 inventory pacing으로 통과했다. 기존 전체 선언과 새 code·테스트·물리 증거·CODE manifest를 반영했으며 의미/물리 입력은 각각3,207개·물리204,167,276bytes다. 원 complete582.368155초+별도 준비15초=597.368155/600초로 현 Binding 선언 모델이 다시600초 안에 들어왔다. 앞 부모 선언600.081944초보다 순 nominal2.713789초 낮으며 입력 제외·속도/decoder/여유/제품 window 변경은 없다. 새 CODE 결과와 이후 worker 전송·자격/dispatch 결과는 추가될 때 재계산해야 한다.
+
+CODE 실제62.796초·시스템CPU최고59.28%·자체CPU최고3.34596%·전용메모리최고50.53MiB·가용RAM최저29.48%·cleanupTrue다. 원72개 engine은 비용 함수를 얻기 위해 구성했으며 worker 호출0이다.73개 CODE manifest는 실제 worker packet이 아니고, 전체 입력의 실제 Native Frame·73개 worker 재구성·동적 helper·독립 수용·사전검사/dispatch는 미완료다. 다음은73개 전송/worker 및 부모 연결에 이 Binding을 적용하는 작업이다. 원본 삭제·덮어쓰기·제품/Native009/접근허용·OS/Defender 변경0·추가 제품 실행 승인대기·공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작을 유지한다. 근거: `legacy154-full73-physical-g001-attempt001`, `legacy154-binding-code001`, `legacy154-binding-code-manifest001`.
+
 ### 부모의 원 Job과 실제 Frame checkpoint 연결
 
 `native009_parent_launch_v1.py`는 원 recovery API가 만든 private10초 window에 production launch 의존성을 연결한다. 원 template의 code·defaults·closure와 완전한 capture checker를 유지하고, 같은 globals를 사용하는 실행 wrapper 하나로 원 Job 생성 메서드를 실행 범위 안에서만 관찰한다. 원 메서드가 반환한 handle은 그대로 runner에게 전달되며 추가 Job·Windows sampler·Frame을 생성하지 않는다. 실패 경로에서도 메서드를 복원하고 event를 닫는다. Job 종료·프로세스/pipe 정리는 원 runner가 맡는다.
