@@ -1,0 +1,74 @@
+{
+  "state": "FAILED_SUCCESSOR_DISPATCH_CONSTRUCTION_NOT_ADOPTED",
+  "index": 165,
+  "physical_run": 8,
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "product_or_Native_executed": false,
+  "error_type": "ValueError",
+  "error_code": "STOP_TERMINAL_METADATA_WARNING_BEFORE_MORE_WORK",
+  "failure_frames": [
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "main",
+      "line": 234
+    },
+    {
+      "file": "current_queue_successor_dispatch.py",
+      "function": "admit",
+      "line": 45
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "pin",
+      "line": 108
+    },
+    {
+      "file": "fresh_lossless_metadata_reader_v1.py",
+      "function": "_read",
+      "line": 39
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "function": "_read",
+      "line": 245
+    },
+    {
+      "file": "weighted_audit_io.py",
+      "function": "_read",
+      "line": 44
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "function": "_read",
+      "line": 83
+    },
+    {
+      "file": "weighted_audit_io.py",
+      "function": "reserve",
+      "line": 35
+    },
+    {
+      "file": "terminal_metadata_pressure_v1.py",
+      "function": "check",
+      "line": 40
+    }
+  ],
+  "cleanup_confirmed": true,
+  "elapsed_seconds": 46.915708300002734,
+  "CPU_max": 79.81,
+  "RAM_min": 23.18211660911469,
+  "terminal_resource_sample": {
+    "system_cpu_percent": 79.81,
+    "available_ram_percent": 23.675508603984973,
+    "commit_used_percent": 50.87320264210154,
+    "parent_cpu_machine_percent": 0.38646692506044067,
+    "parent_private_mib": 51.99609375,
+    "parent_private_percent": 0.163197098718245
+  },
+  "metadata_progress": {
+    "fresh_inputs": 518,
+    "actual_read_passes": 529,
+    "actual_bytes_read": 47586682
+  }
+}

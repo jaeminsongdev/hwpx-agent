@@ -20,6 +20,14 @@ POLICY_SOURCE=dict(path="tools/p09/preparation_attributed_cpu_v1.py",bytes=9869,
 POLICY_CODE=PREFIX+"preparation-attributed-CPU-design-code001.v1.json"
 PROBE=PREFIX+"preparation-attributed-CPU-probe001.v1.json"
 CONNECTION_STATE="PASS_PREPARATION_ATTRIBUTED_CONNECTION_CODE_NOT_NATIVE_OR_STAGE_EXECUTION"
+CONNECTION_CONTRACTS=23
+WINDOW_BRIDGE="tools/p09/recovery_dispatch_window_v1.py"
+WINDOW_TEST="tools/p09/tests/test_recovery_dispatch_window_v1.py"
+WINDOW_PINS=[
+    dict(path="tools/p09/post_product_recovery_connection_v1.py",bytes=8676,
+        sha256="105e55a7534defdd5ea804a03a007c72a96079de042d21fa53d5675064968f77"),
+    dict(path="tools/p09/post_product_recovery_window_v1.py",bytes=12876,
+        sha256="ce0dd3fdddc238dd7181d5c12c0a161a2dea74c791dc8053dd99a2b0ca7e8890")]
 UTIL_PINS=[
     dict(path="tools/p09/terminal_metadata_pressure_v1.py",bytes=2956,sha256="7b5bb9b890cde566f566857c06f010736519ac6e2551480dcf92bdab6dfdd9dd"),
     dict(path="tools/p09/distinct_final_sample_guard_v1.py",bytes=1683,sha256="8c590aa82c2677d391d6d5781b356641f77c7cdc6e55370ca251d6a809ad67c3"),
@@ -67,7 +75,8 @@ def connection_path(attempt):
 
 
 def witnesses(q,a,policy,*,connection=True,connection_attempt=None):
-    for path in (ENTRY_SOURCE,ENTRY_TEST):q.pin(path)
+    for path in (ENTRY_SOURCE,ENTRY_TEST,WINDOW_BRIDGE,WINDOW_TEST):q.pin(path)
+    for pin in WINDOW_PINS:a.exact(q.pin(pin["path"]),pin,"ORIGINAL_WINDOW_CONNECTION_SOURCES")
     a.exact(q.pin(ENTRY["path"]),ENTRY,"ORIGINAL_RECOVERY_ENTRY_UNCHANGED")
     a.exact(q.pin(POLICY_SOURCE["path"]),POLICY_SOURCE,"EXACT_POLICY_DESIGN_SOURCE")
     design=closure(q,POLICY_CODE,policy.CODE_STATE,a,20)
@@ -75,7 +84,14 @@ def witnesses(q,a,policy,*,connection=True,connection_attempt=None):
     probe=closure(q,PROBE,"PASS_CONTROLLED_PREPARATION_CPU_GUARD_SOURCE_READS_NOT_RUNTIME_INSTALLATION",a)
     a.fields(probe,dict(runtime_policy_installed=False,actual_Native_or_product_executed=False,
         actual_P09_preflight_executed=False,subprocess_construction_blocked=True,Native008_absent_before_after=True),"CONTROLLED_NO_CHILD_PROBE")
-    if connection:closure(q,connection_path(connection_attempt),CONNECTION_STATE,a,13)
+    if connection:closure(q,connection_path(connection_attempt),CONNECTION_STATE,a,CONNECTION_CONTRACTS)
+
+
+def window_components(root,envelope):
+    import hashlib
+    data=(root/WINDOW_BRIDGE).read_bytes()
+    pin=dict(path=WINDOW_BRIDGE,bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
+    return envelope.namespace_bundle.load(root,[pin]+WINDOW_PINS,{})[0]
 
 
 def preflight_audit(q,a,policy,attempt):
@@ -113,6 +129,28 @@ def connect_old(old,policy,role,instances):
     return NS(**{**vars(old),"base":NS(**{**vars(old.base),"FIRST":first})})
 
 
+def preparation_metadata_checkpoint(original):
+    """Actual preparation binding only; the owner's qualified Guard decides CPU."""
+    class Checkpoint(original):
+        def __init__(self,reader,owner):
+            guard=getattr(owner.checkpoint_io,"__self__",None)
+            state=getattr(guard,"preparation_CPU",None)
+            require(state is not None and state.role=="whole_metadata_preflight","EXACT_PREPARATION_METADATA_OWNER")
+            require(owner.samples is guard.samples,"SAME_ORIGINAL_SAMPLE_LIST")
+            super().__init__(reader,owner)
+        def __call__(self):
+            require(self.active and self.reader.checkpoint is self and not self.latched,"EXACT_UNLATCHED_METADATA_BINDING")
+            try:
+                self.hard();self.checks+=1
+                self.original()
+            except (ValueError,OSError):
+                self.latched=True;raise
+        def summary(self):
+            return dict(super().summary(),preparation_policy_via_original_owner_guard=True,
+                Native_policy_changed=False,original_75_single_sample_decision_used=False)
+    return Checkpoint
+
+
 def bind_envelope(namespace,envelope):
     name=getattr(namespace,"__name__",None)
     if type(name) is not str or not name.startswith("p09_exact_"):return
@@ -132,6 +170,12 @@ def bind_envelope(namespace,envelope):
 def route_loader(root,original,policy,a,role,instances,*,require_connection=True,connection_attempt=None,audit_attempt=None,envelope=None):
     def load(*args,**kwargs):
         modules,proof=original.load(*args,**kwargs)
+        tests=getattr(modules,"test_flat_current_queue_metadata_connection",None)
+        if tests is not None:
+            runtime=tests.r
+            # Only the namespace attribute used by the REAL binding is changed.
+            # Original test method globals keep the immutable historical runtime.
+            tests.r=NS(**{**vars(runtime),"MetadataCheckpoint":preparation_metadata_checkpoint(runtime.MetadataCheckpoint)})
         pressure=getattr(modules,"terminal_metadata_pressure_v1",None)
         if pressure is not None:
             revised=pressure_facade(pressure,policy,role,instances)
@@ -185,6 +229,7 @@ def main():
     import accept_case112_current_epoch as a
     import flat_current_queue_envelope_runtime_v25 as envelope
     raw,_=envelope.namespace_bundle.load(c.ROOT,[ENTRY,POLICY_SOURCE]+UTIL_PINS,{})
+    windows=window_components(c.ROOT,envelope)
     entry=raw.prepared_run_closure_v1;policy=raw.preparation_attributed_cpu_v1
     host_policy=entry.configure_host_policy(c)
     parser=argparse.ArgumentParser(add_help=False);parser.add_argument("--connection-code",action="store_true")
@@ -204,9 +249,13 @@ def main():
             guard.acquire();q=a.AcceptanceReader(c.ROOT,guard.check);witnesses(q,a,policy,connection=False)
             from tests import test_preparation_attributed_entry_v1 as tests
             tests.MODULE=sys.modules[__name__];tests.POLICY=policy;tests.ENTRY_MODULE=entry;tests.ENVELOPE=envelope
-            result=unittest.TextTestRunner(stream=io.StringIO(),verbosity=0).run(unittest.defaultTestLoader.loadTestsFromModule(tests))
+            from tests import test_recovery_dispatch_window_v1 as bridge_tests
+            bridge_tests.MODULE=windows.recovery_dispatch_window_v1;bridge_tests.ENTRY=sys.modules[__name__]
+            bridge_tests.POLICY=policy;bridge_tests.ORIGINAL=entry;bridge_tests.ENVELOPE=envelope;bridge_tests.COMPONENTS=windows
+            suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromModule(module) for module in (tests,bridge_tests))
+            result=unittest.TextTestRunner(stream=io.StringIO(),verbosity=0).run(suite)
             record["contracts"]=dict(run=result.testsRun,errors=len(result.errors),failures=len(result.failures),skipped=len(result.skipped))
-            a.exact(record["contracts"],dict(run=13,errors=0,failures=0,skipped=0),"ALL_CONNECTION13")
+            a.exact(record["contracts"],dict(run=CONNECTION_CONTRACTS,errors=0,failures=0,skipped=0),"ALL_CONNECTION_CONTRACTS")
             for module in tuple(sys.modules.values()):
                 filename=getattr(module,"__file__",None)
                 if filename and Path(filename).absolute().is_relative_to(c.ROOT/"tools/p09"):
@@ -243,6 +292,10 @@ def main():
     routed=route_loader(c.ROOT,envelope.namespace_bundle,policy,a,ctx.role,instances,
         connection_attempt=args.connection_attempt,
         audit_attempt=ctx.values["--preflight-attempt"] if ctx.stage=="qualify" else None,envelope=envelope)
+    tool=windows.post_product_recovery_window_v1
+    routed,_=windows.recovery_dispatch_window_v1.connect_loader(routed,envelope,
+        windows.post_product_recovery_connection_v1,tool,(c.ROOT/tool.WINDOW_PIN["path"]).read_bytes(),bind_envelope,
+        controller_transform=lambda old:connect_old(old,policy,ctx.role,instances))
     proxy=NS(**{**vars(envelope),"namespace_bundle":routed})
     code=execute(entry,proxy,remainder)
     require(absent() and instances and all(g.cleanup for g in instances),"NO_NATIVE_AND_ALL_STAGE_GUARDS_CLOSED")

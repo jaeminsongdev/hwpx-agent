@@ -4,6 +4,27 @@
 
 2026-10-15 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. run008 제품 실행은 아직 시작하지 않았다.
 
+### 재로딩 연결 수정과 현재 자격
+
+`recovery_dispatch_window_v1.py`는 dispatch `main`의 정확한 컨트롤러 loader 호출 한 개만 연결한다. 원 함수 전체와 자격을 갖춘 graph4 메타데이터 변형을 먼저 대조하고, 연결 변경을 역변환했을 때 나머지 AST가 전부 일치하도록 검사한다. 바깥 alias뿐 아니라 실제 재로딩 결과의 캡처 창·비용 모델·template가10초를 사용하는 회귀가 통과했다. 기본 컨트롤러·과거15초 창과 동결 `prepared_run_closure_v1.py`·공유 `conservative_maintenance.py`는 변경하지 않았다. 별도 Native 진입점은 준비용 CPU Guard를 설치하지 않으며, 전체 Native 자격은 아직 없다.
+
+준비 전용 연결에서 발견한 두 누락도 수정했다. 첫째, 원 사전검사의 실제 `MetadataCheckpoint`가 별도75% 즉시중단을 유지하고 있었다. 실제 입력 binding의 namespace attribute만 준비용 facade로 연결하고, 원10개 계약의 함수 globals와 기본 Native class는 그대로 유지했다. 둘째, dispatch가 새로 로딩한 컨트롤러의 Guard가 준비용 정책을 받지 못했다. 준비 모드에서만 명시적 controller 변환을 전달하고, Native의 기본 변환은 비워 둔다. 실제 재로딩 회귀는 준비 역할의 Guard와 정리를 함께 확인한다.
+
+현재 소스의 `preparation-attributed-connection-code007`은23계약·fresh76/final76·CPU 최고72.25%·가용 RAM 최저21.79473%·cleanup=True로 통과했다. CODE004의 실패, 선행 CODE005·006과 모든 실행 원본은 그대로 보존한다. 현재 자격은007을 기준으로 하며 소스가 달라진 과거 PASS를 재사용하지 않는다.
+
+| 실행 접미사 | 실제 결과와 경계 |
+| --- | --- |
+| `successor-recovery-preflight-run008-attempt006` | 66.785초·CPU85.26%에서 원 `metadata_pressure_failfast.py`의75% 단일 표본 중단. 새 Guard는 경고1개·미중단 상태였으며 cleanup=True. 이후 실제 binding 연결 수정 |
+| `successor-recovery-preflight-run008-attempt007` | 입력3066·Rust787·helper59·fresh563/final563, 121.032초·CPU80.27%·가용 RAM 최저22.24283%·cleanup=True PASS. 실제 준비 Guard의75% 경고1개, checkpoint51388회·복구 완료. 비용 추정598.415565초. 이후 dispatch Guard 소스 수정 전의 결과이므로 현재 자격에 재사용하지 않음 |
+| `successor-recovery-dispatch-qualification-run008-attempt002` | 46.916초·CPU79.81%에서 내부 재로딩 Guard의 원75% 단일 표본 중단, 계약/전체 비용 미확인·cleanup=True. 이후 준비 모드의 명시적 Guard 변환 추가 |
+| `successor-recovery-preflight-run008-attempt008` | 현재 소스. 50.664초·CPU90.46%에서 `STOP_PREPARATION_SYSTEM_PRESSURE90`, 가용 RAM20.25158%·commit53.22706%·부모 CPU0%·private68.25MiB. 메타데이터 checkpoint가 latch 후 복구됐고 cleanup=True. 전체 사전검사 미통과, Native·제품 실행 없음 |
+
+실제80.27% 일시 경고를 처리한 선행 사전검사와, 현재90.46%에서 중단한 실행은 준비 정책의 서로 다른 경계를 보여 준다. 직접 부모 점유가 낮다는 관측만으로 간접 영향이나 외부 프로세스, 프리즈 원인을 확정하지 않는다.
+
+기존 준비 슬롯1..8은 모두 소비됐다. 다음은 원본을 덮어쓰거나 원 슬롯을 재활용하지 않는 명시적 유한 준비 번호 범위를 설계하고, 고정된 현재 소스의 전체 사전검사·dispatch 자격을 닫는 작업이다. 원8회 범위를 몰래 넘기거나 보호 임계값을 올리지 않는다. 현재 Native008은 시작할 수 없으며600초 전체 비용과 실제 Native helper64도 미확인이다. 읽기 전용 planner의 최신 조회는194개 입력·13,122,460바이트·0.087535초에 기존9개 단계를 재실행 불필요 후보로 유지했다. 목표는 ACTIVE다.
+
+아래 준비 정책의005/003 기록은 선행 소스의 검증 이력이며, 현재 실행 위치와 소스 자격은 이 절을 우선한다.
+
 ### 승인된 준비 단계 CPU 정책과 실제 확인
 
 사용자의 “준비 단계 정책 재설계 허용”에 따라 `preparation_attributed_cpu_v1.py`와 준비 전용 진입점 `preparation_attributed_entry_v1.py`를 추가했다. 이 진입점은 case165/run008의 사전검사·dispatch 구성만 허용하고 Native·worker·제품·수용 명령을 거부한다. 공유 기본 모듈과 실제 Native 보호기는 바꾸지 않았다.
@@ -12,7 +33,7 @@
 - 자체 검증 부모의 기계 전체 기준 CPU가 1코어 비중의1.25배를 새 표본2개 연속 넘으면 중단한다. 귀속 값 누락·표본 변조·순서 오류는 fail-closed다. 같은 표본의 반복 checkpoint는 지속 표본 수에 넣지 않는다.
 - 원래 hard guard가 먼저 실행되며 RAM95%·commit95%·원 deadline/IO/정리를 유지한다. 실제 affinity1코어·BelowNormal을 읽어서 확인한다. 추가 sampler·자식·자동 냉각 재개는 없다.
 
-설계 `preparation-attributed-CPU-design-code001`은20계약·fresh21/final21, 실제 무제품 `preparation-attributed-CPU-probe001`은fresh23/final23으로 통과했다. Probe의 CPU 최고는74.8%여서 실제75% 이상 구간의 개선 실측은 아니며, 경계 조건은 합성 테스트와 과거 중단 표본 재생으로 확인했다. 연결 CODE001은 후속 소스 수정으로 현재 사용하지 않고, CODE002는 CPU93.96%로 마지막 확인이 중단됐다. 현재 소스에 대한 CODE003은13계약·fresh72/final72·CPU 최고67.1%·cleanup=True로 통과했다. 증거 선택은 명시적 `--connection-attempt`를 사용해 보호 중단 때마다 소스를 수정하지 않는다.
+설계 `preparation-attributed-CPU-design-code001`은20계약·fresh21/final21, 실제 무제품 `preparation-attributed-CPU-probe001`은fresh23/final23으로 통과했다. Probe의 CPU 최고는74.8%여서 실제75% 이상 구간의 개선 실측은 아니며, 경계 조건은 합성 테스트와 과거 중단 표본 재생으로 확인했다. 연결 CODE001은 후속 소스 수정으로 현재 사용하지 않고, CODE002는 CPU93.96%로 마지막 확인이 중단됐다. 당시 소스에 대한 CODE003은13계약·fresh72/final72·CPU 최고67.1%·cleanup=True로 통과했다. 증거 선택은 명시적 `--connection-attempt`를 사용해 보호 중단 때마다 소스를 수정하지 않는다.
 
 실제 `successor-recovery-preflight-run008-attempt005`는 입력3064·Rust787·helper59·fresh561/final561, 122.350753초·CPU 최고69.34%·가용 RAM 최저25.18289%·cleanup=True로 통과했다. 전체 비용 추정은598.250136초다. 별도 `preparation-attributed-preflight-run008-attempt005`는 준비 전용 정책을 사용한2개 직렬 Guard와 연결 소스의 재확인을 기록한다. 두 Guard의75% 경고 표본은0개이므로, 이번 실행이 기존 정책보다 중단을 줄였다는 실측 주장은 하지 않는다.
 
@@ -24,15 +45,15 @@
 
 이제 수정과 제품 없는 전체 진입점 구성 검사를 먼저 끝내고 소스를 고정한 뒤 증거를 발급한다. 구성 회귀는 실제 진입점을 사용하되 제품·자식 프로세스 생성을 차단하고, 복구용 경로와 실제10초 창의 연결을 확인한다. 경로만 바꿀 때에도 전체 코드 역변환 동등성을 검사하며 과거 파일을 덮어쓰지 않는다.
 
-`tools/p09/recovery_workflow_plan_v1.py`는 통과 증거의 입력 해시와 단계 의존성을 읽기 전용으로 대조한다. 동일 조회의 중복 입력은 한 번만 해시하고 영속 캐시는 만들지 않는다. 기존194개 입력·약0.10~0.11초의9개 단계 조회는 유지한다. 준비 setup만 실패해도 슬롯을 소비한 것으로 구분하며, 다음 슬롯은 현재6이다. 실제 사전검사·제품 진입의 원래 독립 입력 재확인은 그대로 수행한다. 이 조회는 제품 자격이나 GO 승인이 아니다. 관련19개 회귀는 통과했다.
+`tools/p09/recovery_workflow_plan_v1.py`는 통과 증거의 입력 해시와 단계 의존성을 읽기 전용으로 대조한다. 동일 조회의 중복 입력은 한 번만 해시하고 영속 캐시는 만들지 않는다. 기존194개 입력·약0.10~0.11초의9개 단계 조회는 유지한다. 준비 setup만 실패해도 슬롯을 소비한 것으로 구분하며, 현재1..8 모두 소진돼 다음 슬롯은 없다. 실제 사전검사·제품 진입의 원래 독립 입력 재확인은 그대로 수행한다. 이 조회는 제품 자격이나 GO 승인이 아니다. 관련19개 회귀는 통과했다.
 
 새 PASS 사전검사561개 입력까지 포함하는 계획 조회는64MiB 진단 한도에 도달한다. 이 경우 이미 확인한9개 단계는 유지하고 사전검사 재조회만 `BOUNDED_CHECK_INCOMPLETE_NOT_REUSABLE`로 반환한다. 원 사전검사의 실제 PASS를 실패로 바꾸거나, 덜 읽은 조회를 재사용 자격으로 승격하지 않는다. 최신 조회는0.083초였으며 한도를 늘려 전체 재검증을 겹쳐 실행하지 않았다. `--budget-lower-bound`는 필수 부분집합의594.249872초만 계산하는 읽기 전용 계획이며, 원 run007 전체 비용599.843613초와 원 공식을 대조했다. 미래 qualification 입력까지 포함한 전체 비용 통과가 아니다.
 
 ```powershell
-python -B tools/p09/recovery_workflow_plan_v1.py --preflight-attempt 5
+python -B tools/p09/recovery_workflow_plan_v1.py --preflight-attempt 8
 ```
 
-현재는 window CODE·실제 pipe·실패 판정 CODE와 review·복구 CODE·준비 closure3개·전체 CODE와 통과한 사전검사005를 보존한다. 다음 변경은 dispatch 재로딩 연결이며, 변경 소스에 의존하는 자격만 다시 확인한다. 문서·전체 diff·무관한 단계 검사를 반복 조회하거나 전체249개를 다시 돌리지 않는다.
+현재는 window CODE·실제 pipe·실패 판정 CODE와 review·복구 CODE·준비 closure3개·전체 CODE와 선행 사전검사005·007 원본을 보존한다. 후속 재로딩·Guard 연결 수정으로 과거 사전검사는 현재 소스 자격에 재사용하지 않으며, 현재008은90% 보호 중단이다. 다음에는 닫힌 새 준비 번호 범위와 변경 소스에 의존하는 자격만 확인한다. 문서·전체 diff·무관한 단계 검사를 반복 조회하거나 전체249개를 다시 돌리지 않는다.
 
 ### 현재 채택한 복구 준비
 
@@ -51,7 +72,7 @@ python -B tools/p09/recovery_workflow_plan_v1.py --preflight-attempt 5
 
 `successor-recovery-preflight-run008-attempt001`은41.379초에 시스템 CPU89.54%로 중단됐다. 종료 표본의 검증 부모는 CPU0.161%·private61.62MiB, 가용 RAM32.38%였다. attempt002는4.051초에 CPU79.49%로 같은 보호 중단됐다. 둘 다 cleanup=True이며 제품 실행은 없다. 직접 부모 점유가 낮다는 관측만으로 간접 영향이나 외부 원인까지 배제하지 않는다.
 
-이후 attempt003은 setup의 CPU76.65%에서 중단돼 실제 사전검사 기록이 없고, attempt004는 CPU76.36%·부모0%/private47.81MiB에서 중단됐다. 모두 정리 완료이며 원본을 보존한다. 승인된 준비 정책의 attempt005는 위와 같이 통과했으므로 CPU 조건만을 이유로 이를 다시 실행하지 않는다. 통과한9개 기존 증거를 유지하고 dispatch 재로딩 연결 수정·자격 확인 뒤 새로운 두 실제 바이트 경계로 진행한다. CODE·pipe·기존 준비 closure는 소스 또는 선행 증거가 바뀌지 않으면 다시 발급하지 않는다. OS·Defender 설정과 다른 작업은 변경하지 않았다.
+이후 attempt003은 setup의 CPU76.65%에서 중단돼 실제 사전검사 기록이 없고, attempt004는 CPU76.36%·부모0%/private47.81MiB에서 중단됐다. 모두 정리 완료이며 원본을 보존한다. 승인된 준비 정책의 attempt005는 당시 소스로 통과했으나 이후 재로딩 연결 수정이 있어 현재 자격에 재사용하지 않는다. 현재007·008 및 다음 작업은 첫 절을 따른다. CODE·pipe·기존 준비 closure는 소스 또는 선행 증거가 바뀌지 않으면 다시 발급하지 않는다. OS·Defender 설정과 다른 작업은 변경하지 않았다.
 
 ## 이전 run007 검증과 실행 설정
 

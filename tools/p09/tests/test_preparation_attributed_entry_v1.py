@@ -1,5 +1,6 @@
 import copy
 import sys
+import threading
 from types import SimpleNamespace as NS
 from unittest.mock import patch
 import unittest
@@ -24,6 +25,55 @@ def old_fixture():
 
 
 class Tests(unittest.TestCase):
+    def checkpoint_fixture(self):
+        import flat_current_queue_metadata_runtime as runtime
+        guard=POLICY.guard_type(Original,role="whole_metadata_preflight")()
+        events=[];reader=NS(checkpoint=lambda:events.append("original"))
+        owner=NS(lock=threading.Lock(),samples=guard.samples,checkpoint_io=guard.check)
+        binding=MODULE.preparation_metadata_checkpoint(runtime.MetadataCheckpoint)(reader,owner)
+        return guard,reader,binding,events
+
+    def test_actual_metadata_isolated_warning_and_cached_checks_use_same_owner_policy(self):
+        guard,reader,binding,events=self.checkpoint_fixture()
+        guard.row=dict(system_cpu_percent=85,parent_cpu_machine_percent=.1)
+        reader.checkpoint();guard.cached=True
+        for _ in range(100):reader.checkpoint()
+        self.assertEqual(guard.preparation_CPU.warning_samples,1)
+        self.assertFalse(binding.latched);self.assertEqual(len(events),101)
+        binding.restore();self.assertTrue(binding.restored)
+        self.assertTrue(binding.summary()["preparation_policy_via_original_owner_guard"])
+
+    def test_actual_metadata_sustained_stop_latches_and_cleanup_does_not_sample(self):
+        guard,reader,binding,events=self.checkpoint_fixture()
+        guard.row=dict(system_cpu_percent=80,parent_cpu_machine_percent=.1)
+        for _ in range(3):reader.checkpoint()
+        with self.assertRaisesRegex(ValueError,"STOP_PREPARATION_SUSTAINED"):reader.checkpoint()
+        self.assertEqual(len(events),3);self.assertTrue(binding.latched)
+        before=guard.calls
+        with self.assertRaises(ValueError):reader.checkpoint()
+        binding.restore();self.assertEqual(guard.calls,before);self.assertTrue(binding.restored)
+
+    def test_actual_metadata_hard_guard_precedes_policy_and_90_stops_without_original_work(self):
+        for hard,cpu,expected in (("ORIGINAL_HARD_STOP",99,"ORIGINAL_HARD_STOP"),(None,90,"STOP_PREPARATION_SYSTEM_PRESSURE90")):
+            guard,reader,binding,events=self.checkpoint_fixture();guard.error=hard
+            guard.row=dict(system_cpu_percent=cpu,parent_cpu_machine_percent=.1)
+            with self.assertRaisesRegex(ValueError,expected):reader.checkpoint()
+            self.assertEqual(events,[]);binding.restore()
+        import flat_current_queue_metadata_runtime as runtime
+        with self.assertRaises(ValueError):MODULE.preparation_metadata_checkpoint(runtime.MetadataCheckpoint)(NS(checkpoint=lambda:None),NS(checkpoint_io=lambda:None))
+
+    def test_actual_binding_facade_does_not_change_original_contract_globals_or_native_class(self):
+        import flat_current_queue_metadata_runtime as runtime
+        before=runtime.MetadataCheckpoint
+        env=dict(__name__="p09_exact_metadata_test",r=runtime)
+        exec("def f():return r.MetadataCheckpoint",env)
+        tests=NS(r=runtime,f=env["f"])
+        loader=NS(load=lambda *args,**kwargs:(NS(test_flat_current_queue_metadata_connection=tests),[]))
+        routed=MODULE.route_loader(None,loader,POLICY,a,"whole_metadata_preflight",[])
+        modules,_=routed.load()
+        self.assertIsNot(modules.test_flat_current_queue_metadata_connection.r.MetadataCheckpoint,before)
+        self.assertIs(tests.f(),before);self.assertIs(runtime.MetadataCheckpoint,before)
+
     def test_only_two_explicit_preparation_contexts(self):
         self.assertEqual(MODULE.context(arguments()).role,"whole_metadata_preflight")
         self.assertEqual(MODULE.context(arguments("--qualify")).role,"dispatch_construction")
