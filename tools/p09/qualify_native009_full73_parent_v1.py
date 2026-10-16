@@ -24,10 +24,34 @@ READINESS=[dict(path='tools/p09/worker_readiness_v1.py',bytes=6890,
     sha256='047c3f78f8a4472feeec4d56b65716f57e0429091321cb49afe5b685047d3a45'),
  dict(path='tools/p09/worker_readiness_connection_v1.py',bytes=5775,
     sha256='d306d62a08e16f717bb526b2a7fa6c60ac44890f6fed965fdf4a70daca3c0a9b')]
+RETAINED=[dict(path=PREFIX+'native009-full73-parent-connection001.v1.json',bytes=85471,
+    sha256='ed7411265741f5e1c1979971265d77c51f9e945fff54cc2d7f957d2054d59453'),
+ dict(path=PREFIX+'native009-full73-metadata001.v1.json',bytes=1108,
+    sha256='ce2c72146da933c52a304b8ffdb0d6770eb4efef5a9c6db89aaf890862c314d7'),
+ dict(path=PREFIX+'native009-full73-parent-connection002.v1.json',bytes=8348,
+    sha256='f41d7a4e295d6325beea429a7e52d153cb71d54626598f01394c94017e416f9a')]
 
 
 def require(ok,label):
     if not ok:raise ValueError('FULL73_PARENT_'+label)
+
+
+def compact_scope(binding,original_union,scope,base,base_pin,required,checkpoint,exact):
+    # The declaration-injecting wrapper is correct for the live parent, but
+    # cannot normalize a persisted baseline: its implicit inputs are not saved.
+    # Retain the qualified historical alias reconciliation as well as the
+    # underlying full-scope checker; only the later declaration injector is out.
+    require(original_union.__name__=='semantic_union' and original_union.__code__.co_filename.replace('\\','/').endswith(
+        'prior_preparation_alias_v1.py') and set(original_union.__code__.co_freevars)=={'index','module','original','pairs'},
+        'ORIGINAL_NONINJECTING_UNION_FOR_PERSISTED_BASE')
+    explicit=scope.extend(scope.pins(base['input_pins']),{base_pin['path']:base_pin})
+    baseline,_=original_union(binding,explicit,checkpoint)
+    delta=sorted((p for n,p in required.items() if n not in baseline),key=lambda p:p['path'])
+    replay=scope.extend(baseline,scope.pins(delta))
+    exact(replay,required,'INDEPENDENT_SAVED_BASE_AND_DELTA_FULL_ROUNDTRIP')
+    replay,_=original_union(binding,scope.extend(explicit,scope.pins(delta)),checkpoint)
+    exact(replay,required,'RAW_SAVED_BASE_AND_DELTA_REPLAY_WITHOUT_HIDDEN_INHERITANCE')
+    return baseline,delta
 
 
 def main():
@@ -78,6 +102,7 @@ def main():
             contracts=dict(run=15,errors=0,failures=0,skipped=0),fresh_inputs=387,final_fresh_hashes=387,
             semantic_inputs=3218,cleanup_confirmed=True,actual_product_or_Native_executed=False,
             previous_scope_and_budget_exactly_reconstructed=True,parent_cost_graph_worker_calls=0),'CLOSED_REAL73_WORKER_DIAGNOSTICS')
+        for pin in RETAINED:a.exact(q.pin(pin['path']),pin,'IMMUTABLE_SUPERSEDED_SCOPE_AND_FAILED_ADMISSION')
         oldpins=scope.pins(worker['source_pins'])
         for pin in oldpins.values():
             if pin['path'].startswith('tools/p09/') and pin['path'].endswith('.py'):
@@ -101,6 +126,7 @@ def main():
         api=source.api;graph,_=api.reconstruct(hint,bytes(wire),guard.check);del wire
         inherited,_=graph.binding.semantic_union(inherited,guard.check)
         a.exact(len(inherited),worker['semantic_inputs'],'EXACT_COMPLETE_PREVIOUS_SCOPE')
+        original_union=type(graph.binding).semantic_union
         parts.native009_parent_scope_v1.inherit_declaration(graph,inherited,scope)
         launch=entry.launch_api(c.ROOT,loader)
         proxy,context=parent.recovery_api(libs.post_product_recovery_connection_v1,c.ROOT,q.snapshots[ENTRY],launch,
@@ -142,12 +168,23 @@ def main():
         def complete_previous_scope_and_cost_preserved():
             a.exact(prior_budget,worker['original_complete_runtime_budget'],'NO_MISSING_PREVIOUS_COST_INPUTS')
             require(len(inherited)==3218 and all(connected.oracle_inherited.get(n)==p for n,p in inherited.items()),'ALL_PREVIOUS_DECLARED_INPUTS')
+        def compact_scope_replays_without_live_inheritance_injection():
+            baseline,delta=compact_scope(graph.binding,original_union,scope,base,worker['declared_scope_base_pin'],inherited,guard.check,a.exact)
+            require(len(baseline)==3191 and len(delta)==27,'ORIGINAL_BASE3191_PLUS_ALL27_INHERITED_DELTA_PINS')
+        def injecting_normalizer_is_rejected_for_persisted_scope():
+            try:compact_scope(graph.binding,type(graph.binding).semantic_union,scope,base,worker['declared_scope_base_pin'],inherited,guard.check,a.exact)
+            except ValueError as error:
+                require(error.args==('FULL73_PARENT_ORIGINAL_NONINJECTING_UNION_FOR_PERSISTED_BASE',),'EXACT_INJECTING_NORMALIZER_REJECTION')
+            else:raise ValueError('FULL73_PARENT_INJECTED_BASE_WAS_ACCEPTED')
         suites.append(unittest.TestSuite(unittest.FunctionTestCase(fn) for fn in (current_worker_and_launch_metadata_connected,
-            original_limits_and_unexecuted_parent_preserved,complete_previous_scope_and_cost_preserved)))
+            original_limits_and_unexecuted_parent_preserved,complete_previous_scope_and_cost_preserved,
+            compact_scope_replays_without_live_inheritance_injection,injecting_normalizer_is_rejected_for_persisted_scope)))
         result=unittest.TextTestRunner(stream=io.StringIO(),failfast=True).run(unittest.TestSuite(suites))
         row['contracts']=dict(run=result.testsRun,errors=len(result.errors),failures=len(result.failures),skipped=len(result.skipped))
-        row['contract_failures']=[dict(test=t.id().rsplit('.',1)[-1],exception_type=trace.splitlines()[-1].split(':',1)[0]) for t,trace in result.errors+result.failures]
-        a.exact(row['contracts'],dict(run=23,errors=0,failures=0,skipped=0),'ORIGINAL20_PLUS_CURRENT3')
+        row['contract_failures']=[dict(test=t.id().rsplit('.',1)[-1],exception_type=trace.splitlines()[-1].split(':',1)[0],
+            error_code=(m[1] if (m:=re.fullmatch(r'(?:ValueError|RuntimeError): ([A-Z0-9_]{1,160})',trace.splitlines()[-1])) else None))
+            for t,trace in result.errors+result.failures]
+        a.exact(row['contracts'],dict(run=25,errors=0,failures=0,skipped=0),'ORIGINAL20_PLUS_CURRENT5')
         row['whole_original_contract_count_slot_inverses']=inverses
         phase='CURRENT_COMPLETE_SCOPE_AND_COST'
         for module in tuple(sys.modules.values()):
@@ -163,22 +200,20 @@ def main():
         rust=inventory.rust_inputs(c.ROOT,paced);require(len(rust)==787 and set(rust)<=set(required),'CURRENT_RUST787')
         budget=graph.binding.runtime_budget(required,len(requests),built.window.DIRECT.runtime_budget,guard.check)
         total=budget['predicted_runtime_combined_seconds']+15
-        base_scope=scope.extend(scope.pins(base['input_pins']),{worker['declared_scope_base_pin']['path']:worker['declared_scope_base_pin']})
-        base_scope,_=graph.binding.semantic_union(base_scope,guard.check)
-        delta=sorted((p for n,p in required.items() if n not in base_scope),key=lambda p:p['path'])
-        a.exact(scope.extend(base_scope,scope.pins(delta)),required,'EXACT_COMPACT_DECLARATION_ROUNDTRIP')
+        base_scope,delta=compact_scope(graph.binding,original_union,scope,base,worker['declared_scope_base_pin'],required,guard.check,a.exact)
         row.update(previous_scope_and_budget_exactly_reconstructed=True,semantic_inputs=len(required),
             current_Rust_path_count=len(rust),inventory_requests=len(requests),original_complete_runtime_budget=budget,
             predicted_complete_seconds_with_readiness=total,declared_cost_nominal_fits600=total<600,
             additional_readiness_seconds_without_old_credit=15,declared_scope_base_pin=worker['declared_scope_base_pin'],
-            declared_scope_delta_pins=delta,parent_context=context.evidence(),actual_parent_attempts=connected.parent_state.attempts,
+            declared_scope_delta_pins=delta,persisted_scope_uses_original_noninjecting_union=True,
+            retained_superseded_scope_and_failure_pins=RETAINED,parent_context=context.evidence(),actual_parent_attempts=connected.parent_state.attempts,
             actual_worker_calls=built.state.calls,actual_Frame_instances=len(connected.parent_state.frames))
         phase='FINAL_METADATA_HASHES';q.finish();guard.check(force=True)
         row.update(source_pins=list(q.snapshots.values()),fresh_inputs=len(q.snapshots),final_fresh_hashes=q.final_fresh_hashes,
             metadata_source_predicate_optimization=q.source_snapshot_diagnostics())
         require(not denied and not native.exists(),'NO_SUBPROCESS_OR_NATIVE009')
         require(total<600,'COMPLETE_DECLARED_SCOPE_PLUS_READINESS_OUTSIDE600')
-        row['state']='PASS_FULL73_PARENT_LAUNCH_JOB_FRAME_AND_ORACLE23_WITH_DECLARED_COST_NOT_NATIVE'
+        row['state']='PASS_FULL73_PARENT_LAUNCH_JOB_FRAME_AND_ORACLE25_WITH_REPLAYABLE_DECLARED_COST_NOT_NATIVE'
     except (ValueError,OSError,KeyError,TypeError,AttributeError,NameError) as error:
         row['error_type']=type(error).__name__
         row['error_frames']=[dict(file=Path(f.filename).name,function=f.name,line=f.lineno) for f in traceback.extract_tb(error.__traceback__)[-6:]]
