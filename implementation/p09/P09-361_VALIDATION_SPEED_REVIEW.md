@@ -4,6 +4,20 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. Native009는 본문1 PASS와 완전캡처를 확인했지만 최종 전체입력 검사에서720초 제한으로 미수용이며 재실행하지 않는다. case165/run007의 본문1 PASS 역시 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 16KiB 준비 파일과 실제162개 재구성 연결
+
+역할을 그대로 추가한 준비 파일은 공백을 줄여도18,942bytes로 원16KiB 상한을 넘는다. `fixed165_history_declaration_v1.py`는 고정161 table의 역할 선언 전체를 source-pinned data module5,516bytes로 보존한다. worker는 bootstrap의 모듈pin과 연결코드에 고정된 pin을 대조한 뒤 private source loader로 읽는다. 부모가 새로 수용한 declaration과 semantic hash가 정확히 같으며, 모듈은 과거 JSON·manifest·원본 문서·정책 DB를 열지 않는다. descriptor162개는 이 모듈로 옮기지 않고 실제 wire에 전부 남긴다. 선언만으로 부모의 source admission이나 제품권한을 얻지 않는다.
+
+`fixed162_worker_transport_v1.py`는 기존 full75 reconstruction의 전체 본문을 그대로 초기 구성에 사용한다. 현재162개 패킷을 먼저 제한 안에서 복원하고 고정161 catalog·마지막Native009 실패pair를 검사한다. catalog에서 복원한 옛75개 표현으로 결정적인 내부 constructor packet을 만들고 기존full75 경로를 실행한다. 이 내부표현은 과거파일을 다시 읽은 증거나 실제 새transport를 대체하는 증거가 아니다. 이어 전체75→161→162 constructor를 연결하고, 실제 새wire를 원래 worker decoder에 다시 전달하여 원transport SHA·문맥·manifest·첫descriptor·전체162개를 확인한다. 부모·Frame·worker·독립oracle은 하나의 같은 Binding namespace를 사용한다.
+
+원 full75 reconstruction의 count·fingerprint 비교를 바꾸지 않았고, 원 runtime의 capsule filename suffix 한slot만 v5→v6으로 바꿔 전체코드 역변환을 확인했다. 실제v6 manifest92,550bytes·wire15,635bytes·bootstrap14,102bytes를 원paced publisher로 게시한 뒤 원reader로 다시 읽었다. 두16KiB 상한과 manifest256KiB 상한, 원모든pin·두whole읽기·decoder5초·CPU/RAM/IO/시간 보호를 변경하지 않았다. 실제재구성 중 data JSON 파일open은0회다. v6 wire는 `P09W3:` 형식의7bit data이며 plain JSON으로 처리하지 않는다.
+
+처음 code001은 ADMISSION에서 `fields`의 nested 전체값 비교에 부분기대값만 전달해 거부됐다. 제품·worker·Native·manifest/wire/새bootstrap 생성 전 실패이며 원 결과와4개 당시 소스를 `source-archive/p361-fixed162-transport-g001-code001`에 보존했다. 원판정기를 바꾸지 않고 `fits_wire`를 정확한 개별값으로 확인하도록 caller를 수정했다. code002는16계약·185fresh/final185·39.602초·시스템CPU최고24.32%·자체최고5.994032%·전용53.7109MiB·가용RAM최저24.2657%·cleanupTrue·subprocess 생성시도0으로 통과했다. 새 source 모듈 변조/과거JSON 치환·필수역할 누락·잘못된 context·예전suffix·재해시한누락/중복/재정렬/원본pin 변조·실행권한 승격·manifest 치환을 거부한다. 근거는 `fixed162-worker-transport-g001-code001.v1.json`과 `fixed162-worker-transport-g001-code002.v1.json` 및 v6 세파일이다.
+
+기존3,297개 전체선언과 비용을 정확히 재현한 후 현재3,305개·Rust787개를 유지한 필요조건은 Native+별도준비15초554.643905초, metadata낙관적최소165.2초, 합719.843905/720초다. 약0.156초 여유로는 새결과와 후속소스 비용도 보장하지 못한다. 실제 worker process·현재전체 source/helper64·metadata/Frame 공유5초·Native·독립수용은 여전히 미완료다. Native009 원본이 존재하므로 원engine build의 재실행 차단을 우회하지 않으며 이번 연결에서 build/prepare/GO/제품을 호출하지 않았다.
+
+다음 비용 후보는 고정 Native009 입력 중 아직 변환하지 않은 과거case114/129의 독립source검증 기록2개/4,705,626bytes다. 각각 `PASS_INDEPENDENT_CURRENT114_SOURCE_AFTER_PASSED_BODY_NOT_RUNTIME_OR_GATE`, `PASS_PRESERVED129_INDEPENDENT_FULL_NATIVE_SOURCE_NOT_RUNTIME_ACCEPTANCE_OR_GATE`이고 Frame은COMMITTED/등록해제다. 실제제품실행 flag는 둘 다 원래 없으며, case129의 top-level cleanup/accepted 관련 필드도 서로 동일하지 않으므로 absent/null/False/True를 채워 넣지 않는다. 아직 이 기록의 새물리표현·role/Binding/worker alias를 만들거나 수용하지 않았다. 현재 preflight/소스/실행파일을 일반적으로 변환하는 규칙은 추가하지 않는다.
+
 ### 162개 전체 전달 패킷과 원래 worker decoder 검증
 
 고정162개를 기존 v2 worker encoder에 그대로 전달하면23,127bytes로 원16KiB 상한에 거부된다. 별도 size probe001은6계약·176fresh/final176으로 실제 거부와 원 선언3,280개를 보존한 전체3,295개 비용을 확인했다. 역할을 그대로 추가한 bootstrap도22,924bytes여서 같은 상한을 초과한다. 별도 표나 과거 receipt를 worker가 추가로 읽는 방법이나 descriptor 일부를 빼는 방법은 사용하지 않는다.
