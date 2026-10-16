@@ -4,6 +4,20 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 전체75 전송과 원 재구성 검증
+
+`native009_full75_transport_v1.py`는 고정 P149 두 역할을 기존73개 Binding 설치 뒤 연결한다. 원 재구성 체인 세 함수와 engine build의 typed73 상수만75로 바꾸고, 각 전체 code의 역변환 일치를 확인한다. 기존 중간 함수와 최상위 함수에서 이름이 고정된 reconstruction closure 하나씩만 연결한다. 각 함수의 원 globals/defaults·다른 closure와 파서·wire hash·schema·고정 이전 입력·생성자·Source 정책은 유지한다. private suffix만v4에서v5로 변경하며 기본 모듈을 바꾸거나 숨기지 않는다.
+
+전송CODE001은20계약·fresh398/final398로 통과했다. 기존 모든 실패 역할과 새 P149의 서로 다른 중단 사유·제품 실행 미확인을 유지한다. 기존68개·legacy·P154·각 P149 행의 wire를 변조하고 전송hash를 다시 맞춰도 거부한다. 누락·중복·재정렬·다른 case/run·boolean coercion·옛 suffix·제품 승격·다른 함수/closure 연결도 거부한다. 실제 전송 bytes를 원 decoder로 다시 읽었으며 데이터JSON 파일open0, 원engine worker attempts/calls0·제품10초 유지였다.
+
+새 capsule은10,747bytes/SHA `f7caa9580a3c3fcd3519695714f984b788a3b63ec3d2c6f43110b7c1b7597a89`, bootstrap은15,106bytes/SHA `49fe9e963bb3de69471aa5922557d837054445a08bf1c6ff87b64fb015a892ca`로 각각 원16KiB 이하다. 이전v4 파일과 원본을 덮어쓰지 않았다. 새 manifest는57,692bytes이며 준비graph는 `successor-native009-full75-graph001.v1.json`이다.
+
+이전 Binding CODE003의 전체3,242개 선언·물리byte 합·원비용을 먼저 정확히 복원했다. source_pins398개를 전체 상속 범위로 대신 사용하지 않았다. 새 선언3,248개는 기준3,191개와 저장delta57개만으로 동일하게 복원된다. 현재Rust787경로와 원enumerator의 실제pacing167회를 확인했고 원모델과 추가준비15초의 합은595.364461/600초였다. 이 선언 비용은 실제 실행 완료 보장이나 후속worker/부모/dispatch 결과를 포함한 최종 Native 비용이 아니다.
+
+실제67.831초·시스템CPU최고58.24%·자체최고6.18526%·전용52.85MiB·가용RAM최저31.27%·cleanupTrue·프로세스 생성시도0이다. 기존 single-snapshot source와64KiB readinto 버퍼를 사용했으며 원stream·guard·pacing·최종fresh를 유지했다. CPU/프리즈 원인 해결 판정은 아니다.
+
+현재 자격은 packet의 생성·원 재구성과 실행 전 engine 구성이다. 실제production worker 프로세스의75개 EOF/제품차단 진단과 부모·Job/Frame 연결은 다음이다. 이후 전체metadata·metadata/Native 공유decoder5초·Native 두바이트경계·실제동적helper·독립수용·현재전체preflight/dispatch를 마쳐야 한다. Native009 제품1회 허용은 미사용이며 Native008을 재실행하지 않는다. 원CPU/RAM/commit·잠금/IO·제품10초/준비15초/여유60초 변경0·Native009/제품/접근허용/OS·Defender 변경0·수용 증가0을 유지한다. 근거: `native009-full75-transport-code001`, full75 manifest001/graph001 및v5 capsule/bootstrap.
+
 ### 고정 P149 Binding과 준비 reader 검증
 
 `legacy149_binding_v1.py`는 기존73개 descriptor와 전체 생성자를 유지한 채 P149 두 개만 추가한다. 두 원본의 runner/RAM 중단 사유와 제품 실행 미확인 상태를 보존한다. 기존73개 생성자가 모두 완료된 뒤 원raw 생성자로75개를 구성하며, nonconstructor oracle과 Projection 메서드는 바꾸지 않는다. 일반 metadata·소스·EXE·fixture·현재 제품을 새 alias로 허용하지 않는다.
