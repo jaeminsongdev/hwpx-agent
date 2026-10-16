@@ -4,6 +4,24 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 실제 전체75 worker와 초기 준비 최적화
+
+`native009_full75_worker_entry_v1.py`는 기존73개 준비 함수의 전체 본문을 유지하고 typed 개수73→75와 전송 namespace 이름 한 개만 바꾼다. 두 slot을 되돌리면 전체code가 정확히 원본과 같다. 원main·execute·arguments·read 및 launch 함수들의 code/defaults/closure와 GO·Job·15초 준비·10초 캡처는 유지한다. 진단 차단을 production 진입점에 넣지 않는다.
+
+worker001은17계약과 실제EOF 경로를 통과했으나 두 번째GO 진단의 준비15초 상한에서 중단됐다. 전체54.261초·시스템CPU최고55.83%·자체최고0.87831%·전용45.89MiB·가용RAM최저35.29%·cleanupTrue였다. EOF는12.554초·Job CPU1.562초·helper59·원권한거부·GO0이었고, 두 번째Job도 잔여0과 handle 정리를 확인했다. CPU 보호 실패나 제품 성공으로 바꾸지 않는다. 원실패JSON과 당시 entry5,430bytes/SHA `5196df49f21ff15dd5d9f3c494621088af02eff3357c403919f8f66d4aae39bc`, qualifier25,851bytes/SHA `bc700aba0c2258027c615afdf6c1322c9d062e492fef5dc9709d4e425943c4ac`를 별도 source archive에 그대로 보존했다.
+
+검토에서 초기 bootstrap과 namespace 로딩에는 범용 AST 복사가 남아 있음을 확인했다. 이미 검증된 `ast_clone_namespace_v1`/`ast_copy_namespace_connection_v1`을 초기 단계에도 명시적으로 연결했다. 원loader의 전체code·fresh file/hash·import·AST 검사와 모든 준비 본문은 유지하며, byte/hash/AST/JSON cache나 기본 copy/importlib 변경은 없다. 새 계약은 이 연결이 같은 검증된 dependency 교체인지 확인한다. 시간 제한이나 Job CPU/메모리 보호를 늘리지 않았다.
+
+수정 후worker002는 원launch12개와 추가entry6개를 합한18계약, 실제 production `__main__`의EOF/GO_DENIED 두 경로 및fresh400/final400을 통과했다. 외부 진단은 원harness의 metadata 이름 두 개만v3→v5로 바꾸고 전체 역변환을 확인한다. Python audit가 production 실행 전 설치되어 모든 subprocess 생성을 OS 진입 전에 영구 거부한다. EOF는원WORKER_NOT_AUTHORIZED, GO_DENIED는현재EXE·case165의 정확한 인수를 확인한 첫 생성요청에서 차단됐다. 실제 제품은 생성하지 않았다.
+
+두 worker 모두descriptor75·원attempts/calls1·raw policy복원·기본helper59·기타JSON open0·step JSON읽기3·정상exit1/빈stdout·Job잔여0이었다. EOF의GO는0회다. GO_DENIED는준비1.968123초 뒤원GO1회·캡처1회·완전한 차단결과0.036208초로 원준비15초/제품10초 안에 완료됐다. EOF 전체1.553초/Job CPU1.406초·최고45.72MiB, GO_DENIED 전체2.024초/Job CPU2초·최고45.76MiB다. 서로 다른실행/시스템상태의 관측이므로 첫실패 대비속도비율이나 프리즈 원인 해결을 주장하지 않는다.
+
+원1코어affinity1·BelowNormal·Job CPU hard cap6.25%·기존메모리제한·active process16·kill-on-close/no-breakaway를 readback했다. 부모는 두 진단child 명령만1회씩 허용했고 다른부모 생성시도는0이다. 전체69.695초·시스템CPU최고45.41%·자체최고5.13903%·전용52.33MiB·가용RAM최저40.72%·cleanupTrue다.
+
+현재전송CODE001의 전체3,248개 선언과원비용을 먼저 정확히복원한 뒤 새선언3,255개를 기준3,191+저장delta64만으로 독립재구성했다. 원Rust787경로·실제pacing167회·추가준비15초를 포함한 현재모델은596.256038/600초다. 이 모델에는 후속부모/metadata/dispatch 결과와 새소스가 아직 추가되지 않았으며 실제완료를 보장하지 않는다. 두 actual diagnostic worker 호출과 비용그래프의worker calls0을 구분한다.
+
+다음은full75 부모·Job/Frame 연결, 전체metadata와Native 공유decoder5초·실제Native 두바이트경계·동적helper·독립수용·현재전체preflight/dispatch 및 후속비용 검증이다. Native009제품1회 허용은 미사용이고 Native008을 재실행하지 않는다. 준비75%단일표본·실제Native·RAM/commit95%·원IO/잠금·decoder/제품10초/준비15초/여유60초는변경하지 않았다. Native009/제품/접근허용·OS/Defender 변경0·공식수용 증가0·P09/A12/A13 OPEN을 유지한다. 근거: `native009-full75-production-worker001/002`와 `source-archive/p361-full75-worker-attempt001`.
+
 ### 전체75 전송과 원 재구성 검증
 
 `native009_full75_transport_v1.py`는 고정 P149 두 역할을 기존73개 Binding 설치 뒤 연결한다. 원 재구성 체인 세 함수와 engine build의 typed73 상수만75로 바꾸고, 각 전체 code의 역변환 일치를 확인한다. 기존 중간 함수와 최상위 함수에서 이름이 고정된 reconstruction closure 하나씩만 연결한다. 각 함수의 원 globals/defaults·다른 closure와 파서·wire hash·schema·고정 이전 입력·생성자·Source 정책은 유지한다. private suffix만v4에서v5로 변경하며 기본 모듈을 바꾸거나 숨기지 않는다.
