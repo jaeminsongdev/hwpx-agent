@@ -18,6 +18,8 @@ CONSTRUCTION=dict(path='tools/p09/native009_full72_construction_v1.py',bytes=203
 QUALIFIER='tools/p09/qualify_native009_full73_parent_v1.py'
 FAILED_METADATA=dict(path=PREFIX+'native009-full73-metadata002.v1.json',bytes=8139,
     sha256='2e75b98d9003635fbe5483a694049aea3641df7ce6cea66564270f200f4e866b')
+CPU_STOP=dict(path=PREFIX+'native009-full73-metadata004.v1.json',bytes=8974,
+    sha256='7698af5526b94ceac655a773b46206ff5d9bbe87d0676753674417a56941bbe5')
 PUBLICATION_REVIEW=PREFIX+'native009-full73-metadata-publication-review003.v1.json'
 
 
@@ -83,6 +85,48 @@ def encoding_contracts(scope,exact):
         raw_pin_count=len(actual),full_map_losslessly_restored=True,actual_product_or_Native_executed=False)
 
 
+def snapshot_build_reader(build,snapshot,raw):
+    old=build.BuildReader
+    require(isinstance(old,type) and len(old.__bases__)==1 and old.__new__ is object.__new__,'ONE_ORIGINAL_BUILDER_BASE')
+    Snapshot,proof=snapshot.reader_type(old.__bases__[0],raw)
+    # C3 keeps the original builder's zero-argument super() valid, including
+    # its direct_path/ancestor predicates. Only the underlying audit leaf changes.
+    class Reader(old,Snapshot):pass
+    for name in ('__init__','_read','_source'):
+        require(getattr(Reader,name) is getattr(old,name),'WHOLE_BUILDER_METHODS_RETAINED')
+    require(old in Reader.__mro__ and Snapshot in Reader.__mro__,'ORIGINAL_BUILDER_AND_FRESH_LEAF_MRO')
+    return NS(**{**vars(build),'BuildReader':Reader}),dict(proof,
+        original_builder_source_and_ancestor_checks_and_read_and_constructor_functions_retained=True,
+        original_default_build_namespace_not_mutated=True,held_Native_Frame_reader_not_changed=True)
+
+
+def source_mro_contracts(root,snapshot,raw):
+    class Base(snapshot.original.AuditEvidenceReader):pass
+    class Builder(Base):
+        def __init__(self,*args,**kwargs):super().__init__(*args,**kwargs);self.extra_checks=0
+        def _read(self,*args,**kwargs):return super()._read(*args,**kwargs)
+        def _source(self,name):
+            path=super()._source(name);self.extra_checks+=1;return path
+    original=NS(BuildReader=Builder)
+    selected,proof=snapshot_build_reader(original,snapshot,raw)
+    require(all(getattr(selected.BuildReader,n) is getattr(Builder,n) for n in ('__init__','_read','_source')),'MRO_CONTRACT_WHOLE_METHODS')
+    reader=selected.BuildReader(root,lambda:None)
+    first=reader.pin(SELF);second=reader.fresh_pin(SELF)
+    require(first==second and reader.extra_checks==reader.read_passes==2,'MRO_CONTRACT_ORIGINAL_EXTRA_CHECKS_AND_TWO_REAL_READS')
+    stats=reader.source_snapshot_diagnostics()
+    require(stats['source_requests']==stats['fresh_no_follow_stat_attempts']==stats['ordinary_windows_snapshot_decisions']==2
+        and stats['exact_original_fallback_requests']==0 and not stats['stat_result_cached_or_reused_between_source_requests'],'MRO_CONTRACT_FRESH_STAT_NOT_CACHE')
+    require(original.BuildReader is Builder and selected.BuildReader is not Builder and proof['original_default_build_namespace_not_mutated'],'MRO_CONTRACT_DEFAULT_UNCHANGED')
+    class BadBase(Base):
+        def _source(self,name):return None
+    class BadBuilder(BadBase):pass
+    try:snapshot_build_reader(NS(BuildReader=BadBuilder),snapshot,raw)
+    except ValueError as error:require(error.args==('SINGLE_SOURCE_STAT_UNCHANGED_ORIGINAL_SOURCE_METHOD',),'MRO_CONTRACT_EXACT_INCOMPATIBILITY_REJECTION')
+    else:raise ValueError('FULL73_METADATA_MRO_INCOMPATIBLE_BASE_ACCEPTED')
+    return dict(state='PASS_METADATA_BUILDER_SNAPSHOT_MRO5_NOT_FULL_CONNECTION_OR_NATIVE',contracts=5,
+        actual_small_source_reads=reader.read_passes,snapshot=stats,actual_product_or_Native_executed=False)
+
+
 def main():
     import argparse,os,re,threading,time,traceback
     sys.path.insert(0,str(Path(__file__).resolve().parent))
@@ -93,6 +137,11 @@ def main():
         import accept_case112_current_epoch as a
         import current_stored_runtime_scope as scope
         print(json.dumps(encoding_contracts(scope,a.exact),allow_nan=False));return 0
+    if '--check-source-mro' in sys.argv[1:]:
+        require(sys.argv[1:]==['--check-source-mro'],'ONLY_SOURCE_MRO_CONTRACT_MODE')
+        import single_snapshot_source_guard_v1 as snapshot
+        raw=(c.ROOT/snapshot.ORIGINAL_PIN['path']).read_bytes()
+        print(json.dumps(source_mro_contracts(c.ROOT,snapshot,raw),allow_nan=False));return 0
     denied=[]
     def audit(event,args):
         if event=='subprocess.Popen':denied.append(1);raise ValueError('FULL73_METADATA_ALL_SUBPROCESS_DENIED')
@@ -140,6 +189,7 @@ def main():
         row['producer_source_pin']=q.pin(SELF)
         parent_proof=a.read_exact(q,PARENT_PROOF)
         a.exact(q.pin(FAILED_METADATA['path']),FAILED_METADATA,'ORIGINAL_MISSING_SHARED_CONNECTION_FAILURE')
+        a.exact(q.pin(CPU_STOP['path']),CPU_STOP,'ORIGINAL_CPU_STOP_NOT_REUSED_AS_COMPLETION')
         review=q.json(PUBLICATION_REVIEW)
         a.fields(review,dict(state='FAILED_RESULT_PUBLICATION_REVIEW_NOT_RUNTIME_OR_NATIVE_ACCEPTANCE',
             expected_original_output_absent_after_terminal_exit=True,process_exit_code=1,
@@ -182,6 +232,13 @@ def main():
         built=api.build(c.ROOT,loader,api,graph,envelope.prior,proxy,libs.post_product_recovery_window_v1,guard.check)
         old_budget=graph.binding.runtime_budget(inherited,parent_proof['inventory_requests'],built.window.DIRECT.runtime_budget,guard.check)
         a.exact(old_budget,parent_proof['original_complete_runtime_budget'],'ENTIRE_PREVIOUS_COST')
+        a.exact(q.pin(upstream.SNAPSHOT['path']),upstream.SNAPSHOT,'EXACT_QUALIFIED_FRESH_SOURCE_SNAPSHOT_HELPER')
+        snapshots,_=loader.load(c.ROOT,[upstream.SNAPSHOT],{'audit_evidence_io':original_io})
+        snapshot=snapshots.single_snapshot_source_guard_v1
+        pin,raw=q._read(snapshot.ORIGINAL_PIN['path'],parse=True);q._bind(pin['path'],pin)
+        a.exact(pin,snapshot.ORIGINAL_PIN,'UNCHANGED_AUDIT_SOURCE_FOR_LEAF_OPTIMIZATION')
+        env=built.engine.run_owned.__globals__
+        env['build'],row['metadata_builder_source_snapshot_connection']=snapshot_build_reader(env['build'],snapshot,bytes(raw));del raw
         configuration_pin=inherited['tools/p09/current_queue_successor_lossless_runtime_v4.py']
         a.exact(q.pin(configuration_pin['path']),configuration_pin,'EXACT_EXISTING_LOSSLESS_CONFIGURATION')
         configurations,_=loader.load(c.ROOT,[configuration_pin],{})
@@ -238,6 +295,7 @@ def main():
             actual_metadata_read_passes=metadata.read_passes,actual_metadata_physical_bytes=metadata.bytes_read,
             actual_metadata_source_pins_compact=compact_pin_map(required,metadata.snapshots,scope,a.exact),
             actual_metadata_pin_map_losslessly_reconstructed=True,metadata_pressure=build.pressure_summary(binding_state),
+            metadata_source_predicate_optimization=metadata.source_snapshot_diagnostics(),
             original_whole_parent_callback_executions=len(connected.callback_calls),descriptor_count=73,
             all73_fresh_first_and_final_decodes=True,shared_decoder=shared.evidence(),helper_inventory_after_metadata=after,
             previous_scope_and_budget_exactly_reconstructed=True,original_complete_runtime_budget=budget,
@@ -258,6 +316,8 @@ def main():
             row['partial_metadata_diagnostics']=dict(read_passes=metadata.read_passes,physical_bytes=metadata.bytes_read,
                 input_count=len(metadata.snapshots),final_fresh_hashes=metadata.final_fresh_hashes,
                 not_a_complete_hash_or_Native_or_product_claim=True)
+            if callable(getattr(metadata,'source_snapshot_diagnostics',None)):
+                row['partial_metadata_diagnostics']['source_predicate_snapshot']=metadata.source_snapshot_diagnostics()
         if binding_state is not None:binding_state.restore()
         if shared is not None:shared.restore()
         guard.close();row.update(cleanup_confirmed=guard.cleanup,operation_phase=phase,elapsed_seconds=time.monotonic()-started,
@@ -265,6 +325,8 @@ def main():
             owned_CPU_machine_max=max((s['parent_cpu_machine_percent'] for s in guard.samples if s.get('parent_cpu_machine_percent') is not None),default=None),
             owned_private_MiB_max=max((s['parent_private_mib'] for s in guard.samples if s.get('parent_private_mib') is not None),default=None),
             RAM_min=min((s['available_ram_percent'] for s in guard.samples),default=None),subprocess_creation_attempts=len(denied))
+        row['last_original_resource_samples']=[{k:s.get(k) for k in ('time_utc','system_cpu_percent','parent_cpu_machine_percent',
+            'available_ram_percent','commit_used_percent','parent_private_mib')} for s in guard.samples[-8:]]
     require(guard.cleanup,'OWNER_CLEANUP')
     try:libs.successor_preparation_workspace_v1.publish(c.ROOT,output,row,a)
     except ValueError as error:

@@ -4,13 +4,38 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 전체 입력 선언 복원 수정과 metadata 검증
+
+후속 metadata001은 부모 결과의 기준 선언과 delta만으로 전체 입력을 복원하지 못해 제품 실행 전에 거부됐다. 부모001은23개 연결 계약을 통과했지만, 기준 정규화에도 선언 자동 주입 함수를 사용해 저장 delta에 상속27개를 누락했다. 그 결과와598.834949초 모델은 현재 전체 선언의 자격으로 사용하지 않는다. 원 JSON과 당시 소스는 보존한다.
+
+`qualify_native009_full73_parent_v1.py`는 기존 별칭 정규화 함수를 선언 주입 전에 보관해 기준을 정규화한다. 원 별칭·전체 입력 검사와 실제 부모의 선언 주입은 유지한다. 저장된 기준과 delta만으로 전체 pin 맵을 복원하는 검사와 주입 함수를 잘못 선택하면 거부하는 회귀 검사를 추가했다. 부모002는 부적합한 첫 normalizer 선택을 거부했으며 원본을 보존했다. 부모003은25계약·fresh392/final392로 통과했다. 기준3,191개+delta32개=전체3,223개이며, 원 모델+별도 준비15초는599.142489/600초다. 실제61.569초·시스템CPU최고44.11%·자체CPU최고6.14982%·전용49.64MiB·가용RAM최저27.69%·cleanupTrue였다. 이 모델에는 후속 metadata 코드와 결과가 아직 추가되지 않았다.
+
+metadata002는 현재 부모 구성에 원 metadata reader와 Frame을 묶는 shared decoder 연결이 설치되지 않았음을 확인하고 거부됐다. `current_queue_successor_lossless_runtime_v4.configure`와 원 세 구성 요소를 source pin으로 읽어 metadata 경로에 연결했다. 실제 엔진 globals의 binding callback을 호출하고 원 BuildReader·압력 checkpoint·바이트 pacing·해시를 유지한다. 별도 decoder 예산이나 가짜 Job 정리를 만들지 않는다.
+
+metadata003은 마지막575.04초 관측에서 입력3,230개·누적6,469읽기를 기록한 뒤 원262,144bytes 게시 상한에서 결과 저장이 실패했다. 마지막 관측 단계는 FINAL_QUALIFIER_HASHES이며, 상세 결과가 없어 내부 최종 판정은 복구할 수 없다. 원 실행 결과003은 존재하지 않는다. `metadata-publication-review003`은 이 실패를 요약한 검토 자료이지 원 runtime 결과나 PASS가 아니다. 당시 소스는 Git `77916c7`에 보존했다.
+
+보고서의 전체 metadata pin 목록은 이미 보관하는 전체 선언을 기준으로 생략 경로와 추가 물리 pin만 기록하고, raw pin 맵의 SHA256과 완전한 재구성 일치를 검증하도록 바꿨다. 입력이나 해시는 생략하지 않는다. 전체 맵·부분 맵·물리 pin 추가·충돌 거부·digest 변조 거부·크기 상한6계약이 통과했다.3,232개 pin의 합성 사례에서504,194bytes를896bytes로 표현하고 전부 동일하게 복원했다. 원256KiB 상한은 늘리지 않았으며, 이후 게시가 또 크기 때문에 실패하면 PASS 대신 작은 명시적 실패 결과를 남긴다.
+
+metadata004는 실제 입력3,231개·누적4,462읽기·물리242,904,980bytes·최종 hash1,221개에서 기존75% 단일 표본 보호가 작동했다.363.682초·시스템CPU최고77.93%·자체CPU최고2.62399%·전용56.47MiB·가용RAM최저32.82%·cleanupTrue였다. 두 CPU 최대값은 같은 표본이라고 보장하지 않으며 원인 프로세스는 미확인이다. 제품/Native Frame/추가 프로세스 생성0이다. 최종 전체 metadata 검증·보고 형식의 실제 완전 게시·Native source 자격은 통과하지 않았다. 원 실패와 당시 소스는 Git `1636bd6`에 보존했다.
+
+중단 뒤 검토에서 기본 audit reader의 파일/링크 질의와 builder의 추가 경로 질의가 겹침을 확인했다. 준비 경로의 builder와 기존 fresh one-stat leaf를 private C3 MRO로 연결했다. builder의 원 생성자·_read·_source 함수, direct_path의 추가 파일/링크/조상 검사, 원 pacing·checkpoint·해시는 그대로다. 기본 namespace·Native held-path reader는 바꾸지 않는다. 작은 실제 파일 두 번 읽기·매번 새 stat·원 추가 검사 실행·기본 class 보존·부적합 base 거부5계약과 보고 형식6계약이 통과했다. 이 조치가77.93%의 원인을 규명하거나 프리즈를 해결했다는 뜻은 아니다. 다음 실패에는 원 sampler의 마지막8개 표본만 같이 저장하며 별도 sampler는 추가하지 않는다.
+
+다음은 현재 MRO 연결로 전체 metadata를 새로 검증하고 저장된 pin 맵을 독립 복원하는 작업이다. 이 실제 재실행005와 현재 전체 비용은 NOT_RUN이다. 부모25개 계약이나 기존 helper의 변경 없는 시험은 반복하지 않는다. 준비75% 정책·실제 Native 보호·RAM/commit95%·제품10초/준비15초·여유60은 유지한다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작이며, 실제 Native 입력 두 바이트 경계·동적 helper·독립 제품 수용·사전검사/dispatch도 남아 있다. 근거: `native009-full73-parent-connection002/003`, `native009-full73-metadata001/002/004`, `native009-full73-metadata-publication-review003`.
+
+코드 계약 확인 명령:
+
+```powershell
+py -3 -B tools/p09/qualify_native009_full73_metadata_v1.py --check-source-mro
+py -3 -B tools/p09/qualify_native009_full73_metadata_v1.py --check-report-encoding
+```
+
 ### 73개 부모 연결과 독립 oracle 계약
 
 `qualify_native009_full73_parent_v1.py`는 앞서 검증한 v4 worker 진입점을 기존 `native009_parent_launch_v1.py`의 원 Job 소유권·GO 전 Frame checkpoint 의존성에 연결한다. 새 부모 실행기나 별도 Job·sampler·Frame을 만들지 않고 원 구성 함수와 private launch 경로를 재사용했다. 원 Source 정책은 현재 바이트로 다시 구성했으며 부모·원 worker의 공유 globals와 독립 oracle의 전체 역변환을 검사했다.
 
 parent-connection001은 기존 구성8개와 부모 연결12개에 현재 진입점·원 시간 상한·전체 상속 범위3개를 더한23개 계약을 통과했다. 기존 시험의 descriptor 개수 기대값 두 칸만72→73으로 바꾸고 각각 전체 code 역변환을 확인했다. 원 파일·검사 본문·실패 역할은 유지했다. 프로젝트 테스트를 읽기 전 기본 helper59개·Native 합집합64개였으며 모듈을 숨기거나 상한을 늘리지 않았다.
 
-이전 worker 자격의3,218개 전체 입력과 비용 딕셔너리를 정확히 재구성했다. 현재3,220개 입력·Rust787경로/167회 pacing·기준 선언과 compact delta round-trip을 확인했다. 원 complete+별도 준비15초는598.834949/600초이며 여유1.165051초다. 현 결과 및 후속 소스가 추가되면 다시 계산해야 한다. 실제 연결 검증은63.640초·fresh389/final389·시스템CPU최고45.98%·검증기 자체CPU최고6.23849%·전용메모리최고51.29MiB·가용RAM최저29.28%·cleanupTrue였다.
+이 결과는 이전 worker의3,218개 전체 입력과 비용 딕셔너리를 실행 중 정확히 재구성했지만, 저장된 기준과 delta만의 독립 복원에는 앞 절의 누락이 있었다. 따라서 이 단계의3,220개 선언과598.834949초 모델은 현재 자격으로 사용하지 않는다. 실제 연결 검증의63.640초·fresh389/final389·시스템CPU최고45.98%·자체CPU최고6.23849%·전용51.29MiB·가용RAM최저29.28%·cleanupTrue 기록은 원본대로 보존한다. 현재 복원 자격은 부모003을 따른다.
 
 실제 부모/worker 호출·Frame 인스턴스·프로세스 생성 시도는0이다. Job·Frame의 합성 연결 계약과 실행 전 구성은 통과했지만 실제 전체 Native 입력의 두 바이트 경계·실행 경로 동적 helper·독립 제품 수용·사전검사/dispatch는 아직 미완료다. 기존75% 단일 표본 준비 보호·실제 Native 보호·RAM/commit95%·제품10초/준비15초는 변경하지 않았다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작, 제품/Native009/접근허용·OS/Defender 변경0을 유지한다. 근거: `native009-full73-parent-connection001.v1.json`.
 
