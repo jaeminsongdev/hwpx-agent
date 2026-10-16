@@ -4,6 +4,30 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. Native009는 본문1 PASS와 완전캡처를 확인했지만 최종 전체입력 검사에서720초 제한으로 미수용이며 재실행하지 않는다. case165/run007의 본문1 PASS 역시 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 162개 전체 전달 패킷과 원래 worker decoder 검증
+
+고정162개를 기존 v2 worker encoder에 그대로 전달하면23,127bytes로 원16KiB 상한에 거부된다. 별도 size probe001은6계약·176fresh/final176으로 실제 거부와 원 선언3,280개를 보존한 전체3,295개 비용을 확인했다. 역할을 그대로 추가한 bootstrap도22,924bytes여서 같은 상한을 초과한다. 별도 표나 과거 receipt를 worker가 추가로 읽는 방법이나 descriptor 일부를 빼는 방법은 사용하지 않는다.
+
+`bounded_binary_capsule_wire_v3.py`의 첫 binary001은18,002bytes여서 여전히 거부됐다. 해당 결과의 state 이름에 PASS가 있어도 `wire_counts.fits_wire=False`, `original_encoder_error=BINARY_CAPSULE_V3_ORIGINAL_16K_TRANSPORT`, `actual_original_worker_capsule_decoder_exercised=False`가 실제 경계다. 이 기록은 크기 거부 진단일 뿐 전송/worker 자격으로 수용하지 않는다. 첫 size probe와 binary001 소스는 각각 `source-archive/p361-fixed162-packet-probe001` 및 `source-archive/p361-fixed162-binary-packet001`에 원 bytes/hash로 보존했다.
+
+수정 binary002는 각 descriptor의 전체 경로·크기·256bit SHA를 모두 패킷에 담는다. 같은 semantic/physical 순서를 유지하면서 경로 접두부만 무손실로 줄이고, 경로/크기 부분을64KiB dictionary XZ로 압축한다. 무작위 해시는 압축하지 않고 원32bytes로 별도 전달하며, 전체 복원 bytes의 SHA256도 확인한다. 최종 ASCII7bit 표현은 `P09W3:` 식별자를 갖는 data이지 plain JSON이 아니다. 기존 JSON wire나 bootstrap을 덮어쓰거나 이 형식을 worker 파일에 게시하지 않았다. 후속 재구성 경로는 이 명시적 형식을 연결해야 하며 과거 v2 parser로 읽지 않는다.
+
+원 worker encode/decode의 code/defaults/closure와 원 compact pack/unpack, transport SHA, 문맥 및 전체 Binding constructor는 유지한다. 실제 패킷15,649/16,384bytes, 복원 binary29,126/131,072bytes, 원 compact JSON61,186/131,072bytes다. 실제 원 decoder가 모든162개를 복원하고 transport 변조를 거부했다. packet8+새codec10=18계약은 잘못된 pin 타입/해시·249개 binary 전체보존·250개 거부·중복 header key·잘림/뒤붙임·비정규 정수/7bit padding·XZ 추가stream/과대출력·원 guard 오류 전파를 포함한다. decoder memory32MiB, 원 wire16KiB와 binary/compact JSON128KiB 상한을 유지한다.
+
+binary002는178fresh/final178·37.920초·시스템CPU최고30.36%·자체최고5.126857%·전용50.9961MiB·가용RAM최저24.3550%·cleanupTrue·subprocess 생성시도0이다. 이는 같은 프로세스에서 실제 원 capsule decoder를 호출한 결과이며, 별도 worker process의 전체 graph 재구성·entry 준비·Native Frame·제품 실행은 아니다. 근거는 `fixed162-packet-probe001.v1.json`, `fixed162-binary-packet-probe001.v1.json`, `fixed162-binary-packet-probe002.v1.json`이다.
+
+전체선언3,297개는 이전3,280개와 Rust787개를 모두 유지한다. 원 Native모델+별도준비15초553.876077초, 앞선metadata 낙관적최소164.8초를 합한 필요조건718.676077/720초다. 여유는 약1.324초에 불과하고 metadata parse/반복읽기/OS 지연을 모두 보장하는 모델이 아니므로 실제 완료 또는 현재 Native 자격으로 쓰지 않는다. probe 자체 결과와 후속 고정선언·전송·worker 소스/증거도 다시 비용에 넣어야 한다. 다음은 bootstrap16KiB 안의 source-pinned 역할선언, 실제 전체 worker 재구성, 원 helper64·metadata/Frame 공유5초·독립수용의 연결이다. 추가 제품 권한은 없으며 Native008/009를 재실행하지 않는다.
+
+### Native009 실패 표현과 복원 병목 분석
+
+Native009의 본문PASS/최종전체source720초 실패원본5,046,802bytes를315,450bytes의 별도 opaque carrier로 보존했다. 원실패·실제제품실행True·원자식/Job/캡처·미수용 상태를 바꾸지 않고10계약·두 새 물리복원0.089541초·27fresh/final27·cleanupTrue를 확인했다. 이 표현은 원래 실행을 prebody 또는 현재 제품 수용으로 분류하지 않는다.
+
+원161 constructor 전체 후 원raw162 constructor를 연결한 새 Binding은 나머지 Binding/Projection 메서드 identity를 유지하며12계약을 통과했다. 전체 두물리복원 단계는177/324완료 후 원5초budget5.002287초로 중단됐고 `native009-failure-binding-code001.v1.json`은 FAILED 그대로다. 당시3개 소스는 `source-archive/p361-native009-binding-attempt001`에 bytes/hash 그대로 보존했다. CPU 보호에 의한 중단은 아니다.
+
+동일 검증의 무변경 반복 대신 `profile_fixed162_decoder_v1.py`로 private namespace의 원동작을 그대로 호출하는 시간 분석을 추가했다. 기본 모듈·hash 계산·JSON/base64/LZMA·원자원검사는 생략/캐시하지 않았고 원5초budget에서 계측시간도 빼지 않았다. profile001은5계약·324/324복원·3.209925초·239fresh/final239·64.344초·시스템CPU최고32.84%/자체4.805708%·전용58.8359MiB·가용RAM최저25.1057%·cleanupTrue다. LZMA복원1.986918초, hash0.559148초, JSON0.038110초, base640.044050초, 원resource checkpoint0.017539초였다. 앞선 초과의 인과적 원인은 미확정이며, 이 profile은 실패 CODE를 PASS로 바꾸거나 실제 metadata+Frame 공유5초를 수용하지 않는다.
+
+별도 dictionary trial001은 가장 큰 기존75 기록·큰 과거86 기록·기존7재포장·Native009의 서로 다른 대표4개를 비교했다. 원 encoder body와 decoder는 그대로 두고 private encoder dictionary만8MiB→1MiB로 줄였다.8계약·16새복원/원별도5초 중0.409563초·35fresh/final35·23.453초·시스템CPU최고36.35%/자체3.954451%·전용35.3672MiB·가용RAM최저23.9769%·cleanupTrue다. 두복원 시간은0.239976→0.220558초였지만 표현 크기가1,126,864→1,148,296bytes로 늘었다. 원2MiB/s 읽기비용에서 뚜렷한 이득이 아니므로 전체 carrier나 Binding에 적용하지 않았다. 이번 trial은 새carrier를 게시하지 않았다.
+
 ### 고정된161개 표현의 Binding과 두 번의 물리 복원
 
 `legacy_history_binding_v1.py`는 물리검증을 마친86개 과거기록과7개 재포장만 고정된 원본/물리pin·보고상태 catalog hash로 수용한다. 임의의 metadata·현재preflight·소스/실행파일을 변환하는 규칙은 추가하지 않는다. 부모는 고정물리proof와 그 검증프로그램 및 현재93개 carrier 해시를 새로 확인한다. worker는 같은161개 table과4,973bytes의 고정선언을 복원할 수 있지만, 그 선언은 부모의 source admission이나 제품실행 권한이 아니다. 빠진 제품실행 flag를 False/True로 채우거나 과거의 FAIL/scoped PASS를 현재 제품 수용으로 바꾸지 않는다.
