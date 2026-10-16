@@ -4,6 +4,24 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 고정 P149 Binding과 준비 reader 검증
+
+`legacy149_binding_v1.py`는 기존73개 descriptor와 전체 생성자를 유지한 채 P149 두 개만 추가한다. 두 원본의 runner/RAM 중단 사유와 제품 실행 미확인 상태를 보존한다. 기존73개 생성자가 모두 완료된 뒤 원raw 생성자로75개를 구성하며, nonconstructor oracle과 Projection 메서드는 바꾸지 않는다. 일반 metadata·소스·EXE·fixture·현재 제품을 새 alias로 허용하지 않는다.
+
+첫 CODE001은12개 계약을 통과하고 마지막 해시 재확인 중 원75% 단일 표본 정책으로 중단됐다.60.959초·시스템CPU최고75.92%·자체최고4.77297%·전용51.10MiB·가용RAM최저36.65%·cleanupTrue였으며 두 CPU 최대값의 동시성은 보장하지 않는다.594.519238초 선언 모델은 계산했지만 최종fresh를 닫지 못한 전체 실패다. 실패JSON과 당시 CODE fixture를 보존했다.
+
+관련 코드를 검토해 새 준비 reader의 chunk 할당을 기존 검증된64KiB readinto workspace로 바꿨다. 원 읽기 본문의 AST 역변환 일치와 기존 MRO·fresh source 검사·stream·byte pacing·parse·hash·최종fresh를 유지한다. 새 물리파일 두 개는 codec 시험에 필요한 첫 바이트 읽기에서 hash와pin을 함께 결속해 앞선 중복 hash-only 읽기를 제거했다. 기본/Native reader나 CPU 보호는 변경하지 않았다.
+
+CODE002는32.617초에 graph 준비 중 원CPU 보호로 중단됐다. 새 reader의391개 입력/392읽기/15,446,803bytes·최종hash0, 버퍼1개·392lease/392return·활성lease0을 기록했다. 마지막 같은 두 표본은 시스템61.23%/92%·자체각0%였다. 이 관측은 해당 표본에서 검증기가 직접 전체CPU를 사용하지 않았음을 보여주지만, 간접 파일 검사 부하나 프리즈 원인을 규명하지는 않는다. 원 실패와 정상 정리 결과를 보존했다.
+
+전체 graph를 만들지 않는 별도 reader 검증은 새 연결2개와 변경하지 않은 원버퍼15개 계약을 실행했다. reader-code001은17계약·fresh61/final61·7.572초·시스템CPU최고57.81%·자체최고0.38799%·전용46.63MiB·가용RAM최저31.37%·cleanupTrue였다. 이17개는 아래 전체29개의 부분집합이며 별도 고유46개로 세지 않는다.
+
+CODE003은 전체29개 계약·fresh408/final408로 통과했다. 여기에는 기존 Binding12개, 실제 reader/MRO 연결2개와 원버퍼15개가 포함된다. 실제68.960초·시스템CPU최고30.23%·자체최고2.99321%·전용52.52MiB·가용RAM최저32.83%·cleanupTrue·프로세스 생성시도0이다. 실제 준비reader는 workspace1개/65,536bytes·822lease/822return·2,200회 fresh readinto·활성lease0이었고, 파일 바이트·hash·JSON cache는 사용하지 않았다. CPU 원인이나 프리즈 해결 판정은 아니다.
+
+비용은 부모003의 전체3,223개 선언과 원모델을 먼저 정확히 복원한 뒤 계산했다. 새 전체3,242개는 기준3,191개와 저장delta51개만으로 동일하게 복원된다. 현재Rust787경로와 원enumerator의 실제pacing167회를 확인했다. 물리198,781,770bytes에 대한 원모델과 별도준비15초의 합은594.732137/600초다. 입력 제외·과거여유/준비시간 차감·상한 확대 없이 현재 선언은 명목상 들어가지만, 후속 결과와 전송/dispatch 소스의 비용 및 실제 완료 시간은 별도 확인 대상이다.
+
+현재 CODE fixture는 worker packet이 아니다. 실제 runtime graph005/v4 packet은 여전히73개이고, 다음은75개 전송·worker/부모 연결과 전체 metadata/Native의 공유5초·실제두바이트경계·동적helper·독립수용·현재전체preflight/dispatch 검증이다. 사용자는 최적화와 자격 검증을 마친 뒤 Native009에서 동일 제품 시험1회 추가 실행을 허용했다. 아직 사용하지 않았으며 Native008을 재실행하지 않는다. 준비75% 단일표본·실제Native·RAM/commit95%·1코어/BelowNormal·원IO/잠금/decoder/제품10초/준비15초/여유60초를 유지했다. Native009/제품·접근허용·OS/Defender 변경0·공식수용 증가0이다. 근거: `legacy149-binding-code001..003`, CODE manifest001/003 및 `legacy149-preparation-reader-code001`.
+
 ### P149 원본 두 개의 무손실 표현과 전체75 물리 검증
 
 `legacy149_full75_carriers_v1.py`는 P149 원본 두 개만을 대상으로 별도 XZ 표현을 만든다. 첫 원본의3,607,741bytes·OWNED_RUNNER_FAILURE와 둘째의3,322,888bytes·STOP_LOW_AVAILABLE_RAM을 서로 구분한다. 두 원본은 worker/writer/heavy work가 시작됐고 product_complete=False·cleanup/owned_tree_empty=True지만 제품 자식/본문 실행 필드는 없다. 이 미확인 상태와 미수용 판정을 그대로 유지하며 prebody 실패나 현재 제품 PASS로 바꾸지 않는다.
@@ -16,7 +34,7 @@ g001-attempt002는 실패 게시 기록의 명시적 길이/SHA256과 두 실제
 
 수정 후13계약과 실제75개 전체 파일의 두 physical 읽기에서150회 복원이 통과했다. 각 경계의 물리 파일 hash와 복원 원본 hash를 검사했고, 모든150회가 현재 한 원5초 예산 중3.035453초에 완료됐다. fresh181/final181이었다. 실제52.960초·시스템CPU최고67.65%·자체CPU최고1.15193%·전용최고57.70MiB·가용RAM최저34.09%·cleanupTrue·추가 프로세스 생성0이다. 두 새 source와 원본/물리 pin의 현재 파일 일치도 별도로 확인했다.
 
-이는 물리 표현과 전체75 corpus 검증이며 Binding·worker·Native Frame·제품 수용은 아니다. 현재 runtime manifest/graph005/v4 packet은73개 그대로 보존했다. 다음은 고정 P149 역할의75개 Binding 및 전송/부모 연결, metadata와 Native에 걸친 공유5초 decoder, 후속 source/결과를 포함한 원600초 비용의 재계산이다. 물리 검증의3.035453초를 이전 metadata timing과 합쳐 공유5초가 통과한 것처럼 사용하지 않는다. 전체 metadata·실제 Native 두 바이트 경계·동적 helper·독립 수용·사전검사/dispatch는 미완료다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작·Native009/제품/접근허용/OS·Defender 변경0을 유지한다. 근거: `legacy149-full75-physical-g001-attempt001/002`와 새 두 envelope.
+이는 물리 표현과 전체75 corpus 검증이며 Binding·worker·Native Frame·제품 수용은 아니다. 이 시점의 runtime manifest/graph005/v4 packet은73개 그대로 보존했다. 후속 고정75개 Binding과 선언 비용 검증은 앞 절을 따른다. 물리 검증의3.035453초를 이전 metadata timing과 합쳐 공유5초가 통과한 것처럼 사용하지 않는다. 전체 metadata·실제 Native 두 바이트 경계·동적 helper·독립 수용·사전검사/dispatch는 미완료다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작·Native009/제품/접근허용/OS·Defender 변경0을 유지한다. 근거: `legacy149-full75-physical-g001-attempt001/002`와 새 두 envelope.
 
 ### 실제 reader 재사용 확인과 CPU 중단
 
