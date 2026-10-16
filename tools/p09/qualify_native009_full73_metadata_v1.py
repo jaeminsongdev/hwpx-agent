@@ -18,10 +18,69 @@ CONSTRUCTION=dict(path='tools/p09/native009_full72_construction_v1.py',bytes=203
 QUALIFIER='tools/p09/qualify_native009_full73_parent_v1.py'
 FAILED_METADATA=dict(path=PREFIX+'native009-full73-metadata002.v1.json',bytes=8139,
     sha256='2e75b98d9003635fbe5483a694049aea3641df7ce6cea66564270f200f4e866b')
+PUBLICATION_REVIEW=PREFIX+'native009-full73-metadata-publication-review003.v1.json'
 
 
 def require(ok,label):
     if not ok:raise ValueError('FULL73_METADATA_'+label)
+
+
+def restore_pin_map(required,record,scope,exact):
+    import hashlib
+    require(type(record) is dict and set(record)=={'schema_version','omitted_declared_paths','extra_physical_pins','raw_pin_count','raw_pin_map_sha256'},'COMPACT_PIN_MAP_FIELDS')
+    require(record['schema_version']=='hwpx-agent.p09-metadata-pin-map-over-declared-scope/v1','COMPACT_PIN_MAP_SCHEMA')
+    omitted=record['omitted_declared_paths'];extra=record['extra_physical_pins']
+    require(type(omitted) is list and omitted==sorted(set(omitted)) and set(omitted)<=set(required),'EXACT_OMISSION_SET')
+    require(type(extra) is list,'COMPACT_EXTRA_PIN_LIST')
+    extra={} if not extra else scope.pins(extra)
+    require(not(set(extra)&set(required)),'NO_COMPACT_PIN_CONFLICT_OVERRIDE')
+    restored={n:dict(p) for n,p in required.items() if n not in omitted}
+    restored.update(extra)
+    exact(scope.pins(list(restored.values())),restored,'RESTORED_PIN_MAP_SHAPE')
+    require(type(record['raw_pin_count']) is int and len(restored)==record['raw_pin_count'],'COMPACT_PIN_COUNT')
+    digest=hashlib.sha256(json.dumps(restored,ensure_ascii=True,sort_keys=True,separators=(',',':')).encode('ascii')).hexdigest()
+    exact(digest,record['raw_pin_map_sha256'],'COMPACT_PIN_MAP_DIGEST')
+    return restored
+
+
+def compact_pin_map(required,actual,scope,exact):
+    import hashlib
+    require(type(required) is dict and bool(required) and type(actual) is dict and bool(actual),'NONEMPTY_PIN_MAPS')
+    exact(scope.pins(list(required.values())),required,'DECLARED_PIN_MAP_SHAPE')
+    exact(scope.pins(list(actual.values())),actual,'ACTUAL_PIN_MAP_SHAPE')
+    record=dict(schema_version='hwpx-agent.p09-metadata-pin-map-over-declared-scope/v1',
+        omitted_declared_paths=sorted(set(required)-set(actual)),
+        extra_physical_pins=sorted((p for n,p in actual.items() if n not in required),key=lambda p:p['path']),
+        raw_pin_count=len(actual),raw_pin_map_sha256=hashlib.sha256(json.dumps(actual,ensure_ascii=True,
+            sort_keys=True,separators=(',',':')).encode('ascii')).hexdigest())
+    exact(restore_pin_map(required,record,scope,exact),actual,'WHOLE_ACTUAL_PIN_MAP_LOSSLESS_ROUNDTRIP')
+    return record
+
+
+def encoding_contracts(scope,exact):
+    def pin(name):return dict(path=name,bytes=1,sha256='a'*64)
+    required=scope.pins([pin(f'input/{n:04}.json') for n in range(3230)])
+    full=compact_pin_map(required,required,scope,exact)
+    exact(restore_pin_map(required,full,scope,exact),required,'ENCODER_FULL_MAP')
+    subset={n:p for i,(n,p) in enumerate(required.items()) if i>1}
+    omitted=compact_pin_map(required,subset,scope,exact)
+    require(len(omitted['omitted_declared_paths'])==2,'ENCODER_EXACT_OMISSIONS')
+    actual=scope.extend(subset,scope.pins([pin(f'physical/{n}.json') for n in range(4)]))
+    expanded=compact_pin_map(required,actual,scope,exact)
+    require(len(expanded['extra_physical_pins'])==4,'ENCODER_EXACT_EXTRAS')
+    conflict=dict(required);name=next(iter(conflict));conflict[name]=dict(conflict[name],sha256='b'*64)
+    try:compact_pin_map(required,conflict,scope,exact)
+    except ValueError:pass
+    else:raise ValueError('FULL73_METADATA_ENCODER_CONFLICT_ACCEPTED')
+    try:restore_pin_map(required,dict(full,raw_pin_map_sha256='0'*64),scope,exact)
+    except ValueError:pass
+    else:raise ValueError('FULL73_METADATA_ENCODER_DIGEST_MUTATION_ACCEPTED')
+    raw_bytes=len(json.dumps(actual,ensure_ascii=True,indent=2).encode('ascii'))
+    compact_bytes=len(json.dumps(expanded,ensure_ascii=True,indent=2).encode('ascii'))
+    require(raw_bytes>262144 and compact_bytes<2048,'ENCODER_3230_INPUTS_WITHOUT_PUBLISHER_LIMIT_INCREASE')
+    return dict(state='PASS_BOUNDED_METADATA_REPORT_PIN_MAP6_NOT_RUNTIME_OR_PRODUCT',contracts=6,
+        raw_fixture_bytes=raw_bytes,compact_fixture_bytes=compact_bytes,publisher_limit_bytes=262144,
+        raw_pin_count=len(actual),full_map_losslessly_restored=True,actual_product_or_Native_executed=False)
 
 
 def main():
@@ -29,6 +88,11 @@ def main():
     sys.path.insert(0,str(Path(__file__).resolve().parent))
     import conservative_maintenance as c
     c.Windows()
+    if '--check-report-encoding' in sys.argv[1:]:
+        require(sys.argv[1:]==['--check-report-encoding'],'ONLY_ENCODING_CONTRACT_MODE')
+        import accept_case112_current_epoch as a
+        import current_stored_runtime_scope as scope
+        print(json.dumps(encoding_contracts(scope,a.exact),allow_nan=False));return 0
     denied=[]
     def audit(event,args):
         if event=='subprocess.Popen':denied.append(1);raise ValueError('FULL73_METADATA_ALL_SUBPROCESS_DENIED')
@@ -76,6 +140,11 @@ def main():
         row['producer_source_pin']=q.pin(SELF)
         parent_proof=a.read_exact(q,PARENT_PROOF)
         a.exact(q.pin(FAILED_METADATA['path']),FAILED_METADATA,'ORIGINAL_MISSING_SHARED_CONNECTION_FAILURE')
+        review=q.json(PUBLICATION_REVIEW)
+        a.fields(review,dict(state='FAILED_RESULT_PUBLICATION_REVIEW_NOT_RUNTIME_OR_NATIVE_ACCEPTANCE',
+            expected_original_output_absent_after_terminal_exit=True,process_exit_code=1,
+            unchanged_publisher_limit_bytes=262144,inner_final_qualification_outcome_not_recoverable=True,
+            accepted_count_delta=0,GO_authorized=False),'FAILED_PUBLICATION_REVIEW_NOT_RUNTIME_AUTHORITY')
         a.fields(parent_proof,dict(state='PASS_FULL73_PARENT_LAUNCH_JOB_FRAME_AND_ORACLE25_WITH_REPLAYABLE_DECLARED_COST_NOT_NATIVE',
             contracts=dict(run=25,errors=0,failures=0,skipped=0),semantic_inputs=3223,fresh_inputs=392,final_fresh_hashes=392,
             actual_parent_attempts=0,actual_worker_calls=0,actual_Frame_instances=0,subprocess_creation_attempts=0,
@@ -167,7 +236,8 @@ def main():
         _,delta=upstream.compact_scope(graph.binding,original_union,scope,base,parent_proof['declared_scope_base_pin'],required,guard.check,a.exact)
         row.update(semantic_inputs=len(required),metadata_fresh_inputs=len(metadata.snapshots),metadata_final_fresh_hashes=metadata.final_fresh_hashes,
             actual_metadata_read_passes=metadata.read_passes,actual_metadata_physical_bytes=metadata.bytes_read,
-            actual_metadata_semantic_source_pins=list(metadata.snapshots.values()),metadata_pressure=build.pressure_summary(binding_state),
+            actual_metadata_source_pins_compact=compact_pin_map(required,metadata.snapshots,scope,a.exact),
+            actual_metadata_pin_map_losslessly_reconstructed=True,metadata_pressure=build.pressure_summary(binding_state),
             original_whole_parent_callback_executions=len(connected.callback_calls),descriptor_count=73,
             all73_fresh_first_and_final_decodes=True,shared_decoder=shared.evidence(),helper_inventory_after_metadata=after,
             previous_scope_and_budget_exactly_reconstructed=True,original_complete_runtime_budget=budget,
@@ -195,7 +265,19 @@ def main():
             owned_CPU_machine_max=max((s['parent_cpu_machine_percent'] for s in guard.samples if s.get('parent_cpu_machine_percent') is not None),default=None),
             owned_private_MiB_max=max((s['parent_private_mib'] for s in guard.samples if s.get('parent_private_mib') is not None),default=None),
             RAM_min=min((s['available_ram_percent'] for s in guard.samples),default=None),subprocess_creation_attempts=len(denied))
-    require(guard.cleanup,'OWNER_CLEANUP');libs.successor_preparation_workspace_v1.publish(c.ROOT,output,row,a)
+    require(guard.cleanup,'OWNER_CLEANUP')
+    try:libs.successor_preparation_workspace_v1.publish(c.ROOT,output,row,a)
+    except ValueError as error:
+        if error.args!=('CURRENT_EPOCH_ACCEPT_WORKSPACE_BOUNDED_RECEIPT',):raise
+        # Preserve a terminal failure rather than lose the result again. This
+        # intentionally cannot stand in for the detailed whole-input proof.
+        failure=dict(state='FAILED_BOUNDED_METADATA_RESULT_PUBLICATION_NOT_ACCEPTED',accepted_count_delta=0,
+            GO_authorized=False,actual_product_or_Native_executed=False,actual_Native_Frame_created=False,
+            producer_source_pin=row.get('producer_source_pin'),cleanup_confirmed=guard.cleanup,
+            full_detailed_result_not_published=True,original_publisher_limit_bytes=262144,
+            elapsed_seconds=row.get('elapsed_seconds'),operation_phase=row.get('operation_phase'))
+        libs.successor_preparation_workspace_v1.publish(c.ROOT,output,failure,a)
+        print(json.dumps(failure,allow_nan=False));return 1
     print(json.dumps({k:row.get(k) for k in ('state','semantic_inputs','metadata_fresh_inputs','metadata_final_fresh_hashes','fresh_inputs','final_fresh_hashes',
         'predicted_complete_seconds_with_readiness','shared_decoder','elapsed_seconds','CPU_max','owned_CPU_machine_max','owned_private_MiB_max',
         'RAM_min','cleanup_confirmed','operation_phase','error_code','error_frames')},allow_nan=False))
