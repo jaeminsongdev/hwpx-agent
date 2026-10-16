@@ -4,6 +4,24 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 전체75 부모 연결과 실제 metadata 마감
+
+`qualify_native009_full75_parent_v1.py`는 원 construction/parent launch20개 계약을 유지하고, 두 count 기대값만72→75의 전체code 역변환으로 연결한다. 이전3,255개 선언·원비용·기준3,191+저장delta64의 독립복원을 유지하며, 현재worker·실제부모·독립판정기·새 P149 실패역할·공유decoder 소유자를 확인하는7개 계약을 추가했다. 부모001은27계약·fresh399/final399 PASS다. 원 Frame 클래스와 live owner/Job checkpoint가 연결됐지만 실제 부모·worker 호출과 Frame instance는0이다.
+
+공유decoder는 기존 `current_queue_successor_lossless_runtime_v4.configure`와 세 고정component를 통해 부모구성 전에 연결했다. 소스·초기read·원budget class를 바꾸지 않았으며 부모검증에서는 metadata/Frame budget이 모두 미등록인 같은 fresh owner를 확인했다. 기본helper59/Native64·Rust787경로/실제pacing167·전체선언3,257개=기준3,191+delta66을 확인했다. 원모델+별도준비15초596.519358/600초·실제62.355초·시스템CPU최고44.89%·자체최고6.10881%·전용50.05MiB·가용RAM최저36.46%·cleanupTrue·프로세스 생성시도0이다. 현재 후속metadata 비용이나 Native 완료를 이 모델로 대신하지 않는다.
+
+실제 metadata001은 출력관측이 끊긴 뒤 같은 tool handle을 다시 조회했으나 Unknown process였고, 해당 producer 명령의 현재python 프로세스와 결과파일도 없었다. 마지막 받은progress는90.94초·638읽기/634입력·시스템21.66%/자체0%였다. 이는 마지막 수신된 부분관측일 뿐 종료시각·종료코드·CPU 중단·최종정리 또는 검증결과를 증명하지 않는다. `metadata-observation-review001`은 이 미확인 상태와 검토시점 코드pin을 기록하며, 존재하지 않는 metadata001 결과를 만들지 않는다.
+
+producer 코드19,903bytes/SHA `1131d8e56f75aabaa683ccd2bea61d4204a7360f357486253c7e2378b72f9f61`를 변경하지 않고, 살아 있는 같은 명령이 없고 새 출력경로가 모두 부재함을 확인한 뒤 exclusive metadata002를 시작했다. Hidden 독립준비process의 PID/생성시각과 닫힌progress/private stderr 경로를 별도launch record에 기록했다. 같은 PID와 생성시각의 생존을 매번 확인했으며 새 중복실행이나 외부process 종료·OS 설정변경은 없었다. 원 CPU/RAM/commit·pacing·source·600초 guard는 그대로였다. launch record 자체는 현재생존이나 결과증거가 아니다.
+
+metadata002는 실제 원부모 callback1회, 75개 전부의 초기/최종 무손실복원과 metadata 입력3,263개/최종fresh3,263개를 완료했다. 누적6,535읽기·실제물리415,053,252bytes이며 source판정6,535회 모두 새로운 no-follow stat이었다. fallback0·stat/byte/hash/JSON cache0이며 실제 reader의 기존 snapshot/readinto 구현을 확인해 그대로 사용했다. metadata 원pin map3,263개는 전체선언 기반의 생략·추가physical pin·raw map SHA로 무손실 복원했다. 기본helper59/Native64의 전후일치와 원출판256KiB 상한도 유지했다.
+
+같은 실제 공유owner에 등록된 metadata decoder는153회 복원·2.343568초·terminal errorFalse였다. Frame은 미등록/복원0이므로 metadata+Native 합산5초 자격으로 승격하지 않는다. 실제 Native 두바이트경계와 같은 owner에서 원5초를 지키는 검증이 다음이다. 이전 부모의 전체3,257개 선언·원비용을 정확히 복원하고 새선언3,259개=기준3,191+저장delta68, 현재Rust787경로/실제pacing167을 확인했다. 원모델+추가준비15초596.782218/600초는 현재범위의 nominal 비용이며 후속 결과·소스나 실제 완료를 보장하지 않는다.
+
+마지막 qualifier399개/final399까지 통과한 실제총시간은575.066초였다. 시스템CPU최고72.5%·자체최고6.15734%·전용65.33MiB·가용RAM최저31.23%·cleanupTrue·subprocess 생성시도0이며, 종료 후 소유PID 부재와 private stderr0을 확인했다. CPU 보호는 발동하지 않았지만 프리즈 원인을 규명하거나 해결했다고 주장하지 않는다. Native Frame/Job/worker/제품·GO·접근허용은 실행하지 않았고 공식수용 증가0이다.
+
+다음은 새결과/소스를 포함한 비용과 실제Native 두바이트경계·metadata/Native 공유5초·실제동적helper·현재preflight/dispatch·독립수용이다. Native009제품1회 허용은 미사용이며 Native008을 재실행하지 않는다. P09/A12/A13 OPEN·P10 미시작과 원CPU/RAM/IO/잠금·제품10초/준비15초/여유60초를 유지한다. 근거: `native009-full75-parent-connection001`, `native009-full75-metadata002`, 별도 `metadata-observation-review001` 및 `metadata-durable-launch002`.
+
 ### 실제 전체75 worker와 초기 준비 최적화
 
 `native009_full75_worker_entry_v1.py`는 기존73개 준비 함수의 전체 본문을 유지하고 typed 개수73→75와 전송 namespace 이름 한 개만 바꾼다. 두 slot을 되돌리면 전체code가 정확히 원본과 같다. 원main·execute·arguments·read 및 launch 함수들의 code/defaults/closure와 GO·Job·15초 준비·10초 캡처는 유지한다. 진단 차단을 production 진입점에 넣지 않는다.

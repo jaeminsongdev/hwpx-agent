@@ -1,0 +1,44 @@
+{
+  "schema_version": "hwpx-agent.p09-preparation-observation-review/v1",
+  "state": "UNRECOVERABLE_METADATA001_RESULT_AFTER_OBSERVATION_INTERRUPT_NOT_ACCEPTED",
+  "review_time_utc": "2026-10-16T02:39:05.5733421Z",
+  "accepted_count_delta": 0,
+  "GO_authorized": false,
+  "original_expected_output_path": "implementation/p09/evidence/p09-361-case165-native009-full75-metadata001.v1.json",
+  "original_expected_output_absent_at_review": true,
+  "original_tool_session_id": 16919,
+  "observation_sequence": [
+    "write_stdin observation aborted",
+    "same handle polled again without restarting",
+    "write_stdin returned Unknown process id 16919",
+    "current python.exe processes queried by exact producer script name; no matching process returned",
+    "expected result file absent"
+  ],
+  "producer_source_pin_at_review_not_recovered_execution_snapshot": {
+    "path": "tools/p09/qualify_native009_full75_metadata_v1.py",
+    "bytes": 19903,
+    "sha256": "1131d8e56f75aabaa683ccd2bea61d4204a7360f357486253c7e2378b72f9f61"
+  },
+  "parent_qualification_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-native009-full75-parent-connection001.v1.json",
+    "bytes": 105930,
+    "sha256": "a5dd7597582a1e4d3ccbb233f51b1376f98a8d3489a53ca00c0fdbc458b5bfcd"
+  },
+  "last_received_progress_not_terminal_evidence": {
+    "phase": "ACTUAL_ORIGINAL_PARENT_METADATA_CALLBACK",
+    "elapsed_seconds": 90.94,
+    "metadata_read_passes": 638,
+    "metadata_inputs": 634,
+    "system_CPU": 21.66,
+    "owned_CPU": 0.0,
+    "available_RAM_percent": 45.355429696575506
+  },
+  "exit_code": null,
+  "termination_reason": null,
+  "final_cleanup_confirmed": null,
+  "full_metadata_hash_qualification": false,
+  "actual_native_result_present_at_review": false,
+  "CPU_protection_or_freeze_cause_established": false,
+  "original_result_fabricated_or_overwritten": false,
+  "future_launch_requires_no_live_matching_producer_and_new_exclusive_attempt": true
+}
