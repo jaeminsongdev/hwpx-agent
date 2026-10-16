@@ -4,6 +4,22 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 실제 Native009의 본문 통과와 전체시간 중단
+
+같은 qualified entry로 Native009를 한 번 실행했다. Hidden producer PID21236/생성filetime134365946080330606을 시작부터 종료까지 같은 identity로 추적했으며 재실행하지 않았다. worker 준비1.221648초·GO→완전캡처0.166954초·제품본문1 PASS/248filtered를 확인했다. 이전 Native008의 준비·캡처 문제를 이번 실제 실행에서 재현하지 않았지만, 최종 원본입력 검사 `final_source_freeze`에서 원 전체720초 제한에 걸려 STOPPED_NOT_ACCEPTED다. 공식 수용은 증가하지 않는다.
+
+실제 Native입력3268개/물리199890681bytes의 첫 바이트 경계는 완료했고 두 번째 경계는 미완료다. boundary factory2회가 completed boundary2회를 뜻하지 않는다. 같은 owner에서 metadata78회/1.179781초·Frame75회/1.086906초·공유2.266687초/5초·오류 없음이지만, 이 미완료 실행의 합산값을 전체 경계 자격으로 승격하지 않는다. 원본 결과는5046802bytes/SHA `3588e9d53ff9b442c711d165e8ad09fb93627bc0dc756a467a059f11a71ce753`로 보존했다.
+
+원3642개 잠금을 모두 닫았고 잔여handle/reader/stream/close실패0, FrameCLOSED, Python open함수 identity복구, cleanupTrue/빈tree다. 종료 뒤 정확한producer 및 runtime/worker 명령·제품명 process부재와 private stderr0을 확인했다. 원표본 시스템CPU최고71.02%·자체최고2.89175%·전용67.74MiB·가용RAM최저28.82%이며 CPU guard 중단이 아니다. 원 entry의 보고 return code는2이고, 별도 OS process exit code는 수집하지 않았다. 승인된 Native009제품1회는 사용됐고 추가 제품권한은 없다. Native008/009와 통과 본문을 자동 재실행하지 않는다. 근거: canonical `current-runtime-run009`, `native009-full75-runtime-durable-launch001`, `runtime-once-intent` 및 `native009-full75-runtime-terminal-review001`.
+
+### Native600과 전체720 비용 모델의 차이
+
+이번 원 Native 모델에 추가준비15초를 더한597.789677초는600초 안이지만, 앞서 수행하는 metadata 비용을 전체720초에 더하는 사전조건은 없었다. `whole_runtime_metadata_budget_v1.py`는 current input을 원 metadata로 먼저 읽어야 한다는 조건에서 최소open 비용 `(3268-1)/20=163.35초`와 가장 빠른 합법적byte 비용을 낙관적으로 전부 겹쳐 계산한다. metadata 내부의 overlap은 허용하지만, 나중에 시작하는 Native 잠금/읽기와 동시에 수행한 것으로 계산하지 않는다. 기존margin60/shared decoder5는 원 Native 모델에 한 번만 남기고, 초기open/chunk credit도 허용한다.
+
+그렇게 낙관해도 선언모델의 합계는761.139677/720초이므로 현재계획은 REJECT다. 이는 원margin을 포함한 선언모델의 필요조건이며 실제 최소벽시간이나 실행완료 보장이 아니다. parse/source/OS 지연·추가반복읽기 등은 이 optimistic metadata 하한에 더하지 않았다. 원720·600·15초/IO20회·1/2MiB·decoder5·margin60을 늘리거나 공제하지 않는다.
+
+실제 원본 Native009 bytes/SHA와 실패/본문/정리를 확인한 검토001은 새모델7계약·10fresh/final10·7.110초·시스템CPU최고17.99%/자체최고0.37889%·가용RAM최저32.86%·cleanupTrue·새process0으로 통과했다. 이 모델은 아직 새 실제 entry에 채택되지 않았으며, 새 제품권한이나 Native9 수용을 만들지 않는다. 다음은 전체입력과 원 역할을 유지한 metadata/물리표현 비용 최적화 및 후속진입점의 전체720 필요조건 채택이다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작·목표ACTIVE를 유지한다. 근거: `native009-whole720-model-review001.v1.json`.
+
 ### 같은 진입점의 자격 검증과 중복 실행 방지
 
 `native009_full75_runtime_v1.py`는 준비 자격검증과 실제 Native 모드에 같은 build 함수를 사용한다. 기존전체3263개 선언과 원비용·qualified program을 새로 확인하고, 현재75 worker·원 parent/Job·공유decoder·전체 독립 검사기와 추가 accounting을 동일하게 구성한다. 실제 모드에서는 준비 최종해시와 감시정리가 끝난 뒤 원 outer entry를 논리run1로 한 번만 호출한다. 원 entry가 metadata·입력잠금·두 Native byte경계·worker Job/GO와 완전캡처를 새로 검사해야 한다. 기존 metadata PASS나 준비 reader를 실제 Frame으로 대체하지 않는다.
