@@ -4,6 +4,16 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 현재75 부모와 독립 accounting 검사 연결
+
+동결 `native009_full72_construction_v1.construct`는 원 전체 독립 검사기를 직접 연결하지만, 기존 v4 factory가 추가하는 lossless metadata/Frame accounting 검사는 거치지 않았다. 새 `native009_full75_dispatch_connection_v1.py`는 그 명시적 oracle dependency 한 번만 기존 `current_queue_successor_lossless_runtime_v4.oracle_namespace`로 전달한다. 원 전체 checker와 private family는 유지하고 metadata의 실제 물리 바이트·의미 복원 계수, 같은 실행의 metadata/Frame 공유5초, 기존 사후복구 제품10초 검사를 연결한다. 실제 연결된 함수·closure·graph Binding·원 checker family와 추가 판정 함수의 동일성을 확인했다. 현재 제품 후보에 검사기를 실행한 결과는 아니다.
+
+`native009-full75-dispatch-connection001`은 새7계약·fresh403/final403 PASS다. 명시적 root/pin/alias가 다른 요청·추가 dependency·중복 로드·factory 내부 재읽기를 거부하며 원 source 오류를 보존한다. 실제 구성의 기본helper59/Native64, metadata/Frame이 모두 미등록인 새 공유owner, 원 부모/Job 연결과 callback 미실행을 확인했다. 완료된 metadata002는 고정bytes/SHA와 모든 qualified program을 fresh 검사했으며, 전체 데이터 callback을 별도로 다시 실행하지 않았다. 실제 Native는 자신의 metadata와 두 바이트 경계를 새로 검증해야 한다.
+
+이전 전체3259개 선언과 비용을 정확히 복원한 후 새 소스·metadata 결과를 포함한 선언3263개=기준3191+저장delta72를 독립 재구성했다. 현재 Rust787경로/실제pacing167·원모델+추가준비15초597.208434/600초다. 결과 파일 자신과 이후 실행 진입점·자격 소스는 후속 비용에 포함해야 하며 이 nominal 모델은 실제 완료 보장이 아니다.
+
+실제62.574초·시스템CPU최고43.24%·자체CPU최고4.87344%·전용51.97MiB·가용RAM최저34.70%·cleanupTrue였다. 부모/Frame/Job/worker/metadata callback/프로세스생성 시도는0이다. 원 CPU·RAM/commit95%·IO·잠금·공유5초·제품10초/준비15초/여유60초와 모든 실패/원본을 보존했다. 다음은 실제 Native 두 바이트 경계·실행 중 공유decoder·동적helper 및 현재 전체preflight/dispatch·독립수용이다. Native009제품1회 허용은 미사용, 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작이다. 근거: `native009-full75-dispatch-connection001.v1.json`.
+
 ### 전체75 부모 연결과 실제 metadata 마감
 
 `qualify_native009_full75_parent_v1.py`는 원 construction/parent launch20개 계약을 유지하고, 두 count 기대값만72→75의 전체code 역변환으로 연결한다. 이전3,255개 선언·원비용·기준3,191+저장delta64의 독립복원을 유지하며, 현재worker·실제부모·독립판정기·새 P149 실패역할·공유decoder 소유자를 확인하는7개 계약을 추가했다. 부모001은27계약·fresh399/final399 PASS다. 원 Frame 클래스와 live owner/Job checkpoint가 연결됐지만 실제 부모·worker 호출과 Frame instance는0이다.
