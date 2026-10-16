@@ -4,6 +4,24 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 실제 reader 재사용 확인과 CPU 중단
+
+metadata005는 단일 base·단순 allocator라는 초기 가정을 실제 엔진에 적용할 수 없어 사전검사에서 거부됐다. 원 factory가 반환한 fresh 객체를 확인하는 방식으로 바꾼006은 이미 SnapshotReader가 설치되어 있음을 확인해 거부됐다. 실제 MRO에는 원 builder·ReusableReader·WeightedReader·ChunkLeaf·SnapshotReader·AuditEvidenceReader가 함께 있었다. 기본 stat 질의와64KiB 버퍼 최적화는 이미 적용되어 있었다. 따라서 앞선 작은5계약을 실제 경로의 새 성능 개선으로 해석하지 않는다.
+
+007/008의 추가 비교에서는 source 함수의 bytecode와 예외표가 private 참조와 달랐고 counter 함수는 같았다. 단순 디버그 차이로 허용하지 않고 거부를 보존했다. SHA256이 고정된4,560bytes 원문을 전체 모듈 및 원 private non-import AST 방식으로 각각 새로 컴파일하는 작은 계약에서 두 code 산출물의 차이가 재현됐다. 실제 reader source는 전체 모듈 참조와 전체 code가 정확히 일치했다. 현재 검사는 임의의 동등 bytecode나 변경된 예외표를 허용하지 않고 이 두 고정 원문 참조 중 하나와의 정확한 일치를 요구한다. 상수 변조 거부·factory 반환 객체·기존 계층 중복 설치 방지 등을 포함한8계약과 보고 형식6계약이 통과했다.
+
+현재 경로는 이미 qualified된 snapshot이 있으면 클래스·필드·생성자·함수·pacer를 변경하지 않는다. counter가0이고 실제 읽기/스냅샷이 없는 fresh 객체인지도 검사한다. 실제 source 검사1,819회는 모두 새 no-follow stat으로 수행됐으며 fallback0·stat cache0이었다. 기존 reader나 과거 읽기 결과를 재사용한 것이 아니라 같은 검증된 구현을 새 reader에서 사용한 것이다.
+
+새 코드 세대2의 각 실행은 기존 세대와 별도 경로에 기록하며 진단 시도는 세대별1~8로 제한한다. Native 실행 번호나 제품 재시도 권한은 늘리지 않는다. 전체 metadata 읽기 전 현재 선언·원 Rust enumerator·실제 directory pacing으로 비용을 점검하는 조기 거부 경로도 추가했다. g002-attempt001은 Rust787경로/167회 pacing·알려진 선언3,231개·원 모델+준비15초599.882811/600초를 확인한 뒤 실제 원 부모 callback에 진입했다. 알려진 범위의 사전 모델이며 최종 전체 범위/비용이나 Native 완료 보장은 아니다.
+
+g002-attempt001은179.483초·입력1,814개·누적1,819읽기·물리124,475,794bytes·최종hash0에서 원75% 단일 표본 보호로 중단됐다. 마지막 **같은 원 표본**은 시스템CPU85.16%·검증기 자체CPU0.19426%·가용RAM34.44%·commit50.80%·전용52.17MiB였다. 전체 구간 자체CPU최고5.69814%·전용최고57.41MiB·가용RAM최저28.80%이며 cleanupTrue·추가 프로세스 생성 시도0이다. 이 표본은 검증기 프로세스가 직접 전체CPU를 사용한 상황은 아니었음을 보여주지만, 파일 읽기가 다른 프로세스의 부하를 유발했는지는 규명하지 못했다. 제품/Native Frame/접근허용0·P09 수용 증가0을 유지한다.
+
+종료 후 별도 약1.09초 관측에서는 Python5개 합계 약12.44%, Git2개 합계 약5.71%의 기계 CPU가 보였다. 현재 qualifier 이름의 프로세스는 없었고, 경로 문자열만으로 다른 작업의 소유권을 확정하지 않았다. 이 사후 관측은85.16% 당시 원인 자료가 아니며 외부 프로세스를 종료하지 않았다. 읽기 전용 Defender 조회는 평균 검사CPU 목표10·낮은CPU우선순위True·실시간보호 비활성화False였다. 조회에서 개발 경로의 제외 효과는 확인하지 못했으며 제외가 없다고 확정하거나 설정을 바꾸지 않았다.
+
+현재 모델의 여유가 약0.117초뿐이므로 다음은 또 같은 전체 읽기를 시도하는 대신 고정 과거 원본의 I/O 표현을 줄이는 작업이다. 읽기 전용으로 P149 두 원본의 길이·SHA256과 기존 선언 pin 일치를 확인했다. 첫 원본은3,607,741bytes/SHA `677ef24e932a3f48690a6b4818e41f2753b977206b904f649fa22df3b89fd774`, STOPPED_NOT_ACCEPTED/OWNED_RUNNER_FAILURE다. 둘째는3,322,888bytes/SHA `103c85ed2b7bad5885c37e7cc22f8f55ba46c4a2c6435b4f8110e34687940557`, STOPPED_NOT_ACCEPTED/STOP_LOW_AVAILABLE_RAM이다. 둘 다 worker/writer/heavy work가 시작됐고 product_complete=False·cleanup/owned_tree_empty=True지만 제품 자식 실행은 미확인이다. prebody 실패나 현재 제품 PASS로 재분류하지 않는다.
+
+두 원본 합계6,930,629bytes의 원2MiB/s 두 번 읽기 모델은6.609563초다. 압축 후 실제 절감량·75개 전체 corpus와 공유5초 decoder·Binding/worker/현재 비용 검증은 아직 NOT_RUN이다. 원본을 삭제하거나 입력에서 제외하지 않는다. 기존 부모003의25계약은 변경 없이 보존하며 다시 실행하지 않았다. 전체 metadata·Native 두 바이트 경계·동적 helper·독립 수용·사전검사/dispatch는 미완료이고 실제 추가 제품 실행도 승인대기다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작을 유지한다. 근거: `native009-full73-metadata005..008`, `native009-full73-metadata-g002-attempt001` 및 P149 원본 두 개.
+
 ### 전체 입력 선언 복원 수정과 metadata 검증
 
 후속 metadata001은 부모 결과의 기준 선언과 delta만으로 전체 입력을 복원하지 못해 제품 실행 전에 거부됐다. 부모001은23개 연결 계약을 통과했지만, 기준 정규화에도 선언 자동 주입 함수를 사용해 저장 delta에 상속27개를 누락했다. 그 결과와598.834949초 모델은 현재 전체 선언의 자격으로 사용하지 않는다. 원 JSON과 당시 소스는 보존한다.
@@ -18,9 +36,9 @@ metadata003은 마지막575.04초 관측에서 입력3,230개·누적6,469읽기
 
 metadata004는 실제 입력3,231개·누적4,462읽기·물리242,904,980bytes·최종 hash1,221개에서 기존75% 단일 표본 보호가 작동했다.363.682초·시스템CPU최고77.93%·자체CPU최고2.62399%·전용56.47MiB·가용RAM최저32.82%·cleanupTrue였다. 두 CPU 최대값은 같은 표본이라고 보장하지 않으며 원인 프로세스는 미확인이다. 제품/Native Frame/추가 프로세스 생성0이다. 최종 전체 metadata 검증·보고 형식의 실제 완전 게시·Native source 자격은 통과하지 않았다. 원 실패와 당시 소스는 Git `1636bd6`에 보존했다.
 
-중단 뒤 검토에서 기본 audit reader의 파일/링크 질의와 builder의 추가 경로 질의가 겹침을 확인했다. 준비 경로의 builder와 기존 fresh one-stat leaf를 private C3 MRO로 연결했다. builder의 원 생성자·_read·_source 함수, direct_path의 추가 파일/링크/조상 검사, 원 pacing·checkpoint·해시는 그대로다. 기본 namespace·Native held-path reader는 바꾸지 않는다. 작은 실제 파일 두 번 읽기·매번 새 stat·원 추가 검사 실행·기본 class 보존·부적합 base 거부5계약과 보고 형식6계약이 통과했다. 이 조치가77.93%의 원인을 규명하거나 프리즈를 해결했다는 뜻은 아니다. 다음 실패에는 원 sampler의 마지막8개 표본만 같이 저장하며 별도 sampler는 추가하지 않는다.
+중단 뒤 작은 prototype에서 builder와 fresh one-stat leaf의 C3 MRO 연결5계약 및 보고 형식6계약을 확인했다. 이후 실제 경로에는 해당 leaf와 재사용 버퍼가 이미 설치돼 있었음이 앞 절에서 확인됐다. 따라서 이 prototype을 실제 추가 최적화 효과로 사용하지 않는다. 현재 경로는 원 reader의 기존 qualified 계층을 검증해 그대로 사용한다. 마지막8개 원 sampler 표본만 저장하며 별도 sampler는 추가하지 않는다.
 
-다음은 현재 MRO 연결로 전체 metadata를 새로 검증하고 저장된 pin 맵을 독립 복원하는 작업이다. 이 실제 재실행005와 현재 전체 비용은 NOT_RUN이다. 부모25개 계약이나 기존 helper의 변경 없는 시험은 반복하지 않는다. 준비75% 정책·실제 Native 보호·RAM/commit95%·제품10초/준비15초·여유60은 유지한다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작이며, 실제 Native 입력 두 바이트 경계·동적 helper·독립 제품 수용·사전검사/dispatch도 남아 있다. 근거: `native009-full73-parent-connection002/003`, `native009-full73-metadata001/002/004`, `native009-full73-metadata-publication-review003`.
+실제005..008과 새 세대의 결과 및 다음 I/O 후보는 앞 절을 따른다. 전체 metadata와 저장된 pin 맵의 완전한 독립 복원은 아직 통과하지 않았다. 부모25개 계약이나 기존 helper의 변경 없는 시험은 반복하지 않는다. 준비75% 정책·실제 Native 보호·RAM/commit95%·제품10초/준비15초·여유60을 유지한다. 근거: `native009-full73-parent-connection002/003`, `native009-full73-metadata001/002/004`, `native009-full73-metadata-publication-review003`.
 
 코드 계약 확인 명령:
 
