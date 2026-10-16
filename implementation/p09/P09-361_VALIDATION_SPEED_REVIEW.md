@@ -4,6 +4,20 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. Native009는 본문1 PASS와 완전캡처를 확인했지만 최종 전체입력 검사에서720초 제한으로 미수용이며 재실행하지 않는다. case165/run007의 본문1 PASS 역시 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 고정된161개 표현의 Binding과 두 번의 물리 복원
+
+`legacy_history_binding_v1.py`는 물리검증을 마친86개 과거기록과7개 재포장만 고정된 원본/물리pin·보고상태 catalog hash로 수용한다. 임의의 metadata·현재preflight·소스/실행파일을 변환하는 규칙은 추가하지 않는다. 부모는 고정물리proof와 그 검증프로그램 및 현재93개 carrier 해시를 새로 확인한다. worker는 같은161개 table과4,973bytes의 고정선언을 복원할 수 있지만, 그 선언은 부모의 source admission이나 제품실행 권한이 아니다. 빠진 제품실행 flag를 False/True로 채우거나 과거의 FAIL/scoped PASS를 현재 제품 수용으로 바꾸지 않는다.
+
+새 Binding constructor는 원75개 constructor 전체를 먼저 실행한 뒤 원raw constructor로161개를 구성한다. 기존75개 중 논리pin은 하나도 바꾸지 않고 물리표현7개만 교체하며86개를 추가한다. 원 Projection의 모든 메서드와 Binding의 나머지 scope/resource/byte/handle/product 검사 메서드는 같은 함수 identity다. 원semantic_union 앞의 작은 조정은 옛7개 physical pin이 정확한 path/size/SHA일 때만 같은 논리pin으로 돌린다. 잘못된 mapping key·다른old physical hash·일반metadata·다른소스·고정table의 누락/중복/재정렬/변조는 거부한다.
+
+`qualify_legacy_history_binding_v1.py`는 실제 고정75 factory로 이 구성을 검증했으며 runtime engine이나 worker entry를 만들거나 실행하지 않았다.18계약·전체161개 각각의 두 번 새 물리읽기/복원322회·같은 별도 원decoder budget3.640254초/5초·229fresh/final229 PASS다. 기존68개 표현도 두 번 모두 포함했으며, 새93개만 확인한 부분검사가 아니다. 이 물리decoder 예산은 실제 metadata/Native Frame의 공유budget과 구분한다. 원범위와 worker의 부모권한 분리, 원래 provenance 필드의 보존 및 실제변조 carrier 거부를 확인했다.
+
+실제76.635초·시스템CPU최고36.28%·자체최고6.29160%·전용72.82MiB·가용RAM최저29.26%·cleanupTrue·subprocess 생성시도0이다. Native009 원본은 새로 읽은 입력일 뿐 재실행한 것이 아니다. 별도진단 manifest는 worker packet이나 Native 실행구성이 아니다.
+
+기존Native009의 전체semantic scope3268개와 원비용을 정확히 복원했다. 여기에 새코드·증거12개/5508882bytes를 넣은3280개 선언으로 재계산한 Native모델+별도준비15초는556.700486초다. 앞선metadata의 낙관적 최소163.95초를 더하면720.650486/720초여서 현재계획은 REJECT다. 이전의 byte항만 바꾼713.796806초를 실제 자격으로 쓰지 않았고, 새결과파일과 후속전송/metadata 소스도 다시 비용에 포함해야 한다. 전체현재runtime/helper64·실제metadata/Frame 공유5초·worker전송/독립수용은 아직 미완료다.
+
+추가비용의 대부분은 이제 입력 증거가 된 Native009 실패원본5046802bytes다. 다음은 그 본문PASS와 최종source실패를 그대로 보존하는 별도 역할의 무손실 표현을 확인한 후 전체현재범위·metadata 공유decoder·600/720 비용과 전송을 연결하는 것이다. 원한도·전체semantic scope·원본/실패를 유지하며 제품은 재실행하지 않는다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작·목표ACTIVE다. 근거: `legacy-history-binding-code001.v1.json`, `legacy-history-binding-manifest001.v1.json`.
+
 ### 과거86개 기록과 기존 zlib7개 표현의 비용 최적화
 
 Native009의 고정 전체물리scope와 현재75개 manifest를 기준으로, 기존 별칭과 겹치지 않는 P140~P189의262144bytes 이상 과거JSON86개/51637460bytes를 선택했다. `legacy_history_physical_trial_v1.py`는 범위·pin·중복·개수96/누적64MiB 한도를 검사하고, 각 원본의 새로운 전체bytes/SHA를 확인한 뒤 별도 opaque XZ 표현을 발행한다. 원JSON의 정규화·덮어쓰기·삭제는 없다. 보고된 상태와 flag는 absent/null/False/True를 구분해 보존하며 원본문이나 자료의 역할을 바꾸지 않는다. 86개 모두 실제제품 자식실행 필드가 원래 없으므로 새 False나 True로 채우지 않았다.
