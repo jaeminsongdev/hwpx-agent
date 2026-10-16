@@ -4,6 +4,16 @@
 
 2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
 
+### 같은 진입점의 자격 검증과 중복 실행 방지
+
+`native009_full75_runtime_v1.py`는 준비 자격검증과 실제 Native 모드에 같은 build 함수를 사용한다. 기존전체3263개 선언과 원비용·qualified program을 새로 확인하고, 현재75 worker·원 parent/Job·공유decoder·전체 독립 검사기와 추가 accounting을 동일하게 구성한다. 실제 모드에서는 준비 최종해시와 감시정리가 끝난 뒤 원 outer entry를 논리run1로 한 번만 호출한다. 원 entry가 metadata·입력잠금·두 Native byte경계·worker Job/GO와 완전캡처를 새로 검사해야 한다. 기존 metadata PASS나 준비 reader를 실제 Frame으로 대체하지 않는다.
+
+새9계약은 최종해시→준비정리→원 entry 순서, 해시/정리 실패의 실행 차단, 원 entry 오류 보존·재실행 금지, 기존 parent/Job/worker/Frame/metadata 및 사용한 공유budget 거부, 고정 Native009 identity와 불완전/한도초과 자격 거부를 확인한다. 실제 모드의 별도 exclusive intent는 Native 결과·GO·완료가 아닌 시도 의도 기록이다. 관측이 유실되더라도 같은 Native009를 새 프로세스로 재실행하지 않도록 한다. 자격 모드에서는 intent를 만들지 않고 프로세스 생성 시도를 영구 차단한다.
+
+qualification001은9계약·fresh405/final405 PASS다. 현재 선언3266개=기준3191+delta75·Rust787/실제pacing167·원모델+추가준비15초597.546180/600초를 확인했다. 결과 자신과 실제 intent를 포함한 진입 범위는 다시 비용검사를 거쳐야 한다. 실제62.310초·시스템CPU최고54.96%·자체최고5.20489%·전용52.54MiB·가용RAM최저34.46%·cleanupTrue이며 실제 parent/Job/Frame/worker/metadata callback/프로세스 생성0이다. 원600초 lock/720초 전체 deadline·CPU/RAM95·IO·제품10초/준비15초/여유60초와 원본/실패를 유지했다.
+
+이 단계에서 Native009제품1회 허용과 intent는 미사용이고, 다음은 이 자격과 같은 source의 실제 Native 진입 한 번이다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작이며 Native 실제결과와 독립수용을 이 준비 PASS로 대신하지 않는다. 근거: `native009-full75-runtime-entry-qualification001.v1.json`.
+
 ### 현재75 부모와 독립 accounting 검사 연결
 
 동결 `native009_full72_construction_v1.construct`는 원 전체 독립 검사기를 직접 연결하지만, 기존 v4 factory가 추가하는 lossless metadata/Frame accounting 검사는 거치지 않았다. 새 `native009_full75_dispatch_connection_v1.py`는 그 명시적 oracle dependency 한 번만 기존 `current_queue_successor_lossless_runtime_v4.oracle_namespace`로 전달한다. 원 전체 checker와 private family는 유지하고 metadata의 실제 물리 바이트·의미 복원 계수, 같은 실행의 metadata/Frame 공유5초, 기존 사후복구 제품10초 검사를 연결한다. 실제 연결된 함수·closure·graph Binding·원 checker family와 추가 판정 함수의 동일성을 확인했다. 현재 제품 후보에 검사기를 실행한 결과는 아니다.
