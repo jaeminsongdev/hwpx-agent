@@ -2,7 +2,21 @@
 
 ## 현재 재개 위치와 작업 방식 개선
 
-2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. case165/run007의 본문1 PASS는 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
+2026-10-16 목표는 현재 채팅에서 ACTIVE다. 공식 수용은158/249·잔여91·next165이며 P09·A12·A13 OPEN, P10 미시작이다. Native009는 본문1 PASS와 완전캡처를 확인했지만 최종 전체입력 검사에서720초 제한으로 미수용이며 재실행하지 않는다. case165/run007의 본문1 PASS 역시 최종 입력 재확인 실패 때문에 제품 수용으로 재사용하지 않는다. Native008은 실제 진입 후 엄격한 제품 캡처 시간 제한으로 실패했으며, 실제 제품 자식의 실행 여부는 미확인이다.
+
+### 과거86개 기록과 기존 zlib7개 표현의 비용 최적화
+
+Native009의 고정 전체물리scope와 현재75개 manifest를 기준으로, 기존 별칭과 겹치지 않는 P140~P189의262144bytes 이상 과거JSON86개/51637460bytes를 선택했다. `legacy_history_physical_trial_v1.py`는 범위·pin·중복·개수96/누적64MiB 한도를 검사하고, 각 원본의 새로운 전체bytes/SHA를 확인한 뒤 별도 opaque XZ 표현을 발행한다. 원JSON의 정규화·덮어쓰기·삭제는 없다. 보고된 상태와 flag는 absent/null/False/True를 구분해 보존하며 원본문이나 자료의 역할을 바꾸지 않는다. 86개 모두 실제제품 자식실행 필드가 원래 없으므로 새 False나 True로 채우지 않았다.
+
+첫 검증은 새8계약·86개 물리표현8877309bytes·절감42760151bytes·172회 새로운 복원·같은 별도 decoder budget0.969055초/5초·199fresh/final199 PASS다. 각 새 표현을 원 읽기에서 완전히 분리한 두 번째 새 읽기·복원과 최종 원본/물리파일 해시로 확인했다. 실제85.654초·시스템CPU최고34.01%·자체최고2.46548%·전용127.49MiB·가용RAM최저30.31%·cleanupTrue·subprocess시도0이다. 이 증거는 고정 opaque 물리변환이며, generic metadata 별칭이나 runtime 역할·Binding/worker/Frame 자격은 아니다.
+
+이 86개 절감만 이전 선언모델의 byte항에 적용하면720.360419초로 여전히720초를 넘는다. 따라서 이미 허용된75개 중 오래된 zlib 표현을 쓰는 정확한7개(case158 run003/004, case160 run001/002/003, case165 run002/003)를 추가로 재포장했다. `legacy_zlib75_repack_trial_v1.py`는 기존 원파일의 현재SHA와 기존 zlib carrier를 확인하고, 원 decoder로 복원한 bytes를 새 XZ와 동일하게 두 번 더 복원한다. 새 기록·소스·일반metadata를 이7개 역할에 끼워 넣지 않는다. 기존 descriptor와 원본/old carrier는 보존한다.
+
+재포장001은6계약·원zlib7회+새XZ14회·같은 별도budget0.306740초/5초·49fresh/final49 PASS다. 기존8579641bytes→새1697194bytes로 추가6882447bytes를 줄였다. 실제38.713초·시스템CPU최고25.51%·자체최고3.70453%·전용124.04MiB·가용RAM최저32.45%·cleanupTrue·subprocess시도0이다. 이 budget과86개 trial의 budget을 합산해 실제 metadata/Frame 공유5초가 통과했다고 주장하지 않는다.
+
+두 묶음의 읽을 표현은60217101bytes에서10574503bytes로49642598bytes 감소한다. 원 other2MiB/s에서 두 Native 읽기의 명목 byte비용 감소는47.342871초다. 이전761.139677초에서 byte항만 바꾼713.796806초에는 새 소스·역할·검증 증거·최신 실패와 전체scope의 재비용이 아직 반영되지 않았으므로720초 admission이 아니다. 원본과 기존 압축본을 모두 남겼으므로 디스크 공간을 삭제로 회수한 것도 아니다. 커밋 전 고정93개 원본을 credential shape5종으로 제한 검토해95fresh/final95·검출0·cleanupTrue를 확인했으며, 이는 모든 종류의 비밀정보 부재를 보증하는 검사는 아니다.
+
+다음은 고정기록별 역할수용과 기존별칭의 정확한 재조정, 같은 실제metadata/Frame의 공유decoder5초, 현재전체scope/600·720 비용·독립판정 연결이다. 보호/IO 속도·입력 제외·추가제품·접근허용·OS 변경은0이며 Native008/009와 통과본문을 재실행하지 않았다. 공식158/249·잔여91·next165·P09/A12/A13 OPEN·P10 미시작·목표ACTIVE다. 근거: `legacy-history-physical-trial-g001-attempt001.v1.json`, `legacy-zlib75-repack-g001-attempt001.v1.json` 및 두 별도 carrier 폴더.
 
 ### 실제 Native009의 본문 통과와 전체시간 중단
 
