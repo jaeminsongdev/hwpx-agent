@@ -387,6 +387,12 @@ impl PreservingXmlDocument {
         self.original_sha256
     }
 
+    /// Internal immutable bytes for source-bound semantic readers, never a
+    /// public raw-XML action or a writable source buffer.
+    pub(crate) fn with_source_bytes<T>(&self, read: impl FnOnce(&[u8]) -> T) -> T {
+        read(&self.original)
+    }
+
     pub(crate) fn source_text(&self, span: XmlByteSpan) -> Result<&str, PreservingXmlError> {
         let bytes = self
             .original
@@ -395,22 +401,46 @@ impl PreservingXmlDocument {
         std::str::from_utf8(bytes).map_err(|_| PreservingXmlError::InvalidSpan)
     }
 
-    /// Reassembles every untouched token internally and verifies exact source
-    /// bytes and digest without exposing raw XML through the public API.
+    /// Compares the exact concatenation of every untouched token with the whole
+    /// source, then verifies its digest without a whole-XML temporary buffer.
+    /// No raw XML is exposed through the public API.
     ///
     /// # Errors
     ///
-    /// Returns an allocation or equality error if exact reconstruction fails.
+    /// Returns a span or equality error if exact reconstruction fails.
     pub fn verify_untouched_round_trip(&self) -> Result<(), PreservingXmlError> {
-        let serialized = self.serialize_untouched()?;
-        if serialized.as_slice() != self.original.as_ref()
-            || <[u8; 32]>::from(Sha256::digest(&serialized)) != self.original_sha256
+        let mut offset = 0usize;
+        let mut byte_exact = true;
+        for token in &self.tokens {
+            let span = token.span;
+            let bytes = self
+                .original
+                .get(span.start()..span.end())
+                .ok_or(PreservingXmlError::InvalidSpan)?;
+            let end = offset
+                .checked_add(bytes.len())
+                .ok_or(PreservingXmlError::UntouchedMismatch)?;
+            // Compare bytes at the reconstructed position, not span offsets.
+            // Keep checking every span even after a mismatch, preserving the
+            // original invalid-span error precedence over final equality.
+            byte_exact &= self.original.get(offset..end) == Some(bytes);
+            offset = end;
+        }
+        // The entire reconstructed byte sequence was compared above. Only
+        // after byte equality may hashing the equal original replace hashing
+        // a separately allocated serialized copy; this is not hash-only replay.
+        if !byte_exact
+            || offset != self.original.len()
+            || <[u8; 32]>::from(Sha256::digest(&self.original)) != self.original_sha256
         {
             return Err(PreservingXmlError::UntouchedMismatch);
         }
         Ok(())
     }
 
+    // Preserve the original allocating implementation as an independent test
+    // oracle. Production verification does not construct a serialized copy.
+    #[cfg(test)]
     fn serialize_untouched(&self) -> Result<Vec<u8>, PreservingXmlError> {
         let mut output = Vec::new();
         output
@@ -944,6 +974,10 @@ impl From<SafeXmlError> for PreservingXmlError {
 }
 
 #[cfg(test)]
+#[path = "../tests/support/document_import_settings_inputs.rs"]
+mod actual_roundtrip_inputs;
+
+#[cfg(test)]
 mod tests {
     use sha2::{Digest as _, Sha256};
 
@@ -952,6 +986,173 @@ mod tests {
         XmlTokenKind,
     };
     use crate::safe_xml::{SafeXmlLimitConfig, SafeXmlLimits};
+
+    fn allocating_round_trip_oracle(
+        document: &PreservingXmlDocument,
+    ) -> Result<(), PreservingXmlError> {
+        let serialized = document.serialize_untouched()?;
+        if serialized.as_slice() != document.original.as_ref()
+            || <[u8; 32]>::from(Sha256::digest(&serialized)) != document.original_sha256
+        {
+            return Err(PreservingXmlError::UntouchedMismatch);
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn streaming_round_trip_matches_allocating_oracle_for_all36_sources()
+    -> Result<(), Box<dyn std::error::Error>> {
+        use crate::document_import::{ImportedSourcePackage, SourceImportLimits};
+        use domain_ir::DocumentId;
+        let mut packages = 0;
+        let mut xml_parts = 0;
+        for bytes in super::actual_roundtrip_inputs::actual_corpus()? {
+            let source = ImportedSourcePackage::import(
+                &bytes,
+                DocumentId::parse("streaming-xml-roundtrip-corpus")?,
+                Sha256::digest(&bytes).into(),
+                SourceImportLimits::default(),
+            )?;
+            let mut checked_parts = 0;
+            for part in source.parts() {
+                if let Some(xml) = part.xml() {
+                    assert_eq!(allocating_round_trip_oracle(xml), Ok(()));
+                    assert_eq!(
+                        xml.verify_untouched_round_trip(),
+                        allocating_round_trip_oracle(xml)
+                    );
+                    checked_parts += 1;
+                }
+            }
+            assert_eq!(checked_parts, source.receipt().xml_parts);
+            assert!(checked_parts > 0);
+            xml_parts += checked_parts;
+            source.verify_source(&bytes)?;
+            packages += 1;
+        }
+        assert_eq!(packages, 36);
+        assert!(xml_parts >= packages);
+        Ok(())
+    }
+
+    #[test]
+    fn streaming_round_trip_rejects_token_omission_duplication_reordering_and_gaps()
+    -> Result<(), PreservingXmlError> {
+        for case in 0..6 {
+            let mut document = PreservingXmlDocument::parse(b"<root><a/>text<b/></root>")?;
+            match case {
+                0 => {
+                    document.tokens.remove(0);
+                }
+                1 => {
+                    document.tokens.pop();
+                }
+                2 => {
+                    document.tokens.insert(1, document.tokens[1].clone());
+                }
+                3 => {
+                    document.tokens.swap(1, 2);
+                }
+                4 => {
+                    document.tokens[2].span.start += 1;
+                }
+                _ => {
+                    document.tokens.clear();
+                }
+            }
+            assert_eq!(
+                allocating_round_trip_oracle(&document),
+                Err(PreservingXmlError::UntouchedMismatch)
+            );
+            assert_eq!(
+                document.verify_untouched_round_trip(),
+                allocating_round_trip_oracle(&document)
+            );
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn streaming_round_trip_preserves_invalid_span_precedence_after_byte_mismatch()
+    -> Result<(), PreservingXmlError> {
+        for span in [
+            XmlByteSpan { start: 1, end: 0 },
+            XmlByteSpan {
+                start: 0,
+                end: usize::MAX,
+            },
+        ] {
+            let mut document = PreservingXmlDocument::parse(b"<root><a/></root>")?;
+            document.tokens.remove(0);
+            let last = document.tokens.len() - 1;
+            document.tokens[last].span = span;
+            assert_eq!(
+                allocating_round_trip_oracle(&document),
+                Err(PreservingXmlError::InvalidSpan)
+            );
+            assert_eq!(
+                document.verify_untouched_round_trip(),
+                allocating_round_trip_oracle(&document)
+            );
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn streaming_round_trip_checks_digest_when_all_token_bytes_still_equal()
+    -> Result<(), PreservingXmlError> {
+        let mut document = PreservingXmlDocument::parse(b"<root>a</root>")?;
+        document.original_sha256[0] ^= 1;
+        assert_eq!(
+            document.verify_untouched_round_trip(),
+            allocating_round_trip_oracle(&document)
+        );
+        assert_eq!(
+            document.verify_untouched_round_trip(),
+            Err(PreservingXmlError::UntouchedMismatch)
+        );
+        let mut document = PreservingXmlDocument::parse(b"<root>a</root>")?;
+        document.original[6] = b'b';
+        assert_eq!(
+            document.verify_untouched_round_trip(),
+            allocating_round_trip_oracle(&document)
+        );
+        assert_eq!(
+            document.verify_untouched_round_trip(),
+            Err(PreservingXmlError::UntouchedMismatch)
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn streaming_round_trip_keeps_equal_bytes_from_different_span_positions()
+    -> Result<(), PreservingXmlError> {
+        let mut document = PreservingXmlDocument::parse(b"<root><a/><a/></root>")?;
+        document.tokens[2].span = document.tokens[1].span;
+        assert_eq!(allocating_round_trip_oracle(&document), Ok(()));
+        assert_eq!(
+            document.verify_untouched_round_trip(),
+            allocating_round_trip_oracle(&document)
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn streaming_round_trip_preserves_large_unicode_references_bom_and_comments()
+    -> Result<(), PreservingXmlError> {
+        let xml = format!(
+            "\u{feff}<!--before-->\r\n<root a='1'>{}<!--after--></root>\n",
+            "한글&amp;".repeat(4096)
+        );
+        assert!(xml.len() > 32 * 1024);
+        let document = PreservingXmlDocument::parse(xml.as_bytes())?;
+        assert_eq!(allocating_round_trip_oracle(&document), Ok(()));
+        assert_eq!(
+            document.verify_untouched_round_trip(),
+            allocating_round_trip_oracle(&document)
+        );
+        Ok(())
+    }
 
     #[test]
     fn preserves_every_accepted_token_byte_and_digest() {

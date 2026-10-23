@@ -30,9 +30,9 @@ IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/lib.rs": "b4726732a47175205a7e35f3aa8e018e66b2a0fbada144bebeac3f395540c058",
     "crates/domain-ir/src/object_appearance.rs": "f8809b3587a901e1be40cc8e09d06d780c6ffd0189f01c6c52d675290abd5a81",
     "crates/domain-ir/tests/object_appearance.rs": "7ba9f137a76d952ededf3228cc9b76c6e4fdf98783f12546d7ded9debed9da81",
-    "crates/hwpx-package/src/lib.rs": "bc0f0615dd9b3aa2577dbf59e9f681a06e41b9784d2af9042977f89d15690a59",
-    "crates/hwpx-package/src/object_appearance_hwpx.rs": "79b355aeee7a5cf6d8d5a7203e3ad081e9cb27d04571ed9a525a828d47af4477",
-    "crates/hwpx-package/tests/object_appearance_hwpx.rs": "5cfaf6cc624988d5e8621deccaba6cd7d68edfa36be781ff632920640045b6a8",
+    "crates/hwpx-package/src/lib.rs": "a22f9f73f04e17ac3439022fcf6aaa0fb5f5ddb02d48257d10998bd01bdf2e12",
+    "crates/hwpx-package/src/object_appearance_hwpx.rs": "cd19aae862cc95968e6f02ebe1ebc195f57bba44a82e0c09ac2b910aefce53c3",
+    "crates/hwpx-package/tests/object_appearance_hwpx.rs": "b0fa7b333869963a48f0ded42c8a3b71ad0a5c4b83945669fa4a750300580c4e",
 }
 MARKERS = {
     "crates/domain-ir/src/lib.rs": ("mod object_appearance;", "ObjectAppearanceBuilder"),

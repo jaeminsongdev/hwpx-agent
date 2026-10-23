@@ -1,0 +1,376 @@
+{
+  "state": "FAILED_CASE_CONVERSION_SYNC",
+  "actual_Cargo_or_tests": false,
+  "actual_Hangul_or_COM": false,
+  "own_cpu_selection": {
+    "initial_allowed_mask": 65535,
+    "selected_logical_cpu": 2,
+    "selected_mask": 4,
+    "selected_cpu_count": 1,
+    "only_current_verifier_changed": true
+  },
+  "Native011_executed": false,
+  "prior_Native_replayed": false,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "error_type": "ValueError",
+  "error_code": "LATEST_STATE_CASE_SOURCE_PROGRESS_AND_REMAINING_PRODUCT_AND_NATIVE_BOUNDARIES",
+  "cleanup": true,
+  "elapsed_seconds": 6.359,
+  "source_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-361-case-conversion-recovery170.v1.json",
+      "bytes": 179364,
+      "sha256": "9052f0f34c12c073122b4ed0cf1f13c111a0baef83720e151675db6ef6b738b5"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-case-conversion-components169.v1.json",
+      "bytes": 194684,
+      "sha256": "c1d2709f369357e27a20ae65d99fcbc540852aa6c8a6675b5a00d0a065a0493c"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-unicode-match-product-components166.v1.json",
+      "bytes": 203152,
+      "sha256": "e2a13d4286f7890d0b6eed330b1b1c0c33ecbb3505eef2fb85724f6c18199133"
+    },
+    {
+      "path": "Cargo.lock",
+      "bytes": 61066,
+      "sha256": "51cf0a3cc7b97f73e62c570d60bb76fb47c9147e75641d3ab8bc9f02864119b8"
+    },
+    {
+      "path": "Cargo.toml",
+      "bytes": 2695,
+      "sha256": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields.rs",
+      "bytes": 21327,
+      "sha256": "86406ad79853b7c7c7033b7c9d1336d455f5da3eb36a048d2a6f5fb44b70655e"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/forms.rs",
+      "bytes": 19595,
+      "sha256": "a63871808172885b0902f10f34959121a64651614b9684977424e032191d6d65"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/inspection/definitions.rs",
+      "bytes": 13667,
+      "sha256": "44fa80e70e488cb4a6b1d12366c172f86a7511b2d3bc89aa0a4a947cd506d7d9"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms.rs",
+      "bytes": 17595,
+      "sha256": "dfbbd70149cb8bf7b0ffcab0a203bc0da3144afa73f304798ef6c0b9e3880c1d"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/case.rs",
+      "bytes": 7583,
+      "sha256": "236a9635221d5eae3d3c20f47380a314ffba74c2deb4bb0aafc60876ff6af80f"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/case/mapping.rs",
+      "bytes": 2579,
+      "sha256": "5c24e76d4aacaa9c78ddbdd92b44f7a8d0fc8d77dac3e390def36ff8fb58de46"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/readback.rs",
+      "bytes": 5182,
+      "sha256": "c05375dcf1adec797ed32e6e016aac51509d36d6bd8a76d9b861505499603f6b"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/review.rs",
+      "bytes": 9027,
+      "sha256": "2c24cb268de86c7809b6d70e11ae850304d9c696c1ee67e14c602a9af10091ae"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/styles/text/output.rs",
+      "bytes": 1329,
+      "sha256": "a17081ca6653f6b9969b4f5d5a7ea793990035640438daff266265fe9e18e692"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/unicode.rs",
+      "bytes": 6810,
+      "sha256": "f9e7e397d4f496a84ff69213d86594f586b4ac4e569f7fac252c7f8f94786ceb"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/unicode/matches.rs",
+      "bytes": 6509,
+      "sha256": "cb90f3ab9513e5f5e0ef9bb4ec4f5be7dd2150fe5144dbad1b6b122d24eb8792"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/unicode/plan.rs",
+      "bytes": 11439,
+      "sha256": "8d6966c7ff43d531a140fe21a5cd3aa05110c2128e1b40125b5dd6d23c45b3ce"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/unicode/transform.rs",
+      "bytes": 3702,
+      "sha256": "57eccc793df8b2e12ba5107a683d995c887223a94e62a669c086e8caefe758bd"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/reviews/selector.rs",
+      "bytes": 10002,
+      "sha256": "973979648e9ca896ed0710a7ccc90defabe1b84e2ed9aab8b54e9a7adfe3276e"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/reviews/selector/styles.rs",
+      "bytes": 5607,
+      "sha256": "44dfa1adbb9596de8a074fcb286d685c7838fbf0a9d3246c188a5a76c316c9d6"
+    },
+    {
+      "path": "crates/hwpx-package/tests/case_conversion_focused.rs",
+      "bytes": 275,
+      "sha256": "6ae328993bb95016a23d9db001476961132bebe712783ddc47b1a40e222bb47d"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_case_conversion.rs",
+      "bytes": 17476,
+      "sha256": "b6ddeda7ed4bd091dcd893608ff939d92adb5970bd2f6de23b716a638da1bb2e"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_unicode_match_normalization.rs",
+      "bytes": 16681,
+      "sha256": "67345de4a1eeeec44b51aff15ae53986b269359fac861ed7e22a79ee9cf420ef"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_unicode_normalization.rs",
+      "bytes": 18681,
+      "sha256": "0a116d73db9a74a405e825a9e99a7b92156901691bba3c3c4448ba8e338530ce"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_review_assembly_fixture.rs",
+      "bytes": 2484,
+      "sha256": "24700e72cfa062994b3c90679f314dddd998a8e1de5d94b295910d134e8ad979"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/review_cell_output_fixture.rs",
+      "bytes": 3732,
+      "sha256": "54504dc969662cf240c26ea590b6f822a3e60fdd815283445b9b2fae09149a64"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/review_scope_fixture.rs",
+      "bytes": 1002,
+      "sha256": "5f9a059d1d9f5accd3116ff8d72405555813df6ba6f3b1d7e43aab9d9ac818db"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/search_definition_fixture.rs",
+      "bytes": 2370,
+      "sha256": "057bef589f07d9d09efca9d10a8f7d59b99acfc323e663512937d598d94c6afa"
+    },
+    {
+      "path": "crates/product-cli/src/reference_validation_product/source.rs",
+      "bytes": 26860,
+      "sha256": "c864d819072b92cf6662ef6241c6d45fe3c9a40978cf324f18dbfbf44d550fbe"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/owned_sql_job.py",
+      "bytes": 13850,
+      "sha256": "30b08c4d779494bbdb7579b9bb28782b4f4588fc69b931cc9d18af326d46b7a0"
+    },
+    {
+      "path": "tools/p09/run_case_conversion_components.py",
+      "bytes": 12825,
+      "sha256": "f7584bea82459ccacf879516206f7078421e02b790921ade5717c4bc9b8295de"
+    },
+    {
+      "path": "tools/p09/run_case_conversion_recovery.py",
+      "bytes": 7537,
+      "sha256": "933a894ebeff9cbf400da69248c81debf42ecf6f5ef458a279662918a62e660f"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 1511085,
+      "sha256": "02b5282fdbcc7418b93931e9d57c1020410c43ca3ce2b09377311c94eace0478"
+    },
+    {
+      "path": "implementation/p09/P09_SEARCH_SOURCE_INDEX_PROGRESS.md",
+      "bytes": 121697,
+      "sha256": "cbb3cd75a648709488b193c4e5d21c9defe66c470197f55728827fcb383e81ea"
+    },
+    {
+      "path": "protocol/migrations/p09-source-case-conversion-v1.md",
+      "bytes": 6113,
+      "sha256": "ece52c809303edf89f2f474d73f90cf8c1f9ff3906b6dd693116ca02b383e9c6"
+    },
+    {
+      "path": "protocol/migrations/p09-source-unicode-match-normalization-v1.md",
+      "bytes": 6564,
+      "sha256": "042e686eafdfe1cceed1167677df239e75ae2c45facfd09fa140c083f0848ffd"
+    }
+  ],
+  "stdlib_reference_root": "D:\\devdata\\Rustup\\toolchains\\1.96.0-x86_64-pc-windows-msvc\\lib\\rustlib\\src\\rust\\library",
+  "stdlib_reference_pins": [
+    {
+      "path": "alloc/src/str.rs",
+      "bytes": 25485,
+      "sha256": "599f837e2f40d77eb9c3dd0da1ef19b968a7d8259b6c5fcde405f98634ac6e99"
+    },
+    {
+      "path": "core/src/char/methods.rs",
+      "bytes": 74654,
+      "sha256": "dc5b1d705ff74a22454153977763b2ff019917b96c094fbfd15db9baa8ad64f9"
+    },
+    {
+      "path": "core/src/unicode/unicode_data.rs",
+      "bytes": 76896,
+      "sha256": "e8b85cd9385ba25e8b40ab9d910eae4e7edd7af7472c61453de7f271fdd123fd"
+    }
+  ],
+  "resource_samples": {
+    "encoding": "lossless_columns_v1",
+    "columns": [
+      "time_utc",
+      "system_cpu_percent",
+      "available_ram_mib",
+      "total_ram_mib",
+      "available_ram_percent",
+      "commit_used_percent",
+      "parent_cpu_machine_percent",
+      "parent_private_mib",
+      "parent_private_percent"
+    ],
+    "rows": [
+      [
+        "2026-10-20T01:07:59.337497+00:00",
+        12.03,
+        10057.59,
+        31860.92,
+        31.5671813344008,
+        48.346665365304275,
+        0.0,
+        14.8515625,
+        0.04661373069842743
+      ],
+      [
+        "2026-10-20T01:07:59.837707+00:00",
+        11.41,
+        10023.1,
+        31860.92,
+        31.458910462281438,
+        48.349166933764266,
+        0.0,
+        14.8515625,
+        0.04661373069842743
+      ],
+      [
+        "2026-10-20T01:08:00.345442+00:00",
+        9.96,
+        10092.42,
+        31860.92,
+        31.67648207326889,
+        48.33092364527619,
+        0.0,
+        16.10546875,
+        0.05054929291678493
+      ],
+      [
+        "2026-10-20T01:08:00.846027+00:00",
+        8.59,
+        10063.09,
+        31860.92,
+        31.58444386276045,
+        48.34763201353823,
+        0.0,
+        16.10546875,
+        0.05054929291678493
+      ],
+      [
+        "2026-10-20T01:08:01.345503+00:00",
+        7.42,
+        10020.32,
+        31860.92,
+        31.450181115554113,
+        48.342271509695394,
+        0.0,
+        16.10546875,
+        0.05054929291678493
+      ],
+      [
+        "2026-10-20T01:08:01.858463+00:00",
+        9.21,
+        10086.81,
+        31860.92,
+        31.658876255992997,
+        48.34598578230344,
+        0.0,
+        16.10546875,
+        0.05054929291678493
+      ],
+      [
+        "2026-10-20T01:08:02.359972+00:00",
+        15.94,
+        10030.0,
+        31860.92,
+        31.48057444496006,
+        48.39238489753323,
+        0.0,
+        16.10546875,
+        0.05054929291678493
+      ],
+      [
+        "2026-10-20T01:08:02.856856+00:00",
+        14.87,
+        10013.42,
+        31860.92,
+        31.42852939319393,
+        48.33365955270198,
+        0.0,
+        16.3515625,
+        0.05132169297833172
+      ],
+      [
+        "2026-10-20T01:08:03.372941+00:00",
+        8.35,
+        10058.9,
+        31860.92,
+        31.571288541077276,
+        48.318632566519604,
+        0.0,
+        16.3515625,
+        0.05132169297833172
+      ],
+      [
+        "2026-10-20T01:08:03.890085+00:00",
+        8.68,
+        10005.9,
+        31860.92,
+        31.40492828020222,
+        48.38655571575879,
+        0.0,
+        16.3515625,
+        0.05132169297833172
+      ],
+      [
+        "2026-10-20T01:08:04.404801+00:00",
+        13.35,
+        10085.1,
+        31860.92,
+        31.65351849683592,
+        48.31795884199291,
+        0.18925629844841685,
+        17.078125,
+        0.05360211220766037
+      ],
+      [
+        "2026-10-20T01:08:04.904822+00:00",
+        9.23,
+        9832.0,
+        31860.92,
+        30.85912342401269,
+        48.32327247804258,
+        0.0,
+        17.546875,
+        0.055073350420130465
+      ]
+    ]
+  },
+  "system_CPU_max": 15.94,
+  "available_RAM_min_percent": 30.85912342401269
+}

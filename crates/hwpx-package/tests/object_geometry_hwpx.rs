@@ -28,7 +28,7 @@ fn hwpx_limits() -> ObjectGeometryHwpxLimits {
 
 fn common_object(tag: &str, id: u32, instid: u32, marker: &str) -> String {
     format!(
-        r#"<hp:{tag} id="{id}" zOrder="3" numberingType="PICTURE" textWrap="SQUARE" textFlow="BOTH_SIDES" lock="0" href="opaque-ref" groupLevel="0" instid="{instid}"><hp:offset x="10" y="20"/><hp:orgSz width="7200" height="3600"/><hp:curSz width="7200" height="3600"/><hp:flip horizontal="0" vertical="0"/><hp:rotationInfo angle="0" centerX="3600" centerY="1800" rotateimage="1"/><hp:renderingInfo><hc:transMatrix e1="1.000000" e2="0" e3="0" e4="1" e5="10" e6="20"/><hc:scaMatrix e1="1" e2="0" e3="0" e4="1" e5="0" e6="0"/><hc:rotMatrix e1="1" e2="0" e3="0" e4="1" e5="0" e6="0"/></hp:renderingInfo><hp:shapeComment>{marker}</hp:shapeComment><hp:sz width="7200" widthRelTo="ABSOLUTE" height="3600" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="0" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="1" vertRelTo="PARA" horzRelTo="PARA" vertAlign="TOP" horzAlign="LEFT" vertOffset="2000" horzOffset="1000"/><hp:outMargin left="10" right="11" top="12" bottom="13"/></hp:{tag}>"#
+        r#"<hp:{tag} id="{id}" zOrder="3" numberingType="PICTURE" textWrap="SQUARE" textFlow="BOTH_SIDES" lock="0" href="opaque-ref" groupLevel="0" instid="{instid}"><hp:offset x="10" y="20"/><hp:orgSz width="7200" height="3600"/><hp:curSz width="7200" height="3600"/><hp:flip horizontal="0" vertical="0"/><hp:rotationInfo angle="0" centerX="3600" centerY="1800" rotateimage="1"/><hp:renderingInfo><hc:transMatrix e1="1.000000" e2="0" e3="10" e4="0" e5="1" e6="20"/><hc:scaMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/><hc:rotMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/></hp:renderingInfo><hp:shapeComment>{marker}</hp:shapeComment><hp:sz width="7200" widthRelTo="ABSOLUTE" height="3600" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="0" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="1" vertRelTo="PARA" horzRelTo="PARA" vertAlign="TOP" horzAlign="LEFT" vertOffset="2000" horzOffset="1000"/><hp:outMargin left="10" right="11" top="12" bottom="13"/></hp:{tag}>"#
     )
 }
 
@@ -316,9 +316,9 @@ fn lowers_size_with_complete_component_and_exact_fixed_point_transform() {
     component.transform.scale = ObjectAffineMatrix {
         e1_millionths: 1_500_000,
         e2_millionths: 125_000,
-        e3_millionths: -125_000,
-        e4_millionths: 1_500_000,
-        e5_millionths: 0,
+        e3_millionths: 0,
+        e4_millionths: -125_000,
+        e5_millionths: 1_500_000,
         e6_millionths: 0,
     };
     let (output, receipt) = lower(
@@ -367,9 +367,9 @@ fn lowers_rotation_and_flip_only_with_caller_supplied_complete_transform() {
     transform.rotation = ObjectAffineMatrix {
         e1_millionths: 0,
         e2_millionths: 1_000_000,
-        e3_millionths: -1_000_000,
-        e4_millionths: 0,
-        e5_millionths: 5_000_000,
+        e3_millionths: 5_000_000,
+        e4_millionths: -1_000_000,
+        e5_millionths: 0,
         e6_millionths: 6_000_000,
     };
     let (rotated, _) = lower(
@@ -690,30 +690,9 @@ fn explicit_enum_variants_cover_boundary_native_values() {
     assert!(text.contains("widthRelTo=\"PAPER\""));
     assert!(text.contains("heightRelTo=\"PAPER\""));
     let _ = ObjectTransform {
-        translation: ObjectAffineMatrix {
-            e1_millionths: 1_000_000,
-            e2_millionths: 0,
-            e3_millionths: 0,
-            e4_millionths: 1_000_000,
-            e5_millionths: 0,
-            e6_millionths: 0,
-        },
-        scale: ObjectAffineMatrix {
-            e1_millionths: 1_000_000,
-            e2_millionths: 0,
-            e3_millionths: 0,
-            e4_millionths: 1_000_000,
-            e5_millionths: 0,
-            e6_millionths: 0,
-        },
-        rotation: ObjectAffineMatrix {
-            e1_millionths: 1_000_000,
-            e2_millionths: 0,
-            e3_millionths: 0,
-            e4_millionths: 1_000_000,
-            e5_millionths: 0,
-            e6_millionths: 0,
-        },
+        translation: ObjectAffineMatrix::IDENTITY,
+        scale: ObjectAffineMatrix::IDENTITY,
+        rotation: ObjectAffineMatrix::IDENTITY,
     };
     let _ = (
         ObjectHorizontalAlignment::Inside,

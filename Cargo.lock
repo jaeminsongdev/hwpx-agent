@@ -99,6 +99,7 @@ dependencies = [
  "hex",
  "hmac",
  "hwpx-agent-foundation",
+ "keyring-core",
  "postgres",
  "serde",
  "serde_json",
@@ -107,6 +108,7 @@ dependencies = [
  "thiserror",
  "unicode-normalization",
  "uuid",
+ "windows-native-keyring-store",
  "zeroize",
 ]
 
@@ -711,16 +713,26 @@ dependencies = [
 name = "hwpx-agent-cli"
 version = "0.1.0"
 dependencies = [
+ "artifact-service",
  "domain-ir",
+ "getrandom 0.4.3",
  "hex",
  "hwpx-package",
+ "keyring-core",
  "operation-engine",
+ "postgres",
+ "quick-xml",
+ "revision-service",
+ "ring",
  "serde",
  "serde_json",
  "sha2",
  "tempfile",
  "thiserror",
  "uuid",
+ "windows-native-keyring-store",
+ "zeroize",
+ "zip",
 ]
 
 [[package]]
@@ -758,6 +770,7 @@ dependencies = [
  "hex",
  "hwpx-agent-foundation",
  "quick-xml",
+ "regex",
  "serde",
  "serde_json",
  "sha2",
@@ -1758,10 +1771,12 @@ name = "revision-service"
 version = "0.1.0"
 dependencies = [
  "artifact-service",
+ "postgres",
  "serde",
  "serde_json",
  "thiserror",
  "uuid",
+ "zeroize",
 ]
 
 [[package]]

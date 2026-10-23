@@ -269,6 +269,36 @@ impl TableLayoutHwpxError {
 pub struct TableLayoutHwpxReader;
 
 impl TableLayoutHwpxReader {
+    /// Shared immutable-source entry for the document importer. The public
+    /// standalone/section readers keep all their original envelope/selection
+    /// guards. Per-table shape/grid/cell validators are reused unchanged.
+    pub(crate) fn read_from_document(
+        document: &PreservingXmlDocument,
+        root: usize,
+        limits: TableLayoutHwpxLimits,
+    ) -> Result<TableLayoutHwpxReadback, TableLayoutHwpxError> {
+        if document.original_len() > limits.0.input_bytes {
+            return Err(TableLayoutHwpxError::InputLimit);
+        }
+        let table = element(document, root)?;
+        if !has_name(table, "tbl") {
+            return Err(TableLayoutHwpxError::WrongRoot);
+        }
+        let outer = table
+            .outer_span()
+            .ok_or(TableLayoutHwpxError::UnsupportedShape)?;
+        let end = document
+            .elements()
+            .partition_point(|node| node.start_tag_span().start() < outer.end());
+        if end
+            .checked_sub(root)
+            .is_none_or(|count| count > limits.0.elements)
+        {
+            return Err(TableLayoutHwpxError::ElementLimit);
+        }
+        TableShape::read(document, root, limits, true).map(|shape| shape.readback)
+    }
+
     /// Reads one standalone current-Hangul-2020 `hp:tbl` fragment.
     ///
     /// # Errors

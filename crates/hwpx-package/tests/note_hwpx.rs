@@ -112,6 +112,53 @@ fn payload(text: &str) -> Vec<u8> {
     .into_bytes()
 }
 
+#[test]
+fn fresh_note_paragraph_ids_follow_all_existing_body_paragraphs_without_rewriting_source() {
+    let source = source_xml();
+    let original = source.clone();
+    assert_eq!(NoteHwpxReader::allocate_paragraph_ids(&source, 2, hwpx_limits()).expect("allocate"), [3, 4]);
+    let body = payload("body");
+    let state = state(Vec::new());
+    let note = note_for(&source, &body, NoteKind::Footnote, 0, 0, 1, 51);
+    let domain = domain_plan(&state, note);
+    let plan = NoteHwpxBuilder::plan(&source, &state, &domain, FLOW_SOURCE, &paragraph_ids(), &body, state_limits(), hwpx_limits()).expect("plan");
+    let output = NoteHwpxLowerer::lower_section(&source, &body, &plan, &state, FLOW_SOURCE, state_limits(), hwpx_limits()).expect("lower");
+    assert_eq!(NoteHwpxReader::allocate_paragraph_ids(&output, 2, hwpx_limits()).expect("nested IDs included"), [103, 104]);
+    assert_eq!(source, original);
+}
+
+#[test]
+fn note_insertion_rejects_source_payload_and_internal_nonzero_id_collisions() {
+    let regular = source_xml();
+    let regular_body = payload("body");
+    let collision_body = String::from_utf8(regular_body.clone()).expect("fixture UTF8").replace("id=\"101\"", "id=\"1\"").into_bytes();
+    let duplicate_source = String::from_utf8(regular.clone()).expect("fixture UTF8").replace("id=\"2\"", "id=\"1\"").into_bytes();
+    for (source, body) in [(regular, collision_body), (duplicate_source, regular_body.clone())] {
+        let state = state(Vec::new());
+        let note = note_for(&source, &body, NoteKind::Footnote, 0, 0, 1, 51);
+        let domain = domain_plan(&state, note);
+        assert!(matches!(NoteHwpxBuilder::plan(&source, &state, &domain, FLOW_SOURCE, &paragraph_ids(), &body, state_limits(), hwpx_limits()), Err(NoteHwpxError::ParagraphIdentityCollision)));
+    }
+    let duplicate_body = String::from_utf8(regular_body).expect("fixture UTF8").replace("id=\"102\"", "id=\"101\"");
+    assert!(matches!(NoteHwpxReader::inspect_payload(duplicate_body.as_bytes(), hwpx_limits()), Err(NoteHwpxError::ParagraphIdentityCollision)));
+}
+
+#[test]
+fn paragraph_allocation_rejects_overflow_malformed_ids_and_finite_count_limits() {
+    let source = String::from_utf8(source_xml()).expect("fixture UTF8");
+    for id in ["4294967295", "not-number", "-1", "1"] {
+        let bad = source.replace("id=\"2\"", &format!("id=\"{id}\""));
+        assert!(matches!(NoteHwpxReader::allocate_paragraph_ids(bad.as_bytes(), 2, hwpx_limits()), Err(NoteHwpxError::ParagraphIdentityCollision)));
+    }
+    assert!(matches!(NoteHwpxReader::allocate_paragraph_ids(source.as_bytes(), 0, hwpx_limits()), Err(NoteHwpxError::InputLimit)));
+    let tight = NoteHwpxLimits::new(NoteHwpxLimitConfig { paragraphs: 3, ..NoteHwpxLimitConfig::default() }).expect("tight limits");
+    assert!(matches!(NoteHwpxReader::allocate_paragraph_ids(source.as_bytes(), 2, tight), Err(NoteHwpxError::InputLimit)));
+    let zero = source.replace("id=\"1\"", "id=\"0\"").replace("id=\"2\"", "id=\"0\"");
+    assert_eq!(NoteHwpxReader::allocate_paragraph_ids(zero.as_bytes(), 2, hwpx_limits()).expect("original zero sentinel"), [1, 2]);
+    let absent = source.replace(" id=\"1\"", "").replace(" id=\"2\"", "");
+    assert_eq!(NoteHwpxReader::allocate_paragraph_ids(absent.as_bytes(), 2, hwpx_limits()).expect("original low-level missing ID admission"), [1, 2]);
+}
+
 fn note_for(
     source: &[u8],
     body: &[u8],

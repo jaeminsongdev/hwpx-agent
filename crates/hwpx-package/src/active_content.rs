@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::{self, Debug};
-use std::io::{Read, Seek};
+use std::io::{self, Read, Seek};
 
 use serde::Serialize;
 use sha2::{Digest as _, Sha256};
@@ -341,7 +341,7 @@ impl ActiveContentInventory {
         ensure_unique_resources(&resources)?;
 
         let counts = counts(&resources, &controls);
-        let state_sha256 = active_state_sha256(&resources, &controls)?;
+        let state_sha256 = active_state_sha256(&resources, &controls, limits)?;
         let inventory = Self {
             schema_version: ACTIVE_CONTENT_SCHEMA_VERSION,
             profile_id: ACTIVE_CONTENT_PROFILE_ID,
@@ -352,7 +352,10 @@ impl ActiveContentInventory {
             counts,
             activation_allowed: false,
         };
-        let _ = inventory.canonical_json(limits)?;
+        // Validate the exact same JSON size without materializing and discarding
+        // the whole inventory on every scan. No check or limit is skipped.
+        let mut count = InventoryJsonWriter::new(InventoryJsonSink::Count, limits);
+        serde_json::to_writer(&mut count, &inventory).map_err(|_| ActiveContentError::OutputLimit)?;
         Ok(inventory)
     }
 
@@ -395,11 +398,12 @@ impl ActiveContentInventory {
         &self,
         limits: ActiveContentLimits,
     ) -> Result<Vec<u8>, ActiveContentError> {
-        let bytes = serde_json::to_vec(self).map_err(|_| ActiveContentError::OutputLimit)?;
-        if bytes.len() > limits.0.max_json_bytes {
-            return Err(ActiveContentError::OutputLimit);
+        let mut writer = InventoryJsonWriter::new(InventoryJsonSink::Bytes(Vec::new()), limits);
+        serde_json::to_writer(&mut writer, self).map_err(|_| ActiveContentError::OutputLimit)?;
+        match writer.sink {
+            InventoryJsonSink::Bytes(bytes) => Ok(bytes),
+            _ => Err(ActiveContentError::OutputLimit),
         }
-        Ok(bytes)
     }
 
     /// The normal product tier never authorizes active-content execution.
@@ -1199,15 +1203,57 @@ fn control_states(controls: &[ActiveContentControl]) -> Vec<ActiveControlState<'
 fn active_state_sha256(
     resources: &[ActiveContentResource],
     controls: &[ActiveContentControl],
+    limits: ActiveContentLimits,
 ) -> Result<String, ActiveContentError> {
-    let bytes = serde_json::to_vec(&ActiveState {
+    let mut writer = InventoryJsonWriter::new(InventoryJsonSink::Digest(Sha256::new()), limits);
+    serde_json::to_writer(&mut writer, &ActiveState {
         schema_version: ACTIVE_CONTENT_SCHEMA_VERSION,
         profile_id: ACTIVE_CONTENT_PROFILE_ID,
         resources,
         controls: control_states(controls),
     })
     .map_err(|_| ActiveContentError::OutputLimit)?;
-    Ok(hex(Sha256::digest(bytes).into()))
+    match writer.sink {
+        InventoryJsonSink::Digest(hash) => Ok(hex(hash.finalize().into())),
+        _ => Err(ActiveContentError::OutputLimit),
+    }
+}
+
+// Count and Digest retain no serialized JSON. Only an explicit canonical_json
+// request owns an output buffer, and its limit is checked before each append.
+enum InventoryJsonSink {
+    Count,
+    Bytes(Vec<u8>),
+    Digest(Sha256),
+}
+struct InventoryJsonWriter {
+    sink: InventoryJsonSink,
+    written: usize,
+    maximum: usize,
+}
+impl InventoryJsonWriter {
+    fn new(sink: InventoryJsonSink, limits: ActiveContentLimits) -> Self {
+        Self { sink, written: 0, maximum: limits.0.max_json_bytes }
+    }
+}
+impl io::Write for InventoryJsonWriter {
+    fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+        let next = self.written.checked_add(bytes.len())
+            .filter(|size| *size <= self.maximum)
+            .ok_or_else(|| io::Error::other("ACTIVE_CONTENT_JSON_LIMIT"))?;
+        match &mut self.sink {
+            InventoryJsonSink::Count => {}
+            InventoryJsonSink::Digest(hash) => hash.update(bytes),
+            InventoryJsonSink::Bytes(output) => {
+                output.try_reserve(bytes.len())
+                    .map_err(|_| io::Error::other("ACTIVE_CONTENT_JSON_LIMIT"))?;
+                output.extend_from_slice(bytes);
+            }
+        }
+        self.written = next;
+        Ok(bytes.len())
+    }
+    fn flush(&mut self) -> io::Result<()> { Ok(()) }
 }
 
 fn graph_sha256(graph: &PackageGraph) -> String {

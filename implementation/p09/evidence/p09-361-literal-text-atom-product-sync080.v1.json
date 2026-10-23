@@ -1,0 +1,406 @@
+{
+  "state": "PASS_STRICT_V2_LITERAL_PRODUCT_CODE_DOCUMENT_SYNC_TWENTY_FIVE_CASES_NOT_FULL_SEARCH_OR_GATE",
+  "actual_Cargo_or_tests": false,
+  "actual_Hangul_or_COM": false,
+  "Native011_executed": false,
+  "prior_Native_replayed": false,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "fresh_inputs": 33,
+  "final_fresh_hashes": 33,
+  "current_executed_cases": 25,
+  "new_product_cases": 10,
+  "affected_cases": 15,
+  "original_v1_parser_scope_and_v2_service_methods_preserved": true,
+  "entire_492_input_set_reaudited": false,
+  "source_ownership_handoff_without_clone_or_extra_import": true,
+  "resource_policy_unchanged": true,
+  "full_search_native_cas_execution_publication_qualified": false,
+  "next_work": "Extended_review_body_literal_replacement_with_explicit_hidden_and_MEMO_policy",
+  "cleanup": true,
+  "elapsed_seconds": 9.063,
+  "source_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-361-literal-text-atom-product-components079.v1.json",
+      "bytes": 201465,
+      "sha256": "1fcfe918bac8737dc57a41b5a2246b3cc457d2504941e828a15f6c7618f63b4c"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-stored-literal-text-atom-recovery077.v1.json",
+      "bytes": 183111,
+      "sha256": "d824977e51989932c03e16d591f11bd90a40928a713c4cf69fab62b3f58f75c5"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/forms.rs",
+      "bytes": 19595,
+      "sha256": "a63871808172885b0902f10f34959121a64651614b9684977424e032191d6d65"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement.rs",
+      "bytes": 14579,
+      "sha256": "14d8c7b4db87bd650ac68327defd24d4c77f9253289dffdc59c7a3da6b09a42f"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms.rs",
+      "bytes": 11842,
+      "sha256": "c5f935d5727404843c06efd467d0b28268387c44a428aa88a786d3db70f6896c"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/readback.rs",
+      "bytes": 3098,
+      "sha256": "522a580b529f98a0c8ef6c331017ef91a8cc8f917bbc5f76b27deadb6f4e8c66"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/output.rs",
+      "bytes": 3177,
+      "sha256": "3a1dca37d8b2857cdfcd5bdde8057c89f9013f4e0052958963ef4866cb35713e"
+    },
+    {
+      "path": "crates/hwpx-package/src/patch/text_atom_ranges.rs",
+      "bytes": 6657,
+      "sha256": "ce5c5a2602f1e7967042e2344c3ce6d17feb50f3f3a5b3775c6879ef502f66e3"
+    },
+    {
+      "path": "crates/hwpx-package/src/text_flow/source_text_span.rs",
+      "bytes": 892,
+      "sha256": "7b00eae58a445179f54cccbec5ed5de947d3aa596d810ef0952b679f9a94e5d3"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_search_atom_replacement.rs",
+      "bytes": 12625,
+      "sha256": "f31452a68116597e292eebc3522f6eaf6a011da00d23c34a8b293364f055f59e"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_search_replacement.rs",
+      "bytes": 9932,
+      "sha256": "c7e9dac68b17d546ebc039b6fe0a74af3a23065507c5e204e4d476dc96361b8f"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request.rs",
+      "bytes": 15352,
+      "sha256": "e4497c480da55a805be02f63f71d9b356d4e5aa0ddc6c98ce68c2cdf8f0e75cc"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_literal_replacement.rs",
+      "bytes": 11373,
+      "sha256": "f352ac35766acfbdb65314ce539956585445731dd974bd7c5c5cb5dd80866f3e"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_literal_replacement/atoms.rs",
+      "bytes": 6369,
+      "sha256": "b0c0ea3600fe6be32092c9b712f719cc23b236794708aed9bf2925c3dfa7f861"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_source_search.rs",
+      "bytes": 14831,
+      "sha256": "62d31643bf38d7e626116f292cc0f5598768e47ee150f476558f012dbb0dd16b"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider.rs",
+      "bytes": 24265,
+      "sha256": "349922429e98d3c229eb4800bb78f0be2330bc4659d05f44a0411e61151c860e"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import.rs",
+      "bytes": 23617,
+      "sha256": "214f021e05b5f17765e8ee3a66b5cfd5ef4cb01b5bfa69a0de2bcc1333172a0b"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output.rs",
+      "bytes": 5496,
+      "sha256": "c71fea6e3b1d09f76f2657f58dfb82730cf39e06f50b7488ffeb63eeb556a60a"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output/atoms.rs",
+      "bytes": 4866,
+      "sha256": "b0052d886162f80063e58c0e7d20a8bf6081c01d5624ae6789befa1b14d9ac4f"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output/atoms/product.rs",
+      "bytes": 939,
+      "sha256": "adac9c147ec0607dec4f19f0dd793fcbd45a28b5e567c9b1e95542439ac773f8"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output/product.rs",
+      "bytes": 1184,
+      "sha256": "26978cf673193fc9269c22e7eecff157a4dcbaf7a0def11dfc1d64195320b37d"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import.rs",
+      "bytes": 17192,
+      "sha256": "6177b021ef911f0f870ed6ed58d0e4814389b8d454e002dee5f26a0fe623793a"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/literal_replacement_product.rs",
+      "bytes": 18471,
+      "sha256": "27413308e21dbc1f3a7c7f29cf4a4bc9ee8bacd73521c36e020f961b500858ab"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/literal_text_atom_output.rs",
+      "bytes": 12767,
+      "sha256": "3c94bf0f993adc5b18270f9d45256a24f0c0deff12de2a8db71dd01165c6254f"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/literal_text_atom_product.rs",
+      "bytes": 20954,
+      "sha256": "7c611f5332d17a10186945fb316edcd629f4952421f6c23368db6244e5cb9170"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 1418934,
+      "sha256": "897a787fee3df78d34de82c813cd75b30e96ba9e73c390b6519500f670609966"
+    },
+    {
+      "path": "implementation/p09/P09_SEARCH_SOURCE_INDEX_PROGRESS.md",
+      "bytes": 43150,
+      "sha256": "cf6ef7dbeba4d6d3b4aa1c5a5d6d221d37cfcf8925a8eecfd47d4ed3e67ff97a"
+    },
+    {
+      "path": "protocol/migrations/p09-literal-replacement-product-request-v2.md",
+      "bytes": 5948,
+      "sha256": "b5f967f95304f934e091f3e832290f61f0454b3efafd9143f6293fbd9b4d0568"
+    },
+    {
+      "path": "protocol/migrations/p09-literal-replacement-product-request-v1.md",
+      "bytes": 6300,
+      "sha256": "d2f931ed57c4a2f32b2146076b14e04e2b35a5324140d5ee4020a55508e45bdd"
+    },
+    {
+      "path": "protocol/migrations/p09-source-literal-text-atom-output-v2.md",
+      "bytes": 7791,
+      "sha256": "eb3e3a96a5c14c64278f18eabfec05bcaaead058d39fae48ae91b0cbaf295cac"
+    },
+    {
+      "path": "protocol/migrations/p09-source-text-atom-patch-v1.md",
+      "bytes": 6601,
+      "sha256": "c308f28fb92f0cfa25d6b71b40bd631149028fb87bdad464da3918299de89e2a"
+    },
+    {
+      "path": "tools/p09/run_literal_text_atom_product_components.py",
+      "bytes": 9690,
+      "sha256": "2c1cf485965682916c5675846a5966c1620a52b0f61988a2687698ae33caee3e"
+    },
+    {
+      "path": "tools/p09/run_literal_text_atom_product_sync.py",
+      "bytes": 9609,
+      "sha256": "fdc45f5dd1426714c71cd3f1dcffb665dc3704a256f563e903b6e13b9bb4aff9"
+    }
+  ],
+  "resource_samples": {
+    "encoding": "lossless_columns_v1",
+    "columns": [
+      "time_utc",
+      "system_cpu_percent",
+      "available_ram_mib",
+      "total_ram_mib",
+      "available_ram_percent",
+      "commit_used_percent",
+      "parent_cpu_machine_percent",
+      "parent_private_mib",
+      "parent_private_percent"
+    ],
+    "rows": [
+      [
+        "2026-10-19T17:23:24.904033+00:00",
+        1.95,
+        10777.93,
+        31860.92,
+        33.82804535582203,
+        47.24878145202399,
+        0.0,
+        13.25390625,
+        0.041599260457591866
+      ],
+      [
+        "2026-10-19T17:23:25.404581+00:00",
+        0.8,
+        10781.18,
+        31860.92,
+        33.83825820108026,
+        47.23424657766981,
+        0.0,
+        13.25390625,
+        0.041599260457591866
+      ],
+      [
+        "2026-10-19T17:23:25.923749+00:00",
+        0.37,
+        10781.95,
+        31860.92,
+        33.84066122349396,
+        47.234281728514674,
+        0.0,
+        14.77734375,
+        0.04638078464811966
+      ],
+      [
+        "2026-10-19T17:23:26.424591+00:00",
+        0.8,
+        10780.86,
+        31860.92,
+        33.83724059464996,
+        47.23029210762181,
+        0.1953125,
+        14.77734375,
+        0.04638078464811966
+      ],
+      [
+        "2026-10-19T17:23:26.927110+00:00",
+        1.17,
+        10781.24,
+        31860.92,
+        33.838454366175256,
+        47.23029210762181,
+        0.0,
+        14.77734375,
+        0.04638078464811966
+      ],
+      [
+        "2026-10-19T17:23:27.423755+00:00",
+        5.09,
+        10782.36,
+        31860.92,
+        33.84197307756674,
+        47.22769094510135,
+        0.1953125,
+        14.77734375,
+        0.04638078464811966
+      ],
+      [
+        "2026-10-19T17:23:27.919457+00:00",
+        4.69,
+        10782.32,
+        31860.92,
+        33.841838214063934,
+        47.22750347392871,
+        0.0,
+        14.77734375,
+        0.04638078464811966
+      ],
+      [
+        "2026-10-19T17:23:28.419799+00:00",
+        4.1,
+        10782.29,
+        31860.92,
+        33.841727871197996,
+        47.22603885539241,
+        0.0,
+        14.77734375,
+        0.04638078464811966
+      ],
+      [
+        "2026-10-19T17:23:28.920236+00:00",
+        0.78,
+        10782.55,
+        31860.92,
+        33.84254931253329,
+        47.226003704547544,
+        0.1953125,
+        14.77734375,
+        0.04638078464811966
+      ],
+      [
+        "2026-10-19T17:23:29.419558+00:00",
+        2.94,
+        10782.25,
+        31860.92,
+        33.841617528332065,
+        47.22878062129235,
+        0.0,
+        15.41015625,
+        0.04836695623495429
+      ],
+      [
+        "2026-10-19T17:23:29.919601+00:00",
+        0.78,
+        10781.79,
+        31860.92,
+        33.84017081075647,
+        47.23327992943585,
+        0.0,
+        15.69921875,
+        0.04927421979931085
+      ],
+      [
+        "2026-10-19T17:23:30.435696+00:00",
+        1.33,
+        10781.51,
+        31860.92,
+        33.839300328147424,
+        47.22668914602253,
+        0.0,
+        14.49609375,
+        0.04549804172063761
+      ],
+      [
+        "2026-10-19T17:23:30.938547+00:00",
+        0.78,
+        10787.14,
+        31860.92,
+        33.856955186697064,
+        47.2199167499107,
+        0.0,
+        14.49609375,
+        0.04549804172063761
+      ],
+      [
+        "2026-10-19T17:23:31.435274+00:00",
+        0.78,
+        10785.79,
+        31860.92,
+        33.85272537683621,
+        47.21937777028935,
+        0.1953125,
+        14.49609375,
+        0.04549804172063761
+      ],
+      [
+        "2026-10-19T17:23:31.954776+00:00",
+        1.13,
+        10786.22,
+        31860.92,
+        33.85407401186431,
+        47.219037978788926,
+        0.0,
+        14.49609375,
+        0.04549804172063761
+      ],
+      [
+        "2026-10-19T17:23:32.451055+00:00",
+        3.72,
+        10784.25,
+        31860.92,
+        33.84790707169037,
+        47.21887394151286,
+        0.0,
+        14.49609375,
+        0.04549804172063761
+      ],
+      [
+        "2026-10-19T17:23:32.952937+00:00",
+        0.39,
+        10785.55,
+        31860.92,
+        33.851965237093104,
+        47.22044401258377,
+        0.0,
+        14.49609375,
+        0.04549804172063761
+      ],
+      [
+        "2026-10-19T17:23:33.465887+00:00",
+        1.32,
+        10784.74,
+        31860.92,
+        33.84943961149503,
+        47.22047916342864,
+        0.1953125,
+        14.49609375,
+        0.04549804172063761
+      ]
+    ]
+  },
+  "system_CPU_max": 5.09,
+  "available_RAM_min_percent": 33.82804535582203
+}

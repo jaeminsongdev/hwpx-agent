@@ -287,6 +287,26 @@ impl PreservationReport {
         graph_limits: PackageGraphLimits,
         profile: PreservationRuleProfile,
     ) -> Result<Self, PreservationError> {
+        Self::build_with_xml_documents(reader, graph, graph_limits, profile, None)
+    }
+
+    pub(crate) fn build_with_call_local_xml<R: Read + Seek>(
+        reader: &mut BoundedZipReader<R>,
+        graph: &PackageGraph,
+        graph_limits: PackageGraphLimits,
+        profile: PreservationRuleProfile,
+        documents: &mut crate::call_local_xml::CallLocalXmlDocuments,
+    ) -> Result<Self, PreservationError> {
+        Self::build_with_xml_documents(reader, graph, graph_limits, profile, Some(documents))
+    }
+
+    fn build_with_xml_documents<R: Read + Seek>(
+        reader: &mut BoundedZipReader<R>,
+        graph: &PackageGraph,
+        graph_limits: PackageGraphLimits,
+        profile: PreservationRuleProfile,
+        mut documents: Option<&mut crate::call_local_xml::CallLocalXmlDocuments>,
+    ) -> Result<Self, PreservationError> {
         let authoritative = PackageGraph::build(reader, graph_limits)?;
         validate_graph_snapshot(graph, &authoritative)?;
         let entry_by_key = indexed_non_directory_entries(reader)?;
@@ -319,7 +339,7 @@ impl PreservationReport {
             if bytes.len() as u64 != part.expanded_size || digest != part.raw_sha256 {
                 return Err(PreservationError::IdentityMismatch);
             }
-            let classification = classify(part, &bytes, profile)?;
+            let classification = classify(part, &bytes, profile, documents.as_deref_mut())?;
             counts.increment(classification.class);
             records.push(PartPreservationRecord {
                 path: part.path.clone(),
@@ -457,6 +477,7 @@ fn classify(
     part: &PartRecord,
     bytes: &[u8],
     profile: PreservationRuleProfile,
+    documents: Option<&mut crate::call_local_xml::CallLocalXmlDocuments>,
 ) -> Result<Classification, PreservationError> {
     if part.path.as_str() == "mimetype" {
         return Ok(classification(
@@ -473,7 +494,7 @@ fn classify(
         ));
     }
     if media_xml {
-        return classify_xml(bytes);
+        return classify_xml(bytes, part.path.collision_key(), documents);
     }
     if profile == PreservationRuleProfile::Hangul2020PreviewTextV2
         && part.path.as_str() == "Preview/PrvText.txt"
@@ -514,8 +535,28 @@ fn classification(class: PreservationClass, reason: PreservationReason) -> Class
     }
 }
 
-fn classify_xml(bytes: &[u8]) -> Result<Classification, PreservationError> {
-    let document = match PreservingXmlDocument::parse(bytes) {
+fn classify_xml(
+    bytes: &[u8],
+    key: &str,
+    documents: Option<&mut crate::call_local_xml::CallLocalXmlDocuments>,
+) -> Result<Classification, PreservationError> {
+    let standalone;
+    let parsed = if let Some(documents) = documents {
+        documents.document(key, bytes)
+    } else {
+        standalone = PreservingXmlDocument::parse(bytes);
+        match &standalone {
+            Ok(document) => Ok(document),
+            Err(PreservingXmlError::Safe(error)) => {
+                return Ok(classification(
+                    PreservationClass::Rejected,
+                    PreservationReason::XmlRejected(error.code()),
+                ));
+            }
+            Err(error) => return Err(PreservationError::TokenModel { code: error.code() }),
+        }
+    };
+    let document = match parsed {
         Ok(document) => document,
         Err(PreservingXmlError::Safe(error)) => {
             return Ok(classification(

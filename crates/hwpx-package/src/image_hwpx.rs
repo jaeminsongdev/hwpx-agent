@@ -20,6 +20,7 @@ pub const IMAGE_HWPX_SCHEMA_VERSION: &str = "hwpx-agent.image-hwpx/v1";
 pub const IMAGE_HWPX_PROFILE_ID: &str = "hwpx-agent.image-hwpx.hwpml-2011-static-embed/v1";
 
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
+const CORE_NS: &str = "http://www.hancom.co.kr/hwpml/2011/core";
 const SECTION_NS: &str = "http://www.hancom.co.kr/hwpml/2011/section";
 const OPF_NS: &str = "http://www.idpf.org/2007/opf";
 const HWPUNIT_PER_INCH: u64 = 7_200;
@@ -1421,25 +1422,25 @@ fn image_fragment(
     let escaped_relationship = escape_xml_attribute(&request.asset.relationship_id)?;
     let xml = format!(
         concat!(
-            "<hp:pic xmlns:hp=\"{ns}\" id=\"{object_id}\" zOrder=\"0\" numberingType=\"PICTURE\" ",
+            "<hp:pic xmlns:hp=\"{ns}\" xmlns:hc=\"{core_ns}\" id=\"{object_id}\" zOrder=\"0\" numberingType=\"PICTURE\" ",
             "textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" ",
             "href=\"\" groupLevel=\"0\" instid=\"{instance_id}\" reverse=\"0\">",
             "<hp:offset x=\"0\" y=\"0\"/>",
             "<hp:orgSz width=\"{width}\" height=\"{height}\"/>",
-            "<hp:curSz width=\"0\" height=\"0\"/>",
+            "<hp:curSz width=\"{width}\" height=\"{height}\"/>",
             "<hp:flip horizontal=\"0\" vertical=\"0\"/>",
             "<hp:rotationInfo angle=\"0\" centerX=\"{center_x}\" centerY=\"{center_y}\" rotateimage=\"1\"/>",
             "<hp:renderingInfo>",
-            "<hp:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/>",
-            "<hp:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/>",
-            "<hp:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/>",
+            "<hc:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/>",
+            "<hc:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/>",
+            "<hc:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/>",
             "</hp:renderingInfo>",
-            "<hp:img binaryItemIDRef=\"{relationship}\" bright=\"0\" contrast=\"0\" effect=\"REAL_PIC\" alpha=\"0\"/>",
-            "<hp:imgRect><hp:pt0 x=\"0\" y=\"0\"/><hp:pt1 x=\"{width}\" y=\"0\"/>",
-            "<hp:pt2 x=\"{width}\" y=\"{height}\"/><hp:pt3 x=\"0\" y=\"{height}\"/></hp:imgRect>",
+            "<hp:imgRect><hc:pt0 x=\"0\" y=\"0\"/><hc:pt1 x=\"{width}\" y=\"0\"/>",
+            "<hc:pt2 x=\"{width}\" y=\"{height}\"/><hc:pt3 x=\"0\" y=\"{height}\"/></hp:imgRect>",
             "<hp:imgClip left=\"{clip_left}\" right=\"{clip_right}\" top=\"{clip_top}\" bottom=\"{clip_bottom}\"/>",
             "<hp:inMargin left=\"0\" right=\"0\" top=\"0\" bottom=\"0\"/>",
             "<hp:imgDim dimwidth=\"{original_width}\" dimheight=\"{original_height}\"/>",
+            "<hc:img binaryItemIDRef=\"{relationship}\" bright=\"0\" contrast=\"0\" effect=\"REAL_PIC\" alpha=\"0\"/>",
             "<hp:effects/>",
             "<hp:sz width=\"{width}\" widthRelTo=\"ABSOLUTE\" height=\"{height}\" heightRelTo=\"ABSOLUTE\" protect=\"0\"/>",
             "<hp:pos treatAsChar=\"1\" affectLSpacing=\"1\" flowWithText=\"1\" allowOverlap=\"0\" ",
@@ -1449,6 +1450,7 @@ fn image_fragment(
             "<hp:shapeComment>{alt}</hp:shapeComment></hp:pic>"
         ),
         ns = PARAGRAPH_NS,
+        core_ns = CORE_NS,
         object_id = request.object_id,
         instance_id = request.instance_id,
         width = geometry.width_hwpunit,
@@ -1536,27 +1538,31 @@ fn read_image_shape(
     }
     let children = child_indexes(&document, picture_index)?;
     let names = [
-        "offset",
-        "orgSz",
-        "curSz",
-        "flip",
-        "rotationInfo",
-        "renderingInfo",
-        "img",
-        "imgRect",
-        "imgClip",
-        "inMargin",
-        "imgDim",
-        "effects",
-        "sz",
-        "pos",
-        "outMargin",
-        "shapeComment",
+        (PARAGRAPH_NS, "offset"),
+        (PARAGRAPH_NS, "orgSz"),
+        (PARAGRAPH_NS, "curSz"),
+        (PARAGRAPH_NS, "flip"),
+        (PARAGRAPH_NS, "rotationInfo"),
+        (PARAGRAPH_NS, "renderingInfo"),
+        (PARAGRAPH_NS, "imgRect"),
+        (PARAGRAPH_NS, "imgClip"),
+        (PARAGRAPH_NS, "inMargin"),
+        (PARAGRAPH_NS, "imgDim"),
+        (CORE_NS, "img"),
+        (PARAGRAPH_NS, "effects"),
+        (PARAGRAPH_NS, "sz"),
+        (PARAGRAPH_NS, "pos"),
+        (PARAGRAPH_NS, "outMargin"),
+        (PARAGRAPH_NS, "shapeComment"),
     ];
     if children.len() != names.len()
-        || children.iter().zip(names).any(|(index, name)| {
-            element(&document, *index).is_err() || !has_name(&document.elements()[*index], name)
-        })
+        || children
+            .iter()
+            .zip(names)
+            .any(|(index, (namespace, name))| {
+                element(&document, *index).is_err()
+                    || !has_namespace_name(&document.elements()[*index], namespace, name)
+            })
     {
         return Err(ImageHwpxError::ReadbackMismatch);
     }
@@ -1572,7 +1578,10 @@ fn read_image_shape(
     exact_empty_attributes(
         element(&document, children[2])?,
         &["width", "height"],
-        &["0", "0"],
+        &[
+            &expected_geometry.width_hwpunit.to_string(),
+            &expected_geometry.height_hwpunit.to_string(),
+        ],
     )?;
     exact_empty_attributes(
         element(&document, children[3])?,
@@ -1599,9 +1608,9 @@ fn read_image_shape(
     validate_attributes(rendering, &[])?;
     let matrices = child_indexes(&document, children[5])?;
     if matrices.len() != 3
-        || !has_name(element(&document, matrices[0])?, "transMatrix")
-        || !has_name(element(&document, matrices[1])?, "scaMatrix")
-        || !has_name(element(&document, matrices[2])?, "rotMatrix")
+        || !has_core_name(element(&document, matrices[0])?, "transMatrix")
+        || !has_core_name(element(&document, matrices[1])?, "scaMatrix")
+        || !has_core_name(element(&document, matrices[2])?, "rotMatrix")
     {
         return Err(ImageHwpxError::ReadbackMismatch);
     }
@@ -1613,13 +1622,13 @@ fn read_image_shape(
         )?;
     }
     exact_empty_attributes(
-        element(&document, children[6])?,
+        element(&document, children[10])?,
         &["binaryItemIDRef", "bright", "contrast", "effect", "alpha"],
         &[expected_asset.relationship_id(), "0", "0", "REAL_PIC", "0"],
     )?;
-    let image_rect = element(&document, children[7])?;
+    let image_rect = element(&document, children[6])?;
     validate_attributes(image_rect, &[])?;
-    let points = child_indexes(&document, children[7])?;
+    let points = child_indexes(&document, children[6])?;
     let width = expected_geometry.width_hwpunit.to_string();
     let height = expected_geometry.height_hwpunit.to_string();
     let point_values = [("0", "0"), (&width, "0"), (&width, &height), ("0", &height)];
@@ -1632,7 +1641,7 @@ fn read_image_shape(
         .zip(point_values)
     {
         let point = element(&document, point)?;
-        if !has_name(point, expected_name) {
+        if !has_core_name(point, expected_name) {
             return Err(ImageHwpxError::ReadbackMismatch);
         }
         exact_empty_attributes(point, &["x", "y"], &[x, y])?;
@@ -1665,7 +1674,7 @@ fn read_image_shape(
     ];
     let clip_strings = clip.map(|value| value.to_string());
     exact_empty_attributes(
-        element(&document, children[8])?,
+        element(&document, children[7])?,
         &["left", "right", "top", "bottom"],
         &[
             &clip_strings[0],
@@ -1675,12 +1684,12 @@ fn read_image_shape(
         ],
     )?;
     exact_empty_attributes(
-        element(&document, children[9])?,
+        element(&document, children[8])?,
         &["left", "right", "top", "bottom"],
         &["0", "0", "0", "0"],
     )?;
     exact_empty_attributes(
-        element(&document, children[10])?,
+        element(&document, children[9])?,
         &["dimwidth", "dimheight"],
         &[&original_width.to_string(), &original_height.to_string()],
     )?;
@@ -1890,7 +1899,15 @@ fn element(
 }
 
 fn has_name(element: &XmlElementToken, local_name: &str) -> bool {
-    element.name().namespace() == Some(PARAGRAPH_NS) && element.name().local_name() == local_name
+    has_namespace_name(element, PARAGRAPH_NS, local_name)
+}
+
+fn has_core_name(element: &XmlElementToken, local_name: &str) -> bool {
+    has_namespace_name(element, CORE_NS, local_name)
+}
+
+fn has_namespace_name(element: &XmlElementToken, namespace: &str, local_name: &str) -> bool {
+    element.name().namespace() == Some(namespace) && element.name().local_name() == local_name
 }
 
 fn child_indexes(

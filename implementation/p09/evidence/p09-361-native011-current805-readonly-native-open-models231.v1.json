@@ -1,0 +1,351 @@
+{
+  "state": "PASS_EXACT_READY_NATIVE_READONLY_NATIVE_OPENING29_MODELS_NOT_NATIVE",
+  "steps": [
+    {
+      "stage": "native011_selected_models",
+      "exit_code": 0,
+      "cleanup": true,
+      "stdout_bytes": 4012,
+      "stderr_bytes": 0,
+      "stdout_sha256": "169eb495607967cc8df684414145701a5d04d511683c773568d8b6785bd1ed9f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "contract_errors": [],
+      "diagnostics": [],
+      "locations": [],
+      "preflight_summary": {
+        "state": "EXECUTED_EXACT_SOURCE_TRANSFER_MODELS",
+        "contracts": {
+          "run": 29,
+          "errors": 0,
+          "failures": 0,
+          "skipped": 0
+        },
+        "executed_test_ids": {
+          "test_native011_readonly_frame_probe": [
+            "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_actual_original_parent_wrapper_records_own_attempt_without_calling_engine_or_worker",
+            "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_direct_frame_without_original_parent_attempt_is_rejected_by_model",
+            "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_disconnected_lifecycle_cannot_bypass_original_case_start",
+            "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_failed_flag_restore_prevents_second_read_and_acceptance",
+            "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_metadata_time_is_in_same600_clock_not_a_fresh_frame_clock",
+            "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_missing_real_metadata_budget_rejected_before_frame_construction",
+            "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_native_pacing_selection_keeps_class_rate_guard_sleeper_and_unused_state",
+            "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_original_order_both_boundaries_flags_restore_and_intentional_abort",
+            "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_original_read_error_survives_additional_cleanup_failure",
+            "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_previous_pass_or_partial_whole_opening_is_not_accepted",
+            "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_successful_readonly_abort_also_cannot_be_reused_or_committed",
+            "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_used_or_nonoriginal_native_pacer_is_rejected_before_clock_change"
+          ],
+          "test_native011_readonly_frame_driver": [
+            "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_closed_attempts_and_distinct_construction_output",
+            "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_construct_only_finish_does_not_run_or_publish_any_frame",
+            "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_empty_or_oversized_frame_evidence_not_accepted",
+            "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_full_frame_parts_are_bounded_and_lossless_without_truncation",
+            "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_guard_close_is_idempotent_and_does_not_restart_a_scope",
+            "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_native_phase_blocks_any_new_guard_rotation",
+            "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_new_preparation_opening_retains_original_open_pacer_and_rejects_used_reader",
+            "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_original_failure_survives_terminal_publication_failure",
+            "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_success_is_not_preserved_when_full_evidence_cannot_be_written"
+          ],
+          "test_native011_readonly_frame_owned": [
+            "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_changed_original_source_is_rejected",
+            "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_complete_original_frame_restored_and_readonly_result_accepted_only_as_diagnostic",
+            "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_failed_cleanup_expired_native_or_unrestored_flags_rejected",
+            "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_full_original_monitor_ast_inverse_and_no_product_command",
+            "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_missing_or_corrupt_part_and_wrong_part_order_rejected",
+            "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_product_commit_successful_batch_or_clock_reset_never_promoted",
+            "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_terminal_failure_preservation_does_not_grant_late_phase_credit",
+            "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_truncated_boundary_or_decoder_overrun_rejected_after_lossless_reconstruction"
+          ]
+        },
+        "errors": [],
+        "failures": []
+      },
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 0.312,
+          "peak_job_private_mib": 51.21,
+          "peak_job_private_percent": 0.16072051439392035,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 0.8589999999967404
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "fresh_inputs": 17,
+  "final_fresh_hashes": 17,
+  "contracts": {
+    "run": 29,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "executed_test_ids": {
+    "test_native011_readonly_frame_probe": [
+      "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_actual_original_parent_wrapper_records_own_attempt_without_calling_engine_or_worker",
+      "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_direct_frame_without_original_parent_attempt_is_rejected_by_model",
+      "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_disconnected_lifecycle_cannot_bypass_original_case_start",
+      "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_failed_flag_restore_prevents_second_read_and_acceptance",
+      "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_metadata_time_is_in_same600_clock_not_a_fresh_frame_clock",
+      "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_missing_real_metadata_budget_rejected_before_frame_construction",
+      "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_native_pacing_selection_keeps_class_rate_guard_sleeper_and_unused_state",
+      "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_original_order_both_boundaries_flags_restore_and_intentional_abort",
+      "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_original_read_error_survives_additional_cleanup_failure",
+      "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_previous_pass_or_partial_whole_opening_is_not_accepted",
+      "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_successful_readonly_abort_also_cannot_be_reused_or_committed",
+      "test_native011_readonly_frame_probe.ReadonlyFrameContracts.test_used_or_nonoriginal_native_pacer_is_rejected_before_clock_change"
+    ],
+    "test_native011_readonly_frame_driver": [
+      "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_closed_attempts_and_distinct_construction_output",
+      "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_construct_only_finish_does_not_run_or_publish_any_frame",
+      "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_empty_or_oversized_frame_evidence_not_accepted",
+      "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_full_frame_parts_are_bounded_and_lossless_without_truncation",
+      "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_guard_close_is_idempotent_and_does_not_restart_a_scope",
+      "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_native_phase_blocks_any_new_guard_rotation",
+      "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_new_preparation_opening_retains_original_open_pacer_and_rejects_used_reader",
+      "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_original_failure_survives_terminal_publication_failure",
+      "test_native011_readonly_frame_driver.ReadonlyDriverContracts.test_success_is_not_preserved_when_full_evidence_cannot_be_written"
+    ],
+    "test_native011_readonly_frame_owned": [
+      "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_changed_original_source_is_rejected",
+      "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_complete_original_frame_restored_and_readonly_result_accepted_only_as_diagnostic",
+      "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_failed_cleanup_expired_native_or_unrestored_flags_rejected",
+      "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_full_original_monitor_ast_inverse_and_no_product_command",
+      "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_missing_or_corrupt_part_and_wrong_part_order_rejected",
+      "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_product_commit_successful_batch_or_clock_reset_never_promoted",
+      "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_terminal_failure_preservation_does_not_grant_late_phase_credit",
+      "test_native011_readonly_frame_owned.ReadonlyOwnedContracts.test_truncated_boundary_or_decoder_overrun_rejected_after_lossless_reconstruction"
+    ]
+  },
+  "goal": "ACTIVE",
+  "cleanup": true,
+  "elapsed_seconds": 5.375,
+  "source_pins": [
+    {
+      "path": "tools/p09/native011_readonly_frame_owned.py",
+      "bytes": 12558,
+      "sha256": "c47dce55030f1462a70892eb943ea6a07465b9be5a2a2fc86e4ff105c4759463"
+    },
+    {
+      "path": "tools/p09/native011_current_epoch_owned_audit.py",
+      "bytes": 7577,
+      "sha256": "9db0e5d0eec913904fcd2c6e783dfc33dea1b1b1738469e2208368627cd0d627"
+    },
+    {
+      "path": "tools/p09/native011_owned_metadata_audit.py",
+      "bytes": 9498,
+      "sha256": "b624bcefafb00c8decdcd9a4bd80b06bb2a63fa3b7d46af4f524a45cc9e5b493"
+    },
+    {
+      "path": "tools/p09/native011_inherited_source_probe_child.py",
+      "bytes": 28005,
+      "sha256": "910c87e672dbeebc8e5e53b6c5e41ec0cf0a3fba563c5ee6e88ffcf1d6878116"
+    },
+    {
+      "path": "tools/p09/native011_readonly_frame_driver.py",
+      "bytes": 11836,
+      "sha256": "4e2aa524a6d1a95a5eee00424e9583007652ddf9066f21c9a9608bb73b68bab3"
+    },
+    {
+      "path": "tools/p09/native011_readonly_frame_entry.py",
+      "bytes": 2000,
+      "sha256": "7002c461c4510f84f5a363bd1664b50da0d272af27b6ab81ead9e4c0ed95de3e"
+    },
+    {
+      "path": "tools/p09/native011_readonly_frame_probe.py",
+      "bytes": 11883,
+      "sha256": "cab0f91b6e947b73362e5bf3c20e35f20c3e239ba1e5ec58f4d7afd93dcc92c6"
+    },
+    {
+      "path": "tools/p09/native011_precise_boundary_connection.py",
+      "bytes": 2804,
+      "sha256": "00c8cf315a5dd09ce8201a40071a9d55d1dda1be1ff8069fdda88798c663c86d"
+    },
+    {
+      "path": "tools/p09/native011_precise_boundary_pacer.py",
+      "bytes": 2421,
+      "sha256": "bf4e0e1a1d894659eec907b5890e43063e7758b4ec433de4e9e858ef1e90b507"
+    },
+    {
+      "path": "tools/p09/owned_source_read_pressure.py",
+      "bytes": 902,
+      "sha256": "dba6d749e68b098fedf4e3202a0b4a2b9a0ba1c5cd893d81b0f148046435dc51"
+    },
+    {
+      "path": "tools/p09/native011_ready_scope_connection.py",
+      "bytes": 11522,
+      "sha256": "eb725a826d78a8d18a6cb6f8bf361ac17ec5b02f892ba629f215f210bb8f3b5d"
+    },
+    {
+      "path": "tools/p09/native011_ready_native_construction.py",
+      "bytes": 8015,
+      "sha256": "cc04c13eed5af556e82bf37802d569fdb407112e4731f2f4fc291fc483344c31"
+    },
+    {
+      "path": "tools/p09/native011_current_epoch_shared.py",
+      "bytes": 17131,
+      "sha256": "db60bee1016ccab236a05363a618435c2d6c813ebe5359ef55e9cae5114d6dc2"
+    },
+    {
+      "path": "tools/p09/native011_scoped_test_runner.py",
+      "bytes": 6721,
+      "sha256": "fcbec20db2965d8fce995c57c6349d1b2a95334a28fba76754466c9ac9357364"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_readonly_frame_probe.py",
+      "bytes": 11226,
+      "sha256": "b0dc347705e5cd16deea5756911e592ff44a1f11da08bd576fbae5c49bcc8a7d"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_readonly_frame_driver.py",
+      "bytes": 3617,
+      "sha256": "7433aef08ce0cd353f214cd49b58747790f1ce47e514ce299ecaea28a00f1c5c"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_readonly_frame_owned.py",
+      "bytes": 8111,
+      "sha256": "97daf644bbd62e7d3b945a09bf1dc1fdce95849ea8efa30a14b65a136300f9f1"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T20:26:03.795951+00:00",
+      "system_cpu_percent": 1.0,
+      "available_ram_mib": 9080.38,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 28.500054251909084,
+      "commit_used_percent": 49.6063017497329,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.26171875,
+      "parent_private_percent": 0.04476242261440257
+    },
+    {
+      "time_utc": "2026-10-17T20:26:04.296717+00:00",
+      "system_cpu_percent": 3.91,
+      "available_ram_mib": 9089.32,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 28.528118120811953,
+      "commit_used_percent": 49.58633606984613,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.26171875,
+      "parent_private_percent": 0.04476242261440257
+    },
+    {
+      "time_utc": "2026-10-17T20:26:04.797171+00:00",
+      "system_cpu_percent": 2.47,
+      "available_ram_mib": 9084.15,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 28.511885459201032,
+      "commit_used_percent": 49.58654111644122,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.32421875,
+      "parent_private_percent": 0.044958587709398576
+    },
+    {
+      "time_utc": "2026-10-17T20:26:05.297285+00:00",
+      "system_cpu_percent": 0.78,
+      "available_ram_mib": 9085.14,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 28.514987319765655,
+      "commit_used_percent": 49.58604314613888,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.32421875,
+      "parent_private_percent": 0.044958587709398576
+    },
+    {
+      "time_utc": "2026-10-17T20:26:05.810050+00:00",
+      "system_cpu_percent": 0.95,
+      "available_ram_mib": 9084.49,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 28.51295210690507,
+      "commit_used_percent": 49.582481193858605,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.32421875,
+      "parent_private_percent": 0.044958587709398576
+    },
+    {
+      "time_utc": "2026-10-17T20:26:06.684534+00:00",
+      "system_cpu_percent": 3.91,
+      "available_ram_mib": 9093.53,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 28.54132248376887,
+      "commit_used_percent": 49.58402197255879,
+      "parent_cpu_machine_percent": 0.11160714285714286,
+      "parent_private_mib": 14.0859375,
+      "parent_private_percent": 0.04421070828472628
+    },
+    {
+      "time_utc": "2026-10-17T20:26:07.184729+00:00",
+      "system_cpu_percent": 7.23,
+      "available_ram_mib": 9079.42,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 28.49703821357352,
+      "commit_used_percent": 49.61369514410411,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.0859375,
+      "parent_private_percent": 0.04421070828472628
+    },
+    {
+      "time_utc": "2026-10-17T20:26:07.672026+00:00",
+      "system_cpu_percent": 1.21,
+      "available_ram_mib": 9081.91,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 28.504872557054924,
+      "commit_used_percent": 49.612341836576576,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.0859375,
+      "parent_private_percent": 0.04421070828472628
+    },
+    {
+      "time_utc": "2026-10-17T20:26:08.170165+00:00",
+      "system_cpu_percent": 4.39,
+      "available_ram_mib": 9079.8,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 28.498251985098808,
+      "commit_used_percent": 49.608879478356776,
+      "parent_cpu_machine_percent": 0.1953125,
+      "parent_private_mib": 14.0859375,
+      "parent_private_percent": 0.04421070828472628
+    },
+    {
+      "time_utc": "2026-10-17T20:26:08.671031+00:00",
+      "system_cpu_percent": 4.21,
+      "available_ram_mib": 9080.46,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 28.500323978914704,
+      "commit_used_percent": 49.60626659888803,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.0859375,
+      "parent_private_percent": 0.04421070828472628
+    }
+  ]
+}

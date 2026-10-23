@@ -10,9 +10,15 @@ mod active_content;
 mod asset;
 mod basic_shape_hwpx;
 mod bookmark_hwpx;
+mod call_local_xml;
 mod character_style;
+mod click_here_hwpx;
+pub mod cross_reference_sdk;
+pub mod document_import;
 mod drawing_canvas_hwpx;
 mod equation;
+mod field_auto_number_hwpx;
+mod field_object_caption_hwpx;
 mod font_metric_receipt;
 mod form_control_hwpx;
 mod graph;
@@ -22,10 +28,18 @@ mod id_index;
 mod image_hwpx;
 mod limits;
 mod list_definition;
+pub mod native_form_color;
+mod native_form_hwpx;
+mod native_form_package;
+mod native_form_package_lowering;
+pub mod native_form_value_output;
+mod native_root_manifest;
 mod note_hwpx;
 mod object_appearance_hwpx;
+mod object_caption_insert_hwpx;
 mod object_common_properties_hwpx;
 mod object_composition_hwpx;
+mod object_form_insert_hwpx;
 mod object_geometry_hwpx;
 mod object_hyperlink_hwpx;
 mod object_hyperlink_target;
@@ -85,6 +99,11 @@ pub use character_style::{
     LanguageValues, LineType1, LineType2, Shadow, ShadowType, Strikeout, SubstituteFont, Underline,
     UnderlinePosition,
 };
+pub use click_here_hwpx::{
+    CLICK_HERE_HWPX_PROFILE_ID, ClickHereHwpxBuilder, ClickHereHwpxError, ClickHereHwpxField,
+    ClickHereHwpxLimits, ClickHereHwpxLowerer, ClickHereHwpxLoweringReceipt, ClickHereHwpxPlan,
+    ClickHereHwpxReadback, ClickHereHwpxReader,
+};
 pub use drawing_canvas_hwpx::{
     DRAWING_CANVAS_HWPX_PROFILE_ID, DrawingCanvasHwpxBuilder, DrawingCanvasHwpxError,
     DrawingCanvasHwpxLimitConfig, DrawingCanvasHwpxLimits, DrawingCanvasHwpxLowered,
@@ -97,6 +116,18 @@ pub use equation::{
     EquationHwpxLimitConfig, EquationHwpxLimits, EquationHwpxLowered, EquationHwpxLowerer,
     EquationHwpxLoweringReceipt, EquationHwpxReadback, EquationHwpxReader, EquationHwpxRequest,
     EquationHwpxRequestDraft, EquationHwpxSource, EquationLayout, EquationStyle,
+};
+pub use field_auto_number_hwpx::{
+    FIELD_AUTO_NUMBER_HWPX_PROFILE_ID, FieldAutoNumberHwpxBuilder, FieldAutoNumberHwpxError,
+    FieldAutoNumberHwpxLimitConfig, FieldAutoNumberHwpxLimits, FieldAutoNumberHwpxLowerer,
+    FieldAutoNumberHwpxLoweringReceipt, FieldAutoNumberHwpxPlan, FieldAutoNumberHwpxReadback,
+    FieldAutoNumberHwpxReader,
+};
+pub use field_object_caption_hwpx::{
+    FIELD_OBJECT_CAPTION_HWPX_PROFILE_ID, FieldObjectCaptionHwpxBuilder,
+    FieldObjectCaptionHwpxContext, FieldObjectCaptionHwpxError, FieldObjectCaptionHwpxLowerer,
+    FieldObjectCaptionHwpxLoweringReceipt, FieldObjectCaptionHwpxPlan,
+    FieldObjectCaptionHwpxReadback, FieldObjectCaptionHwpxReader, FieldObjectCaptionHwpxTarget,
 };
 pub use font_metric_receipt::{
     CURRENT_FONT_METRIC_PROFILE_ID, CurrentFontMetricCell, CurrentFontMetricLimits,
@@ -145,6 +176,28 @@ pub use list_definition::{
     ListSequenceResult, NumberFormat, NumberingDefinition, NumberingLevel,
     OutlineDefinitionBinding, OutlineDefinitionBindingReader, ParagraphHeadStyle, TextOffsetUnit,
 };
+pub use native_form_hwpx::{
+    NATIVE_FORM_HWPX_PROFILE_ID, NativeFormControlObservation, NativeFormHwpxBuilder,
+    NativeFormHwpxError, NativeFormHwpxLimits, NativeFormHwpxLowerer,
+    NativeFormHwpxLoweringReceipt, NativeFormHwpxMap, NativeFormHwpxPlan, NativeFormHwpxReadback,
+    NativeFormHwpxReader, NativeFormObservedIdentity, NativeFormObservedPayload,
+    NativeFormPhysicalAnchor,
+};
+pub use native_form_package::{
+    NATIVE_FORM_PACKAGE_BINDING_PROFILE_ID, NativeFormPackageBindings, NativeFormPackageError,
+    NativeFormPackageLimits, NativeFormPackageMap, NativeFormPackagePlan, NativeFormPackagePolicy,
+    NativeFormPackageReadback, NativeFormPackageReader, NativeFormPackageSectionMap,
+};
+pub use native_form_package_lowering::{
+    NATIVE_FORM_PACKAGE_OUTPUT_PROFILE_ID, NativeFormPackageLowerer, NativeFormPackageOutput,
+    NativeFormPackageOutputError, NativeFormPackageOutputLimits, NativeFormPackageOutputPlan,
+    NativeFormPackageOutputReceipt,
+};
+pub use native_root_manifest::{
+    NATIVE_ROOT_MANIFEST_PROFILE_ID, NativeRootManifestError, NativeRootManifestLimits,
+    NativeRootManifestOutput, NativeRootManifestPlan, NativeRootManifestPreparer,
+    NativeRootManifestPreservation, NativeRootManifestQualification, NativeRootManifestReceipt,
+};
 pub use note_hwpx::{
     NOTE_HWPX_PROFILE_ID, NoteHwpxBuilder, NoteHwpxError, NoteHwpxLimitConfig, NoteHwpxLimits,
     NoteHwpxLowerer, NoteHwpxLoweringReceipt, NoteHwpxPayloadDigests, NoteHwpxPlan,
@@ -155,6 +208,13 @@ pub use object_appearance_hwpx::{
     ObjectAppearanceHwpxLimitConfig, ObjectAppearanceHwpxLimits, ObjectAppearanceHwpxLowerer,
     ObjectAppearanceHwpxLoweringReceipt, ObjectAppearanceHwpxPlan, ObjectAppearanceHwpxReadback,
     ObjectAppearanceHwpxReader,
+};
+pub use object_caption_insert_hwpx::{
+    OBJECT_CAPTION_INSERT_HWPX_PROFILE_ID, ObjectCaptionInsertHwpxBuilder,
+    ObjectCaptionInsertHwpxError, ObjectCaptionInsertHwpxLimitConfig,
+    ObjectCaptionInsertHwpxLimits, ObjectCaptionInsertHwpxLowerer,
+    ObjectCaptionInsertHwpxLoweringReceipt, ObjectCaptionInsertHwpxPlan,
+    ObjectCaptionInsertHwpxReadback, ObjectCaptionInsertHwpxReader,
 };
 pub use object_common_properties_hwpx::{
     OBJECT_COMMON_PROPERTIES_HWPX_PROFILE_ID, ObjectCommonPropertiesHwpxBuilder,
@@ -168,6 +228,12 @@ pub use object_composition_hwpx::{
     ObjectCompositionHwpxLimitConfig, ObjectCompositionHwpxLimits, ObjectCompositionHwpxLowered,
     ObjectCompositionHwpxLowerer, ObjectCompositionHwpxLoweringReceipt, ObjectCompositionHwpxPlan,
     ObjectCompositionHwpxReadback, ObjectCompositionHwpxReader,
+};
+pub use object_form_insert_hwpx::{
+    OBJECT_FORM_INSERT_HWPX_PROFILE_ID, OBJECT_FORM_INSERT_STATIC_EDIT_PROFILE_SHA256,
+    ObjectFormInsertHwpxBuilder, ObjectFormInsertHwpxError, ObjectFormInsertHwpxLimitConfig,
+    ObjectFormInsertHwpxLimits, ObjectFormInsertHwpxLowerer, ObjectFormInsertHwpxLoweringReceipt,
+    ObjectFormInsertHwpxPlan, ObjectFormInsertHwpxReadback, ObjectFormInsertHwpxReader,
 };
 pub use object_geometry_hwpx::{
     OBJECT_GEOMETRY_HWPX_PROFILE_ID, ObjectGeometryHwpxBuilder, ObjectGeometryHwpxError,
@@ -208,8 +274,10 @@ pub use paragraph_style::{
 };
 pub use patch::{
     AddedPart, AllocationHandle, PatchAttributeValue, PatchError, PatchIntent, PatchLimitConfig,
-    PatchLimits, PatchPartDisposition, PatchPartRecord, PatchResult, PatchText,
-    PreservingPatchEngine, RelationshipAddition, RelationshipSpine, SiblingPosition,
+    PatchLimits, PatchPartDisposition, PatchPartRecord, PatchResult, PatchText, LeafTextRangeReplacement, TextAtomRangeReplacement,
+    WhitespaceText, WhitespaceOutputAtom, WhitespaceControlKind, WhitespaceAtomRangeReplacement,
+    TextControlAtomReplacement, TextControlKind,
+    PreservingPatchEngine, RelationshipAddition, RelationshipSpine, SiblingPosition, ElementSplicePosition,
     ValidatedXmlFragment, XmlAttributeSelector, XmlElementSelector, XmlTextSelector,
 };
 pub use path::PackagePath;

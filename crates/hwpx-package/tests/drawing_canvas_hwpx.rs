@@ -68,13 +68,15 @@ const fn bounds(x: i64, y: i64, width: u64, height: u64) -> CanvasBounds {
 
 fn common(node: &CanvasNode) -> String {
     format!(
-        "<hp:offset x=\"{}\" y=\"{}\"/><hp:orgSz width=\"{}\" height=\"{}\"/><hp:curSz width=\"{}\" height=\"{}\"/><hp:flip horizontal=\"0\" vertical=\"0\"/><hp:rotationInfo angle=\"0\" centerX=\"0\" centerY=\"0\" rotateimage=\"1\"/><hp:renderingInfo><hc:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/><hc:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/><hc:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/></hp:renderingInfo><hp:sz width=\"{}\" widthRelTo=\"ABSOLUTE\" height=\"{}\" heightRelTo=\"ABSOLUTE\" protect=\"{}\"/><hp:pos treatAsChar=\"0\" affectLSpacing=\"0\" flowWithText=\"1\" allowOverlap=\"0\" holdAnchorAndSO=\"1\" vertRelTo=\"PARA\" horzRelTo=\"PARA\" vertAlign=\"TOP\" horzAlign=\"LEFT\" vertOffset=\"0\" horzOffset=\"0\"/><hp:outMargin left=\"0\" right=\"0\" top=\"0\" bottom=\"0\"/>",
+        "<hp:offset x=\"{}\" y=\"{}\"/><hp:orgSz width=\"{}\" height=\"{}\"/><hp:curSz width=\"{}\" height=\"{}\"/><hp:flip horizontal=\"0\" vertical=\"0\"/><hp:rotationInfo angle=\"0\" centerX=\"{}\" centerY=\"{}\" rotateimage=\"1\"/><hp:renderingInfo><hc:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><hc:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><hc:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/></hp:renderingInfo><hp:sz width=\"{}\" widthRelTo=\"ABSOLUTE\" height=\"{}\" heightRelTo=\"ABSOLUTE\" protect=\"{}\"/><hp:pos treatAsChar=\"0\" affectLSpacing=\"0\" flowWithText=\"1\" allowOverlap=\"0\" holdAnchorAndSO=\"1\" vertRelTo=\"PARA\" horzRelTo=\"PARA\" vertAlign=\"TOP\" horzAlign=\"LEFT\" vertOffset=\"0\" horzOffset=\"0\"/><hp:outMargin left=\"0\" right=\"0\" top=\"0\" bottom=\"0\"/>",
         node.bounds.x_hwpunit,
         node.bounds.y_hwpunit,
         node.bounds.width_hwpunit,
         node.bounds.height_hwpunit,
         node.bounds.width_hwpunit,
         node.bounds.height_hwpunit,
+        node.bounds.width_hwpunit / 2,
+        node.bounds.height_hwpunit / 2,
         node.bounds.width_hwpunit,
         node.bounds.height_hwpunit,
         u8::from(node.protected),
@@ -83,9 +85,9 @@ fn common(node: &CanvasNode) -> String {
 
 fn picture_fragment(node: &CanvasNode) -> String {
     format!(
-        "<hp:pic id=\"{}\" zOrder=\"{}\" numberingType=\"PICTURE\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\">{}<hp:shapeComment>picture-opaque-marker</hp:shapeComment><hc:img binaryItemIDRef=\"rId1\"/><hp:imgClip left=\"0\" right=\"640\" top=\"0\" bottom=\"480\"/><hp:imgDim dimwidth=\"640\" dimheight=\"480\"/></hp:pic>",
+        "<hp:pic id=\"{}\" zOrder=\"{}\" numberingType=\"PICTURE\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\" reverse=\"0\">{}<hp:imgRect><hc:pt0 x=\"0\" y=\"0\"/><hc:pt1 x=\"1000\" y=\"0\"/><hc:pt2 x=\"1000\" y=\"800\"/><hc:pt3 x=\"0\" y=\"800\"/></hp:imgRect><hp:imgClip left=\"0\" right=\"640\" top=\"0\" bottom=\"480\"/><hp:inMargin left=\"0\" right=\"0\" top=\"0\" bottom=\"0\"/><hp:imgDim dimwidth=\"640\" dimheight=\"480\"/><hc:img binaryItemIDRef=\"rId1\" bright=\"0\" contrast=\"0\" effect=\"REAL_PIC\" alpha=\"0\"/><hp:effects/><hp:shapeComment>picture-opaque-marker</hp:shapeComment></hp:pic>",
         node.native_object_id,
-        node.ordinal,
+        u32::from(node.parent_id.is_none()) * node.ordinal,
         node.group_level,
         node.native_instance_id,
         common(node),
@@ -94,9 +96,9 @@ fn picture_fragment(node: &CanvasNode) -> String {
 
 fn rectangle_fragment(node: &CanvasNode) -> String {
     format!(
-        "<hp:rect id=\"{}\" zOrder=\"{}\" numberingType=\"DRAWING\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\">{}<hp:shapeComment>rectangle-opaque-marker</hp:shapeComment><hp:pt0 x=\"0\" y=\"0\"/><hp:pt1 x=\"800\" y=\"0\"/><hp:pt2 x=\"800\" y=\"800\"/><hp:pt3 x=\"0\" y=\"800\"/></hp:rect>",
+        "<hp:rect id=\"{}\" zOrder=\"{}\" numberingType=\"NONE\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\" ratio=\"0\">{}<hp:lineShape color=\"#000000\" width=\"283\" style=\"SOLID\" endCap=\"FLAT\" headStyle=\"NORMAL\" tailStyle=\"NORMAL\" headfill=\"0\" tailfill=\"0\" headSz=\"SMALL_SMALL\" tailSz=\"SMALL_SMALL\" outlineStyle=\"NORMAL\" alpha=\"0\"/><hp:shadow type=\"NONE\" color=\"#B2B2B2\" offsetX=\"0\" offsetY=\"0\" alpha=\"0\"/><hc:pt0 x=\"0\" y=\"0\"/><hc:pt1 x=\"800\" y=\"0\"/><hc:pt2 x=\"800\" y=\"800\"/><hc:pt3 x=\"0\" y=\"800\"/><hp:shapeComment>rectangle-opaque-marker</hp:shapeComment></hp:rect>",
         node.native_object_id,
-        node.ordinal,
+        u32::from(node.parent_id.is_none()) * node.ordinal,
         node.group_level,
         node.native_instance_id,
         common(node),
@@ -186,7 +188,7 @@ fn section(source: &DrawingCanvasState) -> Vec<u8> {
     let picture = source.node(&id("picture-1")).expect("picture");
     let shape = source.node(&id("shape-1")).expect("shape");
     format!(
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><hp:section xmlns:hp=\"{PARAGRAPH_NS}\" xmlns:hc=\"{CORE_NS}\"><hp:p id=\"1\"><hp:run charPrIDRef=\"1\"><hp:t>outside-before</hp:t><hp:container id=\"{}\" zOrder=\"{}\" numberingType=\"CONTAINER\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\">{}<hp:shapeComment>container-opaque-marker</hp:shapeComment>{}{}</hp:container><hp:t>outside-after</hp:t></hp:run></hp:p></hp:section>",
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><hp:section xmlns:hp=\"{PARAGRAPH_NS}\" xmlns:hc=\"{CORE_NS}\"><hp:p id=\"1\"><hp:run charPrIDRef=\"1\"><hp:t>outside-before</hp:t><hp:container id=\"{}\" zOrder=\"{}\" numberingType=\"NONE\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\">{}<hp:shapeComment>container-opaque-marker</hp:shapeComment>{}{}</hp:container><hp:t>outside-after</hp:t></hp:run></hp:p></hp:section>",
         root.native_object_id,
         root.ordinal,
         root.group_level,
@@ -335,8 +337,14 @@ fn insert_lowers_one_reserved_container_rectangle_tree_and_reopens() {
     let target = request.target().clone();
     let lowered = lower(&section(&source), &source, &request);
     let text = String::from_utf8(lowered.section_xml.clone()).expect("UTF-8");
-    assert!(text.contains("<hp:container id=\"10\" zOrder=\"1\""));
-    assert!(text.contains("<hp:rect id=\"11\" zOrder=\"0\""));
+    assert!(text.contains("<hp:container id=\"10\" zOrder=\"1\" numberingType=\"NONE\""));
+    assert!(text.contains(
+        "<hp:rect id=\"11\" zOrder=\"0\" numberingType=\"NONE\" textWrap=\"TOP_AND_BOTTOM\""
+    ));
+    assert!(text.contains("instid=\"111\" ratio=\"0\""));
+    assert!(text.contains("<hp:lineShape color=\"#000000\" width=\"283\" style=\"SOLID\""));
+    assert!(text.contains("<hp:shadow type=\"NONE\""));
+    assert!(text.contains("<hc:pt2 x=\"500\" y=\"400\"/>"));
     assert!(text.contains("picture-opaque-marker"));
     assert_eq!(lowered.readback.node_count(), 5);
     DrawingCanvasHwpxReader::read(
@@ -417,12 +425,54 @@ fn native_identity_geometry_and_resource_tampering_fail_closed() {
     let source = state(base_draft());
     let xml = String::from_utf8(section(&source)).expect("UTF-8");
     for tampered in [
-        xml.replace("id=\"2\" zOrder=\"0\"", "id=\"20\" zOrder=\"0\""),
+        xml.replace("instid=\"102\"", "instid=\"202\""),
         xml.replace(
             "<hp:offset x=\"100\" y=\"100\"/>",
             "<hp:offset x=\"101\" y=\"100\"/>",
         ),
         xml.replace("binaryItemIDRef=\"rId1\"", "binaryItemIDRef=\"rId9\""),
+    ] {
+        assert!(matches!(
+            DrawingCanvasHwpxReader::read(
+                tampered.as_bytes(),
+                &source,
+                0,
+                state_limits(),
+                hwpx_limits(),
+            ),
+            Err(DrawingCanvasHwpxError::UnsupportedProfile)
+        ));
+    }
+}
+
+#[test]
+fn nested_native_ids_may_be_canonicalized_without_changing_instance_identity() {
+    let source = state(base_draft());
+    let xml = String::from_utf8(section(&source)).expect("UTF-8");
+    let canonicalized = xml
+        .replace("id=\"2\" zOrder=\"0\"", "id=\"1\" zOrder=\"0\"")
+        .replace("id=\"3\" zOrder=\"0\"", "id=\"1\" zOrder=\"0\"");
+    DrawingCanvasHwpxReader::read(
+        canonicalized.as_bytes(),
+        &source,
+        0,
+        state_limits(),
+        hwpx_limits(),
+    )
+    .expect("nested nodes are identified by stable instid");
+}
+
+#[test]
+fn non_schema_numbering_incomplete_picture_and_wrong_point_namespace_fail_closed() {
+    let source = state(base_draft());
+    let xml = String::from_utf8(section(&source)).expect("UTF-8");
+    for tampered in [
+        xml.replacen("numberingType=\"NONE\"", "numberingType=\"CONTAINER\"", 1),
+        xml.replace(
+            "binaryItemIDRef=\"rId1\" bright=\"0\" contrast=\"0\" effect=\"REAL_PIC\" alpha=\"0\"",
+            "binaryItemIDRef=\"rId1\"",
+        ),
+        xml.replace("<hc:pt0 x=\"0\" y=\"0\"/>", "<hp:pt0 x=\"0\" y=\"0\"/>"),
     ] {
         assert!(matches!(
             DrawingCanvasHwpxReader::read(

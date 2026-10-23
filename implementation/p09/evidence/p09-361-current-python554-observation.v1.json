@@ -1,0 +1,35 @@
+{
+  "schema_version": "hwpx-agent.p09.current-python-runtime-observation/v1",
+  "state": "OBSERVED_SIGNED_RUNTIME_DIFFERS_FROM_HISTORICAL_PIN_NOT_NATIVE_QUALIFIED",
+  "observation_scope": "Read-only file hashes, Windows Authenticode result, executable version and pointer width; no runtime policy change or Native execution",
+  "runtime_directory": "C:/Users/thdqu/.cache/codex-runtimes/codex-primary-runtime/dependencies/python",
+  "historical_required_python_exe_sha256": "dea78bb78043f0d53ef4a475f85fa0312b90fa93c136a0686d17946781c60e16",
+  "current_python_exe": {
+    "bytes": 107312,
+    "sha256": "7a4102b91959bb234507850ea584e1d31d300a6831b171e4aadc59ff592f0234",
+    "file_version": "3.12.14",
+    "windows_authenticode_status": "Valid",
+    "signer_organization": "OpenAI OpCo, LLC"
+  },
+  "current_python312_dll": {
+    "bytes": 6985520,
+    "sha256": "e39aa2da5ea2d310d89994f71bf913a0a137ebaf9f692a565b8c896081512f28",
+    "file_version": "3.12.14",
+    "windows_authenticode_status": "Valid",
+    "signer_organization": "OpenAI OpCo, LLC"
+  },
+  "observed_interpreter_version": "3.12.14",
+  "observed_interpreter_pointer_bits": 64,
+  "code_proof": "implementation/p09/evidence/p09-361-capture004-entry-code551.v1.json",
+  "code_proof_sha256": "f783dca3f6c9ecc755c8127544212720f9af480592bbcee5df2ce44a5d927fbc",
+  "failed_preflight": "implementation/p09/evidence/p09-361-external-qualified-generation004-preflight.v1.json",
+  "failed_preflight_sha256": "79f2d1668c3fcf88edded3b2e678a743cd9dd9e42891155f3ec8ebba99d06071",
+  "failed_preflight_error": "XREF_EXTERNAL_HOST_FIXED_PYTHON_RUNTIME_BYTES",
+  "native_claim_created": false,
+  "new_Hancom_or_COM_or_fixed_eight_started": false,
+  "runtime_or_trust_files_modified": false,
+  "historical_runtime_guard_modified_or_bypassed": false,
+  "runtime_change_time_or_cause_established": false,
+  "runtime_qualification_or_product_gate_pass": false,
+  "next_required_work": "Separately qualify the current runtime and its relevant loaded-image/kernel/worker boundaries before admitting it; preserve the failed preflight and consumed001-003"
+}

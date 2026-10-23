@@ -37,7 +37,7 @@ impl ObjectKey {
         let kind_valid = segments.get(3).is_some_and(|kind| {
             matches!(
                 *kind,
-                "source" | "result" | "preview" | "evidence" | "trace" | "diff" | "receipt"
+                "source" | "result" | "document_ir" | "preview" | "evidence" | "trace" | "diff" | "receipt"
             )
         });
         let state_valid = segments

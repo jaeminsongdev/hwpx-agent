@@ -15,6 +15,7 @@ use crate::{
 };
 
 mod number_format_hwpx;
+pub(crate) mod result_output;
 mod thousands_hwpx;
 
 pub use number_format_hwpx::{
@@ -650,6 +651,62 @@ struct FormulaShape {
     formula_span: XmlByteSpan,
     last_result_span: XmlByteSpan,
     visible_result_span: XmlByteSpan,
+}
+
+/// Reads this exact source field, not a caller-selected formula/table/owner.
+/// Existing field, grid, cache/visible parity and canonical AST guards remain
+/// unchanged. Cache values remain explicitly unverified, never evaluated.
+pub(crate) fn read_imported_field(
+    document: &PreservingXmlDocument,
+    field_begin: usize,
+) -> Result<(FormulaGridDimensions, FormulaCell), TableFormulaHwpxError> {
+    let limits = TableFormulaHwpxLimits::default();
+    let formula_limits = FormulaLimits::default();
+    if document.original_len() > limits.0.input_bytes
+        || document.elements().len() > limits.0.elements
+    {
+        return Err(TableFormulaHwpxError::InputLimit);
+    }
+    validate_document_envelope(document)?;
+    validate_section_root(document)?;
+    let mut ancestor = element(document, field_begin)?.parent();
+    let table = loop {
+        let index = ancestor.ok_or(TableFormulaHwpxError::UnsupportedShape)?;
+        let value = element(document, index)?;
+        if has_paragraph_name(value, "tbl") {
+            break index;
+        }
+        ancestor = value.parent();
+    };
+    let _ = table_indexes(document, limits)?;
+    let grid = read_cells(document, table, limits, true)?;
+    let cell = owning_direct_cell(document, field_begin, table)?;
+    let owner = grid
+        .cells
+        .iter()
+        .find_map(|(index, coordinate)| (*index == cell).then_some(*coordinate))
+        .ok_or(TableFormulaHwpxError::UnsupportedShape)?;
+    let envelope = validate_field_envelope(document, field_begin, limits)?;
+    let parameters = read_field_parameters(document, envelope.parameters, limits)?;
+    let profile = if parameters.native_formula.text == NATIVE_LEFT_FORMULA {
+        FormulaFieldProfile::LeftPrefix
+    } else {
+        FormulaFieldProfile::Canonical
+    };
+    let dimensions = FormulaGridDimensions {
+        rows: grid.rows,
+        columns: grid.columns,
+    };
+    let field = read_field(
+        document,
+        field_begin,
+        owner,
+        dimensions,
+        limits,
+        formula_limits,
+        profile,
+    )?;
+    Ok((dimensions, field.formula))
 }
 
 fn read_shape(
@@ -1306,7 +1363,7 @@ fn cache_decimal_text(cache: &FormulaCache) -> Result<String, TableFormulaHwpxEr
     Ok(decimal_text(*value))
 }
 
-fn parse_canonical_decimal(
+pub(crate) fn parse_canonical_decimal(
     source: &str,
     formula_limits: FormulaLimits,
 ) -> Result<FormulaDecimal, TableFormulaHwpxError> {

@@ -32,14 +32,7 @@ fn limits() -> ShapePointsLimits {
 }
 
 fn identity_matrix() -> ObjectAffineMatrix {
-    ObjectAffineMatrix {
-        e1_millionths: 1_000_000,
-        e2_millionths: 0,
-        e3_millionths: 0,
-        e4_millionths: 1_000_000,
-        e5_millionths: 0,
-        e6_millionths: 0,
-    }
+    ObjectAffineMatrix::IDENTITY
 }
 
 fn geometry(kind: ObjectKind) -> ObjectGeometryStateDraft {

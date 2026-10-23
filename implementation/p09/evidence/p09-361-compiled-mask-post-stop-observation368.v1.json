@@ -1,0 +1,45 @@
+{
+  "schema_version": "hwpx-agent.bounded-post-stop-observation/v1",
+  "scope": "Read-only short samples after run367 terminated, not telemetry of the 99.13 percent spike",
+  "peak_cause_attributed": false,
+  "system_or_security_settings_changed": false,
+  "processes_terminated_by_this_observation": false,
+  "original_owned_job": {
+    "cpu_hard_cap_machine_percent": 6.25,
+    "affinity_mask": 4,
+    "priority_class": 16384,
+    "active_process_limit": 16,
+    "kill_on_close": true,
+    "breakaway_disabled": true,
+    "job_cpu_seconds": 24.75,
+    "peak_job_private_mib": 1902.06,
+    "active_processes": 0,
+    "owned_tree_empty": true,
+    "job_handle_closed": true,
+    "cleanup_confirmed": true
+  },
+  "post_stop_samples": [
+    {"sample": 0, "seconds": 0.82, "system_cpu_percent": 20, "top_observed_process": "maple-re", "top_process_cpu_seconds": 0.453},
+    {"sample": 1, "seconds": 1.10, "system_cpu_percent": 18, "top_observed_process": "maple-re", "top_process_cpu_seconds": 0.719},
+    {"sample": 2, "seconds": 1.05, "system_cpu_percent": 4, "top_observed_process": "maple-re", "top_process_cpu_seconds": 1.000},
+    {"sample": 3, "seconds": 1.05, "system_cpu_percent": 13, "top_observed_process": "maple-re", "top_process_cpu_seconds": 0.750}
+  ],
+  "defender": {
+    "scan_average_cpu_load_factor": 10,
+    "scan_only_if_idle_enabled": true,
+    "returned_exclusion_entries": 1,
+    "all_returned_entries_are_absolute_paths": false,
+    "repo_exclusion_coverage": "UNAVAILABLE_NOT_FALSE",
+    "exclusion_values_withheld": true,
+    "role_in_spike": "UNVERIFIED"
+  },
+  "code_review": {
+    "test_harness_started_in367": false,
+    "completed_tests_in367": 0,
+    "runtime_masking_algorithm_was_not_observed_running": true,
+    "new_inventory_uses_existing_plan_changes_not_per_character_reimport": true,
+    "retained_verification_does_not_rerun_masking_or_writer": true,
+    "next_runner_checks_finite_test_name_sets_before_compile": true,
+    "native_gate_or_freeze_fix_claimed": false
+  }
+}

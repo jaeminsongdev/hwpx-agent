@@ -20,6 +20,7 @@ const FLOW_BEFORE: &str = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 const FLOW_AFTER: &str = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 const SECTION_PATH: &str = "Contents/section0.xml";
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
+const CORE_NS: &str = "http://www.hancom.co.kr/hwpml/2011/core";
 const SECTION_NS: &str = "http://www.hancom.co.kr/hwpml/2011/section";
 
 const CONTAINER: &str = r#"<?xml version="1.0" encoding="UTF-8"?>
@@ -131,6 +132,9 @@ fn crop_dpi_alt_text_and_native_shape_are_strictly_read() -> TestResult {
         section.replace("dimwidth=\"400\"", "dimwidth=\"401\""),
         section.replace("대체 &lt;설명&gt;", "변조"),
         section.replace("effect=\"REAL_PIC\"", "effect=\"GRAY_SCALE\""),
+        section.replace("<c:transMatrix", "<q:transMatrix"),
+        section.replace("<c:img ", "<q:img "),
+        section.replace("<c:pt0", "<q:pt0"),
     ] {
         assert_code(
             ImageHwpxReader::read_in_section(
@@ -486,20 +490,20 @@ fn native_picture_section(
     let height = geometry.height_hwpunit;
     format!(
         concat!(
-            "<hs:sec xmlns:hs=\"{section_ns}\" xmlns:q=\"{ns}\"><q:p id=\"1\" paraPrIDRef=\"1\" styleIDRef=\"1\"><q:run charPrIDRef=\"1\">",
+            "<hs:sec xmlns:hs=\"{section_ns}\" xmlns:q=\"{ns}\" xmlns:c=\"{core_ns}\"><q:p id=\"1\" paraPrIDRef=\"1\" styleIDRef=\"1\"><q:run charPrIDRef=\"1\">",
             "<q:pic id=\"{object_id}\" zOrder=\"0\" numberingType=\"PICTURE\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"0\" instid=\"{instance_id}\" reverse=\"0\">",
-            "<q:offset x=\"0\" y=\"0\"/><q:orgSz width=\"{width}\" height=\"{height}\"/><q:curSz width=\"0\" height=\"0\"/><q:flip horizontal=\"0\" vertical=\"0\"/>",
+            "<q:offset x=\"0\" y=\"0\"/><q:orgSz width=\"{width}\" height=\"{height}\"/><q:curSz width=\"{width}\" height=\"{height}\"/><q:flip horizontal=\"0\" vertical=\"0\"/>",
             "<q:rotationInfo angle=\"0\" centerX=\"{center_x}\" centerY=\"{center_y}\" rotateimage=\"1\"/>",
-            "<q:renderingInfo><q:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><q:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><q:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/></q:renderingInfo>",
-            "<q:img binaryItemIDRef=\"{relationship}\" bright=\"0\" contrast=\"0\" effect=\"REAL_PIC\" alpha=\"0\"/>",
-            "<q:imgRect><q:pt0 x=\"0\" y=\"0\"/><q:pt1 x=\"{width}\" y=\"0\"/><q:pt2 x=\"{width}\" y=\"{height}\"/><q:pt3 x=\"0\" y=\"{height}\"/></q:imgRect>",
+            "<q:renderingInfo><c:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><c:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><c:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/></q:renderingInfo>",
+            "<q:imgRect><c:pt0 x=\"0\" y=\"0\"/><c:pt1 x=\"{width}\" y=\"0\"/><c:pt2 x=\"{width}\" y=\"{height}\"/><c:pt3 x=\"0\" y=\"{height}\"/></q:imgRect>",
             "<q:imgClip left=\"{clip_left}\" right=\"{clip_right}\" top=\"{clip_top}\" bottom=\"{clip_bottom}\"/><q:inMargin left=\"0\" right=\"0\" top=\"0\" bottom=\"0\"/>",
-            "<q:imgDim dimwidth=\"{original_width}\" dimheight=\"{original_height}\"/><q:effects/><q:sz width=\"{width}\" widthRelTo=\"ABSOLUTE\" height=\"{height}\" heightRelTo=\"ABSOLUTE\" protect=\"0\"/>",
+            "<q:imgDim dimwidth=\"{original_width}\" dimheight=\"{original_height}\"/><c:img binaryItemIDRef=\"{relationship}\" bright=\"0\" contrast=\"0\" effect=\"REAL_PIC\" alpha=\"0\"/><q:effects/><q:sz width=\"{width}\" widthRelTo=\"ABSOLUTE\" height=\"{height}\" heightRelTo=\"ABSOLUTE\" protect=\"0\"/>",
             "<q:pos treatAsChar=\"1\" affectLSpacing=\"1\" flowWithText=\"1\" allowOverlap=\"0\" holdAnchorAndSO=\"0\" vertRelTo=\"PARA\" horzRelTo=\"COLUMN\" vertAlign=\"TOP\" horzAlign=\"LEFT\" vertOffset=\"0\" horzOffset=\"0\"/>",
             "<q:outMargin left=\"0\" right=\"0\" top=\"0\" bottom=\"0\"/><q:shapeComment>{alt_xml}</q:shapeComment></q:pic><q:t/></q:run></q:p></hs:sec>"
         ),
         section_ns = SECTION_NS,
         ns = PARAGRAPH_NS,
+        core_ns = CORE_NS,
         object_id = object_id,
         instance_id = instance_id,
         width = width,

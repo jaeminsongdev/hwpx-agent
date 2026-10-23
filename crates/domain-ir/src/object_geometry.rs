@@ -243,8 +243,10 @@ pub struct ObjectRotation {
 
 /// One OWPML affine matrix in deterministic fixed millionths.
 ///
-/// The public OWPML model declares six finite FLOAT coefficients. Fixed millionths avoid
-/// platform-dependent JSON float serialization while retaining six-decimal source precision.
+/// OWPML stores the matrix as `[e1 e2 e3; e4 e5 e6]`: identity uses `e1=e5=1`,
+/// and translation uses `e3`/`e6`. The public model declares six finite FLOAT coefficients.
+/// Fixed millionths avoid platform-dependent JSON float serialization while retaining
+/// six-decimal source precision.
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ObjectAffineMatrix {
@@ -254,6 +256,17 @@ pub struct ObjectAffineMatrix {
     pub e4_millionths: i64,
     pub e5_millionths: i64,
     pub e6_millionths: i64,
+}
+
+impl ObjectAffineMatrix {
+    pub const IDENTITY: Self = Self {
+        e1_millionths: 1_000_000,
+        e2_millionths: 0,
+        e3_millionths: 0,
+        e4_millionths: 0,
+        e5_millionths: 1_000_000,
+        e6_millionths: 0,
+    };
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]

@@ -1,0 +1,1202 @@
+{
+  "state": "PASS_CURRENT_READONLY8_METADATA_TAIL_FINAL_SYNC_NOT_NATIVE",
+  "steps": [
+    {
+      "stage": "native011_selected_models",
+      "exit_code": 0,
+      "cleanup": true,
+      "stdout_bytes": 354,
+      "stderr_bytes": 0,
+      "stdout_sha256": "fd1bbe973e6d8f63bafec42085be86909d37dc22ecfdcf1e68ce0d959a1caf12",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "contract_errors": [],
+      "diagnostics": [],
+      "locations": [],
+      "preflight_summary": {
+        "state": "PASS_CURRENT_READONLY8_METADATA_TAIL_SOURCE_AND_PROBE_SYNC_NOT_NATIVE",
+        "receipt": {
+          "path": "implementation/p09/evidence/p09-361-native011-current805-metadata-tail-readonly8-final-sync308.child.v1.json",
+          "bytes": 11576,
+          "sha256": "2a18826d01f856e5b0aea1ab4a00d31904f37a2e2c5f25f2b35cb65efa1756d5"
+        },
+        "fresh": 61,
+        "final": 61,
+        "cleanup": true
+      },
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 0.234,
+          "peak_job_private_mib": 33.03,
+          "peak_job_private_percent": 0.10366099238695527,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 11.09299999999348
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "fresh_inputs": 62,
+  "final_fresh_hashes": 62,
+  "sync": {
+    "state": "PASS_CURRENT_READONLY8_METADATA_TAIL_SOURCE_AND_PROBE_SYNC_NOT_NATIVE",
+    "fresh": 61,
+    "final": 61,
+    "cleanup": true,
+    "source_pins": [
+      {
+        "path": "implementation/p09/evidence/p09-361-native011-current805-metadata-tail-readonly8-models306.v1.json",
+        "bytes": 35001,
+        "sha256": "04548834aba826d0c5a9d586f5f2fb4d139a2e4aeaaa2539e3ec2b744d184473"
+      },
+      {
+        "path": "tools/p09/accept_case112_current_epoch.py",
+        "bytes": 20933,
+        "sha256": "03fa9362f56b6105b48b8b49599f32ccc8cbf4aa9d0b0836f3cf8580cc9c680c"
+      },
+      {
+        "path": "tools/p09/audit_evidence_io.py",
+        "bytes": 5653,
+        "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+      },
+      {
+        "path": "tools/p09/borrowed_locked_streams.py",
+        "bytes": 7276,
+        "sha256": "7299572c1fc86a932e6df50891e3004dc94c0e635978c04d81a3f961571a3ae5"
+      },
+      {
+        "path": "tools/p09/bounded_process_progress.py",
+        "bytes": 8533,
+        "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+      },
+      {
+        "path": "tools/p09/conservative_maintenance.py",
+        "bytes": 29237,
+        "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+      },
+      {
+        "path": "tools/p09/current_stored_native_bridge.py",
+        "bytes": 7987,
+        "sha256": "74e654c4bd1be0142cce7bc74c281727a1f738a6091270b9571062f0a98f8e6b"
+      },
+      {
+        "path": "tools/p09/current_stored_runtime_scope.py",
+        "bytes": 10087,
+        "sha256": "45f00274f99383c6d27fadea882614a3fd02ca19932bc8735618483f982d8841"
+      },
+      {
+        "path": "tools/p09/distinct_final_sample_guard_v1.py",
+        "bytes": 1683,
+        "sha256": "8c590aa82c2677d391d6d5781b356641f77c7cdc6e55370ca251d6a809ad67c3"
+      },
+      {
+        "path": "tools/p09/live_sql_evidence_reader.py",
+        "bytes": 2109,
+        "sha256": "0458552661a9f69379f41a78d15cdbf1b6c389ede78bed766dcd6616ac937ac7"
+      },
+      {
+        "path": "tools/p09/locked_runtime_inputs.py",
+        "bytes": 15465,
+        "sha256": "e7c40a2ec0367e01c359e3b89c179d45367e9db233348e76ba82364cc0599e14"
+      },
+      {
+        "path": "tools/p09/native011_scoped_test_runner.py",
+        "bytes": 6721,
+        "sha256": "fcbec20db2965d8fce995c57c6349d1b2a95334a28fba76754466c9ac9357364"
+      },
+      {
+        "path": "tools/p09/owned_cpu_baseline_v1.py",
+        "bytes": 1389,
+        "sha256": "0fce7a5f5700270291b02167e96c3739943d5a44c0a912eef43555a1a729b4b5"
+      },
+      {
+        "path": "tools/p09/owned_source_read_pressure.py",
+        "bytes": 902,
+        "sha256": "dba6d749e68b098fedf4e3202a0b4a2b9a0ba1c5cd893d81b0f148046435dc51"
+      },
+      {
+        "path": "tools/p09/owned_sql_job.py",
+        "bytes": 13850,
+        "sha256": "30b08c4d779494bbdb7579b9bb28782b4f4588fc69b931cc9d18af326d46b7a0"
+      },
+      {
+        "path": "tools/p09/packed_receipt_json.py",
+        "bytes": 5958,
+        "sha256": "2eca058b0989cf410809b23a7171fd0ca7ab82bf3e0784077fd08851143c01e6"
+      },
+      {
+        "path": "tools/p09/preparation_attributed_cpu_v1.py",
+        "bytes": 9869,
+        "sha256": "ddc1b48f17645337e65125373d9db822477ca6a94cc34e23992498e6c2c7d13d"
+      },
+      {
+        "path": "tools/p09/prepared_run_closure_v1.py",
+        "bytes": 23900,
+        "sha256": "c159da53076f5bb88dce252db163f82a1f1d71522c9dd248349ca615dc84e672"
+      },
+      {
+        "path": "tools/p09/receipt_compact_json.py",
+        "bytes": 2657,
+        "sha256": "a12d8114131ada0bf2058d16837a9f1a81fbff25adeccc8b18117b7669be7217"
+      },
+      {
+        "path": "tools/p09/runtime_input_frame.py",
+        "bytes": 5802,
+        "sha256": "44a21215a76f4160ca7bfeb55b02f3bb464a2017671b0c2dae9883d7c9cd8929"
+      },
+      {
+        "path": "tools/p09/tests/test_native011_metadata_tail_candidate.py",
+        "bytes": 13673,
+        "sha256": "9859c08424e37fdae7005e5f913d1bbdbd639208568358c59f5427ca454f391c"
+      },
+      {
+        "path": "tools/p09/tests/test_native011_metadata_tail_connection.py",
+        "bytes": 6261,
+        "sha256": "d06be29f4f61d3676556a41e0829387b1bd62fda2b050678f80c39c2c79e4aab"
+      },
+      {
+        "path": "tools/p09/tests/test_native011_readonly_frame_driver.py",
+        "bytes": 11592,
+        "sha256": "21b25603ad387af9cd5bbe8db1d598b2e9ddffc1154f379001cdadc17b36cc9f"
+      },
+      {
+        "path": "tools/p09/tests/test_native011_readonly_frame_owned.py",
+        "bytes": 14584,
+        "sha256": "3cb2172b7037f7379f553b6e8009683b945cfc4dc42c8896cfb8f7ac41e13c60"
+      },
+      {
+        "path": "tools/p09/tests/test_native011_readonly_frame_projection.py",
+        "bytes": 1471,
+        "sha256": "30a714e6fb2eee741719d0acaf13f695d7caae1c30a546a14bc3c0e46284f77d"
+      },
+      {
+        "path": "tools/p09/tests/test_native011_ready_native_construction.py",
+        "bytes": 2050,
+        "sha256": "eccd37cc7de2008116c3ffd1efaa732c703a45c042dc4f090627ad247f7f2da9"
+      },
+      {
+        "path": "tools/p09/tests/test_native011_ready_scope_connection.py",
+        "bytes": 7591,
+        "sha256": "e053f84ee3322954d2320c1a178da3550048e8c2934ec42d83405c2afcbf0f7b"
+      },
+      {
+        "path": "tools/p09/weighted_audit_io.py",
+        "bytes": 3819,
+        "sha256": "c1e15f4cd21382c20c41439aef89a6af468e55dbb49d218b3f6c604c91ce03ca"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-native011-current805-metadata-tail-readonly8-models306.child.v1.json",
+        "bytes": 18469,
+        "sha256": "a5896b951fba845ee19fa554d824b797ebe3667041bf1a8a5b287cc15e2a5507"
+      },
+      {
+        "path": "tools/p09/fresh_lossless_metadata_reader_v1.py",
+        "bytes": 9403,
+        "sha256": "aa312b81bb93f1eb800e281b4273abfd06894ea4f5d1f39b0b183295efc39208"
+      },
+      {
+        "path": "tools/p09/held_envelope_boundary_guard_v1.py",
+        "bytes": 1809,
+        "sha256": "a65cd3c4c091e4e94b27b4d0474b2eafaf3fe2c4ac0682d7d95fa11c4d32e884"
+      },
+      {
+        "path": "tools/p09/native011_chunk_join_connection.py",
+        "bytes": 7072,
+        "sha256": "0be0f3c8f94d01b009c3e31b8c7cc984d31958967d0611d831ed750a993ab1b8"
+      },
+      {
+        "path": "tools/p09/native011_current_epoch_owned_audit.py",
+        "bytes": 7577,
+        "sha256": "9db0e5d0eec913904fcd2c6e783dfc33dea1b1b1738469e2208368627cd0d627"
+      },
+      {
+        "path": "tools/p09/native011_exact_read_budget.py",
+        "bytes": 14847,
+        "sha256": "6f44d4d925649eaabb8cf42ac808b4fd772181dec8584acce7ee019376b787ea"
+      },
+      {
+        "path": "tools/p09/native011_metadata_tail_candidate.py",
+        "bytes": 6568,
+        "sha256": "9196d642e20722f04dbb24cef7e0dce1ddd60d09827b652a3ff84a8229fce381"
+      },
+      {
+        "path": "tools/p09/native011_metadata_tail_connection.py",
+        "bytes": 5528,
+        "sha256": "9e725fc7fe11a3ca7165daf762968bee2032cf625ace8195c3a0eac3ca3a34db"
+      },
+      {
+        "path": "tools/p09/native011_readonly_frame_driver.py",
+        "bytes": 18757,
+        "sha256": "55b593f55f674ea7bc1190c892bec5cb0f34056b446afc5edd51a1de720a8051"
+      },
+      {
+        "path": "tools/p09/native011_readonly_frame_owned.py",
+        "bytes": 18674,
+        "sha256": "ed5f659caf4c6687434b5f44828f8a85f716c33e0d6ab903bbf7d09f0eb559f4"
+      },
+      {
+        "path": "tools/p09/native011_ready_scope_connection.py",
+        "bytes": 13232,
+        "sha256": "b4442d1249722008a44ec725b2bb195019177c1f59772197d597863cba426a7e"
+      },
+      {
+        "path": "tools/p09/owned_input_read_pressure.py",
+        "bytes": 3485,
+        "sha256": "100666115a569ac650a5ea87d1e60ba918402bdedff76216b5b581cc8e962783"
+      },
+      {
+        "path": "tools/p09/reusable_audit_chunk_v1.py",
+        "bytes": 8088,
+        "sha256": "1aa1db74585cbdf50df32ac0c9dc07dfd31557fc37647ca6e6ea3969fbb60e75"
+      },
+      {
+        "path": "tools/p09/runtime_envelope_frame_connection_v1.py",
+        "bytes": 3065,
+        "sha256": "579aa5fb2e0d479077cf965c1dd449ab9fc48305bff9ea52a37bfb0f2688b4e5"
+      },
+      {
+        "path": "tools/p09/runtime_envelope_namespace_bundle_v1.py",
+        "bytes": 3320,
+        "sha256": "385778d26e0c5d99ac6d38ccaeb6afd24bb4029e01b4a6e91683cb80e5e2da62"
+      },
+      {
+        "path": "tools/p09/runtime_envelope_physical_io_v1.py",
+        "bytes": 7214,
+        "sha256": "b3bf5637c1f5d13bf9090236274826440e4c6c543b6db219a95b0869919c324c"
+      },
+      {
+        "path": "tools/p09/runtime_envelope_scope_binding_v1.py",
+        "bytes": 10750,
+        "sha256": "0105881d365213e70bd047b5c7fa8de6fda842f3103b71870c8f2224b3e4db3b"
+      },
+      {
+        "path": "tools/p09/runtime_envelope_source_projection_v1.py",
+        "bytes": 6401,
+        "sha256": "728ffdbac1a4b0edb44a8f34f26f912ac79d9c3bad0b5eb26c19b5102f788d5b"
+      },
+      {
+        "path": "tools/p09/runtime_record_envelope_v1.py",
+        "bytes": 3596,
+        "sha256": "59f4a0bc32f7c03dd1651b5e31f45ad7311fb4b8a36d6490b9b39242895337e5"
+      },
+      {
+        "path": "tools/p09/runtime_record_envelope_v2.py",
+        "bytes": 2891,
+        "sha256": "9a97c8c9c9a6281992430bfc224bbfea036da6d780389ac2777fbb403d62960f"
+      },
+      {
+        "path": "tools/p09/shared_metadata_frame_decoder_budget_v1.py",
+        "bytes": 7823,
+        "sha256": "fb9440e5c89ad684fda6d076a57a940fb2f44114c26d88051d272a4a60a609f6"
+      },
+      {
+        "path": "tools/p09/successor_preparation_workspace_v1.py",
+        "bytes": 9656,
+        "sha256": "003a0978b515c148d1a7f17ba53cdcab9eb77698535714216c90b53c868bbb98"
+      },
+      {
+        "path": "tools/p09/tests/test_native011_exact_read_budget.py",
+        "bytes": 14418,
+        "sha256": "af7dc6ebe2d8f3611f16643aabee57881d4816c780de55563e559e3c71cbc492"
+      },
+      {
+        "path": "tools/p09/tests/test_runtime_envelope_frame_connection_v1.py",
+        "bytes": 5268,
+        "sha256": "d0dfb0d14bd15d4ab9bb194ea4f8cd8e463f4aeb26f51e8a3526809f3e822f20"
+      },
+      {
+        "path": "tools/p09/tests/test_runtime_envelope_scope_binding_v1.py",
+        "bytes": 7518,
+        "sha256": "58dfca29574fdfd24017b7500df27b3b1cb3a3ec8adacccae4f9d086ce8af645"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-native011-current805-readonly-frame-construct008.v1.json",
+        "bytes": 114199,
+        "sha256": "06a88f8cdbe94ecb722f92414d42e9d39ea8c6b4ffd6b3721aba33ae969efc77"
+      },
+      {
+        "path": "implementation/p09/evidence/p09-361-native011-current805-metadata-tail-private-probe001.v1.json",
+        "bytes": 123014,
+        "sha256": "c2478645b6f1ac904a5c13acc02ec4e0828e287a29bfc00debaeb485a710a3cf"
+      },
+      {
+        "path": "tools/p09/native011_metadata_tail_probe.py",
+        "bytes": 8540,
+        "sha256": "0267548736a15d1d5a854cbe109c0c5f63ad2d7096a4e7212f1182fef5c4d177"
+      },
+      {
+        "path": "tools/p09/tests/test_native011_metadata_tail_probe.py",
+        "bytes": 2914,
+        "sha256": "ac3e1b11150d0c775fe481ad53be2424b24b9d39f3ba9a14e428c4d1c42759ad"
+      },
+      {
+        "path": "tools/p09/lossless_metadata_connection_v1.py",
+        "bytes": 15742,
+        "sha256": "6a29bb5b9a7eea25edab896b8fa32bd5425a7c567a3ee51a8428a2fb813f2524"
+      },
+      {
+        "path": "tools/p09/build_case112_current_stored.py",
+        "bytes": 24527,
+        "sha256": "366f35c2ec22fee9e2b5344402cd2ae79eb9bbc8e3c021e769024ffccd765faa"
+      },
+      {
+        "path": "CURRENT_STATE.md",
+        "bytes": 1205523,
+        "sha256": "a899c57c5a2d4a2011eb8662225636eda25ddeb1581a97da4aba0ff547b3a3cb"
+      },
+      {
+        "path": "implementation/p09/P09_VERIFICATION_WORKFLOW.md",
+        "bytes": 286561,
+        "sha256": "3daffa935498a0974a8cda30406cd00c2018f4f52c8d1ebbf84280b1c72fcf9a"
+      }
+    ],
+    "constructor_modeled_source_matches": 45,
+    "official_accepted_count": 158,
+    "accepted_count_delta": 0,
+    "next_case": 165,
+    "goal": "ACTIVE",
+    "P09_gate": "OPEN",
+    "actual_Native_or_product_qualified": false,
+    "next": "FRESH_READONLY008_FULL_METADATA_AND_TWO_NATIVE_BOUNDARIES_NOT_PRODUCT"
+  },
+  "goal": "ACTIVE",
+  "cleanup": true,
+  "elapsed_seconds": 22.78200000000652,
+  "source_pins": [
+    {
+      "path": "tools/p09/accept_case112_current_epoch.py",
+      "bytes": 20933,
+      "sha256": "03fa9362f56b6105b48b8b49599f32ccc8cbf4aa9d0b0836f3cf8580cc9c680c"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    {
+      "path": "tools/p09/borrowed_locked_streams.py",
+      "bytes": 7276,
+      "sha256": "7299572c1fc86a932e6df50891e3004dc94c0e635978c04d81a3f961571a3ae5"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/current_stored_native_bridge.py",
+      "bytes": 7987,
+      "sha256": "74e654c4bd1be0142cce7bc74c281727a1f738a6091270b9571062f0a98f8e6b"
+    },
+    {
+      "path": "tools/p09/current_stored_runtime_scope.py",
+      "bytes": 10087,
+      "sha256": "45f00274f99383c6d27fadea882614a3fd02ca19932bc8735618483f982d8841"
+    },
+    {
+      "path": "tools/p09/distinct_final_sample_guard_v1.py",
+      "bytes": 1683,
+      "sha256": "8c590aa82c2677d391d6d5781b356641f77c7cdc6e55370ca251d6a809ad67c3"
+    },
+    {
+      "path": "tools/p09/live_sql_evidence_reader.py",
+      "bytes": 2109,
+      "sha256": "0458552661a9f69379f41a78d15cdbf1b6c389ede78bed766dcd6616ac937ac7"
+    },
+    {
+      "path": "tools/p09/locked_runtime_inputs.py",
+      "bytes": 15465,
+      "sha256": "e7c40a2ec0367e01c359e3b89c179d45367e9db233348e76ba82364cc0599e14"
+    },
+    {
+      "path": "tools/p09/native011_scoped_test_runner.py",
+      "bytes": 6721,
+      "sha256": "fcbec20db2965d8fce995c57c6349d1b2a95334a28fba76754466c9ac9357364"
+    },
+    {
+      "path": "tools/p09/owned_cpu_baseline_v1.py",
+      "bytes": 1389,
+      "sha256": "0fce7a5f5700270291b02167e96c3739943d5a44c0a912eef43555a1a729b4b5"
+    },
+    {
+      "path": "tools/p09/owned_source_read_pressure.py",
+      "bytes": 902,
+      "sha256": "dba6d749e68b098fedf4e3202a0b4a2b9a0ba1c5cd893d81b0f148046435dc51"
+    },
+    {
+      "path": "tools/p09/owned_sql_job.py",
+      "bytes": 13850,
+      "sha256": "30b08c4d779494bbdb7579b9bb28782b4f4588fc69b931cc9d18af326d46b7a0"
+    },
+    {
+      "path": "tools/p09/packed_receipt_json.py",
+      "bytes": 5958,
+      "sha256": "2eca058b0989cf410809b23a7171fd0ca7ab82bf3e0784077fd08851143c01e6"
+    },
+    {
+      "path": "tools/p09/preparation_attributed_cpu_v1.py",
+      "bytes": 9869,
+      "sha256": "ddc1b48f17645337e65125373d9db822477ca6a94cc34e23992498e6c2c7d13d"
+    },
+    {
+      "path": "tools/p09/prepared_run_closure_v1.py",
+      "bytes": 23900,
+      "sha256": "c159da53076f5bb88dce252db163f82a1f1d71522c9dd248349ca615dc84e672"
+    },
+    {
+      "path": "tools/p09/receipt_compact_json.py",
+      "bytes": 2657,
+      "sha256": "a12d8114131ada0bf2058d16837a9f1a81fbff25adeccc8b18117b7669be7217"
+    },
+    {
+      "path": "tools/p09/runtime_input_frame.py",
+      "bytes": 5802,
+      "sha256": "44a21215a76f4160ca7bfeb55b02f3bb464a2017671b0c2dae9883d7c9cd8929"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_metadata_tail_candidate.py",
+      "bytes": 13673,
+      "sha256": "9859c08424e37fdae7005e5f913d1bbdbd639208568358c59f5427ca454f391c"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_metadata_tail_connection.py",
+      "bytes": 6261,
+      "sha256": "d06be29f4f61d3676556a41e0829387b1bd62fda2b050678f80c39c2c79e4aab"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_readonly_frame_driver.py",
+      "bytes": 11592,
+      "sha256": "21b25603ad387af9cd5bbe8db1d598b2e9ddffc1154f379001cdadc17b36cc9f"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_readonly_frame_owned.py",
+      "bytes": 14584,
+      "sha256": "3cb2172b7037f7379f553b6e8009683b945cfc4dc42c8896cfb8f7ac41e13c60"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_readonly_frame_projection.py",
+      "bytes": 1471,
+      "sha256": "30a714e6fb2eee741719d0acaf13f695d7caae1c30a546a14bc3c0e46284f77d"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_ready_native_construction.py",
+      "bytes": 2050,
+      "sha256": "eccd37cc7de2008116c3ffd1efaa732c703a45c042dc4f090627ad247f7f2da9"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_ready_scope_connection.py",
+      "bytes": 7591,
+      "sha256": "e053f84ee3322954d2320c1a178da3550048e8c2934ec42d83405c2afcbf0f7b"
+    },
+    {
+      "path": "tools/p09/weighted_audit_io.py",
+      "bytes": 3819,
+      "sha256": "c1e15f4cd21382c20c41439aef89a6af468e55dbb49d218b3f6c604c91ce03ca"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-metadata-tail-readonly8-final-sync308.child.v1.json",
+      "bytes": 11576,
+      "sha256": "2a18826d01f856e5b0aea1ab4a00d31904f37a2e2c5f25f2b35cb65efa1756d5"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-metadata-tail-readonly8-models306.v1.json",
+      "bytes": 35001,
+      "sha256": "04548834aba826d0c5a9d586f5f2fb4d139a2e4aeaaa2539e3ec2b744d184473"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-metadata-tail-readonly8-models306.child.v1.json",
+      "bytes": 18469,
+      "sha256": "a5896b951fba845ee19fa554d824b797ebe3667041bf1a8a5b287cc15e2a5507"
+    },
+    {
+      "path": "tools/p09/fresh_lossless_metadata_reader_v1.py",
+      "bytes": 9403,
+      "sha256": "aa312b81bb93f1eb800e281b4273abfd06894ea4f5d1f39b0b183295efc39208"
+    },
+    {
+      "path": "tools/p09/held_envelope_boundary_guard_v1.py",
+      "bytes": 1809,
+      "sha256": "a65cd3c4c091e4e94b27b4d0474b2eafaf3fe2c4ac0682d7d95fa11c4d32e884"
+    },
+    {
+      "path": "tools/p09/native011_chunk_join_connection.py",
+      "bytes": 7072,
+      "sha256": "0be0f3c8f94d01b009c3e31b8c7cc984d31958967d0611d831ed750a993ab1b8"
+    },
+    {
+      "path": "tools/p09/native011_current_epoch_owned_audit.py",
+      "bytes": 7577,
+      "sha256": "9db0e5d0eec913904fcd2c6e783dfc33dea1b1b1738469e2208368627cd0d627"
+    },
+    {
+      "path": "tools/p09/native011_exact_read_budget.py",
+      "bytes": 14847,
+      "sha256": "6f44d4d925649eaabb8cf42ac808b4fd772181dec8584acce7ee019376b787ea"
+    },
+    {
+      "path": "tools/p09/native011_metadata_tail_candidate.py",
+      "bytes": 6568,
+      "sha256": "9196d642e20722f04dbb24cef7e0dce1ddd60d09827b652a3ff84a8229fce381"
+    },
+    {
+      "path": "tools/p09/native011_metadata_tail_connection.py",
+      "bytes": 5528,
+      "sha256": "9e725fc7fe11a3ca7165daf762968bee2032cf625ace8195c3a0eac3ca3a34db"
+    },
+    {
+      "path": "tools/p09/native011_readonly_frame_driver.py",
+      "bytes": 18757,
+      "sha256": "55b593f55f674ea7bc1190c892bec5cb0f34056b446afc5edd51a1de720a8051"
+    },
+    {
+      "path": "tools/p09/native011_readonly_frame_owned.py",
+      "bytes": 18674,
+      "sha256": "ed5f659caf4c6687434b5f44828f8a85f716c33e0d6ab903bbf7d09f0eb559f4"
+    },
+    {
+      "path": "tools/p09/native011_ready_scope_connection.py",
+      "bytes": 13232,
+      "sha256": "b4442d1249722008a44ec725b2bb195019177c1f59772197d597863cba426a7e"
+    },
+    {
+      "path": "tools/p09/owned_input_read_pressure.py",
+      "bytes": 3485,
+      "sha256": "100666115a569ac650a5ea87d1e60ba918402bdedff76216b5b581cc8e962783"
+    },
+    {
+      "path": "tools/p09/reusable_audit_chunk_v1.py",
+      "bytes": 8088,
+      "sha256": "1aa1db74585cbdf50df32ac0c9dc07dfd31557fc37647ca6e6ea3969fbb60e75"
+    },
+    {
+      "path": "tools/p09/runtime_envelope_frame_connection_v1.py",
+      "bytes": 3065,
+      "sha256": "579aa5fb2e0d479077cf965c1dd449ab9fc48305bff9ea52a37bfb0f2688b4e5"
+    },
+    {
+      "path": "tools/p09/runtime_envelope_namespace_bundle_v1.py",
+      "bytes": 3320,
+      "sha256": "385778d26e0c5d99ac6d38ccaeb6afd24bb4029e01b4a6e91683cb80e5e2da62"
+    },
+    {
+      "path": "tools/p09/runtime_envelope_physical_io_v1.py",
+      "bytes": 7214,
+      "sha256": "b3bf5637c1f5d13bf9090236274826440e4c6c543b6db219a95b0869919c324c"
+    },
+    {
+      "path": "tools/p09/runtime_envelope_scope_binding_v1.py",
+      "bytes": 10750,
+      "sha256": "0105881d365213e70bd047b5c7fa8de6fda842f3103b71870c8f2224b3e4db3b"
+    },
+    {
+      "path": "tools/p09/runtime_envelope_source_projection_v1.py",
+      "bytes": 6401,
+      "sha256": "728ffdbac1a4b0edb44a8f34f26f912ac79d9c3bad0b5eb26c19b5102f788d5b"
+    },
+    {
+      "path": "tools/p09/runtime_record_envelope_v1.py",
+      "bytes": 3596,
+      "sha256": "59f4a0bc32f7c03dd1651b5e31f45ad7311fb4b8a36d6490b9b39242895337e5"
+    },
+    {
+      "path": "tools/p09/runtime_record_envelope_v2.py",
+      "bytes": 2891,
+      "sha256": "9a97c8c9c9a6281992430bfc224bbfea036da6d780389ac2777fbb403d62960f"
+    },
+    {
+      "path": "tools/p09/shared_metadata_frame_decoder_budget_v1.py",
+      "bytes": 7823,
+      "sha256": "fb9440e5c89ad684fda6d076a57a940fb2f44114c26d88051d272a4a60a609f6"
+    },
+    {
+      "path": "tools/p09/successor_preparation_workspace_v1.py",
+      "bytes": 9656,
+      "sha256": "003a0978b515c148d1a7f17ba53cdcab9eb77698535714216c90b53c868bbb98"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_exact_read_budget.py",
+      "bytes": 14418,
+      "sha256": "af7dc6ebe2d8f3611f16643aabee57881d4816c780de55563e559e3c71cbc492"
+    },
+    {
+      "path": "tools/p09/tests/test_runtime_envelope_frame_connection_v1.py",
+      "bytes": 5268,
+      "sha256": "d0dfb0d14bd15d4ab9bb194ea4f8cd8e463f4aeb26f51e8a3526809f3e822f20"
+    },
+    {
+      "path": "tools/p09/tests/test_runtime_envelope_scope_binding_v1.py",
+      "bytes": 7518,
+      "sha256": "58dfca29574fdfd24017b7500df27b3b1cb3a3ec8adacccae4f9d086ce8af645"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-readonly-frame-construct008.v1.json",
+      "bytes": 114199,
+      "sha256": "06a88f8cdbe94ecb722f92414d42e9d39ea8c6b4ffd6b3721aba33ae969efc77"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-metadata-tail-private-probe001.v1.json",
+      "bytes": 123014,
+      "sha256": "c2478645b6f1ac904a5c13acc02ec4e0828e287a29bfc00debaeb485a710a3cf"
+    },
+    {
+      "path": "tools/p09/native011_metadata_tail_probe.py",
+      "bytes": 8540,
+      "sha256": "0267548736a15d1d5a854cbe109c0c5f63ad2d7096a4e7212f1182fef5c4d177"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_metadata_tail_probe.py",
+      "bytes": 2914,
+      "sha256": "ac3e1b11150d0c775fe481ad53be2424b24b9d39f3ba9a14e428c4d1c42759ad"
+    },
+    {
+      "path": "tools/p09/lossless_metadata_connection_v1.py",
+      "bytes": 15742,
+      "sha256": "6a29bb5b9a7eea25edab896b8fa32bd5425a7c567a3ee51a8428a2fb813f2524"
+    },
+    {
+      "path": "tools/p09/build_case112_current_stored.py",
+      "bytes": 24527,
+      "sha256": "366f35c2ec22fee9e2b5344402cd2ae79eb9bbc8e3c021e769024ffccd765faa"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 1205523,
+      "sha256": "a899c57c5a2d4a2011eb8662225636eda25ddeb1581a97da4aba0ff547b3a3cb"
+    },
+    {
+      "path": "implementation/p09/P09_VERIFICATION_WORKFLOW.md",
+      "bytes": 286561,
+      "sha256": "3daffa935498a0974a8cda30406cd00c2018f4f52c8d1ebbf84280b1c72fcf9a"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-18T00:21:21.860046+00:00",
+      "system_cpu_percent": 5.11,
+      "available_ram_mib": 8219.0,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.79648239203717,
+      "commit_used_percent": 50.508102533374114,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.890625,
+      "parent_private_percent": 0.046736333882799935
+    },
+    {
+      "time_utc": "2026-10-18T00:21:22.360343+00:00",
+      "system_cpu_percent": 4.79,
+      "available_ram_mib": 8230.55,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.832748413974556,
+      "commit_used_percent": 50.5004748000371,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.890625,
+      "parent_private_percent": 0.046736333882799935
+    },
+    {
+      "time_utc": "2026-10-18T00:21:22.848289+00:00",
+      "system_cpu_percent": 2.16,
+      "available_ram_mib": 8222.68,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.80803161200506,
+      "commit_used_percent": 50.502771321902,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 15.0078125,
+      "parent_private_percent": 0.04710414343591746
+    },
+    {
+      "time_utc": "2026-10-18T00:21:23.350636+00:00",
+      "system_cpu_percent": 2.93,
+      "available_ram_mib": 8227.02,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.82167734642572,
+      "commit_used_percent": 50.49905119081982,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 15.0078125,
+      "parent_private_percent": 0.04710414343591746
+    },
+    {
+      "time_utc": "2026-10-18T00:21:23.849035+00:00",
+      "system_cpu_percent": 0.98,
+      "available_ram_mib": 8224.33,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.813217726704014,
+      "commit_used_percent": 50.49934411452708,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 15.0078125,
+      "parent_private_percent": 0.04710414343591746
+    },
+    {
+      "time_utc": "2026-10-18T00:21:24.352132+00:00",
+      "system_cpu_percent": 1.37,
+      "available_ram_mib": 8229.99,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.830995188438028,
+      "commit_used_percent": 50.51094389333453,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 15.0078125,
+      "parent_private_percent": 0.04710414343591746
+    },
+    {
+      "time_utc": "2026-10-18T00:21:24.865226+00:00",
+      "system_cpu_percent": 12.31,
+      "available_ram_mib": 8181.98,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.68029135420734,
+      "commit_used_percent": 50.5721356557809,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:25.370420+00:00",
+      "system_cpu_percent": 7.03,
+      "available_ram_mib": 8194.86,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.72071362409496,
+      "commit_used_percent": 50.555069920596,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:25.885108+00:00",
+      "system_cpu_percent": 1.7,
+      "available_ram_mib": 8194.24,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.718776493781874,
+      "commit_used_percent": 50.5510627242807,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:26.385767+00:00",
+      "system_cpu_percent": 1.56,
+      "available_ram_mib": 8196.39,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.7255319292408,
+      "commit_used_percent": 50.552181692842424,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:26.890456+00:00",
+      "system_cpu_percent": 6.44,
+      "available_ram_mib": 8196.55,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.72602234197829,
+      "commit_used_percent": 50.54912356933865,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:27.391577+00:00",
+      "system_cpu_percent": 1.95,
+      "available_ram_mib": 8198.32,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.731576266230363,
+      "commit_used_percent": 50.548625599036306,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:27.892743+00:00",
+      "system_cpu_percent": 0.78,
+      "available_ram_mib": 8197.3,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.72837632311824,
+      "commit_used_percent": 50.548080760940806,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:28.394255+00:00",
+      "system_cpu_percent": 0.98,
+      "available_ram_mib": 8198.52,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.7322138027891,
+      "commit_used_percent": 50.54796944993205,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:28.908986+00:00",
+      "system_cpu_percent": 0.57,
+      "available_ram_mib": 8197.7,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.729651396235713,
+      "commit_used_percent": 50.5474187533624,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:29.409536+00:00",
+      "system_cpu_percent": 6.64,
+      "available_ram_mib": 8199.09,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.73400380928094,
+      "commit_used_percent": 50.550154660788195,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:29.923754+00:00",
+      "system_cpu_percent": 0.38,
+      "available_ram_mib": 8199.56,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.73547504749341,
+      "commit_used_percent": 50.55116231834116,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:30.424904+00:00",
+      "system_cpu_percent": 1.17,
+      "available_ram_mib": 8205.91,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.75541032527238,
+      "commit_used_percent": 50.551759882703976,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:30.926387+00:00",
+      "system_cpu_percent": 4.1,
+      "available_ram_mib": 8192.6,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.71362716003823,
+      "commit_used_percent": 50.57630103089812,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:31.439459+00:00",
+      "system_cpu_percent": 3.03,
+      "available_ram_mib": 8197.91,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.73028893279445,
+      "commit_used_percent": 50.57517620386225,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:31.940927+00:00",
+      "system_cpu_percent": 2.15,
+      "available_ram_mib": 8193.3,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.715821757038494,
+      "commit_used_percent": 50.570266802528586,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:32.443027+00:00",
+      "system_cpu_percent": 1.95,
+      "available_ram_mib": 8197.04,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.727554881782943,
+      "commit_used_percent": 50.568157751836324,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:32.947762+00:00",
+      "system_cpu_percent": 0.2,
+      "available_ram_mib": 8193.99,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.71799183340189,
+      "commit_used_percent": 50.56651152060153,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:33.450241+00:00",
+      "system_cpu_percent": 14.39,
+      "available_ram_mib": 8181.48,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.67873429376581,
+      "commit_used_percent": 50.59723335901884,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:33.964556+00:00",
+      "system_cpu_percent": 10.35,
+      "available_ram_mib": 8189.52,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.703966029109672,
+      "commit_used_percent": 50.579827832333514,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:34.464572+00:00",
+      "system_cpu_percent": 3.12,
+      "available_ram_mib": 8201.37,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.741163835248294,
+      "commit_used_percent": 50.55441377149174,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:34.966127+00:00",
+      "system_cpu_percent": 2.08,
+      "available_ram_mib": 8198.65,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.73261839329753,
+      "commit_used_percent": 50.53806277015255,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.94921875,
+      "parent_private_percent": 0.0469202386593587
+    },
+    {
+      "time_utc": "2026-10-18T00:21:35.607133+00:00",
+      "system_cpu_percent": 2.18,
+      "available_ram_mib": 8225.3,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.816258285676454,
+      "commit_used_percent": 50.496385585083765,
+      "parent_cpu_machine_percent": 0.15258789062166933,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:36.107437+00:00",
+      "system_cpu_percent": 1.95,
+      "available_ram_mib": 8223.96,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.812052996452476,
+      "commit_used_percent": 50.50456401499043,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:36.595400+00:00",
+      "system_cpu_percent": 5.21,
+      "available_ram_mib": 8226.27,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.81931110496733,
+      "commit_used_percent": 50.506139944535484,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:37.098540+00:00",
+      "system_cpu_percent": 2.93,
+      "available_ram_mib": 8224.55,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.8139043045365,
+      "commit_used_percent": 50.49738152568844,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:37.596803+00:00",
+      "system_cpu_percent": 5.89,
+      "available_ram_mib": 8227.4,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.822866597314132,
+      "commit_used_percent": 50.49558883260002,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:38.117654+00:00",
+      "system_cpu_percent": 1.66,
+      "available_ram_mib": 8225.95,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.818293498537038,
+      "commit_used_percent": 50.49420037422761,
+      "parent_cpu_machine_percent": 0.18925629844841685,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:38.611839+00:00",
+      "system_cpu_percent": 2.41,
+      "available_ram_mib": 8227.21,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.82225358139227,
+      "commit_used_percent": 50.49289393449324,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:39.112018+00:00",
+      "system_cpu_percent": 0.78,
+      "available_ram_mib": 8226.96,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.82148118133072,
+      "commit_used_percent": 50.49252485062209,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:39.631377+00:00",
+      "system_cpu_percent": 1.33,
+      "available_ram_mib": 8227.16,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.82210645757102,
+      "commit_used_percent": 50.49729950705041,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:40.132846+00:00",
+      "system_cpu_percent": 0.59,
+      "available_ram_mib": 8226.8,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.820978508274795,
+      "commit_used_percent": 50.49717647909336,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:40.630891+00:00",
+      "system_cpu_percent": 1.17,
+      "available_ram_mib": 8227.83,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.82420297202379,
+      "commit_used_percent": 50.497018300291444,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:41.131327+00:00",
+      "system_cpu_percent": 2.28,
+      "available_ram_mib": 8234.24,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.84432215457932,
+      "commit_used_percent": 50.508202127434586,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:41.630918+00:00",
+      "system_cpu_percent": 9.15,
+      "available_ram_mib": 8225.75,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.81766822229674,
+      "commit_used_percent": 50.512320634758645,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:42.132156+00:00",
+      "system_cpu_percent": 2.94,
+      "available_ram_mib": 8229.42,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.829192921627754,
+      "commit_used_percent": 50.50266586936739,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:42.634808+00:00",
+      "system_cpu_percent": 2.87,
+      "available_ram_mib": 8228.43,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.826103321381567,
+      "commit_used_percent": 50.501171958460375,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:43.126758+00:00",
+      "system_cpu_percent": 3.22,
+      "available_ram_mib": 8226.45,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.819862819297004,
+      "commit_used_percent": 50.50277718037615,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:43.627030+00:00",
+      "system_cpu_percent": 1.37,
+      "available_ram_mib": 8232.94,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.840239468539718,
+      "commit_used_percent": 50.497041734188024,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    },
+    {
+      "time_utc": "2026-10-18T00:21:44.132970+00:00",
+      "system_cpu_percent": 1.33,
+      "available_ram_mib": 8224.56,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.813941085491813,
+      "commit_used_percent": 50.49994167888988,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.84765625,
+      "parent_private_percent": 0.04660147037999018
+    }
+  ]
+}

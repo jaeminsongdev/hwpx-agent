@@ -716,3 +716,7 @@ fn assert_manifest_error<T>(result: Result<T, ExecutionManifestError>, expected:
 fn assert_state_error(result: Result<(), StateMachineError>, expected: &str) {
     assert_eq!(result.err().map(StateMachineError::code), Some(expected));
 }
+#[path="support/bytes_transaction.rs"]mod bytes_v1;
+#[path="support/unknown_cas_transaction.rs"]mod unknown_cas;
+#[path="support/prepared_precommit.rs"]mod prepared_precommit;
+#[path="support/archived_manifest.rs"]mod archived_manifest;

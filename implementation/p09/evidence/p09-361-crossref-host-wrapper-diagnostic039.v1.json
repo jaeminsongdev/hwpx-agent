@@ -1,0 +1,279 @@
+{
+  "state": "OBSERVED_EXACT_READONLY_WRAPPER_FAILURE_DIAGNOSTIC_NOT_NATIVE_PASS",
+  "steps": [
+    {
+      "stage": "wrapper_diagnostic",
+      "exit_code": 1,
+      "cleanup": true,
+      "stdout_bytes": 0,
+      "stderr_bytes": 462,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e81bbc5ea6edaf715cc34afb154304429cf70089fb9ad0fd014854043208b299",
+      "safe_PS_codes": [
+        "P09_XREF_BIND_TEST_CHANNEL_WRAPPER_FINISH_ONCE",
+        "P09_XREF_BIND_T"
+      ],
+      "PS_source_line_numbers": [],
+      "safe_PS_property_names": [],
+      "diagnostics": [],
+      "locations": [],
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 1.406,
+          "peak_job_private_mib": 71.88,
+          "peak_job_private_percent": 0.2255898592454142,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 6.4539999999979045
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "failed_source_snapshots": [
+    {
+      "path": "implementation/p09/tools/crossref-host-channel.ps1",
+      "utf8": "# Private bounded checkpoint channel. A reply never grants native authority.\n# No process/COM creation, retry, prompt timeout or force kill in this module.\nSet-StrictMode -Version Latest\n\nfunction New-P09XrefHostChannel {\n    param([Parameter(Mandatory)][IO.TextReader]$InputReader,[Parameter(Mandatory)][IO.TextWriter]$OutputWriter)\n    return [ordered]@{input=$InputReader;output=$OutputWriter;sequence=0;case_index=1;\n        failed=$false;finish_attempted=$false;error_code=$null;cleanup_error_code=$null}\n}\n\nfunction Read-P09XrefBoundedHostReply($Channel) {\n    $buffer=[Text.StringBuilder]::new()\n    for ($i=0;$i -le 4096;$i++) {\n        $value=$Channel.input.Read()\n        Assert-P09XrefBinding ($value -ge 0) 'HOST_REPLY_EOF'\n        if ($value -eq 10) {\n            $text=$buffer.ToString().TrimEnd([char]13)\n            Assert-P09XrefBinding ([Text.Encoding]::UTF8.GetByteCount($text) -le 4096) 'HOST_REPLY_BYTES'\n            return $text\n        }\n        [void]$buffer.Append([char]$value)\n    }\n    throw 'P09_XREF_BIND_HOST_REPLY_LIMIT'\n}\n\nfunction Invoke-P09XrefHostMessage {\n    param([Parameter(Mandatory)]$Channel,[Parameter(Mandatory)][int]$CaseIndex,\n        [Parameter(Mandatory)][ValidateSet('checkpoint','admit_owner','finish')][string]$Operation,\n        [string]$Step,$Owner,[ValidateSet('returned','failed')][string]$CaseStatus)\n    Assert-P09XrefBinding ($CaseIndex -ge 1 -and $CaseIndex -le 8 -and $Channel.case_index -eq $CaseIndex -and\n        -not $Channel.finish_attempted) 'HOST_CASE_ORDER_OR_FINISHED'\n    Assert-P09XrefBinding (-not $Channel.failed -or ($Operation -ceq 'finish' -and $CaseStatus -ceq 'failed')) 'HOST_STOP_LATCHED'\n    if ($Operation -ceq 'finish') {$Channel.finish_attempted=$true}\n    $Channel.sequence++ # Uncertain write/read never reuses a sequence or retries.\n    $request=[ordered]@{schema_version='hwpx-agent.private.crossref-host-request/v1';\n        sequence=$Channel.sequence;case_index=$CaseIndex;operation=$Operation}\n    try {\n        switch -CaseSensitive ($Operation) {\n            'checkpoint' {\n                Assert-P09XrefBinding ($Step -cin (Get-P09XrefCaseFlowSteps)) 'HOST_FIXED_STEP'\n                $request.step=$Step\n            }\n            'admit_owner' {\n                Assert-P09XrefBinding ($null -ne $Owner.identity -and $null -ne $Owner.window) 'HOST_OWNER_REQUIRED'\n                $request.identity=$Owner.identity;$request.window_handle=[int]$Owner.window.WindowHandle\n            }\n            'finish' {$request.case_status=$CaseStatus}\n        }\n        $wire=$request | ConvertTo-Json -Depth 8 -Compress\n        Assert-P09XrefBinding ([Text.Encoding]::UTF8.GetByteCount($wire) -le 4096) 'HOST_REQUEST_BYTES'\n        $Channel.output.WriteLine($wire);$Channel.output.Flush()\n        $text=Read-P09XrefBoundedHostReply $Channel\n        $reply=$text | ConvertFrom-Json\n        $keys=@('schema_version','sequence','case_index','acknowledged','error_code','native_execution_authorized','p09_complete')\n        Assert-P09XrefBinding (@($reply.PSObject.Properties).Count -eq $keys.Count) 'HOST_REPLY_SCHEMA'\n        foreach ($key in $keys) {Assert-P09XrefBinding ($key -cin @($reply.PSObject.Properties.Name)) 'HOST_REPLY_KEY'}\n        Assert-P09XrefBinding ($reply.schema_version -ceq 'hwpx-agent.private.crossref-host-response/v1' -and\n            $reply.sequence -is [int] -and $reply.sequence -eq $Channel.sequence -and\n            $reply.case_index -is [int] -and $reply.case_index -eq $CaseIndex -and\n            $reply.acknowledged -is [bool] -and $reply.native_execution_authorized -is [bool] -and\n            -not $reply.native_execution_authorized -and $reply.p09_complete -is [bool] -and -not $reply.p09_complete -and\n            (($reply.acknowledged -and $null -eq $reply.error_code) -or\n            (-not $reply.acknowledged -and $reply.error_code -is [string] -and\n                $reply.error_code -cmatch '^(XREF_HOST_|XREF_NATIVE_LIMITS_|STOP_|P09_XREF_|P58_)[A-Z_]{1,120}$'))) 'HOST_REPLY_BINDING'\n        $canonical=[ordered]@{}\n        foreach ($key in $keys) {$canonical[$key]=$reply.$key}\n        # Reject duplicate keys, alternative/coerced values and noncanonical parser ambiguities.\n        Assert-P09XrefBinding ($text -ceq ($canonical | ConvertTo-Json -Depth 4 -Compress)) 'HOST_REPLY_CANONICAL'\n        if (-not $reply.acknowledged) {\n            if ($null -eq $Channel.error_code) {$Channel.error_code=$reply.error_code}\n            throw 'P09_XREF_BIND_HOST_DENIED'\n        }\n        if ($Operation -ceq 'finish' -and $CaseStatus -ceq 'returned') {\n            $Channel.case_index++;$Channel.finish_attempted=$false\n        }\n    } catch {\n        $Channel.failed=$true\n        if ($Operation -ceq 'finish') {$Channel.cleanup_error_code='P09_XREF_BIND_HOST_FINISH_FAILED'}\n        throw\n    }\n}\n\nfunction Invoke-P09XrefHostBoundCase {\n    param([Parameter(Mandatory)]$Channel,[Parameter(Mandatory)][int]$CaseIndex,\n        [Parameter(Mandatory)]$ProbeLease,[Parameter(Mandatory)][System.Collections.IDictionary]$FlowRecord)\n    $status='failed'\n    try {\n        $state=New-P09XrefNativeCaseState $CaseIndex $ProbeLease `\n            {param($step,$s) Invoke-P09XrefHostMessage $Channel $s.case_index 'checkpoint' -Step $step} `\n            {param($owner,$s) Invoke-P09XrefHostMessage $Channel $s.case_index 'admit_owner' -Owner $owner}\n        Invoke-P09XrefNativeCaseWorkflow $state $FlowRecord\n        if ($null -eq $FlowRecord.error_code -and $null -eq $FlowRecord.cleanup_error_code -and $FlowRecord.steps.Count -eq 16) {\n            $status='returned'\n        }\n    } catch {\n        $FlowRecord.error_code='P09_XREF_BIND_HOST_CASE_FAILED_NO_RAW_VALUES'\n    } finally {\n        $FlowRecord.host_finish_error_code=$null\n        try {Invoke-P09XrefHostMessage $Channel $CaseIndex 'finish' -CaseStatus $status}\n        catch {$FlowRecord.host_finish_error_code='P09_XREF_BIND_HOST_FINISH_FAILED'}\n        $FlowRecord.native_execution_authorized=$false;$FlowRecord.p09_complete=$false;$FlowRecord.accepted_count_delta=0\n    }\n}\n"
+    },
+    {
+      "path": "implementation/p09/tools/test-crossref-host-channel.ps1",
+      "utf8": "# Fixed readonly pipe qualification. Parent must deny the FIRST preparation checkpoint.\n# This driver never selects a native entry or calls a native session step directly.\n[CmdletBinding()]\nparam([switch]$PortDenial,[switch]$WrapperOnly)\nSet-StrictMode -Version Latest\n$ErrorActionPreference='Stop';$ProgressPreference='SilentlyContinue'\n[Console]::OutputEncoding=[Text.UTF8Encoding]::new($false)\n[Console]::InputEncoding=[Text.UTF8Encoding]::new($false)\nforeach ($name in @('sdk-baseline-owned-session','crossref-owned-active-source','crossref-owned-artifact',\n    'crossref-save-reopen','crossref-sdk-insertion','crossref-stage-probe','crossref-case-flow','crossref-native-case-ports','crossref-host-channel')) {\n    . (Join-Path $PSScriptRoot ($name+'.ps1'))\n}\nfunction Assert-P09XrefChannelReject([scriptblock]$Body) {\n    $failed=$false;try {& $Body} catch {$failed=$true}\n    Assert-P09XrefBinding $failed 'TEST_CHANNEL_EXPECTED_REJECT'\n}\nif ($WrapperOnly) {\n    Assert-P09XrefBinding (-not $PortDenial) 'TEST_CHANNEL_ONE_READONLY_MODE'\n    # Fixed in-memory DENIAL, never external input: this cannot authorize a slot/session.\n    $deny='{\"schema_version\":\"hwpx-agent.private.crossref-host-response/v1\",\"sequence\":1,\"case_index\":1,\"acknowledged\":false,\"error_code\":\"XREF_HOST_TEST_WRAPPER_DENIED\",\"native_execution_authorized\":false,\"p09_complete\":false}'\n    $finish='{\"schema_version\":\"hwpx-agent.private.crossref-host-response/v1\",\"sequence\":2,\"case_index\":1,\"acknowledged\":true,\"error_code\":null,\"native_execution_authorized\":false,\"p09_complete\":false}'\n    $reader=[IO.StringReader]::new($deny+\"`n\"+$finish+\"`n\");$writer=[IO.StringWriter]::new();$lease=$null\n    try {\n        $channel=New-P09XrefHostChannel $reader $writer;$lease=New-P09XrefProbeLease;$record=[ordered]@{}\n        Invoke-P09XrefHostBoundCase $channel 1 $lease $record\n        Assert-P09XrefBinding ($record.error_code -ceq 'P09_XREF_BIND_HOST_DENIED' -and $record.phase -ceq 'prepare_slot' -and\n            $record.steps.Count -eq 1 -and $record.cleanup_callback_returned -and $null -eq $record.cleanup_error_code -and\n            $null -eq $record.host_finish_error_code -and $channel.sequence -eq 2 -and $channel.finish_attempted -and\n            $channel.error_code -ceq 'XREF_HOST_TEST_WRAPPER_DENIED' -and -not $record.native_execution_attested -and\n            -not $record.native_execution_authorized -and -not $record.p09_complete -and\n            -not (Test-Path -LiteralPath (Split-Path -Parent (Get-P09XrefCaseArtifactPath 1 'opened'))) -and\n            $null -eq ('P58OwnedWindowProcess' -as [type])) 'TEST_CHANNEL_ACTUAL_WRAPPER_CLOSED_BEFORE_SLOT'\n        $sent=@($writer.ToString().Split([char]10,[StringSplitOptions]::RemoveEmptyEntries) | ForEach-Object {$_ | ConvertFrom-Json})\n        Assert-P09XrefBinding ($sent.Count -eq 2 -and $sent[0].operation -ceq 'checkpoint' -and\n            $sent[0].step -ceq 'prepare_slot' -and $sent[1].operation -ceq 'finish' -and\n            $sent[1].case_status -ceq 'failed') 'TEST_CHANNEL_WRAPPER_FINISH_ONCE'\n        [ordered]@{schema_version='hwpx-agent.private.crossref-host-channel-contract-result/v1';\n            state='one_actual_host_bound_wrapper_denial_contract_pass_not_native';passed=1;failed=0;\n            fixed_denial_not_external_input=$true;native_directory_created=$false;actual_Hangul_or_COM=$false;\n            native_execution_authorized=$false;p09_complete=$false} | ConvertTo-Json -Compress\n    } finally {\n        if ($null -ne $lease) {Close-P09XrefProbeLease $lease}\n        $reader.Dispose();$writer.Dispose()\n    }\n    exit 0\n}\nif (-not $PortDenial) {\n    $passed=0\n    $reply='{\"schema_version\":\"hwpx-agent.private.crossref-host-response/v1\",\"sequence\":1,\"case_index\":1,\"acknowledged\":true,\"error_code\":null,\"native_execution_authorized\":false,\"p09_complete\":false}'\n    foreach ($text in @($reply.Replace('\"sequence\":1','\"sequence\":2'),\n        $reply.Replace('\"native_execution_authorized\":false','\"native_execution_authorized\":true'),\n        $reply.Replace('\"acknowledged\":true','\"acknowledged\":1'),\n        $reply.Replace('\"acknowledged\":true','\"acknowledged\":false,\"acknowledged\":true'),\n        $reply.Replace('\"case_index\":1','\"case_index\":true'),('x'*4097),'')) {\n        $reader=[IO.StringReader]::new($text+\"`n\");$writer=[IO.StringWriter]::new()\n        try {\n            $channel=New-P09XrefHostChannel $reader $writer\n            Assert-P09XrefChannelReject {Invoke-P09XrefHostMessage $channel 1 'checkpoint' -Step 'prepare_slot'}\n            Assert-P09XrefBinding ($channel.failed -and $channel.sequence -eq 1) 'TEST_CHANNEL_FAILURE_LATCHED'\n            $before=$writer.ToString()\n            Assert-P09XrefChannelReject {Invoke-P09XrefHostMessage $channel 1 'checkpoint' -Step 'prepare_slot'}\n            Assert-P09XrefBinding ($writer.ToString() -ceq $before) 'TEST_CHANNEL_NO_RETRY_WRITE'\n        } finally {$reader.Dispose();$writer.Dispose()}\n    }\n    $passed++\n    $reader=[IO.StringReader]::new($reply+\"`n\");$writer=[IO.StringWriter]::new()\n    try {\n        $channel=New-P09XrefHostChannel $reader $writer\n        Invoke-P09XrefHostMessage $channel 1 'checkpoint' -Step 'prepare_slot'\n        Assert-P09XrefBinding (-not $channel.failed -and $channel.sequence -eq 1) 'TEST_CHANNEL_ACK_NOT_AUTHORITY'\n        $wire=$writer.ToString().Trim() | ConvertFrom-Json\n        Assert-P09XrefBinding ($wire.operation -ceq 'checkpoint' -and $wire.step -ceq 'prepare_slot' -and\n            @($wire.PSObject.Properties).Count -eq 5) 'TEST_CHANNEL_FIXED_OUTBOUND'\n    } finally {$reader.Dispose();$writer.Dispose()}\n    $passed++\n    [ordered]@{schema_version='hwpx-agent.private.crossref-host-channel-contract-result/v1';\n        state='two_ps_channel_contracts_pass_not_native';passed=$passed;failed=0;\n        actual_Hangul_or_COM=$false;native_execution_authorized=$false;p09_complete=$false} | ConvertTo-Json -Compress\n    exit 0\n}\n$lease=$null\ntry {\n    $channel=New-P09XrefHostChannel ([Console]::In) ([Console]::Out)\n    $lease=New-P09XrefProbeLease\n    $record=[ordered]@{}\n    $state=New-P09XrefNativeCaseState 1 $lease `\n        {param($step,$s)\n            Invoke-P09XrefHostMessage $channel $s.case_index 'checkpoint' -Step $step\n            # Even a malicious positive reply cannot let this TEST create a slot/session.\n            throw 'STOP_TEST_PARENT_MUST_DENY_BEFORE_SLOT'\n        } {throw 'STOP_TEST_NATIVE_ADMISSION_MUST_NOT_REACH'}\n    Invoke-P09XrefNativeCaseWorkflow $state $record\n    Invoke-P09XrefHostMessage $channel 1 'finish' -CaseStatus 'failed'\n    Assert-P09XrefBinding ($record.error_code -ceq 'P09_XREF_BIND_HOST_DENIED' -and $record.phase -ceq 'prepare_slot' -and\n        $record.steps.Count -eq 1 -and $record.cleanup_callback_returned -and $null -eq $record.cleanup_error_code -and\n        $channel.sequence -eq 2 -and $channel.failed -and\n        $channel.finish_attempted -and -not $record.native_execution_attested -and -not $record.p09_complete -and\n        -not (Test-Path -LiteralPath (Split-Path -Parent (Get-P09XrefCaseArtifactPath 1 'opened'))) -and\n        $null -eq ('P58OwnedWindowProcess' -as [type])) 'TEST_CHANNEL_ACTUAL_PORTS_STOPPED_BEFORE_SLOT'\n    [ordered]@{schema_version='hwpx-agent.private.crossref-host-channel-contract-result/v1';\n        state='actual_x86_pipe_ports_denial_and_finish_pass_not_native';request_count=$channel.sequence;\n        callback_steps=1;cleanup_callback_returned=$true;native_directory_created=$false;\n        actual_Hangul_or_COM=$false;native_execution_authorized=$false;p09_complete=$false} | ConvertTo-Json -Compress\n} finally {if ($null -ne $lease) {Close-P09XrefProbeLease $lease}}\n"
+    },
+    {
+      "path": "tools/p09/tests/test_crossref_native_host_channel.py",
+      "utf8": "\"\"\"Ordered protocol, actual readonly x86 pipes and core/ports first-step denial.\"\"\"\nimport io\nimport json\nimport os\nfrom pathlib import Path\nimport queue\nimport subprocess\nimport sys\nimport threading\nimport time\nfrom types import SimpleNamespace as NS\nimport unittest\n\nROOT=Path(__file__).resolve().parents[3]\nsys.path.insert(0,str(ROOT/'tools/p09'))\nimport crossref_native_host_channel as host\n\n\ndef wire(sequence, case_index=1, operation='checkpoint', **extra):\n    return json.dumps(dict(schema_version=host.REQUEST,sequence=sequence,case_index=case_index,\n        operation=operation,**extra),separators=(',',':'))\n\n\ndef identity():\n    return dict(process_id=10,session_id=1,created_at_utc='2026-10-17T00:00:00.0000000Z',\n        executable_sha256=host.limits.EXECUTABLE_SHA,window_handle_binds_exact_process=True)\n\n\ndef quiet_protocol():\n    return host.HostProtocol(lambda *a:None,lambda *a:None,lambda *a:None)\n\n\ndef actual_readonly_child(pipe_denial=False, wrapper_only=False):\n    \"\"\"Only this immutable-scope readonly test driver; never native prompt work.\n\n    Two bounded drain threads perform pipe IO only, not resource sampling. The\n    outer original owned-Job supervisor remains the sole resource sampler.\n    \"\"\"\n    shell=r'C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe'\n    driver=ROOT/'implementation/p09/tools/test-crossref-host-channel.ps1'\n    args=[shell,'-NoLogo','-NoProfile','-NonInteractive','-STA','-File',str(driver)]\n    if pipe_denial:args.append('-PortDenial')\n    if wrapper_only:args.append('-WrapperOnly')\n    process=subprocess.Popen(args,cwd=ROOT,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,\n        text=True,encoding='utf-8',errors='strict',creationflags=subprocess.CREATE_NO_WINDOW)\n    events=queue.Queue(maxsize=8);failures=[];stderr=bytearray();stdout_size=0\n    def read_out():\n        try:\n            while True:\n                line=process.stdout.readline(4097)\n                if not line:break\n                if len(line.encode('utf-8'))>4096 or not line.endswith('\\n'):\n                    raise ValueError('READONLY_TEST_PIPE_LINE_LIMIT')\n                events.put(line.rstrip('\\r\\n'),timeout=1)\n        except (ValueError,OSError,UnicodeError,queue.Full):\n            failures.append('READONLY_TEST_STDOUT_FAILED')\n        finally:\n            try:events.put(None,timeout=1)\n            except queue.Full:failures.append('READONLY_TEST_EVENT_QUEUE_FULL')\n    def read_err():\n        try:\n            while True:\n                chunk=process.stderr.read(1024)\n                if not chunk:break\n                stderr.extend(chunk.encode('utf-8'))\n                if len(stderr)>4096:raise ValueError('READONLY_TEST_STDERR_LIMIT')\n        except (ValueError,OSError,UnicodeError):\n            failures.append('READONLY_TEST_STDERR_FAILED')\n    threads=[threading.Thread(target=read_out,daemon=True),threading.Thread(target=read_err,daemon=True)]\n    for thread in threads:thread.start()\n    observed=[];finished=[]\n    def deny(*args):\n        observed.append(args)\n        raise ValueError('STOP_TEST_PARENT_DENIED')\n    protocol=host.HostProtocol(deny,lambda *a:(_ for _ in ()).throw(ValueError('STOP_TEST_NO_ADMISSION')),\n        lambda *args:finished.append(args))\n    result=None;cleanup=False\n    try:\n        deadline=time.monotonic()+45  # THIS readonly test only; never a native prompt timer.\n        while True:\n            if time.monotonic()>=deadline:raise ValueError('READONLY_TEST_PIPE_DEADLINE')\n            if failures:raise ValueError(failures[0])\n            try:line=events.get(timeout=.5)\n            except queue.Empty:continue\n            if line is None:break\n            stdout_size+=len(line.encode('utf-8'))\n            if stdout_size>32768:raise ValueError('READONLY_TEST_STDOUT_LIMIT')\n            packet=json.loads(line)\n            if packet.get('schema_version')==host.REQUEST:\n                if not pipe_denial:raise ValueError('READONLY_TEST_UNEXPECTED_REQUEST')\n                answer=protocol.respond(line)\n                process.stdin.write(answer+'\\n');process.stdin.flush()\n            else:\n                if result is not None:raise ValueError('READONLY_TEST_DUPLICATE_RESULT')\n                result=packet\n        process.stdin.close()\n        code=process.wait(timeout=2)\n        if code or stderr or failures or result is None:raise ValueError('READONLY_TEST_CHILD_FAILED_NO_RAW_VALUES')\n        return dict(exit_code=code,result=result,host=protocol.summary(),\n            checkpoint_callbacks=len(observed),finish_callbacks=len(finished),stdout_bytes=stdout_size,\n            stderr_bytes=len(stderr),readonly_child_cleanup=True)\n    finally:\n        # Killing is permitted only for this fixed readonly test, never native work.\n        if process.poll() is None:process.kill()\n        process.wait(timeout=2)\n        for stream in (process.stdin,process.stdout,process.stderr):\n            if not stream.closed:stream.close()\n        for thread in threads:thread.join(timeout=2)\n        cleanup=process.poll() is not None and not any(t.is_alive() for t in threads)\n        if not cleanup:raise ValueError('READONLY_TEST_CHILD_CLEANUP_FAILED')\n\n\nclass HostChannelContracts(unittest.TestCase):\n    actual=[]\n\n    def test_01_fixed_eight_cases_and_all_checkpoint_admission_frames(self):\n        calls=[]\n        protocol=host.HostProtocol(lambda *a:calls.append(('checkpoint',a)),\n            lambda *a:calls.append(('admit_owner',a)),lambda *a:calls.append(('finish',a)))\n        n=0\n        for case in range(1,9):\n            for operation,step in host.FLOW:\n                n+=1\n                extra=dict(step=step) if operation=='checkpoint' else dict(identity=identity(),window_handle=1)\n                reply=json.loads(protocol.respond(wire(n,case,operation,**extra)))\n                self.assertTrue(reply['acknowledged'])\n            n+=1\n            self.assertTrue(json.loads(protocol.respond(wire(n,case,'finish',case_status='returned')))['acknowledged'])\n        self.assertEqual(n,152)\n        self.assertEqual(len(calls),152)\n        self.assertTrue(protocol.summary()['all_eight_callback_cases_returned'])\n        self.assertFalse(protocol.summary()['native_execution_attested'])\n        self.assertEqual(protocol.summary()['accepted_count_delta'],0)\n\n    def test_02_wrong_order_cannot_skip_owner_admission(self):\n        protocol=quiet_protocol()\n        for n,step in enumerate(('prepare_slot','create_save_session'),1):\n            self.assertTrue(json.loads(protocol.respond(wire(n,step=step)))['acknowledged'])\n        response=json.loads(protocol.respond(wire(3,step='source_open')))\n        self.assertFalse(response['acknowledged'])\n        self.assertEqual(response['error_code'],'XREF_HOST_FIXED_OPERATION_ORDER')\n        self.assertTrue(protocol.stopped)\n\n    def test_03_duplicate_unknown_coerced_and_oversized_requests_rejected(self):\n        good=wire(1,step='prepare_slot')\n        values=[good.replace('\"sequence\":1','\"sequence\":1,\"sequence\":1'),\n            good.replace('\"case_index\":1','\"case_index\":true'),\n            good.replace('\"sequence\":1','\"sequence\":true'),\n            good.replace('\"operation\":\"checkpoint\"','\"operation\":\"execute\"'),\n            good[:-1]+',\"command\":\"private synthetic\"}', 'x'*4097,'{}','null',good+'\\n']\n        for bad in values:\n            protocol=quiet_protocol();result=json.loads(protocol.respond(bad))\n            self.assertFalse(result['acknowledged'])\n            self.assertTrue(protocol.stopped)\n            self.assertNotIn('private synthetic',json.dumps(result))\n        protocol=quiet_protocol();protocol.respond(good)\n        self.assertFalse(json.loads(protocol.respond(good))['acknowledged'])\n\n    def test_04_failed_checkpoint_stays_stopped_but_finish_cleans_once(self):\n        cleaned=[]\n        def stop(*args):raise ValueError('STOP_TEST_NATIVE_CHECKPOINT')\n        protocol=host.HostProtocol(stop,lambda *a:None,lambda *a:cleaned.append(a))\n        self.assertFalse(json.loads(protocol.respond(wire(1,step='prepare_slot')))['acknowledged'])\n        first=protocol.primary_error\n        self.assertFalse(json.loads(protocol.respond(wire(2,step='prepare_slot')))['acknowledged'])\n        self.assertTrue(json.loads(protocol.respond(wire(3,operation='finish',case_status='failed')))['acknowledged'])\n        self.assertEqual(cleaned,[(1,'failed')])\n        self.assertFalse(json.loads(protocol.respond(wire(4,operation='finish',case_status='failed')))['acknowledged'])\n        self.assertEqual(protocol.primary_error,first)\n        self.assertEqual(len(cleaned),1)\n\n    def test_05_primary_and_cleanup_failure_stay_separate_and_redacted(self):\n        def stop(*a):raise ValueError('private synthetic checkpoint')\n        def cleanup(*a):raise ValueError('STOP_TEST_CLEANUP')\n        protocol=host.HostProtocol(stop,lambda *a:None,cleanup)\n        protocol.respond(wire(1,step='prepare_slot'))\n        protocol.respond(wire(2,operation='finish',case_status='failed'))\n        summary=protocol.summary()\n        self.assertEqual(summary['primary_error'],'XREF_HOST_CALLBACK_FAILED_NO_RAW_VALUES')\n        self.assertEqual(summary['cleanup_error'],'STOP_TEST_CLEANUP')\n        self.assertNotIn('private synthetic',json.dumps(summary))\n\n    def test_06_worker_failure_and_premature_success_never_start_next_case(self):\n        cleaned=[];protocol=host.HostProtocol(lambda *a:None,lambda *a:None,lambda *a:cleaned.append(a))\n        self.assertTrue(json.loads(protocol.respond(wire(1,operation='finish',case_status='failed')))['acknowledged'])\n        self.assertEqual(cleaned,[(1,'failed')])\n        self.assertFalse(json.loads(protocol.respond(wire(2,2,step='prepare_slot')))['acknowledged'])\n        protocol=quiet_protocol()\n        self.assertFalse(json.loads(protocol.respond(wire(1,operation='finish',case_status='returned')))['acknowledged'])\n\n    def test_07_callback_return_is_not_native_or_cleanup_authority(self):\n        protocol=host.HostProtocol(lambda *a:dict(native_execution_authorized=True),lambda *a:True,lambda *a:True)\n        reply=json.loads(protocol.respond(wire(1,step='prepare_slot')))\n        self.assertTrue(reply['acknowledged'])\n        self.assertFalse(reply['native_execution_authorized'] or reply['p09_complete'])\n        self.assertFalse(protocol.summary()['native_cleanup_qualified'])\n\n    def test_08_resource_adapter_rejects_prep_guard_and_cleans_without_sampler(self):\n        with self.assertRaisesRegex(ValueError,'NO_PREPARATION_ONLY_NATIVE_GUARD'):\n            host.NativeResourceScope(NS(check=lambda:None,preparation_CPU=object()),lambda:None)\n        scope=host.NativeResourceScope.__new__(host.NativeResourceScope)\n        closed=[];scope.profiles=[];scope.current_case=1\n        scope.guard=NS(check=lambda:(_ for _ in ()).throw(ValueError('STOP_TEST')))\n        scope.current=NS(close=lambda:closed.append(True),profile=dict(cleanup_confirmed=True))\n        scope.finish(1,'failed')\n        self.assertEqual(closed,[True])\n        self.assertIsNone(scope.current)\n        scope.finish(2,'failed')  # A constructor failure before the next checkpoint has nothing to retire.\n\n    def test_09_actual_x86_response_parser_contracts(self):\n        value=actual_readonly_child()\n        self.assertEqual(value['result']['state'],'two_ps_channel_contracts_pass_not_native')\n        self.assertEqual(value['result']['passed'],2)\n        self.assertFalse(value['result']['actual_Hangul_or_COM'])\n        self.actual.append(value)\n\n    def test_10_actual_x86_pipe_core_ports_host_denial_and_cleanup(self):\n        value=actual_readonly_child(pipe_denial=True)\n        self.assertEqual(value['result']['state'],'actual_x86_pipe_ports_denial_and_finish_pass_not_native')\n        self.assertEqual(value['checkpoint_callbacks'],1)\n        self.assertEqual(value['finish_callbacks'],1)\n        self.assertEqual(value['host']['sequence'],2)\n        self.assertEqual(value['host']['primary_error'],'STOP_TEST_PARENT_DENIED')\n        self.assertFalse(value['result']['native_directory_created'] or value['result']['actual_Hangul_or_COM'])\n        self.actual.append(value)\n\n\n    def test_11_actual_product_wrapper_with_fixed_in_memory_denial(self):\n        value=actual_readonly_child(wrapper_only=True)\n        self.assertEqual(value['result']['state'],'one_actual_host_bound_wrapper_denial_contract_pass_not_native')\n        self.assertTrue(value['result']['fixed_denial_not_external_input'])\n        self.assertFalse(value['result']['native_directory_created'] or value['result']['actual_Hangul_or_COM'])\n        self.actual.append(value)\n\n\nif __name__=='__main__':\n    wrapper_only=sys.argv[1:]==['--wrapper-only']\n    if sys.argv[1:] and not wrapper_only:raise SystemExit(2)\n    suite=unittest.TestSuite([HostChannelContracts('test_11_actual_product_wrapper_with_fixed_in_memory_denial')]) if wrapper_only else unittest.defaultTestLoader.loadTestsFromTestCase(HostChannelContracts)\n    result=unittest.TextTestRunner(stream=io.StringIO(),verbosity=0).run(suite)\n    failures=[dict(test=t.id(),last_line=trace.splitlines()[-1][:160]) for t,trace in result.errors+result.failures]\n    print(json.dumps(dict(state=('one_host_bound_wrapper_contract_pass_not_native' if wrapper_only else 'eleven_host_channel_contracts_pass_not_native') if result.wasSuccessful()\n        else 'host_channel_contract_failed',passed=result.testsRun-len(failures),failed=len(failures),declared=result.testsRun,\n        failures=failures,actual_readonly_children=HostChannelContracts.actual,prior_ten_not_reexecuted=wrapper_only,\n        actual_Hangul_or_COM=False,native_execution_authorized=False,host_one_percent_job_installed=False,\n        complete_native_guard_integration_qualified=False,p09_complete=False)))\n    raise SystemExit(0 if result.wasSuccessful() else 2)\n"
+    }
+  ],
+  "fresh_inputs": 4,
+  "final_fresh_hashes": 4,
+  "cleanup": true,
+  "elapsed_seconds": 8.328000000008615,
+  "source_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-361-crossref-host-bound-wrapper038.v1.json",
+      "bytes": 12904,
+      "sha256": "e6170f1085e07c86d1504cb9ef1e53d4aeb7d1cef8d71460a6f3a2c24a0c0fa6"
+    },
+    {
+      "path": "implementation/p09/tools/crossref-host-channel.ps1",
+      "bytes": 6050,
+      "sha256": "ea8f53c7aa3f59de200bd5a2cc3d12758081666d1f15e7827fbe0d4ba5177d5a"
+    },
+    {
+      "path": "implementation/p09/tools/test-crossref-host-channel.ps1",
+      "bytes": 7647,
+      "sha256": "e15bee5e69b4c56296da1b384103c5a7192d5a746c89d235767c33d5f9639ed6"
+    },
+    {
+      "path": "tools/p09/tests/test_crossref_native_host_channel.py",
+      "bytes": 13809,
+      "sha256": "8f645d91b67ca3ec90074d6c2d50d126e0082ea3a5634e6a85cf8e9a0baa1bba"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T08:34:09.512722+00:00",
+      "system_cpu_percent": 7.62,
+      "available_ram_mib": 7623.8,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.928389932071706,
+      "commit_used_percent": 51.28529943042157,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.09375,
+      "parent_private_percent": 0.04423522892160078
+    },
+    {
+      "time_utc": "2026-10-17T08:34:10.013195+00:00",
+      "system_cpu_percent": 8.76,
+      "available_ram_mib": 7523.34,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.613066802184054,
+      "commit_used_percent": 51.28651213456962,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.09375,
+      "parent_private_percent": 0.04423522892160078
+    },
+    {
+      "time_utc": "2026-10-17T08:34:10.722112+00:00",
+      "system_cpu_percent": 12.08,
+      "available_ram_mib": 7650.29,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.01150263075783,
+      "commit_used_percent": 51.350762020519774,
+      "parent_cpu_machine_percent": 0.1358223226681324,
+      "parent_private_mib": 14.01171875,
+      "parent_private_percent": 0.043977762234418516
+    },
+    {
+      "time_utc": "2026-10-17T08:34:11.251265+00:00",
+      "system_cpu_percent": 15.62,
+      "available_ram_mib": 7492.13,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.515119118188856,
+      "commit_used_percent": 51.386457703486336,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.01171875,
+      "parent_private_percent": 0.043977762234418516
+    },
+    {
+      "time_utc": "2026-10-17T08:34:11.765233+00:00",
+      "system_cpu_percent": 10.61,
+      "available_ram_mib": 7809.46,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.511086086438922,
+      "commit_used_percent": 51.38228646989497,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.01171875,
+      "parent_private_percent": 0.043977762234418516
+    },
+    {
+      "time_utc": "2026-10-17T08:34:12.273760+00:00",
+      "system_cpu_percent": 6.84,
+      "available_ram_mib": 7753.38,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.335089215272188,
+      "commit_used_percent": 51.3942201817287,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.01171875,
+      "parent_private_percent": 0.043977762234418516
+    },
+    {
+      "time_utc": "2026-10-17T08:34:12.782252+00:00",
+      "system_cpu_percent": 6.82,
+      "available_ram_mib": 7600.93,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.856605767621602,
+      "commit_used_percent": 51.39391554107315,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.01171875,
+      "parent_private_percent": 0.043977762234418516
+    },
+    {
+      "time_utc": "2026-10-17T08:34:13.286130+00:00",
+      "system_cpu_percent": 17.58,
+      "available_ram_mib": 7676.96,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.095228345365815,
+      "commit_used_percent": 51.39548561214406,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.01171875,
+      "parent_private_percent": 0.043977762234418516
+    },
+    {
+      "time_utc": "2026-10-17T08:34:13.790483+00:00",
+      "system_cpu_percent": 10.8,
+      "available_ram_mib": 7571.91,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.765499341314392,
+      "commit_used_percent": 51.394554114754975,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.01171875,
+      "parent_private_percent": 0.043977762234418516
+    },
+    {
+      "time_utc": "2026-10-17T08:34:14.294840+00:00",
+      "system_cpu_percent": 11.52,
+      "available_ram_mib": 7794.75,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.464925987522673,
+      "commit_used_percent": 51.41712681563634,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.01171875,
+      "parent_private_percent": 0.043977762234418516
+    },
+    {
+      "time_utc": "2026-10-17T08:34:14.800908+00:00",
+      "system_cpu_percent": 10.94,
+      "available_ram_mib": 7642.38,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.98670000655927,
+      "commit_used_percent": 51.42872659444379,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.01171875,
+      "parent_private_percent": 0.043977762234418516
+    },
+    {
+      "time_utc": "2026-10-17T08:34:15.305990+00:00",
+      "system_cpu_percent": 11.74,
+      "available_ram_mib": 7445.28,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.36806885885247,
+      "commit_used_percent": 51.503504158432825,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.01171875,
+      "parent_private_percent": 0.043977762234418516
+    },
+    {
+      "time_utc": "2026-10-17T08:34:15.809172+00:00",
+      "system_cpu_percent": 18.36,
+      "available_ram_mib": 7813.31,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.52318702073649,
+      "commit_used_percent": 51.40505835889727,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.01171875,
+      "parent_private_percent": 0.043977762234418516
+    },
+    {
+      "time_utc": "2026-10-17T08:34:16.313642+00:00",
+      "system_cpu_percent": 0.78,
+      "available_ram_mib": 7797.3,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.47291971514376,
+      "commit_used_percent": 51.40444907758617,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.01171875,
+      "parent_private_percent": 0.043977762234418516
+    },
+    {
+      "time_utc": "2026-10-17T08:34:16.831726+00:00",
+      "system_cpu_percent": 5.31,
+      "available_ram_mib": 7865.03,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.68551363684569,
+      "commit_used_percent": 51.29375320861306,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.91015625,
+      "parent_private_percent": 0.04365899395505
+    },
+    {
+      "time_utc": "2026-10-17T08:34:17.328208+00:00",
+      "system_cpu_percent": 3.82,
+      "available_ram_mib": 7859.3,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.667527749698245,
+      "commit_used_percent": 51.29310291798294,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.91015625,
+      "parent_private_percent": 0.04365899395505
+    }
+  ]
+}

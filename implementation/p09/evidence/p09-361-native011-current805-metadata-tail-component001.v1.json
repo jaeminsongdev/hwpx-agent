@@ -1,0 +1,346 @@
+{
+  "state": "PASS_BOUNDED_ORIGINAL_BUILD_READER_TAIL_COMPONENT_NOT_CONNECTED",
+  "variants": [
+    {
+      "mode": "original",
+      "wall_seconds": 3.1344047999591567,
+      "CPU_seconds": 0.015625,
+      "passes": 28,
+      "bytes": 1857898,
+      "fresh": 14,
+      "final": 14,
+      "query_pacing": {
+        "request_limit_per_second": 20,
+        "requests": 28,
+        "requested_wait_seconds": 0.3219999998109415,
+        "requests_skipped": false,
+        "cleanup_paced": false
+      },
+      "byte_requested_sleep_seconds": 0.8881648025708273,
+      "exact_reservations": null,
+      "exact_reserved": null,
+      "exact_refunded": null,
+      "workspace": null
+    },
+    {
+      "mode": "candidate",
+      "wall_seconds": 3.2471816999604926,
+      "CPU_seconds": 0.0,
+      "passes": 28,
+      "bytes": 1857898,
+      "fresh": 14,
+      "final": 14,
+      "query_pacing": {
+        "request_limit_per_second": 20,
+        "requests": 28,
+        "requested_wait_seconds": 0.8769999996875413,
+        "requests_skipped": false,
+        "cleanup_paced": false
+      },
+      "byte_requested_sleep_seconds": 0.5828732224181294,
+      "exact_reservations": 76,
+      "exact_reserved": 1857926,
+      "exact_refunded": 28,
+      "workspace": {
+        "workspace_allocations": 1,
+        "workspace_bytes": 65536,
+        "active_lease": false,
+        "leases": 28,
+        "lease_returns": 28,
+        "readinto_attempts": 76,
+        "readinto_completed": 76,
+        "returned_bytes": 1857898,
+        "invalid_readinto_returns": 0,
+        "fresh_stream_read_before_every_exposed_chunk": true,
+        "unread_tail_exposed": false,
+        "file_bytes_or_hash_or_JSON_cache": false,
+        "original_MRO_wrappers_preserved": true,
+        "original_stream_open_and_identity_binding_preserved": true,
+        "original_checkpoints_pacing_parse_budget_and_final_hashes_preserved": true,
+        "added_sampler_query_thread_or_process": false,
+        "actual_whole_Native_or_product_connection_qualified": false,
+        "PC_freeze_resolved": false
+      }
+    }
+  ],
+  "proof": {
+    "entire_original_leaf_AST_inverse": true,
+    "actual_EOF_read_retained": true,
+    "all_original_hash_parse_accounting_checkpoint_and_closing_statements_retained": true,
+    "file_content_hash_JSON_or_AST_cache": false,
+    "original_fixed_chunk_path_mutated": false,
+    "original_wrapper_MRO_order_and_method_identities_retained": true,
+    "no_original_class_bases_methods_or_globals_changed": true,
+    "original_open_path_weight_selection_and_semantic_wrappers_not_replaced": true,
+    "explicit_physical_sizes_not_freshness_credit": true,
+    "original_one_two_MiB_rates_and_64KiB_workspace_retained": true,
+    "metadata_factory_or_Native_or_product_connected": false
+  },
+  "physical_inputs": [
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-068.envelope.v1.json",
+      "bytes": 20353,
+      "sha256": "8e96c2e2c3e4273a3add94ff6bf637eabe8712246d2c3eb607a953f64fc306ce"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-161.envelope.v1.json",
+      "bytes": 36942,
+      "sha256": "bd54a0eac4156b7241d0fece2eba5e76a03d3b8bbfb0c3179a1c6415d0577eb9"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-064.envelope.v1.json",
+      "bytes": 68398,
+      "sha256": "458aa736945a862504b5582cd4b6f68b3b7ce78218af31a2f6e13591aeb38896"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-005.envelope.v1.json",
+      "bytes": 87802,
+      "sha256": "576063800e342590484d8587a33830198f85d7405f3fcf1312ace7d29208ca9b"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-078.envelope.v1.json",
+      "bytes": 313647,
+      "sha256": "46a37a13ce9355fe95889a8290890d9dc0c98c6f359404d4548fa9420f7ad176"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-077.envelope.v1.json",
+      "bytes": 323859,
+      "sha256": "3e1bfa7aef831c74a979f2cdd2b823ce173ca9d6442c0d1343581068df7ada60"
+    },
+    {
+      "path": "tools/p09/native011_metadata_tail_candidate.py",
+      "bytes": 3407,
+      "sha256": "dfc32c74ac190639af563fdb58f0ed73ee497462b64b28900b8d3c6720ee2675"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_metadata_tail_candidate.py",
+      "bytes": 8274,
+      "sha256": "9fc59442cfaaabedd85a0d382806a926d0d43d84f690554bf156c99b9cc6c0c8"
+    },
+    {
+      "path": "tools/p09/native011_exact_read_budget.py",
+      "bytes": 14847,
+      "sha256": "6f44d4d925649eaabb8cf42ac808b4fd772181dec8584acce7ee019376b787ea"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_exact_read_budget.py",
+      "bytes": 14418,
+      "sha256": "af7dc6ebe2d8f3611f16643aabee57881d4816c780de55563e559e3c71cbc492"
+    },
+    {
+      "path": "tools/p09/reusable_audit_chunk_v1.py",
+      "bytes": 8088,
+      "sha256": "1aa1db74585cbdf50df32ac0c9dc07dfd31557fc37647ca6e6ea3969fbb60e75"
+    },
+    {
+      "path": "tools/p09/owned_source_read_pressure.py",
+      "bytes": 902,
+      "sha256": "dba6d749e68b098fedf4e3202a0b4a2b9a0ba1c5cd893d81b0f148046435dc51"
+    },
+    {
+      "path": "tools/p09/owned_input_read_pressure.py",
+      "bytes": 3485,
+      "sha256": "100666115a569ac650a5ea87d1e60ba918402bdedff76216b5b581cc8e962783"
+    },
+    {
+      "path": "tools/p09/build_case112_current_stored.py",
+      "bytes": 24527,
+      "sha256": "366f35c2ec22fee9e2b5344402cd2ae79eb9bbc8e3c021e769024ffccd765faa"
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "tools/p09/accept_case112_current_epoch.py",
+      "bytes": 20933,
+      "sha256": "03fa9362f56b6105b48b8b49599f32ccc8cbf4aa9d0b0836f3cf8580cc9c680c"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    {
+      "path": "tools/p09/borrowed_locked_streams.py",
+      "bytes": 7276,
+      "sha256": "7299572c1fc86a932e6df50891e3004dc94c0e635978c04d81a3f961571a3ae5"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/current_issuer_build_inputs.py",
+      "bytes": 18791,
+      "sha256": "7034d77e17c2d6b460d8de753039398adc7c08913f63db203982844ac3e1bd38"
+    },
+    {
+      "path": "tools/p09/current_stored_native_bridge.py",
+      "bytes": 7987,
+      "sha256": "74e654c4bd1be0142cce7bc74c281727a1f738a6091270b9571062f0a98f8e6b"
+    },
+    {
+      "path": "tools/p09/current_stored_runtime_scope.py",
+      "bytes": 10087,
+      "sha256": "45f00274f99383c6d27fadea882614a3fd02ca19932bc8735618483f982d8841"
+    },
+    {
+      "path": "tools/p09/distinct_final_sample_guard_v1.py",
+      "bytes": 1683,
+      "sha256": "8c590aa82c2677d391d6d5781b356641f77c7cdc6e55370ca251d6a809ad67c3"
+    },
+    {
+      "path": "tools/p09/live_sql_evidence_reader.py",
+      "bytes": 2109,
+      "sha256": "0458552661a9f69379f41a78d15cdbf1b6c389ede78bed766dcd6616ac937ac7"
+    },
+    {
+      "path": "tools/p09/locked_runtime_inputs.py",
+      "bytes": 15465,
+      "sha256": "e7c40a2ec0367e01c359e3b89c179d45367e9db233348e76ba82364cc0599e14"
+    },
+    {
+      "path": "tools/p09/native011_exact_read_budget.py",
+      "bytes": 14847,
+      "sha256": "6f44d4d925649eaabb8cf42ac808b4fd772181dec8584acce7ee019376b787ea"
+    },
+    {
+      "path": "tools/p09/native011_metadata_tail_candidate.py",
+      "bytes": 3407,
+      "sha256": "dfc32c74ac190639af563fdb58f0ed73ee497462b64b28900b8d3c6720ee2675"
+    },
+    {
+      "path": "tools/p09/owned_cpu_baseline_v1.py",
+      "bytes": 1389,
+      "sha256": "0fce7a5f5700270291b02167e96c3739943d5a44c0a912eef43555a1a729b4b5"
+    },
+    {
+      "path": "tools/p09/owned_input_read_pressure.py",
+      "bytes": 3485,
+      "sha256": "100666115a569ac650a5ea87d1e60ba918402bdedff76216b5b581cc8e962783"
+    },
+    {
+      "path": "tools/p09/owned_probe_build.py",
+      "bytes": 13542,
+      "sha256": "6930a12de969455cc06944e3354aab9e36ccaf7e5de0df71f18473e7eb6776a2"
+    },
+    {
+      "path": "tools/p09/owned_source_read_pressure.py",
+      "bytes": 902,
+      "sha256": "dba6d749e68b098fedf4e3202a0b4a2b9a0ba1c5cd893d81b0f148046435dc51"
+    },
+    {
+      "path": "tools/p09/owned_sql_job.py",
+      "bytes": 13850,
+      "sha256": "30b08c4d779494bbdb7579b9bb28782b4f4588fc69b931cc9d18af326d46b7a0"
+    },
+    {
+      "path": "tools/p09/packed_receipt_json.py",
+      "bytes": 5958,
+      "sha256": "2eca058b0989cf410809b23a7171fd0ca7ab82bf3e0784077fd08851143c01e6"
+    },
+    {
+      "path": "tools/p09/preparation_attributed_cpu_v1.py",
+      "bytes": 9869,
+      "sha256": "ddc1b48f17645337e65125373d9db822477ca6a94cc34e23992498e6c2c7d13d"
+    },
+    {
+      "path": "tools/p09/prepared_run_closure_v1.py",
+      "bytes": 23900,
+      "sha256": "c159da53076f5bb88dce252db163f82a1f1d71522c9dd248349ca615dc84e672"
+    },
+    {
+      "path": "tools/p09/receipt_compact_json.py",
+      "bytes": 2657,
+      "sha256": "a12d8114131ada0bf2058d16837a9f1a81fbff25adeccc8b18117b7669be7217"
+    },
+    {
+      "path": "tools/p09/reusable_audit_chunk_v1.py",
+      "bytes": 8088,
+      "sha256": "1aa1db74585cbdf50df32ac0c9dc07dfd31557fc37647ca6e6ea3969fbb60e75"
+    },
+    {
+      "path": "tools/p09/runtime_input_frame.py",
+      "bytes": 5802,
+      "sha256": "44a21215a76f4160ca7bfeb55b02f3bb464a2017671b0c2dae9883d7c9cd8929"
+    },
+    {
+      "path": "tools/p09/sql_percentage_resources.py",
+      "bytes": 5269,
+      "sha256": "0fff4a6ce008f1011283b12a56af59a87db04a8c4f85a028a1c9f306763ab3a9"
+    },
+    {
+      "path": "tools/p09/successor_preparation_workspace_v1.py",
+      "bytes": 9656,
+      "sha256": "003a0978b515c148d1a7f17ba53cdcab9eb77698535714216c90b53c868bbb98"
+    },
+    {
+      "path": "tools/p09/weighted_audit_io.py",
+      "bytes": 3819,
+      "sha256": "c1e15f4cd21382c20c41439aef89a6af468e55dbb49d218b3f6c604c91ce03ca"
+    },
+    {
+      "path": "tools/p09/build_case112_current_stored.py",
+      "bytes": 24527,
+      "sha256": "366f35c2ec22fee9e2b5344402cd2ae79eb9bbc8e3c021e769024ffccd765faa"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-prepared-decoder-chunk-join002.v1.json",
+      "bytes": 164528,
+      "sha256": "08db80d10ba4001ed75bde5ecfe87f63b26da9c74377bb766342c841cf9bf1ab"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_metadata_tail_candidate.py",
+      "bytes": 8274,
+      "sha256": "9fc59442cfaaabedd85a0d382806a926d0d43d84f690554bf156c99b9cc6c0c8"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_exact_read_budget.py",
+      "bytes": 14418,
+      "sha256": "af7dc6ebe2d8f3611f16643aabee57881d4816c780de55563e559e3c71cbc492"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-068.envelope.v1.json",
+      "bytes": 20353,
+      "sha256": "8e96c2e2c3e4273a3add94ff6bf637eabe8712246d2c3eb607a953f64fc306ce"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-161.envelope.v1.json",
+      "bytes": 36942,
+      "sha256": "bd54a0eac4156b7241d0fece2eba5e76a03d3b8bbfb0c3179a1c6415d0577eb9"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-064.envelope.v1.json",
+      "bytes": 68398,
+      "sha256": "458aa736945a862504b5582cd4b6f68b3b7ce78218af31a2f6e13591aeb38896"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-005.envelope.v1.json",
+      "bytes": 87802,
+      "sha256": "576063800e342590484d8587a33830198f85d7405f3fcf1312ace7d29208ca9b"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-078.envelope.v1.json",
+      "bytes": 313647,
+      "sha256": "46a37a13ce9355fe95889a8290890d9dc0c98c6f359404d4548fa9420f7ad176"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-077.envelope.v1.json",
+      "bytes": 323859,
+      "sha256": "3e1bfa7aef831c74a979f2cdd2b823ce173ca9d6442c0d1343581068df7ada60"
+    }
+  ],
+  "fresh": 37,
+  "final": 37,
+  "cleanup": true,
+  "whole_original_BuildReader_and_direct_path_AST_used": true,
+  "explicit_component_only_owned_byte_policy_not_actual_engine_construction": true,
+  "actual_metadata_callback_or_Frame_or_worker_or_product_executed": false,
+  "GO_authorized": false,
+  "wall_comparison_not_controlled_OS_cache_or_background": true
+}

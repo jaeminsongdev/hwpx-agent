@@ -463,13 +463,13 @@ fn inspect_island(
     if document.elements().len() > limits.0.elements {
         return Err(ObjectCompositionHwpxError::InputLimit);
     }
-    let mut by_native = BTreeMap::new();
+    let mut by_instance = BTreeMap::new();
     for (index, element) in document.elements().iter().enumerate() {
         if object_tag(element).is_none() {
             continue;
         }
-        let native_id = parse_u32(attribute(element, "id")?)?;
-        if by_native.insert(native_id, index).is_some() {
+        let instance_id = parse_u32(attribute(element, "instid")?)?;
+        if by_instance.insert(instance_id, index).is_some() {
             return Err(ObjectCompositionHwpxError::UnsupportedProfile);
         }
     }
@@ -481,8 +481,8 @@ fn inspect_island(
         .map(|object| object.object_id.clone())
         .collect();
     for object in graph.objects() {
-        let index = *by_native
-            .get(&object.native_object_id)
+        let index = *by_instance
+            .get(&object.native_instance_id)
             .ok_or(ObjectCompositionHwpxError::UnsupportedProfile)?;
         let native_element = element(&document, index)?;
         validate_native_object(&document, native_element, object, graph)?;
@@ -495,7 +495,7 @@ fn inspect_island(
                 .ok_or(ObjectCompositionHwpxError::UnsupportedProfile)?;
             let parent_element = element(&document, xml_parent)?;
             if object_tag(parent_element) != Some("container")
-                || parse_u32(attribute(parent_element, "id")?)? != parent.native_object_id
+                || parse_u32(attribute(parent_element, "instid")?)? != parent.native_instance_id
             {
                 return Err(ObjectCompositionHwpxError::UnsupportedProfile);
             }
@@ -532,11 +532,11 @@ fn inspect_island(
         return Err(ObjectCompositionHwpxError::UnsupportedProfile);
     }
     for index in root_elements.iter().copied() {
-        let native = parse_u32(attribute(element(&document, index)?, "id")?)?;
+        let native = parse_u32(attribute(element(&document, index)?, "instid")?)?;
         let Some(object) = graph
             .objects()
             .iter()
-            .find(|object| object.native_object_id == native)
+            .find(|object| object.native_instance_id == native)
         else {
             return Err(ObjectCompositionHwpxError::UnsupportedProfile);
         };
@@ -555,11 +555,11 @@ fn inspect_island(
         let children = direct_object_children(&document, native.element_index)?;
         let expected: Vec<_> = ordered_children(graph, Some(&group.object_id))
             .into_iter()
-            .map(|object| object.native_object_id)
+            .map(|object| object.native_instance_id)
             .collect();
         let actual: Result<Vec<_>, _> = children
             .iter()
-            .map(|index| parse_u32(attribute(element(&document, *index)?, "id")?))
+            .map(|index| parse_u32(attribute(element(&document, *index)?, "instid")?))
             .collect();
         if actual? != expected {
             return Err(ObjectCompositionHwpxError::UnsupportedProfile);
@@ -601,10 +601,17 @@ fn validate_native_object(
     object: &CompositionObject,
     graph: &ObjectCompositionGraph,
 ) -> Result<(), ObjectCompositionHwpxError> {
-    if parse_u32(attribute(element, "id")?)? != object.native_object_id
+    let expected_numbering_type = match object.kind {
+        CompositionObjectKind::Picture => "PICTURE",
+        _ => "NONE",
+    };
+    let native_id = parse_u32(attribute(element, "id")?)?;
+    let expected_z_order = native_z_order(object);
+    if (object.parent_group_id.is_none() && native_id != object.native_object_id)
         || parse_u32(attribute(element, "instid")?)? != object.native_instance_id
-        || parse_u32(attribute(element, "zOrder")?)? != object.z_order
+        || parse_u32(attribute(element, "zOrder")?)? != expected_z_order
         || parse_u32(attribute(element, "groupLevel")?)? != object.group_level
+        || attribute(element, "numberingType")? != expected_numbering_type
         || !kind_matches(document, element, object.kind)?
         || !object.visible
         || !object.printable
@@ -612,7 +619,7 @@ fn validate_native_object(
         return Err(ObjectCompositionHwpxError::UnsupportedProfile);
     }
     let offset = unique_direct_child(document, element, "offset")?;
-    let size = unique_direct_child(document, element, "curSz")?;
+    let size = unique_direct_child(document, element, "orgSz")?;
     let bounds = CompositionBounds {
         x_hwpunit: parse_i64(attribute(offset, "x")?)?,
         y_hwpunit: parse_i64(attribute(offset, "y")?)?,
@@ -665,8 +672,14 @@ fn validate_connector(
     let end = unique_direct_child(document, element, "endPt")?;
     validate_endpoint(start, &topology.start, graph)?;
     validate_endpoint(end, &topology.end, graph)?;
-    let controls = unique_direct_child(document, element, "controlPoints")?;
-    let points = direct_children_named(document, controls, "point")?;
+    let controls = direct_children_named(document, element, "controlPoints")?;
+    if controls.len() > 1 {
+        return Err(ObjectCompositionHwpxError::UnsupportedProfile);
+    }
+    let points = match controls.first() {
+        Some(controls) => direct_children_named(document, controls, "point")?,
+        None => Vec::new(),
+    };
     if points.len() != topology.control_points.len() {
         return Err(ObjectCompositionHwpxError::UnsupportedProfile);
     }
@@ -691,7 +704,7 @@ fn validate_endpoint(
             graph
                 .object(&subject.object_id)
                 .ok_or(ObjectCompositionHwpxError::UnsupportedProfile)?
-                .native_object_id,
+                .native_instance_id,
             subject.connection_index,
         ),
         None => (0, 0),
@@ -781,7 +794,7 @@ fn patch_existing_fragment(
     let root_index = root[0];
     let native = element(&document, root_index)?;
     let mut edits = vec![
-        value_edit(native, "zOrder", target.z_order.to_string())?,
+        value_edit(native, "zOrder", native_z_order(target).to_string())?,
         value_edit(native, "groupLevel", target.group_level.to_string())?,
     ];
     let offset = unique_direct_child(&document, native, "offset")?;
@@ -795,17 +808,7 @@ fn patch_existing_fragment(
         "y",
         target.bounds.y_hwpunit.to_string(),
     )?);
-    let size = unique_direct_child(&document, native, "curSz")?;
-    edits.push(value_edit(
-        size,
-        "width",
-        target.bounds.width_hwpunit.to_string(),
-    )?);
-    edits.push(value_edit(
-        size,
-        "height",
-        target.bounds.height_hwpunit.to_string(),
-    )?);
+    push_size_component_edits(&document, native, &target.bounds, &mut edits)?;
     if target.kind == CompositionObjectKind::Group {
         let children = direct_object_children(&document, root_index)?;
         if children.is_empty() {
@@ -840,11 +843,21 @@ fn patch_existing_fragment(
         let start = unique_direct_child(&document, native, "startPt")?
             .outer_span()
             .ok_or(ObjectCompositionHwpxError::UnsupportedProfile)?;
-        let controls = unique_direct_child(&document, native, "controlPoints")?
+        let end = unique_direct_child(&document, native, "endPt")?
             .outer_span()
             .ok_or(ObjectCompositionHwpxError::UnsupportedProfile)?;
+        let controls = direct_children_named(&document, native, "controlPoints")?;
+        if controls.len() > 1 {
+            return Err(ObjectCompositionHwpxError::UnsupportedProfile);
+        }
+        let topology_end = match controls.first() {
+            Some(controls) => controls
+                .outer_span()
+                .ok_or(ObjectCompositionHwpxError::UnsupportedProfile)?,
+            None => end,
+        };
         edits.push(ByteEdit {
-            span: ByteRange::new(wrapped.as_bytes(), start.start(), controls.end())?,
+            span: ByteRange::new(wrapped.as_bytes(), start.start(), topology_end.end())?,
             replacement: connector_topology_fragment(topology, target_graph)?,
         });
     } else if !rendered_children.is_empty() {
@@ -859,6 +872,24 @@ fn patch_existing_fragment(
     Ok(output[prefix.len()..output.len() - suffix.len()].to_owned())
 }
 
+fn push_size_component_edits(
+    document: &PreservingXmlDocument,
+    native: &XmlElementToken,
+    bounds: &CompositionBounds,
+    edits: &mut Vec<ByteEdit>,
+) -> Result<(), ObjectCompositionHwpxError> {
+    for name in ["orgSz", "curSz"] {
+        let size = unique_direct_child(document, native, name)?;
+        edits.push(value_edit(size, "width", bounds.width_hwpunit.to_string())?);
+        edits.push(value_edit(
+            size,
+            "height",
+            bounds.height_hwpunit.to_string(),
+        )?);
+    }
+    Ok(())
+}
+
 fn new_group_fragment(
     object: &CompositionObject,
     children: &str,
@@ -869,9 +900,9 @@ fn new_group_fragment(
         return Err(ObjectCompositionHwpxError::UnsupportedProfile);
     }
     let mut output = format!(
-        "<hp:container id=\"{}\" zOrder=\"{}\" numberingType=\"CONTAINER\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\">{}{}{}{}{}{}{}{}{}",
+        "<hp:container id=\"{}\" zOrder=\"{}\" numberingType=\"NONE\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\">{}{}{}{}{}{}{}{}{}",
         object.native_object_id,
-        object.z_order,
+        native_z_order(object),
         object.group_level,
         object.native_instance_id,
         common_component(&object.bounds),
@@ -902,9 +933,9 @@ fn new_connector_fragment(
         .as_ref()
         .ok_or(ObjectCompositionHwpxError::UnsupportedProfile)?;
     let output = format!(
-        "<hp:connectLine id=\"{}\" zOrder=\"{}\" numberingType=\"DRAWING\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\" type=\"{}\">{}{}{}{}<hp:lineShape color=\"#000000\" width=\"1\" style=\"SOLID\" endCap=\"FLAT\" headStyle=\"NORMAL\" tailStyle=\"NORMAL\" headfill=\"1\" tailfill=\"1\" headSz=\"SMALL_SMALL\" tailSz=\"SMALL_SMALL\" outlineStyle=\"NORMAL\" alpha=\"0\"/>{}{}{}{}{}</hp:connectLine>",
+        "<hp:connectLine id=\"{}\" zOrder=\"{}\" numberingType=\"NONE\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\" type=\"{}\">{}{}{}{}<hp:lineShape color=\"#000000\" width=\"1\" style=\"SOLID\" endCap=\"FLAT\" headStyle=\"NORMAL\" tailStyle=\"NORMAL\" headfill=\"1\" tailfill=\"1\" headSz=\"SMALL_SMALL\" tailSz=\"SMALL_SMALL\" outlineStyle=\"NORMAL\" alpha=\"0\"/>{}{}{}{}{}</hp:connectLine>",
         object.native_object_id,
-        object.z_order,
+        native_z_order(object),
         object.group_level,
         object.native_instance_id,
         connector_kind(topology.kind),
@@ -945,7 +976,7 @@ fn rotation_fragment(bounds: &CompositionBounds) -> String {
 }
 
 fn rendering_fragment() -> &'static str {
-    "<hp:renderingInfo><hc:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/><hc:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/><hc:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/></hp:renderingInfo>"
+    "<hp:renderingInfo><hc:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><hc:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><hc:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/></hp:renderingInfo>"
 }
 
 fn size_fragment(bounds: &CompositionBounds) -> String {
@@ -966,16 +997,26 @@ fn connector_topology_fragment(
     let mut output = String::new();
     output.push_str(&endpoint_fragment("startPt", &topology.start, graph)?);
     output.push_str(&endpoint_fragment("endPt", &topology.end, graph)?);
-    output.push_str("<hp:controlPoints>");
-    for point in &topology.control_points {
-        let _ = write!(
-            output,
-            "<hp:point x=\"{}\" y=\"{}\" type=\"{}\"/>",
-            point.x_hwpunit, point.y_hwpunit, point.point_type
-        );
+    if !topology.control_points.is_empty() {
+        output.push_str("<hp:controlPoints>");
+        for point in &topology.control_points {
+            let _ = write!(
+                output,
+                "<hp:point x=\"{}\" y=\"{}\" type=\"{}\"/>",
+                point.x_hwpunit, point.y_hwpunit, point.point_type
+            );
+        }
+        output.push_str("</hp:controlPoints>");
     }
-    output.push_str("</hp:controlPoints>");
     Ok(output)
+}
+
+const fn native_z_order(object: &CompositionObject) -> u32 {
+    if object.parent_group_id.is_some() {
+        0
+    } else {
+        object.z_order
+    }
 }
 
 fn endpoint_fragment(
@@ -988,7 +1029,7 @@ fn endpoint_fragment(
             graph
                 .object(&subject.object_id)
                 .ok_or(ObjectCompositionHwpxError::UnsupportedProfile)?
-                .native_object_id,
+                .native_instance_id,
             subject.connection_index,
         ),
         None => (0, 0),

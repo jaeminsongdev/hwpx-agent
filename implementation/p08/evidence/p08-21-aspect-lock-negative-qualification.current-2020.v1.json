@@ -1,0 +1,140 @@
+{
+  "schema_version": "hwpx-agent.p08-aspect-lock-negative-qualification/v1",
+  "task": "P08-21",
+  "recorded_date": "2026-09-15",
+  "feature_id": "OBJ-044",
+  "target": {
+    "product": "Hancom Hangul 2020",
+    "build": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "executable_relative_to_program_files_x86": "HNC/Office 2020/HOffice110/Bin/Hwp.exe",
+    "executable_byte_len": 2321432,
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+  },
+  "official_model": {
+    "repository": "https://github.com/hancom-io/hwpx-owpml-model",
+    "commit": "1453388472c703a4b299a0834f425cdac16644b9",
+    "files": [
+      {
+        "path": "OWPML/Class/Para/AbstractShapeObjectType.h",
+        "byte_len": 3235,
+        "sha256": "413b55dec690e87f944c5076d83a769071425ecf4f2344dc128e25af7b748839"
+      },
+      {
+        "path": "OWPML/Class/Para/AbstractShapeObjectType.cpp",
+        "byte_len": 4905,
+        "sha256": "16c4a18de9c05de64ed1fe25b57b8a1fb4f81ffd9da9cb523aa5a109fbe9d45a"
+      },
+      {
+        "path": "OWPML/Class/Para/sz.h",
+        "byte_len": 2138,
+        "sha256": "78f3c84b91ddbd10f7bde248577aec8c41f7faeb4f962a013b6d6a2d15d8e433"
+      },
+      {
+        "path": "OWPML/Class/Para/sz.cpp",
+        "byte_len": 2579,
+        "sha256": "1deee5880faff29b983059b1e2e3d679ba0a08451761a65fbac30e5fc3396f30"
+      }
+    ],
+    "reviewed_fields": {
+      "AbstractShapeObjectType.attributes": [
+        "id",
+        "zOrder",
+        "numberingType",
+        "textWrap",
+        "textFlow",
+        "lock",
+        "dropcapstyle"
+      ],
+      "sz.attributes": [
+        "width",
+        "widthRelTo",
+        "height",
+        "heightRelTo",
+        "protect"
+      ]
+    },
+    "aspect_lock_field_count": 0,
+    "rectangle_ratio_rejected_as_equivalent": true
+  },
+  "official_automation": {
+    "repository": "https://github.com/hancom-io/devcenter-archive",
+    "commit": "213c7faad552b4853b525887e36accb6025e837b",
+    "documents": [
+      {
+        "path": "hwp-automation/ActionTable_2504.pdf",
+        "sha256": "bb876a95ea4e0f4b052c94188a1390b5f981161223759f59f52fc324c8130a87",
+        "strong_aspect_lock_token_hits": 0,
+        "protect_size_token_hits": 1
+      },
+      {
+        "path": "hwp-automation/ParameterSetTable_2504.pdf",
+        "sha256": "6fa10e0ae69711af99a03e54c321c6c922796bd943badf8c21b2c7dfb780ad6e",
+        "strong_aspect_lock_token_hits": 0,
+        "protect_size_token_hits": 2
+      },
+      {
+        "path": "hwp-automation/ParameterSetObject.pdf",
+        "sha256": "7cbf536a8814cf8165a1614edfd9816173bb1bd7c9e585821d776563e2bdb674",
+        "strong_aspect_lock_token_hits": 0,
+        "protect_size_token_hits": 3
+      },
+      {
+        "path": "hwp-automation/HwpAutomation_2504.pdf",
+        "sha256": "917142de2704ae037b0132f5a344ce5331b1fd96cc19dd574666aaacfbf0268c",
+        "strong_aspect_lock_token_hits": 0,
+        "protect_size_token_hits": 0
+      }
+    ],
+    "strong_aspect_lock_tokens": [
+      "AspectLock",
+      "KeepRatio",
+      "AspectRatio",
+      "LockAspect"
+    ],
+    "exact_binding_found": false
+  },
+  "installed_surface": {
+    "relative_to_program_files_x86": "HNC/Office 2020/HOffice110/Bin/UxXml/Hancom2016/Hwp/Dlg/ko-KR/hwp_object_property_tabitem_basic.xml",
+    "byte_len": 13566,
+    "sha256": "272cb78a1bdc21a09b84b038470d410777243477be2d9ca7a5f6a2413365556e",
+    "protect_size_control_id_hits": 1,
+    "protect_size_caption_hits": 1,
+    "aspect_ratio_control_token_hits": 0
+  },
+  "decision": {
+    "status": "CAPABILITY_UNAVAILABLE_FOR_TARGET",
+    "reason": "no_persistent_native_or_exact_automation_aspect_lock_surface",
+    "non_equivalent_surface": "ProtectSize",
+    "non_equivalent_reason": "fixed_size_is_not_aspect_ratio_lock_for_future_resize",
+    "direct_lowering": "fail_closed",
+    "automation_binding": "unavailable_with_reason",
+    "catalog_contract_retained": true
+  },
+  "execution": {
+    "hwp_launched": false,
+    "action_executed": false,
+    "document_created_or_opened": false,
+    "document_mutated": false,
+    "network_used_for_target_runtime": false
+  },
+  "privacy": {
+    "user_document_scanned": false,
+    "document_content_present": false,
+    "private_absolute_paths_present": false,
+    "secret_present": false
+  },
+  "claims": {
+    "exact_official_source_negative_qualification": true,
+    "exact_installed_surface_negative_qualification": true,
+    "actual_target_runtime": false,
+    "direct_hwpx_mapping": false,
+    "automation_runtime_binding": false,
+    "differential": false,
+    "row_green": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  }
+}

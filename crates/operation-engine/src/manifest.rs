@@ -1,4 +1,5 @@
 use std::collections::BTreeMap;
+pub mod archive;
 use std::fmt;
 
 use domain_ir::{
@@ -153,6 +154,9 @@ impl ExecutionManifest {
     pub const fn route_count(&self) -> usize {
         self.route_count
     }
+
+    #[must_use]
+    pub const fn target_profile_id(&self) -> &TargetProfileId { &self.target_profile_id }
 
     /// Emits deterministic compact manifest bytes.
     ///

@@ -26,14 +26,14 @@ def copy_tree(root: Path) -> None:
 
 
 class ObjectRemainderHwpxContractTests(unittest.TestCase):
-    def test_current_contract_qualifies_four_direct_and_five_unavailable_profiles(self) -> None:
+    def test_current_contract_qualifies_eight_direct_and_one_unavailable_profile(self) -> None:
         value = validator.validate()
         self.assertEqual(value["state"], "pass", value)
         self.assertEqual(value["source_locks"], 5)
-        self.assertEqual(value["implementation_files"], 5)
+        self.assertEqual(value["implementation_files"], 10)
         self.assertTrue(value["source_qualification_verified"])
-        self.assertEqual(value["direct_hwpx_profiles"], 4)
-        self.assertEqual(value["unavailable_with_reason_profiles"], 5)
+        self.assertEqual(value["direct_hwpx_profiles"], 8)
+        self.assertEqual(value["unavailable_with_reason_profiles"], 1)
         self.assertEqual(value["actual_target"], "not_run")
         self.assertFalse(value["p08_complete"])
 

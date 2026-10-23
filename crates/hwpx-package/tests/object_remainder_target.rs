@@ -18,7 +18,7 @@ fn router() -> ObjectRemainderTargetRouter {
 }
 
 #[test]
-fn exact_target_routes_four_bounded_native_profiles() {
+fn exact_target_routes_eight_bounded_native_profiles() {
     let router = router();
     assert_eq!(
         router.profile_id(),
@@ -41,6 +41,22 @@ fn exact_target_routes_four_bounded_native_profiles() {
             ObjectRemainderCapability::AltText,
             ObjectPropertyKind::DrawingCanvas,
         ),
+        (
+            ObjectRemainderCapability::FormObjectInsert,
+            ObjectPropertyKind::FormObject,
+        ),
+        (
+            ObjectRemainderCapability::CaptionInsert,
+            ObjectPropertyKind::BasicShape,
+        ),
+        (
+            ObjectRemainderCapability::DrawingGallery,
+            ObjectPropertyKind::BasicShape,
+        ),
+        (
+            ObjectRemainderCapability::ParagraphBandObject,
+            ObjectPropertyKind::ParagraphBand,
+        ),
     ] {
         assert_eq!(
             router.route(capability, kind, ObjectRemainderDirectAdmission::Eligible),
@@ -52,39 +68,19 @@ fn exact_target_routes_four_bounded_native_profiles() {
 }
 
 #[test]
-fn five_unqualified_semantics_fail_with_specific_stable_reasons() {
-    for (capability, expected) in [
-        (
-            ObjectRemainderCapability::DrawingGallery,
-            ObjectRemainderTargetRouteError::DrawingGalleryTemplateUnqualified,
-        ),
-        (
-            ObjectRemainderCapability::FormObjectInsert,
-            ObjectRemainderTargetRouteError::FormInsertionStateIncomplete,
-        ),
-        (
-            ObjectRemainderCapability::CaptionInsert,
-            ObjectRemainderTargetRouteError::CaptionInsertionUnqualified,
-        ),
-        (
-            ObjectRemainderCapability::ParagraphBandObject,
-            ObjectRemainderTargetRouteError::ParagraphBandNativeConstructUnqualified,
-        ),
-        (
+fn aspect_lock_remains_unqualified_with_a_specific_stable_reason() {
+    let error = router()
+        .route(
             ObjectRemainderCapability::AspectLock,
-            ObjectRemainderTargetRouteError::AspectLockNativeFieldUnqualified,
-        ),
-    ] {
-        let error = router()
-            .route(
-                capability,
-                ObjectPropertyKind::BasicShape,
-                ObjectRemainderDirectAdmission::Eligible,
-            )
-            .expect_err("unqualified semantic must fail closed");
-        assert_eq!(error, expected);
-        assert_eq!(error.api_error_code(), "CAPABILITY_UNAVAILABLE_FOR_TARGET");
-    }
+            ObjectPropertyKind::BasicShape,
+            ObjectRemainderDirectAdmission::Eligible,
+        )
+        .expect_err("unqualified semantic must fail closed");
+    assert_eq!(
+        error,
+        ObjectRemainderTargetRouteError::AspectLockNativeFieldUnqualified
+    );
+    assert_eq!(error.api_error_code(), "CAPABILITY_UNAVAILABLE_FOR_TARGET");
 }
 
 #[test]
@@ -105,6 +101,22 @@ fn rejected_direct_preflight_never_widens_to_unverified_automation() {
         (
             ObjectRemainderCapability::AltText,
             ObjectPropertyKind::Chart,
+        ),
+        (
+            ObjectRemainderCapability::FormObjectInsert,
+            ObjectPropertyKind::FormObject,
+        ),
+        (
+            ObjectRemainderCapability::CaptionInsert,
+            ObjectPropertyKind::BasicShape,
+        ),
+        (
+            ObjectRemainderCapability::DrawingGallery,
+            ObjectPropertyKind::BasicShape,
+        ),
+        (
+            ObjectRemainderCapability::ParagraphBandObject,
+            ObjectPropertyKind::ParagraphBand,
         ),
     ] {
         assert_eq!(
@@ -132,6 +144,22 @@ fn kind_mismatch_and_target_drift_are_rejected() {
         (
             ObjectRemainderCapability::AltText,
             ObjectPropertyKind::ParagraphBand,
+        ),
+        (
+            ObjectRemainderCapability::FormObjectInsert,
+            ObjectPropertyKind::BasicShape,
+        ),
+        (
+            ObjectRemainderCapability::CaptionInsert,
+            ObjectPropertyKind::Picture,
+        ),
+        (
+            ObjectRemainderCapability::DrawingGallery,
+            ObjectPropertyKind::Picture,
+        ),
+        (
+            ObjectRemainderCapability::ParagraphBandObject,
+            ObjectPropertyKind::BasicShape,
         ),
     ] {
         assert_eq!(

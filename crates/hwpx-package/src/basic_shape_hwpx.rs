@@ -986,6 +986,7 @@ fn shape_fragment(
     )
     .map_err(|_| BasicShapeHwpxError::Allocation)?;
     write_common_component(&mut xml, geometry)?;
+    write_default_drawing_appearance(&mut xml)?;
     write_shape_payload(&mut xml, shape)?;
     write_size_position_margin(&mut xml, geometry)?;
     write!(xml, "</hp:{tag}>").map_err(|_| BasicShapeHwpxError::Allocation)?;
@@ -993,6 +994,19 @@ fn shape_fragment(
         return Err(BasicShapeHwpxError::OutputLimit);
     }
     Ok(xml.into_bytes())
+}
+
+fn write_default_drawing_appearance(xml: &mut String) -> Result<(), BasicShapeHwpxError> {
+    write!(
+        xml,
+        concat!(
+            "<hp:lineShape color=\"#000000\" width=\"283\" style=\"SOLID\" endCap=\"FLAT\" ",
+            "headStyle=\"NORMAL\" tailStyle=\"NORMAL\" headfill=\"0\" tailfill=\"0\" ",
+            "headSz=\"SMALL_SMALL\" tailSz=\"SMALL_SMALL\" outlineStyle=\"NORMAL\" alpha=\"0\"/>",
+            "<hp:shadow type=\"NONE\" color=\"#B2B2B2\" offsetX=\"0\" offsetY=\"0\" alpha=\"0\"/>"
+        )
+    )
+    .map_err(|_| BasicShapeHwpxError::Allocation)
 }
 
 fn write_common_component(
@@ -1333,6 +1347,7 @@ fn read_shape_payload(
         return Err(BasicShapeHwpxError::ReadbackMismatch);
     }
     let payload = &children[common_prefix.len()..children.len() - common_suffix.len()];
+    let payload = validate_default_drawing_appearance(document, payload)?;
     match expected {
         BasicShape::Line { .. } => {
             if payload.len() != 2 {
@@ -1406,6 +1421,68 @@ fn read_shape_payload(
             })
         }
     }
+}
+
+fn validate_default_drawing_appearance<'a>(
+    document: &PreservingXmlDocument,
+    payload: &'a [usize],
+) -> Result<&'a [usize], BasicShapeHwpxError> {
+    if payload.len() < 2 {
+        return Err(BasicShapeHwpxError::ReadbackMismatch);
+    }
+    let line = element(document, payload[0])?;
+    if !has_para_name(line, "lineShape") || !line.is_empty() {
+        return Err(BasicShapeHwpxError::ReadbackMismatch);
+    }
+    validate_attributes(
+        line,
+        &[
+            "color",
+            "width",
+            "style",
+            "endCap",
+            "headStyle",
+            "tailStyle",
+            "headfill",
+            "tailfill",
+            "headSz",
+            "tailSz",
+            "outlineStyle",
+            "alpha",
+        ],
+    )?;
+    for (name, value) in [
+        ("color", "#000000"),
+        ("width", "283"),
+        ("style", "SOLID"),
+        ("endCap", "FLAT"),
+        ("headStyle", "NORMAL"),
+        ("tailStyle", "NORMAL"),
+        ("headfill", "0"),
+        ("tailfill", "0"),
+        ("headSz", "SMALL_SMALL"),
+        ("tailSz", "SMALL_SMALL"),
+        ("outlineStyle", "NORMAL"),
+        ("alpha", "0"),
+    ] {
+        require_attr(line, name, value)?;
+    }
+
+    let shadow = element(document, payload[1])?;
+    if !has_para_name(shadow, "shadow") || !shadow.is_empty() {
+        return Err(BasicShapeHwpxError::ReadbackMismatch);
+    }
+    validate_attributes(shadow, &["type", "color", "offsetX", "offsetY", "alpha"])?;
+    for (name, value) in [
+        ("type", "NONE"),
+        ("color", "#B2B2B2"),
+        ("offsetX", "0"),
+        ("offsetY", "0"),
+        ("alpha", "0"),
+    ] {
+        require_attr(shadow, name, value)?;
+    }
+    Ok(&payload[2..])
 }
 
 fn read_rectangle(

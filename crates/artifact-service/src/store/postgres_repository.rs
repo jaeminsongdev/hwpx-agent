@@ -1,5 +1,12 @@
 //! Current-PC `PostgreSQL` metadata adapter. Connections are loopback-only and tenant-fixed.
 //! No TLS/public-server qualification or transparent retry after an uncertain commit is implied.
+pub mod source_form_policy;
+pub mod source_formula_policy;
+pub mod schema22;
+pub mod schema23;
+pub mod schema24;
+pub mod schema25;
+pub mod schema26;
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
@@ -400,6 +407,23 @@ fn load_record(
     row.map(|row| decode_record(tx, &row)).transpose()
 }
 
+fn decode_artifact_kind(row: &Row) -> Result<ArtifactKind, ArtifactError> {
+    let kind_name: String = value(row, "artifact_kind")?;
+    [
+        ArtifactKind::Source,
+        ArtifactKind::Result,
+        ArtifactKind::DocumentIr,
+        ArtifactKind::Preview,
+        ArtifactKind::Evidence,
+        ArtifactKind::Trace,
+        ArtifactKind::Diff,
+        ArtifactKind::Receipt,
+    ]
+    .into_iter()
+    .find(|kind| kind.as_str() == kind_name)
+    .ok_or(ArtifactError::InvalidState)
+}
+
 fn decode_record(tx: &mut Transaction<'_>, row: &Row) -> Result<ArtifactRecord, ArtifactError> {
     if value::<Option<i16>>(row, "service_metadata_version")? != Some(1) {
         return Err(ArtifactError::InvalidState);
@@ -409,19 +433,7 @@ fn decode_record(tx: &mut Transaction<'_>, row: &Row) -> Result<ArtifactRecord, 
         "art_{}",
         value::<Uuid>(row, "artifact_id")?.simple()
     ))?;
-    let kind_name: String = value(row, "artifact_kind")?;
-    let kind = [
-        ArtifactKind::Source,
-        ArtifactKind::Result,
-        ArtifactKind::Preview,
-        ArtifactKind::Evidence,
-        ArtifactKind::Trace,
-        ArtifactKind::Diff,
-        ArtifactKind::Receipt,
-    ]
-    .into_iter()
-    .find(|kind| kind.as_str() == kind_name)
-    .ok_or(ArtifactError::InvalidState)?;
+    let kind = decode_artifact_kind(row)?;
     let storage_name: String = value(row, "storage_state")?;
     let storage_state = [StorageState::Available, StorageState::Quarantined]
         .into_iter()

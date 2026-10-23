@@ -20,6 +20,10 @@ unicode-normalization.workspace = true
 uuid.workspace = true
 zeroize.workspace = true
 
+[target.'cfg(windows)'.dependencies]
+keyring-core.workspace = true
+windows-native-keyring-store.workspace = true
+
 [dev-dependencies]
 serde_json.workspace = true
 tempfile.workspace = true

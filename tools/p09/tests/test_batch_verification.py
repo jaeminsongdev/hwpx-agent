@@ -2,12 +2,15 @@
 import ast
 import builtins
 import copy
+import hashlib
 from contextlib import contextmanager
-from types import SimpleNamespace as NS
+from pathlib import Path
+from types import FunctionType, SimpleNamespace as NS
 import unittest
 
 MODULE = None
 RAW_RUNTIME = None
+RAW_ENGINE = None
 
 
 def pin(name, size=1):
@@ -16,6 +19,19 @@ def pin(name, size=1):
 
 H = pin('implementation/p09/evidence/p09-361-case114-current-runtime-run001.v1.json')
 N = pin('target/current.exe', 2)
+
+
+def oracle_generator(raw, row, listing, body):
+    expected = original.scope.extend(body, listing)
+    def check(candidate, current_listing, old_body, fresh, guard):
+        guard()
+        actual = ORACLE_SCOPE.extend(old_body, current_listing)
+        if expected != actual:
+            raise ValueError('ORIGINAL_ORACLE_SCOPE_DRIFT')
+        if not candidate['original_terminal_predicate']:
+            raise ValueError('ORIGINAL_ORACLE_TERMINAL_FAILURE')
+        return dict(expected_count=len(expected), cost=ORACLE_SCOPE.cost(actual, 14))
+    return check, dict(original_generator_proof=True)
 
 
 class Reader:
@@ -27,6 +43,8 @@ class Reader:
         self.read_passes = self.bytes_read = 0
         self.names = []
         self.checkpoint = lambda: None
+        self.maximum_parse_bytes = 16 * 1024 * 1024
+        self.root = Path('D:/synthetic-policy-tests')
     def _read(self, name, parse=False):
         self.names.append(name)
         if name not in self.rows:
@@ -41,6 +59,11 @@ class Reader:
             raise ValueError('ORIGINAL_CHANGED')
         self.snapshots[name] = p
         return dict(p)
+    def _bind(self, name, actual):
+        if name in self.snapshots and self.snapshots[name] != actual:
+            raise ValueError('ORIGINAL_CHANGED')
+        self.snapshots[name] = dict(actual)
+        return self.snapshots[name]
     def pin(self, name):
         return dict(self.snapshots[name]) if name in self.snapshots else self.fresh_pin(name)
     def json(self, name):
@@ -86,6 +109,329 @@ class Held:
 
 
 class Tests(unittest.TestCase):
+    def entry_fixture(self, *, mutate=None, bad_count=False):
+        import json
+        import batch_worker_entry as entry
+        prefix = 'implementation/p09/evidence/p09-361-case165-'
+        digest = lambda path, raw: dict(path=path, bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+        encode = lambda obj: json.dumps(obj, sort_keys=True, separators=(',', ':')).encode('ascii')
+        step = dict(index=165, before=158)
+        old_wire = b'synthetic reference wire'
+        current_wire = b'synthetic future wire'
+        old_pin = digest(prefix+'successor-worker-capsule009.compact.v6.json', old_wire)
+        new_pin = digest(prefix+'successor-worker-capsule010.compact.v1.json', current_wire)
+        prior = encode(dict(run=9, index=165, step=step, capsule_pin=old_pin))
+        prior_pin = digest(prefix+'successor-worker-bootstrap009.v6.json', prior)
+        rows = [dict(index=i) for i in range(162)]
+        manifest = pin('implementation/p09/evidence/synthetic-manifest')
+        core = dict(index=165, run=10, step=step, capsule_pin=new_pin,
+            manifest_pin=manifest, first_descriptor=rows[0])
+        bootstrap = dict(schema_version='hwpx-agent.p09-run010-worker-preparation/v1', execution=core,
+            reference_bootstrap_pin=prior_pin, reference_wire_pin=old_pin,
+            reference_is_constructor_data_not_product_replay=True, GO_authorized=False)
+        if mutate:mutate(bootstrap)
+        raw = encode(bootstrap)
+        boot_pin = digest(prefix+'successor-worker-bootstrap010.v1.json', raw)
+        files = {boot_pin['path']:raw, prior_pin['path']:prior, old_pin['path']:old_wire, new_pin['path']:current_wire}
+        calls = []
+        def read(value, limit):
+            calls.append(('read', value['path']))
+            self.assertEqual(limit, 16384)
+            return files[value['path']]
+        binding = NS(descriptors=lambda: rows, manifest_pin=manifest)
+        def reference_factory(hint, wire, checkpoint):
+            calls.append('reference')
+            self.assertEqual(wire, old_wire)
+            return NS(binding=binding), {}
+        def transport_factory(reference, step, checkpoint):
+            calls.append('transport')
+            def decode(wire, expected, guard):
+                calls.append('decoder')
+                self.assertEqual(wire, current_wire)
+                return (NS(descriptors=lambda:rows[:-1], manifest_pin=manifest) if bad_count else binding), {}
+            return NS(worker=NS(TASK='case165-current-r010-tests', decode=decode)), NS(validate_worker_hint=lambda *args:(165,10))
+        args = ('case165-current-r010-tests', boot_pin, read, reference_factory, transport_factory, lambda:None)
+        return entry, args, calls, files
+
+    def test_entry_admits_four_inputs_then_constructs_once_without_encoder(self):
+        entry, args, calls, files = self.entry_fixture()
+        value = entry.reconstruct(*args)
+        self.assertEqual([kind for kind in calls if type(kind) is str], ['reference','transport','decoder'])
+        self.assertEqual(sum(type(kind) is tuple for kind in calls), 4)
+        self.assertEqual(value.proof['metadata_byte_admissions'], 4)
+        self.assertFalse(value.proof['fresh_physical_IO_claimed_by_entry'])
+        self.assertFalse(value.proof['encoder_or_negative_qualification_cases_run'])
+        self.assertFalse(value.proof['GO_authorized'])
+
+    def test_entry_wrong_task_fails_before_io(self):
+        entry, args, calls, _ = self.entry_fixture()
+        with self.assertRaisesRegex(ValueError, 'ENTRY_EXACT_TASK_BEFORE_IO'):
+            entry.reconstruct('case165-current-r009-tests', *args[1:])
+        self.assertEqual(calls, [])
+
+    def test_entry_changed_bootstrap_bytes_cannot_start_reference_constructor(self):
+        entry, args, calls, files = self.entry_fixture()
+        files[args[1]['path']] += b' '
+        with self.assertRaisesRegex(ValueError, 'ENTRY_FRESH_BYTES_MATCH_PIN'):
+            entry.reconstruct(*args)
+        self.assertNotIn('reference', calls)
+
+    def test_entry_go_flag_cannot_be_smuggled_by_valid_hash(self):
+        entry, args, calls, _ = self.entry_fixture(mutate=lambda row:row.update(GO_authorized=True))
+        with self.assertRaisesRegex(ValueError, 'ENTRY_CLOSED_NO_GO_BOOTSTRAP'):
+            entry.reconstruct(*args)
+        self.assertNotIn('reference', calls)
+
+    def test_entry_old_run_or_boolean_case_is_not_new_identity(self):
+        for change in (dict(run=9), dict(index=True)):
+            entry, args, calls, _ = self.entry_fixture(mutate=lambda row:row['execution'].update(change))
+            with self.assertRaisesRegex(ValueError, 'ENTRY_EXACT_CASE_AND_RUN'):
+                entry.reconstruct(*args)
+            self.assertNotIn('reference', calls)
+
+    def test_entry_unknown_reference_path_denied_before_reference_io(self):
+        entry, args, calls, _ = self.entry_fixture(mutate=lambda row:
+            row['reference_wire_pin'].update(path='implementation/p09/evidence/unknown.json'))
+        with self.assertRaisesRegex(ValueError, 'ENTRY_CLOSED_REFERENCE_AND_WIRE_PATHS'):
+            entry.reconstruct(*args)
+        self.assertEqual(len(calls), 1)
+
+    def test_entry_descriptor_subset_is_never_current_qualification(self):
+        entry, args, calls, _ = self.entry_fixture(bad_count=True)
+        with self.assertRaisesRegex(ValueError, 'ENTRY_COMPLETE162_NOT_SUBSET_OR_REBASE'):
+            entry.reconstruct(*args)
+
+    def test_entry_resource_error_identity_preserved_before_io(self):
+        entry, args, calls, _ = self.entry_fixture()
+        error = ValueError('ORIGINAL_RESOURCE_STOP')
+        def stop():raise error
+        with self.assertRaises(ValueError) as caught:
+            entry.reconstruct(*args[:-1], stop)
+        self.assertIs(caught.exception, error)
+        self.assertEqual(calls, [])
+
+    def test_entry_file_reader_original_scope_link_and16K_contracts(self):
+        import io
+        import batch_worker_entry as entry
+        class Root:
+            parents = ()
+            linked = False
+            opened = 0
+            data = b'synthetic bounded metadata'
+            def is_dir(self):return True
+            def is_symlink(self):return self.linked
+            def is_junction(self):return False
+            def __truediv__(self, name):
+                root = self
+                class File:
+                    parent = root
+                    def is_file(self):return True
+                    def is_symlink(self):return False
+                    def is_junction(self):return False
+                    def open(self, mode):
+                        root.opened += 1
+                        return io.BytesIO(root.data)
+                return File()
+        root = Root()
+        read = entry.file_reader(root, lambda:None)
+        selected = pin('implementation/p09/evidence/p09-361-case165-successor-worker-bootstrap010.v1.json')
+        self.assertEqual(read(selected, 16384), root.data)
+        with self.assertRaisesRegex(ValueError, 'ENTRY_ORIGINAL_DIRECT_READ_SCOPE'):
+            read(pin('unknown.json'), 16384)
+        root.linked = True
+        with self.assertRaisesRegex(ValueError, 'ENTRY_DIRECT_ANCESTORS'):
+            read(selected, 16384)
+        self.assertEqual(root.opened, 1)
+        root.linked = False; root.data = b'x'*16385
+        with self.assertRaisesRegex(ValueError, 'ENTRY_ORIGINAL_READ16K'):
+            read(selected, 16384)
+
+    def identity_fixture(self, data=b'synthetic inner bytes', error=None):
+        calls = []
+        digest = lambda raw: dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+        def encode(binding, authority, prior, guard):
+            guard()
+            return data, digest(data)
+        def decode(raw, expected, guard):
+            guard()
+            calls.append((raw, expected))
+            if error is not None:
+                raise error
+            return NS(), dict(policy_capsule_bytes=len(raw))
+        worker = NS(TASK='case165-current-r010-tests', MAX_BYTES=16384, encode=encode, decode=decode)
+        return MODULE.identity_wire(worker, lambda: None), calls, digest
+
+    def test_identity_wire_both_hashes_and_inner_counter_preserved(self):
+        worker, calls, digest = self.identity_fixture()
+        wire, expected = worker.encode(None, None, None, lambda: None)
+        _, proof = worker.decode(wire, expected, lambda: None)
+        self.assertEqual(expected, digest(wire))
+        self.assertEqual(calls, [(b'synthetic inner bytes', digest(b'synthetic inner bytes'))])
+        self.assertEqual(proof['policy_capsule_bytes'], len(b'synthetic inner bytes'))
+        self.assertEqual(proof['identity_transport_bytes'], len(wire))
+        self.assertTrue(proof['original_inner_byte_counter_not_relabelled'])
+
+    def test_identity_wire_old_packet_never_reaches_inner_decoder(self):
+        worker, calls, digest = self.identity_fixture()
+        old = b'P09W3-reference009-only'
+        with self.assertRaisesRegex(ValueError, 'IDENTITY_MAGIC_NOT_OLD009_WIRE'):
+            worker.decode(old, digest(old), lambda: None)
+        self.assertEqual(calls, [])
+
+    def test_identity_wire_wrong_external_hash_never_reaches_inner_decoder(self):
+        worker, calls, _ = self.identity_fixture()
+        wire, expected = worker.encode(None, None, None, lambda: None)
+        with self.assertRaisesRegex(ValueError, 'IDENTITY_TRANSPORT_HASH'):
+            worker.decode(wire, dict(expected, sha256='0'*64), lambda: None)
+        self.assertEqual(calls, [])
+
+    def test_identity_wire_wrong_task_even_with_valid_outer_hash_rejected(self):
+        worker, calls, digest = self.identity_fixture()
+        wire, _ = worker.encode(None, None, None, lambda: None)
+        bad = wire.replace(b'case165-current-r010-tests', b'case165-current-r009-tests')
+        with self.assertRaisesRegex(ValueError, 'EXACT_IDENTITY_TASK_CASE_AND_RUN'):
+            worker.decode(bad, digest(bad), lambda: None)
+        self.assertEqual(calls, [])
+
+    def test_identity_wire_changed_inner_even_with_valid_outer_hash_rejected(self):
+        worker, calls, digest = self.identity_fixture()
+        wire, _ = worker.encode(None, None, None, lambda: None)
+        bad = wire[:-1] + bytes([wire[-1] ^ 1])
+        with self.assertRaisesRegex(ValueError, 'INNER_IDENTITY_HASH'):
+            worker.decode(bad, digest(bad), lambda: None)
+        self.assertEqual(calls, [])
+
+    def test_identity_wire_header_cannot_expand_original16K_ceiling(self):
+        worker, calls, _ = self.identity_fixture(data=b'x'*16384)
+        with self.assertRaisesRegex(ValueError, 'UNCHANGED_IDENTITY_WIRE16K'):
+            worker.encode(None, None, None, lambda: None)
+        self.assertEqual(calls, [])
+
+    def test_identity_wire_original_decoder_error_identity_preserved(self):
+        error = ValueError('ORIGINAL_INNER_DECODER_FAILURE')
+        worker, calls, _ = self.identity_fixture(error=error)
+        wire, expected = worker.encode(None, None, None, lambda: None)
+        with self.assertRaises(ValueError) as caught:
+            worker.decode(wire, expected, lambda: None)
+        self.assertIs(caught.exception, error)
+        self.assertEqual(len(calls), 1)
+
+    def test_identity_wire_hard_guard_error_precedes_decode(self):
+        worker, calls, _ = self.identity_fixture()
+        error = ValueError('ORIGINAL_RESOURCE_FAILURE')
+        def stop():
+            raise error
+        with self.assertRaises(ValueError) as caught:
+            worker.decode(b'', {}, stop)
+        self.assertIs(caught.exception, error)
+        self.assertEqual(calls, [])
+
+    def engine_builder(self):
+        node = next(n for n in ast.parse(RAW_RUNTIME).body
+            if isinstance(n, ast.FunctionDef) and n.name == 'connect_factory')
+        env = {}
+        exec(compile(ast.Module(body=[node], type_ignores=[]), MODULE.RUNTIME, 'exec'), env)
+        runtime = NS(connect_factory=env['connect_factory'])
+        return MODULE.prepare_engine_builder(RAW_ENGINE, runtime, RAW_RUNTIME), runtime
+
+    def test_future_builder_positional_inverse_does_not_change_product10(self):
+        builder, runtime = self.engine_builder()
+        self.assertEqual(builder.task, 'case165-current-r010-tests')
+        self.assertTrue(builder.receipt.endswith('run010.v1.json'))
+        self.assertEqual(builder.proof['target_descriptors'], 162)
+        self.assertTrue(builder.proof['original_product10_retained'])
+        node = next(n for n in ast.parse(RAW_ENGINE).body if isinstance(n, ast.FunctionDef) and n.name == 'build')
+        env = {}
+        exec(compile(ast.Module(body=[node], type_ignores=[]), MODULE.ENGINE, 'exec'), env)
+        original = env['build'].__code__
+        changed = builder.build.__code__
+        slots = builder.proof['engine_metadata_inverses'][1]['slots']
+        restored = list(changed.co_consts)
+        for slot, before, after in slots:
+            self.assertEqual(changed.co_consts[slot], after)
+            restored[slot] = before
+        self.assertEqual(MODULE._code_shape(changed.replace(co_consts=tuple(restored))), MODULE._code_shape(original))
+        for position, value in enumerate(original.co_consts):
+            if type(value) is int and value == 10:
+                self.assertEqual(changed.co_consts[position], 10)
+        self.assertFalse(builder.proof['GO_authorized'])
+        self.assertFalse(builder.proof['new_identity_graph_transport_or_worker_qualified'])
+
+    def test_future_builder_factory_original_body_and_default_are_unchanged(self):
+        builder, runtime = self.engine_builder()
+        original = runtime.connect_factory
+        expected = original.__code__
+        values = list(builder.factory.__code__.co_consts)
+        slot = builder.proof['factory_bound_inverse']['constant_slot']
+        self.assertEqual(values[slot], 10)
+        values[slot] = 8
+        self.assertEqual(MODULE._code_shape(builder.factory.__code__.replace(co_consts=tuple(values))),
+            MODULE._code_shape(expected))
+        self.assertIs(runtime.connect_factory.__code__, expected)
+        self.assertEqual(builder.proof['factory_bound_inverse']['new'], 10)
+
+    def test_future_builder_rejects_changed_sources_and_nonoriginal_runtime(self):
+        builder, runtime = self.engine_builder()
+        with self.assertRaisesRegex(ValueError, 'EXACT_ORIGINAL_ENGINE_SOURCE'):
+            MODULE.prepare_engine_builder(RAW_ENGINE + b'\n', runtime, RAW_RUNTIME)
+        with self.assertRaisesRegex(ValueError, 'EXACT_ORIGINAL_FACTORY_SOURCE'):
+            MODULE.prepare_engine_builder(RAW_ENGINE, runtime, RAW_RUNTIME + b'\n')
+        runtime.connect_factory = lambda *args: None
+        with self.assertRaisesRegex(ValueError, 'ENTIRE_ORIGINAL_RUNTIME_FACTORY'):
+            MODULE.prepare_engine_builder(RAW_ENGINE, runtime, RAW_RUNTIME)
+
+    def test_future_builder_old_task_or_wrong_count_cannot_reach_downstream(self):
+        for task, count in (('case165-current-r009-tests', 162), ('case165-current-r010-tests', 75)):
+            builder, _ = self.engine_builder()
+            graph = NS(worker=NS(TASK=task), binding=NS(next_case=165, descriptors=lambda: [None]*count))
+            with self.assertRaisesRegex(ValueError, 'EXACT_FULL69_RUN009_GRAPH'):
+                builder.build(None, None, None, graph, None, None, None, lambda: None)
+
+    def test_future_builder_existing_new_result_guard_is_still_original(self):
+        builder, _ = self.engine_builder()
+        paths = []
+        class Root:
+            def __truediv__(self, name):
+                paths.append(name)
+                return NS(exists=lambda: True)
+        graph = NS(worker=NS(TASK=builder.task), binding=NS(next_case=165, descriptors=lambda: [None]*162))
+        with self.assertRaisesRegex(ValueError, 'NO_EXISTING_NATIVE009_RECEIPT'):
+            builder.build(Root(), None, None, graph, None, None, None, lambda: None)
+        self.assertEqual(paths, [builder.receipt])
+
+    def test_future_builder_complete_body_single_fixture_construction_no_worker_execution(self):
+        builder, runtime = self.engine_builder()
+        calls = []
+        worker = lambda *args: self.fail('product fixture worker executed')
+        engine = NS(worker=worker)
+        def template():
+            calls.append('template')
+            return engine, {}
+        names = NS(physical_run=lambda index: 10, task=lambda index: builder.task,
+            root_path=lambda config: builder.receipt, public_run=lambda index, run: 1)
+        def factory(root, loader, window, index, run, checkpoint):
+            self.assertEqual((index, run), (165, 10))
+            return template, names, {}
+        # Private test-only dependency. Real factory code is separately checked
+        # above; this isolates the unchanged WHOLE builder control flow.
+        builder.build.__globals__['factory9'] = lambda original: (factory, {})
+        state = NS(original=worker, attempts=0, calls=0, completed=False)
+        def compose(same_engine, graph, root, checkpoint):
+            self.assertIs(same_engine()[0], engine)
+            return worker, state, NS(), {}
+        runtime.compose_worker = compose
+        window = NS(M=NS(base=NS(configure=lambda index: calls.append(index))), WINDOW=NS(SECONDS=10))
+        class Root:
+            def __truediv__(self, name):
+                return NS(exists=lambda: False, read_bytes=lambda: b'synthetic window only')
+        graph = NS(worker=NS(TASK=builder.task), binding=NS(next_case=165, descriptors=lambda: [None]*162))
+        built = builder.build(Root(), None, NS(runtime=runtime), graph, NS(),
+            NS(current_window=lambda *args: (window, {})), NS(WINDOW_PIN={'path': 'synthetic-window'}), lambda: None)
+        self.assertEqual(calls, [165, 'template'])
+        self.assertIs(built.original_worker, worker)
+        self.assertEqual((built.state.attempts, built.state.calls), (0, 0))
+        self.assertFalse(built.product_Native_or_GO_authorized)
+
     def batch(self):
         m = MODULE
         whole = {H['path']: H, N['path']: N}
@@ -104,6 +450,169 @@ class Tests(unittest.TestCase):
             frame.read_boundary(lambda guard: Reader(MODULE.plain(b.current)), lambda: None)
         frame.commit(dict(cleanup_confirmed=True, owned_tree_empty=True,
             job_final=dict(active_processes=0, owned_processes=[])))
+
+    def parent(self, b, *, lifecycle=False):
+        """Synthetic parent constructor; no native handles or product body."""
+        base = MODULE.phased.frames
+        def run():
+            raise AssertionError('original fixture body must not execute')
+        original = FunctionType(run.__code__, dict(run.__globals__, native=NS(frames=base)))
+        worker = lambda: None
+        engine = NS(run_owned=original, worker=worker)
+        def connect_engine(engine, binding):
+            state = NS(original=engine.run_owned, original_worker=engine.worker, frames=[], attempts=0)
+            class Projected(base.Frame):
+                pass
+            class Parent(Projected):
+                def __init__(self, *args, **kwargs):
+                    super().__init__(*args, **kwargs)
+                    state.frames.append(self)
+            native = NS(frames=NS(Frame=Parent))
+            def execute():
+                state.attempts += 1
+                return native.frames.Frame(base.Registry(), MODULE.plain(b.current), lambda: None, held=Held()).acquire()
+            return NS(run_owned=execute, worker=engine.worker), state
+        return b.connect_parent(engine, NS(parent=NS(connect_engine=connect_engine), binding=NS(next_case=b.first_index)),
+            connect_lifecycle=lifecycle)
+
+    def test_parent_lifecycle_hooks_call_original_acquire_and_commit(self):
+        b = self.batch()
+        parent, state = self.parent(b, lifecycle=True)
+        b.begin(Reader(MODULE.plain(b.whole)))
+        frame = parent.run_owned()
+        self.assertEqual(b.phase, 'CASE_ACTIVE')
+        self.assertIs(b.active[1], frame)
+        self.commit(b, frame)
+        self.assertEqual(b.phase, 'READY')
+        self.assertEqual(frame.state, 'COMMITTED')
+        self.assertEqual(len(b.cases), 1)
+        self.assertEqual(len(frame.readers), 2)
+        result = b.finish(Reader(MODULE.plain(b.whole)))
+        self.assertTrue(result['parent_lifecycle_connected'])
+        self.assertFalse(result['queue_advance_authorized'])
+
+    def test_parent_lifecycle_no_acquisition_before_whole_start(self):
+        b = self.batch()
+        parent, state = self.parent(b, lifecycle=True)
+        with self.assertRaisesRegex(ValueError, 'AUDITED_READY_BEFORE_PARENT_ACQUIRE'):
+            parent.run_owned()
+        self.assertFalse(state.frames[0].held.acquired)
+        self.assertEqual(b.cases, [])
+
+    def test_parent_lifecycle_abort_releases_handles_but_breaks_batch(self):
+        b = self.batch()
+        parent, state = self.parent(b, lifecycle=True)
+        b.begin(Reader(MODULE.plain(b.whole)))
+        frame = parent.run_owned()
+        self.assertTrue(frame.close())
+        self.assertTrue(frame.held.closed)
+        self.assertEqual(b.phase, 'BROKEN')
+        with self.assertRaisesRegex(ValueError, 'BROKEN_BATCH'):
+            b.finish(Reader(MODULE.plain(b.whole)))
+
+    def test_parent_lifecycle_incomplete_commit_is_original_failure_not_acceptance(self):
+        b = self.batch()
+        parent, state = self.parent(b, lifecycle=True)
+        b.begin(Reader(MODULE.plain(b.whole)))
+        frame = parent.run_owned()
+        try:
+            with self.assertRaisesRegex(ValueError, 'COMPLETE_TWO_BYTE_BOUNDARIES'):
+                frame.commit({})
+            self.assertEqual(b.phase, 'BROKEN')
+            self.assertEqual(b.cases, [])
+        finally:
+            frame.close()
+
+    def test_exact_connected_parent_frame_keeps_original_two_boundaries(self):
+        b = self.batch()
+        default = MODULE.phased.frames.Frame
+        parent, state = self.parent(b)
+        self.assertIs(MODULE.phased.frames.Frame, default)
+        self.assertEqual(state.frames, [])
+        b.begin(Reader(MODULE.plain(b.whole)))
+        frame = parent.run_owned()
+        self.assertIsNot(type(frame), default)
+        b.case_started(165, frame)
+        self.commit(b, frame)
+        b.case_finished(frame)
+        result = b.finish(Reader(MODULE.plain(b.whole)))
+        self.assertEqual(len(frame.boundaries), 2)
+        self.assertTrue(result['exact_parent_frame_class_connected'])
+        self.assertFalse(result['queue_advance_authorized'])
+        self.assertIs(MODULE.phased.frames.Frame, default)
+
+    def test_unconnected_subclass_is_still_rejected(self):
+        b = self.opened()
+        class Other(MODULE.phased.frames.Frame):
+            pass
+        frame = Other(MODULE.phased.frames.Registry(), MODULE.plain(b.current), lambda: None, held=Held()).acquire()
+        try:
+            with self.assertRaisesRegex(ValueError, 'LIVE_NATIVE_FRAME_NOT_SERIALIZED'):
+                b.case_started(165, frame)
+            self.assertEqual(b.phase, 'BROKEN')
+        finally:
+            frame.close()
+
+    def test_parent_binding_must_precede_start_and_cannot_be_replaced(self):
+        b = self.batch()
+        self.parent(b)
+        with self.assertRaisesRegex(ValueError, 'PARENT_CONNECTION_ONCE'):
+            self.parent(b)
+        with self.assertRaisesRegex(ValueError, 'PARENT_CONNECTION_ONCE'):
+            self.parent(self.opened())
+
+    def test_connected_parent_class_mutation_rejected_before_live_admission(self):
+        b = self.batch()
+        parent, _ = self.parent(b)
+        b.begin(Reader(MODULE.plain(b.whole)))
+        frame = parent.run_owned()
+        type(frame).check = lambda self: None
+        try:
+            with self.assertRaisesRegex(ValueError, 'UNCHANGED_CONNECTED_FRAME_CLASSES'):
+                b.case_started(165, frame)
+            self.assertEqual(b.phase, 'BROKEN')
+        finally:
+            frame.close()
+
+    def test_connected_parent_instance_shadow_rejected(self):
+        b = self.batch()
+        parent, _ = self.parent(b)
+        b.begin(Reader(MODULE.plain(b.whole)))
+        frame = parent.run_owned()
+        frame.check = lambda: None
+        try:
+            with self.assertRaisesRegex(ValueError, 'NO_INSTANCE_FRAME_METHOD_REPLACEMENT'):
+                b.case_started(165, frame)
+        finally:
+            frame.close()
+
+    def test_connected_parent_in_place_function_code_mutation_rejected(self):
+        b = self.batch()
+        parent, _ = self.parent(b)
+        b.begin(Reader(MODULE.plain(b.whole)))
+        frame = parent.run_owned()
+        # Use a method local to this fixture, never mutate a shared base class.
+        method = type(frame).__init__
+        old_code = method.__code__
+        try:
+            method.__code__ = old_code.replace(co_name='changed_constructor')
+            with self.assertRaisesRegex(ValueError, 'UNCHANGED_CONNECTED_FRAME_METHOD_CODE'):
+                b.case_started(165, frame)
+        finally:
+            method.__code__ = old_code
+            frame.close()
+
+    def test_connected_parent_closing_rechecks_class_integrity(self):
+        b = self.batch()
+        parent, _ = self.parent(b)
+        b.begin(Reader(MODULE.plain(b.whole)))
+        frame = parent.run_owned()
+        b.case_started(165, frame)
+        self.commit(b, frame)
+        type(frame).summary = lambda self: {}
+        with self.assertRaisesRegex(ValueError, 'UNCHANGED_CONNECTED_FRAME_CLASSES'):
+            b.case_finished(frame)
+        self.assertEqual(b.phase, 'BROKEN')
 
     def test_whole_start_and_end_are_distinct_fresh_boundaries(self):
         b = self.batch()
@@ -142,6 +651,143 @@ class Tests(unittest.TestCase):
         for key in ('queue_advance_authorized', 'GO_authorized', 'product_execution_authorized'):
             self.assertIs(result[key], False)
         self.assertEqual(result['accepted_count_delta'], 0)
+
+    def oracle_fixture(self, *, close=True):
+        # Actual unchanged full projector code with a typed in-memory Binding
+        # dependency. Not physical envelope/Native evidence or a real acceptor.
+        import runtime_envelope_full_oracle_connection_v1 as full
+        m = MODULE
+        b = self.batch()
+        class Binding:
+            next_case = 165
+            def __init__(self):
+                self.scope_checks = 0
+            def descriptors(self):
+                return []
+            def semantic_union(self, rows, checkpoint):
+                checkpoint()
+                return m.scope.pins(list(rows.values())), {}
+            def project(self, rows, checkpoint):
+                values, proof = self.semantic_union(rows, checkpoint)
+                return NS(physical_pins=values), proof
+            def validate_scope_evidence(self, row, rows, checkpoint):
+                checkpoint()
+                m.require(m.scope.pins(row['source_freeze']) == rows, 'ORACLE_FIXTURE_EXACT_CURRENT_ROW')
+                self.scope_checks += 1
+            def runtime_budget(self, rows, requests, budget, checkpoint):
+                checkpoint()
+                return budget(rows, requests)
+        binding = Binding()
+        function = full.projector
+        typed = FunctionType(function.__code__, dict(function.__globals__,
+            binding_module=NS(Binding=Binding, require=m.require)),
+            argdefs=function.__defaults__, closure=function.__closure__)
+        typed.__kwdefaults__ = function.__kwdefaults__
+        original = NS(**{**vars(full), 'projector': typed})
+        linked = b.connect_full_oracle(original, binding, index=165)
+        generator = FunctionType(oracle_generator.__code__, dict(oracle_generator.__globals__,
+            original=NS(scope=m.scope), ORACLE_SCOPE=m.scope, mechanics_projection=lambda node: node))
+        project, state = linked.projector(generator, binding,
+            lambda rows, requests: dict(input_count=len(rows), requests=requests), lambda: None)
+        frame = None
+        if close:
+            b.begin(Reader(m.plain(b.whole)))
+            frame = self.frame(b)
+            b.case_started(165, frame)
+            self.commit(b, frame)
+            b.case_finished(frame)
+            b.finish(Reader(m.plain(b.whole)))
+        row = dict(source_freeze=[dict(N)], original_terminal_predicate=True)
+        return b, binding, original, linked, generator, project, state, row, frame
+
+    def test_full_oracle_connect_does_not_mutate_default_projector_or_generator(self):
+        b, binding, original, linked, generator, project, state, row, frame = self.oracle_fixture()
+        old_projector = original.projector
+        before_globals, before_row = dict(generator.__globals__), copy.deepcopy(row)
+        check, proof = project(b'source', row, {N['path']: N}, {H['path']: H})
+        result = check(row, {N['path']: N}, {H['path']: H}, None, lambda: None)
+        self.assertIs(original.projector, old_projector)
+        self.assertEqual(generator.__globals__, before_globals)
+        self.assertEqual(row, before_row)
+        self.assertEqual(result, dict(expected_count=1, cost=dict(input_count=1, requests=167)))
+        self.assertEqual(state.batch.whole_scope_checks, 2)
+        self.assertEqual(binding.scope_checks, 2)
+        self.assertTrue(proof['whole_original_checker_code_retained'])
+        self.assertTrue(proof['independent_whole_expectations_checked_before_current_selection'])
+        self.assertFalse(proof['queue_acceptance_authorized'])
+
+    def test_full_oracle_blocks_before_start_and_before_closing(self):
+        b, binding, _, _, _, project, state, row, _ = self.oracle_fixture(close=False)
+        for phase in ('NEW', 'READY'):
+            if phase == 'READY':
+                b.begin(Reader(MODULE.plain(b.whole)))
+            with self.assertRaisesRegex(ValueError, 'COMPLETE_WHOLE_BOUNDARIES_BEFORE_ORACLE'):
+                project(b'source', row, {N['path']: N}, {H['path']: H})
+        self.assertEqual(state.original.observed['generator_calls'], 0)
+        self.assertEqual(binding.scope_checks, 0)
+
+    def test_full_oracle_empty_batch_is_not_product_evidence(self):
+        b, _, _, _, _, project, _, row, _ = self.oracle_fixture(close=False)
+        b.begin(Reader(MODULE.plain(b.whole)))
+        b.finish(Reader(MODULE.plain(b.whole)))
+        with self.assertRaisesRegex(ValueError, 'COMPLETE_WHOLE_BOUNDARIES_BEFORE_ORACLE'):
+            project(b'source', row, {N['path']: N}, {H['path']: H})
+
+    def test_full_oracle_independent_missing_history_not_hidden_by_current_candidate(self):
+        b, _, _, _, _, project, _, row, _ = self.oracle_fixture()
+        with self.assertRaisesRegex(ValueError, 'INDEPENDENT_ORACLE_WHOLE_EXACT'):
+            project(b'source', row, {N['path']: N}, {N['path']: N})
+
+    def test_full_oracle_unknown_whole_input_requires_new_plan(self):
+        b, _, _, _, _, project, _, row, _ = self.oracle_fixture()
+        extra = pin('tools/p09/not-declared.py')
+        with self.assertRaisesRegex(ValueError, 'INDEPENDENT_ORACLE_WHOLE_EXACT'):
+            project(b'source', row, {N['path']: N}, {H['path']: H, extra['path']: extra})
+
+    def test_full_oracle_wrong_current_row_rejected_by_original_projector_dependency(self):
+        b, _, _, _, _, project, _, row, _ = self.oracle_fixture()
+        row['source_freeze'] = [H]
+        with self.assertRaisesRegex(ValueError, 'ORACLE_FIXTURE_EXACT_CURRENT_ROW'):
+            project(b'source', row, {N['path']: N}, {H['path']: H})
+
+    def test_full_oracle_original_terminal_failure_remains_failure(self):
+        b, _, _, _, _, project, _, row, _ = self.oracle_fixture()
+        check, _ = project(b'source', row, {N['path']: N}, {H['path']: H})
+        row['original_terminal_predicate'] = False
+        with self.assertRaisesRegex(ValueError, 'ORIGINAL_ORACLE_TERMINAL_FAILURE'):
+            check(row, {N['path']: N}, {H['path']: H}, None, lambda: None)
+        self.assertEqual(b.phase, 'BROKEN')
+
+    def test_full_oracle_unchanged_candidate_identity_check_is_retained(self):
+        b, _, _, _, _, project, _, row, _ = self.oracle_fixture()
+        check, _ = project(b'source', row, {N['path']: N}, {H['path']: H})
+        with self.assertRaisesRegex(ValueError, 'SAME_UNMODIFIED_CANDIDATE_OBJECT'):
+            check(copy.deepcopy(row), {N['path']: N}, {H['path']: H}, None, lambda: None)
+        self.assertEqual(b.phase, 'BROKEN')
+
+    def test_full_oracle_generator_cannot_omit_independent_scope_check(self):
+        b, binding, _, linked, generator, _, _, row, _ = self.oracle_fixture()
+        def unchecked(raw, row, listing, body):
+            def check(*args):
+                return {}
+            return check, {}
+        forged = FunctionType(unchecked.__code__, dict(generator.__globals__))
+        project, _ = linked.projector(forged, binding, lambda *args: None, lambda: None)
+        with self.assertRaisesRegex(ValueError, 'INDEPENDENT_WHOLE_SCOPE_MUST_BE_CHECKED'):
+            project(b'source', row, {N['path']: N}, {H['path']: H})
+        self.assertEqual(b.phase, 'BROKEN')
+
+    def test_full_oracle_rechecks_batch_and_frame_before_checker(self):
+        for corrupt in ('batch', 'frame'):
+            b, _, _, _, _, project, state, row, frame = self.oracle_fixture()
+            check, _ = project(b'source', row, {N['path']: N}, {H['path']: H})
+            if corrupt == 'batch':
+                b.phase = 'BROKEN'
+            else:
+                frame.state = 'CLOSED'
+            with self.assertRaises(ValueError):
+                check(row, {N['path']: N}, {H['path']: H}, None, lambda: None)
+            self.assertEqual(state.original.observed['original_checker_calls'], 0)
 
     def test_changed_history_at_closing_is_sticky_failure(self):
         b = self.opened()
@@ -296,6 +942,32 @@ class Tests(unittest.TestCase):
                 with b.metadata_reader(Reader(MODULE.plain(b.whole))) as r:
                     b.select_current(required, r)
 
+    def test_partial_prior_bootstrap_need_not_contain_future_descriptors(self):
+        b = self.opened()
+        logical = pin('implementation/p09/evidence/new-current-descriptor.json', 3)
+        def full_union(rows, checkpoint):
+            if rows.get(logical['path']) != logical:
+                raise ValueError('ORIGINAL_ALL_DESCRIPTORS_REQUIRED')
+            return rows, {}
+        binding = NS(descriptors=lambda: [dict(semantic_original_pin=logical, physical_envelope_pin=N)],
+            semantic_union=full_union)
+        b.require_preserved([H], binding)
+        self.assertEqual(b.bootstrap_memberships, 1)
+
+    def test_bootstrap_projection_is_not_fresh_batch_authority(self):
+        b = self.batch()
+        binding = NS(descriptors=lambda: [], semantic_union=lambda rows, checkpoint: (rows, {}))
+        self.assertEqual(b.bootstrap_declaration([H], binding), {H['path']: H})
+        with self.assertRaisesRegex(ValueError, 'BATCH_START_BEFORE_BOOTSTRAP_REUSE'):
+            b.require_preserved([H], binding)
+
+    def test_declared_scope_composition_is_not_live_metadata_authority(self):
+        b = self.batch()
+        binding = NS(descriptors=lambda: [], semantic_union=lambda rows, checkpoint: (rows, {}))
+        self.assertEqual(b.scope_declaration({N['path']: N}, binding), MODULE.plain(b.whole))
+        with self.assertRaisesRegex(ValueError, 'DECLARATION_SEED_ONLY_INSIDE_AUDITED_METADATA'):
+            b.seed_scope_declaration({N['path']: N}, binding)
+
     def test_history_not_selected_from_code_current_or_future(self):
         for name in ('crates/test.rs', 'tools/p09/old.py', 'fixtures/a.hwpx',
                      H['path'].replace('case114', 'case165'), H['path'].replace('case114', 'case166')):
@@ -432,6 +1104,23 @@ class Tests(unittest.TestCase):
             updated.current_input_scope(reader, *args)
         self.assertEqual(batch.phase, 'BROKEN')
 
+    def test_prior_declaration_does_not_need_to_predict_current_programs(self):
+        batch, runtime, reader, args, names = self.runtime_fixture()
+        rows = reader.docs[names['prior']]['source_input_representation']['semantic_source_freeze']
+        reader.docs[names['prior']]['source_input_representation']['semantic_source_freeze'] = [p for p in rows
+            if p['path'] != 'crates/synthetic/input786.rs']
+        updated, _ = MODULE.install_scope(runtime, RAW_RUNTIME, batch)
+        current, _ = updated.current_input_scope(reader, *args)
+        self.assertIn('crates/synthetic/input786.rs', current)
+        self.assertNotIn(H['path'], current)
+
+    def test_derived_unplanned_pin_cannot_be_dropped_by_declaration_seed(self):
+        batch, runtime, reader, args, names = self.runtime_fixture()
+        reader.docs[names['prior']]['source_input_representation']['semantic_source_freeze'].append(pin('unknown-derived.json'))
+        updated, _ = MODULE.install_scope(runtime, RAW_RUNTIME, batch)
+        with self.assertRaisesRegex(ValueError, 'DERIVED_SCOPE_MUST_MATCH_DECLARED_PLAN'):
+            updated.current_input_scope(reader, *args)
+
     def test_changed_prior_bootstrap_not_accepted_from_initial_membership(self):
         batch, runtime, reader, args, names = self.runtime_fixture()
         reader.docs[names['prior']]['bootstrap_metadata']['input_pins'][0]['sha256'] = 'a' * 64
@@ -468,3 +1157,84 @@ class Tests(unittest.TestCase):
             runtime.current_input_scope = MODULE.FunctionType(code, fn.__globals__)
             with self.subTest(mode=mode), self.assertRaisesRegex(ValueError, 'NO_PRIOR_FUNCTION_PATCH'):
                 MODULE.install_scope(runtime, RAW_RUNTIME, batch)
+
+    def namespace_fixture(self, *, mode='rb'):
+        name = 'tools/p09/synthetic_namespace_example.py'
+        raw = b'value = 17\n'
+        expected = dict(path=name, bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+        reader = Reader({name: expected}, {name: raw})
+        observations = []
+        def load(root, pins, reuse):
+            observations.append(reader.maximum_parse_bytes)
+            with (root / pins[0]['path']).open(mode) as stream:
+                source = stream.read(pins[0]['bytes'] + 1)
+            if len(source) != pins[0]['bytes'] or hashlib.sha256(source).hexdigest() != pins[0]['sha256']:
+                raise ValueError('ORIGINAL_NAMESPACE_SOURCE_HASH')
+            return NS(source=source), []
+        original = NS(load=load)
+        paced = MODULE.PacedNamespaceLoader(original, reader, {name: expected})
+        return paced, reader, expected, raw, observations, original
+
+    def test_namespace_source_opens_are_fresh_not_a_byte_cache(self):
+        paced, reader, p, raw, _, original = self.namespace_fixture()
+        fn = original.load
+        for _ in range(2):
+            value, _ = paced.api.load(reader.root, [p], {})
+            self.assertEqual(value.source, raw)
+        self.assertEqual(reader.read_passes, 2)
+        self.assertEqual(paced.source_reads, 2)
+        self.assertIs(original.load, fn)
+
+    def test_namespace_unqualified_pin_or_root_denied_before_io(self):
+        for mode in ('pin', 'root'):
+            paced, reader, p, _, _, _ = self.namespace_fixture()
+            root = reader.root
+            if mode == 'pin':
+                p = dict(p, sha256='a' * 64)
+            else:
+                root = Path('D:/not-the-reader-root')
+            with self.subTest(mode=mode), self.assertRaises(ValueError):
+                paced.api.load(root, [p], {})
+            self.assertEqual(reader.read_passes, 0)
+
+    def test_namespace_reader_budget_is_lowered_then_restored(self):
+        paced, reader, p, _, _, _ = self.namespace_fixture()
+        before = reader.maximum_parse_bytes
+        original = reader._read
+        caps = []
+        def checked(name, parse=False):
+            caps.append(reader.maximum_parse_bytes)
+            return original(name, parse=parse)
+        reader._read = checked
+        paced.api.load(reader.root, [p], {})
+        self.assertEqual(caps, [p['bytes'] + 1])
+        self.assertEqual(reader.maximum_parse_bytes, before)
+
+    def test_namespace_original_read_error_and_parse_limit_preserved(self):
+        paced, reader, p, _, _, _ = self.namespace_fixture()
+        before = reader.maximum_parse_bytes
+        error = ValueError('ORIGINAL_READER_STOP')
+        def stop(name, parse=False):
+            raise error
+        reader._read = stop
+        with self.assertRaises(ValueError) as ctx:
+            paced.api.load(reader.root, [p], {})
+        self.assertIs(ctx.exception, error)
+        self.assertEqual(reader.maximum_parse_bytes, before)
+
+    def test_namespace_writes_are_denied_before_io(self):
+        paced, reader, p, _, _, _ = self.namespace_fixture(mode='wb')
+        with self.assertRaisesRegex(ValueError, 'NAMESPACE_READ_ONLY'):
+            paced.api.load(reader.root, [p], {})
+        self.assertEqual(reader.read_passes, 0)
+
+    def test_namespace_bound_and_original_hash_check_are_not_removed(self):
+        for mode in ('size', 'bytes'):
+            paced, reader, p, _, _, _ = self.namespace_fixture()
+            if mode == 'size':
+                p = dict(p, bytes=65537)
+                paced.allowed[p['path']] = p
+            else:
+                reader.docs[p['path']] = b'changed!!!'
+            with self.subTest(mode=mode), self.assertRaises(ValueError):
+                paced.api.load(reader.root, [p], {})

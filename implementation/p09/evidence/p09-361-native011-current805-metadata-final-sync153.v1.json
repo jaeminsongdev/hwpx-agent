@@ -1,0 +1,200 @@
+{
+  "original_pin": {
+    "path": "crates/product-cli/src/reference_validation_product.rs",
+    "bytes": 6645,
+    "sha256": "9943fe55690775ae58564c247324ae239d9218f571e804a553297be4672e28bd"
+  },
+  "current_pin": {
+    "path": "crates/product-cli/src/reference_validation_product.rs",
+    "bytes": 6687,
+    "sha256": "edf343ba033410dd8c798d6bee6da9f2a21892099c25d4b715643fc41fe33d8c"
+  },
+  "proposed_archive_pin": {
+    "path": "implementation/p09/evidence/p09-native011-prior-compiled-rust787-code/crates/product-cli/src/reference_validation_product.rs",
+    "bytes": 6645,
+    "sha256": "9943fe55690775ae58564c247324ae239d9218f571e804a553297be4672e28bd"
+  },
+  "restored_utf8": "//! Read-only product path for the typed P09 reference validator.\n//!\n//! This operation does not write an HWPX package, update fields, repair links,\n//! or access external data sources. It returns the deterministic report already\n//! bound by the reference-auxiliary request and receipt.\n\nuse domain_ir::{\n    ReferenceAuxiliaryBuilder, ReferenceAuxiliaryDocumentState, ReferenceAuxiliaryError,\n    ReferenceAuxiliaryLimits, ReferenceAuxiliaryReceipt, ReferenceAuxiliaryRequest,\n    ReferenceValidationReport,\n};\nuse serde::Serialize;\nuse sha2::{Digest as _, Sha256};\nuse thiserror::Error;\n\npub const REFERENCE_VALIDATION_PRODUCT_PROFILE_ID: &str =\n    \"hwpx-agent.product.reference-validation-read-only/v1\";\npub const REFERENCE_VALIDATION_PRODUCT_RESULT_SCHEMA_VERSION: &str =\n    \"hwpx-agent.product.reference-validation-result/v1\";\npub const REFERENCE_VALIDATION_PRODUCT_QUALIFICATION: &str =\n    \"caller_supplied_typed_state_only_source_completeness_unverified\";\n\n#[derive(Clone, Debug, Eq, PartialEq, Serialize)]\n#[serde(deny_unknown_fields)]\npub struct ReferenceValidationProductResult {\n    pub schema_version: &'static str,\n    pub profile_id: &'static str,\n    pub qualification: &'static str,\n    pub request_sha256: String,\n    pub domain_receipt: ReferenceAuxiliaryReceipt,\n    pub report_sha256: String,\n    pub report: ReferenceValidationReport,\n}\n\nimpl ReferenceValidationProductResult {\n    /// Serializes the product response within the same bounded output limit.\n    ///\n    /// # Errors\n    /// Returns a bounded-output error without exposing source data in diagnostics.\n    pub fn canonical_json(\n        &self,\n        limits: ReferenceAuxiliaryLimits,\n    ) -> Result<Vec<u8>, ReferenceValidationProductError> {\n        let bytes =\n            serde_json::to_vec(self).map_err(|_| ReferenceValidationProductError::Serialization)?;\n        if bytes.len() > limits.config().output_bytes {\n            return Err(ReferenceValidationProductError::OutputLimit);\n        }\n        Ok(bytes)\n    }\n}\n\n#[derive(Clone, Copy, Debug, Eq, Error, PartialEq)]\npub enum ReferenceValidationProductError {\n    #[error(\"REFERENCE_VALIDATION_PRODUCT_INPUT_REJECTED\")]\n    Request,\n    #[error(\"REFERENCE_VALIDATION_PRODUCT_INPUT_LIMIT\")]\n    InputLimit,\n    #[error(\"REFERENCE_VALIDATION_PRODUCT_READ_ONLY_CAPABILITY_REQUIRED\")]\n    UnsupportedCapability,\n    #[error(\"REFERENCE_VALIDATION_PRODUCT_BINDING_REJECTED\")]\n    Binding,\n    #[error(\"REFERENCE_VALIDATION_PRODUCT_OUTPUT_LIMIT\")]\n    OutputLimit,\n    #[error(\"REFERENCE_VALIDATION_PRODUCT_SERIALIZATION_FAILED\")]\n    Serialization,\n}\n\n#[derive(Debug)]\npub struct ReferenceValidationProductOperation;\n\nimpl ReferenceValidationProductOperation {\n    /// Executes only `ref.reference_validate` against the exact typed state and flow.\n    ///\n    /// The JSON preflight is only a capability filter. Accepted requests are\n    /// still parsed by `ReferenceAuxiliaryRequest::from_json`, which performs\n    /// the domain's bounded, duplicate-key rejecting validation.\n    ///\n    /// # Errors\n    /// Rejects malformed or drifting requests, mutation capabilities, receipt\n    /// mismatches, and bounded serialization failures. No package or external\n    /// source is read or written.\n    pub fn execute_json(\n        source: &ReferenceAuxiliaryDocumentState,\n        current_document_flow_sha256: &str,\n        request_json: &[u8],\n        limits: ReferenceAuxiliaryLimits,\n    ) -> Result<ReferenceValidationProductResult, ReferenceValidationProductError> {\n        if request_json.is_empty() || request_json.len() > limits.config().input_bytes {\n            return Err(ReferenceValidationProductError::InputLimit);\n        }\n        let preview: serde_json::Value = serde_json::from_slice(request_json)\n            .map_err(|_| ReferenceValidationProductError::Request)?;\n        let operation = preview\n            .get(\"operation\")\n            .ok_or(ReferenceValidationProductError::Request)?;\n        let capability = operation\n            .get(\"kind\")\n            .and_then(serde_json::Value::as_str)\n            .ok_or(ReferenceValidationProductError::Request)?;\n        if capability != \"validate_references\" {\n            return Err(ReferenceValidationProductError::UnsupportedCapability);\n        }\n\n        let request = ReferenceAuxiliaryRequest::from_json(\n            request_json,\n            source,\n            current_document_flow_sha256,\n            limits,\n        )\n        .map_err(map_domain_error)?;\n        let plan =\n            ReferenceAuxiliaryBuilder::plan(source, &request, current_document_flow_sha256, limits)\n                .map_err(map_domain_error)?;\n        let built =\n            ReferenceAuxiliaryBuilder::build(&plan, source, current_document_flow_sha256, limits)\n                .map_err(|_| ReferenceValidationProductError::Binding)?;\n        let report = built\n            .state\n            .validate_references(limits)\n            .map_err(|_| ReferenceValidationProductError::Binding)?;\n        let report_sha256 = report\n            .canonical_sha256(limits)\n            .map_err(|_| ReferenceValidationProductError::Binding)?;\n        if built.receipt.capability_id != \"ref.reference_validate\"\n            || built.receipt.validation_report_sha256.as_deref() != Some(report_sha256.as_str())\n            || built.receipt.source_state_sha256 != built.receipt.target_state_sha256\n            || built.receipt.source_document_flow_sha256\n                != built.receipt.target_document_flow_sha256\n        {\n            return Err(ReferenceValidationProductError::Binding);\n        }\n\n        Ok(ReferenceValidationProductResult {\n            schema_version: REFERENCE_VALIDATION_PRODUCT_RESULT_SCHEMA_VERSION,\n            profile_id: REFERENCE_VALIDATION_PRODUCT_PROFILE_ID,\n            qualification: REFERENCE_VALIDATION_PRODUCT_QUALIFICATION,\n            request_sha256: hex::encode(Sha256::digest(request_json)),\n            domain_receipt: built.receipt,\n            report_sha256,\n            report,\n        })\n    }\n}\n\nfn map_domain_error(error: ReferenceAuxiliaryError) -> ReferenceValidationProductError {\n    match error {\n        ReferenceAuxiliaryError::InputLimit => ReferenceValidationProductError::InputLimit,\n        ReferenceAuxiliaryError::OutputLimit => ReferenceValidationProductError::OutputLimit,\n        ReferenceAuxiliaryError::SourceStateDrift\n        | ReferenceAuxiliaryError::DocumentFlowDrift\n        | ReferenceAuxiliaryError::ValidationReportDrift\n        | ReferenceAuxiliaryError::PlanTampered => ReferenceValidationProductError::Binding,\n        _ => ReferenceValidationProductError::Request,\n    }\n}\n",
+  "state": "PASS_NATIVE011_CURRENT805_METADATA_AND_ARCHIVES_DOCUMENT_SYNC_NOT_RUNTIME_OR_GATE",
+  "fresh_inputs": 34,
+  "final_fresh_hashes": 34,
+  "exact_prior_archives": 5,
+  "required_declaration_inputs": 1725,
+  "metadata_inputs": 21,
+  "actual_Native_or_product_qualified": false,
+  "next_boundary": "PROJECT_ACTUAL_UNOPENED_BATCH_PRESERVING_HISTORY419_AND_ALIASES162",
+  "cleanup": true,
+  "elapsed_seconds": 7.063000000023749,
+  "source_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-prior-source-preimages001.v1.json",
+      "bytes": 92704,
+      "sha256": "8bce0d752f5ff8a8f788a2cae6b79d92800e64052aeaeaeb5a1800fcb2f321a6"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-scope-declaration001.v1.json",
+      "bytes": 177981,
+      "sha256": "127fd5a4048a190d48b7da889cb65713e1dd2de46ae5e36ecca817c9d90cd85a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-original-binding002.v1.json",
+      "bytes": 12138,
+      "sha256": "153e6e397fc3ed4c9d6412ae3caa522d8fda56df49695931681cc04da8e44d4e"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-binding-owned152.v1.json",
+      "bytes": 12758,
+      "sha256": "b530edefe700632e583d2c9d482fb27cd1b2fbea64900983a8fce82c31b79ac7"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-prior-preimage-models145.v1.json",
+      "bytes": 6914,
+      "sha256": "f570e78ea4921a9251aeba3239d52ae92d8cbc063d220d1b1e91089459e4930f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-scope-models147.v1.json",
+      "bytes": 6897,
+      "sha256": "6b75c79f8355defcd9282c0bfd28cd4ec7f4bf0c591a169e4875f4db43e4bb96"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-metadata-role-models151.v1.json",
+      "bytes": 9266,
+      "sha256": "39f7fdcd14e64e1f3c15b2256aeefe05699c403734145b45879f930a1321c9bf"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import.rs",
+      "bytes": 26946,
+      "sha256": "c737697ec2547e9bf9be73d02473bde9da9561ee079581ddd24a69b5cc9b08af"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-native011-prior-compiled-rust787-code/crates/hwpx-package/src/document_import.rs",
+      "bytes": 26919,
+      "sha256": "193b092f6288f7d47ce3d0d1c9917e7ba317f4949a50dd26ab7e0cfd414f2edc"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields.rs",
+      "bytes": 21327,
+      "sha256": "86406ad79853b7c7c7033b7c9d1336d455f5da3eb36a048d2a6f5fb44b70655e"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-native011-prior-compiled-rust787-code/crates/hwpx-package/src/document_import/fields.rs",
+      "bytes": 21290,
+      "sha256": "648339fd5ae32eccef1aa371cc8b8b69790710b62404e723a87926614a5a2679"
+    },
+    {
+      "path": "crates/hwpx-package/src/lib.rs",
+      "bytes": 26412,
+      "sha256": "f2a05eed7f54f8ab59078150bfd5f9475e55efba90c3a58dcf41c2776e44a239"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-native011-prior-compiled-rust787-code/crates/hwpx-package/src/lib.rs",
+      "bytes": 26383,
+      "sha256": "ae8b26b0984dab559f7b3f9a2424464487b8eacce273f324d60c905015acc48e"
+    },
+    {
+      "path": "crates/product-cli/src/main.rs",
+      "bytes": 1997,
+      "sha256": "227974950c8fa18b8e9294701499db8c1de59f2a504c9cd22236daf713e42f03"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-native011-prior-compiled-rust787-code/crates/product-cli/src/main.rs",
+      "bytes": 1116,
+      "sha256": "cd5c6fb62fcbd9481a5a92e10a97f5bf733548ac2f46896e7dcd252cd4aa9790"
+    },
+    {
+      "path": "crates/product-cli/src/reference_validation_product.rs",
+      "bytes": 6687,
+      "sha256": "edf343ba033410dd8c798d6bee6da9f2a21892099c25d4b715643fc41fe33d8c"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-native011-prior-compiled-rust787-code/crates/product-cli/src/reference_validation_product.rs",
+      "bytes": 6645,
+      "sha256": "9943fe55690775ae58564c247324ae239d9218f571e804a553297be4672e28bd"
+    },
+    {
+      "path": "tools/p09/native011_prior_source_preimages.py",
+      "bytes": 6516,
+      "sha256": "adc36e0f4faaef36710c37025e4e819e39cb2bef9ee3babf2dd9de0eef562933"
+    },
+    {
+      "path": "tools/p09/current_issuer_build_inputs.py",
+      "bytes": 18791,
+      "sha256": "7034d77e17c2d6b460d8de753039398adc7c08913f63db203982844ac3e1bd38"
+    },
+    {
+      "path": "tools/p09/build_case112_current_stored.py",
+      "bytes": 24527,
+      "sha256": "366f35c2ec22fee9e2b5344402cd2ae79eb9bbc8e3c021e769024ffccd765faa"
+    },
+    {
+      "path": "tools/p09/native011_current_cohort_plan.py",
+      "bytes": 8535,
+      "sha256": "97d49b39de50da9ad0e062a2a0af055753bf3e3f72d67ff76ce52a14d6b85803"
+    },
+    {
+      "path": "tools/p09/stored_test_profile81.py",
+      "bytes": 1083,
+      "sha256": "61f64d1c7fc7654a352f852b2ce3028b60581c2511044ad1dfb3d567802cb950"
+    },
+    {
+      "path": "tools/p09/signed_durable_build_stream.py",
+      "bytes": 7534,
+      "sha256": "953c97f96b5783b4d0439ce672025ea492c3f020f0ac1bb77d8ea0d98e0425e2"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_prior_source_preimages.py",
+      "bytes": 2201,
+      "sha256": "7ac481f10299fa31512a0b460bb4ed484c121788d0aed211aa09d396d1ffe8a2"
+    },
+    {
+      "path": "tools/p09/current_stored_runtime_scope.py",
+      "bytes": 10087,
+      "sha256": "45f00274f99383c6d27fadea882614a3fd02ca19932bc8735618483f982d8841"
+    },
+    {
+      "path": "tools/p09/owned_sql_job.py",
+      "bytes": 13850,
+      "sha256": "30b08c4d779494bbdb7579b9bb28782b4f4588fc69b931cc9d18af326d46b7a0"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    },
+    {
+      "path": "tools/p09/native011_current_epoch_scope.py",
+      "bytes": 11576,
+      "sha256": "088e80d5eb3543d9fd9126f10bdf133b18e7b6e4fa4e7c6a71a91b0602a5af70"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_current_epoch_scope.py",
+      "bytes": 2144,
+      "sha256": "3cb2248c2db87d5861356424ad3608689e239f864cdd1529ecad262cf873c1c8"
+    },
+    {
+      "path": "tools/p09/native011_current_epoch_binding.py",
+      "bytes": 10185,
+      "sha256": "ce9275c12318a76d0c1b63f46d35a1057dba6ca99aa491796b1f976b3da434a9"
+    },
+    {
+      "path": "tools/p09/run_case112_current_stored.py",
+      "bytes": 23159,
+      "sha256": "6f2a79556ebcfae40765ebd127a8fcc1022e5ee8611d666fd3daa723a4236713"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_current_epoch_metadata_roles.py",
+      "bytes": 1185,
+      "sha256": "b40fa1821e186ebf2f8658b453b3c50e75c09ebf3ca689c56571b03a3f0bff82"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 1144804,
+      "sha256": "7bfe092be14435041f7e25c95b804739cee9bedb27fe9ea5b1495b7d237d7d95"
+    },
+    {
+      "path": "implementation/p09/P09_VERIFICATION_WORKFLOW.md",
+      "bytes": 227458,
+      "sha256": "1d95489f371e54afb671246d9e6cc1ef607d3de372b5738a551c4d30fff98f9d"
+    }
+  ]
+}

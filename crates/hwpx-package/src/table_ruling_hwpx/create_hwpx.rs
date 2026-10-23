@@ -9,6 +9,8 @@ use domain_ir::{
 use serde::{Deserialize, Serialize};
 use sha2::{Digest as _, Sha256};
 use thiserror::Error;
+mod review_output;
+pub(crate) use review_output::{ReviewNativeTableOutput, ReviewTableRenderInput, render_review_table};
 
 use super::{
     RawEdit, TableRulingHwpxBinding, TableRulingHwpxError, TableRulingHwpxLimits,
@@ -126,6 +128,96 @@ impl TableCreateHwpxReader {
         })
     }
 }
+
+// BEGIN source-bound review context. The original public reader/lowerer stays unchanged.
+#[derive(Clone, Copy)]
+pub(crate) struct ReviewCreateContextInput<'a> {
+    pub header: &'a [u8],
+    pub section: &'a [u8],
+    pub body: usize,
+    pub paragraph: usize,
+    pub template_section: &'a [u8],
+    pub template_table_ordinal: usize,
+    pub template_binding: &'a TableRulingHwpxBinding,
+    pub limits: TableCreateHwpxLimits,
+}
+
+impl TableCreateHwpxReader {
+    pub(crate) fn read_review_context(
+        input: &ReviewCreateContextInput<'_>,
+    ) -> Result<TableCreateHwpxReadback, TableCreateHwpxError> {
+        let document = PreservingXmlDocument::parse(input.section)?;
+        let body = super::element(&document, input.body)?;
+        let paragraph = super::element(&document, input.paragraph)?;
+        if !super::has_name(body, "subList")
+            || !super::has_name(paragraph, "p")
+            || !super::is_descendant(&document, input.paragraph, input.body)?
+            || paragraph.parent().is_none_or(|parent| {
+                !super::element(&document, parent)
+                    .is_ok_and(|parent| super::has_name(parent, "subList"))
+            })
+            || !super::is_empty_scaffold(input.section, &document, input.paragraph)?
+        {
+            return Err(TableCreateHwpxError::InvalidBinding);
+        }
+        // The original scaffold predicate is retained. Additionally refuse local-name
+        // lookalikes here; source-review preparation never admits a foreign namespace.
+        for (index, node) in document.elements().iter().enumerate() {
+            if super::is_descendant(&document, index, input.paragraph)?
+                && node.name().namespace()
+                    != Some("http://www.hancom.co.kr/hwpml/2011/paragraph")
+            {
+                return Err(TableCreateHwpxError::InvalidBinding);
+            }
+        }
+        let span = paragraph
+            .outer_span()
+            .ok_or(TableCreateHwpxError::InvalidBinding)?;
+        let mut digest = Sha256::new();
+        digest.update(b"hwpx-agent.review-table-insertion-context/v1\0");
+        digest.update(Sha256::digest(input.section));
+        digest.update(input.body.to_le_bytes());
+        digest.update(input.paragraph.to_le_bytes());
+        digest.update(Sha256::digest(&input.section[span.start()..span.end()]));
+        let template = TableRulingHwpxReader::read_existing(
+            input.header,
+            input.template_section,
+            input.template_table_ordinal,
+            input.template_binding,
+            input.limits.ruling,
+        )?;
+        let template_pagination = TablePaginationHwpxReader::read_in_section(
+            input.template_section,
+            input.template_table_ordinal,
+            input.limits.pagination,
+        )?;
+        require_template_profile(&template, &template_pagination)?;
+        require_native_template_wrapper(input.template_section, input.template_table_ordinal)?;
+        let _ = super::insertion_wrapper(input.template_section, input.template_table_ordinal)?;
+        super::ensure_native_table_id_available(
+            input.section,
+            input.template_section,
+            input.template_table_ordinal,
+        )?;
+        Ok(TableCreateHwpxReadback {
+            // This cannot be replayed as the original top-level create request profile.
+            profile_id: "hwpx-agent.review-table-create-source-context/partial-v1",
+            placeholder_paragraph_ordinal: input.paragraph,
+            template_table_ordinal: input.template_table_ordinal,
+            header_sha256: Sha256::digest(input.header).into(),
+            section_sha256: Sha256::digest(input.section).into(),
+            template_section_sha256: Sha256::digest(input.template_section).into(),
+            insertion_context_sha256: hex(digest.finalize()),
+            source_table_count: TablePaginationHwpxReader::count_in_section(
+                input.section,
+                input.limits.pagination,
+            )?,
+            template,
+            template_pagination,
+        })
+    }
+}
+// END source-bound review context.
 
 pub(super) fn require_native_template_wrapper(
     template_section: &[u8],

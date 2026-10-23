@@ -26,11 +26,11 @@ SOURCE_SHA256 = {
 IMPLEMENTATION_SHA256 = {
     "crates/domain-ir/src/object_composition.rs": "d3389af14835039ca9c39dc65f453906704ae456d67720772db810b2f8ca8045",
     "crates/domain-ir/src/drawing_canvas.rs": "e0fc9e25852f19ab70ad6fdfd3680f1d8dd5a07e7d184cb2d02d5103533de118",
-    "crates/hwpx-package/src/lib.rs": "bc0f0615dd9b3aa2577dbf59e9f681a06e41b9784d2af9042977f89d15690a59",
-    "crates/hwpx-package/src/object_composition_hwpx.rs": "2e9f4737fd22e58ed59ebff53ac94964cb89e8fb3eddce83a088eeec265bffe6",
-    "crates/hwpx-package/src/drawing_canvas_hwpx.rs": "0f0ef83c164c63ba013e0ebd19d857aa15f42ad4df3e4d4854acc182285e312d",
-    "crates/hwpx-package/tests/object_composition_hwpx.rs": "79554bce44dc1f0f12c838c43d94854e4bcd5248c64c03a3b58d1acea53598ed",
-    "crates/hwpx-package/tests/drawing_canvas_hwpx.rs": "bdb0376116dacc942b6ed9821eb611b17f87f943308168cf00774010d6f6dc24",
+    "crates/hwpx-package/src/lib.rs": "a22f9f73f04e17ac3439022fcf6aaa0fb5f5ddb02d48257d10998bd01bdf2e12",
+    "crates/hwpx-package/src/object_composition_hwpx.rs": "1a84abd5f48b11ac099451388cb424ed28289b9e5a9f0a2d20382596149ea4ef",
+    "crates/hwpx-package/src/drawing_canvas_hwpx.rs": "7d40271139e25907e2c6e485f71a695863c773a5dc233001a4208977cd553564",
+    "crates/hwpx-package/tests/object_composition_hwpx.rs": "602d3d542be639f5485846fb61d061da38c7386fe1b6fe34bb1f3f0a9a7ea913",
+    "crates/hwpx-package/tests/drawing_canvas_hwpx.rs": "11272daf25ac2039adeb1c735eb016f09a14d88f5892fdb77cda915766b6ae11",
 }
 MARKERS = {
     "crates/domain-ir/src/object_composition.rs": (

@@ -1,0 +1,186 @@
+{
+  "schema_version": "hwpx-agent.p08-object-shape-canary-qualification/v1",
+  "task": "P08-24",
+  "recorded_date": "2026-09-15",
+  "attempt_id": "p08-24-object-shape-canary-20260915-05",
+  "state": "pass",
+  "target": {
+    "product": "Hancom Hangul 2020",
+    "build": "11.0.0.9136",
+    "architecture": "x86",
+    "locale": "ko-KR",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce"
+  },
+  "identities": {
+    "binding_overlay_sha256": "8fd12846d8f998018d79ec872abfab18af8fc2d1d8753a6c5801312ce3b9908f",
+    "progress_sha256": "21ef4916ac2b76e7c29d8e350e77932250cf9ce3eb2a8e7057894b38fc9653ba",
+    "private_trace_sha256": "c327552c0077dbce523f2388fe18ea8d98380a9dd9d8778b18fc520658962628",
+    "runtime_receipt_sha256": "3412306a0de52692b01c368e60734745049c258a2aa7439df34f3565614197b3",
+    "wrapper_sha256": "0c858f7515330be5d14a815c46efe6d18e1515e4acad8b8c232ddfdcfcceaf4f",
+    "child_sha256": "ec56a085af9684076543299e7c5ee6b6da1ab5aacc49ea3b744f1144519c0f89"
+  },
+  "execution": {
+    "canary_case_count": 5,
+    "candidate_execute_count": 5,
+    "effect_observed_count": 5,
+    "semantic_undo_verified_count": 5,
+    "raw_undo_exact_count": 4,
+    "serializer_default_normalized_count": 1,
+    "context_setup_undo_verified_count": 1,
+    "hwp_file_open_count": 0,
+    "document_save_count": 0,
+    "remaining_owned_hwp_processes": 0,
+    "timed_out": false,
+    "stalled": false
+  },
+  "normalization": {
+    "id": "hwpml2x-drawtext-empty-name-default/v1",
+    "scope": "empty_Name_attribute_on_DRAWTEXT_only",
+    "non_empty_names_remain_hash_significant": true,
+    "geometry_style_text_remain_hash_significant": true,
+    "raw_mismatch_preserved": true
+  },
+  "predecessor_attempts": [
+    {
+      "attempt_id": "p08-24-object-shape-canary-20260915-01",
+      "state": "failed"
+    },
+    {
+      "attempt_id": "p08-24-object-shape-canary-20260915-02",
+      "state": "failed"
+    },
+    {
+      "attempt_id": "p08-24-object-shape-canary-20260915-03",
+      "state": "diagnostic_failed"
+    },
+    {
+      "attempt_id": "p08-24-object-shape-canary-20260915-04",
+      "state": "superseded_single_case_pass"
+    }
+  ],
+  "cases": [
+    {
+      "feature_id": "OBJ-026",
+      "capability_id": "obj.shadow",
+      "source_identifier_sha256": "8d33a654ea975f7834e7fa76312aba462244a169119287119733af198f6b49fe",
+      "context": "two_rectangle_unsaved_blank_document_first_shape_selected",
+      "is_action_enable": true,
+      "execute_return_advisory": true,
+      "effect_observed": true,
+      "undo_semantic_verified": true,
+      "undo_raw_exact": false,
+      "empty_name_normalization_counts": {
+        "before": 0,
+        "after": 1,
+        "undo": 1
+      },
+      "context_setup_undo_verified": null,
+      "state": "pass"
+    },
+    {
+      "feature_id": "OBJ-033",
+      "capability_id": "obj.flip",
+      "source_identifier_sha256": "f80e0506a96277f212280be29b1d546e86fc1df4626d3aa43ffa98c277f30ffc",
+      "context": "two_rectangle_unsaved_blank_document_first_shape_selected",
+      "is_action_enable": true,
+      "execute_return_advisory": true,
+      "effect_observed": true,
+      "undo_semantic_verified": true,
+      "undo_raw_exact": true,
+      "empty_name_normalization_counts": {
+        "before": 1,
+        "after": 1,
+        "undo": 1
+      },
+      "context_setup_undo_verified": null,
+      "state": "pass"
+    },
+    {
+      "feature_id": "OBJ-038",
+      "capability_id": "obj.z_order",
+      "source_identifier_sha256": "a59b33b74bdd311236fcec28c1fa11d440c8e0cdffaa0d50b377c6a41b3573f4",
+      "context": "two_rectangle_unsaved_blank_document_first_shape_selected",
+      "is_action_enable": true,
+      "execute_return_advisory": true,
+      "effect_observed": true,
+      "undo_semantic_verified": true,
+      "undo_raw_exact": true,
+      "empty_name_normalization_counts": {
+        "before": 1,
+        "after": 1,
+        "undo": 1
+      },
+      "context_setup_undo_verified": true,
+      "state": "pass"
+    },
+    {
+      "feature_id": "OBJ-045",
+      "capability_id": "obj.object_protect",
+      "source_identifier_sha256": "e79d901c7065ff60ecbe69707d5622e9d6eb2b97566475c1b3767c7f39967da7",
+      "context": "two_rectangle_unsaved_blank_document_first_shape_selected",
+      "is_action_enable": true,
+      "execute_return_advisory": true,
+      "effect_observed": true,
+      "undo_semantic_verified": true,
+      "undo_raw_exact": true,
+      "empty_name_normalization_counts": {
+        "before": 1,
+        "after": 1,
+        "undo": 1
+      },
+      "context_setup_undo_verified": null,
+      "state": "pass"
+    },
+    {
+      "feature_id": "OBJ-013",
+      "capability_id": "obj.caption_insert",
+      "source_identifier_sha256": "560e80463ffcb9238a2354db90cd5d20ddb810e516712ea7fbb8ca58dbea8051",
+      "context": "two_rectangle_unsaved_blank_document_first_shape_selected",
+      "is_action_enable": true,
+      "execute_return_advisory": false,
+      "effect_observed": true,
+      "undo_semantic_verified": true,
+      "undo_raw_exact": true,
+      "empty_name_normalization_counts": {
+        "before": 1,
+        "after": 1,
+        "undo": 1
+      },
+      "context_setup_undo_verified": null,
+      "state": "pass"
+    }
+  ],
+  "boundaries": {
+    "one_session_one_unsaved_disposable_document": true,
+    "setup_rectangle_count": 2,
+    "known_modal_executed": false,
+    "fixture_or_user_document_opened_by_hwp": false,
+    "document_saved": false,
+    "candidate_action_executed": true,
+    "effect_observed": true,
+    "undo_semantic_verified": true,
+    "routing_enabled": false,
+    "differential_run": false
+  },
+  "claims": {
+    "exact_target_selected_object_canary": true,
+    "qualified_canary_case_count": 5,
+    "automation_runtime_support_for_all_candidates": false,
+    "routing_enabled": false,
+    "differential": false,
+    "required_matrix_green": false,
+    "p08_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "privacy": {
+    "absolute_private_paths_present": false,
+    "raw_action_identifiers_present": false,
+    "raw_parameter_identifiers_present": false,
+    "document_content_present": false,
+    "user_document_scanned": false,
+    "external_network_invoked": false,
+    "registry_or_system_setting_changed": false,
+    "computer_use_click_or_type_invoked": false
+  }
+}

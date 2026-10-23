@@ -10,6 +10,13 @@ use crate::types::{
 };
 
 pub trait RevisionRepository: Send + Sync {
+    /// Checks a caller context before any service read or mutation.
+    /// # Errors
+    /// A subject-fixed durable repository rejects a mismatched identity.
+    fn authorize_context(&self, _context: &RevisionRequestContext) -> Result<(), RevisionError> {
+        Ok(())
+    }
+
     /// Atomically commits a sealed node or returns a typed stale-head conflict.
     ///
     /// # Errors

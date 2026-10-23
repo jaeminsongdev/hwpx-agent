@@ -1,0 +1,959 @@
+{
+  "state": "PASS_SELECTED_COORDINATOR9_LIFECYCLE15_PRECOMMIT41_AND_DOC_SYNC_NOT_SQL_RUNTIME_P09_OR_GATE",
+  "own_cpu_selection": {
+    "initial_allowed_mask": 65535,
+    "selected_logical_cpu": 2,
+    "selected_mask": 4,
+    "selected_cpu_count": 1,
+    "only_current_verifier_changed": true
+  },
+  "actual_Hangul_or_COM": false,
+  "Native011_executed": false,
+  "prior_Native_replayed": false,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "actual_PostgreSQL_or_process_restart": false,
+  "SQL23_applied": false,
+  "SQL23_catalog_privilege_or_runtime_qualified": false,
+  "durable_idempotency_complete": false,
+  "P09_product_execution_or_commit": false,
+  "actual_cases_reexecuted": 0,
+  "full919_inputs_replayed": false,
+  "fresh_inputs": 101,
+  "final_fresh_hashes": 101,
+  "new_distinct_cases_this_turn": 24,
+  "retained_precommit_scope_cases": 41,
+  "all23_migrations_and_all19_search_rows_retained": true,
+  "failure271_272_274_276_preserved": true,
+  "next_work": "owned_SQL23_catalog_privilege_runtime_worker_and_restart_campaign_then_qualified_product_dispatch",
+  "cleanup": true,
+  "elapsed_seconds": 19.078,
+  "source_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-361-stored-job-coordinator-checker-recovery275.v1.json",
+      "bytes": 200380,
+      "sha256": "f7f8d8d21f6b30665222d40672d2bb2ff129441b2210108dea542833377e87b7"
+    },
+    {
+      "path": "Cargo.lock",
+      "bytes": 61066,
+      "sha256": "51cf0a3cc7b97f73e62c570d60bb76fb47c9147e75641d3ab8bc9f02864119b8"
+    },
+    {
+      "path": "Cargo.toml",
+      "bytes": 2695,
+      "sha256": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5"
+    },
+    {
+      "path": "crates/artifact-service/src/crypto.rs",
+      "bytes": 11512,
+      "sha256": "1f2e229e921d17cf8b5163ec0ee282b3f51293b3ec0617ae378b81aa87838cca"
+    },
+    {
+      "path": "crates/artifact-service/src/service.rs",
+      "bytes": 36668,
+      "sha256": "f6c9f9eec62944434cd0eeca40fa1767bffbf49bfb92a99cd543a50b29fb1713"
+    },
+    {
+      "path": "crates/artifact-service/src/store.rs",
+      "bytes": 35683,
+      "sha256": "c0b9471216a0f430b1f6a943b5ab79289f48b7599cd3db385118825e28990e86"
+    },
+    {
+      "path": "crates/artifact-service/src/store/postgres_repository.rs",
+      "bytes": 32297,
+      "sha256": "705ab4f28014da06a854e6524b5142f0191b07036a7d80cceec8f4b33c6f9dab"
+    },
+    {
+      "path": "crates/artifact-service/src/store/postgres_repository/schema23.rs",
+      "bytes": 7795,
+      "sha256": "77f5650f47c032feff049bc66951b5316d11d594be9a53b751006c9ca9b8c51a"
+    },
+    {
+      "path": "crates/artifact-service/src/types.rs",
+      "bytes": 25296,
+      "sha256": "497f4d4095834eb82329fc42c85394fad640f34c9804fac9e3ec67981b4b133a"
+    },
+    {
+      "path": "crates/operation-engine/src/lib.rs",
+      "bytes": 972,
+      "sha256": "438675f9c6120efec58702d7a33bf9754ef70bc944300cfe360848a42bdfdd8a"
+    },
+    {
+      "path": "crates/operation-engine/src/manifest.rs",
+      "bytes": 7344,
+      "sha256": "59d1bc9d6ec9997ecafd7e01308609c724c49519ff02f660017c56c6d96aab38"
+    },
+    {
+      "path": "crates/operation-engine/src/transaction.rs",
+      "bytes": 35888,
+      "sha256": "76284a3d65c01b983ef0490563165d7d57e6c41339c9590cd95046c2947af623"
+    },
+    {
+      "path": "crates/operation-engine/src/transaction/integrity.rs",
+      "bytes": 1899,
+      "sha256": "9eacbb6225efba85149a949834f9f39f0373521829f489084901d2247101c867"
+    },
+    {
+      "path": "crates/operation-engine/src/transaction/precommit.rs",
+      "bytes": 3114,
+      "sha256": "de8b41b917e71e4760cbc06daeea6954602a2be44e9095571e5f5c4f9a7440c5"
+    },
+    {
+      "path": "crates/operation-engine/src/transaction/source.rs",
+      "bytes": 1952,
+      "sha256": "08fc27785de1ea595812bbdfc2253486778eb6930d7d29015df34cdc92b2a345"
+    },
+    {
+      "path": "crates/operation-engine/tests/support/bytes_transaction.rs",
+      "bytes": 16264,
+      "sha256": "c4f315936ba65b9a3bb740824ed17a63535af4e711863b1bb941873a354acc92"
+    },
+    {
+      "path": "crates/operation-engine/tests/support/prepared_precommit.rs",
+      "bytes": 8914,
+      "sha256": "273355e1190743351954328db8cccb0ba7ad1af27849e142638eee79e63f1fd6"
+    },
+    {
+      "path": "crates/operation-engine/tests/support/unknown_cas_transaction.rs",
+      "bytes": 4087,
+      "sha256": "b47ab6b2459d4a8c70634cfb6b0afadb06c577ac044c88b363f7800a7118da47"
+    },
+    {
+      "path": "crates/operation-engine/tests/workspace_transaction.rs",
+      "bytes": 26531,
+      "sha256": "78149808bd16ba95dc2d6ea12d19ca487b5ea1acb06963dd46c905c405bd83d4"
+    },
+    {
+      "path": "crates/product-cli/Cargo.toml",
+      "bytes": 772,
+      "sha256": "280f6845d791cdf75e64f7b7fb0a5858e14f8c170f80cf4ee4b8c5e50c2c4a00"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_operations/compiled_search/p02_registry.rs",
+      "bytes": 15124,
+      "sha256": "ad83226bb53de956db362c53ff8aec9b6ec2c485da25c7abd08f7eda74c3e956"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_operations/compiled_search/routing.rs",
+      "bytes": 7467,
+      "sha256": "4e888cf298c526257d52947aca57e00bb0e4748d75d6a33e560b67503ca29e5a"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider.rs",
+      "bytes": 24265,
+      "sha256": "349922429e98d3c229eb4800bb78f0be2330bc4659d05f44a0411e61151c860e"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import.rs",
+      "bytes": 24026,
+      "sha256": "0d526b1cc0e255ed0fd6a608c799fb1cf7fbe7ee03d8149ffb5ab224dda488fa"
+    },
+    {
+      "path": "crates/product-cli/src/lib.rs",
+      "bytes": 26594,
+      "sha256": "bf528f3e888a980cf760bae20c0f754e0bd14f250c5ac4830d37ca0f7eb60195"
+    },
+    {
+      "path": "crates/product-cli/src/stored_revision_commit.rs",
+      "bytes": 16507,
+      "sha256": "7cff9b83c90341cfba7e7c73e1ec33370e405d5a959c71822e05c28313cac4e1"
+    },
+    {
+      "path": "crates/product-cli/src/stored_revision_commit/intent.rs",
+      "bytes": 9859,
+      "sha256": "e762ebbf98f5d23ebf89a520cdb07ce3896673737482560143408d450a4f1bab"
+    },
+    {
+      "path": "crates/product-cli/src/stored_revision_commit/job.rs",
+      "bytes": 12669,
+      "sha256": "d0c0eb766c20a08f97c9800f11b9c9c0b265c5f66e792c146d77e55d3d25b3a9"
+    },
+    {
+      "path": "crates/product-cli/src/stored_revision_commit/registered.rs",
+      "bytes": 2345,
+      "sha256": "d56b222418f16bc3c2bf648fcfdc2aeccf10231484b60669db426b5d5c4c8d9f"
+    },
+    {
+      "path": "crates/product-cli/tests/stored_revision_commit.rs",
+      "bytes": 18387,
+      "sha256": "5b1a611bd30300835ad66a1963fbe061d04e3531518a63494cc9d0c163ab25c6"
+    },
+    {
+      "path": "crates/product-cli/tests/support/stored_commit_manifest.rs",
+      "bytes": 2677,
+      "sha256": "27f1f31cf6bcb9ba85faf47681c7cb91f2306608d0b10c9fa0044ac8d0bf0d61"
+    },
+    {
+      "path": "crates/product-cli/tests/support/stored_commit_recovery.rs",
+      "bytes": 14120,
+      "sha256": "4408b6aa8d9c268ea6ac8a101b5a2fcf53ca88c5913e32f29a4c44c088b04914"
+    },
+    {
+      "path": "crates/product-cli/tests/support/stored_job_coordinator.rs",
+      "bytes": 14233,
+      "sha256": "06b7cff504a133613de511528c885e4abca5cc264b779b77448b140629254fbe"
+    },
+    {
+      "path": "crates/product-cli/tests/support/stored_precommit_receipt.rs",
+      "bytes": 5426,
+      "sha256": "178cac4c5143894db07d8f5e3df51d056c9045584dc868f95206d34fb0e395fa"
+    },
+    {
+      "path": "crates/product-cli/tests/support/stored_registered_commit.rs",
+      "bytes": 13437,
+      "sha256": "9ac72e2bfa42438bfef50029545a21f479e79ec33193e392d99333ce5bd1a6c4"
+    },
+    {
+      "path": "crates/product-cli/tests/support/stored_source_fixture.rs",
+      "bytes": 7986,
+      "sha256": "c238da0b99bc39b6e6fe7a9fcf09b9968d30118ae166a51b986b4e6f53abef8c"
+    },
+    {
+      "path": "crates/revision-service/Cargo.toml",
+      "bytes": 405,
+      "sha256": "49ce9309d52adc375d724d7aeba5ad94448fc764b9d704157652bf4bbf04a762"
+    },
+    {
+      "path": "crates/revision-service/src/lib.rs",
+      "bytes": 504,
+      "sha256": "35d627b0b7a7748466ec97a4a2dce644dbf037f884770205862c92f554f082a6"
+    },
+    {
+      "path": "crates/revision-service/src/postgres.rs",
+      "bytes": 33843,
+      "sha256": "3d51c2690e2f91d494b9475afb66076919e82388f1a03ddc2cf25aca66b8d42a"
+    },
+    {
+      "path": "crates/revision-service/src/postgres/source_formula_policy/issuer_registry.rs",
+      "bytes": 22407,
+      "sha256": "9b62aca51686938cd01678663e4850f28189ea1fea2fd3ac0d5885e826cf48f5"
+    },
+    {
+      "path": "crates/revision-service/src/postgres/source_formula_policy/issuer_registry/stored_revision_jobs.rs",
+      "bytes": 8373,
+      "sha256": "40d151420a38c84613e8513857235de50eaa673a257157c1b3d0bd055eebb25f"
+    },
+    {
+      "path": "crates/revision-service/src/postgres/source_formula_policy/issuer_registry/stored_revision_jobs/admission.rs",
+      "bytes": 10875,
+      "sha256": "a558398e2a8f6a7094378eb93227f46ea6993e8d498a3a56232890bd07373316"
+    },
+    {
+      "path": "crates/revision-service/src/postgres/source_formula_policy/issuer_registry/stored_revision_jobs/lifecycle.rs",
+      "bytes": 9193,
+      "sha256": "abc190ae6bf7f3692d4030239a35a94a2b5f056ec5f7778872f6fd59a7fd22b2"
+    },
+    {
+      "path": "crates/revision-service/src/postgres/source_formula_policy/issuer_registry/stored_revision_jobs/lifecycle/sql.rs",
+      "bytes": 12303,
+      "sha256": "2980dd079975a9755c1a3239f63e1b971279ccd0ac4f458273caa338d50d6783"
+    },
+    {
+      "path": "crates/revision-service/src/postgres/source_formula_policy/issuer_registry/stored_revision_jobs/lifecycle/tests.rs",
+      "bytes": 7592,
+      "sha256": "b7b60df5097aee37622a35dedcbc49ca32dd69c4a5a7d1eaceb689c47fb1661e"
+    },
+    {
+      "path": "crates/revision-service/src/postgres/source_formula_policy/issuer_registry/stored_revision_jobs/types.rs",
+      "bytes": 7446,
+      "sha256": "889f501d31aebfb2d3835d915e30d287b3ea86715bcb1e47a64b0d98e23e5278"
+    },
+    {
+      "path": "crates/revision-service/src/reconciliation.rs",
+      "bytes": 2109,
+      "sha256": "2b32bdc52c3d13864167dd4c438483962e274ce3cf2b512da50121164f29b4ce"
+    },
+    {
+      "path": "crates/revision-service/src/service.rs",
+      "bytes": 20773,
+      "sha256": "d3048dcfb239f8cbfac34a623ee8eb847520796cd93004667bac61748e065951"
+    },
+    {
+      "path": "crates/revision-service/src/store.rs",
+      "bytes": 7574,
+      "sha256": "4c303fd64d920d82647a1952ab70cc3067ae788244cb0ac876d42c07da1c3b47"
+    },
+    {
+      "path": "crates/revision-service/src/types.rs",
+      "bytes": 24254,
+      "sha256": "b18624d3f356fd718db049dca195cce8c56336b7a0eb6ee1f1122d0d0c0b29db"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-stored-job-lifecycle-checker-recovery272.v1.json",
+      "bytes": 178314,
+      "sha256": "14fcecfacf017259e58d5ab8f24e5604f74d1112dee521b9c30dba93d03c827b"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-stored-job-lifecycle-components271.v1.json",
+      "bytes": 3216,
+      "sha256": "08e68eadca18e6df3aa0019dfabbfa81511062841f7581fe109ee94ab9509428"
+    },
+    {
+      "path": "migrations/postgres/0001_p14_metadata.up.sql",
+      "bytes": 28206,
+      "sha256": "7c00f744993581448acb4b6d4d8a46f1ff03d108750da0afc671c3b5e2b0a78d"
+    },
+    {
+      "path": "migrations/postgres/0002_p14_artifact_service.up.sql",
+      "bytes": 13929,
+      "sha256": "202753fbd6f20f181b09bd6227766dfb808811bd4e734a4a418cb5bae4eaee56"
+    },
+    {
+      "path": "migrations/postgres/0003_p14_revision_cas.up.sql",
+      "bytes": 18994,
+      "sha256": "beeac1f22fde0eb3474d40acc14838c1e9676a74b68c5b6f9608713ba6e6e53a"
+    },
+    {
+      "path": "migrations/postgres/0004_p14_history_checkpoints.up.sql",
+      "bytes": 18734,
+      "sha256": "e336890d4ee3fdf4819f52c079ba320f450b01ec516bf5ffaaf505a76b14f249"
+    },
+    {
+      "path": "migrations/postgres/0005_p14_job_state_machine.up.sql",
+      "bytes": 42699,
+      "sha256": "4f15cd28510d55fa58a18aef7b8edf8b4606169fd722a0b8d2c63da2cfb4bf9b"
+    },
+    {
+      "path": "migrations/postgres/0006_p14_worker_lease_fencing.up.sql",
+      "bytes": 30885,
+      "sha256": "03af7cc8b2ae883ff132e3b1737b29c3829fcb0fa9887566485f865b3c0393ab"
+    },
+    {
+      "path": "migrations/postgres/0007_p14_idempotency_reconciliation.up.sql",
+      "bytes": 113376,
+      "sha256": "cc60353df6cf3c51155417e39d0f1f4c348d2a6282bba7d63de9ea0282be5e5d"
+    },
+    {
+      "path": "migrations/postgres/0008_p14_cancel_cleanup.up.sql",
+      "bytes": 85360,
+      "sha256": "2ba28c1386db9c5aeb4661d11069e48f8624c2560b69301a0750ab9344c46f29"
+    },
+    {
+      "path": "migrations/postgres/0009_p14_retention_local_mirror.up.sql",
+      "bytes": 65641,
+      "sha256": "272da51d665be7b9c0b5150a641ca1f9f51b9b78cddb839096acb57eb71e9ec2"
+    },
+    {
+      "path": "migrations/postgres/0010_p16_artifact_repository.up.sql",
+      "bytes": 2724,
+      "sha256": "3d1ce21be0cb100bbc098e798b1917e52c4767da9a832359578179d9b0522420"
+    },
+    {
+      "path": "migrations/postgres/0011_p16_plan_source.up.sql",
+      "bytes": 4578,
+      "sha256": "3aa21685e7511322414265b076f1ed43ff6b7e39c4dd1ee695e121a161777bbc"
+    },
+    {
+      "path": "migrations/postgres/0012_p16_durable_plan_store.up.sql",
+      "bytes": 8656,
+      "sha256": "d85b1b4bbfbf8f63d85ae1088ae676d5c70bf926d6eb3c1cdb070a4b297d6cc0"
+    },
+    {
+      "path": "migrations/postgres/0013_p16_plan_review_evidence.up.sql",
+      "bytes": 7817,
+      "sha256": "16c818ddb5aac58b168174cb39067c2d941e572d883fef3be9b5c452a5b6c923"
+    },
+    {
+      "path": "migrations/postgres/0014_p17_history_checkpoint_note.up.sql",
+      "bytes": 7542,
+      "sha256": "d3e8a2846780f9442ea4b3acf55c072a2ba663590e3b24c9e46736517bb4c129"
+    },
+    {
+      "path": "migrations/postgres/0015_p17_atomic_mirror_checkpoint.up.sql",
+      "bytes": 5292,
+      "sha256": "ff513cf4eed8b9498241e5b111646f1a4b58e7e373e4126b75d9ad317c69b25a"
+    },
+    {
+      "path": "migrations/postgres/0016_p17_durable_git_mirror_push.up.sql",
+      "bytes": 42597,
+      "sha256": "a928dab01d36399a9ce5f24800f689ffcb585abb1da7bdcdf228d8cedafb7263"
+    },
+    {
+      "path": "migrations/postgres/0017_p17_durable_git_mirror_pull.up.sql",
+      "bytes": 20765,
+      "sha256": "2880461cc22be5cbcc0df3802f3996ad8a0ee9ad6a2509d5798e040bdbeea1f4"
+    },
+    {
+      "path": "migrations/postgres/0018_p09_full_document_ir.up.sql",
+      "bytes": 15733,
+      "sha256": "0c167d47f42183d4f79e9dac30150e799cb0c030950bfde1cc7348741d56ca0a"
+    },
+    {
+      "path": "migrations/postgres/0019_p09_authorized_full_ir_intent.up.sql",
+      "bytes": 21899,
+      "sha256": "5dfcac89b97600d21efb3a0d922ce6241440fda6bdc94b14bd3eddc59df2ad59"
+    },
+    {
+      "path": "migrations/postgres/0020_p09_source_form_policy.up.sql",
+      "bytes": 13468,
+      "sha256": "2d189ca60c2a4b2d36c41d1118ce618aee7c98bfa8432a1b7813b0b4edf31dc0"
+    },
+    {
+      "path": "migrations/postgres/0021_p09_source_formula_policy.up.sql",
+      "bytes": 13712,
+      "sha256": "a16fa22b7b1dad0e5994c945391e990fa58d17ea606b7428fcc918cf7862cc06"
+    },
+    {
+      "path": "migrations/postgres/0022_p09_formula_issuer_registry.up.sql",
+      "bytes": 22124,
+      "sha256": "ef690febbe84363c28500f0ea6bf368314803d53f3120713f50d477518ec4b71"
+    },
+    {
+      "path": "migrations/postgres/0023_p09_stored_revision_jobs.down.sql",
+      "bytes": 2617,
+      "sha256": "db65c1e3b60f959d6a464d9ba32aed66e3f3cfa301613bf9793abc0c4e3e4c98"
+    },
+    {
+      "path": "migrations/postgres/0023_p09_stored_revision_jobs.up.sql",
+      "bytes": 56517,
+      "sha256": "8f15f7abed5869aeb083a34bb5b898b5ca819ea3164384ab4b35279fa1b13ca1"
+    },
+    {
+      "path": "tools/p09/compact_receipt_json.py",
+      "bytes": 2254,
+      "sha256": "16ffafc857ecbdb887583aa1c8a1b7ee4e45de8720c29293a8f6afe684397e8e"
+    },
+    {
+      "path": "tools/p09/run_stored_commit_intent_components.py",
+      "bytes": 10746,
+      "sha256": "170ea4911c90660cd1b32948f9cb9bbc340491c7d914befd173174ab661b0282"
+    },
+    {
+      "path": "tools/p09/run_stored_job_coordinator_checker_recovery.py",
+      "bytes": 3157,
+      "sha256": "3372216632f7a07b3f0ee7e852665e490bd5f6cf621923088f80559a58eb4bf5"
+    },
+    {
+      "path": "tools/p09/run_stored_job_coordinator_components.py",
+      "bytes": 8794,
+      "sha256": "9a48ad671a662c9c00dc85a8178d63a07ca57ffd4bd1e8cca3db667da7eb01ea"
+    },
+    {
+      "path": "tools/p09/run_stored_job_lifecycle_checker_recovery.py",
+      "bytes": 2391,
+      "sha256": "98b477c3287e0ff6a8da273f3bfed356befa0c6b619663ea4d1828c14e3cbb7e"
+    },
+    {
+      "path": "tools/p09/run_stored_job_lifecycle_compile_recovery.py",
+      "bytes": 2568,
+      "sha256": "a69db2116d90ffda31d45ab89d871ab3858ff76e9cfbc1dbaf620484f35fcc0d"
+    },
+    {
+      "path": "tools/p09/run_stored_job_lifecycle_components.py",
+      "bytes": 7522,
+      "sha256": "e1ed81ca3b66c0e0b310b75e3f7cfd685496d98858a513051c470700833dc7d8"
+    },
+    {
+      "path": "tools/p09/run_stored_job_registration_components.py",
+      "bytes": 11501,
+      "sha256": "584781c786f82169437d0f2117fa715871bab09b3843e502f3c4d8ff336ce892"
+    },
+    {
+      "path": "tools/p09/run_stored_job_registration_confirmed.py",
+      "bytes": 8937,
+      "sha256": "61f6655b9e8c086e1732ab7a7910a670ced4cd413d34a7c592a1aad43feda613"
+    },
+    {
+      "path": "tools/p09/run_stored_job_registration_fresh_temp.py",
+      "bytes": 2943,
+      "sha256": "ffa4299fbc8a0b0a1ea11f55ec5a88421664e1b26a860ca94004009adfe7a0e5"
+    },
+    {
+      "path": "tools/p09/run_stored_job_registration_recovery.py",
+      "bytes": 2303,
+      "sha256": "b05d0b3ad2933f1b15cdd69ccf04578419097b4956257663e36ed038635849ca"
+    },
+    {
+      "path": "tools/p09/run_stored_revision_jobs_checker_recovery.py",
+      "bytes": 4416,
+      "sha256": "ed4d9208fad0f4cb6ffb2eb5a477e23538eef74a4848c3aeabfbdbd5b3aa800e"
+    },
+    {
+      "path": "tools/p09/run_stored_revision_jobs_components.py",
+      "bytes": 10146,
+      "sha256": "f16216849b8588b411da1cfd09028a4d24a4a4a1e364228df3e7a70b01411c6e"
+    },
+    {
+      "path": "tools/p09/run_stored_revision_jobs_recovery.py",
+      "bytes": 1703,
+      "sha256": "c1499c42cbfb01bb50e153997f4c5c77ec922caa267d8bedc4d87248dc427ac9"
+    },
+    {
+      "path": "tools/p09/stored_revision_jobs_source_contract.py",
+      "bytes": 5788,
+      "sha256": "91103531f560afe36bac240da8ebf4bfb02bed7a8a8fa232bd0af0f852a8fc5b"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-stored-job-lifecycle-compile-recovery273.v1.json",
+      "bytes": 199465,
+      "sha256": "78ffabd31f729f59016278be6acb8a2800d141860f0e0404ccb5cb38a287f23f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-stored-job-coordinator-components274.v1.json",
+      "bytes": 3660,
+      "sha256": "8b78c7873a5d2a1b4ff570a9cda3c44f4f6d781e1d7585ea908027d95e0bae23"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-artifact23-precommit-plan-components270.v1.json",
+      "bytes": 203394,
+      "sha256": "32c22842f7f39818cc863cfdff99be65bac269ef51381bec7c48b75e65678221"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-stored-job-registration-sync269.v1.json",
+      "bytes": 29129,
+      "sha256": "28e2573ddba10bcd7ef4300537ec84cf621d1af36807fab5aac36e85021ca617"
+    },
+    {
+      "path": "protocol/migrations/p09-stored-revision-jobs-v1.md",
+      "bytes": 11789,
+      "sha256": "6926c0818bc205363856cb90d0b82478ad368f03abd4e2ba77e4d05d0ea3b039"
+    },
+    {
+      "path": "implementation/p09/P09_SEARCH_SOURCE_INDEX_PROGRESS.md",
+      "bytes": 201067,
+      "sha256": "90d46d348b724b7fbe3fe044e1543e247096addf7bd333a4484d280393dd057e"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 1601697,
+      "sha256": "a6bd6536deeb8c31dba92b57a6156d00ba8f95b661adef27fbee31f40e3a509f"
+    },
+    {
+      "path": "tools/p09/run_stored_job_coordinator_sync.py",
+      "bytes": 8560,
+      "sha256": "da80c3ccf1c4c6d68298519fc497fc41aaf2dda793b62c86b2ad5d8832161119"
+    },
+    {
+      "path": "tools/p09/run_stored_job_coordinator_doc_recovery.py",
+      "bytes": 8276,
+      "sha256": "d4603b40e00c3e06fbb1327c447ab6f59624099824dc793772bdd36f9530ee6c"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-stored-job-coordinator-sync276.v1.json",
+      "bytes": 27695,
+      "sha256": "95fe49c237548dd274ce223a63fbd87fed307979731d5453b3f4be9dd5600635"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-20T15:25:18.654438+00:00",
+      "system_cpu_percent": 7.09,
+      "available_ram_mib": 14951.76,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.928207866342916,
+      "commit_used_percent": 50.760052496193666,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 18.46875,
+      "parent_private_percent": 0.05796678557132164
+    },
+    {
+      "time_utc": "2026-10-20T15:25:19.154725+00:00",
+      "system_cpu_percent": 4.91,
+      "available_ram_mib": 14924.76,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.84347680562307,
+      "commit_used_percent": 50.73489742151405,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 18.46875,
+      "parent_private_percent": 0.05796678557132164
+    },
+    {
+      "time_utc": "2026-10-20T15:25:19.649352+00:00",
+      "system_cpu_percent": 8.65,
+      "available_ram_mib": 14886.23,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.72254102455803,
+      "commit_used_percent": 50.75171647282097,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:20.140896+00:00",
+      "system_cpu_percent": 14.2,
+      "available_ram_mib": 14982.73,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.02540767091344,
+      "commit_used_percent": 50.74082084061186,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:20.642871+00:00",
+      "system_cpu_percent": 11.43,
+      "available_ram_mib": 14978.43,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.011909060314025,
+      "commit_used_percent": 50.73732732044322,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:21.141865+00:00",
+      "system_cpu_percent": 8.7,
+      "available_ram_mib": 14932.24,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.86694305511197,
+      "commit_used_percent": 50.732381049313375,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:21.641515+00:00",
+      "system_cpu_percent": 12.26,
+      "available_ram_mib": 14952.11,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.929311295002265,
+      "commit_used_percent": 50.73902219656464,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:22.140550+00:00",
+      "system_cpu_percent": 6.5,
+      "available_ram_mib": 14914.54,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.81137929195435,
+      "commit_used_percent": 50.727841202559574,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:22.641532+00:00",
+      "system_cpu_percent": 14.73,
+      "available_ram_mib": 14912.81,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.80597249152352,
+      "commit_used_percent": 50.87409344664906,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:23.147527+00:00",
+      "system_cpu_percent": 11.2,
+      "available_ram_mib": 14931.22,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.863743111999845,
+      "commit_used_percent": 50.742360064844576,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:23.642241+00:00",
+      "system_cpu_percent": 7.98,
+      "available_ram_mib": 14890.88,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.737118543179925,
+      "commit_used_percent": 50.74411547225605,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:24.141760+00:00",
+      "system_cpu_percent": 10.22,
+      "available_ram_mib": 14968.54,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.980878194349344,
+      "commit_used_percent": 50.71961759443984,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:24.640682+00:00",
+      "system_cpu_percent": 8.93,
+      "available_ram_mib": 14933.09,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.86962806484973,
+      "commit_used_percent": 50.71919387540948,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:25.140685+00:00",
+      "system_cpu_percent": 5.73,
+      "available_ram_mib": 14902.75,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.77437765091073,
+      "commit_used_percent": 50.705998054178444,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:25.664508+00:00",
+      "system_cpu_percent": 7.79,
+      "available_ram_mib": 14962.56,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.96210764682191,
+      "commit_used_percent": 50.705271678697834,
+      "parent_cpu_machine_percent": 0.1896237864079813,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:26.155901+00:00",
+      "system_cpu_percent": 6.72,
+      "available_ram_mib": 14941.49,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.89597548917138,
+      "commit_used_percent": 50.704173468149776,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.0,
+      "parent_private_percent": 0.06277283039872394
+    },
+    {
+      "time_utc": "2026-10-20T15:25:26.656350+00:00",
+      "system_cpu_percent": 12.98,
+      "available_ram_mib": 14974.53,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.99968552283208,
+      "commit_used_percent": 50.715328520173394,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.97265625,
+      "parent_private_percent": 0.06582564968959939
+    },
+    {
+      "time_utc": "2026-10-20T15:25:27.155901+00:00",
+      "system_cpu_percent": 11.86,
+      "available_ram_mib": 14949.55,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.921268526107426,
+      "commit_used_percent": 50.7117398794061,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.97265625,
+      "parent_private_percent": 0.06582564968959939
+    },
+    {
+      "time_utc": "2026-10-20T15:25:27.662481+00:00",
+      "system_cpu_percent": 9.04,
+      "available_ram_mib": 14881.86,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.708821728226745,
+      "commit_used_percent": 50.85394517438935,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 20.97265625,
+      "parent_private_percent": 0.06582564968959939
+    },
+    {
+      "time_utc": "2026-10-20T15:25:28.156316+00:00",
+      "system_cpu_percent": 12.28,
+      "available_ram_mib": 15008.38,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.105908921772425,
+      "commit_used_percent": 50.65012767346171,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 22.63671875,
+      "parent_private_percent": 0.07104854534386822
+    },
+    {
+      "time_utc": "2026-10-20T15:25:28.656045+00:00",
+      "system_cpu_percent": 5.41,
+      "available_ram_mib": 14984.32,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.03040988083583,
+      "commit_used_percent": 50.64390159791364,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 22.60546875,
+      "parent_private_percent": 0.07095046279637021
+    },
+    {
+      "time_utc": "2026-10-20T15:25:29.172680+00:00",
+      "system_cpu_percent": 9.45,
+      "available_ram_mib": 14949.98,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.9226416817724,
+      "commit_used_percent": 50.63246983142122,
+      "parent_cpu_machine_percent": 0.18925629844975117,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:29.673786+00:00",
+      "system_cpu_percent": 11.51,
+      "available_ram_mib": 15005.96,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.098319784659765,
+      "commit_used_percent": 50.6304117675595,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:30.173172+00:00",
+      "system_cpu_percent": 6.73,
+      "available_ram_mib": 14969.03,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.98242299447244,
+      "commit_used_percent": 50.634623015881594,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:30.675499+00:00",
+      "system_cpu_percent": 6.5,
+      "available_ram_mib": 14925.24,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.844984824790856,
+      "commit_used_percent": 50.631613746033366,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:31.173115+00:00",
+      "system_cpu_percent": 5.95,
+      "available_ram_mib": 14996.08,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.0673256996504,
+      "commit_used_percent": 50.63071442400975,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:31.672763+00:00",
+      "system_cpu_percent": 9.54,
+      "available_ram_mib": 14952.35,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.93005917442694,
+      "commit_used_percent": 50.62513689799795,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:32.173320+00:00",
+      "system_cpu_percent": 11.68,
+      "available_ram_mib": 15015.82,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.12927708871383,
+      "commit_used_percent": 50.62748897098277,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:32.675134+00:00",
+      "system_cpu_percent": 6.17,
+      "available_ram_mib": 14981.02,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.02003765143792,
+      "commit_used_percent": 50.61916159493723,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:33.190965+00:00",
+      "system_cpu_percent": 16.1,
+      "available_ram_mib": 14948.19,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.91700193529127,
+      "commit_used_percent": 50.6306365980654,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:33.712734+00:00",
+      "system_cpu_percent": 19.32,
+      "available_ram_mib": 14954.43,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 46.93660618447243,
+      "commit_used_percent": 50.7685701134365,
+      "parent_cpu_machine_percent": 0.18962378640731156,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:34.207155+00:00",
+      "system_cpu_percent": 13.69,
+      "available_ram_mib": 14996.5,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.06864981404162,
+      "commit_used_percent": 50.557609920282886,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:34.705986+00:00",
+      "system_cpu_percent": 8.27,
+      "available_ram_mib": 15019.0,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.13925698792175,
+      "commit_used_percent": 50.45538986604166,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:35.219724+00:00",
+      "system_cpu_percent": 3.45,
+      "available_ram_mib": 15090.91,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.36496945035153,
+      "commit_used_percent": 50.441493611311465,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:35.719868+00:00",
+      "system_cpu_percent": 1.36,
+      "available_ram_mib": 15115.01,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.44060335479094,
+      "commit_used_percent": 50.439565257356996,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:36.219595+00:00",
+      "system_cpu_percent": 3.33,
+      "available_ram_mib": 15114.88,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.440186503964064,
+      "commit_used_percent": 50.439565257356996,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:36.730803+00:00",
+      "system_cpu_percent": 4.61,
+      "available_ram_mib": 15104.77,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.408444539530024,
+      "commit_used_percent": 50.43716994773642,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    },
+    {
+      "time_utc": "2026-10-20T15:25:37.230620+00:00",
+      "system_cpu_percent": 2.96,
+      "available_ram_mib": 15100.57,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 47.39528921784685,
+      "commit_used_percent": 50.440006271041646,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 23.12890625,
+      "parent_private_percent": 0.07259334546696182
+    }
+  ]
+}

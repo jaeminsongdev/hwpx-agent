@@ -1,5 +1,8 @@
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug};
+mod source_memo;
+mod source_text_span;
+pub(crate) use source_text_span::read_source_text_span;
 
 use quick_xml::escape::unescape;
 use sha2::{Digest as _, Sha256};
@@ -513,9 +516,59 @@ impl TextFlowReader {
         }
         let root_index = document.root_element();
         validate_document_envelope(&document)?;
-        let root = element(&document, root_index)?;
+        Self::read_from_document(&document, root_index, limits)
+    }
+
+    /// Reads a real paragraph inside an already admitted immutable source tree.
+    /// The public standalone reader retains its complete envelope checks.
+    pub(crate) fn read_from_document(
+        document: &PreservingXmlDocument,
+        root_index: usize,
+        limits: TextFlowLimits,
+    ) -> Result<TextFlow, TextFlowError> {
+        Self::read_document_profile(document, root_index, limits, ReadProfile::TypedParagraph)
+    }
+
+    /// Source import may retain a bounded native field parameter payload, but
+    /// never treats that payload as a typed field or permits its lowering.
+    pub(crate) fn read_preserving_source(
+        document: &PreservingXmlDocument,
+        root_index: usize,
+        limits: TextFlowLimits,
+    ) -> Result<TextFlow, TextFlowError> {
+        Self::read_document_profile(document, root_index, limits, ReadProfile::SourcePreserving)
+    }
+
+    /// Source graph mapping only: retain XML language/space attributes in the
+    /// mapper's original attributes/anchors, never in the standalone typed model.
+    pub(crate) fn read_preserving_xml_context(
+        document: &PreservingXmlDocument, root_index: usize, limits: TextFlowLimits,
+    ) -> Result<TextFlow, TextFlowError> {
+        Self::read_document_profile(document, root_index, limits, ReadProfile::SourceXmlContext)
+    }
+
+    fn read_document_profile(
+        document: &PreservingXmlDocument,
+        root_index: usize,
+        limits: TextFlowLimits,
+        profile: ReadProfile,
+    ) -> Result<TextFlow, TextFlowError> {
+        if document.original_len() > limits.config().input_bytes {
+            return Err(TextFlowError::InputLimit);
+        }
+        let root = element(document, root_index)?;
+        let outer = root.outer_span().ok_or(TextFlowError::UnsupportedShape)?;
+        let end = document
+            .elements()
+            .partition_point(|node| node.start_tag_span().start() < outer.end());
+        if end
+            .checked_sub(root_index)
+            .is_none_or(|count| count > limits.config().items)
+        {
+            return Err(TextFlowError::ItemLimit);
+        }
         require_name(root, "p")?;
-        validate_attributes(
+        validate_profile_attributes(
             root,
             &[
                 "id",
@@ -526,6 +579,7 @@ impl TextFlowReader {
                 "merged",
                 "paraTcId",
             ],
+            profile,
         )?;
         let paragraph = TextParagraphProperties {
             id: required_u32(root, "id")?,
@@ -536,26 +590,27 @@ impl TextFlowReader {
             merged: optional_bool(root, "merged")?.unwrap_or(false),
             paragraph_change_id: optional_u32(root, "paraTcId")?,
         };
-        require_only_whitespace_content(&document, root_index)?;
+        require_only_whitespace_content(document, root_index)?;
 
         let mut state = ReadState::new(limits);
+        state.profile = profile;
         let mut children = Vec::new();
-        for child_index in child_indexes(&document, root_index)? {
+        for child_index in child_indexes(document, root_index)? {
             state.count_item()?;
-            let child = element(&document, child_index)?;
+            let child = element(document, child_index)?;
             reserve_one(&mut children)?;
             if has_name(child, "run") {
                 state.count_run()?;
                 children.push(ParagraphChild::Run(read_run(
-                    &document,
+                    document,
                     child_index,
                     &mut state,
                 )?));
             } else {
                 children.push(ParagraphChild::Opaque(opaque(
-                    &document,
+                    document,
                     child_index,
-                    is_potentially_visible(&document, child_index)?,
+                    is_potentially_visible(document, child_index)?,
                 )?));
             }
         }
@@ -630,7 +685,15 @@ impl TextFlowWriter {
     }
 }
 
+#[derive(Clone, Copy, Eq, PartialEq)]
+enum ReadProfile {
+    TypedParagraph,
+    SourcePreserving,
+    SourceXmlContext,
+}
+
 struct ReadState {
+    profile: ReadProfile,
     limits: TextFlowLimits,
     runs: usize,
     items: usize,
@@ -642,6 +705,7 @@ struct ReadState {
 impl ReadState {
     fn new(limits: TextFlowLimits) -> Self {
         Self {
+            profile: ReadProfile::TypedParagraph,
             limits,
             runs: 0,
             items: 0,
@@ -706,7 +770,7 @@ fn read_run(
     state: &mut ReadState,
 ) -> Result<TextRun, TextFlowError> {
     let run = element(document, index)?;
-    if validate_attributes(run, &["charPrIDRef", "charTcId"]).is_err() {
+    if validate_profile_attributes(run, &["charPrIDRef", "charTcId"], state.profile).is_err() {
         return Err(TextFlowError::UnsupportedShape);
     }
     require_only_whitespace_content(document, index)?;
@@ -843,13 +907,17 @@ fn read_control(
     let child_index = children[0];
     let child = element(document, child_index)?;
     if has_name(child, "fieldBegin") {
-        read_empty_element(
-            document,
-            child_index,
-            &[
-                "id", "type", "name", "editable", "dirty", "zorder", "fieldid",
-            ],
-        )?;
+        let allowed = &[
+            "id", "type", "name", "editable", "dirty", "zorder", "fieldid",
+        ];
+        let preserved_parameters =
+            state.profile != ReadProfile::TypedParagraph && child.first_child().is_some();
+        if preserved_parameters {
+            validate_attributes(child, allowed)?;
+            validate_preserved_field_parameters(document, child_index, state)?;
+        } else {
+            read_empty_element(document, child_index, allowed)?;
+        }
         let id = required_u32(child, "id")?;
         let name = optional_attribute(child, "name").map(ToOwned::to_owned);
         if name
@@ -868,7 +936,13 @@ fn read_control(
             field_id: optional_u32(child, "fieldid")?,
         };
         state.begin_field(id)?;
-        Ok(TextRunItem::FieldBegin(begin))
+        if preserved_parameters {
+            // The header is validated and participates in the SAME field stack,
+            // but the full control stays exact opaque data, not executable IR.
+            Ok(TextRunItem::Opaque(opaque(document, index, true)?))
+        } else {
+            Ok(TextRunItem::FieldBegin(begin))
+        }
     } else if has_name(child, "fieldEnd") {
         read_empty_element(document, child_index, &["beginIDRef", "fieldid"])?;
         let end = FieldEnd {
@@ -884,6 +958,54 @@ fn read_control(
             is_potentially_visible(document, child_index)?,
         )?))
     }
+}
+
+fn validate_preserved_field_parameters(
+    document: &PreservingXmlDocument,
+    begin_index: usize,
+    state: &mut ReadState,
+) -> Result<(), TextFlowError> {
+    require_only_whitespace_content(document, begin_index)?;
+    let payload = child_indexes(document, begin_index)?;
+    if optional_attribute(element(document, begin_index)?, "type") == Some("MEMO") {
+        return source_memo::validate_payload(document, &payload, state);
+    }
+    if payload.len() != 1 {
+        return Err(TextFlowError::InvalidField);
+    }
+    validate_parameter_entries(document, payload[0], state)
+}
+
+// Shared structural validation only. No JSON/author/time/state meaning is inferred.
+pub(crate) fn source_memo_meta_tag_span(
+    document: &PreservingXmlDocument,
+    index: usize,
+) -> Result<crate::XmlByteSpan, TextFlowError> {
+    source_memo::meta_tag_span(document, index)
+}
+
+fn validate_parameter_entries(
+    document: &PreservingXmlDocument,
+    parameter_index: usize,
+    state: &mut ReadState,
+) -> Result<(), TextFlowError> {
+    let parameters = element(document, parameter_index)?;
+    require_name(parameters, "parameters")?;
+    validate_attributes(parameters, &["cnt", "name"])?;
+    require_only_whitespace_content(document, parameter_index)?;
+    let entries = child_indexes(document, parameter_index)?;
+    if usize::try_from(required_u32(parameters, "cnt")?).ok() != Some(entries.len()) {
+        return Err(TextFlowError::InvalidField);
+    }
+    for entry in entries {
+        state.count_item()?;
+        // Payload entry semantics are NOT interpreted. Unknown safe parameter
+        // families are retained, as in the complete source preservation stage.
+        let item = element(document, entry)?;
+        let span = item.outer_span().ok_or(TextFlowError::InvalidField)?;
+        state.count_text(span.len())?;
+    }
+    Ok(())
 }
 
 fn read_empty_element(
@@ -1126,6 +1248,24 @@ fn child_indexes(
     Ok(children)
 }
 
+fn validate_profile_attributes(element: &XmlElementToken, allowed: &[&str], profile: ReadProfile) -> Result<(), TextFlowError> {
+    if profile != ReadProfile::SourceXmlContext { return validate_attributes(element, allowed); }
+    for attribute in element.attributes() {
+        if attribute.is_namespace_declaration() { continue; }
+        if attribute.name().namespace() == Some("http://www.w3.org/XML/1998/namespace") {
+            match attribute.name().local_name() {
+                "lang" => continue,
+                "space" if matches!(attribute.semantic_value(), "default" | "preserve") => continue,
+                _ => return Err(TextFlowError::UnsupportedShape),
+            }
+        }
+        if attribute.name().namespace().is_some() || !allowed.contains(&attribute.name().local_name()) {
+            return Err(TextFlowError::UnsupportedShape);
+        }
+    }
+    Ok(())
+}
+
 fn validate_attributes(element: &XmlElementToken, allowed: &[&str]) -> Result<(), TextFlowError> {
     for attribute in element.attributes() {
         if attribute.is_namespace_declaration() {
@@ -1342,7 +1482,7 @@ fn push_character(target: &mut String, character: char) -> Result<(), TextFlowEr
     Ok(())
 }
 
-fn validate_text(value: &str) -> Result<(), TextFlowError> {
+pub(crate) fn validate_text(value: &str) -> Result<(), TextFlowError> {
     if value.chars().any(|character| {
         character.is_control() || matches!(character as u32 & 0xffff, 0xfffe | 0xffff)
     }) {

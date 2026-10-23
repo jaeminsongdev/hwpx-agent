@@ -71,7 +71,7 @@ fn border_fill(id: u32, left: &str, right: &str, top: &str, bottom: &str) -> Str
     )
 }
 
-fn header() -> TestResult<Vec<u8>> {
+pub(crate) fn header() -> TestResult<Vec<u8>> {
     let source = String::from_utf8(HEADER.to_vec())?;
     let additions = [
         border_fill(3, "SOLID", "DOT", "SOLID", "DOT"),
@@ -94,7 +94,7 @@ fn header() -> TestResult<Vec<u8>> {
         .into_bytes())
 }
 
-fn empty_paragraph(identifier: u32) -> String {
+pub(crate) fn empty_paragraph(identifier: u32) -> String {
     format!(
         r#"<hp:p id="{identifier}" paraPrIDRef="0" styleIDRef="0"><hp:run charPrIDRef="0"><hp:t/></hp:run></hp:p>"#
     )
@@ -163,7 +163,7 @@ fn template_wrapper(native_id: u32, nonempty: bool) -> String {
     )
 }
 
-fn template_section(nonempty: bool) -> Vec<u8> {
+pub(crate) fn template_section(nonempty: bool) -> Vec<u8> {
     format!(
         r#"<hs:sec xmlns:hs="{SECTION_NS}" xmlns:hp="{PARAGRAPH_NS}">{}</hs:sec>"#,
         template_wrapper(700, nonempty)
@@ -667,7 +667,7 @@ fn archive(
     Ok(writer.finish()?.into_inner())
 }
 
-fn package(header: &[u8], section: &[u8], opaque: &[u8]) -> TestResult<Vec<u8>> {
+pub(crate) fn package(header: &[u8], section: &[u8], opaque: &[u8]) -> TestResult<Vec<u8>> {
     Ok(archive(vec![
         (
             "mimetype".to_owned(),

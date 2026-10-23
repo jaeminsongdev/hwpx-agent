@@ -565,9 +565,22 @@ impl DocumentGraphDraft {
     }
 }
 
-#[derive(Clone, Eq, PartialEq, Serialize)]
+#[derive(Clone, Serialize)]
 #[serde(transparent)]
-pub struct DocumentGraph(DocumentGraphDraft);
+pub struct DocumentGraph(
+    DocumentGraphDraft,
+    #[serde(skip)] std::sync::OnceLock<[u8; 32]>,
+);
+
+// Memoized derived bytes are not document state. Warm/cold graphs must remain
+// equal, and transparent serialization must remain exactly the original draft.
+impl PartialEq for DocumentGraph {
+    fn eq(&self, other: &Self) -> bool {
+        self.0 == other.0
+    }
+}
+
+impl Eq for DocumentGraph {}
 
 impl DocumentGraph {
     /// Validates and canonicalizes an untrusted graph draft.
@@ -587,7 +600,7 @@ impl DocumentGraph {
         validate_serialized_size(&draft, limits.max_serialized_bytes)?;
         canonicalize_catalogs(&mut draft);
         Validator::new(limits).validate(&draft)?;
-        Ok(Self(draft))
+        Ok(Self(draft, std::sync::OnceLock::new()))
     }
 
     /// Deserializes an untrusted JSON graph and runs the same full validation as `from_draft`.
@@ -613,7 +626,12 @@ impl DocumentGraph {
     ///
     /// Returns a stable serialization error if the serializer cannot complete.
     pub fn canonical_json(&self) -> Result<Vec<u8>, DocumentGraphError> {
-        serde_json::to_vec(self).map_err(|_| DocumentGraphError::SerializationFailed)
+        let mut writer = Vec::with_capacity(128);
+        // Share the serializer's writer type with digest and size checks. This avoids
+        // separate large graph serializer monomorphizations for each output sink.
+        serde_json::to_writer(&mut writer as &mut dyn io::Write, &self.0)
+            .map_err(|_| DocumentGraphError::SerializationFailed)?;
+        Ok(writer)
     }
 
     /// Returns the digest of the canonical serialized graph.
@@ -622,8 +640,24 @@ impl DocumentGraph {
     ///
     /// Propagates a stable serialization error.
     pub fn canonical_sha256(&self) -> Result<[u8; 32], DocumentGraphError> {
-        let bytes = self.canonical_json()?;
-        Ok(Sha256::digest(bytes).into())
+        // This graph is immutable after full from_draft validation. Cache ONLY
+        // its 32-byte serialization digest, never source/ACL/head/policy/AEAD
+        // verification. A newly admitted draft starts with a fresh empty cell.
+        if let Some(digest) = self.1.get() {
+            return Ok(*digest);
+        }
+        // Keep the exact canonical JSON byte stream without retaining its full allocation.
+        let mut writer = io::BufWriter::with_capacity(32 * 1024, GraphDigestWriter(Sha256::new()));
+        serde_json::to_writer(&mut writer as &mut dyn io::Write, &self.0)
+            .map_err(|_| DocumentGraphError::SerializationFailed)?;
+        let digest = writer
+            .into_inner()
+            .map_err(|_| DocumentGraphError::SerializationFailed)?;
+        let computed: [u8; 32] = digest.0.finalize().into();
+        // Concurrent first readers may compute the same immutable byte stream;
+        // no fallible serializer is run inside a reentrant cache initializer.
+        let _ = self.1.set(computed);
+        Ok(computed)
     }
 
     #[must_use]
@@ -644,6 +678,24 @@ impl DocumentGraph {
     #[must_use]
     pub fn styles(&self) -> &[Style] {
         &self.0.styles
+    }
+
+    /// Borrows validated notes without copying the document or changing presentation order.
+    #[must_use]
+    pub fn notes(&self) -> &[Note] {
+        &self.0.notes
+    }
+
+    /// Read-only metadata; does not bypass full graph admission or authorize mutation.
+    #[must_use]
+    pub const fn metadata(&self) -> &Properties {
+        &self.0.metadata
+    }
+
+    /// Borrows the canonical review catalog, not a replacement presentation-order view.
+    #[must_use]
+    pub fn review_entries(&self) -> &[ReviewEntry] {
+        &self.0.review
     }
 
     #[must_use]
@@ -764,6 +816,19 @@ fn preflight_top_level_counts(
     Ok(())
 }
 
+struct GraphDigestWriter(Sha256);
+
+impl io::Write for GraphDigestWriter {
+    fn write(&mut self, buffer: &[u8]) -> io::Result<usize> {
+        self.0.update(buffer);
+        Ok(buffer.len())
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
+
 struct SerializedSizeWriter {
     written: usize,
     limit: usize,
@@ -802,7 +867,7 @@ fn validate_serialized_size(
         limit,
         exceeded: false,
     };
-    if serde_json::to_writer(&mut writer, draft).is_err() {
+    if serde_json::to_writer(&mut writer as &mut dyn io::Write, draft).is_err() {
         return if writer.exceeded {
             Err(DocumentGraphError::LimitExceeded)
         } else {

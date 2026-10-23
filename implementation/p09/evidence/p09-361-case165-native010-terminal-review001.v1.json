@@ -1,0 +1,393 @@
+{
+  "schema_version": "hwpx-agent.p09-native010-terminal-review/v1",
+  "date": "2026-10-17",
+  "authority": {
+    "answer": "Native010 1회 실행 허용",
+    "questionItemId": "[\"request_user_input_async\",\"call_7982d49b95c9451a906e226ef688d9c3\",0]",
+    "scope": "ONE case165 Native010; original CPU/RAM and input guards; no Native008/009 replay, automatic retry or Hancom access validation"
+  },
+  "result": "STOPPED_BEFORE_WORKER_NOT_ACCEPTED",
+  "original_receipt_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-current-runtime-run010.v1.json",
+    "bytes": 2312978,
+    "sha256": "b617ea54f3c4ffa2a4317cde0772a45fc77d6763409b99bcd377d2b516c67d63"
+  },
+  "dispatcher_result_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-native010-product-dispatch001.v1.json",
+    "bytes": 81022,
+    "sha256": "67e7de0841f6e9c2b53296e470bd0c92c2af05a2ea08d4a737699ce41b5bff61"
+  },
+  "consumed_intent_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-native010-product-dispatch001.intent.v1.json",
+    "bytes": 2416,
+    "sha256": "72e97ae43aaf17e00faf86dfef1dc86cc2ed31310cf9c2c55e285bc6b184a1f0"
+  },
+  "qualification_pin": {
+    "path": "implementation/p09/evidence/p09-361-case165-native010-dispatch-qualification003.v1.json",
+    "bytes": 86403,
+    "sha256": "dcba93bf121aee655a78ff98c15b620996d0d6b437bd79d2a0186b0bdce51d33"
+  },
+  "dispatcher_source_pin": {
+    "path": "tools/p09/batch_product_runtime.py",
+    "bytes": 23931,
+    "sha256": "c98a4c734cdd7293fc8fbe6225480b0746d300df95944d65a366788f3e910a99"
+  },
+  "original_result": {
+    "driver_state": "FAILED_NATIVE010_PRODUCT_DRIVER",
+    "error_code": "PRODUCT_NATIVE010_ORIGINAL_NATIVE_FAILED_NO_AUTOMATIC_RETRY",
+    "native_state": "DEFERRED_NOT_STARTED",
+    "native_stop_reason": "STOP_NATIVE_OPEN_AFTER_HOST_SATURATION",
+    "elapsed_driver_seconds": 544.7293716000277,
+    "elapsed_original_native_seconds": 160.46,
+    "original_parent_context": {
+      "original_parent_owner_execution_attempts": 1,
+      "observed_original_Jobs": 0,
+      "original_owner_Job_scope_restorations": 1,
+      "original_live_Frame_checkpoints": 0,
+      "production_launch_bindings": 1,
+      "added_Job_or_sampler_or_Frame": false,
+      "actual_Native_source_or_product_or_acceptance_qualified": false
+    },
+    "intent_consumed": true,
+    "process_creation_attempts": 0,
+    "worker_created": false,
+    "job_assigned": false,
+    "writer_authorized": false,
+    "product_body_observed": false,
+    "actual_Native_policy_changed": false,
+    "cleanup_confirmed": true,
+    "owned_tree_empty": true,
+    "post_Native_connection": {
+      "phase": "CLOSED_NOT_ACCEPTED",
+      "failed": false,
+      "closing_guard_creations": 0,
+      "original_oracle_attempts": 0,
+      "closing_owner_cleanup": null,
+      "Native_clock_or_limit_reset": false,
+      "extra_whole_finish_or_case_replay": false,
+      "original_Frame_Job_or_oracle_methods_replaced": false,
+      "accepted_count_delta": 0,
+      "GO_authorized": false,
+      "queue_advance_authorized": false,
+      "actual_Native_or_product_or_queue_qualified": false
+    },
+    "native_checkpoint_handoff": {
+      "phase": "NATIVE_TERMINAL",
+      "failed": false,
+      "actual_metadata_reader_bindings": 1,
+      "original_pressure_restored": true,
+      "original_pressure_latched": false,
+      "preparation_guard_reused_in_Native": false,
+      "preparation_CPU_policy_installed_in_Native": false,
+      "added_sampler_or_timer_or_Job": false,
+      "execution_counters_reset": false,
+      "Native_or_product_or_Frame_cleanup_qualified": false,
+      "original_post_Job_guard_bindings": 0,
+      "original_post_Job_guard_checks": 0,
+      "post_Job_guard_body_or_sampler_or_limits_changed": false,
+      "original_modules_mutated": false,
+      "actual_post_Job_runtime_qualified": false
+    }
+  },
+  "scope": {
+    "construction_fresh": 318,
+    "construction_final": 318,
+    "whole_inputs": 3348,
+    "current_inputs": 2929,
+    "preservation_inputs": 419,
+    "full_opening_byte_summary_returned": false,
+    "declared_scope_is_not_claimed_as_complete_measured_byte_summary": true
+  },
+  "resources": {
+    "sample_count": 308,
+    "system_CPU_max_percent": 90.62,
+    "owned_parent_CPU_max_machine_percent": 2.6685854294339224,
+    "owned_private_MiB_max": 73.23046875,
+    "available_RAM_min_percent": 25.451060180386065,
+    "commit_used_max_percent": 56.596545222645744,
+    "system_at_least90_percent_samples": [
+      {
+        "time_utc": "2026-10-16T21:11:50.267513+00:00",
+        "system_cpu_percent": 90.62,
+        "parent_cpu_machine_percent": 0,
+        "parent_private_mib": 68.8359375,
+        "available_ram_percent": 25.757371976222338,
+        "commit_used_percent": 56.596545222645744
+      }
+    ]
+  },
+  "cleanup": {
+    "frame_state": "CLOSED",
+    "input_count": 2929,
+    "completed_byte_boundaries": 0,
+    "opened": 1294,
+    "closed": 1294,
+    "remaining": 0,
+    "active_reader_bindings": 0,
+    "active_byte_streams": 0
+  },
+  "acquisition": {
+    "lock_timing": {
+      "original_guard_checks": 8090,
+      "explicit_phase_events": [
+        {
+          "label": "before_acquire",
+          "phase": "metadata_hash",
+          "original_lock_elapsed_seconds": 0.14202899998053908,
+          "guard_check_number": 1
+        }
+      ],
+      "first_original_error": {
+        "original_error_code": "STOP_NATIVE_OPEN_AFTER_HOST_SATURATION",
+        "original_lock_elapsed_seconds": 94.56238879999728,
+        "phase": "metadata_hash",
+        "guard_check_number": 8090,
+        "original_lock_limit_seconds": 600
+      },
+      "original_lock_limit_seconds": 600,
+      "original_check_invoked_without_replacement": true,
+      "extra_clock_only_at_boundary_or_first_error": true,
+      "extra_CPU_RAM_or_native_query_started": false,
+      "original_resource_guard_or_deadline_extended": false,
+      "cleanup_callback_wrapped": false,
+      "unknown_measurements_not_zeroed": true,
+      "CPU_or_PC_freeze_improvement_established": false
+    },
+    "native_open_pacing": {
+      "maximum_opens_per_second": 20,
+      "open_reservations": 1294,
+      "requested_sleep_seconds": 89.84476238671988,
+      "idle_time_cannot_accumulate_multiple_open_credits": true
+    },
+    "native_acquisition_diagnostics": {
+      "take_attempts": 1295,
+      "take_completed": 1294,
+      "take_failed": 1,
+      "input_kinds": {
+        "directory": {
+          "started": 374,
+          "completed": 374,
+          "failed": 0
+        },
+        "regular": {
+          "started": 921,
+          "completed": 920,
+          "failed": 1
+        }
+      },
+      "operations": {
+        "open_with_pacing": {
+          "started": 1295,
+          "completed": 1294,
+          "failed": 1,
+          "measured": 1295,
+          "unknown": 0,
+          "elapsed_total_seconds": 94.11254300115979,
+          "elapsed_max_seconds": 0.2627020000072662
+        },
+        "inspect_metadata": {
+          "started": 1294,
+          "completed": 1294,
+          "failed": 0,
+          "measured": 1294,
+          "unknown": 0,
+          "elapsed_total_seconds": 0.06069059993023984,
+          "elapsed_max_seconds": 0.003099199995631352
+        }
+      },
+      "last_attempt": {
+        "ordinal": 1295,
+        "kind": "regular",
+        "last_native_operation": "open_with_pacing",
+        "completed": false
+      },
+      "active_take": false,
+      "path_or_handle_or_exception_values_recorded": false,
+      "bounded_aggregate_not_per_input_trace": true,
+      "open_elapsed_includes_original_pacer_and_pressure_wait": true,
+      "inspect_elapsed_covers_original_metadata_bundle": true,
+      "original_native_methods_and_arguments_retained": true,
+      "original_take_guard_and_identity_checks_retained": true,
+      "original_pacer_clock_sleeper_checkpoint_and_credit_retained": true,
+      "cleanup_callback_or_close_wrapped": false,
+      "extra_sampler_or_thread_or_native_query_started": false,
+      "diagnostic_clock_failures_do_not_mask_original_return_or_exception": true,
+      "CPU_cause_or_PC_freeze_improvement_claimed": false
+    },
+    "saturation": {
+      "original_warning_percent": 90,
+      "checks": 8089,
+      "warning_stops": 1,
+      "acquisition_active": false,
+      "latched": true,
+      "original_hard_guards_called_first": true,
+      "original_cached_owner_sample_used": true,
+      "acquisition_cooling_waits_added": 0,
+      "original_outside_acquisition_cooling_retained": false,
+      "sampler_thread_or_native_query_added": false,
+      "CPU_or_PC_freeze_improvement_claimed": false,
+      "original_acquisition_code_and_one_way_latch_retained": true
+    }
+  },
+  "original_receipt_review": {
+    "review_fresh": 1,
+    "review_final": 1,
+    "cleanup": true
+  },
+  "diagnostic_initial_read": {
+    "result": "STOP_PREPARATION_SUSTAINED_SYSTEM_PRESSURE75",
+    "original_product_replayed": false,
+    "source_changed": false
+  },
+  "post_stop_diagnostics": {
+    "not_contemporaneous_attribution": true,
+    "driver_no_longer_live": true,
+    "process_CPU_delta": {
+      "LogicalCPUs": 16,
+      "SpanSeconds": 1.653,
+      "OldDriverStillLive": false,
+      "Top": [
+        {
+          "Name": "python",
+          "Pid": 12504,
+          "MachineCPUPercent": 5.97,
+          "PrivateMiB": 155.6
+        },
+        {
+          "Name": "python",
+          "Pid": 34844,
+          "MachineCPUPercent": 5.73,
+          "PrivateMiB": 194.9
+        },
+        {
+          "Name": "git",
+          "Pid": 19208,
+          "MachineCPUPercent": 4.19,
+          "PrivateMiB": 23.7
+        },
+        {
+          "Name": "explorer",
+          "Pid": 4864,
+          "MachineCPUPercent": 3.49,
+          "PrivateMiB": 462.1
+        },
+        {
+          "Name": "CrossDeviceService",
+          "Pid": 10984,
+          "MachineCPUPercent": 0.89,
+          "PrivateMiB": 130.8
+        },
+        {
+          "Name": "Taskmgr",
+          "Pid": 35796,
+          "MachineCPUPercent": 0.59,
+          "PrivateMiB": 193.1
+        },
+        {
+          "Name": "codex",
+          "Pid": 34108,
+          "MachineCPUPercent": 0.41,
+          "PrivateMiB": 1277
+        },
+        {
+          "Name": "OneDrive.Sync.Service",
+          "Pid": 29008,
+          "MachineCPUPercent": 0.3,
+          "PrivateMiB": 151.7
+        },
+        {
+          "Name": "dllhost",
+          "Pid": 30308,
+          "MachineCPUPercent": 0.24,
+          "PrivateMiB": 2.3
+        },
+        {
+          "Name": "pwsh",
+          "Pid": 28636,
+          "MachineCPUPercent": 0.24,
+          "PrivateMiB": 32.4
+        }
+      ]
+    },
+    "formatted_snapshot": {
+      "CurrentSystemCPUPercent": 26,
+      "Processes": [
+        {
+          "Name": "Idle",
+          "Pid": 0,
+          "MachineCPUPercent": 65,
+          "PrivateMiB": 0
+        },
+        {
+          "Name": "MsMpEng",
+          "Pid": 5268,
+          "MachineCPUPercent": 0.94,
+          "PrivateMiB": 350.8
+        },
+        {
+          "Name": "System",
+          "Pid": 4,
+          "MachineCPUPercent": 4.19,
+          "PrivateMiB": 0
+        },
+        {
+          "Name": "git#1",
+          "Pid": 19208,
+          "MachineCPUPercent": 5.81,
+          "PrivateMiB": 20.8
+        },
+        {
+          "Name": "python",
+          "Pid": 12504,
+          "MachineCPUPercent": 6.44,
+          "PrivateMiB": 155.4
+        }
+      ]
+    },
+    "parent_chain_observation": {
+      "python12504_parent_pwsh34808_parent_codex34108": true,
+      "git19208_parent29420_exited_before_followup": true,
+      "other_project_identity_confirmed": false,
+      "foreign_commands_or_secrets_logged": false
+    },
+    "no_unrelated_process_terminated": true,
+    "no_system_security_settings_changed": true
+  },
+  "code_review": {
+    "files": [
+      "tools/p09/current_queue_acquisition_checkpoint.py",
+      "tools/p09/audit_evidence_io.py",
+      "tools/p09/weighted_audit_io.py",
+      "tools/p09/lower_native_acquisition_pressure.py",
+      "tools/p09/batch_product_runtime.py"
+    ],
+    "findings": [
+      "Acquisition uses the sole original owner sample and one-way saturation latch; no cooling/retry after stop.",
+      "Pacer uses actual sleep with checkpoints, not a busy loop; 89.8447623867 requested sleep seconds in 94.5623888 lock seconds.",
+      "1294 metadata inspections total 0.06069059993 seconds; repeated pin calls reuse the existing pinned snapshot.",
+      "The product exe was not created, and no original Job existed in this attempt.",
+      "Direct verifier full-machine CPU consumption is not supported by these samples; indirect trigger and exact external spike culprit remain unresolved."
+    ],
+    "source_changed": false,
+    "additional_runtime_wrapper_or_envelope_created": false,
+    "diagnostic_observations_are_not_product_qualification": true,
+    "measured_PC_freeze_resolution": false
+  },
+  "terminal": {
+    "automatic_retry": false,
+    "Native010_replay_allowed": false,
+    "Native008_or_Native009_replayed": false,
+    "Native011_authorized": false,
+    "official_accepted": 158,
+    "queue_total": 249,
+    "remaining": 91,
+    "next_case": 165,
+    "product_acceptance_delta": 0,
+    "P09_gate": "OPEN",
+    "A12": "OPEN",
+    "A13": "OPEN",
+    "P10_started": false,
+    "goal_tool_status_observed": "blocked",
+    "goal_resume_available_through_update_goal": false
+  }
+}

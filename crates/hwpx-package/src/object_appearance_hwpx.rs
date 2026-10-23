@@ -524,7 +524,7 @@ fn parse_selected(
     let fill = unique_direct_child(&document, root, CORE_NS, "fillBrush")?;
     let shadow = unique_direct_child(&document, root, PARAGRAPH_NS, "shadow")?;
     let effects = unique_direct_child(&document, root, PARAGRAPH_NS, "effects")?;
-    let image = unique_direct_child(&document, root, PARAGRAPH_NS, "img")?;
+    let image = unique_direct_child(&document, root, CORE_NS, "img")?;
     match target_kind {
         AppearanceTargetKind::BasicShape => {
             if effects.is_some() || image.is_some() {
@@ -624,7 +624,8 @@ fn read_appearance(
             shadow: parsed
                 .shadow
                 .map(|index| parse_classic_shadow(&parsed.document, index, hwpx_limits))
-                .transpose()?,
+                .transpose()?
+                .flatten(),
             picture_effects: None,
             image_adjustment: None,
         },
@@ -685,7 +686,7 @@ fn parse_line(
         head_size: parse_arrow_size(attribute(value, "headSz")?)?,
         tail_size: parse_arrow_size(attribute(value, "tailSz")?)?,
         outline_style: parse_outline_style(attribute(value, "outlineStyle")?)?,
-        alpha: fraction(attribute(value, "alpha")?, limits)?,
+        alpha: byte_alpha(attribute(value, "alpha")?, limits)?,
     })
 }
 
@@ -735,7 +736,7 @@ fn parse_window_brush(
             }
             Ok(FillAppearance::Solid {
                 color: color(attribute(value, "faceColor")?)?,
-                alpha: fraction(attribute(value, "alpha")?, limits)?,
+                alpha: byte_alpha(attribute(value, "alpha")?, limits)?,
             })
         }
         Some(hatch) => {
@@ -744,7 +745,7 @@ fn parse_window_brush(
                 face_color: color(attribute(value, "faceColor")?)?,
                 hatch_color: color(attribute(value, "hatchColor")?)?,
                 hatch_style: parse_hatch_style(hatch)?,
-                alpha: fraction(attribute(value, "alpha")?, limits)?,
+                alpha: byte_alpha(attribute(value, "alpha")?, limits)?,
             })
         }
     }
@@ -803,7 +804,7 @@ fn parse_gradient(
             step_percent: signed_i32(attribute(value, "step")?)?,
             step_center_percent: signed_i32(attribute(value, "stepCenter")?)?,
             colors,
-            alpha: fraction(attribute(value, "alpha")?, hwpx_limits)?,
+            alpha: byte_alpha(attribute(value, "alpha")?, hwpx_limits)?,
         },
     })
 }
@@ -833,7 +834,7 @@ fn parse_image_fill(
             brightness: signed_i32(attribute(image, "bright")?)?,
             contrast: signed_i32(attribute(image, "contrast")?)?,
             effect: parse_image_effect(attribute(image, "effect")?)?,
-            alpha: fraction(attribute(image, "alpha")?, limits)?,
+            alpha: byte_alpha(attribute(image, "alpha")?, limits)?,
         },
     })
 }
@@ -842,17 +843,24 @@ fn parse_classic_shadow(
     document: &PreservingXmlDocument,
     index: usize,
     limits: ObjectAppearanceHwpxLimits,
-) -> Result<ClassicShadow, ObjectAppearanceHwpxError> {
+) -> Result<Option<ClassicShadow>, ObjectAppearanceHwpxError> {
     let value = element(document, index)?;
     require_exact_attributes(value, &["type", "color", "offsetX", "offsetY", "alpha"])?;
     require_no_content(document, value)?;
-    Ok(ClassicShadow {
+    if attribute(value, "type")? == "NONE" {
+        let _ = color(attribute(value, "color")?)?;
+        let _ = signed_i32(attribute(value, "offsetX")?)?;
+        let _ = signed_i32(attribute(value, "offsetY")?)?;
+        let _ = byte_alpha(attribute(value, "alpha")?, limits)?;
+        return Ok(None);
+    }
+    Ok(Some(ClassicShadow {
         shadow_type: parse_classic_shadow_type(attribute(value, "type")?)?,
         color: color(attribute(value, "color")?)?,
         offset_x_hwpunit: signed_i32(attribute(value, "offsetX")?)?,
         offset_y_hwpunit: signed_i32(attribute(value, "offsetY")?)?,
-        alpha: fraction(attribute(value, "alpha")?, limits)?,
-    })
+        alpha: byte_alpha(attribute(value, "alpha")?, limits)?,
+    }))
 }
 
 fn parse_picture_effects(
@@ -1160,7 +1168,7 @@ fn parse_image_adjustment(
         brightness: signed_i32(attribute(image, "bright")?)?,
         contrast: signed_i32(attribute(image, "contrast")?)?,
         effect: parse_image_effect(attribute(image, "effect")?)?,
-        alpha: fraction(attribute(image, "alpha")?, limits)?,
+        alpha: byte_alpha(attribute(image, "alpha")?, limits)?,
     })
 }
 
@@ -1198,6 +1206,10 @@ fn rewrite_appearance(
             }
             if let Some(shadow) = &target.shadow {
                 fragments.extend_from_slice(&classic_shadow_fragment(shadow, limits)?);
+            } else {
+                fragments.extend_from_slice(
+                    b"<hp:shadow xmlns:hp=\"http://www.hancom.co.kr/hwpml/2011/paragraph\" type=\"NONE\" color=\"#B2B2B2\" offsetX=\"0\" offsetY=\"0\" alpha=\"0\"/>",
+                );
             }
         }
         AppearanceTargetKind::Picture => {
@@ -1247,7 +1259,7 @@ fn rewrite_appearance(
                 &parsed.document,
                 image_index,
                 "alpha",
-                fixed_text(i64::from(adjustment.alpha.millionths()))?,
+                byte_alpha_text(adjustment.alpha)?,
                 &mut edits,
             )?;
         }
@@ -1396,7 +1408,7 @@ fn line_fragment(
         arrow_size(line.head_size),
         arrow_size(line.tail_size),
         outline_style(line.outline_style),
-        fixed_text(i64::from(line.alpha.millionths()))?,
+        byte_alpha_text(line.alpha)?,
     )
     .map_err(|_| ObjectAppearanceHwpxError::AllocationFailed)?;
     bounded_fragment(xml, limits)
@@ -1416,7 +1428,7 @@ fn fill_fragment(
                 xml,
                 "<hc:winBrush faceColor=\"{}\" hatchColor=\"#000000\" alpha=\"{}\"/>",
                 color_text(*color),
-                fixed_text(i64::from(alpha.millionths()))?,
+                byte_alpha_text(*alpha)?,
             )
             .map_err(|_| ObjectAppearanceHwpxError::AllocationFailed)?;
         }
@@ -1435,7 +1447,7 @@ fn fill_fragment(
                 color_text(*face_color),
                 color_text(*hatch_color),
                 hatch_style_text(*hatch_style),
-                fixed_text(i64::from(alpha.millionths()))?,
+                byte_alpha_text(*alpha)?,
             )
             .map_err(|_| ObjectAppearanceHwpxError::AllocationFailed)?;
         }
@@ -1463,7 +1475,7 @@ fn write_gradient(
         gradient.step_percent,
         gradient.colors.len(),
         gradient.step_center_percent,
-        fixed_text(i64::from(gradient.alpha.millionths()))?,
+        byte_alpha_text(gradient.alpha)?,
     )
     .map_err(|_| ObjectAppearanceHwpxError::AllocationFailed)?;
     for color in &gradient.colors {
@@ -1487,7 +1499,7 @@ fn write_image_fill(xml: &mut String, image: &ImageFill) -> Result<(), ObjectApp
         image.brightness,
         image.contrast,
         image_effect(image.effect),
-        fixed_text(i64::from(image.alpha.millionths()))?,
+        byte_alpha_text(image.alpha)?,
     )
     .map_err(|_| ObjectAppearanceHwpxError::AllocationFailed)
 }
@@ -1507,7 +1519,7 @@ fn classic_shadow_fragment(
             color_text(shadow.color),
             shadow.offset_x_hwpunit,
             shadow.offset_y_hwpunit,
-            fixed_text(i64::from(shadow.alpha.millionths()))?,
+            byte_alpha_text(shadow.alpha)?,
         ),
         limits,
     )
@@ -2305,6 +2317,40 @@ fn fraction(
     let value = fixed_millionths(value, FIXED_SCALE, limits)?;
     let value = u32::try_from(value).map_err(|_| ObjectAppearanceHwpxError::InvalidNumber)?;
     UnitFraction::new(value).map_err(ObjectAppearanceHwpxError::Domain)
+}
+
+fn byte_alpha(
+    value: &str,
+    limits: ObjectAppearanceHwpxLimits,
+) -> Result<UnitFraction, ObjectAppearanceHwpxError> {
+    if value.len() > limits.0.numeric_text_bytes {
+        return Err(ObjectAppearanceHwpxError::InvalidNumber);
+    }
+    let value = unsigned(value, u32::from(u8::MAX))?;
+    let millionths = value
+        .checked_mul(1_000_000)
+        .and_then(|scaled| scaled.checked_add(127))
+        .ok_or(ObjectAppearanceHwpxError::InvalidNumber)?
+        / u32::from(u8::MAX);
+    UnitFraction::new(millionths).map_err(ObjectAppearanceHwpxError::Domain)
+}
+
+fn byte_alpha_text(value: UnitFraction) -> Result<String, ObjectAppearanceHwpxError> {
+    let millionths = value.millionths();
+    let byte = millionths
+        .checked_mul(u32::from(u8::MAX))
+        .and_then(|scaled| scaled.checked_add(500_000))
+        .ok_or(ObjectAppearanceHwpxError::InvalidNumber)?
+        / 1_000_000;
+    let canonical_millionths = byte
+        .checked_mul(1_000_000)
+        .and_then(|scaled| scaled.checked_add(127))
+        .ok_or(ObjectAppearanceHwpxError::InvalidNumber)?
+        / u32::from(u8::MAX);
+    if canonical_millionths != millionths {
+        return Err(ObjectAppearanceHwpxError::InvalidNumber);
+    }
+    Ok(byte.to_string())
 }
 
 fn scalar(

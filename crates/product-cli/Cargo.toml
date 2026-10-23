@@ -5,11 +5,17 @@ edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
 
+[features]
+p09-installed-format-fixture = []
+
 [dependencies]
+artifact-service = { version = "0.1.0", path = "../artifact-service" }
 domain-ir = { version = "0.1.0", path = "../domain-ir" }
 hex.workspace = true
 hwpx-package = { version = "0.1.0", path = "../hwpx-package" }
 operation-engine = { version = "0.1.0", path = "../operation-engine" }
+revision-service = { version = "0.1.0", path = "../revision-service" }
+ring.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true
@@ -17,7 +23,16 @@ thiserror.workspace = true
 uuid.workspace = true
 
 [dev-dependencies]
+postgres.workspace = true
+quick-xml.workspace = true
 tempfile.workspace = true
+zip.workspace = true
+
+[target.'cfg(windows)'.dev-dependencies]
+getrandom.workspace = true
+keyring-core.workspace = true
+windows-native-keyring-store.workspace = true
+zeroize.workspace = true
 
 [lints]
 workspace = true

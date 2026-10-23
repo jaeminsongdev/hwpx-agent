@@ -340,6 +340,11 @@ impl ObjectSpecialDocumentState {
     }
 
     #[must_use]
+    pub fn external_objects(&self) -> &[ObjectIdentity] {
+        &self.external_objects
+    }
+
+    #[must_use]
     pub fn captions(&self) -> &[ObjectCaptionBinding] {
         &self.captions
     }
@@ -582,6 +587,31 @@ impl ObjectSpecialPlan {
     #[must_use]
     pub const fn target_state(&self) -> &ObjectSpecialDocumentState {
         &self.target_state
+    }
+
+    #[must_use]
+    pub const fn source_state(&self) -> &ObjectSpecialDocumentState {
+        &self.source_state
+    }
+
+    #[must_use]
+    pub const fn operation(&self) -> &ObjectSpecialOperation {
+        &self.operation
+    }
+
+    #[must_use]
+    pub fn source_document_flow_sha256(&self) -> &str {
+        &self.source_document_flow_sha256
+    }
+
+    #[must_use]
+    pub fn target_document_flow_sha256(&self) -> &str {
+        &self.target_document_flow_sha256
+    }
+
+    #[must_use]
+    pub fn plan_sha256(&self) -> &str {
+        &self.plan_sha256
     }
 }
 

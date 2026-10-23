@@ -11,9 +11,14 @@
   },
   "implementation_sha256": {
     "crates/hwpx-package/src/object_common_properties_hwpx.rs": "e1aeeea3fa03fe6325efa78d40d704c9e4420b24fd834da6b4fd2c1b705b86b6",
-    "crates/hwpx-package/src/object_remainder_target.rs": "a688ad663a3c8e63b68904b464a89d540ad1b67d3dcce602bade62a8feb57231",
+    "crates/hwpx-package/src/object_caption_insert_hwpx.rs": "d3fc91d0cc18649f4d59db11f6855c5b2e181459d38abd37d14c5bc68aac4878",
+    "crates/hwpx-package/src/object_form_insert_hwpx.rs": "b505d5ee747d90af2a7571b16c3e96929d0b3b77c2595720eb126198a62be9c1",
+    "crates/hwpx-package/src/object_remainder_target.rs": "3ab9250db0326a7f20e3a0607e3a632ba5b9190ed28f8b1ccfafa92019294879",
+    "crates/hwpx-package/examples/p08_19_support/special.rs": "7830ba6b3ca65acde05e3843bfd98fd1d6e0fb26fb437c51e84d03e2367c2b43",
     "crates/hwpx-package/tests/object_common_properties_hwpx.rs": "94c2a449c151214c50778b752fe59c92e2b28e5748ed692d4f08feb4c465d956",
-    "crates/hwpx-package/tests/object_remainder_target.rs": "56a19d5d02835592fade9e6d537d9629fdf2f04ce9fac46a9109298978b00f78"
+    "crates/hwpx-package/tests/object_caption_insert_hwpx.rs": "ba8e043c2fbd4db9927afff045bb898fde783c7e28a3beab5a1fa04b004ee31b",
+    "crates/hwpx-package/tests/object_form_insert_hwpx.rs": "90cb32121ebaa0d6c05a31d19c456be2b916a372cd368c300288bf6a6b5dcd98",
+    "crates/hwpx-package/tests/object_remainder_target.rs": "85bf7db219324c16797a3f02a84c14fbd8f380917698b8a98a06212a6c741989"
   },
   "official_sources": {
     "owpml_model": {
@@ -42,18 +47,25 @@
         {"path": "hwp-automation/ParameterSetObject.pdf", "sha256": "7cbf536a8814cf8165a1614edfd9816173bb1bd7c9e585821d776563e2bdb674"},
         {"path": "hwp-automation/HwpAutomation_2504.pdf", "sha256": "917142de2704ae037b0132f5a344ce5331b1fd96cc19dd574666aaacfbf0268c"}
       ],
-      "scope": "shape_caption_comment_image_size_protect_size_and_form_surfaces_without_unattended_runtime_claim"
+      "scope": "draw_template_shape_comment_caption_image_size_protect_size_and_form_surfaces_without_unattended_runtime_claim"
     }
   },
+  "installed_template": {
+    "path": "C:\\Program Files (x86)\\HNC\\Office 2020\\HOffice110\\Shared\\HwpTemplate\\Draw\\FG_Basic_Shapes\\Rectangle.drt",
+    "byte_len": 12288,
+    "format": "OLE Compound File Binary",
+    "sha256": "97263ccadb83c470550354abf6bf8fdfd57e8ba4f3b294f479c7bab80f36753b",
+    "redistributed": false
+  },
   "native_map": {
+    "OBJ-003": "installed_rectangle_drt_exact_identity_to_native_rectangle",
+    "OBJ-012": "static_edit_insert_complete_native_state_hash_profile",
+    "OBJ-013": "plain_static_caption_insert_exact_subtree",
+    "OBJ-014": "fixed_rectangle_behind_paragraph_band_profile",
     "OBJ-019": "existing_plain_caption_and_outMargin_only",
     "OBJ-030": "checked_imgDim_orgSz_curSz_mapping",
     "OBJ-046": "existing_admitted_form_root_only",
     "OBJ-047": "existing_shapeComment_description_only_empty_title",
-    "OBJ-003": "CAPABILITY_UNAVAILABLE_FOR_TARGET:qualified_native_template_absent",
-    "OBJ-012": "CAPABILITY_UNAVAILABLE_FOR_TARGET:complete_form_state_absent",
-    "OBJ-013": "CAPABILITY_UNAVAILABLE_FOR_TARGET:subtree_insertion_profile_absent",
-    "OBJ-014": "CAPABILITY_UNAVAILABLE_FOR_TARGET:distinct_native_construct_absent",
     "OBJ-044": "CAPABILITY_UNAVAILABLE_FOR_TARGET:protect_size_is_not_aspect_lock"
   },
   "target": {
@@ -66,12 +78,17 @@
   },
   "tests": {
     "object_common_properties_hwpx": "6/6 PASS",
+    "object_caption_insert_hwpx": "4/4 PASS",
+    "object_form_insert_hwpx": "4/4 PASS",
     "object_remainder_target": "5/5 PASS",
-    "focused_total": "11/11 PASS"
+    "focused_total": "19/19 PASS",
+    "deterministic_bundle_generation": "2/2 PASS",
+    "bundle_cases": 41,
+    "bundle_manifest_sha256": "2d8bfcbf9fe32092614c8d2cd27a3eee2c56d123b0ae956b27544b819bf71a4b"
   },
   "claims": {
-    "direct_hwpx_profiles": 4,
-    "unavailable_with_reason_profiles": 5,
+    "direct_hwpx_profiles": 8,
+    "unavailable_with_reason_profiles": 1,
     "schema": true,
     "semantic_reopen": true,
     "negative": true,

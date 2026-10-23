@@ -610,6 +610,47 @@ fn parse_bookmarks(
     })
 }
 
+/// Source-only point marker envelope using the original exact projection.
+/// No native paragraph ordinal, name normalization or jump authority is exposed.
+pub(crate) struct ImportedBookmarkEnvelope {
+    pub name: String,
+    pub wrapper_element: usize,
+    pub paragraph_element: usize,
+    pub source_run_ordinal: u32,
+    pub source_inline_ordinal: u32,
+}
+
+pub(crate) fn read_imported_point_bookmark(
+    document: &PreservingXmlDocument,
+    index: usize,
+) -> Result<ImportedBookmarkEnvelope, BookmarkHwpxError> {
+    let marker = element(document, index)?;
+    if !has_name(marker, "bookmark") {
+        return Err(BookmarkHwpxError::InvalidBookmark);
+    }
+    let wrapper = marker.parent().ok_or(BookmarkHwpxError::InvalidBookmark)?;
+    let run = element(document, wrapper)?
+        .parent()
+        .ok_or(BookmarkHwpxError::InvalidBookmark)?;
+    let paragraph = element(document, run)?
+        .parent()
+        .ok_or(BookmarkHwpxError::InvalidBookmark)?;
+    let limits = BookmarkHwpxLimits::new(BookmarkHwpxLimitConfig::default())?;
+    let projection = document.with_source_bytes(|source| {
+        bookmark_projection(source, document, &[paragraph], index, limits)
+    })?;
+    let name = document.with_source_bytes(|source| {
+        decoded_attribute(source, strict_attribute(marker, "name")?, limits)
+    })?;
+    Ok(ImportedBookmarkEnvelope {
+        name,
+        wrapper_element: projection.wrapper,
+        paragraph_element: paragraph,
+        source_run_ordinal: projection.anchor.run_ordinal,
+        source_inline_ordinal: projection.anchor.inline_ordinal,
+    })
+}
+
 fn bookmark_projection(
     source: &[u8],
     document: &PreservingXmlDocument,

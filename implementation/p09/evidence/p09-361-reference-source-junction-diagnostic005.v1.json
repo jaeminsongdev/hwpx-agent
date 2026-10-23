@@ -1,0 +1,212 @@
+{
+  "state": "FAILED_REFERENCE_TARGET_IMPORT_SCOPED_TESTS",
+  "steps": [
+    {
+      "stage": "single_failed_junction_diagnostic",
+      "exit_code": 101,
+      "cleanup": true,
+      "stdout_bytes": 432,
+      "stderr_bytes": 281,
+      "stdout_sha256": "1bb87687a5820056ea81e46d956c3617a3ed3eba21413ef560ea8aea7aae554e",
+      "stderr_sha256": "2a82a08707e50868898f50c1128b294a149e0248788af3b4786e84edc6c00e11",
+      "diagnostics": [
+        "error: test failed, to rerun pass `-p hwpx-agent-cli --test reference_source_product`"
+      ],
+      "locations": [],
+      "test_summary": [
+        "test actual_cli_rejects_a_junction_ancestor_before_reading_the_source_leaf ... FAILED",
+        "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.07s"
+      ],
+      "closed_failure_diagnostics": {
+        "junction_fixture_creation_failed": true,
+        "assertion_failure": false,
+        "native_errors": [],
+        "integer_assertion_sides": []
+      },
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": {
+          "stage": "build_finished",
+          "package": null
+        }
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 0.391,
+          "peak_job_private_mib": 54.6,
+          "peak_job_private_percent": 0.17137473111589127,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 0.6380777999875136
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "compiler_profile": {
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_TEST_OPT_LEVEL": "0",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_DEV_DEBUG_ASSERTIONS": "true",
+    "CARGO_PROFILE_DEV_OVERFLOW_CHECKS": "true",
+    "CARGO_PROFILE_DEV_CODEGEN_UNITS": "16",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG_ASSERTIONS": "true",
+    "CARGO_PROFILE_TEST_OVERFLOW_CHECKS": "true",
+    "CARGO_PROFILE_TEST_CODEGEN_UNITS": "16",
+    "CARGO_INCREMENTAL": "0",
+    "RUST_TEST_THREADS": "1",
+    "RUSTUP_AUTO_INSTALL": "0"
+  },
+  "unchanged_format_result_reused": true,
+  "error_type": "ValueError",
+  "error_code": "REFERENCE_TARGET_COMMAND_FAILED",
+  "cleanup": true,
+  "elapsed_seconds": 2.3479420999938156,
+  "source_pins": [
+    {
+      "path": "Cargo.toml",
+      "bytes": 2695,
+      "sha256": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5"
+    },
+    {
+      "path": "Cargo.lock",
+      "bytes": 61056,
+      "sha256": "3dba694d1b6066a8ff7fec347c51edd1b09b7046ca070bbaf3ac78cc8b708887"
+    },
+    {
+      "path": "crates/product-cli/Cargo.toml",
+      "bytes": 772,
+      "sha256": "280f6845d791cdf75e64f7b7fb0a5858e14f8c170f80cf4ee4b8c5e50c2c4a00"
+    },
+    {
+      "path": "crates/product-cli/src/lib.rs",
+      "bytes": 26562,
+      "sha256": "4811ee756dde8335a8ae70836dba8093684c2b7aa26c49af654e0a9c4d997323"
+    },
+    {
+      "path": "crates/product-cli/src/main.rs",
+      "bytes": 1997,
+      "sha256": "227974950c8fa18b8e9294701499db8c1de59f2a504c9cd22236daf713e42f03"
+    },
+    {
+      "path": "crates/product-cli/src/reference_validation_product.rs",
+      "bytes": 6662,
+      "sha256": "6c3bf01d494458354f8e1860c81406562e167b9f758fdb1368bfd2d458ea126a"
+    },
+    {
+      "path": "crates/product-cli/src/reference_validation_product/source.rs",
+      "bytes": 9873,
+      "sha256": "4f0905cdf419695c5d30cf71327fec265589b6938668d9e7cccfad2edf48fe5a"
+    },
+    {
+      "path": "crates/product-cli/tests/reference_source_product.rs",
+      "bytes": 12265,
+      "sha256": "28205a8e10e8418a7f733028264c9490cb68efc5fdb7f1ca56b265b8bd9834c8"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import.rs",
+      "bytes": 26946,
+      "sha256": "c737697ec2547e9bf9be73d02473bde9da9561ee079581ddd24a69b5cc9b08af"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/reference_targets.rs",
+      "bytes": 9246,
+      "sha256": "fc825446554e08ec03d0444f63b66880d4bf1623116a5b2185c16a6ea14957c7"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure.rs",
+      "bytes": 27369,
+      "sha256": "00ce41491d655a7dce0c4b64eb8fde1a48d5bb20c5bdb7803bd4ef6bc29c6793"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/bookmarks.rs",
+      "bytes": 6913,
+      "sha256": "cdd2652bcf8f9178ecc4fee61bc4a57bbc9978ccccac471b976709819e0fe4ce"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_field_fixture.rs",
+      "bytes": 2850,
+      "sha256": "eaa5b0c52e615adc355ff73bcf2a62a4c7e91bdc42d284a6e02d5e5751b60f06"
+    },
+    {
+      "path": "crates/domain-ir/src/reference_auxiliary.rs",
+      "bytes": 87884,
+      "sha256": "04e3c23493732cf35e4cfdff83314d55b725c1e419b524a1ef00ca9c60f66777"
+    },
+    {
+      "path": "implementation/p09/P09-06_CROSS_REFERENCE_POLICY.md",
+      "bytes": 4826,
+      "sha256": "d71808ae0e8eea7df9a815065591341a17540773fae90d74017816a604401082"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T05:02:37.574483+00:00",
+      "system_cpu_percent": 21.63,
+      "available_ram_mib": 7383.82,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.17515274824233,
+      "commit_used_percent": 54.35001371761721,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.421875,
+      "parent_private_percent": 0.04212645415039365
+    },
+    {
+      "time_utc": "2026-10-17T05:02:38.075168+00:00",
+      "system_cpu_percent": 21.35,
+      "available_ram_mib": 7406.14,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.245220468111217,
+      "commit_used_percent": 54.31829008012108,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.421875,
+      "parent_private_percent": 0.04212645415039365
+    },
+    {
+      "time_utc": "2026-10-17T05:02:38.578969+00:00",
+      "system_cpu_percent": 25.59,
+      "available_ram_mib": 7406.27,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.245637318938083,
+      "commit_used_percent": 54.313363103364985,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.4921875,
+      "parent_private_percent": 0.04234713988226416
+    },
+    {
+      "time_utc": "2026-10-17T05:02:39.314464+00:00",
+      "system_cpu_percent": 24.34,
+      "available_ram_mib": 7387.25,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.185917307830238,
+      "commit_used_percent": 54.33226839943147,
+      "parent_cpu_machine_percent": 0.13277512433557714,
+      "parent_private_mib": 13.61328125,
+      "parent_private_percent": 0.04272720975381893
+    }
+  ]
+}

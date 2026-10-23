@@ -94,7 +94,7 @@ fn standard() -> ObjectCompositionGraph {
 
 fn rect(object: &CompositionObject) -> String {
     format!(
-        "<hp:rect id=\"{}\" zOrder=\"{}\" numberingType=\"DRAWING\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\"><hp:offset x=\"{}\" y=\"{}\"/><hp:orgSz width=\"{}\" height=\"{}\"/><hp:curSz width=\"{}\" height=\"{}\"/><hp:flip horizontal=\"0\" vertical=\"0\"/><hp:rotationInfo angle=\"0\" centerX=\"50\" centerY=\"40\" rotateimage=\"1\"/><hp:renderingInfo><hc:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/><hc:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/><hc:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/></hp:renderingInfo><hp:shapeComment>opaque-{}</hp:shapeComment><hp:sz width=\"{}\" widthRelTo=\"ABSOLUTE\" height=\"{}\" heightRelTo=\"ABSOLUTE\" protect=\"0\"/><hp:pos treatAsChar=\"0\" affectLSpacing=\"0\" flowWithText=\"1\" allowOverlap=\"0\" holdAnchorAndSO=\"1\" vertRelTo=\"PARA\" horzRelTo=\"PARA\" vertAlign=\"TOP\" horzAlign=\"LEFT\" vertOffset=\"0\" horzOffset=\"0\"/><hp:outMargin left=\"0\" right=\"0\" top=\"0\" bottom=\"0\"/><hp:pt0 x=\"0\" y=\"0\"/><hp:pt1 x=\"100\" y=\"0\"/><hp:pt2 x=\"100\" y=\"80\"/><hp:pt3 x=\"0\" y=\"80\"/></hp:rect>",
+        "<hp:rect id=\"{}\" zOrder=\"{}\" numberingType=\"NONE\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\"><hp:offset x=\"{}\" y=\"{}\"/><hp:orgSz width=\"{}\" height=\"{}\"/><hp:curSz width=\"{}\" height=\"{}\"/><hp:flip horizontal=\"0\" vertical=\"0\"/><hp:rotationInfo angle=\"0\" centerX=\"50\" centerY=\"40\" rotateimage=\"1\"/><hp:renderingInfo><hc:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><hc:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><hc:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/></hp:renderingInfo><hp:shapeComment>opaque-{}</hp:shapeComment><hp:sz width=\"{}\" widthRelTo=\"ABSOLUTE\" height=\"{}\" heightRelTo=\"ABSOLUTE\" protect=\"0\"/><hp:pos treatAsChar=\"0\" affectLSpacing=\"0\" flowWithText=\"1\" allowOverlap=\"0\" holdAnchorAndSO=\"1\" vertRelTo=\"PARA\" horzRelTo=\"PARA\" vertAlign=\"TOP\" horzAlign=\"LEFT\" vertOffset=\"0\" horzOffset=\"0\"/><hp:outMargin left=\"0\" right=\"0\" top=\"0\" bottom=\"0\"/><hc:pt0 x=\"0\" y=\"0\"/><hc:pt1 x=\"100\" y=\"0\"/><hc:pt2 x=\"100\" y=\"80\"/><hc:pt3 x=\"0\" y=\"80\"/></hp:rect>",
         object.native_object_id,
         object.z_order,
         object.group_level,
@@ -198,6 +198,7 @@ fn group_and_ungroup_lower_as_native_container_and_preserve_outside_island() {
     );
     let grouped_text = String::from_utf8(grouped.section_xml.clone()).expect("UTF-8");
     assert!(grouped_text.contains("<hp:container id=\"20\""));
+    assert!(grouped_text.contains("<hp:container id=\"20\" zOrder=\"0\" numberingType=\"NONE\""));
     assert!(grouped_text.contains("<hp:t>before</hp:t>"));
     assert!(grouped_text.contains("<hp:t>after</hp:t>"));
     assert!(grouped.receipt.semantic_reopen());
@@ -350,8 +351,11 @@ fn connector_create_and_update_cover_native_subjects_control_points_and_all_type
         connector_operation(ConnectorKind::StraightOneWay),
     );
     let created_text = String::from_utf8(created.section_xml.clone()).expect("UTF-8");
+    assert!(created_text.contains("<hp:connectLine id=\"30\" zOrder=\"4\" numberingType=\"NONE\""));
     assert!(created_text.contains("type=\"STRAIGHT_ONEWAY\""));
-    assert!(created_text.contains("subjectIDRef=\"1\" subjectIdx=\"1\""));
+    assert!(created_text.contains("subjectIDRef=\"101\" subjectIdx=\"1\""));
+    assert!(!created_text.contains("subjectIDRef=\"1\" subjectIdx=\"1\""));
+    assert!(!created_text.contains("<hp:controlPoints>"));
 
     let topology = ConnectorTopology {
         kind: ConnectorKind::ArcBoth,
@@ -404,6 +408,23 @@ fn source_flow_and_native_topology_drift_fail_closed() {
     assert!(matches!(
         ObjectCompositionHwpxReader::read(
             tampered.as_bytes(),
+            &source,
+            graph_limits(),
+            hwpx_limits()
+        ),
+        Err(ObjectCompositionHwpxError::UnsupportedProfile)
+    ));
+}
+
+#[test]
+fn illegal_numbering_type_fails_closed_before_composition_lowering() {
+    let source = standard();
+    let invalid = String::from_utf8(section(&source))
+        .expect("UTF-8")
+        .replacen("numberingType=\"NONE\"", "numberingType=\"DRAWING\"", 1);
+    assert!(matches!(
+        ObjectCompositionHwpxReader::read(
+            invalid.as_bytes(),
             &source,
             graph_limits(),
             hwpx_limits()

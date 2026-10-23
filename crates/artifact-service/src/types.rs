@@ -408,6 +408,8 @@ impl QuarantineReason {
 pub enum ArtifactKind {
     Source,
     Result,
+    /// Canonical complete document IR snapshot, not a HWPX result or semantic diff.
+    DocumentIr,
     Preview,
     Evidence,
     Trace,
@@ -421,6 +423,7 @@ impl ArtifactKind {
         match self {
             Self::Source => "source",
             Self::Result => "result",
+            Self::DocumentIr => "document_ir",
             Self::Preview => "preview",
             Self::Evidence => "evidence",
             Self::Trace => "trace",

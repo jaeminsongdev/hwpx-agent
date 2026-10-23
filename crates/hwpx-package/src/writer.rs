@@ -234,6 +234,18 @@ impl PackageArtifact {
         )?;
         Ok(())
     }
+
+    /// Reopens and verifies the immutable package before a temporary byte callback.
+    /// This is artifact integrity only, not fresh service ACL or execution authority.
+    /// # Errors
+    /// Does not invoke the callback if the original package trust chain rejects it.
+    pub fn with_verified_bytes<T>(
+        &self,
+        consume: impl FnOnce(&[u8]) -> T,
+    ) -> Result<T, WriterError> {
+        self.verify()?;
+        Ok(consume(&self.bytes))
+    }
 }
 
 #[derive(Debug)]
@@ -583,7 +595,7 @@ fn write_archive(
     ))
 }
 
-struct BoundedArchiveBuffer {
+pub(crate) struct BoundedArchiveBuffer {
     bytes: Vec<u8>,
     position: u64,
     limit: u64,
@@ -592,7 +604,7 @@ struct BoundedArchiveBuffer {
 }
 
 impl BoundedArchiveBuffer {
-    const fn new(limit: u64) -> Self {
+    pub(crate) const fn new(limit: u64) -> Self {
         Self {
             bytes: Vec::new(),
             position: 0,
@@ -602,7 +614,7 @@ impl BoundedArchiveBuffer {
         }
     }
 
-    fn into_inner(self) -> Result<Vec<u8>, WriterError> {
+    pub(crate) fn into_inner(self) -> Result<Vec<u8>, WriterError> {
         if self.allocation_failed {
             Err(WriterError::ZipConstruction)
         } else if self.overflowed {
@@ -722,10 +734,19 @@ fn zip_options(compression: Compression) -> SimpleFileOptions {
     }
 }
 
+#[cfg_attr(test, derive(Debug, Eq, PartialEq))]
 struct ValidationCounts {
     parts: usize,
     declarations: usize,
     references: usize,
+}
+
+/// Same original writer trust chain for a newly derived note-only package.
+/// Not an authorization, signature, Native or publication attestation.
+pub(crate) fn validate_note_export_archive(bytes: &[u8], limits: PackageLimits) -> Result<(), WriterError> {
+    validate_archive(Cursor::new(bytes), limits, PackageGraphLimits::default(),
+        PreservationRuleProfile::Hangul2020PreviewTextV2, IdRuleProfile::hwpml_2011_shape_v6(),
+        IdIndexLimits::default()).map(|_| ())
 }
 
 fn validate_archive<R: Read + Seek>(
@@ -738,17 +759,27 @@ fn validate_archive<R: Read + Seek>(
 ) -> Result<ValidationCounts, WriterError> {
     let mut reader = BoundedZipReader::open(source, package_limits)?;
     let graph = PackageGraph::build(&mut reader, graph_limits)?;
-    let preservation = PreservationReport::build_with_graph_limits_and_profile(
+    // One archive validation only. Keep fresh bounded reads, CRC/size/profile
+    // and whole-byte comparisons; never retain source or authorization across calls.
+    let mut documents = crate::call_local_xml::CallLocalXmlDocuments::default();
+    let preservation = PreservationReport::build_with_call_local_xml(
         &mut reader,
         &graph,
         graph_limits,
         preservation_profile,
+        &mut documents,
     )?;
     if !preservation.direct_preserve_ready() {
         return Err(WriterError::ArtifactMismatch);
     }
-    let index =
-        IdIndex::build_with_graph_limits(&mut reader, &graph, graph_limits, profile, id_limits)?;
+    let index = IdIndex::build_with_call_local_xml(
+        &mut reader,
+        &graph,
+        graph_limits,
+        profile,
+        id_limits,
+        &mut documents,
+    )?;
     Ok(ValidationCounts {
         parts: preservation.parts().len(),
         declarations: index.declarations().len(),
@@ -1055,5 +1086,249 @@ mod tests {
             .finish()
             .map(Cursor::into_inner)
             .map_err(|_| WriterError::ZipConstruction)
+    }
+}
+
+// P168 writer call-local XML regression oracles; no product authority.
+#[cfg(test)]
+#[path = "../tests/support/document_import_settings_inputs.rs"]
+mod writer_xml_reuse_inputs;
+
+#[cfg(test)]
+mod writer_xml_reuse_tests {
+    use super::*;
+    use std::{
+        cell::{Cell, RefCell},
+        io::SeekFrom,
+        rc::Rc,
+    };
+
+    #[derive(Default, Debug, Eq, PartialEq)]
+    struct Reads {
+        calls: usize,
+        bytes: usize,
+        seeks: usize,
+    }
+
+    struct ObservedCursor<'a> {
+        inner: Cursor<&'a [u8]>,
+        reads: Rc<RefCell<Reads>>,
+    }
+    impl Read for ObservedCursor<'_> {
+        fn read(&mut self, buffer: &mut [u8]) -> io::Result<usize> {
+            let count = self.inner.read(buffer)?;
+            let mut reads = self.reads.borrow_mut();
+            reads.calls += 1;
+            reads.bytes += count;
+            Ok(count)
+        }
+    }
+    impl Seek for ObservedCursor<'_> {
+        fn seek(&mut self, position: SeekFrom) -> io::Result<u64> {
+            self.reads.borrow_mut().seeks += 1;
+            self.inner.seek(position)
+        }
+    }
+
+    // Exact original validation body, retained only as an independent test oracle.
+    fn validate_archive_original<R: Read + Seek>(
+        source: R,
+        package_limits: PackageLimits,
+        graph_limits: PackageGraphLimits,
+        preservation_profile: PreservationRuleProfile,
+        profile: IdRuleProfile,
+        id_limits: IdIndexLimits,
+    ) -> Result<ValidationCounts, WriterError> {
+        let mut reader = BoundedZipReader::open(source, package_limits)?;
+        let graph = PackageGraph::build(&mut reader, graph_limits)?;
+        let preservation = PreservationReport::build_with_graph_limits_and_profile(
+            &mut reader,
+            &graph,
+            graph_limits,
+            preservation_profile,
+        )?;
+        if !preservation.direct_preserve_ready() {
+            return Err(WriterError::ArtifactMismatch);
+        }
+        let index = IdIndex::build_with_graph_limits(
+            &mut reader,
+            &graph,
+            graph_limits,
+            profile,
+            id_limits,
+        )?;
+        Ok(ValidationCounts {
+            parts: preservation.parts().len(),
+            declarations: index.declarations().len(),
+            references: index.references().len(),
+        })
+    }
+
+    fn same_result(
+        expected: Result<ValidationCounts, WriterError>,
+        actual: Result<ValidationCounts, WriterError>,
+    ) -> bool {
+        match (expected, actual) {
+            (Ok(expected), Ok(actual)) => {
+                assert_eq!(actual, expected);
+                true
+            }
+            (Err(expected), Err(actual)) => {
+                assert_eq!(actual.code(), expected.code());
+                if let (WriterError::IdIndex(expected), WriterError::IdIndex(actual)) =
+                    (&expected, &actual)
+                {
+                    assert!(
+                        actual.validation() == expected.validation(),
+                        "whole ID denial evidence differs"
+                    );
+                }
+                false
+            }
+            _ => panic!("original Writer acceptance/denial differs"),
+        }
+    }
+
+    #[test]
+    fn all36_original_writer_verdicts_counts_and_fresh_reads_match_both_profiles()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let mut count = 0;
+        for bytes in super::writer_xml_reuse_inputs::actual_corpus()? {
+            for (preservation, profile) in [
+                (
+                    PreservationRuleProfile::CoreV1,
+                    IdRuleProfile::current_hancom_2020_core_v1(),
+                ),
+                (
+                    PreservationRuleProfile::Hangul2020PreviewTextV2,
+                    IdRuleProfile::current_hancom_2020_formula_v3(),
+                ),
+            ] {
+                let plain_reads = Rc::new(RefCell::new(Reads::default()));
+                let shared_reads = Rc::new(RefCell::new(Reads::default()));
+                let expected = validate_archive_original(
+                    ObservedCursor {
+                        inner: Cursor::new(&bytes),
+                        reads: plain_reads.clone(),
+                    },
+                    PackageLimits::default(),
+                    PackageGraphLimits::default(),
+                    preservation,
+                    profile,
+                    IdIndexLimits::default(),
+                );
+                let actual = validate_archive(
+                    ObservedCursor {
+                        inner: Cursor::new(&bytes),
+                        reads: shared_reads.clone(),
+                    },
+                    PackageLimits::default(),
+                    PackageGraphLimits::default(),
+                    preservation,
+                    profile,
+                    IdIndexLimits::default(),
+                );
+                same_result(expected, actual);
+                assert_eq!(*plain_reads.borrow(), *shared_reads.borrow());
+            }
+            count += 1;
+        }
+        assert_eq!(count, 36);
+        Ok(())
+    }
+
+    fn package(section: &[u8]) -> Result<Vec<u8>, WriterError> {
+        let container = br#"<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="Contents/content.hpf" media-type="application/oebps-package+xml"/></rootfiles></container>"#;
+        let opf = br#"<o:package xmlns:o="http://www.idpf.org/2007/opf/" id="pkg" version="2.0"><o:manifest><o:item id="section0" href="section0.xml" media-type="application/xml"/></o:manifest><o:spine><o:itemref idref="section0" linear="yes"/></o:spine></o:package>"#;
+        let mut writer = ZipWriter::new(Cursor::new(Vec::new()));
+        for (path, bytes) in [
+            ("mimetype", b"application/hwp+zip".as_slice()),
+            ("version.xml", b"<version/>".as_slice()),
+            ("META-INF/container.xml", container.as_slice()),
+            ("Contents/content.hpf", opf.as_slice()),
+            ("Contents/section0.xml", section),
+        ] {
+            writer
+                .start_file(
+                    path,
+                    SimpleFileOptions::default().compression_method(CompressionMethod::Stored),
+                )
+                .map_err(|_| WriterError::ZipConstruction)?;
+            writer
+                .write_all(bytes)
+                .map_err(|_| WriterError::ZipConstruction)?;
+        }
+        writer
+            .finish()
+            .map(Cursor::into_inner)
+            .map_err(|_| WriterError::ZipConstruction)
+    }
+
+    #[test]
+    fn invalid_xml_dangling_reference_and_truncated_archive_keep_original_denial() {
+        let mut inputs = Vec::new();
+        for section in [
+            b"<broken>".as_slice(),
+            br#"<!DOCTYPE section><section/>"#,
+            br#"<q:section xmlns:q="http://www.hancom.co.kr/hwpml/2011/paragraph"><q:p id="10" paraPrIDRef="999"/></q:section>"#,
+        ] { inputs.push(package(section).unwrap()); }
+        let truncated = package(b"<section/>").unwrap();
+        inputs.push(truncated[..truncated.len() / 2].to_vec());
+        for bytes in inputs {
+            let expected = validate_archive_original(
+                Cursor::new(&bytes),
+                PackageLimits::default(),
+                PackageGraphLimits::default(),
+                PreservationRuleProfile::CoreV1,
+                IdRuleProfile::current_hancom_2020_core_v1(),
+                IdIndexLimits::default(),
+            );
+            let actual = validate_archive(
+                Cursor::new(&bytes),
+                PackageLimits::default(),
+                PackageGraphLimits::default(),
+                PreservationRuleProfile::CoreV1,
+                IdRuleProfile::current_hancom_2020_core_v1(),
+                IdIndexLimits::default(),
+            );
+            assert!(
+                !same_result(expected, actual),
+                "hostile package unexpectedly accepted"
+            );
+        }
+    }
+
+    #[test]
+    fn successful_prior_artifact_read_never_authorizes_changed_bytes_callback() {
+        let bytes =
+            package(br#"<q:section xmlns:q="http://www.hancom.co.kr/hwpml/2011/paragraph"/>"#)
+                .unwrap();
+        let mut artifact = PackageArtifact {
+            mode: WriterMode::Preserving,
+            sha256: Sha256::digest(&bytes).into(),
+            bytes: bytes.into_boxed_slice(),
+            report: WriterReport {
+                mode: WriterMode::Preserving,
+                entries: Vec::new(),
+                order: MetadataDisposition::PreservedAvailable,
+                compression_method: MetadataDisposition::PreservedAvailable,
+                timestamp: MetadataDisposition::NotPreservedUnavailable,
+                extra_fields: MetadataDisposition::NotPreservedUnavailable,
+                raw_compressed_stream: MetadataDisposition::NotPreservedUnavailable,
+            },
+            package_limits: PackageLimits::default(),
+            graph_limits: PackageGraphLimits::default(),
+            id_limits: IdIndexLimits::default(),
+            profile: IdRuleProfile::current_hancom_2020_core_v1(),
+            preservation_profile: PreservationRuleProfile::CoreV1,
+        };
+        artifact.with_verified_bytes(|_| ()).unwrap();
+        let callback_called = Cell::new(false);
+        artifact.bytes[0] ^= 1;
+        let error = artifact
+            .with_verified_bytes(|_| callback_called.set(true))
+            .unwrap_err();
+        assert_eq!(error.code(), "writer_artifact_mismatch");
+        assert!(!callback_called.get());
     }
 }

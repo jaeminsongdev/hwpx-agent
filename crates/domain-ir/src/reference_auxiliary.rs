@@ -7,6 +7,7 @@ use sha2::{Digest as _, Sha256};
 use thiserror::Error;
 
 use crate::{LinkAnchor, LogicalId, OpaqueLinkProperty};
+pub mod sequence_program;
 
 pub const REFERENCE_AUXILIARY_SCHEMA_VERSION: &str = "hwpx-agent.reference-auxiliary/v1";
 
@@ -284,7 +285,7 @@ impl CaptionBinding {
             resolved_number: u32,
         }
         require_digest(&binding.caption_content_sha256)?;
-        Ok(hex(Sha256::digest(serialize_bounded(
+        serialized_sha256(
             &Projection {
                 sequence,
                 target,
@@ -295,8 +296,7 @@ impl CaptionBinding {
                 resolved_number,
             },
             limits,
-        )?)
-        .into()))
+        )
     }
 }
 
@@ -399,7 +399,7 @@ impl DateTimeFieldNode {
             format: &'a DateTimeFormatDefinition,
             native_parameters_sha256: &'a str,
         }
-        Ok(hex(Sha256::digest(serialize_bounded(
+        serialized_sha256(
             &Projection {
                 logical_field_id: &self.logical_field_id,
                 anchor: &self.anchor,
@@ -408,8 +408,7 @@ impl DateTimeFieldNode {
                 native_parameters_sha256: &self.native_parameters_sha256,
             },
             limits,
-        )?)
-        .into()))
+        )
     }
 }
 
@@ -676,7 +675,7 @@ impl ReferenceValidationReport {
         &self,
         limits: ReferenceAuxiliaryLimits,
     ) -> Result<String, ReferenceAuxiliaryError> {
-        Ok(hex(Sha256::digest(self.canonical_json(limits)?).into()))
+        serialized_sha256(self, limits)
     }
 }
 
@@ -744,11 +743,8 @@ impl fmt::Debug for ReferenceAuxiliaryDocumentStateDraft {
     }
 }
 
-#[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
-#[serde(
-    try_from = "ReferenceAuxiliaryDocumentStateDraft",
-    into = "ReferenceAuxiliaryDocumentStateDraft"
-)]
+#[derive(Clone, Deserialize, Eq, PartialEq)]
+#[serde(try_from = "ReferenceAuxiliaryDocumentStateDraft")]
 pub struct ReferenceAuxiliaryDocumentState {
     schema_version: String,
     sections: Vec<AuxiliarySectionState>,
@@ -781,6 +777,27 @@ pub struct ReferenceAuxiliaryDocumentState {
     document_protection_sha256: String,
     opaque_document_state_sha256: String,
     document_locked: bool,
+}
+
+// Preserve Draft's exact field order without serde(into)'s full self.clone().
+impl Serialize for ReferenceAuxiliaryDocumentState {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        use serde::ser::SerializeStruct as _;
+        let mut output = serializer.serialize_struct("ReferenceAuxiliaryDocumentStateDraft", 31)?;
+        macro_rules! fields {
+            ($($field:ident),+ $(,)?) => { $(output.serialize_field(stringify!($field), &self.$field)?;)+ };
+        }
+        fields!(schema_version, sections, caption_objects, caption_sequences, captions,
+            date_time_fields, file_name_literals, correction_marks, data_link,
+            validation_targets, validation_edges, occupied_non_aux_control_ids, occupied_non_aux_field_ids,
+            non_auxiliary_content_sha256, field_inventory_sha256, form_inventory_sha256,
+            note_inventory_sha256, comment_inventory_sha256, link_inventory_sha256,
+            cross_reference_inventory_sha256, toc_index_inventory_sha256, citation_inventory_sha256,
+            mail_merge_inventory_sha256, object_inventory_sha256, numbering_inventory_sha256,
+            style_catalog_sha256, relationship_inventory_sha256, resource_inventory_sha256,
+            document_protection_sha256, opaque_document_state_sha256, document_locked);
+        output.end()
+    }
 }
 
 impl ReferenceAuxiliaryDocumentState {
@@ -886,7 +903,8 @@ impl ReferenceAuxiliaryDocumentState {
         &self,
         limits: ReferenceAuxiliaryLimits,
     ) -> Result<String, ReferenceAuxiliaryError> {
-        Ok(hex(Sha256::digest(self.canonical_json(limits)?).into()))
+        validate_state(self, limits)?;
+        serialized_sha256(self, limits)
     }
 }
 
@@ -1546,7 +1564,8 @@ fn validate_state(
     validate_reference_graph(state, limits)
 }
 
-fn validate_caption_state(
+#[cfg(test)]
+fn legacy_validate_caption_state(
     state: &ReferenceAuxiliaryDocumentState,
     limits: ReferenceAuxiliaryLimits,
 ) -> Result<(), ReferenceAuxiliaryError> {
@@ -1596,7 +1615,7 @@ fn validate_caption_state(
             return Err(ReferenceAuxiliaryError::InvalidCaption);
         }
     }
-    let expected_numbers = expected_caption_numbers(state)?;
+    let expected_numbers = legacy_expected_caption_numbers(state)?;
     for caption in &state.captions {
         let expected_number = *expected_numbers
             .get(&caption.logical_caption_id)
@@ -1621,7 +1640,8 @@ fn validate_caption_state(
     Ok(())
 }
 
-fn expected_caption_numbers(
+#[cfg(test)]
+fn legacy_expected_caption_numbers(
     state: &ReferenceAuxiliaryDocumentState,
 ) -> Result<BTreeMap<LogicalId, u32>, ReferenceAuxiliaryError> {
     let section_positions = state
@@ -1889,8 +1909,7 @@ fn build_reference_report(
         }
     }
     issues.sort();
-    let source_reference_inventory_sha256 =
-        hex(Sha256::digest(serialize_bounded(&state.validation_edges, limits)?).into());
+    let source_reference_inventory_sha256 = serialized_sha256(&state.validation_edges, limits)?;
     Ok(ReferenceValidationReport {
         schema_version: REFERENCE_AUXILIARY_SCHEMA_VERSION.to_owned(),
         checked_references: state.validation_edges.len(),
@@ -1904,16 +1923,35 @@ fn build_reference_report(
 }
 
 fn find_cyclic_sources(edges: &[ValidationReferenceEdge]) -> BTreeSet<LogicalId> {
+    find_cyclic_sources_with_step(edges, || {})
+}
+
+// A source has at most one successor. Once a walk is classified, its entire
+// prefix is complete: another source cannot create a new cycle through it.
+// The private step hook permits deterministic complexity tests, not a caller
+// work limit, skipped validation, cached document result or runtime authority.
+fn find_cyclic_sources_with_step(
+    edges: &[ValidationReferenceEdge],
+    mut step: impl FnMut(),
+) -> BTreeSet<LogicalId> {
     let next = edges
         .iter()
         .map(|edge| (&edge.source_node_id, &edge.expected_target_id))
         .collect::<BTreeMap<_, _>>();
     let mut cyclic = BTreeSet::new();
+    let mut complete = BTreeSet::new();
     for start in next.keys() {
+        if complete.contains(start) {
+            continue;
+        }
         let mut visited = BTreeMap::<&LogicalId, usize>::new();
         let mut path: Vec<&LogicalId> = Vec::new();
         let mut current = *start;
         while let Some(target) = next.get(current) {
+            step();
+            if complete.contains(&current) {
+                break;
+            }
             if let Some(cycle_start) = visited.get(current).copied() {
                 for node in &path[cycle_start..] {
                     cyclic.insert((*node).clone());
@@ -1924,11 +1962,13 @@ fn find_cyclic_sources(edges: &[ValidationReferenceEdge]) -> BTreeSet<LogicalId>
             path.push(current);
             current = target;
         }
+        complete.extend(path);
     }
     cyclic
 }
 
-fn enforce_caption_locks(
+#[cfg(test)]
+fn legacy_enforce_caption_locks(
     source: &ReferenceAuxiliaryDocumentState,
     target_sequences: &[CaptionSequenceDefinition],
     target_captions: &[CaptionBinding],
@@ -1985,6 +2025,7 @@ fn enforce_caption_locks(
     Ok(())
 }
 
+#[cfg(test)]
 fn select_caption_object<'a>(
     objects: &'a [CaptionObjectTarget],
     object_id: &LogicalId,
@@ -2001,6 +2042,7 @@ fn select_caption_object<'a>(
     Ok(object)
 }
 
+#[cfg(test)]
 fn select_caption_sequence<'a>(
     sequences: &'a [CaptionSequenceDefinition],
     sequence_id: &LogicalId,
@@ -2015,6 +2057,200 @@ fn select_caption_sequence<'a>(
         return Err(ReferenceAuxiliaryError::InvalidCaption);
     }
     Ok(sequence)
+}
+
+// Call-local borrowed indexes only. Ambiguous source selectors keep the exact
+// legacy errors; target lock maps separately preserve find-first semantics.
+struct CaptionIndex<'a> {
+    sections: BTreeMap<&'a LogicalId, usize>,
+    objects: BTreeMap<&'a LogicalId, Option<&'a CaptionObjectTarget>>,
+    sequences: BTreeMap<&'a LogicalId, Option<&'a CaptionSequenceDefinition>>,
+}
+impl<'a> CaptionIndex<'a> {
+    fn new(state: &'a ReferenceAuxiliaryDocumentState) -> Self {
+        Self::with_step(state, || {})
+    }
+    fn with_step(state: &'a ReferenceAuxiliaryDocumentState, mut step: impl FnMut()) -> Self {
+        let mut sections = BTreeMap::new();
+        for (position, section) in state.sections.iter().enumerate() {
+            step();
+            sections.insert(&section.section_id, position);
+        }
+        let mut objects = BTreeMap::<&LogicalId, Option<&CaptionObjectTarget>>::new();
+        for object in &state.caption_objects {
+            step();
+            objects.entry(&object.logical_object_id).and_modify(|value| *value = None).or_insert(Some(object));
+        }
+        let mut sequences = BTreeMap::<&LogicalId, Option<&CaptionSequenceDefinition>>::new();
+        for sequence in &state.caption_sequences {
+            step();
+            sequences.entry(&sequence.logical_sequence_id).and_modify(|value| *value = None).or_insert(Some(sequence));
+        }
+        Self { sections, objects, sequences }
+    }
+    fn object(&self, id: &LogicalId) -> Result<&'a CaptionObjectTarget, ReferenceAuxiliaryError> {
+        self.objects.get(id).copied().flatten().ok_or(ReferenceAuxiliaryError::CaptionTargetMissing)
+    }
+    fn sequence(&self, id: &LogicalId) -> Result<&'a CaptionSequenceDefinition, ReferenceAuxiliaryError> {
+        self.sequences.get(id).copied().flatten().ok_or(ReferenceAuxiliaryError::InvalidCaption)
+    }
+}
+
+fn validate_caption_state(
+    state: &ReferenceAuxiliaryDocumentState,
+    limits: ReferenceAuxiliaryLimits,
+) -> Result<(), ReferenceAuxiliaryError> {
+    let index = CaptionIndex::new(state);
+    let mut object_ids = BTreeSet::new();
+    for object in &state.caption_objects {
+        if !object_ids.insert(&object.logical_object_id)
+            || !index.sections.contains_key(&object.section_id)
+        {
+            return Err(ReferenceAuxiliaryError::InvalidCaption);
+        }
+        require_digest(&object.object_state_sha256)?;
+    }
+    let mut sequence_ids = BTreeSet::new();
+    for sequence in &state.caption_sequences {
+        if !sequence_ids.insert(&sequence.logical_sequence_id)
+            || sequence.start_at == 0
+            || !valid_text(&sequence.label, limits.0.text_bytes, false)
+            || !valid_text(&sequence.separator, limits.0.text_bytes, true)
+        {
+            return Err(ReferenceAuxiliaryError::InvalidCaption);
+        }
+        require_digest(&sequence.number_style_sha256)?;
+        validate_opaque(&sequence.opaque_properties, limits)?;
+    }
+    let mut caption_ids = BTreeSet::new();
+    let mut captioned_objects = BTreeSet::new();
+    let mut document_orders = BTreeSet::new();
+    for caption in &state.captions {
+        if !caption_ids.insert(&caption.logical_caption_id)
+            || !captioned_objects.insert(&caption.logical_object_id)
+            || !document_orders.insert(caption.document_order)
+        {
+            return Err(ReferenceAuxiliaryError::InvalidCaption);
+        }
+        require_digest(&caption.caption_content_sha256)?;
+        require_digest(&caption.cache.sequence_projection_sha256)?;
+        require_digest(&caption.cache.rendered_number_sha256)?;
+        validate_caption_native(&caption.native_envelope, limits)?;
+        validate_opaque(&caption.opaque_properties, limits)?;
+        let target = index.object(&caption.logical_object_id)?;
+        let sequence =
+            index.sequence(&caption.logical_sequence_id)?;
+        if target.object_kind != sequence.object_kind {
+            return Err(ReferenceAuxiliaryError::InvalidCaption);
+        }
+    }
+    let expected_numbers = expected_caption_numbers_indexed(state, &index, || {})?;
+    for caption in &state.captions {
+        let expected_number = *expected_numbers
+            .get(&caption.logical_caption_id)
+            .ok_or(ReferenceAuxiliaryError::InvalidCaption)?;
+        if caption.cache.resolved_number != expected_number {
+            return Err(ReferenceAuxiliaryError::InvalidCaption);
+        }
+        let target = index.object(&caption.logical_object_id)?;
+        let sequence =
+            index.sequence(&caption.logical_sequence_id)?;
+        let projection =
+            CaptionBinding::projection_sha256(sequence, target, caption, expected_number, limits)?;
+        let expected_status = if projection == caption.cache.sequence_projection_sha256 {
+            AuxiliaryCacheStatus::Current
+        } else {
+            AuxiliaryCacheStatus::Stale
+        };
+        if caption.cache.status != expected_status {
+            return Err(ReferenceAuxiliaryError::InvalidCaption);
+        }
+    }
+    Ok(())
+}
+
+fn expected_caption_numbers_indexed(
+    state: &ReferenceAuxiliaryDocumentState,
+    index: &CaptionIndex<'_>,
+    mut step: impl FnMut(),
+) -> Result<BTreeMap<LogicalId, u32>, ReferenceAuxiliaryError> {
+    let mut ordered = state.captions.iter().collect::<Vec<_>>();
+    ordered.sort_by_key(|caption| caption.document_order);
+    let mut counters = sequence_program::Counters::new();
+    let mut result = BTreeMap::new();
+    for caption in ordered {
+        step();
+        let target = index.object(&caption.logical_object_id)?;
+        let sequence =
+            index.sequence(&caption.logical_sequence_id)?;
+        let section = match sequence.restart_policy {
+            CaptionRestartPolicy::Continuous => None,
+            CaptionRestartPolicy::PerSection => Some(
+                *index.sections
+                    .get(&target.section_id)
+                    .ok_or(ReferenceAuxiliaryError::InvalidCaption)?,
+            ),
+        };
+        result.insert(caption.logical_caption_id.clone(), counters.next(sequence,section)?);
+    }
+    Ok(result)
+}
+
+fn enforce_caption_locks(
+    source: &ReferenceAuxiliaryDocumentState,
+    target_sequences: &[CaptionSequenceDefinition],
+    target_captions: &[CaptionBinding],
+) -> Result<(), ReferenceAuxiliaryError> {
+    // Preserve the original find-first behavior, even for invalid duplicate targets.
+    let mut sequences_by_id = BTreeMap::new();
+    for sequence in target_sequences { sequences_by_id.entry(&sequence.logical_sequence_id).or_insert(sequence); }
+    let mut captions_by_id = BTreeMap::new();
+    for caption in target_captions { captions_by_id.entry(&caption.logical_caption_id).or_insert(caption); }
+    for sequence in &source.caption_sequences {
+        if sequence.locked
+            && sequences_by_id.get(&sequence.logical_sequence_id).copied()
+                != Some(sequence)
+        {
+            return Err(ReferenceAuxiliaryError::Protected);
+        }
+    }
+    for caption in &source.captions {
+        if caption.locked
+            && captions_by_id.get(&caption.logical_caption_id).copied()
+                != Some(caption)
+        {
+            return Err(ReferenceAuxiliaryError::Protected);
+        }
+    }
+    let source_by_object = source
+        .captions
+        .iter()
+        .map(|caption| (&caption.logical_object_id, caption))
+        .collect::<BTreeMap<_, _>>();
+    let target_by_object = target_captions
+        .iter()
+        .map(|caption| (&caption.logical_object_id, caption))
+        .collect::<BTreeMap<_, _>>();
+    for object in &source.caption_objects {
+        if object.locked
+            && source_by_object.get(&object.logical_object_id)
+                != target_by_object.get(&object.logical_object_id)
+        {
+            return Err(ReferenceAuxiliaryError::Protected);
+        }
+    }
+    let mut changed_sections = BTreeSet::new();
+    for object in &source.caption_objects {
+        if source_by_object.get(&object.logical_object_id) != target_by_object.get(&object.logical_object_id) {
+            changed_sections.insert(&object.section_id);
+        }
+    }
+    for section in &source.sections {
+        if section.locked && changed_sections.contains(&section.section_id) {
+            return Err(ReferenceAuxiliaryError::Protected);
+        }
+    }
+    Ok(())
 }
 
 fn select_date_field_index(
@@ -2150,7 +2386,7 @@ fn plan_binding_sha256(
         target_document_flow_sha256: &'a str,
         operation: &'a ReferenceAuxiliaryOperation,
     }
-    Ok(hex(Sha256::digest(serialize_bounded(
+    serialized_sha256(
         &Binding {
             schema_version: plan.schema_version,
             capability_id: plan.capability_id,
@@ -2162,19 +2398,58 @@ fn plan_binding_sha256(
             operation: &plan.operation,
         },
         limits,
-    )?)
-    .into()))
+    )
 }
 
 fn serialize_bounded<T: Serialize>(
     value: &T,
     limits: ReferenceAuxiliaryLimits,
 ) -> Result<Vec<u8>, ReferenceAuxiliaryError> {
-    let bytes = serde_json::to_vec(value).map_err(|_| ReferenceAuxiliaryError::Serialization)?;
-    if bytes.len() > limits.0.output_bytes {
-        return Err(ReferenceAuxiliaryError::OutputLimit);
+    let mut writer = AuxiliaryJsonWriter::new(limits, true);
+    serde_json::to_writer(&mut writer, value)
+        .map_err(|_| writer.failure.unwrap_or(ReferenceAuxiliaryError::Serialization))?;
+    writer.output.ok_or(ReferenceAuxiliaryError::Serialization)
+}
+
+// Canonical JSON is identical; hashing no longer builds a discarded whole JSON
+// buffer. Both sinks reject a crossing chunk BEFORE appending or hashing it.
+fn serialized_sha256<T: Serialize>(value: &T, limits: ReferenceAuxiliaryLimits) -> Result<String, ReferenceAuxiliaryError> {
+    let mut writer = AuxiliaryJsonWriter::new(limits, false);
+    serde_json::to_writer(&mut writer, value)
+        .map_err(|_| writer.failure.unwrap_or(ReferenceAuxiliaryError::Serialization))?;
+    Ok(hex(writer.digest.finalize().into()))
+}
+struct AuxiliaryJsonWriter {
+    output: Option<Vec<u8>>,
+    digest: Sha256,
+    written: usize,
+    maximum: usize,
+    failure: Option<ReferenceAuxiliaryError>,
+}
+impl AuxiliaryJsonWriter {
+    fn new(limits: ReferenceAuxiliaryLimits, output: bool) -> Self {
+        Self { output: output.then(Vec::new), digest: Sha256::new(), written: 0,
+            maximum: limits.0.output_bytes, failure: None }
     }
-    Ok(bytes)
+}
+impl std::io::Write for AuxiliaryJsonWriter {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        if self.failure.is_some() { return Err(std::io::Error::other("REFERENCE_AUXILIARY_JSON_REJECTED")); }
+        let Some(total) = self.written.checked_add(bytes.len()).filter(|n| *n <= self.maximum) else {
+            self.failure = Some(ReferenceAuxiliaryError::OutputLimit);
+            return Err(std::io::Error::other("REFERENCE_AUXILIARY_JSON_LIMIT"));
+        };
+        if let Some(output) = &mut self.output {
+            if output.try_reserve(bytes.len()).is_err() {
+                self.failure = Some(ReferenceAuxiliaryError::Serialization);
+                return Err(std::io::Error::other("REFERENCE_AUXILIARY_JSON_ALLOCATION"));
+            }
+            output.extend_from_slice(bytes);
+        } else { self.digest.update(bytes); }
+        self.written = total;
+        Ok(bytes.len())
+    }
+    fn flush(&mut self) -> std::io::Result<()> { Ok(()) }
 }
 
 fn hex(bytes: [u8; 32]) -> String {
@@ -2383,5 +2658,342 @@ mod private_tests {
             ReferenceAuxiliaryBuilder::build(&plan, &source, D, limits()),
             Err(ReferenceAuxiliaryError::PlanTampered)
         );
+    }
+
+    #[test]
+    fn auxiliary_bounded_state_matches_original_draft_json_sha_and_deserialization() {
+        let mut draft: ReferenceAuxiliaryDocumentStateDraft = state().into();
+        let name = "한글&<frozen>.hwpx";
+        draft.file_name_literals.push(FileNameLiteralNode {
+            logical_literal_id: id("borrowed-literal"), anchor: anchor(), literal: name.into(),
+            source_leaf_name_sha256: hex(Sha256::digest(name.as_bytes()).into()), source_revision_sha256: D.into(),
+            include_extension: true, character_style_sha256: D.into(), paragraph_style_sha256: D.into(),
+            opaque_text_state_sha256: D.into(), opaque_properties: Vec::new(), locked: false,
+        });
+        let original = serde_json::to_vec(&draft).expect("independent original Draft serialization");
+        let value = ReferenceAuxiliaryDocumentState::from_draft(draft,limits()).expect("state");
+        assert_eq!(serde_json::to_vec(&value).expect("borrowed Serialize"),original);
+        assert_eq!(value.canonical_json(limits()).expect("canonical bytes"),original);
+        assert_eq!(value.canonical_sha256(limits()).expect("stream digest"),hex(Sha256::digest(&original).into()));
+        let decoded: ReferenceAuxiliaryDocumentState = serde_json::from_slice(&original).expect("original strict Deserialize");
+        assert_eq!(decoded,value);
+        let report = value.validate_references(limits()).expect("report");
+        assert_eq!(report.canonical_json(limits()).expect("report bytes"),serde_json::to_vec(&report).expect("original report"));
+        assert_eq!(report.canonical_sha256(limits()).expect("report digest"),hex(Sha256::digest(serde_json::to_vec(&report).expect("original report")).into()));
+    }
+
+    #[test]
+    fn auxiliary_bounded_json_and_digest_share_exact_budget_without_discarded_buffers() {
+        let value = (vec!["한글<&>\"\n";4096], "tail");
+        let original = serde_json::to_vec(&value).expect("independent serde bytes");
+        let exact = ReferenceAuxiliaryLimits::new(ReferenceAuxiliaryLimitConfig {
+            input_bytes: original.len(), output_bytes: original.len(), ..Default::default()
+        }).expect("exact limits");
+        assert_eq!(serialize_bounded(&value,exact).expect("exact buffer"),original);
+        assert_eq!(serialized_sha256(&value,exact).expect("exact stream"),hex(Sha256::digest(&original).into()));
+        let short = ReferenceAuxiliaryLimits::new(ReferenceAuxiliaryLimitConfig {
+            input_bytes: original.len()-1, output_bytes: original.len()-1, ..Default::default()
+        }).expect("short limits");
+        assert_eq!(serialize_bounded(&value,short),Err(ReferenceAuxiliaryError::OutputLimit));
+        assert_eq!(serialized_sha256(&value,short),Err(ReferenceAuxiliaryError::OutputLimit));
+        let mut writer = AuxiliaryJsonWriter::new(exact,false);
+        serde_json::to_writer(&mut writer,&value).expect("hash-only writer");
+        assert!(writer.output.is_none());
+        assert_eq!(writer.written,original.len());
+        assert_eq!(hex(writer.digest.finalize().into()),hex(Sha256::digest(&original).into()));
+    }
+
+    #[test]
+    fn auxiliary_bounded_serialization_errors_and_early_limit_stay_fail_closed() {
+        struct Failing;
+        impl Serialize for Failing {
+            fn serialize<S: serde::Serializer>(&self,_:S)->Result<S::Ok,S::Error> {
+                Err(serde::ser::Error::custom("synthetic serialization failure"))
+            }
+        }
+        assert_eq!(serialize_bounded(&Failing,limits()),Err(ReferenceAuxiliaryError::Serialization));
+        assert_eq!(serialized_sha256(&Failing,limits()),Err(ReferenceAuxiliaryError::Serialization));
+        let tight = ReferenceAuxiliaryLimits::new(ReferenceAuxiliaryLimitConfig {input_bytes:31,output_bytes:31,..Default::default()}).expect("tight");
+        for output in [true,false] {
+            let mut writer = AuxiliaryJsonWriter::new(tight,output);
+            assert!(serde_json::to_writer(&mut writer,&"한글\"".repeat(8192)).is_err());
+            assert_eq!(writer.failure,Some(ReferenceAuxiliaryError::OutputLimit));
+            assert!(writer.written<=31);
+            assert!(writer.output.as_ref().is_none_or(|bytes| bytes.len()<=31));
+            let before = writer.written;
+            assert!(std::io::Write::write(&mut writer,b"x").is_err());
+            assert_eq!(writer.written,before); // A failed writer cannot resume with a later short chunk.
+        }
+    }
+    mod caption_index_regressions {
+        use super::*;
+        use std::cell::Cell;
+        type TestResult = Result<(), Box<dyn std::error::Error>>;
+
+        // Synthetic private counter/validation fixtures, not imported/native state.
+        fn fixture(objects: usize, choices: &[usize]) -> ReferenceAuxiliaryDocumentState {
+            let mut source = state();
+            let section = source.sections[0].clone();
+            source.sections = (0..2).map(|i| AuxiliarySectionState { section_id: id(&format!("index-section-{i}")), ..section.clone() }).collect();
+            source.caption_objects = (0..objects).map(|i| CaptionObjectTarget {
+                logical_object_id: id(&format!("index-object-{i:05}")), object_kind: CaptionObjectKind::Picture,
+                section_id: source.sections[i % 2].section_id.clone(), object_state_sha256: D.into(), locked: false,
+            }).collect();
+            source.caption_sequences = (0..2).map(|i| CaptionSequenceDefinition {
+                logical_sequence_id: id(&format!("index-sequence-{i}")), object_kind: CaptionObjectKind::Picture,
+                label: "그림".into(), separator: " ".into(), number_format: CaptionNumberFormat::Decimal,
+                restart_policy: if i == 0 { CaptionRestartPolicy::Continuous } else { CaptionRestartPolicy::PerSection },
+                start_at: if i == 0 { 1 } else { 7 }, number_style_sha256: D.into(), opaque_properties: Vec::new(), locked: false,
+            }).collect();
+            source.captions = choices.iter().enumerate().map(|(i, choice)| CaptionBinding {
+                logical_caption_id: id(&format!("index-caption-{i:05}")),
+                logical_object_id: source.caption_objects[(choice / 2) % objects].logical_object_id.clone(),
+                logical_sequence_id: source.caption_sequences[choice % 2].logical_sequence_id.clone(),
+                document_order: i as u64 * 10, caption_content_sha256: D.into(),
+                cache: CaptionSequenceCache { sequence_projection_sha256: D.into(), rendered_number_sha256: D.into(), resolved_number: 1, status: AuxiliaryCacheStatus::Stale },
+                native_envelope: CaptionNativeEnvelope { side: NativeCaptionSide::Bottom, full_size: false, width_hwpunit: -1,
+                    gap_hwpunit: 0, last_width_hwpunit: 0, sub_list_sha256: D.into(), opaque_native_state_sha256: D.into(),
+                    semantic_binding: CaptionNativeSemanticBinding::UnverifiedSubListNumbering },
+                opaque_properties: Vec::new(), locked: false,
+            }).collect();
+            source
+        }
+        fn fill_cache(source: &mut ReferenceAuxiliaryDocumentState) -> TestResult {
+            let numbers = legacy_expected_caption_numbers(source)?;
+            for caption in &mut source.captions {
+                let number = numbers[&caption.logical_caption_id];
+                let object = select_caption_object(&source.caption_objects, &caption.logical_object_id)?;
+                let sequence = select_caption_sequence(&source.caption_sequences, &caption.logical_sequence_id)?;
+                caption.cache.resolved_number = number;
+                caption.cache.rendered_number_sha256 = hex(Sha256::digest(number.to_string().as_bytes()).into());
+                caption.cache.sequence_projection_sha256 = CaptionBinding::projection_sha256(sequence, object, caption, number, limits())?;
+                caption.cache.status = AuxiliaryCacheStatus::Current;
+            }
+            Ok(())
+        }
+        fn compare(source: &ReferenceAuxiliaryDocumentState) -> TestResult {
+            let before = serde_json::to_vec(source)?;
+            let index = CaptionIndex::new(source);
+            assert_eq!(expected_caption_numbers_indexed(source, &index, || {}), legacy_expected_caption_numbers(source));
+            assert_eq!(validate_caption_state(source, limits()), legacy_validate_caption_state(source, limits()));
+            assert_eq!(serde_json::to_vec(source)?, before);
+            Ok(())
+        }
+        #[test]
+        fn caption_index_exhaustive1555_variants_keep_numbers_errors_projections_and_input_bytes() -> TestResult {
+            let mut cases = 0;
+            for count in 0..=4_u32 {
+                for mut encoded in 0..6_usize.pow(count) {
+                    let choices: Vec<_> = (0..count).map(|_| { let choice = encoded % 6; encoded /= 6; choice }).collect();
+                    let mut source = fixture(3, &choices);
+                    fill_cache(&mut source)?;
+                    compare(&source)?;
+                    source.captions.reverse();
+                    source.caption_objects.reverse();
+                    source.caption_sequences.reverse();
+                    source.sections.reverse();
+                    compare(&source)?;
+                    cases += 1;
+                }
+            }
+            assert_eq!(cases, 1555);
+            Ok(())
+        }
+        #[test]
+        fn caption_index_protection512_masks_keep_first_target_and_last_object_map_behavior() -> TestResult {
+            let mut source = fixture(3, &[0, 3]);
+            fill_cache(&mut source)?;
+            for mask in 0..512_u16 {
+                let mut current = source.clone();
+                for (i, sequence) in current.caption_sequences.iter_mut().enumerate() { sequence.locked = mask & (1 << i) != 0; }
+                for (i, caption) in current.captions.iter_mut().enumerate() { caption.locked = mask & (1 << (i + 2)) != 0; }
+                for (i, object) in current.caption_objects.iter_mut().enumerate() { object.locked = mask & (1 << (i + 4)) != 0; }
+                for (i, section) in current.sections.iter_mut().enumerate() { section.locked = mask & (1 << (i + 7)) != 0; }
+                for variant in 0..8 {
+                    let mut sequences = current.caption_sequences.clone();
+                    let mut captions = current.captions.clone();
+                    match variant {
+                        0 => {},
+                        1 => { sequences[0].label = "표".into(); },
+                        2 => { captions[0].caption_content_sha256 = "b".repeat(64); },
+                        3 => { captions.remove(0); },
+                        4 => { sequences.remove(0); },
+                        5 => { let mut duplicate = sequences[0].clone(); duplicate.label = "changed".into(); sequences.push(duplicate); },
+                        6 => { let mut duplicate = captions[0].clone(); duplicate.caption_content_sha256 = "b".repeat(64); captions.push(duplicate); },
+                        _ => { let mut duplicate = captions[0].clone(); duplicate.caption_content_sha256 = "b".repeat(64); captions.insert(0, duplicate); },
+                    }
+                    assert_eq!(enforce_caption_locks(&current, &sequences, &captions), legacy_enforce_caption_locks(&current, &sequences, &captions));
+                }
+            }
+            Ok(())
+        }
+        #[test]
+        fn caption_index_missing_ambiguous_stale_and_existing_overflow_errors_remain_exact() -> TestResult {
+            let mut source = fixture(3, &[0, 3]);
+            fill_cache(&mut source)?;
+            for variant in 0..12 {
+                let mut changed = source.clone();
+                match variant {
+                    0 => changed.captions[0].logical_object_id = id("index-absent-object"),
+                    1 => changed.captions[0].logical_sequence_id = id("index-absent-sequence"),
+                    2 => changed.caption_objects.push(changed.caption_objects[0].clone()),
+                    3 => changed.caption_sequences.push(changed.caption_sequences[0].clone()),
+                    4 => changed.caption_objects.push(changed.caption_objects[2].clone()),
+                    5 => changed.captions[1].logical_caption_id = changed.captions[0].logical_caption_id.clone(),
+                    6 => changed.captions[1].document_order = changed.captions[0].document_order,
+                    7 => changed.caption_sequences[0].object_kind = CaptionObjectKind::Table,
+                    8 => changed.captions[0].cache.status = AuxiliaryCacheStatus::Stale,
+                    9 => changed.captions[0].caption_content_sha256 = "invalid".into(),
+                    10 => changed.caption_sequences[0].start_at = u32::MAX,
+                    _ => changed.caption_objects[0].section_id = id("index-absent-section"),
+                }
+                compare(&changed)?;
+            }
+            Ok(())
+        }
+        #[test]
+        fn caption_index_8192_private_counter_records_and_visits_are_linear_not_native_acceptance() -> TestResult {
+            const COUNT: usize = 8192;
+            let choices: Vec<_> = (0..COUNT).map(|i| i * 2 + i % 2).collect();
+            let mut source = fixture(COUNT, &choices);
+            let visits = Cell::new(0_usize);
+            let index = CaptionIndex::with_step(&source, || visits.set(visits.get() + 1));
+            let numbers = expected_caption_numbers_indexed(&source, &index, || visits.set(visits.get() + 1))?;
+            assert_eq!(visits.get(), COUNT * 2 + 4); // Two sections, two sequences, objects + captions.
+            assert_eq!(numbers.len(), COUNT);
+            assert_eq!(numbers[&id("index-caption-08190")], 4096);
+            assert_eq!(numbers[&id("index-caption-08191")], 4102);
+            drop(index);
+            // Only the private lock helper is exercised at scale. These placeholder
+            // caches are not claimed as a validated full typed or native state.
+            for sequence in &mut source.caption_sequences { sequence.locked = true; }
+            for caption in &mut source.captions { caption.locked = true; }
+            for object in &mut source.caption_objects { object.locked = true; }
+            for section in &mut source.sections { section.locked = true; }
+            assert_eq!(enforce_caption_locks(&source, &source.caption_sequences, &source.captions), Ok(()));
+            Ok(())
+        }
+    }
+}
+
+#[cfg(test)]
+mod cycle_scan_regressions {
+    use super::*;
+    use crate::{LinkAnchor, LinkPoint};
+
+    type TestResult = Result<(), Box<dyn std::error::Error>>;
+
+    fn node(index: usize) -> Result<LogicalId, Box<dyn std::error::Error>> {
+        Ok(LogicalId::parse(format!("cycle-node-{index:05}"))?)
+    }
+
+    fn graph(successors: &[usize]) -> Result<Vec<ValidationReferenceEdge>, Box<dyn std::error::Error>> {
+        let point = LinkPoint { paragraph_ordinal: 0, run_ordinal: 0, inline_ordinal: 0 };
+        successors.iter().enumerate().map(|(index, target)| Ok(ValidationReferenceEdge {
+            logical_reference_id: LogicalId::parse(format!("cycle-reference-{index:05}"))?,
+            source_node_id: node(index)?,
+            expected_target_id: node(*target)?,
+            expected_target_kind: ReferenceTargetKind::Bookmark,
+            source_anchor: LinkAnchor { section_id: LogicalId::parse("cycle-section")?, start: point, end: point },
+            cached_display_sha256: "a".repeat(64),
+            cache_status: AuxiliaryCacheStatus::Current,
+            edge_state_sha256: "b".repeat(64),
+        })).collect()
+    }
+
+    // Exact pre-optimization algorithm. Keep it deliberately independent of the
+    // completed-path implementation, and use it only for bounded small graphs.
+    fn legacy_scan(edges: &[ValidationReferenceEdge]) -> BTreeSet<LogicalId> {
+        let next = edges.iter().map(|edge| (&edge.source_node_id, &edge.expected_target_id))
+            .collect::<BTreeMap<_, _>>();
+        let mut cyclic = BTreeSet::new();
+        for start in next.keys() {
+            let mut visited = BTreeMap::<&LogicalId, usize>::new();
+            let mut path: Vec<&LogicalId> = Vec::new();
+            let mut current = *start;
+            while let Some(target) = next.get(current) {
+                if let Some(cycle_start) = visited.get(current).copied() {
+                    for node in &path[cycle_start..] { cyclic.insert((*node).clone()); }
+                    break;
+                }
+                visited.insert(current, path.len());
+                path.push(current);
+                current = target;
+            }
+        }
+        cyclic
+    }
+
+    fn bounded_scan(edges: &[ValidationReferenceEdge]) -> (BTreeSet<LogicalId>, usize) {
+        let mut steps = 0usize;
+        let result = find_cyclic_sources_with_step(edges, || {
+            steps += 1;
+            assert!(steps <= edges.len() * 2, "cycle traversal exceeded linear step budget");
+        });
+        (result, steps)
+    }
+
+    #[test]
+    fn exhaustive_701_functional_graphs_match_original_cycle_members_and_input_order() -> TestResult {
+        let mut compared = 0;
+        for count in 0usize..=4 {
+            // Each source chooses any source or the same absent terminal node.
+            // Includes self/disjoint cycles, fan-in, tails and missing terminals.
+            let radix = count + 1;
+            for mut encoded in 0..radix.pow(count as u32) {
+                let successors: Vec<_> = (0..count).map(|_| {
+                    let target = encoded % radix;
+                    encoded /= radix;
+                    target
+                }).collect();
+                let mut edges = graph(&successors)?;
+                let expected = legacy_scan(&edges);
+                assert_eq!(bounded_scan(&edges).0, expected);
+                assert_eq!(find_cyclic_sources(&edges), expected);
+                edges.reverse();
+                assert_eq!(bounded_scan(&edges).0, expected);
+                compared += 1;
+            }
+        }
+        assert_eq!(compared, 701);
+        Ok(())
+    }
+
+    #[test]
+    fn sixteen_thousand_source_chains_cycles_and_tails_have_linear_walk_steps() -> TestResult {
+        const COUNT: usize = 16_384;
+        let mut successors: Vec<_> = (1..=COUNT).collect();
+        let (cycle, steps) = bounded_scan(&graph(&successors)?);
+        assert!(cycle.is_empty());
+        assert_eq!(steps, COUNT);
+
+        successors[COUNT - 1] = 0;
+        let (cycle, steps) = bounded_scan(&graph(&successors)?);
+        assert_eq!(cycle.len(), COUNT);
+        assert_eq!(steps, COUNT + 1);
+
+        successors[COUNT - 1] = COUNT - 64;
+        let (cycle, steps) = bounded_scan(&graph(&successors)?);
+        let expected = (COUNT - 64..COUNT).map(node).collect::<Result<BTreeSet<_>, _>>()?;
+        assert_eq!(cycle, expected); // Reaching a cycle does not make its tail cyclic.
+        assert_eq!(steps, COUNT + 1);
+        Ok(())
+    }
+
+    #[test]
+    fn completed_components_and_legacy_duplicate_source_map_behavior_are_preserved() -> TestResult {
+        for successors in [vec![0, 1, 2, 3], vec![1, 0, 1, 2], vec![4, 0, 0, 2]] {
+            let mut edges = graph(&successors)?;
+            assert_eq!(bounded_scan(&edges).0, legacy_scan(&edges));
+            // Duplicate sources are rejected by original state validation. The
+            // private scanner still keeps the original map's last-entry behavior.
+            let mut duplicate = edges[0].clone();
+            duplicate.expected_target_id = node(4)?;
+            edges.push(duplicate);
+            assert_eq!(bounded_scan(&edges).0, legacy_scan(&edges));
+            edges.reverse();
+            assert_eq!(bounded_scan(&edges).0, legacy_scan(&edges));
+        }
+        Ok(())
     }
 }

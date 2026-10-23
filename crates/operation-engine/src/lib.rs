@@ -12,6 +12,7 @@ pub use idempotency::{
     RevisionCommit, RevisionHead, RevisionStreamKey, TerminalFailure,
 };
 pub use manifest::{ExecutionManifest, ExecutionManifestError};
+pub use manifest::archive::{ArchivedExecutionManifest,ManifestArchiveError};
 pub use state::{
     FaultMoment, FaultPlan, FaultPoint, StateMachineError, TransactionState,
     TransactionStateMachine, TransactionStep,
@@ -20,4 +21,5 @@ pub use transaction::{
     ArtifactDisposition, OutputValidator, RevisionCas, RevisionCasOutcome, RevisionCommitRequest,
     TransactionError, TransactionFailure, TransactionLimits, TransactionReceipt, ValidationOutcome,
     WORKSPACE_TRANSACTION_RECEIPT_SCHEMA_VERSION, WorkspaceTransaction,
+    PreparedPrecommitIdentity,
 };

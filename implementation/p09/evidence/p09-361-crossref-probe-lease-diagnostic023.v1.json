@@ -1,0 +1,277 @@
+{
+  "state": "PASS_LEASE_EXCEPTION_DIAGNOSTIC_AND_FAILED_SOURCE_SNAPSHOTS_NOT_CONTRACT_OR_NATIVE",
+  "steps": [
+    {
+      "stage": "lease_only_exception_type_and_location_diagnostic",
+      "exit_code": 0,
+      "cleanup": true,
+      "stdout_bytes": 253,
+      "stderr_bytes": 0,
+      "stdout_sha256": "0843b99917678365328d4f1822ea95b1f1ed954339677935df5ed9247a87af8b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": [],
+      "locations": [],
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 1.406,
+          "peak_job_private_mib": 67.67,
+          "peak_job_private_percent": 0.21239775660693236,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 6.489077699981863
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM_server": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "failed_source_snapshots": [
+    {
+      "path": "implementation/p09/tools/crossref-stage-probe.ps1",
+      "bytes": 8099,
+      "sha256": "38ee4685a9797de097cd0e7c36d157795fbb4caa43c4d3f20e4aca89a5a1b4b0",
+      "utf8": "# Fixed readonly source-probe lease/runner. No COM activation or execution authority.\nSet-StrictMode -Version Latest\n\nfunction Get-P09XrefStageRunnerCode([string]$TemplateText) {\n    Assert-P09XrefBinding ($TemplateText.Length -gt 0 -and $TemplateText.Length -le 32768) 'PROBE_TEMPLATE_TEXT_LIMIT'\n    $algorithm=[Security.Cryptography.SHA256]::Create()\n    try {$sha=([BitConverter]::ToString($algorithm.ComputeHash([Text.Encoding]::UTF8.GetBytes($TemplateText)))).Replace('-','').ToLowerInvariant()}\n    finally {$algorithm.Dispose()}\n    Assert-P09XrefBinding ($sha -ceq 'b6e6abfb685cd1af58426b17ed73793910747a8dbf2c51a81fab9f4d18e1ba36') 'PROBE_TEMPLATE_TEXT_SHA'\n    $tokens=$null;$errors=$null\n    $ast=[Management.Automation.Language.Parser]::ParseInput($TemplateText,[ref]$tokens,[ref]$errors)\n    Assert-P09XrefBinding (@($errors).Count -eq 0) 'PROBE_TEMPLATE_PARSE'\n    $functions=@($ast.FindAll({param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst]},$false))\n    $support=@(foreach ($name in @('Assert-P09XrefWorker','Get-P09XrefWorkerDigest')) {\n        $found=@($functions | Where-Object {$_.Name -ceq $name})\n        Assert-P09XrefBinding ($found.Count -eq 1) 'PROBE_TEMPLATE_SUPPORT'\n        $found[0].Extent.Text\n    })\n    $found=@($functions | Where-Object {$_.Name -ceq 'Invoke-P09XrefPreparationChild'})\n    Assert-P09XrefBinding ($found.Count -eq 1) 'PROBE_TEMPLATE_RUNNER'\n    $body=$found[0].Extent.Text;$marker='    $start=[Diagnostics.ProcessStartInfo]::new()'\n    $at=$body.IndexOf($marker,[StringComparison]::Ordinal)\n    Assert-P09XrefBinding ($at -gt 0 -and $body.IndexOf($marker,$at+$marker.Length,[StringComparison]::Ordinal) -lt 0) 'PROBE_TEMPLATE_BOUNDARY'\n    $runner=\"function Invoke-P09XrefStageChild {`n\"+\n        \"    `$Kind='source_stage_'+`$Stage`n\"+\n        \"    `$file=`$Lease.binary`n\"+\n        \"    `$childArguments=@('case',`$CaseIndex.ToString(),`$Stage,`$ExpectedSha256)`n\"+$body.Substring($at)\n    return [pscustomobject]@{support=$support;runner=$runner;capture_suffix=$body.Substring($at)}\n}\n\nfunction New-P09XrefProbeLease {\n    $root=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\\..\\..'))\n    $binary=Join-Path $root 'target/p09-149-conservative/debug/examples/p09_crossref_discovery_probe.exe'\n    $template=Join-Path $PSScriptRoot 'inspect-crossref-worker-composition.ps1'\n    $stream=$null;$algorithm=$null\n    try {\n        foreach ($path in @($binary,$template)) {\n            $item=Get-Item -LiteralPath $path -Force\n            Assert-P09XrefBinding ($item -is [IO.FileInfo] -and $item.Length -gt 0 -and\n                $item.Length -le 16777216) 'PROBE_LEASE_FILE'\n            $ancestor=$item\n            while ($null -ne $ancestor) {\n                Assert-P09XrefBinding (($ancestor.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0) 'PROBE_LEASE_LINK'\n                if ($ancestor -is [IO.FileInfo]) {$ancestor=$ancestor.Directory} else {$ancestor=$ancestor.Parent}\n            }\n        }\n        $templateItem=Get-Item -LiteralPath $template\n        Assert-P09XrefBinding ($templateItem.Length -le 32768) 'PROBE_TEMPLATE_SIZE'\n        $raw=[IO.File]::ReadAllBytes($template)\n        $algorithm=[Security.Cryptography.SHA256]::Create()\n        $templateSha=([BitConverter]::ToString($algorithm.ComputeHash($raw))).Replace('-','').ToLowerInvariant()\n        Assert-P09XrefBinding ($templateSha -ceq 'b6e6abfb685cd1af58426b17ed73793910747a8dbf2c51a81fab9f4d18e1ba36') 'PROBE_TEMPLATE_SHA'\n        $text=[Text.UTF8Encoding]::new($false,$true).GetString($raw)\n        $code=Get-P09XrefStageRunnerCode $text\n        Start-Sleep -Milliseconds 50\n        $stream=[IO.File]::Open($binary,[IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::Read)\n        Assert-P09XrefBinding ($stream.Length -eq 5112832) 'PROBE_BINARY_SIZE'\n        $algorithm.Initialize();$watch=[Diagnostics.Stopwatch]::StartNew();$buffer=[byte[]]::new(65536);$count=0L\n        while (($n=$stream.Read($buffer,0,$buffer.Length)) -ne 0) {\n            $count+=$n;Assert-P09XrefBinding ($count -le 5112832) 'PROBE_BINARY_READ_LIMIT'\n            [void]$algorithm.TransformBlock($buffer,0,$n,$buffer,0)\n            $delay=[int][Math]::Ceiling(($count/1048576.0-$watch.Elapsed.TotalSeconds)*1000)\n            if ($delay -gt 0) {Start-Sleep -Milliseconds $delay}\n        }\n        [void]$algorithm.TransformFinalBlock([byte[]]::new(0),0,0);$watch.Stop()\n        $sha=([BitConverter]::ToString($algorithm.Hash)).Replace('-','').ToLowerInvariant()\n        Assert-P09XrefBinding ($count -eq 5112832 -and $sha -ceq '0f9c727afa18d1c0145a21cbc63f947c48922873f6dbe97cd2860e76355491bb') 'PROBE_BINARY_SHA'\n        $lease=[pscustomobject]@{root=$root;binary=$binary;stream=$stream;binary_sha256=$sha;template_sha256=$templateSha;\n            template_text=$text;capture_suffix_sha256=([BitConverter]::ToString($algorithm.ComputeHash(\n                [Text.Encoding]::UTF8.GetBytes($code.capture_suffix)))).Replace('-','').ToLowerInvariant();closed=$false}\n        $stream=$null\n        return $lease\n    } finally {if ($null -ne $stream) {$stream.Dispose()};if ($null -ne $algorithm) {$algorithm.Dispose()}}\n}\n\nfunction Close-P09XrefProbeLease($Lease) {\n    if ($null -ne $Lease -and -not $Lease.closed) {$Lease.stream.Dispose();$Lease.closed=$true}\n}\n\nfunction Invoke-P09XrefStageProbe {\n    param([Parameter(Mandatory)]$Lease,[Parameter(Mandatory)][int]$CaseIndex,\n        [Parameter(Mandatory)][string]$Stage,[Parameter(Mandatory)][string]$ExpectedSha256,\n        [Parameter(Mandatory)][System.Collections.IDictionary]$Record)\n    $Record.children=[Collections.Generic.List[object]]::new();$Record.error_code=$null\n    try {\n        Assert-P09XrefBinding ($Stage -cin @('opened','saved','reopened')) 'PROBE_STAGE'\n        $scope=Get-P09XrefArtifactScope $CaseIndex ($Stage+'_clean') $ExpectedSha256\n        $root=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\\..\\..'))\n        $binary=Join-Path $root 'target/p09-149-conservative/debug/examples/p09_crossref_discovery_probe.exe'\n        Assert-P09XrefBinding (-not $Lease.closed -and $Lease.stream -is [IO.FileStream] -and\n            $Lease.stream.CanRead -and -not $Lease.stream.CanWrite -and $Lease.root -ceq $root -and\n            $Lease.binary -ceq $binary -and $Lease.stream.Name -ceq $binary -and\n            $Lease.binary_sha256 -ceq '0f9c727afa18d1c0145a21cbc63f947c48922873f6dbe97cd2860e76355491bb' -and\n            $Lease.template_sha256 -ceq 'b6e6abfb685cd1af58426b17ed73793910747a8dbf2c51a81fab9f4d18e1ba36') 'PROBE_ACTIVE_LEASE'\n        # Revalidate immutable template bytes, not caller-supplied executable code strings.\n        $code=Get-P09XrefStageRunnerCode $Lease.template_text\n        foreach ($definition in $code.support) {. ([scriptblock]::Create($definition))}\n        . ([scriptblock]::Create($code.runner))\n        $children=$Record.children\n        $response=Invoke-P09XrefStageChild\n        Assert-P09XrefBinding ($response.schema_version -ceq 'hwpx-agent.private.crossref-worker-source-probe/v1' -and\n            $response.state -ceq 'source_probe_completed_not_native_attestation' -and\n            $response.observed_output_sha256 -ceq $ExpectedSha256 -and\n            $response.selected_case.case_id -ceq $scope.case_id -and $response.selected_case.phase -ceq $Stage -and\n            $response.candidate_count -eq 8) 'PROBE_STAGE_RESPONSE'\n        foreach ($name in @('native_execution_attested','native_target_resolution_qualified','parameter_key_semantics_qualified',\n                'causal_insertion_or_preservation_proved','complete_reference_validation_qualified','native_execution_authorized',\n                'raw_document_values_or_sdk_commands_present','p09_complete')) {\n            Assert-P09XrefBinding ($response.$name -is [bool] -and -not $response.$name) 'PROBE_FALSE_CLAIM'\n        }\n        return $response\n    } catch {\n        $code=if ($_.Exception.Message -cmatch '^P09_XREF_(WORKER|BIND)_[A-Z_]+$') {$_.Exception.Message} else {'P09_XREF_BIND_STAGE_PROBE_FAILED_NO_RAW_VALUES'}\n        $Record.error_code=$code;throw $code\n    }\n}\n"
+    },
+    {
+      "path": "implementation/p09/tools/crossref-case-flow.ps1",
+      "bytes": 3253,
+      "sha256": "93325b017c79b1b154adc8e265093ea5adca288891206efb353ebf8956cd1443",
+      "utf8": "# Callback control flow only; callback completion never attests a native operation.\n# Trusted native ports, producer binding, admission and resource guards are separate.\nSet-StrictMode -Version Latest\n\nfunction Get-P09XrefCaseFlowSteps {\n    return @('prepare_slot','create_save_session','source_open','source_bind','opened_save','opened_probe',\n        'sdk_insert','saved_save','saved_probe','save_session_close','create_reopen_session','fresh_saved_open',\n        'reopened_save','reopened_probe','reopen_session_close','final_source_check')\n}\n\nfunction Invoke-P09XrefCaseFlow {\n    param([Parameter(Mandatory)][int]$CaseIndex,[Parameter(Mandatory)][scriptblock]$StepExecutor,\n        [Parameter(Mandatory)][scriptblock]$CleanupExecutor,[Parameter(Mandatory)][System.Collections.IDictionary]$State,\n        [Parameter(Mandatory)][System.Collections.IDictionary]$Record)\n    Assert-P09XrefBinding ($CaseIndex -ge 1 -and $CaseIndex -le 8) 'FLOW_CASE_INDEX'\n    $Record.schema_version='hwpx-agent.crossref-case-callback-flow/v1'\n    $Record.case_id='P09-XREF-BOOK-C'+$CaseIndex.ToString('00')\n    $Record.state='callback_flow_started_unattested';$Record.phase=$null\n    $Record.steps=[Collections.Generic.List[object]]::new();$Record.error_code=$null;$Record.cleanup_error_code=$null\n    $Record.cleanup_callback_entered=$false;$Record.cleanup_callback_returned=$false\n    $Record.native_execution_attested=$false;$Record.native_acceptance_attested=$false\n    $Record.causal_insertion_or_preservation_proved=$false;$Record.accepted_count_delta=0;$Record.automatic_retry=$false\n    try {\n        foreach ($step in (Get-P09XrefCaseFlowSteps)) {\n            $Record.phase=$step\n            $entry=[ordered]@{step=$step;callback_entered=$true;callback_returned=$false}\n            [void]$Record.steps.Add($entry)\n            [void](& $StepExecutor $step $State)\n            $entry.callback_returned=$true\n        }\n        $Record.state='all_callbacks_returned_native_effect_unattested'\n    } catch {\n        $Record.state='callback_flow_failed_native_effect_unattested'\n        $Record.error_code=if ($_.Exception.Message -cmatch '^(P09_XREF_[A-Z_]+|P58_[A-Z_]+|STOP_[A-Z_]+)$') {\n            $_.Exception.Message\n        } else {'P09_XREF_BIND_FLOW_CALLBACK_FAILED_NO_RAW_VALUES'}\n    } finally {\n        $Record.cleanup_callback_entered=$true\n        try {\n            [void](& $CleanupExecutor $State)\n            $Record.cleanup_callback_returned=$true\n        } catch {\n            $Record.cleanup_error_code=if ($_.Exception.Message -cmatch '^(P09_XREF_[A-Z_]+|P58_[A-Z_]+|STOP_[A-Z_]+)$') {\n                $_.Exception.Message\n            } else {'P09_XREF_BIND_FLOW_CLEANUP_FAILED_NO_RAW_VALUES'}\n            if ($null -eq $Record.error_code) {$Record.state='callback_cleanup_failed_native_effect_unattested'}\n        }\n    }\n    $Record.native_execution_attested=$false;$Record.native_acceptance_attested=$false\n    $Record.native_cleanup_attested=$false;$Record.causal_insertion_or_preservation_proved=$false\n    $Record.accepted_count_delta=0;$Record.p09_complete=$false\n    # No state/provider data, document values, SDK commands or ownership proof is serialized here.\n    # In particular cleanup_callback_returned is NOT cleanup_confirmed.\n}\n"
+    },
+    {
+      "path": "implementation/p09/tools/test-crossref-case-flow-probe.ps1",
+      "bytes": 8507,
+      "sha256": "e282e4ddc0a06cd8a47e74b2d42abc85c197514d75f4b3f1aea6a58f3c654d9d",
+      "utf8": "# Model flow and real readonly probe rejection only; no Hangul/native action.\nSet-StrictMode -Version Latest\n$ErrorActionPreference='Stop';$ProgressPreference='SilentlyContinue'\n[Console]::OutputEncoding=[Text.UTF8Encoding]::new($false)\n. (Join-Path $PSScriptRoot 'crossref-owned-active-source.ps1')\n. (Join-Path $PSScriptRoot 'crossref-owned-artifact.ps1')\n. (Join-Path $PSScriptRoot 'crossref-save-reopen.ps1')\n. (Join-Path $PSScriptRoot 'crossref-stage-probe.ps1')\n. (Join-Path $PSScriptRoot 'crossref-case-flow.ps1')\n$script:passed=0;$script:actualProbe=$null\nfunction Invoke-P09XrefFlowTest([scriptblock]$Body) {& $Body;$script:passed++}\nfunction Assert-P09XrefFlowReject([scriptblock]$Body) {\n    $rejected=$false;try {& $Body} catch {$rejected=$true}\n    Assert-P09XrefBinding $rejected 'TEST_FLOW_EXPECTED_REJECTION'\n}\ntry {\n    Invoke-P09XrefFlowTest {\n        $expected='prepare_slot,create_save_session,source_open,source_bind,opened_save,opened_probe,sdk_insert,saved_save,saved_probe,save_session_close,create_reopen_session,fresh_saved_open,reopened_save,reopened_probe,reopen_session_close,final_source_check'\n        Assert-P09XrefBinding (((Get-P09XrefCaseFlowSteps) -join ',') -ceq $expected) 'TEST_FIXED_FLOW_SEQUENCE'\n        for ($i=1;$i -le 8;$i++) {\n            $state=[ordered]@{seen=[Collections.Generic.List[string]]::new();cleanup=0};$record=[ordered]@{}\n            Invoke-P09XrefCaseFlow $i {param($step,$s) [void]$s.seen.Add($step)} {param($s) $s.cleanup++} $state $record\n            Assert-P09XrefBinding (($state.seen -join ',') -ceq $expected -and $state.cleanup -eq 1 -and\n                $record.state -ceq 'all_callbacks_returned_native_effect_unattested' -and\n                -not $record.native_execution_attested -and -not $record.native_acceptance_attested) 'TEST_MODEL_FLOW_NOT_NATIVE'\n        }\n    }\n    Invoke-P09XrefFlowTest {\n        $steps=Get-P09XrefCaseFlowSteps\n        for ($i=0;$i -lt $steps.Count;$i++) {\n            $state=[ordered]@{fail=$steps[$i];seen=[Collections.Generic.List[string]]::new();cleanup=0};$record=[ordered]@{}\n            Invoke-P09XrefCaseFlow 1 {param($step,$s) [void]$s.seen.Add($step);if ($step -ceq $s.fail) {throw 'P09_XREF_BIND_TEST_STEP_FAILURE'}} {param($s) $s.cleanup++} $state $record\n            Assert-P09XrefBinding ($state.seen.Count -eq ($i+1) -and $state.cleanup -eq 1 -and\n                $record.steps.Count -eq ($i+1) -and -not $record.steps[$i].callback_returned -and\n                $record.phase -ceq $steps[$i] -and -not $record.automatic_retry) 'TEST_EACH_FAILURE_STOPS_WITH_ONE_CLEANUP'\n        }\n    }\n    Invoke-P09XrefFlowTest {\n        $state=[ordered]@{};$record=[ordered]@{}\n        Invoke-P09XrefCaseFlow 1 {throw 'private synthetic callback data'} {throw 'P58_OWNED_CLOSE_FAILED_NO_IMPLICIT_SAVE_OR_FORCE_KILL'} $state $record\n        Assert-P09XrefBinding ($record.error_code -ceq 'P09_XREF_BIND_FLOW_CALLBACK_FAILED_NO_RAW_VALUES' -and\n            $record.cleanup_error_code -ceq 'P58_OWNED_CLOSE_FAILED_NO_IMPLICIT_SAVE_OR_FORCE_KILL' -and\n            -not $record.cleanup_callback_returned -and $record.state -ceq 'callback_flow_failed_native_effect_unattested') 'TEST_PRIMARY_AND_CLEANUP_FAILURES_PRESERVED'\n        Assert-P09XrefBinding (($record | ConvertTo-Json -Depth 5 -Compress) -cnotmatch 'private synthetic') 'TEST_PRIVATE_FAILURE_REDACTED'\n    }\n    Invoke-P09XrefFlowTest {\n        $state=[ordered]@{};$record=[ordered]@{}\n        Invoke-P09XrefCaseFlow 1 {param($step,$s) $record.native_execution_attested=$true;$record.native_acceptance_attested=$true;$record.accepted_count_delta=1} {} $state $record\n        Assert-P09XrefBinding (-not $record.native_execution_attested -and -not $record.native_acceptance_attested -and\n            -not $record.native_cleanup_attested -and -not $record.p09_complete -and $record.accepted_count_delta -eq 0) 'TEST_CALLBACK_RETURN_CANNOT_PROMOTE_NATIVE_CLAIMS'\n        Assert-P09XrefFlowReject {Invoke-P09XrefCaseFlow 0 {} {} ([ordered]@{}) ([ordered]@{})}\n        Assert-P09XrefFlowReject {Invoke-P09XrefCaseFlow 9 {} {} ([ordered]@{}) ([ordered]@{})}\n    }\n    Invoke-P09XrefFlowTest {\n        $path=Join-Path $PSScriptRoot 'inspect-crossref-worker-composition.ps1'\n        $text=[Text.UTF8Encoding]::new($false,$true).GetString([IO.File]::ReadAllBytes($path))\n        $code=Get-P09XrefStageRunnerCode $text\n        $tokens=$null;$errors=$null;$ast=[Management.Automation.Language.Parser]::ParseInput($text,[ref]$tokens,[ref]$errors)\n        $function=@($ast.FindAll({param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and\n            $node.Name -ceq 'Invoke-P09XrefPreparationChild'},$false))[0]\n        $marker='    $start=[Diagnostics.ProcessStartInfo]::new()';$original=$function.Extent.Text\n        Assert-P09XrefBinding ($code.capture_suffix -ceq $original.Substring($original.IndexOf($marker,[StringComparison]::Ordinal)) -and\n            $code.support.Count -eq 2 -and $code.runner.Contains(\"`$childArguments=@('case',`$CaseIndex.ToString(),`$Stage,`$ExpectedSha256)\")) 'TEST_EXACT_QUALIFIED_CAPTURE_SUFFIX'\n        Assert-P09XrefFlowReject {Get-P09XrefStageRunnerCode ($text+'changed')}\n        Assert-P09XrefFlowReject {Get-P09XrefStageRunnerCode 'arbitrary code is not a template'}\n    }\n    $lease=New-P09XrefProbeLease\n    try {\n        Invoke-P09XrefFlowTest {\n            Assert-P09XrefBinding (-not $lease.closed -and $lease.stream.CanRead -and -not $lease.stream.CanWrite) 'TEST_REAL_READ_LEASE'\n            $writer=$null;$blocked=$false\n            try {$writer=[IO.File]::Open($lease.binary,[IO.FileMode]::Open,[IO.FileAccess]::Write,[IO.FileShare]::ReadWrite)} catch {$blocked=$true}\n            finally {if ($null -ne $writer) {$writer.Dispose()}}\n            Assert-P09XrefBinding $blocked 'TEST_LEASE_DENIES_BINARY_WRITE_WITHOUT_WRITING'\n        }\n        Invoke-P09XrefFlowTest {\n            $missing=0\n            for ($i=1;$i -le 8;$i++) {if (-not (Test-Path -LiteralPath (Get-P09XrefCaseArtifactPath $i 'opened'))) {$missing=$i;break}}\n            Assert-P09XrefBinding ($missing -gt 0) 'TEST_REAL_MISSING_ARTIFACT_REQUIRED'\n            $record=[ordered]@{}\n            Assert-P09XrefFlowReject {Invoke-P09XrefStageProbe $lease $missing 'opened' ('0'*64) $record}\n            Assert-P09XrefBinding ($record.children.Count -eq 1 -and $record.children[0].exit_code -eq 2 -and\n                $record.children[0].cleanup_confirmed -and $record.error_code -ceq 'P09_XREF_WORKER_PREPARATION_CHILD_FAILED') 'TEST_ACTUAL_MISSING_SOURCE_REJECTED_CHILD_CLEAN'\n            Assert-P09XrefBinding (-not (Test-Path -LiteralPath (Get-P09XrefCaseArtifactPath $missing 'opened'))) 'TEST_NO_ARTIFACT_FABRICATION'\n            $script:actualProbe=[ordered]@{case_index=$missing;children=@($record.children.ToArray());error_code=$record.error_code;\n                missing_artifact_still_missing=$true;native_or_producer_attestation=$false}\n        }\n        Invoke-P09XrefFlowTest {\n            $record=[ordered]@{}\n            Assert-P09XrefFlowReject {Invoke-P09XrefStageProbe $lease 1 '../saved' ('a'*64) $record}\n            Assert-P09XrefBinding ($record.children.Count -eq 0) 'TEST_INVALID_SELECTOR_BEFORE_CHILD'\n        }\n    } finally {Close-P09XrefProbeLease $lease}\n    Invoke-P09XrefFlowTest {\n        Close-P09XrefProbeLease $lease\n        $record=[ordered]@{}\n        Assert-P09XrefFlowReject {Invoke-P09XrefStageProbe $lease 1 'saved' ('a'*64) $record}\n        Assert-P09XrefBinding ($lease.closed -and -not $lease.stream.CanRead -and $record.children.Count -eq 0) 'TEST_CLOSED_LEASE_REJECTS_BEFORE_CHILD'\n    }\n    Assert-P09XrefBinding ($script:passed -eq 9) 'TEST_EXACT_NINE_FLOW_PROBE'\n    [ordered]@{state='nine_case_flow_stage_probe_contracts_pass_native_not_run';passed=$script:passed;failed=0;\n        actual_readonly_missing_probe=$script:actualProbe;lease_closed=$lease.closed;\n        native_session_started=$false;actual_native_case_executor_bound=$false;native_producer_qualified=$false;p09_complete=$false} | ConvertTo-Json -Depth 6 -Compress\n    exit 0\n} catch {\n    $code=if ($_.Exception.Message -cmatch '^P09_XREF_(BIND|WORKER)_[A-Z_]+$') {$_.Exception.Message} else {'P09_XREF_BIND_FLOW_TEST_FAILED_NO_RAW_VALUES'}\n    [ordered]@{state='case_flow_probe_contract_failed';passed=$script:passed;failed=1;error_code=$code;\n        actual_readonly_missing_probe=$script:actualProbe;native_session_started=$false;p09_complete=$false} | ConvertTo-Json -Depth 6 -Compress\n    exit 2\n}\n"
+    }
+  ],
+  "diagnostic": {
+    "state": "lease_diagnostic_exception_not_runtime",
+    "exception_type": "MethodInvocationException",
+    "hresult": -2146233087,
+    "fully_qualified_error_id": "CryptographicException",
+    "source_line": 68,
+    "source_file": "crossref-stage-probe.ps1",
+    "native_executed": false
+  },
+  "fresh_inputs": 4,
+  "final_fresh_hashes": 4,
+  "cleanup": true,
+  "elapsed_seconds": 7.969140500004869,
+  "source_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-361-crossref-case-flow-probe-contracts022.v1.json",
+      "bytes": 20465,
+      "sha256": "5159a2f1e286abb807edcacc76ea1bae2a217d4eb614fcaf9f58ccbd03b5793c"
+    },
+    {
+      "path": "implementation/p09/tools/crossref-stage-probe.ps1",
+      "bytes": 8099,
+      "sha256": "38ee4685a9797de097cd0e7c36d157795fbb4caa43c4d3f20e4aca89a5a1b4b0"
+    },
+    {
+      "path": "implementation/p09/tools/crossref-case-flow.ps1",
+      "bytes": 3253,
+      "sha256": "93325b017c79b1b154adc8e265093ea5adca288891206efb353ebf8956cd1443"
+    },
+    {
+      "path": "implementation/p09/tools/test-crossref-case-flow-probe.ps1",
+      "bytes": 8507,
+      "sha256": "e282e4ddc0a06cd8a47e74b2d42abc85c197514d75f4b3f1aea6a58f3c654d9d"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T07:51:52.086000+00:00",
+      "system_cpu_percent": 33.98,
+      "available_ram_mib": 5061.58,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 15.886479259525808,
+      "commit_used_percent": 54.98970050952907,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.29296875,
+      "parent_private_percent": 0.041721863641964375
+    },
+    {
+      "time_utc": "2026-10-17T07:51:52.586321+00:00",
+      "system_cpu_percent": 30.86,
+      "available_ram_mib": 5058.21,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 15.875898604714461,
+      "commit_used_percent": 54.95023782768716,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.29296875,
+      "parent_private_percent": 0.041721863641964375
+    },
+    {
+      "time_utc": "2026-10-17T07:51:53.435621+00:00",
+      "system_cpu_percent": 35.34,
+      "available_ram_mib": 5004.5,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 15.707319226202262,
+      "commit_used_percent": 55.03326412327261,
+      "parent_cpu_machine_percent": 0.11498423645475017,
+      "parent_private_mib": 13.87890625,
+      "parent_private_percent": 0.043560911407551986
+    },
+    {
+      "time_utc": "2026-10-17T07:51:53.949401+00:00",
+      "system_cpu_percent": 59.28,
+      "available_ram_mib": 4975.19,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 15.615342317286007,
+      "commit_used_percent": 55.09271006042372,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.40234375,
+      "parent_private_percent": 0.045203794078143594
+    },
+    {
+      "time_utc": "2026-10-17T07:51:54.459473+00:00",
+      "system_cpu_percent": 48.83,
+      "available_ram_mib": 4991.76,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 15.667350588096825,
+      "commit_used_percent": 55.06332981258566,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.40234375,
+      "parent_private_percent": 0.045203794078143594
+    },
+    {
+      "time_utc": "2026-10-17T07:51:54.970924+00:00",
+      "system_cpu_percent": 43.18,
+      "available_ram_mib": 5031.74,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 15.792834947302087,
+      "commit_used_percent": 54.99957789693784,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.40234375,
+      "parent_private_percent": 0.045203794078143594
+    },
+    {
+      "time_utc": "2026-10-17T07:51:55.482435+00:00",
+      "system_cpu_percent": 39.02,
+      "available_ram_mib": 5049.35,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 15.848092202498776,
+      "commit_used_percent": 54.970519865177764,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.40234375,
+      "parent_private_percent": 0.045203794078143594
+    },
+    {
+      "time_utc": "2026-10-17T07:51:55.991480+00:00",
+      "system_cpu_percent": 36.52,
+      "available_ram_mib": 5036.2,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 15.806811710320552,
+      "commit_used_percent": 55.04153043029145,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.40234375,
+      "parent_private_percent": 0.045203794078143594
+    },
+    {
+      "time_utc": "2026-10-17T07:51:56.494765+00:00",
+      "system_cpu_percent": 38.26,
+      "available_ram_mib": 5068.54,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 15.908327146980989,
+      "commit_used_percent": 54.90114967282472,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.40234375,
+      "parent_private_percent": 0.045203794078143594
+    },
+    {
+      "time_utc": "2026-10-17T07:51:57.009299+00:00",
+      "system_cpu_percent": 34.23,
+      "available_ram_mib": 5059.8,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 15.880913074955297,
+      "commit_used_percent": 54.87743456948505,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.40234375,
+      "parent_private_percent": 0.045203794078143594
+    },
+    {
+      "time_utc": "2026-10-17T07:51:57.522606+00:00",
+      "system_cpu_percent": 33.08,
+      "available_ram_mib": 5105.47,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 16.024236197486758,
+      "commit_used_percent": 54.812370355628715,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.40234375,
+      "parent_private_percent": 0.045203794078143594
+    },
+    {
+      "time_utc": "2026-10-17T07:51:58.038662+00:00",
+      "system_cpu_percent": 31.06,
+      "available_ram_mib": 5105.66,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 16.024824692771745,
+      "commit_used_percent": 54.83476730228573,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.40234375,
+      "parent_private_percent": 0.045203794078143594
+    },
+    {
+      "time_utc": "2026-10-17T07:51:58.551301+00:00",
+      "system_cpu_percent": 30.87,
+      "available_ram_mib": 5103.1,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 16.016806444513783,
+      "commit_used_percent": 54.83598000643378,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.40234375,
+      "parent_private_percent": 0.045203794078143594
+    },
+    {
+      "time_utc": "2026-10-17T07:51:59.054570+00:00",
+      "system_cpu_percent": 32.03,
+      "available_ram_mib": 5105.83,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 16.025376407101422,
+      "commit_used_percent": 54.84159242466485,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.40234375,
+      "parent_private_percent": 0.045203794078143594
+    },
+    {
+      "time_utc": "2026-10-17T07:51:59.554475+00:00",
+      "system_cpu_percent": 34.57,
+      "available_ram_mib": 5147.01,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 16.15462468406692,
+      "commit_used_percent": 54.812024705654146,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.30078125,
+      "parent_private_percent": 0.04488502579877507
+    }
+  ]
+}

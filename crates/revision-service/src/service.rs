@@ -28,6 +28,7 @@ where
         context: &RevisionRequestContext,
         request: &RevisionCommitRequest,
     ) -> Result<CommitOutcome, RevisionError> {
+        self.repository.authorize_context(context)?;
         self.repository.compare_and_swap(context, request)
     }
 
@@ -42,6 +43,7 @@ where
         project_id: ProjectId,
         branch_id: BranchId,
     ) -> Result<RevisionHead, RevisionError> {
+        self.repository.authorize_context(context)?;
         self.repository
             .head(context.tenant_id(), project_id, branch_id)
     }
@@ -57,6 +59,7 @@ where
         project_id: ProjectId,
         revision_id: RevisionId,
     ) -> Result<RevisionNode, RevisionError> {
+        self.repository.authorize_context(context)?;
         self.repository
             .node(context.tenant_id(), project_id, revision_id)
     }

@@ -1,0 +1,127 @@
+{
+  "schema_version": "hwpx-agent.p09-caption-historical-reuse-audit-review/v1",
+  "recorded_date_local": "2026-10-17",
+  "state": "HISTORICAL_CAPTION_REUSE_CONFIRMED_PARTIAL_RUN_OUTPUT_NOT_CURRENT_PRODUCT_OR_GATE",
+  "GO_authorized": false,
+  "Native010_execution_authority_received": false,
+  "accepted_count_delta": 0,
+  "official_accepted_count": 158,
+  "next_case": 165,
+  "P09_gate": "OPEN",
+  "A12_gate": "OPEN",
+  "A13_gate": "OPEN",
+  "P10_started": false,
+  "PC_freeze_resolved": false,
+  "program_pin": {
+    "path": "tools/p09/audit_caption_target_evidence_reuse.py",
+    "bytes": 9322,
+    "sha256": "ec367979acc2fbe5d74158cfd8a803b6aa4720ab2128e0feb29e61ddf3128e65"
+  },
+  "command": "python -B tools/p09/audit_caption_target_evidence_reuse.py",
+  "execution_observation": {
+    "exit_code": 0,
+    "retained_state": "PASS_CAPTION_HISTORICAL_EVIDENCE_REUSE_NOT_GENERAL_PRODUCT_OR_GATE",
+    "complete_stdout_retained": false,
+    "complete_source_pin_table_retained": false,
+    "fresh_inputs": null,
+    "final_fresh_hashes": null,
+    "complete_resource_statistics_retained": false,
+    "reexecuted_to_recover_output": false,
+    "narrow_scope": "The pinned command exited0 with PASS after reproducing six unchanged original qualifiers and their source identities. Full JSON stdout was clipped by the command output limit. No current Native/product/Gate qualification or complete fresh-input statistics are claimed."
+  },
+  "historical_public_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-19-object-caption-target-c01-20261002-attempt01.v1.json",
+      "bytes": 5819,
+      "sha256": "c60164f16a6c0119d6e61a4f3dad2b3c5e47b89cee8e2e6a15045234507447be"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-19-object-caption-target-c03-20261002-attempt01.v1.json",
+      "bytes": 5816,
+      "sha256": "7a5ea2be62e9b6ef97010f296b435912953f2152ab34b79f4b73f017b24453ef"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-19-object-caption-target-c04-20261002-attempt01.v1.json",
+      "bytes": 5831,
+      "sha256": "a50e11dfd3909224d64cf38b8841c29719b821ec2803e864dfac4bdba7745bb6"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-20-canonical-picture-caption-target-c02-20261002-attempt01.v1.json",
+      "bytes": 6285,
+      "sha256": "66504fbde191d7841aa19ea6eeb8af90c32875fb395f2bd616d1147361346e5b"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-19-object-caption-target-c02-20261002-attempt01.v1.json",
+      "bytes": 3630,
+      "sha256": "2e4ebc7cab300cbc3759c2c1f68e72639645088808dea6a0a49796c9c26551c0"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-19-object-caption-target-c02-20261002-attempt02.v1.json",
+      "bytes": 3630,
+      "sha256": "f2f9877a6b695e54e3ed502527ecd6360d4ae02dd822e98c20592a7a289ce0a7"
+    }
+  ],
+  "historical_reuse_boundary": {
+    "typed_insertion_into_existing_caption_implemented": true,
+    "bounded_target_semantic_records": [
+      {
+        "case": "rectangle",
+        "campaign": "P09-19-C01",
+        "numbers": [
+          19,
+          1,
+          1
+        ]
+      },
+      {
+        "case": "table",
+        "campaign": "P09-19-C03",
+        "numbers": [
+          19,
+          1,
+          1
+        ]
+      },
+      {
+        "case": "equation",
+        "campaign": "P09-19-C04",
+        "numbers": [
+          19,
+          1,
+          1
+        ]
+      },
+      {
+        "case": "picture",
+        "campaign": "P09-20 canonical successor for P09-19-C02",
+        "numbers": [
+          19,
+          1,
+          1
+        ]
+      }
+    ],
+    "failed_original_picture_campaigns_retained": 2,
+    "failed_unnumbered_picture_control_retained": true,
+    "general_numbering_or_update_api_qualified": false,
+    "product_caption_creation_API_qualified": false,
+    "product_object_category_update_API_qualified": false,
+    "calibrated_render_qualified": false,
+    "automation_fallback_qualified": false,
+    "direct_automation_differential_qualified": false,
+    "green_rows": 0,
+    "fixture_preparation_not_promoted_to_product_API": true,
+    "new_Hangul_COM_or_product_execution": false
+  },
+  "backlog_correction": "Do not list all picture/table/equation association and bounded save/reopen campaigns as absent. Reuse the preserved existing-caption insertion and four non-green bounded semantic campaigns within their exact original source/target scope. General caption creation/category update/numbering APIs, baseline-vs-numbered render, fallback/differential and Gate closure remain separate.",
+  "pending_native010": {
+    "qualification_pin": {
+      "path": "implementation/p09/evidence/p09-361-case165-native010-dispatch-qualification003.v1.json",
+      "bytes": 86403,
+      "sha256": "dcba93bf121aee655a78ff98c15b620996d0d6b437bd79d2a0186b0bdce51d33"
+    },
+    "changed": false,
+    "run_product": false
+  },
+  "retained_partial_stdout": "Warning: truncated output (original token count: 4854)\nTotal output lines: 1\n\n{\"state\": \"PASS_CAPTION_HISTORICAL_EVIDENCE_REUSE_NOT_GENERAL_PRODUCT_OR_GATE\", \"historical_records\": [{\"public_pin\": {\"path\": \"implementation/p09/evidence/p09-19-object-caption-target-c01-20261002-attempt01.v1.json\", \"bytes\": 5819, \"sha256\": \"c60164f16a6c0119d6e61a4f3dad2b3c5e47b89cee8e2e6a15045234507447be\"}, \"case_id\": \"P09-19-C01\", \"canonical_picture_successor\": false, \"state\": \"bounded_semantic_non_green\", \"original_record_reproduced_byte_exact\": true, \"actual_target_campaign_reexecuted\": false, \"historical_caption_numbers\": [19, 1, 1], \"remaining_hwp_processes_at_historical_run\": 0, \"green_rows\": 0}, {\"public_pin\": {\"path\": \"implementation/p09/evidence/p09-19-object-caption-target-c03-20261002-attempt01.v1.json\", \"bytes\": 5816, \"sha256\": \"7a5ea2be62e9b6ef97010f296b435912953f2152ab34b79f4b73f017b24453ef\"}, \"case_id\": \"P09-19-C03\", \"canonical_picture_successor\": false, \"state\": \"bounded_semantic_non_green\", \"original_record_reproduced_byte_exact\": true, \"actual_target_campaign_reexecuted\": false, \"historical_caption_numbers\": [19, 1, 1], \"remaining_hwp_processes_at_historical_run\": 0, \"green_rows\": 0}, {\"public_pin\": {\"path\": \"implementation/p09/evidence/p09-19-object-caption-target-c04-20261002-attempt01.v1.json\", \"bytes\": 5831, \"sha256\": \"a50e11dfd3909224d64cf38b8841c29719b821ec2803e864dfac4bdba7745bb6\"}, \"case_id\": \"P09-19-C04\", \"canonical_picture_successor\": false, \"state\": \"bounded_semantic_non_green\", \"original_record_reproduced_byte_exact\": true, \"actual_target_campaign_reexecuted\": false, \"historical_caption_numbers\": [19, 1, 1], \"remaining_hwp_processes_at_historical_run\": 0, \"green_rows\": 0}, {\"public_pin\": {\"path\": \"implementation/p09/evidence/p09-19-object-caption-target-c02-20261002-attempt01.v1.json\", \"bytes\": 3630, \"sha256\": \"2e4ebc7cab300cbc3759c2c1f68e72639645088808dea6a0a49796c9c26551c0\"}, \"case_id\": \"P09-19-C02\", \"canonical_picture_successor\": false, \"state\": \"failed_lifecycle_non_green\", \"original_record_reproduced_byte_exact\": true, \"actual_target_campaign_reexecuted\": false, \"historical_caption_numbers\": [19], \"remaining_hwp_processes_at_historical_run\": 0, \"green_rows\": 0}, {\"public_pin\": {\"path\": \"implementation/p09/evidence/p09-19-object-caption-target-c02-20261002-attempt02.v1.json\", \"bytes\": 3630, \"sha256\": \"f2f9877a6b695e54e3ed502527ecd6360d4ae02dd822e98c20592a7a289ce0a7\"}, \"case_id\": \"P09-19-C02\", \"canonical_picture_successor\"…3654 tokens truncated…6324313621398}, {\"time_utc\": \"2026-10-16T18:31:48.861799+00:00\", \"system_cpu_percent\": 9.09, \"available_ram_mib\": 12117.5, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 38.032500878145306, \"commit_used_percent\": 51.78012373214564, \"parent_cpu_machine_percent\": 0.36259179548271986, \"parent_private_mib\": 20.1171875, \"parent_private_percent\": 0.06314063995184147}, {\"time_utc\": \"2026-10-16T18:31:49.339819+00:00\", \"system_cpu_percent\": 12.42, \"available_ram_mib\": 12042.57, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 37.797323449881965, \"commit_used_percent\": 51.652789796600224, \"parent_cpu_machine_percent\": 0.0, \"parent_private_mib\": 20.1171875, \"parent_private_percent\": 0.06314063995184147}, {\"time_utc\": \"2026-10-16T18:31:49.845235+00:00\", \"system_cpu_percent\": 7.6, \"available_ram_mib\": 12035.1, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 37.7738694607115, \"commit_used_percent\": 51.65782222589093, \"parent_cpu_machine_percent\": 0.0, \"parent_private_mib\": 20.1171875, \"parent_private_percent\": 0.06314063995184147}, {\"time_utc\": \"2026-10-16T18:31:50.389651+00:00\", \"system_cpu_percent\": 8.6, \"available_ram_mib\": 12171.45, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 38.20181587576374, \"commit_used_percent\": 51.75076691820416, \"parent_cpu_machine_percent\": 0.0, \"parent_private_mib\": 20.1171875, \"parent_private_percent\": 0.06314063995184147}, {\"time_utc\": \"2026-10-16T18:31:50.955406+00:00\", \"system_cpu_percent\": 22.26, \"available_ram_mib\": 11842.8, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 37.17029398404565, \"commit_used_percent\": 51.74295757216864, \"parent_cpu_machine_percent\": 0.0, \"parent_private_mib\": 20.1171875, \"parent_private_percent\": 0.06314063995184147}, {\"time_utc\": \"2026-10-16T18:31:51.428290+00:00\", \"system_cpu_percent\": 21.3, \"available_ram_mib\": 11999.58, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 37.66238638516158, \"commit_used_percent\": 51.86458535389666, \"parent_cpu_machine_percent\": 0.0, \"parent_private_mib\": 20.1171875, \"parent_private_percent\": 0.06314063995184147}, {\"time_utc\": \"2026-10-16T18:31:51.933297+00:00\", \"system_cpu_percent\": 16.86, \"available_ram_mib\": 11963.56, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 37.54932172853326, \"commit_used_percent\": 51.60094815888955, \"parent_cpu_machine_percent\": 0.0, \"parent_private_mib\": 20.1171875, \"parent_private_percent\": 0.06314063995184147}]}\r\n"
+}

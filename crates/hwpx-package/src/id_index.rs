@@ -13,6 +13,7 @@ use crate::{
 const OPF_NAMESPACE: &str = "http://www.idpf.org/2007/opf";
 const OPF_NAMESPACE_HANCOM_2020: &str = "http://www.idpf.org/2007/opf/";
 const HWPML_2011_HEAD_NAMESPACE: &str = "http://www.hancom.co.kr/hwpml/2011/head";
+const HWPML_2011_CORE_NAMESPACE: &str = "http://www.hancom.co.kr/hwpml/2011/core";
 const HWPML_2011_PARAGRAPH_NAMESPACE: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const HEADER_PART: &str = "Contents/header.xml";
 
@@ -105,6 +106,10 @@ enum ProfileKind {
     Hwpml2011PictureV5,
     Hwpml2011ShapeV6,
     Hwpml2016OoxmlChartV7,
+    Hwpml2011CaptionOwnerV8,
+    Hwpml2011TextStyleV9,
+    Hwpml2011FontBinaryV10,
+    Hwpml2011ScopedFontV11,
 }
 
 impl IdRuleProfile {
@@ -158,6 +163,42 @@ impl IdRuleProfile {
         Self(ProfileKind::Hwpml2016OoxmlChartV7)
     }
 
+    /// Extends immutable shape/v6 with arc and connector object/instance IDs.
+    /// Source: Hancom model 1453388472c703a4b299a0834f425cdac16644b9,
+    /// ArcType/ConnectLineType -> AbstractDrawingObjectType ->
+    /// AbstractShapeComponentType (instid) -> AbstractShapeObjectType (id).
+    /// Chart rules and connector endpoint references are not admitted here.
+    /// Static vocabulary only; this does not qualify licensed-target behavior.
+    #[must_use]
+    pub const fn hwpml_2011_caption_owner_v8() -> Self {
+        Self(ProfileKind::Hwpml2011CaptionOwnerV8)
+    }
+
+    /// Immutable shape/v6 plus explicit paragraph t.charStyleIDRef -> header charPr.
+    /// Static CT vocabulary from model 1453388472c703a4b299a0834f425cdac16644b9 t.cpp;
+    /// character domain is the existing qualified typed reader's explicit text-style axis.
+    /// No chart/caption-owner rules, implicit defaults or licensed-target qualification.
+    #[must_use]
+    pub const fn hwpml_2011_text_style_v9() -> Self {
+        Self(ProfileKind::Hwpml2011TextStyleV9)
+    }
+
+    /// Immutable shape/v6 plus header font/substFont binaryItemIDRef -> package manifest item.
+    /// Static vocabulary: pinned Hancom model1453388472c703a4b299a0834f425cdac16644b9,
+    /// OWPML/Class/Head/font.cpp and substFont.cpp ReadAttribute/WriteElement.
+    /// Payload validity, font activation, text-style, charts and caption-owner rules are not added.
+    #[must_use]
+    pub const fn hwpml_2011_font_binary_v10() -> Self {
+        Self(ProfileKind::Hwpml2011FontBinaryV10)
+    }
+
+    /// Explicit union of immutable font-binary/v10 and text-style/v9 for scoped font edits.
+    /// No new vocabulary, implicit inheritance, chart/caption-owner or Native qualification.
+    #[must_use]
+    pub const fn hwpml_2011_scoped_font_v11() -> Self {
+        Self(ProfileKind::Hwpml2011ScopedFontV11)
+    }
+
     #[must_use]
     pub const fn version(self) -> &'static str {
         match self.0 {
@@ -168,6 +209,10 @@ impl IdRuleProfile {
             ProfileKind::Hwpml2011PictureV5 => "hwpml-2011-picture-static/v5",
             ProfileKind::Hwpml2011ShapeV6 => "hwpml-2011-shape-static/v6",
             ProfileKind::Hwpml2016OoxmlChartV7 => "hwpml-2016-ooxml-chart/v7",
+            ProfileKind::Hwpml2011CaptionOwnerV8 => "hwpml-2011-caption-owner-static/v8",
+            ProfileKind::Hwpml2011TextStyleV9 => "hwpml-2011-text-style-static/v9",
+            ProfileKind::Hwpml2011FontBinaryV10 => "hwpml-2011-font-binary-static/v10",
+            ProfileKind::Hwpml2011ScopedFontV11 => "hwpml-2011-scoped-font-static/v11",
         }
     }
 
@@ -180,6 +225,10 @@ impl IdRuleProfile {
                 | ProfileKind::Hwpml2011PictureV5
                 | ProfileKind::Hwpml2011ShapeV6
                 | ProfileKind::Hwpml2016OoxmlChartV7
+                | ProfileKind::Hwpml2011CaptionOwnerV8
+                | ProfileKind::Hwpml2011TextStyleV9
+                | ProfileKind::Hwpml2011FontBinaryV10
+                | ProfileKind::Hwpml2011ScopedFontV11
         )
     }
 
@@ -191,6 +240,10 @@ impl IdRuleProfile {
                 | ProfileKind::Hwpml2011PictureV5
                 | ProfileKind::Hwpml2011ShapeV6
                 | ProfileKind::Hwpml2016OoxmlChartV7
+                | ProfileKind::Hwpml2011CaptionOwnerV8
+                | ProfileKind::Hwpml2011TextStyleV9
+                | ProfileKind::Hwpml2011FontBinaryV10
+                | ProfileKind::Hwpml2011ScopedFontV11
         )
     }
 
@@ -201,6 +254,10 @@ impl IdRuleProfile {
                 | ProfileKind::Hwpml2011PictureV5
                 | ProfileKind::Hwpml2011ShapeV6
                 | ProfileKind::Hwpml2016OoxmlChartV7
+                | ProfileKind::Hwpml2011CaptionOwnerV8
+                | ProfileKind::Hwpml2011TextStyleV9
+                | ProfileKind::Hwpml2011FontBinaryV10
+                | ProfileKind::Hwpml2011ScopedFontV11
         )
     }
 
@@ -210,6 +267,10 @@ impl IdRuleProfile {
             ProfileKind::Hwpml2011PictureV5
                 | ProfileKind::Hwpml2011ShapeV6
                 | ProfileKind::Hwpml2016OoxmlChartV7
+                | ProfileKind::Hwpml2011CaptionOwnerV8
+                | ProfileKind::Hwpml2011TextStyleV9
+                | ProfileKind::Hwpml2011FontBinaryV10
+                | ProfileKind::Hwpml2011ScopedFontV11
         )
     }
 
@@ -217,11 +278,19 @@ impl IdRuleProfile {
         matches!(
             self.0,
             ProfileKind::Hwpml2011ShapeV6 | ProfileKind::Hwpml2016OoxmlChartV7
+                | ProfileKind::Hwpml2011CaptionOwnerV8
+                | ProfileKind::Hwpml2011TextStyleV9
+                | ProfileKind::Hwpml2011FontBinaryV10
+                | ProfileKind::Hwpml2011ScopedFontV11
         )
     }
 
     const fn includes_chart_rules(self) -> bool {
         matches!(self.0, ProfileKind::Hwpml2016OoxmlChartV7)
+    }
+
+    const fn includes_caption_owner_rules(self) -> bool {
+        matches!(self.0, ProfileKind::Hwpml2011CaptionOwnerV8)
     }
 
     const fn preservation_profile(self) -> PreservationRuleProfile {
@@ -232,7 +301,17 @@ impl IdRuleProfile {
             | ProfileKind::CurrentHancom2020EquationV4
             | ProfileKind::Hwpml2011PictureV5
             | ProfileKind::Hwpml2011ShapeV6
-            | ProfileKind::Hwpml2016OoxmlChartV7 => {
+            | ProfileKind::Hwpml2016OoxmlChartV7
+            | ProfileKind::Hwpml2011CaptionOwnerV8 => {
+                PreservationRuleProfile::Hangul2020PreviewTextV2
+            }
+            ProfileKind::Hwpml2011TextStyleV9 => {
+                PreservationRuleProfile::Hangul2020PreviewTextV2
+            }
+            ProfileKind::Hwpml2011FontBinaryV10 => {
+                PreservationRuleProfile::Hangul2020PreviewTextV2
+            }
+            ProfileKind::Hwpml2011ScopedFontV11 => {
                 PreservationRuleProfile::Hangul2020PreviewTextV2
             }
         }
@@ -432,16 +511,55 @@ impl IdIndex {
         profile: IdRuleProfile,
         limits: IdIndexLimits,
     ) -> Result<Self, IdIndexError> {
-        let preservation = PreservationReport::build_with_graph_limits_and_profile(
+        Self::build_with_xml_documents(reader, graph, graph_limits, profile, limits, None)
+    }
+
+    pub(crate) fn build_with_call_local_xml<R: Read + Seek>(
+        reader: &mut BoundedZipReader<R>,
+        graph: &PackageGraph,
+        graph_limits: PackageGraphLimits,
+        profile: IdRuleProfile,
+        limits: IdIndexLimits,
+        documents: &mut crate::call_local_xml::CallLocalXmlDocuments,
+    ) -> Result<Self, IdIndexError> {
+        Self::build_with_xml_documents(
             reader,
             graph,
             graph_limits,
-            profile.preservation_profile(),
-        )?;
+            profile,
+            limits,
+            Some(documents),
+        )
+    }
+
+    fn build_with_xml_documents<R: Read + Seek>(
+        reader: &mut BoundedZipReader<R>,
+        graph: &PackageGraph,
+        graph_limits: PackageGraphLimits,
+        profile: IdRuleProfile,
+        limits: IdIndexLimits,
+        mut documents: Option<&mut crate::call_local_xml::CallLocalXmlDocuments>,
+    ) -> Result<Self, IdIndexError> {
+        let preservation = if let Some(documents) = documents.as_deref_mut() {
+            PreservationReport::build_with_call_local_xml(
+                reader,
+                graph,
+                graph_limits,
+                profile.preservation_profile(),
+                documents,
+            )?
+        } else {
+            PreservationReport::build_with_graph_limits_and_profile(
+                reader,
+                graph,
+                graph_limits,
+                profile.preservation_profile(),
+            )?
+        };
         if !preservation.direct_preserve_ready() {
             return Err(IdIndexError::PreservationRejected);
         }
-        IndexBuilder::new(graph, &preservation, profile, limits)?.build(reader)
+        IndexBuilder::new(graph, &preservation, profile, limits)?.build(reader, documents)
     }
 
     #[must_use]
@@ -474,15 +592,18 @@ impl IdIndex {
         part: &PackagePath,
         kind: IdKind,
     ) -> Result<u64, IdIndexError> {
-        self.declarations
+        Self::next_decimal_after_maximum(self.declarations
             .iter()
             .filter(|declaration| declaration.location.part == *part && declaration.kind == kind)
             .filter_map(|declaration| match declaration.value {
                 IdValue::Decimal(value) => Some(value),
                 IdValue::Text(_) => None,
             })
-            .max()
-            .unwrap_or(0)
+            .max())
+    }
+
+    pub(crate) fn next_decimal_after_maximum(maximum: Option<u64>) -> Result<u64, IdIndexError> {
+        maximum.unwrap_or(0)
             .checked_add(1)
             .ok_or(IdIndexError::LimitExceeded {
                 limit: "id_allocation_range",
@@ -795,6 +916,16 @@ const DECLARATION_RULES: &[DeclarationRule] = &[
         IdKind::MemoShape,
         ValueSyntax::Decimal,
     ),
+    // Native OWPML MemoShapeType is serialized as memoPr. Keep legacy declarations
+    // and all duplicate/dangling-reference checks; do not treat missing styles as defaults.
+    declaration(
+        PartSelector::Exact(HEADER_PART),
+        HWPML_2011_HEAD_NAMESPACE,
+        "memoPr",
+        "id",
+        IdKind::MemoShape,
+        ValueSyntax::Decimal,
+    ),
     declaration(
         PartSelector::SpineDocument,
         HWPML_2011_PARAGRAPH_NAMESPACE,
@@ -908,6 +1039,13 @@ const CHART_DECLARATION_RULES: &[DeclarationRule] = &[declaration(
     IdKind::Chart,
     ValueSyntax::Decimal,
 )];
+
+const CAPTION_OWNER_DECLARATION_RULES: &[DeclarationRule] = &[
+    shape_declaration("arc", "id", IdKind::Shape),
+    shape_declaration("arc", "instid", IdKind::ShapeInstance),
+    shape_declaration("connectLine", "id", IdKind::Shape),
+    shape_declaration("connectLine", "instid", IdKind::ShapeInstance),
+];
 
 const fn shape_declaration(
     element: &'static str,
@@ -1116,6 +1254,18 @@ const REFERENCE_RULES: &[ReferenceRule] = &[
     ),
 ];
 
+const TEXT_STYLE_REFERENCE_RULES: &[ReferenceRule] = &[
+    reference(
+        PartSelector::SpineDocument,
+        HWPML_2011_PARAGRAPH_NAMESPACE,
+        "t",
+        "charStyleIDRef",
+        TargetSelector::Exact(HEADER_PART),
+        IdKind::CharacterProperties,
+        ValueSyntax::Decimal,
+    ),
+];
+
 const TABLE_REFERENCE_RULES: &[ReferenceRule] = &[
     reference(
         PartSelector::SpineDocument,
@@ -1178,13 +1328,20 @@ const FORMULA_REFERENCE_RULES: &[ReferenceRule] = &[
 
 const PICTURE_REFERENCE_RULES: &[ReferenceRule] = &[reference(
     PartSelector::SpineDocument,
-    HWPML_2011_PARAGRAPH_NAMESPACE,
+    HWPML_2011_CORE_NAMESPACE,
     "img",
     "binaryItemIDRef",
     TargetSelector::PackageDocument,
     IdKind::ManifestItem,
     ValueSyntax::Text,
 )];
+
+const FONT_BINARY_REFERENCE_RULES: &[ReferenceRule] = &[
+    reference(PartSelector::Exact(HEADER_PART), HWPML_2011_HEAD_NAMESPACE, "font",
+        "binaryItemIDRef", TargetSelector::PackageDocument, IdKind::ManifestItem, ValueSyntax::Text),
+    reference(PartSelector::Exact(HEADER_PART), HWPML_2011_HEAD_NAMESPACE, "substFont",
+        "binaryItemIDRef", TargetSelector::PackageDocument, IdKind::ManifestItem, ValueSyntax::Text),
+];
 
 const fn declaration(
     part: PartSelector,
@@ -1343,6 +1500,7 @@ impl<'a> IndexBuilder<'a> {
     fn build<R: Read + Seek>(
         mut self,
         reader: &mut BoundedZipReader<R>,
+        mut documents: Option<&mut crate::call_local_xml::CallLocalXmlDocuments>,
     ) -> Result<IdIndex, IdIndexError> {
         for record in self.preservation.parts() {
             if record.class() != PreservationClass::TokenStable {
@@ -1356,11 +1514,17 @@ impl<'a> IndexBuilder<'a> {
                 return Err(IdIndexError::LimitExceeded { limit: "parts" });
             }
             let bytes = reader.read_entry(record.source_entry_index())?;
-            let document = PreservingXmlDocument::parse(&bytes)?;
+            let standalone;
+            let document = if let Some(documents) = documents.as_deref_mut() {
+                documents.document(record.path().collision_key(), &bytes)?
+            } else {
+                standalone = PreservingXmlDocument::parse(&bytes)?;
+                &standalone
+            };
             if document.original_sha256() != record.raw_sha256() {
                 return Err(IdIndexError::IdentityMismatch);
             }
-            self.scan_document(record, &document)?;
+            self.scan_document(record, document)?;
         }
         self.resolve()
     }
@@ -1768,6 +1932,11 @@ fn matching_declaration_rule(
     } else {
         &[]
     };
+    let caption_owner = if profile.includes_caption_owner_rules() {
+        CAPTION_OWNER_DECLARATION_RULES
+    } else {
+        &[]
+    };
     for rule in DECLARATION_RULES
         .iter()
         .chain(table)
@@ -1776,6 +1945,7 @@ fn matching_declaration_rule(
         .chain(picture)
         .chain(shape)
         .chain(chart)
+        .chain(caption_owner)
     {
         if part_matches(rule.part, graph, part)
             && rule_namespace_matches(element_namespace, rule.namespace)
@@ -1820,6 +1990,8 @@ fn matching_reference_rule(
         .chain(table)
         .chain(formula)
         .chain(picture)
+        .chain(if matches!(profile.0, ProfileKind::Hwpml2011TextStyleV9 | ProfileKind::Hwpml2011ScopedFontV11) { TEXT_STYLE_REFERENCE_RULES } else { &[] })
+        .chain(if matches!(profile.0, ProfileKind::Hwpml2011FontBinaryV10 | ProfileKind::Hwpml2011ScopedFontV11) { FONT_BINARY_REFERENCE_RULES } else { &[] })
     {
         if part_matches(rule.part, graph, part)
             && rule_namespace_matches(element_namespace, rule.namespace)

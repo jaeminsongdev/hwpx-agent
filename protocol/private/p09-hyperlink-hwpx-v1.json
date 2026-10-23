@@ -22,10 +22,13 @@
   "implementation_files": [
     "crates/domain-ir/src/link_reference.rs",
     "crates/domain-ir/tests/link_reference.rs",
-    "crates/hwpx-package/src/lib.rs",
     "crates/hwpx-package/src/hyperlink_hwpx.rs",
     "crates/hwpx-package/tests/hyperlink_hwpx.rs"
   ],
+  "public_export": {
+    "path": "crates/hwpx-package/src/lib.rs",
+    "markers": ["mod hyperlink_hwpx;", "pub use hyperlink_hwpx::{"]
+  },
   "native_profile": {
     "field_runs": ["begin_control_run", "existing_plain_text_display_run", "end_control_run"],
     "begin_attributes": {"type": "HYPERLINK", "name": "", "editable": "0", "dirty": "1", "zorder": "-1"},

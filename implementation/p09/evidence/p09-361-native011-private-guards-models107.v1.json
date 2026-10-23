@@ -1,0 +1,177 @@
+{
+  "state": "FAILED_NATIVE011_TRANSPORT_SCOPED_TESTS",
+  "steps": [
+    {
+      "stage": "native011_private_guard_contracts",
+      "exit_code": 2,
+      "cleanup": true,
+      "stdout_bytes": 134,
+      "stderr_bytes": 828,
+      "stdout_sha256": "90801ccb5119316f0559ecb2d0094daeede418d77c03ad857324303047315585",
+      "stderr_sha256": "9791e509d7c7d7b74cdf7a3433755a7438d5061e3f3a331c57eff8a7aa6ecc7e",
+      "contract_errors": [
+        "FAILED (errors=1)"
+      ],
+      "diagnostics": [],
+      "locations": [],
+      "preflight_summary": {
+        "state": "FAILED_SCOPE_DELTA_CONTRACTS",
+        "passed": 1,
+        "failed": 1,
+        "model_only": true,
+        "actual_Native_or_Frame_constructed": false
+      },
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 0.234,
+          "peak_job_private_mib": 33.11,
+          "peak_job_private_percent": 0.10390619875570029,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 0.5780000000086147
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "error_type": "ValueError",
+  "error_code": "REFERENCE_TARGET_COMMAND_FAILED",
+  "cleanup": true,
+  "elapsed_seconds": 2.2820000000065193,
+  "source_pins": [
+    {
+      "path": "tools/p09/native011_parent_oracle.py",
+      "bytes": 8421,
+      "sha256": "701fccd5e5a30a5648a299f7d5fe1a25747575b1e4c73fcce1db394c67be1e98"
+    },
+    {
+      "path": "tools/p09/native011_parent_plan.py",
+      "bytes": 19021,
+      "sha256": "b6fb347bb37e00bcc14c37e25876c5df637d64355d4c0ab94865925d1d196e72"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_private_guards.py",
+      "bytes": 1917,
+      "sha256": "a9904f9a4b32d1544bfa662790dc646726d02d6b8a4683d4a99d7dfad21568e4"
+    },
+    {
+      "path": "tools/p09/batch_verification.py",
+      "bytes": 63495,
+      "sha256": "296b4fe1070a6e5e4cfb882ba0ad9ca252edc702fc2441e970292cf5ad76dff9"
+    },
+    {
+      "path": "tools/p09/current_stored_runtime_scope.py",
+      "bytes": 10087,
+      "sha256": "45f00274f99383c6d27fadea882614a3fd02ca19932bc8735618483f982d8841"
+    },
+    {
+      "path": "tools/p09/prepared_run_closure_v1.py",
+      "bytes": 23900,
+      "sha256": "c159da53076f5bb88dce252db163f82a1f1d71522c9dd248349ca615dc84e672"
+    },
+    {
+      "path": "tools/p09/owned_cpu_baseline_v1.py",
+      "bytes": 1389,
+      "sha256": "0fce7a5f5700270291b02167e96c3739943d5a44c0a912eef43555a1a729b4b5"
+    },
+    {
+      "path": "tools/p09/preparation_attributed_cpu_v1.py",
+      "bytes": 9869,
+      "sha256": "ddc1b48f17645337e65125373d9db822477ca6a94cc34e23992498e6c2c7d13d"
+    },
+    {
+      "path": "tools/p09/distinct_final_sample_guard_v1.py",
+      "bytes": 1683,
+      "sha256": "8c590aa82c2677d391d6d5781b356641f77c7cdc6e55370ca251d6a809ad67c3"
+    },
+    {
+      "path": "tools/p09/historical_receipt_batch_partition_v1.py",
+      "bytes": 3188,
+      "sha256": "81967d3fcf24f99c689b3cf6aea1d65765456f7542247192d1cf28c6da912e93"
+    },
+    {
+      "path": "tools/p09/owned_sql_job.py",
+      "bytes": 13850,
+      "sha256": "30b08c4d779494bbdb7579b9bb28782b4f4588fc69b931cc9d18af326d46b7a0"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T13:03:48.458554+00:00",
+      "system_cpu_percent": 7.83,
+      "available_ram_mib": 1672.24,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 5.248556500757994,
+      "commit_used_percent": 52.77367407937447,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.51171875,
+      "parent_private_percent": 0.042408441474450415
+    },
+    {
+      "time_utc": "2026-10-17T13:03:48.958914+00:00",
+      "system_cpu_percent": 11.41,
+      "available_ram_mib": 1850.41,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 5.807761884999439,
+      "commit_used_percent": 52.35503337543428,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.51171875,
+      "parent_private_percent": 0.042408441474450415
+    },
+    {
+      "time_utc": "2026-10-17T13:03:49.451850+00:00",
+      "system_cpu_percent": 8.2,
+      "available_ram_mib": 1699.58,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 5.3343787298187495,
+      "commit_used_percent": 52.588423268429835,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.6015625,
+      "parent_private_percent": 0.042690428798507186
+    },
+    {
+      "time_utc": "2026-10-17T13:03:49.953808+00:00",
+      "system_cpu_percent": 4.02,
+      "available_ram_mib": 1875.09,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 5.885222576885989,
+      "commit_used_percent": 52.299823115090135,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.6015625,
+      "parent_private_percent": 0.042690428798507186
+    }
+  ]
+}

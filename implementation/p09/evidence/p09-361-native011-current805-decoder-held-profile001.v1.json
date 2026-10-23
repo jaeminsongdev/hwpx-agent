@@ -1,0 +1,586 @@
+{
+  "state": "PROFILED_REAL_LARGEST_ENVELOPE_TWO_HELD_BOUNDARIES_NOT_SHARED_FULL_FRAME_OR_PRODUCT",
+  "component": {
+    "schema_version": "hwpx-agent.p09-lossless-runtime-source-projection/v1",
+    "next_case": 165,
+    "semantic_original_pin": {
+      "path": "implementation/p09/evidence/p09-361-case165-current-runtime-run009.v1.json",
+      "bytes": 5046802,
+      "sha256": "3588e9d53ff9b442c711d165e8ad09fb93627bc0dc756a467a059f11a71ce753"
+    },
+    "physical_envelope_pin": {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-162.envelope.v1.json",
+      "bytes": 1960883,
+      "sha256": "5431434b9cdf935fcd3f2106ff449ed31a07f361bf939ee4997d4effffb7c78f"
+    }
+  },
+  "boundaries": 2,
+  "decoder": {
+    "aggregate_limit_seconds": 5.0,
+    "elapsed_decoder_work_seconds": 0.0779999999795109,
+    "attempted_decodes": 2,
+    "completed_decodes": 2,
+    "active_decode": false,
+    "terminal_error_seen": false,
+    "two_boundaries_share_one_budget": true,
+    "physical_read_waits_charged_by_original_IO_budget": true,
+    "original_guard_called_first": true,
+    "extra_sampler_or_thread": false,
+    "blocking_call_hard_preemption_guaranteed": false,
+    "GO_authorized": false
+  },
+  "profiled_functions": [
+    {
+      "file": "runtime_input_frame.py",
+      "line": 57,
+      "name": "read_boundary",
+      "calls": 2,
+      "self_seconds": 5.7100000000000006e-05,
+      "cumulative_seconds": 1.9278996000000002
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "line": 120,
+      "name": "fresh_pin",
+      "calls": 2,
+      "self_seconds": 1.0300000000000001e-05,
+      "cumulative_seconds": 1.9266033
+    },
+    {
+      "file": "held_envelope_boundary_guard_v1.py",
+      "line": 20,
+      "name": "_read",
+      "calls": 2,
+      "self_seconds": 0.0002546,
+      "cumulative_seconds": 1.9265873000000002
+    },
+    {
+      "file": "runtime_envelope_physical_io_v1.py",
+      "line": 127,
+      "name": "_read",
+      "calls": 2,
+      "self_seconds": 0.00035190000000000004,
+      "cumulative_seconds": 1.9263327000000001
+    },
+    {
+      "file": "native011_exact_read_budget.py",
+      "line": 214,
+      "name": "_read",
+      "calls": 2,
+      "self_seconds": 1.5300000000000003e-05,
+      "cumulative_seconds": 1.8617342000000001
+    },
+    {
+      "file": "audit_evidence_io.py",
+      "line": 75,
+      "name": "_read",
+      "calls": 2,
+      "self_seconds": 0.0005120000000000001,
+      "cumulative_seconds": 1.861709
+    },
+    {
+      "file": "native011_exact_read_budget.py",
+      "line": 75,
+      "name": "reserve",
+      "calls": 62,
+      "self_seconds": 0.00018040000000000002,
+      "cumulative_seconds": 1.8430080000000002
+    },
+    {
+      "file": "native011_exact_read_budget.py",
+      "line": 42,
+      "name": "reserve",
+      "calls": 62,
+      "self_seconds": 0.0227791,
+      "cumulative_seconds": 1.8427093
+    },
+    {
+      "file": "runtime_envelope_physical_io_v1.py",
+      "line": 87,
+      "name": "run",
+      "calls": 2,
+      "self_seconds": 1.4900000000000001e-05,
+      "cumulative_seconds": 0.0642429
+    },
+    {
+      "file": "runtime_envelope_physical_io_v1.py",
+      "line": 135,
+      "name": "<lambda>",
+      "calls": 2,
+      "self_seconds": 0.0007683000000000001,
+      "cumulative_seconds": 0.0641597
+    },
+    {
+      "file": "runtime_envelope_source_projection_v1.py",
+      "line": 92,
+      "name": "decode_fresh",
+      "calls": 2,
+      "self_seconds": 0.0004624,
+      "cumulative_seconds": 0.0633914
+    },
+    {
+      "file": "runtime_record_envelope_v2.py",
+      "line": 18,
+      "name": "decode",
+      "calls": 2,
+      "self_seconds": 0.0030701,
+      "cumulative_seconds": 0.0568402
+    },
+    {
+      "file": "native_pressure_failfast_v1.py",
+      "line": 61,
+      "name": "__call__",
+      "calls": 898,
+      "self_seconds": 0.0012185000000000002,
+      "cumulative_seconds": 0.009504100000000001
+    },
+    {
+      "file": "native011_exact_read_budget.py",
+      "line": 162,
+      "name": "<lambda>",
+      "calls": 62,
+      "self_seconds": 6.620000000000001e-05,
+      "cumulative_seconds": 0.008208700000000001
+    },
+    {
+      "file": "native011_exact_read_budget.py",
+      "line": 96,
+      "name": "read_chunk",
+      "calls": 62,
+      "self_seconds": 0.0002113,
+      "cumulative_seconds": 0.0081425
+    },
+    {
+      "file": "reusable_audit_chunk_v1.py",
+      "line": 83,
+      "name": "_read_chunk",
+      "calls": 62,
+      "self_seconds": 0.0001987,
+      "cumulative_seconds": 0.0079146
+    },
+    {
+      "file": "runtime_input_frame.py",
+      "line": 61,
+      "name": "guarded",
+      "calls": 370,
+      "self_seconds": 0.00044370000000000005,
+      "cumulative_seconds": 0.007557200000000001
+    },
+    {
+      "file": "native011_exact_read_budget.py",
+      "line": 86,
+      "name": "readinto",
+      "calls": 62,
+      "self_seconds": 0.0002964,
+      "cumulative_seconds": 0.007537200000000001
+    },
+    {
+      "file": "held_native_read_views_v1.py",
+      "line": 86,
+      "name": "readinto",
+      "calls": 62,
+      "self_seconds": 0.0010517,
+      "cumulative_seconds": 0.0071676000000000005
+    },
+    {
+      "file": "runtime_input_frame.py",
+      "line": 48,
+      "name": "check",
+      "calls": 382,
+      "self_seconds": 0.0004425,
+      "cumulative_seconds": 0.0044226000000000005
+    },
+    {
+      "file": "native_read_call_scratch_v1.py",
+      "line": 86,
+      "name": "readinto",
+      "calls": 62,
+      "self_seconds": 0.0005908,
+      "cumulative_seconds": 0.003970400000000001
+    },
+    {
+      "file": "distinct_final_sample_guard_v1.py",
+      "line": 20,
+      "name": "check",
+      "calls": 1086,
+      "self_seconds": 0.0013033,
+      "cumulative_seconds": 0.0035410000000000003
+    },
+    {
+      "file": "held_native_read_views_v1.py",
+      "line": 44,
+      "name": "readinto",
+      "calls": 62,
+      "self_seconds": 0.0027173,
+      "cumulative_seconds": 0.0032565000000000003
+    },
+    {
+      "file": "locked_runtime_inputs.py",
+      "line": 157,
+      "name": "check",
+      "calls": 526,
+      "self_seconds": 0.00042750000000000004,
+      "cumulative_seconds": 0.0028592
+    },
+    {
+      "file": "runtime_envelope_physical_io_v1.py",
+      "line": 77,
+      "name": "check",
+      "calls": 190,
+      "self_seconds": 0.0001605,
+      "cumulative_seconds": 0.0025598
+    },
+    {
+      "file": "held_envelope_boundary_guard_v1.py",
+      "line": 23,
+      "name": "guarded",
+      "calls": 190,
+      "self_seconds": 0.00012230000000000002,
+      "cumulative_seconds": 0.0021733
+    },
+    {
+      "file": "accept_case112_current_epoch.py",
+      "line": 215,
+      "name": "check",
+      "calls": 1086,
+      "self_seconds": 0.0007459000000000001,
+      "cumulative_seconds": 0.0021532
+    },
+    {
+      "file": "held_native_read_views_v1.py",
+      "line": 60,
+      "name": "check",
+      "calls": 130,
+      "self_seconds": 0.0005608000000000001,
+      "cumulative_seconds": 0.0021187000000000003
+    },
+    {
+      "file": "borrowed_locked_streams.py",
+      "line": 55,
+      "name": "check",
+      "calls": 138,
+      "self_seconds": 0.0001508,
+      "cumulative_seconds": 0.0011993000000000001
+    },
+    {
+      "file": "runtime_input_frame.py",
+      "line": 25,
+      "name": "require_active",
+      "calls": 382,
+      "self_seconds": 0.00017710000000000002,
+      "cumulative_seconds": 0.0011761
+    },
+    {
+      "file": "conservative_maintenance.py",
+      "line": 217,
+      "name": "sample",
+      "calls": 4,
+      "self_seconds": 0.0001594,
+      "cumulative_seconds": 0.0009021000000000001
+    },
+    {
+      "file": "runtime_input_frame.py",
+      "line": 22,
+      "name": "check",
+      "calls": 384,
+      "self_seconds": 0.00028690000000000003,
+      "cumulative_seconds": 0.0008921000000000001
+    },
+    {
+      "file": "locked_runtime_inputs.py",
+      "line": 220,
+      "name": "open",
+      "calls": 4,
+      "self_seconds": 1.52e-05,
+      "cumulative_seconds": 0.000697
+    },
+    {
+      "file": "conservative_maintenance.py",
+      "line": 212,
+      "name": "times",
+      "calls": 4,
+      "self_seconds": 0.0006322000000000001,
+      "cumulative_seconds": 0.0006458000000000001
+    },
+    {
+      "file": "locked_runtime_inputs.py",
+      "line": 202,
+      "name": "verify_stream",
+      "calls": 2,
+      "self_seconds": 1.4000000000000001e-05,
+      "cumulative_seconds": 0.0005134
+    },
+    {
+      "file": "runtime_input_frame.py",
+      "line": 16,
+      "name": "require",
+      "calls": 1158,
+      "self_seconds": 0.00035850000000000004,
+      "cumulative_seconds": 0.00042760000000000004
+    }
+  ],
+  "fresh": 50,
+  "final": 50,
+  "cleanup": true,
+  "source_pins": [
+    {
+      "path": "tools/p09/native011_readonly_frame_probe.py",
+      "bytes": 11883,
+      "sha256": "cab0f91b6e947b73362e5bf3c20e35f20c3e239ba1e5ec58f4d7afd93dcc92c6"
+    },
+    {
+      "path": "tools/p09/native011_readonly_frame_driver.py",
+      "bytes": 13555,
+      "sha256": "8da8b422732e9ca2683d82ea1eee68ae23b60fa812134268e6d19bf06a381527"
+    },
+    {
+      "path": "tools/p09/native011_readonly_frame_entry.py",
+      "bytes": 2008,
+      "sha256": "29e8b7db038cd9e1755d0056ddb804db8cff348c0e997c5e4336548e38ec91c1"
+    },
+    {
+      "path": "tools/p09/native011_readonly_frame_owned.py",
+      "bytes": 13790,
+      "sha256": "5baf337348a5f074fb34d7d33c6e992e0554f296bc01bd7fa63fde85aa81c339"
+    },
+    {
+      "path": "tools/p09/native011_ready_native_construction.py",
+      "bytes": 9169,
+      "sha256": "f3d99c6daa39dd0a8b332b1af4af26b286cf905d55846ae78f15878d53919161"
+    },
+    {
+      "path": "tools/p09/native011_ready_scope_connection.py",
+      "bytes": 11923,
+      "sha256": "f11351cddf7a35c5d32339b6328d38bcc2fd9059d7d01f068b151e2027b42b32"
+    },
+    {
+      "path": "tools/p09/native011_precise_boundary_pacer.py",
+      "bytes": 2421,
+      "sha256": "bf4e0e1a1d894659eec907b5890e43063e7758b4ec433de4e9e858ef1e90b507"
+    },
+    {
+      "path": "tools/p09/native011_precise_boundary_connection.py",
+      "bytes": 2804,
+      "sha256": "00c8cf315a5dd09ce8201a40071a9d55d1dda1be1ff8069fdda88798c663c86d"
+    },
+    {
+      "path": "tools/p09/native011_worker_source_inheritance.py",
+      "bytes": 5971,
+      "sha256": "eb82ff07d42975a801c5b6f6187098a2e2831e1fcc2bbaee45aad87afa966321"
+    },
+    {
+      "path": "tools/p09/native011_source_coverage.py",
+      "bytes": 3118,
+      "sha256": "12605412d44062a94dacff9c5f371a4242e31fea09db0a7a9a6aaf2863d51f75"
+    },
+    {
+      "path": "tools/p09/native011_metadata_audit.py",
+      "bytes": 10082,
+      "sha256": "b52d887dbd4330ab39d4e4a6ea13f45868c3e9eda0c2db9b5cf086271f50c0bd"
+    },
+    {
+      "path": "tools/p09/native011_metadata_epochs.py",
+      "bytes": 5696,
+      "sha256": "4afc83d1ec7af136081a2314ae92cce1f63f14398a7cc6982ece9d3692275eb1"
+    },
+    {
+      "path": "tools/p09/owned_source_read_pressure.py",
+      "bytes": 902,
+      "sha256": "dba6d749e68b098fedf4e3202a0b4a2b9a0ba1c5cd893d81b0f148046435dc51"
+    },
+    {
+      "path": "tools/p09/owned_cpu_baseline_v1.py",
+      "bytes": 1389,
+      "sha256": "0fce7a5f5700270291b02167e96c3739943d5a44c0a912eef43555a1a729b4b5"
+    },
+    {
+      "path": "tools/p09/native011_exact_read_budget.py",
+      "bytes": 14847,
+      "sha256": "6f44d4d925649eaabb8cf42ac808b4fd772181dec8584acce7ee019376b787ea"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_exact_read_budget.py",
+      "bytes": 14418,
+      "sha256": "af7dc6ebe2d8f3611f16643aabee57881d4816c780de55563e559e3c71cbc492"
+    },
+    {
+      "path": "tools/p09/run_case112_current_stored.py",
+      "bytes": 23159,
+      "sha256": "6f2a79556ebcfae40765ebd127a8fcc1022e5ee8611d666fd3daa723a4236713"
+    },
+    {
+      "path": "tools/p09/held_native_read_views_v1.py",
+      "bytes": 13370,
+      "sha256": "3aeb0c2ae50f2de0aeeba3c992aac5c0797367eac09c7693a5b3a7d5782e0584"
+    },
+    {
+      "path": "tools/p09/near_saturation_read_backpressure.py",
+      "bytes": 6072,
+      "sha256": "82ad99f21ed2e3bf100e20809cea38173bb1e7749b71ab2430d661a8fd905162"
+    },
+    {
+      "path": "tools/p09/native_open_backpressure.py",
+      "bytes": 1672,
+      "sha256": "6b282003cc3b837eb6d156a883e134b971efda0697615ce2cf198302ce85c641"
+    },
+    {
+      "path": "tools/p09/lower_native_acquisition_pressure.py",
+      "bytes": 3426,
+      "sha256": "9f3c96656266df4a345a0927a4a066963a1e5b3a2c125f520260e0fe0e8cbaea"
+    },
+    {
+      "path": "tools/p09/qualify_rejected_parent_connection_r2.py",
+      "bytes": 22123,
+      "sha256": "aa5eedf38ba1c816bb85d5b23cb584320a48fbdbdfb12d66da965302c05c4efe"
+    },
+    {
+      "path": "tools/p09/qualify_acquisition_phase_pressure.py",
+      "bytes": 17050,
+      "sha256": "b9fd030f1b4d1526b5d7bd21bf095ebf906e2cce0d4cd4e11919a147fd3b2813"
+    },
+    {
+      "path": "tools/p09/review_checkpoint_queue_stop.py",
+      "bytes": 15604,
+      "sha256": "2ca7510312eab46ccda26c894b84ae3900ef29688fefc25061cc1af8b2fbb797"
+    },
+    {
+      "path": "tools/p09/resume_preserved106_queue_runtime.py",
+      "bytes": 228355,
+      "sha256": "499dfe358b31728f0ebb1d0bc21398bdcce7dbd77d8c424a9fff8b58c252770b"
+    },
+    {
+      "path": "tools/p09/locked_runtime_inputs.py",
+      "bytes": 15465,
+      "sha256": "e7c40a2ec0367e01c359e3b89c179d45367e9db233348e76ba82364cc0599e14"
+    },
+    {
+      "path": "tools/p09/current_queue_acquisition_checkpoint.py",
+      "bytes": 3714,
+      "sha256": "f737f7678f38a1d6e5118bd0a880a120b4327ac9458e4df56515c8484fe0395c"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-readonly-frame-probe005.v1.json",
+      "bytes": 110084,
+      "sha256": "4ae5418b8d7c442cf668e42aa632e42c90eb25f000ddc3b711069036d8f3f3ae"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-readonly-frame-probe005.frame-part000.v1.json",
+      "bytes": 240281,
+      "sha256": "18fbcdf72af3dfc1e3bd2cb9682911cb77bc6e8da3d4c983fa0aad85118cade4"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-readonly-frame-probe005.frame-part001.v1.json",
+      "bytes": 240281,
+      "sha256": "fc0bb74edd5a4a58d1edc3333bd9b99c2b544ac6369234fe5be25e9a6c928cb1"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-readonly-frame-probe005.frame-part002.v1.json",
+      "bytes": 240281,
+      "sha256": "52a3387fd99e38c2c60dbd2c93be2eb285958d96a96d164824f8c54155929998"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-readonly-frame-probe005.frame-part003.v1.json",
+      "bytes": 240281,
+      "sha256": "c2f6c0c963fb3ead45aec738ff016a6bbb8f63bb3305aa499d5f2433b5fcc238"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-readonly-frame-probe005.frame-part004.v1.json",
+      "bytes": 240281,
+      "sha256": "20f75dc7f3facb1ed892174cb64d7a0516d250241efadeab2cd38cb8560ca89e"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-readonly-frame-probe005.frame-part005.v1.json",
+      "bytes": 240281,
+      "sha256": "ebc9efdce63e49d04c15594cbd19f0d31f87a86aceb1ec2318c0d489d4da5a6b"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-readonly-frame-probe005.frame-part006.v1.json",
+      "bytes": 240281,
+      "sha256": "c73182e13506f8104ed4ce8b03d6732871f2360458259ded5b03d12c61054a92"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-readonly-frame-probe005.frame-part007.v1.json",
+      "bytes": 240281,
+      "sha256": "1cbc5a38dd2ea073579575615ccac2546967c69d9b03070596796f11395f7b12"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-native011-current805-readonly-frame-probe005.frame-part008.v1.json",
+      "bytes": 234721,
+      "sha256": "d9e8516f49320bfed25d7d6d801bfba8cdce16dc2c6aa9fd534ff530af7687f0"
+    },
+    {
+      "path": "tools/p09/runtime_record_envelope_v1.py",
+      "bytes": 3596,
+      "sha256": "59f4a0bc32f7c03dd1651b5e31f45ad7311fb4b8a36d6490b9b39242895337e5"
+    },
+    {
+      "path": "tools/p09/runtime_record_envelope_v2.py",
+      "bytes": 2891,
+      "sha256": "9a97c8c9c9a6281992430bfc224bbfea036da6d780389ac2777fbb403d62960f"
+    },
+    {
+      "path": "tools/p09/runtime_envelope_source_projection_v1.py",
+      "bytes": 6401,
+      "sha256": "728ffdbac1a4b0edb44a8f34f26f912ac79d9c3bad0b5eb26c19b5102f788d5b"
+    },
+    {
+      "path": "tools/p09/runtime_envelope_scope_binding_v1.py",
+      "bytes": 10750,
+      "sha256": "0105881d365213e70bd047b5c7fa8de6fda842f3103b71870c8f2224b3e4db3b"
+    },
+    {
+      "path": "tools/p09/runtime_envelope_namespace_bundle_v1.py",
+      "bytes": 3320,
+      "sha256": "385778d26e0c5d99ac6d38ccaeb6afd24bb4029e01b4a6e91683cb80e5e2da62"
+    },
+    {
+      "path": "tools/p09/current_queue_successor_binding.py",
+      "bytes": 15040,
+      "sha256": "6d48c8df7a085461bdad22f8ee4be2baa9675f8035b558f7bc3474b52ea6e915"
+    },
+    {
+      "path": "tools/p09/batch_zlib_mapping.py",
+      "bytes": 15172,
+      "sha256": "e34783ae1e1dcc0b6fda49da1f3fdeb8e62948f43c0f65f683f6b38a78cc7398"
+    },
+    {
+      "path": "tools/p09/current_stored_runtime_scope.py",
+      "bytes": 10087,
+      "sha256": "45f00274f99383c6d27fadea882614a3fd02ca19932bc8735618483f982d8841"
+    },
+    {
+      "path": "tools/p09/runtime_envelope_physical_io_v1.py",
+      "bytes": 7214,
+      "sha256": "b3bf5637c1f5d13bf9090236274826440e4c6c543b6db219a95b0869919c324c"
+    },
+    {
+      "path": "tools/p09/held_envelope_boundary_guard_v1.py",
+      "bytes": 1809,
+      "sha256": "a65cd3c4c091e4e94b27b4d0474b2eafaf3fe2c4ac0682d7d95fa11c4d32e884"
+    },
+    {
+      "path": "implementation/p09/evidence/p361-lossless-runtime-inputs/case165-zlib-g001-162.envelope.v1.json",
+      "bytes": 1960883,
+      "sha256": "5431434b9cdf935fcd3f2106ff449ed31a07f361bf939ee4997d4effffb7c78f"
+    },
+    {
+      "path": "tools/p09/runtime_envelope_frame_connection_v1.py",
+      "bytes": 3065,
+      "sha256": "579aa5fb2e0d479077cf965c1dd449ab9fc48305bff9ea52a37bfb0f2688b4e5"
+    }
+  ],
+  "handles": {
+    "opened": 6,
+    "closed": 6
+  },
+  "system_CPU_max": 30.89,
+  "RAM_min": 25.249181776998295,
+  "profiler_overhead_included": true,
+  "product_or_worker_executed": false,
+  "full_Native_qualification": false
+}

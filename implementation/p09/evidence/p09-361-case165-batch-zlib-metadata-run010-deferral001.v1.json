@@ -1,0 +1,35 @@
+{
+  "schema_version": "hwpx-agent.p09-user-deferred-long-validation/v1",
+  "state": "LONG_VALIDATION_DEFERRED_BY_USER_NOT_GOAL_PAUSE_OR_METADATA_PASS",
+  "authorization": {
+    "source": "direct_human_async_reply",
+    "question": "\ud604\uc7ac PC\uc5d0\uc11c victoria3\ub97c \uc0ac\uc6a9 \uc911\uc778\uac00\uc694?",
+    "answer": "\uc0ac\uc6a9 \uc911 \u2014 \ub2f9\ubd84\uac04 \uae34 \uac80\uc99d \ubcf4\ub958",
+    "scope": "defer_long_validation_while_user_uses_PC; goal_remains_active; do_not_terminate_other_programs"
+  },
+  "official_queue": {
+    "accepted": 158,
+    "total": 249,
+    "remaining": 91,
+    "next_case": 165,
+    "P09": "OPEN",
+    "P10": "NOT_STARTED"
+  },
+  "verified_current_code_sha256": {
+    "tools/p09/batch_zlib_metadata.py": "35c4aa62f06bcaca365402639e5d0b19888f48c81a9f278f546a799837f5d46f",
+    "tools/p09/tests/test_batch_zlib_metadata.py": "2e843c35d7ff78322ed39fe057e62dae85acc2c5beedfcc778c3f1279a15d1a1"
+  },
+  "source_check_method": "Two exact file SHA256 reads; previous16 contracts not rerun; no current metadata or Native qualification claim",
+  "actions": {
+    "long_validation_started": false,
+    "whole_input_audit_started": false,
+    "product_or_Frame_worker_Native_or_GO_executed": false,
+    "tests_or_build_reexecuted": false,
+    "processes_terminated": false,
+    "OS_Defender_WSL_settings_changed": false,
+    "accepted_count_delta": 0
+  },
+  "next_boundary": "Read-only code inspection and small maintenance only. Do not launch long metadata/whole/Native validation until the human withdraws temporary long-validation deferral. Automatic goal continuation is not that withdrawal."
+,
+"resource_screen":{"state": "FAILED_RESOURCE_ADMISSION_ONLY", "product_or_Native_executed": false, "error_code": "STOP_PREPARATION_SYSTEM_PRESSURE90", "cleanup_confirmed": true, "samples": [{"time_utc": "2026-10-16T13:57:53.533357+00:00", "system_cpu_percent": 72.66, "available_ram_mib": 6551.95, "total_ram_mib": 31860.92, "available_ram_percent": 20.564232114800717, "commit_used_percent": 70.32456708365919, "parent_cpu_machine_percent": 0.0, "parent_private_mib": 13.73828125, "parent_private_percent": 0.04311953994381096}, {"time_utc": "2026-10-16T13:57:54.050021+00:00", "system_cpu_percent": 70.53, "available_ram_mib": 6280.65, "total_ram_mib": 31860.92, "available_ram_percent": 19.71271621837834, "commit_used_percent": 71.1722004153541, "parent_cpu_machine_percent": 0.0, "parent_private_mib": 13.73828125, "parent_private_percent": 0.04311953994381096}, {"time_utc": "2026-10-16T13:57:54.549146+00:00", "system_cpu_percent": 90.86, "available_ram_mib": 6159.31, "total_ram_mib": 31860.92, "available_ram_percent": 19.33187394676202, "commit_used_percent": 71.25720687520062, "parent_cpu_machine_percent": 0.0, "parent_private_mib": 13.73828125, "parent_private_percent": 0.04311953994381096}], "preparation_policy": {"profile": "P09_PREPARATION_ATTRIBUTED_CPU_V1_DESIGN", "role": "whole_metadata_preflight", "policy": {"system_warning_percent": 75, "immediate_system_stop_percent": 90, "consecutive_warning_samples": 4, "minimum_warning_span_seconds": 1.5, "owned_single_CPU_measurement_tolerance_factor": 1.25, "consecutive_owned_overload_samples": 2}, "fresh_samples": 3, "warning_samples": 0, "consecutive_warning_samples": 0, "parent_CPU_machine_percent_limit": 7.8125, "stopped": true, "cached_checkpoints_counted_as_new_samples": false, "original_hard_guard_and_RAM_commit_deadline_required": true, "Native_policy_changed": false, "GO_authorized": false}}
+}

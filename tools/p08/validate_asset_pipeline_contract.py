@@ -26,10 +26,10 @@ SOURCES = {
     "implementation/p05/P05_GATE_REPORT.md",
 }
 IMPLEMENTATION_SHA256 = {
-    "crates/hwpx-package/src/lib.rs": "bc0f0615dd9b3aa2577dbf59e9f681a06e41b9784d2af9042977f89d15690a59",
+    "crates/hwpx-package/src/lib.rs": "a22f9f73f04e17ac3439022fcf6aaa0fb5f5ddb02d48257d10998bd01bdf2e12",
     "crates/hwpx-package/src/asset.rs": "2a7aa557159e6c68fe1ed05111f44a846b9d174a9382c7f42d4295f7cdc72f9e",
-    "crates/hwpx-package/tests/asset_pipeline.rs": "1310a39646ff821c9a8549502ef6ce0d8c70b371eef7f89df21ff7e3482720df",
-    "crates/hwpx-package/src/patch.rs": "95b261f8376a39be9827a4a33f51ebc4bf3cbe2f8a7e26e5c37d71583711c9ad",
+    "crates/hwpx-package/tests/asset_pipeline.rs": "8ca6c97eb0ac93e9d8d3d8046a01a7d2fdbeaaeb2df386abecbfbc4cfd189b21",
+    "crates/hwpx-package/src/patch.rs": "bdad473ef1888c1226bed3beb9dd75329b270d54492293e98bcb0277f1f99776",
     "crates/hwpx-package/src/graph.rs": "8a3f32bb1e849150139d26eca4ed02c829e940c329b9a6233168c2078da960ba",
     "crates/hwpx-package/src/preservation.rs": "2b07ad95631e9b1d4dd45e7133e96afad0dbd458b48736db0f89d5f6d2986498",
 }

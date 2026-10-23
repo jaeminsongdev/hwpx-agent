@@ -1,17 +1,21 @@
 use std::error::Error;
 use std::fmt::Write as _;
-use std::io::{Cursor, Write};
+use std::fs::File;
+use std::io::{Cursor, Read, Write};
 use std::path::Path;
 
+use hwpx_agent_foundation::workdir::SecureWorkspace;
 use hwpx_package::{
     AssetDisposition, AssetLimitConfig, AssetLimits, AssetMedia, AssetStoreAdapter,
-    BoundedZipReader, IdIndexLimits, PackageGraph, PackageGraphLimits, PackageLimits, PatchLimits,
-    PatchPartDisposition, PreservingPatchEngine, PreservingWriter, WriterLimits,
+    AtomicPackagePublisher, BoundedZipReader, IdIndexLimits, PackageGraph, PackageGraphLimits,
+    PackageLimits, PatchLimits, PatchPartDisposition, PreservingPatchEngine, PreservingWriter,
+    WriterLimits,
 };
 use serde_json::Value;
 use sha2::{Digest as _, Sha256};
+use tempfile::tempdir;
 use zip::write::SimpleFileOptions;
-use zip::{CompressionMethod, ZipWriter};
+use zip::{CompressionMethod, ZipArchive, ZipWriter};
 
 type TestResult = Result<(), Box<dyn Error>>;
 
@@ -351,6 +355,25 @@ fn new_asset_part_and_manifest_relationship_apply_atomically_and_reopen() -> Tes
         WriterLimits::default(),
     )?;
     artifact.verify()?;
+    let temporary = tempdir()?;
+    let workspace = SecureWorkspace::create(temporary.path().join("asset-publication"))?;
+    AtomicPackagePublisher::publish(
+        &artifact,
+        &workspace,
+        Path::new("asset/staged.hwpx"),
+        Path::new("asset.hwpx"),
+    )?;
+    let published = temporary.path().join("asset-publication/output/asset.hwpx");
+    let mut archive = ZipArchive::new(File::open(published)?)?;
+    let mut package_document = String::new();
+    archive
+        .by_name("Contents/content.hpf")?
+        .read_to_string(&mut package_document)?;
+    assert!(package_document.contains(&format!(
+        "id=\"{}\" href=\"{}\" media-type=\"image/png\" isEmbeded=\"1\"",
+        plan.relationship_id(),
+        plan.target_path().as_str(),
+    )));
     Ok(())
 }
 

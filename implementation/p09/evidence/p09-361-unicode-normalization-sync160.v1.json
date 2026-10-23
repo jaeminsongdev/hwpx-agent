@@ -1,0 +1,485 @@
+{
+  "state": "PASS_UNICODE_NORMALIZATION_SELECTED_SOURCE_DOCS_SYNC_NOT_STORED_PRODUCT_NATIVE_OR_GATE",
+  "actual_Cargo_or_tests": false,
+  "actual_Hangul_or_COM": false,
+  "own_cpu_selection": {
+    "initial_allowed_mask": 65535,
+    "selected_logical_cpu": 2,
+    "selected_mask": 4,
+    "selected_cpu_count": 1,
+    "only_current_verifier_changed": true
+  },
+  "Native011_executed": false,
+  "prior_Native_replayed": false,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "fresh_inputs": 41,
+  "final_fresh_hashes": 41,
+  "current_cases": 3,
+  "retained_cases": 78,
+  "total_distinct_cases": 81,
+  "new_source_cases": 24,
+  "affected_source_cases": 57,
+  "source654_or_Cargo_or_passed_tests_reexecuted": false,
+  "old_common_bodies_and_failed_oracle_inverses_rechecked": true,
+  "next_work": "Current_stored_service_strict_product_request_and_full_SEARCH022_contract_binding",
+  "cleanup": true,
+  "elapsed_seconds": 10.516,
+  "source_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-361-unicode-normalization-failed-cases159.v1.json",
+      "bytes": 173291,
+      "sha256": "d8b44843bb5ecc8959625c7614d3ac126d5b75f927dd2347173ccda29fe7899a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-unicode-normalization-recovery158.v1.json",
+      "bytes": 183255,
+      "sha256": "ea53e63363b1b407028dc5f76af1421aa3873e1d960cddb00e27415984488628"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-control-style-context-recovery155.v1.json",
+      "bytes": 202785,
+      "sha256": "bc2c563a3074e79bd4d6f7630f99ca5491b2247fbe997ea26ac2cbd66c6fd622"
+    },
+    {
+      "path": "Cargo.lock",
+      "bytes": 61066,
+      "sha256": "51cf0a3cc7b97f73e62c570d60bb76fb47c9147e75641d3ab8bc9f02864119b8"
+    },
+    {
+      "path": "Cargo.toml",
+      "bytes": 2695,
+      "sha256": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/fields.rs",
+      "bytes": 21327,
+      "sha256": "86406ad79853b7c7c7033b7c9d1336d455f5da3eb36a048d2a6f5fb44b70655e"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/forms.rs",
+      "bytes": 19595,
+      "sha256": "a63871808172885b0902f10f34959121a64651614b9684977424e032191d6d65"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search.rs",
+      "bytes": 13197,
+      "sha256": "8359402e5cd0848581938bc6ea4e35bfecd4adebfdbaebc5ffb5afb89629b214"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/extract.rs",
+      "bytes": 7198,
+      "sha256": "bf380777bd7d2aeaa7043ef322a9a24afa2967bab3d420663b77fabe05ccc5c8"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/normalization.rs",
+      "bytes": 1494,
+      "sha256": "72635811957385b006088e4324afb44ec3e618800f2bffc7092100222626845b"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement.rs",
+      "bytes": 14579,
+      "sha256": "14d8c7b4db87bd650ac68327defd24d4c77f9253289dffdc59c7a3da6b09a42f"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms.rs",
+      "bytes": 17581,
+      "sha256": "856d70bd6906e4a800a3d20301a6541b655d57cf40205f4345071d4d97c96937"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/readback.rs",
+      "bytes": 5182,
+      "sha256": "c05375dcf1adec797ed32e6e016aac51509d36d6bd8a76d9b861505499603f6b"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/review.rs",
+      "bytes": 9027,
+      "sha256": "2c24cb268de86c7809b6d70e11ae850304d9c696c1ee67e14c602a9af10091ae"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/styles/text.rs",
+      "bytes": 13176,
+      "sha256": "ca9003ad723151b751f37e8fdf5a4e7f2f5662f724629433fb01398bad6363bd"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/styles/text/output.rs",
+      "bytes": 1329,
+      "sha256": "a17081ca6653f6b9969b4f5d5a7ea793990035640438daff266265fe9e18e692"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/unicode.rs",
+      "bytes": 6771,
+      "sha256": "1b90f4d231a3085fed4f060c261889d9fc2ff57c750bcef55c8fae52aba44b8c"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/unicode/plan.rs",
+      "bytes": 9244,
+      "sha256": "54ecc39534db246b6dac6e371fd5299c518ef25768a71ea3a385738ec0641bb5"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/unicode/transform.rs",
+      "bytes": 3546,
+      "sha256": "c4bb0923a8004ac3768c55f16c212ba082b90f26e3479bf840e1afbe2d037da3"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/output.rs",
+      "bytes": 3177,
+      "sha256": "3a1dca37d8b2857cdfcd5bdde8057c89f9013f4e0052958963ef4866cb35713e"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/reviews/selector.rs",
+      "bytes": 9822,
+      "sha256": "e68e647404e01b089a6bb35ffa3fa1d3a861db97f073708365d0678a69f48636"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_regex_replacement.rs",
+      "bytes": 18307,
+      "sha256": "08708c63f94a1e7b864976e869192577cae3ece4a7fa9eede3499f78f2294305"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_review_selector.rs",
+      "bytes": 9147,
+      "sha256": "0fc796e0458a259a1b62f960adc4016ed3fb100addf7b75ea73a76cd4ae7daa4"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_review_selector_replacement.rs",
+      "bytes": 10813,
+      "sha256": "7d3180988338f9a85d61a4eaae1d9b9fcc97fec531bbf25ddb1f4ef9cfc55714"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_search_atom_replacement.rs",
+      "bytes": 12625,
+      "sha256": "f31452a68116597e292eebc3522f6eaf6a011da00d23c34a8b293364f055f59e"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_search_review_replacement.rs",
+      "bytes": 14108,
+      "sha256": "a544885abf60ad6f60b8ed3105295d1b376d93d2723f87cb6a01b6118a7e7e62"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_unicode_normalization.rs",
+      "bytes": 18681,
+      "sha256": "0a116d73db9a74a405e825a9e99a7b92156901691bba3c3c4448ba8e338530ce"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_review_assembly_fixture.rs",
+      "bytes": 2484,
+      "sha256": "24700e72cfa062994b3c90679f314dddd998a8e1de5d94b295910d134e8ad979"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/review_cell_output_fixture.rs",
+      "bytes": 3732,
+      "sha256": "54504dc969662cf240c26ea590b6f822a3e60fdd815283445b9b2fae09149a64"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/review_scope_fixture.rs",
+      "bytes": 1002,
+      "sha256": "5f9a059d1d9f5accd3116ff8d72405555813df6ba6f3b1d7e43aab9d9ac818db"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/search_definition_fixture.rs",
+      "bytes": 2370,
+      "sha256": "057bef589f07d9d09efca9d10a8f7d59b99acfc323e663512937d598d94c6afa"
+    },
+    {
+      "path": "crates/hwpx-package/tests/unicode_normalization_focused.rs",
+      "bytes": 513,
+      "sha256": "80449d3305320a9e4e6a2aa072c58eec4078e4ecd87d10f2c4e0659f325dd6d0"
+    },
+    {
+      "path": "crates/product-cli/src/reference_validation_product/source.rs",
+      "bytes": 26860,
+      "sha256": "c864d819072b92cf6662ef6241c6d45fe3c9a40978cf324f18dbfbf44d550fbe"
+    },
+    {
+      "path": "tools/p09/run_unicode_normalization_components.py",
+      "bytes": 9929,
+      "sha256": "c69a389e8a7ea6813a28e261f67102de842d9791fe5f32346aad120154f42887"
+    },
+    {
+      "path": "tools/p09/run_unicode_normalization_failed_cases.py",
+      "bytes": 7322,
+      "sha256": "e564557929c4af32038179b034e355cdc4df1258cd534744d1a4cfae6bd8e922"
+    },
+    {
+      "path": "tools/p09/run_unicode_normalization_recovery.py",
+      "bytes": 6208,
+      "sha256": "10bc7d1d586bebc9dd2a41aba03bbe60597c75b2c587bd6089608717a71d2dea"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 1498748,
+      "sha256": "7c5548e44e3e5009cdb01e8ebae7819f81939e83246ee330f392238569826db3"
+    },
+    {
+      "path": "implementation/p09/P09_SEARCH_SOURCE_INDEX_PROGRESS.md",
+      "bytes": 111520,
+      "sha256": "96f1591d096118d856826b2b2f1cf201a42b518f3ecf0f58fd48a1516b693f81"
+    },
+    {
+      "path": "protocol/migrations/p09-source-search-index-v1.md",
+      "bytes": 5724,
+      "sha256": "511e353a15b5459fe9ab53806afedc37fca523055a2d6ebebcf93a75a482c885"
+    },
+    {
+      "path": "protocol/migrations/p09-source-unicode-normalization-v1.md",
+      "bytes": 6349,
+      "sha256": "f451aef1f32a8c377c6d924914c7610fa6761ae57957b8680aebb87915f791a6"
+    },
+    {
+      "path": "tools/p09/run_unicode_normalization_sync.py",
+      "bytes": 8217,
+      "sha256": "6ef715a8c126aa70c263b05c0f2c23fdf30e56c4287931e4b946297a0df23e9d"
+    }
+  ],
+  "resource_samples": {
+    "encoding": "lossless_columns_v1",
+    "columns": [
+      "time_utc",
+      "system_cpu_percent",
+      "available_ram_mib",
+      "total_ram_mib",
+      "available_ram_percent",
+      "commit_used_percent",
+      "parent_cpu_machine_percent",
+      "parent_private_mib",
+      "parent_private_percent"
+    ],
+    "rows": [
+      [
+        "2026-10-20T00:16:37.542630+00:00",
+        10.02,
+        9027.29,
+        31860.92,
+        28.33342426402841,
+        50.23031126483227,
+        0.0,
+        14.94921875,
+        0.0469202386593587
+      ],
+      [
+        "2026-10-20T00:16:38.051114+00:00",
+        7.81,
+        9012.77,
+        31860.92,
+        28.28784040007871,
+        50.27303711677304,
+        0.0,
+        14.94921875,
+        0.0469202386593587
+      ],
+      [
+        "2026-10-20T00:16:38.548949+00:00",
+        7.63,
+        8989.97,
+        31860.92,
+        28.216301441997352,
+        50.313144230770924,
+        0.0,
+        16.21484375,
+        0.05089258183302795
+      ],
+      [
+        "2026-10-20T00:16:39.049520+00:00",
+        8.94,
+        8974.69,
+        31860.92,
+        28.16833907627083,
+        50.36239642290942,
+        0.0,
+        16.21484375,
+        0.05089258183302795
+      ],
+      [
+        "2026-10-20T00:16:39.552373+00:00",
+        12.3,
+        8965.36,
+        31860.92,
+        28.139061435842674,
+        50.363907909238876,
+        0.0,
+        16.21484375,
+        0.05089258183302795
+      ],
+      [
+        "2026-10-20T00:16:40.049969+00:00",
+        13.67,
+        9083.49,
+        31860.92,
+        28.509825725703575,
+        50.29582658119778,
+        0.0,
+        16.21484375,
+        0.05089258183302795
+      ],
+      [
+        "2026-10-20T00:16:40.554146+00:00",
+        8.01,
+        9143.16,
+        31860.92,
+        28.69710208983258,
+        50.04926097984972,
+        0.1953125,
+        16.81640625,
+        0.05278067087236457
+      ],
+      [
+        "2026-10-20T00:16:41.052875+00:00",
+        7.62,
+        9190.88,
+        31860.92,
+        28.846886400180473,
+        49.96727749266211,
+        0.0,
+        16.8203125,
+        0.05279293119080182
+      ],
+      [
+        "2026-10-20T00:16:41.544763+00:00",
+        7.97,
+        9186.03,
+        31860.92,
+        28.83164682436297,
+        49.968865139155454,
+        0.0,
+        16.8203125,
+        0.05279293119080182
+      ],
+      [
+        "2026-10-20T00:16:42.044394+00:00",
+        7.28,
+        9170.14,
+        31860.92,
+        28.78178410927867,
+        49.97518057428396,
+        0.0,
+        16.8203125,
+        0.05279293119080182
+      ],
+      [
+        "2026-10-20T00:16:42.545403+00:00",
+        6.64,
+        9165.38,
+        31860.92,
+        28.76683878110366,
+        49.99695652268158,
+        0.0,
+        16.8203125,
+        0.05279293119080182
+      ],
+      [
+        "2026-10-20T00:16:43.044617+00:00",
+        7.75,
+        9202.89,
+        31860.92,
+        28.884562358738144,
+        49.93601667462345,
+        0.1953125,
+        17.390625,
+        0.05458293768264043
+      ],
+      [
+        "2026-10-20T00:16:43.544680+00:00",
+        6.29,
+        9184.68,
+        31860.92,
+        28.82740475418368,
+        49.93412438747456,
+        0.0,
+        17.98046875,
+        0.056434245766665295
+      ],
+      [
+        "2026-10-20T00:16:44.044839+00:00",
+        9.96,
+        9208.83,
+        31860.92,
+        28.903222563399638,
+        49.932730070628004,
+        0.1953125,
+        16.5703125,
+        0.05200827081081777
+      ],
+      [
+        "2026-10-20T00:16:44.546236+00:00",
+        13.81,
+        9156.82,
+        31860.92,
+        28.739976423407644,
+        49.93166382833358,
+        0.1953125,
+        16.5703125,
+        0.05200827081081777
+      ],
+      [
+        "2026-10-20T00:16:45.047161+00:00",
+        2.36,
+        9348.03,
+        31860.92,
+        29.340106750592632,
+        49.74627827248361,
+        0.0,
+        16.5703125,
+        0.05200827081081777
+      ],
+      [
+        "2026-10-20T00:16:45.545378+00:00",
+        4.63,
+        9316.56,
+        31860.92,
+        29.24133762526214,
+        49.73958789500982,
+        0.0,
+        16.5703125,
+        0.05200827081081777
+      ],
+      [
+        "2026-10-20T00:16:46.045179+00:00",
+        6.85,
+        9079.45,
+        31860.92,
+        28.497148556439456,
+        49.73769560786092,
+        0.0,
+        16.5703125,
+        0.05200827081081777
+      ],
+      [
+        "2026-10-20T00:16:46.544756+00:00",
+        6.82,
+        9236.84,
+        31860.92,
+        28.99112904659473,
+        49.73752571211072,
+        0.0,
+        16.5703125,
+        0.05200827081081777
+      ],
+      [
+        "2026-10-20T00:16:47.044569+00:00",
+        7.29,
+        8975.42,
+        31860.92,
+        28.170619495500155,
+        49.73993940345853,
+        0.0,
+        16.5703125,
+        0.05200827081081777
+      ],
+      [
+        "2026-10-20T00:16:47.545949+00:00",
+        3.52,
+        8732.61,
+        31860.92,
+        27.408542622077523,
+        49.74679381820838,
+        0.0,
+        16.5703125,
+        0.05200827081081777
+      ]
+    ]
+  },
+  "system_CPU_max": 13.81,
+  "available_RAM_min_percent": 27.408542622077523
+}

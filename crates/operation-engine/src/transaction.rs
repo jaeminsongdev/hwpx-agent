@@ -8,6 +8,11 @@ use hwpx_agent_foundation::workdir::{SecureWorkspace, StagedArtifact, WorkspaceE
 use serde::Serialize;
 use sha2::{Digest as _, Sha256};
 use thiserror::Error;
+mod source;
+mod integrity;
+mod precommit;
+pub use precommit::PreparedPrecommitIdentity;
+use source::TransactionSource;
 
 use crate::{
     ExecutionManifest, FaultMoment, FaultPlan, FaultPoint, TransactionState,
@@ -77,6 +82,8 @@ pub enum RevisionCasOutcome {
     Committed,
     Conflict,
     Failed,
+    /// The commit may have happened. Preserve artifacts; reconcile instead of retrying.
+    Unknown,
 }
 
 pub trait RevisionCas {
@@ -116,6 +123,16 @@ impl RevisionCommitRequest {
     }
 
     #[must_use]
+    pub const fn source_artifact_id(&self) -> &ArtifactId {
+        &self.source_artifact_id
+    }
+
+    #[must_use]
+    pub const fn manifest_sha256(&self) -> [u8; 32] {
+        self.manifest_sha256
+    }
+
+    #[must_use]
     pub const fn result_artifact_id(&self) -> &ArtifactId {
         &self.result_artifact_id
     }
@@ -136,8 +153,15 @@ impl RevisionCommitRequest {
     ///
     /// Returns a stable serialization error.
     pub fn canonical_sha256(&self) -> Result<[u8; 32], TransactionError> {
-        let bytes = serde_json::to_vec(self).map_err(|_| TransactionError::ReceiptSerialization)?;
+        let bytes = self.canonical_json()?;
         Ok(Sha256::digest(bytes).into())
+    }
+
+    /// Exact precommit receipt bytes for immutable receipt storage; does not authorize CAS.
+    /// # Errors
+    /// Returns the same stable serialization error as the precommit digest.
+    pub fn canonical_json(&self) -> Result<Vec<u8>, TransactionError> {
+        serde_json::to_vec(self).map_err(|_| TransactionError::ReceiptSerialization)
     }
 }
 
@@ -297,6 +321,8 @@ pub enum TransactionError {
     RevisionConflict,
     #[error("workspace transaction revision compare-and-swap failed")]
     RevisionCasFailed,
+    #[error("workspace transaction revision commit outcome is unknown; reconciliation required")]
+    RevisionOutcomeUnknown,
     #[error("workspace transaction fault was injected")]
     InjectedFault,
     #[error("workspace transaction recovery failed")]
@@ -326,6 +352,7 @@ impl TransactionError {
             Self::ArtifactOutcomeIncomplete => "workspace_transaction_artifact_outcome_incomplete",
             Self::RevisionConflict => "workspace_transaction_revision_conflict",
             Self::RevisionCasFailed => "workspace_transaction_revision_cas_failed",
+            Self::RevisionOutcomeUnknown => "workspace_transaction_revision_outcome_unknown",
             Self::InjectedFault => "workspace_transaction_injected_fault",
             Self::RecoveryFailed => "workspace_transaction_recovery_failed",
             Self::WorkspaceFailure => "workspace_transaction_workspace_failure",
@@ -428,10 +455,50 @@ impl WorkspaceTransaction {
         V: OutputValidator,
         C: RevisionCas,
     {
-        let source_path = source_path.as_ref();
-        let initial_source = self.observe_source(source_path);
+        self.execute_source(
+            &TransactionSource::File(source_path.as_ref()),
+            proposed_output, validator, revision_cas, faults,
+        )
+    }
+
+    /// Executes an immutable source obtained from an authenticated store through the same
+    /// isolated staging, validation, publication, recovery and revision-CAS pipeline.
+    /// No caller-selected source file or external plaintext source copy is needed.
+    /// This engine primitive does not itself grant backend/target or product authorization.
+    ///
+    /// # Errors
+    /// Returns the same typed failure/recovery receipt as file input. Source size and SHA must
+    /// match the manifest before any source/output staging or validator/CAS callback.
+    pub fn execute_bytes<V, C>(
+        &mut self,
+        source: &[u8],
+        proposed_output: &[u8],
+        validator: &mut V,
+        revision_cas: &mut C,
+        faults: &mut FaultPlan,
+    ) -> Result<TransactionReceipt, TransactionFailure>
+    where
+        V: OutputValidator,
+        C: RevisionCas,
+    {
+        self.execute_source(&TransactionSource::Bytes(source), proposed_output, validator, revision_cas, faults)
+    }
+
+    fn execute_source<V, C>(
+        &mut self,
+        source_input: &TransactionSource<'_>,
+        proposed_output: &[u8],
+        validator: &mut V,
+        revision_cas: &mut C,
+        faults: &mut FaultPlan,
+    ) -> Result<TransactionReceipt, TransactionFailure>
+    where
+        V: OutputValidator,
+        C: RevisionCas,
+    {
+        let initial_source = source_input.observe(self);
         let result = self.run(
-            source_path,
+            source_input,
             proposed_output,
             validator,
             revision_cas,
@@ -440,7 +507,7 @@ impl WorkspaceTransaction {
         match result {
             Ok(()) => {
                 let source_unchanged = initial_source.as_ref().is_some_and(|before| {
-                    self.observe_source(source_path).as_ref() == Some(before)
+                    source_input.observe(self).as_ref() == Some(before)
                 });
                 if !source_unchanged {
                     self.machine.mark_recovery(TransactionState::Incomplete);
@@ -463,7 +530,7 @@ impl WorkspaceTransaction {
             Err(primary) => {
                 let recovery = self.recover(faults);
                 let source_unchanged = initial_source.as_ref().is_some_and(|before| {
-                    self.observe_source(source_path).as_ref() == Some(before)
+                    source_input.observe(self).as_ref() == Some(before)
                 });
                 let source_changed_during_transaction =
                     initial_source.is_some() && !source_unchanged;
@@ -485,7 +552,7 @@ impl WorkspaceTransaction {
 
     fn run<V, C>(
         &mut self,
-        source_path: &Path,
+        source_input: &TransactionSource<'_>,
         proposed_output: &[u8],
         validator: &mut V,
         revision_cas: &mut C,
@@ -509,7 +576,7 @@ impl WorkspaceTransaction {
         self.finish(TransactionStep::Plan, TransactionState::Planned, faults)?;
 
         Self::begin(TransactionStep::VerifyPreconditions, faults)?;
-        let source = self.read_verified_source(source_path)?;
+        let source = source_input.read_verified(self)?;
         self.finish(
             TransactionStep::VerifyPreconditions,
             TransactionState::PreconditionsVerified,
@@ -525,7 +592,8 @@ impl WorkspaceTransaction {
             ValidationOutcome::Rejected => return Err(TransactionError::ValidationRejected),
             ValidationOutcome::Failed => return Err(TransactionError::ValidationFailed),
         }
-        if !self.source_matches(source_path) {
+        self.verify_staged_result_identity()?;
+        if !source_input.matches(self) {
             return Err(TransactionError::SourceMutationDetected);
         }
         self.finish(
@@ -550,6 +618,7 @@ impl WorkspaceTransaction {
         }
         self.output_staged = None;
         self.artifact_disposition = ArtifactDisposition::Committed;
+        self.verify_published_result_identity()?;
         self.finish(
             TransactionStep::CommitArtifact,
             TransactionState::ArtifactCommitted,
@@ -562,6 +631,17 @@ impl WorkspaceTransaction {
             RevisionCasOutcome::Committed => {}
             RevisionCasOutcome::Conflict => return Err(TransactionError::RevisionConflict),
             RevisionCasOutcome::Failed => return Err(TransactionError::RevisionCasFailed),
+            RevisionCasOutcome::Unknown => {
+                self.machine.mark_recovery(TransactionState::Incomplete);
+                self.artifact_disposition = ArtifactDisposition::CommittedOutcomeUncertain;
+                return Err(TransactionError::RevisionOutcomeUnknown);
+            }
+        }
+        if let Err(error) = self.verify_published_result_identity() {
+            // CAS already reported committed: never roll back or report this artifact as complete.
+            self.machine.mark_recovery(TransactionState::Incomplete);
+            self.artifact_disposition = ArtifactDisposition::CommittedOutcomeUncertain;
+            return Err(error);
         }
         self.finish(
             TransactionStep::CommitRevision,
@@ -738,16 +818,7 @@ impl WorkspaceTransaction {
     fn commit_request(&self) -> Result<RevisionCommitRequest, TransactionError> {
         let result_sha256 = self.result_sha256.ok_or(TransactionError::InvalidState)?;
         let result_size = self.result_size.ok_or(TransactionError::InvalidState)?;
-        let result_artifact_id = artifact_id(result_sha256)?;
-        Ok(RevisionCommitRequest {
-            transaction_id: self.manifest.transaction_id().clone(),
-            base_revision: self.manifest.base_revision().clone(),
-            source_artifact_id: self.manifest.source_artifact_id().clone(),
-            result_artifact_id,
-            manifest_sha256: self.manifest_sha256,
-            result_sha256,
-            result_size,
-        })
+        RevisionCommitRequest::from_manifest_result(&self.manifest,self.manifest_sha256,result_sha256,result_size)
     }
 
     fn recover(&mut self, faults: &mut FaultPlan) -> Option<TransactionError> {
@@ -885,7 +956,7 @@ impl fmt::Debug for WorkspaceTransaction {
     }
 }
 
-fn artifact_id(digest: [u8; 32]) -> Result<ArtifactId, TransactionError> {
+pub(crate) fn artifact_id(digest: [u8; 32]) -> Result<ArtifactId, TransactionError> {
     ArtifactId::parse(format!("sha256-{}", hex::encode(digest)))
         .map_err(|_| TransactionError::ReceiptSerialization)
 }

@@ -403,14 +403,7 @@ fn geometry(kind: ObjectKind) -> Result<ObjectGeometryStateDraft, Box<dyn Error>
 }
 
 fn identity() -> ObjectAffineMatrix {
-    ObjectAffineMatrix {
-        e1_millionths: 1_000_000,
-        e2_millionths: 0,
-        e3_millionths: 0,
-        e4_millionths: 1_000_000,
-        e5_millionths: 0,
-        e6_millionths: 0,
-    }
+    ObjectAffineMatrix::IDENTITY
 }
 
 fn state_limits() -> ShapePointsLimits {
@@ -492,8 +485,8 @@ fn section(kind: ObjectKind, freeform: &FreeformShape) -> String {
             "<q:{tag} id=\"41\" zOrder=\"3\" numberingType=\"NONE\" textWrap=\"SQUARE\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"0\" instid=\"99\">",
             "<q:offset x=\"0\" y=\"0\"/><q:orgSz width=\"7200\" height=\"7200\"/><q:curSz width=\"7200\" height=\"7200\"/>",
             "<q:flip horizontal=\"0\" vertical=\"0\"/><q:rotationInfo angle=\"0\" centerX=\"3600\" centerY=\"3600\" rotateimage=\"1\"/>",
-            "<q:renderingInfo><c:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/>",
-            "<c:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/><c:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/></q:renderingInfo>",
+            "<q:renderingInfo><c:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/>",
+            "<c:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><c:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/></q:renderingInfo>",
             "<q:lineShape marker=\"PRIVATE_LINE_APPEARANCE\"/><c:fillBrush marker=\"PRIVATE_FILL_APPEARANCE\"/>",
             "{payload}",
             "<q:shadow marker=\"PRIVATE_SHADOW_APPEARANCE\"/><q:shapeComment>PRIVATE_CAPTION_OR_COMMENT</q:shapeComment>",

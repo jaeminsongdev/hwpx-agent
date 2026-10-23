@@ -20,6 +20,7 @@ pub const NOTE_HWPX_PROFILE_ID: &str = "hwpx-agent.note-hwpx.hwpml-2011-inline-n
 const PARAGRAPH_NS: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const SECTION_NS: &str = "http://www.hancom.co.kr/hwpml/2011/section";
 const EMPTY_SHA256: &str = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+mod paragraph_ids;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct NoteHwpxLimitConfig {
@@ -222,6 +223,8 @@ impl fmt::Debug for NoteHwpxLoweringReceipt {
 
 #[derive(Debug, Error, Eq, PartialEq)]
 pub enum NoteHwpxError {
+    #[error("note HWPX paragraph identities collide or cannot be allocated")]
+    ParagraphIdentityCollision,
     #[error("note HWPX limits are invalid")]
     InvalidLimit,
     #[error("note HWPX input exceeds a finite limit")]
@@ -256,6 +259,7 @@ impl NoteHwpxError {
     #[must_use]
     pub const fn code(&self) -> &'static str {
         match self {
+            Self::ParagraphIdentityCollision => "note_hwpx_paragraph_identity_collision",
             Self::InvalidLimit => "note_hwpx_invalid_limit",
             Self::InputLimit => "note_hwpx_input_limit",
             Self::UnsupportedStructure => "note_hwpx_unsupported_structure",
@@ -278,6 +282,17 @@ impl NoteHwpxError {
 pub struct NoteHwpxReader;
 
 impl NoteHwpxReader {
+    /// Allocates new numeric paragraph IDs above every observed section/body
+    /// paragraph. No existing IDs are rewritten; zero follows the original
+    /// IdIndex sentinel rule. This is not an identity or execution authority.
+    /// # Errors
+    /// Rejects invalid source, existing nonzero collisions, finite limits and overflow.
+    pub fn allocate_paragraph_ids(source: &[u8], count: usize, limits: NoteHwpxLimits)
+        -> Result<Vec<u32>, NoteHwpxError>
+    {
+        let parsed = parse_section_structure(source, limits)?;
+        paragraph_ids::allocate(&parsed.document, count, limits)
+    }
     /// Inspects an exact, self-contained `subList` payload without exposing its text in Debug.
     ///
     /// # Errors
@@ -389,6 +404,8 @@ impl NoteHwpxBuilder {
             hwpx_limits,
         )?;
         let payload = parse_payload(insert_payload, hwpx_limits)?;
+        paragraph_ids::require_disjoint(
+            &parse_section_structure(source, hwpx_limits)?.document, &payload.paragraph_ids, hwpx_limits)?;
         validate_inserted_note(
             source,
             &readback,
@@ -469,6 +486,7 @@ impl NoteHwpxLowerer {
             return Err(NoteHwpxError::SourceDrift);
         }
         let payload = parse_payload(insert_payload, hwpx_limits)?;
+        paragraph_ids::require_disjoint(&parsed.document, &payload.paragraph_ids, hwpx_limits)?;
         validate_inserted_note(
             source,
             &NoteHwpxReadback {
@@ -722,6 +740,119 @@ fn parse_notes(
     })
 }
 
+pub(crate) struct ImportedNoteEnvelope {
+    pub body_element: usize,
+    pub paragraph_element: usize,
+    pub native_instance_id: u32,
+}
+
+/// Source-body importer envelope. Original projection/plain-text validators
+/// remain unchanged; rich body uses the original source-backed flow mapper.
+pub(crate) fn read_imported_note_envelope(
+    document: &PreservingXmlDocument,
+    note_index: usize,
+) -> Result<ImportedNoteEnvelope, NoteHwpxError> {
+    let limits = NoteHwpxLimits::new(NoteHwpxLimitConfig::default())?;
+    let note = element(document, note_index)?;
+    if note.name().namespace() != Some(PARAGRAPH_NS)
+        || !matches!(note.name().local_name(), "footNote" | "endNote")
+    {
+        return Err(NoteHwpxError::InvalidNote);
+    }
+    let attributes = non_namespace_attributes(note)?;
+    if !attributes.iter().all(|name| {
+        matches!(
+            *name,
+            "flag" | "number" | "userChar" | "prefixChar" | "suffixChar" | "instId"
+        )
+    }) || !attributes.contains(&"instId")
+    {
+        return Err(NoteHwpxError::InvalidNote);
+    }
+    let children = direct_element_children(document, note_index)?;
+    if children.len() != 1 || !has_name(element(document, children[0])?, "subList") {
+        return Err(NoteHwpxError::InvalidNote);
+    }
+    let wrapper = note.parent().ok_or(NoteHwpxError::InvalidNote)?;
+    let control = element(document, wrapper)?;
+    if !has_name(control, "ctrl")
+        || !non_namespace_attributes(control)?.is_empty()
+        || direct_element_children(document, wrapper)? != vec![note_index]
+    {
+        return Err(NoteHwpxError::InvalidNote);
+    }
+    let run = element(
+        document,
+        control.parent().ok_or(NoteHwpxError::InvalidNote)?,
+    )?;
+    if !has_name(run, "run") {
+        return Err(NoteHwpxError::InvalidNote);
+    }
+    let paragraph_element = run.parent().ok_or(NoteHwpxError::InvalidNote)?;
+    if !has_name(element(document, paragraph_element)?, "p") {
+        return Err(NoteHwpxError::InvalidNote);
+    }
+    let mut ancestor = element(document, paragraph_element)?.parent();
+    while let Some(index) = ancestor {
+        let value = element(document, index)?;
+        if has_name(value, "footNote") || has_name(value, "endNote") {
+            return Err(NoteHwpxError::InvalidNote);
+        }
+        ancestor = value.parent();
+    }
+    let native_instance_id = document.with_source_bytes(|source| {
+        require_whitespace_around_child(source, note, element(document, children[0])?)?;
+        require_whitespace_around_child(source, control, note)?;
+        let id = parse_required_u32(source, note, "instId", limits)?;
+        if id == 0 {
+            return Err(NoteHwpxError::InvalidNote);
+        }
+        let _ = parse_optional_u32(source, note, "flag", limits)?;
+        if parse_optional_u32(source, note, "number", limits)?
+            .is_some_and(|v| v > u32::from(u16::MAX))
+        {
+            return Err(NoteHwpxError::InvalidNote);
+        }
+        for name in ["userChar", "prefixChar", "suffixChar"] {
+            validate_imported_marker_character(source, note, name, limits)?;
+        }
+        Ok(id)
+    })?;
+    Ok(ImportedNoteEnvelope {
+        body_element: children[0],
+        paragraph_element,
+        native_instance_id,
+    })
+}
+
+/// Generated literal BMP characters and actually saved decimal WCHAR tokens
+/// are retained verbatim as observed attributes. This does not select a
+/// rendered character, normalize ambiguity or change the old typed profile.
+fn validate_imported_marker_character(
+    source: &[u8],
+    note: &XmlElementToken,
+    name: &str,
+    limits: NoteHwpxLimits,
+) -> Result<(), NoteHwpxError> {
+    if let Some(attribute) = optional_attribute(note, name)? {
+        let value = decoded_attribute(source, attribute, limits)?;
+        let literal = value.chars().count() == 1
+            && value.encode_utf16().count() == 1
+            && !value.chars().any(invalid_xml_character);
+        let native_code = value.len() <= 5
+            && !value.is_empty()
+            && value.bytes().all(|v| v.is_ascii_digit())
+            && value.parse::<u16>().is_ok_and(|code| {
+                code == 0
+                    || char::from_u32(u32::from(code)).is_some_and(|v| !invalid_xml_character(v))
+            });
+        if !literal && !native_code {
+            return Err(NoteHwpxError::InvalidNote);
+        }
+    }
+    Ok(())
+}
+
 fn note_projection(
     source: &[u8],
     document: &PreservingXmlDocument,
@@ -814,6 +945,7 @@ fn note_projection(
 
 struct ParsedPayload {
     digests: NoteHwpxPayloadDigests,
+    paragraph_ids: paragraph_ids::Inventory,
 }
 
 fn parse_payload(payload: &[u8], limits: NoteHwpxLimits) -> Result<ParsedPayload, NoteHwpxError> {
@@ -846,7 +978,8 @@ fn parse_payload(payload: &[u8], limits: NoteHwpxLimits) -> Result<ParsedPayload
     }
     let digests = payload_digests_from_document(payload, &document, root, limits)?;
     document.verify_untouched_round_trip()?;
-    Ok(ParsedPayload { digests })
+    let paragraph_ids = paragraph_ids::inventory(&document, limits)?;
+    Ok(ParsedPayload { digests, paragraph_ids })
 }
 
 fn payload_digests_from_document(

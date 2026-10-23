@@ -756,3 +756,6 @@ fn open_graph(bytes: Vec<u8>) -> Result<OpenedGraph, Box<dyn Error>> {
     let graph = PackageGraph::build(&mut reader, PackageGraphLimits::default())?;
     Ok((reader, graph))
 }
+
+#[path = "support/patch_sibling_permutation.rs"]
+mod sibling_permutation_v1;

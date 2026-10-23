@@ -1,0 +1,306 @@
+{
+  "state": "PASS_INSTALLED_CROSSREF_CALL_DECLARATIONS_READ_NOT_NATIVE_EXECUTION",
+  "steps": [
+    {
+      "stage": "installed_sdk_action_call_declarations_no_server",
+      "exit_code": 0,
+      "cleanup": true,
+      "stdout_bytes": 2795,
+      "stderr_bytes": 0,
+      "stdout_sha256": "4befcc5ffac4dec8bbfac4f1ced5c866657555b7532aa9aee447824fb6864a71",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": [],
+      "locations": [],
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 1.141,
+          "peak_job_private_mib": 93.14,
+          "peak_job_private_percent": 0.29234729313624463,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 1.6809704000188503
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM_server": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "actual_installed_call_declarations": {
+    "schema_version": "hwpx-agent.crossref-action-call-declarations/v1",
+    "state": "read_only_inspection_complete_not_native_qualification",
+    "exact_build": "11.0.0.9136",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    "automation_dll_sha256": "edbc7140f1f09025a34c5ffc2a07c47f90b6a1cdcb2a452b2969b53cd47e1151",
+    "binaries": [
+      {
+        "binary_name": "hwp.exe",
+        "state": "type_library_unavailable",
+        "error_type": "COMException",
+        "hresult": -2147312566
+      },
+      {
+        "binary_name": "HwpAutomation.dll",
+        "state": "type_library_unavailable",
+        "error_type": "COMException",
+        "hresult": -2147312566
+      },
+      {
+        "binary_name": "HwpObject.tlb",
+        "state": "type_library_read",
+        "surface": {
+          "library_name": "HwpObjectLib",
+          "library_guid": "7d2b6f3c-1d95-4e0c-bf5a-5ee564186fbc",
+          "major_version": 1,
+          "minor_version": 0,
+          "system_kind": "SYS_WIN32",
+          "type_count": 255,
+          "all_type_names": [
+            "IDHwpAction",
+            "IDHwpParameterSet",
+            "HActionCrossRef",
+            "IHwpObject"
+          ],
+          "selected_types": [
+            {
+              "name": "IDHwpAction",
+              "type_kind": "TKIND_DISPATCH",
+              "declared_member_names": [
+                "Execute",
+                "GetDefault"
+              ],
+              "members": [
+                {
+                  "name": "GetDefault",
+                  "member_id": 15000,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 3,
+                  "parameters": [
+                    {
+                      "name": "param",
+                      "variant_type": 9,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "Execute",
+                  "member_id": 15002,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 11,
+                  "parameters": [
+                    {
+                      "name": "param",
+                      "variant_type": 9,
+                      "flags": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "IDHwpParameterSet",
+              "type_kind": "TKIND_DISPATCH",
+              "declared_member_names": [],
+              "members": []
+            },
+            {
+              "name": "HActionCrossRef",
+              "type_kind": "TKIND_DISPATCH",
+              "declared_member_names": [
+                "Command",
+                "HSet"
+              ],
+              "members": [
+                {
+                  "name": "HSet",
+                  "member_id": 1,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 9,
+                  "parameters": []
+                },
+                {
+                  "name": "HSet",
+                  "member_id": 1,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 9,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "Command",
+                  "member_id": 28703,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 8,
+                  "parameters": []
+                },
+                {
+                  "name": "Command",
+                  "member_id": 28703,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 8,
+                      "flags": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "IHwpObject",
+              "type_kind": "TKIND_DISPATCH",
+              "declared_member_names": [
+                "HAction",
+                "HParameterSet"
+              ],
+              "members": [
+                {
+                  "name": "HParameterSet",
+                  "member_id": 20004,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 9,
+                  "parameters": []
+                },
+                {
+                  "name": "HAction",
+                  "member_id": 20005,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 9,
+                  "parameters": []
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "registered_typelib_sha256": "abd7ca72b9873dbd90f2d28df872f2353f875662354d226fcc294557c44ca4f9",
+    "registered_typelib_bytes": 473120,
+    "no_com_server_activation": true,
+    "registry_read_only": true,
+    "type_library_registration_requested": false,
+    "hwp_process_set_unchanged": true,
+    "raw_document_values_or_absolute_paths_present": false,
+    "native_property_set_or_save_reopen_qualified": false,
+    "p09_complete": false
+  },
+  "fresh_inputs": 2,
+  "final_fresh_hashes": 2,
+  "native_call_or_parameter_behavior_qualified": false,
+  "cleanup": true,
+  "elapsed_seconds": 3.1054024000186473,
+  "source_pins": [
+    {
+      "path": "tools/p09/inspect_crossref_action_typelib.ps1",
+      "bytes": 3595,
+      "sha256": "8ddb1c6720c6f58747dd74a0ab01592d1622fc73144f0e034ed8ee46461ae4d5"
+    },
+    {
+      "path": "tools/p09/inspect_click_here_lifecycle_typelib.ps1",
+      "bytes": 12960,
+      "sha256": "a455f7e00acbd106de6b5c5f73a654bc450a421d47e88574aee56744abfecbf1"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T07:18:46.148381+00:00",
+      "system_cpu_percent": 17.77,
+      "available_ram_mib": 7641.54,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.98403951745839,
+      "commit_used_percent": 50.766859619418284,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.7265625,
+      "parent_private_percent": 0.043082758988499205
+    },
+    {
+      "time_utc": "2026-10-17T07:18:46.649070+00:00",
+      "system_cpu_percent": 7.03,
+      "available_ram_mib": 7637.5,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.97136234819427,
+      "commit_used_percent": 50.76233687737821,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.7265625,
+      "parent_private_percent": 0.043082758988499205
+    },
+    {
+      "time_utc": "2026-10-17T07:18:47.246142+00:00",
+      "system_cpu_percent": 12.82,
+      "available_ram_mib": 7617.2,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.90766999391275,
+      "commit_used_percent": 50.83951055729263,
+      "parent_cpu_machine_percent": 0.1635554597555538,
+      "parent_private_mib": 14.37890625,
+      "parent_private_percent": 0.04513023216752009
+    },
+    {
+      "time_utc": "2026-10-17T07:18:47.749901+00:00",
+      "system_cpu_percent": 9.38,
+      "available_ram_mib": 7534.89,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.64933282412144,
+      "commit_used_percent": 50.93739394331024,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.37890625,
+      "parent_private_percent": 0.04513023216752009
+    },
+    {
+      "time_utc": "2026-10-17T07:18:48.253043+00:00",
+      "system_cpu_percent": 19.34,
+      "available_ram_mib": 7514.34,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.584819028504626,
+      "commit_used_percent": 50.955104110651114,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.37890625,
+      "parent_private_percent": 0.04513023216752009
+    },
+    {
+      "time_utc": "2026-10-17T07:18:48.753172+00:00",
+      "system_cpu_percent": 23.32,
+      "available_ram_mib": 7638.72,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.975212088183568,
+      "commit_used_percent": 50.77021652510347,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.27734375,
+      "parent_private_percent": 0.04481146388815157
+    }
+  ]
+}

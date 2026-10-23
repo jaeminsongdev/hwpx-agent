@@ -1,7 +1,7 @@
 schema: hwpx-agent.roadmap-status/v2
-updated_at: 2026-09-14
-current_phase: P08
-status: p07_pass_scoped_current_pc_hangul_2020_native_equation_p08_authorized_local_only
+updated_at: 2026-10-23
+current_phase: P09
+status: p09_current_pc_local_authoring_scope_reconciled_gate_open_not_production_or_product_complete
 design_baseline:
   feature_domains: 16
   features: 609
@@ -915,6 +915,70 @@ p10_execution:
     P10-08: current_pc_core_audit_pass_dedicated_production_unqualified
     P10-09: passed_current_pc_local
     P10-10: current_pc_probe_pass_general_routability_unverified
+p09_execution:
+  current_task: close_only_p09_feature_and_local_product_requirements
+  gate_state: open
+  a12_state: open
+  a13_state: open
+  scope_record: implementation/p09/P09_SCOPE_AND_REMAINING.v1.json
+  scope_document: implementation/p09/P09_SCOPE_AND_REMAINING.md
+  feature_rows: 65
+  search_rows: 19
+  reference_rows: 46
+  remaining_closure_work_packages: 31
+  work_package_count_is_not_atomic_tasks_or_completion_percent: true
+  latest_verified_source_generation: p09_628_current_stored_source_insertion_and_eight_private_candidates
+  latest_verified_receipt: implementation/p09/evidence/p09-361-stored-bookmark-insertion628-audit002.v1.json
+  latest_verified_source_scope: unique8_retained7_strengthened_positive1_private_candidates8_fresh930_cleanup_true_not_CAS_native_or_F11
+  latest_verified_normal_product_candidate_receipt: implementation/p09/evidence/p09-361-stored-bookmark-insertion628-audit002.v1.json
+  latest_verified_product_request_receipt: implementation/p09/evidence/p09-361-bookmark-request624-audit002.v1.json
+  current_stage: P09_execution_stage1_F11_capture_recovered632_bookmark8_post_save_field_readback635_qualified_not_full_F11
+  goal_handoff_state: work_continued_at_user_request_but_goal_API_reports_paused_no_resume_tool_available
+  prepared632_recovery_receipt: implementation/p09/evidence/p09-361-prepared-bookmark632-recovery001.v1.json
+  prepared632_recovered_capture: implementation/p09/evidence/p09-361-prepared-bookmark631-recovered632.v1.json
+  prepared632_scope: exact875415bytes_self_contained83547bytes_files48_fresh354_final354_cleanup_true_native_replay0
+  prepared635_readback_receipt: implementation/p09/evidence/p09-361-prepared-bookmark635-field-readback001.v1.json
+  prepared635_scope: current_bookmark8_saved_values_parameters_and_reopen_vs_native_oracle_reader12_fresh60_final60_not_render_rename_or_F11
+  current_user_external_command_required: false
+  prepared631_report: implementation/p09/P09_PREPARED_BOOKMARK_NATIVE_TAIL_631.md
+  prepared631_code_receipt: implementation/p09/evidence/p09-361-prepared-bookmark631-code003.v1.json
+  prepared631_code_scope: changed28_models_retained_actual_READY_denial_native0_fresh297_final297_cleanup_true
+  prepared631_published_entry_check: implementation/p09/evidence/p09-361-prepared-bookmark631-published-entry-check.v1.json
+  prepared631_retained_closed_capture_source_cases: [1, 2]
+  prepared631_next_native_source_cases: [3, 4, 5, 6, 7, 8]
+  prepared631_actual_native_executed: true
+  prepared631_actual_native_cleanup: true
+  prepared631_original_publication_failure: XREF_LOSSLESS610_COMPRESSED_LIMIT_preserved_not_original_dispatch_success
+  prepared630_actual_partial_failure_receipt: implementation/p09/evidence/p09-361-prepared-bookmark630-native001.v1.json
+  prepared630_failed_overall_cleanup_preserved: false
+  readonly_preparation629_receipt: implementation/p09/evidence/p09-361-bookmark-native-preparation629-code002.v1.json
+  readonly_preparation629_scope: contracts18_fresh210_cleanup_true_not_native_entry_ready
+  readonly629_external_receipt: implementation/p09/evidence/p09-361-bookmark-native-preparation629-external001.v1.json
+  prepared630_code_receipt: implementation/p09/evidence/p09-361-prepared-bookmark630-code006.v1.json
+  prepared630_code_scope: unique26_retained24_new_bundle_reader2_fresh267_cleanup_true_not_actual_native_or_semantics
+  prepared630_capture_entry_code_qualified: true
+  prepared630_historical_proofs_checked_at_bundle_boundaries_not_per_case: true
+  actual_native_prepared_eight_executed: true
+  original628_failure: preserved_audit001_all8_body_pass_but_unused_import_warning
+  original629_failure: preserved_code001_python_prelaunch_allowlist_error_no_test_body_executed
+  original627_failures: preserved_audit001_private_test_reader_E0624_and_audit002_Cow_ownership_E0308_no_new_test_body_before_fix
+  original626_failures: preserved_audit001_preparation_CPU_stop_and_audit002_fixture_failure
+  current_624_owned_request_code: verified_request10_and_direct_impact20_normal_actual_source1_not_C05_or_F11_complete
+  current_624_preflight: passed_using_original_immutable623_pin
+  original_624_preflight_failure: preserved_audit001_expected_hash_copy_typo_no_product_test_bodies_executed
+  next_direct_product_task: P09_F11_actual_cross_reference_insertion
+  official249:
+    accepted: 158
+    pending: 91
+    next_case: 165
+    is_total_p09_remaining: false
+  p08_historical_gate_reference: implementation/p08/P08-09_OBJECT_CONFORMANCE_REPORT.md
+  full_goal_p09_to_p20_preserved: true
+  later_phase_requirements_deleted_or_completed_by_scope_document: false
+  p09_required_native_and_local_product_checks_still_required: true
+  original_acl_head_owner_preservation_cpu_ram_and_route_guards_relaxed: false
+  new_p10_implementation_started: false
+  whole_product_production_ready: false
 p14_execution:
   current_task: phase_gate_complete_handoff_to_P15_01
   gate_state: completed_current_pc_local_reference_and_disposable_postgres
@@ -1114,8 +1178,8 @@ phases:
   P05: completed_current_pc_hangul_2020_local_layout
   P06: completed_current_pc_hangul_2020_table_engine
   P07: completed_current_pc_hangul_2020_native_equation
-  P08: in_progress_rebaseline_ready_current_pc_local_scope
-  P09: blocked_by_P08
+  P08: completed_current_pc_local_with_target_unavailable_historical_20260915
+  P09: in_progress_current_pc_local_authoring_gate_open
   P10: in_progress_current_pc_local_scope
   P11: blocked_by_P06_P07_P08_P09_P10
   P12: blocked_by_P06_P07_P08_P09_P11

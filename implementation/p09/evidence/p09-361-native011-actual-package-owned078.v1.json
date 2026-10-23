@@ -1,0 +1,176 @@
+{
+  "state": "FAILED_NATIVE011_TRANSPORT_SCOPED_TESTS",
+  "steps": [
+    {
+      "stage": "native011_transport_contracts",
+      "exit_code": 2,
+      "cleanup": true,
+      "stdout_bytes": 722,
+      "stderr_bytes": 0,
+      "stdout_sha256": "43dc6e84eda00af15c8bb6ce7f767615bf078a9969049c568cf86072f8f5cc10",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "contract_errors": [],
+      "diagnostics": [],
+      "locations": [],
+      "preflight_summary": {
+        "state": "FAILED_NATIVE011_ACTUAL_METADATA_PACKAGE_NOT_NATIVE",
+        "stage": "PREPARATION",
+        "error_code": "CURRENT_EPOCH_ACCEPT_OTHER_MAINTENANCE_ACTIVE",
+        "error_frames": [
+          {
+            "file": "native011_preparation.py",
+            "function": "main",
+            "line": 126
+          },
+          {
+            "file": "accept_case112_current_epoch.py",
+            "function": "acquire",
+            "line": 208
+          },
+          {
+            "file": "accept_case112_current_epoch.py",
+            "function": "require",
+            "line": 43
+          }
+        ],
+        "cleanup": true,
+        "fresh": 0,
+        "final": 0,
+        "elapsed": 0.0,
+        "published_pins": [],
+        "CPU_max": null,
+        "available_RAM_min": null,
+        "receipt": {
+          "path": "implementation/p09/evidence/p09-361-native011-actual-package-attempt001.v1.json",
+          "bytes": 935,
+          "sha256": "016f301003575a2fe914406688fc83628378a8e94bf8285d65866625af5f128f"
+        }
+      },
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 0.156,
+          "peak_job_private_mib": 29.22,
+          "peak_job_private_percent": 0.09171944222907301,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 0.2029999999795109
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "error_type": "ValueError",
+  "error_code": "REFERENCE_TARGET_COMMAND_FAILED",
+  "cleanup": true,
+  "elapsed_seconds": 1.7179999999934807,
+  "source_pins": [
+    {
+      "path": "tools/p09/native011_preparation.py",
+      "bytes": 13050,
+      "sha256": "f7542b181e56f5d39e0df398b05b8c3650474e91ce13eb4021db593c0c221b34"
+    },
+    {
+      "path": "tools/p09/native011_worker_transport.py",
+      "bytes": 4871,
+      "sha256": "136ac0653dfccc3f80873ad26c9129b871229c75b09108b8c38087bafc5c4d71"
+    },
+    {
+      "path": "tools/p09/native011_zlib_binding.py",
+      "bytes": 3338,
+      "sha256": "f047620378fe77c3f75efb11675198e247a4bd3c6518bf8828271e8dfd11529e"
+    },
+    {
+      "path": "tools/p09/native011_package.py",
+      "bytes": 5792,
+      "sha256": "2f41f52d82b40d0a7da8e16d1b68395386c9593b78d2d57d8b1ab2f1d5654506"
+    },
+    {
+      "path": "tools/p09/owned_sql_job.py",
+      "bytes": 13850,
+      "sha256": "30b08c4d779494bbdb7579b9bb28782b4f4588fc69b931cc9d18af326d46b7a0"
+    },
+    {
+      "path": "tools/p09/bounded_process_progress.py",
+      "bytes": 8533,
+      "sha256": "29708912dea654f61653a4098813c63e6a4cb4eba74a15f3437fb80bcd8416a0"
+    },
+    {
+      "path": "tools/p09/preparation_attributed_cpu_v1.py",
+      "bytes": 9869,
+      "sha256": "ddc1b48f17645337e65125373d9db822477ca6a94cc34e23992498e6c2c7d13d"
+    },
+    {
+      "path": "tools/p09/owned_cpu_baseline_v1.py",
+      "bytes": 1389,
+      "sha256": "0fce7a5f5700270291b02167e96c3739943d5a44c0a912eef43555a1a729b4b5"
+    },
+    {
+      "path": "tools/p09/distinct_final_sample_guard_v1.py",
+      "bytes": 1683,
+      "sha256": "8c590aa82c2677d391d6d5781b356641f77c7cdc6e55370ca251d6a809ad67c3"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T11:19:07.668003+00:00",
+      "system_cpu_percent": 3.52,
+      "available_ram_mib": 8582.53,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 26.93748892739991,
+      "commit_used_percent": 52.60054445143621,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.21484375,
+      "parent_private_percent": 0.04147665727321936
+    },
+    {
+      "time_utc": "2026-10-17T11:19:08.168512+00:00",
+      "system_cpu_percent": 14.57,
+      "available_ram_mib": 8484.41,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 26.62952198857461,
+      "commit_used_percent": 52.79290159151895,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.21484375,
+      "parent_private_percent": 0.04147665727321936
+    },
+    {
+      "time_utc": "2026-10-17T11:19:08.656227+00:00",
+      "system_cpu_percent": 9.92,
+      "available_ram_mib": 8433.15,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 26.468642090041005,
+      "commit_used_percent": 52.851580068557034,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.21484375,
+      "parent_private_percent": 0.04147665727321936
+    }
+  ]
+}

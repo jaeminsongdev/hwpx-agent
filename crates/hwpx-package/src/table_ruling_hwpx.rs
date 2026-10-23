@@ -22,6 +22,8 @@ use crate::{
 mod aggregate_hwpx;
 mod auto_fill_hwpx;
 mod create_hwpx;
+pub(crate) use create_hwpx::ReviewCreateContextInput;
+pub(crate) use create_hwpx::{ReviewNativeTableOutput, ReviewTableRenderInput, render_review_table};
 mod formula_reference_hwpx;
 mod merge_split_hwpx;
 mod nested_table_hwpx;

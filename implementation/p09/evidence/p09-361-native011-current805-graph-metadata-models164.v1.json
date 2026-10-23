@@ -1,0 +1,214 @@
+{
+  "state": "PASS_EXACT_GRAPH3_METADATA4_MODELS_NOT_NATIVE",
+  "steps": [
+    {
+      "stage": "native011_selected_models",
+      "exit_code": 0,
+      "cleanup": true,
+      "stdout_bytes": 1112,
+      "stderr_bytes": 0,
+      "stdout_sha256": "11d0bafa35783081abbe7775ba1d195c19726a4c2c80435b31ac158b6695bc59",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "contract_errors": [],
+      "diagnostics": [],
+      "locations": [],
+      "preflight_summary": {
+        "state": "EXECUTED_EXACT_SELECTED_EPOCH_MODELS",
+        "contracts": {
+          "run": 7,
+          "errors": 0,
+          "failures": 0,
+          "skipped": 0
+        },
+        "executed_test_ids": {
+          "test_native011_current_epoch_graph": [
+            "test_native011_current_epoch_graph.GraphContracts.test_original_missing162_and_bad_alias_errors_remain_failures",
+            "test_native011_current_epoch_graph.GraphContracts.test_same_instance_and_all_class_methods_retained_with_actual_original_call",
+            "test_native011_current_epoch_graph.GraphContracts.test_unknown_third_version_and_second_adapter_are_rejected"
+          ],
+          "test_native011_current_epoch_metadata": [
+            "test_native011_current_epoch_metadata.MetadataContracts.test_listing_view_accepts_only_exact_real_new_schema_and_no_freshness_promotion",
+            "test_native011_current_epoch_metadata.MetadataContracts.test_real_NEW_batch_still_denies_before_metadata_reads_or_imports",
+            "test_native011_current_epoch_metadata.MetadataContracts.test_real_approved_policy_and_complete_four_slot_inverse",
+            "test_native011_current_epoch_metadata.MetadataContracts.test_unpinned_source_cannot_be_used_to_rebuild_approved_policy"
+          ]
+        },
+        "errors": [],
+        "failures": []
+      },
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 0.234,
+          "peak_job_private_mib": 32.65,
+          "peak_job_private_percent": 0.1024840018169792,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 0.3119999999762513
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "fresh_inputs": 8,
+  "final_fresh_hashes": 8,
+  "contracts": {
+    "run": 7,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "executed_test_ids": {
+    "test_native011_current_epoch_graph": [
+      "test_native011_current_epoch_graph.GraphContracts.test_original_missing162_and_bad_alias_errors_remain_failures",
+      "test_native011_current_epoch_graph.GraphContracts.test_same_instance_and_all_class_methods_retained_with_actual_original_call",
+      "test_native011_current_epoch_graph.GraphContracts.test_unknown_third_version_and_second_adapter_are_rejected"
+    ],
+    "test_native011_current_epoch_metadata": [
+      "test_native011_current_epoch_metadata.MetadataContracts.test_listing_view_accepts_only_exact_real_new_schema_and_no_freshness_promotion",
+      "test_native011_current_epoch_metadata.MetadataContracts.test_real_NEW_batch_still_denies_before_metadata_reads_or_imports",
+      "test_native011_current_epoch_metadata.MetadataContracts.test_real_approved_policy_and_complete_four_slot_inverse",
+      "test_native011_current_epoch_metadata.MetadataContracts.test_unpinned_source_cannot_be_used_to_rebuild_approved_policy"
+    ]
+  },
+  "goal": "ACTIVE",
+  "cleanup": true,
+  "elapsed_seconds": 3.26500000001397,
+  "source_pins": [
+    {
+      "path": "tools/p09/native011_current_epoch_graph.py",
+      "bytes": 2907,
+      "sha256": "f95c0f9a74de6bbc74cab010fcb7a09aca9ac0a35946e4cd1567341fa722a684"
+    },
+    {
+      "path": "tools/p09/native011_current_epoch_metadata.py",
+      "bytes": 4801,
+      "sha256": "1fd06d33b6cb4b8bead716b79817d78ed7f9a39f2bb2ac1c24e95987371fdbd8"
+    },
+    {
+      "path": "tools/p09/native011_current_epoch_plan.py",
+      "bytes": 6192,
+      "sha256": "5c35279fbe84020e006aa18befc2730333a9448fd42a56c074380c3ff24d3ee8"
+    },
+    {
+      "path": "tools/p09/native011_scoped_test_runner.py",
+      "bytes": 6721,
+      "sha256": "fcbec20db2965d8fce995c57c6349d1b2a95334a28fba76754466c9ac9357364"
+    },
+    {
+      "path": "tools/p09/batch_verification.py",
+      "bytes": 63495,
+      "sha256": "296b4fe1070a6e5e4cfb882ba0ad9ca252edc702fc2441e970292cf5ad76dff9"
+    },
+    {
+      "path": "tools/p09/current_queue_successor_runtime.py",
+      "bytes": 27293,
+      "sha256": "523fbe57dc31f73612651cf44dbca9a85fe706a40e563f391ccade2aa0cf63df"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_current_epoch_graph.py",
+      "bytes": 4196,
+      "sha256": "289d8663b62fe907f5cd5fadf01d87f22dde3eaa7fffb078e5202a3a213790f4"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_current_epoch_metadata.py",
+      "bytes": 2990,
+      "sha256": "9ad3874f2bc95b9153a56577faaa7fb746129721c8294c64ff4d582778568801"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T16:14:57.108881+00:00",
+      "system_cpu_percent": 7.4,
+      "available_ram_mib": 9761.7,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.63847447309749,
+      "commit_used_percent": 48.58011970151543,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.046875,
+      "parent_private_percent": 0.04408810510035377
+    },
+    {
+      "time_utc": "2026-10-17T16:14:57.609614+00:00",
+      "system_cpu_percent": 1.57,
+      "available_ram_mib": 9757.46,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.62518428791151,
+      "commit_used_percent": 48.5853161680822,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.046875,
+      "parent_private_percent": 0.04408810510035377
+    },
+    {
+      "time_utc": "2026-10-17T16:14:58.108434+00:00",
+      "system_cpu_percent": 9.67,
+      "available_ram_mib": 9759.95,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.632994110756037,
+      "commit_used_percent": 48.582644703872,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.296875,
+      "parent_private_percent": 0.04487276548033782
+    },
+    {
+      "time_utc": "2026-10-17T16:14:58.884996+00:00",
+      "system_cpu_percent": 6.28,
+      "available_ram_mib": 9758.32,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.62786929764927,
+      "commit_used_percent": 48.582978636898275,
+      "parent_cpu_machine_percent": 0.1276552287558388,
+      "parent_private_mib": 14.546875,
+      "parent_private_percent": 0.04565742586032187
+    },
+    {
+      "time_utc": "2026-10-17T16:14:59.385190+00:00",
+      "system_cpu_percent": 0.2,
+      "available_ram_mib": 9753.8,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.61368410921737,
+      "commit_used_percent": 48.576581183131744,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.546875,
+      "parent_private_percent": 0.04565742586032187
+    },
+    {
+      "time_utc": "2026-10-17T16:14:59.873156+00:00",
+      "system_cpu_percent": 1.8,
+      "available_ram_mib": 9759.61,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.631902942415124,
+      "commit_used_percent": 48.57245095885939,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.546875,
+      "parent_private_percent": 0.04565742586032187
+    }
+  ]
+}

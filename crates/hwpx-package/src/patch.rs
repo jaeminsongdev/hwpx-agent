@@ -19,6 +19,20 @@ use crate::{
 const OPF_NAMESPACE: &str = "http://www.idpf.org/2007/opf";
 const OPF_NAMESPACE_HANCOM_2020: &str = "http://www.idpf.org/2007/opf/";
 
+mod leaf_text;
+mod leaf_scalar_ranges;
+pub use leaf_scalar_ranges::LeafTextRangeReplacement;
+pub(crate) mod text_atom_ranges;
+pub use text_atom_ranges::TextAtomRangeReplacement;
+mod whitespace_atom_ranges;
+pub use whitespace_atom_ranges::{WhitespaceText,WhitespaceOutputAtom,WhitespaceControlKind,WhitespaceAtomRangeReplacement};
+mod text_control_atoms;
+pub use text_control_atoms::TextControlAtomReplacement;
+pub use whitespace_atom_ranges::WhitespaceControlKind as TextControlKind;
+pub(crate) mod note_kind;
+pub(crate) mod element_splice;
+mod sibling_permutation;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct PatchLimitConfig {
     pub max_intents: usize,
@@ -352,6 +366,8 @@ pub enum SiblingPosition {
     Before,
     After,
 }
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+pub enum ElementSplicePosition { Before, After, FirstChild, LastChild, Subtree }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum RelationshipSpine {
@@ -524,13 +540,64 @@ impl AddedPart {
 
 #[derive(Clone, Eq, PartialEq)]
 pub enum PatchIntent {
+    /// Reorders only original element byte slices in selected sibling slots. Gaps stay positional.
+    /// All selectors must bind the same immutable part/parent in source order; no raw XML is accepted.
+    PermuteSiblingElements {
+        targets: Vec<XmlElementSelector>,
+        source_order: Vec<usize>,
+    },
+    /// Changes only the two native note names. No caller XML/name or renumbering.
+    ConvertNoteKind {
+        target: XmlElementSelector,
+        kind: domain_ir::NoteKind,
+    },
+    /// A source-bound sequence of independently validated elements. Empty
+    /// sequences delete a non-root subtree; child insertion retains start tags.
+    SpliceElements {
+        target: XmlElementSelector,
+        position: ElementSplicePosition,
+        fragments: Vec<ValidatedXmlFragment>,
+    },
     ReplaceAttribute {
         target: XmlAttributeSelector,
         value: PatchAttributeValue,
     },
+    /// Insert a bounded, sorted group of missing unqualified numeric attributes.
+    /// Existing attributes and namespace declarations cannot be overwritten.
+    InsertUnsignedAttributes {
+        target: XmlElementSelector,
+        attributes: BTreeMap<String, u32>,
+    },
     ReplaceText {
         target: XmlTextSelector,
         value: PatchText,
+    },
+    /// Replace only a leaf's semantic text, including an empty/self-closing leaf.
+    /// Child elements, comments and root replacement are rejected; no raw XML is accepted.
+    ReplaceLeafText {
+        target: XmlElementSelector,
+        value: PatchText,
+    },
+    /// Original decoded Unicode scalar ranges, not caller byte offsets or XML.
+    ReplaceLeafScalarRanges {
+        target: XmlElementSelector,
+        ranges: Vec<LeafTextRangeReplacement>,
+    },
+    /// Source TextSpan atom/scalar coordinates. Original tab/lineBreak children remain exact.
+    ReplaceTextAtomScalarRanges {
+        target: XmlElementSelector,
+        ranges: Vec<TextAtomRangeReplacement>,
+    },
+    /// Whitespace-only original Text scalar ranges or exact qualified tab/lineBreak atoms.
+    /// The separate typed output cannot inject arbitrary XML or delete non-whitespace text.
+    ReplaceWhitespaceAtomRanges {
+        target: XmlElementSelector,
+        ranges: Vec<WhitespaceAtomRangeReplacement>,
+    },
+    /// Exact original tab/lineBreak atoms to validated Text/Tab/LineBreak output, never raw XML.
+    ReplaceTextControlAtoms {
+        target: XmlElementSelector,
+        replacements: Vec<TextControlAtomReplacement>,
     },
     InsertSibling {
         target: XmlElementSelector,
@@ -543,6 +610,12 @@ pub enum PatchIntent {
     ReplaceSubtree {
         target: XmlElementSelector,
         fragment: ValidatedXmlFragment,
+    },
+    /// Replace only element content; retain its original start/end tags and attributes.
+    /// Children remain independently safe, namespace-complete validated elements.
+    ReplaceElementContent {
+        target: XmlElementSelector,
+        children: Vec<ValidatedXmlFragment>,
     },
     AllocateId {
         target: XmlAttributeSelector,
@@ -560,16 +633,30 @@ pub enum PatchIntent {
 impl Debug for PatchIntent {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::PermuteSiblingElements { .. } => formatter.write_str("PermuteSiblingElements(<redacted>)"),
+            Self::ConvertNoteKind { .. } => formatter.write_str("ConvertNoteKind(<redacted>)"),
+            Self::SpliceElements { .. } => formatter.write_str("SpliceElements(<redacted>)"),
             Self::ReplaceAttribute { target, value } => formatter
                 .debug_struct("ReplaceAttribute")
                 .field("target", target)
                 .field("value", value)
                 .finish(),
+            Self::InsertUnsignedAttributes { .. } =>
+                formatter.write_str("InsertUnsignedAttributes(<redacted>)"),
             Self::ReplaceText { target, value } => formatter
                 .debug_struct("ReplaceText")
                 .field("target", target)
                 .field("value", value)
                 .finish(),
+            Self::ReplaceLeafText { target, value } => formatter
+                .debug_struct("ReplaceLeafText")
+                .field("target", target)
+                .field("value", value)
+                .finish(),
+            Self::ReplaceLeafScalarRanges { .. } => formatter.write_str("ReplaceLeafScalarRanges(<redacted>)"),
+            Self::ReplaceTextAtomScalarRanges { .. } => formatter.write_str("ReplaceTextAtomScalarRanges(<redacted>)"),
+            Self::ReplaceWhitespaceAtomRanges { .. } => formatter.write_str("ReplaceWhitespaceAtomRanges(<redacted>)"),
+            Self::ReplaceTextControlAtoms { .. } => formatter.write_str("ReplaceTextControlAtoms(<redacted>)"),
             Self::InsertSibling {
                 target,
                 position,
@@ -588,6 +675,11 @@ impl Debug for PatchIntent {
                 .debug_struct("ReplaceSubtree")
                 .field("target", target)
                 .field("fragment", fragment)
+                .finish(),
+            Self::ReplaceElementContent { target, children } => formatter
+                .debug_struct("ReplaceElementContent")
+                .field("target", target)
+                .field("child_count", &children.len())
                 .finish(),
             Self::AllocateId {
                 target,
@@ -834,17 +926,25 @@ impl PreservingPatchEngine {
             return Err(PatchError::LimitExceeded { limit: "intents" });
         }
         let package_limits = reader.package_limits();
-        let preservation = PreservationReport::build_with_graph_limits_and_profile(
+        let mut documents = crate::call_local_xml::CallLocalXmlDocuments::default();
+        let preservation = PreservationReport::build_with_call_local_xml(
             reader,
             graph,
             graph_limits,
             preservation_profile,
+            &mut documents,
         )?;
         if !preservation.direct_preserve_ready() {
             return Err(PatchError::PreservationRejected);
         }
-        let id_index =
-            IdIndex::build_with_graph_limits(reader, graph, graph_limits, id_profile, id_limits)?;
+        let id_index = IdIndex::build_with_call_local_xml(
+            reader,
+            graph,
+            graph_limits,
+            id_profile,
+            id_limits,
+            &mut documents,
+        )?;
         Transaction::new(
             reader,
             graph,
@@ -857,6 +957,7 @@ impl PreservingPatchEngine {
             preservation_profile,
             package_limits,
             intents,
+            &mut documents,
         )?
         .execute()
     }
@@ -995,6 +1096,7 @@ impl<'a> Transaction<'a> {
         preservation_profile: PreservationRuleProfile,
         package_limits: PackageLimits,
         intents: &'a [PatchIntent],
+        parsed_documents: &mut crate::call_local_xml::CallLocalXmlDocuments,
     ) -> Result<Self, PatchError> {
         let mut parts = BTreeMap::new();
         let mut documents = BTreeMap::new();
@@ -1004,7 +1106,8 @@ impl<'a> Transaction<'a> {
                 return Err(PatchError::SelectorStale);
             }
             if record.class() == PreservationClass::TokenStable {
-                let document = PreservingXmlDocument::parse(&bytes)?;
+                let document =
+                    parsed_documents.take_document(record.path().collision_key(), &bytes)?;
                 if document.original_sha256() != record.raw_sha256() {
                     return Err(PatchError::SelectorStale);
                 }
@@ -1187,17 +1290,67 @@ impl<'a> Transaction<'a> {
         &self,
         allocations: &BTreeMap<AllocationHandle, u64>,
     ) -> Result<Vec<ByteEdit>, PatchError> {
+        leaf_scalar_ranges::preflight(self.intents, self.patch_limits)?;
+        text_atom_ranges::preflight(self.intents, self.patch_limits)?;
+        let mut whitespace_budget=whitespace_atom_ranges::preflight(self.intents,self.patch_limits)?;
+        whitespace_budget=whitespace_budget.max(text_control_atoms::preflight(self.intents,self.patch_limits)?);
+        let projected_edits=sibling_permutation::preflight(self.intents,self.patch_limits)?;
+        let mut permutation_bytes=self.patch_limits.config().max_fragment_bytes;
         let mut edits = Vec::new();
         edits
-            .try_reserve_exact(self.intents.len())
+            .try_reserve_exact(projected_edits)
             .map_err(|_| PatchError::AllocationFailed)?;
         for (origin, intent) in self.intents.iter().enumerate() {
             match intent {
+                PatchIntent::PermuteSiblingElements { targets, source_order } => {
+                    let first=targets.first().ok_or(PatchError::ValueInvalid)?;
+                    let document=self.element_context(first)?;
+                    for target in targets {
+                        if target.part!=first.part{return Err(PatchError::SelectorStale);}
+                        self.element_context(target)?;
+                    }
+                    let mut indexes=Vec::new();
+                    indexes.try_reserve_exact(targets.len()).map_err(|_|PatchError::AllocationFailed)?;
+                    indexes.extend(targets.iter().map(|target|target.element_index));
+                    for edit in sibling_permutation::source_edits(document,&indexes,source_order,&mut permutation_bytes)? {
+                        edits.push(ByteEdit::new(first.part.collision_key(),edit.start,edit.end,edit.replacement,origin));
+                    }
+                }
+                PatchIntent::ConvertNoteKind { target, kind } => {
+                    let document = self.element_context(target)?;
+                    for edit in note_kind::source_edits(document, target.element_index, *kind)? {
+                        edits.push(ByteEdit::new(target.part.collision_key(), edit.start,
+                            edit.end, edit.bytes, origin));
+                    }
+                }
+                PatchIntent::SpliceElements { target, position, fragments } => {
+                    let document = self.element_context(target)?;
+                    let edit = element_splice::source_edit(document, target.element_index, *position, fragments, self.patch_limits)?;
+                    edits.push(ByteEdit::new(target.part.collision_key(), edit.start, edit.end, edit.replacement, origin));
+                }
                 PatchIntent::ReplaceAttribute { target, value } => {
                     self.plan_attribute_edit(target, value, allocations, origin, &mut edits)?;
                 }
+                PatchIntent::InsertUnsignedAttributes { target, attributes } => {
+                    self.plan_unsigned_attributes(target, attributes, origin, &mut edits)?;
+                }
                 PatchIntent::ReplaceText { target, value } => {
                     self.plan_text_edit(target, value, origin, &mut edits)?;
+                }
+                PatchIntent::ReplaceLeafText { target, value } => {
+                    self.plan_leaf_text_edit(target, value, origin, &mut edits)?;
+                }
+                PatchIntent::ReplaceLeafScalarRanges { target, ranges } => {
+                    self.plan_leaf_scalar_ranges(target, ranges, origin, &mut edits)?;
+                }
+                PatchIntent::ReplaceTextAtomScalarRanges { target, ranges } => {
+                    self.plan_text_atom_scalar_ranges(target, ranges, origin, &mut edits)?;
+                }
+                PatchIntent::ReplaceWhitespaceAtomRanges { target, ranges } => {
+                    self.plan_whitespace_atom_ranges(target,ranges,origin,&mut whitespace_budget,&mut edits)?;
+                }
+                PatchIntent::ReplaceTextControlAtoms { target, replacements } => {
+                    self.plan_text_control_atoms(target,replacements,origin,&mut whitespace_budget,&mut edits)?;
                 }
                 PatchIntent::InsertSibling {
                     target,
@@ -1212,6 +1365,9 @@ impl<'a> Transaction<'a> {
                 PatchIntent::ReplaceSubtree { target, fragment } => {
                     self.plan_subtree_edit(target, fragment, origin, &mut edits)?;
                 }
+                PatchIntent::ReplaceElementContent { target, children } => {
+                    self.plan_content_edit(target, children, origin, &mut edits)?;
+                }
                 PatchIntent::AllocateId { target, handle, .. } => {
                     self.plan_allocation_edit(target, *handle, allocations, origin, &mut edits)?;
                 }
@@ -1222,6 +1378,44 @@ impl<'a> Transaction<'a> {
             }
         }
         Ok(edits)
+    }
+
+    fn plan_unsigned_attributes(
+        &self,
+        target: &XmlElementSelector,
+        attributes: &BTreeMap<String, u32>,
+        origin: usize,
+        edits: &mut Vec<ByteEdit>,
+    ) -> Result<(), PatchError> {
+        if attributes.is_empty() || attributes.len() > self.patch_limits.config().max_intents {
+            return Err(PatchError::ValueInvalid);
+        }
+        let document = self.element_context(target)?;
+        let element = &document.elements()[target.element_index];
+        let mut bytes = Vec::new();
+        for (name, value) in attributes {
+            let mut chars = name.bytes();
+            if name.len() > 128 || name.eq_ignore_ascii_case("xmlns")
+                || !chars.next().is_some_and(|c| c.is_ascii_alphabetic() || c == b'_')
+                || !chars.all(|c| c.is_ascii_alphanumeric() || matches!(c, b'_' | b'-' | b'.'))
+            {
+                return Err(PatchError::ValueInvalid);
+            }
+            if element.attributes().iter().any(|a| a.name().namespace().is_none()
+                && a.name().local_name() == name)
+            {
+                return Err(PatchError::Conflict);
+            }
+            let addition = format!(" {name}=\"{value}\"");
+            let size = bytes.len().checked_add(addition.len()).ok_or(PatchError::AllocationFailed)?;
+            self.check_value_limit(size)?;
+            bytes.try_reserve(addition.len()).map_err(|_| PatchError::AllocationFailed)?;
+            bytes.extend_from_slice(addition.as_bytes());
+        }
+        let at = element.start_tag_span().end()
+            .checked_sub(if element.is_empty() { 2 } else { 1 }).ok_or(PatchError::SelectorStale)?;
+        edits.push(ByteEdit::new(target.part.collision_key(), at, at, bytes, origin));
+        Ok(())
     }
 
     fn plan_attribute_edit(
@@ -1346,6 +1540,51 @@ impl<'a> Transaction<'a> {
         Ok(())
     }
 
+    fn plan_content_edit(
+        &self,
+        target: &XmlElementSelector,
+        children: &[ValidatedXmlFragment],
+        origin: usize,
+        edits: &mut Vec<ByteEdit>,
+    ) -> Result<(), PatchError> {
+        if children.len() > self.patch_limits.config().max_intents {
+            return Err(PatchError::LimitExceeded {
+                limit: "content_children",
+            });
+        }
+        let document = self.element_context(target)?;
+        let content = document.elements()[target.element_index]
+            .content_span()
+            .ok_or(PatchError::SelectorStale)?;
+        let mut size = 0_usize;
+        for child in children {
+            self.check_fragment_limit(child)?;
+            size = size
+                .checked_add(child.bytes().len())
+                .ok_or(PatchError::AllocationFailed)?;
+            if size > self.patch_limits.config().max_fragment_bytes {
+                return Err(PatchError::LimitExceeded {
+                    limit: "content_fragment_bytes",
+                });
+            }
+        }
+        let mut bytes = Vec::new();
+        bytes
+            .try_reserve_exact(size)
+            .map_err(|_| PatchError::AllocationFailed)?;
+        for child in children {
+            bytes.extend_from_slice(child.bytes());
+        }
+        edits.push(ByteEdit::new(
+            target.part.collision_key(),
+            content.start(),
+            content.end(),
+            bytes,
+            origin,
+        ));
+        Ok(())
+    }
+
     fn plan_allocation_edit(
         &self,
         target: &XmlAttributeSelector,
@@ -1391,8 +1630,13 @@ impl<'a> Transaction<'a> {
             .name()
             .namespace()
             .ok_or(PatchError::RelationshipContainerInvalid)?;
+        let embedded = if relationship.target.as_str().starts_with("BinData/") {
+            " isEmbeded=\"1\""
+        } else {
+            ""
+        };
         let item = format!(
-            "<item xmlns=\"{}\" id=\"{}\" href=\"{}\" media-type=\"{}\"/>",
+            "<item xmlns=\"{}\" id=\"{}\" href=\"{}\" media-type=\"{}\"{embedded}/>",
             escape_attribute(namespace, XmlQuoteStyle::Double)?,
             escape_attribute(relationship.id.value(), XmlQuoteStyle::Double)?,
             escape_attribute(relationship.target.as_str(), XmlQuoteStyle::Double)?,
@@ -1529,21 +1773,25 @@ impl<'a> Transaction<'a> {
         let archive = validation_archive(self.parts.values())?;
         let mut reader = BoundedZipReader::open(Cursor::new(archive), self.package_limits)?;
         let graph = PackageGraph::build(&mut reader, self.graph_limits)?;
-        let preservation = PreservationReport::build_with_graph_limits_and_profile(
+        // A separate post-patch scope: never reuse the original source's models.
+        let mut documents = crate::call_local_xml::CallLocalXmlDocuments::default();
+        let preservation = PreservationReport::build_with_call_local_xml(
             &mut reader,
             &graph,
             self.graph_limits,
             self.preservation_profile,
+            &mut documents,
         )?;
         if !preservation.direct_preserve_ready() || preservation.parts().len() != self.parts.len() {
             return Err(PatchError::ValidationMismatch);
         }
-        let id_index = IdIndex::build_with_graph_limits(
+        let id_index = IdIndex::build_with_call_local_xml(
             &mut reader,
             &graph,
             self.graph_limits,
             self.id_profile,
             self.id_limits,
+            &mut documents,
         )?;
 
         let mut records = Vec::new();
@@ -1885,7 +2133,7 @@ fn escape_text(value: &str) -> Result<String, PatchError> {
     escape_xml(value, None)
 }
 
-fn escape_attribute(value: &str, quote: XmlQuoteStyle) -> Result<String, PatchError> {
+pub(crate) fn escape_attribute(value: &str, quote: XmlQuoteStyle) -> Result<String, PatchError> {
     escape_xml(value, Some(quote))
 }
 
@@ -1904,6 +2152,11 @@ fn escape_xml(value: &str, quote: Option<XmlQuoteStyle>) -> Result<String, Patch
             '>' => output.push_str("&gt;"),
             '"' if quote == Some(XmlQuoteStyle::Double) => output.push_str("&quot;"),
             '\'' if quote == Some(XmlQuoteStyle::Single) => output.push_str("&apos;"),
+            // XML 1.0 3.3.3 normalizes literal attribute whitespace to spaces.
+            // Character references preserve the caller's semantic characters.
+            '\t' if quote.is_some() => output.push_str("&#9;"),
+            '\n' if quote.is_some() => output.push_str("&#10;"),
+            '\r' if quote.is_some() => output.push_str("&#13;"),
             _ => output.push(character),
         }
     }

@@ -34,6 +34,8 @@ pub enum RevisionError {
     Serialization,
     #[error("revision repository failed")]
     RepositoryFailure,
+    #[error("revision database commit outcome is unknown; do not retry blindly")]
+    CommitOutcomeUnknown,
 }
 
 impl RevisionError {
@@ -51,6 +53,7 @@ impl RevisionError {
             Self::GraphCycle => "REVISION_GRAPH_CYCLE",
             Self::Serialization => "REVISION_SERIALIZATION_FAILED",
             Self::RepositoryFailure => "REVISION_REPOSITORY_FAILED",
+            Self::CommitOutcomeUnknown => "REVISION_COMMIT_OUTCOME_UNKNOWN",
         }
     }
 }
@@ -242,6 +245,21 @@ impl RevisionHead {
     }
 }
 
+/// Immutable IR artifact/content/package/graph binding. Metadata alone is not import evidence.
+#[derive(Clone, Copy, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct FullDocumentIrBinding {
+    pub artifact_id: ArtifactId,
+    pub artifact_sha256: ContentDigest,
+    pub result_package_sha256: ContentDigest,
+    pub canonical_graph_sha256: ContentDigest,
+}
+impl fmt::Debug for FullDocumentIrBinding {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str("FullDocumentIrBinding(<redacted>)")
+    }
+}
+
 #[derive(Clone, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct RevisionCommitRequest {
@@ -254,6 +272,8 @@ pub struct RevisionCommitRequest {
     source_artifact_id: ArtifactId,
     result_artifact_id: ArtifactId,
     semantic_diff_artifact_id: Option<ArtifactId>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    full_document_ir: Option<FullDocumentIrBinding>,
     operation_plan_sha256: ContentDigest,
     validation_state: RevisionValidationState,
     validation_summary_sha256: ContentDigest,
@@ -277,6 +297,8 @@ impl<'de> Deserialize<'de> for RevisionCommitRequest {
             source_artifact_id: ArtifactId,
             result_artifact_id: ArtifactId,
             semantic_diff_artifact_id: Option<ArtifactId>,
+            #[serde(default)]
+            full_document_ir: Option<FullDocumentIrBinding>,
             operation_plan_sha256: ContentDigest,
             validation_state: RevisionValidationState,
             validation_summary_sha256: ContentDigest,
@@ -284,7 +306,7 @@ impl<'de> Deserialize<'de> for RevisionCommitRequest {
         }
 
         let value = WireRequest::deserialize(deserializer)?;
-        Self::new(
+        let request = Self::new(
             value.commit_id,
             value.project_id,
             value.branch_id,
@@ -299,7 +321,11 @@ impl<'de> Deserialize<'de> for RevisionCommitRequest {
             value.validation_summary_sha256,
             value.transaction_receipt_sha256,
         )
-        .map_err(D::Error::custom)
+        .map_err(D::Error::custom)?;
+        match value.full_document_ir {
+            Some(binding) => request.with_full_document_ir(binding).map_err(D::Error::custom),
+            None => Ok(request),
+        }
     }
 }
 
@@ -357,6 +383,7 @@ impl RevisionCommitRequest {
             source_artifact_id,
             result_artifact_id,
             semantic_diff_artifact_id,
+            full_document_ir: None,
             operation_plan_sha256,
             validation_state,
             validation_summary_sha256,
@@ -368,6 +395,25 @@ impl RevisionCommitRequest {
     pub const fn commit_id(&self) -> CommitId {
         self.commit_id
     }
+
+    /// Adds the separately stored full IR before CAS seals the node; cannot change a sealed node.
+    /// # Errors
+    /// Rejects aliasing source/result/diff IDs and duplicate attachment to this request.
+    /// Artifact ACL/kind/scanner/content checks remain the provider's responsibility.
+    pub fn with_full_document_ir(mut self, binding: FullDocumentIrBinding) -> Result<Self, RevisionError> {
+        if self.full_document_ir.is_some()
+            || binding.artifact_id == self.source_artifact_id
+            || binding.artifact_id == self.result_artifact_id
+            || self.semantic_diff_artifact_id == Some(binding.artifact_id)
+        {
+            return Err(RevisionError::InvalidRequest);
+        }
+        self.full_document_ir = Some(binding);
+        Ok(self)
+    }
+
+    #[must_use]
+    pub const fn full_document_ir(&self) -> Option<FullDocumentIrBinding> { self.full_document_ir }
 
     #[must_use]
     pub const fn project_id(&self) -> ProjectId {
@@ -456,6 +502,8 @@ pub struct RevisionNode {
     source_artifact_id: ArtifactId,
     result_artifact_id: ArtifactId,
     semantic_diff_artifact_id: Option<ArtifactId>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    full_document_ir: Option<FullDocumentIrBinding>,
     operation_plan_sha256: ContentDigest,
     validation_summary_sha256: ContentDigest,
     transaction_receipt_sha256: ContentDigest,
@@ -481,6 +529,7 @@ impl RevisionNode {
             source_artifact_id: request.source_artifact_id,
             result_artifact_id: request.result_artifact_id,
             semantic_diff_artifact_id: request.semantic_diff_artifact_id,
+            full_document_ir: request.full_document_ir,
             operation_plan_sha256: request.operation_plan_sha256,
             validation_summary_sha256: request.validation_summary_sha256,
             transaction_receipt_sha256: request.transaction_receipt_sha256,
@@ -496,6 +545,22 @@ impl RevisionNode {
     pub const fn revision_id(&self) -> RevisionId {
         self.revision_id
     }
+
+    /// Exact project owning this sealed node; not caller-supplied artifact routing.
+    #[must_use]
+    pub const fn project_id(&self) -> ProjectId {
+        self.project_id
+    }
+
+    /// Immutable committed result, used as the next revision's actual source.
+    #[must_use]
+    pub const fn result_artifact_id(&self) -> ArtifactId {
+        self.result_artifact_id
+    }
+
+    /// The immutable full-IR artifact selected by this sealed revision, never caller routing.
+    #[must_use]
+    pub const fn full_document_ir(&self) -> Option<FullDocumentIrBinding> { self.full_document_ir }
 
     #[must_use]
     pub fn parents(&self) -> &[RevisionId] {

@@ -1,6 +1,7 @@
 #![forbid(unsafe_code)]
 
 mod crypto;
+pub mod key_custody;
 mod service;
 mod signed_url;
 mod store;

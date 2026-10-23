@@ -1,0 +1,315 @@
+{
+  "state": "FAILED_REFERENCE_TARGET_IMPORT_SCOPED_TESTS",
+  "steps": [
+    {
+      "stage": "format_changed_reference_note_sources",
+      "exit_code": 0,
+      "cleanup": true,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": [],
+      "locations": [],
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 0.125,
+          "peak_job_private_mib": 18.56,
+          "peak_job_private_percent": 0.05826103321381566,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 0.521578399988357
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "prior_format_pass_reused": false,
+  "compiler_profile": {
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_TEST_OPT_LEVEL": "0",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_DEV_DEBUG_ASSERTIONS": "true",
+    "CARGO_PROFILE_DEV_OVERFLOW_CHECKS": "true",
+    "CARGO_PROFILE_DEV_CODEGEN_UNITS": "16",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG_ASSERTIONS": "true",
+    "CARGO_PROFILE_TEST_OVERFLOW_CHECKS": "true",
+    "CARGO_PROFILE_TEST_CODEGEN_UNITS": "16",
+    "CARGO_INCREMENTAL": "0",
+    "RUST_TEST_THREADS": "1",
+    "RUSTUP_AUTO_INSTALL": "0"
+  },
+  "error_type": "ValueError",
+  "error_code": "EXACT_LOCKED_TABLE_INPUT",
+  "cleanup": true,
+  "elapsed_seconds": 3.203457499999786,
+  "source_pins": [
+    {
+      "path": "Cargo.toml",
+      "bytes": 2695,
+      "sha256": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5"
+    },
+    {
+      "path": "Cargo.lock",
+      "bytes": 61056,
+      "sha256": "3dba694d1b6066a8ff7fec347c51edd1b09b7046ca070bbaf3ac78cc8b708887"
+    },
+    {
+      "path": "crates/hwpx-package/Cargo.toml",
+      "bytes": 663,
+      "sha256": "1b8e0008d86102dddde09c11931505962c932a04a3b2db60a363cb37481b282c"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import.rs",
+      "bytes": 26946,
+      "sha256": "c737697ec2547e9bf9be73d02473bde9da9561ee079581ddd24a69b5cc9b08af"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/reference_targets.rs",
+      "bytes": 14703,
+      "sha256": "b2b49511c936f9525fb76635cd711fb3420a2bcd12cf7567bf1d61c0f44c4aed"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_reference_targets.rs",
+      "bytes": 19252,
+      "sha256": "957c8e4d49adb929cd1d106565a7ceff5084c9fa9de76eafc1e81194013ed2e3"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure.rs",
+      "bytes": 27369,
+      "sha256": "00ce41491d655a7dce0c4b64eb8fde1a48d5bb20c5bdb7803bd4ef6bc29c6793"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/bookmarks.rs",
+      "bytes": 6913,
+      "sha256": "cdd2652bcf8f9178ecc4fee61bc4a57bbc9978ccccac471b976709819e0fe4ce"
+    },
+    {
+      "path": "crates/domain-ir/src/reference_auxiliary.rs",
+      "bytes": 87884,
+      "sha256": "04e3c23493732cf35e4cfdff83314d55b725c1e419b524a1ef00ca9c60f66777"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_field_fixture.rs",
+      "bytes": 2850,
+      "sha256": "eaa5b0c52e615adc355ff73bcf2a62a4c7e91bdc42d284a6e02d5e5751b60f06"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_bookmark_fixture.rs",
+      "bytes": 4017,
+      "sha256": "be709ad42fa90a6cf273b1b6d34869ecba0a9735e3e015a33354871a3aae0932"
+    },
+    {
+      "path": "implementation/p09/evidence/private/p09-14-hyperlink-discovery-20260912-attempt02/after.hwpx",
+      "bytes": 15097,
+      "sha256": "feb312b974de2dd7d0275e6043e927ea5cf8348cfc0a04b44045e0bf669d4480"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/notes.rs",
+      "bytes": 7430,
+      "sha256": "d19b3ce73df546b89709a374495762ad15aceadcfd4bc7a22468e76b55c4d71f"
+    },
+    {
+      "path": "crates/hwpx-package/src/note_hwpx.rs",
+      "bytes": 72263,
+      "sha256": "3364d95456e783633c77b044a223afa911c6c2035fe79c447c742bc4f40ce7c4"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_note_fixture.rs",
+      "bytes": 3978,
+      "sha256": "6f85b353c45e7b688e99d922374364c1a7012458b505273ad60c30004c3ce2d9"
+    },
+    {
+      "path": "crates/product-cli/Cargo.toml",
+      "bytes": 772,
+      "sha256": "280f6845d791cdf75e64f7b7fb0a5858e14f8c170f80cf4ee4b8c5e50c2c4a00"
+    },
+    {
+      "path": "crates/product-cli/src/main.rs",
+      "bytes": 1997,
+      "sha256": "227974950c8fa18b8e9294701499db8c1de59f2a504c9cd22236daf713e42f03"
+    },
+    {
+      "path": "crates/product-cli/src/lib.rs",
+      "bytes": 26562,
+      "sha256": "4811ee756dde8335a8ae70836dba8093684c2b7aa26c49af654e0a9c4d997323"
+    },
+    {
+      "path": "crates/product-cli/src/reference_validation_product.rs",
+      "bytes": 6662,
+      "sha256": "6c3bf01d494458354f8e1860c81406562e167b9f758fdb1368bfd2d458ea126a"
+    },
+    {
+      "path": "crates/product-cli/src/reference_validation_product/source.rs",
+      "bytes": 9873,
+      "sha256": "4f0905cdf419695c5d30cf71327fec265589b6938668d9e7cccfad2edf48fe5a"
+    },
+    {
+      "path": "crates/product-cli/tests/reference_source_product.rs",
+      "bytes": 15337,
+      "sha256": "13982c2f03a819c517fc1fd7389340d3182ab94de6de1493b2f08e3e2335db2e"
+    },
+    {
+      "path": "fixtures/target-build/p09-24-note-target-20261002-03/output/fixture-manifest.json",
+      "bytes": 9946,
+      "sha256": "ef2e30388827c40e02b99017350f434b33840ce5564c2d46b2bae9c10dac9150"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-26-note-native-batch-qualification.current-2020.v1.json",
+      "bytes": 34455,
+      "sha256": "a03e6461d94010d7b1ccfbf9eecdb8e1d06389f3a690363e7b414d4cda9f2347"
+    },
+    {
+      "path": "fixtures/target-build/p09-24-note-target-20261002-03/output/p09-24-c01-footnote.hwpx",
+      "bytes": 7609,
+      "sha256": "587cc310e952d5424b5803ef01beb8668481c0dbbe503bebad4dfd901a1102dd"
+    },
+    {
+      "path": "implementation/p09/evidence/private/p09-17-field-auto-number-target-p09-24-20261002-c01-attempt01/saved.hwpx",
+      "bytes": 15560,
+      "sha256": "6b6c608353b8fd4323006972bc9f375f76e74c4c62e3730ba2591dffe4077fce"
+    },
+    {
+      "path": "implementation/p09/evidence/private/p09-17-field-auto-number-target-p09-24-20261002-c01-attempt01/reopened.hwpx",
+      "bytes": 15563,
+      "sha256": "8e2035da65e6f2782ea3b6d2ae6b56622d85e261840f21fd1d8f1104ca4c7e4a"
+    },
+    {
+      "path": "fixtures/target-build/p09-24-note-target-20261002-03/output/p09-24-c02-endnote.hwpx",
+      "bytes": 7597,
+      "sha256": "0121bb13948ce67393c8c3909e7a4c192ce83d00bc0b3899e119f62f982b7c88"
+    },
+    {
+      "path": "implementation/p09/evidence/private/p09-17-field-auto-number-target-p09-24-20261002-c02-attempt01/saved.hwpx",
+      "bytes": 15416,
+      "sha256": "b0a011dcf74e1ddb4605cd0482681ec85aabf7dc2992a96d2955a903310eec5c"
+    },
+    {
+      "path": "implementation/p09/evidence/private/p09-17-field-auto-number-target-p09-24-20261002-c02-attempt01/reopened.hwpx",
+      "bytes": 15411,
+      "sha256": "24b9510a1da5deefc99cd3f2a1f186cc70b5efd81eea85a40fa3c00705522e7f"
+    },
+    {
+      "path": "fixtures/target-build/p09-24-note-target-20261002-03/output/p09-24-c03-footnote-endnote.hwpx",
+      "bytes": 7646,
+      "sha256": "e876d566f85f03461b1a7cb9e56f53cd6a3d065989ed2e60356b6043bb0fede9"
+    },
+    {
+      "path": "implementation/p09/evidence/private/p09-17-field-auto-number-target-p09-24-20261002-c03-attempt01/saved.hwpx",
+      "bytes": 15647,
+      "sha256": "46d6d3e32d23d950601a0c98ddec91bb185c957e160bb97fe41bef3a60227cc2"
+    },
+    {
+      "path": "implementation/p09/evidence/private/p09-17-field-auto-number-target-p09-24-20261002-c03-attempt01/reopened.hwpx",
+      "bytes": 15650,
+      "sha256": "8711efe96902778ed5f76f3429e7c1f18a495e541e5ce04775be423ca04d0f34"
+    },
+    {
+      "path": "implementation/p06/evidence/target/p06-table-aggregate.current-2020.attempt02.v2.json",
+      "bytes": 22336,
+      "sha256": "edc71d554e0975d511ffe6f0de1b140a30ca932d0bf2b9c7b70517c5e8674fc5"
+    },
+    {
+      "path": "fixtures/target-build/p06-09-table-aggregate-target-20260909-05/table-022-block-sum.hwpx",
+      "bytes": 13111,
+      "sha256": "56942277d33e114e6d6a960751b337b715903d0fec82018a7eb22c8fcbd4773c"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T05:30:56.516755+00:00",
+      "system_cpu_percent": 32.62,
+      "available_ram_mib": 8382.0,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 26.30810548042364,
+      "commit_used_percent": 51.72582739376814,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.3828125,
+      "parent_private_percent": 0.045142492485957336
+    },
+    {
+      "time_utc": "2026-10-17T05:30:57.017652+00:00",
+      "system_cpu_percent": 38.67,
+      "available_ram_mib": 8268.99,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 25.953389947397103,
+      "commit_used_percent": 51.90833058033869,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.3828125,
+      "parent_private_percent": 0.045142492485957336
+    },
+    {
+      "time_utc": "2026-10-17T05:30:57.538694+00:00",
+      "system_cpu_percent": 41.86,
+      "available_ram_mib": 8344.79,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 26.191301426671956,
+      "commit_used_percent": 51.795519802199166,
+      "parent_cpu_machine_percent": 0.37483068449818224,
+      "parent_private_mib": 14.53515625,
+      "parent_private_percent": 0.04562064490501012
+    },
+    {
+      "time_utc": "2026-10-17T05:30:58.055471+00:00",
+      "system_cpu_percent": 14.77,
+      "available_ram_mib": 8413.14,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 26.405844739005406,
+      "commit_used_percent": 51.68912405324861,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.53515625,
+      "parent_private_percent": 0.04562064490501012
+    },
+    {
+      "time_utc": "2026-10-17T05:30:58.557840+00:00",
+      "system_cpu_percent": 6.99,
+      "available_ram_mib": 8425.06,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 26.443238710239022,
+      "commit_used_percent": 51.67648732451746,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.53515625,
+      "parent_private_percent": 0.04562064490501012
+    },
+    {
+      "time_utc": "2026-10-17T05:30:59.061020+00:00",
+      "system_cpu_percent": 0.78,
+      "available_ram_mib": 8429.45,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 26.457007047844055,
+      "commit_used_percent": 51.67361081371218,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.53515625,
+      "parent_private_percent": 0.04562064490501012
+    }
+  ]
+}

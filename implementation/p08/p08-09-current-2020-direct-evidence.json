@@ -1,16 +1,17 @@
 {
   "schema_version": "hwpx-agent.p08-object-direct-evidence/v1",
   "target_profile_id": "hancom-hangul-2020-secondary",
+  "target_qualification_file": "implementation/p08/evidence/p08-20-object-target-qualification.current-2020.v1.json",
   "profiles": [
     {
       "profile_id": "image-full-package-v1",
       "feature_ids": ["OBJ-002"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["resource_integrity", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "evidence_files": [
         "implementation/p08/P08-01_ASSET_PIPELINE_REPORT.md",
         "implementation/p08/P08-02_IMAGE_HWPX_REPORT.md",
@@ -22,11 +23,11 @@
       "profile_id": "geometry-section-v1",
       "feature_ids": ["OBJ-015", "OBJ-016", "OBJ-017", "OBJ-018", "OBJ-032", "OBJ-033"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "evidence_files": [
         "implementation/p08/P08-03_OBJECT_GEOMETRY_REPORT.md",
         "implementation/p08/evidence/p08-03-object-geometry-source-qualification.v1.json"
@@ -36,11 +37,11 @@
       "profile_id": "basic-shape-package-v1",
       "feature_ids": ["OBJ-001", "OBJ-007", "OBJ-042"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["resource_integrity", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "evidence_files": [
         "implementation/p08/P08-04_BASIC_SHAPE_REPORT.md",
         "implementation/p08/P08-12_FREEFORM_HWPX_INTEGRATION_REPORT.md",
@@ -52,11 +53,11 @@
       "profile_id": "object-protect-section-v1",
       "feature_ids": ["OBJ-045"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "evidence_files": [
         "implementation/p08/P08-03_OBJECT_GEOMETRY_REPORT.md",
         "implementation/p08/P08-14_OBJECT_PROTECT_HWPX_REPORT.md",
@@ -71,11 +72,11 @@
         "OBJ-027", "OBJ-028", "OBJ-029", "OBJ-034", "OBJ-035"
       ],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "evidence_files": [
         "implementation/p08/P08-05_OBJECT_APPEARANCE_REPORT.md",
         "implementation/p08/evidence/p08-05-object-appearance-source-qualification.v1.json"
@@ -85,11 +86,11 @@
       "profile_id": "composition-section-v1",
       "feature_ids": ["OBJ-036", "OBJ-037", "OBJ-038", "OBJ-039", "OBJ-040", "OBJ-041"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "evidence_files": [
         "implementation/p08/P08-06_OBJECT_COMPOSITION_REPORT.md",
         "implementation/p08/P08-11_OBJECT_HWPX_INTEGRATION_REPORT.md",
@@ -117,11 +118,11 @@
       "profile_id": "drawing-canvas-section-v1",
       "feature_ids": ["OBJ-010", "OBJ-031"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "evidence_files": [
         "implementation/p08/P08-08_DRAWING_CANVAS_REPORT.md",
         "implementation/p08/P08-11_OBJECT_HWPX_INTEGRATION_REPORT.md",
@@ -130,18 +131,36 @@
     },
     {
       "profile_id": "object-common-properties-section-v1",
-      "feature_ids": ["OBJ-019", "OBJ-030", "OBJ-046", "OBJ-047"],
+      "feature_ids": ["OBJ-019", "OBJ-030", "OBJ-047"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "evidence_files": [
         "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
         "implementation/p08/P08-17_OBJECT_REMAINDER_HWPX_REPORT.md",
         "implementation/p08/evidence/p08-10-object-remainder-source-qualification.v1.json",
         "implementation/p08/evidence/p08-17-object-remainder-hwpx-source-qualification.current-2020.v1.json"
+      ]
+    },
+    {
+      "profile_id": "object-printable-security-v1",
+      "feature_ids": ["OBJ-046"],
+      "backend": "direct_hwpx",
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build", "security"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": true,
+      "evidence_files": [
+        "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
+        "implementation/p08/P08-17_OBJECT_REMAINDER_HWPX_REPORT.md",
+        "implementation/p08/evidence/p08-10-object-remainder-source-qualification.v1.json",
+        "implementation/p08/evidence/p08-17-object-remainder-hwpx-source-qualification.current-2020.v1.json",
+        "crates/hwpx-package/tests/object_common_properties_hwpx.rs",
+        "tools/p08/tests/test_object_target_oracle.py"
       ]
     },
     {
@@ -156,37 +175,81 @@
       "evidence_files": [
         "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
         "implementation/p08/P08-17_OBJECT_REMAINDER_HWPX_REPORT.md",
+        "implementation/p08/P08-21_ASPECT_LOCK_NEGATIVE_QUALIFICATION_POLICY.md",
+        "implementation/p08/P08-21_ASPECT_LOCK_NEGATIVE_QUALIFICATION_REPORT.md",
         "implementation/p08/evidence/p08-10-object-remainder-source-qualification.v1.json",
-        "implementation/p08/evidence/p08-17-object-remainder-hwpx-source-qualification.current-2020.v1.json"
+        "implementation/p08/evidence/p08-17-object-remainder-hwpx-source-qualification.current-2020.v1.json",
+        "implementation/p08/evidence/p08-21-aspect-lock-negative-qualification.current-2020.v1.json"
       ]
     },
     {
       "profile_id": "object-hyperlink-target-route-v1",
       "feature_ids": ["OBJ-048"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "backend": "direct_hwpx",
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "evidence_files": [
         "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
         "implementation/p08/P08-15_OBJECT_HYPERLINK_HWPX_REPORT.md",
         "implementation/p08/P08-16_OBJECT_HYPERLINK_TARGET_ROUTE_REPORT.md",
         "implementation/p08/evidence/p08-10-object-remainder-source-qualification.v1.json",
         "implementation/p08/evidence/p08-15-object-hyperlink-hwpx-source-qualification.v1.json",
-        "implementation/p08/evidence/p08-16-object-hyperlink-target-route-source-qualification.current-2020.v1.json"
+        "implementation/p08/evidence/p08-16-object-hyperlink-target-route-source-qualification.current-2020.v1.json",
+        "crates/hwpx-package/examples/p08_19_support/properties.rs",
+        "crates/hwpx-package/examples/p08_19_object_target_bundle.rs",
+        "tools/p08/validate_object_target_batch_tooling.py"
+      ]
+    },
+    {
+      "profile_id": "caption-insert-section-v1",
+      "feature_ids": ["OBJ-013"],
+      "backend": "direct_hwpx",
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": true,
+      "evidence_files": [
+        "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
+        "implementation/p08/P08-17_OBJECT_REMAINDER_HWPX_REPORT.md",
+        "implementation/p08/evidence/p08-10-object-remainder-source-qualification.v1.json",
+        "implementation/p08/evidence/p08-17-object-remainder-hwpx-source-qualification.current-2020.v1.json",
+        "crates/hwpx-package/src/object_caption_insert_hwpx.rs",
+        "crates/hwpx-package/tests/object_caption_insert_hwpx.rs",
+        "crates/hwpx-package/examples/p08_19_support/special.rs"
+      ]
+    },
+    {
+      "profile_id": "form-insert-section-v1",
+      "feature_ids": ["OBJ-012"],
+      "backend": "direct_hwpx",
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
+      "negative_passed": true,
+      "rollback_or_retry_passed": true,
+      "evidence_files": [
+        "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
+        "implementation/p08/P08-17_OBJECT_REMAINDER_HWPX_REPORT.md",
+        "implementation/p08/evidence/p08-10-object-remainder-source-qualification.v1.json",
+        "implementation/p08/evidence/p08-17-object-remainder-hwpx-source-qualification.current-2020.v1.json",
+        "crates/hwpx-package/src/object_form_insert_hwpx.rs",
+        "crates/hwpx-package/tests/object_form_insert_hwpx.rs",
+        "crates/hwpx-package/examples/p08_19_support/special.rs"
       ]
     },
     {
       "profile_id": "textbox-properties-section-v1",
       "feature_ids": ["OBJ-025"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "evidence_files": [
         "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
         "implementation/p08/P08-13_TEXTBOX_PROPERTIES_HWPX_REPORT.md",
@@ -198,11 +261,11 @@
       "profile_id": "shape-points-section-v1",
       "feature_ids": ["OBJ-043"],
       "backend": "direct_hwpx",
-      "stage": "integration_passed",
-      "validations_passed": ["schema", "semantic_reopen"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "evidence_files": [
         "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
         "implementation/p08/P08-12_FREEFORM_HWPX_INTEGRATION_REPORT.md",
@@ -211,19 +274,22 @@
       ]
     },
     {
-      "profile_id": "special-object-component-v1",
-      "feature_ids": ["OBJ-003", "OBJ-012", "OBJ-013", "OBJ-014"],
-      "backend": "component_only",
-      "stage": "unit_passed",
-      "validations_passed": ["schema"],
-      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation"],
+      "profile_id": "special-object-target-v1",
+      "feature_ids": ["OBJ-003", "OBJ-014"],
+      "backend": "direct_hwpx",
+      "stage": "oracle_verified",
+      "validations_passed": ["resource_integrity", "semantic_reopen", "hancom_open", "object_bounds", "render_diff"],
+      "fixture_classes_passed": ["boundary", "happy_path", "negative", "preservation", "target_build"],
       "negative_passed": true,
-      "rollback_or_retry_passed": false,
+      "rollback_or_retry_passed": true,
       "evidence_files": [
         "implementation/p08/P08-10_OBJECT_REMAINDER_REPORT.md",
         "implementation/p08/P08-17_OBJECT_REMAINDER_HWPX_REPORT.md",
         "implementation/p08/evidence/p08-10-object-remainder-source-qualification.v1.json",
-        "implementation/p08/evidence/p08-17-object-remainder-hwpx-source-qualification.current-2020.v1.json"
+        "implementation/p08/evidence/p08-17-object-remainder-hwpx-source-qualification.current-2020.v1.json",
+        "crates/hwpx-package/examples/p08_19_support/special.rs",
+        "crates/hwpx-package/examples/p08_19_object_target_bundle.rs",
+        "tools/p08/validate_object_target_batch_tooling.py"
       ]
     },
     {

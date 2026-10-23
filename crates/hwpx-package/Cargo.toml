@@ -5,11 +5,15 @@ edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
 
+[features]
+p09-installed-format-fixture = []
+
 [dependencies]
 domain-ir = { version = "0.1.0", path = "../domain-ir" }
 equation-engine = { version = "0.1.0", path = "../equation-engine" }
 hwpx-agent-foundation = { version = "0.1.0", path = "../foundation" }
 quick-xml.workspace = true
+regex.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true

@@ -1,0 +1,447 @@
+{
+  "state": "PASS_SELECTOR_NAVIGATION_CODE_DOCUMENT_SYNC_NOT_FULL_SELECTOR_NATIVE_OR_GATE",
+  "actual_Cargo_or_tests": false,
+  "actual_Hangul_or_COM": false,
+  "Native011_executed": false,
+  "prior_Native_replayed": false,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "fresh_inputs": 37,
+  "final_fresh_hashes": 37,
+  "current_navigation_cases": 33,
+  "new_core_cases": 6,
+  "new_product_cases": 10,
+  "affected_cases": 17,
+  "entire_548_input_set_reaudited": false,
+  "tests_reexecuted": false,
+  "full_selector_native_or_execution_qualified": false,
+  "next_work": "Selector_style_and_control_filter_combinations_and_full_search_contract",
+  "cleanup": true,
+  "elapsed_seconds": 10.063,
+  "source_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-361-selector-navigation-components101.v1.json",
+      "bytes": 187938,
+      "sha256": "01bde329542d9c59a77e9457a7e74af803c4fed0bf99e3d0085e49c4a3276fd2"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-review-selector-product-components099.v1.json",
+      "bytes": 259017,
+      "sha256": "592c485efebf36cdb45431215b18c4b9de7d55087c1a98004aa2f38af97e136f"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/forms.rs",
+      "bytes": 19595,
+      "sha256": "a63871808172885b0902f10f34959121a64651614b9684977424e032191d6d65"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search.rs",
+      "bytes": 12508,
+      "sha256": "cf5b60e6d1f3cad1b3bb99dd90a19e49772972ed3e53293dc456fa6d29b6c294"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/navigation.rs",
+      "bytes": 6148,
+      "sha256": "bf0226d3d397191530976735c0c0fc66d1497fe102e6730bed750fee5c9d29c9"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/reviews.rs",
+      "bytes": 9980,
+      "sha256": "ecdc13c658f644027333e43c2b1f46d4223479759a2ffa2aca9930e3c326da6a"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/reviews/selector.rs",
+      "bytes": 8117,
+      "sha256": "af674827c80e5a5c11c17fd16dc5d6b43d73524a6488dfd22e4b5dce9a321d82"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/scope.rs",
+      "bytes": 4198,
+      "sha256": "2fe55de02c41b440bee290523fd42af5a70e329b5cd23be194893499adb98805"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/selector.rs",
+      "bytes": 11918,
+      "sha256": "a5473722f1b689fc99c9d69c0d7944f05e5ba1397127724b2337e710274809a9"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_search_navigation.rs",
+      "bytes": 11984,
+      "sha256": "66dff332bcc77436fe7d6d9f422dd8cc28f3bfe080adf66660be947bf5b21010"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_selector_navigation.rs",
+      "bytes": 9229,
+      "sha256": "3806ab52e94db67329c208d1011e94a20130da1bda41a5eee270f52752cb9f9f"
+    },
+    {
+      "path": "crates/hwpx-package/tests/selector_navigation_bundle.rs",
+      "bytes": 220,
+      "sha256": "b47d84c661b6b96bd39fb294a0438627969b29823f93c8e7e9a8a876a73477af"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/review_scope_fixture.rs",
+      "bytes": 1002,
+      "sha256": "5f9a059d1d9f5accd3116ff8d72405555813df6ba6f3b1d7e43aab9d9ac818db"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_source_search.rs",
+      "bytes": 14849,
+      "sha256": "b8766a2349e3e34c6247a09a02a6fa6234d0816f81d5b1b8fae03255474081c3"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_source_search/navigation.rs",
+      "bytes": 3283,
+      "sha256": "9c398d1cb5151927f4685fdca657797941408a7094f1837e84ea920fa9708b5c"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_source_search/selector.rs",
+      "bytes": 12539,
+      "sha256": "cea9ca00a83fc9c617f48833d35293995fc2721a43e74b4c7662004ef12cade5"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_source_search/selector/review.rs",
+      "bytes": 7600,
+      "sha256": "bd95acf2953847bfa01174800b4aeb79e37793e0365886c3dc496e4deb78931a"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_search.rs",
+      "bytes": 11331,
+      "sha256": "3ad39b6d5314a46c932a6afbb1d1027ffbef6842d40f31a08a5e302f7df9d2db"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_search/navigation.rs",
+      "bytes": 1560,
+      "sha256": "7d54fd942c141e20e5b441bfb9c1baeedc2190ac92e0f75fa33a8dc4a9799f5f"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_search/review_selector.rs",
+      "bytes": 3353,
+      "sha256": "aed31a76ddf257d72f72117b251e5d6f9fd7a64a99edc78b2b1158486ffcbd3b"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/source_search/selector.rs",
+      "bytes": 3119,
+      "sha256": "7a590440bccfff10331d33a127966f4bf626c0cbfc64df4844bec25274f4b4db"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/selector_navigation_product.rs",
+      "bytes": 18609,
+      "sha256": "30585c9e3b9c122eec1c44a6388564ff6e81e7f329c163812356f35b22c2ad4e"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/source_search_navigation.rs",
+      "bytes": 14420,
+      "sha256": "7a854e8e03923d5c05a78ebb35df885f62a87f22fe73e0110ccf5a84d602874a"
+    },
+    {
+      "path": "crates/product-cli/tests/selector_navigation_product.rs",
+      "bytes": 299,
+      "sha256": "9125e73821af9f46985b01926c92146da1227c1749a01c3bef47f67ca51387c7"
+    },
+    {
+      "path": "crates/product-cli/tests/selector_navigation_product/actual_import.rs",
+      "bytes": 232,
+      "sha256": "ccdd8a06635c47a622dbc41655ef7c9e5e59b0b489aa2852a8880fc9e9f8418c"
+    },
+    {
+      "path": "crates/product-cli/tests/support/stored_source_fixture.rs",
+      "bytes": 7986,
+      "sha256": "c238da0b99bc39b6e6fe7a9fcf09b9968d30118ae166a51b986b4e6f53abef8c"
+    },
+    {
+      "path": "tools/p09/run_selector_navigation_components.py",
+      "bytes": 10929,
+      "sha256": "27426e7a8699303aefae098d96b3003d441bdf8a8d6f1f76fe0d0497943a88cc"
+    },
+    {
+      "path": "tools/p09/run_source_note_api_components.py",
+      "bytes": 10602,
+      "sha256": "1caa2395cbc6f1f32d66dc360ef96ebb2cf7f4e080c3fe9e9a07eb6056987d5a"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 1440888,
+      "sha256": "2c048d23e843c0dc63f92fc0c6d7fde7266a01e787f64842fc748a4001989bbb"
+    },
+    {
+      "path": "implementation/p09/P09_SEARCH_SOURCE_INDEX_PROGRESS.md",
+      "bytes": 63738,
+      "sha256": "86deb46c662c8d9c18df04b323fb626db591e7bea313bf8d72c54c14066f1975"
+    },
+    {
+      "path": "protocol/migrations/p09-review-selector-product-requests.md",
+      "bytes": 8221,
+      "sha256": "7d225cd88da5d21ffe8e899b2bef49a8c2349195cf05ca728866d4885d937617"
+    },
+    {
+      "path": "protocol/migrations/p09-selector-result-navigation-v1.md",
+      "bytes": 5523,
+      "sha256": "834b66484d1fcf60d5be7c7e82141f5ef5e8e855bdae6bcf99e2a9d94b17aa87"
+    },
+    {
+      "path": "protocol/migrations/p09-source-index-scope-selector-v1.md",
+      "bytes": 6631,
+      "sha256": "2bb14eb7b88215c8bbc476a1f66c12a8699f4327f08f00a28b9f5ee740d9b688"
+    },
+    {
+      "path": "protocol/migrations/p09-source-scope-product-request-v5.md",
+      "bytes": 7575,
+      "sha256": "6b5e674cd4751e51d180d7e76dd7fd8621ecda2e1f3148f3a34dd8471a12a2fb"
+    },
+    {
+      "path": "protocol/migrations/p09-source-search-navigation-v1.md",
+      "bytes": 5608,
+      "sha256": "020975280d6674cfaf562d2ec786c6f127ce0b5fa87be6ebf32ea94b8d7dfdae"
+    },
+    {
+      "path": "protocol/migrations/p09-stored-review-selector-candidates-v1.md",
+      "bytes": 6992,
+      "sha256": "324a8074a0a9f037e7c3a741d89aa8c0f5d35b80f6aaa85b1888e64b15c76e89"
+    },
+    {
+      "path": "tools/p09/run_selector_navigation_sync.py",
+      "bytes": 9076,
+      "sha256": "e77d7144c37f25534211a0aa160311ccac9a19090ccff87f836f7a97f6a6b97c"
+    }
+  ],
+  "resource_samples": {
+    "encoding": "lossless_columns_v1",
+    "columns": [
+      "time_utc",
+      "system_cpu_percent",
+      "available_ram_mib",
+      "total_ram_mib",
+      "available_ram_percent",
+      "commit_used_percent",
+      "parent_cpu_machine_percent",
+      "parent_private_mib",
+      "parent_private_percent"
+    ],
+    "rows": [
+      [
+        "2026-10-19T19:42:37.351152+00:00",
+        0.98,
+        13257.79,
+        31860.92,
+        41.61144721411849,
+        43.15019294005826,
+        0.0,
+        13.83203125,
+        0.04341378758630498
+      ],
+      [
+        "2026-10-19T19:42:37.851718+00:00",
+        0.2,
+        13262.84,
+        31860.92,
+        41.62729980585786,
+        43.13589826314403,
+        0.0,
+        13.83203125,
+        0.04341378758630498
+      ],
+      [
+        "2026-10-19T19:42:38.362822+00:00",
+        0.78,
+        13261.27,
+        31860.92,
+        41.62238341816452,
+        43.13736874015447,
+        0.18925629844841685,
+        14.8359375,
+        0.046564689424678424
+      ],
+      [
+        "2026-10-19T19:42:38.862243+00:00",
+        0.39,
+        13261.48,
+        31860.92,
+        41.62302095472326,
+        43.13736874015447,
+        0.0,
+        14.8359375,
+        0.046564689424678424
+      ],
+      [
+        "2026-10-19T19:42:39.363859+00:00",
+        4.27,
+        13261.51,
+        31860.92,
+        41.62313129758919,
+        43.13800731383629,
+        0.0,
+        14.8359375,
+        0.046564689424678424
+      ],
+      [
+        "2026-10-19T19:42:39.862479+00:00",
+        4.13,
+        13265.38,
+        31860.92,
+        41.63528127316051,
+        43.1295008093775,
+        0.0,
+        14.8359375,
+        0.046564689424678424
+      ],
+      [
+        "2026-10-19T19:42:40.365288+00:00",
+        1.33,
+        13260.41,
+        31860.92,
+        41.61968614810832,
+        43.149267301143325,
+        0.0,
+        14.8359375,
+        0.046564689424678424
+      ],
+      [
+        "2026-10-19T19:42:40.873058+00:00",
+        9.73,
+        13236.92,
+        31860.92,
+        41.54594033270826,
+        43.154668814305175,
+        0.0,
+        14.8359375,
+        0.046564689424678424
+      ],
+      [
+        "2026-10-19T19:42:41.373107+00:00",
+        1.95,
+        13236.83,
+        31860.92,
+        41.54567060570264,
+        43.15081393831765,
+        0.0,
+        14.8359375,
+        0.046564689424678424
+      ],
+      [
+        "2026-10-19T19:42:41.875215+00:00",
+        1.75,
+        13244.76,
+        31860.92,
+        41.570559052130264,
+        43.135792810609416,
+        0.0,
+        14.8359375,
+        0.046564689424678424
+      ],
+      [
+        "2026-10-19T19:42:42.372931+00:00",
+        1.72,
+        13247.11,
+        31860.92,
+        41.577939763829484,
+        43.13352558111523,
+        0.0,
+        15.58984375,
+        0.048930930883067825
+      ],
+      [
+        "2026-10-19T19:42:42.872997+00:00",
+        0.0,
+        13257.3,
+        31860.92,
+        41.60992693463227,
+        43.12467928515601,
+        0.0,
+        17.9296875,
+        0.05627486162698104
+      ],
+      [
+        "2026-10-19T19:42:43.380672+00:00",
+        2.15,
+        13244.87,
+        31860.92,
+        41.57089008072807,
+        43.155934244720534,
+        0.0,
+        15.421875,
+        0.04840373719026604
+      ],
+      [
+        "2026-10-19T19:42:43.891654+00:00",
+        9.85,
+        13137.68,
+        31860.92,
+        41.23445468249147,
+        43.34625263580075,
+        0.0,
+        15.421875,
+        0.04840373719026604
+      ],
+      [
+        "2026-10-19T19:42:44.396965+00:00",
+        21.88,
+        13202.75,
+        31860.92,
+        41.43869932733763,
+        43.27524207068706,
+        0.0,
+        15.421875,
+        0.04840373719026604
+      ],
+      [
+        "2026-10-19T19:42:44.891457+00:00",
+        14.45,
+        13197.57,
+        31860.92,
+        41.422454405408274,
+        43.26303886904266,
+        0.1953125,
+        15.421875,
+        0.04840373719026604
+      ],
+      [
+        "2026-10-19T19:42:45.404331+00:00",
+        13.9,
+        13207.58,
+        31860.92,
+        41.45386534124451,
+        43.25935388880534,
+        0.0,
+        15.421875,
+        0.04840373719026604
+      ],
+      [
+        "2026-10-19T19:42:45.904106+00:00",
+        7.6,
+        13212.32,
+        31860.92,
+        41.46872484719046,
+        43.21194711602257,
+        0.0,
+        15.421875,
+        0.04840373719026604
+      ],
+      [
+        "2026-10-19T19:42:46.404393+00:00",
+        3.91,
+        13189.13,
+        31860.92,
+        41.395959857265375,
+        43.25778967620858,
+        0.0,
+        15.421875,
+        0.04840373719026604
+      ],
+      [
+        "2026-10-19T19:42:46.913526+00:00",
+        12.71,
+        13197.49,
+        31860.92,
+        41.42218467840265,
+        43.24177846636981,
+        0.0,
+        15.421875,
+        0.04840373719026604
+      ]
+    ]
+  },
+  "system_CPU_max": 21.88,
+  "available_RAM_min_percent": 41.23445468249147
+}

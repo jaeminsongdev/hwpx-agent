@@ -58,14 +58,6 @@ pub enum ObjectRemainderTargetRoute {
 pub enum ObjectRemainderTargetRouteError {
     #[error("object-remainder target profile does not match the qualified build")]
     TargetProfileMismatch,
-    #[error("drawing-gallery payload does not contain a qualified native object template")]
-    DrawingGalleryTemplateUnqualified,
-    #[error("form insertion payload does not contain the complete native form-control state")]
-    FormInsertionStateIncomplete,
-    #[error("caption insertion has no qualified exact subtree insertion profile")]
-    CaptionInsertionUnqualified,
-    #[error("paragraph band has no qualified distinct HWPML native construct")]
-    ParagraphBandNativeConstructUnqualified,
     #[error("aspect lock has no qualified HWPML field and is not size protection")]
     AspectLockNativeFieldUnqualified,
     #[error("object kind is outside the qualified direct profile")]
@@ -79,16 +71,6 @@ impl ObjectRemainderTargetRouteError {
     pub const fn code(self) -> &'static str {
         match self {
             Self::TargetProfileMismatch => "object_remainder_target_profile_mismatch",
-            Self::DrawingGalleryTemplateUnqualified => {
-                "object_remainder_drawing_gallery_template_unqualified"
-            }
-            Self::FormInsertionStateIncomplete => {
-                "object_remainder_form_insertion_state_incomplete"
-            }
-            Self::CaptionInsertionUnqualified => "object_remainder_caption_insertion_unqualified",
-            Self::ParagraphBandNativeConstructUnqualified => {
-                "object_remainder_paragraph_band_native_construct_unqualified"
-            }
             Self::AspectLockNativeFieldUnqualified => {
                 "object_remainder_aspect_lock_native_field_unqualified"
             }
@@ -105,9 +87,9 @@ impl ObjectRemainderTargetRouteError {
 
 /// Exact current-PC route policy for the nine P08 remainder capabilities.
 ///
-/// Four capabilities have bounded direct-HWPX subsets. Five stay explicitly unavailable until a
-/// lossless native representation is qualified. A direct preflight rejection never widens to an
-/// unverified dialog or desktop action after the source has been inspected.
+/// Eight capabilities have bounded direct-HWPX subsets. Aspect lock stays explicitly unavailable
+/// until a lossless native representation is qualified. A direct preflight rejection never widens
+/// to an unverified dialog or desktop action after the source has been inspected.
 #[derive(Clone, Copy, Eq, PartialEq)]
 pub struct ObjectRemainderTargetRouter {
     _qualified: (),
@@ -152,17 +134,27 @@ impl ObjectRemainderTargetRouter {
         direct_admission: ObjectRemainderDirectAdmission,
     ) -> Result<ObjectRemainderTargetRoute, ObjectRemainderTargetRouteError> {
         match capability {
-            ObjectRemainderCapability::DrawingGallery => {
-                Err(ObjectRemainderTargetRouteError::DrawingGalleryTemplateUnqualified)
+            ObjectRemainderCapability::FormObjectInsert | ObjectRemainderCapability::Printable => {
+                if object_kind == ObjectPropertyKind::FormObject {
+                    direct_route(direct_admission)
+                } else {
+                    Err(ObjectRemainderTargetRouteError::ObjectKindOutOfScope)
+                }
             }
-            ObjectRemainderCapability::FormObjectInsert => {
-                Err(ObjectRemainderTargetRouteError::FormInsertionStateIncomplete)
-            }
-            ObjectRemainderCapability::CaptionInsert => {
-                Err(ObjectRemainderTargetRouteError::CaptionInsertionUnqualified)
+            ObjectRemainderCapability::DrawingGallery
+            | ObjectRemainderCapability::CaptionInsert => {
+                if object_kind == ObjectPropertyKind::BasicShape {
+                    direct_route(direct_admission)
+                } else {
+                    Err(ObjectRemainderTargetRouteError::ObjectKindOutOfScope)
+                }
             }
             ObjectRemainderCapability::ParagraphBandObject => {
-                Err(ObjectRemainderTargetRouteError::ParagraphBandNativeConstructUnqualified)
+                if object_kind == ObjectPropertyKind::ParagraphBand {
+                    direct_route(direct_admission)
+                } else {
+                    Err(ObjectRemainderTargetRouteError::ObjectKindOutOfScope)
+                }
             }
             ObjectRemainderCapability::AspectLock => {
                 Err(ObjectRemainderTargetRouteError::AspectLockNativeFieldUnqualified)
@@ -177,13 +169,6 @@ impl ObjectRemainderTargetRouter {
             }
             ObjectRemainderCapability::ImageProperties => {
                 if object_kind == ObjectPropertyKind::Picture {
-                    direct_route(direct_admission)
-                } else {
-                    Err(ObjectRemainderTargetRouteError::ObjectKindOutOfScope)
-                }
-            }
-            ObjectRemainderCapability::Printable => {
-                if object_kind == ObjectPropertyKind::FormObject {
                     direct_route(direct_admission)
                 } else {
                     Err(ObjectRemainderTargetRouteError::ObjectKindOutOfScope)

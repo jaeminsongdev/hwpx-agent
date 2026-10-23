@@ -1,0 +1,462 @@
+{
+  "state": "PASS_REGEX_PRODUCT_CODE_DOCUMENT_SYNC_NOT_ZERO_WIDTH_NATIVE_OR_GATE",
+  "actual_Cargo_or_tests": false,
+  "actual_Hangul_or_COM": false,
+  "own_cpu_selection": {
+    "initial_allowed_mask": 65535,
+    "selected_logical_cpu": 2,
+    "selected_mask": 4,
+    "selected_cpu_count": 1,
+    "only_current_verifier_changed": true
+  },
+  "Native011_executed": false,
+  "prior_Native_replayed": false,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "fresh_inputs": 39,
+  "final_fresh_hashes": 39,
+  "current_product_cases": 29,
+  "new_product_cases": 13,
+  "affected_cases": 16,
+  "entire_586_input_set_reaudited": false,
+  "tests_reexecuted": false,
+  "next_work": "Exact_zero_width_source_insertions_then_remaining_style_control_conversion_and_full_transaction_native_contract",
+  "cleanup": true,
+  "elapsed_seconds": 10.063,
+  "source_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-361-regex-product-components116.v1.json",
+      "bytes": 179299,
+      "sha256": "3a778f5ec5f29813a07755065b51f4f61935a163caf7ea3a35a3a7b80659608a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-regex-replacement-focused114.v1.json",
+      "bytes": 169386,
+      "sha256": "478e21869b593aeefd331fc7d115a6d214151e6fdac901a39bec968751ca86eb"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/forms.rs",
+      "bytes": 19595,
+      "sha256": "a63871808172885b0902f10f34959121a64651614b9684977424e032191d6d65"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search.rs",
+      "bytes": 13197,
+      "sha256": "8359402e5cd0848581938bc6ea4e35bfecd4adebfdbaebc5ffb5afb89629b214"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/captures.rs",
+      "bytes": 1230,
+      "sha256": "fbf1318c2179189b0979b8e9214466c752fbf99833b79eebe345826958c718d9"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms.rs",
+      "bytes": 13462,
+      "sha256": "d87d736a315730b72747d39fc983b11a1c8c5bdc336af8a14525ffdb20547982"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/readback.rs",
+      "bytes": 3480,
+      "sha256": "8f80eb363a605f97d8629891c02ac180f22b43d7fd3a106c58c7de5a16ae9b42"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/regex.rs",
+      "bytes": 6039,
+      "sha256": "1248f33522effb8d5c4f3303cdf554b7372f7184d0a3d94724bcd07e232f6ecc"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/regex/template.rs",
+      "bytes": 4545,
+      "sha256": "e9cc945bc4e122ae2caefc51215daf7c625c10e91d17f2bd14860ea03f669f66"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/review.rs",
+      "bytes": 8890,
+      "sha256": "d75ae534f1de321e9e7c485832c2caffe9c59775e50d4ff1d6c8a0900e7dcf5d"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/reviews/selector.rs",
+      "bytes": 9320,
+      "sha256": "09909030cfde410b8a593fe339cabcb0160cab527886cbf60e41f075e19a2a10"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/review_scope_fixture.rs",
+      "bytes": 1002,
+      "sha256": "5f9a059d1d9f5accd3116ff8d72405555813df6ba6f3b1d7e43aab9d9ac818db"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_literal_replacement.rs",
+      "bytes": 11647,
+      "sha256": "964ba74b49eebb8a0704bc9ff210659252a7d8a6cf18870686be374b7d33fd15"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_literal_replacement/regex.rs",
+      "bytes": 10979,
+      "sha256": "3886184a0e0860831214d30cb33c7adf1f82c505c0521dfac0866ea64ec33189"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_literal_replacement/selector.rs",
+      "bytes": 10491,
+      "sha256": "aa435c0eb2318327e04f9822bbedd8c8766696833f7c1fa4718b9e51ec22c0ff"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_source_search/selector.rs",
+      "bytes": 12573,
+      "sha256": "289a1eda83378be18cc10703e5531448398c2734c9daa5376ea1f4d52e26da8e"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import.rs",
+      "bytes": 23617,
+      "sha256": "214f021e05b5f17765e8ee3a66b5cfd5ef4cb01b5bfa69a0de2bcc1333172a0b"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output.rs",
+      "bytes": 5511,
+      "sha256": "b9dab467784a2039bb8e61938bbf53f57e20be6c176f69c10eb0daa32aaba129"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output/atoms/review/selector.rs",
+      "bytes": 6596,
+      "sha256": "291b1552d10d086fbc2546c4fcf3155ec0abb31d0433e14f8b80674a50411386"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output/product.rs",
+      "bytes": 1184,
+      "sha256": "26978cf673193fc9269c22e7eecff157a4dcbaf7a0def11dfc1d64195320b37d"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output/regex.rs",
+      "bytes": 7652,
+      "sha256": "67b2545013527664fe6920467f0320650ecd6fa091ba7fded93fe6385d65476d"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/regex_replacement_product.rs",
+      "bytes": 26342,
+      "sha256": "fb536e176a2776abe9b0eee7531da320d8db7c771fad4c3fabdd85ee406995fc"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/review_selector_product.rs",
+      "bytes": 29523,
+      "sha256": "04b558137ae8c778815b7a9a880052253efd982bf48b93a406cc21d7cada71cc"
+    },
+    {
+      "path": "crates/product-cli/tests/regex_replacement_product.rs",
+      "bytes": 302,
+      "sha256": "92b2a8d17b8fc8df693bf870cde1f316a6b9231b65b67245f5aba18944903ce3"
+    },
+    {
+      "path": "crates/product-cli/tests/regex_replacement_product/actual_import.rs",
+      "bytes": 226,
+      "sha256": "d30d2d99b4828c0db89ab02b6c12ad07b4993b5bbc287663d4ec2644e1115eca"
+    },
+    {
+      "path": "crates/product-cli/tests/support/stored_source_fixture.rs",
+      "bytes": 7986,
+      "sha256": "c238da0b99bc39b6e6fe7a9fcf09b9968d30118ae166a51b986b4e6f53abef8c"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/owned_sql_job.py",
+      "bytes": 13850,
+      "sha256": "30b08c4d779494bbdb7579b9bb28782b4f4588fc69b931cc9d18af326d46b7a0"
+    },
+    {
+      "path": "tools/p09/run_regex_product_components.py",
+      "bytes": 9632,
+      "sha256": "041774a9a5cec6f43f9a904cbf93679838eb4b7b1c1bacbd5dc6c2399840c6c5"
+    },
+    {
+      "path": "tools/p09/run_regex_replacement_focused.py",
+      "bytes": 8387,
+      "sha256": "1848fd5e95f53c3a46b0605079eef94f20309a276185d511c3acb89e875387be"
+    },
+    {
+      "path": "tools/p09/run_source_note_api_components.py",
+      "bytes": 10602,
+      "sha256": "1caa2395cbc6f1f32d66dc360ef96ebb2cf7f4e080c3fe9e9a07eb6056987d5a"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 1460293,
+      "sha256": "4ef282ddfb871cc723456671f2b996f0541f956e8387a97e84ee68c5998d1079"
+    },
+    {
+      "path": "implementation/p09/P09_SEARCH_SOURCE_INDEX_PROGRESS.md",
+      "bytes": 81014,
+      "sha256": "c94f06b72bcbfd954e493caef838ab451d39ad809ee797d9ba7c4136559735a6"
+    },
+    {
+      "path": "protocol/migrations/p09-regex-replacement-product-request-v1.md",
+      "bytes": 6563,
+      "sha256": "80632384f93611de514a7c418f84bc749f777dbb166427819fa154f1cf29d496"
+    },
+    {
+      "path": "protocol/migrations/p09-review-selector-product-requests.md",
+      "bytes": 8865,
+      "sha256": "82ca4292e93cc8ad1e7213702d2a15d9032531a351c4ec91a34ed02a177bdd90"
+    },
+    {
+      "path": "protocol/migrations/p09-source-literal-text-atom-output-v2.md",
+      "bytes": 8382,
+      "sha256": "ea7e1ef845326b9033881d8d35f04d41ada11011ed67feb7f98c1af0af2fccf3"
+    },
+    {
+      "path": "protocol/migrations/p09-source-review-literal-output-v3.md",
+      "bytes": 7153,
+      "sha256": "cd5cf954430d13bd1597044e092d2ca0f63da827eb425c54a4e8d4fd53336378"
+    },
+    {
+      "path": "protocol/migrations/p09-source-selector-regex-replacement-v1.md",
+      "bytes": 8107,
+      "sha256": "58f8e9fedad3cf1f294daae1be34f8c13080bdeae2e08181cbe39a5fc6434f74"
+    },
+    {
+      "path": "tools/p09/run_regex_product_sync.py",
+      "bytes": 9350,
+      "sha256": "9fd08ff6cd3c85156d42b40efb0804ec2b4fde0b12dad843394b82f6d29242eb"
+    }
+  ],
+  "resource_samples": {
+    "encoding": "lossless_columns_v1",
+    "columns": [
+      "time_utc",
+      "system_cpu_percent",
+      "available_ram_mib",
+      "total_ram_mib",
+      "available_ram_percent",
+      "commit_used_percent",
+      "parent_cpu_machine_percent",
+      "parent_private_mib",
+      "parent_private_percent"
+    ],
+    "rows": [
+      [
+        "2026-10-19T21:08:29.234703+00:00",
+        9.47,
+        12868.13,
+        31860.92,
+        40.38844366904742,
+        43.51635929108011,
+        0.0,
+        14.34765625,
+        0.04503214962002208
+      ],
+      [
+        "2026-10-19T21:08:29.735310+00:00",
+        8.98,
+        12954.74,
+        31860.92,
+        40.66029170975658,
+        43.506265140127965,
+        0.0,
+        14.34765625,
+        0.04503214962002208
+      ],
+      [
+        "2026-10-19T21:08:30.233875+00:00",
+        7.51,
+        12934.55,
+        31860.92,
+        40.59693038407286,
+        43.50671624263714,
+        0.0,
+        14.84765625,
+        0.04660147037999018
+      ],
+      [
+        "2026-10-19T21:08:30.733502+00:00",
+        10.94,
+        12930.57,
+        31860.92,
+        40.58441259894843,
+        43.50618312148993,
+        0.0,
+        14.84765625,
+        0.04660147037999018
+      ],
+      [
+        "2026-10-19T21:08:31.234124+00:00",
+        10.76,
+        12976.86,
+        31860.92,
+        40.72970963274829,
+        43.506440894352316,
+        0.0,
+        14.84765625,
+        0.04660147037999018
+      ],
+      [
+        "2026-10-19T21:08:31.734160+00:00",
+        8.54,
+        12929.73,
+        31860.92,
+        40.5818011511213,
+        43.50509930377307,
+        0.0,
+        14.84765625,
+        0.04660147037999018
+      ],
+      [
+        "2026-10-19T21:08:32.233467+00:00",
+        9.41,
+        12971.36,
+        31860.92,
+        40.71245936470708,
+        43.50592534862754,
+        0.0,
+        14.84765625,
+        0.04660147037999018
+      ],
+      [
+        "2026-10-19T21:08:32.748068+00:00",
+        7.14,
+        12932.08,
+        31860.92,
+        40.58915734218365,
+        43.50615382911921,
+        0.0,
+        14.84765625,
+        0.04660147037999018
+      ],
+      [
+        "2026-10-19T21:08:33.254848+00:00",
+        8.67,
+        12894.05,
+        31860.92,
+        40.469803142197016,
+        43.50265046158039,
+        0.0,
+        14.84765625,
+        0.04660147037999018
+      ],
+      [
+        "2026-10-19T21:08:33.749056+00:00",
+        8.0,
+        12963.94,
+        31860.92,
+        40.6891647596763,
+        43.50245127345946,
+        0.0,
+        14.84765625,
+        0.04660147037999018
+      ],
+      [
+        "2026-10-19T21:08:34.247893+00:00",
+        7.39,
+        12944.19,
+        31860.92,
+        40.627164329339124,
+        43.44504994378501,
+        0.0,
+        15.29296875,
+        0.04799914668183677
+      ],
+      [
+        "2026-10-19T21:08:34.747816+00:00",
+        11.94,
+        12912.79,
+        31860.92,
+        40.52862815005894,
+        43.44212656518657,
+        0.0,
+        15.8984375,
+        0.049899496039610636
+      ],
+      [
+        "2026-10-19T21:08:35.256616+00:00",
+        6.88,
+        12963.38,
+        31860.92,
+        40.6873870135029,
+        43.44056821106395,
+        0.0,
+        14.69140625,
+        0.04611105764250015
+      ],
+      [
+        "2026-10-19T21:08:35.751950+00:00",
+        6.05,
+        12923.45,
+        31860.92,
+        40.56207429875576,
+        43.44223201772118,
+        0.0,
+        14.69140625,
+        0.04611105764250015
+      ],
+      [
+        "2026-10-19T21:08:36.252600+00:00",
+        6.05,
+        12985.57,
+        31860.92,
+        40.7570624031818,
+        43.43772685110354,
+        0.0,
+        14.69140625,
+        0.04611105764250015
+      ],
+      [
+        "2026-10-19T21:08:36.765050+00:00",
+        6.63,
+        12955.38,
+        31860.92,
+        40.662277881343414,
+        43.44008781618405,
+        0.0,
+        14.69140625,
+        0.04611105764250015
+      ],
+      [
+        "2026-10-19T21:08:37.279253+00:00",
+        5.87,
+        12925.46,
+        31860.92,
+        40.56840062306938,
+        43.44018741024451,
+        0.0,
+        14.69140625,
+        0.04611105764250015
+      ],
+      [
+        "2026-10-19T21:08:37.779797+00:00",
+        5.66,
+        12990.29,
+        31860.92,
+        40.77186060753556,
+        43.43722302232705,
+        0.0,
+        14.69140625,
+        0.04611105764250015
+      ],
+      [
+        "2026-10-19T21:08:38.299625+00:00",
+        5.68,
+        12950.06,
+        31860.92,
+        40.645591587950314,
+        43.43564123430786,
+        0.0,
+        14.69140625,
+        0.04611105764250015
+      ],
+      [
+        "2026-10-19T21:08:38.794958+00:00",
+        7.62,
+        12910.8,
+        31860.92,
+        40.52237538765594,
+        43.43578769616148,
+        0.0,
+        14.69140625,
+        0.04611105764250015
+      ]
+    ]
+  },
+  "system_CPU_max": 11.94,
+  "available_RAM_min_percent": 40.38844366904742
+}

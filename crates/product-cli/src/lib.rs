@@ -1,5 +1,14 @@
 #![forbid(unsafe_code)]
 
+pub mod comment_operation;
+pub mod form_color_preparation;
+pub mod form_product_request;
+pub mod form_stored_provider;
+pub mod form_value_operation;
+pub mod form_value_preparation;
+pub mod reference_validation_product;
+pub mod stored_revision_commit;
+
 use std::collections::BTreeMap;
 use std::fmt;
 use std::fs::File;

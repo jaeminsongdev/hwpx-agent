@@ -1,0 +1,185 @@
+{
+  "schema_version": "hwpx-agent.p09-source-target-compile-stop/v1",
+  "date": "2026-10-17",
+  "result": {
+    "state": "FAILED_REFERENCE_TARGET_IMPORT_SCOPED_TESTS",
+    "steps": [
+      {
+        "stage": "format_exact_files",
+        "exit_code": 0,
+        "cleanup": true,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "diagnostics": [],
+        "locations": [],
+        "test_summary": [],
+        "owned_job": {
+          "worker_created": true,
+          "job_assigned": true,
+          "limits_readback": {
+            "verified": true,
+            "job_private_limit_mib": 2548.87109375,
+            "cpu_hard_cap_machine_percent": 6.25,
+            "affinity_mask": 1,
+            "priority_class": 16384,
+            "active_process_limit": 16,
+            "kill_on_close": true,
+            "breakaway_disabled": true
+          },
+          "target_authorized": true,
+          "last_job_accounting": {
+            "active_processes": 0,
+            "job_cpu_seconds": 0.172,
+            "peak_job_private_mib": 18.14,
+            "peak_job_private_percent": 0.05693691882259258,
+            "owned_processes": []
+          },
+          "owned_tree_empty": true,
+          "cleanup_confirmed": true,
+          "job_handle_closed": true
+        },
+        "elapsed_seconds": 0.6267906000139192
+      },
+      {
+        "stage": "nine_reference_target_tests",
+        "exit_code": null,
+        "cleanup": true,
+        "owned_job": {
+          "worker_created": true,
+          "job_assigned": true,
+          "limits_readback": {
+            "verified": true,
+            "job_private_limit_mib": 2548.87109375,
+            "cpu_hard_cap_machine_percent": 6.25,
+            "affinity_mask": 1,
+            "priority_class": 16384,
+            "active_process_limit": 16,
+            "kill_on_close": true,
+            "breakaway_disabled": true
+          },
+          "target_authorized": true,
+          "last_job_accounting": {
+            "active_processes": 0,
+            "job_cpu_seconds": 13.703,
+            "peak_job_private_mib": 2254.63,
+            "peak_job_private_percent": 7.076471897204586,
+            "owned_processes": []
+          },
+          "owned_tree_empty": true,
+          "cleanup_confirmed": true,
+          "job_handle_closed": true
+        },
+        "elapsed_seconds": 17.293363500008127
+      }
+    ],
+    "Native010_replayed": false,
+    "Native011_executed": false,
+    "actual_Hangul_or_COM": false,
+    "official_accepted_count": 158,
+    "accepted_count_delta": 0,
+    "P09_gate": "OPEN",
+    "P10_started": false,
+    "error_type": "ValueError",
+    "error_code": "STOP_OWNED_JOB_MEMORY_BUDGET",
+    "cleanup": true,
+    "elapsed_seconds": 19.49240990000544,
+    "source_pins": [
+      {
+        "path": "Cargo.toml",
+        "bytes": 2695,
+        "sha256": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5"
+      },
+      {
+        "path": "Cargo.lock",
+        "bytes": 61056,
+        "sha256": "3dba694d1b6066a8ff7fec347c51edd1b09b7046ca070bbaf3ac78cc8b708887"
+      },
+      {
+        "path": "crates/hwpx-package/Cargo.toml",
+        "bytes": 663,
+        "sha256": "1b8e0008d86102dddde09c11931505962c932a04a3b2db60a363cb37481b282c"
+      },
+      {
+        "path": "crates/hwpx-package/src/document_import.rs",
+        "bytes": 26946,
+        "sha256": "c737697ec2547e9bf9be73d02473bde9da9561ee079581ddd24a69b5cc9b08af"
+      },
+      {
+        "path": "crates/hwpx-package/src/document_import/reference_targets.rs",
+        "bytes": 9246,
+        "sha256": "fc825446554e08ec03d0444f63b66880d4bf1623116a5b2185c16a6ea14957c7"
+      },
+      {
+        "path": "crates/hwpx-package/tests/document_import_reference_targets.rs",
+        "bytes": 8824,
+        "sha256": "9a81eaed32d70d9486bd130c5523efaa2be867a8b8ca0b705bbf84fde9d96761"
+      },
+      {
+        "path": "crates/hwpx-package/src/document_import/structure.rs",
+        "bytes": 27369,
+        "sha256": "00ce41491d655a7dce0c4b64eb8fde1a48d5bb20c5bdb7803bd4ef6bc29c6793"
+      },
+      {
+        "path": "crates/hwpx-package/src/document_import/structure/bookmarks.rs",
+        "bytes": 6913,
+        "sha256": "cdd2652bcf8f9178ecc4fee61bc4a57bbc9978ccccac471b976709819e0fe4ce"
+      },
+      {
+        "path": "crates/domain-ir/src/reference_auxiliary.rs",
+        "bytes": 87884,
+        "sha256": "04e3c23493732cf35e4cfdff83314d55b725c1e419b524a1ef00ca9c60f66777"
+      },
+      {
+        "path": "crates/hwpx-package/tests/support/document_import_field_fixture.rs",
+        "bytes": 2850,
+        "sha256": "eaa5b0c52e615adc355ff73bcf2a62a4c7e91bdc42d284a6e02d5e5751b60f06"
+      },
+      {
+        "path": "crates/hwpx-package/tests/support/document_import_bookmark_fixture.rs",
+        "bytes": 4017,
+        "sha256": "be709ad42fa90a6cf273b1b6d34869ecba0a9735e3e015a33354871a3aae0932"
+      },
+      {
+        "path": "implementation/p09/evidence/private/p09-14-hyperlink-discovery-20260912-attempt02/after.hwpx",
+        "bytes": 15097,
+        "sha256": "feb312b974de2dd7d0275e6043e927ea5cf8348cfc0a04b44045e0bf669d4480"
+      }
+    ],
+    "resource_samples": [],
+    "resource_samples_complete": false
+  },
+  "source_before_module_export": {
+    "path": "crates/hwpx-package/src/document_import.rs",
+    "sha256": "193b092f6288f7d47ce3d0d1c9917e7ba317f4949a50dd26ab7e0cfd414f2edc"
+  },
+  "raw_tool_output_was_truncated": true,
+  "complete_resource_samples_retained": false,
+  "no_passing_test_or_complete_typecheck_claimed": true,
+  "initial_proxy_launch_failure": {
+    "chunk_id": "10acc4",
+    "wall_time_seconds": 1.4059599,
+    "exit_code": 1,
+    "original_token_count": 335,
+    "output": "{\"stage\": \"format_exact_files\", \"state\": \"STARTING_ONE_OWNED_COMMAND\"}\r\nTERMINAL_REFERENCE_TARGET_IMPORT {\"state\": \"FAILED_REFERENCE_TARGET_IMPORT_SCOPED_TESTS\", \"steps\": [{\"stage\": \"format_exact_files\", \"exit_code\": null, \"cleanup\": false, \"elapsed_seconds\": 0.0022037999879103154}], \"Native010_replayed\": false, \"Native011_executed\": false, \"actual_Hangul_or_COM\": false, \"official_accepted_count\": 158, \"accepted_count_delta\": 0, \"P09_gate\": \"OPEN\", \"P10_started\": false, \"error_type\": \"ValueError\", \"error_code\": \"OWNED_SQL_EXECUTABLE_NOT_ALLOWLISTED\", \"cleanup\": false, \"elapsed_seconds\": 1.0209795999980997, \"source_pins\": [], \"resource_samples\": [{\"time_utc\": \"2026-10-17T04:31:02.153481+00:00\", \"system_cpu_percent\": 23.35, \"available_ram_mib\": 6240.77, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 19.587550627452448, \"commit_used_percent\": 52.90205668179188, \"parent_cpu_machine_percent\": 0.0, \"parent_private_mib\": 12.89453125, \"parent_private_percent\": 0.04047131116136479}, {\"time_utc\": \"2026-10-17T04:31:02.654325+00:00\", \"system_cpu_percent\": 14.91, \"available_ram_mib\": 6253.66, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 19.628009678295374, \"commit_used_percent\": 52.885775982142434, \"parent_cpu_machine_percent\": 0.0, \"parent_private_mib\": 12.89453125, \"parent_private_percent\": 0.04047131116136479}]}\r\n"
+  },
+  "proxy_failure_explanation": "Tool allowlist correctly rejected rustup symlinks before job construction. Resolved installed 1.96.0 real toolchain executables instead; validation was not weakened.",
+  "optimization_review": {
+    "same_compiler_attempt_not_replayed": true,
+    "observed_peak_job_private_MiB": 2254.63,
+    "job_private_stop_percent": 7,
+    "job_private_hard_limit_MiB": 2548.87109375,
+    "final_retained_available_RAM_percent": 13.738802497917279,
+    "compiler_phase_not_proven": "Recent hwpx-package fingerprint activity locates work but is not a contemporaneous rustc phase attribution.",
+    "next_preparation_profile": {
+      "incremental": false,
+      "dev_debug": 0,
+      "test_debug": 0,
+      "dev_codegen_units": 16,
+      "test_codegen_units": 16
+    },
+    "original_CPU_RAM_Job_limits_not_increased": true,
+    "actual_tests_still_unverified": true
+  }
+}

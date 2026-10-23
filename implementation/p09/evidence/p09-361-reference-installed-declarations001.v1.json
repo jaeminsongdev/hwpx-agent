@@ -1,0 +1,1419 @@
+{
+  "state": "PASS_ACTUAL_INSTALLED_REFERENCE_DECLARATIONS_NOT_PARAMETER_SERIALIZATION_OR_NATIVE_EXECUTION",
+  "steps": [
+    {
+      "stage": "reference_type_transform_only",
+      "exit_code": 0,
+      "cleanup": true,
+      "stdout_bytes": 377,
+      "stderr_bytes": 0,
+      "stdout_sha256": "6452ee53f850c5f58edda98e577568afe31c61f60b48f7522e8ffc70449c1381",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": [],
+      "locations": [],
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 0.562,
+          "peak_job_private_mib": 43.76,
+          "peak_job_private_percent": 0.13734008713408313,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 0.7617101999931037
+    },
+    {
+      "stage": "reference_static_installed_declarations",
+      "exit_code": 0,
+      "cleanup": true,
+      "stdout_bytes": 15975,
+      "stderr_bytes": 0,
+      "stdout_sha256": "ad21f8275fca7b95a747c2f0b241bc6de56540d9ea696920e4381ce54bf6f6b9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": [],
+      "locations": [],
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 1.094,
+          "peak_job_private_mib": 93.12,
+          "peak_job_private_percent": 0.2922737312256211,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 1.8258954000193626
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM_server": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "exact_transform_precheck": {
+    "state": "exact_original_plus_three_closed_declaration_transforms",
+    "original_sha256": "a455f7e00acbd106de6b5c5f73a654bc450a421d47e88574aee56744abfecbf1",
+    "transformed_sha256": "b8af06136dd81f59af610a9e033557ceb7c5bd5e4377cb1b32a04f9951a7071f",
+    "added_types": [
+      "HActionCrossRef",
+      "HFieldCtrl",
+      "HInsertFieldTemplate"
+    ],
+    "registry_or_typelib_read": false,
+    "no_com_server_activation": true
+  },
+  "actual_installed_reference_declarations": {
+    "schema_version": "hwpx-agent.reference-installed-type-surface/v1",
+    "state": "read_only_inspection_complete_not_native_qualification",
+    "exact_build": "11.0.0.9136",
+    "executable_sha256": "7f00961398802c41620f5ef32fa2d2a26f7ff71f172723be36c660ea86a72bce",
+    "automation_dll_sha256": "edbc7140f1f09025a34c5ffc2a07c47f90b6a1cdcb2a452b2969b53cd47e1151",
+    "binaries": [
+      {
+        "binary_name": "hwp.exe",
+        "state": "type_library_unavailable",
+        "error_type": "COMException",
+        "hresult": -2147312566
+      },
+      {
+        "binary_name": "HwpAutomation.dll",
+        "state": "type_library_unavailable",
+        "error_type": "COMException",
+        "hresult": -2147312566
+      },
+      {
+        "binary_name": "HwpObject.tlb",
+        "state": "type_library_read",
+        "surface": {
+          "library_name": "HwpObjectLib",
+          "library_guid": "7d2b6f3c-1d95-4e0c-bf5a-5ee564186fbc",
+          "major_version": 1,
+          "minor_version": 0,
+          "system_kind": "SYS_WIN32",
+          "type_count": 255,
+          "all_type_names": [
+            "IDHwpAction",
+            "IDHwpParameterSet",
+            "IDHwpParameterArray",
+            "IDHwpCtrlCode",
+            "IXHwpDocuments",
+            "IXHwpDocument",
+            "IXHwpWindows",
+            "IXHwpWindow",
+            "IXHwpToolbarLayout",
+            "IXHwpToolbar",
+            "IXHwpToolbarButton",
+            "IXHwpToolbarComboBox",
+            "IXHwpToolbarMenuButton",
+            "IXHwpTabs",
+            "IXHwpTab",
+            "IXHwpSummaryInfo",
+            "IXHwpDocumentInfo",
+            "IXHwpPrint",
+            "IXHwpRange",
+            "IXHwpFind",
+            "IXHwpSelection",
+            "IXHwpFormPushButtons",
+            "IXHwpFormPushButton",
+            "IXHwpFormCheckButtons",
+            "IXHwpFormCheckButton",
+            "IXHwpFormRadioButtons",
+            "IXHwpFormRadioButton",
+            "IXHwpFormComboBoxs",
+            "IXHwpFormComboBox",
+            "IXHwpFormEdits",
+            "IXHwpFormEdit",
+            "IXHwpCharacterShape",
+            "IXHwpParagraphShape",
+            "IXHwpMessageBox",
+            "IXHwpSendMail",
+            "HSecDef",
+            "HPageDef",
+            "HColDef",
+            "HCharShape",
+            "HViewProperties",
+            "HAppState",
+            "HShapeObject",
+            "HPrint",
+            "HTabDef",
+            "HParaShape",
+            "HFootnoteShape",
+            "HAutoNum",
+            "HPageNumCtrl",
+            "HPageHiding",
+            "HPageNumPos",
+            "HHeaderFooter",
+            "HMailMergeGenerate",
+            "HListProperties",
+            "HTable",
+            "HCell",
+            "HTableCreation",
+            "HSummaryInfo",
+            "HStyleItem",
+            "HSpellingCheck",
+            "HPresentation",
+            "HGridInfo",
+            "HCtrlData",
+            "HDocData",
+            "HNumberingShape",
+            "HBulletShape",
+            "HIndexMark",
+            "HChCompose",
+            "HTableSplitCell",
+            "HBorderFill",
+            "HBorderFillExt",
+            "HPageBorderFill",
+            "HPassword",
+            "HFieldCtrl",
+            "HTextCtrl",
+            "HDutmal",
+            "HCellBorderFill",
+            "HTableDeleteLine",
+            "HTableInsertLine",
+            "HCaption",
+            "HHyperlinkJump",
+            "HInputHanja",
+            "HTableDrawPen",
+            "HEqEdit",
+            "HCaptureEnd",
+            "HPrintToImage",
+            "HFileSaveBlock",
+            "HFileSendMail",
+            "HHncMessageBox",
+            "HTableChartInfo",
+            "HTableTblToStr",
+            "HTableStrToTbl",
+            "HFlashProperties",
+            "HMovieProperties",
+            "HFindReplace",
+            "HTableTemplate",
+            "HFileSecurity",
+            "HLabel",
+            "HMarkpenShape",
+            "HDocDRM",
+            "HPasteHtml",
+            "HOleCreation",
+            "HTableSwap",
+            "HVersionInfo",
+            "HMemoShape",
+            "HSort",
+            "HPluginCreation",
+            "HCompatibleDocument",
+            "HTableBorderFill",
+            "HChComposeShapes",
+            "HSaveAsImage",
+            "HRWPassword",
+            "HDrawLayOut",
+            "HDrawLineAttr",
+            "HDrawFillAttr",
+            "HDrawImageAttr",
+            "HDrawRectType",
+            "HDrawArcType",
+            "HDrawResize",
+            "HDrawRotate",
+            "HDrawEditDetail",
+            "HDrawImageScissoring",
+            "HDrawScAction",
+            "HDrawCtrlHyperlink",
+            "HDrawCoordInfo",
+            "HDrawSoMouseOption",
+            "HDrawSoEquationOption",
+            "HDrawShear",
+            "HDrawTextart",
+            "HDrawShadow",
+            "HDrawConnectLine",
+            "HShapeGuideLine",
+            "HDrawTextBox",
+            "HShapeObjComment",
+            "HChartObjShape",
+            "HDrawVideoAttr",
+            "HRangeTagShape",
+            "HFormGeneral",
+            "HFormCommonAttr",
+            "HFormCharshapeattr",
+            "HFormButtonAttr",
+            "HFormComboboxAttr",
+            "HFormEditAttr",
+            "HFormScrollbarAttr",
+            "HFormListBoxAttr",
+            "HRevisionDef",
+            "HXSecurity",
+            "HPrintWatermark",
+            "HCertDRM",
+            "HFileSaveDaisy",
+            "HPronounceInfo",
+            "HTrackChange",
+            "HBrailleConvert",
+            "HCommPermission",
+            "HVfsAuthentication",
+            "HDeletePage",
+            "HHtmlPlusExport",
+            "HBibliography",
+            "HBibliographyName",
+            "HBibliographyAll",
+            "HMetaData",
+            "HMetaTag",
+            "HStyle",
+            "HFileOpen",
+            "HFileSaveAs",
+            "HDropCap",
+            "HKeyMacro",
+            "HShapeCopyPaste",
+            "HStyleTemplate",
+            "HSectionApply",
+            "HMasterPage",
+            "HGotoE",
+            "HInsertText",
+            "HBookMark",
+            "HHyperLink",
+            "HInsertFieldTemplate",
+            "HIdiom",
+            "HCodeTable",
+            "HPrivateInfoSecurity",
+            "HInputHanjaBusu",
+            "HConvertCase",
+            "HConvertToHangul",
+            "HConvertHiraToGata",
+            "HConvertFullHalf",
+            "HInsertFile",
+            "HDocFilters",
+            "HQCorrect",
+            "HInputHanjaMean",
+            "HMakeContents",
+            "HPreference",
+            "HInternet",
+            "HFtpUpload",
+            "HFileConvert",
+            "HSelectionOpt",
+            "HDocumentInfo",
+            "HExchangeFootnoteEndNote",
+            "HSaveFootnote",
+            "HChangeRome",
+            "HChangeRomeUser",
+            "HSearchForeign",
+            "HSearchAddress",
+            "HAddHanjaWord",
+            "HDocFindInfo",
+            "HSum",
+            "HListParaPos",
+            "HGetText",
+            "HConvertJianFan",
+            "HMousePos",
+            "HFileInfo",
+            "HActionCrossRef",
+            "HSaveUserInfoFile",
+            "HLoadUserInfoFile",
+            "HUserQCommandFile",
+            "HInputDateStyle",
+            "HFileSetSecurity",
+            "HLinkDocument",
+            "HDocumentFilterDialog",
+            "HShapeObjSaveAsPicture",
+            "HEngineProperties",
+            "HScrollPosInfo",
+            "HMessageSet",
+            "HFileXMLSchema",
+            "HFormObjInputCodeTable",
+            "HFormObjInputHanja",
+            "HFormObjHanjaBusu",
+            "HFormObjHanjaMean",
+            "HFormObjInputIdiom",
+            "HViewStatus",
+            "HScriptMacro",
+            "HFileOpenSave",
+            "HXMLOpenSave",
+            "HXMLSchema",
+            "HShapeObjectCopyPaste",
+            "HDeleteCtrls",
+            "HStyleDelete",
+            "HTextVertical",
+            "HCCLMark",
+            "HAutoFill",
+            "HDrawObjTemplateSave",
+            "HFindImagePath",
+            "HBlogUpload",
+            "HBlogAccount",
+            "HPictureChange",
+            "HSolarToLunar",
+            "HLunarToSolar",
+            "HSectionMasterPage",
+            "HTransTranslate",
+            "HPresentationRange",
+            "HParameterSet",
+            "HSet",
+            "HAction",
+            "HArray",
+            "_DIHwpObjectEvents",
+            "HwpObject",
+            "IHwpObject",
+            "IHwpObjectEvents"
+          ],
+          "selected_types": [
+            {
+              "name": "HFieldCtrl",
+              "type_kind": "TKIND_DISPATCH",
+              "declared_member_names": [
+                "QueryInterface",
+                "AddRef",
+                "Release",
+                "GetTypeInfoCount",
+                "GetTypeInfo",
+                "GetIDsOfNames",
+                "Invoke",
+                "HSet",
+                "HSet",
+                "CreateItemArray",
+                "Command",
+                "Command",
+                "Editable",
+                "Editable",
+                "FieldDirty",
+                "FieldDirty",
+                "User",
+                "User",
+                "CtrlData",
+                "CtrlData"
+              ],
+              "members": [
+                {
+                  "name": "QueryInterface",
+                  "member_id": 1610612736,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "riid",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "ppvObj",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "AddRef",
+                  "member_id": 1610612737,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 19,
+                  "parameters": []
+                },
+                {
+                  "name": "Release",
+                  "member_id": 1610612738,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 19,
+                  "parameters": []
+                },
+                {
+                  "name": "GetTypeInfoCount",
+                  "member_id": 1610678272,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "pctinfo",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "GetTypeInfo",
+                  "member_id": 1610678273,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "itinfo",
+                      "variant_type": 23,
+                      "flags": 1
+                    },
+                    {
+                      "name": "lcid",
+                      "variant_type": 19,
+                      "flags": 1
+                    },
+                    {
+                      "name": "pptinfo",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "GetIDsOfNames",
+                  "member_id": 1610678274,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "riid",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "rgszNames",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "cNames",
+                      "variant_type": 23,
+                      "flags": 1
+                    },
+                    {
+                      "name": "lcid",
+                      "variant_type": 19,
+                      "flags": 1
+                    },
+                    {
+                      "name": "rgdispid",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "Invoke",
+                  "member_id": 1610678275,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "dispidMember",
+                      "variant_type": 3,
+                      "flags": 1
+                    },
+                    {
+                      "name": "riid",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "lcid",
+                      "variant_type": 19,
+                      "flags": 1
+                    },
+                    {
+                      "name": "wFlags",
+                      "variant_type": 18,
+                      "flags": 1
+                    },
+                    {
+                      "name": "pdispparams",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "pvarResult",
+                      "variant_type": 26,
+                      "flags": 2
+                    },
+                    {
+                      "name": "pexcepinfo",
+                      "variant_type": 26,
+                      "flags": 2
+                    },
+                    {
+                      "name": "puArgErr",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "HSet",
+                  "member_id": 1,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 9,
+                  "parameters": []
+                },
+                {
+                  "name": "HSet",
+                  "member_id": 1,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 9,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "CreateItemArray",
+                  "member_id": 15000,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "wszItemName",
+                      "variant_type": 8,
+                      "flags": 1
+                    },
+                    {
+                      "name": "pVal",
+                      "variant_type": 3,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "Command",
+                  "member_id": 16415,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 8,
+                  "parameters": []
+                },
+                {
+                  "name": "Command",
+                  "member_id": 16415,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 8,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "Editable",
+                  "member_id": 16416,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 18,
+                  "parameters": []
+                },
+                {
+                  "name": "Editable",
+                  "member_id": 16416,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 18,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "FieldDirty",
+                  "member_id": 16417,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 18,
+                  "parameters": []
+                },
+                {
+                  "name": "FieldDirty",
+                  "member_id": 16417,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 18,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "User",
+                  "member_id": 16418,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 8,
+                  "parameters": []
+                },
+                {
+                  "name": "User",
+                  "member_id": 16418,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 8,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "CtrlData",
+                  "member_id": 16419,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 9,
+                  "parameters": []
+                },
+                {
+                  "name": "CtrlData",
+                  "member_id": 16419,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 9,
+                      "flags": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "HInsertFieldTemplate",
+              "type_kind": "TKIND_DISPATCH",
+              "declared_member_names": [
+                "QueryInterface",
+                "AddRef",
+                "Release",
+                "GetTypeInfoCount",
+                "GetTypeInfo",
+                "GetIDsOfNames",
+                "Invoke",
+                "HSet",
+                "HSet",
+                "CreateItemArray",
+                "ShowSingle",
+                "ShowSingle",
+                "TemplateDirection",
+                "TemplateDirection",
+                "TemplateHelp",
+                "TemplateHelp",
+                "TemplateName",
+                "TemplateName",
+                "TemplateType",
+                "TemplateType",
+                "Editable",
+                "Editable"
+              ],
+              "members": [
+                {
+                  "name": "QueryInterface",
+                  "member_id": 1610612736,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "riid",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "ppvObj",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "AddRef",
+                  "member_id": 1610612737,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 19,
+                  "parameters": []
+                },
+                {
+                  "name": "Release",
+                  "member_id": 1610612738,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 19,
+                  "parameters": []
+                },
+                {
+                  "name": "GetTypeInfoCount",
+                  "member_id": 1610678272,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "pctinfo",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "GetTypeInfo",
+                  "member_id": 1610678273,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "itinfo",
+                      "variant_type": 23,
+                      "flags": 1
+                    },
+                    {
+                      "name": "lcid",
+                      "variant_type": 19,
+                      "flags": 1
+                    },
+                    {
+                      "name": "pptinfo",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "GetIDsOfNames",
+                  "member_id": 1610678274,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "riid",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "rgszNames",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "cNames",
+                      "variant_type": 23,
+                      "flags": 1
+                    },
+                    {
+                      "name": "lcid",
+                      "variant_type": 19,
+                      "flags": 1
+                    },
+                    {
+                      "name": "rgdispid",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "Invoke",
+                  "member_id": 1610678275,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "dispidMember",
+                      "variant_type": 3,
+                      "flags": 1
+                    },
+                    {
+                      "name": "riid",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "lcid",
+                      "variant_type": 19,
+                      "flags": 1
+                    },
+                    {
+                      "name": "wFlags",
+                      "variant_type": 18,
+                      "flags": 1
+                    },
+                    {
+                      "name": "pdispparams",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "pvarResult",
+                      "variant_type": 26,
+                      "flags": 2
+                    },
+                    {
+                      "name": "pexcepinfo",
+                      "variant_type": 26,
+                      "flags": 2
+                    },
+                    {
+                      "name": "puArgErr",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "HSet",
+                  "member_id": 1,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 9,
+                  "parameters": []
+                },
+                {
+                  "name": "HSet",
+                  "member_id": 1,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 9,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "CreateItemArray",
+                  "member_id": 15000,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "wszItemName",
+                      "variant_type": 8,
+                      "flags": 1
+                    },
+                    {
+                      "name": "pVal",
+                      "variant_type": 3,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "ShowSingle",
+                  "member_id": 28703,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 3,
+                  "parameters": []
+                },
+                {
+                  "name": "ShowSingle",
+                  "member_id": 28703,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 3,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "TemplateDirection",
+                  "member_id": 28704,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 8,
+                  "parameters": []
+                },
+                {
+                  "name": "TemplateDirection",
+                  "member_id": 28704,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 8,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "TemplateHelp",
+                  "member_id": 28705,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 8,
+                  "parameters": []
+                },
+                {
+                  "name": "TemplateHelp",
+                  "member_id": 28705,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 8,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "TemplateName",
+                  "member_id": 28706,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 8,
+                  "parameters": []
+                },
+                {
+                  "name": "TemplateName",
+                  "member_id": 28706,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 8,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "TemplateType",
+                  "member_id": 28707,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 18,
+                  "parameters": []
+                },
+                {
+                  "name": "TemplateType",
+                  "member_id": 28707,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 18,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "Editable",
+                  "member_id": 28708,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 18,
+                  "parameters": []
+                },
+                {
+                  "name": "Editable",
+                  "member_id": 28708,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 18,
+                      "flags": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "HActionCrossRef",
+              "type_kind": "TKIND_DISPATCH",
+              "declared_member_names": [
+                "QueryInterface",
+                "AddRef",
+                "Release",
+                "GetTypeInfoCount",
+                "GetTypeInfo",
+                "GetIDsOfNames",
+                "Invoke",
+                "HSet",
+                "HSet",
+                "CreateItemArray",
+                "Command",
+                "Command"
+              ],
+              "members": [
+                {
+                  "name": "QueryInterface",
+                  "member_id": 1610612736,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "riid",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "ppvObj",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "AddRef",
+                  "member_id": 1610612737,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 19,
+                  "parameters": []
+                },
+                {
+                  "name": "Release",
+                  "member_id": 1610612738,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 19,
+                  "parameters": []
+                },
+                {
+                  "name": "GetTypeInfoCount",
+                  "member_id": 1610678272,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "pctinfo",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "GetTypeInfo",
+                  "member_id": 1610678273,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "itinfo",
+                      "variant_type": 23,
+                      "flags": 1
+                    },
+                    {
+                      "name": "lcid",
+                      "variant_type": 19,
+                      "flags": 1
+                    },
+                    {
+                      "name": "pptinfo",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "GetIDsOfNames",
+                  "member_id": 1610678274,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "riid",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "rgszNames",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "cNames",
+                      "variant_type": 23,
+                      "flags": 1
+                    },
+                    {
+                      "name": "lcid",
+                      "variant_type": 19,
+                      "flags": 1
+                    },
+                    {
+                      "name": "rgdispid",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "Invoke",
+                  "member_id": 1610678275,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "dispidMember",
+                      "variant_type": 3,
+                      "flags": 1
+                    },
+                    {
+                      "name": "riid",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "lcid",
+                      "variant_type": 19,
+                      "flags": 1
+                    },
+                    {
+                      "name": "wFlags",
+                      "variant_type": 18,
+                      "flags": 1
+                    },
+                    {
+                      "name": "pdispparams",
+                      "variant_type": 26,
+                      "flags": 1
+                    },
+                    {
+                      "name": "pvarResult",
+                      "variant_type": 26,
+                      "flags": 2
+                    },
+                    {
+                      "name": "pexcepinfo",
+                      "variant_type": 26,
+                      "flags": 2
+                    },
+                    {
+                      "name": "puArgErr",
+                      "variant_type": 26,
+                      "flags": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "HSet",
+                  "member_id": 1,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 9,
+                  "parameters": []
+                },
+                {
+                  "name": "HSet",
+                  "member_id": 1,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 9,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "CreateItemArray",
+                  "member_id": 15000,
+                  "invoke_kind": "INVOKE_FUNC",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "wszItemName",
+                      "variant_type": 8,
+                      "flags": 1
+                    },
+                    {
+                      "name": "pVal",
+                      "variant_type": 3,
+                      "flags": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "Command",
+                  "member_id": 28703,
+                  "invoke_kind": "INVOKE_PROPERTYGET",
+                  "return_variant_type": 8,
+                  "parameters": []
+                },
+                {
+                  "name": "Command",
+                  "member_id": 28703,
+                  "invoke_kind": "INVOKE_PROPERTYPUT",
+                  "return_variant_type": 24,
+                  "parameters": [
+                    {
+                      "name": "",
+                      "variant_type": 8,
+                      "flags": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "registered_typelib_sha256": "abd7ca72b9873dbd90f2d28df872f2353f875662354d226fcc294557c44ca4f9",
+    "registered_typelib_bytes": 473120,
+    "no_com_server_activation": true,
+    "registry_read_only": true,
+    "type_library_registration_requested": false,
+    "hwp_process_set_unchanged": true,
+    "raw_document_values_or_absolute_paths_present": false,
+    "native_property_set_or_save_reopen_qualified": false,
+    "p09_complete": false
+  },
+  "fresh_inputs": 6,
+  "final_fresh_hashes": 6,
+  "native_parameter_serialization_qualified": false,
+  "complete_document_flow_qualified": false,
+  "flat_reference_points_not_substituted_for_nested_flow": true,
+  "cleanup": true,
+  "elapsed_seconds": 4.569543800025713,
+  "source_pins": [
+    {
+      "path": "tools/p09/inspect_click_here_lifecycle_typelib.ps1",
+      "bytes": 12960,
+      "sha256": "a455f7e00acbd106de6b5c5f73a654bc450a421d47e88574aee56744abfecbf1"
+    },
+    {
+      "path": "tools/p09/inspect_reference_typelib.ps1",
+      "bytes": 3792,
+      "sha256": "53f547b6992496dccf2f8f73d4d523b5e85d7c5877c3d623aebaa2b9b99f5134"
+    },
+    {
+      "path": "implementation/p09/P09-06_CROSS_REFERENCE_POLICY.md",
+      "bytes": 4826,
+      "sha256": "d71808ae0e8eea7df9a815065591341a17540773fae90d74017816a604401082"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-06-cross-reference-source-qualification.v1.json",
+      "bytes": 4075,
+      "sha256": "c55708fcb302a748fc420e235226a29cf54a060f30ea1cd0482268286e119cc8"
+    },
+    {
+      "path": "implementation/p00/source-lock.json",
+      "bytes": 23841,
+      "sha256": "4914f2167a6ca94d8673bc5ae3e1311f54761ba28ec6fbf6478db10ca4d3c32f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-49-native-form-property-surface.v1.json",
+      "bytes": 25833,
+      "sha256": "ebd8e94b8826525752f4ce7b0d57ff7a289fa8772bc02e43534b1f3e3d385262"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T05:41:29.410106+00:00",
+      "system_cpu_percent": 27.15,
+      "available_ram_mib": 8697.64,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 27.29876373079038,
+      "commit_used_percent": 51.31533582736389,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.2734375,
+      "parent_private_percent": 0.04479920356971431
+    },
+    {
+      "time_utc": "2026-10-17T05:41:29.910932+00:00",
+      "system_cpu_percent": 17.77,
+      "available_ram_mib": 8531.61,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 26.777651155933473,
+      "commit_used_percent": 51.61441093247517,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.2734375,
+      "parent_private_percent": 0.04479920356971431
+    },
+    {
+      "time_utc": "2026-10-17T05:41:30.721282+00:00",
+      "system_cpu_percent": 14.9,
+      "available_ram_mib": 8669.12,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 27.20926340619845,
+      "commit_used_percent": 51.36271916625008,
+      "parent_cpu_machine_percent": 0.4820395012660799,
+      "parent_private_mib": 14.39453125,
+      "parent_private_percent": 0.04517927344126909
+    },
+    {
+      "time_utc": "2026-10-17T05:41:31.462345+00:00",
+      "system_cpu_percent": 25.52,
+      "available_ram_mib": 8690.51,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 27.276388649642396,
+      "commit_used_percent": 51.34118341529241,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.39453125,
+      "parent_private_percent": 0.04517927344126909
+    },
+    {
+      "time_utc": "2026-10-17T05:41:31.969971+00:00",
+      "system_cpu_percent": 18.75,
+      "available_ram_mib": 8634.0,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 27.09901862281069,
+      "commit_used_percent": 51.394144021564806,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.39453125,
+      "parent_private_percent": 0.04517927344126909
+    },
+    {
+      "time_utc": "2026-10-17T05:41:32.476303+00:00",
+      "system_cpu_percent": 22.46,
+      "available_ram_mib": 8580.05,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 26.929715885510696,
+      "commit_used_percent": 51.40822193493567,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.39453125,
+      "parent_private_percent": 0.04517927344126909
+    },
+    {
+      "time_utc": "2026-10-17T05:41:32.977814+00:00",
+      "system_cpu_percent": 18.48,
+      "available_ram_mib": 8692.87,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 27.283793881978497,
+      "commit_used_percent": 51.29827009217899,
+      "parent_cpu_machine_percent": 0.1947132505047877,
+      "parent_private_mib": 14.29296875,
+      "parent_private_percent": 0.04486050516190057
+    },
+    {
+      "time_utc": "2026-10-17T05:41:33.478852+00:00",
+      "system_cpu_percent": 19.2,
+      "available_ram_mib": 8687.73,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 27.26768382355195,
+      "commit_used_percent": 51.308551714303775,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.29296875,
+      "parent_private_percent": 0.04486050516190057
+    }
+  ]
+}

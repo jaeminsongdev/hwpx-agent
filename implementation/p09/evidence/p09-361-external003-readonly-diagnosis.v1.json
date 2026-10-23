@@ -1,0 +1,92 @@
+{
+  "schema_version": "hwpx-agent.crossref-external003-readonly-diagnosis/v1",
+  "recorded_at_utc": "2026-10-21T17:36:45.6570738Z",
+  "state": "OBSERVED_ORIGINAL003_INPUT_IDLE_DEADLINE_FAILURE_LIVE_NATIVE_CLEANUP_UNRESOLVED",
+  "original_receipt": {
+    "path": "implementation/p09/evidence/p09-361-external-qualified-fixed-eight-run003.v1.json",
+    "bytes": 125769,
+    "sha256": "901374892ce5c40986b3de473a139bf4d3579b68738419bd284f95e63a8c047a"
+  },
+  "original_error_code": "EXTERNAL_ENTRY_INTERRUPTED_WITH_UNCONFIRMED_CLEANUP",
+  "original_cleanup": false,
+  "original_final_fresh_hashes": null,
+  "original_worker_error_code": "P09_XREF_BIND_SESSION_HOST_DENIED",
+  "original_worker_phase": "host_ready",
+  "original_primary_error": "XREF_NATIVE_STARTUP_INPUT_IDLE_BOUNDED_STARTUP_WAIT_EXPIRED_NO_RETRY",
+  "original_input_idle_bound_seconds": 3,
+  "original_input_idle_poll_count": 7,
+  "original_input_idle_observed": false,
+  "original_document_opened_or_saved": false,
+  "original_fixed_eight_executed": false,
+  "original_elapsed_seconds": 109.812,
+  "original_system_CPU_max_percent": 18.22,
+  "original_available_RAM_min_percent": 37.06637552497151,
+  "exact_leftover": {
+    "process_id": 24780,
+    "parent_process_id": 29860,
+    "process_birth_100ns": "134370773797187988",
+    "session_id": 1,
+    "image": "C:\\Program Files (x86)\\HNC\\Office 2020\\HOffice110\\bin\\hwp.exe"
+  },
+  "post_failure_readonly_observation": {
+    "exact_birth_and_image_match": true,
+    "live": true,
+    "wait_for_input_idle_timeout_ms": 0,
+    "wait_status": 0,
+    "last_error": 0,
+    "input_idle_observed_now": true,
+    "readonly_handle_closed": true,
+    "COM_attached": false,
+    "close_or_quit_invoked": false
+  },
+  "interpretation": "The original admission did not observe input-idle within three seconds. The same process was input-idle later; this does not prove COM readiness or authorize relaxing the original condition.",
+  "operator_cleanup_authorization_pending": true,
+  "original_failure_or_claim_modified": false,
+  "original003_replayed": false,
+  "new_native_started_by_diagnosis": false,
+  "current_font503_compilation_or_product_tests_executed": false,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "matched_original_runtime_source_pins": [
+    {
+      "path": "tools/p09/crossref_startup_input_idle.py",
+      "bytes": 1893,
+      "sha256": "c8b8e697e64a97731f281ab3a49b0adac931eed71599161f0b2491cefe945934",
+      "original_run_pin_count": 1,
+      "original_run_hash_match": true
+    },
+    {
+      "path": "tools/p09/crossref_native_startup.py",
+      "bytes": 15100,
+      "sha256": "2c4a28a50cd8c393d291192fc52adda50a59e773a8e22def85de89f30f412969",
+      "original_run_pin_count": 1,
+      "original_run_hash_match": true
+    }
+  ],
+  "document_backups_before_sync": [
+    {
+      "path": "CURRENT_STATE.md",
+      "archive": "implementation/p09/source-archive/p361-crossref003-terminal/CURRENT_STATE.md",
+      "bytes": 1736411,
+      "sha256": "71661e99d36a2a905b1d6e5d367c2c5f01fe9fff42cc4f101f54233955083045"
+    },
+    {
+      "path": "implementation/p09/P09_EXTERNAL_CROSSREF_HOST_RUNBOOK.md",
+      "archive": "implementation/p09/source-archive/p361-crossref003-terminal/P09_EXTERNAL_CROSSREF_HOST_RUNBOOK.md",
+      "bytes": 24137,
+      "sha256": "c44d435e70da910da47f7c825f43f3c306db4031286cb1b8d6ce820a197561f0"
+    },
+    {
+      "path": "implementation/p09/P09_CROSSREF_QUALIFIED_ENTRY_PROGRESS.md",
+      "archive": "implementation/p09/source-archive/p361-crossref003-terminal/P09_CROSSREF_QUALIFIED_ENTRY_PROGRESS.md",
+      "bytes": 13747,
+      "sha256": "15e01e8b39e7bb1c72d49add177fbb7ae9233722e3f47cb3e659f9917f0d49ff"
+    },
+    {
+      "path": "implementation/p09/P09_COMPLETION_EXECUTION.md",
+      "archive": "implementation/p09/source-archive/p361-crossref003-terminal/P09_COMPLETION_EXECUTION.md",
+      "bytes": 25578,
+      "sha256": "8095c3ee890e2f469fb3cdb3a67a2daefb8aa51853c133fb5adc885fecbb5466"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "hwpx-agent.p09-pre-guard-import-failure/v1",
+  "state": "FAILED_BEFORE_GUARD_HISTORY_IMPORT_RECURSION",
+  "driver": "tools/p09/run_compiled_named_style_options.py",
+  "driver_sha256": "4d015271f759057823d7eb5a6af0ffc2aa1471ce89b8e8bd625d5d4822885a50",
+  "error_type": "RecursionError",
+  "error_code": "maximum_recursion_depth_exceeded",
+  "failure_site": "Python import bootstrap while loading shutil and bz2 through historical verifier imports",
+  "source_inputs_locked": 0,
+  "owned_job_started": false,
+  "Cargo_started": false,
+  "tests_started": 0,
+  "Native_started": false,
+  "recursion_limit_changed": false,
+  "original_import_block": "import run_named_style_options_product as previous\nimport run_sql23_storage as closure\nshared,c,a,tools,compact,harness,audit=previous.shared,previous.c,previous.a,previous.tools,previous.compact,previous.harness,previous.audit\n",
+  "original_observer_expression": "previous.previous.previous.base.previous.previous.previous.base.snapshot",
+  "preservation": "Original import block and observer expression plus exact driver hash; replacement inverse must reconstruct the entire original driver byte for byte. This is an import failure witness, not runtime qualification or cleanup attestation."
+}

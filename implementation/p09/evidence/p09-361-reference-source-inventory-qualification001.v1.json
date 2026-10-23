@@ -1,0 +1,294 @@
+{
+  "schema_version": "hwpx-agent.p09-reference-source-inventory-qualification/v1",
+  "date": "2026-10-17",
+  "state": "QUALIFIED_BOUNDED_SOURCE_INVENTORY_NOT_PRODUCT_REFERENCE_VALIDATION",
+  "goal_status_observed": "active",
+  "scope": {
+    "new_read_only_preflight": true,
+    "Rust_product_sources_changed": false,
+    "Native010_or_other_product_replayed": false,
+    "actual_Hangul_COM_or_access_prompt": false,
+    "official_accepted": 158,
+    "queue_total": 249,
+    "remaining": 91,
+    "next_case": 165,
+    "P09_gate": "OPEN",
+    "P10_started": false
+  },
+  "core_tests": {
+    "tests": 18,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "success": true,
+    "fresh": 2,
+    "final": 2,
+    "source_pins": [
+      {
+        "path": "tools/p09/reference_source_inventory.py",
+        "bytes": 10913,
+        "sha256": "a600ddef559d7c4e8259c3d62a7aad78b0535f8e67880bdd9fc83359e9111ad6"
+      },
+      {
+        "path": "tools/p09/tests/test_reference_source_inventory.py",
+        "bytes": 7470,
+        "sha256": "378fc046d21c20f9d035b84d960a54fb9c6addbdc22d60eecd53d1a0979da9c4"
+      }
+    ],
+    "elapsed_seconds": 1.5116981999890413,
+    "cleanup": true,
+    "resource_samples": [
+      {
+        "time_utc": "2026-10-17T04:21:51.804582+00:00",
+        "system_cpu_percent": 33.98,
+        "available_ram_mib": 4972.28,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 15.606208380050255,
+        "commit_used_percent": 53.66723198989343,
+        "parent_cpu_machine_percent": 0,
+        "parent_private_mib": 15.74609375,
+        "parent_private_percent": 0.049421343620557855
+      },
+      {
+        "time_utc": "2026-10-17T04:21:52.304961+00:00",
+        "system_cpu_percent": 32.42,
+        "available_ram_mib": 4975.25,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 15.615513961744128,
+        "commit_used_percent": 53.66153755302432,
+        "parent_cpu_machine_percent": 0,
+        "parent_private_mib": 15.74609375,
+        "parent_private_percent": 0.049421343620557855
+      },
+      {
+        "time_utc": "2026-10-17T04:21:52.805224+00:00",
+        "system_cpu_percent": 34.18,
+        "available_ram_mib": 4885.28,
+        "total_ram_mib": 31860.92,
+        "available_ram_percent": 15.33313430749737,
+        "commit_used_percent": 53.80504087721042,
+        "parent_cpu_machine_percent": 0.9760522199340405,
+        "parent_private_mib": 20.15625,
+        "parent_private_percent": 0.06326324313621398
+      }
+    ]
+  },
+  "first_test_failure": {
+    "tests": 18,
+    "errors": 0,
+    "failures": 1,
+    "source_pins": [
+      {
+        "path": "tools/p09/reference_source_inventory.py",
+        "bytes": 10874,
+        "sha256": "700e9c3aa596ae0b41b2458c80446eb0392977591c111a7849b17eba5e54f57e"
+      },
+      {
+        "path": "tools/p09/tests/test_reference_source_inventory.py",
+        "bytes": 7084,
+        "sha256": "26e3c252db9fbfec8da5ad326be741a62059031248e898fda6aa1e05dd3f24d6"
+      }
+    ],
+    "elapsed_seconds": 1.5012618000037037,
+    "cleanup": true,
+    "retained_failure_output": "........F.........\n======================================================================\nFAIL: test_duplicate_case_alias_and_traversal (test_reference_source_inventory.Tests.test_duplicate_case_alias_and_traversal) (name='a\\\\b.xml')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"D:\\개발\\hwpx-agent\\tools/p09/tests\\test_reference_source_inventory.py\", line 84, in test_duplicate_case_alias_and_traversal\n    with self.subTest(name=name), self.assertRaises(ValueError):\n                                  ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 18 tests in 0.010s\n\nFAILED (failures=1)\n",
+    "correction": "Use raw ZIP record names because Windows normalizes backslashes during synthetic ZIP writing. Reject orig_filename differing from filename, including NUL truncation."
+  },
+  "actual_fixed_fixture_inspection": {
+    "command": "python -B tools/p09/reference_source_inventory.py --inspect-caption-controls",
+    "exit_code": 0,
+    "observed_state": "PASS_FOUR_PINNED_SOURCE_INVENTORIES_NOT_PRODUCT_REFERENCE_VALIDATION",
+    "fixture_count_asserted_by_original_command": 4,
+    "full_per_fixture_or_XML_part_inventory_retained": false,
+    "stdout_tool_truncated": true,
+    "partial_stdout": "Warning: truncated output (original token count: 4540)\nTotal output lines: 1\n\n{\"state\": \"PASS_FOUR_PINNED_SOURCE_INVENTORIES_NOT_PRODUCT_REFERENCE_VALIDATION\", \"inventories\": [{\"case_id\": \"P09-19-C01\", \"role\": \"package_pin\", \"input_pin\": {\"path\": \"fixtures/target-build/p09-19-caption-isolation-controls-20261017-01/p09-19-c01-rectangle-caption-number.unnumbered-control.hwpx\", \"bytes\": 7775, \"sha256\": \"c49a98ae95bf2d88cca4fd7d389dc1f1c118809a35250314665816b497d6fd3b\"}, \"inventory\": {\"schema_version\": \"hwpx-agent.p09-reference-source-inventory/v1\", \"qualification\": \"observed_native_controls_only_not_complete_reference_state_or_product_validation\", \"package_bytes\": 7775, \"package_sha256\": \"c49a98ae95bf2d88cca4fd7d389dc1f1c118809a35250314665816b497d6fd3b\", \"archive_members\": 11, \"expanded_bytes\": 50688, \"xml_elements\": 725, \"observed_controls\": {\"fieldBegin\": 0, \"fieldEnd\": 0, \"bookmark\": 0, \"autoNum\": 0, \"caption\": 1, \"footNote\": 0, \"endNote\": 0, \"pic\": 0, \"rect\": 1, \"tbl\": 0, \"equation\": 0}, \"observed_field_types\": {}, \"unknown_field_types\": 0, \"missing_field_types\": 0, \"xml_parts\": [{\"ordinal\": 1, \"bytes\": 310, \"sha256\": \"5e9e316f85dca872fc85837b81510e679e2f3e10de975d366c6436ec456fd376\", \"elements\": 1, \"controls\": {\"fieldBegin\": 0, \"fieldEnd\": 0, \"bookmark\": 0, \"autoNum\": 0, \"caption\": 0, \"footNote\": 0, \"endNote\": 0, \"pic\": 0, \"rect\": 0, \"tbl\": 0, \"equation\": 0}, \"field_types\": {}, \"unknown_field_types\": 0, \"missing_field_types\": 0}, {\"ordinal\": 2, \"bytes\": 42154, \"sha256\": \"88bbcf2a4fd68983cbe02487759888874f07f72bd81ad33fc1b4ffc8e9dada93\", \"elements\": 646, \"controls\": {\"fieldBegin\": 0, \"fieldEnd\": 0, \"bookmark\": 0, \"autoNum\": 0, \"caption\": 0, \"footNote\": 0, \"endNote\": 0, \"pic\": 0, \"rect\": 0, \"tbl\": 0, \"equation\": 0}, \"field_types\": {}, \"unknown_field_types\": 0, \"missing_field_types\": 0}, {\"ordinal\": 3, \"bytes\": 4940, \"sha256\": \"bc019f02ba25bd5a01b03b6fa9c18d9b6d0ddb0b267e20046ab31c7b27abea20\", \"elements\": 59, \"controls\": {\"fieldBegin\": 0, \"fieldEnd\": 0, \"bookmark\": 0, \"autoNum\": 0, \"caption\": 1, \"footNote\": 0, \"endNote\": 0, \"pic\": 0, \"rect\": 1, \"tbl\": 0, \"equation\": 0}, \"field_types\": {}, \"unknown_field_types\": 0, \"missing_field_types\": 0}, {\"ordinal\": 5, \"bytes\": 278, \"sha256\": \"680d23d8d7d8df82526cc7ab34479d0e9f9f707218ba54b70f280ac290343ab4\", \"elements\": 2, \"controls\": {\"fieldBegin\": 0, \"fieldEnd\": 0, \"bookmark\": 0, \"autoNum\": 0, \"caption\": 0, \"footNote\": 0, \"endNote\": 0, \"pic\": 0, \"rect\": 0, \"tbl\": 0, \"equation\": 0}, \"field_types\": {}, \"unknown_field_types\": 0, \"missing_field_types\": 0}, {\"ordinal\": 8, \"bytes\": 1400, \"sha256\": \"fbe0c83768087c5897b32fe211f39c838e6a1125939b16612e19f95ce668fe9a\", \"elements\": 11, \"controls\": {\"fieldBegin\": 0, \"fieldEnd\": 0, \"bookmark\": 0, \"autoNum\": 0, \"caption\": 0, \"footNote\": 0, \"endNote\": 0, \"pic\": 0, \"rect\": 0, \"tbl\": 0, \"equation\": 0}, \"field_types\": {}, \"unknown_field_types\": 0, \"missing_field_types\": 0}, {\"ordinal\": 9, \"bytes\": 475, \"sha256\": \"5109d3a9249ec1058177fedab574c5d9616058aa92ebefcd33249ebb36a20f61\", \"elements\": 5, \"controls\": {\"fieldBegin\": 0, \"fieldEnd\": 0, \"bookmark\": 0, …3040 tokens truncated…tarted\": false, \"actual_product_or_Hangul_or_COM_executed\": false, \"fresh_inputs\": 7, \"final_fresh_hashes\": 7, \"source_pins\": [{\"path\": \"tools/p09/reference_source_inventory.py\", \"bytes\": 10913, \"sha256\": \"a600ddef559d7c4e8259c3d62a7aad78b0535f8e67880bdd9fc83359e9111ad6\"}, {\"path\": \"tools/p09/tests/test_reference_source_inventory.py\", \"bytes\": 7470, \"sha256\": \"378fc046d21c20f9d035b84d960a54fb9c6addbdc22d60eecd53d1a0979da9c4\"}, {\"path\": \"fixtures/target-build/p09-19-caption-isolation-controls-20261017-01/control-manifest.v1.json\", \"bytes\": 2690, \"sha256\": \"ac4a586d242ebbbca3466be1b5ee43cc80fe7e3ff67ebc689d1d759fc30a2667\"}, {\"path\": \"fixtures/target-build/p09-19-caption-isolation-controls-20261017-01/p09-19-c01-rectangle-caption-number.unnumbered-control.hwpx\", \"bytes\": 7775, \"sha256\": \"c49a98ae95bf2d88cca4fd7d389dc1f1c118809a35250314665816b497d6fd3b\"}, {\"path\": \"fixtures/target-build/p09-19-object-caption-number-target-20261002-02/output/p09-19-c01-rectangle-caption-number.hwpx\", \"bytes\": 7886, \"sha256\": \"fe58ad76019828a0df0051fc54b97f98f04de82a8c46e7fc1d8b68ad5f2fbc91\"}, {\"path\": \"fixtures/target-build/p09-19-caption-isolation-controls-20261017-01/p09-19-c04-equation-caption-number.unnumbered-control.hwpx\", \"bytes\": 12331, \"sha256\": \"194af7b1b9f99a5178253c2b24af52b47cda5ec3fbbfdbd70d8217f005ba6df8\"}, {\"path\": \"fixtures/target-build/p09-19-object-caption-number-target-20261002-02/output/p09-19-c04-equation-caption-number.hwpx\", \"bytes\": 12449, \"sha256\": \"125e871e84fc7f2d8509a66943c8e4a6a6b44db8cd1c994158992e5dbbefcc41\"}], \"cleanup_confirmed\": true, \"elapsed_seconds\": 2.006559899979038, \"original_resource_samples\": [{\"time_utc\": \"2026-10-17T04:22:03.568647+00:00\", \"system_cpu_percent\": 17.97, \"available_ram_mib\": 5311.53, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 16.67099251568861, \"commit_used_percent\": 53.460404418672105, \"parent_cpu_machine_percent\": 0.0, \"parent_private_mib\": 15.1953125, \"parent_private_percent\": 0.0476926387209055}, {\"time_utc\": \"2026-10-17T04:22:04.069135+00:00\", \"system_cpu_percent\": 21.68, \"available_ram_mib\": 5304.24, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 16.648102501166264, \"commit_used_percent\": 53.46468110479808, \"parent_cpu_machine_percent\": 0.0, \"parent_private_mib\": 15.1953125, \"parent_private_percent\": 0.0476926387209055}, {\"time_utc\": \"2026-10-17T04:22:04.574285+00:00\", \"system_cpu_percent\": 21.02, \"available_ram_mib\": 5290.46, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 16.604848097719643, \"commit_used_percent\": 53.47495100997458, \"parent_cpu_machine_percent\": 0.0, \"parent_private_mib\": 15.75390625, \"parent_private_percent\": 0.04944586425743236}, {\"time_utc\": \"2026-10-17T04:22:05.074768+00:00\", \"system_cpu_percent\": 28.91, \"available_ram_mib\": 5218.57, \"total_ram_mib\": 31860.92, \"available_ram_percent\": 16.379233717837355, \"commit_used_percent\": 53.59463963676054, \"parent_cpu_machine_percent\": 0.0, \"parent_private_mib\": 15.75390625, \"parent_private_percent\": 0.04944586425743236}]}\r\n",
+    "complete_retained_result_suffix": {
+      "fresh_inputs": 7,
+      "final_fresh_hashes": 7,
+      "source_pins": [
+        {
+          "path": "tools/p09/reference_source_inventory.py",
+          "bytes": 10913,
+          "sha256": "a600ddef559d7c4e8259c3d62a7aad78b0535f8e67880bdd9fc83359e9111ad6"
+        },
+        {
+          "path": "tools/p09/tests/test_reference_source_inventory.py",
+          "bytes": 7470,
+          "sha256": "378fc046d21c20f9d035b84d960a54fb9c6addbdc22d60eecd53d1a0979da9c4"
+        },
+        {
+          "path": "fixtures/target-build/p09-19-caption-isolation-controls-20261017-01/control-manifest.v1.json",
+          "bytes": 2690,
+          "sha256": "ac4a586d242ebbbca3466be1b5ee43cc80fe7e3ff67ebc689d1d759fc30a2667"
+        },
+        {
+          "path": "fixtures/target-build/p09-19-caption-isolation-controls-20261017-01/p09-19-c01-rectangle-caption-number.unnumbered-control.hwpx",
+          "bytes": 7775,
+          "sha256": "c49a98ae95bf2d88cca4fd7d389dc1f1c118809a35250314665816b497d6fd3b"
+        },
+        {
+          "path": "fixtures/target-build/p09-19-object-caption-number-target-20261002-02/output/p09-19-c01-rectangle-caption-number.hwpx",
+          "bytes": 7886,
+          "sha256": "fe58ad76019828a0df0051fc54b97f98f04de82a8c46e7fc1d8b68ad5f2fbc91"
+        },
+        {
+          "path": "fixtures/target-build/p09-19-caption-isolation-controls-20261017-01/p09-19-c04-equation-caption-number.unnumbered-control.hwpx",
+          "bytes": 12331,
+          "sha256": "194af7b1b9f99a5178253c2b24af52b47cda5ec3fbbfdbd70d8217f005ba6df8"
+        },
+        {
+          "path": "fixtures/target-build/p09-19-object-caption-number-target-20261002-02/output/p09-19-c04-equation-caption-number.hwpx",
+          "bytes": 12449,
+          "sha256": "125e871e84fc7f2d8509a66943c8e4a6a6b44db8cd1c994158992e5dbbefcc41"
+        }
+      ],
+      "cleanup_confirmed": true,
+      "elapsed_seconds": 2.006559899979038,
+      "original_resource_samples": [
+        {
+          "time_utc": "2026-10-17T04:22:03.568647+00:00",
+          "system_cpu_percent": 17.97,
+          "available_ram_mib": 5311.53,
+          "total_ram_mib": 31860.92,
+          "available_ram_percent": 16.67099251568861,
+          "commit_used_percent": 53.460404418672105,
+          "parent_cpu_machine_percent": 0,
+          "parent_private_mib": 15.1953125,
+          "parent_private_percent": 0.0476926387209055
+        },
+        {
+          "time_utc": "2026-10-17T04:22:04.069135+00:00",
+          "system_cpu_percent": 21.68,
+          "available_ram_mib": 5304.24,
+          "total_ram_mib": 31860.92,
+          "available_ram_percent": 16.648102501166264,
+          "commit_used_percent": 53.46468110479808,
+          "parent_cpu_machine_percent": 0,
+          "parent_private_mib": 15.1953125,
+          "parent_private_percent": 0.0476926387209055
+        },
+        {
+          "time_utc": "2026-10-17T04:22:04.574285+00:00",
+          "system_cpu_percent": 21.02,
+          "available_ram_mib": 5290.46,
+          "total_ram_mib": 31860.92,
+          "available_ram_percent": 16.604848097719643,
+          "commit_used_percent": 53.47495100997458,
+          "parent_cpu_machine_percent": 0,
+          "parent_private_mib": 15.75390625,
+          "parent_private_percent": 0.04944586425743236
+        },
+        {
+          "time_utc": "2026-10-17T04:22:05.074768+00:00",
+          "system_cpu_percent": 28.91,
+          "available_ram_mib": 5218.57,
+          "total_ram_mib": 31860.92,
+          "available_ram_percent": 16.379233717837355,
+          "commit_used_percent": 53.59463963676054,
+          "parent_cpu_machine_percent": 0,
+          "parent_private_mib": 15.75390625,
+          "parent_private_percent": 0.04944586425743236
+        }
+      ]
+    },
+    "original_fixture_inspection_repeated_for_missing_output": false,
+    "source_version_is_before_console_summary_change": true,
+    "original_four_qualification_is_not_current_full_CLI_end_to_end_rerun": true
+  },
+  "output_only_change": {
+    "current_tests": {
+      "existing_inspector_AST_unchanged": true,
+      "unchanged_core_tests_reused": 18,
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "success": true,
+      "fresh": 2,
+      "final": 2,
+      "source_pins": [
+        {
+          "path": "tools/p09/reference_source_inventory.py",
+          "bytes": 12450,
+          "sha256": "5344ddc368d3604da4e5915a4e718bffd42033ecab46d9c87660863cdb791adb"
+        },
+        {
+          "path": "tools/p09/tests/test_reference_source_inventory.py",
+          "bytes": 9382,
+          "sha256": "50d6c0a2f85b045e9ed782a99664c7352b402421d3ff43049d22668c9a8813b1"
+        }
+      ],
+      "elapsed_seconds": 1.5081274000112899,
+      "cleanup": true,
+      "resource_samples": [
+        {
+          "time_utc": "2026-10-17T04:24:07.476310+00:00",
+          "system_cpu_percent": 39.84,
+          "available_ram_mib": 4484.21,
+          "total_ram_mib": 31860.92,
+          "available_ram_percent": 14.07433063258952,
+          "commit_used_percent": 55.333909299454795,
+          "parent_cpu_machine_percent": 0,
+          "parent_private_mib": 14.91015625,
+          "parent_private_percent": 0.04679763547498619
+        },
+        {
+          "time_utc": "2026-10-17T04:24:07.977941+00:00",
+          "system_cpu_percent": 37.5,
+          "available_ram_mib": 4738.37,
+          "total_ram_mib": 31860.92,
+          "available_ram_percent": 14.872035991390804,
+          "commit_used_percent": 54.91536233110092,
+          "parent_cpu_machine_percent": 0,
+          "parent_private_mib": 14.91015625,
+          "parent_private_percent": 0.04679763547498619
+        },
+        {
+          "time_utc": "2026-10-17T04:24:08.478150+00:00",
+          "system_cpu_percent": 52.14,
+          "available_ram_mib": 4727.15,
+          "total_ram_mib": 31860.92,
+          "available_ram_percent": 14.83682435683902,
+          "commit_used_percent": 54.93510538897017,
+          "parent_cpu_machine_percent": 1.1715254168132025,
+          "parent_private_mib": 21.19921875,
+          "parent_private_percent": 0.06653674815895994
+        }
+      ]
+    },
+    "existing_inspector_AST_unchanged": true,
+    "normalized_difference": "One new pure console_summary function and replacement of json.dumps(row) with json.dumps(console_summary(row)). All other original AST nodes exactly match.",
+    "old_core_tests_reused": 18,
+    "only_added_output_tests_run": 3,
+    "new_CLI_end_to_end_run": false,
+    "missing_measurements_remain_null_not_zero": true,
+    "stdout_is_aggregate_not_lossless_per_part_or_sample_record": true
+  },
+  "implementation_limits": {
+    "archive_bytes": 33554432,
+    "expanded_bytes": 16777216,
+    "member_bytes": 2097152,
+    "central_directory_entries": 256,
+    "central_directory_bytes": 262144,
+    "XML_elements_whole_archive": 100000,
+    "XML_depth": 128,
+    "expansion_chunk_bytes": 65536,
+    "original_guard_CPU_RAM_and_input_hashes_retained": true,
+    "streaming_end_nodes_removed": true,
+    "per_member_expansion_passes": 1,
+    "per_XML_scan_passes": 1,
+    "no_multiprocess_or_Cargo_or_external_entity_or_archive_extraction": true,
+    "unsupported_or_renamed_member_inputs_rejected": true
+  },
+  "claim_boundary": {
+    "complete_reference_state_reader": false,
+    "spine_or_XML_role_assignment_qualified": false,
+    "reference_edges_resolved": false,
+    "reference_validation_CLI_dispatch": false,
+    "product_reference_validation": false,
+    "fix_or_field_update": false,
+    "render_or_target_or_Gate_qualified": false,
+    "PC_freeze_resolved": false
+  },
+  "next_boundary": "Derive supported source-backed target/edge semantics with explicit coverage and unsupported-form rejection, then connect the typed product API; do not infer source completeness from the inventory or four caption fixtures."
+}

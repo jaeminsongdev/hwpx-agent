@@ -94,6 +94,9 @@ const TRANSPARENT_PNG_1X1: &[u8] = &[
     0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
 ];
 
+/// Reuses the existing non-render preview asset for derived note documents.
+pub(crate) fn neutral_preview_png() -> &'static [u8] { TRANSPARENT_PNG_1X1 }
+
 /// One deterministic, graph-validated VS-0 HWPX. Raw bytes are only available to a verified
 /// in-process consumer callback, so callers cannot accidentally publish an unchecked artifact.
 pub struct Hancom2020Vs0Artifact {

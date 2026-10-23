@@ -1013,7 +1013,12 @@ fn apply_insert(
     if insertion_index > target.comments.len() {
         return Err(CommentError::InvalidInsertionIndex);
     }
-    validate_comment(comment, &target.authors, &target.styles, limits)?;
+    validate_comment(
+        comment,
+        |id| target.authors.iter().any(|author| author.author_id == id),
+        |id| target.styles.iter().any(|style| style.style_id == id),
+        limits,
+    )?;
     let section_index = exact_section_index(&target.sections, &comment.anchor.section_id)?;
     if target.sections[section_index].locked {
         return Err(CommentError::Protected);
@@ -1042,6 +1047,14 @@ fn apply_style(
     if style.style_id != style_id {
         return Err(CommentError::InvalidStyle);
     }
+    // A comment can reference a different style from its section's default.
+    // Check its actual anchor section too, without a section scan per comment.
+    let locked_sections: BTreeSet<_> = target
+        .sections
+        .iter()
+        .filter(|section| section.locked)
+        .map(|section| &section.section_id)
+        .collect();
     if target.styles[index].locked
         || target
             .sections
@@ -1050,7 +1063,10 @@ fn apply_style(
         || target
             .comments
             .iter()
-            .any(|comment| comment.style_id == style_id && comment.locked)
+            .any(|comment| {
+                comment.style_id == style_id
+                    && (comment.locked || locked_sections.contains(&comment.anchor.section_id))
+            })
     {
         return Err(CommentError::Protected);
     }
@@ -1093,7 +1109,7 @@ fn apply_resolution(
     validate_resolution(
         &resolution,
         target.comments[index].created_at,
-        &target.authors,
+        |id| target.authors.iter().any(|author| author.author_id == id),
     )?;
     if target.comments[index].resolution == resolution {
         return Err(CommentError::Noop);
@@ -1220,7 +1236,13 @@ fn validate_document_state(
     let mut begin_ids = BTreeSet::new();
     let mut field_ids = BTreeSet::new();
     for comment in &state.comments {
-        validate_comment(comment, &state.authors, &state.styles, limits)?;
+        // Reuse already validated IDs: do not scan both complete catalogs per comment.
+        validate_comment(
+            comment,
+            |id| author_ids.contains(&id),
+            |id| style_ids.contains(&id),
+            limits,
+        )?;
         if !section_ids.contains(&comment.anchor.section_id)
             || !logical_ids.insert(&comment.identity.logical_comment_id)
             || !begin_ids.insert(comment.identity.begin_control_id)
@@ -1253,8 +1275,8 @@ fn validate_explanation(
 
 fn validate_comment(
     comment: &CommentEntry,
-    authors: &[CommentAuthor],
-    styles: &[CommentStyle],
+    author_exists: impl Fn(u32) -> bool,
+    style_exists: impl Fn(u32) -> bool,
     limits: CommentLimits,
 ) -> Result<(), CommentError> {
     if comment.identity.begin_control_id == 0 || comment.identity.field_id == 0 {
@@ -1269,13 +1291,9 @@ fn validate_comment(
         return Err(CommentError::InvalidNativeBinding);
     }
     if comment.author_id == 0
-        || !authors
-            .iter()
-            .any(|author| author.author_id == comment.author_id)
+        || !author_exists(comment.author_id)
         || comment.style_id == 0
-        || !styles
-            .iter()
-            .any(|style| style.style_id == comment.style_id)
+        || !style_exists(comment.style_id)
     {
         return Err(CommentError::InvalidIdentity);
     }
@@ -1285,7 +1303,7 @@ fn validate_comment(
     }) {
         return Err(CommentError::InvalidAuthorTime);
     }
-    validate_resolution(&comment.resolution, comment.created_at, authors)?;
+    validate_resolution(&comment.resolution, comment.created_at, author_exists)?;
     for digest in [
         comment.name_sha256.as_deref(),
         Some(comment.body_graph_sha256.as_str()),
@@ -1319,7 +1337,7 @@ fn validate_timestamp(value: CommentTimestamp) -> Result<(), CommentError> {
 fn validate_resolution(
     resolution: &CommentResolution,
     created_at: CommentTimestamp,
-    authors: &[CommentAuthor],
+    author_exists: impl Fn(u32) -> bool,
 ) -> Result<(), CommentError> {
     match (
         resolution.resolved,
@@ -1329,7 +1347,7 @@ fn validate_resolution(
         (false, None, None) => Ok(()),
         (true, Some(author_id), Some(resolved_at))
             if author_id != 0
-                && authors.iter().any(|author| author.author_id == author_id)
+                && author_exists(author_id)
                 && validate_timestamp(resolved_at).is_ok()
                 && resolved_at.epoch_millis >= created_at.epoch_millis =>
         {

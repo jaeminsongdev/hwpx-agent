@@ -1,0 +1,26 @@
+{
+  "schema_version": "hwpx-agent.verification-publication-failure-observation/v1",
+  "state": "FAILED_REFERENCE_SOURCE_HEADING_API421_RECEIPT_PUBLICATION",
+  "original_driver": "tools/p09/run_reference_source_heading_api.py",
+  "intended_receipt": "implementation/p09/evidence/p09-361-reference-source-heading-api421.v1.json",
+  "original_receipt_exists": false,
+  "observed_terminal_exit_code": 1,
+  "observed_exception": "ValueError",
+  "observed_error_code": "COMPACT_RECEIPT_PAYLOAD_LIMIT",
+  "observation_origin": "current Codex execution session 87231, terminal tool result d152c4; step-pass messages 499175 and 80a166",
+  "observed_preflight_inputs": 802,
+  "observed_completed_steps": [
+    {"stage": "only_new_heading_adapter7", "cases": 7, "state": "OBSERVED_STEP_PASS_WITHOUT_DURABLE_FINAL_RECEIPT"},
+    {"stage": "actual_v13_reference_source_API_CLI70", "cases": 70, "state": "OBSERVED_STEP_PASS_WITHOUT_DURABLE_FINAL_RECEIPT"}
+  ],
+  "stored_three_case_result": "UNRESOLVED_ORIGINAL_ROW_NOT_PUBLISHED",
+  "original_final_fresh_hashes": null,
+  "original_cleanup_receipt": null,
+  "original_resource_samples": "UNAVAILABLE_AFTER_PRODUCER_EXIT_NO_RECONSTRUCTION_AS_ORIGINAL",
+  "post_exit_observation": "no cargo, rustc, form_stored_provider or reference_source_product process observed; compiler scratch empty",
+  "acceptance_promoted": false,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "recovery_requirement": "preserve this failure and original producer; verify lossless bounded telemetry table layout, then obtain a new complete final source and cleanup proof rather than claiming the unpublished original row"
+}

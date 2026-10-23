@@ -1,0 +1,95 @@
+{
+  "schema_version": "hwpx-agent.passive-native-cleanup-wait-observation/v1",
+  "state": "OBSERVED_LIVE_EXTERNAL_CLEANUP_WAIT_NOT_PRODUCT_OR_GATE",
+  "observed_at_utc": "2026-10-21T05:31:44.1984366Z",
+  "processes": [
+    {
+      "process_id": 16232,
+      "parent_process_id": 6196,
+      "name": "python.exe",
+      "creation_time_utc": "2026-10-21T05:20:20.8387700Z",
+      "creation_time_source": "CIM observation, not held-handle 100ns identity qualification",
+      "cpu_seconds": 1.234375,
+      "private_bytes": 23101440,
+      "responding": true,
+      "has_main_window": false
+    },
+    {
+      "process_id": 29824,
+      "parent_process_id": 16232,
+      "name": "Hwp.exe",
+      "creation_time_utc": "2026-10-21T05:21:12.7726960Z",
+      "creation_time_source": "CIM observation, not held-handle 100ns identity qualification",
+      "cpu_seconds": 8.09375,
+      "private_bytes": 80420864,
+      "responding": true,
+      "has_main_window": false
+    },
+    {
+      "process_id": 32104,
+      "parent_process_id": 29824,
+      "name": "HimTrayIcon.exe",
+      "creation_time_utc": "2026-10-21T05:21:17.8097310Z",
+      "creation_time_source": "CIM observation, not held-handle 100ns identity qualification",
+      "cpu_seconds": 0.171875,
+      "private_bytes": 17715200,
+      "responding": true,
+      "has_main_window": false
+    }
+  ],
+  "final_receipt_exists": false,
+  "source_pins": [
+    {
+      "path": "tools/p09/crossref_native_worker_io.py",
+      "bytes": 6130,
+      "sha256": "3df395e369ff44574628ea50c0be349effca6d983e9997c2636f6d1cc2a04186"
+    },
+    {
+      "path": "tools/p09/run_external_crossref_fixed_batch.py",
+      "bytes": 9989,
+      "sha256": "16b8a709fa5d4dc182e6ee666308a150307c24b373457cc5314fcd01e3761a81"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-external-qualified-fixed-eight-claim001.v1.json",
+      "bytes": 887,
+      "sha256": "e1d374762af6b5ce50e5805c2ca29d63cf7c4d4efd0037cbd9a00411e843a62c"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-external-qualified-fixed-eight-live-cleanup001.v1.json",
+      "bytes": 574,
+      "sha256": "e2609f372d64c3573931ae9ef6744230d621a281460636aa11b30bee7717f08d"
+    }
+  ],
+  "observed_owner_relationships": {
+    "creator_process_id": 16232,
+    "native_process_id": 29824,
+    "native_child_process_id": 32104,
+    "held_handle_native_identity_independently_qualified": false,
+    "exact_Job_membership_independently_qualified": false
+  },
+  "user_screen_observation": "No permission, security or error dialog; only repeated wait messages",
+  "control_flow_source_observation": {
+    "path": "tools/p09/crossref_native_worker_io.py",
+    "function": "wait_native_exit",
+    "loop_condition": "original process signaled AND original Job active count zero",
+    "poll_seconds": 0.2,
+    "notice_seconds": 15,
+    "force_kill": false,
+    "wait_is_before_terminal_failure_publication": true,
+    "triggering_failure_code": "UNRESOLVED_NO_TERMINAL_RECEIPT"
+  },
+  "assistant_actions": {
+    "read_only_process_and_source_observation": true,
+    "COM_or_ROT_used": false,
+    "process_termination_attempted": false,
+    "live_input_edits": false,
+    "local_test_or_build_started": false
+  },
+  "user_interrupt_requested_once": true,
+  "terminal_interrupt_observed": false,
+  "rerun_authorized": false,
+  "fixed_eight_success_or_P09_acceptance_proven": false,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false
+}

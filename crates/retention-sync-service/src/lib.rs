@@ -43,7 +43,9 @@ pub enum RetentionClass {
 impl From<ArtifactKind> for RetentionClass {
     fn from(value: ArtifactKind) -> Self {
         match value {
-            ArtifactKind::Source => Self::Source,
+            // Authoritative IR uses the existing source retention policy, never preview/diff TTL.
+            // This does not itself prove that a revision reference is durably registered.
+            ArtifactKind::Source | ArtifactKind::DocumentIr => Self::Source,
             ArtifactKind::Result => Self::Result,
             ArtifactKind::Preview => Self::Preview,
             ArtifactKind::Evidence => Self::Evidence,

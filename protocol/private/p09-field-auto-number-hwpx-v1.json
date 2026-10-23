@@ -1,0 +1,99 @@
+{
+  "schema_version": "hwpx-agent.p09-field-auto-number-hwpx-contract/v1",
+  "task": "P09-16",
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_qualification": "implementation/p09/evidence/p09-16-field-auto-number-hwpx-source-qualification.v1.json",
+  "migration": "protocol/migrations/p09-field-auto-number-hwpx-v0-to-v1.md",
+  "policy": "implementation/p09/P09-16_FIELD_AUTO_NUMBER_HWPX_POLICY.md",
+  "report": "implementation/p09/P09-16_FIELD_AUTO_NUMBER_HWPX_REPORT.md",
+  "source_locks": [
+    {"path": "docs/03_document_model/09_fields_controls_references.md", "sha256": "3068742808467f298d289c7401980c617981d748dfa73422bab8f7174ef10a20"},
+    {"path": "docs/04_feature_catalog/10_ref.md", "sha256": "34cfc9283d16b96bdb16d0ffec7a485f4b72548a49ec70fec2968b3c657743e4"},
+    {"path": "docs/04_feature_catalog/contracts/10_ref_contracts.md", "sha256": "7062034902932355ac8e6c38a4798dd314f39c44518b7e85c26fe71a7a72cc29"},
+    {"path": "docs/09_roadmap/P09_fields_forms_notes_references.md", "sha256": "0f4068c4dc5484cc348a145c892a2e1d2d3896d421b77c2fa23bb123956f4b55"}
+  ],
+  "implementation_files": [
+    "crates/domain-ir/src/field_engine.rs",
+    "crates/domain-ir/tests/field_engine.rs",
+    "crates/hwpx-package/src/field_auto_number_hwpx.rs",
+    "crates/hwpx-package/tests/field_auto_number_hwpx.rs"
+  ],
+  "public_export": {
+    "path": "crates/hwpx-package/src/lib.rs",
+    "markers": ["mod field_auto_number_hwpx;", "pub use field_auto_number_hwpx::{"]
+  },
+  "profile": "hwpx-agent.field-auto-number-hwpx.hwpml-2011-digit/v1",
+  "feature_capabilities": {
+    "REF-006": "ref.field_page_number",
+    "REF-008": "ref.field_object_number",
+    "REF-009": "ref.field_update"
+  },
+  "admitted_profile": {
+    "source": "one_section_ordered_complete_auto_number_inventory",
+    "native_shape": "direct_run_child_ctrl_autoNum_with_one_autoNumFormat",
+    "native_types": ["PAGE", "PICTURE", "TABLE", "EQUATION"],
+    "format": {"type": "DIGIT", "userChar": "", "prefixChar": "", "suffixChar": "", "supscript": "0"},
+    "number": "canonical_nonnegative_signed_32_bit_decimal",
+    "identity": "ordered_projection_and_exact_anchor_native_autoNum_has_no_begin_end_id",
+    "insert_delta": "one_namespace_compatible_exact_wrapper",
+    "update_delta": "one_exact_num_attribute_value",
+    "outside_delta": "byte_exact"
+  },
+  "planning": {
+    "domain_request_plan_and_build_rechecked": true,
+    "complete_source_target_state_and_flow_bound": true,
+    "section_paragraph_map_and_projection_sha256_bound": true,
+    "domain_plan_and_hwpx_plan_sha256_bound": true,
+    "typed_target_projection_readback": true,
+    "outside_delta_byte_preservation": true,
+    "bounded_json_allocation_and_redacted_debug": true
+  },
+  "failure_policy": [
+    "total_page_section_number_and_non_digit_formats_rejected",
+    "decorated_superscript_locked_opaque_or_unrelated_fields_rejected",
+    "missing_extra_duplicate_or_noncanonical_attributes_and_children_rejected",
+    "comments_stray_text_local_namespace_payload_and_malformed_xml_rejected",
+    "ambiguous_transition_or_out_of_range_anchor_rejected",
+    "state_flow_section_map_projection_domain_plan_or_hwpx_plan_drift_rejected",
+    "input_output_plan_or_allocation_limit_failure_rejected",
+    "no_partial_output_fallback_or_invented_native_identity"
+  ],
+  "evidence_boundary": {
+    "direct_stage": "three_rows_static_section_integration_passed",
+    "integration_rows": 3,
+    "static_section_hwpx": true,
+    "typed_target_projection_readback": true,
+    "page_and_object_auto_number_insert": true,
+    "exact_numeric_result_update": true,
+    "outside_delta_byte_preserved": true,
+    "complete_state_flow_map_and_projection_bound": true,
+    "existing_fixture_page_digit_source_qualified": true,
+    "object_number_target_qualified": false,
+    "complete_package_hwpx": false,
+    "actual_hwpx": false,
+    "actual_hangul": false,
+    "semantic_reopen": false,
+    "field_readback": false,
+    "reference_update": false,
+    "hancom_open": false,
+    "save_reopen": false,
+    "render": false,
+    "automation": false,
+    "differential": false,
+    "green_rows": 0,
+    "p09_complete": false,
+    "production_ready": false,
+    "product_complete": false
+  },
+  "gate_decision": {
+    "component": "pass",
+    "static_section_direct_hwpx": "pass",
+    "ref_006_stage": "integration_passed",
+    "ref_008_stage": "integration_passed",
+    "ref_009_stage": "integration_passed",
+    "current_target": "not_run",
+    "release_green_rows": 0,
+    "p09": "in_progress",
+    "product_complete": false
+  }
+}

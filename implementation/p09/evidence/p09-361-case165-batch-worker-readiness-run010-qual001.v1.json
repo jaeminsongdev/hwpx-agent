@@ -1,0 +1,300 @@
+{
+  "schema_version": "hwpx-agent.p09-owned-run010-worker-readiness-diagnostic/v1",
+  "state": "PASS_OWNED_RUN010_READY_EOF33_NOT_NATIVE_PRODUCT_OR_GO",
+  "GO_authorized": false,
+  "accepted_count_delta": 0,
+  "actual_product_created": false,
+  "actual_worker_process_executed": true,
+  "Native_or_production_Gate_write_qualified": false,
+  "focused_contracts": {
+    "tests": 33,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "failure_names": [],
+    "failure_tail": [],
+    "fresh": 5,
+    "final": 5,
+    "cleanup": true,
+    "source_pins": [
+      {
+        "path": "tools/p09/batch_engine_connection.py",
+        "bytes": 20322,
+        "sha256": "83f06a0bb3802315652057a46df39ecc99a5fbab7884fc245508e325be6ac9ea"
+      },
+      {
+        "path": "tools/p09/batch_verification.py",
+        "bytes": 63495,
+        "sha256": "296b4fe1070a6e5e4cfb882ba0ad9ca252edc702fc2441e970292cf5ad76dff9"
+      },
+      {
+        "path": "tools/p09/batch_worker_launch.py",
+        "bytes": 11399,
+        "sha256": "50c73746d29160b499d0aea94648c977dbc60fb170dd16e673aab7ac8dfd5352"
+      },
+      {
+        "path": "tools/p09/probe_batch_worker_readiness.py",
+        "bytes": 9352,
+        "sha256": "1ae9ca05813e3bcf4d67239c1a406dbf02d78e3690ffd755702fce76f53ef85c"
+      },
+      {
+        "path": "tools/p09/tests/test_batch_engine_connection.py",
+        "bytes": 15150,
+        "sha256": "1d5789a610dd79b618d1fd807c520d729f448a18d395582c900b8a0b2731b6c9"
+      }
+    ]
+  },
+  "current_result": {
+    "state": "PASS_OWNED_RUN010_READY_EOF_NOT_NATIVE",
+    "GO_authorized": false,
+    "accepted_count_delta": 0,
+    "probe": {
+      "GO_authorized": false,
+      "actual_GO_writes": 0,
+      "Native_qualified": false,
+      "owned_limits": {
+        "verified": true,
+        "job_private_limit_mib": 2548.87109375,
+        "cpu_hard_cap_machine_percent": 6.25,
+        "affinity_mask": 1,
+        "priority_class": 16384,
+        "active_process_limit": 16,
+        "kill_on_close": true,
+        "breakaway_disabled": true
+      },
+      "readiness_seconds": 12.70937330002198,
+      "actual_worker_process_executed": true,
+      "actual_product_created": false,
+      "actual_event_observed": true,
+      "child_terminal": {
+        "terminal": "WORKER_NOT_AUTHORIZED",
+        "task": "case165-current-r010-tests",
+        "descriptor_count": 162,
+        "actual_worker_attempts": 1,
+        "actual_worker_calls": 1,
+        "raw_policy_restored": true,
+        "original_worker_code": "run_case112_current_stored.py",
+        "child_default_project_helper_count": 62,
+        "source_step_pin_checked_before_after": true,
+        "Native_source_Frame_or_acceptance_qualified": false
+      },
+      "production_binding": {
+        "maximum_GO_to_complete_capture_seconds": 10,
+        "original_GO_bytes_retained": true,
+        "actual_GO_writes": 0,
+        "actual_capture_count": 0,
+        "actual_complete_capture_within_window": false,
+        "GO_to_complete_capture_elapsed_seconds": null,
+        "stopped": false,
+        "added_sampler_thread_or_process_query": false,
+        "capture_constructor_window_check_failed": false,
+        "original_source_scope_rates_CPU_RAM600_and_1200_retained": true,
+        "blocking_OS_latency_hard_preemption_guaranteed": false,
+        "queue_advance_authorized": false,
+        "PC_freeze_resolved": false,
+        "worker_readiness": {
+          "readiness_limit_seconds": 15,
+          "readiness_elapsed_seconds": null,
+          "bounded_event_waits": 0,
+          "readiness_confirmed": false,
+          "actual_original_GO_written": false,
+          "stopped": false,
+          "product_window_changed": false,
+          "source_or_Job_checks_replaced": false,
+          "owned_cleanup_is_callers_responsibility": true,
+          "installed_in_Native": false
+        },
+        "readiness_outside_actual_window_input": true,
+        "readiness_setup_errors": [],
+        "added_Native_retry_or_acceptance_authority": false
+      },
+      "production_Gate_write_or_Native_Frame_qualified": false,
+      "diagnostic_launch_flag_only": true,
+      "cleanup": {
+        "active_processes": 0,
+        "job_handle_closed": true,
+        "job_CPU_seconds": 2.391,
+        "peak_job_private_MiB": 50.77
+      }
+    },
+    "source_pins": [
+      {
+        "path": "tools/p09/probe_batch_worker_readiness.py",
+        "bytes": 9352,
+        "sha256": "1ae9ca05813e3bcf4d67239c1a406dbf02d78e3690ffd755702fce76f53ef85c"
+      },
+      {
+        "path": "tools/p09/batch_worker_launch.py",
+        "bytes": 11399,
+        "sha256": "50c73746d29160b499d0aea94648c977dbc60fb170dd16e673aab7ac8dfd5352"
+      },
+      {
+        "path": "tools/p09/worker_readiness_v1.py",
+        "bytes": 6890,
+        "sha256": "047c3f78f8a4472feeec4d56b65716f57e0429091321cb49afe5b685047d3a45"
+      },
+      {
+        "path": "tools/p09/worker_readiness_connection_v1.py",
+        "bytes": 5775,
+        "sha256": "d306d62a08e16f717bb526b2a7fa6c60ac44890f6fed965fdf4a70daca3c0a9b"
+      },
+      {
+        "path": "tools/p09/strict_product_window_v1.py",
+        "bytes": 4696,
+        "sha256": "cd35710cbd11e47cc0a83dd2f28c03772b86267713d52bb8129ed52c670cc701"
+      },
+      {
+        "path": "tools/p09/post_product_recovery_window_v1.py",
+        "bytes": 12876,
+        "sha256": "ce0dd3fdddc238dd7181d5c12c0a161a2dea74c791dc8053dd99a2b0ca7e8890"
+      },
+      {
+        "path": "tools/p09/native009_worker_launch_v1.py",
+        "bytes": 4057,
+        "sha256": "30088c308a7294dec10c295bcaba1d396382a7194541e5e21bd599dc03762f4b"
+      }
+    ],
+    "cleanup_confirmed": true,
+    "elapsed_seconds": 15.02855799999088,
+    "fresh_inputs": 7,
+    "final_fresh_hashes": 7,
+    "system_CPU_max": 71.69,
+    "owned_CPU_max": 0.3768521832598849,
+    "parent_private_MiB_max": 14.29296875,
+    "RAM_available_min": 19.85943544911692
+  },
+  "initial_success_before_cleanup_hardening": {
+    "current_qualification_reused": false,
+    "result": {
+      "state": "PASS_OWNED_RUN010_READY_EOF_NOT_NATIVE",
+      "GO_authorized": false,
+      "accepted_count_delta": 0,
+      "probe": {
+        "GO_authorized": false,
+        "actual_GO_writes": 0,
+        "Native_qualified": false,
+        "owned_limits": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "readiness_seconds": 8.09236239999882,
+        "actual_worker_process_executed": true,
+        "actual_product_created": false,
+        "actual_event_observed": true,
+        "child_terminal": {
+          "terminal": "WORKER_NOT_AUTHORIZED",
+          "task": "case165-current-r010-tests",
+          "descriptor_count": 162,
+          "actual_worker_attempts": 1,
+          "actual_worker_calls": 1,
+          "raw_policy_restored": true,
+          "original_worker_code": "run_case112_current_stored.py",
+          "child_default_project_helper_count": 62,
+          "source_step_pin_checked_before_after": true,
+          "Native_source_Frame_or_acceptance_qualified": false
+        },
+        "production_binding": {
+          "maximum_GO_to_complete_capture_seconds": 10,
+          "original_GO_bytes_retained": true,
+          "actual_GO_writes": 0,
+          "actual_capture_count": 0,
+          "actual_complete_capture_within_window": false,
+          "GO_to_complete_capture_elapsed_seconds": null,
+          "stopped": false,
+          "added_sampler_thread_or_process_query": false,
+          "capture_constructor_window_check_failed": false,
+          "original_source_scope_rates_CPU_RAM600_and_1200_retained": true,
+          "blocking_OS_latency_hard_preemption_guaranteed": false,
+          "queue_advance_authorized": false,
+          "PC_freeze_resolved": false,
+          "worker_readiness": {
+            "readiness_limit_seconds": 15,
+            "readiness_elapsed_seconds": null,
+            "bounded_event_waits": 0,
+            "readiness_confirmed": false,
+            "actual_original_GO_written": false,
+            "stopped": false,
+            "product_window_changed": false,
+            "source_or_Job_checks_replaced": false,
+            "owned_cleanup_is_callers_responsibility": true,
+            "installed_in_Native": false
+          },
+          "readiness_outside_actual_window_input": true,
+          "readiness_setup_errors": [],
+          "added_Native_retry_or_acceptance_authority": false
+        },
+        "production_Gate_write_or_Native_Frame_qualified": false,
+        "diagnostic_launch_flag_only": true,
+        "cleanup": {
+          "active_processes": 0,
+          "job_handle_closed": true,
+          "job_CPU_seconds": 1.891,
+          "peak_job_private_MiB": 50.82
+        }
+      },
+      "source_pins": [
+        {
+          "path": "tools/p09/probe_batch_worker_readiness.py",
+          "bytes": 8794,
+          "sha256": "21625e97cb0ec267954ef126220c18c357933780343b793dd506bb3b8f4672ac"
+        },
+        {
+          "path": "tools/p09/batch_worker_launch.py",
+          "bytes": 11399,
+          "sha256": "50c73746d29160b499d0aea94648c977dbc60fb170dd16e673aab7ac8dfd5352"
+        },
+        {
+          "path": "tools/p09/worker_readiness_v1.py",
+          "bytes": 6890,
+          "sha256": "047c3f78f8a4472feeec4d56b65716f57e0429091321cb49afe5b685047d3a45"
+        },
+        {
+          "path": "tools/p09/worker_readiness_connection_v1.py",
+          "bytes": 5775,
+          "sha256": "d306d62a08e16f717bb526b2a7fa6c60ac44890f6fed965fdf4a70daca3c0a9b"
+        },
+        {
+          "path": "tools/p09/strict_product_window_v1.py",
+          "bytes": 4696,
+          "sha256": "cd35710cbd11e47cc0a83dd2f28c03772b86267713d52bb8129ed52c670cc701"
+        },
+        {
+          "path": "tools/p09/post_product_recovery_window_v1.py",
+          "bytes": 12876,
+          "sha256": "ce0dd3fdddc238dd7181d5c12c0a161a2dea74c791dc8053dd99a2b0ca7e8890"
+        },
+        {
+          "path": "tools/p09/native009_worker_launch_v1.py",
+          "bytes": 4057,
+          "sha256": "30088c308a7294dec10c295bcaba1d396382a7194541e5e21bd599dc03762f4b"
+        }
+      ],
+      "cleanup_confirmed": true,
+      "elapsed_seconds": 10.087872200005222,
+      "fresh_inputs": 7,
+      "final_fresh_hashes": 7,
+      "system_CPU_max": 37.89,
+      "owned_CPU_max": 0.6986202685874598,
+      "parent_private_MiB_max": 14.5859375,
+      "RAM_available_min": 20.336300534733788
+    }
+  },
+  "remaining_qualification": [
+    "actual_live_Native_input_boundaries",
+    "original_parent_Native_helper_union64",
+    "metadata_and_live_Frame_shared_decoder5",
+    "original_production_Gate_write_and_capture10",
+    "independent_product_and_accounting_oracles",
+    "separate_new_product_execution_authority"
+  ],
+  "publication_inputs": {
+    "fresh": 11,
+    "final": 11
+  }
+}

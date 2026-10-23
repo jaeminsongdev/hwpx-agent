@@ -1,4 +1,5 @@
 #![allow(clippy::expect_used)]
+mod sequence_program {include!("support/caption_sequence_program.rs");}
 
 use std::fmt::Write as _;
 

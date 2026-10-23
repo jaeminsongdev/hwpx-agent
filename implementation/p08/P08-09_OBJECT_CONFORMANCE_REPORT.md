@@ -2,53 +2,61 @@
 
 ## Result
 
-Result: `matrix_implemented / thresholds_defined / required_matrix_non_green`.
+Result: `P08_PASS_WITH_TARGET_UNAVAILABLE / 41_SUPPORTED_ROWS_GREEN / P11_DEFERRED`.
 
-The authoritative current-target matrix now contains all 58 catalog rows exactly once. It is a
-fail-closed implementation and evidence ledger, not a declaration that P08 or the product is
-complete.
+P08 is complete for licensed Hancom Hangul 2020 `11.0.0.9136` x86 on this PC. The result is
+phase-scoped: it is not P11 completion, arbitrary-document compatibility, another-PC/version,
+production readiness or whole-product completion.
 
 ## Current matrix
 
-- Catalog ownership: P08 42 rows, P11 16 rows.
-- Direct stages: cataloged 5, unit-passed 19, integration-passed 34, oracle-verified 0.
-- Implementation-covered rows: 53/58; release-green rows: 0/58.
-- Automation bindings: 9 candidate-unverified chart bindings, 2 OLE activations denied by policy,
-  and 47 unavailable-with-reason. Runtime support is unverified and routing is disabled for all.
-- Differential state: 58 not-run.
-- Asset threshold: required for 44 rows. Render threshold: required for 53 rows, calibrated for 0.
+- Required global rows: 58 exactly once; P08 owns 42 and P11 owns 16.
+- Direct stages: 5 cataloged, 10 unit-passed, 2 integration-passed, 41 oracle-verified.
+- P08: 41 supported rows green; `OBJ-044` non-green and accepted as exact-target unavailable.
+- P11: 16 rows remain non-green and deferred to P11.
+- Automation bindings: 34 exact-target verified, 9 P11 candidates, 2 policy denied, 13
+  unavailable with reason (8 P08 and 5 P11/unbound).
+- Differentials: 34 exact semantic-contract matches, 7 not-applicable because only the fallback is
+  unavailable, 1 not-applicable because the target capability itself is unavailable, and 16 P11
+  not-run.
+- Thresholds: asset checks required for 44 rows; render checks required for 53 and calibrated for
+  the 41 exact-target direct rows.
 
-Every row is rebuilt from `specs/feature-coverage-matrix.json`, the generated capability contract,
-the bounded direct-evidence projection, automation projection and threshold policy. Catalog and
-generated-contract disagreement, duplicate/missing rows, evidence-path escape, evidence hash
-drift, false stage promotion, weakened thresholds, source-lock drift and false-green output fail
-before a passing validation result.
+## P08-25 closure
 
-## Verified implementation evidence
+The final isolated runtime batch passed 29/29 candidates. It used one x86 STA process and one
+disposable document per feature, opened only named project-owned P08-20 readback fixtures when a
+selected object was required, never saved a document, and left zero owned HWP processes. P08-24
+supplies five separately qualified selected-shape canaries, bringing the exact-target automation
+runtime total to 34.
 
-The matrix records only the stages already proven by P08-01 through P08-15 reports and contracts.
-The fifteen upstream private-contract validators are executed as prerequisites. The dedicated tamper
-suite covers duplicate JSON, direct-row collision, false oracle promotion, target-profile claim
-promotion, threshold weakening, contract claim promotion and false-green matrix mutation.
+The remaining eight P08 fallback routes are disabled with exact evidence:
 
-## Evidence boundary
+- `OBJ-003`: parameterized gallery execution returned false without effect;
+- `OBJ-012`: the exact form insertion default parameter set was unavailable;
+- `OBJ-025`: the selected-textbox property route produced no semantic effect;
+- `OBJ-040`: Hancom 2020 exposed no eligible programmatic multi-shape selection for distribution;
+- `OBJ-043`: the known-modal edit-points route produced no semantic effect;
+- `OBJ-044`: the exact target capability itself is unavailable;
+- `OBJ-046`: no exact per-object printable automation surface exists;
+- `OBJ-048`: the complete hyperlink parameter route remained modal, timed out, and its one owned
+  HWP process was cleaned with no saved document.
 
-No actual-target HWPX document, licensed Hangul process, save/reopen, property readback, PDF/image
-render, automation runtime or differential was executed for P08-09. Twenty-eight rows now have
-preserving static-section semantic reopen, and `OBJ-042` has synthetic full-package reopen; all 53 covered rows
-remain component or synthetic evidence only.
-P08-15's eleven-tag shape-component hyperlink adapter is a partial profile and does not advance the
-complete `OBJ-048` row because chart has no reviewed common root `href`.
-Their current stage cannot satisfy target-build fixture, package integrity, render
-calibration, automation runtime or release-green requirements.
+For 34 verified routes, the automation effect and the already-qualified direct effect satisfy the
+same pinned capability contract on the same target. This is recorded as
+`same_capability_contract_exact_target_semantic_effect_v1`; it does not claim byte-identical
+serialization. Seven supported rows keep their verified direct primary route while an unavailable
+fallback remains disabled. `OBJ-044` remains non-advertised and non-green.
 
-`actual_hwpx=false`, `actual_hangul=false`, `save_reopen=false`, `render=false`,
-`automation=false`, `differential=false`, `p08_09_green=false`, `p08_complete=false`,
-`production_ready=false`, and `product_complete=false`.
+## Validation and evidence boundary
 
-## Next exact task
+The public P08-25 receipt exposes only target identity, bounded state, and SHA-256 locks. Its
+validator deterministically rebuilds the receipt, qualified overlay, public projection and private
+contract from the preserved runtime receipts/traces; tamper tests reject route promotion and
+unavailable-route enablement. The 58-row matrix validator also rejects catalog drift, duplicate
+rows, evidence-path escape, weakened thresholds, false P08 green promotion and any P11 promotion.
 
-Extend HWPX lowering to the remaining ten P08-10 typed models under separate exact contracts. Keep the
-five still-cataloged P11 rows and P11 runtime-routing evidence deferred to P11. After implementation
-closure, execute the combined licensed-target campaign and update rows only from attempt-bound
-evidence.
+`actual_hwpx=true`, `actual_hangul=true`, `save_reopen=true`, `render=true`,
+`automation_runtime_verified=34`, `differential_exact_match=34`, `p08_09_green=true`,
+`p08_complete_current_pc=true`, `p11_complete=false`, `production_ready=false`, and
+`product_complete=false`.

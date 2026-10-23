@@ -1,0 +1,82 @@
+{
+  "schema_version": "hwpx-agent.p09-field-object-caption-hwpx-contract/v2",
+  "task": "P09-18",
+  "profile": "hwpx-agent.field-object-caption-hwpx.hwpml-2011-digit/v1",
+  "policy": "implementation/p09/P09-18_FIELD_OBJECT_CAPTION_HWPX_POLICY.v2.md",
+  "report": "implementation/p09/P09-18_FIELD_OBJECT_CAPTION_HWPX_REPORT.v2.md",
+  "migration": "protocol/migrations/p09-field-object-caption-hwpx-v1-to-v2.md",
+  "qualification": "implementation/p09/evidence/p09-18-field-object-caption-hwpx-source-qualification.20261002-r02.v2.json",
+  "predecessor_source_snapshot": {
+    "path": "implementation/p09/evidence/p09-18-object-caption-source.20261002-r01.snapshot.json",
+    "sha256": "df4910ae5a54194425f32e67efd6bfa94215aee99cf756b89a325207cc1f6a9e"
+  },
+  "source_lock_canonicalization": "utf8_text_crlf_to_lf_sha256",
+  "source_sha256": {
+    "docs/03_document_model/09_fields_controls_references.md": "3068742808467f298d289c7401980c617981d748dfa73422bab8f7174ef10a20",
+    "docs/04_feature_catalog/10_ref.md": "34cfc9283d16b96bdb16d0ffec7a485f4b72548a49ec70fec2968b3c657743e4",
+    "docs/04_feature_catalog/contracts/10_ref_contracts.md": "7062034902932355ac8e6c38a4798dd314f39c44518b7e85c26fe71a7a72cc29",
+    "docs/09_roadmap/P09_fields_forms_notes_references.md": "0f4068c4dc5484cc348a145c892a2e1d2d3896d421b77c2fa23bb123956f4b55"
+  },
+  "implementation_sha256": {
+    "crates/hwpx-package/src/field_object_caption_hwpx.rs": "2dd63a557787ffe1f84a0c9f49c7d0ace89af22037ade6ee8d51db380835adda",
+    "crates/hwpx-package/tests/field_object_caption_hwpx.rs": "589e4d08b4045abd85ccb89f8ac4b7d624e5cc5f2327953779ba42288bae23d9",
+    "crates/domain-ir/src/field_engine.rs": "c9c77c27f741cb985de6da734a14fdf28917d89500d25a73a8cce2d7e2ad5da5",
+    "crates/domain-ir/tests/field_engine.rs": "15a3f49dab9aed32f087ec7aceb1c3d38617681f01162ce4415fe4b77338abb1",
+    "crates/hwpx-package/src/field_auto_number_hwpx.rs": "2927752005e5a1f2914089935dcec21fd61239f44e9861dabca8a505e5b05288",
+    "crates/hwpx-package/tests/field_auto_number_hwpx.rs": "3151a26ce5fc826c0a78d94da40de922903bee5c0344c05260a01d94ba85dc70"
+  },
+  "public_export": {
+    "path": "crates/hwpx-package/src/lib.rs",
+    "markers": [
+      "mod field_object_caption_hwpx;",
+      "pub use field_object_caption_hwpx::{"
+    ]
+  },
+  "admitted_profile": {
+    "scope": "one_existing_caption_one_digit_object_field",
+    "object_selector": "unique_native_u32_id_direct_run_child_and_kind",
+    "picture_names": [
+      "pic",
+      "rect",
+      "ellipse",
+      "line",
+      "arc",
+      "polygon",
+      "curve",
+      "connectLine"
+    ],
+    "table_name": "tbl",
+    "equation_name": "equation",
+    "numbering_types": [
+      "PICTURE",
+      "TABLE",
+      "EQUATION"
+    ],
+    "lock": "0",
+    "caption": "one_direct_caption_one_direct_subList_complete_paragraph_map",
+    "namespace": "root_inherited_with_only_exact_redundant_ancestor_declarations",
+    "instid_required": false,
+    "composition": "reuse_sealed_field_auto_number_plan_on_exact_caption_view",
+    "binding": "full_section_object_caption_selector_state_flow_map_and_two_plan_hashes",
+    "preservation": "only_legacy_verified_caption_delta_every_other_byte_exact",
+    "limits": "inherited_finite_field_auto_number_and_state_limits",
+    "fallback": "none_fail_closed_no_partial_output"
+  },
+  "evidence_boundary": {
+    "static_caption_composition": true,
+    "synthetic_object_shell_tests": true,
+    "typed_projection_readback": true,
+    "outside_caption_byte_preserved": true,
+    "application_owned_sequence_derivation": false,
+    "complete_native_objects": false,
+    "complete_package_hwpx": false,
+    "actual_hangul": false,
+    "semantic_save_reopen": false,
+    "render": false,
+    "differential": false,
+    "green_rows": 0,
+    "p09_complete": false,
+    "product_complete": false
+  },
+  "matrix_effect": "none_REF_008_and_REF_009_remain_static_integration_non_green"
+}

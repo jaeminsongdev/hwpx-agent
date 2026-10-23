@@ -1,0 +1,162 @@
+{
+  "state": "PASS_OWNER_CHECKER_AST_DIAGNOSTIC_AND_EXACT_FAILED_SOURCE_SNAPSHOT_NOT_RUNTIME",
+  "steps": [
+    {
+      "stage": "owner_checker_ast_shape_diagnostic",
+      "exit_code": 0,
+      "cleanup": true,
+      "stdout_bytes": 693,
+      "stderr_bytes": 0,
+      "stdout_sha256": "c0e5b92e34d7efd4b6da74e94bd879a31582529830ecc9a8cc6b243c7aef5f27",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": [],
+      "locations": [],
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 1.234,
+          "peak_job_private_mib": 65.72,
+          "peak_job_private_percent": 0.20627985770674423,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 1.3423823999764863
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM_server": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "failed_source_snapshots": [
+    {
+      "path": "implementation/p09/tools/crossref-owned-active-source.ps1",
+      "bytes": 9229,
+      "sha256": "cd79804df31013aa7e6331341c30edb261ec601f7c44ed8b586f870cafff03a3",
+      "utf8": "# Internal read-only observation, not an execution permit or native target qualifier.\n# Caller pins this file and the original P58 ownership source before importing functions.\nSet-StrictMode -Version Latest\n\nfunction Assert-P09XrefBinding([bool]$Condition,[string]$Code) {\n    if (-not $Condition) {throw ('P09_XREF_BIND_'+$Code)}\n}\n\nfunction Assert-P09XrefOriginalOwnerFunction {\n    $source=Join-Path $PSScriptRoot 'sdk-baseline-owned-session.ps1'\n    $item=Get-Item -LiteralPath $source -Force\n    Assert-P09XrefBinding ($item -is [IO.FileInfo] -and $item.Length -le 32768 -and\n        ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0) 'OWNER_SOURCE_BOUNDARY'\n    $bytes=[IO.File]::ReadAllBytes($source)\n    $algorithm=[Security.Cryptography.SHA256]::Create()\n    try {$sha=([BitConverter]::ToString($algorithm.ComputeHash($bytes))).Replace('-','').ToLowerInvariant()}\n    finally {$algorithm.Dispose()}\n    Assert-P09XrefBinding ($sha -ceq 'bd908d7d8f57513df7992e75f3e7faddaa81ce71d6dc0ad8c0b65963124a6338') 'OWNER_SOURCE_IDENTITY'\n    $tokens=$null;$errors=$null\n    $ast=[Management.Automation.Language.Parser]::ParseInput([Text.UTF8Encoding]::new($false,$true).GetString($bytes),[ref]$tokens,[ref]$errors)\n    $functions=@($ast.FindAll({param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and\n        $node.Name -ceq 'Test-P58Owner'},$false))\n    $actual=Get-Command -Name Test-P58Owner -CommandType Function -ErrorAction Stop\n    Assert-P09XrefBinding (@($errors).Count -eq 0 -and $functions.Count -eq 1 -and\n        $actual.ScriptBlock.Ast.Extent.Text -ceq $functions[0].Body.Extent.Text) 'OWNER_FUNCTION_REPLACED'\n}\n\nfunction Assert-P09XrefActiveSourceObservations($Before,$After) {\n    # These objects are observations, never caller-authorized native capabilities.\n    $names=@('owner_verified','application_bound','collection_bound','document_bound','document_application_bound',\n        'document_count','full_name_matches','modified','version_matches','source_digest_matches')\n    foreach ($observation in @($Before,$After)) {\n        Assert-P09XrefBinding ($observation -is [pscustomobject] -and\n            @($observation.PSObject.Properties).Count -eq $names.Count) 'OBSERVATION_SCHEMA'\n        foreach ($name in $names) {Assert-P09XrefBinding ($name -cin @($observation.PSObject.Properties.Name)) 'OBSERVATION_SCHEMA'}\n        foreach ($name in @('owner_verified','application_bound','collection_bound','document_bound','document_application_bound',\n                'full_name_matches','version_matches','source_digest_matches')) {\n            Assert-P09XrefBinding ($observation.$name -is [bool] -and $observation.$name) 'OBSERVATION_MISMATCH'\n        }\n        Assert-P09XrefBinding ($observation.document_count -is [int] -and $observation.document_count -eq 1) 'SINGLE_DOCUMENT_REQUIRED'\n        # Actual installed declaration is VT_I4, not VARIANT_BOOL. Zero is the conservative\n        # admission value; behavior on an actually opened source is still NOT_RUN.\n        Assert-P09XrefBinding ($observation.modified -is [int] -and $observation.modified -eq 0) 'CLEAN_LONG_REQUIRED'\n    }\n    return [ordered]@{state='paired_owned_active_source_observations_not_target_qualification';\n        paired_observations_validated=$true;runtime_com_observed=$false;native_target_qualified=$false;\n        insertion_or_preservation_proved=$false;native_execution_authorized=$false;reusable_execution_permit=$false;\n        raw_document_values_or_identities_present=$false;p09_complete=$false}\n}\n\nfunction Get-P09XrefHeldComIdentity($Value,$Pointers) {\n    Assert-P09XrefBinding ($null -ne $Value -and [Runtime.InteropServices.Marshal]::IsComObject($Value)) 'REAL_COM_REQUIRED'\n    Assert-P09XrefBinding ($Pointers.Count -lt 64) 'IDENTITY_BUDGET'\n    $pointer=[Runtime.InteropServices.Marshal]::GetIUnknownForObject($Value)\n    Assert-P09XrefBinding ($pointer -ne [IntPtr]::Zero) 'NULL_IDENTITY'\n    [void]$Pointers.Add($pointer)\n    return $pointer\n}\n\nfunction Read-P09XrefActiveSourceObservation($Owner,$Document,$Pointers,$ApplicationId,$CollectionId,$DocumentId,[string]$ExpectedPath) {\n    Assert-P09XrefBinding ((Test-P58Owner $Owner) -eq $true) 'OWNER_CHANGED'\n    $collection=$Owner.hwp.XHwpDocuments\n    $active=$collection.Active_XHwpDocument\n    $application=$Owner.hwp.Application\n    $documentApplication=$Document.Application\n    $count=$collection.Count;$modified=$Document.Modified;$name=$Document.FullName;$activeName=$active.FullName\n    $version=$Owner.hwp.Version\n    return [pscustomobject]@{\n        owner_verified=$true\n        application_bound=((Get-P09XrefHeldComIdentity $application $Pointers) -eq $ApplicationId)\n        collection_bound=((Get-P09XrefHeldComIdentity $collection $Pointers) -eq $CollectionId)\n        document_bound=((Get-P09XrefHeldComIdentity $active $Pointers) -eq $DocumentId)\n        document_application_bound=((Get-P09XrefHeldComIdentity $documentApplication $Pointers) -eq $ApplicationId)\n        document_count=$count\n        full_name_matches=($name -is [string] -and $activeName -is [string] -and\n            [string]::Equals($name,$ExpectedPath,[StringComparison]::OrdinalIgnoreCase) -and\n            [string]::Equals($activeName,$ExpectedPath,[StringComparison]::OrdinalIgnoreCase))\n        modified=$modified\n        version_matches=($version -is [string] -and $version.Replace(',','.').Replace(' ','') -ceq '11.0.0.9136')\n        source_digest_matches=$true # Only reached with the exact source stream held by the outer function.\n    }\n    # Getter RCW aliases belong to the owning session. Do not FinalRelease them:\n    # aliases can be the caller's document/application. Only our IUnknown AddRefs are released.\n}\n\nfunction Observe-P09XrefOwnedActiveSource {\n    param([Parameter(Mandatory)]$Owner,[Parameter(Mandatory)]$Document)\n    $pointers=[Collections.Generic.List[IntPtr]]::new();$stream=$null;$algorithm=$null\n    try {\n        # No activation, fallback to mocks, alternate target, supplied path or source digest.\n        Assert-P09XrefBinding (-not [Environment]::Is64BitProcess -and\n            [Threading.Thread]::CurrentThread.GetApartmentState() -eq [Threading.ApartmentState]::STA) 'X86_STA_REQUIRED'\n        Assert-P09XrefBinding ($null -ne $Owner.hwp -and $null -ne $Owner.documents -and\n            [Runtime.InteropServices.Marshal]::IsComObject($Owner.hwp) -and\n            [Runtime.InteropServices.Marshal]::IsComObject($Owner.documents) -and\n            [Runtime.InteropServices.Marshal]::IsComObject($Document)) 'REAL_OWNED_COM_REQUIRED'\n        Assert-P09XrefOriginalOwnerFunction\n        Assert-P09XrefBinding ((Test-P58Owner $Owner) -eq $true) 'INITIAL_OWNER_MISMATCH'\n        $root=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\\..\\..'))\n        $path=Join-Path $root 'implementation/p09/evidence/private/p09-361-crossref-discovery-inputs-20261017-r01/source-with-bookmark.hwpx'\n        $item=Get-Item -LiteralPath $path -Force\n        Assert-P09XrefBinding ($item -is [IO.FileInfo] -and $item.Length -eq 14425) 'FIXED_SOURCE_SIZE'\n        $ancestor=$item\n        while ($null -ne $ancestor) {\n            Assert-P09XrefBinding (($ancestor.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0) 'SOURCE_LINKED'\n            if ($ancestor -is [IO.FileInfo]) {$ancestor=$ancestor.Directory} else {$ancestor=$ancestor.Parent}\n        }\n        Start-Sleep -Milliseconds 50\n        $stream=[IO.File]::Open($path,[IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::Read)\n        Assert-P09XrefBinding ($stream.Length -eq 14425) 'OPENED_SOURCE_SIZE'\n        $algorithm=[Security.Cryptography.SHA256]::Create()\n        $sourceSha=([BitConverter]::ToString($algorithm.ComputeHash($stream))).Replace('-','').ToLowerInvariant()\n        Assert-P09XrefBinding ($sourceSha -ceq '64539a2dc6e76f0301c8beba20cf24083810fdf571f1f5dabbbf2764cd1ee184') 'FIXED_SOURCE_DIGEST'\n        # Keep source bytes and all acquired IUnknown identities alive across both samples.\n        $applicationId=Get-P09XrefHeldComIdentity $Owner.hwp $pointers\n        $collectionId=Get-P09XrefHeldComIdentity $Owner.documents $pointers\n        $documentId=Get-P09XrefHeldComIdentity $Document $pointers\n        $before=Read-P09XrefActiveSourceObservation $Owner $Document $pointers $applicationId $collectionId $documentId $path\n        $after=Read-P09XrefActiveSourceObservation $Owner $Document $pointers $applicationId $collectionId $documentId $path\n        Assert-P09XrefBinding ((Test-P58Owner $Owner) -eq $true) 'FINAL_OWNER_MISMATCH'\n        $receipt=Assert-P09XrefActiveSourceObservations $before $after\n        $receipt.runtime_com_observed=$true\n        return $receipt\n    } catch {\n        $code=if ($_.Exception.Message -cmatch '^P09_XREF_BIND_[A-Z_]+$') {$_.Exception.Message} else {'P09_XREF_BIND_OBSERVATION_FAILED_NO_RAW_VALUES'}\n        throw $code\n    } finally {\n        # One Release per successful GetIUnknownForObject, including any failing snapshot.\n        foreach ($pointer in $pointers) {[void][Runtime.InteropServices.Marshal]::Release($pointer)}\n        $pointers.Clear()\n        if ($null -ne $algorithm) {$algorithm.Dispose()}\n        if ($null -ne $stream) {$stream.Dispose()}\n    }\n}\n"
+    },
+    {
+      "path": "implementation/p09/tools/test-crossref-owned-active-source.ps1",
+      "bytes": 6993,
+      "sha256": "963740fb59bb6b32a8265602d7b344016dca592a411375f1ba850f607919700a",
+      "utf8": "# No Hangul/COM session. Models and source guards do not qualify the runtime bridge.\nSet-StrictMode -Version Latest\n$ErrorActionPreference='Stop';$ProgressPreference='SilentlyContinue'\n[Console]::OutputEncoding=[Text.UTF8Encoding]::new($false)\n. (Join-Path $PSScriptRoot 'crossref-owned-active-source.ps1')\n. (Join-Path $PSScriptRoot 'sdk-baseline-owned-session.ps1')\n$script:passed=0\nfunction New-P09XrefObservation {\n    return [pscustomobject]@{owner_verified=$true;application_bound=$true;collection_bound=$true;\n        document_bound=$true;document_application_bound=$true;document_count=[int]1;\n        full_name_matches=$true;modified=[int]0;version_matches=$true;source_digest_matches=$true}\n}\nfunction Assert-P09XrefPairReject($Before,$After) {\n    $rejected=$false\n    try {[void](Assert-P09XrefActiveSourceObservations $Before $After)} catch {$rejected=$true}\n    Assert-P09XrefBinding $rejected 'TEST_PAIR_MUST_REJECT'\n}\nfunction Invoke-P09XrefBindingTest([string]$Name,[scriptblock]$Body) {\n    & $Body\n    $script:passed++\n}\ntry {\n    Invoke-P09XrefBindingTest 'valid_paired_observation_is_not_an_execution_permit' {\n        $receipt=Assert-P09XrefActiveSourceObservations (New-P09XrefObservation) (New-P09XrefObservation)\n        Assert-P09XrefBinding ($receipt.paired_observations_validated -and -not $receipt.runtime_com_observed -and\n            -not $receipt.native_target_qualified -and -not $receipt.native_execution_authorized -and\n            -not $receipt.reusable_execution_permit -and -not $receipt.p09_complete) 'TEST_VALID_RECEIPT'\n    }\n    Invoke-P09XrefBindingTest 'every_identity_and_source_flag_is_typed_and_true' {\n        foreach ($name in @('owner_verified','application_bound','collection_bound','document_bound',\n                'document_application_bound','full_name_matches','version_matches','source_digest_matches')) {\n            foreach ($value in @($false,1,'true')) {\n                $before=New-P09XrefObservation;$before.$name=$value\n                Assert-P09XrefPairReject $before (New-P09XrefObservation)\n            }\n        }\n    }\n    Invoke-P09XrefBindingTest 'second_snapshot_cannot_reuse_a_stale_first_success' {\n        foreach ($name in @('owner_verified','application_bound','collection_bound','document_bound',\n                'document_application_bound','full_name_matches','version_matches','source_digest_matches')) {\n            $after=New-P09XrefObservation;$after.$name=$false\n            Assert-P09XrefPairReject (New-P09XrefObservation) $after\n        }\n    }\n    Invoke-P09XrefBindingTest 'exact_one_i4_document_count' {\n        foreach ($value in @(0,2,[long]1,'1',$true,$null)) {\n            $before=New-P09XrefObservation;$before.document_count=$value\n            Assert-P09XrefPairReject $before (New-P09XrefObservation)\n        }\n    }\n    Invoke-P09XrefBindingTest 'modified_i4_zero_is_not_coerced_from_bool_string_or_i8' {\n        foreach ($value in @(-1,1,$false,'0',[long]0,$null)) {\n            $before=New-P09XrefObservation;$before.modified=$value\n            Assert-P09XrefPairReject $before (New-P09XrefObservation)\n        }\n    }\n    Invoke-P09XrefBindingTest 'dirty_second_sample_rejects' {\n        $after=New-P09XrefObservation;$after.modified=[int]1\n        Assert-P09XrefPairReject (New-P09XrefObservation) $after\n    }\n    Invoke-P09XrefBindingTest 'missing_or_extra_observation_fields_reject' {\n        $before=New-P09XrefObservation;$before.PSObject.Properties.Remove('document_bound')\n        Assert-P09XrefPairReject $before (New-P09XrefObservation)\n        $before=New-P09XrefObservation;$before | Add-Member authorization $true\n        Assert-P09XrefPairReject $before (New-P09XrefObservation)\n    }\n    Invoke-P09XrefBindingTest 'preserved_owner_function_identity_is_exact' {\n        Assert-P09XrefOriginalOwnerFunction\n    }\n    Invoke-P09XrefBindingTest 'a_replaced_owner_checker_is_not_accepted' {\n        $original=(Get-Command Test-P58Owner -CommandType Function).ScriptBlock\n        try {\n            Set-Item -Path Function:Test-P58Owner -Value {return $true}\n            $rejected=$false\n            try {Assert-P09XrefOriginalOwnerFunction} catch {$rejected=$true}\n            Assert-P09XrefBinding $rejected 'TEST_REPLACED_OWNER_CHECKER_ACCEPTED'\n        } finally {Set-Item -Path Function:Test-P58Owner -Value $original}\n        Assert-P09XrefOriginalOwnerFunction\n    }\n    Invoke-P09XrefBindingTest 'runtime_bridge_has_no_non_com_fallback' {\n        $rejected=$false\n        try {[void](Observe-P09XrefOwnedActiveSource ([pscustomobject]@{hwp=[object]::new();documents=[object]::new()}) ([object]::new()))}\n        catch {$rejected=$_.Exception.Message -ceq 'P09_XREF_BIND_REAL_OWNED_COM_REQUIRED'}\n        Assert-P09XrefBinding $rejected 'TEST_RUNTIME_NON_COM_FALLBACK'\n    }\n    Invoke-P09XrefBindingTest 'no_iunknown_is_acquired_for_plain_objects' {\n        $pointers=[Collections.Generic.List[IntPtr]]::new();$rejected=$false\n        try {[void](Get-P09XrefHeldComIdentity ([object]::new()) $pointers)} catch {$rejected=$true}\n        Assert-P09XrefBinding ($rejected -and $pointers.Count -eq 0) 'TEST_NON_COM_IDENTITY'\n    }\n    Invoke-P09XrefBindingTest 'bridge_source_has_no_activation_action_or_document_write' {\n        $tokens=$null;$errors=$null\n        $ast=[Management.Automation.Language.Parser]::ParseFile((Join-Path $PSScriptRoot 'crossref-owned-active-source.ps1'),[ref]$tokens,[ref]$errors)\n        Assert-P09XrefBinding (@($errors).Count -eq 0) 'TEST_BRIDGE_SYNTAX'\n        $text=$ast.Extent.Text\n        Assert-P09XrefBinding ($text -cnotmatch '(?i)GetActiveObject|GetTypeFromProgID|CreateInstance|-ComObject|\\.SaveAs\\(|\\.Execute\\(|\\.Quit\\(|FileAccess\\]::Write|FileMode\\]::Create' -and\n            $text -cnotmatch '\\$Document\\.(Modified|FullName)\\s*=') 'TEST_NO_NATIVE_ACTION_OR_WRITE'\n        $receipt=Assert-P09XrefActiveSourceObservations (New-P09XrefObservation) (New-P09XrefObservation)\n        $encoded=$receipt | ConvertTo-Json -Compress\n        Assert-P09XrefBinding ($encoded -cnotmatch 'source-with-bookmark|p09_crossref_discovery_anchor|IntPtr|process_id|FullName') 'TEST_REDACTED_RECEIPT'\n    }\n    Assert-P09XrefBinding ($script:passed -eq 12) 'TEST_EXACT_CONTRACT_COUNT'\n    [ordered]@{state='twelve_owned_active_source_contracts_pass_runtime_not_run';passed=$script:passed;failed=0;\n        original_owner_checker_restored=$true;native_session_started=$false;runtime_bridge_on_real_com_executed=$false;\n        native_target_qualified=$false;native_execution_authorized=$false;p09_complete=$false} | ConvertTo-Json -Compress\n    exit 0\n} catch {\n    $code=if ($_.Exception.Message -cmatch '^P09_XREF_BIND_[A-Z_]+$') {$_.Exception.Message} else {'P09_XREF_BIND_CONTRACT_FAILED_NO_RAW_VALUES'}\n    [ordered]@{state='owned_active_source_contract_failed';passed=$script:passed;failed=1;error_code=$code;\n        native_session_started=$false;runtime_bridge_on_real_com_executed=$false;p09_complete=$false} | ConvertTo-Json -Compress\n    exit 2\n}\n"
+    }
+  ],
+  "diagnostic": {
+    "state": "owner_function_ast_shape_diagnostic_not_runtime",
+    "functions": 1,
+    "errors": 0,
+    "actual_ast_type": "FunctionDefinitionAst",
+    "actual_parent_type": "NamedBlockAst",
+    "expected_body_length": 598,
+    "actual_extent_length": 621,
+    "actual_to_string_length": 596,
+    "expected_body_sha": "080e255789920550bfeb31ed8db9dc488b648edb7305786b93cf7f3f03427435",
+    "actual_extent_sha": "56fd3d84ff36906b3ab42c74bcf7cdb8e5b3b29c8016101b6bc8ca7525938e28",
+    "actual_to_string_sha": "0dc45507f251d1d6985ca326119169d3689c1fa2e5492d26fdc3f6554b7b65f3",
+    "expected_inner_sha": "0dc45507f251d1d6985ca326119169d3689c1fa2e5492d26fdc3f6554b7b65f3",
+    "expected_end_block_sha": "044a2fd95cccace9fc5abcf5cc2e861058269afd350561cafe14104d404bf2a5"
+  },
+  "fresh_inputs": 3,
+  "final_fresh_hashes": 3,
+  "cleanup": true,
+  "elapsed_seconds": 2.750520800007507,
+  "source_pins": [
+    {
+      "path": "implementation/p09/tools/crossref-owned-active-source.ps1",
+      "bytes": 9229,
+      "sha256": "cd79804df31013aa7e6331341c30edb261ec601f7c44ed8b586f870cafff03a3"
+    },
+    {
+      "path": "implementation/p09/tools/test-crossref-owned-active-source.ps1",
+      "bytes": 6993,
+      "sha256": "963740fb59bb6b32a8265602d7b344016dca592a411375f1ba850f607919700a"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-crossref-owned-active-source-tests004.v1.json",
+      "bytes": 10719,
+      "sha256": "1697347f55e5e324860eb18be8c3db4fe44e988456db5e571bd7b8384b88adc5"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T06:52:29.924891+00:00",
+      "system_cpu_percent": 0.6,
+      "available_ram_mib": 7757.91,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.3493111846594,
+      "commit_used_percent": 50.15394019587574,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.59375,
+      "parent_private_percent": 0.04266590816163268
+    },
+    {
+      "time_utc": "2026-10-17T06:52:30.425506+00:00",
+      "system_cpu_percent": 0.97,
+      "available_ram_mib": 7764.79,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.37088934510896,
+      "commit_used_percent": 50.139440472366424,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.59375,
+      "parent_private_percent": 0.04266590816163268
+    },
+    {
+      "time_utc": "2026-10-17T06:52:31.169360+00:00",
+      "system_cpu_percent": 13.97,
+      "available_ram_mib": 7677.73,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 24.09765588841639,
+      "commit_used_percent": 50.29119252814894,
+      "parent_cpu_machine_percent": 0.26256278486238227,
+      "parent_private_mib": 14.375,
+      "parent_private_percent": 0.04511797184908284
+    },
+    {
+      "time_utc": "2026-10-17T06:52:31.674850+00:00",
+      "system_cpu_percent": 13.09,
+      "available_ram_mib": 7600.19,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.854276307118525,
+      "commit_used_percent": 50.343356381937596,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.375,
+      "parent_private_percent": 0.04511797184908284
+    },
+    {
+      "time_utc": "2026-10-17T06:52:32.175077+00:00",
+      "system_cpu_percent": 11.66,
+      "available_ram_mib": 7639.07,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 23.97630325652448,
+      "commit_used_percent": 50.25454777237086,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.2734375,
+      "parent_private_percent": 0.04479920356971431
+    }
+  ]
+}

@@ -19,21 +19,26 @@
   "implementation_files": [
     "crates/hwpx-package/src/lib.rs",
     "crates/hwpx-package/src/object_common_properties_hwpx.rs",
+    "crates/hwpx-package/src/object_caption_insert_hwpx.rs",
+    "crates/hwpx-package/src/object_form_insert_hwpx.rs",
     "crates/hwpx-package/src/object_remainder_target.rs",
+    "crates/hwpx-package/examples/p08_19_support/special.rs",
     "crates/hwpx-package/tests/object_common_properties_hwpx.rs",
+    "crates/hwpx-package/tests/object_caption_insert_hwpx.rs",
+    "crates/hwpx-package/tests/object_form_insert_hwpx.rs",
     "crates/hwpx-package/tests/object_remainder_target.rs"
   ],
   "direct_profiles": {
+    "OBJ-003": "installed_rectangle_drt_exact_identity_to_native_rectangle",
+    "OBJ-012": "static_edit_insert_complete_native_state_hash_profile",
+    "OBJ-013": "plain_static_caption_insert_exact_subtree",
+    "OBJ-014": "fixed_rectangle_behind_paragraph_band_profile",
     "OBJ-019": "existing_plain_caption_and_outMargin_only",
     "OBJ-030": "checked_imgDim_orgSz_curSz_mapping",
     "OBJ-046": "existing_admitted_form_root_only",
     "OBJ-047": "existing_shapeComment_description_only_empty_title"
   },
   "unavailable_profiles": {
-    "OBJ-003": "drawing_gallery_template_unqualified",
-    "OBJ-012": "form_insertion_state_incomplete",
-    "OBJ-013": "caption_insertion_unqualified",
-    "OBJ-014": "paragraph_band_native_construct_unqualified",
     "OBJ-044": "aspect_lock_native_field_unqualified"
   },
   "failure_policy": [
@@ -46,9 +51,9 @@
     "no_partial_output_or_fallback_after_failure"
   ],
   "evidence_boundary": {
-    "direct_hwpx_profiles": 4,
-    "unavailable_with_reason_profiles": 5,
-    "focused_rust_tests": "11/11 PASS",
+    "direct_hwpx_profiles": 8,
+    "unavailable_with_reason_profiles": 1,
+    "focused_rust_tests": "19/19 PASS",
     "schema": true,
     "semantic_reopen": true,
     "negative": true,
@@ -61,8 +66,8 @@
     "render": false,
     "automation_runtime_binding": false,
     "differential": false,
-    "integration_rows": ["OBJ-019", "OBJ-030", "OBJ-046", "OBJ-047"],
-    "unit_rows": ["OBJ-003", "OBJ-012", "OBJ-013", "OBJ-014", "OBJ-044"],
+    "integration_rows": ["OBJ-003", "OBJ-012", "OBJ-013", "OBJ-014", "OBJ-019", "OBJ-030", "OBJ-046", "OBJ-047"],
+    "unit_rows": ["OBJ-044"],
     "release_green_rows": 0,
     "p08_complete": false,
     "production_ready": false,

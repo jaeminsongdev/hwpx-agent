@@ -1,0 +1,432 @@
+{
+  "state": "PASS_STRICT_V3_REVIEW_LITERAL_PRODUCT_CODE_DOCUMENT_SYNC_THIRTY_FIVE_CASES_NOT_FULL_SEARCH_OR_GATE",
+  "actual_Cargo_or_tests": false,
+  "actual_Hangul_or_COM": false,
+  "Native011_executed": false,
+  "prior_Native_replayed": false,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "fresh_inputs": 36,
+  "final_fresh_hashes": 36,
+  "current_executed_cases": 35,
+  "new_product_cases": 10,
+  "affected_cases": 25,
+  "original_v1_v2_parser_and_v3_current_access_preserved": true,
+  "entire_508_input_set_reaudited": false,
+  "source_ownership_handoff_without_clone_or_extra_import": true,
+  "resource_policy_unchanged": true,
+  "full_search_native_cas_execution_publication_qualified": false,
+  "next_work": "Full_SearchScopeSelector_document_section_selection_node_set",
+  "cleanup": true,
+  "elapsed_seconds": 9.547,
+  "source_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-361-review-literal-product-components088.v1.json",
+      "bytes": 162442,
+      "sha256": "3905c914aea2a4f55b241675b7fa120615a0530b619c9763979b0dc80cd392c4"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-stored-review-literal-focused085.v1.json",
+      "bytes": 178020,
+      "sha256": "2d5c00db901cdfba93a072f5a42132ce195075f1fc354dce2fd7ca45a5ef18ed"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms.rs",
+      "bytes": 12491,
+      "sha256": "983b04b2b26647fa7be86778c61285b5529d0492c46209b19960f7c487353681"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/readback.rs",
+      "bytes": 3480,
+      "sha256": "8f80eb363a605f97d8629891c02ac180f22b43d7fd3a106c58c7de5a16ae9b42"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/review.rs",
+      "bytes": 8159,
+      "sha256": "6c310040487d6d3d6b8cef06ba0242b5f9cfde47830ffbb9af22e09d17cb21b7"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/reviews.rs",
+      "bytes": 9962,
+      "sha256": "a9fd70aad75d95390f2d3b5ad4a3d29a51faf3cc62fe1acb7f11a8755f134d78"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/structure/review.rs",
+      "bytes": 20660,
+      "sha256": "6281832bed0e72892757131f3a5bd16c7a461ae7e746b33596df4ac0da24a479"
+    },
+    {
+      "path": "crates/hwpx-package/tests/document_import_search_review_replacement.rs",
+      "bytes": 14108,
+      "sha256": "a544885abf60ad6f60b8ed3105295d1b376d93d2723f87cb6a01b6118a7e7e62"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_field_fixture.rs",
+      "bytes": 2850,
+      "sha256": "eaa5b0c52e615adc355ff73bcf2a62a4c7e91bdc42d284a6e02d5e5751b60f06"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/search_definition_fixture.rs",
+      "bytes": 2370,
+      "sha256": "057bef589f07d9d09efca9d10a8f7d59b99acfc323e663512937d598d94c6afa"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_literal_replacement.rs",
+      "bytes": 11614,
+      "sha256": "55b5549fc3899bb72246e3f9af2a2d5637d43a2ae1d293b5e1d5f50e2db5f188"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_literal_replacement/atoms.rs",
+      "bytes": 6369,
+      "sha256": "b0c0ea3600fe6be32092c9b712f719cc23b236794708aed9bf2925c3dfa7f861"
+    },
+    {
+      "path": "crates/product-cli/src/form_product_request/stored_literal_replacement/review.rs",
+      "bytes": 7837,
+      "sha256": "c3bda022597dea657e4948feca90f89865f0060e3a325805e813e1c3cd21239c"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider.rs",
+      "bytes": 24265,
+      "sha256": "349922429e98d3c229eb4800bb78f0be2330bc4659d05f44a0411e61151c860e"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import.rs",
+      "bytes": 23617,
+      "sha256": "214f021e05b5f17765e8ee3a66b5cfd5ef4cb01b5bfa69a0de2bcc1333172a0b"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output.rs",
+      "bytes": 5496,
+      "sha256": "c71fea6e3b1d09f76f2657f58dfb82730cf39e06f50b7488ffeb63eeb556a60a"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output/atoms.rs",
+      "bytes": 4882,
+      "sha256": "e990fe18dee725fa837150a3bf4d865c9e2044bc15166a2e8e27c5002335030d"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output/atoms/product.rs",
+      "bytes": 939,
+      "sha256": "adac9c147ec0607dec4f19f0dd793fcbd45a28b5e567c9b1e95542439ac773f8"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output/atoms/review.rs",
+      "bytes": 5137,
+      "sha256": "7142b409fac89c38bcfb1bccf0182904131ee82d5d01483ba214d2173ef83406"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output/atoms/review/product.rs",
+      "bytes": 975,
+      "sha256": "6851eceeb8d81e8b89800b862a9e9d67827b792ade5a087efe6079c5e6aca40b"
+    },
+    {
+      "path": "crates/product-cli/src/form_stored_provider/actual_import/literal_search_output/product.rs",
+      "bytes": 1184,
+      "sha256": "26978cf673193fc9269c22e7eecff157a4dcbaf7a0def11dfc1d64195320b37d"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/literal_replacement_product.rs",
+      "bytes": 18471,
+      "sha256": "27413308e21dbc1f3a7c7f29cf4a4bc9ee8bacd73521c36e020f961b500858ab"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/literal_text_atom_product.rs",
+      "bytes": 20954,
+      "sha256": "7c611f5332d17a10186945fb316edcd629f4952421f6c23368db6244e5cb9170"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/review_literal_output.rs",
+      "bytes": 12047,
+      "sha256": "9710f86099b13c2a3c9fc7ad559eba892dbff65118dea7f331f6174d1c546914"
+    },
+    {
+      "path": "crates/product-cli/tests/form_stored_provider/actual_import/review_literal_product.rs",
+      "bytes": 23105,
+      "sha256": "eac282a6f6b7336d2c4cbb525be3b96ac16ee1a781332d42229a66366786e8cd"
+    },
+    {
+      "path": "crates/product-cli/tests/review_literal_product.rs",
+      "bytes": 299,
+      "sha256": "b1118126af2d1d7d3174215ad82509a10edb35a1c446c2a474d0010127ccedc8"
+    },
+    {
+      "path": "crates/product-cli/tests/review_literal_product/actual_import.rs",
+      "bytes": 436,
+      "sha256": "5383bf33e9d940c2f98020f3831197379ac03a0a719443a74695de435d5ebe94"
+    },
+    {
+      "path": "crates/product-cli/tests/support/stored_source_fixture.rs",
+      "bytes": 7986,
+      "sha256": "c238da0b99bc39b6e6fe7a9fcf09b9968d30118ae166a51b986b4e6f53abef8c"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 1424756,
+      "sha256": "d562f6cac51e28193c8d0ca69ca1eabe5a120a1db25960079082005696bf1056"
+    },
+    {
+      "path": "implementation/p09/P09_SEARCH_SOURCE_INDEX_PROGRESS.md",
+      "bytes": 48991,
+      "sha256": "01617e9ae3a92d35add4240ae988135f71755ee4d7e5539f877ec476a423b795"
+    },
+    {
+      "path": "protocol/migrations/p09-review-literal-product-request-v3.md",
+      "bytes": 6302,
+      "sha256": "7ac7f237a2ab4f49b03e02b657d58db0756b2a337f3eff085046e7f95ac053b6"
+    },
+    {
+      "path": "protocol/migrations/p09-source-review-literal-output-v3.md",
+      "bytes": 6443,
+      "sha256": "b1e16dbf2eadc951d911391ec29fe85de7312687902457a92aea03474f53cecc"
+    },
+    {
+      "path": "protocol/migrations/p09-literal-replacement-product-request-v2.md",
+      "bytes": 6081,
+      "sha256": "758f324fb0e5cdfb099f058c761ae0cd7bc5b6a03ee3e1ff8b57ab74c7321f8f"
+    },
+    {
+      "path": "protocol/migrations/p09-source-literal-text-atom-output-v2.md",
+      "bytes": 7909,
+      "sha256": "8b903e445f76fdc3ad1fc5199d6c922234d5b018c5d3162b059cb6050c7c80b5"
+    },
+    {
+      "path": "tools/p09/run_review_literal_product_components.py",
+      "bytes": 9485,
+      "sha256": "5f88324b0223ab24970bc404380c628080d1db1cfc3548bfcc69ae97da5756ce"
+    },
+    {
+      "path": "tools/p09/run_review_literal_product_sync.py",
+      "bytes": 9524,
+      "sha256": "cf7fbb27c0ad341124468d2e1fe152f905621f48ae35543435af47f676c59278"
+    }
+  ],
+  "resource_samples": {
+    "encoding": "lossless_columns_v1",
+    "columns": [
+      "time_utc",
+      "system_cpu_percent",
+      "available_ram_mib",
+      "total_ram_mib",
+      "available_ram_percent",
+      "commit_used_percent",
+      "parent_cpu_machine_percent",
+      "parent_private_mib",
+      "parent_private_percent"
+    ],
+    "rows": [
+      [
+        "2026-10-19T18:14:47.718222+00:00",
+        0.6,
+        9827.01,
+        31860.92,
+        30.843454737049885,
+        48.670398788092605,
+        0.0,
+        14.15234375,
+        0.044419133698159544
+      ],
+      [
+        "2026-10-19T18:14:48.218753+00:00",
+        0.38,
+        9828.78,
+        31860.92,
+        30.84900866130196,
+        48.67394902342458,
+        0.0,
+        14.15234375,
+        0.044419133698159544
+      ],
+      [
+        "2026-10-19T18:14:48.743287+00:00",
+        9.14,
+        9816.65,
+        31860.92,
+        30.810940372554295,
+        48.69155373823084,
+        0.0,
+        15.44140625,
+        0.0484650387824523
+      ],
+      [
+        "2026-10-19T18:14:49.243471+00:00",
+        3.28,
+        9818.24,
+        31860.92,
+        30.815942582476694,
+        48.69199898226587,
+        0.1953125,
+        15.44140625,
+        0.0484650387824523
+      ],
+      [
+        "2026-10-19T18:14:49.743700+00:00",
+        4.73,
+        9823.24,
+        31860.92,
+        30.831635790076376,
+        48.67724734436832,
+        0.0,
+        15.44140625,
+        0.0484650387824523
+      ],
+      [
+        "2026-10-19T18:14:50.235694+00:00",
+        3.14,
+        9827.71,
+        31860.92,
+        30.84566159436859,
+        48.672337943034655,
+        0.0,
+        15.44140625,
+        0.0484650387824523
+      ],
+      [
+        "2026-10-19T18:14:50.732390+00:00",
+        0.2,
+        9827.39,
+        31860.92,
+        30.84466850857517,
+        48.671465030387026,
+        0.0,
+        15.44140625,
+        0.0484650387824523
+      ],
+      [
+        "2026-10-19T18:14:51.248030+00:00",
+        1.47,
+        9826.86,
+        31860.92,
+        30.84298884494927,
+        48.67409548527821,
+        0.0,
+        15.44140625,
+        0.0484650387824523
+      ],
+      [
+        "2026-10-19T18:14:51.748122+00:00",
+        0.59,
+        9829.17,
+        31860.92,
+        30.850234693145683,
+        48.67132442700754,
+        0.1953125,
+        15.44140625,
+        0.0484650387824523
+      ],
+      [
+        "2026-10-19T18:14:52.248258+00:00",
+        0.0,
+        9830.06,
+        31860.92,
+        30.853030045749378,
+        48.670984635507125,
+        0.0,
+        15.44140625,
+        0.0484650387824523
+      ],
+      [
+        "2026-10-19T18:14:52.748005+00:00",
+        4.2,
+        9827.09,
+        31860.92,
+        30.843724464055505,
+        48.67120725752464,
+        0.0,
+        16.07421875,
+        0.050451210369286924
+      ],
+      [
+        "2026-10-19T18:14:53.247887+00:00",
+        2.15,
+        9828.6,
+        31860.92,
+        30.848444686653846,
+        48.66871740601294,
+        0.0,
+        15.1640625,
+        0.04759455617340749
+      ],
+      [
+        "2026-10-19T18:14:53.758226+00:00",
+        8.78,
+        9827.88,
+        31860.92,
+        30.84620104837983,
+        48.69576598114122,
+        0.0,
+        15.1640625,
+        0.04759455617340749
+      ],
+      [
+        "2026-10-19T18:14:54.253361+00:00",
+        7.13,
+        9823.88,
+        31860.92,
+        30.833634221981647,
+        48.677803899412105,
+        0.0,
+        15.1640625,
+        0.04759455617340749
+      ],
+      [
+        "2026-10-19T18:14:54.751968+00:00",
+        5.16,
+        9823.9,
+        31860.92,
+        30.833695523573834,
+        48.679496998440065,
+        0.0,
+        15.1640625,
+        0.04759455617340749
+      ],
+      [
+        "2026-10-19T18:14:55.247892+00:00",
+        4.1,
+        9826.23,
+        31860.92,
+        30.84102719399931,
+        48.675343340271134,
+        0.0,
+        15.1640625,
+        0.04759455617340749
+      ],
+      [
+        "2026-10-19T18:14:55.748060+00:00",
+        1.17,
+        9825.07,
+        31860.92,
+        30.83737361910501,
+        48.675015265719004,
+        0.0,
+        15.1640625,
+        0.04759455617340749
+      ],
+      [
+        "2026-10-19T18:14:56.268768+00:00",
+        0.95,
+        9826.32,
+        31860.92,
+        30.84129692100493,
+        48.67481607759807,
+        0.0,
+        15.1640625,
+        0.04759455617340749
+      ],
+      [
+        "2026-10-19T18:14:56.767697+00:00",
+        8.92,
+        9825.63,
+        31860.92,
+        30.839139104959973,
+        48.67476335133076,
+        0.0,
+        15.1640625,
+        0.04759455617340749
+      ]
+    ]
+  },
+  "system_CPU_max": 9.14,
+  "available_RAM_min_percent": 30.810940372554295
+}

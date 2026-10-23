@@ -488,20 +488,20 @@ fn inspect_island(
         .nth(run_ordinal)
         .map(|(index, _)| index)
         .ok_or(DrawingCanvasHwpxError::UnsupportedProfile)?;
-    let mut by_native = BTreeMap::new();
+    let mut by_instance = BTreeMap::new();
     for (index, element) in document.elements().iter().enumerate() {
         if node_tag(element).is_none() {
             continue;
         }
-        let native = parse_u32(attribute(element, "id")?)?;
-        if by_native.insert(native, index).is_some() {
+        let instance = parse_u32(attribute(element, "instid")?)?;
+        if by_instance.insert(instance, index).is_some() {
             return Err(DrawingCanvasHwpxError::UnsupportedProfile);
         }
     }
     let mut nodes = BTreeMap::new();
     for node in state.nodes() {
-        let index = *by_native
-            .get(&node.native_object_id)
+        let index = *by_instance
+            .get(&node.native_instance_id)
             .ok_or(DrawingCanvasHwpxError::UnsupportedProfile)?;
         let native = element(&document, index)?;
         validate_native_node(&document, native, node, state)?;
@@ -514,7 +514,7 @@ fn inspect_island(
                 .ok_or(DrawingCanvasHwpxError::UnsupportedProfile)?;
             let actual = element(&document, parent)?;
             if node_tag(actual) != Some("container")
-                || parse_u32(attribute(actual, "id")?)? != expected.native_object_id
+                || parse_u32(attribute(actual, "instid")?)? != expected.native_instance_id
             {
                 return Err(DrawingCanvasHwpxError::UnsupportedProfile);
             }
@@ -536,8 +536,8 @@ fn inspect_island(
         return Err(DrawingCanvasHwpxError::UnsupportedProfile);
     }
     for (native_index, expected) in roots.iter().zip(expected_roots) {
-        if parse_u32(attribute(element(&document, *native_index)?, "id")?)?
-            != expected.native_object_id
+        if parse_u32(attribute(element(&document, *native_index)?, "instid")?)?
+            != expected.native_instance_id
         {
             return Err(DrawingCanvasHwpxError::UnsupportedProfile);
         }
@@ -547,8 +547,8 @@ fn inspect_island(
         .iter()
         .filter(|node| node.kind == CanvasNodeKind::Container)
     {
-        let native = by_native
-            .get(&container.native_object_id)
+        let native = by_instance
+            .get(&container.native_instance_id)
             .copied()
             .ok_or(DrawingCanvasHwpxError::UnsupportedProfile)?;
         let actual = direct_node_children(&document, native)?;
@@ -557,8 +557,8 @@ fn inspect_island(
             return Err(DrawingCanvasHwpxError::UnsupportedProfile);
         }
         for (native_index, expected) in actual.iter().zip(expected) {
-            if parse_u32(attribute(element(&document, *native_index)?, "id")?)?
-                != expected.native_object_id
+            if parse_u32(attribute(element(&document, *native_index)?, "instid")?)?
+                != expected.native_instance_id
             {
                 return Err(DrawingCanvasHwpxError::UnsupportedProfile);
             }
@@ -600,34 +600,54 @@ fn validate_native_node(
     node: &CanvasNode,
     state: &DrawingCanvasState,
 ) -> Result<(), DrawingCanvasHwpxError> {
-    if parse_u32(attribute(native, "id")?)? != node.native_object_id
+    let expected_numbering_type = if node.kind == CanvasNodeKind::Picture {
+        "PICTURE"
+    } else {
+        "NONE"
+    };
+    let native_id = parse_u32(attribute(native, "id")?)?;
+    if (node.parent_id.is_none() && native_id != node.native_object_id)
         || parse_u32(attribute(native, "instid")?)? != node.native_instance_id
-        || parse_u32(attribute(native, "zOrder")?)? != node.ordinal
+        || parse_u32(attribute(native, "zOrder")?)? != native_ordinal(node)
         || parse_u32(attribute(native, "groupLevel")?)? != node.group_level
         || node_tag(native) != Some(node_tag_for_kind(node.kind))
+        || attribute(native, "numberingType")? != expected_numbering_type
+        || attribute(native, "textWrap")? != "TOP_AND_BOTTOM"
+        || attribute(native, "textFlow")? != "BOTH_SIDES"
+        || attribute(native, "lock")? != "0"
         || !node.visible
         || !node.printable
     {
         return Err(DrawingCanvasHwpxError::UnsupportedProfile);
     }
     let offset = unique_child(document, native, PARAGRAPH_NS, "offset")?;
-    let size = unique_child(document, native, PARAGRAPH_NS, "curSz")?;
-    let sz = unique_child(document, native, PARAGRAPH_NS, "sz")?;
-    if (CanvasBounds {
+    let size = unique_child(document, native, PARAGRAPH_NS, "orgSz")?;
+    let sz = optional_child(document, native, PARAGRAPH_NS, "sz")?;
+    let actual_bounds = CanvasBounds {
         x_hwpunit: parse_i64(attribute(offset, "x")?)?,
         y_hwpunit: parse_i64(attribute(offset, "y")?)?,
         width_hwpunit: parse_u64(attribute(size, "width")?)?,
         height_hwpunit: parse_u64(attribute(size, "height")?)?,
-    }) != node.bounds
-        || parse_bool01(attribute(sz, "protect")?)? != node.protected
-    {
+    };
+    let actual_protected = match sz {
+        Some(sz) => parse_bool01(attribute(sz, "protect")?)?,
+        None if node.parent_id.is_some() && !node.protected => false,
+        None => return Err(DrawingCanvasHwpxError::UnsupportedProfile),
+    };
+    if actual_bounds != node.bounds || actual_protected != node.protected {
         return Err(DrawingCanvasHwpxError::UnsupportedProfile);
     }
     match node.kind {
         CanvasNodeKind::Picture => validate_picture(document, native, node, state),
+        CanvasNodeKind::Rectangle => {
+            validate_rectangle(document, native, node)?;
+            if !node.resource_refs.is_empty() || node.picture.is_some() {
+                return Err(DrawingCanvasHwpxError::UnsupportedProfile);
+            }
+            Ok(())
+        }
         CanvasNodeKind::Container
         | CanvasNodeKind::Line
-        | CanvasNodeKind::Rectangle
         | CanvasNodeKind::Ellipse
         | CanvasNodeKind::Arc
         | CanvasNodeKind::Polygon
@@ -664,8 +684,17 @@ fn validate_picture(
         return Err(DrawingCanvasHwpxError::UnsupportedProfile);
     }
     let image = unique_child(document, native, CORE_NS, "img")?;
-    if attribute(image, "binaryItemIDRef")? != resource.relationship_id {
+    if attribute(image, "binaryItemIDRef")? != resource.relationship_id
+        || attribute(image, "bright")? != "0"
+        || attribute(image, "contrast")? != "0"
+        || attribute(image, "effect")? != "REAL_PIC"
+        || attribute(image, "alpha")? != "0"
+    {
         return Err(DrawingCanvasHwpxError::UnsupportedProfile);
+    }
+    let image_rectangle = unique_child(document, native, PARAGRAPH_NS, "imgRect")?;
+    for point in ["pt0", "pt1", "pt2", "pt3"] {
+        let _ = unique_child(document, image_rectangle, CORE_NS, point)?;
     }
     let clip = unique_child(document, native, PARAGRAPH_NS, "imgClip")?;
     let expected = picture.clip.unwrap_or(ImageClip {
@@ -682,6 +711,49 @@ fn validate_picture(
         || parse_u32(attribute(dimensions, "dimheight")?)? != picture.original_height_px
     {
         return Err(DrawingCanvasHwpxError::UnsupportedProfile);
+    }
+    let in_margin = unique_child(document, native, PARAGRAPH_NS, "inMargin")?;
+    for side in ["left", "right", "top", "bottom"] {
+        if attribute(in_margin, side)? != "0" {
+            return Err(DrawingCanvasHwpxError::UnsupportedProfile);
+        }
+    }
+    let _ = unique_child(document, native, PARAGRAPH_NS, "effects")?;
+    Ok(())
+}
+
+fn validate_rectangle(
+    document: &PreservingXmlDocument,
+    native: &XmlElementToken,
+    node: &CanvasNode,
+) -> Result<(), DrawingCanvasHwpxError> {
+    if attribute(native, "ratio")? != "0" {
+        return Err(DrawingCanvasHwpxError::UnsupportedProfile);
+    }
+    let line = unique_child(document, native, PARAGRAPH_NS, "lineShape")?;
+    if attribute(line, "color")? != "#000000"
+        || attribute(line, "width")? != "283"
+        || attribute(line, "style")? != "SOLID"
+    {
+        return Err(DrawingCanvasHwpxError::UnsupportedProfile);
+    }
+    let shadow = unique_child(document, native, PARAGRAPH_NS, "shadow")?;
+    if attribute(shadow, "type")? != "NONE" {
+        return Err(DrawingCanvasHwpxError::UnsupportedProfile);
+    }
+    let expected = [
+        ("pt0", 0, 0),
+        ("pt1", node.bounds.width_hwpunit, 0),
+        ("pt2", node.bounds.width_hwpunit, node.bounds.height_hwpunit),
+        ("pt3", 0, node.bounds.height_hwpunit),
+    ];
+    for (name, expected_x, expected_y) in expected {
+        let point = unique_child(document, native, CORE_NS, name)?;
+        if parse_u64(attribute(point, "x")?)? != expected_x
+            || parse_u64(attribute(point, "y")?)? != expected_y
+        {
+            return Err(DrawingCanvasHwpxError::UnsupportedProfile);
+        }
     }
     Ok(())
 }
@@ -769,7 +841,7 @@ fn patch_existing_fragment(
     }
     let root = element(&document, roots[0])?;
     let mut edits = vec![
-        value_edit(root, "zOrder", target.ordinal.to_string())?,
+        value_edit(root, "zOrder", native_ordinal(target).to_string())?,
         value_edit(root, "groupLevel", target.group_level.to_string())?,
     ];
     let offset = unique_child(&document, root, PARAGRAPH_NS, "offset")?;
@@ -860,33 +932,35 @@ fn generate_node(
     require_generated_bindings(node)?;
     let output = match node.kind {
         CanvasNodeKind::Container if !children.is_empty() => format!(
-            "<hp:container id=\"{}\" zOrder=\"{}\" numberingType=\"CONTAINER\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\">{}{}{}{}{}{}</hp:container>",
+            "<hp:container id=\"{}\" zOrder=\"{}\" numberingType=\"NONE\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\">{}{}{}{}{}{}</hp:container>",
             node.native_object_id,
-            node.ordinal,
+            native_ordinal(node),
             node.group_level,
             node.native_instance_id,
             common_component(&node.bounds),
-            rotation_rendering(),
+            rotation_rendering(&node.bounds),
             size_fragment(&node.bounds, node.protected),
             position_fragment(),
             margin_fragment(),
             children
         ),
         CanvasNodeKind::Rectangle if children.is_empty() => format!(
-            "<hp:rect id=\"{}\" zOrder=\"{}\" numberingType=\"DRAWING\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\">{}{}{}{}{}<hp:pt0 x=\"0\" y=\"0\"/><hp:pt1 x=\"{}\" y=\"0\"/><hp:pt2 x=\"{}\" y=\"{}\"/><hp:pt3 x=\"0\" y=\"{}\"/></hp:rect>",
+            "<hp:rect id=\"{}\" zOrder=\"{}\" numberingType=\"NONE\" textWrap=\"TOP_AND_BOTTOM\" textFlow=\"BOTH_SIDES\" lock=\"0\" dropcapstyle=\"None\" href=\"\" groupLevel=\"{}\" instid=\"{}\" ratio=\"0\">{}{}{}{}<hc:pt0 x=\"0\" y=\"0\"/><hc:pt1 x=\"{}\" y=\"0\"/><hc:pt2 x=\"{}\" y=\"{}\"/><hc:pt3 x=\"0\" y=\"{}\"/>{}{}{}</hp:rect>",
             node.native_object_id,
-            node.ordinal,
+            native_ordinal(node),
             node.group_level,
             node.native_instance_id,
             common_component(&node.bounds),
-            rotation_rendering(),
-            size_fragment(&node.bounds, node.protected),
-            position_fragment(),
-            margin_fragment(),
+            rotation_rendering(&node.bounds),
+            line_shape_fragment(),
+            shadow_fragment(),
             node.bounds.width_hwpunit,
             node.bounds.width_hwpunit,
             node.bounds.height_hwpunit,
-            node.bounds.height_hwpunit
+            node.bounds.height_hwpunit,
+            size_fragment(&node.bounds, node.protected),
+            position_fragment(),
+            margin_fragment()
         ),
         _ => return Err(DrawingCanvasHwpxError::UnsupportedProfile),
     };
@@ -925,8 +999,20 @@ fn common_component(bounds: &CanvasBounds) -> String {
     )
 }
 
-fn rotation_rendering() -> &'static str {
-    "<hp:rotationInfo angle=\"0\" centerX=\"0\" centerY=\"0\" rotateimage=\"1\"/><hp:renderingInfo><hc:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/><hc:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/><hc:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"1\" e5=\"0\" e6=\"0\"/></hp:renderingInfo>"
+fn rotation_rendering(bounds: &CanvasBounds) -> String {
+    format!(
+        "<hp:rotationInfo angle=\"0\" centerX=\"{}\" centerY=\"{}\" rotateimage=\"1\"/><hp:renderingInfo><hc:transMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><hc:scaMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/><hc:rotMatrix e1=\"1\" e2=\"0\" e3=\"0\" e4=\"0\" e5=\"1\" e6=\"0\"/></hp:renderingInfo>",
+        bounds.width_hwpunit / 2,
+        bounds.height_hwpunit / 2
+    )
+}
+
+fn line_shape_fragment() -> &'static str {
+    "<hp:lineShape color=\"#000000\" width=\"283\" style=\"SOLID\" endCap=\"FLAT\" headStyle=\"NORMAL\" tailStyle=\"NORMAL\" headfill=\"0\" tailfill=\"0\" headSz=\"SMALL_SMALL\" tailSz=\"SMALL_SMALL\" outlineStyle=\"NORMAL\" alpha=\"0\"/>"
+}
+
+fn shadow_fragment() -> &'static str {
+    "<hp:shadow type=\"NONE\" color=\"#B2B2B2\" offsetX=\"0\" offsetY=\"0\" alpha=\"0\"/>"
 }
 
 fn size_fragment(bounds: &CanvasBounds, protected: bool) -> String {
@@ -985,6 +1071,14 @@ const fn node_tag_for_kind(kind: CanvasNodeKind) -> &'static str {
     }
 }
 
+const fn native_ordinal(node: &CanvasNode) -> u32 {
+    if node.parent_id.is_some() {
+        0
+    } else {
+        node.ordinal
+    }
+}
+
 fn direct_node_children(
     document: &PreservingXmlDocument,
     parent: usize,
@@ -1007,6 +1101,16 @@ fn unique_child<'a>(
     namespace: &str,
     local: &str,
 ) -> Result<&'a XmlElementToken, DrawingCanvasHwpxError> {
+    optional_child(document, parent, namespace, local)?
+        .ok_or(DrawingCanvasHwpxError::UnsupportedProfile)
+}
+
+fn optional_child<'a>(
+    document: &'a PreservingXmlDocument,
+    parent: &XmlElementToken,
+    namespace: &str,
+    local: &str,
+) -> Result<Option<&'a XmlElementToken>, DrawingCanvasHwpxError> {
     let mut values = Vec::new();
     let mut child = parent.first_child();
     while let Some(index) = child {
@@ -1016,10 +1120,10 @@ fn unique_child<'a>(
         }
         child = candidate.next_sibling();
     }
-    if values.len() != 1 {
+    if values.len() > 1 {
         return Err(DrawingCanvasHwpxError::UnsupportedProfile);
     }
-    Ok(values[0])
+    Ok(values.first().copied())
 }
 
 fn has_name(element: &XmlElementToken, namespace: &str, local: &str) -> bool {

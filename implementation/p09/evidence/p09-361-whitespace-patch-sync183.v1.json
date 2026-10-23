@@ -1,0 +1,394 @@
+{
+  "state": "PASS_WHITESPACE_PATCH_SELECTED_DOCS_SYNC_NOT_SOURCE_COMPILER_PRODUCT_NATIVE_OR_GATE",
+  "actual_Cargo_or_tests": false,
+  "actual_Hangul_or_COM": false,
+  "own_cpu_selection": {
+    "initial_allowed_mask": 65535,
+    "selected_logical_cpu": 2,
+    "selected_mask": 4,
+    "selected_cpu_count": 1,
+    "only_current_verifier_changed": true
+  },
+  "Native011_executed": false,
+  "prior_Native_replayed": false,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "fresh_inputs": 30,
+  "final_fresh_hashes": 30,
+  "new_patch_cases": 24,
+  "affected_range_cases": 19,
+  "total_distinct_cases": 43,
+  "source693_or_Cargo_or_tests_reexecuted": false,
+  "next_work": "SEARCH023_original_source_whitespace_policy_selection_protection_compiler_and_readback_then_current_store_product_native_gates",
+  "cleanup": true,
+  "elapsed_seconds": 9.0,
+  "source_pins": [
+    {
+      "path": "implementation/p09/evidence/p09-361-whitespace-patch-strengthening182.v1.json",
+      "bytes": 183290,
+      "sha256": "8303bfcd1b3456a0f019b939c718ff9967947b42ee099603b6285da0b60f6350"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-whitespace-patch-components181.v1.json",
+      "bytes": 206359,
+      "sha256": "25377b3cccff818059d57940c4f2badaa0470d81832857e3631c086fa51f374f"
+    },
+    {
+      "path": "implementation/p09/evidence/p09-361-width-product-components178.v1.json",
+      "bytes": 211555,
+      "sha256": "37e2065b5df76f9ff8732911e647e1d563ef0b720fe827f298b5543c562ce41c"
+    },
+    {
+      "path": "Cargo.lock",
+      "bytes": 61066,
+      "sha256": "51cf0a3cc7b97f73e62c570d60bb76fb47c9147e75641d3ab8bc9f02864119b8"
+    },
+    {
+      "path": "Cargo.toml",
+      "bytes": 2695,
+      "sha256": "5602f0f4660be4ddb723af33885546ca95337719ea17b19620ee24c78c700fb5"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/readback.rs",
+      "bytes": 5182,
+      "sha256": "c05375dcf1adec797ed32e6e016aac51509d36d6bd8a76d9b861505499603f6b"
+    },
+    {
+      "path": "crates/hwpx-package/src/document_import/search/replacement/atoms/unicode/plan.rs",
+      "bytes": 11439,
+      "sha256": "8d6966c7ff43d531a140fe21a5cd3aa05110c2128e1b40125b5dd6d23c45b3ce"
+    },
+    {
+      "path": "crates/hwpx-package/src/lib.rs",
+      "bytes": 26584,
+      "sha256": "5589a995c98291db5818b1271c749b904fc289746e8ceea5b79f8153616761fc"
+    },
+    {
+      "path": "crates/hwpx-package/src/patch.rs",
+      "bytes": 79686,
+      "sha256": "f11414b620a13c2b31b489834cb69faaefb7802ba8f348801db5142a815555aa"
+    },
+    {
+      "path": "crates/hwpx-package/src/patch/leaf_scalar_ranges.rs",
+      "bytes": 6685,
+      "sha256": "6558ebbc1f2387f08a8059fa93a75e7ecf71155204b2bb9e882e1afe7898f3d9"
+    },
+    {
+      "path": "crates/hwpx-package/src/patch/text_atom_ranges.rs",
+      "bytes": 10183,
+      "sha256": "77cd30cea4c2283ebc940fb1a65cde3b9522c0c1277deed209d346a33e58a567"
+    },
+    {
+      "path": "crates/hwpx-package/src/patch/whitespace_atom_ranges.rs",
+      "bytes": 11095,
+      "sha256": "ba22227754174f6e009d5dc7d48e0bddbe6e0a7ea99a80dab0c970e33a6dc2e5"
+    },
+    {
+      "path": "crates/hwpx-package/src/preserving_xml.rs",
+      "bytes": 43702,
+      "sha256": "167cb93624a38f45397b5624bb826ffe19c25caed8e1011d73834299426508c4"
+    },
+    {
+      "path": "crates/hwpx-package/src/text_flow.rs",
+      "bytes": 50904,
+      "sha256": "6182eda7a13385403195c488b5c29a31ac46660962c41eb2fb8dafb338a29e8c"
+    },
+    {
+      "path": "crates/hwpx-package/tests/patch_leaf_scalar_ranges.rs",
+      "bytes": 9894,
+      "sha256": "3772bf578238bbaa48b37b56665b4383d36c593423fb6fcd7f4e276ce6f2799a"
+    },
+    {
+      "path": "crates/hwpx-package/tests/patch_text_atom_ranges.rs",
+      "bytes": 10669,
+      "sha256": "0a1a0f7c125edee9ea6b9e1a981f29907ceb715692a1a41f9cab75feb82126ca"
+    },
+    {
+      "path": "crates/hwpx-package/tests/patch_whitespace_atom_ranges.rs",
+      "bytes": 14687,
+      "sha256": "f45801c98a51beb4c3753e5638214d99440b329f6033fcde5e9e8279dc83eef7"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/document_import_field_fixture.rs",
+      "bytes": 2850,
+      "sha256": "eaa5b0c52e615adc355ff73bcf2a62a4c7e91bdc42d284a6e02d5e5751b60f06"
+    },
+    {
+      "path": "crates/hwpx-package/tests/support/search_definition_fixture.rs",
+      "bytes": 2370,
+      "sha256": "057bef589f07d9d09efca9d10a8f7d59b99acfc323e663512937d598d94c6afa"
+    },
+    {
+      "path": "crates/hwpx-package/tests/whitespace_patch_focused.rs",
+      "bytes": 153,
+      "sha256": "dfbdbe27665a0ceb6ad013c40476cd306c7c368133558a1fe3a871e03bd15646"
+    },
+    {
+      "path": "crates/product-cli/src/reference_validation_product/source.rs",
+      "bytes": 26860,
+      "sha256": "c864d819072b92cf6662ef6241c6d45fe3c9a40978cf324f18dbfbf44d550fbe"
+    },
+    {
+      "path": "tools/p09/conservative_maintenance.py",
+      "bytes": 29237,
+      "sha256": "11b1a55aed7a11ed6a2e8b0dd4d6b6dd73d4019fffa5deabe7e0827665173ad9"
+    },
+    {
+      "path": "tools/p09/owned_sql_job.py",
+      "bytes": 13850,
+      "sha256": "30b08c4d779494bbdb7579b9bb28782b4f4588fc69b931cc9d18af326d46b7a0"
+    },
+    {
+      "path": "tools/p09/run_whitespace_patch_components.py",
+      "bytes": 10544,
+      "sha256": "6322f47994e1335e1c7d5e54cf17316c6d9bfecba72de6cbde7c7eba7b7bb18f"
+    },
+    {
+      "path": "tools/p09/run_whitespace_patch_strengthening.py",
+      "bytes": 7489,
+      "sha256": "4047802e7ca3da8c9435d1b0034d8ffb22989c8f1b3cb10a5519fbcecbbb22c5"
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "bytes": 1523648,
+      "sha256": "9838162eb4e326e66b3e81c5e3d31dcb070cd44c381fc1a5a55a8c8fd252dd28"
+    },
+    {
+      "path": "implementation/p09/P09_SEARCH_SOURCE_INDEX_PROGRESS.md",
+      "bytes": 132462,
+      "sha256": "1002b9185680907c105b009dd0249c230c6c31c71caf03672b2bd5c991a4cd81"
+    },
+    {
+      "path": "protocol/migrations/p09-whitespace-atom-patch-v1.md",
+      "bytes": 6389,
+      "sha256": "499ba76f3d6cc777a65b8bd3fc340f48d7f9304508941cb93b1930859064a53e"
+    },
+    {
+      "path": "protocol/migrations/p09-width-product-request-v1.md",
+      "bytes": 6030,
+      "sha256": "efeaf247a8ea626550c5cd3dc72310fffbe92f35346ca0ee5660536dca7d8674"
+    },
+    {
+      "path": "tools/p09/run_whitespace_patch_sync.py",
+      "bytes": 7855,
+      "sha256": "ad8c3c203082fae18a7d539fe45460bfb653c51e1c152a80bcf76bd69f72037a"
+    }
+  ],
+  "resource_samples": {
+    "encoding": "lossless_columns_v1",
+    "columns": [
+      "time_utc",
+      "system_cpu_percent",
+      "available_ram_mib",
+      "total_ram_mib",
+      "available_ram_percent",
+      "commit_used_percent",
+      "parent_cpu_machine_percent",
+      "parent_private_mib",
+      "parent_private_percent"
+    ],
+    "rows": [
+      [
+        "2026-10-20T02:02:36.912940+00:00",
+        13.89,
+        9713.83,
+        31860.92,
+        30.48823653096742,
+        49.71041855224098,
+        0.0,
+        15.1640625,
+        0.04759455617340749
+      ],
+      [
+        "2026-10-20T02:02:37.413449+00:00",
+        9.47,
+        9657.11,
+        31860.92,
+        30.310192186621663,
+        49.76635526337913,
+        0.0,
+        15.1640625,
+        0.04759455617340749
+      ],
+      [
+        "2026-10-20T02:02:37.904279+00:00",
+        10.0,
+        9730.5,
+        31860.92,
+        30.54055130973917,
+        49.761891106080505,
+        0.0,
+        17.87109375,
+        0.05609095685042228
+      ],
+      [
+        "2026-10-20T02:02:38.404375+00:00",
+        9.18,
+        9706.19,
+        31860.92,
+        30.464255348104157,
+        49.740015563622414,
+        0.0,
+        17.87109375,
+        0.05609095685042228
+      ],
+      [
+        "2026-10-20T02:02:38.905537+00:00",
+        10.19,
+        9646.24,
+        31860.92,
+        30.276096241047668,
+        49.77663102702977,
+        0.1953125,
+        17.87109375,
+        0.05609095685042228
+      ],
+      [
+        "2026-10-20T02:02:39.403926+00:00",
+        24.41,
+        9697.33,
+        31860.92,
+        30.436448945888472,
+        49.80482786309051,
+        0.0,
+        17.87109375,
+        0.05609095685042228
+      ],
+      [
+        "2026-10-20T02:02:39.904565+00:00",
+        9.22,
+        9676.93,
+        31860.92,
+        30.37242556300915,
+        49.76470903214433,
+        0.1953125,
+        17.87109375,
+        0.05609095685042228
+      ],
+      [
+        "2026-10-20T02:02:40.404984+00:00",
+        8.43,
+        9761.83,
+        31860.92,
+        30.63887906360592,
+        49.73763116464533,
+        0.0,
+        17.87109375,
+        0.05609095685042228
+      ],
+      [
+        "2026-10-20T02:02:40.909557+00:00",
+        11.73,
+        9708.07,
+        31860.92,
+        30.470152561272474,
+        49.744040335360154,
+        0.0,
+        17.87109375,
+        0.05609095685042228
+      ],
+      [
+        "2026-10-20T02:02:41.405404+00:00",
+        6.55,
+        9705.89,
+        31860.92,
+        30.46329904326605,
+        49.65495637750859,
+        0.0,
+        19.33203125,
+        0.06067631594595407
+      ],
+      [
+        "2026-10-20T02:02:41.905163+00:00",
+        10.19,
+        9768.49,
+        31860.92,
+        30.65978290654143,
+        49.66430064377015,
+        0.0,
+        19.265625,
+        0.0604678905325208
+      ],
+      [
+        "2026-10-20T02:02:42.403772+00:00",
+        16.02,
+        9688.84,
+        31860.92,
+        30.409795013605887,
+        49.73514717160777,
+        0.0,
+        18.82421875,
+        0.05908247454911147
+      ],
+      [
+        "2026-10-20T02:02:42.918871+00:00",
+        23.3,
+        9589.72,
+        31860.92,
+        30.09868943326065,
+        49.73077089142132,
+        0.0,
+        18.82421875,
+        0.05908247454911147
+      ],
+      [
+        "2026-10-20T02:02:43.409767+00:00",
+        17.58,
+        9712.28,
+        31860.92,
+        30.483356924229394,
+        49.74948871631516,
+        0.0,
+        18.82421875,
+        0.05908247454911147
+      ],
+      [
+        "2026-10-20T02:02:43.911127+00:00",
+        15.4,
+        9600.96,
+        31860.92,
+        30.133986890041495,
+        49.79944978382523,
+        0.0,
+        18.82421875,
+        0.05908247454911147
+      ],
+      [
+        "2026-10-20T02:02:44.404524+00:00",
+        28.43,
+        9550.46,
+        31860.92,
+        29.97546097264784,
+        49.78761566605198,
+        0.0,
+        18.82421875,
+        0.05908247454911147
+      ],
+      [
+        "2026-10-20T02:02:44.904572+00:00",
+        24.61,
+        9645.43,
+        31860.92,
+        30.273533834494284,
+        49.787299308448134,
+        0.0,
+        18.82421875,
+        0.05908247454911147
+      ],
+      [
+        "2026-10-20T02:02:45.417162+00:00",
+        16.06,
+        9532.02,
+        31860.92,
+        29.917604529942455,
+        49.8045290809091,
+        0.0,
+        18.82421875,
+        0.05908247454911147
+      ]
+    ]
+  },
+  "system_CPU_max": 28.43,
+  "available_RAM_min_percent": 29.917604529942455
+}

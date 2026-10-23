@@ -158,6 +158,17 @@ pub(crate) struct SafeXmlDocument {
 
 impl SafeXmlDocument {
     pub fn parse(bytes: &[u8], limits: SafeXmlLimits) -> Result<Self, SafeXmlError> {
+        // A reservation hint, not an admission limit. Long text/attributes can
+        // have very few events; never reserve the byte-derived event ceiling
+        // up front. Original checked growth and every parser guard remain.
+        Self::parse_with_capacity_hint(bytes, limits, 256)
+    }
+
+    fn parse_with_capacity_hint(
+        bytes: &[u8],
+        limits: SafeXmlLimits,
+        capacity_hint: usize,
+    ) -> Result<Self, SafeXmlError> {
         if bytes.len() > limits.config().input_bytes {
             return Err(SafeXmlError::InputLimit);
         }
@@ -171,7 +182,8 @@ impl SafeXmlDocument {
         let initial_capacity = limits
             .config()
             .events
-            .min(bytes.len().saturating_div(2).saturating_add(1));
+            .min(bytes.len().saturating_div(2).saturating_add(1))
+            .min(capacity_hint);
         let mut output = SafeXmlOutput::new(initial_capacity)?;
         let mut state = ParseState::default();
         loop {
@@ -814,5 +826,123 @@ mod tests {
             panic!("unsafe XML was accepted");
         };
         assert_eq!(error.code(), code);
+    }
+}
+
+// P175 initial-capacity parity and sparse/dense allocation regression oracles.
+#[cfg(test)]
+#[path = "../tests/support/document_import_settings_inputs.rs"]
+mod initial_capacity_inputs;
+
+#[cfg(test)]
+mod initial_capacity_tests {
+    use super::*;
+    use crate::{BoundedZipReader, PackageLimits};
+    use std::{error::Error, io::Cursor};
+
+    // usize::MAX restores exactly the original byte-derived reservation.
+    // Both paths retain the entire original parser and every admission check.
+    fn original(bytes: &[u8], limits: SafeXmlLimits) -> Result<SafeXmlDocument, SafeXmlError> {
+        SafeXmlDocument::parse_with_capacity_hint(bytes, limits, usize::MAX)
+    }
+
+    #[test]
+    fn all36_frozen_original_xml_events_spans_and_errors_equal_original_parser()
+    -> Result<(), Box<dyn Error>> {
+        let mut originals = 0;
+        let mut parts = 0;
+        for bytes in super::initial_capacity_inputs::actual_corpus()? {
+            let mut reader = BoundedZipReader::open(Cursor::new(bytes), PackageLimits::default())?;
+            let xml_entries: Vec<_> = reader.entries().iter().filter(|entry| {
+                entry.path.as_str().ends_with(".xml") || entry.path.as_str().ends_with(".hpf")
+            }).map(|entry| entry.index).collect();
+            assert!(!xml_entries.is_empty());
+            for index in xml_entries {
+                let xml = reader.read_entry(index)?;
+                let old = original(&xml, SafeXmlLimits::default());
+                let new = SafeXmlDocument::parse(&xml, SafeXmlLimits::default());
+                assert_eq!(new, old);
+                assert!(new.is_ok());
+                parts += 1;
+            }
+            originals += 1;
+        }
+        assert_eq!(originals, 36);
+        assert!(parts >= 36);
+        Ok(())
+    }
+
+    #[test]
+    fn long_sparse_text_reserves256_not100000_and_dense_events_still_grow()
+    -> Result<(), Box<dyn Error>> {
+        let sparse = format!("<root>{}</root>", "x".repeat(512 * 1024));
+        let old = original(sparse.as_bytes(), SafeXmlLimits::default())?;
+        let new = SafeXmlDocument::parse(sparse.as_bytes(), SafeXmlLimits::default())?;
+        assert_eq!(new, old);
+        assert_eq!(new.events.len(), 3);
+        assert_eq!(new.spans.len(), 3);
+        assert!(new.events.capacity() <= 256);
+        assert!(new.spans.capacity() <= 256);
+        assert!(old.events.capacity() >= 100_000);
+        assert!(old.spans.capacity() >= 100_000);
+        let dense = format!("<root>{}</root>", "<item/>".repeat(600));
+        let old = original(dense.as_bytes(), SafeXmlLimits::default())?;
+        let new = SafeXmlDocument::parse(dense.as_bytes(), SafeXmlLimits::default())?;
+        assert_eq!(new, old);
+        assert_eq!(new.events.len(), 602);
+        assert!(new.events.capacity() >= 602);
+        assert!(new.spans.capacity() >= 602);
+        Ok(())
+    }
+
+    #[test]
+    fn all_original_safety_limits_and_error_precedence_ignore_reservation_hint()
+    -> Result<(), Box<dyn Error>> {
+        let invalid: &[&[u8]] = &[
+            b"", b"<root>", b"<a><b></a>", b"<p:root/>",
+            br#"<root a="1" a="2"/>"#,
+            br#"<root xmlns:a="urn:x" xmlns:b="urn:x" a:id="1" b:id="2"/>"#,
+            br#"<root p:id="1"/>"#, br#" <?xml version="1.0"?><root/>"#,
+            br#"<!--before--><?xml version="1.0"?><root/>"#,
+            br#"<?xml version="1.0" encoding="UTF-8" encoding="UTF-8"?><root/>"#,
+            br#"<?xml version="1.0" standalone="yes" encoding="UTF-8"?><root/>"#,
+            b"<one/><two/>", b"text<root/>", b"<root/>text",
+            "<root/>\u{00A0}".as_bytes(), b"<!DOCTYPE root><root/>",
+            b"<root>&custom;</root>", b"<?target data?><root/>",
+            b"<root><![CDATA[x]]></root>", br#"<?xml version="1.1"?><root/>"#,
+            br#"<?xml version="1.0" encoding="EUC-KR"?><root/>"#,
+            b"<root>\xff</root>",
+        ];
+        for xml in invalid {
+            let old = original(xml, SafeXmlLimits::default());
+            assert!(old.is_err());
+            for hint in [0, 1, 256] {
+                assert_eq!(SafeXmlDocument::parse_with_capacity_hint(xml, SafeXmlLimits::default(), hint), old);
+            }
+        }
+        let cases: Vec<(SafeXmlLimitConfig, Vec<u8>)> = vec![
+            (SafeXmlLimitConfig { input_bytes: 8, text_bytes: 8, total_text_bytes: 8,
+                ..SafeXmlLimitConfig::default() }, b"<root/>xx".to_vec()),
+            (SafeXmlLimitConfig { depth: 1, ..SafeXmlLimitConfig::default() }, b"<root><child/></root>".to_vec()),
+            (SafeXmlLimitConfig { events: 2, ..SafeXmlLimitConfig::default() }, b"<root></root>".to_vec()),
+            (SafeXmlLimitConfig { nodes: 1, ..SafeXmlLimitConfig::default() }, b"<root>text</root>".to_vec()),
+            (SafeXmlLimitConfig { text_bytes: 3, total_text_bytes: 8,
+                ..SafeXmlLimitConfig::default() }, b"<root>four</root>".to_vec()),
+            (SafeXmlLimitConfig { text_bytes: 4, total_text_bytes: 5,
+                ..SafeXmlLimitConfig::default() }, b"<root>abc<child/>def</root>".to_vec()),
+            (SafeXmlLimitConfig { attributes_per_element: 1, ..SafeXmlLimitConfig::default() }, br#"<root a="1" b="2"/>"#.to_vec()),
+            (SafeXmlLimitConfig { attribute_bytes: 4, ..SafeXmlLimitConfig::default() }, br#"<root long="value"/>"#.to_vec()),
+            (SafeXmlLimitConfig { namespace_bindings: 1, ..SafeXmlLimitConfig::default() }, br#"<root xmlns:a="urn:a" xmlns:b="urn:b"/>"#.to_vec()),
+            (SafeXmlLimitConfig { events: 500, ..SafeXmlLimitConfig::default() }, format!("<root>{}</root>", "<item/>".repeat(600)).into_bytes()),
+        ];
+        for (config, xml) in cases {
+            let limits = SafeXmlLimits::new(config)?;
+            let old = original(&xml, limits);
+            assert!(old.is_err());
+            for hint in [0, 1, 256] {
+                assert_eq!(SafeXmlDocument::parse_with_capacity_hint(&xml, limits, hint), old);
+            }
+        }
+        Ok(())
     }
 }

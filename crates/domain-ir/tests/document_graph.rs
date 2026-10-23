@@ -10,8 +10,34 @@ use domain_ir::{
     OpaquePreservation, ParagraphNode, Properties, PropertyValue, Provenance, Reference, Resource,
     ResourceKind, ReviewEntry, Section, SourceAnchorHandle, Style, TableCell, TableNode,
 };
+use sha2::{Digest as _, Sha256};
 
 type TestResult = Result<(), Box<dyn Error>>;
+
+#[test]
+fn borrowed_views_and_streaming_digest_match_owned_canonical_bytes() -> TestResult {
+    let graph = DocumentGraph::from_draft(complete_draft(false)?, DocumentGraphLimits::default())?;
+    let draft = graph.clone().into_draft();
+    assert_eq!(graph.notes(), draft.notes.as_slice());
+    assert_eq!(graph.review_entries(), draft.review.as_slice());
+    assert_eq!(graph.metadata(), &draft.metadata);
+    assert_eq!(
+        serde_json::to_vec(&(graph.sections(), graph.notes()))?,
+        serde_json::to_vec(&(&draft.sections, &draft.notes))?,
+    );
+    let expected: [u8; 32] = Sha256::digest(graph.canonical_json()?).into();
+    assert_eq!(graph.canonical_sha256()?, expected);
+    // Cross several buffer boundaries with escaped/non-ASCII values; no omitted bytes.
+    let mut large = complete_draft(false)?;
+    large.metadata.insert(
+        "streaming-test",
+        PropertyValue::Text("한글\\\"\n".repeat(20_000)),
+    );
+    let large = DocumentGraph::from_draft(large, DocumentGraphLimits::default())?;
+    let expected: [u8; 32] = Sha256::digest(large.canonical_json()?).into();
+    assert_eq!(large.canonical_sha256()?, expected);
+    Ok(())
+}
 
 #[test]
 fn complete_graph_roundtrips_with_stable_golden_digest() -> TestResult {
@@ -523,4 +549,76 @@ fn schema_version_constant_is_exact() {
         DOCUMENT_GRAPH_SCHEMA_VERSION,
         "hwpx-agent.document-graph/v2"
     );
+}
+
+#[test]
+fn immutable_digest_memo_keeps_canonical_bytes_and_warm_cold_equality() -> TestResult {
+    let draft = complete_draft(false)?;
+    let warm = DocumentGraph::from_draft(draft.clone(), DocumentGraphLimits::default())?;
+    let cold = DocumentGraph::from_draft(draft, DocumentGraphLimits::default())?;
+    let bytes = warm.canonical_json()?;
+    let debug = format!("{warm:?}");
+    let expected: [u8; 32] = Sha256::digest(&bytes).into();
+    for _ in 0..16 {
+        assert_eq!(warm.canonical_sha256()?, expected);
+        assert_eq!(warm, cold);
+        assert_eq!(serde_json::to_vec(&warm)?, bytes);
+        assert_eq!(warm.canonical_json()?, bytes);
+        assert_eq!(format!("{warm:?}"), debug);
+    }
+    Ok(())
+}
+
+#[test]
+fn digest_memo_clone_and_reopened_graph_have_the_same_original_digest() -> TestResult {
+    let graph = DocumentGraph::from_draft(complete_draft(false)?, DocumentGraphLimits::default())?;
+    let before = graph.clone();
+    let expected = graph.canonical_sha256()?;
+    let after = graph.clone();
+    let reopened = DocumentGraph::from_json(&graph.canonical_json()?, DocumentGraphLimits::default())?;
+    for candidate in [before, after, reopened] {
+        assert_eq!(candidate, graph);
+        assert_eq!(candidate.canonical_sha256()?, expected);
+        assert_eq!(candidate.canonical_json()?, graph.canonical_json()?);
+    }
+    Ok(())
+}
+
+#[test]
+fn changed_draft_does_not_reuse_the_previous_immutable_digest() -> TestResult {
+    let original = DocumentGraph::from_draft(complete_draft(false)?, DocumentGraphLimits::default())?;
+    let previous = original.canonical_sha256()?;
+    let mut changed = original.clone().into_draft();
+    changed.metadata.insert("digest-memo-fixture", PropertyValue::Text("changed".to_owned()));
+    let changed = DocumentGraph::from_draft(changed, DocumentGraphLimits::default())?;
+    let expected: [u8; 32] = Sha256::digest(changed.canonical_json()?).into();
+    assert_ne!(changed, original);
+    assert_ne!(expected, previous);
+    assert_eq!(changed.canonical_sha256()?, expected);
+    assert_eq!(original.canonical_sha256()?, previous);
+    Ok(())
+}
+
+#[test]
+fn digest_memo_does_not_bypass_new_draft_serialized_size_admission() -> TestResult {
+    let graph = DocumentGraph::from_draft(complete_draft(false)?, DocumentGraphLimits::default())?;
+    let _ = graph.canonical_sha256()?;
+    let limits = DocumentGraphLimits { max_serialized_bytes: 1, ..DocumentGraphLimits::default() };
+    assert!(DocumentGraph::from_draft(graph.into_draft(), limits).is_err());
+    Ok(())
+}
+
+#[test]
+fn concurrent_immutable_digest_first_reads_return_identical_whole_bytes() -> TestResult {
+    let graph = DocumentGraph::from_draft(complete_draft(false)?, DocumentGraphLimits::default())?;
+    let expected: [u8; 32] = Sha256::digest(graph.canonical_json()?).into();
+    std::thread::scope(|scope| {
+        let first = scope.spawn(|| graph.canonical_sha256());
+        let second = scope.spawn(|| graph.canonical_sha256());
+        assert_eq!(first.join().expect("owned digest reader")?, expected);
+        assert_eq!(second.join().expect("owned digest reader")?, expected);
+        Ok::<(), DocumentGraphError>(())
+    })?;
+    assert_eq!(graph.canonical_sha256()?, expected);
+    Ok(())
 }

@@ -1,0 +1,143 @@
+{
+  "state": "FAILED_NATIVE011_TRANSPORT_SCOPED_TESTS",
+  "steps": [
+    {
+      "stage": "native011_selected_models",
+      "exit_code": 1,
+      "cleanup": true,
+      "stdout_bytes": 926,
+      "stderr_bytes": 0,
+      "stdout_sha256": "e0054cd260ce853cffde53ff1cf1ccb7c8d0f48f46d8acf67dec62ffca9a0e68",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "contract_errors": [],
+      "diagnostics": [],
+      "locations": [],
+      "preflight_summary": {
+        "state": "EXECUTED_EXACT_CURRENT805_REPORT_ADMISSION_MODELS",
+        "contracts": {
+          "run": 4,
+          "errors": 1,
+          "failures": 0,
+          "skipped": 0
+        },
+        "executed_test_ids": {
+          "test_native011_current_epoch_report_admission": [
+            "test_native011_current_epoch_report_admission.ReportAdmissionContracts.test_full_original_code_defaults_closure_and_other_globals_retained",
+            "test_native011_current_epoch_report_admission.ReportAdmissionContracts.test_named_admission_controls_are_required_inputs_not_extra_projector_controls",
+            "test_native011_current_epoch_report_admission.ReportAdmissionContracts.test_original_owner_phase_gate_runs_before_new_report_or_io",
+            "test_native011_current_epoch_report_admission.ReportAdmissionContracts.test_unrelated_function_not_admitted"
+          ]
+        },
+        "errors": [
+          "test_native011_current_epoch_report_admission.ReportAdmissionContracts.test_named_admission_controls_are_required_inputs_not_extra_projector_controls"
+        ],
+        "failures": []
+      },
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 0.109,
+          "peak_job_private_mib": 26.01,
+          "peak_job_private_percent": 0.08164146047365288,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 0.4369999999762513
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "error_type": "ValueError",
+  "error_code": "REFERENCE_TARGET_COMMAND_FAILED",
+  "cleanup": true,
+  "elapsed_seconds": 1.702999999979511,
+  "source_pins": [
+    {
+      "path": "tools/p09/native011_current_epoch_report_admission.py",
+      "bytes": 7765,
+      "sha256": "c9b2b342c1fb0835c3cfd1ddca6f08f2e66b4fe8a0a6e0c504966e2edc5f594d"
+    },
+    {
+      "path": "tools/p09/native011_shared_parent.py",
+      "bytes": 6496,
+      "sha256": "048070086879aefb7d9210b3dcba72bbe2cbb728805d93191ac74d622815d8bb"
+    },
+    {
+      "path": "tools/p09/native011_metadata_report.py",
+      "bytes": 8345,
+      "sha256": "a6a81b629a4bc9493a48db805b5e8072af9f6dd69ce6f43723d117f88bba8250"
+    },
+    {
+      "path": "tools/p09/native011_scoped_test_runner.py",
+      "bytes": 6721,
+      "sha256": "fcbec20db2965d8fce995c57c6349d1b2a95334a28fba76754466c9ac9357364"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_current_epoch_report_admission.py",
+      "bytes": 2351,
+      "sha256": "6521970aa693159868de747d1d049f6187eff9ecd6e6f0d122675aab0b368f32"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T16:43:50.682265+00:00",
+      "system_cpu_percent": 2.61,
+      "available_ram_mib": 9768.4,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.659500919217376,
+      "commit_used_percent": 48.517305141730844,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.625,
+      "parent_private_percent": 0.042763990709130686
+    },
+    {
+      "time_utc": "2026-10-17T16:43:51.182523+00:00",
+      "system_cpu_percent": 0.78,
+      "available_ram_mib": 9768.38,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.65943961762519,
+      "commit_used_percent": 48.5066661526832,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.625,
+      "parent_private_percent": 0.042763990709130686
+    },
+    {
+      "time_utc": "2026-10-17T16:43:51.683868+00:00",
+      "system_cpu_percent": 1.37,
+      "available_ram_mib": 9769.09,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.661683255899206,
+      "commit_used_percent": 48.50547102395758,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 13.75,
+      "parent_private_percent": 0.04315632089912271
+    }
+  ]
+}

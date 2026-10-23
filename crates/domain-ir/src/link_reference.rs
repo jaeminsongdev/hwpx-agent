@@ -354,6 +354,44 @@ impl fmt::Debug for ExternalLinkPolicy {
     }
 }
 
+impl ExternalLinkPolicy {
+    /// Checks the immutable sorted policy once; subsequent exact target lookups use binary search.
+    /// The borrowed view cannot outlive or mutate the policy and is not issuer/access authority.
+    /// # Errors
+    /// Rejects every original policy shape, ordering, enablement and finite-limit violation.
+    pub fn validated_external_targets(&self,limits:LinkReferenceLimits)->Result<ValidatedExternalTargetPolicy<'_>,LinkReferenceError>{
+        validate_policy(self,limits)?;Ok(ValidatedExternalTargetPolicy{policy:self,limits})
+    }
+    /// Validates this finite policy and the exact external target using the original rules.
+    /// Pure policy data is not an issuer attestation or permission to open a destination.
+    /// # Errors
+    /// Rejects internal targets, invalid/disabled policies and absent or mismatched approval digests.
+    pub fn require_external_target(&self,target:&HyperlinkTarget,limits:LinkReferenceLimits)->Result<(),LinkReferenceError>{
+        validate_policy(self,limits)?;
+        if target.external_kind().is_none(){return Err(LinkReferenceError::InvalidTarget);}
+        validate_target(target,&[],self,limits)
+    }
+}
+
+pub struct ValidatedExternalTargetPolicy<'a>{policy:&'a ExternalLinkPolicy,limits:LinkReferenceLimits}
+impl fmt::Debug for ValidatedExternalTargetPolicy<'_>{fn fmt(&self,f:&mut fmt::Formatter<'_>)->fmt::Result{
+    f.debug_struct("ValidatedExternalTargetPolicy").field("approvals",&self.policy.approvals.len()).finish_non_exhaustive()}}
+impl ValidatedExternalTargetPolicy<'_>{
+    /// # Errors
+    /// Same original target shape/enablement and exact kind+digest requirement, with no policy rescan.
+    pub fn require_external_target(&self,target:&HyperlinkTarget)->Result<(),LinkReferenceError>{
+        validate_target_shape(target,self.limits)?;
+        let kind=target.external_kind().ok_or(LinkReferenceError::InvalidTarget)?;
+        let enabled=match kind{ExternalTargetKind::Https=>self.policy.allow_https,ExternalTargetKind::Mailto=>self.policy.allow_mailto,
+            ExternalTargetKind::ManagedDocument=>self.policy.allow_managed_documents};
+        if !enabled{return Err(LinkReferenceError::ExternalTargetDenied);}
+        let digest=target.external_approval_sha256(self.limits)?;
+        if self.policy.approvals.binary_search_by(|approval|approval.kind.cmp(&kind).then_with(||approval.target_sha256.cmp(&digest))).is_err(){
+            return Err(LinkReferenceError::ExternalTargetDenied);}
+        Ok(())
+    }
+}
+
 #[derive(Clone, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct HyperlinkEntry {

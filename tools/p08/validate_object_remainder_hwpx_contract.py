@@ -19,6 +19,12 @@ QUALIFICATION = (
     "p08-17-object-remainder-hwpx-source-qualification.current-2020.v1.json"
 )
 PROFILE = "hwpx-agent.object-remainder-target.hangul-2020-11.0.0.9136-x86-ko-KR/v1"
+INSTALLED_TEMPLATE = Path(
+    r"C:\Program Files (x86)\HNC\Office 2020\HOffice110\Shared\HwpTemplate\Draw"
+    r"\FG_Basic_Shapes\Rectangle.drt"
+)
+INSTALLED_TEMPLATE_BYTES = 12_288
+INSTALLED_TEMPLATE_SHA256 = "97263ccadb83c470550354abf6bf8fdfd57e8ba4f3b294f479c7bab80f36753b"
 
 FEATURES = ["OBJ-003", "OBJ-012", "OBJ-013", "OBJ-014", "OBJ-019", "OBJ-030", "OBJ-044", "OBJ-046", "OBJ-047"]
 CAPABILITIES = [
@@ -35,9 +41,14 @@ SOURCE_SHA256 = {
 }
 IMPLEMENTATION_SHA256 = {
     "crates/hwpx-package/src/object_common_properties_hwpx.rs": "e1aeeea3fa03fe6325efa78d40d704c9e4420b24fd834da6b4fd2c1b705b86b6",
-    "crates/hwpx-package/src/object_remainder_target.rs": "a688ad663a3c8e63b68904b464a89d540ad1b67d3dcce602bade62a8feb57231",
+    "crates/hwpx-package/src/object_caption_insert_hwpx.rs": "d3fc91d0cc18649f4d59db11f6855c5b2e181459d38abd37d14c5bc68aac4878",
+    "crates/hwpx-package/src/object_form_insert_hwpx.rs": "b505d5ee747d90af2a7571b16c3e96929d0b3b77c2595720eb126198a62be9c1",
+    "crates/hwpx-package/src/object_remainder_target.rs": "3ab9250db0326a7f20e3a0607e3a632ba5b9190ed28f8b1ccfafa92019294879",
+    "crates/hwpx-package/examples/p08_19_support/special.rs": "7830ba6b3ca65acde05e3843bfd98fd1d6e0fb26fb437c51e84d03e2367c2b43",
     "crates/hwpx-package/tests/object_common_properties_hwpx.rs": "94c2a449c151214c50778b752fe59c92e2b28e5748ed692d4f08feb4c465d956",
-    "crates/hwpx-package/tests/object_remainder_target.rs": "56a19d5d02835592fade9e6d537d9629fdf2f04ce9fac46a9109298978b00f78",
+    "crates/hwpx-package/tests/object_caption_insert_hwpx.rs": "ba8e043c2fbd4db9927afff045bb898fde783c7e28a3beab5a1fa04b004ee31b",
+    "crates/hwpx-package/tests/object_form_insert_hwpx.rs": "90cb32121ebaa0d6c05a31d19c456be2b916a372cd368c300288bf6a6b5dcd98",
+    "crates/hwpx-package/tests/object_remainder_target.rs": "85bf7db219324c16797a3f02a84c14fbd8f380917698b8a98a06212a6c741989",
 }
 IMPLEMENTATION_FILES = ["crates/hwpx-package/src/lib.rs", *IMPLEMENTATION_SHA256]
 DIGEST = re.compile(r"^[0-9a-f]{64}$")
@@ -79,6 +90,10 @@ def raw_sha256(path: Path) -> str:
 
 def expected_direct() -> dict[str, str]:
     return {
+        "OBJ-003": "installed_rectangle_drt_exact_identity_to_native_rectangle",
+        "OBJ-012": "static_edit_insert_complete_native_state_hash_profile",
+        "OBJ-013": "plain_static_caption_insert_exact_subtree",
+        "OBJ-014": "fixed_rectangle_behind_paragraph_band_profile",
         "OBJ-019": "existing_plain_caption_and_outMargin_only",
         "OBJ-030": "checked_imgDim_orgSz_curSz_mapping",
         "OBJ-046": "existing_admitted_form_root_only",
@@ -88,10 +103,6 @@ def expected_direct() -> dict[str, str]:
 
 def expected_unavailable() -> dict[str, str]:
     return {
-        "OBJ-003": "drawing_gallery_template_unqualified",
-        "OBJ-012": "form_insertion_state_incomplete",
-        "OBJ-013": "caption_insertion_unqualified",
-        "OBJ-014": "paragraph_band_native_construct_unqualified",
         "OBJ-044": "aspect_lock_native_field_unqualified",
     }
 
@@ -141,11 +152,11 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
     if not isinstance(boundary, dict):
         errors.append("evidence_boundary")
     else:
-        if boundary.get("direct_hwpx_profiles") != 4 or boundary.get("unavailable_with_reason_profiles") != 5:
+        if boundary.get("direct_hwpx_profiles") != 8 or boundary.get("unavailable_with_reason_profiles") != 1:
             errors.append("evidence_counts")
-        if boundary.get("integration_rows") != ["OBJ-019", "OBJ-030", "OBJ-046", "OBJ-047"]:
+        if boundary.get("integration_rows") != ["OBJ-003", "OBJ-012", "OBJ-013", "OBJ-014", "OBJ-019", "OBJ-030", "OBJ-046", "OBJ-047"]:
             errors.append("integration_rows")
-        if boundary.get("unit_rows") != ["OBJ-003", "OBJ-012", "OBJ-013", "OBJ-014", "OBJ-044"]:
+        if boundary.get("unit_rows") != ["OBJ-044"]:
             errors.append("unit_rows")
         forbidden_true = {
             "actual_target_hwpx", "hancom_open", "save_reopen", "resource_integrity",
@@ -205,16 +216,36 @@ def validate_implementation(root: Path, errors: list[str]) -> None:
             "ObjectCommonPropertiesHwpxLowerer", "native_image_dimensions",
             "verify_preservation", "UnsupportedProfile",
         ),
+        "crates/hwpx-package/src/object_caption_insert_hwpx.rs": (
+            "ObjectCaptionInsertHwpxLowerer", "plain-static",
+            "verify_insertion", "UnsupportedProfile",
+        ),
+        "crates/hwpx-package/src/object_form_insert_hwpx.rs": (
+            "ObjectFormInsertHwpxLowerer", "static-edit",
+            "verify_insertion", "UnsupportedProfile",
+        ),
         "crates/hwpx-package/src/object_remainder_target.rs": (
             "ObjectRemainderTargetRouter", "AspectLockNativeFieldUnqualified",
             "CAPABILITY_UNAVAILABLE_FOR_TARGET",
+        ),
+        "crates/hwpx-package/examples/p08_19_support/special.rs": (
+            "DRAWING_GALLERY_TEMPLATE_SHA256", "drawing_gallery_case",
+            "paragraph_band_case", "ObjectTextWrap::BehindText",
         ),
         "crates/hwpx-package/tests/object_common_properties_hwpx.rs": (
             "margin_and_existing_plain_caption_patch_exact_native_spans",
             "unsupported_or_lossy_profiles_fail_before_any_output",
         ),
+        "crates/hwpx-package/tests/object_caption_insert_hwpx.rs": (
+            "inserts_one_exact_plain_caption_and_preserves_every_other_byte",
+            "caption_attribute_drift_are_rejected",
+        ),
+        "crates/hwpx-package/tests/object_form_insert_hwpx.rs": (
+            "inserts_one_exact_static_edit_and_preserves_every_other_byte",
+            "child_order_drift_are_rejected",
+        ),
         "crates/hwpx-package/tests/object_remainder_target.rs": (
-            "five_unqualified_semantics_fail_with_specific_stable_reasons",
+            "aspect_lock_remains_unqualified_with_a_specific_stable_reason",
             "rejected_direct_preflight_never_widens_to_unverified_automation",
         ),
     }
@@ -233,6 +264,10 @@ def validate_implementation(root: Path, errors: list[str]) -> None:
         if (
             "mod object_common_properties_hwpx;" not in lib
             or "ObjectCommonPropertiesHwpxLowerer" not in lib
+            or "mod object_caption_insert_hwpx;" not in lib
+            or "ObjectCaptionInsertHwpxLowerer" not in lib
+            or "mod object_form_insert_hwpx;" not in lib
+            or "ObjectFormInsertHwpxLowerer" not in lib
             or "mod object_remainder_target;" not in lib
             or "ObjectRemainderTargetRouter" not in lib
         ):
@@ -266,12 +301,9 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
             errors.append("qualification_model")
         if not isinstance(archive, dict) or archive.get("commit") != "213c7faad552b4853b525887e36accb6025e837b":
             errors.append("qualification_archive")
+    validate_installed_template(value.get("installed_template"), errors)
     if value.get("native_map") != {
-        **{key: value for key, value in expected_direct().items()},
-        "OBJ-003": "CAPABILITY_UNAVAILABLE_FOR_TARGET:qualified_native_template_absent",
-        "OBJ-012": "CAPABILITY_UNAVAILABLE_FOR_TARGET:complete_form_state_absent",
-        "OBJ-013": "CAPABILITY_UNAVAILABLE_FOR_TARGET:subtree_insertion_profile_absent",
-        "OBJ-014": "CAPABILITY_UNAVAILABLE_FOR_TARGET:distinct_native_construct_absent",
+        **{key: item for key, item in expected_direct().items()},
         "OBJ-044": "CAPABILITY_UNAVAILABLE_FOR_TARGET:protect_size_is_not_aspect_lock",
     }:
         errors.append("qualification_native_map")
@@ -284,7 +316,7 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
     }:
         errors.append("qualification_target")
     claims = value.get("claims")
-    if not isinstance(claims, dict) or claims.get("direct_hwpx_profiles") != 4 or claims.get("unavailable_with_reason_profiles") != 5:
+    if not isinstance(claims, dict) or claims.get("direct_hwpx_profiles") != 8 or claims.get("unavailable_with_reason_profiles") != 1:
         errors.append("qualification_claims")
     forbidden_true = {
         "complete_native_coverage_for_all_nine", "actual_target_hwpx", "hancom_open",
@@ -297,11 +329,37 @@ def validate_qualification(root: Path, errors: list[str]) -> bool:
     return not any(error.startswith("qualification_") for error in errors)
 
 
+def validate_installed_template(value: Any, errors: list[str]) -> None:
+    expected = {
+        "path": str(INSTALLED_TEMPLATE),
+        "byte_len": INSTALLED_TEMPLATE_BYTES,
+        "format": "OLE Compound File Binary",
+        "sha256": INSTALLED_TEMPLATE_SHA256,
+        "redistributed": False,
+    }
+    if value != expected:
+        errors.append("qualification_installed_template")
+        return
+    try:
+        metadata = INSTALLED_TEMPLATE.lstat()
+        data = INSTALLED_TEMPLATE.read_bytes()
+        if (
+            INSTALLED_TEMPLATE.is_symlink()
+            or not INSTALLED_TEMPLATE.is_file()
+            or metadata.st_size != INSTALLED_TEMPLATE_BYTES
+            or data[:8] != bytes.fromhex("d0cf11e0a1b11ae1")
+            or hashlib.sha256(data).hexdigest() != INSTALLED_TEMPLATE_SHA256
+        ):
+            errors.append("qualification_installed_template_identity")
+    except OSError:
+        errors.append("qualification_installed_template_path")
+
+
 def validate_documents(root: Path, errors: list[str]) -> None:
     expected = {
         MIGRATION: ("There is no accepted v0", "CAPABILITY_UNAVAILABLE_FOR_TARGET"),
-        POLICY: ("direct_hwpx_profiles=4", "complete_native_coverage_for_all_nine=false", "p08_complete=false"),
-        REPORT: ("11/11 PASS", "unavailable_with_reason_profiles=5", "release_green_rows=0"),
+        POLICY: ("direct_hwpx_profiles=8", "complete_native_coverage_for_all_nine=false", "p08_complete=false"),
+        REPORT: ("19/19 PASS", "unavailable_with_reason_profiles=1", "release_green_rows=0"),
     }
     for relative, markers in expected.items():
         try:
@@ -321,8 +379,8 @@ def result(errors: list[str], qualification: bool) -> dict[str, Any]:
         "source_locks": len(SOURCE_SHA256),
         "implementation_files": len(IMPLEMENTATION_FILES),
         "source_qualification_verified": qualification,
-        "direct_hwpx_profiles": 4,
-        "unavailable_with_reason_profiles": 5,
+        "direct_hwpx_profiles": 8,
+        "unavailable_with_reason_profiles": 1,
         "actual_target": "not_run",
         "p08_complete": False,
     }

@@ -25,6 +25,7 @@ const EMPTY_SHA256: &str = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495
 const CATEGORY: &str = "HWPHYPERLINK_TYPE_URL";
 const TARGET_TYPE: &str = "HWPHYPERLINK_TARGET_BOOKMARK";
 const DOC_OPEN_TYPE: &str = "HWPHYPERLINK_JUMP_CURRENTTAB";
+#[cfg(test)]#[path="hyperlink_hwpx/token_window_tests.rs"]mod token_window_tests;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct HyperlinkHwpxLimitConfig {
@@ -882,6 +883,46 @@ fn parse_projection_structure(
     })
 }
 
+/// Source-only importer bridge. Reuses the original exact six-parameter
+/// profile; it does not grant external approval, open a URL or use caller IR.
+pub(crate) fn read_imported_parameter_target(
+    document: &PreservingXmlDocument,
+    index: usize,
+) -> Result<HyperlinkTarget, HyperlinkHwpxError> {
+    let parameters = element(document, index)?;
+    if parameters.name().namespace() != Some(PARAGRAPH_NS)
+        || parameters.name().local_name() != "parameters"
+    {
+        return Err(HyperlinkHwpxError::InvalidHyperlink);
+    }
+    for child in direct_element_children(document, index)? {
+        if element(document, child)?.name().namespace() != Some(PARAGRAPH_NS) {
+            return Err(HyperlinkHwpxError::InvalidHyperlink);
+        }
+    }
+    let limits = HyperlinkHwpxLimits::new(HyperlinkHwpxLimitConfig::default())?;
+    let uri = document
+        .with_source_bytes(|source| validate_parameters(source, document, index, limits))?;
+    let target = HyperlinkTarget::Https { uri };
+    let _ = target.external_approval_sha256(LinkReferenceLimits::new(
+        domain_ir::LinkReferenceLimitConfig::default(),
+    )?)?;
+    Ok(target)
+}
+
+/// Exact original six-parameter profile, yielding only the two existing content leaves.
+/// Source-only patch ingredients, not execution or destination approval.
+pub(crate) fn imported_https_target_leaves(document:&PreservingXmlDocument,index:usize,target:&HyperlinkTarget)
+    ->Result<[(usize,String);2],HyperlinkHwpxError>
+{
+    let _=read_imported_parameter_target(document,index)?;
+    let limits=HyperlinkHwpxLimits::new(HyperlinkHwpxLimitConfig::default())?;
+    let _=HyperlinkHwpxReader::parameters_sha256(target,LinkReferenceLimits::new(Default::default())?,limits)?;
+    let HyperlinkTarget::Https{uri}=target else{return Err(HyperlinkHwpxError::NonRepresentable)};
+    let children=direct_element_children(document,index)?;
+    Ok([(children[1],hyperlink_command(uri,limits)?),(children[2],uri.clone())])
+}
+
 fn validate_parameters(
     source: &[u8],
     document: &PreservingXmlDocument,
@@ -1346,7 +1387,7 @@ fn require_container_whitespace(
     document: &PreservingXmlDocument,
     element_index: usize,
 ) -> Result<(), HyperlinkHwpxError> {
-    if document.tokens().iter().any(|token| {
+    if element_tokens(document, element_index)?.iter().any(|token| {
         token.element_index() == Some(element_index)
             && matches!(
                 token.kind(),
@@ -1366,7 +1407,7 @@ fn require_plain_text_tokens(
     document: &PreservingXmlDocument,
     element_index: usize,
 ) -> Result<(), HyperlinkHwpxError> {
-    if document.tokens().iter().any(|token| {
+    if element_tokens(document, element_index)?.iter().any(|token| {
         token.element_index() == Some(element_index)
             && !matches!(
                 token.kind(),
@@ -1381,6 +1422,16 @@ fn require_plain_text_tokens(
         return Err(HyperlinkHwpxError::InvalidHyperlink);
     }
     Ok(())
+}
+
+// Immutable parser-owned start/end indexes include empty tags and every direct
+// content token. Owner checks above remain unchanged; unrelated siblings are not scanned.
+fn element_tokens(document: &PreservingXmlDocument, index: usize)
+    -> Result<&[crate::preserving_xml::XmlToken], HyperlinkHwpxError>
+{
+    let value=element(document,index)?;
+    let end=value.end_token().ok_or(HyperlinkHwpxError::UnsupportedStructure)?;
+    document.tokens().get(value.start_token()..=end).ok_or(HyperlinkHwpxError::UnsupportedStructure)
 }
 
 fn non_namespace_attributes(element: &XmlElementToken) -> Result<Vec<&str>, HyperlinkHwpxError> {

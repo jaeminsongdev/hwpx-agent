@@ -54,7 +54,7 @@ fn line() -> LineAppearance {
         head_size: ArrowSize::MediumLarge,
         tail_size: ArrowSize::LargeSmall,
         outline_style: OutlineStyle::Outer,
-        alpha: alpha(125_000),
+        alpha: alpha(200_000),
     }
 }
 
@@ -85,14 +85,14 @@ fn picture_section() -> Vec<u8> {
     format!(
         concat!(
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
-            "<hs:sec xmlns:hs=\"urn:test:section\" xmlns:hp=\"{}\">",
+            "<hs:sec xmlns:hs=\"urn:test:section\" xmlns:hp=\"{}\" xmlns:hc=\"{}\">",
             "<hp:p><hp:run><hp:pic id=\"41\" instid=\"141\">",
             "<hp:renderingInfo/><hp:effects/>",
-            "<hp:img binaryItemIDRef=\"image-1\" bright=\"0\" contrast=\"0\" effect=\"REAL_PIC\" alpha=\"0\"/>",
+            "<hc:img binaryItemIDRef=\"image-1\" bright=\"0\" contrast=\"0\" effect=\"REAL_PIC\" alpha=\"0\"/>",
             "<hp:sz width=\"100\" height=\"100\"/>",
             "</hp:pic></hp:run></hp:p></hs:sec>"
         ),
-        PARA_NS,
+        PARA_NS, CORE_NS,
     )
     .into_bytes()
 }
@@ -233,7 +233,7 @@ fn lowers_every_shape_appearance_family_with_strict_readback() {
                     face_color: color(1, 2, 3),
                     hatch_color: color(4, 5, 6),
                     hatch_style: ObjectHatchStyle::CrossDiagonal,
-                    alpha: alpha(100_000),
+                    alpha: alpha(200_000),
                 }),
                 ..ObjectAppearance::default()
             },
@@ -266,7 +266,7 @@ fn lowers_every_shape_appearance_family_with_strict_readback() {
                         brightness: -100,
                         contrast: 100,
                         effect: ImageEffect::GrayScale,
-                        alpha: alpha(500_000),
+                        alpha: alpha(800_000),
                     },
                 }),
                 ..ObjectAppearance::default()
@@ -280,7 +280,7 @@ fn lowers_every_shape_appearance_family_with_strict_readback() {
                     color: color(9, 8, 7),
                     offset_x_hwpunit: -1_000_000_000,
                     offset_y_hwpunit: 1_000_000_000,
-                    alpha: alpha(250_000),
+                    alpha: alpha(200_000),
                 }),
                 ..ObjectAppearance::default()
             },
@@ -432,7 +432,7 @@ fn lowers_transparency_from_an_existing_line_and_preserves_other_bytes() {
     )
     .expect("initial line");
     let mut target = initial.clone();
-    target.line.as_mut().expect("line").alpha = alpha(900_000);
+    target.line.as_mut().expect("line").alpha = alpha(800_000);
     let output = lower(
         &with_line,
         &request(
@@ -455,6 +455,132 @@ fn lowers_transparency_from_an_existing_line_and_preserves_other_bytes() {
         String::from_utf8(output)
             .expect("utf8")
             .contains("<hp:sz width=\"100\" height=\"100\"/>")
+    );
+}
+
+#[test]
+fn core_alpha_uses_exact_bytes_and_rejects_lossy_values() {
+    let target = ObjectAppearance {
+        line: Some(line()),
+        ..ObjectAppearance::default()
+    };
+    let encoded = lower(
+        &shape_section(),
+        &request(
+            AppearanceTargetKind::BasicShape,
+            AppearanceOperation::SetLine,
+            ObjectAppearance::default(),
+            target,
+        ),
+    )
+    .expect("byte alpha lower");
+    let encoded_text = String::from_utf8(encoded).expect("utf8");
+    assert!(encoded_text.contains("alpha=\"51\""));
+
+    let native = encoded_text
+        .replacen("alpha=\"51\"", "alpha=\"32\"", 1)
+        .into_bytes();
+    let native_readback =
+        ObjectAppearanceHwpxReader::read_in_section(&native, 0, 41, 141, limits(), hwpx_limits())
+            .expect("native byte alpha readback");
+    assert_eq!(
+        native_readback
+            .appearance
+            .line
+            .as_ref()
+            .expect("line")
+            .alpha
+            .millionths(),
+        125_490
+    );
+    let mut changed = native_readback.appearance.clone();
+    changed.line.as_mut().expect("line").color = color(90, 80, 70);
+    let rewritten = lower(
+        &native,
+        &request(
+            AppearanceTargetKind::BasicShape,
+            AppearanceOperation::SetLine,
+            native_readback.appearance,
+            changed.clone(),
+        ),
+    )
+    .expect("native byte alpha rewrite");
+    assert!(
+        String::from_utf8(rewritten.clone())
+            .expect("utf8")
+            .contains("alpha=\"32\"")
+    );
+    assert_eq!(
+        ObjectAppearanceHwpxReader::read_in_section(
+            &rewritten,
+            0,
+            41,
+            141,
+            limits(),
+            hwpx_limits(),
+        )
+        .expect("rewritten readback")
+        .appearance,
+        changed
+    );
+
+    let decimal = String::from_utf8(native)
+        .expect("utf8")
+        .replacen("alpha=\"32\"", "alpha=\"0.2\"", 1)
+        .into_bytes();
+    assert!(matches!(
+        ObjectAppearanceHwpxReader::read_in_section(&decimal, 0, 41, 141, limits(), hwpx_limits(),),
+        Err(ObjectAppearanceHwpxError::InvalidNumber)
+    ));
+
+    let unrepresentable = ObjectAppearance {
+        line: Some(LineAppearance {
+            alpha: alpha(125_000),
+            ..line()
+        }),
+        ..ObjectAppearance::default()
+    };
+    assert!(matches!(
+        lower(
+            &shape_section(),
+            &request(
+                AppearanceTargetKind::BasicShape,
+                AppearanceOperation::SetLine,
+                ObjectAppearance::default(),
+                unrepresentable,
+            ),
+        ),
+        Err(ObjectAppearanceHwpxError::InvalidNumber)
+    ));
+}
+
+#[test]
+fn picture_effect_alpha_remains_fractional() {
+    let source_state = ObjectAppearance {
+        image_adjustment: Some(default_adjustment()),
+        ..ObjectAppearance::default()
+    };
+    let glow_target = ObjectAppearance {
+        picture_effects: Some(PictureEffects {
+            glow: picture_effects().glow,
+            ..PictureEffects::default()
+        }),
+        ..source_state.clone()
+    };
+    let glow_output = lower(
+        &picture_section(),
+        &request(
+            AppearanceTargetKind::Picture,
+            AppearanceOperation::SetGlow,
+            source_state,
+            glow_target,
+        ),
+    )
+    .expect("fractional effect alpha lower");
+    assert!(
+        String::from_utf8(glow_output)
+            .expect("utf8")
+            .contains("<hp:glow alpha=\"0.3\"")
     );
 }
 

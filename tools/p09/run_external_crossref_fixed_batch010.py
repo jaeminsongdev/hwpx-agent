@@ -1,0 +1,175 @@
+"""Fixed010 external one-shot entry. Code/readiness and CURRENT session qualification remain mandatory.
+
+No past Native/run is retried, no case subset or saved approval/session is accepted.
+Not connected to P09 semantic acceptance. Never invoke execute from the Codex parent Job.
+"""
+import argparse,json,re,subprocess,sys,time
+from pathlib import Path
+from types import SimpleNamespace as NS
+import named_style_verification_runtime as r
+import crossref_external_host_inspection as installed
+import crossref_startup_prerequisites as prerequisites
+import crossref_external010_runtime as runtime
+import crossref_runtime004_admission as host_profile
+import crossref_generation010_publication as publication
+import crossref_inline_receipt567 as layout
+import crossref_section010_policy as sections
+
+SELF='tools/p09/run_external_crossref_fixed_batch010.py'
+CODE_STATE='PASS_CAPTURE010_ENTRY_CODE_CONTRACTS_NOT_NATIVE_OR_GATE'
+READY_STATE='PASS_CAPTURE010_ENTRY_RUNTIME_PREPARATION_NOT_NATIVE_OR_GATE'
+NAMES=dict(code='implementation/p09/evidence/p09-361-capture010-entry-code606-revised.v1.json',
+    ready='implementation/p09/evidence/p09-361-capture010-entry-ready607.v1.json',
+    claim='implementation/p09/evidence/p09-361-external-qualified-fixed-eight-claim010.v1.json',output=publication.OUTPUT,
+    preflight='implementation/p09/evidence/p09-361-external-qualified-generation010-preflight.v1.json',
+    scratch='target/p09-external-qualified-fixed-eight-scratch-010')
+
+def parser():
+    value=argparse.ArgumentParser(description='Fixed010 current qualification then fixed-eight capture; never P09 acceptance.')
+    group=value.add_mutually_exclusive_group(required=True)
+    group.add_argument('--preflight-generation-010',action='store_true')
+    group.add_argument('--execute-generation-010-fixed-eight',action='store_true')
+    return value
+
+def loaded_paths(exclude=()):
+    result=set()
+    for module in tuple(sys.modules.values()):
+        name=getattr(module,'__file__',None)
+        if name:
+            path=Path(name).absolute()
+            if path.is_relative_to(r.c.ROOT/'tools/p09')and path.suffix=='.py':
+                name=path.relative_to(r.c.ROOT).as_posix()
+                if name not in exclude and '/tests/'not in name:result.add(name)
+    return result
+
+def load_manifest(reader,require_runtime_ready=False):
+    runtime.require(type(require_runtime_ready)is bool,'CAPTURE010_EXACT_READY_REQUIREMENT')
+    proof=layout.unpack(reader.json(NAMES['code']))
+    runtime.require(proof['state']==CODE_STATE and proof['generation']==10 and proof['cleanup']is True
+        and proof['fresh_inputs']==proof['final_fresh_hashes']>0 and proof['contracts']['run']>=24
+        and proof['contracts']['errors']==proof['contracts']['failures']==proof['contracts']['skipped']==0,'CAPTURE010_VERIFIED_CURRENT_CODE_REQUIRED')
+    pins={p['path']:p for p in proof['source_pins']};paths=proof['entry_dependency_paths']
+    runtime.require(type(paths)is list and len(paths)==len(set(paths))and SELF in paths and set(paths)<=set(pins)
+        and loaded_paths()<=set(paths)and runtime.CASE_PATHS<=set(paths),'CAPTURE010_COMPLETE_IMPORT_AND_CASE_SOURCE_CLOSURE')
+    for name in paths:runtime.require(reader.pin(name)==pins[name],'CAPTURE010_CODE_CHANGED_REQUALIFY')
+    if require_runtime_ready:
+        ready=layout.unpack(reader.json(NAMES['ready']))
+        runtime.require(ready['state']==READY_STATE and ready['generation']==10 and ready['cleanup']is True
+            and ready['code_proof_sha256']==reader.snapshots[NAMES['code']]['sha256']and ready['native_startup_qualified']is False,
+            'CAPTURE010_CURRENT_READINESS_NOT_A_NATIVE_PERMIT')
+        current={p['path']:p for p in ready['source_pins']}
+        runtime.require(set(paths)<=set(current),'CAPTURE010_READINESS_SOURCE_CLOSURE')
+        for name in paths:runtime.require(reader.pin(name)==current[name],'CAPTURE010_READINESS_SOURCE_CHANGED')
+    fixed=runtime.fixed_input_pins()
+    for name,(size,sha)in fixed.items():
+        pin=reader.pin(name);runtime.require((pin['bytes'],pin['sha256'])==(size,sha),'CAPTURE010_FIXED_CURRENT_INPUTS')
+    return proof,pins,set(paths)|set(fixed)
+
+def publish_small(path,row):
+    return r.shared.publisher.publish(r.c.ROOT,path,layout.pack(row),NS(require=r.c.require,exact=r.a.exact))
+
+def notify_stage(stage,value,record):
+    runtime.require(stage in('qualification','fixed_eight'),'CAPTURE010_EXACT_NOTICE_STAGE')
+    print(json.dumps(value),flush=True)
+    state=value.get('state')
+    if state in('NATIVE_WORKER_RESULT_RECORDED_BEFORE_CLEANUP','NATIVE_TRANSPORT_FAILED_BEFORE_CLEANUP'):
+        key=stage+'_early_worker_notice'
+        if key not in record:
+            name=f'implementation/p09/evidence/p09-361-external-qualified-fixed-eight-{stage}-worker-notice010.v1.json'
+            record[key]=publish_small(name,dict(value,generation=10,current_run_output=NAMES['output'],force_kill_forbidden=True))
+    if state=='WAITING_SAME_OWNED_NATIVE_EXIT_NO_FORCE_KILL':
+        key=stage+'_live_cleanup_notice'
+        if key not in record:
+            name=f'implementation/p09/evidence/p09-361-external-qualified-fixed-eight-{stage}-live-cleanup010.v1.json'
+            record[key]=publish_small(name,dict(state=state,generation=10,process_id=value['process_id'],force_kill_forbidden=True,
+                rerun_forbidden=True,current_run_output=NAMES['output'],native_execution_authorized=False,P09_complete=False))
+
+def close_readers(readers):
+    rows={}
+    for label,reader in readers.items():
+        reader.finish()
+        rows[label]=dict(fresh_inputs=len(reader.snapshots),final_fresh_hashes=reader.final_fresh_hashes)
+    result=dict(closed=True,readers=rows)
+    runtime.require(sections.closed_boundary(result),'CAPTURE010_WHOLE_READER_CLOSURE')
+    return result
+
+def final_readers(readers,guard):
+    # New physical reads, never a cached pin or a second finish() on an old reader.
+    result={}
+    for label,previous in readers.items():
+        reader=r.a.AcceptanceReader(previous.root,guard.check);result[label]=reader
+        for name,pin in previous.snapshots.items():
+            runtime.require(reader.pin(name)==pin,'CAPTURE010_FINAL_WHOLE_INPUTS_UNCHANGED')
+    return result
+
+def make_guard():
+    return sections.guard_type(r.shared.baseline.guard_type(r.shared.final.guard_type(r.a.Guard)))()
+
+def main(argv=None):
+    args=parser().parse_args(argv);preflight=args.preflight_generation_010;output=NAMES['preflight']if preflight else NAMES['output']
+    c,a,shared=r.c,r.a,r.shared
+    c.require(Path(sys.executable)==installed.fixed.PYTHON,'CAPTURE010_FIXED_RUNTIME_PATH')
+    c.require(not(c.ROOT/output).exists()and not(c.ROOT/output).is_symlink(),'CAPTURE010_IMMUTABLE_OUTPUT')
+    if not preflight:
+        c.require(not(c.ROOT/NAMES['claim']).exists()and not(c.ROOT/NAMES['claim']).is_symlink(),'CAPTURE010_ONE_NATIVE_BUNDLE_NO_REPLAY')
+    selection=r.tools.select_own_single_cpu();shared.host.configure_host_policy(c)
+    guard=make_guard()
+    q=image=shell=python=None;started=time.monotonic()
+    row=dict(state='FAILED_EXTERNAL_QUALIFIED_ENTRY',own_cpu_selection=selection,mode='preflight_only'if preflight else'current_qualification_then_fixed_eight',
+        generation=10,native_claim_created=False,fixed_eight_executed=False,native_startup_qualified=False,crossref_semantics_qualified=False,
+        accepted_count_delta=0,P09_gate='OPEN',P10_started=False,Native011_executed=False)
+    try:
+        guard.acquire();q=a.AcceptanceReader(c.ROOT,guard.check);proof,manifest,paths=load_manifest(q,require_runtime_ready=not preflight)
+        row['python_host_qualification']=host_profile.require_qualification(q)
+        image=a.AcceptanceReader(Path(installed.native.EXECUTABLE).parent,guard.check)
+        shell=a.AcceptanceReader(Path(runtime.original.candidate.original.SHELL).parent,guard.check)
+        python=a.AcceptanceReader(installed.fixed.PYTHON.parent,guard.check)
+        shell_expected=shell.pin(Path(runtime.original.candidate.original.SHELL).name)
+        c.require(shell_expected==proof['external_shell_pins'][0],'CAPTURE010_EXACT_VERIFIED_SHELL')
+        row['current_python_images']=host_profile.verify_current_reader(python);before=installed.current_identity(guard.windows)
+        row['prerequisites']=prerequisites.inspect(guard.windows,guard.check,lambda:image.fresh_pin(Path(installed.native.EXECUTABLE).name))
+        runtime.absent_attempts();passed=row['prerequisites']['all_observed_prerequisites_passed']
+        readers=dict(source=q,native=image,shell=shell,runtime=python)
+        row['preparation_boundary']=close_readers(readers)
+        if not passed:
+            row['prerequisite_denied_without_claim']=True
+            row['state']='DENIED_CURRENT_EXTERNAL_ENTRY_PREREQUISITES_NO_NATIVE_OR_CLAIM'if preflight else'FAILED_EXTERNAL_QUALIFIED_ENTRY'
+            row['error_code']='XREF_SECTION010_CURRENT_EXTERNAL_PREREQUISITES_DENIED'
+        elif preflight:row['state']='OBSERVED_CURRENT_EXTERNAL_ENTRY_PREFLIGHT_NOT_NATIVE_SESSION_OR_PERMIT'
+        else:
+            guard.advance('qualification',lambda:sections.closed_boundary(row['preparation_boundary']))
+            c.require(installed.current_identity(guard.windows)==before,'CAPTURE010_SAME_CREATOR_BEFORE_CLAIM')
+            row['claim']=publish_small(NAMES['claim'],dict(state='ONE_CURRENT_NATIVE_BUNDLE_CLAIMED_NO_RETRY',generation=10,creator=before,
+                code_proof=NAMES['code'],source_digest=q.snapshots[NAMES['code']]['sha256'],native_execution_authorized=False,P09_complete=False))
+            row['native_claim_created']=True;scratch=c.ROOT/NAMES['scratch']
+            c.require(not scratch.exists()and scratch.parent.is_dir()and not scratch.parent.is_symlink()and not scratch.parent.is_junction(),'CAPTURE010_UNIQUE_TEMP')
+            scratch.mkdir();env=r.audit.environment();env.update(TEMP=str(scratch),TMP=str(scratch),PYTHONDONTWRITEBYTECODE='1')
+            artifacts=runtime.execute(guard,manifest,paths,shell_expected,env,lambda stage,value:notify_stage(stage,value,row),row)
+            row.update(state='CAPTURED_CURRENT_NATIVE_FIXED_EIGHT_SEMANTICS_AND_P09_UNQUALIFIED',fixed_eight_executed=True,
+                native_startup_qualified=False,crossref_semantics_qualified=False,captured_cases=len(artifacts['cases']))
+        if passed and not preflight:
+            guard.advance('final_audit',lambda:row.get('batch_closed_for_final_audit')is True)
+            readers=final_readers(readers,guard)
+            q,image,shell,python=(readers[name]for name in('source','native','shell','runtime'))
+            row['final_audit_boundary']=close_readers(readers)
+            guard.complete(lambda:sections.closed_boundary(row['final_audit_boundary'])and row.get('batch_closed_for_final_audit')is True)
+        else:
+            guard.complete(lambda:sections.closed_boundary(row['preparation_boundary']),preflight=True)
+        row.update(fresh_inputs=len(q.snapshots),final_fresh_hashes=q.final_fresh_hashes,external_native_final_hashes=image.final_fresh_hashes,
+            external_shell_final_hashes=shell.final_fresh_hashes,external_runtime_final_hashes=python.final_fresh_hashes)
+    except KeyboardInterrupt:
+        row.update(state='FAILED_EXTERNAL_QUALIFIED_ENTRY',error_type='KeyboardInterrupt',error_code='EXTERNAL_ENTRY_INTERRUPTED_WITH_UNCONFIRMED_CLEANUP',interrupted=True,rerun_forbidden=True)
+    except(ValueError,OSError,KeyError,TypeError,AttributeError,subprocess.SubprocessError)as error:
+        value=error.args[0]if error.args else None;row.update(state='FAILED_EXTERNAL_QUALIFIED_ENTRY',error_type=type(error).__name__,error_code=value if type(value)is str and re.fullmatch('[A-Z][A-Z0-9_]{1,159}',value)else'CAPTURE010_FAILURE_NO_RAW_VALUES')
+    finally:
+        row['section_timing']=guard.section_summary()
+        guard.close();samples=guard.samples
+        row.update(cleanup=guard.cleanup and all(value.get('cleanup')is True for key,value in row.items()if key in('qualification_worker','fixed_worker')),
+            elapsed_seconds=round(time.monotonic()-started,3),source_pins=[]if q is None else list(q.snapshots.values()),resource_samples=samples,
+            system_CPU_max=max((sample['system_cpu_percent']for sample in samples),default=None),available_RAM_min_percent=min((sample['available_ram_percent']for sample in samples),default=None))
+        pin=publish_small(output,row)if preflight else publication.publish_final(c.ROOT,row)
+        print(json.dumps({**{key:row.get(key)for key in('state','error_code','native_claim_created','fixed_eight_executed','captured_cases','fresh_inputs','final_fresh_hashes','cleanup','elapsed_seconds')},'receipt':pin}),flush=True)
+    return 0 if row['cleanup']and row['state'].startswith(('OBSERVED_','CAPTURED_'))else 2
+
+if __name__=='__main__':raise SystemExit(main())
+

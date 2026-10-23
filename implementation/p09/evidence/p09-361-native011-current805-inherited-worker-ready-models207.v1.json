@@ -1,0 +1,354 @@
+{
+  "state": "PASS_EXACT_INHERITED_READY42_MODELS_NOT_NATIVE",
+  "steps": [
+    {
+      "stage": "native011_selected_models",
+      "exit_code": 0,
+      "cleanup": true,
+      "stdout_bytes": 5602,
+      "stderr_bytes": 0,
+      "stdout_sha256": "c3be177e7d8f4357854d54ca230ab8bfa621a3c886300b579cf1cf14f2e5b567",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "contract_errors": [],
+      "diagnostics": [],
+      "locations": [],
+      "preflight_summary": {
+        "state": "EXECUTED_EXACT_SOURCE_TRANSFER_MODELS",
+        "contracts": {
+          "run": 42,
+          "errors": 0,
+          "failures": 0,
+          "skipped": 0
+        },
+        "executed_test_ids": {
+          "test_native011_inherited_source_probe_child": [
+            "test_native011_inherited_source_probe_child.InheritedChildContracts.test_actual_two_reads_not_cached_and_all_child_handles_closed",
+            "test_native011_inherited_source_probe_child.InheritedChildContracts.test_byte_pacer_has_no_idle_burst_credit",
+            "test_native011_inherited_source_probe_child.InheritedChildContracts.test_changed_bytes_in_second_read_are_detected_not_cached",
+            "test_native011_inherited_source_probe_child.InheritedChildContracts.test_failed_cleanup_cannot_resume_reading_or_become_clean",
+            "test_native011_inherited_source_probe_child.InheritedChildContracts.test_identity_drift_after_admission_rejected_before_new_byte_read",
+            "test_native011_inherited_source_probe_child.InheritedChildContracts.test_same_pins_wrong_os_identity_rejected_before_handle_ownership",
+            "test_native011_inherited_source_probe_child.InheritedChildContracts.test_serialized_bool_duplicate_handle_or_path_rejected",
+            "test_native011_inherited_source_probe_child.InheritedChildContracts.test_third_read_pass_or_read_after_close_refused"
+          ],
+          "test_native011_mapped_source_descriptor": [
+            "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_byte_pacer_uses_precise_monotone_clock_without_changing_deadline",
+            "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_changed_descriptor_detected_and_owned_handle_closed",
+            "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_checkpoint_failure_prevents_mapping_read_and_closes_claimed_handle",
+            "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_child_hashes_actual_mapping_and_closes_handle",
+            "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_child_rejects_noninherited_handle_without_claiming_or_closing",
+            "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_cleanup_failure_is_sticky_even_when_later_close_succeeds",
+            "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_duplicate_failure_retains_original_error_and_closes_writer",
+            "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_invalid_argument_shapes_bounds_and_booleans_are_rejected",
+            "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_no_second_prepare_or_oversized_or_empty_payload",
+            "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_writable_descriptor_fails_closed_and_all_handles_cleaned",
+            "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_writer_closed_before_restricted_reader_is_exposed"
+          ],
+          "test_native011_inherited_audit_reader": [
+            "test_native011_inherited_audit_reader.InheritedAuditContracts.test_bounded_direct_source_allocation_does_not_skip_hash_or_eof",
+            "test_native011_inherited_audit_reader.InheritedAuditContracts.test_changed_closing_bytes_are_not_cached_or_accepted",
+            "test_native011_inherited_audit_reader.InheritedAuditContracts.test_closed_or_reused_stream_cannot_read",
+            "test_native011_inherited_audit_reader.InheritedAuditContracts.test_closed_reader_or_wrong_owner_cannot_be_admitted",
+            "test_native011_inherited_audit_reader.InheritedAuditContracts.test_fresh_pin_really_rereads_without_source_cache",
+            "test_native011_inherited_audit_reader.InheritedAuditContracts.test_import_uses_new_bytes_and_real_module_namespace_not_pyc",
+            "test_native011_inherited_audit_reader.InheritedAuditContracts.test_no_overlapping_stream_or_cross_stream_offset_use",
+            "test_native011_inherited_audit_reader.InheritedAuditContracts.test_no_unknown_pathname_fallback",
+            "test_native011_inherited_audit_reader.InheritedAuditContracts.test_original_hash_parse_bind_and_full_closing_methods_retained",
+            "test_native011_inherited_audit_reader.InheritedAuditContracts.test_original_parse_limit_still_rejects_oversized_input",
+            "test_native011_inherited_audit_reader.InheritedAuditContracts.test_partial_read_cannot_qualify_as_complete_fresh_read",
+            "test_native011_inherited_audit_reader.InheritedAuditContracts.test_wrong_os_identity_rejected_before_any_read"
+          ],
+          "test_native011_inherited_worker_ready": [
+            "test_native011_inherited_worker_ready.WorkerReadyContracts.test_late_event_does_not_reach_the_go_sink",
+            "test_native011_inherited_worker_ready.WorkerReadyContracts.test_original_gate_observes_ready_then_no_go_is_written",
+            "test_native011_inherited_worker_ready.WorkerReadyContracts.test_sink_has_no_raw_writer_and_never_accepts_second_write",
+            "test_native011_inherited_worker_ready.WorkerReadyContracts.test_wrong_job_member_never_receives_preparation_start"
+          ],
+          "test_native011_nested_preparation_job": [
+            "test_native011_nested_preparation_job.NestedPreparationContracts.test_breakaway_affinity_priority_or_kill_drift_rejected_before_creation",
+            "test_native011_nested_preparation_job.NestedPreparationContracts.test_changed_parent_blocks_creation_and_later_readback",
+            "test_native011_nested_preparation_job.NestedPreparationContracts.test_inner_subtree_keeps_all_other_original_protections",
+            "test_native011_nested_preparation_job.NestedPreparationContracts.test_no_current_job_or_original_query_failure_is_not_accepted",
+            "test_native011_nested_preparation_job.NestedPreparationContracts.test_only_one_inner_job_can_be_created",
+            "test_native011_nested_preparation_job.NestedPreparationContracts.test_parent_cpu_mismatch_or_unlimited_parent_not_accepted",
+            "test_native011_nested_preparation_job.NestedPreparationContracts.test_relative_100_retains_actual_parent_machine_bound"
+          ]
+        },
+        "errors": [],
+        "failures": []
+      },
+      "test_summary": [],
+      "last_compiler_announcement": {
+        "source": "last_complete_cargo_style_stderr_announcement",
+        "process_or_compiler_phase_attribution_verified": false,
+        "announcement": null
+      },
+      "owned_job": {
+        "worker_created": true,
+        "job_assigned": true,
+        "limits_readback": {
+          "verified": true,
+          "job_private_limit_mib": 2548.87109375,
+          "cpu_hard_cap_machine_percent": 6.25,
+          "affinity_mask": 1,
+          "priority_class": 16384,
+          "active_process_limit": 16,
+          "kill_on_close": true,
+          "breakaway_disabled": true
+        },
+        "target_authorized": true,
+        "last_job_accounting": {
+          "active_processes": 0,
+          "job_cpu_seconds": 0.188,
+          "peak_job_private_mib": 30.89,
+          "peak_job_private_percent": 0.09694233788334185,
+          "owned_processes": []
+        },
+        "owned_tree_empty": true,
+        "cleanup_confirmed": true,
+        "job_handle_closed": true
+      },
+      "elapsed_seconds": 0.7349999999860302
+    }
+  ],
+  "Native010_replayed": false,
+  "Native011_executed": false,
+  "actual_Hangul_or_COM": false,
+  "official_accepted_count": 158,
+  "accepted_count_delta": 0,
+  "P09_gate": "OPEN",
+  "P10_started": false,
+  "fresh_inputs": 13,
+  "final_fresh_hashes": 13,
+  "contracts": {
+    "run": 42,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "executed_test_ids": {
+    "test_native011_inherited_source_probe_child": [
+      "test_native011_inherited_source_probe_child.InheritedChildContracts.test_actual_two_reads_not_cached_and_all_child_handles_closed",
+      "test_native011_inherited_source_probe_child.InheritedChildContracts.test_byte_pacer_has_no_idle_burst_credit",
+      "test_native011_inherited_source_probe_child.InheritedChildContracts.test_changed_bytes_in_second_read_are_detected_not_cached",
+      "test_native011_inherited_source_probe_child.InheritedChildContracts.test_failed_cleanup_cannot_resume_reading_or_become_clean",
+      "test_native011_inherited_source_probe_child.InheritedChildContracts.test_identity_drift_after_admission_rejected_before_new_byte_read",
+      "test_native011_inherited_source_probe_child.InheritedChildContracts.test_same_pins_wrong_os_identity_rejected_before_handle_ownership",
+      "test_native011_inherited_source_probe_child.InheritedChildContracts.test_serialized_bool_duplicate_handle_or_path_rejected",
+      "test_native011_inherited_source_probe_child.InheritedChildContracts.test_third_read_pass_or_read_after_close_refused"
+    ],
+    "test_native011_mapped_source_descriptor": [
+      "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_byte_pacer_uses_precise_monotone_clock_without_changing_deadline",
+      "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_changed_descriptor_detected_and_owned_handle_closed",
+      "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_checkpoint_failure_prevents_mapping_read_and_closes_claimed_handle",
+      "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_child_hashes_actual_mapping_and_closes_handle",
+      "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_child_rejects_noninherited_handle_without_claiming_or_closing",
+      "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_cleanup_failure_is_sticky_even_when_later_close_succeeds",
+      "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_duplicate_failure_retains_original_error_and_closes_writer",
+      "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_invalid_argument_shapes_bounds_and_booleans_are_rejected",
+      "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_no_second_prepare_or_oversized_or_empty_payload",
+      "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_writable_descriptor_fails_closed_and_all_handles_cleaned",
+      "test_native011_mapped_source_descriptor.MappedDescriptorContracts.test_writer_closed_before_restricted_reader_is_exposed"
+    ],
+    "test_native011_inherited_audit_reader": [
+      "test_native011_inherited_audit_reader.InheritedAuditContracts.test_bounded_direct_source_allocation_does_not_skip_hash_or_eof",
+      "test_native011_inherited_audit_reader.InheritedAuditContracts.test_changed_closing_bytes_are_not_cached_or_accepted",
+      "test_native011_inherited_audit_reader.InheritedAuditContracts.test_closed_or_reused_stream_cannot_read",
+      "test_native011_inherited_audit_reader.InheritedAuditContracts.test_closed_reader_or_wrong_owner_cannot_be_admitted",
+      "test_native011_inherited_audit_reader.InheritedAuditContracts.test_fresh_pin_really_rereads_without_source_cache",
+      "test_native011_inherited_audit_reader.InheritedAuditContracts.test_import_uses_new_bytes_and_real_module_namespace_not_pyc",
+      "test_native011_inherited_audit_reader.InheritedAuditContracts.test_no_overlapping_stream_or_cross_stream_offset_use",
+      "test_native011_inherited_audit_reader.InheritedAuditContracts.test_no_unknown_pathname_fallback",
+      "test_native011_inherited_audit_reader.InheritedAuditContracts.test_original_hash_parse_bind_and_full_closing_methods_retained",
+      "test_native011_inherited_audit_reader.InheritedAuditContracts.test_original_parse_limit_still_rejects_oversized_input",
+      "test_native011_inherited_audit_reader.InheritedAuditContracts.test_partial_read_cannot_qualify_as_complete_fresh_read",
+      "test_native011_inherited_audit_reader.InheritedAuditContracts.test_wrong_os_identity_rejected_before_any_read"
+    ],
+    "test_native011_inherited_worker_ready": [
+      "test_native011_inherited_worker_ready.WorkerReadyContracts.test_late_event_does_not_reach_the_go_sink",
+      "test_native011_inherited_worker_ready.WorkerReadyContracts.test_original_gate_observes_ready_then_no_go_is_written",
+      "test_native011_inherited_worker_ready.WorkerReadyContracts.test_sink_has_no_raw_writer_and_never_accepts_second_write",
+      "test_native011_inherited_worker_ready.WorkerReadyContracts.test_wrong_job_member_never_receives_preparation_start"
+    ],
+    "test_native011_nested_preparation_job": [
+      "test_native011_nested_preparation_job.NestedPreparationContracts.test_breakaway_affinity_priority_or_kill_drift_rejected_before_creation",
+      "test_native011_nested_preparation_job.NestedPreparationContracts.test_changed_parent_blocks_creation_and_later_readback",
+      "test_native011_nested_preparation_job.NestedPreparationContracts.test_inner_subtree_keeps_all_other_original_protections",
+      "test_native011_nested_preparation_job.NestedPreparationContracts.test_no_current_job_or_original_query_failure_is_not_accepted",
+      "test_native011_nested_preparation_job.NestedPreparationContracts.test_only_one_inner_job_can_be_created",
+      "test_native011_nested_preparation_job.NestedPreparationContracts.test_parent_cpu_mismatch_or_unlimited_parent_not_accepted",
+      "test_native011_nested_preparation_job.NestedPreparationContracts.test_relative_100_retains_actual_parent_machine_bound"
+    ]
+  },
+  "goal": "ACTIVE",
+  "cleanup": true,
+  "elapsed_seconds": 4.51600000000326,
+  "source_pins": [
+    {
+      "path": "tools/p09/native011_inherited_source_probe_child.py",
+      "bytes": 28005,
+      "sha256": "910c87e672dbeebc8e5e53b6c5e41ec0cf0a3fba563c5ee6e88ffcf1d6878116"
+    },
+    {
+      "path": "tools/p09/native011_inherited_audit_reader.py",
+      "bytes": 6712,
+      "sha256": "57a7a143f5ed0424547e89c09ff03625f2d2d2adba9d46438f53b48a63486c45"
+    },
+    {
+      "path": "tools/p09/native011_nested_preparation_job.py",
+      "bytes": 3051,
+      "sha256": "9e713074a6f603544ae90cdec2b703063ee9cd52cf2de2939cdee1ee88796db8"
+    },
+    {
+      "path": "tools/p09/native011_inherited_worker_ready_inspection.py",
+      "bytes": 17240,
+      "sha256": "ae92c6224e9cbf627475cf8e2511bfd9196f574a3f968e846d581eef2be6a233"
+    },
+    {
+      "path": "tools/p09/audit_evidence_io.py",
+      "bytes": 5653,
+      "sha256": "84b7dae287ac01c7ec308ca302762ec283406fca3fa43bc469882a3913578a8f"
+    },
+    {
+      "path": "tools/p09/owned_source_read_pressure.py",
+      "bytes": 902,
+      "sha256": "dba6d749e68b098fedf4e3202a0b4a2b9a0ba1c5cd893d81b0f148046435dc51"
+    },
+    {
+      "path": "tools/p09/worker_readiness_v1.py",
+      "bytes": 6890,
+      "sha256": "047c3f78f8a4472feeec4d56b65716f57e0429091321cb49afe5b685047d3a45"
+    },
+    {
+      "path": "tools/p09/native011_scoped_test_runner.py",
+      "bytes": 6721,
+      "sha256": "fcbec20db2965d8fce995c57c6349d1b2a95334a28fba76754466c9ac9357364"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_inherited_source_probe_child.py",
+      "bytes": 4468,
+      "sha256": "1622449af4e2afbe47dfe458786eb38095d56a4d795535b964b038ef3c750566"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_mapped_source_descriptor.py",
+      "bytes": 5815,
+      "sha256": "6760ae0342606bac08cd10ff0014c20c58632ee711257332cb8b1a16e638291d"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_inherited_audit_reader.py",
+      "bytes": 6208,
+      "sha256": "af13bfc030d43ce6043c263a9b778b8c04926916351683fe6083b5da134736f3"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_inherited_worker_ready.py",
+      "bytes": 2402,
+      "sha256": "cf370f79b9379efc12dea68acd007d0355af53eeff0ad9ad0992a59c846c3d70"
+    },
+    {
+      "path": "tools/p09/tests/test_native011_nested_preparation_job.py",
+      "bytes": 3169,
+      "sha256": "ecb2695536e79ea521913a5c31ae1cfde195306f024f2a80069effd7697fa3b9"
+    }
+  ],
+  "resource_samples": [
+    {
+      "time_utc": "2026-10-17T18:45:39.525097+00:00",
+      "system_cpu_percent": 15.49,
+      "available_ram_mib": 9667.79,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.34373641786598,
+      "commit_used_percent": 47.80127657323318,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.70703125,
+      "parent_private_percent": 0.04616009891624915
+    },
+    {
+      "time_utc": "2026-10-17T18:45:40.034127+00:00",
+      "system_cpu_percent": 12.19,
+      "available_ram_mib": 9694.76,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.42838165635676,
+      "commit_used_percent": 47.79041496216802,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.70703125,
+      "parent_private_percent": 0.04616009891624915
+    },
+    {
+      "time_utc": "2026-10-17T18:45:40.531883+00:00",
+      "system_cpu_percent": 6.45,
+      "available_ram_mib": 9655.3,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.304515659185217,
+      "commit_used_percent": 47.78484941173011,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.70703125,
+      "parent_private_percent": 0.04616009891624915
+    },
+    {
+      "time_utc": "2026-10-17T18:45:41.031473+00:00",
+      "system_cpu_percent": 15.62,
+      "available_ram_mib": 9567.86,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.030080691285796,
+      "commit_used_percent": 47.86767651919462,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.70703125,
+      "parent_private_percent": 0.04616009891624915
+    },
+    {
+      "time_utc": "2026-10-17T18:45:41.542189+00:00",
+      "system_cpu_percent": 15.87,
+      "available_ram_mib": 9671.43,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.35515077433106,
+      "commit_used_percent": 47.8125482774885,
+      "parent_cpu_machine_percent": 0.1953125,
+      "parent_private_mib": 14.9765625,
+      "parent_private_percent": 0.04700606088841946
+    },
+    {
+      "time_utc": "2026-10-17T18:45:42.043738+00:00",
+      "system_cpu_percent": 9.28,
+      "available_ram_mib": 9655.68,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.305717170392068,
+      "commit_used_percent": 47.79237755100666,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.9765625,
+      "parent_private_percent": 0.04700606088841946
+    },
+    {
+      "time_utc": "2026-10-17T18:45:42.544580+00:00",
+      "system_cpu_percent": 5.47,
+      "available_ram_mib": 9627.14,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.21614328388951,
+      "commit_used_percent": 47.78225410768379,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.9765625,
+      "parent_private_percent": 0.04700606088841946
+    },
+    {
+      "time_utc": "2026-10-17T18:45:43.031386+00:00",
+      "system_cpu_percent": 9.07,
+      "available_ram_mib": 9672.1,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.35724728878383,
+      "commit_used_percent": 47.783830037228846,
+      "parent_cpu_machine_percent": 0.0,
+      "parent_private_mib": 14.9765625,
+      "parent_private_percent": 0.04700606088841946
+    },
+    {
+      "time_utc": "2026-10-17T18:45:43.531616+00:00",
+      "system_cpu_percent": 15.07,
+      "available_ram_mib": 9645.98,
+      "total_ram_mib": 31860.92,
+      "available_ram_percent": 30.275262539393935,
+      "commit_used_percent": 47.77779580885932,
+      "parent_cpu_machine_percent": 0.1953125,
+      "parent_private_mib": 14.9765625,
+      "parent_private_percent": 0.04700606088841946
+    }
+  ]
+}

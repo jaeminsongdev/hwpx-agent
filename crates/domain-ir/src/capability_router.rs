@@ -413,6 +413,16 @@ impl RouteContext {
             health: by_backend,
         })
     }
+
+    #[must_use]
+    pub const fn target_profile(&self) -> &ExactTargetProfile {
+        &self.target_profile
+    }
+
+    #[must_use]
+    pub const fn now_unix_ms(&self) -> u64 {
+        self.now_unix_ms
+    }
 }
 
 impl fmt::Debug for RouteContext {
@@ -646,6 +656,35 @@ impl CapabilityRouter {
     pub fn new(limits: CapabilityRouterLimits) -> Result<Self, CapabilityRouterError> {
         limits.validate()?;
         Ok(Self { limits })
+    }
+
+    /// Routes a whole immutable plan, sharing each capability's original routing decision.
+    /// The original router depends only on capability and this exact context/catalog snapshot;
+    /// operation IDs are projected separately and never reused across operations. This cache
+    /// lives only in this call, so a later registry, health, policy or time snapshot is rechecked.
+    /// # Errors
+    /// Preserves every original routing failure; no partial route set is returned.
+    pub fn route_plan(
+        &self,
+        plan: &crate::CompiledOperationPlan,
+        context: &RouteContext,
+        catalog: &CapabilityRouteCatalog,
+    ) -> Result<Vec<RouteDecision>, CapabilityRouterError> {
+        let mut by_capability = BTreeMap::<&CapabilityId, RouteDecision>::new();
+        let mut routes = Vec::with_capacity(plan.operations().len());
+        for operation in plan.operations() {
+            let route = if let Some(previous) = by_capability.get(operation.capability_id()) {
+                let mut route = previous.clone();
+                route.operation_id = operation.operation_id().clone();
+                route
+            } else {
+                let route = self.route(operation, context, catalog)?;
+                by_capability.insert(operation.capability_id(), route.clone());
+                route
+            };
+            routes.push(route);
+        }
+        Ok(routes)
     }
 
     /// Selects one exact admissible backend or fails closed.

@@ -460,6 +460,91 @@ fn limits_and_json_are_finite_deterministic_and_redacted() -> TestResult {
     Ok(())
 }
 
+#[test]
+fn streamed_canonical_and_scan_budget_match_legacy_bytes_at_exact_boundaries() -> TestResult {
+    let body = r#"<hp:btn command="PRIVATE-NEVER-EXECUTED"/>"#.repeat(256);
+    let bytes = archive_with(&section(&body), &[])?;
+    let inventory = scan(bytes.clone())?;
+    let legacy = serde_json::to_vec(&inventory)?;
+    assert!(legacy.len() > 8192);
+    let exact = ActiveContentLimits::new(ActiveContentLimitConfig {
+        max_json_bytes: legacy.len(), ..Default::default()
+    })?;
+    assert!(inventory.canonical_json(exact)? == legacy);
+    let (mut reader, graph) = open_graph(bytes.clone())?;
+    let same = ActiveContentInventory::scan(&mut reader, &graph, PackageGraphLimits::default(), exact)?;
+    assert_eq!(same, inventory);
+    for maximum in [1, legacy.len() - 1] {
+        let tight = ActiveContentLimits::new(ActiveContentLimitConfig {
+            max_json_bytes: maximum, ..Default::default()
+        })?;
+        assert_eq!(active_error(inventory.canonical_json(tight)).code(), "active_content_output_limit");
+        let (mut reader, graph) = open_graph(bytes.clone())?;
+        assert_eq!(active_error(ActiveContentInventory::scan(&mut reader, &graph,
+            PackageGraphLimits::default(), tight)).code(), "active_content_output_limit");
+    }
+    Ok(())
+}
+
+#[test]
+fn streamed_inventory_state_hash_matches_exact_legacy_projection() -> TestResult {
+    use serde::Serialize;
+    use sha2::{Digest as _, Sha256};
+    #[derive(Eq, Ord, PartialEq, PartialOrd, Serialize)]
+    struct LegacyControl<'a> {
+        document_part: &'a str,
+        kind: ActiveContentControlKind,
+        disposition: ActiveContentDisposition,
+        relationship_id: Option<&'a str>,
+        resource_path: Option<&'a str>,
+        external: bool,
+        command_present: bool,
+        element_sha256: &'a str,
+    }
+    #[derive(Serialize)]
+    struct LegacyState<'a> {
+        schema_version: &'static str,
+        profile_id: &'static str,
+        resources: &'a [hwpx_package::ActiveContentResource],
+        controls: Vec<LegacyControl<'a>>,
+    }
+    let inputs = [
+        archive_with(&section(""), &[])?,
+        archive_with(&section(r#"<hp:script>PRIVATE</hp:script><hp:video videotype="Web" tag="https://fixture.invalid/private"/><hp:btn command="PRIVATE"/>"#), &[])?,
+        archive_with(&section(r#"<hp:btn/><hp:ole objectType="EMBEDDED" binaryItemIDRef="ole1" hasMoniker="0"/>"#),
+            &[Resource::new("ole1", "../BinData/object.bin", "BinData/object.bin", "application/octet-stream", cfb())])?,
+    ];
+    for bytes in inputs {
+        let inventory = scan(bytes)?;
+        let mut controls: Vec<_> = inventory.controls().iter().map(|control| LegacyControl {
+            document_part: control.document_part(), kind: control.kind(), disposition: control.disposition(),
+            relationship_id: control.relationship_id(), resource_path: control.resource_path(),
+            external: control.external(), command_present: control.command_present(),
+            element_sha256: control.element_sha256(),
+        }).collect();
+        controls.sort_unstable();
+        let legacy = serde_json::to_vec(&LegacyState {
+            schema_version: hwpx_package::ACTIVE_CONTENT_SCHEMA_VERSION,
+            profile_id: hwpx_package::ACTIVE_CONTENT_PROFILE_ID,
+            resources: inventory.resources(), controls,
+        })?;
+        assert_eq!(inventory.state_sha256(), hex::encode(Sha256::digest(&legacy)));
+        assert!(inventory.canonical_json(ActiveContentLimits::default())? == serde_json::to_vec(&inventory)?);
+    }
+    Ok(())
+}
+
+#[test]
+fn streamed_state_digest_preserves_unrelated_xml_shift_semantics() -> TestResult {
+    let controls = r#"<hp:script>PRIVATE</hp:script><hp:btn command="PRIVATE"/>"#;
+    let first = scan(archive_with(&section(controls), &[])?)?;
+    let shifted = scan(archive_with(&section(&format!("<hp:p/>{controls}")), &[])?)?;
+    assert_eq!(first.state_sha256(), shifted.state_sha256());
+    assert_ne!(first.source_graph_sha256(), shifted.source_graph_sha256());
+    assert!(first.verify_preserved(&shifted).is_ok());
+    Ok(())
+}
+
 fn scan(bytes: Vec<u8>) -> Result<ActiveContentInventory, Box<dyn Error>> {
     let (mut reader, graph) = open_graph(bytes)?;
     Ok(ActiveContentInventory::scan(

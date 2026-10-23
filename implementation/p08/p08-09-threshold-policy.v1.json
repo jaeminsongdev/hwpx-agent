@@ -11,6 +11,19 @@
       "payload_sha256_exact": true,
       "dangling_or_ambiguous_references_max": 0
     },
+    "relationship-hancom-2020-canonical-v1": {
+      "applies_when_required_validation": "resource_integrity",
+      "source_path_profile": "BinData/p08-{payload_sha256}.{media_extension}",
+      "target_path_profile": "BinData/image1.{media_extension}",
+      "target_relationship_id": "image1",
+      "single_embedded_resource_required": true,
+      "media_type_exact": true,
+      "expanded_length_exact": true,
+      "payload_sha256_exact": true,
+      "reference_multiplicity_exact": true,
+      "arbitrary_path_remap_allowed": false,
+      "dangling_or_ambiguous_references_max": 0
+    },
     "opaque-binary-exact-v1": {
       "applies_when_required_validation": "binary_preservation",
       "package_path_exact": true,
@@ -35,7 +48,17 @@
       "missing_glyphs_max": 0,
       "object_placement_and_size": "strict",
       "antialias_color_tolerance": "fixture_bound_narrow_required",
-      "calibration_state": "not_run"
+      "calibration_state": "pass",
+      "calibration_profile_id": "hancom-2020-object-affected-region-calibrated-v1",
+      "calibrated_features": {
+        "OBJ-020": {"affected_bbox": [135, 166, 274, 242], "changed_pixels_max": 208, "channel_delta_max": 40, "channel_delta_sum_max": 3272},
+        "OBJ-021": {"affected_bbox": [130, 170, 270, 243], "changed_pixels_max": 2425, "channel_delta_max": 47, "channel_delta_sum_max": 50525},
+        "OBJ-022": {"affected_bbox": [130, 170, 270, 238], "changed_pixels_max": 3100, "channel_delta_max": 51, "channel_delta_sum_max": 52050},
+        "OBJ-023": {"affected_bbox": [130, 170, 270, 238], "changed_pixels_max": 2077, "channel_delta_max": 45, "channel_delta_sum_max": 18070},
+        "OBJ-024": {"affected_bbox": [165, 170, 236, 243], "changed_pixels_max": 1628, "channel_delta_max": 49, "channel_delta_sum_max": 31792},
+        "OBJ-026": {"affected_bbox": [139, 250, 346, 323], "changed_pixels_max": 228, "channel_delta_max": 26, "channel_delta_sum_max": 1881},
+        "OBJ-034": {"affected_bbox": [135, 166, 274, 242], "changed_pixels_max": 224, "channel_delta_max": 57, "channel_delta_sum_max": 5354}
+      }
     },
     "not-applicable": {}
   },

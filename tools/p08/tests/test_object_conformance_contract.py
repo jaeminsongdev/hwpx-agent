@@ -24,16 +24,33 @@ from validate_object_conformance_contract import CONTRACT, validate  # noqa: E40
 
 
 class ObjectConformanceContractTests(unittest.TestCase):
-    def test_complete_validator_passes_without_promoting_target_evidence(self) -> None:
+    def test_complete_validator_passes_with_bounded_p08_target_evidence(self) -> None:
         result = validate(run_upstream=False)
         self.assertEqual(result["state"], "pass")
         self.assertEqual(result["required_rows"], 58)
         self.assertEqual(result["implementation_covered_rows"], 53)
-        self.assertEqual(result["green_rows"], 0)
-        self.assertEqual(result["actual_hangul"], "not_run")
-        self.assertEqual(result["render"], "not_run")
+        self.assertEqual(result["green_rows"], 41)
+        self.assertEqual(result["actual_hangul"], "pass")
+        self.assertEqual(result["render"], "pass")
+        self.assertEqual(result["obj044"], "CAPABILITY_UNAVAILABLE_FOR_TARGET")
+        self.assertEqual(result["automation"], "34_verified_8_unavailable")
+        self.assertEqual(result["p08"], "pass_with_target_unavailable")
 
-    def test_matrix_has_every_exact_catalog_row_and_no_false_green(self) -> None:
+    def test_obj044_negative_qualification_is_required(self) -> None:
+        direct = load_json(DIRECT)
+        tampered = copy.deepcopy(direct)
+        profile = next(
+            item for item in tampered["profiles"]
+            if item["profile_id"] == "object-properties-component-v1"
+        )
+        profile["evidence_files"].remove(
+            "implementation/p08/evidence/"
+            "p08-21-aspect-lock-negative-qualification.current-2020.v1.json"
+        )
+        with self.assertRaisesRegex(ConformanceError, "obj044_negative_qualification_missing"):
+            build_matrix(direct_override=tampered)
+
+    def test_matrix_has_exact_p08_green_set_and_p11_stays_deferred(self) -> None:
         matrix = load_json(MATRIX)
         self.assertEqual(
             [row["feature_id"] for row in matrix["rows"]],
@@ -41,14 +58,32 @@ class ObjectConformanceContractTests(unittest.TestCase):
         )
         self.assertEqual(matrix["summary"]["direct_stage_counts"], {
             "cataloged": 5,
-            "unit_passed": 15,
-            "integration_passed": 38,
-            "oracle_verified": 0,
+            "unit_passed": 10,
+            "integration_passed": 2,
+            "oracle_verified": 41,
         })
-        self.assertTrue(all(row["gate_state"] == "non_green" for row in matrix["rows"]))
-        self.assertTrue(all(row["differential_state"] == "not_run" for row in matrix["rows"]))
+        p08 = [row for row in matrix["rows"] if row["catalog_phase"] == "P08"]
+        p11 = [row for row in matrix["rows"] if row["catalog_phase"] == "P11"]
+        self.assertEqual(sum(row["gate_state"] == "green" for row in p08), 41)
+        self.assertEqual(
+            next(row for row in p08 if row["feature_id"] == "OBJ-044")["phase_acceptance"],
+            "target_unavailable_accepted",
+        )
+        self.assertTrue(all(row["gate_state"] == "non_green" for row in p11))
+        self.assertEqual(matrix["summary"]["differential_counts"], {
+            "exact_match": 34,
+            "not_applicable_fallback_unavailable": 7,
+            "not_applicable_target_capability_unavailable": 1,
+            "not_run": 16,
+        })
+        self.assertEqual(matrix["summary"]["automation_binding_counts"], {
+            "verified_current_target": 34,
+            "candidate_unverified": 9,
+            "denied_by_policy": 2,
+            "unavailable_with_reason": 13,
+        })
 
-    def test_direct_collision_and_false_oracle_promotion_fail_closed(self) -> None:
+    def test_direct_collision_and_oracle_demotion_fail_closed(self) -> None:
         direct = load_json(DIRECT)
         collided = copy.deepcopy(direct)
         collided["profiles"][1]["feature_ids"].append("OBJ-002")
@@ -56,15 +91,20 @@ class ObjectConformanceContractTests(unittest.TestCase):
             build_matrix(direct_override=collided)
 
         promoted = copy.deepcopy(direct)
-        promoted["profiles"][0]["stage"] = "oracle_verified"
+        promoted["profiles"][0]["stage"] = "integration_passed"
         with self.assertRaisesRegex(ConformanceError, "direct_profile_semantic_drift"):
             build_matrix(direct_override=promoted)
+
+        wrong_qualification = copy.deepcopy(direct)
+        wrong_qualification["target_qualification_file"] = "implementation/p08/evidence/other.json"
+        with self.assertRaisesRegex(ConformanceError, "direct_target_qualification"):
+            build_matrix(direct_override=wrong_qualification)
 
     def test_automation_and_threshold_claim_tamper_fail_closed(self) -> None:
         automation = load_json(AUTOMATION)
         promoted = copy.deepcopy(automation)
-        promoted["actual_target_profile"] = True
-        with self.assertRaisesRegex(ConformanceError, "automation_private_or_actual_claim"):
+        promoted["verified_current_target"].append("OBJ-048")
+        with self.assertRaisesRegex(ConformanceError, "automation_feature_set|automation_semantic_drift"):
             build_matrix(automation_override=promoted)
 
         thresholds = load_json(THRESHOLDS)
@@ -78,14 +118,15 @@ class ObjectConformanceContractTests(unittest.TestCase):
     def test_contract_claim_and_matrix_green_tamper_fail_closed(self) -> None:
         contract = load_json(CONTRACT)
         promoted_contract = copy.deepcopy(contract)
-        promoted_contract["claims"]["actual_hangul"] = True
-        with self.assertRaisesRegex(ConformanceError, "claim_promotion"):
+        promoted_contract["claims"]["p08_complete_current_pc"] = False
+        with self.assertRaisesRegex(ConformanceError, "contract_drift"):
             validate(contract_override=promoted_contract, run_upstream=False)
 
         matrix = load_json(MATRIX)
         promoted_matrix = copy.deepcopy(matrix)
-        promoted_matrix["rows"][0]["gate_state"] = "green"
-        promoted_matrix["rows"][0]["blockers"] = []
+        obj044 = next(row for row in promoted_matrix["rows"] if row["feature_id"] == "OBJ-044")
+        obj044["gate_state"] = "green"
+        obj044["blockers"] = []
         with self.assertRaisesRegex(ConformanceError, "matrix_drift"):
             validate(matrix_override=promoted_matrix, run_upstream=False)
 

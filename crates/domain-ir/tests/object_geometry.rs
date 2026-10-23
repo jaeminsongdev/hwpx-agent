@@ -19,20 +19,13 @@ fn limits() -> ObjectGeometryLimits {
 }
 
 fn identity_matrix() -> ObjectAffineMatrix {
-    ObjectAffineMatrix {
-        e1_millionths: 1_000_000,
-        e2_millionths: 0,
-        e3_millionths: 0,
-        e4_millionths: 1_000_000,
-        e5_millionths: 0,
-        e6_millionths: 0,
-    }
+    ObjectAffineMatrix::IDENTITY
 }
 
 fn transform() -> ObjectTransform {
     ObjectTransform {
         translation: ObjectAffineMatrix {
-            e5_millionths: 10_000_000,
+            e3_millionths: 10_000_000,
             e6_millionths: 20_000_000,
             ..identity_matrix()
         },
