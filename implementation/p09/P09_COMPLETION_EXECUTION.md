@@ -1,4 +1,4 @@
-> 현재 기준: [640~643 블록 책갈피 원본 준비](P09_BLOCK_BOOKMARK_SOURCE_PREPARATION_640_643.md). 기존 추적 후보142/메타데이터2752개에서 선택 범위의 블록 후보0개를 확인했고2610개는 미파싱이다. SDK 원문/설치 선언을 확인해1문서8범위·생성/재열기2세션 고정 계획을 검증했다. 계획 제어10개는 재실행 없이 보존하고 게시 round-trip16/16·cleanup=true다. 실제 제품 기준은639이며 Native entry/블록 HWPX/Content 양성은 아직 없다. 다음은 고정 P09 source worker/adapter의 구현·offline 실패 검증이다. P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·현재 사용자 명령 불필요·새 Native0·새 P10 미시작.
+> 현재 기준: [644~645 블록 책갈피 생성 함수](P09_BLOCK_BOOKMARK_SOURCE_PORTS_644_645.md). 현재 설치 선택 선언을 확인하고 고정 seed/8개 Bookmark 생성 호출·선택/매개변수 재확인·실패 latch/no-retry·참조 정리를 구현했다. 22모델은001에서 통과했지만 Unicode 전달 대조가 실패했고 원본을 보존했다.002는 함수/시험 본문을 결속해22개를 재실행하지 않고 UTF-8 전송8개와13fresh/final13·cleanup=true를 확인했다. 실제 owner/COM은 모델이며 worker/host·저장/재열기 연결과 블록 HWPX/Content 양성은 남는다. 실제 제품 기준639·P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·현재 사용자 명령 불필요·새 Native0·새 P10 미시작.
 
 ## 현재 P09 실행 순서 — 경계 원장을 기준으로 사용
 
