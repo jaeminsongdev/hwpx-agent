@@ -35,7 +35,7 @@
 ## 현재 F11에 남은 직접 작업
 
 1. 현재24개 저장본의 source-bound 제품 대상/Field/캐시와 의미 그래프 읽기·그래프 JSON 재열기는 [636](P09_PREPARED_BOOKMARK_PRODUCT_GRAPH_636.md)에서 확인했다. 새 HWPX writer/Native 재평가나 전체 F11까지 닫힌 것은 아니다.
-2. 캡처된 PDF2종/BMP6종의 페이지/글자·geometry·의도하지 않은 변경을 실제로 비교한다. 다른 매체를 무조건 동등하다고 하지 않는다.
+2. [637~638](P09_PREPARED_BOOKMARK_RENDER_637_638.md)에서 PDF2종/BMP6종의 같은 매체 최초/재열기 렌더 보존은 확인했다. content5/6의 `?`를 정상 내용으로 보지 않으며, block-only Content와 보통 책갈피를 구분하는 제품 admission/실제 블록 양성 지원이 남는다. 다른 매체를 무조건 동등하다고 하지 않는다.
 3. 대상 이동·이름 변경·대상 없음/중복/깨짐과 보존, 다른 P09 필수 target family의 실제 ID/순서/인수 근거를 닫는다.
 4. 현재 원본/권한/head/허용 backend/지속 가능한 새 출력의 로컬 제품 경계를 마감한다. P11의 독립 refresh나 전체 운영 SQL/key custody를 P09에 합치지 않는다.
 

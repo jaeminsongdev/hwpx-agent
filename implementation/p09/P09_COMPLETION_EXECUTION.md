@@ -1,4 +1,4 @@
-> 현재 기준: [636 현재24문서 제품/의미 그래프 읽기](P09_PREPARED_BOOKMARK_PRODUCT_GRAPH_636.md). 8조합 initial/saved/reopened24개에서 실제 제품 target/Field/cache·책갈피 graph edge·원본 재구성·graph JSON 재열기와 기존 HYPERLINK 보존을 확인했다.917fresh/final917·실행 파일2/2·cleanup=true·새 Native0.635의 Native-oracle 읽기 근거와630/631 및636 이전 실패는 보존한다. 다음은 PDF2/BMP6 렌더/보존 비교이며 이동/이름 변경·다른 대상·허용 backend/새 출력·전체 F11은 미마감이다. P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·사용자 명령 불필요·새 P10 미시작.
+> 현재 기준: [637~638 렌더 보존/시각 검토](P09_PREPARED_BOOKMARK_RENDER_637_638.md). 636 현재24문서 제품 의미/graph 읽기를 보존하고,8종의 같은 매체 최초/재열기 전체 픽셀 보존·nonblank·41/41 입력·122/122 renderer와31/31 손실 없는 리뷰 입력을 확인했다. 기존 PDF8job/제어8개는 재실행하지 않았다. content5/6의 '?'는 보통 책갈피에 block-only Content를 준 발견용 조합이며 양성 PASS가 아니다. 다음은 제품 대상 범위/표시 옵션 admission과 실제 block-content 지원·양성 검증이다. 이동/이름 변경·다른 대상·허용 backend/새 출력·전체 F11은 남는다. P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·현재 사용자 명령 불필요·새 Native0·새 P10 미시작.
 
 ## 현재 P09 실행 순서 — 경계 원장을 기준으로 사용
 
