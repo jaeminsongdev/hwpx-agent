@@ -36,7 +36,7 @@ render003은16,619bytes / SHA256 `80876d96f410d252977e4035a856f10c8fa1b47ca7c7f5
 
 [한글2020 공식 책갈피 참조 도움말](https://help.hancom.com/hoffice110/ko-KR/Hwp/insert/cross_reference/cross_reference%28bookmark%29.htm)은 책갈피 내용 표시를 **블록 책갈피**에서 제공하며, 보통 책갈피를 고르면 GUI가 책갈피 이름 표시로 바뀐다고 설명한다. 현재 원본과 source-bound 모델은 point/보통 책갈피이고 블록 범위를 자격 검증한 대상이 아니다. raw SDK discovery의 content 명령을 그대로 시험한 두 사례를 block-content 양성 증거로 사용하면 안 된다. 하이퍼링크 옵션이 외관을 같게 둘 수 있다는 공식 설명도 있으며, 외관이 같다는 이유로 탐색 기능의 성공/실패를 판정하지 않는다.
 
-따라서 다음 구현 우선순위는 제품 경로의 대상 종류/범위와 표시 옵션 admission이다. 보통 책갈피에 content를 요청한 경우 요청 의도를 몰래 바꾸지 않고 명확히 거부/진단해야 하며, 실제 블록 책갈피 내용에 대한2개 양성 사례는 별도로 구현·검증해야 한다. SDK의 inert discovery와 소비된8종 캡처는 역사 근거로 남기고 바꾸거나 다시 실행하지 않는다. 정확한 블록 HWPX 원본/범위 근거가 없으면 지원을 선언하지 않는다.
+후속 [639](P09_BOOKMARK_DISPLAY_ADMISSION_639.md)에서4개 제품 준비 경계의 보통 책갈피 표시 admission을 구현·검증했다. Content를 요청하면 의도를 몰래 바꾸지 않고 명확한 typed 오류로 거부한다. 실제 블록 책갈피 내용에 대한2개 양성 사례는 별도로 구현·검증해야 한다. SDK의 inert discovery와 소비된8종 캡처는 역사 근거로 남기고 바꾸거나 다시 실행하지 않는다. 정확한 블록 HWPX 원본/범위 근거가 없으면 지원을 선언하지 않는다.
 
 ## 남은 P09 경계
 

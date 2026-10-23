@@ -47,6 +47,15 @@ impl ReferenceValidationProductOperation {
             }
             _ => E::Source,
         })?;
+        if requests.is_empty()
+            || requests.len() > limits.config().items_per_kind
+            || requests.len() > hwpx_package::PatchLimits::default().config().max_intents
+        {
+            return Err(E::Limit);
+        }
+        for request in requests {
+            hwpx_package::document_import::reference_targets::sdk::authoring_display::PointBookmarkAuthoringDisplay::try_from(request.display)?;
+        }
         let proof = forms
             .reconstruct_source_for_verification(bytes)
             .map_err(|_| E::Source)?;

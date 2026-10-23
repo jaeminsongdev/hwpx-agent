@@ -75,6 +75,8 @@ pub enum SourceBookmarkInsertionError {
     Selection,
     #[error("SOURCE_BOOKMARK_INSERT_TARGET_REJECTED")]
     Target,
+    #[error("SOURCE_BOOKMARK_INSERT_CONTENT_REQUIRES_BLOCK_BOOKMARK")]
+    ContentRequiresBlockBookmark,
     #[error("SOURCE_BOOKMARK_INSERT_PROTECTION_REJECTED")]
     Protection,
     #[error("SOURCE_BOOKMARK_INSERT_SAME_COMMAND_ENVELOPE_UNAVAILABLE")]
@@ -91,6 +93,15 @@ pub enum SourceBookmarkInsertionError {
     Preservation,
 }
 type E = SourceBookmarkInsertionError;
+impl From<crate::document_import::reference_targets::sdk::authoring_display::PointBookmarkDisplayError> for SourceBookmarkInsertionError {
+    fn from(error: crate::document_import::reference_targets::sdk::authoring_display::PointBookmarkDisplayError) -> Self {
+        use crate::document_import::reference_targets::sdk::authoring_display::PointBookmarkDisplayError as DisplayError;
+        match error {
+            DisplayError::ContentRequiresBlockBookmark => Self::ContentRequiresBlockBookmark,
+            DisplayError::Unsupported => Self::Target,
+        }
+    }
+}
 pub mod generated;
 #[derive(Clone, Copy)]
 enum EnvelopePolicy {

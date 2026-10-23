@@ -1,4 +1,4 @@
-> 현재 기준: [637~638 렌더 보존/시각 검토](P09_PREPARED_BOOKMARK_RENDER_637_638.md). 636 현재24문서 제품 의미/graph 읽기를 보존하고,8종의 같은 매체 최초/재열기 전체 픽셀 보존·nonblank·41/41 입력·122/122 renderer와31/31 손실 없는 리뷰 입력을 확인했다. 기존 PDF8job/제어8개는 재실행하지 않았다. content5/6의 '?'는 보통 책갈피에 block-only Content를 준 발견용 조합이며 양성 PASS가 아니다. 다음은 제품 대상 범위/표시 옵션 admission과 실제 block-content 지원·양성 검증이다. 이동/이름 변경·다른 대상·허용 backend/새 출력·전체 F11은 남는다. P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·현재 사용자 명령 불필요·새 Native0·새 P10 미시작.
+> 현재 기준: [639 보통 책갈피 제품 표시 admission](P09_BOOKMARK_DISPLAY_ADMISSION_639.md). 4개 직접/저장소 삽입·편집 준비 경계에서 point-Content를 typed 거부하고 유효6조합은 기존 출력 SHA를 유지한다. 새10+영향 AEAD1 조건 중 통과10개는 보존하고 실패 fixture1개만 수정·실행했다.913fresh/final913·compiled2/2·cleanup=true·새 Native0. 다음은 실제 Native 블록 범위 원본/Content 양성 구현과 필요한 로컬 제품 backend/새 출력·이동/이름 변경·다른 대상이다. 632~638 및 소비된 실패 원본은 유지한다. P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·현재 사용자 명령 불필요·새 P10 미시작.
 
 ## 현재 P09 실행 순서 — 경계 원장을 기준으로 사용
 

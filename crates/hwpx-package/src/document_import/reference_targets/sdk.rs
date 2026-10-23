@@ -1,4 +1,5 @@
 //! Actual immutable source binding for inert SDK discovery, not an action permit.
+pub mod authoring_display;
 use std::{collections::BTreeMap, fmt};
 
 use domain_ir::{LogicalId, ReferenceAuxiliaryLimits, ReferenceTargetKind};

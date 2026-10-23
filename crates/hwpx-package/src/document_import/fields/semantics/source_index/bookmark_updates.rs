@@ -80,6 +80,8 @@ pub enum SourceBookmarkCommandError {
     Selection,
     #[error("SOURCE_BOOKMARK_UPDATE_TARGET_REJECTED")]
     Target,
+    #[error("SOURCE_BOOKMARK_UPDATE_CONTENT_REQUIRES_BLOCK_BOOKMARK")]
+    ContentRequiresBlockBookmark,
     #[error("SOURCE_BOOKMARK_UPDATE_PROTECTION_REJECTED")]
     Protection,
     #[error("SOURCE_BOOKMARK_UPDATE_NO_CHANGE")]
@@ -96,6 +98,15 @@ pub enum SourceBookmarkCommandError {
     Readback,
 }
 type E = SourceBookmarkCommandError;
+impl From<crate::document_import::reference_targets::sdk::authoring_display::PointBookmarkDisplayError> for SourceBookmarkCommandError {
+    fn from(error: crate::document_import::reference_targets::sdk::authoring_display::PointBookmarkDisplayError) -> Self {
+        use crate::document_import::reference_targets::sdk::authoring_display::PointBookmarkDisplayError as DisplayError;
+        match error {
+            DisplayError::ContentRequiresBlockBookmark => Self::ContentRequiresBlockBookmark,
+            DisplayError::Unsupported => Self::Target,
+        }
+    }
+}
 struct Leaf {
     element: usize,
     value: String,

@@ -98,6 +98,8 @@ impl StoredImportedDocumentForms {
         }
         let (fresh, proof) = self.fresh_source_reconstructed(provider, now)?;
         let fields = ImportedDocumentFields::import(&self.imported).map_err(|_| E::Fields)?;
+        hwpx_package::document_import::reference_targets::sdk::authoring_display::PointBookmarkAuthoringDisplay::try_from(request.display)
+            .map_err(SourceBookmarkInsertionError::from)?;
         let output = fields.create_bookmark_reference(&proof, request, limits, writer)?;
         let r = output.receipt();
         if r.source_package_sha256 != *fresh.digest.as_bytes()

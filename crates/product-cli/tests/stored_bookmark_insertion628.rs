@@ -19,6 +19,9 @@ use serde_json::{Value, json};
 use sha2::{Digest as _, Sha256};
 use std::{error::Error, fs::OpenOptions, io::Write, path::Path};
 include!("support/stored_source_fixture.rs");
+#[cfg(test)]
+#[path = "support/bookmark_display_admission639.rs"]
+mod admission639;
 #[path = "../../hwpx-package/tests/support/document_import_field_fixture.rs"]
 #[allow(dead_code)]
 mod base;
@@ -256,7 +259,7 @@ fn aead_failure_and_restoration_never_revive_denied_candidate() -> Result {
     let c = prepare(
         p.import_actual_forms(s.head, 4)?,
         &p,
-        Display::Content,
+        Display::BookmarkName,
         true,
     )?;
     s.blobs.tamper.store(true, Ordering::SeqCst);
@@ -378,6 +381,13 @@ fn regular_ancestors(path: &Path) -> Result {
 /// Only fixed private evidence copies; not result ingestion or a user revision.
 pub fn fixed_output_batch(generation: u16) -> Result<Value> {
     require((1..=999).contains(&generation))?;
+    let expected: Value = serde_json::from_str(EXPECTED)?;
+    if expected["cases"]
+        .as_array()
+        .is_some_and(|cases| cases.iter().any(|c| c["display"] == "content"))
+    {
+        return Err("P628_CONSUMED_POINT_CONTENT_DISCOVERY_BATCH_RETIRED".into());
+    }
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let relative = format!(
         "implementation/p09/evidence/private/p09-361-bookmark-insertion628-prepared-{generation:03}"
@@ -387,7 +397,6 @@ pub fn fixed_output_batch(generation: u16) -> Result<Value> {
     require(!directory.exists())?;
     std::fs::create_dir(&directory)?;
     regular_ancestors(&directory)?;
-    let expected: Value = serde_json::from_str(EXPECTED)?;
     let bytes = read_pin(&expected["source"])?;
     let mut rows = Vec::new();
     let cases = expected["cases"].as_array().ok_or("cases")?;

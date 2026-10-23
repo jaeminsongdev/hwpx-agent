@@ -140,6 +140,16 @@ impl StoredImportedDocumentForms {
         let (fresh, proof) = self.fresh_source_reconstructed(provider, now)?;
         let fields = ImportedDocumentFields::import(&self.imported).map_err(|_| E::Meanings)?;
         let index = SourceFieldMeaningIndex::import(&fields, limits).map_err(|_| E::Meanings)?;
+        if requests.is_empty()
+            || requests.len() > limits.config().items_per_kind
+            || requests.len() > hwpx_package::PatchLimits::default().config().max_intents
+        {
+            return Err(E::Output(SourceBookmarkCommandError::Limit));
+        }
+        for request in requests {
+            hwpx_package::document_import::reference_targets::sdk::authoring_display::PointBookmarkAuthoringDisplay::try_from(request.display)
+                .map_err(SourceBookmarkCommandError::from)?;
+        }
         let output = index.lower_bookmark_command_changes(&proof, requests, writer)?;
         let anchors = compiled::selected_anchors(&fields, output.receipt())?;
         if output.receipt().source_package_sha256 != *fresh.digest.as_bytes()
