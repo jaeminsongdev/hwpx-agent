@@ -1,4 +1,4 @@
-> 현재 기준: [639 보통 책갈피 제품 표시 admission](P09_BOOKMARK_DISPLAY_ADMISSION_639.md). 4개 직접/저장소 삽입·편집 준비 경계에서 point-Content를 typed 거부하고 유효6조합은 기존 출력 SHA를 유지한다. 새10+영향 AEAD1 조건 중 통과10개는 보존하고 실패 fixture1개만 수정·실행했다.913fresh/final913·compiled2/2·cleanup=true·새 Native0. 다음은 실제 Native 블록 범위 원본/Content 양성 구현과 필요한 로컬 제품 backend/새 출력·이동/이름 변경·다른 대상이다. 632~638 및 소비된 실패 원본은 유지한다. P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·현재 사용자 명령 불필요·새 P10 미시작.
+> 현재 기준: [640~643 블록 책갈피 원본 준비](P09_BLOCK_BOOKMARK_SOURCE_PREPARATION_640_643.md). 기존 추적 후보142/메타데이터2752개에서 선택 범위의 블록 후보0개를 확인했고2610개는 미파싱이다. SDK 원문/설치 선언을 확인해1문서8범위·생성/재열기2세션 고정 계획을 검증했다. 계획 제어10개는 재실행 없이 보존하고 게시 round-trip16/16·cleanup=true다. 실제 제품 기준은639이며 Native entry/블록 HWPX/Content 양성은 아직 없다. 다음은 고정 P09 source worker/adapter의 구현·offline 실패 검증이다. P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·현재 사용자 명령 불필요·새 Native0·새 P10 미시작.
 
 ## 현재 P09 실행 순서 — 경계 원장을 기준으로 사용
 
