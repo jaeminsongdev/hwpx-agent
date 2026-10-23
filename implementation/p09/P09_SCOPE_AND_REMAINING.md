@@ -1,6 +1,6 @@
 # P09 경계와 잔여 작업 — 2026-10-23
 
-> 현재 기준: [646~647 문서 검사·고정 호스트](P09_BLOCK_BOOKMARK_HOST_AND_DOCUMENT_646_647.md). getter RCW/IUnknown 정리를 보완한 미저장 문서 guard와1문서8범위2세션·54요청 host adapter를 구현했다. 새 guard13+host12 모델 통과·26fresh/final26·cleanup=true이며 기존645의22모델은 재실행하지 않았다. 실제 COM/Native는 미검증이고 PowerShell worker/channel·저장/독립 재열기/현재 진단·실행 자격 연결과 실제 블록 HWPX/Content 양성은 남는다. 실제 제품 기준639·P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·현재 사용자 명령 불필요·새 Native0·새 P10 미시작.
+> 현재 기준: [648~649 고정 worker·채널](P09_BLOCK_BOOKMARK_WORKER_648_649.md). 저장/독립 재열기 코드와 진단을 연결했다. PS7/대상5.1x86의 JSON Int64/Int32 차이를 관측해 시험 shell을 고쳤고 타입 보호는 유지했다. 새 대상17+명령진단6모델·실제 제한 worker READY 거부1/case0·63fresh/final63·cleanup=true다. 기존645/647 시험은 재실행하지 않았다. 현재 lifecycle/live handoff/전체 입력/producer cleanup/결과 게시 controller entry와 실제 블록 HWPX/Content 양성은 남는다. 실제 제품 기준639·P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·현재 사용자 명령 불필요·새 Native0·새 P10 미시작.
 
 P09는 현재 선언된 개발 PC/한글 대상의 **검색·필드·양식·주석·참조 기능 구현과 필요한 실제 제품/한글 검증**을 닫는다. 전체 운영 서비스·GA까지 P09 하나의 선행 조건으로 묶지 않는다. 전체 목표 P09~P20은 유지하며 이 문서에서 후속 단계로 분류한 작업은 삭제하거나 완료 처리한 것이 아니다.
 
