@@ -1,6 +1,6 @@
 # P09 경계와 잔여 작업 — 2026-10-23
 
-> 현재 기준은 [632~635 복구·책갈피8종 저장 후 필드 읽기](P09_BOOKMARK_CAPTURE_RECOVERY_AND_READBACK_632_635.md)다. 631은 캡처6개/전체298/298/cleanup=true 뒤 게시 압축 한도에서 실패했다. 632가 원875415bytes를83,547bytes의 자기완결 영수증에 무손실 복구하고8종48파일·354fresh/final354를 결속했다. 635는 현재24저장본과 기존16Native oracle의 값/Command/전체 인수 및 재열기 보존 일치·읽기12조건·60fresh/final60·cleanup=true로 제한된 field-readback profile을 확인했다. 새 Native 실행0·현재 사용자 명령 불필요·목표 API ACTIVE 확인·캐시 정리 후 P09 제품 대상/DocumentGraph 검증 진행다. 렌더/제품 DocumentGraph·대상 이동/이름 변경/다른 대상/전체 F11은 남으며31미마감묶음/65기능·P09/A12/A13 OPEN은 유지한다. 소비630/631 명령을 재실행하지 않는다.
+> 현재 기준은 [636 현재24문서 제품/의미 그래프 읽기](P09_PREPARED_BOOKMARK_PRODUCT_GRAPH_636.md)다.632 원875415bytes 복구와635 Native-oracle 값/인수·재열기 대조를 보존하고,636에서 실제 제품 대상/Field/캐시·의미 graph edge·원본 재구성·graph JSON 재열기 및 기존 HYPERLINK 보존을 확인했다.917fresh/final917·실행 파일2/2·cleanup=true·새 Native0·목표 ACTIVE·현재 사용자 명령 불필요. 다음은 확보된 PDF2/BMP6 렌더/보존 비교다. 이동/이름 변경·다른 대상·허용 backend/새 출력 및 전체 F11은 남는다.31미마감묶음/65기능·P09/A12/A13 OPEN은 유지하며 소비된 Native 명령을 재실행하지 않는다.
 
 P09는 현재 선언된 개발 PC/한글 대상의 **검색·필드·양식·주석·참조 기능 구현과 필요한 실제 제품/한글 검증**을 닫는다. 전체 운영 서비스·GA까지 P09 하나의 선행 조건으로 묶지 않는다. 전체 목표 P09~P20은 유지하며 이 문서에서 후속 단계로 분류한 작업은 삭제하거나 완료 처리한 것이 아니다.
 

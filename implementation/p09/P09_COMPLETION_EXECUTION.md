@@ -1,4 +1,4 @@
-> 현재 2026-10-23 / [P09 경계·31묶음](P09_SCOPE_AND_REMAINING.md)이 기준이다. [632~635 캡처 복구·책갈피8종 저장 후 필드 읽기](P09_BOOKMARK_CAPTURE_RECOVERY_AND_READBACK_632_635.md): 631 캡처/정리/최종298/298 뒤 원 게시 압축 실패를 보존하고,632가 원875415bytes를 자기완결83547bytes로 무손실 복구·48파일/354fresh/final354·cleanup=true로 결속했다.635는 현재24저장본/기존16Native oracle의 표시·Command·전체 인수와 재열기 보존/읽기12조건·60fresh/final60을 확인했다. 새Native0·현재 외부 명령 불필요·목표 API ACTIVE 확인·캐시 정리 후 P09 제품 대상/DocumentGraph 검증 진행. 제품 대상/DocumentGraph·렌더·이동/이름 변경·다른 대상/전체F11은 미마감이며 P09/A12/A13 OPEN·31묶음/65기능·공식158/249/91대기/next165·P10 새 구현 보류. 아래 역사/실패를 보존하고 소비630/631 명령을 재실행하지 않는다.
+> 현재 기준: [636 현재24문서 제품/의미 그래프 읽기](P09_PREPARED_BOOKMARK_PRODUCT_GRAPH_636.md). 8조합 initial/saved/reopened24개에서 실제 제품 target/Field/cache·책갈피 graph edge·원본 재구성·graph JSON 재열기와 기존 HYPERLINK 보존을 확인했다.917fresh/final917·실행 파일2/2·cleanup=true·새 Native0.635의 Native-oracle 읽기 근거와630/631 및636 이전 실패는 보존한다. 다음은 PDF2/BMP6 렌더/보존 비교이며 이동/이름 변경·다른 대상·허용 backend/새 출력·전체 F11은 미마감이다. P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·사용자 명령 불필요·새 P10 미시작.
 
 ## 현재 P09 실행 순서 — 경계 원장을 기준으로 사용
 
