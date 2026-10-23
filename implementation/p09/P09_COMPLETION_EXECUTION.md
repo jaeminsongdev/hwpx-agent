@@ -1,4 +1,4 @@
-> 현재 기준: [644~645 블록 책갈피 생성 함수](P09_BLOCK_BOOKMARK_SOURCE_PORTS_644_645.md). 현재 설치 선택 선언을 확인하고 고정 seed/8개 Bookmark 생성 호출·선택/매개변수 재확인·실패 latch/no-retry·참조 정리를 구현했다. 22모델은001에서 통과했지만 Unicode 전달 대조가 실패했고 원본을 보존했다.002는 함수/시험 본문을 결속해22개를 재실행하지 않고 UTF-8 전송8개와13fresh/final13·cleanup=true를 확인했다. 실제 owner/COM은 모델이며 worker/host·저장/재열기 연결과 블록 HWPX/Content 양성은 남는다. 실제 제품 기준639·P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·현재 사용자 명령 불필요·새 Native0·새 P10 미시작.
+> 현재 기준: [646~647 문서 검사·고정 호스트](P09_BLOCK_BOOKMARK_HOST_AND_DOCUMENT_646_647.md). getter RCW/IUnknown 정리를 보완한 미저장 문서 guard와1문서8범위2세션·54요청 host adapter를 구현했다. 새 guard13+host12 모델 통과·26fresh/final26·cleanup=true이며 기존645의22모델은 재실행하지 않았다. 실제 COM/Native는 미검증이고 PowerShell worker/channel·저장/독립 재열기/현재 진단·실행 자격 연결과 실제 블록 HWPX/Content 양성은 남는다. 실제 제품 기준639·P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·현재 사용자 명령 불필요·새 Native0·새 P10 미시작.
 
 ## 현재 P09 실행 순서 — 경계 원장을 기준으로 사용
 
