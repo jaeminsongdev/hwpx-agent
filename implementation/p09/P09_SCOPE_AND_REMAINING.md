@@ -1,6 +1,6 @@
 # P09 경계와 잔여 작업 — 2026-10-23
 
-> 현재 기준: [648~649 고정 worker·채널](P09_BLOCK_BOOKMARK_WORKER_648_649.md). 저장/독립 재열기 코드와 진단을 연결했다. PS7/대상5.1x86의 JSON Int64/Int32 차이를 관측해 시험 shell을 고쳤고 타입 보호는 유지했다. 새 대상17+명령진단6모델·실제 제한 worker READY 거부1/case0·63fresh/final63·cleanup=true다. 기존645/647 시험은 재실행하지 않았다. 현재 lifecycle/live handoff/전체 입력/producer cleanup/결과 게시 controller entry와 실제 블록 HWPX/Content 양성은 남는다. 실제 제품 기준639·P09/A12/A13 OPEN·31묶음/65기능·목표 ACTIVE·현재 사용자 명령 불필요·새 Native0·새 P10 미시작.
+> 현재 기준: [650~651 블록 원본 일회용 entry](P09_BLOCK_BOOKMARK_SOURCE_ENTRY_650_651.md). 현재 lifecycle/live handoff/전체입력/producer cleanup/결과 게시를 연결했고15고유모델은11보존+영향4실행으로 확인했다. 코드279/279·현재 사전검사281/281+image1/shell1/Python2·cleanup=true다. Hwp0이며 Codex parent lifecycle만 부적격이므로 보호를 우회하지 않는다. 외부 PowerShell1회 명령을 안내하고 사용자 조건부 지시에 따라 목표 PAUSED로 결과를 기다린다. claim/실제 Native/블록 HWPX/Content 양성0·실제 제품 기준639·P09/A12/A13 OPEN·31묶음/65기능·새 P10 미시작.
 
 P09는 현재 선언된 개발 PC/한글 대상의 **검색·필드·양식·주석·참조 기능 구현과 필요한 실제 제품/한글 검증**을 닫는다. 전체 운영 서비스·GA까지 P09 하나의 선행 조건으로 묶지 않는다. 전체 목표 P09~P20은 유지하며 이 문서에서 후속 단계로 분류한 작업은 삭제하거나 완료 처리한 것이 아니다.
 
