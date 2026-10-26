@@ -16,6 +16,7 @@ const HWPML_2011_HEAD_NAMESPACE: &str = "http://www.hancom.co.kr/hwpml/2011/head
 const HWPML_2011_CORE_NAMESPACE: &str = "http://www.hancom.co.kr/hwpml/2011/core";
 const HWPML_2011_PARAGRAPH_NAMESPACE: &str = "http://www.hancom.co.kr/hwpml/2011/paragraph";
 const HEADER_PART: &str = "Contents/header.xml";
+mod block_bookmark_scalar679;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct IdIndexLimitConfig {
@@ -110,6 +111,7 @@ enum ProfileKind {
     Hwpml2011TextStyleV9,
     Hwpml2011FontBinaryV10,
     Hwpml2011ScopedFontV11,
+    Hancom2020BlockBookmarkV12,
 }
 
 impl IdRuleProfile {
@@ -198,6 +200,13 @@ impl IdRuleProfile {
     pub const fn hwpml_2011_scoped_font_v11() -> Self {
         Self(ProfileKind::Hwpml2011ScopedFontV11)
     }
+    /// Exact Native670 BOOKMARK Prop2 profile over the scoped-font union.
+    /// Block fieldid is a paired scalar, not a globally unique field instance.
+    /// Every excluded scalar is independently bound to one same-paragraph pair.
+    #[must_use]
+    pub const fn hancom_2020_block_bookmark_v12() -> Self {
+        Self(ProfileKind::Hancom2020BlockBookmarkV12)
+    }
 
     #[must_use]
     pub const fn version(self) -> &'static str {
@@ -213,6 +222,7 @@ impl IdRuleProfile {
             ProfileKind::Hwpml2011TextStyleV9 => "hwpml-2011-text-style-static/v9",
             ProfileKind::Hwpml2011FontBinaryV10 => "hwpml-2011-font-binary-static/v10",
             ProfileKind::Hwpml2011ScopedFontV11 => "hwpml-2011-scoped-font-static/v11",
+            ProfileKind::Hancom2020BlockBookmarkV12 => "hancom-2020-block-bookmark-prop2/v12",
         }
     }
 
@@ -229,6 +239,7 @@ impl IdRuleProfile {
                 | ProfileKind::Hwpml2011TextStyleV9
                 | ProfileKind::Hwpml2011FontBinaryV10
                 | ProfileKind::Hwpml2011ScopedFontV11
+                | ProfileKind::Hancom2020BlockBookmarkV12
         )
     }
 
@@ -244,6 +255,7 @@ impl IdRuleProfile {
                 | ProfileKind::Hwpml2011TextStyleV9
                 | ProfileKind::Hwpml2011FontBinaryV10
                 | ProfileKind::Hwpml2011ScopedFontV11
+                | ProfileKind::Hancom2020BlockBookmarkV12
         )
     }
 
@@ -258,6 +270,7 @@ impl IdRuleProfile {
                 | ProfileKind::Hwpml2011TextStyleV9
                 | ProfileKind::Hwpml2011FontBinaryV10
                 | ProfileKind::Hwpml2011ScopedFontV11
+                | ProfileKind::Hancom2020BlockBookmarkV12
         )
     }
 
@@ -271,6 +284,7 @@ impl IdRuleProfile {
                 | ProfileKind::Hwpml2011TextStyleV9
                 | ProfileKind::Hwpml2011FontBinaryV10
                 | ProfileKind::Hwpml2011ScopedFontV11
+                | ProfileKind::Hancom2020BlockBookmarkV12
         )
     }
 
@@ -282,6 +296,7 @@ impl IdRuleProfile {
                 | ProfileKind::Hwpml2011TextStyleV9
                 | ProfileKind::Hwpml2011FontBinaryV10
                 | ProfileKind::Hwpml2011ScopedFontV11
+                | ProfileKind::Hancom2020BlockBookmarkV12
         )
     }
 
@@ -311,7 +326,7 @@ impl IdRuleProfile {
             ProfileKind::Hwpml2011FontBinaryV10 => {
                 PreservationRuleProfile::Hangul2020PreviewTextV2
             }
-            ProfileKind::Hwpml2011ScopedFontV11 => {
+            ProfileKind::Hwpml2011ScopedFontV11 | ProfileKind::Hancom2020BlockBookmarkV12 => {
                 PreservationRuleProfile::Hangul2020PreviewTextV2
             }
         }
@@ -744,6 +759,8 @@ pub enum IdIndexError {
     AmbiguousRule,
     #[error("ID index allocation failed")]
     AllocationFailed,
+    #[error("observed block bookmark scalar profile or pairing was rejected")]
+    BlockBookmarkProfileRejected,
     #[error("ID/reference validation failed with {} issue(s)", .0.issues.len())]
     Validation(IdValidationReport),
 }
@@ -761,6 +778,7 @@ impl IdIndexError {
             Self::IdentityMismatch => "id_index_identity_mismatch",
             Self::AmbiguousRule => "id_index_ambiguous_rule",
             Self::AllocationFailed => "id_index_allocation_failed",
+            Self::BlockBookmarkProfileRejected => "id_index_block_bookmark_profile_rejected",
             Self::Validation(_) => "id_index_validation_failed",
         }
     }
@@ -1534,9 +1552,13 @@ impl<'a> IndexBuilder<'a> {
         part: &PartPreservationRecord,
         document: &PreservingXmlDocument,
     ) -> Result<(), IdIndexError> {
+        let scalars=if self.profile.0==ProfileKind::Hancom2020BlockBookmarkV12 && part.role()==PartRole::SpineDocument {
+            block_bookmark_scalar679::validated_scalars(document,self.limits)?
+        }else{BTreeSet::new()};
         for element_index in 0..document.elements().len() {
             let attribute_count = document.elements()[element_index].attributes().len();
             for attribute_index in 0..attribute_count {
+                if scalars.contains(&(element_index,attribute_index)){continue;}
                 self.scan_attribute(part, document, element_index, attribute_index)?;
             }
         }
@@ -1990,8 +2012,8 @@ fn matching_reference_rule(
         .chain(table)
         .chain(formula)
         .chain(picture)
-        .chain(if matches!(profile.0, ProfileKind::Hwpml2011TextStyleV9 | ProfileKind::Hwpml2011ScopedFontV11) { TEXT_STYLE_REFERENCE_RULES } else { &[] })
-        .chain(if matches!(profile.0, ProfileKind::Hwpml2011FontBinaryV10 | ProfileKind::Hwpml2011ScopedFontV11) { FONT_BINARY_REFERENCE_RULES } else { &[] })
+        .chain(if matches!(profile.0, ProfileKind::Hwpml2011TextStyleV9 | ProfileKind::Hwpml2011ScopedFontV11 | ProfileKind::Hancom2020BlockBookmarkV12) { TEXT_STYLE_REFERENCE_RULES } else { &[] })
+        .chain(if matches!(profile.0, ProfileKind::Hwpml2011FontBinaryV10 | ProfileKind::Hwpml2011ScopedFontV11 | ProfileKind::Hancom2020BlockBookmarkV12) { FONT_BINARY_REFERENCE_RULES } else { &[] })
     {
         if part_matches(rule.part, graph, part)
             && rule_namespace_matches(element_namespace, rule.namespace)

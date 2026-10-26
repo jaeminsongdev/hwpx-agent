@@ -7,6 +7,7 @@ pub mod search_preview;
 pub mod compiled_search;
 pub mod https_targets;
 pub mod bookmark_commands;
+pub mod bookmark_insertion710;
 mod request;
 use super::FormProductRequestError;
 use super::stored::{
@@ -24,6 +25,7 @@ use thiserror::Error;
 /// All variants preserve their original authentication and route guards.
 #[derive(Debug)]
 pub enum PreparedStoredProductOperation {
+    BookmarkInsertion(Box<bookmark_insertion710::PreparedBookmarkInsertionProduct>),
     BookmarkCommands(Box<bookmark_commands::PreparedBookmarkCommandProduct>),
     HttpsTargets(Box<https_targets::PreparedHttpsTargetProduct>),
     Form(Box<PreparedStoredProductForm>),
@@ -52,6 +54,10 @@ impl PreparedStoredProductOperation {
         V: RevisionRepository,
     {
         match self {
+            Self::BookmarkInsertion(product) => {
+                if bindings.is_some() { return Err(StoredProductOperationError::Bindings); }
+                Ok(product.with_verified_bytes(provider, now, consume)?)
+            }
             Self::BookmarkCommands(product) => {
                 if bindings.is_some() { return Err(StoredProductOperationError::Bindings); }
                 Ok(product.with_verified_bytes(provider, now, consume)?)
@@ -99,6 +105,10 @@ impl PreparedStoredProductOperation {
         V: RevisionRepository,
     {
         match self {
+            Self::BookmarkInsertion(product) => {
+                if bindings.is_some() { return Err(StoredProductOperationError::Bindings); }
+                Ok(product.require_current_product_route(provider, now)?)
+            }
             Self::BookmarkCommands(product) => {
                 if bindings.is_some() { return Err(StoredProductOperationError::Bindings); }
                 Ok(product.require_current_product_route(provider, now)?)
@@ -193,6 +203,12 @@ impl StoredProductRequest {
         limits:search_mutations::SearchMutationLimits,now:u64,kind:request::Kind)->Result<PreparedStoredProductOperation,StoredProductOperationError>
     where R:ArtifactMetadataRepository,B:EncryptedBlobStore,S:ArtifactScanner,V:RevisionRepository{
         match kind {
+            request::Kind::BookmarkInsertion(request) => {
+                if bindings.is_some() { return Err(StoredProductOperationError::Bindings); }
+                Ok(PreparedStoredProductOperation::BookmarkInsertion(Box::new(bookmark_insertion710::prepare(
+                    provider, request, raw, bookmark_insertion710::BookmarkInsertionProductLimits::standard()?, now,
+                )?)))
+            }
             request::Kind::BookmarkCommands(request) => {
                 if bindings.is_some() { return Err(StoredProductOperationError::Bindings); }
                 Ok(PreparedStoredProductOperation::BookmarkCommands(Box::new(bookmark_commands::prepare(
@@ -243,6 +259,8 @@ impl StoredProductRequest {
 }
 #[derive(Debug, Error)]
 pub enum StoredProductOperationError {
+    #[error("product_operation_bookmark_insertion_rejected")]
+    BookmarkInsertion(#[from]bookmark_insertion710::BookmarkInsertionProductError),
     #[error("product_operation_bookmark_commands_rejected")]
     BookmarkCommands(#[from]bookmark_commands::BookmarkCommandProductError),
     #[error("product_operation_https_targets_rejected")]

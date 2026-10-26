@@ -146,10 +146,6 @@ impl StoredImportedDocumentForms {
         {
             return Err(E::Output(SourceBookmarkCommandError::Limit));
         }
-        for request in requests {
-            hwpx_package::document_import::reference_targets::sdk::authoring_display::PointBookmarkAuthoringDisplay::try_from(request.display)
-                .map_err(SourceBookmarkCommandError::from)?;
-        }
         let output = index.lower_bookmark_command_changes(&proof, requests, writer)?;
         let anchors = compiled::selected_anchors(&fields, output.receipt())?;
         if output.receipt().source_package_sha256 != *fresh.digest.as_bytes()

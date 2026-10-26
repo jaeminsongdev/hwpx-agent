@@ -14,6 +14,8 @@ const MAX_RELATIVE_PATH_BYTES: usize = 1_024;
 const MAX_PATH_COMPONENTS: usize = 32;
 const MAX_COMMIT_MESSAGE_BYTES: usize = 128;
 const COPY_BUFFER_BYTES: usize = 64 * 1024;
+mod generated716;
+pub use generated716::GeneratedPreviewReceipt;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MaterializeSlot {

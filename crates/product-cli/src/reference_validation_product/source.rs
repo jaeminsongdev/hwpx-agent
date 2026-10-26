@@ -29,6 +29,7 @@ use hwpx_package::document_import::{
     reference_targets::caption_object_state::{CaptionObjectStateReceipt, CaptionObjectStateProjection},
     reference_targets::caption_frames::{CaptionFrameImportReceipt, CaptionSourceFrame},
     reference_targets::headings::{ImportedReferenceHeadingTargets,ReferenceHeadingTargetReceipt},
+    reference_targets::headings::declarations702::SourceHeadingDeclarationInventory,
     structure::{ImportedDocumentStructure, ImportedSectionFlowObservation, StructureImportReceipt},
 };
 use serde::Serialize;
@@ -42,6 +43,10 @@ use hwpx_package::document_import::fields::cached_source::{SourceFieldCachedInli
 
 pub const REFERENCE_SOURCE_RESULT_SCHEMA: &str =
     "hwpx-agent.product.reference-source-assessment/v15";
+pub const REFERENCE_SOURCE_CONDITIONAL_HEADING_SCHEMA: &str =
+    "hwpx-agent.product.reference-source-assessment/v16";
+pub const REFERENCE_SOURCE_BLOCK_MEANING_SCHEMA:&str="hwpx-agent.product.reference-source-assessment/v17";
+pub const REFERENCE_SOURCE_CONDITIONAL_BLOCK_MEANING_SCHEMA:&str="hwpx-agent.product.reference-source-assessment/v18";
 pub const REFERENCE_SOURCE_MAX_ARCHIVE_BYTES: u64 = 32 * 1024 * 1024;
 pub const REFERENCE_SOURCE_INCOMPLETE_EXIT: u8 = 3;
 
@@ -58,6 +63,7 @@ pub enum UnresolvedReferenceStage {
     ReferenceEdgeSemantics,
     CompleteAuxiliaryState,
     DocumentFlow,
+    ConditionalHeadingDeclarations,
 }
 
 /// Minimal source-backed selectors for typed note-kind requests. Never exposes
@@ -150,6 +156,10 @@ pub struct ReferenceSourceAssessment {
     object_target_import: ReferenceObjectTargetImportReceipt,
     // None is an unobserved header declaration model, not a confirmed empty heading inventory.
     heading_target_import: Option<ReferenceHeadingTargetReceipt>,
+    // Original alternatives, never a selected branch or an empty-target proof.
+    // Omitted for legacy v15 to preserve its exact serialized shape.
+    #[serde(skip_serializing_if="Option::is_none")]
+    conditional_heading_declarations: Option<SourceHeadingDeclarationInventory>,
     caption_import: ReferenceCaptionImportReceipt,
     caption_envelopes: Vec<ImportedReferenceCaptionEnvelope>,
     numbering_import: CaptionNumberingImportReceipt,
@@ -203,6 +213,8 @@ impl ReferenceSourceAssessment {
     }
     #[must_use]
     pub const fn heading_target_receipt(&self) -> Option<&ReferenceHeadingTargetReceipt> { self.heading_target_import.as_ref() }
+    #[must_use]
+    pub const fn conditional_heading_declarations(&self) -> Option<&SourceHeadingDeclarationInventory> { self.conditional_heading_declarations.as_ref() }
     #[must_use]
     pub const fn caption_receipt(&self) -> &ReferenceCaptionImportReceipt { &self.caption_import }
     #[must_use]
@@ -385,11 +397,15 @@ impl ReferenceValidationProductOperation {
         let mut targets = imported.targets().to_vec();
         targets.try_reserve(objects.targets().len()).map_err(|_| ReferenceSourceError::InputLimit)?;
         targets.extend_from_slice(objects.targets());
-        let headings=ImportedReferenceHeadingTargets::for_partial_source_assessment(structure,reference_limits).map_err(|error|match error{
+        let heading_error=|error|match error{
             ReferenceTargetImportError::Limit=>ReferenceSourceError::InputLimit,
             ReferenceTargetImportError::Coverage=>ReferenceSourceError::Coverage,
             _=>ReferenceSourceError::Binding,
-        })?;
+        };
+        let conditional_heading_declarations=SourceHeadingDeclarationInventory::observe_conditional(structure,reference_limits).map_err(heading_error)?;
+        let headings=if conditional_heading_declarations.is_some(){None}else{
+            ImportedReferenceHeadingTargets::for_partial_source_assessment(structure,reference_limits).map_err(heading_error)?
+        };
         if let Some(heading)=&headings{
             targets.try_reserve(heading.targets().len()).map_err(|_|ReferenceSourceError::InputLimit)?;
             targets.extend_from_slice(heading.targets());
@@ -422,14 +438,21 @@ impl ReferenceValidationProductOperation {
                 | hwpx_package::ActiveContentError::OutputLimit) => ReferenceSourceError::InputLimit,
             _ => ReferenceSourceError::ActiveSecurity,
         })?;
+        let mut unresolved=vec![UnresolvedReferenceStage::OtherTargetFamilies,
+            UnresolvedReferenceStage::ReferenceEdgeSemantics,UnresolvedReferenceStage::CompleteAuxiliaryState,
+            UnresolvedReferenceStage::DocumentFlow];
+        if conditional_heading_declarations.is_some(){unresolved.push(UnresolvedReferenceStage::ConditionalHeadingDeclarations);}
         Ok(ReferenceSourceAssessment {
-            schema_version: REFERENCE_SOURCE_RESULT_SCHEMA,
+            schema_version: match(conditional_heading_declarations.is_some(),field_meanings.receipt().block_bookmarks>0){
+                (false,false)=>REFERENCE_SOURCE_RESULT_SCHEMA,(true,false)=>REFERENCE_SOURCE_CONDITIONAL_HEADING_SCHEMA,
+                (false,true)=>REFERENCE_SOURCE_BLOCK_MEANING_SCHEMA,(true,true)=>REFERENCE_SOURCE_CONDITIONAL_BLOCK_MEANING_SCHEMA},
             status: ReferenceSourceStatus::Incomplete,
             source: source_receipt,
             structure: structure.receipt().clone(),
             target_import: imported.receipt().clone(),
             object_target_import: objects.receipt().clone(),
             heading_target_import: headings.as_ref().map(|h|h.receipt().clone()),
+            conditional_heading_declarations,
             caption_import: captions.receipt().clone(),
             caption_envelopes: captions.envelopes().to_vec(),
             numbering_import: numbering.receipt().clone(),
@@ -455,12 +478,7 @@ impl ReferenceValidationProductOperation {
             note_style_selections,
             active_security,
             targets,
-            unresolved: vec![
-                UnresolvedReferenceStage::OtherTargetFamilies,
-                UnresolvedReferenceStage::ReferenceEdgeSemantics,
-                UnresolvedReferenceStage::CompleteAuxiliaryState,
-                UnresolvedReferenceStage::DocumentFlow,
-            ],
+            unresolved,
             validation_report: None,
         })
         // Do not label an assessment as a completed reference operation merely

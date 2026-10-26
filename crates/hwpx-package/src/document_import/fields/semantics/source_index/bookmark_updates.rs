@@ -4,8 +4,8 @@ use super::*;
 use crate::cross_reference_sdk::SdkCrossReferenceDisplay;
 use crate::document_import::{
     ImportedSourcePackage, forms::ImportedDocumentForms,
-    reference_targets::sdk::SourceCrossReferenceContext,
 };
+use crate::document_import::fields::bookmark_authoring_targets::{SourceBookmarkAuthoringContext,BookmarkAuthoringTargetError};
 use crate::{
     BoundedZipReader, IdIndexLimits, IdRuleProfile, PackageArtifact, PackageGraphLimits,
     PackagePath, PatchIntent, PatchLimits, PatchText, PreservationRuleProfile,
@@ -98,6 +98,12 @@ pub enum SourceBookmarkCommandError {
     Readback,
 }
 type E = SourceBookmarkCommandError;
+impl From<BookmarkAuthoringTargetError> for SourceBookmarkCommandError {
+    fn from(e:BookmarkAuthoringTargetError)->Self{match e{
+        BookmarkAuthoringTargetError::ContentRequiresBlockBookmark=>Self::ContentRequiresBlockBookmark,
+        BookmarkAuthoringTargetError::Limit=>Self::Limit,_=>Self::Target,
+    }}
+}
 impl From<crate::document_import::reference_targets::sdk::authoring_display::PointBookmarkDisplayError> for SourceBookmarkCommandError {
     fn from(error: crate::document_import::reference_targets::sdk::authoring_display::PointBookmarkDisplayError) -> Self {
         use crate::document_import::reference_targets::sdk::authoring_display::PointBookmarkDisplayError as DisplayError;
@@ -140,9 +146,7 @@ impl SourceFieldMeaningIndex<'_, '_> {
             .map_err(|_| E::Protection)?
             .require_no_observed_document_signals()
             .map_err(|_| E::Protection)?;
-        let context =
-            SourceCrossReferenceContext::import(self.fields.forms.body_structure(), self.limits)
-                .map_err(|_| E::Target)?;
+        let context = SourceBookmarkAuthoringContext::import(self.fields,self.limits).map_err(E::from)?;
         let mut counts = [0usize; 2];
         for part in source.parts() {
             if let Some(xml) = part.xml() {
@@ -197,8 +201,8 @@ impl SourceFieldMeaningIndex<'_, '_> {
             };
             let destination = context
                 .prepare(request.target_id, request.display, request.hyperlink)
-                .map_err(|_| E::Target)?;
-            let new = destination.command_for_discovery();
+                .map_err(E::from)?;
+            let new = destination.command_for_preparation();
             if new.len() > config.text_bytes {
                 return Err(E::Limit);
             }
@@ -370,8 +374,8 @@ impl SourceFieldMeaningIndex<'_, '_> {
                 source_field_sha256: range.begin_anchor.fingerprint_sha256,
                 source_meaning_sha256: request.expected_meaning_sha256,
                 output_command_sha256: sha,
-                selected_target_id_sha256: destination.source_logical_target_id_sha256(),
-                selected_target_state_sha256: destination.source_target_state_sha256().into(),
+                selected_target_id_sha256: destination.receipt().logical_target_id_sha256,
+                selected_target_state_sha256: destination.receipt().target_state_sha256.clone(),
             });
         }
         for leaves in plans.values_mut() {
@@ -391,10 +395,10 @@ impl SourceFieldMeaningIndex<'_, '_> {
         .map_err(|_| E::Limit)?;
         let zip = source.limits.zip().map_err(|_| E::Source)?;
         let mut reader = BoundedZipReader::open(Cursor::new(fresh), zip).map_err(|_| E::Source)?;
-        let profile = crate::document_import::search::replacement::font_profile::select(
-            source,
-            IdRuleProfile::hwpml_2011_shape_v6(),
-        );
+        let profile = if self.fields.fields().iter().any(|v|v.native_kind=="BOOKMARK"){
+            IdRuleProfile::hancom_2020_block_bookmark_v12()
+        }else{crate::document_import::search::replacement::font_profile::select(
+            source,IdRuleProfile::hwpml_2011_shape_v6())};
         let patch = PreservingPatchEngine::apply_with_limits_and_preservation_profile(
             &mut reader,
             &source.graph,

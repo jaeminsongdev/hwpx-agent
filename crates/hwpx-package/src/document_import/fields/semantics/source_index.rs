@@ -11,6 +11,8 @@ pub struct SourceFieldMeaningReceipt {
     pub profile:&'static str,pub source_package_sha256:[u8;32],pub field_graph_sha256:[u8;32],
     pub meaning_inventory_sha256:[u8;32],pub ranges:usize,pub https_targets:usize,pub table_formula_asts:usize,
     pub bookmark_crossrefs:usize,pub unsupported_meanings:usize,pub additional_document_graph_clones:usize,
+    #[serde(skip_serializing_if="super::block749::zero")]
+    pub block_bookmarks:usize,
     pub complete_reference_state_or_external_approval:bool,
 }
 
@@ -59,12 +61,14 @@ impl<'a,'source> SourceFieldMeaningIndex<'a,'source>{
             if let ImportedFieldMeaning::HttpsTarget{target:HyperlinkTarget::Https{uri}}=&observation.meaning
                 &&uri.len()>limits.config().text_bytes{return Err(FieldSemanticImportError::Limit);}
         }
-        let receipt=SourceFieldMeaningReceipt{profile:"hwpx-agent.source-field-meaning-index/partial-v2",
+        let block_bookmarks=observations.iter().filter(|o|matches!(o.meaning,ImportedFieldMeaning::BlockBookmarkRange{..})).count();
+        let receipt=SourceFieldMeaningReceipt{profile:if block_bookmarks>0{super::block749::INDEX_PROFILE}else{"hwpx-agent.source-field-meaning-index/partial-v2"},
             source_package_sha256:fields.receipt().source_package_sha256,field_graph_sha256:fields.receipt().graph_sha256,
             meaning_inventory_sha256,ranges:observations.len(),
             https_targets:observations.iter().filter(|o|matches!(o.meaning,ImportedFieldMeaning::HttpsTarget{..})).count(),
             table_formula_asts:observations.iter().filter(|o|matches!(o.meaning,ImportedFieldMeaning::TableFormula{..})).count(),
             bookmark_crossrefs:observations.iter().filter(|o|matches!(o.meaning,ImportedFieldMeaning::BookmarkCrossReference{..})).count(),
+            block_bookmarks,
             unsupported_meanings:observations.iter().filter(|o|matches!(o.meaning,ImportedFieldMeaning::Unsupported{..})).count(),
             additional_document_graph_clones:0,complete_reference_state_or_external_approval:false};
         Ok(Self{fields,observations,receipt,limits})

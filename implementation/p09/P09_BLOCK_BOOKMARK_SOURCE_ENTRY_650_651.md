@@ -1,6 +1,8 @@
 # P09 블록 책갈피 원본 일회용 entry — 650~651
 
-## 현재 결과와 실행 대기
+> 2026-10-23 현재: **650은 외부 실행 후 `create_bookmarks`에서 실패한 소비된 시험이다. 재실행 금지.** 세션 qualification과 최종 cleanup은 확인됐지만 블록 HWPX는 생성되지 않았다. [652~656 진단·직접 속성 후속 실행](P09_BLOCK_BOOKMARK_TYPED_SUCCESSOR_652_656.md)을 따른다. 아래 명령과 준비 상태는 실행 전 역사 기록이며 현재 실행 지시가 아니다.
+
+## 이하 650 실행 전 준비 기록 — 현재 실행 대기 아님
 
 고정1문서·8블록 범위의 현재 세션 검사→동일 호출 live handoff→캡처→producer/정리→최종 입력/결과 보존 entry를 연결했다. 코드/모델 검증과 현재 Codex 사전검사까지 완료했지만 **새 Native 실행과 블록 HWPX 생성은0회**다. 실제 XML 매핑·제품 block-target/Content 양성·F11/P09 Gate PASS가 아니다.
 

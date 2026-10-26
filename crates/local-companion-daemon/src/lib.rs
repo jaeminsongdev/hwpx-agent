@@ -1,5 +1,7 @@
 #![forbid(unsafe_code)]
 
+pub mod bookmark_preview722;
+
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Component, Path, PathBuf};
@@ -443,7 +445,20 @@ impl LocalCompanionDaemon {
     /// Authentication and exact request-shape validation precede all filesystem inspection.
     #[must_use]
     pub fn handle(&self, bytes: &[u8], token: &SessionToken) -> Value {
-        let parsed = self.handle_inner(bytes, token);
+        self.handle_optional_bookmark_runtime(bytes, token, None)
+    }
+
+    /// A trusted embedding host supplies its authenticated current-source runtime.
+    /// The ordinary daemon has no runtime and fails closed for the new method.
+    #[must_use]
+    pub fn handle_with_bookmark_runtime(&self, bytes: &[u8], token: &SessionToken,
+        runtime: &dyn bookmark_preview722::BookmarkPreviewRuntime) -> Value {
+        self.handle_optional_bookmark_runtime(bytes, token, Some(runtime))
+    }
+
+    fn handle_optional_bookmark_runtime(&self, bytes: &[u8], token: &SessionToken,
+        runtime: Option<&dyn bookmark_preview722::BookmarkPreviewRuntime>) -> Value {
+        let parsed = self.handle_inner(bytes, token, runtime);
         match parsed {
             Ok((protocol, request_id, result)) => response_ok(protocol, &request_id, result),
             Err((protocol, request_id, _)) => response_error(
@@ -457,6 +472,7 @@ impl LocalCompanionDaemon {
         &self,
         bytes: &[u8],
         token: &SessionToken,
+        runtime: Option<&dyn bookmark_preview722::BookmarkPreviewRuntime>,
     ) -> Result<HandleSuccess, HandleFailure> {
         if bytes.is_empty() || bytes.len() > MAX_REQUEST_BYTES {
             return Err((None, None, DaemonError::Request));
@@ -473,6 +489,7 @@ impl LocalCompanionDaemon {
             WORKFLOW_PROTOCOL_VERSION => WORKFLOW_PROTOCOL_VERSION,
             APPROVAL_PROTOCOL_VERSION => APPROVAL_PROTOCOL_VERSION,
             EFFECT_PROTOCOL_VERSION => EFFECT_PROTOCOL_VERSION,
+            bookmark_preview722::BOOKMARK_PREVIEW_PROTOCOL => bookmark_preview722::BOOKMARK_PREVIEW_PROTOCOL,
             _ => return Err((None, Some(request_id), DaemonError::Request)),
         };
         let supplied = Zeroizing::new(std::mem::take(&mut request.session_token));
@@ -480,6 +497,14 @@ impl LocalCompanionDaemon {
             return Err((Some(protocol), Some(request_id), DaemonError::Request));
         }
         let result = match (protocol, request.method) {
+            (bookmark_preview722::BOOKMARK_PREVIEW_PROTOCOL, PrivateMethod::StageBookmarkPreview) => {
+                bookmark_preview722::unique_request(bytes)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
+                let params = parse_exact_params(request.params)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
+                self.config.stage_bookmark_preview(params, runtime)
+                    .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?
+            }
             (_, PrivateMethod::Health) => {
                 parse_exact_params::<EmptyParams>(request.params)
                     .map_err(|error| (Some(protocol), Some(request_id.clone()), error))?;
@@ -741,6 +766,7 @@ struct PrivateRequest {
 #[serde(rename_all = "snake_case")]
 enum PrivateMethod {
     Health,
+    StageBookmarkPreview,
     AuthorizePath,
     Materialize,
     Diff,

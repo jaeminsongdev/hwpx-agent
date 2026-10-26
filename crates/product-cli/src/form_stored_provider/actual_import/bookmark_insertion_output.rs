@@ -1,5 +1,6 @@
 //! Current authenticated stored source -> owned first-insertion candidate.
 //! A private candidate is not a write lease, result ingestion, CAS or Native grant.
+pub mod compiled707;
 use super::bookmark_command_output::{StoredBookmarkCommandError, final_access};
 use super::{
     StoredActualFormImportError, StoredActualFormImportReceipt, StoredImportedDocumentForms,
@@ -40,6 +41,9 @@ pub struct PreparedStoredBookmarkInsertionCandidate {
     output: SourceBookmarkCreationCandidate,
     receipt: StoredBookmarkInsertionReceipt,
     denied: AtomicBool,
+    // Retain only the exact source selections used by the successful lowerer.
+    run: domain_ir::SourceAnchorHandle,
+    target_id: domain_ir::LogicalId,
 }
 impl fmt::Debug for PreparedStoredBookmarkInsertionCandidate {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -98,8 +102,8 @@ impl StoredImportedDocumentForms {
         }
         let (fresh, proof) = self.fresh_source_reconstructed(provider, now)?;
         let fields = ImportedDocumentFields::import(&self.imported).map_err(|_| E::Fields)?;
-        hwpx_package::document_import::reference_targets::sdk::authoring_display::PointBookmarkAuthoringDisplay::try_from(request.display)
-            .map_err(SourceBookmarkInsertionError::from)?;
+        let run=request.run.clone();
+        let target_id=request.target_id.clone();
         let output = fields.create_bookmark_reference(&proof, request, limits, writer)?;
         let r = output.receipt();
         if r.source_package_sha256 != *fresh.digest.as_bytes()
@@ -126,6 +130,8 @@ impl StoredImportedDocumentForms {
             output,
             receipt,
             denied: AtomicBool::new(false),
+            run,
+            target_id,
         })
     }
 }

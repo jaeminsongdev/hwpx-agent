@@ -8,6 +8,7 @@ use crate::{HANCOM_2020_HEAD_NAMESPACE as HH,HANCOM_2020_PARAGRAPH_NAMESPACE as 
     PreservingXmlDocument,XmlElementToken};
 const XMLNS:&str="http://www.w3.org/2000/xmlns/";
 pub const REFERENCE_HEADING_TARGET_PROFILE:&str="hwpx-agent.source-direct-outline-targets/v1";
+pub mod declarations702;
 
 #[derive(Clone,Debug,Eq,PartialEq,Serialize)]
 pub struct SourceHeadingTargetObservation{

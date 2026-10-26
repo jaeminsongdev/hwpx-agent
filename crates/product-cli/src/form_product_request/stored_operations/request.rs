@@ -7,6 +7,7 @@ use revision_service::{RevisionHead, RevisionRepository};
 use serde::{Deserialize, Serialize};
 pub const PRODUCT_OPERATION_REQUEST_SCHEMA: &str = "hwpx-agent.product-operation-request/v2";
 pub(super) enum Kind {
+    BookmarkInsertion(super::bookmark_insertion710::ParsedBookmarkInsertionRequest),
     BookmarkCommands(super::bookmark_commands::ParsedBookmarkCommandRequest),
     HttpsTargets,
     Form,
@@ -81,6 +82,12 @@ pub(super) fn classify(raw: &[u8]) -> Result<Kind, Error> {
     deserializer.end().map_err(|_| RequestError::Request)?;
     let schema: Schema = serde_json::from_slice(raw).map_err(|_| RequestError::Request)?;
     match schema.schema_version.as_str() {
+        super::bookmark_insertion710::BOOKMARK_INSERTION_PRODUCT_REQUEST_SCHEMA => {
+            let request = super::bookmark_insertion710::ParsedBookmarkInsertionRequest::parse(
+                raw, super::bookmark_insertion710::BookmarkInsertionProductLimits::standard().map_err(|_|RequestError::Request)?,
+            ).map_err(|_|RequestError::Request)?;
+            Ok(Kind::BookmarkInsertion(request))
+        }
         super::bookmark_commands::BOOKMARK_COMMAND_PRODUCT_REQUEST_SCHEMA => {
             let request = super::bookmark_commands::ParsedBookmarkCommandRequest::parse(
                 raw, super::bookmark_commands::BookmarkCommandProductLimits::standard().map_err(|_|RequestError::Request)?,

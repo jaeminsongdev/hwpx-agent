@@ -26,6 +26,8 @@ pub mod cross_reference_observation;
 pub mod bookmark_crossref;
 pub mod cached_source;
 pub mod bookmark_insertion;
+pub mod block_bookmarks;
+pub mod bookmark_authoring_targets;
 pub const FIELD_RANGE_IMPORT_PROFILE: &str = PROFILE;
 pub const FIELD_RANGE_IMPORT_SCOPE: &str = SCOPE;
 

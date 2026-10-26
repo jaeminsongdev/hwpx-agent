@@ -53,9 +53,6 @@ impl ReferenceValidationProductOperation {
         {
             return Err(E::Limit);
         }
-        for request in requests {
-            hwpx_package::document_import::reference_targets::sdk::authoring_display::PointBookmarkAuthoringDisplay::try_from(request.display)?;
-        }
         let proof = forms
             .reconstruct_source_for_verification(bytes)
             .map_err(|_| E::Source)?;

@@ -4,6 +4,8 @@ use super::{
     FieldRangeImportReceipt, ImportedDocumentFields,
     cross_reference_observation::CrossReferenceCommandObservations,
 };
+use super::block_bookmarks::{BlockBookmarkImportError, BlockBookmarkImportReceipt, ImportedBlockBookmarks};
+use super::bookmark_authoring_targets::{block_state_sha256, BookmarkAuthoringTargetError};
 use crate::{
     HANCOM_2020_PARAGRAPH_NAMESPACE as HP,
     cross_reference_sdk::{
@@ -66,6 +68,8 @@ pub struct SourceBookmarkCrossReferenceBindings {
     scope: &'static str,
     field_import: FieldRangeImportReceipt,
     target_import: ReferenceTargetImportReceipt,
+    #[serde(skip_serializing_if="Option::is_none")]
+    block_target_import: Option<BlockBookmarkImportReceipt>,
     bindings: Vec<SourceBookmarkCrossReference>,
     native_execution_attested: bool,
     native_target_resolution_qualified: bool,
@@ -135,18 +139,17 @@ impl SourceBookmarkCrossReferenceBindings {
         fields: &ImportedDocumentFields<'_>,
         limits: ReferenceAuxiliaryLimits,
     ) -> Result<Self, Error> {
-        Self::import_selected(fields, limits, false, None)
+        Ok(Self::import_selected(fields, limits, false, None)?.0)
     }
 
     /// The general meaning inventory keeps other target kinds explicitly
     /// Unsupported. This internal path must not turn a subset into a public
     /// whole-CROSSREF binding report or bypass malformed bookmark parameters.
-    pub(super) fn supported_meanings(
-        fields: &ImportedDocumentFields<'_>,
-        limits: ReferenceAuxiliaryLimits,
-        targets: Option<&ImportedReferenceTargets<'_>>,
-    ) -> Result<Vec<SourceBookmarkCrossReference>, Error> {
-        Ok(Self::import_selected(fields, limits, true, targets)?.bindings)
+    /// Retain the exact already parsed BOOKMARK inventory for the common meaning
+    /// reader; it must not rescan cached inlines for each target or field family.
+    pub(super) fn supported_inventory(fields:&ImportedDocumentFields<'_>,limits:ReferenceAuxiliaryLimits,
+        targets:Option<&ImportedReferenceTargets<'_>>)->Result<(Vec<SourceBookmarkCrossReference>,Option<ImportedBlockBookmarks>),Error>{
+        let (value,blocks)=Self::import_selected(fields,limits,true,targets)?;Ok((value.bindings,blocks))
     }
 
     fn import_selected(
@@ -154,7 +157,7 @@ impl SourceBookmarkCrossReferenceBindings {
         limits: ReferenceAuxiliaryLimits,
         keep_other_kinds_unsupported: bool,
         reused_targets: Option<&ImportedReferenceTargets<'_>>,
-    ) -> Result<Self, Error> {
+    ) -> Result<(Self,Option<ImportedBlockBookmarks>), Error> {
         let config = limits.config();
         CrossReferenceCommandObservations::inspect(fields, &[], limits).map_err(
             |error| match error {
@@ -185,12 +188,18 @@ impl SourceBookmarkCrossReferenceBindings {
         if targets.receipt().source_package_sha256 != fields.receipt().source_package_sha256 {
             return Err(Error::Binding);
         }
+        let blocks=if fields.fields().iter().any(|v|v.native_kind=="BOOKMARK"){
+            Some(ImportedBlockBookmarks::import(fields,limits).map_err(|e|match e{
+                BlockBookmarkImportError::Limit=>Error::Limit,_=>Error::Binding,
+            })?)
+        }else{None};
         let source = fields.forms.source();
         let mut result = Self {
             schema_version: PROFILE,
             scope: "source_local_command_and_bookmark_only_not_native_or_complete_validation",
             field_import: fields.receipt().clone(),
             target_import: targets.receipt().clone(),
+            block_target_import: blocks.as_ref().map(|v|v.receipt().clone()),
             bindings: Vec::new(),
             native_execution_attested: false,
             native_target_resolution_qualified: false,
@@ -277,8 +286,19 @@ impl SourceBookmarkCrossReferenceBindings {
                 Err(Error::UnqualifiedKind) if keep_other_kinds_unsupported => continue,
                 result => result?,
             };
-            let target = match targets.by_exact_source_name(name) {
-                Ok(target) => {
+            let point=targets.by_exact_source_name(name);
+            let block=blocks.as_ref().map(|v|v.by_exact_source_name(name));
+            let target = match (point,block) {
+                (Err(ReferenceTargetImportError::Ambiguous),_)
+                | (_,Some(Err(BlockBookmarkImportError::Ambiguous)))=>SourceBookmarkResolution::Ambiguous,
+                (Ok(_),Some(Ok(_)))=>SourceBookmarkResolution::Ambiguous,
+                (Err(ReferenceTargetImportError::Missing),Some(Ok(row)))=>SourceBookmarkResolution::Bound{
+                    logical_target_id:row.field_reference_id().clone(),
+                    target_state_sha256:block_state_sha256(fields,row,limits).map_err(|e|match e{
+                        BookmarkAuthoringTargetError::Limit=>Error::Limit,_=>Error::Binding,
+                    })?,
+                },
+                (Ok(target),None|Some(Err(BlockBookmarkImportError::Missing))) => {
                     if target.target_kind != ReferenceTargetKind::Bookmark {
                         return Err(Error::Binding);
                     }
@@ -287,9 +307,8 @@ impl SourceBookmarkCrossReferenceBindings {
                         target_state_sha256: target.target_state_sha256.clone(),
                     }
                 }
-                Err(ReferenceTargetImportError::Missing) => SourceBookmarkResolution::Missing,
-                Err(ReferenceTargetImportError::Ambiguous) => SourceBookmarkResolution::Ambiguous,
-                Err(_) => return Err(Error::Binding),
+                (Err(ReferenceTargetImportError::Missing),None|Some(Err(BlockBookmarkImportError::Missing)))=>SourceBookmarkResolution::Missing,
+                _=>return Err(Error::Binding),
             };
             let row = SourceBookmarkCrossReference {
                 field_reference_id: field.reference_id.clone(),
@@ -319,7 +338,7 @@ impl SourceBookmarkCrossReferenceBindings {
             bytes: None,
         };
         serde_json::to_writer(&mut count, &result).map_err(|_| Error::Limit)?;
-        Ok(result)
+        Ok((result,blocks))
     }
     /// # Errors
     /// Refuses excessive output without truncating or returning private strings.

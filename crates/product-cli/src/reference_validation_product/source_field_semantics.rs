@@ -9,7 +9,7 @@ use super::{ReferenceValidationProductOperation,source::{ReferenceSourceError,Re
 
 #[derive(Clone,Copy,Debug,Eq,PartialEq,Serialize)]
 #[serde(rename_all="snake_case")]
-pub enum ReferenceSourceMeaningKind{HttpsTarget,TableFormulaAst,BookmarkCrossReference,Unsupported}
+pub enum ReferenceSourceMeaningKind{HttpsTarget,TableFormulaAst,BookmarkCrossReference,BlockBookmarkRange,Unsupported}
 #[derive(Clone,Debug,Eq,PartialEq,Serialize)]
 pub struct ReferenceSourceMeaningSelection{
     pub reference_id:LogicalId,pub source_field_sha256:[u8;32],pub meaning_sha256:[u8;32],pub kind:ReferenceSourceMeaningKind,
@@ -86,9 +86,11 @@ impl ReferenceSourceFieldMeaningAssessment {
                     ImportedFieldMeaning::HttpsTarget{..}=>ReferenceSourceMeaningKind::HttpsTarget,
                     ImportedFieldMeaning::TableFormula{..}=>ReferenceSourceMeaningKind::TableFormulaAst,
                     ImportedFieldMeaning::BookmarkCrossReference{..}=>ReferenceSourceMeaningKind::BookmarkCrossReference,
+                    ImportedFieldMeaning::BlockBookmarkRange{..}=>ReferenceSourceMeaningKind::BlockBookmarkRange,
                     ImportedFieldMeaning::Unsupported{..}=>ReferenceSourceMeaningKind::Unsupported}});
         }
-        let result=ReferenceSourceFieldMeaningAssessment{schema_version:"hwpx-agent.product.reference-source-field-meanings/v2",
+        let result=ReferenceSourceFieldMeaningAssessment{schema_version:if index.receipt().block_bookmarks>0{
+                "hwpx-agent.product.reference-source-field-meanings/v3"}else{"hwpx-agent.product.reference-source-field-meanings/v2"},
             status:ReferenceSourceStatus::Incomplete,meaning_import:index.receipt().clone(),selections,reference_validation_or_external_approval:false};
         let _=result.canonical_json(limits)?;Ok(result)
     }

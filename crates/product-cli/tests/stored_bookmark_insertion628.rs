@@ -22,6 +22,21 @@ include!("support/stored_source_fixture.rs");
 #[cfg(test)]
 #[path = "support/bookmark_display_admission639.rs"]
 mod admission639;
+#[path="support/block_bookmark_authoring679.rs"]
+mod block679;
+pub fn fixed_block_output_batch681() -> Result<Value> { block679::fixed_block_output_batch681() }
+#[path="support/bookmark_insertion_compiler708.rs"]
+mod compiler708;
+pub fn fixed_insertion_compiler708() -> Result<Value> { compiler708::observation() }
+#[path="support/bookmark_insertion_request711.rs"]
+mod request711;
+pub fn fixed_insertion_request711() -> Result<Value> { request711::observation() }
+#[path="support/bookmark_local_stage719.rs"]
+mod stage719;
+pub fn fixed_local_stage719(root:&Path) -> Result<Value> { stage719::observation(root) }
+#[cfg(test)]
+#[path="support/bookmark_local_host724.rs"]
+mod host724;
 #[path = "../../hwpx-package/tests/support/document_import_field_fixture.rs"]
 #[allow(dead_code)]
 mod base;

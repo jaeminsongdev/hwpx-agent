@@ -6,7 +6,7 @@ use super::bookmark_crossref::SourceBookmarkResolution;
 use super::semantics::{ImportedFieldMeaning, source_index::SourceFieldMeaningIndex};
 use super::*;
 use crate::cross_reference_sdk::SdkCrossReferenceDisplay;
-use crate::document_import::reference_targets::sdk::SourceCrossReferenceContext;
+use super::bookmark_authoring_targets::{SourceBookmarkAuthoringContext,BookmarkAuthoringTargetError};
 use crate::{
     BoundedZipReader, ElementSplicePosition, IdIndexLimits, IdRuleProfile, PackageArtifact,
     PackageGraphLimits, PatchIntent, PatchLimits, PreservationRuleProfile, PreservingPatchEngine,
@@ -14,7 +14,7 @@ use crate::{
 };
 use domain_ir::ReferenceAuxiliaryLimits;
 use sha2::{Digest as _, Sha256};
-use std::{collections::BTreeSet, io::Cursor};
+use std::{collections::{BTreeSet,BTreeMap}, io::Cursor};
 
 pub struct SourceBookmarkInsertion<'a> {
     /// Exact original plain run, not a byte offset, caller XML or field result.
@@ -93,6 +93,12 @@ pub enum SourceBookmarkInsertionError {
     Preservation,
 }
 type E = SourceBookmarkInsertionError;
+impl From<BookmarkAuthoringTargetError> for SourceBookmarkInsertionError {
+    fn from(e:BookmarkAuthoringTargetError)->Self{match e{
+        BookmarkAuthoringTargetError::ContentRequiresBlockBookmark=>Self::ContentRequiresBlockBookmark,
+        BookmarkAuthoringTargetError::Limit=>Self::Limit,_=>Self::Target,
+    }}
+}
 impl From<crate::document_import::reference_targets::sdk::authoring_display::PointBookmarkDisplayError> for SourceBookmarkInsertionError {
     fn from(error: crate::document_import::reference_targets::sdk::authoring_display::PointBookmarkDisplayError) -> Self {
         use crate::document_import::reference_targets::sdk::authoring_display::PointBookmarkDisplayError as DisplayError;
@@ -260,12 +266,11 @@ impl ImportedDocumentFields<'_> {
         if self.fields.len() >= limits.config().items_per_kind {
             return Err(E::Limit);
         }
-        let context = SourceCrossReferenceContext::import(self.forms.body_structure(), limits)
-            .map_err(|_| E::Target)?;
+        let context = SourceBookmarkAuthoringContext::import(self, limits).map_err(E::from)?;
         let target = context
             .prepare(request.target_id, request.display, request.hyperlink)
-            .map_err(|_| E::Target)?;
-        let expected: [u8; 32] = Sha256::digest(target.command_for_discovery().as_bytes()).into();
+            .map_err(E::from)?;
+        let expected: [u8; 32] = Sha256::digest(target.command_for_preparation().as_bytes()).into();
         let selected = source
             .resolve_anchor(request.run)
             .map_err(|_| E::Selection)?;
@@ -297,7 +302,7 @@ impl ImportedDocumentFields<'_> {
         }
         let run_span = run.outer_span().ok_or(E::Selection)?;
         let mut ids = BTreeSet::new();
-        let mut fieldids = BTreeSet::new();
+        let mut fieldids = BTreeMap::new();
         let (mut maxid, mut maxfield) = (0u32, 0u32);
         let (mut starts, mut ends, mut visits) = (0usize, 0usize, 0usize);
         // One bounded whole-source pass, not a source/ZIP scan per native ID.
@@ -331,9 +336,11 @@ impl ImportedDocumentFields<'_> {
                         maxid = maxid.max(id);
                         if attr(n, "fieldid").is_some() {
                             let id = number(n, "fieldid")?;
-                            if !fieldids.insert(id) {
-                                return Err(E::Source);
-                            }
+                            let block=attr(n,"type").is_some_and(|v|v.semantic_value()=="BOOKMARK");
+                            // Current source target import already admitted every
+                            // BOOKMARK Prop2 range. Native670 shares fieldid;
+                            // begin id remains unique and is the pairing key.
+                            if fieldids.insert(id,block).is_some_and(|previous|!previous||!block){return Err(E::Source);}
                             maxfield = maxfield.max(id);
                         }
                     } else if named(n, "fieldEnd") {
@@ -411,7 +418,7 @@ impl ImportedDocumentFields<'_> {
             }
             EnvelopePolicy::Generated => {
                 let (begin, end) = generated::render(
-                    target.command_for_discovery(),
+                    target.command_for_preparation(),
                     request.display,
                     request.hyperlink,
                     id,
@@ -458,10 +465,10 @@ impl ImportedDocumentFields<'_> {
         ];
         let zip = source.limits.zip().map_err(|_| E::Source)?;
         let mut reader = BoundedZipReader::open(Cursor::new(fresh), zip).map_err(|_| E::Source)?;
-        let profile = crate::document_import::search::replacement::font_profile::select(
-            source,
-            IdRuleProfile::hwpml_2011_shape_v6(),
-        );
+        let profile = if self.fields.iter().any(|v|v.native_kind=="BOOKMARK"){
+            IdRuleProfile::hancom_2020_block_bookmark_v12()
+        }else{crate::document_import::search::replacement::font_profile::select(
+            source,IdRuleProfile::hwpml_2011_shape_v6())};
         let patch = PreservingPatchEngine::apply_with_limits_and_preservation_profile(
             &mut reader,
             &source.graph,
@@ -499,7 +506,7 @@ impl ImportedDocumentFields<'_> {
             let (new,meaning)=fields.fields.iter().zip(index.observations()).find(|(f,_)|f.native_begin_id==id).ok_or(E::Readback)?;
             if new.native_kind!="CROSSREF"||!matches!(&meaning.meaning,ImportedFieldMeaning::BookmarkCrossReference{command} if command.command_sha256==expected&&matches!(command.target,SourceBookmarkResolution::Bound{..})) {return Err(E::Readback);}
             if matches!(policy,EnvelopePolicy::Generated) {
-                generated::verify_output(&forms,new,target.command_for_discovery(),request.display,request.hyperlink,limits)?;
+                generated::verify_output(&forms,new,target.command_for_preparation(),request.display,request.hyperlink,limits)?;
             }
             let out=forms.source().parts().iter().find(|p|p.path()==part.path()).and_then(|p|p.xml()).ok_or(E::Readback)?;
             let exact=xml.with_source_bytes(|x|out.with_source_bytes(|y|{

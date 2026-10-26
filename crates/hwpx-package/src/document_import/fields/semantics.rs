@@ -2,6 +2,7 @@
 pub mod catalog;
 pub mod evaluation;
 pub mod source_index;
+pub mod block749;
 use super::super::forms::VerifiedFormReconstruction;
 use super::{FieldRangeImportError, ImportedDocumentFields, ImportedFieldRange};
 use domain_ir::{
@@ -22,6 +23,8 @@ const MAX_WORK_ELEMENTS: usize = 8_000_000;
 #[derive(Clone, Eq, PartialEq, Serialize)]
 #[serde(tag = "meaning", rename_all = "snake_case")]
 pub enum ImportedFieldMeaning {
+    /// Exact Prop2 source range/name/content identity; not an evaluated cache or point marker.
+    BlockBookmarkRange { bookmark:block749::SourceBlockBookmarkMeaning },
     /// Exact source-local Command semantics, never Native target/display proof.
     BookmarkCrossReference {
         command: SourceBookmarkCrossReference,
@@ -64,6 +67,8 @@ pub struct FieldSemanticImportReceipt {
     pub https_targets: usize,
     pub table_formula_asts: usize,
     pub bookmark_crossrefs: usize,
+    #[serde(skip_serializing_if="block749::zero")]
+    pub block_bookmarks: usize,
     pub bound_bookmark_edges: usize,
     pub unsupported_meanings: usize,
 }
@@ -90,6 +95,8 @@ impl<'a, 'source> ImportedDocumentFieldSemantics<'a, 'source> {
         fields: &'a ImportedDocumentFields<'source>,
     ) -> Result<Self, FieldSemanticImportError> {
         let observations = read_meanings(fields)?;
+        let block_bookmarks=observations.iter().filter(|v|matches!(v.meaning,ImportedFieldMeaning::BlockBookmarkRange{..})).count();
+        let (profile,scope)=if block_bookmarks>0{(block749::GRAPH_PROFILE,block749::GRAPH_SCOPE)}else{(FIELD_SEMANTICS_PROFILE,FIELD_SEMANTICS_SCOPE)};
         let mut replacements = BTreeMap::new();
         for (range, observation) in fields.fields().iter().zip(&observations) {
             let value =
@@ -104,6 +111,13 @@ impl<'a, 'source> ImportedDocumentFieldSemantics<'a, 'source> {
             .bookmarks()
             .iter()
             .map(|v| (&v.reference_id, v))
+            .collect();
+        // The Command reader admits BOOKMARK Prop2 ranges before returning a
+        // source-local Bound ID. Reuse that exact field's existing begin node;
+        // no point marker, caller node or copied cache becomes a block target.
+        let block_nodes: BTreeMap<_, _> = fields.fields().iter()
+            .filter(|range| range.native_kind == "BOOKMARK")
+            .map(|range| (&range.reference_id, &range.begin_node_id))
             .collect();
         let mut bound_bookmark_edges = 0usize;
         for reference in &mut draft.references {
@@ -121,11 +135,15 @@ impl<'a, 'source> ImportedDocumentFieldSemantics<'a, 'source> {
                     return Err(FieldSemanticImportError::Binding);
                 }
                 if let SourceBookmarkResolution::Bound { logical_target_id, .. } = &command.target {
-                    let bookmark = bookmarks.get(logical_target_id).ok_or(FieldSemanticImportError::Binding)?;
+                    let node = if let Some(bookmark) = bookmarks.get(logical_target_id) {
+                        &bookmark.wrapper_node_id
+                    } else {
+                        block_nodes.get(logical_target_id).copied().ok_or(FieldSemanticImportError::Binding)?
+                    };
                     // This is the actual bookmark wrapper in the same admitted
                     // graph, not a cross-snapshot ID, page coordinate or Native
                     // navigation/target-resolution claim. Unresolved stays None.
-                    reference.target_node_id = Some(bookmark.wrapper_node_id.clone());
+                    reference.target_node_id = Some(node.clone());
                     bound_bookmark_edges = bound_bookmark_edges.checked_add(1)
                         .ok_or(FieldSemanticImportError::Limit)?;
                 }
@@ -152,17 +170,17 @@ impl<'a, 'source> ImportedDocumentFieldSemantics<'a, 'source> {
         }
         draft.metadata.insert(
             "field_semantics_import_profile",
-            PropertyValue::Text(FIELD_SEMANTICS_PROFILE.into()),
+            PropertyValue::Text(profile.into()),
         );
         draft.metadata.insert(
             "field_semantics_import_scope",
-            PropertyValue::Text(FIELD_SEMANTICS_SCOPE.into()),
+            PropertyValue::Text(scope.into()),
         );
         let graph = DocumentGraph::from_draft(draft, DocumentGraphLimits::default())
             .map_err(|_| FieldSemanticImportError::Graph)?;
         let receipt = FieldSemanticImportReceipt {
-            profile: FIELD_SEMANTICS_PROFILE,
-            qualification: FIELD_SEMANTICS_SCOPE,
+            profile,
+            qualification: scope,
             source_package_sha256: fields.receipt().source_package_sha256,
             field_graph_sha256: fields.receipt().graph_sha256,
             graph_sha256: graph
@@ -181,6 +199,7 @@ impl<'a, 'source> ImportedDocumentFieldSemantics<'a, 'source> {
                 .filter(|v| matches!(v.meaning, ImportedFieldMeaning::BookmarkCrossReference { .. }))
                 .count(),
             bound_bookmark_edges,
+            block_bookmarks,
             unsupported_meanings: observations
                 .iter()
                 .filter(|v| matches!(v.meaning, ImportedFieldMeaning::Unsupported { .. }))
@@ -258,24 +277,31 @@ fn read_meanings_with_targets(fields:&ImportedDocumentFields<'_>, limits:domain_
     ->Result<Vec<ImportedFieldSemantic>,FieldSemanticImportError> {
     let mut observations=Vec::new();let mut work=0usize;
     let mut bookmarks = BTreeMap::new();
+    let blocks;
     if fields.fields().iter().any(|field| field.native_kind == "CROSSREF") {
-        for binding in SourceBookmarkCrossReferenceBindings::supported_meanings(fields, limits, targets)
+        let (commands,inventory)=SourceBookmarkCrossReferenceBindings::supported_inventory(fields, limits, targets)
             .map_err(|error| match error {
                 BookmarkCrossReferenceError::Limit => FieldSemanticImportError::Limit,
                 other => FieldSemanticImportError::CrossReference(other),
-            })? {
+            })?;
+        blocks=inventory;
+        for binding in commands {
             if bookmarks.insert(binding.field_reference_id.clone(), binding).is_some() {
                 return Err(FieldSemanticImportError::Binding);
             }
         }
-    }
+    }else{blocks=block749::without_crossrefs(fields,limits)?;}
+    let mut block_meanings=block749::meanings(blocks.as_ref())?;
     observations.try_reserve_exact(fields.fields().len()).map_err(|_|FieldSemanticImportError::Limit)?;
     for range in fields.fields(){observations.push(ImportedFieldSemantic{
         reference_id:range.reference_id.clone(),meaning:match bookmarks.remove(&range.reference_id) {
             Some(command) => ImportedFieldMeaning::BookmarkCrossReference { command },
-            None => read_meaning(fields,range,&mut work)?,
+            None => match block_meanings.remove(&range.reference_id){
+                Some(bookmark)=>ImportedFieldMeaning::BlockBookmarkRange{bookmark},
+                None=>read_meaning(fields,range,&mut work)?,
+            },
         }});}
-    if !bookmarks.is_empty() { return Err(FieldSemanticImportError::Binding); }
+    if !bookmarks.is_empty()||!block_meanings.is_empty() { return Err(FieldSemanticImportError::Binding); }
     Ok(observations)
 }
 fn read_meaning(

@@ -24,6 +24,8 @@ pub mod bookmark_bindings;
 pub mod bookmark_cache_diagnostics;
 pub mod bookmark_updates;
 pub mod bookmark_insertion;
+pub mod bookmark_rename738;
+pub mod bookmark_navigation744;
 
 #[derive(Clone)]
 pub struct SourceCrossReferenceSelection {
