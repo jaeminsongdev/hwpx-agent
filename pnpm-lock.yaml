@@ -29,8 +29,8 @@ importers:
   web/mcp-staging:
     dependencies:
       '@modelcontextprotocol/node':
-        specifier: 2.0.0
-        version: 2.0.0(@modelcontextprotocol/server@2.0.0)(hono@4.13.5)
+        specifier: 2.1.1
+        version: 2.1.1(@modelcontextprotocol/server@2.0.0)
       '@modelcontextprotocol/server':
         specifier: 2.0.0
         version: 2.0.0
@@ -48,8 +48,8 @@ importers:
         specifier: workspace:*
         version: link:../plugin-widget
       '@modelcontextprotocol/node':
-        specifier: 2.0.0
-        version: 2.0.0(@modelcontextprotocol/server@2.0.0)(hono@4.13.5)
+        specifier: 2.1.1
+        version: 2.1.1(@modelcontextprotocol/server@2.0.0)
       '@modelcontextprotocol/server':
         specifier: 2.0.0
         version: 2.0.0
@@ -283,15 +283,11 @@ packages:
     engines: {node: '>=22.19.0'}
     hasBin: true
 
-  '@modelcontextprotocol/node@2.0.0':
-    resolution: {integrity: sha512-Y4hAC2XdGDUdDOCbLDOCA4+aL3NUldjsOWlDL/YwpAxrPhRm1xHd7lZ+mLacvZ9t3PaH28wgNoaLQGrIk1P2pg==}
+  '@modelcontextprotocol/node@2.1.1':
+    resolution: {integrity: sha512-EY92OAXN2xYL7tNS/MVsWJW1v8VHAPwl9B4Ca3pCrjmvqyC+S1C/6UHsMxF2GoFPraS5Yyg56vFz9brVpFojMA==}
     engines: {node: '>=20'}
     peerDependencies:
-      '@modelcontextprotocol/server': ^2.0.0
-      hono: ^4.11.4
-    peerDependenciesMeta:
-      hono:
-        optional: true
+      '@modelcontextprotocol/server': ^2.3.0
 
   '@modelcontextprotocol/sdk@1.30.0':
     resolution: {integrity: sha512-xKd8OIzlqNzcqcNumGAa6g+PW2kjD5vrpcKOnfldAUPP3j7lnqMPwlTXQm8gF+UwH72z0lqaRbjr9hqGz0eITA==}
@@ -991,6 +987,10 @@ packages:
     resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
 
+  hono@4.13.13:
+    resolution: {integrity: sha512-CQ46U0ZkAGmbT/4UxdzzGJpacP2IeKgY4a5/tOI9AABbpOMfK739wfDXmv1usCk+3RkKj1hQy4/fjhiwa2xlrA==}
+    engines: {node: '>=16.9.0'}
+
   hono@4.13.5:
     resolution: {integrity: sha512-O6+/eCYRkzzzy0rPWwKLiGBR1nFuUPZynnwjxN1MBA62NNqbT0wQEzQyK2gSO5yDIDB336sXQleAhOHrzlYyKw==}
     engines: {node: '>=16.9.0'}
@@ -1667,9 +1667,9 @@ snapshots:
   '@esbuild/win32-x64@0.28.2':
     optional: true
 
-  '@hono/node-server@1.19.17(hono@4.13.5)':
+  '@hono/node-server@1.19.17(hono@4.13.13)':
     dependencies:
-      hono: 4.13.5
+      hono: 4.13.13
 
   '@hono/node-server@2.1.1(hono@4.13.5)':
     dependencies:
@@ -1746,12 +1746,11 @@ snapshots:
       - tsx
       - utf-8-validate
 
-  '@modelcontextprotocol/node@2.0.0(@modelcontextprotocol/server@2.0.0)(hono@4.13.5)':
+  '@modelcontextprotocol/node@2.1.1(@modelcontextprotocol/server@2.0.0)':
     dependencies:
-      '@hono/node-server': 1.19.17(hono@4.13.5)
+      '@hono/node-server': 1.19.17(hono@4.13.13)
       '@modelcontextprotocol/server': 2.0.0
-    optionalDependencies:
-      hono: 4.13.5
+      hono: 4.13.13
 
   '@modelcontextprotocol/sdk@1.30.0(zod@4.5.4)':
     dependencies:
@@ -2370,6 +2369,8 @@ snapshots:
   hasown@2.0.4:
     dependencies:
       function-bind: 1.1.2
+
+  hono@4.13.13: {}
 
   hono@4.13.5: {}
 
